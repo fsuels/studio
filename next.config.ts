@@ -1,10 +1,7 @@
-import type { NextConfig } from 'next'
-import webpack from 'webpack'
+import type { NextConfig } from 'next';
+import webpack from 'webpack';
 
 const nextConfig: NextConfig = {
-  // Enable static export for Next.js 15
-  output: 'export',
-
   /* config options here */
   typescript: {
     ignoreBuildErrors: true,
@@ -29,13 +26,13 @@ const nextConfig: NextConfig = {
     // Ignore unsupported Jaeger exporter import
     config.plugins!.push(
       new webpack.IgnorePlugin({ resourceRegExp: /^@opentelemetry\/exporter-jaeger$/ })
-    )
+    );
     // Stub out handlebars to avoid require.extensions usage
     config.plugins!.push(
       new webpack.IgnorePlugin({ resourceRegExp: /^handlebars$/ })
-    )
-    return config
+    );
+    return config;
   },
-}
+};
 
-export default nextConfig
+export default nextConfig;
