@@ -56,18 +56,19 @@ export async function inferDocumentType(
    } catch (error: unknown) {
        // Catch any error from the flow, log it server-side, and re-throw a standard Error
        console.error(`[inferDocumentType] Error executing inferDocumentTypeFlow:`, error);
-       let message = 'An unexpected error occurred while inferring the document type.';
+       let clientErrorMessage = 'An error occurred while inferring the document type. Please check the server logs for details.'; // Generic default message for client
+
         if (error instanceof Error) {
-            // Include the original error message if it's an Error instance
-            // Be cautious about exposing sensitive details from the original error
-            message = `Failed to infer document type: ${error.message}`;
-            console.error("Stack Trace:", error.stack); // Log stack trace server-side
+            // Use the message from the caught error for the client-facing message
+            // Keep it relatively simple and avoid exposing sensitive details
+            clientErrorMessage = `Failed to infer document type: ${error.message}`;
+            console.error("Stack Trace:", error.stack); // Log stack trace server-side only for debugging
         } else {
-            // Handle non-Error exceptions
-            message = `An unexpected error occurred: ${String(error)}`;
+            // Handle cases where the thrown object is not an Error instance
+            clientErrorMessage = `An unexpected error occurred: ${String(error)}`;
         }
-       // Throw a new, simple Error object suitable for the client
-       throw new Error(message);
+       // Throw a new, simple Error object suitable for the client (Server Action boundary)
+       throw new Error(clientErrorMessage);
    }
 }
 
@@ -144,15 +145,14 @@ async input => {
    } catch (error: unknown) {
        // Log the specific error within the flow
        console.error('[inferDocumentTypeFlow] Error during prompt execution or processing:', error);
-       let errorMessage = `Error in AI document inference flow.`;
+       // Decide whether to throw the original error or a new one.
+       // Throwing a new Error allows attaching a more specific message for this context.
         if (error instanceof Error) {
-            errorMessage = `Error in AI inference flow: ${error.message}`;
-             // Rethrow the original error or a new one wrapping it
-             // This allows the calling function (inferDocumentType) to catch it
-            throw new Error(errorMessage, { cause: error }); // Preserve original error if needed
+            // Re-throw a new error that includes the original message but keeps it potentially simpler.
+            throw new Error(`Error in AI inference flow: ${error.message}`, { cause: error }); // Preserve original error in cause if needed server-side
         } else {
-            errorMessage = `Unknown error in AI inference flow: ${String(error)}`;
-            throw new Error(errorMessage);
+            // Handle non-Error exceptions
+            throw new Error(`Unknown error in AI inference flow: ${String(error)}`);
         }
    }
 });
