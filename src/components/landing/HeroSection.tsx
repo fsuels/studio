@@ -12,6 +12,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu" // Import Dropdown components
+import { Logo } from '@/components/layout/Logo'; // Import the Logo component
 
 // Example Language Switcher Flags (replace with actual flag SVGs or images)
 // Using simple text for flags for better consistency across browsers
@@ -58,12 +59,18 @@ export function HeroSection() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
-      className="w-full py-20 md:py-32 bg-gradient-to-br from-teal-100 via-blue-100 to-soft-blue-100 text-center relative overflow-hidden" // Use theme colors if defined, otherwise fallback
+      className="w-full py-16 md:py-24 bg-gradient-to-br from-teal-100 via-blue-100 to-soft-blue-100 text-center relative overflow-hidden" // Use theme colors if defined, otherwise fallback
       style={{
           // Soft blue gradient fallback
           background: 'linear-gradient(135deg, hsl(var(--secondary)) 0%, hsl(var(--background)) 50%, hsl(180, 50%, 85%) 100%)', // Using HSL theme vars
       }}
     >
+       {/* Logo */}
+      <div className="absolute top-4 left-4 z-10">
+        <Logo className="h-8"/> {/* Adjust size as needed */}
+      </div>
+
+
       {/* Language Switcher Dropdown */}
       <div className="absolute top-4 right-4 z-10">
         <DropdownMenu>
@@ -97,7 +104,7 @@ export function HeroSection() {
       </div>
 
 
-      <div className="container mx-auto px-4 relative z-0">
+      <div className="container mx-auto px-4 relative z-0 pt-12 md:pt-0"> {/* Added padding top for small screens to avoid overlap */}
         {/* Pricing Teaser */}
         <div className="mb-4">
            <span className="inline-block bg-primary/10 text-primary px-3 py-1 rounded-full text-sm font-medium mr-2">

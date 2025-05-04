@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Linkedin, Twitter, Send } from 'lucide-react'; // Social and Send icons
 import { useToast } from '@/hooks/use-toast';
+import { Logo } from '@/components/layout/Logo'; // Import the Logo component
 
 export function Footer() {
     const [email, setEmail] = useState('');
@@ -32,10 +33,11 @@ export function Footer() {
     <footer className="bg-muted text-muted-foreground py-12 mt-16 border-t border-border">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
-          {/* Column 1: Product */}
-          <div>
-            <h4 className="font-semibold text-foreground mb-3">Product</h4>
-            <ul className="space-y-2 text-sm">
+          {/* Column 1: Logo & Product */}
+          <div className="space-y-4">
+             <Logo className="h-8 mb-3"/> {/* Add Logo here */}
+             <h4 className="font-semibold text-foreground mb-3 sr-only">Product</h4> {/* Keep for structure, hide visually */}
+             <ul className="space-y-2 text-sm">
               <li><Link href="/#how-it-works" className="hover:text-primary hover:underline">How It Works</Link></li>
               <li><Link href="/pricing" className="hover:text-primary hover:underline">Pricing</Link></li>
               <li><Link href="/features" className="hover:text-primary hover:underline">Features</Link></li>
