@@ -2,8 +2,9 @@
 "use client"; // Mark page as client component due to state management and client children
 
 import React, { useState, useEffect } from 'react'; // Ensure useEffect is imported if used elsewhere
-// ** Removed InferDocumentTypeOutput import as we now only receive the selected name **
+import type { InferDocumentTypeOutput } from '@/ai/flows/infer-document-type';
 import { DocumentInference } from '@/components/document-inference';
+import DocumentTypeSelector, { SuggestedDoc } from '@/components/DocumentTypeSelector'; // Import the new selector
 import { Questionnaire } from '@/components/questionnaire';
 import { DisclaimerStep } from '@/components/disclaimer-step'; // Import the new disclaimer step
 import { PdfPreview } from '@/components/pdf-preview';
@@ -16,6 +17,8 @@ import { TestimonialCarousel } from '@/components/landing/TestimonialCarousel';
 import { FeaturedLogos } from '@/components/landing/FeaturedLogos';
 import { GuaranteeBadge } from '@/components/landing/GuaranteeBadge';
 import { Button } from '@/components/ui/button'; // Import Button
+import { useToast } from '@/hooks/use-toast'; // Import useToast
+
 
 // Define questionnaire icon SVG inline
 const QuestionnaireIcon = () => (
@@ -30,8 +33,10 @@ const ShareIcon = () => (
 
 export default function Home() {
   console.log('[page.tsx] Home component rendering...');
+  const { toast } = useToast();
 
-  const [confirmedDocType, setConfirmedDocType] = useState<string | null>(null); // Store the *confirmed* document type name
+  const [inferenceResult, setInferenceResult] = useState<InferDocumentTypeOutput | null>(null); // Store the raw AI output
+  const [selectedDocType, setSelectedDocType] = useState<string | null>(null); // Store the *confirmed* document type name
   const [selectedState, setSelectedState] = useState<string | undefined>(undefined); // Store selected state from inference step
   const [questionnaireAnswers, setQuestionnaireAnswers] = useState<Record<string, any> | null>(null);
   const [disclaimerAgreed, setDisclaimerAgreed] = useState<boolean>(false); // New state for disclaimer
@@ -42,21 +47,37 @@ export default function Home() {
     if (pdfDataUrl) return 5; // Share/Download is now Step 5
     if (disclaimerAgreed) return 4; // PDF Preview is now Step 4
     if (questionnaireAnswers) return 3; // Disclaimer is now Step 3
-    if (confirmedDocType) return 2; // Questionnaire is Step 2 (based on confirmed type)
+    if (selectedDocType) return 2; // Questionnaire is Step 2 (based on confirmed type)
     return 1; // Inference is Step 1
   };
   const currentStep = getCurrentStep();
 
-  // Updated handler: receives the *selected* document name and state
-  const handleDocumentConfirmed = (selectedDocName: string | null, state?: string) => {
-    console.log('[page.tsx] handleDocumentConfirmed called with:', selectedDocName, 'State:', state);
-    setConfirmedDocType(selectedDocName);
-    setSelectedState(state); // Store the state selected during inference
-    // Reset subsequent steps if the document type changes or becomes null
+  // Handler for when DocumentInference completes its analysis
+  const handleInferenceComplete = (output: InferDocumentTypeOutput | null, state?: string) => {
+    console.log('[page.tsx] handleInferenceComplete called with output:', output, 'State:', state);
+    setInferenceResult(output); // Store the raw output
+    setSelectedState(state); // Store the state used for inference
+    setSelectedDocType(null); // Reset selection, user must pick from suggestions
+    // Reset subsequent steps
     setQuestionnaireAnswers(null);
     setDisclaimerAgreed(false);
     setPdfDataUrl(undefined);
+
+     if (output) {
+        toast({ title: "Analysis Complete", description: "AI suggestions loaded below. Please review and select the best fit." });
+     } else {
+         // Handle case where inference resulted in null (e.g., error or cleared input)
+         toast({ title: "Input Cleared or Error", description: "Provide a description to get suggestions.", variant: "destructive" });
+     }
   };
+
+  // Handler for when user selects a document type from the DocumentTypeSelector
+  const handleDocumentTypeSelected = (docName: string) => {
+      console.log(`[page.tsx] handleDocumentTypeSelected: User selected ${docName}`);
+      setSelectedDocType(docName); // Confirm the selection
+       toast({ title: "Document Type Confirmed", description: `Proceeding with ${docName}.` });
+      // Optional: Automatically scroll to the next step or highlight it
+  }
 
   // Questionnaire submit now leads to disclaimer step
   const handleAnswersSubmit = (answers: Record<string, any>) => {
@@ -65,30 +86,89 @@ export default function Home() {
     setDisclaimerAgreed(false); // Ensure disclaimer needs agreement again
     setPdfDataUrl(undefined); // Clear previous PDF if re-submitting
     console.log("[page.tsx] Questionnaire submitted, proceeding to disclaimer step.");
-    // No PDF generation here anymore
   };
 
   // Disclaimer agreement triggers PDF generation (simulation)
-  const handleDisclaimerAgree = () => {
+  const handleDisclaimerAgree = async () => { // Make async to await generation
      console.log('[page.tsx] handleDisclaimerAgree called.');
      setDisclaimerAgreed(true);
-     console.log("[page.tsx] Disclaimer agreed. Simulating PDF generation with answers:", questionnaireAnswers);
-     // Simulate PDF generation after agreement
-     // In a real app, this would call a backend function (e.g., Firebase Function)
-     // which takes `questionnaireAnswers`, `confirmedDocType`, and `selectedState`, generates the PDF,
-     // potentially saves it to storage, and returns a URL or the PDF data.
-     setTimeout(() => {
-         console.log("[page.tsx] PDF simulation complete. Setting dummy URL.");
-         // Simulate a slightly more complex PDF for better preview
-         const base64Pdf = "JVBERi0xLjQKJeLjz9MKMSAwIG9iago8PC9UeXBlL0NhdGFsb2cvUGFnZXMgMiAwIFI+PgplbmRvYmoKMiAwIG9iago8PC9UeXBlL1BhZ2VzL0NvdW50IDEvS2lkc1sgMyAwIFJdPj4KZW5kb2JqCjMgMCBvYmoKPDwvVHlwZS9QYWdlL1BhcmVudCAyIDAgUi9NZWRpYUJveFswIDAgNjEyIDc5Ml0vUmVzb3VyY2VzPDwvRm9udDw8L0YxIDQgMCBSPj4+Pi9Db250ZW50cyA1IDAgUi9Hcm91cDw8L1MvVHJhbnNwYXJlbmN5L0NTL0RldmljZVJHQi9JIHRydWU+Pj4+PgplbmRvYmoKNSAwIG9iago8PC9MZW5ndGggMjMxPj4Kc3RyZWFtCkJUCjAgMCAwIHJnIEJUL0YxIDQwIFRmIDEgMCAwIDEgMzAgNzQwIFRtCihQREVQIFNpbXVsYXRpb24gLSBEb2N1bWVudCkgVGoKRVQKClBTIFEuLi5RUQpCdCAvRjEgMTIgVGYgMSAwIDAgMSAzMCA3MDAgVG0KKFN0YXRlOiB7U1RBVEVfSEVSRX0pIFRqCkVUCgpCdCAvRjEgMTIgVGYgMSAwIDAgMSAzMCA2ODAgVG0KKENsaWVudDogSW5wdXRzIGZyb20gcXVlc3Rpb25uYWlyZSkgVGoKRVQKClBTIFEuLi5RUQpCdCAvRjEgOCBUZiAxIDAgMCAxIDMwIDYzMCBUbQooRElTQ0xBSU1FUikgVGoKRVQKZW5kc3RyZWFtCmVuZG9iago0IDAgb2JqCjw8L1R5cGUvRm9udC9TdWJ0eXBlL1R5cGUxL0Jhc2VGb250L0hlbHZldGljYT4+CmVuZG9iagp4cmVmCjAgNgowMDAwMDAwMDAwIDY1NTM1IGYgCjAwMDAwMDAwMTIgMDAwMDAgbiAKMDAwMDAwMDA2MiAwMDAwMCBuIAowMDAwMDAwMTQwIDAwMDAwIG4gCjAwMDAwMDA3NDMgMDAwMDAgbiAKMDAwMDAwMDI3NyAwMDAwMCBuIAp0cmFpbGVyCjw8L1Jvb3QgMSAwIFIvU2l6ZSA2Pj4KCnN0YXJ0eHJlZgo4MDMKJSUzMAo=";
-         const statePlaceholder = selectedState || 'N/A';
-         const decodedPdf = atob(base64Pdf);
-         const pdfWithState = decodedPdf.replace('{STATE_HERE}', statePlaceholder);
-         const finalBase64Pdf = btoa(pdfWithState);
+     console.log("[page.tsx] Disclaimer agreed. Triggering PDF generation with type:", selectedDocType, "answers:", questionnaireAnswers);
 
-         setPdfDataUrl(`data:application/pdf;base64,${finalBase64Pdf}`);
-     }, 500);
+     if (!selectedDocType || !questionnaireAnswers) {
+         toast({ title: "Missing Data", description: "Cannot generate PDF without document type and answers.", variant: "destructive"});
+         setDisclaimerAgreed(false); // Revert agreement state
+         return;
+     }
+
+     // Show loading toast
+      const generationToast = toast({
+          title: "Generating Document...",
+          description: "Please wait while we create your PDF.",
+          duration: 999999, // Keep open until dismissed
+      });
+
+     try {
+        // Call the actual PDF generation service (simulated via fetch to API route for now)
+         // In production with static export, this should call a Cloud Function URL
+         const response = await fetch('/api/generate-pdf', {
+             method: 'POST',
+             headers: { 'Content-Type': 'application/json' },
+             body: JSON.stringify({
+                 documentType: selectedDocType,
+                 answers: questionnaireAnswers,
+                 state: selectedState, // Pass state if needed for generation
+             }),
+         });
+
+         generationToast.dismiss(); // Dismiss loading toast
+
+         if (!response.ok) {
+            const errorData = await response.json();
+             console.error("[page.tsx] PDF generation failed:", errorData);
+             toast({ title: "PDF Generation Failed", description: errorData.error || "Could not generate the document.", variant: "destructive"});
+             setDisclaimerAgreed(false); // Revert agreement state
+             return;
+         }
+
+         const blob = await response.blob();
+         const dataUrl = await new Promise<string>((resolve, reject) => {
+             const reader = new FileReader();
+             reader.onloadend = () => resolve(reader.result as string);
+             reader.onerror = reject;
+             reader.readAsDataURL(blob);
+         });
+
+         console.log("[page.tsx] PDF generation successful. Setting data URL.");
+         setPdfDataUrl(dataUrl);
+         toast({ title: "Document Ready!", description: "Your PDF preview is loaded below." });
+
+     } catch (error) {
+          generationToast.dismiss();
+          console.error("[page.tsx] Error during PDF generation fetch:", error);
+          toast({ title: "PDF Generation Error", description: "An unexpected error occurred.", variant: "destructive"});
+          setDisclaimerAgreed(false); // Revert agreement state
+     }
   }
+
+  // Prepare suggestions for DocumentTypeSelector
+   const suggestionsForSelector: SuggestedDoc[] = [];
+   if (inferenceResult) {
+       suggestionsForSelector.push({
+           name: inferenceResult.documentType,
+           reason: inferenceResult.reasoning || `Primary suggestion based on your input. Confidence: ${(inferenceResult.confidence * 100).toFixed(0)}%`,
+           confidence: inferenceResult.confidence,
+       });
+       inferenceResult.alternatives?.forEach(alt => {
+           if (alt !== inferenceResult.documentType) { // Avoid duplicates
+               suggestionsForSelector.push({ name: alt, reason: "An alternative possibility based on your input." });
+           }
+       });
+        // Add "General Inquiry" / "None of these" if not already present
+       if (!suggestionsForSelector.some(s => s.name === 'General Inquiry')) {
+           suggestionsForSelector.push({ name: 'General Inquiry', reason: 'If none of the above seem correct, or if you need further clarification.' });
+       }
+   }
+
 
   return (
     <div className="flex flex-col items-center w-full bg-background">
@@ -101,47 +181,42 @@ export default function Home() {
             {/* Step Panels Wrapper - Use max-w-3xl for better focus */}
             <div className="w-full max-w-3xl mx-auto space-y-8">
                 {/* Step 1: Document Inference & Confirmation */}
-                {currentStep === 1 && (
-                    <Card className="shadow-lg rounded-lg bg-card border border-border transition-all duration-500 ease-out animate-fade-in">
-                        <CardHeader>
-                        <div className="flex items-center space-x-2">
-                            <FileText className="h-6 w-6 text-primary" />
-                            <CardTitle className="text-2xl">Step 1: Describe & Confirm</CardTitle>
-                        </div>
-                        <CardDescription>
-                           Describe your situation and select the relevant U.S. state. Our AI will suggest document types for you to confirm.
-                        </CardDescription>
-                        </CardHeader>
+                <Card className={`shadow-lg rounded-lg bg-card border border-border transition-all duration-500 ease-out ${currentStep > 1 ? 'opacity-50 cursor-not-allowed' : 'animate-fade-in'}`}>
+                    <CardHeader>
+                    <div className="flex items-center space-x-2">
+                        <FileText className="h-6 w-6 text-primary" />
+                        <CardTitle className="text-2xl">Step 1: Describe & Confirm</CardTitle>
+                    </div>
+                    <CardDescription>
+                        {currentStep > 1
+                            ? `Document type confirmed: ${selectedDocType || "N/A"} ${selectedState ? `(State: ${selectedState})` : ''}`
+                            : "Describe your situation and select the relevant U.S. state. Our AI will suggest document types."}
+                    </CardDescription>
+                    </CardHeader>
+                    {currentStep === 1 && (
                         <CardContent>
-                            {/* Pass the confirmation handler */}
-                            <DocumentInference onInferenceResult={handleDocumentConfirmed} />
+                            {/* DocumentInference now only triggers analysis, selection happens below */}
+                            <DocumentInference onInferenceResult={handleInferenceComplete} />
+                             {/* Display suggestions using DocumentTypeSelector if analysis is complete */}
+                            {inferenceResult && (
+                                 <DocumentTypeSelector
+                                     suggestions={suggestionsForSelector}
+                                     onSelect={handleDocumentTypeSelected}
+                                 />
+                            )}
                         </CardContent>
-                    </Card>
-                )}
-                {/* Show locked Step 1 if past it */}
-                {currentStep > 1 && (
-                    <Card className="shadow-lg rounded-lg opacity-50 cursor-not-allowed bg-card border border-border">
-                         <CardHeader>
-                            <div className="flex items-center space-x-2">
-                                <FileText className="h-6 w-6 text-primary" />
-                                <CardTitle className="text-2xl">Step 1: Describe & Confirm</CardTitle>
-                            </div>
-                            <CardDescription>
-                               Document type confirmed: <strong>{confirmedDocType || "N/A"}</strong> {selectedState && `(State: ${selectedState})`}
-                            </CardDescription>
-                         </CardHeader>
-                    </Card>
-                )}
+                    )}
+                </Card>
 
 
                 {/* Separator between steps */}
                 {currentStep > 1 && <Separator className="my-8" />}
 
                 {/* Step 2: Dynamic Questionnaire */}
-                 {currentStep >= 2 && confirmedDocType && (
+                 {currentStep >= 2 && selectedDocType && (
                      <div className={`transition-opacity duration-500 ease-out ${currentStep === 2 ? 'opacity-100 animate-fade-in' : 'opacity-50 cursor-not-allowed'}`}>
                          <Questionnaire
-                             documentType={confirmedDocType} // Pass the confirmed document type name
+                             documentType={selectedDocType} // Pass the confirmed document type name
                              selectedState={selectedState} // Pass selected state
                              onAnswersSubmit={handleAnswersSubmit}
                              isReadOnly={currentStep > 2} // Lock if past this step
@@ -204,7 +279,7 @@ export default function Home() {
                      <div className={`transition-opacity duration-500 ease-out ${currentStep === 4 ? 'opacity-100 animate-fade-in' : 'opacity-50 cursor-not-allowed'}`}>
                          <PdfPreview
                              documentDataUrl={pdfDataUrl}
-                             documentName={`${confirmedDocType || 'document'}.pdf`}
+                             documentName={`${selectedDocType || 'document'}.pdf`}
                              isReadOnly={currentStep > 4} // Lock if past this step
                          />
                      </div>
@@ -252,7 +327,7 @@ export default function Home() {
                                        if (pdfDataUrl) {
                                            const link = document.createElement('a');
                                            link.href = pdfDataUrl;
-                                           link.download = `${confirmedDocType || 'document'}_signed.pdf`;
+                                           link.download = `${selectedDocType || 'document'}_signed.pdf`; // Use selectedDocType
                                            document.body.appendChild(link);
                                            link.click();
                                            document.body.removeChild(link);
