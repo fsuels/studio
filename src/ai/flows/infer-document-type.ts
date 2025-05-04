@@ -1,3 +1,4 @@
+
 'use server';
 
 /**
@@ -8,7 +9,7 @@
  * - InferDocumentTypeOutput - The return type for the inferDocumentType function.
  */
 
-import { ai } from '@/ai/ai-instance';
+import { ai } from '@/ai/ai-instance'; // This import might throw if API key is missing due to changes in ai-instance.ts
 import { z } from 'genkit';
 import { GenerateResponseData } from 'genkit/generate'; // Import necessary type
 
@@ -35,43 +36,53 @@ const InferDocumentTypeOutputSchema = z.object({
 });
 export type InferDocumentTypeOutput = z.infer<typeof InferDocumentTypeOutputSchema>;
 
+// Main exported Server Action function
 export async function inferDocumentType(
   input: InferDocumentTypeInput
 ): Promise<InferDocumentTypeOutput> {
   console.log("[inferDocumentType] Received request with input:", JSON.stringify(input)); // Log entry
 
-  // Validate input at the entry point
-  const validatedInput = InferDocumentTypeInputSchema.safeParse(input);
-  if (!validatedInput.success) {
-    const errorMessage = `Invalid input: ${validatedInput.error.errors.map(e => `${e.path.join('.')}: ${e.message}`).join(', ')}`;
-    console.error("[inferDocumentType] Validation Error:", errorMessage, "Input:", input);
-    // Throw a standard Error that can be serialized and caught by the client
-    throw new Error(errorMessage);
-  }
-   console.log(`[inferDocumentType] Input validated. Calling inferDocumentTypeFlow with: ${JSON.stringify(validatedInput.data)}`);
-   try {
-       const result = await inferDocumentTypeFlow(validatedInput.data);
-       console.log(`[inferDocumentType] inferDocumentTypeFlow executed successfully. Result: ${JSON.stringify(result)}`);
-       return result;
-   } catch (error: unknown) {
-       // Catch any error from the flow, log it server-side, and re-throw a standard Error
-       console.error(`[inferDocumentType] Error executing inferDocumentTypeFlow:`, error);
-       let clientErrorMessage = 'An error occurred while inferring the document type. Please check the server logs for details.'; // Generic default message for client
+  try {
+    // 1. Validate input immediately
+    const validatedInput = InferDocumentTypeInputSchema.safeParse(input);
+    if (!validatedInput.success) {
+      const errorMessage = `Invalid input: ${validatedInput.error.errors.map(e => `${e.path.join('.')}: ${e.message}`).join(', ')}`;
+      console.error("[inferDocumentType] Validation Error:", errorMessage, "Input:", input);
+      // Throw a user-friendly error that can be caught by the client
+      throw new Error(errorMessage);
+    }
 
-        if (error instanceof Error) {
-            // Use the message from the caught error for the client-facing message
-            // Keep it relatively simple and avoid exposing sensitive details
-            clientErrorMessage = `Failed to infer document type: ${error.message}`;
-            console.error("Stack Trace:", error.stack); // Log stack trace server-side only for debugging
-        } else {
-            // Handle cases where the thrown object is not an Error instance
-            clientErrorMessage = `An unexpected error occurred: ${String(error)}`;
-        }
-       // Throw a new, simple Error object suitable for the client (Server Action boundary)
-       throw new Error(clientErrorMessage);
-   }
+    console.log(`[inferDocumentType] Input validated. Calling inferDocumentTypeFlow with: ${JSON.stringify(validatedInput.data)}`);
+
+    // 2. Execute the Genkit flow
+    const result = await inferDocumentTypeFlow(validatedInput.data);
+    console.log(`[inferDocumentType] inferDocumentTypeFlow executed successfully. Result: ${JSON.stringify(result)}`);
+    return result;
+
+  } catch (error: unknown) {
+    // 3. Catch ALL errors (validation, flow execution, AI errors, config errors)
+    console.error(`[inferDocumentType] Top-level error caught:`, error);
+
+    let clientErrorMessage = 'An error occurred while inferring the document type. Please check the server logs for details.'; // Generic default message for client
+
+     if (error instanceof Error) {
+         // Use the message from the caught error (could be from validation or the flow)
+         clientErrorMessage = `Failed to infer document type: ${error.message}`;
+         // Log stack trace server-side only for debugging
+         // Avoid exposing potentially sensitive stack trace details to the client
+         console.error("Stack Trace (Server-Side Only):", error.stack);
+     } else {
+         // Handle rare cases where the thrown object is not an Error instance
+         clientErrorMessage = `An unexpected error occurred: ${String(error)}`;
+     }
+    // Throw a new, simple Error object suitable for the client (Server Action boundary)
+    // This ensures only the message is sent, not the full error object/stack
+    throw new Error(clientErrorMessage);
+  }
 }
 
+
+// Internal Genkit prompt definition
 const prompt = ai.definePrompt({
   name: 'inferDocumentTypePrompt',
   input: {
@@ -107,6 +118,7 @@ const prompt = ai.definePrompt({
 });
 
 
+// Internal Genkit flow definition
 const inferDocumentTypeFlow = ai.defineFlow<
   typeof InferDocumentTypeInputSchema,
   typeof InferDocumentTypeOutputSchema
@@ -119,7 +131,8 @@ async input => {
    console.log(`[inferDocumentTypeFlow] Flow started. Received input: ${JSON.stringify(input)}`);
    let response: GenerateResponseData<z.infer<typeof InferDocumentTypeOutputSchema>>;
    try {
-        console.log("[inferDocumentTypeFlow] Calling AI prompt...");
+        console.log("[inferDocumentTypeFlow] Calling AI prompt..."); // Log before the call
+        // The 'ai' instance or the 'prompt' call itself might throw if the API key is invalid/missing
         response = await prompt(input); // Await the prompt call
         console.log(`[inferDocumentTypeFlow] Raw prompt response received.`);
 
@@ -137,22 +150,27 @@ async input => {
        if (!validatedOutput.success) {
            console.error('[inferDocumentTypeFlow] Prompt output validation failed:', validatedOutput.error.errors.map(e => `${e.path.join('.')}: ${e.message}`).join(', '), 'Raw output:', JSON.stringify(output));
            // Throw an error if validation fails, indicating the AI didn't follow instructions
-           throw new Error(`AI output validation failed: ${validatedOutput.error.errors.map(e => e.message).join(', ')}. Raw output: ${JSON.stringify(output)}`);
+           // Include details about validation failure in the error message
+           const validationErrors = validatedOutput.error.errors.map(e => `${e.path.join('.')}: ${e.message}`).join('; ');
+           throw new Error(`AI output validation failed: ${validationErrors}. Raw output: ${JSON.stringify(output)}`);
        }
 
        console.log(`[inferDocumentTypeFlow] Validation successful. Returning: ${JSON.stringify(validatedOutput.data)}`);
       return validatedOutput.data;
    } catch (error: unknown) {
-       // Log the specific error within the flow
+       // Log the specific error within the flow for detailed server-side debugging
        console.error('[inferDocumentTypeFlow] Error during prompt execution or processing:', error);
-       // Decide whether to throw the original error or a new one.
-       // Throwing a new Error allows attaching a more specific message for this context.
-        if (error instanceof Error) {
-            // Re-throw a new error that includes the original message but keeps it potentially simpler.
-            throw new Error(`Error in AI inference flow: ${error.message}`, { cause: error }); // Preserve original error in cause if needed server-side
-        } else {
-            // Handle non-Error exceptions
-            throw new Error(`Unknown error in AI inference flow: ${String(error)}`);
-        }
+
+       // Re-throw the error to be caught by the top-level handler in `inferDocumentType`.
+       // This keeps the flow focused on its task and lets the Server Action boundary handle client-facing errors.
+       // If the error is already an Error instance, re-throw it directly.
+       if (error instanceof Error) {
+           // Optionally wrap it to add context, but re-throwing the original is often fine.
+           // throw new Error(`Error in AI inference flow step: ${error.message}`, { cause: error });
+           throw error;
+       } else {
+           // Handle non-Error exceptions by converting them to a standard Error.
+           throw new Error(`Unknown error in AI inference flow: ${String(error)}`);
+       }
    }
 });
