@@ -1,7 +1,10 @@
-import type {NextConfig} from 'next';
+import type { NextConfig } from 'next'
+import webpack from 'webpack'
 
 const nextConfig: NextConfig = {
-  // output: 'export', // Removed: Incompatible with Server Actions/Genkit
+  // Enable static export for Next.js 15
+  output: 'export',
+
   /* config options here */
   typescript: {
     ignoreBuildErrors: true,
@@ -9,8 +12,9 @@ const nextConfig: NextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
+
   images: {
-    // unoptimized: true, // Removed: Only needed for static export
+    // Only optimize remote images from specified patterns
     remotePatterns: [
       {
         protocol: 'https',
@@ -20,6 +24,18 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-};
 
-export default nextConfig;
+  webpack(config) {
+    // Ignore unsupported Jaeger exporter import
+    config.plugins!.push(
+      new webpack.IgnorePlugin({ resourceRegExp: /^@opentelemetry\/exporter-jaeger$/ })
+    )
+    // Stub out handlebars to avoid require.extensions usage
+    config.plugins!.push(
+      new webpack.IgnorePlugin({ resourceRegExp: /^handlebars$/ })
+    )
+    return config
+  },
+}
+
+export default nextConfig

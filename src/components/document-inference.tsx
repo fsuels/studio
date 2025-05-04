@@ -1,16 +1,16 @@
 
 "use client";
 
-import React, { useState, useEffect, useCallback, useRef } from 'react'; // Added useRef
-import type { InferDocumentTypeInput, InferDocumentTypeOutput } from '@/ai/flows/infer-document-type';
-import { inferDocumentType } from '@/ai/flows/infer-document-type';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
+// **Removed direct import of inferDocumentType Server Action**
+import type { InferDocumentTypeInput, InferDocumentTypeOutput } from '@/ai/flows/infer-document-type'; // Keep type imports
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
-import { Loader2, Mic, Edit2, Check, BrainCircuit, X } from 'lucide-react'; // Added X icon
+import { Loader2, Mic, Edit2, Check, BrainCircuit, X } from 'lucide-react';
 
 // Mock SpeechRecognition - Replace with actual implementation if needed
 const MockSpeechRecognition = {
@@ -228,10 +228,31 @@ export function DocumentInference({ onInferenceResult }: DocumentInferenceProps)
     stableOnInferenceResult(null); // Notify parent that result is cleared
 
     try {
-      console.log("[handleSubmit] Calling inferDocumentType with description:", currentDescription);
+      console.log("[handleSubmit] Calling API /api/infer-document-type with description:", currentDescription);
       const input: InferDocumentTypeInput = { description: currentDescription };
-      const output = await inferDocumentType(input);
-       console.log("[handleSubmit] inferDocumentType successful. Output:", output);
+
+      // **Use fetch to call the API route**
+      const response = await fetch('/api/infer-document-type', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(input),
+      });
+
+      const responseData = await response.json();
+
+      if (!response.ok) {
+          // Handle API errors (e.g., 4xx, 5xx)
+          console.error("[handleSubmit Error] API responded with error:", response.status, responseData);
+          // Use the error message from the API response if available
+          const errorMessage = responseData.error || `API Error: ${response.status} ${response.statusText}`;
+          throw new Error(errorMessage);
+      }
+
+      // **Assuming responseData is of type InferDocumentTypeOutput on success**
+      const output: InferDocumentTypeOutput = responseData;
+      console.log("[handleSubmit] API call successful. Output:", output);
       setResult(output);
       stableOnInferenceResult(output); // Pass result to parent
       // Add a success toast
@@ -241,21 +262,17 @@ export function DocumentInference({ onInferenceResult }: DocumentInferenceProps)
       });
     } catch (error: unknown) {
       // Log the full error object for better debugging
-      console.error('[handleSubmit Error] Error inferring document type:', error);
+      console.error('[handleSubmit Error] Error during API call or processing:', error);
 
-      // Create a user-friendly error message from the Error object
+      // Create a user-friendly error message
       let errorMessage = "Could not process your request due to an unexpected error. Please try again later.";
        if (error instanceof Error) {
-           // Use the message from the Error object thrown by the server action
+           // Use the message from the caught error (could be from fetch failure or API error response)
            errorMessage = error.message;
-
-           // You can still check for specific patterns if needed, but prioritize the thrown message
-          // Example: if (error.message.includes('API key not valid')) { ... }
        } else {
             // Handle cases where the thrown object is not an Error instance
             errorMessage = `An unexpected error occurred: ${String(error)}`;
        }
-
 
       toast({
         title: "AI Inference Error",
@@ -407,4 +424,3 @@ export function DocumentInference({ onInferenceResult }: DocumentInferenceProps)
 if (typeof window !== 'undefined') {
   window.SpeechRecognition = window.SpeechRecognition || (window as any).webkitSpeechRecognition;
 }
-
