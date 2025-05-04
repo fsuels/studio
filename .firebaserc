@@ -1,8 +1,5 @@
 {
   "projects": {
-    "default": "legaldoc-26ea8",
-    "123legaldoc": "legaldoc-26ea8"
-  },
-  "targets": {},
-  "etags": {}
+    "default": "legaldoc-26ea8"
+  }
 }
