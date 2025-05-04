@@ -1,9 +1,9 @@
 
 "use client"; // Mark page as client component due to state management and client children
 
-import React, { useState, useEffect } from 'react'; // Ensure useEffect is imported if used elsewhere
-import type { InferDocumentTypeOutput, DocumentSuggestion } from '@/ai/flows/infer-document-type'; // Import new output types
-import { DocumentInference } from '@/components/document-inference';
+import React, { useState, useEffect, useCallback, useRef } from 'react'; // Ensure useEffect is imported if used elsewhere
+import type { InferDocumentTypeOutput, DocumentSuggestion, InferDocumentTypeInput } from '@/ai/flows/infer-document-type'; // Import new output types
+import StepOneInput from '@/components/StepOneInput'; // Import the new StepOneInput component
 import DocumentTypeSelector from '@/components/DocumentTypeSelector'; // Import the new selector
 import DynamicFormRenderer from '@/components/DynamicFormRenderer'; // Import the new dynamic renderer
 import { formSchemas } from '@/data/formSchemas'; // Import schemas
@@ -11,7 +11,7 @@ import { DisclaimerStep } from '@/components/disclaimer-step'; // Import the new
 import { PdfPreview } from '@/components/pdf-preview';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import { FileText, FileSignature, Check, Upload, AlertTriangle, Download, ListChecks } from 'lucide-react'; // Added ListChecks icon
+import { FileText, FileSignature, Check, Upload, AlertTriangle, Download, ListChecks, Loader2 } from 'lucide-react'; // Added ListChecks, Loader2 icons
 import HeroFeatureSection from '@/components/landing/HeroFeatureSection'; // Corrected import path to landing
 import ThreeStepSection from '@/components/ThreeStepSection'; // Corrected import path for ThreeStepSection
 import { TestimonialCarousel } from '@/components/landing/TestimonialCarousel';
@@ -31,20 +31,178 @@ const ShareIcon = () => (
 export default function Home() {
   console.log('[page.tsx] Home component rendering...');
   const { toast } = useToast();
-  const { t } = useTranslation(); // Get translation function
+  const { t, i18n } = useTranslation(); // Get translation function and i18n instance
   const [isHydrated, setIsHydrated] = useState(false); // State for hydration
 
-  // State Updates:
-  const [inferenceResult, setInferenceResult] = useState<InferDocumentTypeOutput | null>(null);
-  const [selectedDocType, setSelectedDocType] = useState<string | null>(null);
+  // --- State for Step 1 ---
+  const [description, setDescription] = useState('');
   const [selectedState, setSelectedState] = useState<string | undefined>(undefined);
+  const [isRecording, setIsRecording] = useState(false);
+  const [isLoadingAnalysis, setIsLoadingAnalysis] = useState(false);
+  const [activeTab, setActiveTab] = useState<'text' | 'microphone'>('text');
+  const [transcript, setTranscript] = useState(''); // Hold interim/final transcript
+  const [recognition, setRecognition] = useState<any | null>(null); // Hold recognition instance
+  const isRecordingRef = useRef(isRecording);
+  const recognitionRef = useRef<SpeechRecognition | null>(null);
+
+  // --- State for Step 1 -> 2 ---
+  const [inferenceResult, setInferenceResult] = useState<InferDocumentTypeOutput | null>(null);
+
+  // --- State for Step 2 -> 3 ---
+  const [selectedDocType, setSelectedDocType] = useState<string | null>(null);
   const [questionnaireAnswers, setQuestionnaireAnswers] = useState<Record<string, any> | null>(null);
+
+  // --- State for Step 3 -> 4 ---
   const [disclaimerAgreed, setDisclaimerAgreed] = useState<boolean>(false);
+
+  // --- State for Step 4 -> 5 ---
   const [pdfDataUrl, setPdfDataUrl] = useState<string | undefined>(undefined);
+
 
   useEffect(() => {
     setIsHydrated(true); // Set hydrated state on client
   }, []);
+
+  // Effect to sync isRecording state with its ref
+  useEffect(() => {
+       isRecordingRef.current = isRecording;
+  }, [isRecording]);
+
+  // --- Speech Recognition Setup Effect ---
+  useEffect(() => {
+    const SpeechRecognitionApi = typeof window !== 'undefined' ? (window.SpeechRecognition || (window as any).webkitSpeechRecognition) : null;
+
+    if (SpeechRecognitionApi && !recognitionRef.current) { // Initialize only once
+        try {
+            const instance = new SpeechRecognitionApi();
+            instance.continuous = true;
+            instance.interimResults = true;
+            instance.lang = i18n.language; // Set recognition language based on i18n
+
+            instance.onresult = (event: SpeechRecognitionEvent) => {
+                let interimTranscript = '';
+                let finalTranscriptPiece = '';
+                for (let i = event.resultIndex; i < event.results.length; ++i) {
+                    if (event.results[i].isFinal) {
+                        finalTranscriptPiece += event.results[i][0].transcript;
+                    } else {
+                        interimTranscript += event.results[i][0].transcript;
+                    }
+                }
+                 // Update description state ONLY with final results
+                if (finalTranscriptPiece) {
+                    setDescription(prev => (prev + finalTranscriptPiece).trim() + ' ');
+                }
+                // Update transcript state to show both interim and final (for display)
+                setTranscript(prev => description + interimTranscript); // Display combined transcript
+            };
+
+            instance.onerror = (event: SpeechRecognitionErrorEvent) => {
+                console.error('Speech recognition error:', event.error, event.message);
+                 let errorMessage = t('documentInference.micErrorDefault', { error: event.error, message: event.message || 'Try typing.' });
+                 if (event.error === 'no-speech') errorMessage = t('documentInference.micErrorNoSpeech');
+                 else if (event.error === 'audio-capture') errorMessage = t('documentInference.micErrorAudioCapture');
+                 else if (event.error === 'not-allowed' || event.error === 'service-not-allowed') errorMessage = t('documentInference.micErrorNotAllowed');
+                 else if (event.error === 'network') errorMessage = t('documentInference.micErrorNetwork');
+                 else if (event.error === 'aborted' && !isRecordingRef.current) return; // Ignore intentional stops
+
+                toast({ title: t('documentInference.micErrorTitle'), description: errorMessage, variant: "destructive" });
+                if (isRecordingRef.current) setIsRecording(false);
+            };
+
+            instance.onend = () => {
+                 if (isRecordingRef.current) {
+                    setIsRecording(false);
+                    console.log("Recognition ended unexpectedly, stopping recording state.");
+                 } else {
+                    console.log("Recognition ended intentionally.");
+                 }
+                  setTranscript(description); // Ensure transcript matches final description on end
+            };
+
+            recognitionRef.current = instance; // Store instance in ref
+            setRecognition(instance); // Keep state for potential conditional rendering if needed
+
+        } catch (e) {
+            console.error("Failed to initialize SpeechRecognition:", e);
+            setRecognition(null);
+        }
+    } else if (!SpeechRecognitionApi) {
+        console.warn('Speech Recognition API not supported.');
+        setRecognition(null);
+    } else if (recognitionRef.current) {
+        // Update language if i18n language changes after initialization
+        recognitionRef.current.lang = i18n.language;
+    }
+
+    // Cleanup function
+    return () => {
+       const currentRecognition = recognitionRef.current;
+       if (currentRecognition && isRecordingRef.current) {
+           isRecordingRef.current = false;
+           try {
+                currentRecognition.stop();
+                console.log("Stopping recognition on unmount/cleanup.");
+           } catch (e) { console.warn("Error stopping recognition on unmount:", e); }
+       }
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [i18n.language, t]); // Added t to dependency array
+
+
+  // --- Mic Handlers for StepOneInput ---
+  const handleStartMic = useCallback(() => {
+     const currentRecognition = recognitionRef.current;
+    if (!currentRecognition) {
+         toast({ title: t('documentInference.micUnsupportedTitle'), description: t('documentInference.micUnsupportedDescription'), variant: "destructive" });
+         setActiveTab('text');
+         return;
+    }
+    if (!isRecordingRef.current) {
+        try {
+            currentRecognition.lang = i18n.language; // Ensure correct language before starting
+            currentRecognition.start();
+            console.log(`Starting recognition in language: ${currentRecognition.lang}.`);
+             setIsRecording(true);
+             setTranscript(description); // Reset transcript display on start
+        } catch (e: any) {
+            console.error("Error starting recognition:", e);
+            let errorMsg = t('documentInference.micStartErrorDefault', { message: e.message });
+            if (e.name === 'NotAllowedError' || e.name === 'SecurityError') errorMsg = t('documentInference.micErrorNotAllowed');
+            else if (e.name === 'InvalidStateError') {
+                console.warn("Recognition already started? Attempting to stop and restart.");
+                try { currentRecognition.stop(); } catch {}
+                setTimeout(() => {
+                     try {
+                        currentRecognition.lang = i18n.language; // Ensure correct language
+                        currentRecognition.start();
+                        setIsRecording(true);
+                        setTranscript(description); // Reset transcript display on start
+                     } catch (nestedE: any) {
+                         toast({ title: t('documentInference.micStartErrorTitle'), description: t('documentInference.micStartErrorDefault', { message: nestedE.message }), variant: "destructive" });
+                         setIsRecording(false);
+                     }
+                 }, 100);
+                 return; // Exit early
+            }
+             toast({ title: t('documentInference.micStartErrorTitle'), description: errorMsg, variant: "destructive" });
+             setIsRecording(false);
+        }
+    }
+  }, [i18n.language, t, toast, description]);
+
+  const handleStopMic = useCallback(() => {
+    const currentRecognition = recognitionRef.current;
+    if (currentRecognition && isRecordingRef.current) {
+        try {
+            currentRecognition.stop();
+            console.log("Manually stopping recognition.");
+        } catch (e) { console.warn("Error stopping recognition:", e); }
+        setIsRecording(false);
+         setTranscript(description); // Ensure transcript matches final description
+    }
+  }, [description]);
+
 
   // Determine current step based on state
   const getCurrentStep = () => {
@@ -56,25 +214,86 @@ export default function Home() {
   };
   const currentStep = getCurrentStep();
 
-  // Handler for when DocumentInference completes its analysis
-  const handleInferenceComplete = (output: InferDocumentTypeOutput | null, state?: string) => {
-    console.log('[page.tsx] handleInferenceComplete called with output:', output, 'State:', state);
-    setInferenceResult(output);
-    setSelectedState(state);
-    setSelectedDocType(null);
-    setQuestionnaireAnswers(null);
-    setDisclaimerAgreed(false);
-    setPdfDataUrl(undefined);
 
-     if (output && output.suggestions && output.suggestions.length > 0) {
-        toast({ title: t('toasts.analysisCompleteTitle'), description: t('toasts.analysisCompleteDescription') });
-     } else {
-         toast({ title: t('toasts.analysisInconclusiveTitle'), description: t('toasts.analysisInconclusiveDescription'), variant: "destructive" });
-          if (!output || !output.suggestions || output.suggestions.length === 0) {
-             setInferenceResult({ suggestions: [{ documentType: 'General Inquiry', confidence: 0.1, reasoning: 'Could not confidently match your description to a specific document.' }] });
-          }
+  // Handler for Step 1 "Analyze" button
+   const handleAnalyze = useCallback(async () => {
+     const logPrefix = "[handleAnalyze]";
+     const trimmedDescription = description.trim();
+     if (!trimmedDescription) {
+       toast({ title: t('documentInference.inputRequiredTitle'), description: t('documentInference.inputRequiredDescription'), variant: "destructive" });
+       setInferenceResult(null);
+       return;
      }
-  };
+      // Stop recording if analysis starts while recording
+      if (isRecordingRef.current) {
+          handleStopMic();
+      }
+
+     setIsLoadingAnalysis(true);
+     setInferenceResult(null); // Clear previous results
+
+     const currentLanguage = i18n.language.startsWith('es') ? 'es' : 'en';
+
+     const inputPayload: InferDocumentTypeInput = {
+         description: trimmedDescription,
+         language: currentLanguage,
+         ...(selectedState && { state: selectedState }),
+     };
+
+     console.log(`${logPrefix} Sending payload to API:`, inputPayload);
+
+     try {
+         const response = await fetch('/api/infer-document-type', {
+             method: 'POST',
+             headers: { 'Content-Type': 'application/json' },
+             body: JSON.stringify(inputPayload),
+         });
+
+         if (!response.ok) {
+             let errorMsg = t('documentInference.analysisFailedDefault');
+             let errorCode = 'API_ERROR';
+             try {
+                 const errorData = await response.json();
+                 errorMsg = errorData.error || errorMsg;
+                 errorCode = errorData.code || errorCode;
+                  console.error(`${logPrefix} API Error ${response.status} (${errorCode}):`, errorData);
+             } catch {
+                  console.error(`${logPrefix} API Error ${response.status}:`, await response.text());
+             }
+             if (errorCode === 'STATIC_EXPORT_API_DISABLED') {
+                 errorMsg = t('documentInference.analysisFailedApiDisabled');
+             }
+             toast({ title: t('documentInference.analysisFailedTitle'), description: errorMsg, variant: "destructive" });
+             setInferenceResult(null);
+              setIsLoadingAnalysis(false);
+             return;
+         }
+
+         const result: InferDocumentTypeOutput = await response.json();
+         console.log(`${logPrefix} Received API response:`, result);
+         setInferenceResult(result);
+         // Show success toast for analysis completion
+          if (result && result.suggestions && result.suggestions.length > 0) {
+             toast({ title: t('toasts.analysisCompleteTitle'), description: t('toasts.analysisCompleteDescription') });
+          } else {
+              toast({ title: t('toasts.analysisInconclusiveTitle'), description: t('toasts.analysisInconclusiveDescription'), variant: "destructive" });
+               // Ensure there's a default General Inquiry if AI returns nothing useful
+               if (!result || !result.suggestions || result.suggestions.length === 0) {
+                  setInferenceResult({ suggestions: [{ documentType: 'General Inquiry', confidence: 0.1, reasoning: 'Could not confidently match your description to a specific document.' }] });
+               }
+          }
+
+
+     } catch (error: unknown) {
+         console.error(`${logPrefix} Network or other error during fetch:`, error);
+         toast({ title: t('documentInference.networkErrorTitle'), description: t('documentInference.networkErrorDescription'), variant: "destructive" });
+         setInferenceResult(null);
+     } finally {
+         setIsLoadingAnalysis(false);
+     }
+   }, [description, toast, selectedState, i18n.language, t, handleStopMic]);
+
+
 
   // Handler for when user selects a document type from the DocumentTypeSelector
   const handleDocumentTypeSelected = (docName: string) => {
@@ -160,7 +379,7 @@ export default function Home() {
    if (inferenceResult && suggestionsForSelector.length > 0 && !suggestionsForSelector.some(s => s.documentType === 'General Inquiry')) {
         suggestionsForSelector.push({
             documentType: 'General Inquiry',
-            reasoning: 'If none of the above seem correct, or if you need further clarification.',
+            reasoning: t('docTypeSelector.generalInquiryReason') || 'If none of the above seem correct, or if you need further clarification.',
             confidence: 0.0
         });
    }
@@ -194,17 +413,32 @@ export default function Home() {
                     <CardHeader>
                     <div className="flex items-center space-x-2">
                         <FileText className="h-6 w-6 text-primary" />
-                        <CardTitle className="text-2xl">{t('Step 1: Describe & Confirm')}</CardTitle> {/* Translate */}
+                        <CardTitle className="text-2xl">{t('stepOne.title')}</CardTitle>
                     </div>
                     <CardDescription>
                         {currentStep > 1
-                            ? `${t('Document type confirmed')}: ${selectedDocType || "N/A"} ${selectedState ? `(${t('State')}: ${selectedState})` : ''}` // Translate
-                            : t('Describe your situation and select the relevant U.S. state. Our AI will suggest document types.')} {/* Translate */}
+                            ? `${t('docTypeSelector.confirmed')}: ${selectedDocType || "N/A"} ${selectedState ? `(${t('State')}: ${selectedState})` : ''}`
+                            : t('stepOne.description')}
                     </CardDescription>
                     </CardHeader>
                     {currentStep === 1 && (
                         <CardContent>
-                            <DocumentInference onInferenceResult={handleInferenceComplete} />
+                             {/* Use StepOneInput component */}
+                             <StepOneInput
+                                input={description}
+                                setInput={setDescription}
+                                state={selectedState}
+                                setState={setSelectedState}
+                                onAnalyze={handleAnalyze}
+                                isLoading={isLoadingAnalysis}
+                                isRecording={isRecording}
+                                startMic={handleStartMic}
+                                stopMic={handleStopMic}
+                                mode={activeTab}
+                                setMode={setActiveTab}
+                                transcript={transcript}
+                                recognition={recognition}
+                             />
                             {inferenceResult && (
                                  <DocumentTypeSelector
                                      suggestions={suggestionsForSelector}
@@ -373,4 +607,21 @@ export default function Home() {
 
     </div>
   );
+}
+
+
+// Define SpeechRecognition types if not available globally (common issue)
+declare global {
+  interface Window {
+    SpeechRecognition: typeof SpeechRecognition;
+    webkitSpeechRecognition: typeof SpeechRecognition;
+  }
+  interface SpeechRecognitionErrorEvent extends Event {
+    readonly error: string;
+    readonly message: string;
+  }
+  interface SpeechRecognitionEvent extends Event {
+    readonly resultIndex: number;
+    readonly results: SpeechRecognitionResultList;
+  }
 }

@@ -31,6 +31,21 @@
     }
   },
   "stepPrefix": "STEP",
+  "stepOne": {
+    "title": "Step 1: Describe & Confirm",
+    "description": "Describe your situation and select the relevant U.S. state. Our AI will suggest document types.",
+    "text": "Text",
+    "startMic": "Start Mic",
+    "stopMic": "Stop Recording",
+    "placeholder": "e.g., 'Renting my apartment', 'Starting a business with a partner', 'Need someone to stop contacting me...'",
+    "listening": "Listening...",
+    "stateLabel": "Relevant U.S. State (Optional)",
+    "statePlaceholder": "Select State...",
+    "stateHelp": "Helps tailor document suggestions. Select if applicable.",
+    "analyze": "Analyze My Situation",
+    "textDescriptionLabel": "Description (Text)",
+    "micDescriptionLabel": "Description (Microphone Transcript)"
+  },
   "documentInference": {
     "describePlaceholder": "e.g., 'Renting my apartment', 'Starting a business with a partner', 'Need someone to stop contacting me...'",
     "textHelper": "Describe your situation clearly.",
@@ -97,6 +112,7 @@
     "disclaimerText4": "By continuing, you acknowledge you understand these limitations. Read the full",
     "disclaimerLink": "Disclaimer",
     "termsLink": "Terms of Service",
+    "and": "and",
     "agreeCheckboxLabel": "I have read and understand the disclaimer.",
     "continueButton": "Agree & Continue to Document"
   },
@@ -147,7 +163,8 @@
       "subscribe": "Subscribe",
       "joinMailingList": "Join our mailing list for updates and offers.",
       "copyright": "© {{year}} 123LegalDoc. All rights reserved.",
-      "errorInvalidEmail": "Please enter a valid email address."
+      "errorInvalidEmail": "Please enter a valid email address.",
+      "invalidEmailMessage": "Please provide a valid email address to subscribe."
     },
   "toasts": {
       "subscribedTitle": "Subscribed!",

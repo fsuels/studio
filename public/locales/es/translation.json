@@ -31,6 +31,21 @@
     }
   },
   "stepPrefix": "PASO",
+  "stepOne": {
+    "title": "Paso 1: Describe y Confirma",
+    "description": "Describe tu situación y selecciona el estado de EE. UU. relevante. Nuestra IA sugerirá tipos de documentos.",
+    "text": "Texto",
+    "startMic": "Iniciar Mic",
+    "stopMic": "Detener Grabación",
+    "placeholder": "ej., 'Alquilar mi apartamento', 'Empezar un negocio con un socio', 'Necesito que alguien deje de contactarme...'",
+    "listening": "Escuchando...",
+    "stateLabel": "Estado de EE. UU. relevante (Opcional)",
+    "statePlaceholder": "Seleccionar Estado...",
+    "stateHelp": "Ayuda a personalizar las sugerencias de documentos. Selecciónalo si aplica.",
+    "analyze": "Analizar Mi Situación",
+    "textDescriptionLabel": "Descripción (Texto)",
+    "micDescriptionLabel": "Descripción (Transcripción del Micrófono)"
+  },
   "documentInference": {
     "describePlaceholder": "ej., 'Alquilar mi apartamento', 'Empezar un negocio con un socio', 'Necesito que alguien deje de contactarme...'",
     "textHelper": "Describe tu situación claramente.",
@@ -97,6 +112,7 @@
       "disclaimerText4": "Al continuar, reconoces que comprendes estas limitaciones. Lee el",
       "disclaimerLink": "Descargo de Responsabilidad",
       "termsLink": "Términos de Servicio",
+      "and": "y",
       "agreeCheckboxLabel": "He leído y entiendo el descargo de responsabilidad.",
       "continueButton": "Aceptar y Continuar al Documento"
   },
@@ -147,7 +163,8 @@
         "subscribe": "Suscribirse",
         "joinMailingList": "Únete a nuestra lista de correo para actualizaciones y ofertas.",
         "copyright": "© {{year}} 123LegalDoc. Todos los derechos reservados.",
-        "errorInvalidEmail": "Por favor, ingresa un correo electrónico válido."
+        "errorInvalidEmail": "Por favor, ingresa un correo electrónico válido.",
+        "invalidEmailMessage": "Por favor, proporciona un correo electrónico válido para suscribirte."
     },
     "toasts": {
         "subscribedTitle": "¡Suscrito!",
