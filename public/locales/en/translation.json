@@ -83,7 +83,8 @@
     "selectPrompt": "Based on your description, we suggest the following. Please select the best fit to continue.",
     "confidenceSuffix": "% Match",
     "generalInquiryReason": "If none of the above seem correct, or if you need further clarification.",
-    "noReasoning": "No reasoning provided."
+    "noReasoning": "No reasoning provided.",
+    "confirmed": "Confirmed Selection"
   },
   "dynamicForm": {
     "stepTitle": "Step 2: Provide Details for {{documentType}}",
@@ -188,5 +189,14 @@
       "pdfGenSuccessDescription": "Your PDF preview is loaded below.",
       "pdfGenErrorTitle": "PDF Generation Error"
     },
-    "logoAlt": "123LegalDoc Logo"
+    "logoAlt": "123LegalDoc Logo",
+    "Step 2: Provide Details": "Step 2: Provide Details",
+    "Confirm a document type in Step 1 to see the questions.": "Confirm a document type in Step 1 to see the questions.",
+    "Waiting for document confirmation from Step 1...": "Waiting for document confirmation from Step 1...",
+    "Read and agree to the disclaimer before proceeding.": "Read and agree to the disclaimer before proceeding.",
+    "Complete the questions above to view the disclaimer.": "Complete the questions above to view the disclaimer.",
+    "Review the generated document and sign it digitally.": "Review the generated document and sign it digitally.",
+    "Agree to the disclaimer above to generate the document preview.": "Agree to the disclaimer above to generate the document preview.",
+    "Securely share your document or download it after signing.": "Securely share your document or download it after signing.",
+    "State": "State"
 }

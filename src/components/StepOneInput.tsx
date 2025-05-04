@@ -105,7 +105,7 @@ export default function StepOneInput({
             >
               {transcript || (
                  <span className="text-muted-foreground italic">
-                      {isRecording ? t('documentInference.micTranscriptPlaceholderListening') : (recognition ? t('documentInference.micTranscriptPlaceholderStart') : t('documentInference.micTranscriptPlaceholderUnavailable'))}
+                      {isRecording ? t('stepOne.listening') : (recognition ? t('documentInference.micTranscriptPlaceholderStart') : t('documentInference.micTranscriptPlaceholderUnavailable'))}
                  </span>
               )}
             </div>

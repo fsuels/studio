@@ -33,11 +33,11 @@
   "stepPrefix": "PASO",
   "stepOne": {
     "title": "Paso 1: Describe y Confirma",
-    "description": "Describe tu situación y selecciona el estado de EE. UU. relevante. Nuestra IA sugerirá tipos de documentos.",
+    "description": "Describe tu situación y selecciona el estado de EE. UU. correspondiente. Nuestra IA sugerirá el tipo de documento.",
     "text": "Texto",
-    "startMic": "Iniciar Mic",
-    "stopMic": "Detener Grabación",
-    "placeholder": "ej., 'Alquilar mi apartamento', 'Empezar un negocio con un socio', 'Necesito que alguien deje de contactarme...'",
+    "startMic": "Iniciar micrófono",
+    "stopMic": "Detener grabación",
+    "placeholder": "ej., 'Alquilar mi apartamento', 'Empezar un negocio', 'Necesito que alguien deje de contactarme...'",
     "listening": "Escuchando...",
     "stateLabel": "Estado de EE. UU. relevante (Opcional)",
     "statePlaceholder": "Seleccionar Estado...",
@@ -83,7 +83,8 @@
     "selectPrompt": "Según tu descripción, sugerimos lo siguiente. Por favor, selecciona la mejor opción para continuar.",
     "confidenceSuffix": "% Coincidencia",
     "generalInquiryReason": "Si ninguna de las anteriores parece correcta, o si necesitas más aclaraciones.",
-    "noReasoning": "No se proporcionó justificación."
+    "noReasoning": "No se proporcionó justificación.",
+    "confirmed": "Selección Confirmada"
   },
   "dynamicForm": {
       "stepTitle": "Paso 2: Proporciona Detalles para {{documentType}}",
@@ -188,5 +189,14 @@
         "pdfGenSuccessDescription": "Tu previsualización de PDF está cargada abajo.",
         "pdfGenErrorTitle": "Error al Generar PDF"
      },
-     "logoAlt": "Logo de 123LegalDoc"
+     "logoAlt": "Logo de 123LegalDoc",
+     "Step 2: Provide Details": "Paso 2: Proporcionar Detalles",
+     "Confirm a document type in Step 1 to see the questions.": "Confirma un tipo de documento en el Paso 1 para ver las preguntas.",
+     "Waiting for document confirmation from Step 1...": "Esperando confirmación del documento del Paso 1...",
+     "Read and agree to the disclaimer before proceeding.": "Lee y acepta el descargo de responsabilidad antes de proceder.",
+     "Complete the questions above to view the disclaimer.": "Completa las preguntas anteriores para ver el descargo de responsabilidad.",
+     "Review the generated document and sign it digitally.": "Revisa el documento generado y fírmalo digitalmente.",
+     "Agree to the disclaimer above to generate the document preview.": "Acepta el descargo de responsabilidad anterior para generar la vista previa del documento.",
+     "Securely share your document or download it after signing.": "Comparte de forma segura tu documento o descárgalo después de firmar.",
+     "State": "Estado"
 }
