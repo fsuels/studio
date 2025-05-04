@@ -5,18 +5,27 @@ import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { motion } from 'framer-motion'; // For animations
 import Image from 'next/image';
+import { Check, ChevronDown } from 'lucide-react'; // Added ChevronDown
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu" // Import Dropdown components
 
 // Example Language Switcher Flags (replace with actual flag SVGs or images)
-const FlagEN = () => <span role="img" aria-label="English Flag" className="text-xl mr-1">🇬🇧</span>;
-const FlagES = () => <span role="img" aria-label="Spanish Flag" className="text-xl mr-1">🇪🇸</span>;
+// Using simple text for flags for better consistency across browsers
+const FlagEN = () => <span className="mr-2 text-xs" role="img" aria-label="UK Flag">🇬🇧</span>;
+const FlagES = () => <span className="mr-2 text-xs" role="img" aria-label="Spain Flag">🇪🇸</span>;
+
 
 export function HeroSection() {
   const [language, setLanguage] = useState<'EN' | 'ES'>('EN');
 
-  const toggleLanguage = () => {
-    setLanguage(prev => prev === 'EN' ? 'ES' : 'EN');
+  const handleLanguageChange = (lang: 'EN' | 'ES') => {
+    setLanguage(lang);
     // Add actual i18n logic here
-    console.log(`Language switched to ${language === 'EN' ? 'ES' : 'EN'}`);
+    console.log(`Language switched to ${lang}`);
   };
 
   const textContent = {
@@ -28,6 +37,7 @@ export function HeroSection() {
       trustText: "Trusted by 2,000+ small businesses",
       pricingTeaser: "Only $5/doc – No subscriptions",
       pricingLinkText: "View Pricing",
+      languageName: "English",
     },
     ES: {
       headline: "Documentos Legales al Alcance de tu Mano",
@@ -37,6 +47,7 @@ export function HeroSection() {
       trustText: "Con la confianza de más de 2,000 pequeñas empresas",
       pricingTeaser: "Solo $5/doc – Sin suscripciones",
       pricingLinkText: "Ver Precios",
+      languageName: "Español",
     },
   };
 
@@ -49,26 +60,42 @@ export function HeroSection() {
       transition={{ duration: 0.5 }}
       className="w-full py-20 md:py-32 bg-gradient-to-br from-teal-100 via-blue-100 to-soft-blue-100 text-center relative overflow-hidden" // Use theme colors if defined, otherwise fallback
       style={{
-          // Example inline SVG background pattern
-         // backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23008080' fill-opacity='0.07'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
           // Soft blue gradient fallback
           background: 'linear-gradient(135deg, hsl(var(--secondary)) 0%, hsl(var(--background)) 50%, hsl(180, 50%, 85%) 100%)', // Using HSL theme vars
       }}
     >
-      {/* Language Switcher */}
+      {/* Language Switcher Dropdown */}
       <div className="absolute top-4 right-4 z-10">
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={toggleLanguage}
-          className="text-xs font-medium text-foreground/80 hover:bg-foreground/10 px-2 py-1"
-          aria-label={`Switch language to ${language === 'EN' ? 'Spanish' : 'English'}`}
-        >
-          {language === 'EN' ? <FlagEN /> : <FlagES />}
-          {language}
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="ml-1 h-3 w-3"><path d="m6 9 6 6 6-6"/></svg>
-        </Button>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="outline" // Changed to outline for better definition
+              size="sm"
+              className="text-xs font-medium text-foreground/80 hover:bg-foreground/5 hover:text-foreground px-3 py-1.5 border-border/50 shadow-sm" // Adjusted styling
+              aria-label="Select language"
+            >
+              {language === 'EN' ? <FlagEN /> : <FlagES />}
+              {language}
+              <ChevronDown className="ml-1 h-4 w-4 opacity-70" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="min-w-[8rem]">
+            <DropdownMenuItem
+               onSelect={() => handleLanguageChange('EN')}
+               className={`text-xs ${language === 'EN' ? 'font-medium text-primary' : ''}`}
+            >
+               <FlagEN /> English {language === 'EN' && <Check className="ml-auto h-4 w-4" />}
+            </DropdownMenuItem>
+            <DropdownMenuItem
+               onSelect={() => handleLanguageChange('ES')}
+               className={`text-xs ${language === 'ES' ? 'font-medium text-primary' : ''}`}
+            >
+               <FlagES /> Español {language === 'ES' && <Check className="ml-auto h-4 w-4" />}
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
+
 
       <div className="container mx-auto px-4 relative z-0">
         {/* Pricing Teaser */}
