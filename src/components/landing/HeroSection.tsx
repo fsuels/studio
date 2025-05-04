@@ -1,10 +1,11 @@
+
 // src/components/landing/HeroSection.tsx
 "use client";
 
-import React, { useState } from 'react';
+import React from 'react'; // Removed useState as language is handled by i18next
+import { useTranslation } from 'react-i18next'; // Import useTranslation
 import { Button } from '@/components/ui/button';
 import { motion } from 'framer-motion'; // For animations
-import Image from 'next/image';
 import { Check, ChevronDown } from 'lucide-react'; // Added ChevronDown
 import {
   DropdownMenu,
@@ -21,38 +22,13 @@ const FlagES = () => <span className="mr-2 text-xs" role="img" aria-label="Spain
 
 
 export function HeroSection() {
-  const [language, setLanguage] = useState<'EN' | 'ES'>('EN');
+  const { t, i18n } = useTranslation(); // Use the hook
+  const currentLanguage = i18n.language.startsWith('es') ? 'ES' : 'EN'; // Determine current language
 
-  const handleLanguageChange = (lang: 'EN' | 'ES') => {
-    setLanguage(lang);
-    // Add actual i18n logic here
+  const handleLanguageChange = (lang: 'en' | 'es') => {
+    i18n.changeLanguage(lang); // Change language using i18next
     console.log(`Language switched to ${lang}`);
   };
-
-  const textContent = {
-    EN: {
-      headline: "Legal Docs at Your Fingertips",
-      subhead: "Create, sign & share professional contracts in minutes—no lawyer required.",
-      ctaPrimary: "Get Started – It’s Free",
-      ctaSecondary: "See Demo",
-      trustText: "Trusted by 2,000+ small businesses",
-      pricingTeaser: "Only $5/doc – No subscriptions",
-      pricingLinkText: "View Pricing",
-      languageName: "English",
-    },
-    ES: {
-      headline: "Documentos Legales al Alcance de tu Mano",
-      subhead: "Crea, firma y comparte contratos profesionales en minutos, sin necesidad de abogado.",
-      ctaPrimary: "Comienza Gratis",
-      ctaSecondary: "Ver Demo",
-      trustText: "Con la confianza de más de 2,000 pequeñas empresas",
-      pricingTeaser: "Solo $5/doc – Sin suscripciones",
-      pricingLinkText: "Ver Precios",
-      languageName: "Español",
-    },
-  };
-
-  const currentText = textContent[language];
 
   return (
     <motion.section
@@ -81,23 +57,23 @@ export function HeroSection() {
               className="text-xs font-medium text-foreground/80 hover:bg-foreground/5 hover:text-foreground px-3 py-1.5 border-border/50 shadow-sm" // Adjusted styling
               aria-label="Select language"
             >
-              {language === 'EN' ? <FlagEN /> : <FlagES />}
-              {language}
+              {currentLanguage === 'EN' ? <FlagEN /> : <FlagES />}
+              {currentLanguage}
               <ChevronDown className="ml-1 h-4 w-4 opacity-70" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="min-w-[8rem]">
             <DropdownMenuItem
-               onSelect={() => handleLanguageChange('EN')}
-               className={`text-xs ${language === 'EN' ? 'font-medium text-primary' : ''}`}
+               onSelect={() => handleLanguageChange('en')} // Use 'en' code
+               className={`text-xs ${currentLanguage === 'EN' ? 'font-medium text-primary' : ''}`}
             >
-               <FlagEN /> English {language === 'EN' && <Check className="ml-auto h-4 w-4" />}
+               <FlagEN /> English {currentLanguage === 'EN' && <Check className="ml-auto h-4 w-4" />}
             </DropdownMenuItem>
             <DropdownMenuItem
-               onSelect={() => handleLanguageChange('ES')}
-               className={`text-xs ${language === 'ES' ? 'font-medium text-primary' : ''}`}
+               onSelect={() => handleLanguageChange('es')} // Use 'es' code
+               className={`text-xs ${currentLanguage === 'ES' ? 'font-medium text-primary' : ''}`}
             >
-               <FlagES /> Español {language === 'ES' && <Check className="ml-auto h-4 w-4" />}
+               <FlagES /> Español {currentLanguage === 'ES' && <Check className="ml-auto h-4 w-4" />}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -108,33 +84,33 @@ export function HeroSection() {
         {/* Pricing Teaser */}
         <div className="mb-4">
            <span className="inline-block bg-primary/10 text-primary px-3 py-1 rounded-full text-sm font-medium mr-2">
-             {currentText.pricingTeaser}
+             {t('pricingTeaser')} {/* Use t function */}
            </span>
            <a href="/pricing" className="text-sm text-primary underline hover:text-primary/80">
-             {currentText.pricingLinkText}
+             {t('pricingLinkText')} {/* Use t function */}
            </a>
         </div>
 
         {/* Headline */}
         <motion.h1
-          key={`headline-${language}`} // Add key for animation on language change
+          key={`headline-${currentLanguage}`} // Add key for animation on language change
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3, delay: 0.1 }}
           className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 text-foreground leading-tight" // Use responsive text sizes
         >
-          {currentText.headline}
+          {t('headline')} {/* Use t function */}
         </motion.h1>
 
         {/* Subhead */}
         <motion.p
-          key={`subhead-${language}`}
+          key={`subhead-${currentLanguage}`}
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3, delay: 0.2 }}
           className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-8"
         >
-          {currentText.subhead}
+          {t('subhead')} {/* Use t function */}
         </motion.p>
 
         {/* CTAs */}
@@ -145,10 +121,10 @@ export function HeroSection() {
           className="flex flex-col sm:flex-row justify-center items-center gap-4"
         >
           <Button size="lg" className="bg-accent hover:bg-accent/90 text-accent-foreground shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200">
-            {currentText.ctaPrimary}
+            {t('ctaPrimary')} {/* Use t function */}
           </Button>
           <Button size="lg" variant="outline" className="border-primary text-primary hover:bg-primary/10 shadow-sm hover:shadow-md transform hover:scale-105 transition-all duration-200">
-            {currentText.ctaSecondary}
+            {t('ctaSecondary')} {/* Use t function */}
           </Button>
         </motion.div>
 
@@ -159,7 +135,7 @@ export function HeroSection() {
           transition={{ duration: 0.3, delay: 0.4 }}
           className="mt-12 text-sm text-muted-foreground flex justify-center items-center gap-2 flex-wrap"
           >
-             <span>{currentText.trustText}</span>
+             <span>{t('trustText')}</span> {/* Use t function */}
              <span className="text-yellow-500 flex items-center">
                  ⭐⭐⭐⭐⭐
                  {/* Replace with actual rating logos/component if available */}

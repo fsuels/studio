@@ -1,9 +1,11 @@
+
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster"; // Import Toaster
 import { PromoBanner } from '@/components/landing/PromoBanner';
 import { Footer } from '@/components/layout/Footer';
+import I18nClientProvider from '@/components/providers/I18nProvider'; // Import the i18n provider
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -28,10 +30,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen`}>
-        <PromoBanner />
-        <main className="flex-grow">{children}</main>
-        <Footer />
-        <Toaster /> {/* Add Toaster component */}
+        {/* Wrap children with the I18nProvider */}
+        <I18nClientProvider>
+          <PromoBanner />
+          <main className="flex-grow">{children}</main>
+          <Footer />
+          <Toaster /> {/* Add Toaster component */}
+        </I18nClientProvider>
       </body>
     </html>
   );
