@@ -189,6 +189,14 @@
       "pdfGenSuccessDescription": "Your PDF preview is loaded below.",
       "pdfGenErrorTitle": "PDF Generation Error"
     },
+    "home": {
+        "testimonialsTitle": "What Our Users Say",
+        "testimonial1": "\"123LegalDoc saved me $500 on my lease agreement. Super easy to use!\"",
+        "testimonial2": "\"Generating a partnership agreement took minutes instead of days. Highly recommended.\"",
+        "testimonial3": "\"The AI inference was spot on, and the questionnaire was straightforward. Great service!\"",
+        "featuredIn": "FEATURED IN",
+        "satisfactionGuarantee": "100% Satisfaction Guarantee or Your Money Back"
+    },
     "logoAlt": "123LegalDoc Logo",
     "Step 2: Provide Details": "Step 2: Provide Details",
     "Confirm a document type in Step 1 to see the questions.": "Confirm a document type in Step 1 to see the questions.",

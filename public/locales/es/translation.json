@@ -189,6 +189,14 @@
         "pdfGenSuccessDescription": "Tu previsualización de PDF está cargada abajo.",
         "pdfGenErrorTitle": "Error al Generar PDF"
      },
+     "home": {
+         "testimonialsTitle": "Lo que dicen nuestros usuarios",
+         "testimonial1": "\"123LegalDoc me ahorró $500 en mi contrato de alquiler. ¡Muy fácil de usar!\"",
+         "testimonial2": "\"Generar un contrato de asociación tomó minutos en lugar de días. Altamente recomendado.\"",
+         "testimonial3": "\"La inferencia de la IA fue precisa y el cuestionario fue claro. ¡Excelente servicio!\"",
+         "featuredIn": "DESTACADO EN",
+         "satisfactionGuarantee": "Garantía de satisfacción 100% o le devolvemos su dinero"
+     },
      "logoAlt": "Logo de 123LegalDoc",
      "Step 2: Provide Details": "Paso 2: Proporcionar Detalles",
      "Confirm a document type in Step 1 to see the questions.": "Confirma un tipo de documento en el Paso 1 para ver las preguntas.",

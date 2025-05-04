@@ -1,7 +1,7 @@
 // src/components/landing/TestimonialCarousel.tsx
 "use client";
 
-import React from 'react';
+import React, { useState, useEffect } from 'react'; // Import useState and useEffect
 import Image from 'next/image';
 import { Card, CardContent } from '@/components/ui/card';
 import {
@@ -11,25 +11,26 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel"; // Assuming ShadCN Carousel is installed and configured
+import { useTranslation } from 'react-i18next'; // Import useTranslation
 
-// Placeholder testimonials
+// Placeholder testimonials - Keys for translation
 const testimonials = [
   {
-    quote: "123LegalDoc saved me $500 on my lease agreement. Super easy to use!",
+    quoteKey: "home.testimonial1",
     name: "Sarah Chen",
     title: "Small Business Owner",
     avatar: "/avatars/sarah.jpg", // Replace with actual paths or use Picsum
     dataAiHint: "woman smiling",
   },
   {
-    quote: "Generating a partnership agreement took minutes instead of days. Highly recommended.",
+    quoteKey: "home.testimonial2",
     name: "Michael B.",
     title: "Freelancer",
     avatar: "/avatars/michael.jpg",
     dataAiHint: "man portrait professional",
   },
   {
-    quote: "The AI inference was spot on, and the questionnaire was straightforward. Great service!",
+    quoteKey: "home.testimonial3",
     name: "Emily White",
     title: "Startup Founder",
     avatar: "/avatars/emily.jpg",
@@ -38,10 +39,21 @@ const testimonials = [
 ];
 
 export function TestimonialCarousel() {
+  const { t } = useTranslation();
+  const [isHydrated, setIsHydrated] = useState(false);
+
+  useEffect(() => {
+    setIsHydrated(true);
+  }, []);
+
+  const placeholderText = '...';
+
   return (
     <section className="w-full py-16 bg-muted/50">
       <div className="container mx-auto px-4">
-        <h2 className="text-2xl font-semibold text-center mb-10 text-foreground">What Our Users Say</h2>
+        <h2 className="text-2xl font-semibold text-center mb-10 text-foreground">
+          {isHydrated ? t('home.testimonialsTitle') : placeholderText}
+        </h2>
         <Carousel
           opts={{
             align: "start",
@@ -63,7 +75,9 @@ export function TestimonialCarousel() {
                         className="rounded-full mb-4 border-2 border-primary/50"
                         data-ai-hint={testimonial.dataAiHint}
                       />
-                      <p className="text-base italic text-foreground/90 mb-4 flex-grow">"{testimonial.quote}"</p>
+                      <p className="text-base italic text-foreground/90 mb-4 flex-grow">
+                         "{isHydrated ? t(testimonial.quoteKey) : placeholderText}"
+                      </p>
                       <div>
                         <p className="font-semibold text-sm text-foreground">{testimonial.name}</p>
                         <p className="text-xs text-muted-foreground">{testimonial.title}</p>

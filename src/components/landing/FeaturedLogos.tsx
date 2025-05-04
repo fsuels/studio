@@ -1,8 +1,9 @@
 // src/components/landing/FeaturedLogos.tsx
 "use client";
 
-import React from 'react';
+import React, { useState, useEffect } from 'react'; // Import useState and useEffect
 import Image from 'next/image'; // For optimized images
+import { useTranslation } from 'react-i18next'; // Import useTranslation
 
 // Placeholder logos - Replace with actual logo paths and alt text
 const logos = [
@@ -14,11 +15,20 @@ const logos = [
 ];
 
 export function FeaturedLogos() {
+  const { t } = useTranslation();
+  const [isHydrated, setIsHydrated] = useState(false);
+
+  useEffect(() => {
+    setIsHydrated(true);
+  }, []);
+
+  const placeholderText = '...';
+
   return (
     <section className="w-full py-12 bg-background">
       <div className="container mx-auto px-4">
         <p className="text-center text-sm font-medium text-muted-foreground mb-6">
-          FEATURED IN
+          {isHydrated ? t('home.featuredIn') : placeholderText}
         </p>
         <div className="flex flex-wrap justify-center items-center gap-x-10 gap-y-6 md:gap-x-16">
           {logos.map((logo, index) => (
