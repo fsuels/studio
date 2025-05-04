@@ -41,6 +41,18 @@ export function HeroSection() {
   // Placeholder text while hydrating
   const placeholderText = "...";
 
+  const scrollToWorkflow = () => {
+    const workflowSection = document.getElementById('workflow-start');
+    if (workflowSection) {
+      workflowSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } else {
+       console.warn('Workflow section with id "workflow-start" not found.');
+       // Optionally scroll to top or another fallback
+       window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
+
   return (
     <motion.section
       initial={{ opacity: 0 }}
@@ -130,10 +142,19 @@ export function HeroSection() {
           transition={{ duration: 0.3, delay: 0.3 }}
           className="flex flex-col sm:flex-row justify-center items-center gap-4"
         >
-          <Button size="lg" className="bg-accent hover:bg-accent/90 text-accent-foreground shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200">
+          <Button
+            size="lg"
+            className="bg-accent hover:bg-accent/90 text-accent-foreground shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
+            onClick={scrollToWorkflow} // Add onClick handler
+          >
             {isHydrated ? t('ctaPrimary') : placeholderText}
           </Button>
-          <Button size="lg" variant="outline" className="border-primary text-primary hover:bg-primary/10 shadow-sm hover:shadow-md transform hover:scale-105 transition-all duration-200">
+          <Button
+             size="lg"
+             variant="outline"
+             className="border-primary text-primary hover:bg-primary/10 shadow-sm hover:shadow-md transform hover:scale-105 transition-all duration-200"
+             onClick={scrollToWorkflow} // Add onClick handler
+          >
             {isHydrated ? t('ctaSecondary') : placeholderText}
           </Button>
         </motion.div>

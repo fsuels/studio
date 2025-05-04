@@ -5,7 +5,6 @@ import React, { useState, useEffect } from 'react'; // Ensure useEffect is impor
 import type { InferDocumentTypeOutput } from '@/ai/flows/infer-document-type';
 import { DocumentInference } from '@/components/document-inference';
 import DocumentTypeSelector, { SuggestedDoc } from '@/components/DocumentTypeSelector'; // Import the new selector
-// import { Questionnaire } from '@/components/questionnaire'; // Remove old Questionnaire import
 import DynamicFormRenderer from '@/components/DynamicFormRenderer'; // Import the new dynamic renderer
 import { formSchemas } from '@/data/formSchemas'; // Import schemas
 import { DisclaimerStep } from '@/components/disclaimer-step'; // Import the new disclaimer step
@@ -13,13 +12,13 @@ import { PdfPreview } from '@/components/pdf-preview';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { FileText, FileSignature, Check, Upload, AlertTriangle, Download, ListChecks } from 'lucide-react'; // Added ListChecks icon
-import { HeroSection } from '@/components/landing/HeroSection'; // Corrected import path
-import ThreeStepSection from '@/components/ThreeStepSection'; // This might need label updates or become "4 steps"
 import { TestimonialCarousel } from '@/components/landing/TestimonialCarousel';
 import { FeaturedLogos } from '@/components/landing/FeaturedLogos';
 import { GuaranteeBadge } from '@/components/landing/GuaranteeBadge';
 import { Button } from '@/components/ui/button'; // Import Button
 import { useToast } from '@/hooks/use-toast'; // Import useToast
+import HeroFeatureSection from '@/components/landing/HeroFeatureSection'; // Corrected import path to landing
+import ThreeStepSection from '@/components/ThreeStepSection'; // Corrected import path for ThreeStepSection
 
 
 // Define share icon SVG inline
@@ -177,11 +176,11 @@ export default function Home() {
 
   return (
     <div className="flex flex-col items-center w-full bg-background">
-       <HeroSection /> {/* Render Hero Section */}
+       <HeroFeatureSection /> {/* Use the combined Hero/Feature component */}
        <ThreeStepSection /> {/* Render 3 Step Section */}
 
-        {/* Main Workflow Section - Wrapper with padding */}
-        <div className="w-full max-w-5xl mx-auto px-4 py-12 space-y-12">
+        {/* Main Workflow Section - Wrapper with padding and ID */}
+        <div id="workflow-start" className="w-full max-w-5xl mx-auto px-4 py-12 space-y-12">
 
             {/* Step Panels Wrapper - Use max-w-3xl for better focus */}
             <div className="w-full max-w-3xl mx-auto space-y-8">
