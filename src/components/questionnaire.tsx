@@ -10,65 +10,7 @@ import { Textarea } from '@/components/ui/textarea'; // Import Textarea
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select" // Import Select
 import { Loader2, Edit2, Lock, Check } from 'lucide-react'; // Updated icons
 import { useToast } from '@/hooks/use-toast';
-import { documentLibrary, usStates } from '@/lib/document-library'; // Import library
-
-// Define a basic structure for a question
-interface Question {
-  id: string; // Unique ID for the answer key
-  label: string;
-  type: 'text' | 'number' | 'date' | 'textarea' | 'select'; // Add more types as needed
-  options?: { value: string; label: string }[]; // For select type
-  required?: boolean;
-  placeholder?: string; // Add placeholder text
-  stateSpecific?: string[]; // Only show this question for these states
-}
-
-// Example questions - Load dynamically based on document ID
-// This structure allows mapping questions to document IDs from the library
-const questionsByDocumentId: Record<string, Question[]> = {
-  "residential-lease": [
-    { id: "tenantName", label: "Tenant's Full Name", type: "text", required: true, placeholder: "e.g., Jane Doe" },
-    { id: "propertyAddress", label: "Property Address", type: "textarea", required: true, placeholder: "e.g., 123 Main St, Anytown, USA 12345" },
-    { id: "rentAmount", label: "Monthly Rent Amount ($)", type: "number", required: true, placeholder: "e.g., 1500" },
-    { id: "leaseStartDate", label: "Lease Start Date", type: "date", required: true },
-    { id: "leaseTermMonths", label: "Lease Term (Months)", type: "number", required: true, placeholder: "e.g., 12" },
-    { id: "securityDeposit", label: "Security Deposit Amount ($)", type: "number", placeholder: "e.g., 1500" },
-     { id: "petsAllowed", label: "Pets Allowed?", type: "select", options: [{value: 'yes', label: 'Yes'}, {value: 'no', label: 'No'}], required: true },
-     { id: "lateFeePolicy", label: "Late Fee Policy", type: "textarea", placeholder: "e.g., $50 fee after 5 days late", stateSpecific: ['CA', 'NY'] }, // Example state-specific question
-  ],
-  "nda-mutual": [
-    { id: "party1Name", label: "Party 1 Full Name/Company", type: "text", required: true },
-    { id: "party1Address", label: "Party 1 Address", type: "textarea", required: true },
-    { id: "party2Name", label: "Party 2 Full Name/Company", type: "text", required: true },
-    { id: "party2Address", label: "Party 2 Address", type: "textarea", required: true },
-    { id: "purpose", label: "Purpose of Disclosure", type: "textarea", required: true, placeholder: "e.g., Discussing potential business partnership" },
-    { id: "termYears", label: "Term of Agreement (Years)", type: "number", placeholder: "e.g., 3" },
-  ],
-  "partnership-agreement": [
-     { id: "partner1Name", label: "Partner 1 Full Name", type: "text", required: true, placeholder: "e.g., John Smith" },
-     { id: "partner2Name", label: "Partner 2 Full Name", type: "text", required: true, placeholder: "e.g., Alice Brown" },
-      { id: "partner3Name", label: "Partner 3 Full Name (Optional)", type: "text", placeholder: "e.g., Bob Green" },
-     { id: "businessName", label: "Business Name", type: "text", required: true, placeholder: "e.g., Acme Innovations LLC" },
-     { id: "businessAddress", label: "Principal Business Address", type: "textarea", required: true },
-     { id: "capitalContributions", label: "Initial Capital Contributions", type: "textarea", required: true, placeholder: "e.g., Partner 1: $10,000, Partner 2: $10,000" },
-     { id: "profitSplit", label: "Profit/Loss Sharing Arrangement", type: "textarea", required: true, placeholder: "e.g., 50/50 split after expenses" },
-     { id: "managementRoles", label: "Management Roles & Responsibilities", type: "textarea", placeholder: "e.g., Partner 1: Operations, Partner 2: Marketing" },
-  ],
-  // Add questions for other document IDs...
-  "default": [ // Fallback if no specific questions defined
-     {id: "relevantInfo", label: "Please provide relevant details for your situation", type: "textarea", required: true, placeholder: "Enter all necessary information..."}
-  ],
-  "general-inquiry": [ // Questions for when type is unclear
-      { id: "specificNeed", label: "Can you describe your legal need in more detail?", type: "textarea", required: true, placeholder: "e.g., What are you trying to achieve or protect?" },
-      { id: "involvedParties", label: "Who are the main parties involved?", type: "text", placeholder: "e.g., Myself, my business partner, my landlord" },
-  ],
-   "Lease Agreement (Dummy)": [ // Keep dummy questions matching the dummy type from inference step
-    { id: "tenantName", label: "Tenant's Full Name (Dummy)", type: "text", required: true, placeholder: "e.g., Jane Doe" },
-    { id: "propertyAddress", label: "Property Address (Dummy)", type: "textarea", required: true, placeholder: "e.g., 123 Main St, Anytown, USA 12345" },
-    { id: "rentAmount", label: "Monthly Rent Amount ($) (Dummy)", type: "number", required: true, placeholder: "e.g., 1500" },
-    { id: "leaseStartDate", label: "Lease Start Date (Dummy)", type: "date", required: true },
-  ],
-};
+import { documentLibrary, usStates, type Question } from '@/lib/document-library'; // Import library and Question type
 
 interface QuestionnaireProps {
   documentType: string | null; // The inferred document type NAME (e.g., "Residential Lease Agreement")
@@ -90,14 +32,14 @@ export function Questionnaire({ documentType, selectedState, onAnswersSubmit, is
   const [currentQuestions, setCurrentQuestions] = useState<Question[]>([]);
   const { toast } = useToast();
 
-  // Find the document ID based on the name
-  const documentId = documentLibrary.find(doc => doc.name === documentType)?.id || 'default';
+  // Find the document object based on the name
+   const selectedDocument = documentLibrary.find(doc => doc.name === documentType);
 
   // Effect to load and filter questions based on documentType and selectedState
   useEffect(() => {
      let questionsToLoad: Question[] = [];
-     if (documentType) {
-         questionsToLoad = questionsByDocumentId[documentId] || questionsByDocumentId['default'];
+     if (selectedDocument) {
+         questionsToLoad = selectedDocument.questions || []; // Get questions from the matched document object
 
          // Filter questions based on state relevance
          questionsToLoad = questionsToLoad.filter(q =>
@@ -105,7 +47,16 @@ export function Questionnaire({ documentType, selectedState, onAnswersSubmit, is
             q.stateSpecific.length === 0 || // Keep if empty array (applies to all)
             (selectedState && q.stateSpecific.includes(selectedState)) // Keep if state matches
          );
+     } else if (documentType === 'General Inquiry') {
+         // Handle General Inquiry case specifically if needed
+         const generalDoc = documentLibrary.find(doc => doc.id === 'general-inquiry');
+         questionsToLoad = generalDoc?.questions || [];
+     } else if (documentType) {
+          // Fallback if name doesn't match but type is provided (e.g., use default)
+         const defaultDoc = documentLibrary.find(doc => doc.id === 'default');
+         questionsToLoad = defaultDoc?.questions || [];
      }
+
      setCurrentQuestions(questionsToLoad);
 
      // Reset state when document type or state changes significantly
@@ -114,10 +65,10 @@ export function Questionnaire({ documentType, selectedState, onAnswersSubmit, is
          return acc;
      }, {} as Record<string, boolean>);
      setIsEditing(initialEditingState);
-     setAnswers({});
-     setHasSubmitted(false);
+     setAnswers({}); // Clear previous answers
+     setHasSubmitted(false); // Reset submitted state
 
-  }, [documentType, documentId, selectedState, isReadOnly]); // Re-run when these change
+  }, [documentType, selectedDocument, selectedState, isReadOnly]); // Re-run when these change
 
 
   const handleInputChange = (id: string, value: any) => {
@@ -210,16 +161,17 @@ export function Questionnaire({ documentType, selectedState, onAnswersSubmit, is
               <CardTitle className="text-2xl">Step 2: Answer Questions</CardTitle>
             </div>
             <CardDescription>
-               Infer a document type in Step 1 to see the relevant questions here.
+               Confirm a document type in Step 1 to see the relevant questions here.
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <p className="text-muted-foreground italic">Waiting for document type...</p>
+            <p className="text-muted-foreground italic">Waiting for document confirmation from Step 1...</p>
           </CardContent>
         </Card>
      );
    }
    if (currentQuestions.length === 0 && documentType !== 'General Inquiry') {
+        // Handle case where a document type is selected but has no questions defined (or filtered out)
         return (
             <Card className="shadow-lg rounded-lg bg-card border border-border">
                 <CardHeader>
@@ -228,15 +180,19 @@ export function Questionnaire({ documentType, selectedState, onAnswersSubmit, is
                         <CardTitle className="text-2xl">Step 2: Details for {documentType}</CardTitle>
                     </div>
                     <CardDescription>
-                        No specific questions defined for this document type yet.
+                         No specific questions are needed for this document based on the information provided{selectedState ? ` and state ${selectedState}` : ''}.
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <p className="text-muted-foreground italic">Proceeding to the next step.</p>
+                    <p className="text-muted-foreground italic">You can proceed to the next step.</p>
                 </CardContent>
                 <CardFooter>
-                   <Button onClick={() => onAnswersSubmit({})} className="w-full">
-                      Proceed Without Questions
+                   <Button onClick={() => onAnswersSubmit({})} className="w-full" disabled={hasSubmitted || isReadOnly}>
+                     {hasSubmitted || isReadOnly ? (
+                         <> <Check className="mr-2 h-4 w-4" /> Confirmed - Proceed </>
+                     ) : (
+                         'Confirm & Proceed Without Questions'
+                     )}
                    </Button>
                 </CardFooter>
             </Card>
