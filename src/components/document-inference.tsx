@@ -1,5 +1,7 @@
+
 "use client";
 
+import React, { useState, useEffect, useCallback } from 'react'; // Added React import
 import type { InferDocumentTypeInput, InferDocumentTypeOutput } from '@/ai/flows/infer-document-type';
 import { inferDocumentType } from '@/ai/flows/infer-document-type';
 import { Button } from '@/components/ui/button';
@@ -9,7 +11,6 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2, Mic, Edit2, Check, BrainCircuit, X } from 'lucide-react'; // Added X icon
-import { useState, useEffect, useCallback } from 'react';
 
 // Mock SpeechRecognition - Replace with actual implementation if needed
 const MockSpeechRecognition = {
@@ -394,3 +395,4 @@ export function DocumentInference({ onInferenceResult }: DocumentInferenceProps)
 if (typeof window !== 'undefined') {
   window.SpeechRecognition = window.SpeechRecognition || (window as any).webkitSpeechRecognition;
 }
+
