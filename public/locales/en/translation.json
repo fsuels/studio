@@ -190,6 +190,27 @@
       "pdfGenErrorTitle": "PDF Generation Error"
     },
     "home": {
+        "hero": {
+          "title": "Only 3 Easy Steps",
+          "subtitle": "In a few guided steps, you’ll generate a fully customized legal document."
+        },
+        "steps": {
+          "step1": {
+            "title": "Describe Situation",
+            "desc": "Give a quick summary. Text or mic supported."
+          },
+          "step2": {
+            "title": "Answer Simple Prompts",
+            "desc": "AI will guide you through the exact info needed."
+          },
+          "step3": {
+            "title": "Finalize & Sign",
+            "desc": "Download, sign, or securely share your document."
+          }
+        },
+        "cta": {
+          "startNow": "Start for Free"
+        },
         "testimonialsTitle": "What Our Users Say",
         "testimonial1": "\"123LegalDoc saved me $500 on my lease agreement. Super easy to use!\"",
         "testimonial2": "\"Generating a partnership agreement took minutes instead of days. Highly recommended.\"",

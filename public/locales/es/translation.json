@@ -110,7 +110,7 @@
       "disclaimerText1": "Este servicio no proporciona asesoramiento legal.",
       "disclaimerText2": "Los documentos generados se basan en plantillas comunes y la información que proporcionas. Pueden no ser adecuados para tu situación específica o jurisdicción.",
       "disclaimerText3": "Usar este servicio no crea una relación abogado-cliente. Recomendamos encarecidamente consultar a un abogado calificado para obtener asesoramiento específico a tus necesidades.",
-      "disclaimerText4": "Al continuar, reconoces que comprendes estas limitaciones. Lee el",
+      "disclaimerText4": "Al continuar, reconoces que comprendes estas limitations. Lee el",
       "disclaimerLink": "Descargo de Responsabilidad",
       "termsLink": "Términos de Servicio",
       "and": "y",
@@ -190,6 +190,27 @@
         "pdfGenErrorTitle": "Error al Generar PDF"
      },
      "home": {
+         "hero": {
+            "title": "Solo 3 Pasos Fáciles",
+            "subtitle": "Con unos pocos pasos guiados, generarás un documento legal totalmente personalizado."
+          },
+          "steps": {
+            "step1": {
+              "title": "Describe la situación",
+              "desc": "Brinda un resumen rápido. Se admite texto o voz."
+            },
+            "step2": {
+              "title": "Responde preguntas simples",
+              "desc": "La IA te guiará con la información exacta que se necesita."
+            },
+            "step3": {
+              "title": "Finaliza y firma",
+              "desc": "Descarga, firma o comparte tu documento de forma segura."
+            }
+          },
+          "cta": {
+            "startNow": "Comienza gratis"
+          },
          "testimonialsTitle": "Lo que dicen nuestros usuarios",
          "testimonial1": "\"123LegalDoc me ahorró $500 en mi contrato de alquiler. ¡Muy fácil de usar!\"",
          "testimonial2": "\"Generar un contrato de asociación tomó minutos en lugar de días. Altamente recomendado.\"",

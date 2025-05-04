@@ -12,14 +12,13 @@ import { PdfPreview } from '@/components/pdf-preview';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { FileText, FileSignature, Check, Upload, AlertTriangle, Download, ListChecks, Loader2 } from 'lucide-react'; // Added ListChecks, Loader2 icons
-import HeroFeatureSection from '@/components/landing/HeroFeatureSection'; // Corrected import path to landing
-import ThreeStepSection from '@/components/ThreeStepSection'; // Corrected import path for ThreeStepSection
 import { TestimonialCarousel } from '@/components/landing/TestimonialCarousel';
 import { FeaturedLogos } from '@/components/landing/FeaturedLogos';
 import { GuaranteeBadge } from '@/components/landing/GuaranteeBadge';
 import { Button } from '@/components/ui/button'; // Import Button
 import { useToast } from '@/hooks/use-toast'; // Import useToast
 import { useTranslation } from 'react-i18next'; // Import useTranslation
+import HomepageHeroSteps from '@/components/landing/HomepageHeroSteps'; // Import the new combined hero/steps component
 
 
 // Define share icon SVG inline
@@ -390,8 +389,7 @@ export default function Home() {
   // Render placeholder or null during SSR and initial client render
   if (!isHydrated) {
      return <div className="min-h-screen bg-background"> {/* Basic layout structure */}
-               <div className="h-64 animate-pulse bg-muted"></div> {/* Hero placeholder */}
-               <div className="h-32 animate-pulse bg-background"></div> {/* Steps placeholder */}
+               <div className="h-96 animate-pulse bg-muted"></div> {/* Hero placeholder */}
                <div className="container mx-auto py-12 space-y-8">
                  <div className="h-64 animate-pulse bg-card rounded-lg shadow-lg border border-border"></div> {/* Step 1 placeholder */}
                </div>
@@ -400,8 +398,8 @@ export default function Home() {
 
   return (
     <div className="flex flex-col items-center w-full bg-background">
-       <HeroFeatureSection />
-       <ThreeStepSection />
+        {/* Use the new combined Hero and Steps component */}
+       <HomepageHeroSteps />
 
         {/* Main Workflow Section */}
         <div id="workflow-start" className="w-full max-w-5xl mx-auto px-4 py-12 space-y-12">
