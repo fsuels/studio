@@ -2,10 +2,8 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
-import { Toaster } from "@/components/ui/toaster"; // Import Toaster
-import { PromoBanner } from '@/components/landing/PromoBanner';
-import { Footer } from '@/components/layout/Footer';
-import I18nClientProvider from '@/components/providers/I18nProvider'; // Import the i18n provider
+import { ClientProviders } from '@/components/providers/ClientProviders'; // Import the new client component
+import React from 'react'; // Import React
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -18,25 +16,25 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: '123LegalDoc', // Updated app title
-  description: 'AI-Powered Legal Document Generation', // Updated description
+  title: '123LegalDoc',
+  description: 'AI-Powered Legal Document Generation',
 };
 
+// RootLayout remains a Server Component
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Remove useState and useEffect from here
+
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen`}>
-        {/* Wrap children with the I18nProvider */}
-        <I18nClientProvider>
-          <PromoBanner />
-          <main className="flex-grow">{children}</main>
-          <Footer />
-          <Toaster /> {/* Add Toaster component */}
-        </I18nClientProvider>
+        {/* Use the ClientProviders component to wrap children and handle client-side logic */}
+        <ClientProviders>
+          {children}
+        </ClientProviders>
       </body>
     </html>
   );
