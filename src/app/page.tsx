@@ -2,7 +2,7 @@
 "use client"; // Mark page as client component due to state management and client children
 
 import React, { useState, useEffect } from 'react'; // Ensure useEffect is imported if used elsewhere
-import type { InferDocumentTypeOutput } from '@/ai/flows/infer-document-type';
+// ** Removed InferDocumentTypeOutput import as we now only receive the selected name **
 import { DocumentInference } from '@/components/document-inference';
 import { Questionnaire } from '@/components/questionnaire';
 import { DisclaimerStep } from '@/components/disclaimer-step'; // Import the new disclaimer step
@@ -31,7 +31,7 @@ const ShareIcon = () => (
 export default function Home() {
   console.log('[page.tsx] Home component rendering...');
 
-  const [inferredDocType, setInferredDocType] = useState<string | null>(null);
+  const [confirmedDocType, setConfirmedDocType] = useState<string | null>(null); // Store the *confirmed* document type name
   const [selectedState, setSelectedState] = useState<string | undefined>(undefined); // Store selected state from inference step
   const [questionnaireAnswers, setQuestionnaireAnswers] = useState<Record<string, any> | null>(null);
   const [disclaimerAgreed, setDisclaimerAgreed] = useState<boolean>(false); // New state for disclaimer
@@ -42,17 +42,17 @@ export default function Home() {
     if (pdfDataUrl) return 5; // Share/Download is now Step 5
     if (disclaimerAgreed) return 4; // PDF Preview is now Step 4
     if (questionnaireAnswers) return 3; // Disclaimer is now Step 3
-    if (inferredDocType) return 2; // Questionnaire is Step 2
+    if (confirmedDocType) return 2; // Questionnaire is Step 2 (based on confirmed type)
     return 1; // Inference is Step 1
   };
   const currentStep = getCurrentStep();
 
-  // Updated handler to receive the full output object
-  const handleDocumentInferred = (result: InferDocumentTypeOutput | null, state?: string) => {
-    console.log('[page.tsx] handleDocumentInferred called with:', result, 'State:', state);
-    setInferredDocType(result ? result.documentType : null);
+  // Updated handler: receives the *selected* document name and state
+  const handleDocumentConfirmed = (selectedDocName: string | null, state?: string) => {
+    console.log('[page.tsx] handleDocumentConfirmed called with:', selectedDocName, 'State:', state);
+    setConfirmedDocType(selectedDocName);
     setSelectedState(state); // Store the state selected during inference
-    // Reset subsequent steps
+    // Reset subsequent steps if the document type changes or becomes null
     setQuestionnaireAnswers(null);
     setDisclaimerAgreed(false);
     setPdfDataUrl(undefined);
@@ -75,7 +75,7 @@ export default function Home() {
      console.log("[page.tsx] Disclaimer agreed. Simulating PDF generation with answers:", questionnaireAnswers);
      // Simulate PDF generation after agreement
      // In a real app, this would call a backend function (e.g., Firebase Function)
-     // which takes `questionnaireAnswers`, `inferredDocType`, and `selectedState`, generates the PDF,
+     // which takes `questionnaireAnswers`, `confirmedDocType`, and `selectedState`, generates the PDF,
      // potentially saves it to storage, and returns a URL or the PDF data.
      setTimeout(() => {
          console.log("[page.tsx] PDF simulation complete. Setting dummy URL.");
@@ -92,31 +92,29 @@ export default function Home() {
 
   return (
     <div className="flex flex-col items-center w-full bg-background">
-       <HeroSection /> {/* Use the correct component name */}
-       {/* <FeatureTeaser /> */}
-       {/* Update ThreeStepSection props if needed, or modify the component itself */}
-       <ThreeStepSection />
+       <HeroSection /> {/* Render Hero Section */}
+       <ThreeStepSection /> {/* Render 3 Step Section */}
 
         {/* Main Workflow Section - Wrapper with padding */}
         <div className="w-full max-w-5xl mx-auto px-4 py-12 space-y-12">
 
             {/* Step Panels Wrapper - Use max-w-3xl for better focus */}
             <div className="w-full max-w-3xl mx-auto space-y-8">
-                {/* Step 1: Document Inference */}
+                {/* Step 1: Document Inference & Confirmation */}
                 {currentStep === 1 && (
                     <Card className="shadow-lg rounded-lg bg-card border border-border transition-all duration-500 ease-out animate-fade-in">
                         <CardHeader>
                         <div className="flex items-center space-x-2">
                             <FileText className="h-6 w-6 text-primary" />
-                            <CardTitle className="text-2xl">Step 1: Describe Your Situation</CardTitle>
+                            <CardTitle className="text-2xl">Step 1: Describe & Confirm</CardTitle>
                         </div>
                         <CardDescription>
-                           Use the text box or microphone below, and select the relevant U.S. state. Our AI will suggest the best document type.
+                           Describe your situation and select the relevant U.S. state. Our AI will suggest document types for you to confirm.
                         </CardDescription>
                         </CardHeader>
                         <CardContent>
-                            {/* Pass state selection handler */}
-                            <DocumentInference onInferenceResult={(result, state) => handleDocumentInferred(result, state)} />
+                            {/* Pass the confirmation handler */}
+                            <DocumentInference onInferenceResult={handleDocumentConfirmed} />
                         </CardContent>
                     </Card>
                 )}
@@ -126,10 +124,10 @@ export default function Home() {
                          <CardHeader>
                             <div className="flex items-center space-x-2">
                                 <FileText className="h-6 w-6 text-primary" />
-                                <CardTitle className="text-2xl">Step 1: Describe Your Situation</CardTitle>
+                                <CardTitle className="text-2xl">Step 1: Describe & Confirm</CardTitle>
                             </div>
                             <CardDescription>
-                               Document type inferred: <strong>{inferredDocType || "N/A"}</strong> {selectedState && `(State: ${selectedState})`}
+                               Document type confirmed: <strong>{confirmedDocType || "N/A"}</strong> {selectedState && `(State: ${selectedState})`}
                             </CardDescription>
                          </CardHeader>
                     </Card>
@@ -140,10 +138,10 @@ export default function Home() {
                 {currentStep > 1 && <Separator className="my-8" />}
 
                 {/* Step 2: Dynamic Questionnaire */}
-                 {currentStep >= 2 && inferredDocType && (
+                 {currentStep >= 2 && confirmedDocType && (
                      <div className={`transition-opacity duration-500 ease-out ${currentStep === 2 ? 'opacity-100 animate-fade-in' : 'opacity-50 cursor-not-allowed'}`}>
                          <Questionnaire
-                             documentType={inferredDocType}
+                             documentType={confirmedDocType} // Pass the confirmed document type name
                              selectedState={selectedState} // Pass selected state
                              onAnswersSubmit={handleAnswersSubmit}
                              isReadOnly={currentStep > 2} // Lock if past this step
@@ -158,11 +156,11 @@ export default function Home() {
                                  <CardTitle className="text-2xl">Step 2: Answer Questions</CardTitle>
                              </div>
                              <CardDescription>
-                                 Once a document type is inferred, answer questions here.
+                                 Confirm a document type in Step 1 to see the questions.
                              </CardDescription>
                          </CardHeader>
                          <CardContent>
-                             <p className="text-muted-foreground italic">Waiting for document type from Step 1...</p>
+                             <p className="text-muted-foreground italic">Waiting for document confirmation from Step 1...</p>
                          </CardContent>
                      </Card>
                  )}
@@ -206,7 +204,7 @@ export default function Home() {
                      <div className={`transition-opacity duration-500 ease-out ${currentStep === 4 ? 'opacity-100 animate-fade-in' : 'opacity-50 cursor-not-allowed'}`}>
                          <PdfPreview
                              documentDataUrl={pdfDataUrl}
-                             documentName={`${inferredDocType || 'document'}.pdf`}
+                             documentName={`${confirmedDocType || 'document'}.pdf`}
                              isReadOnly={currentStep > 4} // Lock if past this step
                          />
                      </div>
@@ -254,7 +252,7 @@ export default function Home() {
                                        if (pdfDataUrl) {
                                            const link = document.createElement('a');
                                            link.href = pdfDataUrl;
-                                           link.download = `${inferredDocType || 'document'}_signed.pdf`;
+                                           link.download = `${confirmedDocType || 'document'}_signed.pdf`;
                                            document.body.appendChild(link);
                                            link.click();
                                            document.body.removeChild(link);

@@ -8,51 +8,44 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription }
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'; // Import Tabs
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select" // Import Select
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"; // Import RadioGroup
 import { useToast } from '@/hooks/use-toast';
-import { Loader2, Mic, Edit2, Check, BrainCircuit, X, Text, FileText, MapPin, Lightbulb } from 'lucide-react'; // Added FileText, MapPin, Lightbulb icons
-import { usStates } from '@/lib/document-library'; // Import state list
-
-// Mock SpeechRecognition - Replace with actual implementation if needed
-const MockSpeechRecognition = {
-  start: () => console.log("Mock SpeechRecognition started"),
-  stop: () => console.log("Mock SpeechRecognition stopped"),
-  onresult: (event: any) => {},
-  onerror: (event: any) => {},
-  abort: () => console.log("Mock SpeechRecognition aborted"),
-  continuous: false,
-  interimResults: false,
-  onend: () => {} // Added onend mock
-};
+import { Loader2, Mic, Edit2, Check, BrainCircuit, X, Text, FileText, MapPin, Lightbulb, HelpCircle } from 'lucide-react'; // Added HelpCircle
+import { usStates } from '@/lib/document-library';
 
 // Define props for the component, including the callback
 interface DocumentInferenceProps {
-    onInferenceResult: (result: InferDocumentTypeOutput | null) => void;
+    // Callback now returns the *selected* document name (string) and the state (string | undefined)
+    onInferenceResult: (selectedDocumentName: string | null, state?: string) => void;
 }
 
 export function DocumentInference({ onInferenceResult }: DocumentInferenceProps) {
   const [description, setDescription] = useState('');
-  const [selectedState, setSelectedState] = useState<string | undefined>(undefined); // State for US State selection
+  const [selectedState, setSelectedState] = useState<string | undefined>(undefined);
   const [isRecording, setIsRecording] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [result, setResult] = useState<InferDocumentTypeOutput | null>(null);
+  const [inferenceOutput, setInferenceOutput] = useState<InferDocumentTypeOutput | null>(null); // Store the full AI output
+  const [selectedDocument, setSelectedDocument] = useState<string | null>(null); // Store user's choice
   const [isEditingDescription, setIsEditingDescription] = useState(false);
   const [editedDescription, setEditedDescription] = useState('');
-  const [activeTab, setActiveTab] = useState<'text' | 'microphone'>('text'); // State for tabs
+  const [activeTab, setActiveTab] = useState<'text' | 'microphone'>('text');
   const { toast } = useToast();
-  const isRecordingRef = useRef(isRecording); // Top-level ref
+
+  // Use top-level ref
+  const isRecordingRef = useRef(isRecording);
 
   // State for browser speech recognition API
-  const [recognition, setRecognition] = useState<any | null>(null); // Use 'any' for broader compatibility initially
+  const [recognition, setRecognition] = useState<any | null>(null);
 
-  // Memoize the callback to prevent unnecessary re-renders if passed inline
+  // Memoize the callback to prevent unnecessary re-renders
   const stableOnInferenceResult = useCallback(onInferenceResult, [onInferenceResult]);
 
   // Helper function to safely check for window object
   const isBrowser = typeof window !== 'undefined';
 
-
+  // --- Speech Recognition Setup Effect ---
   useEffect(() => {
     const SpeechRecognitionApi = isBrowser ? (window.SpeechRecognition || (window as any).webkitSpeechRecognition) : null;
     let recognitionInstance: SpeechRecognition | null = null;
@@ -60,223 +53,155 @@ export function DocumentInference({ onInferenceResult }: DocumentInferenceProps)
     if (SpeechRecognitionApi) {
         try {
             recognitionInstance = new SpeechRecognitionApi();
-            recognitionInstance.continuous = true; // Keep listening
-            recognitionInstance.interimResults = true; // Get results while speaking
+            recognitionInstance.continuous = true;
+            recognitionInstance.interimResults = true;
 
             recognitionInstance.onresult = (event: SpeechRecognitionEvent) => {
                 let finalTranscript = '';
-                let interimTranscript = '';
                 for (let i = event.resultIndex; i < event.results.length; ++i) {
-                     if (event.results[i].isFinal) {
+                    if (event.results[i].isFinal) {
                         finalTranscript += event.results[i][0].transcript;
-                    } else {
-                         interimTranscript += event.results[i][0].transcript; // Capture interim
                     }
                 }
-                 // Update description optimistically with interim, then finalize
-                 // For simplicity, only update with final results for now
-                 if (finalTranscript) {
-                     setDescription(prev => (prev + finalTranscript).trim() + ' ');
-                 }
-                 // Optionally update with interimTranscript for real-time feedback, but handle carefully
-                 // e.g., setInterimDescription(interimTranscript);
+                if (finalTranscript) {
+                    setDescription(prev => (prev + finalTranscript).trim() + ' ');
+                }
             };
 
             recognitionInstance.onerror = (event: SpeechRecognitionErrorEvent) => {
                 console.error('Speech recognition error:', event.error, event.message);
-                let errorMessage = `Error: ${event.error}. ${event.message || 'Please try again or type your description.'}`;
-                 if (event.error === 'no-speech') {
-                     errorMessage = "No speech detected. Ensure mic is working and speak clearly.";
-                 } else if (event.error === 'audio-capture') {
-                     errorMessage = "Audio capture failed. Check mic permissions & hardware.";
-                 } else if (event.error === 'not-allowed' || event.error === 'service-not-allowed') {
-                     errorMessage = "Microphone access denied. Allow microphone access in browser settings.";
-                 } else if (event.error === 'network'){
-                      errorMessage = "Network error during speech recognition. Check connection.";
-                 } else if (event.error === 'aborted') {
-                      // Check ref to see if abort was expected (user stopped)
-                      if (isRecordingRef.current) {
-                          errorMessage = "Speech recognition stopped."; // Less alarming message
-                      } else {
-                         // Abort might have been triggered by switching tabs or other non-error scenarios
-                         console.log("Speech recognition aborted (likely intentional or component unmount).");
-                         setIsRecording(false); // Ensure state consistency
-                         return; // Don't show error toast for intentional stops
-                      }
-                 }
+                 let errorMessage = `Error: ${event.error}. ${event.message || 'Try typing.'}`;
+                 if (event.error === 'no-speech') errorMessage = "No speech detected.";
+                 else if (event.error === 'audio-capture') errorMessage = "Mic capture failed.";
+                 else if (event.error === 'not-allowed' || event.error === 'service-not-allowed') errorMessage = "Mic access denied.";
+                 else if (event.error === 'network') errorMessage = "Network error during recognition.";
+                 else if (event.error === 'aborted' && !isRecordingRef.current) return; // Ignore intentional stops
+
                 toast({ title: "Speech Error", description: errorMessage, variant: "destructive" });
-                if (isRecordingRef.current) setIsRecording(false); // Stop recording state on error only if it was active
+                if (isRecordingRef.current) setIsRecording(false);
             };
 
             recognitionInstance.onend = () => {
-                console.log("Speech recognition ended.");
-                // Only update state if it was supposed to be recording (use ref)
-                if (isRecordingRef.current) {
-                    setIsRecording(false); // Ensure state reflects reality if service stops unexpectedly
-                    // Toast handled by toggle button now
-                    // toast({ title: "Recording Stopped" }); // Inform user
-                }
+                if (isRecordingRef.current) setIsRecording(false);
             };
 
             setRecognition(recognitionInstance);
 
         } catch (e) {
             console.error("Failed to initialize SpeechRecognition:", e);
-            setRecognition(null); // Ensure recognition state is null if init fails
+            setRecognition(null);
         }
-
     } else {
         console.warn('Speech Recognition API not supported.');
-        setRecognition(null); // Explicitly set to null if not supported
+        setRecognition(null);
     }
 
-    // Cleanup: Stop recognition if active when component unmounts
     return () => {
-       if (recognitionInstance) {
-            // Check the recording state *ref* because state might be stale in cleanup
-            if (isRecordingRef.current) {
-                try {
-                    recognitionInstance.stop();
-                    console.log("Stopped speech recognition on component unmount (was recording).");
-                } catch (e) {
-                    console.warn("Error stopping speech recognition on unmount:", e);
-                    try { recognitionInstance.abort(); console.log("Aborted speech recognition on unmount."); }
-                    catch (abortError) { console.warn("Could not abort speech recognition on unmount:", abortError); }
-                }
-            } else {
-                 // console.log("Speech recognition cleanup on unmount (was not recording).");
-            }
+       if (recognitionInstance && isRecordingRef.current) {
+           try { recognitionInstance.stop(); } catch (e) { console.warn("Error stopping recognition on unmount:", e); }
        }
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isBrowser, toast]); // isRecordingRef should not be a dependency
+  }, [isBrowser, toast]);
 
+  // --- Start/Stop Recognition Effect ---
+  useEffect(() => {
+    isRecordingRef.current = isRecording;
+    if (recognition) {
+      if (isRecording) {
+        try {
+          recognition.start();
+        } catch (e: any) {
+          console.error("Error starting recognition:", e);
+          let errorMsg = `Could not start recording: ${e.message}.`;
+          if (e.name === 'NotAllowedError' || e.name === 'SecurityError') errorMsg = "Mic access denied.";
+          else if (e.name === 'InvalidStateError') return;
+          toast({ title: "Recording Error", description: errorMsg, variant: "destructive" });
+          setIsRecording(false);
+        }
+      } else {
+        try { recognition.stop(); } catch (e) { console.warn("Error stopping recognition:", e); }
+      }
+    }
+  }, [isRecording, recognition, toast]);
 
-  // Effect to start/stop recognition when isRecording state changes
-   useEffect(() => {
-       // Update the ref whenever isRecording changes
-       isRecordingRef.current = isRecording;
-
-       if (recognition) {
-           if (isRecording) {
-               try {
-                   recognition.start();
-                   console.log("Speech recognition started via state change.");
-               } catch (e: any) {
-                   console.error("Error starting recognition:", e);
-                    let errorMsg = `Could not start recording: ${e.message}. Ensure permissions are granted.`;
-                    if (e.name === 'NotAllowedError' || e.name === 'SecurityError') { // Added SecurityError
-                        errorMsg = "Microphone access denied. Please allow access in your browser settings.";
-                    } else if (e.name === 'InvalidStateError'){
-                        console.warn("Recognition already started or in invalid state. Ignoring redundant start().");
-                        return; // Avoid setting isRecording back to false
-                    }
-                   toast({ title: "Recording Error", description: errorMsg, variant: "destructive" });
-                   setIsRecording(false); // Correct state if start fails
-               }
-           } else {
-               try {
-                   // Check if already stopped to avoid redundant calls/errors
-                   // Note: Checking recognition.readyState might be browser-specific
-                   recognition.stop();
-                   console.log("Speech recognition stopped by state change.");
-                   toast({ title: "Recording Stopped", description: "Processing transcribed text..." });
-               } catch(e) {
-                    console.warn("Error stopping recognition (might already be stopped):", e);
-               }
-           }
-       }
-       // eslint-disable-next-line react-hooks/exhaustive-deps
-   }, [isRecording, recognition, toast]); // Depend on isRecording and recognition instance
-
-
+  // --- Handlers ---
   const handleRecordToggle = () => {
     if (!recognition) {
-         toast({
-            title: "Unsupported Feature",
-            description: "Speech recognition is not available in your browser. Please use the text input.",
-            variant: "destructive",
-        });
-        setActiveTab('text'); // Switch back to text tab
-      return;
+         toast({ title: "Unsupported", description: "Speech recognition unavailable.", variant: "destructive" });
+         setActiveTab('text');
+         return;
     }
-
-    // Toggle recording state - the useEffect handles start/stop
-    const nextRecordingState = !isRecording;
-    setIsRecording(nextRecordingState);
-
-    if (nextRecordingState) {
-         toast({
-            title: "Recording...",
-            description: "Speak clearly. Click the mic again to stop.",
-        });
-    } else {
-         // Toast for stopping is handled in recognition.onend or effect
-    }
+    setIsRecording(prev => !prev);
+    if (!isRecording) toast({ title: "Recording...", description: "Speak clearly." });
+    else toast({ title: "Recording Stopped" });
   };
 
-  const handleSubmit = useCallback(async (currentDescription: string) => {
+  // --- Submit to AI Flow ---
+  const handleInferDocument = useCallback(async (currentDescription: string) => {
+    const logPrefix = "[handleInferDocument]";
     const trimmedDescription = currentDescription.trim();
     if (!trimmedDescription) {
       toast({ title: "Input Required", description: "Please provide a description.", variant: "destructive" });
       return;
     }
-    // Optional: Add validation for state selection if required later
-    // if (!selectedState) {
-    //    toast({ title: "State Required", description: "Please select the relevant U.S. state.", variant: "destructive" });
-    //    return;
-    // }
 
     setIsLoading(true);
-    setResult(null);
-    stableOnInferenceResult(null);
+    setInferenceOutput(null); // Clear previous results
+    setSelectedDocument(null); // Clear previous selection
+    stableOnInferenceResult(null, selectedState); // Notify parent
 
     const inputPayload: InferDocumentTypeInput = {
         description: trimmedDescription,
-        ...(selectedState && { state: selectedState }), // Include state if selected
+        ...(selectedState && { state: selectedState }),
     };
 
-    console.log("[handleSubmit] Sending payload to API:", inputPayload);
+    console.log(`${logPrefix} Sending payload to API:`, inputPayload);
 
     // --- TEMPORARY CHANGE FOR STATIC EXPORT ---
-    console.log("[handleSubmit] AI Inference Temporarily Disabled for Static Export.");
-    await new Promise(resolve => setTimeout(resolve, 700)); // Slightly longer delay
-    // Simulate response based on description/state
-    let dummyDocType = "Lease Agreement (Dummy)";
-    let dummyConfidence = 0.75;
-    let dummyReasoning = "Based on keywords like 'renting'.";
-    let dummyAlternatives : string[] | undefined = undefined;
+     console.log(`${logPrefix} AI Inference API Call Disabled for Static Export. Simulating...`);
+     await new Promise(resolve => setTimeout(resolve, 700));
+     // Simulate response based on description/state
+     let dummyDocType = "Lease Agreement (Dummy)";
+     let dummyConfidence = 0.75;
+     let dummyReasoning = "Based on keywords like 'renting'.";
+     let dummyAlternatives : string[] | undefined = undefined;
 
-     if (trimmedDescription.toLowerCase().includes("nda") || trimmedDescription.toLowerCase().includes("confidential")) {
-        dummyDocType = "Mutual Non-Disclosure Agreement (NDA)";
-        dummyConfidence = 0.85;
-        dummyReasoning = "Keywords 'NDA' or 'confidential' detected.";
-        dummyAlternatives = ["Unilateral Non-Disclosure Agreement (NDA)"];
-     } else if (trimmedDescription.toLowerCase().includes("partner")) {
-        dummyDocType = "Partnership Agreement";
-        dummyConfidence = 0.80;
-        dummyReasoning = "Keyword 'partner' detected.";
-     }
+      if (trimmedDescription.toLowerCase().includes("nda") || trimmedDescription.toLowerCase().includes("confidential")) {
+         dummyDocType = "Mutual Non-Disclosure Agreement (NDA)";
+         dummyConfidence = 0.85;
+         dummyReasoning = "Keywords 'NDA' or 'confidential' detected.";
+         dummyAlternatives = ["Unilateral Non-Disclosure Agreement (NDA)"];
+      } else if (trimmedDescription.toLowerCase().includes("partner")) {
+         dummyDocType = "Partnership Agreement";
+         dummyConfidence = 0.80;
+         dummyReasoning = "Keyword 'partner' detected.";
+      } else if (trimmedDescription.length < 15) { // Example for low confidence
+          dummyDocType = "General Inquiry";
+          dummyConfidence = 0.3;
+          dummyReasoning = "Description is very short. Unclear specific need.";
+          dummyAlternatives = ["Service Agreement", "Residential Lease Agreement"];
+      }
 
-     if (selectedState === 'CA') {
-         dummyReasoning += ` State CA might have specific clauses.`;
-     } else if (selectedState) {
-         dummyReasoning += ` Considering state ${selectedState}.`;
-     }
+      if (selectedState === 'CA') dummyReasoning += ` State CA may have specific clauses.`;
+      else if (selectedState) dummyReasoning += ` Considering state ${selectedState}.`;
 
-    const dummyOutput: InferDocumentTypeOutput = {
-      documentType: dummyDocType,
-      confidence: dummyConfidence,
-      reasoning: dummyReasoning,
-      alternatives: dummyAlternatives,
-    };
-    setResult(dummyOutput);
-    stableOnInferenceResult(dummyOutput);
-    toast({ title: "Analysis Complete (Dummy)", description: `Suggested: ${dummyOutput.documentType}. Confidence: ${(dummyOutput.confidence * 100).toFixed(0)}%. Proceed to Step 2.` });
-    setIsLoading(false);
-    return; // Exit before attempting the fetch call
+     const dummyOutput: InferDocumentTypeOutput = {
+       documentType: dummyDocType,
+       confidence: dummyConfidence,
+       reasoning: dummyReasoning,
+       alternatives: dummyAlternatives?.filter(alt => alt !== dummyDocType), // Filter out primary if it's also an alternative
+     };
 
-    // --- ORIGINAL CODE (Requires a backend/API route) ---
+     setInferenceOutput(dummyOutput);
+     // Automatically select the highest confidence option initially
+     setSelectedDocument(dummyOutput.documentType);
+     // Notify parent immediately with the *initial best guess*
+     // stableOnInferenceResult(dummyOutput.documentType, selectedState);
+     toast({ title: "Analysis Complete (Dummy)", description: `Suggestions loaded below. Review and confirm.` });
+     setIsLoading(false);
+     return; // Exit before attempting the fetch call
+
+    // --- ORIGINAL API CALL CODE ---
     /*
     try {
       console.log(`${logPrefix} Calling fetch to /api/infer-document-type...`);
@@ -289,58 +214,58 @@ export function DocumentInference({ onInferenceResult }: DocumentInferenceProps)
 
       if (!response.ok) {
         let errorData: any = { message: `HTTP error! Status: ${response.status}` };
-        try {
-          errorData = await response.json(); // Try to parse JSON error response
-        } catch (parseError) {
-          console.warn(`${logPrefix} Could not parse error response as JSON.`);
-        }
+        try { errorData = await response.json(); } catch { }
         console.error(`${logPrefix} API error response:`, errorData);
         throw new Error(errorData.error || errorData.message || `HTTP error! Status: ${response.status}`);
       }
 
       const output: InferDocumentTypeOutput = await response.json();
       console.log(`${logPrefix} Parsed API response:`, output);
-      setResult(output);
-      stableOnInferenceResult(output); // Pass result to parent
+
+      setInferenceOutput(output);
+      // Automatically select the highest confidence option initially
+      setSelectedDocument(output.documentType);
+      // Notify parent immediately with the initial best guess
+      // stableOnInferenceResult(output.documentType, selectedState);
+
       toast({
           title: "Analysis Complete",
-          description: `Suggested: ${output.documentType}. Confidence: ${(output.confidence * 100).toFixed(0)}%. ${output.reasoning || ''} Proceed to Step 2.`,
+          description: `AI suggestions loaded below. Please review and confirm your choice.`,
       });
 
     } catch (error: unknown) {
-      console.error(`${logPrefix} Error in handleSubmit:`, error);
+      console.error(`${logPrefix} Error in handleInferDocument:`, error);
       let errorMessage = 'Failed to infer document type.';
       if (error instanceof Error) {
-         // Provide more specific feedback based on common errors
-          if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
-             errorMessage = 'Network error. Could not reach the AI service. Please check your connection.';
-          } else if (error.message.includes('API route is disabled')) {
-              errorMessage = 'AI service is temporarily unavailable (static export mode).';
-          } else if (error.message.includes('Invalid input')) {
-              errorMessage = `There was an issue with the data sent: ${error.message}`;
-          } else {
-               errorMessage = error.message;
-          }
+          if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) errorMessage = 'Network error. Could not reach AI service.';
+          else if (error.message.includes('API route is disabled')) errorMessage = 'AI service unavailable (static export mode).';
+          else if (error.message.includes('Invalid input')) errorMessage = `Data issue: ${error.message}`;
+          else errorMessage = error.message.replace(`${logPrefix} Error: `, ''); // Clean up prefix if added by flow
       }
       toast({ title: "Inference Error", description: errorMessage, variant: "destructive" });
-      setResult(null);
-      stableOnInferenceResult(null); // Notify parent of failure
+      setInferenceOutput(null);
+      setSelectedDocument(null);
+      stableOnInferenceResult(null, selectedState);
     } finally {
       setIsLoading(false);
     }
     */
-
   }, [toast, stableOnInferenceResult, selectedState]);
 
 
    const handleEditDescription = () => {
     setEditedDescription(description);
     setIsEditingDescription(true);
+    setInferenceOutput(null); // Clear results when starting edit
+    setSelectedDocument(null);
+    stableOnInferenceResult(null, selectedState);
   };
 
   const handleCancelEdit = () => {
       setIsEditingDescription(false);
       setEditedDescription('');
+      // Optionally re-infer if description wasn't empty before cancel?
+      // if (description) handleInferDocument(description);
   };
 
   const handleSaveDescription = () => {
@@ -348,39 +273,68 @@ export function DocumentInference({ onInferenceResult }: DocumentInferenceProps)
     setDescription(newDescription);
     setIsEditingDescription(false);
     if (newDescription) {
-        // Automatically re-submit after saving edited text
-        handleSubmit(newDescription);
+        handleInferDocument(newDescription); // Automatically re-submit after saving
     } else {
-         // If saved text is empty, clear results
          toast({ title: "Input Cleared", description: "Description removed.", variant: "destructive" });
-         setResult(null);
-         stableOnInferenceResult(null);
+         setInferenceOutput(null);
+         setSelectedDocument(null);
+         stableOnInferenceResult(null, selectedState);
     }
   };
 
-   // Effect to initialize editedDescription when description changes and result exists
-   // and we are *not* currently in editing mode.
+   // Effect to initialize editedDescription when description changes and result exists, not editing
    useEffect(() => {
-      if (result && !isEditingDescription) {
+      if (inferenceOutput && !isEditingDescription) {
          setEditedDescription(description);
       }
-   }, [description, result, isEditingDescription]);
+   }, [description, inferenceOutput, isEditingDescription]);
 
   // Handle tab change
   const handleTabChange = (value: string) => {
      const newTab = value as 'text' | 'microphone';
      setActiveTab(newTab);
-     // Stop recording if switching away from microphone tab
-     if (newTab === 'text' && isRecording) {
-         setIsRecording(false); // This will trigger the useEffect to stop recognition
-     }
+     if (newTab === 'text' && isRecording) setIsRecording(false);
   };
+
+  // Handle final confirmation of selected document type
+   const handleConfirmSelection = () => {
+        if (!selectedDocument) {
+             toast({ title: "Selection Required", description: "Please select a document type.", variant: "destructive" });
+             return;
+        }
+        console.log(`[handleConfirmSelection] User confirmed: ${selectedDocument}, State: ${selectedState}`);
+        stableOnInferenceResult(selectedDocument, selectedState); // Send final selection to parent
+        toast({ title: "Document Type Confirmed", description: `Proceeding with ${selectedDocument}.` });
+        // Optionally, disable further changes after confirmation
+        // setIsLoading(true); // Or use a different state like `isConfirmed`
+   }
+
+
+  // --- Prepare options for Radio Group ---
+  const documentOptions: { value: string; label: string; confidence?: number }[] = [];
+  if (inferenceOutput) {
+      // Add primary suggestion
+      documentOptions.push({
+          value: inferenceOutput.documentType,
+          label: inferenceOutput.documentType,
+          confidence: inferenceOutput.confidence
+      });
+      // Add alternatives, ensuring no duplicates with primary
+      inferenceOutput.alternatives?.forEach(alt => {
+          if (alt !== inferenceOutput.documentType) {
+              documentOptions.push({ value: alt, label: alt }); // Confidence not provided for alternatives
+          }
+      });
+      // Optionally add "General Inquiry" if it wasn't the primary suggestion
+      if (inferenceOutput.documentType !== 'General Inquiry' && !documentOptions.some(opt => opt.value === 'General Inquiry')) {
+            documentOptions.push({ value: 'General Inquiry', label: 'None of these / Unsure' });
+      }
+  }
 
 
   return (
-    <div className="space-y-4">
-       {/* Removed CardHeader/CardContent wrapper, now part of the parent card */}
-      {/* Tabs for Input Mode */}
+    <div className="space-y-6"> {/* Increased spacing */}
+      {/* Input Area */}
       <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="text" aria-label="Use Text Input">
@@ -392,7 +346,7 @@ export function DocumentInference({ onInferenceResult }: DocumentInferenceProps)
         </TabsList>
 
         {/* Text Input Content */}
-        <TabsContent value="text" className="mt-4"> {/* Added mt-4 for spacing */}
+        <TabsContent value="text" className="mt-4">
           <div className="space-y-2 relative group">
             <Label htmlFor="description-text" className="sr-only">Description (Text)</Label>
             <Textarea
@@ -401,15 +355,13 @@ export function DocumentInference({ onInferenceResult }: DocumentInferenceProps)
               value={isEditingDescription ? editedDescription : description}
               onChange={(e) => isEditingDescription ? setEditedDescription(e.target.value) : setDescription(e.target.value)}
               rows={5}
-              className="pr-12 rounded-md shadow-sm border border-input focus-visible:ring-2 focus-visible:ring-ring bg-card" // Ensure background matches card
-              readOnly={isLoading || (result && !isEditingDescription)} // Readonly if loading OR if result exists and not editing
+              className="pr-12 rounded-md shadow-sm border border-input focus-visible:ring-2 focus-visible:ring-ring bg-card"
+              readOnly={isLoading || (inferenceOutput && !isEditingDescription)}
               disabled={isLoading}
               aria-describedby="text-helper-text"
             />
-            {/* Edit/Save/Cancel Buttons for Textarea */}
             <div className="absolute top-2 right-2 flex flex-col space-y-1">
-                {/* Show Edit button only if result exists, not loading, and not editing */}
-                {result && !isLoading && !isEditingDescription && (
+                {inferenceOutput && !isLoading && !isEditingDescription && (
                  <Button variant="ghost" size="icon" onClick={handleEditDescription} aria-label="Edit Description" className="rounded-full w-8 h-8 opacity-0 group-hover:opacity-100 transition-opacity">
                     <Edit2 className="h-4 w-4" />
                  </Button>
@@ -426,16 +378,15 @@ export function DocumentInference({ onInferenceResult }: DocumentInferenceProps)
                )}
             </div>
              <p id="text-helper-text" className="text-xs text-muted-foreground pl-1">
-                 {isEditingDescription ? 'Editing description. Click Save (✓) or Cancel (✕).' : (result ? 'Analysis complete. Click edit (✎) to revise, or proceed to Step 2.' : 'Describe your situation clearly.')}
+                 {isEditingDescription ? 'Editing description. Save (✓) or Cancel (✕).' : (inferenceOutput ? 'Click edit (✎) to revise description.' : 'Describe your situation.')}
             </p>
           </div>
         </TabsContent>
 
         {/* Microphone Input Content */}
-        <TabsContent value="microphone" className="mt-4"> {/* Added mt-4 for spacing */}
+        <TabsContent value="microphone" className="mt-4">
            <div className="space-y-2 relative group">
             <Label htmlFor="description-mic" className="sr-only">Description (Microphone)</Label>
-            {/* Display area for transcribed text */}
             <div
               id="description-mic"
               className="min-h-[120px] w-full rounded-md border border-input bg-muted/50 px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 pr-12"
@@ -448,26 +399,23 @@ export function DocumentInference({ onInferenceResult }: DocumentInferenceProps)
                         rows={5}
                         className="w-full h-full bg-transparent border-0 focus:ring-0 focus:outline-none resize-none p-0"
                         aria-label="Edit transcribed text"
-                        autoFocus // Focus when editing starts
+                        autoFocus
                      />
                  ) : (
-                     description || <span className="text-muted-foreground italic">Your transcribed text will appear here...</span>
+                     description || <span className="text-muted-foreground italic">Transcribed text appears here...</span>
                  )}
-
             </div>
-            {/* Mic Button & Edit/Save/Cancel */}
             <div className="absolute top-2 right-2 flex flex-col space-y-1">
                 <Button
                     variant="outline"
                     size="icon"
                     onClick={handleRecordToggle}
-                    disabled={isLoading || isEditingDescription} // Disable mic while loading or editing text
+                    disabled={isLoading || isEditingDescription}
                     className={`transition-all duration-200 ${isRecording ? 'bg-red-100 hover:bg-red-200 text-red-700 border-red-300 animate-pulse ring-2 ring-red-300 ring-offset-2' : 'hover:bg-accent'} rounded-full w-8 h-8`}
                     aria-label={isRecording ? 'Stop Recording' : 'Start Recording'}
                 >
                     <Mic className="h-4 w-4" />
                 </Button>
-                {/* Show edit button only if there's text, not loading/recording, and not currently editing */}
                 {description && !isLoading && !isRecording && !isEditingDescription && (
                     <Button variant="ghost" size="icon" onClick={handleEditDescription} aria-label="Edit Description" className="rounded-full w-8 h-8 opacity-0 group-hover:opacity-100 transition-opacity">
                        <Edit2 className="h-4 w-4" />
@@ -485,10 +433,10 @@ export function DocumentInference({ onInferenceResult }: DocumentInferenceProps)
                  )}
             </div>
              <p id="mic-helper-text" className="text-xs text-muted-foreground pl-1">
-               {isRecording ? <span className="text-red-600">Listening... Click mic again to stop.</span> : (recognition ? "Click the microphone to start recording." : "Microphone input not available.")}
-               {isEditingDescription && <span> Editing description. Click Save (✓) or Cancel (✕).</span>}
-               {description && !isRecording && !isEditingDescription && result && <span> Click edit (✎) to revise, or proceed to Step 2.</span>}
-               {description && !isRecording && !isEditingDescription && !result && <span> Click "Infer My Document" below.</span>}
+               {isRecording ? <span className="text-red-600">Listening...</span> : (recognition ? "Click mic to start." : "Mic unavailable.")}
+               {isEditingDescription && <span> Editing. Save (✓) or Cancel (✕).</span>}
+               {description && !isRecording && !isEditingDescription && !inferenceOutput && <span> Click "Infer My Document" below.</span>}
+               {description && !isRecording && !isEditingDescription && inferenceOutput && <span> Click edit (✎) to revise.</span>}
             </p>
           </div>
         </TabsContent>
@@ -502,7 +450,13 @@ export function DocumentInference({ onInferenceResult }: DocumentInferenceProps)
          </Label>
          <Select
              value={selectedState}
-             onValueChange={setSelectedState}
+             onValueChange={(value) => {
+                 setSelectedState(value);
+                 // Clear previous results if state changes
+                 setInferenceOutput(null);
+                 setSelectedDocument(null);
+                 stableOnInferenceResult(null, value); // Notify parent immediately about state change
+             }}
              disabled={isLoading || isEditingDescription}
          >
            <SelectTrigger id="state-select" className="w-full rounded-md shadow-sm" aria-label="Select relevant U.S. state">
@@ -517,66 +471,77 @@ export function DocumentInference({ onInferenceResult }: DocumentInferenceProps)
            </SelectContent>
          </Select>
          <p className="text-xs text-muted-foreground pl-1">
-              Select the state where the legal matter primarily takes place. This helps tailor the document.
+              Helps tailor the document. Select if applicable.
          </p>
        </div>
 
 
-       {/* Submit Button - Updated Icon & Text */}
-       <Button onClick={() => handleSubmit(description)} disabled={isLoading || isRecording || isEditingDescription || !description.trim()} className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-medium">
+       {/* Infer Button */}
+       <Button onClick={() => handleInferDocument(description)} disabled={isLoading || isRecording || isEditingDescription || !description.trim()} className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-medium">
         {isLoading ? (
-          <>
-            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            Analyzing...
-          </>
+          <> <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Analyzing... </>
         ) : (
-          <>
-            <BrainCircuit className="mr-2 h-5 w-5"/> {/* Changed icon */}
-            {result ? 'Infer Again with Edited Text' : 'Infer My Document'}
-          </>
+          <> <BrainCircuit className="mr-2 h-5 w-5"/> Infer My Document </>
         )}
       </Button>
 
 
-      {/* Result Card - Enhanced */}
-      {result && !isLoading && !isEditingDescription && (
+      {/* ----- Result Selection Area ----- */}
+      {inferenceOutput && !isLoading && !isEditingDescription && (
         <Card className="mt-6 bg-secondary/70 rounded-lg shadow-inner border border-border">
-          <CardHeader className="pb-2 pt-4">
+          <CardHeader className="pb-3 pt-4">
             <CardTitle className="text-lg flex items-center font-medium">
                 <BrainCircuit className="mr-2 h-5 w-5 text-primary" />
-                Suggested Document Type
+                Select Document Type
             </CardTitle>
+             <CardDescription className="text-sm">
+                Based on your description, we suggest the following. Please review and select the best fit.
+             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-2 pb-4">
-            <p className="text-xl font-semibold text-primary">{result.documentType}</p>
-            <p className="text-sm text-muted-foreground">
-              Confidence: <span className="font-medium">{(result.confidence * 100).toFixed(0)}%</span>
-            </p>
-             {/* Display Reasoning */}
-             {result.reasoning && (
-                 <p className="text-xs text-muted-foreground italic border-l-2 border-primary/50 pl-2">
-                      {result.reasoning}
+          <CardContent className="space-y-4 pb-4">
+              {/* Display Reasoning */}
+             {inferenceOutput.reasoning && (
+                 <p className="text-xs text-muted-foreground italic border-l-2 border-primary/50 pl-2 py-1 bg-background/30 rounded-r-md">
+                      <strong>AI Reasoning:</strong> {inferenceOutput.reasoning}
                  </p>
              )}
-             {/* Display Alternatives */}
-            {result.alternatives && result.alternatives.length > 0 && (
-                <div className="pt-2">
-                     <p className="text-sm font-medium text-foreground flex items-center">
-                         <Lightbulb className="mr-2 h-4 w-4 text-yellow-500"/>
-                         Also consider:
-                     </p>
-                    <ul className="list-disc list-inside pl-4 text-sm text-muted-foreground">
-                        {result.alternatives.map((alt, index) => (
-                            <li key={index}>{alt}</li>
-                        ))}
-                    </ul>
-                </div>
-            )}
+
+             {/* Radio Group for Selection */}
+             <RadioGroup
+                 value={selectedDocument ?? ''}
+                 onValueChange={setSelectedDocument}
+                 className="space-y-2"
+             >
+                {documentOptions.map((option) => (
+                    <div key={option.value} className="flex items-center space-x-3 rounded-md border border-transparent hover:border-primary/50 hover:bg-background/50 p-3 transition-colors">
+                       <RadioGroupItem value={option.value} id={option.value} />
+                       <Label htmlFor={option.value} className="font-medium flex-grow cursor-pointer">
+                           {option.label}
+                           {option.confidence !== undefined && (
+                               <span className={`ml-2 text-xs font-normal px-1.5 py-0.5 rounded ${
+                                   option.confidence > 0.7 ? 'bg-green-100 text-green-800' :
+                                   option.confidence > 0.4 ? 'bg-yellow-100 text-yellow-800' :
+                                   'bg-red-100 text-red-800'
+                               }`}>
+                                   Confidence: {(option.confidence * 100).toFixed(0)}%
+                               </span>
+                           )}
+                           {option.value === 'General Inquiry' && <HelpCircle className="inline-block ml-1 h-4 w-4 text-muted-foreground" />}
+                       </Label>
+                    </div>
+                ))}
+             </RadioGroup>
+
           </CardContent>
-           <CardFooter className="pt-0 pb-3">
-             <p className="text-xs text-muted-foreground">
-                If this isn't right, click the edit icon (<Edit2 className="inline h-3 w-3 mx-0.5" />) above to revise the description and infer again. Otherwise, proceed to Step 2.
-             </p>
+           <CardFooter className="pt-0 pb-4">
+             <Button
+                onClick={handleConfirmSelection}
+                disabled={!selectedDocument || isLoading} // Disable if nothing selected or loading
+                className="w-full bg-accent hover:bg-accent/90 text-accent-foreground"
+             >
+                 <Check className="mr-2 h-4 w-4" />
+                 Confirm Selection & Proceed to Step 2
+             </Button>
            </CardFooter>
         </Card>
       )}
