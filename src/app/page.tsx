@@ -7,12 +7,13 @@ import { Questionnaire } from '@/components/questionnaire';
 import { PdfPreview } from '@/components/pdf-preview';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import { FileText, FileSignature } from 'lucide-react';
+import { FileText, FileSignature, Check } from 'lucide-react'; // Added Check icon
 
 // Landing Page Sections
 import { HeroSection } from '@/components/landing/HeroSection';
 import { FeatureTeaser } from '@/components/landing/FeatureTeaser';
-import { HowItWorks } from '@/components/landing/HowItWorks';
+// Removed import { HowItWorks } from '@/components/landing/HowItWorks';
+import ThreeStepSection from '@/components/ThreeStepSection'; // Import the new section
 import { TestimonialCarousel } from '@/components/landing/TestimonialCarousel';
 import { FeaturedLogos } from '@/components/landing/FeaturedLogos';
 import { GuaranteeBadge } from '@/components/landing/GuaranteeBadge';
@@ -67,15 +68,12 @@ export default function Home() {
        {/* Render combined Hero and Feature sections */}
        <HeroSection />
        <FeatureTeaser />
-
-       {/* Trust Bar Placeholder - Included in HeroSection */}
-       {/* <div className="w-full bg-muted py-4 text-center text-sm text-muted-foreground">
-          Trusted by 2,000+ small businesses | ⭐⭐⭐⭐⭐ 4.8/5 stars
-       </div> */}
+       <ThreeStepSection /> {/* Added the new ThreeStepSection */}
 
         {/* Main Workflow Section */}
         <div className="w-full max-w-5xl mx-auto px-4 py-12 space-y-12">
-            <HowItWorks currentStep={currentStep} />
+             {/* Removed HowItWorks component, ThreeStepSection provides similar info */}
+             {/* <HowItWorks currentStep={currentStep} /> */}
 
             <div className="w-full max-w-3xl mx-auto space-y-8">
                 {/* Step 1: Document Inference */}
@@ -84,7 +82,7 @@ export default function Home() {
                         <CardHeader>
                         <div className="flex items-center space-x-2">
                             <FileText className="h-6 w-6 text-primary" />
-                            <CardTitle className="text-2xl">Step 1: Describe Your Situation</CardTitle>
+                            <CardTitle className="text-2xl">Start Here: Describe Your Situation</CardTitle> {/* Updated Title */}
                         </div>
                         <CardDescription>
                            Use the text box or microphone below. Our AI will suggest the best document type.
@@ -96,11 +94,13 @@ export default function Home() {
                     </Card>
                 )}
 
-                {/* Separator between steps */}
-                {currentStep > 1 && <Separator className="my-8" />}
+                {/* Separator between steps (Conditional) */}
+                {currentStep > 1 && inferredDocType && (
+                     <Separator className="my-8" />
+                 )}
 
                 {/* Step 2: Dynamic Questionnaire */}
-                 {currentStep >= 2 && (
+                 {currentStep >= 2 && inferredDocType && ( // Only show if doc type is inferred
                      <div className={`transition-opacity duration-500 ease-out ${currentStep === 2 ? 'opacity-100 animate-fade-in' : 'opacity-50 cursor-not-allowed'}`}>
                          <Questionnaire
                              documentType={inferredDocType}
@@ -110,13 +110,13 @@ export default function Home() {
                          />
                      </div>
                  )}
-                 {/* Placeholder if step 1 not complete */}
-                 {currentStep < 2 && (
+                 {/* Placeholder if step 1 not complete OR no specific doc type inferred */}
+                 {currentStep < 2 && !inferredDocType && ( // Simplified placeholder logic
                      <Card className="shadow-lg rounded-lg opacity-50 cursor-not-allowed">
                          <CardHeader>
                              <div className="flex items-center space-x-2">
                                  <QuestionnaireIcon />
-                                 <CardTitle className="text-2xl">Step 2: Answer Questions</CardTitle>
+                                 <CardTitle className="text-2xl">Next: Answer Questions</CardTitle> {/* Updated Title */}
                              </div>
                              <CardDescription>
                                  Once a document type is inferred, answer questions here.
@@ -128,12 +128,14 @@ export default function Home() {
                      </Card>
                  )}
 
-                {/* Separator between steps */}
-                {currentStep > 2 && <Separator className="my-8" />}
+                {/* Separator between steps (Conditional) */}
+                 {currentStep > 2 && questionnaireAnswers && (
+                    <Separator className="my-8" />
+                 )}
 
 
                 {/* Step 3: PDF Preview & Signing */}
-                 {currentStep >= 3 && (
+                 {currentStep >= 3 && questionnaireAnswers && ( // Only show if answers submitted
                      <div className={`transition-opacity duration-500 ease-out ${currentStep === 3 ? 'opacity-100 animate-fade-in' : 'opacity-50 cursor-not-allowed'}`}>
                          <PdfPreview
                              documentDataUrl={pdfDataUrl}
@@ -144,25 +146,25 @@ export default function Home() {
                      </div>
                  )}
                 {/* Placeholder if step 2 not complete */}
-                 {currentStep < 3 && (
+                 {currentStep < 3 && !questionnaireAnswers && ( // Simplified placeholder logic
                       <Card className="shadow-lg rounded-lg opacity-50 cursor-not-allowed">
                          <CardHeader>
                              <div className="flex items-center space-x-2">
                                  <FileSignature className="h-6 w-6 text-primary" />
-                                 <CardTitle className="text-2xl">Step 3: Preview & Sign</CardTitle>
+                                 <CardTitle className="text-2xl">Then: Preview & Sign</CardTitle> {/* Updated Title */}
                              </div>
                              <CardDescription>
                                  Review the generated document and sign it digitally.
                              </CardDescription>
                          </CardHeader>
                          <CardContent>
-                             <p className="text-muted-foreground italic">Complete Step 2 to generate the document preview.</p>
+                             <p className="text-muted-foreground italic">Complete the questions above to generate the document preview.</p>
                          </CardContent>
                      </Card>
                  )}
 
-                 {/* Step 4: Share & Track (Placeholder) */}
-                  {currentStep >= 4 && (
+                 {/* Step 4: Share & Track (Placeholder - shows only after PDF is ready) */}
+                  {currentStep >= 4 && pdfDataUrl && ( // Only show if PDF generated
                      <>
                         <Separator className="my-8" />
                         <Card className="shadow-lg rounded-lg transition-opacity duration-500 ease-out opacity-100 animate-fade-in">
@@ -170,7 +172,7 @@ export default function Home() {
                                 <div className="flex items-center space-x-2">
                                      {/* Placeholder Icon */}
                                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6 text-primary"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" x2="12" y1="2" y2="15"/></svg>
-                                     <CardTitle className="text-2xl">Step 4: Share & Track</CardTitle>
+                                     <CardTitle className="text-2xl">Finally: Share & Track</CardTitle> {/* Updated Title */}
                                 </div>
                                 <CardDescription>
                                    Your document is ready! Share it securely or download it.
