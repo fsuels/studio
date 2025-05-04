@@ -121,12 +121,30 @@ export function DocumentInference({ onInferenceResult }: DocumentInferenceProps)
     }
     // Cleanup function to stop recognition if component unmounts while recording
     return () => {
-        if (recognition && isRecording) {
-            recognition.stop();
+        // Check if recognition exists and stop/abort method is available
+        if (recognition && typeof recognition.stop === 'function') {
+           if (isRecording) {
+               try {
+                  recognition.stop();
+                  console.log("Stopped speech recognition on component unmount.");
+               } catch (e) {
+                   console.warn("Could not stop speech recognition on unmount:", e);
+                   // Try abort as a fallback
+                    if (typeof recognition.abort === 'function') {
+                         try {
+                           recognition.abort();
+                           console.log("Aborted speech recognition on component unmount.");
+                         } catch (abortError) {
+                              console.warn("Could not abort speech recognition on unmount:", abortError);
+                         }
+                    }
+               }
+           }
         }
     };
 
-  }, [toast, isRecording]); // isRecording dependency added for cleanup
+  // }, [toast, isRecording]); // Original dependencies
+  }, [toast, isRecording, recognition]); // Added recognition to dependency array for cleanup logic
 
 
   const handleRecord = () => {
@@ -182,11 +200,35 @@ export function DocumentInference({ onInferenceResult }: DocumentInferenceProps)
       const output = await inferDocumentType(input);
       setResult(output);
       stableOnInferenceResult(output); // Pass result to parent
+      // Add a success toast
+      toast({
+        title: "Analysis Complete",
+        description: `Suggested document type: ${output.documentType}`,
+      });
     } catch (error) {
-      console.error('Error inferring document type:', error);
+       // Log the specific error to the console (server or client depending on where it runs)
+      console.error('[handleSubmit Error] Error inferring document type:', error);
+
+      // Provide more context in the user-facing error message
+      let errorMessage = "Could not process your request due to a server error. Please try again later.";
+       if (error instanceof Error) {
+          // Check for common API key issues (example, actual error message might vary)
+          // Note: Be cautious about exposing too much detail from error messages to the client.
+          if (error.message.includes('API key not valid') || error.message.includes('invalid api key')) {
+              errorMessage = "Server configuration error. Please contact support.";
+          } else if (error.message.includes('quota')) {
+              errorMessage = "The AI service is busy or quota exceeded. Please try again later.";
+          } else if (error.message.includes('fetch failed') || error.message.includes('network error')) {
+              errorMessage = "Network error. Could not reach the AI service. Please check your connection and try again.";
+          }
+          // For generic errors, you might append the message if it's deemed safe/useful
+          // errorMessage += ` (Details: ${error.message})`;
+      }
+
+
       toast({
         title: "AI Inference Error",
-        description: "Could not process your request. Please try again.",
+        description: errorMessage,
         variant: "destructive",
       });
        stableOnInferenceResult(null); // Notify parent about the error (by passing null)
