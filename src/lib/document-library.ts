@@ -29,8 +29,10 @@ export interface LegalDocument {
   id: string;
   /** User-friendly name (e.g., "Residential Lease Agreement") */
   name: string;
-  /** Keywords or phrases users might use to describe needing this document */
+  /** Keywords or phrases users might use to describe needing this document in English */
   aliases: string[];
+  /** Keywords or phrases users might use to describe needing this document in Spanish */
+  aliases_es: string[]; // Added Spanish aliases
   /** List of US state codes where this specific template/rules apply ('all' for general) */
   states: string[] | 'all';
   /** Category the document belongs to */
@@ -74,19 +76,21 @@ const generateIdFromName = (name: string): string => {
   return name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
 };
 
-// Updated document library with comprehensive list and IDs
+// Updated document library with comprehensive list, IDs, and Spanish aliases
 export const documentLibrary: LegalDocument[] = [
   {
     name: "Residential Lease Agreement",
-    aliases: ["rent apartment", "tenant", "lease form", "landlord agreement"],
+    aliases: ["rent apartment", "tenant", "lease form", "landlord agreement", "rental contract"],
+    aliases_es: ["alquilar apartamento", "inquilino", "contrato de arrendamiento", "acuerdo de propietario", "contrato de alquiler"],
     states: ["all"],
     category: "Real Estate",
     id: generateIdFromName("Residential Lease Agreement"),
-    questions: [] // Placeholder
+    questions: [] // Placeholder, load from formSchemas
   },
   {
     name: "Divorce Settlement Agreement",
-    aliases: ["divorce", "separation", "end marriage", "get divorced"],
+    aliases: ["divorce", "separation", "end marriage", "get divorced", "marital settlement"],
+    aliases_es: ["divorcio", "separación", "terminar matrimonio", "acuerdo de divorcio", "liquidación matrimonial"],
     states: ["all"],
     category: "Family Law",
     id: generateIdFromName("Divorce Settlement Agreement"),
@@ -94,7 +98,8 @@ export const documentLibrary: LegalDocument[] = [
   },
   {
     name: "Child Custody Agreement",
-    aliases: ["child custody", "custody battle", "parenting plan"],
+    aliases: ["child custody", "custody battle", "parenting plan", "custody arrangement"],
+    aliases_es: ["custodia de hijos", "plan de crianza", "acuerdo de custodia"],
     states: ["all"],
     category: "Family Law",
     id: generateIdFromName("Child Custody Agreement"),
@@ -102,23 +107,26 @@ export const documentLibrary: LegalDocument[] = [
   },
   {
     name: "Prenuptial Agreement",
-    aliases: ["prenup", "marriage contract", "before marriage agreement"],
+    aliases: ["prenup", "marriage contract", "before marriage agreement", "premarital agreement"],
+    aliases_es: ["acuerdo prenupcial", "capitulaciones matrimoniales", "contrato matrimonial"],
     states: ["all"],
     category: "Family Law",
     id: generateIdFromName("Prenuptial Agreement"),
     questions: [] // Placeholder
   },
   {
-    name: "Mutual Non-Disclosure Agreement (NDA)", // Use this specific name for lookup
+    name: "Mutual Non-Disclosure Agreement (NDA)",
     aliases: ["confidential", "mutual nda", "protect idea", "secret", "both ways nda"],
+    aliases_es: ["confidencial", "nda mutuo", "proteger idea", "secreto", "acuerdo de confidencialidad mutuo"],
     states: ["all"],
     category: "Business",
     id: generateIdFromName("Mutual Non-Disclosure Agreement (NDA)"),
     questions: [] // Placeholder
   },
    {
-    name: "Unilateral Non-Disclosure Agreement (NDA)", // Use this specific name
+    name: "Unilateral Non-Disclosure Agreement (NDA)",
     aliases: ["one-way nda", "disclosing party", "receiving party", "protect my idea"],
+    aliases_es: ["nda unilateral", "parte reveladora", "parte receptora", "proteger mi idea", "acuerdo de confidencialidad unilateral"],
     states: ["all"],
     category: "Business",
     id: generateIdFromName("Unilateral Non-Disclosure Agreement (NDA)"),
@@ -126,7 +134,8 @@ export const documentLibrary: LegalDocument[] = [
   },
   {
     name: "Independent Contractor Agreement",
-    aliases: ["freelance", "contractor", "gig work", "1099 job"],
+    aliases: ["freelance", "contractor", "gig work", "1099 job", "consultant agreement"],
+    aliases_es: ["freelance", "contratista", "trabajo temporal", "acuerdo de consultor", "contrato de servicios profesionales"],
     states: ["all"],
     category: "Business",
     id: generateIdFromName("Independent Contractor Agreement"),
@@ -134,7 +143,8 @@ export const documentLibrary: LegalDocument[] = [
   },
   {
     name: "Service Agreement",
-    aliases: ["hire services", "service provider", "payment terms", "scope of work"],
+    aliases: ["hire services", "service provider", "payment terms", "scope of work", "master service agreement"],
+    aliases_es: ["contratar servicios", "proveedor de servicios", "condiciones de pago", "alcance del trabajo", "contrato de servicios"],
     states: ["all"],
     category: "Business",
     id: generateIdFromName("Service Agreement"),
@@ -142,7 +152,8 @@ export const documentLibrary: LegalDocument[] = [
   },
   {
     name: "Partnership Agreement",
-    aliases: ["business partners", "joint venture", "partner terms"],
+    aliases: ["business partners", "joint venture", "partner terms", "general partnership"],
+    aliases_es: ["socios de negocios", "empresa conjunta", "términos de sociedad", "sociedad colectiva"],
     states: ["all"],
     category: "Business",
     id: generateIdFromName("Partnership Agreement"),
@@ -150,31 +161,44 @@ export const documentLibrary: LegalDocument[] = [
   },
   {
     name: "Operating Agreement",
-    aliases: ["LLC agreement", "limited liability company"],
+    aliases: ["LLC agreement", "limited liability company", "LLC structure"],
+    aliases_es: ["acuerdo operativo", "sociedad de responsabilidad limitada", "estructura LLC"],
     states: ["all"],
     category: "Business",
     id: generateIdFromName("Operating Agreement"),
     questions: [] // Placeholder
   },
   {
-    name: "Bill of Sale (Vehicle)", // Use this specific name
-    aliases: ["sell car", "used item sale", "vehicle transfer", "buy car"],
+    name: "Bill of Sale (Vehicle)",
+    aliases: ["sell car", "vehicle transfer", "buy car", "car sale contract"],
+    aliases_es: ["vender coche", "transferencia de vehículo", "comprar coche", "contrato de compraventa de vehículo"],
     states: ["all"],
     category: "Transactions",
     id: generateIdFromName("Bill of Sale (Vehicle)"),
     questions: [] // Placeholder
   },
+   {
+    name: "Bill of Sale (General)",
+    aliases: ["sell item", "purchase item", "transfer ownership"],
+    aliases_es: ["vender artículo", "comprar artículo", "transferir propiedad", "contrato de compraventa general"],
+    states: ["all"],
+    category: "Transactions",
+    id: generateIdFromName("Bill of Sale (General)"),
+    questions: [] // Placeholder
+  },
   {
-    name: "General Power of Attorney", // Use this specific name
+    name: "General Power of Attorney",
     aliases: ["represent me", "act on my behalf", "authorize someone", "financial poa"],
+    aliases_es: ["representarme", "actuar en mi nombre", "autorizar a alguien", "poder notarial financiero"],
     states: ["all"],
     category: "Personal Affairs",
     id: generateIdFromName("General Power of Attorney"),
     questions: [] // Placeholder
   },
    {
-    name: "Healthcare Power of Attorney", // Use this specific name
-    aliases: ["medical poa", "healthcare proxy", "appoint agent for health"],
+    name: "Healthcare Power of Attorney",
+    aliases: ["medical poa", "healthcare proxy", "appoint agent for health", "medical decisions"],
+    aliases_es: ["poder médico", "proxy de salud", "designar agente de salud", "decisiones médicas"],
     states: ["all"],
     category: "Personal Affairs",
     id: generateIdFromName("Healthcare Power of Attorney"),
@@ -182,15 +206,17 @@ export const documentLibrary: LegalDocument[] = [
   },
   {
     name: "Living Will",
-    aliases: ["medical wishes", "advance directive", "life support", "end of life care"],
+    aliases: ["medical wishes", "advance directive", "life support", "end of life care", "healthcare directive"],
+    aliases_es: ["voluntad vital", "directiva anticipada", "soporte vital", "cuidados paliativos", "directiva de salud"],
     states: ["all"],
-    category: "Estate Planning", // Updated category
+    category: "Estate Planning",
     id: generateIdFromName("Living Will"),
     questions: [] // Placeholder
   },
   {
-    name: "Last Will and Testament", // Use this specific name
-    aliases: ["will", "testament", "estate planning", "distribute assets"],
+    name: "Last Will and Testament",
+    aliases: ["will", "testament", "estate planning", "distribute assets", "inheritance"],
+    aliases_es: ["testamento", "última voluntad", "planificación patrimonial", "distribuir bienes", "herencia"],
     states: ["all"],
     category: "Estate Planning",
     id: generateIdFromName("Last Will and Testament"),
@@ -198,7 +224,8 @@ export const documentLibrary: LegalDocument[] = [
   },
   {
     name: "Loan Agreement",
-    aliases: ["borrow money", "lend funds", "repayment terms", "personal loan"],
+    aliases: ["borrow money", "lend funds", "repayment terms", "personal loan", "loan contract"],
+    aliases_es: ["pedir dinero prestado", "prestar fondos", "condiciones de pago", "préstamo personal", "contrato de préstamo"],
     states: ["all"],
     category: "Finance",
     id: generateIdFromName("Loan Agreement"),
@@ -206,7 +233,8 @@ export const documentLibrary: LegalDocument[] = [
   },
   {
     name: "Promissory Note",
-    aliases: ["IOU", "promise to pay", "loan paper", "debt note"],
+    aliases: ["IOU", "promise to pay", "loan paper", "debt note", "pagaré"],
+    aliases_es: ["pagaré", "promesa de pago", "documento de préstamo", "nota de deuda"],
     states: ["all"],
     category: "Finance",
     id: generateIdFromName("Promissory Note"),
@@ -215,6 +243,7 @@ export const documentLibrary: LegalDocument[] = [
   {
     name: "Employment Offer Letter",
     aliases: ["hire employee", "job offer", "terms of employment", "offer letter"],
+    aliases_es: ["contratar empleado", "oferta de trabajo", "condiciones de empleo", "carta de oferta"],
     states: ["all"],
     category: "Employment",
     id: generateIdFromName("Employment Offer Letter"),
@@ -223,6 +252,7 @@ export const documentLibrary: LegalDocument[] = [
    {
     name: "Non-Compete Agreement",
     aliases: ["restrict competition", "former employee", "noncompete", "restrictive covenant"],
+    aliases_es: ["restringir competencia", "ex empleado", "acuerdo de no competencia", "cláusula restrictiva"],
     states: ["CA", "ND", "OK", "MT"], // Example restricted states
     category: "Employment",
     description: "Restricts an employee from competing after employment ends. Note: Enforceability varies significantly by state.",
@@ -231,15 +261,17 @@ export const documentLibrary: LegalDocument[] = [
   },
   {
     name: "Eviction Notice",
-    aliases: ["remove tenant", "late rent", "kick out", "notice to vacate"],
+    aliases: ["remove tenant", "late rent", "kick out", "notice to vacate", "notice to quit"],
+    aliases_es: ["desalojar inquilino", "renta atrasada", "echar", "aviso de desalojo", "notificación de desahucio"],
     states: ["all"],
     category: "Real Estate",
     id: generateIdFromName("Eviction Notice"),
     questions: [] // Placeholder
   },
   {
-    name: "Deed",
-    aliases: ["property deed", "ownership transfer"],
+    name: "Deed", // General Deed
+    aliases: ["property deed", "ownership transfer", "real estate transfer"],
+    aliases_es: ["escritura de propiedad", "transferencia de propiedad", "transferencia inmobiliaria"],
     states: ["all"],
     category: "Real Estate",
     id: generateIdFromName("Deed"),
@@ -247,7 +279,8 @@ export const documentLibrary: LegalDocument[] = [
   },
   {
     name: "Quitclaim Deed",
-    aliases: ["property transfer", "quit claim deed"],
+    aliases: ["property transfer", "quit claim deed", "release interest"],
+    aliases_es: ["transferencia de propiedad", "escritura de finiquito", "liberar interés"],
     states: ["all"],
     category: "Real Estate",
     id: generateIdFromName("Quitclaim Deed"),
@@ -255,7 +288,8 @@ export const documentLibrary: LegalDocument[] = [
   },
   {
     name: "Articles of Incorporation",
-    aliases: ["form corporation", "incorporate business"],
+    aliases: ["form corporation", "incorporate business", "start corporation"],
+    aliases_es: ["constituir sociedad anónima", "incorporar negocio", "crear corporación"],
     states: ["all"],
     category: "Business",
     id: generateIdFromName("Articles of Incorporation"),
@@ -264,30 +298,34 @@ export const documentLibrary: LegalDocument[] = [
   {
     name: "Cease and Desist Letter",
     aliases: ["stop using", "infringement", "copyright violation", "stop harassment", "infringement warning", "demand letter", "stop using trademark"],
+    aliases_es: ["cese y desista", "infracción", "violación de derechos de autor", "detener acoso", "advertencia de infracción", "carta de demanda", "dejar de usar marca"],
     states: ["all"],
-    category: "General Legal", // Updated category
+    category: "General Legal",
     id: generateIdFromName("Cease and Desist Letter"),
     questions: [] // Placeholder
   },
   {
-    name: "Demand Letter",
-    aliases: ["request payment", "owe money", "legal demand"],
+    name: "Demand Letter", // More general than just payment
+    aliases: ["request payment", "owe money", "legal demand", "request action"],
+    aliases_es: ["exigir pago", "deber dinero", "demanda legal", "solicitar acción", "carta de reclamación"],
     states: ["all"],
-    category: "General Legal", // Updated category
+    category: "General Legal",
     id: generateIdFromName("Demand Letter"),
     questions: [] // Placeholder
   },
   {
     name: "Release of Liability",
-    aliases: ["waiver", "hold harmless", "not responsible"],
+    aliases: ["waiver", "hold harmless", "not responsible", "liability waiver"],
+    aliases_es: ["renuncia", "exoneración de responsabilidad", "no responsable", "renuncia de responsabilidad"],
     states: ["all"],
-    category: "General Legal", // Updated category
+    category: "General Legal",
     id: generateIdFromName("Release of Liability"),
     questions: [] // Placeholder
   },
   {
     name: "Affidavit",
     aliases: ["sworn statement", "declaration", "official statement", "under oath"],
+    aliases_es: ["declaración jurada", "declaración oficial", "bajo juramento"],
     states: ["all"],
     category: "General Legal",
     id: generateIdFromName("Affidavit"),
@@ -295,7 +333,8 @@ export const documentLibrary: LegalDocument[] = [
   },
   {
     name: "Court Order",
-    aliases: ["judge order", "legal ruling"],
+    aliases: ["judge order", "legal ruling", "court ruling"],
+    aliases_es: ["orden judicial", "fallo legal", "decisión del tribunal"],
     states: ["all"],
     category: "Court",
     id: generateIdFromName("Court Order"),
@@ -303,7 +342,8 @@ export const documentLibrary: LegalDocument[] = [
   },
   {
     name: "Restraining Order",
-    aliases: ["keep away", "protection order"],
+    aliases: ["keep away", "protection order", "order of protection"],
+    aliases_es: ["orden de alejamiento", "orden de protección"],
     states: ["all"],
     category: "Court",
     id: generateIdFromName("Restraining Order"),
@@ -312,14 +352,16 @@ export const documentLibrary: LegalDocument[] = [
   {
     name: "Probate Petition",
     aliases: ["inheritance", "will court", "estate administration"],
+    aliases_es: ["herencia", "tribunal testamentario", "administración de bienes", "petición de sucesión"],
     states: ["all"],
-    category: "Estate Planning", // Updated category
+    category: "Estate Planning",
     id: generateIdFromName("Probate Petition"),
     questions: [] // Placeholder
   },
   {
     name: "Bankruptcy Filing",
-    aliases: ["chapter 7", "chapter 13", "debt relief"],
+    aliases: ["chapter 7", "chapter 13", "debt relief", "file bankruptcy"],
+    aliases_es: ["capítulo 7", "capítulo 13", "alivio de deuda", "declararse en bancarrota"],
     states: ["all"],
     category: "Finance",
     id: generateIdFromName("Bankruptcy Filing"),
@@ -328,14 +370,16 @@ export const documentLibrary: LegalDocument[] = [
   {
     name: "Cohabitation Agreement",
     aliases: ["living together", "unmarried partners", "partner sharing assets", "domestic partnership agreement"],
+    aliases_es: ["vivir juntos", "pareja de hecho", "compartir bienes", "acuerdo de convivencia"],
     states: ["all"],
     category: "Family Law",
     id: generateIdFromName("Cohabitation Agreement"),
     questions: [] // Placeholder
   },
    {
-    name: "Invoice Dispute Letter", // Added
+    name: "Invoice Dispute Letter",
     aliases: ["wrong bill", "incorrect invoice", "dispute charge"],
+    aliases_es: ["factura incorrecta", "cargo incorrecto", "disputar cargo", "reclamar factura"],
     states: ["all"],
     category: "Business",
     id: generateIdFromName("Invoice Dispute Letter"),
@@ -346,6 +390,7 @@ export const documentLibrary: LegalDocument[] = [
     id: 'general-inquiry',
     name: 'General Inquiry',
     aliases: ['unsure', 'help', 'legal question', 'need advice', 'other', 'talk to someone', 'not sure'],
+    aliases_es: ['no estoy seguro', 'ayuda', 'pregunta legal', 'necesito consejo', 'otro', 'hablar con alguien', 'duda'],
     states: 'all',
     category: "General Legal",
     description: 'Used when the user\'s need is unclear or doesn\'t match a specific document type.',
@@ -360,25 +405,21 @@ export const documentLibrary: LegalDocument[] = [
 
 
 /**
- * Finds document types matching keywords or aliases.
- * Basic example; a real implementation might use fuzzy search or embeddings.
+ * Finds document types matching keywords or aliases (basic implementation).
  *
  * @param query - The user's input string.
+ * @param language - The language code ('en' or 'es').
  * @param state - The US state code (optional).
  * @returns An array of matching LegalDocument objects.
  */
-export function findMatchingDocuments(query: string, state?: string): LegalDocument[] {
+export function findMatchingDocuments(query: string, language: 'en' | 'es' = 'en', state?: string): LegalDocument[] {
   const lowerQuery = query.toLowerCase();
   return documentLibrary.filter(doc => {
-    // Check if query matches document name or any alias
+    const aliases = language === 'es' ? doc.aliases_es : doc.aliases;
     const nameMatch = doc.name.toLowerCase().includes(lowerQuery);
-    const aliasMatch = doc.aliases.some(alias => lowerQuery.includes(alias.toLowerCase()));
-
-    // Check state compatibility
+    const aliasMatch = aliases.some(alias => lowerQuery.includes(alias.toLowerCase()));
     const stateMatch = !state || doc.states === 'all' || (Array.isArray(doc.states) && doc.states.includes(state));
 
-    // Document matches if query matches name/alias AND state is compatible
-    // Exclude 'General Inquiry' from keyword matches, it's a fallback.
     return (nameMatch || aliasMatch) && stateMatch && doc.id !== 'general-inquiry';
   });
 }

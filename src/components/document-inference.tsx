@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useState, useEffect, useCallback, useRef } from 'react';
@@ -12,6 +11,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Loader2, Mic, StopCircle, BrainCircuit, X, Text, FileText, MapPin, Edit2 } from 'lucide-react'; // Added StopCircle, Edit2
 import { usStates } from '@/lib/document-library';
 import { cn } from '@/lib/utils'; // Import cn utility
+import { useTranslation } from 'react-i18next'; // Import useTranslation
 
 // Define props for the component, including the callback
 interface DocumentInferenceProps {
@@ -26,6 +26,8 @@ export function DocumentInference({ onInferenceResult }: DocumentInferenceProps)
   const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState<'text' | 'microphone'>('text');
   const { toast } = useToast();
+  const { i18n } = useTranslation(); // Get i18n instance for current language
+
   // Move useRef calls to the top level
   const isRecordingRef = useRef(isRecording);
   const recognitionRef = useRef<SpeechRecognition | null>(null);
@@ -43,6 +45,7 @@ export function DocumentInference({ onInferenceResult }: DocumentInferenceProps)
             const instance = new SpeechRecognitionApi();
             instance.continuous = true;
             instance.interimResults = true;
+            instance.lang = i18n.language; // Set recognition language based on i18n
 
             instance.onresult = (event: SpeechRecognitionEvent) => {
                 let finalTranscript = '';
@@ -88,6 +91,9 @@ export function DocumentInference({ onInferenceResult }: DocumentInferenceProps)
     } else if (!SpeechRecognitionApi) {
         console.warn('Speech Recognition API not supported.');
         setRecognition(null);
+    } else if (recognitionRef.current) {
+        // Update language if i18n language changes after initialization
+        recognitionRef.current.lang = i18n.language;
     }
 
     // Cleanup function
@@ -102,7 +108,7 @@ export function DocumentInference({ onInferenceResult }: DocumentInferenceProps)
        }
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isBrowser, toast]); // Dependencies based on what triggers re-setup
+  }, [isBrowser, toast, i18n.language]); // Re-run if language changes
 
   // Effect to sync isRecording state with its ref
    useEffect(() => {
@@ -131,8 +137,9 @@ export function DocumentInference({ onInferenceResult }: DocumentInferenceProps)
     } else {
         // Start recording
         try {
+            currentRecognition.lang = i18n.language; // Ensure correct language before starting
             currentRecognition.start();
-            console.log("Starting recognition.");
+            console.log(`Starting recognition in language: ${currentRecognition.lang}.`);
              setIsRecording(true);
              // Don't toast on start, rely on UI change
              // toast({ title: "Recording...", description: "Speak clearly." });
@@ -145,6 +152,7 @@ export function DocumentInference({ onInferenceResult }: DocumentInferenceProps)
                 try { currentRecognition.stop(); } catch {}
                 setTimeout(() => {
                      try {
+                        currentRecognition.lang = i18n.language; // Ensure correct language
                         currentRecognition.start();
                         setIsRecording(true);
                      } catch (nestedE: any) {
@@ -178,8 +186,11 @@ export function DocumentInference({ onInferenceResult }: DocumentInferenceProps)
     setIsLoading(true);
     stableOnInferenceResult(null, selectedState); // Clear previous results in parent
 
+    const currentLanguage = i18n.language.startsWith('es') ? 'es' : 'en'; // Get current language
+
     const inputPayload: InferDocumentTypeInput = {
         description: trimmedDescription,
+        language: currentLanguage, // Add language to payload
         ...(selectedState && { state: selectedState }),
     };
 
@@ -228,56 +239,7 @@ export function DocumentInference({ onInferenceResult }: DocumentInferenceProps)
     }
     // --- END PRODUCTION ---
 
-
-    /* // --- SIMULATION CODE (Keep for testing if needed, comment out for production) ---
-    console.log(`${logPrefix} AI Inference API Call SIMULATED.`);
-    await new Promise(resolve => setTimeout(resolve, 700));
-     let dummySuggestions: InferDocumentTypeOutput['suggestions'] = [];
-     let primaryDoc = "Residential Lease Agreement";
-     let primaryConf = 0.75;
-     let primaryReason = "Based on keywords like 'renting'. State considerations applied.";
-
-      if (trimmedDescription.toLowerCase().includes("nda") || trimmedDescription.toLowerCase().includes("confidential")) {
-         primaryDoc = "Mutual Non-Disclosure Agreement (NDA)";
-         primaryConf = 0.85;
-         primaryReason = "Keywords 'NDA' or 'confidential' detected.";
-         dummySuggestions.push({ documentType: "Unilateral Non-Disclosure Agreement (NDA)", confidence: 0.4, reasoning: "Alternative possibility." });
-      } else if (trimmedDescription.toLowerCase().includes("partner")) {
-         primaryDoc = "Partnership Agreement";
-         primaryConf = 0.80;
-         primaryReason = "Keyword 'partner' detected.";
-      } else if (trimmedDescription.length < 15) { // Example for low confidence
-          primaryDoc = "General Inquiry";
-          primaryConf = 0.5; // Adjusted confidence
-          primaryReason = "Description is very short. Unclear specific need.";
-          dummySuggestions.push({ documentType: "Service Agreement", confidence: 0.2, reasoning: "Vague, could be service-related." });
-          dummySuggestions.push({ documentType: "Residential Lease Agreement", confidence: 0.1, reasoning: "Less likely, but possible property mention." });
-      } else if (trimmedDescription.toLowerCase().includes("sell") || trimmedDescription.toLowerCase().includes("buy")) {
-          primaryDoc = "Bill of Sale (Vehicle)";
-          primaryConf = 0.70;
-          primaryReason = "Keywords 'sell' or 'buy' detected, often related to vehicles.";
-      }
-
-      if (selectedState === 'CA') primaryReason += ` Specific clauses for CA might apply.`;
-      else if (selectedState) primaryReason += ` Considering state ${selectedState}.`;
-
-      // Add the primary suggestion to the beginning
-      dummySuggestions.unshift({
-          documentType: primaryDoc,
-          confidence: primaryConf,
-          reasoning: primaryReason
-      });
-
-      // Limit to 3 suggestions total
-       dummySuggestions = dummySuggestions.slice(0, 3);
-
-      const dummyOutput: InferDocumentTypeOutput = { suggestions: dummySuggestions };
-
-     stableOnInferenceResult(dummyOutput, selectedState);
-     setIsLoading(false);
-     // --- END SIMULATION --- */
-
-  }, [description, toast, stableOnInferenceResult, selectedState, handleRecordToggle]); // Removed isRecording, use ref
+  }, [description, toast, stableOnInferenceResult, selectedState, handleRecordToggle, i18n.language]); // Added i18n.language
 
 
   // Handle tab change
@@ -443,5 +405,3 @@ declare global {
     readonly results: SpeechRecognitionResultList;
   }
 }
-
-    

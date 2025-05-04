@@ -17,27 +17,19 @@ export default async function handler(
   const requestId = `req_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
   const logPrefix = `[API /infer-document-type] [${requestId}]`;
 
-  // --- TEMPORARY CHANGE FOR STATIC EXPORT ---
-  // Next.js API Routes (like this one) DO NOT WORK when `output: 'export'` is set in next.config.ts.
-  // Static export builds a purely static site with no server-side API capabilities.
-  // Trying to access this route will result in a 404 or other errors.
-  //
-  // To prevent build/runtime errors related to this incompatible route, we immediately return a 503 error.
-  //
-  // RECOMMENDED FIX FOR PRODUCTION (using static export):
-  // 1. Remove this API route file (`src/pages/api/infer-document-type.ts`).
-  // 2. Move the AI logic (`inferDocumentTypeFlow`) to a separate backend service (e.g., Firebase Function, Cloud Run).
-  // 3. Update the client-side component (`src/components/document-inference.tsx`) to `fetch` from your new backend service URL.
-  // 4. Ensure the backend service has the necessary environment variables (like GOOGLE_GENAI_API_KEY).
-  console.warn(`${logPrefix} API Route Disabled: This route (/api/infer-document-type) is incompatible with 'output: "export"' in next.config.ts. Returning 503.`);
-  return res.status(503).json({
-      error: "AI Service Unavailable: API route is disabled in static export mode.",
-      code: 'STATIC_EXPORT_API_DISABLED'
-  });
-  // --- END TEMPORARY CHANGE ---
+  // --- TEMPORARY CHECK FOR STATIC EXPORT ---
+  // If NEXT_PUBLIC_DISABLE_API_ROUTES is set (e.g., during static export build), disable this route.
+  if (process.env.NEXT_PUBLIC_DISABLE_API_ROUTES === 'true') {
+    console.warn(`${logPrefix} API Route Disabled (NEXT_PUBLIC_DISABLE_API_ROUTES=true). Returning 503.`);
+    return res.status(503).json({
+      error: "AI Service Unavailable: API route is disabled for this deployment.",
+      code: 'STATIC_EXPORT_API_DISABLED' // Keep code for consistency
+    });
+  }
+  // --- END TEMPORARY CHECK ---
 
 
-  // Log request entry with ID - This part will not be reached due to the check above
+  // Log request entry with ID
   console.log(`${logPrefix} Received request: ${req.method} ${req.url}`);
 
   if (req.method !== 'POST') {
@@ -47,7 +39,7 @@ export default async function handler(
   }
 
   try {
-    // 1. Validate Input using Zod schema
+    // 1. Validate Input using Zod schema (now includes language)
     console.log(`${logPrefix} Validating request body...`);
     const validationResult = InferDocumentTypeInputSchema.safeParse(req.body);
     if (!validationResult.success) {
@@ -61,10 +53,10 @@ export default async function handler(
       });
     }
 
-    const input = validationResult.data;
+    const input = validationResult.data; // Contains description, language, and optionally state
     console.log(`${logPrefix} Received valid input:`, JSON.stringify(input));
 
-    // 2. Call the Genkit Flow
+    // 2. Call the Genkit Flow (passing the validated input which includes language)
     console.log(`${logPrefix} Calling inferDocumentTypeFlow...`);
     const output: InferDocumentTypeOutput = await inferDocumentTypeFlow(input);
 
@@ -79,7 +71,7 @@ export default async function handler(
     return res.status(200).json(output);
 
   } catch (error: unknown) {
-    // 4. Handle errors
+    // 4. Handle errors (same logic as before)
     console.error(`${logPrefix} === UNHANDLED ERROR START ===`);
     console.error(`${logPrefix} Timestamp: ${new Date().toISOString()}`);
     console.error(`${logPrefix} Error Type:`, error?.constructor?.name);
@@ -99,14 +91,16 @@ export default async function handler(
         console.error(`${logPrefix} Error Message:`, error.message);
         console.error(`${logPrefix} Error Stack:`, error.stack);
 
-        clientErrorMessage = error.message;
+        clientErrorMessage = error.message; // Start with the raw message
 
+        // Refine client message and code based on error content
         if (error.message.includes('AI output validation failed')) {
             statusCode = 502;
             clientErrorMessage = "The AI generated an invalid response format. Please try rephrasing or contact support.";
             errorCode = 'AI_RESPONSE_VALIDATION_FAILED';
         } else if (error.message.includes('Invalid input to flow')) {
             statusCode = 400;
+            // Provide slightly more specific feedback if possible
             clientErrorMessage = `Invalid data sent to AI flow: ${error.message.replace('Invalid input to flow: ','')}`;
             errorCode = 'FLOW_INPUT_INVALID';
         } else if (error.message.includes('API key not valid') || error.message.includes('permission denied')) {
@@ -122,14 +116,17 @@ export default async function handler(
             clientErrorMessage = "Could not reach the AI service due to a network issue. Please check your connection or try again later.";
             errorCode = 'AI_NETWORK_ERROR';
         } else if (error.message.includes("AI flow completed but returned an empty result.")) {
-            statusCode = 500;
+            statusCode = 500; // Or maybe 502 Bad Gateway if the AI consistently returns nothing
             clientErrorMessage = "The AI process completed but returned an empty result. Please try again.";
             errorCode = 'AI_EMPTY_RESULT';
         } else if (error.message.includes("Missing GOOGLE_GENAI_API_KEY") || error.message.includes("Genkit initialization failed")) {
-            statusCode = 503;
+            // Keep logging the detailed error server-side
+            console.error(`${logPrefix} Critical AI configuration/initialization error.`);
+            statusCode = 503; // Service Unavailable is appropriate
             clientErrorMessage = "AI Service configuration error or unavailable. Please contact support.";
             errorCode = 'AI_CONFIG_ERROR';
         } else {
+            // Default for other errors
             clientErrorMessage = 'An unexpected error occurred while processing your request.';
             errorCode = 'UNKNOWN_SERVER_ERROR';
             statusCode = 500;
