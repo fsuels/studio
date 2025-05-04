@@ -1,4 +1,3 @@
-
 "use client"; // Mark page as client component due to state management
 
 import { useState } from 'react';
@@ -17,6 +16,7 @@ import { HowItWorks } from '@/components/landing/HowItWorks';
 import { TestimonialCarousel } from '@/components/landing/TestimonialCarousel';
 import { FeaturedLogos } from '@/components/landing/FeaturedLogos';
 import { GuaranteeBadge } from '@/components/landing/GuaranteeBadge';
+// Removed import HeroFeatureSection from '@/components/HeroFeatureSection'; as it's combined into landing sections
 
 // Define questionnaire icon SVG inline
 const QuestionnaireIcon = () => (
@@ -58,19 +58,20 @@ export default function Home() {
     setTimeout(() => {
         console.log("[page.tsx] PDF simulation complete. Setting dummy URL.");
         // In a real app, this URL would come from a PDF generation service
-        setPdfDataUrl("data:application/pdf;base64,JVBERi0xLjQKJeLjz9MKMSAwIG9iago8PC9UeXBlL0NhdGFsb2cvUGFnZXMgMiAwIFI+PgplbmRvYmoKMiAwIG9iago8PC9UeXBlL1BhZ2VzL0NvdW50IDEvS2lkc1sgMyAwIFJdPj4KZW5kb2JqCjMgMCBvYmoKPDwvVHlwZS9QYWdlL1BhcmVudCAyIDAgUi9NZWRpYUJveFswIDAgNjEyIDc5Ml0vUmVzb3VyY2VzPDwvRm9udDw8L0YxIDQgMCBSPj4+Pj4vQ29udGVudHMgNSAwIFI+PgplbmRvYmoKNSAwIG9iago8PC9MZW5ndGggNDc+PgpzdHJlYW0KQkQKMSAwIDAgMSAzMCA3NDAgVG0KL0YxIDQwIFRmCihQREVQIFNpbXVsYXRpb24pIFRqCkVUCmVuZHN0cmVhbQplbmRvYmoKNCAwIG9iago8PC9UeXBlL0ZvbnQvU3VidHlwZS9UeXBlMS9CYXNlRm9udC9IZWx2ZXRpY2E+PgplbmRvYmoKeHJlZgowIDYKMDAwMDAwMDAwMCA2NTUzNSBmIAowMDAwMDAwMDEyIDAwMDAwIG4gCjAwMDAwMDAwNjIgMDAwMDAgbiAKMDAwMDAwMDAwMCAwMDAwMCBuIAowMDAwMDAwMzMzIDAwMDAwIG4gCjAwMDAwMDAxNjIgMDAwMDAgbiAKdHJhaWxlcgo8PC9Sb290IDEgMCBSL1NpemUgNj4+CnN0YXJ0eHJlZgozODUKJSVFT0YK");
+        setPdfDataUrl("data:application/pdf;base64,JVBERi0xLjQKJeLjz9MKMSAwIG9iago8PC9UeXBlL0NhdGFsb2cvUGFnZXMgMiAwIFI+PgplbmRvYmoKMiAwIG9iago8PC9UeXBlL1BhZ2VzL0NvdW50IDEvS2lkc1sgMyAwIFJdPj4KZW5kb2JqCjMgMCBvYmoKPDwvVHlwZS9QYWdlL1BhcmVudCAyIDAgUi9NZWRpYUJveFswIDAgNjEyIDc5Ml0vUmVzb3VyY2VzPDwvRm9udDw8L0YxIDQgMCBSPj4+Pj4vQ29udGVudHMgNSAwIFI+PgplbmRvYmoKNSAwIG9iago8PC9MZW5ndGggNDc+PgpzdHJlYW0KQkQKMSAwIDAgMSAzMCA3NDAgVG0KL0YxIDQwIFRmCihQREVQIFNpbXVsYXRpb24pIFRqCkVUCmVuZHN0cmVhbQplbmRvYmoKNCAwIG9iago8PC9UeXBlL0ZvbnQvU3VidHlwZS9UeXBlMS9CYXNlRm9udC9IZWx2ZXRpY2E+PgplbmRvYmoKeHJlZgowIDYKMDAwMDAwMDAwMCA2NTUzNSBmIAowMDAwMDAwMDEyIDAwMDAwIG4gCjAwMDAwMDAwNjIgMDAwMDAgbiAKMDAwMDAwMDAwMCAwMDAwMCBuIAowMDAwMDAwMzMzIDAwMDAwIG4gCjAwMDAwMDAxNjIgMDAwMDAgbiAKdHJhaWxlcgo8PC9Sb290IDEgMCBSL1NpemUgNj4KCnN0YXJ0eHJlZgozODUKJSVFT0YK");
     }, 500);
   };
 
   return (
     <div className="flex flex-col items-center w-full bg-background">
+       {/* Render combined Hero and Feature sections */}
        <HeroSection />
        <FeatureTeaser />
 
-       {/* Trust Bar Placeholder */}
-       <div className="w-full bg-muted py-4 text-center text-sm text-muted-foreground">
+       {/* Trust Bar Placeholder - Included in HeroSection */}
+       {/* <div className="w-full bg-muted py-4 text-center text-sm text-muted-foreground">
           Trusted by 2,000+ small businesses | ⭐⭐⭐⭐⭐ 4.8/5 stars
-       </div>
+       </div> */}
 
         {/* Main Workflow Section */}
         <div className="w-full max-w-5xl mx-auto px-4 py-12 space-y-12">
