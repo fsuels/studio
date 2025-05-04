@@ -2,15 +2,15 @@
 "use client";
 
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-// **Removed direct import of inferDocumentType Server Action**
-import type { InferDocumentTypeInput, InferDocumentTypeOutput } from '@/ai/flows/infer-document-type'; // Keep type imports
+import type { InferDocumentTypeInput, InferDocumentTypeOutput } from '@/ai/flows/infer-document-type';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'; // Import Tabs
 import { useToast } from '@/hooks/use-toast';
-import { Loader2, Mic, Edit2, Check, BrainCircuit, X } from 'lucide-react';
+import { Loader2, Mic, Edit2, Check, BrainCircuit, X, Text } from 'lucide-react'; // Added Text icon
 
 // Mock SpeechRecognition - Replace with actual implementation if needed
 const MockSpeechRecognition = {
@@ -29,7 +29,6 @@ interface DocumentInferenceProps {
     onInferenceResult: (result: InferDocumentTypeOutput | null) => void;
 }
 
-
 export function DocumentInference({ onInferenceResult }: DocumentInferenceProps) {
   const [description, setDescription] = useState('');
   const [isRecording, setIsRecording] = useState(false);
@@ -37,13 +36,13 @@ export function DocumentInference({ onInferenceResult }: DocumentInferenceProps)
   const [result, setResult] = useState<InferDocumentTypeOutput | null>(null);
   const [isEditingDescription, setIsEditingDescription] = useState(false);
   const [editedDescription, setEditedDescription] = useState('');
+  const [activeTab, setActiveTab] = useState<'text' | 'microphone'>('text'); // State for tabs
   const { toast } = useToast();
 
-  // State for browser speech recognition API
-  const [recognition, setRecognition] = useState<typeof MockSpeechRecognition | null>(null);
+  const isRecordingRef = useRef(isRecording); // Top-level hook
 
-  // ✅ top‐level hooks only
-  const isRecordingRef = useRef(isRecording); // Moved useRef to top level
+  // State for browser speech recognition API
+  const [recognition, setRecognition] = useState<any | null>(null); // Use 'any' for broader compatibility initially
 
   // Memoize the callback to prevent unnecessary re-renders if passed inline
   const stableOnInferenceResult = useCallback(onInferenceResult, [onInferenceResult]);
@@ -51,100 +50,65 @@ export function DocumentInference({ onInferenceResult }: DocumentInferenceProps)
   // Helper function to safely check for window object
   const isBrowser = typeof window !== 'undefined';
 
-
   useEffect(() => {
-    // keep ref in sync
-    isRecordingRef.current = isRecording;
+    isRecordingRef.current = isRecording; // Keep ref in sync
 
-    // Check for browser support and initialize SpeechRecognition
     const SpeechRecognitionApi = isBrowser ? (window.SpeechRecognition || (window as any).webkitSpeechRecognition) : null;
-
     let recognitionInstance: SpeechRecognition | null = null;
 
     if (SpeechRecognitionApi) {
-        recognitionInstance = new SpeechRecognitionApi();
-        recognitionInstance.continuous = true;
-        recognitionInstance.interimResults = true;
+        try {
+            recognitionInstance = new SpeechRecognitionApi();
+            recognitionInstance.continuous = true; // Keep listening
+            recognitionInstance.interimResults = true; // Get results while speaking
 
-        recognitionInstance.onresult = (event: SpeechRecognitionEvent) => {
-            let interimTranscript = '';
-            let finalTranscript = '';
-            for (let i = event.resultIndex; i < event.results.length; ++i) {
-                if (event.results[i].isFinal) {
-                    finalTranscript += event.results[i][0].transcript;
-                } else {
-                    interimTranscript += event.results[i][0].transcript;
+            recognitionInstance.onresult = (event: SpeechRecognitionEvent) => {
+                let finalTranscript = '';
+                for (let i = event.resultIndex; i < event.results.length; ++i) {
+                    if (event.results[i].isFinal) {
+                        finalTranscript += event.results[i][0].transcript;
+                    }
                 }
-            }
-            // Append final transcript only to avoid duplicate text on finalization
-            if (finalTranscript) {
-                 setDescription(prev => (prev + finalTranscript).trim() + ' '); // Add space after appending
-            }
-            // Optionally update description with interim results for real-time feedback
-            // setEditedDescription(description + interimTranscript); // If editing while recording
-        };
+                if (finalTranscript) {
+                    setDescription(prev => (prev + finalTranscript).trim() + ' ');
+                }
+            };
 
-        recognitionInstance.onerror = (event: SpeechRecognitionErrorEvent) => {
-            console.error('Speech recognition error:', event.error, event.message);
-             let errorMessage = `Error: ${event.error}. ${event.message || 'Please try again or type your description.'}`;
-             if (event.error === 'no-speech') {
-                 errorMessage = "No speech detected. Please ensure your microphone is working and speak clearly.";
-             } else if (event.error === 'audio-capture') {
-                 errorMessage = "Audio capture failed. Please check microphone permissions and hardware.";
-             } else if (event.error === 'not-allowed') {
-                 errorMessage = "Microphone access denied. Please allow microphone access in your browser settings.";
-             }
-            toast({
-                title: "Speech Recognition Error",
-                description: errorMessage,
-                variant: "destructive",
-            });
-            setIsRecording(false); // Ensure recording state is stopped on error
-        };
+            recognitionInstance.onerror = (event: SpeechRecognitionErrorEvent) => {
+                console.error('Speech recognition error:', event.error, event.message);
+                let errorMessage = `Error: ${event.error}. ${event.message || 'Please try again or type your description.'}`;
+                 if (event.error === 'no-speech') {
+                     errorMessage = "No speech detected. Ensure mic is working and speak clearly.";
+                 } else if (event.error === 'audio-capture') {
+                     errorMessage = "Audio capture failed. Check mic permissions & hardware.";
+                 } else if (event.error === 'not-allowed') {
+                     errorMessage = "Microphone access denied. Allow microphone access in browser settings.";
+                 }
+                toast({ title: "Speech Error", description: errorMessage, variant: "destructive" });
+                if (isRecordingRef.current) setIsRecording(false); // Stop recording state on error
+            };
 
-         recognitionInstance.onend = () => {
-            // Automatically stop the recording state when the service disconnects
-            // This can happen due to silence or network issues
-            if (isRecordingRef.current) { // Use ref to check current recording status
-                 setIsRecording(false);
-                 console.log("Speech recognition service disconnected.");
-            }
-        };
+            recognitionInstance.onend = () => {
+                console.log("Speech recognition ended.");
+                // Only update state if it was supposed to be recording
+                if (isRecordingRef.current) {
+                    setIsRecording(false); // Ensure state reflects reality if service stops unexpectedly
+                }
+            };
 
+            setRecognition(recognitionInstance);
 
-        // Assign properties directly to the instance
-         const mockCompatibleInstance = {
-             ...MockSpeechRecognition, // Start with mock structure
-             start: recognitionInstance.start.bind(recognitionInstance),
-             stop: recognitionInstance.stop.bind(recognitionInstance),
-             abort: recognitionInstance.abort.bind(recognitionInstance),
-             onresult: recognitionInstance.onresult,
-             onerror: recognitionInstance.onerror,
-             onend: recognitionInstance.onend, // Add onend handler
-             // We don't need to explicitly set continuous/interimResults here as they are set on the instance above
-         };
-
-
-        setRecognition(mockCompatibleInstance);
-
-        // Start recognition if isRecording is true when the component mounts or recognition initializes
-        if (isRecording) {
-            try {
-                recognitionInstance.start();
-                console.log("Starting recognition on mount/init...");
-            } catch (e: any) {
-                console.error("Error starting recognition on mount/init:", e);
-                // Handle potential errors like permissions already denied
-                setIsRecording(false); // Correct state if start fails
-            }
+        } catch (e) {
+            console.error("Failed to initialize SpeechRecognition:", e);
+            setRecognition(null); // Ensure recognition state is null if init fails
         }
 
     } else {
-        console.warn('Speech Recognition API not supported in this browser.');
+        console.warn('Speech Recognition API not supported.');
+        setRecognition(null); // Explicitly set to null if not supported
     }
 
-
-    // Cleanup function to stop recognition if component unmounts while recording
+    // Cleanup
     return () => {
        if (recognitionInstance && isRecordingRef.current) {
            try {
@@ -152,165 +116,134 @@ export function DocumentInference({ onInferenceResult }: DocumentInferenceProps)
               console.log("Stopped speech recognition on component unmount.");
            } catch (e) {
                console.warn("Could not stop speech recognition on unmount:", e);
-               try {
-                  recognitionInstance.abort();
-                  console.log("Aborted speech recognition on unmount.");
-                } catch (abortError) {
-                     console.warn("Could not abort speech recognition on unmount:", abortError);
-                }
+               try { recognitionInstance.abort(); console.log("Aborted speech recognition on unmount."); }
+               catch (abortError) { console.warn("Could not abort speech recognition on unmount:", abortError); }
            }
        }
     };
-
-  // Only depend on toast, isBrowser and isRecording.
-  // Recognition instance setup happens only once based on browser support.
-  }, [toast, isBrowser, isRecording]); // Added isRecording to dependency array
+  }, [isBrowser, toast]); // Removed isRecording dependency
 
 
-  const handleRecord = () => {
+  // Effect to start/stop recognition when isRecording changes
+   useEffect(() => {
+       if (recognition) {
+           if (isRecording) {
+               try {
+                   recognition.start();
+                   console.log("Speech recognition started.");
+               } catch (e: any) {
+                   console.error("Error starting recognition:", e);
+                    let errorMsg = `Could not start recording: ${e.message}. Ensure permissions are granted.`;
+                    if (e.name === 'NotAllowedError') {
+                        errorMsg = "Microphone access denied. Please allow access in your browser settings.";
+                    } else if (e.name === 'InvalidStateError'){
+                        // This might happen if start() is called while already started
+                        console.warn("Recognition already started or in invalid state.");
+                        // Don't toast for this internal state issue unless necessary
+                        return; // Avoid setting isRecording back to false
+                    }
+                   toast({ title: "Recording Error", description: errorMsg, variant: "destructive" });
+                   setIsRecording(false); // Correct state if start fails
+               }
+           } else {
+               try {
+                   recognition.stop();
+                   console.log("Speech recognition stopped by state change.");
+               } catch(e) {
+                    // Catch potential error if stop() is called when already stopped
+                    console.warn("Error stopping recognition (might already be stopped):", e);
+               }
+           }
+       }
+   }, [isRecording, recognition, toast]); // Depend on isRecording and recognition instance
+
+
+  const handleRecordToggle = () => {
     if (!recognition) {
          toast({
-            title: "Unsupported Feature",
-            description: "Speech recognition is not supported in your browser. Please type your description.",
+            title: "Unsupported",
+            description: "Speech recognition not supported. Please type.",
             variant: "destructive",
         });
+        setActiveTab('text'); // Switch back to text tab
       return;
     }
 
-    if (isRecording) {
-       try {
-           recognition.stop(); // This should trigger the onend event handler which sets isRecording to false
-           console.log("Stopping recognition...");
-           // No need to set state here, onend handler will do it
-       } catch (e) {
-            console.warn("Error stopping recognition:", e);
-            // Force stop state if stop fails unexpectedly
-            setIsRecording(false);
-       }
+    // Toggle recording state - the useEffect handles start/stop
+    setIsRecording(prev => !prev);
 
+    if (!isRecording) {
+        // Clear description when starting a new recording? Optional UX choice.
+        // setDescription('');
+         toast({
+            title: "Recording...",
+            description: "Speak clearly. Click the mic again to stop.",
+        });
     } else {
-       // Consider clearing description or appending based on desired UX
-       // setDescription(''); // Uncomment to clear previous description
-       try {
-            // The useEffect hook will now handle starting recognition when isRecording becomes true
-            setIsRecording(true); // Set recording state to true
-            toast({
-                title: "Recording Started",
-                description: "Speak clearly into your microphone. Click the mic again to stop.", // Updated description
-            });
-       } catch (e: any) {
-            // This catch block might be less necessary now as useEffect handles start
-            console.error("Error in handleRecord when setting isRecording:", e);
-             let errorMsg = `Error: ${e.message || 'Unknown error setting recording state'}.`;
-             toast({
-                title: "Could Not Start Recording",
-                description: errorMsg,
-                variant: "destructive",
-            });
-             // Ensure state is correct if setting state fails somehow (unlikely)
-             if (isRecording) setIsRecording(false);
-       }
-
+         toast({
+            title: "Recording Stopped",
+         });
     }
   };
 
   const handleSubmit = useCallback(async (currentDescription: string) => {
-    if (!currentDescription.trim()) {
-      toast({
-        title: "Input Required",
-        description: "Please provide a description of your situation.",
-        variant: "destructive",
-      });
+    const trimmedDescription = currentDescription.trim();
+    if (!trimmedDescription) {
+      toast({ title: "Input Required", description: "Please provide a description.", variant: "destructive" });
       return;
     }
     setIsLoading(true);
-    setResult(null); // Clear previous results
-    stableOnInferenceResult(null); // Notify parent that result is cleared
+    setResult(null);
+    stableOnInferenceResult(null);
 
     try {
-      console.log("[handleSubmit] Calling API /api/infer-document-type with description:", currentDescription);
-      const input: InferDocumentTypeInput = { description: currentDescription };
+      console.log("[handleSubmit] Calling API /api/infer-document-type with description:", trimmedDescription);
+      const input: InferDocumentTypeInput = { description: trimmedDescription };
 
-      // **Use fetch to call the API route**
       const response = await fetch('/api/infer-document-type', {
-          method: 'POST',
-          headers: {
-              'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(input),
+          method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(input),
       });
-
       const responseData = await response.json();
 
       if (!response.ok) {
-          // Handle API errors (e.g., 4xx, 5xx)
-          console.error("[handleSubmit Error] API responded with error:", response.status, responseData);
-          // Use the error message from the API response if available
-          const errorMessage = responseData.error || `API Error: ${response.status} ${response.statusText}`;
-          throw new Error(errorMessage);
+          console.error("[handleSubmit Error] API error:", response.status, responseData);
+          throw new Error(responseData.error || `API Error: ${response.status}`);
       }
 
-      // **Assuming responseData is of type InferDocumentTypeOutput on success**
       const output: InferDocumentTypeOutput = responseData;
-      console.log("[handleSubmit] API call successful. Output:", output);
+      console.log("[handleSubmit] API success. Output:", output);
       setResult(output);
-      stableOnInferenceResult(output); // Pass result to parent
-      // Add a success toast
-      toast({
-        title: "Analysis Complete",
-        description: `Suggested document type: ${output.documentType}`,
-      });
+      stableOnInferenceResult(output);
+      toast({ title: "Analysis Complete", description: `Suggested: ${output.documentType}` });
     } catch (error: unknown) {
-      // Log the full error object for better debugging
-      console.error('[handleSubmit Error] Error during API call or processing:', error);
-
-      // Create a user-friendly error message
-      let errorMessage = "Could not process your request due to an unexpected error. Please try again later.";
-       if (error instanceof Error) {
-           // Use the message from the caught error (could be from fetch failure or API error response)
-           errorMessage = error.message;
-       } else {
-            // Handle cases where the thrown object is not an Error instance
-            errorMessage = `An unexpected error occurred: ${String(error)}`;
-       }
-
-      toast({
-        title: "AI Inference Error",
-        description: errorMessage,
-        variant: "destructive",
-      });
-       stableOnInferenceResult(null); // Notify parent about the error (by passing null)
+      console.error('[handleSubmit Error]', error);
+      const errorMessage = error instanceof Error ? error.message : `An unexpected error occurred: ${String(error)}`;
+      toast({ title: "AI Error", description: errorMessage, variant: "destructive" });
+      stableOnInferenceResult(null);
     } finally {
       setIsLoading(false);
     }
-  }, [toast, stableOnInferenceResult]); // Add stableOnInferenceResult to dependency array
+  }, [toast, stableOnInferenceResult]);
 
 
    const handleEditDescription = () => {
-    setEditedDescription(description); // Load current description into editor
+    setEditedDescription(description);
     setIsEditingDescription(true);
   };
 
   const handleCancelEdit = () => {
       setIsEditingDescription(false);
-      setEditedDescription(''); // Clear edited description
+      setEditedDescription('');
   };
-
 
   const handleSaveDescription = () => {
     const newDescription = editedDescription.trim();
     setDescription(newDescription);
     setIsEditingDescription(false);
-    // Re-submit with the updated description
-    if (newDescription) { // Only submit if not empty after trimming
+    if (newDescription) {
         handleSubmit(newDescription);
     } else {
-         toast({
-            title: "Input Required",
-            description: "Description cannot be empty after editing.",
-            variant: "destructive",
-        });
-         // Optionally clear results if description becomes empty
+         toast({ title: "Input Required", description: "Description cannot be empty.", variant: "destructive" });
          setResult(null);
          stableOnInferenceResult(null);
     }
@@ -323,62 +256,132 @@ export function DocumentInference({ onInferenceResult }: DocumentInferenceProps)
       }
    }, [description, result, isEditingDescription]);
 
+  // Handle tab change
+  const handleTabChange = (value: string) => {
+     const newTab = value as 'text' | 'microphone';
+     setActiveTab(newTab);
+     // Stop recording if switching away from microphone tab
+     if (newTab === 'text' && isRecording) {
+         setIsRecording(false);
+     }
+  };
+
 
   return (
-    <div className="space-y-6">
-      <div className="space-y-2">
-        <Label htmlFor="description">Description</Label>
-        <div className="relative">
-          <Textarea
-            id="description"
-            placeholder="e.g., 'I need to rent out my apartment', 'Starting a small business with a partner', 'Someone owes me money...'"
-            value={isEditingDescription ? editedDescription : description}
-            onChange={(e) => isEditingDescription ? setEditedDescription(e.target.value) : setDescription(e.target.value)}
-            rows={5}
-            className="pr-20 rounded-md shadow-sm border border-input focus-visible:ring-2 focus-visible:ring-ring" // Added focus styles
-            readOnly={isLoading || isRecording || !isEditingDescription && !!result} // Prevent editing while loading/recording or if result exists and not editing
-            disabled={isLoading || isRecording} // Disable textarea itself during loading/recording
-            aria-describedby="description-helper-text"
-          />
-          <div className="absolute top-2 right-2 flex flex-col space-y-1.5">
-             <Button
-                variant="outline"
-                size="icon"
-                onClick={handleRecord}
-                disabled={isLoading || isEditingDescription || (!!result && !isEditingDescription)} // Disable record when editing text or result exists and not editing
-                className={`transition-colors duration-200 ${isRecording ? 'bg-red-100 hover:bg-red-200 text-red-700 border-red-300' : 'hover:bg-accent'} rounded-full w-8 h-8`} // Smaller, rounded button
-                aria-label={isRecording ? 'Stop Recording' : 'Start Recording'}
-              >
-                <Mic className={`h-4 w-4 ${isRecording ? 'animate-pulse' : ''}`} />
-              </Button>
-             {/* Show edit button only if there's a result, not loading, and not currently editing */}
-             {result && !isLoading && !isEditingDescription && (
-               <Button variant="ghost" size="icon" onClick={handleEditDescription} aria-label="Edit Description" className="rounded-full w-8 h-8">
-                  <Edit2 className="h-4 w-4" />
-               </Button>
-             )}
-             {/* Show save/cancel only when editing */}
-             {isEditingDescription && (
-                 <div className="flex flex-col space-y-1.5">
-                     <Button variant="ghost" size="icon" onClick={handleSaveDescription} aria-label="Save Description" className="rounded-full w-8 h-8 hover:bg-green-100">
-                         <Check className="h-4 w-4 text-green-600" />
-                     </Button>
-                      <Button variant="ghost" size="icon" onClick={handleCancelEdit} aria-label="Cancel Edit" className="rounded-full w-8 h-8 hover:bg-red-100">
-                         <X className="h-4 w-4 text-red-600" />
-                     </Button>
-                 </div>
-             )}
-          </div>
-        </div>
-         <p id="description-helper-text" className="text-xs text-muted-foreground">
-             {isRecording ? <span className="animate-pulse">Listening... Click mic again to stop.</span> : "You can type or use the microphone."}
-              {isEditingDescription && <span> Editing description. Click Save (✓) or Cancel (✕).</span>}
-               {result && !isEditingDescription && <span> Analysis complete. Click <Edit2 className="inline h-3 w-3 mx-0.5" /> to edit description and re-analyze.</span>}
-         </p>
-      </div>
+    <div className="space-y-4">
+      {/* Tabs for Input Mode */}
+      <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
+        <TabsList className="grid w-full grid-cols-2">
+          <TabsTrigger value="text" aria-label="Use Text Input">
+             <Text className="mr-2 h-4 w-4" /> Text
+          </TabsTrigger>
+          <TabsTrigger value="microphone" aria-label="Use Microphone Input">
+             <Mic className="mr-2 h-4 w-4" /> Microphone
+          </TabsTrigger>
+        </TabsList>
 
-       {/* Disable analyze button if editing description, recording, or result already exists and not editing */}
-       <Button onClick={() => handleSubmit(description)} disabled={isLoading || isRecording || isEditingDescription || (!!result && !isEditingDescription)} className="w-full">
+        {/* Text Input Content */}
+        <TabsContent value="text" className="mt-0">
+          <div className="space-y-2 relative group">
+            <Label htmlFor="description-text" className="sr-only">Description (Text)</Label>
+            <Textarea
+              id="description-text"
+              placeholder="e.g., 'Renting my apartment', 'Starting a business with a partner', 'Need someone to stop contacting me...'"
+              value={isEditingDescription ? editedDescription : description}
+              onChange={(e) => isEditingDescription ? setEditedDescription(e.target.value) : setDescription(e.target.value)}
+              rows={5}
+              className="pr-12 rounded-md shadow-sm border border-input focus-visible:ring-2 focus-visible:ring-ring bg-card" // Ensure background matches card
+              readOnly={isLoading || (result && !isEditingDescription)}
+              disabled={isLoading}
+              aria-describedby="text-helper-text"
+            />
+            {/* Edit/Save/Cancel Buttons for Textarea */}
+            <div className="absolute top-2 right-2 flex flex-col space-y-1">
+                {result && !isLoading && !isEditingDescription && (
+                 <Button variant="ghost" size="icon" onClick={handleEditDescription} aria-label="Edit Description" className="rounded-full w-8 h-8 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <Edit2 className="h-4 w-4" />
+                 </Button>
+               )}
+               {isEditingDescription && (
+                   <>
+                       <Button variant="ghost" size="icon" onClick={handleSaveDescription} aria-label="Save Description" className="rounded-full w-8 h-8 hover:bg-green-100">
+                           <Check className="h-4 w-4 text-green-600" />
+                       </Button>
+                        <Button variant="ghost" size="icon" onClick={handleCancelEdit} aria-label="Cancel Edit" className="rounded-full w-8 h-8 hover:bg-red-100">
+                           <X className="h-4 w-4 text-red-600" />
+                       </Button>
+                   </>
+               )}
+            </div>
+             <p id="text-helper-text" className="text-xs text-muted-foreground pl-1">
+                 {isEditingDescription ? 'Editing description. Click Save (✓) or Cancel (✕).' : (result ? 'Analysis complete. Click edit (✎) to revise.' : 'Describe your situation clearly.')}
+            </p>
+          </div>
+        </TabsContent>
+
+        {/* Microphone Input Content */}
+        <TabsContent value="microphone" className="mt-0">
+           <div className="space-y-2 relative group">
+            <Label htmlFor="description-mic" className="sr-only">Description (Microphone)</Label>
+            {/* Display area for transcribed text */}
+            <div
+              id="description-mic"
+              className="min-h-[120px] w-full rounded-md border border-input bg-muted/50 px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 pr-12"
+              aria-live="polite"
+            >
+                 {isEditingDescription ? (
+                     <Textarea
+                        value={editedDescription}
+                        onChange={(e) => setEditedDescription(e.target.value)}
+                        rows={5}
+                        className="w-full h-full bg-transparent border-0 focus:ring-0 focus:outline-none resize-none p-0"
+                        aria-label="Edit transcribed text"
+                     />
+                 ) : (
+                     description || <span className="text-muted-foreground italic">Your transcribed text will appear here...</span>
+                 )}
+
+            </div>
+            {/* Mic Button & Edit/Save/Cancel */}
+            <div className="absolute top-2 right-2 flex flex-col space-y-1">
+                <Button
+                    variant="outline"
+                    size="icon"
+                    onClick={handleRecordToggle}
+                    disabled={isLoading || isEditingDescription}
+                    className={`transition-all duration-200 ${isRecording ? 'bg-red-100 hover:bg-red-200 text-red-700 border-red-300 animate-pulse ring-2 ring-red-300 ring-offset-2' : 'hover:bg-accent'} rounded-full w-8 h-8`}
+                    aria-label={isRecording ? 'Stop Recording' : 'Start Recording'}
+                >
+                    <Mic className="h-4 w-4" />
+                </Button>
+                {/* Show edit button only if there's text, not loading/recording, and not currently editing */}
+                {description && !isLoading && !isRecording && !isEditingDescription && (
+                    <Button variant="ghost" size="icon" onClick={handleEditDescription} aria-label="Edit Description" className="rounded-full w-8 h-8 opacity-0 group-hover:opacity-100 transition-opacity">
+                       <Edit2 className="h-4 w-4" />
+                    </Button>
+                )}
+                 {isEditingDescription && (
+                     <>
+                         <Button variant="ghost" size="icon" onClick={handleSaveDescription} aria-label="Save Description" className="rounded-full w-8 h-8 hover:bg-green-100">
+                             <Check className="h-4 w-4 text-green-600" />
+                         </Button>
+                          <Button variant="ghost" size="icon" onClick={handleCancelEdit} aria-label="Cancel Edit" className="rounded-full w-8 h-8 hover:bg-red-100">
+                             <X className="h-4 w-4 text-red-600" />
+                         </Button>
+                     </>
+                 )}
+            </div>
+             <p id="mic-helper-text" className="text-xs text-muted-foreground pl-1">
+               {isRecording ? <span className="text-red-600">Listening... Click mic again to stop.</span> : "Click the microphone to start recording."}
+               {isEditingDescription && <span> Editing description. Click Save (✓) or Cancel (✕).</span>}
+               {description && !isRecording && !isEditingDescription && <span> Click edit (✎) to revise the text.</span>}
+            </p>
+          </div>
+        </TabsContent>
+      </Tabs>
+
+       {/* Submit Button - Updated Icon & Text */}
+       <Button onClick={() => handleSubmit(description)} disabled={isLoading || isRecording || isEditingDescription || !description.trim()} className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-medium">
         {isLoading ? (
           <>
             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -386,14 +389,14 @@ export function DocumentInference({ onInferenceResult }: DocumentInferenceProps)
           </>
         ) : (
           <>
-            <BrainCircuit className="mr-2 h-4 w-4" />
-            {result ? 'Analyze Again' : 'Infer Document Type'}
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-2 h-5 w-5"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/><path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/></svg>
+            {result ? 'Infer Again with Edited Text' : 'Infer My Document'}
           </>
         )}
       </Button>
 
 
-      {/* Only show result card when not loading AND not editing the description */}
+      {/* Result Card */}
       {result && !isLoading && !isEditingDescription && (
         <Card className="mt-6 bg-secondary rounded-lg shadow-inner border border-border">
           <CardHeader className="pb-2 pt-4">
@@ -410,7 +413,7 @@ export function DocumentInference({ onInferenceResult }: DocumentInferenceProps)
           </CardContent>
            <CardFooter className="pt-0 pb-3">
              <p className="text-xs text-muted-foreground">
-               If this isn't right, click the <Edit2 className="inline h-3 w-3 mx-0.5" /> icon above to edit the description and analyze again.
+                If this isn't right, click the edit icon (<Edit2 className="inline h-3 w-3 mx-0.5" />) above to revise the description and infer again.
              </p>
            </CardFooter>
         </Card>

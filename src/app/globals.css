@@ -2,14 +2,26 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Import Inter font if needed - uncomment if Geist is not preferred */
+/* @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap'); */
+
 body {
-  font-family: var(--font-geist-sans), sans-serif; /* Using Geist font from layout */
+  font-family: var(--font-geist-sans), sans-serif; /* Default to Geist */
+  /* Uncomment below to use Inter */
+  /* font-family: 'Inter', var(--font-geist-sans), sans-serif; */
+  line-height: 1.5; /* Set default line height */
+}
+
+h1, h2, h3, h4, h5, h6 {
+   /* Uncomment below to use Inter for headings */
+   /* font-family: 'Inter', var(--font-geist-sans), sans-serif; */
+   font-weight: 600; /* Example: Make headings semi-bold */
 }
 
 @layer base {
   :root {
     /* Light Theme */
-    --background: 207 100% 91%; /* Soft Blue */
+    --background: 207 100% 96%; /* Slightly off-white background for depth */
     --foreground: 0 0% 3.9%; /* Default Dark Text */
     --card: 0 0% 100%; /* White */
     --card-foreground: 0 0% 3.9%; /* Default Dark Text */
@@ -17,7 +29,7 @@ body {
     --popover-foreground: 0 0% 3.9%; /* Default Dark Text */
     --primary: 180 100% 25%; /* Teal */
     --primary-foreground: 0 0% 98%; /* White text on primary */
-    --secondary: 207 100% 85%; /* Slightly darker soft blue for secondary elements */
+    --secondary: 207 100% 91%; /* Soft Blue */
     --secondary-foreground: 0 0% 9%; /* Dark text on secondary */
     --muted: 207 100% 95%; /* Very light blue for muted backgrounds */
     --muted-foreground: 0 0% 45.1%; /* Grey text on muted */
@@ -25,9 +37,9 @@ body {
     --accent-foreground: 0 0% 98%; /* White text on accent */
     --destructive: 0 84.2% 60.2%; /* Default Red */
     --destructive-foreground: 0 0% 98%; /* White text on destructive */
-    --border: 207 50% 80%; /* Muted Blue Border */
+    --border: 207 50% 85%; /* Lighter Muted Blue Border */
     --input: 0 0% 100%; /* White input background */
-    --ring: 180 100% 25%; /* Teal for focus rings */
+    --ring: 180 100% 30%; /* Slightly darker Teal for focus rings */
     --chart-1: 12 76% 61%; /* Default Chart Colors */
     --chart-2: 173 58% 39%;
     --chart-3: 197 37% 24%;
@@ -49,7 +61,7 @@ body {
     /* Dark Theme - Keeping defaults for now, can customize later */
     --background: 0 0% 3.9%;
     --foreground: 0 0% 98%;
-    --card: 0 0% 3.9%;
+    --card: 0 0% 5.9%; /* Slightly lighter card for dark mode */
     --card-foreground: 0 0% 98%;
     --popover: 0 0% 3.9%;
     --popover-foreground: 0 0% 98%;
@@ -65,7 +77,7 @@ body {
     --destructive-foreground: 0 0% 98%;
     --border: 0 0% 14.9%;
     --input: 0 0% 14.9%;
-    --ring: 180 100% 35%; /* Brighter Teal for dark mode rings */
+    --ring: 180 100% 40%; /* Brighter Teal for dark mode rings */
     --chart-1: 220 70% 50%;
     --chart-2: 160 60% 45%;
     --chart-3: 30 80% 55%;
@@ -89,5 +101,24 @@ body {
   }
   body {
     @apply bg-background text-foreground;
+  }
+
+   /* Input focus styles */
+   input:focus-visible,
+   textarea:focus-visible,
+   select:focus-visible,
+   button:focus-visible {
+       @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
+   }
+}
+
+/* Add Tailwind animations */
+@layer utilities {
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .animate-fade-in {
+    animation: fadeIn 0.5s ease-out forwards;
   }
 }
