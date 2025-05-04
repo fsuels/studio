@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect } from 'react';
@@ -188,7 +187,7 @@ export function Questionnaire({ documentType, onAnswersSubmit, isReadOnly = fals
       <CardHeader>
          <div className="flex items-center space-x-2">
             <QuestionnaireIcon />
-           <CardTitle className="text-2xl">Step 2: Provide Details for {documentType}</CardTitle> {/* Updated Step Number */}
+           <CardTitle className="text-2xl">Step 2: Provide Details for {documentType}</CardTitle>
         </div>
         <CardDescription>
           {isReadOnly

@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from 'react';
@@ -49,8 +48,11 @@ export function PdfPreview({ documentDataUrl, documentName = "document.pdf", isR
 
 
     try {
+      // In a real app, integrate with a digital signature service API here
+      // const result = await signDocumentApi(currentPdfData, signatureOptions);
+      // For now, we simulate success using the mock service
       const options = { /* Signature options */ };
-      const result = await signPdfDocument(currentPdfData, options); // Call the signing service
+      const result = await signPdfDocument(currentPdfData, options); // Call the mock signing service
       setSignatureResult(result);
 
       if (result.success) {

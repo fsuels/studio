@@ -1,4 +1,3 @@
-
 "use client"; // Mark page as client component due to state management and client children
 
 import React, { useState, useEffect } from 'react'; // Ensure useEffect is imported if used elsewhere
@@ -71,6 +70,9 @@ export default function Home() {
      setDisclaimerAgreed(true);
      console.log("[page.tsx] Disclaimer agreed. Simulating PDF generation with answers:", questionnaireAnswers);
      // Simulate PDF generation after agreement
+     // In a real app, this would call a backend function (e.g., Firebase Function)
+     // which takes `questionnaireAnswers` and `inferredDocType`, generates the PDF,
+     // potentially saves it to storage, and returns a URL or the PDF data.
      setTimeout(() => {
          console.log("[page.tsx] PDF simulation complete. Setting dummy URL.");
          // Simulate a slightly more complex PDF for better preview

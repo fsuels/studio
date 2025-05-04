@@ -1,4 +1,3 @@
-
 // src/components/disclaimer-step.tsx
 "use client";
 
