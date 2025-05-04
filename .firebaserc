@@ -1,5 +1,8 @@
 {
   "projects": {
-    "default": "legalease-vo52z"
-  }
+    "default": "legalease-vo52z",
+    "123legaldoc": "legaldoc-26ea8"
+  },
+  "targets": {},
+  "etags": {}
 }
