@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea'; // Import Textarea
-import { Loader2, Edit2, Save, Lock } from 'lucide-react'; // Added Lock icon
+import { Loader2, Edit2, Lock, Check } from 'lucide-react'; // Updated icons
 import { useToast } from '@/hooks/use-toast';
 
 // Define a basic structure for a question
@@ -27,6 +27,12 @@ const exampleQuestions: Record<string, Question[]> = {
     { id: "rentAmount", label: "Monthly Rent Amount ($)", type: "number", required: true, placeholder: "e.g., 1500" },
     { id: "leaseStartDate", label: "Lease Start Date", type: "date", required: true },
   ],
+   "Lease Agreement (Dummy)": [ // Add dummy questions for the dummy type
+    { id: "tenantName", label: "Tenant's Full Name (Dummy)", type: "text", required: true, placeholder: "e.g., Jane Doe" },
+    { id: "propertyAddress", label: "Property Address (Dummy)", type: "textarea", required: true, placeholder: "e.g., 123 Main St, Anytown, USA 12345" },
+    { id: "rentAmount", label: "Monthly Rent Amount ($) (Dummy)", type: "number", required: true, placeholder: "e.g., 1500" },
+    { id: "leaseStartDate", label: "Lease Start Date (Dummy)", type: "date", required: true },
+  ],
   "Partnership Agreement": [
      { id: "partner1Name", label: "Partner 1 Full Name", type: "text", required: true, placeholder: "e.g., John Smith" },
      { id: "partner2Name", label: "Partner 2 Full Name", type: "text", required: true, placeholder: "e.g., Alice Brown" },
@@ -44,6 +50,11 @@ interface QuestionnaireProps {
   isReadOnly?: boolean; // Optional prop to make the form read-only
 }
 
+// Placeholder SVG Icon
+const QuestionnaireIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6 text-primary"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" x2="8" y1="13" y2="13"/><line x1="16" x2="8" y1="17" y2="17"/><line x1="10" x2="8" y1="9" y2="9"/></svg>
+);
+
 export function Questionnaire({ documentType, onAnswersSubmit, isReadOnly = false }: QuestionnaireProps) {
   const [answers, setAnswers] = useState<Record<string, any>>({});
   const [isEditing, setIsEditing] = useState<Record<string, boolean>>({}); // Track editing state per field
@@ -53,20 +64,28 @@ export function Questionnaire({ documentType, onAnswersSubmit, isReadOnly = fals
 
   const questions = documentType ? (exampleQuestions[documentType] || exampleQuestions["Default"]) : [];
 
-  // Effect to initialize editing state when questions load
+  // Effect to initialize editing state and answers when questions load or docType changes
   useEffect(() => {
-     if (questions.length > 0 && !hasSubmitted && !isReadOnly) {
+     if (documentType && questions.length > 0) {
          const initialEditingState = questions.reduce((acc, q) => {
-             acc[q.id] = true; // Start all fields in editing mode initially
+             acc[q.id] = !isReadOnly; // Start in editing mode unless globally read-only
              return acc;
          }, {} as Record<string, boolean>);
          setIsEditing(initialEditingState);
+         // Reset answers if document type changes or we move back to this step
+         setAnswers({});
+         setHasSubmitted(false); // Reset submission status
+     } else {
+        // Clear state if documentType becomes null
+        setAnswers({});
+        setIsEditing({});
+        setHasSubmitted(false);
      }
-  }, [questions, hasSubmitted, isReadOnly]);
+  }, [documentType, questions.length, isReadOnly]); // Rerun when docType, questions, or readOnly state changes
 
 
   const handleInputChange = (id: string, value: any) => {
-    if (isReadOnly) return; // Prevent changes if read-only
+    if (isReadOnly || !isEditing[id]) return; // Prevent changes if read-only or not editing this field
     setAnswers(prev => ({ ...prev, [id]: value }));
   };
 
@@ -91,7 +110,7 @@ export function Questionnaire({ documentType, onAnswersSubmit, isReadOnly = fals
 
   const handleSubmit = (e?: React.FormEvent) => {
     e?.preventDefault();
-    if (isReadOnly || isLoading) return; // Prevent submit if read-only or already loading
+    if (isReadOnly || isLoading || hasSubmitted) return; // Prevent submit if read-only, loading, or already submitted
 
     setIsLoading(true);
 
@@ -136,18 +155,12 @@ export function Questionnaire({ documentType, onAnswersSubmit, isReadOnly = fals
 
       toast({
         title: "Questionnaire Submitted",
-        description: "Your answers have been recorded and locked.",
+        description: "Your answers have been recorded. Proceed to the next step.",
       });
       setIsLoading(false);
 
     }, 1000);
   };
-
-   // Placeholder SVG Icon
-   const QuestionnaireIcon = () => (
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6 text-primary"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" x2="8" y1="13" y2="13"/><line x1="16" x2="8" y1="17" y2="17"/><line x1="10" x2="8" y1="9" y2="9"/></svg>
-   );
-
 
    if (!documentType) {
     // Render placeholder if no document type is selected yet
@@ -175,7 +188,7 @@ export function Questionnaire({ documentType, onAnswersSubmit, isReadOnly = fals
       <CardHeader>
          <div className="flex items-center space-x-2">
             <QuestionnaireIcon />
-           <CardTitle className="text-2xl">Step 2: Provide Details for {documentType}</CardTitle>
+           <CardTitle className="text-2xl">Step 2: Provide Details for {documentType}</CardTitle> {/* Updated Step Number */}
         </div>
         <CardDescription>
           {isReadOnly
@@ -187,7 +200,7 @@ export function Questionnaire({ documentType, onAnswersSubmit, isReadOnly = fals
         <form onSubmit={handleSubmit} className="space-y-6">
           {questions.map(q => (
             <div key={q.id} className="space-y-2 relative group">
-              <Label htmlFor={q.id} className={`${isReadOnly ? 'text-muted-foreground' : ''}`}>
+              <Label htmlFor={q.id} className={`${isReadOnly ? 'text-muted-foreground' : ''} ${!isEditing[q.id] ? 'text-muted-foreground' : ''}`}>
                 {q.label} {q.required && <span className="text-destructive">*</span>}
               </Label>
                {q.type === 'textarea' ? (
@@ -198,8 +211,9 @@ export function Questionnaire({ documentType, onAnswersSubmit, isReadOnly = fals
                        required={q.required}
                        readOnly={!isEditing[q.id] || isReadOnly || isLoading}
                        placeholder={q.placeholder || ''}
-                       className={`peer rounded-md shadow-sm pr-10 resize-none ${isReadOnly || !isEditing[q.id] ? 'bg-muted/50 cursor-not-allowed' : 'bg-background'}`}
+                       className={`peer rounded-md shadow-sm pr-10 resize-none ${isReadOnly || !isEditing[q.id] ? 'bg-muted/50 border-dashed cursor-not-allowed' : 'bg-background'}`}
                        rows={3}
+                       aria-disabled={isReadOnly || !isEditing[q.id]}
                    />
                ) : (
                    <Input
@@ -210,11 +224,12 @@ export function Questionnaire({ documentType, onAnswersSubmit, isReadOnly = fals
                        required={q.required}
                        readOnly={!isEditing[q.id] || isReadOnly || isLoading}
                        placeholder={q.placeholder || ''}
-                       className={`peer rounded-md shadow-sm pr-10 ${isReadOnly || !isEditing[q.id] ? 'bg-muted/50 cursor-not-allowed' : 'bg-background'}`}
+                       className={`peer rounded-md shadow-sm pr-10 ${isReadOnly || !isEditing[q.id] ? 'bg-muted/50 border-dashed cursor-not-allowed' : 'bg-background'}`}
+                       aria-disabled={isReadOnly || !isEditing[q.id]}
                     />
                )}
                 {/* Show Edit/Lock button only if not globally read-only */}
-                {!isReadOnly && answers[q.id] !== undefined && (
+                {!isReadOnly && (
                   <Button
                      type="button"
                      variant="ghost"
@@ -227,19 +242,7 @@ export function Questionnaire({ documentType, onAnswersSubmit, isReadOnly = fals
                       {isEditing[q.id] ? <Lock className="h-4 w-4 text-orange-500" /> : <Edit2 className="h-4 w-4 text-muted-foreground" />}
                   </Button>
                 )}
-                 {!isReadOnly && answers[q.id] === undefined && isEditing[q.id] && (
-                     <Button
-                       type="button"
-                       variant="ghost"
-                       size="icon"
-                       onClick={() => toggleEdit(q.id)} // Allow locking empty non-required fields
-                       disabled={isLoading}
-                       className="absolute right-1 top-[2.1rem] h-7 w-7 opacity-0 group-hover:opacity-100 peer-focus:opacity-100 transition-opacity"
-                       aria-label={'Lock Answer'}
-                     >
-                        <Lock className="h-4 w-4 text-orange-500" />
-                     </Button>
-                 )}
+
             </div>
           ))}
         </form>
@@ -254,10 +257,10 @@ export function Questionnaire({ documentType, onAnswersSubmit, isReadOnly = fals
           ) : hasSubmitted || isReadOnly ? (
               <>
                 <Check className="mr-2 h-4 w-4" />
-                Answers Confirmed
+                Answers Confirmed - Proceed
               </>
           ): (
-            'Confirm All Answers'
+            'Confirm All Answers & Proceed'
           )}
         </Button>
       </CardFooter>

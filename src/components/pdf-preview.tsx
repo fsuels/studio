@@ -21,15 +21,25 @@ export function PdfPreview({ documentDataUrl, documentName = "document.pdf", isR
 
   // Placeholder for actual PDF data fetching or generation
   // In a real app, pdfData might be fetched based on documentDataUrl or passed directly
-  const [pdfData] = useState<Uint8Array | null>(documentDataUrl ? new Uint8Array([/* Fetch or generate based on URL */]) : null); // Example: Fetch based on URL
+  const pdfData: Uint8Array | null = documentDataUrl ? new Uint8Array([/* Example: decode base64 or fetch bytes */]) : null;
 
   const handleSignDocument = async () => {
     if (isReadOnly || (signatureResult && signatureResult.success)) return; // Prevent signing if read-only or already signed
 
-    if (!pdfData || pdfData.length === 0) {
+    if (!documentDataUrl) { // Check documentDataUrl existence before proceeding
        toast({ title: "No Document Data", description: "Cannot sign an empty document.", variant: "destructive" });
       return;
     }
+
+    // Simulate fetching PDF data from URL if needed, otherwise use pre-loaded data
+     // For this example, assume pdfData is derived/available if documentDataUrl exists
+     const currentPdfData = pdfData || new Uint8Array([/* Fetch based on documentDataUrl */]); // Replace with actual fetch logic if needed
+
+     if (!currentPdfData || currentPdfData.length === 0) {
+         toast({ title: "No Document Data", description: "Could not load PDF data for signing.", variant: "destructive" });
+         return;
+     }
+
 
     setIsSigning(true);
     // Keep previous success result if available, otherwise clear
@@ -40,7 +50,7 @@ export function PdfPreview({ documentDataUrl, documentName = "document.pdf", isR
 
     try {
       const options = { /* Signature options */ };
-      const result = await signPdfDocument(pdfData, options); // Call the signing service
+      const result = await signPdfDocument(currentPdfData, options); // Call the signing service
       setSignatureResult(result);
 
       if (result.success) {
@@ -79,11 +89,11 @@ export function PdfPreview({ documentDataUrl, documentName = "document.pdf", isR
       <CardHeader>
         <div className="flex items-center space-x-2">
           <FileSignature className="h-6 w-6 text-primary" />
-          <CardTitle className="text-2xl">Step 3: Preview & Sign Document</CardTitle>
+          <CardTitle className="text-2xl">Step 4: Preview & Sign Document</CardTitle> {/* Updated Step Number */}
         </div>
         <CardDescription>
           {isReadOnly
-            ? "Document preview below."
+            ? "Document preview below. Signing and sharing is available in the next step."
             : "Review the generated document. You can digitally sign it when ready."}
         </CardDescription>
       </CardHeader>
@@ -98,7 +108,10 @@ export function PdfPreview({ documentDataUrl, documentName = "document.pdf", isR
              // Alternative using iframe (simpler but sometimes less reliable)
              // <iframe src={documentDataUrl} width="100%" height="500px" title="PDF Preview" className="border-0"></iframe>
           ) : (
-             <p className="text-muted-foreground italic p-4">PDF Preview will load here once generated...</p>
+             <div className="p-4 text-center text-muted-foreground">
+                <Loader2 className="mx-auto h-8 w-8 animate-spin mb-2" />
+                Generating document preview...
+             </div>
           )}
         </div>
 
@@ -107,9 +120,10 @@ export function PdfPreview({ documentDataUrl, documentName = "document.pdf", isR
             <div className="p-3 bg-green-100 border border-green-300 rounded-md text-green-800 text-sm flex items-center justify-between gap-2">
                <div className="flex items-center gap-2">
                  <CheckCircle className="h-5 w-5" />
-                 <span>Document successfully signed!</span>
+                 <span>Document successfully signed! Proceed to the next step to share or download.</span>
                </div>
-               <Button
+               {/* Keep download button maybe, or move it to the final step */}
+               {/* <Button
                  variant="outline"
                  size="sm"
                  onClick={() => downloadFile(signatureResult.signedPdf, `signed_${documentName}`)}
@@ -117,7 +131,7 @@ export function PdfPreview({ documentDataUrl, documentName = "document.pdf", isR
                >
                  <Download className="mr-2 h-4 w-4" />
                  Download Signed PDF
-               </Button>
+               </Button> */}
             </div>
         )}
          {signatureResult && !signatureResult.success && !isSigning && (
@@ -142,7 +156,7 @@ export function PdfPreview({ documentDataUrl, documentName = "document.pdf", isR
           ) : signatureResult?.success ? (
              <>
                <CheckCircle className="mr-2 h-4 w-4 text-green-300" />
-               Document Signed
+               Document Signed - Proceed to Next Step
              </>
           ) : (
              <>

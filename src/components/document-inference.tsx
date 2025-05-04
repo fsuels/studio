@@ -4,13 +4,13 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import type { InferDocumentTypeInput, InferDocumentTypeOutput } from '@/ai/flows/infer-document-type';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'; // Added CardDescription
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'; // Import Tabs
 import { useToast } from '@/hooks/use-toast';
-import { Loader2, Mic, Edit2, Check, BrainCircuit, X, Text } from 'lucide-react'; // Added Text icon
+import { Loader2, Mic, Edit2, Check, BrainCircuit, X, Text, FileText } from 'lucide-react'; // Added FileText icon
 
 // Mock SpeechRecognition - Replace with actual implementation if needed
 const MockSpeechRecognition = {
@@ -38,7 +38,7 @@ export function DocumentInference({ onInferenceResult }: DocumentInferenceProps)
   const [editedDescription, setEditedDescription] = useState('');
   const [activeTab, setActiveTab] = useState<'text' | 'microphone'>('text'); // State for tabs
   const { toast } = useToast();
-  const isRecordingRef = useRef(isRecording); // Top-level hook
+  const isRecordingRef = useRef(isRecording); // Top-level ref moved outside effects
 
   // State for browser speech recognition API
   const [recognition, setRecognition] = useState<any | null>(null); // Use 'any' for broader compatibility initially
@@ -71,11 +71,12 @@ export function DocumentInference({ onInferenceResult }: DocumentInferenceProps)
                     }
                 }
                  // Update description optimistically with interim, then finalize
-                 // This logic might need adjustment based on desired UX
-                 // For simplicity, let's stick to final results for now
+                 // For simplicity, only update with final results for now
                  if (finalTranscript) {
                      setDescription(prev => (prev + finalTranscript).trim() + ' ');
                  }
+                 // Optionally update with interimTranscript for real-time feedback, but handle carefully
+                 // e.g., setInterimDescription(interimTranscript);
             };
 
             recognitionInstance.onerror = (event: SpeechRecognitionErrorEvent) => {
@@ -90,18 +91,23 @@ export function DocumentInference({ onInferenceResult }: DocumentInferenceProps)
                  } else if (event.error === 'network'){
                       errorMessage = "Network error during speech recognition. Check connection.";
                  } else if (event.error === 'aborted') {
-                      errorMessage = "Speech recognition stopped."; // Less alarming message
-                      // Don't toast an error for manual stops or expected aborts
-                      if (isRecordingRef.current) setIsRecording(false);
-                      return; // Exit early
+                      // Check ref to see if abort was expected (user stopped)
+                      if (isRecordingRef.current) {
+                          errorMessage = "Speech recognition stopped."; // Less alarming message
+                      } else {
+                         // Abort might have been triggered by switching tabs or other non-error scenarios
+                         console.log("Speech recognition aborted (likely intentional or component unmount).");
+                         setIsRecording(false); // Ensure state consistency
+                         return; // Don't show error toast for intentional stops
+                      }
                  }
                 toast({ title: "Speech Error", description: errorMessage, variant: "destructive" });
-                if (isRecordingRef.current) setIsRecording(false); // Stop recording state on error
+                if (isRecordingRef.current) setIsRecording(false); // Stop recording state on error only if it was active
             };
 
             recognitionInstance.onend = () => {
                 console.log("Speech recognition ended.");
-                // Only update state if it was supposed to be recording
+                // Only update state if it was supposed to be recording (use ref)
                 if (isRecordingRef.current) {
                     setIsRecording(false); // Ensure state reflects reality if service stops unexpectedly
                     toast({ title: "Recording Stopped" }); // Inform user
@@ -150,23 +156,15 @@ export function DocumentInference({ onInferenceResult }: DocumentInferenceProps)
        if (recognition) {
            if (isRecording) {
                try {
-                   // Check if already running (some browsers throw error)
-                   // This check is browser-specific and might not be foolproof
-                   // if (!recognition.recognizing) { // 'recognizing' is not standard
-                       recognition.start();
-                       console.log("Speech recognition started via state change.");
-                   // } else {
-                   //     console.warn("Recognition seems to be already running.");
-                   // }
+                   recognition.start();
+                   console.log("Speech recognition started via state change.");
                } catch (e: any) {
                    console.error("Error starting recognition:", e);
                     let errorMsg = `Could not start recording: ${e.message}. Ensure permissions are granted.`;
                     if (e.name === 'NotAllowedError' || e.name === 'SecurityError') { // Added SecurityError
                         errorMsg = "Microphone access denied. Please allow access in your browser settings.";
                     } else if (e.name === 'InvalidStateError'){
-                        // This might happen if start() is called while already started
                         console.warn("Recognition already started or in invalid state. Ignoring redundant start().");
-                        // Don't toast for this internal state issue unless necessary
                         return; // Avoid setting isRecording back to false
                     }
                    toast({ title: "Recording Error", description: errorMsg, variant: "destructive" });
@@ -174,15 +172,9 @@ export function DocumentInference({ onInferenceResult }: DocumentInferenceProps)
                }
            } else {
                try {
-                    // Check if needs stopping
-                    // if (recognition.recognizing) { // Not standard
-                        recognition.stop();
-                        console.log("Speech recognition stopped by state change.");
-                    // } else {
-                    //     console.log("Recognition stop called, but might have already stopped.");
-                    // }
+                   recognition.stop();
+                   console.log("Speech recognition stopped by state change.");
                } catch(e) {
-                    // Catch potential error if stop() is called when already stopped
                     console.warn("Error stopping recognition (might already be stopped):", e);
                }
            }
@@ -207,15 +199,12 @@ export function DocumentInference({ onInferenceResult }: DocumentInferenceProps)
     setIsRecording(nextRecordingState);
 
     if (nextRecordingState) {
-        // Clear description when starting a new recording? Optional UX choice.
-        // setDescription('');
          toast({
             title: "Recording...",
             description: "Speak clearly. Click the mic again to stop.",
         });
     } else {
-         // Toast for stopping is handled in recognition.onend or useEffect->stop
-         // toast({ title: "Recording Stopped" }); // Avoid double toast
+         // Toast for stopping is handled in recognition.onend or effect
     }
   };
 
@@ -230,18 +219,7 @@ export function DocumentInference({ onInferenceResult }: DocumentInferenceProps)
     stableOnInferenceResult(null);
 
     // --- TEMPORARY CHANGE FOR STATIC EXPORT ---
-    // API routes (/api/...) are NOT supported in `output: 'export'` mode.
-    // The fetch call below will fail in a static build.
-    // To fix the "Internal Server Error" during build or runtime in static mode,
-    // we disable the AI call here.
-    //
-    // RECOMMENDED FIX FOR PRODUCTION:
-    // 1. Create a separate backend service (e.g., Firebase Function, Cloud Run).
-    // 2. Deploy the Genkit flow (`inferDocumentTypeFlow`) to that service.
-    // 3. Update the `fetch` call here to point to your new backend service URL.
-    // 4. Ensure the backend service has the `GOOGLE_GENAI_API_KEY` environment variable set.
     console.log("[handleSubmit] AI Inference Temporarily Disabled for Static Export.");
-    // Simulate a delay and provide a dummy result
     await new Promise(resolve => setTimeout(resolve, 500));
     const dummyOutput: InferDocumentTypeOutput = {
       documentType: "Lease Agreement (Dummy)",
@@ -249,42 +227,12 @@ export function DocumentInference({ onInferenceResult }: DocumentInferenceProps)
     };
     setResult(dummyOutput);
     stableOnInferenceResult(dummyOutput);
-    toast({ title: "Analysis Complete (Dummy)", description: `Suggested: ${dummyOutput.documentType}` });
+    toast({ title: "Analysis Complete (Dummy)", description: `Suggested: ${dummyOutput.documentType}. Proceed to Step 2.` });
     setIsLoading(false);
     return; // Exit before attempting the fetch call
 
     // --- ORIGINAL CODE (Requires a backend/API route) ---
-    /*
-    try {
-      console.log("[handleSubmit] Calling API /api/infer-document-type with description:", trimmedDescription);
-      const input: InferDocumentTypeInput = { description: trimmedDescription };
-
-      // THIS WILL FAIL IN STATIC EXPORT MODE (`output: 'export'`)
-      const response = await fetch('/api/infer-document-type', {
-          method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(input),
-      });
-      const responseData = await response.json();
-
-      if (!response.ok) {
-          console.error("[handleSubmit Error] API error:", response.status, responseData);
-          throw new Error(responseData.error || `API Error: ${response.status}`);
-      }
-
-      const output: InferDocumentTypeOutput = responseData;
-      console.log("[handleSubmit] API success. Output:", output);
-      setResult(output);
-      stableOnInferenceResult(output);
-      toast({ title: "Analysis Complete", description: `Suggested: ${output.documentType}` });
-    } catch (error: unknown) {
-      console.error('[handleSubmit Error]', error);
-      const errorMessage = error instanceof Error ? error.message : `An unexpected error occurred: ${String(error)}`;
-      toast({ title: "AI Error", description: errorMessage, variant: "destructive" });
-      stableOnInferenceResult(null);
-    } finally {
-      setIsLoading(false);
-    }
-    */
-    // --- END ORIGINAL CODE ---
+    /* ... */
 
   }, [toast, stableOnInferenceResult]);
 
@@ -335,6 +283,7 @@ export function DocumentInference({ onInferenceResult }: DocumentInferenceProps)
 
   return (
     <div className="space-y-4">
+       {/* Removed CardHeader/CardContent wrapper, now part of the parent card */}
       {/* Tabs for Input Mode */}
       <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
         <TabsList className="grid w-full grid-cols-2">
@@ -347,7 +296,7 @@ export function DocumentInference({ onInferenceResult }: DocumentInferenceProps)
         </TabsList>
 
         {/* Text Input Content */}
-        <TabsContent value="text" className="mt-0">
+        <TabsContent value="text" className="mt-4"> {/* Added mt-4 for spacing */}
           <div className="space-y-2 relative group">
             <Label htmlFor="description-text" className="sr-only">Description (Text)</Label>
             <Textarea
@@ -381,13 +330,13 @@ export function DocumentInference({ onInferenceResult }: DocumentInferenceProps)
                )}
             </div>
              <p id="text-helper-text" className="text-xs text-muted-foreground pl-1">
-                 {isEditingDescription ? 'Editing description. Click Save (✓) or Cancel (✕).' : (result ? 'Analysis complete. Click edit (✎) to revise.' : 'Describe your situation clearly.')}
+                 {isEditingDescription ? 'Editing description. Click Save (✓) or Cancel (✕).' : (result ? 'Analysis complete. Click edit (✎) to revise, or proceed to Step 2.' : 'Describe your situation clearly.')}
             </p>
           </div>
         </TabsContent>
 
         {/* Microphone Input Content */}
-        <TabsContent value="microphone" className="mt-0">
+        <TabsContent value="microphone" className="mt-4"> {/* Added mt-4 for spacing */}
            <div className="space-y-2 relative group">
             <Label htmlFor="description-mic" className="sr-only">Description (Microphone)</Label>
             {/* Display area for transcribed text */}
@@ -442,7 +391,8 @@ export function DocumentInference({ onInferenceResult }: DocumentInferenceProps)
              <p id="mic-helper-text" className="text-xs text-muted-foreground pl-1">
                {isRecording ? <span className="text-red-600">Listening... Click mic again to stop.</span> : (recognition ? "Click the microphone to start recording." : "Microphone input not available.")}
                {isEditingDescription && <span> Editing description. Click Save (✓) or Cancel (✕).</span>}
-               {description && !isRecording && !isEditingDescription && <span> Click edit (✎) to revise the text.</span>}
+               {description && !isRecording && !isEditingDescription && result && <span> Click edit (✎) to revise, or proceed to Step 2.</span>}
+               {description && !isRecording && !isEditingDescription && !result && <span> Click "Infer My Document" below.</span>}
             </p>
           </div>
         </TabsContent>
@@ -457,8 +407,7 @@ export function DocumentInference({ onInferenceResult }: DocumentInferenceProps)
           </>
         ) : (
           <>
-            {/* Using an inline SVG for the 'sparkle' icon */}
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-2 h-5 w-5"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/><path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/></svg>
+            <BrainCircuit className="mr-2 h-5 w-5"/> {/* Changed icon */}
             {result ? 'Infer Again with Edited Text' : 'Infer My Document'}
           </>
         )}
@@ -482,7 +431,7 @@ export function DocumentInference({ onInferenceResult }: DocumentInferenceProps)
           </CardContent>
            <CardFooter className="pt-0 pb-3">
              <p className="text-xs text-muted-foreground">
-                If this isn't right, click the edit icon (<Edit2 className="inline h-3 w-3 mx-0.5" />) above to revise the description and infer again.
+                If this isn't right, click the edit icon (<Edit2 className="inline h-3 w-3 mx-0.5" />) above to revise the description and infer again. Otherwise, proceed to Step 2.
              </p>
            </CardFooter>
         </Card>
