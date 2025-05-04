@@ -72,13 +72,13 @@ export const usStates = [
 // Mock data for the document library - Updated list.
 // Added IDs and empty questions array to satisfy the interface.
 export const documentLibrary: LegalDocument[] = [
-   {
+  {
     id: "residential-lease-agreement",
     name: "Residential Lease Agreement",
     aliases: ["rent apartment", "tenant", "lease form", "landlord agreement"],
     states: ["all"],
     category: "Real Estate",
-    questions: [] // Added empty questions
+    questions: [] // Placeholder questions
   },
   {
     id: "divorce-settlement-agreement",
@@ -105,9 +105,17 @@ export const documentLibrary: LegalDocument[] = [
     questions: []
   },
   {
-    id: "non-disclosure-agreement-nda",
-    name: "Non-Disclosure Agreement (NDA)",
-    aliases: ["confidential", "nda", "protect idea", "secret"],
+    id: "mutual-nda", // Updated ID
+    name: "Mutual Non-Disclosure Agreement (NDA)", // Updated Name for clarity
+    aliases: ["confidential", "mutual nda", "protect idea", "secret", "both ways nda"],
+    states: ["all"],
+    category: "Business",
+    questions: []
+  },
+   {
+    id: "unilateral-nda", // Added Unilateral NDA
+    name: "Unilateral Non-Disclosure Agreement (NDA)",
+    aliases: ["one-way nda", "disclosing party", "receiving party", "protect my idea"],
     states: ["all"],
     category: "Business",
     questions: []
@@ -123,39 +131,63 @@ export const documentLibrary: LegalDocument[] = [
   {
     id: "service-agreement",
     name: "Service Agreement",
-    aliases: ["hire services", "service provider", "payment terms"],
+    aliases: ["hire services", "service provider", "payment terms", "scope of work"],
     states: ["all"],
     category: "Business",
     questions: []
   },
   {
-    id: "bill-of-sale",
-    name: "Bill of Sale",
-    aliases: ["sell car", "used item sale", "vehicle transfer"],
+    id: "bill-of-sale-vehicle", // Made ID more specific
+    name: "Bill of Sale (Vehicle)", // Made name more specific
+    aliases: ["sell car", "used item sale", "vehicle transfer", "buy car"],
     states: ["all"],
     category: "Transactions",
     questions: []
   },
+   {
+    id: "general-power-of-attorney", // Made ID more specific
+    name: "General Power of Attorney", // Made name more specific
+    aliases: ["represent me", "act on my behalf", "authorize someone", "financial poa"],
+    states: ["all"], // Consider making state-specific templates later
+    category: "Personal Affairs",
+    questions: []
+  },
   {
-    id: "power-of-attorney",
-    name: "Power of Attorney",
-    aliases: ["represent me", "act on my behalf", "authorize someone"],
-    states: ["all"],
+    id: "healthcare-power-of-attorney", // Added Healthcare POA
+    name: "Healthcare Power of Attorney",
+    aliases: ["medical poa", "healthcare proxy", "appoint agent for health"],
+    states: ["all"], // Often state-specific forms exist
     category: "Personal Affairs",
     questions: []
   },
   {
     id: "living-will",
     name: "Living Will",
-    aliases: ["medical wishes", "advance directive", "life support"],
-    states: ["all"],
-    category: "Estate",
+    aliases: ["medical wishes", "advance directive", "life support", "end of life care"],
+    states: ["all"], // State forms vary significantly
+    category: "Estate Planning", // Changed category
+    questions: []
+  },
+  {
+    id: "last-will-and-testament", // Added Will
+    name: "Last Will and Testament",
+    aliases: ["will", "testament", "estate planning", "distribute assets"],
+    states: ["all"], // Highly state-specific requirements
+    category: "Estate Planning",
     questions: []
   },
   {
     id: "loan-agreement",
     name: "Loan Agreement",
-    aliases: ["borrow money", "lend funds", "repayment terms"],
+    aliases: ["borrow money", "lend funds", "repayment terms", "personal loan"],
+    states: ["all"],
+    category: "Finance",
+    questions: []
+  },
+  {
+    id: "promissory-note",
+    name: "Promissory Note",
+    aliases: ["IOU", "promise to pay", "loan paper", "debt note"],
     states: ["all"],
     category: "Finance",
     questions: []
@@ -163,7 +195,7 @@ export const documentLibrary: LegalDocument[] = [
   {
     id: "employment-offer-letter",
     name: "Employment Offer Letter",
-    aliases: ["hire employee", "job offer", "terms of employment"],
+    aliases: ["hire employee", "job offer", "terms of employment", "offer letter"],
     states: ["all"],
     category: "Employment",
     questions: []
@@ -171,31 +203,23 @@ export const documentLibrary: LegalDocument[] = [
   {
     id: "eviction-notice",
     name: "Eviction Notice",
-    aliases: ["remove tenant", "late rent", "kick out"],
-    states: ["all"],
+    aliases: ["remove tenant", "late rent", "kick out", "notice to vacate"],
+    states: ["all"], // State-specific notice periods and reasons
     category: "Real Estate",
     questions: []
   },
   {
     id: "affidavit",
     name: "Affidavit",
-    aliases: ["sworn statement", "declaration", "official statement"],
+    aliases: ["sworn statement", "declaration", "official statement", "under oath"],
     states: ["all"],
     category: "General Legal",
     questions: []
   },
   {
-    id: "promissory-note",
-    name: "Promissory Note",
-    aliases: ["IOU", "promise to pay", "loan paper"],
-    states: ["all"],
-    category: "Finance",
-    questions: []
-  },
-  {
     id: "cohabitation-agreement",
     name: "Cohabitation Agreement",
-    aliases: ["living together", "roommate agreement", "partner sharing"],
+    aliases: ["living together", "unmarried partners", "partner sharing assets", "domestic partnership agreement"],
     states: ["all"],
     category: "Family Law",
     questions: []
@@ -203,16 +227,41 @@ export const documentLibrary: LegalDocument[] = [
   {
     id: "non-compete-agreement",
     name: "Non-Compete Agreement",
-    aliases: ["restrict competition", "former employee", "noncompete"],
-    states: ["all"],
+    aliases: ["restrict competition", "former employee", "noncompete", "restrictive covenant"],
+    states: ["CA", "ND", "OK", "MT"], // Example: States where generally unenforceable or restricted
     category: "Employment",
+    description: "Restricts an employee from competing after employment ends. Note: Enforceability varies significantly by state.",
+    questions: []
+  },
+   {
+    id: "partnership-agreement", // Added Partnership Agreement
+    name: "Partnership Agreement",
+    aliases: ["business partners", "starting business together", "partner roles"],
+    states: ["all"],
+    category: "Business",
+    questions: []
+  },
+  {
+    id: "invoice-dispute-letter", // Added Invoice Dispute
+    name: "Invoice Dispute Letter",
+    aliases: ["wrong bill", "incorrect invoice", "dispute charge"],
+    states: ["all"],
+    category: "Business",
+    questions: []
+  },
+  {
+    id: "cease-and-desist-letter", // Added Cease and Desist
+    name: "Cease and Desist Letter",
+    aliases: ["stop harassment", "infringement warning", "demand letter", "stop using trademark"],
+    states: ["all"],
+    category: "General Legal",
     questions: []
   },
     // Add the General Inquiry fallback
     {
     id: 'general-inquiry',
     name: 'General Inquiry',
-    aliases: ['unsure', 'help', 'legal question', 'need advice', 'other'],
+    aliases: ['unsure', 'help', 'legal question', 'need advice', 'other', 'talk to someone', 'not sure'],
     states: 'all',
     category: "General Legal",
     description: 'Used when the user\'s need is unclear or doesn\'t match a specific document type.',
