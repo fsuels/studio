@@ -1,7 +1,7 @@
 
 "use client";
 
-import React, { useState, useEffect, useCallback } from 'react'; // Added React import
+import React, { useState, useEffect, useCallback, useRef } from 'react'; // Added useRef
 import type { InferDocumentTypeInput, InferDocumentTypeOutput } from '@/ai/flows/infer-document-type';
 import { inferDocumentType } from '@/ai/flows/infer-document-type';
 import { Button } from '@/components/ui/button';
@@ -42,6 +42,9 @@ export function DocumentInference({ onInferenceResult }: DocumentInferenceProps)
   // State for browser speech recognition API
   const [recognition, setRecognition] = useState<typeof MockSpeechRecognition | null>(null);
 
+  // ✅ top‐level hooks only
+  const isRecordingRef = useRef(isRecording); // Moved useRef to top level
+
   // Memoize the callback to prevent unnecessary re-renders if passed inline
   const stableOnInferenceResult = useCallback(onInferenceResult, [onInferenceResult]);
 
@@ -50,6 +53,9 @@ export function DocumentInference({ onInferenceResult }: DocumentInferenceProps)
 
 
   useEffect(() => {
+    // keep ref in sync
+    isRecordingRef.current = isRecording;
+
     // Check for browser support and initialize SpeechRecognition
     const SpeechRecognitionApi = isBrowser ? (window.SpeechRecognition || (window as any).webkitSpeechRecognition) : null;
 
@@ -120,13 +126,23 @@ export function DocumentInference({ onInferenceResult }: DocumentInferenceProps)
 
 
         setRecognition(mockCompatibleInstance);
+
+        // Start recognition if isRecording is true when the component mounts or recognition initializes
+        if (isRecording) {
+            try {
+                recognitionInstance.start();
+                console.log("Starting recognition on mount/init...");
+            } catch (e: any) {
+                console.error("Error starting recognition on mount/init:", e);
+                // Handle potential errors like permissions already denied
+                setIsRecording(false); // Correct state if start fails
+            }
+        }
+
     } else {
         console.warn('Speech Recognition API not supported in this browser.');
     }
 
-    // Ref to track recording state reliably in effect cleanup
-    const isRecordingRef = React.useRef(isRecording);
-    isRecordingRef.current = isRecording;
 
     // Cleanup function to stop recognition if component unmounts while recording
     return () => {
@@ -146,8 +162,9 @@ export function DocumentInference({ onInferenceResult }: DocumentInferenceProps)
        }
     };
 
-  // Only depend on toast. Recognition instance and isBrowser don't change.
-  }, [toast, isBrowser]); // Removed isRecording from dependency array
+  // Only depend on toast, isBrowser and isRecording.
+  // Recognition instance setup happens only once based on browser support.
+  }, [toast, isBrowser, isRecording]); // Added isRecording to dependency array
 
 
   const handleRecord = () => {
@@ -164,6 +181,7 @@ export function DocumentInference({ onInferenceResult }: DocumentInferenceProps)
        try {
            recognition.stop(); // This should trigger the onend event handler which sets isRecording to false
            console.log("Stopping recognition...");
+           // No need to set state here, onend handler will do it
        } catch (e) {
             console.warn("Error stopping recognition:", e);
             // Force stop state if stop fails unexpectedly
@@ -174,28 +192,22 @@ export function DocumentInference({ onInferenceResult }: DocumentInferenceProps)
        // Consider clearing description or appending based on desired UX
        // setDescription(''); // Uncomment to clear previous description
        try {
-            recognition.start();
+            // The useEffect hook will now handle starting recognition when isRecording becomes true
             setIsRecording(true); // Set recording state to true
             toast({
                 title: "Recording Started",
                 description: "Speak clearly into your microphone. Click the mic again to stop.", // Updated description
             });
        } catch (e: any) {
-            console.error("Error starting recognition:", e);
-             let errorMsg = `Error: ${e.message || 'Unknown error'}.`;
-             if (e.name === 'NotAllowedError') {
-                errorMsg = "Microphone access denied. Please allow access in browser settings.";
-             } else if (e.name === 'InvalidStateError') {
-                 errorMsg = "Recognition service is already active or in an invalid state.";
-                 // Recognition might already be running or stopped improperly
-                 setIsRecording(false); // Correct state if needed
-             }
+            // This catch block might be less necessary now as useEffect handles start
+            console.error("Error in handleRecord when setting isRecording:", e);
+             let errorMsg = `Error: ${e.message || 'Unknown error setting recording state'}.`;
              toast({
                 title: "Could Not Start Recording",
                 description: errorMsg,
                 variant: "destructive",
             });
-             // Ensure state is correct if start fails
+             // Ensure state is correct if setting state fails somehow (unlikely)
              if (isRecording) setIsRecording(false);
        }
 
