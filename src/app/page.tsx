@@ -12,13 +12,14 @@ import { PdfPreview } from '@/components/pdf-preview';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { FileText, FileSignature, Check, Upload, AlertTriangle, Download, ListChecks } from 'lucide-react'; // Added ListChecks icon
+import HeroFeatureSection from '@/components/landing/HeroFeatureSection'; // Corrected import path to landing
+import ThreeStepSection from '@/components/ThreeStepSection'; // Corrected import path for ThreeStepSection
 import { TestimonialCarousel } from '@/components/landing/TestimonialCarousel';
 import { FeaturedLogos } from '@/components/landing/FeaturedLogos';
 import { GuaranteeBadge } from '@/components/landing/GuaranteeBadge';
 import { Button } from '@/components/ui/button'; // Import Button
 import { useToast } from '@/hooks/use-toast'; // Import useToast
-import HeroFeatureSection from '@/components/HeroFeatureSection'; // Corrected import path to landing
-import ThreeStepSection from '@/components/ThreeStepSection'; // Corrected import path for ThreeStepSection
+import { useTranslation } from 'react-i18next'; // Import useTranslation
 
 
 // Define share icon SVG inline
@@ -30,16 +31,20 @@ const ShareIcon = () => (
 export default function Home() {
   console.log('[page.tsx] Home component rendering...');
   const { toast } = useToast();
+  const { t } = useTranslation(); // Get translation function
+  const [isHydrated, setIsHydrated] = useState(false); // State for hydration
 
   // State Updates:
-  // - inferenceResult stores the full output object { suggestions: [...] }
-  // - suggestionsForSelector is derived from inferenceResult.suggestions
-  const [inferenceResult, setInferenceResult] = useState<InferDocumentTypeOutput | null>(null); // Store the full AI output { suggestions: [...] }
-  const [selectedDocType, setSelectedDocType] = useState<string | null>(null); // Store the *confirmed* document type name
-  const [selectedState, setSelectedState] = useState<string | undefined>(undefined); // Store selected state from inference step
+  const [inferenceResult, setInferenceResult] = useState<InferDocumentTypeOutput | null>(null);
+  const [selectedDocType, setSelectedDocType] = useState<string | null>(null);
+  const [selectedState, setSelectedState] = useState<string | undefined>(undefined);
   const [questionnaireAnswers, setQuestionnaireAnswers] = useState<Record<string, any> | null>(null);
-  const [disclaimerAgreed, setDisclaimerAgreed] = useState<boolean>(false); // New state for disclaimer
+  const [disclaimerAgreed, setDisclaimerAgreed] = useState<boolean>(false);
   const [pdfDataUrl, setPdfDataUrl] = useState<string | undefined>(undefined);
+
+  useEffect(() => {
+    setIsHydrated(true); // Set hydrated state on client
+  }, []);
 
   // Determine current step based on state
   const getCurrentStep = () => {
@@ -52,23 +57,19 @@ export default function Home() {
   const currentStep = getCurrentStep();
 
   // Handler for when DocumentInference completes its analysis
-  // Updated to accept the new InferDocumentTypeOutput format
   const handleInferenceComplete = (output: InferDocumentTypeOutput | null, state?: string) => {
     console.log('[page.tsx] handleInferenceComplete called with output:', output, 'State:', state);
-    setInferenceResult(output); // Store the full output { suggestions: [...] }
-    setSelectedState(state); // Store the state used for inference
-    setSelectedDocType(null); // Reset selection, user must pick from suggestions
-    // Reset subsequent steps
+    setInferenceResult(output);
+    setSelectedState(state);
+    setSelectedDocType(null);
     setQuestionnaireAnswers(null);
     setDisclaimerAgreed(false);
     setPdfDataUrl(undefined);
 
      if (output && output.suggestions && output.suggestions.length > 0) {
-        toast({ title: "Analysis Complete", description: "AI suggestions loaded below. Please review and select the best fit." });
+        toast({ title: t('toasts.analysisCompleteTitle'), description: t('toasts.analysisCompleteDescription') });
      } else {
-         // Handle case where inference resulted in null or empty suggestions
-         toast({ title: "Analysis Inconclusive", description: "Could not determine a specific document type. Please refine your description or select 'General Inquiry'.", variant: "destructive" });
-          // Ensure inferenceResult is set to a state that shows General Inquiry if empty
+         toast({ title: t('toasts.analysisInconclusiveTitle'), description: t('toasts.analysisInconclusiveDescription'), variant: "destructive" });
           if (!output || !output.suggestions || output.suggestions.length === 0) {
              setInferenceResult({ suggestions: [{ documentType: 'General Inquiry', confidence: 0.1, reasoning: 'Could not confidently match your description to a specific document.' }] });
           }
@@ -78,23 +79,21 @@ export default function Home() {
   // Handler for when user selects a document type from the DocumentTypeSelector
   const handleDocumentTypeSelected = (docName: string) => {
       console.log(`[page.tsx] handleDocumentTypeSelected: User selected ${docName}`);
-      setSelectedDocType(docName); // Confirm the selection
-       toast({ title: "Document Type Confirmed", description: `Proceeding with ${docName}.` });
-       // Reset subsequent steps if user re-selects
+      setSelectedDocType(docName);
+       toast({ title: t('toasts.docTypeConfirmedTitle'), description: t('toasts.docTypeConfirmedDescription', { docName }) });
         setQuestionnaireAnswers(null);
         setDisclaimerAgreed(false);
         setPdfDataUrl(undefined);
-      // Optional: Automatically scroll to the next step or highlight it
   }
 
   // Questionnaire submit now leads to disclaimer step
   const handleAnswersSubmit = (answers: Record<string, any>) => {
     console.log('[page.tsx] handleAnswersSubmit called with:', answers);
     setQuestionnaireAnswers(answers);
-    setDisclaimerAgreed(false); // Ensure disclaimer needs agreement again
-    setPdfDataUrl(undefined); // Clear previous PDF if re-submitting
+    setDisclaimerAgreed(false);
+    setPdfDataUrl(undefined);
     console.log("[page.tsx] Questionnaire submitted, proceeding to disclaimer step.");
-     toast({ title: "Details Recorded", description: "Proceed to the disclaimer." });
+     toast({ title: t('toasts.detailsRecordedTitle'), description: t('toasts.detailsRecordedDescription') });
   };
 
   // Disclaimer agreement triggers PDF generation (simulation)
@@ -104,37 +103,34 @@ export default function Home() {
      console.log("[page.tsx] Disclaimer agreed. Triggering PDF generation with type:", selectedDocType, "answers:", questionnaireAnswers);
 
      if (!selectedDocType || !questionnaireAnswers) {
-         toast({ title: "Missing Data", description: "Cannot generate PDF without document type and answers.", variant: "destructive"});
+         toast({ title: t('toasts.missingDataTitle'), description: t('toasts.missingDataDescription'), variant: "destructive"});
          setDisclaimerAgreed(false); // Revert agreement state
          return;
      }
 
-     // Show loading toast
       const generationToast = toast({
-          title: "Generating Document...",
-          description: "Please wait while we create your PDF.",
+          title: t('toasts.generatingPDFTitle'),
+          description: t('toasts.generatingPDFDescription'),
           duration: 999999, // Keep open until dismissed
       });
 
      try {
-        // Call the actual PDF generation service (simulated via fetch to API route for now)
-         // In production with static export, this should call a Cloud Function URL
          const response = await fetch('/api/generate-pdf', {
              method: 'POST',
              headers: { 'Content-Type': 'application/json' },
              body: JSON.stringify({
                  documentType: selectedDocType,
                  answers: questionnaireAnswers,
-                 state: selectedState, // Pass state if needed for generation
+                 state: selectedState,
              }),
          });
 
-         generationToast.dismiss(); // Dismiss loading toast
+         generationToast.dismiss();
 
          if (!response.ok) {
             const errorData = await response.json();
              console.error("[page.tsx] PDF generation failed:", errorData);
-             toast({ title: "PDF Generation Failed", description: errorData.error || "Could not generate the document.", variant: "destructive"});
+             toast({ title: t('toasts.pdfGenFailedTitle'), description: errorData.error || t('toasts.pdfGenFailedDescription'), variant: "destructive"});
              setDisclaimerAgreed(false); // Revert agreement state
              return;
          }
@@ -149,67 +145,69 @@ export default function Home() {
 
          console.log("[page.tsx] PDF generation successful. Setting data URL.");
          setPdfDataUrl(dataUrl);
-         toast({ title: "Document Ready!", description: "Your PDF preview is loaded below." });
+         toast({ title: t('toasts.pdfGenSuccessTitle'), description: t('toasts.pdfGenSuccessDescription') });
 
      } catch (error) {
           generationToast.dismiss();
           console.error("[page.tsx] Error during PDF generation fetch:", error);
-          toast({ title: "PDF Generation Error", description: "An unexpected error occurred.", variant: "destructive"});
+          toast({ title: t('toasts.pdfGenErrorTitle'), description: "An unexpected error occurred.", variant: "destructive"});
           setDisclaimerAgreed(false); // Revert agreement state
      }
   }
 
   // Prepare suggestions for DocumentTypeSelector
-   // Map the new suggestions array format
    const suggestionsForSelector: DocumentSuggestion[] = inferenceResult?.suggestions || [];
-   // Ensure "General Inquiry" is an option if not already suggested by AI and results exist
    if (inferenceResult && suggestionsForSelector.length > 0 && !suggestionsForSelector.some(s => s.documentType === 'General Inquiry')) {
         suggestionsForSelector.push({
             documentType: 'General Inquiry',
             reasoning: 'If none of the above seem correct, or if you need further clarification.',
-            confidence: 0.0 // Low confidence for manually added fallback
+            confidence: 0.0
         });
-   } else if (!inferenceResult || suggestionsForSelector.length === 0) {
-        // If no results at all, maybe provide General Inquiry as the only option initially?
-        // This might be handled better by the initial state or the handleInferenceComplete logic
    }
-
 
   // Get the relevant form schema for the selected document type
    const currentFormSchema = selectedDocType ? (formSchemas[selectedDocType] || formSchemas['default']) : [];
 
+  // Render placeholder or null during SSR and initial client render
+  if (!isHydrated) {
+     return <div className="min-h-screen bg-background"> {/* Basic layout structure */}
+               <div className="h-64 animate-pulse bg-muted"></div> {/* Hero placeholder */}
+               <div className="h-32 animate-pulse bg-background"></div> {/* Steps placeholder */}
+               <div className="container mx-auto py-12 space-y-8">
+                 <div className="h-64 animate-pulse bg-card rounded-lg shadow-lg border border-border"></div> {/* Step 1 placeholder */}
+               </div>
+            </div>;
+  }
 
   return (
     <div className="flex flex-col items-center w-full bg-background">
-       <HeroFeatureSection /> {/* Use the combined Hero/Feature component */}
-       <ThreeStepSection /> {/* Render 3 Step Section */}
+       <HeroFeatureSection />
+       <ThreeStepSection />
 
-        {/* Main Workflow Section - Wrapper with padding and ID */}
+        {/* Main Workflow Section */}
         <div id="workflow-start" className="w-full max-w-5xl mx-auto px-4 py-12 space-y-12">
 
-            {/* Step Panels Wrapper - Use max-w-3xl for better focus */}
+            {/* Step Panels Wrapper */}
             <div className="w-full max-w-3xl mx-auto space-y-8">
                 {/* Step 1: Document Inference & Confirmation */}
                 <Card className={`shadow-lg rounded-lg bg-card border border-border transition-all duration-500 ease-out ${currentStep > 1 ? 'opacity-50 cursor-not-allowed' : 'animate-fade-in'}`}>
                     <CardHeader>
                     <div className="flex items-center space-x-2">
                         <FileText className="h-6 w-6 text-primary" />
-                        <CardTitle className="text-2xl">Step 1: Describe & Confirm</CardTitle>
+                        <CardTitle className="text-2xl">{t('Step 1: Describe & Confirm')}</CardTitle> {/* Translate */}
                     </div>
                     <CardDescription>
                         {currentStep > 1
-                            ? `Document type confirmed: ${selectedDocType || "N/A"} ${selectedState ? `(State: ${selectedState})` : ''}`
-                            : "Describe your situation and select the relevant U.S. state. Our AI will suggest document types."}
+                            ? `${t('Document type confirmed')}: ${selectedDocType || "N/A"} ${selectedState ? `(${t('State')}: ${selectedState})` : ''}` // Translate
+                            : t('Describe your situation and select the relevant U.S. state. Our AI will suggest document types.')} {/* Translate */}
                     </CardDescription>
                     </CardHeader>
                     {currentStep === 1 && (
                         <CardContent>
-                            {/* DocumentInference now only triggers analysis, selection happens below */}
                             <DocumentInference onInferenceResult={handleInferenceComplete} />
-                             {/* Display suggestions using DocumentTypeSelector if analysis is complete */}
                             {inferenceResult && (
                                  <DocumentTypeSelector
-                                     suggestions={suggestionsForSelector} // Pass the array of suggestions
+                                     suggestions={suggestionsForSelector}
                                      onSelect={handleDocumentTypeSelected}
                                  />
                             )}
@@ -225,10 +223,10 @@ export default function Home() {
                  {currentStep >= 2 && selectedDocType && (
                      <div className={`transition-opacity duration-500 ease-out ${currentStep === 2 ? 'opacity-100 animate-fade-in' : 'opacity-50 cursor-not-allowed'}`}>
                          <DynamicFormRenderer
-                             documentType={selectedDocType} // Pass the confirmed document type name
-                             schema={currentFormSchema} // Pass the dynamically loaded schema
+                             documentType={selectedDocType}
+                             schema={currentFormSchema}
                              onSubmit={handleAnswersSubmit}
-                             isReadOnly={currentStep > 2} // Lock if past this step
+                             isReadOnly={currentStep > 2}
                          />
                      </div>
                  )}
@@ -236,15 +234,15 @@ export default function Home() {
                      <Card className="shadow-lg rounded-lg opacity-50 cursor-not-allowed bg-card border border-border">
                          <CardHeader>
                              <div className="flex items-center space-x-2">
-                                 <ListChecks className="h-6 w-6 text-primary" /> {/* Updated Icon */}
-                                 <CardTitle className="text-2xl">Step 2: Provide Details</CardTitle> {/* Updated Title */}
+                                 <ListChecks className="h-6 w-6 text-primary" />
+                                 <CardTitle className="text-2xl">{t('Step 2: Provide Details')}</CardTitle> {/* Translate */}
                              </div>
                              <CardDescription>
-                                 Confirm a document type in Step 1 to see the questions.
+                                 {t('Confirm a document type in Step 1 to see the questions.')} {/* Translate */}
                              </CardDescription>
                          </CardHeader>
                          <CardContent>
-                             <p className="text-muted-foreground italic">Waiting for document confirmation from Step 1...</p>
+                             <p className="text-muted-foreground italic">{t('Waiting for document confirmation from Step 1...')}</p> {/* Translate */}
                          </CardContent>
                      </Card>
                  )}
@@ -258,7 +256,7 @@ export default function Home() {
                      <div className={`transition-opacity duration-500 ease-out ${currentStep === 3 ? 'opacity-100 animate-fade-in' : 'opacity-50 cursor-not-allowed'}`}>
                         <DisclaimerStep
                             onAgree={handleDisclaimerAgree}
-                            isReadOnly={currentStep > 3} // Lock if past this step
+                            isReadOnly={currentStep > 3}
                         />
                      </div>
                 )}
@@ -267,14 +265,14 @@ export default function Home() {
                          <CardHeader>
                              <div className="flex items-center space-x-2">
                                  <AlertTriangle className="h-6 w-6 text-orange-500" />
-                                 <CardTitle className="text-2xl">Step 3: Important Disclaimer</CardTitle>
+                                 <CardTitle className="text-2xl">{t('disclaimerStep.stepTitle')}</CardTitle> {/* Use existing key */}
                              </div>
                              <CardDescription>
-                                 Read and agree to the disclaimer before proceeding.
+                                 {t('Read and agree to the disclaimer before proceeding.')} {/* Translate */}
                              </CardDescription>
                          </CardHeader>
                          <CardContent>
-                             <p className="text-muted-foreground italic">Complete the questions above to view the disclaimer.</p>
+                             <p className="text-muted-foreground italic">{t('Complete the questions above to view the disclaimer.')}</p> {/* Translate */}
                          </CardContent>
                      </Card>
                 )}
@@ -289,7 +287,7 @@ export default function Home() {
                          <PdfPreview
                              documentDataUrl={pdfDataUrl}
                              documentName={`${selectedDocType || 'document'}.pdf`}
-                             isReadOnly={currentStep > 4} // Lock if past this step
+                             isReadOnly={currentStep > 4}
                          />
                      </div>
                  )}
@@ -298,14 +296,14 @@ export default function Home() {
                          <CardHeader>
                              <div className="flex items-center space-x-2">
                                  <FileSignature className="h-6 w-6 text-primary" />
-                                 <CardTitle className="text-2xl">Step 4: Preview & Sign</CardTitle>
+                                 <CardTitle className="text-2xl">{t('pdfPreview.stepTitle')}</CardTitle> {/* Use existing key */}
                              </div>
                              <CardDescription>
-                                 Review the generated document and sign it digitally.
+                                 {t('Review the generated document and sign it digitally.')} {/* Translate */}
                              </CardDescription>
                          </CardHeader>
                          <CardContent>
-                             <p className="text-muted-foreground italic">Agree to the disclaimer above to generate the document preview.</p>
+                             <p className="text-muted-foreground italic">{t('Agree to the disclaimer above to generate the document preview.')}</p> {/* Translate */}
                          </CardContent>
                      </Card>
                  )}
@@ -314,29 +312,27 @@ export default function Home() {
                  {currentStep > 4 && <Separator className="my-8" />}
 
                  {/* Step 5: Share & Track */}
-                  {currentStep >= 5 && pdfDataUrl && ( // Changed condition to check for step 5
+                  {currentStep >= 5 && pdfDataUrl && (
                      <Card className="shadow-lg rounded-lg transition-opacity duration-500 ease-out opacity-100 animate-fade-in bg-card border border-border">
                         <CardHeader>
                             <div className="flex items-center space-x-2">
                                  <ShareIcon />
-                                 <CardTitle className="text-2xl">Step 5: Share & Download</CardTitle> {/* Updated title */}
+                                 <CardTitle className="text-2xl">{t('shareDownloadStep.stepTitle')}</CardTitle> {/* Translate */}
                             </div>
                             <CardDescription>
-                               Your document is ready! Share it securely or download it.
+                               {t('shareDownloadStep.description')} {/* Translate */}
                             </CardDescription>
                         </CardHeader>
                         <CardContent>
-                            {/* Placeholder for actual actions */}
-                            <p className="text-muted-foreground mb-4">Actions available after document signing.</p>
+                            <p className="text-muted-foreground mb-4">{t('shareDownloadStep.actionsPlaceholder')}</p> {/* Translate */}
                             <div className="flex space-x-4">
-                                <Button disabled variant="outline"> <Upload className="mr-2 h-4 w-4" /> Share Securely (Soon)</Button>
-                                {/* Enable download */}
+                                <Button disabled variant="outline"> <Upload className="mr-2 h-4 w-4" /> {t('shareDownloadStep.shareButton')} {/* Translate */}</Button>
                                 <Button
                                   onClick={() => {
                                        if (pdfDataUrl) {
                                            const link = document.createElement('a');
                                            link.href = pdfDataUrl;
-                                           link.download = `${selectedDocType || 'document'}_signed.pdf`; // Use selectedDocType
+                                           link.download = `${selectedDocType || 'document'}_signed.pdf`;
                                            document.body.appendChild(link);
                                            link.click();
                                            document.body.removeChild(link);
@@ -344,25 +340,25 @@ export default function Home() {
                                    }}
                                    disabled={!pdfDataUrl}
                                 >
-                                    <Download className="mr-2 h-4 w-4" /> Download PDF
+                                    <Download className="mr-2 h-4 w-4" /> {t('shareDownloadStep.downloadButton')} {/* Translate */}
                                  </Button>
                             </div>
                         </CardContent>
                     </Card>
                   )}
-                  {currentStep < 5 && ( // Changed condition to check for step 5
+                  {currentStep < 5 && (
                      <Card className="shadow-lg rounded-lg opacity-50 cursor-not-allowed bg-card border border-border">
                            <CardHeader>
                                <div className="flex items-center space-x-2">
                                    <ShareIcon />
-                                   <CardTitle className="text-2xl">Step 5: Share & Download</CardTitle> {/* Updated title */}
+                                   <CardTitle className="text-2xl">{t('shareDownloadStep.stepTitle')}</CardTitle> {/* Translate */}
                                </div>
                                <CardDescription>
-                                  Securely share your document or download it after signing.
+                                  {t('Securely share your document or download it after signing.')} {/* Translate */}
                                </CardDescription>
                            </CardHeader>
                            <CardContent>
-                               <p className="text-muted-foreground italic">Sign the document above to enable sharing and download.</p>
+                               <p className="text-muted-foreground italic">{t('shareDownloadStep.disabledDescription')}</p> {/* Translate */}
                            </CardContent>
                        </Card>
                   )}

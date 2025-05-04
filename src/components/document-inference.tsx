@@ -26,7 +26,8 @@ export function DocumentInference({ onInferenceResult }: DocumentInferenceProps)
   const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState<'text' | 'microphone'>('text');
   const { toast } = useToast();
-  const { i18n } = useTranslation(); // Get i18n instance for current language
+  const { t, i18n } = useTranslation(); // Get i18n instance for current language
+  const [isHydrated, setIsHydrated] = useState(false); // State for hydration
 
   // Move useRef calls to the top level
   const isRecordingRef = useRef(isRecording);
@@ -34,6 +35,11 @@ export function DocumentInference({ onInferenceResult }: DocumentInferenceProps)
   const [recognition, setRecognition] = useState<any | null>(null); // Keep state if needed for conditional UI
   const stableOnInferenceResult = useCallback(onInferenceResult, [onInferenceResult]);
   const isBrowser = typeof window !== 'undefined';
+
+  // Effect to track hydration
+  useEffect(() => {
+    setIsHydrated(true);
+  }, []);
 
 
   // --- Speech Recognition Setup Effect ---
@@ -61,14 +67,14 @@ export function DocumentInference({ onInferenceResult }: DocumentInferenceProps)
 
             instance.onerror = (event: SpeechRecognitionErrorEvent) => {
                 console.error('Speech recognition error:', event.error, event.message);
-                 let errorMessage = `Error: ${event.error}. ${event.message || 'Try typing.'}`;
-                 if (event.error === 'no-speech') errorMessage = "No speech detected.";
-                 else if (event.error === 'audio-capture') errorMessage = "Mic capture failed.";
-                 else if (event.error === 'not-allowed' || event.error === 'service-not-allowed') errorMessage = "Mic access denied.";
-                 else if (event.error === 'network') errorMessage = "Network error during recognition.";
+                 let errorMessage = t('documentInference.micErrorDefault', { error: event.error, message: event.message || 'Try typing.' });
+                 if (event.error === 'no-speech') errorMessage = t('documentInference.micErrorNoSpeech');
+                 else if (event.error === 'audio-capture') errorMessage = t('documentInference.micErrorAudioCapture');
+                 else if (event.error === 'not-allowed' || event.error === 'service-not-allowed') errorMessage = t('documentInference.micErrorNotAllowed');
+                 else if (event.error === 'network') errorMessage = t('documentInference.micErrorNetwork');
                  else if (event.error === 'aborted' && !isRecordingRef.current) return; // Ignore intentional stops
 
-                toast({ title: "Speech Error", description: errorMessage, variant: "destructive" });
+                toast({ title: t('documentInference.micErrorTitle'), description: errorMessage, variant: "destructive" });
                 if (isRecordingRef.current) setIsRecording(false);
             };
 
@@ -108,7 +114,7 @@ export function DocumentInference({ onInferenceResult }: DocumentInferenceProps)
        }
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isBrowser, toast, i18n.language]); // Re-run if language changes
+  }, [isBrowser, toast, i18n.language, t]); // Added t to dependency array
 
   // Effect to sync isRecording state with its ref
    useEffect(() => {
@@ -120,7 +126,7 @@ export function DocumentInference({ onInferenceResult }: DocumentInferenceProps)
   const handleRecordToggle = () => {
      const currentRecognition = recognitionRef.current;
     if (!currentRecognition) {
-         toast({ title: "Unsupported", description: "Speech recognition unavailable.", variant: "destructive" });
+         toast({ title: t('documentInference.micUnsupportedTitle'), description: t('documentInference.micUnsupportedDescription'), variant: "destructive" });
          setActiveTab('text');
          return;
     }
@@ -133,7 +139,6 @@ export function DocumentInference({ onInferenceResult }: DocumentInferenceProps)
         } catch (e) { console.warn("Error stopping recognition:", e); }
         setIsRecording(false);
         // Don't toast on manual stop, less intrusive
-        // toast({ title: "Recording Stopped" });
     } else {
         // Start recording
         try {
@@ -142,11 +147,10 @@ export function DocumentInference({ onInferenceResult }: DocumentInferenceProps)
             console.log(`Starting recognition in language: ${currentRecognition.lang}.`);
              setIsRecording(true);
              // Don't toast on start, rely on UI change
-             // toast({ title: "Recording...", description: "Speak clearly." });
         } catch (e: any) {
             console.error("Error starting recognition:", e);
-            let errorMsg = `Could not start recording: ${e.message}.`;
-            if (e.name === 'NotAllowedError' || e.name === 'SecurityError') errorMsg = "Mic access denied.";
+            let errorMsg = t('documentInference.micStartErrorDefault', { message: e.message });
+            if (e.name === 'NotAllowedError' || e.name === 'SecurityError') errorMsg = t('documentInference.micErrorNotAllowed');
             else if (e.name === 'InvalidStateError') {
                 console.warn("Recognition already started? Attempting to stop and restart.");
                 try { currentRecognition.stop(); } catch {}
@@ -156,13 +160,13 @@ export function DocumentInference({ onInferenceResult }: DocumentInferenceProps)
                         currentRecognition.start();
                         setIsRecording(true);
                      } catch (nestedE: any) {
-                         toast({ title: "Recording Error", description: `Could not start recording: ${nestedE.message}.`, variant: "destructive" });
+                         toast({ title: t('documentInference.micStartErrorTitle'), description: t('documentInference.micStartErrorDefault', { message: nestedE.message }), variant: "destructive" });
                          setIsRecording(false);
                      }
                  }, 100);
                  return; // Exit early
             }
-             toast({ title: "Recording Error", description: errorMsg, variant: "destructive" });
+             toast({ title: t('documentInference.micStartErrorTitle'), description: errorMsg, variant: "destructive" });
              setIsRecording(false);
         }
     }
@@ -174,7 +178,7 @@ export function DocumentInference({ onInferenceResult }: DocumentInferenceProps)
     const logPrefix = "[handleInferDocument]";
     const trimmedDescription = description.trim();
     if (!trimmedDescription) {
-      toast({ title: "Input Required", description: "Please provide a description via text or microphone.", variant: "destructive" });
+      toast({ title: t('documentInference.inputRequiredTitle'), description: t('documentInference.inputRequiredDescription'), variant: "destructive" });
       stableOnInferenceResult(null, selectedState);
       return;
     }
@@ -205,7 +209,7 @@ export function DocumentInference({ onInferenceResult }: DocumentInferenceProps)
         });
 
         if (!response.ok) {
-            let errorMsg = "Failed to get suggestions from AI.";
+            let errorMsg = t('documentInference.analysisFailedDefault');
             let errorCode = 'API_ERROR';
             try {
                 const errorData = await response.json();
@@ -218,9 +222,9 @@ export function DocumentInference({ onInferenceResult }: DocumentInferenceProps)
             }
             // Handle specific known errors from API
             if (errorCode === 'STATIC_EXPORT_API_DISABLED') {
-                errorMsg = "AI analysis is currently unavailable in this deployment mode. Please contact support.";
+                errorMsg = t('documentInference.analysisFailedApiDisabled');
             }
-            toast({ title: "Analysis Failed", description: errorMsg, variant: "destructive" });
+            toast({ title: t('documentInference.analysisFailedTitle'), description: errorMsg, variant: "destructive" });
             stableOnInferenceResult(null, selectedState); // Clear results on error
              setIsLoading(false); // Ensure loading state is reset
             return;
@@ -232,14 +236,15 @@ export function DocumentInference({ onInferenceResult }: DocumentInferenceProps)
 
     } catch (error: unknown) {
         console.error(`${logPrefix} Network or other error during fetch:`, error);
-        toast({ title: "Network Error", description: "Could not connect to the analysis service. Please check your connection.", variant: "destructive" });
+        toast({ title: t('documentInference.networkErrorTitle'), description: t('documentInference.networkErrorDescription'), variant: "destructive" });
         stableOnInferenceResult(null, selectedState); // Clear results on error
     } finally {
         setIsLoading(false);
     }
     // --- END PRODUCTION ---
 
-  }, [description, toast, stableOnInferenceResult, selectedState, handleRecordToggle, i18n.language]); // Added i18n.language
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [description, toast, stableOnInferenceResult, selectedState, handleRecordToggle, i18n.language, t]); // Added t to dependency array
 
 
   // Handle tab change
@@ -251,6 +256,10 @@ export function DocumentInference({ onInferenceResult }: DocumentInferenceProps)
      }
   };
 
+  if (!isHydrated) {
+     // Render a placeholder or null during SSR and initial client render
+     return <div className="h-64 animate-pulse bg-muted rounded-lg"></div>; // Example placeholder
+  }
 
   return (
     <div className="space-y-6">
@@ -268,7 +277,7 @@ export function DocumentInference({ onInferenceResult }: DocumentInferenceProps)
               )}
               disabled={isLoading}
            >
-             <Text className="mr-2 h-4 w-4" /> Text
+             <Text className="mr-2 h-4 w-4" /> {t('Text')} {/* Translate Tab Label */}
            </TabsTrigger>
            <TabsTrigger
              value="microphone"
@@ -286,11 +295,11 @@ export function DocumentInference({ onInferenceResult }: DocumentInferenceProps)
            >
                {isRecording ? (
                   <>
-                    <StopCircle className="mr-2 h-4 w-4 text-red-600" /> Stop Recording
+                    <StopCircle className="mr-2 h-4 w-4 text-red-600" /> {t('Stop Recording')} {/* Translate Tab Label */}
                   </>
                ) : (
                    <>
-                     <Mic className="mr-2 h-4 w-4" /> Start Mic
+                     <Mic className="mr-2 h-4 w-4" /> {t('Start Mic')} {/* Translate Tab Label */}
                    </>
                )}
            </TabsTrigger>
@@ -302,7 +311,7 @@ export function DocumentInference({ onInferenceResult }: DocumentInferenceProps)
             <Label htmlFor="description-text" className="sr-only">Description (Text)</Label>
             <Textarea
               id="description-text"
-              placeholder="e.g., 'Renting my apartment', 'Starting a business with a partner', 'Need someone to stop contacting me...'"
+              placeholder={t('documentInference.describePlaceholder') || "e.g., 'Renting my apartment'..."} // Translate placeholder
               value={description} // Directly bind to description state
               onChange={(e) => setDescription(e.target.value)} // Directly update description
               rows={5}
@@ -311,7 +320,7 @@ export function DocumentInference({ onInferenceResult }: DocumentInferenceProps)
               aria-describedby="text-helper-text"
             />
              <p id="text-helper-text" className="text-xs text-muted-foreground pl-1">
-                Describe your situation clearly.
+                {t('documentInference.textHelper')} {/* Translate helper text */}
             </p>
           </div>
         </TabsContent>
@@ -328,12 +337,12 @@ export function DocumentInference({ onInferenceResult }: DocumentInferenceProps)
                  {/* Display transcript directly */}
                  {description || (
                     <span className="text-muted-foreground italic">
-                        {isRecording ? 'Listening...' : (recognition ? 'Click "Start Mic" tab to begin.' : 'Microphone not available.')}
+                         {isRecording ? t('documentInference.micTranscriptPlaceholderListening') : (recognition ? t('documentInference.micTranscriptPlaceholderStart') : t('documentInference.micTranscriptPlaceholderUnavailable'))} {/* Translate placeholder */}
                     </span>
                  )}
             </div>
              <p id="mic-helper-text" className="text-xs text-muted-foreground pl-1">
-               {isRecording ? <span className="text-red-600 font-medium">Recording... Speak clearly. Click "Stop Recording" tab when done.</span> : (recognition ? 'Click tab above to start recording.' : 'Mic unavailable.')}
+                {isRecording ? <span className="text-red-600 font-medium">{t('documentInference.micHelperRecording')}</span> : (recognition ? t('documentInference.micHelperStart') : t('documentInference.micHelperUnavailable'))} {/* Translate helper text */}
             </p>
           </div>
         </TabsContent>
@@ -343,7 +352,7 @@ export function DocumentInference({ onInferenceResult }: DocumentInferenceProps)
        <div className="space-y-2">
          <Label htmlFor="state-select" className="flex items-center">
              <MapPin className="mr-2 h-4 w-4 text-muted-foreground"/>
-             Relevant U.S. State (Optional)
+             {t('documentInference.stateLabel')} {/* Translate label */}
          </Label>
          <Select
              value={selectedState}
@@ -354,7 +363,7 @@ export function DocumentInference({ onInferenceResult }: DocumentInferenceProps)
              disabled={isLoading || isRecording} // Disable during loading or recording
          >
            <SelectTrigger id="state-select" className="w-full rounded-md shadow-sm" aria-label="Select relevant U.S. state">
-             <SelectValue placeholder="Select State..." />
+             <SelectValue placeholder={t('documentInference.statePlaceholder') || "Select State..."} /> {/* Translate placeholder */}
            </SelectTrigger>
            <SelectContent>
              {/* <SelectItem value="none">Not Applicable / Unsure</SelectItem> */}
@@ -366,7 +375,7 @@ export function DocumentInference({ onInferenceResult }: DocumentInferenceProps)
            </SelectContent>
          </Select>
          <p className="text-xs text-muted-foreground pl-1">
-              Helps tailor document suggestions. Select if applicable.
+              {t('documentInference.stateHelper')} {/* Translate helper text */}
          </p>
        </div>
 
@@ -374,9 +383,9 @@ export function DocumentInference({ onInferenceResult }: DocumentInferenceProps)
        {/* Infer Button */}
        <Button onClick={handleInferDocument} disabled={isLoading || isRecording || !description.trim()} className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-medium">
         {isLoading ? (
-          <> <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Analyzing... </>
+          <> <Loader2 className="mr-2 h-4 w-4 animate-spin" /> {t('documentInference.analyzingButton')} </>
         ) : (
-          <> <BrainCircuit className="mr-2 h-5 w-5"/> Analyze My Situation </>
+          <> <BrainCircuit className="mr-2 h-5 w-5"/> {t('documentInference.analyzeButton')} </>
         )}
       </Button>
 

@@ -1,4 +1,4 @@
-// src/components/HeroFeatureSection.tsx
+// src/components/landing/HeroFeatureSection.tsx
 'use client'
 
 import Link from 'next/link'
@@ -25,5 +25,3 @@ export default function HeroFeatureSection() {
     </>
   )
 }
-
-    

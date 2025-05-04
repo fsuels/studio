@@ -1,10 +1,11 @@
 // src/components/landing/FeatureTeaser.tsx
 "use client";
 
-import React from 'react';
+import React, { useState, useEffect } from 'react'; // Import useState and useEffect
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Zap, Lock, DollarSign } from 'lucide-react'; // Using relevant Lucide icons
 import { motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next'; // Import useTranslation
 
 interface FeatureCardProps {
   icon: React.ElementType;
@@ -36,23 +37,30 @@ const FeatureCard: React.FC<FeatureCardProps> = ({ icon: Icon, title, descriptio
 );
 
 export function FeatureTeaser() {
+  const { t, i18n } = useTranslation(); // Get translation function and i18n instance
+  const [isHydrated, setIsHydrated] = useState(false); // State for hydration
+
+  useEffect(() => {
+    setIsHydrated(true); // Set hydrated state on client
+  }, []);
+
   const features = [
     {
       icon: Zap,
-      title: "Blazing-Fast Workflow",
-      description: "AI guides you step-by-step, making document creation quick and intuitive.",
+      titleKey: "featureTeaser.workflow.title", // Use key for title
+      descriptionKey: "featureTeaser.workflow.description", // Use key for description
       delay: 0.1,
     },
     {
       icon: Lock,
-      title: "Secure & Compliant",
-      description: "Generate encrypted PDFs and utilize time-locked share links for enhanced security.",
+      titleKey: "featureTeaser.secure.title",
+      descriptionKey: "featureTeaser.secure.description",
       delay: 0.2,
     },
     {
       icon: DollarSign,
-      title: "Cost-Effective",
-      description: "Pay just $5 per document compared to $200+ typically charged by law firms.",
+      titleKey: "featureTeaser.costEffective.title",
+      descriptionKey: "featureTeaser.costEffective.description",
       delay: 0.3,
     },
   ];
@@ -62,7 +70,14 @@ export function FeatureTeaser() {
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {features.map((feature) => (
-            <FeatureCard key={feature.title} {...feature} />
+            <FeatureCard
+              key={feature.titleKey}
+              icon={feature.icon}
+              // Translate only when hydrated to prevent mismatches
+              title={isHydrated ? t(feature.titleKey) : '...'}
+              description={isHydrated ? t(feature.descriptionKey) : '...'}
+              delay={feature.delay}
+            />
           ))}
         </div>
       </div>

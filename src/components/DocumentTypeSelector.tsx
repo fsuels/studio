@@ -1,7 +1,7 @@
 // src/components/DocumentTypeSelector.tsx
 'use client'
 
-import React from 'react';
+import React, { useState, useEffect } from 'react'; // Import useState and useEffect
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'; // Adjusted imports
 import { useTranslation } from 'react-i18next';
 import { Lightbulb } from 'lucide-react'; // Added an icon
@@ -14,25 +14,38 @@ interface Props {
 }
 
 export default function DocumentTypeSelector({ suggestions, onSelect }: Props) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const [isHydrated, setIsHydrated] = useState(false); // State for hydration
+
+  useEffect(() => {
+    setIsHydrated(true); // Set hydrated state on client
+  }, []);
 
   if (!suggestions || suggestions.length === 0) return null;
 
   // Ensure "General Inquiry" has a standard reason if none provided by AI
   const processedSuggestions = suggestions.map(s => ({
       ...s,
-      reasoning: s.documentType === 'General Inquiry' && !s.reasoning ? 'Your request is broad or doesn\'t match specific templates. Select this if unsure.' : s.reasoning
+      reasoning: s.documentType === 'General Inquiry' && !s.reasoning
+        ? (isHydrated ? t('docTypeSelector.generalInquiryReason') : '...')
+        : s.reasoning
   }));
+
+  // Show placeholder or nothing if not hydrated
+  if (!isHydrated) {
+    return <div className="mt-6 h-40 animate-pulse bg-muted/70 rounded-lg shadow-inner border border-border"></div>; // Example placeholder
+  }
+
 
   return (
     <Card className="mt-6 bg-secondary/70 rounded-lg shadow-inner border border-border animate-fade-in">
        <CardHeader className="pb-3 pt-4">
           <CardTitle className="text-lg flex items-center font-medium">
               <Lightbulb className="mr-2 h-5 w-5 text-primary" />
-              Suggested Documents
+              {t('docTypeSelector.suggestedTitle')} {/* Translate title */}
           </CardTitle>
            <CardDescription className="text-sm">
-             {t('Based on your description, we suggest the following. Please select the best fit to continue.')}
+             {t('docTypeSelector.selectPrompt')} {/* Translate prompt */}
            </CardDescription>
         </CardHeader>
       <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4 pb-4">
@@ -54,12 +67,13 @@ export default function DocumentTypeSelector({ suggestions, onSelect }: Props) {
                         doc.confidence > 0.4 ? 'bg-yellow-100 text-yellow-800' :
                         'bg-red-100 text-red-800'
                     }`}>
-                        {(doc.confidence * 100).toFixed(0)}% Match
+                        {(doc.confidence * 100).toFixed(0)}{t('docTypeSelector.confidenceSuffix')} {/* Translate suffix */}
                     </span>
                  )}
               </CardTitle>
               <CardDescription className="text-xs text-muted-foreground">
-                {doc.reasoning || 'No reasoning provided.'} {/* Use reasoning field */}
+                 {/* Translate reasoning */}
+                 {doc.reasoning || t('docTypeSelector.noReasoning')}
               </CardDescription>
             </CardContent>
           </Card>
@@ -70,4 +84,4 @@ export default function DocumentTypeSelector({ suggestions, onSelect }: Props) {
   );
 }
 
-    
+

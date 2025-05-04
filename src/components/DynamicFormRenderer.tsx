@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react' // Import useEffect
 import { Input } from '@/components/ui/input'
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea' // Import Textarea
@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button'
 import { FormField } from '@/data/formSchemas'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'; // Import Card components
 import { Check, Loader2 } from 'lucide-react'; // Import icons
+import { useTranslation } from 'react-i18next'; // Import useTranslation
 
 
 interface Props {
@@ -28,6 +29,12 @@ export default function DynamicFormRenderer({ documentType, schema, onSubmit, is
   const [values, setValues] = useState<Record<string, any>>({}); // Allow any value type initially
   const [isLoading, setIsLoading] = useState(false); // Add loading state
   const [hasSubmitted, setHasSubmitted] = useState(isReadOnly); // Initialize based on isReadOnly
+  const { t } = useTranslation(); // Get translation function
+  const [isHydrated, setIsHydrated] = useState(false); // State for hydration
+
+  useEffect(() => {
+    setIsHydrated(true); // Set hydrated state on client
+  }, []);
 
   const handleChange = (id: string, value: string | number | boolean | undefined) => {
       if (isReadOnly) return;
@@ -43,7 +50,7 @@ export default function DynamicFormRenderer({ documentType, schema, onSubmit, is
       // Basic validation: Check if all required fields have values
       const missingRequired = schema.some(field => field.required && (values[field.id] === undefined || values[field.id] === ''));
       if (missingRequired) {
-          alert('Please fill in all required fields (*).'); // Simple alert, replace with better UI feedback
+          alert(t('dynamicForm.errorMissingRequired')); // Use translated alert
           setIsLoading(false);
           return;
       }
@@ -58,6 +65,10 @@ export default function DynamicFormRenderer({ documentType, schema, onSubmit, is
       }, 1000);
   };
 
+  // Show placeholder or nothing if not hydrated
+  if (!isHydrated) {
+    return <div className="h-96 animate-pulse bg-muted rounded-lg shadow-lg border border-border"></div>; // Example placeholder
+  }
 
     if (schema.length === 0) {
         // Handle case where schema is empty (e.g., General Inquiry or no questions needed)
@@ -66,21 +77,21 @@ export default function DynamicFormRenderer({ documentType, schema, onSubmit, is
                  <CardHeader>
                      <div className="flex items-center space-x-2">
                          <QuestionnaireIcon />
-                         <CardTitle className="text-2xl">Step 2: Details for {documentType}</CardTitle>
+                         <CardTitle className="text-2xl">{t('dynamicForm.stepTitle', { documentType })}</CardTitle>
                      </div>
                      <CardDescription>
-                          No specific questions are needed for this document type.
+                          {t('dynamicForm.noQuestionsNeeded')} {/* Translate message */}
                      </CardDescription>
                  </CardHeader>
                  <CardContent>
-                     <p className="text-muted-foreground italic">You can proceed to the next step.</p>
+                     <p className="text-muted-foreground italic">{t('dynamicForm.proceedMessage')}</p> {/* Translate message */}
                  </CardContent>
                  <CardFooter>
                     <Button onClick={() => { if (!hasSubmitted) onSubmit({}); setHasSubmitted(true); }} className="w-full" disabled={hasSubmitted || isReadOnly}>
                       {hasSubmitted || isReadOnly ? (
-                          <> <Check className="mr-2 h-4 w-4" /> Confirmed - Proceed </>
+                          <> <Check className="mr-2 h-4 w-4" /> {t('dynamicForm.confirmedButton')} </>
                       ) : (
-                          'Confirm & Proceed Without Questions'
+                          t('dynamicForm.confirmProceedButton')
                       )}
                     </Button>
                  </CardFooter>
@@ -94,10 +105,10 @@ export default function DynamicFormRenderer({ documentType, schema, onSubmit, is
        <CardHeader>
          <div className="flex items-center space-x-2">
            <QuestionnaireIcon />
-           <CardTitle className="text-2xl">Step 2: Provide Details for {documentType}</CardTitle>
+           <CardTitle className="text-2xl">{t('dynamicForm.stepTitle', { documentType })}</CardTitle>
          </div>
          <CardDescription>
-           {isReadOnly ? 'Review the details provided below.' : 'Answer the questions below.'}
+           {isReadOnly ? t('dynamicForm.reviewDescription') : t('dynamicForm.answerDescription')} {/* Translate descriptions */}
          </CardDescription>
        </CardHeader>
        <CardContent>
@@ -105,7 +116,7 @@ export default function DynamicFormRenderer({ documentType, schema, onSubmit, is
             {schema.map((field) => (
               <div key={field.id} className="space-y-2">
                 <Label htmlFor={field.id}>
-                    {field.label} {field.required && <span className="text-destructive">*</span>}
+                    {field.label} {field.required && <span className="text-destructive">{t('dynamicForm.requiredField')}</span>} {/* Translate required indicator */}
                 </Label>
                 {field.type === 'select' ? (
                   <Select
@@ -116,11 +127,11 @@ export default function DynamicFormRenderer({ documentType, schema, onSubmit, is
                     name={field.id}
                    >
                     <SelectTrigger id={field.id} className={`${isReadOnly ? 'bg-muted/50 border-dashed cursor-not-allowed' : 'bg-background'}`}>
-                      <SelectValue placeholder={field.placeholder || 'Select an option'} />
+                      <SelectValue placeholder={field.placeholder || t('dynamicForm.selectPlaceholder')} /> {/* Translate placeholder */}
                     </SelectTrigger>
                     <SelectContent>
                       {field.options?.map(opt => (
-                        <SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>
+                        <SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem> // Assuming options have label/value
                       ))}
                     </SelectContent>
                   </Select>
@@ -131,7 +142,7 @@ export default function DynamicFormRenderer({ documentType, schema, onSubmit, is
                       onChange={(e) => handleChange(field.id, e.target.value)}
                       required={field.required}
                       disabled={isReadOnly || isLoading}
-                      placeholder={field.placeholder || ''}
+                      placeholder={field.placeholder || ''} // Placeholder from schema is likely specific enough
                       className={`resize-none ${isReadOnly ? 'bg-muted/50 border-dashed cursor-not-allowed' : 'bg-background'}`}
                       rows={3}
                       name={field.id}
@@ -140,7 +151,7 @@ export default function DynamicFormRenderer({ documentType, schema, onSubmit, is
                   <Input
                     id={field.id}
                     value={values[field.id] || ''}
-                    placeholder={field.placeholder || ''}
+                    placeholder={field.placeholder || ''} // Placeholder from schema
                     required={field.required}
                     type={field.type === 'date' ? 'date' : field.type === 'number' ? 'number' : 'text'}
                     onChange={(e) => handleChange(field.id, e.target.value)}
@@ -151,16 +162,6 @@ export default function DynamicFormRenderer({ documentType, schema, onSubmit, is
                 )}
               </div>
             ))}
-            {/* Hide button in read-only mode or if already submitted */}
-            {/* {!isReadOnly && !hasSubmitted && (
-                 <Button type="submit" className="mt-4 w-full" disabled={isLoading}>
-                     {isLoading ? (
-                         <> <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Submitting... </>
-                     ) : (
-                         'Confirm & Proceed'
-                     )}
-                 </Button>
-             )} */}
           </form>
        </CardContent>
         <CardFooter>
@@ -168,15 +169,15 @@ export default function DynamicFormRenderer({ documentType, schema, onSubmit, is
                  {isLoading ? (
                    <>
                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                     Saving Answers...
+                     {t('dynamicForm.savingButton')} {/* Translate button text */}
                    </>
                  ) : hasSubmitted || isReadOnly ? (
                      <>
                        <Check className="mr-2 h-4 w-4" />
-                       Answers Confirmed - Proceed
+                       {t('dynamicForm.confirmedButton')} {/* Translate button text */}
                      </>
                  ): (
-                   'Confirm All Answers & Proceed'
+                   t('dynamicForm.confirmAnswersButton') /* Translate button text */
                  )}
                </Button>
         </CardFooter>

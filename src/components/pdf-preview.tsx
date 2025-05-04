@@ -1,11 +1,12 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react'; // Import useEffect
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Loader2, FileSignature, Download, CheckCircle } from 'lucide-react'; // Added CheckCircle
 import { useToast } from '@/hooks/use-toast';
 import { signPdfDocument, DigitalSignatureResult } from '@/services/digital-signature';
+import { useTranslation } from 'react-i18next'; // Import useTranslation
 
 interface PdfPreviewProps {
   documentDataUrl?: string; // URL to the generated PDF
@@ -17,6 +18,13 @@ export function PdfPreview({ documentDataUrl, documentName = "document.pdf", isR
   const [isSigning, setIsSigning] = useState(false);
   const [signatureResult, setSignatureResult] = useState<DigitalSignatureResult | null>(null);
   const { toast } = useToast();
+  const { t } = useTranslation(); // Get translation function
+  const [isHydrated, setIsHydrated] = useState(false); // State for hydration
+
+  useEffect(() => {
+    setIsHydrated(true); // Set hydrated state on client
+  }, []);
+
 
   // Placeholder for actual PDF data fetching or generation
   // In a real app, pdfData might be fetched based on documentDataUrl or passed directly
@@ -26,7 +34,7 @@ export function PdfPreview({ documentDataUrl, documentName = "document.pdf", isR
     if (isReadOnly || (signatureResult && signatureResult.success)) return; // Prevent signing if read-only or already signed
 
     if (!documentDataUrl) { // Check documentDataUrl existence before proceeding
-       toast({ title: "No Document Data", description: "Cannot sign an empty document.", variant: "destructive" });
+       toast({ title: t('pdfPreview.noDocumentDataTitle'), description: t('pdfPreview.noDocumentDataDescriptionSign'), variant: "destructive" });
       return;
     }
 
@@ -35,7 +43,7 @@ export function PdfPreview({ documentDataUrl, documentName = "document.pdf", isR
      const currentPdfData = pdfData || new Uint8Array([/* Fetch based on documentDataUrl */]); // Replace with actual fetch logic if needed
 
      if (!currentPdfData || currentPdfData.length === 0) {
-         toast({ title: "No Document Data", description: "Could not load PDF data for signing.", variant: "destructive" });
+         toast({ title: t('pdfPreview.noDocumentDataTitle'), description: t('pdfPreview.noDocumentDataDescriptionLoad'), variant: "destructive" });
          return;
      }
 
@@ -56,15 +64,15 @@ export function PdfPreview({ documentDataUrl, documentName = "document.pdf", isR
       setSignatureResult(result);
 
       if (result.success) {
-        toast({ title: "Document Signed", description: result.message });
+        toast({ title: t('pdfPreview.signingSuccessTitle'), description: t('pdfPreview.signingSuccessDescription') });
         // Optional: Automatically trigger download after successful signing
         // downloadFile(result.signedPdf, `signed_${documentName}`);
       } else {
-        toast({ title: "Signing Failed", description: result.message, variant: "destructive" });
+        toast({ title: t('pdfPreview.signingFailedTitle'), description: result.message, variant: "destructive" });
       }
     } catch (error) {
       console.error('Error signing document:', error);
-      toast({ title: "Signing Error", description: "An unexpected error occurred.", variant: "destructive" });
+      toast({ title: t('pdfPreview.signingErrorTitle'), description: t('pdfPreview.signingErrorDescription'), variant: "destructive" });
     } finally {
       setIsSigning(false);
     }
@@ -85,18 +93,23 @@ export function PdfPreview({ documentDataUrl, documentName = "document.pdf", isR
     document.body.removeChild(a);
   };
 
+  // Show placeholder or nothing if not hydrated
+  if (!isHydrated) {
+    return <div className="h-[600px] animate-pulse bg-muted rounded-lg shadow-lg border border-border"></div>; // Example placeholder
+  }
+
 
   return (
     <Card className={`shadow-lg rounded-lg bg-card border border-border ${isReadOnly ? 'opacity-75' : ''}`}>
       <CardHeader>
         <div className="flex items-center space-x-2">
           <FileSignature className="h-6 w-6 text-primary" />
-          <CardTitle className="text-2xl">Step 4: Preview & Sign Document</CardTitle> {/* Updated Step Number */}
+          <CardTitle className="text-2xl">{t('pdfPreview.stepTitle')}</CardTitle> {/* Updated Step Number */}
         </div>
         <CardDescription>
           {isReadOnly
-            ? "Document preview below. Signing and sharing is available in the next step."
-            : "Review the generated document. You can digitally sign it when ready."}
+            ? t('pdfPreview.descriptionReadOnly')
+            : t('pdfPreview.descriptionSign')}
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -105,14 +118,18 @@ export function PdfPreview({ documentDataUrl, documentName = "document.pdf", isR
           {documentDataUrl ? (
              // Use an embed or object tag for better browser compatibility and control
              <object data={documentDataUrl} type="application/pdf" width="100%" height="500px" className="border-0">
-                <p className="p-4 text-muted-foreground">Your browser does not support embedded PDFs. You can <a href={documentDataUrl} download={documentName} className="underline text-primary">download the PDF</a> to view it.</p>
+                <p className="p-4 text-muted-foreground">
+                  {t('pdfPreview.browserNotSupported')} {' '}
+                  <a href={documentDataUrl} download={documentName} className="underline text-primary">
+                    {t('pdfPreview.downloadLink')}
+                  </a>{' '}
+                  {t('pdfPreview.toViewIt')}
+                </p>
              </object>
-             // Alternative using iframe (simpler but sometimes less reliable)
-             // <iframe src={documentDataUrl} width="100%" height="500px" title="PDF Preview" className="border-0"></iframe>
           ) : (
              <div className="p-4 text-center text-muted-foreground">
                 <Loader2 className="mx-auto h-8 w-8 animate-spin mb-2" />
-                Generating document preview...
+                {t('pdfPreview.generatingPreview')}
              </div>
           )}
         </div>
@@ -122,23 +139,13 @@ export function PdfPreview({ documentDataUrl, documentName = "document.pdf", isR
             <div className="p-3 bg-green-100 border border-green-300 rounded-md text-green-800 text-sm flex items-center justify-between gap-2">
                <div className="flex items-center gap-2">
                  <CheckCircle className="h-5 w-5" />
-                 <span>Document successfully signed! Proceed to the next step to share or download.</span>
+                 <span>{t('pdfPreview.signingSuccessDescription')}</span>
                </div>
-               {/* Keep download button maybe, or move it to the final step */}
-               {/* <Button
-                 variant="outline"
-                 size="sm"
-                 onClick={() => downloadFile(signatureResult.signedPdf, `signed_${documentName}`)}
-                 className="bg-green-200 hover:bg-green-300 border-green-400 text-green-900"
-               >
-                 <Download className="mr-2 h-4 w-4" />
-                 Download Signed PDF
-               </Button> */}
             </div>
         )}
          {signatureResult && !signatureResult.success && !isSigning && (
             <div className="p-3 bg-red-100 border border-red-300 rounded-md text-red-800 text-sm">
-               Signing failed: {signatureResult.message}
+               {t('pdfPreview.signingFailedTitle')}: {signatureResult.message}
             </div>
         )}
 
@@ -148,22 +155,22 @@ export function PdfPreview({ documentDataUrl, documentName = "document.pdf", isR
            onClick={handleSignDocument}
            disabled={isSigning || !documentDataUrl || (!!signatureResult && signatureResult.success) || isReadOnly}
            className="w-full transition-colors duration-200"
-           aria-label={signatureResult?.success ? "Document Already Signed" : "Sign Document Digitally"}
+           aria-label={signatureResult?.success ? t('pdfPreview.alreadySignedButton') : t('pdfPreview.signButton')}
         >
           {isSigning ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              Signing...
+              {t('pdfPreview.signingButton')}
             </>
           ) : signatureResult?.success ? (
              <>
                <CheckCircle className="mr-2 h-4 w-4 text-green-300" />
-               Document Signed - Proceed to Next Step
+               {t('pdfPreview.signedButton')}
              </>
           ) : (
              <>
                <FileSignature className="mr-2 h-4 w-4" />
-               Sign Document Digitally
+               {t('pdfPreview.signButton')}
              </>
           )}
         </Button>
