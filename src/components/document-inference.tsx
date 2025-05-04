@@ -20,6 +20,7 @@ const MockSpeechRecognition = {
   abort: () => console.log("Mock SpeechRecognition aborted"),
   continuous: false,
   interimResults: false,
+  onend: () => {} // Added onend mock
 };
 
 // Define props for the component, including the callback
@@ -43,17 +44,22 @@ export function DocumentInference({ onInferenceResult }: DocumentInferenceProps)
   // Memoize the callback to prevent unnecessary re-renders if passed inline
   const stableOnInferenceResult = useCallback(onInferenceResult, [onInferenceResult]);
 
+  // Helper function to safely check for window object
+  const isBrowser = typeof window !== 'undefined';
+
 
   useEffect(() => {
     // Check for browser support and initialize SpeechRecognition
     const SpeechRecognitionApi = isBrowser ? (window.SpeechRecognition || (window as any).webkitSpeechRecognition) : null;
 
+    let recognitionInstance: SpeechRecognition | null = null;
+
     if (SpeechRecognitionApi) {
-        const recognitionInstance = new SpeechRecognitionApi();
+        recognitionInstance = new SpeechRecognitionApi();
         recognitionInstance.continuous = true;
         recognitionInstance.interimResults = true;
 
-        recognitionInstance.onresult = (event: any) => {
+        recognitionInstance.onresult = (event: SpeechRecognitionEvent) => {
             let interimTranscript = '';
             let finalTranscript = '';
             for (let i = event.resultIndex; i < event.results.length; ++i) {
@@ -71,9 +77,9 @@ export function DocumentInference({ onInferenceResult }: DocumentInferenceProps)
             // setEditedDescription(description + interimTranscript); // If editing while recording
         };
 
-        recognitionInstance.onerror = (event: any) => {
-            console.error('Speech recognition error:', event.error);
-             let errorMessage = `Error: ${event.error}. Please try again or type your description.`;
+        recognitionInstance.onerror = (event: SpeechRecognitionErrorEvent) => {
+            console.error('Speech recognition error:', event.error, event.message);
+             let errorMessage = `Error: ${event.error}. ${event.message || 'Please try again or type your description.'}`;
              if (event.error === 'no-speech') {
                  errorMessage = "No speech detected. Please ensure your microphone is working and speak clearly.";
              } else if (event.error === 'audio-capture') {
@@ -86,17 +92,15 @@ export function DocumentInference({ onInferenceResult }: DocumentInferenceProps)
                 description: errorMessage,
                 variant: "destructive",
             });
-            setIsRecording(false);
+            setIsRecording(false); // Ensure recording state is stopped on error
         };
 
          recognitionInstance.onend = () => {
             // Automatically stop the recording state when the service disconnects
             // This can happen due to silence or network issues
-            if (isRecording) { // Only update state if we thought we were recording
+            if (isRecordingRef.current) { // Use ref to check current recording status
                  setIsRecording(false);
                  console.log("Speech recognition service disconnected.");
-                 // Optionally, inform the user
-                 // toast({ title: "Recording Stopped", description: "Speech recognition stopped." });
             }
         };
 
@@ -110,8 +114,7 @@ export function DocumentInference({ onInferenceResult }: DocumentInferenceProps)
              onresult: recognitionInstance.onresult,
              onerror: recognitionInstance.onerror,
              onend: recognitionInstance.onend, // Add onend handler
-             continuous: recognitionInstance.continuous,
-             interimResults: recognitionInstance.interimResults,
+             // We don't need to explicitly set continuous/interimResults here as they are set on the instance above
          };
 
 
@@ -119,32 +122,31 @@ export function DocumentInference({ onInferenceResult }: DocumentInferenceProps)
     } else {
         console.warn('Speech Recognition API not supported in this browser.');
     }
+
+    // Ref to track recording state reliably in effect cleanup
+    const isRecordingRef = React.useRef(isRecording);
+    isRecordingRef.current = isRecording;
+
     // Cleanup function to stop recognition if component unmounts while recording
     return () => {
-        // Check if recognition exists and stop/abort method is available
-        if (recognition && typeof recognition.stop === 'function') {
-           if (isRecording) {
+       if (recognitionInstance && isRecordingRef.current) {
+           try {
+              recognitionInstance.stop();
+              console.log("Stopped speech recognition on component unmount.");
+           } catch (e) {
+               console.warn("Could not stop speech recognition on unmount:", e);
                try {
-                  recognition.stop();
-                  console.log("Stopped speech recognition on component unmount.");
-               } catch (e) {
-                   console.warn("Could not stop speech recognition on unmount:", e);
-                   // Try abort as a fallback
-                    if (typeof recognition.abort === 'function') {
-                         try {
-                           recognition.abort();
-                           console.log("Aborted speech recognition on component unmount.");
-                         } catch (abortError) {
-                              console.warn("Could not abort speech recognition on unmount:", abortError);
-                         }
-                    }
-               }
+                  recognitionInstance.abort();
+                  console.log("Aborted speech recognition on unmount.");
+                } catch (abortError) {
+                     console.warn("Could not abort speech recognition on unmount:", abortError);
+                }
            }
-        }
+       }
     };
 
-  // }, [toast, isRecording]); // Original dependencies
-  }, [toast, isRecording, recognition]); // Added recognition to dependency array for cleanup logic
+  // Only depend on toast. Recognition instance and isBrowser don't change.
+  }, [toast, isBrowser]); // Removed isRecording from dependency array
 
 
   const handleRecord = () => {
@@ -158,25 +160,42 @@ export function DocumentInference({ onInferenceResult }: DocumentInferenceProps)
     }
 
     if (isRecording) {
-      recognition.stop(); // This will trigger the onend event handler
-      // setIsRecording(false); // State is now set in onend
+       try {
+           recognition.stop(); // This should trigger the onend event handler which sets isRecording to false
+           console.log("Stopping recognition...");
+       } catch (e) {
+            console.warn("Error stopping recognition:", e);
+            // Force stop state if stop fails unexpectedly
+            setIsRecording(false);
+       }
+
     } else {
        // Consider clearing description or appending based on desired UX
        // setDescription(''); // Uncomment to clear previous description
        try {
             recognition.start();
-            setIsRecording(true);
+            setIsRecording(true); // Set recording state to true
             toast({
                 title: "Recording Started",
-                description: "Speak clearly into your microphone. Recording will stop automatically after a pause.",
+                description: "Speak clearly into your microphone. Click the mic again to stop.", // Updated description
             });
        } catch (e: any) {
             console.error("Error starting recognition:", e);
+             let errorMsg = `Error: ${e.message || 'Unknown error'}.`;
+             if (e.name === 'NotAllowedError') {
+                errorMsg = "Microphone access denied. Please allow access in browser settings.";
+             } else if (e.name === 'InvalidStateError') {
+                 errorMsg = "Recognition service is already active or in an invalid state.";
+                 // Recognition might already be running or stopped improperly
+                 setIsRecording(false); // Correct state if needed
+             }
              toast({
                 title: "Could Not Start Recording",
-                description: `Error: ${e.message}. Please check microphone permissions.`,
+                description: errorMsg,
                 variant: "destructive",
             });
+             // Ensure state is correct if start fails
+             if (isRecording) setIsRecording(false);
        }
 
     }
@@ -196,8 +215,10 @@ export function DocumentInference({ onInferenceResult }: DocumentInferenceProps)
     stableOnInferenceResult(null); // Notify parent that result is cleared
 
     try {
+      console.log("[handleSubmit] Calling inferDocumentType with description:", currentDescription);
       const input: InferDocumentTypeInput = { description: currentDescription };
       const output = await inferDocumentType(input);
+       console.log("[handleSubmit] inferDocumentType successful. Output:", output);
       setResult(output);
       stableOnInferenceResult(output); // Pass result to parent
       // Add a success toast
@@ -205,25 +226,22 @@ export function DocumentInference({ onInferenceResult }: DocumentInferenceProps)
         title: "Analysis Complete",
         description: `Suggested document type: ${output.documentType}`,
       });
-    } catch (error) {
-       // Log the specific error to the console (server or client depending on where it runs)
+    } catch (error: unknown) {
+      // Log the full error object for better debugging
       console.error('[handleSubmit Error] Error inferring document type:', error);
 
-      // Provide more context in the user-facing error message
-      let errorMessage = "Could not process your request due to a server error. Please try again later.";
+      // Create a user-friendly error message from the Error object
+      let errorMessage = "Could not process your request due to an unexpected error. Please try again later.";
        if (error instanceof Error) {
-          // Check for common API key issues (example, actual error message might vary)
-          // Note: Be cautious about exposing too much detail from error messages to the client.
-          if (error.message.includes('API key not valid') || error.message.includes('invalid api key')) {
-              errorMessage = "Server configuration error. Please contact support.";
-          } else if (error.message.includes('quota')) {
-              errorMessage = "The AI service is busy or quota exceeded. Please try again later.";
-          } else if (error.message.includes('fetch failed') || error.message.includes('network error')) {
-              errorMessage = "Network error. Could not reach the AI service. Please check your connection and try again.";
-          }
-          // For generic errors, you might append the message if it's deemed safe/useful
-          // errorMessage += ` (Details: ${error.message})`;
-      }
+           // Use the message from the Error object thrown by the server action
+           errorMessage = error.message;
+
+           // You can still check for specific patterns if needed, but prioritize the thrown message
+          // Example: if (error.message.includes('API key not valid')) { ... }
+       } else {
+            // Handle cases where the thrown object is not an Error instance
+            errorMessage = `An unexpected error occurred: ${String(error)}`;
+       }
 
 
       toast({
@@ -254,7 +272,18 @@ export function DocumentInference({ onInferenceResult }: DocumentInferenceProps)
     setDescription(newDescription);
     setIsEditingDescription(false);
     // Re-submit with the updated description
-    handleSubmit(newDescription);
+    if (newDescription) { // Only submit if not empty after trimming
+        handleSubmit(newDescription);
+    } else {
+         toast({
+            title: "Input Required",
+            description: "Description cannot be empty after editing.",
+            variant: "destructive",
+        });
+         // Optionally clear results if description becomes empty
+         setResult(null);
+         stableOnInferenceResult(null);
+    }
   };
 
    // Effect to initialize editedDescription when description changes and result exists
@@ -277,7 +306,8 @@ export function DocumentInference({ onInferenceResult }: DocumentInferenceProps)
             onChange={(e) => isEditingDescription ? setEditedDescription(e.target.value) : setDescription(e.target.value)}
             rows={5}
             className="pr-20 rounded-md shadow-sm border border-input focus-visible:ring-2 focus-visible:ring-ring" // Added focus styles
-            readOnly={isLoading || isRecording} // Prevent editing while loading/recording
+            readOnly={isLoading || isRecording || !isEditingDescription && !!result} // Prevent editing while loading/recording or if result exists and not editing
+            disabled={isLoading || isRecording} // Disable textarea itself during loading/recording
             aria-describedby="description-helper-text"
           />
           <div className="absolute top-2 right-2 flex flex-col space-y-1.5">
@@ -285,17 +315,19 @@ export function DocumentInference({ onInferenceResult }: DocumentInferenceProps)
                 variant="outline"
                 size="icon"
                 onClick={handleRecord}
-                disabled={isLoading || isEditingDescription}
+                disabled={isLoading || isEditingDescription || (!!result && !isEditingDescription)} // Disable record when editing text or result exists and not editing
                 className={`transition-colors duration-200 ${isRecording ? 'bg-red-100 hover:bg-red-200 text-red-700 border-red-300' : 'hover:bg-accent'} rounded-full w-8 h-8`} // Smaller, rounded button
                 aria-label={isRecording ? 'Stop Recording' : 'Start Recording'}
               >
                 <Mic className={`h-4 w-4 ${isRecording ? 'animate-pulse' : ''}`} />
               </Button>
-             {result && !isEditingDescription && !isLoading && (
+             {/* Show edit button only if there's a result, not loading, and not currently editing */}
+             {result && !isLoading && !isEditingDescription && (
                <Button variant="ghost" size="icon" onClick={handleEditDescription} aria-label="Edit Description" className="rounded-full w-8 h-8">
                   <Edit2 className="h-4 w-4" />
                </Button>
              )}
+             {/* Show save/cancel only when editing */}
              {isEditingDescription && (
                  <div className="flex flex-col space-y-1.5">
                      <Button variant="ghost" size="icon" onClick={handleSaveDescription} aria-label="Save Description" className="rounded-full w-8 h-8 hover:bg-green-100">
@@ -309,11 +341,14 @@ export function DocumentInference({ onInferenceResult }: DocumentInferenceProps)
           </div>
         </div>
          <p id="description-helper-text" className="text-xs text-muted-foreground">
-             {isRecording ? <span className="animate-pulse">Listening... Speak clearly.</span> : "You can type or use the microphone."}
+             {isRecording ? <span className="animate-pulse">Listening... Click mic again to stop.</span> : "You can type or use the microphone."}
+              {isEditingDescription && <span> Editing description. Click Save (✓) or Cancel (✕).</span>}
+               {result && !isEditingDescription && <span> Analysis complete. Click <Edit2 className="inline h-3 w-3 mx-0.5" /> to edit description and re-analyze.</span>}
          </p>
       </div>
 
-       <Button onClick={() => handleSubmit(description)} disabled={isLoading || isRecording || isEditingDescription} className="w-full">
+       {/* Disable analyze button if editing description, recording, or result already exists and not editing */}
+       <Button onClick={() => handleSubmit(description)} disabled={isLoading || isRecording || isEditingDescription || (!!result && !isEditingDescription)} className="w-full">
         {isLoading ? (
           <>
             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -322,13 +357,14 @@ export function DocumentInference({ onInferenceResult }: DocumentInferenceProps)
         ) : (
           <>
             <BrainCircuit className="mr-2 h-4 w-4" />
-            Infer Document Type
+            {result ? 'Analyze Again' : 'Infer Document Type'}
           </>
         )}
       </Button>
 
 
-      {result && !isLoading && ( // Only show result card when not loading
+      {/* Only show result card when not loading AND not editing the description */}
+      {result && !isLoading && !isEditingDescription && (
         <Card className="mt-6 bg-secondary rounded-lg shadow-inner border border-border">
           <CardHeader className="pb-2 pt-4">
             <CardTitle className="text-lg flex items-center font-medium">
@@ -344,7 +380,7 @@ export function DocumentInference({ onInferenceResult }: DocumentInferenceProps)
           </CardContent>
            <CardFooter className="pt-0 pb-3">
              <p className="text-xs text-muted-foreground">
-               If this isn't right, try editing the description above and analyze again.
+               If this isn't right, click the <Edit2 className="inline h-3 w-3 mx-0.5" /> icon above to edit the description and analyze again.
              </p>
            </CardFooter>
         </Card>
@@ -353,10 +389,8 @@ export function DocumentInference({ onInferenceResult }: DocumentInferenceProps)
   );
 }
 
-// Helper function to safely check for window object
-const isBrowser = typeof window !== 'undefined';
 
-// Assign window properties conditionally
-if (isBrowser) {
+// Assign window properties conditionally for SSR safety
+if (typeof window !== 'undefined') {
   window.SpeechRecognition = window.SpeechRecognition || (window as any).webkitSpeechRecognition;
 }
