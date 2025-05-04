@@ -1,7 +1,7 @@
 import type {NextConfig} from 'next';
 
 const nextConfig: NextConfig = {
-  output: 'export', // Configure for static export
+  // output: 'export', // Removed: Incompatible with Server Actions/Genkit
   /* config options here */
   typescript: {
     ignoreBuildErrors: true,
@@ -10,7 +10,7 @@ const nextConfig: NextConfig = {
     ignoreDuringBuilds: true,
   },
   images: {
-    unoptimized: true, // Required for static export with next/image
+    // unoptimized: true, // Removed: Only needed for static export
     remotePatterns: [
       {
         protocol: 'https',

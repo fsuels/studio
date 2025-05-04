@@ -17,6 +17,9 @@ const QuestionnaireIcon = () => (
 
 
 export default function Home() {
+  // Log when the component starts rendering
+  console.log('[page.tsx] Home component rendering...');
+
   const [inferredDocType, setInferredDocType] = useState<string | null>(null);
   const [questionnaireAnswers, setQuestionnaireAnswers] = useState<Record<string, any> | null>(null);
   // Placeholder for PDF data URL - In a real app, this would be generated
@@ -24,6 +27,7 @@ export default function Home() {
 
   // Callback to receive inferred document type from DocumentInference
   const handleDocumentInferred = (result: InferDocumentTypeOutput | null) => {
+    console.log('[page.tsx] handleDocumentInferred called with:', result);
     setInferredDocType(result ? result.documentType : null);
     // Reset downstream state when inference changes
     setQuestionnaireAnswers(null);
@@ -32,12 +36,18 @@ export default function Home() {
 
   // Callback to receive answers from Questionnaire
   const handleAnswersSubmit = (answers: Record<string, any>) => {
+    console.log('[page.tsx] handleAnswersSubmit called with:', answers);
     setQuestionnaireAnswers(answers);
     // Placeholder: Simulate PDF generation based on answers
-    console.log("Generating PDF with answers:", answers);
+    console.log("[page.tsx] Simulating PDF generation with answers:", answers);
     // In a real app, call a backend service to generate PDF and get a URL
     // For now, just set a dummy URL to enable the preview section
-    setTimeout(() => setPdfDataUrl("dummy-pdf-url.pdf"), 500); // Simulate generation delay
+    // Simulate generation delay - **Important:** Using setTimeout in real apps for async operations is often an anti-pattern.
+    // Replace with actual async logic (e.g., fetch call to a generation endpoint).
+    setTimeout(() => {
+        console.log("[page.tsx] PDF simulation complete. Setting dummy URL.");
+        setPdfDataUrl("dummy-pdf-url.pdf");
+    }, 500);
   };
 
 
