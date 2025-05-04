@@ -5,12 +5,14 @@ import React, { useState, useEffect } from 'react'; // Ensure useEffect is impor
 import type { InferDocumentTypeOutput } from '@/ai/flows/infer-document-type';
 import { DocumentInference } from '@/components/document-inference';
 import DocumentTypeSelector, { SuggestedDoc } from '@/components/DocumentTypeSelector'; // Import the new selector
-import { Questionnaire } from '@/components/questionnaire';
+// import { Questionnaire } from '@/components/questionnaire'; // Remove old Questionnaire import
+import DynamicFormRenderer from '@/components/DynamicFormRenderer'; // Import the new dynamic renderer
+import { formSchemas } from '@/data/formSchemas'; // Import schemas
 import { DisclaimerStep } from '@/components/disclaimer-step'; // Import the new disclaimer step
 import { PdfPreview } from '@/components/pdf-preview';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import { FileText, FileSignature, Check, Upload, AlertTriangle, Download } from 'lucide-react'; // Added Check, Upload, AlertTriangle, Download icons
+import { FileText, FileSignature, Check, Upload, AlertTriangle, Download, ListChecks } from 'lucide-react'; // Added ListChecks icon
 import { HeroSection } from '@/components/landing/HeroSection'; // Corrected import path
 import ThreeStepSection from '@/components/ThreeStepSection'; // This might need label updates or become "4 steps"
 import { TestimonialCarousel } from '@/components/landing/TestimonialCarousel';
@@ -19,11 +21,6 @@ import { GuaranteeBadge } from '@/components/landing/GuaranteeBadge';
 import { Button } from '@/components/ui/button'; // Import Button
 import { useToast } from '@/hooks/use-toast'; // Import useToast
 
-
-// Define questionnaire icon SVG inline
-const QuestionnaireIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6 text-primary"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" x2="8" y1="13" y2="13"/><line x1="16" x2="8" y1="17" y2="17"/><line x1="10" x2="8" y1="9" y2="9"/></svg>
-);
 
 // Define share icon SVG inline
 const ShareIcon = () => (
@@ -76,6 +73,10 @@ export default function Home() {
       console.log(`[page.tsx] handleDocumentTypeSelected: User selected ${docName}`);
       setSelectedDocType(docName); // Confirm the selection
        toast({ title: "Document Type Confirmed", description: `Proceeding with ${docName}.` });
+       // Reset subsequent steps if user re-selects
+        setQuestionnaireAnswers(null);
+        setDisclaimerAgreed(false);
+        setPdfDataUrl(undefined);
       // Optional: Automatically scroll to the next step or highlight it
   }
 
@@ -86,6 +87,7 @@ export default function Home() {
     setDisclaimerAgreed(false); // Ensure disclaimer needs agreement again
     setPdfDataUrl(undefined); // Clear previous PDF if re-submitting
     console.log("[page.tsx] Questionnaire submitted, proceeding to disclaimer step.");
+     toast({ title: "Details Recorded", description: "Proceed to the disclaimer." });
   };
 
   // Disclaimer agreement triggers PDF generation (simulation)
@@ -169,6 +171,9 @@ export default function Home() {
        }
    }
 
+  // Get the relevant form schema for the selected document type
+   const currentFormSchema = selectedDocType ? (formSchemas[selectedDocType] || formSchemas['default']) : [];
+
 
   return (
     <div className="flex flex-col items-center w-full bg-background">
@@ -212,13 +217,13 @@ export default function Home() {
                 {/* Separator between steps */}
                 {currentStep > 1 && <Separator className="my-8" />}
 
-                {/* Step 2: Dynamic Questionnaire */}
+                {/* Step 2: Dynamic Form Renderer */}
                  {currentStep >= 2 && selectedDocType && (
                      <div className={`transition-opacity duration-500 ease-out ${currentStep === 2 ? 'opacity-100 animate-fade-in' : 'opacity-50 cursor-not-allowed'}`}>
-                         <Questionnaire
+                         <DynamicFormRenderer
                              documentType={selectedDocType} // Pass the confirmed document type name
-                             selectedState={selectedState} // Pass selected state
-                             onAnswersSubmit={handleAnswersSubmit}
+                             schema={currentFormSchema} // Pass the dynamically loaded schema
+                             onSubmit={handleAnswersSubmit}
                              isReadOnly={currentStep > 2} // Lock if past this step
                          />
                      </div>
@@ -227,8 +232,8 @@ export default function Home() {
                      <Card className="shadow-lg rounded-lg opacity-50 cursor-not-allowed bg-card border border-border">
                          <CardHeader>
                              <div className="flex items-center space-x-2">
-                                 <QuestionnaireIcon />
-                                 <CardTitle className="text-2xl">Step 2: Answer Questions</CardTitle>
+                                 <ListChecks className="h-6 w-6 text-primary" /> {/* Updated Icon */}
+                                 <CardTitle className="text-2xl">Step 2: Provide Details</CardTitle> {/* Updated Title */}
                              </div>
                              <CardDescription>
                                  Confirm a document type in Step 1 to see the questions.
