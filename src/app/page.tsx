@@ -2,9 +2,9 @@
 "use client"; // Mark page as client component due to state management and client children
 
 import React, { useState, useEffect } from 'react'; // Ensure useEffect is imported if used elsewhere
-import type { InferDocumentTypeOutput } from '@/ai/flows/infer-document-type';
+import type { InferDocumentTypeOutput, DocumentSuggestion } from '@/ai/flows/infer-document-type'; // Import new output types
 import { DocumentInference } from '@/components/document-inference';
-import DocumentTypeSelector, { SuggestedDoc } from '@/components/DocumentTypeSelector'; // Import the new selector
+import DocumentTypeSelector from '@/components/DocumentTypeSelector'; // Import the new selector
 import DynamicFormRenderer from '@/components/DynamicFormRenderer'; // Import the new dynamic renderer
 import { formSchemas } from '@/data/formSchemas'; // Import schemas
 import { DisclaimerStep } from '@/components/disclaimer-step'; // Import the new disclaimer step
@@ -17,7 +17,7 @@ import { FeaturedLogos } from '@/components/landing/FeaturedLogos';
 import { GuaranteeBadge } from '@/components/landing/GuaranteeBadge';
 import { Button } from '@/components/ui/button'; // Import Button
 import { useToast } from '@/hooks/use-toast'; // Import useToast
-import HeroFeatureSection from '@/components/HeroFeatureSection'; // Corrected import path
+import HeroFeatureSection from '@/components/landing/HeroFeatureSection'; // Corrected import path to landing
 import ThreeStepSection from '@/components/ThreeStepSection'; // Corrected import path for ThreeStepSection
 
 
@@ -31,7 +31,10 @@ export default function Home() {
   console.log('[page.tsx] Home component rendering...');
   const { toast } = useToast();
 
-  const [inferenceResult, setInferenceResult] = useState<InferDocumentTypeOutput | null>(null); // Store the raw AI output
+  // State Updates:
+  // - inferenceResult stores the full output object { suggestions: [...] }
+  // - suggestionsForSelector is derived from inferenceResult.suggestions
+  const [inferenceResult, setInferenceResult] = useState<InferDocumentTypeOutput | null>(null); // Store the full AI output { suggestions: [...] }
   const [selectedDocType, setSelectedDocType] = useState<string | null>(null); // Store the *confirmed* document type name
   const [selectedState, setSelectedState] = useState<string | undefined>(undefined); // Store selected state from inference step
   const [questionnaireAnswers, setQuestionnaireAnswers] = useState<Record<string, any> | null>(null);
@@ -49,9 +52,10 @@ export default function Home() {
   const currentStep = getCurrentStep();
 
   // Handler for when DocumentInference completes its analysis
+  // Updated to accept the new InferDocumentTypeOutput format
   const handleInferenceComplete = (output: InferDocumentTypeOutput | null, state?: string) => {
     console.log('[page.tsx] handleInferenceComplete called with output:', output, 'State:', state);
-    setInferenceResult(output); // Store the raw output
+    setInferenceResult(output); // Store the full output { suggestions: [...] }
     setSelectedState(state); // Store the state used for inference
     setSelectedDocType(null); // Reset selection, user must pick from suggestions
     // Reset subsequent steps
@@ -59,11 +63,15 @@ export default function Home() {
     setDisclaimerAgreed(false);
     setPdfDataUrl(undefined);
 
-     if (output) {
+     if (output && output.suggestions && output.suggestions.length > 0) {
         toast({ title: "Analysis Complete", description: "AI suggestions loaded below. Please review and select the best fit." });
      } else {
-         // Handle case where inference resulted in null (e.g., error or cleared input)
-         toast({ title: "Input Cleared or Error", description: "Provide a description to get suggestions.", variant: "destructive" });
+         // Handle case where inference resulted in null or empty suggestions
+         toast({ title: "Analysis Inconclusive", description: "Could not determine a specific document type. Please refine your description or select 'General Inquiry'.", variant: "destructive" });
+          // Ensure inferenceResult is set to a state that shows General Inquiry if empty
+          if (!output || !output.suggestions || output.suggestions.length === 0) {
+             setInferenceResult({ suggestions: [{ documentType: 'General Inquiry', confidence: 0.1, reasoning: 'Could not confidently match your description to a specific document.' }] });
+          }
      }
   };
 
@@ -152,23 +160,20 @@ export default function Home() {
   }
 
   // Prepare suggestions for DocumentTypeSelector
-   const suggestionsForSelector: SuggestedDoc[] = [];
-   if (inferenceResult) {
-       suggestionsForSelector.push({
-           name: inferenceResult.documentType,
-           reason: inferenceResult.reasoning || `Primary suggestion based on your input. Confidence: ${(inferenceResult.confidence * 100).toFixed(0)}%`,
-           confidence: inferenceResult.confidence,
-       });
-       inferenceResult.alternatives?.forEach(alt => {
-           if (alt !== inferenceResult.documentType) { // Avoid duplicates
-               suggestionsForSelector.push({ name: alt, reason: "An alternative possibility based on your input." });
-           }
-       });
-        // Add "General Inquiry" / "None of these" if not already present
-       if (!suggestionsForSelector.some(s => s.name === 'General Inquiry')) {
-           suggestionsForSelector.push({ name: 'General Inquiry', reason: 'If none of the above seem correct, or if you need further clarification.' });
-       }
+   // Map the new suggestions array format
+   const suggestionsForSelector: DocumentSuggestion[] = inferenceResult?.suggestions || [];
+   // Ensure "General Inquiry" is an option if not already suggested by AI and results exist
+   if (inferenceResult && suggestionsForSelector.length > 0 && !suggestionsForSelector.some(s => s.documentType === 'General Inquiry')) {
+        suggestionsForSelector.push({
+            documentType: 'General Inquiry',
+            reasoning: 'If none of the above seem correct, or if you need further clarification.',
+            confidence: 0.0 // Low confidence for manually added fallback
+        });
+   } else if (!inferenceResult || suggestionsForSelector.length === 0) {
+        // If no results at all, maybe provide General Inquiry as the only option initially?
+        // This might be handled better by the initial state or the handleInferenceComplete logic
    }
+
 
   // Get the relevant form schema for the selected document type
    const currentFormSchema = selectedDocType ? (formSchemas[selectedDocType] || formSchemas['default']) : [];
@@ -204,7 +209,7 @@ export default function Home() {
                              {/* Display suggestions using DocumentTypeSelector if analysis is complete */}
                             {inferenceResult && (
                                  <DocumentTypeSelector
-                                     suggestions={suggestionsForSelector}
+                                     suggestions={suggestionsForSelector} // Pass the array of suggestions
                                      onSelect={handleDocumentTypeSelected}
                                  />
                             )}
@@ -373,5 +378,3 @@ export default function Home() {
     </div>
   );
 }
-
-    

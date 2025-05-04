@@ -5,15 +5,11 @@ import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'; // Adjusted imports
 import { useTranslation } from 'react-i18next';
 import { Lightbulb } from 'lucide-react'; // Added an icon
+import type { DocumentSuggestion } from '@/ai/flows/infer-document-type'; // Import the suggestion type
 
-export interface SuggestedDoc {
-  name: string;
-  reason: string;
-  confidence?: number; // Add confidence for potential display
-}
-
+// Interface Props uses the imported DocumentSuggestion type
 interface Props {
-  suggestions: SuggestedDoc[];
+  suggestions: DocumentSuggestion[]; // Use the imported type
   onSelect: (docType: string) => void;
 }
 
@@ -22,10 +18,10 @@ export default function DocumentTypeSelector({ suggestions, onSelect }: Props) {
 
   if (!suggestions || suggestions.length === 0) return null;
 
-  // Ensure "General Inquiry" has a standard reason if none provided
+  // Ensure "General Inquiry" has a standard reason if none provided by AI
   const processedSuggestions = suggestions.map(s => ({
       ...s,
-      reason: s.name === 'General Inquiry' && !s.reason ? 'Your request is broad or doesn\'t match specific templates. Select this if unsure.' : s.reason
+      reasoning: s.documentType === 'General Inquiry' && !s.reasoning ? 'Your request is broad or doesn\'t match specific templates. Select this if unsure.' : s.reasoning
   }));
 
   return (
@@ -43,15 +39,15 @@ export default function DocumentTypeSelector({ suggestions, onSelect }: Props) {
         {processedSuggestions.map((doc, index) => (
           <Card
             key={index}
-            onClick={() => onSelect(doc.name)}
+            onClick={() => onSelect(doc.documentType)} // Use documentType field
             className="cursor-pointer hover:shadow-lg transition-all duration-200 border-2 border-transparent hover:border-primary focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 bg-card"
             tabIndex={0} // Make card focusable
-            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') onSelect(doc.name); }} // Allow selection with keyboard
+            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') onSelect(doc.documentType); }} // Allow selection with keyboard
           >
             <CardContent className="p-4">
               <CardTitle className="text-base font-semibold mb-2 flex items-center justify-between">
-                 <span>{doc.name}</span>
-                  {/* Optional: Display confidence */}
+                 <span>{doc.documentType}</span> {/* Use documentType field */}
+                  {/* Display confidence */}
                  {doc.confidence !== undefined && (
                     <span className={`ml-2 text-xs font-normal px-1.5 py-0.5 rounded ${
                         doc.confidence > 0.7 ? 'bg-green-100 text-green-800' :
@@ -63,7 +59,7 @@ export default function DocumentTypeSelector({ suggestions, onSelect }: Props) {
                  )}
               </CardTitle>
               <CardDescription className="text-xs text-muted-foreground">
-                {doc.reason}
+                {doc.reasoning || 'No reasoning provided.'} {/* Use reasoning field */}
               </CardDescription>
             </CardContent>
           </Card>
@@ -73,3 +69,5 @@ export default function DocumentTypeSelector({ suggestions, onSelect }: Props) {
     </Card>
   );
 }
+
+    

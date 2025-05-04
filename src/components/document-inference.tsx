@@ -2,7 +2,7 @@
 "use client";
 
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import type { InferDocumentTypeInput, InferDocumentTypeOutput } from '@/ai/flows/infer-document-type';
+import type { InferDocumentTypeInput, InferDocumentTypeOutput } from '@/ai/flows/infer-document-type'; // Updated import
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
@@ -15,8 +15,8 @@ import { cn } from '@/lib/utils'; // Import cn utility
 
 // Define props for the component, including the callback
 interface DocumentInferenceProps {
-    // Callback now returns the *raw* AI output and the state used
-    onInferenceResult: (output: InferDocumentTypeOutput | null, state?: string) => void;
+    // Callback now returns the *full* AI output object and the state used
+    onInferenceResult: (output: InferDocumentTypeOutput | null, state?: string) => void; // Use InferDocumentTypeOutput
 }
 
 export function DocumentInference({ onInferenceResult }: DocumentInferenceProps) {
@@ -26,13 +26,13 @@ export function DocumentInference({ onInferenceResult }: DocumentInferenceProps)
   const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState<'text' | 'microphone'>('text');
   const { toast } = useToast();
+  // Move useRef calls to the top level
   const isRecordingRef = useRef(isRecording);
-  const [recognition, setRecognition] = useState<any | null>(null);
+  const recognitionRef = useRef<SpeechRecognition | null>(null);
+  const [recognition, setRecognition] = useState<any | null>(null); // Keep state if needed for conditional UI
   const stableOnInferenceResult = useCallback(onInferenceResult, [onInferenceResult]);
   const isBrowser = typeof window !== 'undefined';
 
-  // Move useRef to the top level
-  const recognitionRef = useRef<SpeechRecognition | null>(null);
 
   // --- Speech Recognition Setup Effect ---
   useEffect(() => {
@@ -171,7 +171,7 @@ export function DocumentInference({ onInferenceResult }: DocumentInferenceProps)
       return;
     }
      // Stop recording if analysis starts while recording
-     if (isRecording) {
+     if (isRecordingRef.current) { // Use ref for accurate check within async callback
          handleRecordToggle();
      }
 
@@ -185,71 +185,106 @@ export function DocumentInference({ onInferenceResult }: DocumentInferenceProps)
 
     console.log(`${logPrefix} Sending payload to API:`, inputPayload);
 
-    // Use API Route or Cloud Function call here in production
-    // For static export, keeping the simulation:
-    console.log(`${logPrefix} AI Inference API Call Disabled for Static Export. Simulating...`);
+    // --- PRODUCTION: Use API Route or Cloud Function call ---
+    try {
+        const response = await fetch('/api/infer-document-type', { // Or your Cloud Function URL
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(inputPayload),
+        });
+
+        if (!response.ok) {
+            let errorMsg = "Failed to get suggestions from AI.";
+            let errorCode = 'API_ERROR';
+            try {
+                const errorData = await response.json();
+                errorMsg = errorData.error || errorMsg;
+                errorCode = errorData.code || errorCode;
+                 console.error(`${logPrefix} API Error ${response.status} (${errorCode}):`, errorData);
+            } catch {
+                // Ignore JSON parsing error if response is not JSON
+                 console.error(`${logPrefix} API Error ${response.status}:`, await response.text());
+            }
+            // Handle specific known errors from API
+            if (errorCode === 'STATIC_EXPORT_API_DISABLED') {
+                errorMsg = "AI analysis is currently unavailable in this deployment mode. Please contact support.";
+            }
+            toast({ title: "Analysis Failed", description: errorMsg, variant: "destructive" });
+            stableOnInferenceResult(null, selectedState); // Clear results on error
+             setIsLoading(false); // Ensure loading state is reset
+            return;
+        }
+
+        const result: InferDocumentTypeOutput = await response.json();
+        console.log(`${logPrefix} Received API response:`, result);
+        stableOnInferenceResult(result, selectedState); // Pass the full output object
+
+    } catch (error: unknown) {
+        console.error(`${logPrefix} Network or other error during fetch:`, error);
+        toast({ title: "Network Error", description: "Could not connect to the analysis service. Please check your connection.", variant: "destructive" });
+        stableOnInferenceResult(null, selectedState); // Clear results on error
+    } finally {
+        setIsLoading(false);
+    }
+    // --- END PRODUCTION ---
+
+
+    /* // --- SIMULATION CODE (Keep for testing if needed, comment out for production) ---
+    console.log(`${logPrefix} AI Inference API Call SIMULATED.`);
     await new Promise(resolve => setTimeout(resolve, 700));
-     let dummyDocType = "Residential Lease Agreement"; // Default to Lease
-     let dummyConfidence = 0.75;
-     let dummyReasoning = "Based on keywords like 'renting'. State considerations applied.";
-     let dummyAlternatives : string[] | undefined = undefined;
+     let dummySuggestions: InferDocumentTypeOutput['suggestions'] = [];
+     let primaryDoc = "Residential Lease Agreement";
+     let primaryConf = 0.75;
+     let primaryReason = "Based on keywords like 'renting'. State considerations applied.";
 
       if (trimmedDescription.toLowerCase().includes("nda") || trimmedDescription.toLowerCase().includes("confidential")) {
-         dummyDocType = "Mutual Non-Disclosure Agreement (NDA)";
-         dummyConfidence = 0.85;
-         dummyReasoning = "Keywords 'NDA' or 'confidential' detected.";
-         dummyAlternatives = ["Unilateral Non-Disclosure Agreement (NDA)"];
+         primaryDoc = "Mutual Non-Disclosure Agreement (NDA)";
+         primaryConf = 0.85;
+         primaryReason = "Keywords 'NDA' or 'confidential' detected.";
+         dummySuggestions.push({ documentType: "Unilateral Non-Disclosure Agreement (NDA)", confidence: 0.4, reasoning: "Alternative possibility." });
       } else if (trimmedDescription.toLowerCase().includes("partner")) {
-         dummyDocType = "Partnership Agreement";
-         dummyConfidence = 0.80;
-         dummyReasoning = "Keyword 'partner' detected.";
+         primaryDoc = "Partnership Agreement";
+         primaryConf = 0.80;
+         primaryReason = "Keyword 'partner' detected.";
       } else if (trimmedDescription.length < 15) { // Example for low confidence
-          dummyDocType = "General Inquiry";
-          dummyConfidence = 0.3;
-          dummyReasoning = "Description is very short. Unclear specific need.";
-          dummyAlternatives = ["Service Agreement", "Residential Lease Agreement"];
+          primaryDoc = "General Inquiry";
+          primaryConf = 0.5; // Adjusted confidence
+          primaryReason = "Description is very short. Unclear specific need.";
+          dummySuggestions.push({ documentType: "Service Agreement", confidence: 0.2, reasoning: "Vague, could be service-related." });
+          dummySuggestions.push({ documentType: "Residential Lease Agreement", confidence: 0.1, reasoning: "Less likely, but possible property mention." });
       } else if (trimmedDescription.toLowerCase().includes("sell") || trimmedDescription.toLowerCase().includes("buy")) {
-          dummyDocType = "Bill of Sale (Vehicle)";
-          dummyConfidence = 0.70;
-           dummyReasoning = "Keywords 'sell' or 'buy' detected, often related to vehicles.";
+          primaryDoc = "Bill of Sale (Vehicle)";
+          primaryConf = 0.70;
+          primaryReason = "Keywords 'sell' or 'buy' detected, often related to vehicles.";
       }
 
-      if (selectedState === 'CA') dummyReasoning += ` Specific clauses for CA might apply.`;
-      else if (selectedState) dummyReasoning += ` Considering state ${selectedState}.`;
+      if (selectedState === 'CA') primaryReason += ` Specific clauses for CA might apply.`;
+      else if (selectedState) primaryReason += ` Considering state ${selectedState}.`;
 
-     const dummyOutput: InferDocumentTypeOutput = {
-       documentType: dummyDocType,
-       confidence: dummyConfidence,
-       reasoning: dummyReasoning,
-       alternatives: dummyAlternatives?.filter(alt => alt !== dummyDocType),
-     };
+      // Add the primary suggestion to the beginning
+      dummySuggestions.unshift({
+          documentType: primaryDoc,
+          confidence: primaryConf,
+          reasoning: primaryReason
+      });
+
+      // Limit to 3 suggestions total
+       dummySuggestions = dummySuggestions.slice(0, 3);
+
+      const dummyOutput: InferDocumentTypeOutput = { suggestions: dummySuggestions };
 
      stableOnInferenceResult(dummyOutput, selectedState);
      setIsLoading(false);
-     // return; // Keep exit for simulation
+     // --- END SIMULATION --- */
 
-    /* // --- ORIGINAL API CALL CODE (Keep for reference or conditional use) ---
-    try {
-      const response = await fetch('/api/infer-document-type', { // Or your Cloud Function URL
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(inputPayload),
-      });
-      // ... rest of API handling ...
-    } catch (error: unknown) {
-       // ... error handling ...
-    } finally {
-      setIsLoading(false);
-    }
-    */
-  }, [description, toast, stableOnInferenceResult, selectedState, isRecording]); // Added isRecording
+  }, [description, toast, stableOnInferenceResult, selectedState, handleRecordToggle]); // Removed isRecording, use ref
 
 
   // Handle tab change
   const handleTabChange = (value: string) => {
      const newTab = value as 'text' | 'microphone';
      setActiveTab(newTab);
-     if (newTab === 'text' && isRecording) {
+     if (newTab === 'text' && isRecordingRef.current) { // Use ref
          handleRecordToggle(); // Stop recording if switching to text tab
      }
   };
@@ -283,11 +318,7 @@ export function DocumentInference({ onInferenceResult }: DocumentInferenceProps)
              )}
              onClick={() => {
                  // Toggle recording only if microphone tab becomes active or is already active
-                 if (activeTab !== 'microphone' || !isRecording) {
-                     handleRecordToggle();
-                 } else if (isRecording) {
-                     handleRecordToggle(); // Stop if already recording
-                 }
+                 handleRecordToggle(); // Simplified toggle logic
              }}
              disabled={isLoading || !recognition} // Disable if loading or mic not supported
            >
@@ -412,3 +443,5 @@ declare global {
     readonly results: SpeechRecognitionResultList;
   }
 }
+
+    
