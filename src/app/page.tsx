@@ -17,7 +17,7 @@ import { FeaturedLogos } from '@/components/landing/FeaturedLogos';
 import { GuaranteeBadge } from '@/components/landing/GuaranteeBadge';
 import { Button } from '@/components/ui/button'; // Import Button
 import { useToast } from '@/hooks/use-toast'; // Import useToast
-import HeroFeatureSection from '@/components/landing/HeroFeatureSection'; // Corrected import path to landing
+import HeroFeatureSection from '@/components/HeroFeatureSection'; // Corrected import path
 import ThreeStepSection from '@/components/ThreeStepSection'; // Corrected import path for ThreeStepSection
 
 
@@ -373,3 +373,5 @@ export default function Home() {
     </div>
   );
 }
+
+    
