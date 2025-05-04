@@ -1,3 +1,4 @@
+
 {
   "hosting": {
     "public": "out",
@@ -5,12 +6,12 @@
       "firebase.json",
       "**/.*",
       "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
     ]
-    // "rewrites": [ // Removed: Not applicable if not using static export with SPA fallback
-    //   {
-    //     "source": "**",
-    //     "destination": "/index.html"
-    //   }
-    // ]
   }
 }
