@@ -1,3 +1,4 @@
+
 "use client"; // Mark page as client component due to state management and client children
 
 import React, { useState, useEffect } from 'react'; // Ensure useEffect is imported if used elsewhere
@@ -31,6 +32,7 @@ export default function Home() {
   console.log('[page.tsx] Home component rendering...');
 
   const [inferredDocType, setInferredDocType] = useState<string | null>(null);
+  const [selectedState, setSelectedState] = useState<string | undefined>(undefined); // Store selected state from inference step
   const [questionnaireAnswers, setQuestionnaireAnswers] = useState<Record<string, any> | null>(null);
   const [disclaimerAgreed, setDisclaimerAgreed] = useState<boolean>(false); // New state for disclaimer
   const [pdfDataUrl, setPdfDataUrl] = useState<string | undefined>(undefined);
@@ -45,9 +47,11 @@ export default function Home() {
   };
   const currentStep = getCurrentStep();
 
-  const handleDocumentInferred = (result: InferDocumentTypeOutput | null) => {
-    console.log('[page.tsx] handleDocumentInferred called with:', result);
+  // Updated handler to receive the full output object
+  const handleDocumentInferred = (result: InferDocumentTypeOutput | null, state?: string) => {
+    console.log('[page.tsx] handleDocumentInferred called with:', result, 'State:', state);
     setInferredDocType(result ? result.documentType : null);
+    setSelectedState(state); // Store the state selected during inference
     // Reset subsequent steps
     setQuestionnaireAnswers(null);
     setDisclaimerAgreed(false);
@@ -71,13 +75,18 @@ export default function Home() {
      console.log("[page.tsx] Disclaimer agreed. Simulating PDF generation with answers:", questionnaireAnswers);
      // Simulate PDF generation after agreement
      // In a real app, this would call a backend function (e.g., Firebase Function)
-     // which takes `questionnaireAnswers` and `inferredDocType`, generates the PDF,
+     // which takes `questionnaireAnswers`, `inferredDocType`, and `selectedState`, generates the PDF,
      // potentially saves it to storage, and returns a URL or the PDF data.
      setTimeout(() => {
          console.log("[page.tsx] PDF simulation complete. Setting dummy URL.");
          // Simulate a slightly more complex PDF for better preview
-         const base64Pdf = "JVBERi0xLjQKJeLjz9MKMSAwIG9iago8PC9UeXBlL0NhdGFsb2cvUGFnZXMgMiAwIFI+PgplbmRvYmoKMiAwIG9iago8PC9UeXBlL1BhZ2VzL0NvdW50IDEvS2lkc1sgMyAwIFJdPj4KZW5kb2JqCjMgMCBvYmoKPDwvVHlwZS9QYWdlL1BhcmVudCAyIDAgUi9NZWRpYUJveFswIDAgNjEyIDc5Ml0vUmVzb3VyY2VzPDwvRm9udDw8L0YxIDQgMCBSPj4+Pi9Db250ZW50cyA1IDAgUi9Hcm91cDw8L1MvVHJhbnNwYXJlbmN5L0NTL0RldmljZVJHQi9JIHRydWU+Pj4+PgplbmRvYmoKNSAwIG9iago8PC9MZW5ndGggMTU5Pj4Kc3RyZWFtCkJUCjAgMCAwIHJnIEJUL0YxIDQwIFRmIDEgMCAwIDEgMzAgNzQwIFRtCihQREVQIFNpbXVsYXRpb24gLSBEb2N1bWVudCkgVGoKRVQKClBTIFEuLi5RUQpCdCAvRjEgMTIgVGYgMSAwIDAgMSAzMCA3MDAgVG0KKENsaWVudDogSW5wdXRzIGZyb20gcXVlc3Rpb25uYWlyZSkgVGoKRVQKZW5kc3RyZWFtCmVuZG9iago0IDAgb2JqCjw8L1R5cGUvRm9udC9TdWJ0eXBlL1R5cGUxL0Jhc2VGb250L0hlbHZldGljYT4+CmVuZG9iagp4cmVmCjAgNgowMDAwMDAwMDAwIDY1NTM1IGYgCjAwMDAwMDAwMTIgMDAwMDAgbiAKMDAwMDAwMDA2MiAwMDAwMCBuIAowMDAwMDAwMTQwIDAwMDAwIG4gCjAwMDAwMDA1OTYgMDAwMDAgbiAKMDAwMDAwMDI0MCAwMDAwMCBuIAp0cmFpbGVyCjw8L1Jvb3QgMSAwIFIvU2l6ZSA2Pj4KCnN0YXJ0eHJlZgo2NTYKJSUzMAo=";
-         setPdfDataUrl(`data:application/pdf;base64,${base64Pdf}`);
+         const base64Pdf = "JVBERi0xLjQKJeLjz9MKMSAwIG9iago8PC9UeXBlL0NhdGFsb2cvUGFnZXMgMiAwIFI+PgplbmRvYmoKMiAwIG9iago8PC9UeXBlL1BhZ2VzL0NvdW50IDEvS2lkc1sgMyAwIFJdPj4KZW5kb2JqCjMgMCBvYmoKPDwvVHlwZS9QYWdlL1BhcmVudCAyIDAgUi9NZWRpYUJveFswIDAgNjEyIDc5Ml0vUmVzb3VyY2VzPDwvRm9udDw8L0YxIDQgMCBSPj4+Pi9Db250ZW50cyA1IDAgUi9Hcm91cDw8L1MvVHJhbnNwYXJlbmN5L0NTL0RldmljZVJHQi9JIHRydWU+Pj4+PgplbmRvYmoKNSAwIG9iago8PC9MZW5ndGggMjMxPj4Kc3RyZWFtCkJUCjAgMCAwIHJnIEJUL0YxIDQwIFRmIDEgMCAwIDEgMzAgNzQwIFRtCihQREVQIFNpbXVsYXRpb24gLSBEb2N1bWVudCkgVGoKRVQKClBTIFEuLi5RUQpCdCAvRjEgMTIgVGYgMSAwIDAgMSAzMCA3MDAgVG0KKFN0YXRlOiB7U1RBVEVfSEVSRX0pIFRqCkVUCgpCdCAvRjEgMTIgVGYgMSAwIDAgMSAzMCA2ODAgVG0KKENsaWVudDogSW5wdXRzIGZyb20gcXVlc3Rpb25uYWlyZSkgVGoKRVQKClBTIFEuLi5RUQpCdCAvRjEgOCBUZiAxIDAgMCAxIDMwIDYzMCBUbQooRElTQ0xBSU1FUikgVGoKRVQKZW5kc3RyZWFtCmVuZG9iago0IDAgb2JqCjw8L1R5cGUvRm9udC9TdWJ0eXBlL1R5cGUxL0Jhc2VGb250L0hlbHZldGljYT4+CmVuZG9iagp4cmVmCjAgNgowMDAwMDAwMDAwIDY1NTM1IGYgCjAwMDAwMDAwMTIgMDAwMDAgbiAKMDAwMDAwMDA2MiAwMDAwMCBuIAowMDAwMDAwMTQwIDAwMDAwIG4gCjAwMDAwMDA3NDMgMDAwMDAgbiAKMDAwMDAwMDI3NyAwMDAwMCBuIAp0cmFpbGVyCjw8L1Jvb3QgMSAwIFIvU2l6ZSA2Pj4KCnN0YXJ0eHJlZgo4MDMKJSUzMAo=";
+         const statePlaceholder = selectedState || 'N/A';
+         const decodedPdf = atob(base64Pdf);
+         const pdfWithState = decodedPdf.replace('{STATE_HERE}', statePlaceholder);
+         const finalBase64Pdf = btoa(pdfWithState);
+
+         setPdfDataUrl(`data:application/pdf;base64,${finalBase64Pdf}`);
      }, 500);
   }
 
@@ -102,11 +111,12 @@ export default function Home() {
                             <CardTitle className="text-2xl">Step 1: Describe Your Situation</CardTitle>
                         </div>
                         <CardDescription>
-                           Use the text box or microphone below. Our AI will suggest the best document type.
+                           Use the text box or microphone below, and select the relevant U.S. state. Our AI will suggest the best document type.
                         </CardDescription>
                         </CardHeader>
                         <CardContent>
-                            <DocumentInference onInferenceResult={handleDocumentInferred} />
+                            {/* Pass state selection handler */}
+                            <DocumentInference onInferenceResult={(result, state) => handleDocumentInferred(result, state)} />
                         </CardContent>
                     </Card>
                 )}
@@ -119,7 +129,7 @@ export default function Home() {
                                 <CardTitle className="text-2xl">Step 1: Describe Your Situation</CardTitle>
                             </div>
                             <CardDescription>
-                               Document type inferred: <strong>{inferredDocType || "N/A"}</strong>.
+                               Document type inferred: <strong>{inferredDocType || "N/A"}</strong> {selectedState && `(State: ${selectedState})`}
                             </CardDescription>
                          </CardHeader>
                     </Card>
@@ -134,6 +144,7 @@ export default function Home() {
                      <div className={`transition-opacity duration-500 ease-out ${currentStep === 2 ? 'opacity-100 animate-fade-in' : 'opacity-50 cursor-not-allowed'}`}>
                          <Questionnaire
                              documentType={inferredDocType}
+                             selectedState={selectedState} // Pass selected state
                              onAnswersSubmit={handleAnswersSubmit}
                              isReadOnly={currentStep > 2} // Lock if past this step
                          />
@@ -237,7 +248,22 @@ export default function Home() {
                             <p className="text-muted-foreground mb-4">Actions available after document signing.</p>
                             <div className="flex space-x-4">
                                 <Button disabled variant="outline"> <Upload className="mr-2 h-4 w-4" /> Share Securely (Soon)</Button>
-                                <Button disabled> <Download className="mr-2 h-4 w-4" /> Download PDF </Button>
+                                {/* Enable download */}
+                                <Button
+                                  onClick={() => {
+                                       if (pdfDataUrl) {
+                                           const link = document.createElement('a');
+                                           link.href = pdfDataUrl;
+                                           link.download = `${inferredDocType || 'document'}_signed.pdf`;
+                                           document.body.appendChild(link);
+                                           link.click();
+                                           document.body.removeChild(link);
+                                       }
+                                   }}
+                                   disabled={!pdfDataUrl}
+                                >
+                                    <Download className="mr-2 h-4 w-4" /> Download PDF
+                                 </Button>
                             </div>
                         </CardContent>
                     </Card>

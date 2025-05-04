@@ -9,8 +9,10 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'; // Import Tabs
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select" // Import Select
 import { useToast } from '@/hooks/use-toast';
-import { Loader2, Mic, Edit2, Check, BrainCircuit, X, Text, FileText } from 'lucide-react'; // Added FileText icon
+import { Loader2, Mic, Edit2, Check, BrainCircuit, X, Text, FileText, MapPin, Lightbulb } from 'lucide-react'; // Added FileText, MapPin, Lightbulb icons
+import { usStates } from '@/lib/document-library'; // Import state list
 
 // Mock SpeechRecognition - Replace with actual implementation if needed
 const MockSpeechRecognition = {
@@ -31,6 +33,7 @@ interface DocumentInferenceProps {
 
 export function DocumentInference({ onInferenceResult }: DocumentInferenceProps) {
   const [description, setDescription] = useState('');
+  const [selectedState, setSelectedState] = useState<string | undefined>(undefined); // State for US State selection
   const [isRecording, setIsRecording] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState<InferDocumentTypeOutput | null>(null);
@@ -38,7 +41,7 @@ export function DocumentInference({ onInferenceResult }: DocumentInferenceProps)
   const [editedDescription, setEditedDescription] = useState('');
   const [activeTab, setActiveTab] = useState<'text' | 'microphone'>('text'); // State for tabs
   const { toast } = useToast();
-  const isRecordingRef = useRef(isRecording); // Top-level ref moved outside effects
+  const isRecordingRef = useRef(isRecording); // Top-level ref
 
   // State for browser speech recognition API
   const [recognition, setRecognition] = useState<any | null>(null); // Use 'any' for broader compatibility initially
@@ -110,7 +113,8 @@ export function DocumentInference({ onInferenceResult }: DocumentInferenceProps)
                 // Only update state if it was supposed to be recording (use ref)
                 if (isRecordingRef.current) {
                     setIsRecording(false); // Ensure state reflects reality if service stops unexpectedly
-                    toast({ title: "Recording Stopped" }); // Inform user
+                    // Toast handled by toggle button now
+                    // toast({ title: "Recording Stopped" }); // Inform user
                 }
             };
 
@@ -172,8 +176,11 @@ export function DocumentInference({ onInferenceResult }: DocumentInferenceProps)
                }
            } else {
                try {
+                   // Check if already stopped to avoid redundant calls/errors
+                   // Note: Checking recognition.readyState might be browser-specific
                    recognition.stop();
                    console.log("Speech recognition stopped by state change.");
+                   toast({ title: "Recording Stopped", description: "Processing transcribed text..." });
                } catch(e) {
                     console.warn("Error stopping recognition (might already be stopped):", e);
                }
@@ -214,27 +221,116 @@ export function DocumentInference({ onInferenceResult }: DocumentInferenceProps)
       toast({ title: "Input Required", description: "Please provide a description.", variant: "destructive" });
       return;
     }
+    // Optional: Add validation for state selection if required later
+    // if (!selectedState) {
+    //    toast({ title: "State Required", description: "Please select the relevant U.S. state.", variant: "destructive" });
+    //    return;
+    // }
+
     setIsLoading(true);
     setResult(null);
     stableOnInferenceResult(null);
 
+    const inputPayload: InferDocumentTypeInput = {
+        description: trimmedDescription,
+        ...(selectedState && { state: selectedState }), // Include state if selected
+    };
+
+    console.log("[handleSubmit] Sending payload to API:", inputPayload);
+
     // --- TEMPORARY CHANGE FOR STATIC EXPORT ---
     console.log("[handleSubmit] AI Inference Temporarily Disabled for Static Export.");
-    await new Promise(resolve => setTimeout(resolve, 500));
+    await new Promise(resolve => setTimeout(resolve, 700)); // Slightly longer delay
+    // Simulate response based on description/state
+    let dummyDocType = "Lease Agreement (Dummy)";
+    let dummyConfidence = 0.75;
+    let dummyReasoning = "Based on keywords like 'renting'.";
+    let dummyAlternatives : string[] | undefined = undefined;
+
+     if (trimmedDescription.toLowerCase().includes("nda") || trimmedDescription.toLowerCase().includes("confidential")) {
+        dummyDocType = "Mutual Non-Disclosure Agreement (NDA)";
+        dummyConfidence = 0.85;
+        dummyReasoning = "Keywords 'NDA' or 'confidential' detected.";
+        dummyAlternatives = ["Unilateral Non-Disclosure Agreement (NDA)"];
+     } else if (trimmedDescription.toLowerCase().includes("partner")) {
+        dummyDocType = "Partnership Agreement";
+        dummyConfidence = 0.80;
+        dummyReasoning = "Keyword 'partner' detected.";
+     }
+
+     if (selectedState === 'CA') {
+         dummyReasoning += ` State CA might have specific clauses.`;
+     } else if (selectedState) {
+         dummyReasoning += ` Considering state ${selectedState}.`;
+     }
+
     const dummyOutput: InferDocumentTypeOutput = {
-      documentType: "Lease Agreement (Dummy)",
-      confidence: 0.75,
+      documentType: dummyDocType,
+      confidence: dummyConfidence,
+      reasoning: dummyReasoning,
+      alternatives: dummyAlternatives,
     };
     setResult(dummyOutput);
     stableOnInferenceResult(dummyOutput);
-    toast({ title: "Analysis Complete (Dummy)", description: `Suggested: ${dummyOutput.documentType}. Proceed to Step 2.` });
+    toast({ title: "Analysis Complete (Dummy)", description: `Suggested: ${dummyOutput.documentType}. Confidence: ${(dummyOutput.confidence * 100).toFixed(0)}%. Proceed to Step 2.` });
     setIsLoading(false);
     return; // Exit before attempting the fetch call
 
     // --- ORIGINAL CODE (Requires a backend/API route) ---
-    /* ... */
+    /*
+    try {
+      console.log(`${logPrefix} Calling fetch to /api/infer-document-type...`);
+      const response = await fetch('/api/infer-document-type', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(inputPayload),
+      });
+      console.log(`${logPrefix} Fetch response status: ${response.status}`);
 
-  }, [toast, stableOnInferenceResult]);
+      if (!response.ok) {
+        let errorData: any = { message: `HTTP error! Status: ${response.status}` };
+        try {
+          errorData = await response.json(); // Try to parse JSON error response
+        } catch (parseError) {
+          console.warn(`${logPrefix} Could not parse error response as JSON.`);
+        }
+        console.error(`${logPrefix} API error response:`, errorData);
+        throw new Error(errorData.error || errorData.message || `HTTP error! Status: ${response.status}`);
+      }
+
+      const output: InferDocumentTypeOutput = await response.json();
+      console.log(`${logPrefix} Parsed API response:`, output);
+      setResult(output);
+      stableOnInferenceResult(output); // Pass result to parent
+      toast({
+          title: "Analysis Complete",
+          description: `Suggested: ${output.documentType}. Confidence: ${(output.confidence * 100).toFixed(0)}%. ${output.reasoning || ''} Proceed to Step 2.`,
+      });
+
+    } catch (error: unknown) {
+      console.error(`${logPrefix} Error in handleSubmit:`, error);
+      let errorMessage = 'Failed to infer document type.';
+      if (error instanceof Error) {
+         // Provide more specific feedback based on common errors
+          if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
+             errorMessage = 'Network error. Could not reach the AI service. Please check your connection.';
+          } else if (error.message.includes('API route is disabled')) {
+              errorMessage = 'AI service is temporarily unavailable (static export mode).';
+          } else if (error.message.includes('Invalid input')) {
+              errorMessage = `There was an issue with the data sent: ${error.message}`;
+          } else {
+               errorMessage = error.message;
+          }
+      }
+      toast({ title: "Inference Error", description: errorMessage, variant: "destructive" });
+      setResult(null);
+      stableOnInferenceResult(null); // Notify parent of failure
+    } finally {
+      setIsLoading(false);
+    }
+    */
+
+  }, [toast, stableOnInferenceResult, selectedState]);
 
 
    const handleEditDescription = () => {
@@ -398,6 +494,34 @@ export function DocumentInference({ onInferenceResult }: DocumentInferenceProps)
         </TabsContent>
       </Tabs>
 
+       {/* State Selection Dropdown */}
+       <div className="space-y-2">
+         <Label htmlFor="state-select" className="flex items-center">
+             <MapPin className="mr-2 h-4 w-4 text-muted-foreground"/>
+             Relevant U.S. State (Optional)
+         </Label>
+         <Select
+             value={selectedState}
+             onValueChange={setSelectedState}
+             disabled={isLoading || isEditingDescription}
+         >
+           <SelectTrigger id="state-select" className="w-full rounded-md shadow-sm" aria-label="Select relevant U.S. state">
+             <SelectValue placeholder="Select State..." />
+           </SelectTrigger>
+           <SelectContent>
+             {usStates.map(state => (
+               <SelectItem key={state.value} value={state.value}>
+                 {state.label} ({state.value})
+               </SelectItem>
+             ))}
+           </SelectContent>
+         </Select>
+         <p className="text-xs text-muted-foreground pl-1">
+              Select the state where the legal matter primarily takes place. This helps tailor the document.
+         </p>
+       </div>
+
+
        {/* Submit Button - Updated Icon & Text */}
        <Button onClick={() => handleSubmit(description)} disabled={isLoading || isRecording || isEditingDescription || !description.trim()} className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-medium">
         {isLoading ? (
@@ -414,20 +538,40 @@ export function DocumentInference({ onInferenceResult }: DocumentInferenceProps)
       </Button>
 
 
-      {/* Result Card */}
+      {/* Result Card - Enhanced */}
       {result && !isLoading && !isEditingDescription && (
-        <Card className="mt-6 bg-secondary rounded-lg shadow-inner border border-border">
+        <Card className="mt-6 bg-secondary/70 rounded-lg shadow-inner border border-border">
           <CardHeader className="pb-2 pt-4">
             <CardTitle className="text-lg flex items-center font-medium">
                 <BrainCircuit className="mr-2 h-5 w-5 text-primary" />
                 Suggested Document Type
             </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-1 pb-4">
+          <CardContent className="space-y-2 pb-4">
             <p className="text-xl font-semibold text-primary">{result.documentType}</p>
             <p className="text-sm text-muted-foreground">
               Confidence: <span className="font-medium">{(result.confidence * 100).toFixed(0)}%</span>
             </p>
+             {/* Display Reasoning */}
+             {result.reasoning && (
+                 <p className="text-xs text-muted-foreground italic border-l-2 border-primary/50 pl-2">
+                      {result.reasoning}
+                 </p>
+             )}
+             {/* Display Alternatives */}
+            {result.alternatives && result.alternatives.length > 0 && (
+                <div className="pt-2">
+                     <p className="text-sm font-medium text-foreground flex items-center">
+                         <Lightbulb className="mr-2 h-4 w-4 text-yellow-500"/>
+                         Also consider:
+                     </p>
+                    <ul className="list-disc list-inside pl-4 text-sm text-muted-foreground">
+                        {result.alternatives.map((alt, index) => (
+                            <li key={index}>{alt}</li>
+                        ))}
+                    </ul>
+                </div>
+            )}
           </CardContent>
            <CardFooter className="pt-0 pb-3">
              <p className="text-xs text-muted-foreground">
