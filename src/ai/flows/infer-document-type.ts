@@ -66,17 +66,15 @@ export async function inferDocumentType(
     let clientErrorMessage = 'An error occurred while inferring the document type. Please check the server logs for details.'; // Generic default message for client
 
      if (error instanceof Error) {
-         // Use the message from the caught error (could be from validation or the flow)
+         // Prioritize the message from the caught error
          clientErrorMessage = `Failed to infer document type: ${error.message}`;
          // Log stack trace server-side only for debugging
-         // Avoid exposing potentially sensitive stack trace details to the client
          console.error("Stack Trace (Server-Side Only):", error.stack);
      } else {
          // Handle rare cases where the thrown object is not an Error instance
          clientErrorMessage = `An unexpected error occurred: ${String(error)}`;
      }
-    // Throw a new, simple Error object suitable for the client (Server Action boundary)
-    // This ensures only the message is sent, not the full error object/stack
+    // IMPORTANT: Always throw a new, simple Error object to the client boundary
     throw new Error(clientErrorMessage);
   }
 }
