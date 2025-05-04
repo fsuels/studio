@@ -69,196 +69,280 @@ export const usStates = [
 ];
 
 
-// Mock data for the document library - Updated list.
-// Added IDs and empty questions array to satisfy the interface.
+// Function to generate ID from name
+const generateIdFromName = (name: string): string => {
+  return name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+};
+
+// Updated document library with comprehensive list and IDs
 export const documentLibrary: LegalDocument[] = [
   {
-    id: "residential-lease-agreement",
     name: "Residential Lease Agreement",
     aliases: ["rent apartment", "tenant", "lease form", "landlord agreement"],
     states: ["all"],
     category: "Real Estate",
-    questions: [] // Placeholder questions
+    id: generateIdFromName("Residential Lease Agreement"),
+    questions: [] // Placeholder
   },
   {
-    id: "divorce-settlement-agreement",
     name: "Divorce Settlement Agreement",
     aliases: ["divorce", "separation", "end marriage", "get divorced"],
     states: ["all"],
     category: "Family Law",
-    questions: []
+    id: generateIdFromName("Divorce Settlement Agreement"),
+    questions: [] // Placeholder
   },
   {
-    id: "child-custody-agreement",
     name: "Child Custody Agreement",
     aliases: ["child custody", "custody battle", "parenting plan"],
     states: ["all"],
     category: "Family Law",
-    questions: []
+    id: generateIdFromName("Child Custody Agreement"),
+    questions: [] // Placeholder
   },
   {
-    id: "prenuptial-agreement",
     name: "Prenuptial Agreement",
     aliases: ["prenup", "marriage contract", "before marriage agreement"],
     states: ["all"],
     category: "Family Law",
-    questions: []
+    id: generateIdFromName("Prenuptial Agreement"),
+    questions: [] // Placeholder
   },
   {
-    id: "mutual-nda", // Updated ID
-    name: "Mutual Non-Disclosure Agreement (NDA)", // Updated Name for clarity
+    name: "Mutual Non-Disclosure Agreement (NDA)", // Use this specific name for lookup
     aliases: ["confidential", "mutual nda", "protect idea", "secret", "both ways nda"],
     states: ["all"],
     category: "Business",
-    questions: []
+    id: generateIdFromName("Mutual Non-Disclosure Agreement (NDA)"),
+    questions: [] // Placeholder
   },
    {
-    id: "unilateral-nda", // Added Unilateral NDA
-    name: "Unilateral Non-Disclosure Agreement (NDA)",
+    name: "Unilateral Non-Disclosure Agreement (NDA)", // Use this specific name
     aliases: ["one-way nda", "disclosing party", "receiving party", "protect my idea"],
     states: ["all"],
     category: "Business",
-    questions: []
+    id: generateIdFromName("Unilateral Non-Disclosure Agreement (NDA)"),
+    questions: [] // Placeholder
   },
   {
-    id: "independent-contractor-agreement",
     name: "Independent Contractor Agreement",
     aliases: ["freelance", "contractor", "gig work", "1099 job"],
     states: ["all"],
     category: "Business",
-    questions: []
+    id: generateIdFromName("Independent Contractor Agreement"),
+    questions: [] // Placeholder
   },
   {
-    id: "service-agreement",
     name: "Service Agreement",
     aliases: ["hire services", "service provider", "payment terms", "scope of work"],
     states: ["all"],
     category: "Business",
-    questions: []
+    id: generateIdFromName("Service Agreement"),
+    questions: [] // Placeholder
   },
   {
-    id: "bill-of-sale-vehicle", // Made ID more specific
-    name: "Bill of Sale (Vehicle)", // Made name more specific
+    name: "Partnership Agreement",
+    aliases: ["business partners", "joint venture", "partner terms"],
+    states: ["all"],
+    category: "Business",
+    id: generateIdFromName("Partnership Agreement"),
+    questions: [] // Placeholder
+  },
+  {
+    name: "Operating Agreement",
+    aliases: ["LLC agreement", "limited liability company"],
+    states: ["all"],
+    category: "Business",
+    id: generateIdFromName("Operating Agreement"),
+    questions: [] // Placeholder
+  },
+  {
+    name: "Bill of Sale (Vehicle)", // Use this specific name
     aliases: ["sell car", "used item sale", "vehicle transfer", "buy car"],
     states: ["all"],
     category: "Transactions",
-    questions: []
+    id: generateIdFromName("Bill of Sale (Vehicle)"),
+    questions: [] // Placeholder
+  },
+  {
+    name: "General Power of Attorney", // Use this specific name
+    aliases: ["represent me", "act on my behalf", "authorize someone", "financial poa"],
+    states: ["all"],
+    category: "Personal Affairs",
+    id: generateIdFromName("General Power of Attorney"),
+    questions: [] // Placeholder
   },
    {
-    id: "general-power-of-attorney", // Made ID more specific
-    name: "General Power of Attorney", // Made name more specific
-    aliases: ["represent me", "act on my behalf", "authorize someone", "financial poa"],
-    states: ["all"], // Consider making state-specific templates later
-    category: "Personal Affairs",
-    questions: []
-  },
-  {
-    id: "healthcare-power-of-attorney", // Added Healthcare POA
-    name: "Healthcare Power of Attorney",
+    name: "Healthcare Power of Attorney", // Use this specific name
     aliases: ["medical poa", "healthcare proxy", "appoint agent for health"],
-    states: ["all"], // Often state-specific forms exist
+    states: ["all"],
     category: "Personal Affairs",
-    questions: []
+    id: generateIdFromName("Healthcare Power of Attorney"),
+    questions: [] // Placeholder
   },
   {
-    id: "living-will",
     name: "Living Will",
     aliases: ["medical wishes", "advance directive", "life support", "end of life care"],
-    states: ["all"], // State forms vary significantly
-    category: "Estate Planning", // Changed category
-    questions: []
+    states: ["all"],
+    category: "Estate Planning", // Updated category
+    id: generateIdFromName("Living Will"),
+    questions: [] // Placeholder
   },
   {
-    id: "last-will-and-testament", // Added Will
-    name: "Last Will and Testament",
+    name: "Last Will and Testament", // Use this specific name
     aliases: ["will", "testament", "estate planning", "distribute assets"],
-    states: ["all"], // Highly state-specific requirements
+    states: ["all"],
     category: "Estate Planning",
-    questions: []
+    id: generateIdFromName("Last Will and Testament"),
+    questions: [] // Placeholder
   },
   {
-    id: "loan-agreement",
     name: "Loan Agreement",
     aliases: ["borrow money", "lend funds", "repayment terms", "personal loan"],
     states: ["all"],
     category: "Finance",
-    questions: []
+    id: generateIdFromName("Loan Agreement"),
+    questions: [] // Placeholder
   },
   {
-    id: "promissory-note",
     name: "Promissory Note",
     aliases: ["IOU", "promise to pay", "loan paper", "debt note"],
     states: ["all"],
     category: "Finance",
-    questions: []
+    id: generateIdFromName("Promissory Note"),
+    questions: [] // Placeholder
   },
   {
-    id: "employment-offer-letter",
     name: "Employment Offer Letter",
     aliases: ["hire employee", "job offer", "terms of employment", "offer letter"],
     states: ["all"],
     category: "Employment",
-    questions: []
+    id: generateIdFromName("Employment Offer Letter"),
+    questions: [] // Placeholder
+  },
+   {
+    name: "Non-Compete Agreement",
+    aliases: ["restrict competition", "former employee", "noncompete", "restrictive covenant"],
+    states: ["CA", "ND", "OK", "MT"], // Example restricted states
+    category: "Employment",
+    description: "Restricts an employee from competing after employment ends. Note: Enforceability varies significantly by state.",
+    id: generateIdFromName("Non-Compete Agreement"),
+    questions: [] // Placeholder
   },
   {
-    id: "eviction-notice",
     name: "Eviction Notice",
     aliases: ["remove tenant", "late rent", "kick out", "notice to vacate"],
-    states: ["all"], // State-specific notice periods and reasons
+    states: ["all"],
     category: "Real Estate",
-    questions: []
+    id: generateIdFromName("Eviction Notice"),
+    questions: [] // Placeholder
   },
   {
-    id: "affidavit",
+    name: "Deed",
+    aliases: ["property deed", "ownership transfer"],
+    states: ["all"],
+    category: "Real Estate",
+    id: generateIdFromName("Deed"),
+    questions: [] // Placeholder
+  },
+  {
+    name: "Quitclaim Deed",
+    aliases: ["property transfer", "quit claim deed"],
+    states: ["all"],
+    category: "Real Estate",
+    id: generateIdFromName("Quitclaim Deed"),
+    questions: [] // Placeholder
+  },
+  {
+    name: "Articles of Incorporation",
+    aliases: ["form corporation", "incorporate business"],
+    states: ["all"],
+    category: "Business",
+    id: generateIdFromName("Articles of Incorporation"),
+    questions: [] // Placeholder
+  },
+  {
+    name: "Cease and Desist Letter",
+    aliases: ["stop using", "infringement", "copyright violation", "stop harassment", "infringement warning", "demand letter", "stop using trademark"],
+    states: ["all"],
+    category: "General Legal", // Updated category
+    id: generateIdFromName("Cease and Desist Letter"),
+    questions: [] // Placeholder
+  },
+  {
+    name: "Demand Letter",
+    aliases: ["request payment", "owe money", "legal demand"],
+    states: ["all"],
+    category: "General Legal", // Updated category
+    id: generateIdFromName("Demand Letter"),
+    questions: [] // Placeholder
+  },
+  {
+    name: "Release of Liability",
+    aliases: ["waiver", "hold harmless", "not responsible"],
+    states: ["all"],
+    category: "General Legal", // Updated category
+    id: generateIdFromName("Release of Liability"),
+    questions: [] // Placeholder
+  },
+  {
     name: "Affidavit",
     aliases: ["sworn statement", "declaration", "official statement", "under oath"],
     states: ["all"],
     category: "General Legal",
-    questions: []
+    id: generateIdFromName("Affidavit"),
+    questions: [] // Placeholder
   },
   {
-    id: "cohabitation-agreement",
+    name: "Court Order",
+    aliases: ["judge order", "legal ruling"],
+    states: ["all"],
+    category: "Court",
+    id: generateIdFromName("Court Order"),
+    questions: [] // Placeholder
+  },
+  {
+    name: "Restraining Order",
+    aliases: ["keep away", "protection order"],
+    states: ["all"],
+    category: "Court",
+    id: generateIdFromName("Restraining Order"),
+    questions: [] // Placeholder
+  },
+  {
+    name: "Probate Petition",
+    aliases: ["inheritance", "will court", "estate administration"],
+    states: ["all"],
+    category: "Estate Planning", // Updated category
+    id: generateIdFromName("Probate Petition"),
+    questions: [] // Placeholder
+  },
+  {
+    name: "Bankruptcy Filing",
+    aliases: ["chapter 7", "chapter 13", "debt relief"],
+    states: ["all"],
+    category: "Finance",
+    id: generateIdFromName("Bankruptcy Filing"),
+    questions: [] // Placeholder
+  },
+  {
     name: "Cohabitation Agreement",
     aliases: ["living together", "unmarried partners", "partner sharing assets", "domestic partnership agreement"],
     states: ["all"],
     category: "Family Law",
-    questions: []
-  },
-  {
-    id: "non-compete-agreement",
-    name: "Non-Compete Agreement",
-    aliases: ["restrict competition", "former employee", "noncompete", "restrictive covenant"],
-    states: ["CA", "ND", "OK", "MT"], // Example: States where generally unenforceable or restricted
-    category: "Employment",
-    description: "Restricts an employee from competing after employment ends. Note: Enforceability varies significantly by state.",
-    questions: []
+    id: generateIdFromName("Cohabitation Agreement"),
+    questions: [] // Placeholder
   },
    {
-    id: "partnership-agreement", // Added Partnership Agreement
-    name: "Partnership Agreement",
-    aliases: ["business partners", "starting business together", "partner roles"],
-    states: ["all"],
-    category: "Business",
-    questions: []
-  },
-  {
-    id: "invoice-dispute-letter", // Added Invoice Dispute
-    name: "Invoice Dispute Letter",
+    name: "Invoice Dispute Letter", // Added
     aliases: ["wrong bill", "incorrect invoice", "dispute charge"],
     states: ["all"],
     category: "Business",
-    questions: []
+    id: generateIdFromName("Invoice Dispute Letter"),
+    questions: [] // Placeholder
   },
-  {
-    id: "cease-and-desist-letter", // Added Cease and Desist
-    name: "Cease and Desist Letter",
-    aliases: ["stop harassment", "infringement warning", "demand letter", "stop using trademark"],
-    states: ["all"],
-    category: "General Legal",
-    questions: []
-  },
-    // Add the General Inquiry fallback
-    {
+  // General Inquiry Fallback (Keep last)
+   {
     id: 'general-inquiry',
     name: 'General Inquiry',
     aliases: ['unsure', 'help', 'legal question', 'need advice', 'other', 'talk to someone', 'not sure'],
@@ -269,9 +353,11 @@ export const documentLibrary: LegalDocument[] = [
       { id: "specificNeed", label: "Can you describe your legal need in more detail?", type: "textarea", required: true, placeholder: "e.g., What are you trying to achieve or protect?" },
       { id: "involvedParties", label: "Who are the main parties involved?", type: "text", placeholder: "e.g., Myself, my business partner, my landlord" },
       { id: "desiredOutcome", label: "What is your desired outcome?", type: "textarea", placeholder: "e.g., Get paid for work, stop someone from contacting me, formalize an agreement" },
+       { id: 'state', label: 'Which U.S. state is relevant? (Optional)', type: 'select', options: usStates }
     ]
   },
 ];
+
 
 /**
  * Finds document types matching keywords or aliases.
