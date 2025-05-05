@@ -15,6 +15,7 @@ import { Button } from '@/components/ui/button'; // Import Button
 import { useToast } from '@/hooks/use-toast'; // Import useToast
 import { useTranslation } from 'react-i18next'; // Import useTranslation
 import TrustAndTestimonialsSection from "@/components/landing/TrustAndTestimonialsSection"; // Import the combined Trust/Testimonials component
+import type { LegalDocument } from '@/lib/document-library'; // Import LegalDocument type
 
 
 // Define share icon SVG inline
@@ -30,7 +31,7 @@ export default function Home() {
   const [isHydrated, setIsHydrated] = useState(false); // State for hydration
 
   // --- State for Step 1 ---
-  const [selectedDoc, setSelectedDoc] = useState<any>(null); // State for the selected document object
+  const [selectedDoc, setSelectedDoc] = useState<LegalDocument | null>(null); // State for the selected document object
   const [userState, setUserState] = useState(''); // State for the selected US state
 
   // --- State for Step 1 -> 2 ---
@@ -62,7 +63,7 @@ export default function Home() {
 
 
   // Handler for when user selects a document from Step1DocumentSelector
-   const handleDocumentSelected = (doc: any) => { // doc is the full document object from library
+   const handleDocumentSelected = (doc: LegalDocument) => { // Use LegalDocument type
       console.log(`[page.tsx] handleDocumentSelected: User selected`, doc);
       setSelectedDoc(doc); // Store the selected document object
        toast({ title: t('toasts.docTypeConfirmedTitle'), description: t('toasts.docTypeConfirmedDescription', { docName: doc.name }) });
@@ -214,7 +215,6 @@ export default function Home() {
                              schema={currentFormSchema}
                              onSubmit={handleAnswersSubmit}
                              isReadOnly={currentStep > 2}
-                             state={userState} // Pass state to form renderer
                          />
                      </div>
                  )}
