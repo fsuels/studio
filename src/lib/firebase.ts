@@ -1,6 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp, getApps, getApp, type FirebaseApp } from "firebase/app";
 import { getAnalytics, isSupported, type Analytics } from "firebase/analytics";
+import { getFirestore as getFirestoreFB, provideFirestore } from "firebase/firestore"; //Import getFirestore
 
 // Default Firebase configuration provided by the user
 // Used as fallbacks if environment variables are not set.
@@ -100,5 +101,9 @@ if (typeof window !== 'undefined' && app) { // Ensure app is initialized before 
   });
 }
 
+// Export Firestore
+const getFirestore = (app: FirebaseApp) => {
+    return getFirestoreFB(app);
+}
 
-export { app, analytics }; // Export initialized app and analytics (which might be null)
+export { app, analytics, getFirestore }; // Export initialized app and analytics (which might be null)
