@@ -378,6 +378,8 @@
      "title": "Legal Insights & Articles",
      "subtitle": "Smart legal tips, document guides, and industry updates.",
      "readMore": "Read more",
+     "prevPost": "Previous Post",
+     "nextPost": "Next Post",
      "freelancer-docs": {
        "title": "5 Legal Documents Every Freelancer Should Know",
        "desc": "From contracts to NDAs — simplify your freelance life with these essentials.",
@@ -399,7 +401,8 @@
      "lease-florida": {
        "title": "How to Create a Valid Lease Agreement in Florida",
        "desc": "A step-by-step legal checklist for landlords and renters in Florida.",
-       "date": "2023-11-03"
+       "date": "2023-11-03",
+       "body": "Coming soon..."
      },
      "legal-checklist-small-business": {
         "title": "The Ultimate Legal Checklist for Starting a Small Business",
@@ -436,6 +439,24 @@
         "desc": "Learn about joint custody, sole custody, and how to create a fair plan.",
         "date": "2024-03-25",
         "body": "<p>Child custody agreements determine where children live and who makes decisions for them after parents separate. Key concepts:</p><ul><li><strong>Legal Custody:</strong> Right to make major decisions (education, healthcare, religion). Can be Joint or Sole.</li><li><strong>Physical Custody:</strong> Where the child primarily resides. Can be Joint (significant time with both parents) or Sole (primarily with one parent, visitation for the other).</li><li><strong>Best Interests of the Child:</strong> Courts prioritize the child's well-being, considering factors like parental stability, child's preference (if old enough), and history of care.</li><li><strong>Parenting Plan:</strong> A detailed schedule outlining visitation, holidays, transportation, and communication.</li></ul><p>Mediation or collaboration is often encouraged to create a plan. Formalizing the agreement legally is essential.</p>"
+      },
+       "digital-signatures-legal": {
+        "title": "Are Digital Signatures Legally Binding in the U.S.?",
+        "desc": "Understand the legal status of e-signatures under U.S. law.",
+        "date": "2024-03-30",
+        "body": "Coming soon..."
+      },
+      "notarized-documents-online": {
+        "title": "Can You Notarize Documents Online? What to Know",
+        "desc": "Learn how online notarization works and which states support it.",
+        "date": "2024-03-28",
+        "body": "Coming soon..."
+      },
+      "legal-documents-immigrants": {
+        "title": "Top 5 Legal Documents Immigrants Need in the U.S.",
+        "desc": "From work permits to affidavits—here’s what new residents should prepare.",
+        "date": "2024-03-27",
+        "body": "Coming soon..."
       },
        "contract-basics": {
         "title": "Contract Basics: What Every Agreement Must Include",
@@ -490,8 +511,73 @@
         "desc": "Independent contractor rules, contracts, and tax forms.",
         "date": "2024-04-09",
         "body": "Coming soon..."
+      },
+       "legal-docs-remote-work": {
+        "title": "Essential Legal Documents for Remote Work",
+        "desc": "Ensure legal compliance while hiring or working remotely.",
+        "date": "2024-04-10",
+        "body": "Coming soon..."
+      },
+      "legal-name-change": {
+        "title": "How to Legally Change Your Name in the U.S.",
+        "desc": "Step-by-step process for a legal name change in any state.",
+        "date": "2024-04-11",
+        "body": "Coming soon..."
+      },
+      "how-to-draft-bill-of-sale": {
+        "title": "How to Draft a Legal Bill of Sale",
+        "desc": "Ensure your private sale is secure with a properly formatted bill of sale.",
+        "date": "2024-04-12",
+        "body": "Coming soon..."
+      },
+      "divorce-paperwork-guide": {
+        "title": "The Paperwork You Need to File for Divorce",
+        "desc": "A checklist of forms and filings for divorce in your state.",
+        "date": "2024-04-13",
+        "body": "Coming soon..."
+      },
+      "start-llc-online": {
+        "title": "How to Start an LLC Online in 2024",
+        "desc": "File your Limited Liability Company without a lawyer using these tools.",
+        "date": "2024-04-14",
+        "body": "Coming soon..."
+      },
+      "do-i-need-a-lawyer": {
+        "title": "Do I Need a Lawyer or Can I Do It Myself?",
+        "desc": "When it's safe to use DIY legal tools—and when it's not.",
+        "date": "2024-04-15",
+        "body": "Coming soon..."
+      },
+      "pet-agreements-renters": {
+        "title": "Pet Agreements for Renters: What to Include",
+        "desc": "How to make pets part of a lease agreement legally and clearly.",
+        "date": "2024-04-16",
+        "body": "Coming soon..."
+      },
+      "freelancer-contract-template": {
+        "title": "Free Freelancer Contract Template for 2024",
+        "desc": "Protect your freelance work with a simple contract template.",
+        "date": "2024-04-17",
+        "body": "Coming soon..."
+      },
+      "medical-consent-minors": {
+        "title": "Medical Consent Forms for Minors: What Parents Should Know",
+        "desc": "Why a consent form is vital when your child is under someone else’s care.",
+        "date": "2024-04-18",
+        "body": "Coming soon..."
+      },
+      "legal-docs-for-startups": {
+        "title": "Top 7 Legal Documents Every Startup Needs",
+        "desc": "From founder agreements to NDAs—cover your legal bases early.",
+        "date": "2024-04-19",
+        "body": "Coming soon..."
+      },
+      "power-of-attorney-guide": {
+        "title": "General vs. Limited Power of Attorney: What's the Difference?",
+        "desc": "Understand when each type of POA is appropriate and why it matters.",
+        "date": "2024-04-20",
+        "body": "Coming soon..."
       }
    }
 }
 
-    
