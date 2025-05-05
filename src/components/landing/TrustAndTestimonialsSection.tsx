@@ -3,7 +3,7 @@
 
 import { useTranslation } from 'react-i18next'
 import { useEffect, useState } from 'react'
-import { FileText, Lock, CheckCircle } from 'lucide-react'; // Use relevant icons
+import { FileText, Lock, CheckCircle, ShieldCheck } from 'lucide-react'; // Use relevant icons
 import Image from 'next/image'; // Import Image
 import { Card, CardContent } from '@/components/ui/card'; // Import Card
 import {
@@ -13,6 +13,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel"; // Import Carousel
+import { Button } from '@/components/ui/button'; // Import Button
 
 // Define the structure for testimonial data from translations
 interface TestimonialData {
@@ -58,14 +59,25 @@ export default function TrustAndTestimonialsSection() {
     };
   });
 
+  const scrollToWorkflow = () => {
+    const workflowSection = document.getElementById('workflow-start');
+    if (workflowSection) {
+      workflowSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } else {
+       console.warn('Workflow section with id "workflow-start" not found.');
+       // Optionally scroll to top or another fallback
+       // window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
 
   return (
-    <section className="bg-muted/50 py-16 px-4 text-center"> {/* Adjusted background */}
+    <section className="bg-muted/50 py-20 px-4 text-center"> {/* Adjusted background and padding */}
 
       {/* Trust Strip Section */}
-       <p className="uppercase text-muted-foreground tracking-wide mb-6 text-sm font-semibold">
+       <h2 className="text-lg uppercase text-muted-foreground tracking-wide mb-8 font-semibold"> {/* Changed h2, font size, color, tracking */}
         {isHydrated ? t('home.trustStrip.title') : placeholderText}
-      </p>
+      </h2>
       <div className="flex flex-wrap justify-center gap-6 md:gap-10 items-center max-w-4xl mx-auto text-foreground/80 text-sm mb-16"> {/* Increased bottom margin */}
         <div className="flex items-center gap-2">
           <FileText className="h-5 w-5 text-primary" /> {/* Document icon */}
@@ -82,15 +94,15 @@ export default function TrustAndTestimonialsSection() {
       </div>
 
       {/* Testimonials Section */}
-      <h2 className="text-2xl font-semibold text-center mb-10 text-foreground">
+      <h3 className="text-3xl font-bold text-foreground mb-10"> {/* Changed h3, font size, color */}
         {isHydrated ? t('home.testimonials.title') : placeholderText}
-      </h2>
+      </h3>
         <Carousel
           opts={{
             align: "start",
             loop: true,
           }}
-          className="w-full max-w-xl md:max-w-2xl lg:max-w-3xl mx-auto"
+          className="w-full max-w-xl md:max-w-2xl lg:max-w-3xl mx-auto mb-12" // Added mb-12
         >
           <CarouselContent>
              {testimonials.map((testimonial, index) => (
@@ -123,6 +135,24 @@ export default function TrustAndTestimonialsSection() {
           <CarouselPrevious className="absolute left-[-50px] top-1/2 -translate-y-1/2 hidden sm:flex" />
           <CarouselNext className="absolute right-[-50px] top-1/2 -translate-y-1/2 hidden sm:flex" />
         </Carousel>
+
+       {/* Guarantee and CTA */}
+      <div className="mt-16 flex flex-col items-center space-y-6"> {/* Increased top margin and spacing */}
+         <div className="inline-flex items-center gap-3 bg-secondary/80 border border-primary/30 rounded-full px-6 py-3 shadow-sm">
+           <ShieldCheck className="h-6 w-6 text-primary" />
+           <p className="text-sm font-medium text-secondary-foreground">
+              {isHydrated ? t('home.satisfactionGuarantee') : placeholderText} {/* Used correct key */}
+           </p>
+         </div>
+          <Button
+              size="lg"
+              className="text-lg px-8 py-4 bg-accent hover:bg-accent/90 text-accent-foreground shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
+              onClick={scrollToWorkflow}
+           >
+              {isHydrated ? t('home.callToAction') : placeholderText} {/* Used correct key */}
+           </Button>
+      </div>
+
     </section>
   )
 }
