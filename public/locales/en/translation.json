@@ -378,21 +378,28 @@
      "title": "Legal Insights & Articles",
      "subtitle": "Smart legal tips, document guides, and industry updates.",
      "readMore": "Read more",
-     "freelancer": {
+     "freelancer-docs": {
        "title": "5 Legal Documents Every Freelancer Should Know",
-       "desc": "From contracts to NDAs — simplify your freelance life with these essentials."
+       "desc": "From contracts to NDAs — simplify your freelance life with these essentials.",
+       "date": "2024-03-12",
+       "body": "<p>If you're a freelancer, protecting yourself legally is as important as delivering great work. Here are five key documents every freelancer should have:</p>\n  <ul>\n    <li><strong>Independent Contractor Agreement</strong>: Defines scope, payment, deadlines, and ownership of work.</li>\n    <li><strong>Non-Disclosure Agreement (NDA)</strong>: Keeps confidential information secure when working with clients.</li>\n    <li><strong>Invoice</strong>: Essential for requesting payment and keeping records.</li>\n    <li><strong>Service Agreement</strong>: Especially useful for recurring or ongoing engagements.</li>\n    <li><strong>Copyright License</strong>: Clarifies who owns the work product and whether reuse is allowed.</li>\n  </ul>\n  <p>These documents build trust and clarity — and prevent conflicts before they start.</p>"
      },
-     "ai": {
+     "ai-legaltech": {
        "title": "How AI is Transforming LegalTech",
-       "desc": "Explore the rise of AI in document generation, compliance, and contracts."
+       "desc": "Explore the rise of AI in document generation, compliance, and contracts.",
+       "date": "2024-02-02",
+       "body": "<p>Artificial Intelligence is changing the legal world. LegalTech platforms now use AI to:</p>\n  <ul>\n    <li>Understand user intent through voice or text.</li>\n    <li>Classify legal needs and suggest appropriate documents.</li>\n    <li>Auto-fill and validate clauses based on best practices.</li>\n  </ul>\n  <p>AI doesn't replace lawyers — but it empowers more people to access reliable legal tools quickly and affordably.</p>"
      },
-     "templates": {
+     "templates-risk": {
        "title": "Why Free Templates Can Be Risky",
-       "desc": "Legal templates often miss crucial clauses — here's what to watch for."
+       "desc": "Legal templates often miss crucial clauses — here's what to watch for.",
+       "date": "2023-12-20",
+       "body": "<p>Using free legal templates can seem like a quick solution, but often they:</p>\n  <ul>\n    <li>Omit state-specific laws or jurisdiction requirements.</li>\n    <li>Include outdated or invalid legal language.</li>\n    <li>Fail to cover essential risks, like late fees or liability.</li>\n  </ul>\n  <p>Instead, platforms like 123LegalDoc provide customizable, jurisdiction-aware contracts that ensure better protection.</p>"
      },
-     "lease": {
+     "lease-florida": {
        "title": "How to Create a Valid Lease Agreement in Florida",
        "desc": "A step-by-step legal checklist for landlords and renters in Florida."
      }
    }
 }
+

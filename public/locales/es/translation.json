@@ -213,7 +213,7 @@
             "startNow": "Comienza gratis"
           },
           "testimonialsTitle": "Lo que dicen nuestros usuarios",
-          "testimonial1": "\"123LegalDoc me ahorró $500 en mi contrato de alquiler. ¡Súper fácil de usar!\"",
+          "testimonial1": "\"123LegalDoc me ahorró $500 en mi contrato de alquiler. ¡Muy fácil de usar!\"",
           "testimonial1Name": "Sarah Chen",
           "testimonial1Role": "Dueña de Pequeño Negocio",
           "testimonial2": "\"Generar un contrato de sociedad tomó minutos en vez de días. Muy recomendable.\"",
@@ -223,7 +223,7 @@
           "testimonial3Name": "Emily White",
           "testimonial3Role": "Fundadora de Startup",
           "featuredIn": "DESTACADO EN",
-          "satisfactionGuarantee": "Garantía de satisfacción 100% o le devolvemos su dinero",
+          "satisfactionGuarantee": "Garantía de satisfacción del 100% o le devolvemos su dinero",
           "trustStrip": {
             "title": "Confiado por Profesionales",
             "badge1": "Más de {{count}} documentos generados",
@@ -378,21 +378,28 @@
       "title": "Consejos y Artículos Legales",
       "subtitle": "Tips legales, guías de documentos y novedades del sector.",
       "readMore": "Leer más",
-      "freelancer": {
+      "freelancer-docs": {
         "title": "5 Documentos Legales que Todo Freelancer Debe Conocer",
-        "desc": "Desde contratos hasta acuerdos de confidencialidad — lo básico para freelancers."
+        "desc": "Desde contratos hasta acuerdos de confidencialidad — lo básico para freelancers.",
+        "date": "2024-03-12",
+        "body": "<p>Si trabajas como freelancer, protegerte legalmente es tan importante como hacer bien tu trabajo. Estos son cinco documentos clave que deberías tener:</p>\n  <ul>\n    <li><strong>Contrato de Prestación de Servicios</strong>: Define el alcance, pagos, tiempos de entrega y propiedad del trabajo.</li>\n    <li><strong>Acuerdo de Confidencialidad (NDA)</strong>: Protege información sensible del cliente.</li>\n    <li><strong>Factura</strong>: Necesaria para solicitar pagos y llevar control.</li>\n    <li><strong>Acuerdo de Servicios</strong>: Ideal para relaciones recurrentes con clientes.</li>\n    <li><strong>Licencia de Derechos de Autor</strong>: Aclara quién es el dueño del contenido y si puede reutilizarse.</li>\n  </ul>\n  <p>Estos documentos ayudan a evitar malentendidos y brindan seguridad legal.</p>"
       },
-      "ai": {
+      "ai-legaltech": {
         "title": "Cómo la IA Está Transformando el LegalTech",
-        "desc": "Explora el papel de la inteligencia artificial en documentos y cumplimiento."
+        "desc": "Explora el papel de la inteligencia artificial en documentos y cumplimiento.",
+        "date": "2024-02-02",
+        "body": "<p>La inteligencia artificial está revolucionando el mundo legal. Hoy en día, plataformas legales utilizan IA para:</p>\n  <ul>\n    <li>Entender las necesidades legales mediante voz o texto.</li>\n    <li>Clasificar situaciones y recomendar documentos adecuados.</li>\n    <li>Rellenar cláusulas automáticamente siguiendo buenas prácticas.</li>\n  </ul>\n  <p>La IA no reemplaza abogados, pero permite que más personas accedan a herramientas legales confiables y asequibles.</p>"
       },
-      "templates": {
+      "templates-risk": {
         "title": "Por Qué los Modelos Gratis Pueden Ser Peligrosos",
-        "desc": "Los modelos gratuitos suelen omitir cláusulas clave — qué debes revisar."
+        "desc": "Los modelos gratuitos suelen omitir cláusulas clave — qué debes revisar.",
+        "date": "2023-12-20",
+        "body": "<p>Usar plantillas legales gratuitas puede parecer conveniente, pero muchas veces:</p>\n  <ul>\n    <li>No consideran leyes estatales específicas.</li>\n    <li>Usan lenguaje legal desactualizado o inválido.</li>\n    <li>Omiten cláusulas clave sobre pagos, responsabilidades o sanciones.</li>\n  </ul>\n  <p>Plataformas como 123LegalDoc ofrecen contratos personalizables que cumplen con las leyes locales.</p>"
       },
-      "lease": {
+      "lease-florida": {
         "title": "Cómo Crear un Contrato de Alquiler Válido en Florida",
         "desc": "Guía legal paso a paso para propietarios e inquilinos en Florida."
       }
     }
 }
+
