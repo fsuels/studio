@@ -222,7 +222,13 @@
         "testimonial3Name": "Emily White",
         "testimonial3Role": "Startup Founder",
         "featuredIn": "FEATURED IN",
-        "satisfactionGuarantee": "100% Satisfaction Guarantee or Your Money Back"
+        "satisfactionGuarantee": "100% Satisfaction Guarantee or Your Money Back",
+        "trustStrip": {
+          "title": "Trusted By Professionals",
+          "badge1": "Used by small businesses in all 50 states",
+          "badge2": "Encrypted & privacy-compliant",
+          "badge3": "Legal formats verified by attorneys"
+        }
     },
     "logoAlt": "123LegalDoc Logo",
     "Step 2: Provide Details": "Step 2: Provide Details",
