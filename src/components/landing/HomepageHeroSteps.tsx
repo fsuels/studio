@@ -148,18 +148,8 @@ export default function HomepageHeroSteps() {
                 </Button>
              </motion.div>
 
-             {/* Trust Bar */}
-             <motion.div
-                 initial={{ opacity: 0, y: 10 }}
-                 animate={{ opacity: isHydrated ? 1 : 0, y: isHydrated ? 0 : 10 }}
-                 transition={{ duration: 0.3, delay: 0.7 }}
-                 className="mt-12 text-sm text-muted-foreground flex justify-center items-center gap-2 flex-wrap"
-             >
-                 <span>{isHydrated ? t('trustText') : placeholderText}</span>
-                 <span className="text-yellow-500 flex items-center">
-                     ⭐⭐⭐⭐⭐
-                 </span>
-             </motion.div>
+             {/* Removed the duplicate Trust Bar */}
+
         </div>
     </motion.section>
   )
