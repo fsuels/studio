@@ -190,7 +190,7 @@
         "pdfGenErrorTitle": "Error al Generar PDF"
      },
      "home": {
-         "hero": {
+          "hero": {
             "title": "Solo 3 Pasos Fáciles",
             "subtitle": "Con unos pocos pasos guiados, generarás un documento legal totalmente personalizado."
           },
@@ -211,18 +211,18 @@
           "cta": {
             "startNow": "Comienza gratis"
           },
-         "testimonialsTitle": "Lo que dicen nuestros usuarios",
-         "testimonial1": "\"123LegalDoc me ahorró $500 en mi contrato de alquiler. ¡Muy fácil de usar!\"",
-         "testimonial1Name": "Sarah Chen",
-         "testimonial1Role": "Propietaria de pequeño negocio",
-         "testimonial2": "\"Generar un contrato de asociación tomó minutos en lugar de días. Altamente recomendado.\"",
-         "testimonial2Name": "Michael B.",
-         "testimonial2Role": "Freelancer",
-         "testimonial3": "\"La inferencia de IA fue precisa y el cuestionario claro. ¡Gran servicio!\"",
-         "testimonial3Name": "Emily White",
-         "testimonial3Role": "Fundadora de startup",
-         "featuredIn": "DESTACADO EN",
-         "satisfactionGuarantee": "Garantía de satisfacción del 100% o le devolvemos su dinero",
+          "testimonialsTitle": "Lo que dicen nuestros usuarios",
+          "testimonial1": "\"123LegalDoc me ahorró $500 en mi contrato de alquiler. ¡Muy fácil de usar!\"",
+          "testimonial1Name": "Sarah Chen",
+          "testimonial1Role": "Propietaria de pequeño negocio",
+          "testimonial2": "\"Generar un contrato de asociación tomó minutos en lugar de días. Altamente recomendado.\"",
+          "testimonial2Name": "Michael B.",
+          "testimonial2Role": "Freelancer",
+          "testimonial3": "\"La inferencia de IA fue precisa y el cuestionario claro. ¡Gran servicio!\"",
+          "testimonial3Name": "Emily White",
+          "testimonial3Role": "Fundadora de startup",
+          "featuredIn": "DESTACADO EN",
+          "satisfactionGuarantee": "Garantía de satisfacción del 100% o le devolvemos su dinero",
           "trustStrip": {
             "title": "Confiado por Profesionales",
             "badge1": "Más de {{count}} documentos generados",
@@ -231,21 +231,31 @@
           },
           "testimonials": {
             "title": "Lo que dicen nuestros usuarios",
-            "t1": {
-              "quote": "\"123LegalDoc me ahorró $500 en mi contrato de alquiler. ¡Súper fácil de usar!\"",
-              "name": "Sarah Chen",
-              "title": "Dueña de Pequeño Negocio"
-            },
-            "t2": {
-              "quote": "\"Generar un contrato de sociedad tomó minutos en vez de días. Muy recomendable.\"",
-              "name": "Michael B.",
-              "title": "Freelancer"
-            },
-            "t3": {
-              "quote": "\"La inferencia de IA fue precisa y el formulario muy claro. ¡Excelente servicio!\"",
-              "name": "Emily White",
-              "title": "Fundadora de Startup"
-            }
+            "t1": { "quote": "Esta plataforma me ahorró horas de papeleo.", "name": "Ana Ramírez", "title": "Propietaria en Texas" },
+            "t2": { "quote": "Extremadamente intuitivo. Creé un contrato en minutos.", "name": "Jason Liu", "title": "Fundador de Startup" },
+            "t3": { "quote": "La IA me dio justo lo que necesitaba. ¡Fantástico!", "name": "Linda Fox", "title": "Agente Inmobiliaria" },
+            "t4": { "quote": "Me guió paso a paso sin ninguna confusión.", "name": "Kevin James", "title": "Freelancer" },
+            "t5": { "quote": "Simple, rápido y legalmente sólido. Muy recomendable.", "name": "Nina Patel", "title": "Vendedora en Línea" },
+            "t6": { "quote": "Perfecto para contratos de pequeños negocios.", "name": "Carlos Gómez", "title": "Dueño de Boutique" },
+            "t7": { "quote": "El soporte en español fue clave para mi equipo.", "name": "Rosa Villanueva", "title": "Asistente Legal" },
+            "t8": { "quote": "Excelente diseño y resultados confiables.", "name": "Matthew R.", "title": "Fotógrafo" },
+            "t9": { "quote": "Pude crear un contrato de alquiler estando de vacaciones.", "name": "Joanne L.", "title": "Propietaria Remota" },
+            "t10": { "quote": "Lo volvería a usar sin duda. Es excelente.", "name": "Henry Thomas", "title": "Inversionista" },
+            "t11": { "quote": "No necesitas ser abogado. Lo hace todo por ti.", "name": "Susan White", "title": "Organizadora de Eventos" },
+            "t12": { "quote": "Previsualización y compartición de documentos fue muy fluida.", "name": "Liam Cruz", "title": "Consultor de Software" },
+            "t13": { "quote": "¡Por fin ayuda legal accesible!", "name": "Laura Bennett", "title": "Escritora Freelance" },
+            "t14": { "quote": "Mi inquilino firmó el mismo día.", "name": "Omar Hassan", "title": "Propietario" },
+            "t15": { "quote": "Esta app es esencial para emprendedores.", "name": "Jada Evans", "title": "Coach de Vida" },
+            "t16": { "quote": "Hasta mis padres pudieron usarla fácilmente.", "name": "Miguel Reyes", "title": "Estudiante Universitario" },
+            "t17": { "quote": "El formulario dinámico fue ideal para mí.", "name": "Emily Rivera", "title": "Organizadora sin fines de lucro" },
+            "t18": { "quote": "Es como tener un abogado en el celular.", "name": "Daniel Schmidt", "title": "Desarrollador Freelance" },
+            "t19": { "quote": "Limpio, moderno y legalmente confiable.", "name": "Priya Desai", "title": "Arquitecta" },
+            "t20": { "quote": "Me ayuda a redactar sin dudar.", "name": "George Park", "title": "Consultor de Marketing" },
+            "t21": { "quote": "Confiable y rápido. El mejor gasto de $5.", "name": "Aliya Khan", "title": "Coach en Línea" },
+            "t22": { "quote": "La IA acertó con mis documentos de negocio.", "name": "Bobby Tran", "title": "Fundador de Startup" },
+            "t23": { "quote": "Me dio tranquilidad en cada paso.", "name": "Natalie Scott", "title": "Madre y Propietaria" },
+            "t24": { "quote": "Confío más en esta herramienta que en plantillas online.", "name": "Eric Delgado", "title": "Dueño de Negocio" },
+            "t25": { "quote": "El soporte bilingüe fue clave.", "name": "Yesenia Morales", "title": "Líder Comunitaria" }
           },
           "moneyBackGuarantee": "Garantía de satisfacción 100% o le devolvemos su dinero",
           "callToAction": "Comenzar ahora"
@@ -269,3 +279,5 @@
        "costEffectiveDescription": "Paga solo $5 por documento en comparación con los $200+ que suelen cobrar los bufetes de abogados."
      }
 }
+
+    
