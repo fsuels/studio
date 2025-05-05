@@ -1,7 +1,7 @@
 // src/components/Step1DocumentSelector.tsx
 "use client";
 
-import React, { useState, useEffect } from "react"; // Ensure useEffect is imported if needed
+import React, { useState, useEffect, useMemo } from "react"; // Added useMemo
 import { useTranslation } from "react-i18next";
 import { documentLibrary, usStates, LegalDocument } from "@/lib/document-library"; // Import usStates and LegalDocument
 import { Button } from "@/components/ui/button";
@@ -17,17 +17,14 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { ArrowLeft, FileText, Search } from "lucide-react";
 
 // User-friendly category definitions derived from the library or predefined
-// Define categories based on the documentLibrary data
 const getCategoriesFromLibrary = (library: LegalDocument[]) => {
   const uniqueCategories = [...new Set(library.map(doc => doc.category))];
   return uniqueCategories
     .map(catKey => ({
-        key: catKey,
-        // Attempt to find a more user-friendly label if defined elsewhere,
-        // otherwise just use the key. You might want a mapping for this.
-        label: catKey // Example: replace with t(`categories.${catKey}`) if you add category translations
-    }))
-    .sort((a, b) => a.label.localeCompare(b.label)); // Sort alphabetically by label
+      key: catKey,
+      label: catKey // Use the category key directly for now, translation can be added if needed
+    }));
+    // Sorting moved to useMemo inside the component
 };
 
 
@@ -37,9 +34,8 @@ interface Step1DocumentSelectorProps {
   onStateChange: (state: string) => void; // Function called when state selection changes
 }
 
-
 export default function Step1DocumentSelector({ onDocumentSelect, onStateChange }: Step1DocumentSelectorProps) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation(); // Corrected: Added i18n
   const [view, setView] = useState<'categories' | 'documents'>('categories');
   const [currentCategory, setCurrentCategory] = useState<string>('');
   const [categorySearch, setCategorySearch] = useState<string>('');
@@ -47,24 +43,45 @@ export default function Step1DocumentSelector({ onDocumentSelect, onStateChange 
   const [selectedState, setSelectedState] = useState<string>('');
   const [isHydrated, setIsHydrated] = useState(false);
 
-  // Derive categories dynamically from the library
-  const CATEGORY_LIST = getCategoriesFromLibrary(documentLibrary);
-
+  // Derive categories dynamically and sort them using t
+   const CATEGORY_LIST = useMemo(() => {
+       // Get categories first
+       const categories = getCategoriesFromLibrary(documentLibrary);
+       // Sort based on the translated label (using t directly for now, ideally use specific keys)
+       // Ensure t is defined before using it for sorting
+       if (!t || typeof t !== 'function') { // Guard against t being undefined/not a function during initial renders/SSR
+            return categories.sort((a, b) => a.label.localeCompare(b.label)); // Fallback sort
+       }
+       return categories.sort((a, b) => t(a.label).localeCompare(t(b.label)));
+   }, [t]); // Depend on t to re-sort if language changes
 
   useEffect(() => {
     setIsHydrated(true); // Set hydration flag on client
   }, []);
 
   // Filtered categories based on search term
-  const filteredCategories = CATEGORY_LIST.filter(cat =>
-    t(cat.label).toLowerCase().includes(categorySearch.toLowerCase()) // Use translated label for search
-  );
+  const filteredCategories = useMemo(() => {
+      if (!t || typeof t !== 'function') { // Ensure t exists before using
+        return CATEGORY_LIST.filter(cat =>
+           cat.label.toLowerCase().includes(categorySearch.toLowerCase())
+        );
+      }
+      return CATEGORY_LIST.filter(cat =>
+        t(cat.label).toLowerCase().includes(categorySearch.toLowerCase())
+      );
+  }, [CATEGORY_LIST, categorySearch, t]);
+
 
   // Documents filtered by selected category and document search term
-  const docsInCategory = documentLibrary.filter(doc =>
-     doc.category === currentCategory && doc.id !== 'general-inquiry' && // Exclude general inquiry from listing
-    (docSearch.trim() === '' || t(doc.name).toLowerCase().includes(docSearch.toLowerCase()) || (doc.aliases?.some(alias => alias.toLowerCase().includes(docSearch.toLowerCase())))) // Check aliases too
-  );
+  const docsInCategory = useMemo(() => {
+     return documentLibrary.filter(doc =>
+         doc.category === currentCategory && doc.id !== 'general-inquiry' && // Exclude general inquiry from listing
+        (docSearch.trim() === '' ||
+         (t && typeof t === 'function' ? t(doc.name).toLowerCase().includes(docSearch.toLowerCase()) : doc.name.toLowerCase().includes(docSearch.toLowerCase())) || // Use translated name if t exists
+         (doc.aliases?.some(alias => alias.toLowerCase().includes(docSearch.toLowerCase())))) // Check aliases too
+      );
+  }, [currentCategory, docSearch, t]);
+
 
   const openCategory = (key: string) => {
     setCurrentCategory(key);
@@ -85,13 +102,19 @@ export default function Step1DocumentSelector({ onDocumentSelect, onStateChange 
   };
 
    // Placeholders for SSR/initial hydration
-   const categoryPlaceholder = t('docTypeSelector.searchCategories', 'Search categories...');
-   const documentPlaceholder = t('docTypeSelector.searchPlaceholder', 'Search documents...');
-   const noCategoriesPlaceholder = t('docTypeSelector.noCategoriesFound', 'No categories match your search.');
-   const noDocumentsPlaceholder = t('docTypeSelector.noResults', 'No documents match your search in this category.');
-   const statePlaceholder = t('docTypeSelector.statePlaceholder', 'Select State...');
+   // Guard t usage
+   const categoryPlaceholder = (t && typeof t === 'function') ? t('docTypeSelector.searchCategories', 'Search categories...') : 'Search categories...';
+   const documentPlaceholder = (t && typeof t === 'function') ? t('docTypeSelector.searchPlaceholder', 'Search documents...') : 'Search documents...';
+   const noCategoriesPlaceholder = (t && typeof t === 'function') ? t('docTypeSelector.noCategoriesFound', 'No categories match your search.') : 'No categories match your search.';
+   const noDocumentsPlaceholder = (t && typeof t === 'function') ? t('docTypeSelector.noResults', 'No documents match your search in this category.') : 'No documents match your search in this category.';
+   const statePlaceholder = (t && typeof t === 'function') ? t('stepOne.statePlaceholder', 'Select State...') : 'Select State...'; // Changed key to match stepOne
 
+   // Show placeholder or nothing if not hydrated
+   if (!isHydrated || !t || typeof t !== 'function') { // Check for t function availability as well
+     return <div className="h-96 animate-pulse bg-muted rounded-lg shadow-lg border border-border"></div>; // Example placeholder
+   }
 
+  // Return statement starts directly - Ensure no hidden characters or syntax errors before this
   return (
     <div className="space-y-6">
       {view === 'categories' ? (
@@ -111,7 +134,7 @@ export default function Step1DocumentSelector({ onDocumentSelect, onStateChange 
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
               type="text"
-              placeholder={isHydrated ? categoryPlaceholder : 'Loading...'}
+              placeholder={categoryPlaceholder}
               value={categorySearch}
               onChange={e => setCategorySearch(e.target.value)}
               className="w-full pl-10 bg-background" // Use theme background
@@ -131,12 +154,12 @@ export default function Step1DocumentSelector({ onDocumentSelect, onStateChange 
                  >
                    {/* Optional: Add an icon based on category key */}
                    {/* <Home className="h-6 w-6 mb-2 text-primary" /> */}
-                   <span className="font-medium text-card-foreground text-sm">{isHydrated ? t(cat.label) : '...'}</span>
+                   <span className="font-medium text-card-foreground text-sm">{t(cat.label)}</span>
                  </Button>
               ))}
             </div>
           ) : (
-             <p className="text-muted-foreground italic text-center py-4">{isHydrated ? noCategoriesPlaceholder : 'Loading...'}</p>
+             <p className="text-muted-foreground italic text-center py-4">{noCategoriesPlaceholder}</p>
           )}
         </>
       ) : (
@@ -144,10 +167,12 @@ export default function Step1DocumentSelector({ onDocumentSelect, onStateChange 
           {/* Back Button & Title */}
           <div className="flex items-center justify-between mb-4">
             <Button variant="outline" size="sm" onClick={goBack}>
-              <ArrowLeft className="mr-2 h-4 w-4" /> {isHydrated ? t('docTypeSelector.backToCategories') : '...'}
+              <ArrowLeft className="mr-2 h-4 w-4" /> {t('docTypeSelector.backToCategories')}
             </Button>
-            {/* Title showing the current category */}
-            {/* <h3 className="text-lg font-semibold text-muted-foreground">{t(CATEGORY_LIST.find(c => c.key === currentCategory)?.label || currentCategory)}</h3> */}
+            {/* Title showing the current category - Corrected label lookup */}
+             <h3 className="text-xl font-semibold">
+                 {t(CATEGORY_LIST.find(c => c.key === currentCategory)?.label || currentCategory)}
+             </h3>
           </div>
 
           {/* Document Search & State Select */}
@@ -156,7 +181,7 @@ export default function Step1DocumentSelector({ onDocumentSelect, onStateChange 
                 <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                 <Input
                   type="text"
-                  placeholder={isHydrated ? documentPlaceholder : 'Loading...'}
+                  placeholder={documentPlaceholder}
                   value={docSearch}
                   onChange={e => setDocSearch(e.target.value)}
                   className="w-full pl-10 bg-background" // Use theme background
@@ -165,10 +190,10 @@ export default function Step1DocumentSelector({ onDocumentSelect, onStateChange 
              </div>
              <Select value={selectedState} onValueChange={handleStateSelection}>
                 <SelectTrigger className="w-full bg-background"> {/* Use theme background */}
-                    <SelectValue placeholder={isHydrated ? statePlaceholder : 'Loading...'} />
+                    <SelectValue placeholder={statePlaceholder} />
                 </SelectTrigger>
                 <SelectContent>
-                     <SelectItem value="">{isHydrated ? statePlaceholder : 'Loading...'}</SelectItem>
+                     <SelectItem value="">{statePlaceholder}</SelectItem>
                      {/* Use usStates array imported from library */}
                     {usStates.map(state => (
                        <SelectItem key={state.value} value={state.value}>{state.label} ({state.value})</SelectItem>
@@ -187,28 +212,28 @@ export default function Step1DocumentSelector({ onDocumentSelect, onStateChange 
                         className="shadow hover:shadow-lg cursor-pointer transition bg-card border-border hover:border-primary/50 flex flex-col" // Use theme card/border
                     >
                         <CardHeader className="pb-2">
-                            <CardTitle className="text-base font-semibold text-card-foreground">{isHydrated ? t(doc.name) : '...'}</CardTitle> {/* Use theme card foreground */}
+                            <CardTitle className="text-base font-semibold text-card-foreground">{t(doc.name)}</CardTitle> {/* Use theme card foreground */}
                         </CardHeader>
                         <CardContent className="text-xs text-muted-foreground flex-grow"> {/* Use theme muted foreground */}
-                            {isHydrated ? t(doc.description) || t('docTypeSelector.noDescription') : '...'}
+                            {t(doc.description) || t('docTypeSelector.noDescription')}
                         </CardContent>
                         <CardFooter className="pt-2 pb-3 text-xs text-muted-foreground flex justify-between items-center border-t border-border mt-auto"> {/* Use theme muted foreground/border */}
                            <span>💲{doc.basePrice}</span>
                            <div className="flex gap-2">
-                               {doc.requiresNotarization && <span title={isHydrated ? t('docTypeSelector.requiresNotarization') : ''}>📝</span>}
-                               {doc.canBeRecorded && <span title={isHydrated ? t('docTypeSelector.canBeRecorded') : ''}>🏛️</span>}
+                               {doc.requiresNotarization && <span title={t('docTypeSelector.requiresNotarization')}>📝</span>}
+                               {doc.canBeRecorded && <span title={t('docTypeSelector.canBeRecorded')}>🏛️</span>}
                            </div>
                         </CardFooter>
                     </Card>
                 ))}
             </div>
           ) : (
-              <p className="text-muted-foreground italic text-center py-6">{isHydrated ? noDocumentsPlaceholder : 'Loading...'}</p> {/* Use theme muted foreground */}
+              <p className="text-muted-foreground italic text-center py-6">{noDocumentsPlaceholder}</p> {/* Use theme muted foreground */}
           )}
         </>
       )}
     </div>
-  );
+  ); // End of the return statement
 }
 
 // Helper CSS class if needed (e.g., in globals.css)
