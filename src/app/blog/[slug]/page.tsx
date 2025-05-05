@@ -10,10 +10,27 @@ export default function BlogPostPage() {
   const slug = Array.isArray(params?.slug) ? params.slug[0] : params?.slug as string | undefined; // Extract slug safely
   const { t } = useTranslation()
   const [isHydrated, setIsHydrated] = useState(false); // State for hydration
+  const [formattedDate, setFormattedDate] = useState<string | null>(null); // State for formatted date
 
   useEffect(() => {
     setIsHydrated(true); // Set hydrated state on client
-  }, []);
+    // Format date only on the client after hydration
+    if (slug) {
+       const dateString = t(`blog.${slug}.date`, { defaultValue: '' });
+       if (dateString) {
+           try {
+               // Parse the ISO date string and format it
+               const dateObj = new Date(dateString);
+               setFormattedDate(dateObj.toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' }));
+           } catch (e) {
+               console.error("Error formatting date:", e);
+               setFormattedDate(dateString); // Fallback to the raw string if parsing fails
+           }
+       } else {
+            setFormattedDate('Date not available');
+       }
+    }
+  }, [slug, t]);
 
   // Placeholder text while hydrating
   const placeholderTitle = "Loading...";
@@ -41,10 +58,9 @@ export default function BlogPostPage() {
       <h1 className="text-3xl font-bold mb-4 text-foreground">
           {isHydrated ? t(`blog.${slug}.title`, placeholderTitle) : placeholderTitle}
       </h1>
-      {/* Date can be tricky with hydration, consider fetching/formatting on client or passing from static props */}
+      {/* Display formatted date only after hydration */}
       <p className="text-sm text-muted-foreground mb-8">
-         {/* Example: Fetching or using a fixed date format for consistency */}
-         {isHydrated ? t(`blog.${slug}.date`, { defaultValue: 'Loading Date...' }) : placeholderDate}
+         {isHydrated && formattedDate ? formattedDate : placeholderDate}
       </p>
       <article className="prose prose-primary dark:prose-invert max-w-none text-foreground">
          {/* Render blog body using dangerouslySetInnerHTML */}
