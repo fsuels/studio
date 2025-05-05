@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useCallback, useRef } from 'react'; // Ensure useEffect is imported if used elsewhere
 import type { InferDocumentTypeOutput, DocumentSuggestion, InferDocumentTypeInput } from '@/ai/flows/infer-document-type'; // Import new output types
-import StepOneInput from '@/components/StepOneInput'; // Import the new StepOneInput component
+// Removed import StepOneInput from '@/components/StepOneInput'; // Remove the old StepOneInput component
 import DocumentTypeSelector from '@/components/DocumentTypeSelector'; // Import the new selector
 import DynamicFormRenderer from '@/components/DynamicFormRenderer'; // Import the new dynamic renderer
 import { formSchemas } from '@/data/formSchemas'; // Import schemas
@@ -16,6 +16,8 @@ import { Button } from '@/components/ui/button'; // Import Button
 import { useToast } from '@/hooks/use-toast'; // Import useToast
 import { useTranslation } from 'react-i18next'; // Import useTranslation
 import TrustAndTestimonialsSection from '@/components/landing/TrustAndTestimonialsSection'; // Import the combined Trust/Testimonials component
+import StepOneInput from '@/components/StepOneInput';
+import TrustAndTestimonialsSection_server from "@/components/landing/TrustAndTestimonialsSection"; // Import the combined Trust/Testimonials component
 // Removed PromoBanner import
 // Removed Footer import
 
@@ -23,7 +25,7 @@ import TrustAndTestimonialsSection from '@/components/landing/TrustAndTestimonia
 const ShareIcon = () => (
    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6 text-primary"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" x2="12" y1="2" y2="15"/></svg>
 );
-
+import Step1DocumentSelector from '@/components/Step1DocumentSelector';
 
 export default function Home() {
   console.log('[page.tsx] Home component rendering...');
@@ -54,6 +56,8 @@ export default function Home() {
 
   // --- State for Step 4 -> 5 ---
   const [pdfDataUrl, setPdfDataUrl] = useState<string | undefined>(undefined);
+  const [selectedDocument, setSelectedDocument] = useState(null);
+  const [userState, setUserState] = useState('');
 
 
   useEffect(() => {
@@ -417,30 +421,18 @@ export default function Home() {
                             : t('stepOne.description')}
                     </CardDescription>
                     </CardHeader>
+                     <Step1DocumentSelector
+                         onDocumentSelect={doc => {
+                             setSelectedDocType(doc.name);
+                             setSelectedState(userState)
+                         }}
+                         onStateChange={state => setUserState(state)}
+                     />
+
                     {currentStep === 1 && (
                         <CardContent>
                              {/* Use StepOneInput component */}
-                             <StepOneInput
-                                input={description}
-                                setInput={setDescription}
-                                state={selectedState}
-                                setState={setSelectedState}
-                                onAnalyze={handleAnalyze}
-                                isLoading={isLoadingAnalysis}
-                                isRecording={isRecording}
-                                startMic={handleStartMic}
-                                stopMic={handleStopMic}
-                                mode={activeTab}
-                                setMode={setActiveTab}
-                                transcript={transcript}
-                                recognition={recognition}
-                             />
-                            {inferenceResult && (
-                                 <DocumentTypeSelector
-                                     suggestions={suggestionsForSelector}
-                                     onSelect={handleDocumentTypeSelected}
-                                 />
-                            )}
+                           
                         </CardContent>
                     )}
                 </Card>
@@ -597,7 +589,7 @@ export default function Home() {
         </div>
 
         {/* Footer Sections */}
-         <TrustAndTestimonialsSection /> {/* Use the combined component */}
+         <TrustAndTestimonialsSection_server /> {/* Use the combined component */}
 
     </div>
   );

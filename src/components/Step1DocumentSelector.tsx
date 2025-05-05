@@ -1,8 +1,10 @@
-tsx
+'use client'
+
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { getDocs, collection } from "firebase/firestore";
-import { db } from "@/lib/firebase";
+import { app } from "@/lib/firebase";
+import { getFirestore } from "firebase/firestore";
 
 export default function Step1DocumentSelector({ onDocumentSelect, onStateChange }) {
   const { t } = useTranslation();
@@ -13,8 +15,9 @@ export default function Step1DocumentSelector({ onDocumentSelect, onStateChange 
 
   useEffect(() => {
     async function fetchDocuments() {
+      const db = getFirestore(app);
       const docsSnapshot = await getDocs(collection(db, "documents"));
-      const docs = docsSnapshot.docs.map(doc => doc.data());
+      const docs = docsSnapshot.docs.map(doc => ({...doc.data(), id: doc.id}));
       setDocuments(docs);
     }
     fetchDocuments();
