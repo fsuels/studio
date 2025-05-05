@@ -17,7 +17,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { ArrowLeft, FileText, Search } from "lucide-react";
 
 // User-friendly category definitions derived from the library or predefined
-const getCategoriesFromLibrary = (library: LegalDocument[]) => {
+const getCategoriesFromLibrary = (library: LegalDocument[], t: (key: string, fallback: string) => string, isHydrated: boolean) => {
   const uniqueCategories = [...new Set(library.map(doc => doc.category))];
   // Define a desired order or sort alphabetically
   const categoryOrder = [
@@ -35,12 +35,17 @@ const getCategoriesFromLibrary = (library: LegalDocument[]) => {
       label: catKey // Use the category key directly for now, translation can be added if needed
     }))
     .sort((a, b) => {
-       const indexA = categoryOrder.indexOf(a.key);
-       const indexB = categoryOrder.indexOf(b.key);
-       if (indexA === -1 && indexB === -1) return a.label.localeCompare(b.label); // Both not in order, sort alphabetically
-       if (indexA === -1) return 1; // a is not in order, put it after b
-       if (indexB === -1) return -1; // b is not in order, put it after a
-       return indexA - indexB; // Sort based on predefined order
+        const indexA = categoryOrder.indexOf(a.key);
+        const indexB = categoryOrder.indexOf(b.key);
+        if (indexA === -1 && indexB === -1) {
+            // Translate labels for sorting only if hydrated
+            const labelA = isHydrated ? t(a.label, a.label) : a.label;
+            const labelB = isHydrated ? t(b.label, b.label) : b.label;
+            return labelA.localeCompare(labelB);
+        }
+        if (indexA === -1) return 1; // a is not in order, put it after b
+        if (indexB === -1) return -1; // b is not in order, put it after a
+        return indexA - indexB; // Sort based on predefined order
     });
 };
 
@@ -59,14 +64,15 @@ export default function Step1DocumentSelector({ onDocumentSelect, onStateChange 
   const [selectedState, setSelectedState] = useState<string>('');
   const [isHydrated, setIsHydrated] = useState(false);
 
-   // Derive categories dynamically and sort them
-   const CATEGORY_LIST = useMemo(() => {
-       return getCategoriesFromLibrary(documentLibrary);
-   }, []); // Removed dependencies as getCategoriesFromLibrary is stable and documentLibrary is static
-
   useEffect(() => {
     setIsHydrated(true);
   }, []);
+
+   // Derive categories dynamically and sort them
+   const CATEGORY_LIST = useMemo(() => {
+       return getCategoriesFromLibrary(documentLibrary, t, isHydrated);
+   // eslint-disable-next-line react-hooks/exhaustive-deps
+   }, [t, isHydrated]); // Re-sort when language changes
 
   // Filtered categories based on search term
   const filteredCategories = useMemo(() => {
@@ -128,7 +134,7 @@ export default function Step1DocumentSelector({ onDocumentSelect, onStateChange 
     <div className="space-y-6">
       {view === 'categories' ? (
         <>
-          {/* Title and Description */}
+          {/* Title and Description (Removed duplicate) */}
            <CardHeader className="p-0 mb-4">
                <div className="flex items-center space-x-2">
                   <FileText className="h-6 w-6 text-primary" />
