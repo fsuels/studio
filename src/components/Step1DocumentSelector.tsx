@@ -1,4 +1,4 @@
-
+// src/components/Step1DocumentSelector.tsx
 'use client'
 
 import React, { useState, useMemo, useEffect } from "react"; // Import useMemo and useEffect
@@ -11,10 +11,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 
 /**
  * Step1DocumentSelector: Static category→document picker using local documentLibrary,
- * with predefined categories and search functionality.
+ * bypassing Firestore so categories show instantly.
  */
 export default function Step1DocumentSelector({ onDocumentSelect, onStateChange }) {
-  const { t } = useTranslation(); // Call useTranslation at the top level
+  const { t, i18n } = useTranslation(); // Call useTranslation at the top level
   const [view, setView] = useState<'categories' | 'documents'>('categories');
   const [currentCategory, setCurrentCategory] = useState<string>('');
   const [categorySearch, setCategorySearch] = useState<string>('');
@@ -82,7 +82,7 @@ export default function Step1DocumentSelector({ onDocumentSelect, onStateChange 
        {/* CardHeader dynamically updates */}
       <CardHeader>
         <CardTitle className="text-2xl">
-           {view === 'categories' ? t('stepOne.title') : `${t('Step 1: Select Document in')} ${t(currentCategoryLabel)}`}
+           {view === 'categories' ? t('stepOne.categoryDescription') : `${t('Step 1: Select Document in')} ${t(currentCategoryLabel)}`}
         </CardTitle>
         <CardDescription>
             {view === 'categories' ? t('stepOne.categoryDescription') : t('stepOne.selectDocDescription')}
