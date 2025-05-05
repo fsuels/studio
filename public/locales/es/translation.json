@@ -213,17 +213,17 @@
             "startNow": "Comienza gratis"
           },
           "testimonialsTitle": "Lo que dicen nuestros usuarios",
-          "testimonial1": "\"123LegalDoc me ahorró $500 en mi contrato de alquiler. ¡Muy fácil de usar!\"",
+          "testimonial1": "\"123LegalDoc me ahorró $500 en mi contrato de alquiler. ¡Súper fácil de usar!\"",
           "testimonial1Name": "Sarah Chen",
-          "testimonial1Role": "Propietaria de pequeño negocio",
+          "testimonial1Role": "Dueña de Pequeño Negocio",
           "testimonial2": "\"Generar un contrato de sociedad tomó minutos en vez de días. Muy recomendable.\"",
           "testimonial2Name": "Michael B.",
           "testimonial2Role": "Freelancer",
           "testimonial3": "\"La inferencia de IA fue precisa y el formulario muy claro. ¡Excelente servicio!\"",
           "testimonial3Name": "Emily White",
-          "testimonial3Role": "Fundadora de startup",
+          "testimonial3Role": "Fundadora de Startup",
           "featuredIn": "DESTACADO EN",
-          "satisfactionGuarantee": "Garantía de satisfacción del 100% o le devolvemos su dinero",
+          "satisfactionGuarantee": "Garantía de satisfacción 100% o le devolvemos su dinero",
           "trustStrip": {
             "title": "Confiado por Profesionales",
             "badge1": "Más de {{count}} documentos generados",
@@ -302,37 +302,40 @@
            "description": "Perfecto para necesidades puntuales.",
           "item1": "1 PDF legal descargable",
           "item2": "Personalización de cláusulas",
-          "item3": "Soporte por correo"
+          "item3": "Soporte por correo",
+           "item4": "Compartir seguro (pronto)"
         },
         "bundle": {
           "title": "Paquete de 5 Documentos",
            "description": "Ideal para múltiples documentos relacionados.",
           "item1": "5 PDFs descargables",
-          "item2": "Edición ilimitada",
-          "item3": "Soporte prioritario"
+          "item2": "Todas las funciones del único",
+          "item3": "Créditos no expiran",
+           "item4": "Mejor valor por documento"
         },
         "unlimited": {
-          "title": "Acceso Ilimitado",
+          "title": "Pro Negocios",
            "description": "Para usuarios frecuentes y negocios.",
           "item1": "Documentos ilimitados",
-          "item2": "Recomendaciones personalizadas",
-          "item3": "Soporte VIP"
+          "item2": "Soporte prioritario",
+          "item3": "Funciones de equipo (pronto)",
+           "item4": "Cancela en cualquier momento"
         }
       },
-      "guarantee": "Garantía de satisfacción 100% o le devolvemos su dinero"
+      "guarantee": "Garantía de satisfacción 100% o le devolvemos su dinero en compras únicas/paquetes."
     },
     "features": {
         "title": "Características que hacen lo legal fácil",
         "subtitle": "Todo lo que necesitas para crear documentos seguros y válidos rápidamente.",
         "items": {
-          "ai": { "title": "IA Inteligente", "desc": "Comprende tu situación legal con lenguaje natural en segundos." },
-          "forms": { "title": "Formularios Dinámicos", "desc": "Preguntas guiadas basadas en el tipo de documento." },
-          "local": { "title": "Lógica Estatal", "desc": "Los documentos se ajustan automáticamente a tu estado de EE. UU." },
-          "bilingual": { "title": "Experiencia Bilingüe", "desc": "Todo el sistema funciona perfectamente en inglés y español." },
-          "pdf": { "title": "Generación de PDF", "desc": "Crea, descarga y firma documentos seguros al instante." },
-          "sharing": { "title": "Enlaces Privados", "desc": "Comparte con enlaces temporales o de un solo uso para mayor seguridad." },
-          "dashboard": { "title": "Panel de Documentos", "desc": "Organiza y accede a todos tus documentos fácilmente." },
-          "security": { "title": "Seguro y Legal", "desc": "Tus datos están cifrados y nunca se comparten sin consentimiento." }
+          "ai": { "title": "Inferencia por IA", "desc": "Sugerencias inteligentes basadas en tus necesidades." },
+          "forms": { "title": "Cuestionarios Dinámicos", "desc": "Preguntas guiadas adaptadas al documento elegido." },
+          "local": { "title": "Cláusulas Específicas del Estado", "desc": "Documentos adaptados a las leyes estatales de EE. UU." },
+          "bilingual": { "title": "Soporte Bilingüe (EN/ES)", "desc": "Interfaz y soporte completos en inglés y español." },
+          "pdf": { "title": "Generación Instantánea de PDF", "desc": "Previsualiza y descarga PDFs profesionales." },
+          "sharing": { "title": "Compartir de Forma Segura", "desc": "Comparte documentos con enlaces de tiempo limitado (próximamente)." },
+          "dashboard": { "title": "Panel de Usuario", "desc": "Gestiona tus documentos y configuraciones fácilmente." },
+          "security": { "title": "Privacidad y Seguridad", "desc": "Datos encriptados y prácticas conformes." }
         }
     },
     "resources": {
@@ -362,13 +365,34 @@
          "hours": "Lunes a Viernes, 9am–6pm EST"
        },
        "help": {
-         "title": "Temas Comunes",
-         "item1": "No recibí mi documento",
-         "item2": "Necesito editar una cláusula",
-         "item3": "No puedo descargar el PDF",
-         "item4": "Solicitar reembolso"
+         "title": "Ayuda Rápida",
+         "item1": "Cómo funciona la generación de documentos",
+         "item2": "Precios y opciones de pago",
+         "item3": "Solución de problemas comunes",
+         "item4": "Entender tu panel"
        },
-       "note": "También puedes consultar nuestra sección de Preguntas Frecuentes.",
-       "cta": "Ir a Preguntas Frecuentes"
-     }
+       "note": "Para respuestas inmediatas, consulta nuestra página de Preguntas Frecuentes.",
+       "cta": "Visitar Preguntas Frecuentes"
+     },
+    "blog": {
+      "title": "Consejos y Artículos Legales",
+      "subtitle": "Tips legales, guías de documentos y novedades del sector.",
+      "readMore": "Leer más",
+      "freelancer": {
+        "title": "5 Documentos Legales que Todo Freelancer Debe Conocer",
+        "desc": "Desde contratos hasta acuerdos de confidencialidad — lo básico para freelancers."
+      },
+      "ai": {
+        "title": "Cómo la IA Está Transformando el LegalTech",
+        "desc": "Explora el papel de la inteligencia artificial en documentos y cumplimiento."
+      },
+      "templates": {
+        "title": "Por Qué los Modelos Gratis Pueden Ser Peligrosos",
+        "desc": "Los modelos gratuitos suelen omitir cláusulas clave — qué debes revisar."
+      },
+      "lease": {
+        "title": "Cómo Crear un Contrato de Alquiler Válido en Florida",
+        "desc": "Guía legal paso a paso para propietarios e inquilinos en Florida."
+      }
+    }
 }

@@ -302,37 +302,40 @@
            "description": "Perfect for one-off needs.",
           "item1": "1 downloadable legal PDF",
           "item2": "Clause customization",
-          "item3": "Email support"
+          "item3": "Email support",
+           "item4": "Secure sharing (soon)"
         },
         "bundle": {
           "title": "5-Document Bundle",
            "description": "Ideal for multiple related documents.",
           "item1": "5 downloadable PDFs",
-          "item2": "Unlimited editing",
-          "item3": "Priority support"
+          "item2": "All single document features",
+          "item3": "Credits never expire",
+           "item4": "Best value per document"
         },
         "unlimited": {
-          "title": "Unlimited Access",
+          "title": "Business Pro",
            "description": "For frequent users & businesses.",
           "item1": "Unlimited documents",
-          "item2": "Personalized recommendations",
-          "item3": "VIP support"
+          "item2": "Priority support",
+          "item3": "Team features (coming soon)",
+           "item4": "Cancel anytime"
         }
       },
-      "guarantee": "100% Satisfaction Guarantee or Your Money Back"
+      "guarantee": "100% Satisfaction Guarantee or Your Money Back on single/bundle purchases."
     },
     "features": {
         "title": "Features That Make Legal Easy",
         "subtitle": "Everything you need to create valid, secure documents quickly.",
         "items": {
-          "ai": { "title": "AI-Powered Inference", "desc": "Understand your legal situation in seconds with natural language input." },
-          "forms": { "title": "Dynamic Forms", "desc": "Get guided questions based on your chosen document type." },
-          "local": { "title": "State-Specific Logic", "desc": "Documents automatically adjust based on your U.S. state." },
-          "bilingual": { "title": "English & Spanish UX", "desc": "Everything works seamlessly in both languages." },
-          "pdf": { "title": "PDF Generation", "desc": "Create, download, and sign secure documents instantly." },
-          "sharing": { "title": "Private Share Links", "desc": "Share with expiring, one-time access links for extra safety." },
-          "dashboard": { "title": "Document Dashboard", "desc": "Track and organize every document you generate." },
-          "security": { "title": "Secure & Compliant", "desc": "Your data is encrypted and never shared without consent." }
+          "ai": { "title": "AI-Powered Inference", "desc": "Smart suggestions based on your needs." },
+          "forms": { "title": "Dynamic Questionnaires", "desc": "Guided questions tailored to your chosen document." },
+          "local": { "title": "State-Specific Clauses", "desc": "Documents adapted for U.S. state laws." },
+          "bilingual": { "title": "Bilingual Support (EN/ES)", "desc": "Full interface and support in English & Spanish." },
+          "pdf": { "title": "Instant PDF Generation", "desc": "Preview and download professional PDFs." },
+          "sharing": { "title": "Secure Sharing", "desc": "Share documents with time-limited links (coming soon)." },
+          "dashboard": { "title": "User Dashboard", "desc": "Manage your documents and settings easily." },
+          "security": { "title": "Privacy & Security", "desc": "Encrypted data and compliant practices." }
         }
     },
     "resources": {
@@ -362,13 +365,34 @@
         "hours": "Mon–Fri, 9am–6pm EST"
       },
       "help": {
-        "title": "Common Help Topics",
-        "item1": "I didn’t receive my document",
-        "item2": "I need to edit a clause",
-        "item3": "I can’t download the PDF",
-        "item4": "I need a refund"
+        "title": "Quick Help",
+        "item1": "How document generation works",
+        "item2": "Pricing and payment options",
+        "item3": "Troubleshooting common issues",
+        "item4": "Understanding your dashboard"
       },
-      "note": "You can also check our FAQ for common questions.",
-      "cta": "Go to FAQ"
-    }
+      "note": "For immediate answers, check our FAQ page.",
+      "cta": "Visit FAQ"
+    },
+   "blog": {
+     "title": "Legal Insights & Articles",
+     "subtitle": "Smart legal tips, document guides, and industry updates.",
+     "readMore": "Read more",
+     "freelancer": {
+       "title": "5 Legal Documents Every Freelancer Should Know",
+       "desc": "From contracts to NDAs — simplify your freelance life with these essentials."
+     },
+     "ai": {
+       "title": "How AI is Transforming LegalTech",
+       "desc": "Explore the rise of AI in document generation, compliance, and contracts."
+     },
+     "templates": {
+       "title": "Why Free Templates Can Be Risky",
+       "desc": "Legal templates often miss crucial clauses — here's what to watch for."
+     },
+     "lease": {
+       "title": "How to Create a Valid Lease Agreement in Florida",
+       "desc": "A step-by-step legal checklist for landlords and renters in Florida."
+     }
+   }
 }
