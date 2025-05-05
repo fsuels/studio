@@ -15,6 +15,7 @@
   "Answer Simple Questions": "Responde Preguntas Simples",
   "Provide a few details to customize your document.": "Proporciona algunos detalles para personalizar tu documento.",
   "Preview & Sign": "Previsualiza y Firma",
+  "Download & Sign": "Descarga y Firma",
   "Get a professional PDF ready to sign and share.": "Obtén un PDF profesional listo para firmar y compartir.",
   "featureTeaser": {
     "workflow": {
@@ -212,15 +213,15 @@
             "startNow": "Comienza gratis"
           },
           "testimonialsTitle": "Lo que dicen nuestros usuarios",
-          "testimonial1": "\"123LegalDoc me ahorró $500 en mi contrato de alquiler. ¡Súper fácil de usar!\"",
+          "testimonial1": "\"123LegalDoc me ahorró $500 en mi contrato de alquiler. ¡Muy fácil de usar!\"",
           "testimonial1Name": "Sarah Chen",
-          "testimonial1Role": "Dueña de Pequeño Negocio",
+          "testimonial1Role": "Propietaria de pequeño negocio",
           "testimonial2": "\"Generar un contrato de sociedad tomó minutos en vez de días. Muy recomendable.\"",
           "testimonial2Name": "Michael B.",
           "testimonial2Role": "Freelancer",
           "testimonial3": "\"La inferencia de IA fue precisa y el formulario muy claro. ¡Excelente servicio!\"",
           "testimonial3Name": "Emily White",
-          "testimonial3Role": "Fundadora de Startup",
+          "testimonial3Role": "Fundadora de startup",
           "featuredIn": "DESTACADO EN",
           "satisfactionGuarantee": "Garantía de satisfacción del 100% o le devolvemos su dinero",
           "trustStrip": {
@@ -338,9 +339,22 @@
         "q4": { "question": "¿Cuánto cuesta?", "answer": "Ofrecemos precios simples de pago por documento a $5, paquetes y un plan ilimitado. Consulta nuestra página de Precios para más detalles." },
         "q5": { "question": "¿Está segura mi información?", "answer": "Sí, utilizamos cifrado y seguimos las mejores prácticas de la industria para proteger tus datos. Consulta nuestra Política de Privacidad." },
         "q6": { "question": "¿Qué pasa si necesito ayuda?", "answer": "Puedes visitar nuestra página de Soporte o contactarnos a través de los canales proporcionados para obtener ayuda con la plataforma." }
+     },
+    "support": {
+       "title": "Centro de Soporte",
+       "subtitle": "¿Necesitas ayuda? Encuentra recursos o contáctanos abajo.",
+       "contact": {
+         "title": "Contáctanos",
+         "hours": "Disponible Lun-Vie, 9 AM - 5 PM EST"
+       },
+       "help": {
+         "title": "Ayuda Rápida",
+         "item1": "Cómo funciona la generación de documentos",
+         "item2": "Precios y opciones de pago",
+         "item3": "Solución de problemas comunes",
+         "item4": "Entendiendo tu panel de control"
+       },
+       "note": "Para respuestas inmediatas, consulta nuestra página de Preguntas Frecuentes.",
+       "cta": "Visitar Preguntas Frecuentes"
      }
 }
-
-    
-
-

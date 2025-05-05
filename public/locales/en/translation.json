@@ -15,6 +15,7 @@
   "Answer Simple Questions": "Answer Simple Questions",
   "Provide a few details to customize your document.": "Provide a few details to customize your document.",
   "Preview & Sign": "Preview & Sign",
+  "Download & Sign": "Download & Sign",
   "Get a professional PDF ready to sign and share.": "Get a professional PDF ready to sign and share.",
   "featureTeaser": {
     "workflow": {
@@ -338,5 +339,22 @@
         "q4": { "question": "How much does it cost?", "answer": "We offer simple pay-per-document pricing at $5, bundles, and an unlimited plan. See our Pricing page for details." },
         "q5": { "question": "Is my information secure?", "answer": "Yes, we use encryption and follow industry best practices to protect your data. See our Privacy Policy." },
         "q6": { "question": "What if I need help?", "answer": "You can visit our Support page or contact us through the provided channels for assistance with the platform." }
+    },
+   "support": {
+      "title": "Support Center",
+      "subtitle": "Need help? Find resources or contact us below.",
+      "contact": {
+        "title": "Contact Us",
+        "hours": "Available Mon-Fri, 9 AM - 5 PM EST"
+      },
+      "help": {
+        "title": "Quick Help",
+        "item1": "How document generation works",
+        "item2": "Pricing and payment options",
+        "item3": "Troubleshooting common issues",
+        "item4": "Understanding your dashboard"
+      },
+      "note": "For immediate answers, check our FAQ page.",
+      "cta": "Visit FAQ"
     }
 }
