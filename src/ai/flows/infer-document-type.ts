@@ -1,4 +1,3 @@
-
 // **Removed 'use server'; directive**
 
 /**
@@ -79,6 +78,7 @@ const getAvailableDocumentsContext = (language: 'en' | 'es'): string => {
 // Internal Genkit prompt definition
 const prompt = ai.definePrompt({
   name: 'inferDocumentTypePrompt_v2', // Renamed for clarity
+  model: 'googleai/gemini-1.5-flash-latest', // ** Explicitly specify the model here **
   input: {
     schema: InferDocumentTypeInputSchema,
   },
@@ -288,6 +288,10 @@ async (input) => {
             } else if (error.message.includes('invalid response') || error.message.includes('parse error') || error.message.includes('malformed')) {
                  errorMessage = 'AI Service returned an invalid response';
             }
+             // ** Check for the specific model error **
+             else if (error.message.includes('Must supply a `model`')) {
+                  errorMessage = `AI model configuration error: ${error.message}`;
+             }
             // ... add more specific cases as needed
        } else {
            console.error(`${logPrefix} Non-Error Caught in Flow:`, error);
@@ -307,5 +311,3 @@ async (input) => {
        };
    }
 });
-
-    
