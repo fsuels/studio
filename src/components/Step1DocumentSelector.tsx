@@ -19,11 +19,29 @@ import { ArrowLeft, FileText, Search } from "lucide-react";
 // User-friendly category definitions derived from the library or predefined
 const getCategoriesFromLibrary = (library: LegalDocument[]) => {
   const uniqueCategories = [...new Set(library.map(doc => doc.category))];
+  // Define a desired order or sort alphabetically
+  const categoryOrder = [
+      'Finance',
+      'Business',
+      'Real Estate',
+      'Family',
+      'Personal',
+      'Estate Planning',
+      'Miscellaneous', // Keep General Inquiry or misc last
+  ];
   return uniqueCategories
     .map(catKey => ({
       key: catKey,
       label: catKey // Use the category key directly for now, translation can be added if needed
-    }));
+    }))
+    .sort((a, b) => {
+       const indexA = categoryOrder.indexOf(a.key);
+       const indexB = categoryOrder.indexOf(b.key);
+       if (indexA === -1 && indexB === -1) return a.label.localeCompare(b.label); // Both not in order, sort alphabetically
+       if (indexA === -1) return 1; // a is not in order, put it after b
+       if (indexB === -1) return -1; // b is not in order, put it after a
+       return indexA - indexB; // Sort based on predefined order
+    });
 };
 
 // Define the props expected by the component
@@ -41,18 +59,10 @@ export default function Step1DocumentSelector({ onDocumentSelect, onStateChange 
   const [selectedState, setSelectedState] = useState<string>('');
   const [isHydrated, setIsHydrated] = useState(false);
 
-  // Derive categories dynamically and sort them using t
+   // Derive categories dynamically and sort them
    const CATEGORY_LIST = useMemo(() => {
-       const categories = getCategoriesFromLibrary(documentLibrary);
-       if (!t || typeof t !== 'function') {
-            return categories.sort((a, b) => a.label.localeCompare(b.label));
-       }
-       // Sorting requires translation keys to be set up correctly for category labels.
-       // If labels are just strings like "Real Estate", t(label) might just return the string itself if no key matches.
-       // Assuming direct translation or fallback for sorting:
-       return categories.sort((a, b) => t(a.label, a.label).localeCompare(t(b.label, b.label)));
-   // eslint-disable-next-line react-hooks/exhaustive-deps
-   }, [t]); // Depend on t
+       return getCategoriesFromLibrary(documentLibrary);
+   }, []); // Removed dependencies as getCategoriesFromLibrary is stable and documentLibrary is static
 
   useEffect(() => {
     setIsHydrated(true);
@@ -60,13 +70,12 @@ export default function Step1DocumentSelector({ onDocumentSelect, onStateChange 
 
   // Filtered categories based on search term
   const filteredCategories = useMemo(() => {
-      if (!isHydrated || !t || typeof t !== 'function') {
-        return CATEGORY_LIST.filter(cat =>
-           cat.label.toLowerCase().includes(categorySearch.toLowerCase())
-        );
+      if (!isHydrated) { // Don't filter during SSR/hydration mismatch risk phase
+        return CATEGORY_LIST;
       }
+      // Filter using t function only after hydration
       return CATEGORY_LIST.filter(cat =>
-        t(cat.label, cat.label).toLowerCase().includes(categorySearch.toLowerCase()) // Add fallback value
+         t(cat.label, cat.label).toLowerCase().includes(categorySearch.toLowerCase()) // Add fallback value
       );
   }, [CATEGORY_LIST, categorySearch, t, isHydrated]);
 
@@ -77,11 +86,11 @@ export default function Step1DocumentSelector({ onDocumentSelect, onStateChange 
      return documentLibrary.filter(doc =>
          doc.category === currentCategory && doc.id !== 'general-inquiry' &&
         (docSearch.trim() === '' ||
-         (isHydrated && t && typeof t === 'function' ? t(doc.name, doc.name).toLowerCase().includes(docSearch.toLowerCase()) : doc.name.toLowerCase().includes(docSearch.toLowerCase())) ||
+         (isHydrated && t ? t(doc.name, doc.name).toLowerCase().includes(docSearch.toLowerCase()) : doc.name.toLowerCase().includes(docSearch.toLowerCase())) || // Use t only after hydration
          (doc.aliases?.some(alias => alias.toLowerCase().includes(docSearch.toLowerCase()))))
       );
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentCategory, docSearch, t, isHydrated]);
+  }, [currentCategory, docSearch, t, isHydrated]); // Depend on t and isHydrated
 
 
   const openCategory = (key: string) => {
@@ -97,9 +106,9 @@ export default function Step1DocumentSelector({ onDocumentSelect, onStateChange 
   };
 
   const handleStateSelection = (value: string) => {
-      const stateValue = value === "" ? "" : value;
-      setSelectedState(stateValue);
-      onStateChange(stateValue); // Notify parent
+      // const stateValue = value === "" ? "" : value; // Keep state as string
+      setSelectedState(value); // Update local state
+      onStateChange(value); // Notify parent
   };
 
    // Placeholders for SSR/initial hydration
@@ -114,6 +123,7 @@ export default function Step1DocumentSelector({ onDocumentSelect, onStateChange 
      return <div className="h-96 animate-pulse bg-muted rounded-lg shadow-lg border border-border"></div>;
    }
 
+  // Main return statement
   return (
     <div className="space-y-6">
       {view === 'categories' ? (
@@ -150,6 +160,7 @@ export default function Step1DocumentSelector({ onDocumentSelect, onStateChange 
                    onClick={() => openCategory(cat.key)}
                    className="h-auto min-h-[80px] p-4 border-border shadow-sm hover:shadow-md transition text-center flex flex-col justify-center items-center bg-card hover:bg-muted"
                  >
+                   {/* Translate category label safely after hydration */}
                    <span className="font-medium text-card-foreground text-sm">{t(cat.label, cat.label)}</span>
                  </Button>
               ))}
@@ -167,6 +178,7 @@ export default function Step1DocumentSelector({ onDocumentSelect, onStateChange 
             </Button>
             {/* Title showing the current category */}
              <h3 className="text-xl font-semibold">
+                 {/* Translate category label safely */}
                  {t(CATEGORY_LIST.find(c => c.key === currentCategory)?.label || currentCategory, CATEGORY_LIST.find(c => c.key === currentCategory)?.label || currentCategory)}
              </h3>
           </div>
@@ -186,10 +198,12 @@ export default function Step1DocumentSelector({ onDocumentSelect, onStateChange 
              </div>
              <Select value={selectedState} onValueChange={handleStateSelection}>
                 <SelectTrigger className="w-full bg-background">
+                    {/* Use SelectValue's placeholder */}
                     <SelectValue placeholder={statePlaceholder} />
                 </SelectTrigger>
                 <SelectContent>
-                     <SelectItem value="">{statePlaceholder}</SelectItem>
+                     {/* REMOVED: Item with empty value causes error */}
+                     {/* <SelectItem value="">{statePlaceholder}</SelectItem> */}
                     {usStates.map(state => (
                        <SelectItem key={state.value} value={state.value}>{state.label} ({state.value})</SelectItem>
                     ))}
@@ -207,14 +221,17 @@ export default function Step1DocumentSelector({ onDocumentSelect, onStateChange 
                         className="shadow hover:shadow-lg cursor-pointer transition bg-card border-border hover:border-primary/50 flex flex-col"
                     >
                         <CardHeader className="pb-2">
+                             {/* Translate document name safely */}
                             <CardTitle className="text-base font-semibold text-card-foreground">{t(doc.name, doc.name)}</CardTitle>
                         </CardHeader>
                         <CardContent className="text-xs text-muted-foreground flex-grow">
+                            {/* Translate description safely */}
                             {t(doc.description, doc.description) || t('docTypeSelector.noDescription', 'No description available.')}
                         </CardContent>
                         <CardFooter className="pt-2 pb-3 text-xs text-muted-foreground flex justify-between items-center border-t border-border mt-auto">
                            <span>💲{doc.basePrice}</span>
                            <div className="flex gap-2">
+                               {/* Translate titles safely */}
                                {doc.requiresNotarization && <span title={t('docTypeSelector.requiresNotarization', 'Requires Notarization')}>📝</span>}
                                {doc.canBeRecorded && <span title={t('docTypeSelector.canBeRecorded', 'Can Be Recorded')}>🏛️</span>}
                            </div>
