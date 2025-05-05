@@ -1,4 +1,3 @@
-
 "use client"; // Mark page as client component due to state management and client children
 
 import React, { useState, useEffect, useCallback, useRef } from 'react'; // Ensure useEffect is imported if used elsewhere
@@ -13,10 +12,10 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Separator } from '@/components/ui/separator';
 import { FileText, FileSignature, Check, Upload, AlertTriangle, Download, ListChecks, Loader2 } from 'lucide-react'; // Added ListChecks, Loader2 icons
 import HomepageHeroSteps from '@/components/landing/HomepageHeroSteps'; // Corrected import path to landing
-import HomepageTestimonialsFooter from '@/components/landing/HomepageTestimonialsFooter'; // Import the new combined footer component
 import { Button } from '@/components/ui/button'; // Import Button
 import { useToast } from '@/hooks/use-toast'; // Import useToast
 import { useTranslation } from 'react-i18next'; // Import useTranslation
+import TrustAndTestimonialsSection from '@/components/landing/TrustAndTestimonialsSection'; // Import the combined Trust/Testimonials component
 
 
 // Define share icon SVG inline
@@ -597,7 +596,7 @@ export default function Home() {
         </div>
 
         {/* Footer Sections */}
-        <HomepageTestimonialsFooter />
+         <TrustAndTestimonialsSection /> {/* Use the combined component */}
 
     </div>
   );

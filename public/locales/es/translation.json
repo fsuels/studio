@@ -228,6 +228,24 @@
             "badge1": "Más de {{count}} documentos generados",
             "badge2": "Cifrado y conforme a la privacidad",
             "badge3": "Verificado por abogados reales"
+          },
+          "testimonials": {
+            "title": "Lo que dicen nuestros usuarios",
+            "t1": {
+              "quote": "\"123LegalDoc me ahorró $500 en mi contrato de alquiler. ¡Súper fácil de usar!\"",
+              "name": "Sarah Chen",
+              "title": "Dueña de Pequeño Negocio"
+            },
+            "t2": {
+              "quote": "\"Generar un contrato de sociedad tomó minutos en vez de días. Muy recomendable.\"",
+              "name": "Michael B.",
+              "title": "Freelancer"
+            },
+            "t3": {
+              "quote": "\"La inferencia de IA fue precisa y el formulario muy claro. ¡Excelente servicio!\"",
+              "name": "Emily White",
+              "title": "Fundadora de Startup"
+            }
           }
      },
      "logoAlt": "Logo de 123LegalDoc",

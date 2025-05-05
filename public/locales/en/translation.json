@@ -228,6 +228,24 @@
           "badge1": "Over {{count}} documents generated",
           "badge2": "Encrypted & privacy-compliant",
           "badge3": "Verified by real attorneys"
+        },
+        "testimonials": {
+            "title": "What Our Users Say",
+            "t1": {
+              "quote": "\"123LegalDoc saved me $500 on my lease agreement. Super easy to use!\"",
+              "name": "Sarah Chen",
+              "title": "Small Business Owner"
+            },
+            "t2": {
+              "quote": "\"Generating a partnership agreement took minutes instead of days. Highly recommended.\"",
+              "name": "Michael B.",
+              "title": "Freelancer"
+            },
+            "t3": {
+              "quote": "\"The AI inference was spot on, and the questionnaire was straightforward. Great service!\"",
+              "name": "Emily White",
+              "title": "Startup Founder"
+            }
         }
     },
     "logoAlt": "123LegalDoc Logo",
