@@ -314,6 +314,19 @@
           "item4": "Cancel anytime"
         }
       }
+    },
+    "features": {
+        "title": "Key Features",
+        "subtitle": "Powerful tools to simplify your legal document workflow.",
+        "items": {
+          "ai": { "title": "AI Document Inference", "desc": "Smart suggestions based on your needs." },
+          "forms": { "title": "Dynamic Questionnaires", "desc": "Guided questions tailored to your chosen document." },
+          "local": { "title": "State-Specific Clauses", "desc": "Documents adapted for U.S. state laws." },
+          "bilingual": { "title": "Bilingual Support (EN/ES)", "desc": "Full interface and support in English & Spanish." },
+          "pdf": { "title": "Instant PDF Generation", "desc": "Preview and download professional PDFs." },
+          "sharing": { "title": "Secure Sharing", "desc": "Share documents with time-limited links (coming soon)." },
+          "dashboard": { "title": "User Dashboard", "desc": "Manage your documents and settings easily." },
+          "security": { "title": "Privacy & Security", "desc": "Encrypted data and compliant practices." }
+        }
     }
 }
-

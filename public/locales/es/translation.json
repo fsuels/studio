@@ -314,7 +314,22 @@
             "item4": "Cancela cuando quieras"
           }
         }
-      }
+      },
+    "features": {
+        "title": "Características Clave",
+        "subtitle": "Herramientas poderosas para simplificar tu flujo de trabajo legal.",
+        "items": {
+          "ai": { "title": "Inferencia de Documentos con IA", "desc": "Sugerencias inteligentes basadas en tus necesidades." },
+          "forms": { "title": "Cuestionarios Dinámicos", "desc": "Preguntas guiadas adaptadas al documento elegido." },
+          "local": { "title": "Cláusulas Específicas por Estado", "desc": "Documentos adaptados a las leyes estatales de EE. UU." },
+          "bilingual": { "title": "Soporte Bilingüe (EN/ES)", "desc": "Interfaz completa y soporte en inglés y español." },
+          "pdf": { "title": "Generación Instantánea de PDF", "desc": "Previsualiza y descarga PDFs profesionales." },
+          "sharing": { "title": "Compartir de Forma Segura", "desc": "Comparte documentos con enlaces de tiempo limitado (próximamente)." },
+          "dashboard": { "title": "Panel de Usuario", "desc": "Gestiona tus documentos y configuraciones fácilmente." },
+          "security": { "title": "Privacidad y Seguridad", "desc": "Datos encriptados y prácticas conformes." }
+        }
+    }
 }
 
     
+
