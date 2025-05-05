@@ -1,3 +1,4 @@
+// src/app/page.tsx
 "use client"; // Mark page as client component due to state management and client children
 
 import React, { useState, useEffect, useCallback, useRef } from 'react'; // Ensure useEffect is imported if used elsewhere
@@ -13,9 +14,8 @@ import HomepageHeroSteps from '@/components/landing/HomepageHeroSteps'; // Corre
 import { Button } from '@/components/ui/button'; // Import Button
 import { useToast } from '@/hooks/use-toast'; // Import useToast
 import { useTranslation } from 'react-i18next'; // Import useTranslation
-import TrustAndTestimonialsSection_server from "@/components/landing/TrustAndTestimonialsSection"; // Import the combined Trust/Testimonials component
-// Removed PromoBanner import
-// Removed Footer import
+import TrustAndTestimonialsSection from "@/components/landing/TrustAndTestimonialsSection"; // Import the combined Trust/Testimonials component
+
 
 // Define share icon SVG inline
 const ShareIcon = () => (
@@ -189,7 +189,7 @@ export default function Home() {
                     </div>
                     <CardDescription>
                          {currentStep > 1
-                             ? `State: ${userState || "Not specified"}. You can restart by selecting a new document below.`
+                             ? `${t('State')}: ${userState || t('Not specified')}. ${t('You can restart by selecting a new document below.')}`
                              : t('stepOne.categoryDescription')}
                     </CardDescription>
                     </CardHeader>
@@ -214,6 +214,7 @@ export default function Home() {
                              schema={currentFormSchema}
                              onSubmit={handleAnswersSubmit}
                              isReadOnly={currentStep > 2}
+                             state={userState} // Pass state to form renderer
                          />
                      </div>
                  )}
@@ -354,7 +355,7 @@ export default function Home() {
         </div>
 
         {/* Footer Sections */}
-         <TrustAndTestimonialsSection_server /> {/* Use the combined component */}
+         <TrustAndTestimonialsSection /> {/* Use the combined component */}
 
     </div>
   );
@@ -376,5 +377,3 @@ declare global {
     readonly results: SpeechRecognitionResultList;
   }
 }
-
-    
