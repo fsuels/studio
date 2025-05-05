@@ -398,7 +398,44 @@
      },
      "lease-florida": {
        "title": "How to Create a Valid Lease Agreement in Florida",
-       "desc": "A step-by-step legal checklist for landlords and renters in Florida."
+       "desc": "A step-by-step legal checklist for landlords and renters in Florida.",
+       "date": "2023-11-03"
+     },
+     "ai-vs-lawyers": {
+       "title": "AI vs. Lawyers: When to Use a Legal Assistant Bot",
+       "date": "2024-03-11",
+       "desc": "Understand when AI-driven tools like 123LegalDoc are sufficient and when you should seek human legal advice.",
+       "body": "<p>This is the full English content for the AI vs Lawyers article...</p>"
+     },
+     "how-to-make-a-lease": {
+       "title": "How to Make a Lease Agreement in 5 Minutes",
+       "date": "2024-02-01",
+       "desc": "A step-by-step guide to quickly generating a state-compliant rental agreement.",
+        "body": "<p>This is the full English content for the Lease Agreement article...</p>"
+     },
+     "top-5-legal-mistakes": {
+       "title": "Top 5 Legal Mistakes Freelancers Make",
+       "date": "2023-12-19",
+       "desc": "Avoid these costly legal missteps when working with clients and subcontractors.",
+        "body": "<p>This is the full English content for the Freelancer Mistakes article...</p>"
+     },
+     "divorce-vs-legal-separation": {
+       "title": "Divorce vs. Legal Separation: What’s the Difference?",
+       "date": "2023-11-02",
+       "desc": "Explore the key distinctions between divorce and legal separation in the U.S.",
+        "body": "<p>This is the full English content for the Divorce vs Separation article...</p>"
+     },
+     "how-to-sell-a-car": {
+       "title": "How to Sell a Car Privately with a Bill of Sale",
+       "date": "2023-10-15",
+       "desc": "Learn how to transfer ownership legally and safely with a bill of sale.",
+        "body": "<p>This is the full English content for the Selling a Car article...</p>"
+     },
+     "starting-a-partnership": {
+       "title": "Starting a Business Partnership: Must-Have Legal Docs",
+       "date": "2023-09-30",
+       "desc": "What legal agreements should you have when co-founding a business?",
+        "body": "<p>This is the full English content for the Partnership Docs article...</p>"
      }
    }
 }

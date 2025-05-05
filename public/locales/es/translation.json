@@ -398,8 +398,45 @@
       },
       "lease-florida": {
         "title": "Cómo Crear un Contrato de Alquiler Válido en Florida",
-        "desc": "Guía legal paso a paso para propietarios e inquilinos en Florida."
-      }
+        "desc": "Guía legal paso a paso para propietarios e inquilinos en Florida.",
+        "date": "2023-11-03"
+      },
+       "ai-vs-lawyers": {
+         "title": "IA vs. Abogados: Cuándo Usar un Asistente Legal Automatizado",
+         "date": "2024-03-11",
+         "desc": "Comprende cuándo las herramientas impulsadas por IA como 123LegalDoc son suficientes y cuándo debes buscar asesoría legal humana.",
+         "body": "<p>Este es el contenido completo en español para el artículo de IA vs Abogados...</p>"
+       },
+       "how-to-make-a-lease": {
+         "title": "Cómo Hacer un Contrato de Alquiler en 5 Minutos",
+         "date": "2024-02-01",
+         "desc": "Guía paso a paso para generar rápidamente un contrato de alquiler compatible con tu estado.",
+         "body": "<p>Este es el contenido completo en español para el artículo de Contrato de Alquiler...</p>"
+       },
+       "top-5-legal-mistakes": {
+         "title": "Los 5 Errores Legales Más Comunes de los Freelancers",
+         "date": "2023-12-19",
+         "desc": "Evita estos errores legales costosos al trabajar con clientes y subcontratistas.",
+          "body": "<p>Este es el contenido completo en español para el artículo de Errores de Freelancers...</p>"
+       },
+       "divorce-vs-legal-separation": {
+         "title": "Divorcio vs. Separación Legal: ¿Cuál es la Diferencia?",
+         "date": "2023-11-02",
+         "desc": "Explora las diferencias clave entre el divorcio y la separación legal en EE. UU.",
+          "body": "<p>Este es el contenido completo en español para el artículo de Divorcio vs Separación...</p>"
+       },
+       "how-to-sell-a-car": {
+         "title": "Cómo Vender un Coche con un Contrato de Compra-Venta",
+         "date": "2023-10-15",
+         "desc": "Aprende cómo transferir la propiedad legalmente y con seguridad mediante un contrato de compra-venta.",
+          "body": "<p>Este es el contenido completo en español para el artículo de Vender un Coche...</p>"
+       },
+       "starting-a-partnership": {
+         "title": "Cómo Empezar una Sociedad: Documentos Legales Esenciales",
+         "date": "2023-09-30",
+         "desc": "¿Qué acuerdos legales necesitas al iniciar un negocio con un socio?",
+         "body": "<p>Este es el contenido completo en español para el artículo de Documentos de Sociedad...</p>"
+       }
     }
 }
 
