@@ -230,22 +230,32 @@
           "badge3": "Verified by real attorneys"
         },
         "testimonials": {
-            "title": "What Our Users Say",
-            "t1": {
-              "quote": "\"123LegalDoc saved me $500 on my lease agreement. Super easy to use!\"",
-              "name": "Sarah Chen",
-              "title": "Small Business Owner"
-            },
-            "t2": {
-              "quote": "\"Generating a partnership agreement took minutes instead of days. Highly recommended.\"",
-              "name": "Michael B.",
-              "title": "Freelancer"
-            },
-            "t3": {
-              "quote": "\"The AI inference was spot on, and the questionnaire was straightforward. Great service!\"",
-              "name": "Emily White",
-              "title": "Startup Founder"
-            }
+          "title": "What Our Users Say",
+          "t1": { "quote": "This platform saved me hours of paperwork.", "name": "Ana Ramirez", "title": "Landlord in Texas" },
+          "t2": { "quote": "Extremely intuitive. Created a contract in minutes.", "name": "Jason Liu", "title": "Startup Founder" },
+          "t3": { "quote": "The AI gave exactly what I needed. Fantastic!", "name": "Linda Fox", "title": "Real Estate Agent" },
+          "t4": { "quote": "It guided me step-by-step with zero confusion.", "name": "Kevin James", "title": "Freelancer" },
+          "t5": { "quote": "Simple, fast, and legally solid. Highly recommended.", "name": "Nina Patel", "title": "eCommerce Seller" },
+          "t6": { "quote": "Perfect for small business contracts.", "name": "Carlos Gómez", "title": "Boutique Owner" },
+          "t7": { "quote": "The Spanish support was a game-changer for my team.", "name": "Rosa Villanueva", "title": "Legal Assistant" },
+          "t8": { "quote": "Great design and reliable results.", "name": "Matthew R.", "title": "Photographer" },
+          "t9": { "quote": "Helped me create a lease agreement while on vacation.", "name": "Joanne L.", "title": "Remote Landlord" },
+          "t10": { "quote": "100% would use again. It’s just that good.", "name": "Henry Thomas", "title": "Investor" },
+          "t11": { "quote": "No law degree needed. It handled everything.", "name": "Susan White", "title": "Event Planner" },
+          "t12": { "quote": "Document preview and sharing were super smooth.", "name": "Liam Cruz", "title": "Software Consultant" },
+          "t13": { "quote": "Affordable legal help finally exists!", "name": "Laura Bennett", "title": "Freelance Writer" },
+          "t14": { "quote": "My tenant signed the agreement the same day.", "name": "Omar Hassan", "title": "Property Owner" },
+          "t15": { "quote": "This app is essential for solo entrepreneurs.", "name": "Jada Evans", "title": "Life Coach" },
+          "t16": { "quote": "Even my parents found it easy to use.", "name": "Miguel Reyes", "title": "College Student" },
+          "t17": { "quote": "The dynamic form was perfect for my needs.", "name": "Emily Rivera", "title": "Nonprofit Organizer" },
+          "t18": { "quote": "It’s like having a lawyer on your phone.", "name": "Daniel Schmidt", "title": "Freelance Developer" },
+          "t19": { "quote": "Clean, modern, and legally sound.", "name": "Priya Desai", "title": "Architect" },
+          "t20": { "quote": "Helps me draft contracts without second guessing.", "name": "George Park", "title": "Marketing Consultant" },
+          "t21": { "quote": "Reliable and quick. Best $5 I’ve spent.", "name": "Aliya Khan", "title": "Online Coach" },
+          "t22": { "quote": "The AI nailed my business formation doc.", "name": "Bobby Tran", "title": "Startup Founder" },
+          "t23": { "quote": "Gave me peace of mind with every click.", "name": "Natalie Scott", "title": "Mom & Landlord" },
+          "t24": { "quote": "I trust this tool more than templates online.", "name": "Eric Delgado", "title": "Business Owner" },
+          "t25": { "quote": "The bilingual support sealed the deal.", "name": "Yesenia Morales", "title": "Community Leader" }
         },
         "moneyBackGuarantee": "100% Satisfaction Guarantee or Your Money Back",
         "callToAction": "Get Started Now"
@@ -269,3 +279,4 @@
       "costEffectiveDescription": "Pay just $5 per document compared to $200+ typically charged by law firms."
     }
 }
+
