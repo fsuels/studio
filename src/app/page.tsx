@@ -12,13 +12,11 @@ import { PdfPreview } from '@/components/pdf-preview';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { FileText, FileSignature, Check, Upload, AlertTriangle, Download, ListChecks, Loader2 } from 'lucide-react'; // Added ListChecks, Loader2 icons
-import { TestimonialCarousel } from '@/components/landing/TestimonialCarousel';
-import { FeaturedLogos } from '@/components/landing/FeaturedLogos';
-import { GuaranteeBadge } from '@/components/landing/GuaranteeBadge';
+import HomepageHeroSteps from '@/components/landing/HomepageHeroSteps'; // Corrected import path to landing
+import HomepageTestimonialsFooter from '@/components/landing/HomepageTestimonialsFooter'; // Import the new combined footer component
 import { Button } from '@/components/ui/button'; // Import Button
 import { useToast } from '@/hooks/use-toast'; // Import useToast
 import { useTranslation } from 'react-i18next'; // Import useTranslation
-import HomepageHeroSteps from '@/components/landing/HomepageHeroSteps'; // Import the new combined hero/steps component
 
 
 // Define share icon SVG inline
@@ -599,9 +597,7 @@ export default function Home() {
         </div>
 
         {/* Footer Sections */}
-        <TestimonialCarousel />
-        <FeaturedLogos />
-        <GuaranteeBadge />
+        <HomepageTestimonialsFooter />
 
     </div>
   );
