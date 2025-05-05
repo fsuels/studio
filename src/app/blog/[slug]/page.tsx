@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next'
 import { useEffect, useState } from 'react'; // Import hooks
 import { blogArticles, type BlogArticle } from '@/data/blogArticles'; // Import data and type
 import Link from 'next/link'; // Import Link
-import { ArrowLeft, ArrowRight } from 'lucide-react'; // Import icons
+import { ArrowLeft } from 'lucide-react'; // Import icons
 import { Button } from '@/components/ui/button'; // Import Button
 
 export default function BlogPostPage() {
@@ -34,7 +34,8 @@ export default function BlogPostPage() {
                try {
                    // Parse the ISO date string and format it using current locale
                    const dateObj = new Date(dateString);
-                   setFormattedDate(dateObj.toLocaleDateString(i18n.language, { year: 'numeric', month: 'long', day: 'numeric' }));
+                   // Ensure i18n.language exists before using it
+                   setFormattedDate(dateObj.toLocaleDateString(i18n.language || 'en', { year: 'numeric', month: 'long', day: 'numeric' }));
                } catch (e) {
                    console.error("Error formatting date:", e);
                    setFormattedDate(dateString); // Fallback to the raw string if parsing fails
@@ -49,11 +50,12 @@ export default function BlogPostPage() {
         setArticle(undefined); // Clear article if slug is missing
         setFormattedDate(null); // Clear date
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [slug, i18n.language]); // Rerun on slug or language change
 
 
-  // Determine language key suffix
-  const langSuffix = i18n.language.startsWith('es') ? '_es' : '_en';
+  // Determine language key suffix - Ensure i18n.language exists
+  const langSuffix = (i18n.language && i18n.language.startsWith('es')) ? '_es' : '_en';
 
   // Placeholders
   const placeholderTitle = t('Loading...', { defaultValue: "Loading..."});
@@ -85,21 +87,34 @@ export default function BlogPostPage() {
            <p className="text-muted-foreground">
                 {t('Could not find article with slug', { defaultValue: 'Could not find an article with the slug:' })} <span className="font-mono bg-muted px-1">{slug || 'unknown'}</span>.
             </p>
+           <Button variant="outline" asChild className="mt-4">
+               <Link href="/blog" className="flex items-center gap-2">
+                 <ArrowLeft className="h-4 w-4" />
+                 {t('Back to Blog', { defaultValue: 'Back to Blog'})}
+               </Link>
+           </Button>
          </main>
       );
   }
 
-  const prevSlug = article.navigation?.prev;
-  const nextSlug = article.navigation?.next;
-  const prevArticle = prevSlug ? blogArticles.find(a => a.slug === prevSlug) : null;
-  const nextArticle = nextSlug ? blogArticles.find(a => a.slug === nextSlug) : null;
-
+  // Content extraction using the determined language suffix
+  const articleTitle = article[`title${langSuffix}` as keyof BlogArticle] || placeholderTitle;
+  const articleBody = article[`content${langSuffix}` as keyof BlogArticle] || placeholderBody;
 
   return (
     <main className="max-w-3xl mx-auto px-6 py-12 md:py-20">
+      {/* Button to go back to the main blog page */}
+      <div className="mb-8">
+         <Button variant="outline" asChild>
+             <Link href="/blog" className="flex items-center gap-2 text-sm">
+               <ArrowLeft className="h-4 w-4" />
+               {t('Back to Blog', { defaultValue: 'Back to Blog'})}
+             </Link>
+         </Button>
+      </div>
+
       <h1 className="text-3xl md:text-4xl font-bold mb-4 text-foreground">
-          {/* Access title based on language suffix */}
-          {article[`title${langSuffix}` as keyof BlogArticle] || placeholderTitle}
+          {articleTitle}
       </h1>
       {/* Display formatted date only after hydration */}
       <p className="text-sm text-muted-foreground mb-8">
@@ -107,40 +122,18 @@ export default function BlogPostPage() {
       </p>
       <article className="prose prose-primary dark:prose-invert max-w-none text-foreground mb-16">
          {/* Render blog body using dangerouslySetInnerHTML and language suffix */}
-          <div dangerouslySetInnerHTML={{ __html: article[`content${langSuffix}` as keyof BlogArticle] || placeholderBody }} />
+          <div dangerouslySetInnerHTML={{ __html: articleBody }} />
       </article>
 
-      {/* Navigation Links */}
-      <nav className="flex justify-between items-center border-t border-border pt-8 mt-12">
-          {prevArticle ? (
-            <Link href={`/blog/${prevSlug}`} passHref>
-              <Button variant="outline" className="flex items-center gap-2">
-                <ArrowLeft className="h-4 w-4" />
-                <div className="text-left">
-                    <span className="text-xs text-muted-foreground">{t('blog.prevPost', { defaultValue: 'Previous Post' })}</span>
-                    <p className="text-sm font-medium line-clamp-1">{prevArticle[`title${langSuffix}` as keyof BlogArticle]}</p>
-                </div>
-              </Button>
-            </Link>
-          ) : (
-            <div /> // Placeholder to keep layout consistent
-          )}
-
-          {nextArticle ? (
-             <Link href={`/blog/${nextSlug}`} passHref>
-                <Button variant="outline" className="flex items-center gap-2">
-                   <div className="text-right">
-                       <span className="text-xs text-muted-foreground">{t('blog.nextPost', { defaultValue: 'Next Post' })}</span>
-                       <p className="text-sm font-medium line-clamp-1">{nextArticle[`title${langSuffix}` as keyof BlogArticle]}</p>
-                   </div>
-                   <ArrowRight className="h-4 w-4" />
-                </Button>
-             </Link>
-          ) : (
-            <div /> // Placeholder to keep layout consistent
-          )}
+      {/* Simplified Navigation: Only back to blog */}
+      <nav className="flex justify-start border-t border-border pt-8 mt-12">
+          <Button variant="outline" asChild>
+               <Link href="/blog" className="flex items-center gap-2">
+                 <ArrowLeft className="h-4 w-4" />
+                 {t('Back to Blog', { defaultValue: 'Back to Blog'})}
+               </Link>
+           </Button>
       </nav>
     </main>
   )
 }
-
