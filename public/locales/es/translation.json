@@ -277,7 +277,44 @@
        "secureDescription": "Genera PDFs encriptados y utiliza enlaces para compartir con bloqueo de tiempo para mayor seguridad.",
        "costEffectiveTitle": "Económico",
        "costEffectiveDescription": "Paga solo $5 por documento en comparación con los $200+ que suelen cobrar los bufetes de abogados."
-     }
+     },
+      "pricing": {
+        "title": "Precios Simples y Transparentes",
+        "subtitle": "Paga solo por lo que necesitas. Sin tarifas ocultas ni suscripciones.",
+        "perDocument": "documento",
+        "bundleOf5": "paquete de 5",
+        "perMonth": "mes",
+        "mostPopular": "Más Popular",
+        "cta": "Comenzar",
+        "ctaContact": "Contactar Ventas",
+        "guarantee": "Garantía de satisfacción 100% o devolución de tu dinero en compras individuales/paquetes.",
+        "plans": {
+          "single": {
+            "title": "Documento Individual",
+            "description": "Perfecto para necesidades puntuales.",
+            "item1": "Genera un documento",
+            "item2": "Cuestionario guiado por IA",
+            "item3": "PDF descargable",
+            "item4": "Compartir seguro (pronto)"
+          },
+          "bundle": {
+            "title": "Paquete de Documentos",
+            "description": "Ideal para múltiples documentos relacionados.",
+            "item1": "Genera hasta 5 documentos",
+            "item2": "Todas las funciones del plan individual",
+            "item3": "Los créditos nunca expiran",
+            "item4": "Mejor valor por documento"
+          },
+          "unlimited": {
+            "title": "Business Pro",
+            "description": "Para usuarios frecuentes y negocios.",
+            "item1": "Documentos ilimitados",
+            "item2": "Soporte prioritario",
+            "item3": "Funciones de equipo (pronto)",
+            "item4": "Cancela cuando quieras"
+          }
+        }
+      }
 }
 
     

@@ -277,6 +277,43 @@
       "secureDescription": "Generate encrypted PDFs and utilize time-locked share links for enhanced security.",
       "costEffectiveTitle": "Cost-Effective",
       "costEffectiveDescription": "Pay just $5 per document compared to $200+ typically charged by law firms."
+    },
+    "pricing": {
+      "title": "Simple, Transparent Pricing",
+      "subtitle": "Pay only for what you need. No hidden fees, no subscriptions required.",
+      "perDocument": "document",
+      "bundleOf5": "bundle of 5",
+      "perMonth": "month",
+      "mostPopular": "Most Popular",
+      "cta": "Get Started",
+      "ctaContact": "Contact Sales",
+      "guarantee": "100% Satisfaction Guarantee or Your Money Back on single/bundle purchases.",
+      "plans": {
+        "single": {
+          "title": "Single Document",
+          "description": "Perfect for one-off needs.",
+          "item1": "Generate one document",
+          "item2": "AI-guided questionnaire",
+          "item3": "Downloadable PDF",
+          "item4": "Secure sharing (soon)"
+        },
+        "bundle": {
+          "title": "Document Bundle",
+          "description": "Ideal for multiple related documents.",
+          "item1": "Generate up to 5 documents",
+          "item2": "All single document features",
+          "item3": "Credits never expire",
+          "item4": "Best value per document"
+        },
+        "unlimited": {
+          "title": "Business Pro",
+          "description": "For frequent users & businesses.",
+          "item1": "Unlimited documents",
+          "item2": "Priority support",
+          "item3": "Team features (coming soon)",
+          "item4": "Cancel anytime"
+        }
+      }
     }
 }
 
