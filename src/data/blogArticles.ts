@@ -196,17 +196,7 @@ export const blogArticles: BlogArticle[] = [
     "content_en": "Coming soon...",
     "content_es": "Próximamente..."
   },
-  {
-    "slug": "legal-docs-remote-work",
-    "title_en": "Essential Legal Documents for Remote Work",
-    "title_es": "Documentos Legales Esenciales para el Trabajo Remoto",
-    "date": "2024-04-10",
-    "summary_en": "Ensure legal compliance while hiring or working remotely.",
-    "summary_es": "Asegura el cumplimiento legal al contratar o trabajar de forma remota.",
-    "content_en": "Coming soon...",
-    "content_es": "Próximamente..."
-  },
-  {
+   {
     "slug": "legal-name-change",
     "title_en": "How to Legally Change Your Name in the U.S.",
     "title_es": "Cómo Cambiar Legalmente tu Nombre en EE. UU.",
