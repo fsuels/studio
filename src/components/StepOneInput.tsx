@@ -143,7 +143,7 @@ export default function StepOneInput({
             </SelectTrigger>
             <SelectContent>
               {/* Add a "None" option */}
-              <SelectItem value="none">{t('stepOne.statePlaceholder', { defaultValue: 'Select State...' })}</SelectItem>
+              <SelectItem key="none-option" value="none">{t('stepOne.statePlaceholder', { defaultValue: 'Select State...' })}</SelectItem>
                {/* Use the full list */}
               {usStates.map((s) => (
                 <SelectItem key={s.value} value={s.value}>{s.label} ({s.value})</SelectItem>

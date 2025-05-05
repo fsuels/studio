@@ -1,85 +1,113 @@
 // src/components/DocumentTypeSelector.tsx
 'use client'
 
-import React, { useState, useEffect } from 'react'; // Import useState and useEffect
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'; // Adjusted imports
+import React, { useState, useEffect, useMemo } from 'react';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from '@/components/ui/card';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
+import { Input } from '@/components/ui/input';
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { useTranslation } from 'react-i18next';
-import { Lightbulb } from 'lucide-react'; // Added an icon
-import type { DocumentSuggestion } from '@/ai/flows/infer-document-type'; // Import the suggestion type
+import { documentLibrary, usStates, LegalDocument, findMatchingDocuments } from '@/lib/document-library';
 
-// Interface Props uses the imported DocumentSuggestion type
+
 interface Props {
-  suggestions: DocumentSuggestion[]; // Use the imported type
-  onSelect: (docType: string) => void;
+  onSelect: (docType: string) => void; // Now accepts the document ID
+  selectedDocument?: string; // Optional prop for pre-selecting a document
 }
 
-export default function DocumentTypeSelector({ suggestions, onSelect }: Props) {
+export default function DocumentTypeSelector({ onSelect, selectedDocument }: Props) {
   const { t, i18n } = useTranslation();
-  const [isHydrated, setIsHydrated] = useState(false); // State for hydration
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedState, setSelectedState] = useState<string | undefined>(undefined);
+
 
   useEffect(() => {
-    setIsHydrated(true); // Set hydrated state on client
+    // Set hydrated state on client
   }, []);
 
-  if (!suggestions || suggestions.length === 0) return null;
+  const categories = useMemo(() => {
+    return [...new Set(documentLibrary.map((doc) => doc.category))];
+  }, []);
 
-  // Ensure "General Inquiry" has a standard reason if none provided by AI
-  const processedSuggestions = suggestions.map(s => ({
-      ...s,
-      reasoning: s.documentType === 'General Inquiry' && !s.reasoning
-        ? (isHydrated ? t('docTypeSelector.generalInquiryReason') : '...')
-        : s.reasoning
-  }));
-
-  // Show placeholder or nothing if not hydrated
-  if (!isHydrated) {
-    return <div className="mt-6 h-40 animate-pulse bg-muted/70 rounded-lg shadow-inner border border-border"></div>; // Example placeholder
-  }
-
+  const filteredDocuments = useMemo(() => {
+    return findMatchingDocuments(searchQuery, i18n.language as 'en' | 'es', selectedState);
+  }, [searchQuery, selectedState, i18n.language]);
 
   return (
-    <Card className="mt-6 bg-secondary/70 rounded-lg shadow-inner border border-border animate-fade-in">
-       <CardHeader className="pb-3 pt-4">
-          <CardTitle className="text-lg flex items-center font-medium">
-              <Lightbulb className="mr-2 h-5 w-5 text-primary" />
-              {t('docTypeSelector.suggestedTitle')} {/* Translate title */}
-          </CardTitle>
-           <CardDescription className="text-sm">
-             {t('docTypeSelector.selectPrompt')} {/* Translate prompt */}
-           </CardDescription>
-        </CardHeader>
-      <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4 pb-4">
-        {processedSuggestions.map((doc, index) => (
-          <Card
-            key={index}
-            onClick={() => onSelect(doc.documentType)} // Use documentType field
-            className="cursor-pointer hover:shadow-lg transition-all duration-200 border-2 border-transparent hover:border-primary focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 bg-card"
-            tabIndex={0} // Make card focusable
-            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') onSelect(doc.documentType); }} // Allow selection with keyboard
-          >
-            <CardContent className="p-4">
-              <CardTitle className="text-base font-semibold mb-2 flex items-center justify-between">
-                 <span>{doc.documentType}</span> {/* Use documentType field */}
-                  {/* Display confidence */}
-                 {doc.confidence !== undefined && (
-                    <span className={`ml-2 text-xs font-normal px-1.5 py-0.5 rounded ${
-                        doc.confidence > 0.7 ? 'bg-green-100 text-green-800' :
-                        doc.confidence > 0.4 ? 'bg-yellow-100 text-yellow-800' :
-                        'bg-red-100 text-red-800'
-                    }`}>
-                        {(doc.confidence * 100).toFixed(0)}{t('docTypeSelector.confidenceSuffix')} {/* Translate suffix */}
-                    </span>
-                 )}
-              </CardTitle>
-              <CardDescription className="text-xs text-muted-foreground">
-                 {/* Translate reasoning */}
-                 {doc.reasoning || t('docTypeSelector.noReasoning')}
-              </CardDescription>
-            </CardContent>
-          </Card>
-        ))}
+    <Card className="mt-6">
+      <CardHeader>
+        <CardTitle>{t('docTypeSelector.title')}</CardTitle>
+        <CardDescription>{t('docTypeSelector.subtitle')}</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <div className="flex gap-4">
+          <Input
+            type="search"
+            placeholder={t('docTypeSelector.searchPlaceholder')}
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+
+          <Select onValueChange={setSelectedState}>
+            <SelectTrigger>
+              <SelectValue placeholder={t('docTypeSelector.selectState')} />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectLabel>{t('docTypeSelector.statesLabel')}</SelectLabel>
+                {usStates.map((state) => (
+                  <SelectItem key={state.value} value={state.value}>
+                    {state.label}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+        </div>
+        <Tabs defaultValue={categories[0]} className="mt-4">
+          <TabsList>
+            {categories.map((category) => (
+              <TabsTrigger key={category} value={category}>
+                {category}
+              </TabsTrigger>
+            ))}
+          </TabsList>
+          {categories.map((category) => (
+            <TabsContent key={category} value={category}>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {filteredDocuments
+                  .filter((doc) => doc.category === category)
+                  .map((doc) => (
+                    <Card
+                      key={doc.id}
+                      className={`cursor-pointer hover:shadow-lg transition-all duration-200 ${selectedDocument === doc.id ? 'border-2 border-primary' : ''}`}
+                      onClick={() => onSelect(doc.id)}
+                    >
+                      <CardHeader>
+                        <CardTitle>{doc.name}</CardTitle>
+                        <CardDescription>{doc.description}</CardDescription>
+                      </CardHeader>
+                    </Card>
+                  ))}
+              </div>
+            </TabsContent>
+          ))}
+        </Tabs>
       </CardContent>
-      {/* Footer can be added if needed, e.g., for "None of these" option */}
     </Card>
   );
 }
