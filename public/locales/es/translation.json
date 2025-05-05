@@ -212,15 +212,15 @@
             "startNow": "Comienza gratis"
           },
           "testimonialsTitle": "Lo que dicen nuestros usuarios",
-          "testimonial1": "\"123LegalDoc me ahorró $500 en mi contrato de alquiler. ¡Muy fácil de usar!\"",
+          "testimonial1": "\"123LegalDoc me ahorró $500 en mi contrato de alquiler. ¡Súper fácil de usar!\"",
           "testimonial1Name": "Sarah Chen",
-          "testimonial1Role": "Propietaria de pequeño negocio",
-          "testimonial2": "\"Generar un contrato de asociación tomó minutos en lugar de días. Altamente recomendado.\"",
+          "testimonial1Role": "Dueña de Pequeño Negocio",
+          "testimonial2": "\"Generar un contrato de sociedad tomó minutos en vez de días. Muy recomendable.\"",
           "testimonial2Name": "Michael B.",
           "testimonial2Role": "Freelancer",
-          "testimonial3": "\"La inferencia de IA fue precisa y el cuestionario claro. ¡Gran servicio!\"",
+          "testimonial3": "\"La inferencia de IA fue precisa y el formulario muy claro. ¡Excelente servicio!\"",
           "testimonial3Name": "Emily White",
-          "testimonial3Role": "Fundadora de startup",
+          "testimonial3Role": "Fundadora de Startup",
           "featuredIn": "DESTACADO EN",
           "satisfactionGuarantee": "Garantía de satisfacción del 100% o le devolvemos su dinero",
           "trustStrip": {
@@ -328,8 +328,19 @@
           "dashboard": { "title": "Panel de Usuario", "desc": "Gestiona tus documentos y configuraciones fácilmente." },
           "security": { "title": "Privacidad y Seguridad", "desc": "Datos encriptados y prácticas conformes." }
         }
-    }
+    },
+     "faq": {
+        "title": "Preguntas Frecuentes",
+        "subtitle": "Encuentra respuestas a preguntas comunes abajo.",
+        "q1": { "question": "¿Es 123LegalDoc un bufete de abogados?", "answer": "No, 123LegalDoc es una plataforma de software y no proporciona asesoramiento legal. Recomendamos consultar a un abogado calificado para necesidades legales específicas." },
+        "q2": { "question": "¿Qué tan precisas son las sugerencias de la IA?", "answer": "Nuestra IA está entrenada en escenarios legales comunes, pero las sugerencias son informativas. Siempre revisa el tipo de documento elegido." },
+        "q3": { "question": "¿Puedo usar los documentos en cualquier estado de EE. UU.?", "answer": "Muchos documentos son generales, pero algunos tienen cláusulas específicas por estado. Selecciona el estado relevante en el Paso 1 para obtener los mejores resultados." },
+        "q4": { "question": "¿Cuánto cuesta?", "answer": "Ofrecemos precios simples de pago por documento a $5, paquetes y un plan ilimitado. Consulta nuestra página de Precios para más detalles." },
+        "q5": { "question": "¿Está segura mi información?", "answer": "Sí, utilizamos cifrado y seguimos las mejores prácticas de la industria para proteger tus datos. Consulta nuestra Política de Privacidad." },
+        "q6": { "question": "¿Qué pasa si necesito ayuda?", "answer": "Puedes visitar nuestra página de Soporte o contactarnos a través de los canales proporcionados para obtener ayuda con la plataforma." }
+     }
 }
 
     
+
 

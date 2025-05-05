@@ -328,5 +328,15 @@
           "dashboard": { "title": "User Dashboard", "desc": "Manage your documents and settings easily." },
           "security": { "title": "Privacy & Security", "desc": "Encrypted data and compliant practices." }
         }
+    },
+    "faq": {
+        "title": "Frequently Asked Questions",
+        "subtitle": "Find answers to common questions below.",
+        "q1": { "question": "Is 123LegalDoc a law firm?", "answer": "No, 123LegalDoc is a software platform and does not provide legal advice. We recommend consulting a qualified attorney for specific legal needs." },
+        "q2": { "question": "How accurate are the AI suggestions?", "answer": "Our AI is trained on common legal scenarios but suggestions are informational. Always review the chosen document type." },
+        "q3": { "question": "Can I use documents in any U.S. state?", "answer": "Many documents are general, but some have state-specific clauses. Select the relevant state in Step 1 for best results." },
+        "q4": { "question": "How much does it cost?", "answer": "We offer simple pay-per-document pricing at $5, bundles, and an unlimited plan. See our Pricing page for details." },
+        "q5": { "question": "Is my information secure?", "answer": "Yes, we use encryption and follow industry best practices to protect your data. See our Privacy Policy." },
+        "q6": { "question": "What if I need help?", "answer": "You can visit our Support page or contact us through the provided channels for assistance with the platform." }
     }
 }
