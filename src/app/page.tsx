@@ -128,9 +128,17 @@ export default function Home() {
          generationToast.dismiss();
 
          if (!response.ok) {
-            const errorData = await response.json();
-             console.error("[page.tsx] PDF generation failed:", errorData);
-             toast({ title: t('toasts.pdfGenFailedTitle'), description: errorData.error || t('toasts.pdfGenFailedDescription'), variant: "destructive"});
+            const errorText = await response.text(); // Read response body as text
+             console.error("[page.tsx] PDF generation failed:", response.status, response.statusText, errorText);
+             // Try to parse JSON, but fall back to text if it fails
+             let errorDetails = errorText;
+             try {
+                 const jsonError = JSON.parse(errorText);
+                 errorDetails = jsonError.error || errorText;
+             } catch (e) {
+                 // Ignore JSON parsing error, use raw text
+             }
+             toast({ title: t('toasts.pdfGenFailedTitle'), description: `${response.status} ${response.statusText}: ${errorDetails}`, variant: "destructive"});
              setDisclaimerAgreed(false); // Revert agreement state
              return;
          }
@@ -147,10 +155,10 @@ export default function Home() {
          setPdfDataUrl(dataUrl);
          toast({ title: t('toasts.pdfGenSuccessTitle'), description: t('toasts.pdfGenSuccessDescription') });
 
-     } catch (error) {
+     } catch (error: any) { // Catch specific error type if possible
           generationToast.dismiss();
           console.error("[page.tsx] Error during PDF generation fetch:", error);
-          toast({ title: t('toasts.pdfGenErrorTitle'), description: "An unexpected error occurred.", variant: "destructive"});
+          toast({ title: t('toasts.pdfGenErrorTitle'), description: `An unexpected error occurred: ${error.message || error}`, variant: "destructive"});
           setDisclaimerAgreed(false); // Revert agreement state
      }
   }
