@@ -225,9 +225,9 @@
         "satisfactionGuarantee": "100% Satisfaction Guarantee or Your Money Back",
         "trustStrip": {
           "title": "Trusted By Professionals",
-          "badge1": "Used by small businesses in all 50 states",
+          "badge1": "Over {{count}} documents generated",
           "badge2": "Encrypted & privacy-compliant",
-          "badge3": "Legal formats verified by attorneys"
+          "badge3": "Verified by real attorneys"
         }
     },
     "logoAlt": "123LegalDoc Logo",
