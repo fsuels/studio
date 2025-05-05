@@ -213,10 +213,16 @@
           },
          "testimonialsTitle": "Lo que dicen nuestros usuarios",
          "testimonial1": "\"123LegalDoc me ahorró $500 en mi contrato de alquiler. ¡Muy fácil de usar!\"",
+         "testimonial1Name": "Sarah Chen",
+         "testimonial1Role": "Propietaria de pequeño negocio",
          "testimonial2": "\"Generar un contrato de asociación tomó minutos en lugar de días. Altamente recomendado.\"",
-         "testimonial3": "\"La inferencia de la IA fue precisa y el cuestionario fue claro. ¡Excelente servicio!\"",
+         "testimonial2Name": "Michael B.",
+         "testimonial2Role": "Freelancer",
+         "testimonial3": "\"La inferencia de IA fue precisa y el cuestionario claro. ¡Gran servicio!\"",
+         "testimonial3Name": "Emily White",
+         "testimonial3Role": "Fundadora de startup",
          "featuredIn": "DESTACADO EN",
-         "satisfactionGuarantee": "Garantía de satisfacción 100% o le devolvemos su dinero"
+         "satisfactionGuarantee": "Garantía de satisfacción del 100% o le devolvemos su dinero"
      },
      "logoAlt": "Logo de 123LegalDoc",
      "Step 2: Provide Details": "Paso 2: Proporcionar Detalles",
