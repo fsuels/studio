@@ -18,7 +18,7 @@ export default function BlogPostPage() {
   // Placeholder text while hydrating
   const placeholderTitle = "Loading...";
   const placeholderDate = "Loading date...";
-  const placeholderBody = "Loading content...";
+  const placeholderBody = "<p>Loading content...</p>"; // Default as HTML string
 
   if (!slug) {
       // Handle case where slug might be missing (e.g., during initial render)
@@ -47,13 +47,10 @@ export default function BlogPostPage() {
          {isHydrated ? t(`blog.${slug}.date`, { defaultValue: 'Loading Date...' }) : placeholderDate}
       </p>
       <article className="prose prose-primary dark:prose-invert max-w-none text-foreground">
-         {/* Render actual content using t() or fetch dynamically */}
-          <p className="text-muted-foreground">
-             {isHydrated ? t(`blog.${slug}.body`, {
-                defaultValue: placeholderBody
-             }) : placeholderBody}
-          </p>
-           {/* Add more paragraphs or elements as needed for blog content */}
+         {/* Render blog body using dangerouslySetInnerHTML */}
+          <div dangerouslySetInnerHTML={{ __html: isHydrated ? t(`blog.${slug}.body`, {
+            defaultValue: '<p>This blog post is coming soon. Please check back later for the full article.</p>'
+          }) : placeholderBody }} />
       </article>
     </main>
   )
