@@ -6,34 +6,43 @@ import { useTranslation } from 'react-i18next'
 import Link from 'next/link'; // Import Link
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'; // Import Card components
 
-const posts = [
+// Define the base type for a post
+type Post = {
+  slug: string;
+  titleKey: string;
+  descKey: string;
+  date: string; // Static ISO date string
+};
+
+const posts: Post[] = [
   {
     slug: 'freelancer-docs',
-    titleKey: 'blog.freelancer-docs.title', // Updated key to match translation file structure
-    descKey: 'blog.freelancer-docs.desc', // Updated key
-    date: '2024-03-12' // Static ISO date string
+    titleKey: 'blog.freelancer-docs.title', // Use full key from i18n
+    descKey: 'blog.freelancer-docs.desc', // Use full key from i18n
+    date: '2024-03-12'
   },
   {
     slug: 'ai-legaltech',
-    titleKey: 'blog.ai-legaltech.title', // Updated key
-    descKey: 'blog.ai-legaltech.desc', // Updated key
-    date: '2024-02-02' // Static ISO date string
+    titleKey: 'blog.ai-legaltech.title', // Use full key from i18n
+    descKey: 'blog.ai-legaltech.desc', // Use full key from i18n
+    date: '2024-02-02'
   },
   {
     slug: 'templates-risk',
-    titleKey: 'blog.templates-risk.title', // Updated key
-    descKey: 'blog.templates-risk.desc', // Updated key
-    date: '2023-12-20' // Static ISO date string
+    titleKey: 'blog.templates-risk.title', // Use full key from i18n
+    descKey: 'blog.templates-risk.desc', // Use full key from i18n
+    date: '2023-12-20'
   },
   {
     slug: 'lease-florida',
-    titleKey: 'blog.lease-florida.title', // Updated key
-    descKey: 'blog.lease-florida.desc', // Updated key
-    date: '2023-11-03' // Static ISO date string - Placeholder, update if needed
+    titleKey: 'blog.lease-florida.title', // Use full key from i18n
+    descKey: 'blog.lease-florida.desc', // Use full key from i18n
+    date: '2023-11-03' // Placeholder, update if needed
   }
 ];
 
-interface FormattedPost extends (typeof posts)[0] {
+// Define FormattedPost using the base Post type and adding formattedDate
+interface FormattedPost extends Post {
   formattedDate: string;
 }
 
@@ -49,6 +58,7 @@ export default function BlogPage() {
     const clientFormattedPosts = posts.map(post => {
         let dateDisplay = post.date; // Default to ISO string
         try {
+            // Format date to locale string (e.g., "March 12, 2024")
             dateDisplay = new Date(post.date).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' });
         } catch (e) {
             console.error("Error formatting date:", e, "for post:", post.slug);
@@ -82,6 +92,7 @@ export default function BlogPage() {
           <Card key={post.slug} className="shadow-lg rounded-xl bg-card border border-border transition-shadow hover:shadow-xl flex flex-col">
             <CardHeader>
                <CardTitle className="text-xl font-semibold text-card-foreground">
+                  {/* Use the full key from the post object */}
                   {isHydrated ? t(post.titleKey, placeholderTitle) : placeholderTitle}
                </CardTitle>
                 <CardDescription className="text-sm text-muted-foreground pt-1">
@@ -91,6 +102,7 @@ export default function BlogPage() {
             </CardHeader>
             <CardContent className="flex-grow">
                <p className="text-muted-foreground text-sm leading-relaxed">
+                 {/* Use the full key from the post object */}
                  {isHydrated ? t(post.descKey, placeholderDesc) : placeholderDesc}
                </p>
             </CardContent>
