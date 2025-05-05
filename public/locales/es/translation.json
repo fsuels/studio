@@ -233,5 +233,13 @@
      "Review the generated document and sign it digitally.": "Revisa el documento generado y fírmalo digitalmente.",
      "Agree to the disclaimer above to generate the document preview.": "Acepta el descargo de responsabilidad anterior para generar la vista previa del documento.",
      "Securely share your document or download it after signing.": "Comparte de forma segura tu documento o descárgalo después de firmar.",
-     "State": "Estado"
+     "State": "Estado",
+     "homepage": {
+       "workflowTitle": "Flujo de trabajo ultrarrápido",
+       "workflowDescription": "La IA te guía paso a paso para que crear documentos sea rápido e intuitivo.",
+       "secureTitle": "Seguro y Conforme",
+       "secureDescription": "Genera PDFs encriptados y utiliza enlaces para compartir con bloqueo de tiempo para mayor seguridad.",
+       "costEffectiveTitle": "Económico",
+       "costEffectiveDescription": "Paga solo $5 por documento en comparación con los $200+ que suelen cobrar los bufetes de abogados."
+     }
 }
