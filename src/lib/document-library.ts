@@ -12,6 +12,14 @@ export type Question = {
   // Add language variants if needed, e.g., label_es: '...'
 };
 
+// Define structure for upsell clauses
+export type UpsellClause = {
+    id: string;
+    description: string;
+    description_es?: string;
+    price: number; // e.g., 1 or 2 dollars
+};
+
 // Define the structure for a single legal document
 export type LegalDocument = {
   id: string; // Unique identifier for the document (e.g., 'residential-lease')
@@ -24,9 +32,12 @@ export type LegalDocument = {
   questions?: Question[]; // Array of questions for the dynamic form
   description?: string; // Short description of the document
   description_es?: string; // Spanish description
-  requiresNotarization?: boolean; // NEW: Does this document typically require notarization?
-  canBeRecorded?: boolean; // NEW: Can this document be recorded with a court/clerk?
-  // Add other metadata as needed (e.g., basePrice)
+  requiresNotarization?: boolean; // Does this document typically require notarization?
+  canBeRecorded?: boolean; // Can this document be recorded with a court/clerk?
+  offerNotarization?: boolean; // Should we offer help/links for notarization?
+  offerRecordingHelp?: boolean; // Should we offer help/links for recording?
+  basePrice: number; // Base price for the document (e.g., 5)
+  upsellClauses?: UpsellClause[]; // Optional clauses user can add for a fee
 };
 
 // Helper function to create slugs from names (basic example)
@@ -73,6 +84,13 @@ export const documentLibrary: LegalDocument[] = [
     description_es: "Crea un contrato entre un propietario y un inquilino para alquilar una propiedad residencial.",
     requiresNotarization: false,
     canBeRecorded: false,
+    offerNotarization: false,
+    offerRecordingHelp: false,
+    basePrice: 5,
+    upsellClauses: [
+        { id: "petClause", description: "Add specific rules for pets", description_es: "Añadir reglas específicas para mascotas", price: 1 },
+        { id: "earlyTermination", description: "Include conditions for early lease termination", description_es: "Incluir condiciones para terminación anticipada del contrato", price: 2 },
+    ],
     questions: [ // Example questions - expand significantly
         { id: "landlordName", label: "Landlord's Full Name", type: "text", required: true },
         { id: "tenantName", label: "Tenant's Full Name", type: "text", required: true },
@@ -92,8 +110,15 @@ export const documentLibrary: LegalDocument[] = [
     category: "Family Law",
     description: "Formalizes the terms of a divorce, including property division, support, and custody.",
     description_es: "Formaliza los términos de un divorcio, incluyendo división de bienes, manutención y custodia.",
-    requiresNotarization: true, // Often required
-    canBeRecorded: true, // Often filed with court
+    requiresNotarization: true,
+    canBeRecorded: true,
+    offerNotarization: true,
+    offerRecordingHelp: true,
+    basePrice: 5,
+    upsellClauses: [
+        { id: "spousalSupportWaiver", description: "Include waiver of spousal support", description_es: "Incluir renuncia a la manutención conyugal", price: 2 },
+        { id: "retirementSplit", description: "Specify division of retirement accounts", description_es: "Especificar división de cuentas de jubilación", price: 2 },
+    ],
     questions: [ // Example questions
         { id: "spouse1Name", label: "Spouse 1 Full Name", type: "text", required: true },
         { id: "spouse2Name", label: "Spouse 2 Full Name", type: "text", required: true },
@@ -112,8 +137,11 @@ export const documentLibrary: LegalDocument[] = [
     category: "Family Law",
     description: "Defines legal and physical custody arrangements for minor children.",
     description_es: "Define los arreglos de custodia legal y física para hijos menores.",
-    requiresNotarization: true, // Often required
-    canBeRecorded: true, // Often filed with court
+    requiresNotarization: true,
+    canBeRecorded: true,
+    offerNotarization: true,
+    offerRecordingHelp: true,
+    basePrice: 5,
     questions: [] // Placeholder - Add detailed questions about parents, children, schedules, decision-making etc.
   },
   {
@@ -126,8 +154,11 @@ export const documentLibrary: LegalDocument[] = [
     category: "Family Law",
     description: "Sets terms for property division and support if a marriage ends.",
     description_es: "Establece los términos para la división de bienes y manutención si el matrimonio termina.",
-    requiresNotarization: true, // Typically required
+    requiresNotarization: true,
     canBeRecorded: false,
+    offerNotarization: true,
+    offerRecordingHelp: false,
+    basePrice: 5,
     questions: [] // Placeholder - Add questions about assets, debts, waivers etc.
   },
   {
@@ -142,6 +173,9 @@ export const documentLibrary: LegalDocument[] = [
     description_es: "Obliga legalmente a dos partes a mantener la información compartida confidencial.",
     requiresNotarization: false,
     canBeRecorded: false,
+    offerNotarization: false,
+    offerRecordingHelp: false,
+    basePrice: 5,
     questions: [
        { id: "party1Name", label: "Party 1 Full Name/Company", type: "text", required: true },
        { id: "party1Address", label: "Party 1 Address", type: "textarea", required: true },
@@ -165,6 +199,9 @@ export const documentLibrary: LegalDocument[] = [
     description_es: "Obliga a una parte (Receptor) a mantener confidencial la información de otra parte (Revelador).",
     requiresNotarization: false,
     canBeRecorded: false,
+    offerNotarization: false,
+    offerRecordingHelp: false,
+    basePrice: 5,
      questions: [
         { id: "disclosingPartyName", label: "Disclosing Party Full Name/Company", type: "text", required: true },
         { id: "disclosingPartyAddress", label: "Disclosing Party Address", type: "textarea", required: true },
@@ -188,6 +225,9 @@ export const documentLibrary: LegalDocument[] = [
     description_es: "Define la relación entre un negocio y un contratista independiente.",
     requiresNotarization: false,
     canBeRecorded: false,
+    offerNotarization: false,
+    offerRecordingHelp: false,
+    basePrice: 5,
     questions: [] // Placeholder - Add questions about parties, services, payment, term, intellectual property etc.
   },
   {
@@ -202,6 +242,9 @@ export const documentLibrary: LegalDocument[] = [
     description_es: "Describe los términos bajo los cuales se prestarán los servicios.",
     requiresNotarization: false,
     canBeRecorded: false,
+    offerNotarization: false,
+    offerRecordingHelp: false,
+    basePrice: 5,
     questions: [
         { id: 'clientName', label: 'Client Full Name/Company', type: 'text', required: true },
         { id: 'clientAddress', label: 'Client Address', type: 'textarea', required: true },
@@ -212,7 +255,7 @@ export const documentLibrary: LegalDocument[] = [
         { id: 'endDate', label: 'Service End Date (Optional, for fixed term)', type: 'date' },
         { id: 'paymentTerms', label: 'Payment Amount and Terms', type: 'textarea', required: true, placeholder: 'e.g., $50/hour billed monthly, $1000 fixed fee upon completion' },
         { id: 'confidentialityClause', label: 'Include Confidentiality Clause?', type: 'select', options: [{value: 'yes', label: 'Yes'}, {value: 'no', label: 'No'}], required: true },
-        { id: 'state', label: 'Governing State Law', type: 'select', required: true, options: usStates }
+        { id: 'state', label: 'Governing State Law', type: 'select', required: true, options: usStates.map(s => ({ value: s.value, label: s.label })) }
     ]
   },
   {
@@ -225,8 +268,11 @@ export const documentLibrary: LegalDocument[] = [
     category: "Business",
     description: "Governs the relationship between business partners.",
     description_es: "Rige la relación entre socios de negocios.",
-    requiresNotarization: false, // Sometimes recommended
+    requiresNotarization: false,
     canBeRecorded: false,
+    offerNotarization: false,
+    offerRecordingHelp: false,
+    basePrice: 5,
     questions: [
          { id: "partner1Name", label: "Partner 1 Full Name", type: "text", required: true, placeholder: "e.g., John Smith" },
          { id: "partner1Address", label: "Partner 1 Address", type: "textarea", required: true },
@@ -240,7 +286,7 @@ export const documentLibrary: LegalDocument[] = [
          { id: "profitSplit", label: "Profit/Loss Sharing Arrangement", type: "textarea", required: true, placeholder: "e.g., 50/50 split after expenses, or based on capital contribution" },
          { id: "managementRoles", label: "Management Roles & Responsibilities", type: "textarea", placeholder: "e.g., Partner 1: Operations, Partner 2: Marketing. Major decisions require unanimous vote." },
          { id: "dissolutionTerms", label: "Terms for Dissolution/Partner Exit", type: "textarea", placeholder: "e.g., Buyout options, asset distribution procedure" },
-         { id: 'state', label: 'Governing State Law', type: 'select', required: true, options: usStates }
+         { id: 'state', label: 'Governing State Law', type: 'select', required: true, options: usStates.map(s => ({ value: s.value, label: s.label })) }
     ]
   },
   {
@@ -255,6 +301,9 @@ export const documentLibrary: LegalDocument[] = [
     description_es: "Describe la propiedad y los procedimientos operativos de una LLC.",
     requiresNotarization: false,
     canBeRecorded: false,
+    offerNotarization: false,
+    offerRecordingHelp: false,
+    basePrice: 5,
     questions: [] // Placeholder - Add questions about members, management, capital, distributions, dissolution etc.
   },
   {
@@ -269,6 +318,9 @@ export const documentLibrary: LegalDocument[] = [
     description_es: "Documenta la transferencia de propiedad de un vehículo.",
     requiresNotarization: false, // Sometimes required by state DMV
     canBeRecorded: false,
+    offerNotarization: false,
+    offerRecordingHelp: false,
+    basePrice: 5,
     questions: [ // Example questions for Vehicle Bill of Sale
         { id: "buyerName", label: "Buyer's Full Name", type: "text", required: true },
         { id: "sellerName", label: "Seller's Full Name", type: "text", required: true },
@@ -294,6 +346,9 @@ export const documentLibrary: LegalDocument[] = [
     description_es: "Documenta la transferencia de propiedad de bienes personales.",
     requiresNotarization: false,
     canBeRecorded: false,
+    offerNotarization: false,
+    offerRecordingHelp: false,
+    basePrice: 5,
     questions: [] // Placeholder
   },
   {
@@ -306,8 +361,11 @@ export const documentLibrary: LegalDocument[] = [
     category: "Personal Affairs",
     description: "Authorizes someone (Agent) to handle broad financial and legal matters.",
     description_es: "Autoriza a alguien (Agente) a manejar amplios asuntos financieros y legales.",
-    requiresNotarization: true, // Almost always required
-    canBeRecorded: true, // Sometimes recorded (e.g., for real estate transactions)
+    requiresNotarization: true,
+    canBeRecorded: true,
+    offerNotarization: true,
+    offerRecordingHelp: false, // Recording POA for finance isn't typical unless real estate involved
+    basePrice: 5,
     questions: [
         { id: 'principalName', label: 'Principal\'s Full Name (Person granting power)', type: 'text', required: true },
         { id: 'principalAddress', label: 'Principal\'s Full Address', type: 'textarea', required: true },
@@ -316,7 +374,7 @@ export const documentLibrary: LegalDocument[] = [
         { id: 'alternateAgentName', label: 'Alternate Agent\'s Full Name (Optional)', type: 'text' },
         { id: 'effectiveDateType', label: 'When does this POA become effective?', type: 'select', options: [{value: 'immediately', label: 'Immediately'}, {value: 'incapacity', label: 'Upon my incapacity'}], required: true },
         { id: 'isDurable', label: 'Is this a Durable POA (remains effective after incapacity)?', type: 'select', options: [{value: 'yes', label: 'Yes (Durable)'}, {value: 'no', label: 'No (Terminates on incapacity)'}], required: true },
-        { id: 'state', label: 'State Governing the POA', type: 'select', required: true, options: usStates.filter(opt => ['CA', 'NY', 'TX', 'FL', 'IL', 'Other'].includes(opt.value)) } // Example limited states + Other
+        { id: 'state', label: 'State Governing the POA', type: 'select', required: true, options: usStates.map(s => ({ value: s.value, label: s.label })) }
     ]
   },
    {
@@ -329,8 +387,11 @@ export const documentLibrary: LegalDocument[] = [
     category: "Personal Affairs",
     description: "Appoints an agent to make healthcare decisions if you cannot.",
     description_es: "Designa a un agente para tomar decisiones de atención médica si usted no puede.",
-    requiresNotarization: true, // Often required
+    requiresNotarization: true,
     canBeRecorded: false,
+    offerNotarization: true,
+    offerRecordingHelp: false,
+    basePrice: 5,
     questions: [
        { id: 'principalName', label: 'Principal\'s Full Name (Person granting power)', type: 'text', required: true },
        { id: 'principalAddress', label: 'Principal\'s Full Address', type: 'textarea', required: true },
@@ -338,7 +399,7 @@ export const documentLibrary: LegalDocument[] = [
        { id: 'agentAddress', label: 'Healthcare Agent\'s Full Address', type: 'textarea', required: true },
        { id: 'alternateAgentName', label: 'Alternate Healthcare Agent\'s Full Name (Optional)', type: 'text' },
        { id: 'lifeSupportPreferences', label: 'Preferences regarding life support (Optional)', type: 'textarea', placeholder: 'e.g., I do/do not want artificial respiration...' },
-       { id: 'state', label: 'State Governing the POA', type: 'select', required: true, options: usStates.filter(opt => ['CA', 'NY', 'TX', 'FL', 'IL', 'Other'].includes(opt.value)) }
+       { id: 'state', label: 'State Governing the POA', type: 'select', required: true, options: usStates.map(s => ({ value: s.value, label: s.label })) }
     ]
   },
   {
@@ -351,8 +412,11 @@ export const documentLibrary: LegalDocument[] = [
     category: "Estate",
     description: "Specifies your wishes for medical treatment if you are incapacitated.",
     description_es: "Especifica sus deseos de tratamiento médico si queda incapacitado.",
-    requiresNotarization: true, // Often required
+    requiresNotarization: true,
     canBeRecorded: false,
+    offerNotarization: true,
+    offerRecordingHelp: false,
+    basePrice: 5,
     questions: [] // Placeholder - Add questions about specific treatments (CPR, feeding tubes etc.)
   },
    {
@@ -365,8 +429,11 @@ export const documentLibrary: LegalDocument[] = [
     category: "Estate",
     description: "Specifies how your assets should be distributed after your death.",
     description_es: "Especifica cómo deben distribuirse sus bienes después de su muerte.",
-    requiresNotarization: true, // Required
+    requiresNotarization: true,
     canBeRecorded: true, // Filed with probate court after death
+    offerNotarization: true,
+    offerRecordingHelp: true,
+    basePrice: 5,
     questions: [
         { id: 'testatorName', label: 'Your Full Name (Testator)', type: 'text', required: true },
         { id: 'testatorAddress', label: 'Your Full Address', type: 'textarea', required: true },
@@ -375,7 +442,7 @@ export const documentLibrary: LegalDocument[] = [
         { id: 'alternateExecutorName', label: 'Alternate Executor Full Name (Optional)', type: 'text' },
         { id: 'beneficiaries', label: 'Beneficiaries and Asset Distribution', type: 'textarea', required: true, placeholder: 'e.g., My house at 123 Main St to my daughter Jane Doe. My savings account to my son John Doe. Residue to...' },
         { id: 'guardianForMinors', label: 'Guardian for Minor Children (if applicable)', type: 'text', placeholder: 'Full name of guardian' },
-         { id: 'state', label: 'State Governing the Will', type: 'select', required: true, options: usStates.filter(opt => ['CA', 'NY', 'TX', 'FL', 'IL', 'Other'].includes(opt.value)) }
+         { id: 'state', label: 'State Governing the Will', type: 'select', required: true, options: usStates.map(s => ({ value: s.value, label: s.label })) }
     ]
   },
   {
@@ -390,6 +457,9 @@ export const documentLibrary: LegalDocument[] = [
     description_es: "Formaliza los términos de un préstamo entre dos partes.",
     requiresNotarization: false, // Sometimes recommended
     canBeRecorded: false,
+    offerNotarization: false,
+    offerRecordingHelp: false,
+    basePrice: 5,
     questions: [] // Placeholder - Add questions about lender, borrower, amount, interest rate, repayment schedule, collateral etc.
   },
   {
@@ -404,6 +474,9 @@ export const documentLibrary: LegalDocument[] = [
     description_es: "Una promesa escrita de una parte de pagar a otra parte una suma definida de dinero.",
     requiresNotarization: false,
     canBeRecorded: false,
+    offerNotarization: false,
+    offerRecordingHelp: false,
+    basePrice: 5,
     questions: [] // Placeholder - Similar to Loan Agreement but often simpler
   },
   {
@@ -418,6 +491,9 @@ export const documentLibrary: LegalDocument[] = [
     description_es: "Formaliza una oferta de empleo a un candidato.",
     requiresNotarization: false,
     canBeRecorded: false,
+    offerNotarization: false,
+    offerRecordingHelp: false,
+    basePrice: 5,
     questions: [] // Placeholder - Add questions about employer, employee, position, salary, start date, benefits, contingencies etc.
   },
   {
@@ -432,6 +508,9 @@ export const documentLibrary: LegalDocument[] = [
     description_es: "Notificación formal de un propietario a un inquilino para desocupar la propiedad.",
     requiresNotarization: false, // Usually served, not notarized
     canBeRecorded: true, // Often filed with court as part of eviction process
+    offerNotarization: false,
+    offerRecordingHelp: true,
+    basePrice: 5,
     questions: [] // Placeholder - Add questions about landlord, tenant, property, reason for eviction, notice period, state etc.
   },
    {
@@ -444,8 +523,11 @@ export const documentLibrary: LegalDocument[] = [
     category: "Real Estate",
     description: "Transfers real estate ownership with a guarantee of clear title.",
     description_es: "Transfiere la propiedad de bienes raíces con garantía de título limpio.",
-    requiresNotarization: true, // Required
-    canBeRecorded: true, // Required for legal effect
+    requiresNotarization: true,
+    canBeRecorded: true,
+    offerNotarization: true,
+    offerRecordingHelp: true,
+    basePrice: 5,
     questions: [] // Placeholder - Add Grantor, Grantee, Property Description, Consideration etc.
   },
   {
@@ -458,8 +540,11 @@ export const documentLibrary: LegalDocument[] = [
     category: "Real Estate",
     description: "Transfers interest in real property without guaranteeing clear title.",
     description_es: "Transfiere interés en bienes raíces sin garantizar título limpio.",
-    requiresNotarization: true, // Required
-    canBeRecorded: true, // Required for legal effect
+    requiresNotarization: true,
+    canBeRecorded: true,
+    offerNotarization: true,
+    offerRecordingHelp: true,
+    basePrice: 5,
     questions: [] // Placeholder - Add Grantor, Grantee, Property Description etc.
   },
    {
@@ -474,6 +559,9 @@ export const documentLibrary: LegalDocument[] = [
     description_es: "El documento legal principal utilizado para formar una corporación.",
     requiresNotarization: false,
     canBeRecorded: true, // Filed with Secretary of State
+    offerNotarization: false,
+    offerRecordingHelp: true,
+    basePrice: 5,
     questions: [] // Placeholder - Add corporation name, registered agent, shares, incorporator etc.
   },
   {
@@ -488,6 +576,9 @@ export const documentLibrary: LegalDocument[] = [
     description_es: "Exige que el destinatario detenga una actividad ilegal o infractora específica.",
     requiresNotarization: false,
     canBeRecorded: false,
+    offerNotarization: false,
+    offerRecordingHelp: false,
+    basePrice: 5,
     questions: [
         { id: 'senderName', label: 'Your Full Name/Company (Sender)', type: 'text', required: true },
         { id: 'senderAddress', label: 'Your Address', type: 'textarea', required: true },
@@ -512,6 +603,9 @@ export const documentLibrary: LegalDocument[] = [
     description_es: "Una carta formal exigiendo pago o acción antes de tomar medidas legales.",
     requiresNotarization: false,
     canBeRecorded: false,
+    offerNotarization: false,
+    offerRecordingHelp: false,
+    basePrice: 5,
     questions: [
         { id: 'yourName', label: 'Your Full Name/Company', type: 'text', required: true },
         { id: 'yourAddress', label: 'Your Address', type: 'textarea', required: true },
@@ -537,6 +631,9 @@ export const documentLibrary: LegalDocument[] = [
     description_es: "Una parte acuerda no responsabilizar a otra por posibles daños o lesiones.",
     requiresNotarization: false, // Sometimes recommended
     canBeRecorded: false,
+    offerNotarization: false,
+    offerRecordingHelp: false,
+    basePrice: 5,
     questions: [] // Placeholder - Add releasing party, released party, activity description, date etc.
   },
   {
@@ -549,8 +646,11 @@ export const documentLibrary: LegalDocument[] = [
     category: "General Legal",
     description: "A written statement confirmed by oath or affirmation, for use as evidence in court.",
     description_es: "Una declaración escrita confirmada por juramento o afirmación, para uso como prueba en tribunal.",
-    requiresNotarization: true, // Required
+    requiresNotarization: true,
     canBeRecorded: true, // Sometimes filed with court
+    offerNotarization: true,
+    offerRecordingHelp: true,
+    basePrice: 5,
     questions: [] // Placeholder - Add affiant name, statement details, date, notary block etc.
   },
     {
@@ -565,6 +665,9 @@ export const documentLibrary: LegalDocument[] = [
     description_es: "Para situaciones donde un documento específico no está claro de inmediato.",
      requiresNotarization: false,
      canBeRecorded: false,
+     offerNotarization: false,
+     offerRecordingHelp: false,
+     basePrice: 0, // Typically free or leads to paid doc
     questions: [ // Basic questions for inquiry routing
         { id: "inquiryDetails", label: "Please describe your situation or question in detail", type: "textarea", required: true },
         { id: "desiredOutcome", label: "What outcome are you hoping for?", type: "text" },
@@ -625,4 +728,3 @@ export function findMatchingDocuments(
 export function getDocumentById(id: string): LegalDocument | undefined {
     return documentLibrary.find(doc => doc.id === id);
 }
-
