@@ -37,10 +37,11 @@ const getCategoriesFromLibrary = (library: LegalDocument[], t: (key: string, fal
     .sort((a, b) => {
         const indexA = categoryOrder.indexOf(a.key);
         const indexB = categoryOrder.indexOf(b.key);
+        // Use translated labels for sorting only if hydrated and t exists
+        const labelA = isHydrated && t ? t(a.label, a.label) : a.label;
+        const labelB = isHydrated && t ? t(b.label, b.label) : b.label;
+
         if (indexA === -1 && indexB === -1) {
-            // Translate labels for sorting only if hydrated
-            const labelA = isHydrated ? t(a.label, a.label) : a.label;
-            const labelB = isHydrated ? t(b.label, b.label) : b.label;
             return labelA.localeCompare(labelB);
         }
         if (indexA === -1) return 1; // a is not in order, put it after b
@@ -70,6 +71,7 @@ export default function Step1DocumentSelector({ onDocumentSelect, onStateChange 
 
    // Derive categories dynamically and sort them
    const CATEGORY_LIST = useMemo(() => {
+       // Pass t function to sorting logic
        return getCategoriesFromLibrary(documentLibrary, t, isHydrated);
    // eslint-disable-next-line react-hooks/exhaustive-deps
    }, [t, isHydrated]); // Re-sort when language changes
@@ -83,7 +85,8 @@ export default function Step1DocumentSelector({ onDocumentSelect, onStateChange 
       return CATEGORY_LIST.filter(cat =>
          t(cat.label, cat.label).toLowerCase().includes(categorySearch.toLowerCase()) // Add fallback value
       );
-  }, [CATEGORY_LIST, categorySearch, t, isHydrated]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [CATEGORY_LIST, categorySearch, t, isHydrated]); // Depend on t
 
 
   // Documents filtered by selected category and document search term
@@ -112,9 +115,10 @@ export default function Step1DocumentSelector({ onDocumentSelect, onStateChange 
   };
 
   const handleStateSelection = (value: string) => {
-      // const stateValue = value === "" ? "" : value; // Keep state as string
-      setSelectedState(value); // Update local state
-      onStateChange(value); // Notify parent
+      // Set state to "none" if empty string selected, otherwise use value
+      const stateValue = value === "none" ? "" : value;
+      setSelectedState(stateValue); // Update local state
+      onStateChange(stateValue); // Notify parent
   };
 
    // Placeholders for SSR/initial hydration
@@ -134,14 +138,8 @@ export default function Step1DocumentSelector({ onDocumentSelect, onStateChange 
     <div className="space-y-6">
       {view === 'categories' ? (
         <>
-          {/* Title and Description (Removed duplicate) */}
-           <CardHeader className="p-0 mb-4">
-               <div className="flex items-center space-x-2">
-                  <FileText className="h-6 w-6 text-primary" />
-                  <CardTitle className="text-2xl">{t('stepOne.selectDocDescription', 'Choose the document that best fits your needs.')}</CardTitle>
-               </div>
-                <CardDescription>{t('stepOne.categoryDescription', 'Choose the legal area that best fits your need.')}</CardDescription>
-           </CardHeader>
+          {/* REMOVED duplicate header rendering */}
+          {/* <CardHeader className="p-0 mb-4"> ... </CardHeader> */}
 
           {/* Category Search */}
           <div className="relative">
@@ -208,8 +206,8 @@ export default function Step1DocumentSelector({ onDocumentSelect, onStateChange 
                     <SelectValue placeholder={statePlaceholder} />
                 </SelectTrigger>
                 <SelectContent>
-                     {/* REMOVED: Item with empty value causes error */}
-                     {/* <SelectItem value="">{statePlaceholder}</SelectItem> */}
+                     {/* Use "none" value for the placeholder option */}
+                     <SelectItem value="none">{statePlaceholder}</SelectItem>
                     {usStates.map(state => (
                        <SelectItem key={state.value} value={state.value}>{state.label} ({state.value})</SelectItem>
                     ))}
