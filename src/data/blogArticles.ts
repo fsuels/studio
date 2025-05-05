@@ -10,7 +10,7 @@ export type BlogArticle = {
   summary_es: string;
   content_en: string;
   content_es: string;
-  navigation?: { // Added optional navigation
+  navigation?: { // Changed to optional and directly include prev/next
     prev: string | null;
     next: string | null;
   };
