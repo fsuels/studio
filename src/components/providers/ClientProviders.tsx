@@ -3,9 +3,10 @@
 
 import React, { useState, useEffect, ReactNode } from 'react';
 import I18nClientProvider from '@/components/providers/I18nProvider';
-import { PromoBanner } from '@/components/landing/PromoBanner';
-import { Footer } from '@/components/layout/Footer';
+// Removed PromoBanner import
+// Removed Footer import
 import { Toaster } from "@/components/ui/toaster";
+import { Layout } from '@/components/layout/Layout'; // Import Layout
 
 interface ClientProvidersProps {
   children: ReactNode;
@@ -23,22 +24,20 @@ export function ClientProviders({ children }: ClientProvidersProps) {
   // After hydration and the effect runs, render with I18nClientProvider.
   if (!isClient) {
     return (
-      <>
-        <PromoBanner />
-        <main className="flex-grow">{children}</main>
-        <Footer />
+      <Layout> {/* Use Layout wrapper */}
+        {children}
         <Toaster />
-      </>
+      </Layout>
     );
   }
 
   // Now we are definitely on the client, render with the i18n provider
   return (
     <I18nClientProvider>
-      <PromoBanner />
-      <main className="flex-grow">{children}</main>
-      <Footer />
-      <Toaster />
+      <Layout> {/* Use Layout wrapper */}
+        {children}
+        <Toaster />
+      </Layout>
     </I18nClientProvider>
   );
 }

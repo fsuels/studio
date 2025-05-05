@@ -356,5 +356,13 @@
       },
       "note": "For immediate answers, check our FAQ page.",
       "cta": "Visit FAQ"
+    },
+    "nav": {
+      "pricing": "Pricing",
+      "features": "Features",
+      "resources": "Resources",
+      "blog": "Blog",
+      "faq": "FAQ",
+      "support": "Support"
     }
 }

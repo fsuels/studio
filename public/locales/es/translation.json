@@ -356,5 +356,13 @@
        },
        "note": "Para respuestas inmediatas, consulta nuestra página de Preguntas Frecuentes.",
        "cta": "Visitar Preguntas Frecuentes"
-     }
+     },
+    "nav": {
+      "pricing": "Precios",
+      "features": "Características",
+      "resources": "Recursos",
+      "blog": "Blog",
+      "faq": "FAQ",
+      "support": "Soporte"
+    }
 }

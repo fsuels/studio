@@ -16,7 +16,8 @@ import { Button } from '@/components/ui/button'; // Import Button
 import { useToast } from '@/hooks/use-toast'; // Import useToast
 import { useTranslation } from 'react-i18next'; // Import useTranslation
 import TrustAndTestimonialsSection from '@/components/landing/TrustAndTestimonialsSection'; // Import the combined Trust/Testimonials component
-
+// Removed PromoBanner import
+// Removed Footer import
 
 // Define share icon SVG inline
 const ShareIcon = () => (
