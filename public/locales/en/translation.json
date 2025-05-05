@@ -38,7 +38,7 @@
     "text": "Text",
     "startMic": "Start Mic",
     "stopMic": "Stop Recording",
-    "placeholder": "e.g., 'Renting my apartment', 'Starting a business with a partner', 'Need someone to stop contacting me...'",
+    "placeholder": "e.g., 'Rent out my apartment', 'Start a business', 'Someone won't stop contacting me...'",
     "listening": "Listening...",
     "stateLabel": "Relevant U.S. State (Optional)",
     "statePlaceholder": "Select State...",
@@ -279,84 +279,6 @@
       "costEffectiveTitle": "Cost-Effective",
       "costEffectiveDescription": "Pay just $5 per document compared to $200+ typically charged by law firms."
     },
-    "pricing": {
-      "title": "Simple, Transparent Pricing",
-      "subtitle": "Pay only for what you need. No hidden fees, no subscriptions required.",
-      "perDocument": "document",
-      "bundleOf5": "bundle of 5",
-      "perMonth": "month",
-      "mostPopular": "Most Popular",
-      "cta": "Get Started",
-      "ctaContact": "Contact Sales",
-      "guarantee": "100% Satisfaction Guarantee or Your Money Back on single/bundle purchases.",
-      "plans": {
-        "single": {
-          "title": "Single Document",
-          "description": "Perfect for one-off needs.",
-          "item1": "Generate one document",
-          "item2": "AI-guided questionnaire",
-          "item3": "Downloadable PDF",
-          "item4": "Secure sharing (soon)"
-        },
-        "bundle": {
-          "title": "Document Bundle",
-          "description": "Ideal for multiple related documents.",
-          "item1": "Generate up to 5 documents",
-          "item2": "All single document features",
-          "item3": "Credits never expire",
-          "item4": "Best value per document"
-        },
-        "unlimited": {
-          "title": "Business Pro",
-          "description": "For frequent users & businesses.",
-          "item1": "Unlimited documents",
-          "item2": "Priority support",
-          "item3": "Team features (coming soon)",
-          "item4": "Cancel anytime"
-        }
-      }
-    },
-    "features": {
-        "title": "Key Features",
-        "subtitle": "Powerful tools to simplify your legal document workflow.",
-        "items": {
-          "ai": { "title": "AI Document Inference", "desc": "Smart suggestions based on your needs." },
-          "forms": { "title": "Dynamic Questionnaires", "desc": "Guided questions tailored to your chosen document." },
-          "local": { "title": "State-Specific Clauses", "desc": "Documents adapted for U.S. state laws." },
-          "bilingual": { "title": "Bilingual Support (EN/ES)", "desc": "Full interface and support in English & Spanish." },
-          "pdf": { "title": "Instant PDF Generation", "desc": "Preview and download professional PDFs." },
-          "sharing": { "title": "Secure Sharing", "desc": "Share documents with time-limited links (coming soon)." },
-          "dashboard": { "title": "User Dashboard", "desc": "Manage your documents and settings easily." },
-          "security": { "title": "Privacy & Security", "desc": "Encrypted data and compliant practices." }
-        }
-    },
-    "faq": {
-        "title": "Frequently Asked Questions",
-        "subtitle": "Find answers to common questions below.",
-        "q1": { "question": "Is 123LegalDoc a law firm?", "answer": "No, 123LegalDoc is a software platform and does not provide legal advice. We recommend consulting a qualified attorney for specific legal needs." },
-        "q2": { "question": "How accurate are the AI suggestions?", "answer": "Our AI is trained on common legal scenarios but suggestions are informational. Always review the chosen document type." },
-        "q3": { "question": "Can I use documents in any U.S. state?", "answer": "Many documents are general, but some have state-specific clauses. Select the relevant state in Step 1 for best results." },
-        "q4": { "question": "How much does it cost?", "answer": "We offer simple pay-per-document pricing at $5, bundles, and an unlimited plan. See our Pricing page for details." },
-        "q5": { "question": "Is my information secure?", "answer": "Yes, we use encryption and follow industry best practices to protect your data. See our Privacy Policy." },
-        "q6": { "question": "What if I need help?", "answer": "You can visit our Support page or contact us through the provided channels for assistance with the platform." }
-    },
-   "support": {
-      "title": "Support Center",
-      "subtitle": "Need help? Find resources or contact us below.",
-      "contact": {
-        "title": "Contact Us",
-        "hours": "Available Mon-Fri, 9 AM - 5 PM EST"
-      },
-      "help": {
-        "title": "Quick Help",
-        "item1": "How document generation works",
-        "item2": "Pricing and payment options",
-        "item3": "Troubleshooting common issues",
-        "item4": "Understanding your dashboard"
-      },
-      "note": "For immediate answers, check our FAQ page.",
-      "cta": "Visit FAQ"
-    },
     "nav": {
       "pricing": "Pricing",
       "features": "Features",
@@ -364,5 +286,89 @@
       "blog": "Blog",
       "faq": "FAQ",
       "support": "Support"
+    },
+    "pricing": {
+      "title": "Simple, Transparent Pricing",
+      "subtitle": "No hidden fees. Just fair, flat-rate legal document creation.",
+       "perDocument": "document",
+       "bundleOf5": "bundle of 5",
+       "perMonth": "month",
+       "mostPopular": "Most Popular",
+       "cta": "Start Now",
+       "ctaContact": "Contact Sales",
+      "plans": {
+        "single": {
+          "title": "Single Document",
+           "description": "Perfect for one-off needs.",
+          "item1": "1 downloadable legal PDF",
+          "item2": "Clause customization",
+          "item3": "Email support"
+        },
+        "bundle": {
+          "title": "5-Document Bundle",
+           "description": "Ideal for multiple related documents.",
+          "item1": "5 downloadable PDFs",
+          "item2": "Unlimited editing",
+          "item3": "Priority support"
+        },
+        "unlimited": {
+          "title": "Unlimited Access",
+           "description": "For frequent users & businesses.",
+          "item1": "Unlimited documents",
+          "item2": "Personalized recommendations",
+          "item3": "VIP support"
+        }
+      },
+      "guarantee": "100% Satisfaction Guarantee or Your Money Back"
+    },
+    "features": {
+        "title": "Features That Make Legal Easy",
+        "subtitle": "Everything you need to create valid, secure documents quickly.",
+        "items": {
+          "ai": { "title": "AI-Powered Inference", "desc": "Understand your legal situation in seconds with natural language input." },
+          "forms": { "title": "Dynamic Forms", "desc": "Get guided questions based on your chosen document type." },
+          "local": { "title": "State-Specific Logic", "desc": "Documents automatically adjust based on your U.S. state." },
+          "bilingual": { "title": "English & Spanish UX", "desc": "Everything works seamlessly in both languages." },
+          "pdf": { "title": "PDF Generation", "desc": "Create, download, and sign secure documents instantly." },
+          "sharing": { "title": "Private Share Links", "desc": "Share with expiring, one-time access links for extra safety." },
+          "dashboard": { "title": "Document Dashboard", "desc": "Track and organize every document you generate." },
+          "security": { "title": "Secure & Compliant", "desc": "Your data is encrypted and never shared without consent." }
+        }
+    },
+    "resources": {
+        "title": "Legal Resources & Guides",
+        "subtitle": "Helpful tutorials and tools to make legal tasks simpler.",
+        "guides": { "title": "Document Guides", "desc": "Understand what each document does and how to use it." },
+        "states": { "title": "State-by-State Rules", "desc": "Learn legal differences between U.S. states." },
+        "voice": { "title": "Voice Input Tips", "desc": "Speak naturally and improve AI understanding." },
+        "signing": { "title": "Signing & Sharing", "desc": "See how to e-sign and share your documents securely." },
+        "workflow": { "title": "How It Works", "desc": "Step-by-step overview of your AI-powered legal workflow." }
+    },
+    "faq": {
+        "title": "Frequently Asked Questions",
+        "subtitle": "Everything you need to know about using 123LegalDoc.",
+        "q1": { "question": "Are these documents legally valid?", "answer": "Yes. All documents are based on legal templates and clauses used across the U.S." },
+        "q2": { "question": "Are documents state-specific?", "answer": "Yes. The platform adapts documents to match your U.S. state requirements." },
+        "q3": { "question": "Can I edit after generating a document?", "answer": "Yes, you can make updates before downloading your final PDF." },
+        "q4": { "question": "Do I need to talk to a lawyer?", "answer": "For most everyday documents, no. If you need legal advice, we recommend speaking to an attorney." },
+        "q5": { "question": "Is my data secure?", "answer": "All documents are encrypted and only stored temporarily for your access." },
+        "q6": { "question": "How much does it cost?", "answer": "Documents start at just $5. We also offer bundles and unlimited access." }
+    },
+   "support": {
+      "title": "Support Center",
+      "subtitle": "Need help? We're here to assist you.",
+      "contact": {
+        "title": "Contact Us",
+        "hours": "Mon–Fri, 9am–6pm EST"
+      },
+      "help": {
+        "title": "Common Help Topics",
+        "item1": "I didn’t receive my document",
+        "item2": "I need to edit a clause",
+        "item3": "I can’t download the PDF",
+        "item4": "I need a refund"
+      },
+      "note": "You can also check our FAQ for common questions.",
+      "cta": "Go to FAQ"
     }
 }

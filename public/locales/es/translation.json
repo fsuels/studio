@@ -279,90 +279,96 @@
        "costEffectiveTitle": "Económico",
        "costEffectiveDescription": "Paga solo $5 por documento en comparación con los $200+ que suelen cobrar los bufetes de abogados."
      },
-      "pricing": {
-        "title": "Precios Simples y Transparentes",
-        "subtitle": "Paga solo por lo que necesitas. Sin tarifas ocultas ni suscripciones.",
-        "perDocument": "documento",
-        "bundleOf5": "paquete de 5",
-        "perMonth": "mes",
-        "mostPopular": "Más Popular",
-        "cta": "Comenzar",
-        "ctaContact": "Contactar Ventas",
-        "guarantee": "Garantía de satisfacción 100% o devolución de tu dinero en compras individuales/paquetes.",
-        "plans": {
-          "single": {
-            "title": "Documento Individual",
-            "description": "Perfecto para necesidades puntuales.",
-            "item1": "Genera un documento",
-            "item2": "Cuestionario guiado por IA",
-            "item3": "PDF descargable",
-            "item4": "Compartir seguro (pronto)"
-          },
-          "bundle": {
-            "title": "Paquete de Documentos",
-            "description": "Ideal para múltiples documentos relacionados.",
-            "item1": "Genera hasta 5 documentos",
-            "item2": "Todas las funciones del plan individual",
-            "item3": "Los créditos nunca expiran",
-            "item4": "Mejor valor por documento"
-          },
-          "unlimited": {
-            "title": "Business Pro",
-            "description": "Para usuarios frecuentes y negocios.",
-            "item1": "Documentos ilimitados",
-            "item2": "Soporte prioritario",
-            "item3": "Funciones de equipo (pronto)",
-            "item4": "Cancela cuando quieras"
-          }
-        }
-      },
-    "features": {
-        "title": "Características Clave",
-        "subtitle": "Herramientas poderosas para simplificar tu flujo de trabajo legal.",
-        "items": {
-          "ai": { "title": "Inferencia de Documentos con IA", "desc": "Sugerencias inteligentes basadas en tus necesidades." },
-          "forms": { "title": "Cuestionarios Dinámicos", "desc": "Preguntas guiadas adaptadas al documento elegido." },
-          "local": { "title": "Cláusulas Específicas por Estado", "desc": "Documentos adaptados a las leyes estatales de EE. UU." },
-          "bilingual": { "title": "Soporte Bilingüe (EN/ES)", "desc": "Interfaz completa y soporte en inglés y español." },
-          "pdf": { "title": "Generación Instantánea de PDF", "desc": "Previsualiza y descarga PDFs profesionales." },
-          "sharing": { "title": "Compartir de Forma Segura", "desc": "Comparte documentos con enlaces de tiempo limitado (próximamente)." },
-          "dashboard": { "title": "Panel de Usuario", "desc": "Gestiona tus documentos y configuraciones fácilmente." },
-          "security": { "title": "Privacidad y Seguridad", "desc": "Datos encriptados y prácticas conformes." }
-        }
-    },
-     "faq": {
-        "title": "Preguntas Frecuentes",
-        "subtitle": "Encuentra respuestas a preguntas comunes abajo.",
-        "q1": { "question": "¿Es 123LegalDoc un bufete de abogados?", "answer": "No, 123LegalDoc es una plataforma de software y no proporciona asesoramiento legal. Recomendamos consultar a un abogado calificado para necesidades legales específicas." },
-        "q2": { "question": "¿Qué tan precisas son las sugerencias de la IA?", "answer": "Nuestra IA está entrenada en escenarios legales comunes, pero las sugerencias son informativas. Siempre revisa el tipo de documento elegido." },
-        "q3": { "question": "¿Puedo usar los documentos en cualquier estado de EE. UU.?", "answer": "Muchos documentos son generales, pero algunos tienen cláusulas específicas por estado. Selecciona el estado relevante en el Paso 1 para obtener los mejores resultados." },
-        "q4": { "question": "¿Cuánto cuesta?", "answer": "Ofrecemos precios simples de pago por documento a $5, paquetes y un plan ilimitado. Consulta nuestra página de Precios para más detalles." },
-        "q5": { "question": "¿Está segura mi información?", "answer": "Sí, utilizamos cifrado y seguimos las mejores prácticas de la industria para proteger tus datos. Consulta nuestra Política de Privacidad." },
-        "q6": { "question": "¿Qué pasa si necesito ayuda?", "answer": "Puedes visitar nuestra página de Soporte o contactarnos a través de los canales proporcionados para obtener ayuda con la plataforma." }
-     },
-    "support": {
-       "title": "Centro de Soporte",
-       "subtitle": "¿Necesitas ayuda? Encuentra recursos o contáctanos abajo.",
-       "contact": {
-         "title": "Contáctanos",
-         "hours": "Disponible Lun-Vie, 9 AM - 5 PM EST"
-       },
-       "help": {
-         "title": "Ayuda Rápida",
-         "item1": "Cómo funciona la generación de documentos",
-         "item2": "Precios y opciones de pago",
-         "item3": "Solución de problemas comunes",
-         "item4": "Entendiendo tu panel de control"
-       },
-       "note": "Para respuestas inmediatas, consulta nuestra página de Preguntas Frecuentes.",
-       "cta": "Visitar Preguntas Frecuentes"
-     },
     "nav": {
       "pricing": "Precios",
       "features": "Características",
       "resources": "Recursos",
       "blog": "Blog",
-      "faq": "FAQ",
+      "faq": "Preguntas Frecuentes",
       "support": "Soporte"
-    }
+    },
+    "pricing": {
+      "title": "Precios simples y transparentes",
+      "subtitle": "Sin tarifas ocultas. Solo documentos legales a precio justo.",
+       "perDocument": "documento",
+       "bundleOf5": "paquete de 5",
+       "perMonth": "mes",
+       "mostPopular": "Más Popular",
+       "cta": "Comenzar ahora",
+       "ctaContact": "Contactar Ventas",
+      "plans": {
+        "single": {
+          "title": "Documento Único",
+           "description": "Perfecto para necesidades puntuales.",
+          "item1": "1 PDF legal descargable",
+          "item2": "Personalización de cláusulas",
+          "item3": "Soporte por correo"
+        },
+        "bundle": {
+          "title": "Paquete de 5 Documentos",
+           "description": "Ideal para múltiples documentos relacionados.",
+          "item1": "5 PDFs descargables",
+          "item2": "Edición ilimitada",
+          "item3": "Soporte prioritario"
+        },
+        "unlimited": {
+          "title": "Acceso Ilimitado",
+           "description": "Para usuarios frecuentes y negocios.",
+          "item1": "Documentos ilimitados",
+          "item2": "Recomendaciones personalizadas",
+          "item3": "Soporte VIP"
+        }
+      },
+      "guarantee": "Garantía de satisfacción 100% o le devolvemos su dinero"
+    },
+    "features": {
+        "title": "Características que hacen lo legal fácil",
+        "subtitle": "Todo lo que necesitas para crear documentos seguros y válidos rápidamente.",
+        "items": {
+          "ai": { "title": "IA Inteligente", "desc": "Comprende tu situación legal con lenguaje natural en segundos." },
+          "forms": { "title": "Formularios Dinámicos", "desc": "Preguntas guiadas basadas en el tipo de documento." },
+          "local": { "title": "Lógica Estatal", "desc": "Los documentos se ajustan automáticamente a tu estado de EE. UU." },
+          "bilingual": { "title": "Experiencia Bilingüe", "desc": "Todo el sistema funciona perfectamente en inglés y español." },
+          "pdf": { "title": "Generación de PDF", "desc": "Crea, descarga y firma documentos seguros al instante." },
+          "sharing": { "title": "Enlaces Privados", "desc": "Comparte con enlaces temporales o de un solo uso para mayor seguridad." },
+          "dashboard": { "title": "Panel de Documentos", "desc": "Organiza y accede a todos tus documentos fácilmente." },
+          "security": { "title": "Seguro y Legal", "desc": "Tus datos están cifrados y nunca se comparten sin consentimiento." }
+        }
+    },
+    "resources": {
+        "title": "Recursos y Guías Legales",
+        "subtitle": "Tutoriales y herramientas para facilitar tareas legales.",
+        "guides": { "title": "Guías de Documentos", "desc": "Comprende para qué sirve cada documento y cómo usarlo." },
+        "states": { "title": "Reglas por Estado", "desc": "Consulta diferencias legales entre los estados de EE. UU." },
+        "voice": { "title": "Consejos de Voz", "desc": "Habla con claridad para una mejor comprensión por la IA." },
+        "signing": { "title": "Firmar y Compartir", "desc": "Aprende a firmar y compartir tus documentos de forma segura." },
+        "workflow": { "title": "Cómo Funciona", "desc": "Vista general paso a paso del flujo legal asistido por IA." }
+    },
+     "faq": {
+        "title": "Preguntas Frecuentes",
+        "subtitle": "Todo lo que necesitas saber sobre 123LegalDoc.",
+        "q1": { "question": "¿Estos documentos son legalmente válidos?", "answer": "Sí. Todos se basan en plantillas legales y cláusulas comunes en EE. UU." },
+        "q2": { "question": "¿Los documentos se adaptan a mi estado?", "answer": "Sí. Se ajustan según los requisitos del estado en EE. UU. que selecciones." },
+        "q3": { "question": "¿Puedo editar después de generar un documento?", "answer": "Sí, puedes hacer cambios antes de descargar el PDF final." },
+        "q4": { "question": "¿Necesito un abogado?", "answer": "No para documentos comunes. Para asesoría legal específica, recomendamos consultar a un abogado." },
+        "q5": { "question": "¿Mis datos están seguros?", "answer": "Sí, están cifrados y se almacenan de forma temporal para tu uso exclusivo." },
+        "q6": { "question": "¿Cuánto cuesta?", "answer": "Desde solo $5 por documento. También hay paquetes y acceso ilimitado." }
+     },
+    "support": {
+       "title": "Centro de Soporte",
+       "subtitle": "¿Necesitas ayuda? Estamos aquí para ayudarte.",
+       "contact": {
+         "title": "Contáctanos",
+         "hours": "Lunes a Viernes, 9am–6pm EST"
+       },
+       "help": {
+         "title": "Temas Comunes",
+         "item1": "No recibí mi documento",
+         "item2": "Necesito editar una cláusula",
+         "item3": "No puedo descargar el PDF",
+         "item4": "Solicitar reembolso"
+       },
+       "note": "También puedes consultar nuestra sección de Preguntas Frecuentes.",
+       "cta": "Ir a Preguntas Frecuentes"
+     }
 }
