@@ -22,10 +22,6 @@ export default function Step1DocumentSelector({ onDocumentSelect, onStateChange 
   const [selectedState, setSelectedState] = useState<string>('');
   const [isHydrated, setIsHydrated] = useState(false); // State for hydration
 
-  useEffect(() => {
-    setIsHydrated(true); // Set hydrated state on client
-  }, []);
-
   // Define categories inside the component and sort using useMemo
   const CATEGORY_LIST = useMemo(() => [
     // Match these keys to the 'category' field in documentLibrary
@@ -44,6 +40,12 @@ export default function Step1DocumentSelector({ onDocumentSelect, onStateChange 
     { key: 'General Legal', label: 'General Legal Statements' },
     // Add other categories as needed
   ].sort((a, b) => t(a.label).localeCompare(t(b.label))), [t]); // Sort by translated label, dependent on t
+
+
+  useEffect(() => {
+    setIsHydrated(true); // Set hydrated state on client
+  }, []);
+
 
   // Filtered categories based on search
   const filteredCategories = useMemo(() => CATEGORY_LIST.filter(cat =>
