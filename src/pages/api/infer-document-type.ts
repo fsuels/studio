@@ -71,10 +71,10 @@ export default async function handler(
     return res.status(200).json(output);
 
   } catch (error: unknown) {
-    // 4. Handle errors (same logic as before)
-    console.error(`${logPrefix} === UNHANDLED ERROR START ===`);
+    // 4. Handle errors - IMPROVED LOGGING
+    console.error(`${logPrefix} === UNHANDLED ERROR IN API HANDLER START ===`);
     console.error(`${logPrefix} Timestamp: ${new Date().toISOString()}`);
-    console.error(`${logPrefix} Error Type:`, error?.constructor?.name);
+    console.error(`${logPrefix} Raw Error Object:`, error); // Log the raw error object
 
     let statusCode = 500;
     let clientErrorMessage = 'An internal server error occurred while processing your request.';
@@ -82,19 +82,20 @@ export default async function handler(
     let errorDetails: any = undefined;
 
     if (error instanceof z.ZodError) {
-        statusCode = 502;
+        statusCode = 502; // Bad Gateway - upstream service (AI) returned bad data
         clientErrorMessage = "The AI generated an invalid response format. Please try rephrasing or contact support.";
         errorCode = 'AI_RESPONSE_FORMAT_INVALID';
         errorDetails = error.flatten();
         console.error(`${logPrefix} ZodError (AI Output Validation):`, JSON.stringify(errorDetails));
     } else if (error instanceof Error) {
+        console.error(`${logPrefix} Error Type:`, error.constructor?.name);
         console.error(`${logPrefix} Error Message:`, error.message);
-        console.error(`${logPrefix} Error Stack:`, error.stack);
+        console.error(`${logPrefix} Error Stack:`, error.stack); // Log stack trace
 
         clientErrorMessage = error.message; // Start with the raw message
 
         // Refine client message and code based on error content
-        if (error.message.includes('AI output validation failed')) {
+         if (error.message.includes('AI output validation failed')) {
             statusCode = 502;
             clientErrorMessage = "The AI generated an invalid response format. Please try rephrasing or contact support.";
             errorCode = 'AI_RESPONSE_VALIDATION_FAILED';
@@ -104,19 +105,19 @@ export default async function handler(
             clientErrorMessage = `Invalid data sent to AI flow: ${error.message.replace('Invalid input to flow: ','')}`;
             errorCode = 'FLOW_INPUT_INVALID';
         } else if (error.message.includes('API key not valid') || error.message.includes('permission denied')) {
-            statusCode = 503;
+            statusCode = 503; // Service Unavailable - Config/Auth issue
             clientErrorMessage = "Could not authenticate with the AI service. Please contact support.";
             errorCode = 'AI_AUTH_ERROR';
         } else if (error.message.includes('quota exceeded')) {
-             statusCode = 429;
+             statusCode = 429; // Too Many Requests
              clientErrorMessage = "AI service quota exceeded. Please try again later or contact support.";
              errorCode = 'AI_QUOTA_EXCEEDED';
         } else if (error.message.includes('fetch failed') || error.message.includes('network error') || error.message.includes('socket hang up') || error.message.includes('timeout')) {
-            statusCode = 504;
+            statusCode = 504; // Gateway Timeout
             clientErrorMessage = "Could not reach the AI service due to a network issue. Please check your connection or try again later.";
             errorCode = 'AI_NETWORK_ERROR';
         } else if (error.message.includes("AI flow completed but returned an empty result.")) {
-            statusCode = 500; // Or maybe 502 Bad Gateway if the AI consistently returns nothing
+            statusCode = 502; // Bad Gateway - AI didn't provide expected output
             clientErrorMessage = "The AI process completed but returned an empty result. Please try again.";
             errorCode = 'AI_EMPTY_RESULT';
         } else if (error.message.includes("Missing GOOGLE_GENAI_API_KEY") || error.message.includes("Genkit initialization failed")) {
@@ -126,19 +127,19 @@ export default async function handler(
             clientErrorMessage = "AI Service configuration error or unavailable. Please contact support.";
             errorCode = 'AI_CONFIG_ERROR';
         } else {
-            // Default for other errors
+            // Default for other errors caught by the API handler itself
             clientErrorMessage = 'An unexpected error occurred while processing your request.';
-            errorCode = 'UNKNOWN_SERVER_ERROR';
+            errorCode = 'UNKNOWN_SERVER_ERROR'; // This is the error code the user sees
             statusCode = 500;
         }
     } else {
-        console.error(`${logPrefix} Non-Error Caught:`, error);
+        console.error(`${logPrefix} Non-Error Caught in API Handler:`, error);
         clientErrorMessage = `An unexpected server error occurred.`;
         errorCode = 'UNKNOWN_EXCEPTION';
         statusCode = 500;
     }
 
-    console.error(`${logPrefix} === UNHANDLED ERROR END ===`);
+    console.error(`${logPrefix} === UNHANDLED ERROR IN API HANDLER END ===`);
     console.log(`${logPrefix} Sending error response status ${statusCode}. Code: ${errorCode}, Client Message: "${clientErrorMessage}"`);
 
     const responsePayload: ErrorResponse = {

@@ -194,8 +194,10 @@ async (input) => {
              };
         }
 
+        const currentLanguage = validatedInput.data.language; // Extract language for use in error messages
+
         // Get language-specific context
-        const availableDocumentsContext = getAvailableDocumentsContext(validatedInput.data.language);
+        const availableDocumentsContext = getAvailableDocumentsContext(currentLanguage);
 
         console.log(`${logPrefix} Calling AI prompt with description, state (${validatedInput.data.state || 'None'}), and language (${validatedInput.data.language})`);
         // Pass the dynamic context along with other input data to the prompt
@@ -245,7 +247,7 @@ async (input) => {
             }
             // Ensure reasoning exists, especially for General Inquiry
             if (suggestion.documentType === 'General Inquiry' && !suggestion.reasoning) {
-                suggestion.reasoning = language === 'es'
+                suggestion.reasoning = currentLanguage === 'es'
                     ? "La necesidad del usuario no está clara o no coincide con las plantillas disponibles."
                     : "User need is unclear or does not match available document templates.";
                 console.warn(`${logPrefix} Added default reasoning for 'General Inquiry' suggestion.`);
@@ -260,7 +262,7 @@ async (input) => {
                 suggestions: [{
                     documentType: 'General Inquiry',
                     confidence: 0.1,
-                    reasoning: language === 'es'
+                    reasoning: currentLanguage === 'es'
                        ? `Las sugerencias de la IA no fueron válidas o no se reconocieron. Descripción original: "${input.description}"`
                        : `AI suggestions were invalid or not recognized. Original Description: "${input.description}"`
                 }]
@@ -277,17 +279,47 @@ async (input) => {
       return finalOutput;
 
    } catch (error: unknown) {
-       console.error(`${logPrefix} Error during prompt execution or processing:`, error);
-        const errorMessage = error instanceof Error ? error.message : String(error);
+       console.error(`${logPrefix} === ERROR IN GENKIT FLOW START ===`);
+       console.error(`${logPrefix} Timestamp: ${new Date().toISOString()}`);
+       console.error(`${logPrefix} Raw Error Object:`, error); // Log the raw error object
+       const currentLanguage = (input as InferDocumentTypeInput)?.language || 'en'; // Get language from input if possible
+
+       let errorMessage = 'An unexpected error occurred during analysis.'; // Default generic message
+       let errorStack = 'No stack trace available.';
+
+       if (error instanceof Error) {
+            console.error(`${logPrefix} Error Type:`, error.constructor?.name);
+            console.error(`${logPrefix} Error Message:`, error.message);
+            console.error(`${logPrefix} Error Stack:`, error.stack); // Log stack trace
+            errorMessage = error.message; // Use specific error message
+            errorStack = error.stack || errorStack;
+
+            // Add more specific error handling based on potential Genkit/API errors
+            if (error.message.includes('API key') || error.message.includes('permission')) {
+                 errorMessage = 'AI Service Authentication Error';
+            } else if (error.message.includes('quota')) {
+                 errorMessage = 'AI Service Quota Exceeded';
+            } else if (error.message.includes('network') || error.message.includes('fetch') || error.message.includes('timeout')) {
+                 errorMessage = 'AI Service Network Error';
+            } else if (error.message.includes('invalid response') || error.message.includes('parse error')) {
+                 errorMessage = 'AI Service returned an invalid response';
+            }
+            // ... add more specific cases as needed
+       } else {
+           console.error(`${logPrefix} Non-Error Caught in Flow:`, error);
+           errorMessage = 'An unknown error occurred during analysis.';
+       }
+       console.error(`${logPrefix} === ERROR IN GENKIT FLOW END ===`);
+
        // Return a structured error response matching the schema
-        return {
-            suggestions: [{
-                documentType: 'General Inquiry',
-                confidence: 0.05,
-                reasoning: language === 'es'
-                    ? `Ocurrió un error inesperado durante el análisis: ${errorMessage}. Descripción original: "${input.description}"`
-                    : `An unexpected error occurred during analysis: ${errorMessage}. Original Description: "${input.description}"`
-            }]
-        };
+       return {
+           suggestions: [{
+               documentType: 'General Inquiry',
+               confidence: 0.05,
+               reasoning: currentLanguage === 'es'
+                   ? `Ocurrió un error inesperado durante el análisis: ${errorMessage}. Descripción original: "${(input as InferDocumentTypeInput)?.description || 'N/A'}"`
+                   : `An unexpected error occurred during analysis: ${errorMessage}. Original Description: "${(input as InferDocumentTypeInput)?.description || 'N/A'}"`
+           }]
+       };
    }
 });
