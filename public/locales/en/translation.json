@@ -365,14 +365,14 @@
         "hours": "Mon–Fri, 9am–6pm EST"
       },
       "help": {
-        "title": "Quick Help",
-        "item1": "How document generation works",
-        "item2": "Pricing and payment options",
-        "item3": "Troubleshooting common issues",
-        "item4": "Understanding your dashboard"
+        "title": "Common Help Topics",
+        "item1": "I didn’t receive my document",
+        "item2": "I need to edit a clause",
+        "item3": "I can’t download the PDF",
+        "item4": "I need a refund"
       },
-      "note": "For immediate answers, check our FAQ page.",
-      "cta": "Visit FAQ"
+      "note": "You can also check our FAQ for common questions.",
+      "cta": "Go to FAQ"
     },
    "blog": {
      "title": "Legal Insights & Articles",
@@ -401,42 +401,42 @@
        "desc": "A step-by-step legal checklist for landlords and renters in Florida.",
        "date": "2023-11-03"
      },
-     "ai-vs-lawyers": {
-       "title": "AI vs. Lawyers: When to Use a Legal Assistant Bot",
-       "date": "2024-03-11",
-       "desc": "Understand when AI-driven tools like 123LegalDoc are sufficient and when you should seek human legal advice.",
-       "body": "<p>This is the full English content for the AI vs Lawyers article...</p>"
-     },
-     "how-to-make-a-lease": {
-       "title": "How to Make a Lease Agreement in 5 Minutes",
-       "date": "2024-02-01",
-       "desc": "A step-by-step guide to quickly generating a state-compliant rental agreement.",
-        "body": "<p>This is the full English content for the Lease Agreement article...</p>"
-     },
-     "top-5-legal-mistakes": {
-       "title": "Top 5 Legal Mistakes Freelancers Make",
-       "date": "2023-12-19",
-       "desc": "Avoid these costly legal missteps when working with clients and subcontractors.",
-        "body": "<p>This is the full English content for the Freelancer Mistakes article...</p>"
-     },
-     "divorce-vs-legal-separation": {
-       "title": "Divorce vs. Legal Separation: What’s the Difference?",
-       "date": "2023-11-02",
-       "desc": "Explore the key distinctions between divorce and legal separation in the U.S.",
-        "body": "<p>This is the full English content for the Divorce vs Separation article...</p>"
-     },
-     "how-to-sell-a-car": {
-       "title": "How to Sell a Car Privately with a Bill of Sale",
-       "date": "2023-10-15",
-       "desc": "Learn how to transfer ownership legally and safely with a bill of sale.",
-        "body": "<p>This is the full English content for the Selling a Car article...</p>"
-     },
-     "starting-a-partnership": {
-       "title": "Starting a Business Partnership: Must-Have Legal Docs",
-       "date": "2023-09-30",
-       "desc": "What legal agreements should you have when co-founding a business?",
-        "body": "<p>This is the full English content for the Partnership Docs article...</p>"
-     }
+     "legal-checklist-small-business": {
+        "title": "The Ultimate Legal Checklist for Starting a Small Business",
+        "desc": "A step-by-step legal guide for new entrepreneurs—licenses, agreements, and tax forms.",
+        "date": "2024-03-11",
+        "body": "<p>Starting a small business involves navigating a complex legal landscape. This checklist covers the essentials:</p><ul><li>Choosing a business structure (Sole Proprietorship, LLC, Corporation)</li><li>Registering your business name</li><li>Obtaining necessary licenses and permits (federal, state, local)</li><li>Understanding tax obligations (EIN, sales tax, income tax)</li><li>Drafting key agreements (Partnership, Operating, Leases)</li><li>Complying with employment laws</li></ul><p>Consulting with legal and financial professionals is crucial.</p>"
+      },
+      "ndas-how-to-use": {
+        "title": "When and Why You Need an NDA (Non-Disclosure Agreement)",
+        "desc": "Learn what an NDA is, when to use it, and how to protect sensitive business information.",
+        "date": "2024-02-01",
+        "body": "<p>An NDA, or Non-Disclosure Agreement, is a legal contract that establishes confidentiality between parties. Key considerations:</p><ul><li><strong>Purpose:</strong> Protects trade secrets, client lists, financial data, or proprietary ideas during discussions.</li><li><strong>Types:</strong> Mutual (both parties share info) or Unilateral (one party discloses).</li><li><strong>When to Use:</strong> Before pitching investors, hiring contractors with access to sensitive data, exploring partnerships, or discussing inventions.</li><li><strong>Key Clauses:</strong> Definition of confidential info, obligations of receiving party, duration of confidentiality, exclusions.</li></ul><p>An NDA is a fundamental tool for safeguarding intellectual property and business strategies.</p>"
+      },
+      "eviction-process": {
+        "title": "Understanding the Eviction Process: Landlord & Tenant Rights",
+        "desc": "Explore the legal eviction process and how to avoid common pitfalls as a landlord or tenant.",
+        "date": "2023-12-19",
+        "body": "<p>Eviction is a legal process landlords must follow to remove a tenant. Key steps and rights:</p><ul><li><strong>Valid Reason:</strong> Typically non-payment of rent, lease violations, or illegal activity.</li><li><strong>Notice:</strong> Landlord must provide proper written notice (e.g., 3-day notice to pay or quit, 30-day notice to vacate). State laws vary significantly.</li><li><strong>Court Filing:</strong> If the tenant doesn't comply, the landlord files an unlawful detainer lawsuit.</li><li><strong>Tenant Response:</strong> Tenant has a specific timeframe to respond to the court summons.</li><li><strong>Hearing:</strong> A judge hears the case and issues a ruling.</li><li><strong>Writ of Possession:</strong> If the landlord wins, law enforcement executes the eviction.</li></ul><p>Both landlords and tenants should understand their state's specific laws and seek legal advice if unsure.</p>"
+      },
+      "power-of-attorney-basics": {
+        "title": "Power of Attorney: What It Is and Why It Matters",
+        "desc": "A clear breakdown of Power of Attorney types and when to create one.",
+        "date": "2024-01-12",
+        "body": "<p>A Power of Attorney (POA) is a legal document granting someone (the Agent) authority to act on another person's (the Principal) behalf. Types include:</p><ul><li><strong>General POA:</strong> Broad authority over financial matters. Often ends if the Principal becomes incapacitated.</li><li><strong>Durable POA:</strong> Remains effective even if the Principal becomes incapacitated. Crucial for planning.</li><li><strong>Healthcare POA (or Proxy):</strong> Allows the Agent to make medical decisions if the Principal cannot.</li><li><strong>Special/Limited POA:</strong> Grants specific, limited powers for a particular task or time.</li></ul><p>Creating POAs is vital for ensuring your affairs and healthcare wishes are managed if you're unable to do so yourself.</p>"
+      },
+      "contract-breach": {
+        "title": "What Happens If Someone Breaks a Contract?",
+        "desc": "Understand legal remedies and prevention strategies for breach of contract.",
+        "date": "2024-03-01",
+        "body": "<p>A breach of contract occurs when one party fails to fulfill their obligations under a legally binding agreement. Consequences and remedies depend on the contract and the nature of the breach:</p><ul><li><strong>Material Breach:</strong> A significant failure that undermines the contract's core purpose. The non-breaching party may be excused from performance and can sue for damages.</li><li><strong>Minor Breach:</strong> A less significant failure. The non-breaching party must still perform but can sue for damages caused by the breach.</li><li><strong>Remedies:</strong> Compensatory damages (money to cover losses), specific performance (court orders performance), rescission (cancels the contract), reformation (court rewrites part of the contract).</li></ul><p>Clear contract drafting, communication, and negotiation can help prevent breaches. Seek legal advice if a breach occurs.</p>"
+      },
+      "child-custody-explained": {
+        "title": "Child Custody Agreements: A Simple Guide for Parents",
+        "desc": "Learn about joint custody, sole custody, and how to create a fair plan.",
+        "date": "2024-03-25",
+        "body": "<p>Child custody agreements determine where children live and who makes decisions for them after parents separate. Key concepts:</p><ul><li><strong>Legal Custody:</strong> Right to make major decisions (education, healthcare, religion). Can be Joint or Sole.</li><li><strong>Physical Custody:</strong> Where the child primarily resides. Can be Joint (significant time with both parents) or Sole (primarily with one parent, visitation for the other).</li><li><strong>Best Interests of the Child:</strong> Courts prioritize the child's well-being, considering factors like parental stability, child's preference (if old enough), and history of care.</li><li><strong>Parenting Plan:</strong> A detailed schedule outlining visitation, holidays, transportation, and communication.</li></ul><p>Mediation or collaboration is often encouraged to create a plan. Formalizing the agreement legally is essential.</p>"
+      }
    }
 }
 
