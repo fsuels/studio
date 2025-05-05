@@ -21,7 +21,7 @@ const ProgressStepper: React.FC<ProgressStepperProps> = ({ currentStep }) => {
   const { t } = useTranslation();
 
   return (
-    <nav aria-label="Progress">
+    <nav aria-label="Progress" className="stepper"> {/* Added stepper class for potential sticky styles */}
       <ol role="list" className="flex items-center justify-between space-x-2 md:space-x-4">
         {STEPS.map((step, index) => (
           <li key={step.id} className={cn("relative flex-1", index < STEPS.length - 1 ? "pr-8 sm:pr-12" : "")}>
@@ -51,7 +51,9 @@ const ProgressStepper: React.FC<ProgressStepperProps> = ({ currentStep }) => {
 
              {/* Label */}
              <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 whitespace-nowrap text-center text-xs font-medium md:bottom-auto md:top-11">
+               {/* Hide label on small screens, show inline on sm+ */}
                <span className={cn(
+                 "hidden sm:inline", // Hide by default, show on sm screens and up
                  step.id <= currentStep ? "text-foreground" : "text-muted-foreground"
                )}>
                  {t(step.labelKey, `Step ${step.id}`)}

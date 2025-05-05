@@ -10,6 +10,7 @@ body {
   /* Uncomment below to use Inter */
   /* font-family: 'Inter', var(--font-geist-sans), sans-serif; */
   line-height: 1.5; /* Set default line height */
+  overflow-x: hidden; /* Prevent horizontal scrolling */
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -112,7 +113,7 @@ h1, h2, h3, h4, h5, h6 {
    }
 }
 
-/* Add Tailwind animations */
+/* Add Tailwind animations and responsive grids/stepper */
 @layer utilities {
   @keyframes fadeIn {
     from { opacity: 0; transform: translateY(10px); }
@@ -130,4 +131,66 @@ h1, h2, h3, h4, h5, h6 {
   .scrollbar-hide::-webkit-scrollbar {
     display: none; /* Safari and Chrome */
   }
-} /* Removed extra closing brace */
+
+  /* Responsive Grids */
+  .category-grid,
+  .document-grid {
+    @apply grid gap-3; /* Adjusted gap */
+  }
+
+  /* Phone */
+  @media (max-width: 639px) {
+    .category-grid,
+    .document-grid {
+      @apply grid-cols-1;
+    }
+    .step-card__title {
+        @apply text-xl; /* Slightly smaller title on mobile */
+    }
+     .step-card__subtitle {
+        @apply text-base; /* Ensure subtitle is readable */
+    }
+     .step-card {
+        @apply p-4; /* Reduced padding on mobile */
+     }
+     .stepper { /* Sticky stepper on mobile */
+        @apply sticky top-0 bg-background z-50 py-2 shadow-sm border-b;
+     }
+  }
+
+  /* Tablet */
+  @media (min-width: 640px) and (max-width: 1023px) {
+    .category-grid,
+    .document-grid {
+      @apply grid-cols-2;
+    }
+     .step-card {
+        @apply p-6;
+     }
+      .step-card__title {
+        @apply text-2xl;
+    }
+     .step-card__subtitle {
+        @apply text-lg;
+    }
+  }
+
+  /* Desktop */
+  @media (min-width: 1024px) {
+    .category-grid {
+      @apply grid-cols-4;
+    }
+    .document-grid {
+      @apply grid-cols-3;
+    }
+     .step-card {
+        @apply p-6; /* Keep p-6 for desktop */
+     }
+      .step-card__title {
+        @apply text-2xl;
+    }
+     .step-card__subtitle {
+        @apply text-lg;
+    }
+  }
+}
