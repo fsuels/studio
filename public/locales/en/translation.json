@@ -33,8 +33,9 @@
   },
   "stepPrefix": "STEP",
   "stepOne": {
-    "title": "Step 1: Describe & Confirm",
-    "description": "Describe your situation and select the relevant U.S. state. Our AI will suggest document types.",
+    "title": "Step 1: Select a Category",
+    "categoryDescription": "Choose the legal area that best fits your need.",
+    "selectDocDescription": "Choose the document that best fits your needs.",
     "text": "Text",
     "startMic": "Start Mic",
     "stopMic": "Stop Recording",
@@ -85,7 +86,15 @@
     "confidenceSuffix": "% Match",
     "generalInquiryReason": "If none of the above seem correct, or if you need further clarification.",
     "noReasoning": "No reasoning provided.",
-    "confirmed": "Confirmed Selection"
+    "confirmed": "Confirmed Selection",
+    "searchCategories": "Search categories...",
+    "noCategoriesFound": "No categories match your search.",
+    "backToCategories": "Back to Categories",
+    "searchPlaceholder": "Search documents...",
+    "noDescription": "No description available.",
+    "requiresNotarization": "Requires Notarization",
+    "canBeRecorded": "Can Be Recorded",
+    "noResults": "No documents match your search in this category."
   },
   "dynamicForm": {
     "stepTitle": "Step 2: Provide Details for {{documentType}}",
@@ -212,18 +221,6 @@
         "cta": {
           "startNow": "Start for Free"
         },
-        "testimonialsTitle": "What Our Users Say",
-        "testimonial1": "\"123LegalDoc saved me $500 on my lease agreement. Super easy to use!\"",
-        "testimonial1Name": "Sarah Chen",
-        "testimonial1Role": "Small Business Owner",
-        "testimonial2": "\"Generating a partnership agreement took minutes instead of days. Highly recommended.\"",
-        "testimonial2Name": "Michael B.",
-        "testimonial2Role": "Freelancer",
-        "testimonial3": "\"The AI inference was spot on, and the questionnaire was straightforward. Great service!\"",
-        "testimonial3Name": "Emily White",
-        "testimonial3Role": "Startup Founder",
-        "featuredIn": "FEATURED IN",
-        "satisfactionGuarantee": "100% Satisfaction Guarantee or Your Money Back",
         "trustStrip": {
           "title": "Trusted By Professionals",
           "badge1": "Over {{count}} documents generated",
@@ -580,4 +577,3 @@
       }
    }
 }
-
