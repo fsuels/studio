@@ -19,29 +19,38 @@ const STEPS = [
 
 const ProgressStepper: React.FC<ProgressStepperProps> = ({ currentStep }) => {
   const { t } = useTranslation();
+  const progressPercent = ((currentStep -1) / (STEPS.length -1 )) * 100; // Calculate progress for mobile bar
+
 
   return (
-    <nav aria-label="Progress" className="stepper"> {/* Added stepper class for potential sticky styles */}
-      <ol role="list" className="flex items-center justify-between space-x-2 md:space-x-4">
+    // Use the 'stepper' class which is now responsive in globals.css
+    <nav aria-label="Progress" className="stepper">
+      {/* Mobile Progress Bar - Visible only on small screens */}
+       <div className="progress-bar block sm:hidden">
+            <div style={{ width: `${progressPercent}%` }} />
+        </div>
+
+      {/* Desktop/Tablet Step Indicator List - Hidden on small screens */}
+       <ol role="list" className="hidden sm:flex items-center justify-between space-x-2 md:space-x-4 w-full">
         {STEPS.map((step, index) => (
-          <li key={step.id} className={cn("relative flex-1", index < STEPS.length - 1 ? "pr-8 sm:pr-12" : "")}>
+          <li key={step.id} className={cn("stepper__item relative flex-1", index < STEPS.length - 1 ? "pr-8 sm:pr-12" : "")}>
             {/* Step Circle/Number */}
             <div
               className={cn(
-                "flex h-10 w-10 items-center justify-center rounded-full",
-                step.id < currentStep ? 'bg-primary' : '',
-                step.id === currentStep ? 'border-2 border-primary bg-primary/10' : '',
-                step.id > currentStep ? 'border-2 border-border bg-muted' : ''
+                "stepper__number flex h-10 w-10 items-center justify-center rounded-full border-2", // Added border-2 here for consistency
+                step.id < currentStep ? 'bg-green-600 border-green-600 text-white stepper__item--complete' : '', // Use completion style
+                step.id === currentStep ? 'border-primary bg-primary/10 text-primary stepper__item--active' : '',
+                step.id > currentStep ? 'border-border bg-muted text-muted-foreground stepper__item--incomplete' : ''
               )}
               aria-current={step.id === currentStep ? 'step' : undefined}
             >
               {step.id < currentStep ? (
-                <Check className="h-6 w-6 text-primary-foreground" aria-hidden="true" />
+                <Check className="h-6 w-6" aria-hidden="true" /> // Use completion icon
               ) : (
                 <span
                   className={cn(
-                    "text-sm font-medium",
-                    step.id === currentStep ? 'text-primary' : 'text-muted-foreground'
+                    "text-sm font-medium"
+                    // Text color handled by parent div class
                   )}
                 >
                   {step.id}
@@ -50,14 +59,10 @@ const ProgressStepper: React.FC<ProgressStepperProps> = ({ currentStep }) => {
             </div>
 
              {/* Label */}
-             <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 whitespace-nowrap text-center text-xs font-medium md:bottom-auto md:top-11">
-               {/* Hide label on small screens, show inline on sm+ */}
-               <span className={cn(
-                 "hidden sm:inline", // Hide by default, show on sm screens and up
-                 step.id <= currentStep ? "text-foreground" : "text-muted-foreground"
-               )}>
-                 {t(step.labelKey, `Step ${step.id}`)}
-               </span>
+             <div className={cn("stepper__label absolute -bottom-6 left-1/2 -translate-x-1/2 whitespace-nowrap text-center text-xs font-medium md:bottom-auto md:top-11",
+                step.id <= currentStep ? "text-foreground" : "text-muted-foreground"
+             )}>
+                {t(step.labelKey, `Step ${step.id}`)}
              </div>
 
 
@@ -65,9 +70,8 @@ const ProgressStepper: React.FC<ProgressStepperProps> = ({ currentStep }) => {
             {index < STEPS.length - 1 && (
               <div
                 className={cn(
-                  "absolute right-0 top-1/2 h-0.5 w-full -translate-y-1/2",
-                   // Adjust line positioning based on index if needed
-                  step.id < currentStep ? 'bg-primary' : 'bg-border'
+                  "absolute right-0 top-5 h-0.5 w-full -translate-y-1/2", // Adjusted top position for alignment with circle center
+                  step.id < currentStep ? 'bg-green-600' : 'bg-border' // Use completion color for line
                 )}
                 aria-hidden="true"
               />

@@ -5,6 +5,11 @@
 /* Import Inter font if needed - uncomment if Geist is not preferred */
 /* @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap'); */
 
+html, body, #__next {
+  overflow-x: hidden; /* Prevent horizontal scroll */
+}
+
+
 body {
   font-family: var(--font-geist-sans), sans-serif; /* Default to Geist */
   /* Uncomment below to use Inter */
@@ -138,23 +143,76 @@ h1, h2, h3, h4, h5, h6 {
     @apply grid gap-3; /* Adjusted gap */
   }
 
+  /* General Step Card Styles */
+  .step-card {
+      /* Base padding and font sizes for mobile */
+     @apply p-4 bg-card rounded-lg shadow-lg border border-border;
+  }
+   .step-card__header {
+      @apply mb-4; /* Space below header */
+   }
+   .step-card__title {
+      @apply text-xl font-semibold text-foreground; /* Mobile title */
+   }
+    .step-card__subtitle {
+       @apply text-base text-muted-foreground; /* Mobile subtitle */
+    }
+     .step-card select,
+    .step-card input {
+      @apply w-full box-border mb-4; /* Full width inputs/selects with margin */
+    }
+
+
+  /* Category and Document Card Styles (Mobile-first) */
+  .category-card,
+  .document-card {
+     @apply p-4 border rounded-md shadow-sm text-center flex flex-col items-center justify-center;
+     min-height: 56px; /* Min touch target */
+     font-size: 1rem; /* Base font size */
+  }
+   .category-card:active,
+  .document-card:active {
+    @apply scale-95 transition-transform duration-100 ease-out;
+  }
+   /* Hover styles for non-touch devices */
+   @media (hover: hover) {
+       .category-card:hover,
+       .document-card:hover {
+           @apply shadow-md border-primary/50;
+       }
+   }
+
+
   /* Phone */
   @media (max-width: 639px) {
     .category-grid,
     .document-grid {
       @apply grid-cols-1;
     }
-    .step-card__title {
-        @apply text-xl; /* Slightly smaller title on mobile */
-    }
-     .step-card__subtitle {
-        @apply text-base; /* Ensure subtitle is readable */
-    }
-     .step-card {
-        @apply p-4; /* Reduced padding on mobile */
+     /* Sticky Stepper for Mobile */
+     .stepper {
+       @apply sticky top-0 bg-background z-50 py-2 px-2 shadow-sm border-b flex justify-between items-center;
      }
-     .stepper { /* Sticky stepper on mobile */
-        @apply sticky top-0 bg-background z-50 py-2 shadow-sm border-b;
+     .stepper__label {
+        @apply hidden; /* Hide full labels on mobile */
+     }
+     .stepper__number {
+         @apply flex items-center justify-center h-6 w-6 rounded-full text-xs font-bold; /* Visible step number */
+     }
+      .stepper__item--active .stepper__number {
+         @apply bg-primary text-primary-foreground;
+     }
+      .stepper__item--complete .stepper__number {
+          @apply bg-green-600 text-white; /* Example completion color */
+      }
+     .stepper__item--incomplete .stepper__number {
+          @apply bg-muted text-muted-foreground border border-border;
+      }
+     .progress-bar {
+        @apply flex-1 mx-4 bg-muted h-1 rounded overflow-hidden; /* Add progress bar styling */
+     }
+     .progress-bar > div {
+         @apply bg-primary h-full transition-all duration-300;
      }
   }
 
@@ -165,32 +223,56 @@ h1, h2, h3, h4, h5, h6 {
       @apply grid-cols-2;
     }
      .step-card {
-        @apply p-6;
+        @apply p-6; /* Larger padding */
      }
       .step-card__title {
-        @apply text-2xl;
+        @apply text-2xl; /* Larger title */
     }
      .step-card__subtitle {
-        @apply text-lg;
+        @apply text-lg; /* Larger subtitle */
     }
+     /* Stepper on Tablet/Desktop */
+    .stepper {
+       @apply relative flex items-center justify-between space-x-2 md:space-x-4 p-4 border-b; /* Non-sticky, more space */
+    }
+     .stepper__label {
+        @apply block text-xs font-medium mt-1; /* Show labels */
+     }
+     .progress-bar {
+         @apply hidden; /* Hide progress bar on larger screens */
+     }
+     .stepper__item {
+         @apply flex-1 relative text-center;
+     }
   }
 
   /* Desktop */
   @media (min-width: 1024px) {
     .category-grid {
-      @apply grid-cols-4;
+      @apply grid-cols-4; /* 4 columns for categories */
     }
     .document-grid {
-      @apply grid-cols-3;
+      @apply grid-cols-3; /* 3 columns for documents */
     }
+     /* Step card styles remain same as tablet */
      .step-card {
-        @apply p-6; /* Keep p-6 for desktop */
+        @apply p-6;
      }
-      .step-card__title {
+     .step-card__title {
         @apply text-2xl;
     }
      .step-card__subtitle {
         @apply text-lg;
     }
+     /* Stepper styles remain same as tablet */
+     .stepper {
+        @apply relative flex items-center justify-between space-x-4 p-4 border-b;
+     }
+     .stepper__label {
+         @apply block text-xs font-medium mt-1;
+     }
+     .progress-bar {
+          @apply hidden;
+     }
   }
 }

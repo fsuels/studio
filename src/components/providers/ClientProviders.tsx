@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useState, useEffect, ReactNode } from 'react';
@@ -24,7 +23,8 @@ export function ClientProviders({ children }: ClientProvidersProps) {
   // After hydration and the effect runs, render with I18nClientProvider.
   if (!isClient) {
     return (
-      <Layout> {/* Use Layout wrapper */}
+      // Wrap directly in Layout
+      <Layout>
         {children}
         <Toaster />
       </Layout>
@@ -34,10 +34,12 @@ export function ClientProviders({ children }: ClientProvidersProps) {
   // Now we are definitely on the client, render with the i18n provider
   return (
     <I18nClientProvider>
-      <Layout> {/* Use Layout wrapper */}
+       {/* Wrap directly in Layout */}
+      <Layout>
         {children}
         <Toaster />
       </Layout>
     </I18nClientProvider>
   );
 }
+
