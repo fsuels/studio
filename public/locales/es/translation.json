@@ -35,14 +35,16 @@
   "stepOne": {
     "title": "Paso 1: Describe y Confirma",
     "description": "Describe tu situación y selecciona el estado de EE. UU. correspondiente. Nuestra IA sugerirá el tipo de documento.",
+    "categoryDescription": "Elige el área legal que mejor se adapte a tu necesidad.",
+    "selectDocDescription": "Elige el documento que mejor se adapte a tus necesidades.",
     "text": "Texto",
     "startMic": "Iniciar micrófono",
     "stopMic": "Detener grabación",
     "placeholder": "ej., 'Alquilar mi apartamento', 'Empezar un negocio', 'Necesito que alguien deje de contactarme...'",
     "listening": "Escuchando...",
-    "stateLabel": "Estado de EE. UU. relevante (Opcional)",
+    "stateLabel": "Estado de EE. UU. relevante (Obligatorio)",
     "statePlaceholder": "Seleccionar Estado...",
-    "stateHelp": "Ayuda a personalizar las sugerencias de documentos. Selecciónalo si aplica.",
+    "stateHelp": "Ayuda a personalizar el documento para tu jurisdicción.",
     "analyze": "Analizar Mi Situación",
     "textDescriptionLabel": "Descripción (Texto)",
     "micDescriptionLabel": "Descripción (Transcripción del Micrófono)"
@@ -85,7 +87,15 @@
     "confidenceSuffix": "% Coincidencia",
     "generalInquiryReason": "Si ninguna de las anteriores parece correcta, o si necesitas más aclaraciones.",
     "noReasoning": "No se proporcionó justificación.",
-    "confirmed": "Selección Confirmada"
+    "confirmed": "Selección Confirmada",
+    "searchCategories": "Buscar categorías...",
+    "noCategoriesFound": "No hay categorías que coincidan con tu búsqueda.",
+    "backToCategories": "Volver a Categorías",
+    "searchPlaceholder": "Buscar documentos...",
+    "noDescription": "No hay descripción disponible.",
+    "requiresNotarization": "Requiere Notarización",
+    "canBeRecorded": "Se Puede Registrar",
+    "noResults": "No hay documentos que coincidan con tu búsqueda en esta categoría."
   },
   "dynamicForm": {
       "stepTitle": "Paso 2: Proporciona Detalles para {{documentType}}",
@@ -136,7 +146,7 @@
       "noDocumentDataDescriptionLoad": "No se pudieron cargar los datos del PDF para firmar.",
       "signButton": "Firmar Documento Digitalmente",
       "signingButton": "Firmando...",
-      "signedButton": "Documento Firmado - Proceder al Siguiente Paso",
+      "signedButton": "Documento Firmado - Proceder",
       "alreadySignedButton": "Documento Ya Firmado"
   },
    "shareDownloadStep": {
@@ -145,7 +155,7 @@
        "actionsPlaceholder": "Acciones disponibles después de firmar el documento.",
        "shareButton": "Compartir de Forma Segura (Pronto)",
        "downloadButton": "Descargar PDF",
-       "disabledDescription": "Firma el documento arriba para habilitar compartir y descargar."
+       "disabledDescription": "Firma el documento en el paso anterior para habilitar compartir y descargar."
    },
     "footer": {
         "howItWorks": "Cómo Funciona",
@@ -215,13 +225,13 @@
           "testimonialsTitle": "Lo que dicen nuestros usuarios",
           "testimonial1": "\"123LegalDoc me ahorró $500 en mi contrato de alquiler. ¡Muy fácil de usar!\"",
           "testimonial1Name": "Sarah Chen",
-          "testimonial1Role": "Dueña de Pequeño Negocio",
-          "testimonial2": "\"Generar un contrato de sociedad tomó minutos en vez de días. Muy recomendable.\"",
+          "testimonial1Role": "Propietaria de pequeño negocio",
+          "testimonial2": "\"Generar un contrato de sociedad tomó minutos en vez de días. Altamente recomendado.\"",
           "testimonial2Name": "Michael B.",
           "testimonial2Role": "Freelancer",
-          "testimonial3": "\"La inferencia de IA fue precisa y el formulario muy claro. ¡Excelente servicio!\"",
+          "testimonial3": "\"La inferencia de IA fue precisa y el cuestionario claro. ¡Gran servicio!\"",
           "testimonial3Name": "Emily White",
-          "testimonial3Role": "Fundadora de Startup",
+          "testimonial3Role": "Fundadora de startup",
           "featuredIn": "DESTACADO EN",
           "satisfactionGuarantee": "Garantía de satisfacción del 100% o le devolvemos su dinero",
           "trustStrip": {
@@ -378,6 +388,8 @@
       "title": "Consejos y Artículos Legales",
       "subtitle": "Tips legales, guías de documentos y novedades del sector.",
       "readMore": "Leer más",
+      "prevPost": "Artículo Anterior",
+      "nextPost": "Artículo Siguiente",
       "freelancer-docs": {
         "title": "5 Documentos Legales que Todo Freelancer Debe Conocer",
         "desc": "Desde contratos hasta acuerdos de confidencialidad — lo básico para freelancers.",
@@ -399,7 +411,8 @@
       "lease-florida": {
         "title": "Cómo Crear un Contrato de Alquiler Válido en Florida",
         "desc": "Guía legal paso a paso para propietarios e inquilinos en Florida.",
-        "date": "2023-11-03"
+        "date": "2023-11-03",
+         "body": "Próximamente..."
       },
        "ai-vs-lawyers": {
          "title": "IA vs. Abogados: Cuándo Usar un Asistente Legal Automatizado",
@@ -436,8 +449,186 @@
          "date": "2023-09-30",
          "desc": "¿Qué acuerdos legales necesitas al iniciar un negocio con un socio?",
          "body": "<p>Este es el contenido completo en español para el artículo de Documentos de Sociedad...</p>"
+       },
+       "legal-checklist-small-business": {
+         "title": "Lista Legal Definitiva para Iniciar un Pequeño Negocio",
+         "desc": "Una guía legal paso a paso para nuevos emprendedores: licencias, contratos y formularios fiscales.",
+         "date": "2024-03-11",
+         "body": "<p>Iniciar un pequeño negocio implica navegar un complejo panorama legal. Esta lista cubre lo esencial:</p><ul><li>Elegir una estructura de negocio (Empresario individual, LLC, Corporación)</li><li>Registrar el nombre de tu negocio</li><li>Obtener las licencias y permisos necesarios (federales, estatales, locales)</li><li>Comprender las obligaciones fiscales (EIN, impuesto sobre ventas, impuesto sobre la renta)</li><li>Redactar acuerdos clave (Sociedad, Operativo, Arrendamientos)</li><li>Cumplir con las leyes laborales</li></ul><p>Consultar con profesionales legales y financieros es crucial.</p>"
+       },
+       "ndas-how-to-use": {
+         "title": "Cuándo y Por Qué Necesitas un NDA (Acuerdo de Confidencialidad)",
+         "desc": "Descubre qué es un NDA, cuándo usarlo y cómo proteger información sensible de negocios.",
+         "date": "2024-02-01",
+         "body": "<p>Un NDA, o Acuerdo de Confidencialidad, es un contrato legal que establece confidencialidad entre las partes. Consideraciones clave:</p><ul><li><strong>Propósito:</strong> Protege secretos comerciales, listas de clientes, datos financieros o ideas propietarias durante discusiones.</li><li><strong>Tipos:</strong> Mutuo (ambas partes comparten información) o Unilateral (una parte revela).</li><li><strong>Cuándo usarlo:</strong> Antes de presentar a inversores, contratar contratistas con acceso a datos sensibles, explorar asociaciones o discutir invenciones.</li><li><strong>Cláusulas Clave:</strong> Definición de información confidencial, obligaciones de la parte receptora, duración de la confidencialidad, exclusiones.</li></ul><p>Un NDA es una herramienta fundamental para salvaguardar la propiedad intelectual y las estrategias de negocio.</p>"
+       },
+       "eviction-process": {
+         "title": "Entendiendo el Proceso de Desalojo: Derechos del Propietario e Inquilino",
+         "desc": "Explora el proceso legal de desalojo y cómo evitar errores comunes como propietario o inquilino.",
+         "date": "2023-12-19",
+         "body": "<p>El desalojo es un proceso legal que los propietarios deben seguir para retirar a un inquilino. Pasos y derechos clave:</p><ul><li><strong>Razón Válida:</strong> Típicamente falta de pago de alquiler, violaciones del contrato de arrendamiento o actividad ilegal.</li><li><strong>Notificación:</strong> El propietario debe proporcionar una notificación escrita adecuada (p. ej., aviso de 3 días para pagar o desalojar, aviso de 30 días para desalojar). Las leyes estatales varían significativamente.</li><li><strong>Presentación Judicial:</strong> Si el inquilino no cumple, el propietario presenta una demanda de desalojo ilegal.</li><li><strong>Respuesta del Inquilino:</strong> El inquilino tiene un plazo específico para responder a la citación judicial.</li><li><strong>Audiencia:</strong> Un juez escucha el caso y emite un fallo.</li><li><strong>Orden de Posesión:</strong> Si el propietario gana, las fuerzas del orden ejecutan el desalojo.</li></ul><p>Tanto propietarios como inquilinos deben comprender las leyes específicas de su estado y buscar asesoramiento legal si no están seguros.</p>"
+       },
+       "power-of-attorney-basics": {
+         "title": "Poder Legal: Qué Es y Por Qué Es Importante",
+         "desc": "Una guía clara sobre los tipos de poder legal y cuándo crearlo.",
+         "date": "2024-01-12",
+         "body": "<p>Un Poder Legal (POA) es un documento legal que otorga a alguien (el Agente) autoridad para actuar en nombre de otra persona (el Principal). Los tipos incluyen:</p><ul><li><strong>POA General:</strong> Autoridad amplia sobre asuntos financieros. A menudo termina si el Principal queda incapacitado.</li><li><strong>POA Duradero:</strong> Sigue siendo efectivo incluso si el Principal queda incapacitado. Crucial para la planificación.</li><li><strong>POA de Atención Médica (o Proxy):</strong> Permite al Agente tomar decisiones médicas si el Principal no puede.</li><li><strong>POA Especial/Limitado:</strong> Otorga poderes específicos y limitados para una tarea o tiempo particular.</li></ul><p>Crear POAs es vital para asegurar que tus asuntos y deseos de atención médica se gestionen si no puedes hacerlo tú mismo.</p>"
+       },
+       "contract-breach": {
+         "title": "¿Qué Pasa Si Alguien Rompe un Contrato?",
+         "desc": "Conoce los remedios legales y estrategias para prevenir el incumplimiento de contratos.",
+         "date": "2024-03-01",
+         "body": "<p>Un incumplimiento de contrato ocurre cuando una parte no cumple con sus obligaciones bajo un acuerdo legalmente vinculante. Las consecuencias y remedios dependen del contrato y la naturaleza del incumplimiento:</p><ul><li><strong>Incumplimiento Material:</strong> Una falla significativa que socava el propósito central del contrato. La parte no incumplidora puede ser excusada de cumplir y puede demandar por daños.</li><li><strong>Incumplimiento Menor:</strong> Una falla menos significativa. La parte no incumplidora aún debe cumplir pero puede demandar por daños causados por el incumplimiento.</li><li><strong>Remedios:</strong> Daños compensatorios (dinero para cubrir pérdidas), cumplimiento específico (el tribunal ordena el cumplimiento), rescisión (cancela el contrato), reforma (el tribunal reescribe parte del contrato).</li></ul><p>Una redacción clara del contrato, comunicación y negociación pueden ayudar a prevenir incumplimientos. Busca asesoramiento legal si ocurre un incumplimiento.</p>"
+       },
+       "child-custody-explained": {
+         "title": "Acuerdos de Custodia de Menores: Una Guía para Padres",
+         "desc": "Aprende sobre custodia compartida, exclusiva y cómo crear un plan justo.",
+         "date": "2024-03-25",
+         "body": "<p>Los acuerdos de custodia de menores determinan dónde viven los niños y quién toma decisiones por ellos después de que los padres se separan. Conceptos clave:</p><ul><li><strong>Custodia Legal:</strong> Derecho a tomar decisiones importantes (educación, atención médica, religión). Puede ser Conjunta o Única.</li><li><strong>Custodia Física:</strong> Dónde reside principalmente el niño. Puede ser Conjunta (tiempo significativo con ambos padres) o Única (principalmente con un padre, visitas para el otro).</li><li><strong>Interés Superior del Niño:</strong> Los tribunales priorizan el bienestar del niño, considerando factores como la estabilidad parental, la preferencia del niño (si tiene edad suficiente) y el historial de cuidado.</li><li><strong>Plan de Crianza:</strong> Un cronograma detallado que describe visitas, días festivos, transporte y comunicación.</li></ul><p>A menudo se fomenta la mediación o la colaboración para crear un plan. Es esencial formalizar el acuerdo legalmente.</p>"
+       },
+       "digital-signatures-legal": {
+         "title": "¿Son Legalmente Válidas las Firmas Digitales en EE. UU.?",
+         "desc": "Comprende la validez legal de las firmas electrónicas según la ley estadounidense.",
+         "date": "2024-03-30",
+         "body": "Próximamente..."
+       },
+       "notarized-documents-online": {
+         "title": "¿Se Puede Notariar un Documento en Línea? Lo Que Debes Saber",
+         "desc": "Aprende cómo funciona la notarización en línea y qué estados la permiten.",
+         "date": "2024-03-28",
+         "body": "Próximamente..."
+       },
+       "legal-documents-immigrants": {
+         "title": "Los 5 Documentos Legales Más Importantes para Inmigrantes en EE. UU.",
+         "desc": "Desde permisos de trabajo hasta declaraciones juradas—esto es lo que deben preparar los nuevos residentes.",
+         "date": "2024-03-27",
+         "body": "Próximamente..."
+       },
+       "contract-basics": {
+         "title": "Contratos Básicos: Qué Debe Incluir Todo Acuerdo",
+         "desc": "Conoce las partes esenciales de cualquier contrato legal válido.",
+         "date": "2024-04-01",
+         "body": "Próximamente..."
+       },
+       "green-card-process": {
+         "title": "Entendiendo el Proceso de Solicitud de la Green Card",
+         "desc": "Resumen de los pasos, formularios y documentos necesarios para la residencia legal permanente.",
+         "date": "2024-04-02",
+         "body": "Próximamente..."
+       },
+       "why-you-need-a-will": {
+         "title": "Por Qué Necesitas un Testamento — Sin Importar Tu Edad",
+         "desc": "Descubre cómo un testamento puede proteger tus bienes y tu familia.",
+         "date": "2024-04-03",
+         "body": "Próximamente..."
+       },
+       "eviction-letter-guide": {
+         "title": "Cómo Escribir una Carta Legal de Desalojo",
+         "desc": "Pasos para que los propietarios notifiquen correctamente y eviten problemas legales.",
+         "date": "2024-04-04",
+         "body": "Próximamente..."
+       },
+       "buying-home-checklist": {
+         "title": "Lista Legal para Compradores de Vivienda por Primera Vez",
+         "desc": "Desde contratos de compra hasta títulos de propiedad — protege tu transacción inmobiliaria.",
+         "date": "2024-04-05",
+         "body": "Próximamente..."
+       },
+       "identity-theft-response": {
+         "title": "¿Qué Hacer Si Eres Víctima de Robo de Identidad",
+         "desc": "Tus derechos y los pasos legales que debes tomar de inmediato.",
+         "date": "2024-04-06",
+         "body": "Próximamente..."
+       },
+       "notarized-vs-witnessed": {
+         "title": "Notariado vs Testificado: ¿Cuál es la Diferencia?",
+         "desc": "Cuándo usar cada forma de verificación documental.",
+         "date": "2024-04-07",
+         "body": "Próximamente..."
+       },
+       "nda-vs-noncompete": {
+         "title": "NDA vs. No Competencia: ¿Cuál Necesitas?",
+         "desc": "Compara estos dos contratos comunes en negocios.",
+         "date": "2024-04-08",
+         "body": "Próximamente..."
+       },
+       "how-to-hire-freelancers": {
+         "title": "Cómo Contratar Freelancers Legalmente en EE.UU.",
+         "desc": "Reglas para contratistas independientes, contratos y formularios fiscales.",
+         "date": "2024-04-09",
+         "body": "Próximamente..."
+       },
+       "legal-docs-remote-work": {
+         "title": "Documentos Legales Esenciales para el Trabajo Remoto",
+         "desc": "Asegura el cumplimiento legal al contratar o trabajar de forma remota.",
+         "date": "2024-04-10",
+         "body": "Próximamente..."
+       },
+       "legal-name-change": {
+         "title": "Cómo Cambiar Legalmente tu Nombre en EE. UU.",
+         "desc": "Proceso paso a paso para cambiar legalmente tu nombre en cualquier estado.",
+         "date": "2024-04-11",
+         "body": "Próximamente..."
+       },
+       "how-to-draft-bill-of-sale": {
+         "title": "Cómo Redactar un Contrato de Compra-Venta Legal",
+         "desc": "Asegura tu venta privada con un contrato de compra-venta bien redactado.",
+         "date": "2024-04-12",
+         "body": "Próximamente..."
+       },
+       "divorce-paperwork-guide": {
+         "title": "Los Documentos Necesarios para Solicitar el Divorcio",
+         "desc": "Lista de formularios y trámites para el divorcio en tu estado.",
+         "date": "2024-04-13",
+         "body": "Próximamente..."
+       },
+       "start-llc-online": {
+         "title": "Cómo Crear una LLC en Línea en 2024",
+         "desc": "Crea tu empresa de responsabilidad limitada sin abogado usando estas herramientas.",
+         "date": "2024-04-14",
+         "body": "Próximamente..."
+       },
+       "do-i-need-a-lawyer": {
+         "title": "¿Necesito un Abogado o Puedo Hacerlo Yo Mismo?",
+         "desc": "Cuándo puedes usar herramientas legales por tu cuenta y cuándo no.",
+         "date": "2024-04-15",
+         "body": "Próximamente..."
+       },
+       "pet-agreements-renters": {
+         "title": "Acuerdos de Mascotas para Inquilinos: Qué Incluir",
+         "desc": "Cómo incluir legalmente a las mascotas en un contrato de arrendamiento.",
+         "date": "2024-04-16",
+         "body": "Próximamente..."
+       },
+       "freelancer-contract-template": {
+         "title": "Plantilla Gratis de Contrato para Freelancers 2024",
+         "desc": "Protege tu trabajo freelance con una plantilla de contrato sencilla.",
+         "date": "2024-04-17",
+         "body": "Próximamente..."
+       },
+       "medical-consent-minors": {
+         "title": "Formularios de Consentimiento Médico para Menores: Lo Que Deben Saber los Padres",
+         "desc": "Por qué un formulario de consentimiento médico es vital cuando tu hijo está al cuidado de otra persona.",
+         "date": "2024-04-18",
+         "body": "Próximamente..."
+       },
+       "legal-docs-for-startups": {
+         "title": "Los 7 Documentos Legales Que Toda Startup Necesita",
+         "desc": "Desde acuerdos entre socios hasta NDAs—protege tu startup desde el inicio.",
+         "date": "2024-04-19",
+         "body": "Próximamente..."
+       },
+       "power-of-attorney-guide": {
+         "title": "Poder General vs. Limitado: ¿Cuál es la Diferencia?",
+         "desc": "Conoce cuándo se usa cada tipo de poder legal y por qué importa.",
+         "date": "2024-04-20",
+         "body": "Próximamente..."
        }
-    }
+    },
+    "progressStepper": {
+     "step1": "Seleccionar Documento",
+     "step2": "Personalizar",
+     "step3": "Finalizar"
+   }
 }
 
-    

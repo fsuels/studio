@@ -1,110 +1,121 @@
 // src/app/page.tsx
 "use client"; // Mark page as client component due to state management and client children
 
-import React, { useState, useEffect, useCallback, useRef } from 'react'; // Ensure useEffect is imported if used elsewhere
-import type { InferDocumentTypeOutput, DocumentSuggestion } from '@/ai/flows/infer-document-type'; // Import new output types
-import DynamicFormRenderer from '@/components/DynamicFormRenderer'; // Import the new dynamic renderer
-import { formSchemas } from '@/data/formSchemas'; // Import schemas
-import { DisclaimerStep } from '@/components/disclaimer-step'; // Import the new disclaimer step
+import React, { useState, useEffect, useCallback, useRef } from 'react';
+import type { InferDocumentTypeOutput, DocumentSuggestion } from '@/ai/flows/infer-document-type'; // Keep if used elsewhere, otherwise remove
+import DynamicFormRenderer from '@/components/DynamicFormRenderer';
+import { formSchemas } from '@/data/formSchemas';
+import { DisclaimerStep } from '@/components/disclaimer-step';
 import { PdfPreview } from '@/components/pdf-preview';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import { FileText, FileSignature, Check, Upload, AlertTriangle, Download, ListChecks, Loader2 } from 'lucide-react'; // Added ListChecks, Loader2 icons
+import { FileText, FileSignature, Check, Upload, AlertTriangle, Download, ListChecks, Loader2 } from 'lucide-react';
 import HomepageHeroSteps from '@/components/landing/HomepageHeroSteps'; // Corrected import path to landing
-import { Button } from '@/components/ui/button'; // Import Button
-import { useToast } from '@/hooks/use-toast'; // Import useToast
-import { useTranslation } from 'react-i18next'; // Import useTranslation
-import TrustAndTestimonialsSection from "@/components/landing/TrustAndTestimonialsSection"; // Import the combined Trust/Testimonials component
-import type { LegalDocument } from '@/lib/document-library'; // Import LegalDocument type
-
-
-// Define share icon SVG inline
-const ShareIcon = () => (
-   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6 text-primary"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" x2="12" y1="2" y2="15"/></svg>
-);
+import { Button } from '@/components/ui/button';
+import { useToast } from '@/hooks/use-toast';
+import { useTranslation } from 'react-i18next';
+import TrustAndTestimonialsSection from "@/components/landing/TrustAndTestimonialsSection";
+import type { LegalDocument } from '@/lib/document-library';
+import ProgressStepper from '@/components/ProgressStepper'; // Import the new stepper
 import Step1DocumentSelector from '@/components/Step1DocumentSelector'; // Corrected import for Step1DocumentSelector
+
+// Define share icon SVG inline (Removed - assuming Download/Upload icons suffice for now)
 
 export default function Home() {
   console.log('[page.tsx] Home component rendering...');
   const { toast } = useToast();
-  const { t, i18n } = useTranslation(); // Get translation function and i18n instance
-  const [isHydrated, setIsHydrated] = useState(false); // State for hydration
+  const { t, i18n } = useTranslation();
+  const [isHydrated, setIsHydrated] = useState(false);
 
-  // --- State for Step 1 ---
-  const [selectedDoc, setSelectedDoc] = useState<LegalDocument | null>(null); // State for the selected document object
-  const [userState, setUserState] = useState(''); // State for the selected US state
-
-  // --- State for Step 1 -> 2 ---
-  const [inferenceResult, setInferenceResult] = useState<InferDocumentTypeOutput | null>(null); // Keep if used elsewhere, otherwise remove
-
-  // --- State for Step 2 -> 3 ---
+  // --- State Management for the New Flow ---
+  const [currentStep, setCurrentStep] = useState(1); // 1: Select, 2: Customize, 3: Pay/Download
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [selectedState, setSelectedState] = useState<string>(''); // Mandatory after category selection
+  const [selectedDoc, setSelectedDoc] = useState<LegalDocument | null>(null);
   const [questionnaireAnswers, setQuestionnaireAnswers] = useState<Record<string, any> | null>(null);
-
-  // --- State for Step 3 -> 4 ---
   const [disclaimerAgreed, setDisclaimerAgreed] = useState<boolean>(false);
-
-  // --- State for Step 4 -> 5 ---
   const [pdfDataUrl, setPdfDataUrl] = useState<string | undefined>(undefined);
 
+  // Refs for scrolling
+  const step2Ref = useRef<HTMLDivElement>(null);
+  const step3Ref = useRef<HTMLDivElement>(null);
+  const step4Ref = useRef<HTMLDivElement>(null);
+  const step5Ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    setIsHydrated(true); // Set hydrated state on client
+    setIsHydrated(true);
   }, []);
 
-  // Determine current step based on state
-   const getCurrentStep = () => {
-     if (pdfDataUrl) return 5; // Share/Download is Step 5
-     if (disclaimerAgreed) return 4; // PDF Preview is Step 4
-     if (questionnaireAnswers !== null) return 3; // Disclaimer is Step 3 (triggered by non-null answers)
-     if (selectedDoc !== null) return 2; // Questionnaire is Step 2 (triggered by non-null doc)
-     return 1; // Category/Document Selection is Step 1
-   };
-   const currentStep = getCurrentStep();
+   // --- Auto-advance Logic ---
+   useEffect(() => {
+     if (selectedCategory && selectedState && selectedDoc && currentStep === 1) {
+       console.log("[page.tsx] Auto-advancing to Step 2 (Customize)");
+       setCurrentStep(2);
+       // Scroll to Step 2 section after a short delay to allow rendering
+       setTimeout(() => {
+          step2Ref.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+       }, 100);
+     }
+   }, [selectedCategory, selectedState, selectedDoc, currentStep]); // Dependencies for auto-advance
 
 
-  // Handler for when user selects a document from Step1DocumentSelector
-   const handleDocumentSelected = (doc: LegalDocument) => { // Use LegalDocument type
-      console.log(`[page.tsx] handleDocumentSelected: User selected`, doc);
-      setSelectedDoc(doc); // Store the selected document object
-       toast({ title: t('toasts.docTypeConfirmedTitle'), description: t('toasts.docTypeConfirmedDescription', { docName: doc.name }) });
-        // Reset subsequent steps
-        setQuestionnaireAnswers(null);
+   const handleCategorySelect = (categoryKey: string) => {
+       console.log(`[page.tsx] Category selected: ${categoryKey}`);
+       setSelectedCategory(categoryKey);
+       setSelectedState(''); // Reset state when category changes
+       setSelectedDoc(null); // Reset doc when category changes
+       setQuestionnaireAnswers(null); // Reset subsequent steps
+       setDisclaimerAgreed(false);
+       setPdfDataUrl(undefined);
+       // Don't change currentStep here, wait for state and doc selection
+   }
+
+   const handleStateSelect = (stateCode: string) => {
+        console.log(`[page.tsx] State selected: ${stateCode}`);
+        setSelectedState(stateCode);
+        setSelectedDoc(null); // Reset doc if state changes after category
+        setQuestionnaireAnswers(null); // Reset subsequent steps
         setDisclaimerAgreed(false);
         setPdfDataUrl(undefined);
+        // Don't change currentStep here, wait for doc selection
    }
 
-   // Handler for when user selects a state from Step1DocumentSelector
-   const handleStateChange = (stateCode: string) => {
-        console.log(`[page.tsx] handleStateChange: User selected state ${stateCode}`);
-        setUserState(stateCode);
-        // Potentially reset subsequent steps if state change affects them significantly
-        // setQuestionnaireAnswers(null);
-        // setDisclaimerAgreed(false);
-        // setPdfDataUrl(undefined);
+   const handleDocumentSelect = (doc: LegalDocument) => {
+       console.log(`[page.tsx] Document selected: ${doc.name}`);
+       setSelectedDoc(doc);
+       // Auto-advance is handled by the useEffect hook
+       // Reset subsequent steps (redundant if already done in category/state change, but safe)
+       setQuestionnaireAnswers(null);
+       setDisclaimerAgreed(false);
+       setPdfDataUrl(undefined);
    }
 
 
-  // Questionnaire submit now leads to disclaimer step
+  // --- Submission Handlers for Subsequent Steps ---
+
   const handleAnswersSubmit = (answers: Record<string, any>) => {
-    console.log('[page.tsx] handleAnswersSubmit called with:', answers);
-    setQuestionnaireAnswers(answers); // Set the answers
+    console.log('[page.tsx] Step 2 Answers Submitted:', answers);
+    setQuestionnaireAnswers(answers);
+    setCurrentStep(3); // Advance to Disclaimer step
     setDisclaimerAgreed(false); // Ensure disclaimer needs re-agreement
     setPdfDataUrl(undefined); // Clear any previous PDF
-    console.log("[page.tsx] Questionnaire submitted, proceeding to disclaimer step.");
-     toast({ title: t('toasts.detailsRecordedTitle'), description: t('toasts.detailsRecordedDescription') });
+    toast({ title: t('toasts.detailsRecordedTitle'), description: t('toasts.detailsRecordedDescription') });
+     setTimeout(() => {
+       step3Ref.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+     }, 100);
   };
 
-  // Disclaimer agreement triggers PDF generation (simulation)
-  const handleDisclaimerAgree = async () => { // Make async to await generation
-     console.log('[page.tsx] handleDisclaimerAgree called.');
+  const handleDisclaimerAgree = async () => {
+     console.log('[page.tsx] Step 3 Disclaimer Agreed.');
      setDisclaimerAgreed(true);
-     const docId = selectedDoc?.id; // Use ID from selectedDoc
-     const docName = selectedDoc?.name || 'document'; // Use name from selectedDoc
-     console.log("[page.tsx] Disclaimer agreed. Triggering PDF generation with type ID:", docId, "answers:", questionnaireAnswers);
+     setCurrentStep(4); // Advance to PDF Preview step
+     const docId = selectedDoc?.id;
+     const docName = selectedDoc?.name || 'document';
 
      if (!docId || questionnaireAnswers === null) {
          toast({ title: t('toasts.missingDataTitle'), description: t('toasts.missingDataDescription'), variant: "destructive"});
-         setDisclaimerAgreed(false); // Revert agreement state
+         setCurrentStep(3); // Revert step
+         setDisclaimerAgreed(false);
          return;
      }
 
@@ -114,32 +125,30 @@ export default function Home() {
           duration: 999999, // Keep open until dismissed
       });
 
+      setTimeout(() => {
+       step4Ref.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+     }, 100);
+
      try {
          const response = await fetch('/api/generate-pdf', {
              method: 'POST',
              headers: { 'Content-Type': 'application/json' },
              body: JSON.stringify({
-                 documentType: docName, // Send the document NAME for now, might change later
+                 documentType: docName,
                  answers: questionnaireAnswers,
-                 state: userState, // Pass selected state
+                 state: selectedState,
              }),
          });
 
          generationToast.dismiss();
 
          if (!response.ok) {
-            const errorText = await response.text(); // Read response body as text
-             console.error("[page.tsx] PDF generation failed:", response.status, response.statusText, errorText);
-             // Try to parse JSON, but fall back to text if it fails
-             let errorDetails = errorText;
-             try {
-                 const jsonError = JSON.parse(errorText);
-                 errorDetails = jsonError.error || errorText;
-             } catch (e) {
-                 // Ignore JSON parsing error, use raw text
-             }
+            const errorText = await response.text();
+            let errorDetails = errorText;
+             try { const jsonError = JSON.parse(errorText); errorDetails = jsonError.error || errorText; } catch (e) {}
              toast({ title: t('toasts.pdfGenFailedTitle'), description: `${response.status} ${response.statusText}: ${errorDetails}`, variant: "destructive"});
-             setDisclaimerAgreed(false); // Revert agreement state
+             setCurrentStep(3); // Revert step
+             setDisclaimerAgreed(false);
              return;
          }
 
@@ -151,20 +160,29 @@ export default function Home() {
              reader.readAsDataURL(blob);
          });
 
-         console.log("[page.tsx] PDF generation successful. Setting data URL.");
          setPdfDataUrl(dataUrl);
          toast({ title: t('toasts.pdfGenSuccessTitle'), description: t('toasts.pdfGenSuccessDescription') });
 
-     } catch (error: any) { // Catch specific error type if possible
+     } catch (error: any) {
           generationToast.dismiss();
           console.error("[page.tsx] Error during PDF generation fetch:", error);
           toast({ title: t('toasts.pdfGenErrorTitle'), description: `An unexpected error occurred: ${error.message || error}`, variant: "destructive"});
-          setDisclaimerAgreed(false); // Revert agreement state
+          setCurrentStep(3); // Revert step
+          setDisclaimerAgreed(false);
      }
   }
 
-  // Get the relevant form schema for the selected document type (use ID)
-   const currentFormSchema = selectedDoc?.id ? (formSchemas[selectedDoc.name] || formSchemas['default']) : []; // Use name for schema lookup, fallback to default
+   // Handler for PDF signing completion (moves to Step 5)
+   const handleSigningComplete = () => {
+       console.log('[page.tsx] Step 4 Signing Complete.');
+       setCurrentStep(5); // Advance to Share/Download step
+        setTimeout(() => {
+           step5Ref.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 100);
+   };
+
+  // Get the relevant form schema for the selected document
+   const currentFormSchema = selectedDoc?.id ? (formSchemas[selectedDoc.name] || formSchemas['default']) : [];
 
   // Render placeholder or null during SSR and initial client render
   if (!isHydrated) {
@@ -178,210 +196,183 @@ export default function Home() {
 
   return (
     <div className="flex flex-col items-center w-full bg-background">
-        {/* Use the new combined Hero and Steps component */}
        <HomepageHeroSteps />
 
         {/* Main Workflow Section */}
         <div id="workflow-start" className="w-full max-w-5xl mx-auto px-4 py-12 space-y-12">
 
+             {/* Progress Stepper */}
+             <ProgressStepper currentStep={currentStep} />
+
             {/* Step Panels Wrapper */}
             <div className="w-full max-w-3xl mx-auto space-y-8">
-                {/* Step 1: Document Selection */}
-                <Card className={`shadow-lg rounded-lg bg-card border border-border transition-all duration-500 ease-out ${currentStep > 1 ? 'opacity-50 cursor-not-allowed' : 'animate-fade-in'}`}>
-                    <CardHeader>
-                    <div className="flex items-center space-x-2">
-                        <FileText className="h-6 w-6 text-primary" />
-                        {/* Title changes based on selection */}
-                         <CardTitle className="text-2xl">
-                             {currentStep > 1 ? `${t('docTypeSelector.confirmed')}: ${selectedDoc?.name || "N/A"}` : t('stepOne.selectDocDescription')}
-                         </CardTitle>
-                    </div>
-                    <CardDescription>
-                         {currentStep > 1
-                             ? `${t('State')}: ${userState || t('Not specified')}. ${t('You can restart by selecting a new document below.')}`
-                             : t('stepOne.categoryDescription')}
-                    </CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                         {/* Render the new Step1DocumentSelector */}
-                         <Step1DocumentSelector
-                             onDocumentSelect={handleDocumentSelected}
-                             onStateChange={handleStateChange}
-                         />
-                     </CardContent>
-                </Card>
+
+                {/* --- Step 1: Category / State / Document Selection --- */}
+                 {/* Step 1 is always potentially visible, but gets overlaid/disabled */}
+                 <div className={`transition-opacity duration-500 ease-out ${currentStep > 1 ? 'opacity-50 cursor-not-allowed pointer-events-none' : 'opacity-100 animate-fade-in'}`}>
+                     <Step1DocumentSelector
+                         selectedCategory={selectedCategory}
+                         selectedState={selectedState}
+                         onCategorySelect={handleCategorySelect}
+                         onStateSelect={handleStateSelect}
+                         onDocumentSelect={handleDocumentSelect}
+                         isReadOnly={currentStep > 1} // Make read-only if past step 1
+                     />
+                 </div>
 
 
-                {/* Separator between steps */}
-                {currentStep > 1 && <Separator className="my-8" />}
-
-                {/* Step 2: Dynamic Form Renderer */}
-                 {currentStep >= 2 && selectedDoc?.id && (
-                     <div className={`transition-opacity duration-500 ease-out ${currentStep === 2 ? 'opacity-100 animate-fade-in' : 'opacity-50 cursor-not-allowed'}`}>
-                         <DynamicFormRenderer
-                             documentType={selectedDoc.name} // Pass name for title
-                             schema={currentFormSchema}
-                             onSubmit={handleAnswersSubmit}
-                             isReadOnly={currentStep > 2}
-                         />
-                     </div>
-                 )}
-                 {currentStep < 2 && (
-                     <Card className="shadow-lg rounded-lg opacity-50 cursor-not-allowed bg-card border border-border">
-                         <CardHeader>
-                             <div className="flex items-center space-x-2">
-                                 <ListChecks className="h-6 w-6 text-primary" />
-                                 <CardTitle className="text-2xl">{t('Step 2: Provide Details')}</CardTitle> {/* Translate */}
-                             </div>
-                             <CardDescription>
-                                 {t('Confirm a document type in Step 1 to see the questions.')} {/* Translate */}
-                             </CardDescription>
-                         </CardHeader>
-                         <CardContent>
-                             <p className="text-muted-foreground italic">{t('Waiting for document confirmation from Step 1...')}</p> {/* Translate */}
-                         </CardContent>
-                     </Card>
-                 )}
-
-                {/* Separator between steps */}
-                 {currentStep > 2 && <Separator className="my-8" />}
+                {/* --- Step 2: Dynamic Form Renderer --- */}
+                 <div ref={step2Ref}> {/* Add ref for scrolling */}
+                     {currentStep >= 2 && selectedDoc?.id ? (
+                         <div className={`transition-opacity duration-500 ease-out ${currentStep === 2 ? 'opacity-100 animate-fade-in' : 'opacity-50 cursor-not-allowed'}`}>
+                             <DynamicFormRenderer
+                                 documentType={selectedDoc.name}
+                                 schema={currentFormSchema}
+                                 onSubmit={handleAnswersSubmit}
+                                 isReadOnly={currentStep > 2}
+                             />
+                         </div>
+                     ) : currentStep === 1 ? ( // Show placeholder only if step 1 is active but doc not selected
+                        <Card className="shadow-lg rounded-lg opacity-50 cursor-not-allowed bg-card border border-border">
+                             <CardHeader>
+                                 <div className="flex items-center space-x-2">
+                                     <ListChecks className="h-6 w-6 text-muted-foreground" />
+                                     <CardTitle className="text-2xl text-muted-foreground">{t('Step 2: Provide Details')}</CardTitle>
+                                 </div>
+                                 <CardDescription className="text-muted-foreground">
+                                     {t('Confirm a document type in Step 1 to see the questions.')}
+                                 </CardDescription>
+                             </CardHeader>
+                             <CardContent>
+                                 <p className="text-muted-foreground italic">{t('Waiting for document confirmation from Step 1...')}</p>
+                             </CardContent>
+                         </Card>
+                    ) : null} {/* Don't show placeholder if past step 2 */}
+                 </div>
 
 
-                {/* Step 3: Disclaimer */}
-                {currentStep >= 3 && questionnaireAnswers !== null && (
-                     <div className={`transition-opacity duration-500 ease-out ${currentStep === 3 ? 'opacity-100 animate-fade-in' : 'opacity-50 cursor-not-allowed'}`}>
-                        <DisclaimerStep
-                            onAgree={handleDisclaimerAgree}
-                            isReadOnly={currentStep > 3}
-                        />
-                     </div>
-                )}
-                {currentStep < 3 && (
-                    <Card className="shadow-lg rounded-lg opacity-50 cursor-not-allowed bg-card border border-border">
-                         <CardHeader>
-                             <div className="flex items-center space-x-2">
-                                 <AlertTriangle className="h-6 w-6 text-orange-500" />
-                                 <CardTitle className="text-2xl">{t('disclaimerStep.stepTitle')}</CardTitle> {/* Use existing key */}
-                             </div>
-                             <CardDescription>
-                                 {t('Read and agree to the disclaimer before proceeding.')} {/* Translate */}
-                             </CardDescription>
-                         </CardHeader>
-                         <CardContent>
-                             <p className="text-muted-foreground italic">{t('Complete the questions above to view the disclaimer.')}</p> {/* Translate */}
-                         </CardContent>
-                     </Card>
-                )}
-
-                 {/* Separator between steps */}
-                 {currentStep > 3 && <Separator className="my-8" />}
+                {/* --- Step 3: Disclaimer --- */}
+                 <div ref={step3Ref}> {/* Add ref for scrolling */}
+                    {currentStep >= 3 && questionnaireAnswers !== null ? (
+                         <div className={`transition-opacity duration-500 ease-out ${currentStep === 3 ? 'opacity-100 animate-fade-in' : 'opacity-50 cursor-not-allowed'}`}>
+                            <DisclaimerStep
+                                onAgree={handleDisclaimerAgree}
+                                isReadOnly={currentStep > 3}
+                            />
+                         </div>
+                    ) : currentStep <= 2 ? ( // Show placeholder only if before step 3
+                        <Card className="shadow-lg rounded-lg opacity-50 cursor-not-allowed bg-card border border-border">
+                             <CardHeader>
+                                 <div className="flex items-center space-x-2">
+                                     <AlertTriangle className="h-6 w-6 text-muted-foreground" />
+                                     <CardTitle className="text-2xl text-muted-foreground">{t('disclaimerStep.stepTitle')}</CardTitle>
+                                 </div>
+                                 <CardDescription className="text-muted-foreground">
+                                     {t('Read and agree to the disclaimer before proceeding.')}
+                                 </CardDescription>
+                             </CardHeader>
+                             <CardContent>
+                                 <p className="text-muted-foreground italic">{t('Complete the questions above to view the disclaimer.')}</p>
+                             </CardContent>
+                         </Card>
+                    ) : null} {/* Don't show placeholder if past step 3 */}
+                 </div>
 
 
-                {/* Step 4: PDF Preview & Signing */}
-                 {currentStep >= 4 && disclaimerAgreed && (
-                     <div className={`transition-opacity duration-500 ease-out ${currentStep === 4 ? 'opacity-100 animate-fade-in' : 'opacity-50 cursor-not-allowed'}`}>
-                         <PdfPreview
-                             documentDataUrl={pdfDataUrl}
-                             documentName={`${selectedDoc?.name || 'document'}.pdf`} // Use selected doc name
-                             isReadOnly={currentStep > 4}
-                         />
-                     </div>
-                 )}
-                 {currentStep < 4 && (
-                      <Card className="shadow-lg rounded-lg opacity-50 cursor-not-allowed bg-card border border-border">
-                         <CardHeader>
-                             <div className="flex items-center space-x-2">
-                                 <FileSignature className="h-6 w-6 text-primary" />
-                                 <CardTitle className="text-2xl">{t('pdfPreview.stepTitle')}</CardTitle> {/* Use existing key */}
-                             </div>
-                             <CardDescription>
-                                 {t('Review the generated document and sign it digitally.')} {/* Translate */}
-                             </CardDescription>
-                         </CardHeader>
-                         <CardContent>
-                             <p className="text-muted-foreground italic">{t('Agree to the disclaimer above to generate the document preview.')}</p> {/* Translate */}
-                         </CardContent>
-                     </Card>
-                 )}
+                 {/* --- Step 4: PDF Preview & Signing --- */}
+                 <div ref={step4Ref}> {/* Add ref for scrolling */}
+                     {currentStep >= 4 && disclaimerAgreed ? (
+                         <div className={`transition-opacity duration-500 ease-out ${currentStep === 4 ? 'opacity-100 animate-fade-in' : 'opacity-50 cursor-not-allowed'}`}>
+                             <PdfPreview
+                                 documentDataUrl={pdfDataUrl}
+                                 documentName={`${selectedDoc?.name || 'document'}.pdf`}
+                                 isReadOnly={currentStep > 4}
+                                 onSigningComplete={handleSigningComplete} // Pass the handler
+                             />
+                         </div>
+                     ) : currentStep <= 3 ? ( // Show placeholder only if before step 4
+                          <Card className="shadow-lg rounded-lg opacity-50 cursor-not-allowed bg-card border border-border">
+                             <CardHeader>
+                                 <div className="flex items-center space-x-2">
+                                     <FileSignature className="h-6 w-6 text-muted-foreground" />
+                                     <CardTitle className="text-2xl text-muted-foreground">{t('pdfPreview.stepTitle')}</CardTitle>
+                                 </div>
+                                 <CardDescription className="text-muted-foreground">
+                                     {t('Review the generated document and sign it digitally.')}
+                                 </CardDescription>
+                             </CardHeader>
+                             <CardContent>
+                                 <p className="text-muted-foreground italic">{t('Agree to the disclaimer above to generate the document preview.')}</p>
+                             </CardContent>
+                         </Card>
+                    ) : null} {/* Don't show placeholder if past step 4 */}
+                 </div>
 
-                 {/* Separator between steps */}
-                 {currentStep > 4 && <Separator className="my-8" />}
 
-                 {/* Step 5: Share & Download */}
-                  {currentStep >= 5 && pdfDataUrl && (
-                     <Card className="shadow-lg rounded-lg transition-opacity duration-500 ease-out opacity-100 animate-fade-in bg-card border border-border">
-                        <CardHeader>
-                            <div className="flex items-center space-x-2">
-                                 <ShareIcon />
-                                 <CardTitle className="text-2xl">{t('shareDownloadStep.stepTitle')}</CardTitle> {/* Translate */}
-                            </div>
-                            <CardDescription>
-                               {t('shareDownloadStep.description')} {/* Translate */}
-                            </CardDescription>
-                        </CardHeader>
-                        <CardContent>
-                            <p className="text-muted-foreground mb-4">{t('shareDownloadStep.actionsPlaceholder')}</p> {/* Translate */}
-                            <div className="flex space-x-4">
-                                <Button disabled variant="outline"> <Upload className="mr-2 h-4 w-4" /> {t('shareDownloadStep.shareButton')} {/* Translate */}</Button>
-                                <Button
-                                  onClick={() => {
-                                       if (pdfDataUrl) {
-                                           const link = document.createElement('a');
-                                           link.href = pdfDataUrl;
-                                           link.download = `${selectedDoc?.name || 'document'}_signed.pdf`; // Use selected doc name
-                                           document.body.appendChild(link);
-                                           link.click();
-                                           document.body.removeChild(link);
-                                       }
-                                   }}
-                                   disabled={!pdfDataUrl}
-                                >
-                                    <Download className="mr-2 h-4 w-4" /> {t('shareDownloadStep.downloadButton')} {/* Translate */}
-                                 </Button>
-                            </div>
-                        </CardContent>
-                    </Card>
-                  )}
-                  {currentStep < 5 && (
-                     <Card className="shadow-lg rounded-lg opacity-50 cursor-not-allowed bg-card border border-border">
-                           <CardHeader>
-                               <div className="flex items-center space-x-2">
-                                   <ShareIcon />
-                                   <CardTitle className="text-2xl">{t('shareDownloadStep.stepTitle')}</CardTitle> {/* Translate */}
-                               </div>
-                               <CardDescription>
-                                  {t('Securely share your document or download it after signing.')} {/* Translate */}
-                               </CardDescription>
-                           </CardHeader>
-                           <CardContent>
-                               <p className="text-muted-foreground italic">{t('shareDownloadStep.disabledDescription')}</p> {/* Translate */}
-                           </CardContent>
-                       </Card>
-                  )}
+                 {/* --- Step 5: Share & Download --- */}
+                  <div ref={step5Ref}> {/* Add ref for scrolling */}
+                      {currentStep >= 5 && pdfDataUrl ? (
+                         <Card className="shadow-lg rounded-lg transition-opacity duration-500 ease-out opacity-100 animate-fade-in bg-card border border-border">
+                            <CardHeader>
+                                <div className="flex items-center space-x-2">
+                                     <Download className="h-6 w-6 text-primary" /> {/* Changed icon */}
+                                     <CardTitle className="text-2xl">{t('shareDownloadStep.stepTitle')}</CardTitle>
+                                </div>
+                                <CardDescription>
+                                   {t('shareDownloadStep.description')}
+                                </CardDescription>
+                            </CardHeader>
+                            <CardContent>
+                                <p className="text-muted-foreground mb-4">{t('shareDownloadStep.actionsPlaceholder')}</p>
+                                <div className="flex space-x-4">
+                                    <Button disabled variant="outline"> <Upload className="mr-2 h-4 w-4" /> {t('shareDownloadStep.shareButton')}</Button>
+                                    <Button
+                                      onClick={() => {
+                                           if (pdfDataUrl) {
+                                               const link = document.createElement('a');
+                                               link.href = pdfDataUrl;
+                                               link.download = `${selectedDoc?.name || 'document'}_signed.pdf`;
+                                               document.body.appendChild(link);
+                                               link.click();
+                                               document.body.removeChild(link);
+                                           }
+                                       }}
+                                       disabled={!pdfDataUrl}
+                                    >
+                                        <Download className="mr-2 h-4 w-4" /> {t('shareDownloadStep.downloadButton')}
+                                     </Button>
+                                </div>
+                            </CardContent>
+                        </Card>
+                      ) : currentStep <= 4 ? ( // Show placeholder only if before step 5
+                         <Card className="shadow-lg rounded-lg opacity-50 cursor-not-allowed bg-card border border-border">
+                               <CardHeader>
+                                   <div className="flex items-center space-x-2">
+                                       <Download className="h-6 w-6 text-muted-foreground" />
+                                       <CardTitle className="text-2xl text-muted-foreground">{t('shareDownloadStep.stepTitle')}</CardTitle>
+                                   </div>
+                                   <CardDescription className="text-muted-foreground">
+                                      {t('Securely share your document or download it after signing.')}
+                                   </CardDescription>
+                               </CardHeader>
+                               <CardContent>
+                                   <p className="text-muted-foreground italic">{t('shareDownloadStep.disabledDescription')}</p>
+                               </CardContent>
+                           </Card>
+                      ): null} {/* Don't show placeholder if past step 5 */}
+                  </div>
 
             </div>
         </div>
 
         {/* Footer Sections */}
-         <TrustAndTestimonialsSection /> {/* Use the combined component */}
-
+         <TrustAndTestimonialsSection />
     </div>
   );
 }
 
 
 // Define SpeechRecognition types if not available globally (common issue)
-declare global {
-  interface Window {
-    SpeechRecognition: typeof SpeechRecognition;
-    webkitSpeechRecognition: typeof SpeechRecognition;
-  }
-  interface SpeechRecognitionErrorEvent extends Event {
-    readonly error: string;
-    readonly message: string;
-  }
-  interface SpeechRecognitionEvent extends Event {
-    readonly resultIndex: number;
-    readonly results: SpeechRecognitionResultList;
-  }
-}
+// Removed - No longer needed as StepOneInput is gone
+// declare global { ... }
+

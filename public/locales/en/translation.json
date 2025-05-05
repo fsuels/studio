@@ -33,7 +33,7 @@
   },
   "stepPrefix": "STEP",
   "stepOne": {
-    "title": "Step 1: Select a Category",
+    "title": "Step 1: Describe & Confirm",
     "categoryDescription": "Choose the legal area that best fits your need.",
     "selectDocDescription": "Choose the document that best fits your needs.",
     "text": "Text",
@@ -41,9 +41,9 @@
     "stopMic": "Stop Recording",
     "placeholder": "e.g., 'Rent out my apartment', 'Start a business', 'Someone won't stop contacting me...'",
     "listening": "Listening...",
-    "stateLabel": "Relevant U.S. State (Optional)",
+    "stateLabel": "Relevant U.S. State (Required)",
     "statePlaceholder": "Select State...",
-    "stateHelp": "Helps tailor document suggestions. Select if applicable.",
+    "stateHelp": "Helps tailor the document to your jurisdiction.",
     "analyze": "Analyze My Situation",
     "textDescriptionLabel": "Description (Text)",
     "micDescriptionLabel": "Description (Microphone Transcript)"
@@ -145,7 +145,7 @@
     "noDocumentDataDescriptionLoad": "Could not load PDF data for signing.",
     "signButton": "Sign Document Digitally",
     "signingButton": "Signing...",
-    "signedButton": "Document Signed - Proceed to Next Step",
+    "signedButton": "Document Signed - Proceed",
     "alreadySignedButton": "Document Already Signed"
   },
    "shareDownloadStep": {
@@ -154,7 +154,7 @@
       "actionsPlaceholder": "Actions available after document signing.",
       "shareButton": "Share Securely (Soon)",
       "downloadButton": "Download PDF",
-      "disabledDescription": "Sign the document above to enable sharing and download."
+      "disabledDescription": "Sign the document in the previous step to enable sharing and download."
    },
    "footer": {
       "howItWorks": "How It Works",
@@ -177,7 +177,7 @@
       "errorInvalidEmail": "Please enter a valid email address.",
       "invalidEmailMessage": "Please provide a valid email address to subscribe."
     },
-  "toasts": {
+    "toasts": {
       "subscribedTitle": "Subscribed!",
       "subscribedDescription": "Thanks for joining! Check your inbox for your free credits.",
       "invalidEmailTitle": "Invalid Email",
@@ -575,5 +575,11 @@
         "date": "2024-04-20",
         "body": "Coming soon..."
       }
+   },
+    "progressStepper": {
+     "step1": "Select Document",
+     "step2": "Customize",
+     "step3": "Finalize"
    }
 }
+
