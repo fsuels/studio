@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button'
 import { CheckCircle, ShieldCheck, Rocket } from 'lucide-react'
 import { motion } from 'framer-motion'; // Import motion
 import Link from 'next/link'; // Import Link
-import { Logo } from '@/components/layout/Logo'; // Import Logo
+// Removed Logo import as it's handled in the Header
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -63,46 +63,13 @@ export default function HomepageHeroSteps() {
             background: 'linear-gradient(135deg, hsl(var(--secondary)) 0%, hsl(var(--background)) 50%, hsl(180, 50%, 85%) 100%)',
         }}
     >
-        {/* Logo */}
-        <div className="absolute top-4 left-4 z-10">
-            <Logo className="h-8"/>
-        </div>
+        {/* Removed Logo - It's now in the Header */}
 
-        {/* Language Switcher */}
-        <div className="absolute top-4 right-4 z-10">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button
-                variant="outline"
-                size="sm"
-                className="text-xs font-medium text-foreground/80 hover:bg-foreground/5 hover:text-foreground px-3 py-1.5 border-border/50 shadow-sm"
-                aria-label="Select language"
-                disabled={!isHydrated}
-              >
-                {isHydrated ? (currentLanguage === 'EN' ? <FlagEN /> : <FlagES />) : null}
-                {isHydrated ? currentLanguage : '...'}
-                <ChevronDown className="ml-1 h-4 w-4 opacity-70" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="min-w-[8rem]">
-              <DropdownMenuItem
-                 onSelect={() => handleLanguageChange('en')}
-                 className={`text-xs ${currentLanguage === 'EN' ? 'font-medium text-primary' : ''}`}
-              >
-                 <FlagEN /> English {currentLanguage === 'EN' && <Check className="ml-auto h-4 w-4" />}
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                 onSelect={() => handleLanguageChange('es')}
-                 className={`text-xs ${currentLanguage === 'ES' ? 'font-medium text-primary' : ''}`}
-              >
-                 <FlagES /> Español {currentLanguage === 'ES' && <Check className="ml-auto h-4 w-4" />}
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
+        {/* Language Switcher - Moved to Header */}
+        {/* <div className="absolute top-4 right-4 z-10">...</div> */}
 
         {/* Main Content */}
-        <div className="relative z-0 pt-12 md:pt-0">
+        <div className="relative z-0 pt-0 md:pt-0"> {/* Adjusted padding */}
            {/* Pricing Teaser */}
            <div className="mb-4">
               <span className="inline-block bg-primary/10 text-primary px-3 py-1 rounded-full text-sm font-medium mr-2">
