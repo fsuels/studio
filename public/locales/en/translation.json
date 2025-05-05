@@ -213,8 +213,14 @@
         },
         "testimonialsTitle": "What Our Users Say",
         "testimonial1": "\"123LegalDoc saved me $500 on my lease agreement. Super easy to use!\"",
+        "testimonial1Name": "Sarah Chen",
+        "testimonial1Role": "Small Business Owner",
         "testimonial2": "\"Generating a partnership agreement took minutes instead of days. Highly recommended.\"",
+        "testimonial2Name": "Michael B.",
+        "testimonial2Role": "Freelancer",
         "testimonial3": "\"The AI inference was spot on, and the questionnaire was straightforward. Great service!\"",
+        "testimonial3Name": "Emily White",
+        "testimonial3Role": "Startup Founder",
         "featuredIn": "FEATURED IN",
         "satisfactionGuarantee": "100% Satisfaction Guarantee or Your Money Back"
     },
@@ -227,5 +233,13 @@
     "Review the generated document and sign it digitally.": "Review the generated document and sign it digitally.",
     "Agree to the disclaimer above to generate the document preview.": "Agree to the disclaimer above to generate the document preview.",
     "Securely share your document or download it after signing.": "Securely share your document or download it after signing.",
-    "State": "State"
+    "State": "State",
+    "homepage": {
+      "workflowTitle": "Blazing-Fast Workflow",
+      "workflowDescription": "AI guides you step-by-step, making document creation quick and intuitive.",
+      "secureTitle": "Secure & Compliant",
+      "secureDescription": "Generate encrypted PDFs and utilize time-locked share links for enhanced security.",
+      "costEffectiveTitle": "Cost-Effective",
+      "costEffectiveDescription": "Pay just $5 per document compared to $200+ typically charged by law firms."
+    }
 }
