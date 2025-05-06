@@ -4,7 +4,7 @@
 import { useState, useEffect } from 'react'; // Import hooks
 import Link from 'next/link'
 import { useTranslation } from 'react-i18next'
-import CartDrawer from '@/components/CartDrawer' // Keep CartDrawer import
+// Removed CartDrawer import as it's handled by MiniCartDrawer in Header
 
 export default function Nav() {
   const { t, i18n } = useTranslation(); // Add i18n instance
@@ -34,8 +34,7 @@ export default function Nav() {
             {isHydrated ? t(link.labelKey) : placeholderText}
           </Link>
         ))}
-        {/* Render CartDrawer only after hydration to ensure context is available */}
-        {isHydrated && <CartDrawer />}
+        {/* CartDrawer removed from here. MiniCartDrawer is rendered in Header.tsx */}
     </nav>
   )
 }
