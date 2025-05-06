@@ -13,7 +13,7 @@ import { PdfPreview } from '@/components/pdf-preview';
 import { ShareDownloadStep } from '@/components/share-download-step';
 import ProgressStepper from '@/components/ProgressStepper'; // Main stepper component
 import HeroSection from '@/components/landing/HomepageHeroSteps'; // Corrected import path
-import ThreeStepSection from '@/components/ThreeStepSection'; // Corrected import path
+import ThreeStepSection from '@/components/landing/ThreeStepSection'; // Corrected import path
 import { TrustAndTestimonialsSection } from '@/components/landing/TrustAndTestimonialsSection';
 import { GuaranteeBadge } from '@/components/landing/GuaranteeBadge';
 import { PromoBanner } from '@/components/landing/PromoBanner';
@@ -115,7 +115,7 @@ export default function Home() {
       }
     } catch (error: any) {
       console.error('[page.tsx] Network or unexpected error during analysis:', error);
-      setApiError(`Unable to reach server: ${error.message}. Original Description: "${input.description}"`);
+      setApiError(`An unexpected error occurred during analysis: ${error.message}. Original Description: "${input.description}"`);
       toast({
         title: t('toasts.networkErrorTitle', "Network Error"),
         description: t('toasts.networkErrorDescription', "Could not connect to the analysis service. Please check your connection."),
@@ -254,43 +254,44 @@ export default function Home() {
       case 1: // Category Selection
         return (
             <Step1DocumentSelector
-                selectedCategory={null} 
+                selectedCategory={null} // This prop might need to be managed if category selection should be sticky
                 onCategorySelect={(categoryKey) => {
+                    // Logic if a category is selected directly in Step1DocumentSelector
+                    // This might set some local state within Step1DocumentSelector or bubble up further if needed
                     console.log("Category selected in parent (Home):", categoryKey);
+                    // If Step1DocumentSelector internally manages its 'currentCategory' for view, this might be sufficient.
+                    // If the parent (Home) needs to know the category for other reasons, update a state here.
                 }}
-                onDocumentSelect={handleDocumentSelect}
-                // selectedState={globalSelectedState} // Prop removed, managed by StickyFilterBar
-                // onStateSelect={setGlobalSelectedState} // Prop removed
-                // searchTerm={globalSearchTerm} // Prop removed
-                // onSearchTermChange={setGlobalSearchTerm} // Prop removed
-                globalSelectedState={globalSelectedState} // Keep passing for internal logic if needed
-                globalSearchTerm={globalSearchTerm} // Keep passing for internal logic if needed
+                onDocumentSelect={handleDocumentSelect} // This is the crucial callback for when a document is chosen
+                globalSelectedState={globalSelectedState}
+                globalSearchTerm={globalSearchTerm}
             />
         );
-      case 2: 
-        if (aiSuggestions.length > 0 && userInput) { // Check if userInput is also available for context
+      case 2: // AI Suggestions - This step might be bypassed if direct selection is preferred
+        if (aiSuggestions.length > 0 && userInput) {
           return (
             <DocTypeSelector
-              userInput={userInput} // Pass userInput
+              userInput={userInput}
               suggestions={aiSuggestions}
-              onConfirm={(doc) => {
-                 // Ensure doc is a LegalDocument. AISuggestion might need mapping or casting
-                const fullDoc = documentLibrary.find(d => d.name === doc.documentType) as LegalDocument | undefined;
+              onConfirm={(docSuggestion) => {
+                const fullDoc = documentLibrary.find(d => d.name === docSuggestion.documentType) as LegalDocument | undefined;
                 if (fullDoc) {
                     handleDocumentSelect(fullDoc);
                 } else {
-                    toast({title: "Error", description: `Document type "${doc.documentType}" not found in library.`, variant: "destructive"})
-                    setCurrentStep(1); // Go back if doc not found
+                    toast({title: "Error", description: `Document type "${docSuggestion.documentType}" not found in library.`, variant: "destructive"})
+                    setCurrentStep(1); // Revert if the suggested doc is not found (should not happen if AI is well-trained)
                 }
               }}
               onSelectDifferent={() => {
-                  setCurrentStep(1);
-                  setAiSuggestions([]); 
+                  setCurrentStep(1); // Go back to manual selection
+                  setAiSuggestions([]); // Clear AI suggestions
               }}
             />
           );
         }
-        // Fallback if direct selection happened or no AI suggestions
+        // If no AI suggestions, or user skipped AI, they should be in Step 1 (Category/Doc Selection)
+        // Or, if direct selection leads here, it implies `selectedDocument` should be set.
+        // This fallback might need refinement based on exact flow logic.
          return <p>{t('Loading suggestions or select a document from Step 1...')}</p>;
 
 
@@ -322,7 +323,7 @@ export default function Home() {
         if (!pdfSigned) return <p>{t('Securely share your document or download it after signing.')}</p>;
         return (
           <ShareDownloadStep
-            signedPdfData={generatedPdfBlob} 
+            signedPdfData={generatedPdfBlob}
             documentName={`${selectedDocument?.name.replace(/\s/g, '_') || 'document'}_signed.pdf`}
             onStartOver={resetFlow}
           />
@@ -402,4 +403,7 @@ const Loader2 = ({ className }: { className?: string }) => (
     <path d="M21 12a9 9 0 1 1-6.219-8.56" />
   </svg>
 );
+
+// Helper function to get documentLibrary - can be removed if not directly used here
+// const getDocumentLibrary = () => documentLibrary;
 
