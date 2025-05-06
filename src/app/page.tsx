@@ -2,7 +2,6 @@
 "use client";
 
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { useTranslation } from 'react-i18next';
 import type { LegalDocument } from '@/lib/document-library';
 import { usStates } from '@/lib/document-library'; 
 import DocTypeSelector, { type AISuggestion } from '@/components/DocumentTypeSelector'; 
@@ -11,8 +10,7 @@ import { DisclaimerStep } from '@/components/disclaimer-step';
 import { PdfPreview } from '@/components/pdf-preview';
 import { ShareDownloadStep } from '@/components/share-download-step';
 import ProgressStepper from '@/components/ProgressStepper'; 
-import HeroSection from '@/components/landing/HomepageHeroSteps'; 
-import ThreeStepSection from '@/components/landing/ThreeStepSection'; 
+import HomepageHeroSteps from '@/components/landing/HomepageHeroSteps'; 
 import TrustAndTestimonialsSection from '@/components/landing/TrustAndTestimonialsSection';
 import { GuaranteeBadge } from '@/components/landing/GuaranteeBadge';
 import { PromoBanner } from '@/components/landing/PromoBanner';
@@ -21,7 +19,8 @@ import { useToast } from '@/hooks/use-toast';
 import { Separator } from '@/components/ui/separator';
 import { FileText, FileSignature, Check, Upload, AlertTriangle, Download, ListChecks, Loader2 } from 'lucide-react';
 import Step1DocumentSelector from '@/components/Step1DocumentSelector'; 
-import StickyFilterBar from '@/components/StickyFilterBar'; // Import StickyFilterBar
+import StickyFilterBar from '@/components/StickyFilterBar'; 
+import { useTranslation } from 'react-i18next';
 
 
 const ShareIcon = () => (
@@ -71,7 +70,7 @@ export default function Home() {
     setSelectedDocument(doc);
     setCurrentStep(2); 
     scrollToTop();
-    if (isHydrated) { // Ensure toast is called only on client
+    if (isHydrated) { 
         toast({ title: t('toasts.docTypeConfirmedTitle'), description: t('toasts.docTypeConfirmedDescription', { docName: doc.name }) });
     }
   }, [scrollToTop, t, toast, isHydrated]);
@@ -180,7 +179,7 @@ export default function Home() {
 
 
   const renderStepContent = () => {
-    if (!isHydrated) { // Don't render steps content until hydrated
+    if (!isHydrated) { 
         return <div className="text-center py-10"><Loader2 className="h-8 w-8 animate-spin mx-auto" /> <p>{t('Loading...')}</p></div>;
     }
     console.log(`[page.tsx] Rendering content for step: ${currentStep}`);
@@ -242,8 +241,8 @@ export default function Home() {
   return (
     <>
       <PromoBanner />
-      <HeroSection />
-      <ThreeStepSection />
+      <HomepageHeroSteps />
+      {/* <ThreeStepSection /> REMOVED: This is now part of HomepageHeroSteps */}
       <TrustAndTestimonialsSection />
       <GuaranteeBadge />
 
@@ -265,7 +264,6 @@ export default function Home() {
                 </div>
             )}
             
-            {/* Conditionally render StickyFilterBar only on client and when step is 1 */}
             {isHydrated && currentStep === 1 && (
               <StickyFilterBar
                 searchTerm={globalSearchTerm}
