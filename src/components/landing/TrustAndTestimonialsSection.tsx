@@ -2,40 +2,49 @@
 'use client'
 
 import { useTranslation } from 'react-i18next'
-import { useEffect, useState, useRef } from 'react' // Import useRef
-import { Button } from '@/components/ui/button'; // Keep Button import if used elsewhere or for future use
-import { Card, CardContent } from '@/components/ui/card'; // Import Card components
-import { ChevronLeft, ChevronRight, FileText, Lock, CheckCircle, ShieldCheck } from 'lucide-react'; // Import icons
-import Image from 'next/image'; // Import Image if needed for avatars later
+import { useEffect, useState, useRef } from 'react'
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card'; // Not used directly, but good to keep if styling is similar
+import { ChevronLeft, ChevronRight, FileText, Lock, CheckCircle, ShieldCheck } from 'lucide-react';
+import Image from 'next/image';
 
 export default function TrustAndTestimonialsSection() {
-  const { t, i18n } = useTranslation()
-  const [docCount, setDocCount] = useState(4200)
+  const { t, i18n } = useTranslation();
+  const [docCount, setDocCount] = useState(4200);
   const [isHydrated, setIsHydrated] = useState(false);
-  const scrollRef = useRef<HTMLDivElement>(null) // Ref for the scrollable div
+  const [testimonialCount, setTestimonialCount] = useState(0); // Initialize with 0
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setIsHydrated(true);
     const interval = setInterval(() => {
-      setDocCount((prev) => prev + Math.floor(Math.random() * 3))
-    }, 4000)
-    return () => clearInterval(interval)
-  }, [])
+      setDocCount((prev) => prev + Math.floor(Math.random() * 3));
+    }, 4000);
+    return () => clearInterval(interval);
+  }, []);
+
+  // Calculate testimonialCount after hydration when i18n is ready
+  useEffect(() => {
+    if (isHydrated) {
+      const testimonialsObject = t('home.testimonials', { returnObjects: true, ns: 'translation' });
+      if (typeof testimonialsObject === 'object' && testimonialsObject !== null && !Array.isArray(testimonialsObject)) {
+        const count = Object.keys(testimonialsObject).filter(key => key.startsWith('t') && typeof testimonialsObject[key] === 'object').length;
+        setTestimonialCount(count > 0 ? count : 3); // Fallback to 3 if no 'tX' keys are found or translations are missing
+      } else {
+        setTestimonialCount(3); // Fallback if translations are not as expected
+      }
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isHydrated, t, i18n.language]); // Add i18n.language as dependency
 
   const placeholderText = '...';
   const formattedCount = isHydrated ? docCount.toLocaleString(i18n.language) : placeholderText;
 
-  // Get the actual number of defined testimonials (currently 3)
-  const testimonialCount = Object.keys(t('home.testimonials', { returnObjects: true })).filter(key => key.startsWith('t')).length;
-
-  // Scroll function for buttons
   const scroll = (dir: 'left' | 'right') => {
-    if (!scrollRef.current) return
-    // Calculate scroll amount (e.g., width of one card + gap)
-    // Assuming card width is 320px (w-80) + gap 24px (space-x-6)
-    const scrollAmount = 320 + 24;
-    scrollRef.current.scrollBy({ left: dir === 'right' ? scrollAmount : -scrollAmount, behavior: 'smooth' })
-  }
+    if (!scrollRef.current) return;
+    const scrollAmount = 320 + 24; // w-80 (320px) + space-x-6 (24px)
+    scrollRef.current.scrollBy({ left: dir === 'right' ? scrollAmount : -scrollAmount, behavior: 'smooth' });
+  };
 
    const scrollToWorkflow = () => {
     const workflowSection = document.getElementById('workflow-start');
@@ -46,10 +55,9 @@ export default function TrustAndTestimonialsSection() {
     }
   };
 
+
   return (
-    // Using theme colors and styles
     <section className="bg-secondary/30 py-20 px-4 text-center">
-      {/* Trust Strip */}
       <h2 className="text-sm uppercase text-muted-foreground tracking-wide mb-4 font-medium">
         {isHydrated ? t('home.trustStrip.title') : placeholderText}
       </h2>
@@ -68,106 +76,103 @@ export default function TrustAndTestimonialsSection() {
         </div>
       </div>
 
-      {/* Testimonials Title */}
       <h3 className="text-3xl font-bold text-foreground mb-10">
         {isHydrated ? t('home.testimonials.title') : placeholderText}
       </h3>
 
-      {/* Testimonials Carousel */}
       <div className="relative max-w-6xl mx-auto">
-        {/* Left Arrow */}
         <Button
           variant="outline"
           size="icon"
           className="absolute left-[-10px] md:left-[-20px] top-1/2 z-10 -translate-y-1/2 bg-card hover:bg-muted rounded-full shadow-md"
           onClick={() => scroll('left')}
           aria-label="Scroll left"
+          disabled={!isHydrated}
         >
           <ChevronLeft className="h-5 w-5" />
         </Button>
 
-        {/* Scrollable Container */}
         <div
           ref={scrollRef}
-          className="flex overflow-x-auto space-x-6 scrollbar-hide px-4 py-4" // Added padding for cards near edges
+          className="flex overflow-x-auto space-x-6 scrollbar-hide px-4 py-4"
           style={{ scrollSnapType: 'x mandatory' }}
         >
-          {/* Loop through the defined testimonials */}
-          {Array.from({ length: testimonialCount }).map((_, i) => (
+          {!isHydrated || testimonialCount === 0 ? (
+            // Skeleton loaders for testimonials
+            Array.from({ length: 3 }).map((_, i) => (
+              <div
+                key={`skeleton-${i}`}
+                className="bg-card p-6 rounded-2xl shadow-lg w-72 md:w-80 shrink-0 flex flex-col border border-border animate-pulse"
+                style={{ scrollSnapAlign: 'start' }}
+              >
+                <div className="h-16 w-16 rounded-full bg-muted mb-4 mx-auto"></div>
+                <div className="h-4 bg-muted rounded w-3/4 mb-2"></div>
+                <div className="h-4 bg-muted rounded w-full mb-1"></div>
+                <div className="h-4 bg-muted rounded w-5/6 mb-4"></div>
+                <div className="mt-auto text-center">
+                  <div className="h-4 bg-muted rounded w-1/2 mb-1 mx-auto"></div>
+                  <div className="h-3 bg-muted rounded w-1/3 mx-auto"></div>
+                </div>
+              </div>
+            ))
+          ) : (
+            // Actual testimonials
+            Array.from({ length: testimonialCount }).map((_, i) => (
              <div
                key={i}
-               className="bg-card p-6 rounded-2xl shadow-lg w-72 md:w-80 text-left shrink-0 flex flex-col border border-border transition hover:shadow-xl" // Use theme colors
+               className="bg-card p-6 rounded-2xl shadow-lg w-72 md:w-80 text-left shrink-0 flex flex-col border border-border transition hover:shadow-xl"
                style={{ scrollSnapAlign: 'start' }}
              >
-               {/* Placeholder for Avatar - Add Image component here if needed */}
                 <Image
-                   src={`https://picsum.photos/seed/${i+30}/60/60`} // Placeholder image
-                   alt={isHydrated ? t(`home.testimonials.t${i + 1}.name`, 'Testimonial Avatar') : 'Loading...'}
+                   src={`https://picsum.photos/seed/${i+30}/60/60`}
+                   alt={isHydrated ? t(`home.testimonials.t${i + 1}.name`, { defaultValue: 'Testimonial Avatar'}) : 'Loading...'}
                    width={60}
                    height={60}
                    className="rounded-full mb-4 border-2 border-primary/30 mx-auto"
-                   data-ai-hint="person portrait professional" // Added AI hint
+                   data-ai-hint="person portrait professional"
                  />
                <p className="italic text-foreground/90 mb-4 leading-relaxed flex-grow">
-                 "{isHydrated ? t(`home.testimonials.t${i + 1}.quote`) : placeholderText}"
+                 "{isHydrated ? t(`home.testimonials.t${i + 1}.quote`, { defaultValue: 'Loading quote...'}) : placeholderText}"
                </p>
-               <div className="mt-auto text-center"> {/* Centered name/title */}
+               <div className="mt-auto text-center">
                  <p className="font-semibold text-sm text-foreground">
-                   {isHydrated ? t(`home.testimonials.t${i + 1}.name`) : placeholderText}
+                   {isHydrated ? t(`home.testimonials.t${i + 1}.name`, { defaultValue: 'Loading name...'}) : placeholderText}
                  </p>
                  <p className="text-xs text-muted-foreground">
-                   {isHydrated ? t(`home.testimonials.t${i + 1}.title`) : placeholderText}
+                   {isHydrated ? t(`home.testimonials.t${i + 1}.title`, { defaultValue: 'Loading title...'}) : placeholderText}
                  </p>
                </div>
              </div>
-          ))}
-           {/* Optional: Add empty divs for spacing/visual effect if needed */}
+            ))
+          )}
         </div>
 
-        {/* Right Arrow */}
         <Button
           variant="outline"
           size="icon"
           className="absolute right-[-10px] md:right-[-20px] top-1/2 z-10 -translate-y-1/2 bg-card hover:bg-muted rounded-full shadow-md"
           onClick={() => scroll('right')}
           aria-label="Scroll right"
+          disabled={!isHydrated}
         >
           <ChevronRight className="h-5 w-5" />
         </Button>
       </div>
 
-
-       {/* Guarantee and CTA */}
       <div className="mt-20 flex flex-col items-center space-y-6">
-         {/* Guarantee Badge */}
          <div className="inline-flex items-center gap-2 bg-card text-sm px-5 py-3 rounded-full shadow-md border border-border">
            <ShieldCheck className="h-5 w-5 text-primary" />
            <span className="font-medium text-foreground/90">{isHydrated ? t('home.moneyBackGuarantee') : placeholderText}</span>
          </div>
-          {/* Call to Action Button */}
           <Button
               size="lg"
               className="mt-6 px-8 py-3 text-lg bg-accent hover:bg-accent/90 text-accent-foreground transition rounded-full font-semibold shadow-lg hover:shadow-xl transform hover:scale-105"
-              onClick={scrollToWorkflow} // Added onClick handler
+              onClick={scrollToWorkflow}
+              disabled={!isHydrated}
            >
               {isHydrated ? t('home.callToAction') : placeholderText}
            </Button>
       </div>
-
     </section>
-  )
+  );
 }
-
-// Helper CSS for scrollbar-hide if not using a plugin
-// Add this to your global CSS file (e.g., src/app/globals.css)
-/*
-@layer utilities {
-  .scrollbar-hide {
-    -ms-overflow-style: none; // IE and Edge
-    scrollbar-width: none; // Firefox
-  }
-  .scrollbar-hide::-webkit-scrollbar {
-    display: none; // Safari and Chrome
-  }
-}
-*/
