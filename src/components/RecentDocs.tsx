@@ -1,7 +1,5 @@
 'use client'
-tsx
 // src/components/RecentDocs.tsx
-'use client'
 
 import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
