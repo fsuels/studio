@@ -1,3 +1,4 @@
+// src/components/Step1DocumentSelector.tsx
 'use client';
 
 import React, { useState, useEffect, useMemo } from "react";
@@ -5,16 +6,10 @@ import { useTranslation } from "react-i18next";
 import { documentLibrary, usStates, type LegalDocument } from "@/lib/document-library";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+// Select component is removed from here as state selection is now global
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowLeft, FileText, Search, Landmark, Briefcase, Home, Users, User, ScrollText, Handshake, ShieldQuestion, GraduationCap, FileIcon as PaperIcon } from "lucide-react"; // Added PaperIcon
-import { Label } from "@/components/ui/label";
+import { ArrowLeft, FileText, Search, Landmark, Briefcase, Home, Users, User, ScrollText, Handshake, ShieldQuestion, GraduationCap, FileIcon as PaperIcon } from "lucide-react"; 
+import { Label } from "@/components/ui/label"; // Label might still be useful for local search
 
 // User-friendly category definitions with icons
 const CATEGORY_LIST = [
@@ -24,33 +19,32 @@ const CATEGORY_LIST = [
   { key: 'Family', label: 'Family', icon: Users },
   { key: 'Personal', label: 'Personal', icon: User },
   { key: 'Estate Planning', label: 'Estate Planning', icon: ScrollText },
-  { key: 'Transactions', label: 'Transactions', icon: Handshake },
-  { key: 'Miscellaneous', label: 'General', icon: FileText }, // Fallback / Misc
+  { key: 'Miscellaneous', label: 'General', icon: FileText }, 
 ];
 
 
 interface Step1DocumentSelectorProps {
   selectedCategory: string | null;
-  selectedState: string;
   onCategorySelect: (categoryKey: string | null) => void;
-  onStateSelect: (stateCode: string) => void;
+  // onStateSelect is removed as it's handled globally
   onDocumentSelect: (doc: LegalDocument) => void;
   isReadOnly?: boolean;
+  globalSearchTerm: string; // New prop for global search
+  globalSelectedState: string; // New prop for global state
 }
 
 export default function Step1DocumentSelector({
   selectedCategory,
-  selectedState,
   onCategorySelect,
-  onStateSelect,
   onDocumentSelect,
-  isReadOnly = false
+  isReadOnly = false,
+  globalSearchTerm,
+  globalSelectedState
 }: Step1DocumentSelectorProps) {
   const { t, i18n } = useTranslation();
   const [view, setView] = useState<'categories' | 'documents'>(selectedCategory ? 'documents' : 'categories');
   const [currentCategory, setCurrentCategory] = useState<string | null>(selectedCategory);
-  const [docSearch, setDocSearch] = useState<string>('');
-  const [internalState, setInternalState] = useState<string>(selectedState);
+  const [docSearch, setDocSearch] = useState<string>(''); // Local search within category
   const [isHydrated, setIsHydrated] = useState(false);
 
   useEffect(() => {
@@ -62,14 +56,9 @@ export default function Step1DocumentSelector({
     setView(selectedCategory ? 'documents' : 'categories');
   }, [selectedCategory]);
 
-   useEffect(() => {
-    setInternalState(selectedState);
-  }, [selectedState]);
-
 
   const sortedCategories = useMemo(() => {
        const uniqueCategoriesMap = new Map<string, { key: string, label: string, icon: React.ElementType }>();
-       // Use CATEGORY_LIST as the source for categories to display
        CATEGORY_LIST.forEach(catInfo => {
            if (!uniqueCategoriesMap.has(catInfo.key)) {
                uniqueCategoriesMap.set(catInfo.key, catInfo);
@@ -84,62 +73,80 @@ export default function Step1DocumentSelector({
   }, [isHydrated, i18n.language, t]);
 
 
-  const docsInCategory = useMemo(() => {
-    if (!currentCategory) return [];
-    return documentLibrary.filter(doc =>
-        doc.category === currentCategory &&
-        doc.id !== 'general-inquiry'
-     );
-  }, [currentCategory]);
-
+  // Filter documents based on selected category, local doc search, global search, and global state
   const filteredDocs = useMemo(() => {
-      if (docSearch.trim() === '') return docsInCategory;
-      const lowerSearch = docSearch.toLowerCase();
-      return docsInCategory.filter(doc =>
-         (isHydrated ? t(doc.name, doc.name) : doc.name).toLowerCase().includes(lowerSearch) ||
-         (doc.aliases?.some(alias => alias.toLowerCase().includes(lowerSearch))) ||
-         (languageSupportsSpanish(doc.languageSupport) && doc.aliases_es?.some(alias => alias.toLowerCase().includes(lowerSearch))) ||
-         (isHydrated && languageSupportsSpanish(doc.languageSupport) && doc.name_es && t(doc.name_es, doc.name_es).toLowerCase().includes(lowerSearch))
+    let docs = documentLibrary;
+
+    // 1. Filter by global search term (applies to all documents if no category selected, or within category if selected)
+    if (globalSearchTerm.trim() !== '') {
+      const lowerGlobalSearch = globalSearchTerm.toLowerCase();
+      docs = docs.filter(doc =>
+        (isHydrated ? t(doc.name, doc.name) : doc.name).toLowerCase().includes(lowerGlobalSearch) ||
+        (doc.aliases?.some(alias => alias.toLowerCase().includes(lowerGlobalSearch))) ||
+        (languageSupportsSpanish(doc.languageSupport) && doc.aliases_es?.some(alias => alias.toLowerCase().includes(lowerGlobalSearch))) ||
+        (isHydrated && languageSupportsSpanish(doc.languageSupport) && doc.name_es && t(doc.name_es, doc.name_es).toLowerCase().includes(lowerGlobalSearch)) ||
+        (isHydrated ? t(doc.description, doc.description) : doc.description).toLowerCase().includes(lowerGlobalSearch) ||
+        (isHydrated && languageSupportsSpanish(doc.languageSupport) && doc.description_es && t(doc.description_es, doc.description_es).toLowerCase().includes(lowerGlobalSearch))
       );
-  }, [docsInCategory, docSearch, t, i18n.language, isHydrated]);
+    }
+    
+    // 2. Filter by global selected state
+    if (globalSelectedState && globalSelectedState !== 'all') {
+        docs = docs.filter(doc => doc.states === 'all' || doc.states?.includes(globalSelectedState));
+    }
+
+    // 3. If a category is selected, filter by that category
+    if (currentCategory) {
+      docs = docs.filter(doc => doc.category === currentCategory);
+    }
+    
+    // 4. Filter by local document search (within the already filtered list)
+    if (view === 'documents' && docSearch.trim() !== '') {
+        const lowerDocSearch = docSearch.toLowerCase();
+        docs = docs.filter(doc =>
+            (isHydrated ? t(doc.name, doc.name) : doc.name).toLowerCase().includes(lowerDocSearch) ||
+            (doc.aliases?.some(alias => alias.toLowerCase().includes(lowerDocSearch))) ||
+            (languageSupportsSpanish(doc.languageSupport) && doc.aliases_es?.some(alias => alias.toLowerCase().includes(lowerDocSearch))) ||
+            (isHydrated && languageSupportsSpanish(doc.languageSupport) && doc.name_es && t(doc.name_es, doc.name_es).toLowerCase().includes(lowerDocSearch))
+        );
+    }
+    
+    return docs.filter(doc => doc.id !== 'general-inquiry'); // Always exclude general inquiry
+  }, [currentCategory, docSearch, globalSearchTerm, globalSelectedState, view, t, i18n.language, isHydrated]);
+
 
    const languageSupportsSpanish = (support: string[]): boolean => support.includes('es');
 
 
   const handleCategoryClick = (key: string) => {
     if (isReadOnly) return;
-    onCategorySelect(key);
-    setCurrentCategory(key);
+    onCategorySelect(key); // Notify parent of category selection
+    // setCurrentCategory(key); // This is now handled by useEffect based on selectedCategory prop
     setDocSearch('');
     setView('documents');
   };
 
   const handleBackToCategories = () => {
     if (isReadOnly) return;
-    onCategorySelect(null);
-    setCurrentCategory(null);
+    onCategorySelect(null); // Reset category in parent
+    // setCurrentCategory(null); // Handled by useEffect
     setDocSearch('');
     setView('categories');
   };
 
-  const handleStateChange = (value: string) => {
-       const actualValue = value === '_placeholder_' ? '' : value;
-       if (isReadOnly) return;
-       setInternalState(actualValue);
-       onStateSelect(actualValue);
-  }
-
   const handleDocSelect = (doc: LegalDocument) => {
-    if (isReadOnly || !internalState) {
-        // Optionally, show a toast or alert message if state is required
-        // toast({ title: "State Required", description: "Please select a state before choosing a document." });
+    if (isReadOnly || !globalSelectedState) { // Check globalSelectedState
+        toast({ 
+            title: t('State Required', {defaultValue: "State Required"}), 
+            description: t('Please select a state from the filter bar above before choosing a document.', {defaultValue: "Please select a state from the filter bar above before choosing a document."}),
+            variant: "destructive" 
+        });
         return;
     }
     onDocumentSelect(doc);
-    // Auto-advance is handled by parent component's useEffect
   };
 
-   const statePlaceholder = t('stepOne.statePlaceholder', 'Select State...');
+  const { toast } = useToast(); // Ensure toast is defined
 
   if (!isHydrated) {
     return <div className="h-96 animate-pulse bg-muted rounded-lg shadow-lg border border-border"></div>;
@@ -149,9 +156,9 @@ export default function Step1DocumentSelector({
      <Card className={`step-card ${isReadOnly ? 'opacity-50 cursor-not-allowed pointer-events-none' : 'opacity-100'}`}>
         <CardHeader className="step-card__header">
              <PaperIcon className="step-card__icon" />
-             <div> {/* Wrapper for title and subtitle to ensure correct layout with icon */}
+             <div> 
                 <CardTitle className="step-card__title">
-                    {t('stepOne.title')} {/* Always "Step 1: Select a Category" */}
+                    {t('stepOne.title')} 
                 </CardTitle>
                 <CardDescription className="step-card__subtitle">
                     {view === 'categories'
@@ -162,9 +169,8 @@ export default function Step1DocumentSelector({
              </div>
         </CardHeader>
 
-        {/* Conditional Back Button for Document View - Placed below header */}
         {view === 'documents' && (
-            <div className="px-6 pb-4 border-b border-border"> {/* Added padding and border */}
+            <div className="px-6 pb-4 border-b border-border"> 
                  <div className="flex items-center justify-between">
                      <Button variant="outline" size="sm" onClick={handleBackToCategories} disabled={isReadOnly}>
                        <ArrowLeft className="mr-2 h-4 w-4" /> {t('docTypeSelector.backToCategories')}
@@ -179,7 +185,6 @@ export default function Step1DocumentSelector({
         <CardContent className="step-content space-y-6 pt-6">
              {view === 'categories' ? (
                 <div className="animate-fade-in space-y-4">
-                     {/* Category Search REMOVED for initial category view as per instruction */}
                      {sortedCategories.length > 0 ? (
                          <div className="category-grid pt-2">
                              {sortedCategories.map(cat => (
@@ -203,50 +208,27 @@ export default function Step1DocumentSelector({
                          <p className="text-muted-foreground italic text-center py-6">{t('docTypeSelector.noCategoriesFound')}</p>
                      )}
                 </div>
-             ) : (
+             ) : ( // Document View
                  <div className="animate-fade-in space-y-6">
-                    <div className="mb-4">
-                        <Label htmlFor="state-select-step1" className="block text-sm font-medium text-foreground mb-1">
-                           {t('stepOne.stateLabel')} <span className="text-destructive">*</span>
-                        </Label>
-                        <Select
-                          value={internalState || '_placeholder_'}
-                          onValueChange={handleStateChange}
-                          required
-                          disabled={isReadOnly}
-                          name="state-select-step1"
-                        >
-                           <SelectTrigger id="state-select-step1" className={`w-full text-base md:text-sm ${!internalState ? 'text-muted-foreground' : ''} ${isReadOnly ? 'bg-muted/50 border-dashed' : 'bg-background'}`} style={{ minHeight: '44px' }}>
-                               <SelectValue placeholder={statePlaceholder} />
-                           </SelectTrigger>
-                           <SelectContent>
-                               <SelectItem value="_placeholder_" disabled>{statePlaceholder}</SelectItem>
-                               {usStates.map(state => (
-                                  <SelectItem key={state.value} value={state.value}>
-                                    {t(state.label, state.label)} ({state.value})
-                                  </SelectItem>
-                               ))}
-                           </SelectContent>
-                       </Select>
-                        <p className="text-xs text-muted-foreground mt-1">{t('stepOne.stateHelp')}</p>
-                     </div>
-
-                     {docsInCategory.length > 7 && internalState && (
+                    {/* State selector is now global, handled by StickyFilterBar */}
+                     
+                     {/* Local Document Search within category (if many docs) */}
+                     {documentLibrary.filter(d => d.category === currentCategory).length > 7 && globalSelectedState && (
                          <div className="relative mb-4">
                              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                              <Input
-                                type="search" /* Changed to search for better semantics */
+                                type="search" 
                                 placeholder={t('docTypeSelector.searchPlaceholder')}
                                 value={docSearch}
                                 onChange={e => !isReadOnly && setDocSearch(e.target.value)}
-                                disabled={isReadOnly || !internalState}
-                                className={`w-full pl-10 text-base md:text-sm ${isReadOnly || !internalState ? 'bg-muted/50 border-dashed cursor-not-allowed' : 'bg-background'}`}
+                                disabled={isReadOnly || !globalSelectedState}
+                                className={`w-full pl-10 text-base md:text-sm ${isReadOnly || !globalSelectedState ? 'bg-muted/50 border-dashed cursor-not-allowed' : 'bg-background'}`}
                                 aria-label={t('docTypeSelector.searchPlaceholder')}
                              />
                          </div>
                      )}
 
-                      {internalState ? (
+                      {globalSelectedState ? ( // Only show documents if a state is selected globally
                          <>
                             {filteredDocs.length > 0 ? (
                                 <div className="document-grid pt-4 animate-fade-in">
@@ -280,7 +262,7 @@ export default function Step1DocumentSelector({
                             )}
                          </>
                       ) : (
-                         <p className="text-muted-foreground italic text-center py-6">{t('Please select a state first.')}</p>
+                         <p className="text-muted-foreground italic text-center py-6">{t('Please select a state from the filter bar above to see documents.')}</p>
                       )}
                  </div>
              )}
@@ -288,3 +270,15 @@ export default function Step1DocumentSelector({
      </Card>
   );
 }
+
+// Helper function to get useToast -- ensure it's imported if not globally available
+const useToast = () => {
+  // This is a placeholder. In a real app, useToast would come from your UI library (e.g., shadcn/ui)
+  // or a custom hook that manages toast state.
+  return {
+    toast: ({ title, description, variant }: { title: string; description?: string; variant?: string }) => {
+      console.log(`Toast: ${title} - ${description} (${variant})`);
+      // alert(`${title}\n${description}`); // Simple alert for demo
+    },
+  };
+};
