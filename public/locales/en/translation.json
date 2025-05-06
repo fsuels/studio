@@ -282,7 +282,10 @@
       "resources": "Resources",
       "blog": "Blog",
       "faq": "FAQ",
-      "support": "Support"
+      "support": "Support",
+      "searchPlaceholder": "Search documents...",
+      "signUp": "Sign Up",
+      "signIn": "Sign In"
     },
     "pricing": {
       "title": "Simple, Transparent Pricing",
@@ -609,4 +612,3 @@
    "Please select a state from the filter bar above before choosing a document.": "Please select a state from the filter bar above before choosing a document.",
    "Back": "Back"
 }
-

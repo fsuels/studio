@@ -1,21 +1,21 @@
 // src/components/layout/Header.tsx
-'use client'; // Make this a client component to use hooks
+'use client'; 
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Logo } from '@/components/layout/Logo';
-import Nav from '@/components/Nav'; // Import the Nav component
-import { useTranslation } from 'react-i18next'; // Import useTranslation
+import Nav from '@/components/Nav'; 
+import { useTranslation } from 'react-i18next'; 
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"; // Import Dropdown
-import { Button } from '@/components/ui/button'; // Import Button
+} from "@/components/ui/dropdown-menu"; 
+import { Button } from '@/components/ui/button'; 
 import MiniCartDrawer from '@/components/MiniCartDrawer';
-// import { ThemeToggle } from '@/components/ThemeToggle'; // Removed ThemeToggle
-import { Check, ChevronDown, Globe, LogIn } from 'lucide-react'; // Icons for dropdown, added Globe for placeholder, LogIn for login button
+import { Check, ChevronDown, Globe, UserPlus, LogIn, Search as SearchIcon } from 'lucide-react'; 
+import { Input } from '@/components/ui/input';
 
 // Inline SVG Flags for better portability and less dependency on external files
 const FlagUS = () => (
@@ -59,9 +59,10 @@ const FlagES = () => (
 
 
 export function Header() {
-  const { i18n, t } = useTranslation(); // Added t for Login button text
+  const { i18n, t } = useTranslation(); 
   const [isHydrated, setIsHydrated] = useState(false);
-  const [currentLanguageDisplay, setCurrentLanguageDisplay] = useState('...'); // Placeholder for language display
+  const [currentLanguageDisplay, setCurrentLanguageDisplay] = useState('...'); 
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     setIsHydrated(true);
@@ -80,6 +81,14 @@ export function Header() {
     });
   };
 
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    // Implement search logic here, e.g., navigate to a search results page
+    // For now, just log the query
+    console.log("Search query:", searchQuery);
+    // router.push(`/search?q=${encodeURIComponent(searchQuery)}`);
+  };
+
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -91,20 +100,21 @@ export function Header() {
            <div className="hidden md:flex flex-1 justify-center">
               <Nav />
            </div>
-          <nav className="flex items-center gap-2"> 
-            <Button
-              variant="outline"
-              size="sm"
-              className="text-xs font-medium text-foreground/80 hover:bg-foreground/5 hover:text-foreground px-2 py-1.5 md:px-3 border-border/50 shadow-sm flex items-center"
-              asChild
-              disabled={!isHydrated}
-            >
-              <Link href="/dashboard">
-                <LogIn className="h-4 w-4 mr-1 md:mr-2" />
-                <span className="hidden sm:inline">{isHydrated ? t('Login', {defaultValue: 'Login'}) : '...'}</span>
-              </Link>
-            </Button>
-            {isHydrated && <MiniCartDrawer />}
+          <nav className="flex items-center gap-2">
+            {/* Search Input */}
+             <form onSubmit={handleSearch} className="relative hidden sm:flex items-center mr-2">
+                <SearchIcon className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                <Input
+                    type="search"
+                    placeholder={t('nav.searchPlaceholder', { defaultValue: 'Search documents...' })}
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="h-9 pl-10 text-sm rounded-md w-40 md:w-56"
+                    disabled={!isHydrated}
+                />
+             </form>
+
+            {/* Language Switcher */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
@@ -134,6 +144,34 @@ export function Header() {
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
+
+            {/* Auth Buttons */}
+             <Button
+                variant="outline"
+                size="sm"
+                className="text-xs font-medium text-foreground/80 hover:bg-foreground/5 hover:text-foreground px-2 py-1.5 md:px-3 border-border/50 shadow-sm flex items-center"
+                asChild
+                disabled={!isHydrated}
+             >
+                <Link href="/dashboard?auth=signup"> {/* Assuming /dashboard handles auth states */}
+                   <UserPlus className="h-4 w-4 mr-1 md:mr-2" />
+                   <span className="hidden sm:inline">{isHydrated ? t('nav.signUp', {defaultValue: 'Sign Up'}) : '...'}</span>
+                </Link>
+             </Button>
+             <Button
+                variant="default" // Default variant for primary action
+                size="sm"
+                className="text-xs font-medium px-2 py-1.5 md:px-3 shadow-sm flex items-center"
+                asChild
+                disabled={!isHydrated}
+             >
+                <Link href="/dashboard?auth=signin">
+                    <LogIn className="h-4 w-4 mr-1 md:mr-2" />
+                    <span className="hidden sm:inline">{isHydrated ? t('nav.signIn', {defaultValue: 'Sign In'}) : '...'}</span>
+                </Link>
+             </Button>
+
+            {isHydrated && <MiniCartDrawer />}
           </nav>
         </div>
       </div>
