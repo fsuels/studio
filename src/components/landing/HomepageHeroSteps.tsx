@@ -17,16 +17,6 @@ export default function HomepageHeroSteps() {
     setIsHydrated(true);
   }, []); 
 
-  const scrollToWorkflow = () => {
-    const workflowSection = document.getElementById('workflow-start');
-    if (workflowSection) {
-      workflowSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    } else {
-       console.warn('Workflow section with id "workflow-start" not found.');
-       window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-  };
-
   const placeholderText = "...";
 
   return (
@@ -108,12 +98,12 @@ export default function HomepageHeroSteps() {
                 transition={{ duration: 0.3, delay: 0.6 }}
              >
                 <Button
+                    asChild
                     size="lg"
                     className="text-lg px-8 py-4 bg-accent hover:bg-accent/90 text-accent-foreground shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
-                    onClick={scrollToWorkflow}
                     disabled={!isHydrated} // Disable button before hydration
                 >
-                    {isHydrated ? t('home.cta.startNow') : placeholderText}
+                  <Link href="/#workflow-start">{isHydrated ? t('home.cta.startNow') : placeholderText}</Link>
                 </Button>
              </motion.div>
         </div>

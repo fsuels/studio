@@ -4,7 +4,7 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { LegalDocument } from '@/lib/document-library';
-import { usStates, documentLibrary } from '@/lib/document-library'; 
+import { usStates } from '@/lib/document-library'; 
 import DocTypeSelector, { type AISuggestion } from '@/components/DocumentTypeSelector'; 
 import { Questionnaire } from '@/components/questionnaire';
 import { DisclaimerStep } from '@/components/disclaimer-step';
@@ -242,12 +242,7 @@ export default function Home() {
   return (
     <>
       <PromoBanner />
-      <HeroSection
-          onGetStartedClick={() => {
-              const section = document.getElementById(workflowSectionId);
-              if (section) section.scrollIntoView({ behavior: 'smooth' });
-          }}
-      />
+      <HeroSection />
       <ThreeStepSection />
       <TrustAndTestimonialsSection />
       <GuaranteeBadge />
@@ -316,4 +311,3 @@ export default function Home() {
     </>
   );
 }
-

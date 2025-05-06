@@ -10,11 +10,6 @@ import Link from 'next/link'; // Import Link for navigation
 export default function PricingPage() {
   const { t } = useTranslation()
 
-  // Function to handle CTA click (placeholder - now handled by Links)
-  // const handleCtaClick = () => {
-  //    console.log("Pricing CTA clicked!");
-  // }
-
   return (
     <main className="container mx-auto px-4 py-16 md:py-24 text-center">
       <h1 className="text-4xl md:text-5xl font-bold mb-4 text-foreground">
@@ -49,7 +44,7 @@ export default function PricingPage() {
           </CardContent>
           <CardFooter>
             <Button asChild className="w-full bg-primary hover:bg-primary/90 text-primary-foreground">
-              <Link href="/">{t('pricing.cta', 'Get Started')}</Link>
+              <Link href="/#workflow-start">{t('pricing.cta', 'Get Started')}</Link>
             </Button>
           </CardFooter>
         </Card>
@@ -81,7 +76,7 @@ export default function PricingPage() {
           </CardContent>
           <CardFooter>
             <Button asChild className="w-full bg-primary hover:bg-primary/90 text-primary-foreground">
-              <Link href="/">{t('pricing.cta', 'Get Started')}</Link>
+              <Link href="/#workflow-start">{t('pricing.cta', 'Get Started')}</Link>
             </Button>
           </CardFooter>
         </Card>
@@ -122,3 +117,4 @@ export default function PricingPage() {
     </main>
   )
 }
+
