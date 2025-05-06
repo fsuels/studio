@@ -5,15 +5,15 @@ import { useTranslation } from 'react-i18next'
 import { Button } from '@/components/ui/button'; // Import Button
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card'; // Import Card components
 import { Check } from 'lucide-react'; // Import Check icon
+import Link from 'next/link'; // Import Link for navigation
 
 export default function PricingPage() {
   const { t } = useTranslation()
 
-  // Function to handle CTA click (placeholder)
-  const handleCtaClick = () => {
-     console.log("Pricing CTA clicked!");
-     // In a real app, this would redirect to signup/checkout or trigger an action
-  }
+  // Function to handle CTA click (placeholder - now handled by Links)
+  // const handleCtaClick = () => {
+  //    console.log("Pricing CTA clicked!");
+  // }
 
   return (
     <main className="container mx-auto px-4 py-16 md:py-24 text-center">
@@ -48,8 +48,8 @@ export default function PricingPage() {
             </ul>
           </CardContent>
           <CardFooter>
-            <Button onClick={handleCtaClick} className="w-full bg-primary hover:bg-primary/90 text-primary-foreground">
-              {t('pricing.cta', 'Get Started')} {/* Default text */}
+            <Button asChild className="w-full bg-primary hover:bg-primary/90 text-primary-foreground">
+              <Link href="/">{t('pricing.cta', 'Get Started')}</Link>
             </Button>
           </CardFooter>
         </Card>
@@ -80,8 +80,8 @@ export default function PricingPage() {
              </ul>
           </CardContent>
           <CardFooter>
-            <Button onClick={handleCtaClick} className="w-full bg-primary hover:bg-primary/90 text-primary-foreground">
-              {t('pricing.cta', 'Get Started')} {/* Default text */}
+            <Button asChild className="w-full bg-primary hover:bg-primary/90 text-primary-foreground">
+              <Link href="/">{t('pricing.cta', 'Get Started')}</Link>
             </Button>
           </CardFooter>
         </Card>
@@ -109,8 +109,8 @@ export default function PricingPage() {
             </ul>
           </CardContent>
           <CardFooter>
-             <Button onClick={handleCtaClick} variant="outline" className="w-full border-primary text-primary hover:bg-primary/10">
-               {t('pricing.ctaContact', 'Contact Sales')} {/* Changed CTA */}
+             <Button asChild variant="outline" className="w-full border-primary text-primary hover:bg-primary/10">
+               <Link href="/support">{t('pricing.ctaContact', 'Contact Sales')}</Link>
              </Button>
           </CardFooter>
         </Card>
