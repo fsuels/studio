@@ -725,59 +725,67 @@ export const documentLibrary: LegalDocument[] = [
  * @param state - Optional 2-letter US state code.
  * @returns An array of matching LegalDocument objects.
  */
-export function findMatchingDocuments(
-    query: string,
-    language: 'en' | 'es' = 'en',
-    state?: string
-): LegalDocument[] {
-    const lowerQuery = query.toLowerCase().trim();
+// src/lib/document-library.ts
 
-    if (!lowerQuery && !state) {
-        // Return all except General Inquiry if no filter, sorted alphabetically by name
-        return documentLibrary
-                 .filter(doc => doc.id !== 'general-inquiry')
-                 .sort((a, b) => a.name.localeCompare(b.name));
+export function findMatchingDocuments(
+  query: string = "",
+  language: 'en' | 'es' = 'en',
+  state?: string
+): LegalDocument[] {
+  const lowerQuery = query.toLowerCase().trim();
+
+  // If no search text and no state filter, return everything except "general-inquiry"
+  if (!lowerQuery && !state) {
+    return documentLibrary
+      .filter((doc) => doc.id !== 'general-inquiry')
+      .sort((a, b) => a.name.localeCompare(b.name));
+  }
+
+  const results = documentLibrary.filter((doc) => {
+    if (doc.id === 'general-inquiry') return false;
+
+    // State filter
+    if (state) {
+      if (doc.states !== 'all' && !doc.states?.includes(state)) {
+        return false;
+      }
     }
 
-    const results = documentLibrary.filter(doc => {
-        if (doc.id === 'general-inquiry') return false; // Always exclude General Inquiry from search/filter results
+    // Text filter
+    if (lowerQuery) {
+      const nameMatch =
+        language === 'es' && doc.name_es
+          ? doc.name_es.toLowerCase()
+          : doc.name.toLowerCase();
+      const descriptionMatch =
+        language === 'es' && doc.description_es
+          ? doc.description_es.toLowerCase()
+          : doc.description?.toLowerCase() || "";
+      const aliasesMatch = (language === 'es' ? doc.aliases_es : doc.aliases) || [];
 
-        // Check State Compatibility
-        if (state) {
-            if (doc.states !== 'all' && !doc.states?.includes(state)) {
-                return false; // Exclude if state doesn't match and isn't 'all'
-            }
-        }
+      if (nameMatch.includes(lowerQuery)) return true;
+      if (descriptionMatch.includes(lowerQuery)) return true;
+      if (aliasesMatch.some((alias) => alias.toLowerCase().includes(lowerQuery)))
+        return true;
 
-        // Check Query Match (if query exists)
-        if (lowerQuery) {
-             const nameMatch = language === 'es' && doc.name_es ? doc.name_es.toLowerCase() : doc.name.toLowerCase();
-             const descriptionMatch = language === 'es' && doc.description_es ? doc.description_es.toLowerCase() : doc.description?.toLowerCase();
-             const aliasesMatch = language === 'es' ? doc.aliases_es : doc.aliases;
+      return false;
+    }
 
-             if (nameMatch?.includes(lowerQuery)) return true;
-             if (descriptionMatch?.includes(lowerQuery)) return true;
-             if (aliasesMatch?.some(alias => alias.toLowerCase().includes(lowerQuery))) return true;
+    // If only state was provided (and passed), include it
+    return true;
+  });
 
-             // If query doesn't match name, description, or aliases in the selected language
-             return false;
-        }
-
-        // If only state filter was applied and it passed, include the doc
-        return !!state;
-    });
-
-    // Sort the filtered results alphabetically by name
-    return results.sort((a, b) => a.name.localeCompare(b.name));
+  return results.sort((a, b) => a.name.localeCompare(b.name));
 }
 
-// Add more utility functions as needed, e.g., getDocumentById
+// Get a single document by its ID
 export function getDocumentById(id: string): LegalDocument | undefined {
-    return documentLibrary.find(doc => doc.id === id);
+  return documentLibrary.find(doc => doc.id === id);
 }
 
-// Utility to get documents by category
+// Get all documents in a given category (excluding the “general-inquiry” fallback)
 export function getDocumentsByCategory(category: string): LegalDocument[] {
-    return documentLibrary.filter(doc => doc.category === category && doc.id !== 'general-inquiry')
-           .sort((a,b) => a.name.localeCompare(b.name));
+  return documentLibrary
+    .filter(doc => doc.category === category && doc.id !== 'general-inquiry')
+    .sort((a, b) => a.name.localeCompare(b.name));
 }
