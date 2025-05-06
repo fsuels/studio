@@ -1,65 +1,182 @@
 // src/app/dashboard/page.tsx
+'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { FileText, CreditCard, History, UserCircle, Settings, LogOut, Loader2 } from 'lucide-react';
+import Link from 'next/link';
 
-// Although dashboard isn't typically parameterized in the same way as [linkId],
-// applying generateStaticParams structure for potential future use or consistency.
-// If the dashboard route *never* expects parameters for static generation,
-// this function can be omitted.
-export async function generateStaticParams() {
-  // For a simple /dashboard, there are usually no params to pre-generate.
-  // Return an empty array or an array with an empty object if structure requires.
-  // If /dashboard/[userId] existed, you'd return [{ userId: 'user1' }, { userId: 'user2' }]
-  return [{}]; // Indicates the base /dashboard route should be generated.
-}
+// Mock data - replace with actual data fetching
+const mockUser = {
+  name: 'Jane Doe',
+  email: 'jane.doe@example.com',
+};
 
-// Props will be empty if no dynamic params are defined in the path
-interface DashboardPageProps {
-    params?: { [key: string]: string | string[] | undefined }; // Optional params
-    searchParams?: { [key: string]: string | string[] | undefined }; // Optional query params
-}
+const mockDocuments = [
+  { id: 'doc1', name: 'Residential Lease Agreement', date: '2024-05-01', status: 'Signed' },
+  { id: 'doc2', name: 'Non-Disclosure Agreement', date: '2024-04-15', status: 'Draft' },
+  { id: 'doc3', name: 'Bill of Sale - Vehicle', date: '2024-03-20', status: 'Completed' },
+];
 
+const mockPayments = [
+  { id: 'pay1', date: '2024-05-01', amount: '$5.00', document: 'Residential Lease Agreement' },
+  { id: 'pay2', date: '2024-03-20', amount: '$5.00', document: 'Bill of Sale - Vehicle' },
+];
 
-export default function DashboardPage({ params, searchParams }: DashboardPageProps) {
-  // In a real app, this page would likely fetch user-specific data
-  // (e.g., list of documents, account settings) based on authentication.
-  // Since this is static export, data fetching might happen client-side
-  // or be pre-rendered if possible using generateStaticParams with user IDs.
+export default function DashboardPage() {
+  const { t, i18n } = useTranslation();
+  const [activeTab, setActiveTab] = useState<'documents' | 'payments' | 'profile'>('documents');
+  const [isLoading, setIsLoading] = useState(true);
+  const [isHydrated, setIsHydrated] = useState(false);
+
+  useEffect(() => {
+    setIsHydrated(true);
+    // Simulate data fetching
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 1000);
+  }, []);
+
+  if (!isHydrated) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-background">
+        <Loader2 className="h-12 w-12 animate-spin text-primary" />
+      </div>
+    );
+  }
+  
+  const renderContent = () => {
+    if (isLoading) {
+      return (
+        <div className="flex items-center justify-center py-10">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+          <p className="ml-2 text-muted-foreground">{t('Loading dashboard data...')}</p>
+        </div>
+      );
+    }
+    switch (activeTab) {
+      case 'documents':
+        return (
+          <div className="space-y-4">
+            {mockDocuments.map((doc) => (
+              <Card key={doc.id} className="shadow-sm hover:shadow-md transition-shadow">
+                <CardHeader className="flex flex-row items-center justify-between pb-2">
+                  <CardTitle className="text-md font-medium">{doc.name}</CardTitle>
+                  <Button variant="outline" size="sm" asChild>
+                    <Link href={`/generate?docId=${doc.id}`}>{t('View/Edit')}</Link>
+                  </Button>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-xs text-muted-foreground">
+                    {t('Date')}: {new Date(doc.date).toLocaleDateString(i18n.language)} | {t('Status')}: <span className={`font-semibold ${doc.status === 'Signed' || doc.status === 'Completed' ? 'text-green-600' : 'text-orange-500'}`}>{t(doc.status)}</span>
+                  </p>
+                </CardContent>
+              </Card>
+            ))}
+            {mockDocuments.length === 0 && <p className="text-muted-foreground">{t('No documents found.')}</p>}
+          </div>
+        );
+      case 'payments':
+        return (
+          <div className="space-y-4">
+            {mockPayments.map((payment) => (
+              <Card key={payment.id} className="shadow-sm">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-md font-medium">{payment.document}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-xs text-muted-foreground">
+                    {t('Date')}: {new Date(payment.date).toLocaleDateString(i18n.language)} | {t('Amount')}: {payment.amount}
+                  </p>
+                </CardContent>
+              </Card>
+            ))}
+            {mockPayments.length === 0 && <p className="text-muted-foreground">{t('No payment history.')}</p>}
+          </div>
+        );
+      case 'profile':
+        return (
+          <Card className="shadow-sm">
+            <CardHeader>
+              <CardTitle className="text-lg">{t('Profile Settings')}</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div>
+                <label className="text-sm font-medium text-muted-foreground">{t('Name')}</label>
+                <p>{mockUser.name}</p>
+              </div>
+              <div>
+                <label className="text-sm font-medium text-muted-foreground">{t('Email')}</label>
+                <p>{mockUser.email}</p>
+              </div>
+              <Button variant="outline" className="mt-4">
+                <Settings className="mr-2 h-4 w-4" /> {t('Edit Profile')}
+              </Button>
+            </CardContent>
+          </Card>
+        );
+      default:
+        return null;
+    }
+  };
 
   return (
-    <main className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-4">Dashboard</h1>
+    <main className="container mx-auto px-4 py-8 md:py-12">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
+        <h1 className="text-3xl font-bold text-foreground">
+          {t('Dashboard')}
+        </h1>
+        <Button variant="ghost" size="sm" asChild className="mt-2 md:mt-0">
+          <Link href="/">
+             <LogOut className="mr-2 h-4 w-4" /> {t('Logout')}
+          </Link>
+        </Button>
+      </div>
+      
       <p className="text-muted-foreground mb-6">
-        Welcome back! Here you can manage your documents and account settings.
+        {t('Welcome back, {{name}}! Manage your legal documents and account.', { name: mockUser.name })}
       </p>
 
-      {/* Placeholder for dashboard content */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-         {/* Example Card 1: Recent Documents */}
-         <div className="border rounded-lg p-6 shadow-sm bg-card text-card-foreground">
-             <h2 className="text-xl font-semibold mb-3">Recent Documents</h2>
-             <ul className="space-y-2 text-sm text-muted-foreground">
-                 <li>Lease Agreement - Signed_Lease_Agreement.pdf</li>
-                 <li>Partnership Agreement - Draft_Partnership_v2.pdf</li>
-                 <li>Invoice Dispute - Dispute_Letter_Apr24.pdf</li>
-             </ul>
-             {/* Add link to view all documents */}
-         </div>
+      <div className="flex flex-col md:flex-row gap-8">
+        {/* Sidebar Navigation */}
+        <nav className="w-full md:w-64 space-y-2 shrink-0">
+          <Button
+            variant={activeTab === 'documents' ? 'default' : 'ghost'}
+            className="w-full justify-start"
+            onClick={() => setActiveTab('documents')}
+          >
+            <FileText className="mr-2 h-4 w-4" /> {t('My Documents')}
+          </Button>
+          <Button
+            variant={activeTab === 'payments' ? 'default' : 'ghost'}
+            className="w-full justify-start"
+            onClick={() => setActiveTab('payments')}
+          >
+            <CreditCard className="mr-2 h-4 w-4" /> {t('Payment History')}
+          </Button>
+          <Button
+            variant={activeTab === 'profile' ? 'default' : 'ghost'}
+            className="w-full justify-start"
+            onClick={() => setActiveTab('profile')}
+          >
+            <UserCircle className="mr-2 h-4 w-4" /> {t('Profile')}
+          </Button>
+        </nav>
 
-          {/* Example Card 2: Account Settings */}
-         <div className="border rounded-lg p-6 shadow-sm bg-card text-card-foreground">
-             <h2 className="text-xl font-semibold mb-3">Account</h2>
-             <p className="text-sm text-muted-foreground">Manage your profile and subscription.</p>
-             {/* Add link to account settings */}
-         </div>
-
-          {/* Example Card 3: Create New Document */}
-         <div className="border rounded-lg p-6 shadow-sm bg-card text-card-foreground">
-             <h2 className="text-xl font-semibold mb-3">Create New</h2>
-             <p className="text-sm text-muted-foreground">Start generating a new legal document.</p>
-              {/* Add link to the main generation page */}
-         </div>
+        {/* Main Content Area */}
+        <div className="flex-1 bg-card p-6 rounded-lg border border-border shadow-lg">
+          {renderContent()}
+        </div>
       </div>
     </main>
   );
 }
+
+// Ensure translations are added to your i18n files:
+// "Dashboard", "Logout", "Welcome back, {{name}}! Manage your legal documents and account.",
+// "My Documents", "Payment History", "Profile", "View/Edit", "Date", "Status",
+// "Amount", "Profile Settings", "Name", "Email", "Edit Profile", "No documents found.",
+// "No payment history.", "Loading dashboard data..."
+// Document statuses: "Signed", "Draft", "Completed"

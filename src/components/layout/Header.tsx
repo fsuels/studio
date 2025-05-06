@@ -2,6 +2,7 @@
 'use client'; // Make this a client component to use hooks
 
 import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { Logo } from '@/components/layout/Logo';
 import Nav from '@/components/Nav'; // Import the Nav component
 import { useTranslation } from 'react-i18next'; // Import useTranslation
@@ -13,8 +14,8 @@ import {
 } from "@/components/ui/dropdown-menu"; // Import Dropdown
 import { Button } from '@/components/ui/button'; // Import Button
 import MiniCartDrawer from '@/components/MiniCartDrawer';
-import { ThemeToggle } from '@/components/ThemeToggle'; // Changed to named import
-import { Check, ChevronDown, Globe } from 'lucide-react'; // Icons for dropdown, added Globe for placeholder
+// import { ThemeToggle } from '@/components/ThemeToggle'; // Removed ThemeToggle
+import { Check, ChevronDown, Globe, LogIn } from 'lucide-react'; // Icons for dropdown, added Globe for placeholder, LogIn for login button
 
 // Inline SVG Flags for better portability and less dependency on external files
 const FlagUS = () => (
@@ -48,7 +49,7 @@ const FlagES = () => (
             <path d="M8.5 13v-1h.15c.2 0 .35-.15.35-.35V9h1v3h1v1z"/>
             <path d="M4.5 13v-1H4.35c-.2 0-.35-.15-.35-.35V9H5v3H6v1z"/>
          </g>
-         <path d="M7.5 1c.38 0 .7.1.96.28.21.14.38.33.49.55.11.22.15.46.15.72 0 .26-.04.5.15.72-.11.22-.28.41-.49.55-.26.17-.58.28-.96.28s-.7-.1-.96-.28c-.21-.14-.38-.33-.49-.55-.11-.22-.15-.46-.15-.72 0 .26.04.5.15.72.11-.22.28-.41.49-.55.26-.17.58.28.96.28zm0 6c.38 0 .7.1.96.28.21.14.38.33.49.55.11.22.15.46.15.72 0 .26-.04.5.15.72-.11.22-.28.41-.49.55-.26.17-.58.28-.96.28s-.7-.1-.96-.28c-.21-.14-.38-.33-.49-.55-.11-.22-.15-.46-.15-.72 0 .26.04.5.15.72.11-.22.28-.41.49-.55.26-.17.58.28.96.28z" fill="#fff"/>
+         <path d="M7.5 1c.38 0 .7.1.96.28.21.14.38.33.49.55.11.22.15.46.15.72 0 .26-.04.5.15.72-.11.22-.28.41-.49.55-.26.17-.58.28-.96.28s-.7-.1-.96-.28c-.21-.14-.38-.33-.49-.55-.11-.22-.15-.46-.15-.72 0 .26.04.5.15.72.11.22.28.41.49.55.26-.17.58.28.96.28zm0 6c.38 0 .7.1.96.28.21.14.38.33.49.55.11.22.15.46.15.72 0 .26-.04.5.15.72-.11.22-.28.41-.49.55-.26.17-.58.28-.96.28s-.7-.1-.96-.28c-.21-.14-.38-.33-.49-.55-.11-.22-.15-.46-.15-.72 0 .26.04.5.15.72.11.22.28.41.49.55.26-.17.58.28.96.28z" fill="#fff"/>
          <path d="M7.5 7C8.08 7 8.4.6 8.4 1.2V5.8C8.4 6.4 8.08 7 7.5 7S6.6 6.4 6.6 5.8V1.2C6.6.6 6.92 0 7.5 0c.58 0 .9.6.9 1.2z" fill="#ad1519"/>
          <path d="M7.5 13c.58 0 .9-.6.9-1.2V7.8c0-.6-.32-1.2-.9-1.2s-.9.6-.9 1.2v4c0 .6.32 1.2.9 1.2z" fill="#75aadb"/>
          <path d="M9.03 5.5H5.97c-.48 0-.78-.27-.78-.6 0-.33.3-.6.78-.6h3.06c.48 0 .78.27.78.6 0 .33-.3.6-.78.6z" fill="#ffc400"/>
@@ -58,23 +59,21 @@ const FlagES = () => (
 
 
 export function Header() {
-  const { i18n } = useTranslation();
+  const { i18n, t } = useTranslation(); // Added t for Login button text
   const [isHydrated, setIsHydrated] = useState(false);
   const [currentLanguageDisplay, setCurrentLanguageDisplay] = useState('...'); // Placeholder for language display
 
   useEffect(() => {
     setIsHydrated(true);
-    // Set initial language display based on i18n.language
-    // Ensure i18n.language is defined before using startsWith
     if (i18n.language) {
         setCurrentLanguageDisplay(i18n.language.startsWith('es') ? 'ES' : 'EN');
     } else {
-        setCurrentLanguageDisplay('EN'); // Default if language is undefined
+        setCurrentLanguageDisplay('EN'); 
     }
   }, [i18n.language]);
 
   const handleLanguageChange = (lang: 'en' | 'es') => {
-    if (!isHydrated) return; // Prevent changes before hydration
+    if (!isHydrated) return; 
     i18n.changeLanguage(lang).then(() => {
       setCurrentLanguageDisplay(lang === 'es' ? 'ES' : 'EN');
       console.log(`Language switched to ${lang}`);
@@ -84,7 +83,7 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-14 items-center px-4 md:px-6"> {/* Added responsive padding */}
+      <div className="container flex h-14 items-center px-4 md:px-6"> 
         <div className="mr-4 flex">
           <Logo />
         </div>
@@ -92,21 +91,31 @@ export function Header() {
            <div className="hidden md:flex flex-1 justify-center">
               <Nav />
            </div>
-          <nav className="flex items-center gap-2"> {/* Added gap for better spacing */}
-           <ThemeToggle />
-            {/* Render MiniCartDrawer only after hydration to ensure context is available */}
+          <nav className="flex items-center gap-2"> 
+            <Button
+              variant="outline"
+              size="sm"
+              className="text-xs font-medium text-foreground/80 hover:bg-foreground/5 hover:text-foreground px-2 py-1.5 md:px-3 border-border/50 shadow-sm flex items-center"
+              asChild
+              disabled={!isHydrated}
+            >
+              <Link href="/dashboard">
+                <LogIn className="h-4 w-4 mr-1 md:mr-2" />
+                <span className="hidden sm:inline">{isHydrated ? t('Login', {defaultValue: 'Login'}) : '...'}</span>
+              </Link>
+            </Button>
             {isHydrated && <MiniCartDrawer />}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
                   variant="outline"
                   size="sm"
-                  className="text-xs font-medium text-foreground/80 hover:bg-foreground/5 hover:text-foreground px-2 py-1.5 md:px-3 border-border/50 shadow-sm flex items-center" // Ensure items-center
+                  className="text-xs font-medium text-foreground/80 hover:bg-foreground/5 hover:text-foreground px-2 py-1.5 md:px-3 border-border/50 shadow-sm flex items-center" 
                   aria-label="Select language"
-                  disabled={!isHydrated} // Disable button before hydration
+                  disabled={!isHydrated} 
                 >
                   {isHydrated ? (currentLanguageDisplay === 'EN' ? <FlagUS /> : <FlagES />) : <Globe className="h-4 w-4 mr-1 text-muted-foreground" /> }
-                  <span className="hidden sm:inline">{isHydrated ? currentLanguageDisplay : '...'}</span> {/* Hide text on very small screens */}
+                  <span className="hidden sm:inline">{isHydrated ? currentLanguageDisplay : '...'}</span> 
                   <ChevronDown className="ml-1 h-4 w-4 opacity-70" />
                 </Button>
               </DropdownMenuTrigger>
@@ -131,4 +140,3 @@ export function Header() {
     </header>
   );
 }
-
