@@ -3,7 +3,7 @@
 
 import React, { useState } from 'react';
 import { documentLibrary } from '@/lib/document-library';
-import { analyzeFormDataFlow } from '@/ai/flows/analyze-form-data';
+import { analyzeFormData } from '@/ai/flows/analyze-form-data'; // Corrected import
 
 interface Props {
   templateId: string;
@@ -28,16 +28,27 @@ export function StepThreeInput({ templateId, stateCode }: Props) {
     setLoading(true);
     setIsReviewing(true);
     try {
-      const response = await analyzeFormDataFlow({
-        docType: template.name,
-        state: stateCode,
-        language: 'en',
-        formData
+      // Call the corrected function name
+      const response = await analyzeFormData({ 
+        documentType: template.name,
+        // schema: template.questions || [], // Pass the schema if your analyzeFormData expects it
+        answers: formData,
+        // state: stateCode, // Pass state if analyzeFormData expects it
+        // language: 'en', // Pass language if analyzeFormData expects it
       });
-      setAiIssues(response.issues || []);
-      setAiSuggestions(response.suggestions || []);
+      // Assuming analyzeFormData returns an array of suggestions/issues objects
+      // Adjust this based on the actual return type of analyzeFormData
+      // For now, let's assume it returns an array of objects with a 'message' and 'type' (issue/suggestion)
+      const issues = response.filter(r => r.importance === 'error' || r.importance === 'warning').map(r => r.message);
+      const suggestions = response.filter(r => r.importance === 'info').map(r => r.message);
+      
+      setAiIssues(issues);
+      setAiSuggestions(suggestions);
+
     } catch (err) {
+      console.error("Error during AI check:", err);
       setAiIssues(['Unable to analyze the form. Please try again later.']);
+      setAiSuggestions([]);
     }
     setLoading(false);
   };

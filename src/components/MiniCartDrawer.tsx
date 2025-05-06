@@ -13,15 +13,15 @@ import {
   DrawerTrigger,
 } from '@/components/ui/drawer';
 import { Button } from '@/components/ui/button';
-import { CartContext } from '@/contexts/CartProvider';
+import { useCart } from '@/contexts/CartProvider'; // Updated import
 import { ShoppingCart } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export default function MiniCartDrawer() {
-  const { cartItems } = React.useContext(CartContext);
+  const { items: cartItems } = useCart(); // Use the useCart hook
   const [open, setOpen] = useState(false);
 
-  const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+  const totalItems = cartItems.reduce((sum, item) => sum + (item.qty ?? 1), 0); // Use item.qty
 
   return (
     <Drawer open={open} onOpenChange={setOpen}>
@@ -30,7 +30,7 @@ export default function MiniCartDrawer() {
           <ShoppingCart className="mr-2 h-4 w-4" />
           Cart
           {totalItems > 0 && (
-            <span className="absolute -top-2 -right-2 h-5 w-5 rounded-full bg-primary text-white text-xs flex items-center justify-center">
+            <span className="absolute -top-2 -right-2 h-5 w-5 rounded-full bg-primary text-primary-foreground text-xs flex items-center justify-center">
               {totalItems}
             </span>
           )}
@@ -54,11 +54,11 @@ export default function MiniCartDrawer() {
             <ul className="divide-y">
               {cartItems.map((item) => (
                 <li
-                  key={item.bundle.id}
+                  key={item.id} // Use item.id for key
                   className="flex items-center justify-between py-2"
                 >
-                  <span className="flex-grow">{item.bundle.title}</span>
-                  <span className="font-semibold ml-2">x{item.quantity}</span>
+                  <span className="flex-grow">{item.name}</span> {/* Use item.name */}
+                  <span className="font-semibold ml-2">x{item.qty}</span> {/* Use item.qty */}
                 </li>
               ))}
             </ul>
@@ -68,7 +68,7 @@ export default function MiniCartDrawer() {
           <Button
             className={cn(
               'w-full bg-gradient-to-r from-electric-500 to-electric-700 hover:to-electric-600 text-white shadow-glass',
-              cartItems.length == 0 && "pointer-events-none opacity-50"
+              cartItems.length === 0 && "pointer-events-none opacity-50"
             )}
             onClick={() => {
               console.log('Checkout');

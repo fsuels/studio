@@ -1,7 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp, getApps, getApp, type FirebaseApp } from "firebase/app";
 import { getAnalytics, isSupported, type Analytics } from "firebase/analytics";
-import { getFirestore as getFirestoreFB, provideFirestore } from "firebase/firestore"; //Import getFirestore
+import { getFirestore as getFirestoreFB, type Firestore } from "firebase/firestore"; //Import getFirestore and Firestore type
 
 // Default Firebase configuration provided by the user
 // Used as fallbacks if environment variables are not set.
@@ -101,9 +101,22 @@ if (typeof window !== 'undefined' && app) { // Ensure app is initialized before 
   });
 }
 
-// Export Firestore
-const getFirestore = (app: FirebaseApp) => {
-    return getFirestoreFB(app);
+// Initialize Firestore instance
+// This should be 'Firestore' from 'firebase/firestore'
+// and getFirestoreFB is the alias for the actual getFirestore function.
+let db: Firestore;
+if (app) { // Ensure app is initialized before trying to get Firestore
+  try {
+    db = getFirestoreFB(app); // Call the imported getFirestoreFB function
+    console.log("Firebase Firestore initialized.");
+  } catch (error) {
+    console.error("Firebase Firestore initialization failed:", error);
+    // Handle Firestore initialization failure appropriately.
+    // db will remain undefined, so any code using it needs to handle this.
+  }
+} else {
+  console.error("Firebase app not initialized, cannot initialize Firestore.");
+  // db will remain undefined.
 }
 
-export { app, analytics, getFirestore }; // Export initialized app and analytics (which might be null)
+export { app, analytics, db }; // Export initialized app, analytics (which might be null), and db (which might be undefined)
