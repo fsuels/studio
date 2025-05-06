@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowLeft, FileText, Search, Landmark, Briefcase, Home, Users, User, ScrollText, Handshake, ShieldQuestion, GraduationCap, FileIcon as PaperIcon } from "lucide-react"; 
 import { Label } from "@/components/ui/label"; // Label might still be useful for local search
+import { track } from "@/lib/analytics";
 
 // User-friendly category definitions with icons
 const CATEGORY_LIST = [
@@ -124,6 +125,7 @@ export default function Step1DocumentSelector({
     // setCurrentCategory(key); // This is now handled by useEffect based on selectedCategory prop
     setDocSearch('');
     setView('documents');
+    track('select_item', { category: key });
   };
 
   const handleBackToCategories = () => {
@@ -144,6 +146,7 @@ export default function Step1DocumentSelector({
         return;
     }
     onDocumentSelect(doc);
+    track('view_item', {id: doc.id,name: doc.name,category : doc.category,price    : doc.basePrice,state    : globalSelectedState,});
   };
 
   const { toast } = useToast(); // Ensure toast is defined

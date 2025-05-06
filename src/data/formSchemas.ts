@@ -7,6 +7,8 @@ export type FormField = {
   required?: boolean
   type: 'text' | 'select' | 'date' | 'number' | 'textarea' // Added textarea
   options?: {value: string, label: string}[] // Changed to object for select options
+  tooltip?: string // NEW: optional hover hint
+  helperText?: string // NEW: optional helper copy under the input
 }
 
 export type FormSchema = {
@@ -34,7 +36,7 @@ const usStatesOptions = [
     { value: 'WI', label: 'Wisconsin' }, { value: 'WY', label: 'Wyoming' },
     { value: 'DC', label: 'District of Columbia' },
     { value: 'Other', label: 'Other/Not Applicable' } // Added 'Other' option
-];
+]
 
 
 export const formSchemas: FormSchema = {
@@ -311,3 +313,226 @@ export const formSchemas: FormSchema = {
         { id: "details", label: "Please describe the situation", type: "textarea", required: true },
     ]
 };
+
+/* ─────────────────────────────────────────────────────────────────
+   NEW form fields for high-demand templates added 2024-06
+   ───────────────────────────────────────────────────────────────── */
+/* ------------------------------------------------------------------ */
+/*  HIGH‑DEMAND ADD‑ONS – drop these under the big `formSchemas`       */
+/* ------------------------------------------------------------------ */
+export const formSchemasAdditions: FormSchema = {
+  /* ===== EMPLOYMENT ================================================= */
+  'Employment Termination Letter': [
+    { id: 'employerName',  label: 'Employer / Company Name',           type: 'text',     required: true },
+    { id: 'employerAddress', label: 'Employer Address',                type: 'textarea', required: true },
+    { id: 'employeeName',  label: 'Employee Full Name',                type: 'text',     required: true },
+    { id: 'employeePosition', label: 'Position / Job Title',           type: 'text' },
+    { id: 'terminationDate', label: 'Termination Effective Date',      type: 'date',     required: true },
+    { id: 'terminationReason', label: 'Reason for Termination (brief)',type: 'textarea',
+    { id: 'terminationDate', label: 'Termination Date', type: 'date', required: true },
+    { id: 'companyName', label: 'Company Name', type: 'text', required: true },
+    { id: 'companyAddress', label: 'Company Address', type: 'textarea', required: true },
+    { id: 'reasonForTermination', label: 'Reason for Termination', type: 'select', options: [{ value: 'performance', label: 'Performance' }, { value: 'misconduct', label: 'Misconduct' }, { value: 'restructuring', label: 'Restructuring' }, { value: 'other', label: 'Other' }], required: true },
+    { id: 'otherReasonDetails', label: 'Details of Other Reason', type: 'textarea', required: false },
+    { id: 'severanceOffered', label: 'Severance Offered?', type: 'select', options: [{ value: 'yes', label: 'Yes' }, { value: 'no', label: 'No' }], required: true },
+    { id: 'severanceDetails', label: 'Severance Details (if applicable)', type: 'textarea', required: false, placeholder: 'e.g., 2 weeks pay, continued benefits' },
+    { id: 'returnOfProperty', label: 'Return of Company Property?', type: 'select', options: [{ value: 'yes', label: 'Yes' }, { value: 'no', label: 'No' }], required: true },
+    { id: 'returnPropertyDetails', label: 'Details of Property to Return', type: 'textarea', required: false, placeholder: 'e.g., laptop, phone, badge' },
+    { id: 'confidentialityObligations', label: 'Confidentiality Obligations?', type: 'select', options: [{ value: 'yes', label: 'Yes' }, { value: 'no', label: 'No' }], required: true },
+  ],
+      placeholder: 'e.g. position eliminated, misconduct, performance' },
+    { id: 'finalPayAmount', label: 'Final Pay Amount (USD)',           type: 'number',
+      helperText: 'Include accrued PTO if applicable' },
+    { id: 'state', label: 'Governing State Law', type: 'select', required: true, options: usStatesOptions },
+  ],
+
+  'At‑Will Employment Agreement': [
+    { id: 'employerName', label: 'Employer / Company Name',            type: 'text',     required: true },
+    { id: 'employeeName', label: 'Employee Full Name', type: 'text', required: true },
+    { id: 'position', label: 'Position / Job Title', type: 'text', required: true },
+    { id: 'position',     label: 'Position / Job Title',               type: 'text',     required: true },
+    { id: 'startDate',    label: 'Employment Start Date',              type: 'date',     required: true },
+    { id: 'compensation', label: 'Compensation (USD, per hour / year)',type: 'text',
+      placeholder: 'e.g. $25 per hour or $60 000 annual' },
+    { id: 'state', label: 'Governing State Law', type: 'select', required: true, options: usStatesOptions },
+  ],
+
+  'Employee Non‑Compete Agreement': [
+    { id: 'employerName',   label: 'Employer / Company Name',          type: 'text',     required: true },
+    { id: 'employeeName',   label: 'Employee Full Name',               type: 'text',     required: true },
+    { id: 'effectiveDate',  label: 'Agreement Effective Date',        type: 'date',     required: true },
+    { id: 'durationMonths', label: 'Restriction Duration (months)',   type: 'number',   required: true,
+      tooltip: 'Typical range 6‑24 months' },
+    { id: 'restrictedTerritory', label: 'Restricted Territory',       type: 'text',
+      placeholder: 'e.g. 50 mile radius, entire USA' },
+    { id: 'scope',          label: 'Scope of Restricted Activities',  type: 'textarea',
+      helperText: 'Describe competing services / roles to be avoided' },
+    { id: 'consideration',  label: 'Consideration (if any)',          type: 'textarea',
+      placeholder: 'e.g. $1 000, promotion, access to trade secrets' },
+    { id: 'state',          label: 'Governing State Law',             type: 'select',   required: true,
+      options: usStatesOptions },
+  ],
+  'Employee Handbook Template': [
+    { id: 'companyName', label: 'Company Name', type: 'text', required: true },
+    { id: 'companyAddress', label: 'Company Address', type: 'textarea', required: true },
+    { id: 'introduction', label: 'Introduction Text (Optional)', type: 'textarea' },
+    { id: 'equalOpportunityPolicy', label: 'Equal Opportunity Policy', type: 'textarea', required: true, placeholder: 'e.g., We are an equal opportunity employer.' },
+    { id: 'codeOfConduct', label: 'Code of Conduct', type: 'textarea', required: true },
+    { id: 'attendancePolicy', label: 'Attendance Policy', type: 'textarea', required: true },
+    { id: 'benefitsOverview', label: 'Benefits Overview', type: 'textarea' },
+    { id: 'disciplinaryProcedure', label: 'Disciplinary Procedure', type: 'textarea' },
+    { id: 'state', label: 'Governing State Law', type: 'select', required: true, options: usStatesOptions },
+  ],
+  'Website Privacy Policy': [
+    { id: 'websiteName', label: 'Website Name', type: 'text', required: true },
+    { id: 'websiteUrl', label: 'Website URL', type: 'text', required: true },
+    { id: 'companyName', label: 'Company Name', type: 'text', required: true },
+    { id: 'companyAddress', label: 'Company Address', type: 'textarea', required: true },
+    { id: 'dataCollection', label: 'Data Collection Description', type: 'textarea', required: true, placeholder: 'e.g., We collect your name, email, and IP address.' },
+    { id: 'dataUse', label: 'Data Use Description', type: 'textarea', required: true, placeholder: 'e.g., We use your data to personalize your experience and send you updates.' },
+    { id: 'dataSharing', label: 'Data Sharing Description', type: 'textarea', placeholder: 'e.g., We do not share your data with third parties.' },
+    { id: 'dataSecurity', label: 'Data Security Measures', type: 'textarea', placeholder: 'e.g., We use encryption and secure servers.' },
+    { id: 'cookieUse', label: 'Cookie Use Description', type: 'textarea', required: true, placeholder: 'e.g., We use cookies to improve your experience.' },
+    { id: 'userRights', label: 'User Rights Description', type: 'textarea', placeholder: 'e.g., You have the right to access and delete your data.' },
+  ],
+  'Website Terms of Service': [
+    { id: 'websiteName', label: 'Website Name', type: 'text', required: true },
+    { id: 'websiteUrl', label: 'Website URL', type: 'text', required: true },
+    { id: 'companyName', label: 'Company Name', type: 'text', required: true },
+    { id: 'companyAddress', label: 'Company Address', type: 'textarea', required: true },
+    { id: 'userConduct', label: 'User Conduct Guidelines', type: 'textarea', required: true, placeholder: 'e.g., No illegal activity, no spam.' },
+    { id: 'intellectualProperty', label: 'Intellectual Property Description', type: 'textarea', required: true, placeholder: 'e.g., All content is our property.' },
+    { id: 'disclaimerOfWarranty', label: 'Disclaimer of Warranty', type: 'textarea', required: true },
+    { id: 'limitationOfLiability', label: 'Limitation of Liability', type: 'textarea', required: true },
+    { id: 'governingLaw', label: 'Governing Law (State)', type: 'select', required: true, options: usStatesOptions },
+  ],
+  'GDPR Data-Processing Addendum': [
+    { id: 'controllerName', label: 'Controller Name (Your Company)', type: 'text', required: true },
+    { id: 'controllerAddress', label: 'Controller Address', type: 'textarea', required: true },
+    { id: 'processorName', label: 'Processor Name (Third Party)', type: 'text', required: true },
+    { id: 'processorAddress', label: 'Processor Address', type: 'textarea', required: true },
+    { id: 'dataProtectionOfficer', label: 'Data Protection Officer (Optional)', type: 'text' },
+    { id: 'dataDescription', label: 'Description of Personal Data', type: 'textarea', required: true, placeholder: 'e.g., User names, emails, IP addresses' },
+    { id: 'processingActivities', label: 'Description of Processing Activities', type: 'textarea', required: true, placeholder: 'e.g., Data storage, analytics, email marketing' },
+    { id: 'securityMeasures', label: 'Security Measures', type: 'textarea', required: true, placeholder: 'e.g., Encryption, access controls, secure servers' },
+    { id: 'dataBreachNotification', label: 'Data Breach Notification Procedure', type: 'textarea', required: true },
+    { id: 'dataTransfers', label: 'Cross-Border Data Transfer', type: 'textarea', placeholder: 'e.g., Data may be transferred to the US' },
+  ],
+  'Cookie Banner & Preference Text': [
+    { id: 'websiteName', label: 'Website Name', type: 'text', required: true },
+    { id: 'bannerText', label: 'Cookie Banner Text', type: 'textarea', required: true, placeholder: 'e.g., We use cookies to enhance your experience...' },
+    { id: 'functionalCookieDescription', label: 'Description of Functional Cookies', type: 'textarea', required: true, placeholder: 'e.g., These cookies enable core functionality...' },
+    { id: 'analyticsCookieDescription', label: 'Description of Analytics Cookies', type: 'textarea', required: true, placeholder: 'e.g., These cookies help us understand how you use our site...' },
+    { id: 'marketingCookieDescription', label: 'Description of Marketing Cookies', type: 'textarea', placeholder: 'e.g., These cookies are used to deliver targeted ads...' },
+    { id: 'cookiePreferencesLink', label: 'Link to Cookie Preferences', type: 'text', placeholder: 'e.g., /cookie-preferences' },
+  ],
+};
+/* ─────────────────────────────────────────────────────────────────
+   NEW form fields for high-demand templates added 2024-06
+   ───────────────────────────────────────────────────────────────── */
+
+/* ──── AUTO‑ADDED “MINIMUM VIABLE” SCHEMAS ──── */
+
+const generic = (placeholder = 'Enter details here…') => [
+  { id: 'details', label: 'Key details', type: 'textarea', placeholder, required: true }
+];
+
+// Employment
+formSchemas['Employee Non‑Compete Agreement']        = generic();
+formSchemas['Employee Handbook (Template)']          = generic();
+formSchemas['Employment Termination Letter']         = [
+  { id: 'employeeName', label: 'Employee Full Name', type: 'text', required: true },
+  { id: 'lastDay', label: 'Last Day of Employment', type: 'date', required: true },
+  { id: 'reason', label: 'Reason (optional)', type: 'textarea' }
+];
+formSchemas['At‑Will Employment Agreement']          = [
+  { id: 'employeeName', label: 'Employee Full Name', type: 'text', required: true },
+  { id: 'position',     label: 'Position / Title',   type: 'text', required: true },
+  { id: 'startDate',    label: 'Start Date',         type: 'date', required: true }
+];
+
+// Website / Online business
+formSchemas['Website Privacy Policy']                = generic('What kinds of data do you collect?');
+formSchemas['Website Terms of Service']              = generic();
+formSchemas['GDPR Data‑Processing Addendum']         = generic('Controller + Processor names');
+formSchemas['Cookie‑Banner Text']                    = generic('Site name & cookies used');
+
+// Real‑estate purchase & addenda
+formSchemas['Real‑Estate Purchase & Sale Agreement'] = generic('Property address, price, closing date');
+formSchemas['Land Contract (Installment Sale)']      = generic('Property, term, balloon payment');
+formSchemas['Lease Addendum – Smoking Policy']       = generic('Allowed / prohibited areas');
+formSchemas['Lease Addendum – Pets']                 = generic('Species, weight limits, deposits');
+formSchemas['Lease Addendum – Furnishings Inventory']= generic('List furniture & appliances');
+formSchemas['Roommate Agreement']                    = generic('Rent split, chores, quiet hours');
+
+// Finance
+formSchemas['Bill of Sale (Personal Property)']      = generic('Describe the item sold');
+formSchemas['Installment Promissory Note']           = generic('Principal, interest, payment schedule');
+formSchemas['Debt Settlement Letter']                = generic('Debt amount, settlement offer');
+
+// Family
+formSchemas['Post‑Nuptial Agreement']                = generic('Assets & debts to be covered');
+formSchemas['Separation Agreement']                  = generic('Property, support, custody');
+formSchemas['Travel Consent for Minor']              = generic('Child, destination, guardians');
+formSchemas['Pet Custody Agreement']                 = generic('Pet name, visitation');
+
+// IP / Creative
+formSchemas['Copyright Transfer Agreement']          = generic('Work title & transfer terms');
+formSchemas['Model Release']                         = generic('Model name, usage');
+formSchemas['Photo License Agreement']               = generic('Image description, license scope');
+
+// Corporate
+formSchemas['Corporate Bylaws']                      = generic('Corporation name & state');
+formSchemas['Board Resolution']                      = generic('Resolution text');
+formSchemas['Corporate Meeting Minutes']             = generic('Meeting date & decisions');
+formSchemas['Stock Purchase Agreement']              = generic('Shares, price, closing date');
+/* ─────────────────────────────────────────────────────────────────
+   NEW second wave of form fields for high-demand templates 2024-06
+   ───────────────────────────────────────────────────────────────── */
+export const formSchemasAdditions2: FormSchema = {
+    'Promissory Note': [
+        { id: 'lenderName', label: 'Lender Name', type: 'text', required: true },
+        { id: 'borrowerName', label: 'Borrower Name', type: 'text', required: true },
+        { id: 'principalAmount', label: 'Loan Amount ($)', type: 'number', required: true },
+        { id: 'interestRate', label: 'Interest Rate (%)', type: 'number' },
+        { id: 'repaymentTerms', label: 'Repayment Terms', type: 'textarea', required: true },
+    ]
+    // add more...
+
+}
+/* -------------------------------------------------------------------
+   MERGE HELPER (concatenate your baseline with additions)
+   ------------------------------------------------------------------- */
+/**
+ * A utility function that merges two `FormSchema` objects together.
+ * It iterates through the properties of `schemaToAdd`, and for each property:
+ * - If the property does not exist in `baseSchema`, it's directly added.
+ * - If the property exists in `baseSchema`, it is merged by concatenating the arrays.
+ *
+ * This approach safely adds new schemas and extends existing ones without directly mutating the `baseSchema`.
+ *
+ * @param {FormSchema} baseSchema - The baseline form schemas to be extended.
+ * @param {FormSchema} schemaToAdd - The additional form schemas to be added.
+ * @returns {FormSchema} A new `FormSchema` that is a merge of the two inputs.
+ */
+export function mergeFormSchemas(baseSchema: FormSchema, schemaToAdd: FormSchema): FormSchema {
+  const mergedSchemas: FormSchema = { ...baseSchema }; // clone
+
+  for (const docType in schemaToAdd) {
+    if (!mergedSchemas[docType]) {
+      // Does not exist: Add the new key
+      mergedSchemas[docType] = schemaToAdd[docType];
+    } else {
+      // Exists: Append to array
+      mergedSchemas[docType] = [
+        ...(mergedSchemas[docType] ?? []),
+        ...schemaToAdd[docType],
+      ];
+    }
+  }
+
+  return mergedSchemas;
+}
+
+// Use it like this:
+// export const allFormSchemas = mergeFormSchemas(mergeFormSchemas(formSchemas, formSchemasAdditions), formSchemasAdditions2)

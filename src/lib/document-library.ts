@@ -1,5 +1,7 @@
 // src/lib/document-library.ts
 
+import { additionalDocs } from './document-library-additions';
+
 // Define the structure for a single question
 export type Question = {
   id: string; // Unique identifier for the question (e.g., 'tenant_name')
@@ -713,13 +715,126 @@ export const documentLibrary: LegalDocument[] = [
     ]
   },
 ];
+// Combine the base document library with the additional documents
+
+const newlyAddedDocs :LegalDocument[] = [
+  {
+    id: 'employee-termination-letter',
+    name: 'Employee Termination Letter',
+    category: 'Business',
+    description: 'Formal notification of employee termination.',
+    description_es: 'Notificación formal de terminación de empleo.',
+    aliases: ['fire employee', 'dismiss employee', 'layoff', 'end employment'],
+    aliases_es: ['despedir empleado', 'cesar empleado', 'despido', 'fin de empleo'],
+    languageSupport: ['en', 'es'],
+    requiresNotarization: false,
+    canBeRecorded: false,
+    offerNotarization: false,
+    offerRecordingHelp: false,
+    basePrice: 5,
+    states: 'all',
+    questions: [], // Add form questions here
+  },
+  {
+    id: 'at-will-employment-agreement',
+    name: 'At-Will Employment Agreement',
+    category: 'Business',
+    description: 'Establish an at-will employment relationship.',
+    description_es: 'Establecer una relación de empleo a voluntad.',
+    aliases: ['at will', 'employment', 'hire', 'job contract'],
+    aliases_es: ['a voluntad', 'empleo', 'contratar', 'contrato de trabajo'],
+    languageSupport: ['en', 'es'],
+    requiresNotarization: false,
+    canBeRecorded: false,
+    offerNotarization: false,
+    offerRecordingHelp: false,
+    basePrice: 5,
+    states: 'all',
+    questions: [], // Add form questions here
+  },
+  {
+    id: 'employee-non-compete-agreement',
+    name: 'Employee Non-Compete Agreement',
+    category: 'Business',
+    description: 'Restrict employee competition after leaving.',
+    description_es: 'Restringir la competencia del empleado después de irse.',
+    aliases: ['noncompete', 'restrict competition', 'former employee'],
+    aliases_es: ['no competencia', 'restringir competencia', 'ex empleado'],
+    languageSupport: ['en', 'es'],
+    requiresNotarization: false,
+    canBeRecorded: false,
+    offerNotarization: false,
+    offerRecordingHelp: false,
+    basePrice: 5,
+    states: 'all',
+    questions: [], // Add form questions here
+  },
+  {
+    id: 'employee-handbook-acknowledgment',
+    name: 'Employee Handbook Acknowledgment',
+    category: 'Business',
+    description: 'Confirm employee receipt and understanding of handbook.',
+    description_es: 'Confirmar que el empleado recibió y entendió el manual.',
+    aliases: ['handbook', 'acknowledge', 'company rules'],
+    aliases_es: ['manual', 'reconocer', 'reglas de la empresa'],
+    languageSupport: ['en', 'es'],
+    requiresNotarization: false,
+    canBeRecorded: false,
+    offerNotarization: false,
+    offerRecordingHelp: false,
+    basePrice: 3,
+    states: 'all',
+    questions: [], // Add form questions here
+  },
+  {
+    id: 'website-privacy-policy',
+    name: 'Website Privacy Policy',
+    category: 'Business',
+    description: 'Describe data handling practices for a website.',
+    description_es: 'Describir prácticas de manejo de datos para un sitio web.',
+    aliases: ['privacy', 'data handling', 'website policy'],
+    aliases_es: ['privacidad', 'manejo de datos', 'política del sitio web'],
+    languageSupport: ['en', 'es'],
+    requiresNotarization: false,
+    canBeRecorded: false,
+    offerNotarization: false,
+    offerRecordingHelp: false,
+    basePrice: 5,
+    states: 'all',
+    questions: [], // Add form questions here
+  },
+  {
+    id: 'website-terms-of-service',
+    name: 'Website Terms of Service',
+    category: 'Business',
+    description: 'Set rules for using a website.',
+    description_es: 'Establecer reglas para usar un sitio web.',
+    aliases: ['terms of use', 'website rules', 'service terms'],
+    aliases_es: ['términos de uso', 'reglas del sitio web', 'términos de servicio'],
+    languageSupport: ['en', 'es'],
+    requiresNotarization: false,
+    canBeRecorded: false,
+    offerNotarization: false,
+    offerRecordingHelp: false,
+    basePrice: 5,
+    states: 'all',
+    questions: [], // Add form questions here
+  },
+  // Add more documents here
+];
+
+
+documentLibrary.push(...newlyAddedDocs)
+
+
+const allDocuments = [...documentLibrary, ...additionalDocs];
 
 
 /**
  * Finds matching documents based on search query, language, and state.
  * - Searches name, aliases, and descriptions.
  * - Filters by state if provided.
- *
+ * 
  * @param query - The search string.
  * @param language - 'en' | 'es'.
  * @param state - Optional 2-letter US state code.
@@ -736,7 +851,7 @@ export function findMatchingDocuments(
 
   // If no search text and no state filter, return everything except "general-inquiry"
   if (!lowerQuery && !state) {
-    return documentLibrary
+    return allDocuments
       .filter((doc) => doc.id !== 'general-inquiry')
       .sort((a, b) => a.name.localeCompare(b.name));
   }
@@ -775,17 +890,17 @@ export function findMatchingDocuments(
     return true;
   });
 
-  return results.sort((a, b) => a.name.localeCompare(b.name));
+  return results.sort((a, b) => a.name.localeCompare(b.name))
 }
 
 // Get a single document by its ID
 export function getDocumentById(id: string): LegalDocument | undefined {
-  return documentLibrary.find(doc => doc.id === id);
+  return allDocuments.find(doc => doc.id === id);
 }
 
 // Get all documents in a given category (excluding the “general-inquiry” fallback)
 export function getDocumentsByCategory(category: string): LegalDocument[] {
-  return documentLibrary
+  return allDocuments
     .filter(doc => doc.category === category && doc.id !== 'general-inquiry')
     .sort((a, b) => a.name.localeCompare(b.name));
 }

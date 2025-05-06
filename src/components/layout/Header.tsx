@@ -12,6 +12,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"; // Import Dropdown
 import { Button } from '@/components/ui/button'; // Import Button
+import MiniCartDrawer from '@/components/MiniCartDrawer';
+import ThemeToggle from '@/components/ThemeToggle';
 import { Check, ChevronDown } from 'lucide-react'; // Icons for dropdown
 
 // Inline SVG Flags for better portability and less dependency on external files
@@ -86,6 +88,8 @@ export function Header() {
               <Nav />
            </div>
           <nav className="flex items-center">
+           <ThemeToggle />
+            <MiniCartDrawer />
             {/* Language Switcher Dropdown */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>

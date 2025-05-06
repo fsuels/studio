@@ -1,287 +1,249 @@
+@import url("https://rsms.me/inter/inter.css");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-/* Import Inter font if needed - uncomment if Geist is not preferred */
-/* @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap'); */
-
-html, body, #__next {
-  overflow-x: hidden; /* Prevent horizontal scroll */
-}
-
-
-body {
-  font-family: var(--font-geist-sans), sans-serif; /* Default to Geist */
-  /* Uncomment below to use Inter */
-  /* font-family: 'Inter', var(--font-geist-sans), sans-serif; */
-  line-height: 1.5; /* Set default line height */
-  overflow-x: hidden; /* Prevent horizontal scrolling */
-}
-
-h1, h2, h3, h4, h5, h6 {
-   /* Uncomment below to use Inter for headings */
-   /* font-family: 'Inter', var(--font-geist-sans), sans-serif; */
-   font-weight: 600; /* Example: Make headings semi-bold */
-}
-
+ 
 @layer base {
   :root {
-    /* Light Theme */
-    --background: 207 100% 96%; /* Slightly off-white background for depth */
-    --foreground: 0 0% 3.9%; /* Default Dark Text */
-    --card: 0 0% 100%; /* White */
-    --card-foreground: 0 0% 3.9%; /* Default Dark Text */
-    --popover: 0 0% 100%; /* White */
-    --popover-foreground: 0 0% 3.9%; /* Default Dark Text */
-    --primary: 180 100% 25%; /* Teal */
-    --primary-foreground: 0 0% 98%; /* White text on primary */
-    --secondary: 207 100% 91%; /* Soft Blue */
-    --secondary-foreground: 0 0% 9%; /* Dark text on secondary */
-    --muted: 207 100% 95%; /* Very light blue for muted backgrounds */
-    --muted-foreground: 0 0% 45.1%; /* Grey text on muted */
-    --accent: 180 100% 25%; /* Teal */
-    --accent-foreground: 0 0% 98%; /* White text on accent */
-    --destructive: 0 84.2% 60.2%; /* Default Red */
-    --destructive-foreground: 0 0% 98%; /* White text on destructive */
-    --border: 207 50% 85%; /* Lighter Muted Blue Border */
-    --input: 0 0% 100%; /* White input background */
-    --ring: 180 100% 30%; /* Slightly darker Teal for focus rings */
-    --chart-1: 12 76% 61%; /* Default Chart Colors */
-    --chart-2: 173 58% 39%;
-    --chart-3: 197 37% 24%;
-    --chart-4: 43 74% 66%;
-    --chart-5: 27 87% 67%;
+    --background: 0 0% 100%;
+    --foreground: 224 71.4% 4.1%;
+    --card: 0 0% 100%;
+    --card-foreground: 224 71.4% 4.1%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 224 71.4% 4.1%;
+    --primary: 220.9 39.3% 11%;
+    --primary-foreground: 210 20% 98%;
+    --secondary: 220 14.3% 95.9%;
+    --secondary-foreground: 220.9 39.3% 11%;
+    --muted: 220 14.3% 95.9%;
+    --muted-foreground: 220 8.9% 46.1%;
+    --accent: 220 14.3% 95.9%;
+    --accent-foreground: 220.9 39.3% 11%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 20% 98%;
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 224 71.4% 4.1%;
     --radius: 0.5rem;
-    /* Sidebar colors - Default */
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 240 5.9% 10%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
   .dark {
-    /* Dark Theme - Keeping defaults for now, can customize later */
-    --background: 0 0% 3.9%;
-    --foreground: 0 0% 98%;
-    --card: 0 0% 5.9%; /* Slightly lighter card for dark mode */
-    --card-foreground: 0 0% 98%;
-    --popover: 0 0% 3.9%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 180 100% 35%; /* Brighter Teal for dark mode */
-    --primary-foreground: 0 0% 9%;
-    --secondary: 0 0% 14.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 0 0% 14.9%;
-    --muted-foreground: 0 0% 63.9%;
-    --accent: 180 100% 35%; /* Brighter Teal for dark mode */
-    --accent-foreground: 0 0% 9%;
+    --background: 224 71.4% 4.1%;
+    --foreground: 210 20% 98%;
+    --card: 224 71.4% 4.1%;
+    --card-foreground: 210 20% 98%;
+    --popover: 224 71.4% 4.1%;
+    --popover-foreground: 210 20% 98%;
+    --primary: 210 20% 98%;
+    --primary-foreground: 220.9 39.3% 11%;
+    --secondary: 215 27.9% 16.9%;
+    --secondary-foreground: 210 20% 98%;
+    --muted: 215 27.9% 16.9%;
+    --muted-foreground: 217.9 10.6% 64.9%;
+    --accent: 215 27.9% 16.9%;
+    --accent-foreground: 210 20% 98%;
     --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 14.9%;
-    --input: 0 0% 14.9%;
-    --ring: 180 100% 40%; /* Brighter Teal for dark mode rings */
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
-    /* Dark Sidebar colors - Default */
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --destructive-foreground: 210 20% 98%;
+    --border: 215 27.9% 16.9%;
+    --input: 215 27.9% 16.9%;
+    --ring: 216 12.2% 83.9%;
   }
 }
-
+ 
 @layer base {
   * {
     @apply border-border;
   }
-  html, body { /* Added html here too */
-    @apply bg-background text-foreground overflow-x-hidden;
+  body {
+    @apply bg-background text-foreground;
   }
+  html, body, #__next { overflow-x: hidden; }
 
-   /* Input focus styles */
-   input:focus-visible,
-   textarea:focus-visible,
-   select:focus-visible,
-   button:focus-visible {
-       @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
-   }
+  body {
+    /* Use HSL values from the theme for gradients */
+    background: radial-gradient(at top left, hsl(var(--primary) / 0.2) 0%, transparent 60%), 
+                radial-gradient(circle at 20% 0%, hsl(var(--accent)) 0%, transparent 45%), /* Adjusted to use accent from theme */
+                radial-gradient(circle at 80% 10%, hsl(var(--secondary)) 0%, transparent 40%), /* Adjusted to use secondary */
+                radial-gradient(circle at 50% 120%, hsl(var(--accent)) 0%, transparent 50%); /* Adjusted to use accent */
+    font-family: var(--font-geist-sans), 'InterVariable', sans-serif;
+    line-height: 1.5;
+  }
+  input:focus-visible,
+  textarea:focus-visible,
+  select:focus-visible,
+  button:focus-visible {
+    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
+  }
+  .card-hover {
+    @apply transition-transform duration-150 hover:-translate-y-1 hover:shadow-lg;
+  }
+  h1,h2,h3,h4,h5,h6 { @apply font-semibold text-foreground; } /* Use theme foreground color */
+  .bg-glass {
+    backdrop-filter: blur(12px) saturate(180%);
+    background: hsl(var(--card) / 0.6); /* Use card color with opacity */
+    box-shadow: 0 8px 32px hsla(var(--foreground) / 0.12); /* Use foreground with opacity for shadow */
+  }
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-track { @apply bg-transparent; }
+  ::-webkit-scrollbar-thumb { @apply bg-muted-foreground/50 hover:bg-muted-foreground/70 rounded-lg transition-colors duration-200; } /* Use muted foreground */
+  
+  .motion-fade {
+    opacity: 0;
+  }
+  .motion-fade[data-visible="true"] {
+    opacity: 1;
+    transition: opacity .4s cubic-bezier(.16,1,.3,1);
+  }
 }
 
-/* Add Tailwind animations and responsive grids/stepper */
 @layer utilities {
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .animate-fade-up      { animation: fadeUp .45s cubic-bezier(.16,1,.3,1) both; }
+
   @keyframes fadeIn {
     from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+    to   { opacity: 1; transform: translateY(0); }
   }
-  .animate-fade-in {
-    animation: fadeIn 0.5s ease-out forwards;
-  }
+  .animate-fade-in      { animation: fadeIn 0.5s ease-out forwards; }
 
-  /* Scrollbar Hide utility */
-  .scrollbar-hide {
-    -ms-overflow-style: none; /* IE and Edge */
-    scrollbar-width: none; /* Firefox */
-    
-  }
   .scrollbar-hide::-webkit-scrollbar {
-    display: none; /* Safari and Chrome */
+    display: none;
+  }
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
   }
 
-  /* Responsive Grids */
-  .category-grid,
-  .document-grid {
-    @apply grid gap-3; /* Adjusted gap */
+  button:focus-visible, a:focus-visible { @apply ring-2 ring-offset-2 ring-primary; }
+  
+  .card-content {
+    @apply px-4 py-3 !important; /* Keep if essential, otherwise review use of !important */
   }
 
-  /* General Step Card Styles */
-  .step-card {
-      /* Base padding and font sizes for mobile */
-     @apply p-4 bg-card rounded-lg shadow-lg border border-border;
+  .category-grid, .document-grid { 
+    @apply grid gap-3; 
   }
-   .step-card__header {
-      @apply mb-4 flex items-start space-x-3; /* Use flex for icon and text alignment */
-   }
-    .step-card__icon { /* Style for the icon in the header */
-        @apply h-7 w-7 text-primary shrink-0 mt-1; /* Adjusted size and margin-top */
+
+  /* Step Card Styling */
+  .step-card { 
+    @apply p-4 bg-card rounded-lg shadow-lg border border-border; 
+  }
+  .step-card__header { 
+    @apply mb-4 flex items-start space-x-3; 
+  }
+  .step-card__icon { 
+    @apply h-7 w-7 text-primary shrink-0 mt-1; 
+  }
+  .step-card__title { 
+    @apply text-xl font-semibold text-foreground; 
+  }
+  .step-card__subtitle { 
+    @apply text-base text-muted-foreground; 
+  }
+  .step-card select, 
+  .step-card input[type="text"], 
+  .step-card input[type="search"] { 
+    @apply w-full box-border mb-4 bg-background border-input placeholder:text-muted-foreground text-foreground; 
+  }
+
+  /* Category and Document Card Styling */
+  .category-card, .document-card { 
+    @apply p-4 border border-border rounded-md shadow-sm text-center flex flex-col items-center justify-center bg-card text-card-foreground;
+    min-height: 56px; 
+    font-size: 1rem; 
+  }
+  .category-card:active, .document-card:active { 
+    @apply scale-95 transition-transform duration-100 ease-out; 
+  }
+  @media (hover:hover) {
+    .category-card:hover, .document-card:hover { 
+      @apply shadow-md border-primary/50; 
     }
-   .step-card__title {
-      @apply text-xl font-semibold text-foreground; /* Mobile title */
-   }
-    .step-card__subtitle {
-       @apply text-base text-muted-foreground; /* Mobile subtitle */
-    }
-     .step-card select,
-    .step-card input[type="text"], /* Be specific for search input */
-    .step-card input[type="search"] {
-      @apply w-full box-border mb-4; /* Full width inputs/selects with margin */
-    }
-
-
-  /* Category and Document Card Styles (Mobile-first) */
-  .category-card,
-  .document-card {
-     @apply p-4 border rounded-md shadow-sm text-center flex flex-col items-center justify-center;
-     min-height: 56px; /* Min touch target */
-     font-size: 1rem; /* Base font size */
   }
-   .category-card:active,
-  .document-card:active {
-    @apply scale-95 transition-transform duration-100 ease-out;
-  }
-   /* Hover styles for non-touch devices */
-   @media (hover: hover) {
-       .category-card:hover,
-       .document-card:hover {
-           @apply shadow-md border-primary/50;
-       }
-   }
 
-
-  /* Phone */
+  /* Responsive Grid Adjustments from previous commit */
   @media (max-width: 639px) {
-    .category-grid {
-      @apply grid-cols-1; /* Categories become single column */
-    }
-    .document-grid {
-      @apply grid-cols-1; /* Documents become single column */
-    }
-     /* Sticky Stepper for Mobile */
-     .stepper {
-       @apply sticky top-0 bg-background z-50 py-2 px-2 shadow-sm border-b flex justify-between items-center;
-     }
-     .stepper__label {
-        @apply hidden; /* Hide full labels on mobile */
-     }
-     .stepper__number {
-         @apply flex items-center justify-center h-6 w-6 rounded-full text-xs font-bold; /* Visible step number */
-     }
-      .stepper__item--active .stepper__number {
-         @apply bg-primary text-primary-foreground;
-     }
-      .stepper__item--complete .stepper__number {
-          @apply bg-green-600 text-white; /* Example completion color */
-      }
-     .stepper__item--incomplete .stepper__number {
-          @apply bg-muted text-muted-foreground border border-border;
-      }
-     .progress-bar {
-        @apply flex-1 mx-4 bg-muted h-1 rounded overflow-hidden; /* Add progress bar styling */
-     }
-     .progress-bar > div {
-         @apply bg-primary h-full transition-all duration-300;
-     }
+    .category-grid, .document-grid { grid-template-columns: 1fr; }
   }
-
-  /* Tablet */
   @media (min-width: 640px) and (max-width: 1023px) {
-    .category-grid {
-      @apply grid-cols-2; /* Categories 2 columns */
-    }
-    .document-grid {
-      @apply grid-cols-2; /* Documents 2 columns */
-    }
-     .step-card {
-        @apply p-6; /* Larger padding */
-     }
-      .step-card__title {
-        @apply text-2xl; /* Larger title */
-    }
-     .step-card__subtitle {
-        @apply text-lg; /* Larger subtitle */
-    }
-     /* Stepper on Tablet/Desktop */
-    .stepper {
-       @apply relative flex items-center justify-between space-x-2 md:space-x-4 p-4 border-b; /* Non-sticky, more space */
-    }
-     .stepper__label {
-        @apply block text-xs font-medium mt-1; /* Show labels */
-     }
-     .progress-bar {
-         @apply hidden; /* Hide progress bar on larger screens */
-     }
-     .stepper__item {
-         @apply flex-1 relative text-center;
-     }
+    .category-grid, .document-grid { grid-template-columns: repeat(2,1fr); }
+  }
+  @media (min-width: 1024px) {
+    /* Example: 3 columns for category, 3 for document on desktop */
+    .category-grid { grid-template-columns: repeat(3,1fr); } 
+    .document-grid { grid-template-columns: repeat(3,1fr); }
   }
 
-  /* Desktop */
-  @media (min-width: 1024px) {
-    .category-grid {
-      @apply grid-cols-3; /* 3 columns for categories */
-    }
-    .document-grid {
-      @apply grid-cols-3; /* 3 columns for documents */
-    }
-     /* Step card styles remain same as tablet */
-     .step-card {
-        @apply p-6;
-     }
-     .step-card__title {
-        @apply text-2xl;
-    }
-     .step-card__subtitle {
-        @apply text-lg;
-    }
-     /* Stepper styles remain same as tablet */
-     .stepper {
-        @apply relative flex items-center justify-between space-x-4 p-4 border-b;
-     }
-     .stepper__label {
-         @apply block text-xs font-medium mt-1;
-     }
-     .progress-bar {
-          @apply hidden;
-     }
+  /* Stepper styles from previous commit */
+  .stepper {
+    @apply sticky top-0 bg-background z-20 py-2 flex justify-between items-center px-2 border-b border-border shadow-sm;
+    /* Ensure stepper uses background color for light/dark mode */
+  }
+  .stepper__item {
+    @apply flex-1 text-center; /* Basic styling, can be enhanced */
+  }
+  .stepper__item--active .stepper__label,
+  .stepper__item--active .stepper__number {
+    @apply text-primary font-semibold;
+  }
+  .stepper__item--complete .stepper__label,
+  .stepper__item--complete .stepper__number {
+    @apply text-green-600; /* Or use a theme color like accent-foreground */
+  }
+  .stepper__number {
+    @apply block mx-auto h-8 w-8 rounded-full border-2 flex items-center justify-center mb-1;
+    /* Dynamic border/bg in component */
+  }
+  .stepper__label {
+    @apply text-xs;
+  }
+  .progress-bar {
+    @apply flex-1 mx-4 bg-muted h-1 rounded overflow-hidden sm:hidden; /* Show only on mobile */
+  }
+  .progress-bar > div {
+     @apply bg-primary h-full transition-all duration-300;
+  }
+
+
+  /* Step Content Padding */
+  .step-content {
+    @apply p-4; /* Default padding for mobile */
+  }
+  @media (min-width: 640px) {
+    .step-content { @apply p-6; } /* Larger padding for tablet and up */
+  }
+
+}
+
+/* Specific styling for Stepper based on ProgressStepper.tsx requirements */
+@layer components {
+  .stepper {
+    @apply w-full;
+  }
+
+  .stepper__item {
+    @apply relative flex flex-col items-center;
+    /* Horizontal line connection will be handled by ::after or border trick in JSX if needed */
+  }
+
+  .stepper__number {
+    /* Base styles for the circle are applied in ProgressStepper.tsx via cn() */
+    /* No specific CSS needed here unless overriding those dynamic classes */
+  }
+
+  .stepper__label {
+    /* Styles for labels are applied in ProgressStepper.tsx via cn() */
+  }
+
+  /* Mobile progress bar - ensure it's part of stepper or handled in ProgressStepper.tsx */
+  .progress-bar {
+    @apply block sm:hidden h-1 bg-muted rounded-full overflow-hidden;
+  }
+  .progress-bar > div {
+    @apply bg-primary h-full transition-all;
   }
 }

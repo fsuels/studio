@@ -1,7 +1,8 @@
 
-import type { Metadata } from 'next';
-import { Geist, Geist_Mono } from 'next/font/google';
-import './globals.css';
+import type { Metadata } from 'next'; // Import Metadata type
+import { Geist, Geist_Mono } from 'next/font/google'; // Import font modules
+import './globals.css'; // Import global CSS
+import { AnimatePresence, MotionConfig } from 'framer-motion';
 import { ClientProviders } from '@/components/providers/ClientProviders'; // Import the new client component
 import React from 'react'; // Import React
 

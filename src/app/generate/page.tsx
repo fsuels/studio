@@ -1,12 +1,24 @@
 // src/app/generate/page.tsx
-import React from 'react';
+import React from 'react'
+import DocumentFlow from '@/components/DocumentFlow'
+import { Button } from '@/components/ui/button'
 
 export default function GeneratePage() {
   return (
     <main className="p-8 text-center">
-      <h1 className="text-3xl font-bold">Generate Document</h1>
-      <p className="mt-4">This is the document generation page.</p>
-      {/* Add document generation components here */}
+      <h1 className="text-3xl font-bold mb-8">Generate Document</h1>
+
+      <div className='max-w-3xl mx-auto'>
+      <DocumentFlow />
+      <div className='mt-8'>
+      <Button
+        className="bg-gradient-to-r from-electric-500 to-electric-700 hover:to-electric-600 text-white shadow-glass"
+      >
+        Continue
+      </Button>
+      </div>
+      </div>
+
     </main>
-  );
+  )
 }

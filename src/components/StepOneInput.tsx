@@ -3,6 +3,7 @@
 
 import React from 'react';
 import { File } from 'lucide-react';
+import { cn } from '@/lib/utils';
 import { documentLibrary } from '@/lib/document-library';
 
 interface StepOneInputProps {
@@ -29,7 +30,12 @@ export function StepOneInput({ onSelectCategory }: StepOneInputProps) {
           <button
             key={category}
             onClick={() => onSelectCategory(category)}
-            className="flex flex-col items-center p-4 border rounded-lg shadow-sm hover:shadow-md transition"
+            className={cn(
+              'flex flex-col items-center p-4 border rounded-lg shadow-sm hover:shadow-md transition',
+              'hover:-translate-y-1 hover:shadow-glass transition-all duration-200',
+              'active:scale-95 motion-reduce:transform-none'
+            )}
+
           >
             <File className="w-6 h-6 mb-2 text-blue-600" />
             <span className="text-center">{category}</span>
