@@ -6,32 +6,32 @@ import { useTranslation } from "react-i18next";
 import { documentLibrary, usStates, type LegalDocument } from "@/lib/document-library";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-// Select component is removed from here as state selection is now global
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"; // Keep Select for state
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowLeft, FileText, Search, Landmark, Briefcase, Home, Users, User, ScrollText, Handshake, ShieldQuestion, GraduationCap, FileIcon as PaperIcon } from "lucide-react"; 
-import { Label } from "@/components/ui/label"; // Label might still be useful for local search
+import { ArrowLeft, FileText, Search, Landmark, Briefcase, Home, Users, User, ScrollText, Handshake, ShieldQuestion, GraduationCap, FileIcon as PaperIcon, Loader2 } from "lucide-react"; 
+import { Label } from "@/components/ui/label";
 import { track } from "@/lib/analytics";
+import { useToast } from "@/hooks/use-toast"; // Import useToast
 
 // User-friendly category definitions with icons
 const CATEGORY_LIST = [
-  { key: 'Finance', label: 'Finance', icon: Landmark },
-  { key: 'Business', label: 'Business', icon: Briefcase },
-  { key: 'Real Estate', label: 'Real Estate', icon: Home },
-  { key: 'Family', label: 'Family', icon: Users },
-  { key: 'Personal', label: 'Personal', icon: User },
-  { key: 'Estate Planning', label: 'Estate Planning', icon: ScrollText },
-  { key: 'Miscellaneous', label: 'General', icon: FileText }, 
+  { key: 'Finance', labelKey: 'Finance', icon: Landmark },
+  { key: 'Business', labelKey: 'Business', icon: Briefcase },
+  { key: 'Real Estate', labelKey: 'Real Estate', icon: Home },
+  { key: 'Family', labelKey: 'Family', icon: Users },
+  { key: 'Personal', labelKey: 'Personal', icon: User },
+  { key: 'Estate Planning', labelKey: 'Estate Planning', icon: ScrollText },
+  { key: 'Miscellaneous', labelKey: 'General', icon: FileText }, 
 ];
 
 
 interface Step1DocumentSelectorProps {
   selectedCategory: string | null;
   onCategorySelect: (categoryKey: string | null) => void;
-  // onStateSelect is removed as it's handled globally
   onDocumentSelect: (doc: LegalDocument) => void;
   isReadOnly?: boolean;
-  globalSearchTerm: string; // New prop for global search
-  globalSelectedState: string; // New prop for global state
+  globalSearchTerm: string; 
+  globalSelectedState: string; 
 }
 
 export default function Step1DocumentSelector({
@@ -44,22 +44,23 @@ export default function Step1DocumentSelector({
 }: Step1DocumentSelectorProps) {
   const { t, i18n } = useTranslation();
   const [view, setView] = useState<'categories' | 'documents'>(selectedCategory ? 'documents' : 'categories');
-  const [currentCategory, setCurrentCategory] = useState<string | null>(selectedCategory);
-  const [docSearch, setDocSearch] = useState<string>(''); // Local search within category
+  const [currentCategoryKey, setCurrentCategoryKey] = useState<string | null>(selectedCategory); // Store key for consistency
+  const [docSearch, setDocSearch] = useState<string>(''); 
   const [isHydrated, setIsHydrated] = useState(false);
+  const { toast } = useToast();
 
   useEffect(() => {
     setIsHydrated(true);
   }, []);
 
   useEffect(() => {
-    setCurrentCategory(selectedCategory);
+    setCurrentCategoryKey(selectedCategory);
     setView(selectedCategory ? 'documents' : 'categories');
   }, [selectedCategory]);
 
 
   const sortedCategories = useMemo(() => {
-       const uniqueCategoriesMap = new Map<string, { key: string, label: string, icon: React.ElementType }>();
+       const uniqueCategoriesMap = new Map<string, { key: string, labelKey: string, icon: React.ElementType }>();
        CATEGORY_LIST.forEach(catInfo => {
            if (!uniqueCategoriesMap.has(catInfo.key)) {
                uniqueCategoriesMap.set(catInfo.key, catInfo);
@@ -67,77 +68,74 @@ export default function Step1DocumentSelector({
        });
        const uniqueCategories = Array.from(uniqueCategoriesMap.values());
 
-      if (!isHydrated) return uniqueCategories;
+      if (!isHydrated) return uniqueCategories; // Return unsorted during hydration
       return [...uniqueCategories].sort((a, b) =>
-         t(a.label, a.label).localeCompare(t(b.label, b.label), i18n.language)
+         t(a.labelKey, a.key).localeCompare(t(b.labelKey, b.key), i18n.language)
       );
-  }, [isHydrated, i18n.language, t]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isHydrated, i18n.language, t]); // t is now a dependency
 
 
-  // Filter documents based on selected category, local doc search, global search, and global state
   const filteredDocs = useMemo(() => {
     let docs = documentLibrary;
+    if (!isHydrated) return []; // Return empty or placeholder during hydration
 
-    // 1. Filter by global search term (applies to all documents if no category selected, or within category if selected)
     if (globalSearchTerm.trim() !== '') {
       const lowerGlobalSearch = globalSearchTerm.toLowerCase();
       docs = docs.filter(doc =>
-        (isHydrated ? t(doc.name, doc.name) : doc.name).toLowerCase().includes(lowerGlobalSearch) ||
+        (t(doc.name, doc.name)).toLowerCase().includes(lowerGlobalSearch) ||
         (doc.aliases?.some(alias => alias.toLowerCase().includes(lowerGlobalSearch))) ||
         (languageSupportsSpanish(doc.languageSupport) && doc.aliases_es?.some(alias => alias.toLowerCase().includes(lowerGlobalSearch))) ||
-        (isHydrated && languageSupportsSpanish(doc.languageSupport) && doc.name_es && t(doc.name_es, doc.name_es).toLowerCase().includes(lowerGlobalSearch)) ||
-        (isHydrated ? t(doc.description, doc.description) : doc.description).toLowerCase().includes(lowerGlobalSearch) ||
-        (isHydrated && languageSupportsSpanish(doc.languageSupport) && doc.description_es && t(doc.description_es, doc.description_es).toLowerCase().includes(lowerGlobalSearch))
+        (languageSupportsSpanish(doc.languageSupport) && doc.name_es && t(doc.name_es, doc.name_es).toLowerCase().includes(lowerGlobalSearch)) ||
+        (t(doc.description, doc.description)).toLowerCase().includes(lowerGlobalSearch) ||
+        (languageSupportsSpanish(doc.languageSupport) && doc.description_es && t(doc.description_es, doc.description_es).toLowerCase().includes(lowerGlobalSearch))
       );
     }
     
-    // 2. Filter by global selected state
     if (globalSelectedState && globalSelectedState !== 'all') {
         docs = docs.filter(doc => doc.states === 'all' || doc.states?.includes(globalSelectedState));
     }
 
-    // 3. If a category is selected, filter by that category
-    if (currentCategory) {
-      docs = docs.filter(doc => doc.category === currentCategory);
+    if (currentCategoryKey) {
+      docs = docs.filter(doc => doc.category === currentCategoryKey);
     }
     
-    // 4. Filter by local document search (within the already filtered list)
     if (view === 'documents' && docSearch.trim() !== '') {
         const lowerDocSearch = docSearch.toLowerCase();
         docs = docs.filter(doc =>
-            (isHydrated ? t(doc.name, doc.name) : doc.name).toLowerCase().includes(lowerDocSearch) ||
+            (t(doc.name, doc.name)).toLowerCase().includes(lowerDocSearch) ||
             (doc.aliases?.some(alias => alias.toLowerCase().includes(lowerDocSearch))) ||
             (languageSupportsSpanish(doc.languageSupport) && doc.aliases_es?.some(alias => alias.toLowerCase().includes(lowerDocSearch))) ||
-            (isHydrated && languageSupportsSpanish(doc.languageSupport) && doc.name_es && t(doc.name_es, doc.name_es).toLowerCase().includes(lowerDocSearch))
+            (languageSupportsSpanish(doc.languageSupport) && doc.name_es && t(doc.name_es, doc.name_es).toLowerCase().includes(lowerDocSearch))
         );
     }
     
-    return docs.filter(doc => doc.id !== 'general-inquiry'); // Always exclude general inquiry
-  }, [currentCategory, docSearch, globalSearchTerm, globalSelectedState, view, t, i18n.language, isHydrated]);
+    return docs.filter(doc => doc.id !== 'general-inquiry'); 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentCategoryKey, docSearch, globalSearchTerm, globalSelectedState, view, t, i18n.language, isHydrated]);
 
 
-   const languageSupportsSpanish = (support: string[]): boolean => support.includes('es');
+   const languageSupportsSpanish = (support: string[] | undefined): boolean => !!support && support.includes('es');
 
 
   const handleCategoryClick = (key: string) => {
-    if (isReadOnly) return;
-    onCategorySelect(key); // Notify parent of category selection
-    // setCurrentCategory(key); // This is now handled by useEffect based on selectedCategory prop
+    if (isReadOnly || !isHydrated) return;
+    onCategorySelect(key); 
     setDocSearch('');
     setView('documents');
     track('select_item', { category: key });
   };
 
   const handleBackToCategories = () => {
-    if (isReadOnly) return;
-    onCategorySelect(null); // Reset category in parent
-    // setCurrentCategory(null); // Handled by useEffect
+    if (isReadOnly || !isHydrated) return;
+    onCategorySelect(null); 
     setDocSearch('');
     setView('categories');
   };
 
   const handleDocSelect = (doc: LegalDocument) => {
-    if (isReadOnly || !globalSelectedState) { // Check globalSelectedState
+    if (!isHydrated) return;
+    if (isReadOnly || !globalSelectedState) { 
         toast({ 
             title: t('State Required', {defaultValue: "State Required"}), 
             description: t('Please select a state from the filter bar above before choosing a document.', {defaultValue: "Please select a state from the filter bar above before choosing a document."}),
@@ -146,13 +144,45 @@ export default function Step1DocumentSelector({
         return;
     }
     onDocumentSelect(doc);
-    track('view_item', {id: doc.id,name: doc.name,category : doc.category,price    : doc.basePrice,state    : globalSelectedState,});
+    track('view_item', {id: doc.id,name: doc.name,category : doc.category,price : doc.basePrice,state : globalSelectedState,});
   };
+  
+  const placeholderTitle = isHydrated ? t('stepOne.title') : "Loading...";
+  const placeholderCategoryDesc = isHydrated ? t('stepOne.categoryDescription') : "Loading...";
+  const placeholderSelectDocDesc = isHydrated ? t('stepOne.selectDocDescription') : "Loading...";
+  const placeholderSearchCategories = isHydrated ? t('docTypeSelector.searchCategories') : "Searching...";
+  const placeholderNoCategories = isHydrated ? t('docTypeSelector.noCategoriesFound') : "Loading...";
+  const placeholderBackToCategories = isHydrated ? t('docTypeSelector.backToCategories') : "Back...";
+  const placeholderSearchDocuments = isHydrated ? t('docTypeSelector.searchPlaceholder') : "Searching...";
+  const placeholderNoResults = isHydrated ? t('docTypeSelector.noResults') : "Loading...";
+  const placeholderNoDescription = isHydrated ? t('docTypeSelector.noDescription') : "Loading...";
+  const placeholderRequiresNotarization = isHydrated ? t('docTypeSelector.requiresNotarization') : "Requires Notarization";
+  const placeholderCanBeRecorded = isHydrated ? t('docTypeSelector.canBeRecorded') : "Can Be Recorded";
 
-  const { toast } = useToast(); // Ensure toast is defined
 
   if (!isHydrated) {
-    return <div className="h-96 animate-pulse bg-muted rounded-lg shadow-lg border border-border"></div>;
+    return (
+      <Card className="step-card opacity-50">
+        <CardHeader className="step-card__header">
+            <PaperIcon className="step-card__icon animate-pulse" />
+            <div> 
+              <CardTitle className="step-card__title h-6 bg-muted-foreground/20 rounded w-3/4 mb-1"></CardTitle>
+              <CardDescription className="step-card__subtitle h-4 bg-muted-foreground/10 rounded w-full"></CardDescription>
+            </div>
+        </CardHeader>
+        <CardContent className="step-content space-y-6 pt-6">
+           <div className="h-10 bg-muted-foreground/10 rounded w-full mb-4"></div>
+           <div className="category-grid pt-2">
+            {[...Array(6)].map((_, i) => (
+                <div key={i} className="category-card h-auto min-h-[90px] p-4 border-border shadow-sm bg-muted flex flex-col justify-center items-center">
+                    <div className="h-6 w-6 mb-2 bg-muted-foreground/20 rounded-full"></div>
+                    <div className="h-4 bg-muted-foreground/10 rounded w-20"></div>
+                </div>
+            ))}
+           </div>
+        </CardContent>
+      </Card>
+    );
   }
 
   return (
@@ -161,12 +191,12 @@ export default function Step1DocumentSelector({
              <PaperIcon className="step-card__icon" />
              <div> 
                 <CardTitle className="step-card__title">
-                    {t('stepOne.title')} 
+                    {placeholderTitle} 
                 </CardTitle>
                 <CardDescription className="step-card__subtitle">
                     {view === 'categories'
-                       ? t('stepOne.categoryDescription')
-                       : t('stepOne.selectDocDescription')
+                       ? placeholderCategoryDesc
+                       : placeholderSelectDocDesc
                      }
                  </CardDescription>
              </div>
@@ -175,11 +205,11 @@ export default function Step1DocumentSelector({
         {view === 'documents' && (
             <div className="px-6 pb-4 border-b border-border"> 
                  <div className="flex items-center justify-between">
-                     <Button variant="outline" size="sm" onClick={handleBackToCategories} disabled={isReadOnly}>
-                       <ArrowLeft className="mr-2 h-4 w-4" /> {t('docTypeSelector.backToCategories')}
+                     <Button variant="outline" size="sm" onClick={handleBackToCategories} disabled={isReadOnly || !isHydrated}>
+                       <ArrowLeft className="mr-2 h-4 w-4" /> {placeholderBackToCategories}
                      </Button>
                       <h3 className="text-lg font-semibold text-muted-foreground text-right">
-                        {t(CATEGORY_LIST.find(c => c.key === currentCategory)?.label || currentCategory || '')}
+                        {t(CATEGORY_LIST.find(c => c.key === currentCategoryKey)?.labelKey || currentCategoryKey || '')}
                       </h3>
                  </div>
             </div>
@@ -195,7 +225,7 @@ export default function Step1DocumentSelector({
                                      key={cat.key}
                                      variant="outline"
                                      onClick={() => handleCategoryClick(cat.key)}
-                                     disabled={isReadOnly}
+                                     disabled={isReadOnly || !isHydrated}
                                      className="category-card h-auto min-h-[90px] p-4 border-border shadow-sm hover:shadow-md transition text-center flex flex-col justify-center items-center bg-card hover:bg-muted active:scale-95 active:transition-transform active:duration-100"
                                      style={{ minHeight: '56px' }}
                                  >
@@ -203,35 +233,17 @@ export default function Step1DocumentSelector({
                                          const IconComponent = cat.icon || FileText;
                                          return <IconComponent className="h-6 w-6 mb-2 text-primary/80" />;
                                       })()}
-                                     <span className="font-medium text-card-foreground text-sm">{t(cat.label, cat.label)}</span>
+                                     <span className="font-medium text-card-foreground text-sm">{t(cat.labelKey, cat.key)}</span>
                                  </Button>
                              ))}
                          </div>
                      ) : (
-                         <p className="text-muted-foreground italic text-center py-6">{t('docTypeSelector.noCategoriesFound')}</p>
+                         <p className="text-muted-foreground italic text-center py-6">{placeholderNoCategories}</p>
                      )}
                 </div>
-             ) : ( // Document View
+             ) : ( 
                  <div className="animate-fade-in space-y-6">
-                    {/* State selector is now global, handled by StickyFilterBar */}
-                     
-                     {/* Local Document Search within category (if many docs) */}
-                     {documentLibrary.filter(d => d.category === currentCategory).length > 7 && globalSelectedState && (
-                         <div className="relative mb-4">
-                             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                             <Input
-                                type="search" 
-                                placeholder={t('docTypeSelector.searchPlaceholder')}
-                                value={docSearch}
-                                onChange={e => !isReadOnly && setDocSearch(e.target.value)}
-                                disabled={isReadOnly || !globalSelectedState}
-                                className={`w-full pl-10 text-base md:text-sm ${isReadOnly || !globalSelectedState ? 'bg-muted/50 border-dashed cursor-not-allowed' : 'bg-background'}`}
-                                aria-label={t('docTypeSelector.searchPlaceholder')}
-                             />
-                         </div>
-                     )}
-
-                      {globalSelectedState ? ( // Only show documents if a state is selected globally
+                     {globalSelectedState ? ( 
                          <>
                             {filteredDocs.length > 0 ? (
                                 <div className="document-grid pt-4 animate-fade-in">
@@ -239,7 +251,7 @@ export default function Step1DocumentSelector({
                                     <Card
                                         key={doc.id}
                                         onClick={() => handleDocSelect(doc)}
-                                        className={`document-card shadow hover:shadow-lg cursor-pointer transition bg-card border border-border flex flex-col active:scale-95 active:transition-transform active:duration-100 ${isReadOnly ? 'pointer-events-none' : ''}`}
+                                        className={`document-card shadow hover:shadow-lg cursor-pointer transition bg-card border border-border flex flex-col active:scale-95 active:transition-transform active:duration-100 ${isReadOnly || !isHydrated ? 'pointer-events-none opacity-50' : ''}`}
                                          style={{ minHeight: '56px' }}
                                     >
                                         <CardHeader className="pb-2 pt-4 px-4">
@@ -248,24 +260,24 @@ export default function Step1DocumentSelector({
                                              </CardTitle>
                                         </CardHeader>
                                         <CardContent className="text-xs text-muted-foreground flex-grow px-4">
-                                            {i18n.language === 'es' && doc.description_es ? t(doc.description_es, doc.description) : t(doc.description, doc.description) || t('docTypeSelector.noDescription')}
+                                            {i18n.language === 'es' && doc.description_es ? t(doc.description_es, doc.description) : t(doc.description, doc.description) || placeholderNoDescription}
                                         </CardContent>
                                         <CardFooter className="pt-2 pb-3 px-4 text-xs text-muted-foreground flex justify-between items-center border-t border-border mt-auto">
                                            <span>💲{doc.basePrice}</span>
                                            <div className="flex gap-2">
-                                               {doc.requiresNotarization && <span title={t('docTypeSelector.requiresNotarization')}>📝</span>}
-                                               {doc.canBeRecorded && <span title={t('docTypeSelector.canBeRecorded')}>🏛️</span>}
+                                               {doc.requiresNotarization && <span title={placeholderRequiresNotarization}>📝</span>}
+                                               {doc.canBeRecorded && <span title={placeholderCanBeRecorded}>🏛️</span>}
                                            </div>
                                         </CardFooter>
                                     </Card>
                                 ))}
                                 </div>
                             ) : (
-                                <p className="text-muted-foreground italic text-center py-6">{t('docTypeSelector.noResults')}</p>
+                                <p className="text-muted-foreground italic text-center py-6">{placeholderNoResults}</p>
                             )}
                          </>
                       ) : (
-                         <p className="text-muted-foreground italic text-center py-6">{t('Please select a state from the filter bar above to see documents.')}</p>
+                         <p className="text-muted-foreground italic text-center py-6">{isHydrated ? t('Please select a state from the filter bar above to see documents.') : "Loading..."}</p>
                       )}
                  </div>
              )}
@@ -274,14 +286,3 @@ export default function Step1DocumentSelector({
   );
 }
 
-// Helper function to get useToast -- ensure it's imported if not globally available
-const useToast = () => {
-  // This is a placeholder. In a real app, useToast would come from your UI library (e.g., shadcn/ui)
-  // or a custom hook that manages toast state.
-  return {
-    toast: ({ title, description, variant }: { title: string; description?: string; variant?: string }) => {
-      console.log(`Toast: ${title} - ${description} (${variant})`);
-      // alert(`${title}\n${description}`); // Simple alert for demo
-    },
-  };
-};

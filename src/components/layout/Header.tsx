@@ -14,11 +14,11 @@ import {
 import { Button } from '@/components/ui/button'; // Import Button
 import MiniCartDrawer from '@/components/MiniCartDrawer';
 import { ThemeToggle } from '@/components/ThemeToggle'; // Changed to named import
-import { Check, ChevronDown } from 'lucide-react'; // Icons for dropdown
+import { Check, ChevronDown, Globe } from 'lucide-react'; // Icons for dropdown, added Globe for placeholder
 
 // Inline SVG Flags for better portability and less dependency on external files
 const FlagUS = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="16" viewBox="0 0 750 500" className="w-6 h-4 mr-2">
+  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="14" viewBox="0 0 750 500" className="w-5 h-auto mr-2 rounded-sm">
     <rect width="750" height="500" fill="#fff"/>
     <path fill="#b22234" d="M0 0h750v38.46H0zm0 76.92h750v38.46H0zm0 76.92h750v38.46H0zm0 76.93h750v38.46H0zm0 76.92h750v38.46H0zm0 76.92h750v38.46H0zm0 76.93h750v38.46H0z"/>
     <path fill="#3c3b6e" d="M0 0h300v269.23H0z"/>
@@ -27,7 +27,7 @@ const FlagUS = () => (
 );
 
 const FlagES = () => (
-   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="16" viewBox="0 0 750 500" className="w-6 h-4 mr-2">
+   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="14" viewBox="0 0 750 500" className="w-5 h-auto mr-2 rounded-sm">
       <rect width="750" height="500" fill="#c60b1e"/>
       <rect width="750" height="125" y="125" fill="#ffc400"/>
       <g transform="translate(206.25 212.5) scale(7.5)">
@@ -48,7 +48,7 @@ const FlagES = () => (
             <path d="M8.5 13v-1h.15c.2 0 .35-.15.35-.35V9h1v3h1v1z"/>
             <path d="M4.5 13v-1H4.35c-.2 0-.35-.15-.35-.35V9H5v3H6v1z"/>
          </g>
-         <path d="M7.5 1c.38 0 .7.1.96.28.21.14.38.33.49.55.11.22.15.46.15.72 0 .26-.04.5.15.72-.11.22-.28.41-.49.55-.26.17-.58.28-.96.28s-.7-.1-.96-.28c-.21-.14-.38-.33-.49-.55-.11-.22-.15-.46-.15-.72 0 .26.04.5.15-.72.11-.22.28-.41.49-.55.26-.17.58-.28.96-.28zm0 6c.38 0 .7.1.96.28.21.14.38.33.49.55.11.22.15.46.15.72 0 .26-.04.5.15.72-.11.22-.28.41-.49.55-.26.17-.58.28-.96.28s-.7-.1-.96-.28c-.21-.14-.38-.33-.49-.55-.11-.22-.15-.46-.15-.72 0 .26.04.5.15-.72.11-.22.28-.41.49-.55.26-.17.58-.28.96-.28z" fill="#fff"/>
+         <path d="M7.5 1c.38 0 .7.1.96.28.21.14.38.33.49.55.11.22.15.46.15.72 0 .26-.04.5.15.72-.11.22-.28.41-.49.55-.26.17-.58.28-.96.28s-.7-.1-.96-.28c-.21-.14-.38-.33-.49-.55-.11-.22-.15-.46-.15-.72 0 .26.04.5.15.72.11-.22.28-.41.49-.55.26-.17.58.28.96.28zm0 6c.38 0 .7.1.96.28.21.14.38.33.49.55.11.22.15.46.15.72 0 .26-.04.5.15.72-.11.22-.28.41-.49.55-.26.17-.58.28-.96.28s-.7-.1-.96-.28c-.21-.14-.38-.33-.49-.55-.11-.22-.15-.46-.15-.72 0 .26.04.5.15.72.11-.22.28-.41.49-.55.26-.17.58.28.96.28z" fill="#fff"/>
          <path d="M7.5 7C8.08 7 8.4.6 8.4 1.2V5.8C8.4 6.4 8.08 7 7.5 7S6.6 6.4 6.6 5.8V1.2C6.6.6 6.92 0 7.5 0c.58 0 .9.6.9 1.2z" fill="#ad1519"/>
          <path d="M7.5 13c.58 0 .9-.6.9-1.2V7.8c0-.6-.32-1.2-.9-1.2s-.9.6-.9 1.2v4c0 .6.32 1.2.9 1.2z" fill="#75aadb"/>
          <path d="M9.03 5.5H5.97c-.48 0-.78-.27-.78-.6 0-.33.3-.6.78-.6h3.06c.48 0 .78.27.78.6 0 .33-.3.6-.78.6z" fill="#ffc400"/>
@@ -59,19 +59,24 @@ const FlagES = () => (
 
 export function Header() {
   const { i18n } = useTranslation();
-  const [isHydrated, setIsHydrated] = useState(false); // State to track hydration
-  const [currentLanguage, setCurrentLanguage] = useState('EN'); // State for current language display
+  const [isHydrated, setIsHydrated] = useState(false);
+  const [currentLanguageDisplay, setCurrentLanguageDisplay] = useState('...'); // Placeholder for language display
 
-  // Effect to set hydration state and initialize language
   useEffect(() => {
     setIsHydrated(true);
-    setCurrentLanguage(i18n.language.startsWith('es') ? 'ES' : 'EN');
-  }, [i18n.language]); // Rerun when language changes
+    // Set initial language display based on i18n.language
+    // Ensure i18n.language is defined before using startsWith
+    if (i18n.language) {
+        setCurrentLanguageDisplay(i18n.language.startsWith('es') ? 'ES' : 'EN');
+    } else {
+        setCurrentLanguageDisplay('EN'); // Default if language is undefined
+    }
+  }, [i18n.language]);
 
   const handleLanguageChange = (lang: 'en' | 'es') => {
+    if (!isHydrated) return; // Prevent changes before hydration
     i18n.changeLanguage(lang).then(() => {
-      // Update state after language change is confirmed
-      setCurrentLanguage(lang === 'es' ? 'ES' : 'EN');
+      setCurrentLanguageDisplay(lang === 'es' ? 'ES' : 'EN');
       console.log(`Language switched to ${lang}`);
     });
   };
@@ -79,52 +84,51 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-14 items-center">
+      <div className="container flex h-14 items-center px-4 md:px-6"> {/* Added responsive padding */}
         <div className="mr-4 flex">
           <Logo />
         </div>
         <div className="flex flex-1 items-center justify-between space-x-2 md:justify-end">
-           <div className="hidden md:flex flex-1 justify-center"> {/* Hide Nav on small screens, center on medium+ */}
+           <div className="hidden md:flex flex-1 justify-center">
               <Nav />
            </div>
-          <nav className="flex items-center">
+          <nav className="flex items-center gap-2"> {/* Added gap for better spacing */}
            <ThemeToggle />
-            <MiniCartDrawer />
-            {/* Language Switcher Dropdown */}
+            {/* Render MiniCartDrawer only after hydration to ensure context is available */}
+            {isHydrated && <MiniCartDrawer />}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
                   variant="outline"
                   size="sm"
-                  className="text-xs font-medium text-foreground/80 hover:bg-foreground/5 hover:text-foreground px-3 py-1.5 border-border/50 shadow-sm"
+                  className="text-xs font-medium text-foreground/80 hover:bg-foreground/5 hover:text-foreground px-2 py-1.5 md:px-3 border-border/50 shadow-sm flex items-center" // Ensure items-center
                   aria-label="Select language"
-                  disabled={!isHydrated}
+                  disabled={!isHydrated} // Disable button before hydration
                 >
-                   {/* Show correct flag based on current language */}
-                  {isHydrated ? (currentLanguage === 'EN' ? <FlagUS /> : <FlagES />) : <div className="w-6 h-4 mr-2 bg-muted rounded-sm animate-pulse"></div>}
-                  {isHydrated ? currentLanguage : '...'}
+                  {isHydrated ? (currentLanguageDisplay === 'EN' ? <FlagUS /> : <FlagES />) : <Globe className="h-4 w-4 mr-1 text-muted-foreground" /> }
+                  <span className="hidden sm:inline">{isHydrated ? currentLanguageDisplay : '...'}</span> {/* Hide text on very small screens */}
                   <ChevronDown className="ml-1 h-4 w-4 opacity-70" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="min-w-[8rem]">
                 <DropdownMenuItem
                    onSelect={() => handleLanguageChange('en')}
-                   className={`text-xs ${currentLanguage === 'EN' ? 'font-medium text-primary' : ''}`}
+                   className={`text-xs ${currentLanguageDisplay === 'EN' ? 'font-medium text-primary bg-accent' : ''}`}
                 >
-                   <FlagUS /> English {currentLanguage === 'EN' && <Check className="ml-auto h-4 w-4" />}
+                   <FlagUS /> English {currentLanguageDisplay === 'EN' && <Check className="ml-auto h-4 w-4" />}
                 </DropdownMenuItem>
                 <DropdownMenuItem
                    onSelect={() => handleLanguageChange('es')}
-                   className={`text-xs ${currentLanguage === 'ES' ? 'font-medium text-primary' : ''}`}
+                   className={`text-xs ${currentLanguageDisplay === 'ES' ? 'font-medium text-primary bg-accent' : ''}`}
                 >
-                   <FlagES /> Español {currentLanguage === 'ES' && <Check className="ml-auto h-4 w-4" />}
+                   <FlagES /> Español {currentLanguageDisplay === 'ES' && <Check className="ml-auto h-4 w-4" />}
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
-            {/* Add Auth/User button here later */}
           </nav>
         </div>
       </div>
     </header>
   );
 }
+
