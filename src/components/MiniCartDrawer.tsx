@@ -45,7 +45,7 @@ export default function MiniCartDrawer() {
                 totalItems > 1 ? 's' : ''
               } in your cart.`
             ) : (
-              <p>Your cart is empty.</p>
+              "Your cart is empty." // Removed the nested <p> tag
             )}
           </DrawerDescription>
         </DrawerHeader>
