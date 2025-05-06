@@ -36,7 +36,7 @@ export default function RootLayout({
           {/* Add viewport meta tag here */}
           <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
       </head>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen`}>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen overflow-x-hidden`}>
         {/* Use the ClientProviders component to wrap children and handle client-side logic */}
         <ClientProviders>
           {children}

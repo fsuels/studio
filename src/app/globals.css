@@ -105,8 +105,8 @@ h1, h2, h3, h4, h5, h6 {
   * {
     @apply border-border;
   }
-  body {
-    @apply bg-background text-foreground;
+  html, body { /* Added html here too */
+    @apply bg-background text-foreground overflow-x-hidden;
   }
 
    /* Input focus styles */
@@ -150,8 +150,11 @@ h1, h2, h3, h4, h5, h6 {
      @apply p-4 bg-card rounded-lg shadow-lg border border-border;
   }
    .step-card__header {
-      @apply mb-4; /* Space below header */
+      @apply mb-4 flex items-start space-x-3; /* Use flex for icon and text alignment */
    }
+    .step-card__icon { /* Style for the icon in the header */
+        @apply h-7 w-7 text-primary shrink-0 mt-1; /* Adjusted size and margin-top */
+    }
    .step-card__title {
       @apply text-xl font-semibold text-foreground; /* Mobile title */
    }
@@ -159,7 +162,8 @@ h1, h2, h3, h4, h5, h6 {
        @apply text-base text-muted-foreground; /* Mobile subtitle */
     }
      .step-card select,
-    .step-card input {
+    .step-card input[type="text"], /* Be specific for search input */
+    .step-card input[type="search"] {
       @apply w-full box-border mb-4; /* Full width inputs/selects with margin */
     }
 
@@ -186,9 +190,11 @@ h1, h2, h3, h4, h5, h6 {
 
   /* Phone */
   @media (max-width: 639px) {
-    .category-grid,
+    .category-grid {
+      @apply grid-cols-1; /* Categories become single column */
+    }
     .document-grid {
-      @apply grid-cols-1;
+      @apply grid-cols-1; /* Documents become single column */
     }
      /* Sticky Stepper for Mobile */
      .stepper {
@@ -219,9 +225,11 @@ h1, h2, h3, h4, h5, h6 {
 
   /* Tablet */
   @media (min-width: 640px) and (max-width: 1023px) {
-    .category-grid,
+    .category-grid {
+      @apply grid-cols-2; /* Categories 2 columns */
+    }
     .document-grid {
-      @apply grid-cols-2;
+      @apply grid-cols-2; /* Documents 2 columns */
     }
      .step-card {
         @apply p-6; /* Larger padding */
@@ -250,7 +258,7 @@ h1, h2, h3, h4, h5, h6 {
   /* Desktop */
   @media (min-width: 1024px) {
     .category-grid {
-      @apply grid-cols-4; /* 4 columns for categories */
+      @apply grid-cols-3; /* 3 columns for categories */
     }
     .document-grid {
       @apply grid-cols-3; /* 3 columns for documents */

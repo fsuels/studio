@@ -13,24 +13,19 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowLeft, FileText, Search, Landmark, Briefcase, Home, Users, User, ScrollText, Handshake, ShieldQuestion, GraduationCap } from "lucide-react"; // Import icons
-import { Label } from "@/components/ui/label"; //Import Label component
+import { ArrowLeft, FileText, Search, Landmark, Briefcase, Home, Users, User, ScrollText, Handshake, ShieldQuestion, GraduationCap, FileIcon as PaperIcon } from "lucide-react"; // Added PaperIcon
+import { Label } from "@/components/ui/label";
 
 // User-friendly category definitions with icons
-// Reverted to original categories from documentLibrary
 const CATEGORY_LIST = [
   { key: 'Finance', label: 'Finance', icon: Landmark },
   { key: 'Business', label: 'Business', icon: Briefcase },
   { key: 'Real Estate', label: 'Real Estate', icon: Home },
   { key: 'Family', label: 'Family', icon: Users },
-  { key: 'Personal', label: 'Personal', icon: User }, // Combined Personal & Family
+  { key: 'Personal', label: 'Personal', icon: User },
   { key: 'Estate Planning', label: 'Estate Planning', icon: ScrollText },
-  { key: 'Transactions', label: 'Transactions', icon: Handshake }, // Added Transactions
-  // { key: 'Contracts & Agreements', label: 'Contracts', icon: Handshake }, // Keeping this broader one or use Transactions?
-  // { key: 'Court & Litigation', label: 'Litigation', icon: ShieldQuestion }, // Kept this
-  { key: 'Miscellaneous', label: 'General' }, // Fallback / Misc
-  // { key: 'Identification & Immigration', label: 'Identification & Immigration' }, // Added category
-  // { key: 'Employment & Labor', label: 'Employment & Labor' } // Added category
+  { key: 'Transactions', label: 'Transactions', icon: Handshake },
+  { key: 'Miscellaneous', label: 'General', icon: FileText }, // Fallback / Misc
 ];
 
 
@@ -39,9 +34,8 @@ interface Step1DocumentSelectorProps {
   selectedState: string;
   onCategorySelect: (categoryKey: string | null) => void;
   onStateSelect: (stateCode: string) => void;
-  onDocumentSelect: (doc: LegalDocument) => void; // Change to pass the whole doc object
-  // setCurrentStep: (step: number) => void; // Receive setCurrentStep - REMOVED, handled in parent
-  isReadOnly?: boolean; // Keep isReadOnly
+  onDocumentSelect: (doc: LegalDocument) => void;
+  isReadOnly?: boolean;
 }
 
 export default function Step1DocumentSelector({
@@ -50,21 +44,19 @@ export default function Step1DocumentSelector({
   onCategorySelect,
   onStateSelect,
   onDocumentSelect,
-  // setCurrentStep, // Removed
   isReadOnly = false
 }: Step1DocumentSelectorProps) {
   const { t, i18n } = useTranslation();
-  const [view, setView] = useState<'categories' | 'documents'>('categories'); // Corrected useState typing
+  const [view, setView] = useState<'categories' | 'documents'>(selectedCategory ? 'documents' : 'categories');
   const [currentCategory, setCurrentCategory] = useState<string | null>(selectedCategory);
   const [docSearch, setDocSearch] = useState<string>('');
-  const [internalState, setInternalState] = useState<string>(selectedState); // Internal state for the dropdown
+  const [internalState, setInternalState] = useState<string>(selectedState);
   const [isHydrated, setIsHydrated] = useState(false);
 
   useEffect(() => {
     setIsHydrated(true);
   }, []);
 
-  // Sync internal states with prop changes
   useEffect(() => {
     setCurrentCategory(selectedCategory);
     setView(selectedCategory ? 'documents' : 'categories');
@@ -77,150 +69,117 @@ export default function Step1DocumentSelector({
 
   const sortedCategories = useMemo(() => {
        const uniqueCategoriesMap = new Map<string, { key: string, label: string, icon: React.ElementType }>();
-       documentLibrary.forEach(doc => {
-           if (doc.id !== 'general-inquiry' && !uniqueCategoriesMap.has(doc.category)) {
-               const categoryInfo = CATEGORY_LIST.find(c => c.key === doc.category) || { key: doc.category, label: doc.category, icon: FileText };
-               uniqueCategoriesMap.set(doc.category, categoryInfo);
+       // Use CATEGORY_LIST as the source for categories to display
+       CATEGORY_LIST.forEach(catInfo => {
+           if (!uniqueCategoriesMap.has(catInfo.key)) {
+               uniqueCategoriesMap.set(catInfo.key, catInfo);
            }
        });
        const uniqueCategories = Array.from(uniqueCategoriesMap.values());
 
-      if (!isHydrated) return uniqueCategories; // Return unsorted during hydration
+      if (!isHydrated) return uniqueCategories;
       return [...uniqueCategories].sort((a, b) =>
          t(a.label, a.label).localeCompare(t(b.label, b.label), i18n.language)
       );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isHydrated, i18n.language, t]);
 
 
-  // Documents filtered by selected category and document search term
   const docsInCategory = useMemo(() => {
     if (!currentCategory) return [];
     return documentLibrary.filter(doc =>
         doc.category === currentCategory &&
         doc.id !== 'general-inquiry'
      );
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentCategory]);
 
-   // Further filter documents based on search query
   const filteredDocs = useMemo(() => {
       if (docSearch.trim() === '') return docsInCategory;
       const lowerSearch = docSearch.toLowerCase();
       return docsInCategory.filter(doc =>
          (isHydrated ? t(doc.name, doc.name) : doc.name).toLowerCase().includes(lowerSearch) ||
          (doc.aliases?.some(alias => alias.toLowerCase().includes(lowerSearch))) ||
-         (languageSupportsSpanish(doc.languageSupport) && doc.aliases_es?.some(alias => alias.toLowerCase().includes(lowerSearch))) || // Check Spanish aliases
-         (isHydrated && languageSupportsSpanish(doc.languageSupport) && doc.name_es && t(doc.name_es, doc.name_es).toLowerCase().includes(lowerSearch)) // Check Spanish name
+         (languageSupportsSpanish(doc.languageSupport) && doc.aliases_es?.some(alias => alias.toLowerCase().includes(lowerSearch))) ||
+         (isHydrated && languageSupportsSpanish(doc.languageSupport) && doc.name_es && t(doc.name_es, doc.name_es).toLowerCase().includes(lowerSearch))
       );
-      // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [docsInCategory, docSearch, t, i18n.language, isHydrated]);
 
-  // Helper function to check if Spanish is supported
    const languageSupportsSpanish = (support: string[]): boolean => support.includes('es');
 
 
   const handleCategoryClick = (key: string) => {
     if (isReadOnly) return;
-    onCategorySelect(key); // Inform parent
-    setCurrentCategory(key); // Update internal state
+    onCategorySelect(key);
+    setCurrentCategory(key);
     setDocSearch('');
     setView('documents');
   };
 
   const handleBackToCategories = () => {
     if (isReadOnly) return;
-    onCategorySelect(null); // Inform parent
-    setCurrentCategory(null); // Update internal state
+    onCategorySelect(null);
+    setCurrentCategory(null);
     setDocSearch('');
     setView('categories');
   };
 
   const handleStateChange = (value: string) => {
-       // Use '_placeholder_' or similar non-empty value for the placeholder item
        const actualValue = value === '_placeholder_' ? '' : value;
        if (isReadOnly) return;
-       setInternalState(actualValue); // Update internal dropdown state
-       onStateSelect(actualValue); // Inform parent
+       setInternalState(actualValue);
+       onStateSelect(actualValue);
   }
 
   const handleDocSelect = (doc: LegalDocument) => {
-    if (isReadOnly || !internalState) return; // State selection is now mandatory BEFORE doc selection
-
-    onDocumentSelect(doc); // Pass the selected doc object
-
-    // Auto-advance handled by parent component's useEffect based on selectedDoc change
-     /*
-     setTimeout(() => {
-        setCurrentStep(2); // Removed - parent handles this
-     }, 150);
-     */
+    if (isReadOnly || !internalState) {
+        // Optionally, show a toast or alert message if state is required
+        // toast({ title: "State Required", description: "Please select a state before choosing a document." });
+        return;
+    }
+    onDocumentSelect(doc);
+    // Auto-advance is handled by parent component's useEffect
   };
 
+   const statePlaceholder = t('stepOne.statePlaceholder', 'Select State...');
 
-   // Placeholders for SSR/initial hydration
-   const documentSearchPlaceholder = t('docTypeSelector.searchPlaceholder', 'Search documents...');
-   const noDocumentsPlaceholder = t('docTypeSelector.noResults', 'No documents found for your criteria.');
-   const statePlaceholder = t('stepOne.statePlaceholder', 'Select State...'); // Mandatory state prompt
-   const categorySearchPlaceholder = t('docTypeSelector.searchCategories', 'Search categories...');
-
-
-  // Show loading state if not hydrated
   if (!isHydrated) {
     return <div className="h-96 animate-pulse bg-muted rounded-lg shadow-lg border border-border"></div>;
   }
 
-  // Main return statement using Card component
-  // Use step-card class for consistent padding/styling from globals.css
   return (
      <Card className={`step-card ${isReadOnly ? 'opacity-50 cursor-not-allowed pointer-events-none' : 'opacity-100'}`}>
         <CardHeader className="step-card__header">
-            {/* Use consistent header structure */}
-             <div className="flex items-center space-x-2">
-                <FileText className="h-6 w-6 text-primary" />
-                 {/* Conditional Title based on view */}
-                 <CardTitle className="step-card__title">
+             <PaperIcon className="step-card__icon" />
+             <div> {/* Wrapper for title and subtitle to ensure correct layout with icon */}
+                <CardTitle className="step-card__title">
+                    {t('stepOne.title')} {/* Always "Step 1: Select a Category" */}
+                </CardTitle>
+                <CardDescription className="step-card__subtitle">
                     {view === 'categories'
-                       ? t('stepOne.categoryDescription') // Use i18n key for title
-                       : t('stepOne.selectDocDescription') // Use i18n key for title
+                       ? t('stepOne.categoryDescription')
+                       : t('stepOne.selectDocDescription')
                      }
-                 </CardTitle>
+                 </CardDescription>
              </div>
-             {/* Conditional Subtitle/Back Button */}
-              {view === 'categories' ? (
-                null // No subtitle needed here, title covers it
-             ) : (
-                 <div className="flex items-center justify-between mt-2">
+        </CardHeader>
+
+        {/* Conditional Back Button for Document View - Placed below header */}
+        {view === 'documents' && (
+            <div className="px-6 pb-4 border-b border-border"> {/* Added padding and border */}
+                 <div className="flex items-center justify-between">
                      <Button variant="outline" size="sm" onClick={handleBackToCategories} disabled={isReadOnly}>
                        <ArrowLeft className="mr-2 h-4 w-4" /> {t('docTypeSelector.backToCategories')}
                      </Button>
                       <h3 className="text-lg font-semibold text-muted-foreground text-right">
-                        {t(CATEGORY_LIST.find(c => c.key === currentCategory)?.label || currentCategory)}
+                        {t(CATEGORY_LIST.find(c => c.key === currentCategory)?.label || currentCategory || '')}
                       </h3>
                  </div>
-             )}
-        </CardHeader>
-        <CardContent className="step-content space-y-6"> {/* Use step-content class */}
-            {/* --- Category View --- */}
+            </div>
+        )}
+
+        <CardContent className="step-content space-y-6 pt-6">
              {view === 'categories' ? (
                 <div className="animate-fade-in space-y-4">
-                     {/* Category Search (Show only if > 7 categories) */}
-                     {sortedCategories.length > 7 && (
-                          <div className="relative mb-4">
-                               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                               <Input
-                                  type="text"
-                                  placeholder={categorySearchPlaceholder}
-                                  value={docSearch} // Use docSearch state temporarily, maybe rename state?
-                                  onChange={e => !isReadOnly && setDocSearch(e.target.value)}
-                                  disabled={isReadOnly}
-                                  className={`w-full pl-10 text-base md:text-sm ${isReadOnly ? 'bg-muted/50 border-dashed cursor-not-allowed' : 'bg-background'}`}
-                                  aria-label={categorySearchPlaceholder}
-                               />
-                          </div>
-                     )}
-
-                    {/* Category Grid - Use category-grid class from globals.css */}
+                     {/* Category Search REMOVED for initial category view as per instruction */}
                      {sortedCategories.length > 0 ? (
                          <div className="category-grid pt-2">
                              {sortedCategories.map(cat => (
@@ -229,12 +188,11 @@ export default function Step1DocumentSelector({
                                      variant="outline"
                                      onClick={() => handleCategoryClick(cat.key)}
                                      disabled={isReadOnly}
-                                     className="category-card h-auto min-h-[90px] p-4 border-border shadow-sm hover:shadow-md transition text-center flex flex-col justify-center items-center bg-card hover:bg-muted active:scale-95 active:transition-transform active:duration-100" // Use category-card class
-                                     style={{ minHeight: '56px' }} // Ensure min touch target
+                                     className="category-card h-auto min-h-[90px] p-4 border-border shadow-sm hover:shadow-md transition text-center flex flex-col justify-center items-center bg-card hover:bg-muted active:scale-95 active:transition-transform active:duration-100"
+                                     style={{ minHeight: '56px' }}
                                  >
-                                      {/* Find the icon component dynamically */}
                                       {(() => {
-                                         const IconComponent = cat.icon || FileText; // Use category icon or fallback
+                                         const IconComponent = cat.icon || FileText;
                                          return <IconComponent className="h-6 w-6 mb-2 text-primary/80" />;
                                       })()}
                                      <span className="font-medium text-card-foreground text-sm">{t(cat.label, cat.label)}</span>
@@ -246,75 +204,66 @@ export default function Step1DocumentSelector({
                      )}
                 </div>
              ) : (
-                 // --- Document View ---
                  <div className="animate-fade-in space-y-6">
-                    {/* Mandatory State Select */}
                     <div className="mb-4">
-                        <Label htmlFor="state-select-step1" className="block text-sm font-medium text-foreground mb-1"> {/* Changed text-gray-700 to text-foreground */}
-                           {t('stepOne.stateLabel', 'Relevant U.S. State')} <span className="text-destructive">*</span> {/* Mark as required */}
+                        <Label htmlFor="state-select-step1" className="block text-sm font-medium text-foreground mb-1">
+                           {t('stepOne.stateLabel')} <span className="text-destructive">*</span>
                         </Label>
                         <Select
-                          value={internalState || '_placeholder_'} // Use placeholder value if internalState is empty
-                          onValueChange={handleStateChange} // Use internal handler
-                          required // Mark as required
+                          value={internalState || '_placeholder_'}
+                          onValueChange={handleStateChange}
+                          required
                           disabled={isReadOnly}
-                          name="state-select-step1" // Unique name
+                          name="state-select-step1"
                         >
                            <SelectTrigger id="state-select-step1" className={`w-full text-base md:text-sm ${!internalState ? 'text-muted-foreground' : ''} ${isReadOnly ? 'bg-muted/50 border-dashed' : 'bg-background'}`} style={{ minHeight: '44px' }}>
                                <SelectValue placeholder={statePlaceholder} />
                            </SelectTrigger>
                            <SelectContent>
-                               {/* Placeholder Item - Use a specific, non-empty value */}
                                <SelectItem value="_placeholder_" disabled>{statePlaceholder}</SelectItem>
                                {usStates.map(state => (
                                   <SelectItem key={state.value} value={state.value}>
-                                    {t(state.label, state.label)} ({state.value}) {/* Translate state name */}
+                                    {t(state.label, state.label)} ({state.value})
                                   </SelectItem>
                                ))}
                            </SelectContent>
                        </Select>
-                        <p className="text-xs text-muted-foreground mt-1">{t('stepOne.stateHelp', 'Helps tailor the document to your jurisdiction.')}</p>
+                        <p className="text-xs text-muted-foreground mt-1">{t('stepOne.stateHelp')}</p>
                      </div>
 
-
-                     {/* Document Search (Conditional on > 7 docs and state selected) */}
-                     {docsInCategory.length > 7 && internalState && ( // Show only if state selected & many docs
+                     {docsInCategory.length > 7 && internalState && (
                          <div className="relative mb-4">
                              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                              <Input
-                                type="text"
-                                placeholder={documentSearchPlaceholder}
+                                type="search" /* Changed to search for better semantics */
+                                placeholder={t('docTypeSelector.searchPlaceholder')}
                                 value={docSearch}
                                 onChange={e => !isReadOnly && setDocSearch(e.target.value)}
-                                disabled={isReadOnly || !internalState} // Disable if state not selected
+                                disabled={isReadOnly || !internalState}
                                 className={`w-full pl-10 text-base md:text-sm ${isReadOnly || !internalState ? 'bg-muted/50 border-dashed cursor-not-allowed' : 'bg-background'}`}
-                                aria-label={documentSearchPlaceholder}
+                                aria-label={t('docTypeSelector.searchPlaceholder')}
                              />
                          </div>
                      )}
 
-                     {/* Document Grid (Show only if state is selected) */}
-                      {internalState ? ( // Render grid only when state is selected
+                      {internalState ? (
                          <>
                             {filteredDocs.length > 0 ? (
-                                // Use document-grid class from globals.css
                                 <div className="document-grid pt-4 animate-fade-in">
                                 {filteredDocs.map(doc => (
                                     <Card
                                         key={doc.id}
-                                        onClick={() => handleDocSelect(doc)} // Pass the whole doc object
-                                        className={`document-card shadow hover:shadow-lg cursor-pointer transition bg-card border border-border flex flex-col active:scale-95 active:transition-transform active:duration-100 ${isReadOnly ? 'pointer-events-none' : ''}`} // Use document-card class
-                                         style={{ minHeight: '56px' }} // Ensure min touch target
+                                        onClick={() => handleDocSelect(doc)}
+                                        className={`document-card shadow hover:shadow-lg cursor-pointer transition bg-card border border-border flex flex-col active:scale-95 active:transition-transform active:duration-100 ${isReadOnly ? 'pointer-events-none' : ''}`}
+                                         style={{ minHeight: '56px' }}
                                     >
                                         <CardHeader className="pb-2 pt-4 px-4">
-                                             {/* Translate document name, fallback to English */}
                                              <CardTitle className="text-base font-semibold text-card-foreground">
                                                  {i18n.language === 'es' && doc.name_es ? t(doc.name_es, doc.name) : t(doc.name, doc.name)}
                                              </CardTitle>
                                         </CardHeader>
                                         <CardContent className="text-xs text-muted-foreground flex-grow px-4">
-                                            {/* Translate description, fallback to English */}
-                                            {i18n.language === 'es' && doc.description_es ? t(doc.description_es, doc.description) : t(doc.description, doc.description) || t('docTypeSelector.noDescription', 'No description available.')}
+                                            {i18n.language === 'es' && doc.description_es ? t(doc.description_es, doc.description) : t(doc.description, doc.description) || t('docTypeSelector.noDescription')}
                                         </CardContent>
                                         <CardFooter className="pt-2 pb-3 px-4 text-xs text-muted-foreground flex justify-between items-center border-t border-border mt-auto">
                                            <span>💲{doc.basePrice}</span>
@@ -327,16 +276,14 @@ export default function Step1DocumentSelector({
                                 ))}
                                 </div>
                             ) : (
-                                <p className="text-muted-foreground italic text-center py-6">{noDocumentsPlaceholder}</p>
+                                <p className="text-muted-foreground italic text-center py-6">{t('docTypeSelector.noResults')}</p>
                             )}
                          </>
                       ) : (
-                         // Prompt to select state if not yet selected
                          <p className="text-muted-foreground italic text-center py-6">{t('Please select a state first.')}</p>
                       )}
                  </div>
              )}
-
         </CardContent>
      </Card>
   );
