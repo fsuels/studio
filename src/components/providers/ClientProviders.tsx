@@ -2,10 +2,9 @@
 
 import React, { useState, useEffect, ReactNode } from 'react';
 import I18nClientProvider from '@/components/providers/I18nProvider';
-// Removed PromoBanner import
-// Removed Footer import
 import { Toaster } from "@/components/ui/toaster";
 import { Layout } from '@/components/layout/Layout'; // Import Layout
+import { CartProvider } from '@/contexts/CartProvider'; // Import CartProvider
 
 interface ClientProvidersProps {
   children: ReactNode;
@@ -24,22 +23,24 @@ export function ClientProviders({ children }: ClientProvidersProps) {
   if (!isClient) {
     return (
       // Wrap directly in Layout
-      <Layout>
-        {children}
-        <Toaster />
-      </Layout>
+      <CartProvider>
+        <Layout>
+          {children}
+          <Toaster />
+        </Layout>
+      </CartProvider>
     );
   }
 
   // Now we are definitely on the client, render with the i18n provider
   return (
     <I18nClientProvider>
-       {/* Wrap directly in Layout */}
-      <Layout>
-        {children}
-        <Toaster />
-      </Layout>
+      <CartProvider>
+        <Layout>
+          {children}
+          <Toaster />
+        </Layout>
+      </CartProvider>
     </I18nClientProvider>
   );
 }
-
