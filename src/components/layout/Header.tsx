@@ -13,7 +13,6 @@ import {
 } from "@/components/ui/popover"; 
 import { Button } from '@/components/ui/button'; 
 import MiniCartDrawer from '@/components/MiniCartDrawer';
-// Removed ThemeToggle import
 import { Check, ChevronDown, Globe, UserPlus, LogIn, Search as SearchIcon, ExternalLink, FileText, Menu as MenuIcon, X as CloseIcon, LayoutGrid, ChevronUp } from 'lucide-react'; 
 import { Input } from '@/components/ui/input';
 import { documentLibrary, LegalDocument } from '@/lib/document-library';
@@ -73,8 +72,8 @@ export function Header() {
   const searchResultsRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isMegaMenuOpen, setIsMegaMenuOpen] = useState(false); // For desktop Popover
-  const [showMobileCategories, setShowMobileCategories] = useState(false); // For mobile "Make Documents"
+  const [isMegaMenuOpen, setIsMegaMenuOpen] = useState(false); 
+  const [showMobileCategories, setShowMobileCategories] = useState(false); 
 
 
   useEffect(() => {
@@ -165,7 +164,7 @@ export function Header() {
   const handleMegaMenuLinkClick = () => {
     setIsMegaMenuOpen(false);
     setIsMobileMenuOpen(false);
-    setShowMobileCategories(false); // Also close mobile categories if open
+    setShowMobileCategories(false); 
   }
 
 
@@ -181,7 +180,6 @@ export function Header() {
         </div>
        
         <nav className="hidden md:flex items-center gap-2 ml-auto">
-            {/* Desktop "Make Documents" Popover */}
             <Popover open={isMegaMenuOpen} onOpenChange={setIsMegaMenuOpen}>
                 <PopoverTrigger asChild>
                     <Button variant="ghost" size="sm" className="text-sm font-medium flex items-center gap-1 px-2 hover:text-primary" disabled={!isHydrated}>
@@ -191,10 +189,10 @@ export function Header() {
                     </Button>
                 </PopoverTrigger>
                 <PopoverContent 
-                    className="mt-2 w-[90vw] lg:w-[80rem] max-w-full bg-card p-0 rounded-lg shadow-lg z-50 overflow-visible absolute left-1/2 -translate-x-1/2" 
                     align="center"
                     side="bottom"
                     sideOffset={4}
+                    className="mt-2 w-[90vw] lg:w-[80rem] max-w-full bg-card p-0 rounded-lg shadow-lg z-50 overflow-visible" // Removed absolute positioning
                 >
                    <MegaMenuContent categories={CATEGORY_LIST} documents={documentLibrary} onLinkClick={handleMegaMenuLinkClick}/>
                 </PopoverContent>
@@ -294,14 +292,12 @@ export function Header() {
                     <span className="hidden sm:inline">{isHydrated ? t('Sign In') : '...'}</span>
                 </Link>
              </Button>
-             {/* Removed ThemeToggle component */}
             {isHydrated && <MiniCartDrawer />}
         </nav>
 
         {/* Mobile Menu Button */}
         <div className="md:hidden ml-auto flex items-center gap-2">
             {isHydrated && <MiniCartDrawer />}
-            {/* Removed ThemeToggle component from mobile view */}
              <Button variant="ghost" size="icon" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} disabled={!isHydrated}>
                 {isMobileMenuOpen ? <CloseIcon className="h-5 w-5" /> : <MenuIcon className="h-5 w-5" />}
              </Button>
@@ -349,7 +345,6 @@ export function Header() {
                 )}
             </form>
             
-            {/* "Make Documents" for Mobile */}
             <Button
               variant="ghost"
               className="w-full justify-between text-base font-medium flex items-center gap-2 px-2 py-3 hover:text-primary"
@@ -369,7 +364,6 @@ export function Header() {
               </div>
             )}
             
-            {/* Other Nav Links for Mobile */}
             <div className="border-t border-border pt-4 space-y-1">
                 {[
                     { href: "/pricing", labelKey: "nav.pricing" },
@@ -384,6 +378,18 @@ export function Header() {
                 ))}
             </div>
 
+            <div className="border-t pt-4 flex items-center gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="flex-1 justify-start text-base py-3"
+                  onClick={() => handleLanguageChange(currentLanguageDisplay === 'EN' ? 'es' : 'en')}
+                  disabled={!isHydrated}
+                >
+                   {isHydrated ? (currentLanguageDisplay === 'EN' ? <FlagES /> : <FlagUS />) : <Globe className="h-5 w-5 mr-2 text-muted-foreground" />}
+                   {isHydrated ? (currentLanguageDisplay === 'EN' ? t('Español') : t('English')) : '...'}
+                </Button>
+            </div>
 
              <div className="border-t border-border pt-4 space-y-2">
                  <Button variant="outline" size="sm" className="w-full justify-start text-base py-3" asChild onClick={() => setIsMobileMenuOpen(false)}><Link href="/signup"><UserPlus className="h-5 w-5 mr-2" />{isHydrated ? t('Sign Up') : '...'}</Link></Button>
