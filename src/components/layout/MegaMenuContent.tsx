@@ -25,9 +25,7 @@ export default function MegaMenuContent({ categories, documents, onLinkClick }: 
   };
 
   return (
-    // Adjusted max-height for mobile context, could be controlled by parent if needed
     <ScrollArea className="max-h-[60vh] md:max-h-[calc(100vh-10rem)]"> 
-        {/* Grid adjusts for mobile: 1 col, sm: 2 cols, up to 7 on large screens */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7 gap-x-4 gap-y-6 p-4 md:p-6 bg-popover text-popover-foreground rounded-b-lg">
         {categories.map(category => {
             const categoryDocs = getDocumentsForCategory(category.key);
@@ -41,17 +39,23 @@ export default function MegaMenuContent({ categories, documents, onLinkClick }: 
                     <p className="text-xs text-muted-foreground italic">{t('nav.noDocumentsInCategory', 'No documents in this category yet.')}</p>
                 ): (
                 <ul className="space-y-1.5">
-                    {categoryDocs.slice(0, MAX_DOCS_PER_CATEGORY_INITIAL).map(doc => (
-                    <li key={doc.id}>
-                        <Link 
-                            href={`/?docId=${encodeURIComponent(doc.id)}#workflow-start`} 
-                            className="text-xs md:text-sm text-muted-foreground hover:text-primary hover:underline transition-colors duration-150 block py-0.5"
-                            onClick={onLinkClick}
-                        >
-                        {t(i18n.language === 'es' && doc.name_es ? doc.name_es : doc.name, doc.name)}
-                        </Link>
-                    </li>
-                    ))}
+                    {categoryDocs.slice(0, MAX_DOCS_PER_CATEGORY_INITIAL).map(doc => {
+                      const docHref = doc.id === 'bill-of-sale-vehicle' 
+                        ? (i18n.language === 'es' ? `/es/docs/${doc.id}` : `/docs/${doc.id}`)
+                        : `/?docId=${encodeURIComponent(doc.id)}#workflow-start`;
+                      
+                      return (
+                        <li key={doc.id}>
+                            <Link 
+                                href={docHref} 
+                                className="text-xs md:text-sm text-muted-foreground hover:text-primary hover:underline transition-colors duration-150 block py-0.5"
+                                onClick={onLinkClick}
+                            >
+                            {t(i18n.language === 'es' && doc.name_es ? doc.name_es : doc.name, doc.name)}
+                            </Link>
+                        </li>
+                      );
+                    })}
                     {categoryDocs.length > MAX_DOCS_PER_CATEGORY_INITIAL && (
                     <li>
                         <Link 
