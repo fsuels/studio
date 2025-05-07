@@ -2,15 +2,15 @@
 "use client";
 
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import type { LegalDocument } from '@/lib/document-library';
-import { usStates } from '@/lib/document-library'; 
-import DocTypeSelector, { type AISuggestion } from '@/components/DocumentTypeSelector'; 
+import { documentLibrary, type LegalDocument, usStates } from '@/lib/document-library'; // Correctly import documentLibrary
+import DocTypeSelector from '@/components/DocumentTypeSelector'; 
+import type { AISuggestion } from '@/components/DocumentTypeSelector';
 import { Questionnaire } from '@/components/questionnaire';
 import { DisclaimerStep } from '@/components/disclaimer-step';
 import { PdfPreview } from '@/components/pdf-preview';
 import { ShareDownloadStep } from '@/components/share-download-step';
 import ProgressStepper from '@/components/ProgressStepper'; 
-import HomepageHeroSteps from '@/components/landing/HomepageHeroSteps'; 
+import HeroSection from '@/components/landing/HomepageHeroSteps'; 
 import ThreeStepSection from '@/components/landing/ThreeStepSection';
 import TrustAndTestimonialsSection from '@/components/landing/TrustAndTestimonialsSection';
 import { GuaranteeBadge } from '@/components/landing/GuaranteeBadge';
@@ -143,6 +143,7 @@ export default function Home() {
   const handleDisclaimerAgree = useCallback(() => {
     console.log('[page.tsx] handleDisclaimerAgree called');
     setDisclaimerAgreed(true);
+    setCurrentStep(3); // Ensure current step is 3 when disclaimer agreed
     scrollToTop();
   }, [scrollToTop]);
 
@@ -294,7 +295,7 @@ export default function Home() {
   return (
     <>
       <PromoBanner />
-      <HomepageHeroSteps />
+      <HeroSection />
       <ThreeStepSection /> 
       <TrustAndTestimonialsSection />
       <GuaranteeBadge />
@@ -342,22 +343,26 @@ export default function Home() {
              {isHydrated && currentStep > 1 && currentStep <= 3 && (
                  <div className="mt-8 flex justify-center">
                      <Button variant="outline" onClick={() => {
-                         if (currentStep === 3) {
-                           setDisclaimerAgreed(false); 
-                           setPdfSigned(false); 
-                           setPdfUrl(null); 
-                           setGeneratedPdfBlob(null); 
-                           setCurrentStep(2);
-                         } else { 
-                           setCurrentStep(prev => Math.max(1, prev - 1));
-                         }
-                         if (currentStep === 3 && pdfUrl) { 
+                         if (currentStep === 3 && pdfSigned) { // If signed, going back means going to disclaimer
+                            setPdfSigned(false);
+                            // PDF URL and blob are kept so disclaimer re-agree re-shows preview
+                         } else if (currentStep === 3 && disclaimerAgreed) { // If disclaimer agreed, going back means to edit answers
+                             setDisclaimerAgreed(false);
+                             // Clear PDF related state as answers might change
                              setPdfUrl(null);
-                             setIsPdfLoading(false); 
-                             setPdfError(null); 
                              setGeneratedPdfBlob(null);
-                             setApiError(null); 
+                             setIsPdfLoading(false);
+                             setPdfError(null);
+                             setApiError(null);
+                             setCurrentStep(2);
+                         } else if (currentStep === 2) { // From answers to doc selection
+                             setSelectedDocument(null); // This will clear questions and reset answers in Questionnaire
+                             setFormAnswers(null);
+                             setCurrentStep(1);
+                         } else { // General back from step X to X-1
+                             setCurrentStep(prev => Math.max(1, prev - 1));
                          }
+                         scrollToWorkflow();
                      }}>
                          {t('Back', {defaultValue: 'Back'})}
                      </Button>
