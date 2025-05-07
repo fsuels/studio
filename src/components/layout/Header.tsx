@@ -16,6 +16,8 @@ import { Button } from '@/components/ui/button';
 import MiniCartDrawer from '@/components/MiniCartDrawer';
 import { Check, ChevronDown, Globe, UserPlus, LogIn, Search as SearchIcon } from 'lucide-react'; 
 import { Input } from '@/components/ui/input';
+import { ThemeToggle } from '@/components/ThemeToggle';
+
 
 // Inline SVG Flags for better portability and less dependency on external files
 const FlagUS = () => (
@@ -153,7 +155,7 @@ export function Header() {
                 asChild
                 disabled={!isHydrated}
              >
-                <Link href="/dashboard?auth=signup"> {/* Assuming /dashboard handles auth states */}
+                <Link href="/signup"> 
                    <UserPlus className="h-4 w-4 mr-1 md:mr-2" />
                    <span className="hidden sm:inline">{isHydrated ? t('nav.signUp', {defaultValue: 'Sign Up'}) : '...'}</span>
                 </Link>
@@ -165,12 +167,12 @@ export function Header() {
                 asChild
                 disabled={!isHydrated}
              >
-                <Link href="/dashboard?auth=signin">
+                <Link href="/signin">
                     <LogIn className="h-4 w-4 mr-1 md:mr-2" />
                     <span className="hidden sm:inline">{isHydrated ? t('nav.signIn', {defaultValue: 'Sign In'}) : '...'}</span>
                 </Link>
              </Button>
-
+             <ThemeToggle />
             {isHydrated && <MiniCartDrawer />}
           </nav>
         </div>
