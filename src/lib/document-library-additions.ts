@@ -10,7 +10,7 @@ export const documentLibraryAdditions: LegalDocument[] = [ // Changed from Docum
     id: 'nda-contract', // Will be auto-generated if not provided based on name
     name: 'Non-Disclosure Agreement',
     name_es: 'Acuerdo de Confidencialidad',
-    category: 'Business',
+    category: 'Business', // Updated category
     description: 'Protect your confidential information with a legally binding NDA.',
     description_es: 'Proteja su información confidencial con un NDA legalmente vinculante.',
     languageSupport: ['en', 'es'],
@@ -209,21 +209,23 @@ export const documentLibraryAdditions: LegalDocument[] = [ // Changed from Docum
         { id: 'guardianForMinors', label: 'Guardian for Minor Children (if applicable)', type: 'text', placeholder: 'Full name of guardian' },
         { id: 'state', label: 'State Governing the Will', type: 'select', required: true, options: [{value: 'CA', label: 'California'}, {value: 'NY', label: 'New York'}, {value: 'TX', label: 'Texas'}, {value: 'FL', label: 'Florida'}, {value: 'Other', label: 'Other'}] }
     ],
-  },
-  {
-    id: 'prenuptial-agreement',
-    name: 'Prenuptial Agreement',
-    name_es: 'Acuerdo Prenupcial',
-    category: 'Family', // Corrected category
-    description: 'Protect your assets before getting married.',
-    description_es: 'Proteja sus bienes antes de casarse.',
-    languageSupport: ['en', 'es'],
-    requiresNotarization: true,
-    canBeRecorded: false,
-    offerNotarization: true,
-    offerRecordingHelp: false,
-    basePrice: 7,
-    states: 'all',
-    questions: [/* Placeholder questions */]
-  },
+  }
+  // Removed duplicate 'prenuptial-agreement' which is already in document-library.ts
+  // {
+  //   id: 'prenuptial-agreement',
+  //   name: 'Prenuptial Agreement',
+  //   name_es: 'Acuerdo Prenupcial',
+  //   category: 'Family', // Corrected category
+  //   description: 'Protect your assets before getting married.',
+  //   description_es: 'Proteja sus bienes antes de casarse.',
+  //   languageSupport: ['en', 'es'],
+  //   requiresNotarization: true,
+  //   canBeRecorded: false,
+  //   offerNotarization: true,
+  //   offerRecordingHelp: false,
+  //   basePrice: 7,
+  //   states: 'all',
+  //   questions: [/* Placeholder questions */]
+  // },
 ];
+
