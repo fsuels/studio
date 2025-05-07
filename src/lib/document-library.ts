@@ -41,6 +41,8 @@ export type LegalDocument = {
   basePrice: number; // Base price for the document (e.g., 5)
   languageSupport: string[]; // Array of supported language codes (e.g., ['en', 'es'])
   upsellClauses?: UpsellClause[]; // Optional clauses user can add for a fee
+  templatePath?: string; // Path to the English markdown template
+  templatePath_es?: string; // Path to the Spanish markdown template
 };
 
 // Helper function to create slugs from names (basic example)
@@ -77,6 +79,7 @@ export let documentLibrary: LegalDocument[] = [ // Changed to let for modificati
   {
     id: 'promissory-note',
     name: 'Promissory Note',
+    name_es: 'Pagaré',
     category: 'Finance', // Updated category
     description: 'Formalize a promise to repay a loan.',
     description_es: 'Formalizar una promesa de pago de un préstamo.',
@@ -103,6 +106,7 @@ export let documentLibrary: LegalDocument[] = [ // Changed to let for modificati
   {
     id: "bill-of-sale-vehicle", // Keep specific IDs if needed
     name: "Bill of Sale (Vehicle)",
+    name_es: "Factura de Venta (Vehículo)",
     category: "Finance", // Updated category
     description: "Document the sale and transfer of ownership for a vehicle.",
     description_es: "Documentar la venta y transferencia de propiedad de un vehículo.",
@@ -133,6 +137,7 @@ export let documentLibrary: LegalDocument[] = [ // Changed to let for modificati
   {
     id: 'invoice',
     name: 'Invoice',
+    name_es: 'Factura',
     category: 'Finance',
     description: 'Request payment for goods or services rendered.',
     description_es: 'Solicitar pago por bienes o servicios prestados.',
@@ -157,6 +162,7 @@ export let documentLibrary: LegalDocument[] = [ // Changed to let for modificati
   {
     id: 'demand-letter-payment',
     name: 'Demand Letter (Payment)',
+    name_es: 'Carta de Reclamación (Pago)',
     category: 'Finance', // Or could be Litigation
     description: 'Formally request payment that is overdue.',
     description_es: 'Solicitar formalmente un pago atrasado.',
@@ -187,6 +193,7 @@ export let documentLibrary: LegalDocument[] = [ // Changed to let for modificati
    {
     id: 'independent-contractor-agreement',
     name: 'Independent Contractor Agreement',
+    name_es: 'Contrato de Contratista Independiente',
     category: 'Business', // Updated category
     description: 'Define terms for hiring a freelancer or independent contractor.',
     description_es: 'Definir términos para contratar a un freelancer o contratista independiente.',
@@ -211,6 +218,7 @@ export let documentLibrary: LegalDocument[] = [ // Changed to let for modificati
   {
     id: 'service-agreement',
     name: 'Service Agreement',
+    name_es: 'Acuerdo de Servicios',
     category: 'Business', // Updated category
     description: 'Outline terms for providing or receiving ongoing services.',
     description_es: 'Esbozar términos para proporcionar o recibir servicios continuos.',
@@ -239,6 +247,7 @@ export let documentLibrary: LegalDocument[] = [ // Changed to let for modificati
    {
     id: "nda", // Keep specific ID
     name: "Non-Disclosure Agreement (NDA)",
+    name_es: "Acuerdo de Confidencialidad (NDA)",
     category: "Business", // Updated category
     description: "Protect confidential information shared between parties.",
     description_es: "Proteger información confidencial compartida entre partes.",
@@ -269,6 +278,7 @@ export let documentLibrary: LegalDocument[] = [ // Changed to let for modificati
   {
     id: 'non-compete-agreement',
     name: 'Non-Compete Agreement',
+    name_es: 'Acuerdo de No Competencia',
     category: 'Business',
     description: 'Restrict an employee or contractor from competing after termination.',
     description_es: 'Restringir a un empleado o contratista de competir después de la terminación.',
@@ -292,6 +302,7 @@ export let documentLibrary: LegalDocument[] = [ // Changed to let for modificati
   {
     id: 'partnership-agreement',
     name: 'Partnership Agreement',
+    name_es: 'Acuerdo de Sociedad',
     category: 'Business',
     description: 'Define the terms, responsibilities, and profit sharing for business partners.',
     description_es: 'Definir los términos, responsabilidades y reparto de beneficios para socios comerciales.',
@@ -322,6 +333,7 @@ export let documentLibrary: LegalDocument[] = [ // Changed to let for modificati
   {
     id: 'operating-agreement',
     name: 'Operating Agreement (LLC)',
+    name_es: 'Acuerdo Operativo (LLC)',
     category: 'Business',
     description: 'Outline the ownership structure and operating procedures for an LLC.',
     description_es: 'Esbozar la estructura de propiedad y los procedimientos operativos para una LLC.',
@@ -339,6 +351,7 @@ export let documentLibrary: LegalDocument[] = [ // Changed to let for modificati
    {
     id: 'articles-of-incorporation',
     name: 'Articles of Incorporation',
+    name_es: 'Acta Constitutiva',
     category: 'Business',
     description: 'Formal document filed with the state to create a corporation.',
     description_es: 'Documento formal presentado al estado para crear una corporación.',
@@ -356,6 +369,7 @@ export let documentLibrary: LegalDocument[] = [ // Changed to let for modificati
   {
     id: 'employment-offer-letter',
     name: 'Employment Offer Letter',
+    name_es: 'Carta de Oferta de Empleo',
     category: 'Business', // Or Employment
     description: 'Formalize a job offer with key terms like salary, start date, and position.',
     description_es: 'Formalizar una oferta de trabajo con términos clave como salario, fecha de inicio y puesto.',
@@ -370,12 +384,43 @@ export let documentLibrary: LegalDocument[] = [ // Changed to let for modificati
     states: 'all',
     questions: [/* Placeholder questions about employee name, position, salary, start date */]
   },
+  {
+    id: 'employment-termination-letter',
+    name: 'Employment Termination Letter',
+    name_es: 'Carta de Terminación de Empleo',
+    category: 'Business',
+    description: 'Formally notify an employee of their termination.',
+    description_es: 'Notificar formalmente a un empleado de su despido.',
+    aliases: ["fire employee", "layoff letter", "termination notice"],
+    aliases_es: ["despedir empleado", "carta de despido", "aviso de terminación"],
+    languageSupport: ['en', 'es'],
+    requiresNotarization: false,
+    canBeRecorded: false,
+    offerNotarization: false,
+    offerRecordingHelp: false,
+    basePrice: 5,
+    states: 'all',
+    templatePath: "public/templates/en/termination-letter.md",
+    templatePath_es: "public/templates/es/termination-letter.md",
+    questions: [
+        { id: 'employerName',  label: 'Employer / Company Name', type: 'text', required: true },
+        { id: 'employerAddress', label: 'Employer Address', type: 'textarea', required: true },
+        { id: 'employeeName',  label: 'Employee Full Name', type: 'text',     required: true },
+        { id: 'employeePosition', label: 'Position / Job Title', type: 'text' },
+        { id: 'terminationDate', label: 'Termination Effective Date', type: 'date', required: true },
+        { id: 'terminationReason', label: 'Reason for Termination (brief)',type: 'textarea', placeholder: 'e.g. position eliminated, misconduct, performance' },
+        { id: 'finalPaycheckDate', label: 'Final Paycheck Date', type: 'date', required: true},
+        { id: 'supervisorName', label: 'Supervisor Name', type: 'text', required: true },
+        { id: 'supervisorTitle', label: 'Supervisor Title', type: 'text', required: true },
+    ]
+  },
   // ... Add other Business docs like Bylaws, Termination Letters, Board Resolutions, Business Bill of Sale ...
 
   // --- Category 3: Real Estate ---
    {
     id: "leaseAgreement", // Keep specific ID
     name: "Residential Lease Agreement", // More specific name
+    name_es: "Contrato de Arrendamiento Residencial",
     category: "Real Estate", // Correct category
     description: "Set terms for renting a residential property.",
     description_es: "Establecer términos para alquilar una propiedad residencial.",
@@ -410,6 +455,7 @@ export let documentLibrary: LegalDocument[] = [ // Changed to let for modificati
   {
     id: 'commercial-lease-agreement',
     name: 'Commercial Lease Agreement',
+    name_es: 'Contrato de Arrendamiento Comercial',
     category: 'Real Estate',
     description: 'Lease agreement specifically for commercial properties.',
     description_es: 'Contrato de arrendamiento específico para propiedades comerciales.',
@@ -425,6 +471,7 @@ export let documentLibrary: LegalDocument[] = [ // Changed to let for modificati
    {
     id: 'eviction-notice',
     name: 'Eviction Notice',
+    name_es: 'Aviso de Desalojo',
     category: 'Real Estate',
     description: 'Formal notice to a tenant to vacate the property.',
     description_es: 'Notificación formal a un inquilino para desalojar la propiedad.',
@@ -451,6 +498,7 @@ export let documentLibrary: LegalDocument[] = [ // Changed to let for modificati
   {
     id: 'quitclaim-deed',
     name: 'Quitclaim Deed',
+    name_es: 'Escritura de Finiquito',
     category: 'Real Estate',
     description: 'Transfer property interest without warranty of title.',
     description_es: 'Transferir interés en una propiedad sin garantía de título.',
@@ -471,6 +519,7 @@ export let documentLibrary: LegalDocument[] = [ // Changed to let for modificati
    {
      id: "divorce-settlement-agreement", // Keep specific ID
      name: "Divorce Settlement Agreement",
+     name_es: "Acuerdo de Divorcio",
      category: "Family", // Updated category
      description: "Formalizes the terms of a divorce, including property division, support, and custody.",
      description_es: "Formaliza los términos de un divorcio, incluyendo división de bienes, manutención y custodia.",
@@ -501,6 +550,7 @@ export let documentLibrary: LegalDocument[] = [ // Changed to let for modificati
   {
     id: 'child-custody-agreement',
     name: 'Child Custody Agreement',
+    name_es: 'Acuerdo de Custodia de Menores',
     category: 'Family',
     description: 'Outline legal/physical custody, visitation schedule for children.',
     description_es: 'Esbozar la custodia legal/física, horario de visitas para los hijos.',
@@ -518,6 +568,7 @@ export let documentLibrary: LegalDocument[] = [ // Changed to let for modificati
    {
     id: 'prenuptial-agreement',
     name: 'Prenuptial Agreement',
+    name_es: 'Acuerdo Prenupcial',
     category: 'Family',
     description: 'Agreement made before marriage regarding asset division if divorced.',
     description_es: 'Acuerdo hecho antes del matrimonio sobre la división de bienes en caso de divorcio.',
@@ -535,6 +586,7 @@ export let documentLibrary: LegalDocument[] = [ // Changed to let for modificati
   {
     id: 'child-medical-consent',
     name: 'Child Medical Consent Form',
+    name_es: 'Formulario de Consentimiento Médico para Menores',
     category: 'Family',
     description: 'Authorize a caregiver to make medical decisions for your child.',
     description_es: 'Autorizar a un cuidador a tomar decisiones médicas por su hijo.',
@@ -553,6 +605,7 @@ export let documentLibrary: LegalDocument[] = [ // Changed to let for modificati
    {
     id: "powerOfAttorney", // Keep specific ID
     name: "General Power of Attorney", // More specific
+    name_es: "Poder Notarial General",
     category: "Personal", // Updated category
     description: "Authorize someone to act on your behalf for financial or general matters.",
     description_es: "Autorizar a alguien para actuar en su nombre en asuntos financieros o generales.",
@@ -583,6 +636,7 @@ export let documentLibrary: LegalDocument[] = [ // Changed to let for modificati
    {
     id: 'healthcare-power-of-attorney', // Keep specific ID if needed
     name: 'Healthcare Power of Attorney',
+    name_es: 'Poder Notarial para Atención Médica',
     category: 'Personal', // Updated category
     description: 'Appoint an agent to make healthcare decisions if you cannot.',
     description_es: 'Nombrar un agente para tomar decisiones de atención médica si usted no puede.',
@@ -608,6 +662,7 @@ export let documentLibrary: LegalDocument[] = [ // Changed to let for modificati
    {
     id: 'living-will',
     name: 'Living Will / Advance Directive',
+    name_es: 'Testamento Vital / Directiva Anticipada',
     category: 'Personal', // Or Estate Planning
     description: 'Specify your wishes for end-of-life medical care.',
     description_es: 'Especificar sus deseos para la atención médica al final de la vida.',
@@ -625,6 +680,7 @@ export let documentLibrary: LegalDocument[] = [ // Changed to let for modificati
   {
     id: 'affidavit-general',
     name: 'Affidavit (General)',
+    name_es: 'Declaración Jurada (General)',
     category: 'Personal', // Or Litigation
     description: 'A sworn written statement confirmed by oath, often used as evidence.',
     description_es: 'Una declaración escrita jurada confirmada por juramento, a menudo utilizada como prueba.',
@@ -651,6 +707,7 @@ export let documentLibrary: LegalDocument[] = [ // Changed to let for modificati
   {
     id: 'last-will-testament',
     name: 'Last Will and Testament',
+    name_es: 'Última Voluntad y Testamento',
     category: 'Estate Planning', // Updated category
     description: 'Specify how your assets should be distributed after death.',
     description_es: 'Especificar cómo deben distribuirse sus bienes después de la muerte.',
@@ -677,6 +734,7 @@ export let documentLibrary: LegalDocument[] = [ // Changed to let for modificati
   {
     id: 'living-trust',
     name: 'Living Trust (Revocable)',
+    name_es: 'Fideicomiso en Vida (Revocable)',
     category: 'Estate Planning',
     description: 'Manage assets during life and distribute after death, potentially avoiding probate.',
     description_es: 'Gestionar activos durante la vida y distribuirlos después de la muerte, potencialmente evitando el proceso sucesorio.',
@@ -715,3 +773,38 @@ export let documentLibrary: LegalDocument[] = [ // Changed to let for modificati
     ]
   }
 ];
+
+// Merge additional documents if any
+if (documentLibraryAdditions && documentLibraryAdditions.length > 0) {
+  documentLibrary = [...documentLibrary, ...documentLibraryAdditions];
+}
+
+// Helper function to find documents by category, search term, and state
+export function findMatchingDocuments(
+  searchQuery: string,
+  language: 'en' | 'es' = 'en', // Default to English
+  stateCode?: string
+): LegalDocument[] {
+  const lowerQuery = searchQuery.toLowerCase();
+
+  return documentLibrary.filter((doc) => {
+    // Determine which name and description to use based on language
+    const name = language === 'es' && doc.name_es ? doc.name_es : doc.name;
+    const description = language === 'es' && doc.description_es ? doc.description_es : doc.description;
+    const aliases = language === 'es' && doc.aliases_es ? doc.aliases_es : doc.aliases || [];
+
+    // Check state compatibility
+    const stateMatch = !stateCode || stateCode === 'all' || doc.states === 'all' || (Array.isArray(doc.states) && doc.states.includes(stateCode));
+    if (!stateMatch) return false;
+
+    // Check search query match (if provided)
+    if (lowerQuery) {
+      return (
+        name.toLowerCase().includes(lowerQuery) ||
+        (description && description.toLowerCase().includes(lowerQuery)) ||
+        aliases.some(alias => alias.toLowerCase().includes(lowerQuery))
+      );
+    }
+    return true; // If no query, match all (that fit state)
+  });
+}
