@@ -4,7 +4,7 @@
 
 import { useFormContext, FormProvider } from 'react-hook-form'; 
 import axios from 'axios';
-import React, { useEffect, useState, useRef } from 'react'; // Added useRef
+import React, { useEffect, useState, useRef } from 'react'; 
 import ProgressSteps from './ProgressSteps';
 import FieldRenderer from './FieldRenderer';
 import type { LegalDocument } from '@/lib/document-library'; 
@@ -12,8 +12,8 @@ import { Button } from '@/components/ui/button';
 import { Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useTranslation } from 'react-i18next';
-import { prettify } from '@/lib/schema-utils'; // Import prettify
-import { useAddressAutocomplete, useVinDecoder } from '@/hooks/useSmartDefaults'; // Import smart default hooks
+import { prettify } from '@/lib/schema-utils'; 
+import { useAddressAutocomplete, useVinDecoder } from '@/hooks/useSmartDefaults'; 
 
 interface WizardFormProps {
   locale: 'en' | 'es';
@@ -25,12 +25,10 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
   const methods = useFormContext(); 
   const { t } = useTranslation();
   const { toast } = useToast();
-  const liveRef = useRef<HTMLDivElement>(null); // Ref for ARIA live region
+  const liveRef = useRef<HTMLDivElement>(null); 
 
-  // Derive steps from schema keys, including labels
   const steps = React.useMemo(() => {
     if (doc.questions && doc.questions.length > 0) {
-      // Use doc.questions if available, as it may have specific order or conditional logic not in Zod schema
       return doc.questions.map(q => ({ id: q.id, label: q.label || prettify(q.id) }));
     }
     if (doc.schema && 'shape' in doc.schema && typeof doc.schema.shape === 'object' && doc.schema.shape !== null) {
@@ -43,7 +41,6 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Integrate smart default hooks
   useAddressAutocomplete(methods.watch, methods.setValue);
   useVinDecoder(methods.watch, methods.setValue);
 
@@ -71,13 +68,11 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
       return;
     }
     
-    // Announce update for screen readers
     if (liveRef.current && currentStepField) {
         setTimeout(() => {
             if (liveRef.current) liveRef.current.innerText = `${currentStepField.label} updated`;
         }, 50);
     }
-
 
     if (currentStepIndex < totalSteps - 1) {
       setCurrentStepIndex(s => s + 1);
@@ -94,8 +89,31 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
         onComplete(response.data.checkoutUrl); 
       } catch (error: any) {
         console.error('Submission error:', error);
-        const errorMsg = error.response?.data?.error || error.message || 'Failed to submit document.';
-        toast({ title: "Submission Failed", description: errorMsg, variant: "destructive" });
+        let errorMsg = error.message || 'Failed to submit document.';
+        let errorDetailsString = '';
+
+        if (error.response && error.response.data) {
+          errorMsg = error.response.data.error || errorMsg;
+          if (error.response.data.details) {
+            // Attempt to format Zod error details if they exist
+            const details = error.response.data.details;
+            if (details.formErrors && details.formErrors.length > 0) {
+              errorDetailsString += `Form errors: ${details.formErrors.join(', ')}. `;
+            }
+            if (details.fieldErrors) {
+              errorDetailsString += Object.entries(details.fieldErrors)
+                .map(([field, messages]) => `${field}: ${(messages as string[]).join(', ')}`)
+                .join('; ');
+            }
+          }
+        }
+        
+        toast({ 
+          title: "Submission Failed", 
+          description: `${errorMsg}${errorDetailsString ? ` Details: ${errorDetailsString}` : ''}`, 
+          variant: "destructive",
+          duration: 9000, // Longer duration for detailed errors
+        });
         setIsSubmitting(false);
       }
     }
@@ -138,7 +156,7 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
             {t('Back')}
             </Button>
         )}
-        {currentStepIndex === 0 && <div />} {/* Placeholder to keep 'Next' button to the right */}
+        {currentStepIndex === 0 && <div />} 
         
         <Button
           type="button"
@@ -150,8 +168,8 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
            (currentStepIndex === totalSteps - 1 || totalSteps === 0 ? t('dynamicForm.confirmAnswersButton', 'Confirm & Continue') : t('Next'))}
         </Button>
       </div>
-      {/* ARIA Live Region for screen reader announcements */}
       <div ref={liveRef} className="sr-only" aria-live="polite" />
     </div>
   );
 }
+
