@@ -32,7 +32,7 @@ export default function BillOfSaleTemplateEN() {
     }
     fetchMarkdown();
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [t]); // Added t to dependency array
+  }, [t]);
 
   if (isLoading) {
     return <div className="p-4 border rounded-md bg-muted animate-pulse min-h-[300px] text-muted-foreground">{t('Loading document preview…', {defaultValue: 'Loading document preview…'})}</div>;
@@ -43,8 +43,11 @@ export default function BillOfSaleTemplateEN() {
   }
 
   return (
-    <div className="prose prose-sm md:prose-base lg:prose-lg dark:prose-invert max-w-none p-4 border rounded-md bg-card text-card-foreground shadow">
-      <ReactMarkdown remarkPlugins={[remarkGfm]}>
+    <div className="bg-card p-8 rounded-2xl shadow-xl mx-auto max-w-4xl border border-border"> {/* Updated styling */}
+      <ReactMarkdown
+        className="prose prose-neutral dark:prose-invert max-w-none" // Apply prose styles
+        remarkPlugins={[remarkGfm]}
+      >
         {md}
       </ReactMarkdown>
     </div>

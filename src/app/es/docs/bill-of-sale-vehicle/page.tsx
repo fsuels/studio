@@ -9,24 +9,24 @@ import { Button } from '@/components/ui/button';
 import { Toggle } from '@/components/ui/toggle';
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '@/components/ui/card';
 import { motion } from 'framer-motion';
-import DocumentPreview from '@/components/DocumentPreview'; // Updated import
+import DocumentPreview from '@/components/DocumentPreview'; 
 import { requiredNotaryStates } from '@/lib/stateNotaryRequirements';
 import { useTranslation } from 'react-i18next';
 import { useRouter } from 'next/navigation';
 import { FileText, Lock, DownloadCloud } from 'lucide-react';
+import BillOfSaleTemplateES from '@/templates/BillOfSaleTemplateES';
 
 export default function BillOfSalePageES() {
   const { t, i18n } = useTranslation();
-  const locale = 'es'; // Explicitly set locale
+  const locale = 'es'; 
   const router = useRouter();
 
-  const [stateCode, setStateCode] = useState<string>('CA'); // default
+  const [stateCode, setStateCode] = useState<string>('CA'); 
   const [wantNotary, setWantNotary] = useState<boolean>(requiredNotaryStates.includes(stateCode));
   const { addItem } = useCart();
-  const priceCents = 1995; // $19.95
+  const priceCents = 1995; 
 
   useEffect(() => {
-    // Ensure i18n is ready and set to Spanish for this page if not already
     if (i18n.language !== 'es') {
       i18n.changeLanguage('es');
     }
@@ -46,7 +46,7 @@ export default function BillOfSalePageES() {
   };
 
    const content = {
-    en: {
+    en: { // Keeping EN for reference
       title: 'Vehicle Bill of Sale',
       attorneyDrafted: 'Attorney-Drafted',
       description: 'Ensure a smooth, legally-compliant transfer of your vehicle’s ownership.',
@@ -89,75 +89,47 @@ export default function BillOfSalePageES() {
   const currentContent = content[locale];
 
   const features = [
-    { icon: <FileText className="h-8 w-8 text-primary" />, title: currentContent.feature1Title, desc: currentContent.feature1Desc },
-    { icon: <Lock className="h-8 w-8 text-primary" />, title: currentContent.feature2Title, desc: currentContent.feature2Desc },
-    { icon: <DownloadCloud className="h-8 w-8 text-primary" />, title: currentContent.feature3Title, desc: currentContent.feature3Desc },
+    { icon: <FileText className="h-6 w-6 text-primary" />, title: currentContent.feature1Title, desc: currentContent.feature1Desc },
+    { icon: <Lock className="h-6 w-6 text-primary" />, title: currentContent.feature2Title, desc: currentContent.feature2Desc },
+    { icon: <DownloadCloud className="h-6 w-6 text-primary" />, title: currentContent.feature3Title, desc: currentContent.feature3Desc },
   ];
 
-
   return (
-    <main className="container mx-auto py-12 px-4">
-      {/* Hero Section */}
-       <div className="grid lg:grid-cols-2 gap-8 items-center mb-16">
-        <motion.div
-          initial={{ opacity: 0, x: -50 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.5 }}
-          className="flex flex-col items-center lg:items-start text-center lg:text-left"
-        >
-          <Badge variant="outline" className="mb-3 border-primary text-primary bg-primary/10 self-center lg:self-start">
+    <main className="container mx-auto py-12 space-y-12">
+      <div className="lg:flex lg:items-start lg:space-x-12">
+        <div className="flex-shrink-0 lg:w-1/2">
+          <BillOfSaleTemplateES />
+        </div>
+        <div className="mt-8 lg:mt-0 lg:w-1/2">
+          <Badge variant="outline" className="mb-3 border-primary text-primary bg-primary/10">
             {currentContent.attorneyDrafted}
           </Badge>
-          <h1 className="text-3xl md:text-4xl font-bold mb-4 text-foreground">
+          <h1 className="text-4xl font-bold mb-4 text-foreground">
             {currentContent.title}
           </h1>
-          <p className="text-lg text-muted-foreground mb-6 max-w-md">
+          <p className="mt-4 text-lg text-muted-foreground mb-6">
             {currentContent.description}
           </p>
-          <div className="flex items-baseline space-x-2 mb-6">
-            <span className="text-4xl font-bold text-primary">${(priceCents / 100).toFixed(2)}</span>
-            <span className="text-sm text-muted-foreground">{currentContent.perDocument}</span>
-          </div>
-          <Button size="lg" className="w-full sm:w-auto px-8 py-3 text-base" onClick={handleStart}>
+          <div className="mt-6 text-3xl font-semibold text-primary">${(priceCents / 100).toFixed(2)} <span className="text-sm font-normal text-muted-foreground">{currentContent.perDocument}</span></div>
+          <Button size="lg" className="mt-8 px-8 py-3 text-base" onClick={handleStart}>
             {currentContent.startFree}
           </Button>
-        </motion.div>
 
-        {/* Document Preview Side */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-        >
-          <DocumentPreview docId="bill-of-sale-vehicle" locale={locale} alt={currentContent.title + " preview"} />
-        </motion.div>
+          {/* feature bullet-points */}
+          <ul className="mt-10 space-y-6">
+            {features.map((f, i) => (
+              <li key={i} className="flex items-start space-x-4">
+                <span className="icon text-2xl mt-1">{f.icon}</span>
+                <div>
+                  <h3 className="font-semibold text-card-foreground">{f.title}</h3>
+                  <p className="text-sm text-muted-foreground">{f.desc}</p>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
       
-      {/* Feature Highlights Section */}
-      <section className="py-16 bg-secondary/50 rounded-xl">
-        <div className="container mx-auto px-4">
-            <h2 className="text-2xl md:text-3xl font-bold text-center mb-12 text-foreground">
-                {t('features.title', {lng: locale, defaultValue: 'Características que Hacen lo Legal Fácil'})}
-            </h2>
-            <div className="grid md:grid-cols-3 gap-8">
-            {features.map((f, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: i * 0.1 }}
-                whileHover={{ scale: 1.03, boxShadow: "0px 10px 20px hsl(var(--card-foreground) / 0.08)"}}
-                className="p-6 bg-card rounded-lg shadow-md text-center border border-border"
-              >
-                <div className="flex justify-center text-4xl mb-4">{f.icon}</div>
-                <h3 className="font-semibold text-lg mb-2 text-card-foreground">{f.title}</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">{f.desc}</p>
-              </motion.div>
-            ))}
-            </div>
-        </div>
-      </section>
-
       {/* Notary Upsell / Requirement Section */}
       <section className="mt-16 py-12">
         <div className="max-w-2xl mx-auto">
@@ -209,3 +181,4 @@ export default function BillOfSalePageES() {
     </main>
   );
 }
+
