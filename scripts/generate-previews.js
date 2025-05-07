@@ -7,7 +7,7 @@ import puppeteer from 'puppeteer';
 import MarkdownIt from 'markdown-it'; // Added back MarkdownIt as puppeteer alone might not render .md as styled HTML
 
 // --- CONFIGURATION — adjust as needed ---
-const templatesDir = path.join(process.cwd(), 'src', 'data', 'templates');  // your .md files
+const templatesDir = path.join(process.cwd(), 'public', 'templates');  // UPDATED: Point to public/templates
 const outDir       = path.join(process.cwd(), 'public', 'images', 'previews');
 const languages    = ['en','es'];
 
@@ -111,4 +111,3 @@ generate().catch(err => {
   console.error('Error generating previews:', err);
   process.exit(1);
 });
-
