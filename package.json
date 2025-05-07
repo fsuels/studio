@@ -7,12 +7,11 @@
     "dev": "next dev --turbopack -p 9002",
     "genkit:dev": "genkit start -- tsx src/ai/dev.ts",
     "genkit:watch": "genkit start -- tsx --watch src/ai/dev.ts",
-    "build": "npm run generate:previews && next build",
+    "build": "next build",
     "start": "next start",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
-    "generate:previews": "node scripts/generate-previews.js",
-    "gen:previews": "node scripts/generate-previews.js"
+    "gen:previews": "node --experimental-modules scripts/generate-previews.js"
   },
   "dependencies": {
     "@genkit-ai/googleai": "^1.6.2",
