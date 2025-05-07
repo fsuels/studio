@@ -3,17 +3,19 @@
 'use client';
 
 import { useParams, notFound, useRouter } from 'next/navigation';
-import WizardLayout from '@/components/WizardLayout'; // Using existing WizardLayout
-import { documentLibrary, type LegalDocument } from '@/lib/document-library'; // Using LegalDocument
+import WizardLayout from '@/components/WizardLayout'; 
+import { documentLibrary, type LegalDocument } from '@/lib/document-library'; 
 import React, { useEffect, useState } from 'react';
 import { Loader2 } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast'; // Import useToast
 
 export default function StartWizardPage() {
   const params = useParams();
-  const router = useRouter(); // For navigation
+  const router = useRouter(); 
+  const { toast } = useToast(); // Initialize useToast
 
   const locale = params.locale as 'en' | 'es';
-  const docIdFromPath = params.docId as string; // Renamed to avoid conflict
+  const docIdFromPath = params.docId as string; 
 
   const [docConfig, setDocConfig] = useState<LegalDocument | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -24,12 +26,10 @@ export default function StartWizardPage() {
       if (foundDoc) {
         setDocConfig(foundDoc);
       } else {
-        // If docConfig is not found, trigger Next.js not found page
         notFound();
       }
       setIsLoading(false);
     } else {
-       // If no docId in params, also not found
       setIsLoading(false);
       notFound();
     }
@@ -46,8 +46,6 @@ export default function StartWizardPage() {
   }
 
   if (!docConfig) {
-    // This state should ideally be caught by notFound() earlier,
-    // but as a safeguard:
     return <p>Document configuration could not be loaded.</p>;
   }
   
@@ -56,14 +54,13 @@ export default function StartWizardPage() {
       locale={locale}
       doc={docConfig}
       onComplete={(checkoutUrl) => {
-        // checkoutUrl is the Stripe session URL
-        // Redirect user to Stripe checkout
         if (checkoutUrl) {
+            toast({ title: "Proceeding to Checkout", description: "Redirecting to secure payment..." });
             router.push(checkoutUrl);
         } else {
-            // Fallback or error handling if checkoutUrl is not provided
             console.error("Checkout URL not provided from WizardLayout onComplete.");
-            router.push(`/${locale}/dashboard?status=error`); // Example fallback
+            toast({ title: "Checkout Error", description: "Could not initiate checkout. Please try again.", variant: "destructive" });
+            router.push(`/${locale}/dashboard?status=checkout_error`); 
         }
       }}
     />

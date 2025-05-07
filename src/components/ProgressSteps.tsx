@@ -28,7 +28,7 @@ export default function ProgressSteps({ current, total, stepLabels }: ProgressSt
               <div className="flex flex-col items-center text-center">
                 <div
                   className={cn(
-                    "flex h-10 w-10 items-center justify-center rounded-full border-2 transition-colors duration-300",
+                    "flex h-10 w-10 items-center justify-center rounded-full border-2 transition-colors duration-300 step-circle", // Added step-circle for global CSS
                     isCompleted ? "bg-green-600 border-green-600 text-white" : "",
                     isActive ? "border-primary bg-primary/10 text-primary" : "",
                     !isCompleted && !isActive ? "border-border bg-muted text-muted-foreground" : ""
@@ -45,7 +45,7 @@ export default function ProgressSteps({ current, total, stepLabels }: ProgressSt
                 </div>
                 <p
                   className={cn(
-                    "mt-2 text-xs font-medium whitespace-nowrap overflow-hidden text-ellipsis max-w-[80px] sm:max-w-none",
+                    "mt-2 text-xs font-medium whitespace-nowrap overflow-hidden text-ellipsis max-w-[80px] sm:max-w-none step-caption", // Added step-caption for global CSS
                     isCompleted ? "text-green-700" : "",
                     isActive ? "text-primary" : "",
                     !isCompleted && !isActive ? "text-muted-foreground" : ""
@@ -62,7 +62,7 @@ export default function ProgressSteps({ current, total, stepLabels }: ProgressSt
                     "absolute left-1/2 top-5 h-0.5 w-full -translate-x-0 transform transition-colors duration-300 -z-10",
                     isCompleted ? "bg-green-600" : "bg-border"
                   )}
-                  style={{ marginLeft: '50%', width: 'calc(100% - 2.5rem)' }} // Adjust based on circle size
+                  style={{ marginLeft: '50%', width: 'calc(100% - 2.5rem)' }} 
                   aria-hidden="true"
                 />
               )}

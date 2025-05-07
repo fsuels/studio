@@ -6,29 +6,30 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation'; // Use next/navigation for App Router
 import { FormProvider, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import type { LegalDocument } from '@/lib/document-library'; // Changed to LegalDocument
+import type { LegalDocument } from '@/lib/document-library'; 
 import WizardForm from './WizardForm';
 import PreviewPane from './PreviewPane'; 
-import React, { useEffect } from 'react'; // Import useEffect
+import React, { useEffect } from 'react'; 
 import { z } from 'zod';
+import { useTranslation } from 'react-i18next'; // Import useTranslation
 
 interface WizardLayoutProps {
   locale: 'en' | 'es';
-  doc: LegalDocument; // Changed to LegalDocument
-  onComplete: (checkoutUrl: string) => void; // Keep this prop
+  doc: LegalDocument; 
+  onComplete: (checkoutUrl: string) => void; 
 }
 
 export default function WizardLayout({ locale, doc, onComplete }: WizardLayoutProps) {
   const router = useRouter();
+  const { t } = useTranslation(); // For translating breadcrumbs
   const formSchema = doc.schema || z.object({}); 
   
   const methods = useForm({
     resolver: zodResolver(formSchema),
-    defaultValues: {}, // Initialize with empty or load from storage
+    defaultValues: {}, 
     mode: 'onBlur', 
   });
 
-  // Load draft from localStorage on mount
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const draft = localStorage.getItem(`draft-${doc.id}-${locale}`);
@@ -37,23 +38,30 @@ export default function WizardLayout({ locale, doc, onComplete }: WizardLayoutPr
           methods.reset(JSON.parse(draft));
         } catch (e) {
           console.error("Failed to parse draft from localStorage", e);
-          localStorage.removeItem(`draft-${doc.id}-${locale}`); // Clear invalid draft
+          localStorage.removeItem(`draft-${doc.id}-${locale}`); 
         }
       }
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [doc.id, locale, methods.reset]); // methods.reset might not be stable, consider specific fields if issues arise
+  }, [doc.id, locale, methods.reset]); 
+
+  const documentDisplayName = locale === 'es' && doc.name_es ? doc.name_es : doc.name;
 
   return (
     <FormProvider {...methods}>
       <main className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
         <nav className="text-sm mb-6 space-x-1 text-muted-foreground">
-          <Link href={`/${locale}`} className="hover:text-primary transition-colors">Home</Link>
+          <Link href={`/${locale}`} className="hover:text-primary transition-colors">
+            {t('Home', { ns: 'translation' })} {/* Ensure 'Home' is in translation files or provide default */}
+          </Link>
           <span>/</span>
-          {/* Link to document detail page (if exists) or display name */}
-          <span className="text-foreground font-medium">{doc.name_es && locale === 'es' ? doc.name_es : doc.name}</span>
+          <Link href={`/${locale}/docs/${doc.id}/start`} className="hover:text-primary transition-colors">
+            {documentDisplayName}
+          </Link>
           <span>/</span>
-          <span className="text-foreground font-semibold">Create</span>
+          <span className="text-foreground font-semibold">
+            {t('Create', { ns: 'translation' })} {/* Ensure 'Create' is in translation files or provide default */}
+          </span>
         </nav>
 
         <div className="lg:grid lg:grid-cols-2 lg:gap-12 items-start">

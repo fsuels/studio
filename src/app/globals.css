@@ -246,4 +246,28 @@
   .progress-bar > div {
     @apply bg-primary h-full transition-all;
   }
+
+  /* New Stepper Styles */
+  .step-circle {
+    @apply flex items-center justify-center h-8 w-8 rounded-full border-2 border-border;
+  }
+  .stepper li.active .step-circle, /* More specific selector if needed */
+  .stepper__item--active .step-circle { /* if ProgressSteps uses this class */
+    @apply bg-primary text-primary-foreground border-primary;
+  }
+  .stepper li.completed .step-circle, /* Example for completed */
+  .stepper__item--complete .step-circle {
+     @apply bg-green-600 text-white border-green-600;
+  }
+
+  .step-caption {
+    @apply text-xs md:text-sm mt-1 max-w-[5rem] leading-tight text-center; /* Added text-center */
+  }
+  
+  @media (max-width: 520px) {
+    .step-caption {
+      @apply hidden; /* Tailwind class to hide */
+    }
+  }
 }
+
