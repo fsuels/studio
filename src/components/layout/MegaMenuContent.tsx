@@ -26,7 +26,7 @@ export default function MegaMenuContent({ categories, documents, onLinkClick }: 
 
   return (
     <ScrollArea className="max-h-[70vh] md:max-h-[calc(100vh-10rem)]">
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-8 p-6 md:p-8 bg-popover text-popover-foreground rounded-b-lg shadow-lg">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-7 gap-x-6 gap-y-8 p-6 md:p-8 bg-popover text-popover-foreground rounded-b-lg shadow-lg">
         {categories.map(category => {
             const categoryDocs = getDocumentsForCategory(category.key);
             return (
@@ -70,3 +70,4 @@ export default function MegaMenuContent({ categories, documents, onLinkClick }: 
     </ScrollArea>
   );
 }
+

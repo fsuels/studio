@@ -73,6 +73,7 @@ export function Header() {
   const searchResultsRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isMegaMenuOpen, setIsMegaMenuOpen] = useState(false);
 
 
   useEffect(() => {
@@ -147,14 +148,21 @@ export function Header() {
     setSearchQuery('');
     setShowResults(false); 
     setIsMobileMenuOpen(false);
+    setIsMegaMenuOpen(false);
   };
   
   const handleResultClick = (docId: string) => {
     setSearchQuery('');
     setShowResults(false);
     setIsMobileMenuOpen(false);
+    setIsMegaMenuOpen(false);
     router.push(`/?docId=${encodeURIComponent(docId)}#workflow-start`);
   };
+
+  const handleMegaMenuLinkClick = () => {
+    setIsMegaMenuOpen(false);
+    setIsMobileMenuOpen(false);
+  }
 
 
   return (
@@ -166,7 +174,7 @@ export function Header() {
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex flex-1 items-center justify-center">
-            <Popover>
+            <Popover open={isMegaMenuOpen} onOpenChange={setIsMegaMenuOpen}>
                 <PopoverTrigger asChild>
                     <Button variant="ghost" size="sm" className="text-sm font-medium flex items-center gap-1 px-2 hover:text-primary" disabled={!isHydrated}>
                         <LayoutGrid className="h-4 w-4 text-muted-foreground" />
@@ -174,8 +182,8 @@ export function Header() {
                         <ChevronDown className="h-4 w-4 opacity-70" />
                     </Button>
                 </PopoverTrigger>
-                <PopoverContent className="w-screen max-w-4xl p-0" align="center">
-                   <MegaMenuContent categories={CATEGORY_LIST} documents={documentLibrary} onLinkClick={() => {}}/>
+                <PopoverContent className="w-screen max-w-screen-xl p-0 -translate-x-1/2 left-1/2" align="center">
+                   <MegaMenuContent categories={CATEGORY_LIST} documents={documentLibrary} onLinkClick={handleMegaMenuLinkClick}/>
                 </PopoverContent>
             </Popover>
             <Nav />
@@ -273,7 +281,7 @@ export function Header() {
              >
                 <Link href="/signin">
                     <LogIn className="h-4 w-4 mr-1 md:mr-2" />
-                    <span className="hidden sm:inline">{isHydrated ? t('Login') : '...'}</span>
+                    <span className="hidden sm:inline">{isHydrated ? t('Sign In') : '...'}</span>
                 </Link>
              </Button>
              <ThemeToggle />
@@ -281,7 +289,9 @@ export function Header() {
         </nav>
 
         {/* Mobile Menu Button */}
-        <div className="md:hidden ml-auto">
+        <div className="md:hidden ml-auto flex items-center gap-2">
+            {isHydrated && <MiniCartDrawer />}
+            <ThemeToggle />
              <Button variant="ghost" size="icon" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} disabled={!isHydrated}>
                 {isMobileMenuOpen ? <CloseIcon className="h-5 w-5" /> : <MenuIcon className="h-5 w-5" />}
              </Button>
@@ -329,7 +339,7 @@ export function Header() {
                 )}
             </form>
             
-            <Popover>
+            <Popover open={isMegaMenuOpen} onOpenChange={setIsMegaMenuOpen}>
                 <PopoverTrigger asChild>
                     <Button variant="ghost" className="w-full justify-start text-sm font-medium flex items-center gap-2 px-2 hover:text-primary" disabled={!isHydrated}>
                         <LayoutGrid className="h-4 w-4 text-muted-foreground" />
@@ -338,7 +348,7 @@ export function Header() {
                     </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-[calc(100vw-2rem)] max-w-md p-0" align="start" side="bottom">
-                   <MegaMenuContent categories={CATEGORY_LIST} documents={documentLibrary} onLinkClick={() => setIsMobileMenuOpen(false)}/>
+                   <MegaMenuContent categories={CATEGORY_LIST} documents={documentLibrary} onLinkClick={handleMegaMenuLinkClick}/>
                 </PopoverContent>
             </Popover>
 
@@ -346,10 +356,11 @@ export function Header() {
 
              <div className="border-t border-border pt-4 space-y-2">
                  <Button variant="outline" size="sm" className="w-full justify-start" asChild onClick={() => setIsMobileMenuOpen(false)}><Link href="/signup"><UserPlus className="h-4 w-4 mr-2" />{isHydrated ? t('Sign Up') : '...'}</Link></Button>
-                 <Button variant="default" size="sm" className="w-full justify-start" asChild onClick={() => setIsMobileMenuOpen(false)}><Link href="/signin"><LogIn className="h-4 w-4 mr-2" />{isHydrated ? t('Login') : '...'}</Link></Button>
+                 <Button variant="default" size="sm" className="w-full justify-start" asChild onClick={() => setIsMobileMenuOpen(false)}><Link href="/signin"><LogIn className="h-4 w-4 mr-2" />{isHydrated ? t('Sign In') : '...'}</Link></Button>
              </div>
          </div>
       )}
     </header>
   );
 }
+    
