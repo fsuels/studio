@@ -138,6 +138,8 @@ export function Header() {
     i18n.changeLanguage(lang).then(() => {
       setCurrentLanguageDisplay(lang === 'es' ? 'ES' : 'EN');
     });
+    setIsMobileMenuOpen(false); // Close mobile menu on language change
+    setIsMegaMenuOpen(false); // Close mega menu on language change
   };
 
   const handleSearchSubmit = (e: React.FormEvent) => {
@@ -166,14 +168,20 @@ export function Header() {
 
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 overflow-visible">
       <div className="container flex h-14 items-center px-4 md:px-6"> 
         <div className="mr-auto md:mr-4 flex">
           <Logo />
         </div>
 
-        {/* Desktop Navigation */}
-        <div className="hidden md:flex flex-1 items-center justify-center">
+        {/* Desktop Navigation - Main links to the left of "Make Documents" */}
+        <div className="hidden md:flex flex-1 items-center justify-start">
+            <Nav /> {/* Main navigation links like Pricing, Features, etc. */}
+        </div>
+       
+        {/* Desktop Actions - "Make Documents", Search, Language, Auth, Theme, Cart aligned to the right */}
+        <nav className="hidden md:flex items-center gap-2 ml-auto">
+            {/* "Make Documents" Popover Trigger - Now on the right */}
             <Popover open={isMegaMenuOpen} onOpenChange={setIsMegaMenuOpen}>
                 <PopoverTrigger asChild>
                     <Button variant="ghost" size="sm" className="text-sm font-medium flex items-center gap-1 px-2 hover:text-primary" disabled={!isHydrated}>
@@ -182,15 +190,17 @@ export function Header() {
                         <ChevronDown className="h-4 w-4 opacity-70" />
                     </Button>
                 </PopoverTrigger>
-                <PopoverContent className="w-screen max-w-screen-xl p-0 -translate-x-1/2 left-1/2" align="center">
+                <PopoverContent 
+                    className="absolute left-1/2 -translate-x-1/2 mt-2 w-[90vw] lg:w-[80rem] max-w-full bg-card p-6 rounded-lg shadow-lg z-50 overflow-visible"
+                    align="center"
+                    side="bottom"
+                    sideOffset={4}
+                >
                    <MegaMenuContent categories={CATEGORY_LIST} documents={documentLibrary} onLinkClick={handleMegaMenuLinkClick}/>
                 </PopoverContent>
             </Popover>
-            <Nav />
-        </div>
-       
-        <nav className="hidden md:flex items-center gap-2 ml-auto">
-             <form onSubmit={handleSearchSubmit} className="relative flex items-center mr-2">
+
+             <form onSubmit={handleSearchSubmit} className="relative flex items-center">
                 <SearchIcon className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground pointer-events-none" />
                 <Input
                     ref={searchInputRef}
@@ -206,7 +216,7 @@ export function Header() {
                 {showResults && searchResults.length > 0 && (
                   <div 
                     ref={searchResultsRef}
-                    className="absolute top-full mt-2 w-full md:w-72 max-h-80 overflow-y-auto bg-popover border border-border rounded-md shadow-lg z-[60]"
+                    className="absolute top-full mt-2 w-full md:w-72 max-h-80 overflow-y-auto bg-popover border border-border rounded-md shadow-lg z-[70]" // Increased z-index
                   >
                     <ul>
                       {searchResults.map((doc) => (
@@ -242,7 +252,7 @@ export function Header() {
                   <ChevronDown className="ml-1 h-4 w-4 opacity-70" />
                 </Button>
               </PopoverTrigger>
-              <PopoverContent align="end" className="min-w-[8rem] p-1">
+              <PopoverContent align="end" className="min-w-[8rem] p-1 z-[70]"> {/* Increased z-index */}
                 <Button
                    onClick={() => handleLanguageChange('en')}
                    variant={currentLanguageDisplay === 'EN' ? 'secondary': 'ghost'}
@@ -300,11 +310,11 @@ export function Header() {
 
       {/* Mobile Menu Content */}
       {isMobileMenuOpen && isHydrated && (
-         <div className="md:hidden absolute top-14 left-0 right-0 bg-background shadow-lg border-t border-border p-4 space-y-4 animate-fade-in">
+         <div className="md:hidden absolute top-14 left-0 right-0 bg-background shadow-lg border-t border-border p-4 space-y-4 animate-fade-in z-[60]"> {/* Ensured z-index */}
             <form onSubmit={handleSearchSubmit} className="relative flex items-center w-full">
                  <SearchIcon className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground pointer-events-none" />
                  <Input
-                     ref={searchInputRef} // Ensure ref is also handled for mobile search if needed
+                     ref={searchInputRef} 
                      type="search"
                      placeholder={t('nav.searchPlaceholder', { defaultValue: 'Search documents...' })}
                      value={searchQuery}
@@ -316,8 +326,8 @@ export function Header() {
                  />
                  {showResults && searchResults.length > 0 && (
                   <div 
-                    ref={searchResultsRef} // And here
-                    className="absolute top-full mt-1 w-full max-h-60 overflow-y-auto bg-popover border border-border rounded-md shadow-lg z-[60]"
+                    ref={searchResultsRef} 
+                    className="absolute top-full mt-1 w-full max-h-60 overflow-y-auto bg-popover border border-border rounded-md shadow-lg z-[70]" // Increased z-index
                   >
                     <ul>
                       {searchResults.map((doc) => (
@@ -347,12 +357,12 @@ export function Header() {
                         <ChevronDown className="h-4 w-4 opacity-70 ml-auto" />
                     </Button>
                 </PopoverTrigger>
-                <PopoverContent className="w-[calc(100vw-2rem)] max-w-md p-0" align="start" side="bottom">
+                <PopoverContent className="w-[calc(100vw-2rem)] max-w-md p-0 z-[70]" align="start" side="bottom"> {/* Increased z-index */}
                    <MegaMenuContent categories={CATEGORY_LIST} documents={documentLibrary} onLinkClick={handleMegaMenuLinkClick}/>
                 </PopoverContent>
             </Popover>
 
-            <Nav /> {/* Simplified Nav for mobile or full nav if it adapts well */}
+            <Nav /> {/* Main navigation links like Pricing, Features, etc. */}
 
              <div className="border-t border-border pt-4 space-y-2">
                  <Button variant="outline" size="sm" className="w-full justify-start" asChild onClick={() => setIsMobileMenuOpen(false)}><Link href="/signup"><UserPlus className="h-4 w-4 mr-2" />{isHydrated ? t('Sign Up') : '...'}</Link></Button>
