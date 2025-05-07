@@ -1,5 +1,5 @@
 // src/lib/document-library.ts
-
+import type { z } from 'zod'; // Import Zod
 import { documentLibraryAdditions } from './document-library-additions';
 
 // Define the structure for a single question
@@ -24,26 +24,27 @@ export type UpsellClause = {
 
 // Define the structure for a single legal document
 export type LegalDocument = {
-  id: string; // Unique identifier for the document (e.g., 'residential-lease')
-  name: string; // English name of the document
-  name_es?: string; // Spanish name of the document (optional)
-  aliases?: string[]; // English keywords or phrases (optional, can remove if not used)
-  aliases_es?: string[]; // Spanish keywords or phrases (optional)
-  category: string; // Category for grouping (e.g., 'Real Estate', 'Family Law') - USE NEW CATEGORIES
-  states?: string[] | 'all'; // States where this document is applicable ('all' or list like ['CA', 'NY'])
-  questions?: Question[]; // Array of questions for the dynamic form
-  description: string; // Short description of the document
-  description_es?: string; // Spanish description
-  requiresNotarization: boolean; // Does this document typically require notarization?
-  canBeRecorded: boolean; // Can this document be recorded with a court/clerk?
-  offerNotarization: boolean; // Should we offer help/links for notarization?
-  offerRecordingHelp: boolean; // Should we offer help/links for recording?
-  basePrice: number; // Base price for the document (e.g., 5)
-  languageSupport: string[]; // Array of supported language codes (e.g., ['en', 'es'])
-  upsellClauses?: UpsellClause[]; // Optional clauses user can add for a fee
-  templatePath?: string; // Path to the English markdown template
-  templatePath_es?: string; // Path to the Spanish markdown template
-  requiresNotarizationStates?: string[]; // States where notarization is legally required
+  id: string; 
+  name: string; 
+  name_es?: string; 
+  aliases?: string[]; 
+  aliases_es?: string[]; 
+  category: string; 
+  states?: string[] | 'all'; 
+  questions?: Question[]; 
+  schema?: z.AnyZodObject; // NEW: Zod schema for react-hook-form
+  description: string; 
+  description_es?: string; 
+  requiresNotarization: boolean; 
+  canBeRecorded: boolean; 
+  offerNotarization: boolean; 
+  offerRecordingHelp: boolean; 
+  basePrice: number; 
+  languageSupport: string[]; 
+  upsellClauses?: UpsellClause[]; 
+  templatePath?: string; 
+  templatePath_es?: string; 
+  requiresNotarizationStates?: string[]; 
 };
 
 // Helper function to create slugs from names (basic example)
@@ -75,13 +76,13 @@ export const usStates = [
 ];
 
 // The main library of legal documents - Updated with new structure and categories
-export let documentLibrary: LegalDocument[] = [ // Changed to let for modification
+export let documentLibrary: LegalDocument[] = [ 
   // --- Category 1: Finance ---
   {
     id: 'promissory-note',
     name: 'Promissory Note',
     name_es: 'Pagaré',
-    category: 'Finance', // Updated category
+    category: 'Finance', 
     description: 'Formalize a promise to repay a loan.',
     description_es: 'Formalizar una promesa de pago de un préstamo.',
     aliases: ["iou", "loan paper", "promise to pay"],
@@ -93,7 +94,7 @@ export let documentLibrary: LegalDocument[] = [ // Changed to let for modificati
     offerRecordingHelp: false,
     basePrice: 5,
     states: 'all',
-    questions: [ // Placeholder questions
+    questions: [ 
         { id: 'lenderName', label: 'Lender Name', type: 'text', required: true },
         { id: 'borrowerName', label: 'Borrower Name', type: 'text', required: true },
         { id: 'principalAmount', label: 'Loan Amount ($)', type: 'number', required: true },
@@ -118,11 +119,11 @@ export let documentLibrary: LegalDocument[] = [ // Changed to let for modificati
     canBeRecorded: false,
     offerNotarization: true,
     offerRecordingHelp: false,
-    basePrice: 19.95, // As per prompt
+    basePrice: 19.95, 
     states: 'all',
     templatePath: "/templates/en/bill-of-sale-vehicle.md", 
     templatePath_es: "/templates/es/bill-of-sale-vehicle.md",
-    requiresNotarizationStates: ["AZ", "KY", "LA", "MT", "NV", "OH", "OK", "PA", "WV", "WY"], // Example states
+    requiresNotarizationStates: ["AZ", "KY", "LA", "MT", "NV", "OH", "OK", "PA", "WV", "WY"], 
     questions: [
         { id: 'sale_date', label: 'Date of Sale', type: 'date', required: true },
         { id: 'seller_name', label: 'Seller\'s Full Name', type: 'text', required: true },
@@ -360,7 +361,7 @@ export let documentLibrary: LegalDocument[] = [ // Changed to let for modificati
     questions: []
   },
    {
-    id: 'articles-of-incorporation-biz', // Ensure unique ID
+    id: 'articles-of-incorporation-biz', 
     name: 'Articles of Incorporation',
     name_es: 'Acta Constitutiva',
     category: 'Business',
@@ -812,3 +813,6 @@ export function findMatchingDocuments(
     return true; // If no query, match all (that fit state)
   });
 }
+
+// Export the documentLibrary with 'documents' alias for WizardShell compatibility
+export { documentLibrary as documents };
