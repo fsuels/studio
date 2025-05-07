@@ -95,7 +95,8 @@
     "noDescription": "No description available.",
     "requiresNotarization": "Requires Notarization",
     "canBeRecorded": "Can Be Recorded",
-    "noResults": "No documents match your search in this category."
+    "noResults": "No documents match your search in this category.",
+    "searchInCategoryPlaceholder": "Search in this category..."
   },
   "dynamicForm": {
     "stepTitle": "Step 2: Provide Details for {{documentType}}",
