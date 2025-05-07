@@ -191,7 +191,7 @@ export function Header() {
                     </Button>
                 </PopoverTrigger>
                 <PopoverContent 
-                    className="absolute left-1/2 -translate-x-1/2 mt-2 w-[90vw] lg:w-[80rem] max-w-full bg-card p-6 rounded-lg shadow-lg z-50 overflow-visible"
+                    className="mt-2 w-[90vw] lg:w-[80rem] max-w-full bg-card p-0 rounded-lg shadow-lg z-50 overflow-visible" 
                     align="center"
                     side="bottom"
                     sideOffset={4}
@@ -357,7 +357,11 @@ export function Header() {
                         <ChevronDown className="h-4 w-4 opacity-70 ml-auto" />
                     </Button>
                 </PopoverTrigger>
-                <PopoverContent className="w-[calc(100vw-2rem)] max-w-md p-0 z-[70]" align="start" side="bottom"> {/* Increased z-index */}
+                <PopoverContent 
+                  className="w-[calc(100vw-2rem)] max-w-md p-0 z-[70] absolute left-1/2 -translate-x-1/2 mt-2 bg-card shadow-lg rounded-lg overflow-visible" 
+                  align="center" 
+                  side="bottom"
+                > {/* Increased z-index and centering styles */}
                    <MegaMenuContent categories={CATEGORY_LIST} documents={documentLibrary} onLinkClick={handleMegaMenuLinkClick}/>
                 </PopoverContent>
             </Popover>
@@ -373,4 +377,5 @@ export function Header() {
     </header>
   );
 }
+    
     
