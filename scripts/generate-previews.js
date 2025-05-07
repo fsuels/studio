@@ -1,104 +1,93 @@
 // scripts/generate-previews.js
-
 import fs from 'fs';
 import path from 'path';
-// import { fileURLToPath } from 'url'; // Not strictly needed if using process.cwd() consistently
 import puppeteer from 'puppeteer';
-import MarkdownIt from 'markdown-it'; // Added back MarkdownIt as puppeteer alone might not render .md as styled HTML
+import MarkdownIt from 'markdown-it';
 
-// --- CONFIGURATION — adjust as needed ---
-const templatesDir = path.join(process.cwd(), 'public', 'templates');  // UPDATED: Point to public/templates
+const templatesDir = path.join(process.cwd(), 'public', 'templates');
 const outDir       = path.join(process.cwd(), 'public', 'images', 'previews');
 const languages    = ['en','es'];
 
-// make sure output dirs exist
-for (const lang of languages) {
-  fs.mkdirSync(path.join(outDir, lang), { recursive: true });
-}
-
 async function generate() {
-  const mdInstance = new MarkdownIt();
-  const browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox', '--disable-setuid-sandbox'] }); // Added sandbox args for compatibility
-  
+  const browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox', '--disable-setuid-sandbox'] }); // Added sandbox args
+  const mdInstance = new MarkdownIt(); // Create instance of MarkdownIt
+
   for (const lang of languages) {
-    const mdDir = path.join(templatesDir, lang);
+    const mdDir  = path.join(templatesDir, lang);
     const pngDir = path.join(outDir, lang);
-    
+    fs.mkdirSync(pngDir, { recursive: true });
+
     if (!fs.existsSync(mdDir)) {
         console.warn(`Markdown directory not found for language ${lang}: ${mdDir}`);
         continue;
     }
 
-    const mdFiles = fs.readdirSync(mdDir).filter(f => f.endsWith('.md'));
+    for (const file of fs.readdirSync(mdDir).filter(f => f.endsWith('.md'))) {
+      const id      = file.replace(/\.md$/, '');
+      const mdPath  = path.join(mdDir, file);
+      const pngPath = path.join(pngDir, `${id}.png`);
 
-    for (const mdFile of mdFiles) {
-      const docId    = path.basename(mdFile, '.md');
-      const mdPath   = path.join(mdDir, mdFile);
-      const pngPath  = path.join(pngDir, `${docId}.png`);
-
-      // skip if PNG exists and is newer than the Markdown
+      // **FRESHNESS CHECK**
       if (fs.existsSync(pngPath)) {
-        const mdStat  = fs.statSync(mdPath);
-        const pngStat = fs.statSync(pngPath);
-        if (pngStat.mtimeMs >= mdStat.mtimeMs) {
-          console.log(`⏭ ${lang}/${docId}.png is fresh`);
+        const mdTime  = fs.statSync(mdPath).mtimeMs;
+        const pngTime = fs.statSync(pngPath).mtimeMs;
+        if (pngTime >= mdTime) {
+          console.log(`⏭ up-to-date: ${lang}/${id}.png`);
           continue;
         }
       }
 
-      console.log(`🖼️  Generating ${lang}/${docId}.png`);
+      console.log(`🔄 Generating preview for ${lang}/${id}`);
+      const raw   = fs.readFileSync(mdPath, 'utf-8');
+      const htmlBody = mdInstance.render(raw); // Use the instance
+      const page  = await browser.newPage();
       
-      const rawMdContent = fs.readFileSync(mdPath, 'utf-8');
-      const htmlBody = mdInstance.render(rawMdContent);
+      // Set viewport to a typical high-resolution display of a letter-sized page
+      // 8.5 inches * 96 DPI = 816px, 11 inches * 96 DPI = 1056px
+      // Using a slightly larger width for better capture of full-width elements like tables.
+      await page.setViewport({ width: 816, height: 1056, deviceScaleFactor: 2 }); 
 
-      const html = `
-        <html>
-        <head>
+      await page.setContent(`
+        <html><head>
+          <meta charset="UTF-8">
           <style>
-            /* Basic styling for the preview - try to match your PDF/display style */
             body { 
               font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
               padding: 32px; 
               width: 8.5in; /* Standard letter width */
               height: 11in; /* Standard letter height */
               box-sizing: border-box; 
-              margin: 0; 
+              margin: 0;
               background-color: white; /* Ensure background for screenshot */
             }
-            .prose h1 { font-size:24px; margin-top:0; margin-bottom: 16px; }
-            .prose h2 { font-size:20px; margin-bottom: 12px; }
-            .prose h3 { font-size:18px; margin-bottom: 10px; }
+            .prose h1 { font-size:24px; margin-top:0; margin-bottom: 16px; font-weight: 600;}
+            .prose h2 { font-size:20px; margin-bottom: 12px; font-weight: 600;}
+            .prose h3 { font-size:18px; margin-bottom: 10px; font-weight: 600;}
             .prose p, .prose li { font-size: 12px; line-height: 1.6; margin-bottom: 8px; }
             .prose ul, .prose ol { padding-left: 20px; margin-bottom: 10px; }
             .prose table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 11px; }
-            .prose table, .prose th, .prose td { border: 1px solid #ccc; }
+            .prose table, .prose th, .prose td { border: 1px solid #ccc; } /* Light grey border */
             .prose th, .prose td { padding: 6px 8px; text-align: left; }
-            .prose th { background-color: #f0f0f0; font-weight: 600; }
+            .prose th { background-color: #f0f0f0; font-weight: 600; } /* Light grey header */
             .prose strong { font-weight: 600; }
+            .prose hr { border-top: 1px solid #e5e7eb; margin: 16px 0; }
             /* Add more specific styles from your globals.css if needed */
           </style>
-        </head>
-        <body class="prose">${htmlBody}</body>
-        </html>`;
-      
-      const page = await browser.newPage();
-      // Set viewport to a typical high-resolution display of a letter-sized page
-      // 8.5 inches * 96 DPI = 816px, 11 inches * 96 DPI = 1056px
-      await page.setViewport({ width: 816, height: 1056, deviceScaleFactor: 2 }); // Use deviceScaleFactor for sharper images
-      await page.setContent(html, { waitUntil: 'networkidle0' });
+        </head><body class="prose">${htmlBody}</body></html>
+      `, { waitUntil: 'networkidle0' });
       
       // Screenshot the entire body or a specific element if preferred
       const elementToScreenshot = await page.$('body');
       if (elementToScreenshot) {
-        await elementToScreenshot.screenshot({ 
-            path: pngPath, 
-            omitBackground: false, // Keep background for non-transparent PNGs
-            type: 'png', // Explicitly set type
-            // fullPage: true might be too large for previews, clip to viewport
-            clip: { x: 0, y: 0, width: 816, height: 1056 } // Clip to the page dimensions
-        });
+          await elementToScreenshot.screenshot({ 
+              path: pngPath, 
+              omitBackground: false, // Keep background for non-transparent PNGs
+              type: 'png', // Explicitly set type
+              // Clip to the page dimensions to ensure consistent preview size
+              clip: { x: 0, y: 0, width: 816, height: 1056 } 
+          });
       } else {
-        console.error(`Could not find body element for ${lang}/${docId}.png`);
+          console.error(`Could not find body element for ${lang}/${id}.png`);
       }
       await page.close();
     }
@@ -107,7 +96,4 @@ async function generate() {
   console.log('All previews checked/generated.');
 }
 
-generate().catch(err => {
-  console.error('Error generating previews:', err);
-  process.exit(1);
-});
+generate().catch(err => { console.error('Error generating previews:', err); process.exit(1); });

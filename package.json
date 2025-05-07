@@ -11,7 +11,8 @@
     "start": "next start",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
-    "generate:previews": "node scripts/generate-previews.js"
+    "generate:previews": "node scripts/generate-previews.js",
+    "gen:previews": "node scripts/generate-previews.js"
   },
   "dependencies": {
     "@genkit-ai/googleai": "^1.6.2",
