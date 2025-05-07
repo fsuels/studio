@@ -1,38 +1,97 @@
 // src/components/DocumentPreview.tsx
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import { useTranslation } from 'react-i18next'; // Import useTranslation
 import Image from 'next/image'; // Use next/image for optimization
 
 interface DocumentPreviewProps {
-  /** slug or docId matching your preview filename */
-  docId: string;
-  alt?: string;
-  locale?: 'en' | 'es'; // Optional locale for alt text or conditional image paths
+  docId: string;          // e.g. "bill-of-sale-vehicle"
+  locale?: 'en' | 'es';     // defaults to 'en'
+  alt?: string; // Added alt prop
 }
 
 export default function DocumentPreview({
   docId,
+  locale = 'en',
   alt,
-  locale = 'en', // Default to English
 }: DocumentPreviewProps) {
-  // Adjust src based on locale
-  const src = `/images/previews/${locale}/${docId}.png`;
-  const defaultAlt = locale === 'es' ? `Vista previa de ${docId}` : `${docId} preview`;
+  const { t } = useTranslation();
+  const [imgExists, setImgExists] = useState<boolean>(true); // Assume image exists initially
+  const [md, setMd] = useState<string>('');
+  const [isLoadingMd, setIsLoadingMd] = useState<boolean>(false);
+  const [errorMd, setErrorMd] = useState<string | null>(null);
+
+  // 1) Try loading the static preview PNG
+  const imgSrc = `/images/previews/${locale}/${docId}.png`;
+  const defaultAlt = alt ?? (locale === 'es' ? t(`Vista previa de ${docId}`) : t(`${docId} preview`));
+
+  // onError → hide image and load markdown
+  const handleImgError = () => {
+    console.warn(`[DocumentPreview] Image not found or failed to load: ${imgSrc}. Falling back to Markdown.`);
+    setImgExists(false);
+  };
+
+  // 2) If image is missing or errored, fetch the Markdown live
+  useEffect(() => {
+    if (!imgExists) {
+      setIsLoadingMd(true);
+      setErrorMd(null);
+      fetch(`/templates/${locale}/${docId}.md`)
+        .then(r => {
+          if (!r.ok) {
+            throw new Error(`Failed to fetch Markdown template (${r.status}): /templates/${locale}/${docId}.md`);
+          }
+          return r.text();
+        })
+        .then(text => {
+          setMd(text);
+          setIsLoadingMd(false);
+        })
+        .catch(err => {
+          console.error(`[DocumentPreview] Error fetching Markdown for ${docId} (${locale}):`, err);
+          setMd(''); // Clear any previous markdown
+          setErrorMd(err.message || t('Error loading preview content.', {defaultValue: 'Error loading preview content.'}));
+          setIsLoadingMd(false);
+        });
+    }
+  }, [docId, locale, imgExists, t]);
 
   return (
-    <div className="border rounded-lg overflow-hidden bg-muted flex items-center justify-center aspect-[8.5/11] max-h-[500px] md:max-h-[600px] w-full shadow-lg">
-      {/* Using next/image component for optimized image loading */}
-      <Image
-        src={src}
-        alt={alt ?? defaultAlt}
-        width={850} // Example width, adjust based on your image's aspect ratio
-        height={1100} // Example height, adjust
-        className="object-contain w-full h-full"
-        priority // Consider priority if it's LCP
-        unoptimized={process.env.NODE_ENV === 'development'} // Useful for local dev if image optimizer is slow
-        data-ai-hint="document template screenshot"
-      />
+    <div className="border rounded-lg overflow-hidden bg-muted p-2 md:p-4 aspect-[8.5/11] max-h-[500px] md:max-h-[600px] w-full flex items-center justify-center shadow-lg">
+      {imgExists ? (
+        <Image
+          src={imgSrc}
+          alt={defaultAlt}
+          width={850} // Intrinsic width of a letter page at higher DPI for quality
+          height={1100} // Intrinsic height
+          className="object-contain w-full h-full"
+          onError={handleImgError}
+          priority // Consider if this is LCP
+          unoptimized={process.env.NODE_ENV === 'development'}
+          data-ai-hint="document template screenshot"
+        />
+      ) : isLoadingMd ? (
+        <p className="text-center text-sm text-muted-foreground animate-pulse">
+          {t('Loading preview…', {defaultValue: 'Loading preview…'})}
+        </p>
+      ) : errorMd ? (
+        <p className="text-center text-sm text-destructive p-4">
+          {errorMd}
+        </p>
+      ) : md ? (
+        <div className="prose prose-sm dark:prose-invert max-w-none w-full h-full overflow-y-auto p-2 bg-background text-foreground">
+          <ReactMarkdown remarkPlugins={[remarkGfm]}>
+            {md}
+          </ReactMarkdown>
+        </div>
+      ) : (
+         <p className="text-center text-sm text-muted-foreground">
+           {t('Preview not available.', {defaultValue: 'Preview not available.'})}
+         </p>
+      )}
     </div>
   );
 }

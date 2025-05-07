@@ -41,12 +41,12 @@ async function generate() {
         const mdStat  = fs.statSync(mdPath);
         const pngStat = fs.statSync(pngPath);
         if (pngStat.mtimeMs >= mdStat.mtimeMs) {
-          console.log(`⏭ up-to-date: ${lang}/${docId}.png`);
+          console.log(`⏭ ${lang}/${docId}.png is fresh`);
           continue;
         }
       }
 
-      console.log(`✏️  Rendering: ${lang}/${docId}`);
+      console.log(`🖼️  Generating ${lang}/${docId}.png`);
       
       const rawMdContent = fs.readFileSync(mdPath, 'utf-8');
       const htmlBody = mdInstance.render(rawMdContent);
@@ -55,33 +55,51 @@ async function generate() {
         <html>
         <head>
           <style>
-            body { font-family: Inter, sans-serif; padding: 32px; width: 8.5in; height: 11in; box-sizing: border-box; margin: 0; background-color: white; }
-            table { width: 100%; border-collapse: collapse; margin: 16px 0; }
-            table, th, td { border: 1px solid #ddd; }
-            th, td { padding: 8px; text-align: left; font-size: 12px; }
-            h1 { font-size: 24px; margin-top:24px; margin-bottom: 12px; }
-            h2 { font-size: 18px; margin-top:20px; margin-bottom: 10px; }
-            h3 { font-size: 16px; margin-top:18px; margin-bottom: 8px; }
-            p, li {font-size: 12px; line-height: 1.6;}
-            ul, ol { padding-left: 20px; margin-bottom: 10px;}
-            img { max-width: 100%; }
+            /* Basic styling for the preview - try to match your PDF/display style */
+            body { 
+              font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+              padding: 32px; 
+              width: 8.5in; /* Standard letter width */
+              height: 11in; /* Standard letter height */
+              box-sizing: border-box; 
+              margin: 0; 
+              background-color: white; /* Ensure background for screenshot */
+            }
+            .prose h1 { font-size:24px; margin-top:0; margin-bottom: 16px; }
+            .prose h2 { font-size:20px; margin-bottom: 12px; }
+            .prose h3 { font-size:18px; margin-bottom: 10px; }
+            .prose p, .prose li { font-size: 12px; line-height: 1.6; margin-bottom: 8px; }
+            .prose ul, .prose ol { padding-left: 20px; margin-bottom: 10px; }
+            .prose table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 11px; }
+            .prose table, .prose th, .prose td { border: 1px solid #ccc; }
+            .prose th, .prose td { padding: 6px 8px; text-align: left; }
+            .prose th { background-color: #f0f0f0; font-weight: 600; }
+            .prose strong { font-weight: 600; }
             /* Add more specific styles from your globals.css if needed */
           </style>
         </head>
-        <body>${htmlBody}</body>
-        </html>
-      `;
+        <body class="prose">${htmlBody}</body>
+        </html>`;
       
       const page = await browser.newPage();
-      await page.setViewport({ width: 816, height: 1056 }); // 8.5x11 inches at 96 DPI
+      // Set viewport to a typical high-resolution display of a letter-sized page
+      // 8.5 inches * 96 DPI = 816px, 11 inches * 96 DPI = 1056px
+      await page.setViewport({ width: 816, height: 1056, deviceScaleFactor: 2 }); // Use deviceScaleFactor for sharper images
       await page.setContent(html, { waitUntil: 'networkidle0' });
       
-      await page.screenshot({ 
-          path: pngPath, 
-          omitBackground: false, // Keep background for non-transparent PNGs
-          type: 'png',
-          clip: { x: 0, y: 0, width: 816, height: 1056 } // Clip to the page dimensions
-      });
+      // Screenshot the entire body or a specific element if preferred
+      const elementToScreenshot = await page.$('body');
+      if (elementToScreenshot) {
+        await elementToScreenshot.screenshot({ 
+            path: pngPath, 
+            omitBackground: false, // Keep background for non-transparent PNGs
+            type: 'png', // Explicitly set type
+            // fullPage: true might be too large for previews, clip to viewport
+            clip: { x: 0, y: 0, width: 816, height: 1056 } // Clip to the page dimensions
+        });
+      } else {
+        console.error(`Could not find body element for ${lang}/${docId}.png`);
+      }
       await page.close();
     }
   }
@@ -93,3 +111,4 @@ generate().catch(err => {
   console.error('Error generating previews:', err);
   process.exit(1);
 });
+

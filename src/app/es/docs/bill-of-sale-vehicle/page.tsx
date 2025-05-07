@@ -129,7 +129,7 @@ export default function BillOfSalePageES() {
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5, delay: 0.2 }}
         >
-          <DocumentPreview docId="bill-of-sale-vehicle" alt={currentContent.title + " preview"} locale={locale} />
+          <DocumentPreview docId="bill-of-sale-vehicle" locale={locale} alt={currentContent.title + " preview"} />
         </motion.div>
       </div>
       
@@ -146,7 +146,7 @@ export default function BillOfSalePageES() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: i * 0.1 }}
-                whileHover={{ scale: 1.03, boxShadow: "0px 10px 20px rgba(0,0,0,0.08)"}}
+                whileHover={{ scale: 1.03, boxShadow: "0px 10px 20px hsl(var(--card-foreground) / 0.08)"}}
                 className="p-6 bg-card rounded-lg shadow-md text-center border border-border"
               >
                 <div className="flex justify-center text-4xl mb-4">{f.icon}</div>

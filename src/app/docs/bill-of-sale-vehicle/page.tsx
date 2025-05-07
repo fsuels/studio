@@ -124,7 +124,7 @@ export default function BillOfSaleVehiclePage() {
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5, delay: 0.2 }}
         >
-          <DocumentPreview docId="bill-of-sale-vehicle" alt={currentContent.title + " preview"} locale={locale} />
+          <DocumentPreview docId="bill-of-sale-vehicle" locale={locale} alt={currentContent.title + " preview"} />
         </motion.div>
       </div>
       
@@ -132,7 +132,7 @@ export default function BillOfSaleVehiclePage() {
       <section className="py-16 bg-secondary/50 rounded-xl">
         <div className="container mx-auto px-4">
             <h2 className="text-2xl md:text-3xl font-bold text-center mb-12 text-foreground">
-                {t('features.title', 'Features That Make Legal Easy')}
+                {t('features.title', {defaultValue: 'Features That Make Legal Easy'})}
             </h2>
             <div className="grid md:grid-cols-3 gap-8">
             {features.map((f, i) => (
@@ -141,7 +141,7 @@ export default function BillOfSaleVehiclePage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: i * 0.1 }}
-                whileHover={{ scale: 1.03, boxShadow: "0px 10px 20px rgba(0,0,0,0.08)"}}
+                whileHover={{ scale: 1.03, boxShadow: "0px 10px 20px hsl(var(--card-foreground) / 0.08)"}}
                 className="p-6 bg-card rounded-lg shadow-md text-center border border-border"
               >
                 <div className="flex justify-center text-4xl mb-4">{f.icon}</div>
@@ -160,7 +160,7 @@ export default function BillOfSaleVehiclePage() {
           <Card className="shadow-lg border border-border">
             <CardHeader>
                 <CardTitle className="text-xl text-center text-card-foreground">
-                    {t('Notarization Options', 'Notarization Options')}
+                    {t('Notarization Options', {defaultValue: 'Notarization Options'})}
                 </CardTitle>
             </CardHeader>
             <CardContent className="text-center">
@@ -191,7 +191,7 @@ export default function BillOfSaleVehiclePage() {
                 </p>
               )}
                <p className="text-xs text-muted-foreground mt-2">
-                 {t('Notarization services may incur additional fees.', 'Notarization services may incur additional fees.')}
+                 {t('Notarization services may incur additional fees.', {defaultValue: 'Notarization services may incur additional fees.'})}
                </p>
             </CardContent>
           </Card>
