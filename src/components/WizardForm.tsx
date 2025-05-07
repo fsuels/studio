@@ -1,12 +1,13 @@
+
 // src/components/WizardForm.tsx
 'use client';
 
-import { useFormContext } from 'react-hook-form';
+import { useFormContext, FormProvider } from 'react-hook-form'; // FormProvider is not needed if methods are passed down
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import ProgressSteps from './ProgressSteps';
 import FieldRenderer from './FieldRenderer';
-import type { LegalDocument } from '@/lib/document-library';
+import type { LegalDocument } from '@/lib/document-library'; // Changed to LegalDocument
 import { Button } from '@/components/ui/button';
 import { Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
@@ -14,31 +15,32 @@ import { useTranslation } from 'react-i18next';
 
 interface WizardFormProps {
   locale: 'en' | 'es';
-  doc: LegalDocument;
-  onComplete: (checkoutUrl: string) => void; // Expects Stripe Checkout URL
+  doc: LegalDocument; // Changed to LegalDocument
+  onComplete: (checkoutUrl: string) => void; // Renamed from onDone to onComplete
 }
 
 export default function WizardForm({ locale, doc, onComplete }: WizardFormProps) {
-  const methods = useFormContext(); // Get methods from FormProvider in WizardLayout
+  const methods = useFormContext(); 
   const { t } = useTranslation();
   const { toast } = useToast();
 
   const steps: string[] = React.useMemo(() => {
+    // Prioritize 'questions' array if available, otherwise fallback to Zod schema keys
     if (doc.questions && doc.questions.length > 0) {
       return doc.questions.map(q => q.id);
     }
+    // Fallback to Zod schema keys if no 'questions' array
     if (doc.schema && 'shape' in doc.schema && typeof doc.schema.shape === 'object' && doc.schema.shape !== null) {
-      // Ensure schema.shape is not null before accessing keys
       return Object.keys(doc.schema.shape);
     }
-    return [];
+    return []; // Return empty array if no questions or schema shape found
   }, [doc.questions, doc.schema]);
+
 
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const totalSteps = steps.length;
 
-  // Autosave draft to localStorage
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const subscription = methods.watch((values) => {
@@ -49,14 +51,13 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
   }, [methods, doc.id, locale]);
 
   const handleNextStep = async () => {
-    setIsSubmitting(true); // Indicate loading for validation/submission
-    const currentStepFieldKey = steps[currentStepIndex] as any; // Or provide a more specific type
+    setIsSubmitting(true); 
+    const currentStepFieldKey = totalSteps > 0 ? steps[currentStepIndex] : null;
     
     let isValid = true;
-    if (totalSteps > 0 && currentStepFieldKey) { // Only trigger validation if there are steps/fields
-        isValid = await methods.trigger(currentStepFieldKey);
+    if (currentStepFieldKey) { // Only trigger validation if there's a field for the current step
+        isValid = await methods.trigger(currentStepFieldKey as any); // Cast to any if type issues
     }
-
 
     if (!isValid) {
       toast({ title: "Validation Error", description: "Please correct the errors before proceeding.", variant: "destructive" });
@@ -69,23 +70,20 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
       window.scrollTo({ top: 0, behavior: 'smooth' });
       setIsSubmitting(false);
     } else {
-      // Final submission logic
       try {
-        const response = await axios.post(`/api/wizard/${doc.id}/submit`, {
+        const response = await axios.post(`/${locale}/api/wizard/${doc.id}/submit`, { // Ensure locale is in API path
           values: methods.getValues(),
-          locale,
+          locale, // Pass locale in body too, if needed by API
         });
         toast({ title: "Submission Successful", description: "Document saved, proceeding to payment." });
         localStorage.removeItem(`draft-${doc.id}-${locale}`);
-        onComplete(response.data.checkoutUrl); // Pass Stripe checkout URL
+        onComplete(response.data.checkoutUrl); 
       } catch (error: any) {
         console.error('Submission error:', error);
         const errorMsg = error.response?.data?.error || error.message || 'Failed to submit document.';
         toast({ title: "Submission Failed", description: errorMsg, variant: "destructive" });
         setIsSubmitting(false);
       }
-      // Note: setIsSubmitting(false) is handled in the finally block of the try/catch if submission fails,
-      // or after onComplete if it succeeds and redirects. If no redirect, set it here.
     }
   };
 
@@ -99,8 +97,9 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
   const currentFieldKey = totalSteps > 0 ? steps[currentStepIndex] : null;
 
   return (
-    <div>
-      {totalSteps > 0 && <ProgressSteps current={currentStepIndex + 1} total={totalSteps} />}
+    // FormProvider is in WizardLayout, no need to wrap again here
+    <div className="rounded-lg border bg-card p-6 shadow-sm">
+      {totalSteps > 0 && <ProgressSteps current={currentStepIndex + 1} total={totalSteps} stepLabels={steps.map(s => doc.questions?.find(q=>q.id === s)?.label || s)} />}
       
       <div className="mt-6 space-y-6">
         {currentFieldKey ? (
@@ -108,6 +107,7 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
             fieldKey={currentFieldKey}
             locale={locale}
             doc={doc}
+            // requiresNotary is handled by useNotary hook within FieldRenderer based on stateCode
           />
         ) : (
           <p className="text-muted-foreground">{t('dynamicForm.noQuestionsNeeded')}</p>
@@ -127,10 +127,10 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
           type="button"
           onClick={handleNextStep}
           className="bg-primary text-primary-foreground hover:bg-primary/90"
-          disabled={isSubmitting || (totalSteps === 0 && currentStepIndex > 0) } // Disable if no steps but not on first "imaginary" step
+          disabled={isSubmitting || (totalSteps === 0 && currentStepIndex > 0) }
         >
           {isSubmitting ? <Loader2 className="animate-spin h-5 w-5" /> : 
-           (currentStepIndex === totalSteps - 1 || totalSteps === 0 ? t('dynamicForm.confirmAnswersButton', 'Confirm & Pay') : t('Next'))}
+           (currentStepIndex === totalSteps - 1 || totalSteps === 0 ? t('dynamicForm.confirmAnswersButton', 'Confirm & Continue') : t('Next'))}
         </Button>
       </div>
     </div>

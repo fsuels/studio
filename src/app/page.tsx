@@ -1,8 +1,9 @@
+
 // src/app/page.tsx
 "use client";
 
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { documentLibrary, type LegalDocument, usStates } from '@/lib/document-library'; // Correctly import documentLibrary
+import { type LegalDocument, usStates, documentLibrary } from '@/lib/document-library'; 
 import DocTypeSelector from '@/components/DocumentTypeSelector'; 
 import type { AISuggestion } from '@/components/DocumentTypeSelector';
 import { Questionnaire } from '@/components/questionnaire';
@@ -36,22 +37,26 @@ export default function Home() {
   const searchParams = useSearchParams();
   const router = useRouter();
 
+  // State for Step 1 (Document Selection on Homepage)
+  const [globalSearchTerm, setGlobalSearchTerm] = useState('');
+  const [globalSelectedState, setGlobalSelectedState] = useState<string>(''); // e.g., "CA", "NY"
+  const [selectedCategoryForFilter, setSelectedCategoryForFilter] = useState<string | null>(null);
+
+
+  // States for the OLD multi-step flow (now largely superseded by the new /start page)
+  // These might be removed or significantly refactored if the entire flow moves off the homepage.
   const [currentStep, setCurrentStep] = useState(1); 
   const [selectedDocument, setSelectedDocument] = useState<LegalDocument | null>(null);
   const [formAnswers, setFormAnswers] = useState<Record<string, any> | null>(null);
   const [disclaimerAgreed, setDisclaimerAgreed] = useState(false);
   const [pdfSigned, setPdfSigned] = useState(false);
-
-  const [globalSearchTerm, setGlobalSearchTerm] = useState('');
-  const [globalSelectedState, setGlobalSelectedState] = useState<string>('');
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-
   const [pdfUrl, setPdfUrl] = useState<string | null>(null);
   const [isPdfLoading, setIsPdfLoading] = useState(false);
   const [pdfError, setPdfError] = useState<string | null>(null);
   const [generatedPdfBlob, setGeneratedPdfBlob] = useState<Blob | null>(null);
-
   const [apiError, setApiError] = useState<string | null>(null);
+
+
   const [isHydrated, setIsHydrated] = useState(false); 
 
   useEffect(() => {
@@ -60,9 +65,6 @@ export default function Home() {
 
 
   const user = useMemo(() => ({ uid: 'test_user_123', name: 'Test User', email: 'test@example.com' }), []);
-
-  const isDocumentConfirmed = !!selectedDocument;
-  const areDetailsProvided = !!formAnswers;
 
   const workflowSectionId = "workflow-start";
 
@@ -77,18 +79,26 @@ export default function Home() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
 
+  // This handler is now for Step1DocumentSelector on the homepage
+  const handleDocumentSelectFromHomepage = useCallback((doc: LegalDocument) => {
+    if (!isHydrated) return;
+    console.log('[page.tsx] Homepage document selected:', doc.name);
+    
+    // Navigate to the new dedicated wizard start page
+    router.push(`/${i18n.language}/docs/${doc.id}/start`);
 
-  const handleDocumentSelect = useCallback((doc: LegalDocument) => {
-    console.log('[page.tsx] handleDocumentSelect called with doc:', doc);
-    setSelectedDocument(doc);
-    setCurrentStep(2); 
-    scrollToWorkflow(); 
-    if (isHydrated) { 
-        toast({ title: t('toasts.docTypeConfirmedTitle'), description: t('toasts.docTypeConfirmedDescription', { docName: doc.name }) });
-    }
-  }, [scrollToWorkflow, t, toast, isHydrated]);
+    // Toast for confirmation
+    toast({ 
+        title: t('toasts.docTypeConfirmedTitle'), 
+        description: t('toasts.docTypeConfirmedDescription', { docName: doc.name_es && i18n.language === 'es' ? doc.name_es : doc.name }) 
+    });
 
-  // Effect to handle docId and category from query parameters
+    // The old logic of setting selectedDocument and advancing step on homepage is removed
+    // as the flow now moves to a new page.
+  }, [i18n.language, router, t, toast, isHydrated]);
+
+
+  // Effect to handle docId and category from query parameters for homepage filtering
   useEffect(() => {
     if (!isHydrated) return;
 
@@ -101,194 +111,46 @@ export default function Home() {
         scrollToWorkflow();
     }
 
-    if (categoryFromQuery && !selectedCategory) {
+    if (categoryFromQuery && !selectedCategoryForFilter) {
         const isValidCategory = CATEGORY_LIST.some(cat => cat.key === categoryFromQuery);
         if (isValidCategory) {
-            console.log(`[page.tsx] Category from query param: ${categoryFromQuery}`);
-            setSelectedCategory(categoryFromQuery);
-            setCurrentStep(1); // Ensure user is on step 1 to see category filtered
+            setSelectedCategoryForFilter(categoryFromQuery);
             scrollToWorkflow();
-             // Optionally clear category from URL if you only want it to apply on initial load
-            // const newPath = window.location.pathname; // Keep current path, remove query
-            // router.replace(newPath, { scroll: false });
-        } else {
-            console.warn(`[page.tsx] Invalid category "${categoryFromQuery}" from query param.`);
         }
     }
 
-    if (docIdFromQuery && !selectedDocument) { 
-      const foundDocument = documentLibrary.find(doc => doc.id === docIdFromQuery);
-      if (foundDocument) {
-        console.log('[page.tsx] Found document from query param:', foundDocument.name);
-        handleDocumentSelect(foundDocument);
-        // Optionally, remove the query parameter from the URL after processing
-        // router.replace('/', { scroll: false }); 
-      } else {
-        console.warn(`[page.tsx] Document with ID "${docIdFromQuery}" not found in library.`);
+    // If docId is in query, it likely means user came from an external link
+    // or an old bookmark. We'll let Step1DocumentSelector handle displaying it,
+    // and selection will trigger navigation via handleDocumentSelectFromHomepage.
+    if (docIdFromQuery) {
+      const foundDoc = documentLibrary.find(d => d.id === docIdFromQuery);
+      if (foundDoc && !selectedCategoryForFilter) {
+         // If a doc is specified directly, and no category is set,
+         // we can pre-select its category for a better UX on the homepage filter.
+         setSelectedCategoryForFilter(foundDoc.category);
+         scrollToWorkflow();
       }
     }
-  }, [searchParams, handleDocumentSelect, selectedDocument, selectedCategory, globalSearchTerm, isHydrated, router, scrollToWorkflow]);
+
+  }, [searchParams, globalSearchTerm, selectedCategoryForFilter, isHydrated, scrollToWorkflow]);
 
 
-  const handleAnswersSubmit = useCallback((answers: Record<string, any>) => {
-    console.log('[page.tsx] handleAnswersSubmit called with answers:', answers);
-    setFormAnswers(answers);
-    setCurrentStep(3); 
-    scrollToTop();
-    if (isHydrated) {
-        toast({ title: t('toasts.detailsRecordedTitle'), description: t('toasts.detailsRecordedDescription') });
-    }
-  }, [scrollToTop, t, toast, isHydrated]);
-
-  const handleDisclaimerAgree = useCallback(() => {
-    console.log('[page.tsx] handleDisclaimerAgree called');
-    setDisclaimerAgreed(true);
-    setCurrentStep(3); // Ensure current step is 3 when disclaimer agreed
-    scrollToTop();
-  }, [scrollToTop]);
-
-  useEffect(() => {
-    const fetchPdfData = async () => {
-      if (currentStep === 3 && selectedDocument && formAnswers && disclaimerAgreed && !pdfUrl && !isPdfLoading && isHydrated) {
-        setIsPdfLoading(true);
-        setPdfError(null);
-        setGeneratedPdfBlob(null); 
-        setApiError(null); 
-        toast({ title: t('toasts.generatingPDFTitle'), description: t('toasts.generatingPDFDescription') });
-        console.log('[page.tsx] Fetching PDF for Step 3 (Finalize). Doc:', selectedDocument.name, 'State:', globalSelectedState);
-
-        try {
-          const response = await fetch('/api/generate-pdf', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              documentType: selectedDocument.name, 
-              answers: formAnswers,
-              state: globalSelectedState, 
-            }),
-          });
-
-          if (!response.ok) {
-            let errorText = '';
-            try {
-                errorText = await response.text();
-            } catch(e) {}
-            let errorData;
-            try {
-                errorData = JSON.parse(errorText); 
-            } catch (e) {
-                errorData = { error: errorText || `HTTP error ${response.status}` };
-            }
-            console.error(`[API /generate-pdf] Error ${response.status}:`, errorData);
-            const clientMessage = errorData?.error || `Failed to generate PDF: ${response.statusText}`;
-            setApiError(`PDF Generation Error: ${clientMessage}`);
-            throw new Error(clientMessage);
-          }
-
-          const pdfBlob = await response.blob();
-          const url = URL.createObjectURL(pdfBlob);
-          setPdfUrl(url);
-          setGeneratedPdfBlob(pdfBlob); 
-          toast({ title: t('toasts.pdfGenSuccessTitle'), description: t('toasts.pdfGenSuccessDescription') });
-        } catch (err: any) {
-          console.error('[page.tsx] Error fetching PDF:', err);
-          setPdfError(err.message || t('toasts.pdfGenFailedDescription'));
-          toast({ title: t('toasts.pdfGenErrorTitle'), description: err.message || t('toasts.pdfGenFailedDescription'), variant: 'destructive' });
-        } finally {
-          setIsPdfLoading(false);
-        }
-      }
-    };
-
-    fetchPdfData();
-
-    return () => {
-      if (pdfUrl) {
-        URL.revokeObjectURL(pdfUrl);
-      }
-    };
-  }, [currentStep, selectedDocument, formAnswers, disclaimerAgreed, globalSelectedState, t, toast, isPdfLoading, pdfUrl, isHydrated]);
-
-  const handlePdfSign = useCallback(() => {
-    console.log('[page.tsx] handlePdfSign called');
-    setPdfSigned(true);
-    scrollToTop();
-  }, [scrollToTop]);
-
-  const resetFlow = () => {
-    setCurrentStep(1);
-    setSelectedDocument(null);
-    setFormAnswers(null);
-    setDisclaimerAgreed(false);
-    setPdfSigned(false);
-    setGlobalSearchTerm(''); 
-    setGlobalSelectedState(''); 
-    setSelectedCategory(null); 
-    setPdfUrl(null);
-    setIsPdfLoading(false);
-    setPdfError(null);
-    setGeneratedPdfBlob(null);
-    setApiError(null);
-    scrollToTop();
-    router.replace('/', { scroll: false }); 
-  };
-
-
-  const renderStepContent = () => {
+  // The renderStepContent and associated logic for steps 2-5 on the homepage 
+  // might be removed or significantly changed as the wizard flow is now on a dedicated page.
+  // For now, let's keep it minimal on the homepage, focusing on document selection.
+  const renderHomepageContent = () => {
     if (!isHydrated) { 
         return <div className="text-center py-10"><Loader2 className="h-8 w-8 animate-spin mx-auto" /> <p>{t('Loading...')}</p></div>;
     }
-    console.log(`[page.tsx] Rendering content for step: ${currentStep}`);
-    switch (currentStep) {
-      case 1: 
-        return (
-          <Step1DocumentSelector
-            selectedCategory={selectedCategory}
-            onCategorySelect={setSelectedCategory}
-            onDocumentSelect={handleDocumentSelect} 
-            globalSelectedState={globalSelectedState} 
-            globalSearchTerm={globalSearchTerm}     
-          />
-        );
-      case 2: 
-        if (!selectedDocument) return <p>{t('Confirm a document type in Step 1 to see the questions.')}</p>;
-        return (
-          <Questionnaire
-            documentType={selectedDocument.name}
-            selectedState={globalSelectedState} 
-            onAnswersSubmit={handleAnswersSubmit}
-          />
-        );
-      case 3: 
-        if (!areDetailsProvided) return <p>{t('Complete the questions above to view the disclaimer.')}</p>;
-        
-        if (!disclaimerAgreed) {
-          return <DisclaimerStep onAgree={handleDisclaimerAgree} />;
-        }
-
-        if (isPdfLoading) return <div className="text-center py-10"><Loader2 className="h-8 w-8 animate-spin mx-auto" /> <p>{t('toasts.generatingPDFTitle')}</p></div>;
-        if (pdfError) return <div className="text-center py-10 text-destructive"><AlertTriangle className="h-8 w-8 mx-auto mb-2" /> <p>{t('toasts.pdfGenFailedTitle')}</p><p className="text-sm">{pdfError}</p></div>;
-        if (!pdfUrl) return <p>{t('Preparing document preview...')}</p>; 
-
-        if (!pdfSigned) {
-          return (
-            <PdfPreview
-              documentDataUrl={pdfUrl}
-              documentName={`${selectedDocument?.name.replace(/\s/g, '_') || 'document'}.pdf`}
-              onSignSuccess={handlePdfSign}
-            />
-          );
-        }
-        return (
-          <ShareDownloadStep
-            signedPdfData={generatedPdfBlob}
-            documentName={`${selectedDocument?.name.replace(/\s/g, '_') || 'document'}_signed.pdf`}
-            onStartOver={resetFlow}
-          />
-        );
-      default:
-        return <p>Unknown step.</p>;
-    }
+    return (
+      <Step1DocumentSelector
+        selectedCategory={selectedCategoryForFilter}
+        onCategorySelect={setSelectedCategoryForFilter}
+        onDocumentSelect={handleDocumentSelectFromHomepage} 
+        globalSelectedState={globalSelectedState} 
+        globalSearchTerm={globalSearchTerm}     
+      />
+    );
   };
 
 
@@ -318,15 +180,13 @@ export default function Home() {
                 </div>
             )}
             
-            {isHydrated && currentStep === 1 && (
+            {isHydrated && ( // Only render StickyFilterBar on client
               <StickyFilterBar
                 searchTerm={globalSearchTerm}
                 onSearchTermChange={(term) => {
                     setGlobalSearchTerm(term);
-                    // If user starts typing a global search, clear category selection
-                    // so the document list shows global search results, not category-filtered ones.
-                    if (term.trim() !== '' && selectedCategory) {
-                        setSelectedCategory(null);
+                    if (term.trim() !== '' && selectedCategoryForFilter) {
+                        setSelectedCategoryForFilter(null);
                     }
                 }}
                 selectedState={globalSelectedState}
@@ -334,40 +194,14 @@ export default function Home() {
               />
             )}
 
-            {isHydrated && <ProgressStepper currentStep={currentStep} />}
+            {/* No ProgressStepper on homepage for document selection part */}
+            {/* ProgressStepper will be on the dedicated wizard page */}
 
             <div className="mt-8 bg-card p-4 sm:p-6 md:p-8 rounded-xl shadow-2xl border border-border/20">
-                {renderStepContent()}
+                {renderHomepageContent()}
             </div>
 
-             {isHydrated && currentStep > 1 && currentStep <= 3 && (
-                 <div className="mt-8 flex justify-center">
-                     <Button variant="outline" onClick={() => {
-                         if (currentStep === 3 && pdfSigned) { // If signed, going back means going to disclaimer
-                            setPdfSigned(false);
-                            // PDF URL and blob are kept so disclaimer re-agree re-shows preview
-                         } else if (currentStep === 3 && disclaimerAgreed) { // If disclaimer agreed, going back means to edit answers
-                             setDisclaimerAgreed(false);
-                             // Clear PDF related state as answers might change
-                             setPdfUrl(null);
-                             setGeneratedPdfBlob(null);
-                             setIsPdfLoading(false);
-                             setPdfError(null);
-                             setApiError(null);
-                             setCurrentStep(2);
-                         } else if (currentStep === 2) { // From answers to doc selection
-                             setSelectedDocument(null); // This will clear questions and reset answers in Questionnaire
-                             setFormAnswers(null);
-                             setCurrentStep(1);
-                         } else { // General back from step X to X-1
-                             setCurrentStep(prev => Math.max(1, prev - 1));
-                         }
-                         scrollToWorkflow();
-                     }}>
-                         {t('Back', {defaultValue: 'Back'})}
-                     </Button>
-                 </div>
-             )}
+             {/* Back button logic might change or be removed from homepage flow */}
          </div>
       </section>
     </>

@@ -1,3 +1,4 @@
+
 // src/app/es/docs/bill-of-sale-vehicle/page.tsx
 'use client';
 
@@ -12,14 +13,14 @@ import { motion } from 'framer-motion';
 import DocumentPreview from '@/components/DocumentPreview'; 
 import { requiredNotaryStates } from '@/lib/stateNotaryRequirements';
 import { useTranslation } from 'react-i18next';
-import { useRouter } from 'next/navigation';
+import Link from 'next/link'; // Import Link
 import { FileText, Lock, DownloadCloud } from 'lucide-react';
 import BillOfSaleTemplateES from '@/templates/BillOfSaleTemplateES';
 
 export default function BillOfSalePageES() {
   const { t, i18n } = useTranslation();
   const locale = 'es'; 
-  const router = useRouter();
+  
 
   const [stateCode, setStateCode] = useState<string>('CA'); 
   const [wantNotary, setWantNotary] = useState<boolean>(requiredNotaryStates.includes(stateCode));
@@ -37,13 +38,6 @@ export default function BillOfSalePageES() {
   useEffect(() => {
     setWantNotary(requiredNotaryStates.includes(stateCode));
   }, [stateCode]);
-
-  const handleStart = () => {
-    const itemName = t('Contrato de Compraventa de Vehículo', {lng: 'es'});
-    track('add_to_cart', { item_id: 'bill-of-sale-vehicle', item_name: itemName, value: priceCents / 100, currency: 'USD' });
-    addItem({ id: 'bill-of-sale-vehicle', type: 'doc', name: itemName, price: priceCents });
-    router.push(`/?docId=bill-of-sale-vehicle&lang=${locale}#workflow-start`);
-  };
 
    const content = {
     en: { // Keeping EN for reference
@@ -111,8 +105,10 @@ export default function BillOfSalePageES() {
             {currentContent.description}
           </p>
           <div className="mt-6 text-3xl font-semibold text-primary">${(priceCents / 100).toFixed(2)} <span className="text-sm font-normal text-muted-foreground">{currentContent.perDocument}</span></div>
-          <Button size="lg" className="mt-8 px-8 py-3 text-base" onClick={handleStart}>
-            {currentContent.startFree}
+          <Button size="lg" className="mt-8 px-8 py-3 text-base" asChild>
+            <Link href={`/${locale}/docs/bill-of-sale-vehicle/start`}>
+                {currentContent.startFree}
+            </Link>
           </Button>
 
           {/* feature bullet-points */}
@@ -174,8 +170,10 @@ export default function BillOfSalePageES() {
 
       {/* Bottom CTA Section */}
       <section className="mt-12 py-12 text-center">
-        <Button size="xl" className="px-10 py-4 text-lg" onClick={handleStart}>
-          {currentContent.getStarted}
+        <Button size="xl" className="px-10 py-4 text-lg" asChild>
+           <Link href={`/${locale}/docs/bill-of-sale-vehicle/start`}>
+             {currentContent.getStarted}
+           </Link>
         </Button>
       </section>
     </main>

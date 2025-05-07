@@ -12,11 +12,10 @@ import { useTranslation } from 'react-i18next';
 interface PreviewPaneProps {
   locale: 'en' | 'es';
   docId: string;
-  templatePath?: string; // Optional path to the .md template
+  templatePath?: string; 
   watch: UseFormWatch<any>; // From react-hook-form
 }
 
-// Debounce function
 const debounce = <F extends (...args: any[]) => any>(func: F, waitFor: number) => {
   let timeout: NodeJS.Timeout;
   return (...args: Parameters<F>): Promise<ReturnType<F>> =>
@@ -33,7 +32,6 @@ export default function PreviewPane({ locale, docId, templatePath, watch }: Prev
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Fetch the raw Markdown template
   useEffect(() => {
     async function fetchTemplate() {
       setIsLoading(true);
@@ -49,7 +47,7 @@ export default function PreviewPane({ locale, docId, templatePath, watch }: Prev
       } catch (err) {
         console.error("Error fetching Markdown template:", err);
         setError(err instanceof Error ? err.message : "Could not load template.");
-        setRawMarkdown(''); // Clear any old markdown
+        setRawMarkdown(''); 
       } finally {
         setIsLoading(false);
       }
@@ -57,30 +55,29 @@ export default function PreviewPane({ locale, docId, templatePath, watch }: Prev
     fetchTemplate();
   }, [docId, locale, templatePath]);
 
-  // Debounced function to update processed markdown
   const updatePreview = useCallback((formData: Record<string, any>, markdown: string) => {
     if (!markdown) return '';
     let tempMd = markdown;
     for (const key in formData) {
-      // Basic placeholder replacement: {{key}}
-      // More robust templating (like Handlebars) might be needed for complex logic (loops, conditionals)
       const placeholder = new RegExp(`{{\\s*${key}\\s*}}`, 'g');
-      tempMd = tempMd.replace(placeholder, formData[key] || `{{${key}}}`); // Keep placeholder if value is empty
+      tempMd = tempMd.replace(placeholder, formData[key] || `{{${key}}}`); 
     }
     return tempMd;
   }, []);
   
   const debouncedUpdatePreview = React.useMemo(() => debounce(updatePreview, 300), [updatePreview]);
 
-  // Watch for form changes and update the preview
   useEffect(() => {
     if (!rawMarkdown) return;
 
+    // Subscribe to all form field changes
     const subscription = watch(async (formData) => {
+      // formData contains all current form values
       const processed = await debouncedUpdatePreview(formData, rawMarkdown);
       setProcessedMarkdown(processed);
     });
-    // Initial processing
+
+    // Initial processing with current form values
     debouncedUpdatePreview(watch(), rawMarkdown).then(setProcessedMarkdown);
     
     return () => subscription.unsubscribe();

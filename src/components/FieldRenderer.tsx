@@ -8,78 +8,82 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Checkbox } from "@/components/ui/checkbox"; // Assuming Checkbox is for the notary
+import { Checkbox } from "@/components/ui/checkbox"; 
 import type { LegalDocument, Question } from '@/lib/document-library';
 import { useNotary } from '@/hooks/useNotary';
 import { cn } from '@/lib/utils';
+import { useTranslation } from 'react-i18next'; // Import useTranslation
 
 interface FieldRendererProps {
   fieldKey: string;
   locale: 'en' | 'es';
-  doc: LegalDocument; // Using LegalDocument type which includes schema
-  // requiresNotary: boolean; // This will be determined by useNotary hook based on state
+  doc: LegalDocument; 
 }
 
 export default function FieldRenderer({ fieldKey, locale, doc }: FieldRendererProps) {
   const { control, register, setValue, watch, formState: { errors } } = useFormContext();
+  const { t } = useTranslation(); // For translating labels/placeholders if needed from i18n
   
+  // Find the field schema from doc.questions array
   const fieldSchema = doc.questions?.find(q => q.id === fieldKey);
 
-  // Watch the stateCode field if it exists in the form
-  const formStateCode = watch('stateCode'); // Assuming 'stateCode' is an ID in your form
-  const { isRequired: notaryIsRequiredByState, isChecked: notaryIsChecked, setIsChecked: toggleNotary } = useNotary(formStateCode);
+  // Watch the stateCode field (assuming it's named 'stateCode' in your form)
+  const formStateCode = watch('stateCode'); 
+  const { isRequired: notaryIsRequiredByState, isChecked: notaryIsChecked, setChecked: setNotaryChecked } = useNotary(formStateCode);
 
 
   if (!fieldSchema) {
-    // This can happen if steps are just keys of schema but not direct questions (e.g. for grouping)
-    // Or if fieldKey is for a special non-question field like the notary toggle
-    if (fieldKey === 'notarizationToggle') { // Example special key for notary
+    // Handle special non-question fields or error if schema not found
+    if (fieldKey === 'notarizationToggle' && doc.offerNotarization) { // Check if doc offers notarization
       return (
-        <div className="space-y-2">
-          <Label htmlFor="notarization-toggle" className="font-medium">Notarization</Label>
+        <div className="space-y-2 pt-4 border-t mt-4">
           <div className="flex items-center space-x-2">
             <Controller
-              name="notarizationPreference" // Field name in react-hook-form
+              name="notarizationPreference" 
               control={control}
-              defaultValue={notaryIsChecked}
+              defaultValue={notaryIsRequiredByState || false} // Default to true if required by state
               render={({ field }) => (
                 <Checkbox
                   id="notarization-toggle"
-                  checked={field.value}
+                  checked={notaryIsRequiredByState || field.value} // Always checked if required by state
                   onCheckedChange={(checked) => {
-                    if (notaryIsRequiredByState && !checked) return; // Prevent unchecking if required
-                    field.onChange(checked);
+                    if (notaryIsRequiredByState && !checked) return; 
+                    setNotaryChecked(checked as boolean); // Update hook state
+                    field.onChange(checked); // Update form state
                   }}
-                  disabled={notaryIsRequiredByState}
+                  disabled={notaryIsRequiredByState} // Disable if required by state (always checked)
                 />
               )}
             />
             <Label htmlFor="notarization-toggle" className="text-sm font-normal">
               {notaryIsRequiredByState
-                ? 'Notarization (Required by State)'
-                : 'Add Notarization (Optional)'}
+                ? t('Notarization (Required by State)')
+                : t('Add Notarization (Optional)')}
             </Label>
           </div>
-           {notaryIsRequiredByState && <p className="text-xs text-muted-foreground">Notarization is required for {formStateCode}.</p>}
+           {notaryIsRequiredByState && <p className="text-xs text-muted-foreground">{t('Notarization is required for {{stateCode}}.', {stateCode: formStateCode})}</p>}
+           {!notaryIsRequiredByState && <p className="text-xs text-muted-foreground">{t('Notarization may incur an additional fee.')}</p>}
         </div>
       );
     }
-    return <p className="text-destructive">Field schema not found for: {fieldKey}</p>;
+    console.warn(`Field schema not found for key: ${fieldKey} in document: ${doc.name}`);
+    return <p className="text-destructive">Configuration error: Field schema for "{fieldKey}" not found.</p>;
   }
 
   const labelText = fieldSchema.label; // Assuming label is already in the correct language or use t() if needed
   const placeholderText = fieldSchema.placeholder;
   const fieldError = errors[fieldKey];
 
+  // ZIP code auto-fill (example)
   const handleZipBlur = async (e: React.FocusEvent<HTMLInputElement>) => {
     const zip = e.target.value;
-    if (zip.length === 5) {
+    if (zip.length === 5 && fieldSchema.id === 'zip_code') { // Example ID
       try {
         const res = await fetch(`https://api.zippopotam.us/us/${zip}`);
         if (res.ok) {
           const data = await res.json();
-          setValue('city', data.places[0]['place name']); // Assuming 'city' field exists
-          setValue('state', data.places[0]['state abbreviation']); // Assuming 'state' field exists
+          setValue('city', data.places[0]['place name']); 
+          setValue('stateCode', data.places[0]['state abbreviation']); // Ensure this matches your state field ID
         }
       } catch (error) {
         console.error("Failed to fetch ZIP data", error);
@@ -87,14 +91,14 @@ export default function FieldRenderer({ fieldKey, locale, doc }: FieldRendererPr
     }
   };
 
+  // VIN auto-fill (example)
   const handleVinBlur = async (e: React.FocusEvent<HTMLInputElement>) => {
     const vin = e.target.value;
-    if (vin.length === 17) {
+    if (vin.length === 17 && fieldSchema.id === 'vehicle_vin') { // Example ID
       try {
         const res = await fetch(`https://vpic.nhtsa.dot.gov/api/vehicles/DecodeVin/${vin}?format=json`);
         if (res.ok) {
           const data = await res.json();
-          // NHTSA API structure might vary. These indices are examples.
           const yearResult = data.Results.find((r: any) => r.Variable === 'Model Year');
           const makeResult = data.Results.find((r: any) => r.Variable === 'Make');
           const modelResult = data.Results.find((r: any) => r.Variable === 'Model');
@@ -120,8 +124,8 @@ export default function FieldRenderer({ fieldKey, locale, doc }: FieldRendererPr
           id={fieldKey}
           placeholder={placeholderText}
           {...register(fieldKey, { required: fieldSchema.required })}
-          onBlur={fieldKey === 'zipcode' ? handleZipBlur : fieldKey === 'vin' ? handleVinBlur : undefined}
-          className={cn(fieldError && "border-destructive focus-visible:ring-destructive")}
+          onBlur={fieldSchema.id === 'zip_code' ? handleZipBlur : fieldSchema.id === 'vehicle_vin' ? handleVinBlur : undefined}
+          className={cn("bg-background", fieldError && "border-destructive focus-visible:ring-destructive")}
         />
       ) : fieldSchema.type === 'select' && fieldSchema.options ? (
         <Controller
@@ -130,8 +134,8 @@ export default function FieldRenderer({ fieldKey, locale, doc }: FieldRendererPr
           rules={{ required: fieldSchema.required }}
           render={({ field }) => (
             <Select onValueChange={field.onChange} defaultValue={field.value}>
-              <SelectTrigger id={fieldKey} className={cn(fieldError && "border-destructive focus:ring-destructive")}>
-                <SelectValue placeholder={placeholderText || "Select..."} />
+              <SelectTrigger id={fieldKey} className={cn("bg-background", fieldError && "border-destructive focus:ring-destructive")}>
+                <SelectValue placeholder={placeholderText || t("Select...")} />
               </SelectTrigger>
               <SelectContent>
                 {fieldSchema.options?.map(opt => (
@@ -148,10 +152,10 @@ export default function FieldRenderer({ fieldKey, locale, doc }: FieldRendererPr
           placeholder={placeholderText}
           {...register(fieldKey, { 
             required: fieldSchema.required,
-            validate: fieldKey === 'vin' ? (value) => value.length === 17 || 'VIN must be 17 characters' : undefined
+            validate: fieldSchema.id === 'vehicle_vin' ? (value) => value.length === 17 || 'VIN must be 17 characters' : undefined
           })}
-          onBlur={fieldKey === 'zipcode' ? handleZipBlur : fieldKey === 'vin' ? handleVinBlur : undefined}
-          className={cn(fieldError && "border-destructive focus-visible:ring-destructive")}
+          onBlur={fieldSchema.id === 'zip_code' ? handleZipBlur : fieldSchema.id === 'vehicle_vin' ? handleVinBlur : undefined}
+          className={cn("bg-background", fieldError && "border-destructive focus-visible:ring-destructive")}
         />
       )}
       {fieldError && <p className="text-xs text-destructive">{String(fieldError.message)}</p>}
