@@ -1,19 +1,18 @@
-
 // src/components/PreviewPane.tsx
 'use client';
 
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useMemo } from 'react'; // Ensured useMemo is imported
 import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm'; // Import remark-gfm
-import { UseFormWatch } from 'react-hook-form';
+import remarkGfm from 'remark-gfm';
+import type { UseFormWatch } from 'react-hook-form';
 import { Loader2 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { debounce } from 'lodash-es'; // Import debounce
+import { debounce } from 'lodash-es';
 
 interface PreviewPaneProps {
   locale: 'en' | 'es';
   docId: string;
-  templatePath?: string; 
+  templatePath?: string;
   watch: UseFormWatch<any>; // From react-hook-form
 }
 
@@ -28,6 +27,8 @@ export default function PreviewPane({ locale, docId, templatePath, watch }: Prev
     async function fetchTemplate() {
       setIsLoading(true);
       setError(null);
+      setRawMarkdown(''); // Clear raw markdown before fetching
+      setProcessedMarkdown(''); // Clear processed markdown
       const path = templatePath || `/templates/${locale}/${docId}.md`;
       try {
         const response = await fetch(path);
@@ -36,11 +37,10 @@ export default function PreviewPane({ locale, docId, templatePath, watch }: Prev
         }
         const text = await response.text();
         setRawMarkdown(text);
-        setProcessedMarkdown(text); // Initialize processedMarkdown
       } catch (err) {
         console.error("Error fetching Markdown template:", err);
         setError(err instanceof Error ? err.message : "Could not load template.");
-        setRawMarkdown(''); 
+        setRawMarkdown(''); // Ensure it's empty on error
       } finally {
         setIsLoading(false);
       }
@@ -48,44 +48,50 @@ export default function PreviewPane({ locale, docId, templatePath, watch }: Prev
     fetchTemplate();
   }, [docId, locale, templatePath]);
 
-  // Debounced function to update the preview
-  const updatePreviewContent = useCallback((formData: Record<string, any>, markdown: string): string => {
-    if (!markdown) return '';
-    let tempMd = markdown;
-    // Iterate over form data to replace placeholders
+  // This function performs the markdown processing and calls setProcessedMarkdown
+  const updatePreviewContentAndSetState = useCallback((formData: Record<string, any>, currentRawMarkdown: string) => {
+    if (!currentRawMarkdown) {
+      setProcessedMarkdown('');
+      return;
+    }
+    let tempMd = currentRawMarkdown;
     for (const key in formData) {
-      // Regex to find placeholders like {{fieldName}}, {{ fieldName }}, etc.
       const placeholderRegex = new RegExp(`{{\\s*${key.trim()}\\s*}}`, 'g');
       const value = formData[key];
-      // If value exists, make it bold. Otherwise, use underscores.
       tempMd = tempMd.replace(placeholderRegex, value ? `**${String(value)}**` : '____');
     }
-    // Replace any remaining unfulfilled placeholders with underscores
     tempMd = tempMd.replace(/\{\{.*?\}\}/g, '____');
-    return tempMd;
-  }, []);
-  
-  const debouncedUpdatePreview = React.useMemo(() => debounce(updatePreviewContent, 300), [updatePreviewContent]);
+    setProcessedMarkdown(tempMd);
+  }, [setProcessedMarkdown]);
+
+  // Create the debounced version of the state-updating function
+  const debouncedUpdatePreview = useMemo(
+    () => debounce(updatePreviewContentAndSetState, 300),
+    [updatePreviewContentAndSetState]
+  );
 
   useEffect(() => {
-    if (!rawMarkdown) {
-        setProcessedMarkdown(''); // Clear processed markdown if raw is empty
-        return;
+    if (isLoading || !rawMarkdown) {
+      if (!isLoading && !rawMarkdown) { // If loading finished and still no markdown
+        setProcessedMarkdown(''); // Explicitly clear preview
+      }
+      return; // Don't setup watchers if still loading or no markdown
     }
-
-    const subscription = watch(async (formData) => {
-      const processed = await debouncedUpdatePreview(formData, rawMarkdown);
-      setProcessedMarkdown(processed);
-    });
 
     // Initial processing with current form values
-    debouncedUpdatePreview(watch(), rawMarkdown).then(setProcessedMarkdown);
-    
+    debouncedUpdatePreview(watch(), rawMarkdown);
+
+    // Subscribe to form changes
+    const subscription = watch((formData) => {
+      debouncedUpdatePreview(formData, rawMarkdown);
+    });
+
     return () => {
-        subscription.unsubscribe();
-        debouncedUpdatePreview.cancel(); // Cancel any pending debounced calls
-    }
-  }, [watch, rawMarkdown, debouncedUpdatePreview]);
+      subscription.unsubscribe();
+      debouncedUpdatePreview.cancel();
+    };
+  }, [watch, rawMarkdown, debouncedUpdatePreview, isLoading, setProcessedMarkdown]);
+
 
   if (isLoading) {
     return (
