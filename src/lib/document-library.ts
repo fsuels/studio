@@ -105,25 +105,25 @@ export let documentLibrary: LegalDocument[] = [ // Changed to let for modificati
     ]
   },
   {
-    id: "bill-of-sale-vehicle", 
+    id: "bill-of-sale-vehicle",
     name: "Vehicle Bill of Sale",
     name_es: "Contrato de Compraventa de Vehículo",
-    category: "Finance", 
+    category: "Finance",
     description: "Document the sale and transfer of ownership for a vehicle, compliant with state requirements.",
     description_es: "Documentar la venta y transferencia de propiedad de un vehículo, conforme a los requisitos estatales.",
     aliases: ["sell car", "used item sale", "vehicle transfer", "car sale contract"],
     aliases_es: ["venta de coche", "venta de artículo usado", "transferencia de vehículo", "contrato de venta de auto"],
     languageSupport: ["en", "es"],
-    requiresNotarization: true, 
-    canBeRecorded: false, 
+    requiresNotarization: true,
+    canBeRecorded: false,
     offerNotarization: true,
     offerRecordingHelp: false,
     basePrice: 19.95, // As per prompt
-    states: 'all', 
-    templatePath: "src/data/templates/en/bill-of-sale-vehicle.md",
-    templatePath_es: "src/data/templates/es/bill-of-sale-vehicle.md",
+    states: 'all',
+    templatePath: "/templates/en/bill-of-sale-vehicle.md", 
+    templatePath_es: "/templates/es/bill-of-sale-vehicle.md",
     requiresNotarizationStates: ["AZ", "KY", "LA", "MT", "NV", "OH", "OK", "PA", "WV", "WY"], // Example states
-    questions: [ // These should match the placeholders in the markdown
+    questions: [
         { id: 'sale_date', label: 'Date of Sale', type: 'date', required: true },
         { id: 'seller_name', label: 'Seller\'s Full Name', type: 'text', required: true },
         { id: 'seller_address', label: 'Seller\'s Full Address', type: 'textarea', required: true },
@@ -141,7 +141,7 @@ export let documentLibrary: LegalDocument[] = [ // Changed to let for modificati
         { id: 'as_is', label: 'Is the vehicle sold "as-is"?', type: 'select', options: [{value: 'yes', label: 'Yes, as-is'}, {value: 'no', label: 'No, with warranties'}], required: true },
         { id: 'warranty_details', label: 'Warranty Details (if not "as-is")', type: 'textarea', placeholder: 'e.g., 30-day warranty on drivetrain (if applicable)'},
         { id: 'state', label: 'State of Sale (Governing Law & Notary)', type: 'select', required: true, options: usStates.map(s => ({value: s.value, label: s.label})) },
-        { id: 'county', label: 'County (for Notary Acknowledgment)', type: 'text', required: false } // Often required for notary
+        { id: 'county', label: 'County (for Notary Acknowledgment)', type: 'text', required: false }
     ],
      upsellClauses: [
       { id: 'includeNotaryLanguage', description: 'Include formal Notary Acknowledgment block', description_es: 'Incluir bloque formal de Reconocimiento Notarial', price: 2.00 }
@@ -159,9 +159,9 @@ export let documentLibrary: LegalDocument[] = [ // Changed to let for modificati
     canBeRecorded: false,
     offerNotarization: false,
     offerRecordingHelp: false,
-    basePrice: 3, 
+    basePrice: 3,
     states: 'all',
-    questions: [ 
+    questions: [
       { id: 'recipientName', label: 'Recipient Name/Company', type: 'text', required: true },
       { id: 'recipientAddress', label: 'Recipient Address', type: 'textarea' },
       { id: 'yourName', label: 'Your Name/Company', type: 'text', required: true },
@@ -176,7 +176,7 @@ export let documentLibrary: LegalDocument[] = [ // Changed to let for modificati
     id: 'demand-letter-payment',
     name: 'Demand Letter (Payment)',
     name_es: 'Carta de Reclamación (Pago)',
-    category: 'Finance', 
+    category: 'Finance',
     description: 'Formally request payment that is overdue.',
     description_es: 'Solicitar formalmente un pago atrasado.',
     aliases: ["request payment", "owe money", "legal demand"],
@@ -188,7 +188,7 @@ export let documentLibrary: LegalDocument[] = [ // Changed to let for modificati
     offerRecordingHelp: false,
     basePrice: 5,
     states: 'all',
-    questions: [ 
+    questions: [
       { id: 'senderName', label: 'Your Name/Company (Sender)', type: 'text', required: true },
       { id: 'senderAddress', label: 'Your Address', type: 'textarea', required: true },
       { id: 'recipientName', label: 'Recipient Name/Company', type: 'text', required: true },
@@ -205,7 +205,7 @@ export let documentLibrary: LegalDocument[] = [ // Changed to let for modificati
     id: 'independent-contractcontractor-agreement',
     name: 'Independent Contractor Agreement',
     name_es: 'Contrato de Contratista Independiente',
-    category: 'Business', 
+    category: 'Business',
     description: 'Define terms for hiring a freelancer or independent contractor.',
     description_es: 'Definir términos para contratar a un freelancer o contratista independiente.',
     aliases: ["freelance", "contractor", "gig work", "1099 job"],
@@ -217,7 +217,7 @@ export let documentLibrary: LegalDocument[] = [ // Changed to let for modificati
     offerRecordingHelp: false,
     basePrice: 5,
     states: 'all',
-    questions: [ 
+    questions: [
         { id: 'clientName', label: 'Client/Company Name', type: 'text', required: true },
         { id: 'contractorName', label: 'Contractor Name', type: 'text', required: true },
         { id: 'serviceDescription', label: 'Description of Services', type: 'textarea', required: true },
@@ -230,7 +230,7 @@ export let documentLibrary: LegalDocument[] = [ // Changed to let for modificati
     id: 'service-agreement',
     name: 'Service Agreement',
     name_es: 'Acuerdo de Servicios',
-    category: 'Business', 
+    category: 'Business',
     description: 'Outline terms for providing or receiving ongoing services.',
     description_es: 'Esbozar términos para proporcionar o recibir servicios continuos.',
     aliases: ["hire services", "service provider", "payment terms"],
@@ -242,7 +242,7 @@ export let documentLibrary: LegalDocument[] = [ // Changed to let for modificati
     offerRecordingHelp: false,
     basePrice: 5,
     states: 'all',
-     questions: [ 
+     questions: [
         { id: 'clientName', label: 'Client Full Name/Company', type: 'text', required: true },
         { id: 'clientAddress', label: 'Client Address', type: 'textarea', required: true },
         { id: 'providerName', label: 'Service Provider Full Name/Company', type: 'text', required: true },
@@ -256,10 +256,10 @@ export let documentLibrary: LegalDocument[] = [ // Changed to let for modificati
     ]
   },
    {
-    id: "nda", 
+    id: "nda",
     name: "Non-Disclosure Agreement (NDA)",
     name_es: "Acuerdo de Confidencialidad (NDA)",
-    category: "Business", 
+    category: "Business",
     description: "Protect confidential information shared between parties.",
     description_es: "Proteger información confidencial compartida entre partes.",
     aliases: ["confidential", "nda", "protect idea", "secret"],
@@ -271,7 +271,7 @@ export let documentLibrary: LegalDocument[] = [ // Changed to let for modificati
     offerRecordingHelp: false,
     basePrice: 5,
     states: 'all',
-    questions: [ 
+    questions: [
        { id: "party1Name", label: "Party 1 Full Name/Company", type: "text", required: true },
        { id: "party1Address", label: "Party 1 Address", type: "textarea", required: true },
        { id: "party2Name", label: "Party 2 Full Name/Company", type: "text", required: true },
@@ -283,7 +283,7 @@ export let documentLibrary: LegalDocument[] = [ // Changed to let for modificati
     ],
     upsellClauses: [
       { id: "extendedTerm", description: "Extend NDA duration beyond 1 year", description_es: "Extender la duración del NDA más allá de 1 año", price: 1 },
-      { id: "mutualProtection", description: "Make NDA mutual instead of one-sided", description_es: "Hacer que el NDA sea mutuo en lugar de unilateral", price: 2 } 
+      { id: "mutualProtection", description: "Make NDA mutual instead of one-sided", description_es: "Hacer que el NDA sea mutuo en lugar de unilateral", price: 2 }
     ]
   },
   {
@@ -301,8 +301,8 @@ export let documentLibrary: LegalDocument[] = [ // Changed to let for modificati
     offerNotarization: false,
     offerRecordingHelp: false,
     basePrice: 5,
-    states: 'all', 
-    questions: [ 
+    states: 'all',
+    questions: [
         { id: 'companyName', label: 'Company Name', type: 'text', required: true },
         { id: 'employeeName', label: 'Employee/Contractor Name', type: 'text', required: true },
         { id: 'restrictedActivities', label: 'Description of Restricted Activities', type: 'textarea', required: true },
@@ -324,9 +324,9 @@ export let documentLibrary: LegalDocument[] = [ // Changed to let for modificati
     canBeRecorded: false,
     offerNotarization: false,
     offerRecordingHelp: false,
-    basePrice: 7, 
+    basePrice: 7,
     states: 'all',
-    questions: [ 
+    questions: [
          { id: "partner1Name", label: "Partner 1 Full Name", type: "text", required: true, placeholder: "e.g., John Smith" },
          { id: "partner1Address", label: "Partner 1 Address", type: "textarea", required: true },
          { id: "partner2Name", label: "Partner 2 Full Name", type: "text", required: true, placeholder: "e.g., Alice Brown" },
@@ -370,9 +370,9 @@ export let documentLibrary: LegalDocument[] = [ // Changed to let for modificati
     aliases_es: ["formar corporación", "incorporar negocio"],
     languageSupport: ['en', 'es'],
     requiresNotarization: false,
-    canBeRecorded: true, 
+    canBeRecorded: true,
     offerNotarization: false,
-    offerRecordingHelp: true, 
+    offerRecordingHelp: true,
     basePrice: 5,
     states: 'all',
     questions: []
@@ -381,7 +381,7 @@ export let documentLibrary: LegalDocument[] = [ // Changed to let for modificati
     id: 'employment-offer-letter',
     name: 'Employment Offer Letter',
     name_es: 'Carta de Oferta de Empleo',
-    category: 'Business', 
+    category: 'Business',
     description: 'Formalize a job offer with key terms like salary, start date, and position.',
     description_es: 'Formalizar una oferta de trabajo con términos clave como salario, fecha de inicio y puesto.',
     aliases: ["hire employee", "job offer", "terms of employment"],
@@ -411,8 +411,8 @@ export let documentLibrary: LegalDocument[] = [ // Changed to let for modificati
     offerRecordingHelp: false,
     basePrice: 5,
     states: 'all',
-    templatePath: "src/data/templates/en/termination-letter.md",
-    templatePath_es: "src/data/templates/es/termination-letter.md",
+    templatePath: "/templates/en/termination-letter.md",
+    templatePath_es: "/templates/es/termination-letter.md",
     questions: [
         { id: 'employerName',  label: 'Employer / Company Name', type: 'text', required: true },
         { id: 'employerAddress', label: 'Employer Address', type: 'textarea', required: true },
@@ -427,22 +427,22 @@ export let documentLibrary: LegalDocument[] = [ // Changed to let for modificati
   },
   // --- Category 3: Real Estate ---
    {
-    id: "leaseAgreement", 
-    name: "Residential Lease Agreement", 
+    id: "leaseAgreement",
+    name: "Residential Lease Agreement",
     name_es: "Contrato de Arrendamiento Residencial",
-    category: "Real Estate", 
+    category: "Real Estate",
     description: "Set terms for renting a residential property.",
     description_es: "Establecer términos para alquilar una propiedad residencial.",
     aliases: ["rent apartment", "tenant", "lease form", "landlord agreement"],
     aliases_es: ["alquiler de apartamento", "inquilino", "formulario de arrendamiento", "acuerdo de propietario"],
     languageSupport: ["en", "es"],
     requiresNotarization: false,
-    canBeRecorded: true, 
+    canBeRecorded: true,
     offerNotarization: false,
     offerRecordingHelp: true,
     basePrice: 5,
     states: 'all',
-    questions: [ 
+    questions: [
         { id: 'landlord_name', label: 'Landlord\'s Full Name or Company', required: true, type: 'text', placeholder: "e.g., Acme Property Management" },
         { id: 'tenant_name', label: 'Tenant\'s Full Name', required: true, type: 'text', placeholder: "e.g., Jane Doe" },
         { id: 'property_address', label: 'Full Property Address (incl. unit #)', required: true, type: 'textarea', placeholder: "e.g., 123 Main St, Unit 4B, Anytown, USA 12345" },
@@ -487,13 +487,13 @@ export let documentLibrary: LegalDocument[] = [ // Changed to let for modificati
     aliases: ["remove tenant", "late rent", "kick out", "notice to quit"],
     aliases_es: ["desalojar inquilino", "renta atrasada", "echar", "notificación de desalojo"],
     languageSupport: ['en', 'es'],
-    requiresNotarization: false, 
+    requiresNotarization: false,
     canBeRecorded: false,
     offerNotarization: false,
     offerRecordingHelp: false,
     basePrice: 5,
-    states: 'all', 
-    questions: [ 
+    states: 'all',
+    questions: [
       { id: 'landlordName', label: 'Landlord Name', type: 'text', required: true },
       { id: 'tenantName', label: 'Tenant Name', type: 'text', required: true },
       { id: 'propertyAddress', label: 'Property Address', type: 'textarea', required: true },
@@ -501,7 +501,7 @@ export let documentLibrary: LegalDocument[] = [ // Changed to let for modificati
       { id: 'reasonDetails', label: 'Details of Reason (if violation or other)', type: 'textarea' },
       { id: 'noticeDate', label: 'Date Notice Given', type: 'date', required: true },
       { id: 'vacateDate', label: 'Date Tenant Must Vacate By', type: 'date', required: true },
-      { id: 'state', label: 'State Governing Lease', type: 'select', required: true, options: usStates.map(s => ({ value: s.value, label: s.label })) } 
+      { id: 'state', label: 'State Governing Lease', type: 'select', required: true, options: usStates.map(s => ({ value: s.value, label: s.label })) }
     ]
   },
   {
@@ -524,21 +524,21 @@ export let documentLibrary: LegalDocument[] = [ // Changed to let for modificati
   },
   // --- Category 4: Family ---
    {
-     id: "divorce-settlement-agreement", 
+     id: "divorce-settlement-agreement",
      name: "Divorce Settlement Agreement",
      name_es: "Acuerdo de Divorcio",
-     category: "Family", 
+     category: "Family",
      description: "Formalizes the terms of a divorce, including property division, support, and custody.",
      description_es: "Formaliza los términos de un divorcio, incluyendo división de bienes, manutención y custodia.",
      aliases: ["divorce", "separation", "end marriage", "get divorced", "marital settlement"],
      aliases_es: ["divorcio", "separación", "terminar matrimonio", "divorciarse", "acuerdo matrimonial"],
      languageSupport: ["en", "es"],
-     requiresNotarization: true, 
-     canBeRecorded: true, 
+     requiresNotarization: true,
+     canBeRecorded: true,
      offerNotarization: true,
      offerRecordingHelp: true,
-     basePrice: 7, 
-     states: "all", 
+     basePrice: 7,
+     states: "all",
      questions: [
          { id: "spouse1Name", label: "Spouse 1 Full Name", type: "text", required: true },
          { id: "spouse2Name", label: "Spouse 2 Full Name", type: "text", required: true },
@@ -564,7 +564,7 @@ export let documentLibrary: LegalDocument[] = [ // Changed to let for modificati
     aliases: ["child custody", "custody battle", "parenting plan"],
     aliases_es: ["custodia de hijos", "batalla por custodia", "plan de crianza"],
     languageSupport: ['en', 'es'],
-    requiresNotarization: true, 
+    requiresNotarization: true,
     canBeRecorded: true,
     offerNotarization: true,
     offerRecordingHelp: true,
@@ -587,7 +587,7 @@ export let documentLibrary: LegalDocument[] = [ // Changed to let for modificati
     offerNotarization: true,
     offerRecordingHelp: false,
     basePrice: 7,
-    states: 'all', 
+    states: 'all',
     questions: []
   },
   {
@@ -598,7 +598,7 @@ export let documentLibrary: LegalDocument[] = [ // Changed to let for modificati
     description: 'Authorize a caregiver to make medical decisions for your child.',
     description_es: 'Autorizar a un cuidador a tomar decisiones médicas por su hijo.',
     languageSupport: ['en', 'es'],
-    requiresNotarization: true, 
+    requiresNotarization: true,
     canBeRecorded: false,
     offerNotarization: true,
     offerRecordingHelp: false,
@@ -608,10 +608,10 @@ export let documentLibrary: LegalDocument[] = [ // Changed to let for modificati
   },
   // --- Category 5: Personal ---
    {
-    id: "powerOfAttorney", 
-    name: "General Power of Attorney", 
+    id: "powerOfAttorney",
+    name: "General Power of Attorney",
     name_es: "Poder Notarial General",
-    category: "Personal", 
+    category: "Personal",
     description: "Authorize someone to act on your behalf for financial or general matters.",
     description_es: "Autorizar a alguien para actuar en su nombre en asuntos financieros o generales.",
     aliases: ["represent me", "act on my behalf", "authorize someone", "financial poa"],
@@ -623,7 +623,7 @@ export let documentLibrary: LegalDocument[] = [ // Changed to let for modificati
     offerRecordingHelp: false,
     basePrice: 5,
     states: 'all',
-    questions: [ 
+    questions: [
         { id: 'principalName', label: 'Principal\'s Full Name (Person granting power)', type: 'text', required: true },
         { id: 'principalAddress', label: 'Principal\'s Full Address', type: 'textarea', required: true },
         { id: 'agentName', label: 'Agent\'s Full Name (Person receiving power)', type: 'text', required: true },
@@ -639,10 +639,10 @@ export let documentLibrary: LegalDocument[] = [ // Changed to let for modificati
     ]
   },
    {
-    id: 'healthcare-power-of-attorney', 
+    id: 'healthcare-power-of-attorney',
     name: 'Healthcare Power of Attorney',
     name_es: 'Poder Notarial para Atención Médica',
-    category: 'Personal', 
+    category: 'Personal',
     description: 'Appoint an agent to make healthcare decisions if you cannot.',
     description_es: 'Nombrar un agente para tomar decisiones de atención médica si usted no puede.',
     aliases: ["medical poa", "healthcare proxy", "appoint agent for health", "medical decisions"],
@@ -654,7 +654,7 @@ export let documentLibrary: LegalDocument[] = [ // Changed to let for modificati
     offerRecordingHelp: false,
     basePrice: 5,
     states: 'all',
-    questions: [ 
+    questions: [
        { id: 'principalName', label: 'Principal\'s Full Name (Person granting power)', type: 'text', required: true },
        { id: 'principalAddress', label: 'Principal\'s Full Address', type: 'textarea', required: true },
        { id: 'agentName', label: 'Healthcare Agent\'s Full Name', type: 'text', required: true },
@@ -668,13 +668,13 @@ export let documentLibrary: LegalDocument[] = [ // Changed to let for modificati
     id: 'living-will',
     name: 'Living Will / Advance Directive',
     name_es: 'Testamento Vital / Directiva Anticipada',
-    category: 'Personal', 
+    category: 'Personal',
     description: 'Specify your wishes for end-of-life medical care.',
     description_es: 'Especificar sus deseos para la atención médica al final de la vida.',
     aliases: ["medical wishes", "advance directive", "life support", "end of life"],
     aliases_es: ["deseos médicos", "directiva anticipada", "soporte vital", "fin de vida"],
     languageSupport: ['en', 'es'],
-    requiresNotarization: true, 
+    requiresNotarization: true,
     canBeRecorded: false,
     offerNotarization: true,
     offerRecordingHelp: false,
@@ -686,19 +686,19 @@ export let documentLibrary: LegalDocument[] = [ // Changed to let for modificati
     id: 'affidavit-general',
     name: 'Affidavit (General)',
     name_es: 'Declaración Jurada (General)',
-    category: 'Personal', 
+    category: 'Personal',
     description: 'A sworn written statement confirmed by oath, often used as evidence.',
     description_es: 'Una declaración escrita jurada confirmada por juramento, a menudo utilizada como prueba.',
     aliases: ["sworn statement", "declaration", "official statement", "statement under oath"],
     aliases_es: ["declaración jurada", "declaración oficial", "declaración bajo juramento"],
     languageSupport: ['en', 'es'],
     requiresNotarization: true,
-    canBeRecorded: false, 
+    canBeRecorded: false,
     offerNotarization: true,
     offerRecordingHelp: false,
     basePrice: 5,
     states: 'all',
-    questions: [ 
+    questions: [
       { id: 'affiantName', label: 'Your Full Name (Affiant)', type: 'text', required: true },
       { id: 'affiantAddress', label: 'Your Address', type: 'textarea', required: true },
       { id: 'statement', label: 'Statement of Facts (Number each paragraph)', type: 'textarea', required: true, placeholder: '1. On [Date], I observed...\n2. The following occurred...' },
@@ -711,19 +711,19 @@ export let documentLibrary: LegalDocument[] = [ // Changed to let for modificati
     id: 'last-will-testament',
     name: 'Last Will and Testament',
     name_es: 'Última Voluntad y Testamento',
-    category: 'Estate Planning', 
+    category: 'Estate Planning',
     description: 'Specify how your assets should be distributed after death.',
     description_es: 'Especificar cómo deben distribuirse sus bienes después de la muerte.',
     aliases: ["will", "inheritance", "distribute assets"],
     aliases_es: ["testamento", "herencia", "distribuir bienes"],
     languageSupport: ['en', 'es'],
-    requiresNotarization: true, 
-    canBeRecorded: false, 
-    offerNotarization: true, 
+    requiresNotarization: true,
+    canBeRecorded: false,
+    offerNotarization: true,
     offerRecordingHelp: false,
     basePrice: 7,
-    states: 'all', 
-    questions: [ 
+    states: 'all',
+    questions: [
         { id: 'testatorName', label: 'Your Full Name (Testator)', type: 'text', required: true },
         { id: 'testatorAddress', label: 'Your Full Address', type: 'textarea', required: true },
         { id: 'executorName', label: 'Executor Full Name', type: 'text', required: true },
@@ -742,20 +742,20 @@ export let documentLibrary: LegalDocument[] = [ // Changed to let for modificati
     description: 'Manage assets during life and distribute after death, potentially avoiding probate.',
     description_es: 'Gestionar activos durante la vida y distribuirlos después de la muerte, potencialmente evitando el proceso sucesorio.',
     languageSupport: ['en', 'es'],
-    requiresNotarization: true, 
+    requiresNotarization: true,
     canBeRecorded: false,
     offerNotarization: true,
     offerRecordingHelp: false,
-    basePrice: 10, 
+    basePrice: 10,
     states: 'all',
     questions: []
   },
   // --- Fallback / General Inquiry ---
   {
-    id: 'general-inquiry', 
+    id: 'general-inquiry',
     name: "General Inquiry",
     name_es: "Consulta General",
-    category: "Miscellaneous", 
+    category: "Miscellaneous",
     description: "For situations where a specific document isn't immediately clear or needed.",
     description_es: "Para situaciones donde un documento específico no está claro o no se necesita de inmediato.",
     aliases: ["help", "question", "legal advice", "not sure"],
@@ -765,7 +765,7 @@ export let documentLibrary: LegalDocument[] = [ // Changed to let for modificati
     canBeRecorded: false,
     offerNotarization: false,
     offerRecordingHelp: false,
-    basePrice: 0, 
+    basePrice: 0,
     states: "all",
     questions: [
         { id: "inquiryDetails", label: "Please describe your situation or question in detail", type: "textarea", required: true },
