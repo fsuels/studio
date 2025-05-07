@@ -6,45 +6,46 @@ import { useTranslation } from "react-i18next";
 import { documentLibrary, usStates, type LegalDocument } from "@/lib/document-library";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label"; // Import Label
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"; // Import Select components
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowLeft, FileText, Search, Landmark, Briefcase, Home, Users, User, ScrollText, Handshake, ShieldQuestion, GraduationCap, FileIcon as PaperIcon, Loader2 } from "lucide-react"; 
+import { ArrowLeft, FileText, Search, Landmark, Briefcase, Home, Users, User, ScrollText, ShieldQuestion, GraduationCap, FileIcon as PaperIcon, Loader2 } from "lucide-react";
 import { track } from "@/lib/analytics";
 import { useToast } from "@/hooks/use-toast";
 
 // User-friendly category definitions with icons
-const CATEGORY_LIST = [
+// Moved CATEGORY_LIST to the top level and exported it
+export const CATEGORY_LIST = [
   { key: 'Finance', labelKey: 'Finance', icon: Landmark },
   { key: 'Business', labelKey: 'Business', icon: Briefcase },
   { key: 'Real Estate', labelKey: 'Real Estate', icon: Home },
   { key: 'Family', labelKey: 'Family', icon: Users },
   { key: 'Personal', labelKey: 'Personal', icon: User },
   { key: 'Estate Planning', labelKey: 'Estate Planning', icon: ScrollText },
-  { key: 'Miscellaneous', labelKey: 'General', icon: FileText }, 
+  { key: 'Miscellaneous', labelKey: 'General', icon: FileText },
 ];
 
 
 interface Step1DocumentSelectorProps {
-  selectedCategory: string | null; // Prop to externally set/get category
-  onCategorySelect: (categoryKey: string | null) => void; // Callback for category selection
+  selectedCategory: string | null;
+  onCategorySelect: (categoryKey: string | null) => void;
   onDocumentSelect: (doc: LegalDocument) => void;
   isReadOnly?: boolean;
-  globalSearchTerm: string; 
-  globalSelectedState: string; 
+  globalSearchTerm: string;
+  globalSelectedState: string;
 }
 
 export default function Step1DocumentSelector({
-  selectedCategory, // Use this to reflect externally controlled category
-  onCategorySelect, // Use this to inform parent of category selection
+  selectedCategory,
+  onCategorySelect,
   onDocumentSelect,
   isReadOnly = false,
   globalSearchTerm,
   globalSelectedState
 }: Step1DocumentSelectorProps) {
   const { t, i18n } = useTranslation();
-  // Local view controls what to show IF NOT doing a global search
   const [view, setView] = useState<'categories' | 'documents'>(selectedCategory ? 'documents' : 'categories');
-  // Local document search, active only when in 'documents' view and no global search
-  const [docSearch, setDocSearch] = useState<string>(''); 
+  const [docSearch, setDocSearch] = useState<string>('');
   const [isHydrated, setIsHydrated] = useState(false);
   const { toast } = useToast();
 
@@ -52,11 +53,10 @@ export default function Step1DocumentSelector({
     setIsHydrated(true);
   }, []);
 
-  // If a category is passed via prop, set the view accordingly
   useEffect(() => {
     if (selectedCategory) {
       setView('documents');
-    } else if (!globalSearchTerm.trim()) { // Only switch to categories if not in global search
+    } else if (!globalSearchTerm.trim()) {
       setView('categories');
     }
   }, [selectedCategory, globalSearchTerm]);
@@ -71,20 +71,19 @@ export default function Step1DocumentSelector({
        });
        const uniqueCategories = Array.from(uniqueCategoriesMap.values());
 
-      if (!isHydrated) return uniqueCategories; 
+      if (!isHydrated) return uniqueCategories;
       return [...uniqueCategories].sort((a, b) =>
          t(a.labelKey, a.key).localeCompare(t(b.labelKey, b.key), i18n.language)
       );
-  }, [isHydrated, i18n.language, t]); 
+  }, [isHydrated, i18n.language, t]);
 
 
   const languageSupportsSpanish = (support: string[] | undefined): boolean => !!support && support.includes('es');
 
   const documentsToDisplay = useMemo(() => {
-    let docs = [...documentLibrary]; 
+    let docs = [...documentLibrary];
     if (!isHydrated) return [];
 
-    // 1. Global Search Filter (applied first if globalSearchTerm is active)
     if (globalSearchTerm.trim() !== '') {
       const lowerGlobalSearch = globalSearchTerm.toLowerCase();
       docs = docs.filter(doc =>
@@ -96,11 +95,9 @@ export default function Step1DocumentSelector({
         (languageSupportsSpanish(doc.languageSupport) && doc.description_es && t(doc.description_es, doc.description_es).toLowerCase().includes(lowerGlobalSearch))
       );
     } else {
-      // 2. Category Filter (only if NO global search AND a category is selected via prop)
       if (selectedCategory) {
         docs = docs.filter(doc => doc.category === selectedCategory);
       }
-      // 3. Local Document Search (only if NO global search AND in 'documents' view AND docSearch is active)
       if (view === 'documents' && docSearch.trim() !== '') {
           const lowerDocSearch = docSearch.toLowerCase();
           docs = docs.filter(doc =>
@@ -111,45 +108,42 @@ export default function Step1DocumentSelector({
           );
       }
     }
-    
-    // 4. Always apply State Filter
+
     if (globalSelectedState && globalSelectedState !== 'all') {
         docs = docs.filter(doc => doc.states === 'all' || (Array.isArray(doc.states) && doc.states.includes(globalSelectedState)));
     }
-    
+
     return docs.filter(doc => doc.id !== 'general-inquiry');
   }, [selectedCategory, docSearch, globalSearchTerm, globalSelectedState, view, t, i18n.language, isHydrated]);
 
 
   const handleCategoryClick = (key: string) => {
     if (isReadOnly || !isHydrated) return;
-    onCategorySelect(key); // Inform parent about category selection
-    setDocSearch(''); // Reset local doc search when category changes
-    // View will be updated by useEffect watching selectedCategory prop
+    onCategorySelect(key);
+    setDocSearch('');
     track('select_item', { category: key });
   };
 
   const handleBackToCategories = () => {
     if (isReadOnly || !isHydrated) return;
-    onCategorySelect(null); // Inform parent that category is deselected
+    onCategorySelect(null);
     setDocSearch('');
-    // View will be updated by useEffect watching selectedCategory prop
   };
 
   const handleDocSelect = (doc: LegalDocument) => {
     if (!isHydrated) return;
-    if (isReadOnly || !globalSelectedState) { 
-        toast({ 
-            title: t('State Required'), 
+    if (isReadOnly || !globalSelectedState) {
+        toast({
+            title: t('State Required'),
             description: t('Please select a state from the filter bar above before choosing a document.'),
-            variant: "destructive" 
+            variant: "destructive"
         });
         return;
     }
     onDocumentSelect(doc);
     track('view_item', {id: doc.id,name: doc.name,category : doc.category,price : doc.basePrice,state : globalSelectedState,});
   };
-  
+
   const placeholderTitle = isHydrated ? t('stepOne.title') : "Loading...";
   const placeholderCategoryDesc = isHydrated ? t('stepOne.categoryDescription') : "Loading...";
   const placeholderSelectDocDesc = isHydrated ? t('stepOne.selectDocDescription') : "Loading...";
@@ -168,7 +162,7 @@ export default function Step1DocumentSelector({
       <Card className="step-card opacity-50">
         <CardHeader className="step-card__header">
             <PaperIcon className="step-card__icon animate-pulse" />
-            <div> 
+            <div>
               <CardTitle className="step-card__title h-6 bg-muted-foreground/20 rounded w-3/4 mb-1"></CardTitle>
               <CardDescription className="step-card__subtitle h-4 bg-muted-foreground/10 rounded w-full"></CardDescription>
             </div>
@@ -188,21 +182,20 @@ export default function Step1DocumentSelector({
     );
   }
 
-  // Determine current display mode based on global search term
   const isGlobalSearching = globalSearchTerm.trim() !== '';
 
   return (
      <Card className={`step-card ${isReadOnly ? 'opacity-50 cursor-not-allowed pointer-events-none' : 'opacity-100'}`}>
         <CardHeader className="step-card__header">
              <PaperIcon className="step-card__icon" />
-             <div> 
+             <div>
                 <CardTitle className="step-card__title">
-                    {isGlobalSearching 
-                      ? t('Search Results') 
+                    {isGlobalSearching
+                      ? t('Search Results')
                       : view === 'categories'
-                        ? placeholderTitle // "Step 1: Select Category"
-                        : t('stepOne.selectDocDescription') // "Choose the document..."
-                    } 
+                        ? placeholderTitle
+                        : t('stepOne.selectDocDescription')
+                    }
                 </CardTitle>
                 <CardDescription className="step-card__subtitle">
                     {isGlobalSearching
@@ -215,9 +208,8 @@ export default function Step1DocumentSelector({
              </div>
         </CardHeader>
 
-        {/* Back button and Category Title: Only if NOT global searching AND in documents view */}
         {!isGlobalSearching && view === 'documents' && selectedCategory && (
-            <div className="px-6 pb-4 border-b border-border"> 
+            <div className="px-6 pb-4 border-b border-border">
                  <div className="flex items-center justify-between">
                      <Button variant="outline" size="sm" onClick={handleBackToCategories} disabled={isReadOnly || !isHydrated}>
                        <ArrowLeft className="mr-2 h-4 w-4" /> {placeholderBackToCategories}
@@ -231,9 +223,8 @@ export default function Step1DocumentSelector({
 
         <CardContent className="step-content space-y-6 pt-6">
              {isGlobalSearching ? (
-                // GLOBAL SEARCH RESULTS VIEW
                 <div className="animate-fade-in space-y-6">
-                     {globalSelectedState ? ( 
+                     {globalSelectedState ? (
                          <>
                             {documentsToDisplay.length > 0 ? (
                                 <div className="document-grid pt-4 animate-fade-in">
@@ -271,7 +262,6 @@ export default function Step1DocumentSelector({
                       )}
                  </div>
              ) : view === 'categories' ? (
-                // CATEGORY SELECTION VIEW (No global search active)
                 <div className="animate-fade-in space-y-4">
                      {sortedCategories.length > 0 ? (
                          <div className="category-grid pt-2">
@@ -293,10 +283,8 @@ export default function Step1DocumentSelector({
                          <p className="text-muted-foreground italic text-center py-6">{placeholderNoCategories}</p>
                      )}
                 </div>
-             ) : ( 
-                 // DOCUMENTS WITHIN CATEGORY VIEW (No global search active, category selected)
+             ) : (
                  <div className="animate-fade-in space-y-6">
-                     {/* Local search input for documents within the category */}
                       <div className="relative">
                         <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                         <Input
@@ -309,7 +297,7 @@ export default function Step1DocumentSelector({
                             disabled={isReadOnly || !isHydrated}
                         />
                       </div>
-                     {globalSelectedState ? ( 
+                     {globalSelectedState ? (
                          <>
                             {documentsToDisplay.length > 0 ? (
                                 <div className="document-grid pt-4 animate-fade-in">

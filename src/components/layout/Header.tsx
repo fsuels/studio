@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/dropdown-menu"; 
 import { Button } from '@/components/ui/button'; 
 import MiniCartDrawer from '@/components/MiniCartDrawer';
-import { ThemeToggle } from '@/components/ThemeToggle';
+import { ThemeToggle } from '@/components/ThemeToggle'; // Corrected import path
 import { Check, ChevronDown, Globe, UserPlus, LogIn, Search as SearchIcon, ExternalLink, FileText } from 'lucide-react'; 
 import { Input } from '@/components/ui/input';
 import { documentLibrary, LegalDocument } from '@/lib/document-library';
@@ -86,7 +86,7 @@ export function Header() {
     if (!isHydrated) return;
 
     const performSearch = () => {
-      if (searchQuery.trim().length > 1) { // Search if query is at least 2 chars
+      if (searchQuery.trim().length > 1) { 
         const lowerQuery = searchQuery.toLowerCase();
         const lang = i18n.language as 'en' | 'es';
         
@@ -101,7 +101,7 @@ export function Header() {
             aliases.some(alias => alias.toLowerCase().includes(lowerQuery))
           );
         });
-        setSearchResults(results.slice(0, 5)); // Limit to 5 results
+        setSearchResults(results.slice(0, 5)); 
         setShowResults(true);
       } else {
         setSearchResults([]);
@@ -109,12 +109,11 @@ export function Header() {
       }
     };
     
-    const debounceTimeout = setTimeout(performSearch, 300); // Debounce search
+    const debounceTimeout = setTimeout(performSearch, 300); 
     return () => clearTimeout(debounceTimeout);
 
   }, [searchQuery, i18n.language, isHydrated]);
 
-  // Close results when clicking outside
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (
@@ -140,15 +139,16 @@ export function Header() {
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Currently, navigation happens via dropdown. 
-    // This could navigate to a full search page: router.push(`/search?q=${encodeURIComponent(searchQuery)}`);
-    console.log("Search submitted:", searchQuery);
-    setShowResults(false); // Hide dropdown on submit
+    if (searchQuery.trim()) {
+      router.push(`/?search=${encodeURIComponent(searchQuery)}#workflow-start`); // Added #workflow-start
+    }
+    setShowResults(false); 
   };
   
-  const handleResultClick = () => {
+  const handleResultClick = (docId: string) => {
     setSearchQuery('');
     setShowResults(false);
+    router.push(`/?docId=${encodeURIComponent(docId)}#workflow-start`);
   };
 
 
@@ -163,7 +163,6 @@ export function Header() {
               <Nav />
            </div>
           <nav className="flex items-center gap-2">
-            {/* Search Input & Results Dropdown */}
              <form onSubmit={handleSearchSubmit} className="relative hidden sm:flex items-center mr-2">
                 <SearchIcon className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground pointer-events-none" />
                 <Input
@@ -185,9 +184,8 @@ export function Header() {
                     <ul>
                       {searchResults.map((doc) => (
                         <li key={doc.id}>
-                          <Link
-                            href={`/?docId=${doc.id}`}
-                            onClick={handleResultClick}
+                          <button 
+                            onClick={() => handleResultClick(doc.id)} 
                             className="flex items-center gap-2 px-3 py-2.5 text-sm text-popover-foreground hover:bg-accent transition-colors w-full text-left"
                           >
                             <FileText className="h-4 w-4 shrink-0 text-muted-foreground"/>
@@ -195,7 +193,7 @@ export function Header() {
                                {i18n.language === 'es' && doc.name_es ? doc.name_es : doc.name}
                             </span>
                             <ExternalLink className="h-3 w-3 ml-auto text-muted-foreground/70"/>
-                          </Link>
+                          </button>
                         </li>
                       ))}
                     </ul>
@@ -203,7 +201,6 @@ export function Header() {
                 )}
              </form>
 
-            {/* Language Switcher */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
@@ -234,7 +231,6 @@ export function Header() {
               </DropdownMenuContent>
             </DropdownMenu>
 
-            {/* Auth Buttons */}
              <Button
                 variant="outline"
                 size="sm"
@@ -244,7 +240,7 @@ export function Header() {
              >
                 <Link href="/signup"> 
                    <UserPlus className="h-4 w-4 mr-1 md:mr-2" />
-                   <span className="hidden sm:inline">{isHydrated ? t('nav.signUp', {defaultValue: 'Sign Up'}) : '...'}</span>
+                   <span className="hidden sm:inline">{isHydrated ? t('Sign Up') : '...'}</span>
                 </Link>
              </Button>
              <Button
@@ -256,7 +252,7 @@ export function Header() {
              >
                 <Link href="/signin">
                     <LogIn className="h-4 w-4 mr-1 md:mr-2" />
-                    <span className="hidden sm:inline">{isHydrated ? t('nav.signIn', {defaultValue: 'Sign In'}) : '...'}</span>
+                    <span className="hidden sm:inline">{isHydrated ? t('Login') : '...'}</span>
                 </Link>
              </Button>
              <ThemeToggle />
@@ -267,4 +263,3 @@ export function Header() {
     </header>
   );
 }
-

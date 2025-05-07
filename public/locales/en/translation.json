@@ -287,7 +287,8 @@
       "support": "Support",
       "searchPlaceholder": "Search documents...",
       "signUp": "Sign Up",
-      "signIn": "Sign In"
+      "signIn": "Sign In",
+      "documentCategories": "Document Categories"
     },
     "pricing": {
       "title": "Simple, Transparent Pricing",

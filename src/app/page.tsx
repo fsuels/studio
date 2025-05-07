@@ -3,7 +3,7 @@
 
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import type { LegalDocument } from '@/lib/document-library';
-import { usStates, documentLibrary as staticDocumentLibrary } from '@/lib/document-library'; // Renamed to avoid conflict
+import { usStates } from '@/lib/document-library'; 
 import DocTypeSelector, { type AISuggestion } from '@/components/DocumentTypeSelector'; 
 import { Questionnaire } from '@/components/questionnaire';
 import { DisclaimerStep } from '@/components/disclaimer-step';
@@ -18,11 +18,11 @@ import { PromoBanner } from '@/components/landing/PromoBanner';
 import { Button } from '@/components/ui/button'; 
 import { useToast } from '@/hooks/use-toast'; 
 import { Separator } from '@/components/ui/separator';
-import { FileText, FileSignature, Check, Upload, AlertTriangle, Download, ListChecks, Loader2 } from 'lucide-react'; // Added ListChecks icon
-import Step1DocumentSelector from '@/components/Step1DocumentSelector'; 
+import { FileText, FileSignature, Check, Upload, AlertTriangle, Download, ListChecks, Loader2 } from 'lucide-react'; 
+import Step1DocumentSelector, { CATEGORY_LIST } from '@/components/Step1DocumentSelector'; 
 import StickyFilterBar from '@/components/StickyFilterBar'; 
 import { useTranslation } from 'react-i18next';
-import { useSearchParams, useRouter } from 'next/navigation'; // Added useRouter
+import { useSearchParams, useRouter } from 'next/navigation'; 
 
 
 const ShareIcon = () => (
@@ -82,45 +82,52 @@ export default function Home() {
     console.log('[page.tsx] handleDocumentSelect called with doc:', doc);
     setSelectedDocument(doc);
     setCurrentStep(2); 
-    scrollToWorkflow(); // Scroll to workflow section
+    scrollToWorkflow(); 
     if (isHydrated) { 
         toast({ title: t('toasts.docTypeConfirmedTitle'), description: t('toasts.docTypeConfirmedDescription', { docName: doc.name }) });
     }
   }, [scrollToWorkflow, t, toast, isHydrated]);
 
-  // Effect to handle docId from query parameters
+  // Effect to handle docId and category from query parameters
   useEffect(() => {
     if (!isHydrated) return;
 
     const docIdFromQuery = searchParams.get('docId');
-    if (docIdFromQuery && !selectedDocument) { // Process only if not already selected to avoid loops
-      const foundDocument = staticDocumentLibrary.find(doc => doc.id === docIdFromQuery);
+    const categoryFromQuery = searchParams.get('category');
+    const searchFromQuery = searchParams.get('search');
+
+    if (searchFromQuery && !globalSearchTerm) {
+        setGlobalSearchTerm(searchFromQuery);
+        scrollToWorkflow();
+    }
+
+    if (categoryFromQuery && !selectedCategory) {
+        const isValidCategory = CATEGORY_LIST.some(cat => cat.key === categoryFromQuery);
+        if (isValidCategory) {
+            console.log(`[page.tsx] Category from query param: ${categoryFromQuery}`);
+            setSelectedCategory(categoryFromQuery);
+            setCurrentStep(1); // Ensure user is on step 1 to see category filtered
+            scrollToWorkflow();
+             // Optionally clear category from URL if you only want it to apply on initial load
+            // const newPath = window.location.pathname; // Keep current path, remove query
+            // router.replace(newPath, { scroll: false });
+        } else {
+            console.warn(`[page.tsx] Invalid category "${categoryFromQuery}" from query param.`);
+        }
+    }
+
+    if (docIdFromQuery && !selectedDocument) { 
+      const foundDocument = documentLibrary.find(doc => doc.id === docIdFromQuery);
       if (foundDocument) {
         console.log('[page.tsx] Found document from query param:', foundDocument.name);
-        
-        // Ensure state is set if document has specific state requirements
-        // This is a basic check; more sophisticated logic might be needed if states='all' but still has state-specific questions
-        if (Array.isArray(foundDocument.states) && foundDocument.states.length > 0 && !globalSelectedState) {
-            // If the document is state-specific and no global state is set,
-            // we might prompt the user or default to the first state in the list.
-            // For now, let's assume the user will select a state or it's 'all'.
-            // If a specific state is required by the document, this needs to be handled.
-            // For simplicity, if `globalSelectedState` is not set, and doc has specific states,
-            // we might set `globalSelectedState` to the first state of the document or leave as is.
-            // Let's set it if not 'all' and a state is available from the doc.
-            if(foundDocument.states[0] && foundDocument.states[0] !== 'all') {
-                // setGlobalSelectedState(foundDocument.states[0]);
-                // console.log(`[page.tsx] Auto-set globalSelectedState to ${foundDocument.states[0]} from document.`);
-            }
-        }
         handleDocumentSelect(foundDocument);
-        // Optionally, remove the query parameter from the URL
+        // Optionally, remove the query parameter from the URL after processing
         // router.replace('/', { scroll: false }); 
       } else {
         console.warn(`[page.tsx] Document with ID "${docIdFromQuery}" not found in library.`);
       }
     }
-  }, [searchParams, handleDocumentSelect, selectedDocument, isHydrated, globalSelectedState, router]);
+  }, [searchParams, handleDocumentSelect, selectedDocument, selectedCategory, globalSearchTerm, isHydrated, router, scrollToWorkflow]);
 
 
   const handleAnswersSubmit = useCallback((answers: Record<string, any>) => {
@@ -214,7 +221,7 @@ export default function Home() {
     setDisclaimerAgreed(false);
     setPdfSigned(false);
     setGlobalSearchTerm(''); 
-    // setGlobalSelectedState(''); // Consider if state should reset
+    setGlobalSelectedState(''); 
     setSelectedCategory(null); 
     setPdfUrl(null);
     setIsPdfLoading(false);
@@ -222,7 +229,7 @@ export default function Home() {
     setGeneratedPdfBlob(null);
     setApiError(null);
     scrollToTop();
-    router.replace('/', { scroll: false }); // Clear query params on reset
+    router.replace('/', { scroll: false }); 
   };
 
 
@@ -305,7 +312,7 @@ export default function Home() {
 
             {apiError && (
                 <div className="my-4 p-4 bg-destructive/10 border border-destructive text-destructive rounded-md text-sm">
-                    <p><strong>{t('API Error Occurred', 'API Error Occurred')}:</strong></p> {/* Added default value */}
+                    <p><strong>{t('API Error Occurred', {defaultValue: 'API Error Occurred'})}:</strong></p> 
                     <pre className="whitespace-pre-wrap break-all">{apiError}</pre>
                 </div>
             )}
@@ -313,7 +320,14 @@ export default function Home() {
             {isHydrated && currentStep === 1 && (
               <StickyFilterBar
                 searchTerm={globalSearchTerm}
-                onSearchTermChange={setGlobalSearchTerm}
+                onSearchTermChange={(term) => {
+                    setGlobalSearchTerm(term);
+                    // If user starts typing a global search, clear category selection
+                    // so the document list shows global search results, not category-filtered ones.
+                    if (term.trim() !== '' && selectedCategory) {
+                        setSelectedCategory(null);
+                    }
+                }}
                 selectedState={globalSelectedState}
                 onSelectedStateChange={setGlobalSelectedState}
               />
@@ -337,12 +351,12 @@ export default function Home() {
                          } else { 
                            setCurrentStep(prev => Math.max(1, prev - 1));
                          }
-                         if (currentStep === 3 && pdfUrl) { // Ensure pdfUrl is reset only if it was set
+                         if (currentStep === 3 && pdfUrl) { 
                              setPdfUrl(null);
-                             setIsPdfLoading(false); // Reset loading state
-                             setPdfError(null); // Clear previous PDF errors
+                             setIsPdfLoading(false); 
+                             setPdfError(null); 
                              setGeneratedPdfBlob(null);
-                             setApiError(null); // Clear API errors too
+                             setApiError(null); 
                          }
                      }}>
                          {t('Back', {defaultValue: 'Back'})}
