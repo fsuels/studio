@@ -6,68 +6,77 @@
 This Vehicle Bill of Sale ("Agreement") is made and entered into on **{{sale_date}}**, by and between:
 
 - **Seller:** {{seller_name}}, of {{seller_address}}
-- **Buyer:** {{buyer_name}}, of {{buyer_address}}
+- **Buyer:**  {{buyer_name}}, of {{buyer_address}}
 
-Collectively the “Parties.”
+Collectively referred to herein as the “Parties.”
 
 ---
 
 ## 1. Vehicle Description
 
-| Field                       | Value                          |
-|-----------------------------|--------------------------------|
-| Year                        | {{vehicle_year}}               |
-| Make                        | {{vehicle_make}}               |
-| Model                       | {{vehicle_model}}              |
-| Color                       | {{vehicle_color}}              |
-| VIN                         | {{vehicle_vin}}                |
-| Odometer Reading (miles)    | {{vehicle_odometer}}           |
+The Seller hereby sells to the Buyer, and the Buyer hereby purchases from the Seller, the following motor vehicle (the “Vehicle”):
+
+| Field                          | Description                         |
+|--------------------------------|-------------------------------------|
+| Year                           | {{vehicle_year}}                    |
+| Make                           | {{vehicle_make}}                    |
+| Model                          | {{vehicle_model}}                   |
+| Color                          | {{vehicle_color}}                   |
+| Vehicle Identification Number (VIN) | {{vehicle_vin}}            |
+| Odometer Reading               | {{vehicle_odometer}} miles          |
 
 ## 2. Purchase Price & Payment
 
-1.  **Sale Price:** $**{{sale_price}}**
-2.  **Payment Method:** {{payment_method}}
-3.  **Payment Date:** {{sale_date}}
+1. **Sale Price:** The total purchase price is **${{sale_price}}** (U.S. Dollars).
+2. **Payment Method:** {{payment_method}} (e.g., Cash, Check, Wire Transfer).
+3. **Payment Date:** Payment was made in full on **{{sale_date}}**.
 
 ## 3. “As-Is” Condition
 
-The Vehicle is sold **“AS-IS”**, with no warranties, unless otherwise specified below:
-{{warranty_details_display}}
+The Buyer acknowledges that the Vehicle is sold **"AS-IS"**, without any warranties or guarantees, express or implied, including but not limited to any implied warranty of merchantability or fitness for a particular purpose.
+{{#if warranty_details}}
+**Warranties (if any):**
+{{warranty_details}}
+{{/if}}
 
-## 4. Seller’s Representations
+## 4. Representations & Warranties of Seller
 
--   Seller is lawful owner.
--   Vehicle free of liens except: {{existing_liens}}
--   Odometer accurate to best knowledge.
+The Seller represents and warrants that:
+
+1. The Seller is the lawful owner of the Vehicle and has full authority to sell it.
+2. The Vehicle is free and clear of all liens, encumbrances, and security interests except as disclosed:
+   - {{existing_liens}}
+3. To the best of the Seller’s knowledge, the odometer reading is accurate.
 
 ## 5. Governing Law
 
-This Agreement is governed by **{{state}}** law.
+This Agreement shall be governed by and construed in accordance with the laws of the State of **{{state}}**.
 
 ## 6. Signatures
 
-| Seller Signature        | Date               |
-|-------------------------|--------------------|
-| ________________________| ___________________|
-| ({{seller_name}})       |                    |
+**IN WITNESS WHEREOF**, the Parties have executed this Agreement as of the date first written above.
 
-| Buyer Signature         | Date               |
-|-------------------------|--------------------|
-| ________________________| ___________________|
-| ({{buyer_name}})        |                    |
+| Seller Signature        | Date                 |
+|-------------------------|----------------------|
+| ________________________| _____________________|
+| ({{seller_name}})       |                      |
 
----
 
-### Notary Acknowledgment (Optional)
+| Buyer Signature         | Date                 |
+|-------------------------|----------------------|
+| ________________________| _____________________|
+| ({{buyer_name}})        |                      |
+
+### Notary Acknowledgment
 
 State of **{{state}}**
 County of **{{county}}**
 
-On this ____ day of ____________, 20__, before me, personally appeared **{{seller_name}}** and **{{buyer_name}}**, known to me (or proved) to be the persons whose names are subscribed, who acknowledged they signed for the purposes therein.
+On this **____** day of **______________, 20__**, before me, the undersigned, a Notary Public in and for said State, personally appeared **{{seller_name}}** and **{{buyer_name}}**, personally known to me (or proved to me on the basis of satisfactory evidence) to be the persons whose names are subscribed to this Agreement and acknowledged that they executed the same for the purposes therein contained.
 
-**Notary Public:** _______________________
-My Commission Expires: ________________
+**Notary Public:**   __________________________
+My Commission Expires: ______________
 
 ---
 
-*Template generated by 123LegalDoc—replace all `{{…}}` with actual data.*
+*Template generated by 123 LegalDoc. Replace bracketed fields with actual data.*

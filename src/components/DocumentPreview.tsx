@@ -16,8 +16,8 @@ export default function DocumentPreview({
   alt,
   locale = 'en', // Default to English
 }: DocumentPreviewProps) {
-  // Potentially adjust src based on locale if you have localized preview images
-  const src = `/images/previews/${docId}.png`;
+  // Adjust src based on locale
+  const src = `/images/previews/${locale}/${docId}.png`;
   const defaultAlt = locale === 'es' ? `Vista previa de ${docId}` : `${docId} preview`;
 
   return (

@@ -10,7 +10,7 @@
     "start": "next start",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
-    "export": "next build"
+    "generate:previews": "node scripts/generate-previews.js"
   },
   "dependencies": {
     "@genkit-ai/googleai": "^1.6.2",
@@ -53,11 +53,13 @@
     "i18next-browser-languagedetector": "^8.0.0",
     "i18next-http-backend": "^2.5.2",
     "lucide-react": "^0.475.0",
+    "markdown-it": "^13.0.1",
     "next": "15.2.3",
     "next-themes": "^0.3.0",
     "openai": "^4.52.7",
     "patch-package": "^8.0.0",
     "pdf-lib": "^1.17.1",
+    "puppeteer": "^21.0.0",
     "react": "^18.3.1",
     "react-day-picker": "^8.10.1",
     "react-dom": "^18.3.1",
@@ -73,6 +75,7 @@
     "zod": "^3.24.2"
   },
   "devDependencies": {
+    "@types/markdown-it": "^12.2.3",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
