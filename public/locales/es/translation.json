@@ -295,7 +295,11 @@
       "resources": "Recursos",
       "blog": "Blog",
       "faq": "Preguntas Frecuentes",
-      "support": "Soporte"
+      "support": "Soporte",
+      "searchPlaceholder": "Buscar documentos...",
+      "signUp": "Regístrate",
+      "signIn": "Acceder",
+      "documentCategories": "Crear Documentos"
     },
     "pricing": {
       "title": "Precios simples y transparentes",
@@ -659,6 +663,14 @@
     "Corporate Meeting Minutes": "Actas de Reunión Corporativa",
     "Stock Purchase Agreement": "Contrato de Compra de Acciones",
     "Login": "Acceso",
+    "Sign Up": "Regístrate",
+    "Create your 123LegalDoc account": "Crea tu cuenta 123LegalDoc",
+    "Create Account": "Crear Cuenta",
+    "Already have an account?": "¿Ya tienes una cuenta?",
+    "Sign In": "Acceder",
+    "Access your 123LegalDoc dashboard": "Accede a tu panel de 123LegalDoc",
+    "Don't have an account?": "¿No tienes una cuenta?",
+    "Confirm Password": "Confirmar Contraseña",
     "Dashboard": "Panel",
     "Welcome back, {{name}}! Manage your legal documents and account.": "¡Bienvenido de nuevo, {{name}}! Administra tus documentos legales y tu cuenta.",
     "My Documents": "Mis Documentos",
@@ -684,6 +696,14 @@
     "Please select a state from the filter bar above to see documents.": "Por favor, selecciona un estado de la barra de filtros de arriba para ver los documentos.",
     "State Required": "Estado Requerido",
     "Please select a state from the filter bar above before choosing a document.": "Por favor, selecciona un estado de la barra de filtros de arriba antes de elegir un documento.",
-    "Back": "Atrás"
+    "Back": "Atrás",
+    "Search Results": "Resultados de Búsqueda",
+    "Showing documents matching your search and state criteria.": "Mostrando documentos que coinciden con tu búsqueda y criterios de estado.",
+    "API Error Occurred": "Ocurrió un Error de API",
+    "Loading...": "Cargando...",
+    "Search all documents...": "Buscar todos los documentos...",
+    "All States": "Todos los Estados"
 }
 
+
+    

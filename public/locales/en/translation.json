@@ -288,7 +288,7 @@
       "searchPlaceholder": "Search documents...",
       "signUp": "Sign Up",
       "signIn": "Sign In",
-      "documentCategories": "Document Categories"
+      "documentCategories": "Make Documents"
     },
     "pricing": {
       "title": "Simple, Transparent Pricing",
@@ -621,5 +621,13 @@
    "Please select a state from the filter bar above to see documents.": "Please select a state from the filter bar above to see documents.",
    "State Required": "State Required",
    "Please select a state from the filter bar above before choosing a document.": "Please select a state from the filter bar above before choosing a document.",
-   "Back": "Back"
+   "Back": "Back",
+   "Search Results": "Search Results",
+   "Showing documents matching your search and state criteria.": "Showing documents matching your search and state criteria.",
+   "API Error Occurred": "API Error Occurred",
+   "Loading...": "Loading...",
+   "Search all documents...": "Search all documents...",
+   "All States": "All States"
 }
+
+    
