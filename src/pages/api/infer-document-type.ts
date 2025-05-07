@@ -1,157 +1,144 @@
 
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { inferDocumentTypeFlow, InferDocumentTypeInputSchema, InferDocumentTypeOutput } from '@/ai/flows/infer-document-type';
-import { z } from 'zod'; // Import z for detailed error handling
+import { z } from 'zod';
 
-// Define a more specific error response type
 type ErrorResponse = {
-  error: string; // User-friendly error message
-  details?: any; // Optional structured details (e.g., validation errors)
-  code?: string; // Optional internal error code
+  error: string;
+  details?: any;
+  code?: string;
 };
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<InferDocumentTypeOutput | ErrorResponse> // Use updated ErrorResponse type
+  res: NextApiResponse<InferDocumentTypeOutput | ErrorResponse>
 ) {
   const requestId = `req_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
   const logPrefix = `[API /infer-document-type] [${requestId}]`;
 
-  // --- TEMPORARY CHECK FOR STATIC EXPORT ---
-  // If NEXT_PUBLIC_DISABLE_API_ROUTES is set (e.g., during static export build), disable this route.
+  console.log(`${logPrefix} Received request: ${req.method} ${req.url}`);
+
   if (process.env.NEXT_PUBLIC_DISABLE_API_ROUTES === 'true') {
     console.warn(`${logPrefix} API Route Disabled (NEXT_PUBLIC_DISABLE_API_ROUTES=true). Returning 503.`);
     return res.status(503).json({
-      error: "AI Service Unavailable: API route is disabled for this deployment.",
-      code: 'STATIC_EXPORT_API_DISABLED' // Keep code for consistency
+      error: "AI document inference is disabled in the current environment.",
+      details: "This API route is not available when NEXT_PUBLIC_DISABLE_API_ROUTES is set to true.",
+      code: 'API_DISABLED_INFERENCE'
     });
   }
-  // --- END TEMPORARY CHECK ---
-
-
-  // Log request entry with ID
-  console.log(`${logPrefix} Received request: ${req.method} ${req.url}`);
 
   if (req.method !== 'POST') {
     console.warn(`${logPrefix} Method Not Allowed: ${req.method}`);
     res.setHeader('Allow', ['POST']);
-    return res.status(405).json({ error: `Method ${req.method} Not Allowed`, code: 'METHOD_NOT_ALLOWED' });
+    return res.status(405).json({ error: `Method ${req.method} Not Allowed`, code: 'METHOD_NOT_ALLOWED_INFERENCE' });
   }
 
   try {
-    // 1. Validate Input using Zod schema (now includes language)
-    console.log(`${logPrefix} Validating request body...`);
+    console.log(`${logPrefix} Validating request body. Body received:`, JSON.stringify(req.body));
     const validationResult = InferDocumentTypeInputSchema.safeParse(req.body);
     if (!validationResult.success) {
       const validationErrors = validationResult.error.flatten();
       console.error(`${logPrefix} Invalid input:`, JSON.stringify(validationErrors));
       const errorMessages = validationResult.error.errors.map(e => `${e.path.join('.') || 'input'}: ${e.message}`).join('; ');
       return res.status(400).json({
-        error: `Invalid input provided. ${errorMessages}`,
+        error: `Invalid input for document inference: ${errorMessages}`,
         details: validationErrors,
-        code: 'INVALID_INPUT'
+        code: 'INVALID_INPUT_INFERENCE'
       });
     }
 
-    const input = validationResult.data; // Contains description, language, and optionally state
-    console.log(`${logPrefix} Received valid input:`, JSON.stringify(input));
+    const input = validationResult.data;
+    console.log(`${logPrefix} Input validation successful. Parsed input:`, JSON.stringify(input));
 
-    // 2. Call the Genkit Flow (passing the validated input which includes language)
     console.log(`${logPrefix} Calling inferDocumentTypeFlow...`);
     const output: InferDocumentTypeOutput = await inferDocumentTypeFlow(input);
 
-    if (!output) {
-      console.error(`${logPrefix} inferDocumentTypeFlow returned null or undefined unexpectedly.`);
-      throw new Error("AI flow completed but returned an empty result.");
+    if (!output || !output.suggestions || output.suggestions.length === 0) {
+      console.error(`${logPrefix} inferDocumentTypeFlow returned empty or invalid suggestions. Output:`, JSON.stringify(output));
+      // It's possible the flow intentionally returns empty suggestions if it can't classify.
+      // However, if 'output' itself is null/undefined, that's an issue.
+      if (!output) {
+         throw new Error("AI flow for document inference completed but returned an unexpectedly empty result object.");
+      }
+      // If output exists but suggestions are empty, this might be a valid scenario (e.g., "General Inquiry")
+      // But we should ensure the schema is still met.
+      const outputValidation = InferDocumentTypeOutputSchema.safeParse(output);
+      if (!outputValidation.success) {
+        console.error(`${logPrefix} inferDocumentTypeFlow output failed schema validation:`, JSON.stringify(outputValidation.error.flatten()));
+        throw new z.ZodError(outputValidation.error.issues); // Propagate ZodError
+      }
+      console.log(`${logPrefix} Flow executed, result contains suggestions (possibly empty or General Inquiry). Output:`, JSON.stringify(output));
+    } else {
+      console.log(`${logPrefix} Flow executed successfully. Output:`, JSON.stringify(output));
     }
-    console.log(`${logPrefix} Flow executed successfully. Output:`, JSON.stringify(output));
-
-    // 3. Return the successful response
+    
     console.log(`${logPrefix} Sending successful response status 200.`);
     return res.status(200).json(output);
 
   } catch (error: unknown) {
-    // 4. Handle errors - IMPROVED LOGGING
-    console.error(`${logPrefix} === UNHANDLED ERROR IN API HANDLER START ===`);
+    console.error(`${logPrefix} === UNHANDLED ERROR IN API HANDLER (/infer-document-type) START ===`);
     console.error(`${logPrefix} Timestamp: ${new Date().toISOString()}`);
-    console.error(`${logPrefix} Raw Error Object:`, error); // Log the raw error object
+    console.error(`${logPrefix} Raw Error Object Type:`, typeof error);
+    console.error(`${logPrefix} Raw Error Object:`, error);
 
     let statusCode = 500;
-    let clientErrorMessage = 'An internal server error occurred while processing your request.';
-    let errorCode = 'INTERNAL_SERVER_ERROR';
-    let errorDetails: any = undefined;
+    let clientErrorMessage = 'An internal server error occurred during document type inference.';
+    let errorCode = 'INFERENCE_INTERNAL_SERVER_ERROR';
+    let errorDetails: any = error instanceof Error ? { name: error.name, message: error.message, stack: error.stack } : { message: String(error) };
 
     if (error instanceof z.ZodError) {
-        statusCode = 502; // Bad Gateway - upstream service (AI) returned bad data
-        clientErrorMessage = "The AI generated an invalid response format. Please try rephrasing or contact support.";
-        errorCode = 'AI_RESPONSE_FORMAT_INVALID';
-        errorDetails = error.flatten();
-        console.error(`${logPrefix} ZodError (AI Output Validation):`, JSON.stringify(errorDetails));
+        statusCode = 502; // Bad Gateway - AI service responded with invalid format
+        clientErrorMessage = "The AI service generated an invalid response format for document inference. Please try rephrasing or contact support.";
+        errorCode = 'AI_RESPONSE_FORMAT_INVALID_INFERENCE';
+        errorDetails = error.flatten(); // More specific Zod error details
+        console.error(`${logPrefix} ZodError (likely AI Output Validation or Input in Flow):`, JSON.stringify(errorDetails));
     } else if (error instanceof Error) {
-        console.error(`${logPrefix} Error Type:`, error.constructor?.name);
-        console.error(`${logPrefix} Error Message:`, error.message);
-        console.error(`${logPrefix} Error Stack:`, error.stack); // Log stack trace
+        // More detailed error logging for generic errors
+        console.error(`${logPrefix} Error Name: ${error.name}`);
+        console.error(`${logPrefix} Error Message: ${error.message}`);
+        console.error(`${logPrefix} Error Stack: ${error.stack}`);
 
-        clientErrorMessage = error.message; // Start with the raw message
+        clientErrorMessage = `AI Service Error: ${error.message}`; // Use the actual error message
 
-        // Refine client message and code based on error content
-         if (error.message.includes('AI output validation failed')) {
-            statusCode = 502;
-            clientErrorMessage = "The AI generated an invalid response format. Please try rephrasing or contact support.";
-            errorCode = 'AI_RESPONSE_VALIDATION_FAILED';
-        } else if (error.message.includes('Invalid input to flow')) {
-            statusCode = 400;
-            // Provide slightly more specific feedback if possible
-            clientErrorMessage = `Invalid data sent to AI flow: ${error.message.replace('Invalid input to flow: ','')}`;
-            errorCode = 'FLOW_INPUT_INVALID';
+        if (error.message.includes('GOOGLE_GENAI_API_KEY') || error.message.includes('Genkit initialization failed')) {
+            statusCode = 503; // Service Unavailable
+            clientErrorMessage = "AI service configuration or initialization error. Please contact support.";
+            errorCode = 'AI_INIT_CONFIG_ERROR_INFERENCE';
         } else if (error.message.includes('API key not valid') || error.message.includes('permission denied')) {
-            statusCode = 503; // Service Unavailable - Config/Auth issue
-            clientErrorMessage = "Could not authenticate with the AI service. Please contact support.";
-            errorCode = 'AI_AUTH_ERROR';
+            statusCode = 503; // Service Unavailable or Forbidden
+            clientErrorMessage = "Could not authenticate with the AI service due to an invalid API key or permissions. Please contact support.";
+            errorCode = 'AI_AUTH_ERROR_INFERENCE';
         } else if (error.message.includes('quota exceeded')) {
              statusCode = 429; // Too Many Requests
              clientErrorMessage = "AI service quota exceeded. Please try again later or contact support.";
-             errorCode = 'AI_QUOTA_EXCEEDED';
+             errorCode = 'AI_QUOTA_EXCEEDED_INFERENCE';
         } else if (error.message.includes('fetch failed') || error.message.includes('network error') || error.message.includes('socket hang up') || error.message.includes('timeout')) {
             statusCode = 504; // Gateway Timeout
-            clientErrorMessage = "Could not reach the AI service due to a network issue. Please check your connection or try again later.";
-            errorCode = 'AI_NETWORK_ERROR';
-        } else if (error.message.includes("AI flow completed but returned an empty result.")) {
-            statusCode = 502; // Bad Gateway - AI didn't provide expected output
-            clientErrorMessage = "The AI process completed but returned an empty result. Please try again.";
-            errorCode = 'AI_EMPTY_RESULT';
-        } else if (error.message.includes("Missing GOOGLE_GENAI_API_KEY") || error.message.includes("Genkit initialization failed")) {
-            // Keep logging the detailed error server-side
-            console.error(`${logPrefix} Critical AI configuration/initialization error.`);
-            statusCode = 503; // Service Unavailable is appropriate
-            clientErrorMessage = "AI Service configuration error or unavailable. Please contact support.";
-            errorCode = 'AI_CONFIG_ERROR';
+            clientErrorMessage = "Network error: Could not reach the AI service. Please check your connection or try again later.";
+            errorCode = 'AI_NETWORK_ERROR_INFERENCE';
         } else {
-            // Default for other errors caught by the API handler itself
-            clientErrorMessage = 'An unexpected error occurred while processing your request.';
-            errorCode = 'UNKNOWN_SERVER_ERROR'; // This is the error code the user sees
-            statusCode = 500;
+             // Default for other errors from the flow or Genkit
+            errorCode = 'AI_FLOW_EXECUTION_ERROR_INFERENCE';
         }
     } else {
-        console.error(`${logPrefix} Non-Error Caught in API Handler:`, error);
-        clientErrorMessage = `An unexpected server error occurred.`;
-        errorCode = 'UNKNOWN_EXCEPTION';
-        statusCode = 500;
+        console.error(`${logPrefix} Non-Error object thrown in API handler:`, error);
+        clientErrorMessage = `An unexpected server error of unknown type occurred during document inference.`;
+        errorCode = 'UNKNOWN_EXCEPTION_TYPE_INFERENCE';
     }
 
-    console.error(`${logPrefix} === UNHANDLED ERROR IN API HANDLER END ===`);
-    console.log(`${logPrefix} Sending error response status ${statusCode}. Code: ${errorCode}, Client Message: "${clientErrorMessage}"`);
+    console.error(`${logPrefix} === UNHANDLED ERROR IN API HANDLER (/infer-document-type) END ===`);
+    console.log(`${logPrefix} Sending error response: Status ${statusCode}, Code: ${errorCode}, Message: "${clientErrorMessage}"`);
 
     const responsePayload: ErrorResponse = {
         error: clientErrorMessage,
         code: errorCode,
-        ...(errorDetails && { details: errorDetails }),
+        details: process.env.NODE_ENV === 'development' ? errorDetails : undefined, // Only send full details in dev
     };
 
     if (!res.headersSent) {
         return res.status(statusCode).json(responsePayload);
     } else {
-        console.error(`${logPrefix} Error handler attempted to send response, but headers were already sent.`);
+        console.error(`${logPrefix} Error handler attempted to send response, but headers were already sent. This indicates a critical failure or double-response attempt.`);
     }
   }
 }
