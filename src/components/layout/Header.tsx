@@ -14,7 +14,7 @@ import {
 import { Button } from '@/components/ui/button'; 
 import MiniCartDrawer from '@/components/MiniCartDrawer';
 import { ThemeToggle } from '@/components/ThemeToggle'; // Corrected import path
-import { Check, ChevronDown, Globe, UserPlus, LogIn, Search as SearchIcon, ExternalLink, FileText, Menu as MenuIcon, X as CloseIcon, LayoutGrid } from 'lucide-react'; 
+import { Check, ChevronDown, Globe, UserPlus, LogIn, Search as SearchIcon, ExternalLink, FileText, Menu as MenuIcon, X as CloseIcon, LayoutGrid, ChevronUp } from 'lucide-react'; 
 import { Input } from '@/components/ui/input';
 import { documentLibrary, LegalDocument } from '@/lib/document-library';
 import { useRouter } from 'next/navigation';
@@ -73,7 +73,8 @@ export function Header() {
   const searchResultsRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isMegaMenuOpen, setIsMegaMenuOpen] = useState(false);
+  const [isMegaMenuOpen, setIsMegaMenuOpen] = useState(false); // For desktop Popover
+  const [showMobileCategories, setShowMobileCategories] = useState(false); // For mobile "Make Documents"
 
 
   useEffect(() => {
@@ -138,8 +139,8 @@ export function Header() {
     i18n.changeLanguage(lang).then(() => {
       setCurrentLanguageDisplay(lang === 'es' ? 'ES' : 'EN');
     });
-    setIsMobileMenuOpen(false); // Close mobile menu on language change
-    setIsMegaMenuOpen(false); // Close mega menu on language change
+    setIsMobileMenuOpen(false); 
+    setIsMegaMenuOpen(false); 
   };
 
   const handleSearchSubmit = (e: React.FormEvent) => {
@@ -164,6 +165,7 @@ export function Header() {
   const handleMegaMenuLinkClick = () => {
     setIsMegaMenuOpen(false);
     setIsMobileMenuOpen(false);
+    setShowMobileCategories(false); // Also close mobile categories if open
   }
 
 
@@ -174,14 +176,12 @@ export function Header() {
           <Logo />
         </div>
 
-        {/* Desktop Navigation - Main links to the left of "Make Documents" */}
         <div className="hidden md:flex flex-1 items-center justify-start">
-            <Nav /> {/* Main navigation links like Pricing, Features, etc. */}
+            <Nav /> 
         </div>
        
-        {/* Desktop Actions - "Make Documents", Search, Language, Auth, Theme, Cart aligned to the right */}
         <nav className="hidden md:flex items-center gap-2 ml-auto">
-            {/* "Make Documents" Popover Trigger - Now on the right */}
+            {/* Desktop "Make Documents" Popover */}
             <Popover open={isMegaMenuOpen} onOpenChange={setIsMegaMenuOpen}>
                 <PopoverTrigger asChild>
                     <Button variant="ghost" size="sm" className="text-sm font-medium flex items-center gap-1 px-2 hover:text-primary" disabled={!isHydrated}>
@@ -191,7 +191,7 @@ export function Header() {
                     </Button>
                 </PopoverTrigger>
                 <PopoverContent 
-                    className="mt-2 w-[90vw] lg:w-[80rem] max-w-full bg-card p-0 rounded-lg shadow-lg z-50 overflow-visible" 
+                    className="mt-2 w-[90vw] lg:w-[80rem] max-w-full bg-card p-0 rounded-lg shadow-lg z-50 overflow-visible absolute left-1/2 -translate-x-1/2" 
                     align="center"
                     side="bottom"
                     sideOffset={4}
@@ -216,7 +216,7 @@ export function Header() {
                 {showResults && searchResults.length > 0 && (
                   <div 
                     ref={searchResultsRef}
-                    className="absolute top-full mt-2 w-full md:w-72 max-h-80 overflow-y-auto bg-popover border border-border rounded-md shadow-lg z-[70]" // Increased z-index
+                    className="absolute top-full mt-2 w-full md:w-72 max-h-80 overflow-y-auto bg-popover border border-border rounded-md shadow-lg z-[70]"
                   >
                     <ul>
                       {searchResults.map((doc) => (
@@ -252,7 +252,7 @@ export function Header() {
                   <ChevronDown className="ml-1 h-4 w-4 opacity-70" />
                 </Button>
               </PopoverTrigger>
-              <PopoverContent align="end" className="min-w-[8rem] p-1 z-[70]"> {/* Increased z-index */}
+              <PopoverContent align="end" className="min-w-[8rem] p-1 z-[70]">
                 <Button
                    onClick={() => handleLanguageChange('en')}
                    variant={currentLanguageDisplay === 'EN' ? 'secondary': 'ghost'}
@@ -310,7 +310,7 @@ export function Header() {
 
       {/* Mobile Menu Content */}
       {isMobileMenuOpen && isHydrated && (
-         <div className="md:hidden absolute top-14 left-0 right-0 bg-background shadow-lg border-t border-border p-4 space-y-4 animate-fade-in z-[60]"> {/* Ensured z-index */}
+         <div className="md:hidden absolute top-14 left-0 right-0 bg-background shadow-lg border-t border-border p-4 space-y-4 animate-fade-in z-[60] max-h-[calc(100vh-3.5rem)] overflow-y-auto">
             <form onSubmit={handleSearchSubmit} className="relative flex items-center w-full">
                  <SearchIcon className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground pointer-events-none" />
                  <Input
@@ -327,7 +327,7 @@ export function Header() {
                  {showResults && searchResults.length > 0 && (
                   <div 
                     ref={searchResultsRef} 
-                    className="absolute top-full mt-1 w-full max-h-60 overflow-y-auto bg-popover border border-border rounded-md shadow-lg z-[70]" // Increased z-index
+                    className="absolute top-full mt-1 w-full max-h-60 overflow-y-auto bg-popover border border-border rounded-md shadow-lg z-[70]"
                   >
                     <ul>
                       {searchResults.map((doc) => (
@@ -349,28 +349,45 @@ export function Header() {
                 )}
             </form>
             
-            <Popover open={isMegaMenuOpen} onOpenChange={setIsMegaMenuOpen}>
-                <PopoverTrigger asChild>
-                    <Button variant="ghost" className="w-full justify-start text-sm font-medium flex items-center gap-2 px-2 hover:text-primary" disabled={!isHydrated}>
-                        <LayoutGrid className="h-4 w-4 text-muted-foreground" />
-                        {isHydrated ? t('nav.documentCategories') : '...'}
-                        <ChevronDown className="h-4 w-4 opacity-70 ml-auto" />
+            {/* "Make Documents" for Mobile */}
+            <Button
+              variant="ghost"
+              className="w-full justify-between text-base font-medium flex items-center gap-2 px-2 py-3 hover:text-primary"
+              onClick={() => setShowMobileCategories(!showMobileCategories)}
+              disabled={!isHydrated}
+              aria-expanded={showMobileCategories}
+            >
+              <div className="flex items-center gap-2">
+                <LayoutGrid className="h-5 w-5 text-muted-foreground" />
+                {isHydrated ? t('nav.documentCategories') : '...'}
+              </div>
+              {showMobileCategories ? <ChevronUp className="h-5 w-5 opacity-70" /> : <ChevronDown className="h-5 w-5 opacity-70" />}
+            </Button>
+            {showMobileCategories && (
+              <div className="pl-4 mt-0 border-l-2 border-muted/70">
+                 <MegaMenuContent categories={CATEGORY_LIST} documents={documentLibrary} onLinkClick={handleMegaMenuLinkClick}/>
+              </div>
+            )}
+            
+            {/* Other Nav Links for Mobile */}
+            <div className="border-t border-border pt-4 space-y-1">
+                {[
+                    { href: "/pricing", labelKey: "nav.pricing" },
+                    { href: "/features", labelKey: "nav.features" },
+                    { href: "/blog", labelKey: "nav.blog" },
+                    { href: "/faq", labelKey: "nav.faq" },
+                    { href: "/support", labelKey: "nav.support" },
+                ].map(link => (
+                    <Button key={link.href} variant="ghost" asChild className="w-full justify-start text-base py-3" onClick={() => setIsMobileMenuOpen(false)}>
+                        <Link href={link.href}>{isHydrated ? t(link.labelKey) : '...'}</Link>
                     </Button>
-                </PopoverTrigger>
-                <PopoverContent 
-                  className="w-[calc(100vw-2rem)] max-w-md p-0 z-[70] absolute left-1/2 -translate-x-1/2 mt-2 bg-card shadow-lg rounded-lg overflow-visible" 
-                  align="center" 
-                  side="bottom"
-                > {/* Increased z-index and centering styles */}
-                   <MegaMenuContent categories={CATEGORY_LIST} documents={documentLibrary} onLinkClick={handleMegaMenuLinkClick}/>
-                </PopoverContent>
-            </Popover>
+                ))}
+            </div>
 
-            <Nav /> {/* Main navigation links like Pricing, Features, etc. */}
 
              <div className="border-t border-border pt-4 space-y-2">
-                 <Button variant="outline" size="sm" className="w-full justify-start" asChild onClick={() => setIsMobileMenuOpen(false)}><Link href="/signup"><UserPlus className="h-4 w-4 mr-2" />{isHydrated ? t('Sign Up') : '...'}</Link></Button>
-                 <Button variant="default" size="sm" className="w-full justify-start" asChild onClick={() => setIsMobileMenuOpen(false)}><Link href="/signin"><LogIn className="h-4 w-4 mr-2" />{isHydrated ? t('Sign In') : '...'}</Link></Button>
+                 <Button variant="outline" size="sm" className="w-full justify-start text-base py-3" asChild onClick={() => setIsMobileMenuOpen(false)}><Link href="/signup"><UserPlus className="h-5 w-5 mr-2" />{isHydrated ? t('Sign Up') : '...'}</Link></Button>
+                 <Button variant="default" size="sm" className="w-full justify-start text-base py-3" asChild onClick={() => setIsMobileMenuOpen(false)}><Link href="/signin"><LogIn className="h-5 w-5 mr-2" />{isHydrated ? t('Sign In') : '...'}</Link></Button>
              </div>
          </div>
       )}
