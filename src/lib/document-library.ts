@@ -1,25 +1,26 @@
 // src/lib/document-library.ts
-import { z } from 'zod'; // Import Zod
+import { z } from 'zod'; 
 import { documentLibraryAdditions } from './document-library-additions';
 
 // Define the structure for a single question
 export type Question = {
-  id: string; // Unique identifier for the question (e.g., 'tenant_name')
-  label: string; // The question text presented to the user
-  placeholder?: string; // Placeholder text for input fields
-  required?: boolean; // Whether the question must be answered
-  type: 'text' | 'select' | 'date' | 'number' | 'textarea'; // Input type
-  options?: { value: string; label: string }[]; // Options for 'select' type
-  stateSpecific?: string[]; // Optional: List of state codes (e.g., ['CA', 'NY']) where this question applies
-  // Add language variants if needed, e.g., label_es: '...'
+  id: string; 
+  label: string; 
+  placeholder?: string; 
+  required?: boolean; 
+  type: 'text' | 'select' | 'date' | 'number' | 'textarea'; 
+  options?: { value: string; label: string }[]; 
+  stateSpecific?: string[]; 
+  helperText?: string;
+  tooltip?: string;
 };
 
 // Define structure for upsell clauses
 export type UpsellClause = {
     id: string;
     description: string;
-    description_es?: string; // Spanish description for upsell
-    price: number; // e.g., 1 or 2 dollars
+    description_es?: string; 
+    price: number; 
 };
 
 // Define the structure for a single legal document
@@ -32,7 +33,7 @@ export type LegalDocument = {
   category: string; 
   states?: string[] | 'all'; 
   questions?: Question[]; 
-  schema: z.AnyZodObject; // Zod schema for react-hook-form
+  schema: z.AnyZodObject; 
   description: string; 
   description_es?: string; 
   requiresNotarization: boolean; 
@@ -46,12 +47,6 @@ export type LegalDocument = {
   templatePath_es?: string; 
   requiresNotarizationStates?: string[]; 
 };
-
-// Helper function to create slugs from names (basic example)
-function generateIdFromName(name: string): string {
-  return name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-}
-
 
 // US States Data (with value/label for select components)
 export const usStates = [
@@ -75,7 +70,7 @@ export const usStates = [
     { value: 'DC', label: 'District of Columbia' }
 ];
 
-// The main library of legal documents - Updated with new structure and categories
+// The main library of legal documents
 export let documentLibrary: LegalDocument[] = [ 
   // --- Category 1: Finance ---
   {
@@ -132,25 +127,25 @@ export let documentLibrary: LegalDocument[] = [
     templatePath_es: "/templates/es/bill-of-sale-vehicle.md",
     requiresNotarizationStates: ["AZ", "KY", "LA", "MT", "NV", "OH", "OK", "PA", "WV", "WY"], 
     schema: z.object({
-        sale_date: z.string().min(1, "Sale date is required"), // Assuming date string format for simplicity
+        sale_date: z.string().min(1, "Sale date is required"),
         seller_name: z.string().min(1, "Seller name is required"),
         seller_address: z.string().min(1, "Seller address is required"),
         buyer_name: z.string().min(1, "Buyer name is required"),
         buyer_address: z.string().min(1, "Buyer address is required"),
-        vehicle_year: z.number().int().min(1900).max(new Date().getFullYear() + 1),
+        vehicle_year: z.coerce.number().int().min(1900, "Invalid vehicle year").max(new Date().getFullYear() + 1, "Invalid vehicle year"),
         vehicle_make: z.string().min(1, "Vehicle make is required"),
         vehicle_model: z.string().min(1, "Vehicle model is required"),
         vehicle_color: z.string().min(1, "Vehicle color is required"),
         vehicle_vin: z.string().length(17, "VIN must be 17 characters"),
-        vehicle_odometer: z.number().int().min(0, "Odometer reading must be positive"),
-        sale_price: z.number().positive("Sale price must be positive"),
+        vehicle_odometer: z.coerce.number().int().min(0, "Odometer reading must be positive"),
+        sale_price: z.coerce.number().positive("Sale price must be positive"),
         payment_method: z.string().min(1, "Payment method is required"),
         existing_liens: z.string().min(1, "Existing liens information is required (enter 'None' if applicable)"),
         as_is: z.enum(['yes', 'no']),
         warranty_details: z.string().optional(),
         state: z.string().length(2, "State must be 2 characters"),
         county: z.string().optional(),
-    }).refine(data => data.as_is === 'no' ? !!data.warranty_details : true, {
+    }).refine(data => data.as_is === 'no' ? !!data.warranty_details && data.warranty_details.trim() !== '' : true, {
         message: "Warranty details are required if not sold 'as-is'",
         path: ['warranty_details'],
     }),
@@ -197,8 +192,8 @@ export let documentLibrary: LegalDocument[] = [
         recipientAddress: z.string().optional(),
         yourName: z.string().min(1),
         invoiceNumber: z.string().min(1),
-        invoiceDate: z.string().min(1), // Assuming date string
-        dueDate: z.string().optional(), // Assuming date string
+        invoiceDate: z.string().min(1), 
+        dueDate: z.string().optional(), 
         lineItems: z.string().min(1),
         totalAmount: z.number().positive(),
     }),
@@ -235,9 +230,9 @@ export let documentLibrary: LegalDocument[] = [
         recipientName: z.string().min(1),
         recipientAddress: z.string().min(1),
         amountDue: z.number().positive(),
-        originalDueDate: z.string().optional(), // Assuming date string
+        originalDueDate: z.string().optional(), 
         reasonForDebt: z.string().min(1),
-        deadlineForPayment: z.string().min(1), // Assuming date string
+        deadlineForPayment: z.string().min(1), 
         consequences: z.string().optional(),
     }),
     questions: [
@@ -254,7 +249,7 @@ export let documentLibrary: LegalDocument[] = [
   },
   // --- Category 2: Business ---
    {
-    id: 'independent-contractcontractor-agreement', // Note: Original ID had a typo "contractcontractor"
+    id: 'independent-contractcontractor-agreement', 
     name: 'Independent Contractor Agreement',
     name_es: 'Contrato de Contratista Independiente',
     category: 'Business', 
@@ -274,8 +269,8 @@ export let documentLibrary: LegalDocument[] = [
         contractorName: z.string().min(1),
         serviceDescription: z.string().min(1),
         paymentTerms: z.string().min(1),
-        startDate: z.string().min(1), // Assuming date string
-        endDate: z.string().optional(), // Assuming date string
+        startDate: z.string().min(1), 
+        endDate: z.string().optional(), 
     }),
     questions: [
         { id: 'clientName', label: 'Client/Company Name', type: 'text', required: true },
@@ -308,8 +303,8 @@ export let documentLibrary: LegalDocument[] = [
         providerName: z.string().min(1),
         providerAddress: z.string().min(1),
         serviceDescription: z.string().min(1),
-        startDate: z.string().min(1), // Assuming date string
-        endDate: z.string().optional(), // Assuming date string
+        startDate: z.string().min(1), 
+        endDate: z.string().optional(), 
         paymentTerms: z.string().min(1),
         confidentialityClause: z.enum(['yes', 'no']),
         state: z.string().length(2),
@@ -348,7 +343,7 @@ export let documentLibrary: LegalDocument[] = [
         party1Address: z.string().min(1),
         party2Name: z.string().min(1),
         party2Address: z.string().min(1),
-        effectiveDate: z.string().min(1), // Assuming date string
+        effectiveDate: z.string().min(1), 
         purpose: z.string().min(1),
         confidentialInfoDescription: z.string().optional(),
         termYears: z.number().int().min(0).optional(),
@@ -422,7 +417,7 @@ export let documentLibrary: LegalDocument[] = [
         partner2Address: z.string().min(1),
         businessName: z.string().min(1),
         businessAddress: z.string().min(1),
-        startDate: z.string().min(1), // Assuming date string
+        startDate: z.string().min(1), 
         capitalContributions: z.string().min(1),
         profitSplit: z.string().min(1),
         managementRoles: z.string().optional(),
@@ -445,7 +440,7 @@ export let documentLibrary: LegalDocument[] = [
     ],
   },
   {
-    id: 'operating-agreement', // Note: Original was 'operating-agreement-llc' in some places
+    id: 'operating-agreement', 
     name: 'Operating Agreement (LLC)',
     name_es: 'Acuerdo Operativo (LLC)',
     category: 'Business',
@@ -460,8 +455,8 @@ export let documentLibrary: LegalDocument[] = [
     offerRecordingHelp: false,
     basePrice: 7,
     states: 'all',
-    schema: z.object({ /* Define schema based on typical LLC operating agreement fields */ }),
-    questions: [] // Add relevant questions
+    schema: z.object({}),
+    questions: [] 
   },
    {
     id: 'articles-of-incorporation-biz', 
@@ -479,14 +474,14 @@ export let documentLibrary: LegalDocument[] = [
     offerRecordingHelp: true,
     basePrice: 5,
     states: 'all',
-    schema: z.object({ /* Define schema based on Articles of Incorporation requirements */ }),
-    questions: [] // Add relevant questions
+    schema: z.object({}),
+    questions: [] 
   },
   {
     id: 'employment-offer-letter',
     name: 'Employment Offer Letter',
     name_es: 'Carta de Oferta de Empleo',
-    category: 'Business', // Or Employment
+    category: 'Business', 
     description: 'Formalize a job offer with key terms like salary, start date, and position.',
     description_es: 'Formalizar una oferta de trabajo con términos clave como salario, fecha de inicio y puesto.',
     aliases: ["hire employee", "job offer", "terms of employment"],
@@ -498,14 +493,14 @@ export let documentLibrary: LegalDocument[] = [
     offerRecordingHelp: false,
     basePrice: 5,
     states: 'all',
-    schema: z.object({ /* Define schema for employment offer letter */ }),
-    questions: [] // Add relevant questions
+    schema: z.object({}),
+    questions: [] 
   },
   {
     id: 'employment-termination-letter',
     name: 'Employment Termination Letter',
     name_es: 'Carta de Terminación de Empleo',
-    category: 'Business', // Or Employment
+    category: 'Business', 
     description: 'Formally notify an employee of their termination.',
     description_es: 'Notificar formalmente a un empleado de su despido.',
     aliases: ["fire employee", "layoff letter", "termination notice"],
@@ -524,9 +519,9 @@ export let documentLibrary: LegalDocument[] = [
         employerAddress: z.string().min(1),
         employeeName: z.string().min(1),
         employeePosition: z.string().optional(),
-        terminationDate: z.string().min(1), // Assuming date string
+        terminationDate: z.string().min(1), 
         terminationReason: z.string().optional(),
-        finalPaycheckDate: z.string().min(1), // Assuming date string
+        finalPaycheckDate: z.string().min(1), 
         supervisorName: z.string().min(1),
         supervisorTitle: z.string().min(1),
     }),
@@ -563,7 +558,7 @@ export let documentLibrary: LegalDocument[] = [
         landlord_name: z.string().min(1),
         tenant_name: z.string().min(1),
         property_address: z.string().min(1),
-        lease_start: z.string().min(1), // Assuming date string
+        lease_start: z.string().min(1), 
         lease_term: z.number().int().positive(),
         monthly_rent: z.number().positive(),
         rent_due_date: z.string().min(1),
@@ -609,8 +604,8 @@ export let documentLibrary: LegalDocument[] = [
     offerRecordingHelp: true,
     basePrice: 7,
     states: 'all',
-    schema: z.object({ /* Define schema for commercial lease */ }),
-    questions: [] // Add relevant questions
+    schema: z.object({}),
+    questions: [] 
   },
    {
     id: 'eviction-notice',
@@ -634,8 +629,8 @@ export let documentLibrary: LegalDocument[] = [
         propertyAddress: z.string().min(1),
         reasonForEviction: z.enum(['nonpayment', 'leaseViolation', 'endOfTerm', 'other']),
         reasonDetails: z.string().optional(),
-        noticeDate: z.string().min(1), // Assuming date string
-        vacateDate: z.string().min(1), // Assuming date string
+        noticeDate: z.string().min(1), 
+        vacateDate: z.string().min(1), 
         state: z.string().length(2),
     }).refine(data => data.reasonForEviction === 'leaseViolation' || data.reasonForEviction === 'other' ? !!data.reasonDetails : true, {
         message: "Details are required if reason is 'Lease Violation' or 'Other'",
@@ -668,8 +663,8 @@ export let documentLibrary: LegalDocument[] = [
     offerRecordingHelp: true,
     basePrice: 5,
     states: 'all',
-    schema: z.object({ /* Define schema for quitclaim deed */ }),
-    questions: [] // Add relevant questions
+    schema: z.object({}),
+    questions: [] 
   },
   // --- Category 4: Family ---
    {
@@ -691,8 +686,8 @@ export let documentLibrary: LegalDocument[] = [
      schema: z.object({
         spouse1Name: z.string().min(1),
         spouse2Name: z.string().min(1),
-        dateOfMarriage: z.string().min(1), // Assuming date string
-        dateOfSeparation: z.string().min(1), // Assuming date string
+        dateOfMarriage: z.string().min(1), 
+        dateOfSeparation: z.string().min(1), 
         hasChildren: z.enum(['yes', 'no']),
         propertyDivision: z.string().min(1),
         spousalSupport: z.string().optional(),
@@ -729,8 +724,8 @@ export let documentLibrary: LegalDocument[] = [
     offerRecordingHelp: true,
     basePrice: 7,
     states: 'all',
-    schema: z.object({ /* Define schema for child custody */ }),
-    questions: [] // Add relevant questions
+    schema: z.object({}),
+    questions: [] 
   },
    {
     id: 'prenuptial-agreement',
@@ -748,8 +743,8 @@ export let documentLibrary: LegalDocument[] = [
     offerRecordingHelp: false,
     basePrice: 7,
     states: 'all',
-    schema: z.object({ /* Define schema for prenuptial agreement */ }),
-    questions: [] // Add relevant questions
+    schema: z.object({}),
+    questions: [] 
   },
   {
     id: 'child-medical-consent',
@@ -765,8 +760,8 @@ export let documentLibrary: LegalDocument[] = [
     offerRecordingHelp: false,
     basePrice: 3,
     states: 'all',
-    schema: z.object({ /* Define schema for child medical consent */ }),
-    questions: [] // Add relevant questions
+    schema: z.object({}),
+    questions: [] 
   },
   // --- Category 5: Personal ---
    {
@@ -861,14 +856,14 @@ export let documentLibrary: LegalDocument[] = [
     offerRecordingHelp: false,
     basePrice: 5,
     states: 'all',
-    schema: z.object({ /* Define schema for living will */ }),
-    questions: [] // Add relevant questions
+    schema: z.object({}),
+    questions: [] 
   },
   {
     id: 'affidavit-general',
     name: 'Affidavit (General)',
     name_es: 'Declaración Jurada (General)',
-    category: 'Personal', // Or General Legal
+    category: 'Personal', 
     description: 'A sworn written statement confirmed by oath, often used as evidence.',
     description_es: 'Una declaración escrita jurada confirmada por juramento, a menudo utilizada como prueba.',
     aliases: ["sworn statement", "declaration", "official statement", "statement under oath"],
@@ -942,13 +937,13 @@ export let documentLibrary: LegalDocument[] = [
     description_es: 'Gestionar activos durante la vida y distribuirlos después de la muerte, potencialmente evitando el proceso sucesorio.',
     languageSupport: ['en', 'es'],
     requiresNotarization: true,
-    canBeRecorded: false, // Typically not, but state law varies
+    canBeRecorded: false, 
     offerNotarization: true,
     offerRecordingHelp: false,
     basePrice: 10,
     states: 'all',
-    schema: z.object({ /* Define schema for living trust */ }),
-    questions: [] // Add relevant questions
+    schema: z.object({}),
+    questions: [] 
   },
   // --- Fallback / General Inquiry ---
   {
@@ -965,7 +960,7 @@ export let documentLibrary: LegalDocument[] = [
     canBeRecorded: false,
     offerNotarization: false,
     offerRecordingHelp: false,
-    basePrice: 0, // Or a nominal fee for consultation
+    basePrice: 0, 
     states: "all",
     schema: z.object({
         inquiryDetails: z.string().min(10, "Please provide more details about your situation."),
@@ -991,22 +986,19 @@ if (documentLibraryAdditions && documentLibraryAdditions.length > 0) {
 // Helper function to find documents by category, search term, and state
 export function findMatchingDocuments(
   searchQuery: string,
-  language: 'en' | 'es' = 'en', // Default to English
+  language: 'en' | 'es' = 'en', 
   stateCode?: string
 ): LegalDocument[] {
   const lowerQuery = searchQuery.toLowerCase();
 
   return documentLibrary.filter((doc) => {
-    // Determine which name and description to use based on language
     const name = language === 'es' && doc.name_es ? doc.name_es : doc.name;
     const description = language === 'es' && doc.description_es ? doc.description_es : doc.description;
     const aliases = language === 'es' && doc.aliases_es ? doc.aliases_es : doc.aliases || [];
 
-    // Check state compatibility
     const stateMatch = !stateCode || stateCode === 'all' || doc.states === 'all' || (Array.isArray(doc.states) && doc.states.includes(stateCode));
     if (!stateMatch) return false;
 
-    // Check search query match (if provided)
     if (lowerQuery) {
       return (
         name.toLowerCase().includes(lowerQuery) ||
@@ -1014,9 +1006,9 @@ export function findMatchingDocuments(
         aliases.some(alias => alias.toLowerCase().includes(lowerQuery))
       );
     }
-    return true; // If no query, match all (that fit state)
+    return true; 
   });
 }
 
-// Export the documentLibrary with 'documents' alias for WizardShell compatibility
+// Re-export with a more common name for easier import.
 export { documentLibrary as documents };
