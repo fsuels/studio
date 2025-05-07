@@ -288,7 +288,9 @@
       "searchPlaceholder": "Search documents...",
       "signUp": "Sign Up",
       "signIn": "Sign In",
-      "documentCategories": "Make Documents"
+      "documentCategories": "Make Documents",
+      "seeMoreDocuments": "See all in {{categoryName}}...",
+      "noDocumentsInCategory": "No documents in this category yet."
     },
     "pricing": {
       "title": "Simple, Transparent Pricing",
