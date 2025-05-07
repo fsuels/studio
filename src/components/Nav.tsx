@@ -1,7 +1,7 @@
 // components/Nav.tsx
 'use client'
 
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react'; // Added React import
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 import {
@@ -29,6 +29,7 @@ export default function Nav() {
   const navLinks = [
     { href: "/pricing", labelKey: "nav.pricing" },
     { href: "/features", labelKey: "nav.features" },
+    // { href: "/resources", labelKey: "nav.resources" }, // Resources page doesn't exist yet
     { href: "/blog", labelKey: "nav.blog" },
     { href: "/faq", labelKey: "nav.faq" },
     { href: "/support", labelKey: "nav.support" },
