@@ -2,9 +2,10 @@
 import type { Metadata } from 'next'; // Import Metadata type
 import { Geist, Geist_Mono } from 'next/font/google'; // Import font modules
 import './globals.css'; // Import global CSS
-import { AnimatePresence, MotionConfig } from 'framer-motion';
+// Removed AnimatePresence and MotionConfig as they are not used here, can be added in ClientProviders if needed.
 import { ClientProviders } from '@/components/providers/ClientProviders'; // Import the new client component
 import React from 'react'; // Import React
+import { ThemeProvider } from 'next-themes'; // Import ThemeProvider
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -19,8 +20,6 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: '123LegalDoc',
   description: 'AI-Powered Legal Document Generation',
-  // Add viewport meta tag here if not done globally
-  // viewport: 'width=device-width, initial-scale=1, maximum-scale=1',
 };
 
 // RootLayout remains a Server Component
@@ -29,19 +28,17 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // Remove useState and useEffect from here
-
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning> {/* Add suppressHydrationWarning */}
       <head>
-          {/* Add viewport meta tag here */}
           <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen overflow-x-hidden`}>
-        {/* Use the ClientProviders component to wrap children and handle client-side logic */}
-        <ClientProviders>
-          {children}
-        </ClientProviders>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem> {/* ThemeProvider wraps ClientProviders */}
+          <ClientProviders>
+            {children}
+          </ClientProviders>
+        </ThemeProvider>
       </body>
     </html>
   );

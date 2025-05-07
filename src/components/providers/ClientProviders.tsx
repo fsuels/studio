@@ -1,51 +1,28 @@
 
 "use client";
 
-import React, { useState, useEffect, ReactNode } from 'react';
+import React, { ReactNode } from 'react';
 import I18nClientProvider from '@/components/providers/I18nProvider';
 import { Toaster } from "@/components/ui/toaster";
-import { Layout } from '@/components/layout/Layout'; // Import Layout
-import { CartProvider } from '@/contexts/CartProvider'; // Import CartProvider
-import { ThemeProvider } from 'next-themes'; // Import ThemeProvider
+import { Layout } from '@/components/layout/Layout'; 
+import { CartProvider } from '@/contexts/CartProvider'; 
+// ThemeProvider is now in RootLayout, so it's removed from here.
+// No need for isClient state here for gating ThemeProvider or I18nClientProvider directly.
+// Component-level isHydrated checks will handle client-specific rendering for translations.
 
 interface ClientProvidersProps {
   children: ReactNode;
 }
 
 export function ClientProviders({ children }: ClientProvidersProps) {
-  const [isClient, setIsClient] = useState(false);
-
-  useEffect(() => {
-    // This effect runs only on the client, after the initial render
-    setIsClient(true);
-  }, []);
-
-  // During SSR or initial client render before the effect runs, render basic structure.
-  // After hydration and the effect runs, render with I18nClientProvider and ThemeProvider.
-  if (!isClient) {
-    return (
-      // Wrap directly in Layout
+  return (
+    <I18nClientProvider> {/* I18nProvider is always rendered */}
       <CartProvider>
         <Layout>
           {children}
           <Toaster />
         </Layout>
       </CartProvider>
-    );
-  }
-
-  // Now we are definitely on the client, render with all providers
-  return (
-    <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-      <I18nClientProvider>
-        <CartProvider>
-          <Layout>
-            {children}
-            <Toaster />
-          </Layout>
-        </CartProvider>
-      </I18nClientProvider>
-    </ThemeProvider>
+    </I18nClientProvider>
   );
 }
-

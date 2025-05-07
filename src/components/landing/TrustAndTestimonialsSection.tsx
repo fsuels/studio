@@ -1,10 +1,10 @@
+
 // TrustAndTestimonialsSection.tsx
 'use client'
 
 import { useTranslation } from 'react-i18next'
 import { useEffect, useState, useRef } from 'react'
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card'; // Not used directly, but good to keep if styling is similar
 import { ChevronLeft, ChevronRight, FileText, Lock, CheckCircle, ShieldCheck } from 'lucide-react';
 import Image from 'next/image';
 
@@ -12,7 +12,7 @@ export default function TrustAndTestimonialsSection() {
   const { t, i18n } = useTranslation();
   const [docCount, setDocCount] = useState(4200);
   const [isHydrated, setIsHydrated] = useState(false);
-  const [testimonialCount, setTestimonialCount] = useState(0); // Initialize with 0
+  const [testimonialCount, setTestimonialCount] = useState(0);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -23,26 +23,27 @@ export default function TrustAndTestimonialsSection() {
     return () => clearInterval(interval);
   }, []);
 
-  // Calculate testimonialCount after hydration when i18n is ready
   useEffect(() => {
     if (isHydrated) {
       const testimonialsObject = t('home.testimonials', { returnObjects: true, ns: 'translation' });
       if (typeof testimonialsObject === 'object' && testimonialsObject !== null && !Array.isArray(testimonialsObject)) {
         const count = Object.keys(testimonialsObject).filter(key => key.startsWith('t') && typeof testimonialsObject[key] === 'object').length;
-        setTestimonialCount(count > 0 ? count : 3); // Fallback to 3 if no 'tX' keys are found or translations are missing
+        setTestimonialCount(count > 0 ? count : 3); 
       } else {
-        setTestimonialCount(3); // Fallback if translations are not as expected
+        setTestimonialCount(3); 
       }
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isHydrated, t, i18n.language]); // Add i18n.language as dependency
+  }, [isHydrated, t, i18n.language]); 
 
   const placeholderText = '...';
+  
+  // Ensure formattedCount is only calculated after hydration
   const formattedCount = isHydrated ? docCount.toLocaleString(i18n.language) : placeholderText;
 
   const scroll = (dir: 'left' | 'right') => {
     if (!scrollRef.current) return;
-    const scrollAmount = 320 + 24; // w-80 (320px) + space-x-6 (24px)
+    const scrollAmount = 320 + 24; 
     scrollRef.current.scrollBy({ left: dir === 'right' ? scrollAmount : -scrollAmount, behavior: 'smooth' });
   };
 
@@ -55,7 +56,6 @@ export default function TrustAndTestimonialsSection() {
     }
   };
 
-
   return (
     <section className="bg-secondary/30 py-20 px-4 text-center">
       <h2 className="text-sm uppercase text-muted-foreground tracking-wide mb-4 font-medium">
@@ -64,6 +64,7 @@ export default function TrustAndTestimonialsSection() {
       <div className="flex flex-wrap justify-center gap-6 md:gap-10 items-center max-w-4xl mx-auto text-foreground/80 text-sm mb-16">
         <div className="flex items-center gap-2">
           <FileText className="h-5 w-5 text-primary" />
+          {/* Use pre-calculated formattedCount */}
           <span>{isHydrated ? t('home.trustStrip.badge1', { count: formattedCount }) : placeholderText}</span>
         </div>
         <div className="flex items-center gap-2">
@@ -71,7 +72,7 @@ export default function TrustAndTestimonialsSection() {
           <span>{isHydrated ? t('home.trustStrip.badge2') : placeholderText}</span>
         </div>
         <div className="flex items-center gap-2">
-          <CheckCircle className="h-5 w-5 text-green-600" />
+          <ShieldCheck className="h-5 w-5 text-primary" /> {/* Updated Icon */}
           <span>{isHydrated ? t('home.trustStrip.badge3') : placeholderText}</span>
         </div>
       </div>
@@ -98,7 +99,6 @@ export default function TrustAndTestimonialsSection() {
           style={{ scrollSnapType: 'x mandatory' }}
         >
           {!isHydrated || testimonialCount === 0 ? (
-            // Skeleton loaders for testimonials
             Array.from({ length: 3 }).map((_, i) => (
               <div
                 key={`skeleton-${i}`}
@@ -116,7 +116,6 @@ export default function TrustAndTestimonialsSection() {
               </div>
             ))
           ) : (
-            // Actual testimonials
             Array.from({ length: testimonialCount }).map((_, i) => (
              <div
                key={i}
@@ -132,7 +131,7 @@ export default function TrustAndTestimonialsSection() {
                    data-ai-hint="person portrait professional"
                  />
                <p className="italic text-foreground/90 mb-4 leading-relaxed flex-grow">
-                 "{isHydrated ? t(`home.testimonials.t${i + 1}.quote`, { defaultValue: 'Loading quote...'}) : placeholderText}"
+                 {isHydrated ? t(`home.testimonials.t${i + 1}.quote`, { defaultValue: 'Loading quote...'}) : placeholderText}
                </p>
                <div className="mt-auto text-center">
                  <p className="font-semibold text-sm text-foreground">
