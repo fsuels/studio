@@ -3,7 +3,7 @@
 
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import type { LegalDocument } from '@/lib/document-library';
-import { usStates } from '@/lib/document-library'; 
+import { usStates, documentLibrary as staticDocumentLibrary } from '@/lib/document-library'; // Renamed to avoid conflict
 import DocTypeSelector, { type AISuggestion } from '@/components/DocumentTypeSelector'; 
 import { Questionnaire } from '@/components/questionnaire';
 import { DisclaimerStep } from '@/components/disclaimer-step';
@@ -11,16 +11,18 @@ import { PdfPreview } from '@/components/pdf-preview';
 import { ShareDownloadStep } from '@/components/share-download-step';
 import ProgressStepper from '@/components/ProgressStepper'; 
 import HomepageHeroSteps from '@/components/landing/HomepageHeroSteps'; 
+import ThreeStepSection from '@/components/landing/ThreeStepSection';
 import TrustAndTestimonialsSection from '@/components/landing/TrustAndTestimonialsSection';
 import { GuaranteeBadge } from '@/components/landing/GuaranteeBadge';
 import { PromoBanner } from '@/components/landing/PromoBanner';
 import { Button } from '@/components/ui/button'; 
 import { useToast } from '@/hooks/use-toast'; 
 import { Separator } from '@/components/ui/separator';
-import { FileText, FileSignature, Check, Upload, AlertTriangle, Download, ListChecks, Loader2 } from 'lucide-react';
+import { FileText, FileSignature, Check, Upload, AlertTriangle, Download, ListChecks, Loader2 } from 'lucide-react'; // Added ListChecks icon
 import Step1DocumentSelector from '@/components/Step1DocumentSelector'; 
 import StickyFilterBar from '@/components/StickyFilterBar'; 
 import { useTranslation } from 'react-i18next';
+import { useSearchParams, useRouter } from 'next/navigation'; // Added useRouter
 
 
 const ShareIcon = () => (
@@ -31,6 +33,8 @@ export default function Home() {
   console.log('[page.tsx] Home component rendering...');
   const { t, i18n } = useTranslation();
   const { toast } = useToast();
+  const searchParams = useSearchParams();
+  const router = useRouter();
 
   const [currentStep, setCurrentStep] = useState(1); 
   const [selectedDocument, setSelectedDocument] = useState<LegalDocument | null>(null);
@@ -48,7 +52,7 @@ export default function Home() {
   const [generatedPdfBlob, setGeneratedPdfBlob] = useState<Blob | null>(null);
 
   const [apiError, setApiError] = useState<string | null>(null);
-  const [isHydrated, setIsHydrated] = useState(false); // Hydration check
+  const [isHydrated, setIsHydrated] = useState(false); 
 
   useEffect(() => {
     setIsHydrated(true);
@@ -60,6 +64,15 @@ export default function Home() {
   const isDocumentConfirmed = !!selectedDocument;
   const areDetailsProvided = !!formAnswers;
 
+  const workflowSectionId = "workflow-start";
+
+  const scrollToWorkflow = useCallback(() => {
+    const section = document.getElementById(workflowSectionId);
+    if (section) {
+      section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }, []);
+
   const scrollToTop = useCallback(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
@@ -69,11 +82,45 @@ export default function Home() {
     console.log('[page.tsx] handleDocumentSelect called with doc:', doc);
     setSelectedDocument(doc);
     setCurrentStep(2); 
-    scrollToTop();
+    scrollToWorkflow(); // Scroll to workflow section
     if (isHydrated) { 
         toast({ title: t('toasts.docTypeConfirmedTitle'), description: t('toasts.docTypeConfirmedDescription', { docName: doc.name }) });
     }
-  }, [scrollToTop, t, toast, isHydrated]);
+  }, [scrollToWorkflow, t, toast, isHydrated]);
+
+  // Effect to handle docId from query parameters
+  useEffect(() => {
+    if (!isHydrated) return;
+
+    const docIdFromQuery = searchParams.get('docId');
+    if (docIdFromQuery && !selectedDocument) { // Process only if not already selected to avoid loops
+      const foundDocument = staticDocumentLibrary.find(doc => doc.id === docIdFromQuery);
+      if (foundDocument) {
+        console.log('[page.tsx] Found document from query param:', foundDocument.name);
+        
+        // Ensure state is set if document has specific state requirements
+        // This is a basic check; more sophisticated logic might be needed if states='all' but still has state-specific questions
+        if (Array.isArray(foundDocument.states) && foundDocument.states.length > 0 && !globalSelectedState) {
+            // If the document is state-specific and no global state is set,
+            // we might prompt the user or default to the first state in the list.
+            // For now, let's assume the user will select a state or it's 'all'.
+            // If a specific state is required by the document, this needs to be handled.
+            // For simplicity, if `globalSelectedState` is not set, and doc has specific states,
+            // we might set `globalSelectedState` to the first state of the document or leave as is.
+            // Let's set it if not 'all' and a state is available from the doc.
+            if(foundDocument.states[0] && foundDocument.states[0] !== 'all') {
+                // setGlobalSelectedState(foundDocument.states[0]);
+                // console.log(`[page.tsx] Auto-set globalSelectedState to ${foundDocument.states[0]} from document.`);
+            }
+        }
+        handleDocumentSelect(foundDocument);
+        // Optionally, remove the query parameter from the URL
+        // router.replace('/', { scroll: false }); 
+      } else {
+        console.warn(`[page.tsx] Document with ID "${docIdFromQuery}" not found in library.`);
+      }
+    }
+  }, [searchParams, handleDocumentSelect, selectedDocument, isHydrated, globalSelectedState, router]);
 
 
   const handleAnswersSubmit = useCallback((answers: Record<string, any>) => {
@@ -167,7 +214,7 @@ export default function Home() {
     setDisclaimerAgreed(false);
     setPdfSigned(false);
     setGlobalSearchTerm(''); 
-    setGlobalSelectedState(''); 
+    // setGlobalSelectedState(''); // Consider if state should reset
     setSelectedCategory(null); 
     setPdfUrl(null);
     setIsPdfLoading(false);
@@ -175,6 +222,7 @@ export default function Home() {
     setGeneratedPdfBlob(null);
     setApiError(null);
     scrollToTop();
+    router.replace('/', { scroll: false }); // Clear query params on reset
   };
 
 
@@ -236,13 +284,11 @@ export default function Home() {
   };
 
 
-  const workflowSectionId = "workflow-start";
-
   return (
     <>
       <PromoBanner />
       <HomepageHeroSteps />
-      {/* <ThreeStepSection /> REMOVED: This is now part of HomepageHeroSteps */}
+      <ThreeStepSection /> 
       <TrustAndTestimonialsSection />
       <GuaranteeBadge />
 
@@ -259,7 +305,7 @@ export default function Home() {
 
             {apiError && (
                 <div className="my-4 p-4 bg-destructive/10 border border-destructive text-destructive rounded-md text-sm">
-                    <p><strong>{t('API Error Occurred')}:</strong></p>
+                    <p><strong>{t('API Error Occurred', 'API Error Occurred')}:</strong></p> {/* Added default value */}
                     <pre className="whitespace-pre-wrap break-all">{apiError}</pre>
                 </div>
             )}
@@ -291,13 +337,12 @@ export default function Home() {
                          } else { 
                            setCurrentStep(prev => Math.max(1, prev - 1));
                          }
-                         if (currentStep === 3) {
-                             setDisclaimerAgreed(false);
-                             setPdfSigned(false);
+                         if (currentStep === 3 && pdfUrl) { // Ensure pdfUrl is reset only if it was set
                              setPdfUrl(null);
-                             setIsPdfLoading(false);
-                             setPdfError(null);
+                             setIsPdfLoading(false); // Reset loading state
+                             setPdfError(null); // Clear previous PDF errors
                              setGeneratedPdfBlob(null);
+                             setApiError(null); // Clear API errors too
                          }
                      }}>
                          {t('Back', {defaultValue: 'Back'})}
