@@ -29,7 +29,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning> {/* Add suppressHydrationWarning */}
+    <html lang="en" suppressHydrationWarning>{/* Add suppressHydrationWarning and remove whitespace */}
       <head>
           <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
       </head>
