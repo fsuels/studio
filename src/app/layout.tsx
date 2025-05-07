@@ -5,7 +5,7 @@ import './globals.css'; // Import global CSS
 // Removed AnimatePresence and MotionConfig as they are not used here, can be added in ClientProviders if needed.
 import { ClientProviders } from '@/components/providers/ClientProviders'; // Import the new client component
 import React from 'react'; // Import React
-import { ThemeProvider } from 'next-themes'; // Import ThemeProvider
+// Removed ThemeProvider import
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -34,13 +34,14 @@ export default function RootLayout({
           <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen overflow-x-hidden`}>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem> {/* ThemeProvider wraps ClientProviders */}
+        {/* ThemeProvider removed */}
           <ClientProviders>
             {children}
           </ClientProviders>
-        </ThemeProvider>
+        {/* ThemeProvider removed */}
       </body>
     </html>
   );
 }
+
 

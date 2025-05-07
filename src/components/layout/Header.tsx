@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/popover"; 
 import { Button } from '@/components/ui/button'; 
 import MiniCartDrawer from '@/components/MiniCartDrawer';
-import { ThemeToggle } from '@/components/ThemeToggle'; // Corrected import path
+// Removed ThemeToggle import
 import { Check, ChevronDown, Globe, UserPlus, LogIn, Search as SearchIcon, ExternalLink, FileText, Menu as MenuIcon, X as CloseIcon, LayoutGrid, ChevronUp } from 'lucide-react'; 
 import { Input } from '@/components/ui/input';
 import { documentLibrary, LegalDocument } from '@/lib/document-library';
@@ -294,14 +294,14 @@ export function Header() {
                     <span className="hidden sm:inline">{isHydrated ? t('Sign In') : '...'}</span>
                 </Link>
              </Button>
-             <ThemeToggle />
+             {/* Removed ThemeToggle component */}
             {isHydrated && <MiniCartDrawer />}
         </nav>
 
         {/* Mobile Menu Button */}
         <div className="md:hidden ml-auto flex items-center gap-2">
             {isHydrated && <MiniCartDrawer />}
-            <ThemeToggle />
+            {/* Removed ThemeToggle component from mobile view */}
              <Button variant="ghost" size="icon" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} disabled={!isHydrated}>
                 {isMobileMenuOpen ? <CloseIcon className="h-5 w-5" /> : <MenuIcon className="h-5 w-5" />}
              </Button>
@@ -396,3 +396,4 @@ export function Header() {
 }
     
     
+
