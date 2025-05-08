@@ -4,7 +4,7 @@
 import React, { useEffect } from 'react'; 
 import { useFormContext, Controller } from 'react-hook-form';
 import SmartInput from '@/components/wizard/SmartInput';
-import AddressField from '@/components/form/AddressField'; 
+import { AddressField } from '@/components/AddressField'; 
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -76,18 +76,28 @@ export default function FieldRenderer({ fieldKey, locale, doc }: FieldRendererPr
 
   if (isAddressFieldKey(fieldKey)) {
     return (
-      // AddressField now handles its own RHF registration via useFormContext
-      // So we don't need to wrap it in a Controller here if it's designed that way.
-      // We pass the `name` prop for RHF integration within AddressField.
-      <AddressField
-        name={fieldKey} // This is the name RHF will use, e.g., "seller_address"
-        label={labelText}
-        placeholder={placeholderText || t('Enter address...')}
-        required={fieldSchema?.required}
-        // The error display is now handled inside AddressField
-        // aria-invalid={!!fieldError} // AddressField can get this from errors[name]
-        // className={cn(fieldError && "border-destructive focus-visible:ring-destructive")}
-        // RHF's value and onChange are handled by register inside AddressField
+      <Controller
+        control={control}
+        name={fieldKey as any}
+        render={({ field: { onChange: rhfOnChange, value: rhfValue, name: rhfName } }) => (
+          <AddressField
+            name={rhfName}
+            label={labelText}
+            value={rhfValue || ''}
+            onChange={(raw, parts) => {
+              rhfOnChange(raw); 
+              if (parts && doc.schema && typeof doc.schema.shape === 'object' && doc.schema.shape) {
+                const prefix = rhfName.replace('_address', '');
+                if ((doc.schema.shape as any)[`${prefix}_city`]) setValue(`${prefix}_city` as any, parts.city, {shouldValidate: true});
+                if ((doc.schema.shape as any)[`${prefix}_state`]) setValue(`${prefix}_state` as any, parts.state, {shouldValidate: true});
+                if ((doc.schema.shape as any)[`${prefix}_postal_code`]) setValue(`${prefix}_postal_code` as any, parts.postalCode, {shouldValidate: true});
+              }
+            }}
+            required={fieldSchema?.required || (doc.schema?.shape as any)?.[fieldKey]?._def?.typeName !== 'ZodOptional'}
+            error={errors[fieldKey as any]?.message as string | undefined}
+            placeholder={placeholderText || t('Enter address...')}
+          />
+        )}
       />
     );
   }
@@ -129,11 +139,11 @@ export default function FieldRenderer({ fieldKey, locale, doc }: FieldRendererPr
           {!notaryIsRequiredByState && <p className="text-xs text-muted-foreground">{t('Notarization may incur an additional fee.')}</p>}
           {errors.notarizationPreference && <p className="text-xs text-destructive mt-1">{String(errors.notarizationPreference.message)}</p>}
         </div>
-      ) : fieldKey === 'odo_status' && fieldSchema?.type === 'select' && (doc.schema.shape as any).odo_status?._def?.values ? (
+      ) : fieldKey === 'odo_status' && fieldSchema?.type === 'select' && (doc.schema?.shape as any)?.odo_status?._def?.values ? (
         <Controller
           control={control}
           name="odo_status"
-          defaultValue={(doc.schema.shape as any).odo_status?._def?.defaultValue || "ACTUAL"}
+          defaultValue={(doc.schema?.shape as any)?.odo_status?._def?.defaultValue || "ACTUAL"}
           render={({ field }) => (
             <RadioGroup
               onValueChange={field.onChange}
@@ -141,7 +151,7 @@ export default function FieldRenderer({ fieldKey, locale, doc }: FieldRendererPr
               className={cn("space-y-2", fieldError && "border-destructive focus-visible:ring-destructive")}
               aria-invalid={!!fieldError}
             >
-              {(doc.schema.shape as any).odo_status._def.values.map((opt: string) => (
+              {((doc.schema?.shape as any).odo_status._def.values as string[]).map((opt: string) => (
                  <div key={opt} className="flex items-center space-x-2">
                     <RadioGroupItem value={opt} id={`odo_status_${opt.toLowerCase()}`} />
                     <Label htmlFor={`odo_status_${opt.toLowerCase()}`} className="font-normal">
@@ -156,7 +166,7 @@ export default function FieldRenderer({ fieldKey, locale, doc }: FieldRendererPr
         <Controller
           name="as_is"
           control={control}
-          defaultValue={fieldSchema && (doc.schema.shape as any).as_is?._def?.defaultValue ? (doc.schema.shape as any).as_is._def.defaultValue : true}
+          defaultValue={fieldSchema && (doc.schema?.shape as any)?.as_is?._def?.defaultValue ? (doc.schema?.shape as any).as_is._def.defaultValue : true}
           render={({ field }) => (
             <div className="flex items-center space-x-2">
               <Switch
@@ -190,20 +200,20 @@ export default function FieldRenderer({ fieldKey, locale, doc }: FieldRendererPr
           className={cn("bg-background", fieldError && "border-destructive focus-visible:ring-destructive")}
           aria-invalid={!!fieldError}
         />
-      ) : fieldSchema?.type === 'select' && (fieldSchema.options || (doc.schema.shape as any)[fieldKey]?._def?.values) ? (
+      ) : fieldSchema?.type === 'select' && (fieldSchema.options || (doc.schema?.shape as any)?.[fieldKey]?._def?.values) ? (
         <Controller
           name={fieldKey as any}
           control={control}
           rules={{ required: fieldSchema?.required }}
-          defaultValue={(doc.schema.shape as any)[fieldKey]?._def?.defaultValue}
+          defaultValue={(doc.schema?.shape as any)?.[fieldKey]?._def?.defaultValue}
           render={({ field }) => (
             <Select onValueChange={field.onChange} value={field.value as string || undefined}>
               <SelectTrigger id={fieldKey} className={cn("bg-background", fieldError && "border-destructive focus:ring-destructive")} aria-invalid={!!fieldError}>
                 <SelectValue placeholder={placeholderText || t("Select...")} />
               </SelectTrigger>
               <SelectContent>
-                { (doc.schema.shape as any)[fieldKey]?._def?.values ? 
-                   (doc.schema.shape as any)[fieldKey]._def.values.map((opt: string) => (
+                { (doc.schema?.shape as any)?.[fieldKey]?._def?.values ? 
+                   ((doc.schema.shape as any)[fieldKey]._def.values as string[]).map((opt: string) => (
                     <SelectItem key={opt} value={opt}>{t(opt.replace(/_/g, ' '), opt.replace(/_/g, ' ').charAt(0).toUpperCase() + opt.replace(/_/g, ' ').slice(1))}</SelectItem>
                   ))
                   : fieldSchema.options?.map(opt => ( 
@@ -221,12 +231,7 @@ export default function FieldRenderer({ fieldKey, locale, doc }: FieldRendererPr
           className={cn("input bg-background", fieldError && "border-destructive focus-visible:ring-destructive")}
           inputMode={inputType === 'number' || inputType === 'tel' ? 'numeric' : undefined}
           aria-invalid={!!fieldError}
-          name={fieldKey} // Pass name directly for SmartInput to use with register
-          // {...register(fieldKey as any, { // register is now called inside SmartInput
-          //    required: fieldSchema?.required,
-          //    valueAsNumber: inputType === 'number',
-          //    onBlur: fieldKey === 'vin' ? (e) => decodeVin(e.target.value) : undefined,
-          // })}
+          name={fieldKey} 
         />
       )}
       {fieldKey === 'vin' && vinLoading && <p className="text-xs text-muted-foreground mt-1">Decoding VIN…</p>}
