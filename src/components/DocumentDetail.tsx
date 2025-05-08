@@ -1,63 +1,84 @@
 // src/components/DocumentDetail.tsx
 'use client';
 
-import Image from 'next/image';
+import React, { useEffect, useState } from 'react';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import { useTranslation } from 'react-i18next';
 import { documentLibrary, type LegalDocument } from '@/lib/document-library';
-import { Loader2, AlertTriangle } from 'lucide-react'; // Added AlertTriangle
-import React, { useEffect, useState } from 'react';
+import { Loader2, AlertTriangle } from 'lucide-react';
 
 interface DocumentDetailProps {
   docId: string;
   locale: 'en' | 'es';
-  altText?: string;
+  altText?: string; // Kept for potential future use, though not used for Markdown
 }
 
 export default function DocumentDetail({ docId, locale, altText }: DocumentDetailProps) {
   const { t } = useTranslation();
+  const [md, setMd] = useState<string>('');
   const [isLoading, setIsLoading] = useState(true);
-  const [imgError, setImgError] = useState(false);
-  const [attemptedImgSrc, setAttemptedImgSrc] = useState('');
+  const [error, setError] = useState<string | null>(null);
+  const [isHydrated, setIsHydrated = useState(false);
 
   const doc = documentLibrary.find((d: LegalDocument) => d.id === docId);
 
   useEffect(() => {
-    // Reset loading/error states when docId or locale changes
-    setIsLoading(true);
-    setImgError(false);
-    setAttemptedImgSrc(`/images/previews/${locale}/${docId}.png`); // Set imgSrc for potential error display
-  }, [docId, locale]);
+    setIsHydrated(true);
+  }, []);
 
-  if (!doc) {
-    // This case should ideally be caught by notFound() on the page level
+  useEffect(() => {
+    if (!doc || !isHydrated) return;
+
+    setIsLoading(true);
+    setError(null);
+    const templatePath = locale === 'es' && doc.templatePath_es ? doc.templatePath_es : doc.templatePath;
+
+    if (!templatePath) {
+      console.warn(`[DocumentDetail] No templatePath defined for docId: ${docId}, locale: ${locale}`);
+      setError(t('Preview not available for this document.', {defaultValue: 'Preview not available for this document.'}));
+      setIsLoading(false);
+      setMd(''); // Ensure md is cleared if no template path
+      return;
+    }
+    
+    // Ensure templatePath starts with a slash if it's a local path
+    const fetchPath = templatePath.startsWith('/') ? templatePath : `/${templatePath}`;
+
+    fetch(fetchPath)
+      .then((r) => {
+        if (!r.ok) {
+          throw new Error(
+            `Failed to fetch ${fetchPath} (${r.status} ${r.statusText})`
+          );
+        }
+        return r.text();
+      })
+      .then(setMd)
+      .catch((err) => {
+        console.error('[DocumentDetail] Error fetching Markdown:', err);
+        setError(err.message || t('Error loading preview content.', {defaultValue: 'Error loading preview content.'}));
+        setMd(''); // Clear markdown on error
+      })
+      .finally(() => setIsLoading(false));
+  }, [docId, locale, doc, isHydrated, t]);
+
+
+  if (!isHydrated || !doc) {
+    // Show a generic loading or a more specific "document not found" if !doc and hydrated
     return (
-      <div className="flex flex-col items-center justify-center text-destructive p-4 border rounded-lg bg-destructive/10 min-h-[300px]">
-        <AlertTriangle className="h-8 w-8 mb-2" />
-        <p className="font-semibold">{t('Document configuration not found for ID:', {defaultValue: 'Document configuration not found for ID:'})} {docId}</p>
+      <div className="flex flex-col items-center justify-center text-muted-foreground p-4 border rounded-lg bg-muted min-h-[300px]">
+        <Loader2 className="h-8 w-8 animate-spin mb-2" />
+        <p>{t('Loading document details...', {defaultValue: 'Loading document details...'})}</p>
       </div>
     );
   }
-
-  const imgSrc = `/images/previews/${locale}/${docId}.png`;
-  // Use doc.name (or its translation) for a more descriptive default alt text
+  
   const documentDisplayName = locale === 'es' && doc.name_es ? doc.name_es : doc.name;
-  const fallbackAlt = altText ?? `${documentDisplayName} ${t('preview.watermark', 'preview')}`;
-
-
-  const handleImageLoad = () => {
-    setIsLoading(false);
-    setImgError(false);
-  };
-
-  const handleImageError = () => {
-    setIsLoading(false);
-    setImgError(true);
-    console.warn(`[DocumentDetail] Preview image not found or failed to load: ${attemptedImgSrc}`);
-  };
 
   return (
     <div
-      className="relative w-full h-auto max-w-[850px] mx-auto border shadow-md bg-white overflow-hidden select-none aspect-[8.5/11]"
+      className="relative w-full h-auto min-h-[500px] md:min-h-[650px] max-w-[850px] mx-auto border shadow-md bg-white overflow-hidden select-none aspect-[8.5/11]"
       style={{
         WebkitUserSelect: 'none',
         MozUserSelect: 'none',
@@ -65,49 +86,41 @@ export default function DocumentDetail({ docId, locale, altText }: DocumentDetai
         userSelect: 'none',
       }}
     >
-      {/* Watermark */}
       <div className="absolute inset-0 z-10 pointer-events-none flex items-center justify-center">
         <span
           className="text-6xl font-bold text-gray-300 opacity-25 rotate-[315deg]"
-          style={{ fontSize: '5rem' }} // Consistent with previous styling
+          style={{ fontSize: '5rem' }}
         >
-          {t('preview.watermark', {defaultValue: 'PREVIEW'})}
+          {t('preview.watermark', { defaultValue: 'PREVIEW' })}
         </span>
       </div>
 
-      {/* Loading State */}
       {isLoading && (
         <div className="absolute inset-0 flex flex-col items-center justify-center bg-muted/70 z-20">
           <Loader2 className="h-8 w-8 animate-spin text-primary mb-2" />
-          <p className="text-sm text-muted-foreground">{t('Loading preview...', {defaultValue: 'Loading preview...'})}</p>
+          <p className="text-sm text-muted-foreground">{t('Loading preview...', { defaultValue: 'Loading preview...' })}</p>
         </div>
       )}
 
-      {/* Error State */}
-      {!isLoading && imgError && (
+      {!isLoading && error && (
          <div className="absolute inset-0 flex flex-col items-center justify-center bg-destructive/5 z-20 p-4 text-center">
            <AlertTriangle className="h-8 w-8 text-destructive mb-2" />
-           <p className="text-destructive text-sm font-semibold">{t('Preview image failed to load.', {defaultValue: 'Preview image failed to load.'})}</p>
-           <p className="text-xs text-muted-foreground mt-1">
-             {t('Attempted path:', {defaultValue: 'Attempted path:'})} <code className="text-xs bg-muted p-0.5 rounded">{attemptedImgSrc}</code>
-            </p>
+           <p className="text-destructive text-sm font-semibold">{t('Error loading preview', {defaultValue: 'Error loading preview'})}</p>
+           <p className="text-xs text-muted-foreground mt-1">{error}</p>
          </div>
       )}
+      
+      {!isLoading && !error && md && (
+        <div className="prose prose-sm dark:prose-invert max-w-none w-full h-full overflow-y-auto p-4 md:p-6 relative z-0">
+           <ReactMarkdown remarkPlugins={[remarkGfm]}>{md}</ReactMarkdown>
+        </div>
+      )}
 
-      {/* Image - hidden if loading or error to prevent broken image icon */}
-      <Image
-        src={imgSrc}
-        alt={fallbackAlt}
-        width={850}
-        height={1100}
-        className="w-full h-auto relative z-0 object-contain"
-        priority // Preload if it's LCP
-        onLoad={handleImageLoad}
-        onError={handleImageError}
-        unoptimized={process.env.NODE_ENV === 'development'} // Useful for local dev
-        data-ai-hint="document template screenshot"
-        style={{ visibility: isLoading || imgError ? 'hidden' : 'visible' }} // Control visibility
-      />
+      {!isLoading && !error && !md && (
+         <div className="absolute inset-0 flex flex-col items-center justify-center text-muted-foreground z-20 p-4 text-center">
+            <p>{t('Preview content is not available for this document.', {defaultValue: 'Preview content is not available for this document.'})}</p>
+         </div>
+      )}
     </div>
   );
 }
