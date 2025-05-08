@@ -1,4 +1,4 @@
-// src/utils/vin.ts
+// src/utils/isValidVIN.ts
 
 /**
  * Basic VIN validation.
