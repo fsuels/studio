@@ -1,3 +1,4 @@
+// src/components/AddressField.tsx
 'use client';
 import { useEffect, useRef } from 'react';
 import { useFormContext } from 'react-hook-form';
@@ -7,7 +8,7 @@ import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 
 interface AddressFieldProps {
-  inputNamePrefix?: string;
+  inputNamePrefix?: string; // e.g., "seller" or "buyer" to create "seller_address"
   label?: string;
   required?: boolean;
   error?: string;
@@ -16,18 +17,20 @@ interface AddressFieldProps {
 
 
 export function AddressField({ inputNamePrefix = "", label, required, error }: AddressFieldProps) {
-  const { register, setValue, formState: { errors } } = useFormContext();
+  const { register, setValue, formState: { errors: formErrors } } = useFormContext(); // Renamed errors to formErrors
   const inputRef = useRef<HTMLInputElement>(null);
 
+  // Construct field names based on prefix
   const baseFieldName = inputNamePrefix ? `${inputNamePrefix}_address` : "address";
   const streetFieldName = inputNamePrefix ? `${inputNamePrefix}_street` : "street";
   const cityFieldName = inputNamePrefix ? `${inputNamePrefix}_city` : "city";
   const stateFieldName = inputNamePrefix ? `${inputNamePrefix}_state` : "state";
-  const postalCodeFieldName = inputNamePrefix ? `${inputNamePrefix}_postalCode` : "postalCode";
+  const postalCodeFieldName = inputNamePrefix ? `${inputNamePrefix}_postalCode` : "postalCode"; // Corrected: postalCode
   const countryFieldName = inputNamePrefix ? `${inputNamePrefix}_country` : "country";
 
+
   useEffect(() => {
-    let autocomplete: google.maps.places.Autocomplete | undefined;
+    let autocomplete: google.maps.places.Autocomplete | undefined; // Corrected type
 
     (async () => {
       if (!(window as any).google?.maps?.places) {
@@ -42,14 +45,16 @@ export function AddressField({ inputNamePrefix = "", label, required, error }: A
 
       try {
         // APILoader should make google.maps.places.Autocomplete available
-        autocomplete = new google.maps.places.Autocomplete(inputRef.current!, {
-          fields: ['address_components', 'formatted_address', 'name'], 
+        autocomplete = new google.maps.places.Autocomplete(inputRef.current!, { // Added non-null assertion
+          fields: ['address_components', 'formatted_address', 'name'], // Removed geometry as it's not used
           types: ['address'],
         });
 
         autocomplete.addListener('place_changed', () => {
-          const place = autocomplete!.getPlace();
+          const place = autocomplete!.getPlace(); // Added non-null assertion
           if (!place.address_components) {
+            // If place has no address_components, it might be a business or just a name.
+            // Clear dependent fields if the input is also cleared, otherwise leave as is.
             if (!inputRef.current?.value) {
                 setValue(streetFieldName, '');
                 setValue(cityFieldName, '');
@@ -64,8 +69,8 @@ export function AddressField({ inputNamePrefix = "", label, required, error }: A
           const wanted = new Set([
             'street_number',
             'route',
-            'locality', 
-            'administrative_area_level_1', 
+            'locality', // City
+            'administrative_area_level_1', // State
             'postal_code',
             'postal_code_suffix',
             'country',
@@ -77,6 +82,7 @@ export function AddressField({ inputNamePrefix = "", label, required, error }: A
             if (wanted.has(type)) parts[type] = c.short_name; 
           });
           
+          // Construct street from street_number and route, or use place.name as fallback
           const streetValue = `${parts.street_number ?? ''} ${parts.route ?? ''}`.trim() || place.name || '';
           
           setValue(streetFieldName, streetValue, { shouldValidate: true, shouldDirty: true });
@@ -94,26 +100,31 @@ export function AddressField({ inputNamePrefix = "", label, required, error }: A
               inputRef.current.value = place.formatted_address; // Also directly set input value if needed
             }
           } else {
+             // Fallback if formatted_address is not available, use the constructed street value
              setValue(baseFieldName, streetValue, { shouldValidate: true, shouldDirty: true });
           }
         });
       } catch (e) {
         console.error("Error loading Google Maps Places Autocomplete library:", e);
+        // Potentially set an error state here to inform the user
       }
     })();
 
     return () => {
+      // Cleanup: remove listeners and PAC container if it exists
       if (autocomplete) {
-        autocomplete.unbindAll();
+        autocomplete.unbindAll(); // Remove all listeners from the Autocomplete instance
+        // Remove the PAC container from the DOM
         const pacContainers = document.querySelectorAll('.pac-container');
         pacContainers.forEach(container => container.remove());
       }
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [baseFieldName, streetFieldName, cityFieldName, stateFieldName, postalCodeFieldName, countryFieldName, setValue]); 
+  }, [baseFieldName, streetFieldName, cityFieldName, stateFieldName, postalCodeFieldName, countryFieldName, setValue]); // Dependencies for useEffect
 
+  // Get RHF registration props, separating ref
   const { ref: rhfRef, ...restOfRegister } = register(baseFieldName); // Register the main address field
-  const fieldErrorActual = errors[baseFieldName]?.message || error;
+  const fieldErrorActual = formErrors[baseFieldName]?.message || error;
 
 
   return (
@@ -122,13 +133,13 @@ export function AddressField({ inputNamePrefix = "", label, required, error }: A
       <Input
         id={baseFieldName}
         ref={(e) => {
-          rhfRef(e);
-          inputRef.current = e;
+          rhfRef(e); // Pass the element to RHF's ref
+          inputRef.current = e; // Also assign to local inputRef
         }}
-        {...restOfRegister}
+        {...restOfRegister} // Spread other RHF props (onChange, onBlur, name)
         className={cn("w-full", fieldErrorActual && "border-destructive focus-visible:ring-destructive")}
-        placeholder="123 Main St, City, State ZIP" 
-        autoComplete="off"
+        placeholder="123 Main St, City, State ZIP" // Generic placeholder
+        autoComplete="off" // Important to disable browser's own autocomplete
         aria-invalid={!!fieldErrorActual}
       />
       {fieldErrorActual && <p className="text-xs text-destructive mt-1">{String(fieldErrorActual)}</p>}
