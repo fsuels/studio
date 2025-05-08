@@ -1,10 +1,10 @@
 // src/components/ProgressStepper.tsx
 "use client";
 
-import React, { useState, useEffect } from 'react'; // Import useState and useEffect
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils';
-import { Check, Loader2 } from 'lucide-react'; // Import Check icon, Loader2
+import { Check, Loader2 } from 'lucide-react';
 
 interface ProgressStepperProps {
   currentStep: number; 
@@ -27,13 +27,12 @@ const ProgressStepper: React.FC<ProgressStepperProps> = ({ currentStep }) => {
   const progressPercent = ((currentStep -1) / (STEPS.length -1 )) * 100; 
 
   if (!isHydrated) {
-    // Render a simple placeholder or loader during hydration phase
     return (
-      <nav aria-label="Progress" className="stepper py-4">
+      <nav aria-label="Progress" className="stepper sticky top-0 z-30 bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60 py-4 opacity-50">
         <div className="progress-bar block sm:hidden bg-muted h-1 rounded-full">
-            <div className="bg-primary h-full rounded-full" style={{ width: `0%` }} /> {/* Start at 0% before hydration */}
+            <div className="bg-primary h-full rounded-full" style={{ width: `0%` }} /> 
         </div>
-        <ol role="list" className="hidden sm:flex items-center justify-between space-x-2 md:space-x-4 w-full opacity-50">
+        <ol role="list" className="hidden sm:flex items-center justify-between space-x-2 md:space-x-4 w-full overflow-x-auto scrollbar-hide py-2 md:justify-center">
             {STEPS.map((step) => (
                 <li key={step.id} className={cn("stepper__item relative flex-1")}>
                     <div className="stepper__number flex h-10 w-10 items-center justify-center rounded-full border-2 border-border bg-muted text-muted-foreground">
@@ -47,11 +46,11 @@ const ProgressStepper: React.FC<ProgressStepperProps> = ({ currentStep }) => {
   }
 
   return (
-    <nav aria-label="Progress" className="stepper">
-       <div className="progress-bar block sm:hidden">
-            <div style={{ width: `${progressPercent}%` }} />
+    <nav aria-label="Progress" className="stepper sticky top-0 z-30 bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+       <div className="progress-bar block sm:hidden h-1 bg-muted rounded-full overflow-hidden">
+            <div className="bg-primary h-full rounded-full transition-all duration-300" style={{ width: `${progressPercent}%` }} />
         </div>
-       <ol role="list" className="hidden sm:flex items-center justify-between space-x-2 md:space-x-4 w-full">
+       <ol role="list" className="hidden sm:flex items-center justify-between space-x-2 md:space-x-4 w-full overflow-x-auto scrollbar-hide py-2 md:justify-center">
         {STEPS.map((step, index) => (
           <li key={step.id} className={cn("stepper__item relative flex-1", index < STEPS.length - 1 ? "pr-8 sm:pr-12" : "")}>
             <div

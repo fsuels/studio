@@ -180,8 +180,8 @@
 
   /* Stepper styles from previous commit */
   .stepper {
-    @apply sticky top-0 bg-background z-20 py-2 flex justify-between items-center px-2 border-b border-border shadow-sm;
     /* Ensure stepper uses background color for light/dark mode */
+    /* Sticky behavior is now managed directly in the ProgressStepper component with Tailwind classes */
   }
   .stepper__item {
     @apply flex-1 text-center; /* Basic styling, can be enhanced */
@@ -202,10 +202,10 @@
     @apply text-xs;
   }
   .progress-bar {
-    @apply flex-1 mx-4 bg-muted h-1 rounded overflow-hidden sm:hidden; /* Show only on mobile */
+     /* Styles are now in ProgressStepper.tsx for mobile progress bar */
   }
   .progress-bar > div {
-     @apply bg-primary h-full transition-all duration-300;
+     /* Styles are now in ProgressStepper.tsx */
   }
 
 
@@ -240,12 +240,8 @@
   }
 
   /* Mobile progress bar - ensure it's part of stepper or handled in ProgressStepper.tsx */
-  .progress-bar {
-    @apply block sm:hidden h-1 bg-muted rounded-full overflow-hidden;
-  }
-  .progress-bar > div {
-    @apply bg-primary h-full transition-all;
-  }
+  /* .progress-bar is now styled within ProgressStepper for mobile */
+
 
   /* New Stepper Styles */
   .step-circle {
