@@ -8,11 +8,12 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox"; 
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"; // Added RadioGroup and RadioGroupItem
 import type { LegalDocument, Question } from '@/lib/document-library';
 import { useNotary } from '@/hooks/useNotary';
 import { cn } from '@/lib/utils';
 import { useTranslation } from 'react-i18next';
-import { prettify } from '@/lib/schema-utils'; // Import prettify
+import { prettify } from '@/lib/schema-utils'; 
 
 interface FieldRendererProps {
   fieldKey: string;
@@ -25,7 +26,7 @@ export default function FieldRenderer({ fieldKey, locale, doc }: FieldRendererPr
   const { t } = useTranslation();
   
   const fieldSchema = doc.questions?.find(q => q.id === fieldKey) || 
-                      (doc.schema && typeof doc.schema.shape === 'object' && doc.schema.shape && doc.schema.shape[fieldKey] ? 
+                      (doc.schema && typeof doc.schema.shape === 'object' && doc.schema.shape && (doc.schema.shape as any)[fieldKey] ? 
                         { id: fieldKey, label: prettify(fieldKey) , type: 'text', ...((doc.schema.shape as any)[fieldKey]._def) } : undefined);
 
 
@@ -73,11 +74,11 @@ export default function FieldRenderer({ fieldKey, locale, doc }: FieldRendererPr
   const fieldError = errors[fieldKey];
 
   let inputType: React.HTMLInputTypeAttribute = 'text';
-  if (fieldSchema.type === 'number' || fieldKey === 'vehicle_year' || fieldKey === 'odometer' || fieldKey === 'payment_price' || fieldKey === 'principalAmount' || fieldKey === 'interestRate' || fieldKey === 'durationMonths' || fieldKey === 'monthly_rent' || fieldKey === 'security_deposit' || fieldKey === 'lease_term' || fieldKey === 'termYears' || fieldKey === 'amountDue') {
+  if (fieldSchema.type === 'number' || fieldKey === 'vehicle_year' || fieldKey === 'odometer' || fieldKey === 'price' || fieldKey === 'principalAmount' || fieldKey === 'interestRate' || fieldKey === 'durationMonths' || fieldKey === 'monthly_rent' || fieldKey === 'security_deposit' || fieldKey === 'lease_term' || fieldKey === 'termYears' || fieldKey === 'amountDue') {
     inputType = 'number';
   } else if (fieldSchema.type === 'date') {
     inputType = 'date';
-  } else if (fieldKey.endsWith('_phone') || name.endsWith('Phone')) {
+  } else if (fieldKey.endsWith('_phone') || fieldKey.endsWith('Phone')) { // Use fieldKey consistently
     inputType = 'tel';
   }
 
@@ -88,7 +89,32 @@ export default function FieldRenderer({ fieldKey, locale, doc }: FieldRendererPr
         {labelText} {fieldSchema.required && <span className="text-destructive">*</span>}
       </Label>
       
-      {fieldSchema.type === 'textarea' ? (
+      {fieldKey === 'odo_status' ? (
+        <Controller
+          control={control}
+          name="odo_status"
+          render={({ field }) => (
+            <RadioGroup
+              onValueChange={field.onChange}
+              defaultValue={field.value}
+              className={cn("space-y-2", fieldError && "border-destructive focus-visible:ring-destructive")}
+            >
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="ACTUAL" id="odo_actual" />
+                <Label htmlFor="odo_actual" className="font-normal">{t('fields.odo_status.actual', 'Actual mileage')}</Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="EXCEEDS" id="odo_exceeds" />
+                <Label htmlFor="odo_exceeds" className="font-normal">{t('fields.odo_status.exceeds', 'Exceeds mechanical limits')}</Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="NOT_ACTUAL" id="odo_not_actual" />
+                <Label htmlFor="odo_not_actual" className="font-normal">{t('fields.odo_status.not_actual', 'Not actual mileage')}</Label>
+              </div>
+            </RadioGroup>
+          )}
+        />
+      ) : fieldSchema.type === 'textarea' ? (
         <Textarea
           id={fieldKey}
           placeholder={placeholderText}

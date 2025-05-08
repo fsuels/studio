@@ -629,7 +629,32 @@
    "API Error Occurred": "API Error Occurred",
    "Loading...": "Loading...",
    "Search all documents...": "Search all documents...",
-   "All States": "All States"
+   "All States": "All States",
+   "breadcrumb": {
+      "home": "Home",
+      "start": "Start"
+   },
+   "wizard": {
+      "next": "Next"
+   },
+   "fields": {
+      "sellerName": {
+          "label": "Seller's Full Name"
+      },
+      "sellerAddress": {
+          "label": "Seller's Full Address"
+      },
+      "odo_status": {
+        "actual": "Actual mileage",
+        "exceeds": "Exceeds mechanical limits",
+        "not_actual": "Not actual mileage"
+      }
+   },
+   "docDetail": {
+      "previewTitle": "Preview your document",
+      "previewSubtitle": "See exactly what your Bill of Sale will look like—and then click “Start for Free” to fill in your details.",
+      "startForFree": "Start for Free"
+   }
 }
 
     
