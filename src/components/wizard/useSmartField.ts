@@ -9,59 +9,12 @@ type HookProps = {
   setValue: UseFormSetValue<any>;
 };
 
-/** Autocomplete + masking for address, VIN, phone, color, year … */
+/** Autocomplete + masking for VIN, phone, color, year … */
 export const useSmartField = ({ name, watch, setValue }: HookProps): void => {
   const currentValue = watch(name);
 
-  // Address autocomplete (Google Places)
-  useEffect(() => {
-    if (name !== 'seller_address' && name !== 'buyer_address') return;
-
-    const inputEl = document.querySelector<HTMLInputElement>(`input[name="${name}"]`);
-    if (!inputEl) return;
-
-    let autocomplete: google.maps.places.Autocomplete | undefined;
-
-    const initAutocomplete = () => {
-      if (window.google && window.google.maps && window.google.maps.places && !autocomplete && inputEl) {
-        autocomplete = new google.maps.places.Autocomplete(inputEl, { types: ['address'] });
-        autocomplete.addListener('place_changed', () => {
-          const place = autocomplete!.getPlace();
-          setValue(name, place.formatted_address || '', { shouldValidate: true, shouldDirty: true, shouldTouch: true });
-        });
-      }
-    };
-
-    if (!(window as any)._googlePlacesScriptLoading && !(window as any)._googlePlaces) {
-      (window as any)._googlePlacesScriptLoading = true;
-      const script = document.createElement('script');
-      const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
-      if (!apiKey) {
-        console.warn("NEXT_PUBLIC_GOOGLE_MAPS_API_KEY is not set. Address autocomplete will not work.");
-        (window as any)._googlePlacesScriptLoading = false;
-        return;
-      }
-      script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places`;
-      script.async = true;
-      script.defer = true;
-      script.onload = () => {
-        (window as any)._googlePlaces = true;
-        (window as any)._googlePlacesScriptLoading = false;
-        initAutocomplete();
-      };
-      script.onerror = () => {
-        console.error("Failed to load Google Maps API script.");
-        (window as any)._googlePlacesScriptLoading = false;
-      }
-      document.head.appendChild(script);
-      // No cleanup needed for script tag added this way if it's meant to be global for the session
-    } else if ((window as any)._googlePlaces) {
-      initAutocomplete();
-    }
-    // If script is already loading, initAutocomplete will be called by its onload.
-
-  }, [name, setValue, watch]);
-
+  // Address autocomplete logic has been moved to the AddressField component
+  // which uses react-places-autocomplete.
 
   // Year – numeric only, 4 digits
   useEffect(() => {
@@ -122,11 +75,10 @@ export const useSmartField = ({ name, watch, setValue }: HookProps): void => {
               if (result.Make && (!watch('vehicle_make') || watch('vehicle_make') === '')) setValue('vehicle_make', result.Make, { shouldValidate: true, shouldDirty: true });
               if (result.Model && (!watch('vehicle_model') || watch('vehicle_model') === '')) setValue('vehicle_model', result.Model, { shouldValidate: true, shouldDirty: true });
               if (result.ModelYear && (!watch('vehicle_year') || watch('vehicle_year') === '')) setValue('vehicle_year', result.ModelYear, { shouldValidate: true, shouldDirty: true });
-              // Color is not typically in standard VIN decode, so it's omitted here.
             }
           })
           .catch(error => console.error('VIN decoding error:', error));
       }
     }
-  }, [currentValue, name, setValue, watch]); // Use currentValue to re-run effect when this field's value changes
+  }, [currentValue, name, setValue, watch]); 
 };

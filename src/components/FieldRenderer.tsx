@@ -4,12 +4,13 @@
 import React from 'react';
 import { useFormContext, Controller } from 'react-hook-form';
 import SmartInput from '@/components/wizard/SmartInput'; 
+import AddressField from '@/components/AddressField'; // Added AddressField import
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox"; 
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Switch } from "@/components/ui/switch"; // Added Switch import
+import { Switch } from "@/components/ui/switch"; 
 import type { LegalDocument, Question } from '@/lib/document-library';
 import { useNotary } from '@/hooks/useNotary';
 import { cn } from '@/lib/utils';
@@ -34,9 +35,32 @@ export default function FieldRenderer({ fieldKey, locale, doc }: FieldRendererPr
   const formStateCode = watch('stateCode'); 
   const { isRequired: notaryIsRequiredByState } = useNotary(formStateCode);
 
-  if (!fieldSchema && fieldKey !== 'as_is' && fieldKey !== 'warranty_text') { // Adjusted condition
-    if (fieldKey === 'notarizationToggle' && doc.offerNotarization) {
-      return (
+  if (!fieldSchema && fieldKey !== 'as_is' && fieldKey !== 'warranty_text' && fieldKey !== 'notarizationToggle') { 
+    console.warn(`Field schema not found for key: ${fieldKey} in document: ${doc.name}`);
+    return <p className="text-destructive">Configuration error: Field schema for "{fieldKey}" not found.</p>;
+  }
+  
+  const labelText = fieldSchema?.label ? t(fieldSchema.label, fieldSchema.label) : prettify(fieldKey);
+  const placeholderText = fieldSchema?.placeholder ? t(fieldSchema.placeholder, fieldSchema.placeholder) : '';
+  const fieldError = errors[fieldKey];
+
+  let inputType: React.HTMLInputTypeAttribute = 'text';
+  if (fieldSchema?.type === 'number' || fieldKey === 'vehicle_year' || fieldKey === 'odometer' || fieldKey === 'price' || fieldKey === 'principalAmount' || fieldKey === 'interestRate' || fieldKey === 'durationMonths' || fieldKey === 'monthly_rent' || fieldKey === 'security_deposit' || fieldKey === 'lease_term' || fieldKey === 'termYears' || fieldKey === 'amountDue') {
+    inputType = 'number';
+  } else if (fieldSchema?.type === 'date') {
+    inputType = 'date';
+  } else if (fieldKey.endsWith('_phone') || fieldKey.endsWith('Phone')) { 
+    inputType = 'tel';
+  }
+
+
+  return (
+    <div className="space-y-2">
+      <Label htmlFor={fieldKey} className={cn("font-medium", fieldError && "text-destructive")}>
+        {labelText} {fieldSchema?.required && <span className="text-destructive">*</span>}
+      </Label>
+      
+      {fieldKey === 'notarizationToggle' && doc.offerNotarization ? (
         <div className="space-y-2 pt-4 border-t mt-4">
           <div className="flex items-center space-x-2">
             <Controller
@@ -64,41 +88,15 @@ export default function FieldRenderer({ fieldKey, locale, doc }: FieldRendererPr
            {notaryIsRequiredByState && <p className="text-xs text-muted-foreground">{t('Notarization is required for {{stateCode}}.', {stateCode: formStateCode})}</p>}
            {!notaryIsRequiredByState && <p className="text-xs text-muted-foreground">{t('Notarization may incur an additional fee.')}</p>}
         </div>
-      );
-    }
-    console.warn(`Field schema not found for key: ${fieldKey} in document: ${doc.name}`);
-    return <p className="text-destructive">Configuration error: Field schema for "{fieldKey}" not found.</p>;
-  }
-  
-  const labelText = fieldSchema?.label ? t(fieldSchema.label, fieldSchema.label) : prettify(fieldKey);
-  const placeholderText = fieldSchema?.placeholder ? t(fieldSchema.placeholder, fieldSchema.placeholder) : '';
-  const fieldError = errors[fieldKey];
-
-  let inputType: React.HTMLInputTypeAttribute = 'text';
-  if (fieldSchema?.type === 'number' || fieldKey === 'vehicle_year' || fieldKey === 'odometer' || fieldKey === 'price' || fieldKey === 'principalAmount' || fieldKey === 'interestRate' || fieldKey === 'durationMonths' || fieldKey === 'monthly_rent' || fieldKey === 'security_deposit' || fieldKey === 'lease_term' || fieldKey === 'termYears' || fieldKey === 'amountDue') {
-    inputType = 'number';
-  } else if (fieldSchema?.type === 'date') {
-    inputType = 'date';
-  } else if (fieldKey.endsWith('_phone') || fieldKey.endsWith('Phone')) { 
-    inputType = 'tel';
-  }
-
-
-  return (
-    <div className="space-y-2">
-      <Label htmlFor={fieldKey} className={cn("font-medium", fieldError && "text-destructive")}>
-        {labelText} {fieldSchema?.required && <span className="text-destructive">*</span>}
-      </Label>
-      
-      {fieldKey === 'odo_status' ? (
+      ) : fieldKey === 'odo_status' ? (
         <Controller
           control={control}
           name="odo_status"
           render={({ field }) => (
             <RadioGroup
               onValueChange={field.onChange}
-              defaultValue={field.value as string | undefined} // Cast to string | undefined
-              value={field.value as string | undefined} // Ensure value is controlled
+              defaultValue={field.value as string | undefined}
+              value={field.value as string | undefined}
               className={cn("space-y-2", fieldError && "border-destructive focus-visible:ring-destructive")}
             >
               <div className="flex items-center space-x-2">
@@ -116,10 +114,11 @@ export default function FieldRenderer({ fieldKey, locale, doc }: FieldRendererPr
             </RadioGroup>
           )}
         />
-      ) : fieldKey === 'as_is' ? ( // Special handling for 'as_is'
+      ) : fieldKey === 'as_is' ? ( 
         <Controller
           name="as_is"
           control={control}
+          defaultValue={true} // Default to true for 'as_is'
           render={({field}) =>(
             <div className="flex items-center space-x-2">
               <Switch 
@@ -134,7 +133,7 @@ export default function FieldRenderer({ fieldKey, locale, doc }: FieldRendererPr
             </div>
           )}
         />
-      ) : fieldKey === 'warranty_text' ? ( // Special handling for 'warranty_text'
+      ) : fieldKey === 'warranty_text' ? ( 
          !watch('as_is') && (
           <Textarea 
             id={fieldKey}
@@ -143,7 +142,21 @@ export default function FieldRenderer({ fieldKey, locale, doc }: FieldRendererPr
             className={cn("bg-background", fieldError && "border-destructive focus-visible:ring-destructive")}
           />
         )
-      ) : fieldSchema?.type === 'textarea' ? (
+      ) : (fieldKey.includes('address') && (fieldSchema?.type === 'text' || fieldSchema?.type === 'textarea')) ? (
+        <Controller
+          name={fieldKey as any}
+          control={control}
+          rules={{ required: fieldSchema?.required }}
+          render={({ field }) => (
+            <AddressField
+              {...field}
+              placeholder={placeholderText || t('Enter address...')}
+              id={fieldKey}
+              className={cn(fieldError && "border-destructive focus-visible:ring-destructive")}
+            />
+          )}
+        />
+      ): fieldSchema?.type === 'textarea' ? (
         <Textarea
           id={fieldKey}
           placeholder={placeholderText}
@@ -152,7 +165,7 @@ export default function FieldRenderer({ fieldKey, locale, doc }: FieldRendererPr
         />
       ) : fieldSchema?.type === 'select' && fieldSchema.options ? (
         <Controller
-          name={fieldKey}
+          name={fieldKey as any}
           control={control}
           rules={{ required: fieldSchema?.required }}
           render={({ field }) => (

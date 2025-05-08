@@ -11,7 +11,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-// Removed Link import as we'll use programmatic navigation
 
 // Inline SVG Flags
 const FlagUS = () => (
@@ -64,11 +63,9 @@ export function LanguageSwitcher() {
   const { i18n, t } = useTranslation();
   const [isPopoverOpen, setIsPopoverOpen] = React.useState(false);
 
-  // Simplified currentDisplayLocale logic, directly relying on currentRouteLocale or fallback
   const currentDisplayLocale = currentRouteLocale || 'en';
 
   useEffect(() => {
-    // Sync i18n language with route locale if they differ
     if (currentRouteLocale && i18n.language !== currentRouteLocale) {
       i18n.changeLanguage(currentRouteLocale);
     }
@@ -86,9 +83,9 @@ export function LanguageSwitcher() {
     const queryString = searchParams.toString();
     const finalUrl = queryString ? `${newPathWithLocale}?${queryString}` : newPathWithLocale;
     
-    i18n.changeLanguage(newLocaleTarget); // Change i18n language client-side
+    i18n.changeLanguage(newLocaleTarget); 
     
-    router.push(finalUrl).then(() => router.refresh()); // ensures fresh i18n props
+    router.push(finalUrl).then(() => router.refresh()); // Added router.refresh()
 
     setIsPopoverOpen(false);
   };
