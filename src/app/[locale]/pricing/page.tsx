@@ -1,22 +1,25 @@
-// src/app/pricing/page.tsx
+// src/app/[locale]/pricing/page.tsx
 'use client'
 
 import { useTranslation } from 'react-i18next'
-import { Button } from '@/components/ui/button'; // Import Button
-import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card'; // Import Card components
-import { Check } from 'lucide-react'; // Import Check icon
-import Link from 'next/link'; // Import Link for navigation
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card'; 
+import { Check } from 'lucide-react'; 
+import Link from 'next/link'; 
+import { useParams } from 'next/navigation';
 
 export default function PricingPage() {
-  const { t } = useTranslation()
+  const { t } = useTranslation();
+  const params = useParams();
+  const locale = params.locale as 'en' | 'es';
 
   return (
     <main className="container mx-auto px-4 py-16 md:py-24 text-center">
       <h1 className="text-4xl md:text-5xl font-bold mb-4 text-foreground">
-        {t('pricing.title', 'Simple, Transparent Pricing')} {/* Default text */}
+        {t('pricing.title', 'Simple, Transparent Pricing')} 
       </h1>
       <p className="text-lg md:text-xl text-muted-foreground mb-12 max-w-2xl mx-auto">
-        {t('pricing.subtitle', 'Pay only for what you need. No hidden fees, no subscriptions required.')} {/* Default text */}
+        {t('pricing.subtitle', 'Pay only for what you need. No hidden fees, no subscriptions required.')} 
       </p>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
@@ -24,7 +27,7 @@ export default function PricingPage() {
         <Card className="shadow-lg rounded-xl bg-card border border-border transition-all hover:shadow-xl">
           <CardHeader className="pb-4">
             <CardTitle className="text-2xl font-semibold text-card-foreground">
-              {t('pricing.plans.single.title', 'Single Document')} {/* Default text */}
+              {t('pricing.plans.single.title', 'Single Document')} 
             </CardTitle>
             <CardDescription className="text-muted-foreground">
                 {t('pricing.plans.single.description', 'Perfect for one-off needs.')}
@@ -44,7 +47,7 @@ export default function PricingPage() {
           </CardContent>
           <CardFooter>
             <Button asChild className="w-full bg-primary hover:bg-primary/90 text-primary-foreground">
-              <Link href="/#workflow-start">{t('pricing.cta', 'Get Started')}</Link>
+              <Link href={`/${locale}/#workflow-start`}>{t('pricing.cta', 'Get Started')}</Link>
             </Button>
           </CardFooter>
         </Card>
@@ -54,9 +57,9 @@ export default function PricingPage() {
            <div className="absolute top-0 right-0 bg-primary text-primary-foreground px-3 py-1 text-xs font-bold rounded-bl-lg">
              {t('pricing.mostPopular', 'Most Popular')}
            </div>
-          <CardHeader className="pb-4 pt-10"> {/* Added padding top */}
+          <CardHeader className="pb-4 pt-10"> 
             <CardTitle className="text-2xl font-semibold text-card-foreground">
-              {t('pricing.plans.bundle.title', 'Document Bundle')} {/* Default text */}
+              {t('pricing.plans.bundle.title', 'Document Bundle')} 
             </CardTitle>
              <CardDescription className="text-muted-foreground">
                  {t('pricing.plans.bundle.description', 'Ideal for multiple related documents.')}
@@ -76,7 +79,7 @@ export default function PricingPage() {
           </CardContent>
           <CardFooter>
             <Button asChild className="w-full bg-primary hover:bg-primary/90 text-primary-foreground">
-              <Link href="/#workflow-start">{t('pricing.cta', 'Get Started')}</Link>
+              <Link href={`/${locale}/#workflow-start`}>{t('pricing.cta', 'Get Started')}</Link>
             </Button>
           </CardFooter>
         </Card>
@@ -85,7 +88,7 @@ export default function PricingPage() {
         <Card className="shadow-lg rounded-xl bg-card border border-border transition-all hover:shadow-xl">
           <CardHeader className="pb-4">
             <CardTitle className="text-2xl font-semibold text-card-foreground">
-              {t('pricing.plans.unlimited.title', 'Business Pro')} {/* Changed Name */}
+              {t('pricing.plans.unlimited.title', 'Business Pro')} 
             </CardTitle>
              <CardDescription className="text-muted-foreground">
                  {t('pricing.plans.unlimited.description', 'For frequent users &amp; businesses.')}
@@ -105,16 +108,15 @@ export default function PricingPage() {
           </CardContent>
           <CardFooter>
              <Button asChild variant="outline" className="w-full border-primary text-primary hover:bg-primary/10">
-               <Link href="/support">{t('pricing.ctaContact', 'Contact Sales')}</Link>
+               <Link href={`/${locale}/support`}>{t('pricing.ctaContact', 'Contact Sales')}</Link>
              </Button>
           </CardFooter>
         </Card>
       </div>
 
       <p className="text-sm text-muted-foreground mt-12 italic">
-         🛡️ {t('pricing.guarantee', '100% Satisfaction Guarantee or Your Money Back on single/bundle purchases.')} {/* Default text */}
+         🛡️ {t('pricing.guarantee', '100% Satisfaction Guarantee or Your Money Back on single/bundle purchases.')} 
       </p>
     </main>
   )
 }
-

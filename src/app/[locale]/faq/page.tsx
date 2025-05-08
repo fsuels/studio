@@ -1,27 +1,25 @@
-// app/faq/page.tsx
+// src/app/[locale]/faq/page.tsx
 'use client'
 
-import { useState, useEffect } from 'react' // Import useEffect
+import { useState, useEffect } from 'react' 
 import { useTranslation } from 'react-i18next'
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@/components/ui/accordion" // Use ShadCN Accordion
+} from "@/components/ui/accordion" 
 
 export default function FAQPage() {
   const { t } = useTranslation()
-  const [isHydrated, setIsHydrated] = useState(false); // State for hydration
+  const [isHydrated, setIsHydrated] = useState(false); 
 
   useEffect(() => {
-    setIsHydrated(true); // Set hydrated state on client
+    setIsHydrated(true); 
   }, []);
 
-  // Define number of questions directly (or fetch from backend)
   const questions = Array.from({ length: 6 }, (_, i) => i + 1)
 
-  // Placeholder text while hydrating
   const placeholderTitle = "Frequently Asked Questions";
   const placeholderSubtitle = "Find answers to common questions below.";
   const placeholderQuestion = "Loading question...";

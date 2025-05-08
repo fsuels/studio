@@ -1,7 +1,7 @@
 // src/app/[locale]/docs/[docId]/page.tsx
 'use client';
 
-import { useParams, notFound, useRouter } from 'next/navigation'; 
+import { useParams, notFound } from 'next/navigation'; 
 import { documentLibrary, type LegalDocument } from '@/lib/document-library'; 
 import { useTranslation } from 'react-i18next';
 import Link from 'next/link';
@@ -25,8 +25,8 @@ const DocumentDetail = dynamic(() => import('@/components/DocumentDetail'), {
 
 export default function DocPage() {
   const params = useParams();
-  const { t, i18n } = useTranslation(); // Added i18n for current language access
-  const router = useRouter(); 
+  const { t, i18n } = useTranslation(); 
+  // const router = useRouter(); // Removed unused router
 
   const currentLocale = (Array.isArray(params.locale) ? params.locale[0] : params.locale) as 'en' | 'es' | undefined;
   const docId = Array.isArray(params.docId) ? params.docId[0] : params.docId as string | undefined;
@@ -48,7 +48,6 @@ export default function DocPage() {
     setIsLoading(false);
   }, [docId]);
 
-  // Effect to sync i18next language with URL locale, if they differ
   useEffect(() => {
     if (currentLocale && i18n.language !== currentLocale) {
       i18n.changeLanguage(currentLocale);
@@ -102,7 +101,7 @@ export default function DocPage() {
                 </Button>
             </div>
             <div className="lg:order-1">
-                 <DocumentDetail locale={currentLocale as 'en' | 'es'} docId={docId} />
+                 <DocumentDetail locale={currentLocale as 'en' | 'es'} docId={docId} altText={`${documentDisplayName} preview`} />
             </div>
         </div>
     </main>

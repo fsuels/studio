@@ -2,7 +2,7 @@
 import type { Metadata } from 'next'; 
 import { Geist, Geist_Mono } from 'next/font/google'; 
 import './globals.css'; 
-import { ClientProviders } from '@/components/providers/ClientProviders'; 
+// ClientProviders is removed from here, will be in [locale]/layout.tsx
 import React from 'react'; 
 
 const geistSans = Geist({
@@ -31,9 +31,8 @@ export default function RootLayout({
           <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen overflow-x-hidden`}>
-          <ClientProviders>
-            {children}
-          </ClientProviders>
+          {/* ClientProviders will be inside the [locale] segment's layout */}
+          {children}
       </body>
     </html>
   );

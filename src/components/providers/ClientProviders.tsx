@@ -6,17 +6,15 @@ import I18nClientProvider from '@/components/providers/I18nProvider';
 import { Toaster } from "@/components/ui/toaster";
 import { Layout } from '@/components/layout/Layout'; 
 import { CartProvider } from '@/contexts/CartProvider'; 
-// ThemeProvider is now in RootLayout, so it's removed from here.
-// No need for isClient state here for gating ThemeProvider or I18nClientProvider directly.
-// Component-level isHydrated checks will handle client-specific rendering for translations.
 
 interface ClientProvidersProps {
   children: ReactNode;
+  locale: 'en' | 'es'; // Add locale prop
 }
 
-export function ClientProviders({ children }: ClientProvidersProps) {
+export function ClientProviders({ children, locale }: ClientProvidersProps) {
   return (
-    <I18nClientProvider> {/* I18nProvider is always rendered */}
+    <I18nClientProvider locale={locale}> {/* Pass locale to I18nProvider */}
       <CartProvider>
         <Layout>
           {children}

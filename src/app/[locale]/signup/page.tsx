@@ -1,4 +1,4 @@
-// src/app/signup/page.tsx
+// src/app/[locale]/signup/page.tsx
 'use client';
 
 import React from 'react';
@@ -9,9 +9,12 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import Link from 'next/link';
 import { Logo } from '@/components/layout/Logo';
+import { useParams } from 'next/navigation';
 
 export default function SignUpPage() {
   const { t } = useTranslation();
+  const params = useParams();
+  const locale = params.locale as 'en' | 'es';
 
   return (
     <main className="container mx-auto px-4 py-8 md:py-12 flex flex-col items-center justify-center min-h-[calc(100vh-8rem)]">
@@ -40,7 +43,7 @@ export default function SignUpPage() {
         <CardFooter className="flex flex-col gap-4">
           <Button className="w-full bg-primary text-primary-foreground hover:bg-primary/90">{t('Create Account')}</Button>
           <p className="text-xs text-muted-foreground text-center">
-            {t('Already have an account?')} <Link href="/signin" className="underline text-primary hover:text-primary/80">{t('Sign In')}</Link>
+            {t('Already have an account?')} <Link href={`/${locale}/signin`} className="underline text-primary hover:text-primary/80">{t('Sign In')}</Link>
           </p>
         </CardFooter>
       </Card>

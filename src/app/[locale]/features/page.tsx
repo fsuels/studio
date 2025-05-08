@@ -1,8 +1,8 @@
-// app/features/page.tsx
+// src/app/[locale]/features/page.tsx
 'use client'
 
 import { useTranslation } from 'react-i18next'
-import { Bot, ListChecks, Building, Languages, FileText, Share2, LayoutDashboard, ShieldCheck } from 'lucide-react'; // Import icons
+import { Bot, ListChecks, Building, Languages, FileText, Share2, LayoutDashboard, ShieldCheck } from 'lucide-react'; 
 
 export default function FeaturesPage() {
   const { t } = useTranslation()
@@ -26,7 +26,6 @@ export default function FeaturesPage() {
   )
 }
 
-// Use ReactNode for icon to allow Lucide components
 function Feature({ icon, title, desc }: { icon: React.ReactNode; title: string; desc: string }) {
   return (
     <div className="bg-card rounded-2xl p-6 shadow-lg hover:shadow-xl transition border border-border">
