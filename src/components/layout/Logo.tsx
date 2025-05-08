@@ -24,58 +24,58 @@ export function Logo({ wrapperClassName, className, ...props }: LogoProps) {
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 130 40" 
+        viewBox="0 0 130 40" // Adjusted viewBox to better fit the new logo's aspect ratio
         fill="none"
-        className={cn("h-10 w-auto", className)} // Increased height from h-9 to h-10, removed explicit width/height attributes
+        className={cn("h-10 w-auto", className)} // Retained h-10, width will scale
         aria-hidden="true"
         {...props} 
       >
-        {/* Document Icon Background - Light Teal */}
+        {/* Document Icon Background - Light Teal from image: approx #A0D2DB */}
         <path 
           d="M5 2C3.34315 2 2 3.34315 2 5V35C2 36.6569 3.34315 38 5 38H35C36.6569 38 38 36.6569 38 35V12L28 2H5Z" 
-          fill="#A0D2DB" // Light teal for document body - approximate from image
+          fill="#A0D2DB" 
         />
-        {/* Document Fold - Slightly Darker Teal */}
+        {/* Document Fold - Slightly Darker Teal for fold - approx #7FA8B0 (slightly darker than #A0D2DB) */}
         <path 
           d="M28 2V12H38" 
-          fill="#7FA8B0" // Slightly darker teal for fold - approximate
+          fill="#7FA8B0" 
         />
-         {/* Justice Scale - Darker Teal */}
-        <g fill="#005A5B"> {/* Darker Teal/Blue for scale - approximate */}
+         {/* Justice Scale - Darker Teal/Blue from image: approx #005A5B */}
+        <g fill="#005A5B">
           {/* Base of the scale */}
-          <path d="M20 27V14H21V27H20Z" /> 
+          <rect x="19.5" y="14" width="1" height="13" rx="0.5"/>
           {/* Beam of the scale */}
-          <path d="M12 14H29V15H12V14Z" /> 
+          <rect x="12" y="13.5" width="16" height="1" rx="0.5"/>
           {/* Left Pan support */}
-          <path d="M14 15V17L12 18V17L14 15Z" />
+          <path d="M14.5 14.5L12.5 15.5V16.5L14.5 17.5V14.5Z" />
           {/* Right Pan support */}
-          <path d="M27 15V17L29 18V17L27 15Z" />
+          <path d="M25.5 14.5L27.5 15.5V16.5L25.5 17.5V14.5Z" />
           {/* Left Pan */}
-          <path d="M10 19C10 18.4477 10.4477 18 11 18H15C15.5523 18 16 18.4477 16 19V21C16 22.1046 15.1046 23 14 23H12C10.8954 23 10 22.1046 10 21V19Z" />
+          <path d="M10 18.5C10 17.9477 10.4477 17.5 11 17.5H15C15.5523 17.5 16 17.9477 16 18.5V20.5C16 21.3284 15.3284 22 14.5 22H11.5C10.6716 22 10 21.3284 10 20.5V18.5Z" />
           {/* Right Pan */}
-          <path d="M25 19C25 18.4477 25.4477 18 26 18H30C30.5523 18 31 18.4477 31 19V21C31 22.1046 30.1046 23 29 23H27C25.8954 23 25 22.1046 25 21V19Z" />
+          <path d="M24 18.5C24 17.9477 24.4477 17.5 25 17.5H29C29.5523 17.5 30 17.9477 30 18.5V20.5C30 21.3284 29.3284 22 28.5 22H25.5C24.6716 22 24 21.3284 24 20.5V18.5Z" />
         </g>
         
-        {/* Text Part - Using approximate dark blue/black color from image */}
+        {/* Text Part - Using approximate dark blue/black color from image: approx #1A2B3C (matches --foreground dark) */}
         {/* "123" - Lighter weight */}
         <text 
             x="48" 
-            y="27" 
-            fontFamily="Inter, sans-serif" // Using Inter as specified in globals.css as a base
-            fontSize="18" 
-            fontWeight="300" // Lighter weight
-            fill="hsl(var(--foreground))" // Use theme foreground color
+            y="19" // Adjusted Y for vertical centering with new text
+            fontFamily="Inter, sans-serif"
+            fontSize="17" // Slightly increased for better balance
+            fontWeight="300" 
+            fill="hsl(var(--foreground))" 
         >
             123
         </text>
         {/* "LegalDoc" - Bolder weight */}
          <text 
-            x="80" 
-            y="27" 
+            x="48" 
+            y="34" // Adjusted Y for second line
             fontFamily="Inter, sans-serif"
-            fontSize="18" 
-            fontWeight="600" // Bolder weight
-            fill="hsl(var(--foreground))" // Use theme foreground color
+            fontSize="17" // Slightly increased
+            fontWeight="600" 
+            fill="hsl(var(--foreground))"
         >
             LegalDoc
         </text>
