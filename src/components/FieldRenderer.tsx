@@ -1,22 +1,22 @@
 // src/components/FieldRenderer.tsx
 'use client';
 
-import React, { useEffect } from 'react'; // Added useEffect
+import React, { useEffect } from 'react'; 
 import { useFormContext, Controller } from 'react-hook-form';
 import SmartInput from '@/components/wizard/SmartInput';
-import { AddressField } from '@/components/AddressField';
+import AddressField from '@/components/form/AddressField'; // Updated import path
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Switch } from "@/components/ui/switch";
-import type { LegalDocument } from '@/lib/document-library'; // Removed Question type as it's part of LegalDocument
+import type { LegalDocument } from '@/lib/document-library'; 
 import { useNotary } from '@/hooks/useNotary';
 import { cn } from '@/lib/utils';
 import { useTranslation } from 'react-i18next';
 import { prettify } from '@/lib/schema-utils';
-import { useVinDecoder } from '@/hooks/useVinDecoder'; // Import useVinDecoder
+import { useVinDecoder } from '@/hooks/useVinDecoder'; 
 
 interface FieldRendererProps {
   fieldKey: string;
@@ -32,16 +32,12 @@ export default function FieldRenderer({ fieldKey, locale, doc }: FieldRendererPr
     (doc.schema && typeof doc.schema.shape === 'object' && doc.schema.shape && (doc.schema.shape as any)[fieldKey] ?
       { id: fieldKey, label: prettify(fieldKey), type: 'text', ...((doc.schema.shape as any)[fieldKey]._def) } : undefined);
 
-  const formStateCode = watch('stateCode');
+  const formStateCode = watch('stateCode'); // Assuming 'stateCode' is the name of your state field
   const { isRequired: notaryIsRequiredByState } = useNotary(formStateCode);
-
-  // VIN Decoder hook
   const { decode: decodeVin, data: vinData, loading: vinLoading, error: vinError } = useVinDecoder();
 
   useEffect(() => {
     if (fieldKey === 'vin' && vinData) {
-      // Auto-populate only if the target fields are empty or match what would be populated
-      // This prevents overwriting user's manual input if they changed it after VIN decoding
       if (vinData.make && (!watch('make') || watch('make') === '')) setValue('make', vinData.make, { shouldValidate: true, shouldDirty: true });
       if (vinData.model && (!watch('model') || watch('model') === '')) setValue('model', vinData.model, { shouldValidate: true, shouldDirty: true });
       if (vinData.year && (!watch('year') || watch('year') === '' || watch('year') === 0)) setValue('year', vinData.year, { shouldValidate: true, shouldDirty: true });
@@ -63,57 +59,36 @@ export default function FieldRenderer({ fieldKey, locale, doc }: FieldRendererPr
     inputType = 'number';
   } else if (fieldSchema?.type === 'date') {
     inputType = 'date';
-  } else if (fieldKey.endsWith('_phone') || fieldKey.endsWith('Phone')) {
+  } else if (fieldKey.endsWith('_phone') || (fieldSchema?.label && fieldSchema.label.toLowerCase().includes('phone'))) { // Updated check for phone
     inputType = 'tel';
   }
 
-  const isAddressField = fieldKey.endsWith('_address') && (fieldSchema?.type === 'text' || fieldSchema?.type === 'textarea');
+  const isAddressFieldKey = (key: string) => key.endsWith('_address') || 
+                                          (fieldSchema?.label && fieldSchema.label.toLowerCase().includes('address')) ||
+                                          key === 'property_address';
+
+
+  if (isAddressFieldKey(fieldKey)) {
+    return (
+      <AddressField
+        name={fieldKey}
+        label={labelText}
+        placeholder={placeholderText || t('Enter address...')}
+        required={fieldSchema?.required}
+        aria-invalid={!!fieldError}
+        className={cn(fieldError && "border-destructive focus-visible:ring-destructive")}
+      />
+    );
+  }
+
 
   return (
     <div className="space-y-2">
-      {!isAddressField && (
-        <Label htmlFor={fieldKey} className={cn("font-medium", fieldError && "text-destructive")}>
+       <Label htmlFor={fieldKey} className={cn("font-medium", fieldError && "text-destructive")}>
           {labelText} {fieldSchema?.required && <span className="text-destructive">*</span>}
         </Label>
-      )}
 
-      {isAddressField ? (
-        <Controller
-          name={fieldKey as any}
-          control={control}
-          rules={{ required: fieldSchema?.required }}
-          render={({ field: controllerField }) => {
-            const baseName = fieldKey.substring(0, fieldKey.lastIndexOf('_address'));
-            // Construct field names based on the base and check if they exist in the schema
-            const cityFieldName = `${baseName}_city`;
-            const stateFieldName = `${baseName}_state`;
-            const postalCodeFieldName = `${baseName}_postal_code`;
-      
-            const hasCityField = doc.schema && doc.schema.shape && !!(doc.schema.shape as any)[cityFieldName];
-            const hasStateField = doc.schema && doc.schema.shape && !!(doc.schema.shape as any)[stateFieldName];
-            const hasPostalCodeField = doc.schema && doc.schema.shape && !!(doc.schema.shape as any)[postalCodeFieldName];
-
-
-            return (
-              <AddressField
-                label={labelText}
-                value={controllerField.value || ''}
-                onChange={(rawValue, parts) => {
-                  controllerField.onChange(rawValue);
-                  if (parts) {
-                    if (hasCityField && parts.city) setValue(cityFieldName, parts.city, { shouldValidate: true, shouldDirty: true });
-                    if (hasStateField && parts.state) setValue(stateFieldName, parts.state, { shouldValidate: true, shouldDirty: true });
-                    if (hasPostalCodeField && parts.postalCode) setValue(postalCodeFieldName, parts.postalCode, { shouldValidate: true, shouldDirty: true });
-                  }
-                }}
-                placeholder={placeholderText || t('Enter address...')}
-                required={fieldSchema?.required}
-                error={fieldError?.message as string | undefined}
-              />
-            );
-          }}
-        />
-      ) : fieldKey === 'notarizationToggle' && doc.offerNotarization ? (
+      {fieldKey === 'notarizationToggle' && doc.offerNotarization ? (
         <div className="space-y-2 pt-4 border-t mt-4">
           <div className="flex items-center space-x-2">
             <Controller
@@ -204,7 +179,7 @@ export default function FieldRenderer({ fieldKey, locale, doc }: FieldRendererPr
           className={cn("bg-background", fieldError && "border-destructive focus-visible:ring-destructive")}
           aria-invalid={!!fieldError}
         />
-      ) : fieldSchema?.type === 'select' && fieldSchema.options ? (
+      ) : fieldSchema?.type === 'select' && (fieldSchema.options || (doc.schema.shape as any)[fieldKey]?._def?.values) ? (
         <Controller
           name={fieldKey as any}
           control={control}
@@ -216,11 +191,11 @@ export default function FieldRenderer({ fieldKey, locale, doc }: FieldRendererPr
                 <SelectValue placeholder={placeholderText || t("Select...")} />
               </SelectTrigger>
               <SelectContent>
-                { (doc.schema.shape as any)[fieldKey]?._def?.values ? // Check if it's a Zod enum
+                { (doc.schema.shape as any)[fieldKey]?._def?.values ? 
                    (doc.schema.shape as any)[fieldKey]._def.values.map((opt: string) => (
                     <SelectItem key={opt} value={opt}>{t(opt.replace(/_/g, ' '), opt.replace(/_/g, ' ').charAt(0).toUpperCase() + opt.replace(/_/g, ' ').slice(1))}</SelectItem>
                   ))
-                  : fieldSchema.options?.map(opt => ( // Fallback to manual options if not a Zod enum
+                  : fieldSchema.options?.map(opt => ( 
                     <SelectItem key={opt.value} value={opt.value}>{t(opt.label, opt.label)}</SelectItem>
                 ))}
               </SelectContent>
