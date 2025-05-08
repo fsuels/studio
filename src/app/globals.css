@@ -6,48 +6,48 @@
  
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 224 71.4% 4.1%;
+    --background: 210 40% 98%; /* Soft Bluetint White */
+    --foreground: 220.9 39.3% 11%; /* Dark Blue/Black */
     --card: 0 0% 100%;
     --card-foreground: 224 71.4% 4.1%;
     --popover: 0 0% 100%;
     --popover-foreground: 224 71.4% 4.1%;
-    --primary: 220.9 39.3% 11%;
-    --primary-foreground: 210 20% 98%;
-    --secondary: 220 14.3% 95.9%;
-    --secondary-foreground: 220.9 39.3% 11%;
+    --primary: 176 100% 30%; /* Teal Accent */
+    --primary-foreground: 210 20% 98%; /* White */
+    --secondary: 207 90% 92%; /* Soft Blue (#D1E9FF) */
+    --secondary-foreground: 220.9 39.3% 11%; /* Dark Blue/Black */
     --muted: 220 14.3% 95.9%;
     --muted-foreground: 220 8.9% 46.1%;
-    --accent: 220 14.3% 95.9%;
-    --accent-foreground: 220.9 39.3% 11%;
+    --accent: 176 100% 30%;  /* Teal Accent for interactive elements */
+    --accent-foreground: 210 20% 98%; /* White */
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 20% 98%;
     --border: 220 13% 91%;
     --input: 220 13% 91%;
-    --ring: 224 71.4% 4.1%;
+    --ring: 176 100% 30%; /* Teal Accent for focus rings */
     --radius: 0.5rem;
   }
 
   .dark {
-    --background: 224 71.4% 4.1%;
-    --foreground: 210 20% 98%;
+    --background: 224 71.4% 4.1%; /* Dark Blue/Black */
+    --foreground: 210 40% 98%; /* Soft Blue-tint White */
     --card: 224 71.4% 4.1%;
     --card-foreground: 210 20% 98%;
     --popover: 224 71.4% 4.1%;
     --popover-foreground: 210 20% 98%;
-    --primary: 210 20% 98%;
-    --primary-foreground: 220.9 39.3% 11%;
-    --secondary: 215 27.9% 16.9%;
-    --secondary-foreground: 210 20% 98%;
+    --primary: 176 100% 40%; /* Slightly lighter Teal for dark mode */
+    --primary-foreground: 220.9 39.3% 11%; /* Dark Blue/Black */
+    --secondary: 220 14.3% 15%; /* Darker Soft Blue */
+    --secondary-foreground: 210 20% 98%; /* White */
     --muted: 215 27.9% 16.9%;
     --muted-foreground: 217.9 10.6% 64.9%;
-    --accent: 215 27.9% 16.9%;
-    --accent-foreground: 210 20% 98%;
+    --accent: 176 100% 40%; /* Slightly lighter Teal for dark mode */
+    --accent-foreground: 220.9 39.3% 11%; /* Dark Blue/Black */
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 20% 98%;
     --border: 215 27.9% 16.9%;
     --input: 215 27.9% 16.9%;
-    --ring: 216 12.2% 83.9%;
+    --ring: 176 100% 40%; /* Teal Accent for focus rings */
   }
 }
  
@@ -55,17 +55,14 @@
   * {
     @apply border-border;
   }
+  html, body, #__next { overflow-x: hidden; }
   body {
     @apply bg-background text-foreground;
-  }
-  html, body, #__next { overflow-x: hidden; }
-
-  body {
     /* Use HSL values from the theme for gradients */
-    background: radial-gradient(at top left, hsl(var(--primary) / 0.2) 0%, transparent 60%), 
-                radial-gradient(circle at 20% 0%, hsl(var(--accent)) 0%, transparent 45%), /* Adjusted to use accent from theme */
-                radial-gradient(circle at 80% 10%, hsl(var(--secondary)) 0%, transparent 40%), /* Adjusted to use secondary */
-                radial-gradient(circle at 50% 120%, hsl(var(--accent)) 0%, transparent 50%); /* Adjusted to use accent */
+    background: radial-gradient(at top left, hsl(var(--secondary)) 0%, transparent 50%), 
+                radial-gradient(circle at 20% 0%, hsl(var(--accent) / 0.3) 0%, transparent 45%),
+                radial-gradient(circle at 80% 10%, hsl(var(--primary) / 0.2) 0%, transparent 40%), 
+                radial-gradient(circle at 50% 120%, hsl(var(--secondary)) 0%, transparent 50%);
     font-family: var(--font-geist-sans), 'InterVariable', sans-serif;
     line-height: 1.5;
   }
@@ -266,4 +263,3 @@
     }
   }
 }
-
