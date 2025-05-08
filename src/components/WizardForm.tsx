@@ -15,7 +15,7 @@ import { prettify } from '@/lib/schema-utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import type { BillOfSaleData } from '@/schemas/billOfSale';
-import AddressField from '@/components/AddressField'; // Corrected import path
+import { AddressField } from '@/components/AddressField'; // Corrected import path
 
 
 interface WizardFormProps {
@@ -65,11 +65,10 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
     if (doc.questions && doc.questions.length > 0) {
       return doc.questions.map(q => ({ id: q.id, label: q.label || prettify(q.id) }));
     }
-    // Fallback to Zod schema shape if questions array is not present or empty
     if (doc.schema && 'shape' in doc.schema && typeof doc.schema.shape === 'object' && doc.schema.shape !== null) {
       return Object.keys(doc.schema.shape).map(key => ({ id: key, label: prettify(key) }));
     }
-    return []; // Return empty array if no questions or schema shape
+    return []; 
   }, [doc.questions, doc.schema]);
 
   const totalSteps = steps.length;
@@ -94,11 +93,10 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
     if (currentStepField && currentStepField.id) {
       isValid = await trigger(currentStepField.id as any);
     } else if (totalSteps > 0 && !currentStepField) {
-      // This case should ideally not happen if steps array is correctly populated
       console.error("Error: currentStepField is undefined but totalSteps > 0. currentStepIndex:", currentStepIndex, "steps:", steps);
-      isValid = false; // Consider it invalid if the field cannot be determined
+      isValid = false; 
     }
-    // If totalSteps is 0, isValid remains true, and it proceeds to submit.
+    
 
     if (!isValid) {
       toast({ title: t("Validation Error"), description: t("Please correct the errors before proceeding."), variant: "destructive" });
@@ -116,7 +114,6 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
       setCurrentStepIndex(s => s + 1);
       if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' });
     } else {
-      // Final step: submit
       try {
         const response = await axios.post(`/${locale}/api/wizard/${doc.id}/submit`, { 
           values: getValues(),
@@ -135,7 +132,6 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
           title = t(`API Error Occurred`, { status: axiosError.response?.status || '' }).trim();
           description = axiosError.response?.data?.error || axiosError.message;
           if(axiosError.response?.data?.details && typeof axiosError.response.data.details === 'object') {
-            // Handle Zod-like error details if present
             const detailsString = Object.entries(axiosError.response.data.details.fieldErrors || {})
               .map(([field, messages]) => `${prettify(field)}: ${(messages as string[]).join(', ')}`)
               .join('; ');
@@ -184,19 +180,17 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
                       label={t(currentField.label)}
                       value={value || ''}
                       onChange={(raw, parts) => {
-                        onChange(raw); // RHF update
-                        // If parts are available and the document schema has corresponding fields, update them
+                        onChange(raw); 
                         if (parts && doc.schema && typeof doc.schema.shape === 'object' && doc.schema.shape) {
                           const prefix = rhfName.replace('_address', '');
                           if ((doc.schema.shape as any)[`${prefix}_city`]) setValue(`${prefix}_city` as any, parts.city, {shouldValidate: true});
                           if ((doc.schema.shape as any)[`${prefix}_state`]) setValue(`${prefix}_state` as any, parts.state, {shouldValidate: true});
                           if ((doc.schema.shape as any)[`${prefix}_postal_code`]) setValue(`${prefix}_postal_code` as any, parts.postalCode, {shouldValidate: true});
-                          // Add country if needed: if ((doc.schema.shape as any)[`${prefix}_country`]) setValue(`${prefix}_country`, parts.country);
                         }
                       }}
                       required={doc.questions?.find(q => q.id === currentField.id)?.required || (doc.schema.shape as any)[currentField.id]?._def?.typeName !== 'ZodOptional'}
                       error={errors[currentField.id as any]?.message as string | undefined}
-                      aria-invalid={!!errors[currentField.id as any]} // Ensure aria-invalid is set based on RHF errors
+                      aria-invalid={!!errors[currentField.id as any]} 
                     />
                   )}
                 />
@@ -224,10 +218,8 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
               {t('Back')}
             </Button>
           )}
-          {/* This div ensures the "Next" button stays to the right when "Back" is not visible */}
           {currentStepIndex === 0 && totalSteps > 0 && <div />} 
 
-          {/* Show "Next" or "Confirm" button only if there are steps or if it's the initial state with no steps */}
           {(totalSteps > 0 || (totalSteps === 0 && currentStepIndex === 0)) && (
             <Button
               type="button"
