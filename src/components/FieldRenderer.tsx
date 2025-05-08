@@ -4,7 +4,7 @@
 import React, { useEffect } from 'react'; 
 import { useFormContext, Controller } from 'react-hook-form';
 import SmartInput from '@/components/wizard/SmartInput';
-import AddressField from '@/components/form/AddressField'; // Updated import path
+import AddressField from '@/components/form/AddressField'; 
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -30,9 +30,16 @@ export default function FieldRenderer({ fieldKey, locale, doc }: FieldRendererPr
 
   const fieldSchema = doc.questions?.find(q => q.id === fieldKey) ||
     (doc.schema && typeof doc.schema.shape === 'object' && doc.schema.shape && (doc.schema.shape as any)[fieldKey] ?
-      { id: fieldKey, label: prettify(fieldKey), type: 'text', ...((doc.schema.shape as any)[fieldKey]._def) } : undefined);
+      { 
+        id: fieldKey, 
+        label: prettify(fieldKey), // Default label from key
+        type: 'text', // Default type
+        ...((doc.schema.shape as any)[fieldKey]._def || {}), // Spread Zod definition properties
+        // Explicitly map Zod types to our FormField types if necessary
+        // For example, if Zod type is z.string().email(), map to type: 'email' if you have specific email input
+      } : undefined);
 
-  const formStateCode = watch('stateCode'); // Assuming 'stateCode' is the name of your state field
+  const formStateCode = watch('stateCode'); 
   const { isRequired: notaryIsRequiredByState } = useNotary(formStateCode);
   const { decode: decodeVin, data: vinData, loading: vinLoading, error: vinError } = useVinDecoder();
 
@@ -47,7 +54,8 @@ export default function FieldRenderer({ fieldKey, locale, doc }: FieldRendererPr
 
   if (!fieldSchema && fieldKey !== 'as_is' && fieldKey !== 'warranty_text' && fieldKey !== 'notarizationToggle') {
     console.warn(`Field schema not found for key: ${fieldKey} in document: ${doc.name}`);
-    return <p className="text-destructive">Configuration error: Field schema for "{fieldKey}" not found.</p>;
+    // Render nothing or a placeholder if schema is missing for non-special fields
+    return null; 
   }
 
   const labelText = fieldSchema?.label ? t(fieldSchema.label, fieldSchema.label) : prettify(fieldKey);
@@ -55,28 +63,54 @@ export default function FieldRenderer({ fieldKey, locale, doc }: FieldRendererPr
   const fieldError = errors[fieldKey];
 
   let inputType: React.HTMLInputTypeAttribute = 'text';
-  if (fieldSchema?.type === 'number' || fieldKey === 'year' || fieldKey === 'odometer' || fieldKey === 'price' || fieldKey === 'principalAmount' || fieldKey === 'interestRate' || fieldKey === 'durationMonths' || fieldKey === 'monthly_rent' || fieldKey === 'security_deposit' || fieldKey === 'lease_term' || fieldKey === 'termYears' || fieldKey === 'amountDue') {
+  if (fieldSchema?.type === 'number' || ['year', 'odometer', 'price', 'principalAmount', 'interestRate', 'durationMonths', 'monthly_rent', 'security_deposit', 'lease_term', 'termYears', 'amountDue'].includes(fieldKey)) {
     inputType = 'number';
   } else if (fieldSchema?.type === 'date') {
     inputType = 'date';
-  } else if (fieldKey.endsWith('_phone') || (fieldSchema?.label && fieldSchema.label.toLowerCase().includes('phone'))) { // Updated check for phone
+  } else if (fieldKey.endsWith('_phone') || (fieldSchema?.label && fieldSchema.label.toLowerCase().includes('phone'))) { 
     inputType = 'tel';
   }
 
-  const isAddressFieldKey = (key: string) => key.endsWith('_address') || 
-                                          (fieldSchema?.label && fieldSchema.label.toLowerCase().includes('address')) ||
-                                          key === 'property_address';
-
+  const isAddressFieldKey = (key: string) => 
+    key.endsWith('_address') || 
+    (fieldSchema?.label && fieldSchema.label.toLowerCase().includes('address')) ||
+    key === 'property_address';
 
   if (isAddressFieldKey(fieldKey)) {
     return (
-      <AddressField
+      <Controller
         name={fieldKey}
-        label={labelText}
-        placeholder={placeholderText || t('Enter address...')}
-        required={fieldSchema?.required}
-        aria-invalid={!!fieldError}
-        className={cn(fieldError && "border-destructive focus-visible:ring-destructive")}
+        control={control}
+        rules={{ required: fieldSchema?.required }}
+        render={({ field: { onChange: rhfOnChange, value: rhfValue, name: rhfName, ref: rhfRef } }) => (
+          <AddressField
+            name={rhfName} 
+            label={labelText}
+            placeholder={placeholderText || t('Enter address...')}
+            required={fieldSchema?.required}
+            value={rhfValue || ''} // Ensure value is a string
+            onChange={(raw, parts) => {
+              rhfOnChange(raw); // Update RHF with the raw string value
+              if (parts) {
+                // Optionally set related fields like city, state, postal code
+                // This depends on how your form is structured and if these are separate fields
+                // Example:
+                // if (doc.schema.shape.seller_city) setValue('seller_city', parts.city);
+                // if (doc.schema.shape.seller_state) setValue('seller_state', parts.state);
+                // if (doc.schema.shape.seller_postal_code) setValue('seller_postal_code', parts.postalCode);
+                // Adjust based on your schema and field names for buyer/seller/property addresses
+                 const prefix = fieldKey.replace('_address', ''); // e.g., "seller", "buyer", "property"
+                 if ((doc.schema.shape as any)[`${prefix}_city`]) setValue(`${prefix}_city`, parts.city, {shouldValidate: true});
+                 if ((doc.schema.shape as any)[`${prefix}_state`]) setValue(`${prefix}_state`, parts.state, {shouldValidate: true});
+                 if ((doc.schema.shape as any)[`${prefix}_postal_code`]) setValue(`${prefix}_postal_code`, parts.postalCode, {shouldValidate: true});
+              }
+            }}
+            error={fieldError?.message as string | undefined}
+            aria-invalid={!!fieldError}
+            className={cn(fieldError && "border-destructive focus-visible:ring-destructive")}
+            ref={rhfRef} // Pass ref for RHF
+          />
+        )}
       />
     );
   }
@@ -118,7 +152,7 @@ export default function FieldRenderer({ fieldKey, locale, doc }: FieldRendererPr
           {!notaryIsRequiredByState && <p className="text-xs text-muted-foreground">{t('Notarization may incur an additional fee.')}</p>}
           {errors.notarizationPreference && <p className="text-xs text-destructive mt-1">{String(errors.notarizationPreference.message)}</p>}
         </div>
-      ) : fieldKey === 'odo_status' ? (
+      ) : fieldKey === 'odo_status' && fieldSchema?.type === 'select' && (doc.schema.shape as any).odo_status?._def?.values ? (
         <Controller
           control={control}
           name="odo_status"
@@ -141,11 +175,12 @@ export default function FieldRenderer({ fieldKey, locale, doc }: FieldRendererPr
             </RadioGroup>
           )}
         />
-      ) : fieldKey === 'as_is' ? (
+      ) : fieldKey === 'as_is' && fieldSchema?.type === 'select' ? ( // Check if as_is is a select type in schema
         <Controller
           name="as_is"
           control={control}
-          defaultValue={(doc.schema.shape as any).as_is?._def?.defaultValue || true}
+          // Check if schema definition exists for as_is before accessing defaultValue
+          defaultValue={fieldSchema && (doc.schema.shape as any).as_is?._def?.defaultValue ? (doc.schema.shape as any).as_is._def.defaultValue : true}
           render={({ field }) => (
             <div className="flex items-center space-x-2">
               <Switch

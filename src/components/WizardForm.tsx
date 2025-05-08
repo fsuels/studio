@@ -1,10 +1,10 @@
 // src/components/WizardForm.tsx
 'use client';
 
-import { useForm, FormProvider } from 'react-hook-form';
+import { useForm, FormProvider, Controller } from 'react-hook-form'; // Added Controller
 import axios, { AxiosError } from 'axios';
 import React, { useEffect, useState, useRef } from 'react';
-import ProgressSteps from './ProgressSteps';
+import ProgressSteps from './ProgressSteps'; // Corrected component name
 import FieldRenderer from './FieldRenderer';
 import type { LegalDocument } from '@/lib/document-library';
 import { Button } from '@/components/ui/button';
@@ -16,6 +16,7 @@ import { useAddressAutocomplete, useVinDecoder } from '@/hooks/useSmartDefaults'
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import type { BillOfSaleData } from '@/schemas/billOfSale'; // For type assertion
+// Removed direct import of AddressField as it's handled by FieldRenderer
 
 interface WizardFormProps {
   locale: 'en' | 'es';
@@ -24,53 +25,48 @@ interface WizardFormProps {
 }
 
 export default function WizardForm({ locale, doc, onComplete }: WizardFormProps) {
-  const { t } = useTranslation();
+  const { t } } from useTranslation();
   const { toast } = useToast();
   const liveRef = useRef<HTMLDivElement>(null);
 
-  const getInitialDefaultValues = () => {
-    let defaults: Partial<z.infer<typeof doc.schema>> = {};
+  const methods = useForm<z.infer<typeof doc.schema>>({
+    resolver: zodResolver(doc.schema),
+    defaultValues: {}, // Default values will be loaded from localStorage
+    mode: 'onBlur',
+  });
+  
+  const { watch, getValues, trigger, setValue, reset } = methods; 
+
+  // Load from localStorage on mount
+  useEffect(() => {
     if (typeof window !== 'undefined') {
       const draft = localStorage.getItem(`draft-${doc.id}-${locale}`);
       if (draft) {
         try {
-          defaults = JSON.parse(draft);
+          reset(JSON.parse(draft)); // Use reset to update form values
         } catch (e) {
           console.error("Failed to parse draft from localStorage", e);
           localStorage.removeItem(`draft-${doc.id}-${locale}`);
-          // Fall through to programmatic defaults if draft is invalid
+          // Apply programmatic defaults if draft is invalid and no draft was loaded
+          if (doc.id === 'bill-of-sale-vehicle') {
+            reset({ sale_date: new Date() } as Partial<BillOfSaleData>);
+          }
+        }
+      } else {
+         // Apply programmatic defaults if no draft exists
+        if (doc.id === 'bill-of-sale-vehicle') {
+          reset({ sale_date: new Date() } as Partial<BillOfSaleData>);
         }
       }
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [doc.id, locale, reset]); // Add reset to dependencies
 
-    // Apply programmatic defaults ONLY if no valid draft was loaded from localStorage
-    // (i.e., defaults is still empty or was reset due to parsing error)
-    if (Object.keys(defaults).length === 0) {
-      if (doc.id === 'bill-of-sale-vehicle') {
-        // Type assertion is safe here because doc.schema for 'bill-of-sale-vehicle' is BillOfSaleSchema
-        (defaults as Partial<BillOfSaleData>).sale_date = new Date();
-      }
-      // Add other document-specific programmatic defaults here if needed
-      // else if (doc.id === 'another-doc-id') {
-      //   (defaults as Partial<OtherDocType>).someField = 'default value';
-      // }
-    }
-    return defaults;
-  };
-
-  const methods = useForm<z.infer<typeof doc.schema>>({
-    resolver: zodResolver(doc.schema),
-    defaultValues: getInitialDefaultValues(),
-    mode: 'onBlur',
-  });
-  
-  const { watch, getValues, trigger, setValue } = methods; // Destructure setValue here
 
   const steps = React.useMemo(() => {
     if (doc.questions && doc.questions.length > 0) {
       return doc.questions.map(q => ({ id: q.id, label: q.label || prettify(q.id) }));
     }
-    // Fallback to Zod schema shape if no explicit questions
     if (doc.schema && 'shape' in doc.schema && typeof doc.schema.shape === 'object' && doc.schema.shape !== null) {
       return Object.keys(doc.schema.shape).map(key => ({ id: key, label: prettify(key) }));
     }
@@ -82,7 +78,8 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useAddressAutocomplete(watch, setValue);
-  useVinDecoder(watch, setValue); // Using the correct hook name
+  // useVinDecoder is called within FieldRenderer for the 'vin' field specifically
+  // No need to call it directly here if FieldRenderer handles it.
 
   // Autosave to localStorage
   useEffect(() => {
@@ -92,7 +89,6 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
       });
       return () => subscription.unsubscribe();
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [watch, doc.id, locale]);
 
 
@@ -201,7 +197,6 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
               {t('Back')}
             </Button>
           )}
-          {/* This div ensures the "Next/Submit" button is pushed to the right when "Back" is not visible */}
           {currentStepIndex === 0 && totalSteps > 0 && <div />} 
 
           {(totalSteps > 0 || (totalSteps === 0 && currentStepIndex === 0)) && (
