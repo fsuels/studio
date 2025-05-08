@@ -32,11 +32,9 @@ export default function FieldRenderer({ fieldKey, locale, doc }: FieldRendererPr
     (doc.schema && typeof doc.schema.shape === 'object' && doc.schema.shape && (doc.schema.shape as any)[fieldKey] ?
       { 
         id: fieldKey, 
-        label: prettify(fieldKey), // Default label from key
-        type: 'text', // Default type
-        ...((doc.schema.shape as any)[fieldKey]._def || {}), // Spread Zod definition properties
-        // Explicitly map Zod types to our FormField types if necessary
-        // For example, if Zod type is z.string().email(), map to type: 'email' if you have specific email input
+        label: prettify(fieldKey), 
+        type: 'text', 
+        ...((doc.schema.shape as any)[fieldKey]._def || {}), 
       } : undefined);
 
   const formStateCode = watch('stateCode'); 
@@ -54,7 +52,6 @@ export default function FieldRenderer({ fieldKey, locale, doc }: FieldRendererPr
 
   if (!fieldSchema && fieldKey !== 'as_is' && fieldKey !== 'warranty_text' && fieldKey !== 'notarizationToggle') {
     console.warn(`Field schema not found for key: ${fieldKey} in document: ${doc.name}`);
-    // Render nothing or a placeholder if schema is missing for non-special fields
     return null; 
   }
 
@@ -67,50 +64,30 @@ export default function FieldRenderer({ fieldKey, locale, doc }: FieldRendererPr
     inputType = 'number';
   } else if (fieldSchema?.type === 'date') {
     inputType = 'date';
-  } else if (fieldKey.endsWith('_phone') || (fieldSchema?.label && fieldSchema.label.toLowerCase().includes('phone'))) { 
+  } else if (fieldKey.endsWith('_phone') || (fieldSchema?.label && (fieldSchema.label.toLowerCase().includes('phone') || fieldSchema.label.toLowerCase().includes('teléfono') ))) { 
     inputType = 'tel';
   }
 
+
   const isAddressFieldKey = (key: string) => 
     key.endsWith('_address') || 
-    (fieldSchema?.label && fieldSchema.label.toLowerCase().includes('address')) ||
+    (fieldSchema?.label && (fieldSchema.label.toLowerCase().includes('address') || fieldSchema.label.toLowerCase().includes('dirección'))) ||
     key === 'property_address';
 
   if (isAddressFieldKey(fieldKey)) {
     return (
-      <Controller
-        name={fieldKey}
-        control={control}
-        rules={{ required: fieldSchema?.required }}
-        render={({ field: { onChange: rhfOnChange, value: rhfValue, name: rhfName, ref: rhfRef } }) => (
-          <AddressField
-            name={rhfName} 
-            label={labelText}
-            placeholder={placeholderText || t('Enter address...')}
-            required={fieldSchema?.required}
-            value={rhfValue || ''} // Ensure value is a string
-            onChange={(raw, parts) => {
-              rhfOnChange(raw); // Update RHF with the raw string value
-              if (parts) {
-                // Optionally set related fields like city, state, postal code
-                // This depends on how your form is structured and if these are separate fields
-                // Example:
-                // if (doc.schema.shape.seller_city) setValue('seller_city', parts.city);
-                // if (doc.schema.shape.seller_state) setValue('seller_state', parts.state);
-                // if (doc.schema.shape.seller_postal_code) setValue('seller_postal_code', parts.postalCode);
-                // Adjust based on your schema and field names for buyer/seller/property addresses
-                 const prefix = fieldKey.replace('_address', ''); // e.g., "seller", "buyer", "property"
-                 if ((doc.schema.shape as any)[`${prefix}_city`]) setValue(`${prefix}_city`, parts.city, {shouldValidate: true});
-                 if ((doc.schema.shape as any)[`${prefix}_state`]) setValue(`${prefix}_state`, parts.state, {shouldValidate: true});
-                 if ((doc.schema.shape as any)[`${prefix}_postal_code`]) setValue(`${prefix}_postal_code`, parts.postalCode, {shouldValidate: true});
-              }
-            }}
-            error={fieldError?.message as string | undefined}
-            aria-invalid={!!fieldError}
-            className={cn(fieldError && "border-destructive focus-visible:ring-destructive")}
-            ref={rhfRef} // Pass ref for RHF
-          />
-        )}
+      // AddressField now handles its own RHF registration via useFormContext
+      // So we don't need to wrap it in a Controller here if it's designed that way.
+      // We pass the `name` prop for RHF integration within AddressField.
+      <AddressField
+        name={fieldKey} // This is the name RHF will use, e.g., "seller_address"
+        label={labelText}
+        placeholder={placeholderText || t('Enter address...')}
+        required={fieldSchema?.required}
+        // The error display is now handled inside AddressField
+        // aria-invalid={!!fieldError} // AddressField can get this from errors[name]
+        // className={cn(fieldError && "border-destructive focus-visible:ring-destructive")}
+        // RHF's value and onChange are handled by register inside AddressField
       />
     );
   }
@@ -175,11 +152,10 @@ export default function FieldRenderer({ fieldKey, locale, doc }: FieldRendererPr
             </RadioGroup>
           )}
         />
-      ) : fieldKey === 'as_is' && fieldSchema?.type === 'select' ? ( // Check if as_is is a select type in schema
+      ) : fieldKey === 'as_is' && fieldSchema?.type === 'select' ? ( 
         <Controller
           name="as_is"
           control={control}
-          // Check if schema definition exists for as_is before accessing defaultValue
           defaultValue={fieldSchema && (doc.schema.shape as any).as_is?._def?.defaultValue ? (doc.schema.shape as any).as_is._def.defaultValue : true}
           render={({ field }) => (
             <div className="flex items-center space-x-2">
@@ -245,11 +221,12 @@ export default function FieldRenderer({ fieldKey, locale, doc }: FieldRendererPr
           className={cn("input bg-background", fieldError && "border-destructive focus-visible:ring-destructive")}
           inputMode={inputType === 'number' || inputType === 'tel' ? 'numeric' : undefined}
           aria-invalid={!!fieldError}
-          {...register(fieldKey as any, {
-             required: fieldSchema?.required,
-             valueAsNumber: inputType === 'number',
-             onBlur: fieldKey === 'vin' ? (e) => decodeVin(e.target.value) : undefined,
-          })}
+          name={fieldKey} // Pass name directly for SmartInput to use with register
+          // {...register(fieldKey as any, { // register is now called inside SmartInput
+          //    required: fieldSchema?.required,
+          //    valueAsNumber: inputType === 'number',
+          //    onBlur: fieldKey === 'vin' ? (e) => decodeVin(e.target.value) : undefined,
+          // })}
         />
       )}
       {fieldKey === 'vin' && vinLoading && <p className="text-xs text-muted-foreground mt-1">Decoding VIN…</p>}
