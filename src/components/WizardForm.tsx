@@ -12,7 +12,8 @@ import { Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useTranslation } from 'react-i18next';
 import { prettify } from '@/lib/schema-utils';
-import { useAddressAutocomplete, useVinDecoder } from '@/hooks/useSmartDefaults';
+import { useAddressAutocomplete } from '@/hooks/useSmartDefaults'; // useVinDecoder was removed from here
+import useDecodeVin from '@/hooks/useDecodeVin'; // Import the new VIN decoding hook
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 
@@ -23,10 +24,9 @@ interface WizardFormProps {
 }
 
 export default function WizardForm({ locale, doc, onComplete }: WizardFormProps) {
-  // Use z.infer to get the type from the Zod schema for strong typing with useForm
   const methods = useForm<z.infer<typeof doc.schema>>({
-    resolver: zodResolver(doc.schema || z.object({})), // Fallback to empty Zod object if doc.schema is undefined
-    defaultValues: {}, // Default values will be loaded from localStorage
+    resolver: zodResolver(doc.schema || z.object({})), 
+    defaultValues: {}, 
     mode: 'onBlur',
   });
   const { t } = useTranslation();
@@ -37,11 +37,10 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
     if (doc.questions && doc.questions.length > 0) {
       return doc.questions.map(q => ({ id: q.id, label: q.label || prettify(q.id) }));
     }
-    // Fallback to Zod schema keys if questions array is not defined or empty
     if (doc.schema && 'shape' in doc.schema && typeof doc.schema.shape === 'object' && doc.schema.shape !== null) {
       return Object.keys(doc.schema.shape).map(key => ({ id: key, label: prettify(key) }));
     }
-    return []; // Return empty array if no questions or schema shape
+    return []; 
   }, [doc.questions, doc.schema]);
 
   const totalSteps = steps.length;
@@ -49,7 +48,35 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useAddressAutocomplete(methods.watch, methods.setValue);
-  useVinDecoder(methods.watch, methods.setValue);
+  
+  // VIN Decoding Logic
+  const vinToWatch = methods.watch('vin' as any); // Watch the 'vin' field
+  const { decoded, error: vinError, loading: vinLoading } = useDecodeVin(vinToWatch);
+
+  useEffect(() => {
+    if (decoded) {
+      // Only set if the field is currently empty or if the decoded value is different,
+      // to avoid overriding user's manual input if they correct it.
+      if (decoded.Make && methods.getValues('vehicle_make' as any) !== decoded.Make) {
+        methods.setValue('vehicle_make' as any, decoded.Make, { shouldValidate: true, shouldDirty: true });
+      }
+      if (decoded.Model && methods.getValues('vehicle_model' as any) !== decoded.Model) {
+        methods.setValue('vehicle_model' as any, decoded.Model, { shouldValidate: true, shouldDirty: true });
+      }
+      if (decoded.ModelYear && Number(methods.getValues('year' as any)) !== Number(decoded.ModelYear)) {
+        methods.setValue('year' as any, Number(decoded.ModelYear), { shouldValidate: true, shouldDirty: true });
+      }
+    }
+  }, [decoded, methods]);
+
+  useEffect(() => {
+    if (vinError) {
+      console.warn("VIN decoding error:", vinError);
+      // Optionally, show a toast or a small message near the VIN field
+      // toast({ title: "VIN Info", description: "Could not auto-fill vehicle details from VIN.", variant: "default" });
+    }
+  }, [vinError, toast]);
+
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -80,16 +107,14 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
 
     let isValid = true;
     if (currentStepField && currentStepField.id) {
-        // Ensure the field ID is a valid path for the form values
         isValid = await methods.trigger(currentStepField.id as any);
     } else if (totalSteps > 0 && !currentStepField) {
         console.error("Error: currentStepField is undefined but totalSteps > 0. currentStepIndex:", currentStepIndex, "steps:", steps);
         isValid = false;
     }
 
-
     if (!isValid) {
-      toast({ title: t("Validation Error", "Validation Error"), description: t("Please correct the errors before proceeding.", "Please correct the errors before proceeding."), variant: "destructive" });
+      toast({ title: t("Validation Error"), description: t("Please correct the errors before proceeding."), variant: "destructive" });
       setIsSubmitting(false);
       return;
     }
@@ -105,19 +130,18 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
       if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' });
       setIsSubmitting(false);
     } else {
-      // Final step: submit
       try {
         const response = await axios.post(`/${locale}/api/wizard/${doc.id}/submit`, {
           values: methods.getValues(),
           locale,
         });
-        toast({ title: t("Submission Successful", "Submission Successful"), description: t("Document saved, proceeding to payment.", "Document saved, proceeding to payment.") });
+        toast({ title: t("Submission Successful"), description: t("Document saved, proceeding to payment.") });
         if (typeof window !== 'undefined') localStorage.removeItem(`draft-${doc.id}-${locale}`);
         onComplete(response.data.checkoutUrl);
       } catch (error: any) {
         console.error('Submission error in WizardForm:', error);
-        let title = t("Submission Failed", "Submission Failed");
-        let description = t("An unexpected error occurred. Please try again.", "An unexpected error occurred. Please try again.");
+        let title = t("Submission Failed");
+        let description = t("An unexpected error occurred. Please try again.");
 
         if (axios.isAxiosError(error)) {
           const axiosError = error as AxiosError<any>;
@@ -156,7 +180,7 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
       <div className="bg-card rounded-lg shadow-xl p-6 md:p-8 border border-border">
         {(totalSteps > 0 && currentField) && <ProgressSteps current={currentStepIndex + 1} total={totalSteps} stepLabels={steps.map(s => t(s.label, s.label))} />}
 
-        <div className="mt-6 space-y-6 min-h-[200px]"> {/* Added min-height */}
+        <div className="mt-6 space-y-6 min-h-[200px]">
           {currentField && currentField.id ? (
             <FieldRenderer
               fieldKey={currentField.id}
@@ -164,7 +188,7 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
               doc={doc}
             />
           ) : (
-            <p className="text-muted-foreground text-center py-10">{t('dynamicForm.noQuestionsNeeded', 'No questions needed for this document type.')}</p>
+            <p className="text-muted-foreground text-center py-10">{t('dynamicForm.noQuestionsNeeded')}</p>
           )}
         </div>
 
@@ -177,12 +201,10 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
               disabled={isSubmitting}
               className="text-foreground border-border hover:bg-muted"
               >
-              {t('Back', 'Back')}
+              {t('Back')}
               </Button>
           )}
-          {/* This div ensures the "Next/Confirm" button is pushed to the right when "Back" is not visible */}
           {currentStepIndex === 0 && totalSteps > 0 && <div />}
-
 
           {(totalSteps > 0 || (totalSteps === 0 && currentStepIndex === 0)) && (
               <Button
@@ -192,7 +214,7 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
               disabled={isSubmitting}
               >
               {isSubmitting ? <Loader2 className="animate-spin h-5 w-5" /> :
-              (currentStepIndex === totalSteps - 1 || totalSteps === 0 ? t('dynamicForm.confirmAnswersButton', 'Confirm & Continue') : t('Next', 'Next'))}
+              (currentStepIndex === totalSteps - 1 || totalSteps === 0 ? t('dynamicForm.confirmAnswersButton') : t('Next'))}
               </Button>
           )}
         </div>
