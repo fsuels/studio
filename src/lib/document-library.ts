@@ -1,6 +1,7 @@
 // src/lib/document-library.ts
 import { z } from 'zod'; 
 import { documentLibraryAdditions } from './document-library-additions';
+import { BillOfSaleSchema } from '@/schemas/billOfSale'; // Import the new schema
 
 // Define the structure for a single question
 export type Question = {
@@ -117,7 +118,7 @@ export let documentLibrary: LegalDocument[] = [
     aliases: ["sell car", "used item sale", "vehicle transfer", "car sale contract"],
     aliases_es: ["venta de coche", "venta de artículo usado", "transferencia de vehículo", "contrato de venta de auto"],
     languageSupport: ["en", "es"],
-    requiresNotarization: true, // Default, actual requirement depends on state
+    requiresNotarization: true, 
     canBeRecorded: false,
     offerNotarization: true,
     offerRecordingHelp: false,
@@ -126,53 +127,33 @@ export let documentLibrary: LegalDocument[] = [
     templatePath: "/templates/en/bill-of-sale-vehicle.md", 
     templatePath_es: "/templates/es/bill-of-sale-vehicle.md",
     requiresNotarizationStates: ["AZ", "KY", "LA", "MT", "NV", "OH", "OK", "PA", "WV", "WY"], 
-    schema: z.object({
-        seller_name: z.string().min(2, "Seller name is required").regex(/^[a-zA-Z .'-]+$/, 'Only letters and specific characters allowed for seller name'),
-        seller_address: z.string().min(5, "Seller address is required"),
-        seller_phone: z.string().optional(), // Added phone based on useSmartField
-        buyer_name: z.string().min(2, "Buyer name is required").regex(/^[a-zA-Z .'-]+$/, 'Only letters and specific characters allowed for buyer name'),
-        buyer_address: z.string().min(5, "Buyer address is required"),
-        buyer_phone: z.string().optional(), // Added phone
-        vehicle_year: z.coerce.number().int().min(1900, "Invalid vehicle year").max(new Date().getFullYear() + 1, "Invalid vehicle year"),
-        vehicle_make: z.string().min(2, "Vehicle make is required").regex(/^[a-zA-Z0-9 ]+$/, 'Invalid characters in vehicle make'),
-        vehicle_model: z.string().min(1, "Vehicle model is required"),
-        vehicle_color: z.string().min(2, "Vehicle color is required").regex(/^[a-zA-Z ]+$/, 'Only letters and spaces allowed for color'),
-        vin: z.string().length(17, 'VIN must be 17 characters').regex(/^[A-HJ-NPR-Z0-9]+$/i, 'Invalid VIN format'),
-        odometer: z.coerce.number().int().min(0, "Odometer reading must be non-negative"),
-        payment_price: z.coerce.number().positive("Sale price must be positive"),
-        payment_method: z.enum(['cash', 'check', 'wire', 'paypal', 'credit_card'], { errorMap: () => ({ message: "Please select a valid payment method."}) }),
-        sale_date: z.string().min(1, "Sale date is required"), // Assuming YYYY-MM-DD string from date input
-        existing_liens: z.string().optional(), // Made optional, can be "None"
-        as_is: z.enum(['yes', 'no'], { errorMap: () => ({ message: "Please specify if sold 'as-is'."}) }),
-        warranty_details: z.string().optional(),
-        state: z.string().length(2, "State must be 2 characters"),
-        county: z.string().optional(),
-    }).refine(data => data.as_is === 'no' ? !!data.warranty_details && data.warranty_details.trim() !== '' : true, {
-        message: "Warranty details are required if not sold 'as-is'",
-        path: ['warranty_details'],
-    }),
+    schema: BillOfSaleSchema, // Use the imported schema
     questions: [
         { id: 'seller_name', label: 'Seller\'s Full Name', type: 'text', required: true },
+        { id: 'seller_phone', label: 'Seller\'s Phone Number', type: 'text', required: true, placeholder: '(XXX) XXX-XXXX' },
         { id: 'seller_address', label: 'Seller\'s Full Address', type: 'textarea', required: true },
-        { id: 'seller_phone', label: 'Seller\'s Phone (Optional)', type: 'text' },
         { id: 'buyer_name', label: 'Buyer\'s Full Name', type: 'text', required: true },
         { id: 'buyer_address', label: 'Buyer\'s Full Address', type: 'textarea', required: true },
-        { id: 'buyer_phone', label: 'Buyer\'s Phone (Optional)', type: 'text' },
-        { id: 'vehicle_year', label: 'Vehicle Year', type: 'number', placeholder: 'e.g., 2020', required: true },
+        { id: 'year', label: 'Vehicle Year', type: 'number', placeholder: 'e.g., 2020', required: true },
         { id: 'vehicle_make', label: 'Vehicle Make', type: 'text', placeholder: 'e.g., Toyota', required: true },
         { id: 'vehicle_model', label: 'Vehicle Model', type: 'text', placeholder: 'e.g., Camry', required: true },
         { id: 'vehicle_color', label: 'Vehicle Color', type: 'text', placeholder: 'e.g., Blue', required: true },
-        { id: 'vin', label: 'Vehicle Identification Number (VIN)', type: 'text', required: true }, // Changed from vehicle_vin to vin to match schema
-        { id: 'odometer', label: 'Odometer Reading (miles)', type: 'number', required: true }, // Changed from vehicle_odometer
-        { id: 'payment_price', label: 'Sale Price ($)', type: 'number', required: true }, // Changed from sale_price
-        { id: 'payment_method', label: 'Payment Method', type: 'select', required: true, options: [ // Options for the enum
+        { id: 'vin', label: 'Vehicle Identification Number (VIN)', type: 'text', required: true },
+        { id: 'odometer', label: 'Odometer Reading (miles)', type: 'number', required: true },
+        { id: 'odo_status', label: 'Odometer Status', type: 'select', required: true, options: [
+            {value: 'ACTUAL', label: 'Actual Mileage'}, 
+            {value: 'EXCEEDS', label: 'Exceeds Mechanical Limits'}, 
+            {value: 'NOT_ACTUAL', label: 'Not Actual Mileage (Warning)'}
+        ]},
+        { id: 'price', label: 'Sale Price ($)', type: 'number', required: true },
+        { id: 'payment_method', label: 'Payment Method', type: 'select', required: true, options: [
             {value: 'cash', label: 'Cash'}, {value: 'check', label: 'Check'}, {value: 'wire', label: 'Wire Transfer'},
             {value: 'paypal', label: 'PayPal'}, {value: 'credit_card', label: 'Credit / Debit Card'}
         ]},
         { id: 'sale_date', label: 'Date of Sale', type: 'date', required: true },
         { id: 'existing_liens', label: 'Existing Liens (if any, otherwise leave blank or "None")', type: 'text', placeholder: 'e.g., None, or Loan with XYZ Bank' },
-        { id: 'as_is', label: 'Is the vehicle sold "as-is"?', type: 'select', options: [{value: 'yes', label: 'Yes, as-is'}, {value: 'no', label: 'No, with warranties'}], required: true },
-        { id: 'warranty_details', label: 'Warranty Details (if not "as-is")', type: 'textarea', placeholder: 'e.g., 30-day warranty on drivetrain (if applicable)'},
+        { id: 'as_is', label: 'Is the vehicle sold "as-is"?', type: 'select', options: [{value: 'true', label: 'Yes, as-is'}, {value: 'false', label: 'No, with warranties'}], required: true }, // Boolean, so 'true'/'false' strings
+        { id: 'warranty_text', label: 'Warranty Details (if not "as-is")', type: 'textarea', placeholder: 'e.g., 30-day warranty on drivetrain (if applicable)'},
         { id: 'state', label: 'State of Sale (Governing Law & Notary)', type: 'select', required: true, options: usStates.map(s => ({value: s.value, label: s.label})) },
         { id: 'county', label: 'County (for Notary Acknowledgment)', type: 'text', required: false }
     ],
@@ -256,7 +237,7 @@ export let documentLibrary: LegalDocument[] = [
   },
   // --- Category 2: Business ---
    {
-    id: 'independent-contractcontractor-agreement', 
+    id: 'independent-contractcontractor-agreementor-agreement', 
     name: 'Independent Contractor Agreement',
     name_es: 'Contrato de Contratista Independiente',
     category: 'Business', 
@@ -981,41 +962,3 @@ export let documentLibrary: LegalDocument[] = [
     ]
   }
 ];
-
-// Merge additional documents if any
-if (documentLibraryAdditions && documentLibraryAdditions.length > 0) {
-  const existingIds = new Set(documentLibrary.map(doc => doc.id));
-  const newDocs = documentLibraryAdditions.filter(addDoc => !existingIds.has(addDoc.id));
-  documentLibrary = [...documentLibrary, ...newDocs];
-}
-
-
-// Helper function to find documents by category, search term, and state
-export function findMatchingDocuments(
-  searchQuery: string,
-  language: 'en' | 'es' = 'en', 
-  stateCode?: string
-): LegalDocument[] {
-  const lowerQuery = searchQuery.toLowerCase();
-
-  return documentLibrary.filter((doc) => {
-    const name = language === 'es' && doc.name_es ? doc.name_es : doc.name;
-    const description = language === 'es' && doc.description_es ? doc.description_es : doc.description;
-    const aliases = language === 'es' && doc.aliases_es ? doc.aliases_es : doc.aliases || [];
-
-    const stateMatch = !stateCode || stateCode === 'all' || doc.states === 'all' || (Array.isArray(doc.states) && doc.states.includes(stateCode));
-    if (!stateMatch) return false;
-
-    if (lowerQuery) {
-      return (
-        name.toLowerCase().includes(lowerQuery) ||
-        (description && description.toLowerCase().includes(lowerQuery)) ||
-        aliases.some(alias => alias.toLowerCase().includes(lowerQuery))
-      );
-    }
-    return true; 
-  });
-}
-
-// Re-export with a more common name for easier import.
-export { documentLibrary as documents };
