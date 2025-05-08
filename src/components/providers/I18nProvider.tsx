@@ -1,24 +1,24 @@
-
+// src/components/providers/I18nProvider.tsx
 "use client";
 
-import React, { ReactNode, useEffect } from 'react'; // Import useEffect
+import React, { ReactNode, useEffect } from 'react';
 import { I18nextProvider } from 'react-i18next';
-import i18n from '@/lib/i18n'; 
+import i18nInstance from '@/lib/i18n'; // Import the initialized instance
 
 interface I18nProviderProps {
   children: ReactNode;
-  locale: 'en' | 'es'; // Add locale prop
+  locale: 'en' | 'es';
 }
 
 const I18nClientProvider: React.FC<I18nProviderProps> = ({ children, locale }) => {
-  // Effect to change i18n language when locale prop changes
   useEffect(() => {
-    if (i18n.language !== locale) {
-      i18n.changeLanguage(locale);
+    // Check current i18next language and change only if different from prop
+    if (i18nInstance.language !== locale) {
+      i18nInstance.changeLanguage(locale);
     }
-  }, [locale]);
+  }, [locale]); // Depend only on locale, as i18nInstance is stable
 
-  return <I18nextProvider i18n={i18n}>{children}</I18nextProvider>;
+  return <I18nextProvider i18n={i18nInstance}>{children}</I18nextProvider>;
 };
 
 export default I18nClientProvider;

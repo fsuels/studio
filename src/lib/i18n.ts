@@ -1,17 +1,14 @@
-
 // src/lib/i18n.ts
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import HttpBackend from 'i18next-http-backend';
-import LanguageDetector from 'i18next-browser-languagedetector';
+// import LanguageDetector from 'i18next-browser-languagedetector'; // REMOVED
 
 i18n
   // load translation using http -> see /public/locales
   // learn more: https://github.com/i18next/i18next-http-backend
   .use(HttpBackend)
-  // detect user language
-  // learn more: https://github.com/i18next/i18next-browser-languageDetector
-  .use(LanguageDetector)
+  // .use(LanguageDetector) // REMOVED - Language detection will be handled by Next.js routing and props
   // pass the i18n instance to react-i18next.
   .use(initReactI18next)
   // init i18next
@@ -27,7 +24,7 @@ i18n
       loadPath: '/locales/{{lng}}/{{ns}}.json',
     },
     // Specify namespaces (optional, default is 'translation')
-    ns: ['translation'],
+    ns: ['translation', 'support'], // Added 'support' namespace if it's used
     defaultNS: 'translation',
     // React specific options
     react: {
@@ -38,4 +35,3 @@ i18n
   });
 
 export default i18n;
-

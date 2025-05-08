@@ -1,7 +1,7 @@
 // src/components/LanguageSwitcher.tsx
 'use client';
 
-import { usePathname, useSearchParams, useRouter, useParams } from 'next/navigation'; // Added useParams
+import { usePathname, useSearchParams, useRouter, useParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
@@ -11,7 +11,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import Link from 'next/link';
+// Removed Link import as we'll use programmatic navigation
 
 // Inline SVG Flags
 const FlagUS = () => (
@@ -53,51 +53,49 @@ const FlagES = () => (
    </svg>
 );
 
-
-const localizations: Array<'en' | 'es'> = ['en', 'es']; // Define available locales
+const localizations: Array<'en' | 'es'> = ['en', 'es'];
 
 export function LanguageSwitcher() {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const params = useParams(); // Use useParams to get current locale from route
+  const params = useParams();
   const currentRouteLocale = params.locale as 'en' | 'es';
   const { i18n, t } = useTranslation();
   const [isPopoverOpen, setIsPopoverOpen] = React.useState(false);
 
-  // State to manage the displayed locale, synced with route and i18n
-  const [currentDisplayLocale, setCurrentDisplayLocale] = useState<'en' | 'es'>(currentRouteLocale || 'en');
+  // Simplified currentDisplayLocale logic, directly relying on currentRouteLocale or fallback
+  const currentDisplayLocale = currentRouteLocale || 'en';
 
   useEffect(() => {
-    // Sync display locale with route locale
-    if (currentRouteLocale && currentRouteLocale !== currentDisplayLocale) {
-      setCurrentDisplayLocale(currentRouteLocale);
-    }
-    // Sync i18n language with route locale
+    // Sync i18n language with route locale if they differ
     if (currentRouteLocale && i18n.language !== currentRouteLocale) {
       i18n.changeLanguage(currentRouteLocale);
     }
-  }, [currentRouteLocale, i18n, currentDisplayLocale]);
+  }, [currentRouteLocale, i18n]);
 
-
-  const getLocalizedPath = (newLang: 'en' | 'es') => {
-    if (!pathname) return `/${newLang}`; // Fallback if pathname is somehow null
-
-    const currentPathSegments = pathname.split('/');
-    // Ensure there's a locale segment to replace or add one
-    if (currentPathSegments.length > 1 && localizations.includes(currentPathSegments[1] as 'en' | 'es')) {
-      currentPathSegments[1] = newLang;
-    } else {
-      // Pathname doesn't start with a known locale, prepend newLang
-      // This case might need more robust handling depending on your routing structure
-      currentPathSegments.splice(1, 0, newLang);
+  const handleLocaleChange = (newLocaleTarget: 'en' | 'es') => {
+    if (currentRouteLocale === newLocaleTarget) {
+      setIsPopoverOpen(false);
+      return;
     }
-    
-    let newPath = currentPathSegments.join('/');
-    if (newPath.startsWith('//')) newPath = newPath.substring(1); // Avoid double slash if original pathname was just "/"
+
+    const basePath = pathname.replace(/^\/(en|es)/, '');
+    const newPathWithLocale = `/${newLocaleTarget}${basePath || '/'}`;
 
     const queryString = searchParams.toString();
-    return queryString ? `${newPath}?${queryString}` : newPath;
+    const finalUrl = queryString ? `${newPathWithLocale}?${queryString}` : newPathWithLocale;
+    
+    i18n.changeLanguage(newLocaleTarget); // Change i18n language client-side
+    router.push(finalUrl); // Navigate to the new URL
+    
+    // Defer router.refresh slightly to allow navigation to settle
+    // This helps ensure refresh acts on the new route context.
+    setTimeout(() => {
+      router.refresh();
+    }, 50);
+
+    setIsPopoverOpen(false);
   };
 
   return (
@@ -120,22 +118,13 @@ export function LanguageSwitcher() {
                     key={lang}
                     variant={currentDisplayLocale === lang ? 'secondary' : 'ghost'}
                     className="w-full justify-start text-xs"
-                    asChild 
+                    onClick={() => handleLocaleChange(lang)}
                 >
-                    <Link 
-                        href={getLocalizedPath(lang)} 
-                        locale={lang} // Important for Next.js to handle locale switching correctly
-                        onClick={() => {
-                            // i18n.changeLanguage(lang); // i18n will sync via useEffect based on route
-                            setIsPopoverOpen(false);
-                        }}
-                    >
-                        <span className="flex items-center w-full"> 
-                            {lang === 'en' ? <FlagUS /> : <FlagES />} 
-                            {lang === 'en' ? 'English' : 'Español'} 
-                            {currentDisplayLocale === lang && <Check className="ml-auto h-4 w-4" />}
-                        </span>
-                    </Link>
+                    <span className="flex items-center w-full">
+                        {lang === 'en' ? <FlagUS /> : <FlagES />}
+                        {lang === 'en' ? 'English' : 'Español'}
+                        {currentDisplayLocale === lang && <Check className="ml-auto h-4 w-4" />}
+                    </span>
                 </Button>
             ))}
       </PopoverContent>
