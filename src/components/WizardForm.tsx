@@ -1,10 +1,10 @@
 // src/components/WizardForm.tsx
 'use client';
 
-import { useForm, FormProvider, Controller } from 'react-hook-form'; // Added Controller
+import { useForm, FormProvider, Controller } from 'react-hook-form';
 import axios, { AxiosError } from 'axios';
 import React, { useEffect, useState, useRef } from 'react';
-import ProgressSteps from './ProgressSteps'; // Corrected component name
+import ProgressSteps from './ProgressSteps';
 import FieldRenderer from './FieldRenderer';
 import type { LegalDocument } from '@/lib/document-library';
 import { Button } from '@/components/ui/button';
@@ -12,11 +12,11 @@ import { Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useTranslation } from 'react-i18next';
 import { prettify } from '@/lib/schema-utils';
-import { useAddressAutocomplete, useVinDecoder } from '@/hooks/useSmartDefaults';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import type { BillOfSaleData } from '@/schemas/billOfSale'; // For type assertion
-// Removed direct import of AddressField as it's handled by FieldRenderer
+import type { BillOfSaleData } from '@/schemas/billOfSale';
+import AddressField from '@/components/form/AddressField';
+
 
 interface WizardFormProps {
   locale: 'en' | 'es';
@@ -25,42 +25,39 @@ interface WizardFormProps {
 }
 
 export default function WizardForm({ locale, doc, onComplete }: WizardFormProps) {
-  const { t } } from useTranslation();
+  const { t } = useTranslation();
   const { toast } = useToast();
   const liveRef = useRef<HTMLDivElement>(null);
 
   const methods = useForm<z.infer<typeof doc.schema>>({
     resolver: zodResolver(doc.schema),
-    defaultValues: {}, // Default values will be loaded from localStorage
+    defaultValues: {},
     mode: 'onBlur',
   });
   
-  const { watch, getValues, trigger, setValue, reset } = methods; 
+  const { watch, getValues, trigger, setValue, reset, control, formState: { errors } } = methods; 
 
-  // Load from localStorage on mount
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const draft = localStorage.getItem(`draft-${doc.id}-${locale}`);
       if (draft) {
         try {
-          reset(JSON.parse(draft)); // Use reset to update form values
+          reset(JSON.parse(draft));
         } catch (e) {
           console.error("Failed to parse draft from localStorage", e);
           localStorage.removeItem(`draft-${doc.id}-${locale}`);
-          // Apply programmatic defaults if draft is invalid and no draft was loaded
           if (doc.id === 'bill-of-sale-vehicle') {
-            reset({ sale_date: new Date() } as Partial<BillOfSaleData>);
+             reset({ sale_date: new Date() } as Partial<BillOfSaleData>);
           }
         }
       } else {
-         // Apply programmatic defaults if no draft exists
         if (doc.id === 'bill-of-sale-vehicle') {
-          reset({ sale_date: new Date() } as Partial<BillOfSaleData>);
+           reset({ sale_date: new Date() } as Partial<BillOfSaleData>);
         }
       }
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [doc.id, locale, reset]); // Add reset to dependencies
+  }, [doc.id, locale, reset]);
 
 
   const steps = React.useMemo(() => {
@@ -77,11 +74,6 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  useAddressAutocomplete(watch, setValue);
-  // useVinDecoder is called within FieldRenderer for the 'vin' field specifically
-  // No need to call it directly here if FieldRenderer handles it.
-
-  // Autosave to localStorage
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const subscription = watch((values) => {
@@ -136,13 +128,15 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
 
         if (axios.isAxiosError(error)) {
           const axiosError = error as AxiosError<any>;
-          title = t(`API Error {{status}}`, { status: axiosError.response?.status || '' }).trim();
+          title = t(`API Error Occurred`, { status: axiosError.response?.status || '' }).trim();
           description = axiosError.response?.data?.error || axiosError.message;
-          if(axiosError.response?.data?.details) {
-            const detailsString = typeof axiosError.response.data.details === 'string' 
-              ? axiosError.response.data.details 
-              : JSON.stringify(axiosError.response.data.details);
-            description += ` ${t("Details")}: ${detailsString}`;
+          if(axiosError.response?.data?.details && typeof axiosError.response.data.details === 'object') {
+            const detailsString = Object.entries(axiosError.response.data.details.fieldErrors || {})
+              .map(([field, messages]) => `${prettify(field)}: ${(messages as string[]).join(', ')}`)
+              .join('; ');
+            if (detailsString) description += ` ${t("Details")}: ${detailsString}`;
+          } else if (axiosError.response?.data?.details && typeof axiosError.response.data.details === 'string') {
+            description += ` ${t("Details")}: ${axiosError.response.data.details}`;
           }
         } else if (error instanceof Error) {
           description = error.message;
@@ -175,11 +169,37 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
 
         <div className="mt-6 space-y-6 min-h-[200px]">
           {currentField && currentField.id ? (
-            <FieldRenderer
-              fieldKey={currentField.id}
-              locale={locale}
-              doc={doc}
-            />
+            (currentField.id.endsWith('_address')) ? (
+                <Controller
+                  control={control}
+                  name={currentField.id as any}
+                  render={({ field: { onChange, value, name: rhfName } }) => (
+                    <AddressField
+                      name={rhfName}
+                      label={t(currentField.label)}
+                      value={value || ''}
+                      onChange={(raw, parts) => {
+                        onChange(raw); // RHF update
+                        if (parts) {
+                          const prefix = rhfName.replace('_address', '');
+                          if ((doc.schema.shape as any)[`${prefix}_city`]) setValue(`${prefix}_city` as any, parts.city, {shouldValidate: true});
+                          if ((doc.schema.shape as any)[`${prefix}_state`]) setValue(`${prefix}_state` as any, parts.state, {shouldValidate: true});
+                          if ((doc.schema.shape as any)[`${prefix}_postal_code`]) setValue(`${prefix}_postal_code` as any, parts.postalCode, {shouldValidate: true});
+                        }
+                      }}
+                      required={doc.questions?.find(q => q.id === currentField.id)?.required || (doc.schema.shape as any)[currentField.id]?._def?.typeName !== 'ZodOptional'}
+                      error={errors[currentField.id as any]?.message as string | undefined}
+                      aria-invalid={!!errors[currentField.id as any]}
+                    />
+                  )}
+                />
+            ) : (
+                <FieldRenderer
+                    fieldKey={currentField.id}
+                    locale={locale}
+                    doc={doc}
+                />
+            )
           ) : (
             <p className="text-muted-foreground text-center py-10">{t('dynamicForm.noQuestionsNeeded')}</p>
           )}
@@ -207,7 +227,7 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
               disabled={isSubmitting}
             >
               {isSubmitting ? <Loader2 className="animate-spin h-5 w-5" /> :
-              (currentStepIndex === totalSteps - 1 || totalSteps === 0 ? t('dynamicForm.confirmAnswersButton') : t('Next'))}
+              (currentStepIndex === totalSteps - 1 || totalSteps === 0 ? t('dynamicForm.confirmAnswersButton') : t('wizard.next'))}
             </Button>
           )}
         </div>
