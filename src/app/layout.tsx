@@ -7,6 +7,14 @@ import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import React from 'react';
 
+// Conditionally import the script for development
+if (process.env.NODE_ENV === 'development' && typeof window !== 'undefined') {
+  import('../../scripts/find-missing-i18n.js').catch(err => {
+    console.error("Failed to load find-missing-i18n.js script:", err);
+  });
+}
+
+
 const geistSans = Geist({
   variable: '--font-geist-sans',
   subsets: ['latin'],
@@ -24,7 +32,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning> {/* Add suppressHydrationWarning */}
       <head>
           <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
       </head>
@@ -41,3 +49,4 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     </html>
   );
 }
+

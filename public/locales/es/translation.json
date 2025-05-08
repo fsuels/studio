@@ -35,8 +35,6 @@
   "stepOne": {
     "title": "Paso 1: Describe y Confirma",
     "description": "Describe tu situación y selecciona el estado de EE. UU. correspondiente. Nuestra IA sugerirá el tipo de documento.",
-    "categoryDescription": "Elige el área legal que mejor se adapte a tu necesidad.",
-    "selectDocDescription": "Elige el documento que mejor se adapte a tus necesidades.",
     "text": "Texto",
     "startMic": "Iniciar micrófono",
     "stopMic": "Detener grabación",
@@ -47,7 +45,9 @@
     "stateHelp": "Ayuda a personalizar el documento para tu jurisdicción.",
     "analyze": "Analizar Mi Situación",
     "textDescriptionLabel": "Descripción (Texto)",
-    "micDescriptionLabel": "Descripción (Transcripción del Micrófono)"
+    "micDescriptionLabel": "Descripción (Transcripción del Micrófono)",
+    "categoryDescription": "Elige el área legal que mejor se adapte a tu necesidad.",
+    "selectDocDescription": "Elige el documento que mejor se adapte a tus necesidades."
   },
   "documentInference": {
     "describePlaceholder": "ej., 'Alquilar mi apartamento', 'Empezar un negocio con un socio', 'Necesito que alguien deje de contactarme...'",
@@ -95,7 +95,8 @@
     "noDescription": "No hay descripción disponible.",
     "requiresNotarization": "Requiere Notarización",
     "canBeRecorded": "Se Puede Registrar",
-    "noResults": "No hay documentos que coincidan con tu búsqueda en esta categoría."
+    "noResults": "No hay documentos que coincidan con tu búsqueda en esta categoría.",
+    "searchInCategoryPlaceholder": "Buscar en esta categoría..."
   },
   "dynamicForm": {
       "stepTitle": "Paso 2: Proporciona Detalles para {{documentType}}",
@@ -352,6 +353,12 @@
           "sharing": { "title": "Compartir de Forma Segura", "desc": "Comparte documentos con enlaces de tiempo limitado (próximamente)." },
           "dashboard": { "title": "Panel de Usuario", "desc": "Gestiona tus documentos y configuraciones fácilmente." },
           "security": { "title": "Privacidad y Seguridad", "desc": "Datos encriptados y prácticas conformes." }
+        },
+        "hero": {
+          "title": "Todas las funciones que necesitas"
+        },
+        "card1": {
+          "title": "Rellenado inteligente"
         }
     },
     "resources": {
@@ -704,8 +711,25 @@
     "API Error Occurred": "Ocurrió un Error de API",
     "Loading...": "Cargando...",
     "Search all documents...": "Buscar todos los documentos...",
-    "All States": "Todos los Estados"
+    "All States": "Todos los Estados",
+    "breadcrumb": {
+        "home": "Inicio",
+        "start": "Iniciar"
+    },
+    "wizard": {
+        "next": "Siguiente"
+    },
+    "fields": {
+        "sellerName": {
+            "label": "Nombre completo del vendedor"
+        },
+        "sellerAddress": {
+            "label": "Dirección completa del vendedor"
+        }
+    },
+    "docDetail": {
+        "previewTitle": "Vista previa de tu documento",
+        "previewSubtitle": "Mira exactamente cómo se verá tu Contrato de Compraventa de Vehículo—y luego haz clic en “Comenzar Gratis” para completar tus datos.",
+        "startForFree": "Comenzar Gratis"
+    }
 }
-
-
-    

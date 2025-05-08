@@ -33,6 +33,9 @@ i18n
     react: {
       useSuspense: false, // Set to true if using Suspense for loading translations
     },
+    saveMissing: process.env.NODE_ENV === 'development', // Save missing keys to .missing.json in dev
+    // Missing key handler is set up in scripts/find-missing-i18n.js
   });
 
 export default i18n;
+
