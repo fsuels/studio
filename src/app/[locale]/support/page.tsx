@@ -1,34 +1,29 @@
 // src/app/[locale]/support/page.tsx
-'use client'; // This page uses client-side logic to determine which component to render
+'use client'
 
-import { useParams } from 'next/navigation';
-import SupportEN from '@/components/SupportEN';
-import SupportES from '@/components/SupportES';
-import { useEffect, useState } from 'react';
-import { Loader2 } from 'lucide-react';
+import { useParams } from 'next/navigation'
+import { useTranslation } from 'react-i18next'
+import SupportContent from '@/components/SupportContent' 
+import React, { useEffect } from 'react'; // Import React for useEffect
 
-export default function LocaleSupportPage() {
-  const params = useParams();
-  const locale = params.locale as 'en' | 'es';
-  const [isHydrated, setIsHydrated] = useState(false);
+export default function SupportPage() {
+  const { locale } = useParams() as { locale: 'en' | 'es' }
+  const { i18n } = useTranslation()
 
   useEffect(() => {
-    setIsHydrated(true);
-  }, []);
+    if (locale && i18n.language !== locale) {
+      i18n.changeLanguage(locale);
+    }
+  }, [locale, i18n]);
 
-  if (!isHydrated) {
-    // Optional: Render a loading state or null during hydration
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
-        <p className="ml-2 text-muted-foreground">Loading support page...</p>
-      </div>
-    );
+  if (!locale) {
+    // Handle case where locale might not be available immediately,
+    // though Next.js routing should provide it.
+    return <div>Loading support information...</div>; 
   }
 
-  if (locale === 'es') {
-    return <SupportES />;
-  }
-  // Default to English if locale is not 'es' or is undefined (though useParams should provide it)
-  return <SupportEN />;
+  return (
+    // The container and main tag are now part of SupportContent
+    <SupportContent locale={locale} />
+  )
 }

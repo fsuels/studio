@@ -1,21 +1,24 @@
-// src/components/SupportPageContent.tsx
+// src/components/SupportContent.tsx
 'use client'
 
 import { useTranslation } from 'react-i18next'
 import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Mail, Clock, HelpCircle, LifeBuoy } from 'lucide-react';
-import type { useParams } from 'next/navigation'; // Only for type if needed, actual call in page
+import React, { useEffect } from 'react'; // Added React and useEffect
 
-interface SupportPageContentProps {
-  locale: 'en' | 'es'; // Locale passed down to ensure context if needed, though i18n should handle
+interface SupportContentProps {
+  locale: 'en' | 'es'; 
 }
 
-export default function SupportPageContent({ locale }: SupportPageContentProps) {
-  const { t } = useTranslation();
-  // Note: Actual `locale` for translation is derived from i18n context,
-  // which should be set by `I18nClientProvider` based on the URL segment.
-  // The `locale` prop here is mostly for clarity or if direct conditional logic based on it was ever needed.
+export default function SupportContent({ locale }: SupportContentProps) {
+  const { t, i18n } = useTranslation();
+  
+  useEffect(() => {
+    if (i18n.language !== locale) {
+      i18n.changeLanguage(locale);
+    }
+  }, [locale, i18n]);
 
   return (
     <main className="max-w-4xl mx-auto px-6 py-20">
