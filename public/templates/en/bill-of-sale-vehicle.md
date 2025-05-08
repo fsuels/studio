@@ -31,11 +31,12 @@ The Seller hereby sells to the Buyer, and the Buyer hereby purchases from the Se
 2. **Payment Method:** {{payment_method}} (e.g., Cash, Check, Wire Transfer).
 3. **Payment Date:** Payment was made in full on **{{sale_date}}**.
 
-## 3. “As-Is” Condition
+## 3. Condition of Vehicle
 
+{{#if as_is}}
 The Buyer acknowledges that the Vehicle is sold **"AS-IS"**, without any warranties or guarantees, express or implied, including but not limited to any implied warranty of merchantability or fitness for a particular purpose.
-{{#if warranty_details}}
-**Warranties (if any):**
+{{else}}
+**Limited Warranty.** The Seller warrants the Vehicle under the following terms:
 {{warranty_details}}
 {{/if}}
 

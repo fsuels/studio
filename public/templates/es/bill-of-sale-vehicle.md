@@ -31,11 +31,12 @@ El Vendedor por el presente vende al Comprador, y el Comprador por el presente c
 2. **Método de Pago:** {{payment_method}} (ej., Efectivo, Cheque, Transferencia Bancaria).
 3. **Fecha de Pago:** El pago se realizó en su totalidad el **{{sale_date}}**.
 
-## 3. Condición "Tal Como Está" ("As-Is")
+## 3. Condición del Vehículo
 
+{{#if as_is}}
 El Comprador reconoce que el Vehículo se vende **"TAL COMO ESTÁ"**, sin ninguna garantía, expresa o implícita, incluyendo pero no limitándose a cualquier garantía implícita de comerciabilidad o idoneidad para un propósito particular.
-{{#if warranty_details}}
-**Garantías (si las hay):**
+{{else}}
+**Garantía Limitada.** El Vendedor garantiza el Vehículo bajo los siguientes términos:
 {{warranty_details}}
 {{/if}}
 
