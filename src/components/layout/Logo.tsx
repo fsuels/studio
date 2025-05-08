@@ -24,11 +24,9 @@ export function Logo({ wrapperClassName, className, ...props }: LogoProps) {
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        width="36" // Adjusted base width for new logo proportions
-        height="36" // Adjusted base height
-        viewBox="0 0 130 40" // Adjusted viewBox to better fit the new logo's aspect ratio (icon + text)
+        viewBox="0 0 130 40" 
         fill="none"
-        className={cn("h-9 w-auto", className)} // Maintain height, auto width
+        className={cn("h-10 w-auto", className)} // Increased height from h-9 to h-10, removed explicit width/height attributes
         aria-hidden="true"
         {...props} 
       >
@@ -66,7 +64,7 @@ export function Logo({ wrapperClassName, className, ...props }: LogoProps) {
             fontFamily="Inter, sans-serif" // Using Inter as specified in globals.css as a base
             fontSize="18" 
             fontWeight="300" // Lighter weight
-            fill="#0A2540" // Dark blue/black color for text
+            fill="hsl(var(--foreground))" // Use theme foreground color
         >
             123
         </text>
@@ -77,7 +75,7 @@ export function Logo({ wrapperClassName, className, ...props }: LogoProps) {
             fontFamily="Inter, sans-serif"
             fontSize="18" 
             fontWeight="600" // Bolder weight
-            fill="#0A2540" // Dark blue/black color for text
+            fill="hsl(var(--foreground))" // Use theme foreground color
         >
             LegalDoc
         </text>
