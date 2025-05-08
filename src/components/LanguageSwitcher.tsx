@@ -85,7 +85,8 @@ export function LanguageSwitcher() {
     
     i18n.changeLanguage(newLocaleTarget); 
     
-    router.push(finalUrl).then(() => router.refresh()); // Added router.refresh()
+    router.push(finalUrl);
+    router.refresh(); // Call refresh on a new line
 
     setIsPopoverOpen(false);
   };
