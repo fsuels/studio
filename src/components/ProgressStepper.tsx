@@ -28,11 +28,17 @@ const ProgressStepper: React.FC<ProgressStepperProps> = ({ currentStep }) => {
 
   if (!isHydrated) {
     return (
-      <nav aria-label="Progress" className="stepper sticky top-0 z-30 bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60 py-4 opacity-50">
+      <nav
+        aria-label="Progress"
+        className="stepper sticky top-0 z-30 bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60 py-4 opacity-50"
+      >
         <div className="progress-bar block sm:hidden bg-muted h-1 rounded-full">
             <div className="bg-primary h-full rounded-full" style={{ width: `0%` }} /> 
         </div>
-        <ol role="list" className="hidden sm:flex items-center justify-between space-x-2 md:space-x-4 w-full overflow-x-auto scrollbar-hide py-2 md:justify-center">
+        <ol
+          role="list"
+          className="flex items-center space-x-2 md:space-x-4 w-full overflow-x-auto scrollbar-hide py-2 md:justify-center"
+        >
             {STEPS.map((step) => (
                 <li key={step.id} className={cn("stepper__item relative flex-1")}>
                     <div className="stepper__number flex h-10 w-10 items-center justify-center rounded-full border-2 border-border bg-muted text-muted-foreground">
@@ -46,11 +52,17 @@ const ProgressStepper: React.FC<ProgressStepperProps> = ({ currentStep }) => {
   }
 
   return (
-    <nav aria-label="Progress" className="stepper sticky top-0 z-30 bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <nav
+      aria-label="Progress"
+      className="stepper sticky top-0 z-30 bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60"
+    >
        <div className="progress-bar block sm:hidden h-1 bg-muted rounded-full overflow-hidden">
             <div className="bg-primary h-full rounded-full transition-all duration-300" style={{ width: `${progressPercent}%` }} />
         </div>
-       <ol role="list" className="hidden sm:flex items-center justify-between space-x-2 md:space-x-4 w-full overflow-x-auto scrollbar-hide py-2 md:justify-center">
+       <ol
+         role="list"
+         className="flex items-center space-x-2 md:space-x-4 w-full overflow-x-auto scrollbar-hide py-2 md:justify-center"
+       >
         {STEPS.map((step, index) => (
           <li key={step.id} className={cn("stepper__item relative flex-1", index < STEPS.length - 1 ? "pr-8 sm:pr-12" : "")}>
             <div
@@ -96,3 +108,4 @@ const ProgressStepper: React.FC<ProgressStepperProps> = ({ currentStep }) => {
 };
 
 export default ProgressStepper;
+
