@@ -4,7 +4,7 @@
 import React from 'react';
 import { useFormContext, Controller } from 'react-hook-form';
 import SmartInput from '@/components/wizard/SmartInput'; 
-import AddressField from '@/components/AddressField'; // Added AddressField import
+import AddressField from '@/components/AddressField';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -76,6 +76,7 @@ export default function FieldRenderer({ fieldKey, locale, doc }: FieldRendererPr
                     field.onChange(checked);
                   }}
                   disabled={notaryIsRequiredByState}
+                  aria-invalid={!!errors.notarizationPreference}
                 />
               )}
             />
@@ -87,6 +88,7 @@ export default function FieldRenderer({ fieldKey, locale, doc }: FieldRendererPr
           </div>
            {notaryIsRequiredByState && <p className="text-xs text-muted-foreground">{t('Notarization is required for {{stateCode}}.', {stateCode: formStateCode})}</p>}
            {!notaryIsRequiredByState && <p className="text-xs text-muted-foreground">{t('Notarization may incur an additional fee.')}</p>}
+           {errors.notarizationPreference && <p className="text-xs text-destructive mt-1">{String(errors.notarizationPreference.message)}</p>}
         </div>
       ) : fieldKey === 'odo_status' ? (
         <Controller
@@ -98,6 +100,7 @@ export default function FieldRenderer({ fieldKey, locale, doc }: FieldRendererPr
               defaultValue={field.value as string | undefined}
               value={field.value as string | undefined}
               className={cn("space-y-2", fieldError && "border-destructive focus-visible:ring-destructive")}
+              aria-invalid={!!fieldError}
             >
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="ACTUAL" id="odo_actual" />
@@ -126,6 +129,7 @@ export default function FieldRenderer({ fieldKey, locale, doc }: FieldRendererPr
                 checked={field.value} 
                 onCheckedChange={field.onChange}
                 aria-labelledby="as_is_label"
+                aria-invalid={!!errors.as_is}
               />
               <span id="as_is_label" className="text-sm">
                 {field.value ? t('Sold As-Is') : t('Warranty Included')}
@@ -140,6 +144,7 @@ export default function FieldRenderer({ fieldKey, locale, doc }: FieldRendererPr
             placeholder={placeholderText || t('Describe warranty…')}
             {...register(fieldKey, { required: fieldSchema?.required && !watch('as_is') })}
             className={cn("bg-background", fieldError && "border-destructive focus-visible:ring-destructive")}
+            aria-invalid={!!fieldError}
           />
         )
       ) : (fieldKey.includes('address') && (fieldSchema?.type === 'text' || fieldSchema?.type === 'textarea')) ? (
@@ -153,6 +158,7 @@ export default function FieldRenderer({ fieldKey, locale, doc }: FieldRendererPr
               placeholder={placeholderText || t('Enter address...')}
               id={fieldKey}
               className={cn(fieldError && "border-destructive focus-visible:ring-destructive")}
+              aria-invalid={!!fieldError}
             />
           )}
         />
@@ -162,6 +168,7 @@ export default function FieldRenderer({ fieldKey, locale, doc }: FieldRendererPr
           placeholder={placeholderText}
           {...register(fieldKey, { required: fieldSchema?.required })}
           className={cn("bg-background", fieldError && "border-destructive focus-visible:ring-destructive")}
+          aria-invalid={!!fieldError}
         />
       ) : fieldSchema?.type === 'select' && fieldSchema.options ? (
         <Controller
@@ -170,7 +177,7 @@ export default function FieldRenderer({ fieldKey, locale, doc }: FieldRendererPr
           rules={{ required: fieldSchema?.required }}
           render={({ field }) => (
             <Select onValueChange={field.onChange} defaultValue={field.value as string | undefined} value={field.value as string || undefined}>
-              <SelectTrigger id={fieldKey} className={cn("bg-background", fieldError && "border-destructive focus:ring-destructive")}>
+              <SelectTrigger id={fieldKey} className={cn("bg-background", fieldError && "border-destructive focus:ring-destructive")} aria-invalid={!!fieldError}>
                 <SelectValue placeholder={placeholderText || t("Select...")} />
               </SelectTrigger>
               <SelectContent>
@@ -189,10 +196,11 @@ export default function FieldRenderer({ fieldKey, locale, doc }: FieldRendererPr
           placeholder={placeholderText}
           className={cn("input bg-background", fieldError && "border-destructive focus-visible:ring-destructive")}
           inputMode={inputType === 'number' || inputType === 'tel' ? 'numeric' : undefined}
+          aria-invalid={!!fieldError}
         />
       )}
-      {fieldError && <p className="text-xs text-destructive">{String(fieldError.message)}</p>}
-      {fieldSchema?.helperText && <p className="text-xs text-muted-foreground">{t(fieldSchema.helperText, fieldSchema.helperText)}</p>}
+      {fieldError && <p className="text-xs text-destructive mt-1">{String(fieldError.message)}</p>}
+      {fieldSchema?.helperText && !fieldError && <p className="text-xs text-muted-foreground">{t(fieldSchema.helperText, fieldSchema.helperText)}</p>}
     </div>
   );
 }
