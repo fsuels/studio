@@ -3,8 +3,7 @@
 
 import React from 'react';
 import { useFormContext, Controller } from 'react-hook-form';
-// import { Input } from '@/components/ui/input'; // Replaced by SmartInput for relevant types
-import SmartInput from '@/components/wizard/SmartInput'; // Import SmartInput
+import SmartInput from '@/components/wizard/SmartInput'; 
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -13,6 +12,7 @@ import type { LegalDocument, Question } from '@/lib/document-library';
 import { useNotary } from '@/hooks/useNotary';
 import { cn } from '@/lib/utils';
 import { useTranslation } from 'react-i18next';
+import { prettify } from '@/lib/schema-utils'; // Import prettify
 
 interface FieldRendererProps {
   fieldKey: string;
@@ -25,8 +25,8 @@ export default function FieldRenderer({ fieldKey, locale, doc }: FieldRendererPr
   const { t } = useTranslation();
   
   const fieldSchema = doc.questions?.find(q => q.id === fieldKey) || 
-                      (doc.schema.shape && doc.schema.shape[fieldKey] ? 
-                        { id: fieldKey, label: fieldKey, type: 'text', ...doc.schema.shape[fieldKey]._def } : undefined);
+                      (doc.schema && typeof doc.schema.shape === 'object' && doc.schema.shape && doc.schema.shape[fieldKey] ? 
+                        { id: fieldKey, label: prettify(fieldKey) , type: 'text', ...((doc.schema.shape as any)[fieldKey]._def) } : undefined);
 
 
   const formStateCode = watch('stateCode'); 
@@ -68,17 +68,16 @@ export default function FieldRenderer({ fieldKey, locale, doc }: FieldRendererPr
     return <p className="text-destructive">Configuration error: Field schema for "{fieldKey}" not found.</p>;
   }
   
-  const labelText = fieldSchema.label || t(fieldKey); // Use label from schema or translate fieldKey
-  const placeholderText = fieldSchema.placeholder || '';
+  const labelText = fieldSchema.label ? t(fieldSchema.label, fieldSchema.label) : prettify(fieldKey);
+  const placeholderText = fieldSchema.placeholder ? t(fieldSchema.placeholder, fieldSchema.placeholder) : '';
   const fieldError = errors[fieldKey];
 
-  // Determine input type for SmartInput or specific components
   let inputType: React.HTMLInputTypeAttribute = 'text';
-  if (fieldSchema.type === 'number' || fieldKey === 'vehicle_year' || fieldKey === 'odometer' || fieldKey === 'payment_price') {
+  if (fieldSchema.type === 'number' || fieldKey === 'vehicle_year' || fieldKey === 'odometer' || fieldKey === 'payment_price' || fieldKey === 'principalAmount' || fieldKey === 'interestRate' || fieldKey === 'durationMonths' || fieldKey === 'monthly_rent' || fieldKey === 'security_deposit' || fieldKey === 'lease_term' || fieldKey === 'termYears' || fieldKey === 'amountDue') {
     inputType = 'number';
   } else if (fieldSchema.type === 'date') {
     inputType = 'date';
-  } else if (fieldKey.endsWith('_phone')) {
+  } else if (fieldKey.endsWith('_phone') || name.endsWith('Phone')) {
     inputType = 'tel';
   }
 
@@ -89,26 +88,7 @@ export default function FieldRenderer({ fieldKey, locale, doc }: FieldRendererPr
         {labelText} {fieldSchema.required && <span className="text-destructive">*</span>}
       </Label>
       
-      {fieldKey === 'payment_method' && fieldSchema.type === 'select' && doc.id === 'bill-of-sale-vehicle' ? ( // Specific handling for payment_method
-         <Controller
-          name={fieldKey}
-          control={control}
-          rules={{ required: fieldSchema.required }}
-          render={({ field }) => (
-            <Select onValueChange={field.onChange} defaultValue={field.value}>
-              <SelectTrigger id={fieldKey} className={cn("bg-background", fieldError && "border-destructive focus:ring-destructive")}>
-                <SelectValue placeholder={placeholderText || t("Select Payment Method")} />
-              </SelectTrigger>
-              <SelectContent>
-                {/* Options from Zod enum in schema */}
-                {(doc.schema.shape as any).payment_method._def.values.map((opt: string) => (
-                   <SelectItem key={opt} value={opt}>{t(opt.replace(/_/g, ' '), opt.replace(/_/g, ' ').charAt(0).toUpperCase() + opt.replace(/_/g, ' ').slice(1))}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          )}
-        />
-      ) : fieldSchema.type === 'textarea' ? (
+      {fieldSchema.type === 'textarea' ? (
         <Textarea
           id={fieldKey}
           placeholder={placeholderText}
@@ -121,32 +101,30 @@ export default function FieldRenderer({ fieldKey, locale, doc }: FieldRendererPr
           control={control}
           rules={{ required: fieldSchema.required }}
           render={({ field }) => (
-            <Select onValueChange={field.onChange} defaultValue={field.value}>
+            <Select onValueChange={field.onChange} defaultValue={field.value} value={field.value || undefined}>
               <SelectTrigger id={fieldKey} className={cn("bg-background", fieldError && "border-destructive focus:ring-destructive")}>
                 <SelectValue placeholder={placeholderText || t("Select...")} />
               </SelectTrigger>
               <SelectContent>
                 {fieldSchema.options?.map(opt => (
-                  <SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>
+                  <SelectItem key={opt.value} value={opt.value}>{t(opt.label, opt.label)}</SelectItem>
                 ))}
               </SelectContent>
             </Select>
           )}
         />
-      ) : ( // Default to SmartInput for text, number, date, tel
+      ) : ( 
         <SmartInput
           id={fieldKey}
-          name={fieldKey} // Pass name to SmartInput
+          name={fieldKey} 
           type={inputType}
           placeholder={placeholderText}
-          // RHF register is handled inside SmartInput now
-          // required={fieldSchema.required} // RHF handles required via schema in useForm
           className={cn("input bg-background", fieldError && "border-destructive focus-visible:ring-destructive")}
           inputMode={inputType === 'number' || inputType === 'tel' ? 'numeric' : undefined}
         />
       )}
       {fieldError && <p className="text-xs text-destructive">{String(fieldError.message)}</p>}
-      {fieldSchema.helperText && <p className="text-xs text-muted-foreground">{fieldSchema.helperText}</p>}
+      {fieldSchema.helperText && <p className="text-xs text-muted-foreground">{t(fieldSchema.helperText, fieldSchema.helperText)}</p>}
     </div>
   );
 }
