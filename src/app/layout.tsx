@@ -25,19 +25,15 @@ export const metadata: Metadata = {
 // ───────── Root layout ─────────
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    // ⚠️  NO newline / space after <html …>  – keep <head> flush left
-    <html lang="en" suppressHydrationWarning><head>
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-        <script
-          src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY&libraries=places"
+    <html lang="en" suppressHydrationWarning={true}><head><meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1"
+        /><script
+          src={`https://maps.googleapis.com/maps/api/js?key=YOUR_KEY&libraries=places`}
           async
           defer
-        />
-      </head><body
+        /></head><body
         className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen overflow-x-hidden`}
-      >
-        <ClientProviders>{children}</ClientProviders>
-      </body>
-    </html>
-  )
+      ><ClientProviders>{children}</ClientProviders></body></html>
+  );
 }
