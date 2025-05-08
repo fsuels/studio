@@ -25,8 +25,6 @@ export const metadata: Metadata = {
 // ───────── Root layout (❗ NO whitespace after <html …>) ─────────
 /* prettier-ignore */
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  // const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY; // API Key is now loaded by GooglePlacesLoader
-
   return (
     <html lang="en" suppressHydrationWarning={true}><head><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/></head><body className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen overflow-x-hidden`}><ClientProviders>{children}</ClientProviders></body></html>
   );
