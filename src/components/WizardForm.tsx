@@ -14,20 +14,24 @@ import { useTranslation } from 'react-i18next';
 import { prettify } from '@/lib/schema-utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import type { BillOfSaleData } from '@/schemas/billOfSale';
-import AddressField from '@/components/AddressField'; // Corrected import path
-
+import type { BillOfSaleData } from '@/schemas/billOfSale'; // Assuming this specific type might be used for default values
+import AuthModal from '@/components/AuthModal'; // Import AuthModal
+import { useAuth } from '@/hooks/useAuth'; // Import useAuth hook
+import { useRouter } from 'next/navigation'; // Import useRouter
 
 interface WizardFormProps {
   locale: 'en' | 'es';
   doc: LegalDocument;
-  onComplete: (checkoutUrl: string) => void;
+  onComplete: (checkoutUrl: string) => void; // Callback after successful submission (e.g., to redirect to Stripe)
 }
 
 export default function WizardForm({ locale, doc, onComplete }: WizardFormProps) {
   const { t } = useTranslation();
   const { toast } = useToast();
   const liveRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
+  const { isLoggedIn, isLoading: authIsLoading, user } = useAuth(); // Use the auth hook
+  const [showAuthModal, setShowAuthModal] = useState(false);
 
   const methods = useForm<z.infer<typeof doc.schema>>({
     resolver: zodResolver(doc.schema),
@@ -46,13 +50,14 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
         } catch (e) {
           console.error("Failed to parse draft from localStorage", e);
           localStorage.removeItem(`draft-${doc.id}-${locale}`);
+          // Example: reset with specific default for bill-of-sale-vehicle if needed
           if (doc.id === 'bill-of-sale-vehicle') {
-             reset({ sale_date: new Date() } as Partial<BillOfSaleData>); 
+             reset({ sale_date: new Date().toISOString().split('T')[0] } as Partial<BillOfSaleData>); 
           }
         }
       } else {
-        if (doc.id === 'bill-of-sale-vehicle') {
-           reset({ sale_date: new Date() } as Partial<BillOfSaleData>); 
+         if (doc.id === 'bill-of-sale-vehicle') {
+           reset({ sale_date: new Date().toISOString().split('T')[0] } as Partial<BillOfSaleData>);
         }
       }
     }
@@ -61,14 +66,12 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
 
   const steps = React.useMemo(() => {
     if (doc.questions && doc.questions.length > 0) {
-      // If questions array is provided, use it directly
       return doc.questions.map(q => ({ id: q.id, label: q.label || prettify(q.id) }));
     }
-    // Fallback to Zod schema shape if questions array is not available
     if (doc.schema && 'shape' in doc.schema && typeof doc.schema.shape === 'object' && doc.schema.shape !== null) {
       return Object.keys(doc.schema.shape).map(key => ({ id: key, label: prettify(key) }));
     }
-    return []; // Should not happen if doc is well-defined
+    return [];
   }, [doc.questions, doc.schema]);
 
   const totalSteps = steps.length;
@@ -84,9 +87,51 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
     }
   }, [watch, doc.id, locale]);
 
+  const proceedToApiSubmission = async () => {
+    setIsSubmitting(true);
+    try {
+      const response = await axios.post(`/${locale}/api/wizard/${doc.id}/submit`, { 
+        values: getValues(),
+        locale, 
+      });
+      toast({ title: t("Submission Successful"), description: t("Document saved, proceeding to payment.") });
+      if (typeof window !== 'undefined') localStorage.removeItem(`draft-${doc.id}-${locale}`);
+      onComplete(response.data.checkoutUrl); // onComplete should handle redirecting to Stripe
+    } catch (error: any) {
+      console.error('Submission error in WizardForm:', error);
+      let title = t("Submission Failed");
+      let description = t("An unexpected error occurred. Please try again.");
+
+      if (axios.isAxiosError(error)) {
+        const axiosError = error as AxiosError<any>;
+        title = t(`API Error Occurred`, { status: axiosError.response?.status || '' }).trim();
+        description = axiosError.response?.data?.error || axiosError.message;
+        if(axiosError.response?.data?.details && typeof axiosError.response.data.details === 'object') {
+          const detailsString = Object.entries(axiosError.response.data.details.fieldErrors || {})
+            .map(([field, messages]) => `${prettify(field)}: ${(messages as string[]).join(', ')}`)
+            .join('; ');
+          if (detailsString) description += ` ${t("Details")}: ${detailsString}`;
+        } else if (axiosError.response?.data?.details && typeof axiosError.response.data.details === 'string') {
+          description += ` ${t("Details")}: ${axiosError.response.data.details}`;
+        }
+      } else if (error instanceof Error) {
+        description = error.message;
+      }
+
+      toast({
+        title: title,
+        description: description,
+        variant: "destructive",
+        duration: 9000,
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
 
   const handleNextStep = async () => {
-    setIsSubmitting(true);
+    setIsSubmitting(true); // Indicate processing start
     const currentStepField = totalSteps > 0 ? steps[currentStepIndex] : null;
 
     let isValid = true;
@@ -113,46 +158,23 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
     if (currentStepIndex < totalSteps - 1) {
       setCurrentStepIndex(s => s + 1);
       if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' });
+      setIsSubmitting(false); // Stop loading for next step
     } else {
-      // Final step: submit
-      try {
-        const response = await axios.post(`/${locale}/api/wizard/${doc.id}/submit`, { 
-          values: getValues(),
-          locale, 
-        });
-        toast({ title: t("Submission Successful"), description: t("Document saved, proceeding to payment.") });
-        if (typeof window !== 'undefined') localStorage.removeItem(`draft-${doc.id}-${locale}`);
-        onComplete(response.data.checkoutUrl);
-      } catch (error: any) {
-        console.error('Submission error in WizardForm:', error);
-        let title = t("Submission Failed");
-        let description = t("An unexpected error occurred. Please try again.");
-
-        if (axios.isAxiosError(error)) {
-          const axiosError = error as AxiosError<any>;
-          title = t(`API Error Occurred`, { status: axiosError.response?.status || '' }).trim();
-          description = axiosError.response?.data?.error || axiosError.message;
-          if(axiosError.response?.data?.details && typeof axiosError.response.data.details === 'object') {
-            const detailsString = Object.entries(axiosError.response.data.details.fieldErrors || {})
-              .map(([field, messages]) => `${prettify(field)}: ${(messages as string[]).join(', ')}`)
-              .join('; ');
-            if (detailsString) description += ` ${t("Details")}: ${detailsString}`;
-          } else if (axiosError.response?.data?.details && typeof axiosError.response.data.details === 'string') {
-            description += ` ${t("Details")}: ${axiosError.response.data.details}`;
-          }
-        } else if (error instanceof Error) {
-          description = error.message;
+      // Final step: check auth, then submit
+      if (!authIsLoading) { // Only proceed if auth check is complete
+        if (!isLoggedIn) {
+          setShowAuthModal(true);
+          setIsSubmitting(false); // Stop loading, show modal
+          return;
         }
-
-        toast({
-          title: title,
-          description: description,
-          variant: "destructive",
-          duration: 9000,
-        });
+        // If logged in, proceed to API submission
+        await proceedToApiSubmission();
+      } else {
+        // Auth is still loading, wait
+        toast({ title: "Verifying account...", description: "Please wait."});
+        setIsSubmitting(false); // Keep button enabled but indicate loading
       }
     }
-    setIsSubmitting(false);
   };
 
   const handlePreviousStep = () => {
@@ -166,42 +188,28 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
 
   return (
     <FormProvider {...methods}>
+      <AuthModal
+        isOpen={showAuthModal}
+        onClose={() => setShowAuthModal(false)}
+        onAuthSuccess={() => {
+          setShowAuthModal(false);
+          // User is now "authenticated" (mocked), attempt submission again
+          // Small delay to ensure UI updates if necessary
+          setTimeout(() => {
+            handleNextStep(); // This will re-check auth (which should now be true) and proceed
+          }, 100);
+        }}
+      />
       <div className="bg-card rounded-lg shadow-xl p-6 md:p-8 border border-border">
         {(totalSteps > 0 && currentField) && <ProgressSteps current={currentStepIndex + 1} total={totalSteps} stepLabels={steps.map(s => t(s.label, s.label))} />}
 
         <div className="mt-6 space-y-6 min-h-[200px]">
           {currentField && currentField.id ? (
-            (currentField.id.endsWith('_address')) ? (
-                <Controller
-                  control={control}
-                  name={currentField.id as any}
-                  render={({ field: { onChange, value, name: rhfName } }) => (
-                    <AddressField
-                      name={rhfName}
-                      label={t(currentField.label)}
-                      value={value || ''}
-                      onChange={(raw, parts) => {
-                        onChange(raw); 
-                        if (parts && doc.schema && typeof doc.schema.shape === 'object' && doc.schema.shape) {
-                          const prefix = rhfName.replace('_address', '');
-                          if ((doc.schema.shape as any)[`${prefix}_city`]) setValue(`${prefix}_city` as any, parts.city, {shouldValidate: true});
-                          if ((doc.schema.shape as any)[`${prefix}_state`]) setValue(`${prefix}_state` as any, parts.state, {shouldValidate: true});
-                          if ((doc.schema.shape as any)[`${prefix}_postal_code`]) setValue(`${prefix}_postal_code` as any, parts.postalCode, {shouldValidate: true});
-                        }
-                      }}
-                      required={doc.questions?.find(q => q.id === currentField.id)?.required || (doc.schema.shape as any)[currentField.id]?._def?.typeName !== 'ZodOptional'}
-                      // error={errors[currentField.id as any]?.message as string | undefined}
-                      aria-invalid={!!errors[currentField.id as any]} 
-                    />
-                  )}
-                />
-            ) : (
-                <FieldRenderer
-                    fieldKey={currentField.id}
-                    locale={locale}
-                    doc={doc}
-                />
-            )
+            <FieldRenderer
+                fieldKey={currentField.id}
+                locale={locale}
+                doc={doc}
+            />
           ) : (
             <p className="text-muted-foreground text-center py-10">{t('dynamicForm.noQuestionsNeeded')}</p>
           )}
@@ -213,7 +221,7 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
               type="button"
               variant="outline"
               onClick={handlePreviousStep}
-              disabled={isSubmitting}
+              disabled={isSubmitting || authIsLoading}
               className="text-foreground border-border hover:bg-muted"
             >
               {t('Back')}
@@ -226,9 +234,9 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
               type="button"
               onClick={handleNextStep}
               className="bg-primary text-primary-foreground hover:bg-primary/90 min-w-[120px]"
-              disabled={isSubmitting}
+              disabled={isSubmitting || authIsLoading}
             >
-              {isSubmitting ? <Loader2 className="animate-spin h-5 w-5" /> :
+              {isSubmitting || authIsLoading ? <Loader2 className="animate-spin h-5 w-5" /> :
               (currentStepIndex === totalSteps - 1 || totalSteps === 0 ? t('dynamicForm.confirmAnswersButton') : t('wizard.next'))}
             </Button>
           )}
