@@ -4,7 +4,7 @@
 import React from 'react';
 import { useFormContext, Controller } from 'react-hook-form';
 import SmartInput from '@/components/wizard/SmartInput'; 
-import AddressField from '@/components/AddressField';
+import { AddressField } from '@/components/AddressField'; // Ensure correct import
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -53,14 +53,53 @@ export default function FieldRenderer({ fieldKey, locale, doc }: FieldRendererPr
     inputType = 'tel';
   }
 
+  const isAddressField = fieldKey.endsWith('_address') && (fieldSchema?.type === 'text' || fieldSchema?.type === 'textarea');
 
   return (
     <div className="space-y-2">
-      <Label htmlFor={fieldKey} className={cn("font-medium", fieldError && "text-destructive")}>
-        {labelText} {fieldSchema?.required && <span className="text-destructive">*</span>}
-      </Label>
+      {!isAddressField && (
+          <Label htmlFor={fieldKey} className={cn("font-medium", fieldError && "text-destructive")}>
+            {labelText} {fieldSchema?.required && <span className="text-destructive">*</span>}
+          </Label>
+      )}
       
-      {fieldKey === 'notarizationToggle' && doc.offerNotarization ? (
+      {isAddressField ? (
+        <Controller
+          name={fieldKey as any}
+          control={control}
+          rules={{ required: fieldSchema?.required }}
+          render={({ field: controllerField }) => {
+            const baseName = fieldKey.substring(0, fieldKey.lastIndexOf('_address'));
+            const cityFieldName = `${baseName}_city`;
+            const stateFieldName = `${baseName}_state`;
+            const postalCodeFieldName = `${baseName}_postal_code`;
+
+            const hasCityField = !!doc.schema.shape[cityFieldName];
+            const hasStateField = !!doc.schema.shape[stateFieldName];
+            const hasPostalCodeField = !!doc.schema.shape[postalCodeFieldName];
+
+            return (
+              <AddressField
+                label={labelText} // AddressField handles its own label rendering
+                value={controllerField.value || ''}
+                onChange={(rawValue, parts) => {
+                  controllerField.onChange(rawValue);
+                  if (parts) {
+                    if (hasCityField && parts.city) setValue(cityFieldName, parts.city, { shouldValidate: true, shouldDirty: true });
+                    if (hasStateField && parts.state) setValue(stateFieldName, parts.state, { shouldValidate: true, shouldDirty: true });
+                    if (hasPostalCodeField && parts.postalCode) setValue(postalCodeFieldName, parts.postalCode, { shouldValidate: true, shouldDirty: true });
+                  }
+                }}
+                placeholder={placeholderText || t('Enter address...')}
+                required={fieldSchema?.required}
+                error={fieldError?.message as string | undefined}
+                // Pass id for label association if AddressField is modified to use it
+                // id={fieldKey} 
+              />
+            );
+          }}
+        />
+      ) : fieldKey === 'notarizationToggle' && doc.offerNotarization ? (
         <div className="space-y-2 pt-4 border-t mt-4">
           <div className="flex items-center space-x-2">
             <Controller
@@ -121,7 +160,7 @@ export default function FieldRenderer({ fieldKey, locale, doc }: FieldRendererPr
         <Controller
           name="as_is"
           control={control}
-          defaultValue={true} // Default to true for 'as_is'
+          defaultValue={true} 
           render={({field}) =>(
             <div className="flex items-center space-x-2">
               <Switch 
@@ -147,22 +186,7 @@ export default function FieldRenderer({ fieldKey, locale, doc }: FieldRendererPr
             aria-invalid={!!fieldError}
           />
         )
-      ) : (fieldKey.includes('address') && (fieldSchema?.type === 'text' || fieldSchema?.type === 'textarea')) ? (
-        <Controller
-          name={fieldKey as any}
-          control={control}
-          rules={{ required: fieldSchema?.required }}
-          render={({ field }) => (
-            <AddressField
-              {...field}
-              placeholder={placeholderText || t('Enter address...')}
-              id={fieldKey}
-              className={cn(fieldError && "border-destructive focus-visible:ring-destructive")}
-              aria-invalid={!!fieldError}
-            />
-          )}
-        />
-      ): fieldSchema?.type === 'textarea' ? (
+      ) : fieldSchema?.type === 'textarea' ? (
         <Textarea
           id={fieldKey}
           placeholder={placeholderText}
