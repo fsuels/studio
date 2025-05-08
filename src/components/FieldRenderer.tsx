@@ -8,7 +8,8 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox"; 
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"; // Added RadioGroup and RadioGroupItem
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Switch } from "@/components/ui/switch"; // Added Switch import
 import type { LegalDocument, Question } from '@/lib/document-library';
 import { useNotary } from '@/hooks/useNotary';
 import { cn } from '@/lib/utils';
@@ -33,7 +34,7 @@ export default function FieldRenderer({ fieldKey, locale, doc }: FieldRendererPr
   const formStateCode = watch('stateCode'); 
   const { isRequired: notaryIsRequiredByState } = useNotary(formStateCode);
 
-  if (!fieldSchema) {
+  if (!fieldSchema && fieldKey !== 'as_is' && fieldKey !== 'warranty_text') { // Adjusted condition
     if (fieldKey === 'notarizationToggle' && doc.offerNotarization) {
       return (
         <div className="space-y-2 pt-4 border-t mt-4">
@@ -69,16 +70,16 @@ export default function FieldRenderer({ fieldKey, locale, doc }: FieldRendererPr
     return <p className="text-destructive">Configuration error: Field schema for "{fieldKey}" not found.</p>;
   }
   
-  const labelText = fieldSchema.label ? t(fieldSchema.label, fieldSchema.label) : prettify(fieldKey);
-  const placeholderText = fieldSchema.placeholder ? t(fieldSchema.placeholder, fieldSchema.placeholder) : '';
+  const labelText = fieldSchema?.label ? t(fieldSchema.label, fieldSchema.label) : prettify(fieldKey);
+  const placeholderText = fieldSchema?.placeholder ? t(fieldSchema.placeholder, fieldSchema.placeholder) : '';
   const fieldError = errors[fieldKey];
 
   let inputType: React.HTMLInputTypeAttribute = 'text';
-  if (fieldSchema.type === 'number' || fieldKey === 'vehicle_year' || fieldKey === 'odometer' || fieldKey === 'price' || fieldKey === 'principalAmount' || fieldKey === 'interestRate' || fieldKey === 'durationMonths' || fieldKey === 'monthly_rent' || fieldKey === 'security_deposit' || fieldKey === 'lease_term' || fieldKey === 'termYears' || fieldKey === 'amountDue') {
+  if (fieldSchema?.type === 'number' || fieldKey === 'vehicle_year' || fieldKey === 'odometer' || fieldKey === 'price' || fieldKey === 'principalAmount' || fieldKey === 'interestRate' || fieldKey === 'durationMonths' || fieldKey === 'monthly_rent' || fieldKey === 'security_deposit' || fieldKey === 'lease_term' || fieldKey === 'termYears' || fieldKey === 'amountDue') {
     inputType = 'number';
-  } else if (fieldSchema.type === 'date') {
+  } else if (fieldSchema?.type === 'date') {
     inputType = 'date';
-  } else if (fieldKey.endsWith('_phone') || fieldKey.endsWith('Phone')) { // Use fieldKey consistently
+  } else if (fieldKey.endsWith('_phone') || fieldKey.endsWith('Phone')) { 
     inputType = 'tel';
   }
 
@@ -86,7 +87,7 @@ export default function FieldRenderer({ fieldKey, locale, doc }: FieldRendererPr
   return (
     <div className="space-y-2">
       <Label htmlFor={fieldKey} className={cn("font-medium", fieldError && "text-destructive")}>
-        {labelText} {fieldSchema.required && <span className="text-destructive">*</span>}
+        {labelText} {fieldSchema?.required && <span className="text-destructive">*</span>}
       </Label>
       
       {fieldKey === 'odo_status' ? (
@@ -96,7 +97,8 @@ export default function FieldRenderer({ fieldKey, locale, doc }: FieldRendererPr
           render={({ field }) => (
             <RadioGroup
               onValueChange={field.onChange}
-              defaultValue={field.value}
+              defaultValue={field.value as string | undefined} // Cast to string | undefined
+              value={field.value as string | undefined} // Ensure value is controlled
               className={cn("space-y-2", fieldError && "border-destructive focus-visible:ring-destructive")}
             >
               <div className="flex items-center space-x-2">
@@ -114,20 +116,47 @@ export default function FieldRenderer({ fieldKey, locale, doc }: FieldRendererPr
             </RadioGroup>
           )}
         />
-      ) : fieldSchema.type === 'textarea' ? (
+      ) : fieldKey === 'as_is' ? ( // Special handling for 'as_is'
+        <Controller
+          name="as_is"
+          control={control}
+          render={({field}) =>(
+            <div className="flex items-center space-x-2">
+              <Switch 
+                id={field.name}
+                checked={field.value} 
+                onCheckedChange={field.onChange}
+                aria-labelledby="as_is_label"
+              />
+              <span id="as_is_label" className="text-sm">
+                {field.value ? t('Sold As-Is') : t('Warranty Included')}
+              </span>
+            </div>
+          )}
+        />
+      ) : fieldKey === 'warranty_text' ? ( // Special handling for 'warranty_text'
+         !watch('as_is') && (
+          <Textarea 
+            id={fieldKey}
+            placeholder={placeholderText || t('Describe warranty…')}
+            {...register(fieldKey, { required: fieldSchema?.required && !watch('as_is') })}
+            className={cn("bg-background", fieldError && "border-destructive focus-visible:ring-destructive")}
+          />
+        )
+      ) : fieldSchema?.type === 'textarea' ? (
         <Textarea
           id={fieldKey}
           placeholder={placeholderText}
-          {...register(fieldKey, { required: fieldSchema.required })}
+          {...register(fieldKey, { required: fieldSchema?.required })}
           className={cn("bg-background", fieldError && "border-destructive focus-visible:ring-destructive")}
         />
-      ) : fieldSchema.type === 'select' && fieldSchema.options ? (
+      ) : fieldSchema?.type === 'select' && fieldSchema.options ? (
         <Controller
           name={fieldKey}
           control={control}
-          rules={{ required: fieldSchema.required }}
+          rules={{ required: fieldSchema?.required }}
           render={({ field }) => (
-            <Select onValueChange={field.onChange} defaultValue={field.value} value={field.value || undefined}>
+            <Select onValueChange={field.onChange} defaultValue={field.value as string | undefined} value={field.value as string || undefined}>
               <SelectTrigger id={fieldKey} className={cn("bg-background", fieldError && "border-destructive focus:ring-destructive")}>
                 <SelectValue placeholder={placeholderText || t("Select...")} />
               </SelectTrigger>
@@ -150,7 +179,7 @@ export default function FieldRenderer({ fieldKey, locale, doc }: FieldRendererPr
         />
       )}
       {fieldError && <p className="text-xs text-destructive">{String(fieldError.message)}</p>}
-      {fieldSchema.helperText && <p className="text-xs text-muted-foreground">{t(fieldSchema.helperText, fieldSchema.helperText)}</p>}
+      {fieldSchema?.helperText && <p className="text-xs text-muted-foreground">{t(fieldSchema.helperText, fieldSchema.helperText)}</p>}
     </div>
   );
 }
