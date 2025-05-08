@@ -1,33 +1,30 @@
 // components/Nav.tsx
 'use client';
 
-import React, { useState, useEffect } from 'react'; // Import React, useState, useEffect
+import React, { useState, useEffect } from 'react'; 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 
 export default function Nav() {
   const { t } = useTranslation();
-  const pathname = usePathname(); // e.g. "/en/pricing", "/es/docs/…"
+  const pathname = usePathname(); 
   const [locale, setLocale] = useState<'en'|'es'>('en');
   const [mounted, setMounted] = useState(false);
 
-  // Only run on client once
   useEffect(() => {
     setMounted(true);
     const segments = pathname.split('/');
-    const pathLocale = segments[1];
-    if (pathLocale === 'es') {
-      setLocale('es');
+    const pathLocale = segments[1] as 'en' | 'es' | undefined;
+    if (pathLocale && ['en', 'es'].includes(pathLocale)) {
+      setLocale(pathLocale);
     } else {
-      setLocale('en'); // Default to 'en' if not 'es' or if segment is missing/different
+      setLocale('en'); 
     }
   }, [pathname]);
 
   if (!mounted) {
-    // Render a placeholder or null to prevent SSR/client mismatch
-    // For a nav, rendering null is often acceptable as it won't cause major layout shifts if CSS is handled well.
-    return <nav className="flex items-center gap-3 md:gap-4 text-sm font-medium text-muted-foreground h-8"></nav>; // Placeholder with height
+    return <nav className="flex items-center gap-3 md:gap-4 text-sm font-medium text-muted-foreground h-8"></nav>; 
   }
 
   const navLinks = [
@@ -41,7 +38,11 @@ export default function Nav() {
   return (    
     <nav className="flex items-center gap-3 md:gap-4 text-sm font-medium text-muted-foreground">
       {navLinks.map(link => (
-        <Link key={link.href} href={`/${locale}${link.href}`} className="hover:text-primary transition-colors px-1 py-1.5 sm:px-2">
+        <Link 
+          key={link.href} 
+          href={`/${locale}${link.href}`} 
+          className="hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground transition-colors px-2 py-1.5 rounded-md" // Updated classes
+        >
           {t(link.labelKey, { defaultValue: link.defaultLabel })}
         </Link>
       ))}
