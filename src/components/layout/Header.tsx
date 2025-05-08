@@ -3,13 +3,14 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation'; // Import usePathname
 import { Logo } from '@/components/layout/Logo';
 import Nav from '@/components/Nav'; 
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"; 
 import { Button } from '@/components/ui/button'; 
 import MiniCartDrawer from '@/components/MiniCartDrawer';
-import { ThemeToggle } from '@/components/ThemeToggle'; // Corrected import path
+import { ThemeToggle } from '@/components/ThemeToggle';
 import { Check, ChevronDown, Globe, UserPlus, LogIn, Search as SearchIcon, ExternalLink, FileText, Menu as MenuIcon, X as CloseIcon, LayoutGrid, ChevronUp } from 'lucide-react'; 
 import { Input } from '@/components/ui/input';
 import { documentLibrary, LegalDocument } from '@/lib/document-library';
@@ -19,9 +20,10 @@ import MegaMenuContent from './MegaMenuContent';
 import { useTranslation } from 'react-i18next';
 
 
-export function Header() {
+export default function Header() { // Changed to default export
   const { i18n, t } = useTranslation(); 
-  const [isHydrated, setIsHydrated] = useState(false);
+  const [clientLocale, setClientLocale] = useState<'en'|'es'>('en'); // Renamed to avoid conflict
+  const [mounted, setMounted] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState<LegalDocument[]>([]);
   const [showResults, setShowResults] = useState(false);
@@ -31,19 +33,30 @@ export function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMegaMenuOpen, setIsMegaMenuOpen] = useState(false); 
   const [showMobileCategories, setShowMobileCategories] = useState(false); 
+  
+  const pathname = usePathname(); // Get current pathname
+
+  useEffect(() => {
+    setMounted(true);
+    const segments = pathname.split('/');
+    const pathLocale = segments[1];
+    if (pathLocale === 'es') {
+      setClientLocale('es');
+      if (i18n.language !== 'es') i18n.changeLanguage('es');
+    } else {
+      setClientLocale('en'); // Default to 'en'
+      if (i18n.language !== 'en') i18n.changeLanguage('en');
+    }
+  }, [pathname, i18n]);
 
 
   useEffect(() => {
-    setIsHydrated(true);
-  }, []);
-
-  useEffect(() => {
-    if (!isHydrated) return;
+    if (!mounted) return; // Ensure client-side only for i18n.language sensitive operations
 
     const performSearch = () => {
       if (searchQuery.trim().length > 1) { 
         const lowerQuery = searchQuery.toLowerCase();
-        const lang = i18n.language as 'en' | 'es';
+        const lang = clientLocale; // Use client-derived locale
         
         const results = documentLibrary.filter(doc => {
           const name = lang === 'es' && doc.name_es ? doc.name_es : doc.name;
@@ -67,7 +80,7 @@ export function Header() {
     const debounceTimeout = setTimeout(performSearch, 300); 
     return () => clearTimeout(debounceTimeout);
 
-  }, [searchQuery, i18n.language, isHydrated]);
+  }, [searchQuery, clientLocale, mounted]);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -94,7 +107,7 @@ export function Header() {
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      router.push(`/${i18n.language}/?search=${encodeURIComponent(searchQuery)}#workflow-start`); 
+      router.push(`/${clientLocale}/?search=${encodeURIComponent(searchQuery)}#workflow-start`); 
     }
     setSearchQuery('');
     setShowResults(false); 
@@ -107,7 +120,7 @@ export function Header() {
     setShowResults(false);
     setIsMobileMenuOpen(false);
     setIsMegaMenuOpen(false);
-    router.push(`/${i18n.language}/docs/${docId}`); 
+    router.push(`/${clientLocale}/docs/${docId}`); 
   };
 
   const handleMegaMenuLinkClick = () => {
@@ -131,9 +144,9 @@ export function Header() {
         <nav className="hidden md:flex items-center gap-2 ml-auto">
             <Popover open={isMegaMenuOpen} onOpenChange={setIsMegaMenuOpen}>
                 <PopoverTrigger asChild>
-                    <Button variant="ghost" size="sm" className="text-sm font-medium flex items-center gap-1 px-2 hover:text-primary" disabled={!isHydrated}>
+                    <Button variant="ghost" size="sm" className="text-sm font-medium flex items-center gap-1 px-2 hover:text-primary" disabled={!mounted}>
                         <LayoutGrid className="h-4 w-4 text-muted-foreground" />
-                        {isHydrated ? t('nav.documentCategories') : '...'}
+                        {mounted ? t('nav.documentCategories') : '...'}
                         <ChevronDown className="h-4 w-4 opacity-70" />
                     </Button>
                 </PopoverTrigger>
@@ -152,13 +165,13 @@ export function Header() {
                 <Input
                     ref={searchInputRef}
                     type="search"
-                    placeholder={isHydrated ? t('nav.searchPlaceholder', { defaultValue: 'Search documents...' }) : "..."}
+                    placeholder={mounted ? t('nav.searchPlaceholder', { defaultValue: 'Search documents...' }) : "..."}
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     onFocus={() => searchQuery.trim().length > 1 && searchResults.length > 0 && setShowResults(true)}
                     className="h-9 pl-10 text-sm rounded-md w-40 md:w-56 bg-background border-input focus:border-primary"
-                    disabled={!isHydrated}
-                    aria-label={isHydrated ? t('nav.searchPlaceholder', {defaultValue: 'Search documents...'}) : "Search documents"}
+                    disabled={!mounted}
+                    aria-label={mounted ? t('nav.searchPlaceholder', {defaultValue: 'Search documents...'}) : "Search documents"}
                 />
                 {showResults && searchResults.length > 0 && (
                   <div 
@@ -174,7 +187,7 @@ export function Header() {
                           >
                             <FileText className="h-4 w-4 shrink-0 text-muted-foreground"/>
                             <span className="truncate">
-                               {i18n.language === 'es' && doc.name_es ? doc.name_es : doc.name}
+                               {clientLocale === 'es' && doc.name_es ? doc.name_es : doc.name}
                             </span>
                             <ExternalLink className="h-3 w-3 ml-auto text-muted-foreground/70"/>
                           </button>
@@ -184,62 +197,64 @@ export function Header() {
                   </div>
                 )}
              </form>
+            
+            {mounted && <LanguageSwitcher />} {/* Render LanguageSwitcher only when mounted */}
 
-            <LanguageSwitcher />
-
-             <Button
-                variant="outline"
-                size="sm"
-                className="text-xs font-medium text-foreground/80 hover:bg-foreground/5 hover:text-foreground px-2 py-1.5 md:px-3 border-border/50 shadow-sm flex items-center h-9 md:h-8"
-                asChild
-                disabled={!isHydrated}
-             >
-                <Link href={`/${i18n.language}/signup`}> 
-                   <UserPlus className="h-4 w-4 mr-1 md:mr-2" />
-                   <span className="hidden sm:inline">{isHydrated ? t('Sign Up') : '...'}</span>
-                </Link>
-             </Button>
-             <Button
-                variant="default" 
-                size="sm"
-                className="text-xs font-medium px-2 py-1.5 md:px-3 shadow-sm flex items-center h-9 md:h-8"
-                asChild
-                disabled={!isHydrated}
-             >
-                <Link href={`/${i18n.language}/signin`}>
-                    <LogIn className="h-4 w-4 mr-1 md:mr-2" />
-                    <span className="hidden sm:inline">{isHydrated ? t('Sign In') : '...'}</span>
-                </Link>
-             </Button>
-            {isHydrated && <MiniCartDrawer />}
-            {isHydrated && <ThemeToggle />}
+            {mounted && (
+                <>
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        className="text-xs font-medium text-foreground/80 hover:bg-foreground/5 hover:text-foreground px-2 py-1.5 md:px-3 border-border/50 shadow-sm flex items-center h-9 md:h-8"
+                        asChild
+                    >
+                        <Link href={`/${clientLocale}/signup`}> 
+                        <UserPlus className="h-4 w-4 mr-1 md:mr-2" />
+                        <span className="hidden sm:inline">{t('Sign Up')}</span>
+                        </Link>
+                    </Button>
+                    <Button
+                        variant="default" 
+                        size="sm"
+                        className="text-xs font-medium px-2 py-1.5 md:px-3 shadow-sm flex items-center h-9 md:h-8"
+                        asChild
+                    >
+                        <Link href={`/${clientLocale}/signin`}>
+                            <LogIn className="h-4 w-4 mr-1 md:mr-2" />
+                            <span className="hidden sm:inline">{t('Sign In')}</span>
+                        </Link>
+                    </Button>
+                    <MiniCartDrawer />
+                    <ThemeToggle />
+                </>
+            )}
         </nav>
 
         {/* Mobile Menu Button */}
         <div className="md:hidden ml-auto flex items-center gap-1">
-            {isHydrated && <MiniCartDrawer />}
-            {isHydrated && <ThemeToggle />}
-             <Button variant="ghost" size="icon" className="h-9 w-9" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} disabled={!isHydrated}>
+            {mounted && <MiniCartDrawer />}
+            {mounted && <ThemeToggle />}
+             <Button variant="ghost" size="icon" className="h-9 w-9" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} disabled={!mounted}>
                 {isMobileMenuOpen ? <CloseIcon className="h-5 w-5" /> : <MenuIcon className="h-5 w-5" />}
              </Button>
         </div>
       </div>
 
       {/* Mobile Menu Content */}
-      {isMobileMenuOpen && isHydrated && (
+      {isMobileMenuOpen && mounted && (
          <div className="md:hidden absolute top-14 left-0 right-0 bg-background shadow-lg border-t border-border p-4 space-y-4 animate-fade-in z-[60] max-h-[calc(100vh-3.5rem)] overflow-y-auto">
             <form onSubmit={handleSearchSubmit} className="relative flex items-center w-full">
                  <SearchIcon className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground pointer-events-none" />
                  <Input
                      ref={searchInputRef} 
                      type="search"
-                     placeholder={isHydrated ? t('nav.searchPlaceholder', { defaultValue: 'Search documents...' }) : "..."}
+                     placeholder={mounted ? t('nav.searchPlaceholder', { defaultValue: 'Search documents...' }) : "..."}
                      value={searchQuery}
                      onChange={(e) => setSearchQuery(e.target.value)}
                      onFocus={() => searchQuery.trim().length > 1 && searchResults.length > 0 && setShowResults(true)}
                      className="h-10 pl-10 text-sm rounded-md w-full bg-muted border-input focus:border-primary"
-                     disabled={!isHydrated}
-                     aria-label={isHydrated ? t('nav.searchPlaceholder', {defaultValue: 'Search documents...'}) : "Search documents"}
+                     disabled={!mounted}
+                     aria-label={mounted ? t('nav.searchPlaceholder', {defaultValue: 'Search documents...'}) : "Search documents"}
                  />
                  {showResults && searchResults.length > 0 && (
                   <div 
@@ -255,7 +270,7 @@ export function Header() {
                           >
                             <FileText className="h-4 w-4 shrink-0 text-muted-foreground"/>
                             <span className="truncate">
-                               {i18n.language === 'es' && doc.name_es ? doc.name_es : doc.name}
+                               {clientLocale === 'es' && doc.name_es ? doc.name_es : doc.name}
                             </span>
                             <ExternalLink className="h-3 w-3 ml-auto text-muted-foreground/70"/>
                           </button>
@@ -270,12 +285,12 @@ export function Header() {
               variant="ghost"
               className="w-full justify-between text-base font-medium flex items-center gap-2 px-2 py-3 hover:text-primary"
               onClick={() => setShowMobileCategories(!showMobileCategories)}
-              disabled={!isHydrated}
+              disabled={!mounted}
               aria-expanded={showMobileCategories}
             >
               <div className="flex items-center gap-2">
                 <LayoutGrid className="h-5 w-5 text-muted-foreground" />
-                {isHydrated ? t('nav.documentCategories') : '...'}
+                {mounted ? t('nav.documentCategories') : '...'}
               </div>
               {showMobileCategories ? <ChevronUp className="h-5 w-5 opacity-70" /> : <ChevronDown className="h-5 w-5 opacity-70" />}
             </Button>
@@ -287,31 +302,28 @@ export function Header() {
             
             <div className="border-t border-border pt-4 space-y-1">
                 {[
-                    { href: `/${i18n.language}/pricing`, labelKey: "nav.pricing" },
-                    { href: `/${i18n.language}/features`, labelKey: "nav.features" },
-                    { href: `/${i18n.language}/blog`, labelKey: "nav.blog" },
-                    { href: `/${i18n.language}/faq`, labelKey: "nav.faq" },
-                    { href: `/${i18n.language}/support`, labelKey: "nav.support" },
+                    { href: "/pricing", labelKey: "nav.pricing" },
+                    { href: "/features", labelKey: "nav.features" },
+                    { href: "/blog", labelKey: "nav.blog" },
+                    { href: "/faq", labelKey: "nav.faq" },
+                    { href: "/support", labelKey: "nav.support" },
                 ].map(link => (
                     <Button key={link.href} variant="ghost" asChild className="w-full justify-start text-base py-3" onClick={() => setIsMobileMenuOpen(false)}>
-                        <Link href={link.href}>{isHydrated ? t(link.labelKey) : '...'}</Link>
+                        <Link href={`/${clientLocale}${link.href}`}>{mounted ? t(link.labelKey) : '...'}</Link>
                     </Button>
                 ))}
             </div>
 
             <div className="border-t pt-4 flex items-center gap-2">
-                <LanguageSwitcher />
+                 {mounted && <LanguageSwitcher />}
             </div>
 
              <div className="border-t border-border pt-4 space-y-2">
-                 <Button variant="outline" size="sm" className="w-full justify-start text-base py-3" asChild onClick={() => setIsMobileMenuOpen(false)}><Link href={`/${i18n.language}/signup`}><UserPlus className="h-5 w-5 mr-2" />{isHydrated ? t('Sign Up') : '...'}</Link></Button>
-                 <Button variant="default" size="sm" className="w-full justify-start text-base py-3" asChild onClick={() => setIsMobileMenuOpen(false)}><Link href={`/${i18n.language}/signin`}><LogIn className="h-5 w-5 mr-2" />{isHydrated ? t('Sign In') : '...'}</Link></Button>
+                 <Button variant="outline" size="sm" className="w-full justify-start text-base py-3" asChild onClick={() => setIsMobileMenuOpen(false)}><Link href={`/${clientLocale}/signup`}><UserPlus className="h-5 w-5 mr-2" />{mounted ? t('Sign Up') : '...'}</Link></Button>
+                 <Button variant="default" size="sm" className="w-full justify-start text-base py-3" asChild onClick={() => setIsMobileMenuOpen(false)}><Link href={`/${clientLocale}/signin`}><LogIn className="h-5 w-5 mr-2" />{mounted ? t('Sign In') : '...'}</Link></Button>
              </div>
          </div>
       )}
     </header>
   );
 }
-    
-    
-

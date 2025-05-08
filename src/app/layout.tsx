@@ -4,8 +4,6 @@ import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css'; 
 import { ClientProviders } from '@/components/providers/ClientProviders'; 
 import React from 'react'; 
-// Removed dynamic import of LanguageSwitcher as it's not used here and caused an error.
-// The LanguageSwitcher component is correctly imported and used within Header.tsx, which is a client component.
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -28,12 +26,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>{/* Add suppressHydrationWarning and remove whitespace */}
+    <html lang="en" suppressHydrationWarning>
       <head>
           <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen overflow-x-hidden`}>
-          {/* ClientProviders will handle its placement or Header is client-side */}
           <ClientProviders>
             {children}
           </ClientProviders>

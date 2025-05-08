@@ -11,6 +11,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import Link from 'next/link'; // Import Link
 
 // Inline SVG Flags
 const FlagUS = () => (
@@ -63,37 +64,25 @@ export function LanguageSwitcher() {
   const [currentLocale, setCurrentLocale] = useState<'en' | 'es'>('en');
 
   useEffect(() => {
-    // This effect runs only on the client, after the initial render
     const segments = pathname.split('/');
-    if (segments[1] === 'es') {
+    const pathLocale = segments[1];
+    if (pathLocale === 'es') {
       setCurrentLocale('es');
-      if (i18n.language !== 'es') {
-        i18n.changeLanguage('es');
-      }
+      if (i18n.language !== 'es') i18n.changeLanguage('es');
     } else {
       setCurrentLocale('en');
-      if (i18n.language !== 'en') {
-        i18n.changeLanguage('en');
-      }
+      if (i18n.language !== 'en') i18n.changeLanguage('en');
     }
   }, [pathname, i18n]);
 
-  const changeLanguage = (newLang: 'en' | 'es') => {
-    if (currentLocale === newLang) {
-      setIsPopoverOpen(false);
-      return; 
-    }
 
+  const getLocalizedPath = (newLang: 'en' | 'es') => {
     const currentPathSegments = pathname.split('/');
-    currentPathSegments[1] = newLang; // Replace locale segment
+    currentPathSegments[1] = newLang; 
     const newPath = currentPathSegments.join('/');
     
     const queryString = searchParams.toString();
-    const finalPath = queryString ? `${newPath}?${queryString}` : newPath;
-
-    router.push(finalPath);
-    // i18n.changeLanguage(newLang); // Let the path change trigger i18n update via LanguageDetector or useEffect
-    setIsPopoverOpen(false);
+    return queryString ? `${newPath}?${queryString}` : newPath;
   };
 
   const currentLanguageDisplay = currentLocale.toUpperCase();
@@ -114,24 +103,27 @@ export function LanguageSwitcher() {
       </PopoverTrigger>
       <PopoverContent align="end" className="min-w-[8rem] p-1 z-[70]">
             <Button
-                onClick={() => changeLanguage('en')}
+                // Use Link for navigation
                 variant={currentLocale === 'en' ? 'secondary' : 'ghost'}
                 className="w-full justify-start text-xs"
-                asChild={false} 
+                asChild 
             >
-                <span className="flex items-center w-full"> 
-                    <FlagUS /> English {currentLocale === 'en' && <Check className="ml-auto h-4 w-4" />}
-                </span>
+                <Link href={getLocalizedPath('en')} locale="en" onClick={() => setIsPopoverOpen(false)}>
+                    <span className="flex items-center w-full"> 
+                        <FlagUS /> English {currentLocale === 'en' && <Check className="ml-auto h-4 w-4" />}
+                    </span>
+                </Link>
             </Button>
             <Button
-                onClick={() => changeLanguage('es')}
                 variant={currentLocale === 'es' ? 'secondary' : 'ghost'}
                 className="w-full justify-start text-xs"
-                asChild={false}
+                asChild
             >
-                 <span className="flex items-center w-full">
-                    <FlagES /> Español {currentLocale === 'es' && <Check className="ml-auto h-4 w-4" />}
-                </span>
+                 <Link href={getLocalizedPath('es')} locale="es" onClick={() => setIsPopoverOpen(false)}>
+                    <span className="flex items-center w-full">
+                        <FlagES /> Español {currentLocale === 'es' && <Check className="ml-auto h-4 w-4" />}
+                    </span>
+                 </Link>
             </Button>
       </PopoverContent>
     </Popover>
