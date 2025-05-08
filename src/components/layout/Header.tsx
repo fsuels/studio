@@ -9,8 +9,7 @@ import Nav from '@/components/Nav';
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"; 
 import { Button } from '@/components/ui/button'; 
-// import MiniCartDrawer from '@/components/MiniCartDrawer'; // Temporarily removed
-import { ThemeToggle } from '@/components/ThemeToggle'; 
+// import MiniCartDrawer from '@/components/MiniCartDrawer'; // Temporarily removed as per previous instruction
 import { Check, ChevronDown, Globe, UserPlus, LogIn, Search as SearchIcon, ExternalLink, FileText, Menu as MenuIcon, X as CloseIcon, LayoutGrid, ChevronUp } from 'lucide-react'; 
 import { Input } from '@/components/ui/input';
 import { documentLibrary, type LegalDocument } from '@/lib/document-library';
@@ -34,11 +33,10 @@ export default function Header() {
   const [showMobileCategories, setShowMobileCategories] = useState(false); 
   
   const pathname = usePathname(); 
-  const params = useParams(); // Using useParams for locale consistently
+  const params = useParams(); 
 
   useEffect(() => {
     setMounted(true);
-    // Consistently derive locale from params, which comes from the URL structure
     const pathLocale = params.locale as 'en' | 'es' | undefined;
     const newLocale = pathLocale && ['en', 'es'].includes(pathLocale) ? pathLocale : 'en';
     
@@ -230,7 +228,6 @@ export default function Header() {
                         </Link>
                     </Button>
                     {/* <MiniCartDrawer /> */} 
-                    <ThemeToggle />
                 </>
             )}
         </nav>
@@ -238,7 +235,6 @@ export default function Header() {
         {/* Mobile Menu Button */}
         <div className="md:hidden ml-auto flex items-center gap-1">
             {/* {mounted && <MiniCartDrawer />} */} 
-            {mounted && <ThemeToggle />}
              <Button variant="ghost" size="icon" className="h-9 w-9" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} disabled={!mounted}>
                 {isMobileMenuOpen ? <CloseIcon className="h-5 w-5" /> : <MenuIcon className="h-5 w-5" />}
              </Button>
