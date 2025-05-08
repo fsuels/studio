@@ -262,4 +262,11 @@
       @apply hidden; /* Tailwind class to hide */
     }
   }
+
+  /* Global styling for invalid form fields */
+  input[aria-invalid="true"],
+  select[aria-invalid="true"],
+  textarea[aria-invalid="true"] {
+    @apply border-destructive ring-1 ring-destructive;
+  }
 }
