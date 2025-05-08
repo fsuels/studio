@@ -15,7 +15,7 @@ import { prettify } from '@/lib/schema-utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import type { BillOfSaleData } from '@/schemas/billOfSale';
-import { AddressField } from '@/components/AddressField'; // Corrected import path
+import AddressField from '@/components/AddressField'; // Corrected import path
 
 
 interface WizardFormProps {
@@ -31,7 +31,7 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
 
   const methods = useForm<z.infer<typeof doc.schema>>({
     resolver: zodResolver(doc.schema),
-    defaultValues: {}, // Default values will be loaded from localStorage
+    defaultValues: {}, 
     mode: 'onBlur',
   });
   
@@ -47,28 +47,28 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
           console.error("Failed to parse draft from localStorage", e);
           localStorage.removeItem(`draft-${doc.id}-${locale}`);
           if (doc.id === 'bill-of-sale-vehicle') {
-             reset({ sale_date: new Date() } as Partial<BillOfSaleData>); // Type assertion for specific default
+             reset({ sale_date: new Date() } as Partial<BillOfSaleData>); 
           }
         }
       } else {
-        // Initialize with specific defaults if no draft exists
         if (doc.id === 'bill-of-sale-vehicle') {
-           reset({ sale_date: new Date() } as Partial<BillOfSaleData>); // Type assertion for specific default
+           reset({ sale_date: new Date() } as Partial<BillOfSaleData>); 
         }
       }
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [doc.id, locale, reset]);
+  }, [doc.id, locale, reset, doc.schema]);
 
 
   const steps = React.useMemo(() => {
     if (doc.questions && doc.questions.length > 0) {
+      // If questions array is provided, use it directly
       return doc.questions.map(q => ({ id: q.id, label: q.label || prettify(q.id) }));
     }
+    // Fallback to Zod schema shape if questions array is not available
     if (doc.schema && 'shape' in doc.schema && typeof doc.schema.shape === 'object' && doc.schema.shape !== null) {
       return Object.keys(doc.schema.shape).map(key => ({ id: key, label: prettify(key) }));
     }
-    return []; 
+    return []; // Should not happen if doc is well-defined
   }, [doc.questions, doc.schema]);
 
   const totalSteps = steps.length;
@@ -114,6 +114,7 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
       setCurrentStepIndex(s => s + 1);
       if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' });
     } else {
+      // Final step: submit
       try {
         const response = await axios.post(`/${locale}/api/wizard/${doc.id}/submit`, { 
           values: getValues(),
@@ -189,7 +190,7 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
                         }
                       }}
                       required={doc.questions?.find(q => q.id === currentField.id)?.required || (doc.schema.shape as any)[currentField.id]?._def?.typeName !== 'ZodOptional'}
-                      error={errors[currentField.id as any]?.message as string | undefined}
+                      // error={errors[currentField.id as any]?.message as string | undefined}
                       aria-invalid={!!errors[currentField.id as any]} 
                     />
                   )}

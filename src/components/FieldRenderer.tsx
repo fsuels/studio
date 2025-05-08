@@ -4,7 +4,7 @@
 import React, { useEffect } from 'react'; 
 import { useFormContext, Controller } from 'react-hook-form';
 import SmartInput from '@/components/wizard/SmartInput';
-import { AddressField } from '@/components/AddressField'; 
+import AddressField from '@/components/AddressField'; 
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -94,7 +94,7 @@ export default function FieldRenderer({ fieldKey, locale, doc }: FieldRendererPr
               }
             }}
             required={fieldSchema?.required || (doc.schema?.shape as any)?.[fieldKey]?._def?.typeName !== 'ZodOptional'}
-            error={errors[fieldKey as any]?.message as string | undefined}
+            // error={errors[fieldKey as any]?.message as string | undefined}
             placeholder={placeholderText || t('Enter address...')}
           />
         )}
@@ -231,7 +231,7 @@ export default function FieldRenderer({ fieldKey, locale, doc }: FieldRendererPr
           className={cn("input bg-background", fieldError && "border-destructive focus-visible:ring-destructive")}
           inputMode={inputType === 'number' || inputType === 'tel' ? 'numeric' : undefined}
           aria-invalid={!!fieldError}
-          name={fieldKey} 
+          {...register(fieldKey as any, { required: fieldSchema?.required })}
         />
       )}
       {fieldKey === 'vin' && vinLoading && <p className="text-xs text-muted-foreground mt-1">Decoding VIN…</p>}
@@ -246,3 +246,4 @@ export default function FieldRenderer({ fieldKey, locale, doc }: FieldRendererPr
     </div>
   );
 }
+
