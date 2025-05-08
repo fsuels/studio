@@ -1,7 +1,7 @@
 // src/components/PreviewPane.tsx
 'use client';
 
-import React, { useEffect, useState, useCallback, useMemo } from 'react'; // Ensured useMemo is imported
+import React, { useEffect, useState, useCallback, useMemo } from 'react'; 
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import type { UseFormWatch } from 'react-hook-form';
@@ -13,7 +13,7 @@ interface PreviewPaneProps {
   locale: 'en' | 'es';
   docId: string;
   templatePath?: string;
-  watch: UseFormWatch<any>; // From react-hook-form
+  watch: UseFormWatch<any>; 
 }
 
 export default function PreviewPane({ locale, docId, templatePath, watch }: PreviewPaneProps) {
@@ -23,12 +23,14 @@ export default function PreviewPane({ locale, docId, templatePath, watch }: Prev
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  const watermarkText = t('previewWatermark');
+
   useEffect(() => {
     async function fetchTemplate() {
       setIsLoading(true);
       setError(null);
-      setRawMarkdown(''); // Clear raw markdown before fetching
-      setProcessedMarkdown(''); // Clear processed markdown
+      setRawMarkdown(''); 
+      setProcessedMarkdown(''); 
       const path = templatePath || `/templates/${locale}/${docId}.md`;
       try {
         const response = await fetch(path);
@@ -40,7 +42,7 @@ export default function PreviewPane({ locale, docId, templatePath, watch }: Prev
       } catch (err) {
         console.error("Error fetching Markdown template:", err);
         setError(err instanceof Error ? err.message : "Could not load template.");
-        setRawMarkdown(''); // Ensure it's empty on error
+        setRawMarkdown(''); 
       } finally {
         setIsLoading(false);
       }
@@ -48,7 +50,6 @@ export default function PreviewPane({ locale, docId, templatePath, watch }: Prev
     fetchTemplate();
   }, [docId, locale, templatePath]);
 
-  // This function performs the markdown processing and calls setProcessedMarkdown
   const updatePreviewContentAndSetState = useCallback((formData: Record<string, any>, currentRawMarkdown: string) => {
     if (!currentRawMarkdown) {
       setProcessedMarkdown('');
@@ -60,11 +61,10 @@ export default function PreviewPane({ locale, docId, templatePath, watch }: Prev
       const value = formData[key];
       tempMd = tempMd.replace(placeholderRegex, value ? `**${String(value)}**` : '____');
     }
-    tempMd = tempMd.replace(/\{\{.*?\}\}/g, '____');
+    tempMd = tempMd.replace(/\{\{.*?\}\}/g, '____'); // Replace any remaining placeholders
     setProcessedMarkdown(tempMd);
-  }, [setProcessedMarkdown]);
+  }, []);
 
-  // Create the debounced version of the state-updating function
   const debouncedUpdatePreview = useMemo(
     () => debounce(updatePreviewContentAndSetState, 300),
     [updatePreviewContentAndSetState]
@@ -72,16 +72,14 @@ export default function PreviewPane({ locale, docId, templatePath, watch }: Prev
 
   useEffect(() => {
     if (isLoading || !rawMarkdown) {
-      if (!isLoading && !rawMarkdown) { // If loading finished and still no markdown
-        setProcessedMarkdown(''); // Explicitly clear preview
+      if (!isLoading && !rawMarkdown) { 
+        setProcessedMarkdown(''); 
       }
-      return; // Don't setup watchers if still loading or no markdown
+      return; 
     }
 
-    // Initial processing with current form values
     debouncedUpdatePreview(watch(), rawMarkdown);
 
-    // Subscribe to form changes
     const subscription = watch((formData) => {
       debouncedUpdatePreview(formData, rawMarkdown);
     });
@@ -90,7 +88,7 @@ export default function PreviewPane({ locale, docId, templatePath, watch }: Prev
       subscription.unsubscribe();
       debouncedUpdatePreview.cancel();
     };
-  }, [watch, rawMarkdown, debouncedUpdatePreview, isLoading, setProcessedMarkdown]);
+  }, [watch, rawMarkdown, debouncedUpdatePreview, isLoading]);
 
 
   if (isLoading) {
@@ -119,10 +117,17 @@ export default function PreviewPane({ locale, docId, templatePath, watch }: Prev
   }
 
   return (
-    <div className="prose prose-sm dark:prose-invert max-w-none p-1 border rounded-md bg-background overflow-y-auto h-full">
-      <ReactMarkdown remarkPlugins={[remarkGfm]}>
-        {processedMarkdown || ''}
-      </ReactMarkdown>
+    <div
+      id="live-preview"
+      data-watermark={watermarkText}
+      className="relative w-full min-h-[500px] md:min-h-[650px] h-full overflow-hidden rounded-lg bg-background shadow-md border border-border"
+    >
+      {/* Scrollable content area */}
+      <div className="prose prose-sm dark:prose-invert max-w-none w-full h-full overflow-y-auto p-4 md:p-6">
+        <ReactMarkdown remarkPlugins={[remarkGfm]}>
+          {processedMarkdown || ''}
+        </ReactMarkdown>
+      </div>
     </div>
   );
 }

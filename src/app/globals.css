@@ -55,7 +55,7 @@
   * {
     @apply border-border;
   }
-  html, body, #__next { overflow-x: hidden; }
+  html, body, #__next { @apply overflow-x-hidden; }
   body {
     @apply bg-background text-foreground;
     /* Use HSL values from the theme for gradients */
@@ -274,4 +274,21 @@
   #live-preview {
     user-select: none;
   }
+
+  #live-preview::before {
+    content: attr(data-watermark);
+    position: absolute;
+    inset: 0;
+    font-size: 8rem; /* Tailwind: text-9xl */
+    line-height: 1;
+    font-weight: 700; /* Tailwind: font-bold */
+    color: hsl(var(--muted-foreground) / 0.06); /* Adjusted for theme */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: rotate(-30deg);
+    pointer-events: none;
+    z-index: 0; /* Behind content but above background */
+  }
 }
+
