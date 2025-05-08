@@ -96,6 +96,7 @@ export default function DocPage() {
                 </Button>
             </div>
             <div className="lg:order-1">
+                 {/* DocumentDetail will now use the locale from params, passed down */}
                  <DocumentDetail locale={locale} docId={docId} />
             </div>
         </div>

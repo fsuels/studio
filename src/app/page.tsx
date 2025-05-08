@@ -1,11 +1,10 @@
-
 // src/app/page.tsx
 "use client";
 
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import type { LegalDocument } from '@/lib/document-library'; 
 import { usStates, documentLibrary } from '@/lib/document-library'; 
-import DocTypeSelector, { type AISuggestion } from '@/components/DocumentTypeSelector'; 
+import DocTypeSelector from '@/components/DocumentTypeSelector'; // Corrected import path
 import { Questionnaire } from '@/components/questionnaire';
 import { DisclaimerStep } from '@/components/disclaimer-step';
 import { PdfPreview } from '@/components/pdf-preview';
@@ -99,7 +98,8 @@ export default function Home() {
 
   const renderHomepageContent = () => {
     if (!isHydrated) { 
-        return <div className="text-center py-10"><Loader2 className="h-8 w-8 animate-spin mx-auto" /> <p suppressHydrationWarning>{isHydrated ? t('Loading...') : 'Loading...'}</p></div>;
+        // Render a stable placeholder during SSR and initial client render before hydration
+        return <div className="text-center py-10"><Loader2 className="h-8 w-8 animate-spin mx-auto" /> <p suppressHydrationWarning>Loading...</p></div>;
     }
     return (
       <Step1DocumentSelector

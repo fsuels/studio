@@ -8,12 +8,12 @@ import Image from 'next/image';
 import { Loader2 } from 'lucide-react'; 
 
 interface DocumentDetailProps {
-  locale: 'en' | 'es'; // Changed from string to specific union type
+  locale: 'en' | 'es'; 
   docId: string;
 }
 
 export default function DocumentDetail({ locale, docId }: DocumentDetailProps) {
-  const { t } = useTranslation();
+  const { t } = useTranslation(); // t function can still be used for other fixed strings if needed
   const [md, setMd] = useState<string>('');
   const [imgSrc, setImgSrc] = useState<string>('');
   const [imgError, setImgError] = useState(false);
@@ -24,7 +24,7 @@ export default function DocumentDetail({ locale, docId }: DocumentDetailProps) {
     setIsLoading(true);
     setImgError(false);
     setMdError(false);
-    setMd(''); // Clear previous markdown content
+    setMd(''); 
 
     const markdownPath = `/templates/${locale}/${docId}.md`;
     const imagePath = `/images/previews/${locale}/${docId}.png`;
@@ -46,22 +46,23 @@ export default function DocumentDetail({ locale, docId }: DocumentDetailProps) {
       })
       .then(text => {
         setMd(text);
-        setMdError(false); // Ensure mdError is reset on successful fetch
+        setMdError(false); 
       })
       .catch(err => {
         console.error(`[DocumentDetail] Error fetching markdown for ${docId} (${locale}):`, err);
         setMdError(true);
       })
       .finally(() => setIsLoading(false));
-  }, [locale, docId]); // Add locale and docId as dependencies
+  }, [locale, docId]); 
 
   const handleImgError = () => {
     console.warn(`[DocumentDetail] Preview image not found or failed to load: ${imgSrc}`);
     setImgError(true); 
   };
   
-  const placeholderLoading = t('Loading document preview…', {defaultValue: 'Loading document preview…'});
-  const placeholderError = t('Preview not available.', {defaultValue: 'Preview not available.'});
+  // Use locale directly for loading text, t() not needed for this dynamic part
+  const placeholderLoading = locale === 'es' ? 'Cargando vista previa del documento…' : 'Loading document preview…';
+  const placeholderError = locale === 'es' ? 'Vista previa no disponible.' : 'Preview not available.';
 
 
   if (isLoading) {
@@ -78,7 +79,7 @@ export default function DocumentDetail({ locale, docId }: DocumentDetailProps) {
       {!imgError ? (
         <Image
           src={imgSrc}
-          alt={t(`${docId} preview`, {defaultValue: `${docId} preview`})}
+          alt={alt ?? `${docId} preview`} // Use alt from props or construct default
           width={850} 
           height={1100}
           className="object-contain w-full h-full"
@@ -86,7 +87,7 @@ export default function DocumentDetail({ locale, docId }: DocumentDetailProps) {
           priority 
           unoptimized={process.env.NODE_ENV === 'development'}
           data-ai-hint="document template screenshot"
-          key={imgSrc} // Add key to force re-render on src change
+          key={imgSrc} 
         />
       ) : mdError || !md ? (
          <div className="flex items-center justify-center h-full">
@@ -99,4 +100,10 @@ export default function DocumentDetail({ locale, docId }: DocumentDetailProps) {
       )}
     </div>
   );
+}
+
+interface DocumentDetailProps {
+  locale: 'en' | 'es'; 
+  docId: string;
+  alt?: string; // Added alt prop
 }

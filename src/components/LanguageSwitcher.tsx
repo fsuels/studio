@@ -1,9 +1,8 @@
 // src/components/LanguageSwitcher.tsx
-'use client'; 
+'use client';
 
-import React from 'react'; 
-import { usePathname, useRouter } from 'next/navigation'; // Import useRouter for programmatic navigation
-import Link from 'next/link';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { Check, ChevronDown } from 'lucide-react';
@@ -55,60 +54,49 @@ const FlagES = () => (
 
 
 export function LanguageSwitcher() {
+  const router = useRouter();
   const pathname = usePathname();
+  const searchParams = useSearchParams();
   const { i18n, t } = useTranslation();
-  const router = useRouter(); // Get router instance
-  const [currentLanguageDisplay, setCurrentLanguageDisplay] = React.useState('...');
   const [isPopoverOpen, setIsPopoverOpen] = React.useState(false);
-  const [isHydrated, setIsHydrated] = React.useState(false);
 
-  React.useEffect(() => {
-    setIsHydrated(true);
-  }, []);
+  const [currentLocale, setCurrentLocale] = useState<'en' | 'es'>('en');
 
-  React.useEffect(() => {
-    if (isHydrated) {
-      setCurrentLanguageDisplay(i18n.language.startsWith('es') ? 'ES' : 'EN');
+  useEffect(() => {
+    // This effect runs only on the client, after the initial render
+    const segments = pathname.split('/');
+    if (segments[1] === 'es') {
+      setCurrentLocale('es');
+      if (i18n.language !== 'es') {
+        i18n.changeLanguage('es');
+      }
+    } else {
+      setCurrentLocale('en');
+      if (i18n.language !== 'en') {
+        i18n.changeLanguage('en');
+      }
     }
-  }, [i18n.language, isHydrated]);
+  }, [pathname, i18n]);
 
   const changeLanguage = (newLang: 'en' | 'es') => {
-    const currentLang = i18n.language.startsWith('es') ? 'es' : 'en';
-    if (currentLang === newLang) {
+    if (currentLocale === newLang) {
       setIsPopoverOpen(false);
-      return; // No change needed
+      return; 
     }
 
-    const newPath = pathname ? pathname.replace(`/${currentLang}`, `/${newLang}`) : `/${newLang}`;
+    const currentPathSegments = pathname.split('/');
+    currentPathSegments[1] = newLang; // Replace locale segment
+    const newPath = currentPathSegments.join('/');
     
-    // Use router.push for navigation, which changes locale via middleware/routing
-    router.push(newPath); 
-    // i18n.changeLanguage will be called automatically by LanguageDetector or middleware logic
+    const queryString = searchParams.toString();
+    const finalPath = queryString ? `${newPath}?${queryString}` : newPath;
+
+    router.push(finalPath);
+    // i18n.changeLanguage(newLang); // Let the path change trigger i18n update via LanguageDetector or useEffect
     setIsPopoverOpen(false);
   };
-  
-  const currentLang = isHydrated && i18n.language ? (i18n.language.startsWith('es') ? 'es' : 'en') : 'en';
-  
-  if (!isHydrated) {
-    return (
-      <Button
-        variant="outline"
-        size="sm"
-        className="text-xs font-medium text-foreground/80 hover:bg-foreground/5 hover:text-foreground px-2 py-1.5 md:px-3 border-border/50 shadow-sm flex items-center opacity-50 cursor-default"
-        aria-label={t('Select language', {defaultValue: 'Select language'})}
-        disabled
-      >
-        <FlagUS /> 
-        <span className="hidden sm:inline">...</span>
-        <ChevronDown className="ml-1 h-4 w-4 opacity-70" />
-      </Button>
-    );
-  }
 
-  // Determine paths for Link components
-  const pathForEn = pathname ? pathname.replace(`/${currentLang}`, `/en`) : '/en';
-  const pathForEs = pathname ? pathname.replace(`/${currentLang}`, `/es`) : '/es';
-
+  const currentLanguageDisplay = currentLocale.toUpperCase();
 
   return (
     <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
@@ -119,37 +107,32 @@ export function LanguageSwitcher() {
           className="text-xs font-medium text-foreground/80 hover:bg-foreground/5 hover:text-foreground px-2 py-1.5 md:px-3 border-border/50 shadow-sm flex items-center"
           aria-label={t('Select language', {defaultValue: 'Select language'})}
         >
-          {currentLanguageDisplay === 'EN' ? <FlagUS /> : <FlagES />}
+          {currentLocale === 'en' ? <FlagUS /> : <FlagES />}
           <span className="hidden sm:inline">{currentLanguageDisplay}</span>
           <ChevronDown className="ml-1 h-4 w-4 opacity-70" />
         </Button>
       </PopoverTrigger>
       <PopoverContent align="end" className="min-w-[8rem] p-1 z-[70]">
-        {/* Use Next.js Link for navigation and locale change */}
-        <Link href={pathForEn} passHref legacyBehavior locale="en">
             <Button
-                onClick={() => changeLanguage('en')} // changeLanguage will now primarily handle closing popover
-                variant={currentLang === 'en' ? 'secondary' : 'ghost'}
+                onClick={() => changeLanguage('en')}
+                variant={currentLocale === 'en' ? 'secondary' : 'ghost'}
                 className="w-full justify-start text-xs"
                 asChild={false} 
             >
-                <a className="flex items-center w-full"> 
-                    <FlagUS /> English {currentLang === 'en' && <Check className="ml-auto h-4 w-4" />}
-                </a>
+                <span className="flex items-center w-full"> 
+                    <FlagUS /> English {currentLocale === 'en' && <Check className="ml-auto h-4 w-4" />}
+                </span>
             </Button>
-        </Link>
-        <Link href={pathForEs} passHref legacyBehavior locale="es">
             <Button
                 onClick={() => changeLanguage('es')}
-                variant={currentLang === 'es' ? 'secondary' : 'ghost'}
+                variant={currentLocale === 'es' ? 'secondary' : 'ghost'}
                 className="w-full justify-start text-xs"
                 asChild={false}
             >
-                 <a className="flex items-center w-full">
-                    <FlagES /> Español {currentLang === 'es' && <Check className="ml-auto h-4 w-4" />}
-                </a>
+                 <span className="flex items-center w-full">
+                    <FlagES /> Español {currentLocale === 'es' && <Check className="ml-auto h-4 w-4" />}
+                </span>
             </Button>
-        </Link>
       </PopoverContent>
     </Popover>
   );
