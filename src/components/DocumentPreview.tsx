@@ -12,6 +12,9 @@ interface DocumentPreviewProps {
   docId: string;
   locale?: 'en' | 'es';
   alt?: string;
+  // The 'html' prop from the diff seems to refer to the markdown content
+  // which is fetched internally in this component via `md` state.
+  // We'll use the existing `md` state for the content.
 }
 
 export default function DocumentPreview({
@@ -58,7 +61,7 @@ export default function DocumentPreview({
   }, [docId, locale, imgExists, t]);
 
   return (
-    <div className="relative border rounded-lg overflow-hidden bg-muted p-2 md:p-4 aspect-[8.5/11] max-h-[500px] md:max-h-[600px] w-full flex items-center justify-center shadow-lg">
+    <div className="relative w-full h-full overflow-auto rounded-lg bg-white shadow border border-border">
       {/* 🔒 block copy / highlight */}
       <div className="absolute inset-0 select-none pointer-events-none z-20" />
 
@@ -67,7 +70,7 @@ export default function DocumentPreview({
         className="absolute inset-0 flex items-center justify-center z-10 select-none pointer-events-none
                    text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-widest opacity-10 rotate-[-35deg] text-muted-foreground"
       >
-        {locale === 'es' ? 'VISTA PREVIA' : 'PREVIEW'}
+        {locale === 'es' ? t('VISTA PREVIA', 'VISTA PREVIA') : t('PREVIEW', 'PREVIEW')}
       </div>
       
       {/* document body / image */}
@@ -84,18 +87,18 @@ export default function DocumentPreview({
           data-ai-hint="document template screenshot"
         />
       ) : isLoadingMd ? (
-        <div className="flex flex-col items-center justify-center text-muted-foreground">
+        <div className="flex flex-col items-center justify-center text-muted-foreground h-full p-4">
           <Loader2 className="h-6 w-6 animate-spin mb-2" />
           <p className="text-center text-sm ">
             {t('Loading preview…', {defaultValue: 'Loading preview…'})}
           </p>
         </div>
       ) : errorMd ? (
-        <p className="text-center text-sm text-destructive p-4">
+        <p className="text-center text-sm text-destructive p-4 h-full flex items-center justify-center">
           {errorMd}
         </p>
       ) : md ? (
-        <div className="prose prose-sm dark:prose-invert max-w-none w-full h-full overflow-y-auto p-2 bg-background text-foreground">
+        <div className="prose prose-sm dark:prose-invert max-w-none w-full h-full overflow-y-auto p-4 md:p-6 bg-background text-foreground">
           <ReactMarkdown 
             remarkPlugins={[remarkGfm]}
             components={{
@@ -107,7 +110,7 @@ export default function DocumentPreview({
           </ReactMarkdown>
         </div>
       ) : (
-         <p className="text-center text-sm text-muted-foreground">
+         <p className="text-center text-sm text-muted-foreground h-full flex items-center justify-center p-4">
            {t('Preview not available.', {defaultValue: 'Preview not available.'})}
          </p>
       )}
