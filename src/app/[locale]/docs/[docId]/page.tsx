@@ -1,26 +1,62 @@
 // src/app/[locale]/docs/[docId]/page.tsx
 'use client';
 
-import { useParams, notFound } from 'next/navigation';
-import DocumentDetail from '@/components/DocumentDetail'; // Component to render the detail
-import { documentLibrary } from '@/lib/document-library'; // Assuming this is where doc configs are
+import { useParams, notFound, useRouter } from 'next/navigation'; // useRouter for navigation
+import { documentLibrary } from '@/lib/document-library'; 
 import { useTranslation } from 'react-i18next';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import React from 'react';
+import React, { useEffect, useState } from 'react'; // Added useEffect and useState
+import dynamic from 'next/dynamic'; // For dynamic import
+import { Loader2 } from 'lucide-react'; // For loading state
+import { Badge } from '@/components/ui/badge'; // Keep Badge import
+
+
+// Dynamically import DocumentDetail with SSR disabled
+const DocumentDetail = dynamic(() => import('@/components/DocumentDetail'), {
+  ssr: false,
+  loading: () => (
+    <div className="flex items-center justify-center border rounded-lg bg-muted p-4 aspect-[8.5/11] max-h-[500px] md:max-h-[700px] w-full shadow-lg">
+      <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      <p className="ml-2 text-muted-foreground">Loading preview...</p>
+    </div>
+  ),
+});
 
 
 export default function DocPage() {
   const params = useParams();
   const { t } = useTranslation();
+  const router = useRouter(); // For navigation
 
-  const locale = Array.isArray(params.locale) ? params.locale[0] : params.locale as 'en' | 'es';
-  const docId = Array.isArray(params.docId) ? params.docId[0] : params.docId as string;
+  // Ensure locale and docId are strings
+  const locale = Array.isArray(params.locale) ? params.locale[0] : params.locale as 'en' | 'es' | undefined;
+  const docId = Array.isArray(params.docId) ? params.docId[0] : params.docId as string | undefined;
 
-  const docConfig = documentLibrary.find(d => d.id === docId);
+  const [docConfig, setDocConfig] = useState<typeof documentLibrary[0] | undefined>(undefined);
+  const [isLoading, setIsLoading] = useState(true);
 
-  if (!docConfig) {
-    return notFound();
+  useEffect(() => {
+    if (docId) {
+      const foundDoc = documentLibrary.find(d => d.id === docId);
+      if (foundDoc) {
+        setDocConfig(foundDoc);
+      } else {
+        notFound();
+      }
+    } else {
+      notFound(); // If no docId, it's a 404
+    }
+    setIsLoading(false);
+  }, [docId]);
+
+  if (isLoading || !docConfig || !locale) {
+    return (
+       <div className="flex items-center justify-center min-h-screen">
+        <Loader2 className="h-12 w-12 animate-spin text-primary" />
+        <p className="ml-2 text-muted-foreground">Loading document details...</p>
+      </div>
+    );
   }
   
   const documentDisplayName = locale === 'es' && docConfig.name_es ? docConfig.name_es : docConfig.name;
@@ -55,7 +91,7 @@ export default function DocPage() {
                 </div>
                 <Button size="lg" className="w-full sm:w-auto text-base" asChild>
                   <Link href={`/${locale}/docs/${docId}/start`}>
-                    {locale === 'es' ? t('Start for Free', {lng: 'es', defaultValue: 'Comenzar Gratis'}) : t('Start for Free', {defaultValue: 'Start for Free'})}
+                     {t('Start for Free', {defaultValue: 'Start for Free'})}
                   </Link>
                 </Button>
             </div>

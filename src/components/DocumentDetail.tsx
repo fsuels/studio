@@ -4,11 +4,11 @@ import React, { useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { useTranslation } from 'react-i18next';
-import Image from 'next/image'; // For optimized images
-import { Loader2 } from 'lucide-react'; // For loading state
+import Image from 'next/image'; 
+import { Loader2 } from 'lucide-react'; 
 
 interface DocumentDetailProps {
-  locale: 'en' | 'es';
+  locale: 'en' | 'es'; // Changed from string to specific union type
   docId: string;
 }
 
@@ -24,31 +24,40 @@ export default function DocumentDetail({ locale, docId }: DocumentDetailProps) {
     setIsLoading(true);
     setImgError(false);
     setMdError(false);
+    setMd(''); // Clear previous markdown content
 
     const markdownPath = `/templates/${locale}/${docId}.md`;
     const imagePath = `/images/previews/${locale}/${docId}.png`;
-    setImgSrc(imagePath); // Set image path for preview
+    
+    console.log(`[DocumentDetail] Fetching for locale: ${locale}, docId: ${docId}`);
+    console.log(`[DocumentDetail] Markdown path: ${markdownPath}`);
+    console.log(`[DocumentDetail] Image path: ${imagePath}`);
+
+    setImgSrc(imagePath); 
 
     fetch(markdownPath)
       .then((r) => {
         if (!r.ok) {
-          console.error(`Failed to fetch ${markdownPath}: ${r.status}`);
+          console.error(`[DocumentDetail] Failed to fetch ${markdownPath}: ${r.status}`);
           setMdError(true);
           throw new Error(`Failed to fetch ${locale}/${docId}.md`);
         }
         return r.text();
       })
-      .then(setMd)
+      .then(text => {
+        setMd(text);
+        setMdError(false); // Ensure mdError is reset on successful fetch
+      })
       .catch(err => {
-        console.error(`Error fetching markdown for ${docId} (${locale}):`, err);
+        console.error(`[DocumentDetail] Error fetching markdown for ${docId} (${locale}):`, err);
         setMdError(true);
       })
       .finally(() => setIsLoading(false));
-  }, [locale, docId]);
+  }, [locale, docId]); // Add locale and docId as dependencies
 
   const handleImgError = () => {
-    console.warn(`Preview image not found or failed to load: ${imgSrc}`);
-    setImgError(true); // This will hide the <img> tag
+    console.warn(`[DocumentDetail] Preview image not found or failed to load: ${imgSrc}`);
+    setImgError(true); 
   };
   
   const placeholderLoading = t('Loading document preview…', {defaultValue: 'Loading document preview…'});
@@ -74,16 +83,17 @@ export default function DocumentDetail({ locale, docId }: DocumentDetailProps) {
           height={1100}
           className="object-contain w-full h-full"
           onError={handleImgError}
-          priority // Consider if this is LCP if it's often the main content
-          unoptimized={process.env.NODE_ENV === 'development'} // Useful for local dev with non-optimized images
+          priority 
+          unoptimized={process.env.NODE_ENV === 'development'}
           data-ai-hint="document template screenshot"
+          key={imgSrc} // Add key to force re-render on src change
         />
       ) : mdError || !md ? (
          <div className="flex items-center justify-center h-full">
             <p className="text-center text-sm text-muted-foreground p-4">{placeholderError}</p>
          </div>
       ) : (
-        <div className="prose prose-sm dark:prose-invert max-w-none w-full h-full overflow-y-auto p-1 md:p-2">
+        <div className="prose prose-sm dark:prose-invert max-w-none w-full h-full overflow-y-auto p-1 md:p-2 bg-background text-foreground">
           <ReactMarkdown remarkPlugins={[remarkGfm]}>{md}</ReactMarkdown>
         </div>
       )}

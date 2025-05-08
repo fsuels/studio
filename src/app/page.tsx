@@ -99,7 +99,7 @@ export default function Home() {
 
   const renderHomepageContent = () => {
     if (!isHydrated) { 
-        return <div className="text-center py-10"><Loader2 className="h-8 w-8 animate-spin mx-auto" /> <p>{t('Loading...')}</p></div>;
+        return <div className="text-center py-10"><Loader2 className="h-8 w-8 animate-spin mx-auto" /> <p suppressHydrationWarning>{isHydrated ? t('Loading...') : 'Loading...'}</p></div>;
     }
     return (
       <Step1DocumentSelector

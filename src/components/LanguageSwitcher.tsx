@@ -1,8 +1,8 @@
 // src/components/LanguageSwitcher.tsx
-'use client'; // Ensures this component and its hooks run on the client
+'use client'; 
 
-import React from 'react'; // Import React
-import { usePathname } from 'next/navigation';
+import React from 'react'; 
+import { usePathname, useRouter } from 'next/navigation'; // Import useRouter for programmatic navigation
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
@@ -57,6 +57,7 @@ const FlagES = () => (
 export function LanguageSwitcher() {
   const pathname = usePathname();
   const { i18n, t } = useTranslation();
+  const router = useRouter(); // Get router instance
   const [currentLanguageDisplay, setCurrentLanguageDisplay] = React.useState('...');
   const [isPopoverOpen, setIsPopoverOpen] = React.useState(false);
   const [isHydrated, setIsHydrated] = React.useState(false);
@@ -71,15 +72,23 @@ export function LanguageSwitcher() {
     }
   }, [i18n.language, isHydrated]);
 
-  const changeLanguage = (lang: 'en' | 'es') => {
-    i18n.changeLanguage(lang);
+  const changeLanguage = (newLang: 'en' | 'es') => {
+    const currentLang = i18n.language.startsWith('es') ? 'es' : 'en';
+    if (currentLang === newLang) {
+      setIsPopoverOpen(false);
+      return; // No change needed
+    }
+
+    const newPath = pathname ? pathname.replace(`/${currentLang}`, `/${newLang}`) : `/${newLang}`;
+    
+    // Use router.push for navigation, which changes locale via middleware/routing
+    router.push(newPath); 
+    // i18n.changeLanguage will be called automatically by LanguageDetector or middleware logic
     setIsPopoverOpen(false);
   };
   
   const currentLang = isHydrated && i18n.language ? (i18n.language.startsWith('es') ? 'es' : 'en') : 'en';
-  const otherLang = currentLang === 'en' ? 'es' : 'en';
-  const targetPath = pathname ? pathname.replace(`/${currentLang}`, `/${otherLang}`) : `/${otherLang}`;
-
+  
   if (!isHydrated) {
     return (
       <Button
@@ -89,12 +98,17 @@ export function LanguageSwitcher() {
         aria-label={t('Select language', {defaultValue: 'Select language'})}
         disabled
       >
-        <FlagUS /> {/* Default to US flag during skeleton state */}
+        <FlagUS /> 
         <span className="hidden sm:inline">...</span>
         <ChevronDown className="ml-1 h-4 w-4 opacity-70" />
       </Button>
     );
   }
+
+  // Determine paths for Link components
+  const pathForEn = pathname ? pathname.replace(`/${currentLang}`, `/en`) : '/en';
+  const pathForEs = pathname ? pathname.replace(`/${currentLang}`, `/es`) : '/es';
+
 
   return (
     <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
@@ -111,9 +125,10 @@ export function LanguageSwitcher() {
         </Button>
       </PopoverTrigger>
       <PopoverContent align="end" className="min-w-[8rem] p-1 z-[70]">
-        <Link href={currentLang === 'en' ? targetPath : pathname.replace(`/${currentLang}`, `/en`)} passHref legacyBehavior>
+        {/* Use Next.js Link for navigation and locale change */}
+        <Link href={pathForEn} passHref legacyBehavior locale="en">
             <Button
-                onClick={() => changeLanguage('en')}
+                onClick={() => changeLanguage('en')} // changeLanguage will now primarily handle closing popover
                 variant={currentLang === 'en' ? 'secondary' : 'ghost'}
                 className="w-full justify-start text-xs"
                 asChild={false} 
@@ -123,7 +138,7 @@ export function LanguageSwitcher() {
                 </a>
             </Button>
         </Link>
-        <Link href={currentLang === 'es' ? targetPath : pathname.replace(`/${currentLang}`, `/es`)} passHref legacyBehavior>
+        <Link href={pathForEs} passHref legacyBehavior locale="es">
             <Button
                 onClick={() => changeLanguage('es')}
                 variant={currentLang === 'es' ? 'secondary' : 'ghost'}

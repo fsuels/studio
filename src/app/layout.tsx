@@ -1,11 +1,11 @@
 
-import type { Metadata } from 'next'; // Import Metadata type
-import { Geist, Geist_Mono } from 'next/font/google'; // Import font modules
-import './globals.css'; // Import global CSS
-// Removed AnimatePresence and MotionConfig as they are not used here, can be added in ClientProviders if needed.
-import { ClientProviders } from '@/components/providers/ClientProviders'; // Import the new client component
-import React from 'react'; // Import React
-// Removed ThemeProvider import
+import type { Metadata } from 'next'; 
+import { Geist, Geist_Mono } from 'next/font/google'; 
+import './globals.css'; 
+import { ClientProviders } from '@/components/providers/ClientProviders'; 
+import React from 'react'; 
+// Removed dynamic import of LanguageSwitcher as it's not used here and caused an error.
+// The LanguageSwitcher component is correctly imported and used within Header.tsx, which is a client component.
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -22,7 +22,6 @@ export const metadata: Metadata = {
   description: 'AI-Powered Legal Document Generation',
 };
 
-// RootLayout remains a Server Component
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -34,14 +33,12 @@ export default function RootLayout({
           <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen overflow-x-hidden`}>
-        {/* ThemeProvider removed */}
+          {/* ClientProviders will handle its placement or Header is client-side */}
           <ClientProviders>
             {children}
           </ClientProviders>
-        {/* ThemeProvider removed */}
       </body>
     </html>
   );
 }
-
 
