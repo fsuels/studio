@@ -87,13 +87,8 @@ export function LanguageSwitcher() {
     const finalUrl = queryString ? `${newPathWithLocale}?${queryString}` : newPathWithLocale;
     
     i18n.changeLanguage(newLocaleTarget); // Change i18n language client-side
-    router.push(finalUrl); // Navigate to the new URL
     
-    // Defer router.refresh slightly to allow navigation to settle
-    // This helps ensure refresh acts on the new route context.
-    setTimeout(() => {
-      router.refresh();
-    }, 50);
+    router.push(finalUrl).then(() => router.refresh()); // ensures fresh i18n props
 
     setIsPopoverOpen(false);
   };
