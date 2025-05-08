@@ -1,105 +1,90 @@
 // src/components/DocumentDetail.tsx
 'use client';
-import React, { useEffect, useState } from 'react';
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
-import { useTranslation } from 'react-i18next';
+
 import Image from 'next/image';
+import { useTranslation } from 'react-i18next';
+import { documentLibrary, type LegalDocument } from '@/lib/document-library'; // Import LegalDocument type
 import { Loader2 } from 'lucide-react';
-import { documentLibrary } from '@/lib/document-library'; // Import documentLibrary
+import React, { useEffect, useState } from 'react'; // Import React for useState, useEffect
 
 interface DocumentDetailProps {
-  locale: 'en' | 'es';
   docId: string;
-  altText?: string; // Renamed from alt to altText
+  locale: 'en' | 'es'; // Use specific locale types
+  altText?: string;
 }
 
-export default function DocumentDetail({ locale, docId, altText }: DocumentDetailProps) {
+export default function DocumentDetail({ docId, locale, altText }: DocumentDetailProps) {
   const { t } = useTranslation();
-  const [md, setMd] = useState<string>('');
-  const [imgSrc, setImgSrc] = useState<string>('');
-  const [imgError, setImgError] = useState(false);
-  const [mdError, setMdError] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [imgError, setImgError] = useState(false);
 
-  const docConfig = documentLibrary.find((d) => d.id === docId);
-  const fallbackAlt = docConfig ? (locale === 'es' && docConfig.name_es ? docConfig.name_es : docConfig.name) + ' preview' : `${docId} preview`;
-
+  const doc = documentLibrary.find((d: LegalDocument) => d.id === docId); // Explicitly type d
 
   useEffect(() => {
+    // Reset loading/error states when docId or locale changes
     setIsLoading(true);
     setImgError(false);
-    setMdError(false);
-    setMd('');
+  }, [docId, locale]);
 
-    const markdownPath = `/templates/${locale}/${docId}.md`;
-    const imagePath = `/images/previews/${locale}/${docId}.png`;
-
-    console.log(`[DocumentDetail] Fetching for locale: ${locale}, docId: ${docId}`);
-    setImgSrc(imagePath);
-
-    fetch(markdownPath)
-      .then((r) => {
-        if (!r.ok) {
-          console.error(`[DocumentDetail] Failed to fetch ${markdownPath}: ${r.status}`);
-          setMdError(true);
-          throw new Error(`Failed to fetch ${locale}/${docId}.md`);
-        }
-        return r.text();
-      })
-      .then(text => {
-        setMd(text);
-        setMdError(false);
-      })
-      .catch(err => {
-        console.error(`[DocumentDetail] Error fetching markdown for ${docId} (${locale}):`, err);
-        setMdError(true);
-      })
-      .finally(() => setIsLoading(false));
-  }, [locale, docId]);
-
-  const handleImgError = () => {
-    console.warn(`[DocumentDetail] Preview image not found or failed to load: ${imgSrc}`);
-    setImgError(true);
-  };
-
-  const placeholderLoading = locale === 'es' ? t('Cargando vista previa del documento…', {defaultValue: 'Cargando vista previa del documento…'}) : t('Loading document preview…', {defaultValue: 'Loading document preview…'});
-  const placeholderError = locale === 'es' ? t('Vista previa no disponible.', {defaultValue: 'Vista previa no disponible.'}) : t('Preview not available.', {defaultValue: 'Preview not available.'});
-
-
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center border rounded-lg bg-muted p-4 aspect-[8.5/11] max-h-[500px] md:max-h-[700px] w-full shadow-lg">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
-        <p className="ml-2 text-muted-foreground">{placeholderLoading}</p>
-      </div>
-    );
+  if (!doc) {
+    // Handle case where document is not found, though this should ideally be caught by the page
+    return <p>{t('Document not found', { defaultValue: 'Document not found' })}</p>;
   }
 
+  const imgSrc = `/images/previews/${locale}/${docId}.png`;
+  const fallbackAlt = altText ?? (locale === 'es' && doc.name_es ? doc.name_es : doc.name) + ` ${t('preview')}`;
+
+  const handleImageLoad = () => {
+    setIsLoading(false);
+  };
+
+  const handleImageError = () => {
+    setIsLoading(false);
+    setImgError(true);
+    console.warn(`[DocumentDetail] Preview image not found or failed to load: ${imgSrc}`);
+  };
+
+
   return (
-    <div className="border rounded-lg overflow-hidden bg-background shadow-xl p-2 md:p-3 aspect-[8.5/11] max-h-[500px] md:max-h-[700px] w-full">
-      {!imgError ? (
-        <Image
-          src={imgSrc}
-          alt={altText ?? fallbackAlt} // Use altText or fallbackAlt
-          width={850}
-          height={1100}
-          className="object-contain w-full h-full"
-          onError={handleImgError}
-          priority
-          unoptimized={process.env.NODE_ENV === 'development'}
-          data-ai-hint="document template screenshot"
-          key={imgSrc}
-        />
-      ) : mdError || !md ? (
-         <div className="flex items-center justify-center h-full">
-            <p className="text-center text-sm text-muted-foreground p-4">{placeholderError}</p>
-         </div>
-      ) : (
-        <div className="prose prose-sm dark:prose-invert max-w-none w-full h-full overflow-y-auto p-1 md:p-2 bg-background text-foreground">
-          <ReactMarkdown remarkPlugins={[remarkGfm]}>{md}</ReactMarkdown>
+    <div
+      className="relative w-full h-auto max-w-[850px] mx-auto border shadow-md bg-white overflow-hidden select-none aspect-[8.5/11]"
+      style={{
+        WebkitUserSelect: 'none',
+        MozUserSelect: 'none',
+        msUserSelect: 'none',
+        userSelect: 'none',
+      }}
+    >
+      {isLoading && !imgError && (
+        <div className="absolute inset-0 flex items-center justify-center bg-muted/50 z-20">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
         </div>
       )}
+      {!isLoading && imgError && (
+         <div className="absolute inset-0 flex items-center justify-center bg-muted/50 z-20">
+           <p className="text-destructive text-sm p-4">{t('Preview image failed to load.', {defaultValue: 'Preview image failed to load.'})}</p>
+         </div>
+      )}
+      <div className="absolute inset-0 z-10 pointer-events-none flex items-center justify-center">
+        <span
+          className="text-6xl font-bold text-gray-300 opacity-25 rotate-[315deg]"
+          style={{ fontSize: '5rem' }}
+        >
+          {t('preview.watermark', {defaultValue: 'PREVIEW'})}
+        </span>
+      </div>
+      <Image
+        src={imgSrc}
+        alt={fallbackAlt} // Use fallbackAlt which includes altText if provided
+        width={850}
+        height={1100}
+        className="w-full h-auto relative z-0 object-contain"
+        priority // Preload image as it's likely LCP on detail pages
+        onLoad={handleImageLoad}
+        onError={handleImageError}
+        unoptimized={process.env.NODE_ENV === 'development'} // Useful for local dev if image paths are tricky
+        data-ai-hint="document template screenshot" // Keep AI hint
+      />
     </div>
   );
 }

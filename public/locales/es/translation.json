@@ -731,5 +731,8 @@
         "previewTitle": "Vista previa de tu documento",
         "previewSubtitle": "Mira exactamente cómo se verá tu Contrato de Compraventa de Vehículo—y luego haz clic en “Comenzar Gratis” para completar tus datos.",
         "startForFree": "Comenzar Gratis"
-    }
+    },
+    "preview": {
+        "watermark": "VISTA PREVIA"
+     }
 }

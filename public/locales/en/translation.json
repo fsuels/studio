@@ -658,7 +658,10 @@
    "Sold As-Is": "Sold As-Is",
    "Warranty Included": "Warranty Included",
    "Describe warranty…": "Describe warranty…",
-   "previewWatermark": "PREVIEW"
+   "previewWatermark": "PREVIEW",
+   "preview": {
+      "watermark": "PREVIEW"
+   }
 }
 
     
