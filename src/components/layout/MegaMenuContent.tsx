@@ -40,9 +40,10 @@ export default function MegaMenuContent({ categories, documents, onLinkClick }: 
                 ): (
                 <ul className="space-y-1.5">
                     {categoryDocs.slice(0, MAX_DOCS_PER_CATEGORY_INITIAL).map(doc => {
-                      const docHref = doc.id === 'bill-of-sale-vehicle' 
-                        ? (i18n.language === 'es' ? `/es/docs/${doc.id}` : `/docs/${doc.id}`)
-                        : `/?docId=${encodeURIComponent(doc.id)}#workflow-start`;
+                      // Use dynamic route: /[locale]/docs/[docId]/page.tsx
+                      // The page.tsx inside /start/ is for the wizard, not the detail/landing page.
+                      // We want to link to the detail page which then links to the start page.
+                      const docHref = `/${i18n.language}/docs/${doc.id}`;
                       
                       return (
                         <li key={doc.id}>
@@ -59,7 +60,7 @@ export default function MegaMenuContent({ categories, documents, onLinkClick }: 
                     {categoryDocs.length > MAX_DOCS_PER_CATEGORY_INITIAL && (
                     <li>
                         <Link 
-                            href={`/?category=${encodeURIComponent(category.key)}#workflow-start`} 
+                            href={`/${i18n.language}/?category=${encodeURIComponent(category.key)}#workflow-start`} 
                             className="text-xs md:text-sm text-primary font-medium hover:underline mt-1 inline-block"
                             onClick={onLinkClick}
                         >

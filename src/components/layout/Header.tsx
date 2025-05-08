@@ -5,66 +5,23 @@ import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { Logo } from '@/components/layout/Logo';
 import Nav from '@/components/Nav'; 
-import { useTranslation } from 'react-i18next'; 
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover"; 
+import { LanguageSwitcher } from '@/components/LanguageSwitcher';
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"; 
 import { Button } from '@/components/ui/button'; 
 import MiniCartDrawer from '@/components/MiniCartDrawer';
+import { ThemeToggle } from '@/components/ThemeToggle'; // Corrected import path
 import { Check, ChevronDown, Globe, UserPlus, LogIn, Search as SearchIcon, ExternalLink, FileText, Menu as MenuIcon, X as CloseIcon, LayoutGrid, ChevronUp } from 'lucide-react'; 
 import { Input } from '@/components/ui/input';
 import { documentLibrary, LegalDocument } from '@/lib/document-library';
 import { useRouter } from 'next/navigation';
 import { CATEGORY_LIST } from '@/components/Step1DocumentSelector';
 import MegaMenuContent from './MegaMenuContent'; 
-
-// Inline SVG Flags for better portability and less dependency on external files
-const FlagUS = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="14" viewBox="0 0 750 500" className="w-5 h-auto mr-2 rounded-sm">
-    <rect width="750" height="500" fill="#fff"/>
-    <path fill="#b22234" d="M0 0h750v38.46H0zm0 76.92h750v38.46H0zm0 76.92h750v38.46H0zm0 76.93h750v38.46H0zm0 76.92h750v38.46H0zm0 76.92h750v38.46H0zm0 76.93h750v38.46H0z"/>
-    <path fill="#3c3b6e" d="M0 0h300v269.23H0z"/>
-    <path fill="#fff" d="m60 19.23 6.18 19-16.18-11.74h19.99L53.82 38.23zm60 0 6.18 19-16.18-11.74h19.99L113.82 38.23zm60 0 6.18 19-16.18-11.74h19.99L173.82 38.23zm60 0 6.18 19-16.18-11.74h19.99L233.82 38.23zm-180 38.46 6.18 19-16.18-11.74h19.99L53.82 76.69zm60 0 6.18 19-16.18-11.74h19.99L113.82 76.69zm60 0 6.18 19-16.18-11.74h19.99L173.82 76.69zm60 0 6.18 19-16.18-11.74h19.99L233.82 76.69zm-150 38.46 6.18 19-16.18-11.74h19.99L83.82 115.15zm60 0 6.18 19-16.18-11.74h19.99L143.82 115.15zm60 0 6.18 19-16.18-11.74h19.99L203.82 115.15zm-180 38.46 6.18 19-16.18-11.74h19.99L53.82 153.61zm60 0 6.18 19-16.18-11.74h19.99L113.82 153.61zm60 0 6.18 19-16.18-11.74h19.99L173.82 153.61zm60 0 6.18 19-16.18-11.74h19.99L233.82 153.61zm-150 38.46 6.18 19-16.18-11.74h19.99L83.82 192.07zm60 0 6.18 19-16.18-11.74h19.99L143.82 192.07zm60 0 6.18 19-16.18-11.74h19.99L203.82 192.07zm-180 38.46 6.18 19-16.18-11.74h19.99L53.82 230.53zm60 0 6.18 19-16.18-11.74h19.99L113.82 230.53zm60 0 6.18 19-16.18-11.74h19.99L173.82 230.53zm60 0 6.18 19-16.18-11.74h19.99L233.82 230.53z"/>
-  </svg>
-);
-
-const FlagES = () => (
-   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="14" viewBox="0 0 750 500" className="w-5 h-auto mr-2 rounded-sm">
-      <rect width="750" height="500" fill="#c60b1e"/>
-      <rect width="750" height="125" y="125" fill="#ffc400"/>
-      <g transform="translate(206.25 212.5) scale(7.5)">
-         <g fill="#fff">
-            <path d="M7 0h1v13H7zM9 0h1v13H9z"/>
-            <path d="M10 13v1h3v-1zm-6 0v1h3v-1z"/>
-         </g>
-         <path d="M7 15h2v2H7zM7 17h2v1H7zM9 17H7v1h2zm0 1H7v1h2z" fill="#c60b1e"/>
-         <path d="M10.14 13.48a.15.15 0 0 0-.14-.15H6a.15.15 0 0 0-.14.15L5.1 15.91c-.07.2.07.4.29.4h.32c.1 0 .18-.05.22-.13L6 15.8h4l.07.38c.04.08.12.13.22.13h.32c.22 0 .36-.2.29-.4z" fill="#ffc400"/>
-         <path d="M10 13h.8a.15.15 0 0 0 .15-.15V0h-2v12.85c0 .08.06.15.15.15zM6 13h.8c.09 0 .15-.07.15-.15V0H5v12.85c0 .08.07.15.15.15z" fill="#ad1519"/>
-         <path d="M7 13h2v1H7z" fill="#ffc400"/>
-         <g fill="#006a44">
-            <path d="M13 13v-1h.15c.2 0 .35-.15.35-.35V9h1v3h1v1zm-10 0v-1h-.15c-.2 0-.35-.15-.35-.35V9H2v3H1v1z"/>
-            <circle cx="7.5" cy="3.5" r="2"/>
-            <circle cx="7.5" cy="9.5" r="2"/>
-         </g>
-         <g fill="#75aadb">
-            <path d="M8.5 13v-1h.15c.2 0 .35-.15.35-.35V9h1v3h1v1z"/>
-            <path d="M4.5 13v-1H4.35c-.2 0-.35-.15-.35-.35V9H5v3H6v1z"/>
-         </g>
-         <path d="M7.5 1c.38 0 .7.1.96.28.21.14.38.33.49.55.11.22.15.46.15.72 0 .26-.04.5.15.72-.11.22-.28.41-.49.55-.26.17-.58.28-.96.28s-.7-.1-.96-.28c-.21-.14-.38-.33-.49-.55-.11-.22-.15-.46-.15-.72 0 .26.04.5.15.72.11.22.28.41.49.55.26.17.58.28.96.28zm0 6c.38 0 .7.1.96.28.21.14.38.33.49.55.11.22.15.46.15.72 0 .26-.04.5.15.72-.11.22-.28.41-.49.55-.26.17-.58.28-.96.28s-.7-.1-.96-.28c-.21-.14-.38-.33-.49-.55-.11-.22-.15-.46-.15-.72 0 .26.04.5.15.72.11.22.28.41.49.55.26.17.58.28.96.28z" fill="#fff"/>
-         <path d="M7.5 7C8.08 7 8.4.6 8.4 1.2V5.8C8.4 6.4 8.08 7 7.5 7S6.6 6.4 6.6 5.8V1.2C6.6.6 6.92 0 7.5 0c.58 0 .9.6.9 1.2z" fill="#ad1519"/>
-         <path d="M7.5 13c.58 0 .9-.6.9-1.2V7.8c0-.6-.32-1.2-.9-1.2s-.9.6-.9 1.2v4c0 .6.32 1.2.9 1.2z" fill="#75aadb"/>
-         <path d="M9.03 5.5H5.97c-.48 0-.78-.27-.78-.6 0-.33.3-.6.78-.6h3.06c.48 0 .78.27.78.6 0 .33-.3.6-.78.6z" fill="#ffc400"/>
-      </g>
-   </svg>
-);
+import { useTranslation } from 'react-i18next';
 
 
 export function Header() {
   const { i18n, t } = useTranslation(); 
   const [isHydrated, setIsHydrated] = useState(false);
-  const [currentLanguageDisplay, setCurrentLanguageDisplay] = useState('...'); 
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState<LegalDocument[]>([]);
   const [showResults, setShowResults] = useState(false);
@@ -78,12 +35,7 @@ export function Header() {
 
   useEffect(() => {
     setIsHydrated(true);
-    if (i18n.language) {
-        setCurrentLanguageDisplay(i18n.language.startsWith('es') ? 'ES' : 'EN');
-    } else {
-        setCurrentLanguageDisplay('EN'); 
-    }
-  }, [i18n.language]);
+  }, []);
 
   useEffect(() => {
     if (!isHydrated) return;
@@ -128,24 +80,21 @@ export function Header() {
         setShowResults(false);
       }
     }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    if (typeof window !== 'undefined') {
+        document.addEventListener("mousedown", handleClickOutside);
+    }
+    return () => {
+        if (typeof window !== 'undefined') {
+            document.removeEventListener("mousedown", handleClickOutside);
+        }
+    };
   }, []);
 
-
-  const handleLanguageChange = (lang: 'en' | 'es') => {
-    if (!isHydrated) return; 
-    i18n.changeLanguage(lang).then(() => {
-      setCurrentLanguageDisplay(lang === 'es' ? 'ES' : 'EN');
-    });
-    setIsMobileMenuOpen(false); 
-    setIsMegaMenuOpen(false); 
-  };
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      router.push(`/?search=${encodeURIComponent(searchQuery)}#workflow-start`); 
+      router.push(`/${i18n.language}/?search=${encodeURIComponent(searchQuery)}#workflow-start`); 
     }
     setSearchQuery('');
     setShowResults(false); 
@@ -158,7 +107,7 @@ export function Header() {
     setShowResults(false);
     setIsMobileMenuOpen(false);
     setIsMegaMenuOpen(false);
-    router.push(`/?docId=${encodeURIComponent(docId)}#workflow-start`);
+    router.push(`/${i18n.language}/docs/${docId}`); 
   };
 
   const handleMegaMenuLinkClick = () => {
@@ -191,8 +140,8 @@ export function Header() {
                 <PopoverContent 
                     align="center"
                     side="bottom"
-                    sideOffset={4}
-                    className="mt-2 w-[90vw] lg:w-[80rem] max-w-full bg-card p-0 rounded-lg shadow-lg z-50 overflow-visible" // Removed absolute positioning
+                    sideOffset={10} 
+                    className="absolute left-1/2 -translate-x-1/2 mt-2 w-[calc(100vw-4rem)] lg:w-[80rem] max-w-[1200px] bg-popover p-0 rounded-lg shadow-xl z-[70] border border-border" 
                 >
                    <MegaMenuContent categories={CATEGORY_LIST} documents={documentLibrary} onLinkClick={handleMegaMenuLinkClick}/>
                 </PopoverContent>
@@ -203,13 +152,13 @@ export function Header() {
                 <Input
                     ref={searchInputRef}
                     type="search"
-                    placeholder={t('nav.searchPlaceholder', { defaultValue: 'Search documents...' })}
+                    placeholder={isHydrated ? t('nav.searchPlaceholder', { defaultValue: 'Search documents...' }) : "..."}
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     onFocus={() => searchQuery.trim().length > 1 && searchResults.length > 0 && setShowResults(true)}
                     className="h-9 pl-10 text-sm rounded-md w-40 md:w-56 bg-background border-input focus:border-primary"
                     disabled={!isHydrated}
-                    aria-label={t('nav.searchPlaceholder', {defaultValue: 'Search documents...'})}
+                    aria-label={isHydrated ? t('nav.searchPlaceholder', {defaultValue: 'Search documents...'}) : "Search documents"}
                 />
                 {showResults && searchResults.length > 0 && (
                   <div 
@@ -236,46 +185,16 @@ export function Header() {
                 )}
              </form>
 
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="text-xs font-medium text-foreground/80 hover:bg-foreground/5 hover:text-foreground px-2 py-1.5 md:px-3 border-border/50 shadow-sm flex items-center" 
-                  aria-label="Select language"
-                  disabled={!isHydrated} 
-                >
-                  {isHydrated ? (currentLanguageDisplay === 'EN' ? <FlagUS /> : <FlagES />) : <Globe className="h-4 w-4 mr-1 text-muted-foreground" /> }
-                  <span className="hidden sm:inline">{isHydrated ? currentLanguageDisplay : '...'}</span> 
-                  <ChevronDown className="ml-1 h-4 w-4 opacity-70" />
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent align="end" className="min-w-[8rem] p-1 z-[70]">
-                <Button
-                   onClick={() => handleLanguageChange('en')}
-                   variant={currentLanguageDisplay === 'EN' ? 'secondary': 'ghost'}
-                   className="w-full justify-start text-xs"
-                >
-                   <FlagUS /> English {currentLanguageDisplay === 'EN' && <Check className="ml-auto h-4 w-4" />}
-                </Button>
-                <Button
-                   onClick={() => handleLanguageChange('es')}
-                   variant={currentLanguageDisplay === 'ES' ? 'secondary': 'ghost'}
-                   className="w-full justify-start text-xs"
-                >
-                   <FlagES /> Español {currentLanguageDisplay === 'ES' && <Check className="ml-auto h-4 w-4" />}
-                </Button>
-              </PopoverContent>
-            </Popover>
+            <LanguageSwitcher />
 
              <Button
                 variant="outline"
                 size="sm"
-                className="text-xs font-medium text-foreground/80 hover:bg-foreground/5 hover:text-foreground px-2 py-1.5 md:px-3 border-border/50 shadow-sm flex items-center"
+                className="text-xs font-medium text-foreground/80 hover:bg-foreground/5 hover:text-foreground px-2 py-1.5 md:px-3 border-border/50 shadow-sm flex items-center h-9 md:h-8"
                 asChild
                 disabled={!isHydrated}
              >
-                <Link href="/signup"> 
+                <Link href={`/${i18n.language}/signup`}> 
                    <UserPlus className="h-4 w-4 mr-1 md:mr-2" />
                    <span className="hidden sm:inline">{isHydrated ? t('Sign Up') : '...'}</span>
                 </Link>
@@ -283,22 +202,24 @@ export function Header() {
              <Button
                 variant="default" 
                 size="sm"
-                className="text-xs font-medium px-2 py-1.5 md:px-3 shadow-sm flex items-center"
+                className="text-xs font-medium px-2 py-1.5 md:px-3 shadow-sm flex items-center h-9 md:h-8"
                 asChild
                 disabled={!isHydrated}
              >
-                <Link href="/signin">
+                <Link href={`/${i18n.language}/signin`}>
                     <LogIn className="h-4 w-4 mr-1 md:mr-2" />
                     <span className="hidden sm:inline">{isHydrated ? t('Sign In') : '...'}</span>
                 </Link>
              </Button>
             {isHydrated && <MiniCartDrawer />}
+            {isHydrated && <ThemeToggle />}
         </nav>
 
         {/* Mobile Menu Button */}
-        <div className="md:hidden ml-auto flex items-center gap-2">
+        <div className="md:hidden ml-auto flex items-center gap-1">
             {isHydrated && <MiniCartDrawer />}
-             <Button variant="ghost" size="icon" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} disabled={!isHydrated}>
+            {isHydrated && <ThemeToggle />}
+             <Button variant="ghost" size="icon" className="h-9 w-9" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} disabled={!isHydrated}>
                 {isMobileMenuOpen ? <CloseIcon className="h-5 w-5" /> : <MenuIcon className="h-5 w-5" />}
              </Button>
         </div>
@@ -312,13 +233,13 @@ export function Header() {
                  <Input
                      ref={searchInputRef} 
                      type="search"
-                     placeholder={t('nav.searchPlaceholder', { defaultValue: 'Search documents...' })}
+                     placeholder={isHydrated ? t('nav.searchPlaceholder', { defaultValue: 'Search documents...' }) : "..."}
                      value={searchQuery}
                      onChange={(e) => setSearchQuery(e.target.value)}
                      onFocus={() => searchQuery.trim().length > 1 && searchResults.length > 0 && setShowResults(true)}
                      className="h-10 pl-10 text-sm rounded-md w-full bg-muted border-input focus:border-primary"
                      disabled={!isHydrated}
-                     aria-label={t('nav.searchPlaceholder', {defaultValue: 'Search documents...'})}
+                     aria-label={isHydrated ? t('nav.searchPlaceholder', {defaultValue: 'Search documents...'}) : "Search documents"}
                  />
                  {showResults && searchResults.length > 0 && (
                   <div 
@@ -366,11 +287,11 @@ export function Header() {
             
             <div className="border-t border-border pt-4 space-y-1">
                 {[
-                    { href: "/pricing", labelKey: "nav.pricing" },
-                    { href: "/features", labelKey: "nav.features" },
-                    { href: "/blog", labelKey: "nav.blog" },
-                    { href: "/faq", labelKey: "nav.faq" },
-                    { href: "/support", labelKey: "nav.support" },
+                    { href: `/${i18n.language}/pricing`, labelKey: "nav.pricing" },
+                    { href: `/${i18n.language}/features`, labelKey: "nav.features" },
+                    { href: `/${i18n.language}/blog`, labelKey: "nav.blog" },
+                    { href: `/${i18n.language}/faq`, labelKey: "nav.faq" },
+                    { href: `/${i18n.language}/support`, labelKey: "nav.support" },
                 ].map(link => (
                     <Button key={link.href} variant="ghost" asChild className="w-full justify-start text-base py-3" onClick={() => setIsMobileMenuOpen(false)}>
                         <Link href={link.href}>{isHydrated ? t(link.labelKey) : '...'}</Link>
@@ -379,21 +300,12 @@ export function Header() {
             </div>
 
             <div className="border-t pt-4 flex items-center gap-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="flex-1 justify-start text-base py-3"
-                  onClick={() => handleLanguageChange(currentLanguageDisplay === 'EN' ? 'es' : 'en')}
-                  disabled={!isHydrated}
-                >
-                   {isHydrated ? (currentLanguageDisplay === 'EN' ? <FlagES /> : <FlagUS />) : <Globe className="h-5 w-5 mr-2 text-muted-foreground" />}
-                   {isHydrated ? (currentLanguageDisplay === 'EN' ? t('Español') : t('English')) : '...'}
-                </Button>
+                <LanguageSwitcher />
             </div>
 
              <div className="border-t border-border pt-4 space-y-2">
-                 <Button variant="outline" size="sm" className="w-full justify-start text-base py-3" asChild onClick={() => setIsMobileMenuOpen(false)}><Link href="/signup"><UserPlus className="h-5 w-5 mr-2" />{isHydrated ? t('Sign Up') : '...'}</Link></Button>
-                 <Button variant="default" size="sm" className="w-full justify-start text-base py-3" asChild onClick={() => setIsMobileMenuOpen(false)}><Link href="/signin"><LogIn className="h-5 w-5 mr-2" />{isHydrated ? t('Sign In') : '...'}</Link></Button>
+                 <Button variant="outline" size="sm" className="w-full justify-start text-base py-3" asChild onClick={() => setIsMobileMenuOpen(false)}><Link href={`/${i18n.language}/signup`}><UserPlus className="h-5 w-5 mr-2" />{isHydrated ? t('Sign Up') : '...'}</Link></Button>
+                 <Button variant="default" size="sm" className="w-full justify-start text-base py-3" asChild onClick={() => setIsMobileMenuOpen(false)}><Link href={`/${i18n.language}/signin`}><LogIn className="h-5 w-5 mr-2" />{isHydrated ? t('Sign In') : '...'}</Link></Button>
              </div>
          </div>
       )}

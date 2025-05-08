@@ -1,11 +1,10 @@
-
 // TrustAndTestimonialsSection.tsx
 'use client'
 
-import { useTranslation } from 'react-i18next'
+import React, { useTranslation } from 'react-i18next' // Import React
 import { useEffect, useState, useRef } from 'react'
 import { Button } from '@/components/ui/button';
-import { ChevronLeft, ChevronRight, FileText, Lock, CheckCircle, ShieldCheck } from 'lucide-react';
+import { ChevronLeft, ChevronRight, FileText, Lock, ShieldCheck } from 'lucide-react'; // Added ShieldCheck
 import Image from 'next/image';
 
 export default function TrustAndTestimonialsSection() {
@@ -38,7 +37,6 @@ export default function TrustAndTestimonialsSection() {
 
   const placeholderText = '...';
   
-  // Ensure formattedCount is only calculated after hydration
   const formattedCount = isHydrated ? docCount.toLocaleString(i18n.language) : placeholderText;
 
   const scroll = (dir: 'left' | 'right') => {
@@ -59,26 +57,25 @@ export default function TrustAndTestimonialsSection() {
   return (
     <section className="bg-secondary/30 py-20 px-4 text-center">
       <h2 className="text-sm uppercase text-muted-foreground tracking-wide mb-4 font-medium">
-        {isHydrated ? t('home.trustStrip.title') : placeholderText}
+        {isHydrated ? t('home.trustStrip.title', {defaultValue: "Trusted By Professionals"}) : placeholderText}
       </h2>
       <div className="flex flex-wrap justify-center gap-6 md:gap-10 items-center max-w-4xl mx-auto text-foreground/80 text-sm mb-16">
         <div className="flex items-center gap-2">
           <FileText className="h-5 w-5 text-primary" />
-          {/* Use pre-calculated formattedCount */}
-          <span>{isHydrated ? t('home.trustStrip.badge1', { count: formattedCount }) : placeholderText}</span>
+          <span>{isHydrated ? t('home.trustStrip.badge1', { count: formattedCount, defaultValue: `Over ${formattedCount} documents generated` }) : placeholderText}</span>
         </div>
         <div className="flex items-center gap-2">
           <Lock className="h-5 w-5 text-primary" />
-          <span>{isHydrated ? t('home.trustStrip.badge2') : placeholderText}</span>
+          <span>{isHydrated ? t('home.trustStrip.badge2', {defaultValue: "Encrypted & privacy-compliant"}) : placeholderText}</span>
         </div>
         <div className="flex items-center gap-2">
-          <ShieldCheck className="h-5 w-5 text-primary" /> {/* Updated Icon */}
-          <span>{isHydrated ? t('home.trustStrip.badge3') : placeholderText}</span>
+          <ShieldCheck className="h-5 w-5 text-primary" /> 
+          <span>{isHydrated ? t('home.trustStrip.badge3', {defaultValue: "Verified by real attorneys"}) : placeholderText}</span>
         </div>
       </div>
 
       <h3 className="text-3xl font-bold text-foreground mb-10">
-        {isHydrated ? t('home.testimonials.title') : placeholderText}
+        {isHydrated ? t('home.testimonials.title', {defaultValue: "What Our Users Say"}) : placeholderText}
       </h3>
 
       <div className="relative max-w-6xl mx-auto">
@@ -161,7 +158,7 @@ export default function TrustAndTestimonialsSection() {
       <div className="mt-20 flex flex-col items-center space-y-6">
          <div className="inline-flex items-center gap-2 bg-card text-sm px-5 py-3 rounded-full shadow-md border border-border">
            <ShieldCheck className="h-5 w-5 text-primary" />
-           <span className="font-medium text-foreground/90">{isHydrated ? t('home.moneyBackGuarantee') : placeholderText}</span>
+           <span className="font-medium text-foreground/90">{isHydrated ? t('home.moneyBackGuarantee', {defaultValue: "100% Satisfaction Guarantee or Your Money Back"}) : placeholderText}</span>
          </div>
           <Button
               size="lg"
@@ -169,7 +166,7 @@ export default function TrustAndTestimonialsSection() {
               onClick={scrollToWorkflow}
               disabled={!isHydrated}
            >
-              {isHydrated ? t('home.callToAction') : placeholderText}
+              {isHydrated ? t('home.callToAction', {defaultValue: "Get Started Now"}) : placeholderText}
            </Button>
       </div>
     </section>
