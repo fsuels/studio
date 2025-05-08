@@ -3,14 +3,14 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation'; // Import usePathname
+import { usePathname } from 'next/navigation'; 
 import { Logo } from '@/components/layout/Logo';
 import Nav from '@/components/Nav'; 
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"; 
 import { Button } from '@/components/ui/button'; 
 import MiniCartDrawer from '@/components/MiniCartDrawer';
-import { ThemeToggle } from '@/components/ThemeToggle';
+import { ThemeToggle } from '@/components/ThemeToggle'; // Corrected import path
 import { Check, ChevronDown, Globe, UserPlus, LogIn, Search as SearchIcon, ExternalLink, FileText, Menu as MenuIcon, X as CloseIcon, LayoutGrid, ChevronUp } from 'lucide-react'; 
 import { Input } from '@/components/ui/input';
 import { documentLibrary, LegalDocument } from '@/lib/document-library';
@@ -20,9 +20,9 @@ import MegaMenuContent from './MegaMenuContent';
 import { useTranslation } from 'react-i18next';
 
 
-export default function Header() { // Changed to default export
+export default function Header() { 
   const { i18n, t } = useTranslation(); 
-  const [clientLocale, setClientLocale] = useState<'en'|'es'>('en'); // Renamed to avoid conflict
+  const [clientLocale, setClientLocale] = useState<'en'|'es'>('en'); 
   const [mounted, setMounted] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState<LegalDocument[]>([]);
@@ -34,7 +34,7 @@ export default function Header() { // Changed to default export
   const [isMegaMenuOpen, setIsMegaMenuOpen] = useState(false); 
   const [showMobileCategories, setShowMobileCategories] = useState(false); 
   
-  const pathname = usePathname(); // Get current pathname
+  const pathname = usePathname(); 
 
   useEffect(() => {
     setMounted(true);
@@ -44,19 +44,19 @@ export default function Header() { // Changed to default export
       setClientLocale('es');
       if (i18n.language !== 'es') i18n.changeLanguage('es');
     } else {
-      setClientLocale('en'); // Default to 'en'
+      setClientLocale('en'); 
       if (i18n.language !== 'en') i18n.changeLanguage('en');
     }
   }, [pathname, i18n]);
 
 
   useEffect(() => {
-    if (!mounted) return; // Ensure client-side only for i18n.language sensitive operations
+    if (!mounted) return; 
 
     const performSearch = () => {
       if (searchQuery.trim().length > 1) { 
         const lowerQuery = searchQuery.toLowerCase();
-        const lang = clientLocale; // Use client-derived locale
+        const lang = clientLocale; 
         
         const results = documentLibrary.filter(doc => {
           const name = lang === 'es' && doc.name_es ? doc.name_es : doc.name;
@@ -144,10 +144,15 @@ export default function Header() { // Changed to default export
         <nav className="hidden md:flex items-center gap-2 ml-auto">
             <Popover open={isMegaMenuOpen} onOpenChange={setIsMegaMenuOpen}>
                 <PopoverTrigger asChild>
-                    <Button variant="ghost" size="sm" className="text-sm font-medium flex items-center gap-1 px-2 hover:text-primary" disabled={!mounted}>
-                        <LayoutGrid className="h-4 w-4 text-muted-foreground" />
+                    <Button
+                        variant="ghost"
+                        size="sm"
+                        className="text-sm font-medium flex items-center gap-1 px-2 text-foreground/80 hover:bg-muted hover:text-foreground focus:bg-muted focus:text-foreground" 
+                        disabled={!mounted}
+                    >
+                        <LayoutGrid className="h-4 w-4" /> 
                         {mounted ? t('nav.documentCategories') : '...'}
-                        <ChevronDown className="h-4 w-4 opacity-70" />
+                        <ChevronDown className="h-4 w-4 opacity-70" /> 
                     </Button>
                 </PopoverTrigger>
                 <PopoverContent 
@@ -198,7 +203,7 @@ export default function Header() { // Changed to default export
                 )}
              </form>
             
-            {mounted && <LanguageSwitcher />} {/* Render LanguageSwitcher only when mounted */}
+            {mounted && <LanguageSwitcher />} 
 
             {mounted && (
                 <>
@@ -224,7 +229,7 @@ export default function Header() { // Changed to default export
                             <span className="hidden sm:inline">{t('Sign In')}</span>
                         </Link>
                     </Button>
-                    <MiniCartDrawer />
+                    {/* <MiniCartDrawer /> */} {/* Temporarily removed MiniCartDrawer */}
                     <ThemeToggle />
                 </>
             )}
@@ -232,7 +237,7 @@ export default function Header() { // Changed to default export
 
         {/* Mobile Menu Button */}
         <div className="md:hidden ml-auto flex items-center gap-1">
-            {mounted && <MiniCartDrawer />}
+            {/* {mounted && <MiniCartDrawer />} */} {/* Temporarily removed MiniCartDrawer */}
             {mounted && <ThemeToggle />}
              <Button variant="ghost" size="icon" className="h-9 w-9" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} disabled={!mounted}>
                 {isMobileMenuOpen ? <CloseIcon className="h-5 w-5" /> : <MenuIcon className="h-5 w-5" />}
@@ -327,3 +332,4 @@ export default function Header() { // Changed to default export
     </header>
   );
 }
+
