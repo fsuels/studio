@@ -31,8 +31,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning>{/* Ensure no whitespace directly after this tag */}
-      <head>
+    <html lang="en" suppressHydrationWarning>{/* Ensure no whitespace directly after this tag */}<head>
           <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
           <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY&libraries=places" async defer></script>
       </head>
@@ -44,3 +43,4 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     </html>
   );
 }
+
