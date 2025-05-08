@@ -1,8 +1,7 @@
-
+// app/layout.tsx
 import './globals.css';
 import { ClientProviders } from '@/components/providers/ClientProviders';
-import Header from '@/components/layout/Header';
-import { Footer } from '@/components/layout/Footer';
+// Header and Footer are now rendered by ClientProviders
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import React from 'react';
@@ -38,16 +37,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY&libraries=places" async defer></script>
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen overflow-x-hidden`}>
-        {/* Default locale 'en' is passed to ClientProviders in the root layout.
-            The ClientProviders in [locale]/layout.tsx will then set the specific locale.
-        */}
-        <ClientProviders locale="en">
-          <Header />
-          <main className="flex-grow">{children}</main>
-          <Footer />
+        <ClientProviders>
+          {children} {/* children here is the content from [locale]/page.tsx etc. */}
         </ClientProviders>
       </body>
     </html>
   );
 }
-
