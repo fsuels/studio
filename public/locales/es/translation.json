@@ -299,7 +299,9 @@
       "searchPlaceholder": "Buscar documentos...",
       "signUp": "Regístrate",
       "signIn": "Acceder",
-      "documentCategories": "Crear Documentos"
+      "documentCategories": "Crear Documentos",
+      "seeMoreDocuments": "Ver todos en {{categoryName}}...",
+      "noDocumentsInCategory": "No hay documentos en esta categoría todavía."
     },
     "pricing": {
       "title": "Precios simples y transparentes",
