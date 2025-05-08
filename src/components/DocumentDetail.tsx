@@ -11,7 +11,7 @@ import { Loader2, AlertTriangle } from 'lucide-react';
 interface DocumentDetailProps {
   docId: string;
   locale: 'en' | 'es';
-  altText?: string; // Kept for potential future use, though not used for Markdown
+  altText?: string; 
 }
 
 export default function DocumentDetail({ docId, locale, altText }: DocumentDetailProps) {
@@ -19,7 +19,7 @@ export default function DocumentDetail({ docId, locale, altText }: DocumentDetai
   const [md, setMd] = useState<string>('');
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [isHydrated, setIsHydrated = useState(false);
+  const [isHydrated, setIsHydrated] = useState(false);
 
   const doc = documentLibrary.find((d: LegalDocument) => d.id === docId);
 
@@ -38,11 +38,10 @@ export default function DocumentDetail({ docId, locale, altText }: DocumentDetai
       console.warn(`[DocumentDetail] No templatePath defined for docId: ${docId}, locale: ${locale}`);
       setError(t('Preview not available for this document.', {defaultValue: 'Preview not available for this document.'}));
       setIsLoading(false);
-      setMd(''); // Ensure md is cleared if no template path
+      setMd(''); 
       return;
     }
     
-    // Ensure templatePath starts with a slash if it's a local path
     const fetchPath = templatePath.startsWith('/') ? templatePath : `/${templatePath}`;
 
     fetch(fetchPath)
@@ -58,14 +57,13 @@ export default function DocumentDetail({ docId, locale, altText }: DocumentDetai
       .catch((err) => {
         console.error('[DocumentDetail] Error fetching Markdown:', err);
         setError(err.message || t('Error loading preview content.', {defaultValue: 'Error loading preview content.'}));
-        setMd(''); // Clear markdown on error
+        setMd(''); 
       })
       .finally(() => setIsLoading(false));
   }, [docId, locale, doc, isHydrated, t]);
 
 
   if (!isHydrated || !doc) {
-    // Show a generic loading or a more specific "document not found" if !doc and hydrated
     return (
       <div className="flex flex-col items-center justify-center text-muted-foreground p-4 border rounded-lg bg-muted min-h-[300px]">
         <Loader2 className="h-8 w-8 animate-spin mb-2" />
