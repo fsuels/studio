@@ -24,8 +24,9 @@ export const metadata: Metadata = {
 };
 
 // ───────── Root layout ─────────
+/* prettier-ignore */
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning={true}><head><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/></head><body className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen overflow-x-hidden`}><ClientProviders>{children}</ClientProviders></body></html>
+    <html lang="en" suppressHydrationWarning><head><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/></head><body className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen overflow-x-hidden`}><ClientProviders>{children}</ClientProviders></body></html>
   );
 }
