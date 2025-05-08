@@ -35,6 +35,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" suppressHydrationWarning> {/* Add suppressHydrationWarning */}
       <head>
           <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+          <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY&libraries=places" async defer></script>
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen overflow-x-hidden`}>
         {/* Default locale 'en' is passed to ClientProviders in the root layout.
