@@ -5,18 +5,24 @@ import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import React from 'react';
 
+// ───────── Dev-only i18n helper ─────────
 if (process.env.NODE_ENV === 'development' && typeof window !== 'undefined') {
-  import('../../scripts/find-missing-i18n.js').catch(console.error);
+  import('../../scripts/find-missing-i18n.js').catch(err =>
+    console.error('Failed to load find-missing-i18n.js:', err),
+  );
 }
 
+// ───────── Fonts ─────────
 const geistSans = Geist({ variable: '--font-geist-sans', subsets: ['latin'] });
 const geistMono = Geist_Mono({ variable: '--font-geist-mono', subsets: ['latin'] });
 
+// ───────── <head> metadata ─────────
 export const metadata: Metadata = {
   title: '123LegalDoc',
   description: 'AI-Powered Legal Document Generation',
 };
 
+// ───────── Root layout ─────────
 /* prettier-ignore */
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
