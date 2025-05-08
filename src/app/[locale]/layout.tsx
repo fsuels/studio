@@ -2,11 +2,11 @@
 'use client';
 
 import type { ReactNode } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams } from 'next/navigation'; // Keep useParams to get locale if params prop is not used directly
 import { ClientProviders } from '@/components/providers/ClientProviders';
-import { Inter } from 'next/font/google'; // Assuming Inter is used, adjust if different
 
-const inter = Inter({ subsets: ['latin'] }); // Example font loading
+// Font loading (like Inter) should be handled in the root layout (app/layout.tsx)
+// const inter = Inter({ subsets: ['latin'] }); // Removed
 
 interface LocaleLayoutProps {
   children: ReactNode;
@@ -14,13 +14,12 @@ interface LocaleLayoutProps {
 }
 
 export default function LocaleLayout({ children, params }: LocaleLayoutProps) {
-  // No need to use useParams() here if Next.js provides params directly to layout
+  // The 'locale' is directly available from the 'params' prop provided by Next.js
   const { locale } = params;
 
   return (
-    // The <html> and <body> tags are now in the root src/app/layout.tsx
-    // This layout component will be nested within that.
-    // Pass the detected locale to ClientProviders
+    // This ClientProviders instance will correctly set the i18n language
+    // based on the URL segment.
     <ClientProviders locale={locale as 'en' | 'es'}>
       {children}
     </ClientProviders>
