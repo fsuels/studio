@@ -3,18 +3,17 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation'; 
+import { usePathname, useRouter, useParams } from 'next/navigation'; 
 import { Logo } from '@/components/layout/Logo';
 import Nav from '@/components/Nav'; 
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"; 
 import { Button } from '@/components/ui/button'; 
-import MiniCartDrawer from '@/components/MiniCartDrawer';
-import { ThemeToggle } from '@/components/ThemeToggle'; // Corrected import path
+// import MiniCartDrawer from '@/components/MiniCartDrawer'; // Temporarily removed
+import { ThemeToggle } from '@/components/ThemeToggle'; 
 import { Check, ChevronDown, Globe, UserPlus, LogIn, Search as SearchIcon, ExternalLink, FileText, Menu as MenuIcon, X as CloseIcon, LayoutGrid, ChevronUp } from 'lucide-react'; 
 import { Input } from '@/components/ui/input';
-import { documentLibrary, LegalDocument } from '@/lib/document-library';
-import { useRouter } from 'next/navigation';
+import { documentLibrary, type LegalDocument } from '@/lib/document-library';
 import { CATEGORY_LIST } from '@/components/Step1DocumentSelector';
 import MegaMenuContent from './MegaMenuContent'; 
 import { useTranslation } from 'react-i18next';
@@ -35,19 +34,19 @@ export default function Header() {
   const [showMobileCategories, setShowMobileCategories] = useState(false); 
   
   const pathname = usePathname(); 
+  const params = useParams(); // Using useParams for locale consistently
 
   useEffect(() => {
     setMounted(true);
-    const segments = pathname.split('/');
-    const pathLocale = segments[1];
-    if (pathLocale === 'es') {
-      setClientLocale('es');
-      if (i18n.language !== 'es') i18n.changeLanguage('es');
-    } else {
-      setClientLocale('en'); 
-      if (i18n.language !== 'en') i18n.changeLanguage('en');
+    // Consistently derive locale from params, which comes from the URL structure
+    const pathLocale = params.locale as 'en' | 'es' | undefined;
+    const newLocale = pathLocale && ['en', 'es'].includes(pathLocale) ? pathLocale : 'en';
+    
+    setClientLocale(newLocale);
+    if (i18n.language !== newLocale) {
+      i18n.changeLanguage(newLocale);
     }
-  }, [pathname, i18n]);
+  }, [params.locale, i18n]);
 
 
   useEffect(() => {
@@ -129,6 +128,7 @@ export default function Header() {
     setShowMobileCategories(false); 
   }
 
+  const placeholderSearch = mounted ? t('nav.searchPlaceholder', { defaultValue: 'Search documents...' }) : "...";
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 overflow-visible">
@@ -147,12 +147,12 @@ export default function Header() {
                     <Button
                         variant="ghost"
                         size="sm"
-                        className="text-sm font-medium flex items-center gap-1 px-2 text-foreground/80 hover:bg-muted hover:text-foreground focus:bg-muted focus:text-foreground" 
+                        className="text-sm font-medium flex items-center gap-1 px-2 text-foreground/80 hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground" 
                         disabled={!mounted}
                     >
                         <LayoutGrid className="h-4 w-4" /> 
                         {mounted ? t('nav.documentCategories') : '...'}
-                        <ChevronDown className="h-4 w-4 opacity-70" /> 
+                        {isMegaMenuOpen ? <ChevronUp className="h-4 w-4 opacity-70" /> : <ChevronDown className="h-4 w-4 opacity-70" />}
                     </Button>
                 </PopoverTrigger>
                 <PopoverContent 
@@ -170,13 +170,13 @@ export default function Header() {
                 <Input
                     ref={searchInputRef}
                     type="search"
-                    placeholder={mounted ? t('nav.searchPlaceholder', { defaultValue: 'Search documents...' }) : "..."}
+                    placeholder={placeholderSearch}
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     onFocus={() => searchQuery.trim().length > 1 && searchResults.length > 0 && setShowResults(true)}
                     className="h-9 pl-10 text-sm rounded-md w-40 md:w-56 bg-background border-input focus:border-primary"
                     disabled={!mounted}
-                    aria-label={mounted ? t('nav.searchPlaceholder', {defaultValue: 'Search documents...'}) : "Search documents"}
+                    aria-label={placeholderSearch}
                 />
                 {showResults && searchResults.length > 0 && (
                   <div 
@@ -229,7 +229,7 @@ export default function Header() {
                             <span className="hidden sm:inline">{t('Sign In')}</span>
                         </Link>
                     </Button>
-                    {/* <MiniCartDrawer /> */} {/* Temporarily removed MiniCartDrawer */}
+                    {/* <MiniCartDrawer /> */} 
                     <ThemeToggle />
                 </>
             )}
@@ -237,7 +237,7 @@ export default function Header() {
 
         {/* Mobile Menu Button */}
         <div className="md:hidden ml-auto flex items-center gap-1">
-            {/* {mounted && <MiniCartDrawer />} */} {/* Temporarily removed MiniCartDrawer */}
+            {/* {mounted && <MiniCartDrawer />} */} 
             {mounted && <ThemeToggle />}
              <Button variant="ghost" size="icon" className="h-9 w-9" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} disabled={!mounted}>
                 {isMobileMenuOpen ? <CloseIcon className="h-5 w-5" /> : <MenuIcon className="h-5 w-5" />}
@@ -253,13 +253,13 @@ export default function Header() {
                  <Input
                      ref={searchInputRef} 
                      type="search"
-                     placeholder={mounted ? t('nav.searchPlaceholder', { defaultValue: 'Search documents...' }) : "..."}
+                     placeholder={placeholderSearch}
                      value={searchQuery}
                      onChange={(e) => setSearchQuery(e.target.value)}
                      onFocus={() => searchQuery.trim().length > 1 && searchResults.length > 0 && setShowResults(true)}
                      className="h-10 pl-10 text-sm rounded-md w-full bg-muted border-input focus:border-primary"
                      disabled={!mounted}
-                     aria-label={mounted ? t('nav.searchPlaceholder', {defaultValue: 'Search documents...'}) : "Search documents"}
+                     aria-label={placeholderSearch}
                  />
                  {showResults && searchResults.length > 0 && (
                   <div 
@@ -288,7 +288,7 @@ export default function Header() {
             
             <Button
               variant="ghost"
-              className="w-full justify-between text-base font-medium flex items-center gap-2 px-2 py-3 hover:text-primary"
+              className="w-full justify-between text-base font-medium flex items-center gap-2 px-2 py-3 hover:bg-primary hover:text-primary-foreground"
               onClick={() => setShowMobileCategories(!showMobileCategories)}
               disabled={!mounted}
               aria-expanded={showMobileCategories}
@@ -332,4 +332,3 @@ export default function Header() {
     </header>
   );
 }
-
