@@ -2,7 +2,7 @@
 'use client';
 
 import { useParams, notFound, useRouter } from 'next/navigation';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { Loader2, Edit, Eye } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { documentLibrary, type LegalDocument } from '@/lib/document-library';
@@ -11,8 +11,8 @@ import WizardForm from '@/components/WizardForm';
 import PreviewPane from '@/components/PreviewPane';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"; // Removed TabsContent as it's not directly used here
-import { useForm, FormProvider, type UseFormReturn } from 'react-hook-form';
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useForm, FormProvider } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 
@@ -27,6 +27,7 @@ export default function StartWizardPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [isHydrated, setIsHydrated] = useState(false);
   const [mobileView, setMobileView] = useState<'form' | 'preview'>('form');
+  const { toast } = useToast(); // Ensure toast is initialized
 
   useEffect(() => {
     setIsHydrated(true);
@@ -35,31 +36,36 @@ export default function StartWizardPage() {
   useEffect(() => {
     if (docIdFromPath && isHydrated) {
       const foundDoc = documentLibrary.find(d => d.id === docIdFromPath);
-      if (foundDoc) {
+      // Ensure foundDoc and its schema (and schema.shape) are valid before setting
+      if (foundDoc && foundDoc.schema && typeof foundDoc.schema.shape === 'object' && foundDoc.schema.shape !== null) {
         setDocConfig(foundDoc);
       } else {
-        console.error(`[StartWizardPage] Document config not found for docId: ${docIdFromPath}`);
-        notFound();
+        console.error(`[StartWizardPage] Document config not found or schema invalid for docId: ${docIdFromPath}`);
+        notFound(); // Trigger 404 if doc or its schema is not valid
       }
       setIsLoading(false);
     } else if (!docIdFromPath && isHydrated) {
       setIsLoading(false);
-      notFound();
+      notFound(); // Trigger 404 if docId is missing
     }
-  }, [docIdFromPath, isHydrated]);
+  }, [docIdFromPath, isHydrated, notFound]);
 
-  const methods = useForm<z.infer<typeof docConfig.schema>>({
-    resolver: docConfig ? zodResolver(docConfig.schema) : undefined,
-    defaultValues: {}, // Default values will be loaded from localStorage by WizardForm
+
+  // Initialize useForm here, but ensure docConfig is valid before using docConfig.schema
+  // We will pass methods to WizardForm which can re-initialize if needed or handle conditional schema
+  const methods = useForm<any>({ // Use 'any' for now, WizardForm will handle specific types
+    // Resolver and defaultValues will be set in WizardForm or based on valid docConfig
     mode: 'onBlur',
   });
 
-  const handleWizardComplete = (checkoutUrl: string) => {
+
+  const handleWizardComplete = useCallback((checkoutUrl: string) => {
     toast({ title: t("Proceeding to Checkout", {ns: 'translation'}), description: t("Redirecting to secure payment...", {ns: 'translation'}) });
     router.push(checkoutUrl);
-  };
+  }, [toast, t, router]);
 
-  if (!isHydrated || isLoading || !docConfig) {
+
+  if (!isHydrated || isLoading || !docConfig || !docConfig.schema || typeof docConfig.schema.shape !== 'object' || docConfig.schema.shape === null) {
     return (
       <div className="flex justify-center items-center min-h-screen">
         <Loader2 className="h-12 w-12 animate-spin text-primary" />
@@ -98,7 +104,7 @@ export default function StartWizardPage() {
           <div className="lg:col-span-1">
             <WizardForm
               locale={locale}
-              doc={docConfig}
+              doc={docConfig} // docConfig is guaranteed to be valid here
               onComplete={handleWizardComplete}
             />
           </div>
@@ -121,7 +127,7 @@ export default function StartWizardPage() {
             <div>
               <WizardForm
                 locale={locale}
-                doc={docConfig}
+                doc={docConfig} // docConfig is guaranteed to be valid here
                 onComplete={handleWizardComplete}
               />
             </div>
