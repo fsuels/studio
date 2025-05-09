@@ -1,7 +1,7 @@
 // src/components/ReviewStep.tsx
 'use client';
 
-import React from 'react';
+import React, { useMemo } from 'react'; // Imported useMemo
 import { useFormContext } from 'react-hook-form';
 import type { LegalDocument } from '@/lib/document-library';
 import { prettify } from '@/lib/schema-utils';
@@ -77,7 +77,7 @@ export default function ReviewStep({ doc, locale, onEdit }: ReviewStepProps) {
             <div key={field.id} className="flex justify-between items-start py-2 border-b border-border last:border-b-0">
               <div className="flex-1">
                 <dt className="text-sm font-medium text-muted-foreground">{t(field.label, field.label)}:</dt>
-                <dd className="mt-0.5 text-sm text-card-foreground break-words">{displayValue}</dd>
+                <dd className="mt-0.5 text-sm text-card-foreground break-words">{String(displayValue)}</dd>
               </div>
               <Button variant="ghost" size="icon" onClick={() => onEdit(field.id)} className="ml-2 text-primary hover:text-primary/80 h-7 w-7 p-1">
                 <Edit2 className="h-4 w-4" />
@@ -95,3 +95,4 @@ export default function ReviewStep({ doc, locale, onEdit }: ReviewStepProps) {
     </Card>
   );
 }
+
