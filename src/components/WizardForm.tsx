@@ -19,7 +19,7 @@ import { useAuth } from '@/hooks/useAuth';
 import DefaultAddressField from '@/components/AddressField'; 
 import { TooltipProvider } from '@/components/ui/tooltip'; 
 import TrustBadges from '@/components/TrustBadges';
-import ReviewStep from './ReviewStep';
+import ReviewStep from '@/components/ReviewStep'; // Corrected import path
 import { saveFormProgress, loadFormProgress } from '@/lib/firestore/saveFormProgress';
 import { debounce } from 'lodash-es';
 
@@ -114,7 +114,7 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
                 await saveFormProgress({
                     userId: user.uid,
                     docType: doc.id,
-                    state: locale,
+                    state: locale, // Assuming locale is used as state here
                     formData: valuesToSave,
                 });
                 console.log('[WizardForm] Draft saved to Firestore:', valuesToSave);
@@ -153,7 +153,11 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
     }
     // Fallback to schema keys if questions array is not defined or empty
     if (doc.schema && 'shape' in doc.schema && typeof doc.schema.shape === 'object' && doc.schema.shape !== null) {
-      return Object.keys(doc.schema.shape).map(key => ({ id: key, label: prettify(key) }));
+      const shape = doc.schema.shape as Record<string, any>;
+      return Object.keys(shape).map(key => ({ 
+        id: key, 
+        label: shape[key]?.description || prettify(key) 
+      }));
     }
     return [];
   }, [doc.questions, doc.schema]);
@@ -223,7 +227,8 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
 
     if (currentStepFieldKey) {
       isValid = await trigger(currentStepFieldKey as any);
-    } else if (totalSteps === 0) { // No fields, proceed to review/submit
+    } else if (totalSteps === 0 && steps.length === 0) { // No fields defined by questions or schema.shape
+      console.log("[WizardForm] No fields to validate, proceeding to review.");
       setIsReviewing(true);
       return;
     } else if (currentStepIndex >= totalSteps -1 && totalSteps > 0) {
@@ -233,6 +238,12 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
             setIsReviewing(true);
             return;
         }
+    } else if (!currentStepFieldKey && totalSteps > 0 && currentStepIndex < totalSteps) {
+      // This case implies steps were derived (e.g. from schema keys) but currentStepFieldKey is still null.
+      // This could happen if steps array is populated asynchronously or if logic for steps has an issue.
+      // For now, log error and prevent proceeding to avoid unexpected behavior.
+      console.error("Error: currentStepField is undefined but totalSteps > 0. currentStepIndex:", currentStepIndex, "steps:", steps);
+      isValid = false; 
     }
 
 
@@ -298,22 +309,23 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
              />
           ) : (
             <div className="mt-6 space-y-6 min-h-[200px]">
-                {currentField && currentField.id ? (
-                    (doc.schema.shape as any)[currentField.id] && ((doc.schema.shape as any)[currentField.id] instanceof z.ZodObject || ((doc.schema.shape as any)[currentField.id]._def && (doc.schema.shape as any)[currentField.id]._def.typeName === 'ZodObject')) && (currentField.id.includes('_address') || currentField.id.includes('Address')) ? (
-                    <Controller
-                        control={control}
-                        name={currentField.id as any}
-                        render={({ field: { onChange: rhfOnChange, value: rhfValue, name: rhfName, ref: rhfRefInput, ...restRhfField }}) => (
-                            <DefaultAddressField
-                                name={rhfName}
-                                label={t(currentField.label, currentField.label)}
-                                required={(doc.schema?.shape as any)?.[currentField.id]?._def?.typeName !== 'ZodOptional'}
-                                error={errors[currentField.id as any]?.message as string | undefined}
-                                placeholder={t('Enter address...', { ns: 'translation' })}
-                                tooltip={(doc.questions?.find(q => q.id === currentField.id)?.tooltip) || ''}
-                            />
-                        )}
-                    />
+               {currentField && currentField.id ? (
+                 (doc.schema.shape as any)[currentField.id] && ((doc.schema.shape as any)[currentField.id] instanceof z.ZodObject || ((doc.schema.shape as any)[currentField.id]._def && (doc.schema.shape as any)[currentField.id]._def.typeName === 'ZodObject')) && (currentField.id.includes('_address') || currentField.id.includes('Address')) ? (
+
+                  <Controller
+                    control={control}
+                    name={currentField.id as any}
+                    render={({ field: { onChange: rhfOnChange, value: rhfValue, name: rhfName, ref: rhfRefInput, ...restRhfField }}) => (
+                        <DefaultAddressField
+                            name={rhfName}
+                            label={t(currentField.label, currentField.label)}
+                            required={(doc.schema?.shape as any)?.[currentField.id]?._def?.typeName !== 'ZodOptional'}
+                            error={errors[currentField.id as any]?.message as string | undefined}
+                            placeholder={t('Enter address...', { ns: 'translation' })}
+                            tooltip={(doc.questions?.find(q => q.id === currentField.id)?.tooltip) || (doc.schema.shape as any)?.[currentField.id]?.description || ''}
+                        />
+                    )}
+                  />
                 ) : ( <FieldRenderer fieldKey={currentField.id} locale={locale} doc={doc} /> )
                 ) : (
                 <p className="text-muted-foreground text-center py-10">{t('dynamicForm.noQuestionsNeeded', { ns: 'translation' })}</p>
@@ -344,7 +356,7 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
               >
                 {formIsSubmitting || authIsLoading ? <Loader2 className="animate-spin h-5 w-5" /> :
                   isReviewing ? t('dynamicForm.confirmAnswersButton', { ns: 'translation' }) :
-                  (currentStepIndex === totalSteps - 1 || totalSteps === 0 ? t('Review Answers', { ns: 'translation' }) : t('wizard.next', { ns: 'translation' }))}
+                  (currentStepIndex === totalSteps - 1 || (totalSteps === 0 && steps.length === 0) ? t('Review Answers', { ns: 'translation' }) : t('wizard.next', { ns: 'translation' }))}
               </Button>
           </div>
           <TrustBadges /> 
@@ -352,11 +364,11 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
           <AuthModal
             isOpen={showAuthModal}
             onClose={() => setShowAuthModal(false)}
-            onAuthSuccess={async () => { // Changed to async
+            onAuthSuccess={async () => { 
               setShowAuthModal(false);
-              if (user || isLoggedIn) { // Check again, might have logged in
-                 await new Promise(resolve => setTimeout(resolve, 100)); // Allow state to update
-                 await proceedToApiSubmission(); // Call the submission logic
+              if (user || isLoggedIn) { 
+                 await new Promise(resolve => setTimeout(resolve, 100)); 
+                 await proceedToApiSubmission(); 
               } else {
                  toast({ title: "Authentication Required", description: "Please sign in to continue.", variant: "destructive"});
               }
@@ -367,4 +379,5 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
     </FormProvider>
   );
 }
+
 
