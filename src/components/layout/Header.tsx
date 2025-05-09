@@ -10,12 +10,12 @@ import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Button } from '@/components/ui/button'; 
 // import MiniCartDrawer from '@/components/MiniCartDrawer'; // Not currently used
-// import { ThemeToggle } from '@/components/ThemeToggle'; // Corrected import path
+// import { ThemeToggle } from '@/components/ui/ThemeToggle'; // Corrected import path
 import { Check, ChevronDown, Globe, UserPlus, LogIn, Search as SearchIcon, ExternalLink, FileText, Menu as MenuIcon, X as CloseIcon, LayoutGrid, ChevronUp, LogOut } from 'lucide-react'; 
 import { Input } from '@/components/ui/input';
 import { documentLibrary, type LegalDocument } from '@/lib/document-library';
 import { CATEGORY_LIST } from '@/components/Step1DocumentSelector';
-import MegaMenuContent from '@/components/mega-menu/MegaMenuContent'; // Updated import path
+import MegaMenuContent from '@/components/mega-menu/MegaMenuContent'; 
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/hooks/useAuth';
 
@@ -141,15 +141,21 @@ export default function Header() {
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 overflow-visible">
       <div className="container flex h-14 items-center px-4 md:px-6">
         <div className="mr-auto md:mr-4 flex items-center">
-           <Logo wrapperClassName="items-center self-center" svgClassName="h-8 w-auto" textClassName="text-lg" />
+           <Logo wrapperClassName="items-center self-center" svgClassName="h-7 w-7" textClassName="text-sm" />
         </div>
 
         <div className="hidden md:flex flex-1 items-center justify-start">
-          <Nav />
+          {/* Desktop Nav is now part of the right-aligned section based on previous structure for megamenu */}
         </div>
 
         <nav className="hidden md:flex items-center gap-2 ml-auto">
-            <Popover open={isMegaMenuOpen} onOpenChange={setIsMegaMenuOpen}>
+            <Nav /> {/* Placed Nav here for desktop */}
+            <Popover open={isMegaMenuOpen} 
+              onOpenChange={(open) => {
+                console.log('MegaMenu Popover onOpenChange:', open);
+                setIsMegaMenuOpen(open);
+              }}
+            >
                 <PopoverTrigger asChild>
                     <Button
                         variant="ghost"
@@ -167,8 +173,7 @@ export default function Header() {
                     align="center" 
                     side="bottom"
                     sideOffset={10}
-                    className="w-[90vw] md:w-[90vw] lg:w-[80rem] xl:w-[1200px] max-w-full bg-card shadow-xl rounded-lg p-0 z-[70] border border-border 
-                               absolute left-1/2 -translate-x-1/2 mt-2 overflow-visible" // Centering and width classes
+                    className="w-[90vw] md:w-[90vw] lg:w-[80rem] xl:w-[1200px] max-w-full bg-card shadow-xl rounded-lg p-0 z-[70] border border-border absolute left-1/2 -translate-x-1/2 overflow-visible" 
                 >
                    <MegaMenuContent categories={CATEGORY_LIST} documents={documentLibrary} onLinkClick={handleMegaMenuLinkClick}/>
                 </PopoverContent>

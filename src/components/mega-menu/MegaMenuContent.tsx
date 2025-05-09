@@ -5,7 +5,9 @@ import React from 'react';
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 import type { LegalDocument } from '@/lib/document-library';
-import { CATEGORY_LIST, type CategoryInfo } from '@/components/Step1DocumentSelector'; 
+// CATEGORY_LIST is now directly imported where MegaMenuContent is used (Header.tsx)
+// import { CATEGORY_LIST } from '@/components/Step1DocumentSelector'; 
+import type { CategoryInfo } from '@/components/Step1DocumentSelector';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { FileText } from 'lucide-react';
 
@@ -26,7 +28,7 @@ export default function MegaMenuContent({ categories, documents, onLinkClick }: 
   };
 
   return (
-    <ScrollArea className="max-h-[60vh] md:max-h-[calc(100vh-10rem)]"> 
+    <ScrollArea className="max-h-[60vh] md:max-h-[calc(100vh-10rem)] min-h-[300px]"> {/* Added min-h for testing */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7 gap-x-4 gap-y-6 p-4 md:p-6 bg-popover text-popover-foreground rounded-b-lg">
         {categories.map(category => {
             const categoryDocs = getDocumentsForCategory(category.key);
@@ -52,7 +54,7 @@ export default function MegaMenuContent({ categories, documents, onLinkClick }: 
                                 className="text-xs md:text-sm text-muted-foreground hover:text-primary hover:underline transition-colors duration-150 block py-0.5"
                                 onClick={onLinkClick}
                             >
-                            {t(docName, docName)}
+                            {t(docName, {defaultValue: docName})}
                             </Link>
                         </li>
                       );
