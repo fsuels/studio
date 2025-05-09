@@ -11,9 +11,9 @@ import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-  TooltipProvider,
 } from "@/components/ui/tooltip";
 import { Button } from '@/components/ui/button';
+
 
 interface AddressFieldProps {
   name: string;
@@ -22,9 +22,10 @@ interface AddressFieldProps {
   required?: boolean;
   className?: string;
   error?: string;
-  tooltip?: string; // Added tooltip prop
+  tooltip?: string;
 }
 
+// Ensure this is a default export
 export default function AddressField({
   name,
   label,
@@ -38,20 +39,24 @@ export default function AddressField({
   const inputRef = useRef<HTMLInputElement | null>(null);
   const fieldErrorActual = formErrors[name]?.message || error;
 
+  // Forwarding ref for react-hook-form
   const { ref: rhfRef, ...restOfRegister } = register(name, { required });
 
   useEffect(() => {
     let autocomplete: google.maps.places.Autocomplete | undefined;
+    let intervalId: NodeJS.Timeout | undefined;
 
     const initializeAutocomplete = () => {
       if (!(window as any).google?.maps?.places || !inputRef.current) {
-        const checkGoogleMaps = setInterval(() => {
+        // Retry if Google Maps API is not loaded yet
+        intervalId = setInterval(() => {
           if ((window as any).google?.maps?.places && inputRef.current) {
-            clearInterval(checkGoogleMaps);
+            clearInterval(intervalId);
+            intervalId = undefined;
             initializeAutocompleteInternal();
           }
         }, 100);
-        return () => clearInterval(checkGoogleMaps);
+        return;
       }
       initializeAutocompleteInternal();
     };
@@ -60,29 +65,63 @@ export default function AddressField({
       if (!inputRef.current) return;
       autocomplete = new google.maps.places.Autocomplete(inputRef.current, {
         types: ['address'],
-        fields: ['address_components', 'formatted_address'],
-        componentRestrictions: { country: ['us', 'ca', 'mx'] }
+        fields: ['address_components', 'formatted_address', 'name'], // Added 'name' for business names etc.
+        componentRestrictions: { country: ['us', 'ca', 'mx'] }, // Restrict to North America
       });
 
       autocomplete.addListener('place_changed', () => {
         const place = autocomplete.getPlace();
         if (place.formatted_address) {
           setValue(name, place.formatted_address, { shouldValidate: true, shouldDirty: true });
+          // Update the input visually as well, as RHF might not do it immediately for controlled external components
           if (inputRef.current) {
             inputRef.current.value = place.formatted_address;
           }
         }
-      });
-      (inputRef.current as any).googleAutocomplete = autocomplete;
-    }
+        // Potentially parse address_components here and setValue for city, state, zip if needed
+        // This part was in a previous version and might be useful depending on schema structure
+        if (place.address_components) {
+          const wanted = new Set([
+            'street_number',
+            'route',
+            'locality', // City
+            'administrative_area_level_1', // State
+            'postal_code',
+            'postal_code_suffix',
+            'country',
+          ]);
+          const parts: Record<string, string> = {};
+          place.address_components.forEach(c => {
+            const type = c.types[0];
+            if (wanted.has(type)) parts[type] = c.short_name;
+          });
 
-    const cleanupEffect = initializeAutocomplete();
+          // Example: setValue for structured address fields if they exist in your form
+          // This assumes your form has fields like 'street', 'city', 'stateCode', 'postalCode'
+          // Adjust field names as per your Zod schema
+          if (setValue) { // Check if setValue is available (it should be from useFormContext)
+            const streetValue = `${parts.street_number ?? ''} ${parts.route ?? ''}`.trim();
+            // setValue(`${name}_street`, streetValue); // If you have a separate street field
+            // setValue(`${name}_city`, parts.locality ?? '');
+            // setValue(`${name}_state`, parts.administrative_area_level_1 ?? '');
+            const postalCodeValue = [parts.postal_code, parts.postal_code_suffix].filter(Boolean).join('-');
+            // setValue(`${name}_zip`, postalCodeValue);
+            // setValue(`${name}_country`, parts.country ?? '');
+          }
+        }
+      });
+      // Store autocomplete instance on the input element to help with cleanup
+      (inputRef.current as any).googleAutocomplete = autocomplete;
+    };
+
+    initializeAutocomplete();
 
     return () => {
-      if (cleanupEffect) cleanupEffect();
+      if (intervalId) clearInterval(intervalId);
       const currentInputRef = inputRef.current;
       if (currentInputRef && (currentInputRef as any).googleAutocomplete) {
-        (currentInputRef as any).googleAutocomplete.unbindAll();
+        // google.maps.event.clearInstanceListeners(currentInputRef); // Preferred way if listeners are directly on input
+        // (currentInputRef as any).googleAutocomplete.unbindAll(); // Fallback
         const pacContainers = document.querySelectorAll('.pac-container');
         pacContainers.forEach(container => container.remove());
       }
@@ -109,13 +148,13 @@ export default function AddressField({
       <Input
         id={name}
         placeholder={placeholder}
-        {...restOfRegister}
-        ref={el => {
+        {...restOfRegister} // Spread the registration props from react-hook-form
+        ref={el => { // Combine refs
           rhfRef(el);
           inputRef.current = el;
         }}
-        className={cn("w-full max-w-sm", fieldErrorActual && "border-destructive focus-visible:ring-destructive")}
-        autoComplete="off"
+        className={cn("w-full max-w-sm", fieldErrorActual && "border-destructive focus-visible:ring-destructive")} // Applied max-w-sm
+        autoComplete="off" // Disable browser autocomplete to prefer Google Places
         aria-invalid={!!fieldErrorActual}
       />
       {fieldErrorActual && <p className="text-xs text-destructive mt-1">{String(fieldErrorActual)}</p>}

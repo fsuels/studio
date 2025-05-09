@@ -16,7 +16,7 @@ import { prettify } from '@/lib/schema-utils';
 import { z } from 'zod';
 import AuthModal from '@/components/AuthModal';
 import { useAuth } from '@/hooks/useAuth';
-import AddressField from '@/components/AddressField'; 
+import AddressField from '@/components/AddressField'; // Corrected: default import
 import { TooltipProvider } from '@/components/ui/tooltip'; 
 import TrustBadges from '@/components/TrustBadges';
 import ReviewStep from '@/components/ReviewStep'; 
@@ -173,7 +173,7 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
 
  const actualSchemaShape = useMemo(() => {
     if (!doc || !doc.schema) {
-      console.warn(`[WizardForm] Doc or doc.schema is undefined for docId: ${doc?.id}`);
+      console.warn(`[WizardForm actualSchemaShape] Doc or doc.schema is undefined for docId: ${doc?.id}`);
       return undefined;
     }
     const schemaDef = doc.schema._def;
@@ -182,40 +182,53 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
     } else if (schemaDef?.typeName === 'ZodEffects' && schemaDef.schema?._def?.typeName === 'ZodObject') {
       return schemaDef.schema.shape;
     }
-    console.warn(`[WizardForm] Unhandled schema type for ${doc.id}: ${schemaDef?.typeName}. No shape derived.`);
+    console.warn(`[WizardForm actualSchemaShape] Unhandled Zod schema type for ${doc.id}: ${schemaDef?.typeName}. Cannot derive shape for steps.`);
     return undefined;
   }, [doc]);
 
  const steps = useMemo(() => {
-    if (!doc) return [];
+    if (!isHydrated || !doc) { 
+        console.log('[WizardForm steps.useMemo] Not hydrated or no doc, returning [].');
+        return [];
+    }
+
+    console.log(`[WizardForm steps.useMemo] Processing doc: ${doc.id}, has doc.questions: ${!!doc.questions}, questions length: ${doc.questions?.length}`);
+
     if (doc.questions && doc.questions.length > 0) {
-       return doc.questions.map(q => ({ 
-            id: q.id, 
-            label: q.label ? t(q.label, q.label) : prettify(q.id), 
-            tooltip: q.tooltip ? t(q.tooltip, q.tooltip) : undefined 
+        const mappedQuestions = doc.questions.map(q => ({
+            id: q.id,
+            label: q.label ? t(q.label, { defaultValue: prettify(q.id) }) : prettify(q.id),
+            tooltip: q.tooltip ? t(q.tooltip, { defaultValue: q.tooltip }) : undefined
         }));
+        console.log('[WizardForm steps.useMemo] Derived from doc.questions:', mappedQuestions.length, 'steps.');
+        return mappedQuestions;
     }
-    
-    if (actualSchemaShape && typeof actualSchemaShape === 'object' && Object.keys(actualSchemaShape).length > 0) {
-        return Object.keys(actualSchemaShape).map(key => {
-            const fieldDef = (actualSchemaShape as any)[key]?._def;
-            const zodDescription = fieldDef?.description ?? fieldDef?.schema?._def?.description;
-            const zodTooltip = (fieldDef as any)?.tooltip ?? (fieldDef?.schema?._def as any)?.tooltip;
-            const questionConfig = doc.questions?.find(q => q.id === key);
 
-            const label = questionConfig?.label ? t(questionConfig.label, questionConfig.label) : (zodDescription ? t(zodDescription, zodDescription) : t(`fields.${key}.label`, prettify(key)));
-            const tooltip = questionConfig?.tooltip ? t(questionConfig.tooltip, questionConfig.tooltip) : (zodTooltip ? t(zodTooltip, zodTooltip) : (zodDescription ? t(zodDescription, zodDescription) : label));
-
-            return {
-                id: key,
-                label: label,
-                tooltip: tooltip
-            };
-        });
+    console.log(`[WizardForm steps.useMemo] doc.questions not usable. Checking actualSchemaShape.`);
+    if (actualSchemaShape && typeof actualSchemaShape === 'object') {
+        const shapeKeys = Object.keys(actualSchemaShape);
+        if (shapeKeys.length > 0) {
+            console.log(`[WizardForm steps.useMemo] Deriving from schema shape. Keys:`, shapeKeys);
+            const schemaDerivedSteps = shapeKeys.map(key => {
+                const fieldDef = (actualSchemaShape as any)[key]?._def;
+                const questionConfig = doc.questions?.find(q => q.id === key);
+                const zodDescription = fieldDef?.description ?? fieldDef?.schema?._def?.description;
+                const zodTooltip = (fieldDef as any)?.tooltip ?? (fieldDef?.schema?._def as any)?.tooltip;
+                const label = questionConfig?.label ? t(questionConfig.label, { defaultValue: questionConfig.label })
+                            : (zodDescription ? t(zodDescription, { defaultValue: zodDescription })
+                            : t(`fields.${key}.label`, { defaultValue: prettify(key) }));
+                const tooltip = questionConfig?.tooltip ? t(questionConfig.tooltip, { defaultValue: questionConfig.tooltip })
+                              : (zodTooltip ? t(zodTooltip, { defaultValue: zodTooltip })
+                              : (zodDescription && zodDescription !== label ? t(zodDescription, { defaultValue: zodDescription }) : undefined));
+                return { id: key, label: label, tooltip: tooltip };
+            });
+            console.log('[WizardForm steps.useMemo] Derived from schema shape:', schemaDerivedSteps.length, 'steps.');
+            return schemaDerivedSteps;
+        }
     }
-    console.warn(`[WizardForm] No questions or derivable schema shape for doc: ${doc.id}`);
+    console.warn(`[WizardForm steps.useMemo] No questions derived for doc: ${doc.id}. Returning [].`);
     return [];
-  }, [actualSchemaShape, doc, t, i18n.language]);
+  }, [actualSchemaShape, doc, t, i18n.language, isHydrated]);
 
 
   const totalSteps = steps.length > 0 ? steps.length : 1; 
@@ -321,7 +334,7 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
     if (liveRef.current && currentStepFieldKey) {
       const currentStepLabel = steps[currentStepIndex]?.label || currentStepFieldKey;
       setTimeout(() => {
-        if (liveRef.current) liveRef.current.innerText = `${t(currentStepLabel, currentStepLabel)} updated`;
+        if (liveRef.current) liveRef.current.innerText = `${t(currentStepLabel, {defaultValue: currentStepLabel})} updated`;
       }, 50);
     }
 
@@ -336,7 +349,7 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
   const handlePreviousStep = () => {
     if (isReviewing) {
       setIsReviewing(false); 
-      setCurrentStepIndex(Math.max(0, steps.length - 1)); // Go to last form step or 0 if no steps
+      setCurrentStepIndex(Math.max(0, steps.length - 1)); 
       if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' });
       return;
     }
@@ -371,7 +384,7 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
     );
   }
   
-  console.log("[WizardForm] Rendering. isReviewing:", isReviewing, "currentStepIndex:", currentStepIndex, "currentField ID:", currentField?.id, "totalSteps:", totalSteps, "steps count:", steps.length, "actualSchemaShape keys:", actualSchemaShape ? Object.keys(actualSchemaShape) : 'undefined');
+  // console.log("[WizardForm] Rendering. isReviewing:", isReviewing, "currentStepIndex:", currentStepIndex, "currentField ID:", currentField?.id, "totalSteps:", totalSteps, "steps count:", steps.length, "actualSchemaShape keys:", actualSchemaShape ? Object.keys(actualSchemaShape) : 'undefined', "Errors:", errors);
 
 
   if (steps.length === 0 && !isReviewing) {
@@ -396,38 +409,36 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
     );
   }
 
- const formContent = currentField && currentField.id && actualSchemaShape && (actualSchemaShape as any)[currentField.id] ? (
+ const formContent = currentField && currentField.id ? (
     <div className="mt-6 space-y-6 min-h-[200px]">
-        { ( (actualSchemaShape as any)[currentField.id] && 
-          (
-            ((actualSchemaShape as any)[currentField.id] instanceof z.ZodObject) || 
-            (
-                (actualSchemaShape as any)[currentField.id]._def && 
-                (actualSchemaShape as any)[currentField.id]._def.typeName === 'ZodObject'
-            )
-          ) && 
-          (currentField.id.includes('_address') || currentField.id.includes('Address')))
-        ? ( 
+       {(actualSchemaShape && (actualSchemaShape as any)[currentField.id] && ((actualSchemaShape as any)[currentField.id] instanceof z.ZodObject || ((actualSchemaShape as any)[currentField.id]._def && (actualSchemaShape as any)[currentField.id]._def.typeName === 'ZodObject')) && (currentField.id.includes('_address') || currentField.id.includes('Address')))
+        ? (
           <Controller
-            key={`${currentField.id}-controller-address`} 
+            key={`${currentField.id}-controller-address`}
             control={control}
-            name={currentField.id as any} 
+            name={currentField.id as any}
             render={({ field: { onChange: rhfOnChange, value: rhfValue, name: rhfName }}) => (
-                <AddressField 
+                <AddressField
                     name={rhfName as string}
                     label={currentField.label}
                     required={!((actualSchemaShape as any)?.[currentField!.id]?._def?.typeName?.startsWith('ZodOptional'))}
                     error={errors[currentField!.id as any]?.message as string | undefined}
                     placeholder={t("Enter address...", {ns: "translation"})}
                     tooltip={currentField.tooltip || currentField.label}
+                    value={rhfValue || ''} // Pass value for controlled component
+                    onChange={(val, parts) => { // onChange for PlacesAutocomplete
+                        rhfOnChange(val); // Update RHF
+                        // If you need to set structured parts, do it here
+                        // e.g., if(parts) { setValue('city', parts.city); ... }
+                    }}
                 />
             )}
           />
-        ) : ( 
-          <FieldRenderer 
-            key={currentField.id} 
-            fieldKey={currentField.id} 
-            locale={locale} 
+        ) : (
+          <FieldRenderer
+            key={currentField.id}
+            fieldKey={currentField.id}
+            locale={locale}
             doc={doc} />
         )
       }
@@ -448,7 +459,7 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
 
         {showMobilePreview && (
           <div className="lg:hidden mb-6 h-96">
-            {/* PreviewPane is rendered by parent StartWizardPage */}
+            {/* PreviewPane is rendered by parent StartWizardPage and receives context from there */}
           </div>
         )}
 
@@ -463,7 +474,7 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
            <ReviewStep
               doc={doc}
               locale={locale}
-              onBackToForm={handlePreviousStep} 
+              onBackToForm={handleEditFieldFromReview} 
            />
         ) : formContent }
 
