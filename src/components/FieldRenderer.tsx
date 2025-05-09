@@ -60,14 +60,26 @@ export default function FieldRenderer({ fieldKey, locale, doc }: FieldRendererPr
 
   const formStateCode = watch('state'); 
   const { isRequired: notaryIsRequiredByState } = useNotary(formStateCode);
+  
+  // Initialize useVinDecoder at the top level of the component
   const { decode, data: vinData, loading: vinLoading, error: vinError } = useVinDecoder();
 
 
   useEffect(() => {
     if (fieldKey === 'vin' && vinData && setValue) { 
-      if (vinData.make && (!watch('make') || watch('make') === '')) setValue('make', vinData.make, { shouldValidate: true, shouldDirty: true });
-      if (vinData.model && (!watch('model') || watch('model') === '')) setValue('model', vinData.model, { shouldValidate: true, shouldDirty: true });
-      if (vinData.year && (!watch('year') || watch('year') === '' || watch('year') === 0)) setValue('year', Number(vinData.year), { shouldValidate: true, shouldDirty: true });
+      const currentMake = watch('make');
+      const currentModel = watch('model');
+      const currentYear = watch('year');
+
+      if (vinData.make && (currentMake === undefined || currentMake === '')) {
+        setValue('make', vinData.make, { shouldValidate: true, shouldDirty: true });
+      }
+      if (vinData.model && (currentModel === undefined || currentModel === '')) {
+        setValue('model', vinData.model, { shouldValidate: true, shouldDirty: true });
+      }
+      if (vinData.year && (currentYear === undefined || currentYear === '' || currentYear === 0)) {
+        setValue('year', Number(vinData.year), { shouldValidate: true, shouldDirty: true });
+      }
     }
   }, [vinData, fieldKey, setValue, watch]);
 
@@ -103,19 +115,19 @@ export default function FieldRenderer({ fieldKey, locale, doc }: FieldRendererPr
         control={control}
         name={fieldKey as any}
         rules={{ required: fieldSchema?.required }}
-        render={({ field }) => ( // RHF field object
+        render={({ field }) => ( 
           <AddressField
-            name={field.name} // Pass RHF name
+            name={field.name} 
             label={labelText}
             required={fieldSchema?.required}
             error={errors[fieldKey as any]?.message as string | undefined}
             placeholder={placeholderText || t('Enter address...', { ns: 'translation' })}
             className="max-w-sm" 
             tooltip={tooltipText}
-            value={field.value || ''} // Controlled by RHF
-            onChange={(val, parts) => { // AddressField's onChange provides raw and parsed parts
-                field.onChange(val); // Update RHF with the raw address string
-                 if (parts) {
+            value={field.value || ''} 
+            onChange={(val: string, parts?: any) => { 
+                field.onChange(val); 
+                 if (parts && actualSchemaShape) {
                     const prefix = fieldKey.replace(/_address$/i, '') || fieldKey.replace(/Address$/i, '');
                     if ((actualSchemaShape as any)?.[`${prefix}_city`]) setValue(`${prefix}_city`, parts.city, {shouldValidate: true, shouldDirty: true});
                     if ((actualSchemaShape as any)?.[`${prefix}_state`]) setValue(`${prefix}_state`, parts.state, {shouldValidate: true, shouldDirty: true});
@@ -269,7 +281,7 @@ export default function FieldRenderer({ fieldKey, locale, doc }: FieldRendererPr
           aria-invalid={!!fieldError}
           rhfProps={register(fieldKey as any, { 
             required: fieldSchema?.required,
-            onBlur: fieldKey === 'vin' ? (e) => decode(e.target.value) : undefined,
+            onBlur: fieldKey === 'vin' ? (e) => decode(e.target.value) : undefined, // Use decode from useVinDecoder
            })}
         />
       )}
