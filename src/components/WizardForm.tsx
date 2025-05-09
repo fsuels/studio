@@ -2,7 +2,7 @@
 'use client';
 
 import React, { useEffect, useState, useRef, useCallback, useMemo } from 'react';
-import { useFormContext, Controller, FormProvider } from 'react-hook-form'; // Import useFormContext
+import { useForm, FormProvider, Controller, useFormContext } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import axios, { AxiosError } from 'axios';
 import { useRouter, useParams } from 'next/navigation';
@@ -11,18 +11,20 @@ import { Loader2, Info } from 'lucide-react';
 
 import type { LegalDocument } from '@/lib/document-library';
 import { useToast } from '@/hooks/use-toast';
-import { useAuth } from '@/hooks/useAuth';
 import { useTranslation } from 'react-i18next';
 
 import FieldRenderer from './FieldRenderer';
-import { Tooltip, TooltipProvider, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'; 
-import TrustBadges from '@/components/TrustBadges';
-import ReviewStep from '@/components/ReviewStep'; 
 import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
 import { prettify } from '@/lib/schema-utils';
 import AuthModal from '@/components/AuthModal';
+import { useAuth } from '@/hooks/useAuth';
 import AddressField from '@/components/AddressField'; 
+import { TooltipProvider } from '@/components/ui/tooltip'; 
+import TrustBadges from '@/components/TrustBadges';
+import ReviewStep from '@/components/ReviewStep'; 
+import { saveFormProgress, loadFormProgress } from '@/lib/firestore/saveFormProgress';
+import { debounce } from 'lodash-es';
 
 
 interface WizardFormProps {
@@ -40,20 +42,24 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
 
   const [isHydrated, setIsHydrated] = useState(false);
   const [showAuthModal, setShowAuthModal] = useState(false);
-  const [isReviewing, setIsReviewing] = useState(isReviewing);
+  const [isReviewing, setIsReviewing] = useState(false); // Initialized to false
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
 
   const liveRef = useRef<HTMLDivElement>(null);
 
-  // Use useFormContext instead of useForm
-  const methods = useFormContext<z.infer<typeof doc.schema>>();
+  const methods = useForm<z.infer<typeof doc.schema>>({
+    resolver: zodResolver(doc.schema),
+    defaultValues: {}, 
+    mode: 'onBlur',
+  });
 
   const {
     getValues,
     trigger,
     control,
-    watch, // watch is now from useFormContext
+    watch,
     setValue,
+    reset, // Added reset
     formState: { errors, isSubmitting: formIsSubmitting, isValid: isFormValid, dirtyFields },
   } = methods;
 
@@ -61,6 +67,73 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
     setIsHydrated(true);
   }, []);
   
+  // Load draft from localStorage or Firestore
+  useEffect(() => {
+    async function loadDraft() {
+      if (!doc?.id || !isHydrated || authIsLoading) return;
+      let draftData: Partial<z.infer<typeof doc.schema>> = {};
+      try {
+        if (isLoggedIn && user?.uid) {
+          draftData = await loadFormProgress({ userId: user.uid, docType: doc.id, state: locale });
+        } else {
+          const lsKey = `draft-${doc.id}-${locale}`;
+          const lsDraft = localStorage.getItem(lsKey);
+          if (lsDraft) draftData = JSON.parse(lsDraft);
+        }
+      } catch (e) {
+        console.warn('[WizardForm] Draft loading failed:', e);
+      }
+      if (Object.keys(draftData).length > 0) {
+        reset(draftData); // Reset form with loaded draft data
+        console.log('[WizardForm] Draft loaded:', draftData);
+      } else {
+        // If no draft, ensure default values from schema are applied if any
+        // RHF handles this if defaultValues in useForm is set up with schema defaults
+        // For now, an empty object is fine, or explicit schema defaults could be used here.
+        console.log('[WizardForm] No draft found, using initial/empty values.');
+      }
+    }
+    loadDraft();
+  }, [doc?.id, locale, isHydrated, reset, authIsLoading, isLoggedIn, user]);
+
+
+  const debouncedSave = useCallback(
+    debounce(async (data: Record<string, any>) => {
+      if (!doc?.id || authIsLoading || !isHydrated || Object.keys(data).length === 0) return;
+      
+      const relevantDataToSave = Object.keys(data).reduce((acc, key) => {
+        if (data[key] !== undefined) { // Only save defined values
+            acc[key] = data[key];
+        }
+        return acc;
+      }, {} as Record<string,any>);
+
+      if (Object.keys(relevantDataToSave).length === 0) return;
+
+
+      if (isLoggedIn && user?.uid) {
+        await saveFormProgress({ userId: user.uid, docType: doc.id, state: locale, formData: relevantDataToSave });
+      } else {
+         localStorage.setItem(`draft-${doc.id}-${locale}`, JSON.stringify(relevantDataToSave));
+      }
+      console.log('[WizardForm] Autosaved draft for:', doc.id, locale, relevantDataToSave);
+    }, 1000),
+    [isLoggedIn, user?.uid, doc?.id, locale, authIsLoading, isHydrated] 
+  );
+
+  useEffect(() => {
+    if (!doc?.id || authIsLoading || !isHydrated) return () => {};
+    
+    const subscription = watch((values) => {
+       debouncedSave(values as Record<string, any>);
+    });
+    return () => {
+      subscription.unsubscribe();
+      debouncedSave.cancel();
+    } ;
+  }, [watch, doc?.id, debouncedSave, authIsLoading, isHydrated]);
+
+
   const actualSchemaShape = useMemo(() => {
     const def = doc.schema?._def;
     if (!def) return undefined;
@@ -72,16 +145,15 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
     if (!actualSchemaShape) return [];
     return Object.keys(actualSchemaShape).map(key => {
        const fieldDef = (actualSchemaShape as any)[key]?._def;
-       const labelFromDescription = fieldDef?.description || fieldDef?.schema?._def?.description;
-       let fieldLabel = prettify(key); // Default label
+       const labelFromDescription = fieldDef?.description ?? fieldDef?.schema?._def?.description;
+       let fieldLabel = prettify(key); 
 
-        // Attempt to get label from doc.questions first
         const questionConfig = doc.questions?.find(q => q.id === key);
         if (questionConfig?.label) {
           fieldLabel = t(questionConfig.label, { defaultValue: questionConfig.label });
-        } else if (labelFromDescription) { // Fallback to Zod description
+        } else if (labelFromDescription) { 
           fieldLabel = t(labelFromDescription, { defaultValue: labelFromDescription });
-        } else { // Fallback to prettified key if no other label source
+        } else { 
            fieldLabel = t(`fields.${key}.label`, { defaultValue: prettify(key) });
         }
        
@@ -102,8 +174,8 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
   const handlePreviousStep = useCallback(() => {
     if (isReviewing) {
       setIsReviewing(false);
-      // Optionally jump to the last field index if desired
-      // setCurrentStepIndex(Math.max(0, totalSteps - 1)); 
+       // setCurrentStepIndex is already 0-based, so ensure it doesn't go below 0
+      setCurrentStepIndex(Math.max(0, totalSteps - 1)); 
     } else if (currentStepIndex > 0) {
       setCurrentStepIndex(prev => prev - 1);
     }
@@ -128,12 +200,18 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
           localStorage.removeItem(`draft-${doc.id}-${locale}`);
           onComplete(response.data.checkoutUrl);
         } catch (error) {
-          console.error("API submission error:", error);
+          console.error("[WizardForm] API submission error:", error);
           if (axios.isAxiosError(error)) {
             const axiosError = error as AxiosError<{ error?: string; details?: any; code?: string }>;
+            const apiErrorMsg = axiosError.response?.data?.error || axiosError.message;
+            const apiErrorDetails = axiosError.response?.data?.details;
+            let userFriendlyMessage = `${t('API Error Occurred', { ns: 'translation', defaultValue: "API Error Occurred"})}: ${apiErrorMsg}`;
+            if (apiErrorDetails && typeof apiErrorDetails === 'object') {
+                 userFriendlyMessage += ` Details: ${JSON.stringify(apiErrorDetails, null, 2)}`;
+            }
             toast({
               title: t('API Error Occurred', { ns: 'translation', defaultValue: "API Error Occurred"}),
-              description: `${t('Error submitting form:', { ns: 'translation', defaultValue: "Error submitting form:"})} ${axiosError.response?.data?.error || axiosError.message}`,
+              description: userFriendlyMessage,
               variant: "destructive",
             });
           } else {
@@ -167,9 +245,9 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
     if (currentStepFieldKey) {
       isValid = await trigger(currentStepFieldKey as any);
     } else if (totalSteps > 0 && currentStepIndex < totalSteps) {
-      console.error("Error: currentStepField is undefined but totalSteps > 0. currentStepIndex:", currentStepIndex, "steps:", steps);
+      console.error("[WizardForm] Error: currentField.id is undefined but attempting to proceed. currentStepIndex:", currentStepIndex, "steps:", steps);
       isValid = false; 
-    } else {
+    } else { // This case should ideally not be reached if totalSteps > 0 and currentStepIndex < totalSteps
       isValid = true; 
     }
 
@@ -181,7 +259,7 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
 
     if (currentStepIndex < totalSteps - 1) {
       setCurrentStepIndex(prev => prev + 1);
-    } else {
+    } else { // Reached the end of form fields
       const allFieldsValid = await trigger(); 
       if (allFieldsValid) {
         setIsReviewing(true);
@@ -212,7 +290,8 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
     onComplete,
     toast,
     t,
-    currentField
+    currentField, // Added currentField
+    doc.schema // Added doc.schema to dependency array for actualSchemaShape re-calculation
   ]);
 
   if (!isHydrated || authIsLoading) {
@@ -233,7 +312,7 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
     : t('wizard.next', { ns: 'translation' });
 
 
-  const formContent = currentField && currentField.id ? (
+  const formContent = currentField && currentField.id && actualSchemaShape && (actualSchemaShape as any)[currentField.id] ? (
             <div className="mt-6 space-y-6 min-h-[200px]">
                {(actualSchemaShape as any)?.[currentField.id] && ((actualSchemaShape as any)[currentField.id] instanceof z.ZodObject || ((actualSchemaShape as any)[currentField.id]._def && (actualSchemaShape as any)[currentField.id]._def.typeName === 'ZodObject')) && (currentField.id.includes('_address') || currentField.id.includes('Address')) ? (
 
@@ -241,17 +320,16 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
                    key={`${currentField.id}-controller`}
                    control={control}
                    name={currentField.id as any}
-                   render={({ field: { onChange: rhfOnChange, value: rhfValue } }) => (
+                   render={({ field: { onChange: rhfOnChange, value: rhfValue, name: rhfName } }) => (
                      <AddressField
-                       name={currentField.id} 
+                       name={rhfName} 
                        label={currentField.label}
                        required={(doc.questions?.find(q => q.id === currentField.id) || (actualSchemaShape as any)?.[currentField.id]?._def)?.required}
-                       error={errors[currentField.id]?.message as string | undefined}
+                       error={errors[currentField.id as any]?.message as string | undefined}
                        placeholder={t("Enter address...")}
-                       value={rhfValue || ''} // Pass value
-                       onChange={(val, parts) => { // Use AddressField's onChange
+                       value={rhfValue || ''} 
+                       onChange={(val, parts) => { 
                          rhfOnChange(val);
-                          // If parts are returned by AddressField, you can use them here to set city, state, etc.
                           if (parts) {
                             const prefix = currentField.id.replace(/_address$/i, '') || currentField.id.replace(/Address$/i, '');
                             if ((actualSchemaShape as any)?.[`${prefix}_city`]) setValue(`${prefix}_city`, parts.city, {shouldValidate: true, shouldDirty: true});
@@ -274,7 +352,8 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
           ) : null;
 
   return (
-      <TooltipProvider> {/* TooltipProvider already here */}
+    <> {/* Root Fragment to wrap TooltipProvider and AuthModal */}
+      <TooltipProvider>
         <div className="bg-card rounded-lg shadow-xl p-4 md:p-6 border border-border">
           <div className="mb-6">
             {totalSteps > 0 && (
@@ -307,6 +386,7 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
                 {t('Back', { ns: 'translation' })}
               </Button>
             )}
+            {/* Ensure this div exists to balance flexbox when Back button isn't rendered, only if totalSteps > 0 to avoid showing it for no-step forms */}
             {!(currentStepIndex > 0 || isReviewing) && totalSteps > 0 && <div />}
 
 
@@ -319,7 +399,6 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
               {formIsSubmitting || authIsLoading ? <Loader2 className="animate-spin h-5 w-5" /> : buttonText}
             </Button>
           </div>
-
         </div>
       </TooltipProvider>
       <AuthModal
@@ -327,8 +406,11 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
         onClose={() => setShowAuthModal(false)}
         onAuthSuccess={() => {
           setShowAuthModal(false);
-          handleNextStep(); 
+          if (isLoggedIn && isReviewing) { 
+             handleNextStep(); 
+          }
         }}
       />
+    </>
   );
 }
