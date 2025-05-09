@@ -37,8 +37,8 @@ const WizardComponent = ({ docConfig, initialLocale }: { docConfig: LegalDocumen
             { label: t('breadcrumb.start') },
           ]}
         />
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-6">
-          <div className="lg:col-span-2">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-6"> {/* Changed lg:grid-cols-3 to lg:grid-cols-2 */}
+          <div className="lg:col-span-1"> {/* Changed lg:col-span-2 to lg:col-span-1 */}
             <WizardForm
               locale={initialLocale}
               doc={docConfig}
@@ -54,14 +54,14 @@ const WizardComponent = ({ docConfig, initialLocale }: { docConfig: LegalDocumen
               }}
             />
           </div>
-          <div className="lg:col-span-1">
+          <div className="lg:col-span-1"> {/* This remains lg:col-span-1 for 50/50 split */}
             <div className="sticky top-24 h-screen max-h-[calc(100vh-6rem)] flex flex-col">
               <h3 className="text-xl font-semibold mb-4 text-center text-card-foreground shrink-0">{t('Live Preview')}</h3>
               <div className="flex-grow overflow-hidden">
                 <PreviewPane
                   docId={docIdFromPath}
                   locale={initialLocale}
-                  watch={methods.watch}
+                  watch={methods.watch} // Pass watch from FormProvider context
                 />
               </div>
             </div>
