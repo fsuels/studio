@@ -5,8 +5,7 @@ import { FormProvider, useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import axios, { AxiosError } from 'axios';
 import React, { useEffect, useState, useRef } from 'react';
-// import ProgressSteps from './ProgressSteps'; // Removed ProgressSteps
-import { Progress } from '@/components/ui/progress'; // Added ShadCN Progress
+import { Progress } from '@/components/ui/progress'; 
 import FieldRenderer from './FieldRenderer';
 import type { LegalDocument } from '@/lib/document-library';
 import { Button } from '@/components/ui/button';
@@ -18,7 +17,7 @@ import { z } from 'zod';
 import type { BillOfSaleData } from '@/schemas/billOfSale';
 import AuthModal from '@/components/AuthModal';
 import { useAuth } from '@/hooks/useAuth';
-import { AddressField } from '@/components/AddressField';
+import AddressField from '@/components/AddressField'; // Corrected import
 
 
 interface WizardFormProps {
@@ -36,7 +35,7 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
 
   const methods = useForm<z.infer<typeof doc.schema>>({
     resolver: zodResolver(doc.schema),
-    defaultValues: {}, // Default values will be loaded from localStorage
+    defaultValues: {}, 
     mode: 'onBlur',
   });
 
@@ -45,7 +44,7 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
     getValues,
     trigger,
     reset,
-    control, // Added control for Controller
+    control, 
     formState: { errors, isSubmitting: formIsSubmitting }
   } = methods;
 
@@ -61,12 +60,12 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
           console.error("Failed to parse draft from localStorage", e);
           localStorage.removeItem(`draft-${doc.id}-${locale}`);
         }
-      } else if (doc.id === 'bill-of-sale-vehicle') {
+      } else if (doc.id === 'bill-of-sale-vehicle' && 'sale_date' in (doc.schema.shape as any)) { // Check if sale_date exists
          defaultValuesToSet = { sale_date: new Date() } as Partial<BillOfSaleData> as any;
       }
       reset(defaultValuesToSet);
     }
-  }, [doc.id, locale, reset]);
+  }, [doc.id, locale, reset, doc.schema]);
 
 
   const steps = React.useMemo(() => {
@@ -79,7 +78,7 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
     return [];
   }, [doc.questions, doc.schema]);
 
-  const totalSteps = steps.length > 0 ? steps.length : 1; // Ensure totalSteps is at least 1 to avoid division by zero
+  const totalSteps = steps.length > 0 ? steps.length : 1; 
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
 
 
@@ -108,7 +107,7 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
 
       if (axios.isAxiosError(error)) {
         const axiosError = error as AxiosError<any>;
-        title = t(`API Error Occurred`, { status: axiosError.response?.status || '' }).trim();
+        title = t(`API Error Occurred`, { ns: 'translation', defaultValue: "API Error Occurred {{status}}", status: axiosError.response?.status || '' }).trim();
         description = axiosError.response?.data?.error || axiosError.message;
         if(axiosError.response?.data?.details && typeof axiosError.response.data.details === 'object') {
           const detailsString = Object.entries(axiosError.response.data.details.fieldErrors || {})
@@ -131,9 +130,9 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
     let isValid = true;
     if (currentStepField && currentStepField.id) {
       isValid = await trigger(currentStepField.id as any);
-    } else if (totalSteps > 0 && !currentStepField && currentStepIndex < totalSteps) { // check if currentStepIndex is within bounds
+    } else if (totalSteps > 0 && !currentStepField && currentStepIndex < totalSteps) { 
       console.error("Error: currentStepField is undefined but totalSteps > 0. currentStepIndex:", currentStepIndex, "steps:", steps);
-      isValid = false; // Or handle this case as a "no fields to validate"
+      isValid = false; 
     }
 
 
@@ -177,38 +176,27 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
   return (
       <FormProvider {...methods}>
       <div className="bg-card rounded-lg shadow-xl p-6 md:p-8 border border-border">
-         {/* Linear Progress Bar */}
         <div className="mb-6">
           <Progress value={progressValue} className="w-full h-2" />
           <p className="text-xs text-muted-foreground mt-1 text-right">
-            {t('Step {{current}} of {{total}}', { current: currentStepIndex + 1, total: totalSteps })}
+            {t('Step {{current}} of {{total}}', { ns: 'translation', current: currentStepIndex + 1, total: totalSteps })}
           </p>
         </div>
 
 
         <div className="mt-6 space-y-6 min-h-[200px]">
           {currentField && currentField.id ? (
-             currentField.id.endsWith('_address') ? ( // Check if it's an address field
+             currentField.id.includes('_address') || currentField.id.includes('Address') ? ( 
                 <Controller
                   control={control}
                   name={currentField.id as any}
-                  render={({ field: { onChange: rhfOnChange, value: rhfValue } }) => (
+                  render={({ field: { onChange: rhfOnChange, value: rhfValue, ref: rhfRef } }) => ( // Make sure to pass ref
                     <AddressField
                       name={currentField.id}
                       label={t(currentField.label, currentField.label)}
-                      // value={rhfValue || ''} // AddressField manages its own internal value
-                      onChange={(raw, parts) => {
-                        rhfOnChange(raw); // Update RHF with the raw string value
-                        // if (parts && doc.schema && typeof doc.schema.shape === 'object' && doc.schema.shape) {
-                        //   const prefix = currentField.id.replace('_address', '');
-                        //   if ((doc.schema.shape as any)[`${prefix}_city`]) setValue(`${prefix}_city` as any, parts.city, {shouldValidate: true});
-                        //   if ((doc.schema.shape as any)[`${prefix}_state`]) setValue(`${prefix}_state` as any, parts.state, {shouldValidate: true});
-                        //   if ((doc.schema.shape as any)[`${prefix}_postal_code`]) setValue(`${prefix}_postal_code` as any, parts.postalCode, {shouldValidate: true});
-                        // }
-                      }}
-                      required={doc.questions?.find(q => q.id === currentField.id)?.required || (doc.schema?.shape as any)?.[currentField.id]?._def?.typeName !== 'ZodOptional'}
+                      required={(doc.schema?.shape as any)?.[currentField.id]?._def?.typeName !== 'ZodOptional'}
                       error={errors[currentField.id as any]?.message as string | undefined}
-                      placeholder={t('Enter address...')}
+                      placeholder={t('Enter address...', { ns: 'translation' })}
                     />
                   )}
                 />
@@ -236,7 +224,6 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
               {t('Back')}
             </Button>
           )}
-          {/* Ensure there's always an element for space-between to work correctly, even if the back button is not rendered */}
           {currentStepIndex === 0 && totalSteps > 0 && <div />} 
 
           {(totalSteps > 0 || (totalSteps === 0 && currentStepIndex === 0)) && (
@@ -257,9 +244,8 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
           onClose={() => setShowAuthModal(false)}
           onAuthSuccess={() => {
             setShowAuthModal(false);
-            // Small delay to ensure auth state might propagate if needed, then proceed
             setTimeout(() => {
-              handleNextStep(); // Retry submission logic which will now find user logged in
+              handleNextStep(); 
             }, 100);
           }}
         />
