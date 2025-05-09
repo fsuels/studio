@@ -17,7 +17,6 @@ import { useTranslation } from 'react-i18next';
 import { debounce } from 'lodash-es';
 
 import FieldRenderer from './FieldRenderer';
-import AddressField from '@/components/AddressField'; 
 import { TooltipProvider } from '@/components/ui/tooltip'; 
 import TrustBadges from '@/components/TrustBadges';
 import ReviewStep from '@/components/ReviewStep'; 
@@ -25,6 +24,7 @@ import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
 import { prettify } from '@/lib/schema-utils';
 import AuthModal from '@/components/AuthModal';
+import AddressField from '@/components/AddressField';
 
 
 interface WizardFormProps {
@@ -134,9 +134,7 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
   const handlePreviousStep = useCallback(() => {
     if (isReviewing) {
       setIsReviewing(false);
-      // No specific field to jump to, user was reviewing all.
-      // Optionally, jump to the last field index if desired.
-      // setCurrentStepIndex(totalSteps - 1);
+      // setCurrentStepIndex(totalSteps - 1); // Optionally jump to the last field index
     } else if (currentStepIndex > 0) {
       setCurrentStepIndex(prev => prev - 1);
     }
@@ -147,13 +145,12 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
     const currentStepFieldKey = steps[currentStepIndex]?.id;
 
     if (isReviewing) {
-      isValid = await trigger(); // Validate all fields when reviewing
+      isValid = await trigger(); 
       if (isValid) {
         if (!isLoggedIn) {
           setShowAuthModal(true);
           return;
         }
-        // Proceed to payment/submission
          try {
           const response = await axios.post(`/${locale}/api/wizard/${doc.id}/submit`, { 
             values: getValues(),
@@ -183,6 +180,14 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
       }
       return;
     }
+    
+    if (steps.length === 0) { // Handle schema-only or no-step forms
+      setIsReviewing(true);
+       if (typeof window !== 'undefined') {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+      return;
+    }
 
 
     if (currentStepFieldKey) {
@@ -191,8 +196,7 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
       console.error("Error: currentStepField is undefined but totalSteps > 0. currentStepIndex:", currentStepIndex, "steps:", steps);
       isValid = false; 
     } else {
-      // This case means there are no fields (totalSteps === 0) or we are past the last field
-      isValid = true; // No fields to validate, or already past them.
+      isValid = true; 
     }
 
 
@@ -204,8 +208,7 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
     if (currentStepIndex < totalSteps - 1) {
       setCurrentStepIndex(prev => prev + 1);
     } else {
-      // Reached the end of questions, now trigger review
-      const allFieldsValid = await trigger(); // Validate all fields before going to review
+      const allFieldsValid = await trigger(); 
       if (allFieldsValid) {
         setIsReviewing(true);
         if (typeof window !== 'undefined') {
@@ -251,7 +254,7 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
 
   const buttonText = isReviewing
     ? t('Submit & Proceed to Payment', { ns: 'translation' })
-    : currentStepIndex === totalSteps - 1 && totalSteps > 0 // Ensure totalSteps > 0 for review button
+    : (steps.length === 0 || currentStepIndex === totalSteps - 1) // Show review if no steps or on last step
     ? t('Review Answers', { ns: 'translation' })
     : t('wizard.next', { ns: 'translation' });
 
@@ -272,16 +275,6 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
                       error={errors[currentField.id]?.message as string | undefined}
                       placeholder={t("Enter address...")}
                       tooltip={currentField.tooltip}
-                      // value={rhfValue || ''} // RHF Controller handles value
-                      // onChange={(val, parts) => {
-                      //     rhfOnChange(val);
-                      //      if (parts) {
-                      //         const prefix = currentField.id.replace(/_address$/i, '') || currentField.id.replace(/Address$/i, '');
-                      //         if ((actualSchemaShape as any)?.[`${prefix}_city`]) setValue(`${prefix}_city`, parts.city, {shouldValidate: true, shouldDirty: true});
-                      //         if ((actualSchemaShape as any)?.[`${prefix}_state`]) setValue(`${prefix}_state`, parts.state, {shouldValidate: true, shouldDirty: true});
-                      //         if ((actualSchemaShape as any)?.[`${prefix}_postal_code`]) setValue(`${prefix}_postal_code`, parts.postalCode, {shouldValidate: true, shouldDirty: true});
-                      //      }
-                      // }}
                     />
                   )}
                 />
@@ -304,7 +297,7 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
               <>
                 <Progress value={progress} className="w-full h-2" />
                 <p className="text-xs text-muted-foreground mt-1 text-right">
-                  {isReviewing ? t('Reviewing', {ns: 'translation'}) : `${t('Step', {ns: 'translation'})} ${currentStepIndex + 1} ${t('of', {ns: 'translation'})} ${totalSteps}`} ({Math.round(progress)}% {t('Complete', {ns: 'translation'})})
+                  {Math.round(progress)}% {t('Complete', {ns: 'translation'})}
                 </p>
               </>
             )}
@@ -330,8 +323,9 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
                 {t('Back', { ns: 'translation' })}
               </Button>
             )}
-            {/* Spacer to push Next button to the right if Back is not visible */}
-            {!(currentStepIndex > 0 || isReviewing) && <div />} 
+             {/* Ensure Next button is always rendered or a spacer if not on the first step */}
+            {!(currentStepIndex > 0 || isReviewing) && totalSteps > 0 && <div />}
+
 
             <Button
               type="button"
@@ -350,7 +344,7 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
         onClose={() => setShowAuthModal(false)}
         onAuthSuccess={() => {
           setShowAuthModal(false);
-          handleNextStep(); // Re-attempt submission after auth
+          handleNextStep(); 
         }}
       />
     </FormProvider>
