@@ -290,7 +290,9 @@
       "signIn": "Sign In",
       "documentCategories": "Make Documents",
       "seeMoreDocuments": "See all in {{categoryName}}...",
-      "noDocumentsInCategory": "No documents in this category yet."
+      "noDocumentsInCategory": "No documents in this category yet.",
+      "noDocumentsAvailable": "No documents available for the selected categories at this time.",
+      "noCategoriesAvailable": "No document categories available."
     },
     "pricing": {
       "title": "Simple, Transparent Pricing",
