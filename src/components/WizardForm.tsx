@@ -16,7 +16,7 @@ import { prettify } from '@/lib/schema-utils';
 import { z } from 'zod';
 import AuthModal from '@/components/AuthModal';
 import { useAuth } from '@/hooks/useAuth';
-import AddressField from '@/components/AddressField'; // Corrected import path
+import AddressField from '@/components/AddressField'; 
 import { TooltipProvider } from '@/components/ui/tooltip'; 
 import TrustBadges from '@/components/TrustBadges';
 import ReviewStep from '@/components/ReviewStep'; 
@@ -268,7 +268,7 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
             return;
         }
     } else if (!currentStepFieldKey && totalSteps > 0 && currentStepIndex < totalSteps) {
-       console.error("Error: currentStepFieldKey is undefined but totalSteps > 0 and currentStepIndex is within bounds. currentStepIndex:", currentStepIndex, "totalSteps:", totalSteps, "steps:", steps);
+       console.error("Error: currentStepField is undefined but totalSteps > 0. currentStepIndex:", currentStepIndex, "steps:", steps);
       isValid = false; 
     }
 
@@ -311,6 +311,19 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
     }
   };
   
+  const handleEditField = (fieldIdToEdit: string) => {
+    const stepIndex = steps.findIndex(s => s.id === fieldIdToEdit);
+    if (stepIndex !== -1) {
+        setCurrentStepIndex(stepIndex);
+        setIsReviewing(false);
+        if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+        console.warn(`[WizardForm] Field ID "${fieldIdToEdit}" not found in steps. Cannot navigate to edit.`);
+        toast({ title: "Navigation Error", description: `Could not find field "${prettify(fieldIdToEdit)}" to edit.`, variant: "destructive" });
+    }
+  };
+
+
   const currentField = !isReviewing && steps.length > 0 && currentStepIndex < steps.length ? steps[currentStepIndex] : null;
   const progressValue = totalSteps > 0 ? ((isReviewing ? totalSteps : currentStepIndex) / totalSteps) * 100 : (isReviewing ? 100 : 0);
 
@@ -325,9 +338,9 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
       if (shapeObjForCurrentField && currentField.id in shapeObjForCurrentField) {
           currentFieldSchemaDefinition = shapeObjForCurrentField[currentField.id];
       } else if(shapeObjForCurrentField) {
-        console.warn(`[WizardForm] Field key "${currentField.id}" not found in schema shape for doc "${doc.name}". Available keys:`, Object.keys(shapeObjForCurrentField));
+        // console.warn(`[WizardForm] Field key "${currentField.id}" not found in schema shape for doc "${doc.name}". Available keys:`, Object.keys(shapeObjForCurrentField));
       } else {
-         console.warn(`[WizardForm] Schema shape is undefined for doc "${doc.name}"`);
+         // console.warn(`[WizardForm] Schema shape is undefined for doc "${doc.name}"`);
       }
   }
 
@@ -368,14 +381,7 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
            <ReviewStep
               doc={doc}
               locale={locale}
-              onEdit={(fieldIdToEdit) => {
-                  const stepIndex = steps.findIndex(s => s.id === fieldIdToEdit);
-                  if (stepIndex !== -1) {
-                      setCurrentStepIndex(stepIndex);
-                  }
-                  setIsReviewing(false);
-                  if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' });
-              }}
+              onEdit={handleEditField}
            />
         ) : currentField && currentField.id ? (
             <div className="mt-6 space-y-6 min-h-[200px]">
@@ -453,3 +459,4 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
     </FormProvider>
   );
 }
+

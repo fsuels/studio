@@ -26,14 +26,37 @@ export default function ReviewStep({ doc, locale, onEdit }: ReviewStepProps) {
   const documentDisplayName = locale === 'es' && doc.name_es ? doc.name_es : doc.name;
 
   // Determine which fields to display based on schema or questions
-  const fieldsToReview = doc.questions && doc.questions.length > 0 
-    ? doc.questions 
-    : (doc.schema && 'shape' in doc.schema && typeof doc.schema.shape === 'object' && doc.schema.shape !== null 
-      ? Object.keys(doc.schema.shape as Record<string, any>).map(key => ({
-          id: key,
-          label: (doc.schema.shape as Record<string, any>)[key]?.description || prettify(key)
-        }))
-      : []);
+  const fieldsToReview = useMemo(() => {
+    if (doc.questions && doc.questions.length > 0) {
+        return doc.questions.map(q => ({ 
+            id: q.id, 
+            label: q.label, 
+            tooltip: q.tooltip 
+        }));
+    } else if (doc.schema) {
+        let shapeObject: Record<string, any> | undefined;
+        const schemaDef = doc.schema._def;
+
+        if (schemaDef?.typeName === 'ZodObject') {
+            shapeObject = doc.schema.shape;
+        } else if (schemaDef?.typeName === 'ZodEffects' && schemaDef.schema?._def?.typeName === 'ZodObject') {
+            shapeObject = schemaDef.schema.shape;
+        }
+
+        if (shapeObject && typeof shapeObject === 'object' && Object.keys(shapeObject).length > 0) {
+            return Object.keys(shapeObject).map(key => ({
+                id: key,
+                label: (shapeObject![key] && (shapeObject![key] as any)._def && typeof (shapeObject![key] as any)._def.description === 'string' && (shapeObject![key] as any)._def.description) 
+                       ? (shapeObject![key] as any)._def.description 
+                       : prettify(key),
+                tooltip: (shapeObject![key] && (shapeObject![key] as any)._def && typeof (shapeObject![key] as any)._def.tooltip === 'string') 
+                         ? (shapeObject![key] as any)._def.tooltip 
+                         : undefined
+            }));
+        }
+    }
+    return [];
+  }, [doc]);
 
 
   return (
