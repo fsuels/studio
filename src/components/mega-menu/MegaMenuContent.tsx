@@ -5,7 +5,7 @@ import React from 'react';
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 import type { LegalDocument } from '@/lib/document-library';
-import type { CategoryInfo } from '@/components/Step1DocumentSelector'; // Ensure CategoryInfo is exported or defined here
+import type { CategoryInfo } from '@/components/Step1DocumentSelector'; 
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { FileText } from 'lucide-react';
 
@@ -26,8 +26,8 @@ export default function MegaMenuContent({ categories, documents, onLinkClick }: 
   };
 
   return (
-    <ScrollArea className="max-h-[calc(100vh-10rem-4rem)] md:max-h-[70vh] bg-popover text-popover-foreground rounded-b-lg"> {/* Adjusted max-h for better viewport fitting */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-7 gap-x-4 gap-y-6 p-4 md:p-6"> {/* Increased max columns for wider screens */}
+    <ScrollArea className="w-full max-h-[calc(100vh-10rem-4rem)] md:max-h-[70vh] bg-popover text-popover-foreground rounded-b-lg">
+        <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-7 gap-x-4 gap-y-6 p-4 md:p-6">
         {categories.map(category => {
             const categoryDocs = getDocumentsForCategory(category.key);
             const categoryLabel = t(category.labelKey, { defaultValue: category.key });
