@@ -16,23 +16,23 @@ import { prettify } from '@/lib/schema-utils';
 import { z } from 'zod';
 import AuthModal from '@/components/AuthModal';
 import { useAuth } from '@/hooks/useAuth';
-import AddressField from '@/components/AddressField'; 
+import { AddressField } from '@/components/AddressField'; 
 import { TooltipProvider } from '@/components/ui/tooltip'; 
 import TrustBadges from '@/components/TrustBadges';
 import ReviewStep from '@/components/ReviewStep'; 
 import { saveFormProgress, loadFormProgress } from '@/lib/firestore/saveFormProgress';
 import { debounce } from 'lodash-es';
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
 
 
 interface WizardFormProps {
   locale: 'en' | 'es';
-  doc: LegalDocument; // Use the full LegalDocument type
+  doc: LegalDocument; 
   onComplete: (checkoutUrl: string) => void;
 }
 
 export default function WizardForm({ locale, doc, onComplete }: WizardFormProps) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { toast } = useToast();
   const liveRef = useRef<HTMLDivElement>(null);
   const { isLoggedIn, isLoading: authIsLoading, user } = useAuth();
@@ -41,6 +41,8 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
   const [isHydrated, setIsHydrated] = useState(false);
   const [showMobilePreview, setShowMobilePreview] = useState(false);
   const router = useRouter();
+  const params = useParams(); // Use params to get current locale for API calls if needed
+
 
   const methods = useForm<z.infer<typeof doc.schema>>({
     resolver: zodResolver(doc.schema),
@@ -69,41 +71,45 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
         let draftData: Partial<z.infer<typeof doc.schema>> = {};
         if (isLoggedIn && user?.uid) {
           try {
-            const firestoreDraft = await loadFormProgress({ userId: user.uid, docType: doc.id, state: locale }); // Pass locale as state
+            // Pass the actual locale from params, not a hardcoded one or i18n.language which might not be updated yet
+            const currentLocaleForDraft = params.locale as 'en' | 'es' || locale;
+            const firestoreDraft = await loadFormProgress({ userId: user.uid, docType: doc.id, state: currentLocaleForDraft });
             if (firestoreDraft && Object.keys(firestoreDraft).length > 0) {
               draftData = firestoreDraft;
-              console.log(`[WizardForm] Loaded draft from Firestore for ${doc.id}-${locale}:`, draftData);
+              console.log(`[WizardForm] Loaded draft from Firestore for ${doc.id}-${currentLocaleForDraft}:`, draftData);
             } else {
-              const lsDraft = localStorage.getItem(`draft-${doc.id}-${locale}`);
+              const lsDraft = localStorage.getItem(`draft-${doc.id}-${currentLocaleForDraft}`);
               if (lsDraft) {
                 draftData = JSON.parse(lsDraft);
-                console.log(`[WizardForm] Loaded draft from localStorage for ${doc.id}-${locale}:`, draftData);
+                console.log(`[WizardForm] Loaded draft from localStorage for ${doc.id}-${currentLocaleForDraft}:`, draftData);
               } else {
-                console.log(`[WizardForm] No draft found in Firestore or localStorage for ${doc.id}-${locale}.`);
+                console.log(`[WizardForm] No draft found in Firestore or localStorage for ${doc.id}-${currentLocaleForDraft}.`);
               }
             }
           } catch (e) {
             console.error("[WizardForm] Failed to load draft from Firestore, falling back to localStorage:", e);
-            const lsDraft = localStorage.getItem(`draft-${doc.id}-${locale}`);
+            const currentLocaleForDraft = params.locale as 'en' | 'es' || locale;
+            const lsDraft = localStorage.getItem(`draft-${doc.id}-${currentLocaleForDraft}`);
             if (lsDraft) {
               draftData = JSON.parse(lsDraft);
-              console.log(`[WizardForm] Loaded draft from localStorage (fallback) for ${doc.id}-${locale}:`, draftData);
+              console.log(`[WizardForm] Loaded draft from localStorage (fallback) for ${doc.id}-${currentLocaleForDraft}:`, draftData);
             } else {
-               console.log(`[WizardForm] No draft found in localStorage (fallback) for ${doc.id}-${locale}.`);
+               console.log(`[WizardForm] No draft found in localStorage (fallback) for ${doc.id}-${currentLocaleForDraft}.`);
             }
           }
-        } else if (!isLoggedIn && !authIsLoading) { // Only load from LS if not logged in and auth check is complete
-          const lsDraft = localStorage.getItem(`draft-${doc.id}-${locale}`);
+        } else if (!isLoggedIn && !authIsLoading) { 
+          const currentLocaleForDraft = params.locale as 'en' | 'es' || locale;
+          const lsDraft = localStorage.getItem(`draft-${doc.id}-${currentLocaleForDraft}`);
           if (lsDraft) {
             try {
               draftData = JSON.parse(lsDraft);
-              console.log(`[WizardForm] Loaded draft from localStorage (anonymous user) for ${doc.id}-${locale}:`, draftData);
+              console.log(`[WizardForm] Loaded draft from localStorage (anonymous user) for ${doc.id}-${currentLocaleForDraft}:`, draftData);
             } catch (e) {
               console.error("[WizardForm] Failed to parse draft from localStorage (anonymous user)", e);
-              localStorage.removeItem(`draft-${doc.id}-${locale}`);
+              localStorage.removeItem(`draft-${doc.id}-${currentLocaleForDraft}`);
             }
           } else {
-             console.log(`[WizardForm] No draft found in localStorage (anonymous user) for ${doc.id}-${locale}.`);
+             console.log(`[WizardForm] No draft found in localStorage (anonymous user) for ${doc.id}-${currentLocaleForDraft}.`);
           }
         }
         
@@ -120,22 +126,21 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
     if(doc && isHydrated && methods) { 
         loadDraft();
     }
-  }, [doc, locale, reset, isLoggedIn, user, authIsLoading, isHydrated, methods]); 
+  }, [doc, locale, reset, isLoggedIn, user, authIsLoading, isHydrated, methods, params.locale]); 
 
 
   const debouncedSaveToFirestore = useCallback(
     debounce(async (valuesToSave: Record<string, any>) => {
-      if (isLoggedIn && user?.uid && doc && doc.id && locale) {
-        // Check if methods and formState are available
+      const currentLocaleForSave = params.locale as 'en' | 'es' || locale;
+      if (isLoggedIn && user?.uid && doc && doc.id && currentLocaleForSave) {
         if (methods && methods.formState && (Object.keys(dirtyFields).length > 0 || Object.keys(valuesToSave).some(k => valuesToSave[k] !== undefined))) {
              try {
                 await saveFormProgress({
                     userId: user.uid,
                     docType: doc.id,
-                    state: locale, 
+                    state: currentLocaleForSave, 
                     formData: valuesToSave,
                 });
-                // console.log(`[WizardForm] Autosaved draft to Firestore for ${doc.id}-${locale}`);
             } catch (error) {
                 console.error('[WizardForm] Failed to save draft to Firestore:', error);
                 toast({ title: "Autosave Failed", description: "Could not save draft to cloud.", variant: "destructive" });
@@ -143,16 +148,16 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
         }
       }
     }, 1000), 
-    [isLoggedIn, user?.uid, doc?.id, locale, methods, saveFormProgress, dirtyFields, toast] 
+    [isLoggedIn, user?.uid, doc?.id, locale, methods, dirtyFields, toast, params.locale] 
   );
 
   useEffect(() => {
-    if (typeof window !== 'undefined' && doc && doc.id && locale && isHydrated && methods && methods.watch && methods.formState) {
-      const draftKey = `draft-${doc.id}-${locale}`;
+    const currentLocaleForDraft = params.locale as 'en' | 'es' || locale;
+    if (typeof window !== 'undefined' && doc && doc.id && currentLocaleForDraft && isHydrated && methods && methods.watch && methods.formState) {
+      const draftKey = `draft-${doc.id}-${currentLocaleForDraft}`;
       const subscription = watch((values) => { 
         if (Object.keys(dirtyFields).length > 0 || Object.keys(values).some(k => values[k] !== undefined)) {
           localStorage.setItem(draftKey, JSON.stringify(values));
-          // console.log(`[WizardForm] Autosaved draft to localStorage for ${doc.id}-${locale}`);
         }
         debouncedSaveToFirestore(values);
       });
@@ -161,67 +166,51 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
         debouncedSaveToFirestore.cancel(); 
       }
     }
-  }, [watch, doc, locale, isHydrated, debouncedSaveToFirestore, methods, dirtyFields]);
+  }, [watch, doc, locale, isHydrated, debouncedSaveToFirestore, methods, dirtyFields, params.locale]);
 
 
  const actualSchemaShape = useMemo(() => {
     if (!doc || !doc.schema) {
-      // console.warn("[WizardForm] actualSchemaShape: doc or doc.schema is missing.");
       return undefined;
     }
     const schemaDef = doc.schema._def;
     if (schemaDef?.typeName === 'ZodObject') {
-      // console.log("[WizardForm] actualSchemaShape: Type is ZodObject.");
       return doc.schema.shape;
     } else if (schemaDef?.typeName === 'ZodEffects' && schemaDef.schema?._def?.typeName === 'ZodObject') {
-      // console.log("[WizardForm] actualSchemaShape: Type is ZodEffects wrapping ZodObject.");
       return schemaDef.schema.shape;
     }
-    // console.warn("[WizardForm] actualSchemaShape: Schema type is not ZodObject or ZodEffects(ZodObject). Type:", schemaDef?.typeName);
     return undefined;
   }, [doc]);
 
  const steps = useMemo(() => {
-    if (!doc) {
-      console.error("[WizardForm] Steps calc: `doc` prop is UNDEFINED or NULL.");
-      return [];
-    }
-    // console.log("[WizardForm] Steps calc: Processing doc:", doc.name, "ID:", doc.id);
-    // console.log("[WizardForm] Steps calc: doc.questions IS:", doc.questions);
-    // console.log("[WizardForm] Steps calc: doc.questions?.length IS:", doc.questions?.length);
-    // console.log("[WizardForm] Steps calc: doc.schema IS:", doc.schema);
-    // console.log("[WizardForm] Steps calc: doc.schema?._def IS:", doc.schema?._def);
-    // console.log("[WizardForm] Steps calc: actualSchemaShape IS:", actualSchemaShape);
-
+    if (!doc) return [];
     if (doc.questions && doc.questions.length > 0) {
-      // console.log("[WizardForm] Steps calc: USING doc.questions array. Count:", doc.questions.length);
-      return doc.questions.map(q => ({
-        id: q.id,
-        label: q.label || prettify(q.id), // Fallback to prettified id if label is missing
-        tooltip: q.tooltip
-      }));
+       return doc.questions.map(q => ({ 
+            id: q.id, 
+            label: q.label ? t(q.label, q.label) : prettify(q.id), // Translate question label
+            tooltip: q.tooltip ? t(q.tooltip, q.tooltip) : undefined // Translate tooltip
+        }));
     }
     
-    // console.warn("[WizardForm] Steps calc: doc.questions is NOT suitable. Checking actualSchemaShape.");
-
     if (actualSchemaShape && typeof actualSchemaShape === 'object' && Object.keys(actualSchemaShape).length > 0) {
-        // console.log("[WizardForm] Steps calc: USING Zod schema shape. Keys:", Object.keys(actualSchemaShape));
         return Object.keys(actualSchemaShape).map(key => {
             const fieldDef = (actualSchemaShape as any)[key]?._def;
-            // For ZodEffects (e.g. from .refine()), the description might be on the inner schema
-            const description = fieldDef?.description ?? fieldDef?.schema?._def?.description;
-            const tooltip = (fieldDef as any)?.tooltip ?? (fieldDef?.schema?._def as any)?.tooltip;
+            const zodDescription = fieldDef?.description ?? fieldDef?.schema?._def?.description;
+            const zodTooltip = (fieldDef as any)?.tooltip ?? (fieldDef?.schema?._def as any)?.tooltip;
+            const questionConfig = doc.questions?.find(q => q.id === key);
+
+            const label = questionConfig?.label ? t(questionConfig.label, questionConfig.label) : (zodDescription ? t(zodDescription, zodDescription) : t(`fields.${key}.label`, prettify(key)));
+            const tooltip = questionConfig?.tooltip ? t(questionConfig.tooltip, questionConfig.tooltip) : (zodTooltip ? t(zodTooltip, zodTooltip) : (zodDescription ? t(zodDescription, zodDescription) : label));
+
             return {
                 id: key,
-                label: description || prettify(key),
-                tooltip: tooltip || description
+                label: label,
+                tooltip: tooltip
             };
         });
     }
-    
-    console.error(`[WizardForm] Steps calc: CRITICAL - No questions from doc.questions AND no valid Zod schema shape for doc: ${doc?.name}. Steps will be empty.`);
     return [];
-  }, [actualSchemaShape, doc]);
+  }, [actualSchemaShape, doc, t, i18n.language, prettify]);
 
 
   const totalSteps = steps.length > 0 ? steps.length : 1; 
@@ -233,14 +222,15 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
       toast({ title: "Error", description: "Document configuration is missing.", variant: "destructive"});
       return;
     }
+    const currentApiLocale = params.locale as 'en' | 'es' || locale;
     try {
-      const response = await axios.post(`/${locale}/api/wizard/${doc.id}/submit`, {
+      const response = await axios.post(`/${currentApiLocale}/api/wizard/${doc.id}/submit`, {
         values: getValues(),
-        locale,
+        locale: currentApiLocale,
       });
       toast({ title: t("Submission Successful", { ns: 'translation' }), description: t("Document saved, proceeding to payment.", { ns: 'translation' }) });
-      if (typeof window !== 'undefined' && doc.id && locale) {
-        localStorage.removeItem(`draft-${doc.id}-${locale}`);
+      if (typeof window !== 'undefined' && doc.id && currentApiLocale) {
+        localStorage.removeItem(`draft-${doc.id}-${currentApiLocale}`);
       }
       onComplete(response.data.checkoutUrl);
     } catch (error: any) {
@@ -308,12 +298,10 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
     if (currentStepFieldKey) {
       isValid = await trigger(currentStepFieldKey as any);
     } else if (steps.length === 0 ) { 
-      // This case means no questions are defined for the document.
-      setIsReviewing(true); // Directly go to review step if no questions.
+      setIsReviewing(true); 
       if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' });
       return;
     } else if (currentStepIndex >= totalSteps -1 && totalSteps > 0) { 
-        // This is the last question, validate all fields before moving to review
         isValid = await trigger(); 
          if (isValid) {
             setIsReviewing(true);
@@ -321,7 +309,6 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
             return;
         }
     } else if (!currentStepFieldKey && totalSteps > 0 && currentStepIndex < totalSteps) {
-       // This should ideally not be reached if steps array is managed correctly
        console.error("Error: currentStepFieldKey is undefined but totalSteps > 0 and not last step. currentStepIndex:", currentStepIndex, "steps:", steps);
        isValid = false; 
     }
@@ -343,9 +330,7 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
       setCurrentStepIndex(s => s + 1);
       if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' });
     } else { 
-      // This path should now be covered by the logic above that sets isReviewing = true
-      // If it reaches here, it means it was the last question, and it was valid.
-      const allFieldsValid = await trigger(); // Final check just in case
+      const allFieldsValid = await trigger(); 
       if(allFieldsValid) {
         setIsReviewing(true);
         if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -373,8 +358,10 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
         setCurrentStepIndex(stepIndex);
         setIsReviewing(false);
         if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' });
+        console.log(`[WizardForm] Editing field: ${fieldIdToEdit}, moving to step index: ${stepIndex}`);
     } else {
         toast({ title: "Navigation Error", description: `Could not find field "${prettify(fieldIdToEdit)}" to edit.`, variant: "destructive" });
+        console.error(`[WizardForm] Could not find step for fieldId: ${fieldIdToEdit}. Steps:`, steps);
     }
   };
 
@@ -391,17 +378,18 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
       </div>
     );
   }
+  
+  console.log("[WizardForm] Rendering. isReviewing:", isReviewing, "currentStepIndex:", currentStepIndex, "currentField:", currentField, "steps:", steps);
+
 
   if (steps.length === 0 && !isReviewing) {
-    // This case handles documents that genuinely have no questions or schema-derived fields
-    // Or if something went wrong with steps calculation but doc is present
     return (
         <div className="bg-card rounded-lg shadow-xl p-4 md:p-6 border border-border">
             <p className="text-muted-foreground text-center py-10 min-h-[200px] flex flex-col items-center justify-center">
                 {t('dynamicForm.noQuestionsNeeded', { ns: 'translation', documentType: doc.name })}
                  <Button
                     type="button"
-                    onClick={() => setIsReviewing(true)} // Go directly to review
+                    onClick={() => setIsReviewing(true)} 
                     className="mt-4 bg-primary text-primary-foreground hover:bg-primary/90 min-w-[120px]"
                     disabled={formIsSubmitting || authIsLoading}
                 >
@@ -425,12 +413,14 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
             )
           ) && 
           (currentField.id.includes('_address') || currentField.id.includes('Address')))
-        ? ( // If the field is a ZodObject and seems like an address block
+        ? ( 
           <Controller
+            key={`${currentField.id}-controller-address`}
             control={control}
-            name={currentField.id as any} // This might need refinement if field.id is not a direct key for ZodObject
+            name={currentField.id as any} 
             render={({ field: { onChange: rhfOnChange, value: rhfValue, name: rhfName }}) => (
-                <AddressField // Assuming AddressField can handle being bound to a ZodObject field
+                <AddressField 
+                    key={currentField.id} 
                     name={rhfName as string}
                     label={currentField.label}
                     required={!((actualSchemaShape as any)?.[currentField!.id]?._def?.typeName?.startsWith('ZodOptional'))}
@@ -440,12 +430,16 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
                 />
             )}
           />
-        ) : ( // Otherwise, render as a single field
-          <FieldRenderer fieldKey={currentField.id} locale={locale} doc={doc} />
+        ) : ( 
+          <FieldRenderer 
+            key={currentField.id} 
+            fieldKey={currentField.id} 
+            locale={locale} 
+            doc={doc} />
         )
       }
     </div>
-  ) : null; // Render nothing if currentField or currentField.id is null/undefined
+  ) : null; 
 
 
   return (
@@ -461,7 +455,7 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
 
         {showMobilePreview && (
           <div className="lg:hidden mb-6 h-96">
-             {/* PreviewPane needs FormProvider, ensure it's correctly wrapped in StartWizardPage */}
+             {/* PreviewPane is rendered in StartWizardPage and needs FormProvider there */}
           </div>
         )}
 
@@ -527,4 +521,3 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
     </FormProvider>
   );
 }
-
