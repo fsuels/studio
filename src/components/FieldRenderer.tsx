@@ -83,19 +83,20 @@ export default function FieldRenderer({ fieldKey, locale, doc }: FieldRendererPr
           <AddressField
             name={rhfName}
             label={labelText}
-            value={rhfValue || ''}
-            onChange={(raw, parts) => {
-              rhfOnChange(raw); 
-              if (parts && doc.schema && typeof doc.schema.shape === 'object' && doc.schema.shape) {
-                const prefix = rhfName.replace('_address', '');
-                if ((doc.schema.shape as any)[`${prefix}_city`]) setValue(`${prefix}_city` as any, parts.city, {shouldValidate: true});
-                if ((doc.schema.shape as any)[`${prefix}_state`]) setValue(`${prefix}_state` as any, parts.state, {shouldValidate: true});
-                if ((doc.schema.shape as any)[`${prefix}_postal_code`]) setValue(`${prefix}_postal_code` as any, parts.postalCode, {shouldValidate: true});
-              }
-            }}
+            // value={rhfValue || ''} // AddressField manages its own internal value for autocomplete suggestions
+            // onChange={(raw, parts) => { // onChange structure changed in AddressField
+            //   rhfOnChange(raw); 
+            //   if (parts && doc.schema && typeof doc.schema.shape === 'object' && doc.schema.shape) {
+            //     const prefix = rhfName.replace('_address', '');
+            //     if ((doc.schema.shape as any)[`${prefix}_city`]) setValue(`${prefix}_city` as any, parts.city, {shouldValidate: true});
+            //     if ((doc.schema.shape as any)[`${prefix}_state`]) setValue(`${prefix}_state` as any, parts.state, {shouldValidate: true});
+            //     if ((doc.schema.shape as any)[`${prefix}_postal_code`]) setValue(`${prefix}_postal_code` as any, parts.postalCode, {shouldValidate: true});
+            //   }
+            // }}
             required={fieldSchema?.required || (doc.schema?.shape as any)?.[fieldKey]?._def?.typeName !== 'ZodOptional'}
-            // error={errors[fieldKey as any]?.message as string | undefined}
+            error={errors[fieldKey as any]?.message as string | undefined}
             placeholder={placeholderText || t('Enter address...')}
+            className="max-w-sm" // Added max-w-sm
           />
         )}
       />
@@ -148,7 +149,7 @@ export default function FieldRenderer({ fieldKey, locale, doc }: FieldRendererPr
             <RadioGroup
               onValueChange={field.onChange}
               value={field.value as string || undefined}
-              className={cn("space-y-2", fieldError && "border-destructive focus-visible:ring-destructive")}
+              className={cn("space-y-2 max-w-sm", fieldError && "border-destructive focus-visible:ring-destructive")} // Added max-w-sm
               aria-invalid={!!fieldError}
             >
               {((doc.schema?.shape as any).odo_status._def.values as string[]).map((opt: string) => (
@@ -168,7 +169,7 @@ export default function FieldRenderer({ fieldKey, locale, doc }: FieldRendererPr
           control={control}
           defaultValue={fieldSchema && (doc.schema?.shape as any)?.as_is?._def?.defaultValue ? (doc.schema?.shape as any).as_is._def.defaultValue : true}
           render={({ field }) => (
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center space-x-2 max-w-sm"> {/* Added max-w-sm */}
               <Switch
                 id={field.name}
                 checked={field.value}
@@ -188,7 +189,7 @@ export default function FieldRenderer({ fieldKey, locale, doc }: FieldRendererPr
             id={fieldKey}
             placeholder={placeholderText || t('Describe warranty…')}
             {...register(fieldKey as any, { required: fieldSchema?.required && !watch('as_is') })}
-            className={cn("bg-background", fieldError && "border-destructive focus-visible:ring-destructive")}
+            className={cn("bg-background max-w-sm", fieldError && "border-destructive focus-visible:ring-destructive")} // Added max-w-sm
             aria-invalid={!!fieldError}
           />
         )
@@ -197,7 +198,7 @@ export default function FieldRenderer({ fieldKey, locale, doc }: FieldRendererPr
           id={fieldKey}
           placeholder={placeholderText}
           {...register(fieldKey as any, { required: fieldSchema?.required })}
-          className={cn("bg-background", fieldError && "border-destructive focus-visible:ring-destructive")}
+          className={cn("bg-background max-w-sm", fieldError && "border-destructive focus-visible:ring-destructive")} // Added max-w-sm
           aria-invalid={!!fieldError}
         />
       ) : fieldSchema?.type === 'select' && (fieldSchema.options || (doc.schema?.shape as any)?.[fieldKey]?._def?.values) ? (
@@ -208,7 +209,7 @@ export default function FieldRenderer({ fieldKey, locale, doc }: FieldRendererPr
           defaultValue={(doc.schema?.shape as any)?.[fieldKey]?._def?.defaultValue}
           render={({ field }) => (
             <Select onValueChange={field.onChange} value={field.value as string || undefined}>
-              <SelectTrigger id={fieldKey} className={cn("bg-background", fieldError && "border-destructive focus:ring-destructive")} aria-invalid={!!fieldError}>
+              <SelectTrigger id={fieldKey} className={cn("bg-background max-w-sm", fieldError && "border-destructive focus:ring-destructive")} aria-invalid={!!fieldError}> {/* Added max-w-sm */}
                 <SelectValue placeholder={placeholderText || t("Select...")} />
               </SelectTrigger>
               <SelectContent>
@@ -228,7 +229,7 @@ export default function FieldRenderer({ fieldKey, locale, doc }: FieldRendererPr
           id={fieldKey}
           type={inputType}
           placeholder={placeholderText}
-          className={cn("input bg-background", fieldError && "border-destructive focus-visible:ring-destructive")}
+          className={cn("input bg-background", fieldError && "border-destructive focus-visible:ring-destructive")} // SmartInput will handle max-w-sm
           inputMode={inputType === 'number' || inputType === 'tel' ? 'numeric' : undefined}
           aria-invalid={!!fieldError}
           {...register(fieldKey as any, { required: fieldSchema?.required })}
@@ -246,4 +247,3 @@ export default function FieldRenderer({ fieldKey, locale, doc }: FieldRendererPr
     </div>
   );
 }
-

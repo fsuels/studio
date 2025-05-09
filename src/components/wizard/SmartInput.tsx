@@ -4,37 +4,36 @@ import React from 'react';
 import { useSmartField } from './useSmartField';
 import { useFormContext } from 'react-hook-form';
 import { Input } from '@/components/ui/input'; 
+import { cn } from '@/lib/utils';
 
 interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
   name: string; 
 }
 
-export default function SmartInput({ name, type, ...rest }: Props) {
+export default function SmartInput({ name, type, className, ...rest }: Props) {
   const { register, watch, setValue } = useFormContext();
   
   const fieldRegistration = register(name, {
      valueAsNumber: type === 'number',
-     // Add other RHF register options if needed, e.g., onBlur for VIN
      onBlur: name === 'vin' ? (e) => {
-        // Assuming useSmartField's VIN logic or a separate useVinDecoder hook handles the actual decoding
-        // This onBlur could trigger that decoding if it's not already handled by watching the value.
-        // For now, keeping it simple as useSmartField watches the value.
+        // VIN decoding logic is handled by useVinDecoder hook in FieldRenderer
      } : undefined,
   });
 
-  // useSmartField now gets `name`, `watch`, `setValue`
-  // It will use `watch(name)` for the current value and `setValue(name, ...)` to update.
-  useSmartField({
-    name, // Pass the field's name
-    watch,
-    setValue,
-  });
+  // useSmartField is primarily for specific field behaviors like phone masking or VIN decoding effects.
+  // General input styling should be applied directly.
+  // useSmartField({
+  //   name, 
+  //   watch,
+  //   setValue,
+  // });
 
   return (
     <Input
       {...rest} 
       {...fieldRegistration} 
       type={type} 
+      className={cn("max-w-sm", className)} // Added max-w-sm
     />
   );
 }
