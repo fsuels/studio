@@ -1,28 +1,29 @@
 // src/components/ReviewStep.tsx
 'use client';
 
-import React, { useMemo, useState, useEffect } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useFormContext, Controller } from 'react-hook-form';
 import type { LegalDocument, Question } from '@/lib/document-library';
+import { usStates } from '@/lib/document-library';
 import { prettify } from '@/lib/schema-utils';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Edit2, Check, X, AlertTriangle, Loader2 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Checkbox } from '@/components/ui/checkbox';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Switch } from '@/components/ui/switch';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Checkbox } from "@/components/ui/checkbox";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Switch } from "@/components/ui/switch";
 import { useTranslation } from 'react-i18next';
 import { useToast } from '@/hooks/use-toast';
 import { z } from 'zod';
-import AddressField from '@/components/AddressField'; // Assuming AddressField handles its own display and edit for RHF
+import AddressField from '@/components/AddressField'; 
+import { Label } from "@/components/ui/label";
 
 interface ReviewStepProps {
   doc: LegalDocument;
   locale: 'en' | 'es';
-  // onBackToForm was removed as per user request to edit inline
 }
 
 export default function ReviewStep({ doc, locale }: ReviewStepProps) {
@@ -31,7 +32,7 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
   const { toast } = useToast();
 
   const [editingFieldId, setEditingFieldId] = useState<string | null>(null);
-  const [editedValue, setEditedValue] = useState<any>(''); // Can be string, number, boolean
+  const [editedValue, setEditedValue] = useState<any>(null); 
   const [isHydrated, setIsHydrated] = useState(false);
 
   useEffect(() => {
@@ -42,23 +43,21 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
     const schemaDef = doc?.schema?._def;
     if (!schemaDef) return undefined;
     if (schemaDef.typeName === 'ZodObject') return doc.schema.shape;
-    if (schemaDef.typeName === 'ZodEffects') return schemaDef.schema?.shape;
+    if (schemaDef.typeName === 'ZodEffects' && schemaDef.schema?._def?.typeName === 'ZodObject') return schemaDef.schema.shape; 
     return undefined;
   }, [doc]);
 
+
   const fieldsToReview = useMemo(() => {
     if (!isHydrated || !doc || !actualSchemaShape) return [];
-    const currentFormData = getValues(); // Get current form data to ensure all filled fields are included
-
-    // Combine keys from schema and current form data to ensure all relevant fields are covered
+    const currentFormData = getValues();
     const allFieldKeys = Array.from(new Set([...Object.keys(actualSchemaShape), ...Object.keys(currentFormData)]));
-
 
     return allFieldKeys
       .map((fieldId) => {
         const questionConfig = doc.questions?.find(q => q.id === fieldId);
         const schemaField = (actualSchemaShape as any)?.[fieldId];
-        const schemaFieldDef = schemaField?._def;
+        const schemaFieldDef = schemaField?._def; 
         const zodDescription = schemaFieldDef?.description ?? schemaFieldDef?.schema?._def?.description;
         
         let label = prettify(fieldId);
@@ -74,16 +73,29 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
         if (questionConfig?.type) {
           fieldType = questionConfig.type;
         } else if (schemaFieldDef) {
-          if (schemaFieldDef.typeName === 'ZodNumber') fieldType = 'number';
-          else if (schemaFieldDef.typeName === 'ZodDate') fieldType = 'date';
-          else if (schemaFieldDef.typeName === 'ZodBoolean') fieldType = 'boolean';
-          else if (schemaFieldDef.innerType?._def?.typeName === 'ZodEnum' || schemaFieldDef.typeName === 'ZodEnum') fieldType = 'select';
-          else if (fieldId.includes('_address') || fieldId.includes('Address') || fieldType === 'address') fieldType = 'address';
-          else if (fieldId.includes('phone') || fieldId.includes('tel')) fieldType = 'tel';
+          const baseTypeDef = schemaFieldDef.innerType?._def || schemaFieldDef; 
+          if (baseTypeDef.typeName === 'ZodNumber') fieldType = 'number';
+          else if (baseTypeDef.typeName === 'ZodDate' || (baseTypeDef.typeName === 'ZodString' && (schemaFieldDef.checks?.some((c: any) => c.kind === 'datetime') || fieldId.endsWith('_date')))) fieldType = 'date';
+          else if (baseTypeDef.typeName === 'ZodBoolean') fieldType = 'boolean';
+          else if (baseTypeDef.typeName === 'ZodEnum') fieldType = 'select';
+          else if (fieldId.includes('_address') || fieldId.includes('Address') || fieldId === 'seller_address' || fieldId === 'buyer_address') fieldType = 'address';
+          else if (fieldId.endsWith('_phone') || (label && (label.toLowerCase().includes('phone') || label.toLowerCase().includes('teléfono')))) fieldType = 'tel';
+          else if (fieldId === 'warranty_text') fieldType = 'textarea'; 
         }
         
-        const options = questionConfig?.options || 
-                        (schemaFieldDef?.innerType?._def?.values || schemaFieldDef?.values)?.map((val: string) => ({ value: val, label: t(`fields.${fieldId}.options.${val}`, {defaultValue: prettify(val)}) }));
+        // Refactored options assignment
+        const zodEnumBasedOptions = (schemaFieldDef?.innerType?._def?.values || schemaFieldDef?.values || (schemaFieldDef?.typeName === 'ZodEffects' && schemaFieldDef?.schema?._def?.values) )
+                                    ?.map((val: string) => ({ value: val, label: t(`fields.${fieldId}.options.${val}`, {defaultValue: prettify(val)}) }));
+        
+        const stateBasedOptions = (fieldId === 'state' ? usStates.map(s => ({value: s.value, label: s.label})) : undefined);
+
+        const odoStatusBasedOptions = (fieldId === 'odo_status' ? 
+                                      [{value: 'ACTUAL', label: t('fields.odo_status.actual', 'Actual mileage')}, 
+                                       {value: 'EXCEEDS', label: t('fields.odo_status.exceeds', 'Exceeds mechanical limits')}, 
+                                       {value: 'NOT_ACTUAL', label: t('fields.odo_status.not_actual', 'Not actual mileage')}] 
+                                      : undefined);
+
+        const options = questionConfig?.options || zodEnumBasedOptions || stateBasedOptions || odoStatusBasedOptions;
         
         const placeholder = questionConfig?.placeholder || (schemaFieldDef as any)?.placeholder;
 
@@ -96,28 +108,45 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
           placeholder: placeholder ? t(placeholder, {defaultValue: placeholder}) : undefined,
         };
       })
-      .filter(field => currentFormData.hasOwnProperty(field.id) || (actualSchemaShape as any)?.[field.id]); // Only review fields present in form or schema
+      .filter(field => (actualSchemaShape as any)?.[field.id]); 
   }, [doc, actualSchemaShape, t, isHydrated, getValues]);
 
 
-  const handleEdit = (id: string) => {
+  const handleEdit = (id: string, type: Question['type']) => {
     const currentValue = getValues(id);
-    setEditedValue(currentValue); // Store the raw value
+    if (type === 'date' && currentValue instanceof Date) {
+      setEditedValue(currentValue.toISOString().split('T')[0]); 
+    } else {
+      setEditedValue(currentValue === undefined || currentValue === null ? '' : currentValue);
+    }
     setEditingFieldId(id);
   };
   
-  const handleInputChange = (value: any) => {
-    setEditedValue(value);
+  const handleInputChange = (value: any, type: Question['type']) => {
+    if (type === 'number') {
+        setEditedValue(value === '' ? '' : parseFloat(value as string)); 
+    } else if (type === 'boolean') {
+        setEditedValue(Boolean(value));
+    } else {
+        setEditedValue(value);
+    }
   };
 
-  const handleSave = async (id: string) => {
-    // Type coercion might be needed here if `editedValue` is always a string
-    // but Zod schema expects a number/boolean. Zod's `coerce` usually handles this.
-    setValue(id, editedValue, { shouldValidate: true, shouldDirty: true });
-    const isValid = await trigger(id);
+  const handleSave = async (id: string, type: Question['type']) => {
+    let valueToSave = editedValue;
+    if (type === 'number') {
+      valueToSave = editedValue === '' || editedValue === null ? undefined : parseFloat(editedValue as string);
+      if (isNaN(valueToSave as number)) valueToSave = undefined; 
+    } else if (type === 'date' && typeof editedValue === 'string') {
+      valueToSave = editedValue ? new Date(editedValue) : undefined;
+    }
+
+    setValue(id, valueToSave, { shouldValidate: true, shouldDirty: true });
+    const isValid = await trigger(id); 
     if (isValid) {
       setEditingFieldId(null); 
-      toast({ title: t('Changes Saved'), description: `${t(fieldsToReview.find(f=>f.id === id)?.label || id)} ${t('updated.')}` });
+      const fieldLabel = fieldsToReview.find(f=>f.id === id)?.label || id;
+      toast({ title: t('Changes Saved'), description: `${t(fieldLabel)} ${t('updated.')}` });
     } else {
       toast({ title: t('Validation Error'), description: t('Please correct the field.'), variant: 'destructive' });
     }
@@ -125,7 +154,7 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
 
   const handleCancel = () => {
     setEditingFieldId(null);
-    setEditedValue(''); // Clear temporary edit value
+    setEditedValue(null); 
   };
   
   if (!isHydrated) {
@@ -158,7 +187,7 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
           </p>
         )}
         {fieldsToReview.map((field) => { 
-          const liveFieldValue = watch(field.id); // Watch for live updates for display
+          const liveFieldValue = watch(field.id);
 
           let displayValue: string;
             if (liveFieldValue instanceof Date) {
@@ -169,9 +198,8 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
                 const selectedOption = field.options.find(opt => opt.value === liveFieldValue);
                 displayValue = selectedOption ? t(selectedOption.label, {defaultValue: selectedOption.label}) : String(liveFieldValue);
             } else {
-                displayValue = (liveFieldValue !== undefined && liveFieldValue !== null && liveFieldValue !== '') ? String(liveFieldValue) : t('Not Provided', { ns: 'translation' });
+                displayValue = (liveFieldValue !== undefined && liveFieldValue !== null && String(liveFieldValue).trim() !== '') ? String(liveFieldValue) : t('Not Provided', { ns: 'translation' });
             }
-
 
           return (
             <div key={field.id} className="py-3 border-b border-border last:border-b-0 group">
@@ -185,16 +213,16 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
                     <div className="mt-1 space-y-2">
                        {field.type === 'textarea' ? (
                         <Textarea
-                          value={String(editedValue ?? '')} // Ensure string for textarea
-                          onChange={(e) => handleInputChange(e.target.value)}
+                          value={String(editedValue ?? '')}
+                          onChange={(e) => handleInputChange(e.target.value, field.type)}
                           className="min-h-[60px] max-w-sm bg-background border-input"
                           aria-label={t(field.label, {defaultValue: field.label})}
                           placeholder={field.placeholder}
                         />
                       ) : field.type === 'select' && field.options ? (
                         <Select
-                          value={String(editedValue ?? '')} // Ensure string for Select value
-                          onValueChange={(val) => handleInputChange(val)}
+                          value={String(editedValue ?? '')}
+                          onValueChange={(val) => handleInputChange(val, field.type)}
                         >
                           <SelectTrigger aria-label={t(field.label, {defaultValue: field.label})} className="max-w-sm bg-background border-input">
                             <SelectValue placeholder={field.placeholder || t('Select...')} />
@@ -205,20 +233,31 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
                             ))}
                           </SelectContent>
                         </Select>
+                      ) : field.type === 'boolean' && field.id === 'as_is' ? (
+                        <div className="flex items-center space-x-2 pt-1 max-w-sm">
+                            <Switch
+                                id={`review-edit-${field.id}`}
+                                checked={Boolean(editedValue)}
+                                onCheckedChange={(val) => handleInputChange(val, field.type)}
+                            />
+                            <Label htmlFor={`review-edit-${field.id}`} className="text-sm font-normal">
+                               {Boolean(editedValue) ? t('Sold As-Is') : t('Warranty Included')}
+                            </Label>
+                        </div>
                       ) : field.type === 'boolean' || field.type === 'checkbox' ? (
                         <div className="flex items-center space-x-2 pt-1">
                            <Checkbox
-                              checked={Boolean(editedValue)} // Coerce to boolean
-                              onCheckedChange={(checked) => handleInputChange(Boolean(checked))} // Store as boolean
+                              checked={Boolean(editedValue)}
+                              onCheckedChange={(checked) => handleInputChange(Boolean(checked), field.type)}
                               id={`review-edit-${field.id}`}
                            />
-                           <label htmlFor={`review-edit-${field.id}`} className="text-sm font-normal">
+                           <Label htmlFor={`review-edit-${field.id}`} className="text-sm font-normal">
                              {t(field.label, {defaultValue: field.label})} 
-                           </label>
+                           </Label>
                         </div>
-                      ) : field.type === 'radio' && field.options && field.id === 'odo_status' ? ( // Special handling for odo_status
+                      ) : field.type === 'radio' && field.options && field.id === 'odo_status' ? (
                           <RadioGroup
-                            onValueChange={(val) => handleInputChange(val)}
+                            onValueChange={(val) => handleInputChange(val, field.type)}
                             value={editedValue as string || undefined}
                             className="space-y-1"
                           >
@@ -226,43 +265,31 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
                               <div key={opt.value} className="flex items-center space-x-2">
                                 <RadioGroupItem value={opt.value} id={`review_odo_status_${opt.value.toLowerCase()}`} />
                                 <Label htmlFor={`review_odo_status_${opt.value.toLowerCase()}`} className="font-normal text-sm">
-                                  {t(opt.label, {defaultValue: opt.label})}
+                                  {t(`fields.odo_status.${opt.value.toLowerCase()}`, {defaultValue: opt.label})}
                                 </Label>
                               </div>
                             ))}
                           </RadioGroup>
-                      ) : field.type === 'boolean' && field.id === 'as_is' ? ( // Special handling for as_is switch
-                        <div className="flex items-center space-x-2 pt-1 max-w-sm">
-                            <Switch
-                                id={`review-edit-${field.id}`}
-                                checked={Boolean(editedValue)}
-                                onCheckedChange={(val) => handleInputChange(val)}
-                            />
-                            <Label htmlFor={`review-edit-${field.id}`} className="text-sm font-normal">
-                               {Boolean(editedValue) ? t('Sold As-Is') : t('Warranty Included')}
-                            </Label>
-                        </div>
                       ): field.type === 'address' ? (
-                        <AddressField
-                          name={field.id} // RHF will handle value/onChange via Controller if used directly or via context
-                          label="" // Label is handled above
-                          placeholder={field.placeholder}
-                          required={field.required}
-                          // error={errors[field.id]?.message as string | undefined} // Show error from main form
-                          // value and onChange are implicitly handled by RHF if used with Controller/register
-                        />
-                      ) : ( // Default to text, number, date, tel
+                         <AddressField
+                            name={field.id} 
+                            label="" 
+                            placeholder={field.placeholder || t('Enter address...', { ns: 'translation' })}
+                            value={String(editedValue ?? '')}
+                            onChange={(val) => handleInputChange(val, field.type)} 
+                          />
+                      ) : ( 
                         <Input
                           type={field.type === 'number' ? 'number' : field.type === 'date' ? 'date' : field.type === 'tel' ? 'tel' : 'text'}
-                          value={String(editedValue ?? '')} // Ensure string for input
-                          onChange={(e) => handleInputChange(e.target.value)}
+                          value={field.type === 'date' && editedValue instanceof Date ? editedValue.toISOString().split('T')[0] : String(editedValue ?? '')}
+                          onChange={(e) => handleInputChange(e.target.value, field.type)}
                           aria-label={t(field.label, {defaultValue: field.label})}
                           className="max-w-sm bg-background border-input"
                           placeholder={field.placeholder}
                         />
                       )}
                       <div className="flex gap-2 mt-2">
-                        <Button size="sm" onClick={() => handleSave(field.id)}>
+                        <Button size="sm" onClick={() => handleSave(field.id, field.type)}>
                           <Check className="w-4 h-4 mr-1" />
                           {t('Save', { ns: 'translation' })}
                         </Button>
@@ -282,7 +309,7 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
                   <Button
                     variant="ghost"
                     size="icon"
-                    onClick={() => handleEdit(field.id)}
+                    onClick={() => handleEdit(field.id, field.type)}
                     className="ml-2 text-primary hover:text-primary/80 h-7 w-7 p-1 opacity-0 group-hover:opacity-100 focus-within:opacity-100 transition-opacity shrink-0"
                   >
                     <Edit2 className="h-4 w-4" />
@@ -290,7 +317,7 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
                   </Button>
                 )}
               </div>
-              {errors[field.id] && ( 
+              {errors[field.id] && editingFieldId !== field.id && ( 
                 <p className="text-xs text-destructive mt-1 flex items-center gap-1">
                    <AlertTriangle className="h-3 w-3" />
                    {errors[field.id]?.message?.toString()}
