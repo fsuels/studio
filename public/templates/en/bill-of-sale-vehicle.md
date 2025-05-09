@@ -1,5 +1,4 @@
 # Vehicle Bill of Sale
-**Document ID:** `bill-of-sale-vehicle`
 
 ---
 

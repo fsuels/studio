@@ -1,5 +1,4 @@
 # Contrato de Compraventa de Vehículo
-**ID del Documento:** `bill-of-sale-vehicle`
 
 ---
 
