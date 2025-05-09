@@ -16,7 +16,7 @@ import { prettify } from '@/lib/schema-utils';
 import { z } from 'zod';
 import AuthModal from '@/components/AuthModal';
 import { useAuth } from '@/hooks/useAuth';
-import AddressField from '@/components/AddressField'; // Corrected: default import
+import AddressField from '@/components/AddressField'; 
 import { TooltipProvider } from '@/components/ui/tooltip'; 
 import TrustBadges from '@/components/TrustBadges';
 import ReviewStep from '@/components/ReviewStep'; 
@@ -231,8 +231,8 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
   }, [actualSchemaShape, doc, t, i18n.language, isHydrated]);
 
 
-  const totalSteps = steps.length > 0 ? steps.length : 1; 
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
+  const totalFieldsToFill = steps.length;
 
 
   const proceedToApiSubmission = async () => {
@@ -283,8 +283,8 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
     }
   };
 
-  const handleNextStep = async () => {
-    if (!doc) return;
+ const handleNextStep = async () => {
+    if (!doc || formIsSubmitting || authIsLoading) return;
 
     if (isReviewing) {
       if (!authIsLoading) {
@@ -304,59 +304,73 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
       return;
     }
 
-    const currentStepFieldKey = steps.length > 0 && currentStepIndex < steps.length ? steps[currentStepIndex]?.id : null;
-    let isValid = true;
-
-    if (currentStepFieldKey) {
-      isValid = await trigger(currentStepFieldKey as any);
-    } else if (steps.length === 0 ) { 
-      setIsReviewing(true); 
+    if (totalFieldsToFill === 0) {
+      setIsReviewing(true);
       if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' });
+      if (liveRef.current) setTimeout(() => { if(liveRef.current) liveRef.current.innerText = t('Reviewing answers', { ns: 'translation' }); }, 50);
       return;
-    } else if (currentStepIndex >= totalSteps -1 && totalSteps > 0) { 
-        isValid = await trigger(); 
-         if (isValid) {
-            setIsReviewing(true);
-            if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' });
-            return;
-        }
-    } else if (!currentStepFieldKey && totalSteps > 0 && currentStepIndex < totalSteps) {
-       console.error("Error: currentStepFieldKey is undefined but totalSteps > 0 and not last step. currentStepIndex:", currentStepIndex, "steps:", steps);
-       isValid = false; 
     }
 
+    const isLastFieldStep = currentStepIndex === totalFieldsToFill - 1;
+    let isValid = false;
+
+    if (isLastFieldStep) {
+      isValid = await trigger(); 
+    } else {
+      const currentFieldKey = steps[currentStepIndex]?.id;
+      if (currentFieldKey) {
+        isValid = await trigger(currentFieldKey as any);
+      } else {
+        console.error("[WizardForm] Error: currentFieldKey is undefined in an intermediate step.");
+        isValid = false; 
+      }
+    }
 
     if (!isValid) {
-      toast({ title: t("Validation Error", { ns: 'translation' }), description: t("Please correct the errors on the current step before proceeding.", { ns: 'translation' }), variant: "destructive" });
+      toast({
+        title: t("Validation Error", { ns: 'translation' }),
+        description: t("Please correct the errors on the current step before proceeding.", { ns: 'translation' }),
+        variant: "destructive"
+      });
       return;
     }
 
-    if (liveRef.current && currentStepFieldKey) {
-      const currentStepLabel = steps[currentStepIndex]?.label || currentStepFieldKey;
-      setTimeout(() => {
-        if (liveRef.current) liveRef.current.innerText = `${t(currentStepLabel, {defaultValue: currentStepLabel})} updated`;
-      }, 50);
-    }
-
-    if (currentStepIndex < totalSteps - 1) {
+    if (isLastFieldStep) {
+      setIsReviewing(true);
+      if (liveRef.current) setTimeout(() => { if(liveRef.current) liveRef.current.innerText = t('Reviewing answers', { ns: 'translation' }); }, 50);
+    } else {
       setCurrentStepIndex(s => s + 1);
-      if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' });
-    } else { 
-      // Handled by (currentStepIndex >= totalSteps -1) block
+      if (liveRef.current) {
+        const nextStepLabel = steps[currentStepIndex + 1]?.label || steps[currentStepIndex + 1]?.id;
+        setTimeout(() => {
+          if (liveRef.current && nextStepLabel) liveRef.current.innerText = `${t('Moved to step', {ns: 'translation'})} ${t(nextStepLabel, {defaultValue: nextStepLabel})}`;
+        }, 50);
+      }
     }
+    if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' });
   };
+
 
   const handlePreviousStep = () => {
     if (isReviewing) {
       setIsReviewing(false); 
-      setCurrentStepIndex(Math.max(0, steps.length - 1)); 
-      if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' });
-      return;
-    }
-    if (currentStepIndex > 0) {
+      setCurrentStepIndex(Math.max(0, totalFieldsToFill - 1)); 
+       if (liveRef.current) {
+        const prevStepLabel = steps[Math.max(0, totalFieldsToFill - 1)]?.label || steps[Math.max(0, totalFieldsToFill - 1)]?.id;
+        setTimeout(() => {
+          if (liveRef.current && prevStepLabel) liveRef.current.innerText = `${t('Editing field', {ns: 'translation'})} ${t(prevStepLabel, {defaultValue: prevStepLabel})}`;
+        }, 50);
+      }
+    } else if (currentStepIndex > 0) {
       setCurrentStepIndex(s => s - 1);
-      if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' });
+      if (liveRef.current) {
+        const prevStepLabel = steps[currentStepIndex -1]?.label || steps[currentStepIndex -1]?.id;
+         setTimeout(() => {
+          if (liveRef.current && prevStepLabel) liveRef.current.innerText = `${t('Moved to step', {ns: 'translation'})} ${t(prevStepLabel, {defaultValue: prevStepLabel})}`;
+        }, 50);
+      }
     }
+    if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' });
   };
   
   const handleEditFieldFromReview = (fieldIdToEdit: string) => {
@@ -371,8 +385,12 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
   };
 
 
-  const currentField = !isReviewing && steps.length > 0 && currentStepIndex < steps.length && currentStepIndex >=0 ? steps[currentStepIndex] : null;
-  const progressValue = totalSteps > 0 ? ((isReviewing ? totalSteps : currentStepIndex + 1) / totalSteps) * 100 : (isReviewing || steps.length === 0 ? 100 : 0);
+  const currentField = !isReviewing && totalFieldsToFill > 0 && currentStepIndex < totalFieldsToFill ? steps[currentStepIndex] : null;
+  
+  const reviewStepIsEffectivelyTheLast = totalFieldsToFill > 0;
+  const totalUiSteps = reviewStepIsEffectivelyTheLast ? totalFieldsToFill + 1 : (totalFieldsToFill === 0 ? 1 : 0) ;
+  const currentUiStep = isReviewing ? totalUiSteps : (totalFieldsToFill === 0 ? 1 : currentStepIndex + 1);
+  const progressValue = totalUiSteps > 0 ? (currentUiStep / totalUiSteps) * 100 : (isReviewing ? 100 :0) ;
 
 
   if (!isHydrated || !doc) {
@@ -383,25 +401,26 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
       </div>
     );
   }
-  
-  // console.log("[WizardForm] Rendering. isReviewing:", isReviewing, "currentStepIndex:", currentStepIndex, "currentField ID:", currentField?.id, "totalSteps:", totalSteps, "steps count:", steps.length, "actualSchemaShape keys:", actualSchemaShape ? Object.keys(actualSchemaShape) : 'undefined', "Errors:", errors);
+
+  const buttonText = isReviewing
+    ? t('dynamicForm.confirmAnswersButton', { ns: 'translation' })
+    : totalFieldsToFill === 0 || currentStepIndex === totalFieldsToFill - 1
+    ? t('Review Answers', { ns: 'translation' })
+    : t('wizard.next', { ns: 'translation' });
 
 
-  if (steps.length === 0 && !isReviewing) {
+  if (totalFieldsToFill === 0 && !isReviewing) {
     return (
         <div className="bg-card rounded-lg shadow-xl p-4 md:p-6 border border-border">
             <p className="text-muted-foreground text-center py-10 min-h-[200px] flex flex-col items-center justify-center">
                 {t('dynamicForm.noQuestionsNeeded', { ns: 'translation', documentType: doc.name })}
                  <Button
                     type="button"
-                    onClick={() => {
-                        setIsReviewing(true); 
-                        if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' });
-                    }} 
+                    onClick={handleNextStep} 
                     className="mt-4 bg-primary text-primary-foreground hover:bg-primary/90 min-w-[120px]"
                     disabled={formIsSubmitting || authIsLoading}
                 >
-                     {t('dynamicForm.confirmProceedButton', { ns: 'translation' })}
+                     {buttonText}
                  </Button>
             </p>
             <TrustBadges />
@@ -410,39 +429,37 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
   }
 
  const formContent = currentField && currentField.id ? (
-    <div className="mt-6 space-y-6 min-h-[200px]">
-       {(actualSchemaShape && (actualSchemaShape as any)[currentField.id] && ((actualSchemaShape as any)[currentField.id] instanceof z.ZodObject || ((actualSchemaShape as any)[currentField.id]._def && (actualSchemaShape as any)[currentField.id]._def.typeName === 'ZodObject')) && (currentField.id.includes('_address') || currentField.id.includes('Address')))
-        ? (
-          <Controller
-            key={`${currentField.id}-controller-address`}
-            control={control}
-            name={currentField.id as any}
-            render={({ field: { onChange: rhfOnChange, value: rhfValue, name: rhfName }}) => (
-                <AddressField
-                    name={rhfName as string}
-                    label={currentField.label}
-                    required={!((actualSchemaShape as any)?.[currentField!.id]?._def?.typeName?.startsWith('ZodOptional'))}
-                    error={errors[currentField!.id as any]?.message as string | undefined}
-                    placeholder={t("Enter address...", {ns: "translation"})}
-                    tooltip={currentField.tooltip || currentField.label}
-                    value={rhfValue || ''} // Pass value for controlled component
-                    onChange={(val, parts) => { // onChange for PlacesAutocomplete
-                        rhfOnChange(val); // Update RHF
-                        // If you need to set structured parts, do it here
-                        // e.g., if(parts) { setValue('city', parts.city); ... }
-                    }}
+            <div className="mt-6 space-y-6 min-h-[200px]">
+               {(doc.schema.shape as any)[currentField.id] && ((doc.schema.shape as any)[currentField.id] instanceof z.ZodObject || ((doc.schema.shape as any)[currentField.id]._def && (doc.schema.shape as any)[currentField.id]._def.typeName === 'ZodObject')) && (currentField.id.includes('_address') || currentField.id.includes('Address'))) ? (
+
+                <Controller
+                  key={`${currentField.id}-controller-address`}
+                  control={control}
+                  name={currentField.id as any}
+                  render={({ field: { onChange: rhfOnChange, value: rhfValue, name: rhfName }}) => (
+                      <AddressField
+                          name={rhfName as string}
+                          label={currentField.label}
+                          required={!((doc.schema.shape as any)?.[currentField!.id]?._def?.typeName?.startsWith('ZodOptional'))}
+                          error={errors[currentField!.id as any]?.message as string | undefined}
+                          placeholder={t("Enter address...", {ns: "translation"})}
+                          tooltip={currentField.tooltip || currentField.label}
+                          value={rhfValue || ''} 
+                          onChange={(val) => { 
+                              rhfOnChange(val);
+                          }}
+                      />
+                  )}
                 />
-            )}
-          />
-        ) : (
-          <FieldRenderer
-            key={currentField.id}
-            fieldKey={currentField.id}
-            locale={locale}
-            doc={doc} />
-        )
-      }
-    </div>
+              ) : (
+                <FieldRenderer
+                  key={currentField.id}
+                  fieldKey={currentField.id}
+                  locale={locale}
+                  doc={doc} />
+              )
+            }
+            </div>
   ) : null; 
 
 
@@ -459,7 +476,7 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
 
         {showMobilePreview && (
           <div className="lg:hidden mb-6 h-96">
-            {/* PreviewPane is rendered by parent StartWizardPage and receives context from there */}
+             {/* PreviewPane rendered by parent, WizardForm is inside FormProvider */}
           </div>
         )}
 
@@ -480,7 +497,7 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
 
 
         <div className="mt-8 flex justify-between items-center">
-           { (currentStepIndex > 0 || isReviewing) && (steps.length > 0 || (isReviewing && steps.length === 0) ) && (
+           { (currentStepIndex > 0 || isReviewing) && (totalFieldsToFill > 0 || (isReviewing && totalFieldsToFill === 0) ) && (
             <Button
               type="button"
               variant="outline"
@@ -491,18 +508,16 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
               {t('Back', { ns: 'translation' })}
             </Button>
           )}
-          {currentStepIndex === 0 && !isReviewing && steps.length > 0 && <div />}
+          {currentStepIndex === 0 && !isReviewing && totalFieldsToFill > 0 && <div />}
 
 
            <Button
               type="button"
               onClick={handleNextStep}
               className="bg-primary text-primary-foreground hover:bg-primary/90 min-w-[120px]"
-              disabled={formIsSubmitting || authIsLoading || (isReviewing && !isFormValid && steps.length > 0 && Object.keys(errors).length > 0)}
+              disabled={formIsSubmitting || authIsLoading || (isReviewing && !isFormValid && totalFieldsToFill > 0 && Object.keys(errors).length > 0)}
             >
-              {formIsSubmitting || authIsLoading ? <Loader2 className="animate-spin h-5 w-5" /> :
-                isReviewing ? t('dynamicForm.confirmAnswersButton', { ns: 'translation' }) :
-                (steps.length === 0 || currentStepIndex === totalSteps - 1 ? t('Review Answers', { ns: 'translation' }) : t('wizard.next', { ns: 'translation' }))}
+              {formIsSubmitting || authIsLoading ? <Loader2 className="animate-spin h-5 w-5" /> : buttonText}
             </Button>
         </div>
         <TrustBadges />
