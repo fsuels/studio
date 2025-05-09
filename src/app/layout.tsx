@@ -23,7 +23,7 @@ export const metadata: Metadata = {
   description: 'AI-Powered Legal Document Generation',
 };
 
-// ───────── Root layout ─────────
+// ───────── Root layout (❗ NO whitespace after <html …>) ─────────
 /* prettier-ignore */
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
