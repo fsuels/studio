@@ -26,7 +26,6 @@ const DocumentDetail = dynamic(() => import('@/components/DocumentDetail'), {
 export default function DocPage() {
   const params = useParams();
   const { t, i18n } = useTranslation(); 
-  // const router = useRouter(); // Removed unused router
 
   const currentLocale = (Array.isArray(params.locale) ? params.locale[0] : params.locale) as 'en' | 'es' | undefined;
   const docId = Array.isArray(params.docId) ? params.docId[0] : params.docId as string | undefined;
@@ -81,24 +80,28 @@ export default function DocPage() {
         
         <div className="grid lg:grid-cols-2 gap-8 items-start">
             <div className="lg:order-2">
-                <h1 className="text-3xl md:text-4xl font-bold mb-3 text-foreground">
+                <h1 className="text-3xl md:text-4xl font-bold mb-3 text-foreground text-center">
                     {documentDisplayName}
                 </h1>
-                <Badge variant="outline" className="mb-3 border-primary text-primary bg-primary/10">
-                   {t('Attorney-Drafted', {defaultValue: 'Attorney-Drafted'})}
-                </Badge>
-                <p className="text-lg text-muted-foreground mb-6">
+                <div className="flex justify-center">
+                  <Badge variant="outline" className="mb-3 border-primary text-primary bg-primary/10">
+                    {t('Attorney-Drafted', {defaultValue: 'Attorney-Drafted'})}
+                  </Badge>
+                </div>
+                <p className="text-lg text-muted-foreground mb-6 text-center">
                    {currentLocale === 'es' && docConfig.description_es ? docConfig.description_es : docConfig.description}
                 </p>
-                <div className="flex items-baseline space-x-2 mb-6">
+                <div className="flex items-baseline justify-center space-x-2 mb-6">
                     <span className="text-3xl font-bold text-primary">${docConfig.basePrice.toFixed(2)}</span>
                     <span className="text-sm text-muted-foreground">{t('pricing.perDocument', {defaultValue: 'per document'})}</span>
                 </div>
-                <Button size="lg" className="w-full sm:w-auto text-base" asChild>
-                  <Link href={`/${currentLocale}/docs/${docId}/start`}>
-                     {t('Start for Free', {defaultValue: 'Start for Free'})}
-                  </Link>
-                </Button>
+                <div className="flex justify-center">
+                  <Button size="lg" className="w-full sm:w-auto text-base" asChild>
+                    <Link href={`/${currentLocale}/docs/${docId}/start`}>
+                      {t('docDetail.startForFree')}
+                    </Link>
+                  </Button>
+                </div>
             </div>
             <div className="lg:order-1">
                  <DocumentDetail locale={currentLocale as 'en' | 'es'} docId={docId} altText={`${documentDisplayName} preview`} />
