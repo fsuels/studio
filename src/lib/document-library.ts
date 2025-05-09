@@ -9,11 +9,11 @@ export type Question = {
   label: string;
   placeholder?: string;
   required?: boolean;
-  type: 'text' | 'select' | 'date' | 'number' | 'textarea' | 'boolean'; // Added 'boolean' for Switch/Checkbox
+  type: 'text' | 'select' | 'date' | 'number' | 'textarea' | 'boolean' | 'address'; // Added 'address' type
   options?: { value: string; label: string }[];
   stateSpecific?: string[];
   helperText?: string;
-  tooltip?: string; // Added tooltip
+  tooltip?: string; 
 };
 
 // Define structure for upsell clauses
@@ -130,14 +130,15 @@ export let documentLibrary: LegalDocument[] = [
     schema: BillOfSaleSchema,
     questions: [
       { id: 'seller_name', label: 'Seller\'s Full Name', type: 'text', required: true, tooltip: "Enter the full legal name of the person or entity selling the vehicle." },
-      { id: 'seller_phone', label: 'Seller\'s Phone Number', type: 'text', required: true, placeholder: '(XXX) XXX-XXXX', tooltip: "A valid phone number for the seller." },
-      { id: 'seller_address', label: 'Seller\'s Full Address', type: 'textarea', required: true, tooltip: "Include street, city, state, and ZIP code." },
+      { id: 'seller_phone', label: 'Seller\'s Phone Number', type: 'text', required: false, placeholder: '(XXX) XXX-XXXX', tooltip: "A valid phone number for the seller." },
+      { id: 'seller_address', label: 'Seller\'s Full Address', type: 'address', required: true, tooltip: "Include street, city, state, and ZIP code." },
       { id: 'buyer_name', label: 'Buyer\'s Full Name', type: 'text', required: true, tooltip: "Enter the full legal name of the person or entity buying the vehicle." },
-      { id: 'buyer_address', label: 'Buyer\'s Full Address', type: 'textarea', required: true, tooltip: "Include street, city, state, and ZIP code for the buyer." },
+      { id: 'buyer_address', label: 'Buyer\'s Full Address', type: 'address', required: true, tooltip: "Include street, city, state, and ZIP code for the buyer." },
+      { id: 'buyer_phone', label: 'Buyer\'s Phone Number', type: 'text', required: false, placeholder: '(XXX) XXX-XXXX', tooltip: "A valid phone number for the buyer." },
       { id: 'year', label: 'Vehicle Year', type: 'number', placeholder: 'e.g., 2020', required: true, tooltip: "The manufacturing year of the vehicle (e.g., 2022)." },
-      { id: 'vehicle_make', label: 'Vehicle Make', type: 'text', placeholder: 'e.g., Toyota', required: true, tooltip: "The manufacturer of the vehicle (e.g., Honda, Ford)." },
-      { id: 'vehicle_model', label: 'Vehicle Model', type: 'text', placeholder: 'e.g., Camry', required: true, tooltip: "The specific model of the vehicle (e.g., Civic, F-150)." },
-      { id: 'vehicle_color', label: 'Vehicle Color', type: 'text', placeholder: 'e.g., Blue', required: true, tooltip: "The primary color of the vehicle." },
+      { id: 'make', label: 'Vehicle Make', type: 'text', placeholder: 'e.g., Toyota', required: true, tooltip: "The manufacturer of the vehicle (e.g., Honda, Ford)." },
+      { id: 'model', label: 'Vehicle Model', type: 'text', placeholder: 'e.g., Camry', required: true, tooltip: "The specific model of the vehicle (e.g., Civic, F-150)." },
+      { id: 'color', label: 'Vehicle Color', type: 'text', placeholder: 'e.g., Blue', required: true, tooltip: "The primary color of the vehicle." },
       { id: 'vin', label: 'Vehicle Identification Number (VIN)', type: 'text', required: true, tooltip: "The 17-character unique identifier for the vehicle." },
       { id: 'odometer', label: 'Odometer Reading (miles)', type: 'number', required: true, tooltip: "Current mileage shown on the vehicle's odometer." },
       {
@@ -149,7 +150,7 @@ export let documentLibrary: LegalDocument[] = [
       },
       { id: 'price', label: 'Sale Price ($)', type: 'number', required: true, tooltip: "The total agreed-upon price for the vehicle in USD." },
       {
-        id: 'payment_method', label: 'Payment Method', type: 'select', required: true, options: [
+        id: 'payment_method', label: 'Payment Method', type: 'select', required: false, options: [ // Optional
           { value: 'cash', label: 'Cash' }, { value: 'check', label: 'Check' }, { value: 'wire', label: 'Wire Transfer' },
           { value: 'paypal', label: 'PayPal' }, { value: 'credit_card', label: 'Credit / Debit Card' }
         ], tooltip: "How the buyer will pay or has paid for the vehicle."

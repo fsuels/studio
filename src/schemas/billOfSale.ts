@@ -6,9 +6,6 @@ export const BillOfSaleSchema = z.object({
   /* ---------- Seller ---------- */
   seller_name:      z.string().min(2, { message: "Seller name must be at least 2 characters." }),
   seller_address:   z.string().min(5, { message: "Seller address must be at least 5 characters." }),
-  seller_city:      z.string().optional(),
-  seller_state:     z.string().optional(),
-  seller_postal_code: z.string().optional(),
   seller_phone:     z.string()
                      .regex(/^\(\d{3}\)\s\d{3}-\d{4}$/, { message: "Invalid phone number format. Use (XXX) XXX-XXXX."})
                      .optional(),
@@ -16,9 +13,6 @@ export const BillOfSaleSchema = z.object({
   /* ---------- Buyer ---------- */
   buyer_name:       z.string().min(2, { message: "Buyer name must be at least 2 characters." }),
   buyer_address:    z.string().min(5, { message: "Buyer address must be at least 5 characters." }),
-  buyer_city:       z.string().optional(),
-  buyer_state:      z.string().optional(),
-  buyer_postal_code:z.string().optional(),
   buyer_phone:      z.string()
                      .regex(/^\(\d{3}\)\s\d{3}-\d{4}$/, { message: "Invalid phone number format. Use (XXX) XXX-XXXX."})
                      .optional()
