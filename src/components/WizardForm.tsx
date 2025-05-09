@@ -16,7 +16,7 @@ import { prettify } from '@/lib/schema-utils';
 import { z } from 'zod';
 import AuthModal from '@/components/AuthModal';
 import { useAuth } from '@/hooks/useAuth';
-import { AddressField } from '@/components/AddressField'; 
+import AddressField from '@/components/AddressField'; // Corrected import path to default
 import { TooltipProvider } from '@/components/ui/tooltip'; 
 import TrustBadges from '@/components/TrustBadges';
 import ReviewStep from '@/components/ReviewStep'; 
@@ -41,7 +41,7 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
   const [isHydrated, setIsHydrated] = useState(false);
   const [showMobilePreview, setShowMobilePreview] = useState(false);
   const router = useRouter();
-  const params = useParams(); // Use params to get current locale for API calls if needed
+  const params = useParams(); 
 
 
   const methods = useForm<z.infer<typeof doc.schema>>({
@@ -71,7 +71,6 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
         let draftData: Partial<z.infer<typeof doc.schema>> = {};
         if (isLoggedIn && user?.uid) {
           try {
-            // Pass the actual locale from params, not a hardcoded one or i18n.language which might not be updated yet
             const currentLocaleForDraft = params.locale as 'en' | 'es' || locale;
             const firestoreDraft = await loadFormProgress({ userId: user.uid, docType: doc.id, state: currentLocaleForDraft });
             if (firestoreDraft && Object.keys(firestoreDraft).length > 0) {
@@ -187,8 +186,8 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
     if (doc.questions && doc.questions.length > 0) {
        return doc.questions.map(q => ({ 
             id: q.id, 
-            label: q.label ? t(q.label, q.label) : prettify(q.id), // Translate question label
-            tooltip: q.tooltip ? t(q.tooltip, q.tooltip) : undefined // Translate tooltip
+            label: q.label ? t(q.label, q.label) : prettify(q.id), 
+            tooltip: q.tooltip ? t(q.tooltip, q.tooltip) : undefined 
         }));
     }
     
@@ -402,7 +401,7 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
   }
 
 
- const formContent = currentField && currentField.id ? (
+ const formContent = currentField && currentField.id && actualSchemaShape && (actualSchemaShape as any)[currentField.id] ? (
     <div className="mt-6 space-y-6 min-h-[200px]">
         { (actualSchemaShape && (actualSchemaShape as any)[currentField.id] && 
           (
@@ -455,7 +454,7 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
 
         {showMobilePreview && (
           <div className="lg:hidden mb-6 h-96">
-             {/* PreviewPane is rendered in StartWizardPage and needs FormProvider there */}
+            {/* PreviewPane is rendered in StartWizardPage and needs FormProvider there */}
           </div>
         )}
 
@@ -521,3 +520,4 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
     </FormProvider>
   );
 }
+
