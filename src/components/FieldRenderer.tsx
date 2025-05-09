@@ -3,8 +3,8 @@
 
 import React, { useEffect } from 'react';
 import { useFormContext, Controller } from 'react-hook-form';
-import SmartInput from '@/components/wizard/SmartInput'; // Using SmartInput for standard text/number/tel
-import AddressField from '@/components/AddressField';
+import SmartInput from '@/components/wizard/SmartInput';
+import AddressField from '@/components/AddressField'; 
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -12,11 +12,12 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Switch } from "@/components/ui/switch";
 import type { LegalDocument, Question } from '@/lib/document-library';
+import { usStates } from '@/lib/document-library';
 import { useNotary } from '@/hooks/useNotary';
 import { cn } from '@/lib/utils';
 import { useTranslation } from 'react-i18next';
 import { prettify } from '@/lib/schema-utils';
-import { useVinDecoder } from '@/hooks/useVinDecoder'; // For displaying decoded VIN info
+import { useVinDecoder } from '@/hooks/useVinDecoder'; 
 import { Info, Loader2 } from 'lucide-react';
 import {
   Tooltip,
@@ -52,14 +53,14 @@ export default function FieldRenderer({ fieldKey, locale, doc }: FieldRendererPr
           'text',
     options: (fieldSchemaFromZod._def?.innerType?._def?.values || fieldSchemaFromZod._def?.values)?.map((val: string) => ({ value: val, label: prettify(val) })),
     required: fieldSchemaFromZod._def?.typeName !== 'ZodOptional' && fieldSchemaFromZod._def?.innerType?._def?.typeName !== 'ZodOptional',
-    tooltip: (fieldSchemaFromZod._def as any)?.tooltip || (fieldSchemaFromZod._def?.schema?._def as any)?.tooltip || undefined, // Ensure undefined if not present
+    tooltip: (fieldSchemaFromZod._def as any)?.tooltip || (fieldSchemaFromZod._def?.schema?._def as any)?.tooltip || undefined,
     helperText: (fieldSchemaFromZod._def as any)?.helperText || undefined,
     placeholder: (fieldSchemaFromZod._def as any)?.placeholder || undefined,
   } : undefined);
 
-  const formStateCode = watch('state'); // Assuming 'state' is the name of your state field in the form
+  const formStateCode = watch('state'); 
   const { isRequired: notaryIsRequiredByState } = useNotary(formStateCode);
-  const { decode: decodeVin, data: vinData, loading: vinLoading, error: vinError } = useVinDecoder();
+  const { decode, data: vinData, loading: vinLoading, error: vinError } = useVinDecoder();
 
 
   useEffect(() => {
@@ -102,26 +103,23 @@ export default function FieldRenderer({ fieldKey, locale, doc }: FieldRendererPr
         control={control}
         name={fieldKey as any}
         rules={{ required: fieldSchema?.required }}
-        render={({ field: { onChange: rhfOnChange, value: rhfValue, name: rhfName } }) => (
+        render={({ field }) => ( // RHF field object
           <AddressField
-            name={rhfName}
+            name={field.name} // Pass RHF name
             label={labelText}
             required={fieldSchema?.required}
             error={errors[fieldKey as any]?.message as string | undefined}
             placeholder={placeholderText || t('Enter address...', { ns: 'translation' })}
-            className="max-w-sm" // Applied max-w-sm
+            className="max-w-sm" 
             tooltip={tooltipText}
-            value={rhfValue || ''}
+            value={field.value || ''} // Controlled by RHF
             onChange={(val, parts) => { // AddressField's onChange provides raw and parsed parts
-                rhfOnChange(val); // Update RHF with the raw address string
+                field.onChange(val); // Update RHF with the raw address string
                  if (parts) {
                     const prefix = fieldKey.replace(/_address$/i, '') || fieldKey.replace(/Address$/i, '');
-                    // Dynamically set related fields if they exist in the schema for this prefix
                     if ((actualSchemaShape as any)?.[`${prefix}_city`]) setValue(`${prefix}_city`, parts.city, {shouldValidate: true, shouldDirty: true});
                     if ((actualSchemaShape as any)?.[`${prefix}_state`]) setValue(`${prefix}_state`, parts.state, {shouldValidate: true, shouldDirty: true});
                     if ((actualSchemaShape as any)?.[`${prefix}_postal_code`]) setValue(`${prefix}_postal_code`, parts.postalCode, {shouldValidate: true, shouldDirty: true});
-                    // For full address field, parts.street can be set back to name if that's desired
-                    // rhfOnChange(parts.street); // Or set the structured street part if a separate field exists
                  }
             }}
           />
@@ -261,7 +259,7 @@ export default function FieldRenderer({ fieldKey, locale, doc }: FieldRendererPr
             </Select>
           )}
         />
-      ) : ( // Default to SmartInput for text, number, tel
+      ) : ( 
         <SmartInput
           id={fieldKey}
           type={inputType}
