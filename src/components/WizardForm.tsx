@@ -17,7 +17,7 @@ import { z } from 'zod';
 import type { BillOfSaleData } from '@/schemas/billOfSale';
 import AuthModal from '@/components/AuthModal';
 import { useAuth } from '@/hooks/useAuth';
-import AddressField from '@/components/AddressField'; // Corrected import
+import AddressField from '@/components/AddressField';
 
 
 interface WizardFormProps {
@@ -60,11 +60,12 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
           console.error("Failed to parse draft from localStorage", e);
           localStorage.removeItem(`draft-${doc.id}-${locale}`);
         }
-      } else if (doc.id === 'bill-of-sale-vehicle' && 'sale_date' in (doc.schema.shape as any)) { // Check if sale_date exists
+      } else if (doc.id === 'bill-of-sale-vehicle' && 'sale_date' in (doc.schema.shape as any)) { 
          defaultValuesToSet = { sale_date: new Date() } as Partial<BillOfSaleData> as any;
       }
       reset(defaultValuesToSet);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [doc.id, locale, reset, doc.schema]);
 
 
@@ -179,7 +180,7 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
         <div className="mb-6">
           <Progress value={progressValue} className="w-full h-2" />
           <p className="text-xs text-muted-foreground mt-1 text-right">
-            {t('Step {{current}} of {{total}}', { ns: 'translation', current: currentStepIndex + 1, total: totalSteps })}
+             {Math.round(progressValue)}% {t('Complete', { ns: 'translation' })}
           </p>
         </div>
 
@@ -190,9 +191,9 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
                 <Controller
                   control={control}
                   name={currentField.id as any}
-                  render={({ field: { onChange: rhfOnChange, value: rhfValue, ref: rhfRef } }) => ( // Make sure to pass ref
+                  render={({ field: { onChange: rhfOnChange, value: rhfValue, ref: rhfRef, name: rhfName } }) => (
                     <AddressField
-                      name={currentField.id}
+                      name={rhfName}
                       label={t(currentField.label, currentField.label)}
                       required={(doc.schema?.shape as any)?.[currentField.id]?._def?.typeName !== 'ZodOptional'}
                       error={errors[currentField.id as any]?.message as string | undefined}
@@ -253,3 +254,4 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
       </FormProvider>
   );
 }
+

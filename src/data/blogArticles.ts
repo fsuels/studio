@@ -10,10 +10,8 @@ export type BlogArticle = {
   summary_es: string;
   content_en: string;
   content_es: string;
-  navigation?: { // Changed to optional and directly include prev/next
-    prev: string | null;
-    next: string | null;
-  };
+  prev: string | null; // Slug of the previous article or null
+  next: string | null; // Slug of the next article or null
 };
 
 
@@ -28,7 +26,8 @@ export const blogArticles: BlogArticle[] = [
     "summary_es": "Una guía legal paso a paso para nuevos emprendedores: licencias, contratos y formularios fiscales.",
     "content_en": "<p>Starting a small business involves navigating a complex legal landscape. This checklist covers the essentials:</p><ul><li>Choosing a business structure (Sole Proprietorship, LLC, Corporation)</li><li>Registering your business name</li><li>Obtaining necessary licenses and permits (federal, state, local)</li><li>Understanding tax obligations (EIN, sales tax, income tax)</li><li>Drafting key agreements (Partnership, Operating, Leases)</li><li>Complying with employment laws</li></ul><p>Consulting with legal and financial professionals is crucial.</p>",
     "content_es": "<p>Iniciar un pequeño negocio implica navegar un complejo panorama legal. Esta lista cubre lo esencial:</p><ul><li>Elegir una estructura de negocio (Empresario individual, LLC, Corporación)</li><li>Registrar el nombre de tu negocio</li><li>Obtener las licencias y permisos necesarios (federales, estatales, locales)</li><li>Comprender las obligaciones fiscales (EIN, impuesto sobre ventas, impuesto sobre la renta)</li><li>Redactar acuerdos clave (Sociedad, Operativo, Arrendamientos)</li><li>Cumplir con las leyes laborales</li></ul><p>Consultar con profesionales legales y financieros es crucial.</p>",
-    "navigation": { "prev": null, "next": "ndas-how-to-use" } // Assuming this is the start
+    "prev": null, 
+    "next": "ndas-how-to-use"
   },
   {
     "slug": "ndas-how-to-use",
@@ -39,7 +38,8 @@ export const blogArticles: BlogArticle[] = [
     "summary_es": "Descubre qué es un NDA, cuándo usarlo y cómo proteger información sensible de negocios.",
     "content_en": "<p>An NDA, or Non-Disclosure Agreement, is a legal contract that establishes confidentiality between parties. Key considerations:</p><ul><li><strong>Purpose:</strong> Protects trade secrets, client lists, financial data, or proprietary ideas during discussions.</li><li><strong>Types:</strong> Mutual (both parties share info) or Unilateral (one party discloses).</li><li><strong>When to Use:</strong> Before pitching investors, hiring contractors with access to sensitive data, exploring partnerships, or discussing inventions.</li><li><strong>Key Clauses:</strong> Definition of confidential info, obligations of receiving party, duration of confidentiality, exclusions.</li></ul><p>An NDA is a fundamental tool for safeguarding intellectual property and business strategies.</p>",
     "content_es": "<p>Un NDA, o Acuerdo de Confidencialidad, es un contrato legal que establece confidencialidad entre las partes. Consideraciones clave:</p><ul><li><strong>Propósito:</strong> Protege secretos comerciales, listas de clientes, datos financieros o ideas propietarias durante discusiones.</li><li><strong>Tipos:</strong> Mutuo (ambas partes comparten información) o Unilateral (una parte revela).</li><li><strong>Cuándo usarlo:</strong> Antes de presentar a inversores, contratar contratistas con acceso a datos sensibles, explorar asociaciones o discutir invenciones.</li><li><strong>Cláusulas Clave:</strong> Definición de información confidencial, obligaciones de la parte receptora, duración de la confidencialidad, exclusiones.</li></ul><p>Un NDA es una herramienta fundamental para salvaguardar la propiedad intelectual y las estrategias de negocio.</p>",
-    "navigation": { "prev": "legal-checklist-small-business", "next": "eviction-process" }
+    "prev": "legal-checklist-small-business", 
+    "next": "eviction-process"
   },
   {
     "slug": "eviction-process",
@@ -50,7 +50,8 @@ export const blogArticles: BlogArticle[] = [
     "summary_es": "Explora el proceso legal de desalojo y cómo evitar errores comunes como propietario o inquilino.",
     "content_en": "<p>Eviction is a legal process landlords must follow to remove a tenant. Key steps and rights:</p><ul><li><strong>Valid Reason:</strong> Typically non-payment of rent, lease violations, or illegal activity.</li><li><strong>Notice:</strong> Landlord must provide proper written notice (e.g., 3-day notice to pay or quit, 30-day notice to vacate). State laws vary significantly.</li><li><strong>Court Filing:</strong> If the tenant doesn't comply, the landlord files an unlawful detainer lawsuit.</li><li><strong>Tenant Response:</strong> Tenant has a specific timeframe to respond to the court summons.</li><li><strong>Hearing:</strong> A judge hears the case and issues a ruling.</li><li><strong>Writ of Possession:</strong> If the landlord wins, law enforcement executes the eviction.</li></ul><p>Both landlords and tenants should understand their state's specific laws and seek legal advice if unsure.</p>",
     "content_es": "<p>El desalojo es un proceso legal que los propietarios deben seguir para retirar a un inquilino. Pasos y derechos clave:</p><ul><li><strong>Razón Válida:</strong> Típicamente falta de pago de alquiler, violaciones del contrato de arrendamiento o actividad ilegal.</li><li><strong>Notificación:</strong> El propietario debe proporcionar una notificación escrita adecuada (p. ej., aviso de 3 días para pagar o desalojar, aviso de 30 días para desalojar). Las leyes estatales varían significativamente.</li><li><strong>Presentación Judicial:</strong> Si el inquilino no cumple, el propietario presenta una demanda de desalojo ilegal.</li><li><strong>Respuesta del Inquilino:</strong> El inquilino tiene un plazo específico para responder a la citación judicial.</li><li><strong>Audiencia:</strong> Un juez escucha el caso y emite un fallo.</li><li><strong>Orden de Posesión:</strong> Si el propietario gana, las fuerzas del orden ejecutan el desalojo.</li></ul><p>Tanto propietarios como inquilinos deben comprender las leyes específicas de su estado y buscar asesoramiento legal si no están seguros.</p>",
-    "navigation": { "prev": "ndas-how-to-use", "next": "power-of-attorney-basics" }
+    "prev": "ndas-how-to-use", 
+    "next": "power-of-attorney-basics"
    },
    {
     "slug": "power-of-attorney-basics",
@@ -61,7 +62,8 @@ export const blogArticles: BlogArticle[] = [
     "summary_es": "Una guía clara sobre los tipos de poder legal y cuándo crearlo.",
     "content_en": "<p>A Power of Attorney (POA) is a legal document granting someone (the Agent) authority to act on another person's (the Principal) behalf. Types include:</p><ul><li><strong>General POA:</strong> Broad authority over financial matters. Often ends if the Principal becomes incapacitated.</li><li><strong>Durable POA:</strong> Remains effective even if the Principal becomes incapacitated. Crucial for planning.</li><li><strong>Healthcare POA (or Proxy):</strong> Allows the Agent to make medical decisions if the Principal cannot.</li><li><strong>Special/Limited POA:</strong> Grants specific, limited powers for a particular task or time.</li></ul><p>Creating POAs is vital for ensuring your affairs and healthcare wishes are managed if you're unable to do so yourself.</p>",
     "content_es": "<p>Un Poder Legal (POA) es un documento legal que otorga a alguien (el Agente) autoridad para actuar en nombre de otra persona (el Principal). Los tipos incluyen:</p><ul><li><strong>POA General:</strong> Autoridad amplia sobre asuntos financieros. A menudo termina si el Principal queda incapacitado.</li><li><strong>POA Duradero:</strong> Sigue siendo efectivo incluso si el Principal queda incapacitado. Crucial para la planificación.</li><li><strong>POA de Atención Médica (o Proxy):</strong> Permite al Agente tomar decisiones médicas si el Principal no puede.</li><li><strong>POA Especial/Limitado:</strong> Otorga poderes específicos y limitados para una tarea o tiempo particular.</li></ul><p>Crear POAs es vital para asegurar que tus asuntos y deseos de atención médica se gestionen si no puedes hacerlo tú mismo.</p>",
-    "navigation": { "prev": "eviction-process", "next": "contract-breach" }
+    "prev": "eviction-process", 
+    "next": "contract-breach"
    },
    {
     "slug": "contract-breach",
@@ -72,7 +74,8 @@ export const blogArticles: BlogArticle[] = [
     "summary_es": "Conoce los remedios legales y estrategias para prevenir el incumplimiento de contratos.",
     "content_en": "<p>A breach of contract occurs when one party fails to fulfill their obligations under a legally binding agreement. Consequences and remedies depend on the contract and the nature of the breach:</p><ul><li><strong>Material Breach:</strong> A significant failure that undermines the contract's core purpose. The non-breaching party may be excused from performance and can sue for damages.</li><li><strong>Minor Breach:</strong> A less significant failure. The non-breaching party must still perform but can sue for damages caused by the breach.</li><li><strong>Remedies:</strong> Compensatory damages (money to cover losses), specific performance (court orders performance), rescission (cancels the contract), reformation (court rewrites part of the contract).</li></ul><p>Clear contract drafting, communication, and negotiation can help prevent breaches. Seek legal advice if a breach occurs.</p>",
     "content_es": "<p>Un incumplimiento de contrato ocurre cuando una parte no cumple con sus obligaciones bajo un acuerdo legalmente vinculante. Las consecuencias y remedios dependen del contrato y la naturaleza del incumplimiento:</p><ul><li><strong>Incumplimiento Material:</strong> Una falla significativa que socava el propósito central del contrato. La parte no incumplidora puede ser excusada de cumplir y puede demandar por daños.</li><li><strong>Incumplimiento Menor:</strong> Una falla menos significativa. La parte no incumplidora aún debe cumplir pero puede demandar por daños causados por el incumplimiento.</li><li><strong>Remedios:</strong> Daños compensatorios (dinero para cubrir pérdidas), cumplimiento específico (el tribunal ordena el cumplimiento), rescisión (cancela el contrato), reforma (el tribunal reescribe parte del contrato).</li></ul><p>Una redacción clara del contrato, comunicación y negociación pueden ayudar a prevenir incumplimientos. Busca asesoramiento legal si ocurre un incumplimiento.</p>",
-     "navigation": { "prev": "power-of-attorney-basics", "next": "child-custody-explained" }
+     "prev": "power-of-attorney-basics", 
+     "next": "child-custody-explained"
    },
    {
     "slug": "child-custody-explained",
@@ -83,7 +86,8 @@ export const blogArticles: BlogArticle[] = [
     "summary_es": "Aprende sobre custodia compartida, exclusiva y cómo crear un plan justo.",
     "content_en": "<p>Child custody agreements determine where children live and who makes decisions for them after parents separate. Key concepts:</p><ul><li><strong>Legal Custody:</strong> Right to make major decisions (education, healthcare, religion). Can be Joint or Sole.</li><li><strong>Physical Custody:</strong> Where the child primarily resides. Can be Joint (significant time with both parents) or Sole (primarily with one parent, visitation for the other).</li><li><strong>Best Interests of the Child:</strong> Courts prioritize the child's well-being, considering factors like parental stability, child's preference (if old enough), and history of care.</li><li><strong>Parenting Plan:</strong> A detailed schedule outlining visitation, holidays, transportation, and communication.</li></ul><p>Mediation or collaboration is often encouraged to create a plan. Formalizing the agreement legally is essential.</p>",
     "content_es": "<p>Los acuerdos de custodia de menores determinan dónde viven los niños y quién toma decisiones por ellos después de que los padres se separan. Conceptos clave:</p><ul><li><strong>Custodia Legal:</strong> Derecho a tomar decisiones importantes (educación, atención médica, religión). Puede ser Conjunta o Única.</li><li><strong>Custodia Física:</strong> Dónde reside principalmente el niño. Puede ser Conjunta (tiempo significativo con ambos padres) o Única (principalmente con un padre, visitas para el otro).</li><li><strong>Interés Superior del Niño:</strong> Los tribunales priorizan el bienestar del niño, considerando factores como la estabilidad parental, la preferencia del niño (si tiene edad suficiente) y el historial de cuidado.</li><li><strong>Plan de Crianza:</strong> Un cronograma detallado que describe visitas, días festivos, transporte y comunicación.</li></ul><p>A menudo se fomenta la mediación o la colaboración para crear un plan. Es esencial formalizar el acuerdo legalmente.</p>",
-     "navigation": { "prev": "contract-breach", "next": "digital-signatures-legal" }
+     "prev": "contract-breach", 
+     "next": "digital-signatures-legal"
    },
   {
     "slug": "digital-signatures-legal",
@@ -94,7 +98,8 @@ export const blogArticles: BlogArticle[] = [
     "summary_es": "Comprende la validez legal de las firmas electrónicas según la ley estadounidense.",
     "content_en": "Coming soon...",
     "content_es": "Próximamente...",
-     "navigation": { "prev": "child-custody-explained", "next": "notarized-documents-online" }
+     "prev": "child-custody-explained", 
+     "next": "notarized-documents-online"
   },
   {
     "slug": "notarized-documents-online",
@@ -105,7 +110,8 @@ export const blogArticles: BlogArticle[] = [
     "summary_es": "Aprende cómo funciona la notarización en línea y qué estados la permiten.",
     "content_en": "Coming soon...",
     "content_es": "Próximamente...",
-     "navigation": { "prev": "digital-signatures-legal", "next": "legal-documents-immigrants" }
+     "prev": "digital-signatures-legal", 
+     "next": "legal-documents-immigrants"
   },
   {
     "slug": "legal-documents-immigrants",
@@ -116,7 +122,8 @@ export const blogArticles: BlogArticle[] = [
     "summary_es": "Desde permisos de trabajo hasta declaraciones juradas—esto es lo que deben preparar los nuevos residentes.",
     "content_en": "Coming soon...",
     "content_es": "Próximamente...",
-     "navigation": { "prev": "notarized-documents-online", "next": "contract-basics" }
+     "prev": "notarized-documents-online", 
+     "next": "contract-basics"
   },
   {
     "slug": "contract-basics",
@@ -127,7 +134,8 @@ export const blogArticles: BlogArticle[] = [
     "summary_es": "Conoce las partes esenciales de cualquier contrato legal válido.",
     "content_en": "Coming soon...",
     "content_es": "Próximamente...",
-    "navigation": { "prev": "legal-documents-immigrants", "next": "green-card-process" }
+    "prev": "legal-documents-immigrants",
+    "next": "green-card-process"
   },
   {
     "slug": "green-card-process",
@@ -138,7 +146,8 @@ export const blogArticles: BlogArticle[] = [
     "summary_es": "Resumen de los pasos, formularios y documentos necesarios para la residencia legal permanente.",
     "content_en": "Coming soon...",
     "content_es": "Próximamente...",
-    "navigation": { "prev": "contract-basics", "next": "why-you-need-a-will" }
+    "prev": "contract-basics",
+    "next": "why-you-need-a-will"
   },
   {
     "slug": "why-you-need-a-will",
@@ -149,7 +158,8 @@ export const blogArticles: BlogArticle[] = [
     "summary_es": "Descubre cómo un testamento puede proteger tus bienes y tu familia.",
     "content_en": "Coming soon...",
     "content_es": "Próximamente...",
-    "navigation": { "prev": "green-card-process", "next": "eviction-letter-guide" }
+    "prev": "green-card-process",
+    "next": "eviction-letter-guide"
   },
   {
     "slug": "eviction-letter-guide",
@@ -160,7 +170,8 @@ export const blogArticles: BlogArticle[] = [
     "summary_es": "Pasos para que los propietarios notifiquen correctamente y eviten problemas legales.",
     "content_en": "Coming soon...",
     "content_es": "Próximamente...",
-    "navigation": { "prev": "why-you-need-a-will", "next": "buying-home-checklist" }
+    "prev": "why-you-need-a-will",
+    "next": "buying-home-checklist"
   },
   {
     "slug": "buying-home-checklist",
@@ -171,7 +182,8 @@ export const blogArticles: BlogArticle[] = [
     "summary_es": "Desde contratos de compra hasta títulos de propiedad — protege tu transacción inmobiliaria.",
     "content_en": "Coming soon...",
     "content_es": "Próximamente...",
-    "navigation": { "prev": "eviction-letter-guide", "next": "identity-theft-response" }
+    "prev": "eviction-letter-guide",
+    "next": "identity-theft-response"
   },
   {
     "slug": "identity-theft-response",
@@ -182,7 +194,8 @@ export const blogArticles: BlogArticle[] = [
     "summary_es": "Tus derechos y los pasos legales que debes tomar de inmediato.",
     "content_en": "Coming soon...",
     "content_es": "Próximamente...",
-    "navigation": { "prev": "buying-home-checklist", "next": "notarized-vs-witnessed" }
+    "prev": "buying-home-checklist",
+    "next": "notarized-vs-witnessed"
   },
   {
     "slug": "notarized-vs-witnessed",
@@ -193,7 +206,8 @@ export const blogArticles: BlogArticle[] = [
     "summary_es": "Cuándo usar cada forma de verificación documental.",
     "content_en": "Coming soon...",
     "content_es": "Próximamente...",
-    "navigation": { "prev": "identity-theft-response", "next": "nda-vs-noncompete" }
+    "prev": "identity-theft-response",
+    "next": "nda-vs-noncompete"
   },
   {
     "slug": "nda-vs-noncompete",
@@ -204,7 +218,8 @@ export const blogArticles: BlogArticle[] = [
     "summary_es": "Compara estos dos contratos comunes en negocios.",
     "content_en": "Coming soon...",
     "content_es": "Próximamente...",
-    "navigation": { "prev": "notarized-vs-witnessed", "next": "how-to-hire-freelancers" }
+    "prev": "notarized-vs-witnessed",
+    "next": "how-to-hire-freelancers"
   },
   {
     "slug": "how-to-hire-freelancers",
@@ -215,7 +230,8 @@ export const blogArticles: BlogArticle[] = [
     "summary_es": "Reglas para contratistas independientes, contratos y formularios fiscales.",
     "content_en": "Coming soon...",
     "content_es": "Próximamente...",
-    "navigation": { "prev": "nda-vs-noncompete", "next": "legal-docs-remote-work" }
+    "prev": "nda-vs-noncompete",
+    "next": "legal-docs-remote-work"
   },
   {
     "slug": "legal-docs-remote-work",
@@ -226,7 +242,8 @@ export const blogArticles: BlogArticle[] = [
     "summary_es": "Asegura el cumplimiento legal al contratar o trabajar de forma remota.",
     "content_en": "Coming soon...",
     "content_es": "Próximamente...",
-    "navigation": { "prev": "how-to-hire-freelancers", "next": "legal-name-change" }
+    "prev": "how-to-hire-freelancers",
+    "next": "legal-name-change" 
   },
    {
     "slug": "legal-name-change",
@@ -237,7 +254,8 @@ export const blogArticles: BlogArticle[] = [
     "summary_es": "Proceso paso a paso para cambiar legalmente tu nombre en cualquier estado.",
     "content_en": "Coming soon...",
     "content_es": "Próximamente...",
-    "navigation": { "prev": "legal-docs-remote-work", "next": "how-to-draft-bill-of-sale" }
+    "prev": "legal-docs-remote-work", 
+    "next": "how-to-draft-bill-of-sale"
   },
   {
     "slug": "how-to-draft-bill-of-sale",
@@ -248,7 +266,8 @@ export const blogArticles: BlogArticle[] = [
     "summary_es": "Asegura tu venta privada con un contrato de compra-venta bien redactado.",
     "content_en": "Coming soon...",
     "content_es": "Próximamente...",
-    "navigation": { "prev": "legal-name-change", "next": "divorce-paperwork-guide" }
+    "prev": "legal-name-change", 
+    "next": "divorce-paperwork-guide"
   },
   {
     "slug": "divorce-paperwork-guide",
@@ -259,7 +278,8 @@ export const blogArticles: BlogArticle[] = [
     "summary_es": "Lista de formularios y trámites para el divorcio en tu estado.",
     "content_en": "Coming soon...",
     "content_es": "Próximamente...",
-    "navigation": { "prev": "how-to-draft-bill-of-sale", "next": "start-llc-online" }
+    "prev": "how-to-draft-bill-of-sale", 
+    "next": "start-llc-online"
   },
   {
     "slug": "start-llc-online",
@@ -270,7 +290,8 @@ export const blogArticles: BlogArticle[] = [
     "summary_es": "Crea tu empresa de responsabilidad limitada sin abogado usando estas herramientas.",
     "content_en": "Coming soon...",
     "content_es": "Próximamente...",
-    "navigation": { "prev": "divorce-paperwork-guide", "next": "do-i-need-a-lawyer" }
+    "prev": "divorce-paperwork-guide", 
+    "next": "do-i-need-a-lawyer"
   },
   {
     "slug": "do-i-need-a-lawyer",
@@ -281,7 +302,8 @@ export const blogArticles: BlogArticle[] = [
     "summary_es": "Cuándo puedes usar herramientas legales por tu cuenta y cuándo no.",
     "content_en": "Coming soon...",
     "content_es": "Próximamente...",
-    "navigation": { "prev": "start-llc-online", "next": "pet-agreements-renters" }
+    "prev": "start-llc-online", 
+    "next": "pet-agreements-renters"
   },
   {
     "slug": "pet-agreements-renters",
@@ -292,7 +314,8 @@ export const blogArticles: BlogArticle[] = [
     "summary_es": "Cómo incluir legalmente a las mascotas en un contrato de arrendamiento.",
     "content_en": "Coming soon...",
     "content_es": "Próximamente...",
-    "navigation": { "prev": "do-i-need-a-lawyer", "next": "freelancer-contract-template" }
+    "prev": "do-i-need-a-lawyer", 
+    "next": "freelancer-contract-template"
   },
   {
     "slug": "freelancer-contract-template",
@@ -303,7 +326,8 @@ export const blogArticles: BlogArticle[] = [
     "summary_es": "Protege tu trabajo freelance con una plantilla de contrato sencilla.",
     "content_en": "Coming soon...",
     "content_es": "Próximamente...",
-    "navigation": { "prev": "pet-agreements-renters", "next": "medical-consent-minors" }
+    "prev": "pet-agreements-renters", 
+    "next": "medical-consent-minors"
   },
   {
     "slug": "medical-consent-minors",
@@ -314,7 +338,8 @@ export const blogArticles: BlogArticle[] = [
     "summary_es": "Por qué un formulario de consentimiento médico es vital cuando tu hijo está al cuidado de otra persona.",
     "content_en": "Coming soon...",
     "content_es": "Próximamente...",
-    "navigation": { "prev": "freelancer-contract-template", "next": "legal-docs-for-startups" }
+    "prev": "freelancer-contract-template", 
+    "next": "legal-docs-for-startups"
   },
   {
     "slug": "legal-docs-for-startups",
@@ -325,7 +350,8 @@ export const blogArticles: BlogArticle[] = [
     "summary_es": "Desde acuerdos entre socios hasta NDAs—protege tu startup desde el inicio.",
     "content_en": "Coming soon...",
     "content_es": "Próximamente...",
-    "navigation": { "prev": "medical-consent-minors", "next": "power-of-attorney-guide" }
+    "prev": "medical-consent-minors", 
+    "next": "power-of-attorney-guide"
   },
   {
     "slug": "power-of-attorney-guide",
@@ -336,6 +362,7 @@ export const blogArticles: BlogArticle[] = [
     "summary_es": "Conoce cuándo se usa cada tipo de poder legal y por qué importa.",
     "content_en": "Coming soon...",
     "content_es": "Próximamente...",
-    "navigation": { "prev": "legal-docs-for-startups", "next": null }
+    "prev": "legal-docs-for-startups", 
+    "next": null
   }
 ];

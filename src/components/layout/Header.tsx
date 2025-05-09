@@ -9,7 +9,8 @@ import Nav from '@/components/Nav';
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"; 
 import { Button } from '@/components/ui/button'; 
-// import MiniCartDrawer from '@/components/MiniCartDrawer'; // Temporarily removed as per previous instruction
+// import MiniCartDrawer from '@/components/MiniCartDrawer'; // Temporarily removed
+// import { ThemeToggle } from '@/components/ThemeToggle'; // Temporarily removed
 import { Check, ChevronDown, Globe, UserPlus, LogIn, Search as SearchIcon, ExternalLink, FileText, Menu as MenuIcon, X as CloseIcon, LayoutGrid, ChevronUp } from 'lucide-react'; 
 import { Input } from '@/components/ui/input';
 import { documentLibrary, type LegalDocument } from '@/lib/document-library';
@@ -132,7 +133,7 @@ export default function Header() {
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 overflow-visible">
       <div className="container flex h-14 items-center px-4 md:px-6"> 
         <div className="mr-auto md:mr-4 flex">
-          <Logo />
+          <Logo svgClassName="h-7 w-7 md:h-8 md:w-8" textClassName="text-lg md:text-xl" />
         </div>
 
         <div className="hidden md:flex flex-1 items-center justify-start">
@@ -157,7 +158,7 @@ export default function Header() {
                     align="center"
                     side="bottom"
                     sideOffset={10} 
-                    className="absolute left-1/2 -translate-x-1/2 mt-2 w-[calc(100vw-4rem)] lg:w-[80rem] max-w-[1200px] bg-popover p-0 rounded-lg shadow-xl z-[70] border border-border" 
+                    className="absolute left-1/2 -translate-x-1/2 mt-2 w-[calc(100vw-2rem)] md:w-[90vw] lg:w-[80rem] xl:w-[1200px] max-w-full bg-popover p-0 rounded-lg shadow-xl z-[70] border border-border" 
                 >
                    <MegaMenuContent categories={CATEGORY_LIST} documents={documentLibrary} onLinkClick={handleMegaMenuLinkClick}/>
                 </PopoverContent>
@@ -203,6 +204,8 @@ export default function Header() {
             
             {mounted && <LanguageSwitcher />} 
 
+            {/* {mounted && <ThemeToggle />} */} 
+
             {mounted && (
                 <>
                     <Button
@@ -234,6 +237,7 @@ export default function Header() {
 
         {/* Mobile Menu Button */}
         <div className="md:hidden ml-auto flex items-center gap-1">
+            {/* {mounted && <ThemeToggle />} */}
             {/* {mounted && <MiniCartDrawer />} */} 
              <Button variant="ghost" size="icon" className="h-9 w-9" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} disabled={!mounted}>
                 {isMobileMenuOpen ? <CloseIcon className="h-5 w-5" /> : <MenuIcon className="h-5 w-5" />}
@@ -284,13 +288,14 @@ export default function Header() {
             
             <Button
               variant="ghost"
-              className="w-full justify-between text-base font-medium flex items-center gap-2 px-2 py-3 hover:bg-primary hover:text-primary-foreground"
+              className="w-full justify-between text-base font-medium flex items-center gap-2 px-2 py-3 hover:bg-primary hover:text-primary-foreground data-[state=open]:bg-primary data-[state=open]:text-primary-foreground"
               onClick={() => setShowMobileCategories(!showMobileCategories)}
               disabled={!mounted}
               aria-expanded={showMobileCategories}
+              data-state={showMobileCategories ? 'open' : 'closed'}
             >
               <div className="flex items-center gap-2">
-                <LayoutGrid className="h-5 w-5 text-muted-foreground" />
+                <LayoutGrid className="h-5 w-5 text-muted-foreground group-data-[state=open]:text-primary-foreground" />
                 {mounted ? t('nav.documentCategories') : '...'}
               </div>
               {showMobileCategories ? <ChevronUp className="h-5 w-5 opacity-70" /> : <ChevronDown className="h-5 w-5 opacity-70" />}
@@ -328,3 +333,4 @@ export default function Header() {
     </header>
   );
 }
+
