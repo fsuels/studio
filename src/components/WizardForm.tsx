@@ -4,7 +4,7 @@
 import { useForm, FormProvider, Controller, useFormContext } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import axios, { AxiosError } from 'axios';
-import React, { useEffect, useState, useRef, useCallback } from 'react';
+import React, { useEffect, useState, useRef, useCallback, useMemo } from 'react';
 import { Progress } from '@/components/ui/progress';
 import FieldRenderer from './FieldRenderer';
 import type { LegalDocument } from '@/lib/document-library';
@@ -19,10 +19,10 @@ import { useAuth } from '@/hooks/useAuth';
 import AddressField from '@/components/AddressField'; // Corrected import path
 import { TooltipProvider } from '@/components/ui/tooltip'; 
 import TrustBadges from '@/components/TrustBadges';
-import ReviewStep from '@/components/ReviewStep';
+import ReviewStep from '@/components/ReviewStep'; 
 import { saveFormProgress, loadFormProgress } from '@/lib/firestore/saveFormProgress';
 import { debounce } from 'lodash-es';
-
+import PreviewPane from './PreviewPane'; // For mobile toggle
 
 interface WizardFormProps {
   locale: 'en' | 'es';
@@ -37,14 +37,12 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
   const { isLoggedIn, isLoading: authIsLoading, user } = useAuth();
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [isReviewing, setIsReviewing] = useState(false);
+  const [isHydrated, setIsHydrated] = useState(false);
+  const [showMobilePreview, setShowMobilePreview] = useState(false);
 
-  // Ensure doc and doc.schema are valid before using them
-  const safeSchema = doc && doc.schema && typeof doc.schema.shape === 'object' && doc.schema.shape !== null 
-    ? doc.schema 
-    : z.object({}); // Fallback to an empty schema if doc.schema is invalid
 
-  const methods = useForm<z.infer<typeof safeSchema>>({
-    resolver: zodResolver(safeSchema),
+  const methods = useForm<z.infer<typeof doc.schema>>({
+    resolver: zodResolver(doc.schema),
     defaultValues: {}, 
     mode: 'onBlur',
   });
@@ -55,24 +53,25 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
     trigger,
     reset,
     control,
+    setValue, // Added setValue
     formState: { errors, isSubmitting: formIsSubmitting, dirtyFields, isValid: isFormValid }
   } = methods;
 
 
   useEffect(() => {
-    async function loadDraft() {
-      // Ensure doc and doc.id are available
-      if (typeof window !== 'undefined' && doc && doc.id && locale) {
-        let draftData: Partial<z.infer<typeof safeSchema>> = {};
+    setIsHydrated(true);
+  }, []);
+
+  useEffect(() => {
+    async function loadDraftData() {
+      if (typeof window !== 'undefined' && doc && doc.id && locale && isHydrated) {
+        let draftData: Partial<z.infer<typeof doc.schema>> = {};
         if (isLoggedIn && user?.uid) {
-          console.log(`[WizardForm] Logged in. Attempting to load draft from Firestore for user ${user.uid}, doc ${doc.id}, locale ${locale}`);
           try {
             const firestoreDraft = await loadFormProgress({ userId: user.uid, docType: doc.id, state: locale });
             if (firestoreDraft && Object.keys(firestoreDraft).length > 0) {
               draftData = firestoreDraft;
-              console.log('[WizardForm] Draft loaded from Firestore:', draftData);
             } else {
-              console.log('[WizardForm] No draft found in Firestore, trying localStorage.');
               const lsDraft = localStorage.getItem(`draft-${doc.id}-${locale}`);
               if (lsDraft) draftData = JSON.parse(lsDraft);
             }
@@ -82,7 +81,6 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
             if (lsDraft) draftData = JSON.parse(lsDraft);
           }
         } else {
-          console.log('[WizardForm] Not logged in. Loading draft from localStorage.');
           const lsDraft = localStorage.getItem(`draft-${doc.id}-${locale}`);
           if (lsDraft) {
             try {
@@ -94,26 +92,27 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
           }
         }
         
-        if (doc.id === 'bill-of-sale-vehicle' && !draftData.sale_date && safeSchema && 'shape' in safeSchema && safeSchema.shape && (safeSchema.shape as any).sale_date) {
-           const saleDateShape = (safeSchema.shape as any).sale_date;
-           if (saleDateShape && (saleDateShape instanceof z.ZodDate || (saleDateShape._def && saleDateShape._def.typeName === 'ZodDate'))) {
+        if (doc.id === 'bill-of-sale-vehicle' && !draftData.sale_date && doc.schema && 'shape' in doc.schema && (doc.schema.shape as any).sale_date) {
+           const saleDateShapeDef = (doc.schema.shape as any).sale_date?._def;
+           if (saleDateShapeDef && saleDateShapeDef.typeName === 'ZodDate') {
               draftData = { ...draftData, sale_date: new Date() } as any;
            }
         }
-        console.log('[WizardForm] Resetting form with draft data:', draftData);
         reset(draftData);
       }
     }
-    if(!authIsLoading && doc) { 
-        loadDraft();
+    if(!authIsLoading && doc && isHydrated) { 
+        loadDraftData();
     }
-  }, [doc, safeSchema, locale, reset, isLoggedIn, user, authIsLoading]);
+  }, [doc, locale, reset, isLoggedIn, user, authIsLoading, isHydrated]);
 
 
   const debouncedSaveToFirestore = useCallback(
     debounce(async (valuesToSave: Record<string, any>) => {
+      // Get current dirtyFields state from formState directly inside the debounced function
+      const currentDirtyFields = methods.formState.dirtyFields; 
       if (isLoggedIn && user?.uid && doc && doc.id && locale) {
-        if (Object.keys(dirtyFields).length > 0 || Object.keys(valuesToSave).some(k => valuesToSave[k] !== undefined)) {
+        if (Object.keys(currentDirtyFields).length > 0 || Object.keys(valuesToSave).some(k => valuesToSave[k] !== undefined)) {
             try {
                 await saveFormProgress({
                     userId: user.uid,
@@ -121,23 +120,23 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
                     state: locale, 
                     formData: valuesToSave,
                 });
-                console.log('[WizardForm] Draft saved to Firestore:', valuesToSave);
             } catch (error) {
                 console.error('[WizardForm] Failed to save draft to Firestore:', error);
             }
         }
       }
     }, 1000), 
-    [isLoggedIn, user, doc, locale, dirtyFields] 
+    [isLoggedIn, user?.uid, doc?.id, locale, methods.formState.dirtyFields, saveFormProgress] // Keep stable dependencies, dirtyFields is read inside
   );
 
 
   useEffect(() => {
-    if (typeof window !== 'undefined' && doc && doc.id && locale) {
+    if (typeof window !== 'undefined' && doc && doc.id && locale && isHydrated) {
       const draftKey = `draft-${doc.id}-${locale}`;
-      const subscription = watch((values) => {
-        if (Object.keys(dirtyFields).length > 0 || Object.keys(values).some(k => values[k] !== undefined)) {
-            localStorage.setItem(draftKey, JSON.stringify(values));
+      const subscription = watch((values, { name, type }) => { // name and type of change
+        // Check dirtyFields from the formState inside the watch callback
+        if (Object.keys(methods.formState.dirtyFields).length > 0 || Object.keys(values).some(k => values[k] !== undefined)) {
+             localStorage.setItem(draftKey, JSON.stringify(values));
         }
         debouncedSaveToFirestore(values);
       });
@@ -146,29 +145,23 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
         debouncedSaveToFirestore.cancel();
       }
     }
-  }, [watch, doc, locale, dirtyFields, debouncedSaveToFirestore]);
+  }, [watch, doc, locale, isHydrated, debouncedSaveToFirestore, methods.formState.dirtyFields]);
 
-  const steps = React.useMemo(() => {
-    if (!doc) return []; // Guard against undefined doc
-    if (doc.questions && doc.questions.length > 0) {
-      return doc.questions.map(q => ({ id: q.id, label: q.label || prettify(q.id) }));
-    }
-    // Ensure doc.schema and doc.schema.shape exist before trying to get keys
-    if (doc.schema && 'shape' in doc.schema && typeof doc.schema.shape === 'object' && doc.schema.shape !== null) {
-      const shape = doc.schema.shape as Record<string, any>;
-      return Object.keys(shape).map(key => ({ 
-        id: key, 
-        label: shape[key]?.description || prettify(key) 
-      }));
-    }
-    return [];
+  const steps = useMemo(() => {
+    if (!doc || !doc.schema || !('shape' in doc.schema) || typeof doc.schema.shape !== 'object' || doc.schema.shape === null) return [];
+    
+    const shape = doc.schema.shape as Record<string, any>;
+    return Object.keys(shape).map(key => ({ 
+      id: key, 
+      label: shape[key]?.description || prettify(key) 
+    }));
   }, [doc]);
 
-  const totalSteps = steps.length > 0 ? steps.length : 1;
+  const totalSteps = steps.length > 0 ? steps.length : 1; // Ensure totalSteps is at least 1
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
 
   const proceedToApiSubmission = async () => {
-    if (!doc || !doc.id) { // Guard against undefined doc or doc.id
+    if (!doc || !doc.id) { 
       toast({ title: "Error", description: "Document configuration is missing.", variant: "destructive"});
       return;
     }
@@ -193,11 +186,16 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
         description = axiosError.response?.data?.error || axiosError.message;
         if (axiosError.response?.data?.details && typeof axiosError.response.data.details === 'object') {
           const fieldErrors = (axiosError.response.data.details as any).fieldErrors;
-          const detailsString = fieldErrors 
-            ? Object.entries(fieldErrors)
+          const formErrors = (axiosError.response.data.details as any).formErrors;
+          let detailsString = '';
+          if (fieldErrors) {
+             detailsString = Object.entries(fieldErrors)
                 .map(([field, messages]) => `${prettify(field as string)}: ${(messages as string[]).join(', ')}`)
-                .join('; ')
-            : JSON.stringify(axiosError.response.data.details); 
+                .join('; ');
+          }
+          if (formErrors && formErrors.length > 0) {
+             detailsString += (detailsString ? '; ' : '') + `Form Errors: ${formErrors.join(', ')}`;
+          }
           if (detailsString) description += ` Details: ${detailsString}`;
         } else if (axiosError.response?.data?.details && typeof axiosError.response.data.details === 'string') {
           description += ` Details: ${axiosError.response.data.details}`;
@@ -210,7 +208,7 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
   };
 
   const handleNextStep = async () => {
-    if (!doc) return; // Guard clause
+    if (!doc) return; 
 
     if (isReviewing) { 
       if (!authIsLoading) {
@@ -230,7 +228,7 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
 
     if (currentStepFieldKey) {
       isValid = await trigger(currentStepFieldKey as any);
-    } else if (totalSteps === 0 && steps.length === 0) {
+    } else if (totalSteps === 0 || steps.length === 0) { 
       console.log("[WizardForm] No fields to validate, proceeding to review.");
       setIsReviewing(true);
       return;
@@ -241,9 +239,7 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
             return;
         }
     } else if (!currentStepFieldKey && totalSteps > 0 && currentStepIndex < totalSteps) {
-      // This condition should ideally not be met if steps are derived correctly.
-      // If it is, it implies an issue with `steps` or `currentStepIndex` logic.
-      console.error("Error: currentStepFieldKey is null/undefined in handleNextStep, but currentStepIndex is within totalSteps. currentStepIndex:", currentStepIndex, "steps:", steps, "totalSteps:", totalSteps);
+      console.error("Error: currentStepField is undefined but totalSteps > 0. currentStepIndex:", currentStepIndex, "steps:", steps);
       isValid = false; 
     }
 
@@ -282,13 +278,28 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
   };
   
   const currentField = !isReviewing && totalSteps > 0 && currentStepIndex < steps.length ? steps[currentStepIndex] : null;
-  const progressValue = totalSteps > 0 ? ((isReviewing ? totalSteps : currentStepIndex + 1) / totalSteps) * 100 : (isReviewing ? 100 : 0);
+  const progressValue = totalSteps > 0 ? ((isReviewing ? totalSteps : currentStepIndex) / totalSteps) * 100 : (isReviewing ? 100 : 0);
 
 
   return (
     <FormProvider {...methods}>
       <TooltipProvider> 
-        <div className="bg-card rounded-lg shadow-xl p-6 md:p-8 border border-border">
+        <div className="bg-card rounded-lg shadow-xl p-4 md:p-6 border border-border"> {/* Reduced padding for mobile */}
+          
+          {/* Mobile Preview Toggle */}
+          <div className="lg:hidden mb-4 flex justify-center">
+            <Button variant="outline" onClick={() => setShowMobilePreview(!showMobilePreview)}>
+              {showMobilePreview ? t('Hide Preview') : t('Show Preview')}
+            </Button>
+          </div>
+
+          {showMobilePreview && (
+            <div className="lg:hidden mb-6 h-96"> {/* Specific height for mobile preview */}
+               <PreviewPane docId={doc.id} locale={locale} />
+            </div>
+          )}
+
+
           <div className="mb-6">
             <Progress value={progressValue} className="w-full h-2" />
             <p className="text-xs text-muted-foreground mt-1 text-right">
@@ -311,35 +322,27 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
              />
           ) : (
             <div className="mt-6 space-y-6 min-h-[200px]">
-               {currentField && currentField.id && doc && doc.schema && doc.schema.shape ? (
-                 (() => {
-                    const isAddressField = currentField.id.includes('_address') || currentField.id.includes('Address');
-                    const fieldSchemaDefinition = (doc.schema.shape as any)[currentField.id];
-
-                    if (isAddressField && fieldSchemaDefinition) {
-                      return (
-                        <Controller
-                          control={control}
-                          name={currentField.id as any}
-                          render={({ field: { onChange: rhfOnChange, value: rhfValue, name: rhfName }}) => (
-                              <AddressField
-                                  name={rhfName as string}
-                                  label={t((doc.questions?.find(q => q.id === currentField!.id)?.label) || fieldSchemaDefinition?.description || prettify(currentField!.id), fieldSchemaDefinition?.description || prettify(currentField!.id))}
-                                  required={!(fieldSchemaDefinition?._def?.typeName === 'ZodOptional')}
-                                  error={errors[currentField!.id as any]?.message as string | undefined}
-                                  placeholder={t((doc.questions?.find(q => q.id === currentField!.id)?.placeholder) || "Enter address...")}
-                                  tooltip={(doc.questions?.find(q => q.id === currentField!.id)?.tooltip) || fieldSchemaDefinition?.description || ''}
-                              />
-                          )}
+               {currentField && currentField.id ? (
+                 (doc.schema?.shape as any)?.[currentField.id] && (((doc.schema.shape as any)[currentField.id] instanceof z.ZodObject || ((doc.schema.shape as any)[currentField.id]._def && (doc.schema.shape as any)[currentField.id]._def.typeName === 'ZodObject')) && (currentField.id.includes('_address') || currentField.id.includes('Address'))) ? (
+                  <Controller
+                    control={control}
+                    name={currentField.id as any}
+                    render={({ field: { onChange: rhfOnChange, value: rhfValue, name: rhfName }}) => (
+                        <AddressField
+                            name={rhfName as string}
+                            label={t((doc.questions?.find(q => q.id === currentField!.id)?.label) || (doc.schema.shape as any)?.[currentField!.id]?.description || prettify(currentField!.id), (doc.schema.shape as any)?.[currentField!.id]?.description || prettify(currentField!.id))}
+                            required={!((doc.schema.shape as any)?.[currentField!.id]?._def?.typeName === 'ZodOptional')}
+                            error={errors[currentField!.id as any]?.message as string | undefined}
+                            placeholder={t((doc.questions?.find(q => q.id === currentField!.id)?.placeholder) || "Enter address...")}
+                            tooltip={(doc.questions?.find(q => q.id === currentField!.id)?.tooltip) || (doc.schema.shape as any)?.[currentField!.id]?.description || ''}
                         />
-                      );
-                    } else if (fieldSchemaDefinition) {
-                      return <FieldRenderer fieldKey={currentField.id} locale={locale} doc={doc} />;
-                    } else {
-                      console.warn(`Field ${currentField.id} not found in schema shape for doc ${doc.id}`);
-                      return <p className="text-destructive">Configuration error: Field '{currentField.id}' not in schema.</p>;
-                    }
-                 })()
+                    )}
+                  />
+                ) : (doc.schema?.shape as any)?.[currentField.id] ? (
+                  <FieldRenderer fieldKey={currentField.id} locale={locale} doc={doc} />
+                ) : (
+                  <p className="text-destructive">Configuration error: Field '{currentField.id}' not in schema for {doc.name}.</p>
+                )
                 ) : (
                 <p className="text-muted-foreground text-center py-10">{t('dynamicForm.noQuestionsNeeded', { ns: 'translation' })}</p>
                 )}
@@ -383,7 +386,7 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
                  await new Promise(resolve => setTimeout(resolve, 100)); 
                  await proceedToApiSubmission(); 
               } else {
-                 toast({ title: "Authentication Required", description: "Please sign in to continue.", variant: "destructive"});
+                 toast({ title: t("Authentication Required", { ns: 'translation' }), description: t("Please sign in to continue.", { ns: 'translation' }), variant: "destructive"});
               }
             }}
           />
@@ -392,3 +395,4 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
     </FormProvider>
   );
 }
+
