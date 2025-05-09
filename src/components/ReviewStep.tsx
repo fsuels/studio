@@ -2,7 +2,7 @@
 'use client';
 
 import React, { useMemo, useState, useEffect } from 'react';
-import { useFormContext, Controller } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 import type { LegalDocument, Question } from '@/lib/document-library';
 import { prettify } from '@/lib/schema-utils';
 import { Button } from '@/components/ui/button';
@@ -10,10 +10,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Edit2, Check, X, AlertTriangle, Loader2 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/select';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
-// AddressField is not directly used for editing inline here; standard inputs are used.
-// import AddressField from '@/components/AddressField'; 
 import { useTranslation } from 'react-i18next';
 import { useToast } from '@/hooks/use-toast';
 import { z } from 'zod';
@@ -26,12 +24,12 @@ interface ReviewStepProps {
 export default function ReviewStep({ doc, locale }: ReviewStepProps) {
   const { t } = useTranslation();
   const { getValues, setValue, trigger, watch, formState: { errors } } = useFormContext();
-  const formData = getValues();
-  const { toast } = useToast();
+  const formData = getValues(); // Initial snapshot of form data
 
   const [editingFieldId, setEditingFieldId] = useState<string | null>(null);
   const [editedValue, setEditedValue] = useState<any>(''); 
   const [isHydrated, setIsHydrated] = useState(false);
+  const { toast } = useToast();
 
   useEffect(() => {
     setIsHydrated(true);
@@ -72,16 +70,18 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
           else if (schemaFieldDef.typeName === 'ZodDate') fieldType = 'date';
           else if (schemaFieldDef.typeName === 'ZodBoolean') fieldType = 'boolean';
           else if (schemaFieldDef.innerType?._def?.typeName === 'ZodEnum' || schemaFieldDef.typeName === 'ZodEnum') fieldType = 'select';
-          else if (fieldId.includes('_address') || fieldId.includes('Address')) fieldType = 'address';
+          else if (fieldId.includes('_address') || fieldId.includes('Address')) fieldType = 'text'; // Simplified for review step
           else if (fieldId.includes('phone') || fieldId.includes('tel')) fieldType = 'tel';
         }
         
+        const options = questionConfig?.options || 
+                        (schemaFieldDef?.innerType?._def?.values || schemaFieldDef?.values)?.map((val: string) => ({ value: val, label: prettify(val) }));
+
         return {
           id: fieldId, 
           label,
           type: fieldType,
-          options: questionConfig?.options || 
-                   (schemaFieldDef?.innerType?._def?.values || schemaFieldDef?.values)?.map((val: string) => ({ value: val, label: prettify(val) })),
+          options,
           required: questionConfig?.required || (schemaFieldDef?.typeName !== 'ZodOptional' && schemaFieldDef?.innerType?._def?.typeName !== 'ZodOptional'),
           placeholder: questionConfig?.placeholder || (schemaFieldDef as any)?.placeholder,
         };
@@ -91,13 +91,13 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
 
 
   const handleEdit = (id: string) => {
-    const fieldSchema = fieldsToReview.find(f => f.id === id);
-    let initialValue = formData[id] ?? '';
-    if (fieldSchema?.type === 'boolean') {
-      initialValue = Boolean(formData[id]);
-    }
-    setEditedValue(initialValue);
+    const currentValue = getValues(id); // Get fresh value from form state
+    setEditedValue(currentValue ?? '');
     setEditingFieldId(id);
+  };
+  
+  const handleInputChange = (value: any) => {
+    setEditedValue(value);
   };
 
   const handleSave = async (id: string) => {
@@ -146,42 +146,42 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
           </p>
         )}
         {fieldsToReview.map((field) => { 
-          const currentValue = watch(field.id);
-          const displayValue = currentValue instanceof Date
-            ? currentValue.toLocaleDateString(locale)
-            : typeof currentValue === 'boolean'
-            ? (currentValue ? t('Yes') : t('No'))
-            : (currentValue !== undefined && currentValue !== null && currentValue !== '' ? String(currentValue) : t('Not Provided', { ns: 'translation' }));
+          const currentValueInForm = watch(field.id); // Watch for live updates for display
+          const displayValue = currentValueInForm instanceof Date
+            ? currentValueInForm.toLocaleDateString(locale)
+            : typeof currentValueInForm === 'boolean'
+            ? (currentValueInForm ? t('Yes') : t('No'))
+            : (currentValueInForm !== undefined && currentValueInForm !== null && currentValueInForm !== '' ? String(currentValueInForm) : t('Not Provided', { ns: 'translation' }));
 
           return (
             <div key={field.id} className="py-3 border-b border-border last:border-b-0 group">
               <div className="flex justify-between items-start gap-2">
                 <div className="flex-1">
                   <p className="text-sm font-medium text-muted-foreground mb-0.5">
-                    {t(field.label, field.label)}
+                    {t(field.label, {defaultValue: field.label})}
                     {field.required && <span className="text-destructive ml-1">*</span>}
                   </p>
                   {editingFieldId === field.id ? (
                     <div className="mt-1 space-y-2">
                       {field.type === 'textarea' ? (
                         <Textarea
-                          value={editedValue}
-                          onChange={(e) => setEditedValue(e.target.value)}
+                          value={String(editedValue)}
+                          onChange={(e) => handleInputChange(e.target.value)}
                           className="min-h-[60px] max-w-sm"
-                          aria-label={field.label}
+                          aria-label={t(field.label, {defaultValue: field.label})}
                           placeholder={field.placeholder ? t(field.placeholder) : undefined}
                         />
                       ) : field.type === 'select' && field.options ? (
                         <Select
                           value={String(editedValue)}
-                          onValueChange={(val) => setEditedValue(val)}
+                          onValueChange={(val) => handleInputChange(val)}
                         >
-                          <SelectTrigger aria-label={field.label} className="max-w-sm">
+                          <SelectTrigger aria-label={t(field.label, {defaultValue: field.label})} className="max-w-sm">
                             <SelectValue placeholder={field.placeholder ? t(field.placeholder) : t('Select...')} />
                           </SelectTrigger>
                           <SelectContent>
                             {field.options.map(opt => (
-                              <SelectItem key={opt.value} value={opt.value}>{t(opt.label, opt.label)}</SelectItem>
+                              <SelectItem key={opt.value} value={opt.value}>{t(opt.label, {defaultValue: opt.label})}</SelectItem>
                             ))}
                           </SelectContent>
                         </Select>
@@ -189,19 +189,19 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
                         <div className="flex items-center space-x-2 pt-1">
                            <Checkbox
                               checked={Boolean(editedValue)}
-                              onCheckedChange={(checked) => setEditedValue(Boolean(checked))}
+                              onCheckedChange={(checked) => handleInputChange(Boolean(checked))}
                               id={`review-edit-${field.id}`}
                            />
                            <label htmlFor={`review-edit-${field.id}`} className="text-sm font-normal">
-                             {t(field.label, field.label)}
+                             {t(field.label, {defaultValue: field.label})}
                            </label>
                         </div>
                       ) : (
                         <Input
                           type={field.type === 'number' ? 'number' : field.type === 'date' ? 'date' : field.type === 'tel' ? 'tel' : 'text'}
                           value={String(editedValue)}
-                          onChange={(e) => setEditedValue(e.target.value)}
-                          aria-label={field.label}
+                          onChange={(e) => handleInputChange(e.target.value)}
+                          aria-label={t(field.label, {defaultValue: field.label})}
                           className="max-w-sm"
                           placeholder={field.placeholder ? t(field.placeholder) : undefined}
                         />
@@ -231,7 +231,7 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
                     className="ml-2 text-primary hover:text-primary/80 h-7 w-7 p-1 opacity-0 group-hover:opacity-100 focus-within:opacity-100 transition-opacity shrink-0"
                   >
                     <Edit2 className="h-4 w-4" />
-                    <span className="sr-only">{t('Edit', { ns: 'translation' })} {t(field.label, field.label)}</span>
+                    <span className="sr-only">{t('Edit', { ns: 'translation' })} {t(field.label, {defaultValue: field.label})}</span>
                   </Button>
                 )}
               </div>
