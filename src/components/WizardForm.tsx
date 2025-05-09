@@ -16,7 +16,7 @@ import { z } from 'zod';
 import type { BillOfSaleData } from '@/schemas/billOfSale';
 import AuthModal from '@/components/AuthModal';
 import { useAuth } from '@/hooks/useAuth';
-import { AddressField } from '@/components/AddressField'; // Corrected import path
+import AddressField from '@/components/AddressField'; // Corrected import path
 import { TooltipProvider } from '@/components/ui/tooltip'; // Import TooltipProvider
 
 
@@ -57,7 +57,12 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
           localStorage.removeItem(`draft-${doc.id}-${locale}`);
         }
       } else if (doc.id === 'bill-of-sale-vehicle' && 'sale_date' in (doc.schema.shape as any)) {
-        defaultValuesToSet = { sale_date: new Date() } as Partial<BillOfSaleData> as any;
+        // Ensure 'sale_date' is part of the schema before trying to set it
+        // This check helps prevent errors if the schema changes.
+        const saleDateShape = (doc.schema.shape as any).sale_date;
+        if (saleDateShape && (saleDateShape instanceof z.ZodDate || (saleDateShape._def && saleDateShape._def.typeName === 'ZodDate'))) {
+          defaultValuesToSet = { sale_date: new Date() } as Partial<BillOfSaleData> as any;
+        }
       }
       reset(defaultValuesToSet);
     }
@@ -182,7 +187,7 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
 
         <div className="mt-6 space-y-6 min-h-[200px]">
           {currentField && currentField.id ? (
-            currentField.id.includes('_address') || currentField.id.includes('Address') ? (
+            doc.schema.shape[currentField.id] && (doc.schema.shape[currentField.id] instanceof z.ZodObject || (doc.schema.shape[currentField.id]._def && doc.schema.shape[currentField.id]._def.typeName === 'ZodObject')) && (currentField.id.includes('_address') || currentField.id.includes('Address')) ? (
               <Controller
                 control={control}
                 name={currentField.id as any}
@@ -241,9 +246,11 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
           onClose={() => setShowAuthModal(false)}
           onAuthSuccess={() => {
             setShowAuthModal(false);
+            // Ensure API submission proceeds after successful "auth"
+            // Adding a small delay to ensure auth state is updated before proceeding
             setTimeout(() => {
-              handleNextStep();
-            }, 100);
+              handleNextStep(); // Retry the submission/next step logic
+            }, 100); 
           }}
         />
       </div>
