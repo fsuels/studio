@@ -10,8 +10,8 @@ import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Button } from '@/components/ui/button';
 // import MiniCartDrawer from '@/components/MiniCartDrawer';
-// import { ThemeToggle } from '@/components/ThemeToggle';
-import { Check, ChevronDown, Globe, UserPlus, LogIn, Search as SearchIcon, ExternalLink, FileText, Menu as MenuIcon, X as CloseIcon, LayoutGrid, ChevronUp } from 'lucide-react';
+// import { ThemeToggle } from '@/components/ThemeToggle'; // ThemeToggle is not being used currently
+import { Check, ChevronDown, Globe, UserPlus, LogIn, Search as SearchIcon, ExternalLink, FileText, Menu as MenuIcon, X as CloseIcon, LayoutGrid, ChevronUp, LogOut } from 'lucide-react'; 
 import { Input } from '@/components/ui/input';
 import { documentLibrary, type LegalDocument } from '@/lib/document-library';
 import { CATEGORY_LIST } from '@/components/Step1DocumentSelector';
@@ -140,8 +140,8 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 overflow-visible">
       <div className="container flex h-14 items-center px-4 md:px-6">
-        <div className="mr-auto md:mr-4 flex">
-          <Logo wrapperClassName="items-start" svgClassName="h-8 w-8" textClassName="text-lg" />
+        <div className="mr-auto md:mr-4 flex items-center"> {/* Ensure items-center for vertical alignment */}
+          <Logo wrapperClassName="items-center self-center" svgClassName="h-8 w-8" textClassName="text-lg" /> {/* Added self-center for logo itself */}
         </div>
 
         <div className="hidden md:flex flex-1 items-center justify-start">
@@ -164,11 +164,10 @@ export default function Header() {
                     </Button>
                 </PopoverTrigger>
                 <PopoverContent
-                    align="center" // Centers content relative to the trigger
+                    align="center" 
                     side="bottom"
                     sideOffset={10}
-                    className="mt-2 w-[calc(100vw-2rem)] md:w-[90vw] lg:w-[80rem] xl:w-[1200px] max-w-full bg-popover p-0 rounded-lg shadow-xl z-[70] border border-border"
-                    // Removed absolute left-1/2 -translate-x-1/2 to rely on Radix align, can be re-added if viewport centering is strictly needed and trigger is off-center
+                    className="mt-2 w-[calc(100vw-2rem)] md:w-[90vw] lg:w-[80rem] xl:w-[1200px] max-w-full bg-popover p-0 rounded-lg shadow-xl z-[70] border border-border absolute left-1/2 -translate-x-1/2" 
                 >
                    <MegaMenuContent categories={CATEGORY_LIST} documents={documentLibrary} onLinkClick={handleMegaMenuLinkClick}/>
                 </PopoverContent>
@@ -197,7 +196,7 @@ export default function Header() {
                         <li key={doc.id}>
                           <button
                             onClick={() => handleResultClick(doc.id)}
-                            className="flex items-center gap-2 px-3 py-2.5 text-sm text-popover-foreground hover:bg-accent transition-colors w-full text-left"
+                            className="flex items-center gap-2 px-3 py-2.5 text-sm text-popover-foreground hover:bg-accent hover:text-accent-foreground transition-colors w-full text-left"
                           >
                             <FileText className="h-4 w-4 shrink-0 text-muted-foreground"/>
                             <span className="truncate">
@@ -219,10 +218,10 @@ export default function Header() {
             {mounted && (
               isLoggedIn ? (
                 <>
-                  <Button variant="ghost" size="sm" className="text-xs font-medium px-2 py-1.5 md:px-3 h-9 md:h-8" asChild>
+                  <Button variant="ghost" size="sm" className="text-xs font-medium px-2 py-1.5 md:px-3 h-9 md:h-8 hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground" asChild>
                     <Link href={`/${clientLocale}/dashboard`}>{t('Dashboard')}</Link>
                   </Button>
-                  <Button variant="outline" size="sm" onClick={handleLogout} className="text-xs font-medium px-2 py-1.5 md:px-3 h-9 md:h-8">
+                  <Button variant="outline" size="sm" onClick={handleLogout} className="text-xs font-medium px-2 py-1.5 md:px-3 h-9 md:h-8 hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground">
                     <LogOut className="h-4 w-4 mr-1 md:mr-2" /> {t('Logout')}
                   </Button>
                 </>
@@ -231,7 +230,7 @@ export default function Header() {
                     <Button
                         variant="outline"
                         size="sm"
-                        className="text-xs font-medium text-foreground/80 hover:bg-foreground/5 hover:text-foreground px-2 py-1.5 md:px-3 border-border/50 shadow-sm flex items-center h-9 md:h-8"
+                        className="text-xs font-medium text-foreground/80 hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground px-2 py-1.5 md:px-3 border-border/50 shadow-sm flex items-center h-9 md:h-8"
                         asChild
                     >
                         <Link href={`/${clientLocale}/signup`}>
@@ -242,7 +241,7 @@ export default function Header() {
                     <Button
                         variant="default"
                         size="sm"
-                        className="text-xs font-medium px-2 py-1.5 md:px-3 shadow-sm flex items-center h-9 md:h-8"
+                        className="text-xs font-medium px-2 py-1.5 md:px-3 shadow-sm flex items-center h-9 md:h-8 bg-primary text-primary-foreground hover:bg-primary/90 focus:bg-primary/90"
                         asChild
                     >
                         <Link href={`/${clientLocale}/signin`}>
@@ -292,7 +291,7 @@ export default function Header() {
                         <li key={doc.id}>
                           <button
                             onClick={() => handleResultClick(doc.id)}
-                            className="flex items-center gap-2 px-3 py-2.5 text-sm text-popover-foreground hover:bg-accent transition-colors w-full text-left"
+                            className="flex items-center gap-2 px-3 py-2.5 text-sm text-popover-foreground hover:bg-accent hover:text-accent-foreground transition-colors w-full text-left"
                           >
                             <FileText className="h-4 w-4 shrink-0 text-muted-foreground"/>
                             <span className="truncate">
@@ -329,14 +328,14 @@ export default function Header() {
 
             <div className="border-t border-border pt-4 space-y-1">
                 {[
-                    { href: "/pricing", labelKey: "nav.pricing" },
-                    { href: "/features", labelKey: "nav.features" },
-                    { href: "/blog", labelKey: "nav.blog" },
-                    { href: "/faq", labelKey: "nav.faq" },
-                    { href: "/support", labelKey: "nav.support" },
+                    { href: "/pricing", labelKey: "nav.pricing", defaultLabel: "Pricing" },
+                    { href: "/features", labelKey: "nav.features", defaultLabel: "Features" },
+                    { href: "/blog", labelKey: "nav.blog", defaultLabel: "Blog" },
+                    { href: "/faq", labelKey: "nav.faq", defaultLabel: "FAQ" },
+                    { href: "/support", labelKey: "nav.support", defaultLabel: "Support" },
                 ].map(link => (
-                    <Button key={link.href} variant="ghost" asChild className="w-full justify-start text-base py-3" onClick={() => setIsMobileMenuOpen(false)}>
-                        <Link href={`/${clientLocale}${link.href}`}>{mounted ? t(link.labelKey) : '...'}</Link>
+                    <Button key={link.href} variant="ghost" asChild className="w-full justify-start text-base py-3 hover:bg-primary hover:text-primary-foreground" onClick={() => setIsMobileMenuOpen(false)}>
+                        <Link href={`/${clientLocale}${link.href}`}>{mounted ? t(link.labelKey, {defaultValue: link.defaultLabel}) : '...'}</Link>
                     </Button>
                 ))}
             </div>
@@ -347,13 +346,13 @@ export default function Header() {
 
              <div className="border-t border-border pt-4 space-y-2">
                  {isLoggedIn ? (
-                    <Button variant="outline" size="sm" onClick={handleLogout}  className="w-full justify-start text-base py-3">
+                    <Button variant="outline" size="sm" onClick={handleLogout}  className="w-full justify-start text-base py-3 hover:bg-primary hover:text-primary-foreground">
                         <LogOut className="h-5 w-5 mr-2" /> {t('Logout')}
                     </Button>
                  ) : (
                     <>
-                        <Button variant="outline" size="sm" className="w-full justify-start text-base py-3" asChild onClick={() => setIsMobileMenuOpen(false)}><Link href={`/${clientLocale}/signup`}><UserPlus className="h-5 w-5 mr-2" />{mounted ? t('Sign Up') : '...'}</Link></Button>
-                        <Button variant="default" size="sm" className="w-full justify-start text-base py-3" asChild onClick={() => setIsMobileMenuOpen(false)}><Link href={`/${clientLocale}/signin`}><LogIn className="h-5 w-5 mr-2" />{mounted ? t('Sign In') : '...'}</Link></Button>
+                        <Button variant="outline" size="sm" className="w-full justify-start text-base py-3 hover:bg-primary hover:text-primary-foreground" asChild onClick={() => setIsMobileMenuOpen(false)}><Link href={`/${clientLocale}/signup`}><UserPlus className="h-5 w-5 mr-2" />{mounted ? t('Sign Up') : '...'}</Link></Button>
+                        <Button variant="default" size="sm" className="w-full justify-start text-base py-3 bg-primary text-primary-foreground hover:bg-primary/90" asChild onClick={() => setIsMobileMenuOpen(false)}><Link href={`/${clientLocale}/signin`}><LogIn className="h-5 w-5 mr-2" />{mounted ? t('Sign In') : '...'}</Link></Button>
                     </>
                  )}
              </div>
