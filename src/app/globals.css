@@ -290,5 +290,8 @@
     pointer-events: none;
     z-index: 0; /* Behind content but above background */
   }
-}
 
+  #live-preview .prose h1 {
+    @apply text-center; /* Center H1 within the live preview prose */
+  }
+}
