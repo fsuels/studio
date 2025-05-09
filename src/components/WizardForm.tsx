@@ -16,7 +16,7 @@ import { prettify } from '@/lib/schema-utils';
 import { z } from 'zod';
 import AuthModal from '@/components/AuthModal';
 import { useAuth } from '@/hooks/useAuth';
-import AddressField from '@/components/AddressField'; // Corrected import path to default
+import AddressField from '@/components/AddressField'; 
 import { TooltipProvider } from '@/components/ui/tooltip'; 
 import TrustBadges from '@/components/TrustBadges';
 import ReviewStep from '@/components/ReviewStep'; 
@@ -56,6 +56,7 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
     control,
     watch,
     reset, 
+    setValue, 
     formState: { errors, isSubmitting: formIsSubmitting, isValid: isFormValid, dirtyFields }
   } = methods;
 
@@ -112,8 +113,10 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
           }
         }
         
-        if (doc.id === 'bill-of-sale-vehicle' && !draftData.sale_date && doc.schema && (doc.schema.shape as any)?.sale_date) {
-           const saleDateShape = (doc.schema.shape as any).sale_date;
+        const schemaForDefaults = doc.schema._def.typeName === 'ZodEffects' ? doc.schema._def.schema : doc.schema;
+
+        if (doc.id === 'bill-of-sale-vehicle' && !draftData.sale_date && schemaForDefaults && (schemaForDefaults.shape as any)?.sale_date) {
+           const saleDateShape = (schemaForDefaults.shape as any).sale_date;
            if (saleDateShape?._def?.typeName === 'ZodDate' || saleDateShape?._def?.innerType?._def?.typeName === 'ZodDate' ) {
               draftData = { ...draftData, sale_date: new Date() } as any; 
               console.log(`[WizardForm] Defaulted sale_date for ${doc.id}-${locale}.`);
@@ -170,6 +173,7 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
 
  const actualSchemaShape = useMemo(() => {
     if (!doc || !doc.schema) {
+      console.warn(`[WizardForm] Doc or doc.schema is undefined for docId: ${doc?.id}`);
       return undefined;
     }
     const schemaDef = doc.schema._def;
@@ -178,6 +182,7 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
     } else if (schemaDef?.typeName === 'ZodEffects' && schemaDef.schema?._def?.typeName === 'ZodObject') {
       return schemaDef.schema.shape;
     }
+    console.warn(`[WizardForm] Unhandled schema type for ${doc.id}: ${schemaDef?.typeName}. No shape derived.`);
     return undefined;
   }, [doc]);
 
@@ -208,8 +213,9 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
             };
         });
     }
+    console.warn(`[WizardForm] No questions or derivable schema shape for doc: ${doc.id}`);
     return [];
-  }, [actualSchemaShape, doc, t, i18n.language, prettify]);
+  }, [actualSchemaShape, doc, t, i18n.language]);
 
 
   const totalSteps = steps.length > 0 ? steps.length : 1; 
@@ -276,12 +282,6 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
         const allFieldsValidOnReview = await trigger();
         if (!allFieldsValidOnReview) {
             toast({ title: t("Validation Error", { ns: 'translation' }), description: t("Please correct the errors before proceeding.", { ns: 'translation' }), variant: "destructive" });
-            setIsReviewing(false); 
-             const firstErrorField = Object.keys(errors)[0];
-             if (firstErrorField) {
-                const errorStepIndex = steps.findIndex(s => s.id === firstErrorField);
-                if (errorStepIndex !== -1) setCurrentStepIndex(errorStepIndex);
-             }
             return;
         }
         await proceedToApiSubmission();
@@ -329,19 +329,14 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
       setCurrentStepIndex(s => s + 1);
       if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' });
     } else { 
-      const allFieldsValid = await trigger(); 
-      if(allFieldsValid) {
-        setIsReviewing(true);
-        if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' });
-      } else {
-        toast({ title: t("Validation Error", { ns: 'translation' }), description: t("Please correct all errors before proceeding to review.", { ns: 'translation' }), variant: "destructive" });
-      }
+      // Handled by (currentStepIndex >= totalSteps -1) block
     }
   };
 
   const handlePreviousStep = () => {
     if (isReviewing) {
-      setIsReviewing(false);
+      setIsReviewing(false); 
+      setCurrentStepIndex(Math.max(0, steps.length - 1)); // Go to last form step or 0 if no steps
       if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' });
       return;
     }
@@ -351,22 +346,20 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
     }
   };
   
-  const handleEditField = (fieldIdToEdit: string) => {
+  const handleEditFieldFromReview = (fieldIdToEdit: string) => {
     const stepIndex = steps.findIndex(s => s.id === fieldIdToEdit);
     if (stepIndex !== -1) {
         setCurrentStepIndex(stepIndex);
-        setIsReviewing(false);
+        setIsReviewing(false); 
         if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' });
-        console.log(`[WizardForm] Editing field: ${fieldIdToEdit}, moving to step index: ${stepIndex}`);
     } else {
         toast({ title: "Navigation Error", description: `Could not find field "${prettify(fieldIdToEdit)}" to edit.`, variant: "destructive" });
-        console.error(`[WizardForm] Could not find step for fieldId: ${fieldIdToEdit}. Steps:`, steps);
     }
   };
 
 
-  const currentField = !isReviewing && steps.length > 0 && currentStepIndex < steps.length ? steps[currentStepIndex] : null;
-  const progressValue = totalSteps > 0 ? ((isReviewing ? totalSteps : currentStepIndex + 1) / totalSteps) * 100 : (isReviewing ? 100 : 0);
+  const currentField = !isReviewing && steps.length > 0 && currentStepIndex < steps.length && currentStepIndex >=0 ? steps[currentStepIndex] : null;
+  const progressValue = totalSteps > 0 ? ((isReviewing ? totalSteps : currentStepIndex + 1) / totalSteps) * 100 : (isReviewing || steps.length === 0 ? 100 : 0);
 
 
   if (!isHydrated || !doc) {
@@ -378,7 +371,7 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
     );
   }
   
-  console.log("[WizardForm] Rendering. isReviewing:", isReviewing, "currentStepIndex:", currentStepIndex, "currentField:", currentField, "steps:", steps);
+  console.log("[WizardForm] Rendering. isReviewing:", isReviewing, "currentStepIndex:", currentStepIndex, "currentField ID:", currentField?.id, "totalSteps:", totalSteps, "steps count:", steps.length, "actualSchemaShape keys:", actualSchemaShape ? Object.keys(actualSchemaShape) : 'undefined');
 
 
   if (steps.length === 0 && !isReviewing) {
@@ -388,7 +381,10 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
                 {t('dynamicForm.noQuestionsNeeded', { ns: 'translation', documentType: doc.name })}
                  <Button
                     type="button"
-                    onClick={() => setIsReviewing(true)} 
+                    onClick={() => {
+                        setIsReviewing(true); 
+                        if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }} 
                     className="mt-4 bg-primary text-primary-foreground hover:bg-primary/90 min-w-[120px]"
                     disabled={formIsSubmitting || authIsLoading}
                 >
@@ -400,10 +396,9 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
     );
   }
 
-
  const formContent = currentField && currentField.id && actualSchemaShape && (actualSchemaShape as any)[currentField.id] ? (
     <div className="mt-6 space-y-6 min-h-[200px]">
-        { (actualSchemaShape && (actualSchemaShape as any)[currentField.id] && 
+        { ( (actualSchemaShape as any)[currentField.id] && 
           (
             ((actualSchemaShape as any)[currentField.id] instanceof z.ZodObject) || 
             (
@@ -414,12 +409,11 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
           (currentField.id.includes('_address') || currentField.id.includes('Address')))
         ? ( 
           <Controller
-            key={`${currentField.id}-controller-address`}
+            key={`${currentField.id}-controller-address`} 
             control={control}
             name={currentField.id as any} 
             render={({ field: { onChange: rhfOnChange, value: rhfValue, name: rhfName }}) => (
                 <AddressField 
-                    key={currentField.id} 
                     name={rhfName as string}
                     label={currentField.label}
                     required={!((actualSchemaShape as any)?.[currentField!.id]?._def?.typeName?.startsWith('ZodOptional'))}
@@ -454,7 +448,7 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
 
         {showMobilePreview && (
           <div className="lg:hidden mb-6 h-96">
-            {/* PreviewPane is rendered in StartWizardPage and needs FormProvider there */}
+            {/* PreviewPane is rendered by parent StartWizardPage */}
           </div>
         )}
 
@@ -469,13 +463,13 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
            <ReviewStep
               doc={doc}
               locale={locale}
-              onEdit={handleEditField}
+              onBackToForm={handlePreviousStep} 
            />
         ) : formContent }
 
 
         <div className="mt-8 flex justify-between items-center">
-          {(currentStepIndex > 0 || isReviewing) && (steps.length > 0 || isReviewing) && (
+           { (currentStepIndex > 0 || isReviewing) && (steps.length > 0 || (isReviewing && steps.length === 0) ) && (
             <Button
               type="button"
               variant="outline"
@@ -497,7 +491,7 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
             >
               {formIsSubmitting || authIsLoading ? <Loader2 className="animate-spin h-5 w-5" /> :
                 isReviewing ? t('dynamicForm.confirmAnswersButton', { ns: 'translation' }) :
-                (currentStepIndex === totalSteps - 1 || (steps.length === 0) ? t('Review Answers', { ns: 'translation' }) : t('wizard.next', { ns: 'translation' }))}
+                (steps.length === 0 || currentStepIndex === totalSteps - 1 ? t('Review Answers', { ns: 'translation' }) : t('wizard.next', { ns: 'translation' }))}
             </Button>
         </div>
         <TrustBadges />
@@ -520,4 +514,3 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
     </FormProvider>
   );
 }
-
