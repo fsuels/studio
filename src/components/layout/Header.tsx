@@ -1,27 +1,28 @@
 // src/components/layout/Header.tsx
-'use client'; 
+'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import { usePathname, useRouter, useParams } from 'next/navigation'; 
+import { usePathname, useRouter, useParams } from 'next/navigation';
 import { Logo } from '@/components/layout/Logo';
-import Nav from '@/components/Nav'; 
+import Nav from '@/components/Nav';
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"; 
-import { Button } from '@/components/ui/button'; 
-// import MiniCartDrawer from '@/components/MiniCartDrawer'; // Temporarily removed
-// import { ThemeToggle } from '@/components/ThemeToggle'; // Temporarily removed
-import { Check, ChevronDown, Globe, UserPlus, LogIn, Search as SearchIcon, ExternalLink, FileText, Menu as MenuIcon, X as CloseIcon, LayoutGrid, ChevronUp } from 'lucide-react'; 
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Button } from '@/components/ui/button';
+// import MiniCartDrawer from '@/components/MiniCartDrawer';
+// import { ThemeToggle } from '@/components/ThemeToggle';
+import { Check, ChevronDown, Globe, UserPlus, LogIn, Search as SearchIcon, ExternalLink, FileText, Menu as MenuIcon, X as CloseIcon, LayoutGrid, ChevronUp } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { documentLibrary, type LegalDocument } from '@/lib/document-library';
 import { CATEGORY_LIST } from '@/components/Step1DocumentSelector';
-import MegaMenuContent from './MegaMenuContent'; 
+import MegaMenuContent from './MegaMenuContent';
 import { useTranslation } from 'react-i18next';
+import { useAuth } from '@/hooks/useAuth';
 
 
-export default function Header() { 
-  const { i18n, t } = useTranslation(); 
-  const [clientLocale, setClientLocale] = useState<'en'|'es'>('en'); 
+export default function Header() {
+  const { i18n, t } = useTranslation();
+  const [clientLocale, setClientLocale] = useState<'en' | 'es'>('en');
   const [mounted, setMounted] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState<LegalDocument[]>([]);
@@ -30,17 +31,17 @@ export default function Header() {
   const searchResultsRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isMegaMenuOpen, setIsMegaMenuOpen] = useState(false); 
-  const [showMobileCategories, setShowMobileCategories] = useState(false); 
-  
-  const pathname = usePathname(); 
-  const params = useParams(); 
+  const [isMegaMenuOpen, setIsMegaMenuOpen] = useState(false);
+  const [showMobileCategories, setShowMobileCategories] = useState(false);
+  const { isLoggedIn, logout } = useAuth();
+
+  const params = useParams();
 
   useEffect(() => {
     setMounted(true);
     const pathLocale = params.locale as 'en' | 'es' | undefined;
     const newLocale = pathLocale && ['en', 'es'].includes(pathLocale) ? pathLocale : 'en';
-    
+
     setClientLocale(newLocale);
     if (i18n.language !== newLocale) {
       i18n.changeLanguage(newLocale);
@@ -49,13 +50,13 @@ export default function Header() {
 
 
   useEffect(() => {
-    if (!mounted) return; 
+    if (!mounted) return;
 
     const performSearch = () => {
-      if (searchQuery.trim().length > 1) { 
+      if (searchQuery.trim().length > 1) {
         const lowerQuery = searchQuery.toLowerCase();
-        const lang = clientLocale; 
-        
+        const lang = clientLocale;
+
         const results = documentLibrary.filter(doc => {
           const name = lang === 'es' && doc.name_es ? doc.name_es : doc.name;
           const description = lang === 'es' && doc.description_es ? doc.description_es : doc.description;
@@ -67,15 +68,15 @@ export default function Header() {
             aliases.some(alias => alias.toLowerCase().includes(lowerQuery))
           );
         });
-        setSearchResults(results.slice(0, 5)); 
+        setSearchResults(results.slice(0, 5));
         setShowResults(true);
       } else {
         setSearchResults([]);
         setShowResults(false);
       }
     };
-    
-    const debounceTimeout = setTimeout(performSearch, 300); 
+
+    const debounceTimeout = setTimeout(performSearch, 300);
     return () => clearTimeout(debounceTimeout);
 
   }, [searchQuery, clientLocale, mounted]);
@@ -92,12 +93,12 @@ export default function Header() {
       }
     }
     if (typeof window !== 'undefined') {
-        document.addEventListener("mousedown", handleClickOutside);
+      document.addEventListener("mousedown", handleClickOutside);
     }
     return () => {
-        if (typeof window !== 'undefined') {
-            document.removeEventListener("mousedown", handleClickOutside);
-        }
+      if (typeof window !== 'undefined') {
+        document.removeEventListener("mousedown", handleClickOutside);
+      }
     };
   }, []);
 
@@ -105,60 +106,69 @@ export default function Header() {
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      router.push(`/${clientLocale}/?search=${encodeURIComponent(searchQuery)}#workflow-start`); 
+      router.push(`/${clientLocale}/?search=${encodeURIComponent(searchQuery)}#workflow-start`);
     }
     setSearchQuery('');
-    setShowResults(false); 
+    setShowResults(false);
     setIsMobileMenuOpen(false);
     setIsMegaMenuOpen(false);
   };
-  
+
   const handleResultClick = (docId: string) => {
     setSearchQuery('');
     setShowResults(false);
     setIsMobileMenuOpen(false);
     setIsMegaMenuOpen(false);
-    router.push(`/${clientLocale}/docs/${docId}`); 
+    router.push(`/${clientLocale}/docs/${docId}`);
   };
 
   const handleMegaMenuLinkClick = () => {
     setIsMegaMenuOpen(false);
     setIsMobileMenuOpen(false);
-    setShowMobileCategories(false); 
+    setShowMobileCategories(false);
   }
+
+  const handleLogout = () => {
+    logout();
+    setIsMobileMenuOpen(false); 
+    router.push(`/${clientLocale}/`); 
+  };
+
 
   const placeholderSearch = mounted ? t('nav.searchPlaceholder', { defaultValue: 'Search documents...' }) : "...";
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 overflow-visible">
-      <div className="container flex h-14 items-center px-4 md:px-6"> 
+      <div className="container flex h-14 items-center px-4 md:px-6">
         <div className="mr-auto md:mr-4 flex">
-          <Logo svgClassName="h-7 w-7 md:h-8 md:w-8" textClassName="text-lg md:text-xl" />
+          <Logo wrapperClassName="items-start" svgClassName="h-8 w-8" textClassName="text-lg" />
         </div>
 
         <div className="hidden md:flex flex-1 items-center justify-start">
-            <Nav /> 
+          <Nav />
         </div>
-       
+
         <nav className="hidden md:flex items-center gap-2 ml-auto">
             <Popover open={isMegaMenuOpen} onOpenChange={setIsMegaMenuOpen}>
                 <PopoverTrigger asChild>
                     <Button
                         variant="ghost"
                         size="sm"
-                        className="text-sm font-medium flex items-center gap-1 px-2 text-foreground/80 hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground" 
+                        className="text-sm font-medium flex items-center gap-1 px-2 text-foreground/80 hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground data-[state=open]:bg-primary data-[state=open]:text-primary-foreground"
                         disabled={!mounted}
+                        aria-expanded={isMegaMenuOpen}
                     >
-                        <LayoutGrid className="h-4 w-4" /> 
-                        {mounted ? t('nav.documentCategories') : '...'}
+                        <LayoutGrid className="h-4 w-4" />
+                        {mounted ? t('nav.documentCategories', { defaultValue: "Make Documents"}) : '...'}
                         {isMegaMenuOpen ? <ChevronUp className="h-4 w-4 opacity-70" /> : <ChevronDown className="h-4 w-4 opacity-70" />}
                     </Button>
                 </PopoverTrigger>
-                <PopoverContent 
-                    align="center"
+                <PopoverContent
+                    align="center" // Centers content relative to the trigger
                     side="bottom"
-                    sideOffset={10} 
-                    className="absolute left-1/2 -translate-x-1/2 mt-2 w-[calc(100vw-2rem)] md:w-[90vw] lg:w-[80rem] xl:w-[1200px] max-w-full bg-popover p-0 rounded-lg shadow-xl z-[70] border border-border" 
+                    sideOffset={10}
+                    className="mt-2 w-[calc(100vw-2rem)] md:w-[90vw] lg:w-[80rem] xl:w-[1200px] max-w-full bg-popover p-0 rounded-lg shadow-xl z-[70] border border-border"
+                    // Removed absolute left-1/2 -translate-x-1/2 to rely on Radix align, can be re-added if viewport centering is strictly needed and trigger is off-center
                 >
                    <MegaMenuContent categories={CATEGORY_LIST} documents={documentLibrary} onLinkClick={handleMegaMenuLinkClick}/>
                 </PopoverContent>
@@ -178,15 +188,15 @@ export default function Header() {
                     aria-label={placeholderSearch}
                 />
                 {showResults && searchResults.length > 0 && (
-                  <div 
+                  <div
                     ref={searchResultsRef}
                     className="absolute top-full mt-2 w-full md:w-72 max-h-80 overflow-y-auto bg-popover border border-border rounded-md shadow-lg z-[70]"
                   >
                     <ul>
                       {searchResults.map((doc) => (
                         <li key={doc.id}>
-                          <button 
-                            onClick={() => handleResultClick(doc.id)} 
+                          <button
+                            onClick={() => handleResultClick(doc.id)}
                             className="flex items-center gap-2 px-3 py-2.5 text-sm text-popover-foreground hover:bg-accent transition-colors w-full text-left"
                           >
                             <FileText className="h-4 w-4 shrink-0 text-muted-foreground"/>
@@ -201,12 +211,22 @@ export default function Header() {
                   </div>
                 )}
              </form>
-            
-            {mounted && <LanguageSwitcher />} 
 
-            {/* {mounted && <ThemeToggle />} */} 
+            {mounted && <LanguageSwitcher />}
+
+            {/* <ThemeToggle /> */}
 
             {mounted && (
+              isLoggedIn ? (
+                <>
+                  <Button variant="ghost" size="sm" className="text-xs font-medium px-2 py-1.5 md:px-3 h-9 md:h-8" asChild>
+                    <Link href={`/${clientLocale}/dashboard`}>{t('Dashboard')}</Link>
+                  </Button>
+                  <Button variant="outline" size="sm" onClick={handleLogout} className="text-xs font-medium px-2 py-1.5 md:px-3 h-9 md:h-8">
+                    <LogOut className="h-4 w-4 mr-1 md:mr-2" /> {t('Logout')}
+                  </Button>
+                </>
+              ) : (
                 <>
                     <Button
                         variant="outline"
@@ -214,13 +234,13 @@ export default function Header() {
                         className="text-xs font-medium text-foreground/80 hover:bg-foreground/5 hover:text-foreground px-2 py-1.5 md:px-3 border-border/50 shadow-sm flex items-center h-9 md:h-8"
                         asChild
                     >
-                        <Link href={`/${clientLocale}/signup`}> 
+                        <Link href={`/${clientLocale}/signup`}>
                         <UserPlus className="h-4 w-4 mr-1 md:mr-2" />
                         <span className="hidden sm:inline">{t('Sign Up')}</span>
                         </Link>
                     </Button>
                     <Button
-                        variant="default" 
+                        variant="default"
                         size="sm"
                         className="text-xs font-medium px-2 py-1.5 md:px-3 shadow-sm flex items-center h-9 md:h-8"
                         asChild
@@ -230,15 +250,16 @@ export default function Header() {
                             <span className="hidden sm:inline">{t('Sign In')}</span>
                         </Link>
                     </Button>
-                    {/* <MiniCartDrawer /> */} 
-                </>
+                 </>
+              )
             )}
+            {/* <MiniCartDrawer /> */}
         </nav>
 
         {/* Mobile Menu Button */}
         <div className="md:hidden ml-auto flex items-center gap-1">
             {/* {mounted && <ThemeToggle />} */}
-            {/* {mounted && <MiniCartDrawer />} */} 
+            {/* {mounted && <MiniCartDrawer />} */}
              <Button variant="ghost" size="icon" className="h-9 w-9" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} disabled={!mounted}>
                 {isMobileMenuOpen ? <CloseIcon className="h-5 w-5" /> : <MenuIcon className="h-5 w-5" />}
              </Button>
@@ -251,7 +272,7 @@ export default function Header() {
             <form onSubmit={handleSearchSubmit} className="relative flex items-center w-full">
                  <SearchIcon className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground pointer-events-none" />
                  <Input
-                     ref={searchInputRef} 
+                     ref={searchInputRef}
                      type="search"
                      placeholder={placeholderSearch}
                      value={searchQuery}
@@ -262,15 +283,15 @@ export default function Header() {
                      aria-label={placeholderSearch}
                  />
                  {showResults && searchResults.length > 0 && (
-                  <div 
-                    ref={searchResultsRef} 
+                  <div
+                    ref={searchResultsRef}
                     className="absolute top-full mt-1 w-full max-h-60 overflow-y-auto bg-popover border border-border rounded-md shadow-lg z-[70]"
                   >
                     <ul>
                       {searchResults.map((doc) => (
                         <li key={doc.id}>
-                          <button 
-                            onClick={() => handleResultClick(doc.id)} 
+                          <button
+                            onClick={() => handleResultClick(doc.id)}
                             className="flex items-center gap-2 px-3 py-2.5 text-sm text-popover-foreground hover:bg-accent transition-colors w-full text-left"
                           >
                             <FileText className="h-4 w-4 shrink-0 text-muted-foreground"/>
@@ -285,10 +306,10 @@ export default function Header() {
                   </div>
                 )}
             </form>
-            
+
             <Button
               variant="ghost"
-              className="w-full justify-between text-base font-medium flex items-center gap-2 px-2 py-3 hover:bg-primary hover:text-primary-foreground data-[state=open]:bg-primary data-[state=open]:text-primary-foreground"
+              className="w-full justify-between text-base font-medium flex items-center gap-2 px-2 py-3 hover:bg-primary hover:text-primary-foreground data-[state=open]:bg-primary data-[state=open]:text-primary-foreground group"
               onClick={() => setShowMobileCategories(!showMobileCategories)}
               disabled={!mounted}
               aria-expanded={showMobileCategories}
@@ -296,7 +317,7 @@ export default function Header() {
             >
               <div className="flex items-center gap-2">
                 <LayoutGrid className="h-5 w-5 text-muted-foreground group-data-[state=open]:text-primary-foreground" />
-                {mounted ? t('nav.documentCategories') : '...'}
+                {mounted ? t('nav.documentCategories', {defaultValue: "Make Documents"}) : '...'}
               </div>
               {showMobileCategories ? <ChevronUp className="h-5 w-5 opacity-70" /> : <ChevronDown className="h-5 w-5 opacity-70" />}
             </Button>
@@ -305,7 +326,7 @@ export default function Header() {
                  <MegaMenuContent categories={CATEGORY_LIST} documents={documentLibrary} onLinkClick={handleMegaMenuLinkClick}/>
               </div>
             )}
-            
+
             <div className="border-t border-border pt-4 space-y-1">
                 {[
                     { href: "/pricing", labelKey: "nav.pricing" },
@@ -325,12 +346,19 @@ export default function Header() {
             </div>
 
              <div className="border-t border-border pt-4 space-y-2">
-                 <Button variant="outline" size="sm" className="w-full justify-start text-base py-3" asChild onClick={() => setIsMobileMenuOpen(false)}><Link href={`/${clientLocale}/signup`}><UserPlus className="h-5 w-5 mr-2" />{mounted ? t('Sign Up') : '...'}</Link></Button>
-                 <Button variant="default" size="sm" className="w-full justify-start text-base py-3" asChild onClick={() => setIsMobileMenuOpen(false)}><Link href={`/${clientLocale}/signin`}><LogIn className="h-5 w-5 mr-2" />{mounted ? t('Sign In') : '...'}</Link></Button>
+                 {isLoggedIn ? (
+                    <Button variant="outline" size="sm" onClick={handleLogout}  className="w-full justify-start text-base py-3">
+                        <LogOut className="h-5 w-5 mr-2" /> {t('Logout')}
+                    </Button>
+                 ) : (
+                    <>
+                        <Button variant="outline" size="sm" className="w-full justify-start text-base py-3" asChild onClick={() => setIsMobileMenuOpen(false)}><Link href={`/${clientLocale}/signup`}><UserPlus className="h-5 w-5 mr-2" />{mounted ? t('Sign Up') : '...'}</Link></Button>
+                        <Button variant="default" size="sm" className="w-full justify-start text-base py-3" asChild onClick={() => setIsMobileMenuOpen(false)}><Link href={`/${clientLocale}/signin`}><LogIn className="h-5 w-5 mr-2" />{mounted ? t('Sign In') : '...'}</Link></Button>
+                    </>
+                 )}
              </div>
          </div>
       )}
     </header>
   );
 }
-
