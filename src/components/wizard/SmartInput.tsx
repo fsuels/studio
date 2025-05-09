@@ -13,15 +13,22 @@ const formatPhoneNumber = (value: string): string => {
   const length = digits.length;
 
   if (length === 0) return '';
-  if (length <= 3) return `(${digits}`;
-  if (length <= 6) return `(${digits.slice(0, 3)}) ${digits.slice(3)}`;
-  // Ensure we don't exceed 10 digits for formatting
-  return `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6, 10)}`;
+  
+  let formattedNumber = '(';
+  if (length >= 1) {
+    formattedNumber += digits.substring(0, Math.min(3, length));
+  }
+  if (length > 3) {
+    formattedNumber += ') ' + digits.substring(3, Math.min(6, length));
+  }
+  if (length > 6) {
+    formattedNumber += '-' + digits.substring(6, Math.min(10, length));
+  }
+  return formattedNumber;
 };
 
 interface SmartInputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange' | 'onBlur' | 'name' | 'ref'> {
   rhfProps: UseFormRegisterReturn;
-  // type is part of HTMLAttributes, but we might want to be explicit for clarity
   type?: React.HTMLInputTypeAttribute;
 }
 
@@ -35,21 +42,13 @@ const SmartInput = React.forwardRef<HTMLInputElement, SmartInputProps>(
       if (type === 'tel') {
         const formattedValue = formatPhoneNumber(currentValue);
         
-        // Update the event target value for RHF
-        // RHF's onChange expects an event or the value directly.
-        // To ensure RHF updates correctly and its internal state matches the input field,
-        // it's often safer to call it with the new value rather than a modified event,
-        // unless specific event properties are needed by RHF's internal logic.
-        // However, RHF's `register` typically provides an onChange that expects an event.
+        // Create a synthetic event with the formatted value to pass to RHF
         const syntheticEvent = {
-          ...event, // Spread original event to keep other properties if any
+          ...event,
           target: { ...event.target, value: formattedValue, name: rhfName },
         } as React.ChangeEvent<HTMLInputElement>;
         rhfOnChange(syntheticEvent);
 
-        // If cursor position needs manual management (often for complex masks),
-        // this would be the place, but it adds significant complexity.
-        // For simple formatting like this, it's often acceptable.
       } else {
         rhfOnChange(event); // Call original RHF onChange for non-phone fields
       }
@@ -57,13 +56,13 @@ const SmartInput = React.forwardRef<HTMLInputElement, SmartInputProps>(
 
     return (
       <Input
-        {...rest} // Spread other HTML attributes like placeholder, id, aria-invalid etc.
-        {...restRhfRegisterProps} // Spread other RHF props like onBlur
+        {...rest} 
+        {...restRhfRegisterProps} 
         name={rhfName}
-        type={type} // Use the type prop passed to SmartInput
-        className={cn("max-w-sm", className)} // Ensure max-w-sm is applied as per original UI
-        onChange={handleInputChange} // Our custom handler
-        ref={(e) => { // Combine RHF's ref with the forwardedRef
+        type={type} 
+        className={cn("max-w-sm", className)} 
+        onChange={handleInputChange} 
+        ref={(e) => { 
           rhfRegisterRef(e);
           if (typeof forwardedRef === 'function') {
             forwardedRef(e);
