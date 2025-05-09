@@ -3,9 +3,9 @@
 
 import { useParams, notFound, useRouter } from 'next/navigation';
 import React, { useEffect, useState, useCallback, useMemo } from 'react';
-import { useForm, FormProvider } from 'react-hook-form'; // Import useForm and FormProvider
-import { zodResolver } from '@hookform/resolvers/zod'; // Import zodResolver
-import { z } from 'zod'; // Import z
+import { useForm, FormProvider } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
 import { Loader2 } from 'lucide-react';
 
 import { documentLibrary, type LegalDocument } from '@/lib/document-library';
@@ -14,10 +14,9 @@ import WizardForm from '@/components/WizardForm';
 import PreviewPane from '@/components/PreviewPane';
 import { useTranslation } from 'react-i18next';
 import { useToast } from '@/hooks/use-toast';
-import { saveFormProgress, loadFormProgress } from '@/lib/firestore/saveFormProgress'; // Import save/load functions
-import { useAuth } from '@/hooks/useAuth'; // Import useAuth
-import { debounce } from 'lodash-es'; // Import debounce
-
+import { saveFormProgress, loadFormProgress } from '@/lib/firestore/saveFormProgress';
+import { useAuth } from '@/hooks/useAuth';
+import { debounce } from 'lodash-es';
 
 export default function StartWizardPage() {
   const params = useParams();
@@ -31,26 +30,14 @@ export default function StartWizardPage() {
 
   const [isLoadingConfig, setIsLoadingConfig] = useState(true);
   const [isHydrated, setIsHydrated] = useState(false);
-  const [docConfig, setDocConfig] = useState<LegalDocument | undefined>(undefined);
+  
+  // Synchronously derive docConfig
+  const docConfig = useMemo(
+    () => documentLibrary.find(d => d.id === docIdFromPath),
+    [docIdFromPath]
+  );
 
-  useEffect(() => {
-    setIsHydrated(true);
-  }, []);
-
-  useEffect(() => {
-    if (docIdFromPath && isHydrated) {
-      const foundDoc = documentLibrary.find(d => d.id === docIdFromPath);
-      if (foundDoc && foundDoc.schema) {
-        setDocConfig(foundDoc);
-      } else {
-        console.error(`[StartWizardPage] Document config not found or schema invalid for docId: ${docIdFromPath}`);
-        notFound();
-      }
-      setIsLoadingConfig(false);
-    }
-  }, [docIdFromPath, isHydrated]);
-
-  // Initialize useForm here
+  // Single RHF instance creation
   const methods = useForm<z.infer<typeof docConfigSchema>>({
     resolver: docConfig?.schema ? zodResolver(docConfig.schema) : undefined,
     defaultValues: {}, // Will be loaded from localStorage/Firestore
@@ -58,25 +45,50 @@ export default function StartWizardPage() {
   });
   
   const { reset, watch } = methods;
-  const docConfigSchema = docConfig?.schema || z.object({}); // Fallback to empty schema if docConfig is not ready
+  // Fallback to empty schema if docConfig or its schema is not ready, to prevent errors.
+  const docConfigSchema = docConfig?.schema || z.object({}); 
+
+  useEffect(() => {
+    setIsHydrated(true);
+  }, []);
+
+  // Effect for initial loading and validation
+  useEffect(() => {
+    if (docIdFromPath && isHydrated) {
+      if (docConfig && docConfig.schema) {
+        // docConfig is valid and has a schema
+      } else {
+        console.error(`[StartWizardPage] Document config not found or schema invalid for docId: ${docIdFromPath}`);
+        notFound(); // Trigger 404 if doc or its schema is not valid
+      }
+      setIsLoadingConfig(false);
+    }
+  }, [docIdFromPath, isHydrated, docConfig]);
+
 
   // Load draft data
   useEffect(() => {
     async function loadDraft() {
-      if (!docConfig || !isHydrated || authIsLoading) return;
+      if (!docConfig?.id || !isHydrated || authIsLoading) return;
       const currentLocale = params.locale as 'en' | 'es' || locale;
       let draftData: Partial<z.infer<typeof docConfig.schema>> = {};
       try {
         if (isLoggedIn && user?.uid) {
           draftData = await loadFormProgress({ userId: user.uid, docType: docConfig.id, state: currentLocale });
         } else {
-          const lsDraft = localStorage.getItem(`draft-${docConfig.id}-${currentLocale}`);
+          const lsKey = `draft-${docConfig.id}-${currentLocale}`;
+          const lsDraft = localStorage.getItem(lsKey);
           if (lsDraft) draftData = JSON.parse(lsDraft);
         }
       } catch (e) {
         console.warn('[StartWizardPage] Draft loading failed:', e);
       }
-      reset(draftData); // Reset form with loaded draft data
+      if (Object.keys(draftData).length > 0) {
+        reset(draftData);
+        console.log('[StartWizardPage] Draft loaded:', draftData);
+      } else {
+        console.log('[StartWizardPage] No draft found, using initial/empty values.');
+      }
     }
     loadDraft();
   }, [docConfig, locale, isHydrated, reset, authIsLoading, isLoggedIn, user, params.locale]);
@@ -85,29 +97,38 @@ export default function StartWizardPage() {
   // Autosave draft data
   const debouncedSave = useCallback(
     debounce(async (data: Record<string, any>) => {
-      if (!docConfig || authIsLoading) return;
-      const currentLocale = params.locale as 'en' | 'es' || locale;
+      if (!docConfig?.id || authIsLoading || !isHydrated || Object.keys(data).length === 0) return;
+      
+      const relevantDataToSave = Object.keys(data).reduce((acc, key) => {
+        if (data[key] !== undefined) {
+            acc[key] = data[key];
+        }
+        return acc;
+      }, {} as Record<string,any>);
+
+      if (Object.keys(relevantDataToSave).length === 0) return;
+
       if (isLoggedIn && user?.uid) {
-        await saveFormProgress({ userId: user.uid, docType: docConfig.id, state: currentLocale, formData: data });
+        await saveFormProgress({ userId: user.uid, docType: docConfig.id, state: locale, formData: relevantDataToSave });
+      } else {
+         localStorage.setItem(`draft-${docConfig.id}-${locale}`, JSON.stringify(relevantDataToSave));
       }
+      console.log('[WizardForm] Autosaved draft for:', docConfig.id, locale, relevantDataToSave);
     }, 1000),
-    [isLoggedIn, user, docConfig, locale, params.locale, authIsLoading]
+    [isLoggedIn, user?.uid, docConfig, locale, authIsLoading, isHydrated] 
   );
 
   useEffect(() => {
-    if (!docConfig || authIsLoading) return () => {};
-    const currentLocale = params.locale as 'en' | 'es' || locale;
-    const storageKey = `draft-${docConfig.id}-${currentLocale}`;
+    if (!docConfig?.id || authIsLoading || !isHydrated) return () => {};
     
     const subscription = watch((values) => {
-      localStorage.setItem(storageKey, JSON.stringify(values));
-      debouncedSave(values);
+       debouncedSave(values as Record<string, any>);
     });
     return () => {
       subscription.unsubscribe();
       debouncedSave.cancel();
     } ;
-  }, [watch, docConfig, locale, debouncedSave, params.locale, authIsLoading]);
+  }, [watch, docConfig, debouncedSave, authIsLoading, isHydrated]);
 
 
   const handleWizardComplete = useCallback(
@@ -141,9 +162,9 @@ export default function StartWizardPage() {
 
 
   return (
-    <FormProvider {...methods}> {/* Wrap WizardForm and PreviewPane with FormProvider */}
+    <FormProvider {...methods}> {/* Wizard and Preview share the SAME form context */}
       <main className="container mx-auto py-8 px-4 sm:px-6 lg:px-8">
-        <Breadcrumb
+         <Breadcrumb
           items={[
             { label: t('breadcrumb.home', { ns: 'translation' }), href: `/${locale}` },
             { label: documentDisplayName, href: `/${locale}/docs/${docConfig.id}` },

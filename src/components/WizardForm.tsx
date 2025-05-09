@@ -2,7 +2,7 @@
 'use client';
 
 import React, { useEffect, useState, useRef, useCallback, useMemo } from 'react';
-import { useForm, FormProvider, Controller, useFormContext } from 'react-hook-form';
+import { Controller, useFormContext } from 'react-hook-form'; // Removed useForm, FormProvider
 import { zodResolver } from '@hookform/resolvers/zod';
 import axios, { AxiosError } from 'axios';
 import { useRouter, useParams } from 'next/navigation';
@@ -42,96 +42,29 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
 
   const [isHydrated, setIsHydrated] = useState(false);
   const [showAuthModal, setShowAuthModal] = useState(false);
-  const [isReviewing, setIsReviewing] = useState(false); // Initialized to false
+  const [isReviewing, setIsReviewing] = useState(false);
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
 
   const liveRef = useRef<HTMLDivElement>(null);
 
-  const methods = useForm<z.infer<typeof doc.schema>>({
-    resolver: zodResolver(doc.schema),
-    defaultValues: {}, 
-    mode: 'onBlur',
-  });
-
+  // Pull everything from the *outer* RHF context
   const {
     getValues,
     trigger,
     control,
     watch,
     setValue,
-    reset, // Added reset
+    reset,
     formState: { errors, isSubmitting: formIsSubmitting, isValid: isFormValid, dirtyFields },
-  } = methods;
+  } = useFormContext<z.infer<typeof doc.schema>>();
+
 
   useEffect(() => {
     setIsHydrated(true);
   }, []);
   
-  // Load draft from localStorage or Firestore
-  useEffect(() => {
-    async function loadDraft() {
-      if (!doc?.id || !isHydrated || authIsLoading) return;
-      let draftData: Partial<z.infer<typeof doc.schema>> = {};
-      try {
-        if (isLoggedIn && user?.uid) {
-          draftData = await loadFormProgress({ userId: user.uid, docType: doc.id, state: locale });
-        } else {
-          const lsKey = `draft-${doc.id}-${locale}`;
-          const lsDraft = localStorage.getItem(lsKey);
-          if (lsDraft) draftData = JSON.parse(lsDraft);
-        }
-      } catch (e) {
-        console.warn('[WizardForm] Draft loading failed:', e);
-      }
-      if (Object.keys(draftData).length > 0) {
-        reset(draftData); // Reset form with loaded draft data
-        console.log('[WizardForm] Draft loaded:', draftData);
-      } else {
-        // If no draft, ensure default values from schema are applied if any
-        // RHF handles this if defaultValues in useForm is set up with schema defaults
-        // For now, an empty object is fine, or explicit schema defaults could be used here.
-        console.log('[WizardForm] No draft found, using initial/empty values.');
-      }
-    }
-    loadDraft();
-  }, [doc?.id, locale, isHydrated, reset, authIsLoading, isLoggedIn, user]);
-
-
-  const debouncedSave = useCallback(
-    debounce(async (data: Record<string, any>) => {
-      if (!doc?.id || authIsLoading || !isHydrated || Object.keys(data).length === 0) return;
-      
-      const relevantDataToSave = Object.keys(data).reduce((acc, key) => {
-        if (data[key] !== undefined) { // Only save defined values
-            acc[key] = data[key];
-        }
-        return acc;
-      }, {} as Record<string,any>);
-
-      if (Object.keys(relevantDataToSave).length === 0) return;
-
-
-      if (isLoggedIn && user?.uid) {
-        await saveFormProgress({ userId: user.uid, docType: doc.id, state: locale, formData: relevantDataToSave });
-      } else {
-         localStorage.setItem(`draft-${doc.id}-${locale}`, JSON.stringify(relevantDataToSave));
-      }
-      console.log('[WizardForm] Autosaved draft for:', doc.id, locale, relevantDataToSave);
-    }, 1000),
-    [isLoggedIn, user?.uid, doc?.id, locale, authIsLoading, isHydrated] 
-  );
-
-  useEffect(() => {
-    if (!doc?.id || authIsLoading || !isHydrated) return () => {};
-    
-    const subscription = watch((values) => {
-       debouncedSave(values as Record<string, any>);
-    });
-    return () => {
-      subscription.unsubscribe();
-      debouncedSave.cancel();
-    } ;
-  }, [watch, doc?.id, debouncedSave, authIsLoading, isHydrated]);
+  // Load draft from localStorage or Firestore - This logic is now in StartWizardPage
+  // Autosave draft data - This logic is now in StartWizardPage
 
 
   const actualSchemaShape = useMemo(() => {
@@ -174,7 +107,6 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
   const handlePreviousStep = useCallback(() => {
     if (isReviewing) {
       setIsReviewing(false);
-       // setCurrentStepIndex is already 0-based, so ensure it doesn't go below 0
       setCurrentStepIndex(Math.max(0, totalSteps - 1)); 
     } else if (currentStepIndex > 0) {
       setCurrentStepIndex(prev => prev - 1);
@@ -245,10 +177,15 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
     if (currentStepFieldKey) {
       isValid = await trigger(currentStepFieldKey as any);
     } else if (totalSteps > 0 && currentStepIndex < totalSteps) {
-      console.error("[WizardForm] Error: currentField.id is undefined but attempting to proceed. currentStepIndex:", currentStepIndex, "steps:", steps);
-      isValid = false; 
-    } else { // This case should ideally not be reached if totalSteps > 0 and currentStepIndex < totalSteps
-      isValid = true; 
+      // This case handles when currentStepIndex is valid but currentStepFieldKey might be null/undefined
+      // which indicates an issue with the `steps` array or `currentStepIndex` logic
+      console.error("Error: currentStepFieldKey is undefined but attempting to proceed. currentStepIndex:", currentStepIndex, "steps:", steps);
+      isValid = false;
+    } else {
+      // This case implies currentStepIndex might be out of bounds or totalSteps is 0,
+      // which should have been caught by `steps.length === 0` check earlier.
+      // For safety, consider it invalid if we reach here unexpectedly.
+      isValid = await trigger(); // Validate all fields as a fallback
     }
 
 
@@ -259,7 +196,7 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
 
     if (currentStepIndex < totalSteps - 1) {
       setCurrentStepIndex(prev => prev + 1);
-    } else { // Reached the end of form fields
+    } else { 
       const allFieldsValid = await trigger(); 
       if (allFieldsValid) {
         setIsReviewing(true);
@@ -290,8 +227,8 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
     onComplete,
     toast,
     t,
-    currentField, // Added currentField
-    doc.schema // Added doc.schema to dependency array for actualSchemaShape re-calculation
+    currentField, 
+    doc.schema 
   ]);
 
   if (!isHydrated || authIsLoading) {
@@ -352,7 +289,7 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
           ) : null;
 
   return (
-    <> {/* Root Fragment to wrap TooltipProvider and AuthModal */}
+    <>
       <TooltipProvider>
         <div className="bg-card rounded-lg shadow-xl p-4 md:p-6 border border-border">
           <div className="mb-6">
@@ -375,7 +312,7 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
           <TrustBadges />
 
           <div className="mt-8 flex justify-between items-center">
-            {(currentStepIndex > 0 || isReviewing) && (
+             {(currentStepIndex > 0 || isReviewing) && (
               <Button
                 type="button"
                 variant="outline"
@@ -386,8 +323,7 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
                 {t('Back', { ns: 'translation' })}
               </Button>
             )}
-            {/* Ensure this div exists to balance flexbox when Back button isn't rendered, only if totalSteps > 0 to avoid showing it for no-step forms */}
-            {!(currentStepIndex > 0 || isReviewing) && totalSteps > 0 && <div />}
+             {!(currentStepIndex > 0 || isReviewing) && totalSteps > 0 && <div />}
 
 
             <Button
