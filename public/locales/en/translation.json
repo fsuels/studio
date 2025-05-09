@@ -662,7 +662,12 @@
    "preview": {
       "watermark": "PREVIEW"
    },
-   "Complete": "Complete"
+   "Complete": "Complete",
+   "trustBadges": {
+    "secure": "SSL Secure Checkout",
+    "privacy": "Privacy Protected",
+    "attorneyReviewed": "Attorney-Reviewed Templates"
+  }
 }
 
     

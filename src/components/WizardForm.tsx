@@ -16,8 +16,9 @@ import { prettify } from '@/lib/schema-utils';
 import { z } from 'zod';
 import AuthModal from '@/components/AuthModal';
 import { useAuth } from '@/hooks/useAuth';
-import DefaultAddressField from '@/components/AddressField'; // Corrected import path for default export
+import DefaultAddressField from '@/components/AddressField'; 
 import { TooltipProvider } from '@/components/ui/tooltip'; 
+import TrustBadges from '@/components/TrustBadges'; // Import TrustBadges
 
 
 interface WizardFormProps {
@@ -35,7 +36,7 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
 
   const methods = useForm<z.infer<typeof doc.schema>>({
     resolver: zodResolver(doc.schema),
-    defaultValues: {}, // Default values will be loaded from localStorage
+    defaultValues: {}, 
     mode: 'onBlur',
   });
 
@@ -61,10 +62,13 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
           localStorage.removeItem(`draft-${doc.id}-${locale}`);
         }
       } else if (doc.id === 'bill-of-sale-vehicle' && doc.schema && 'shape' in doc.schema && (doc.schema.shape as any).sale_date) {
-        const saleDateShape = (doc.schema.shape as any).sale_date;
-        if (saleDateShape && (saleDateShape instanceof z.ZodDate || (saleDateShape._def && saleDateShape._def.typeName === 'ZodDate'))) {
-          defaultValuesToSet = { sale_date: new Date() } as any;
-        }
+         const saleDateShape = (doc.schema.shape as any).sale_date;
+         if (saleDateShape && (saleDateShape instanceof z.ZodDate || (saleDateShape._def && saleDateShape._def.typeName === 'ZodDate'))) {
+            // Ensure sale_date is compatible with HTML date input if that's how it's rendered.
+            // RHF's defaultValues for date inputs usually expect a string 'YYYY-MM-DD' or a Date object.
+            // z.coerce.date() will handle string conversion.
+            defaultValuesToSet = { sale_date: new Date() } as any;
+         }
       }
       reset(defaultValuesToSet);
     }
@@ -75,7 +79,6 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
     if (doc.questions && doc.questions.length > 0) {
       return doc.questions.map(q => ({ id: q.id, label: q.label || prettify(q.id) }));
     }
-    // Ensure doc.schema and doc.schema.shape exist before trying to map keys
     if (doc.schema && 'shape' in doc.schema && typeof doc.schema.shape === 'object' && doc.schema.shape !== null) {
       return Object.keys(doc.schema.shape).map(key => ({ id: key, label: prettify(key) }));
     }
@@ -114,10 +117,15 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
         title = t(`API Error Occurred`, { ns: 'translation', defaultValue: "API Error Occurred {{status}}", status: axiosError.response?.status || '' }).trim();
         description = axiosError.response?.data?.error || axiosError.message;
         if (axiosError.response?.data?.details && typeof axiosError.response.data.details === 'object') {
-          const detailsString = Object.entries(axiosError.response.data.details.fieldErrors || {})
-            .map(([field, messages]) => `${prettify(field as string)}: ${(messages as string[]).join(', ')}`)
-            .join('; ');
+          // Attempt to stringify fieldErrors if they exist
+          const fieldErrors = (axiosError.response.data.details as any).fieldErrors;
+          const detailsString = fieldErrors 
+            ? Object.entries(fieldErrors)
+                .map(([field, messages]) => `${prettify(field as string)}: ${(messages as string[]).join(', ')}`)
+                .join('; ')
+            : JSON.stringify(axiosError.response.data.details); // Fallback for other detail structures
           if (detailsString) description += ` ${t("Details", { ns: 'translation' })}: ${detailsString}`;
+
         } else if (axiosError.response?.data?.details && typeof axiosError.response.data.details === 'string') {
           description += ` ${t("Details", { ns: 'translation' })}: ${axiosError.response.data.details}`;
         }
@@ -155,7 +163,6 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
       setCurrentStepIndex(s => s + 1);
       if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' });
     } else {
-      // Final step: submit
       if (!authIsLoading) {
         if (!isLoggedIn) {
           setShowAuthModal(true);
@@ -182,7 +189,7 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
 
   return (
     <FormProvider {...methods}>
-      <TooltipProvider>
+      <TooltipProvider> {/* Ensure TooltipProvider wraps content using tooltips */}
         <div className="bg-card rounded-lg shadow-xl p-6 md:p-8 border border-border">
           <div className="mb-6">
             <Progress value={progressValue} className="w-full h-2" />
@@ -193,12 +200,12 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
 
 
           <div className="mt-6 space-y-6 min-h-[200px]">
-            {currentField && currentField.id ? (
-               fieldSchemaDefinition && (fieldSchemaDefinition instanceof z.ZodObject || (fieldSchemaDefinition._def && fieldSchemaDefinition._def.typeName === 'ZodObject')) && (currentField.id.includes('_address') || currentField.id.includes('Address')) ? (
+             {currentField && currentField.id ? (
+               (doc.schema.shape as any)[currentField.id] && ((doc.schema.shape as any)[currentField.id] instanceof z.ZodObject || ((doc.schema.shape as any)[currentField.id]._def && (doc.schema.shape as any)[currentField.id]._def.typeName === 'ZodObject')) && (currentField.id.includes('_address') || currentField.id.includes('Address')) ? (
                 <Controller
                   control={control}
                   name={currentField.id as any}
-                  render={({ field: { onChange: rhfOnChange, value: rhfValue, name: rhfName, ref: rhfRef, ...restRhfField }}) => (
+                  render={({ field: { onChange: rhfOnChange, value: rhfValue, name: rhfName, ref: rhfRefInput, ...restRhfField }}) => ( // Renamed ref to rhfRefInput
                     <DefaultAddressField
                       name={rhfName}
                       label={t(currentField.label, currentField.label)}
@@ -206,11 +213,10 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
                       error={errors[currentField.id as any]?.message as string | undefined}
                       placeholder={t('Enter address...', { ns: 'translation' })}
                       tooltip={(doc.questions?.find(q => q.id === currentField.id)?.tooltip) || ''}
-                      // Pass RHF's value and onChange to AddressField
                       value={rhfValue || ''}
                       onChange={(val, parts) => {
-                        rhfOnChange(val); // Update RHF's internal state for the raw address string
-                        if (parts) { // If Google Places returns structured parts, update related fields
+                        rhfOnChange(val); 
+                        if (parts) { 
                             if ((doc.schema.shape as any).city) setValue('city', parts.city, {shouldValidate: true});
                             if ((doc.schema.shape as any).state) setValue('state', parts.state, {shouldValidate: true});
                             if ((doc.schema.shape as any).postal_code) setValue('postal_code', parts.postalCode, {shouldValidate: true});
@@ -243,7 +249,7 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
                 {t('Back', { ns: 'translation' })}
               </Button>
             )}
-            {currentStepIndex === 0 && totalSteps > 0 && <div />} {/* Spacer */}
+            {currentStepIndex === 0 && totalSteps > 0 && <div />} 
 
             {(totalSteps > 0 || (totalSteps === 0 && currentStepIndex === 0)) && (
               <Button
@@ -257,6 +263,7 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
               </Button>
             )}
           </div>
+          <TrustBadges /> {/* Add TrustBadges component here */}
           <div ref={liveRef} className="sr-only" aria-live="polite" />
           <AuthModal
             isOpen={showAuthModal}
