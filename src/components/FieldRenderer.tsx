@@ -1,22 +1,29 @@
 // src/components/FieldRenderer.tsx
 'use client';
 
-import React, { useEffect } from 'react'; 
+import React, { useEffect } from 'react';
 import { useFormContext, Controller } from 'react-hook-form';
 import SmartInput from '@/components/wizard/SmartInput';
-import AddressField from '@/components/AddressField'; 
+import AddressField from '@/components/AddressField';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Switch } from "@/components/ui/switch";
-import type { LegalDocument } from '@/lib/document-library'; 
+import type { LegalDocument } from '@/lib/document-library';
 import { useNotary } from '@/hooks/useNotary';
 import { cn } from '@/lib/utils';
 import { useTranslation } from 'react-i18next';
 import { prettify } from '@/lib/schema-utils';
-import { useVinDecoder } from '@/hooks/useVinDecoder'; 
+import { useVinDecoder } from '@/hooks/useVinDecoder';
+import { Info } from 'lucide-react'; // Import Info icon
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"; // Import Tooltip components
+import { Button } from '@/components/ui/button';
 
 interface FieldRendererProps {
   fieldKey: string;
@@ -30,14 +37,16 @@ export default function FieldRenderer({ fieldKey, locale, doc }: FieldRendererPr
 
   const fieldSchema = doc.questions?.find(q => q.id === fieldKey) ||
     (doc.schema && typeof doc.schema.shape === 'object' && doc.schema.shape && (doc.schema.shape as any)[fieldKey] ?
-      { 
-        id: fieldKey, 
-        label: prettify(fieldKey), 
-        type: 'text', 
-        ...((doc.schema.shape as any)[fieldKey]._def || {}), 
+      {
+        id: fieldKey,
+        label: prettify(fieldKey),
+        type: 'text',
+        ...((doc.schema.shape as any)[fieldKey]._def || {}),
+         // Ensure tooltip is included if available in schema definition
+        tooltip: (doc.schema.shape as any)[fieldKey]._def?.tooltip || (doc.schema.shape as any)[fieldKey].description,
       } : undefined);
 
-  const formStateCode = watch('stateCode'); 
+  const formStateCode = watch('stateCode');
   const { isRequired: notaryIsRequiredByState } = useNotary(formStateCode);
   const { decode: decodeVin, data: vinData, loading: vinLoading, error: vinError } = useVinDecoder();
 
@@ -52,11 +61,12 @@ export default function FieldRenderer({ fieldKey, locale, doc }: FieldRendererPr
 
   if (!fieldSchema && fieldKey !== 'as_is' && fieldKey !== 'warranty_text' && fieldKey !== 'notarizationToggle') {
     console.warn(`Field schema not found for key: ${fieldKey} in document: ${doc.name}`);
-    return null; 
+    return null;
   }
 
   const labelText = fieldSchema?.label ? t(fieldSchema.label, fieldSchema.label) : prettify(fieldKey);
   const placeholderText = fieldSchema?.placeholder ? t(fieldSchema.placeholder, fieldSchema.placeholder) : '';
+  const tooltipText = fieldSchema?.tooltip ? t(fieldSchema.tooltip, fieldSchema.tooltip) : '';
   const fieldError = errors[fieldKey];
 
   let inputType: React.HTMLInputTypeAttribute = 'text';
@@ -64,13 +74,13 @@ export default function FieldRenderer({ fieldKey, locale, doc }: FieldRendererPr
     inputType = 'number';
   } else if (fieldSchema?.type === 'date') {
     inputType = 'date';
-  } else if (fieldKey.endsWith('_phone') || (fieldSchema?.label && (fieldSchema.label.toLowerCase().includes('phone') || fieldSchema.label.toLowerCase().includes('teléfono') ))) { 
+  } else if (fieldKey.endsWith('_phone') || (fieldSchema?.label && (fieldSchema.label.toLowerCase().includes('phone') || fieldSchema.label.toLowerCase().includes('teléfono')))) {
     inputType = 'tel';
   }
 
 
-  const isAddressFieldKey = (key: string) => 
-    key.endsWith('_address') || 
+  const isAddressFieldKey = (key: string) =>
+    key.endsWith('_address') ||
     (fieldSchema?.label && (fieldSchema.label.toLowerCase().includes('address') || fieldSchema.label.toLowerCase().includes('dirección'))) ||
     key === 'property_address';
 
@@ -83,20 +93,11 @@ export default function FieldRenderer({ fieldKey, locale, doc }: FieldRendererPr
           <AddressField
             name={rhfName}
             label={labelText}
-            // value={rhfValue || ''} // AddressField manages its own internal value for autocomplete suggestions
-            // onChange={(raw, parts) => { // onChange structure changed in AddressField
-            //   rhfOnChange(raw); 
-            //   if (parts && doc.schema && typeof doc.schema.shape === 'object' && doc.schema.shape) {
-            //     const prefix = rhfName.replace('_address', '');
-            //     if ((doc.schema.shape as any)[`${prefix}_city`]) setValue(`${prefix}_city` as any, parts.city, {shouldValidate: true});
-            //     if ((doc.schema.shape as any)[`${prefix}_state`]) setValue(`${prefix}_state` as any, parts.state, {shouldValidate: true});
-            //     if ((doc.schema.shape as any)[`${prefix}_postal_code`]) setValue(`${prefix}_postal_code` as any, parts.postalCode, {shouldValidate: true});
-            //   }
-            // }}
             required={fieldSchema?.required || (doc.schema?.shape as any)?.[fieldKey]?._def?.typeName !== 'ZodOptional'}
             error={errors[fieldKey as any]?.message as string | undefined}
             placeholder={placeholderText || t('Enter address...')}
-            className="max-w-sm" // Added max-w-sm
+            className="max-w-sm"
+            tooltip={tooltipText}
           />
         )}
       />
@@ -106,9 +107,23 @@ export default function FieldRenderer({ fieldKey, locale, doc }: FieldRendererPr
 
   return (
     <div className="space-y-2">
-       <Label htmlFor={fieldKey} className={cn("font-medium", fieldError && "text-destructive")}>
+      <div className="flex items-center gap-1">
+        <Label htmlFor={fieldKey} className={cn("font-medium", fieldError && "text-destructive")}>
           {labelText} {fieldSchema?.required && <span className="text-destructive">*</span>}
         </Label>
+        {tooltipText && (
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button variant="ghost" size="icon" className="h-5 w-5 p-0 text-muted-foreground hover:text-foreground">
+                <Info className="h-4 w-4" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent side="top" align="start" className="max-w-xs text-sm bg-popover text-popover-foreground border shadow-md rounded-md p-2">
+              <p>{tooltipText}</p>
+            </TooltipContent>
+          </Tooltip>
+        )}
+      </div>
 
       {fieldKey === 'notarizationToggle' && doc.offerNotarization ? (
         <div className="space-y-2 pt-4 border-t mt-4">
@@ -149,27 +164,27 @@ export default function FieldRenderer({ fieldKey, locale, doc }: FieldRendererPr
             <RadioGroup
               onValueChange={field.onChange}
               value={field.value as string || undefined}
-              className={cn("space-y-2 max-w-sm", fieldError && "border-destructive focus-visible:ring-destructive")} // Added max-w-sm
+              className={cn("space-y-2 max-w-sm", fieldError && "border-destructive focus-visible:ring-destructive")}
               aria-invalid={!!fieldError}
             >
               {((doc.schema?.shape as any).odo_status._def.values as string[]).map((opt: string) => (
-                 <div key={opt} className="flex items-center space-x-2">
-                    <RadioGroupItem value={opt} id={`odo_status_${opt.toLowerCase()}`} />
-                    <Label htmlFor={`odo_status_${opt.toLowerCase()}`} className="font-normal">
-                      {t(`fields.odo_status.${opt.toLowerCase()}`, opt.replace(/_/g, ' ').charAt(0).toUpperCase() + opt.replace(/_/g, ' ').slice(1))}
-                    </Label>
-                 </div>
+                <div key={opt} className="flex items-center space-x-2">
+                  <RadioGroupItem value={opt} id={`odo_status_${opt.toLowerCase()}`} />
+                  <Label htmlFor={`odo_status_${opt.toLowerCase()}`} className="font-normal">
+                    {t(`fields.odo_status.${opt.toLowerCase()}`, opt.replace(/_/g, ' ').charAt(0).toUpperCase() + opt.replace(/_/g, ' ').slice(1))}
+                  </Label>
+                </div>
               ))}
             </RadioGroup>
           )}
         />
-      ) : fieldKey === 'as_is' && fieldSchema?.type === 'select' ? ( 
+      ) : fieldKey === 'as_is' && (fieldSchema?.type === 'select' || fieldSchema?.type === 'boolean') ? ( // fieldSchema.type 'boolean' added for Switch
         <Controller
           name="as_is"
           control={control}
-          defaultValue={fieldSchema && (doc.schema?.shape as any)?.as_is?._def?.defaultValue ? (doc.schema?.shape as any).as_is._def.defaultValue : true}
+          defaultValue={fieldSchema && (doc.schema?.shape as any)?.as_is?._def?.defaultValue !== undefined ? (doc.schema?.shape as any).as_is._def.defaultValue : true}
           render={({ field }) => (
-            <div className="flex items-center space-x-2 max-w-sm"> {/* Added max-w-sm */}
+            <div className="flex items-center space-x-2 max-w-sm">
               <Switch
                 id={field.name}
                 checked={field.value}
@@ -189,7 +204,7 @@ export default function FieldRenderer({ fieldKey, locale, doc }: FieldRendererPr
             id={fieldKey}
             placeholder={placeholderText || t('Describe warranty…')}
             {...register(fieldKey as any, { required: fieldSchema?.required && !watch('as_is') })}
-            className={cn("bg-background max-w-sm", fieldError && "border-destructive focus-visible:ring-destructive")} // Added max-w-sm
+            className={cn("bg-background max-w-sm", fieldError && "border-destructive focus-visible:ring-destructive")}
             aria-invalid={!!fieldError}
           />
         )
@@ -198,7 +213,7 @@ export default function FieldRenderer({ fieldKey, locale, doc }: FieldRendererPr
           id={fieldKey}
           placeholder={placeholderText}
           {...register(fieldKey as any, { required: fieldSchema?.required })}
-          className={cn("bg-background max-w-sm", fieldError && "border-destructive focus-visible:ring-destructive")} // Added max-w-sm
+          className={cn("bg-background max-w-sm", fieldError && "border-destructive focus-visible:ring-destructive")}
           aria-invalid={!!fieldError}
         />
       ) : fieldSchema?.type === 'select' && (fieldSchema.options || (doc.schema?.shape as any)?.[fieldKey]?._def?.values) ? (
@@ -209,17 +224,17 @@ export default function FieldRenderer({ fieldKey, locale, doc }: FieldRendererPr
           defaultValue={(doc.schema?.shape as any)?.[fieldKey]?._def?.defaultValue}
           render={({ field }) => (
             <Select onValueChange={field.onChange} value={field.value as string || undefined}>
-              <SelectTrigger id={fieldKey} className={cn("bg-background max-w-sm", fieldError && "border-destructive focus:ring-destructive")} aria-invalid={!!fieldError}> {/* Added max-w-sm */}
+              <SelectTrigger id={fieldKey} className={cn("bg-background max-w-sm", fieldError && "border-destructive focus:ring-destructive")} aria-invalid={!!fieldError}>
                 <SelectValue placeholder={placeholderText || t("Select...")} />
               </SelectTrigger>
               <SelectContent>
-                { (doc.schema?.shape as any)?.[fieldKey]?._def?.values ? 
-                   ((doc.schema.shape as any)[fieldKey]._def.values as string[]).map((opt: string) => (
+                {(doc.schema?.shape as any)?.[fieldKey]?._def?.values ?
+                  ((doc.schema.shape as any)[fieldKey]._def.values as string[]).map((opt: string) => (
                     <SelectItem key={opt} value={opt}>{t(opt.replace(/_/g, ' '), opt.replace(/_/g, ' ').charAt(0).toUpperCase() + opt.replace(/_/g, ' ').slice(1))}</SelectItem>
                   ))
-                  : fieldSchema.options?.map(opt => ( 
+                  : fieldSchema.options?.map(opt => (
                     <SelectItem key={opt.value} value={opt.value}>{t(opt.label, opt.label)}</SelectItem>
-                ))}
+                  ))}
               </SelectContent>
             </Select>
           )}
@@ -229,7 +244,7 @@ export default function FieldRenderer({ fieldKey, locale, doc }: FieldRendererPr
           id={fieldKey}
           type={inputType}
           placeholder={placeholderText}
-          className={cn("input bg-background", fieldError && "border-destructive focus-visible:ring-destructive")} // SmartInput will handle max-w-sm
+          className={cn("input bg-background", fieldError && "border-destructive focus-visible:ring-destructive")}
           inputMode={inputType === 'number' || inputType === 'tel' ? 'numeric' : undefined}
           aria-invalid={!!fieldError}
           {...register(fieldKey as any, { required: fieldSchema?.required })}
