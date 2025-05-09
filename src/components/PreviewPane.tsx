@@ -4,7 +4,7 @@
 import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { useFormContext, type UseFormWatch } from 'react-hook-form'; 
+import { useFormContext } from 'react-hook-form'; 
 import { Loader2, AlertTriangle } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { debounce } from 'lodash-es';
@@ -18,7 +18,7 @@ interface PreviewPaneProps {
 
 export default function PreviewPane({ locale, docId }: PreviewPaneProps) {
   const { t } = useTranslation();
-  const { watch } = useFormContext();
+  const { watch } = useFormContext(); // Get watch from useFormContext
 
 
   const [rawMarkdown, setRawMarkdown] = useState<string>('');
@@ -88,11 +88,16 @@ export default function PreviewPane({ locale, docId }: PreviewPaneProps) {
       tempMd = tempMd.replace(placeholderRegex, value ? `**${String(value)}**` : '____');
     }
     tempMd = tempMd.replace(/\{\{.*?\}\}/g, '____'); // Replace any remaining placeholders
-    if (docConfig?.name_es && locale === 'es') {
-        tempMd = tempMd.replace(/^# .*/, `# ${docConfig.name_es}`);
-    } else if (docConfig?.name) {
-        tempMd = tempMd.replace(/^# .*/, `# ${docConfig.name}`);
+    
+    // Update title based on locale
+    let titleToUse = docConfig?.name;
+    if (locale === 'es' && docConfig?.name_es) {
+      titleToUse = docConfig.name_es;
     }
+    if (titleToUse) {
+       tempMd = tempMd.replace(/^# .*/m, `# ${titleToUse}`);
+    }
+
     return tempMd;
   }, [docConfig, locale]);
 
@@ -117,10 +122,11 @@ export default function PreviewPane({ locale, docId }: PreviewPaneProps) {
       return;
     }
     
+    // Initial update
     debouncedUpdatePreview(watch(), rawMarkdown);
-
+    
     const subscription = watch((formData) => {
-      debouncedUpdatePreview(formData, rawMarkdown);
+      debouncedUpdatePreview(formData as Record<string, any>, rawMarkdown);
     });
 
     return () => {
@@ -170,7 +176,7 @@ export default function PreviewPane({ locale, docId }: PreviewPaneProps) {
     <div
       id="live-preview"
       data-watermark={watermarkText}
-      className="relative w-full h-full" // Simplified: parent controls bg, border, shadow, overflow
+      className="relative w-full h-full bg-white" // Ensures white background, parent div handles border/shadow/overflow
       style={{
         WebkitUserSelect: 'none',
         MozUserSelect: 'none',
@@ -178,7 +184,6 @@ export default function PreviewPane({ locale, docId }: PreviewPaneProps) {
         userSelect: 'none',
       }}
     >
-      {/* Watermark - stays the same */}
       <div className="absolute inset-0 z-10 pointer-events-none flex items-center justify-center">
         <span
           className="text-6xl font-bold text-gray-300/50 opacity-25 rotate-[315deg]"
@@ -188,13 +193,14 @@ export default function PreviewPane({ locale, docId }: PreviewPaneProps) {
         </span>
       </div>
 
-      {/* Markdown content container with scrollbar visually hidden */}
       <div className={cn("prose prose-sm dark:prose-invert max-w-none w-full h-full overflow-y-auto p-4 md:p-6 scrollbar-hide")}>
         <ReactMarkdown 
             remarkPlugins={[remarkGfm]}
             components={{
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
                 p: ({node, ...props}) => <p {...props} className="select-none" />,
-                h1: ({node, ...props}) => <h1 {...props} className="text-center select-none" />, // Center H1
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                h1: ({node, ...props}) => <h1 {...props} className="text-center select-none" />,
             }}
         >
           {processedMarkdown || ''}

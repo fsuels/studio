@@ -2,29 +2,27 @@
 'use client';
 
 import React, { useEffect, useState, useRef, useCallback, useMemo } from 'react';
-import { useForm, Controller, FormProvider } from 'react-hook-form';
+import { useFormContext, Controller, FormProvider } from 'react-hook-form'; // Import useFormContext
 import { zodResolver } from '@hookform/resolvers/zod';
 import axios, { AxiosError } from 'axios';
 import { useRouter, useParams } from 'next/navigation';
 import { z } from 'zod';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Info } from 'lucide-react';
 
 import type { LegalDocument } from '@/lib/document-library';
-import { saveFormProgress, loadFormProgress } from '@/lib/firestore/saveFormProgress';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/hooks/useAuth';
 import { useTranslation } from 'react-i18next';
-import { debounce } from 'lodash-es';
 
 import FieldRenderer from './FieldRenderer';
-import { TooltipProvider } from '@/components/ui/tooltip'; 
+import { Tooltip, TooltipProvider, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'; 
 import TrustBadges from '@/components/TrustBadges';
 import ReviewStep from '@/components/ReviewStep'; 
 import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
 import { prettify } from '@/lib/schema-utils';
 import AuthModal from '@/components/AuthModal';
-import AddressField from '@/components/AddressField';
+import AddressField from '@/components/AddressField'; 
 
 
 interface WizardFormProps {
@@ -42,23 +40,19 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
 
   const [isHydrated, setIsHydrated] = useState(false);
   const [showAuthModal, setShowAuthModal] = useState(false);
-  const [isReviewing, setIsReviewing] = useState(false);
+  const [isReviewing, setIsReviewing] = useState(isReviewing);
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
 
   const liveRef = useRef<HTMLDivElement>(null);
 
-  const methods = useForm<z.infer<typeof doc.schema>>({
-    resolver: zodResolver(doc.schema),
-    defaultValues: {}, 
-    mode: 'onBlur',
-  });
+  // Use useFormContext instead of useForm
+  const methods = useFormContext<z.infer<typeof doc.schema>>();
 
   const {
     getValues,
     trigger,
     control,
-    watch,
-    reset,
+    watch, // watch is now from useFormContext
     setValue,
     formState: { errors, isSubmitting: formIsSubmitting, isValid: isFormValid, dirtyFields },
   } = methods;
@@ -66,75 +60,50 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
   useEffect(() => {
     setIsHydrated(true);
   }, []);
-
-  useEffect(() => {
-    async function loadDraft() {
-      const currentLocale = params.locale as 'en' | 'es' || locale;
-      let draftData: Partial<z.infer<typeof doc.schema>> = {};
-      try {
-        if (isLoggedIn && user?.uid) {
-          draftData = await loadFormProgress({ userId: user.uid, docType: doc.id, state: currentLocale });
-        } else {
-          const lsDraft = localStorage.getItem(`draft-${doc.id}-${currentLocale}`);
-          if (lsDraft) draftData = JSON.parse(lsDraft);
-        }
-      } catch (e) {
-        console.warn('[WizardForm] Draft loading failed:', e);
-      }
-      reset(draftData);
-    }
-    if (doc && isHydrated && !authIsLoading) loadDraft();
-  }, [doc, locale, isHydrated, reset, authIsLoading, isLoggedIn, user, params.locale]);
-
-  const debouncedSave = useCallback(
-    debounce(async (data: Record<string, any>) => {
-      const currentLocale = params.locale as 'en' | 'es' || locale;
-      if (isLoggedIn && user?.uid) {
-        await saveFormProgress({ userId: user.uid, docType: doc.id, state: currentLocale, formData: data });
-      }
-    }, 1000),
-    [isLoggedIn, user, doc.id, locale, params.locale]
-  );
-
-  useEffect(() => {
-    const currentLocale = params.locale as 'en' | 'es' || locale;
-    const storageKey = `draft-${doc.id}-${currentLocale}`;
-    const sub = watch((values) => {
-      localStorage.setItem(storageKey, JSON.stringify(values));
-      debouncedSave(values);
-    });
-    return () => sub.unsubscribe();
-  }, [watch, doc.id, locale, debouncedSave, params.locale]);
   
   const actualSchemaShape = useMemo(() => {
     const def = doc.schema?._def;
     if (!def) return undefined;
-    return def.typeName === 'ZodEffects' ? def.schema.shape : doc.schema.shape;
+    return def.typeName === 'ZodEffects' ? def.schema.shape : def.typeName === 'ZodObject' ? def.shape : undefined;
   }, [doc.schema]);
+
 
   const steps = useMemo(() => {
     if (!actualSchemaShape) return [];
     return Object.keys(actualSchemaShape).map(key => {
        const fieldDef = (actualSchemaShape as any)[key]?._def;
        const labelFromDescription = fieldDef?.description || fieldDef?.schema?._def?.description;
+       let fieldLabel = prettify(key); // Default label
+
+        // Attempt to get label from doc.questions first
+        const questionConfig = doc.questions?.find(q => q.id === key);
+        if (questionConfig?.label) {
+          fieldLabel = t(questionConfig.label, { defaultValue: questionConfig.label });
+        } else if (labelFromDescription) { // Fallback to Zod description
+          fieldLabel = t(labelFromDescription, { defaultValue: labelFromDescription });
+        } else { // Fallback to prettified key if no other label source
+           fieldLabel = t(`fields.${key}.label`, { defaultValue: prettify(key) });
+        }
+       
        return {
          id: key,
-         label: t(`fields.${key}.label`, { defaultValue: labelFromDescription || prettify(key) }),
+         label: fieldLabel,
          tooltip: t((fieldDef?.tooltip || fieldDef?.schema?._def?.tooltip || ''), { defaultValue: (fieldDef?.tooltip || fieldDef?.schema?._def?.tooltip || '')}) || undefined
        };
     });
-  }, [actualSchemaShape, t]);
+  }, [actualSchemaShape, t, doc.questions]);
 
 
   const totalSteps = steps.length;
   const currentField = !isReviewing && totalSteps > 0 && currentStepIndex < totalSteps ? steps[currentStepIndex] : null;
-  const progress = totalSteps > 0 ? ((isReviewing ? totalSteps : currentStepIndex) / totalSteps) * 100 : 0;
+  const progress = totalSteps > 0 ? ((isReviewing ? totalSteps : currentStepIndex + 1) / totalSteps) * 100 : 0;
 
 
   const handlePreviousStep = useCallback(() => {
     if (isReviewing) {
       setIsReviewing(false);
-      // setCurrentStepIndex(totalSteps - 1); // Optionally jump to the last field index
+      // Optionally jump to the last field index if desired
+      // setCurrentStepIndex(Math.max(0, totalSteps - 1)); 
     } else if (currentStepIndex > 0) {
       setCurrentStepIndex(prev => prev - 1);
     }
@@ -176,15 +145,20 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
           }
         }
       } else {
-        toast({ title: t('Validation Failed'), description: t('Please correct the errors in the form.'), variant: 'destructive' });
+        toast({ title: t('Validation Failed', { ns: 'translation'}), description: t('Please correct the errors in the form.',{ns: 'translation'}), variant: 'destructive' });
       }
       return;
     }
     
-    if (steps.length === 0) { // Handle schema-only or no-step forms
-      setIsReviewing(true);
-       if (typeof window !== 'undefined') {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (steps.length === 0) { 
+      const allValidForNoSteps = await trigger();
+      if(allValidForNoSteps) {
+        setIsReviewing(true);
+        if (typeof window !== 'undefined') {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      } else {
+        toast({ title: t('Validation Failed', { ns: 'translation'}), description: t('Please correct all errors before reviewing.', {ns: 'translation'}), variant: 'destructive' });
       }
       return;
     }
@@ -201,7 +175,7 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
 
 
     if (!isValid) {
-      toast({ title: t('Validation Error'), description: t('Please correct the field before proceeding.'), variant: 'destructive'});
+      toast({ title: t('Validation Error', {ns: 'translation'}), description: t('Please correct the field before proceeding.',{ns: 'translation'}), variant: 'destructive'});
       return;
     }
 
@@ -215,7 +189,7 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
           window.scrollTo({ top: 0, behavior: 'smooth' });
         }
       } else {
-         toast({ title: t('Validation Failed'), description: t('Please correct all errors before reviewing.'), variant: 'destructive' });
+         toast({ title: t('Validation Failed', { ns: 'translation'}), description: t('Please correct all errors before reviewing.', {ns: 'translation'}), variant: 'destructive' });
       }
     }
 
@@ -254,7 +228,7 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
 
   const buttonText = isReviewing
     ? t('Submit & Proceed to Payment', { ns: 'translation' })
-    : (steps.length === 0 || currentStepIndex === totalSteps - 1) // Show review if no steps or on last step
+    : (steps.length === 0 || currentStepIndex === totalSteps - 1) 
     ? t('Review Answers', { ns: 'translation' })
     : t('wizard.next', { ns: 'translation' });
 
@@ -263,34 +237,44 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
             <div className="mt-6 space-y-6 min-h-[200px]">
                {(actualSchemaShape as any)?.[currentField.id] && ((actualSchemaShape as any)[currentField.id] instanceof z.ZodObject || ((actualSchemaShape as any)[currentField.id]._def && (actualSchemaShape as any)[currentField.id]._def.typeName === 'ZodObject')) && (currentField.id.includes('_address') || currentField.id.includes('Address')) ? (
 
-                <Controller
-                  key={`${currentField.id}-controller`}
-                  control={control}
-                  name={currentField.id as any}
-                  render={({ field: { onChange: rhfOnChange, value: rhfValue, name: rhfName } }) => (
-                    <AddressField
-                      name={rhfName}
-                      label={currentField.label}
-                      required
-                      error={errors[currentField.id]?.message as string | undefined}
-                      placeholder={t("Enter address...")}
-                      tooltip={currentField.tooltip}
-                    />
-                  )}
-                />
+                 <Controller
+                   key={`${currentField.id}-controller`}
+                   control={control}
+                   name={currentField.id as any}
+                   render={({ field: { onChange: rhfOnChange, value: rhfValue } }) => (
+                     <AddressField
+                       name={currentField.id} 
+                       label={currentField.label}
+                       required={(doc.questions?.find(q => q.id === currentField.id) || (actualSchemaShape as any)?.[currentField.id]?._def)?.required}
+                       error={errors[currentField.id]?.message as string | undefined}
+                       placeholder={t("Enter address...")}
+                       value={rhfValue || ''} // Pass value
+                       onChange={(val, parts) => { // Use AddressField's onChange
+                         rhfOnChange(val);
+                          // If parts are returned by AddressField, you can use them here to set city, state, etc.
+                          if (parts) {
+                            const prefix = currentField.id.replace(/_address$/i, '') || currentField.id.replace(/Address$/i, '');
+                            if ((actualSchemaShape as any)?.[`${prefix}_city`]) setValue(`${prefix}_city`, parts.city, {shouldValidate: true, shouldDirty: true});
+                            if ((actualSchemaShape as any)?.[`${prefix}_state`]) setValue(`${prefix}_state`, parts.state, {shouldValidate: true, shouldDirty: true});
+                            if ((actualSchemaShape as any)?.[`${prefix}_postal_code`]) setValue(`${prefix}_postal_code`, parts.postalCode, {shouldValidate: true, shouldDirty: true});
+                          }
+                       }}
+                       tooltip={currentField.tooltip}
+                     />
+                   )}
+                 />
               ) : (
                 <FieldRenderer key={currentField.id} fieldKey={currentField.id} locale={locale} doc={doc} />
               )}
             </div>
           ) : totalSteps === 0 && !isReviewing ? (
              <div className="mt-6 min-h-[200px] flex flex-col items-center justify-center text-center">
-                <p className="text-muted-foreground mb-4">{t('dynamicForm.noQuestionsNeeded', {documentType: doc.name_es && locale==='es' ? doc.name_es : doc.name})}</p>
+                <p className="text-muted-foreground mb-4">{t('dynamicForm.noQuestionsNeeded', {ns: 'translation', documentType: doc.name_es && locale==='es' ? doc.name_es : doc.name})}</p>
              </div>
           ) : null;
 
   return (
-    <FormProvider {...methods}>
-      <TooltipProvider>
+      <TooltipProvider> {/* TooltipProvider already here */}
         <div className="bg-card rounded-lg shadow-xl p-4 md:p-6 border border-border">
           <div className="mb-6">
             {totalSteps > 0 && (
@@ -323,7 +307,6 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
                 {t('Back', { ns: 'translation' })}
               </Button>
             )}
-             {/* Ensure Next button is always rendered or a spacer if not on the first step */}
             {!(currentStepIndex > 0 || isReviewing) && totalSteps > 0 && <div />}
 
 
@@ -347,6 +330,5 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
           handleNextStep(); 
         }}
       />
-    </FormProvider>
   );
 }

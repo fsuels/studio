@@ -3,54 +3,111 @@
 
 import { useParams, notFound, useRouter } from 'next/navigation';
 import React, { useEffect, useState, useCallback, useMemo } from 'react';
+import { useForm, FormProvider } from 'react-hook-form'; // Import useForm and FormProvider
+import { zodResolver } from '@hookform/resolvers/zod'; // Import zodResolver
+import { z } from 'zod'; // Import z
 import { Loader2 } from 'lucide-react';
+
 import { documentLibrary, type LegalDocument } from '@/lib/document-library';
 import Breadcrumb from '@/components/Breadcrumb';
 import WizardForm from '@/components/WizardForm';
 import PreviewPane from '@/components/PreviewPane';
 import { useTranslation } from 'react-i18next';
 import { useToast } from '@/hooks/use-toast';
-import { FormProvider } from 'react-hook-form'; // Import FormProvider
+import { saveFormProgress, loadFormProgress } from '@/lib/firestore/saveFormProgress'; // Import save/load functions
+import { useAuth } from '@/hooks/useAuth'; // Import useAuth
+import { debounce } from 'lodash-es'; // Import debounce
+
 
 export default function StartWizardPage() {
   const params = useParams();
   const { t, i18n } = useTranslation();
   const router = useRouter();
   const { toast } = useToast();
+  const { isLoggedIn, user, isLoading: authIsLoading } = useAuth();
 
   const locale = params.locale as 'en' | 'es';
   const docIdFromPath = params.docId as string;
 
   const [isLoadingConfig, setIsLoadingConfig] = useState(true);
   const [isHydrated, setIsHydrated] = useState(false);
+  const [docConfig, setDocConfig] = useState<LegalDocument | undefined>(undefined);
 
   useEffect(() => {
     setIsHydrated(true);
   }, []);
 
-  const docConfig = useMemo(() => {
-    if (!docIdFromPath || !isHydrated) return undefined;
-    // Find the document configuration from the library
-    const foundDoc = documentLibrary.find(d => d.id === docIdFromPath);
-    // If found, return it. WizardForm will handle cases where questions/schema might be missing.
-    return foundDoc;
-  }, [docIdFromPath, isHydrated]);
-
   useEffect(() => {
-    if (isHydrated && docIdFromPath) {
-      if (!docConfig) {
-        console.error(`[StartWizardPage] Document config not found for docId: ${docIdFromPath}. This will lead to a 404 page.`);
-        notFound(); // Trigger 404 if doc config is not found
+    if (docIdFromPath && isHydrated) {
+      const foundDoc = documentLibrary.find(d => d.id === docIdFromPath);
+      if (foundDoc && foundDoc.schema) {
+        setDocConfig(foundDoc);
       } else {
-        // Basic check: Does it have questions or a schema?
-        // This log helps confirm if the found doc has the necessary parts.
-        const hasQuestions = docConfig.questions && docConfig.questions.length > 0;
-        const hasSchema = !!docConfig.schema;
-        console.log(`[StartWizardPage] Loaded docConfig for ${docIdFromPath}: HasQuestions=${hasQuestions}, HasSchema=${hasSchema}`);
+        console.error(`[StartWizardPage] Document config not found or schema invalid for docId: ${docIdFromPath}`);
+        notFound();
       }
       setIsLoadingConfig(false);
     }
-  }, [docConfig, docIdFromPath, isHydrated, notFound]);
+  }, [docIdFromPath, isHydrated]);
+
+  // Initialize useForm here
+  const methods = useForm<z.infer<typeof docConfigSchema>>({
+    resolver: docConfig?.schema ? zodResolver(docConfig.schema) : undefined,
+    defaultValues: {}, // Will be loaded from localStorage/Firestore
+    mode: 'onBlur',
+  });
+  
+  const { reset, watch } = methods;
+  const docConfigSchema = docConfig?.schema || z.object({}); // Fallback to empty schema if docConfig is not ready
+
+  // Load draft data
+  useEffect(() => {
+    async function loadDraft() {
+      if (!docConfig || !isHydrated || authIsLoading) return;
+      const currentLocale = params.locale as 'en' | 'es' || locale;
+      let draftData: Partial<z.infer<typeof docConfig.schema>> = {};
+      try {
+        if (isLoggedIn && user?.uid) {
+          draftData = await loadFormProgress({ userId: user.uid, docType: docConfig.id, state: currentLocale });
+        } else {
+          const lsDraft = localStorage.getItem(`draft-${docConfig.id}-${currentLocale}`);
+          if (lsDraft) draftData = JSON.parse(lsDraft);
+        }
+      } catch (e) {
+        console.warn('[StartWizardPage] Draft loading failed:', e);
+      }
+      reset(draftData); // Reset form with loaded draft data
+    }
+    loadDraft();
+  }, [docConfig, locale, isHydrated, reset, authIsLoading, isLoggedIn, user, params.locale]);
+
+
+  // Autosave draft data
+  const debouncedSave = useCallback(
+    debounce(async (data: Record<string, any>) => {
+      if (!docConfig || authIsLoading) return;
+      const currentLocale = params.locale as 'en' | 'es' || locale;
+      if (isLoggedIn && user?.uid) {
+        await saveFormProgress({ userId: user.uid, docType: docConfig.id, state: currentLocale, formData: data });
+      }
+    }, 1000),
+    [isLoggedIn, user, docConfig, locale, params.locale, authIsLoading]
+  );
+
+  useEffect(() => {
+    if (!docConfig || authIsLoading) return () => {};
+    const currentLocale = params.locale as 'en' | 'es' || locale;
+    const storageKey = `draft-${docConfig.id}-${currentLocale}`;
+    
+    const subscription = watch((values) => {
+      localStorage.setItem(storageKey, JSON.stringify(values));
+      debouncedSave(values);
+    });
+    return () => {
+      subscription.unsubscribe();
+      debouncedSave.cancel();
+    } ;
+  }, [watch, docConfig, locale, debouncedSave, params.locale, authIsLoading]);
 
 
   const handleWizardComplete = useCallback(
@@ -68,7 +125,7 @@ export default function StartWizardPage() {
   );
 
 
-  if (!isHydrated || isLoadingConfig || !docConfig) {
+  if (!isHydrated || isLoadingConfig || !docConfig || authIsLoading) {
     return (
       <div className="flex justify-center items-center min-h-[calc(100vh-8rem)]">
         <Loader2 className="h-12 w-12 animate-spin text-primary" />
@@ -82,16 +139,9 @@ export default function StartWizardPage() {
   const documentDisplayName =
   locale === 'es' && docConfig.name_es ? docConfig.name_es : docConfig.name;
 
-  // Pass methods down using FormProvider
-  // WizardForm now uses useForm internally, so FormProvider is not needed here
-  // unless PreviewPane also needs access to the same form context, which it does.
-
-  // The WizardForm component initializes its own form context.
-  // If PreviewPane needs to react to form changes, it must be inside the FormProvider
-  // created by WizardForm, or WizardForm needs to pass `watch` down.
-  // For simplicity, we'll ensure PreviewPane gets form context if WizardForm provides it.
 
   return (
+    <FormProvider {...methods}> {/* Wrap WizardForm and PreviewPane with FormProvider */}
       <main className="container mx-auto py-8 px-4 sm:px-6 lg:px-8">
         <Breadcrumb
           items={[
@@ -102,7 +152,6 @@ export default function StartWizardPage() {
         />
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-6">
           <div className="lg:col-span-1">
-             {/* WizardForm will internally create FormProvider */}
             <WizardForm
               locale={locale}
               doc={docConfig}
@@ -110,21 +159,17 @@ export default function StartWizardPage() {
             />
           </div>
           <div className="lg:col-span-1">
-            <div className="sticky top-24 h-screen max-h-[calc(100vh-8rem)] flex flex-col">
+            <div className="sticky top-24 h-[calc(100vh-8rem)] max-h-[calc(100vh-8rem)] flex flex-col">
               <h3 className="text-xl font-semibold mb-4 text-center text-card-foreground shrink-0">
                 {t('Live Preview', { ns: 'translation' })}
               </h3>
               <div className="flex-grow overflow-hidden rounded-lg shadow-md border border-border bg-background">
-                {/* PreviewPane needs to be wrapped in FormProvider if it uses useFormContext */}
-                {/* This will be handled if WizardForm correctly sets up its provider */}
-                 <FormProvider {...{} /* This is tricky, PreviewPane needs access to WizardForm's methods */}>
-                    <PreviewPane docId={docIdFromPath} locale={locale} />
-                 </FormProvider>
+                 <PreviewPane docId={docIdFromPath} locale={locale} />
               </div>
             </div>
           </div>
         </div>
       </main>
+    </FormProvider>
   );
 }
-
