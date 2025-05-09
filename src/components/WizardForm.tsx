@@ -16,7 +16,7 @@ import { prettify } from '@/lib/schema-utils';
 import { z } from 'zod';
 import AuthModal from '@/components/AuthModal';
 import { useAuth } from '@/hooks/useAuth';
-import AddressField from '@/components/AddressField'; 
+import { AddressField } from '@/components/AddressField'; 
 import { TooltipProvider } from '@/components/ui/tooltip'; 
 import TrustBadges from '@/components/TrustBadges';
 import ReviewStep from '@/components/ReviewStep'; 
@@ -143,7 +143,7 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
   }, [watch, doc, locale, isHydrated, debouncedSaveToFirestore, methods?.formState?.dirtyFields, methods]);
 
 
-  const steps = useMemo(() => {
+ const steps = useMemo(() => {
     if (!doc) {
         console.warn("[WizardForm] Steps calc: Document config is missing.");
         return [];
@@ -177,10 +177,9 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
             }));
         }
     }
-
-    console.warn("[WizardForm] Steps calc: No questions defined in doc.questions and Zod schema shape is invalid or empty for doc:", doc.name);
+    console.warn(`[WizardForm] Steps calc: No questions or valid Zod schema shape for doc: ${doc.name}. Steps will be empty.`);
     return [];
-  }, [doc]);
+  }, [doc, prettify]);
 
 
   const totalSteps = steps.length > 0 ? steps.length : 1; 
@@ -235,13 +234,31 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
   };
 
   const handleNextStep = async () => {
-    if (!doc) return;
+    if (!doc || steps.length === 0 && !isReviewing) { // If no steps and not reviewing, go to review.
+        setIsReviewing(true);
+        if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' });
+        return;
+    }
+
 
     if (isReviewing) {
       if (!authIsLoading) {
         if (!isLoggedIn) {
           setShowAuthModal(true);
           return;
+        }
+        // Ensure all fields are validated before API submission if coming from review
+        const allFieldsValidOnReview = await trigger();
+        if (!allFieldsValidOnReview) {
+            toast({ title: t("Validation Error", { ns: 'translation' }), description: t("Please correct the errors before proceeding.", { ns: 'translation' }), variant: "destructive" });
+            setIsReviewing(false); // Go back to the form to show errors
+            // Optionally, navigate to the first error field:
+            // const firstErrorField = Object.keys(errors)[0];
+            // if (firstErrorField) {
+            //    const errorStepIndex = steps.findIndex(s => s.id === firstErrorField);
+            //    if (errorStepIndex !== -1) setCurrentStepIndex(errorStepIndex);
+            // }
+            return;
         }
         await proceedToApiSubmission();
       } else {
@@ -250,17 +267,18 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
       return;
     }
 
-    const currentStepFieldKey = totalSteps > 0 && currentStepIndex < steps.length ? steps[currentStepIndex]?.id : null;
+    const currentStepFieldKey = steps.length > 0 && currentStepIndex < steps.length ? steps[currentStepIndex]?.id : null;
     let isValid = true;
 
     if (currentStepFieldKey) {
       isValid = await trigger(currentStepFieldKey as any);
-    } else if (steps.length === 0) {
-      console.log("[WizardForm] No fields/steps to validate, proceeding to review.");
-      setIsReviewing(true);
-      if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' });
-      return;
-    } else if (currentStepIndex >= totalSteps -1 && totalSteps > 0) {
+    } else if (steps.length === 0) { 
+      // This case should now be handled by the check at the beginning of the function.
+      // console.log("[WizardForm] No fields/steps to validate, proceeding to review.");
+      // setIsReviewing(true);
+      // if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' });
+      // return;
+    } else if (currentStepIndex >= totalSteps -1 && totalSteps > 0) { // On the last field/step
         isValid = await trigger(); 
          if (isValid) {
             setIsReviewing(true);
@@ -288,7 +306,7 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
     if (currentStepIndex < totalSteps - 1) {
       setCurrentStepIndex(s => s + 1);
       if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' });
-    } else {
+    } else { // This is the last field, all fields validated individually or as a whole
       const allFieldsValid = await trigger();
       if(allFieldsValid) {
         setIsReviewing(true);
@@ -302,6 +320,9 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
   const handlePreviousStep = () => {
     if (isReviewing) {
       setIsReviewing(false);
+      // If currentStepIndex is already at the last step, keep it there.
+      // Otherwise, if you want to jump to a specific step (e.g., first error, or just last step), adjust setCurrentStepIndex.
+      // For now, just exiting review mode will show the last step or currentStepIndex.
       if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' });
       return;
     }
@@ -327,23 +348,6 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
   const currentField = !isReviewing && steps.length > 0 && currentStepIndex < steps.length ? steps[currentStepIndex] : null;
   const progressValue = totalSteps > 0 ? ((isReviewing ? totalSteps : currentStepIndex) / totalSteps) * 100 : (isReviewing ? 100 : 0);
 
-  let currentFieldSchemaDefinition: z.ZodTypeAny | undefined;
-  if (currentField && currentField.id && doc?.schema?._def) {
-      let shapeObjForCurrentField: Record<string, any> | undefined;
-      if (doc.schema._def.typeName === 'ZodObject') {
-          shapeObjForCurrentField = doc.schema.shape;
-      } else if (doc.schema._def.typeName === 'ZodEffects' && doc.schema._def.schema?._def?.typeName === 'ZodObject') {
-          shapeObjForCurrentField = doc.schema._def.schema.shape;
-      }
-      if (shapeObjForCurrentField && currentField.id in shapeObjForCurrentField) {
-          currentFieldSchemaDefinition = shapeObjForCurrentField[currentField.id];
-      } else if(shapeObjForCurrentField) {
-        // console.warn(`[WizardForm] Field key "${currentField.id}" not found in schema shape for doc "${doc.name}". Available keys:`, Object.keys(shapeObjForCurrentField));
-      } else {
-         // console.warn(`[WizardForm] Schema shape is undefined for doc "${doc.name}"`);
-      }
-  }
-
 
   if (!isHydrated || !doc) {
     return (
@@ -352,6 +356,36 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
       </div>
     );
   }
+
+  const formContent = currentField && currentField.id ? (
+    <div className="mt-6 space-y-6 min-h-[200px]">
+       {(doc.schema.shape as any)?.[currentField.id] && ((doc.schema.shape as any)[currentField.id] instanceof z.ZodObject || ((doc.schema.shape as any)[currentField.id]._def && (doc.schema.shape as any)[currentField.id]._def.typeName === 'ZodObject')) && (currentField.id.includes('_address') || currentField.id.includes('Address')) ? (
+
+        <Controller
+          control={control}
+          name={currentField.id as any}
+          render={({ field: { onChange: rhfOnChange, value: rhfValue, name: rhfName }}) => (
+              <AddressField
+                  name={rhfName as string}
+                  label={currentField.label}
+                  required={!(currentField?.id && (doc.schema.shape as any)?.[currentField.id]?._def?.typeName?.startsWith('ZodOptional'))}
+                  error={errors[currentField!.id as any]?.message as string | undefined}
+                  placeholder={t("Enter address...", {ns: "translation"})}
+                  tooltip={currentField.tooltip || currentField.label}
+              />
+          )}
+        />
+      ) : (
+        <FieldRenderer fieldKey={currentField.id} locale={locale} doc={doc} />
+      )
+    }
+  </div>
+  ) : (
+     <p className="text-muted-foreground text-center py-10 min-h-[200px] flex items-center justify-center">
+        {t('dynamicForm.noQuestionsNeeded', { ns: 'translation' })}
+     </p>
+  );
+
 
   return (
     <FormProvider {...methods}>
@@ -383,34 +417,7 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
               locale={locale}
               onEdit={handleEditField}
            />
-        ) : currentField && currentField.id ? (
-            <div className="mt-6 space-y-6 min-h-[200px]">
-               {(doc.schema.shape as any)?.[currentField.id] && ((doc.schema.shape as any)[currentField.id] instanceof z.ZodObject || ((doc.schema.shape as any)[currentField.id]._def && (doc.schema.shape as any)[currentField.id]._def.typeName === 'ZodObject')) && (currentField.id.includes('_address') || currentField.id.includes('Address')) ? (
-
-                <Controller
-                  control={control}
-                  name={currentField.id as any}
-                  render={({ field: { onChange: rhfOnChange, value: rhfValue, name: rhfName }}) => (
-                      <AddressField
-                          name={rhfName as string}
-                          label={currentField.label}
-                          required={!(currentFieldSchemaDefinition?._def?.typeName?.startsWith('ZodOptional'))}
-                          error={errors[currentField!.id as any]?.message as string | undefined}
-                          placeholder={t("Enter address...", {ns: "translation"})}
-                          tooltip={(currentFieldSchemaDefinition?._def?.description as string | undefined) || currentField.label}
-                      />
-                  )}
-                />
-              ) : (
-                <FieldRenderer fieldKey={currentField.id} locale={locale} doc={doc} />
-              )
-            }
-          </div>
-        ) : (
-          <p className="text-muted-foreground text-center py-10">
-            {t('dynamicForm.noQuestionsNeeded', { ns: 'translation' })}
-          </p>
-        )}
+        ) : formContent }
 
 
         <div className="mt-8 flex justify-between items-center">

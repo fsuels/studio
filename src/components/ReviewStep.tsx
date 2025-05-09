@@ -1,7 +1,7 @@
 // src/components/ReviewStep.tsx
 'use client';
 
-import React, { useMemo } from 'react'; // Imported useMemo
+import React, { useMemo } from 'react'; 
 import { useFormContext } from 'react-hook-form';
 import type { LegalDocument } from '@/lib/document-library';
 import { prettify } from '@/lib/schema-utils';
@@ -27,6 +27,7 @@ export default function ReviewStep({ doc, locale, onEdit }: ReviewStepProps) {
 
   // Determine which fields to display based on schema or questions
   const fieldsToReview = useMemo(() => {
+    if (!doc) return [];
     if (doc.questions && doc.questions.length > 0) {
         return doc.questions.map(q => ({ 
             id: q.id, 
@@ -56,7 +57,7 @@ export default function ReviewStep({ doc, locale, onEdit }: ReviewStepProps) {
         }
     }
     return [];
-  }, [doc]);
+  }, [doc, prettify]);
 
 
   return (
