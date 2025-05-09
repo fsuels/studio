@@ -8,72 +8,44 @@ import { useToast } from '@/hooks/use-toast';
 import { documentLibrary, type LegalDocument } from '@/lib/document-library';
 import Breadcrumb from '@/components/Breadcrumb';
 import WizardForm from '@/components/WizardForm';
-import WizardLayout from '@/components/WizardLayout';
-import PreviewPane from '@/components/PreviewPane'; // For WizardLayout structure
+// WizardLayout is no longer used here, page structure is handled directly
+import PreviewPane from '@/components/PreviewPane'; 
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
 export default function StartWizardPage() {
   const params = useParams();
-  const { t, i18n } = useTranslation(); // i18n instance for locale
+  const { t, i18n } = useTranslation();
   const router = useRouter();
 
   const locale = params.locale as 'en' | 'es';
   const docIdFromPath = params.docId as string;
 
+  const [docConfig, setDocConfig] = useState<LegalDocument | undefined>(undefined);
   const [isLoading, setIsLoading] = useState(true);
   const [isHydrated, setIsHydrated] = useState(false);
   const { toast } = useToast();
 
-  const docConfig = useMemo(() => {
-    if (!docIdFromPath) {
-        console.warn("[StartWizardPage] docIdFromPath is missing in params.");
-        return null;
-    }
-    const foundDoc = documentLibrary.find(d => d.id === docIdFromPath);
-    
-    if (!foundDoc) {
-        console.error(`[StartWizardPage] Document config not found in library for docId: ${docIdFromPath}.`);
-        return null;
-    }
-    
-    console.log(`[StartWizardPage] Found doc: ${foundDoc.name}. Validating its schema...`);
-
-    if (!foundDoc.schema) {
-        console.error(`[StartWizardPage] Schema is missing for document: ${foundDoc.name} (ID: ${docIdFromPath}).`);
-        return null;
-    }
-    
-    // Basic check: is it a Zod schema and does it have a shape property (for ZodObject)?
-    // More complex Zod types like ZodEffects might need different handling if they are top-level.
-    // For BillOfSaleSchema, it's a ZodObject, so .shape should exist.
-    if (foundDoc.schema._def?.typeName === 'ZodObject' && foundDoc.schema.shape && typeof foundDoc.schema.shape === 'object' && Object.keys(foundDoc.schema.shape).length > 0) {
-        console.log(`[StartWizardPage] Schema for ${foundDoc.name} appears valid with ${Object.keys(foundDoc.schema.shape).length} keys.`);
-        return foundDoc;
-    } else if (foundDoc.schema._def?.typeName === 'ZodEffects' && foundDoc.schema._def.schema?._def?.typeName === 'ZodObject' && foundDoc.schema._def.schema.shape && typeof foundDoc.schema._def.schema.shape === 'object' && Object.keys(foundDoc.schema._def.schema.shape).length > 0) {
-        console.log(`[StartWizardPage] Schema for ${foundDoc.name} (ZodEffects wrapping ZodObject) appears valid with ${Object.keys(foundDoc.schema._def.schema.shape).length} keys.`);
-        return foundDoc;
-    } else {
-        console.error(`[StartWizardPage] Schema for docId '${docIdFromPath}' ('${foundDoc.name}') is invalid or does not have a usable shape for questions. Schema type: ${foundDoc.schema?._def?.typeName}. Shape:`, foundDoc.schema?.shape);
-        return null; 
-    }
-  }, [docIdFromPath]);
-
   useEffect(() => {
     setIsHydrated(true);
-    if (docIdFromPath) {
-      if (docConfig) {
-        setIsLoading(false);
+  }, []);
+  
+  useEffect(() => {
+    if (docIdFromPath && isHydrated) {
+      const foundDoc = documentLibrary.find(d => d.id === docIdFromPath);
+      if (foundDoc && foundDoc.schema) {
+        setDocConfig(foundDoc);
       } else {
-        // Error logged in useMemo, trigger notFound
-        setIsLoading(false);
-        notFound();
+        console.error(`[StartWizardPage] Document config not found or schema invalid for docId: ${docIdFromPath}. Doc found: ${!!foundDoc}, Schema valid: ${!!foundDoc?.schema}`);
+        notFound(); 
       }
-    } else if (isHydrated) {
+      setIsLoading(false);
+    } else if (!docIdFromPath && isHydrated) {
       setIsLoading(false);
       notFound();
     }
-  }, [docIdFromPath, docConfig, isHydrated, notFound]);
+  }, [docIdFromPath, isHydrated, notFound]);
+
 
   const handleWizardComplete = useCallback(
     (checkoutUrl: string) => {
@@ -86,7 +58,7 @@ export default function StartWizardPage() {
     [toast, t, router]
   );
 
-  if (!isHydrated || isLoading) {
+  if (!isHydrated || isLoading || !docConfig) {
     return (
       <div className="flex justify-center items-center min-h-screen">
         <Loader2 className="h-12 w-12 animate-spin text-primary" />
@@ -96,24 +68,21 @@ export default function StartWizardPage() {
       </div>
     );
   }
-
-  if (!docConfig) {
-    // This should ideally be caught by notFound() in useEffect,
-    // but as a fallback rendering an error message.
-    return (
-      <div className="text-center py-10 text-destructive">
-        {t('Document configuration error or document not found.', { ns: 'translation' })}
-      </div>
-    );
-  }
   
   const documentDisplayName =
     locale === 'es' && docConfig.name_es ? docConfig.name_es : docConfig.name;
 
   return (
-    <WizardLayout locale={locale} doc={docConfig}>
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-0">
-        <div className="lg:col-span-1">
+    <main className="container mx-auto py-8 px-4 sm:px-6 lg:px-8">
+      <Breadcrumb
+        items={[
+          { label: t('breadcrumb.home', { ns: 'translation' }), href: `/${locale}` },
+          { label: documentDisplayName, href: `/${locale}/docs/${docConfig.id}` },
+          { label: t('breadcrumb.start', { ns: 'translation' }) },
+        ]}
+      />
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-6">
+        <div className="lg:col-span-1"> {/* Adjusted from lg:col-span-2 for 50/50 split */}
           <WizardForm
             locale={locale}
             doc={docConfig}
@@ -121,16 +90,17 @@ export default function StartWizardPage() {
           />
         </div>
         <div className="lg:col-span-1">
-          <div className="hidden lg:block sticky top-24 h-screen max-h-[calc(100vh-8rem)] flex-col">
+          <div className="sticky top-24 h-screen max-h-[calc(100vh-8rem)] flex flex-col">
             <h3 className="text-xl font-semibold mb-4 text-center text-card-foreground shrink-0">
               {t('Live Preview', { ns: 'translation' })}
             </h3>
-            <div className="flex-grow overflow-hidden">
+            {/* This div now controls the visual appearance and overflow of the preview area */}
+            <div className="flex-grow overflow-hidden rounded-lg shadow-md border border-border bg-background">
               <PreviewPane docId={docIdFromPath} locale={locale} />
             </div>
           </div>
         </div>
       </div>
-    </WizardLayout>
+    </main>
   );
 }
