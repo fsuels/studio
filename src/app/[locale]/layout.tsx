@@ -1,17 +1,23 @@
 // app/[locale]/layout.tsx
-import type { ReactNode } from 'react';
-// No 'use client' needed if it's just passing children and not using hooks directly.
-// No ClientProviders here as it's handled by the root layout.
+'use client';
+
+import { ReactNode } from 'react';
+import { useParams } from 'next/navigation';
+import { ClientProviders } from '@/components/providers/ClientProviders';
 
 interface LocaleLayoutProps {
   children: ReactNode;
-  params: { locale: string }; // Next.js ensures params.locale is available
+  // params is implicitly available via useParams hook in client components
 }
 
-export default function LocaleLayout({ children, params }: LocaleLayoutProps) {
-  // This layout doesn't need to do much other than provide the children.
-  // The locale from params is used by ClientProviders in the root layout.
-  // The 'use client' directive and useParams hook were moved to ClientProviders
-  // to ensure hooks are only called in client components.
-  return <>{children}</>;
+export default function LocaleLayout({ children }: LocaleLayoutProps) {
+  const params = useParams();
+  // Ensure locale is correctly typed and defaults if params.locale is not 'en' or 'es'
+  const locale = (params?.locale === 'es' || params?.locale === 'en') ? params.locale : 'en';
+
+  return (
+    <ClientProviders locale={locale}>
+      {children}
+    </ClientProviders>
+  );
 }
