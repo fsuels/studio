@@ -10,7 +10,7 @@ import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Button } from '@/components/ui/button'; 
 // import MiniCartDrawer from '@/components/MiniCartDrawer'; // Not currently used
-// import { ThemeToggle } from '@/components/ui/ThemeToggle'; // Corrected import path
+// import { ThemeToggle } from '@/components/ui/ThemeToggle'; // ThemeToggle is not used.
 import { Check, ChevronDown, Globe, UserPlus, LogIn, Search as SearchIcon, ExternalLink, FileText, Menu as MenuIcon, X as CloseIcon, LayoutGrid, ChevronUp, LogOut } from 'lucide-react'; 
 import { Input } from '@/components/ui/input';
 import { documentLibrary, type LegalDocument } from '@/lib/document-library';
@@ -141,7 +141,7 @@ export default function Header() {
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 overflow-visible">
       <div className="container flex h-14 items-center px-4 md:px-6">
         <div className="mr-auto md:mr-4 flex items-center">
-           <Logo wrapperClassName="items-center self-center" svgClassName="h-7 w-7" textClassName="text-sm" />
+           <Logo wrapperClassName="items-center self-center" svgClassName="h-7 w-7 md:h-8 md:w-8" textClassName="text-base md:text-lg" />
         </div>
 
         <div className="hidden md:flex flex-1 items-center justify-start">
@@ -149,12 +149,9 @@ export default function Header() {
         </div>
 
         <nav className="hidden md:flex items-center gap-2 ml-auto">
-            <Nav /> {/* Placed Nav here for desktop */}
+            <Nav /> 
             <Popover open={isMegaMenuOpen} 
-              onOpenChange={(open) => {
-                console.log('MegaMenu Popover onOpenChange:', open);
-                setIsMegaMenuOpen(open);
-              }}
+              onOpenChange={setIsMegaMenuOpen}
             >
                 <PopoverTrigger asChild>
                     <Button
@@ -173,7 +170,7 @@ export default function Header() {
                     align="center" 
                     side="bottom"
                     sideOffset={10}
-                    className="w-[90vw] md:w-[90vw] lg:w-[80rem] xl:w-[1200px] max-w-full bg-card shadow-xl rounded-lg p-0 z-[70] border border-border absolute left-1/2 -translate-x-1/2 overflow-visible" 
+                    className="w-[90vw] md:w-[90vw] lg:w-[80rem] xl:w-[1200px] max-w-full bg-card shadow-xl rounded-lg p-0 z-[60] border border-border absolute left-1/2 -translate-x-1/2 overflow-visible" 
                 >
                    <MegaMenuContent categories={CATEGORY_LIST} documents={documentLibrary} onLinkClick={handleMegaMenuLinkClick}/>
                 </PopoverContent>
@@ -206,7 +203,7 @@ export default function Header() {
                           >
                             <FileText className="h-4 w-4 shrink-0 text-muted-foreground"/>
                             <span className="truncate">
-                               {clientLocale === 'es' && doc.name_es ? doc.name_es : doc.name}
+                               {clientLocale === 'es' && doc.name_es ? t(doc.name_es, doc.name_es) : t(doc.name, doc.name)}
                             </span>
                             <ExternalLink className="h-3 w-3 ml-auto text-muted-foreground/70"/>
                           </button>
@@ -219,7 +216,6 @@ export default function Header() {
 
             {mounted && <LanguageSwitcher />}
 
-            {/* <ThemeToggle /> */}
 
             {mounted && (
               isLoggedIn ? (
@@ -258,13 +254,10 @@ export default function Header() {
                  </>
               )
             )}
-            {/* <MiniCartDrawer /> */}
         </nav>
 
         {/* Mobile Menu Button */}
         <div className="md:hidden ml-auto flex items-center gap-1">
-            {/* {mounted && <ThemeToggle />} */}
-            {/* <MiniCartDrawer /> */}
              <Button variant="ghost" size="icon" className="h-9 w-9" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} disabled={!mounted}>
                 {isMobileMenuOpen ? <CloseIcon className="h-5 w-5" /> : <MenuIcon className="h-5 w-5" />}
              </Button>
@@ -301,7 +294,7 @@ export default function Header() {
                           >
                             <FileText className="h-4 w-4 shrink-0 text-muted-foreground"/>
                             <span className="truncate">
-                               {clientLocale === 'es' && doc.name_es ? doc.name_es : doc.name}
+                               {clientLocale === 'es' && doc.name_es ? t(doc.name_es, doc.name_es) : t(doc.name, doc.name)}
                             </span>
                             <ExternalLink className="h-3 w-3 ml-auto text-muted-foreground/70"/>
                           </button>
