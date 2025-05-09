@@ -1,4 +1,3 @@
-// src/components/ReviewStep.tsx
 'use client';
 
 import React, { useMemo, useState, useEffect } from 'react';
@@ -12,9 +11,10 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
-import AddressField from '@/components/AddressField'; // Ensure this path is correct
+import AddressField from '@/components/AddressField';
 import { useTranslation } from 'react-i18next';
-import { useToast } from '@/hooks/use-toast'; // Import useToast
+import { useToast } from '@/hooks/use-toast';
+import { z } from 'zod';
 
 interface ReviewStepProps {
   doc: LegalDocument;
@@ -25,7 +25,7 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
   const { t } = useTranslation();
   const { getValues, setValue, trigger, watch, formState: { errors } } = useFormContext();
   const formData = getValues();
-  const { toast } = useToast(); // Get the toast function
+  const { toast } = useToast();
 
   const [editingFieldId, setEditingFieldId] = useState<string | null>(null);
   const [editedValue, setEditedValue] = useState<any>('');
@@ -44,53 +44,65 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
   }, [doc]);
 
   const fieldsToReview = useMemo(() => {
-    if (!isHydrated || !doc) return [];
+    if (!isHydrated || !doc || !actualSchemaShape) return [];
 
-    const fieldKeysFromSchema = actualSchemaShape ? Object.keys(actualSchemaShape) : [];
-    
-    return fieldKeysFromSchema.map((id) => {
-      const questionConfig = doc.questions?.find(q => q.id === id);
-      const schemaFieldDef = (actualSchemaShape as any)?.[id]?._def;
-      const zodDescription = schemaFieldDef?.description ?? schemaFieldDef?.schema?._def?.description;
-      
-      let label = prettify(id);
-      if (questionConfig?.label) {
-        label = t(questionConfig.label, { defaultValue: questionConfig.label });
-      } else if (zodDescription) {
-        label = t(zodDescription, { defaultValue: zodDescription });
-      } else {
-        label = t(`fields.${id}.label`, { defaultValue: prettify(id) });
-      }
-      
-      return {
-        id,
-        label,
-        type: questionConfig?.type || 
-              (schemaFieldDef?.typeName === 'ZodNumber' ? 'number' :
-               schemaFieldDef?.typeName === 'ZodDate' ? 'date' :
-               schemaFieldDef?.typeName === 'ZodBoolean' ? 'boolean' :
-               (schemaFieldDef?.innerType?._def?.typeName === 'ZodEnum' || schemaFieldDef?.typeName === 'ZodEnum') ? 'select' :
-               (id.includes('_address') || id.includes('Address')) ? 'address' :
-               (id.includes('phone') || id.includes('tel')) ? 'tel' :
-               'text'),
-        options: questionConfig?.options || 
-                 (schemaFieldDef?.innerType?._def?.values || schemaFieldDef?.values)?.map((val: string) => ({ value: val, label: prettify(val) })),
-        required: questionConfig?.required || (schemaFieldDef?.typeName !== 'ZodOptional' && schemaFieldDef?.innerType?._def?.typeName !== 'ZodOptional')
-      };
-    }).filter(field => formData.hasOwnProperty(field.id)); // Only review fields that have data
+    return Object.keys(formData)
+      .map((id) => {
+        const questionConfig = doc.questions?.find(q => q.id === id);
+        const schemaField = (actualSchemaShape as any)?.[id];
+        const schemaFieldDef = schemaField?._def;
+        const zodDescription = schemaFieldDef?.description ?? schemaFieldDef?.schema?._def?.description;
+        
+        let label = prettify(id);
+        if (questionConfig?.label) {
+          label = t(questionConfig.label, { defaultValue: questionConfig.label });
+        } else if (zodDescription) {
+          label = t(zodDescription, { defaultValue: zodDescription });
+        } else {
+          label = t(`fields.${id}.label`, { defaultValue: prettify(id) });
+        }
+        
+        let fieldType: Question['type'] = 'text';
+        if (questionConfig?.type) {
+          fieldType = questionConfig.type;
+        } else if (schemaFieldDef) {
+          if (schemaFieldDef.typeName === 'ZodNumber') fieldType = 'number';
+          else if (schemaFieldDef.typeName === 'ZodDate') fieldType = 'date';
+          else if (schemaFieldDef.typeName === 'ZodBoolean') fieldType = 'boolean';
+          else if (schemaFieldDef.innerType?._def?.typeName === 'ZodEnum' || schemaFieldDef.typeName === 'ZodEnum') fieldType = 'select';
+          else if (id.includes('_address') || id.includes('Address')) fieldType = 'address';
+          else if (id.includes('phone') || id.includes('tel')) fieldType = 'tel';
+        }
+        
+        return {
+          id,
+          label,
+          type: fieldType,
+          options: questionConfig?.options || 
+                   (schemaFieldDef?.innerType?._def?.values || schemaFieldDef?.values)?.map((val: string) => ({ value: val, label: prettify(val) })),
+          required: questionConfig?.required || (schemaFieldDef?.typeName !== 'ZodOptional' && schemaFieldDef?.innerType?._def?.typeName !== 'ZodOptional'),
+          placeholder: questionConfig?.placeholder || (schemaFieldDef as any)?.placeholder,
+        };
+      })
+      .filter(field => formData.hasOwnProperty(field.id));
   }, [doc, formData, actualSchemaShape, t, isHydrated]);
 
   const handleEdit = (id: string) => {
-    setEditedValue(formData[id] ?? ''); 
+    const fieldSchema = fieldsToReview.find(f => f.id === id);
+    let initialValue = formData[id] ?? '';
+    if (fieldSchema?.type === 'boolean') {
+      initialValue = Boolean(formData[id]);
+    }
+    setEditedValue(initialValue);
     setEditingFieldId(id);
   };
 
   const handleSave = async (id: string) => {
     setValue(id, editedValue, { shouldValidate: true, shouldDirty: true });
-    const isValid = await trigger(id); 
+    const isValid = await trigger(id);
     if (isValid) {
-      setEditingFieldId(null); 
-      toast({ title: t('Changes Saved'), description: `${t(fieldsToReview.find(f=>f.id === id)?.label || id)} ${t('updated.')}` });
+      setEditingFieldId(null);
+      toast({ title: t('Changes Saved'), description: `${t(fieldsToReview.find(f => f.id === id)?.label || id)} ${t('updated.')}` });
     } else {
       toast({ title: t('Validation Error'), description: t('Please correct the field.'), variant: 'destructive' });
     }
@@ -98,9 +110,9 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
 
   const handleCancel = () => {
     setEditingFieldId(null);
-    setEditedValue(''); 
+    setEditedValue('');
   };
-
+  
   if (!isHydrated) {
     return (
       <Card className="bg-card border-border shadow-lg animate-pulse">
@@ -131,16 +143,12 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
           </p>
         )}
         {fieldsToReview.map((field) => {
-          const currentValue = watch(field.id); 
+          const currentValue = watch(field.id);
           const displayValue = currentValue instanceof Date
             ? currentValue.toLocaleDateString(locale)
             : typeof currentValue === 'boolean'
             ? (currentValue ? t('Yes') : t('No'))
             : (currentValue !== undefined && currentValue !== null && currentValue !== '' ? String(currentValue) : t('Not Provided', { ns: 'translation' }));
-
-          const fieldSchemaFromQuestions = doc.questions?.find(q => q.id === field.id);
-          const inputType = fieldSchemaFromQuestions?.type || field.type;
-
 
           return (
             <div key={field.id} className="py-3 border-b border-border last:border-b-0 group">
@@ -152,20 +160,21 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
                   </p>
                   {editingFieldId === field.id ? (
                     <div className="mt-1 space-y-2">
-                       {inputType === 'textarea' ? (
+                      {field.type === 'textarea' ? (
                         <Textarea
                           value={editedValue}
                           onChange={(e) => setEditedValue(e.target.value)}
                           className="min-h-[60px] max-w-sm"
                           aria-label={field.label}
+                          placeholder={field.placeholder ? t(field.placeholder) : undefined}
                         />
-                      ) : inputType === 'select' && field.options ? (
+                      ) : field.type === 'select' && field.options ? (
                         <Select
                           value={String(editedValue)}
                           onValueChange={(val) => setEditedValue(val)}
                         >
                           <SelectTrigger aria-label={field.label} className="max-w-sm">
-                            <SelectValue placeholder={t('Select...')} />
+                            <SelectValue placeholder={field.placeholder ? t(field.placeholder) : t('Select...')} />
                           </SelectTrigger>
                           <SelectContent>
                             {field.options.map(opt => (
@@ -173,32 +182,36 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
                             ))}
                           </SelectContent>
                         </Select>
-                      ) : inputType === 'boolean' || inputType === 'checkbox' ? (
-                        <div className="flex items-center space-x-2">
+                      ) : field.type === 'boolean' || field.type === 'checkbox' ? (
+                        <div className="flex items-center space-x-2 pt-1">
                            <Checkbox
                               checked={Boolean(editedValue)}
                               onCheckedChange={(checked) => setEditedValue(Boolean(checked))}
                               id={`review-edit-${field.id}`}
                            />
                            <label htmlFor={`review-edit-${field.id}`} className="text-sm font-normal">
+                             {/* Label for boolean might be part of the main field.label, or a specific 'yes/no' text */}
                              {t(field.label, field.label)}
                            </label>
                         </div>
-                      ) : inputType === 'address' ? (
+                      ) : field.type === 'address' ? (
                          <AddressField
                             name={field.id} 
                             label="" 
-                            value={String(editedValue)}
-                            onChange={(val) => setEditedValue(val)}
-                            className="max-w-sm"
+                            // AddressField internally handles its value, RHF controller passes it
+                            // For standalone use, value and onChange would be needed here.
+                            // Since it's via RHF, this might be more complex to integrate here directly
+                            // For now, keep as Input, assuming AddressField is used via Controller in main form
+                            placeholder={field.placeholder ? t(field.placeholder) : undefined}
                          />
                       ) : (
                         <Input
-                          type={inputType === 'number' ? 'number' : inputType === 'date' ? 'date' : inputType === 'tel' ? 'tel' : 'text'}
+                          type={field.type === 'number' ? 'number' : field.type === 'date' ? 'date' : field.type === 'tel' ? 'tel' : 'text'}
                           value={String(editedValue)}
                           onChange={(e) => setEditedValue(e.target.value)}
                           aria-label={field.label}
                           className="max-w-sm"
+                          placeholder={field.placeholder ? t(field.placeholder) : undefined}
                         />
                       )}
                       <div className="flex gap-2 mt-2">
@@ -218,7 +231,7 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
                     </p>
                   )}
                 </div>
-                {editingFieldId !== field.id && (
+                {editingFieldId !== id && (
                   <Button
                     variant="ghost"
                     size="icon"
