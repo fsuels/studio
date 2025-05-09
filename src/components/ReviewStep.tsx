@@ -1,3 +1,4 @@
+// src/components/ReviewStep.tsx
 'use client';
 
 import React, { useMemo, useState, useEffect } from 'react';
@@ -11,7 +12,8 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
-import AddressField from '@/components/AddressField';
+// AddressField is not directly used for editing inline here; standard inputs are used.
+// import AddressField from '@/components/AddressField'; 
 import { useTranslation } from 'react-i18next';
 import { useToast } from '@/hooks/use-toast';
 import { z } from 'zod';
@@ -28,7 +30,7 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
   const { toast } = useToast();
 
   const [editingFieldId, setEditingFieldId] = useState<string | null>(null);
-  const [editedValue, setEditedValue] = useState<any>('');
+  const [editedValue, setEditedValue] = useState<any>(''); 
   const [isHydrated, setIsHydrated] = useState(false);
 
   useEffect(() => {
@@ -47,22 +49,22 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
     if (!isHydrated || !doc || !actualSchemaShape) return [];
 
     return Object.keys(formData)
-      .map((id) => {
-        const questionConfig = doc.questions?.find(q => q.id === id);
-        const schemaField = (actualSchemaShape as any)?.[id];
+      .map((fieldId) => { 
+        const questionConfig = doc.questions?.find(q => q.id === fieldId);
+        const schemaField = (actualSchemaShape as any)?.[fieldId];
         const schemaFieldDef = schemaField?._def;
         const zodDescription = schemaFieldDef?.description ?? schemaFieldDef?.schema?._def?.description;
         
-        let label = prettify(id);
+        let label = prettify(fieldId);
         if (questionConfig?.label) {
           label = t(questionConfig.label, { defaultValue: questionConfig.label });
         } else if (zodDescription) {
           label = t(zodDescription, { defaultValue: zodDescription });
-        } else {
-          label = t(`fields.${id}.label`, { defaultValue: prettify(id) });
+        } else { 
+           label = t(`fields.${fieldId}.label`, { defaultValue: prettify(fieldId) });
         }
         
-        let fieldType: Question['type'] = 'text';
+        let fieldType: Question['type'] = 'text'; 
         if (questionConfig?.type) {
           fieldType = questionConfig.type;
         } else if (schemaFieldDef) {
@@ -70,12 +72,12 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
           else if (schemaFieldDef.typeName === 'ZodDate') fieldType = 'date';
           else if (schemaFieldDef.typeName === 'ZodBoolean') fieldType = 'boolean';
           else if (schemaFieldDef.innerType?._def?.typeName === 'ZodEnum' || schemaFieldDef.typeName === 'ZodEnum') fieldType = 'select';
-          else if (id.includes('_address') || id.includes('Address')) fieldType = 'address';
-          else if (id.includes('phone') || id.includes('tel')) fieldType = 'tel';
+          else if (fieldId.includes('_address') || fieldId.includes('Address')) fieldType = 'address';
+          else if (fieldId.includes('phone') || fieldId.includes('tel')) fieldType = 'tel';
         }
         
         return {
-          id,
+          id: fieldId, 
           label,
           type: fieldType,
           options: questionConfig?.options || 
@@ -86,6 +88,7 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
       })
       .filter(field => formData.hasOwnProperty(field.id));
   }, [doc, formData, actualSchemaShape, t, isHydrated]);
+
 
   const handleEdit = (id: string) => {
     const fieldSchema = fieldsToReview.find(f => f.id === id);
@@ -101,8 +104,8 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
     setValue(id, editedValue, { shouldValidate: true, shouldDirty: true });
     const isValid = await trigger(id);
     if (isValid) {
-      setEditingFieldId(null);
-      toast({ title: t('Changes Saved'), description: `${t(fieldsToReview.find(f => f.id === id)?.label || id)} ${t('updated.')}` });
+      setEditingFieldId(null); 
+      toast({ title: t('Changes Saved'), description: `${t(fieldsToReview.find(f=>f.id === id)?.label || id)} ${t('updated.')}` });
     } else {
       toast({ title: t('Validation Error'), description: t('Please correct the field.'), variant: 'destructive' });
     }
@@ -142,7 +145,7 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
             {t('No details to review for this document.', { ns: 'translation' })}
           </p>
         )}
-        {fieldsToReview.map((field) => {
+        {fieldsToReview.map((field) => { 
           const currentValue = watch(field.id);
           const displayValue = currentValue instanceof Date
             ? currentValue.toLocaleDateString(locale)
@@ -190,20 +193,9 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
                               id={`review-edit-${field.id}`}
                            />
                            <label htmlFor={`review-edit-${field.id}`} className="text-sm font-normal">
-                             {/* Label for boolean might be part of the main field.label, or a specific 'yes/no' text */}
                              {t(field.label, field.label)}
                            </label>
                         </div>
-                      ) : field.type === 'address' ? (
-                         <AddressField
-                            name={field.id} 
-                            label="" 
-                            // AddressField internally handles its value, RHF controller passes it
-                            // For standalone use, value and onChange would be needed here.
-                            // Since it's via RHF, this might be more complex to integrate here directly
-                            // For now, keep as Input, assuming AddressField is used via Controller in main form
-                            placeholder={field.placeholder ? t(field.placeholder) : undefined}
-                         />
                       ) : (
                         <Input
                           type={field.type === 'number' ? 'number' : field.type === 'date' ? 'date' : field.type === 'tel' ? 'tel' : 'text'}
@@ -231,7 +223,7 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
                     </p>
                   )}
                 </div>
-                {editingFieldId !== id && (
+                {editingFieldId !== field.id && (
                   <Button
                     variant="ghost"
                     size="icon"
