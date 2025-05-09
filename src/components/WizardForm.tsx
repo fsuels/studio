@@ -192,8 +192,6 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
         return [];
     }
 
-    console.log(`[WizardForm steps.useMemo] Processing doc: ${doc.id}, has doc.questions: ${!!doc.questions}, questions length: ${doc.questions?.length}`);
-
     if (doc.questions && doc.questions.length > 0) {
         const mappedQuestions = doc.questions.map(q => ({
             id: q.id,
@@ -204,19 +202,29 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
         return mappedQuestions;
     }
 
-    console.log(`[WizardForm steps.useMemo] doc.questions not usable. Checking actualSchemaShape.`);
     if (actualSchemaShape && typeof actualSchemaShape === 'object') {
         const shapeKeys = Object.keys(actualSchemaShape);
         if (shapeKeys.length > 0) {
-            console.log(`[WizardForm steps.useMemo] Deriving from schema shape. Keys:`, shapeKeys);
             const schemaDerivedSteps = shapeKeys.map(key => {
                 const fieldDef = (actualSchemaShape as any)[key]?._def;
                 const questionConfig = doc.questions?.find(q => q.id === key);
                 const zodDescription = fieldDef?.description ?? fieldDef?.schema?._def?.description;
                 const zodTooltip = (fieldDef as any)?.tooltip ?? (fieldDef?.schema?._def as any)?.tooltip;
-                const label = questionConfig?.label ? t(questionConfig.label, { defaultValue: questionConfig.label })
-                            : (zodDescription ? t(zodDescription, { defaultValue: zodDescription })
-                            : t(`fields.${key}.label`, { defaultValue: prettify(key) }));
+                
+                let label = prettify(key);
+                if (questionConfig?.label) {
+                     label = t(questionConfig.label, { defaultValue: questionConfig.label });
+                } else if (zodDescription) {
+                     label = t(zodDescription, {defaultValue: zodDescription});
+                } else {
+                    const translationKey = `fields.${key}.label`;
+                    const defaultLabel = prettify(key);
+                    // Check if translation exists, if not, use prettify
+                    // Note: i18n.exists might not be reliable for all backends or might need specific config
+                    // A safer approach is to rely on the defaultValue of t()
+                    label = t(translationKey, {defaultValue: defaultLabel});
+                }
+
                 const tooltip = questionConfig?.tooltip ? t(questionConfig.tooltip, { defaultValue: questionConfig.tooltip })
                               : (zodTooltip ? t(zodTooltip, { defaultValue: zodTooltip })
                               : (zodDescription && zodDescription !== label ? t(zodDescription, { defaultValue: zodDescription }) : undefined));
@@ -303,7 +311,8 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
       }
       return;
     }
-
+    
+    // If there are no steps (schema-only form with no 'questions' array), go directly to review.
     if (totalFieldsToFill === 0) {
       setIsReviewing(true);
       if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -313,18 +322,17 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
 
     const isLastFieldStep = currentStepIndex === totalFieldsToFill - 1;
     let isValid = false;
+    const currentStepFieldKey = steps[currentStepIndex]?.id;
 
-    if (isLastFieldStep) {
-      isValid = await trigger(); 
+    if (currentStepFieldKey) {
+       isValid = await trigger(currentStepFieldKey as any);
+    } else if (isLastFieldStep) { // Fallback for last step if currentStepFieldKey is somehow undefined but we are at the last step index
+       isValid = await trigger();
     } else {
-      const currentFieldKey = steps[currentStepIndex]?.id;
-      if (currentFieldKey) {
-        isValid = await trigger(currentFieldKey as any);
-      } else {
-        console.error("[WizardForm] Error: currentFieldKey is undefined in an intermediate step.");
-        isValid = false; 
-      }
+       console.error("[WizardForm] Error: currentStepFieldKey is undefined in an intermediate step. currentStepIndex:", currentStepIndex, "totalFieldsToFill:", totalFieldsToFill, "steps:", steps);
+       isValid = false;
     }
+
 
     if (!isValid) {
       toast({
@@ -430,7 +438,7 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
 
  const formContent = currentField && currentField.id ? (
             <div className="mt-6 space-y-6 min-h-[200px]">
-               {(doc.schema.shape as any)[currentField.id] && ((doc.schema.shape as any)[currentField.id] instanceof z.ZodObject || ((doc.schema.shape as any)[currentField.id]._def && (doc.schema.shape as any)[currentField.id]._def.typeName === 'ZodObject')) && (currentField.id.includes('_address') || currentField.id.includes('Address'))) ? (
+               {(doc.schema.shape as any)?.[currentField.id] && (((doc.schema.shape as any)[currentField.id] instanceof z.ZodObject) || (((doc.schema.shape as any)[currentField.id]?._def) && ((doc.schema.shape as any)[currentField.id]._def.typeName === 'ZodObject'))) && (currentField.id.includes('_address') || currentField.id.includes('Address'))) ? (
 
                 <Controller
                   key={`${currentField.id}-controller-address`}
@@ -444,10 +452,17 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
                           error={errors[currentField!.id as any]?.message as string | undefined}
                           placeholder={t("Enter address...", {ns: "translation"})}
                           tooltip={currentField.tooltip || currentField.label}
-                          value={rhfValue || ''} 
-                          onChange={(val) => { 
-                              rhfOnChange(val);
-                          }}
+                          // value={rhfValue || ''} // Value prop is handled by usePlacesAutocomplete internal state
+                          // onChange={(val, parts) => { // onChange prop expects (val: string, parts?: ParsedAddress) => void
+                          //     rhfOnChange(val); // Update RHF with the raw address string
+                          //      if (parts && typeof setValue === 'function') { // Check if setValue is a function
+                          //         const prefix = rhfName.replace(/_address$/i, '') || rhfName.replace(/Address$/i, '');
+                          //         // Dynamically set related fields if they exist in the schema for this prefix
+                          //         if ((actualSchemaShape as any)?.[`${prefix}_city`]) setValue(`${prefix}_city`, parts.city, {shouldValidate: true, shouldDirty: true});
+                          //         if ((actualSchemaShape as any)?.[`${prefix}_state`]) setValue(`${prefix}_state`, parts.state, {shouldValidate: true, shouldDirty: true});
+                          //         if ((actualSchemaShape as any)?.[`${prefix}_postal_code`]) setValue(`${prefix}_postal_code`, parts.postalCode, {shouldValidate: true, shouldDirty: true});
+                          //      }
+                          // }}
                       />
                   )}
                 />
@@ -491,7 +506,6 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
            <ReviewStep
               doc={doc}
               locale={locale}
-              onBackToForm={handleEditFieldFromReview} 
            />
         ) : formContent }
 
@@ -540,3 +554,4 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
     </FormProvider>
   );
 }
+
