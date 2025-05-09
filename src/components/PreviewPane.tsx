@@ -4,20 +4,25 @@
 import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import type { UseFormWatch } from 'react-hook-form';
-import { Loader2, AlertTriangle } from 'lucide-react'; // Added AlertTriangle
+import { useFormContext, type UseFormWatch } from 'react-hook-form'; // Import useFormContext
+import { Loader2, AlertTriangle } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { debounce } from 'lodash-es';
-import { documentLibrary, type LegalDocument } from '@/lib/document-library'; // Import documentLibrary
+import { documentLibrary, type LegalDocument } from '@/lib/document-library';
 
 interface PreviewPaneProps {
   locale: 'en' | 'es';
   docId: string;
-  watch: UseFormWatch<any>; // RHF's watch function to get live form values
+  watch: UseFormWatch<any>; // Keep this prop for flexibility, but can also use context
 }
 
-export default function PreviewPane({ locale, docId, watch }: PreviewPaneProps) {
+export default function PreviewPane({ locale, docId, watch: watchProp }: PreviewPaneProps) {
   const { t } = useTranslation();
+  // Try to get watch from context if not provided as prop, or prefer prop if available
+  const contextMethods = useFormContext();
+  const watch = watchProp || contextMethods?.watch;
+
+
   const [rawMarkdown, setRawMarkdown] = useState<string>('');
   const [processedMarkdown, setProcessedMarkdown] = useState<string>('');
   const [isLoading, setIsLoading] = useState(true);
@@ -26,7 +31,7 @@ export default function PreviewPane({ locale, docId, watch }: PreviewPaneProps) 
 
   const docConfig = useMemo(() => documentLibrary.find(d => d.id === docId), [docId]);
   const templatePath = locale === 'es' && docConfig?.templatePath_es ? docConfig.templatePath_es : docConfig?.templatePath;
-  const watermarkText = t('preview.watermark', 'PREVIEW'); // Default to PREVIEW if translation missing
+  const watermarkText = t('preview.watermark', { ns: 'translation', defaultValue: 'PREVIEW' });
 
   useEffect(() => {
     setIsHydrated(true);
@@ -80,13 +85,10 @@ export default function PreviewPane({ locale, docId, watch }: PreviewPaneProps) 
     }
     let tempMd = currentRawMarkdown;
     for (const key in formData) {
-      // Regex to match {{handlebars_style_placeholders}}
       const placeholderRegex = new RegExp(`{{\\s*${key.trim()}\\s*}}`, 'g');
       const value = formData[key];
-      // Replace with bolded value or a line if empty
       tempMd = tempMd.replace(placeholderRegex, value ? `**${String(value)}**` : '____');
     }
-    // Replace any remaining unfulfilled placeholders
     tempMd = tempMd.replace(/\{\{.*?\}\}/g, '____');
     return tempMd;
   }, []);
@@ -99,6 +101,12 @@ export default function PreviewPane({ locale, docId, watch }: PreviewPaneProps) 
   );
 
   useEffect(() => {
+    if (!watch) { // If watch is not available (neither via prop nor context)
+      console.warn("[PreviewPane] 'watch' function is not available. Live preview updates will not work.");
+      if (rawMarkdown) setProcessedMarkdown(updatePreviewContent({}, rawMarkdown)); // Show initial template without form data
+      return;
+    }
+
     if (isLoading || !rawMarkdown || !isHydrated) {
       if (!isLoading && !rawMarkdown && isHydrated) {
         setProcessedMarkdown('');
@@ -106,7 +114,6 @@ export default function PreviewPane({ locale, docId, watch }: PreviewPaneProps) 
       return;
     }
     
-    // Initial update
     debouncedUpdatePreview(watch(), rawMarkdown);
 
     const subscription = watch((formData) => {
@@ -117,7 +124,7 @@ export default function PreviewPane({ locale, docId, watch }: PreviewPaneProps) 
       subscription.unsubscribe();
       debouncedUpdatePreview.cancel();
     };
-  }, [watch, rawMarkdown, isLoading, isHydrated, debouncedUpdatePreview]);
+  }, [watch, rawMarkdown, isLoading, isHydrated, debouncedUpdatePreview, updatePreviewContent]);
 
 
   if (!isHydrated) {
@@ -158,8 +165,8 @@ export default function PreviewPane({ locale, docId, watch }: PreviewPaneProps) 
 
   return (
     <div
-      id="live-preview" // For CSS targeting
-      data-watermark={watermarkText} // For CSS ::before pseudo-element
+      id="live-preview"
+      data-watermark={watermarkText}
       className="relative w-full min-h-[500px] md:min-h-[650px] h-full overflow-hidden rounded-lg bg-background shadow-md border border-border"
       style={{
         WebkitUserSelect: 'none',
@@ -168,12 +175,10 @@ export default function PreviewPane({ locale, docId, watch }: PreviewPaneProps) 
         userSelect: 'none',
       }}
     >
-      {/* Scrollable content area */}
       <div className="prose prose-sm dark:prose-invert max-w-none w-full h-full overflow-y-auto p-4 md:p-6">
         <ReactMarkdown 
             remarkPlugins={[remarkGfm]}
             components={{
-                 // eslint-disable-next-line @typescript-eslint/no-unused-vars
                 p: ({node, ...props}) => <p {...props} className="select-none" />
             }}
         >

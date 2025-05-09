@@ -1,8 +1,7 @@
 // src/components/WizardForm.tsx
 'use client';
 
-import { FormProvider, useForm, Controller } from 'react-hook-form'; 
-import { zodResolver } from '@hookform/resolvers/zod';
+import { useFormContext, Controller, type UseFormReturn } from 'react-hook-form'; 
 import axios, { AxiosError } from 'axios';
 import React, { useEffect, useState, useRef } from 'react';
 import { Progress } from '@/components/ui/progress'; 
@@ -24,21 +23,19 @@ interface WizardFormProps {
   locale: 'en' | 'es';
   doc: LegalDocument;
   onComplete: (checkoutUrl: string) => void;
+  // Note: react-hook-form methods will be accessed via useFormContext
 }
 
 export default function WizardForm({ locale, doc, onComplete }: WizardFormProps) {
   const { t } = useTranslation();
   const { toast } = useToast();
   const liveRef = useRef<HTMLDivElement>(null);
-  const { isLoggedIn, isLoading: authIsLoading, user } = useAuth();
+  const { isLoggedIn, isLoading: authIsLoading } = useAuth(); // Removed user as it's not directly used here
   const [showAuthModal, setShowAuthModal] = useState(false);
 
-  const methods = useForm<z.infer<typeof doc.schema>>({
-    resolver: zodResolver(doc.schema),
-    defaultValues: {}, 
-    mode: 'onBlur',
-  });
-
+  // Get methods from FormProvider context set in StartWizardPage
+  const methods = useFormContext<z.infer<typeof doc.schema>>();
+  
   const {
     watch,
     getValues,
@@ -65,7 +62,6 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
       }
       reset(defaultValuesToSet);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [doc.id, locale, reset, doc.schema]);
 
 
@@ -98,13 +94,13 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
         values: getValues(),
         locale,
       });
-      toast({ title: t("Submission Successful"), description: t("Document saved, proceeding to payment.") });
+      toast({ title: t("Submission Successful", {ns: 'translation'}), description: t("Document saved, proceeding to payment.", {ns: 'translation'}) });
       if (typeof window !== 'undefined') localStorage.removeItem(`draft-${doc.id}-${locale}`);
       onComplete(response.data.checkoutUrl);
     } catch (error: any) {
       console.error('Submission error in WizardForm:', error);
-      let title = t("Submission Failed");
-      let description = t("An unexpected error occurred. Please try again.");
+      let title = t("Submission Failed", {ns: 'translation'});
+      let description = t("An unexpected error occurred. Please try again.", {ns: 'translation'});
 
       if (axios.isAxiosError(error)) {
         const axiosError = error as AxiosError<any>;
@@ -114,9 +110,9 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
           const detailsString = Object.entries(axiosError.response.data.details.fieldErrors || {})
             .map(([field, messages]) => `${prettify(field as string)}: ${(messages as string[]).join(', ')}`)
             .join('; ');
-          if (detailsString) description += ` ${t("Details")}: ${detailsString}`;
+          if (detailsString) description += ` ${t("Details", {ns: 'translation'})}: ${detailsString}`;
         } else if (axiosError.response?.data?.details && typeof axiosError.response.data.details === 'string') {
-          description += ` ${t("Details")}: ${axiosError.response.data.details}`;
+          description += ` ${t("Details", {ns: 'translation'})}: ${axiosError.response.data.details}`;
         }
       } else if (error instanceof Error) {
         description = error.message;
@@ -138,7 +134,7 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
 
 
     if (!isValid) {
-      toast({ title: t("Validation Error"), description: t("Please correct the errors before proceeding."), variant: "destructive" });
+      toast({ title: t("Validation Error", {ns: 'translation'}), description: t("Please correct the errors before proceeding.", {ns: 'translation'}), variant: "destructive" });
       return;
     }
 
@@ -159,7 +155,7 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
         }
         await proceedToApiSubmission();
       } else {
-        toast({ title: "Verifying account...", description: "Please wait."});
+        toast({ title: t("Verifying account...", {ns: 'translation'}), description: t("Please wait.", {ns: 'translation'})});
       }
     }
   };
@@ -175,7 +171,6 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
   const progressValue = totalSteps > 0 ? ((currentStepIndex + 1) / totalSteps) * 100 : 0;
 
   return (
-      <FormProvider {...methods}>
       <div className="bg-card rounded-lg shadow-xl p-6 md:p-8 border border-border">
         <div className="mb-6">
           <Progress value={progressValue} className="w-full h-2" />
@@ -191,9 +186,9 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
                 <Controller
                   control={control}
                   name={currentField.id as any}
-                  render={({ field: { onChange: rhfOnChange, value: rhfValue, ref: rhfRef, name: rhfName } }) => (
+                  render={({ field }) => ( // field contains onChange, onBlur, value, ref
                     <AddressField
-                      name={rhfName}
+                      name={field.name} // Pass name from RHF's field object
                       label={t(currentField.label, currentField.label)}
                       required={(doc.schema?.shape as any)?.[currentField.id]?._def?.typeName !== 'ZodOptional'}
                       error={errors[currentField.id as any]?.message as string | undefined}
@@ -209,7 +204,7 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
                 />
               )
           ) : (
-            <p className="text-muted-foreground text-center py-10">{t('dynamicForm.noQuestionsNeeded')}</p>
+            <p className="text-muted-foreground text-center py-10">{t('dynamicForm.noQuestionsNeeded', { ns: 'translation' })}</p>
           )}
         </div>
 
@@ -222,7 +217,7 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
               disabled={formIsSubmitting || authIsLoading}
               className="text-foreground border-border hover:bg-muted"
             >
-              {t('Back')}
+              {t('Back', { ns: 'translation' })}
             </Button>
           )}
           {currentStepIndex === 0 && totalSteps > 0 && <div />} 
@@ -235,7 +230,7 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
               disabled={formIsSubmitting || authIsLoading}
             >
               {formIsSubmitting || authIsLoading ? <Loader2 className="animate-spin h-5 w-5" /> :
-              (currentStepIndex === totalSteps - 1 || totalSteps === 0 ? t('dynamicForm.confirmAnswersButton') : t('wizard.next'))}
+              (currentStepIndex === totalSteps - 1 || totalSteps === 0 ? t('dynamicForm.confirmAnswersButton', {ns: 'translation'}) : t('wizard.next', {ns: 'translation'}))}
             </Button>
           )}
         </div>
@@ -251,7 +246,5 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
           }}
         />
       </div>
-      </FormProvider>
   );
 }
-
