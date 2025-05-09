@@ -3,21 +3,21 @@
 
 import React, { useEffect } from 'react';
 import { useFormContext, Controller } from 'react-hook-form';
-import SmartInput from '@/components/wizard/SmartInput';
-import AddressField from '@/components/AddressField'; // Corrected: default import
+import SmartInput from '@/components/wizard/SmartInput'; // Using SmartInput for standard text/number/tel
+import AddressField from '@/components/AddressField';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Switch } from "@/components/ui/switch";
-import type { LegalDocument } from '@/lib/document-library';
+import type { LegalDocument, Question } from '@/lib/document-library';
 import { useNotary } from '@/hooks/useNotary';
 import { cn } from '@/lib/utils';
 import { useTranslation } from 'react-i18next';
 import { prettify } from '@/lib/schema-utils';
-import { useVinDecoder } from '@/hooks/useVinDecoder';
-import { Info } from 'lucide-react';
+import { useVinDecoder } from '@/hooks/useVinDecoder'; // For displaying decoded VIN info
+import { Info, Loader2 } from 'lucide-react';
 import {
   Tooltip,
   TooltipContent,
@@ -35,40 +35,43 @@ export default function FieldRenderer({ fieldKey, locale, doc }: FieldRendererPr
   const { control, register, setValue, watch, formState: { errors } } = useFormContext();
   const { t } = useTranslation();
 
-  // Derive fieldSchema: prioritize doc.questions, then fallback to doc.schema.shape
   const fieldSchemaFromQuestions = doc.questions?.find(q => q.id === fieldKey);
-  const fieldSchemaFromZod = (doc.schema?.shape as any)?.[fieldKey];
   
-  const fieldSchema = fieldSchemaFromQuestions || (fieldSchemaFromZod ? {
+  const actualSchemaShape = doc.schema?._def?.typeName === 'ZodEffects' 
+    ? doc.schema._def.schema.shape 
+    : doc.schema?.shape;
+  const fieldSchemaFromZod = (actualSchemaShape as any)?.[fieldKey];
+  
+  const fieldSchema: Question | undefined = fieldSchemaFromQuestions || (fieldSchemaFromZod ? {
     id: fieldKey,
     label: (fieldSchemaFromZod._def?.description || fieldSchemaFromZod._def?.schema?._def?.description) || prettify(fieldKey),
     type: fieldSchemaFromZod._def?.typeName === 'ZodNumber' ? 'number' :
           fieldSchemaFromZod._def?.typeName === 'ZodDate' ? 'date' :
           fieldSchemaFromZod._def?.typeName === 'ZodBoolean' ? 'boolean' :
           (fieldSchemaFromZod._def?.innerType?._def?.typeName === 'ZodEnum' || fieldSchemaFromZod._def?.typeName === 'ZodEnum') ? 'select' :
-          'text', // Default to text
+          'text',
     options: (fieldSchemaFromZod._def?.innerType?._def?.values || fieldSchemaFromZod._def?.values)?.map((val: string) => ({ value: val, label: prettify(val) })),
     required: fieldSchemaFromZod._def?.typeName !== 'ZodOptional' && fieldSchemaFromZod._def?.innerType?._def?.typeName !== 'ZodOptional',
-    tooltip: (fieldSchemaFromZod._def as any)?.tooltip || (fieldSchemaFromZod._def?.schema?._def as any)?.tooltip || (fieldSchemaFromZod._def?.description || fieldSchemaFromZod._def?.schema?._def?.description),
-    helperText: (fieldSchemaFromZod._def as any)?.helperText, // Assuming helperText can be part of Zod def
+    tooltip: (fieldSchemaFromZod._def as any)?.tooltip || (fieldSchemaFromZod._def?.schema?._def as any)?.tooltip || undefined, // Ensure undefined if not present
+    helperText: (fieldSchemaFromZod._def as any)?.helperText || undefined,
+    placeholder: (fieldSchemaFromZod._def as any)?.placeholder || undefined,
   } : undefined);
 
-
-  const formStateCode = watch('stateCode'); // Assuming 'stateCode' is the name of your state field in the form
+  const formStateCode = watch('state'); // Assuming 'state' is the name of your state field in the form
   const { isRequired: notaryIsRequiredByState } = useNotary(formStateCode);
   const { decode: decodeVin, data: vinData, loading: vinLoading, error: vinError } = useVinDecoder();
 
 
   useEffect(() => {
-    if (fieldKey === 'vin' && vinData && setValue) { // Added setValue check for safety
+    if (fieldKey === 'vin' && vinData && setValue) { 
       if (vinData.make && (!watch('make') || watch('make') === '')) setValue('make', vinData.make, { shouldValidate: true, shouldDirty: true });
       if (vinData.model && (!watch('model') || watch('model') === '')) setValue('model', vinData.model, { shouldValidate: true, shouldDirty: true });
-      if (vinData.year && (!watch('year') || watch('year') === '' || watch('year') === 0)) setValue('year', vinData.year, { shouldValidate: true, shouldDirty: true });
+      if (vinData.year && (!watch('year') || watch('year') === '' || watch('year') === 0)) setValue('year', Number(vinData.year), { shouldValidate: true, shouldDirty: true });
     }
   }, [vinData, fieldKey, setValue, watch]);
 
 
-  if (!fieldSchema && fieldKey !== 'as_is' && fieldKey !== 'warranty_text' && fieldKey !== 'notarizationToggle') {
+  if (!fieldSchema && !['as_is', 'warranty_text', 'notarizationToggle'].includes(fieldKey)) {
     console.warn(`[FieldRenderer] Field schema not found for key: ${fieldKey} in document: ${doc.name}. This field will not be rendered.`);
     return null;
   }
@@ -105,15 +108,21 @@ export default function FieldRenderer({ fieldKey, locale, doc }: FieldRendererPr
             label={labelText}
             required={fieldSchema?.required}
             error={errors[fieldKey as any]?.message as string | undefined}
-            placeholder={placeholderText || t('Enter address...')}
-            className="max-w-sm"
+            placeholder={placeholderText || t('Enter address...', { ns: 'translation' })}
+            className="max-w-sm" // Applied max-w-sm
             tooltip={tooltipText}
-            // Pass value and onChange for AddressField's internal state and RHF update
             value={rhfValue || ''}
-            onChange={(val, parts) => {
+            onChange={(val, parts) => { // AddressField's onChange provides raw and parsed parts
                 rhfOnChange(val); // Update RHF with the raw address string
-                // If your schema has structured address parts, set them here
-                // e.g., if (parts) { setValue('city', parts.city); setValue('stateCode', parts.state); ... }
+                 if (parts) {
+                    const prefix = fieldKey.replace(/_address$/i, '') || fieldKey.replace(/Address$/i, '');
+                    // Dynamically set related fields if they exist in the schema for this prefix
+                    if ((actualSchemaShape as any)?.[`${prefix}_city`]) setValue(`${prefix}_city`, parts.city, {shouldValidate: true, shouldDirty: true});
+                    if ((actualSchemaShape as any)?.[`${prefix}_state`]) setValue(`${prefix}_state`, parts.state, {shouldValidate: true, shouldDirty: true});
+                    if ((actualSchemaShape as any)?.[`${prefix}_postal_code`]) setValue(`${prefix}_postal_code`, parts.postalCode, {shouldValidate: true, shouldDirty: true});
+                    // For full address field, parts.street can be set back to name if that's desired
+                    // rhfOnChange(parts.street); // Or set the structured street part if a separate field exists
+                 }
             }}
           />
         )}
@@ -146,7 +155,7 @@ export default function FieldRenderer({ fieldKey, locale, doc }: FieldRendererPr
         <div className="space-y-2 pt-4 border-t mt-4">
           <div className="flex items-center space-x-2">
             <Controller
-              name="notarizationPreference" // Assuming this is the RHF name for the toggle
+              name="notarizationPreference" 
               control={control}
               defaultValue={notaryIsRequiredByState || false}
               render={({ field }) => (
@@ -154,7 +163,7 @@ export default function FieldRenderer({ fieldKey, locale, doc }: FieldRendererPr
                   id="notarization-toggle"
                   checked={notaryIsRequiredByState || field.value}
                   onCheckedChange={(checked) => {
-                    if (notaryIsRequiredByState && !checked) return; // Prevent unchecking if state requires it
+                    if (notaryIsRequiredByState && !checked) return; 
                     field.onChange(checked);
                   }}
                   disabled={notaryIsRequiredByState}
@@ -242,7 +251,7 @@ export default function FieldRenderer({ fieldKey, locale, doc }: FieldRendererPr
           render={({ field }) => (
             <Select onValueChange={field.onChange} value={field.value as string || undefined}>
               <SelectTrigger id={fieldKey} className={cn("bg-background max-w-sm", fieldError && "border-destructive focus:ring-destructive")} aria-invalid={!!fieldError}>
-                <SelectValue placeholder={placeholderText || t("Select...")} />
+                <SelectValue placeholder={placeholderText || t("Select...", {ns: 'translation'})} />
               </SelectTrigger>
               <SelectContent>
                 {fieldSchema.options?.map(opt => (
@@ -252,21 +261,24 @@ export default function FieldRenderer({ fieldKey, locale, doc }: FieldRendererPr
             </Select>
           )}
         />
-      ) : (
+      ) : ( // Default to SmartInput for text, number, tel
         <SmartInput
           id={fieldKey}
           type={inputType}
           placeholder={placeholderText}
-          className={cn("input bg-background", fieldError && "border-destructive focus-visible:ring-destructive")} // Removed max-w-sm as SmartInput handles it
+          className={cn("input bg-background", fieldError && "border-destructive focus-visible:ring-destructive")}
           inputMode={inputType === 'number' || inputType === 'tel' ? 'numeric' : undefined}
           aria-invalid={!!fieldError}
-          {...register(fieldKey as any, { required: fieldSchema?.required })}
+          rhfProps={register(fieldKey as any, { 
+            required: fieldSchema?.required,
+            onBlur: fieldKey === 'vin' ? (e) => decode(e.target.value) : undefined,
+           })}
         />
       )}
-      {fieldKey === 'vin' && vinLoading && <p className="text-xs text-muted-foreground mt-1">Decoding VIN…</p>}
+      {fieldKey === 'vin' && vinLoading && <p className="text-xs text-muted-foreground mt-1 flex items-center"><Loader2 className="h-3 w-3 animate-spin mr-1" /> {t("Decoding VIN…")}</p>}
       {fieldKey === 'vin' && vinData && !vinError && (
         <p className="text-xs text-muted-foreground mt-1">
-          {vinData.year} {vinData.make} {vinData.model} {vinData.bodyClass ? `(${vinData.bodyClass})` : ''}
+          {t("Decoded")}: {vinData.year} {vinData.make} {vinData.model} {vinData.bodyClass ? `(${vinData.bodyClass})` : ''}
         </p>
       )}
       {fieldKey === 'vin' && vinError && <p className="text-xs text-destructive mt-1">{vinError}</p>}
