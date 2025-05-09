@@ -7,16 +7,19 @@ export const BillOfSaleSchema = z.object({
   seller_name:      z.string().min(2, { message: "Seller name must be at least 2 characters." }),
   seller_address:   z.string().min(5, { message: "Seller address must be at least 5 characters." }),
   seller_phone:     z.string()
-                     .regex(/^\(\d{3}\)\s\d{3}-\d{4}$/, { message: "Invalid phone number format. Use (XXX) XXX-XXXX."})
-                     .optional(),
+                     .optional()
+                     .refine(val => val === undefined || val === "" || /^\(\d{3}\)\s\d{3}-\d{4}$/.test(val), {
+                        message: "Phone number must be in (XXX) XXX-XXXX format or empty.",
+                     }),
 
   /* ---------- Buyer ---------- */
   buyer_name:       z.string().min(2, { message: "Buyer name must be at least 2 characters." }),
   buyer_address:    z.string().min(5, { message: "Buyer address must be at least 5 characters." }),
   buyer_phone:      z.string()
-                     .regex(/^\(\d{3}\)\s\d{3}-\d{4}$/, { message: "Invalid phone number format. Use (XXX) XXX-XXXX."})
                      .optional()
-                     .or(z.literal('')), // Allow empty string or valid format if optional
+                     .refine(val => val === undefined || val === "" || /^\(\d{3}\)\s\d{3}-\d{4}$/.test(val), {
+                        message: "Phone number must be in (XXX) XXX-XXXX format or empty.",
+                     }),
 
   /* ---------- Vehicle ---------- */
   vin:              z.string().length(17, { message: 'VIN must be 17 characters.'})
