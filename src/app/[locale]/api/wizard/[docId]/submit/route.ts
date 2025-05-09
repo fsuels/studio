@@ -1,4 +1,3 @@
-
 // src/app/[locale]/api/wizard/[docId]/submit/route.ts
 import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
@@ -8,32 +7,18 @@ import { z } from 'zod';
 
 // Placeholder for user authentication - replace with your actual auth logic
 async function getCurrentUser(): Promise<{ uid: string; email?: string | null } | null> {
-  // Example: If using Firebase Auth on the client and passing ID token in headers
-  // const idToken = req.headers.get('authorization')?.split('Bearer ')[1];
-  // if (!idToken) return null;
-  // try {
-  //   const decodedToken = await admin.auth().verifyIdToken(idToken);
-  //   return { uid: decodedToken.uid, email: decodedToken.email };
-  // } catch (error) {
-  //   console.error('Error verifying auth token:', error);
-  //   return null;
-  // }
   console.warn("[submit/route.ts] Using MOCK getCurrentUser. Replace with actual authentication.");
   return { uid: 'test-user-123', email: 'test-user@example.com' }; // Placeholder
 }
 
+// Initial console logs for environment variables (for debugging during build/server start)
 if (!process.env.STRIPE_SECRET_KEY) {
-  console.error('[submit/route.ts] CRITICAL: STRIPE_SECRET_KEY environment variable is not set.');
-  // Potentially throw or handle globally if Stripe is essential for all paths
+  console.error('[submit/route.ts] CRITICAL AT MODULE LOAD: STRIPE_SECRET_KEY environment variable is not set.');
 }
 if (!process.env.NEXT_PUBLIC_SITE_URL) {
-    console.error('[submit/route.ts] CRITICAL: NEXT_PUBLIC_SITE_URL environment variable is not set. Stripe success/cancel URLs will be invalid.');
+    console.error('[submit/route.ts] CRITICAL AT MODULE LOAD: NEXT_PUBLIC_SITE_URL environment variable is not set. Stripe success/cancel URLs will be invalid.');
 }
 
-
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2023-10-16', 
-});
 
 export async function POST(
   req: Request,
@@ -41,6 +26,25 @@ export async function POST(
 ) {
   const logPrefix = `[API /wizard/${params.docId}/submit]`;
   console.log(`${logPrefix} Received POST request.`);
+
+  // Check for critical environment variables at the beginning of the handler
+  const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL;
+
+  if (!stripeSecretKey) {
+    console.error(`${logPrefix} CRITICAL RUNTIME: STRIPE_SECRET_KEY is not set. Aborting.`);
+    return NextResponse.json({ error: 'Payment provider configuration is missing. Please contact support.', code: 'STRIPE_KEY_MISSING' }, { status: 503 });
+  }
+
+  if (!siteUrl) {
+    console.error(`${logPrefix} CRITICAL RUNTIME: NEXT_PUBLIC_SITE_URL is not set. Aborting.`);
+    return NextResponse.json({ error: 'Site URL configuration is missing. Please contact support.', code: 'SITE_URL_MISSING' }, { status: 503 });
+  }
+
+  // Initialize Stripe client here, now that we've confirmed the key exists
+  const stripe = new Stripe(stripeSecretKey, {
+    apiVersion: '2023-10-16', 
+  });
 
   try {
     const body = await req.json();
@@ -68,7 +72,7 @@ export async function POST(
       const validationResult = docConfig.schema.safeParse(values);
       if (!validationResult.success) {
         console.error(`${logPrefix} Invalid form data:`, validationResult.error.flatten());
-        return NextResponse.json({ error: 'Invalid form data', details: validationResult.error.flatten() }, { status: 400 });
+        return NextResponse.json({ error: 'Invalid form data', details: validationResult.error.flatten(), code: 'INVALID_FORM_DATA' }, { status: 400 });
       }
       console.log(`${logPrefix} Form data validated successfully against Zod schema.`);
     } else {
@@ -81,7 +85,7 @@ export async function POST(
       console.log(`${logPrefix} Firestore instance obtained.`);
     } catch (dbError) {
       console.error(`${logPrefix} Failed to get Firestore instance:`, dbError);
-      return NextResponse.json({ error: 'Internal server error: Database connection failed.', details: (dbError instanceof Error ? dbError.message : 'Unknown DB error') }, { status: 500 });
+      return NextResponse.json({ error: 'Internal server error: Database connection failed.', details: (dbError instanceof Error ? dbError.message : 'Unknown DB error'), code: 'DB_CONNECTION_FAILED' }, { status: 500 });
     }
     
     const documentInstanceId = `${params.docId}_${Date.now()}`;
@@ -102,17 +106,12 @@ export async function POST(
       console.log(`${logPrefix} Document draft saved to Firestore: users/${user.uid}/documents/${documentInstanceId}`);
     } catch (firestoreError) {
       console.error(`${logPrefix} Firestore set operation failed:`, firestoreError);
-      return NextResponse.json({ error: 'Failed to save document draft.', details: (firestoreError instanceof Error ? firestoreError.message : 'Unknown Firestore error') }, { status: 500 });
+      return NextResponse.json({ error: 'Failed to save document draft.', details: (firestoreError instanceof Error ? firestoreError.message : 'Unknown Firestore error'), code: 'FIRESTORE_SAVE_FAILED' }, { status: 500 });
     }
 
     let session;
     try {
-      const siteUrl = process.env.NEXT_PUBLIC_SITE_URL;
-      if (!siteUrl) {
-        console.error(`${logPrefix} NEXT_PUBLIC_SITE_URL is not set. Cannot create Stripe session.`);
-        throw new Error("Site URL configuration is missing for Stripe checkout.");
-      }
-
+      // siteUrl is already checked and confirmed to exist at the top of the handler
       session = await stripe.checkout.sessions.create({
         mode: 'payment',
         payment_method_types: ['card'],
@@ -142,12 +141,14 @@ export async function POST(
       console.log(`${logPrefix} Stripe Checkout session created: ${session.id}`);
     } catch (stripeError) {
       console.error(`${logPrefix} Stripe session creation failed:`, stripeError);
-      return NextResponse.json({ error: 'Failed to create payment session.', details: (stripeError instanceof Error ? stripeError.message : 'Unknown Stripe error') }, { status: 500 });
+      return NextResponse.json({ error: 'Failed to create payment session.', details: (stripeError instanceof Error ? stripeError.message : 'Unknown Stripe error'), code: 'STRIPE_SESSION_FAILED' }, { status: 500 });
     }
 
     if (!session.url) {
         console.error(`${logPrefix} Stripe session URL not created, though session object exists.`);
-        throw new Error("Stripe session URL not created after session object was formed.");
+        // This specific error should now be less likely as Stripe key and site URL are pre-checked.
+        // If it still occurs, it's a more intricate Stripe API issue.
+        return NextResponse.json({ error: 'Stripe session URL missing after creation.', code: 'STRIPE_URL_MISSING' }, { status: 500 });
     }
 
     return NextResponse.json({ checkoutUrl: session.url });
@@ -158,6 +159,7 @@ export async function POST(
     if (error instanceof Error) {
       errorMessage = error.message;
     }
-    return NextResponse.json({ error: 'Failed to process document submission', details: errorMessage }, { status: 500 });
+    // This general catch block might indicate an issue before Stripe/DB ops, e.g., req.json() failure
+    return NextResponse.json({ error: 'Failed to process document submission', details: errorMessage, code: 'UNHANDLED_SUBMISSION_ERROR' }, { status: 500 });
   }
 }
