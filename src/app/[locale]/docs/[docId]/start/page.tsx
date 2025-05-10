@@ -6,9 +6,10 @@ import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Edit, Eye } from 'lucide-react';
 
 import { documentLibrary, type LegalDocument } from '@/lib/document-library';
+import { localizations } from '@/lib/localizations'; // Import localizations
 import Breadcrumb from '@/components/Breadcrumb';
 import WizardForm from '@/components/WizardForm';
 import PreviewPane from '@/components/PreviewPane';
@@ -16,7 +17,39 @@ import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/hooks/useAuth';
 import { loadFormProgress, saveFormProgress } from '@/lib/firestore/saveFormProgress';
 import { debounce } from 'lodash-es';
-import TrustBadges from '@/components/TrustBadges'; // Import TrustBadges
+import TrustBadges from '@/components/TrustBadges';
+import { Button } from '@/components/ui/button';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { cn } from '@/lib/utils';
+
+
+// generateStaticParams is crucial for static export of dynamic routes
+export async function generateStaticParams() {
+  console.log('[generateStaticParams /docs/[docId]/start] Starting generation...');
+  if (!documentLibrary || documentLibrary.length === 0) {
+    console.warn('[generateStaticParams /docs/[docId]/start] documentLibrary is empty or undefined. No paths will be generated.');
+    return [];
+  }
+  if (!localizations || localizations.length === 0) {
+    console.warn('[generateStaticParams /docs/[docId]/start] localizations is empty or undefined. No paths will be generated.');
+    return [];
+  }
+
+  const params = [];
+  for (const locale of localizations) {
+    for (const doc of documentLibrary) {
+      // Ensure doc and doc.id are valid and not 'general-inquiry'
+      if (doc && doc.id && doc.id !== 'general-inquiry') {
+        params.push({ locale, docId: doc.id });
+      } else if (!doc || !doc.id) {
+        console.warn(`[generateStaticParams /docs/[docId]/start] Encountered a document with missing id in locale ${locale}. Skipping.`);
+      }
+    }
+  }
+  console.log(`[generateStaticParams /docs/[docId]/start] Generated ${params.length} paths.`);
+  return params;
+}
+
 
 export default function StartWizardPage() {
   const params = useParams();
@@ -29,15 +62,16 @@ export default function StartWizardPage() {
 
   const [isLoadingConfig, setIsLoadingConfig] = useState(true);
   const [isHydrated, setIsHydrated] = useState(false);
+  const [activeMobileTab, setActiveMobileTab] = useState<'form' | 'preview'>('form');
   
   const docConfig = useMemo(() => {
-    if (!isHydrated) return undefined; // Ensure hydration before accessing documentLibrary
+    if (!isHydrated) return undefined;
     return documentLibrary.find(d => d.id === docIdFromPath);
   }, [docIdFromPath, isHydrated]);
 
-  const methods = useForm<z.infer<any>>({ // Schema will be set dynamically
+  const methods = useForm<z.infer<any>>({
     defaultValues: {}, 
-    mode: 'onBlur',
+    mode: 'onBlur', 
   });
   const { reset, watch } = methods;
 
@@ -46,19 +80,23 @@ export default function StartWizardPage() {
   }, []);
 
   useEffect(() => {
-    if (isHydrated && docConfig && docConfig.schema) {
-      methods.reset({}, { resolver: zodResolver(docConfig.schema) } as any);
+    if (isHydrated && docConfig) {
+      if (docConfig.schema) {
+        methods.reset({}, { resolver: zodResolver(docConfig.schema) } as any);
+      } else {
+        console.warn(`[StartWizardPage] No Zod schema found for document ID: ${docIdFromPath}. Form validation might not work as expected.`);
+        methods.reset({}); // Reset without resolver if no schema
+      }
       setIsLoadingConfig(false);
-    } else if (isHydrated && !docConfig) {
+    } else if (isHydrated && !docConfig && !isLoadingConfig) { // Ensure !isLoadingConfig to prevent multiple notFound calls
       console.error(`[StartWizardPage] Document config not found for docId: ${docIdFromPath}`);
       notFound();
-      setIsLoadingConfig(false);
     }
-  }, [docConfig, isHydrated, methods, docIdFromPath]);
+  }, [docConfig, isHydrated, methods, docIdFromPath, isLoadingConfig]);
 
-  // Load progress
+
   useEffect(() => {
-    if (!docConfig?.id || !isHydrated || authIsLoading || !docConfig.schema || isLoadingConfig) return;
+    if (!docConfig?.id || !isHydrated || authIsLoading || isLoadingConfig) return;
     
     async function loadDraft() {
       let draftData: Record<string, any> = {};
@@ -83,7 +121,6 @@ export default function StartWizardPage() {
     loadDraft();
   }, [docConfig, locale, isHydrated, reset, authIsLoading, isLoggedIn, user, isLoadingConfig]);
 
-  // Autosave progress
   const debouncedSave = useCallback(
     debounce(async (data: Record<string, any>) => {
       if (!docConfig?.id || authIsLoading || !isHydrated || Object.keys(data).length === 0 || isLoadingConfig) return;
@@ -119,14 +156,13 @@ export default function StartWizardPage() {
 
   const handleWizardComplete = useCallback(
     (checkoutUrl: string) => {
-      // This logic is now inside WizardForm's handleNextStep for final submission
-      // Kept here for conceptual clarity, WizardForm will call its onComplete prop.
       console.log("[StartWizardPage] Wizard onComplete triggered with checkoutUrl:", checkoutUrl);
+      router.push(checkoutUrl);
     },
-    []
+    [router]
   );
 
-  if (!isHydrated || isLoadingConfig || !docConfig || !docConfig.schema) {
+  if (!isHydrated || isLoadingConfig || !docConfig ) {
     return (
       <div className="flex justify-center items-center min-h-[calc(100vh-8rem)]">
         <Loader2 className="h-12 w-12 animate-spin text-primary" />
@@ -150,19 +186,33 @@ export default function StartWizardPage() {
           ]}
         />
         
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-6">
-          <div className="lg:col-span-1">
+        {/* Mobile Tab Switcher */}
+        <div className="lg:hidden mb-4 sticky top-14 z-30 bg-background/90 backdrop-blur-sm py-2 -mx-4 px-4 border-b">
+          <Tabs value={activeMobileTab} onValueChange={(value) => setActiveMobileTab(value as 'form' | 'preview')} className="w-full">
+            <TabsList className="grid w-full grid-cols-2 h-10">
+              <TabsTrigger value="form" className="text-xs sm:text-sm data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+                <Edit className="w-4 h-4 mr-1.5" /> {t('Form', {ns: 'translation'})}
+              </TabsTrigger>
+              <TabsTrigger value="preview" className="text-xs sm:text-sm data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+                <Eye className="w-4 h-4 mr-1.5" /> {t('Preview', {ns: 'translation'})}
+              </TabsTrigger>
+            </TabsList>
+          </Tabs>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-2 lg:mt-6">
+          <div className={cn("lg:col-span-1", activeMobileTab !== 'form' && 'hidden lg:block')}>
             <WizardForm
               locale={locale}
               doc={docConfig}
               onComplete={handleWizardComplete}
             />
-            <div className="mt-6">
+            <div className="mt-6 lg:mt-8">
               <TrustBadges />
             </div>
           </div>
-          <div className="lg:col-span-1">
-            <div className="sticky top-24 h-[calc(100vh-8rem)] max-h-[calc(100vh-8rem)] flex flex-col lg:max-h-[calc(100vh-6rem)]">
+          <div className={cn("lg:col-span-1", activeMobileTab !== 'preview' && 'hidden lg:block')}>
+             <div className="sticky top-32 lg:top-24 h-[calc(100vh-14rem)] lg:h-[calc(100vh-8rem)] max-h-[calc(100vh-14rem)] lg:max-h-[calc(100vh-6rem)] flex flex-col">
               <h3 className="text-xl font-semibold mb-4 text-center text-card-foreground shrink-0 hidden lg:block">
                 {t('Live Preview', { ns: 'translation' })}
               </h3>
@@ -176,5 +226,3 @@ export default function StartWizardPage() {
     </FormProvider>
   );
 }
-
-    
