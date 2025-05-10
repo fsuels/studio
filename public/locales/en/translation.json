@@ -626,7 +626,7 @@
    "Start Over": "Start Over",
    "Please select a state from the filter bar above to see documents.": "Please select a state from the filter bar above to see documents.",
    "State Required": "State Required",
-   "Please select a state from the filter bar above before choosing a document.": "Please select a state from the filter bar above before choosing a document.",
+   "Please select a state from the filter bar above before choosing a document.": "Please select a state from the filter bar above to choosing a document.",
    "Back": "Back",
    "Search Results": "Search Results",
    "Showing documents matching your search and state criteria.": "Showing documents matching your search and state criteria.",
@@ -640,7 +640,7 @@
    },
    "wizard": {
       "next": "Next",
-      "confirmChargeAndPay": "Confirm {{price}} charge & Proceed to Payment",
+      "confirmChargeAndPay": "Confirm $35 charge & Proceed to Payment",
       "changeDocument": "Change Document"
    },
    "fields": {
@@ -675,7 +675,3 @@
     "attorneyReviewed": "Attorney-Reviewed Templates"
   }
 }
-
-    
-    
-
