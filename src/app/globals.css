@@ -275,23 +275,14 @@
     user-select: none;
   }
 
-  #live-preview::before {
-    content: attr(data-watermark);
-    position: absolute;
-    inset: 0;
-    font-size: 8rem; /* Tailwind: text-9xl */
-    line-height: 1;
-    font-weight: 700; /* Tailwind: font-bold */
-    color: hsl(var(--muted-foreground) / 0.06); /* Adjusted for theme */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transform: rotate(-30deg);
-    pointer-events: none;
-    z-index: 0; /* Behind content but above background */
-  }
+  /* REMOVED the ::before watermark for #live-preview */
+  /* The inline span watermark in PreviewPane.tsx will now be the only one */
 
   #live-preview .prose h1 {
     @apply text-center; /* Center H1 within the live preview prose */
   }
 }
+
+/* hide native scrollbar for horizontal stepper */
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
