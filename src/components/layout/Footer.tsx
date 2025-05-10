@@ -5,7 +5,7 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Linkedin, Twitter, Send, Lock, Loader2, Phone, MessageSquare } from 'lucide-react'; 
+import { Linkedin, Twitter, Send, Lock, Loader2, Phone, MessageSquare, Clock } from 'lucide-react'; 
 import { useToast } from '@/hooks/use-toast';
 import { Logo } from '@/components/layout/Logo';
 import { useTranslation } from 'react-i18next';
