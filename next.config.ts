@@ -1,3 +1,4 @@
+
 import type { NextConfig } from 'next';
 import webpack from 'webpack';
 
@@ -12,13 +13,14 @@ const nextConfig: NextConfig = {
   },
 
   images: {
-    // Only optimize remote images from specified patterns
+    unoptimized: true, // Disable Image Optimization for static export
+    // Only optimize remote images from specified patterns if unoptimized is false
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'picsum.photos', // Corrected hostname
+        hostname: 'picsum.photos', 
         port: '',
-        pathname: '/**', // Allow any path under this hostname
+        pathname: '/**', 
       },
     ],
   },
