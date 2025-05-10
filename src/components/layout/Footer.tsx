@@ -5,17 +5,19 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Linkedin, Twitter, Send, Loader2 } from 'lucide-react';
+import { Linkedin, Twitter, Send, Lock, Loader2 } from 'lucide-react'; // Added Lock icon
 import { useToast } from '@/hooks/use-toast';
 import { Logo } from '@/components/layout/Logo';
 import { useTranslation } from 'react-i18next';
+import { useParams } from 'next/navigation'; // Import useParams
 
 const Footer = React.memo(function Footer() {
     const [email, setEmail] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const { toast } = useToast();
     const { t, i18n } = useTranslation();
-    const locale = i18n.language as 'en' | 'es'; 
+    const params = useParams(); // Use useParams to get locale
+    const locale = (params.locale as 'en' | 'es') || i18n.language as 'en' | 'es' || 'en';
     const [isHydrated, setIsHydrated] = useState(false);
 
     useEffect(() => {
@@ -40,19 +42,19 @@ const Footer = React.memo(function Footer() {
     const currentYear = new Date().getFullYear();
 
     const footerLinks = [
-      { sectionTitleKey: 'Product', links: [
+      { sectionTitleKey: 'Product', defaultSectionTitle: 'Product', links: [
           { path: '/#workflow-start', labelKey: 'footer.howItWorks', defaultLabel: 'How It Works' },
           { path: '/pricing', labelKey: 'footer.pricing', defaultLabel: 'Pricing' },
           { path: '/features', labelKey: 'footer.features', defaultLabel: 'Features' },
         ]
       },
-      { sectionTitleKey: 'footer.resources', links: [
+      { sectionTitleKey: 'footer.resources', defaultSectionTitle: 'Resources', links: [
           { path: '/blog', labelKey: 'footer.blog', defaultLabel: 'Blog' },
           { path: '/faq', labelKey: 'footer.faq', defaultLabel: 'FAQ' },
           { path: '/support', labelKey: 'footer.support', defaultLabel: 'Support' },
         ]
       },
-      { sectionTitleKey: 'footer.legal', links: [
+      { sectionTitleKey: 'footer.legal', defaultSectionTitle: 'Legal', links: [
           { path: '/privacy-policy', labelKey: 'footer.privacyPolicy', defaultLabel: 'Privacy Policy' },
           { path: '/terms-of-service', labelKey: 'footer.termsOfService', defaultLabel: 'Terms of Service' },
           { path: '/disclaimer', labelKey: 'footer.disclaimer', defaultLabel: 'Disclaimer' },
@@ -88,7 +90,7 @@ const Footer = React.memo(function Footer() {
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
           <div className="space-y-4">
-             <Logo wrapperClassName="mb-1 items-start" svgClassName="h-8 w-8" textClassName="text-sm" />
+             <Logo wrapperClassName="mb-1 items-start" svgClassName="h-7 w-7" textClassName="text-sm" />
              <p className="text-xs">
                 {t('subhead', {defaultValue: 'Create, sign & share professional contracts in minutes—no lawyer required.'})}
              </p>
@@ -96,12 +98,12 @@ const Footer = React.memo(function Footer() {
 
           {footerLinks.map(section => (
             <div key={section.sectionTitleKey}>
-                <h4 className="font-semibold text-foreground mb-3">{t(section.sectionTitleKey, section.sectionTitleKey.split('.').pop())}</h4>
+                <h4 className="font-semibold text-foreground mb-3">{t(section.sectionTitleKey, {defaultValue: section.defaultSectionTitle})}</h4>
                 <ul className="space-y-2 text-sm">
                     {section.links.map(link => (
                          <li key={link.path}>
                             <Link href={`/${locale}${link.path}`} className="hover:text-primary hover:underline">
-                                {t(link.labelKey, link.defaultLabel)}
+                                {t(link.labelKey, {defaultValue: link.defaultLabel})}
                             </Link>
                          </li>
                     ))}
@@ -109,34 +111,36 @@ const Footer = React.memo(function Footer() {
             </div>
           ))}
           
-
           <div>
-             <h4 className="font-semibold text-foreground mb-3">{t('footer.community', 'Community')}</h4>
+             <h4 className="font-semibold text-foreground mb-3">{t('footer.community', {defaultValue: 'Community'})}</h4>
              <div className="flex space-x-3 mb-6">
-                 <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="text-muted-foreground hover:text-primary transition-colors">
+                 <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" aria-label={t('LinkedIn', {defaultValue: 'LinkedIn'})} className="text-muted-foreground hover:text-primary transition-colors">
                     <Linkedin className="h-5 w-5" />
                  </a>
-                 <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" aria-label="Twitter" className="text-muted-foreground hover:text-primary transition-colors">
+                 <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" aria-label={t('Twitter', {defaultValue: 'Twitter'})} className="text-muted-foreground hover:text-primary transition-colors">
                      <Twitter className="h-5 w-5" />
                  </a>
              </div>
 
-            <h4 className="font-semibold text-foreground mb-3">{t('footer.getCredits', 'Get 3 Free Credits')}</h4>
-            <form onSubmit={handleSubscribe} className="flex gap-2">
-              <Input
-                type="email"
-                placeholder={t('footer.emailPlaceholder', 'Enter your email')}
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="flex-grow bg-background text-sm"
-                aria-label={t('footer.emailPlaceholder', 'Email for newsletter subscription')}
-                disabled={isLoading}
-              />
-              <Button type="submit" size="icon" className="bg-primary text-primary-foreground hover:bg-primary/90" aria-label={t('footer.subscribe', 'Subscribe')} disabled={isLoading}>
-                 {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
+            <h4 className="font-semibold text-foreground mb-3">{t('footer.getCredits', {defaultValue: 'Get 3 Free Credits'})}</h4>
+            <form onSubmit={handleSubscribe} className="flex gap-2 items-center">
+              <div className="relative flex-grow">
+                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input
+                  type="email"
+                  placeholder={t('footer.emailPlaceholder', {defaultValue: 'Enter your email'})}
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="pl-10 pr-2 py-2 h-11 text-base bg-background" // Increased padding and height
+                  aria-label={t('footer.emailPlaceholder', {defaultValue: 'Email for newsletter subscription'})}
+                  disabled={isLoading}
+                />
+              </div>
+              <Button type="submit" size="icon" className="bg-primary text-primary-foreground hover:bg-primary/90 h-11 w-11 shrink-0" aria-label={t('footer.subscribe', {defaultValue: 'Subscribe'})} disabled={isLoading}>
+                 {isLoading ? <Loader2 className="h-5 w-5 animate-spin" /> : <Send className="h-5 w-5" />}
               </Button>
             </form>
-            <p className="text-xs mt-2">{t('footer.joinMailingList', 'Join our mailing list for updates and offers.')}</p>
+            <p className="text-xs mt-2">{t('footer.joinMailingList', {defaultValue: 'Join our mailing list for updates and offers.'})}</p>
           </div>
         </div>
 
@@ -144,6 +148,8 @@ const Footer = React.memo(function Footer() {
           {t('footer.copyright', { year: currentYear, defaultValue: `© ${currentYear} 123LegalDoc. All rights reserved.` })}
         </div>
       </div>
+      {/* Placeholder for Intercom chat bubble script integration */}
+      {/* <script>{`// Intercom script would go here or be loaded via a Script component in _app.tsx or a root layout`}</script> */}
     </footer>
   );
 });

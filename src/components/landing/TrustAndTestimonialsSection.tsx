@@ -4,16 +4,18 @@
 import React, { useEffect, useState, useRef } from 'react'; 
 import { useTranslation } from 'react-i18next'; 
 import { Button } from '@/components/ui/button';
-import { ChevronLeft, ChevronRight, FileText, Lock, ShieldCheck } from 'lucide-react'; 
+import { ChevronLeft, ChevronRight, FileText, Lock, ShieldCheck, Star } from 'lucide-react'; 
 import Image from 'next/image'; 
 
 interface Testimonial {
   quote: string;
   name: string;
   title: string;
+  outcome?: string; // New field for outcome
 }
 
 const MemoizedTestimonialCard = React.memo(function TestimonialCard({ testimonial, index, t, isHydrated, placeholderText }: { testimonial: Testimonial | null; index: number; t: (key: string, fallback?: string | object) => string; isHydrated: boolean; placeholderText: string; }) {
+  const rating = 5; // Placeholder rating
   return (
     <div
       className="bg-card p-6 rounded-2xl shadow-lg w-72 md:w-80 text-left shrink-0 flex flex-col border border-border transition hover:shadow-xl"
@@ -22,17 +24,30 @@ const MemoizedTestimonialCard = React.memo(function TestimonialCard({ testimonia
       {testimonial ? (
         <>
           <Image
-            src={`https://picsum.photos/seed/${index + 30}/60/60`}
+            src={`https://picsum.photos/seed/${index + 30}/96/96`} // Updated size
             alt={isHydrated ? t(`home.testimonials.t${index + 1}.name`, { defaultValue: 'Testimonial Avatar'}) : 'Loading...'}
-            width={60}
-            height={60}
+            width={96} // Updated size
+            height={96} // Updated size
             loading="lazy"
             data-ai-hint="person portrait professional"
             className="rounded-full mb-4 border-2 border-primary/30 mx-auto"
           />
+          <div className="flex justify-center mb-2">
+            {Array.from({ length: rating }).map((_, i) => (
+              <Star key={i} className="h-4 w-4 text-yellow-400 fill-yellow-400" />
+            ))}
+             {Array.from({ length: 5 - rating }).map((_, i) => (
+              <Star key={`empty-${i}`} className="h-4 w-4 text-yellow-400" />
+            ))}
+          </div>
           <p className="italic text-foreground/90 mb-4 leading-relaxed flex-grow">
-            {isHydrated ? testimonial.quote : placeholderText}
+            "{isHydrated ? testimonial.quote : placeholderText}"
           </p>
+          {testimonial.outcome && (
+            <p className="text-sm text-primary font-medium mb-3 text-center">
+              {isHydrated ? testimonial.outcome : placeholderText}
+            </p>
+          )}
           <div className="mt-auto text-center">
             <p className="font-semibold text-sm text-foreground">
               {isHydrated ? testimonial.name : placeholderText}
@@ -43,15 +58,18 @@ const MemoizedTestimonialCard = React.memo(function TestimonialCard({ testimonia
           </div>
         </>
       ) : (
-        // Skeleton for when testimonial data is not yet loaded
         <>
-          <div className="h-16 w-16 rounded-full bg-muted mb-4 mx-auto"></div>
-          <div className="h-4 bg-muted rounded w-3/4 mb-2"></div>
-          <div className="h-4 bg-muted rounded w-full mb-1"></div>
-          <div className="h-4 bg-muted rounded w-5/6 mb-4"></div>
+          <div className="h-24 w-24 rounded-full bg-muted mb-4 mx-auto animate-pulse"></div>
+          <div className="flex justify-center mb-2">
+            {[...Array(5)].map((_,i) => <div key={i} className="h-4 w-4 bg-muted rounded-sm mx-0.5 animate-pulse"></div>)}
+          </div>
+          <div className="h-4 bg-muted rounded w-3/4 mb-2 animate-pulse"></div>
+          <div className="h-4 bg-muted rounded w-full mb-1 animate-pulse"></div>
+          <div className="h-4 bg-muted rounded w-5/6 mb-4 animate-pulse"></div>
+           <div className="h-3 bg-muted rounded w-1/2 mb-3 mx-auto animate-pulse"></div>
           <div className="mt-auto text-center">
-            <div className="h-4 bg-muted rounded w-1/2 mb-1 mx-auto"></div>
-            <div className="h-3 bg-muted rounded w-1/3 mx-auto"></div>
+            <div className="h-4 bg-muted rounded w-1/2 mb-1 mx-auto animate-pulse"></div>
+            <div className="h-3 bg-muted rounded w-1/3 mx-auto animate-pulse"></div>
           </div>
         </>
       )}
@@ -80,19 +98,20 @@ const TrustAndTestimonialsSection = React.memo(function TrustAndTestimonialsSect
       const rawTestimonials = t('home.testimonials', { returnObjects: true, ns: 'translation' }) as any;
       if (typeof rawTestimonials === 'object' && rawTestimonials !== null && !Array.isArray(rawTestimonials)) {
         const loadedTestimonials: Testimonial[] = [];
-        for (let i = 1; i <= 25; i++) { // Assuming up to t25
+        for (let i = 1; i <= 25; i++) { 
           if (rawTestimonials[`t${i}`] && typeof rawTestimonials[`t${i}`] === 'object') {
             loadedTestimonials.push({
               quote: rawTestimonials[`t${i}`].quote || 'Loading quote...',
               name: rawTestimonials[`t${i}`].name || 'Loading name...',
-              title: rawTestimonials[`t${i}`].title || 'Loading title...'
+              title: rawTestimonials[`t${i}`].title || 'Loading title...',
+              outcome: rawTestimonials[`t${i}`].outcome || undefined,
             });
           }
         }
         setTestimonialsData(loadedTestimonials);
         setTestimonialCount(loadedTestimonials.length > 0 ? loadedTestimonials.length : 3);
       } else {
-        setTestimonialCount(3);
+        setTestimonialCount(3); 
         setTestimonialsData([]);
       }
     }
@@ -117,24 +136,30 @@ const TrustAndTestimonialsSection = React.memo(function TrustAndTestimonialsSect
   };
 
   return (
-    <section className="bg-secondary/30 py-20 px-4 text-center">
-      <h2 className="text-sm uppercase text-muted-foreground tracking-wide mb-4 font-medium">
-        {isHydrated ? t('home.trustStrip.title', {defaultValue: "Trusted By Professionals"}) : placeholderText}
-      </h2>
-      <div className="flex flex-wrap justify-center gap-6 md:gap-10 items-center max-w-4xl mx-auto text-foreground/80 text-sm mb-16">
-        <div className="flex items-center gap-2">
-          <FileText className="h-5 w-5 text-primary" />
-          <span>{isHydrated ? t('home.trustStrip.badge1', { count: formattedCount, defaultValue: `Over ${formattedCount} documents generated` }) : placeholderText}</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <Lock className="h-5 w-5 text-primary" />
-          <span>{isHydrated ? t('home.trustStrip.badge2', {defaultValue: "Encrypted & privacy-compliant"}) : placeholderText}</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <ShieldCheck className="h-5 w-5 text-primary" /> 
-          <span>{isHydrated ? t('home.trustStrip.badge3', {defaultValue: "Verified by real attorneys"}) : placeholderText}</span>
+    <section className="bg-secondary/30 py-16 md:py-20 px-4 text-center">
+      {/* Trust Strip - Modified */}
+      <div className="container mx-auto px-4 mb-12 md:mb-16">
+        <p className="text-xs uppercase text-muted-foreground tracking-wider mb-3 font-medium">
+          {isHydrated ? t('home.trustStrip.title', {defaultValue: "Trusted By Professionals"}) : placeholderText}
+        </p>
+        <div className="flex flex-col sm:flex-row flex-wrap justify-center items-center gap-x-6 gap-y-3 text-foreground/90 text-sm font-medium">
+          <div className="flex items-center gap-2">
+            <FileText className="h-5 w-5 text-primary" />
+            <span>{isHydrated ? t('home.trustStrip.badge1', { count: formattedCount, defaultValue: `Over ${formattedCount} documents generated` }) : placeholderText}</span>
+          </div>
+          <div className="hidden sm:block w-px h-4 bg-border"></div>
+          <div className="flex items-center gap-2">
+            <Lock className="h-5 w-5 text-primary" />
+            <span>{t('trustBadges.secure', { defaultValue: "SSL Secure Checkout" })}</span>
+          </div>
+           <div className="hidden sm:block w-px h-4 bg-border"></div>
+          <div className="flex items-center gap-2">
+            <ShieldCheck className="h-5 w-5 text-primary" /> 
+            <span>{t('trustBadges.attorneyReviewed', { defaultValue: "Attorney-Reviewed Templates" })}</span>
+          </div>
         </div>
       </div>
+
 
       <h3 className="text-3xl font-bold text-foreground mb-10">
         {isHydrated ? t('home.testimonials.title', {defaultValue: "What Our Users Say"}) : placeholderText}
@@ -144,7 +169,7 @@ const TrustAndTestimonialsSection = React.memo(function TrustAndTestimonialsSect
         <Button
           variant="outline"
           size="icon"
-          className="absolute left-[-10px] md:left-[-20px] top-1/2 z-10 -translate-y-1/2 bg-card hover:bg-muted rounded-full shadow-md"
+          className="absolute left-[-10px] md:left-[-20px] top-1/2 z-10 -translate-y-1/2 bg-card hover:bg-muted rounded-full shadow-md border-border"
           onClick={() => scroll('left')}
           aria-label="Scroll left"
           disabled={!isHydrated}
@@ -172,7 +197,7 @@ const TrustAndTestimonialsSection = React.memo(function TrustAndTestimonialsSect
         <Button
           variant="outline"
           size="icon"
-          className="absolute right-[-10px] md:right-[-20px] top-1/2 z-10 -translate-y-1/2 bg-card hover:bg-muted rounded-full shadow-md"
+          className="absolute right-[-10px] md:right-[-20px] top-1/2 z-10 -translate-y-1/2 bg-card hover:bg-muted rounded-full shadow-md border-border"
           onClick={() => scroll('right')}
           aria-label="Scroll right"
           disabled={!isHydrated}
@@ -181,7 +206,7 @@ const TrustAndTestimonialsSection = React.memo(function TrustAndTestimonialsSect
         </Button>
       </div>
 
-      <div className="mt-20 flex flex-col items-center space-y-6">
+      <div className="mt-16 md:mt-20 flex flex-col items-center space-y-6">
          <div className="inline-flex items-center gap-2 bg-card text-sm px-5 py-3 rounded-full shadow-md border border-border">
            <ShieldCheck className="h-5 w-5 text-primary" />
            <span className="font-medium text-foreground/90">{isHydrated ? t('home.moneyBackGuarantee', {defaultValue: "100% Satisfaction Guarantee or Your Money Back"}) : placeholderText}</span>

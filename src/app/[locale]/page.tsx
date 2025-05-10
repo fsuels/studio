@@ -11,10 +11,11 @@ import { PdfPreview } from '@/components/pdf-preview';
 import { ShareDownloadStep } from '@/components/share-download-step';
 import ProgressStepper from '@/components/ProgressStepper'; 
 import HomepageHeroSteps from '@/components/landing/HomepageHeroSteps'; 
-import ThreeStepSection from '@/components/landing/ThreeStepSection';
+// import ThreeStepSection from '@/components/landing/ThreeStepSection'; // To be replaced by HowItWorks
+import HowItWorks from '@/components/landing/HowItWorks'; // New import
 import TrustAndTestimonialsSection from '@/components/landing/TrustAndTestimonialsSection';
 import { GuaranteeBadge } from '@/components/landing/GuaranteeBadge';
-import { PromoBanner } from '@/components/landing/PromoBanner';
+import { AnnouncementBar } from '@/components/AnnouncementBar'; // Use new name
 import { Button } from '@/components/ui/button'; 
 import { useToast } from '@/hooks/use-toast'; 
 import { Separator } from '@/components/ui/separator';
@@ -24,11 +25,9 @@ import StickyFilterBar from '@/components/StickyFilterBar';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams, useRouter, useParams } from 'next/navigation';
 import { Badge } from '@/components/ui/badge';
+import SearchBar from '@/components/SearchBar'; // New import
+import TopDocsChips from '@/components/TopDocsChips'; // New import
 
-
-const ShareIcon = () => (
-   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6 text-primary"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" x2="12" y1="2" y2="15"/></svg>
-);
 
 export default function HomePage() {
   console.log('[page.tsx] Home component rendering...');
@@ -64,14 +63,6 @@ export default function HomePage() {
     console.log('[page.tsx] Homepage document selected:', doc.name);
     
     router.push(`/${locale}/docs/${doc.id}/start`);
-
-    // Toast message for document selection is now handled on the /start page if needed
-    // or can be kept here if preferred. For now, let's assume it's better on the /start page
-    // to confirm entry into the wizard.
-    // toast({ 
-    //     title: t('toasts.docTypeConfirmedTitle'), 
-    //     description: t('toasts.docTypeConfirmedDescription', { docName: locale === 'es' && doc.name_es ? doc.name_es : doc.name }) 
-    // });
   }, [locale, router, isHydrated]);
 
   useEffect(() => {
@@ -94,12 +85,10 @@ export default function HomePage() {
         }
     }
 
-    if (docIdFromQuery && !selectedCategoryForFilter) { // Check if docIdFromQuery is not null
+    if (docIdFromQuery && !selectedCategoryForFilter) { 
       const foundDoc = documentLibrary.find(d => d.id === docIdFromQuery);
-      if (foundDoc) { // Check if foundDoc is not undefined
+      if (foundDoc) { 
          setSelectedCategoryForFilter(foundDoc.category);
-         // Optionally, also set a global selected document ID here if Step1DocumentSelector can use it
-         // to pre-highlight the specific document.
          scrollToWorkflow();
       }
     }
@@ -122,18 +111,22 @@ export default function HomePage() {
 
   return (
     <>
-      <PromoBanner />
-      <HomepageHeroSteps />
-      <div className="text-center -mt-6 mb-8"> {/* Badge placed after Hero and before ThreeStepSection */}
+      <AnnouncementBar />
+      <HomepageHeroSteps /> {/* Reduced top padding is handled within this component's style potentially or its parent's */}
+       <div className="container mx-auto px-4 -mt-8 sm:-mt-4 md:mt-0 mb-8 relative z-10"> {/* Search bar positioning */}
+          <SearchBar />
+       </div>
+      <div className="text-center -mt-2 mb-8"> 
          {isHydrated && (
             <Badge variant="secondary" className="bg-primary/10 text-primary border-primary/30 px-4 py-1.5 text-sm shadow-sm">
                  {t('home.hero.pricingBadge')}
             </Badge>
          )}
       </div>
-      <ThreeStepSection /> 
+      <HowItWorks /> 
       <TrustAndTestimonialsSection />
       <GuaranteeBadge />
+      <TopDocsChips />
 
       <Separator className="my-12" />
 
@@ -152,7 +145,7 @@ export default function HomePage() {
                 onSearchTermChange={(term) => {
                     setGlobalSearchTerm(term);
                     if (term.trim() !== '' && selectedCategoryForFilter) {
-                        setSelectedCategoryForFilter(null); // Reset category if global search is used
+                        setSelectedCategoryForFilter(null); 
                     }
                 }}
                 selectedState={globalSelectedState}
@@ -168,4 +161,3 @@ export default function HomePage() {
     </>
   );
 }
-
