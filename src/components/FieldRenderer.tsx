@@ -1,7 +1,7 @@
 // src/components/FieldRenderer.tsx
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react'; // Added useState
 import { useFormContext, Controller } from 'react-hook-form';
 import SmartInput from '@/components/wizard/SmartInput';
 import AddressField from '@/components/AddressField'; 
@@ -23,6 +23,7 @@ import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
+  // TooltipProvider is used in WizardForm
 } from "@/components/ui/tooltip";
 import { Button } from '@/components/ui/button';
 
@@ -35,6 +36,7 @@ interface FieldRendererProps {
 const FieldRenderer = React.memo(function FieldRenderer({ fieldKey, locale, doc }: FieldRendererProps) {
   const { control, register, setValue, watch, formState: { errors } } = useFormContext();
   const { t } = useTranslation();
+  const [isTooltipOpen, setIsTooltipOpen] = useState(false); // State for controlled tooltip
 
   const fieldSchemaFromQuestions = doc.questions?.find(q => q.id === fieldKey);
   
@@ -50,7 +52,7 @@ const FieldRenderer = React.memo(function FieldRenderer({ fieldKey, locale, doc 
           fieldSchemaFromZod._def?.typeName === 'ZodDate' ? 'date' :
           fieldSchemaFromZod._def?.typeName === 'ZodBoolean' ? 'boolean' :
           (fieldSchemaFromZod._def?.innerType?._def?.typeName === 'ZodEnum' || fieldSchemaFromZod._def?.typeName === 'ZodEnum') ? 'select' :
-          fieldKey.toLowerCase().includes('address') ? 'address' : // Infer address type
+          fieldKey.toLowerCase().includes('address') ? 'address' : 
           'text',
     options: (fieldSchemaFromZod._def?.innerType?._def?.values || fieldSchemaFromZod._def?.values)?.map((val: string) => ({ value: val, label: prettify(val) })),
     required: fieldSchemaFromZod._def?.typeName !== 'ZodOptional' && fieldSchemaFromZod._def?.innerType?._def?.typeName !== 'ZodOptional',
@@ -117,7 +119,7 @@ const FieldRenderer = React.memo(function FieldRenderer({ fieldKey, locale, doc 
             error={errors[fieldKey as any]?.message as string | undefined}
             placeholder={placeholderText || t('Enter address...', { ns: 'translation' })}
             className="max-w-sm" 
-            tooltip={tooltipText}
+            tooltip={tooltipText} // Tooltip prop might be handled internally by AddressField if it also has tooltips
             value={field.value || ''} 
             onChange={(val: string, parts?: any) => { 
                 field.onChange(val); 
@@ -142,9 +144,19 @@ const FieldRenderer = React.memo(function FieldRenderer({ fieldKey, locale, doc 
           {labelText} {fieldSchema?.required && <span className="text-destructive">*</span>}
         </Label>
         {tooltipText && (
-          <Tooltip>
+          <Tooltip open={isTooltipOpen} onOpenChange={setIsTooltipOpen}>
             <TooltipTrigger asChild>
-              <Button variant="ghost" size="icon" className="h-5 w-5 p-0 text-muted-foreground hover:text-foreground">
+              <Button 
+                type="button"
+                variant="ghost" 
+                size="icon" 
+                className="h-5 w-5 p-0 text-muted-foreground hover:text-foreground"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setIsTooltipOpen(prev => !prev);
+                }}
+                // onBlur={() => setTimeout(() => setIsTooltipOpen(false), 150)} // Keep for focus loss
+              >
                 <Info className="h-4 w-4" />
               </Button>
             </TooltipTrigger>
