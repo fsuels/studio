@@ -2,7 +2,8 @@
 // This is now a Server Component
 
 import DocPageClient from './DocPageClient'; // Import the client component
-import { documentLibrary, localizations } from '@/lib/document-library';
+import { documentLibrary } from '@/lib/document-library';
+import { localizations } from '@/lib/localizations'; // Corrected import
 import type { LegalDocument } from '@/lib/document-library';
 
 // generateStaticParams is a server-side function
