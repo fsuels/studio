@@ -153,7 +153,7 @@ export default function StartWizardPageClient({ params: routeParams }: StartWiza
     );
   }
   
-  const documentDisplayName = locale === 'es' && docConfig.name_es ? docConfig.name_es : docConfig.name;
+  const documentDisplayName = locale === 'es' && docConfig.name_es ? docConfig.name_es : doc.name;
 
   return (
     <FormProvider {...methods}>
@@ -206,3 +206,4 @@ export default function StartWizardPageClient({ params: routeParams }: StartWiza
     </FormProvider>
   );
 }
+

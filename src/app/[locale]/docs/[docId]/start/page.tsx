@@ -45,3 +45,4 @@ export default function StartWizardPageContainer({ params }: StartWizardPageProp
   // It's then passed down to the client component.
   return <StartWizardPageClient params={params} />;
 }
+
