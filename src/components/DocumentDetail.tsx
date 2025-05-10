@@ -1,7 +1,7 @@
 // src/components/DocumentDetail.tsx
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { useTranslation } from 'react-i18next';
@@ -12,7 +12,7 @@ import Image from 'next/image'; // Import next/image
 interface DocumentDetailProps {
   docId: string;
   locale: 'en' | 'es';
-  altText?: string; 
+  altText?: string;
 }
 
 const DocumentDetail = React.memo(function DocumentDetail({ docId, locale, altText }: DocumentDetailProps) {
@@ -22,7 +22,12 @@ const DocumentDetail = React.memo(function DocumentDetail({ docId, locale, altTe
   const [error, setError] = useState<string | null>(null);
   const [isHydrated, setIsHydrated] = useState(false);
 
-  const doc = documentLibrary.find((d: LegalDocument) => d.id === docId);
+  const doc = useMemo(() => documentLibrary.find((d: LegalDocument) => d.id === docId), [docId]);
+
+  const templatePath = useMemo(() => {
+    if (!doc) return undefined;
+    return locale === 'es' && doc.templatePath_es ? doc.templatePath_es : doc.templatePath;
+  }, [doc, locale]);
 
   useEffect(() => {
     setIsHydrated(true);
@@ -33,8 +38,7 @@ const DocumentDetail = React.memo(function DocumentDetail({ docId, locale, altTe
 
     setIsLoading(true);
     setError(null);
-    const templatePath = locale === 'es' && doc.templatePath_es ? doc.templatePath_es : doc.templatePath;
-
+    
     if (!templatePath) {
       console.warn(`[DocumentDetail] No templatePath defined for docId: ${docId}, locale: ${locale}`);
       setError(t('Preview not available for this document.', {defaultValue: 'Preview not available for this document.'}));
@@ -126,6 +130,7 @@ const DocumentDetail = React.memo(function DocumentDetail({ docId, locale, altTe
               loading="lazy"
               className="object-contain w-full h-full" 
               data-ai-hint="document template screenshot"
+              priority={false} // Ensure priority is false for lazy loading
             />
          </div>
       )}
