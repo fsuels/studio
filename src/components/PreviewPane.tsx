@@ -18,7 +18,7 @@ interface PreviewPaneProps {
 
 export default function PreviewPane({ locale, docId }: PreviewPaneProps) {
   const { t } = useTranslation();
-  const { watch } = useFormContext(); // Get watch from useFormContext
+  const { watch } = useFormContext(); 
 
 
   const [rawMarkdown, setRawMarkdown] = useState<string>('');
@@ -89,12 +89,13 @@ export default function PreviewPane({ locale, docId }: PreviewPaneProps) {
     }
     tempMd = tempMd.replace(/\{\{.*?\}\}/g, '____'); // Replace any remaining placeholders
     
-    // Update title based on locale
     let titleToUse = docConfig?.name;
     if (locale === 'es' && docConfig?.name_es) {
       titleToUse = docConfig.name_es;
     }
     if (titleToUse) {
+       // Ensure title is centered by applying text-center to h1 if markdown is used
+       // This is better handled by .prose h1:text-center in globals.css
        tempMd = tempMd.replace(/^# .*/m, `# ${titleToUse}`);
     }
 
@@ -122,7 +123,6 @@ export default function PreviewPane({ locale, docId }: PreviewPaneProps) {
       return;
     }
     
-    // Initial update
     debouncedUpdatePreview(watch(), rawMarkdown);
     
     const subscription = watch((formData) => {
@@ -176,7 +176,7 @@ export default function PreviewPane({ locale, docId }: PreviewPaneProps) {
     <div
       id="live-preview"
       data-watermark={watermarkText}
-      className="relative w-full h-full bg-white" // Ensures white background, parent div handles border/shadow/overflow
+      className="relative w-full h-full bg-background" 
       style={{
         WebkitUserSelect: 'none',
         MozUserSelect: 'none',
@@ -184,23 +184,15 @@ export default function PreviewPane({ locale, docId }: PreviewPaneProps) {
         userSelect: 'none',
       }}
     >
-      <div className="absolute inset-0 z-10 pointer-events-none flex items-center justify-center">
-        <span
-          className="text-6xl font-bold text-gray-300/50 opacity-25 rotate-[315deg]"
-          style={{ fontSize: '5rem' }}
-        >
-          {watermarkText}
-        </span>
-      </div>
+      {/* Watermark is applied via CSS in globals.css */}
 
-      <div className={cn("prose prose-sm dark:prose-invert max-w-none w-full h-full overflow-y-auto p-4 md:p-6 scrollbar-hide")}>
+      <div className={cn("prose prose-sm dark:prose-invert max-w-none w-full h-full overflow-y-auto overflow-x-hidden p-4 md:p-6 scrollbar-hide bg-background text-foreground")}>
         <ReactMarkdown 
             remarkPlugins={[remarkGfm]}
             components={{
                 // eslint-disable-next-line @typescript-eslint/no-unused-vars
                 p: ({node, ...props}) => <p {...props} className="select-none" />,
-                // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                h1: ({node, ...props}) => <h1 {...props} className="text-center select-none" />,
+                // h1 styling (including text-center) is now primarily in globals.css for .prose h1 within #live-preview
             }}
         >
           {processedMarkdown || ''}

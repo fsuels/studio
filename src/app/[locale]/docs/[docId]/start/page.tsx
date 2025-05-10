@@ -6,7 +6,7 @@ import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Loader2, Edit, FileText as FileTextIcon } from 'lucide-react'; // Renamed FileText to FileTextIcon
+import { Loader2, Edit, FileText as FileTextIcon } from 'lucide-react';
 
 import { documentLibrary, type LegalDocument } from '@/lib/document-library';
 import Breadcrumb from '@/components/Breadcrumb';
@@ -43,7 +43,8 @@ export default function StartWizardPage() {
   useEffect(() => {
     if (docIdFromPath && isHydrated) {
       const foundDoc = documentLibrary.find(d => d.id === docIdFromPath);
-      if (foundDoc && foundDoc.schema) {
+      // Ensure the document has a schema. If not, it's considered invalid for the wizard.
+      if (foundDoc && foundDoc.schema && typeof foundDoc.schema.safeParse === 'function') {
         setDocConfig(foundDoc);
       } else {
         console.error(`[StartWizardPage] Document config not found or schema invalid for docId: ${docIdFromPath}`);
@@ -53,8 +54,7 @@ export default function StartWizardPage() {
     }
   }, [docIdFromPath, isHydrated]);
 
-  const methods = useForm<z.infer<any>>({ // Use any for schema initially
-    resolver: docConfig?.schema ? zodResolver(docConfig.schema) : undefined,
+  const methods = useForm<z.infer<any>>({ // Schema will be set in useEffect
     defaultValues: {}, 
     mode: 'onBlur',
   });
@@ -63,14 +63,15 @@ export default function StartWizardPage() {
 
   useEffect(() => {
     if (docConfig?.schema) {
-      methods.reset({}, { resolver: zodResolver(docConfig.schema) } as any); // Re-initialize resolver when docConfig is loaded
+      // Set resolver once docConfig is available and has a valid schema
+      methods.reset({}, { resolver: zodResolver(docConfig.schema) } as any); 
     }
   }, [docConfig, methods]);
 
 
   useEffect(() => {
     async function loadDraft() {
-      if (!docConfig?.id || !isHydrated || authIsLoading) return;
+      if (!docConfig?.id || !isHydrated || authIsLoading || !docConfig.schema) return; // Also wait for schema
       const currentLocale = params.locale as 'en' | 'es' || locale;
       let draftData: Partial<z.infer<typeof docConfig.schema>> = {};
       try {
@@ -85,7 +86,7 @@ export default function StartWizardPage() {
         console.warn('[StartWizardPage] Draft loading failed:', e);
       }
       if (Object.keys(draftData).length > 0) {
-        reset(draftData);
+        reset(draftData); // reset is now correctly called after resolver is set
         console.log('[StartWizardPage] Draft loaded:', draftData);
       } else {
         console.log('[StartWizardPage] No draft found, using initial/empty values.');
@@ -119,7 +120,7 @@ export default function StartWizardPage() {
   );
 
   useEffect(() => {
-    if (!docConfig?.id || authIsLoading || !isHydrated) return () => {};
+    if (!docConfig?.id || authIsLoading || !isHydrated || !watch) return () => {}; // Ensure watch is defined
     
     const subscription = watch((values) => {
        debouncedSave(values as Record<string, any>);
@@ -146,7 +147,7 @@ export default function StartWizardPage() {
   );
 
 
-  if (!isHydrated || isLoadingConfig || !docConfig || authIsLoading) {
+  if (!isHydrated || isLoadingConfig || !docConfig || authIsLoading || !docConfig.schema) {
     return (
       <div className="flex justify-center items-center min-h-[calc(100vh-8rem)]">
         <Loader2 className="h-12 w-12 animate-spin text-primary" />
@@ -176,7 +177,7 @@ export default function StartWizardPage() {
         <div className="lg:hidden sticky top-14 z-40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 py-2 mb-4 border-b">
           <div className="flex justify-around">
             <Button
-              variant={mobileView === 'form' ? 'secondary' : 'ghost'}
+              variant={mobileView === 'form' ? 'default' : 'ghost'}
               onClick={() => setMobileView('form')}
               className="w-1/2 flex items-center gap-2"
             >
@@ -184,7 +185,7 @@ export default function StartWizardPage() {
               {t('Form')}
             </Button>
             <Button
-              variant={mobileView === 'preview' ? 'secondary' : 'ghost'}
+              variant={mobileView === 'preview' ? 'default' : 'ghost'}
               onClick={() => setMobileView('preview')}
               className="w-1/2 flex items-center gap-2"
             >
@@ -206,10 +207,13 @@ export default function StartWizardPage() {
 
           {/* Right Column: Preview Pane */}
           <div className={cn("lg:col-span-1", mobileView === 'form' && 'hidden lg:block')}>
-            <div className="sticky top-24 h-[calc(100vh-8rem)] max-h-[calc(100vh-8rem)] flex flex-col lg:max-h-[calc(100vh-6rem)]"> {/* Adjusted max-h for desktop */}
+             {/* Ensure this container allows its child to manage its own scroll */}
+            <div className="sticky top-24 h-[calc(100vh-8rem)] max-h-[calc(100vh-8rem)] flex flex-col lg:max-h-[calc(100vh-6rem)]">
               <h3 className="text-xl font-semibold mb-4 text-center text-card-foreground shrink-0 hidden lg:block">
                 {t('Live Preview', { ns: 'translation' })}
               </h3>
+              {/* The flex-grow and overflow-hidden here are for the rounded corners and shadow of the container,
+                  PreviewPane itself should handle its content scrolling. */}
               <div className="flex-grow overflow-hidden rounded-lg shadow-md border border-border bg-background">
                  <PreviewPane docId={docIdFromPath} locale={locale} />
               </div>
@@ -220,3 +224,4 @@ export default function StartWizardPage() {
     </FormProvider>
   );
 }
+

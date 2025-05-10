@@ -75,15 +75,15 @@
   .card-hover {
     @apply transition-transform duration-150 hover:-translate-y-1 hover:shadow-lg;
   }
-  h1,h2,h3,h4,h5,h6 { @apply font-semibold text-foreground; } /* Use theme foreground color */
+  h1,h2,h3,h4,h5,h6 { @apply font-semibold text-foreground; } 
   .bg-glass {
     backdrop-filter: blur(12px) saturate(180%);
-    background: hsl(var(--card) / 0.6); /* Use card color with opacity */
-    box-shadow: 0 8px 32px hsla(var(--foreground) / 0.12); /* Use foreground with opacity for shadow */
+    background: hsl(var(--card) / 0.6); 
+    box-shadow: 0 8px 32px hsla(var(--foreground) / 0.12); 
   }
   ::-webkit-scrollbar { width: 8px; height: 8px; }
   ::-webkit-scrollbar-track { @apply bg-transparent; }
-  ::-webkit-scrollbar-thumb { @apply bg-muted-foreground/50 hover:bg-muted-foreground/70 rounded-lg transition-colors duration-200; } /* Use muted foreground */
+  ::-webkit-scrollbar-thumb { @apply bg-muted-foreground/50 hover:bg-muted-foreground/70 rounded-lg transition-colors duration-200; } 
   
   .motion-fade {
     opacity: 0;
@@ -118,14 +118,13 @@
   button:focus-visible, a:focus-visible { @apply ring-2 ring-offset-2 ring-primary; }
   
   .card-content {
-    @apply px-4 py-3 !important; /* Keep if essential, otherwise review use of !important */
+    @apply px-4 py-3; 
   }
 
   .category-grid, .document-grid { 
     @apply grid gap-3; 
   }
 
-  /* Step Card Styling */
   .step-card { 
     @apply p-4 bg-card rounded-lg shadow-lg border border-border; 
   }
@@ -147,7 +146,6 @@
     @apply w-full box-border mb-4 bg-background border-input placeholder:text-muted-foreground text-foreground; 
   }
 
-  /* Category and Document Card Styling */
   .category-card, .document-card { 
     @apply p-4 border border-border rounded-md shadow-sm text-center flex flex-col items-center justify-center bg-card text-card-foreground;
     min-height: 56px; 
@@ -162,7 +160,6 @@
     }
   }
 
-  /* Responsive Grid Adjustments from previous commit */
   @media (max-width: 639px) {
     .category-grid, .document-grid { grid-template-columns: 1fr; }
   }
@@ -170,18 +167,15 @@
     .category-grid, .document-grid { grid-template-columns: repeat(2,1fr); }
   }
   @media (min-width: 1024px) {
-    /* Example: 3 columns for category, 3 for document on desktop */
     .category-grid { grid-template-columns: repeat(3,1fr); } 
     .document-grid { grid-template-columns: repeat(3,1fr); }
   }
 
-  /* Stepper styles from previous commit */
   .stepper {
-    /* Ensure stepper uses background color for light/dark mode */
-    /* Sticky behavior is now managed directly in the ProgressStepper component with Tailwind classes */
+    /* Stepper uses background color for light/dark mode */
   }
   .stepper__item {
-    @apply flex-1 text-center; /* Basic styling, can be enhanced */
+    @apply flex-1 text-center; 
   }
   .stepper__item--active .stepper__label,
   .stepper__item--active .stepper__number {
@@ -189,34 +183,24 @@
   }
   .stepper__item--complete .stepper__label,
   .stepper__item--complete .stepper__number {
-    @apply text-green-600; /* Or use a theme color like accent-foreground */
+    @apply text-green-600; 
   }
   .stepper__number {
     @apply block mx-auto h-8 w-8 rounded-full border-2 flex items-center justify-center mb-1;
-    /* Dynamic border/bg in component */
   }
   .stepper__label {
     @apply text-xs;
   }
-  .progress-bar {
-     /* Styles are now in ProgressStepper.tsx for mobile progress bar */
-  }
-  .progress-bar > div {
-     /* Styles are now in ProgressStepper.tsx */
-  }
 
-
-  /* Step Content Padding */
   .step-content {
-    @apply p-4; /* Default padding for mobile */
+    @apply p-4; 
   }
   @media (min-width: 640px) {
-    .step-content { @apply p-6; } /* Larger padding for tablet and up */
+    .step-content { @apply p-6; } 
   }
 
 }
 
-/* Specific styling for Stepper based on ProgressStepper.tsx requirements */
 @layer components {
   .stepper {
     @apply w-full;
@@ -224,78 +208,59 @@
 
   .stepper__item {
     @apply relative flex flex-col items-center;
-    /* Horizontal line connection will be handled by ::after or border trick in JSX if needed */
   }
 
-  .stepper__number {
-    /* Base styles for the circle are applied in ProgressStepper.tsx via cn() */
-    /* No specific CSS needed here unless overriding those dynamic classes */
-  }
-
-  .stepper__label {
-    /* Styles for labels are applied in ProgressStepper.tsx via cn() */
-  }
-
-  /* Mobile progress bar - ensure it's part of stepper or handled in ProgressStepper.tsx */
-  /* .progress-bar is now styled within ProgressStepper for mobile */
-
-
-  /* New Stepper Styles */
   .step-circle {
     @apply flex items-center justify-center h-8 w-8 rounded-full border-2 border-border;
   }
-  .stepper li.active .step-circle, /* More specific selector if needed */
-  .stepper__item--active .step-circle { /* if ProgressSteps uses this class */
+  .stepper li.active .step-circle, 
+  .stepper__item--active .step-circle { 
     @apply bg-primary text-primary-foreground border-primary;
   }
-  .stepper li.completed .step-circle, /* Example for completed */
+  .stepper li.completed .step-circle, 
   .stepper__item--complete .step-circle {
      @apply bg-green-600 text-white border-green-600;
   }
 
   .step-caption {
-    @apply text-xs md:text-sm mt-1 max-w-[5rem] leading-tight text-center; /* Added text-center */
+    @apply text-xs md:text-sm mt-1 max-w-[5rem] leading-tight text-center; 
   }
   
   @media (max-width: 520px) {
     .step-caption {
-      @apply hidden; /* Tailwind class to hide */
+      @apply hidden; 
     }
   }
 
-  /* Global styling for invalid form fields */
   input[aria-invalid="true"],
   select[aria-invalid="true"],
   textarea[aria-invalid="true"] {
     @apply border-destructive ring-1 ring-destructive;
   }
 
-  /* Disable highlight in live preview */
   #live-preview {
     user-select: none;
   }
 
   #live-preview::before {
-    content: attr(data-watermark); /* “Preview” or “Vista previa” */
+    content: attr(data-watermark); 
     position: absolute;
     inset: 0;
-    font-size: 5rem; /* Adjusted for better fit */
+    font-size: 5rem; 
     font-weight: 700;
-    color: hsl(var(--muted-foreground) / 0.08); /* Use theme color for opacity */
+    color: hsl(var(--muted-foreground) / 0.08); 
     display: flex;
     align-items: center;
     justify-content: center;
     transform: rotate(-30deg);
     pointer-events: none;
-    z-index: 10; /* Ensure watermark is above content but below interactive elements if any */
+    z-index: 10; 
   }
 
   #live-preview .prose h1 {
-    @apply text-xl font-semibold text-left mt-4 mb-4 md:text-2xl md:mb-6; /* Adjusted for preview title */
+    @apply text-xl font-semibold text-center mt-4 mb-4 md:text-2xl md:mb-6; 
   }
 }
 
-/* hide native scrollbar for horizontal stepper */
 .scrollbar-hide::-webkit-scrollbar { display: none; }
 .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
-

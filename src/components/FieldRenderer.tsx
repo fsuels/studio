@@ -1,7 +1,7 @@
 // src/components/FieldRenderer.tsx
 'use client';
 
-import React, { useEffect, useState } from 'react'; // Added useState
+import React, { useEffect, useState } from 'react'; 
 import { useFormContext, Controller } from 'react-hook-form';
 import SmartInput from '@/components/wizard/SmartInput';
 import AddressField from '@/components/AddressField'; 
@@ -23,7 +23,6 @@ import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-  // TooltipProvider is used in WizardForm
 } from "@/components/ui/tooltip";
 import { Button } from '@/components/ui/button';
 
@@ -36,7 +35,6 @@ interface FieldRendererProps {
 const FieldRenderer = React.memo(function FieldRenderer({ fieldKey, locale, doc }: FieldRendererProps) {
   const { control, register, setValue, watch, formState: { errors } } = useFormContext();
   const { t } = useTranslation();
-  const [isTooltipOpen, setIsTooltipOpen] = useState(false); // State for controlled tooltip
 
   const fieldSchemaFromQuestions = doc.questions?.find(q => q.id === fieldKey);
   
@@ -119,7 +117,7 @@ const FieldRenderer = React.memo(function FieldRenderer({ fieldKey, locale, doc 
             error={errors[fieldKey as any]?.message as string | undefined}
             placeholder={placeholderText || t('Enter address...', { ns: 'translation' })}
             className="max-w-sm" 
-            tooltip={tooltipText} // Tooltip prop might be handled internally by AddressField if it also has tooltips
+            tooltipText={tooltipText}
             value={field.value || ''} 
             onChange={(val: string, parts?: any) => { 
                 field.onChange(val); 
@@ -144,18 +142,14 @@ const FieldRenderer = React.memo(function FieldRenderer({ fieldKey, locale, doc 
           {labelText} {fieldSchema?.required && <span className="text-destructive">*</span>}
         </Label>
         {tooltipText && (
-          <Tooltip open={isTooltipOpen} onOpenChange={setIsTooltipOpen}>
+          <Tooltip>
             <TooltipTrigger asChild>
               <Button 
                 type="button"
                 variant="ghost" 
                 size="icon" 
-                className="h-5 w-5 p-0 text-muted-foreground hover:text-foreground"
-                onClick={(e) => {
-                  e.preventDefault();
-                  setIsTooltipOpen(prev => !prev);
-                }}
-                // onBlur={() => setTimeout(() => setIsTooltipOpen(false), 150)} // Keep for focus loss
+                className="h-5 w-5 p-0 text-muted-foreground hover:text-foreground focus-visible:ring-1 focus-visible:ring-ring" // Ensure focus ring is subtle if needed
+                aria-label={`Info for ${labelText}`}
               >
                 <Info className="h-4 w-4" />
               </Button>
@@ -275,7 +269,7 @@ const FieldRenderer = React.memo(function FieldRenderer({ fieldKey, locale, doc 
               </SelectTrigger>
               <SelectContent>
                 {fieldSchema.options?.map(opt => (
-                    <SelectItem key={opt.value} value={opt.value}>{t(opt.label, {defaultValue: opt.label})}</SelectItem>
+                    <SelectItem key={opt.value} value={String(opt.value)}>{t(opt.label, {defaultValue: opt.label})}</SelectItem>
                 ))}
               </SelectContent>
             </Select>
@@ -308,3 +302,4 @@ const FieldRenderer = React.memo(function FieldRenderer({ fieldKey, locale, doc 
   );
 });
 export default FieldRenderer;
+
