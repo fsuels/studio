@@ -2,10 +2,10 @@
 {
   "headline": "Legal Docs at Your Fingertips",
   "subhead": "Create, sign & share professional contracts in minutes—no lawyer required.",
-  "ctaPrimary": "Get Started – It’s Free",
+  "ctaPrimary": "Start Free, Pay $35/Doc →",
   "ctaSecondary": "See Demo",
   "trustText": "Trusted by 2,000+ small businesses",
-  "pricingTeaser": "Only $5/doc – No subscriptions",
+  "pricingTeaser": "Only $35/doc – No subscriptions",
   "pricingLinkText": "View Pricing",
   "languageName": "English",
   "Just 3 Easy Steps": "Just 3 Easy Steps",
@@ -28,7 +28,7 @@
     },
     "costEffective": {
       "title": "Cost-Effective",
-      "description": "Pay just $5 per document compared to $200+ typically charged by law firms."
+      "description": "Pay just $35 per document compared to $200+ typically charged by law firms."
     }
   },
   "stepPrefix": "STEP",
@@ -204,7 +204,8 @@
     "home": {
         "hero": {
           "title": "Only 3 Easy Steps",
-          "subtitle": "In a few guided steps, you’ll generate a fully customized legal document."
+          "subtitle": "In a few guided steps, you’ll generate a fully customized legal document.",
+          "pricingBadge": "One-time $35/document • No subscription"
         },
         "steps": {
           "step1": {
@@ -276,7 +277,7 @@
       "secureTitle": "Secure & Compliant",
       "secureDescription": "Generate encrypted PDFs and utilize time-locked share links for enhanced security.",
       "costEffectiveTitle": "Cost-Effective",
-      "costEffectiveDescription": "Pay just $5 per document compared to $200+ typically charged by law firms."
+      "costEffectiveDescription": "Pay just $35 per document compared to $200+ typically charged by law firms."
     },
     "nav": {
       "pricing": "Pricing",
@@ -329,7 +330,8 @@
            "item4": "Cancel anytime"
         }
       },
-      "guarantee": "100% Satisfaction Guarantee or Your Money Back on single/bundle purchases."
+      "guarantee": "100% Satisfaction Guarantee or Your Money Back on single/bundle purchases.",
+      "payPerDocBadge": "One-time $35/document • No subscription"
     },
     "features": {
         "title": "Features That Make Legal Easy",
@@ -362,7 +364,7 @@
         "q3": { "question": "Can I edit after generating a document?", "answer": "Yes, you can make updates before downloading your final PDF." },
         "q4": { "question": "Do I need to talk to a lawyer?", "answer": "For most everyday documents, no. If you need legal advice, we recommend speaking to an attorney." },
         "q5": { "question": "Is my data secure?", "answer": "All documents are encrypted and only stored temporarily for your access." },
-        "q6": { "question": "How much does it cost?", "answer": "Documents start at just $5. We also offer bundles and unlimited access." }
+        "q6": { "question": "How much does it cost?", "answer": "Documents are a flat $35 each. No subscriptions." }
     },
    "support": {
       "title": "Support Center",
@@ -637,7 +639,8 @@
       "start": "Start"
    },
    "wizard": {
-      "next": "Next"
+      "next": "Next",
+      "confirmChargeAndPay": "Confirm {{price}} charge & Proceed to Payment"
    },
    "fields": {
       "sellerName": {

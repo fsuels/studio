@@ -4,7 +4,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import type { LegalDocument } from '@/lib/document-library'; 
 import { usStates, documentLibrary } from '@/lib/document-library'; 
-import DocTypeSelector, { type AISuggestion } from '@/components/DocumentTypeSelector'; 
+import DocTypeSelector from '@/components/DocumentTypeSelector'; 
 import { Questionnaire } from '@/components/questionnaire';
 import { DisclaimerStep } from '@/components/disclaimer-step';
 import { PdfPreview } from '@/components/pdf-preview';
@@ -22,7 +22,8 @@ import { FileText, FileSignature, Check, Upload, AlertTriangle, Download, ListCh
 import Step1DocumentSelector, { CATEGORY_LIST } from '@/components/Step1DocumentSelector'; 
 import StickyFilterBar from '@/components/StickyFilterBar'; 
 import { useTranslation } from 'react-i18next';
-import { useSearchParams, useRouter, useParams } from 'next/navigation'; // Added useParams
+import { useSearchParams, useRouter, useParams } from 'next/navigation';
+import { Badge } from '@/components/ui/badge';
 
 
 const ShareIcon = () => (
@@ -64,11 +65,14 @@ export default function HomePage() {
     
     router.push(`/${locale}/docs/${doc.id}/start`);
 
-    toast({ 
-        title: t('toasts.docTypeConfirmedTitle'), 
-        description: t('toasts.docTypeConfirmedDescription', { docName: locale === 'es' && doc.name_es ? doc.name_es : doc.name }) 
-    });
-  }, [locale, router, t, toast, isHydrated]);
+    // Toast message for document selection is now handled on the /start page if needed
+    // or can be kept here if preferred. For now, let's assume it's better on the /start page
+    // to confirm entry into the wizard.
+    // toast({ 
+    //     title: t('toasts.docTypeConfirmedTitle'), 
+    //     description: t('toasts.docTypeConfirmedDescription', { docName: locale === 'es' && doc.name_es ? doc.name_es : doc.name }) 
+    // });
+  }, [locale, router, isHydrated]);
 
   useEffect(() => {
     if (!isHydrated) return;
@@ -90,10 +94,12 @@ export default function HomePage() {
         }
     }
 
-    if (docIdFromQuery) {
+    if (docIdFromQuery && !selectedCategoryForFilter) { // Check if docIdFromQuery is not null
       const foundDoc = documentLibrary.find(d => d.id === docIdFromQuery);
-      if (foundDoc && !selectedCategoryForFilter) {
+      if (foundDoc) { // Check if foundDoc is not undefined
          setSelectedCategoryForFilter(foundDoc.category);
+         // Optionally, also set a global selected document ID here if Step1DocumentSelector can use it
+         // to pre-highlight the specific document.
          scrollToWorkflow();
       }
     }
@@ -118,6 +124,13 @@ export default function HomePage() {
     <>
       <PromoBanner />
       <HomepageHeroSteps />
+      <div className="text-center -mt-6 mb-8"> {/* Badge placed after Hero and before ThreeStepSection */}
+         {isHydrated && (
+            <Badge variant="secondary" className="bg-primary/10 text-primary border-primary/30 px-4 py-1.5 text-sm shadow-sm">
+                 {t('home.hero.pricingBadge')}
+            </Badge>
+         )}
+      </div>
       <ThreeStepSection /> 
       <TrustAndTestimonialsSection />
       <GuaranteeBadge />
@@ -139,7 +152,7 @@ export default function HomePage() {
                 onSearchTermChange={(term) => {
                     setGlobalSearchTerm(term);
                     if (term.trim() !== '' && selectedCategoryForFilter) {
-                        setSelectedCategoryForFilter(null);
+                        setSelectedCategoryForFilter(null); // Reset category if global search is used
                     }
                 }}
                 selectedState={globalSelectedState}
@@ -155,3 +168,4 @@ export default function HomePage() {
     </>
   );
 }
+

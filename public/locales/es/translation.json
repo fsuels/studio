@@ -2,10 +2,10 @@
 {
   "headline": "Documentos Legales al Alcance de tu Mano",
   "subhead": "Crea, firma y comparte contratos profesionales en minutos, sin necesidad de abogado.",
-  "ctaPrimary": "Comienza Gratis",
+  "ctaPrimary": "Comienza Gratis, Paga $35/Doc →",
   "ctaSecondary": "Ver Demo",
   "trustText": "Con la confianza de más de 2,000 pequeñas empresas",
-  "pricingTeaser": "Solo $5/doc – Sin suscripciones",
+  "pricingTeaser": "Solo $35/doc – Sin suscripciones",
   "pricingLinkText": "Ver Precios",
   "languageName": "Español",
   "Just 3 Easy Steps": "Solo 3 Pasos Fáciles",
@@ -28,7 +28,7 @@
     },
     "costEffective": {
       "title": "Económico",
-      "description": "Paga solo $5 por documento en comparación con los $200+ que suelen cobrar los bufetes de abogados."
+      "description": "Paga solo $35 por documento en comparación con los $200+ que suelen cobrar los bufetes de abogados."
     }
   },
   "stepPrefix": "PASO",
@@ -204,7 +204,8 @@
      "home": {
           "hero": {
             "title": "Solo 3 Pasos Fáciles",
-            "subtitle": "Con unos pocos pasos guiados, generarás un documento legal totalmente personalizado."
+            "subtitle": "Con unos pocos pasos guiados, generarás un documento legal totalmente personalizado.",
+            "pricingBadge": "Pago único de $35/documento • Sin suscripción"
           },
           "steps": {
             "step1": {
@@ -288,7 +289,7 @@
        "secureTitle": "Seguro y Conforme",
        "secureDescription": "Genera PDFs encriptados y utiliza enlaces para compartir con bloqueo de tiempo para mayor seguridad.",
        "costEffectiveTitle": "Económico",
-       "costEffectiveDescription": "Paga solo $5 por documento en comparación con los $200+ que suelen cobrar los bufetes de abogados."
+       "costEffectiveDescription": "Paga solo $35 por documento en comparación con los $200+ que suelen cobrar los bufetes de abogados."
      },
     "nav": {
       "pricing": "Precios",
@@ -339,7 +340,8 @@
            "item4": "Cancela en cualquier momento"
         }
       },
-      "guarantee": "Garantía de satisfacción 100% o le devolvemos su dinero en compras únicas/paquetes."
+      "guarantee": "Garantía de satisfacción 100% o le devolvemos su dinero en compras únicas/paquetes.",
+      "payPerDocBadge": "Pago único de $35/documento • Sin suscripción"
     },
     "features": {
         "title": "Características que hacen lo legal fácil",
@@ -378,7 +380,7 @@
         "q3": { "question": "¿Puedo editar después de generar un documento?", "answer": "Sí, puedes hacer cambios antes de descargar el PDF final." },
         "q4": { "question": "¿Necesito un abogado?", "answer": "No para documentos comunes. Para asesoría legal específica, recomendamos consultar a un abogado." },
         "q5": { "question": "¿Mis datos están seguros?", "answer": "Sí, están cifrados y se almacenan de forma temporal para tu uso exclusivo." },
-        "q6": { "question": "¿Cuánto cuesta?", "answer": "Desde solo $5 por documento. También hay paquetes y acceso ilimitado." }
+        "q6": { "question": "¿Cuánto cuesta?", "answer": "Los documentos cuestan $35 cada uno. Sin suscripciones." }
      },
     "support": {
        "title": "Centro de Soporte",
@@ -717,7 +719,8 @@
         "start": "Iniciar"
     },
     "wizard": {
-        "next": "Siguiente"
+        "next": "Siguiente",
+        "confirmChargeAndPay": "Confirmar cargo de {{price}} y Proceder al Pago"
     },
     "fields": {
         "sellerName": {
@@ -738,3 +741,5 @@
      "Complete": "Completo"
 }
 
+    
+    

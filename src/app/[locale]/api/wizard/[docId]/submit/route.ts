@@ -19,6 +19,7 @@ if (!process.env.NEXT_PUBLIC_SITE_URL) {
     console.error('[submit/route.ts] CRITICAL AT MODULE LOAD: NEXT_PUBLIC_SITE_URL environment variable is not set. Stripe success/cancel URLs will be invalid.');
 }
 
+const FIXED_DOCUMENT_PRICE_CENTS = 35 * 100; // $35 in cents
 
 export async function POST(
   req: Request,
@@ -27,7 +28,6 @@ export async function POST(
   const logPrefix = `[API /wizard/${params.docId}/submit]`;
   console.log(`${logPrefix} Received POST request.`);
 
-  // Check for critical environment variables at the beginning of the handler
   const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL;
 
@@ -41,7 +41,6 @@ export async function POST(
     return NextResponse.json({ error: 'Site URL configuration is missing. Please contact support.', code: 'SITE_URL_MISSING' }, { status: 503 });
   }
 
-  // Initialize Stripe client here, now that we've confirmed the key exists
   const stripe = new Stripe(stripeSecretKey, {
     apiVersion: '2023-10-16', 
   });
@@ -79,6 +78,13 @@ export async function POST(
         console.warn(`${logPrefix} No Zod schema found for document ID: ${params.docId}. Skipping server-side validation of 'values'.`);
     }
     
+    // Conceptual check for planType as per user request, though planType is not currently part of the request.
+    // If a planType were sent, this is where you might reject it:
+    // if (body.planType && body.planType !== 'single') {
+    //   console.error(`${logPrefix} Invalid planType received: ${body.planType}. Only 'single' is supported.`);
+    //   return NextResponse.json({ error: 'Invalid plan type. Only single document purchase is supported.', code: 'INVALID_PLAN_TYPE' }, { status: 400 });
+    // }
+
     let db;
     try {
       db = admin.firestore();
@@ -102,6 +108,7 @@ export async function POST(
         data: values,
         createdAt: admin.firestore.FieldValue.serverTimestamp(),
         status: 'draft', 
+        pricePaid: FIXED_DOCUMENT_PRICE_CENTS / 100, // Store the price paid in dollars
       });
       console.log(`${logPrefix} Document draft saved to Firestore: users/${user.uid}/documents/${documentInstanceId}`);
     } catch (firestoreError) {
@@ -111,7 +118,6 @@ export async function POST(
 
     let session;
     try {
-      // siteUrl is already checked and confirmed to exist at the top of the handler
       session = await stripe.checkout.sessions.create({
         mode: 'payment',
         payment_method_types: ['card'],
@@ -120,10 +126,10 @@ export async function POST(
           {
             price_data: {
               currency: 'usd',
-              unit_amount: docConfig.basePrice * 100, 
+              unit_amount: FIXED_DOCUMENT_PRICE_CENTS, // Use fixed price
               product_data: {
                 name: docConfig.name_es && effectiveLocale === 'es' ? docConfig.name_es : docConfig.name,
-                description: docConfig.description_es && effectiveLocale === 'es' ? docConfig.description_es : docConfig.description,
+                description: docConfig.description_es && effectiveLocale === 'es' ? doc.description_es : docConfig.description,
               },
             },
             quantity: 1,
@@ -146,8 +152,6 @@ export async function POST(
 
     if (!session.url) {
         console.error(`${logPrefix} Stripe session URL not created, though session object exists.`);
-        // This specific error should now be less likely as Stripe key and site URL are pre-checked.
-        // If it still occurs, it's a more intricate Stripe API issue.
         return NextResponse.json({ error: 'Stripe session URL missing after creation.', code: 'STRIPE_URL_MISSING' }, { status: 500 });
     }
 
@@ -159,7 +163,6 @@ export async function POST(
     if (error instanceof Error) {
       errorMessage = error.message;
     }
-    // This general catch block might indicate an issue before Stripe/DB ops, e.g., req.json() failure
     return NextResponse.json({ error: 'Failed to process document submission', details: errorMessage, code: 'UNHANDLED_SUBMISSION_ERROR' }, { status: 500 });
   }
 }

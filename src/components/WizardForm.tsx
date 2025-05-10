@@ -2,13 +2,13 @@
 'use client';
 
 import React, { useEffect, useState, useRef, useCallback, useMemo } from 'react';
-import { useFormContext, Controller, FormProvider } from 'react-hook-form'; 
+import { FormProvider, Controller, useFormContext } from 'react-hook-form'; 
 import { zodResolver } from '@hookform/resolvers/zod';
 import axios, { AxiosError } from 'axios';
 import { useRouter, useParams } from 'next/navigation';
 import { z } from 'zod';
 import { Loader2, Info } from 'lucide-react';
-import dynamic from 'next/dynamic'; // Import dynamic
+
 
 import type { LegalDocument } from '@/lib/document-library';
 import { useToast } from '@/hooks/use-toast';
@@ -18,7 +18,7 @@ import FieldRenderer from './FieldRenderer';
 import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
 import { prettify } from '@/lib/schema-utils';
-// import AuthModal from '@/components/AuthModal'; // Import will be dynamic
+import AuthModal from '@/components/AuthModal'; 
 import { useAuth } from '@/hooks/useAuth';
 import AddressField from '@/components/AddressField'; 
 import { TooltipProvider } from '@/components/ui/tooltip'; 
@@ -27,8 +27,6 @@ import ReviewStep from '@/components/ReviewStep';
 import { saveFormProgress, loadFormProgress } from '@/lib/firestore/saveFormProgress';
 import { debounce } from 'lodash-es';
 
-const AuthModal = dynamic(() => import('@/components/AuthModal'), { ssr: false });
-
 
 interface WizardFormProps {
   locale: 'en' | 'es';
@@ -36,7 +34,7 @@ interface WizardFormProps {
   onComplete: (checkoutUrl: string) => void;
 }
 
-const WizardForm = React.memo(function WizardForm({ locale, doc, onComplete }: WizardFormProps) {
+export default function WizardForm({ locale, doc, onComplete }: WizardFormProps) {
   const { t } = useTranslation();
   const router = useRouter();
   const params = useParams();
@@ -97,25 +95,27 @@ const WizardForm = React.memo(function WizardForm({ locale, doc, onComplete }: W
   }, [actualSchemaShape, t, doc.questions]);
 
 
-  const totalSteps = steps.length;
-  const currentField = !isReviewing && totalSteps > 0 && currentStepIndex < totalSteps ? steps[currentStepIndex] : null;
-  const progress = totalSteps > 0 ? ((isReviewing ? totalSteps : currentStepIndex + 1) / totalSteps) * 100 : 0;
+  const totalFieldsToFill = steps.length;
+  const currentField = !isReviewing && totalFieldsToFill > 0 && currentStepIndex < totalFieldsToFill ? steps[currentStepIndex] : null;
+  const progress = totalFieldsToFill > 0 ? ((isReviewing ? totalFieldsToFill : currentStepIndex + 1) / totalFieldsToFill) * 100 : 0;
 
 
   const handlePreviousStep = useCallback(() => {
     if (isReviewing) {
       setIsReviewing(false);
-      setCurrentStepIndex(Math.max(0, totalSteps - 1)); 
+      //setCurrentStepIndex(Math.max(0, totalFieldsToFill - 1)); // Go to last field
+      // No need to change step index when coming back from review, user might want to edit current field
     } else if (currentStepIndex > 0) {
       setCurrentStepIndex(prev => prev - 1);
     }
-  }, [isReviewing, currentStepIndex, totalSteps]);
+  }, [isReviewing, currentStepIndex, totalFieldsToFill]);
 
   const handleNextStep = useCallback(async () => {
     let isValid = false;
     const currentStepFieldKey = steps[currentStepIndex]?.id;
 
     if (isReviewing) {
+      // This is the final submission after review
       isValid = await trigger(); 
       if (isValid) {
         if (!isLoggedIn) {
@@ -159,24 +159,30 @@ const WizardForm = React.memo(function WizardForm({ locale, doc, onComplete }: W
     }
     
     if (steps.length === 0) { 
-      const allValidForNoSteps = await trigger();
+      // Case for documents with no configurable fields (e.g. a static template)
+      const allValidForNoSteps = await trigger(); // Trigger validation on the (empty) schema
       if(allValidForNoSteps) {
-        setIsReviewing(true);
+        setIsReviewing(true); // Directly go to review/submit
         if (typeof window !== 'undefined') {
           window.scrollTo({ top: 0, behavior: 'smooth' });
         }
       } else {
+        // This case should ideally not happen if the schema is truly empty and valid.
+        // If it does, it implies an issue with the base schema or RHF setup for empty schemas.
         toast({ title: t('Validation Failed', { ns: 'translation'}), description: t('Please correct all errors before reviewing.', {ns: 'translation'}), variant: 'destructive' });
       }
       return;
     }
 
+    // Regular step progression
     if (currentStepFieldKey) {
       isValid = await trigger(currentStepFieldKey as any);
-    } else if (totalSteps > 0 && currentStepIndex < totalSteps) {
-      console.error("Error: currentStepFieldKey is undefined but totalSteps > 0. currentStepIndex:", currentStepIndex, "steps:", steps);
+    } else if (totalFieldsToFill > 0 && currentStepIndex < totalFieldsToFill) {
+      console.error("Error: currentStepFieldKey is undefined but totalFieldsToFill > 0. currentStepIndex:", currentStepIndex, "steps:", steps);
       isValid = false; 
     } else {
+      // This case implies we are at the end of steps OR totalFieldsToFill is 0 (handled above)
+      // If we are at the end, trigger validation for the whole form before going to review.
       isValid = await trigger();
     }
 
@@ -185,9 +191,11 @@ const WizardForm = React.memo(function WizardForm({ locale, doc, onComplete }: W
       return;
     }
 
-    if (currentStepIndex < totalSteps - 1) {
+    // If current step is valid and not the last step, go to next step
+    if (currentStepIndex < totalFieldsToFill - 1) {
       setCurrentStepIndex(prev => prev + 1);
     } else { 
+      // If on the last step and it's valid, or if there were no steps, proceed to review.
       const allFieldsValid = await trigger(); 
       if (allFieldsValid) {
         setIsReviewing(true);
@@ -208,18 +216,18 @@ const WizardForm = React.memo(function WizardForm({ locale, doc, onComplete }: W
   }, [
     currentStepIndex,
     steps,
-    totalSteps,
+    totalFieldsToFill,
     isReviewing,
     isLoggedIn,
     trigger,
     locale,
     doc.id,
+    doc.schema, // Added doc.schema as dependency
     getValues,
     onComplete,
     toast,
     t,
     currentField, 
-    doc.schema 
   ]);
 
   if (!isHydrated || authIsLoading) {
@@ -234,8 +242,8 @@ const WizardForm = React.memo(function WizardForm({ locale, doc, onComplete }: W
   }
 
   const buttonText = isReviewing
-    ? t('Submit & Proceed to Payment', { ns: 'translation' })
-    : (steps.length === 0 || currentStepIndex === totalSteps - 1) 
+    ? t('wizard.confirmChargeAndPay', { price: '$35', ns: 'translation' })
+    : (totalFieldsToFill === 0 || currentStepIndex === totalFieldsToFill - 1) 
     ? t('Review Answers', { ns: 'translation' })
     : t('wizard.next', { ns: 'translation' });
 
@@ -254,18 +262,19 @@ const WizardForm = React.memo(function WizardForm({ locale, doc, onComplete }: W
                        label={currentField.label}
                        required={(doc.questions?.find(q => q.id === currentField.id) || (actualSchemaShape as any)?.[currentField.id]?._def)?.required}
                        error={errors[currentField.id as any]?.message as string | undefined}
-                       placeholder={t("Enter address...")}
+                       placeholder={t("Enter address...")} // Fallback placeholder
                        value={rhfValue || ''} 
                        onChange={(val, parts) => { 
                          rhfOnChange(val);
-                          if (parts) {
+                          if (parts && actualSchemaShape) { // Ensure actualSchemaShape is defined
                             const prefix = currentField.id.replace(/_address$/i, '') || currentField.id.replace(/Address$/i, '');
+                            // Check if derived fields exist in the schema before setting them
                             if ((actualSchemaShape as any)?.[`${prefix}_city`]) setValue(`${prefix}_city`, parts.city, {shouldValidate: true, shouldDirty: true});
                             if ((actualSchemaShape as any)?.[`${prefix}_state`]) setValue(`${prefix}_state`, parts.state, {shouldValidate: true, shouldDirty: true});
                             if ((actualSchemaShape as any)?.[`${prefix}_postal_code`]) setValue(`${prefix}_postal_code`, parts.postalCode, {shouldValidate: true, shouldDirty: true});
                           }
                        }}
-                       tooltip={currentField.tooltip}
+                       tooltipText={currentField.tooltip} // Use tooltipText prop
                      />
                    )}
                  />
@@ -273,7 +282,7 @@ const WizardForm = React.memo(function WizardForm({ locale, doc, onComplete }: W
                 <FieldRenderer key={currentField.id} fieldKey={currentField.id} locale={locale} doc={doc} />
               )}
             </div>
-          ) : totalSteps === 0 && !isReviewing ? (
+          ) : totalFieldsToFill === 0 && !isReviewing ? (
              <div className="mt-6 min-h-[200px] flex flex-col items-center justify-center text-center">
                 <p className="text-muted-foreground mb-4">{t('dynamicForm.noQuestionsNeeded', {ns: 'translation', documentType: doc.name_es && locale==='es' ? doc.name_es : doc.name})}</p>
              </div>
@@ -284,7 +293,7 @@ const WizardForm = React.memo(function WizardForm({ locale, doc, onComplete }: W
       <TooltipProvider>
         <div className="bg-card rounded-lg shadow-xl p-4 md:p-6 border border-border">
           <div className="mb-6">
-            {totalSteps > 0 && (
+            {totalFieldsToFill > 0 && (
               <>
                 <Progress value={progress} className="w-full h-2" />
                  <p className="text-xs text-muted-foreground mt-1 text-right">
@@ -295,15 +304,20 @@ const WizardForm = React.memo(function WizardForm({ locale, doc, onComplete }: W
           </div>
 
           {isReviewing ? (
-            <ReviewStep doc={doc} locale={locale} onBackToForm={handlePreviousStep} />
+             <ReviewStep
+               doc={doc}
+               locale={locale}
+             />
           ) : formContent }
           
           <div className="sr-only" aria-live="polite" ref={liveRef}></div>
 
-          <TrustBadges />
+          {/* TrustBadges rendered below form fields, before action buttons */}
+          {!isReviewing && <TrustBadges className="mt-6" />}
+
 
           <div className="mt-8 flex justify-between items-center">
-             {(currentStepIndex > 0 || isReviewing) && (
+            { (currentStepIndex > 0 || isReviewing) && totalFieldsToFill > 0 && (
               <Button
                 type="button"
                 variant="outline"
@@ -314,7 +328,7 @@ const WizardForm = React.memo(function WizardForm({ locale, doc, onComplete }: W
                 {t('Back', { ns: 'translation' })}
               </Button>
             )}
-             {!(currentStepIndex > 0 || isReviewing) && totalSteps > 0 && <div />}
+             { !(currentStepIndex > 0 || isReviewing) && totalFieldsToFill > 0 && <div />} {/* Placeholder for spacing if no Back button */}
 
 
             <Button
@@ -342,5 +356,4 @@ const WizardForm = React.memo(function WizardForm({ locale, doc, onComplete }: W
       )}
     </>
   );
-});
-export default WizardForm;
+}
