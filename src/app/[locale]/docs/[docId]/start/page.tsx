@@ -6,7 +6,7 @@ import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Edit, FileText as FileTextIcon } from 'lucide-react'; // Renamed FileText to FileTextIcon
 
 import { documentLibrary, type LegalDocument } from '@/lib/document-library';
 import Breadcrumb from '@/components/Breadcrumb';
@@ -17,6 +17,8 @@ import { useToast } from '@/hooks/use-toast';
 import { saveFormProgress, loadFormProgress } from '@/lib/firestore/saveFormProgress';
 import { useAuth } from '@/hooks/useAuth';
 import { debounce } from 'lodash-es';
+import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 
 export default function StartWizardPage() {
   const params = useParams();
@@ -30,43 +32,42 @@ export default function StartWizardPage() {
 
   const [isLoadingConfig, setIsLoadingConfig] = useState(true);
   const [isHydrated, setIsHydrated] = useState(false);
-  
-  // Synchronously derive docConfig
-  const docConfig = useMemo(
-    () => documentLibrary.find(d => d.id === docIdFromPath),
-    [docIdFromPath]
-  );
+  const [docConfig, setDocConfig] = useState<LegalDocument | undefined>(undefined);
+  const [mobileView, setMobileView] = useState<'form' | 'preview'>('form');
 
-  // Single RHF instance creation
-  const methods = useForm<z.infer<typeof docConfigSchema>>({
-    resolver: docConfig?.schema ? zodResolver(docConfig.schema) : undefined,
-    defaultValues: {}, // Will be loaded from localStorage/Firestore
-    mode: 'onBlur',
-  });
-  
-  const { reset, watch } = methods;
-  // Fallback to empty schema if docConfig or its schema is not ready, to prevent errors.
-  const docConfigSchema = docConfig?.schema || z.object({}); 
 
   useEffect(() => {
     setIsHydrated(true);
   }, []);
 
-  // Effect for initial loading and validation
   useEffect(() => {
     if (docIdFromPath && isHydrated) {
-      if (docConfig && docConfig.schema) {
-        // docConfig is valid and has a schema
+      const foundDoc = documentLibrary.find(d => d.id === docIdFromPath);
+      if (foundDoc && foundDoc.schema) {
+        setDocConfig(foundDoc);
       } else {
         console.error(`[StartWizardPage] Document config not found or schema invalid for docId: ${docIdFromPath}`);
-        notFound(); // Trigger 404 if doc or its schema is not valid
+        notFound(); 
       }
       setIsLoadingConfig(false);
     }
-  }, [docIdFromPath, isHydrated, docConfig]);
+  }, [docIdFromPath, isHydrated]);
+
+  const methods = useForm<z.infer<any>>({ // Use any for schema initially
+    resolver: docConfig?.schema ? zodResolver(docConfig.schema) : undefined,
+    defaultValues: {}, 
+    mode: 'onBlur',
+  });
+  
+  const { reset, watch } = methods;
+
+  useEffect(() => {
+    if (docConfig?.schema) {
+      methods.reset({}, { resolver: zodResolver(docConfig.schema) } as any); // Re-initialize resolver when docConfig is loaded
+    }
+  }, [docConfig, methods]);
 
 
-  // Load draft data
   useEffect(() => {
     async function loadDraft() {
       if (!docConfig?.id || !isHydrated || authIsLoading) return;
@@ -94,7 +95,6 @@ export default function StartWizardPage() {
   }, [docConfig, locale, isHydrated, reset, authIsLoading, isLoggedIn, user, params.locale]);
 
 
-  // Autosave draft data
   const debouncedSave = useCallback(
     debounce(async (data: Record<string, any>) => {
       if (!docConfig?.id || authIsLoading || !isHydrated || Object.keys(data).length === 0) return;
@@ -162,7 +162,7 @@ export default function StartWizardPage() {
 
 
   return (
-    <FormProvider {...methods}> {/* Wizard and Preview share the SAME form context */}
+    <FormProvider {...methods}> 
       <main className="container mx-auto py-8 px-4 sm:px-6 lg:px-8">
          <Breadcrumb
           items={[
@@ -171,17 +171,43 @@ export default function StartWizardPage() {
             { label: t('breadcrumb.start', { ns: 'translation' }) },
           ]}
         />
+
+        {/* Mobile Tab Switcher */}
+        <div className="lg:hidden sticky top-14 z-40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 py-2 mb-4 border-b">
+          <div className="flex justify-around">
+            <Button
+              variant={mobileView === 'form' ? 'secondary' : 'ghost'}
+              onClick={() => setMobileView('form')}
+              className="w-1/2 flex items-center gap-2"
+            >
+              <Edit className="h-4 w-4" />
+              {t('Form')}
+            </Button>
+            <Button
+              variant={mobileView === 'preview' ? 'secondary' : 'ghost'}
+              onClick={() => setMobileView('preview')}
+              className="w-1/2 flex items-center gap-2"
+            >
+              <FileTextIcon className="h-4 w-4" /> 
+              {t('Preview')}
+            </Button>
+          </div>
+        </div>
+
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-6">
-          <div className="lg:col-span-1">
+          {/* Left Column: Form */}
+          <div className={cn("lg:col-span-1", mobileView === 'preview' && 'hidden lg:block')}>
             <WizardForm
               locale={locale}
               doc={docConfig}
               onComplete={handleWizardComplete}
             />
           </div>
-          <div className="lg:col-span-1">
-            <div className="sticky top-24 h-[calc(100vh-8rem)] max-h-[calc(100vh-8rem)] flex flex-col">
-              <h3 className="text-xl font-semibold mb-4 text-center text-card-foreground shrink-0">
+
+          {/* Right Column: Preview Pane */}
+          <div className={cn("lg:col-span-1", mobileView === 'form' && 'hidden lg:block')}>
+            <div className="sticky top-24 h-[calc(100vh-8rem)] max-h-[calc(100vh-8rem)] flex flex-col lg:max-h-[calc(100vh-6rem)]"> {/* Adjusted max-h for desktop */}
+              <h3 className="text-xl font-semibold mb-4 text-center text-card-foreground shrink-0 hidden lg:block">
                 {t('Live Preview', { ns: 'translation' })}
               </h3>
               <div className="flex-grow overflow-hidden rounded-lg shadow-md border border-border bg-background">
