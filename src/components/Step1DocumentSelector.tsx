@@ -7,7 +7,7 @@ import { documentLibrary, type LegalDocument } from "@/lib/document-library";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowLeft, FileText, Search, Landmark, Briefcase, Home, Users, User, ScrollText, ShieldQuestion, GraduationCap, FileIcon as PaperIcon, Loader2 } from "lucide-react";
+import { ArrowLeft, FileText, Search, Landmark, Briefcase, Home, Users, User, ScrollText, ShieldQuestion, AlertTriangle, Star } from "lucide-react"; // Added Star for top docs
 import { track } from "@/lib/analytics";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
@@ -25,6 +25,7 @@ export const CATEGORY_LIST: CategoryInfo[] = [
   { key: 'Family', labelKey: 'Family', icon: Users },
   { key: 'Personal', labelKey: 'Personal', icon: User },
   { key: 'Estate Planning', labelKey: 'Estate Planning', icon: ScrollText },
+  { key: 'Employment', labelKey: 'Employment & Labor Documents', icon: Briefcase }, // Added from previous update
   { key: 'Miscellaneous', labelKey: 'General', icon: FileText },
 ];
 
@@ -38,14 +39,24 @@ interface Step1DocumentSelectorProps {
   globalSelectedState: string;
 }
 
-const MemoizedCategoryCard = React.memo(function CategoryCard({ category, onClick, disabled, t }: { category: CategoryInfo; onClick: () => void; disabled: boolean; t: (key: string, fallback: string) => string; }) {
+// Placeholder for top docs - in a real app, this comes from Firestore
+const placeholderTopDocs: Array<Pick<LegalDocument, 'id' | 'name' | 'name_es' | 'category'> & { icon?: React.ElementType }> = [
+    { id: 'bill-of-sale-vehicle', name: 'Vehicle Bill of Sale', name_es: 'Contrato de Compraventa de Vehículo', category: 'Finance', icon: FileText },
+    { id: 'leaseAgreement', name: 'Residential Lease Agreement', name_es: 'Contrato de Arrendamiento Residencial', category: 'Real Estate', icon: Home },
+    { id: 'nda', name: 'Non-Disclosure Agreement (NDA)', name_es: 'Acuerdo de Confidencialidad (NDA)', category: 'Business', icon: ShieldQuestion },
+    { id: 'powerOfAttorney', name: 'General Power of Attorney', name_es: 'Poder Notarial General', category: 'Personal', icon: User },
+    { id: 'last-will-testament', name: 'Last Will and Testament', name_es: 'Última Voluntad y Testamento', category: 'Estate Planning', icon: ScrollText },
+    { id: 'eviction-notice', name: 'Eviction Notice', name_es: 'Aviso de Desalojo', category: 'Real Estate', icon: AlertTriangle },
+];
+
+
+const MemoizedCategoryCard = React.memo(function CategoryCard({ category, onClick, disabled, t }: { category: CategoryInfo; onClick: () => void; disabled: boolean; t: (key: string, fallback?: string | object) => string; }) {
   return (
     <Button
       variant="outline"
       onClick={onClick}
       disabled={disabled}
       className="category-card h-auto min-h-[90px] p-4 border-border shadow-sm hover:shadow-md transition text-center flex flex-col justify-center items-center bg-card hover:bg-muted active:scale-95 active:transition-transform active:duration-100"
-      style={{ minHeight: '56px' }}
     >
       {React.createElement(category.icon || FileText, { className: "h-6 w-6 mb-2 text-primary/80" })}
       <span className="font-medium text-card-foreground text-sm">{t(category.labelKey, category.key)}</span>
@@ -61,15 +72,14 @@ const MemoizedDocumentCard = React.memo(function DocumentCard({ doc, onSelect, d
         "document-card shadow hover:shadow-lg cursor-pointer transition bg-card border border-border flex flex-col active:scale-95 active:transition-transform active:duration-100",
         disabled ? 'pointer-events-none opacity-50' : ''
       )}
-      style={{ minHeight: '56px' }}
     >
       <CardHeader className="pb-2 pt-4 px-4">
         <CardTitle className="text-base font-semibold text-card-foreground">
-          {i18nLanguage === 'es' && doc.name_es ? t(doc.name_es, doc.name) : t(doc.name, doc.name)}
+          {i18nLanguage === 'es' && doc.name_es ? t(doc.name_es, doc.name_es) : t(doc.name, doc.name)}
         </CardTitle>
       </CardHeader>
       <CardContent className="text-xs text-muted-foreground flex-grow px-4">
-        {i18nLanguage === 'es' && doc.description_es ? t(doc.description_es, doc.description) : t(doc.description, doc.description) || placeholderNoDescription}
+        {i18nLanguage === 'es' && doc.description_es ? t(doc.description_es, doc.description_es) : t(doc.description, doc.description) || placeholderNoDescription}
       </CardContent>
       <CardFooter className="pt-2 pb-3 px-4 text-xs text-muted-foreground flex justify-between items-center border-t border-border mt-auto">
         <span>💲{doc.basePrice}</span>
@@ -82,9 +92,24 @@ const MemoizedDocumentCard = React.memo(function DocumentCard({ doc, onSelect, d
   );
 });
 
+const MemoizedTopDocChip = React.memo(function TopDocChip({ doc, onSelect, disabled, t, i18nLanguage }: { doc: Pick<LegalDocument, 'id' | 'name' | 'name_es'> & { icon?: React.ElementType }; onSelect: () => void; disabled: boolean; t: (key: string, fallback?: string | object) => string; i18nLanguage: string; }) {
+    return (
+        <Button
+            variant="outline"
+            size="sm"
+            onClick={onSelect}
+            disabled={disabled}
+            className="category-card h-auto min-h-[50px] p-3 border-border shadow-sm hover:shadow-md transition text-center flex items-center justify-center gap-2 bg-card hover:bg-muted active:scale-95 active:transition-transform active:duration-100"
+        >
+            {doc.icon && React.createElement(doc.icon, { className: "h-4 w-4 text-primary/80" })}
+            <span className="font-medium text-card-foreground text-xs">{i18nLanguage === 'es' && doc.name_es ? t(doc.name_es, doc.name_es) : t(doc.name, doc.name)}</span>
+        </Button>
+    );
+});
+
 
 const Step1DocumentSelector = React.memo(function Step1DocumentSelector({
-  selectedCategory,
+  selectedCategory: initialSelectedCategory, // Renamed to avoid conflict
   onCategorySelect,
   onDocumentSelect,
   isReadOnly = false,
@@ -92,7 +117,9 @@ const Step1DocumentSelector = React.memo(function Step1DocumentSelector({
   globalSelectedState
 }: Step1DocumentSelectorProps) {
   const { t, i18n } = useTranslation();
-  const [view, setView] = useState<'categories' | 'documents'>(selectedCategory ? 'documents' : 'categories');
+  // 'top-docs', 'all-categories', 'documents-in-category', 'search-results'
+  const [currentView, setCurrentView] = useState<'top-docs' | 'all-categories' | 'documents-in-category'>(initialSelectedCategory ? 'documents-in-category' : 'top-docs');
+  const [selectedCategoryInternal, setSelectedCategoryInternal] = useState<string | null>(initialSelectedCategory);
   const [docSearch, setDocSearch] = useState<string>('');
   const [isHydrated, setIsHydrated] = useState(false);
   const { toast } = useToast();
@@ -101,13 +128,28 @@ const Step1DocumentSelector = React.memo(function Step1DocumentSelector({
     setIsHydrated(true);
   }, []);
 
+  // Effect to switch view if globalSearchTerm is used
   useEffect(() => {
-    if (selectedCategory) {
-      setView('documents');
-    } else if (!globalSearchTerm.trim()) {
-      setView('categories');
+    if (globalSearchTerm.trim() !== '') {
+      setCurrentView('search-results');
+      setSelectedCategoryInternal(null); // Clear category when global search is active
+    } else if (currentView === 'search-results' && globalSearchTerm.trim() === '') {
+      // Revert to top-docs or selected category view when search is cleared
+      setCurrentView(selectedCategoryInternal ? 'documents-in-category' : 'top-docs');
     }
-  }, [selectedCategory, globalSearchTerm]);
+  }, [globalSearchTerm, currentView, selectedCategoryInternal]);
+
+  // Effect to update internal selected category when prop changes (e.g., from URL param)
+  useEffect(() => {
+    if (initialSelectedCategory && initialSelectedCategory !== selectedCategoryInternal) {
+      setSelectedCategoryInternal(initialSelectedCategory);
+      setCurrentView('documents-in-category');
+    } else if (!initialSelectedCategory && selectedCategoryInternal && currentView !== 'search-results' && !globalSearchTerm.trim()) {
+      // If prop clears category, revert to top-docs unless searching
+       setSelectedCategoryInternal(null);
+       setCurrentView('top-docs');
+    }
+  }, [initialSelectedCategory, selectedCategoryInternal, currentView, globalSearchTerm]);
 
 
   const sortedCategories = useMemo(() => {
@@ -132,7 +174,7 @@ const Step1DocumentSelector = React.memo(function Step1DocumentSelector({
     let docs = [...documentLibrary];
     if (!isHydrated) return [];
 
-    if (globalSearchTerm.trim() !== '') {
+    if (currentView === 'search-results' && globalSearchTerm.trim() !== '') {
       const lowerGlobalSearch = globalSearchTerm.toLowerCase();
       docs = docs.filter(doc =>
         (t(doc.name, doc.name)).toLowerCase().includes(lowerGlobalSearch) ||
@@ -142,19 +184,20 @@ const Step1DocumentSelector = React.memo(function Step1DocumentSelector({
         (t(doc.description, doc.description)).toLowerCase().includes(lowerGlobalSearch) ||
         (languageSupportsSpanish(doc.languageSupport) && doc.description_es && t(doc.description_es, doc.description_es).toLowerCase().includes(lowerGlobalSearch))
       );
+    } else if (currentView === 'documents-in-category' && selectedCategoryInternal) {
+        docs = docs.filter(doc => doc.category === selectedCategoryInternal);
+        if (docSearch.trim() !== '') {
+            const lowerDocSearch = docSearch.toLowerCase();
+            docs = docs.filter(doc =>
+                (t(doc.name, doc.name)).toLowerCase().includes(lowerDocSearch) ||
+                (doc.aliases?.some(alias => alias.toLowerCase().includes(lowerDocSearch))) ||
+                (languageSupportsSpanish(doc.languageSupport) && doc.aliases_es?.some(alias => alias.toLowerCase().includes(lowerDocSearch))) ||
+                (languageSupportsSpanish(doc.languageSupport) && doc.name_es && t(doc.name_es, doc.name_es).toLowerCase().includes(lowerDocSearch))
+            );
+        }
     } else {
-      if (selectedCategory) {
-        docs = docs.filter(doc => doc.category === selectedCategory);
-      }
-      if (view === 'documents' && docSearch.trim() !== '') {
-          const lowerDocSearch = docSearch.toLowerCase();
-          docs = docs.filter(doc =>
-              (t(doc.name, doc.name)).toLowerCase().includes(lowerDocSearch) ||
-              (doc.aliases?.some(alias => alias.toLowerCase().includes(lowerDocSearch))) ||
-              (languageSupportsSpanish(doc.languageSupport) && doc.aliases_es?.some(alias => alias.toLowerCase().includes(lowerDocSearch))) ||
-              (languageSupportsSpanish(doc.languageSupport) && doc.name_es && t(doc.name_es, doc.name_es).toLowerCase().includes(lowerDocSearch))
-          );
-      }
+      // For 'top-docs' or 'all-categories' view, no doc filtering here, handled by dedicated rendering
+      return []; // Or return all docs if 'all-categories' has its own full list rendering
     }
 
     if (globalSelectedState && globalSelectedState !== 'all') {
@@ -162,24 +205,42 @@ const Step1DocumentSelector = React.memo(function Step1DocumentSelector({
     }
 
     return docs.filter(doc => doc.id !== 'general-inquiry');
-  }, [selectedCategory, docSearch, globalSearchTerm, globalSelectedState, view, t, i18n.language, isHydrated]);
+  }, [selectedCategoryInternal, docSearch, globalSearchTerm, globalSelectedState, currentView, t, i18n.language, isHydrated]);
 
 
   const handleCategoryClick = (key: string) => {
     if (isReadOnly || !isHydrated) return;
-    onCategorySelect(key);
+    setSelectedCategoryInternal(key);
+    setCurrentView('documents-in-category');
+    onCategorySelect(key); // Notify parent about category selection for URL update etc.
     setDocSearch('');
-    track('select_item', { category: key });
+    track('select_item_category', { item_category: key });
   };
 
-  const handleBackToCategories = () => {
+  const handleBackToAllCategories = () => {
     if (isReadOnly || !isHydrated) return;
+    setSelectedCategoryInternal(null);
+    setCurrentView('all-categories');
+    onCategorySelect(null); // Notify parent
+    setDocSearch('');
+  };
+  
+  const handleBackToTopDocs = () => {
+    if (isReadOnly || !isHydrated) return;
+    setSelectedCategoryInternal(null);
+    setCurrentView('top-docs');
     onCategorySelect(null);
     setDocSearch('');
   };
 
-  const handleDocSelect = (doc: LegalDocument) => {
+
+  const handleDocSelect = (doc: LegalDocument | Pick<LegalDocument, 'id' | 'name' | 'name_es' | 'category'>) => {
     if (!isHydrated) return;
+    const fullDoc = documentLibrary.find(d => d.id === doc.id);
+    if (!fullDoc) {
+        toast({ title: "Error", description: "Document details not found.", variant: "destructive"});
+        return;
+    }
     if (isReadOnly || !globalSelectedState) {
         toast({
             title: t('State Required'),
@@ -188,8 +249,8 @@ const Step1DocumentSelector = React.memo(function Step1DocumentSelector({
         });
         return;
     }
-    onDocumentSelect(doc);
-    track('view_item', {id: doc.id,name: doc.name,category : doc.category,price : doc.basePrice,state : globalSelectedState,});
+    onDocumentSelect(fullDoc);
+    track('select_item', {item_id: fullDoc.id,item_name: fullDoc.name,item_category : fullDoc.category,price : fullDoc.basePrice,state : globalSelectedState,});
   };
 
   const placeholderCategoryDesc = isHydrated ? t('stepOne.categoryDescription') : "Loading...";
@@ -207,7 +268,7 @@ const Step1DocumentSelector = React.memo(function Step1DocumentSelector({
     return (
       <Card className="step-card opacity-50">
         <CardHeader className="step-card__header">
-            <PaperIcon className="step-card__icon animate-pulse" />
+            <FileText className="step-card__icon animate-pulse" />
             <div>
               <CardTitle className="step-card__title h-6 bg-muted-foreground/20 rounded w-3/4 mb-1"></CardTitle>
               <CardDescription className="step-card__subtitle h-4 bg-muted-foreground/10 rounded w-full"></CardDescription>
@@ -228,47 +289,57 @@ const Step1DocumentSelector = React.memo(function Step1DocumentSelector({
     );
   }
 
-  const isGlobalSearching = globalSearchTerm.trim() !== '';
+  let cardTitle = "";
+  let cardDescription = "";
+
+  if (currentView === 'search-results') {
+    cardTitle = t('Search Results');
+    cardDescription = t('Showing documents matching your search and state criteria.');
+  } else if (currentView === 'top-docs') {
+    cardTitle = t('stepOne.topDocumentsTitle', 'Top Documents This Week');
+    cardDescription = placeholderCategoryDesc; // Or a specific description for top docs
+  } else if (currentView === 'all-categories') {
+    cardTitle = t('stepOne.categoryDescription');
+    cardDescription = placeholderCategoryDesc;
+  } else if (currentView === 'documents-in-category') {
+    cardTitle = t('stepOne.selectDocDescription');
+    cardDescription = placeholderSelectDocDesc;
+  }
+
 
   return (
      <Card className={cn("step-card", isReadOnly ? 'opacity-50 cursor-not-allowed pointer-events-none' : 'opacity-100')}>
         <CardHeader className="step-card__header">
-             <PaperIcon className="step-card__icon" />
+             <FileText className="step-card__icon" />
              <div>
-                <CardTitle className="step-card__title">
-                    {isGlobalSearching
-                      ? t('Search Results')
-                      : view === 'categories'
-                        ? t('stepOne.categoryDescription')
-                        : t('stepOne.selectDocDescription')
-                    }
-                </CardTitle>
-                <CardDescription className="step-card__subtitle">
-                    {isGlobalSearching
-                       ? t('Showing documents matching your search and state criteria.')
-                       : view === 'categories'
-                         ? placeholderCategoryDesc
-                         : placeholderSelectDocDesc
-                     }
-                 </CardDescription>
+                <CardTitle className="step-card__title">{cardTitle}</CardTitle>
+                <CardDescription className="step-card__subtitle">{cardDescription}</CardDescription>
              </div>
         </CardHeader>
 
-        {!isGlobalSearching && view === 'documents' && selectedCategory && (
+        {(currentView === 'documents-in-category' && selectedCategoryInternal) && (
             <div className="px-6 pb-4 border-b border-border">
                  <div className="flex items-center justify-between">
-                     <Button variant="outline" size="sm" onClick={handleBackToCategories} disabled={isReadOnly || !isHydrated}>
+                     <Button variant="outline" size="sm" onClick={handleBackToAllCategories} disabled={isReadOnly || !isHydrated}>
                        <ArrowLeft className="mr-2 h-4 w-4" /> {placeholderBackToCategories}
                      </Button>
                       <h3 className="text-lg font-semibold text-muted-foreground text-right">
-                        {t(CATEGORY_LIST.find(c => c.key === selectedCategory)?.labelKey || selectedCategory || '', selectedCategory || '')}
+                        {t(CATEGORY_LIST.find(c => c.key === selectedCategoryInternal)?.labelKey || selectedCategoryInternal || '', selectedCategoryInternal || '')}
                       </h3>
                  </div>
             </div>
         )}
+         {currentView === 'all-categories' && (
+            <div className="px-6 pb-4 border-b border-border">
+                <Button variant="outline" size="sm" onClick={handleBackToTopDocs} disabled={isReadOnly || !isHydrated}>
+                    <ArrowLeft className="mr-2 h-4 w-4" /> {t('stepOne.backToTopDocumentsButton', 'Back to Top Documents')}
+                </Button>
+            </div>
+        )}
+
 
         <CardContent className="step-content space-y-6 pt-6">
-             {isGlobalSearching ? (
+             {currentView === 'search-results' ? (
                 <div className="animate-fade-in space-y-6">
                      {globalSelectedState ? (
                          <>
@@ -296,7 +367,25 @@ const Step1DocumentSelector = React.memo(function Step1DocumentSelector({
                          <p className="text-muted-foreground italic text-center py-6">{isHydrated ? t('Please select a state from the filter bar above to see documents.') : "Loading..."}</p>
                       )}
                  </div>
-             ) : view === 'categories' ? (
+             ) : currentView === 'top-docs' ? (
+                <div className="animate-fade-in space-y-4">
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                        {placeholderTopDocs.map(doc => (
+                            <MemoizedTopDocChip
+                                key={doc.id}
+                                doc={doc}
+                                onSelect={() => handleDocSelect(doc)}
+                                disabled={isReadOnly || !isHydrated}
+                                t={t}
+                                i18nLanguage={i18n.language}
+                            />
+                        ))}
+                    </div>
+                    <Button variant="link" onClick={() => setCurrentView('all-categories')} className="w-full justify-center text-primary">
+                        {t('stepOne.exploreAllCategoriesButton', 'Explore All Document Categories')} →
+                    </Button>
+                </div>
+             ) : currentView === 'all-categories' ? (
                 <div className="animate-fade-in space-y-4">
                      {sortedCategories.length > 0 ? (
                          <div className="category-grid pt-2">
@@ -314,7 +403,7 @@ const Step1DocumentSelector = React.memo(function Step1DocumentSelector({
                          <p className="text-muted-foreground italic text-center py-6">{placeholderNoCategories}</p>
                      )}
                 </div>
-             ) : (
+             ) : ( // documents-in-category view
                  <div className="animate-fade-in space-y-6">
                       <div className="relative">
                         <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
@@ -360,3 +449,4 @@ const Step1DocumentSelector = React.memo(function Step1DocumentSelector({
   );
 });
 export default Step1DocumentSelector;
+

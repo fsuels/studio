@@ -47,7 +47,10 @@
     "stateHelp": "Helps tailor the document to your jurisdiction.",
     "analyze": "Analyze My Situation",
     "textDescriptionLabel": "Description (Text)",
-    "micDescriptionLabel": "Description (Microphone Transcript)"
+    "micDescriptionLabel": "Description (Microphone Transcript)",
+    "topDocumentsTitle": "Top Documents This Week",
+    "exploreAllCategoriesButton": "Explore All Document Categories",
+    "backToTopDocumentsButton": "Back to Top Documents"
   },
   "documentInference": {
     "describePlaceholder": "e.g., 'Renting my apartment', 'Starting a business with a partner', 'Need someone to stop contacting me...'",
@@ -684,3 +687,4 @@
     "loading": "Loading popular documents..."
   }
 }
+
