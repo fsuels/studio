@@ -1,27 +1,9 @@
 // src/app/[locale]/docs/[docId]/start/page.tsx
-'use client';
+// This is now a Server Component
 
-import { useParams, notFound, useRouter } from 'next/navigation';
-import React, { useEffect, useState, useCallback, useMemo } from 'react';
-import { useForm, FormProvider } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-import { Loader2, Edit, Eye } from 'lucide-react';
-
-import { documentLibrary, type LegalDocument } from '@/lib/document-library';
-import { localizations } from '@/lib/localizations'; // Import localizations
-import Breadcrumb from '@/components/Breadcrumb';
-import WizardForm from '@/components/WizardForm';
-import PreviewPane from '@/components/PreviewPane';
-import { useTranslation } from 'react-i18next';
-import { useAuth } from '@/hooks/useAuth';
-import { loadFormProgress, saveFormProgress } from '@/lib/firestore/saveFormProgress';
-import { debounce } from 'lodash-es';
-import TrustBadges from '@/components/TrustBadges';
-import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { cn } from '@/lib/utils';
-
+import StartWizardPageClient from './StartWizardPageClient';
+import { documentLibrary } from '@/lib/document-library';
+import { localizations } from '@/lib/localizations';
 
 // generateStaticParams is crucial for static export of dynamic routes
 export async function generateStaticParams() {
@@ -50,179 +32,16 @@ export async function generateStaticParams() {
   return params;
 }
 
+interface StartWizardPageProps {
+  params: {
+    locale: string;
+    docId: string;
+  };
+}
 
-export default function StartWizardPage() {
-  const params = useParams();
-  const { t, i18n } = useTranslation();
-  const router = useRouter();
-  const { isLoggedIn, user, isLoading: authIsLoading } = useAuth();
-
-  const locale = params.locale as 'en' | 'es';
-  const docIdFromPath = params.docId as string;
-
-  const [isLoadingConfig, setIsLoadingConfig] = useState(true);
-  const [isHydrated, setIsHydrated] = useState(false);
-  const [activeMobileTab, setActiveMobileTab] = useState<'form' | 'preview'>('form');
-  
-  const docConfig = useMemo(() => {
-    if (!isHydrated) return undefined;
-    return documentLibrary.find(d => d.id === docIdFromPath);
-  }, [docIdFromPath, isHydrated]);
-
-  const methods = useForm<z.infer<any>>({
-    defaultValues: {}, 
-    mode: 'onBlur', 
-  });
-  const { reset, watch } = methods;
-
-  useEffect(() => {
-    setIsHydrated(true);
-  }, []);
-
-  useEffect(() => {
-    if (isHydrated && docConfig) {
-      if (docConfig.schema) {
-        methods.reset({}, { resolver: zodResolver(docConfig.schema) } as any);
-      } else {
-        console.warn(`[StartWizardPage] No Zod schema found for document ID: ${docIdFromPath}. Form validation might not work as expected.`);
-        methods.reset({}); // Reset without resolver if no schema
-      }
-      setIsLoadingConfig(false);
-    } else if (isHydrated && !docConfig && !isLoadingConfig) { // Ensure !isLoadingConfig to prevent multiple notFound calls
-      console.error(`[StartWizardPage] Document config not found for docId: ${docIdFromPath}`);
-      notFound();
-    }
-  }, [docConfig, isHydrated, methods, docIdFromPath, isLoadingConfig]);
-
-
-  useEffect(() => {
-    if (!docConfig?.id || !isHydrated || authIsLoading || isLoadingConfig) return;
-    
-    async function loadDraft() {
-      let draftData: Record<string, any> = {};
-      try {
-        if (isLoggedIn && user?.uid) {
-          draftData = await loadFormProgress({ userId: user.uid, docType: docConfig.id, state: locale });
-        } else {
-          const lsKey = `draft-${docConfig.id}-${locale}`;
-          const lsDraft = localStorage.getItem(lsKey);
-          if (lsDraft) draftData = JSON.parse(lsDraft);
-        }
-      } catch (e) {
-        console.warn('[StartWizardPage] Draft loading failed:', e);
-      }
-      if (Object.keys(draftData).length > 0) {
-        reset(draftData);
-        console.log('[StartWizardPage] Draft loaded:', draftData);
-      } else {
-        console.log('[StartWizardPage] No draft found, using initial/empty values.');
-      }
-    }
-    loadDraft();
-  }, [docConfig, locale, isHydrated, reset, authIsLoading, isLoggedIn, user, isLoadingConfig]);
-
-  const debouncedSave = useCallback(
-    debounce(async (data: Record<string, any>) => {
-      if (!docConfig?.id || authIsLoading || !isHydrated || Object.keys(data).length === 0 || isLoadingConfig) return;
-      
-      const relevantDataToSave = Object.keys(data).reduce((acc, key) => {
-        if (data[key] !== undefined) { acc[key] = data[key]; }
-        return acc;
-      }, {} as Record<string,any>);
-
-      if (Object.keys(relevantDataToSave).length === 0) return;
-
-      if (isLoggedIn && user?.uid) {
-        await saveFormProgress({ userId: user.uid, docType: docConfig.id, state: locale, formData: relevantDataToSave });
-      } else {
-         localStorage.setItem(`draft-${docConfig.id}-${locale}`, JSON.stringify(relevantDataToSave));
-      }
-      console.log('[WizardForm] Autosaved draft for:', docConfig.id, locale, relevantDataToSave);
-    }, 1000),
-    [isLoggedIn, user?.uid, docConfig, locale, authIsLoading, isHydrated, isLoadingConfig] 
-  );
-
-  useEffect(() => {
-    if (!docConfig?.id || authIsLoading || !isHydrated || !watch || isLoadingConfig) return () => {};
-    
-    const subscription = watch((values) => {
-       debouncedSave(values as Record<string, any>);
-    });
-    return () => {
-      subscription.unsubscribe();
-      debouncedSave.cancel();
-    } ;
-  }, [watch, docConfig, debouncedSave, authIsLoading, isHydrated, isLoadingConfig]);
-
-  const handleWizardComplete = useCallback(
-    (checkoutUrl: string) => {
-      console.log("[StartWizardPage] Wizard onComplete triggered with checkoutUrl:", checkoutUrl);
-      router.push(checkoutUrl);
-    },
-    [router]
-  );
-
-  if (!isHydrated || isLoadingConfig || !docConfig ) {
-    return (
-      <div className="flex justify-center items-center min-h-[calc(100vh-8rem)]">
-        <Loader2 className="h-12 w-12 animate-spin text-primary" />
-        <p className="ml-2 text-muted-foreground">
-          {t('Loading document wizard...', { ns: 'translation' })}
-        </p>
-      </div>
-    );
-  }
-  
-  const documentDisplayName = locale === 'es' && docConfig.name_es ? docConfig.name_es : docConfig.name;
-
-  return (
-    <FormProvider {...methods}>
-      <main className="container mx-auto py-8 px-4 sm:px-6 lg:px-8">
-         <Breadcrumb
-          items={[
-            { label: t('breadcrumb.home', { ns: 'translation' }), href: `/${locale}` },
-            { label: documentDisplayName, href: `/${locale}/docs/${docConfig.id}` },
-            { label: t('breadcrumb.start', { ns: 'translation' }) },
-          ]}
-        />
-        
-        {/* Mobile Tab Switcher */}
-        <div className="lg:hidden mb-4 sticky top-14 z-30 bg-background/90 backdrop-blur-sm py-2 -mx-4 px-4 border-b">
-          <Tabs value={activeMobileTab} onValueChange={(value) => setActiveMobileTab(value as 'form' | 'preview')} className="w-full">
-            <TabsList className="grid w-full grid-cols-2 h-10">
-              <TabsTrigger value="form" className="text-xs sm:text-sm data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
-                <Edit className="w-4 h-4 mr-1.5" /> {t('Form', {ns: 'translation'})}
-              </TabsTrigger>
-              <TabsTrigger value="preview" className="text-xs sm:text-sm data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
-                <Eye className="w-4 h-4 mr-1.5" /> {t('Preview', {ns: 'translation'})}
-              </TabsTrigger>
-            </TabsList>
-          </Tabs>
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-2 lg:mt-6">
-          <div className={cn("lg:col-span-1", activeMobileTab !== 'form' && 'hidden lg:block')}>
-            <WizardForm
-              locale={locale}
-              doc={docConfig}
-              onComplete={handleWizardComplete}
-            />
-            <div className="mt-6 lg:mt-8">
-              <TrustBadges />
-            </div>
-          </div>
-          <div className={cn("lg:col-span-1", activeMobileTab !== 'preview' && 'hidden lg:block')}>
-             <div className="sticky top-32 lg:top-24 h-[calc(100vh-14rem)] lg:h-[calc(100vh-8rem)] max-h-[calc(100vh-14rem)] lg:max-h-[calc(100vh-6rem)] flex flex-col">
-              <h3 className="text-xl font-semibold mb-4 text-center text-card-foreground shrink-0 hidden lg:block">
-                {t('Live Preview', { ns: 'translation' })}
-              </h3>
-              <div className="flex-grow overflow-hidden rounded-lg shadow-md border border-border bg-background">
-                 <PreviewPane docId={docIdFromPath} locale={locale} />
-              </div>
-            </div>
-          </div>
-        </div>
-      </main>
-    </FormProvider>
-  );
+// This Server Component now correctly passes params to the Client Component
+export default function StartWizardPageContainer({ params }: StartWizardPageProps) {
+  // The `params` prop is directly available here from Next.js
+  // It's then passed down to the client component.
+  return <StartWizardPageClient params={params} />;
 }
