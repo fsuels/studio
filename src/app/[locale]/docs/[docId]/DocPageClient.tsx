@@ -8,11 +8,11 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import React, { useEffect, useState, useMemo } from 'react';
 import dynamic from 'next/dynamic';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Star, ShieldCheck, Zap, HelpCircle, Award } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
-// import { useCart } from '@/contexts/CartProvider'; // Already commented out
 import { track } from '@/lib/analytics';
 import { Separator } from '@/components/ui/separator';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 const DocumentDetail = dynamic(() => import('@/components/DocumentDetail'), {
   ssr: false,
@@ -25,19 +25,25 @@ const DocumentDetail = dynamic(() => import('@/components/DocumentDetail'), {
 });
 
 interface DocPageClientProps {
-  params: { // Explicitly define the params prop
+  params: {
     locale: string;
     docId: string;
   };
 }
 
-export default function DocPageClient({ params: routeParams }: DocPageClientProps) { // Use routeParams to avoid conflict with hook
-  const params = useParams(); // Keep using hook for consistency within client component, or use routeParams
+// Placeholder for AI dynamic highlights
+const AiHighlightPlaceholder = ({ text }: { text: string }) => (
+  <span className="bg-primary/10 text-primary px-1 py-0.5 rounded-sm text-xs font-medium border border-primary/30 cursor-help" title="AI Highlight: This section will be auto-customized based on your answers.">
+    {text} <Zap size={12} className="inline ml-1" />
+  </span>
+);
+
+
+export default function DocPageClient({ params: routeParams }: DocPageClientProps) {
+  const params = useParams();
   const { t, i18n } = useTranslation();
   const router = useRouter();
-  // const { addItem } = useCart(); // Already commented out
 
-  // Use routeParams directly if preferred, or continue with params from hook
   const currentLocale = (Array.isArray(params.locale) ? params.locale[0] : params.locale) as 'en' | 'es' | undefined;
   const docId = Array.isArray(params.docId) ? params.docId[0] : params.docId as string | undefined;
 
@@ -82,12 +88,6 @@ export default function DocPageClient({ params: routeParams }: DocPageClientProp
 
   const handleStartWizard = () => {
     if (!docConfig || !currentLocale || !isHydrated) return;
-    // addItem({ // Already commented out
-    //   id: docConfig.id,
-    //   type: 'doc',
-    //   name: currentLocale === 'es' && docConfig.name_es ? docConfig.name_es : docConfig.name,
-    //   price: docConfig.basePrice * 100, // Assuming basePrice is in dollars
-    // });
     track('add_to_cart', {
       id: docConfig.id,
       name: currentLocale === 'es' && docConfig.name_es ? docConfig.name_es : docConfig.name,
@@ -99,7 +99,7 @@ export default function DocPageClient({ params: routeParams }: DocPageClientProp
 
   if (!isHydrated || isLoading || !docConfig || !currentLocale) {
     return (
-       <div className="flex items-center justify-center min-h-[calc(100vh-10rem)]"> {/* Adjusted min-h */}
+       <div className="flex items-center justify-center min-h-[calc(100vh-10rem)]">
         <Loader2 className="h-12 w-12 animate-spin text-primary" />
         <p className="ml-2 text-muted-foreground">Loading document details...</p>
       </div>
@@ -107,7 +107,16 @@ export default function DocPageClient({ params: routeParams }: DocPageClientProp
   }
 
   const documentDisplayName = currentLocale === 'es' && docConfig.name_es ? docConfig.name_es : docConfig.name;
+  const documentDescription = currentLocale === 'es' && docConfig.description_es ? docConfig.description_es : docConfig.description;
 
+  const benefits = [
+    { icon: ShieldCheck, textKey: 'docDetail.benefit1', defaultText: 'Legally Sound & State-Specific' },
+    { icon: Zap, textKey: 'docDetail.benefit2', defaultText: 'Quick & Easy Customization' },
+    { icon: Award, textKey: 'docDetail.benefit3', defaultText: 'Instant Download & Secure Sharing' },
+  ];
+  
+  // Placeholder for competitive pricing data
+  const competitorPrice = 200; 
 
   return (
     <main className="container mx-auto py-12 px-4 sm:px-6 lg:px-8">
@@ -121,41 +130,112 @@ export default function DocPageClient({ params: routeParams }: DocPageClientProp
           </span>
         </nav>
 
-        {/* Marketing Section */}
-        <div className="text-center mb-8 md:mb-12">
+        {/* Hero Section */}
+        <div className="text-center mb-10 md:mb-16">
+            <div className="inline-block p-3 mb-4 bg-primary/10 rounded-full">
+              <FileText className="h-8 w-8 text-primary" />
+            </div>
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-3 text-foreground">
                 {documentDisplayName}
             </h1>
-            <Badge variant="outline" className="mb-3 border-primary text-primary bg-primary/10">
-              {t('Attorney-Drafted', {defaultValue: 'Attorney-Drafted'})}
-            </Badge>
+             <div className="flex items-center justify-center space-x-2 mb-3">
+                {Array(5).fill(0).map((_, i) => (
+                  <Star key={i} className="h-5 w-5 text-yellow-400 fill-yellow-400" />
+                ))}
+                <span className="text-sm text-muted-foreground">(4.9 stars - 200+ reviews)</span> {/* Placeholder */}
+             </div>
             <p className="text-lg text-muted-foreground mb-6 max-w-2xl mx-auto">
-               {currentLocale === 'es' && docConfig.description_es ? docConfig.description_es : docConfig.description}
+               {documentDescription}
             </p>
-            <div className="flex items-baseline justify-center space-x-2 mb-6">
-                <span className="text-4xl font-bold text-primary">${docConfig.basePrice.toFixed(2)}</span>
-                <span className="text-md text-muted-foreground">{t('pricing.perDocument', {defaultValue: 'per document'})}</span>
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-3xl mx-auto mb-8">
+              {benefits.map((benefit, index) => (
+                <div key={index} className="flex items-center space-x-2 p-3 bg-card border border-border rounded-lg text-left">
+                  <benefit.icon className="h-5 w-5 text-primary shrink-0" />
+                  <span className="text-xs text-card-foreground">{t(benefit.textKey, benefit.defaultText)}</span>
+                </div>
+              ))}
             </div>
+            
             <Button size="lg" className="w-full sm:w-auto text-base px-8 py-3" onClick={handleStartWizard} disabled={!isHydrated}>
               {t('docDetail.startForFree')}
             </Button>
         </div>
+        
+        <Separator className="my-8 md:my-12" />
 
-        {/* Divider Text */}
-        <div className="text-center my-8 md:my-12">
-            <h2 className="text-xl md:text-2xl font-semibold text-foreground mb-2">
-                 {t('docDetail.previewTitle', {defaultValue: 'Document Preview'})}
-            </h2>
-            <p className="text-sm text-muted-foreground">
-                {t('docDetail.previewSubtitle', {defaultValue: "This is how your document will generally look. Specific clauses and details will be customized by your answers."})}
-            </p>
-            <Separator className="mt-4 mb-6 md:mb-8 w-1/4 mx-auto" />
+        {/* Preview & Pricing Information Section */}
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-8 items-start">
+            {/* Document Preview Section - takes more space on larger screens */}
+            <section className="md:col-span-3 bg-card shadow-xl rounded-xl p-2 md:p-4 lg:p-6 border border-border">
+                <div className="text-center mb-4">
+                    <h2 className="text-xl md:text-2xl font-semibold text-foreground mb-1">
+                        {t('docDetail.previewTitle', {defaultValue: 'Document Preview'})}
+                    </h2>
+                    <p className="text-xs text-muted-foreground">
+                        {t('docDetail.previewSubtitle', {defaultValue: "This is how your document will generally look. Specific clauses and details will be customized by your answers."})}
+                    </p>
+                </div>
+                <DocumentDetail locale={currentLocale as 'en' | 'es'} docId={docId as string} altText={`${documentDisplayName} preview`} />
+                 <p className="text-xs text-muted-foreground mt-2 text-center italic">
+                    AI Highlight: <AiHighlightPlaceholder text="Key clauses" /> will be automatically tailored.
+                 </p>
+            </section>
+
+            {/* Pricing & Upsell Section - takes less space */}
+            <aside className="md:col-span-2 space-y-6">
+                 <Card className="shadow-lg border-primary">
+                    <CardHeader>
+                        <CardTitle className="text-lg text-primary">{t('docDetail.pricingTitle', 'Transparent Pricing')}</CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-3">
+                        <div className="flex items-baseline justify-between">
+                            <span className="text-3xl font-bold text-foreground">${docConfig.basePrice.toFixed(2)}</span>
+                            <span className="text-sm text-muted-foreground">{t('pricing.perDocument', {defaultValue: 'per document'})}</span>
+                        </div>
+                        <p className="text-xs text-muted-foreground">
+                             {t('docDetail.competitivePrice', { competitorPrice: competitorPrice.toFixed(2), defaultValue: `Compare to typical attorney fees of $${competitorPrice.toFixed(2)}+`})}
+                        </p>
+                         <Button size="lg" className="w-full mt-2" onClick={handleStartWizard} disabled={!isHydrated}>
+                           {t('docDetail.startForFree')}
+                         </Button>
+                    </CardContent>
+                 </Card>
+
+                 {docConfig.upsellClauses && docConfig.upsellClauses.length > 0 && (
+                    <Card className="shadow-md">
+                        <CardHeader>
+                            <CardTitle className="text-md flex items-center gap-2">
+                                <Zap size={18} className="text-accent" /> {t('docDetail.optionalAddons', 'Optional Add-ons')}
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-2">
+                            {docConfig.upsellClauses.map(clause => (
+                                <div key={clause.id} className="text-xs flex justify-between items-center p-2 bg-muted/50 rounded-md">
+                                    <span>{currentLocale === 'es' && clause.description_es ? clause.description_es : clause.description}</span>
+                                    <Badge variant="secondary">+${clause.price.toFixed(2)}</Badge>
+                                </div>
+                            ))}
+                        </CardContent>
+                    </Card>
+                 )}
+
+                 {/* Placeholder for AI dynamic highlights (more detailed) */}
+                 <Card className="shadow-md">
+                    <CardHeader>
+                        <CardTitle className="text-md flex items-center gap-2">
+                            <HelpCircle size={18} className="text-blue-500" /> {t('docDetail.aiAssistance', 'AI Assistance')}
+                        </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <p className="text-xs text-muted-foreground">
+                            Our AI will help suggest <AiHighlightPlaceholder text="relevant clauses" /> and ensure your document is tailored to the <AiHighlightPlaceholder text="specifics of your situation" /> as you answer questions in the next step.
+                        </p>
+                    </CardContent>
+                 </Card>
+            </aside>
         </div>
 
-        {/* Document Preview Section */}
-         <section className="bg-card shadow-xl rounded-xl p-2 md:p-4 lg:p-6 border border-border">
-             <DocumentDetail locale={currentLocale as 'en' | 'es'} docId={docId as string} altText={`${documentDisplayName} preview`} />
-        </section>
 
         {/* Sticky CTA for mobile */}
         <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-t p-4 shadow-lg z-40">
