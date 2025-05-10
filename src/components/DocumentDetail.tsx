@@ -23,27 +23,31 @@ const DocumentDetail = React.memo(function DocumentDetail({ docId, locale, altTe
   const [error, setError] = useState<string | null>(null);
   const [isHydrated, setIsHydrated] = useState(false);
 
-  const doc = useMemo(() => documentLibrary.find((d: LegalDocument) => d.id === docId), [docId]);
+  const docConfig = useMemo(() => documentLibrary.find((d: LegalDocument) => d.id === docId), [docId]);
 
   const templatePath = useMemo(() => {
-    if (!doc) return undefined;
-    return locale === 'es' && doc.templatePath_es ? doc.templatePath_es : doc.templatePath;
-  }, [doc, locale]);
+    if (!docConfig) return undefined;
+    return locale === 'es' && docConfig.templatePath_es ? docConfig.templatePath_es : docConfig.templatePath;
+  }, [docConfig, locale]);
 
   useEffect(() => {
     setIsHydrated(true);
   }, []);
 
   useEffect(() => {
-    if (!doc || !isHydrated || !templatePath) {
-      if(isHydrated && !doc) {
+    if (!docConfig || !isHydrated ) {
+      if(isHydrated && !docConfig) {
         setError(t('Document configuration not found.', {defaultValue: 'Document configuration not found.'}));
-      } else if (isHydrated && !templatePath) {
-        console.warn(`[DocumentDetail] No templatePath defined for docId: ${docId}, locale: ${locale}. Using placeholder image or showing error if image fails.`);
-        // No direct error here, will try to load image first. If image also fails, then it's an issue.
-        // Set MD to empty so image fallback is attempted.
-        setMd('');
+        setIsLoading(false);
       }
+      return;
+    }
+    
+    // If templatePath is not defined, it means we should rely on the pre-generated PNG image.
+    // No need to fetch markdown in this case.
+    if (!templatePath) {
+      console.log(`[DocumentDetail] No templatePath for docId: ${docId}, locale: ${locale}. Relying on image preview.`);
+      setMd(''); // Ensure md is empty so image is shown
       setIsLoading(false);
       return;
     }
@@ -64,7 +68,7 @@ const DocumentDetail = React.memo(function DocumentDetail({ docId, locale, altTe
       })
       .then(text => {
         let modifiedMd = text;
-        const documentDisplayName = locale === 'es' && doc.name_es ? doc.name_es : doc.name;
+        const documentDisplayName = locale === 'es' && docConfig.name_es ? docConfig.name_es : docConfig.name;
         if (documentDisplayName) {
             modifiedMd = modifiedMd.replace(/^# .*/m, `# ${documentDisplayName}`);
         }
@@ -76,10 +80,10 @@ const DocumentDetail = React.memo(function DocumentDetail({ docId, locale, altTe
         setMd(''); 
       })
       .finally(() => setIsLoading(false));
-  }, [docId, locale, doc, isHydrated, t, templatePath]);
+  }, [docId, locale, docConfig, isHydrated, t, templatePath]);
 
 
-  if (!isHydrated || (!doc && !isLoading)) { // Added !isLoading to prevent flash of "not found"
+  if (!isHydrated || (!docConfig && !isLoading)) { 
     return (
       <div className="flex flex-col items-center justify-center text-muted-foreground p-4 border rounded-lg bg-muted min-h-[300px] aspect-[8.5/11]">
         <Loader2 className="h-8 w-8 animate-spin mb-2" />
@@ -88,8 +92,7 @@ const DocumentDetail = React.memo(function DocumentDetail({ docId, locale, altTe
     );
   }
   
-  // This case handles if doc is not found after hydration and loading finishes
-  if (isHydrated && !isLoading && !doc) {
+  if (isHydrated && !isLoading && !docConfig) {
     return (
          <div className="flex flex-col items-center justify-center text-destructive p-4 border rounded-lg bg-destructive/10 min-h-[300px] aspect-[8.5/11]">
            <AlertTriangle className="h-8 w-8 mb-2" />
@@ -98,7 +101,7 @@ const DocumentDetail = React.memo(function DocumentDetail({ docId, locale, altTe
     );
   }
   
-  const documentDisplayName = doc && (locale === 'es' && doc.name_es ? doc.name_es : doc.name);
+  const documentDisplayName = docConfig && (locale === 'es' && docConfig.name_es ? docConfig.name_es : docConfig.name);
   const imgSrc = `/images/previews/${locale}/${docId}.png`;
   const fallbackAlt = altText || `${documentDisplayName || docId} preview`;
   const watermarkText = t('preview.watermark', { defaultValue: 'PREVIEW' });
@@ -122,7 +125,7 @@ const DocumentDetail = React.memo(function DocumentDetail({ docId, locale, altTe
         </div>
       )}
 
-      {!isLoading && error && !md && ( // Show error only if markdown also failed (or wasn't attempted due to no templatePath)
+      {!isLoading && error && !md && ( 
          <div className="absolute inset-0 flex flex-col items-center justify-center bg-destructive/5 z-20 p-4 text-center">
            <AlertTriangle className="h-8 w-8 text-destructive mb-2" />
            <p className="text-destructive text-sm font-semibold">{t('Error loading preview', {defaultValue: 'Error loading preview'})}</p>
@@ -142,8 +145,8 @@ const DocumentDetail = React.memo(function DocumentDetail({ docId, locale, altTe
             {md}
            </ReactMarkdown>
         </div>
-      ) : !isLoading && !error && !md && ( // Fallback to image if MD is empty and no error fetching MD
-         <div className="absolute inset-0 flex flex-col items-center justify-center text-muted-foreground z-0 p-0 text-center"> {/* Changed z-index and padding */}
+      ) : !isLoading && !error && !md && templatePath === undefined ? ( // Only show image if templatePath was undefined (meaning PNG is the primary source)
+         <div className="absolute inset-0 flex flex-col items-center justify-center text-muted-foreground z-0 p-0 text-center">
             <Image 
               src={imgSrc} 
               alt={fallbackAlt} 
@@ -151,25 +154,14 @@ const DocumentDetail = React.memo(function DocumentDetail({ docId, locale, altTe
               height={1100} 
               className="object-contain w-full h-full" 
               data-ai-hint="document template screenshot"
-              loading="lazy" // Changed from priority={true}
+              loading="lazy" 
               onError={(e) => {
-                  console.warn(`[DocumentDetail] Image failed to load: ${imgSrc}. Fallback content will be shown if MD also failed.`);
-                  // If MD also fails or is empty, the error/loading state for MD will handle it.
-                  // To prevent image error showing over MD error, we can set an error state for image too.
-                  // For now, if MD is also unavailable, the final fallback below handles it.
-                  // If we want to show specific "Image unavailable" over "MD unavailable":
-                  if (!md) setError(t('Image preview not available.', {defaultValue: 'Image preview not available.'}));
+                  console.warn(`[DocumentDetail] Image failed to load: ${imgSrc}.`);
+                  setError(t('Image preview not available.', {defaultValue: 'Image preview not available.'}));
               }}
             />
          </div>
-      )}
-       {!isLoading && !error && !md && !templatePath && ( // Ultimate fallback if no templatePath and image fails
-            <div className="absolute inset-0 flex flex-col items-center justify-center bg-muted/70 z-20 p-4 text-center">
-                <AlertTriangle className="h-8 w-8 text-muted-foreground mb-2" />
-                <p className="text-sm text-muted-foreground">{t('Preview not available for this document.', {defaultValue: 'Preview not available for this document.'})}</p>
-            </div>
-        )}
-    </div>
-  );
-});
-export default DocumentDetail;
+      ) : !isLoading && !error && !md && ( // If templatePath was defined but MD is empty (e.g. fetch failed but wasn't an error state like 404)
+          <div className="absolute inset-0 flex flex-col items-center justify-center bg-muted/70 z-20 p-4 text-center">
+            <AlertTriangle className="h-8 w-8 text-muted-foreground mb-2" />
+            <p className="text-sm text-muted-foreground">{t('Preview not available for this document.', {

@@ -10,6 +10,7 @@ import { useTranslation } from 'react-i18next';
 import { debounce } from 'lodash-es';
 import { documentLibrary, type LegalDocument } from '@/lib/document-library';
 import { cn } from '@/lib/utils';
+import Image from 'next/image'; // Import next/image
 
 interface PreviewPaneProps {
   locale: 'en' | 'es';
@@ -26,10 +27,12 @@ export default function PreviewPane({ locale, docId }: PreviewPaneProps) {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isHydrated, setIsHydrated] = useState(false);
+  const [imageError, setImageError] = useState(false);
 
   const docConfig = useMemo(() => documentLibrary.find(d => d.id === docId), [docId]);
   const templatePath = locale === 'es' && docConfig?.templatePath_es ? docConfig.templatePath_es : docConfig?.templatePath;
   const watermarkText = t('preview.watermark', { ns: 'translation', defaultValue: 'PREVIEW' });
+  const imgSrc = `/images/previews/${locale}/${docId}.png`;
 
   useEffect(() => {
     setIsHydrated(true);
@@ -47,13 +50,14 @@ export default function PreviewPane({ locale, docId }: PreviewPaneProps) {
     async function fetchTemplate() {
       setIsLoading(true);
       setError(null);
+      setImageError(false); // Reset image error on new fetch
       setRawMarkdown('');
       setProcessedMarkdown('');
 
       if (!templatePath) {
-        console.warn(`[PreviewPane] No templatePath for docId: ${docId}, locale: ${locale}`);
-        setError(t('Preview template not available for this document.', { ns: 'translation' }));
-        setIsLoading(false);
+        console.warn(`[PreviewPane] No templatePath for docId: ${docId}, locale: ${locale}. Will attempt image fallback.`);
+        // No direct error here, will try to load image first if MD fetch isn't attempted.
+        setIsLoading(false); // Stop loading MD as there's no path
         return;
       }
       
@@ -87,15 +91,13 @@ export default function PreviewPane({ locale, docId }: PreviewPaneProps) {
       const value = formData[key];
       tempMd = tempMd.replace(placeholderRegex, value ? `**${String(value)}**` : '____');
     }
-    tempMd = tempMd.replace(/\{\{.*?\}\}/g, '____'); // Replace any remaining placeholders
+    tempMd = tempMd.replace(/\{\{.*?\}\}/g, '____'); 
     
     let titleToUse = docConfig?.name;
     if (locale === 'es' && docConfig?.name_es) {
       titleToUse = docConfig.name_es;
     }
     if (titleToUse) {
-       // Ensure title is centered by applying text-center to h1 if markdown is used
-       // This is better handled by .prose h1:text-center in globals.css
        tempMd = tempMd.replace(/^# .*/m, `# ${titleToUse}`);
     }
 
@@ -111,28 +113,27 @@ export default function PreviewPane({ locale, docId }: PreviewPaneProps) {
 
   useEffect(() => {
     if (!watch) { 
-      console.warn("[PreviewPane] 'watch' function is not available. Live preview updates will not work.");
       if (rawMarkdown) setProcessedMarkdown(updatePreviewContent({}, rawMarkdown)); 
       return;
     }
 
-    if (isLoading || !rawMarkdown || !isHydrated) {
-      if (!isLoading && !rawMarkdown && isHydrated) {
-        setProcessedMarkdown('');
-      }
-      return;
+    if (isLoading || !isHydrated) return;
+    
+    // Initial update, and set up watcher if rawMarkdown is available
+    if (rawMarkdown) {
+      debouncedUpdatePreview(watch(), rawMarkdown);
+      const subscription = watch((formData) => {
+        debouncedUpdatePreview(formData as Record<string, any>, rawMarkdown);
+      });
+      return () => {
+        subscription.unsubscribe();
+        debouncedUpdatePreview.cancel();
+      };
+    } else {
+      // If rawMarkdown is not available (e.g. no templatePath), clear processedMarkdown
+      setProcessedMarkdown('');
     }
     
-    debouncedUpdatePreview(watch(), rawMarkdown);
-    
-    const subscription = watch((formData) => {
-      debouncedUpdatePreview(formData as Record<string, any>, rawMarkdown);
-    });
-
-    return () => {
-      subscription.unsubscribe();
-      debouncedUpdatePreview.cancel();
-    };
   }, [watch, rawMarkdown, isLoading, isHydrated, debouncedUpdatePreview, updatePreviewContent]);
 
 
@@ -154,50 +155,69 @@ export default function PreviewPane({ locale, docId }: PreviewPaneProps) {
     );
   }
 
-  if (error) {
+  // If Markdown successfully loaded and processed, show it
+  if (!error && rawMarkdown && processedMarkdown) {
     return (
-      <div className="flex flex-col items-center justify-center h-full text-destructive p-4 text-center">
-        <AlertTriangle className="h-8 w-8 mb-2" />
-        <p className="font-semibold">{t('Error loading preview', { ns: 'translation' })}</p>
-        <p className="text-xs mt-1">{error}</p>
+      <div
+        id="live-preview"
+        data-watermark={watermarkText}
+        className="relative w-full h-full bg-background" 
+        style={{ userSelect: 'none' }}
+      >
+        <div className={cn("prose prose-sm dark:prose-invert max-w-none w-full h-full overflow-y-auto overflow-x-hidden p-4 md:p-6 scrollbar-hide bg-background text-foreground")}>
+          <ReactMarkdown 
+              remarkPlugins={[remarkGfm]}
+              components={{ p: ({node, ...props}) => <p {...props} className="select-none" /> }}
+          >
+            {processedMarkdown}
+          </ReactMarkdown>
+        </div>
       </div>
     );
   }
 
-  if (!rawMarkdown && !isLoading) {
+  // If Markdown fetch failed OR no templatePath was provided, AND image hasn't errored yet, try to show image
+  if ((error || !templatePath) && !imageError) {
+    return (
+      <div
+        id="live-preview"
+        data-watermark={watermarkText}
+        className="relative w-full h-full bg-background"
+        style={{ userSelect: 'none' }}
+      >
+        <Image
+          src={imgSrc}
+          alt={`${docId} preview fallback`}
+          width={850}
+          height={1100}
+          className="object-contain w-full h-full"
+          loading="lazy"
+          data-ai-hint="document template screenshot"
+          onError={() => {
+            console.warn(`[PreviewPane] Fallback image also failed to load: ${imgSrc}`);
+            setImageError(true);
+          }}
+        />
+      </div>
+    );
+  }
+  
+  // If both Markdown and Image have failed, or if there was an error and no templatePath
+  if (error || imageError || (!templatePath && !rawMarkdown && !isLoading)) {
      return (
-        <div className="flex flex-col items-center justify-center h-full text-muted-foreground p-4">
-          <p>{t('Template not found or empty.', { ns: 'translation' })}</p>
+        <div className="flex flex-col items-center justify-center h-full text-destructive p-4 text-center">
+          <AlertTriangle className="h-8 w-8 mb-2" />
+          <p className="font-semibold">{error ? t('Error loading preview', { ns: 'translation' }) : t('Preview Unavailable', { ns: 'translation'})}</p>
+          {error && <p className="text-xs mt-1">{error}</p>}
+          {imageError && !error && <p className="text-xs mt-1">{t('Image preview could not be loaded.')}</p>}
         </div>
      );
   }
 
+  // Fallback for any other unhandled state (should ideally not be reached)
   return (
-    <div
-      id="live-preview"
-      data-watermark={watermarkText}
-      className="relative w-full h-full bg-background" 
-      style={{
-        WebkitUserSelect: 'none',
-        MozUserSelect: 'none',
-        msUserSelect: 'none',
-        userSelect: 'none',
-      }}
-    >
-      {/* Watermark is applied via CSS in globals.css */}
-
-      <div className={cn("prose prose-sm dark:prose-invert max-w-none w-full h-full overflow-y-auto overflow-x-hidden p-4 md:p-6 scrollbar-hide bg-background text-foreground")}>
-        <ReactMarkdown 
-            remarkPlugins={[remarkGfm]}
-            components={{
-                // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                p: ({node, ...props}) => <p {...props} className="select-none" />,
-                // h1 styling (including text-center) is now primarily in globals.css for .prose h1 within #live-preview
-            }}
-        >
-          {processedMarkdown || ''}
-        </ReactMarkdown>
-      </div>
+    <div className="flex flex-col items-center justify-center h-full text-muted-foreground p-4">
+      <p>{t('Preview not available.', { ns: 'translation' })}</p>
     </div>
   );
 }

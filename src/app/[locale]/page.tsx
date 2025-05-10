@@ -4,18 +4,17 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import type { LegalDocument } from '@/lib/document-library'; 
 import { usStates, documentLibrary } from '@/lib/document-library'; 
-import DocTypeSelector from '@/components/DocumentTypeSelector'; 
+// Removed DocTypeSelector and document-inference imports as Step1DocumentSelector handles initial selection
 import { Questionnaire } from '@/components/questionnaire';
 import { DisclaimerStep } from '@/components/disclaimer-step';
 import { PdfPreview } from '@/components/pdf-preview';
 import { ShareDownloadStep } from '@/components/share-download-step';
 import ProgressStepper from '@/components/ProgressStepper'; 
 import HomepageHeroSteps from '@/components/landing/HomepageHeroSteps'; 
-// import ThreeStepSection from '@/components/landing/ThreeStepSection'; // To be replaced by HowItWorks
-import HowItWorks from '@/components/landing/HowItWorks'; // New import
+import HowItWorks from '@/components/landing/HowItWorks'; 
 import TrustAndTestimonialsSection from '@/components/landing/TrustAndTestimonialsSection';
 import { GuaranteeBadge } from '@/components/landing/GuaranteeBadge';
-import { AnnouncementBar } from '@/components/AnnouncementBar'; // Use new name
+import { AnnouncementBar } from '@/components/AnnouncementBar'; 
 import { Button } from '@/components/ui/button'; 
 import { useToast } from '@/hooks/use-toast'; 
 import { Separator } from '@/components/ui/separator';
@@ -25,18 +24,17 @@ import StickyFilterBar from '@/components/StickyFilterBar';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams, useRouter, useParams } from 'next/navigation';
 import { Badge } from '@/components/ui/badge';
-import SearchBar from '@/components/SearchBar'; // New import
-import TopDocsChips from '@/components/TopDocsChips'; // New import
+import SearchBar from '@/components/SearchBar'; 
+import TopDocsChips from '@/components/TopDocsChips'; 
 
 
 export default function HomePage() {
-  console.log('[page.tsx] Home component rendering...');
   const { t, i18n } = useTranslation();
   const { toast } = useToast();
   const searchParams = useSearchParams();
   const router = useRouter();
   const params = useParams();
-  const locale = params.locale as 'en' | 'es';
+  const locale = params.locale as 'en' | 'es' || 'en';
 
 
   const [globalSearchTerm, setGlobalSearchTerm] = useState('');
@@ -60,7 +58,6 @@ export default function HomePage() {
 
   const handleDocumentSelectFromHomepage = useCallback((doc: LegalDocument) => {
     if (!isHydrated) return;
-    console.log('[page.tsx] Homepage document selected:', doc.name);
     
     router.push(`/${locale}/docs/${doc.id}/start`);
   }, [locale, router, isHydrated]);
@@ -94,7 +91,7 @@ export default function HomePage() {
     }
   }, [searchParams, globalSearchTerm, selectedCategoryForFilter, isHydrated, scrollToWorkflow]);
 
-  const renderHomepageContent = () => {
+  const renderStep1Selector = () => {
     if (!isHydrated) { 
         return <div className="text-center py-10"><Loader2 className="h-8 w-8 animate-spin mx-auto" /> <p suppressHydrationWarning>Loading...</p></div>;
     }
@@ -112,21 +109,13 @@ export default function HomePage() {
   return (
     <>
       <AnnouncementBar />
-      <HomepageHeroSteps /> {/* Reduced top padding is handled within this component's style potentially or its parent's */}
-       <div className="container mx-auto px-4 -mt-8 sm:-mt-4 md:mt-0 mb-8 relative z-10"> {/* Search bar positioning */}
-          <SearchBar />
-       </div>
-      <div className="text-center -mt-2 mb-8"> 
-         {isHydrated && (
-            <Badge variant="secondary" className="bg-primary/10 text-primary border-primary/30 px-4 py-1.5 text-sm shadow-sm">
-                 {t('home.hero.pricingBadge')}
-            </Badge>
-         )}
-      </div>
+      <HomepageHeroSteps /> 
+      {/* SearchBar is now inside HomepageHeroSteps */}
+      {/* Badge is now inside HomepageHeroSteps */}
       <HowItWorks /> 
       <TrustAndTestimonialsSection />
       <GuaranteeBadge />
-      <TopDocsChips />
+      <TopDocsChips /> {/* This replaces the old category grid on the homepage main section */}
 
       <Separator className="my-12" />
 
@@ -154,7 +143,7 @@ export default function HomePage() {
             )}
 
             <div className="mt-8 bg-card p-4 sm:p-6 md:p-8 rounded-xl shadow-2xl border border-border/20">
-                {renderHomepageContent()}
+                {renderStep1Selector()} {/* This now conditionally renders TopDocsChips or the full category/doc selector based on interaction */}
             </div>
          </div>
       </section>

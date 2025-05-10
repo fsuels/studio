@@ -5,18 +5,18 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Linkedin, Twitter, Send, Lock, Loader2 } from 'lucide-react'; // Added Lock icon
+import { Linkedin, Twitter, Send, Lock, Loader2, Phone, MessageSquare } from 'lucide-react'; 
 import { useToast } from '@/hooks/use-toast';
 import { Logo } from '@/components/layout/Logo';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'next/navigation'; // Import useParams
+import { useParams } from 'next/navigation'; 
 
 const Footer = React.memo(function Footer() {
     const [email, setEmail] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const { toast } = useToast();
     const { t, i18n } = useTranslation();
-    const params = useParams(); // Use useParams to get locale
+    const params = useParams(); 
     const locale = (params.locale as 'en' | 'es') || i18n.language as 'en' | 'es' || 'en';
     const [isHydrated, setIsHydrated] = useState(false);
 
@@ -31,9 +31,10 @@ const Footer = React.memo(function Footer() {
              return;
         }
         setIsLoading(true);
+        // Simulate API call
         await new Promise(resolve => setTimeout(resolve, 1000));
         console.log("Subscribing email:", email);
-        toast({ title: t('toasts.subscribedTitle'), description: t('toasts.subscribedDescription') });
+        toast({ title: t('toasts.subscribedTitle', {defaultValue: "Subscribed!"}), description: t('toasts.subscribedDescription', {defaultValue: "Thanks for joining! Check your inbox for your free credits."}) });
         setEmail('');
         setIsLoading(false);
     };
@@ -112,8 +113,8 @@ const Footer = React.memo(function Footer() {
           ))}
           
           <div>
-             <h4 className="font-semibold text-foreground mb-3">{t('footer.community', {defaultValue: 'Community'})}</h4>
-             <div className="flex space-x-3 mb-6">
+             <h4 className="font-semibold text-foreground mb-3">{t('footer.community', {defaultValue: 'Community & Support'})}</h4>
+             <div className="flex space-x-3 mb-4">
                  <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" aria-label={t('LinkedIn', {defaultValue: 'LinkedIn'})} className="text-muted-foreground hover:text-primary transition-colors">
                     <Linkedin className="h-5 w-5" />
                  </a>
@@ -121,22 +122,28 @@ const Footer = React.memo(function Footer() {
                      <Twitter className="h-5 w-5" />
                  </a>
              </div>
+             {/* Placeholder for Phone/Hours - actual numbers/logic needed */}
+             <div className="text-xs space-y-1 mb-6">
+                <p className="flex items-center gap-1.5"><Phone className="h-3.5 w-3.5 text-primary/80"/> <span>+1 (800) 555-0199 (Support)</span></p>
+                <p className="flex items-center gap-1.5"><Clock className="h-3.5 w-3.5 text-primary/80"/> <span>{t('support.contact.hours', {defaultValue: 'Mon–Fri, 9am–6pm EST'})}</span></p>
+             </div>
+
 
             <h4 className="font-semibold text-foreground mb-3">{t('footer.getCredits', {defaultValue: 'Get 3 Free Credits'})}</h4>
             <form onSubmit={handleSubscribe} className="flex gap-2 items-center">
               <div className="relative flex-grow">
-                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
                 <Input
                   type="email"
                   placeholder={t('footer.emailPlaceholder', {defaultValue: 'Enter your email'})}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="pl-10 pr-2 py-2 h-11 text-base bg-background" // Increased padding and height
+                  className="pl-10 pr-2 py-2 h-12 text-base bg-background border-input" 
                   aria-label={t('footer.emailPlaceholder', {defaultValue: 'Email for newsletter subscription'})}
                   disabled={isLoading}
                 />
               </div>
-              <Button type="submit" size="icon" className="bg-primary text-primary-foreground hover:bg-primary/90 h-11 w-11 shrink-0" aria-label={t('footer.subscribe', {defaultValue: 'Subscribe'})} disabled={isLoading}>
+              <Button type="submit" size="icon" className="bg-primary text-primary-foreground hover:bg-primary/90 h-12 w-12 shrink-0" aria-label={t('footer.subscribe', {defaultValue: 'Subscribe'})} disabled={isLoading}>
                  {isLoading ? <Loader2 className="h-5 w-5 animate-spin" /> : <Send className="h-5 w-5" />}
               </Button>
             </form>
@@ -148,8 +155,14 @@ const Footer = React.memo(function Footer() {
           {t('footer.copyright', { year: currentYear, defaultValue: `© ${currentYear} 123LegalDoc. All rights reserved.` })}
         </div>
       </div>
-      {/* Placeholder for Intercom chat bubble script integration */}
-      {/* <script>{`// Intercom script would go here or be loaded via a Script component in _app.tsx or a root layout`}</script> */}
+      {/* Intercom Placeholder: In a real app, this would be a Script tag in _app.tsx or the root layout */}
+      {isHydrated && (
+        <div className="fixed bottom-4 right-4 z-50">
+          <Button variant="outline" size="icon" className="rounded-full shadow-lg bg-primary text-primary-foreground hover:bg-primary/90 w-12 h-12" aria-label={t('Open chat', {defaultValue: 'Open chat'})}>
+            <MessageSquare className="h-6 w-6" />
+          </Button>
+        </div>
+      )}
     </footer>
   );
 });

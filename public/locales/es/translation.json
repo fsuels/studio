@@ -224,18 +224,6 @@
           "cta": {
             "startNow": "Comienza gratis"
           },
-          "testimonialsTitle": "Lo que dicen nuestros usuarios",
-          "testimonial1": "\"123LegalDoc me ahorró $500 en mi contrato de alquiler. ¡Muy fácil de usar!\"",
-          "testimonial1Name": "Sarah Chen",
-          "testimonial1Role": "Propietaria de pequeño negocio",
-          "testimonial2": "\"Generar un contrato de sociedad tomó minutos en vez de días. Altamente recomendado.\"",
-          "testimonial2Name": "Michael B.",
-          "testimonial2Role": "Freelancer",
-          "testimonial3": "\"La inferencia de IA fue precisa y el cuestionario claro. ¡Gran servicio!\"",
-          "testimonial3Name": "Emily White",
-          "testimonial3Role": "Fundadora de startup",
-          "featuredIn": "DESTACADO EN",
-          "satisfactionGuarantee": "Garantía de satisfacción del 100% o le devolvemos su dinero",
           "trustStrip": {
             "title": "Confiado por Profesionales",
             "badge1": "Más de {{count}} documentos generados",
@@ -244,31 +232,31 @@
           },
           "testimonials": {
             "title": "Lo que dicen nuestros usuarios",
-            "t1": { "quote": "Esta plataforma me ahorró horas de papeleo.", "name": "Ana Ramírez", "title": "Propietaria en Texas" },
-            "t2": { "quote": "Extremadamente intuitivo. Creé un contrato en minutos.", "name": "Jason Liu", "title": "Fundador de Startup" },
-            "t3": { "quote": "La IA me dio justo lo que necesitaba. ¡Fantástico!", "name": "Linda Fox", "title": "Agente Inmobiliaria" },
-            "t4": { "quote": "Me guió paso a paso sin ninguna confusión.", "name": "Kevin James", "title": "Freelancer" },
-            "t5": { "quote": "Simple, rápido y legalmente sólido. Muy recomendable.", "name": "Nina Patel", "title": "Vendedora en Línea" },
-            "t6": { "quote": "Perfecto para contratos de pequeños negocios.", "name": "Carlos Gómez", "title": "Dueño de Boutique" },
-            "t7": { "quote": "El soporte en español fue clave para mi equipo.", "name": "Rosa Villanueva", "title": "Asistente Legal" },
-            "t8": { "quote": "Excelente diseño y resultados confiables.", "name": "Matthew R.", "title": "Fotógrafo" },
-            "t9": { "quote": "Pude crear un contrato de alquiler estando de vacaciones.", "name": "Joanne L.", "title": "Propietaria Remota" },
-            "t10": { "quote": "Lo volvería a usar sin duda. Es excelente.", "name": "Henry Thomas", "title": "Inversionista" },
-            "t11": { "quote": "No necesitas ser abogado. Lo hace todo por ti.", "name": "Susan White", "title": "Organizadora de Eventos" },
-            "t12": { "quote": "Previsualización y compartición de documentos fue muy fluida.", "name": "Liam Cruz", "title": "Consultor de Software" },
-            "t13": { "quote": "¡Por fin ayuda legal accesible!", "name": "Laura Bennett", "title": "Escritora Freelance" },
-            "t14": { "quote": "Mi inquilino firmó el mismo día.", "name": "Omar Hassan", "title": "Propietario" },
-            "t15": { "quote": "Esta app es esencial para emprendedores.", "name": "Jada Evans", "title": "Coach de Vida" },
-            "t16": { "quote": "Hasta mis padres pudieron usarla fácilmente.", "name": "Miguel Reyes", "title": "Estudiante Universitario" },
-            "t17": { "quote": "El formulario dinámico fue ideal para mí.", "name": "Emily Rivera", "title": "Organizadora sin fines de lucro" },
-            "t18": { "quote": "Es como tener un abogado en el celular.", "name": "Daniel Schmidt", "title": "Desarrollador Freelance" },
-            "t19": { "quote": "Limpio, moderno y legalmente confiable.", "name": "Priya Desai", "title": "Arquitecta" },
-            "t20": { "quote": "Me ayuda a redactar sin dudar.", "name": "George Park", "title": "Consultor de Marketing" },
-            "t21": { "quote": "Confiable y rápido. El mejor gasto de $5.", "name": "Aliya Khan", "title": "Coach en Línea" },
-            "t22": { "quote": "La IA acertó con mis documentos de negocio.", "name": "Bobby Tran", "title": "Fundador de Startup" },
-            "t23": { "quote": "Me dio tranquilidad en cada paso.", "name": "Natalie Scott", "title": "Madre y Propietaria" },
-            "t24": { "quote": "Confío más en esta herramienta que en plantillas online.", "name": "Eric Delgado", "title": "Dueño de Negocio" },
-            "t25": { "quote": "El soporte bilingüe fue clave.", "name": "Yesenia Morales", "title": "Líder Comunitaria" }
+            "t1": { "quote": "Esta plataforma me ahorró horas de papeleo.", "name": "Ana Ramírez", "title": "Propietaria en Texas", "outcome": "Ahorró $500 en gastos legales" },
+            "t2": { "quote": "Extremadamente intuitivo. Creé un contrato en minutos.", "name": "Jason Liu", "title": "Fundador de Startup", "outcome": "Lanzó su negocio más rápido" },
+            "t3": { "quote": "La IA me dio justo lo que necesitaba. ¡Fantástico!", "name": "Linda Fox", "title": "Agente Inmobiliaria", "outcome": "Cerró el trato sin problemas" },
+            "t4": { "quote": "Me guió paso a paso sin ninguna confusión.", "name": "Kevin James", "title": "Freelancer", "outcome": "Aseguró proyecto con cliente" },
+            "t5": { "quote": "Simple, rápido y legalmente sólido. Muy recomendable.", "name": "Nina Patel", "title": "Vendedora en Línea", "outcome": "Protegió su tienda en línea" },
+            "t6": { "quote": "Perfecto para contratos de pequeños negocios.", "name": "Carlos Gómez", "title": "Dueño de Boutique", "outcome": "Formalizó acuerdos con proveedores" },
+            "t7": { "quote": "El soporte en español fue clave para mi equipo.", "name": "Rosa Villanueva", "title": "Asistente Legal", "outcome": "Mejoró la eficiencia del equipo" },
+            "t8": { "quote": "Excelente diseño y resultados confiables.", "name": "Matthew R.", "title": "Fotógrafo", "outcome": "Estandarizó contratos con clientes" },
+            "t9": { "quote": "Pude crear un contrato de alquiler estando de vacaciones.", "name": "Joanne L.", "title": "Propietaria Remota", "outcome": "Gestionó propiedad a distancia" },
+            "t10": { "quote": "Lo volvería a usar sin duda. Es excelente.", "name": "Henry Thomas", "title": "Inversionista", "outcome": "Solidificó términos de inversión" },
+            "t11": { "quote": "No necesitas ser abogado. Lo hace todo por ti.", "name": "Susan White", "title": "Organizadora de Eventos", "outcome": "Simplificó contratos de eventos" },
+            "t12": { "quote": "Previsualización y compartición de documentos fue muy fluida.", "name": "Liam Cruz", "title": "Consultor de Software", "outcome": "Agilizó la incorporación de clientes" },
+            "t13": { "quote": "¡Por fin ayuda legal accesible!", "name": "Laura Bennett", "title": "Escritora Freelance", "outcome": "Protegió mis derechos de autor" },
+            "t14": { "quote": "Mi inquilino firmó el mismo día.", "name": "Omar Hassan", "title": "Propietario", "outcome": "Aseguró ingresos por alquiler" },
+            "t15": { "quote": "Esta app es esencial para emprendedores.", "name": "Jada Evans", "title": "Coach de Vida", "outcome": "Profesionalizó mi práctica de coaching" },
+            "t16": { "quote": "Hasta mis padres pudieron usarla fácilmente.", "name": "Miguel Reyes", "title": "Estudiante Universitario", "outcome": "Ayudó con acuerdo de compañeros de piso" },
+            "t17": { "quote": "El formulario dinámico fue ideal para mí.", "name": "Emily Rivera", "title": "Organizadora sin fines de lucro", "outcome": "Redactó acuerdos de voluntariado" },
+            "t18": { "quote": "Es como tener un abogado en el celular.", "name": "Daniel Schmidt", "title": "Desarrollador Freelance", "outcome": "Hizo contratos de servicio rápidamente" },
+            "t19": { "quote": "Limpio, moderno y legalmente confiable.", "name": "Priya Desai", "title": "Arquitecta", "outcome": "Preparó propuestas para clientes" },
+            "t20": { "quote": "Me ayuda a redactar sin dudar.", "name": "George Park", "title": "Consultor de Marketing", "outcome": "Aclaró alcances de proyecto" },
+            "t21": { "quote": "Confiable y rápido. El mejor gasto de $35.", "name": "Aliya Khan", "title": "Coach en Línea", "outcome": "Aseguró acuerdos de coaching" },
+            "t22": { "quote": "La IA acertó con mis documentos de negocio.", "name": "Bobby Tran", "title": "Fundador de Startup", "outcome": "Registró LLC fácilmente" },
+            "t23": { "quote": "Me dio tranquilidad en cada paso.", "name": "Natalie Scott", "title": "Madre y Propietaria", "outcome": "Gestionó alquiler sin problemas" },
+            "t24": { "quote": "Confío más en esta herramienta que en plantillas online.", "name": "Eric Delgado", "title": "Dueño de Negocio", "outcome": "Creó contratos personalizados" },
+            "t25": { "quote": "El soporte bilingüe fue clave.", "name": "Yesenia Morales", "title": "Líder Comunitaria", "outcome": "Atendió necesidades de comunidad diversa" }
           },
           "moneyBackGuarantee": "Garantía de satisfacción 100% o le devolvemos su dinero",
           "callToAction": "Comenzar ahora"
@@ -520,125 +508,125 @@
          "body": "Próximamente..."
        },
        "contract-basics": {
-         "title": "Contratos Básicos: Qué Debe Incluir Todo Acuerdo",
-         "desc": "Conoce las partes esenciales de cualquier contrato legal válido.",
-         "date": "2024-04-01",
-         "body": "Próximamente..."
-       },
-       "green-card-process": {
-         "title": "Entendiendo el Proceso de Solicitud de la Green Card",
-         "desc": "Resumen de los pasos, formularios y documentos necesarios para la residencia legal permanente.",
-         "date": "2024-04-02",
-         "body": "Próximamente..."
-       },
-       "why-you-need-a-will": {
-         "title": "Por Qué Necesitas un Testamento — Sin Importar Tu Edad",
-         "desc": "Descubre cómo un testamento puede proteger tus bienes y tu familia.",
-         "date": "2024-04-03",
-         "body": "Próximamente..."
-       },
-       "eviction-letter-guide": {
-         "title": "Cómo Escribir una Carta Legal de Desalojo",
-         "desc": "Pasos para que los propietarios notifiquen correctamente y eviten problemas legales.",
-         "date": "2024-04-04",
-         "body": "Próximamente..."
-       },
-       "buying-home-checklist": {
-         "title": "Lista Legal para Compradores de Vivienda por Primera Vez",
-         "desc": "Desde contratos de compra hasta títulos de propiedad — protege tu transacción inmobiliaria.",
-         "date": "2024-04-05",
-         "body": "Próximamente..."
-       },
-       "identity-theft-response": {
-         "title": "¿Qué Hacer Si Eres Víctima de Robo de Identidad",
-         "desc": "Tus derechos y los pasos legales que debes tomar de inmediato.",
-         "date": "2024-04-06",
-         "body": "Próximamente..."
-       },
-       "notarized-vs-witnessed": {
-         "title": "Notariado vs Testificado: ¿Cuál es la Diferencia?",
-         "desc": "Cuándo usar cada forma de verificación documental.",
-         "date": "2024-04-07",
-         "body": "Próximamente..."
-       },
-       "nda-vs-noncompete": {
-         "title": "NDA vs. No Competencia: ¿Cuál Necesitas?",
-         "desc": "Compara estos dos contratos comunes en negocios.",
-         "date": "2024-04-08",
-         "body": "Próximamente..."
-       },
-       "how-to-hire-freelancers": {
-         "title": "Cómo Contratar Freelancers Legalmente en EE.UU.",
-         "desc": "Reglas para contratistas independientes, contratos y formularios fiscales.",
-         "date": "2024-04-09",
-         "body": "Próximamente..."
-       },
+        "title": "Contratos Básicos: Qué Debe Incluir Todo Acuerdo",
+        "desc": "Conoce las partes esenciales de cualquier contrato legal válido.",
+        "date": "2024-04-01",
+        "body": "Próximamente..."
+      },
+      "green-card-process": {
+        "title": "Entendiendo el Proceso de Solicitud de la Green Card",
+        "desc": "Resumen de los pasos, formularios y documentos necesarios para la residencia legal permanente.",
+        "date": "2024-04-02",
+        "body": "Próximamente..."
+      },
+      "why-you-need-a-will": {
+        "title": "Por Qué Necesitas un Testamento — Sin Importar Tu Edad",
+        "desc": "Descubre cómo un testamento puede proteger tus bienes y tu familia.",
+        "date": "2024-04-03",
+        "body": "Próximamente..."
+      },
+      "eviction-letter-guide": {
+        "title": "Cómo Escribir una Carta Legal de Desalojo",
+        "desc": "Pasos para que los propietarios notifiquen correctamente y eviten problemas legales.",
+        "date": "2024-04-04",
+        "body": "Próximamente..."
+      },
+      "buying-home-checklist": {
+        "title": "Lista Legal para Compradores de Vivienda por Primera Vez",
+        "desc": "Desde contratos de compra hasta títulos de propiedad — protege tu transacción inmobiliaria.",
+        "date": "2024-04-05",
+        "body": "Próximamente..."
+      },
+      "identity-theft-response": {
+        "title": "Qué Hacer Si Eres Víctima de Robo de Identidad",
+        "desc": "Tus derechos y los pasos legales que debes tomar de inmediato.",
+        "date": "2024-04-06",
+        "body": "Próximamente..."
+      },
+      "notarized-vs-witnessed": {
+        "title": "Notariado vs Testificado: ¿Cuál es la Diferencia?",
+        "desc": "Cuándo usar cada forma de verificación documental.",
+        "date": "2024-04-07",
+        "body": "Próximamente..."
+      },
+      "nda-vs-noncompete": {
+        "title": "NDA vs. No Competencia: ¿Cuál Necesitas?",
+        "desc": "Compara estos dos contratos comunes en negocios.",
+        "date": "2024-04-08",
+        "body": "Próximamente..."
+      },
+      "how-to-hire-freelancers": {
+        "title": "Cómo Contratar Freelancers Legalmente en EE.UU.",
+        "desc": "Reglas para contratistas independientes, contratos y formularios fiscales.",
+        "date": "2024-04-09",
+        "body": "Próximamente..."
+      },
        "legal-docs-remote-work": {
-         "title": "Documentos Legales Esenciales para el Trabajo Remoto",
-         "desc": "Asegura el cumplimiento legal al contratar o trabajar de forma remota.",
-         "date": "2024-04-10",
-         "body": "Próximamente..."
-       },
-       "legal-name-change": {
-         "title": "Cómo Cambiar Legalmente tu Nombre en EE. UU.",
-         "desc": "Proceso paso a paso para cambiar legalmente tu nombre en cualquier estado.",
-         "date": "2024-04-11",
-         "body": "Próximamente..."
-       },
-       "how-to-draft-bill-of-sale": {
-         "title": "Cómo Redactar un Contrato de Compra-Venta Legal",
-         "desc": "Asegura tu venta privada con un contrato de compra-venta bien redactado.",
-         "date": "2024-04-12",
-         "body": "Próximamente..."
-       },
-       "divorce-paperwork-guide": {
-         "title": "Los Documentos Necesarios para Solicitar el Divorcio",
-         "desc": "Lista de formularios y trámites para el divorcio en tu estado.",
-         "date": "2024-04-13",
-         "body": "Próximamente..."
-       },
-       "start-llc-online": {
-         "title": "Cómo Crear una LLC en Línea en 2024",
-         "desc": "Crea tu empresa de responsabilidad limitada sin abogado usando estas herramientas.",
-         "date": "2024-04-14",
-         "body": "Próximamente..."
-       },
-       "do-i-need-a-lawyer": {
-         "title": "¿Necesito un Abogado o Puedo Hacerlo Yo Mismo?",
-         "desc": "Cuándo puedes usar herramientas legales por tu cuenta y cuándo no.",
-         "date": "2024-04-15",
-         "body": "Próximamente..."
-       },
-       "pet-agreements-renters": {
-         "title": "Acuerdos de Mascotas para Inquilinos: Qué Incluir",
-         "desc": "Cómo incluir legalmente a las mascotas en un contrato de arrendamiento.",
-         "date": "2024-04-16",
-         "body": "Próximamente..."
-       },
-       "freelancer-contract-template": {
-         "title": "Plantilla Gratis de Contrato para Freelancers 2024",
-         "desc": "Protege tu trabajo freelance con una plantilla de contrato sencilla.",
-         "date": "2024-04-17",
-         "body": "Próximamente..."
-       },
-       "medical-consent-minors": {
-         "title": "Formularios de Consentimiento Médico para Menores: Lo Que Deben Saber los Padres",
-         "desc": "Por qué un formulario de consentimiento médico es vital cuando tu hijo está al cuidado de otra persona.",
-         "date": "2024-04-18",
-         "body": "Próximamente..."
-       },
-       "legal-docs-for-startups": {
-         "title": "Los 7 Documentos Legales Que Toda Startup Necesita",
-         "desc": "Desde acuerdos entre socios hasta NDAs—protege tu startup desde el inicio.",
-         "date": "2024-04-19",
-         "body": "Próximamente..."
-       },
-       "power-of-attorney-guide": {
-         "title": "Poder General vs. Limitado: ¿Cuál es la Diferencia?",
-         "desc": "Conoce cuándo se usa cada tipo de poder legal y por qué importa.",
-         "date": "2024-04-20",
-         "body": "Próximamente..."
-       }
+        "title": "Documentos Legales Esenciales para el Trabajo Remoto",
+        "desc": "Asegura el cumplimiento legal al contratar o trabajar de forma remota.",
+        "date": "2024-04-10",
+        "body": "Próximamente..."
+      },
+      "legal-name-change": {
+        "title": "Cómo Cambiar Legalmente tu Nombre en EE. UU.",
+        "desc": "Proceso paso a paso para cambiar legalmente tu nombre en cualquier estado.",
+        "date": "2024-04-11",
+        "body": "Próximamente..."
+      },
+      "how-to-draft-bill-of-sale": {
+        "title": "Cómo Redactar un Contrato de Compra-Venta Legal",
+        "desc": "Asegura tu venta privada con un contrato de compra-venta bien redactado.",
+        "date": "2024-04-12",
+        "body": "Próximamente..."
+      },
+      "divorce-paperwork-guide": {
+        "title": "Los Documentos Necesarios para Solicitar el Divorcio",
+        "desc": "Lista de formularios y trámites para el divorcio en tu estado.",
+        "date": "2024-04-13",
+        "body": "Próximamente..."
+      },
+      "start-llc-online": {
+        "title": "Cómo Crear una LLC en Línea en 2024",
+        "desc": "Crea tu empresa de responsabilidad limitada sin abogado usando estas herramientas.",
+        "date": "2024-04-14",
+        "body": "Próximamente..."
+      },
+      "do-i-need-a-lawyer": {
+        "title": "¿Necesito un Abogado o Puedo Hacerlo Yo Mismo?",
+        "desc": "Cuándo puedes usar herramientas legales por tu cuenta y cuándo no.",
+        "date": "2024-04-15",
+        "body": "Próximamente..."
+      },
+      "pet-agreements-renters": {
+        "title": "Acuerdos de Mascotas para Inquilinos: Qué Incluir",
+        "desc": "Cómo incluir legalmente a las mascotas en un contrato de arrendamiento.",
+        "date": "2024-04-16",
+        "body": "Próximamente..."
+      },
+      "freelancer-contract-template": {
+        "title": "Plantilla Gratis de Contrato para Freelancers 2024",
+        "desc": "Protege tu trabajo freelance con una plantilla de contrato sencilla.",
+        "date": "2024-04-17",
+        "body": "Próximamente..."
+      },
+      "medical-consent-minors": {
+        "title": "Formularios de Consentimiento Médico para Menores: Lo Que Deben Saber los Padres",
+        "desc": "Por qué un formulario de consentimiento médico es vital cuando tu hijo está al cuidado de otra persona.",
+        "date": "2024-04-18",
+        "body": "Próximamente..."
+      },
+      "legal-docs-for-startups": {
+        "title": "Los 7 Documentos Legales Que Toda Startup Necesita",
+        "desc": "Desde acuerdos entre socios hasta NDAs—protege tu startup desde el inicio.",
+        "date": "2024-04-19",
+        "body": "Próximamente..."
+      },
+      "power-of-attorney-guide": {
+        "title": "Poder General vs. Limitado: ¿Cuál es la Diferencia?",
+        "desc": "Conoce cuándo se usa cada tipo de poder legal y por qué importa.",
+        "date": "2024-04-20",
+        "body": "Próximamente..."
+      }
     },
     "progressStepper": {
      "step1": "Seleccionar Documento",
@@ -728,6 +716,11 @@
         },
         "sellerAddress": {
             "label": "Dirección completa del vendedor"
+        },
+        "odo_status": {
+          "actual": "Millaje real",
+          "exceeds": "Supera los límites mecánicos",
+          "not_actual": "No es el millaje real"
         }
     },
     "docDetail": {
@@ -735,11 +728,25 @@
         "previewSubtitle": "Mira exactamente cómo se verá tu Contrato de Compraventa de Vehículo—y luego haz clic en “Comenzar Gratis” para completar tus datos.",
         "startForFree": "Comenzar Gratis"
     },
+    "Sold As-Is": "Vendido Tal Cual",
+    "Warranty Included": "Garantía Incluida",
+    "Describe warranty…": "Describe la garantía...",
     "preview": {
         "watermark": "VISTA PREVIA"
      },
-     "Complete": "Completo"
+     "Complete": "Completo",
+     "trustBadges": {
+      "secure": "Pago Seguro SSL",
+      "privacy": "Privacidad Protegida",
+      "attorneyReviewed": "Plantillas Revisadas por Abogados"
+    },
+    "SearchBar":{
+      "placeholder": "Buscar más de 200 contratos…",
+      "ariaLabel": "Buscar documentos",
+      "search": "Buscar"
+    },
+    "TopDocsChips":{
+      "title": "Documentos Legales Populares",
+      "loading": "Cargando documentos populares..."
+    }
 }
-
-    
-    

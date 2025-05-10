@@ -3,6 +3,7 @@ import webpack from 'webpack';
 
 const nextConfig: NextConfig = {
   /* config options here */
+  output: 'export', // Ensures static export
   typescript: {
     ignoreBuildErrors: true,
   },
@@ -15,9 +16,9 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'picsum.photos',
+        hostname: 'picsum.photos', // Corrected hostname
         port: '',
-        pathname: '/**',
+        pathname: '/**', // Allow any path under this hostname
       },
     ],
   },

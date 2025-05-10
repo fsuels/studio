@@ -58,11 +58,12 @@
   html, body, #__next { @apply overflow-x-hidden; }
   body {
     @apply bg-background text-foreground;
-    /* Use HSL values from the theme for gradients */
-    background: radial-gradient(at top left, hsl(var(--secondary)) 0%, transparent 50%), 
-                radial-gradient(circle at 20% 0%, hsl(var(--accent) / 0.3) 0%, transparent 45%),
-                radial-gradient(circle at 80% 10%, hsl(var(--primary) / 0.2) 0%, transparent 40%), 
-                radial-gradient(circle at 50% 120%, hsl(var(--secondary)) 0%, transparent 50%);
+    /* Example Gradient Mesh - for more complex mesh, consider SVG or a generator */
+    background: 
+      radial-gradient(ellipse at 10% 10%, hsl(var(--primary) / 0.15) 0%, transparent 50%),
+      radial-gradient(ellipse at 90% 20%, hsl(var(--secondary) / 0.2) 0%, transparent 50%),
+      radial-gradient(ellipse at 50% 90%, hsl(var(--accent) / 0.1) 0%, transparent 60%),
+      hsl(var(--background));
     font-family: var(--font-geist-sans), 'InterVariable', sans-serif;
     line-height: 1.5;
   }
@@ -91,6 +92,14 @@
   .motion-fade[data-visible="true"] {
     opacity: 1;
     transition: opacity .4s cubic-bezier(.16,1,.3,1);
+  }
+
+  /* Parallax placeholder - actual parallax requires JS or more complex CSS */
+  .parallax-bg-layer {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    z-index: -10; /* Behind content */
+    /* Add individual background images or pseudo-elements here for parallax sheets */
   }
 }
 
