@@ -13,6 +13,7 @@ import { Badge } from '@/components/ui/badge';
 import { useCart } from '@/contexts/CartProvider';
 import { track } from '@/lib/analytics';
 import { Separator } from '@/components/ui/separator';
+import { localizations } from '@/lib/localizations';
 
 const DocumentDetail = dynamic(() => import('@/components/DocumentDetail'), {
   ssr: false,
@@ -23,6 +24,19 @@ const DocumentDetail = dynamic(() => import('@/components/DocumentDetail'), {
     </div>
   ),
 });
+
+// Add generateStaticParams for dynamic routes with static export
+export async function generateStaticParams() {
+  const params = [];
+  for (const locale of localizations) {
+    for (const doc of documentLibrary) {
+      if (doc.id !== 'general-inquiry') { // Exclude general inquiry or other non-detail pages
+        params.push({ locale, docId: doc.id });
+      }
+    }
+  }
+  return params;
+}
 
 
 export default function DocPage() {
@@ -146,7 +160,7 @@ export default function DocPage() {
         </div>
         
         {/* Document Preview Section */}
-        <section className="bg-card shadow-xl rounded-xl p-2 md:p-4 lg:p-6 border border-border">
+         <section className="bg-background shadow-xl rounded-xl p-2 md:p-4 lg:p-6 border border-border">
              <DocumentDetail locale={currentLocale as 'en' | 'es'} docId={docId} altText={`${documentDisplayName} preview`} />
         </section>
 
@@ -159,4 +173,5 @@ export default function DocPage() {
     </main>
   );
 }
+
 
