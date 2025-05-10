@@ -50,6 +50,7 @@ const FieldRenderer = React.memo(function FieldRenderer({ fieldKey, locale, doc 
           fieldSchemaFromZod._def?.typeName === 'ZodDate' ? 'date' :
           fieldSchemaFromZod._def?.typeName === 'ZodBoolean' ? 'boolean' :
           (fieldSchemaFromZod._def?.innerType?._def?.typeName === 'ZodEnum' || fieldSchemaFromZod._def?.typeName === 'ZodEnum') ? 'select' :
+          fieldKey.toLowerCase().includes('address') ? 'address' : // Infer address type
           'text',
     options: (fieldSchemaFromZod._def?.innerType?._def?.values || fieldSchemaFromZod._def?.values)?.map((val: string) => ({ value: val, label: prettify(val) })),
     required: fieldSchemaFromZod._def?.typeName !== 'ZodOptional' && fieldSchemaFromZod._def?.innerType?._def?.typeName !== 'ZodOptional',
@@ -102,13 +103,7 @@ const FieldRenderer = React.memo(function FieldRenderer({ fieldKey, locale, doc 
     inputType = 'tel';
   }
 
-
-  const isAddressFieldKey = (key: string) =>
-    key.endsWith('_address') ||
-    (fieldSchema?.label && (fieldSchema.label.toLowerCase().includes('address') || fieldSchema.label.toLowerCase().includes('dirección'))) ||
-    key === 'property_address';
-
-  if (isAddressFieldKey(fieldKey)) {
+  if (fieldSchema?.type === 'address') {
     return (
       <Controller
         control={control}
@@ -153,7 +148,11 @@ const FieldRenderer = React.memo(function FieldRenderer({ fieldKey, locale, doc 
                 <Info className="h-4 w-4" />
               </Button>
             </TooltipTrigger>
-            <TooltipContent side="top" align="start" className="max-w-xs text-sm bg-popover text-popover-foreground border shadow-md rounded-md p-2">
+            <TooltipContent 
+              side="bottom" 
+              align="start" 
+              className="max-w-xs text-sm bg-popover text-popover-foreground border shadow-md rounded-md p-2 z-50"
+            >
               <p>{tooltipText}</p>
             </TooltipContent>
           </Tooltip>
