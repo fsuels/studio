@@ -1,22 +1,22 @@
 // src/components/pdf-preview.tsx
 "use client";
 
-import { useState, useEffect } from 'react'; // Import useEffect
+import React, { useState, useEffect } from 'react'; // Import React
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Loader2, FileSignature, CheckCircle, AlertTriangle } from 'lucide-react'; // Added CheckCircle, AlertTriangle
+import { Loader2, FileSignature, CheckCircle, AlertTriangle } from 'lucide-react'; 
 import { useToast } from '@/hooks/use-toast';
 import { signPdfDocument, DigitalSignatureResult } from '@/services/digital-signature';
-import { useTranslation } from 'react-i18next'; // Import useTranslation
+import { useTranslation } from 'react-i18next'; 
 
 interface PdfPreviewProps {
-  documentDataUrl?: string; // URL to the generated PDF
-  documentName?: string; // Example: "Lease Agreement.pdf"
-  isReadOnly?: boolean; // Optional prop to make the component read-only
-  onSignSuccess?: () => void; // Callback for successful signing
+  documentDataUrl?: string; 
+  documentName?: string; 
+  isReadOnly?: boolean; 
+  onSignSuccess?: () => void; 
 }
 
-export function PdfPreview({ documentDataUrl, documentName = "document.pdf", isReadOnly = false, onSignSuccess }: PdfPreviewProps) {
+const PdfPreview = React.memo(function PdfPreview({ documentDataUrl, documentName = "document.pdf", isReadOnly = false, onSignSuccess }: PdfPreviewProps) {
   const [isSigning, setIsSigning] = useState(false);
   const [signatureResult, setSignatureResult] = useState<DigitalSignatureResult | null>(null);
   const { toast } = useToast();
@@ -35,15 +35,10 @@ export function PdfPreview({ documentDataUrl, documentName = "document.pdf", isR
        toast({ title: t('pdfPreview.noDocumentDataTitle'), description: t('pdfPreview.noDocumentDataDescriptionSign'), variant: "destructive" });
       return;
     }
+    
+    const dummyPdfData = new Uint8Array([0]); 
 
-    // Assuming documentDataUrl implies the data is ready or can be fetched.
-    // For this component, we'll assume the data is implicitly available via the URL
-    // or that the parent handles loading it into the URL.
-    // The actual bytes would be fetched if `signPdfDocument` needed them directly.
-    // Here, we pass a dummy Uint8Array as `signPdfDocument` is a mock.
-    const dummyPdfData = new Uint8Array([0]); // Placeholder
-
-     if (!dummyPdfData || dummyPdfData.length === 0) { // This check is more symbolic here
+     if (!dummyPdfData || dummyPdfData.length === 0) { 
          toast({ title: t('pdfPreview.noDocumentDataTitle'), description: t('pdfPreview.noDocumentDataDescriptionLoad'), variant: "destructive" });
          return;
      }
@@ -54,14 +49,14 @@ export function PdfPreview({ documentDataUrl, documentName = "document.pdf", isR
     }
 
     try {
-      const options = { signer: "User", reason: "Agreed to terms" }; // Example options
+      const options = { signer: "User", reason: "Agreed to terms" }; 
       const result = await signPdfDocument(dummyPdfData, options);
       setSignatureResult(result);
 
       if (result.success) {
         toast({ title: t('pdfPreview.signingSuccessTitle'), description: t('pdfPreview.signingSuccessDescription') });
         if (onSignSuccess) {
-          onSignSuccess(); // Notify parent of success
+          onSignSuccess(); 
         }
       } else {
         toast({ title: t('pdfPreview.signingFailedTitle'), description: result.message || t('An error occurred during signing.'), variant: "destructive" });
@@ -90,7 +85,7 @@ export function PdfPreview({ documentDataUrl, documentName = "document.pdf", isR
           {isReadOnly
             ? t('pdfPreview.descriptionReadOnly')
             : signatureResult?.success
-            ? t('pdfPreview.descriptionReadOnly') // If signed, effectively read-only for signing
+            ? t('pdfPreview.descriptionReadOnly') 
             : t('pdfPreview.descriptionSign')}
         </CardDescription>
       </CardHeader>
@@ -159,4 +154,5 @@ export function PdfPreview({ documentDataUrl, documentName = "document.pdf", isR
       )}
     </Card>
   );
-}
+});
+export { PdfPreview };

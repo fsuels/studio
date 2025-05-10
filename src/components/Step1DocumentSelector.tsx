@@ -6,15 +6,14 @@ import { useTranslation } from "react-i18next";
 import { documentLibrary, usStates, type LegalDocument } from "@/lib/document-library";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label"; // Import Label
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"; // Import Select components
+import { Label } from "@/components/ui/label"; 
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"; 
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowLeft, FileText, Search, Landmark, Briefcase, Home, Users, User, ScrollText, ShieldQuestion, GraduationCap, FileIcon as PaperIcon, Loader2 } from "lucide-react";
 import { track } from "@/lib/analytics";
 import { useToast } from "@/hooks/use-toast";
 
-// User-friendly category definitions with icons
-// Moved CATEGORY_LIST to the top level and exported it
+
 export const CATEGORY_LIST = [
   { key: 'Finance', labelKey: 'Finance', icon: Landmark },
   { key: 'Business', labelKey: 'Business', icon: Briefcase },
@@ -35,7 +34,7 @@ interface Step1DocumentSelectorProps {
   globalSelectedState: string;
 }
 
-export default function Step1DocumentSelector({
+const Step1DocumentSelector = React.memo(function Step1DocumentSelector({
   selectedCategory,
   onCategorySelect,
   onDocumentSelect,
@@ -338,4 +337,5 @@ export default function Step1DocumentSelector({
         </CardContent>
      </Card>
   );
-}
+});
+export default Step1DocumentSelector;

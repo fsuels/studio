@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next'
 import { CheckCircle, Edit3, FileText } from 'lucide-react' 
 
-export default function ThreeStepSection() {
+const ThreeStepSection = React.memo(function ThreeStepSection() {
   const { t } = useTranslation();
   const [isHydrated, setIsHydrated] = useState(false);
 
@@ -64,4 +64,5 @@ export default function ThreeStepSection() {
       </div>
     </section>
   )
-}
+});
+export default ThreeStepSection;

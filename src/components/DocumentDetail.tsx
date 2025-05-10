@@ -7,6 +7,7 @@ import remarkGfm from 'remark-gfm';
 import { useTranslation } from 'react-i18next';
 import { documentLibrary, type LegalDocument } from '@/lib/document-library';
 import { Loader2, AlertTriangle } from 'lucide-react';
+import Image from 'next/image'; // Import next/image
 
 interface DocumentDetailProps {
   docId: string;
@@ -14,7 +15,7 @@ interface DocumentDetailProps {
   altText?: string; 
 }
 
-export default function DocumentDetail({ docId, locale, altText }: DocumentDetailProps) {
+const DocumentDetail = React.memo(function DocumentDetail({ docId, locale, altText }: DocumentDetailProps) {
   const { t } = useTranslation();
   const [md, setMd] = useState<string>('');
   const [isLoading, setIsLoading] = useState(true);
@@ -60,7 +61,7 @@ export default function DocumentDetail({ docId, locale, altText }: DocumentDetai
         setMd(''); 
       })
       .finally(() => setIsLoading(false));
-  }, [docId, locale, doc, isHydrated, t]);
+  }, [docId, locale, doc, isHydrated, t, templatePath]);
 
 
   if (!isHydrated || !doc) {
@@ -73,6 +74,9 @@ export default function DocumentDetail({ docId, locale, altText }: DocumentDetai
   }
   
   const documentDisplayName = locale === 'es' && doc.name_es ? doc.name_es : doc.name;
+  const imgSrc = `/images/previews/${locale}/${docId}.png`;
+  const fallbackAlt = altText || `${documentDisplayName} preview`;
+
 
   return (
     <div
@@ -108,17 +112,24 @@ export default function DocumentDetail({ docId, locale, altText }: DocumentDetai
          </div>
       )}
       
-      {!isLoading && !error && md && (
+      {!isLoading && !error && md ? (
         <div className="prose prose-sm dark:prose-invert max-w-none w-full h-full overflow-y-auto p-4 md:p-6 relative z-0">
            <ReactMarkdown remarkPlugins={[remarkGfm]}>{md}</ReactMarkdown>
         </div>
-      )}
-
-      {!isLoading && !error && !md && (
+      ) : !isLoading && !error && !md && (
          <div className="absolute inset-0 flex flex-col items-center justify-center text-muted-foreground z-20 p-4 text-center">
-            <p>{t('Preview content is not available for this document.', {defaultValue: 'Preview content is not available for this document.'})}</p>
+            <Image 
+              src={imgSrc} 
+              alt={fallbackAlt} 
+              width={850} 
+              height={1100} 
+              loading="lazy"
+              className="object-contain w-full h-full" 
+              data-ai-hint="document template screenshot"
+            />
          </div>
       )}
     </div>
   );
-}
+});
+export default DocumentDetail;

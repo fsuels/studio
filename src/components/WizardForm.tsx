@@ -2,12 +2,13 @@
 'use client';
 
 import React, { useEffect, useState, useRef, useCallback, useMemo } from 'react';
-import { Controller, useFormContext } from 'react-hook-form'; // Removed useForm, FormProvider
+import { useFormContext, Controller, FormProvider } from 'react-hook-form'; 
 import { zodResolver } from '@hookform/resolvers/zod';
 import axios, { AxiosError } from 'axios';
 import { useRouter, useParams } from 'next/navigation';
 import { z } from 'zod';
 import { Loader2, Info } from 'lucide-react';
+import dynamic from 'next/dynamic'; // Import dynamic
 
 import type { LegalDocument } from '@/lib/document-library';
 import { useToast } from '@/hooks/use-toast';
@@ -17,7 +18,7 @@ import FieldRenderer from './FieldRenderer';
 import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
 import { prettify } from '@/lib/schema-utils';
-import AuthModal from '@/components/AuthModal';
+// import AuthModal from '@/components/AuthModal'; // Import will be dynamic
 import { useAuth } from '@/hooks/useAuth';
 import AddressField from '@/components/AddressField'; 
 import { TooltipProvider } from '@/components/ui/tooltip'; 
@@ -26,6 +27,8 @@ import ReviewStep from '@/components/ReviewStep';
 import { saveFormProgress, loadFormProgress } from '@/lib/firestore/saveFormProgress';
 import { debounce } from 'lodash-es';
 
+const AuthModal = dynamic(() => import('@/components/AuthModal'), { ssr: false });
+
 
 interface WizardFormProps {
   locale: 'en' | 'es';
@@ -33,7 +36,7 @@ interface WizardFormProps {
   onComplete: (checkoutUrl: string) => void;
 }
 
-export default function WizardForm({ locale, doc, onComplete }: WizardFormProps) {
+const WizardForm = React.memo(function WizardForm({ locale, doc, onComplete }: WizardFormProps) {
   const { t } = useTranslation();
   const router = useRouter();
   const params = useParams();
@@ -47,7 +50,6 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
 
   const liveRef = useRef<HTMLDivElement>(null);
 
-  // Pull everything from the *outer* RHF context
   const {
     getValues,
     trigger,
@@ -63,10 +65,6 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
     setIsHydrated(true);
   }, []);
   
-  // Load draft from localStorage or Firestore - This logic is now in StartWizardPage
-  // Autosave draft data - This logic is now in StartWizardPage
-
-
   const actualSchemaShape = useMemo(() => {
     const def = doc.schema?._def;
     if (!def) return undefined;
@@ -173,21 +171,14 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
       return;
     }
 
-
     if (currentStepFieldKey) {
       isValid = await trigger(currentStepFieldKey as any);
     } else if (totalSteps > 0 && currentStepIndex < totalSteps) {
-      // This case handles when currentStepIndex is valid but currentStepFieldKey might be null/undefined
-      // which indicates an issue with the `steps` array or `currentStepIndex` logic
-      console.error("Error: currentStepFieldKey is undefined but attempting to proceed. currentStepIndex:", currentStepIndex, "steps:", steps);
-      isValid = false;
+      console.error("Error: currentStepFieldKey is undefined but totalSteps > 0. currentStepIndex:", currentStepIndex, "steps:", steps);
+      isValid = false; 
     } else {
-      // This case implies currentStepIndex might be out of bounds or totalSteps is 0,
-      // which should have been caught by `steps.length === 0` check earlier.
-      // For safety, consider it invalid if we reach here unexpectedly.
-      isValid = await trigger(); // Validate all fields as a fallback
+      isValid = await trigger();
     }
-
 
     if (!isValid) {
       toast({ title: t('Validation Error', {ns: 'translation'}), description: t('Please correct the field before proceeding.',{ns: 'translation'}), variant: 'destructive'});
@@ -296,7 +287,7 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
             {totalSteps > 0 && (
               <>
                 <Progress value={progress} className="w-full h-2" />
-                <p className="text-xs text-muted-foreground mt-1 text-right">
+                 <p className="text-xs text-muted-foreground mt-1 text-right">
                   {Math.round(progress)}% {t('Complete', {ns: 'translation'})}
                 </p>
               </>
@@ -304,7 +295,7 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
           </div>
 
           {isReviewing ? (
-             <ReviewStep doc={doc} locale={locale} />
+            <ReviewStep doc={doc} locale={locale} onBackToForm={handlePreviousStep} />
           ) : formContent }
           
           <div className="sr-only" aria-live="polite" ref={liveRef}></div>
@@ -337,16 +328,19 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
           </div>
         </div>
       </TooltipProvider>
-      <AuthModal
-        isOpen={showAuthModal}
-        onClose={() => setShowAuthModal(false)}
-        onAuthSuccess={() => {
-          setShowAuthModal(false);
-          if (isLoggedIn && isReviewing) { 
-             handleNextStep(); 
-          }
-        }}
-      />
+      {showAuthModal && (
+        <AuthModal
+          isOpen={showAuthModal}
+          onClose={() => setShowAuthModal(false)}
+          onAuthSuccess={() => {
+            setShowAuthModal(false);
+            if (isLoggedIn && isReviewing) { 
+              handleNextStep(); 
+            }
+          }}
+        />
+      )}
     </>
   );
-}
+});
+export default WizardForm;

@@ -1,7 +1,7 @@
 // src/components/landing/HomepageHeroSteps.tsx
 'use client'
 
-import React, { useState, useEffect } from 'react'; // Import React, useState, useEffect
+import React, { useState, useEffect } from 'react'; 
 import { useTranslation } from 'react-i18next'
 import { Button } from '@/components/ui/button'
 import { CheckCircle, ShieldCheck, Rocket } from 'lucide-react'
@@ -9,7 +9,7 @@ import { motion } from 'framer-motion';
 import Link from 'next/link'; 
 
 
-export default function HomepageHeroSteps() {
+const HomepageHeroSteps = React.memo(function HomepageHeroSteps() {
   const { t, i18n } = useTranslation()
   const [isHydrated, setIsHydrated] = useState(false); 
   
@@ -17,7 +17,7 @@ export default function HomepageHeroSteps() {
     setIsHydrated(true);
   }, []); 
 
-  const placeholderText = "..."; // Placeholder for text before hydration
+  const placeholderText = "..."; 
 
   return (
     <motion.section
@@ -108,4 +108,5 @@ export default function HomepageHeroSteps() {
         </div>
     </motion.section>
   )
-}
+});
+export default HomepageHeroSteps;

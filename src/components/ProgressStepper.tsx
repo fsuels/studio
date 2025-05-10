@@ -16,7 +16,7 @@ const STEPS = [
   { id: 3, labelKey: 'progressStepper.step3' },
 ];
 
-const ProgressStepper: React.FC<ProgressStepperProps> = ({ currentStep }) => {
+const ProgressStepper: React.FC<ProgressStepperProps> = React.memo(({ currentStep }) => {
   const { t } = useTranslation();
   const [isHydrated, setIsHydrated] = useState(false);
 
@@ -105,7 +105,6 @@ const ProgressStepper: React.FC<ProgressStepperProps> = ({ currentStep }) => {
       </ol>
     </nav>
   );
-};
+});
 
 export default ProgressStepper;
-

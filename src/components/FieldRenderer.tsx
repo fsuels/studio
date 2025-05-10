@@ -32,7 +32,7 @@ interface FieldRendererProps {
   doc: LegalDocument;
 }
 
-export default function FieldRenderer({ fieldKey, locale, doc }: FieldRendererProps) {
+const FieldRenderer = React.memo(function FieldRenderer({ fieldKey, locale, doc }: FieldRendererProps) {
   const { control, register, setValue, watch, formState: { errors } } = useFormContext();
   const { t } = useTranslation();
 
@@ -61,7 +61,6 @@ export default function FieldRenderer({ fieldKey, locale, doc }: FieldRendererPr
   const formStateCode = watch('state'); 
   const { isRequired: notaryIsRequiredByState } = useNotary(formStateCode);
   
-  // Initialize useVinDecoder at the top level of the component
   const { decode, data: vinData, loading: vinLoading, error: vinError } = useVinDecoder();
 
 
@@ -281,7 +280,7 @@ export default function FieldRenderer({ fieldKey, locale, doc }: FieldRendererPr
           aria-invalid={!!fieldError}
           rhfProps={register(fieldKey as any, { 
             required: fieldSchema?.required,
-            onBlur: fieldKey === 'vin' ? (e) => decode(e.target.value) : undefined, // Use decode from useVinDecoder
+            onBlur: fieldKey === 'vin' ? (e) => decode(e.target.value) : undefined,
            })}
         />
       )}
@@ -296,4 +295,5 @@ export default function FieldRenderer({ fieldKey, locale, doc }: FieldRendererPr
       {fieldSchema?.helperText && !fieldError && <p className="text-xs text-muted-foreground">{t(fieldSchema.helperText, {defaultValue: fieldSchema.helperText})}</p>}
     </div>
   );
-}
+});
+export default FieldRenderer;

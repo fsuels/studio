@@ -1,11 +1,11 @@
 // src/components/landing/GuaranteeBadge.tsx
-"use client"; // Added 'use client' because we use hooks
+"use client"; 
 
-import React, { useState, useEffect } from 'react'; // Import useState and useEffect
-import { ShieldCheck } from 'lucide-react'; // Using a relevant icon
-import { useTranslation } from 'react-i18next'; // Import useTranslation
+import React, { useState, useEffect } from 'react'; 
+import { ShieldCheck } from 'lucide-react'; 
+import { useTranslation } from 'react-i18next'; 
 
-export function GuaranteeBadge() {
+const GuaranteeBadge = React.memo(function GuaranteeBadge() {
   const { t } = useTranslation();
   const [isHydrated, setIsHydrated] = useState(false);
 
@@ -27,4 +27,5 @@ export function GuaranteeBadge() {
       </div>
     </section>
   );
-}
+});
+export { GuaranteeBadge };

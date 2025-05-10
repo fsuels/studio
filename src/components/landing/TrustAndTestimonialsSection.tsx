@@ -1,13 +1,13 @@
 // TrustAndTestimonialsSection.tsx
 'use client'
 
-import React, { useTranslation } from 'react-i18next' // Import React
-import { useEffect, useState, useRef } from 'react'
+import React, { useEffect, useState, useRef } from 'react'; // Import React separately
+import { useTranslation } from 'react-i18next'; // Import useTranslation from react-i18next
 import { Button } from '@/components/ui/button';
-import { ChevronLeft, ChevronRight, FileText, Lock, ShieldCheck } from 'lucide-react'; // Added ShieldCheck
-import Image from 'next/image';
+import { ChevronLeft, ChevronRight, FileText, Lock, ShieldCheck } from 'lucide-react'; 
+import Image from 'next/image'; 
 
-export default function TrustAndTestimonialsSection() {
+const TrustAndTestimonialsSection = React.memo(function TrustAndTestimonialsSection() {
   const { t, i18n } = useTranslation();
   const [docCount, setDocCount] = useState(4200);
   const [isHydrated, setIsHydrated] = useState(false);
@@ -26,9 +26,11 @@ export default function TrustAndTestimonialsSection() {
     if (isHydrated) {
       const testimonialsObject = t('home.testimonials', { returnObjects: true, ns: 'translation' });
       if (typeof testimonialsObject === 'object' && testimonialsObject !== null && !Array.isArray(testimonialsObject)) {
-        const count = Object.keys(testimonialsObject).filter(key => key.startsWith('t') && typeof testimonialsObject[key] === 'object').length;
+        // Check if testimonialsObject itself contains t1, t2 etc.
+        const count = Object.keys(testimonialsObject).filter(key => key.startsWith('t') && typeof (testimonialsObject as any)[key] === 'object').length;
         setTestimonialCount(count > 0 ? count : 3); 
       } else {
+        // Fallback if the structure is not as expected or no testimonials are defined
         setTestimonialCount(3); 
       }
     }
@@ -41,7 +43,7 @@ export default function TrustAndTestimonialsSection() {
 
   const scroll = (dir: 'left' | 'right') => {
     if (!scrollRef.current) return;
-    const scrollAmount = 320 + 24; 
+    const scrollAmount = 320 + 24; // Card width + gap
     scrollRef.current.scrollBy({ left: dir === 'right' ? scrollAmount : -scrollAmount, behavior: 'smooth' });
   };
 
@@ -53,6 +55,7 @@ export default function TrustAndTestimonialsSection() {
        console.warn('Workflow section with id "workflow-start" not found.');
     }
   };
+
 
   return (
     <section className="bg-secondary/30 py-20 px-4 text-center">
@@ -92,14 +95,16 @@ export default function TrustAndTestimonialsSection() {
 
         <div
           ref={scrollRef}
-          className="flex overflow-x-auto space-x-6 scrollbar-hide px-4 py-4"
+          className="flex overflow-x-auto space-x-6 scrollbar-hide px-4 py-4" // Added px-4 py-4 for internal padding
           style={{ scrollSnapType: 'x mandatory' }}
         >
+          {/* Render skeleton or actual items based on hydration and testimonialCount */}
           {!isHydrated || testimonialCount === 0 ? (
+            // Skeleton loaders
             Array.from({ length: 3 }).map((_, i) => (
               <div
                 key={`skeleton-${i}`}
-                className="bg-card p-6 rounded-2xl shadow-lg w-72 md:w-80 shrink-0 flex flex-col border border-border animate-pulse"
+                className="bg-card p-6 rounded-2xl shadow-lg w-72 md:w-80 shrink-0 flex flex-col border border-border animate-pulse" // Use theme colors
                 style={{ scrollSnapAlign: 'start' }}
               >
                 <div className="h-16 w-16 rounded-full bg-muted mb-4 mx-auto"></div>
@@ -113,19 +118,21 @@ export default function TrustAndTestimonialsSection() {
               </div>
             ))
           ) : (
+            // Actual testimonial items
             Array.from({ length: testimonialCount }).map((_, i) => (
              <div
                key={i}
-               className="bg-card p-6 rounded-2xl shadow-lg w-72 md:w-80 text-left shrink-0 flex flex-col border border-border transition hover:shadow-xl"
+               className="bg-card p-6 rounded-2xl shadow-lg w-72 md:w-80 text-left shrink-0 flex flex-col border border-border transition hover:shadow-xl" // Use theme colors
                style={{ scrollSnapAlign: 'start' }}
              >
                 <Image
-                   src={`https://picsum.photos/seed/${i+30}/60/60`}
+                   src={`https://picsum.photos/seed/${i+30}/60/60`} // Placeholder image
                    alt={isHydrated ? t(`home.testimonials.t${i + 1}.name`, { defaultValue: 'Testimonial Avatar'}) : 'Loading...'}
                    width={60}
                    height={60}
-                   className="rounded-full mb-4 border-2 border-primary/30 mx-auto"
-                   data-ai-hint="person portrait professional"
+                   loading="lazy" // Added lazy loading
+                   data-ai-hint="person portrait professional" // AI hint for image selection
+                   className="rounded-full mb-4 border-2 border-primary/30 mx-auto" // Use theme colors
                  />
                <p className="italic text-foreground/90 mb-4 leading-relaxed flex-grow">
                  {isHydrated ? t(`home.testimonials.t${i + 1}.quote`, { defaultValue: 'Loading quote...'}) : placeholderText}
@@ -171,4 +178,10 @@ export default function TrustAndTestimonialsSection() {
       </div>
     </section>
   );
-}
+});
+export default TrustAndTestimonialsSection;
+
+// Reminder: Ensure your i18n files (e.g., public/locales/en/translation.json and public/locales/es/translation.json)
+// have all the necessary keys for home.testimonials.t1 through home.testimonials.t25 (or however many you have).
+// Example structure for each testimonial:
+// "t1": { "quote": "...", "name": "...", "title": "..." }

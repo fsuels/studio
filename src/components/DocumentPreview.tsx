@@ -4,20 +4,17 @@
 import React, { useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { useTranslation } from 'react-i18next'; // Import useTranslation
-import Image from 'next/image'; // Use next/image for optimization
+import { useTranslation } from 'react-i18next'; 
+import Image from 'next/image'; 
 import { Loader2 } from 'lucide-react';
 
 interface DocumentPreviewProps {
   docId: string;
   locale?: 'en' | 'es';
   alt?: string;
-  // The 'html' prop from the diff seems to refer to the markdown content
-  // which is fetched internally in this component via `md` state.
-  // We'll use the existing `md` state for the content.
 }
 
-export default function DocumentPreview({
+const DocumentPreview = React.memo(function DocumentPreview({
   docId,
   locale = 'en',
   alt,
@@ -62,10 +59,7 @@ export default function DocumentPreview({
 
   return (
     <div className="relative w-full h-full overflow-auto rounded-lg bg-white shadow border border-border">
-      {/* 🔒 block copy / highlight */}
       <div className="absolute inset-0 select-none pointer-events-none z-20" />
-
-      {/* 🔍 watermark */}
       <div
         className="absolute inset-0 flex items-center justify-center z-10 select-none pointer-events-none
                    text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-widest opacity-10 rotate-[-35deg] text-muted-foreground"
@@ -73,16 +67,16 @@ export default function DocumentPreview({
         {locale === 'es' ? t('VISTA PREVIA', 'VISTA PREVIA') : t('PREVIEW', 'PREVIEW')}
       </div>
       
-      {/* document body / image */}
       {imgExists ? (
         <Image
           src={imgSrc}
           alt={defaultAlt}
-          width={850}
-          height={1100}
+          width={850} 
+          height={1100} 
+          loading="lazy" // Added lazy loading
           className="object-contain w-full h-full"
           onError={handleImgError}
-          priority
+          priority={false} // Set to false for lazy loading
           unoptimized={process.env.NODE_ENV === 'development'}
           data-ai-hint="document template screenshot"
         />
@@ -116,4 +110,5 @@ export default function DocumentPreview({
       )}
     </div>
   );
-}
+});
+export default DocumentPreview;

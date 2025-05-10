@@ -1,21 +1,21 @@
 // src/components/share-download-step.tsx
 "use client";
 
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react'; // Import React
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Download, Share2, RotateCcw, CheckCircle, AlertTriangle } from 'lucide-react'; // Added CheckCircle, AlertTriangle
+import { Download, Share2, RotateCcw, CheckCircle, AlertTriangle } from 'lucide-react'; 
 import { useToast } from '@/hooks/use-toast';
 import { useTranslation } from 'react-i18next';
 
 interface ShareDownloadStepProps {
-  signedPdfData: Blob | null; // Changed from Uint8Array to Blob
-  documentName: string; // e.g., "Lease_Agreement_signed.pdf"
+  signedPdfData: Blob | null; 
+  documentName: string; 
   onStartOver?: () => void;
-  isReadOnly?: boolean; // If the overall flow is read-only
+  isReadOnly?: boolean; 
 }
 
-export function ShareDownloadStep({
+const ShareDownloadStep = React.memo(function ShareDownloadStep({
   signedPdfData,
   documentName,
   onStartOver,
@@ -31,7 +31,6 @@ export function ShareDownloadStep({
 
   const handleShare = () => {
     if (isReadOnly) return;
-    // Placeholder for sharing logic
     toast({
       title: t('Share Feature Coming Soon'),
       description: t('Secure document sharing will be available shortly.'),
@@ -76,15 +75,13 @@ export function ShareDownloadStep({
      return <div className="h-72 animate-pulse bg-muted rounded-lg shadow-lg border border-border"></div>;
   }
 
-  // Determine if actions should be disabled (read-only or no PDF data)
   const actionsDisabled = isReadOnly || !signedPdfData;
 
   return (
     <Card className={`shadow-lg rounded-lg bg-card border border-border ${actionsDisabled && !isReadOnly ? 'opacity-70' : ''} ${isReadOnly ? 'opacity-75' : ''}`}>
       <CardHeader>
          <div className="flex items-center space-x-2">
-            {/* Choose an icon that fits "Share & Download" */}
-            <Share2 className="h-6 w-6 text-primary" /> {/* Or Download icon */}
+            <Share2 className="h-6 w-6 text-primary" /> 
             <CardTitle className="text-2xl">{t('shareDownloadStep.stepTitle')}</CardTitle>
          </div>
         <CardDescription>
@@ -103,7 +100,7 @@ export function ShareDownloadStep({
         {signedPdfData && (
              <div className="p-3 bg-green-100 border border-green-300 rounded-md text-green-800 text-sm flex items-center gap-2">
                 <CheckCircle className="h-5 w-5" />
-                <span>{t('Document signed and ready!')}</span> {/* Add to i18n */}
+                <span>{t('Document signed and ready!')}</span> 
              </div>
         )}
 
@@ -135,10 +132,11 @@ export function ShareDownloadStep({
             className="w-full text-muted-foreground hover:text-primary"
           >
             <RotateCcw className="mr-2 h-4 w-4" />
-            {t('Start Over')} {/* Add to i18n */}
+            {t('Start Over')} 
           </Button>
         </CardFooter>
       )}
     </Card>
   );
-}
+});
+export { ShareDownloadStep };

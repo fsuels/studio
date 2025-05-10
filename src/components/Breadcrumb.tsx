@@ -1,7 +1,8 @@
 // src/components/Breadcrumb.tsx
 'use client';
 import Link from 'next/link';
-import { useTranslation } from 'react-i18next'; // Import useTranslation for potential future use
+import { useTranslation } from 'react-i18next'; 
+import React from 'react'; // Import React
 
 interface BreadcrumbItem {
   label: string;
@@ -12,8 +13,8 @@ interface BreadcrumbProps {
   items: BreadcrumbItem[];
 }
 
-export default function Breadcrumb({ items }: BreadcrumbProps) {
-  const { t } = useTranslation(); // Initialize useTranslation
+const Breadcrumb = React.memo(function Breadcrumb({ items }: BreadcrumbProps) {
+  const { t } = useTranslation(); 
 
   return (
     <nav aria-label="Breadcrumb" className="text-sm text-muted-foreground mb-6">
@@ -35,4 +36,5 @@ export default function Breadcrumb({ items }: BreadcrumbProps) {
       </ol>
     </nav>
   );
-}
+});
+export default Breadcrumb;

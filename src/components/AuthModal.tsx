@@ -18,17 +18,17 @@ import { useParams } from 'next/navigation';
 interface AuthModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onAuthSuccess: () => void; // Callback for when user "authenticates" (mocked for now by navigating away)
+  onAuthSuccess: () => void; 
 }
 
+// No React.memo here as this is typically controlled by isOpen and won't re-render unnecessarily if parent is memoized
 export default function AuthModal({ isOpen, onClose, onAuthSuccess }: AuthModalProps) {
   const { t } = useTranslation();
   const params = useParams();
   const locale = params.locale as 'en' | 'es' || 'en';
 
   const handleNavigation = () => {
-    onClose(); // Close the modal
-    // onAuthSuccess will be called by the parent form if auth state changes after navigation
+    onClose(); 
   };
 
   return (

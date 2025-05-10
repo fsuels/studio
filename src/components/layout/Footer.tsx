@@ -10,7 +10,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Logo } from '@/components/layout/Logo';
 import { useTranslation } from 'react-i18next';
 
-export function Footer() {
+const Footer = React.memo(function Footer() {
     const [email, setEmail] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const { toast } = useToast();
@@ -87,15 +87,13 @@ export function Footer() {
     <footer className="bg-muted text-muted-foreground py-12 mt-16 border-t border-border">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
-          {/* Column 1: Logo */}
           <div className="space-y-4">
-             <Logo wrapperClassName="mb-1" />
+             <Logo wrapperClassName="mb-1 items-start" svgClassName="h-8 w-8" textClassName="text-sm" />
              <p className="text-xs">
                 {t('subhead', {defaultValue: 'Create, sign & share professional contracts in minutes—no lawyer required.'})}
              </p>
           </div>
 
-          {/* Columns 2-4: Links */}
           {footerLinks.map(section => (
             <div key={section.sectionTitleKey}>
                 <h4 className="font-semibold text-foreground mb-3">{t(section.sectionTitleKey, section.sectionTitleKey.split('.').pop())}</h4>
@@ -112,7 +110,6 @@ export function Footer() {
           ))}
           
 
-          {/* Column 4: Community & Subscribe (adjusted from original structure to fit the new link columns) */}
           <div>
              <h4 className="font-semibold text-foreground mb-3">{t('footer.community', 'Community')}</h4>
              <div className="flex space-x-3 mb-6">
@@ -149,4 +146,5 @@ export function Footer() {
       </div>
     </footer>
   );
-}
+});
+export { Footer };

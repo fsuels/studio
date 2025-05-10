@@ -11,10 +11,11 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { cn } from '@/lib/utils';
 
-// Inline SVG Flags
+
 const FlagUS = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="14" viewBox="0 0 750 500" className="w-5 h-auto mr-2 rounded-sm">
+  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="14" viewBox="0 0 750 500" className="w-5 h-auto mr-2 rounded-sm shrink-0">
     <rect width="750" height="500" fill="#fff"/>
     <path fill="#b22234" d="M0 0h750v38.46H0zm0 76.92h750v38.46H0zm0 76.92h750v38.46H0zm0 76.93h750v38.46H0zm0 76.92h750v38.46H0zm0 76.92h750v38.46H0zm0 76.93h750v38.46H0z"/>
     <path fill="#3c3b6e" d="M0 0h300v269.23H0z"/>
@@ -23,7 +24,7 @@ const FlagUS = () => (
 );
 
 const FlagES = () => (
-   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="14" viewBox="0 0 750 500" className="w-5 h-auto mr-2 rounded-sm">
+   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="14" viewBox="0 0 750 500" className="w-5 h-auto mr-2 rounded-sm shrink-0">
       <rect width="750" height="500" fill="#c60b1e"/>
       <rect width="750" height="125" y="125" fill="#ffc400"/>
       <g transform="translate(206.25 212.5) scale(7.5)">
@@ -54,7 +55,7 @@ const FlagES = () => (
 
 const availableLocales: Array<'en' | 'es'> = ['en', 'es'];
 
-export function LanguageSwitcher() {
+const LanguageSwitcher = React.memo(function LanguageSwitcher() {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -63,22 +64,18 @@ export function LanguageSwitcher() {
   const [isPopoverOpen, setIsPopoverOpen] = React.useState(false);
 
   const [currentRouteLocale, setCurrentRouteLocale] = useState<'en' | 'es'>('en');
+  const [isHydrated, setIsHydrated] = useState(false);
 
   useEffect(() => {
+    setIsHydrated(true);
     const pathLocale = params.locale as 'en' | 'es' | undefined;
     if (pathLocale && availableLocales.includes(pathLocale)) {
       setCurrentRouteLocale(pathLocale);
-      if (i18n.language !== pathLocale) {
-        // This call will be made by I18nClientProvider based on the new prop
-        // i18n.changeLanguage(pathLocale); 
-      }
+      // i18n language is now set by I18nClientProvider
     } else if (pathname === '/') { 
         setCurrentRouteLocale('en'); 
-        if (i18n.language !== 'en') {
-            // i18n.changeLanguage('en');
-        }
     }
-  }, [params.locale, i18n, pathname]);
+  }, [params.locale, pathname]);
 
   const handleLocaleChange = (newLocaleTarget: 'en' | 'es') => {
     if (currentRouteLocale === newLocaleTarget) {
@@ -86,22 +83,32 @@ export function LanguageSwitcher() {
       return;
     }
 
-    // REMOVED: i18n.changeLanguage(newLocaleTarget); 
-    // The I18nClientProvider will handle this when its `locale` prop changes.
-
-    const newPath = pathname === '/' 
-      ? `/${newLocaleTarget}`
-      : pathname.replace(/^\/(en|es)/, `/${newLocaleTarget}`);
-
+    let newPath = pathname;
+    if (pathname.startsWith(`/${currentRouteLocale}`)) {
+      newPath = pathname.replace(`/${currentRouteLocale}`, `/${newLocaleTarget}`);
+    } else if (pathname === '/') {
+      newPath = `/${newLocaleTarget}`;
+    } else {
+      // Fallback for paths that don't start with locale (e.g. might be root page before redirect)
+      newPath = `/${newLocaleTarget}${pathname}`;
+    }
+    
     const queryString = searchParams.toString();
     const finalUrl = queryString ? `${newPath}?${queryString}` : newPath;
     
-    router.push(finalUrl); // Navigate. This triggers re-render of [locale]/layout.tsx, passing new locale to ClientProviders.
+    router.push(finalUrl);
+    // router.refresh(); // router.refresh() was causing issues. Let ClientProviders handle i18n change.
 
     setIsPopoverOpen(false);
   };
   
-  const displayLanguage = i18n.language as 'en' | 'es';
+  // Use currentRouteLocale for display consistency before i18n instance might update
+  const displayLanguage = isHydrated ? currentRouteLocale : 'en'; 
+
+  if (!isHydrated) {
+    // Render a minimal placeholder or null during SSR/pre-hydration
+    return <div className="h-9 w-20 bg-muted rounded-md animate-pulse"></div>;
+  }
 
   return (
     <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
@@ -109,20 +116,23 @@ export function LanguageSwitcher() {
         <Button
           variant="outline"
           size="sm"
-          className="text-xs font-medium text-foreground/80 hover:bg-foreground/5 hover:text-foreground px-2 py-1.5 md:px-3 border-border/50 shadow-sm flex items-center"
+          className={cn(
+            "text-xs font-medium text-foreground/80 hover:bg-foreground/5 hover:text-foreground px-2 py-1.5 md:px-3 border-border/50 shadow-sm flex items-center",
+            isPopoverOpen && "bg-muted"
+          )}
           aria-label={t('Select language', {defaultValue: 'Select language'})}
         >
           {displayLanguage === 'en' ? <FlagUS /> : <FlagES />}
           <span className="hidden sm:inline">{displayLanguage.toUpperCase()}</span>
-          <ChevronDown className="ml-1 h-4 w-4 opacity-70" />
+          <ChevronDown className="ml-1 h-4 w-4 opacity-70 shrink-0" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent align="end" className="min-w-[8rem] p-1 z-[70]">
+      <PopoverContent align="end" className="min-w-[8rem] p-1 z-[70] bg-popover border-border shadow-xl rounded-lg">
             {availableLocales.map(lang => (
                  <Button
                     key={lang}
                     variant={displayLanguage === lang ? 'secondary' : 'ghost'}
-                    className="w-full justify-start text-xs"
+                    className="w-full justify-start text-xs h-8 px-2"
                     onClick={() => handleLocaleChange(lang)}
                 >
                     <span className="flex items-center w-full">
@@ -135,4 +145,5 @@ export function LanguageSwitcher() {
       </PopoverContent>
     </Popover>
   );
-}
+});
+export { LanguageSwitcher };

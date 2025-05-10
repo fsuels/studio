@@ -1,7 +1,7 @@
 // src/components/ReviewStep.tsx
 'use client';
 
-import React, { useMemo, useState, useEffect } from 'react';
+import React, { useMemo, useState, useCallback } from 'react';
 import { useFormContext, Controller } from 'react-hook-form';
 import type { LegalDocument, Question } from '@/lib/document-library';
 import { usStates } from '@/lib/document-library';
@@ -22,7 +22,7 @@ interface ReviewStepProps {
   locale: 'en' | 'es';
 }
 
-export default function ReviewStep({ doc, locale }: ReviewStepProps) {
+const ReviewStep = React.memo(function ReviewStep({ doc, locale }: ReviewStepProps) {
   const { t } = useTranslation();
   const { control, getValues, setValue, trigger, formState: { errors } } = useFormContext();
   const { toast } = useToast();
@@ -61,41 +61,58 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
         else if (schemaFieldDef?.typeName === 'ZodEnum' || schemaFieldDef?.innerType?._def?.typeName === 'ZodEnum') fieldType = 'select';
         else if (fieldId.includes('address') && schemaFieldDef?.typeName === 'ZodString') fieldType = 'address';
         else if (fieldId.includes('phone') && schemaFieldDef?.typeName === 'ZodString') fieldType = 'tel';
-
-        const zodEnumValues = schemaFieldDef?.innerType?._def?.values ?? schemaFieldDef?.values ?? (schemaFieldDef?.typeName === 'ZodEffects' && schemaFieldDef.schema?._def?.values);
-        let derivedEnumOptions: { value: string; label: string }[] | undefined = undefined;
-
-        if (Array.isArray(zodEnumValues)) {
-            derivedEnumOptions = zodEnumValues.map((val: string) => ({
-                value: val,
-                label: t(`fields.${fieldId}.options.${val}`, { defaultValue: prettify(val) })
-            }));
-        } else if (typeof zodEnumValues === 'object' && zodEnumValues !== null) {
-            // Handle native enums if their values are strings
-            derivedEnumOptions = Object.values(zodEnumValues)
-                .filter(v => typeof v === 'string')
-                .map((val: string) => ({
-                    value: val,
-                    label: t(`fields.${fieldId}.options.${val}`, { defaultValue: prettify(val) })
-                }));
-            if (derivedEnumOptions.length === 0) derivedEnumOptions = undefined;
-        }
         
-        const options = questionConfig?.options && Array.isArray(questionConfig.options) ? questionConfig.options :
-                        derivedEnumOptions ||
-                        (fieldId === 'state' ? usStates.map(s => ({ value: s.value, label: s.label })) : undefined) ||
-                        (fieldId === 'odo_status' ? [
-                            { value: 'ACTUAL', label: t('fields.odo_status.actual', 'Actual mileage') },
-                            { value: 'EXCEEDS', label: t('fields.odo_status.exceeds', 'Exceeds mechanical limits') },
-                            { value: 'NOT_ACTUAL', label: t('fields.odo_status.not_actual', 'Not actual mileage') }
-                        ] : undefined);
+        const rawEnum =
+          schemaFieldDef?.innerType?._def?.values ??
+          schemaFieldDef?.values ??
+          (schemaFieldDef?.typeName === 'ZodEffects'
+            ? schemaFieldDef.schema?._def?.values
+            : undefined);
+
+        const enumOptions = Array.isArray(rawEnum)
+          ? rawEnum.map((val: string) => ({
+              value : val,
+              label : t(`fields.${fieldId}.options.${val}`, {
+                defaultValue: prettify(val),
+              }),
+            }))
+          : undefined;
+        
+        const options =
+          questionConfig?.options ??
+          enumOptions ??
+          (fieldId === 'state'
+            ? usStates.map((s) => ({ value: s.value, label: s.label }))
+            : undefined) ??
+          (fieldId === 'odo_status'
+            ? [
+                {
+                  value: 'ACTUAL',
+                  label: t('fields.odo_status.actual', 'Actual mileage'),
+                },
+                {
+                  value: 'EXCEEDS',
+                  label: t(
+                    'fields.odo_status.exceeds',
+                    'Exceeds mechanical limits',
+                  ),
+                },
+                {
+                  value: 'NOT_ACTUAL',
+                  label: t(
+                    'fields.odo_status.not_actual',
+                    'Not actual mileage',
+                  ),
+                },
+              ]
+            : undefined);
         
         const placeholder = questionConfig?.placeholder || (schemaFieldDef as any)?.placeholder;
 
         return {
           id: fieldId,
           label: t(label, { defaultValue: label }),
-          type: fieldType as Question['type'], // Cast to ensure type safety
+          type: fieldType as Question['type'], 
           required: questionConfig?.required ?? (schemaFieldDef?.typeName !== 'ZodOptional' && schemaFieldDef?.innerType?._def?.typeName !== 'ZodOptional'),
           options,
           placeholder,
@@ -109,7 +126,7 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
     setEditingFieldId(field.id);
   };
 
-  const handleSave = async (id: string) => {
+  const handleSave = useCallback(async (id: string) => {
     const fieldSchema = fieldsToReview.find(f => f.id === id);
     let valueToSet: any = currentEditValue;
 
@@ -131,11 +148,11 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
     } else {
       toast({ title: t('Validation Error'), description: t('Please correct the field.'), variant: 'destructive' });
     }
-  };
+  }, [currentEditValue, fieldsToReview, setValue, trigger, t, toast]);
 
-  const handleCancel = () => {
+  const handleCancel = useCallback(() => {
     setEditingFieldId(null); 
-  };
+  }, []);
 
 
   return (
@@ -177,10 +194,10 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
                           control={control}
                           render={({ field: controllerField }) => (
                             <Select 
-                              value={currentEditValue} 
+                              value={String(currentEditValue ?? '')} 
                               onValueChange={(val) => {
                                 setCurrentEditValue(val);
-                                controllerField.onChange(val); // Also update RHF value for immediate validation trigger
+                                controllerField.onChange(val);
                               }}
                             >
                                <SelectTrigger className="w-full max-w-sm">
@@ -188,7 +205,7 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
                                </SelectTrigger>
                                <SelectContent>
                                    {field.options.map((opt) => (
-                                       <SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>
+                                       <SelectItem key={opt.value} value={String(opt.value)}>{opt.label}</SelectItem>
                                    ))}
                                </SelectContent>
                            </Select>
@@ -220,7 +237,6 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
                                     onChange={(val, parts) => {
                                         setCurrentEditValue(val);
                                         controllerField.onChange(val);
-                                        // If you need to set parts to other fields, use setValue from useFormContext
                                     }}
                                     placeholder={field.placeholder}
                                     className="max-w-sm"
@@ -258,7 +274,7 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
                       if (value instanceof Date) return value.toLocaleDateString();
                       if (typeof value === 'boolean') return value ? t('Yes') : t('No');
                       if (field.options && value !== undefined && value !== null) {
-                        const opt = field.options.find(o => String(o.value) === String(value)); // Ensure comparison is robust
+                        const opt = field.options.find(o => String(o.value) === String(value)); 
                         return opt?.label || String(value);
                       }
                       return (value !== undefined && value !== null && String(value).trim() !== '') ? String(value) : t('Not Provided');
@@ -288,4 +304,5 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
       </CardContent>
     </Card>
   );
-}
+});
+export default ReviewStep;

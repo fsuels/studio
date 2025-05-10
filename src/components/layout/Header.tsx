@@ -1,7 +1,7 @@
 // src/components/layout/Header.tsx
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react'; 
 import Link from 'next/link';
 import { usePathname, useRouter, useParams } from 'next/navigation';
 import { Logo } from '@/components/layout/Logo';
@@ -9,8 +9,8 @@ import Nav from '@/components/Nav';
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Button } from '@/components/ui/button'; 
-// import MiniCartDrawer from '@/components/MiniCartDrawer'; // Not currently used
-// import { ThemeToggle } from '@/components/ThemeToggle'; // ThemeToggle is not used.
+import MiniCartDrawer from '@/components/MiniCartDrawer';
+// import { ThemeToggle } from '@/components/ui/ThemeToggle'; // Corrected import path
 import { Check, ChevronDown, Globe, UserPlus, LogIn, Search as SearchIcon, ExternalLink, FileText, Menu as MenuIcon, X as CloseIcon, LayoutGrid, ChevronUp, LogOut } from 'lucide-react'; 
 import { Input } from '@/components/ui/input';
 import { documentLibrary, type LegalDocument } from '@/lib/document-library';
@@ -18,9 +18,10 @@ import { CATEGORY_LIST } from '@/components/Step1DocumentSelector';
 import MegaMenuContent from '@/components/mega-menu/MegaMenuContent'; 
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/hooks/useAuth';
+import { cn } from '@/lib/utils';
 
 
-export default function Header() {
+const Header = React.memo(function Header() {
   const { i18n, t } = useTranslation();
   const [clientLocale, setClientLocale] = useState<'en' | 'es'>('en');
   const [mounted, setMounted] = useState(false);
@@ -141,7 +142,7 @@ export default function Header() {
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 overflow-visible">
       <div className="container flex h-14 items-center px-4 md:px-6">
         <div className="mr-auto md:mr-4 flex items-center">
-           <Logo wrapperClassName="items-center self-center mr-2 md:mr-4" svgClassName="h-7 w-7 md:h-8 md:w-8" textClassName="text-base md:text-lg" />
+           <Logo wrapperClassName="items-center self-center mr-2 md:mr-4" svgClassName="h-7 w-7" textClassName="text-xs" />
         </div>
 
         <div className="hidden md:flex flex-1 items-center justify-start">
@@ -149,17 +150,20 @@ export default function Header() {
         </div>
 
         <nav className="hidden md:flex items-center gap-2 ml-auto">
-            {/* Desktop "Make Documents" Button & Mega Menu */}
             <Popover open={isMegaMenuOpen} 
               onOpenChange={setIsMegaMenuOpen}
             >
                 <PopoverTrigger asChild>
                     <Button
-                        variant="default" // Use default variant for primary action appearance
+                        variant="default" 
                         size="sm"
-                        className="text-sm font-medium flex items-center gap-1 px-3 h-9 text-primary-foreground bg-primary hover:bg-primary/90 focus:bg-primary/80 data-[state=open]:bg-primary/80"
+                        className={cn(
+                          "text-sm font-medium flex items-center gap-1 px-3 h-9 text-primary-foreground bg-primary hover:bg-primary/90 focus:bg-primary/80",
+                           isMegaMenuOpen && "bg-primary/80" 
+                        )}
                         disabled={!mounted}
                         aria-expanded={isMegaMenuOpen}
+                        onClick={() => setIsMegaMenuOpen(prev => !prev)}
                     >
                         <LayoutGrid className="h-4 w-4" />
                         {mounted ? t('nav.documentCategories', { defaultValue: "Make Documents"}) : '...'}
@@ -256,7 +260,6 @@ export default function Header() {
             )}
         </nav>
 
-        {/* Mobile Menu Button */}
         <div className="md:hidden ml-auto flex items-center gap-1">
              <Button variant="ghost" size="icon" className="h-9 w-9" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} disabled={!mounted}>
                 {isMobileMenuOpen ? <CloseIcon className="h-5 w-5" /> : <MenuIcon className="h-5 w-5" />}
@@ -264,7 +267,6 @@ export default function Header() {
         </div>
       </div>
 
-      {/* Mobile Menu Content */}
       {isMobileMenuOpen && mounted && (
          <div className="md:hidden absolute top-14 left-0 right-0 bg-background shadow-lg border-t border-border p-4 space-y-4 animate-fade-in z-[60] max-h-[calc(100vh-3.5rem)] overflow-y-auto">
             <form onSubmit={handleSearchSubmit} className="relative flex items-center w-full">
@@ -364,5 +366,6 @@ export default function Header() {
       )}
     </header>
   );
-}
+});
+export default Header;
 

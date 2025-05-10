@@ -3,10 +3,10 @@
 
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { X, Gift } from 'lucide-react'; // Icons for dismiss and offer
+import { X, Gift } from 'lucide-react'; 
 import { motion, AnimatePresence } from 'framer-motion';
 
-export function PromoBanner() {
+const PromoBanner = React.memo(function PromoBanner() {
   const [isVisible, setIsVisible] = useState(true);
 
   if (!isVisible) {
@@ -41,4 +41,5 @@ export function PromoBanner() {
       </motion.div>
     </AnimatePresence>
   );
-}
+});
+export { PromoBanner };
