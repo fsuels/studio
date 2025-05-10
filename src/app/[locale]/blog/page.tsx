@@ -8,6 +8,12 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useTranslation } from 'react-i18next'; 
 import { useParams } from 'next/navigation';
+import React from 'react'; // Import React
+
+// Add generateStaticParams for dynamic routes with static export
+export async function generateStaticParams() {
+  return [{ locale: 'en' }, { locale: 'es' }];
+}
 
 const categories = [
   'All',

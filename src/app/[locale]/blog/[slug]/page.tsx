@@ -8,6 +8,19 @@ import { blogArticles, type BlogArticle } from '@/data/blogArticles';
 import Link from 'next/link'; 
 import { ArrowLeft } from 'lucide-react'; 
 import { Button } from '@/components/ui/button'; 
+import React from 'react'; // Import React
+
+// Add generateStaticParams for dynamic routes with static export
+export async function generateStaticParams() {
+  const params = [];
+  for (const locale of ['en', 'es']) {
+    for (const article of blogArticles) {
+      params.push({ locale, slug: article.slug });
+    }
+  }
+  return params;
+}
+
 
 export default function BlogPostPage() {
   const params = useParams(); 

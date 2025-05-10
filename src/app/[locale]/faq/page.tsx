@@ -9,6 +9,13 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion" 
+import React from 'react'; // Import React
+
+// Add generateStaticParams for dynamic routes with static export
+export async function generateStaticParams() {
+  return [{ locale: 'en' }, { locale: 'es' }];
+}
+
 
 export default function FAQPage() {
   const { t } = useTranslation()

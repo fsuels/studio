@@ -7,6 +7,12 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter }
 import { Check } from 'lucide-react'; 
 import Link from 'next/link'; 
 import { useParams } from 'next/navigation';
+import React from 'react'; // Import React
+
+// Add generateStaticParams for dynamic routes with static export
+export async function generateStaticParams() {
+  return [{ locale: 'en' }, { locale: 'es' }];
+}
 
 export default function PricingPage() {
   const { t } = useTranslation();
@@ -19,7 +25,7 @@ export default function PricingPage() {
         {t('pricing.title', 'Simple, Transparent Pricing')} 
       </h1>
       <p className="text-lg md:text-xl text-muted-foreground mb-12 max-w-2xl mx-auto">
-        {t('pricing.subtitle', 'Pay only for what you need. No hidden fees, no subscriptions required.')} 
+        {t('pricing.payPerDocBadge', 'One-time $35/document • No subscription')}
       </p>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
@@ -35,13 +41,13 @@ export default function PricingPage() {
           </CardHeader>
           <CardContent className="space-y-6">
             <p className="text-5xl font-bold text-primary mb-6">
-              $5
+              $35
               <span className="text-lg font-normal text-muted-foreground"> / {t('pricing.perDocument', 'document')}</span>
             </p>
             <ul className="text-sm text-left space-y-3 text-card-foreground/90">
-              <li className="flex items-center gap-2"><Check className="h-4 w-4 text-green-500" /> {t('pricing.plans.single.item1', 'Generate one document')}</li>
-              <li className="flex items-center gap-2"><Check className="h-4 w-4 text-green-500" /> {t('pricing.plans.single.item2', 'AI-guided questionnaire')}</li>
-              <li className="flex items-center gap-2"><Check className="h-4 w-4 text-green-500" /> {t('pricing.plans.single.item3', 'Downloadable PDF')}</li>
+              <li className="flex items-center gap-2"><Check className="h-4 w-4 text-green-500" /> {t('pricing.plans.single.item1', '1 downloadable legal PDF')}</li>
+              <li className="flex items-center gap-2"><Check className="h-4 w-4 text-green-500" /> {t('pricing.plans.single.item2', 'Clause customization')}</li>
+              <li className="flex items-center gap-2"><Check className="h-4 w-4 text-green-500" /> {t('pricing.plans.single.item3', 'Email support')}</li>
               <li className="flex items-center gap-2"><Check className="h-4 w-4 text-green-500" /> {t('pricing.plans.single.item4', 'Secure sharing (soon)')}</li>
             </ul>
           </CardContent>
@@ -59,7 +65,7 @@ export default function PricingPage() {
            </div>
           <CardHeader className="pb-4 pt-10"> 
             <CardTitle className="text-2xl font-semibold text-card-foreground">
-              {t('pricing.plans.bundle.title', 'Document Bundle')} 
+              {t('pricing.plans.bundle.title', '5-Document Bundle')} 
             </CardTitle>
              <CardDescription className="text-muted-foreground">
                  {t('pricing.plans.bundle.description', 'Ideal for multiple related documents.')}
@@ -67,11 +73,11 @@ export default function PricingPage() {
           </CardHeader>
           <CardContent className="space-y-6">
             <p className="text-5xl font-bold text-primary mb-6">
-              $20
+              $150 
               <span className="text-lg font-normal text-muted-foreground"> / {t('pricing.bundleOf5', 'bundle of 5')}</span>
             </p>
              <ul className="text-sm text-left space-y-3 text-card-foreground/90">
-               <li className="flex items-center gap-2"><Check className="h-4 w-4 text-green-500" /> {t('pricing.plans.bundle.item1', 'Generate up to 5 documents')}</li>
+               <li className="flex items-center gap-2"><Check className="h-4 w-4 text-green-500" /> {t('pricing.plans.bundle.item1', '5 downloadable PDFs')}</li>
                <li className="flex items-center gap-2"><Check className="h-4 w-4 text-green-500" /> {t('pricing.plans.bundle.item2', 'All single document features')}</li>
                <li className="flex items-center gap-2"><Check className="h-4 w-4 text-green-500" /> {t('pricing.plans.bundle.item3', 'Credits never expire')}</li>
                <li className="flex items-center gap-2"><Check className="h-4 w-4 text-green-500" /> {t('pricing.plans.bundle.item4', 'Best value per document')}</li>
@@ -91,7 +97,7 @@ export default function PricingPage() {
               {t('pricing.plans.unlimited.title', 'Business Pro')} 
             </CardTitle>
              <CardDescription className="text-muted-foreground">
-                 {t('pricing.plans.unlimited.description', 'For frequent users &amp; businesses.')}
+                 {t('pricing.plans.unlimited.description', 'For frequent users & businesses.')}
              </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
@@ -120,3 +126,4 @@ export default function PricingPage() {
     </main>
   )
 }
+
