@@ -1,7 +1,7 @@
 // src/components/ReviewStep.tsx
 'use client';
 
-import React, { useMemo, useState, useCallback } from 'react';
+import React, { useMemo, useState, useCallback, useEffect } from 'react';
 import { useFormContext, Controller } from 'react-hook-form';
 import type { LegalDocument, Question } from '@/lib/document-library';
 import { usStates } from '@/lib/document-library';
@@ -13,7 +13,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
-import AddressField from '@/components/AddressField';
+import AddressField  from '@/components/AddressField';
 import { useTranslation } from 'react-i18next';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
@@ -21,24 +21,23 @@ import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-  // TooltipProvider is used in WizardForm
 } from "@/components/ui/tooltip";
 
 interface ReviewStepProps {
   doc: LegalDocument;
   locale: 'en' | 'es';
+  // onBackToForm prop removed as per user request to edit inline
 }
 
-const ReviewStep = React.memo(function ReviewStep({ doc, locale }: ReviewStepProps) {
+export default function ReviewStep({ doc, locale }: ReviewStepProps) {
   const { t } = useTranslation();
-  const { control, getValues, setValue, trigger, formState: { errors } } = useFormContext();
+  const { control, getValues, setValue, trigger, formState: { errors }, watch } = useFormContext();
   const { toast } = useToast();
 
   const [editingFieldId, setEditingFieldId] = useState<string | null>(null);
-  const [currentEditValue, setCurrentEditValue] = useState<any>('');
-  
-  // State for individual tooltips if they were to be added here
-  // Example: const [tooltipStates, setTooltipStates] = useState<Record<string, boolean>>({});
+  // No need for editedValue if using Controller directly with RHF state
+
+  const watchedValues = watch(); // Watch all form values to make fieldsToReview reactive
 
   const actualSchemaShape = useMemo(() => {
     const schemaDef = doc?.schema?._def;
@@ -49,117 +48,78 @@ const ReviewStep = React.memo(function ReviewStep({ doc, locale }: ReviewStepPro
   }, [doc.schema]);
 
   const fieldsToReview = useMemo(() => {
-    const formData = getValues();
+    const currentFormData = getValues(); // Use getValues to ensure we have all keys, even if not in schema yet
     const allFieldKeys = Array.from(new Set([
       ...(actualSchemaShape ? Object.keys(actualSchemaShape) : []),
-      ...Object.keys(formData)
+      ...Object.keys(currentFormData) // Include keys from current form data
     ]));
 
     return allFieldKeys
-      .filter(fieldId => fieldId !== 'notarizationPreference') // Example filter
+      .filter(fieldId => {
+        // Filter out fields that shouldn't be reviewed or are internal
+        if (fieldId === 'notarizationPreference') return false; // Example internal field
+        // Add other filters if needed, e.g., based on field type or a flag in schema
+        return true;
+      })
       .map((fieldId) => {
+        const questionConfig = doc.questions?.find(q => q.id === fieldId);
         const schemaField = (actualSchemaShape as any)?.[fieldId];
         const schemaFieldDef = schemaField?._def;
-        const questionConfig = doc.questions?.find(q => q.id === fieldId);
 
-        const label = questionConfig?.label || schemaFieldDef?.description || prettify(fieldId);
+        let label = questionConfig?.label || schemaFieldDef?.description || (schemaFieldDef?.labelKey ? t(schemaFieldDef.labelKey) : null) || prettify(fieldId);
         
-        let fieldType = questionConfig?.type || 'text';
-        if (schemaFieldDef?.typeName === 'ZodNumber') fieldType = 'number';
-        else if (schemaFieldDef?.typeName === 'ZodBoolean') fieldType = 'boolean';
-        else if (schemaFieldDef?.typeName === 'ZodDate') fieldType = 'date';
-        else if (schemaFieldDef?.typeName === 'ZodEnum' || schemaFieldDef?.innerType?._def?.typeName === 'ZodEnum') fieldType = 'select';
-        else if (fieldId.includes('address') && schemaFieldDef?.typeName === 'ZodString') fieldType = 'address';
-        else if (fieldId.includes('phone') && schemaFieldDef?.typeName === 'ZodString') fieldType = 'tel';
+        let fieldType: Question['type'] = questionConfig?.type || 'text';
+        if (schemaFieldDef) {
+            if (schemaFieldDef.typeName === 'ZodNumber') fieldType = 'number';
+            else if (schemaFieldDef.typeName === 'ZodBoolean') fieldType = 'boolean';
+            else if (schemaFieldDef.typeName === 'ZodDate') fieldType = 'date';
+            else if (schemaFieldDef.typeName === 'ZodEnum' || schemaFieldDef.innerType?._def?.typeName === 'ZodEnum') fieldType = 'select';
+            else if (fieldId.includes('address') && schemaFieldDef.typeName === 'ZodString') fieldType = 'address';
+            else if (fieldId.includes('phone') && schemaFieldDef.typeName === 'ZodString') fieldType = 'tel';
+            else if (schemaFieldDef.typeName === 'ZodString' && (fieldDef?.uiType === 'textarea' || questionConfig?.type === 'textarea')) fieldType = 'textarea';
+        }
         
-        const rawEnum =
-          schemaFieldDef?.innerType?._def?.values ??
-          schemaFieldDef?.values ??
-          (schemaFieldDef?.typeName === 'ZodEffects'
-            ? schemaFieldDef.schema?._def?.values
-            : undefined);
-
-        const enumOptions = Array.isArray(rawEnum)
-          ? rawEnum.map((val: string) => ({
-              value : val,
-              label : t(`fields.${fieldId}.options.${val}`, {
-                defaultValue: prettify(val),
-              }),
-            }))
-          : undefined;
+        const rawEnumValues = schemaFieldDef?.innerType?._def?.values ?? schemaFieldDef?.values ?? (schemaFieldDef?.typeName === 'ZodEffects' ? schemaFieldDef.schema?._def?.values : undefined);
+        const enumOptions = Array.isArray(rawEnumValues) ? rawEnumValues.map((val: string) => ({ value: val, label: t(`fields.${fieldId}.options.${val}`, { defaultValue: prettify(val) }) })) : undefined;
         
-        const options =
-          questionConfig?.options ??
-          enumOptions ??
-          (fieldId === 'state'
-            ? usStates.map((s) => ({ value: s.value, label: s.label }))
-            : undefined) ??
-          (fieldId === 'odo_status'
-            ? [
-                { value: 'ACTUAL', label: t('fields.odo_status.actual', 'Actual mileage')},
-                { value: 'EXCEEDS', label: t('fields.odo_status.exceeds', 'Exceeds mechanical limits')},
-                { value: 'NOT_ACTUAL', label: t('fields.odo_status.not_actual', 'Not actual mileage')}
-              ]
-            : undefined);
+        const options = questionConfig?.options ?? enumOptions ?? (fieldId === 'state' ? usStates.map(s => ({ value: s.value, label: s.label })) : undefined) ?? (fieldId === 'odo_status' ? [{ value: 'ACTUAL', label: t('fields.odo_status.actual', {defaultValue: 'Actual mileage'}) }, { value: 'EXCEEDS', label: t('fields.odo_status.exceeds', {defaultValue: 'Exceeds mechanical limits'}) }, { value: 'NOT_ACTUAL', label: t('fields.odo_status.not_actual', {defaultValue: 'Not actual mileage'}) }] : undefined);
         
         const placeholder = questionConfig?.placeholder || (schemaFieldDef as any)?.placeholder;
         const tooltip = questionConfig?.tooltip || (schemaFieldDef as any)?.tooltip;
+        const required = questionConfig?.required ?? (schemaFieldDef?.typeName !== 'ZodOptional' && schemaFieldDef?.innerType?._def?.typeName !== 'ZodOptional');
 
-        return {
-          id: fieldId,
-          label: t(label, { defaultValue: label }),
-          type: fieldType as Question['type'], 
-          required: questionConfig?.required ?? (schemaFieldDef?.typeName !== 'ZodOptional' && schemaFieldDef?.innerType?._def?.typeName !== 'ZodOptional'),
-          options,
-          placeholder,
-          tooltip,
-        };
+        return { id: fieldId, label, type: fieldType, options, required, placeholder, tooltip };
       });
-  }, [doc.schema, doc.questions, actualSchemaShape, getValues, t]);
+  }, [doc, actualSchemaShape, getValues, t, watchedValues]); // Depend on watchedValues
 
-
-  const handleEdit = (field: ReturnType<typeof fieldsToReview>[number]) => {
-    setCurrentEditValue(getValues(field.id) ?? '');
-    setEditingFieldId(field.id);
+  const handleEdit = (fieldId: string) => {
+    setEditingFieldId(fieldId);
   };
 
-  const handleSave = useCallback(async (id: string) => {
-    const fieldSchema = fieldsToReview.find(f => f.id === id);
-    let valueToSet: any = currentEditValue;
-
-    if (fieldSchema?.type === 'number' && typeof currentEditValue === 'string' && currentEditValue.trim() !== '') {
-      const num = parseFloat(currentEditValue);
-      valueToSet = isNaN(num) ? undefined : num; // Set to undefined if not a valid number
-    } else if (fieldSchema?.type === 'number' && currentEditValue === '') {
-        valueToSet = undefined; 
-    }
-    
-    setValue(id, valueToSet, { shouldValidate: true, shouldDirty: true });
-    const isValid = await trigger(id); 
-    
+  const handleSave = useCallback(async (fieldId: string) => {
+    const isValid = await trigger(fieldId as any); // Cast to any if fieldId is not a direct key of FormValues
     if (isValid) {
-      setEditingFieldId(null); 
-      toast({ title: t('Changes Saved'), description: `${fieldsToReview.find(f=>f.id === id)?.label || id} ${t('updated.')}` });
+      setEditingFieldId(null);
+      toast({ title: t('Changes Saved'), description: `${fieldsToReview.find(f => f.id === fieldId)?.label || fieldId} ${t('updated.')}` });
     } else {
       toast({ title: t('Validation Error'), description: t('Please correct the field.'), variant: 'destructive' });
     }
-  }, [currentEditValue, fieldsToReview, setValue, trigger, t, toast]);
+  }, [trigger, toast, t, fieldsToReview]);
 
   const handleCancel = useCallback(() => {
-    setEditingFieldId(null); 
+    setEditingFieldId(null);
   }, []);
 
-  const renderFieldValue = (fieldId: string, fieldType: Question['type'] | undefined, options: Question['options'] | undefined) => {
-    const value = getValues(fieldId);
-    if (fieldType === 'boolean') return value ? t('Yes') : t('No');
-    if (fieldType === 'select' && options && value !== undefined && value !== null) {
-        const opt = options.find(o => String(o.value) === String(value));
-        return opt?.label || String(value);
+  const renderFieldValue = (field: typeof fieldsToReview[number]) => {
+    const value = getValues(field.id); // Get current value from RHF
+    if (field.type === 'boolean') return value ? t('Yes') : t('No');
+    if (field.type === 'select' && field.options && value !== undefined && value !== null) {
+      const opt = field.options.find(o => String(o.value) === String(value));
+      return opt?.label || String(value);
     }
     if (value instanceof Date) return value.toLocaleDateString(locale);
     return (value !== undefined && value !== null && String(value).trim() !== '') ? String(value) : <span className="italic text-muted-foreground/70">{t('Not Provided')}</span>;
   };
-
 
   return (
     <Card className="bg-card border-border shadow-lg">
@@ -173,126 +133,93 @@ const ReviewStep = React.memo(function ReviewStep({ doc, locale }: ReviewStepPro
         {fieldsToReview.map((field) => (
           <div key={field.id} className="py-3 border-b border-border last:border-b-0">
             <div className="flex justify-between items-start gap-2">
-              <div className="flex-1 min-w-0"> {/* Added min-w-0 for flexbox to allow shrinking */}
+              <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-1 mb-0.5">
-                    <p className="text-sm font-medium text-muted-foreground">
+                  <p className="text-sm font-medium text-muted-foreground">
                     {field.label}
                     {field.required && <span className="text-destructive ml-1">*</span>}
-                    </p>
-                    {field.tooltip && editingFieldId !== field.id && (
-                        <Tooltip>
-                            <TooltipTrigger asChild>
-                                <Button type="button" variant="ghost" size="icon" className="h-5 w-5 p-0 text-muted-foreground hover:text-foreground" onClick={(e) => e.stopPropagation()}> 
-                                    <Info className="h-3.5 w-3.5" />
-                                </Button>
-                            </TooltipTrigger>
-                            <TooltipContent side="top" align="start" className="max-w-xs text-xs bg-popover text-popover-foreground border shadow-md rounded p-1.5 z-50">
-                                <p>{field.tooltip}</p>
-                            </TooltipContent>
-                        </Tooltip>
-                    )}
+                  </p>
+                  {field.tooltip && editingFieldId !== field.id && (
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button type="button" variant="ghost" size="icon" className="h-5 w-5 p-0 text-muted-foreground hover:text-foreground" onClick={(e) => e.stopPropagation()}>
+                          <Info className="h-3.5 w-3.5" />
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent side="top" align="start" className="max-w-xs text-xs bg-popover text-popover-foreground border shadow-md rounded p-1.5 z-50">
+                        <p>{field.tooltip}</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  )}
                 </div>
 
                 {editingFieldId === field.id ? (
                   <div className="mt-1.5 space-y-2">
-                    {field.type === 'textarea' ? (
-                       <Controller
-                          name={field.id as any}
-                          control={control}
-                          render={({ field: controllerField }) => (
-                            <Textarea 
-                              value={currentEditValue ?? ''} 
-                              onChange={(e) => setCurrentEditValue(e.target.value)}
-                              onBlur={() => { controllerField.onChange(currentEditValue); controllerField.onBlur(); }}
-                              className="max-w-md text-sm" 
-                              rows={3}
-                              placeholder={field.placeholder}
-                            />
-                          )}
-                        />
-                    ) : field.type === 'select' && field.options ? (
-                       <Controller
-                          name={field.id as any}
-                          control={control}
-                          render={({ field: controllerField }) => (
-                            <Select 
-                              value={String(currentEditValue ?? '')} 
-                              onValueChange={(val) => {
-                                setCurrentEditValue(val);
+                    <Controller
+                      name={field.id as any}
+                      control={control}
+                      render={({ field: controllerField }) => {
+                        const commonProps = {
+                          ...controllerField,
+                          value: controllerField.value ?? '', // Ensure value is not undefined for controlled components
+                          onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | string | boolean) => {
+                            let valToSet;
+                            if (typeof e === 'object' && e.target) {
+                                valToSet = field.type === 'number' && (e.target as HTMLInputElement).value !== '' ? Number((e.target as HTMLInputElement).value) : (e.target as HTMLInputElement).value;
+                            } else { // For Select, Switch
+                                valToSet = e;
+                            }
+                            controllerField.onChange(valToSet);
+                          },
+                          className: cn("max-w-md text-sm", errors[field.id] && "border-destructive"),
+                          placeholder: field.placeholder || '',
+                        };
+
+                        if (field.type === 'textarea') return <Textarea {...commonProps} rows={3} />;
+                        if (field.type === 'select' && field.options) return (
+                          <Select
+                            value={String(commonProps.value)}
+                            onValueChange={commonProps.onChange}
+                            disabled={commonProps.disabled}
+                          >
+                            <SelectTrigger className={cn(commonProps.className, "w-full")}>
+                              <SelectValue placeholder={field.placeholder || t('Select...')} />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {field.options.map((opt) => (
+                                <SelectItem key={opt.value} value={String(opt.value)} className="text-sm">{opt.label}</SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        );
+                        if (field.type === 'boolean') return (
+                          <div className="flex items-center space-x-2">
+                            <Switch id={`review-${field.id}`} checked={Boolean(commonProps.value)} onCheckedChange={commonProps.onChange} />
+                            <Label htmlFor={`review-${field.id}`} className="text-sm font-normal">{Boolean(commonProps.value) ? t('Yes') : t('No')}</Label>
+                          </div>
+                        );
+                        if (field.type === 'address') return (
+                          <AddressField
+                            name={controllerField.name}
+                            label="" // Label is already rendered above
+                            value={controllerField.value || ''}
+                            onChange={(val, parts) => {
                                 controllerField.onChange(val);
-                              }}
-                            >
-                               <SelectTrigger className="w-full max-w-md text-sm">
-                                   <SelectValue placeholder={field.placeholder || t('Select...')} />
-                               </SelectTrigger>
-                               <SelectContent>
-                                   {field.options.map((opt) => (
-                                       <SelectItem key={opt.value} value={String(opt.value)} className="text-sm">{opt.label}</SelectItem>
-                                   ))}
-                               </SelectContent>
-                           </Select>
-                          )}
-                        />
-                    ) : field.type === 'boolean' ? (
-                        <Controller
-                          name={field.id as any}
-                          control={control}
-                          render={({ field: controllerField }) => (
-                            <div className="flex items-center space-x-2">
-                                <Switch 
-                                  checked={typeof currentEditValue === 'boolean' ? currentEditValue : false} 
-                                  onCheckedChange={(val) => {
-                                    setCurrentEditValue(val);
-                                    controllerField.onChange(val);
-                                  }} 
-                                  id={`review-${field.id}`}
-                                />
-                                <Label htmlFor={`review-${field.id}`} className="text-sm font-normal">
-                                  {currentEditValue ? t('Yes') : t('No')}
-                                </Label>
-                            </div>
-                          )}
-                        />
-                    ) : field.type === 'address' ? (
-                         <Controller
-                            name={field.id as any}
-                            control={control}
-                            render={({ field: controllerField }) => (
-                                <AddressField 
-                                    name={controllerField.name}
-                                    label="" 
-                                    value={currentEditValue ?? ''}
-                                    onChange={(val, parts) => {
-                                        setCurrentEditValue(val);
-                                        controllerField.onChange(val);
-                                         if (parts && actualSchemaShape) {
-                                            const prefix = field.id.replace(/_address$/i, '') || field.id.replace(/Address$/i, '');
-                                            if ((actualSchemaShape as any)?.[`${prefix}_city`]) setValue(`${prefix}_city`, parts.city, {shouldValidate: true, shouldDirty: true});
-                                            if ((actualSchemaShape as any)?.[`${prefix}_state`]) setValue(`${prefix}_state`, parts.state, {shouldValidate: true, shouldDirty: true});
-                                            if ((actualSchemaShape as any)?.[`${prefix}_postal_code`]) setValue(`${prefix}_postal_code`, parts.postalCode, {shouldValidate: true, shouldDirty: true});
-                                         }
-                                    }}
-                                    placeholder={field.placeholder}
-                                    className="max-w-md"
-                                />
-                            )}
-                         />
-                    ) : (
-                       <Controller
-                          name={field.id as any}
-                          control={control}
-                          render={({ field: controllerField }) => (
-                            <Input
-                               type={field.type === 'number' ? 'number' : field.type === 'date' ? 'date' : 'text'}
-                               value={currentEditValue ?? ''}
-                               onChange={(e) => setCurrentEditValue(e.target.value)}
-                               onBlur={() => { controllerField.onChange(currentEditValue); controllerField.onBlur();}}
-                               className="max-w-md text-sm"
-                               placeholder={field.placeholder}
-                           />
-                          )}
-                        />
-                    )}
+                                if (parts && actualSchemaShape) {
+                                    const prefix = field.id.replace(/_address$/i, '') || field.id.replace(/Address$/i, '');
+                                    if ((actualSchemaShape as any)?.[`${prefix}_city`]) setValue(`${prefix}_city`, parts.city, {shouldValidate: true, shouldDirty: true});
+                                    if ((actualSchemaShape as any)?.[`${prefix}_state`]) setValue(`${prefix}_state`, parts.state, {shouldValidate: true, shouldDirty: true});
+                                    if ((actualSchemaShape as any)?.[`${prefix}_postal_code`]) setValue(`${prefix}_postal_code`, parts.postalCode, {shouldValidate: true, shouldDirty: true});
+                                }
+                            }}
+                            placeholder={field.placeholder || t('Enter address...', {ns: 'translation'})}
+                            className="max-w-md"
+                            error={errors[field.id]?.message as string | undefined}
+                          />
+                        );
+                        return <Input {...commonProps} type={field.type === 'number' ? 'number' : field.type === 'date' ? 'date' : 'text'} />;
+                      }}
+                    />
                     <div className="flex gap-2 mt-2">
                       <Button size="sm" onClick={() => handleSave(field.id)} className="text-xs h-8">
                         <Check className="w-3.5 h-3.5 mr-1" />{t('Save')}
@@ -304,19 +231,16 @@ const ReviewStep = React.memo(function ReviewStep({ doc, locale }: ReviewStepPro
                   </div>
                 ) : (
                   <p className="text-sm text-card-foreground mt-1 break-words pr-10">
-                     {renderFieldValue(field.id, field.type, field.options)}
+                    {renderFieldValue(field)}
                   </p>
                 )}
               </div>
               {editingFieldId !== field.id && (
                 <Button
-                  type="button" // Ensure it doesn't submit form if wrapped
+                  type="button"
                   variant="ghost"
                   size="icon"
-                  onClick={(e) => {
-                    e.preventDefault(); // Prevent any default button action or form submission
-                    handleEdit(field);
-                  }}
+                  onClick={() => handleEdit(field.id)}
                   className="mt-1 self-start shrink-0"
                   aria-label={`${t('Edit')} ${field.label}`}
                 >
@@ -324,9 +248,9 @@ const ReviewStep = React.memo(function ReviewStep({ doc, locale }: ReviewStepPro
                 </Button>
               )}
             </div>
-            {errors[field.id] && editingFieldId === field.id && ( // Only show error if currently editing this field
+            {errors[field.id] && editingFieldId === field.id && (
               <p className="text-xs text-destructive mt-1 flex items-center gap-1">
-                 <AlertTriangle className="h-3 w-3" /> {String(errors[field.id]?.message)}
+                <AlertTriangle className="h-3 w-3" /> {String(errors[field.id]?.message)}
               </p>
             )}
           </div>
@@ -334,5 +258,6 @@ const ReviewStep = React.memo(function ReviewStep({ doc, locale }: ReviewStepPro
       </CardContent>
     </Card>
   );
-});
-export default ReviewStep;
+}
+
+    

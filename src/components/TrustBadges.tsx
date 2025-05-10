@@ -4,6 +4,7 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ShieldCheck, Lock, Award } from 'lucide-react'; // Example icons
+import { cn } from '@/lib/utils';
 
 interface TrustBadgeItem {
   icon: React.ElementType;
@@ -17,7 +18,11 @@ const trustBadgeItems: TrustBadgeItem[] = [
   { icon: Award, textKey: 'trustBadges.attorneyReviewed', defaultText: 'Attorney-Reviewed Templates' },
 ];
 
-export default function TrustBadges() {
+interface TrustBadgesProps {
+  className?: string;
+}
+
+export default function TrustBadges({ className }: TrustBadgesProps) {
   const { t } = useTranslation();
   const [isHydrated, setIsHydrated] = useState(false);
 
@@ -28,7 +33,7 @@ export default function TrustBadges() {
   if (!isHydrated) {
     // Render a simple placeholder or null during SSR/pre-hydration
     return (
-      <div className="flex flex-wrap justify-center items-center gap-x-6 gap-y-2 mt-6 animate-pulse">
+      <div className={cn("flex flex-wrap justify-center items-center gap-x-6 gap-y-2 mt-6 animate-pulse", className)}>
         {[...Array(3)].map((_, i) => (
           <div key={i} className="flex items-center gap-1.5 text-xs text-muted-foreground/50">
             <div className="h-4 w-4 bg-muted-foreground/20 rounded-full"></div>
@@ -40,13 +45,15 @@ export default function TrustBadges() {
   }
 
   return (
-    <div className="flex flex-wrap justify-center items-center gap-x-6 gap-y-2 mt-6">
+    <div className={cn("flex flex-wrap justify-center items-center gap-x-6 gap-y-2 py-3 px-2 bg-muted/50 border border-border rounded-lg", className)}>
       {trustBadgeItems.map((item, index) => (
         <div key={index} className="flex items-center gap-1.5 text-xs text-muted-foreground">
-          <item.icon className="h-3.5 w-3.5 text-green-600" />
-          <span>{t(item.textKey, item.defaultText)}</span>
+          <item.icon className="h-4 w-4 text-green-600 shrink-0" />
+          <span className="font-medium">{t(item.textKey, item.defaultText)}</span>
         </div>
       ))}
     </div>
   );
 }
+
+    
