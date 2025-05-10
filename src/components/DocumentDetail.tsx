@@ -60,11 +60,9 @@ const DocumentDetail = React.memo(function DocumentDetail({ docId, locale, altTe
         return r.text();
       })
       .then(text => {
-        // Modify title in markdown if needed before setting state
         let modifiedMd = text;
         const documentDisplayName = locale === 'es' && doc.name_es ? doc.name_es : doc.name;
         if (documentDisplayName) {
-            // Replace the first H1 heading only
             modifiedMd = modifiedMd.replace(/^# .*/m, `# ${documentDisplayName}`);
         }
         setMd(modifiedMd);
@@ -95,15 +93,14 @@ const DocumentDetail = React.memo(function DocumentDetail({ docId, locale, altTe
 
   return (
     <div
-      id="live-preview" // Keep ID for global CSS targeting
-      data-watermark={watermarkText} // For CSS ::before watermark
+      id="live-preview" 
+      data-watermark={watermarkText} 
       className={cn(
         "relative w-full h-auto min-h-[500px] md:min-h-[650px]", 
-        "max-w-[850px] mx-auto border shadow-md bg-card", // Changed background to card for theme consistency
+        "max-w-[850px] mx-auto border shadow-md bg-card", 
         "overflow-hidden select-none aspect-[8.5/11]"
       )}
     >
-      {/* Watermark is now handled by CSS using ::before on #live-preview in globals.css */}
       
       {isLoading && (
         <div className="absolute inset-0 flex flex-col items-center justify-center bg-muted/70 z-20">
@@ -125,9 +122,7 @@ const DocumentDetail = React.memo(function DocumentDetail({ docId, locale, altTe
            <ReactMarkdown 
              remarkPlugins={[remarkGfm]}
              components={{
-                // eslint-disable-next-line @typescript-eslint/no-unused-vars
                 p: ({node, ...props}) => <p {...props} className="select-none" />,
-                // H1 styling is now handled by .prose h1 in globals.css
              }}
            >
             {md}
@@ -140,10 +135,13 @@ const DocumentDetail = React.memo(function DocumentDetail({ docId, locale, altTe
               alt={fallbackAlt} 
               width={850} 
               height={1100} 
-              loading="lazy"
               className="object-contain w-full h-full" 
               data-ai-hint="document template screenshot"
-              priority={false}
+              priority={true} // Set priority to true for LCP image
+              onError={() => {
+                  // Fallback logic if image fails to load, e.g., try to load markdown directly
+                  console.warn(`[DocumentDetail] Image failed to load: ${imgSrc}. Markdown should render if available.`);
+              }}
             />
          </div>
       )}
@@ -151,4 +149,3 @@ const DocumentDetail = React.memo(function DocumentDetail({ docId, locale, altTe
   );
 });
 export default DocumentDetail;
-

@@ -17,6 +17,22 @@ interface MegaMenuContentProps {
 
 const MAX_DOCS_PER_CATEGORY_INITIAL = 5;
 
+const MemoizedDocLink = React.memo(function DocLink({ doc, locale, onClick, t }: { doc: LegalDocument; locale: 'en' | 'es'; onClick?: () => void; t: (key: string, fallback?: string | object) => string; }) {
+  const docName = locale === 'es' && doc.name_es ? doc.name_es : doc.name;
+  const docHref = `/${locale}/docs/${doc.id}`;
+  return (
+    <li>
+      <Link 
+        href={docHref} 
+        className="text-xs md:text-sm text-muted-foreground hover:text-primary hover:underline transition-colors duration-150 block py-0.5"
+        onClick={onClick}
+      >
+        {t(docName, {defaultValue: docName})}
+      </Link>
+    </li>
+  );
+});
+
 export default function MegaMenuContent({ categories, documents, onLinkClick }: MegaMenuContentProps) {
   const { t, i18n } = useTranslation();
   const currentLocale = i18n.language as 'en' | 'es';
@@ -30,7 +46,7 @@ export default function MegaMenuContent({ categories, documents, onLinkClick }: 
 
   return (
     <ScrollArea className="w-full max-h-[calc(100vh-10rem-4rem)] md:max-h-[70vh] bg-popover text-popover-foreground rounded-b-lg">
-        <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-7 gap-x-4 gap-y-6 p-4 md:p-6 min-h-[200px]"> {/* Added min-h-[200px] */}
+        <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-7 gap-x-4 gap-y-6 p-4 md:p-6 min-h-[200px]">
         {categories.map(category => {
             const categoryDocs = getDocumentsForCategory(category.key);
             const categoryLabel = t(category.labelKey, { defaultValue: category.key });
@@ -44,22 +60,15 @@ export default function MegaMenuContent({ categories, documents, onLinkClick }: 
                     <p className="text-xs text-muted-foreground italic">{t('nav.noDocumentsInCategory', 'No documents in this category yet.')}</p>
                 ): (
                 <ul className="space-y-1.5">
-                    {categoryDocs.slice(0, MAX_DOCS_PER_CATEGORY_INITIAL).map(doc => {
-                      const docName = currentLocale === 'es' && doc.name_es ? doc.name_es : doc.name;
-                      const docHref = `/${currentLocale}/docs/${doc.id}`;
-                      
-                      return (
-                        <li key={doc.id}>
-                            <Link 
-                                href={docHref} 
-                                className="text-xs md:text-sm text-muted-foreground hover:text-primary hover:underline transition-colors duration-150 block py-0.5"
-                                onClick={onLinkClick}
-                            >
-                            {t(docName, {defaultValue: docName})}
-                            </Link>
-                        </li>
-                      );
-                    })}
+                    {categoryDocs.slice(0, MAX_DOCS_PER_CATEGORY_INITIAL).map(doc => (
+                      <MemoizedDocLink
+                        key={doc.id}
+                        doc={doc}
+                        locale={currentLocale}
+                        onClick={onLinkClick}
+                        t={t}
+                      />
+                    ))}
                     {categoryDocs.length > MAX_DOCS_PER_CATEGORY_INITIAL && (
                     <li>
                         <Link 

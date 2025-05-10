@@ -1,17 +1,70 @@
 // TrustAndTestimonialsSection.tsx
 'use client'
 
-import React, { useEffect, useState, useRef } from 'react'; // Import React separately
-import { useTranslation } from 'react-i18next'; // Import useTranslation from react-i18next
+import React, { useEffect, useState, useRef } from 'react'; 
+import { useTranslation } from 'react-i18next'; 
 import { Button } from '@/components/ui/button';
 import { ChevronLeft, ChevronRight, FileText, Lock, ShieldCheck } from 'lucide-react'; 
 import Image from 'next/image'; 
+
+interface Testimonial {
+  quote: string;
+  name: string;
+  title: string;
+}
+
+const MemoizedTestimonialCard = React.memo(function TestimonialCard({ testimonial, index, t, isHydrated, placeholderText }: { testimonial: Testimonial | null; index: number; t: (key: string, fallback?: string | object) => string; isHydrated: boolean; placeholderText: string; }) {
+  return (
+    <div
+      className="bg-card p-6 rounded-2xl shadow-lg w-72 md:w-80 text-left shrink-0 flex flex-col border border-border transition hover:shadow-xl"
+      style={{ scrollSnapAlign: 'start' }}
+    >
+      {testimonial ? (
+        <>
+          <Image
+            src={`https://picsum.photos/seed/${index + 30}/60/60`}
+            alt={isHydrated ? t(`home.testimonials.t${index + 1}.name`, { defaultValue: 'Testimonial Avatar'}) : 'Loading...'}
+            width={60}
+            height={60}
+            loading="lazy"
+            data-ai-hint="person portrait professional"
+            className="rounded-full mb-4 border-2 border-primary/30 mx-auto"
+          />
+          <p className="italic text-foreground/90 mb-4 leading-relaxed flex-grow">
+            {isHydrated ? testimonial.quote : placeholderText}
+          </p>
+          <div className="mt-auto text-center">
+            <p className="font-semibold text-sm text-foreground">
+              {isHydrated ? testimonial.name : placeholderText}
+            </p>
+            <p className="text-xs text-muted-foreground">
+              {isHydrated ? testimonial.title : placeholderText}
+            </p>
+          </div>
+        </>
+      ) : (
+        // Skeleton for when testimonial data is not yet loaded
+        <>
+          <div className="h-16 w-16 rounded-full bg-muted mb-4 mx-auto"></div>
+          <div className="h-4 bg-muted rounded w-3/4 mb-2"></div>
+          <div className="h-4 bg-muted rounded w-full mb-1"></div>
+          <div className="h-4 bg-muted rounded w-5/6 mb-4"></div>
+          <div className="mt-auto text-center">
+            <div className="h-4 bg-muted rounded w-1/2 mb-1 mx-auto"></div>
+            <div className="h-3 bg-muted rounded w-1/3 mx-auto"></div>
+          </div>
+        </>
+      )}
+    </div>
+  );
+});
 
 const TrustAndTestimonialsSection = React.memo(function TrustAndTestimonialsSection() {
   const { t, i18n } = useTranslation();
   const [docCount, setDocCount] = useState(4200);
   const [isHydrated, setIsHydrated] = useState(false);
   const [testimonialCount, setTestimonialCount] = useState(0);
+  const [testimonialsData, setTestimonialsData] = useState<Testimonial[]>([]);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -24,38 +77,44 @@ const TrustAndTestimonialsSection = React.memo(function TrustAndTestimonialsSect
 
   useEffect(() => {
     if (isHydrated) {
-      const testimonialsObject = t('home.testimonials', { returnObjects: true, ns: 'translation' });
-      if (typeof testimonialsObject === 'object' && testimonialsObject !== null && !Array.isArray(testimonialsObject)) {
-        // Check if testimonialsObject itself contains t1, t2 etc.
-        const count = Object.keys(testimonialsObject).filter(key => key.startsWith('t') && typeof (testimonialsObject as any)[key] === 'object').length;
-        setTestimonialCount(count > 0 ? count : 3); 
+      const rawTestimonials = t('home.testimonials', { returnObjects: true, ns: 'translation' }) as any;
+      if (typeof rawTestimonials === 'object' && rawTestimonials !== null && !Array.isArray(rawTestimonials)) {
+        const loadedTestimonials: Testimonial[] = [];
+        for (let i = 1; i <= 25; i++) { // Assuming up to t25
+          if (rawTestimonials[`t${i}`] && typeof rawTestimonials[`t${i}`] === 'object') {
+            loadedTestimonials.push({
+              quote: rawTestimonials[`t${i}`].quote || 'Loading quote...',
+              name: rawTestimonials[`t${i}`].name || 'Loading name...',
+              title: rawTestimonials[`t${i}`].title || 'Loading title...'
+            });
+          }
+        }
+        setTestimonialsData(loadedTestimonials);
+        setTestimonialCount(loadedTestimonials.length > 0 ? loadedTestimonials.length : 3);
       } else {
-        // Fallback if the structure is not as expected or no testimonials are defined
-        setTestimonialCount(3); 
+        setTestimonialCount(3);
+        setTestimonialsData([]);
       }
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isHydrated, t, i18n.language]); 
+  }, [isHydrated, t, i18n.language]);
 
   const placeholderText = '...';
-  
   const formattedCount = isHydrated ? docCount.toLocaleString(i18n.language) : placeholderText;
 
   const scroll = (dir: 'left' | 'right') => {
     if (!scrollRef.current) return;
-    const scrollAmount = 320 + 24; // Card width + gap
+    const scrollAmount = 320 + 24; 
     scrollRef.current.scrollBy({ left: dir === 'right' ? scrollAmount : -scrollAmount, behavior: 'smooth' });
   };
 
-   const scrollToWorkflow = () => {
+  const scrollToWorkflow = () => {
     const workflowSection = document.getElementById('workflow-start');
     if (workflowSection) {
       workflowSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
     } else {
-       console.warn('Workflow section with id "workflow-start" not found.');
+      console.warn('Workflow section with id "workflow-start" not found.');
     }
   };
-
 
   return (
     <section className="bg-secondary/30 py-20 px-4 text-center">
@@ -95,59 +154,19 @@ const TrustAndTestimonialsSection = React.memo(function TrustAndTestimonialsSect
 
         <div
           ref={scrollRef}
-          className="flex overflow-x-auto space-x-6 scrollbar-hide px-4 py-4" // Added px-4 py-4 for internal padding
+          className="flex overflow-x-auto space-x-6 scrollbar-hide px-4 py-4"
           style={{ scrollSnapType: 'x mandatory' }}
         >
-          {/* Render skeleton or actual items based on hydration and testimonialCount */}
-          {!isHydrated || testimonialCount === 0 ? (
-            // Skeleton loaders
-            Array.from({ length: 3 }).map((_, i) => (
-              <div
-                key={`skeleton-${i}`}
-                className="bg-card p-6 rounded-2xl shadow-lg w-72 md:w-80 shrink-0 flex flex-col border border-border animate-pulse" // Use theme colors
-                style={{ scrollSnapAlign: 'start' }}
-              >
-                <div className="h-16 w-16 rounded-full bg-muted mb-4 mx-auto"></div>
-                <div className="h-4 bg-muted rounded w-3/4 mb-2"></div>
-                <div className="h-4 bg-muted rounded w-full mb-1"></div>
-                <div className="h-4 bg-muted rounded w-5/6 mb-4"></div>
-                <div className="mt-auto text-center">
-                  <div className="h-4 bg-muted rounded w-1/2 mb-1 mx-auto"></div>
-                  <div className="h-3 bg-muted rounded w-1/3 mx-auto"></div>
-                </div>
-              </div>
-            ))
-          ) : (
-            // Actual testimonial items
-            Array.from({ length: testimonialCount }).map((_, i) => (
-             <div
-               key={i}
-               className="bg-card p-6 rounded-2xl shadow-lg w-72 md:w-80 text-left shrink-0 flex flex-col border border-border transition hover:shadow-xl" // Use theme colors
-               style={{ scrollSnapAlign: 'start' }}
-             >
-                <Image
-                   src={`https://picsum.photos/seed/${i+30}/60/60`} // Placeholder image
-                   alt={isHydrated ? t(`home.testimonials.t${i + 1}.name`, { defaultValue: 'Testimonial Avatar'}) : 'Loading...'}
-                   width={60}
-                   height={60}
-                   loading="lazy" // Added lazy loading
-                   data-ai-hint="person portrait professional" // AI hint for image selection
-                   className="rounded-full mb-4 border-2 border-primary/30 mx-auto" // Use theme colors
-                 />
-               <p className="italic text-foreground/90 mb-4 leading-relaxed flex-grow">
-                 {isHydrated ? t(`home.testimonials.t${i + 1}.quote`, { defaultValue: 'Loading quote...'}) : placeholderText}
-               </p>
-               <div className="mt-auto text-center">
-                 <p className="font-semibold text-sm text-foreground">
-                   {isHydrated ? t(`home.testimonials.t${i + 1}.name`, { defaultValue: 'Loading name...'}) : placeholderText}
-                 </p>
-                 <p className="text-xs text-muted-foreground">
-                   {isHydrated ? t(`home.testimonials.t${i + 1}.title`, { defaultValue: 'Loading title...'}) : placeholderText}
-                 </p>
-               </div>
-             </div>
-            ))
-          )}
+          {Array.from({ length: testimonialCount }).map((_, i) => (
+            <MemoizedTestimonialCard
+              key={i}
+              testimonial={testimonialsData[i] || null}
+              index={i}
+              t={t}
+              isHydrated={isHydrated}
+              placeholderText={placeholderText}
+            />
+          ))}
         </div>
 
         <Button
@@ -180,8 +199,3 @@ const TrustAndTestimonialsSection = React.memo(function TrustAndTestimonialsSect
   );
 });
 export default TrustAndTestimonialsSection;
-
-// Reminder: Ensure your i18n files (e.g., public/locales/en/translation.json and public/locales/es/translation.json)
-// have all the necessary keys for home.testimonials.t1 through home.testimonials.t25 (or however many you have).
-// Example structure for each testimonial:
-// "t1": { "quote": "...", "name": "...", "title": "..." }

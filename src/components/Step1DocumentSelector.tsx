@@ -3,18 +3,22 @@
 
 import React, { useState, useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { documentLibrary, usStates, type LegalDocument } from "@/lib/document-library";
+import { documentLibrary, type LegalDocument } from "@/lib/document-library";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label"; 
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"; 
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowLeft, FileText, Search, Landmark, Briefcase, Home, Users, User, ScrollText, ShieldQuestion, GraduationCap, FileIcon as PaperIcon, Loader2 } from "lucide-react";
 import { track } from "@/lib/analytics";
 import { useToast } from "@/hooks/use-toast";
+import { cn } from "@/lib/utils";
 
+export interface CategoryInfo {
+  key: string;
+  labelKey: string;
+  icon: React.ElementType;
+}
 
-export const CATEGORY_LIST = [
+export const CATEGORY_LIST: CategoryInfo[] = [
   { key: 'Finance', labelKey: 'Finance', icon: Landmark },
   { key: 'Business', labelKey: 'Business', icon: Briefcase },
   { key: 'Real Estate', labelKey: 'Real Estate', icon: Home },
@@ -33,6 +37,51 @@ interface Step1DocumentSelectorProps {
   globalSearchTerm: string;
   globalSelectedState: string;
 }
+
+const MemoizedCategoryCard = React.memo(function CategoryCard({ category, onClick, disabled, t }: { category: CategoryInfo; onClick: () => void; disabled: boolean; t: (key: string, fallback: string) => string; }) {
+  return (
+    <Button
+      variant="outline"
+      onClick={onClick}
+      disabled={disabled}
+      className="category-card h-auto min-h-[90px] p-4 border-border shadow-sm hover:shadow-md transition text-center flex flex-col justify-center items-center bg-card hover:bg-muted active:scale-95 active:transition-transform active:duration-100"
+      style={{ minHeight: '56px' }}
+    >
+      {React.createElement(category.icon || FileText, { className: "h-6 w-6 mb-2 text-primary/80" })}
+      <span className="font-medium text-card-foreground text-sm">{t(category.labelKey, category.key)}</span>
+    </Button>
+  );
+});
+
+const MemoizedDocumentCard = React.memo(function DocumentCard({ doc, onSelect, disabled, t, i18nLanguage, placeholderNoDescription, placeholderRequiresNotarization, placeholderCanBeRecorded }: { doc: LegalDocument; onSelect: () => void; disabled: boolean; t: (key: string, fallback?: string | object) => string; i18nLanguage: string; placeholderNoDescription: string; placeholderRequiresNotarization: string; placeholderCanBeRecorded: string; }) {
+  return (
+    <Card
+      onClick={onSelect}
+      className={cn(
+        "document-card shadow hover:shadow-lg cursor-pointer transition bg-card border border-border flex flex-col active:scale-95 active:transition-transform active:duration-100",
+        disabled ? 'pointer-events-none opacity-50' : ''
+      )}
+      style={{ minHeight: '56px' }}
+    >
+      <CardHeader className="pb-2 pt-4 px-4">
+        <CardTitle className="text-base font-semibold text-card-foreground">
+          {i18nLanguage === 'es' && doc.name_es ? t(doc.name_es, doc.name) : t(doc.name, doc.name)}
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="text-xs text-muted-foreground flex-grow px-4">
+        {i18nLanguage === 'es' && doc.description_es ? t(doc.description_es, doc.description) : t(doc.description, doc.description) || placeholderNoDescription}
+      </CardContent>
+      <CardFooter className="pt-2 pb-3 px-4 text-xs text-muted-foreground flex justify-between items-center border-t border-border mt-auto">
+        <span>💲{doc.basePrice}</span>
+        <div className="flex gap-2">
+          {doc.requiresNotarization && <span title={placeholderRequiresNotarization}>📝</span>}
+          {doc.canBeRecorded && <span title={placeholderCanBeRecorded}>🏛️</span>}
+        </div>
+      </CardFooter>
+    </Card>
+  );
+});
+
 
 const Step1DocumentSelector = React.memo(function Step1DocumentSelector({
   selectedCategory,
@@ -62,7 +111,7 @@ const Step1DocumentSelector = React.memo(function Step1DocumentSelector({
 
 
   const sortedCategories = useMemo(() => {
-       const uniqueCategoriesMap = new Map<string, { key: string, labelKey: string, icon: React.ElementType }>();
+       const uniqueCategoriesMap = new Map<string, CategoryInfo>();
        CATEGORY_LIST.forEach(catInfo => {
            if (!uniqueCategoriesMap.has(catInfo.key)) {
                uniqueCategoriesMap.set(catInfo.key, catInfo);
@@ -143,10 +192,8 @@ const Step1DocumentSelector = React.memo(function Step1DocumentSelector({
     track('view_item', {id: doc.id,name: doc.name,category : doc.category,price : doc.basePrice,state : globalSelectedState,});
   };
 
-  const placeholderTitle = isHydrated ? t('stepOne.title') : "Loading...";
   const placeholderCategoryDesc = isHydrated ? t('stepOne.categoryDescription') : "Loading...";
   const placeholderSelectDocDesc = isHydrated ? t('stepOne.selectDocDescription') : "Loading...";
-  const placeholderSearchCategories = isHydrated ? t('docTypeSelector.searchCategories') : "Searching...";
   const placeholderNoCategories = isHydrated ? t('docTypeSelector.noCategoriesFound') : "Loading...";
   const placeholderBackToCategories = isHydrated ? t('docTypeSelector.backToCategories') : "Back...";
   const placeholderSearchDocuments = isHydrated ? t('docTypeSelector.searchInCategoryPlaceholder', 'Search in this category...') : "Searching...";
@@ -184,7 +231,7 @@ const Step1DocumentSelector = React.memo(function Step1DocumentSelector({
   const isGlobalSearching = globalSearchTerm.trim() !== '';
 
   return (
-     <Card className={`step-card ${isReadOnly ? 'opacity-50 cursor-not-allowed pointer-events-none' : 'opacity-100'}`}>
+     <Card className={cn("step-card", isReadOnly ? 'opacity-50 cursor-not-allowed pointer-events-none' : 'opacity-100')}>
         <CardHeader className="step-card__header">
              <PaperIcon className="step-card__icon" />
              <div>
@@ -192,7 +239,7 @@ const Step1DocumentSelector = React.memo(function Step1DocumentSelector({
                     {isGlobalSearching
                       ? t('Search Results')
                       : view === 'categories'
-                        ? placeholderTitle
+                        ? t('stepOne.categoryDescription')
                         : t('stepOne.selectDocDescription')
                     }
                 </CardTitle>
@@ -214,7 +261,7 @@ const Step1DocumentSelector = React.memo(function Step1DocumentSelector({
                        <ArrowLeft className="mr-2 h-4 w-4" /> {placeholderBackToCategories}
                      </Button>
                       <h3 className="text-lg font-semibold text-muted-foreground text-right">
-                        {t(CATEGORY_LIST.find(c => c.key === selectedCategory)?.labelKey || selectedCategory || '')}
+                        {t(CATEGORY_LIST.find(c => c.key === selectedCategory)?.labelKey || selectedCategory || '', selectedCategory || '')}
                       </h3>
                  </div>
             </div>
@@ -228,28 +275,17 @@ const Step1DocumentSelector = React.memo(function Step1DocumentSelector({
                             {documentsToDisplay.length > 0 ? (
                                 <div className="document-grid pt-4 animate-fade-in">
                                 {documentsToDisplay.map(doc => (
-                                    <Card
+                                    <MemoizedDocumentCard
                                         key={doc.id}
-                                        onClick={() => handleDocSelect(doc)}
-                                        className={`document-card shadow hover:shadow-lg cursor-pointer transition bg-card border border-border flex flex-col active:scale-95 active:transition-transform active:duration-100 ${isReadOnly || !isHydrated ? 'pointer-events-none opacity-50' : ''}`}
-                                         style={{ minHeight: '56px' }}
-                                    >
-                                        <CardHeader className="pb-2 pt-4 px-4">
-                                             <CardTitle className="text-base font-semibold text-card-foreground">
-                                                 {i18n.language === 'es' && doc.name_es ? t(doc.name_es, doc.name) : t(doc.name, doc.name)}
-                                             </CardTitle>
-                                        </CardHeader>
-                                        <CardContent className="text-xs text-muted-foreground flex-grow px-4">
-                                            {i18n.language === 'es' && doc.description_es ? t(doc.description_es, doc.description) : t(doc.description, doc.description) || placeholderNoDescription}
-                                        </CardContent>
-                                        <CardFooter className="pt-2 pb-3 px-4 text-xs text-muted-foreground flex justify-between items-center border-t border-border mt-auto">
-                                           <span>💲{doc.basePrice}</span>
-                                           <div className="flex gap-2">
-                                               {doc.requiresNotarization && <span title={placeholderRequiresNotarization}>📝</span>}
-                                               {doc.canBeRecorded && <span title={placeholderCanBeRecorded}>🏛️</span>}
-                                           </div>
-                                        </CardFooter>
-                                    </Card>
+                                        doc={doc}
+                                        onSelect={() => handleDocSelect(doc)}
+                                        disabled={isReadOnly || !isHydrated}
+                                        t={t}
+                                        i18nLanguage={i18n.language}
+                                        placeholderNoDescription={placeholderNoDescription}
+                                        placeholderRequiresNotarization={placeholderRequiresNotarization}
+                                        placeholderCanBeRecorded={placeholderCanBeRecorded}
+                                    />
                                 ))}
                                 </div>
                             ) : (
@@ -265,17 +301,13 @@ const Step1DocumentSelector = React.memo(function Step1DocumentSelector({
                      {sortedCategories.length > 0 ? (
                          <div className="category-grid pt-2">
                              {sortedCategories.map(cat => (
-                                 <Button
-                                     key={cat.key}
-                                     variant="outline"
-                                     onClick={() => handleCategoryClick(cat.key)}
-                                     disabled={isReadOnly || !isHydrated}
-                                     className="category-card h-auto min-h-[90px] p-4 border-border shadow-sm hover:shadow-md transition text-center flex flex-col justify-center items-center bg-card hover:bg-muted active:scale-95 active:transition-transform active:duration-100"
-                                     style={{ minHeight: '56px' }}
-                                 >
-                                      {React.createElement(cat.icon || FileText, { className: "h-6 w-6 mb-2 text-primary/80" })}
-                                     <span className="font-medium text-card-foreground text-sm">{t(cat.labelKey, cat.key)}</span>
-                                 </Button>
+                                 <MemoizedCategoryCard
+                                      key={cat.key}
+                                      category={cat}
+                                      onClick={() => handleCategoryClick(cat.key)}
+                                      disabled={isReadOnly || !isHydrated}
+                                      t={t}
+                                 />
                              ))}
                          </div>
                      ) : (
@@ -301,28 +333,17 @@ const Step1DocumentSelector = React.memo(function Step1DocumentSelector({
                             {documentsToDisplay.length > 0 ? (
                                 <div className="document-grid pt-4 animate-fade-in">
                                 {documentsToDisplay.map(doc => (
-                                    <Card
+                                     <MemoizedDocumentCard
                                         key={doc.id}
-                                        onClick={() => handleDocSelect(doc)}
-                                        className={`document-card shadow hover:shadow-lg cursor-pointer transition bg-card border border-border flex flex-col active:scale-95 active:transition-transform active:duration-100 ${isReadOnly || !isHydrated ? 'pointer-events-none opacity-50' : ''}`}
-                                         style={{ minHeight: '56px' }}
-                                    >
-                                        <CardHeader className="pb-2 pt-4 px-4">
-                                             <CardTitle className="text-base font-semibold text-card-foreground">
-                                                 {i18n.language === 'es' && doc.name_es ? t(doc.name_es, doc.name) : t(doc.name, doc.name)}
-                                             </CardTitle>
-                                        </CardHeader>
-                                        <CardContent className="text-xs text-muted-foreground flex-grow px-4">
-                                            {i18n.language === 'es' && doc.description_es ? t(doc.description_es, doc.description) : t(doc.description, doc.description) || placeholderNoDescription}
-                                        </CardContent>
-                                        <CardFooter className="pt-2 pb-3 px-4 text-xs text-muted-foreground flex justify-between items-center border-t border-border mt-auto">
-                                           <span>💲{doc.basePrice}</span>
-                                           <div className="flex gap-2">
-                                               {doc.requiresNotarization && <span title={placeholderRequiresNotarization}>📝</span>}
-                                               {doc.canBeRecorded && <span title={placeholderCanBeRecorded}>🏛️</span>}
-                                           </div>
-                                        </CardFooter>
-                                    </Card>
+                                        doc={doc}
+                                        onSelect={() => handleDocSelect(doc)}
+                                        disabled={isReadOnly || !isHydrated}
+                                        t={t}
+                                        i18nLanguage={i18n.language}
+                                        placeholderNoDescription={placeholderNoDescription}
+                                        placeholderRequiresNotarization={placeholderRequiresNotarization}
+                                        placeholderCanBeRecorded={placeholderCanBeRecorded}
+                                    />
                                 ))}
                                 </div>
                             ) : (
