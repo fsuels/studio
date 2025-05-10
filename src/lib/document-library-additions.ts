@@ -1,6 +1,5 @@
 // src/lib/document-library-additions.ts
-
-import type { LegalDocument } from './document-library'; 
+import type { LegalDocument } from '@/types/documents'; // Import types
 
 // Additional documents to be added to the existing document library
 export const documentLibraryAdditions: LegalDocument[] = [ 
@@ -19,6 +18,16 @@ export const documentLibraryAdditions: LegalDocument[] = [
     offerRecordingHelp: false,
     basePrice: 5,
     states: 'all', 
+    schema: z.object({ // Assuming z is imported or available in the context where schema is used
+      party1Name: z.string().min(1),
+      party1Address: z.string().min(1),
+      party2Name: z.string().min(1),
+      party2Address: z.string().min(1),
+      effectiveDate: z.string().min(1),
+      purpose: z.string().min(1),
+      confidentialInfoDescription: z.string().optional(),
+      termYears: z.number().int().min(0).optional(),
+    }),
     upsellClauses: [
       { id: 'extendedTerm', description: 'Extend NDA duration beyond 1 year', description_es: 'Extender la duración del NDA más allá de 1 año', price: 1 },
       { id: 'mutualProtection', description: 'Make NDA mutual instead of one-sided', description_es: 'Hacer que el NDA sea mutuo en lugar de unilateral', price: 2 }
@@ -35,8 +44,8 @@ export const documentLibraryAdditions: LegalDocument[] = [
     ]
   },
   {
-    id: 'partnership-agreement-add', // Changed ID to avoid conflict if base library has one
-    name: 'Partnership Agreement', // This name might conflict if base has one, consider "Detailed Partnership Agreement"
+    id: 'partnership-agreement-add', 
+    name: 'Partnership Agreement', 
     name_es: 'Acuerdo de Sociedad',
     category: 'Business',
     description: 'Establish clear terms and expectations for your business partnership.',
@@ -48,6 +57,20 @@ export const documentLibraryAdditions: LegalDocument[] = [
     offerRecordingHelp: false,
     basePrice: 7,
     states: 'all',
+    schema: z.object({
+      partner1Name: z.string().min(1),
+      partner1Address: z.string().min(1),
+      partner2Name: z.string().min(1),
+      partner2Address: z.string().min(1),
+      businessName: z.string().min(1),
+      businessAddress: z.string().min(1),
+      startDate: z.string().min(1),
+      capitalContributions: z.string().min(1),
+      profitSplit: z.string().min(1),
+      managementRoles: z.string().optional(),
+      dissolutionTerms: z.string().optional(),
+      state: z.string().length(2),
+    }),
      questions: [
          { id: "partner1Name", label: "Partner 1 Full Name", type: "text", required: true, placeholder: "e.g., John Smith" },
          { id: "partner1Address", label: "Partner 1 Address", type: "textarea", required: true },
@@ -64,8 +87,8 @@ export const documentLibraryAdditions: LegalDocument[] = [
     ],
   },
   {
-    id: 'employment-contract-add', // Changed ID
-    name: 'Employment Contract', // This name might conflict
+    id: 'employment-contract-add', 
+    name: 'Employment Contract', 
     name_es: 'Contrato de Empleo',
     category: 'Business',
     description: 'Outline the terms of employment for your new hires.',
@@ -77,6 +100,14 @@ export const documentLibraryAdditions: LegalDocument[] = [
     offerRecordingHelp: false,
     basePrice: 5,
     states: 'all',
+    schema: z.object({
+      employeeName: z.string().min(1),
+      employerName: z.string().min(1),
+      jobTitle: z.string().min(1),
+      startDate: z.string().min(1),
+      salary: z.string().min(1),
+      duties: z.string().optional(),
+    }),
     questions: [
       { id: 'employeeName', label: 'Employee Full Name', type: 'text', required: true },
       { id: 'employerName', label: 'Employer/Company Name', type: 'text', required: true },
@@ -88,8 +119,8 @@ export const documentLibraryAdditions: LegalDocument[] = [
   },
   // --- Real Estate Documents ---
   {
-    id: 'residential-lease-agreement-add', // Changed ID
-    name: 'Residential Lease Agreement', // This name might conflict
+    id: 'residential-lease-agreement-add', 
+    name: 'Residential Lease Agreement', 
     name_es: 'Contrato de Arrendamiento Residencial',
     category: 'Real Estate',
     description: 'Create a lease agreement for renting a residential property.',
@@ -101,6 +132,23 @@ export const documentLibraryAdditions: LegalDocument[] = [
     offerRecordingHelp: true,
     basePrice: 5,
     states: 'all',
+    schema: z.object({
+        landlord_name: z.string().min(1),
+        tenant_name: z.string().min(1),
+        property_address: z.string().min(1),
+        lease_start: z.string().min(1),
+        lease_term: z.number().int().positive(),
+        monthly_rent: z.number().positive(),
+        rent_due_date: z.string().min(1),
+        security_deposit: z.number().min(0).optional(),
+        pets_allowed: z.enum(['yes', 'no', 'specific']),
+        pet_conditions: z.string().optional(),
+        late_fee_policy: z.string().optional(),
+        state: z.string().length(2),
+    }).refine(data => data.pets_allowed === 'specific' ? !!data.pet_conditions : true, {
+        message: "Pet conditions are required if pets are allowed with specific conditions",
+        path: ['pet_conditions'],
+    }),
      questions: [
         { id: 'landlord_name', label: 'Landlord\'s Full Name or Company', required: true, type: 'text', placeholder: "e.g., Acme Property Management" },
         { id: 'tenant_name', label: 'Tenant\'s Full Name', required: true, type: 'text', placeholder: "e.g., Jane Doe" },
@@ -121,8 +169,8 @@ export const documentLibraryAdditions: LegalDocument[] = [
     ]
   },
   {
-    id: 'commercial-lease-agreement-add', // Changed ID
-    name: 'Commercial Lease Agreement', // This name might conflict
+    id: 'commercial-lease-agreement-add', 
+    name: 'Commercial Lease Agreement', 
     name_es: 'Contrato de Arrendamiento Comercial',
     category: 'Real Estate',
     description: 'Create a lease agreement for renting a commercial property.',
@@ -134,11 +182,12 @@ export const documentLibraryAdditions: LegalDocument[] = [
     offerRecordingHelp: true,
     basePrice: 7,
     states: 'all',
-     questions: [/* Placeholder questions */]
+    schema: z.object({}), // Placeholder for schema
+    questions: [/* Placeholder questions */]
   },
   {
-    id: 'purchase-agreement-real-estate-add', // Changed ID
-    name: 'Real Estate Purchase Agreement', // This name might conflict
+    id: 'purchase-agreement-real-estate-add', 
+    name: 'Real Estate Purchase Agreement', 
     name_es: 'Contrato de Compraventa de Bienes Raíces',
     category: 'Real Estate',
     description: 'Formalize the purchase of a real estate property.',
@@ -150,8 +199,12 @@ export const documentLibraryAdditions: LegalDocument[] = [
     offerRecordingHelp: true,
     basePrice: 7,
     states: 'all',
+    schema: z.object({}), // Placeholder for schema
     questions: [/* Placeholder questions */]
   }
-  // Removed 'power-of-attorney' as it's defined in the main library
-  // Removed 'last-will-testament' as it's defined in the main library
 ];
+
+// Ensure z is defined if not imported globally in this file's scope
+// This is a common pattern if schemas are defined here directly.
+// If z comes from an import in the consuming file (document-library.ts), this isn't needed here.
+import { z } from 'zod';
