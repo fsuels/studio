@@ -7,7 +7,8 @@ import remarkGfm from 'remark-gfm';
 import { useTranslation } from 'react-i18next';
 import { documentLibrary, type LegalDocument } from '@/lib/document-library';
 import { Loader2, AlertTriangle } from 'lucide-react';
-import Image from 'next/image'; // Import next/image
+import Image from 'next/image'; 
+import { cn } from '@/lib/utils';
 
 interface DocumentDetailProps {
   docId: string;
@@ -58,7 +59,16 @@ const DocumentDetail = React.memo(function DocumentDetail({ docId, locale, altTe
         }
         return r.text();
       })
-      .then(setMd)
+      .then(text => {
+        // Modify title in markdown if needed before setting state
+        let modifiedMd = text;
+        const documentDisplayName = locale === 'es' && doc.name_es ? doc.name_es : doc.name;
+        if (documentDisplayName) {
+            // Replace the first H1 heading only
+            modifiedMd = modifiedMd.replace(/^# .*/m, `# ${documentDisplayName}`);
+        }
+        setMd(modifiedMd);
+      })
       .catch((err) => {
         console.error('[DocumentDetail] Error fetching Markdown:', err);
         setError(err.message || t('Error loading preview content.', {defaultValue: 'Error loading preview content.'}));
@@ -70,7 +80,7 @@ const DocumentDetail = React.memo(function DocumentDetail({ docId, locale, altTe
 
   if (!isHydrated || !doc) {
     return (
-      <div className="flex flex-col items-center justify-center text-muted-foreground p-4 border rounded-lg bg-muted min-h-[300px]">
+      <div className="flex flex-col items-center justify-center text-muted-foreground p-4 border rounded-lg bg-muted min-h-[300px] aspect-[8.5/11]">
         <Loader2 className="h-8 w-8 animate-spin mb-2" />
         <p>{t('Loading document details...', {defaultValue: 'Loading document details...'})}</p>
       </div>
@@ -80,27 +90,21 @@ const DocumentDetail = React.memo(function DocumentDetail({ docId, locale, altTe
   const documentDisplayName = locale === 'es' && doc.name_es ? doc.name_es : doc.name;
   const imgSrc = `/images/previews/${locale}/${docId}.png`;
   const fallbackAlt = altText || `${documentDisplayName} preview`;
+  const watermarkText = t('preview.watermark', { defaultValue: 'PREVIEW' });
 
 
   return (
     <div
-      className="relative w-full h-auto min-h-[500px] md:min-h-[650px] max-w-[850px] mx-auto border shadow-md bg-white overflow-hidden select-none aspect-[8.5/11]"
-      style={{
-        WebkitUserSelect: 'none',
-        MozUserSelect: 'none',
-        msUserSelect: 'none',
-        userSelect: 'none',
-      }}
+      id="live-preview" // Keep ID for global CSS targeting
+      data-watermark={watermarkText} // For CSS ::before watermark
+      className={cn(
+        "relative w-full h-auto min-h-[500px] md:min-h-[650px]", 
+        "max-w-[850px] mx-auto border shadow-md bg-card", // Changed background to card for theme consistency
+        "overflow-hidden select-none aspect-[8.5/11]"
+      )}
     >
-      <div className="absolute inset-0 z-10 pointer-events-none flex items-center justify-center">
-        <span
-          className="text-6xl font-bold text-gray-300 opacity-25 rotate-[315deg]"
-          style={{ fontSize: '5rem' }}
-        >
-          {t('preview.watermark', { defaultValue: 'PREVIEW' })}
-        </span>
-      </div>
-
+      {/* Watermark is now handled by CSS using ::before on #live-preview in globals.css */}
+      
       {isLoading && (
         <div className="absolute inset-0 flex flex-col items-center justify-center bg-muted/70 z-20">
           <Loader2 className="h-8 w-8 animate-spin text-primary mb-2" />
@@ -117,8 +121,17 @@ const DocumentDetail = React.memo(function DocumentDetail({ docId, locale, altTe
       )}
       
       {!isLoading && !error && md ? (
-        <div className="prose prose-sm dark:prose-invert max-w-none w-full h-full overflow-y-auto p-4 md:p-6 relative z-0">
-           <ReactMarkdown remarkPlugins={[remarkGfm]}>{md}</ReactMarkdown>
+        <div className="prose prose-sm dark:prose-invert max-w-none w-full h-full overflow-y-auto p-4 md:p-6 relative z-0 bg-background text-foreground">
+           <ReactMarkdown 
+             remarkPlugins={[remarkGfm]}
+             components={{
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                p: ({node, ...props}) => <p {...props} className="select-none" />,
+                // H1 styling is now handled by .prose h1 in globals.css
+             }}
+           >
+            {md}
+           </ReactMarkdown>
         </div>
       ) : !isLoading && !error && !md && (
          <div className="absolute inset-0 flex flex-col items-center justify-center text-muted-foreground z-20 p-4 text-center">
@@ -130,7 +143,7 @@ const DocumentDetail = React.memo(function DocumentDetail({ docId, locale, altTe
               loading="lazy"
               className="object-contain w-full h-full" 
               data-ai-hint="document template screenshot"
-              priority={false} // Ensure priority is false for lazy loading
+              priority={false}
             />
          </div>
       )}
@@ -138,3 +151,4 @@ const DocumentDetail = React.memo(function DocumentDetail({ docId, locale, altTe
   );
 });
 export default DocumentDetail;
+

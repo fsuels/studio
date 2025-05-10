@@ -275,14 +275,27 @@
     user-select: none;
   }
 
-  /* REMOVED the ::before watermark for #live-preview */
-  /* The inline span watermark in PreviewPane.tsx will now be the only one */
+  #live-preview::before {
+    content: attr(data-watermark); /* “Preview” or “Vista previa” */
+    position: absolute;
+    inset: 0;
+    font-size: 5rem; /* Adjusted for better fit */
+    font-weight: 700;
+    color: hsl(var(--muted-foreground) / 0.08); /* Use theme color for opacity */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: rotate(-30deg);
+    pointer-events: none;
+    z-index: 10; /* Ensure watermark is above content but below interactive elements if any */
+  }
 
   #live-preview .prose h1 {
-    @apply text-center; /* Center H1 within the live preview prose */
+    @apply text-xl font-semibold text-left mt-4 mb-4 md:text-2xl md:mb-6; /* Adjusted for preview title */
   }
 }
 
 /* hide native scrollbar for horizontal stepper */
 .scrollbar-hide::-webkit-scrollbar { display: none; }
 .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+
