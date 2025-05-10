@@ -48,8 +48,14 @@ export async function POST(
   try {
     const body = await req.json();
     console.log(`${logPrefix} Request body:`, body);
-    const { values, locale: bodyLocale } = body; 
+    const { values, locale: bodyLocale, planType } = body; 
     const effectiveLocale = bodyLocale || params.locale;
+
+    // Reject if planType is present and not 'single'
+    if (planType && planType !== 'single') {
+      console.error(`${logPrefix} Invalid planType received: ${planType}. Only 'single' is supported.`);
+      return NextResponse.json({ error: 'Invalid plan type. Only single document purchase is supported.', code: 'INVALID_PLAN_TYPE' }, { status: 400 });
+    }
 
     const user = await getCurrentUser();
 
@@ -78,13 +84,6 @@ export async function POST(
         console.warn(`${logPrefix} No Zod schema found for document ID: ${params.docId}. Skipping server-side validation of 'values'.`);
     }
     
-    // Conceptual check for planType as per user request, though planType is not currently part of the request.
-    // If a planType were sent, this is where you might reject it:
-    // if (body.planType && body.planType !== 'single') {
-    //   console.error(`${logPrefix} Invalid planType received: ${body.planType}. Only 'single' is supported.`);
-    //   return NextResponse.json({ error: 'Invalid plan type. Only single document purchase is supported.', code: 'INVALID_PLAN_TYPE' }, { status: 400 });
-    // }
-
     let db;
     try {
       db = admin.firestore();
@@ -118,6 +117,9 @@ export async function POST(
 
     let session;
     try {
+      const documentDisplayName = docConfig.name_es && effectiveLocale === 'es' ? docConfig.name_es : docConfig.name;
+      const documentDisplayDescription = docConfig.description_es && effectiveLocale === 'es' ? docConfig.description_es : docConfig.description;
+
       session = await stripe.checkout.sessions.create({
         mode: 'payment',
         payment_method_types: ['card'],
@@ -126,10 +128,10 @@ export async function POST(
           {
             price_data: {
               currency: 'usd',
-              unit_amount: FIXED_DOCUMENT_PRICE_CENTS, // Use fixed price
+              unit_amount: FIXED_DOCUMENT_PRICE_CENTS, 
               product_data: {
-                name: docConfig.name_es && effectiveLocale === 'es' ? docConfig.name_es : docConfig.name,
-                description: docConfig.description_es && effectiveLocale === 'es' ? doc.description_es : docConfig.description,
+                name: documentDisplayName,
+                description: documentDisplayDescription,
               },
             },
             quantity: 1,
@@ -166,3 +168,4 @@ export async function POST(
     return NextResponse.json({ error: 'Failed to process document submission', details: errorMessage, code: 'UNHANDLED_SUBMISSION_ERROR' }, { status: 500 });
   }
 }
+

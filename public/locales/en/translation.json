@@ -640,7 +640,8 @@
    },
    "wizard": {
       "next": "Next",
-      "confirmChargeAndPay": "Confirm {{price}} charge & Proceed to Payment"
+      "confirmChargeAndPay": "Confirm {{price}} charge & Proceed to Payment",
+      "changeDocument": "Change Document"
    },
    "fields": {
       "sellerName": {
@@ -677,3 +678,4 @@
 
     
     
+
