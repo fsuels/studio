@@ -62,7 +62,6 @@ export function LanguageSwitcher() {
   const { i18n, t } = useTranslation();
   const [isPopoverOpen, setIsPopoverOpen] = React.useState(false);
 
-  // This state will reflect the locale from the URL, updated after navigation
   const [currentRouteLocale, setCurrentRouteLocale] = useState<'en' | 'es'>('en');
 
   useEffect(() => {
@@ -70,12 +69,13 @@ export function LanguageSwitcher() {
     if (pathLocale && availableLocales.includes(pathLocale)) {
       setCurrentRouteLocale(pathLocale);
       if (i18n.language !== pathLocale) {
-        i18n.changeLanguage(pathLocale);
+        // This call will be made by I18nClientProvider based on the new prop
+        // i18n.changeLanguage(pathLocale); 
       }
-    } else if (pathname === '/') { // Handle root path redirection case
-        setCurrentRouteLocale('en'); // Default to 'en' for root
+    } else if (pathname === '/') { 
+        setCurrentRouteLocale('en'); 
         if (i18n.language !== 'en') {
-            i18n.changeLanguage('en');
+            // i18n.changeLanguage('en');
         }
     }
   }, [params.locale, i18n, pathname]);
@@ -86,12 +86,9 @@ export function LanguageSwitcher() {
       return;
     }
 
-    // Optimistically update i18n instance for immediate text changes
-    i18n.changeLanguage(newLocaleTarget);
+    // REMOVED: i18n.changeLanguage(newLocaleTarget); 
+    // The I18nClientProvider will handle this when its `locale` prop changes.
 
-    // Construct the new path
-    // If current pathname is just '/' (root), then new path is just /en or /es
-    // Otherwise, replace the current locale segment
     const newPath = pathname === '/' 
       ? `/${newLocaleTarget}`
       : pathname.replace(/^\/(en|es)/, `/${newLocaleTarget}`);
@@ -99,19 +96,11 @@ export function LanguageSwitcher() {
     const queryString = searchParams.toString();
     const finalUrl = queryString ? `${newPath}?${queryString}` : newPath;
     
-    router.push(finalUrl);
-    // router.refresh() will be implicitly handled by Next.js navigation for App Router
-    // but explicit refresh can ensure server components update if needed.
-    // For purely client-side translation updates via i18next, router.refresh() might be too heavy.
-    // Let's rely on Next.js navigation and the useEffect hook to update currentRouteLocale
-    // and re-render based on i18n.language changes.
-    // If server components are not updating, router.refresh() can be added back.
-    // router.refresh(); 
+    router.push(finalUrl); // Navigate. This triggers re-render of [locale]/layout.tsx, passing new locale to ClientProviders.
 
     setIsPopoverOpen(false);
   };
   
-  // Use i18n.language for the displayed flag/text as it updates immediately
   const displayLanguage = i18n.language as 'en' | 'es';
 
   return (
@@ -147,5 +136,3 @@ export function LanguageSwitcher() {
     </Popover>
   );
 }
-
-    
