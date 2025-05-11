@@ -1,19 +1,19 @@
 // src/components/ReviewStep.tsx
 'use client';
 
-import React, { useMemo, useState, useCallback, useEffect } from 'react';
+import React, { useMemo, useState, useCallback } from 'react';
 import { useFormContext, Controller } from 'react-hook-form';
 import type { LegalDocument, Question } from '@/lib/document-library';
-import { usStates } from '@/lib/document-library';
+import { usStates } from '@/lib/document-library'; // Ensure usStates is imported if used
 import { prettify } from '@/lib/schema-utils';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Edit2, Check, X, AlertTriangle, Info } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from '@/components/ui/switch';
-import AddressField  from '@/components/AddressField';
+import AddressField from '@/components/AddressField'; 
 import { useTranslation } from 'react-i18next';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
@@ -23,10 +23,10 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
+
 interface ReviewStepProps {
   doc: LegalDocument;
   locale: 'en' | 'es';
-  // onBackToForm prop removed as per user request to edit inline
 }
 
 export default function ReviewStep({ doc, locale }: ReviewStepProps) {
@@ -35,30 +35,27 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
   const { toast } = useToast();
 
   const [editingFieldId, setEditingFieldId] = useState<string | null>(null);
-  // No need for editedValue if using Controller directly with RHF state
-
-  const watchedValues = watch(); // Watch all form values to make fieldsToReview reactive
+  
+  const watchedValues = watch(); 
 
   const actualSchemaShape = useMemo(() => {
     const schemaDef = doc?.schema?._def;
     if (!schemaDef) return undefined;
     if (schemaDef.typeName === 'ZodObject') return doc.schema.shape;
-    if (schemaDef.typeName === 'ZodEffects') return schemaDef.schema?.shape;
+    if (schemaDef.typeName === 'ZodEffects' && schemaDef.schema?._def?.typeName === 'ZodObject') return schemaDef.schema.shape;
     return undefined;
   }, [doc.schema]);
 
   const fieldsToReview = useMemo(() => {
-    const currentFormData = getValues(); // Use getValues to ensure we have all keys, even if not in schema yet
+    const currentFormData = getValues();
     const allFieldKeys = Array.from(new Set([
       ...(actualSchemaShape ? Object.keys(actualSchemaShape) : []),
-      ...Object.keys(currentFormData) // Include keys from current form data
+      ...Object.keys(currentFormData) 
     ]));
 
     return allFieldKeys
       .filter(fieldId => {
-        // Filter out fields that shouldn't be reviewed or are internal
-        if (fieldId === 'notarizationPreference') return false; // Example internal field
-        // Add other filters if needed, e.g., based on field type or a flag in schema
+        if (fieldId === 'notarizationPreference') return false;
         return true;
       })
       .map((fieldId) => {
@@ -68,7 +65,7 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
 
         let label = questionConfig?.label || schemaFieldDef?.description || (schemaFieldDef?.labelKey ? t(schemaFieldDef.labelKey) : null) || prettify(fieldId);
         
-        let fieldType: Question['type'] = questionConfig?.type || 'text';
+        let fieldType: Question['type'] = questionConfig?.type || 'text'; 
         if (schemaFieldDef) {
             if (schemaFieldDef.typeName === 'ZodNumber') fieldType = 'number';
             else if (schemaFieldDef.typeName === 'ZodBoolean') fieldType = 'boolean';
@@ -76,13 +73,16 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
             else if (schemaFieldDef.typeName === 'ZodEnum' || schemaFieldDef.innerType?._def?.typeName === 'ZodEnum') fieldType = 'select';
             else if (fieldId.includes('address') && schemaFieldDef.typeName === 'ZodString') fieldType = 'address';
             else if (fieldId.includes('phone') && schemaFieldDef.typeName === 'ZodString') fieldType = 'tel';
-            else if (schemaFieldDef.typeName === 'ZodString' && (fieldDef?.uiType === 'textarea' || questionConfig?.type === 'textarea')) fieldType = 'textarea';
+            else if (schemaFieldDef.typeName === 'ZodString' && questionConfig?.type === 'textarea') fieldType = 'textarea';
         }
         
         const rawEnumValues = schemaFieldDef?.innerType?._def?.values ?? schemaFieldDef?.values ?? (schemaFieldDef?.typeName === 'ZodEffects' ? schemaFieldDef.schema?._def?.values : undefined);
-        const enumOptions = Array.isArray(rawEnumValues) ? rawEnumValues.map((val: string) => ({ value: val, label: t(`fields.${fieldId}.options.${val}`, { defaultValue: prettify(val) }) })) : undefined;
+        const enumOptions = Array.isArray(rawEnumValues) ? rawEnumValues.map((val: string) => ({ value: val, label: t(`fields.${fieldId}.options.${val}`, {defaultValue: prettify(val)}) })) : undefined;
         
-        const options = questionConfig?.options ?? enumOptions ?? (fieldId === 'state' ? usStates.map(s => ({ value: s.value, label: s.label })) : undefined) ?? (fieldId === 'odo_status' ? [{ value: 'ACTUAL', label: t('fields.odo_status.actual', {defaultValue: 'Actual mileage'}) }, { value: 'EXCEEDS', label: t('fields.odo_status.exceeds', {defaultValue: 'Exceeds mechanical limits'}) }, { value: 'NOT_ACTUAL', label: t('fields.odo_status.not_actual', {defaultValue: 'Not actual mileage'}) }] : undefined);
+        const options = questionConfig?.options ??
+                        enumOptions ??
+                        (fieldId === 'state' ? usStates.map(s => ({value: s.value, label: s.label})) : undefined) ??
+                        (fieldId === 'odo_status' ? [{value: 'ACTUAL', label: t('fields.odo_status.actual', 'Actual mileage')}, {value: 'EXCEEDS', label: t('fields.odo_status.exceeds', 'Exceeds mechanical limits')}, {value: 'NOT_ACTUAL', label: t('fields.odo_status.not_actual', 'Not actual mileage')}] : undefined);
         
         const placeholder = questionConfig?.placeholder || (schemaFieldDef as any)?.placeholder;
         const tooltip = questionConfig?.tooltip || (schemaFieldDef as any)?.tooltip;
@@ -90,17 +90,17 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
 
         return { id: fieldId, label, type: fieldType, options, required, placeholder, tooltip };
       });
-  }, [doc, actualSchemaShape, getValues, t, watchedValues]); // Depend on watchedValues
+  }, [doc, actualSchemaShape, getValues, t, watchedValues]); 
 
   const handleEdit = (fieldId: string) => {
     setEditingFieldId(fieldId);
   };
 
   const handleSave = useCallback(async (fieldId: string) => {
-    const isValid = await trigger(fieldId as any); // Cast to any if fieldId is not a direct key of FormValues
+    const isValid = await trigger(fieldId as any);
     if (isValid) {
-      setEditingFieldId(null);
-      toast({ title: t('Changes Saved'), description: `${fieldsToReview.find(f => f.id === fieldId)?.label || fieldId} ${t('updated.')}` });
+      setEditingFieldId(null); 
+      toast({ title: t('Changes Saved'), description: `${t(fieldsToReview.find(f=>f.id === fieldId)?.label || fieldId)} ${t('updated.')}` });
     } else {
       toast({ title: t('Validation Error'), description: t('Please correct the field.'), variant: 'destructive' });
     }
@@ -111,7 +111,7 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
   }, []);
 
   const renderFieldValue = (field: typeof fieldsToReview[number]) => {
-    const value = getValues(field.id); // Get current value from RHF
+    const value = getValues(field.id);
     if (field.type === 'boolean') return value ? t('Yes') : t('No');
     if (field.type === 'select' && field.options && value !== undefined && value !== null) {
       const opt = field.options.find(o => String(o.value) === String(value));
@@ -161,12 +161,12 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
                       render={({ field: controllerField }) => {
                         const commonProps = {
                           ...controllerField,
-                          value: controllerField.value ?? '', // Ensure value is not undefined for controlled components
+                          value: controllerField.value ?? '', 
                           onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | string | boolean) => {
                             let valToSet;
-                            if (typeof e === 'object' && e.target) {
+                            if (typeof e === 'object' && 'target' in e && e.target) {
                                 valToSet = field.type === 'number' && (e.target as HTMLInputElement).value !== '' ? Number((e.target as HTMLInputElement).value) : (e.target as HTMLInputElement).value;
-                            } else { // For Select, Switch
+                            } else { 
                                 valToSet = e;
                             }
                             controllerField.onChange(valToSet);
@@ -180,7 +180,6 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
                           <Select
                             value={String(commonProps.value)}
                             onValueChange={commonProps.onChange}
-                            disabled={commonProps.disabled}
                           >
                             <SelectTrigger className={cn(commonProps.className, "w-full")}>
                               <SelectValue placeholder={field.placeholder || t('Select...')} />
@@ -201,7 +200,7 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
                         if (field.type === 'address') return (
                           <AddressField
                             name={controllerField.name}
-                            label="" // Label is already rendered above
+                            label="" 
                             value={controllerField.value || ''}
                             onChange={(val, parts) => {
                                 controllerField.onChange(val);
@@ -259,5 +258,3 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
     </Card>
   );
 }
-
-    
