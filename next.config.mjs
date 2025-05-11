@@ -23,17 +23,17 @@ const nextConfig = {
     ],
   },
 
-  webpack(config) {
-    // Ignore unsupported Jaeger exporter import
-    config.plugins.push(
-      new webpack.IgnorePlugin({ resourceRegExp: /^@opentelemetry\/exporter-jaeger$/ })
-    );
-    // Stub out handlebars to avoid require.extensions usage
-    config.plugins.push(
-      new webpack.IgnorePlugin({ resourceRegExp: /^handlebars$/ })
-    );
-    return config;
-  },
+  // webpack(config) {
+  //   // Ignore unsupported Jaeger exporter import
+  //   config.plugins.push(
+  //     new webpack.IgnorePlugin({ resourceRegExp: /^@opentelemetry\/exporter-jaeger$/ })
+  //   );
+  //   // Stub out handlebars to avoid require.extensions usage
+  //   config.plugins.push(
+  //     new webpack.IgnorePlugin({ resourceRegExp: /^handlebars$/ })
+  //   );
+  //   return config;
+  // },
 };
 
 export default nextConfig;
