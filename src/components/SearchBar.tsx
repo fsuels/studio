@@ -7,9 +7,9 @@ import { Button } from '@/components/ui/button';
 import { Search, FileText, ExternalLink } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useRouter, useParams } from 'next/navigation';
-import { documentLibrary, type LegalDocument } from '@/lib/document-library'; // Assuming this structure
+import { documentLibrary, type LegalDocument } from '@/lib/document-library'; 
 
-export default function SearchBar() {
+const SearchBar = React.memo(function SearchBar() {
   const { t, i18n } = useTranslation();
   const router = useRouter();
   const params = useParams();
@@ -20,8 +20,15 @@ export default function SearchBar() {
   const [showSuggestions, setShowSuggestions] = useState(false);
   const searchInputRef = useRef<HTMLInputElement>(null);
   const suggestionsRef = useRef<HTMLUListElement>(null);
+  const [isHydrated, setIsHydrated] = useState(false);
 
   useEffect(() => {
+    setIsHydrated(true);
+  }, []);
+
+  useEffect(() => {
+    if (!isHydrated) return; // Don't run search logic until hydrated
+
     if (searchTerm.trim().length > 1) {
       const lowerQuery = searchTerm.toLowerCase();
       const results = documentLibrary.filter(doc => {
@@ -40,9 +47,10 @@ export default function SearchBar() {
       setSuggestions([]);
       setShowSuggestions(false);
     }
-  }, [searchTerm, locale]);
+  }, [searchTerm, locale, isHydrated]); // Added isHydrated
 
   useEffect(() => {
+    if (!isHydrated) return; // Don't attach listeners until hydrated
     function handleClickOutside(event: MouseEvent) {
       if (
         suggestionsRef.current && !suggestionsRef.current.contains(event.target as Node) &&
@@ -53,11 +61,12 @@ export default function SearchBar() {
     }
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+  }, [isHydrated]); // Added isHydrated
 
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!isHydrated) return; // Ensure component is hydrated
     if (searchTerm.trim()) {
       router.push(`/${locale}/?search=${encodeURIComponent(searchTerm)}#workflow-start`);
       setSearchTerm('');
@@ -66,27 +75,30 @@ export default function SearchBar() {
   };
   
   const handleSuggestionClick = (docId: string) => {
+    if (!isHydrated) return; // Ensure component is hydrated
     setSearchTerm('');
     setShowSuggestions(false);
     router.push(`/${locale}/docs/${docId}`);
   };
 
+  const placeholderText = isHydrated ? t('SearchBar.placeholder', { defaultValue: 'Search 200+ contracts…' }) : "Loading...";
 
   return (
     <form onSubmit={handleSearchSubmit} className="relative w-full max-w-xl mx-auto">
       <div className="relative">
-        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground pointer-events-none" />
+        <SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground pointer-events-none" />
         <Input
           ref={searchInputRef}
           type="search"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          onFocus={() => searchTerm.trim().length > 1 && suggestions.length > 0 && setShowSuggestions(true)}
-          placeholder={t('SearchBar.placeholder', { defaultValue: 'Search 200+ contracts…' })}
+          onFocus={() => isHydrated && searchTerm.trim().length > 1 && suggestions.length > 0 && setShowSuggestions(true)}
+          placeholder={placeholderText}
           className="w-full pl-10 pr-4 py-3 h-12 text-base rounded-full shadow-lg border-border focus:ring-primary focus:border-primary bg-background"
-          aria-label={t('SearchBar.ariaLabel', {defaultValue: 'Search documents'})}
+          aria-label={placeholderText}
+          disabled={!isHydrated} // Disable input until hydrated
         />
-         {showSuggestions && suggestions.length > 0 && (
+         {isHydrated && showSuggestions && suggestions.length > 0 && ( // Only show suggestions if hydrated
           <ul 
             ref={suggestionsRef}
             className="absolute z-50 w-full mt-1 bg-popover border border-border rounded-md shadow-lg max-h-60 overflow-y-auto"
@@ -111,4 +123,5 @@ export default function SearchBar() {
       </div>
     </form>
   );
-}
+});
+export default SearchBar;

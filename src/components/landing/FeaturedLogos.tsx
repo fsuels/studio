@@ -2,7 +2,7 @@
 'use client'
 
 import { useTranslation } from 'react-i18next'
-import Image from 'next/image'; // Import Next.js Image component
+import Image from 'next/image'; 
 import React, { useState, useEffect } from 'react';
 
 
@@ -32,14 +32,14 @@ const FeaturedLogos = React.memo(function FeaturedLogos() {
         </p>
         <div className="flex flex-wrap justify-center items-center gap-8 md:gap-12 lg:gap-16 opacity-75">
           {logos.map((logo, index) => (
-            <div key={index} className="h-6 md:h-7 lg:h-8"> {/* Container to manage image aspect ratio */}
+            <div key={index} className="h-6 md:h-7 lg:h-8"> 
               <Image
                 src={logo.src}
                 alt={logo.alt}
-                width={120} // Provide appropriate width
-                height={32}  // Provide appropriate height
-                className="grayscale object-contain h-full w-auto" // Ensure image scales correctly
-                loading="lazy" // Lazy load logos
+                width={120} 
+                height={32}  
+                className="grayscale object-contain h-full w-auto" 
+                loading="lazy" 
                 data-ai-hint={logo.dataAiHint}
               />
             </div>

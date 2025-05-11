@@ -21,7 +21,7 @@ const GuaranteeBadge = React.memo(function GuaranteeBadge() {
         <div className="inline-flex items-center gap-3 bg-secondary/80 border border-primary/30 rounded-full px-6 py-3 shadow-sm">
           <ShieldCheck className="h-6 w-6 text-primary" />
           <p className="text-sm font-medium text-secondary-foreground">
-             {isHydrated ? t('home.satisfactionGuarantee') : placeholderText}
+             {isHydrated ? t('home.satisfactionGuarantee', {defaultValue: "100% Satisfaction Guarantee or Your Money Back"}) : placeholderText}
           </p>
         </div>
       </div>

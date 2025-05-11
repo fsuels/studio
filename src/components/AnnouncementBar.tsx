@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next';
 const calculateTimeLeftUntilMidnight = () => {
   const now = new Date();
   const midnight = new Date(now);
-  midnight.setHours(24, 0, 0, 0); // Set to next midnight
+  midnight.setHours(24, 0, 0, 0); 
 
   const diff = midnight.getTime() - now.getTime();
 
@@ -32,7 +32,6 @@ const AnnouncementBar = React.memo(function PromoBanner() {
 
   useEffect(() => {
     setIsHydrated(true);
-    // Check local storage if user has dismissed it before for this "day"
     const dismissedDate = localStorage.getItem('promoDismissedDate');
     const today = new Date().toDateString();
     if (dismissedDate === today) {
@@ -57,7 +56,6 @@ const AnnouncementBar = React.memo(function PromoBanner() {
 
   const handleDismiss = useCallback(() => {
     setIsVisible(false);
-    // Store dismissal for today
     const today = new Date().toDateString();
     localStorage.setItem('promoDismissedDate', today);
   }, []);
@@ -81,13 +79,13 @@ const AnnouncementBar = React.memo(function PromoBanner() {
           <div className="container mx-auto px-4 py-2 flex flex-col sm:flex-row items-center justify-center text-sm relative gap-2 sm:gap-4">
             <div className="flex items-center">
               <Gift className="h-4 w-4 mr-2 shrink-0" />
-              <span className="font-medium mr-1">{t('Limited Time Offer:', {defaultValue: 'Limited Time Offer:'})}</span>
-              <span>{t('Get 20% off your first document!', {defaultValue: 'Get 20% off your first document!'})}</span>
+              <span className="font-medium mr-1">{t('Limited Time Offer:')}</span>
+              <span>{t('Get 20% off your first document!')}</span>
             </div>
             {!countdown.expired && (
               <div className="flex items-center font-mono text-xs bg-primary-foreground/20 px-2 py-0.5 rounded">
                 <Clock className="h-3 w-3 mr-1.5" />
-                <span>{t('Expires in:', {defaultValue: 'Expires in:'})} {countdown.timeLeftString}</span>
+                <span>{t('Expires in:')} {countdown.timeLeftString}</span>
               </div>
             )}
             <Button
@@ -95,7 +93,7 @@ const AnnouncementBar = React.memo(function PromoBanner() {
               size="icon"
               onClick={handleDismiss}
               className="absolute right-0 top-1/2 -translate-y-1/2 h-7 w-7 text-primary-foreground/70 hover:bg-primary-foreground/10 hover:text-primary-foreground sm:h-6 sm:w-6"
-              aria-label={t('Dismiss promotional banner', {defaultValue: 'Dismiss promotional banner'})}
+              aria-label={t('Dismiss promotional banner')}
             >
               <X className="h-4 w-4" />
             </Button>
