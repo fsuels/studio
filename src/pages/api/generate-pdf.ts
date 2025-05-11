@@ -78,13 +78,14 @@ export default async function handler(
     console.error(`${logPrefix} === PDF GENERATION ERROR HANDLER START ===`);
     console.error(`${logPrefix} Timestamp: ${new Date().toISOString()}`);
     console.error(`${logPrefix} Raw Error Object Type:`, typeof error);
-    console.error(`${logPrefix} Raw Error Object:`, error);
     
     let statusCode = 500;
     let clientErrorMessage = 'Failed to generate PDF document due to an internal server error.';
     let errorCode = 'PDF_GENERATION_INTERNAL_ERROR';
     let errorDetails: any = error instanceof Error ? { name: error.name, message: error.message, stack: error.stack } : { message: String(error) };
 
+    // Modified log line
+    console.error(`${logPrefix} Processed Error Details:`, JSON.stringify(errorDetails, null, 2));
 
     if (error instanceof Error) {
         console.error(`${logPrefix} Error Name: ${error.name}`);

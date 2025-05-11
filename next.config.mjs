@@ -1,8 +1,6 @@
-
-import type { NextConfig } from 'next';
 import webpack from 'webpack';
 
-const nextConfig: NextConfig = {
+const nextConfig = {
   /* config options here */
   output: 'export', // Ensures static export
   typescript: {
@@ -18,20 +16,20 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'picsum.photos', 
+        hostname: 'picsum.photos',
         port: '',
-        pathname: '/**', 
+        pathname: '/**',
       },
     ],
   },
 
   webpack(config) {
     // Ignore unsupported Jaeger exporter import
-    config.plugins!.push(
+    config.plugins.push(
       new webpack.IgnorePlugin({ resourceRegExp: /^@opentelemetry\/exporter-jaeger$/ })
     );
     // Stub out handlebars to avoid require.extensions usage
-    config.plugins!.push(
+    config.plugins.push(
       new webpack.IgnorePlugin({ resourceRegExp: /^handlebars$/ })
     );
     return config;

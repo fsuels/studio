@@ -24,7 +24,7 @@ i18n
       loadPath: '/locales/{{lng}}/{{ns}}.json',
     },
     // Specify namespaces (optional, default is 'translation')
-    ns: ['translation', 'support'], // Added 'support' namespace if it's used
+    ns: ['translation'], // Removed 'support' namespace
     defaultNS: 'translation',
     // React specific options
     react: {

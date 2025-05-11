@@ -8,7 +8,7 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import React, { useEffect, useState, useMemo } from 'react';
 import dynamic from 'next/dynamic';
-import { Loader2, Star, ShieldCheck, Zap, HelpCircle, Award } from 'lucide-react';
+import { Loader2, Star, ShieldCheck, Zap, HelpCircle, Award, FileText } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { track } from '@/lib/analytics';
 import { Separator } from '@/components/ui/separator';
@@ -154,10 +154,10 @@ export default function DocPageClient({ params: routeParams }: DocPageClientProp
                   <benefit.icon className="h-5 w-5 text-primary shrink-0" />
                   <span className="text-xs text-card-foreground">{t(benefit.textKey, benefit.defaultText)}</span>
                 </div>
-              ))}
+              ))}\
             </div>
             
-            <Button size="lg" className="w-full sm:w-auto text-base px-8 py-3" onClick={handleStartWizard} disabled={!isHydrated}>
+            <Button size="lg" className="w-full sm:w-auto text-base px-8 py-3" onClick={handleStartWizard} disabled={!isHydrated}>\
               {t('docDetail.startForFree')}
             </Button>
         </div>
@@ -196,7 +196,7 @@ export default function DocPageClient({ params: routeParams }: DocPageClientProp
                         <p className="text-xs text-muted-foreground">
                              {t('docDetail.competitivePrice', { competitorPrice: competitorPrice.toFixed(2), defaultValue: `Compare to typical attorney fees of $${competitorPrice.toFixed(2)}+`})}
                         </p>
-                         <Button size="lg" className="w-full mt-2" onClick={handleStartWizard} disabled={!isHydrated}>
+                         <Button size="lg" className="w-full mt-2" onClick={handleStartWizard} disabled={!isHydrated}>\
                            {t('docDetail.startForFree')}
                          </Button>
                     </CardContent>
@@ -215,7 +215,7 @@ export default function DocPageClient({ params: routeParams }: DocPageClientProp
                                     <span>{currentLocale === 'es' && clause.description_es ? clause.description_es : clause.description}</span>
                                     <Badge variant="secondary">+${clause.price.toFixed(2)}</Badge>
                                 </div>
-                            ))}
+                            ))}\
                         </CardContent>
                     </Card>
                  )}
@@ -239,7 +239,7 @@ export default function DocPageClient({ params: routeParams }: DocPageClientProp
 
         {/* Sticky CTA for mobile */}
         <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-t p-4 shadow-lg z-40">
-          <Button size="lg" className="w-full text-base" onClick={handleStartWizard} disabled={!isHydrated}>
+          <Button size="lg" className="w-full text-base" onClick={handleStartWizard} disabled={!isHydrated}>\
              {t('docDetail.startForFree')}
           </Button>
         </div>

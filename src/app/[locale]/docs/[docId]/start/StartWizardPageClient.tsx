@@ -9,7 +9,6 @@ import { z } from 'zod';
 import { Loader2, Edit, Eye } from 'lucide-react';
 
 import { documentLibrary, type LegalDocument } from '@/lib/document-library';
-// import { localizations } from '@/lib/localizations'; // Not needed in client component directly for generateStaticParams
 import Breadcrumb from '@/components/Breadcrumb';
 import WizardForm from '@/components/WizardForm';
 import PreviewPane from '@/components/PreviewPane';
@@ -22,61 +21,59 @@ import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from '@/lib/utils';
 
-
-interface StartWizardPageClientProps {
-  params: { // Explicitly define the params prop from the server component
-    locale: string;
-    docId: string;
-  };
-}
-
-
-export default function StartWizardPageClient({ params: routeParams }: StartWizardPageClientProps) {
-  // const params = useParams(); // Can use routeParams directly
-  const { t, i18n } = useTranslation();
+export default function StartWizardPageClient() {
+  const params = useParams();
+  const { t, i18n, ready } = useTranslation(); 
   const router = useRouter();
   const { isLoggedIn, user, isLoading: authIsLoading } = useAuth();
 
-  const locale = routeParams.locale as 'en' | 'es';
-  const docIdFromPath = routeParams.docId as string;
+  const locale = (Array.isArray(params.locale) ? params.locale[0] : params.locale) as 'en' | 'es';
+  const docIdFromPath = (Array.isArray(params.docId) ? params.docId[0] : params.docId) as string;
 
+  const [isMounted, setIsMounted] = useState(false); // <-- New state for mounted status
   const [isLoadingConfig, setIsLoadingConfig] = useState(true);
-  const [isHydrated, setIsHydrated] = useState(false);
+  const [isHydrated, setIsHydrated] = useState(false); // Retained for clarity, though isMounted covers initial client render
   const [activeMobileTab, setActiveMobileTab] = useState<'form' | 'preview'>('form');
   
-  const docConfig = useMemo(() => {
-    if (!isHydrated) return undefined;
-    return documentLibrary.find(d => d.id === docIdFromPath);
-  }, [docIdFromPath, isHydrated]);
+  useEffect(() => {
+    setIsMounted(true); // <-- Set mounted to true on client
+    setIsHydrated(true); // Keep for consistency if other logic depends on it
+  }, []);
 
-  const methods = useForm<z.infer<any>>({ // Using any for schema inference until a specific type is passed
+  const docConfig = useMemo(() => {
+    if (!isMounted || !docIdFromPath) return undefined; // Depend on isMounted
+    return documentLibrary.find(d => d.id === docIdFromPath);
+  }, [docIdFromPath, isMounted]);
+
+  const methods = useForm<z.infer<any>>({
     defaultValues: {}, 
     mode: 'onBlur', 
   });
   const { reset, watch } = methods;
 
   useEffect(() => {
-    setIsHydrated(true);
-  }, []);
-
-  useEffect(() => {
-    if (isHydrated && docConfig) {
-      if (docConfig.schema && typeof docConfig.schema.safeParse === 'function') { // Check if schema is a Zod schema
+    if (!isMounted) {
+      return; 
+    }
+    if (docConfig) {
+      if (docConfig.schema && typeof docConfig.schema.safeParse === 'function') {
         methods.reset({}, { resolver: zodResolver(docConfig.schema) } as any);
       } else {
-        console.warn(`[StartWizardPageClient] No valid Zod schema found for document ID: ${docIdFromPath}. Form validation might not work as expected.`);
-        methods.reset({}); // Reset without resolver if no schema or invalid schema
+        console.warn(`[StartWizardPageClient] No valid Zod schema for doc ID: ${docIdFromPath}. Validation might not work.`);
+        methods.reset({}); 
       }
       setIsLoadingConfig(false);
-    } else if (isHydrated && !docConfig && !isLoadingConfig) { 
-      console.error(`[StartWizardPageClient] Document config not found for docId: ${docIdFromPath}`);
-      notFound();
+    } else if (isMounted && docIdFromPath) {
+      console.log(`[StartWizardPageClient] docConfig not found for ${docIdFromPath} after mount. Setting isLoadingConfig to false.`);
+      setIsLoadingConfig(false);
+    } else if (!docIdFromPath && isMounted) {
+      console.error(`[StartWizardPageClient] docIdFromPath is missing after mount.`);
+      setIsLoadingConfig(false);
     }
-  }, [docConfig, isHydrated, methods, docIdFromPath, isLoadingConfig]);
-
+  }, [docConfig, isMounted, methods, docIdFromPath, reset]);
 
   useEffect(() => {
-    if (!docConfig?.id || !isHydrated || authIsLoading || isLoadingConfig) return;
+    if (!docConfig?.id || !isMounted || authIsLoading || isLoadingConfig || !locale || !ready) return;
     
     async function loadDraft() {
       let draftData: Record<string, any> = {};
@@ -92,18 +89,18 @@ export default function StartWizardPageClient({ params: routeParams }: StartWiza
         console.warn('[StartWizardPageClient] Draft loading failed:', e);
       }
       if (Object.keys(draftData).length > 0) {
-        reset(draftData);
+        reset(draftData, { keepValues: true });
         console.log('[StartWizardPageClient] Draft loaded:', draftData);
       } else {
         console.log('[StartWizardPageClient] No draft found, using initial/empty values.');
       }
     }
     loadDraft();
-  }, [docConfig, locale, isHydrated, reset, authIsLoading, isLoggedIn, user, isLoadingConfig]);
+  }, [docConfig, locale, isMounted, reset, authIsLoading, isLoggedIn, user, isLoadingConfig, ready]);
 
   const debouncedSave = useCallback(
     debounce(async (data: Record<string, any>) => {
-      if (!docConfig?.id || authIsLoading || !isHydrated || Object.keys(data).length === 0 || isLoadingConfig) return;
+      if (!docConfig?.id || authIsLoading || !isMounted || Object.keys(data).length === 0 || isLoadingConfig || !locale || !ready) return;
       
       const relevantDataToSave = Object.keys(data).reduce((acc, key) => {
         if (data[key] !== undefined) { acc[key] = data[key]; }
@@ -119,11 +116,11 @@ export default function StartWizardPageClient({ params: routeParams }: StartWiza
       }
       console.log('[WizardForm] Autosaved draft for:', docConfig.id, locale, relevantDataToSave);
     }, 1000),
-    [isLoggedIn, user?.uid, docConfig, locale, authIsLoading, isHydrated, isLoadingConfig] 
+    [isLoggedIn, user?.uid, docConfig, locale, authIsLoading, isMounted, isLoadingConfig, ready] 
   );
 
   useEffect(() => {
-    if (!docConfig?.id || authIsLoading || !isHydrated || !watch || isLoadingConfig) return () => {};
+    if (!docConfig?.id || authIsLoading || !isMounted || !watch || isLoadingConfig || !locale || !ready) return () => {};
     
     const subscription = watch((values) => {
        debouncedSave(values as Record<string, any>);
@@ -132,7 +129,7 @@ export default function StartWizardPageClient({ params: routeParams }: StartWiza
       subscription.unsubscribe();
       debouncedSave.cancel();
     } ;
-  }, [watch, docConfig, debouncedSave, authIsLoading, isHydrated, isLoadingConfig]);
+  }, [watch, docConfig, debouncedSave, authIsLoading, isMounted, isLoadingConfig, locale, ready]);
 
   const handleWizardComplete = useCallback(
     (checkoutUrl: string) => {
@@ -142,18 +139,35 @@ export default function StartWizardPageClient({ params: routeParams }: StartWiza
     [router]
   );
 
-  if (!isHydrated || isLoadingConfig || !docConfig ) {
+  // Primary loading state: waits for client mount, i18next readiness, and initial config/param check.
+  if (!isMounted) {
+    // Render a minimal, static placeholder or null on initial client render to match SSR
+    return (
+        <div className="flex justify-center items-center min-h-[calc(100vh-8rem)]">
+            <Loader2 className="h-12 w-12 animate-spin text-primary" />
+            <p className="ml-2 text-muted-foreground">Loading...</p> {/* Non-translated, static text */}
+        </div>
+    );
+  }
+
+  if (!ready || isLoadingConfig) { 
     return (
       <div className="flex justify-center items-center min-h-[calc(100vh-8rem)]">
         <Loader2 className="h-12 w-12 animate-spin text-primary" />
         <p className="ml-2 text-muted-foreground">
-          {t('Loading document wizard...', { ns: 'translation' })}
+          {ready ? t('Loading document wizard...', { ns: 'translation' }) : 'Preparing interface...'}
         </p>
       </div>
     );
   }
   
-  const documentDisplayName = locale === 'es' && docConfig.name_es ? docConfig.name_es : doc.name;
+  if (!docIdFromPath || !docConfig) {
+    console.error(`[StartWizardPageClient] Critical failure: docIdFromPath (${docIdFromPath}) or docConfig is missing. Calling notFound().`);
+    notFound();
+    return null; 
+  }
+  
+  const documentDisplayName = locale === 'es' && docConfig.name_es ? docConfig.name_es : docConfig.name;
 
   return (
     <FormProvider {...methods}>
@@ -166,7 +180,6 @@ export default function StartWizardPageClient({ params: routeParams }: StartWiza
           ]}
         />
         
-        {/* Mobile Tab Switcher */}
         <div className="lg:hidden mb-4 sticky top-14 z-30 bg-background/90 backdrop-blur-sm py-2 -mx-4 px-4 border-b">
           <Tabs value={activeMobileTab} onValueChange={(value) => setActiveMobileTab(value as 'form' | 'preview')} className="w-full">
             <TabsList className="grid w-full grid-cols-2 h-10">
@@ -206,4 +219,3 @@ export default function StartWizardPageClient({ params: routeParams }: StartWiza
     </FormProvider>
   );
 }
-

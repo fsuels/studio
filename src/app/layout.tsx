@@ -1,32 +1,51 @@
-// src/app/layout.tsx
 /* prettier-ignore */
-import './globals.css'; // Ensures Tailwind and global styles are processed
-import { ClientProviders } from '@/components/providers/ClientProviders';
+// src/app/layout.tsx
+import './globals.css';
+// import { ClientProviders } from '@/components/providers/ClientProviders'; // Already in [locale]/layout.tsx
 import type { Metadata } from 'next';
-import { Geist, Geist_Mono } from 'next/font/google';
+import { Inter, Merriweather } from 'next/font/google';
+import { GeistMono } from 'geist/font/mono';
 import React from 'react';
+import { DefaultSeo } from 'next-seo';
+import SEO from '../../next-seo.config.js'; // Corrected import path to root
+import Script from 'next/script';
+import { AuthProvider } from '@/hooks/useAuth';
 
-// ───────── Dev-only i18n helper ─────────
+// Dev-only i18n helper
 if (process.env.NODE_ENV === 'development' && typeof window !== 'undefined') {
   import('../../scripts/find-missing-i18n.js').catch(err =>
     console.error('Failed to load find-missing-i18n.js:', err),
   );
 }
 
-// ───────── Fonts ─────────
-const geistSans = Geist({ variable: '--font-geist-sans', subsets: ['latin'] });
-const geistMono = Geist_Mono({ variable: '--font-geist-mono', subsets: ['latin'] });
+// Fonts
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-inter',
+});
 
-// ───────── <head> metadata ─────────
+const merriweather = Merriweather({
+  weight: ['400', '700'],
+  subsets: ['latin'],
+  variable: '--font-merriweather',
+});
+
+const geistMono = GeistMono({
+  variable: '--font-geist-mono',
+  subsets: ['latin'],
+});
+
 export const metadata: Metadata = {
-  title: '123LegalDoc',
-  description: 'AI-Powered Legal Document Generation',
+  // Metadata is now primarily handled by next-seo.config.js and DefaultSeo
+  // title: '123LegalDoc', // Default title can be set in next-seo.config.js
+  // description: 'AI-Powered Legal Document Generation', // Default description can be set in next-seo.config.js
 };
 
-// ───────── Root layout (❗ NO whitespace after <html …>) ─────────
 /* prettier-ignore */
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  const googleMapsApiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
   return (
-    <html lang="en" suppressHydrationWarning><head><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/></head><body className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen overflow-x-hidden`}><ClientProviders>{children}</ClientProviders></body></html>
+    /* prettier-ignore */
+    <html lang="en" suppressHydrationWarning><head><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" /><script src={`https://maps.googleapis.com/maps/api/js?key=${googleMapsApiKey}&libraries=places&loading=async`} async defer></script><link rel="preconnect" href="https://firebasestorage.googleapis.com" /><link rel="preload" href="/images/hero-placeholder.png" as="image" /><link rel="alternate" href="https://123legaldoc.com/en/" hrefLang="en" /><link rel="alternate" href="https://123legaldoc.com/es/" hrefLang="es" /></head><body className={`${inter.variable} ${merriweather.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen overflow-x-hidden`}><AuthProvider><DefaultSeo {...SEO} />{children}<Script defer src="https://cdn.intercom.io/widget.js" strategy="lazyOnload" /></AuthProvider></body></html>
   );
 }
