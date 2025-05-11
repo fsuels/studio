@@ -2,7 +2,6 @@ import webpack from 'webpack';
 
 const nextConfig = {
   /* config options here */
-  output: 'export', // Ensures static export
   typescript: {
     ignoreBuildErrors: true,
   },

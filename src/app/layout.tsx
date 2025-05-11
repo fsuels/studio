@@ -51,7 +51,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
         {/* The Google Maps script will be loaded by next/script below */}
-        <link rel="preconnect" href="https://firebasestorage.googleapis.com" />
+        <link rel="preconnect" href="https://maps.googleapis.com" />
         <link rel="preload" href="/images/hero-placeholder.png" as="image" />
         <link rel="alternate" href="https://123legaldoc.com/en/" hrefLang="en" />
         <link rel="alternate" href="https://123legaldoc.com/es/" hrefLang="es" />
