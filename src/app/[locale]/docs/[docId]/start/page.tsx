@@ -4,6 +4,7 @@
 import StartWizardPageClient from './StartWizardPageClient';
 import { documentLibrary } from '@/lib/document-library';
 import { localizations } from '@/lib/localizations'; // Assuming this defines your supported locales e.g. [{id: 'en'}, {id: 'es'}]
+import type { LegalDocument } from '@/lib/document-library';
 
 // generateStaticParams is crucial for static export of dynamic routes
 export async function generateStaticParams() {
@@ -21,7 +22,14 @@ export async function generateStaticParams() {
     const params = [];
     for (const locale of defaultLocales) {
       for (const doc of documentLibrary) {
-        params.push({ locale: locale, docId: doc.id });
+         // Ensure doc and doc.id are valid and it's not a general inquiry type if that shouldn't have a start page
+        if (doc && doc.id && doc.id !== 'general-inquiry' && doc.schema) { // Added check for doc.schema
+            params.push({ locale: locale, docId: doc.id });
+        } else if (!doc || !doc.id) {
+            console.warn(`[generateStaticParams /docs/[docId]/start] Encountered a document with missing id in locale ${locale}. Skipping.`);
+        } else if (!doc.schema) {
+            console.warn(`[generateStaticParams /docs/[docId]/start] Document with id ${doc.id} is missing a schema in locale ${locale}. Skipping.`);
+        }
       }
     }
     if (params.length === 0) console.warn('[generateStaticParams /docs/[docId]/start] No params generated with fallback locales.');
@@ -34,15 +42,20 @@ export async function generateStaticParams() {
   for (const localeObj of localizations) { 
     const locale = typeof localeObj === 'string' ? localeObj : (localeObj as { id: string }).id; // Handle both formats
     if (!locale) {
-        console.warn("""[generateStaticParams /docs/[docId]/start] Invalid locale object encountered:""", localeObj);
+        console.warn(`[generateStaticParams /docs/[docId]/start] Invalid locale object encountered:`, localeObj);
         continue;
     }
     for (const doc of documentLibrary) {
       if (!doc.id) {
-        console.warn("""[generateStaticParams /docs/[docId]/start] Document with missing ID encountered:""", doc);
+        console.warn(`[generateStaticParams /docs/[docId]/start] Document with missing ID encountered:`, doc);
         continue;
       }
-      params.push({ locale: locale, docId: doc.id });
+       // Ensure doc and doc.id are valid and it's not a general inquiry type if that shouldn't have a start page
+      if (doc && doc.id !== 'general-inquiry' && doc.schema) { // Added check for doc.schema
+        params.push({ locale: locale, docId: doc.id });
+      } else if (!doc.schema) {
+         console.warn(`[generateStaticParams /docs/[docId]/start] Document with id ${doc.id} is missing a schema in locale ${locale}. Skipping generation for this combination.`);
+      }
     }
   }
   console.log(`[generateStaticParams /docs/[docId]/start] Generated ${params.length} params.`);
@@ -61,9 +74,10 @@ interface StartWizardPageProps {
   };
 }
 
+// This Server Component now correctly passes params to the Client Component
 export default function StartWizardPage({ params }: StartWizardPageProps) {
   const { locale, docId } = params;
   // The StartWizardPageClient will handle fetching its own specific document data
   // and form schema based on the docId and locale.
-  return <StartWizardPageClient params={{ locale, docId }} />;
+  return <StartWizardPageClient params={params} />;
 }
