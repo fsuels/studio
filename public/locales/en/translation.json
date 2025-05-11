@@ -779,5 +779,13 @@
   "Page {{currentPage}} of {{totalPages}}": "Page {{currentPage}} of {{totalPages}}",
   "Next": "Next",
   "Loading date...": "Loading date...",
-  "Loading content...": "Loading content..."
+  "Loading content...": "Loading content...",
+  "Finance": "Finance",
+  "Business": "Business",
+  "Real Estate": "Real Estate",
+  "Family": "Family",
+  "Personal": "Personal",
+  "Estate Planning": "Estate Planning",
+  "Employment & Labor Documents": "Employment & Labor Documents",
+  "General": "General"
 }

@@ -21,7 +21,6 @@ interface AuthModalProps {
   onAuthSuccess: () => void; 
 }
 
-// No React.memo here as this is typically controlled by isOpen and won't re-render unnecessarily if parent is memoized
 export default function AuthModal({ isOpen, onClose, onAuthSuccess }: AuthModalProps) {
   const { t } = useTranslation();
   const params = useParams();
