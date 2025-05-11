@@ -3,8 +3,8 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { Search, FileText, ExternalLink } from 'lucide-react';
+// Removed Button as it's not used
+import { Search, FileText, ExternalLink } from 'lucide-react'; // Imported Search icon
 import { useTranslation } from 'react-i18next';
 import { useRouter, useParams } from 'next/navigation';
 import { documentLibrary, type LegalDocument } from '@/lib/document-library'; 
@@ -27,7 +27,7 @@ const SearchBar = React.memo(function SearchBar() {
   }, []);
 
   useEffect(() => {
-    if (!isHydrated) return; // Don't run search logic until hydrated
+    if (!isHydrated) return; 
 
     if (searchTerm.trim().length > 1) {
       const lowerQuery = searchTerm.toLowerCase();
@@ -40,17 +40,17 @@ const SearchBar = React.memo(function SearchBar() {
           (description && description.toLowerCase().includes(lowerQuery)) ||
           aliases.some(alias => alias.toLowerCase().includes(lowerQuery))
         );
-      }).slice(0, 5); // Limit to 5 suggestions
+      }).slice(0, 5); 
       setSuggestions(results);
       setShowSuggestions(true);
     } else {
       setSuggestions([]);
       setShowSuggestions(false);
     }
-  }, [searchTerm, locale, isHydrated]); // Added isHydrated
+  }, [searchTerm, locale, isHydrated]); 
 
   useEffect(() => {
-    if (!isHydrated) return; // Don't attach listeners until hydrated
+    if (!isHydrated) return; 
     function handleClickOutside(event: MouseEvent) {
       if (
         suggestionsRef.current && !suggestionsRef.current.contains(event.target as Node) &&
@@ -61,12 +61,12 @@ const SearchBar = React.memo(function SearchBar() {
     }
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [isHydrated]); // Added isHydrated
+  }, [isHydrated]); 
 
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!isHydrated) return; // Ensure component is hydrated
+    if (!isHydrated) return; 
     if (searchTerm.trim()) {
       router.push(`/${locale}/?search=${encodeURIComponent(searchTerm)}#workflow-start`);
       setSearchTerm('');
@@ -75,7 +75,7 @@ const SearchBar = React.memo(function SearchBar() {
   };
   
   const handleSuggestionClick = (docId: string) => {
-    if (!isHydrated) return; // Ensure component is hydrated
+    if (!isHydrated) return; 
     setSearchTerm('');
     setShowSuggestions(false);
     router.push(`/${locale}/docs/${docId}`);
@@ -86,7 +86,7 @@ const SearchBar = React.memo(function SearchBar() {
   return (
     <form onSubmit={handleSearchSubmit} className="relative w-full max-w-xl mx-auto">
       <div className="relative">
-        <SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground pointer-events-none" />
+        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground pointer-events-none" /> {/* Used Search directly */}
         <Input
           ref={searchInputRef}
           type="search"
@@ -96,9 +96,9 @@ const SearchBar = React.memo(function SearchBar() {
           placeholder={placeholderText}
           className="w-full pl-10 pr-4 py-3 h-12 text-base rounded-full shadow-lg border-border focus:ring-primary focus:border-primary bg-background"
           aria-label={placeholderText}
-          disabled={!isHydrated} // Disable input until hydrated
+          disabled={!isHydrated} 
         />
-         {isHydrated && showSuggestions && suggestions.length > 0 && ( // Only show suggestions if hydrated
+         {isHydrated && showSuggestions && suggestions.length > 0 && ( 
           <ul 
             ref={suggestionsRef}
             className="absolute z-50 w-full mt-1 bg-popover border border-border rounded-md shadow-lg max-h-60 overflow-y-auto"
