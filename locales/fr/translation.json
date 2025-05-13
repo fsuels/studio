@@ -1,0 +1,20 @@
+'''
+{
+  "documents": {
+    "us": {
+       // ... US document translations if available ...
+    },
+    "ca": {
+      "promissory-note-ca": {
+        "lenderName": { "label": "Nom du prêteur" },
+        "borrowerName": { "label": "Nom de l'emprunteur" },
+        "principalAmount": { "label": "Montant principal (CAD)" },
+        "interestRate": { "label": "Taux d'intérêt (%)" },
+        "repaymentTerms": { "label": "Conditions de remboursement" },
+        "province": { "label": "Province régissant la loi" }
+      }
+      // ... other CA documents ...
+    }
+  }
+}
+'''
