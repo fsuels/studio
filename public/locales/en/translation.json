@@ -636,7 +636,6 @@
    "Draft": "Draft",
    "Completed": "Completed",
    "Amount": "Amount",
-   "No documents found.": "No documents found.",
    "No payment history.": "No payment history.",
    "Profile Settings": "Profile Settings",
    "Name": "Name",
@@ -653,7 +652,6 @@
    "Search Results": "Search Results",
    "Showing documents matching your search and state criteria.": "Showing documents matching your search and state criteria.",
    "API Error Occurred": "API Error Occurred",
-   "Loading...": "Loading...",
    "Search all documents...": "Search all documents...",
    "All States": "All States",
    "breadcrumb": {
@@ -787,5 +785,13 @@
   "Personal": "Personal",
   "Estate Planning": "Estate Planning",
   "Employment & Labor Documents": "Employment & Labor Documents",
-  "General": "General"
+  "General": "General",
+  "Vehicle Bill of Sale": "Vehicle Bill of Sale",
+  "Residential Lease Agreement": "Residential Lease Agreement",
+  "Non-Disclosure Agreement (NDA)": "Non-Disclosure Agreement (NDA)",
+  "General Power of Attorney": "General Power of Attorney",
+  "Last Will and Testament": "Last Will and Testament",
+  "Eviction Notice": "Eviction Notice",
+  "You're {{currentStep}} of {{totalSteps}} done!": "You're {{currentStep}} of {{totalSteps}} done!"
+
 }
