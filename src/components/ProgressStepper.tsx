@@ -17,7 +17,7 @@ const STEPS = [
 ];
 
 const ProgressStepper: React.FC<ProgressStepperProps> = React.memo(({ currentStep }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation("common");
   const [isHydrated, setIsHydrated] = useState(false);
 
   useEffect(() => {

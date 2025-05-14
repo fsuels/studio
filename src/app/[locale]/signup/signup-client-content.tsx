@@ -18,7 +18,7 @@ interface SignUpClientContentProps {
 }
 
 export default function SignUpClientContent({ locale }: SignUpClientContentProps) {
-  const { t } = useTranslation();
+  const { t } = useTranslation("common");
   const router = useRouter();
   const { login } = useAuth(); 
   const { toast } = useToast();

@@ -15,7 +15,7 @@ const logos = [
 ];
 
 const FeaturedLogos = React.memo(function FeaturedLogos() {
-  const { t } = useTranslation();
+  const { t } = useTranslation("common");
   const [isHydrated, setIsHydrated] = useState(false);
 
   useEffect(() => {

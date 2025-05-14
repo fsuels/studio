@@ -3,6 +3,7 @@
 
 import React, { useEffect, useRef } from 'react';
 import { useFormContext } from 'react-hook-form';
+import { useTranslation } from 'react-i18next'; // Added
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
@@ -14,17 +15,16 @@ import {
 } from "@/components/ui/tooltip";
 import { Button } from '@/components/ui/button';
 
-
 interface AddressFieldProps {
   name: string;
-  label: string;
-  placeholder?: string;
+  label: string; // Expected to be a translation key
+  placeholder?: string; // Expected to be a translation key
   required?: boolean;
   className?: string;
-  error?: string;
-  tooltip?: string;
-  value?: string; // Added value prop for controlled component usage
-  onChange?: (value: string, parts?: Record<string, string>) => void; // Added onChange for controlled component
+  error?: string; // Expected to be a translation key if it's a direct string
+  tooltip?: string; // Expected to be a translation key
+  value?: string;
+  onChange?: (value: string, parts?: Record<string, string>) => void;
 }
 
 const AddressField = React.memo(function AddressField({
@@ -35,9 +35,10 @@ const AddressField = React.memo(function AddressField({
   className,
   error,
   tooltip,
-  value: controlledValue, // Use controlledValue for external control
-  onChange: controlledOnChange, // Use controlledOnChange for external control
+  value: controlledValue,
+  onChange: controlledOnChange,
 }: AddressFieldProps) {
+  const { t } = useTranslation("common"); // Added
   const { register, setValue: rhfSetValue, formState: { errors: formErrors } } = useFormContext();
   const inputRef = useRef<HTMLInputElement | null>(null);
   const fieldErrorActual = formErrors[name]?.message || error;
@@ -66,16 +67,16 @@ const AddressField = React.memo(function AddressField({
       if (!inputRef.current) return;
       autocomplete = new google.maps.places.Autocomplete(inputRef.current, {
         types: ['address'],
-        fields: ['address_components', 'formatted_address', 'name'], 
-        componentRestrictions: { country: ['us', 'ca', 'mx'] }, 
+        fields: ['address_components', 'formatted_address', 'name'],
+        componentRestrictions: { country: ['us', 'ca', 'mx'] },
       });
 
       autocomplete.addListener('place_changed', () => {
         const place = autocomplete.getPlace();
         const formattedAddress = place.formatted_address || '';
-        
+
         const wanted = new Set([
-          'street_number', 'route', 'locality', 'administrative_area_level_1', 
+          'street_number', 'route', 'locality', 'administrative_area_level_1',
           'postal_code', 'postal_code_suffix', 'country'
         ]);
         const parts: Record<string, string> = {};
@@ -91,15 +92,12 @@ const AddressField = React.memo(function AddressField({
             country: parts.country ?? '',
         };
 
-
         if (controlledOnChange) {
           controlledOnChange(formattedAddress, addressParts);
         } else {
           rhfSetValue(name, formattedAddress, { shouldValidate: true, shouldDirty: true });
-          // Example of setting structured parts if form has such fields:
-          // rhfSetValue(`${name}_city`, addressParts.city); 
         }
-        
+
         if (inputRef.current) {
           inputRef.current.value = formattedAddress;
         }
@@ -119,18 +117,16 @@ const AddressField = React.memo(function AddressField({
     };
   }, [name, rhfSetValue, controlledOnChange]);
 
-  // Handle local input change if not fully controlled by RHF Controller
   const handleLocalInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (controlledOnChange) {
-      controlledOnChange(e.target.value); // Allow parent to manage state if onChange is provided
+      controlledOnChange(e.target.value);
     }
-    // If not using RHF Controller, RHF register handles its own state
   };
 
   return (
     <div className={cn('space-y-1', className)}>
       <div className="flex items-center gap-1">
-        <Label htmlFor={name} className={cn(fieldErrorActual && "text-destructive")}>{label}{required && <span className="text-destructive">*</span>}</Label>
+        <Label htmlFor={name} className={cn(fieldErrorActual && "text-destructive")}>{t(label)}{required && <span className="text-destructive">*</span>}</Label>
         {tooltip && (
           <Tooltip>
             <TooltipTrigger asChild>
@@ -139,26 +135,26 @@ const AddressField = React.memo(function AddressField({
               </Button>
             </TooltipTrigger>
             <TooltipContent side="top" align="start" className="max-w-xs text-sm bg-popover text-popover-foreground border shadow-md rounded-md p-2">
-              <p>{tooltipText}</p>
+              <p>{t(tooltip)}</p> {/* Changed from tooltipText to t(tooltip) */}
             </TooltipContent>
           </Tooltip>
         )}
       </div>
       <Input
         id={name}
-        placeholder={placeholder}
+        placeholder={placeholder ? t(placeholder) : undefined} // Changed
         {...restOfRegister}
-        defaultValue={controlledValue} // Use defaultValue if controlledValue is for initial render
-        onChange={controlledOnChange ? handleLocalInputChange : restOfRegister.onChange} // Use local or RHF change
-        ref={el => { 
+        defaultValue={controlledValue}
+        onChange={controlledOnChange ? handleLocalInputChange : restOfRegister.onChange}
+        ref={el => {
           rhfRef(el);
           inputRef.current = el;
         }}
-        className={cn("w-full max-w-sm", fieldErrorActual && "border-destructive focus-visible:ring-destructive")} 
-        autoComplete="off" 
+        className={cn("w-full max-w-sm", fieldErrorActual && "border-destructive focus-visible:ring-destructive")}
+        autoComplete="off"
         aria-invalid={!!fieldErrorActual}
       />
-      {fieldErrorActual && <p className="text-xs text-destructive mt-1">{String(fieldErrorActual)}</p>}
+      {fieldErrorActual && <p className="text-xs text-destructive mt-1">{t(String(fieldErrorActual))}</p>} {/* Changed */}
     </div>
   );
 });

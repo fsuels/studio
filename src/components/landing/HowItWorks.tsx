@@ -8,7 +8,7 @@ import { FileText, Edit3, CheckCircle } from 'lucide-react';
 import { Progress } from '@/components/ui/progress'; 
 
 const HowItWorks = React.memo(function HowItWorks() {
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation("common");
   const [isHydrated, setIsHydrated] = useState(false);
   const containerRef = useRef(null);
   const isInView = useInView(containerRef, { once: true, amount: 0.2 });

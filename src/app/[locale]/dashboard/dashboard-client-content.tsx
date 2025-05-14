@@ -64,7 +64,7 @@ async function getPaymentHistoryForUser(userId: string): Promise<PaymentData[]> 
 // --- End Placeholder Functions ---
 
 export default function DashboardClientContent({ locale }: DashboardClientContentProps) {
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation("common");
   const [activeTab, setActiveTab] = useState<'documents' | 'payments' | 'profile'>('documents');
   const { user, isLoggedIn, isLoading: authLoading, logout } = useAuth();
   const router = useRouter();

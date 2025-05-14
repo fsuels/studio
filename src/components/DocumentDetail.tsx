@@ -17,7 +17,7 @@ interface DocumentDetailProps {
 }
 
 const DocumentDetail = React.memo(function DocumentDetail({ docId, locale, altText }: DocumentDetailProps) {
-  const { t } = useTranslation();
+  const { t } = useTranslation("common");
   const [md, setMd] = useState<string>('');
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

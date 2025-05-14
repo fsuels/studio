@@ -1,0 +1,86 @@
+{
+  "seller_name": {
+    "label": "Nombre completo del vendedor",
+    "tooltip": "Ingrese el nombre legal completo de la persona o entidad que vende el vehículo."
+  },
+  "seller_phone": {
+    "label": "Número de teléfono del vendedor",
+    "tooltip": "Un número de teléfono válido para el vendedor."
+  },
+  "seller_address": {
+    "label": "Dirección completa del vendedor",
+    "tooltip": "Incluya calle, ciudad, estado y código postal."
+  },
+  "buyer_name": {
+    "label": "Nombre completo del comprador",
+    "tooltip": "Ingrese el nombre legal completo de la persona o entidad que compra el vehículo."
+  },
+  "buyer_address": {
+    "label": "Dirección completa del comprador",
+    "tooltip": "Incluya calle, ciudad, estado y código postal del comprador."
+  },
+  "buyer_phone": {
+    "label": "Número de teléfono del comprador",
+    "tooltip": "Un número de teléfono válido para el comprador."
+  },
+  "year": {
+    "label": "Año del vehículo",
+    "tooltip": "El año de fabricación del vehículo (por ejemplo, 2022)."
+  },
+  "make": {
+    "label": "Marca del vehículo",
+    "tooltip": "El fabricante del vehículo (por ejemplo, Honda, Ford)."
+  },
+  "model": {
+    "label": "Modelo del vehículo",
+    "tooltip": "El modelo específico del vehículo (por ejemplo, Civic, F-150)."
+  },
+  "color": {
+    "label": "Color del vehículo",
+    "tooltip": "El color principal del vehículo."
+  },
+  "vin": {
+    "label": "Número de Identificación del Vehículo (VIN)",
+    "tooltip": "El identificador único de 17 caracteres para el vehículo."
+  },
+  "odometer": {
+    "label": "Lectura del odómetro (millas)",
+    "tooltip": "El millaje actual que se muestra en el odómetro del vehículo."
+  },
+  "odo_status": {
+    "label": "Estado del odómetro",
+    "tooltip": "Indique si la lectura del odómetro es precisa, ha superado los límites o se sabe que es incorrecta."
+  },
+  "price": {
+    "label": "Precio de venta ($)",
+    "tooltip": "El precio total acordado para el vehículo en USD."
+  },
+  "payment_method": {
+    "label": "Método de pago",
+    "tooltip": "Cómo pagará o ha pagado el comprador por el vehículo."
+  },
+  "sale_date": {
+    "label": "Fecha de venta",
+    "tooltip": "La fecha en que se finaliza la venta."
+  },
+  "existing_liens": {
+    "label": "Gravámenes existentes (si los hay, de lo contrario deje en blanco o \"Ninguno\")",
+    "tooltip": "Divulgue cualquier préstamo pendiente o reclamación contra el vehículo."
+  },
+  "as_is": {
+    "label": "¿Se vende el vehículo \"tal cual\"?",
+    "tooltip": "Seleccione 'Sí' si se vende sin garantías, 'No' si se proporcionan garantías."
+  },
+  "warranty_text": {
+    "label": "Detalles de la garantía (si no es \"tal cual\")",
+    "tooltip": "Si se ofrecen garantías, descríbalas aquí. Este campo solo está activo si 'Vendido tal cual' es 'No'."
+  },
+  "state": {
+    "label": "Estado de venta (Ley aplicable y notario)",
+    "tooltip": "El estado de EE. UU. cuyas leyes regirán este acuerdo y donde puede ocurrir la notarización."
+  },
+  "county": {
+    "label": "Condado (para reconocimiento notarial)",
+    "tooltip": "El condado dentro del estado donde se firma el documento, típicamente para fines de notarización."
+  }
+}

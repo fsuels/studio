@@ -19,7 +19,7 @@ interface VehicleBillOfSaleDisplayProps {
 }
 
 export default function VehicleBillOfSaleDisplay({ locale }: VehicleBillOfSaleDisplayProps) {
-  const { t } = useTranslation();
+  const { t } = useTranslation("common");
   const router = useRouter();
   const [stateCode, setStateCode] = useState<string>('CA'); // default, can be changed by a state selector later
   const [wantNotary, setWantNotary] = useState<boolean>(requiredNotaryStates.includes(stateCode));

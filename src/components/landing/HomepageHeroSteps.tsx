@@ -12,7 +12,7 @@ import SearchBar from '@/components/SearchBar'; // Import SearchBar
 
 // Placeholder for TrustStrip - in a real app this would be a separate component
 const TrustStripPlaceholder = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation("common");
   return (
     <div className="mt-6 mb-8 flex flex-col sm:flex-row items-center justify-center gap-x-6 gap-y-3 text-foreground/90 text-sm font-medium">
       <div className="flex items-center gap-2">
@@ -33,7 +33,7 @@ const TrustStripPlaceholder = () => {
 
 
 const HomepageHeroSteps = React.memo(function HomepageHeroSteps() {
-  const { t, i18n } = useTranslation()
+  const { t, i18n } = useTranslation("common")
   const [isHydrated, setIsHydrated] = useState(false); 
   
   useEffect(() => {

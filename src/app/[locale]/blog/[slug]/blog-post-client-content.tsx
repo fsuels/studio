@@ -15,7 +15,7 @@ interface BlogPostClientContentProps {
 }
 
 export default function BlogPostClientContent({ locale, slug }: BlogPostClientContentProps) {
-  const { t, i18n } = useTranslation(); 
+  const { t, i18n } = useTranslation("common"); 
   const [isHydrated, setIsHydrated] = useState(false); 
   const [formattedDate, setFormattedDate] = useState<string | null>(null); 
   const [article, setArticle] = useState<BlogArticle | undefined>(undefined); 

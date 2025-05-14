@@ -1,0 +1,86 @@
+{
+  "seller_name": {
+    "label": "Seller's Full Name",
+    "tooltip": "Enter the full legal name of the person or entity selling the vehicle."
+  },
+  "seller_phone": {
+    "label": "Seller's Phone Number",
+    "tooltip": "A valid phone number for the seller."
+  },
+  "seller_address": {
+    "label": "Seller's Full Address",
+    "tooltip": "Include street, city, state, and ZIP code."
+  },
+  "buyer_name": {
+    "label": "Buyer's Full Name",
+    "tooltip": "Enter the full legal name of the person or entity buying the vehicle."
+  },
+  "buyer_address": {
+    "label": "Buyer's Full Address",
+    "tooltip": "Include street, city, state, and ZIP code for the buyer."
+  },
+  "buyer_phone": {
+    "label": "Buyer's Phone Number",
+    "tooltip": "A valid phone number for the buyer."
+  },
+  "year": {
+    "label": "Vehicle Year",
+    "tooltip": "The manufacturing year of the vehicle (e.g., 2022)."
+  },
+  "make": {
+    "label": "Vehicle Make",
+    "tooltip": "The manufacturer of the vehicle (e.g., Honda, Ford)."
+  },
+  "model": {
+    "label": "Vehicle Model",
+    "tooltip": "The specific model of the vehicle (e.g., Civic, F-150)."
+  },
+  "color": {
+    "label": "Vehicle Color",
+    "tooltip": "The primary color of the vehicle."
+  },
+  "vin": {
+    "label": "Vehicle Identification Number (VIN)",
+    "tooltip": "The 17-character unique identifier for the vehicle."
+  },
+  "odometer": {
+    "label": "Odometer Reading (miles)",
+    "tooltip": "Current mileage shown on the vehicle's odometer."
+  },
+  "odo_status": {
+    "label": "Odometer Status",
+    "tooltip": "Indicate if the odometer reading is accurate, has rolled over, or is known to be incorrect."
+  },
+  "price": {
+    "label": "Sale Price ($)",
+    "tooltip": "The total agreed-upon price for the vehicle in USD."
+  },
+  "payment_method": {
+    "label": "Payment Method",
+    "tooltip": "How the buyer will pay or has paid for the vehicle."
+  },
+  "sale_date": {
+    "label": "Date of Sale",
+    "tooltip": "The date the sale is finalized."
+  },
+  "existing_liens": {
+    "label": "Existing Liens (if any, otherwise leave blank or \"None\")",
+    "tooltip": "Disclose any outstanding loans or claims against the vehicle."
+  },
+  "as_is": {
+    "label": "Is the vehicle sold \"as-is\"?",
+    "tooltip": "Select 'Yes' if sold without warranties, 'No' if warranties are provided."
+  },
+  "warranty_text": {
+    "label": "Warranty Details (if not \"as-is\")",
+    "tooltip": "If warranties are offered, describe them here. This field is only active if 'Sold As-Is' is 'No'."
+  },
+  "state": {
+    "label": "State of Sale (Governing Law & Notary)",
+    "tooltip": "The U.S. state whose laws will govern this agreement and where notarization may occur."
+  },
+  "county": {
+    "label": "County (for Notary Acknowledgment)",
+    "tooltip": "The county within the state where the document is signed, typically for notarization purposes."
+  }
+}

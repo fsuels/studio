@@ -37,7 +37,7 @@ function getCategory(article: (typeof blogArticles)[0]) {
 }
 
 export default function BlogClientContent({ locale }: BlogClientContentProps) {
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation("common");
   const [query, setQuery] = useState('');
   const [category, setCategory] = useState('All');
   const [page, setPage] = useState(1);

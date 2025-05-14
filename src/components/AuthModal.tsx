@@ -18,39 +18,49 @@ import { useParams } from 'next/navigation';
 interface AuthModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onAuthSuccess: () => void; 
+  onAuthSuccess: () => void;
 }
 
 export default function AuthModal({ isOpen, onClose, onAuthSuccess }: AuthModalProps) {
-  const { t } = useTranslation();
+  const { t } = useTranslation("common");
   const params = useParams();
-  const locale = params.locale as 'en' | 'es' || 'en';
+  const locale = (params.locale as 'en' | 'es') || 'en';
 
   const handleNavigation = () => {
-    onClose(); 
+    onClose();
+    onAuthSuccess();
   };
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogContent className="sm:max-w-[425px] bg-card border-border">
         <DialogHeader>
-          <DialogTitle className="text-card-foreground">{t('Authentication Required')}</DialogTitle>
+          <DialogTitle className="text-card-foreground">
+            {t('Authentication Required', { defaultValue: 'Authentication Required' })}
+          </DialogTitle>
           <DialogDescription className="text-muted-foreground">
-            {t('Please sign in or create an account to save your document and proceed to payment.')}
+            {t(
+              'Please sign in or create an account to save your document and proceed to payment.',
+              { defaultValue: 'Please sign in or create an account to save your document and proceed to payment.' }
+            )}
           </DialogDescription>
         </DialogHeader>
         <DialogFooter className="flex flex-col sm:flex-row gap-2 pt-4">
-          <Button variant="outline" onClick={onClose} className="w-full sm:w-auto border-input text-foreground">
-            {t('Cancel')}
+          <Button
+            variant="outline"
+            onClick={onClose}
+            className="w-full sm:w-auto border-input text-foreground"
+          >
+            {t('Cancel', { defaultValue: 'Cancel' })}
           </Button>
           <Button asChild className="w-full sm:w-auto bg-secondary text-secondary-foreground hover:bg-secondary/90">
             <Link href={`/${locale}/signup`} onClick={handleNavigation}>
-              {t('Sign Up')}
+              {t('Sign Up', { defaultValue: 'Sign Up' })}
             </Link>
           </Button>
           <Button asChild className="w-full sm:w-auto bg-primary text-primary-foreground hover:bg-primary/90">
             <Link href={`/${locale}/signin`} onClick={handleNavigation}>
-              {t('Sign In')}
+              {t('Sign In', { defaultValue: 'Sign In' })}
             </Link>
           </Button>
         </DialogFooter>

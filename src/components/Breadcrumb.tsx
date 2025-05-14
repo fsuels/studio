@@ -1,11 +1,11 @@
 // src/components/Breadcrumb.tsx
 'use client';
 import Link from 'next/link';
-import { useTranslation } from 'react-i18next'; 
+import { useTranslation } from 'react-i18next';
 import React from 'react'; // Import React
 
 interface BreadcrumbItem {
-  label: string;
+  label: string; // Expected to be a translation key
   href?: string;
 }
 
@@ -14,7 +14,7 @@ interface BreadcrumbProps {
 }
 
 const Breadcrumb = React.memo(function Breadcrumb({ items }: BreadcrumbProps) {
-  const { t } = useTranslation(); 
+  const { t } = useTranslation("common"); // Changed to common namespace
 
   return (
     <nav aria-label="Breadcrumb" className="text-sm text-muted-foreground mb-6">
@@ -23,7 +23,7 @@ const Breadcrumb = React.memo(function Breadcrumb({ items }: BreadcrumbProps) {
           <li key={index} className="flex items-center">
             {item.href ? (
               <Link href={item.href} className="hover:text-primary hover:underline transition-colors">
-                {t(item.label, item.label)} 
+                {t(item.label, item.label)}
               </Link>
             ) : (
               <span className="font-semibold text-foreground">{t(item.label, item.label)}</span>

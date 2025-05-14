@@ -33,7 +33,7 @@ const DynamicFooter = dynamic(() => import('@/components/layout/Footer').then(mo
 
 
 const AppShell = React.memo(function AppShell({ children }: { children: ReactNode }) {
-  const { ready } = useTranslation(); // t function not directly used here
+  const { ready } = useTranslation("common"); // t function not directly used here
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {

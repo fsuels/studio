@@ -23,7 +23,7 @@ interface TrustBadgesProps {
 }
 
 export default function TrustBadges({ className }: TrustBadgesProps) {
-  const { t } = useTranslation();
+  const { t } = useTranslation("common");
   const [isHydrated, setIsHydrated] = useState(false);
 
   useEffect(() => {

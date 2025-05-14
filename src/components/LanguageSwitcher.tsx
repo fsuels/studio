@@ -10,47 +10,34 @@ import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
+} from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
 
-
+// Placeholder FlagUS Component - Replace with your actual SVG component
 const FlagUS = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="14" viewBox="0 0 750 500" className="w-5 h-auto mr-2 rounded-sm shrink-0">
-    <rect width="750" height="500" fill="#fff"/>
-    <path fill="#b22234" d="M0 0h750v38.46H0zm0 76.92h750v38.46H0zm0 76.92h750v38.46H0zm0 76.93h750v38.46H0zm0 76.92h750v38.46H0zm0 76.92h750v38.46H0zm0 76.93h750v38.46H0z"/>
-    <path fill="#3c3b6e" d="M0 0h300v269.23H0z"/>
-    <path fill="#fff" d="m60 19.23 6.18 19-16.18-11.74h19.99L53.82 38.23zm60 0 6.18 19-16.18-11.74h19.99L113.82 38.23zm60 0 6.18 19-16.18-11.74h19.99L173.82 38.23zm60 0 6.18 19-16.18-11.74h19.99L233.82 38.23zm-180 38.46 6.18 19-16.18-11.74h19.99L53.82 76.69zm60 0 6.18 19-16.18-11.74h19.99L113.82 76.69zm60 0 6.18 19-16.18-11.74h19.99L173.82 76.69zm60 0 6.18 19-16.18-11.74h19.99L233.82 76.69zm-150 38.46 6.18 19-16.18-11.74h19.99L83.82 115.15zm60 0 6.18 19-16.18-11.74h19.99L143.82 115.15zm60 0 6.18 19-16.18-11.74h19.99L203.82 115.15zm-180 38.46 6.18 19-16.18-11.74h19.99L53.82 153.61zm60 0 6.18 19-16.18-11.74h19.99L113.82 153.61zm60 0 6.18 19-16.18-11.74h19.99L173.82 153.61zm60 0 6.18 19-16.18-11.74h19.99L233.82 153.61zm-150 38.46 6.18 19-16.18-11.74h19.99L83.82 192.07zm60 0 6.18 19-16.18-11.74h19.99L143.82 192.07zm60 0 6.18 19-16.18-11.74h19.99L203.82 192.07zm-180 38.46 6.18 19-16.18-11.74h19.99L53.82 230.53zm60 0 6.18 19-16.18-11.74h19.99L113.82 230.53zm60 0 6.18 19-16.18-11.74h19.99L173.82 230.53zm60 0 6.18 19-16.18-11.74h19.99L233.82 230.53z"/>
+  <svg width="20" height="15" viewBox="0 0 20 15" className="mr-2 rounded-sm" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect width="20" height="15" fill="#E0E0E0"/>
+    <path d="M0 0H20V3H0V0Z" fill="#D32F2F"/>
+    <path d="M0 6H20V9H0V6Z" fill="#D32F2F"/>
+    <path d="M0 12H20V15H0V12Z" fill="#D32F2F"/>
+    <path d="M0 0H9V9H0V0Z" fill="#1976D2"/>
+    {/* Simplified stars - add more detail for actual flag */}
+    <circle cx="2.5" cy="2.5" r="0.5" fill="white"/>
+    <circle cx="6.5" cy="2.5" r="0.5" fill="white"/>
+    <circle cx="4.5" cy="4.5" r="0.5" fill="white"/>
+    <circle cx="2.5" cy="6.5" r="0.5" fill="white"/>
+    <circle cx="6.5" cy="6.5" r="0.5" fill="white"/>
   </svg>
 );
 
+// Placeholder FlagES Component - Replace with your actual SVG component
 const FlagES = () => (
-   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="14" viewBox="0 0 750 500" className="w-5 h-auto mr-2 rounded-sm shrink-0">
-      <rect width="750" height="500" fill="#c60b1e"/>
-      <rect width="750" height="125" y="125" fill="#ffc400"/>
-      <g transform="translate(206.25 212.5) scale(7.5)">
-         <g fill="#fff">
-            <path d="M7 0h1v13H7zM9 0h1v13H9z"/>
-            <path d="M10 13v1h3v-1zm-6 0v1h3v-1z"/>
-         </g>
-         <path d="M7 15h2v2H7zM7 17h2v1H7zM9 17H7v1h2zm0 1H7v1h2z" fill="#c60b1e"/>
-         <path d="M10.14 13.48a.15.15 0 0 0-.14-.15H6a.15.15 0 0 0-.14.15L5.1 15.91c-.07.2.07.4.29.4h.32c.1 0 .18-.05.22-.13L6 15.8h4l.07.38c.04.08.12.13.22.13h.32c.22 0 .36-.2.29-.4z" fill="#ffc400"/>
-         <path d="M10 13h.8a.15.15 0 0 0 .15-.15V0h-2v12.85c0 .08.06.15.15.15zM6 13h.8c.09 0 .15-.07.15-.15V0H5v12.85c0 .08.07.15.15.15z" fill="#ad1519"/>
-         <path d="M7 13h2v1H7z" fill="#ffc400"/>
-         <g fill="#006a44">
-            <path d="M13 13v-1h.15c.2 0 .35-.15.35-.35V9h1v3h1v1zm-10 0v-1h-.15c-.2 0-.35-.15-.35-.35V9H2v3H1v1z"/>
-            <circle cx="7.5" cy="3.5" r="2"/>
-            <circle cx="7.5" cy="9.5" r="2"/>
-         </g>
-         <g fill="#75aadb">
-            <path d="M8.5 13v-1h.15c.2 0 .35-.15.35-.35V9h1v3h1v1z"/>
-            <path d="M4.5 13v-1H4.35c-.2 0-.35-.15-.35-.35V9H5v3H6v1z"/>
-         </g>
-         <path d="M7.5 1c.38 0 .7.1.96.28.21.14.38.33.49.55.11.22.15.46.15.72 0 .26-.04.5.15.72-.11.22-.28.41-.49.55-.26.17-.58.28-.96.28s-.7-.1-.96-.28c-.21-.14-.38-.33-.49-.55-.11-.22-.15-.46-.15-.72 0 .26.04.5.15.72.11.22.28.41.49.55.26.17.58.28.96.28zm0 6c.38 0 .7.1.96.28.21.14.38.33.49.55.11.22.15.46.15.72 0 .26-.04.5.15.72-.11.22-.28.41-.49.55-.26.17-.58.28-.96.28s-.7-.1-.96-.28c-.21-.14-.38-.33-.49-.55-.11-.22-.15-.46-.15-.72 0 .26.04.5.15.72.11.22.28.41.49.55.26.17.58.28.96.28z" fill="#fff"/>
-         <path d="M7.5 7C8.08 7 8.4.6 8.4 1.2V5.8C8.4 6.4 8.08 7 7.5 7S6.6 6.4 6.6 5.8V1.2C6.6.6 6.92 0 7.5 0c.58 0 .9.6.9 1.2z" fill="#ad1519"/>
-         <path d="M7.5 13c.58 0 .9-.6.9-1.2V7.8c0-.6-.32-1.2-.9-1.2s-.9.6-.9 1.2v4c0 .6.32 1.2.9 1.2z" fill="#75aadb"/>
-         <path d="M9.03 5.5H5.97c-.48 0-.78-.27-.78-.6 0-.33.3-.6.78-.6h3.06c.48 0 .78.27.78.6 0 .33-.3.6-.78.6z" fill="#ffc400"/>
-      </g>
-   </svg>
+  <svg width="20" height="15" viewBox="0 0 20 15" className="mr-2 rounded-sm" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect width="20" height="15" fill="#C60B1E"/>
+    <rect y="3.75" width="20" height="7.5" fill="#FFC400"/>
+    {/* Simplified coat of arms representation */}
+    <rect x="5" y="5.5" width="3" height="4" fill="#AD1519"/> 
+  </svg>
 );
 
 const availableLocales: Array<'en' | 'es'> = ['en', 'es'];
@@ -60,54 +47,44 @@ const LanguageSwitcher = React.memo(function LanguageSwitcher() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const params = useParams();
-  const { i18n, t } = useTranslation();
-  const [isPopoverOpen, setIsPopoverOpen] = React.useState(false);
-
+  const { i18n, t } = useTranslation("common");
+  const [isPopoverOpen, setIsPopoverOpen] = useState(false);
   const [currentRouteLocale, setCurrentRouteLocale] = useState<'en' | 'es'>('en');
   const [isHydrated, setIsHydrated] = useState(false);
 
+  // Determine locale from the URL param on mount
   useEffect(() => {
     setIsHydrated(true);
     const pathLocale = params.locale as 'en' | 'es' | undefined;
     if (pathLocale && availableLocales.includes(pathLocale)) {
       setCurrentRouteLocale(pathLocale);
-      // i18n language is now set by I18nClientProvider
-    } else if (pathname === '/') { 
-        setCurrentRouteLocale('en'); 
+    } else if (pathname === '/') {
+      setCurrentRouteLocale('en');
     }
   }, [params.locale, pathname]);
 
-  const handleLocaleChange = (newLocaleTarget: 'en' | 'es') => {
-    if (currentRouteLocale === newLocaleTarget) {
+  const handleLocaleChange = (newLocale: 'en' | 'es') => {
+    if (newLocale === currentRouteLocale) {
       setIsPopoverOpen(false);
       return;
     }
 
-    let newPath = pathname;
-    if (pathname.startsWith(`/${currentRouteLocale}`)) {
-      newPath = pathname.replace(`/${currentRouteLocale}`, `/${newLocaleTarget}`);
-    } else if (pathname === '/') {
-      newPath = `/${newLocaleTarget}`;
-    } else {
-      // Fallback for paths that don't start with locale (e.g. might be root page before redirect)
-      newPath = `/${newLocaleTarget}${pathname}`;
-    }
-    
-    const queryString = searchParams.toString();
-    const finalUrl = queryString ? `${newPath}?${queryString}` : newPath;
-    
-    router.push(finalUrl);
-    // router.refresh(); // router.refresh() was causing issues. Let ClientProviders handle i18n change.
+    // swap the locale prefix in the path
+    let newPath = pathname.startsWith(`/${currentRouteLocale}`)
+      ? pathname.replace(`/${currentRouteLocale}`, `/${newLocale}`)
+      : `/${newLocale}${pathname === '/' ? '' : pathname}`;
 
+    const query = searchParams.toString();
+    if (query) newPath += `?${query}`;
+
+    router.push(newPath);
     setIsPopoverOpen(false);
   };
-  
-  // Use currentRouteLocale for display consistency before i18n instance might update
-  const displayLanguage = isHydrated ? currentRouteLocale : 'en'; 
+
+  const displayLang = isHydrated ? currentRouteLocale : 'en';
 
   if (!isHydrated) {
-    // Render a minimal placeholder or null during SSR/pre-hydration
-    return <div className="h-9 w-20 bg-muted rounded-md animate-pulse"></div>;
+    return <div className="h-9 w-20 bg-muted rounded-md animate-pulse" />;
   }
 
   return (
@@ -117,33 +94,37 @@ const LanguageSwitcher = React.memo(function LanguageSwitcher() {
           variant="outline"
           size="sm"
           className={cn(
-            "text-xs font-medium text-foreground/80 hover:bg-foreground/5 hover:text-foreground px-2 py-1.5 md:px-3 border-border/50 shadow-sm flex items-center",
-            isPopoverOpen && "bg-muted"
+            'text-xs font-medium text-foreground/80 hover:bg-foreground/5 hover:text-foreground px-2 py-1.5 md:px-3 border-border/50 shadow-sm flex items-center',
+            isPopoverOpen && 'bg-muted'
           )}
-          aria-label={t('Select language', {defaultValue: 'Select language'})}
+          aria-label={t('Select language')}
         >
-          {displayLanguage === 'en' ? <FlagUS /> : <FlagES />}
-          <span className="hidden sm:inline">{displayLanguage.toUpperCase()}</span>
+          {displayLang === 'en' ? <FlagUS /> : <FlagES />}
+          <span className="hidden sm:inline">{displayLang.toUpperCase()}</span>
           <ChevronDown className="ml-1 h-4 w-4 opacity-70 shrink-0" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent align="end" className="min-w-[8rem] p-1 z-[70] bg-popover border-border shadow-xl rounded-lg">
-            {availableLocales.map(lang => (
-                 <Button
-                    key={lang}
-                    variant={displayLanguage === lang ? 'secondary' : 'ghost'}
-                    className="w-full justify-start text-xs h-8 px-2"
-                    onClick={() => handleLocaleChange(lang)}
-                >
-                    <span className="flex items-center w-full">
-                        {lang === 'en' ? <FlagUS /> : <FlagES />}
-                        {lang === 'en' ? 'English' : 'Español'}
-                        {displayLanguage === lang && <Check className="ml-auto h-4 w-4" />}
-                    </span>
-                </Button>
-            ))}
+      <PopoverContent
+        align="end"
+        className="min-w-[8rem] p-1 z-[70] bg-popover border-border shadow-xl rounded-lg"
+      >
+        {availableLocales.map((lang) => (
+          <Button
+            key={lang}
+            variant={displayLang === lang ? 'secondary' : 'ghost'}
+            className="w-full justify-start text-xs h-8 px-2"
+            onClick={() => handleLocaleChange(lang)}
+          >
+            <span className="flex items-center w-full">
+              {lang === 'en' ? <FlagUS /> : <FlagES />}
+              {lang === 'en' ? 'English' : 'Español'}
+              {displayLang === lang && <Check className="ml-auto h-4 w-4" />}
+            </span>
+          </Button>
+        ))}
       </PopoverContent>
     </Popover>
   );
 });
+
 export { LanguageSwitcher };

@@ -41,7 +41,7 @@ const AiHighlightPlaceholder = ({ text }: { text: string }) => (
 
 export default function DocPageClient({ params: routeParams }: DocPageClientProps) {
   const params = useParams();
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation("common");
   const router = useRouter();
 
   const currentLocale = (Array.isArray(params.locale) ? params.locale[0] : params.locale) as 'en' | 'es' | undefined;

@@ -49,7 +49,7 @@ const StickyFilterBar = dynamic(() => import('@/components/StickyFilterBar'), {
 });
 
 export default function HomePageClient() {
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation("common");
   const { toast } = useToast();
   const searchParams = useSearchParams();
   const router = useRouter();

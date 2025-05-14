@@ -43,7 +43,7 @@ function BundleClient({ bundle }: { bundle: (typeof bundles)[number] }) {
       <Card className="border border-border shadow-sm">
         {bundle.imageUrl && (
           // eslint-disable-next-line @next/next/no-img-element
-          <img src={bundle.imageUrl} alt={bundle.name} className="h-48 w-full object-cover rounded-t" />
+          (<img src={bundle.imageUrl} alt={bundle.name} className="h-48 w-full object-cover rounded-t" />)
         )}
 
         <CardHeader className="space-y-1">
@@ -72,5 +72,5 @@ function BundleClient({ bundle }: { bundle: (typeof bundles)[number] }) {
         </CardContent>
       </Card>
     </main>
-  )
+  );
 }

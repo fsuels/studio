@@ -1,0 +1,72 @@
+{
+  "headline": "Legal Docs at Your Fingertips",
+  "subhead": "Create, sign & share professional contracts in minutes—no lawyer required.",
+  "ctaPrimary": "Start Free, Pay $35/Doc →",
+  "ctaSecondary": "See Demo",
+  "trustText": "Trusted by 2,000+ small businesses",
+  "pricingTeaser": "Only $35/doc – No subscriptions",
+  "pricingLinkText": "View Pricing",
+  "languageName": "English",
+  "Just 3 Easy Steps": "Just 3 Easy Steps",
+  "featureTeaser": {
+    "workflow": {
+      "title": "Blazing-Fast Workflow",
+      "description": "AI guides you step-by-step, making document creation quick and intuitive."
+    },
+    "secure": {
+      "title": "Secure & Compliant",
+      "description": "Generate encrypted PDFs and utilize time-locked share links for enhanced security."
+    },
+    "costEffective": {
+      "title": "Cost-Effective",
+      "description": "Pay just $35 per document compared to $200+ typically charged by law firms."
+    }
+  },
+  "stepPrefix": "STEP",
+  "stepOne": {
+    "title": "Step 1: Select Category",
+    "description": "Choose the legal area that best fits your needs.",
+    "categoryDescription": "Choose the legal area that best fits your need.",
+    "selectDocDescription": "Choose the document that best fits your needs.",
+    "text": "Text",
+    "startMic": "Start Mic",
+    "stopMic": "Stop Recording",
+    "placeholder": "e.g., 'Rent out my apartment', 'Start a business', 'Someone won't stop contacting me...'",
+    "listening": "Listening...",
+    "stateLabel": "Relevant U.S. State (Required)",
+    "statePlaceholder": "Select State...",
+    "stateHelp": "Helps tailor the document to your jurisdiction.",
+    "analyze": "Analyze My Situation",
+    "textDescriptionLabel": "Description (Text)",
+    "micDescriptionLabel": "Description (Microphone Transcript)",
+    "topDocumentsTitle": "Top Documents This Week",
+    "exploreAllCategoriesButton": "Explore All Document Categories",
+    "backToTopDocumentsButton": "Back to Top Documents"
+  },
+  "logoAlt": "123LegalDoc Logo",
+  "nav": {
+    "pricing": "Pricing",
+    "features": "Features",
+    "resources": "Resources",
+    "blog": "Blog",
+    "faq": "FAQ",
+    "support": "Support",
+    "searchPlaceholder": "Search documents...",
+    "signUp": "Sign Up",
+    "signIn": "Sign In",
+    "documentCategories": "Make Documents",
+    "seeMoreDocuments": "See all in {{categoryName}}...",
+    "noDocumentsInCategory": "No documents in this category yet.",
+    "noDocumentsAvailable": "No documents available for the selected categories at this time.",
+    "noCategoriesAvailable": "No document categories available."
+  },
+  "SearchBar": {
+    "placeholder": "Search 200+ contracts…",
+    "ariaLabel": "Search documents",
+    "search": "Search"
+  },
+  "TopDocsChips": {
+    "title": "Popular Legal Documents",
+    "loading": "Loading popular documents..."
+  }
+}

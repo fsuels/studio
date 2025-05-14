@@ -23,7 +23,7 @@ import { cn } from '@/lib/utils';
 
 export default function StartWizardPageClient() {
   const params = useParams();
-  const { t, i18n, ready } = useTranslation(); 
+  const { t, i18n, ready } = useTranslation("common"); 
   const router = useRouter();
   const { isLoggedIn, user, isLoading: authIsLoading } = useAuth();
 

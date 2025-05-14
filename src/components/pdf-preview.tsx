@@ -20,7 +20,7 @@ const PdfPreview = React.memo(function PdfPreview({ documentDataUrl, documentNam
   const [isSigning, setIsSigning] = useState(false);
   const [signatureResult, setSignatureResult] = useState<DigitalSignatureResult | null>(null);
   const { toast } = useToast();
-  const { t } = useTranslation();
+  const { t } = useTranslation("common");
   const [isHydrated, setIsHydrated] = useState(false);
 
   useEffect(() => {

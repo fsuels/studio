@@ -64,7 +64,7 @@ const MemoizedTestimonialCard = React.memo(function TestimonialCard({ testimonia
         </>
       ) : (
         // Skeleton loader for testimonial card
-        <div className="flex flex-col items-center">
+        (<div className="flex flex-col items-center">
           <div className="h-24 w-24 rounded-full bg-muted mb-4 animate-pulse"></div>
           <div className="flex justify-center mb-3">
             {[...Array(5)].map((_,i) => <div key={i} className="h-4 w-4 bg-muted rounded-sm mx-0.5 animate-pulse"></div>)}
@@ -72,19 +72,19 @@ const MemoizedTestimonialCard = React.memo(function TestimonialCard({ testimonia
           <div className="h-4 bg-muted rounded w-3/4 mb-2 animate-pulse"></div>
           <div className="h-4 bg-muted rounded w-full mb-1 animate-pulse"></div>
           <div className="h-4 bg-muted rounded w-5/6 mb-4 animate-pulse"></div>
-           <div className="h-3 bg-muted rounded w-1/2 mb-3 mx-auto animate-pulse"></div>
+          <div className="h-3 bg-muted rounded w-1/2 mb-3 mx-auto animate-pulse"></div>
           <div className="mt-auto text-center pt-3 border-t border-border/50 w-full">
             <div className="h-4 bg-muted rounded w-1/2 mb-1 mx-auto animate-pulse"></div>
             <div className="h-3 bg-muted rounded w-1/3 mx-auto animate-pulse"></div>
           </div>
-        </div>
+        </div>)
       )}
     </div>
   );
 });
 
 const TrustAndTestimonialsSection = React.memo(function TrustAndTestimonialsSection() {
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation("common");
   const [docCount, setDocCount] = useState(4200);
   const [isHydrated, setIsHydrated] = useState(false);
   const [testimonialsData, setTestimonialsData] = useState<Testimonial[]>([]);

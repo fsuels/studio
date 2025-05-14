@@ -1,9 +1,16 @@
-// src/hooks/useAuth.ts
+// src/hooks/useAuth.tsx
 'use client';
 
-import React, { useState, useEffect, useCallback, createContext, useContext, ReactNode } from 'react';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+  ReactNode
+} from 'react';
 
-// Define the shape of the auth context
+// 1) Define the shape of your auth context
 interface AuthContextType {
   isLoggedIn: boolean;
   user: { uid: string; email?: string | null } | null;
@@ -12,75 +19,58 @@ interface AuthContextType {
   logout: () => void;
 }
 
-// Create the AuthContext with a default undefined value initially
+// 2) Create the context (default undefined to catch mis-use)
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// Mock auth state.
-let mockGlobalIsLoggedIn = false;
-let mockGlobalUser: { uid: string; email?: string | null } | null = null;
-
-// Renamed the hook slightly to avoid confusion with the context hook below
-export function useAuthHook() {
+// 3) A hook that manages your mock auth state and persistence
+function useAuthHook() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState<{ uid: string; email?: string | null } | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
+  // On mount, read from localStorage
   useEffect(() => {
     setIsLoading(true);
-    const storedAuth = typeof window !== 'undefined' ? localStorage.getItem('mockAuth') : null;
-    if (storedAuth) {
+    if (typeof window !== 'undefined') {
+      const stored = localStorage.getItem('mockAuth');
+      if (stored) {
         try {
-            const authData = JSON.parse(storedAuth);
-            mockGlobalIsLoggedIn = authData.isLoggedIn;
-            mockGlobalUser = authData.user;
-        } catch (e) {
-            console.error("Failed to parse mockAuth from localStorage", e);
-            localStorage.removeItem('mockAuth');
-            mockGlobalIsLoggedIn = false;
-            mockGlobalUser = null;
+          const { isLoggedIn, user } = JSON.parse(stored);
+          setIsLoggedIn(isLoggedIn);
+          setUser(user);
+        } catch {
+          localStorage.removeItem('mockAuth');
+          setIsLoggedIn(false);
+          setUser(null);
         }
-    } else {
-        mockGlobalIsLoggedIn = false;
-        mockGlobalUser = null;
+      }
     }
-    setIsLoggedIn(mockGlobalIsLoggedIn);
-    setUser(mockGlobalUser);
     setIsLoading(false);
   }, []);
 
+  // login & logout update state + localStorage
   const login = useCallback((email = 'test@example.com', uid = 'mock-user-123') => {
-    mockGlobalIsLoggedIn = true;
-    mockGlobalUser = { uid, email };
-    if (typeof window !== 'undefined') {
-        localStorage.setItem('mockAuth', JSON.stringify({ isLoggedIn: true, user: mockGlobalUser }));
-    }
+    const newUser = { uid, email };
+    localStorage.setItem('mockAuth', JSON.stringify({ isLoggedIn: true, user: newUser }));
     setIsLoggedIn(true);
-    setUser(mockGlobalUser);
-    console.log('[useAuth Mock] User logged in:', mockGlobalUser);
+    setUser(newUser);
   }, []);
 
   const logout = useCallback(() => {
-    mockGlobalIsLoggedIn = false;
-    mockGlobalUser = null;
-    if (typeof window !== 'undefined') {
-        localStorage.removeItem('mockAuth');
-    }
+    localStorage.removeItem('mockAuth');
     setIsLoggedIn(false);
     setUser(null);
-    console.log('[useAuth Mock] User logged out');
   }, []);
 
   return { isLoggedIn, user, isLoading, login, logout };
 }
 
-// Create the AuthProvider component
+// 4) The provider component — also a client component
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const auth = useAuthHook(); // Use the hook internally
+  const auth = useAuthHook();
 
-  // Prevent rendering children until initial loading is complete to avoid flashes of incorrect UI
-  if (auth.isLoading) {
-    return null; // Or a loading spinner, or some placeholder
-  }
+  // Prevent any UI flashes while loading
+  if (auth.isLoading) return null;
 
   return (
     <AuthContext.Provider value={auth}>
@@ -89,11 +79,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   );
 }
 
-// Custom hook to use the auth context
+// 5) Hook for consuming the context
 export function useAuth() {
-  const context = useContext(AuthContext);
-  if (context === undefined) {
+  const ctx = useContext(AuthContext);
+  if (!ctx) {
     throw new Error('useAuth must be used within an AuthProvider');
   }
-  return context;
+  return ctx;
 }

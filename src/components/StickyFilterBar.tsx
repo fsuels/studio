@@ -21,7 +21,7 @@ const StickyFilterBar = React.memo(function StickyFilterBar({
   selectedState,
   onSelectedStateChange,
 }: StickyFilterBarProps) {
-  const { t } = useTranslation();
+  const { t } = useTranslation("common");
   const [isHydrated, setIsHydrated] = useState(false);
 
   useEffect(() => {

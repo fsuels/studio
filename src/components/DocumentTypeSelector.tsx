@@ -30,7 +30,7 @@ interface Props {
 }
 
 export default function DocumentTypeSelector({ onSelect, selectedDocument }: Props) {
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation("common");
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedState, setSelectedState] = useState<string | undefined>(undefined);
 

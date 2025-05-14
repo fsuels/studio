@@ -17,7 +17,7 @@ interface DisclaimerStepProps {
 
 export function DisclaimerStep({ onAgree, isReadOnly = false }: DisclaimerStepProps) {
   const [isChecked, setIsChecked] = useState(false);
-  const { t } = useTranslation(); // Get translation function
+  const { t } = useTranslation("common"); // Get translation function
   const [isHydrated, setIsHydrated] = useState(false); // State for hydration
 
   useEffect(() => {

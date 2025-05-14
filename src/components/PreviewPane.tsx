@@ -18,7 +18,7 @@ interface PreviewPaneProps {
 }
 
 export default function PreviewPane({ locale, docId }: PreviewPaneProps) {
-  const { t } = useTranslation();
+  const { t } = useTranslation("common");
   const { watch } = useFormContext(); 
 
 

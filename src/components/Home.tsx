@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 const Home: React.FC = () => {
-  const { t, ready } = useTranslation(['common', 'home', 'translation']);
+  const { t, ready } = useTranslation("common");
   const documentCount = 4808; // Replace with your state or API call
 
   const translations = useMemo(

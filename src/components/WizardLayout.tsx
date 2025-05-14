@@ -19,7 +19,7 @@ interface WizardLayoutProps {
 
 export default function WizardLayout({ locale, doc, children }: WizardLayoutProps) {
   const router = useRouter();
-  const { t } = useTranslation(); 
+  const { t } = useTranslation("common"); 
   
   const documentDisplayName = locale === 'es' && doc.name_es ? doc.name_es : doc.name;
 

@@ -19,7 +19,7 @@ const DocumentPreview = React.memo(function DocumentPreview({
   locale = 'en',
   alt,
 }: DocumentPreviewProps) {
-  const { t } = useTranslation();
+  const { t } = useTranslation("common");
   const [imgExists, setImgExists] = useState<boolean>(true);
   const [md, setMd] = useState<string>('');
   const [isLoadingMd, setIsLoadingMd] = useState<boolean>(false);

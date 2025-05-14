@@ -18,7 +18,7 @@ function Feature({ icon, title, desc }: { icon: React.ReactNode; title: string; 
 
 // This is the main content component that uses client-side hooks
 export default function FeaturesClientContent() {
-  const { t } = useTranslation();
+  const { t } = useTranslation("common");
 
   return (
     <main className="max-w-6xl mx-auto px-6 py-20">

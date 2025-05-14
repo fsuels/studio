@@ -36,7 +36,7 @@ interface WizardFormProps {
 }
 
 export default function WizardForm({ locale, doc, onComplete }: WizardFormProps) {
-  const { t } = useTranslation();
+  const { t } = useTranslation("common");
   const router = useRouter();
   // Params not directly used here but kept if needed for other logic based on original structure.
   // const params = useParams(); 

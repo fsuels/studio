@@ -116,7 +116,7 @@ const Step1DocumentSelector = React.memo(function Step1DocumentSelector({
   globalSearchTerm,
   globalSelectedState
 }: Step1DocumentSelectorProps) {
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation("common");
   // 'top-docs', 'all-categories', 'documents-in-category', 'search-results'
   const [currentView, setCurrentView] = useState<'top-docs' | 'all-categories' | 'documents-in-category'>(initialSelectedCategory ? 'documents-in-category' : 'top-docs');
   const [selectedCategoryInternal, setSelectedCategoryInternal] = useState<string | null>(initialSelectedCategory);
@@ -308,144 +308,141 @@ const Step1DocumentSelector = React.memo(function Step1DocumentSelector({
 
 
   return (
-     <Card className={cn("step-card", isReadOnly ? 'opacity-50 cursor-not-allowed pointer-events-none' : 'opacity-100')}>
-        <CardHeader className="step-card__header">
-             <FileText className="step-card__icon" />
-             <div>
-                <CardTitle className="step-card__title">{cardTitle}</CardTitle>
-                <CardDescription className="step-card__subtitle">{cardDescription}</CardDescription>
-             </div>
-        </CardHeader>
-
-        {(currentView === 'documents-in-category' && selectedCategoryInternal) && (
-            <div className="px-6 pb-4 border-b border-border">
-                 <div className="flex items-center justify-between">
-                     <Button variant="outline" size="sm" onClick={handleBackToAllCategories} disabled={isReadOnly || !isHydrated}>
-                       <ArrowLeft className="mr-2 h-4 w-4" /> {placeholderBackToCategories}
-                     </Button>
-                      <h3 className="text-lg font-semibold text-muted-foreground text-right">
-                        {t(CATEGORY_LIST.find(c => c.key === selectedCategoryInternal)?.labelKey || selectedCategoryInternal || '', selectedCategoryInternal || '')}
-                      </h3>
-                 </div>
-            </div>
-        )}
-         {currentView === 'all-categories' && (
-            <div className="px-6 pb-4 border-b border-border">
-                <Button variant="outline" size="sm" onClick={handleBackToTopDocs} disabled={isReadOnly || !isHydrated}>
-                    <ArrowLeft className="mr-2 h-4 w-4" /> {t('stepOne.backToTopDocumentsButton', 'Back to Top Documents')}
-                </Button>
-            </div>
-        )}
-
-
-        <CardContent className="step-content space-y-6 pt-6">
-             {currentView === 'search-results' ? (
-                <div className="animate-fade-in space-y-6">
-                     {globalSelectedState ? (
-                         <>
-                            {documentsToDisplay.length > 0 ? (
-                                <div className="document-grid pt-4 animate-fade-in">
-                                {documentsToDisplay.map(doc => (
-                                    <MemoizedDocumentCard
-                                        key={doc.id}
-                                        doc={doc}
-                                        onSelect={() => handleDocSelect(doc)}
-                                        disabled={isReadOnly || !isHydrated}
-                                        t={t}
-                                        i18nLanguage={i18n.language}
-                                        placeholderNoDescription={placeholderNoDescription}
-                                        placeholderRequiresNotarization={placeholderRequiresNotarization}
-                                        placeholderCanBeRecorded={placeholderCanBeRecorded}
-                                    />
-                                ))}
-                                </div>
-                            ) : (
-                                <p className="text-muted-foreground italic text-center py-6">{placeholderNoResults}</p>
-                            )}
-                         </>
-                      ) : (
-                         <p className="text-muted-foreground italic text-center py-6">{isHydrated ? t('Please select a state from the filter bar above to see documents.') : "Loading..."}</p>
-                      )}
-                 </div>
-             ) : currentView === 'top-docs' ? (
-                <div className="animate-fade-in space-y-4">
-                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                        {placeholderTopDocs.map(doc => (
-                            <MemoizedTopDocChip
-                                key={doc.id}
-                                doc={doc}
-                                onSelect={() => handleDocSelect(doc)}
-                                disabled={isReadOnly || !isHydrated}
-                                t={t}
-                                i18nLanguage={i18n.language}
-                            />
-                        ))}
-                    </div>
-                    <Button variant="link" onClick={() => setCurrentView('all-categories')} className="w-full justify-center text-primary">
-                        {t('stepOne.exploreAllCategoriesButton', 'Explore All Document Categories')} →
-                    </Button>
-                </div>
-             ) : currentView === 'all-categories' ? (
-                <div className="animate-fade-in space-y-4">
-                     {sortedCategories.length > 0 ? (
-                         <div className="category-grid pt-2">
-                             {sortedCategories.map(cat => (
-                                 <MemoizedCategoryCard
-                                      key={cat.key}
-                                      category={cat}
-                                      onClick={() => handleCategoryClick(cat.key)}
+    <Card className={cn("step-card", isReadOnly ? 'opacity-50 cursor-not-allowed pointer-events-none' : 'opacity-100')}>
+      <CardHeader className="step-card__header">
+           <FileText className="step-card__icon" />
+           <div>
+              <CardTitle className="step-card__title">{cardTitle}</CardTitle>
+              <CardDescription className="step-card__subtitle">{cardDescription}</CardDescription>
+           </div>
+      </CardHeader>
+      {(currentView === 'documents-in-category' && selectedCategoryInternal) && (
+          <div className="px-6 pb-4 border-b border-border">
+               <div className="flex items-center justify-between">
+                   <Button variant="outline" size="sm" onClick={handleBackToAllCategories} disabled={isReadOnly || !isHydrated}>
+                     <ArrowLeft className="mr-2 h-4 w-4" /> {placeholderBackToCategories}
+                   </Button>
+                    <h3 className="text-lg font-semibold text-muted-foreground text-right">
+                      {t(CATEGORY_LIST.find(c => c.key === selectedCategoryInternal)?.labelKey || selectedCategoryInternal || '', selectedCategoryInternal || '')}
+                    </h3>
+               </div>
+          </div>
+      )}
+      {currentView === 'all-categories' && (
+         <div className="px-6 pb-4 border-b border-border">
+             <Button variant="outline" size="sm" onClick={handleBackToTopDocs} disabled={isReadOnly || !isHydrated}>
+                 <ArrowLeft className="mr-2 h-4 w-4" /> {t('stepOne.backToTopDocumentsButton', 'Back to Top Documents')}
+             </Button>
+         </div>
+     )}
+      <CardContent className="step-content space-y-6 pt-6">
+           {currentView === 'search-results' ? (
+              <div className="animate-fade-in space-y-6">
+                   {globalSelectedState ? (
+                       <>
+                          {documentsToDisplay.length > 0 ? (
+                              <div className="document-grid pt-4 animate-fade-in">
+                              {documentsToDisplay.map(doc => (
+                                  <MemoizedDocumentCard
+                                      key={doc.id}
+                                      doc={doc}
+                                      onSelect={() => handleDocSelect(doc)}
                                       disabled={isReadOnly || !isHydrated}
                                       t={t}
-                                 />
-                             ))}
-                         </div>
-                     ) : (
-                         <p className="text-muted-foreground italic text-center py-6">{placeholderNoCategories}</p>
-                     )}
-                </div>
-             ) : ( // documents-in-category view
-                 <div className="animate-fade-in space-y-6">
-                      <div className="relative">
-                        <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                        <Input
-                            type="search"
-                            placeholder={placeholderSearchDocuments}
-                            value={docSearch}
-                            onChange={(e) => setDocSearch(e.target.value)}
-                            className="w-full pl-10 h-10 text-sm"
-                            aria-label={placeholderSearchDocuments}
-                            disabled={isReadOnly || !isHydrated}
-                        />
-                      </div>
-                     {globalSelectedState ? (
-                         <>
-                            {documentsToDisplay.length > 0 ? (
-                                <div className="document-grid pt-4 animate-fade-in">
-                                {documentsToDisplay.map(doc => (
-                                     <MemoizedDocumentCard
-                                        key={doc.id}
-                                        doc={doc}
-                                        onSelect={() => handleDocSelect(doc)}
-                                        disabled={isReadOnly || !isHydrated}
-                                        t={t}
-                                        i18nLanguage={i18n.language}
-                                        placeholderNoDescription={placeholderNoDescription}
-                                        placeholderRequiresNotarization={placeholderRequiresNotarization}
-                                        placeholderCanBeRecorded={placeholderCanBeRecorded}
-                                    />
-                                ))}
-                                </div>
-                            ) : (
-                                <p className="text-muted-foreground italic text-center py-6">{placeholderNoResults}</p>
-                            )}
-                         </>
-                      ) : (
-                         <p className="text-muted-foreground italic text-center py-6">{isHydrated ? t('Please select a state from the filter bar above to see documents.') : "Loading..."}</p>
-                      )}
+                                      i18nLanguage={i18n.language}
+                                      placeholderNoDescription={placeholderNoDescription}
+                                      placeholderRequiresNotarization={placeholderRequiresNotarization}
+                                      placeholderCanBeRecorded={placeholderCanBeRecorded}
+                                  />
+                              ))}
+                              </div>
+                          ) : (
+                              <p className="text-muted-foreground italic text-center py-6">{placeholderNoResults}</p>
+                          )}
+                       </>
+                    ) : (
+                       <p className="text-muted-foreground italic text-center py-6">{isHydrated ? t('Please select a state from the filter bar above to see documents.') : "Loading..."}</p>
+                    )}
+               </div>
+           ) : currentView === 'top-docs' ? (
+              <div className="animate-fade-in space-y-4">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                      {placeholderTopDocs.map(doc => (
+                          <MemoizedTopDocChip
+                              key={doc.id}
+                              doc={doc}
+                              onSelect={() => handleDocSelect(doc)}
+                              disabled={isReadOnly || !isHydrated}
+                              t={t}
+                              i18nLanguage={i18n.language}
+                          />
+                      ))}
+                  </div>
+                  <Button variant="link" onClick={() => setCurrentView('all-categories')} className="w-full justify-center text-primary">
+                      {t('stepOne.exploreAllCategoriesButton', 'Explore All Document Categories')} →
+                  </Button>
+              </div>
+           ) : currentView === 'all-categories' ? (
+              <div className="animate-fade-in space-y-4">
+                   {sortedCategories.length > 0 ? (
+                       <div className="category-grid pt-2">
+                           {sortedCategories.map(cat => (
+                               <MemoizedCategoryCard
+                                    key={cat.key}
+                                    category={cat}
+                                    onClick={() => handleCategoryClick(cat.key)}
+                                    disabled={isReadOnly || !isHydrated}
+                                    t={t}
+                               />
+                           ))}
+                       </div>
+                   ) : (
+                       <p className="text-muted-foreground italic text-center py-6">{placeholderNoCategories}</p>
+                   )}
+              </div>
+           ) : ( // documents-in-category view
+               (<div className="animate-fade-in space-y-6">
+                 <div className="relative">
+                   <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                   <Input
+                       type="search"
+                       placeholder={placeholderSearchDocuments}
+                       value={docSearch}
+                       onChange={(e) => setDocSearch(e.target.value)}
+                       className="w-full pl-10 h-10 text-sm"
+                       aria-label={placeholderSearchDocuments}
+                       disabled={isReadOnly || !isHydrated}
+                   />
                  </div>
-             )}
-        </CardContent>
-     </Card>
+                 {globalSelectedState ? (
+                     <>
+                        {documentsToDisplay.length > 0 ? (
+                            <div className="document-grid pt-4 animate-fade-in">
+                            {documentsToDisplay.map(doc => (
+                                 <MemoizedDocumentCard
+                                    key={doc.id}
+                                    doc={doc}
+                                    onSelect={() => handleDocSelect(doc)}
+                                    disabled={isReadOnly || !isHydrated}
+                                    t={t}
+                                    i18nLanguage={i18n.language}
+                                    placeholderNoDescription={placeholderNoDescription}
+                                    placeholderRequiresNotarization={placeholderRequiresNotarization}
+                                    placeholderCanBeRecorded={placeholderCanBeRecorded}
+                                />
+                            ))}
+                            </div>
+                        ) : (
+                            <p className="text-muted-foreground italic text-center py-6">{placeholderNoResults}</p>
+                        )}
+                     </>
+                  ) : (
+                     <p className="text-muted-foreground italic text-center py-6">{isHydrated ? t('Please select a state from the filter bar above to see documents.') : "Loading..."}</p>
+                  )}
+               </div>)
+           )}
+      </CardContent>
+    </Card>
   );
 });
 export default Step1DocumentSelector;

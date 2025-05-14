@@ -34,7 +34,7 @@ interface FieldRendererProps {
 
 const FieldRenderer = React.memo(function FieldRenderer({ fieldKey, locale, doc }: FieldRendererProps) {
   const { control, register, setValue, watch, formState: { errors } } = useFormContext();
-  const { t } = useTranslation();
+  const { t } = useTranslation("common");
 
   const fieldSchemaFromQuestions = doc.questions?.find(q => q.id === fieldKey);
   

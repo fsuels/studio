@@ -30,7 +30,7 @@ interface ReviewStepProps {
 }
 
 export default function ReviewStep({ doc, locale }: ReviewStepProps) {
-  const { t } = useTranslation();
+  const { t } = useTranslation("common");
   const { control, getValues, setValue, trigger, formState: { errors }, watch } = useFormContext();
   const { toast } = useToast();
 

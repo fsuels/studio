@@ -1,0 +1,67 @@
+{
+  "headline": "Documentos Legales al Alcance de tu Mano",
+  "subhead": "Crea, firma y comparte contratos profesionales en minutos, sin necesidad de abogado.",
+  "ctaPrimary": "Comienza Gratis, Paga $35/Doc →",
+  "ctaSecondary": "Ver Demo",
+  "trustText": "Con la confianza de más de 2,000 pequeñas empresas",
+  "pricingTeaser": "Solo $35/doc – Sin suscripciones",
+  "pricingLinkText": "Ver Precios",
+  "languageName": "Español",
+  "Just 3 Easy Steps": "Solo 3 Pasos Fáciles",
+  "featureTeaser": {
+    "workflow": {
+      "title": "Flujo de trabajo ultrarrápido",
+      "description": "La IA te guía paso a paso para que crear documentos sea rápido e intuitivo."
+    },
+    "secure": {
+      "title": "Seguro y Conforme",
+      "description": "Genera PDFs encriptados y utiliza enlaces para compartir con bloqueo de tiempo para mayor seguridad."
+    },
+    "costEffective": {
+      "title": "Económico",
+      "description": "Paga solo $35 por documento en comparación con los $200+ que suelen cobrar los bufetes de abogados."
+    }
+  },
+  "stepPrefix": "PASO",
+  "stepOne": {
+    "title": "Paso 1: Describe y Confirma",
+    "description": "Describe tu situación y selecciona el estado de EE. UU. correspondiente. Nuestra IA sugerirá el tipo de documento.",
+    "text": "Texto",
+    "startMic": "Iniciar micrófono",
+    "stopMic": "Detener grabación",
+    "placeholder": "ej., 'Alquilar mi apartamento', 'Empezar un negocio', 'Necesito que alguien deje de contactarme...'",
+    "listening": "Escuchando...",
+    "stateLabel": "Estado de EE. UU. relevante (Obligatorio)",
+    "statePlaceholder": "Seleccionar Estado...",
+    "stateHelp": "Ayuda a personalizar el documento para tu jurisdicción.",
+    "analyze": "Analizar Mi Situación",
+    "textDescriptionLabel": "Descripción (Texto)",
+    "micDescriptionLabel": "Descripción (Transcripción del Micrófono)",
+    "categoryDescription": "Elige el área legal que mejor se adapte a tu necesidad.",
+    "selectDocDescription": "Elige el documento que mejor se adapte a tus necesidades."
+  },
+  "logoAlt": "Logo de 123LegalDoc",
+  "nav": {
+    "pricing": "Precios",
+    "features": "Características",
+    "resources": "Recursos",
+    "blog": "Blog",
+    "faq": "Preguntas Frecuentes",
+    "support": "Soporte",
+    "searchPlaceholder": "Buscar documentos...",
+    "signUp": "Regístrate",
+    "signIn": "Acceder",
+    "documentCategories": "Crear Documentos",
+    "seeMoreDocuments": "Ver todos en {{categoryName}}...",
+    "noDocumentsInCategory": "No hay documentos en esta categoría todavía."
+  },
+  "SearchBar": {
+    "placeholder": "Buscar más de 200 contratos…",
+    "ariaLabel": "Buscar documentos",
+    "search": "Buscar"
+  },
+  "TopDocsChips": {
+    "title": "Documentos Legales Populares",
+    "loading": "Cargando documentos populares..."
+  }
+}

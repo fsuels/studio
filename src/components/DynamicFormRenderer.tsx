@@ -87,7 +87,7 @@ export default function DynamicFormRenderer({
   userId,
   stateCode,
 }: Props) {
-  const { t } = useTranslation();
+  const { t } = useTranslation('common');
 
   /* ---------------- state ------------------ */
   const [values, setValues] = useState<Record<string, any>>({});
@@ -526,7 +526,7 @@ export default function DynamicFormRenderer({
   userId,
   stateCode,
 }: Props) {
-  const { t } = useTranslation()
+  const { t } = useTranslation('common')
 
   const [values, setValues] = useState<Record<string, any>>({})
   const [isLoading, setIsLoading] = useState(false)

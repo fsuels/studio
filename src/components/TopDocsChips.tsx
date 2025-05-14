@@ -20,10 +20,11 @@ const staticTopDocIds: string[] = [
 ];
 
 const TopDocsChips = React.memo(function TopDocsChips() {
-  const { t, i18n } = useTranslation();
+  // Use 'common' namespace for shared UI text
+  const { t: tCommon, i18n } = useTranslation("common");
   const params = useParams();
   const router = useRouter();
-  const locale = params.locale as 'en' | 'es' || 'en';
+  const locale = (params.locale as 'en' | 'es') || 'en';
   
   const [topDocs, setTopDocs] = useState<LegalDocument[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -38,7 +39,7 @@ const TopDocsChips = React.memo(function TopDocsChips() {
     
     const resolvedTopDocs = staticTopDocIds
       .map(id => documentLibrary.find(doc => doc.id === id))
-      .filter(doc => doc !== undefined) as LegalDocument[];
+      .filter((doc): doc is LegalDocument => doc !== undefined);
     
     setTopDocs(resolvedTopDocs);
     setIsLoading(false);
@@ -57,12 +58,13 @@ const TopDocsChips = React.memo(function TopDocsChips() {
     }
   };
 
-
   if (isLoading && isHydrated) {
     return (
       <div className="container mx-auto px-4 py-8 text-center">
         <Loader2 className="h-6 w-6 animate-spin mx-auto text-muted-foreground" />
-        <p className="text-sm text-muted-foreground mt-2">{t('TopDocsChips.loading', {defaultValue: 'Loading popular documents...'})}</p>
+        <p className="text-sm text-muted-foreground mt-2">
+          {tCommon('TopDocsChips.loading', { defaultValue: 'Loading popular documents...' })}
+        </p>
       </div>
     );
   }
@@ -74,7 +76,7 @@ const TopDocsChips = React.memo(function TopDocsChips() {
   return (
     <section className="container mx-auto px-4 py-8 md:py-12">
       <h2 className="text-xl font-semibold text-center mb-6 text-foreground">
-        {t('TopDocsChips.title', {defaultValue: 'Popular Legal Documents'})}
+        {tCommon('TopDocsChips.title', { defaultValue: 'Popular Legal Documents' })}
       </h2>
       <div className="flex flex-wrap justify-center items-center gap-2 md:gap-3">
         {topDocs.map((doc) => (
@@ -92,7 +94,7 @@ const TopDocsChips = React.memo(function TopDocsChips() {
       </div>
       <div className="text-center mt-6">
         <Button variant="link" onClick={handleExploreAll} className="text-primary text-sm">
-          {t('stepOne.exploreAllCategoriesButton', {defaultValue: 'Explore All Document Categories'})} →
+          {tCommon('stepOne.exploreAllCategoriesButton', { defaultValue: 'Explore All Document Categories' })} →
         </Button>
       </div>
     </section>

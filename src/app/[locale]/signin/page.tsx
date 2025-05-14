@@ -14,7 +14,7 @@ import { useAuth } from '@/hooks/useAuth'; // Import useAuth
 import { useToast } from '@/hooks/use-toast'; // Import useToast
 
 export default function SignInPage() {
-  const { t } = useTranslation();
+  const { t } = useTranslation("common");
   const params = useParams();
   const router = useRouter();
   const { login } = useAuth(); // Get login function

@@ -1,0 +1,21 @@
+{
+  "howItWorks": "Cómo Funciona",
+  "pricing": "Precios",
+  "features": "Características",
+  "resources": "Recursos",
+  "blog": "Blog",
+  "faq": "Preguntas Frecuentes",
+  "support": "Soporte",
+  "legal": "Legal",
+  "privacyPolicy": "Política de Privacidad",
+  "termsOfService": "Términos de Servicio",
+  "disclaimer": "Descargo de Responsabilidad",
+  "community": "Comunidad",
+  "getCredits": "Obtén 3 Créditos Gratis",
+  "emailPlaceholder": "Ingresa tu correo electrónico",
+  "subscribe": "Suscribirse",
+  "joinMailingList": "Únete a nuestra lista de correo para actualizaciones y ofertas.",
+  "copyright": "© {{year}} 123LegalDoc. Todos los derechos reservados.",
+  "errorInvalidEmail": "Por favor, ingresa un correo electrónico válido.",
+  "invalidEmailMessage": "Por favor, proporciona un correo electrónico válido para suscribirte."
+}

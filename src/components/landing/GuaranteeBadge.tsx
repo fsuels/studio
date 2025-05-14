@@ -6,7 +6,7 @@ import { ShieldCheck } from 'lucide-react';
 import { useTranslation } from 'react-i18next'; 
 
 const GuaranteeBadge = React.memo(function GuaranteeBadge() {
-  const { t } = useTranslation();
+  const { t } = useTranslation("common");
   const [isHydrated, setIsHydrated] = useState(false);
 
   useEffect(() => {

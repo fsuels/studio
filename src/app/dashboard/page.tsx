@@ -27,7 +27,7 @@ const mockPayments = [
 ];
 
 export default function DashboardPage() {
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation("common");
   const [activeTab, setActiveTab] = useState<'documents' | 'payments' | 'profile'>('documents');
   const [isLoading, setIsLoading] = useState(true);
   const [isHydrated, setIsHydrated] = useState(false);

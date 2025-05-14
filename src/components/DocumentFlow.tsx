@@ -22,7 +22,7 @@ export default function DocumentFlow({
   initialLocale = 'en',
 }: DocumentFlowProps = {}) { 
   const router = useRouter();
-  const { t } = useTranslation();
+  const { t } = useTranslation("common");
 
   const [templateId, setTemplateId] = useState<string>(initialDocId ?? '');
   const [step, setStep] = useState(initialDocId ? 2 : 1); 

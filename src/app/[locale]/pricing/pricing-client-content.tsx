@@ -15,7 +15,7 @@ interface PricingClientContentProps {
 }
 
 export default function PricingClientContent({ locale }: PricingClientContentProps) {
-  const { t } = useTranslation();
+  const { t } = useTranslation("common");
 
   const freeCreditsUsed = 0; 
   const totalFreeCredits = 1;

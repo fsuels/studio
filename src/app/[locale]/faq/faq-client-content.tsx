@@ -16,7 +16,7 @@ interface FaqClientContentProps {
 }
 
 export default function FaqClientContent({ locale }: FaqClientContentProps) {
-  const { t } = useTranslation()
+  const { t } = useTranslation("common")
   const [isHydrated, setIsHydrated] = useState(false); 
 
   useEffect(() => {

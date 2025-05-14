@@ -47,7 +47,6 @@ export default function BundlesCarousel({ max = 6 }: Props) {
   return (
     <section className="w-full max-w-6xl mx-auto mt-8">
       <h2 className="text-xl font-semibold mb-4 px-1">Popular bundles</h2>
-
       <div className="flex gap-4 overflow-x-auto scrollbar-hide pb-2">
         {bundles.map(b => (
           <motion.div key={b.id} initial={{opacity:0}} animate={{opacity:1}} transition={{delay:.1}}>
@@ -56,7 +55,7 @@ export default function BundlesCarousel({ max = 6 }: Props) {
             >
               {b.imageUrl && (
                 // eslint-disable-next-line @next/next/no-img-element
-                <img src={b.imageUrl} alt={b.name} className="h-32 w-full object-cover rounded-t" data-ai-hint="legal document bundle" />
+                (<img src={b.imageUrl} alt={b.name} className="h-32 w-full object-cover rounded-t" data-ai-hint="legal document bundle" />)
               )}
 
               <CardHeader className="pb-1">
@@ -79,5 +78,5 @@ export default function BundlesCarousel({ max = 6 }: Props) {
         ))}
       </div>
     </section>
-  )
+  );
 }

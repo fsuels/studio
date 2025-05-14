@@ -1,0 +1,933 @@
+{
+  "In three quick steps, you’ll have a ready-to-use legal document.": "En tres rápidos pasos, tendrás un documento legal listo para usar.",
+  "Describe Your Situation": "Describe tu Situación",
+  "Tell us what you need—type or speak it.": "Dinos qué necesitas: escríbelo o dilo.",
+  "Answer Simple Questions": "Responde Preguntas Simples",
+  "Provide a few details to customize your document.": "Proporciona algunos detalles para personalizar tu documento.",
+  "Preview & Sign": "Previsualiza y Firma",
+  "Download & Sign": "Descarga y Firma",
+  "Get a professional PDF ready to sign and share.": "Obtén un PDF profesional listo para firmar y compartir.",
+  "documentInference": {
+    "describePlaceholder": "ej., 'Alquilar mi apartamento', 'Empezar un negocio con un socio', 'Necesito que alguien deje de contactarme...'",
+    "textHelper": "Describe tu situación claramente.",
+    "micHelperRecording": "Grabando... Habla claro. Haz clic en la pestaña \"Detener Grabación\" cuando termines.",
+    "micHelperStart": "Haz clic en la pestaña de arriba para empezar a grabar.",
+    "micHelperUnavailable": "Micrófono no disponible.",
+    "micTranscriptPlaceholderListening": "Escuchando...",
+    "micTranscriptPlaceholderStart": "Haz clic en la pestaña \"Iniciar Mic\" para comenzar.",
+    "micTranscriptPlaceholderUnavailable": "Micrófono no disponible.",
+    "stateLabel": "Estado de EE. UU. relevante (Opcional)",
+    "statePlaceholder": "Seleccionar Estado...",
+    "stateHelper": "Ayuda a personalizar las sugerencias de documentos. Selecciónalo si aplica.",
+    "analyzeButton": "Analizar Mi Situación",
+    "analyzingButton": "Analizando...",
+    "inputRequiredTitle": "Información Requerida",
+    "inputRequiredDescription": "Por favor, proporciona una descripción por texto o micrófono.",
+    "micErrorTitle": "Error de Voz",
+    "micErrorNoSpeech": "No se detectó voz.",
+    "micErrorAudioCapture": "Falló la captura del micrófono.",
+    "micErrorNotAllowed": "Acceso al micrófono denegado.",
+    "micErrorNetwork": "Error de red durante el reconocimiento.",
+    "micErrorDefault": "Error: {{error}}. {{message}}",
+    "micUnsupportedTitle": "No Soportado",
+    "micUnsupportedDescription": "Reconocimiento de voz no disponible.",
+    "micStartErrorTitle": "Error al Grabar",
+    "micStartErrorDefault": "No se pudo iniciar la grabación: {{message}}.",
+    "analysisFailedTitle": "Análisis Fallido",
+    "analysisFailedDefault": "No se pudieron obtener sugerencias de la IA.",
+    "analysisFailedApiDisabled": "El análisis de IA no está disponible actualmente en este modo de despliegue. Por favor, contacta con soporte.",
+    "networkErrorTitle": "Error de Red",
+    "networkErrorDescription": "No se pudo conectar al servicio de análisis. Por favor, revisa tu conexión."
+  },
+  "docTypeSelector": {
+    "suggestedTitle": "Documentos Sugeridos",
+    "selectPrompt": "Según tu descripción, sugerimos lo siguiente. Por favor, selecciona la mejor opción para continuar.",
+    "confidenceSuffix": "% Coincidencia",
+    "generalInquiryReason": "Si ninguna de las anteriores parece correcta, o si necesitas más aclaraciones.",
+    "noReasoning": "No se proporcionó justificación.",
+    "confirmed": "Selección Confirmada",
+    "searchCategories": "Buscar categorías...",
+    "noCategoriesFound": "No hay categorías que coincidan con tu búsqueda.",
+    "backToCategories": "Volver a Categorías",
+    "searchPlaceholder": "Buscar documentos...",
+    "noDescription": "No hay descripción disponible.",
+    "requiresNotarization": "Requiere Notarización",
+    "canBeRecorded": "Se Puede Registrar",
+    "noResults": "No hay documentos que coincidan con tu búsqueda en esta categoría.",
+    "searchInCategoryPlaceholder": "Buscar en esta categoría..."
+  },
+  "dynamicForm": {
+    "stepTitle": "Paso 2: Proporciona Detalles para {{documentType}}",
+    "reviewDescription": "Revisa los detalles proporcionados abajo.",
+    "answerDescription": "Responde las preguntas abajo.",
+    "answerDescriptionWithState": "Responde las preguntas abajo para el estado de {{state}}.",
+    "noQuestionsNeeded": "No se necesitan preguntas específicas para este tipo de documento.",
+    "noQuestionsNeededWithState": "No se necesitan preguntas específicas para este documento basado en la información proporcionada{{stateInfo}}.",
+    "stateInfoFragment": " y el estado {{state}}",
+    "proceedMessage": "Puedes proceder al siguiente paso.",
+    "confirmProceedButton": "Confirmar y Proceder Sin Preguntas",
+    "confirmAnswersButton": "Confirmar Todas las Respuestas y Proceder",
+    "savingButton": "Guardando Respuestas...",
+    "confirmedButton": "Respuestas Confirmadas - Proceder",
+    "selectPlaceholder": "Selecciona una opción",
+    "requiredField": "*",
+    "errorMissingRequired": "Por favor, completa todos los campos requeridos (*).",
+    "errorUnsaved": "Por favor, guarda (bloquea) todas las respuestas antes de confirmar."
+  },
+  "disclaimerStep": {
+    "stepTitle": "Paso 3: Descargo de Responsabilidad Importante",
+    "description": "Por favor, lee y acepta lo siguiente antes de proceder.",
+    "disclaimerText1": "Este servicio no proporciona asesoramiento legal.",
+    "disclaimerText2": "Los documentos generados se basan en plantillas comunes y la información que proporcionas. Pueden no ser adecuados para tu situación específica o jurisdicción.",
+    "disclaimerText3": "Usar este servicio no crea una relación abogado-cliente. Recomendamos encarecidamente consultar a un abogado calificado para obtener asesoramiento específico a tus necesidades.",
+    "disclaimerText4": "Al continuar, reconoces que comprendes estas limitations. Lee el",
+    "disclaimerLink": "Descargo de Responsabilidad",
+    "termsLink": "Términos de Servicio",
+    "and": "y",
+    "agreeCheckboxLabel": "He leído y entiendo el descargo de responsabilidad.",
+    "continueButton": "Aceptar y Continuar al Documento"
+  },
+  "pdfPreview": {
+    "stepTitle": "Paso 4: Previsualizar y Firmar Documento",
+    "descriptionReadOnly": "Previsualización del documento abajo. La firma y el compartir están disponibles en el siguiente paso.",
+    "descriptionSign": "Revisa el documento generado. Puedes firmarlo digitalmente cuando estés listo.",
+    "browserNotSupported": "Tu navegador no soporta PDFs embebidos. Puedes",
+    "downloadLink": "descargar el PDF",
+    "toViewIt": "para verlo.",
+    "generatingPreview": "Generando previsualización del documento...",
+    "signingSuccessTitle": "Documento Firmado",
+    "signingSuccessDescription": "¡Documento firmado con éxito! Procede al siguiente paso para compartir o descargar.",
+    "signingFailedTitle": "Fallo al Firmar",
+    "signingErrorTitle": "Error al Firmar",
+    "signingErrorDescription": "Ocurrió un error inesperado.",
+    "noDocumentDataTitle": "Sin Datos del Documento",
+    "noDocumentDataDescriptionSign": "No se puede firmar un documento vacío.",
+    "noDocumentDataDescriptionLoad": "No se pudieron cargar los datos del PDF para firmar.",
+    "signButton": "Firmar Documento Digitalmente",
+    "signingButton": "Firmando...",
+    "signedButton": "Documento Firmado - Proceder",
+    "alreadySignedButton": "Documento Ya Firmado"
+  },
+  "shareDownloadStep": {
+    "stepTitle": "Paso 5: Compartir y Descargar",
+    "description": "¡Tu documento está listo! Compártelo de forma segura o descárgalo.",
+    "actionsPlaceholder": "Acciones disponibles después de firmar el documento.",
+    "shareButton": "Compartir de Forma Segura (Pronto)",
+    "downloadButton": "Descargar PDF",
+    "disabledDescription": "Firma el documento en el paso anterior para habilitar compartir y descargar."
+  },
+  "toasts": {
+    "subscribedTitle": "¡Suscrito!",
+    "subscribedDescription": "¡Gracias por unirte! Revisa tu bandeja de entrada para tus créditos gratis.",
+    "invalidEmailTitle": "Correo Inválido",
+    "analysisCompleteTitle": "Análisis Completo",
+    "analysisCompleteDescription": "Sugerencias de IA cargadas abajo. Por favor, revisa y selecciona la mejor opción.",
+    "analysisInconclusiveTitle": "Análisis Inconcluso",
+    "analysisInconclusiveDescription": "No se pudo determinar un tipo de documento específico. Por favor, refina tu descripción o selecciona 'Consulta General'.",
+    "docTypeConfirmedTitle": "Tipo de Documento Confirmado",
+    "docTypeConfirmedDescription": "Procediendo con {{docName}}.",
+    "detailsRecordedTitle": "Detalles Registrados",
+    "detailsRecordedDescription": "Procede al descargo de responsabilidad.",
+    "missingDataTitle": "Datos Faltantes",
+    "missingDataDescription": "No se puede generar el PDF sin el tipo de documento y las respuestas.",
+    "generatingPDFTitle": "Generando Documento...",
+    "generatingPDFDescription": "Por favor espera mientras creamos tu PDF.",
+    "pdfGenFailedTitle": "Fallo al Generar PDF",
+    "pdfGenFailedDescription": "No se pudo generar el documento.",
+    "pdfGenSuccessTitle": "¡Documento Listo!",
+    "pdfGenSuccessDescription": "Tu previsualización de PDF está cargada abajo.",
+    "pdfGenErrorTitle": "Error al Generar PDF"
+  },
+  "home": {
+    "hero": {
+      "title": "Solo 3 Pasos Fáciles",
+      "subtitle": "Con unos pocos pasos guiados, generarás un documento legal totalmente personalizado.",
+      "pricingBadge": "Pago único de $35/documento • Sin suscripción"
+    },
+    "steps": {
+      "step1": {
+        "title": "Describe la situación",
+        "desc": "Brinda un resumen rápido. Se admite texto o voz."
+      },
+      "step2": {
+        "title": "Responde preguntas simples",
+        "desc": "La IA te guiará con la información exacta que se necesita."
+      },
+      "step3": {
+        "title": "Finaliza y firma",
+        "desc": "Descarga, firma o comparte tu documento de forma segura."
+      }
+    },
+    "cta": {
+      "startNow": "Comienza gratis"
+    },
+    "trustStrip": {
+      "title": "Confiado por Profesionales",
+      "badge1": "Más de {{count}} documentos generados",
+      "badge2": "Cifrado y conforme a la privacidad",
+      "badge3": "Verificado por abogados reales"
+    },
+    "testimonials": {
+      "title": "Lo que dicen nuestros usuarios",
+      "t1": {
+        "quote": "Esta plataforma me ahorró horas de papeleo.",
+        "name": "Ana Ramírez",
+        "title": "Propietaria en Texas",
+        "outcome": "Ahorró $500 en gastos legales"
+      },
+      "t2": {
+        "quote": "Extremadamente intuitivo. Creé un contrato en minutos.",
+        "name": "Jason Liu",
+        "title": "Fundador de Startup",
+        "outcome": "Lanzó su negocio más rápido"
+      },
+      "t3": {
+        "quote": "La IA me dio justo lo que necesitaba. ¡Fantástico!",
+        "name": "Linda Fox",
+        "title": "Agente Inmobiliaria",
+        "outcome": "Cerró el trato sin problemas"
+      },
+      "t4": {
+        "quote": "Me guió paso a paso sin ninguna confusión.",
+        "name": "Kevin James",
+        "title": "Freelancer",
+        "outcome": "Aseguró proyecto con cliente"
+      },
+      "t5": {
+        "quote": "Simple, rápido y legalmente sólido. Muy recomendable.",
+        "name": "Nina Patel",
+        "title": "Vendedora en Línea",
+        "outcome": "Protegió su tienda en línea"
+      },
+      "t6": {
+        "quote": "Perfecto para contratos de pequeños negocios.",
+        "name": "Carlos Gómez",
+        "title": "Dueño de Boutique",
+        "outcome": "Formalizó acuerdos con proveedores"
+      },
+      "t7": {
+        "quote": "El soporte en español fue clave para mi equipo.",
+        "name": "Rosa Villanueva",
+        "title": "Asistente Legal",
+        "outcome": "Mejoró la eficiencia del equipo"
+      },
+      "t8": {
+        "quote": "Excelente diseño y resultados confiables.",
+        "name": "Matthew R.",
+        "title": "Fotógrafo",
+        "outcome": "Estandarizó contratos con clientes"
+      },
+      "t9": {
+        "quote": "Pude crear un contrato de alquiler estando de vacaciones.",
+        "name": "Joanne L.",
+        "title": "Propietaria Remota",
+        "outcome": "Gestionó propiedad a distancia"
+      },
+      "t10": {
+        "quote": "Lo volvería a usar sin duda. Es excelente.",
+        "name": "Henry Thomas",
+        "title": "Inversionista",
+        "outcome": "Solidificó términos de inversión"
+      },
+      "t11": {
+        "quote": "No necesitas ser abogado. Lo hace todo por ti.",
+        "name": "Susan White",
+        "title": "Organizadora de Eventos",
+        "outcome": "Simplificó contratos de eventos"
+      },
+      "t12": {
+        "quote": "Previsualización y compartición de documentos fue muy fluida.",
+        "name": "Liam Cruz",
+        "title": "Consultor de Software",
+        "outcome": "Agilizó la incorporación de clientes"
+      },
+      "t13": {
+        "quote": "¡Por fin ayuda legal accesible!",
+        "name": "Laura Bennett",
+        "title": "Escritora Freelance",
+        "outcome": "Protegió mis derechos de autor"
+      },
+      "t14": {
+        "quote": "Mi inquilino firmó el mismo día.",
+        "name": "Omar Hassan",
+        "title": "Propietario",
+        "outcome": "Aseguró ingresos por alquiler"
+      },
+      "t15": {
+        "quote": "Esta app es esencial para emprendedores.",
+        "name": "Jada Evans",
+        "title": "Coach de Vida",
+        "outcome": "Profesionalizó mi práctica de coaching"
+      },
+      "t16": {
+        "quote": "Hasta mis padres pudieron usarla fácilmente.",
+        "name": "Miguel Reyes",
+        "title": "Estudiante Universitario",
+        "outcome": "Ayudó con acuerdo de compañeros de piso"
+      },
+      "t17": {
+        "quote": "El formulario dinámico fue ideal para mí.",
+        "name": "Emily Rivera",
+        "title": "Organizadora sin fines de lucro",
+        "outcome": "Redactó acuerdos de voluntariado"
+      },
+      "t18": {
+        "quote": "Es como tener un abogado en el celular.",
+        "name": "Daniel Schmidt",
+        "title": "Desarrollador Freelance",
+        "outcome": "Hizo contratos de servicio rápidamente"
+      },
+      "t19": {
+        "quote": "Limpio, moderno y legalmente confiable.",
+        "name": "Priya Desai",
+        "title": "Arquitecta",
+        "outcome": "Preparó propuestas para clientes"
+      },
+      "t20": {
+        "quote": "Me ayuda a redactar sin dudar.",
+        "name": "George Park",
+        "title": "Consultor de Marketing",
+        "outcome": "Aclaró alcances de proyecto"
+      },
+      "t21": {
+        "quote": "Confiable y rápido. El mejor gasto de $35.",
+        "name": "Aliya Khan",
+        "title": "Coach en Línea",
+        "outcome": "Aseguró acuerdos de coaching"
+      },
+      "t22": {
+        "quote": "La IA acertó con mis documentos de negocio.",
+        "name": "Bobby Tran",
+        "title": "Fundador de Startup",
+        "outcome": "Registró LLC fácilmente"
+      },
+      "t23": {
+        "quote": "Me dio tranquilidad en cada paso.",
+        "name": "Natalie Scott",
+        "title": "Madre y Propietaria",
+        "outcome": "Gestionó alquiler sin problemas"
+      },
+      "t24": {
+        "quote": "Confío más en esta herramienta que en plantillas online.",
+        "name": "Eric Delgado",
+        "title": "Dueño de Negocio",
+        "outcome": "Creó contratos personalizados"
+      },
+      "t25": {
+        "quote": "El soporte bilingüe fue clave.",
+        "name": "Yesenia Morales",
+        "title": "Líder Comunitaria",
+        "outcome": "Atendió necesidades de comunidad diversa"
+      }
+    },
+    "moneyBackGuarantee": "Garantía de satisfacción 100% o le devolvemos su dinero",
+    "callToAction": "Comenzar ahora"
+  },
+  "Step 2: Provide Details": "Paso 2: Proporcionar Detalles",
+  "Confirm a document type in Step 1 to see the questions.": "Confirma un tipo de documento en el Paso 1 para ver las preguntas.",
+  "Waiting for document confirmation from Step 1...": "Esperando confirmación del documento del Paso 1...",
+  "Read and agree to the disclaimer before proceeding.": "Lee y acepta el descargo de responsabilidad antes de proceder.",
+  "Complete the questions above to view the disclaimer.": "Completa las preguntas anteriores para ver el descargo de responsabilidad.",
+  "Review the generated document and sign it digitally.": "Revisa el documento generado y fírmalo digitalmente.",
+  "Agree to the disclaimer above to generate the document preview.": "Acepta el descargo de responsabilidad anterior para generar la vista previa del documento.",
+  "Securely share your document or download it after signing.": "Comparte de forma segura tu documento o descárgalo después de firmar.",
+  "State": "Estado",
+  "homepage": {
+    "workflowTitle": "Flujo de trabajo ultrarrápido",
+    "workflowDescription": "La IA te guía paso a paso para que crear documentos sea rápido e intuitivo.",
+    "secureTitle": "Seguro y Conforme",
+    "secureDescription": "Genera PDFs encriptados y utiliza enlaces para compartir con bloqueo de tiempo para mayor seguridad.",
+    "costEffectiveTitle": "Económico",
+    "costEffectiveDescription": "Paga solo $35 por documento en comparación con los $200+ que suelen cobrar los bufetes de abogados."
+  },
+  "pricing": {
+    "title": "Precios simples y transparentes",
+    "subtitle": "Sin tarifas ocultas. Solo documentos legales a precio justo.",
+    "perDocument": "documento",
+    "bundleOf5": "paquete de 5",
+    "perMonth": "mes",
+    "mostPopular": "Más Popular",
+    "cta": "Comenzar ahora",
+    "ctaContact": "Contactar Ventas",
+    "plans": {
+      "single": {
+        "title": "Documento Único",
+        "description": "Perfecto para necesidades puntuales.",
+        "item1": "1 PDF legal descargable",
+        "item2": "Personalización de cláusulas",
+        "item3": "Soporte por correo",
+        "item4": "Compartir seguro (pronto)"
+      },
+      "bundle": {
+        "title": "Paquete de 5 Documentos",
+        "description": "Ideal para múltiples documentos relacionados.",
+        "item1": "5 PDFs descargables",
+        "item2": "Todas las funciones del único",
+        "item3": "Créditos no expiran",
+        "item4": "Mejor valor por documento"
+      },
+      "unlimited": {
+        "title": "Pro Negocios",
+        "description": "Para usuarios frecuentes y negocios.",
+        "item1": "Documentos ilimitados",
+        "item2": "Soporte prioritario",
+        "item3": "Funciones de equipo (pronto)",
+        "item4": "Cancela en cualquier momento"
+      }
+    },
+    "guarantee": "Garantía de satisfacción 100% o le devolvemos su dinero en compras únicas/paquetes.",
+    "payPerDocBadge": "Pago único de $35/documento • Sin suscripción"
+  },
+  "features": {
+    "title": "Características que hacen lo legal fácil",
+    "subtitle": "Todo lo que necesitas para crear documentos seguros y válidos rápidamente.",
+    "items": {
+      "ai": {
+        "title": "Inferencia por IA",
+        "desc": "Sugerencias inteligentes basadas en tus necesidades."
+      },
+      "forms": {
+        "title": "Cuestionarios Dinámicos",
+        "desc": "Preguntas guiadas adaptadas al documento elegido."
+      },
+      "local": {
+        "title": "Cláusulas Específicas del Estado",
+        "desc": "Documentos adaptados a las leyes estatales de EE. UU."
+      },
+      "bilingual": {
+        "title": "Soporte Bilingüe (EN/ES)",
+        "desc": "Interfaz y soporte completos en inglés y español."
+      },
+      "pdf": {
+        "title": "Generación Instantánea de PDF",
+        "desc": "Previsualiza y descarga PDFs profesionales."
+      },
+      "sharing": {
+        "title": "Compartir de Forma Segura",
+        "desc": "Comparte documentos con enlaces de tiempo limitado (próximamente)."
+      },
+      "dashboard": {
+        "title": "Panel de Usuario",
+        "desc": "Gestiona tus documentos y configuraciones fácilmente."
+      },
+      "security": {
+        "title": "Privacidad y Seguridad",
+        "desc": "Datos encriptados y prácticas conformes."
+      }
+    },
+    "hero": {
+      "title": "Todas las funciones que necesitas"
+    },
+    "card1": {
+      "title": "Rellenado inteligente"
+    }
+  },
+  "resources": {
+    "title": "Recursos y Guías Legales",
+    "subtitle": "Tutoriales y herramientas para facilitar tareas legales.",
+    "guides": {
+      "title": "Guías de Documentos",
+      "desc": "Comprende para qué sirve cada documento y cómo usarlo."
+    },
+    "states": {
+      "title": "Reglas por Estado",
+      "desc": "Consulta diferencias legales entre los estados de EE. UU."
+    },
+    "voice": {
+      "title": "Consejos de Voz",
+      "desc": "Habla con claridad para una mejor comprensión por la IA."
+    },
+    "signing": {
+      "title": "Firmar y Compartir",
+      "desc": "Aprende a firmar y compartir tus documentos de forma segura."
+    },
+    "workflow": {
+      "title": "Cómo Funciona",
+      "desc": "Vista general paso a paso del flujo legal asistido por IA."
+    }
+  },
+  "faq": {
+    "title": "Preguntas Frecuentes",
+    "subtitle": "Todo lo que necesitas saber sobre 123LegalDoc.",
+    "q1": {
+      "question": "¿Estos documentos son legalmente válidos?",
+      "answer": "Sí. Todos se basan en plantillas legales y cláusulas comunes en EE. UU."
+    },
+    "q2": {
+      "question": "¿Los documentos se adaptan a mi estado?",
+      "answer": "Sí. Se ajustan según los requisitos del estado en EE. UU. que selecciones."
+    },
+    "q3": {
+      "question": "¿Puedo editar después de generar un documento?",
+      "answer": "Sí, puedes hacer cambios antes de descargar el PDF final."
+    },
+    "q4": {
+      "question": "¿Necesito un abogado?",
+      "answer": "No para documentos comunes. Para asesoría legal específica, recomendamos consultar a un abogado."
+    },
+    "q5": {
+      "question": "¿Mis datos están seguros?",
+      "answer": "Sí, están cifrados y se almacenan de forma temporal para tu uso exclusivo."
+    },
+    "q6": {
+      "question": "¿Cuánto cuesta?",
+      "answer": "Los documentos cuestan $35 cada uno. Sin suscripciones."
+    }
+  },
+  "support": {
+    "title": "Centro de Soporte",
+    "subtitle": "¿Necesitas ayuda? Estamos aquí para ayudarte.",
+    "contact": {
+      "title": "Contáctanos",
+      "hours": "Lunes a Viernes, 9am–6pm EST"
+    },
+    "help": {
+      "title": "Ayuda Rápida",
+      "item1": "Cómo funciona la generación de documentos",
+      "item2": "Precios y opciones de pago",
+      "item3": "Solución de problemas comunes",
+      "item4": "Entender tu panel"
+    },
+    "note": "Para respuestas inmediatas, consulta nuestra página de Preguntas Frecuentes.",
+    "cta": "Visitar Preguntas Frecuentes"
+  },
+  "blog": {
+    "title": "Consejos y Artículos Legales",
+    "subtitle": "Tips legales, guías de documentos y novedades del sector.",
+    "readMore": "Leer más",
+    "prevPost": "Artículo Anterior",
+    "nextPost": "Artículo Siguiente",
+    "freelancer-docs": {
+      "title": "5 Documentos Legales que Todo Freelancer Debe Conocer",
+      "desc": "Desde contratos hasta acuerdos de confidencialidad — lo básico para freelancers.",
+      "date": "2024-03-12",
+      "body": "<p>Si trabajas como freelancer, protegerte legalmente es tan importante como hacer bien tu trabajo. Estos son cinco documentos clave que deberías tener:</p>\n  <ul>\n    <li><strong>Contrato de Prestación de Servicios</strong>: Define el alcance, pagos, tiempos de entrega y propiedad del trabajo.</li>\n    <li><strong>Acuerdo de Confidencialidad (NDA)</strong>: Protege información sensible del cliente.</li>\n    <li><strong>Factura</strong>: Necesaria para solicitar pagos y llevar control.</li>\n    <li><strong>Acuerdo de Servicios</strong>: Ideal para relaciones recurrentes con clientes.</li>\n    <li><strong>Licencia de Derechos de Autor</strong>: Aclara quién es el dueño del contenido y si puede reutilizarse.</li>\n  </ul>\n  <p>Estos documentos ayudan a evitar malentendidos y brindan seguridad legal.</p>"
+    },
+    "ai-legaltech": {
+      "title": "Cómo la IA Está Transformando el LegalTech",
+      "desc": "Explora el papel de la inteligencia artificial en documentos y cumplimiento.",
+      "date": "2024-02-02",
+      "body": "<p>La inteligencia artificial está revolucionando el mundo legal. Hoy en día, plataformas legales utilizan IA para:</p>\n  <ul>\n    <li>Entender las necesidades legales mediante voz o texto.</li>\n    <li>Clasificar situaciones y recomendar documentos adecuados.</li>\n    <li>Rellenar cláusulas automáticamente siguiendo buenas prácticas.</li>\n  </ul>\n  <p>La IA no reemplaza abogados, pero permite que más personas accedan a herramientas legales confiables y asequibles.</p>"
+    },
+    "templates-risk": {
+      "title": "Por Qué los Modelos Gratis Pueden Ser Peligrosos",
+      "desc": "Los modelos gratuitos suelen omitir cláusulas clave — qué debes revisar.",
+      "date": "2023-12-20",
+      "body": "<p>Usar plantillas legales gratuitas puede parecer conveniente, pero muchas veces:</p>\n  <ul>\n    <li>No consideran leyes estatales específicas.</li>\n    <li>Usan lenguaje legal desactualizado o inválido.</li>\n    <li>Omiten cláusulas clave sobre pagos, responsabilidades o sanciones.</li>\n  </ul>\n  <p>Plataformas como 123LegalDoc ofrecen contratos personalizables que cumplen con las leyes locales.</p>"
+    },
+    "lease-florida": {
+      "title": "Cómo Crear un Contrato de Alquiler Válido en Florida",
+      "desc": "Guía legal paso a paso para propietarios e inquilinos en Florida.",
+      "date": "2023-11-03",
+      "body": "Próximamente..."
+    },
+    "ai-vs-lawyers": {
+      "title": "IA vs. Abogados: Cuándo Usar un Asistente Legal Automatizado",
+      "date": "2024-03-11",
+      "desc": "Comprende cuándo las herramientas impulsadas por IA como 123LegalDoc son suficientes y cuándo debes buscar asesoría legal humana.",
+      "body": "<p>Este es el contenido completo en español para el artículo de IA vs Abogados...</p>"
+    },
+    "how-to-make-a-lease": {
+      "title": "Cómo Hacer un Contrato de Alquiler en 5 Minutos",
+      "date": "2024-02-01",
+      "desc": "Guía paso a paso para generar rápidamente un contrato de alquiler compatible con tu estado.",
+      "body": "<p>Este es el contenido completo en español para el artículo de Contrato de Alquiler...</p>"
+    },
+    "top-5-legal-mistakes": {
+      "title": "Los 5 Errores Legales Más Comunes de los Freelancers",
+      "date": "2023-12-19",
+      "desc": "Evita estos errores legales costosos al trabajar con clientes y subcontratistas.",
+      "body": "<p>Este es el contenido completo en español para el artículo de Errores de Freelancers...</p>"
+    },
+    "divorce-vs-legal-separation": {
+      "title": "Divorcio vs. Separación Legal: ¿Cuál es la Diferencia?",
+      "date": "2023-11-02",
+      "desc": "Explora las diferencias clave entre el divorcio y la separación legal en EE. UU.",
+      "body": "<p>Este es el contenido completo en español para el artículo de Divorcio vs Separación...</p>"
+    },
+    "how-to-sell-a-car": {
+      "title": "Cómo Vender un Coche con un Contrato de Compra-Venta",
+      "date": "2023-10-15",
+      "desc": "Aprende cómo transferir la propiedad legalmente y con seguridad mediante un contrato de compra-venta.",
+      "body": "<p>Este es el contenido completo en español para el artículo de Vender un Coche...</p>"
+    },
+    "starting-a-partnership": {
+      "title": "Cómo Empezar una Sociedad: Documentos Legales Esenciales",
+      "date": "2023-09-30",
+      "desc": "¿Qué acuerdos legales necesitas al iniciar un negocio con un socio?",
+      "body": "<p>Este es el contenido completo en español para el artículo de Documentos de Sociedad...</p>"
+    },
+    "legal-checklist-small-business": {
+      "title": "Lista Legal Definitiva para Iniciar un Pequeño Negocio",
+      "desc": "Una guía legal paso a paso para nuevos emprendedores: licencias, contratos y formularios fiscales.",
+      "date": "2024-03-11",
+      "body": "<p>Iniciar un pequeño negocio implica navegar un complejo panorama legal. Esta lista cubre lo esencial:</p><ul><li>Elegir una estructura de negocio (Empresario individual, LLC, Corporación)</li><li>Registrar el nombre de tu negocio</li><li>Obtener las licencias y permisos necesarios (federales, estatales, locales)</li><li>Comprender las obligaciones fiscales (EIN, impuesto sobre ventas, impuesto sobre la renta)</li><li>Redactar acuerdos clave (Sociedad, Operativo, Arrendamientos)</li><li>Cumplir con las leyes laborales</li></ul><p>Consultar con profesionales legales y financieros es crucial.</p>"
+    },
+    "ndas-how-to-use": {
+      "title": "Cuándo y Por Qué Necesitas un NDA (Acuerdo de Confidencialidad)",
+      "desc": "Descubre qué es un NDA, cuándo usarlo y cómo proteger información sensible de negocios.",
+      "date": "2024-02-01",
+      "body": "<p>Un NDA, o Acuerdo de Confidencialidad, es un contrato legal que establece confidencialidad entre las partes. Consideraciones clave:</p><ul><li><strong>Propósito:</strong> Protege secretos comerciales, listas de clientes, datos financieros o ideas propietarias durante discusiones.</li><li><strong>Tipos:</strong> Mutuo (ambas partes comparten información) o Unilateral (una parte revela).</li><li><strong>Cuándo usarlo:</strong> Antes de presentar a inversores, contratar contratistas con acceso a datos sensibles, explorar asociaciones o discutir invenciones.</li><li><strong>Cláusulas Clave:</strong> Definición de información confidencial, obligaciones de la parte receptora, duración de la confidencialidad, exclusiones.</li></ul><p>Un NDA es una herramienta fundamental para salvaguardar la propiedad intelectual y las estrategias de negocio.</p>"
+    },
+    "eviction-process": {
+      "title": "Entendiendo el Proceso de Desalojo: Derechos del Propietario e Inquilino",
+      "desc": "Explora el proceso legal de desalojo y cómo evitar errores comunes como propietario o inquilino.",
+      "date": "2023-12-19",
+      "body": "<p>El desalojo es un proceso legal que los propietarios deben seguir para retirar a un inquilino. Pasos y derechos clave:</p><ul><li><strong>Razón Válida:</strong> Típicamente falta de pago de alquiler, violaciones del contrato de arrendamiento o actividad ilegal.</li><li><strong>Notificación:</strong> El propietario debe proporcionar una notificación escrita adecuada (p. ej., aviso de 3 días para pagar o desalojar, aviso de 30 días para desalojar). Las leyes estatales varían significativamente.</li><li><strong>Presentación Judicial:</strong> Si el inquilino no cumple, el propietario presenta una demanda de desalojo ilegal.</li><li><strong>Respuesta del Inquilino:</strong> El inquilino tiene un plazo específico para responder a la citación judicial.</li><li><strong>Audiencia:</strong> Un juez escucha el caso y emite un fallo.</li><li><strong>Orden de Posesión:</strong> Si el propietario gana, las fuerzas del orden ejecutan el desalojo.</li></ul><p>Tanto propietarios como inquilinos deben comprender las leyes específicas de su estado y buscar asesoramiento legal si no están seguros.</p>"
+    },
+    "power-of-attorney-basics": {
+      "title": "Poder Legal: Qué Es y Por Qué Es Importante",
+      "desc": "Una guía clara sobre los tipos de poder legal y cuándo crearlo.",
+      "date": "2024-01-12",
+      "body": "<p>Un Poder Legal (POA) es un documento legal que otorga a alguien (el Agente) autoridad para actuar en nombre de otra persona (el Principal). Los tipos incluyen:</p><ul><li><strong>POA General:</strong> Autoridad amplia sobre asuntos financieros. A menudo termina si el Principal queda incapacitado.</li><li><strong>POA Duradero:</strong> Sigue siendo efectivo incluso si el Principal queda incapacitado. Crucial para la planificación.</li><li><strong>POA de Atención Médica (o Proxy):</strong> Permite al Agente tomar decisiones médicas si el Principal no puede.</li><li><strong>POA Especial/Limitado:</strong> Otorga poderes específicos y limitados para una tarea o tiempo particular.</li></ul><p>Crear POAs es vital para asegurar que tus asuntos y deseos de atención médica se gestionen si no puedes hacerlo tú mismo.</p>"
+    },
+    "contract-breach": {
+      "title": "¿Qué Pasa Si Alguien Rompe un Contrato?",
+      "desc": "Conoce los remedios legales y estrategias para prevenir el incumplimiento de contratos.",
+      "date": "2024-03-01",
+      "body": "<p>Un incumplimiento de contrato ocurre cuando una parte no cumple con sus obligaciones bajo un acuerdo legalmente vinculante. Las consecuencias y remedios dependen del contrato y la naturaleza del incumplimiento:</p><ul><li><strong>Incumplimiento Material:</strong> Una falla significativa que socava el propósito central del contrato. La parte no incumplidora puede ser excusada de cumplir y puede demandar por daños.</li><li><strong>Incumplimiento Menor:</strong> Una falla menos significativa. La parte no incumplidora aún debe cumplir pero puede demandar por daños causados por el incumplimiento.</li><li><strong>Remedios:</strong> Daños compensatorios (dinero para cubrir pérdidas), cumplimiento específico (el tribunal ordena el cumplimiento), rescisión (cancela el contrato), reforma (el tribunal reescribe parte del contrato).</li></ul><p>Una redacción clara del contrato, comunicación y negociación pueden ayudar a prevenir incumplimientos. Busca asesoramiento legal si ocurre un incumplimiento.</p>"
+    },
+    "child-custody-explained": {
+      "title": "Acuerdos de Custodia de Menores: Una Guía para Padres",
+      "desc": "Aprende sobre custodia compartida, exclusiva y cómo crear un plan justo.",
+      "date": "2024-03-25",
+      "body": "<p>Los acuerdos de custodia de menores determinan dónde viven los niños y quién toma decisiones por ellos después de que los padres se separan. Conceptos clave:</p><ul><li><strong>Custodia Legal:</strong> Derecho a tomar decisiones importantes (educación, atención médica, religión). Puede ser Conjunta o Única.</li><li><strong>Custodia Física:</strong> Dónde reside principalmente el niño. Puede ser Conjunta (tiempo significativo con ambos padres) o Única (principalmente con un padre, visitas para el otro).</li><li><strong>Interés Superior del Niño:</strong> Los tribunales priorizan el bienestar del niño, considerando factores como la estabilidad parental, la preferencia del niño (si tiene edad suficiente) y el historial de cuidado.</li><li><strong>Plan de Crianza:</strong> Un cronograma detallado que describe visitas, días festivos, transporte y comunicación.</li></ul><p>A menudo se fomenta la mediación o la colaboración para crear un plan. Es esencial formalizar el acuerdo legalmente.</p>"
+    },
+    "digital-signatures-legal": {
+      "title": "¿Son Legalmente Válidas las Firmas Digitales en EE. UU.?",
+      "desc": "Comprende la validez legal de las firmas electrónicas según la ley estadounidense.",
+      "date": "2024-03-30",
+      "body": "Próximamente..."
+    },
+    "notarized-documents-online": {
+      "title": "¿Se Puede Notariar un Documento en Línea? Lo Que Debes Saber",
+      "desc": "Aprende cómo funciona la notarización en línea y qué estados la permiten.",
+      "date": "2024-03-28",
+      "body": "Próximamente..."
+    },
+    "legal-documents-immigrants": {
+      "title": "Los 5 Documentos Legales Más Importantes para Inmigrantes en EE. UU.",
+      "desc": "Desde permisos de trabajo hasta declaraciones juradas—esto es lo que deben preparar los nuevos residentes.",
+      "date": "2024-03-27",
+      "body": "Próximamente..."
+    },
+    "contract-basics": {
+      "title": "Contratos Básicos: Qué Debe Incluir Todo Acuerdo",
+      "desc": "Conoce las partes esenciales de cualquier contrato legal válido.",
+      "date": "2024-04-01",
+      "body": "Próximamente..."
+    },
+    "green-card-process": {
+      "title": "Entendiendo el Proceso de Solicitud de la Green Card",
+      "desc": "Resumen de los pasos, formularios y documentos necesarios para la residencia legal permanente.",
+      "date": "2024-04-02",
+      "body": "Próximamente..."
+    },
+    "why-you-need-a-will": {
+      "title": "Por Qué Necesitas un Testamento — Sin Importar Tu Edad",
+      "desc": "Descubre cómo un testamento puede proteger tus bienes y tu familia.",
+      "date": "2024-04-03",
+      "body": "Próximamente..."
+    },
+    "eviction-letter-guide": {
+      "title": "Cómo Escribir una Carta Legal de Desalojo",
+      "desc": "Pasos para que los propietarios notifiquen correctamente y eviten problemas legales.",
+      "date": "2024-04-04",
+      "body": "Próximamente..."
+    },
+    "buying-home-checklist": {
+      "title": "Lista Legal para Compradores de Vivienda por Primera Vez",
+      "desc": "Desde contratos de compra hasta títulos de propiedad — protege tu transacción inmobiliaria.",
+      "date": "2024-04-05",
+      "body": "Próximamente..."
+    },
+    "identity-theft-response": {
+      "title": "Qué Hacer Si Eres Víctima de Robo de Identidad",
+      "desc": "Tus derechos y los pasos legales que debes tomar de inmediato.",
+      "date": "2024-04-06",
+      "body": "Próximamente..."
+    },
+    "notarized-vs-witnessed": {
+      "title": "Notariado vs Testificado: ¿Cuál es la Diferencia?",
+      "desc": "Cuándo usar cada forma de verificación documental.",
+      "date": "2024-04-07",
+      "body": "Próximamente..."
+    },
+    "nda-vs-noncompete": {
+      "title": "NDA vs. No Competencia: ¿Cuál Necesitas?",
+      "desc": "Compara estos dos contratos comunes en negocios.",
+      "date": "2024-04-08",
+      "body": "Próximamente..."
+    },
+    "how-to-hire-freelancers": {
+      "title": "Cómo Contratar Freelancers Legalmente en EE.UU.",
+      "desc": "Reglas para contratistas independientes, contratos y formularios fiscales.",
+      "date": "2024-04-09",
+      "body": "Próximamente..."
+    },
+    "legal-docs-remote-work": {
+      "title": "Documentos Legales Esenciales para el Trabajo Remoto",
+      "desc": "Asegura el cumplimiento legal al contratar o trabajar de forma remota.",
+      "date": "2024-04-10",
+      "body": "Próximamente..."
+    },
+    "legal-name-change": {
+      "title": "Cómo Cambiar Legalmente tu Nombre en EE. UU.",
+      "desc": "Proceso paso a paso para cambiar legalmente tu nombre en cualquier estado.",
+      "date": "2024-04-11",
+      "body": "Próximamente..."
+    },
+    "how-to-draft-bill-of-sale": {
+      "title": "Cómo Redactar un Contrato de Compra-Venta Legal",
+      "desc": "Asegura tu venta privada con un contrato de compra-venta bien redactado.",
+      "date": "2024-04-12",
+      "body": "Próximamente..."
+    },
+    "divorce-paperwork-guide": {
+      "title": "Los Documentos Necesarios para Solicitar el Divorcio",
+      "desc": "Lista de formularios y trámites para el divorcio en tu estado.",
+      "date": "2024-04-13",
+      "body": "Próximamente..."
+    },
+    "start-llc-online": {
+      "title": "Cómo Crear una LLC en Línea en 2024",
+      "desc": "Crea tu empresa de responsabilidad limitada sin abogado usando estas herramientas.",
+      "date": "2024-04-14",
+      "body": "Próximamente..."
+    },
+    "do-i-need-a-lawyer": {
+      "title": "¿Necesito un Abogado o Puedo Hacerlo Yo Mismo?",
+      "desc": "Cuándo puedes usar herramientas legales por tu cuenta y cuándo no.",
+      "date": "2024-04-15",
+      "body": "Próximamente..."
+    },
+    "pet-agreements-renters": {
+      "title": "Acuerdos de Mascotas para Inquilinos: Qué Incluir",
+      "desc": "Cómo incluir legalmente a las mascotas en un contrato de arrendamiento.",
+      "date": "2024-04-16",
+      "body": "Próximamente..."
+    },
+    "freelancer-contract-template": {
+      "title": "Plantilla Gratis de Contrato para Freelancers 2024",
+      "desc": "Protege tu trabajo freelance con una plantilla de contrato sencilla.",
+      "date": "2024-04-17",
+      "body": "Próximamente..."
+    },
+    "medical-consent-minors": {
+      "title": "Formularios de Consentimiento Médico para Menores: Lo Que Deben Saber los Padres",
+      "desc": "Por qué un formulario de consentimiento médico es vital cuando tu hijo está al cuidado de otra persona.",
+      "date": "2024-04-18",
+      "body": "Próximamente..."
+    },
+    "legal-docs-for-startups": {
+      "title": "Los 7 Documentos Legales Que Toda Startup Necesita",
+      "desc": "Desde acuerdos entre socios hasta NDAs—protege tu startup desde el inicio.",
+      "date": "2024-04-19",
+      "body": "Próximamente..."
+    },
+    "power-of-attorney-guide": {
+      "title": "Poder General vs. Limitado: ¿Cuál es la Diferencia?",
+      "desc": "Conoce cuándo se usa cada tipo de poder legal y por qué importa.",
+      "date": "2024-04-20",
+      "body": "Próximamente..."
+    }
+  },
+  "progressStepper": {
+    "step1": "Seleccionar Documento",
+    "step2": "Personalizar",
+    "step3": "Finalizar"
+  },
+  "Employment Termination Letter": "Carta de Terminación de Empleo",
+  "At‑Will Employment Agreement": "Contrato de Empleo a Voluntad",
+  "Employee Non‑Compete Agreement": "Acuerdo de No Competencia",
+  "Employee Handbook (Template)": "Manual del Empleado (Plantilla)",
+  "Website Privacy Policy": "Política de Privacidad Web",
+  "Website Terms of Service": "Términos de Servicio Web",
+  "GDPR Data‑Processing Addendum": "Anexo de Procesamiento de Datos (RGPD)",
+  "Cookie‑Banner Text": "Texto de Aviso de Cookies",
+  "Real‑Estate Purchase & Sale Agreement": "Contrato de Compraventa de Bienes Raíces",
+  "Land Contract (Installment Sale)": "Contrato de Terreno (Venta a Plazos)",
+  "Lease Addendum – Smoking Policy": "Anexo de Arrendamiento – Política de Fumar",
+  "Lease Addendum – Pets": "Anexo de Arrendamiento – Mascotas",
+  "Lease Addendum – Furnishings Inventory": "Anexo de Arrendamiento – Inventario de Mobiliario",
+  "Roommate Agreement": "Acuerdo de Compañeros de Piso",
+  "Bill of Sale (Personal Property)": "Factura de Venta (Bienes Personales)",
+  "Installment Promissory Note": "Pagaré con Pagos a Plazos",
+  "Debt Settlement Letter": "Carta de Liquidación de Deuda",
+  "Post‑Nuptial Agreement": "Acuerdo Postnupcial",
+  "Separation Agreement": "Acuerdo de Separación",
+  "Travel Consent for Minor": "Permiso de Viaje para Menor",
+  "Pet Custody Agreement": "Acuerdo de Custodia de Mascota",
+  "Copyright Transfer Agreement": "Acuerdo de Cesión de Derechos de Autor",
+  "Model Release": "Contrato de Cesión de Imagen",
+  "Photo License Agreement": "Licencia de Uso de Fotografías",
+  "Corporate Bylaws": "Estatutos Corporativos",
+  "Board Resolution": "Resolución de la Junta Directiva",
+  "Corporate Meeting Minutes": "Actas de Reunión Corporativa",
+  "Stock Purchase Agreement": "Contrato de Compra de Acciones",
+  "Login": "Acceso",
+  "Sign Up": "Regístrate",
+  "Create your 123LegalDoc account": "Crea tu cuenta 123LegalDoc",
+  "Create Account": "Crear Cuenta",
+  "Already have an account?": "¿Ya tienes una cuenta?",
+  "Sign In": "Acceder",
+  "Access your 123LegalDoc dashboard": "Accede a tu panel de 123LegalDoc",
+  "Don't have an account?": "¿No tienes una cuenta?",
+  "Confirm Password": "Confirmar Contraseña",
+  "Dashboard": "Panel",
+  "Welcome back, {{name}}! Manage your legal documents and account.": "¡Bienvenido de nuevo, {{name}}! Administra tus documentos legales y tu cuenta.",
+  "My Documents": "Mis Documentos",
+  "Payment History": "Historial de Pagos",
+  "Profile": "Perfil",
+  "View/Edit": "Ver/Editar",
+  "Date": "Fecha",
+  "Status": "Estado",
+  "Signed": "Firmado",
+  "Draft": "Borrador",
+  "Completed": "Completado",
+  "Amount": "Cantidad",
+  "No documents found.": "No se encontraron documentos.",
+  "No payment history.": "Sin historial de pagos.",
+  "Profile Settings": "Configuración de Perfil",
+  "Name": "Nombre",
+  "Email": "Correo Electrónico",
+  "Edit Profile": "Editar Perfil",
+  "Loading dashboard data...": "Cargando datos del panel...",
+  "Logout": "Cerrar Sesión",
+  "Document signed and ready!": "¡Documento firmado y listo!",
+  "Start Over": "Empezar de Nuevo",
+  "Please select a state from the filter bar above to see documents.": "Por favor, selecciona un estado de la barra de filtros de arriba para ver los documentos.",
+  "State Required": "Estado Requerido",
+  "Please select a state from the filter bar above before choosing a document.": "Por favor, selecciona un estado de la barra de filtros de arriba antes de elegir un documento.",
+  "Back": "Atrás",
+  "Search Results": "Resultados de Búsqueda",
+  "Showing documents matching your search and state criteria.": "Mostrando documentos que coinciden con tu búsqueda y criterios de estado.",
+  "API Error Occurred": "Ocurrió un Error de API",
+  "Loading...": "Cargando...",
+  "Search all documents...": "Buscar todos los documentos...",
+  "All States": "Todos los Estados",
+  "breadcrumb": {
+    "home": "Inicio",
+    "start": "Iniciar"
+  },
+  "wizard": {
+    "next": "Siguiente",
+    "confirmChargeAndPay": "Confirmar cargo de {{price}} y Proceder al Pago"
+  },
+  "fields": {
+    "sellerName": {
+      "label": "Nombre completo del vendedor"
+    },
+    "sellerAddress": {
+      "label": "Dirección completa del vendedor"
+    },
+    "odo_status": {
+      "actual": "Millaje real",
+      "exceeds": "Supera los límites mecánicos",
+      "not_actual": "No es el millaje real"
+    }
+  },
+  "docDetail": {
+    "previewTitle": "Vista previa de tu documento",
+    "previewSubtitle": "Mira exactamente cómo se verá tu Contrato de Compraventa de Vehículo—y luego haz clic en “Comenzar Gratis” para completar tus datos.",
+    "startForFree": "Comenzar Gratis"
+  },
+  "Sold As-Is": "Vendido Tal Cual",
+  "Warranty Included": "Garantía Incluida",
+  "Describe warranty…": "Describe la garantía...",
+  "preview": {
+    "watermark": "VISTA PREVIA"
+  },
+  "Complete": "Completo",
+  "trustBadges": {
+    "secure": "Pago Seguro SSL",
+    "privacy": "Privacidad Protegida",
+    "attorneyReviewed": "Plantillas Revisadas por Abogados"
+  },
+  "Contrato de Compraventa de Vehículo": "Contrato de Compraventa de Vehículo",
+  "Contrato de Arrendamiento Residencial": "Contrato de Arrendamiento Residencial",
+  "Acuerdo de Confidencialidad (NDA)": "Acuerdo de Confidencialidad (NDA)",
+  "Poder Notarial General": "Poder Notarial General",
+  "Última Voluntad y Testamento": "Última Voluntad y Testamento",
+  "Aviso de Desalojo": "Aviso de Desalojo",
+  "Product": "Producto",
+  "LinkedIn": "LinkedIn",
+  "Twitter": "Twitter",
+  "Alabama": "Alabama",
+  "Alaska": "Alaska",
+  "Arizona": "Arizona",
+  "Arkansas": "Arkansas",
+  "California": "California",
+  "Colorado": "Colorado",
+  "Connecticut": "Connecticut",
+  "Delaware": "Delaware",
+  "Florida": "Florida",
+  "Georgia": "Georgia",
+  "Hawaii": "Hawái",
+  "Idaho": "Idaho",
+  "Illinois": "Illinois",
+  "Indiana": "Indiana",
+  "Iowa": "Iowa",
+  "Kansas": "Kansas",
+  "Kentucky": "Kentucky",
+  "Louisiana": "Luisiana",
+  "Maine": "Maine",
+  "Maryland": "Maryland",
+  "Massachusetts": "Massachusetts",
+  "Michigan": "Míchigan",
+  "Minnesota": "Minnesota",
+  "Mississippi": "Misisipi",
+  "Missouri": "Misuri",
+  "Montana": "Montana",
+  "Nebraska": "Nebraska",
+  "Nevada": "Nevada",
+  "New Hampshire": "Nuevo Hampshire",
+  "New Jersey": "Nueva Jersey",
+  "New Mexico": "Nuevo México",
+  "New York": "Nueva York",
+  "North Carolina": "Carolina del Norte",
+  "North Dakota": "Dakota del Norte",
+  "Ohio": "Ohio",
+  "Oklahoma": "Oklahoma",
+  "Oregon": "Oregón",
+  "Pennsylvania": "Pensilvania",
+  "Rhode Island": "Rhode Island",
+  "South Carolina": "Carolina del Sur",
+  "South Dakota": "Dakota del Sur",
+  "Tennessee": "Tennessee",
+  "Texas": "Texas",
+  "Utah": "Utah",
+  "Vermont": "Vermont",
+  "Virginia": "Virginia",
+  "Washington": "Washington",
+  "West Virginia": "Virginia Occidental",
+  "Wisconsin": "Wisconsin",
+  "Wyoming": "Wyoming",
+  "District of Columbia": "Distrito de Columbia",
+  "Pagaré": "Pagaré",
+  "Factura": "Factura",
+  "Carta de Reclamación (Pago)": "Carta de Reclamación (Pago)",
+  "Contrato de Contratista Independiente": "Contrato de Contratista Independiente",
+  "Acuerdo de Servicios": "Acuerdo de Servicios",
+  "Acuerdo de No Competencia": "Acuerdo de No Competencia",
+  "Acuerdo de Sociedad": "Acuerdo de Sociedad",
+  "Contrato de Arrendamiento Comercial": "Contrato de Arrendamiento Comercial",
+  "Escritura de Finiquito": "Escritura de Finiquito",
+  "Acuerdo de Divorcio": "Acuerdo de Divorcio",
+  "Acuerdo de Custodia de Menores": "Acuerdo de Custodia de Menores",
+  "Acuerdo Prenupcial": "Acuerdo Prenupcial",
+  "Formulario de Consentimiento Médico para Menores": "Formulario de Consentimiento Médico para Menores",
+  "Poder Notarial para Atención Médica": "Poder Notarial para Atención Médica",
+  "Testamento Vital / Directiva Anticipada": "Testamento Vital / Directiva Anticipada",
+  "Declaración Jurada (General)": "Declaración Jurada (General)",
+  "Fideicomiso en Vida (Revocable)": "Fideicomiso en Vida (Revocable)",
+  "Carta de Oferta de Empleo": "Carta de Oferta de Empleo",
+  "Carta de Terminación de Empleo": "Carta de Terminación de Empleo",
+  "Vehicle Bill of Sale": "Contrato de Compraventa de Vehículo",
+  "Residential Lease Agreement": "Contrato de Arrendamiento Residencial",
+  "Non-Disclosure Agreement (NDA)": "Acuerdo de Confidencialidad (NDA)",
+  "General Power of Attorney": "Poder Notarial General",
+  "Last Will and Testament": "Última Voluntad y Testamento",
+  "Eviction Notice": "Notificación de Desalojo",
+  "You're {{currentStep}} of {{totalSteps}} done!": "¡Has completado {{currentStep}} de {{totalSteps}}!"
+}

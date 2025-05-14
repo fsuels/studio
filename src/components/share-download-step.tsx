@@ -22,7 +22,7 @@ const ShareDownloadStep = React.memo(function ShareDownloadStep({
   isReadOnly = false
 }: ShareDownloadStepProps) {
   const { toast } = useToast();
-  const { t } = useTranslation();
+  const { t } = useTranslation("common");
   const [isHydrated, setIsHydrated] = useState(false);
 
   useEffect(() => {
