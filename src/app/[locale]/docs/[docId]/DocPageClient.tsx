@@ -44,8 +44,8 @@ export default function DocPageClient({ params: routeParams }: DocPageClientProp
   const { t, i18n } = useTranslation("common");
   const router = useRouter();
 
-  const currentLocale = (Array.isArray(params.locale) ? params.locale[0] : params.locale) as 'en' | 'es' | undefined;
-  const docId = Array.isArray(params.docId) ? params.docId[0] : params.docId as string | undefined;
+  const currentLocale = (Array.isArray(params!.locale) ? params!.locale[0] : params!.locale) as 'en' | 'es' | undefined;
+  const docId = Array.isArray(params!.docId) ? params!.docId[0] : params!.docId as string | undefined;
 
   const [docConfig, setDocConfig] = useState<LegalDocument | undefined>(undefined);
   const [isLoading, setIsLoading] = useState(true);
@@ -78,9 +78,9 @@ export default function DocPageClient({ params: routeParams }: DocPageClientProp
   useEffect(() => {
     if (docConfig && isHydrated) {
       track('view_item', {
-        id: docConfig.id,
-        name: currentLocale === 'es' && docConfig.name_es ? docConfig.name_es : docConfig.name,
-        value: docConfig.basePrice
+        id: docConfig!.id,
+        name: currentLocale === 'es' && docConfig!.name_es ? docConfig!.name_es : docConfig!.name,
+        value: docConfig!.basePrice
       });
     }
   }, [docConfig, currentLocale, isHydrated]);
@@ -89,11 +89,11 @@ export default function DocPageClient({ params: routeParams }: DocPageClientProp
   const handleStartWizard = () => {
     if (!docConfig || !currentLocale || !isHydrated) return;
     track('add_to_cart', {
-      id: docConfig.id,
-      name: currentLocale === 'es' && docConfig.name_es ? docConfig.name_es : docConfig.name,
-      value: docConfig.basePrice
+      id: docConfig!.id,
+      name: currentLocale === 'es' && docConfig!.name_es ? docConfig!.name_es : docConfig!.name,
+      value: docConfig!.basePrice
     });
-    router.push(`/${currentLocale}/docs/${docConfig.id}/start`);
+    router.push(`/${currentLocale}/docs/${docConfig!.id}/start`);
   };
 
 
@@ -106,8 +106,8 @@ export default function DocPageClient({ params: routeParams }: DocPageClientProp
     );
   }
 
-  const documentDisplayName = currentLocale === 'es' && docConfig.name_es ? docConfig.name_es : docConfig.name;
-  const documentDescription = currentLocale === 'es' && docConfig.description_es ? docConfig.description_es : docConfig.description;
+  const documentDisplayName = currentLocale === 'es' && docConfig!.name_es ? docConfig!.name_es : docConfig!.name;
+  const documentDescription = currentLocale === 'es' && docConfig!.description_es ? docConfig!.description_es : docConfig!.description;
 
   const benefits = [
     { icon: ShieldCheck, textKey: 'docDetail.benefit1', defaultText: 'Legally Sound & State-Specific' },
@@ -190,7 +190,7 @@ export default function DocPageClient({ params: routeParams }: DocPageClientProp
                     </CardHeader>
                     <CardContent className="space-y-3">
                         <div className="flex items-baseline justify-between">
-                            <span className="text-3xl font-bold text-foreground">${docConfig.basePrice.toFixed(2)}</span>
+                            <span className="text-3xl font-bold text-foreground">${docConfig!.basePrice.toFixed(2)}</span>
                             <span className="text-sm text-muted-foreground">{t('pricing.perDocument', {defaultValue: 'per document'})}</span>
                         </div>
                         <p className="text-xs text-muted-foreground">
@@ -202,7 +202,7 @@ export default function DocPageClient({ params: routeParams }: DocPageClientProp
                     </CardContent>
                  </Card>
 
-                 {docConfig.upsellClauses && docConfig.upsellClauses.length > 0 && (
+                 {docConfig!.upsellClauses && docConfig!.upsellClauses.length > 0 && (
                     <Card className="shadow-md">
                         <CardHeader>
                             <CardTitle className="text-md flex items-center gap-2">
@@ -210,7 +210,7 @@ export default function DocPageClient({ params: routeParams }: DocPageClientProp
                             </CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-2">
-                            {docConfig.upsellClauses.map(clause => (
+                            {docConfig!.upsellClauses.map(clause => (
                                 <div key={clause.id} className="text-xs flex justify-between items-center p-2 bg-muted/50 rounded-md">
                                     <span>{currentLocale === 'es' && clause.description_es ? clause.description_es : clause.description}</span>
                                     <Badge variant="secondary">+${clause.price.toFixed(2)}</Badge>

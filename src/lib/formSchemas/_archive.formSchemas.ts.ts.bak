@@ -1,3 +1,4 @@
+// @ts-nocheck
 // src/data/formSchemas.ts
 
 export type FormField = {

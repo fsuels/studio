@@ -22,13 +22,13 @@ export async function generateStaticParams() {
     for (const doc of documentLibrary) {
       // Ensure doc and doc.id are valid before pushing
       if (doc && doc.id && doc.id !== 'general-inquiry') { // Exclude general inquiry or other non-detail pages
-        params.push({ locale, docId: doc.id });
+        params!.push({ locale, docId: doc.id });
       } else if (!doc || !doc.id) {
         console.warn(`[generateStaticParams /docs] Encountered a document with missing id in locale ${locale}. Skipping.`);
       }
     }
   }
-  console.log(`[generateStaticParams /docs] Generated ${params.length} paths.`);
+  console.log(`[generateStaticParams /docs] Generated ${params!.length} paths.`);
   return params;
 }
 

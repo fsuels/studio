@@ -7,7 +7,7 @@ import { redirect, useParams } from 'next/navigation';
 
 export default function DocsIndexPage() {
   const params = useParams();
-  const locale = params.locale as string;
+  const locale = params!.locale as string;
   
   // For now, redirect to the homepage's document selection area
   redirect(`/${locale}/#workflow-start`);

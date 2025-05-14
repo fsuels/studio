@@ -27,8 +27,8 @@ export default function StartWizardPageClient() {
   const router = useRouter();
   const { isLoggedIn, user, isLoading: authIsLoading } = useAuth();
 
-  const locale = (Array.isArray(params.locale) ? params.locale[0] : params.locale) as 'en' | 'es';
-  const docIdFromPath = (Array.isArray(params.docId) ? params.docId[0] : params.docId) as string;
+  const locale = (Array.isArray(params!.locale) ? params!.locale[0] : params!.locale) as 'en' | 'es';
+  const docIdFromPath = (Array.isArray(params!.docId) ? params!.docId[0] : params!.docId) as string;
 
   const [isMounted, setIsMounted] = useState(false); // <-- New state for mounted status
   const [isLoadingConfig, setIsLoadingConfig] = useState(true);
@@ -56,8 +56,8 @@ export default function StartWizardPageClient() {
       return; 
     }
     if (docConfig) {
-      if (docConfig.schema && typeof docConfig.schema.safeParse === 'function') {
-        methods.reset({}, { resolver: zodResolver(docConfig.schema) } as any);
+      if (docConfig!.schema && typeof docConfig!.schema.safeParse === 'function') {
+        methods.reset({}, { resolver: zodResolver(docConfig!.schema) } as any);
       } else {
         console.warn(`[StartWizardPageClient] No valid Zod schema for doc ID: ${docIdFromPath}. Validation might not work.`);
         methods.reset({}); 
@@ -79,9 +79,9 @@ export default function StartWizardPageClient() {
       let draftData: Record<string, any> = {};
       try {
         if (isLoggedIn && user?.uid) {
-          draftData = await loadFormProgress({ userId: user.uid, docType: docConfig.id, state: locale });
+          draftData = await loadFormProgress({ userId: user.uid, docType: docConfig!.id, state: locale });
         } else {
-          const lsKey = `draft-${docConfig.id}-${locale}`;
+          const lsKey = `draft-${docConfig!.id}-${locale}`;
           const lsDraft = localStorage.getItem(lsKey);
           if (lsDraft) draftData = JSON.parse(lsDraft);
         }
@@ -110,11 +110,11 @@ export default function StartWizardPageClient() {
       if (Object.keys(relevantDataToSave).length === 0) return;
 
       if (isLoggedIn && user?.uid) {
-        await saveFormProgress({ userId: user.uid, docType: docConfig.id, state: locale, formData: relevantDataToSave });
+        await saveFormProgress({ userId: user.uid, docType: docConfig!.id, state: locale, formData: relevantDataToSave });
       } else {
-         localStorage.setItem(`draft-${docConfig.id}-${locale}`, JSON.stringify(relevantDataToSave));
+         localStorage.setItem(`draft-${docConfig!.id}-${locale}`, JSON.stringify(relevantDataToSave));
       }
-      console.log('[WizardForm] Autosaved draft for:', docConfig.id, locale, relevantDataToSave);
+      console.log('[WizardForm] Autosaved draft for:', docConfig!.id, locale, relevantDataToSave);
     }, 1000),
     [isLoggedIn, user?.uid, docConfig, locale, authIsLoading, isMounted, isLoadingConfig, ready] 
   );
@@ -167,7 +167,7 @@ export default function StartWizardPageClient() {
     return null; 
   }
   
-  const documentDisplayName = locale === 'es' && docConfig.name_es ? docConfig.name_es : docConfig.name;
+  const documentDisplayName = locale === 'es' && docConfig!.name_es ? docConfig!.name_es : docConfig!.name;
 
   return (
     <FormProvider {...methods}>
@@ -175,7 +175,7 @@ export default function StartWizardPageClient() {
          <Breadcrumb
           items={[
             { label: t('breadcrumb.home', { ns: 'translation' }), href: `/${locale}` },
-            { label: documentDisplayName, href: `/${locale}/docs/${docConfig.id}` },
+            { label: documentDisplayName, href: `/${locale}/docs/${docConfig!.id}` },
             { label: t('breadcrumb.start', { ns: 'translation' }) },
           ]}
         />

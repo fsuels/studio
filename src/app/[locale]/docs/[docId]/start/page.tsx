@@ -24,7 +24,7 @@ export async function generateStaticParams() {
       for (const doc of documentLibrary) {
          // Ensure doc and doc.id are valid and it's not a general inquiry type if that shouldn't have a start page
         if (doc && doc.id && doc.id !== 'general-inquiry' && doc.schema) { // Added check for doc.schema
-            params.push({ locale: locale, docId: doc.id });
+            params!.push({ locale: locale, docId: doc.id });
         } else if (!doc || !doc.id) {
             console.warn(`[generateStaticParams /docs/[docId]/start] Encountered a document with missing id in locale ${locale}. Skipping.`);
         } else if (!doc.schema) {
@@ -32,7 +32,7 @@ export async function generateStaticParams() {
         }
       }
     }
-    if (params.length === 0) console.warn('[generateStaticParams /docs/[docId]/start] No params generated with fallback locales.');
+    if (params!.length === 0) console.warn('[generateStaticParams /docs/[docId]/start] No params generated with fallback locales.');
     return params;
   }
 
@@ -52,17 +52,17 @@ export async function generateStaticParams() {
       }
        // Ensure doc and doc.id are valid and it's not a general inquiry type if that shouldn't have a start page
       if (doc && doc.id !== 'general-inquiry' && doc.schema) { // Added check for doc.schema
-        params.push({ locale: locale, docId: doc.id });
+        params!.push({ locale: locale, docId: doc.id });
       } else if (!doc.schema) {
          console.warn(`[generateStaticParams /docs/[docId]/start] Document with id ${doc.id} is missing a schema in locale ${locale}. Skipping generation for this combination.`);
       }
     }
   }
-  console.log(`[generateStaticParams /docs/[docId]/start] Generated ${params.length} params.`);
-  if (params.length === 0) {
+  console.log(`[generateStaticParams /docs/[docId]/start] Generated ${params!.length} params!.`);
+  if (params!.length === 0) {
       console.warn('[generateStaticParams /docs/[docId]/start] No params were generated. Check documentLibrary and localizations content and structure.');
       // Example: Manually add a known good param for debugging if all else fails
-      // params.push({ locale: 'en', docId: 'bill-of-sale-vehicle' }); 
+      // params!.push({ locale: 'en', docId: 'bill-of-sale-vehicle' }); 
   }
   return params;
 }
