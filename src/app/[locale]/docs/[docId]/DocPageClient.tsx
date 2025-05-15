@@ -47,8 +47,12 @@ export default function DocPageClient({ params: routeParams }: DocPageClientProp
   const currentLocale = (Array.isArray(params!.locale) ? params!.locale[0] : params!.locale) as 'en' | 'es' | undefined;
   const docId = Array.isArray(params!.docId) ? params!.docId[0] : params!.docId as string | undefined;
 
-  const [docConfig, setDocConfig] = useState<LegalDocument | undefined>(undefined);
-  const [isLoading, setIsLoading] = useState(true);
+  const docConfig = useMemo(() => {
+    if (!docId) return undefined;
+    return documentLibrary.find(d => d.id === docId);
+  }, [docId]);
+  
+  const [isLoading, setIsLoading] = useState(true); // isLoadingConfig might be more accurate if config fetching is async
   const [isHydrated, setIsHydrated] = useState(false);
 
   useEffect(() => {
@@ -56,18 +60,22 @@ export default function DocPageClient({ params: routeParams }: DocPageClientProp
   }, []);
 
   useEffect(() => {
-    if (docId && isHydrated) {
-      const foundDoc = documentLibrary.find(d => d.id === docId);
-      if (foundDoc) {
-        setDocConfig(foundDoc);
-      } else {
-        notFound();
-      }
-    } else if (isHydrated && !docId) {
-       notFound();
+    if (isHydrated) { // Ensure this runs only after hydration
+        if (docId) {
+            const foundDoc = documentLibrary.find(d => d.id === docId);
+            if (!foundDoc) {
+                console.error(`[DocPageClient] Doc config not found for ID: ${docId}. Triggering 404.`);
+                notFound();
+            }
+            // setDocConfig is implicitly handled by useMemo now
+        } else {
+            console.error("[DocPageClient] docId is undefined. Triggering 404.");
+            notFound();
+        }
+        setIsLoading(false); // Config is resolved (or not found)
     }
-    setIsLoading(false);
-  }, [docId, isHydrated]);
+  }, [docId, isHydrated, notFound]); // Removed docConfig from deps as it's derived
+
 
   useEffect(() => {
     if (currentLocale && i18n.language !== currentLocale && isHydrated) {
@@ -78,9 +86,9 @@ export default function DocPageClient({ params: routeParams }: DocPageClientProp
   useEffect(() => {
     if (docConfig && isHydrated) {
       track('view_item', {
-        id: docConfig!.id,
-        name: currentLocale === 'es' && docConfig!.name_es ? docConfig!.name_es : docConfig!.name,
-        value: docConfig!.basePrice
+        id: docConfig.id,
+        name: currentLocale === 'es' && docConfig.translations?.es?.name ? docConfig.translations.es.name : docConfig.translations?.en?.name || docConfig.name,
+        value: docConfig.basePrice
       });
     }
   }, [docConfig, currentLocale, isHydrated]);
@@ -89,11 +97,11 @@ export default function DocPageClient({ params: routeParams }: DocPageClientProp
   const handleStartWizard = () => {
     if (!docConfig || !currentLocale || !isHydrated) return;
     track('add_to_cart', {
-      id: docConfig!.id,
-      name: currentLocale === 'es' && docConfig!.name_es ? docConfig!.name_es : docConfig!.name,
-      value: docConfig!.basePrice
+      id: docConfig.id,
+      name: currentLocale === 'es' && docConfig.translations?.es?.name ? docConfig.translations.es.name : docConfig.translations?.en?.name || docConfig.name,
+      value: docConfig.basePrice
     });
-    router.push(`/${currentLocale}/docs/${docConfig!.id}/start`);
+    router.push(`/${currentLocale}/docs/${docConfig.id}/start`);
   };
 
 
@@ -106,8 +114,9 @@ export default function DocPageClient({ params: routeParams }: DocPageClientProp
     );
   }
 
-  const documentDisplayName = currentLocale === 'es' && docConfig!.name_es ? docConfig!.name_es : docConfig!.name;
-  const documentDescription = currentLocale === 'es' && docConfig!.description_es ? docConfig!.description_es : docConfig!.description;
+  const documentDisplayName = currentLocale === 'es' && docConfig.translations?.es?.name ? docConfig.translations.es.name : docConfig.translations?.en?.name || docConfig.name;
+  const documentDescription = currentLocale === 'es' && docConfig.translations?.es?.description ? docConfig.translations.es.description : docConfig.translations?.en?.description || docConfig.description;
+
 
   const benefits = [
     { icon: ShieldCheck, textKey: 'docDetail.benefit1', defaultText: 'Legally Sound & State-Specific' },
@@ -154,10 +163,10 @@ export default function DocPageClient({ params: routeParams }: DocPageClientProp
                   <benefit.icon className="h-5 w-5 text-primary shrink-0" />
                   <span className="text-xs text-card-foreground">{t(benefit.textKey, benefit.defaultText)}</span>
                 </div>
-              ))}\
+              ))}
             </div>
             
-            <Button size="lg" className="w-full sm:w-auto text-base px-8 py-3" onClick={handleStartWizard} disabled={!isHydrated}>\
+            <Button size="lg" className="w-full sm:w-auto text-base px-8 py-3" onClick={handleStartWizard} disabled={!isHydrated}>
               {t('docDetail.startForFree')}
             </Button>
         </div>
@@ -190,19 +199,19 @@ export default function DocPageClient({ params: routeParams }: DocPageClientProp
                     </CardHeader>
                     <CardContent className="space-y-3">
                         <div className="flex items-baseline justify-between">
-                            <span className="text-3xl font-bold text-foreground">${docConfig!.basePrice.toFixed(2)}</span>
+                            <span className="text-3xl font-bold text-foreground">${docConfig.basePrice.toFixed(2)}</span>
                             <span className="text-sm text-muted-foreground">{t('pricing.perDocument', {defaultValue: 'per document'})}</span>
                         </div>
                         <p className="text-xs text-muted-foreground">
                              {t('docDetail.competitivePrice', { competitorPrice: competitorPrice.toFixed(2), defaultValue: `Compare to typical attorney fees of $${competitorPrice.toFixed(2)}+`})}
                         </p>
-                         <Button size="lg" className="w-full mt-2" onClick={handleStartWizard} disabled={!isHydrated}>\
+                         <Button size="lg" className="w-full mt-2" onClick={handleStartWizard} disabled={!isHydrated}>
                            {t('docDetail.startForFree')}
                          </Button>
                     </CardContent>
                  </Card>
 
-                 {docConfig!.upsellClauses && docConfig!.upsellClauses.length > 0 && (
+                 {docConfig.upsellClauses && docConfig.upsellClauses.length > 0 && (
                     <Card className="shadow-md">
                         <CardHeader>
                             <CardTitle className="text-md flex items-center gap-2">
@@ -210,12 +219,12 @@ export default function DocPageClient({ params: routeParams }: DocPageClientProp
                             </CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-2">
-                            {docConfig!.upsellClauses.map(clause => (
+                            {docConfig.upsellClauses.map(clause => (
                                 <div key={clause.id} className="text-xs flex justify-between items-center p-2 bg-muted/50 rounded-md">
-                                    <span>{currentLocale === 'es' && clause.description_es ? clause.description_es : clause.description}</span>
+                                    <span>{currentLocale === 'es' && clause.translations?.es?.description ? clause.translations.es.description : clause.translations?.en?.description || clause.description}</span>
                                     <Badge variant="secondary">+${clause.price.toFixed(2)}</Badge>
                                 </div>
-                            ))}\
+                            ))}
                         </CardContent>
                     </Card>
                  )}
@@ -239,10 +248,11 @@ export default function DocPageClient({ params: routeParams }: DocPageClientProp
 
         {/* Sticky CTA for mobile */}
         <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-t p-4 shadow-lg z-40">
-          <Button size="lg" className="w-full text-base" onClick={handleStartWizard} disabled={!isHydrated}>\
+          <Button size="lg" className="w-full text-base" onClick={handleStartWizard} disabled={!isHydrated}>
              {t('docDetail.startForFree')}
           </Button>
         </div>
     </main>
   );
 }
+
