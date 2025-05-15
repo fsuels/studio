@@ -1,14 +1,10 @@
 // src/lib/documents/us/index.ts
 // This file should export all US-specific documents.
-// Each document should be in its own subfolder with metadata, questions, schema, and an index.ts
 
 export { vehicleBillOfSale } from './vehicle-bill-of-sale';
-export { promissoryNote } from './promissory-note';
+export { promissoryNote } from './promissory-note'; // Ensures 'promissoryNote' is exported from its barrel
 
 // Assuming these documents are now or will be structured similarly under ./us/
-// If they are still standalone .ts files directly in src/lib/documents/us/ then this needs adjustment.
-// For now, I will assume they are being moved to the new structure or their individual files export the correct object.
-
 export { affidavitGeneral } from './affidavit-general';
 export { articlesOfIncorporationBiz } from './articles-of-incorporation-biz';
 export { childCustodyAgreement } from './child-custody-agreement';
