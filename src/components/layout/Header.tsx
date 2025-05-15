@@ -1,7 +1,7 @@
 // src/components/layout/Header.tsx
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react'; 
+import React, { useState, useEffect, useRef, useCallback } from 'react'; 
 import Link from 'next/link';
 import { useRouter, useParams } from 'next/navigation';
 import { Logo } from '@/components/layout/Logo';
@@ -10,36 +10,23 @@ import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Button } from '@/components/ui/button'; 
 import MiniCartDrawer from '@/components/MiniCartDrawer';
-import {
-  Check,
-  ChevronDown,
-  Globe,
-  UserPlus,
-  LogIn,
-  Search as SearchIcon,
-  ExternalLink,
-  FileText,
-  Menu as MenuIcon,
-  X as CloseIcon,
-  LayoutGrid,
-  ChevronUp,
-  LogOut
-} from 'lucide-react'; 
+import { Check, ChevronDown, Globe, UserPlus, LogIn, Search as SearchIcon, ExternalLink, FileText, Menu as MenuIcon, X as CloseIcon, LayoutGrid, ChevronUp, LogOut } from 'lucide-react'; 
 import { Input } from '@/components/ui/input';
-import { documentLibrary, type LegalDocument } from '@/lib/document-library';
+import { documentLibrary, LegalDocument } from '@/lib/document-library';
 import { CATEGORY_LIST } from '@/components/Step1DocumentSelector';
 import MegaMenuContent from '@/components/mega-menu/MegaMenuContent'; 
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/hooks/useAuth';
 import { cn } from '@/lib/utils';
+import { getDocTranslation } from '@/lib/i18nUtils';
 
 const Header = React.memo(function Header() {
   // Scoped translations
   const { i18n, t: tHeader } = useTranslation("common");
-  const { t: tCommon } = useTranslation("common");
+  const { t: tCommon } = useTranslation("common"); // For general common keys if needed
   const router = useRouter();
   const params = useParams();
-  const { isLoggedIn, logout } = useAuth();
+  const { isLoggedIn, logout, user } = useAuth(); // Added user from useAuth
 
   // Locale setup
   const [clientLocale, setClientLocale] = useState<'en' | 'es'>('en');
@@ -47,10 +34,8 @@ const Header = React.memo(function Header() {
     const pathLocale = params.locale as 'en' | 'es' | undefined;
     const newLocale = pathLocale && ['en','es'].includes(pathLocale) ? pathLocale : 'en';
     setClientLocale(newLocale);
-    if (i18n.language !== newLocale) {
-      i18n.changeLanguage(newLocale);
-    }
-  }, [params.locale, i18n]);
+    // i18n.changeLanguage is handled in LanguageSwitcher and I18nClientProvider
+  }, [params.locale]);
 
   // Search state
   const [mounted, setMounted] = useState(false);
@@ -68,12 +53,16 @@ const Header = React.memo(function Header() {
       if (searchQuery.trim().length > 1) {
         const lower = searchQuery.toLowerCase();
         const results = documentLibrary.filter(doc => {
-          const name = clientLocale === 'es' && doc.name_es ? doc.name_es : doc.name;
-          const desc = clientLocale === 'es' && doc.description_es ? doc.description_es : doc.description;
-          const aliases = clientLocale === 'es' && doc.aliases_es ? doc.aliases_es : (doc.aliases || []);
+          if (doc.id === 'general-inquiry') return false; // Exclude general inquiry
+          const translatedDoc = getDocTranslation(doc, clientLocale);
+          
+          const name = translatedDoc.name || ''; // Fallback to empty string
+          const desc = translatedDoc.description || ''; // Fallback to empty string
+          const aliases = translatedDoc.aliases || []; // Fallback to empty array
+
           return (
             name.toLowerCase().includes(lower) ||
-            (desc && desc.toLowerCase().includes(lower)) ||
+            (desc && desc.toLowerCase().includes(lower)) || // Check if desc is not empty before toLowerCase
             aliases.some(a => a.toLowerCase().includes(lower))
           );
         });
@@ -135,10 +124,10 @@ const Header = React.memo(function Header() {
     : '...';
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur overflow-visible">
+    <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 overflow-visible">
       <div className="container flex h-14 items-center px-4 md:px-6">
         <div className="mr-auto md:mr-4 flex items-center">
-          <Logo wrapperClassName="items-center self-center mr-2 md:mr-4" svgClassName="h-7 w-7" textClassName="text-xs" />
+          <Logo wrapperClassName="items-center self-center mr-2 md:mr-4" svgClassName="h-6 w-6 md:h-7 md:w-7" textClassName="text-xs md:text-sm" />
         </div>
 
         {/* Desktop Nav */}
@@ -153,7 +142,7 @@ const Header = React.memo(function Header() {
               <Button
                 variant="default" size="sm"
                 className={cn(
-                  'text-sm font-medium flex items-center gap-1 px-3 h-9 bg-primary text-primary-foreground hover:bg-primary/90',
+                  'text-sm font-medium flex items-center gap-1 px-3 h-9 bg-primary text-primary-foreground hover:bg-primary/90 focus-visible:ring-primary focus-visible:ring-2 focus-visible:ring-offset-2',
                   isMegaMenuOpen && 'bg-primary/80'
                 )}
                 disabled={!mounted}
@@ -161,13 +150,27 @@ const Header = React.memo(function Header() {
                 onClick={() => setIsMegaMenuOpen(v => !v)}
               >
                 <LayoutGrid className="h-4 w-4" />
-                {mounted ? tHeader('nav.documentCategories', { defaultValue: 'Make Documents' }) : '...'}
+                {mounted ? tHeader('nav.makeDocuments', { defaultValue: 'Make Documents' }) : '...'}
                 {isMegaMenuOpen ? <ChevronUp className="h-4 w-4 opacity-70" /> : <ChevronDown className="h-4 w-4 opacity-70" />}
               </Button>
             </PopoverTrigger>
             <PopoverContent
-              align="center" side="bottom" sideOffset={10}
-              className="w-[calc(100vw-3rem)] max-w-7xl bg-card shadow-xl rounded-lg p-0 border border-border absolute left-1/2 -translate-x-1/2 overflow-visible"
+              align="center" side="bottom" sideOffset={12} // Increased sideOffset slightly
+              className="
+                absolute 
+                left-1/2  
+                -translate-x-1/2 
+                top-full 
+                mt-1   // Reduced margin-top
+                w-[calc(100vw-4rem)] md:w-[calc(100vw-8rem)] lg:w-[calc(100vw-12rem)] xl:w-[1280px] // Responsive width
+                max-w-[90vw] md:max-w-7xl // Ensure it doesn't exceed viewport greatly
+                bg-popover // Use popover for background
+                p-0 // Remove padding, content will handle it
+                rounded-lg
+                shadow-xl // Use a more pronounced shadow
+                z-[60] // Ensure it's above other content but potentially below modals
+                overflow-hidden // Changed from visible to hidden for content scroll
+              "
             >
               <MegaMenuContent
                 categories={CATEGORY_LIST}
@@ -191,7 +194,7 @@ const Header = React.memo(function Header() {
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
               onFocus={() => searchQuery.trim().length > 1 && searchResults.length > 0 && setShowResults(true)}
-              className="h-9 pl-10 text-sm rounded-md w-40 md:w-56 bg-background border-input focus:border-primary"
+              className="h-9 pl-10 text-sm rounded-md w-40 md:w-56 bg-background border-input focus:border-primary focus-visible:ring-primary focus-visible:ring-2 focus-visible:ring-offset-2"
               disabled={!mounted}
               aria-label={placeholderSearch}
             />
@@ -202,16 +205,18 @@ const Header = React.memo(function Header() {
               >
                 <ul>
                   {searchResults.map(doc => {
-                    const docName = clientLocale === 'es' && doc.name_es ? doc.name_es : doc.name;
+                    const translatedDoc = getDocTranslation(doc, clientLocale);
+                    const docName = translatedDoc.name;
                     return (
                       <li key={doc.id}>
                         <button
+                          type="button" // Added type="button"
                           onClick={() => handleResultClick(doc.id)}
                           className="flex items-center gap-2 px-3 py-2.5 text-sm text-popover-foreground hover:bg-accent hover:text-accent-foreground transition-colors w-full text-left"
                         >
                           <FileText className="h-4 w-4 shrink-0 text-muted-foreground"/>
                           <span className="truncate">
-                            {tHeader(docName, { defaultValue: docName })}
+                            {docName}
                           </span>
                           <ExternalLink className="h-3 w-3 ml-auto text-muted-foreground/70"/>
                         </button>
@@ -227,21 +232,21 @@ const Header = React.memo(function Header() {
           {mounted && <LanguageSwitcher />}
 
           {/* Auth buttons */}
-          {mounted && (isLoggedIn ? (
+          {mounted && (isLoggedIn && user ? ( // Check if user object exists
             <>
               <Button
                 variant="ghost" size="sm"
-                className="text-xs font-medium px-2 py-1.5 md:px-3 h-9 hover:bg-muted"
+                className="text-xs font-medium px-2 py-1.5 md:px-3 h-9 md:h-8 hover:bg-muted focus-visible:ring-primary focus-visible:ring-2 focus-visible:ring-offset-2"
                 asChild
               >
                 <Link href={`/${clientLocale}/dashboard`}>
-                  {tHeader('Dashboard')}
+                  {user.email || tHeader('Dashboard')} {/* Display email or generic Dashboard */}
                 </Link>
               </Button>
               <Button
                 variant="outline" size="sm"
                 onClick={handleLogout}
-                className="text-xs font-medium px-2 py-1.5 md:px-3 h-9 hover:bg-muted"
+                className="text-xs font-medium px-2 py-1.5 md:px-3 h-9 md:h-8 hover:bg-muted focus-visible:ring-primary focus-visible:ring-2 focus-visible:ring-offset-2"
               >
                 <LogOut className="h-4 w-4 mr-1 md:mr-2" /> {tHeader('Logout')}
               </Button>
@@ -250,7 +255,7 @@ const Header = React.memo(function Header() {
             <>
               <Button
                 variant="ghost" size="sm"
-                className="text-xs font-medium text-foreground/80 hover:bg-muted px-2 py-1.5 md:px-3 h-9 flex items-center"
+                className="text-xs font-medium text-foreground/80 hover:bg-muted px-2 py-1.5 md:px-3 h-9 md:h-8 flex items-center focus-visible:ring-primary focus-visible:ring-2 focus-visible:ring-offset-2"
                 asChild
               >
                 <Link href={`/${clientLocale}/signup`}>
@@ -260,7 +265,7 @@ const Header = React.memo(function Header() {
               </Button>
               <Button
                 variant="default" size="sm"
-                className="text-xs font-medium px-2 py-1.5 md:px-3 h-9 shadow-sm bg-primary text-primary-foreground hover:bg-primary/90"
+                className="text-xs font-medium px-2 py-1.5 md:px-3 h-9 md:h-8 shadow-sm bg-primary text-primary-foreground hover:bg-primary/90 focus-visible:ring-primary focus-visible:ring-2 focus-visible:ring-offset-2"
                 asChild
               >
                 <Link href={`/${clientLocale}/signin`}>
@@ -274,7 +279,7 @@ const Header = React.memo(function Header() {
 
         {/* Mobile menu toggle */}
         <div className="md:hidden ml-auto flex items-center gap-1">
-          <Button variant="ghost" size="icon" className="h-9 w-9" onClick={() => setIsMobileMenuOpen(v => !v)} disabled={!mounted}>
+          <Button variant="ghost" size="icon" className="h-9 w-9 focus-visible:ring-primary focus-visible:ring-2 focus-visible:ring-offset-2" onClick={() => setIsMobileMenuOpen(v => !v)} disabled={!mounted}>
             {isMobileMenuOpen ? <CloseIcon className="h-5 w-5" /> : <MenuIcon className="h-5 w-5" />}
           </Button>
         </div>
@@ -293,7 +298,7 @@ const Header = React.memo(function Header() {
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
               onFocus={() => searchQuery.trim().length > 1 && searchResults.length > 0 && setShowResults(true)}
-              className="h-10 pl-10 text-sm rounded-md w-full bg-muted border-input focus:border-primary"
+              className="h-10 pl-10 text-sm rounded-md w-full bg-muted border-input focus:border-primary focus-visible:ring-primary focus-visible:ring-2 focus-visible:ring-offset-2"
               disabled={!mounted}
               aria-label={placeholderSearch}
             />
@@ -304,19 +309,17 @@ const Header = React.memo(function Header() {
               >
                 <ul>
                   {searchResults.map(doc => {
-                    const docName = clientLocale === 'es' && doc.name_es ? doc.name_es : doc.name;
+                    const translatedDoc = getDocTranslation(doc, clientLocale);
+                    const docName = translatedDoc.name;
                     return (
                       <li key={doc.id}>
                         <button
+                          type="button" // Added type="button"
                           onClick={() => handleResultClick(doc.id)}
-                          className="
-                            flex items-center gap-2 px-3 py-2.5 text-sm text-popover-foreground
-                            hover:bg-accent hover:text-accent-foreground transition-colors
-                            w-full text-left
-                          "
+                          className="flex items-center gap-2 px-3 py-2.5 text-sm text-popover-foreground hover:bg-accent hover:text-accent-foreground transition-colors w-full text-left"
                         >
                           <FileText className="h-4 w-4 shrink-0 text-muted-foreground" />
-                          <span className="truncate">{tHeader(docName, { defaultValue: docName })}</span>
+                          <span className="truncate">{docName}</span>
                           <ExternalLink className="h-3 w-3 ml-auto text-muted-foreground/70" />
                         </button>
                       </li>
@@ -330,7 +333,7 @@ const Header = React.memo(function Header() {
           {/* Mobile categories toggle */}
           <Button
             variant="ghost"
-            className="w-full justify-between text-base font-medium flex items-center gap-2 px-2 py-3 hover:bg-muted group"
+            className="w-full justify-between text-base font-medium flex items-center gap-2 px-2 py-3 hover:bg-muted group focus-visible:ring-primary focus-visible:ring-2 focus-visible:ring-offset-2"
             onClick={() => setShowMobileCategories(v => !v)}
             aria-expanded={showMobileCategories}
             data-state={showMobileCategories ? 'open' : 'closed'}
@@ -338,7 +341,7 @@ const Header = React.memo(function Header() {
           >
             <div className="flex items-center gap-2">
               <LayoutGrid className="h-5 w-5 text-muted-foreground group-data-[state=open]:text-primary" />
-              {mounted ? tHeader('nav.documentCategories', { defaultValue: 'Make Documents' }) : '...'}
+              {mounted ? tHeader('nav.makeDocuments', { defaultValue: 'Make Documents' }) : '...'}
             </div>
             {showMobileCategories ? <ChevronUp className="h-5 w-5 opacity-70" /> : <ChevronDown className="h-5 w-5 opacity-70" />}
           </Button>
@@ -368,7 +371,7 @@ const Header = React.memo(function Header() {
               <Button
                 key={link.href}
                 variant="ghost" asChild
-                className="w-full justify-start text-base py-3 hover:bg-muted"
+                className="w-full justify-start text-base py-3 hover:bg-muted focus-visible:ring-primary focus-visible:ring-2 focus-visible:ring-offset-2"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 <Link href={`/${clientLocale}${link.href}`}>
@@ -387,22 +390,22 @@ const Header = React.memo(function Header() {
 
           {/* Mobile auth */}
           <div className="border-t border-border pt-4 space-y-2">
-            {isLoggedIn ? (
+            {isLoggedIn && user ? ( // Check if user object exists
               <>
                 <Button
                   variant="ghost" size="sm"
-                  className="w-full justify-start text-base py-3 hover:bg-muted"
+                  className="w-full justify-start text-base py-3 hover:bg-muted focus-visible:ring-primary focus-visible:ring-2 focus-visible:ring-offset-2"
                   asChild
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   <Link href={`/${clientLocale}/dashboard`}>
-                    {tHeader('Dashboard')}
+                    {user.email || tHeader('Dashboard')}
                   </Link>
                 </Button>
                 <Button
                   variant="outline" size="sm"
                   onClick={handleLogout}
-                  className="w-full justify-start text-base py-3 hover:bg-muted"
+                  className="w-full justify-start text-base py-3 hover:bg-muted focus-visible:ring-primary focus-visible:ring-2 focus-visible:ring-offset-2"
                 >
                   <LogOut className="h-5 w-5 mr-2" /> {tHeader('Logout')}
                 </Button>
@@ -411,7 +414,7 @@ const Header = React.memo(function Header() {
               <>
                 <Button
                   variant="ghost" size="sm"
-                  className="w-full justify-start text-base py-3 hover:bg-muted"
+                  className="w-full justify-start text-base py-3 hover:bg-muted focus-visible:ring-primary focus-visible:ring-2 focus-visible:ring-offset-2"
                   asChild
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
@@ -422,7 +425,7 @@ const Header = React.memo(function Header() {
                 </Button>
                 <Button
                   variant="default" size="sm"
-                  className="w-full justify-start text-base py-3 bg-primary text-primary-foreground hover:bg-primary/90"
+                  className="w-full justify-start text-base py-3 bg-primary text-primary-foreground hover:bg-primary/90 focus-visible:ring-primary focus-visible:ring-2 focus-visible:ring-offset-2"
                   asChild
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
@@ -442,3 +445,18 @@ const Header = React.memo(function Header() {
 });
 
 export default Header;
+
+// Helper to get localized document name, description, and aliases
+// Moved from SearchBar as it's more generic
+export const getLocalizedDocStrings = (doc: LegalDocument, locale: 'en' | 'es') => {
+  let name = doc.name;
+  let description = doc.description;
+  let aliases: string[] = doc.aliases || [];
+
+  if (locale === 'es') {
+    name = doc.name_es || doc.name;
+    description = doc.description_es || doc.description;
+    aliases = doc.aliases_es || doc.aliases || [];
+  }
+  return { name, description, aliases };
+};
