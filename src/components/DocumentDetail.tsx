@@ -9,6 +9,7 @@ import { documentLibrary, type LegalDocument } from '@/lib/document-library';
 import { Loader2, AlertTriangle } from 'lucide-react';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
+import { getTemplatePath } from '@/lib/templateUtils'; // Centralized util
 
 interface DocumentDetailProps {
   docId: string;
@@ -25,10 +26,12 @@ const DocumentDetail = React.memo(function DocumentDetail({ docId, locale, altTe
 
   const docConfig = useMemo(() => documentLibrary.find((d: LegalDocument) => d.id === docId), [docId]);
 
+  // Use the new standardized template path structure
   const templatePath = useMemo(() => {
     if (!docConfig) return undefined;
-    return locale === 'es' && docConfig.templatePath_es ? docConfig.templatePath_es : docConfig.templatePath;
-  }, [docConfig, locale]);
+    // Ensure leading slash for public folder access
+    return `/templates/${locale}/${docId}.md`;
+  }, [docConfig, locale, docId]);
 
   useEffect(() => {
     setIsHydrated(true);
@@ -45,7 +48,7 @@ const DocumentDetail = React.memo(function DocumentDetail({ docId, locale, altTe
 
     if (!templatePath) {
       console.log(`[DocumentDetail] No templatePath for docId: ${docId}, locale: ${locale}. Relying on image preview.`);
-      setMd(''); // Ensure md is empty so image is shown
+      setMd('');
       setIsLoading(false);
       return;
     }
@@ -53,22 +56,25 @@ const DocumentDetail = React.memo(function DocumentDetail({ docId, locale, altTe
     setIsLoading(true);
     setError(null);
 
-    const fetchPath = templatePath.startsWith('/') ? templatePath : `/${templatePath}`;
-
-    fetch(fetchPath)
+    fetch(templatePath) // Path is already absolute from public
       .then((r) => {
         if (!r.ok) {
           throw new Error(
-            `Failed to fetch ${fetchPath} (${r.status} ${r.statusText})`
+            `Failed to fetch ${templatePath} (${r.status} ${r.statusText})`
           );
         }
         return r.text();
       })
       .then(text => {
         let modifiedMd = text;
-        const documentDisplayNameForTitle = locale === 'es' && docConfig.name_es ? docConfig.name_es : docConfig.name;
+        const documentDisplayNameForTitle = locale === 'es' && docConfig.translations?.es?.name ? docConfig.translations.es.name : docConfig.translations?.en?.name;
         if (documentDisplayNameForTitle) {
             modifiedMd = modifiedMd.replace(/^# .*/m, `# ${documentDisplayNameForTitle}`);
+        } else {
+            const fallbackTitle = locale === 'es' ? docConfig.name_es || docConfig.name : docConfig.name;
+            if (fallbackTitle) {
+                modifiedMd = modifiedMd.replace(/^# .*/m, `# ${fallbackTitle}`);
+            }
         }
         setMd(modifiedMd);
       })
@@ -99,7 +105,7 @@ const DocumentDetail = React.memo(function DocumentDetail({ docId, locale, altTe
     );
   }
 
-  const documentDisplayName = docConfig && (locale === 'es' && docConfig.name_es ? docConfig.name_es : docConfig.name);
+  const documentDisplayName = docConfig && (locale === 'es' && docConfig.translations?.es?.name ? docConfig.translations.es.name : docConfig.translations?.en?.name || docConfig.name);
   const imgSrc = `/images/previews/${locale}/${docId}.png`;
   const fallbackAlt = altText || `${documentDisplayName || docId} preview`;
   const watermarkText = t('preview.watermark', { defaultValue: 'PREVIEW' });
@@ -149,7 +155,7 @@ const DocumentDetail = React.memo(function DocumentDetail({ docId, locale, altTe
             {md}
            </ReactMarkdown>
         </div>
-      ) : !isLoading && !error && !md && templatePath === undefined ? (
+      ) : !isLoading && !error && !md && !templatePath ? ( // Was: templatePath === undefined, simplified
          <div className="absolute inset-0 flex flex-col items-center justify-center text-muted-foreground z-0 p-0 text-center">
             <Image
               src={imgSrc}
@@ -161,7 +167,6 @@ const DocumentDetail = React.memo(function DocumentDetail({ docId, locale, altTe
               loading="lazy"
               onError={(e) => {
                   console.warn(`[DocumentDetail] Image failed to load: ${imgSrc}.`);
-                  // setError(t('Image preview not available.', {defaultValue: 'Image preview not available.'}));
               }}
             />
          </div>

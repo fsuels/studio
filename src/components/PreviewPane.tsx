@@ -4,13 +4,13 @@
 import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { useFormContext } from 'react-hook-form'; 
+import { useFormContext } from 'react-hook-form';
 import { Loader2, AlertTriangle } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { debounce } from 'lodash-es';
 import { documentLibrary, type LegalDocument } from '@/lib/document-library';
 import { cn } from '@/lib/utils';
-import Image from 'next/image'; // Import next/image
+import Image from 'next/image';
 
 interface PreviewPaneProps {
   locale: 'en' | 'es';
@@ -19,8 +19,7 @@ interface PreviewPaneProps {
 
 export default function PreviewPane({ locale, docId }: PreviewPaneProps) {
   const { t } = useTranslation("common");
-  const { watch } = useFormContext(); 
-
+  const { watch } = useFormContext();
 
   const [rawMarkdown, setRawMarkdown] = useState<string>('');
   const [processedMarkdown, setProcessedMarkdown] = useState<string>('');
@@ -30,7 +29,13 @@ export default function PreviewPane({ locale, docId }: PreviewPaneProps) {
   const [imageError, setImageError] = useState(false);
 
   const docConfig = useMemo(() => documentLibrary.find(d => d.id === docId), [docId]);
-  const templatePath = locale === 'es' && docConfig?.templatePath_es ? docConfig.templatePath_es : docConfig?.templatePath;
+
+  // Use the new standardized template path structure
+  const templatePath = useMemo(() => {
+    if (!docConfig) return undefined;
+    return `/templates/${locale}/${docId}.md`; // Path relative to public folder
+  }, [docConfig, locale, docId]);
+
   const watermarkText = t('preview.watermark', { ns: 'translation', defaultValue: 'PREVIEW' });
   const imgSrc = `/images/previews/${locale}/${docId}.png`;
 
@@ -50,23 +55,20 @@ export default function PreviewPane({ locale, docId }: PreviewPaneProps) {
     async function fetchTemplate() {
       setIsLoading(true);
       setError(null);
-      setImageError(false); // Reset image error on new fetch
+      setImageError(false);
       setRawMarkdown('');
       setProcessedMarkdown('');
 
       if (!templatePath) {
         console.warn(`[PreviewPane] No templatePath for docId: ${docId}, locale: ${locale}. Will attempt image fallback.`);
-        // No direct error here, will try to load image first if MD fetch isn't attempted.
-        setIsLoading(false); // Stop loading MD as there's no path
+        setIsLoading(false);
         return;
       }
       
-      const fetchUrl = templatePath.startsWith('/') ? templatePath : `/${templatePath}`;
-
       try {
-        const response = await fetch(fetchUrl);
+        const response = await fetch(templatePath); // Path is already absolute from public
         if (!response.ok) {
-          throw new Error(`Failed to fetch template (${response.status}): ${fetchUrl}`);
+          throw new Error(`Failed to fetch template (${response.status}): ${templatePath}`);
         }
         const text = await response.text();
         setRawMarkdown(text);
@@ -91,12 +93,15 @@ export default function PreviewPane({ locale, docId }: PreviewPaneProps) {
       const value = formData[key];
       tempMd = tempMd.replace(placeholderRegex, value ? `**${String(value)}**` : '____');
     }
-    tempMd = tempMd.replace(/\{\{.*?\}\}/g, '____'); 
+    tempMd = tempMd.replace(/\{\{.*?\}\}/g, '____');
     
-    let titleToUse = docConfig?.name;
-    if (locale === 'es' && docConfig?.name_es) {
-      titleToUse = docConfig.name_es;
+    let titleToUse = docConfig?.translations?.en?.name; // Default to English name
+    if (locale === 'es' && docConfig?.translations?.es?.name) {
+      titleToUse = docConfig.translations.es.name;
+    } else if (docConfig?.name) { // Fallback to root name if translations are missing
+        titleToUse = docConfig.name;
     }
+
     if (titleToUse) {
        tempMd = tempMd.replace(/^# .*/m, `# ${titleToUse}`);
     }
@@ -112,62 +117,56 @@ export default function PreviewPane({ locale, docId }: PreviewPaneProps) {
   );
 
   useEffect(() => {
-    if (!watch) { 
-      if (rawMarkdown) setProcessedMarkdown(updatePreviewContent({}, rawMarkdown)); 
+    if (!watch || !isHydrated || isLoading) {
+      if (rawMarkdown && !isLoading) setProcessedMarkdown(updatePreviewContent({}, rawMarkdown));
       return;
     }
-
-    if (isLoading || !isHydrated) return;
     
-    // Initial update, and set up watcher if rawMarkdown is available
-    if (rawMarkdown) {
-      debouncedUpdatePreview(watch(), rawMarkdown);
-      const subscription = watch((formData) => {
-        debouncedUpdatePreview(formData as Record<string, any>, rawMarkdown);
-      });
-      return () => {
-        subscription.unsubscribe();
-        debouncedUpdatePreview.cancel();
-      };
-    } else {
-      // If rawMarkdown is not available (e.g. no templatePath), clear processedMarkdown
-      setProcessedMarkdown('');
-    }
+    debouncedUpdatePreview(watch(), rawMarkdown);
+    const subscription = watch((formData) => {
+      debouncedUpdatePreview(formData as Record<string, any>, rawMarkdown);
+    });
+    return () => {
+      subscription.unsubscribe();
+      debouncedUpdatePreview.cancel();
+    };
     
   }, [watch, rawMarkdown, isLoading, isHydrated, debouncedUpdatePreview, updatePreviewContent]);
 
 
   if (!isHydrated) {
     return (
-        <div className="flex flex-col items-center justify-center h-full text-muted-foreground p-4 animate-pulse">
+        <div className="flex flex-col items-center justify-center h-full text-muted-foreground p-4 animate-pulse bg-muted rounded-lg">
             <Loader2 className="h-8 w-8 animate-spin mb-2" />
-            <p>{t('Loading document preview...', { ns: 'translation' })}</p>
+            <p>{t('Loading document preview...', { ns: 'translation', defaultValue: 'Loading document preview...' })}</p>
         </div>
     );
   }
   
   if (isLoading) {
     return (
-      <div className="flex flex-col items-center justify-center h-full text-muted-foreground p-4">
+      <div className="flex flex-col items-center justify-center h-full text-muted-foreground p-4 bg-muted rounded-lg">
         <Loader2 className="h-8 w-8 animate-spin mb-2" />
-        <p>{t('Loading document preview...', { ns: 'translation' })}</p>
+        <p>{t('Loading document preview...', { ns: 'translation', defaultValue: 'Loading document preview...' })}</p>
       </div>
     );
   }
 
-  // If Markdown successfully loaded and processed, show it
   if (!error && rawMarkdown && processedMarkdown) {
     return (
       <div
         id="live-preview"
         data-watermark={watermarkText}
-        className="relative w-full h-full bg-background" 
+        className="relative w-full h-full bg-background rounded-lg overflow-hidden"
         style={{ userSelect: 'none' }}
       >
         <div className={cn("prose prose-sm dark:prose-invert max-w-none w-full h-full overflow-y-auto overflow-x-hidden p-4 md:p-6 scrollbar-hide bg-background text-foreground")}>
           <ReactMarkdown 
               remarkPlugins={[remarkGfm]}
-              components={{ p: ({node, ...props}) => <p {...props} className="select-none" /> }}
+              components={{ 
+                p: ({node, ...props}) => <p {...props} className="select-none" />,
+                h1: ({node, ...props}) => <h1 {...props} className="text-center" />,
+              }}
           >
             {processedMarkdown}
           </ReactMarkdown>
@@ -176,13 +175,12 @@ export default function PreviewPane({ locale, docId }: PreviewPaneProps) {
     );
   }
 
-  // If Markdown fetch failed OR no templatePath was provided, AND image hasn't errored yet, try to show image
   if ((error || !templatePath) && !imageError) {
     return (
       <div
         id="live-preview"
         data-watermark={watermarkText}
-        className="relative w-full h-full bg-background"
+        className="relative w-full h-full bg-background rounded-lg overflow-hidden"
         style={{ userSelect: 'none' }}
       >
         <Image
@@ -202,22 +200,20 @@ export default function PreviewPane({ locale, docId }: PreviewPaneProps) {
     );
   }
   
-  // If both Markdown and Image have failed, or if there was an error and no templatePath
   if (error || imageError || (!templatePath && !rawMarkdown && !isLoading)) {
      return (
-        <div className="flex flex-col items-center justify-center h-full text-destructive p-4 text-center">
+        <div className="flex flex-col items-center justify-center h-full text-destructive p-4 text-center bg-destructive/5 rounded-lg">
           <AlertTriangle className="h-8 w-8 mb-2" />
-          <p className="font-semibold">{error ? t('Error loading preview', { ns: 'translation' }) : t('Preview Unavailable', { ns: 'translation'})}</p>
+          <p className="font-semibold">{error ? t('Error loading preview', { ns: 'translation', defaultValue: 'Error loading preview' }) : t('Preview Unavailable', { ns: 'translation', defaultValue: 'Preview Unavailable'})}</p>
           {error && <p className="text-xs mt-1">{error}</p>}
-          {imageError && !error && <p className="text-xs mt-1">{t('Image preview could not be loaded.')}</p>}
+          {imageError && !error && <p className="text-xs mt-1">{t('Image preview could not be loaded.', { ns: 'translation', defaultValue: 'Image preview could not be loaded.' })}</p>}
         </div>
      );
   }
 
-  // Fallback for any other unhandled state (should ideally not be reached)
   return (
-    <div className="flex flex-col items-center justify-center h-full text-muted-foreground p-4">
-      <p>{t('Preview not available.', { ns: 'translation' })}</p>
+    <div className="flex flex-col items-center justify-center h-full text-muted-foreground p-4 bg-muted rounded-lg">
+      <p>{t('Preview not available.', { ns: 'translation', defaultValue: 'Preview not available.' })}</p>
     </div>
   );
 }
