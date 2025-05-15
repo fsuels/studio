@@ -1,1 +1,3 @@
-// TODO: fill in questions.ts
+import { usStates } from '@/lib/usStates';
+
+export const firstSecondQuestions = [
