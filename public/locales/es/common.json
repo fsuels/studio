@@ -1,12 +1,16 @@
-
 {
   "nav": {
-    "makeDocuments": "Crear Documento",
+    "makeDocuments": "Crear Documentos",
     "pricing": "Precios",
     "features": "Características",
     "blog": "Blog",
     "faq": "Preguntas Frecuentes",
     "support": "Soporte",
+    "dashboard": "Tablero",
+    "settings": "Configuración",
+    "logout": "Cerrar Sesión",
+    "login": "Iniciar Sesión",
+    "signup": "Registrarse",
     "searchPlaceholder": "Buscar documentos...",
     "noDocumentsInCategory": "Aún no hay documentos en esta categoría.",
     "seeMoreDocuments": "Ver todos en {{categoryName}}...",
@@ -14,19 +18,20 @@
     "noCategoriesAvailable": "No hay categorías de documentos disponibles."
   },
   "footer": {
-    "sectionProductTitle": "Producto",
-    "sectionResourcesTitle": "Recursos",
-    "sectionLegalTitle": "Legal",
-    "sectionCommunityTitle": "Comunidad y Contacto",
-    "linkHowItWorks": "Cómo Funciona",
-    "linkPricing": "Precios",
-    "linkFeatures": "Características",
-    "linkBlog": "Blog",
-    "linkFaq": "Preguntas Frecuentes",
-    "linkSupport": "Soporte",
-    "linkPrivacyPolicy": "Política de Privacidad",
-    "linkTermsOfService": "Términos de Servicio",
-    "linkDisclaimer": "Descargo de Responsabilidad",
+    "subhead": "Generación de Documentos Legales con IA. Rápido, Asequible, Seguro.",
+    "productSectionTitle": "Producto",
+    "pricingLink": "Precios",
+    "featuresLink": "Características",
+    "howItWorksLink": "Cómo Funciona",
+    "resourcesSectionTitle": "Recursos",
+    "blogLink": "Blog",
+    "faqLink": "Preguntas Frecuentes",
+    "supportLink": "Soporte",
+    "legalSectionTitle": "Legal",
+    "privacyPolicyLink": "Política de Privacidad",
+    "termsOfServiceLink": "Términos de Servicio",
+    "disclaimerLink": "Descargo de Responsabilidad",
+    "communitySectionTitle": "Comunidad y Contacto",
     "socialLinkedInAria": "Página de LinkedIn",
     "socialTwitterAria": "Perfil de Twitter",
     "supportPhoneNumber": "+1 (800) 555-0199 (Soporte)",
@@ -38,215 +43,21 @@
     "joinMailingListDesc": "Únete a nuestra lista de correo para ofertas exclusivas.",
     "copyright": "© {{year}} 123LegalDoc. Todos los derechos reservados.",
     "openChatAria": "Abrir chat",
-    "errorInvalidEmailTitle": "Correo Inválido",
-    "errorInvalidEmailDesc": "Por favor, ingrese una dirección de correo electrónico válida.",
-    "subscribedSuccessTitle": "¡Suscrito!",
-    "subscribedSuccessDesc": "Gracias por unirte a nuestra lista de correo."
-  },
-  "logoAlt": "123LegalDoc Inicio",
-  "subhead": "Generación de Documentos Legales con IA. Rápido, Asequible, Seguro.",
-  "headline": "Documentos Legales al Alcance de tu Mano",
-  "ctaPrimary": "Comenzar Gratis, Paga $35/Doc →",
-  "ctaSecondary": "Ver Demo",
-  "trustText": "Con la confianza de más de 2,000 pequeñas empresas",
-  "pricingTeaser": "Pago único de $35/documento • Sin suscripción",
-  "pricingLinkText": "Ver Precios",
-  "languageName": "Español (EE. UU.)",
-  "stepOne": {
-    "topDocumentsTitle": "Documentos Más Usados Esta Semana",
-    "exploreAllCategoriesButton": "Explorar Todas las Categorías de Documentos →",
-    "backToTopDocumentsButton": "Volver a Documentos Principales",
-    "categoryDescription": "Elige una categoría legal para encontrar el documento que necesitas.",
-    "selectDocDescription": "Selecciona una plantilla de documento de la lista.",
-    "searchInCategoryPlaceholder": "Buscar en esta categoría..."
-  },
-  "docTypeSelector": {
-    "title": "Paso 1: Elige tu Necesidad Legal",
-    "subtitle": "Selecciona una categoría, luego un documento. Filtra por estado si es necesario.",
-    "searchPlaceholder": "Buscar todos los documentos...",
-    "selectState": "Todos los Estados",
-    "statesLabel": "Estados de EE. UU.",
-    "noCategoriesFound": "No se encontraron categorías que coincidan con tu búsqueda.",
-    "backToCategories": "Volver a Categorías",
-    "noResults": "No se encontraron documentos que coincidan con tus criterios.",
-    "noDescription": "Sin descripción disponible.",
-    "requiresNotarization": "Requiere Notarización",
-    "canBeRecorded": "Puede Ser Registrado"
-  },
-  "wizard": {
-    "next": "Siguiente",
-    "confirmChargeAndPay": "Confirmar y Pagar {{price}}",
-    "changeDocument": "Cambiar Documento"
-  },
-  "preview": {
-    "watermark": "VISTA PREVIA"
-  },
-  "fields": {
-    "sellerName": { "label": "Nombre completo del vendedor" },
-    "sellerAddress": { "label": "Dirección completa del vendedor" },
-    "buyerName": { "label": "Nombre completo del comprador" },
-    "buyerAddress": { "label": "Dirección completa del comprador" },
-    "vehicleVin": { "label": "VIN" },
-    "salePrice": { "label": "Precio de Venta" },
-    "paymentMethod": {
-      "label": "Método de Pago",
-      "options": {
-        "cash": "Efectivo",
-        "check": "Cheque",
-        "wire": "Transferencia Bancaria",
-        "paypal": "PayPal",
-        "credit_card": "Tarjeta de Crédito / Débito"
-      }
-    },
-    "odo_status": {
-      "actual": "Millaje real",
-      "exceeds": "Supera los límites mecánicos",
-      "not_actual": "Millaje no real"
-    }
-  },
-  "toasts": {
-    "docTypeConfirmedTitle": "Tipo de Documento Confirmado",
-    "docTypeConfirmedDescription": "{{docName}} seleccionado. Por favor, completa los detalles.",
-    "stateRequired": "Estado Requerido",
-    "selectStateBeforeDocument": "Por favor, selecciona un estado antes de elegir un documento.",
-    "subscribedTitle": "¡Suscrito!",
-    "subscribedDescription": "Gracias por unirte a nuestra lista de correo."
-  },
-  "home": {
-    "hero": {
-      "title": "Solo 3 Pasos Fáciles",
-      "subtitle": "Con unos pocos pasos guiados, generarás un documento legal totalmente personalizado.",
-      "pricingBadge": "Pago único de $35/documento • Sin suscripción"
-    },
-    "steps": {
-      "step1": {
-        "title": "Describe la situación",
-        "desc": "Brinda un resumen rápido. Se admite texto o voz."
-      },
-      "step2": {
-        "title": "Responde preguntas simples",
-        "desc": "La IA te guiará con la información exacta que se necesita."
-      },
-      "step3": {
-        "title": "Finaliza y firma",
-        "desc": "Descarga, firma o comparte tu documento de forma segura."
-      }
-    },
-    "cta": {
-      "startNow": "Comienza gratis"
-    },
-    "trustStrip": {
-      "title": "Confiado por Profesionales",
-      "badge1": "Más de {{count}} documentos generados",
-      "badge2": "Cifrado y conforme a la privacidad",
-      "badge3": "Verificado por abogados reales"
-    },
-    "testimonials": {
-      "title": "Lo que dicen nuestros usuarios",
-      "t1": { "quote": "Esta plataforma me ahorró horas de papeleo.", "name": "Ana Ramírez", "title": "Propietaria en Texas" },
-      "t2": { "quote": "Extremadamente intuitivo. Creé un contrato en minutos.", "name": "Jason Liu", "title": "Fundador de Startup" },
-      "t3": { "quote": "La IA me dio justo lo que necesitaba. ¡Fantástico!", "name": "Linda Fox", "title": "Agente Inmobiliaria" },
-      "t4": { "quote": "Me guió paso a paso sin ninguna confusión.", "name": "Kevin James", "title": "Freelancer" },
-      "t5": { "quote": "Simple, rápido y legalmente sólido. Muy recomendable.", "name": "Nina Patel", "title": "Vendedora en Línea" },
-      "t6": { "quote": "Perfecto para contratos de pequeños negocios.", "name": "Carlos Gómez", "title": "Dueño de Boutique" },
-      "t7": { "quote": "El soporte en español fue clave para mi equipo.", "name": "Rosa Villanueva", "title": "Asistente Legal" },
-      "t8": { "quote": "Excelente diseño y resultados confiables.", "name": "Matthew R.", "title": "Fotógrafo" },
-      "t9": { "quote": "Pude crear un contrato de alquiler estando de vacaciones.", "name": "Joanne L.", "title": "Propietaria Remota" },
-      "t10": { "quote": "Lo volvería a usar sin duda. Es excelente.", "name": "Henry Thomas", "title": "Inversionista" },
-      "t11": { "quote": "No necesitas ser abogado. Lo hace todo por ti.", "name": "Susan White", "title": "Organizadora de Eventos" },
-      "t12": { "quote": "Previsualización y compartición de documentos fue muy fluida.", "name": "Liam Cruz", "title": "Consultor de Software" },
-      "t13": { "quote": "¡Por fin ayuda legal accesible!", "name": "Laura Bennett", "title": "Escritora Freelance" },
-      "t14": { "quote": "Mi inquilino firmó el mismo día.", "name": "Omar Hassan", "title": "Propietario" },
-      "t15": { "quote": "Esta app es esencial para emprendedores.", "name": "Jada Evans", "title": "Coach de Vida" },
-      "t16": { "quote": "Hasta mis padres pudieron usarla fácilmente.", "name": "Miguel Reyes", "title": "Estudiante Universitario" },
-      "t17": { "quote": "El formulario dinámico fue ideal para mí.", "name": "Emily Rivera", "title": "Organizadora sin fines de lucro" },
-      "t18": { "quote": "Es como tener un abogado en el celular.", "name": "Daniel Schmidt", "title": "Desarrollador Freelance" },
-      "t19": { "quote": "Limpio, moderno y legalmente confiable.", "name": "Priya Desai", "title": "Arquitecta" },
-      "t20": { "quote": "Me ayuda a redactar sin dudar.", "name": "George Park", "title": "Consultor de Marketing" },
-      "t21": { "quote": "Confiable y rápido. El mejor gasto de $5.", "name": "Aliya Khan", "title": "Coach en Línea" },
-      "t22": { "quote": "La IA acertó con mis documentos de negocio.", "name": "Bobby Tran", "title": "Fundador de Startup" },
-      "t23": { "quote": "Me dio tranquilidad en cada paso.", "name": "Natalie Scott", "title": "Madre y Propietaria" },
-      "t24": { "quote": "Confío más en esta herramienta que en plantillas online.", "name": "Eric Delgado", "title": "Dueño de Negocio" },
-      "t25": { "quote": "El soporte bilingüe fue clave.", "name": "Yesenia Morales", "title": "Líder Comunitaria" }
-    },
-    "featuredIn": "DESTACADO EN",
-    "satisfactionGuarantee": "Garantía de satisfacción del 100% o le devolvemos su dinero",
-    "moneyBackGuarantee": "Garantía de satisfacción 100% o le devolvemos su dinero",
-    "callToAction": "Comenzar ahora"
-  },
-  "trustBadges": {
-    "secure": "Pago Seguro SSL",
-    "privacy": "Privacidad Protegida",
-    "attorneyReviewed": "Plantillas Revisadas por Abogados"
-  },
-  "announcement": {
-    "offerTitle": "Oferta por Tiempo Limitado:",
-    "offerDetails": "¡Obtén 20% de descuento en tu primer documento!",
-    "expiresIn": "Expira en:",
-    "dismissLabel": "Descartar banner promocional"
-  },
-  "support": {
-    "title": "Centro de Soporte",
-    "subtitle": "¿Necesitas ayuda? Estamos aquí para ayudarte.",
-    "contact": {
-      "title": "Contáctanos",
-      "hours": "Lun–Vie, 9am–6pm EST"
-    },
-    "help": {
-      "title": "Temas Comunes",
-      "item1": "No recibí mi documento",
-      "item2": "Necesito editar una cláusula",
-      "item3": "No puedo descargar el PDF",
-      "item4": "Solicitar reembolso"
-    },
-    "note": "También puedes consultar nuestra sección de Preguntas Frecuentes.",
-    "cta": "Ir a Preguntas Frecuentes"
-  },
-  "faq": {
-    "title": "Preguntas Frecuentes",
-    "subtitle": "Todo lo que necesitas saber sobre 123LegalDoc.",
-    "q1": {
-      "question": "¿Estos documentos son legalmente válidos?",
-      "answer": "Sí. Todos se basan en plantillas legales y cláusulas comunes en EE. UU."
-    },
-    "q2": {
-      "question": "¿Los documentos se adaptan a mi estado?",
-      "answer": "Sí. Se ajustan según los requisitos del estado en EE. UU. que selecciones."
-    },
-    "q3": {
-      "question": "¿Puedo editar después de generar un documento?",
-      "answer": "Sí, puedes hacer cambios antes de descargar el PDF final."
-    },
-    "q4": {
-      "question": "¿Necesito un abogado?",
-      "answer": "No para documentos comunes. Para asesoría legal específica, recomendamos consultar a un abogado."
-    },
-    "q5": {
-      "question": "¿Mis datos están seguros?",
-      "answer": "Sí, están cifrados y se almacenan de forma temporal para tu uso exclusivo."
-    },
-    "q6": {
-      "question": "¿Cuánto cuesta?",
-      "answer": "Desde solo $35 por documento. También hay paquetes y acceso ilimitado."
-    }
+    "logoAlt": "123LegalDoc Inicio"
   },
   "pricing": {
     "title": "Precios simples y transparentes",
     "payPerDocBadge": "Pago único de $35/documento • Sin suscripción",
     "freeCreditTitle": "Tu Crédito de Documento Gratis",
     "freeCreditStatus": "Has usado {{used}} de {{total}} créditos de documentos gratis.",
-    "claimFreeCredit": "¡Regístrate para Reclamar tu Documento Gratis!",
-    "perDocument": "por documento",
-    "bundleOf5": "paquete de 5",
-    "perMonth": "mes",
-    "mostPopular": "Más Popular",
+    "claimFreeCredit": "¡Regístrate para Reclamar Tu Documento Gratis!",
     "plans": {
       "single": {
         "title": "Documento Único",
         "description": "Perfecto para necesidades puntuales.",
         "item1": "1 PDF legal descargable",
         "item2": "Personalización de cláusulas",
-        "item3": "Soporte por correo electrónico",
+        "item3": "Soporte por correo",
         "item4": "Compartir seguro (pronto)"
       },
       "bundle": {
@@ -258,20 +69,24 @@
         "item4": "Mejor valor por documento"
       },
       "unlimited": {
-        "title": "Business Pro",
-        "description": "Para usuarios frecuentes y empresas.",
+        "title": "Profesional de Negocios",
+        "description": "Para usuarios frecuentes y negocios.",
         "item1": "Documentos ilimitados",
         "item2": "Soporte prioritario",
         "item3": "Funciones de equipo (pronto)",
-        "item4": "Cancela cuando quieras"
+        "item4": "Cancela en cualquier momento"
       }
     },
-    "cta": "Empezar Ahora",
-    "ctaContact": "Contactar Ventas",
+    "perDocument": "documento",
+    "bundleOf5": "paquete de 5",
+    "perMonth": "mes",
+    "cta": "Comenzar ahora",
+    "mostPopular": "Más Popular",
+    "ctaContact": "Contactar a Ventas",
     "comparisonTitle": "Cómo Nos Comparamos",
     "featureHeader": "Característica",
     "competitorHeader": "Abogado Tradicional",
-    "competitorOnlineHeader": "Otros Servicios Online",
+    "competitorOnlineHeader": "Otros Servicios en Línea",
     "pricePerDocLabel": "Precio Prom. por Documento",
     "customizationLabel": "Nivel de Personalización",
     "highLabel": "Alto (asistido por IA)",
@@ -282,55 +97,126 @@
     "daysWeeksLabel": "Días/Semanas",
     "hoursDaysLabel": "Horas/Días",
     "accessibilityLabel": "Accesibilidad",
-    "accessible247Label": "Online 24/7",
+    "accessible247Label": "En línea 24/7",
     "officeHoursLabel": "Horario de Oficina, Citas",
-    "onlineLimitedSupportLabel": "Online, Soporte Variable",
-    "guarantee": "Garantía de satisfacción del 100% o devolución de tu dinero en compras individuales/paquetes."
+    "onlineLimitedSupportLabel": "En línea, Soporte Varía",
+    "guarantee": "Garantía de Satisfacción del 100% o Devolución de tu Dinero en compras individuales/paquetes."
+  },
+  "features": {
+    "title": "Características Clave",
+    "subtitle": "Herramientas poderosas para simplificar tu flujo de trabajo de documentos legales.",
+    "items": {
+      "ai": {
+        "title": "Inferencia de Documentos por IA",
+        "desc": "Sugerencias inteligentes basadas en tus necesidades."
+      },
+      "forms": {
+        "title": "Cuestionarios Dinámicos",
+        "desc": "Preguntas guiadas adaptadas al documento elegido."
+      },
+      "local": {
+        "title": "Cláusulas Específicas del Estado",
+        "desc": "Documentos adaptados a las leyes estatales de EE. UU."
+      },
+      "bilingual": {
+        "title": "Soporte Bilingüe (EN/ES)",
+        "desc": "Interfaz y soporte completo en inglés y español."
+      },
+      "pdf": {
+        "title": "Generación Instantánea de PDF",
+        "desc": "Previsualiza y descarga PDFs profesionales."
+      },
+      "sharing": {
+        "title": "Compartir de Forma Segura",
+        "desc": "Comparte documentos con enlaces de tiempo limitado (próximamente)."
+      },
+      "dashboard": {
+        "title": "Panel de Usuario",
+        "desc": "Administra tus documentos y configuraciones fácilmente."
+      },
+      "security": {
+        "title": "Privacidad y Seguridad",
+        "desc": "Datos encriptados y prácticas conformes."
+      }
+    }
+  },
+  "faq": {
+    "title": "Preguntas Frecuentes",
+    "subtitle": "Encuentra respuestas a preguntas comunes a continuación.",
+    "q1": {
+      "question": "¿Son estos documentos legalmente válidos?",
+      "answer": "Sí. Todos los documentos se basan en plantillas y cláusulas legales utilizadas en los EE. UU."
+    },
+    "q2": {
+      "question": "¿Los documentos son específicos para cada estado?",
+      "answer": "Sí. La plataforma adapta los documentos para que cumplan con los requisitos de tu estado en EE. UU."
+    },
+    "q3": {
+      "question": "¿Puedo editar un documento después de generarlo?",
+      "answer": "Sí, puedes hacer actualizaciones antes de descargar tu PDF final."
+    },
+    "q4": {
+      "question": "¿Necesito hablar con un abogado?",
+      "answer": "Para la mayoría de los documentos cotidianos, no. Si necesitas asesoramiento legal, te recomendamos hablar con un abogado."
+    },
+    "q5": {
+      "question": "¿Están seguros mis datos?",
+      "answer": "Todos los documentos están encriptados y solo se almacenan temporalmente para tu acceso."
+    },
+    "q6": {
+      "question": "¿Cuánto cuesta?",
+      "answer": "Los documentos comienzan desde solo $5. También ofrecemos paquetes y acceso ilimitado."
+    }
+  },
+  "support": {
+    "title": "Centro de Soporte",
+    "subtitle": "¿Necesitas ayuda? Estamos aquí para asistirte.",
+    "contact": {
+      "title": "Contáctanos",
+      "hours": "Lunes a Viernes, 9am–6pm EST"
+    },
+    "help": {
+      "title": "Temas de Ayuda Comunes",
+      "item1": "No recibí mi documento",
+      "item2": "Necesito editar una cláusula",
+      "item3": "No puedo descargar el PDF",
+      "item4": "Necesito un reembolso"
+    },
+    "note": "También puedes consultar nuestra sección de Preguntas Frecuentes.",
+    "cta": "Ir a Preguntas Frecuentes"
   },
   "blog": {
-    "title": "Consejos y Artículos Legales",
-    "subtitle": "Tips legales, guías de documentos y novedades del sector.",
+    "title": "Perspectivas y Artículos Legales",
+    "subtitle": "Consejos legales inteligentes, guías de documentos y actualizaciones de la industria.",
     "readMore": "Leer más",
     "freelancer": {
       "title": "5 Documentos Legales que Todo Freelancer Debe Conocer",
-      "desc": "Desde contratos hasta acuerdos de confidencialidad — lo básico para freelancers.",
-      "date": "2024-03-12",
-      "body": "<p>Si trabajas como freelancer, protegerte legalmente es tan importante como hacer bien tu trabajo. Estos son cinco documentos clave que deberías tener:</p><ul><li><strong>Contrato de Prestación de Servicios</strong>: Define el alcance, pagos, tiempos de entrega y propiedad del trabajo.</li><li><strong>Acuerdo de Confidencialidad (NDA)</strong>: Protege información sensible del cliente.</li><li><strong>Factura</strong>: Necesaria para solicitar pagos y llevar control.</li><li><strong>Acuerdo de Servicios</strong>: Ideal para relaciones recurrentes con clientes.</li><li><strong>Licencia de Derechos de Autor</strong>: Aclara quién es el dueño del contenido y si puede reutilizarse.</li></ul><p>Estos documentos ayudan a evitar malentendidos y brindan seguridad legal.</p>"
+      "desc": "Desde contratos hasta NDAs — simplifica tu vida freelance con estos esenciales."
     },
     "ai": {
       "title": "Cómo la IA Está Transformando el LegalTech",
-      "desc": "Explora el papel de la inteligencia artificial en documentos y cumplimiento.",
-      "date": "2024-02-02",
-      "body": "<p>La inteligencia artificial está revolucionando el mundo legal. Hoy en día, plataformas legales utilizan IA para:</p><ul><li>Entender las necesidades legales mediante voz o texto.</li><li>Clasificar situaciones y recomendar documentos adecuados.</li><li>Rellenar cláusulas automáticamente siguiendo buenas prácticas.</li></ul><p>La IA no reemplaza abogados, pero permite que más personas accedan a herramientas legales confiables y asequibles.</p>"
+      "desc": "Explora el auge de la IA en la generación de documentos, cumplimiento y contratos."
     },
     "templates": {
-      "title": "Por Qué los Modelos Gratis Pueden Ser Peligrosos",
-      "desc": "Los modelos gratuitos suelen omitir cláusulas clave — qué debes revisar.",
-      "date": "2023-12-20",
-      "body": "<p>Usar plantillas legales gratuitas puede parecer conveniente, pero muchas veces:</p><ul><li>No consideran leyes estatales específicas.</li><li>Usan lenguaje legal desactualizado o inválido.</li><li>Omiten cláusulas clave sobre pagos, responsabilidades o sanciones.</li></ul><p>Plataformas como 123LegalDoc ofrecen contratos personalizables que cumplen con las leyes locales.</p>"
+      "title": "Por Qué las Plantillas Gratuitas Pueden Ser Arriesgadas",
+      "desc": "Las plantillas legales a menudo omiten cláusulas cruciales — esto es lo que debes tener en cuenta."
+    },
+    "lease": {
+      "title": "Cómo Crear un Contrato de Arrendamiento Válido en Florida",
+      "desc": "Una lista de verificación legal paso a paso para propietarios e inquilinos en Florida."
     }
-  },
-  "docDetail": {
-    "previewTitle": "Vista Previa del Documento",
-    "previewSubtitle": "Así es como se verá generalmente tu documento. Las cláusulas y detalles específicos se personalizarán con tus respuestas.",
-    "startForFree": "Comenzar Gratis",
-    "benefit1": "Legalmente Sólido y Específico del Estado",
-    "benefit2": "Personalización Rápida y Fácil",
-    "benefit3": "Descarga Instantánea y Uso Compartido Seguro",
-    "pricingTitle": "Precios Transparentes",
-    "competitivePrice": "Compara con los honorarios típicos de abogados de ${{competitorPrice}}+",
-    "optionalAddons": "Complementos Opcionales",
-    "aiAssistance": "Asistencia de IA"
-  },
-  "breadcrumb": {
-    "home": "Inicio",
-    "start": "Iniciar"
   },
   "authModal": {
     "title": "Autenticación Requerida",
     "description": "Por favor, inicia sesión o crea una cuenta para guardar tu documento y proceder al pago.",
     "cancelButton": "Cancelar",
-    "signUpButton": "Regístrate",
+    "signUpButton": "Registrarse",
     "signInButton": "Iniciar Sesión"
+  },
+  "toasts": {
+    "docTypeConfirmedTitle": "Tipo de Documento Confirmado",
+    "docTypeConfirmedDescription": "Has seleccionado {{docName}}.",
+    "stateRequiredTitle": "Estado Requerido",
+    "stateRequiredDescription": "Por favor, selecciona un estado de la barra de filtros antes de elegir un documento."
   }
 }
