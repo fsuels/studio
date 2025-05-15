@@ -1,4 +1,3 @@
-tsx
 // src/app/bundle/[id]/page.tsx
 import React from 'react'
 import { notFound } from 'next/navigation'
@@ -15,9 +14,9 @@ interface Props {
 
 export default async function BundleDetailPage({ params }: Props) {
   // try Firestore first
-  let bundle = (await loadBundles()).find(b => b.id === params.id)
+  let bundle = (await loadBundles()).find(b => b.id === params!.id)
   if (!bundle) {
-    bundle = bundles.find(b => b.id === params.id)
+    bundle = bundles.find(b => b.id === params!.id)
   }
   if (!bundle) return notFound()
 

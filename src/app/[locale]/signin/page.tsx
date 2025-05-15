@@ -19,7 +19,7 @@ export default function SignInPage() {
   const router = useRouter();
   const { login } = useAuth(); // Get login function
   const { toast } = useToast();
-  const locale = params.locale as 'en' | 'es';
+  const locale = params!.locale as 'en' | 'es';
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState(''); // Simple password state for demo

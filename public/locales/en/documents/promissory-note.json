@@ -1,0 +1,51 @@
+{
+    "date": {
+      "label": "Date of Note",
+      "tooltip": "Enter the date this note is created."
+    },
+    "placeOfExecution": {
+      "label": "Place of Execution",
+      "tooltip": "Enter the city and state where this note is signed."
+    },
+    "lenderName": {
+      "label": "Lender Name",
+      "tooltip": ""
+    },
+    "lenderAddress": {
+      "label": "Lender Address",
+      "tooltip": "Street, City, State, ZIP"
+    },
+    "borrowerName": {
+      "label": "Borrower Name",
+      "tooltip": ""
+    },
+    "borrowerAddress": {
+      "label": "Borrower Address",
+      "tooltip": "Street, City, State, ZIP"
+    },
+    "principalAmount": {
+      "label": "Principal Amount",
+      "tooltip": "For example: 10000"
+    },
+    "interestRate": {
+      "label": "Interest Rate (%)",
+      "tooltip": "Annual rate, for example: 5"
+    },
+    "paymentFrequency": {
+      "label": "Payment Frequency",
+      "tooltip": ""
+    },
+    "maturityDate": {
+      "label": "Maturity Date",
+      "tooltip": ""
+    },
+    "governingLaw": {
+      "label": "Governing Law",
+      "tooltip": ""
+    },
+    "lateFeeRate": {
+      "label": "Late Fee Rate (%)",
+      "tooltip": "Optional percentage charged on late payments"
+    }
+  }
+  

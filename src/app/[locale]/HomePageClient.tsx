@@ -54,7 +54,7 @@ export default function HomePageClient() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const params = useParams();
-  const locale = params.locale as 'en' | 'es' || 'en';
+  const locale = params!.locale as 'en' | 'es' || 'en';
 
   const [globalSearchTerm, setGlobalSearchTerm] = useState('');
   const [globalSelectedState, setGlobalSelectedState] = useState<string>('');
@@ -79,9 +79,9 @@ export default function HomePageClient() {
   useEffect(() => {
     if (!isHydrated) return;
 
-    const docIdFromQuery = searchParams.get('docId');
-    const categoryFromQuery = searchParams.get('category');
-    const searchFromQuery = searchParams.get('search');
+    const docIdFromQuery = searchParams!.get('docId');
+    const categoryFromQuery = searchParams!.get('category');
+    const searchFromQuery = searchParams!.get('search');
 
     if (searchFromQuery && !globalSearchTerm) {
         setGlobalSearchTerm(searchFromQuery);

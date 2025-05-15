@@ -7,7 +7,7 @@ export async function generateStaticParams() {
   const params = [];
   for (const locale of ['en', 'es']) {
     for (const article of blogArticles) {
-      params.push({ locale, slug: article.slug });
+      params!.push({ locale, slug: article.slug });
     }
   }
   return params;

@@ -1,31 +1,34 @@
-// src/lib/documents/us/index.ts
-// Re-export all US documents as named exports
+// -----------------------------------------------------------------------------
+// Barrel of U.S. LegalDocument **objects**.
+// ONLY re-export the LegalDocument instances – never schemas/questions –
+// so `import * as us from "@/lib/documents/us"` returns pure data.
+// -----------------------------------------------------------------------------
 
-export * from './bill-of-sale-vehicle';
-export * from './promissory-note';
-export * from './invoice';
-export * from './demand-letter-payment';
-export * from './independent-contractor-agreement';
-export * from './service-agreement';
-export * from './nda';
-export * from './non-compete-agreement';
-export * from './partnership-agreement';
-export * from './operating-agreement';
-export * from './articles-of-incorporation-biz';
-export * from './employment-offer-letter';
-export * from './employment-termination-letter';
-export * from './lease-agreement';
-export * from './commercial-lease-agreement';
-export * from './eviction-notice';
-export * from './quitclaim-deed';
-export * from './divorce-settlement-agreement';
-export * from './child-custody-agreement';
-export * from './prenuptial-agreement';
-export * from './child-medical-consent';
-export * from './power-of-attorney';
-export * from './healthcare-power-of-attorney';
-export * from './living-will';
-export * from './affidavit-general';
-export * from './last-will-testament';
-export * from './living-trust';
-export * from './general-inquiry';
+export { vehicleBillOfSaleMeta as vehicleBillOfSale } from './vehicle-bill-of-sale';
+export { promissoryNoteMeta      as promissoryNote   } from './promissory-note';
+
+export { demandLetterPayment }            from './demand-letter-payment';
+export { independentContractorAgreement } from './independent-contractor-agreement';
+export { serviceAgreement }               from './service-agreement';
+export { nda }                            from './nda';
+export { nonCompeteAgreement }            from './non-compete-agreement';
+export { partnershipAgreement }           from './partnership-agreement';
+export { operatingAgreement }             from './operating-agreement';
+export { articlesOfIncorporationBiz }     from './articles-of-incorporation-biz';
+export { employmentOfferLetter }          from './employment-offer-letter';
+export { employmentTerminationLetter }    from './employment-termination-letter';
+export { leaseAgreement }                 from './lease-agreement';
+export { commercialLeaseAgreement }       from './commercial-lease-agreement';
+export { evictionNotice }                 from './eviction-notice';
+export { quitclaimDeed }                  from './quitclaim-deed';
+export { divorceSettlementAgreement }     from './divorce-settlement-agreement';
+export { childCustodyAgreement }          from './child-custody-agreement';
+export { prenuptialAgreement }            from './prenuptial-agreement';
+export { childMedicalConsent }            from './child-medical-consent';
+export { powerOfAttorney }                from './power-of-attorney';
+export { healthcarePowerOfAttorney }      from './healthcare-power-of-attorney';
+export { livingWill }                     from './living-will';
+export { affidavitGeneral }               from './affidavit-general';
+export { lastWillTestament }              from './last-will-testament';
+export { livingTrust }                    from './living-trust';
+export { generalInquiry }                 from './general-inquiry';

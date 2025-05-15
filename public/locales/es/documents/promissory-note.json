@@ -1,0 +1,51 @@
+{
+    "date": {
+      "label": "Fecha del Pagaré",
+      "tooltip": "Ingrese la fecha en que se emite este pagaré."
+    },
+    "placeOfExecution": {
+      "label": "Lugar de Firma",
+      "tooltip": "Ciudad y estado donde se firma este pagaré."
+    },
+    "lenderName": {
+      "label": "Nombre del Prestamista",
+      "tooltip": ""
+    },
+    "lenderAddress": {
+      "label": "Dirección del Prestamista",
+      "tooltip": "Calle, Ciudad, Estado, Código Postal"
+    },
+    "borrowerName": {
+      "label": "Nombre del Prestatario",
+      "tooltip": ""
+    },
+    "borrowerAddress": {
+      "label": "Dirección del Prestatario",
+      "tooltip": "Calle, Ciudad, Estado, Código Postal"
+    },
+    "principalAmount": {
+      "label": "Monto Principal",
+      "tooltip": "Por ejemplo: 10000"
+    },
+    "interestRate": {
+      "label": "Tasa de Interés (%)",
+      "tooltip": "Tasa anual, por ejemplo: 5"
+    },
+    "paymentFrequency": {
+      "label": "Frecuencia de Pago",
+      "tooltip": ""
+    },
+    "maturityDate": {
+      "label": "Fecha de Vencimiento",
+      "tooltip": ""
+    },
+    "governingLaw": {
+      "label": "Ley Aplicable",
+      "tooltip": ""
+    },
+    "lateFeeRate": {
+      "label": "Tasa por Pago Tardío (%)",
+      "tooltip": "Porcentaje opcional sobre pagos atrasados"
+    }
+  }
+  

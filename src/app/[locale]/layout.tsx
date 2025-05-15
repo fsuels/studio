@@ -12,8 +12,8 @@ interface LocaleLayoutProps {
 
 export default function LocaleLayout({ children }: LocaleLayoutProps) {
   const params = useParams();
-  // Ensure locale is correctly typed and defaults if params.locale is not 'en' or 'es'
-  const detectedLocale = (params?.locale === 'es' || params?.locale === 'en') ? params.locale : 'en';
+  // Ensure locale is correctly typed and defaults if params!.locale is not 'en' or 'es'
+  const detectedLocale = (params?.locale === 'es' || params?.locale === 'en') ? params!.locale : 'en';
   const { i18n } = useTranslation("common"); // Get i18n instance
 
   // Effect to synchronize i18next instance with the detected locale from URL
