@@ -4,22 +4,25 @@
 import React from 'react';
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
-import type { LegalDocument } from '@/lib/document-library';
+import type { LegalDocument } from '@/lib/document-library'; // Use the re-exported type
 import type { CategoryInfo } from '@/components/Step1DocumentSelector'; 
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { FileText } from 'lucide-react';
+import { getDocTranslation } from '@/lib/i18nUtils'; // Import the utility
 
 interface MegaMenuContentProps {
   categories: CategoryInfo[];
-  documents: LegalDocument[];
+  documents: LegalDocument[]; // This will be the US documents by default if Header passes `documentLibrary`
   onLinkClick?: () => void; 
 }
 
 const MAX_DOCS_PER_CATEGORY_INITIAL = 5;
 
 const MemoizedDocLink = React.memo(function DocLink({ doc, locale, onClick, t }: { doc: LegalDocument; locale: 'en' | 'es'; onClick?: () => void; t: (key: string, fallback?: string | object) => string; }) {
-  const docName = locale === 'es' && doc.name_es ? doc.name_es : doc.name;
+  const translatedDoc = getDocTranslation(doc, locale); // Use utility
+  const docName = translatedDoc.name;
   const docHref = `/${locale}/docs/${doc.id}`;
+  
   return (
     <li>
       <Link 
@@ -57,12 +60,12 @@ export default function MegaMenuContent({ categories, documents, onLinkClick }: 
                   {categoryLabel}
                 </h4>
                 {categoryDocs.length === 0 ? (
-                    <p className="text-xs text-muted-foreground italic">{t('nav.noDocumentsInCategory', 'No documents in this category yet.')}</p>
+                    <p className="text-xs text-muted-foreground italic">{t('nav.noDocumentsInCategory', {defaultValue: 'No documents in this category yet.'})}</p>
                 ): (
                 <ul className="space-y-1.5">
                     {categoryDocs.slice(0, MAX_DOCS_PER_CATEGORY_INITIAL).map(doc => (
                       <MemoizedDocLink
-                        key={doc.id}
+                        key={`${category.key}-${doc.id}`}
                         doc={doc}
                         locale={currentLocale}
                         onClick={onLinkClick}
@@ -87,12 +90,12 @@ export default function MegaMenuContent({ categories, documents, onLinkClick }: 
         })}
         {!hasContent && categories.length > 0 && (
             <div className="col-span-full text-center text-muted-foreground py-8">
-                <p>{t('nav.noDocumentsAvailable', 'No documents available for the selected categories at this time.')}</p>
+                <p>{t('nav.noDocumentsAvailable', {defaultValue: 'No documents available for the selected categories at this time.'})}</p>
             </div>
         )}
          {categories.length === 0 && (
             <div className="col-span-full text-center text-muted-foreground py-8">
-                <p>{t('nav.noCategoriesAvailable', 'No document categories available.')}</p>
+                <p>{t('nav.noCategoriesAvailable', {defaultValue: 'No document categories available.'})}</p>
             </div>
         )}
         </div>

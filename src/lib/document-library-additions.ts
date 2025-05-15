@@ -1,5 +1,6 @@
 // src/lib/document-library-additions.ts
-import type { LegalDocument } from '@/types/documents'; // Import types
+import { z } from 'zod'; // Moved to the top
+import type { LegalDocument } from '@/types/documents'; 
 
 // Additional documents to be added to the existing document library
 export const documentLibraryAdditions: LegalDocument[] = [ 
@@ -18,7 +19,7 @@ export const documentLibraryAdditions: LegalDocument[] = [
     offerRecordingHelp: false,
     basePrice: 5,
     states: 'all', 
-    schema: z.object({ // Assuming z is imported or available in the context where schema is used
+    schema: z.object({ 
       party1Name: z.string().min(1),
       party1Address: z.string().min(1),
       party2Name: z.string().min(1),
@@ -203,8 +204,3 @@ export const documentLibraryAdditions: LegalDocument[] = [
     questions: [/* Placeholder questions */]
   }
 ];
-
-// Ensure z is defined if not imported globally in this file's scope
-// This is a common pattern if schemas are defined here directly.
-// If z comes from an import in the consuming file (document-library.ts), this isn't needed here.
-import { z } from 'zod';
