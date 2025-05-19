@@ -133,9 +133,8 @@ export default function StartWizardPageClient() {
   }, [watch, docConfig, debouncedSave, authIsLoading, isMounted, isLoadingConfig, locale, ready]);
 
   const handleWizardComplete = useCallback(
-    (checkoutUrl: string) => {
-      console.log("[StartWizardPageClient] Wizard onComplete triggered with checkoutUrl:", checkoutUrl);
-      router.push(checkoutUrl);
+    (redirectUrl: string) => {
+      router.push(redirectUrl);
     },
     [router]
   );

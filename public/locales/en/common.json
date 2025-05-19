@@ -354,7 +354,10 @@
   "wizard": {
     "next": "Next",
     "confirmChargeAndPay": "Confirm Charge & Pay {{price}}",
-    "changeDocument": "Change Document"
+    "changeDocument": "Change Document",
+    "saveContinue": "Save and Continue",
+    "skipQuestion": "Skip this Question",
+    "generateDocument": "Generate Document"
   },
   "Review Answers": "Review Answers",
   "API Error Occurred": "API Error Occurred",

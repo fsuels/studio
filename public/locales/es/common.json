@@ -353,7 +353,10 @@
   "wizard": {
     "next": "Siguiente",
     "confirmChargeAndPay": "Confirmar Cargo y Pagar {{price}}",
-    "changeDocument": "Cambiar Documento"
+    "changeDocument": "Cambiar Documento",
+    "saveContinue": "Guardar y Continuar",
+    "skipQuestion": "Saltar esta Pregunta",
+    "generateDocument": "Generar Documento"
   },
   "Review Answers": "Revisar Respuestas",
   "API Error Occurred": "Ocurrió un Error de API",
