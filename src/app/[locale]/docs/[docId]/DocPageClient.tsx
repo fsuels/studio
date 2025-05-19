@@ -60,7 +60,9 @@ export default function DocPageClient({ params: routeParams }: DocPageClientProp
 
   // Preload detail component and next step route for quicker interactions
   useEffect(() => {
-    DocumentDetail.preload();
+    if (typeof (DocumentDetail as any).preload === 'function') {
+      (DocumentDetail as any).preload();
+    }
     if (docId && currentLocale) {
       router.prefetch(`/${currentLocale}/docs/${docId}/start`);
     }
@@ -84,17 +86,6 @@ export default function DocPageClient({ params: routeParams }: DocPageClientProp
   }, [docId, isHydrated, notFound]); // Removed docConfig from deps as it's derived
 
 
-  useEffect(() => {
-    if (!isHydrated) return;
-    import('@/components/DocumentDetail').then(mod => {
-      if (mod && mod.default && typeof (mod.default as any).preload === 'function') {
-        (mod.default as any).preload();
-      }
-    });
-    if (docId && currentLocale) {
-      router.prefetch(`/${currentLocale}/docs/${docId}/start`);
-    }
-  }, [isHydrated, docId, currentLocale, router]);
 
 
   useEffect(() => {
