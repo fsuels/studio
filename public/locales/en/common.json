@@ -345,10 +345,12 @@
   "Live Preview": "Live Preview",
   "Complete": "Complete",
   "Back": "Back",
-  "wizard.next": "Next",
+  "wizard": {
+    "next": "Next",
+    "confirmChargeAndPay": "Confirm Charge & Pay {{price}}",
+    "changeDocument": "Change Document"
+  },
   "Review Answers": "Review Answers",
-  "wizard.confirmChargeAndPay": "Confirm Charge & Pay {{price}}",
-  "wizard.changeDocument": "Change Document",
   "API Error Occurred": "API Error Occurred",
   "An unexpected error occurred.": "An unexpected error occurred.",
   "Validation Failed": "Validation Failed",
