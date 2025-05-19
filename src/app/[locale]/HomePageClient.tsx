@@ -24,28 +24,23 @@ const LoadingSpinner = () => (
 
 // Dynamically import components
 const HowItWorks = dynamic(() => import('@/components/landing/HowItWorks'), {
-  loading: () => <LoadingSpinner />,
-  ssr: false
+  loading: () => <LoadingSpinner />
 });
 
 const TrustAndTestimonialsSection = dynamic(() => import('@/components/landing/TrustAndTestimonialsSection'), {
-  loading: () => <LoadingSpinner />,
-  ssr: false
+  loading: () => <LoadingSpinner />
 });
 
 const GuaranteeBadge = dynamic(() => import('@/components/landing/GuaranteeBadge').then(mod => mod.GuaranteeBadge), {
-  loading: () => <LoadingSpinner />,
-  ssr: false
+  loading: () => <LoadingSpinner />
 });
 
 const TopDocsChips = dynamic(() => import('@/components/TopDocsChips'), {
-  loading: () => <LoadingSpinner />,
-  ssr: false
+  loading: () => <LoadingSpinner />
 });
 
 const StickyFilterBar = dynamic(() => import('@/components/StickyFilterBar'), {
-  loading: () => <div className="h-16 bg-muted" />, // Placeholder for filter bar height
-  ssr: false
+  loading: () => <div className="h-16 bg-muted" /> // Placeholder for filter bar height
 });
 
 export default function HomePageClient() {

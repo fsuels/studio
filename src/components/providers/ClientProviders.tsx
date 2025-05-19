@@ -23,12 +23,10 @@ const FooterSkeleton = () => <div className="h-40 bg-muted animate-pulse"></div>
 // Dynamically import Header and Footer
 const DynamicHeader = dynamic(() => import('@/components/layout/Header'), {
   loading: () => <HeaderSkeleton />,
-  ssr: false, 
 });
 
 const DynamicFooter = dynamic(() => import('@/components/layout/Footer').then(mod => mod.Footer), {
   loading: () => <FooterSkeleton />,
-  ssr: false, 
 });
 
 
