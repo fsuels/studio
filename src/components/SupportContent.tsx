@@ -39,10 +39,10 @@ export default function SupportContent({ locale }: SupportContentProps) {
   return (
     <main className="max-w-4xl mx-auto px-6 py-20">
       <h1 className="text-4xl font-bold text-center mb-6 text-foreground">
-        {t('title')}
+        {t('support.title')}
       </h1>
       <p className="text-lg text-muted-foreground text-center mb-12">
-        {t('subtitle')}
+        {t('support.subtitle')}
       </p>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -51,7 +51,7 @@ export default function SupportContent({ locale }: SupportContentProps) {
             <div className="flex items-center space-x-2">
               <Mail className="h-6 w-6 text-primary" />
               <CardTitle className="text-xl font-semibold text-card-foreground">
-                {t('contact.title')}
+                {t('support.contact.title')}
               </CardTitle>
             </div>
           </CardHeader>
@@ -60,7 +60,7 @@ export default function SupportContent({ locale }: SupportContentProps) {
               <Mail className="h-4 w-4" /> support@123legaldoc.com
             </p>
             <p className="text-muted-foreground text-sm flex items-center gap-2">
-              <Clock className="h-4 w-4" /> {t('contact.hours')}
+              <Clock className="h-4 w-4" /> {t('support.contact.hours')}
             </p>
           </CardContent>
         </Card>
@@ -70,23 +70,23 @@ export default function SupportContent({ locale }: SupportContentProps) {
             <div className="flex items-center space-x-2">
               <LifeBuoy className="h-6 w-6 text-primary" />
               <CardTitle className="text-xl font-semibold text-card-foreground">
-                {t('help.title')}
+                {t('support.help.title')}
               </CardTitle>
             </div>
           </CardHeader>
           <CardContent>
             <ul className="text-sm text-muted-foreground list-none space-y-2">
               <li className="flex items-center gap-2">
-                <HelpCircle className="h-4 w-4 text-primary/70" /> {t('help.item1')}
+                <HelpCircle className="h-4 w-4 text-primary/70" /> {t('support.help.item1')}
               </li>
               <li className="flex items-center gap-2">
-                <HelpCircle className="h-4 w-4 text-primary/70" /> {t('help.item2')}
+                <HelpCircle className="h-4 w-4 text-primary/70" /> {t('support.help.item2')}
               </li>
               <li className="flex items-center gap-2">
-                <HelpCircle className="h-4 w-4 text-primary/70" /> {t('help.item3')}
+                <HelpCircle className="h-4 w-4 text-primary/70" /> {t('support.help.item3')}
               </li>
               <li className="flex items-center gap-2">
-                <HelpCircle className="h-4 w-4 text-primary/70" /> {t('help.item4')}
+                <HelpCircle className="h-4 w-4 text-primary/70" /> {t('support.help.item4')}
               </li>
             </ul>
           </CardContent>
@@ -95,13 +95,13 @@ export default function SupportContent({ locale }: SupportContentProps) {
 
       <div className="mt-16 text-center bg-secondary/50 p-6 rounded-lg border border-border">
         <p className="text-sm text-muted-foreground mb-3">
-          📌 {t('note')}
+          📌 {t('support.note')}
         </p>
         <Link
           href={`/${locale}/faq`}
           className="inline-block text-primary hover:underline text-sm font-medium"
         >
-          {t('cta')} →
+          {t('support.cta')} →
         </Link>
       </div>
     </main>
