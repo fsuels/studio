@@ -157,10 +157,10 @@ export default function PreviewPane({ locale, docId }: PreviewPaneProps) {
       <div
         id="live-preview"
         data-watermark={watermarkText}
-        className="relative w-full h-full bg-background rounded-lg overflow-hidden"
+        className="relative w-full h-full bg-card text-card-foreground rounded-lg overflow-hidden"
         style={{ userSelect: 'none' }}
       >
-        <div className={cn("prose prose-sm dark:prose-invert max-w-none w-full h-full overflow-y-auto overflow-x-hidden p-4 md:p-6 scrollbar-hide bg-background text-foreground")}>
+        <div className={cn("prose prose-sm max-w-none w-full h-full overflow-y-auto overflow-x-hidden p-4 md:p-6 scrollbar-hide bg-card text-card-foreground")}>
           <ReactMarkdown 
               remarkPlugins={[remarkGfm]}
               components={{ 
@@ -180,7 +180,7 @@ export default function PreviewPane({ locale, docId }: PreviewPaneProps) {
       <div
         id="live-preview"
         data-watermark={watermarkText}
-        className="relative w-full h-full bg-background rounded-lg overflow-hidden"
+        className="relative w-full h-full bg-card text-card-foreground rounded-lg overflow-hidden"
         style={{ userSelect: 'none' }}
       >
         <Image
