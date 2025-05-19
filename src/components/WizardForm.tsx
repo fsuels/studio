@@ -128,7 +128,7 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
             // planType: 'single' // Implicitly single, or explicitly send
           });
           localStorage.removeItem(`draft-${doc.id}-${locale}`);
-          onComplete(response.data.checkoutUrl);
+          onComplete('/dashboard');
         } catch (error) {
           console.error("[WizardForm] API submission error:", error);
           if (axios.isAxiosError(error)) {
@@ -218,8 +218,19 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
     onComplete,
     toast,
     t,
-    currentField, 
+    currentField,
   ]);
+
+  const handleSkipStep = useCallback(() => {
+    if (currentStepIndex < totalSteps - 1) {
+      setCurrentStepIndex(prev => prev + 1);
+    } else {
+      setIsReviewing(true);
+      if (typeof window !== 'undefined') {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
+  }, [currentStepIndex, totalSteps]);
 
   if (!isHydrated || authIsLoading) {
     return (
@@ -233,10 +244,8 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
   }
 
   const buttonText = isReviewing
-    ? t('wizard.confirmChargeAndPay', { price: '$35' })
-    : (totalSteps === 0 || currentStepIndex === totalSteps - 1)
-    ? t('Review Answers')
-    : t('wizard.next');
+    ? t('wizard.generateDocument')
+    : t('wizard.saveContinue');
 
 
   const formContent = currentField && currentField.id && actualSchemaShape && (actualSchemaShape as any)[currentField.id] ? (
@@ -319,6 +328,17 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
             )}
             {!(currentStepIndex > 0 || isReviewing) && totalSteps > 0 && <div className="w-full sm:w-auto" />} {/* Placeholder for spacing */}
 
+            {!isReviewing && (
+              <Button
+                type="button"
+                variant="ghost"
+                onClick={handleSkipStep}
+                disabled={formIsSubmitting || authIsLoading}
+                className="border border-dashed text-muted-foreground w-full sm:w-auto"
+              >
+                {t('wizard.skipQuestion')}
+              </Button>
+            )}
 
             <Button
               type="button"
