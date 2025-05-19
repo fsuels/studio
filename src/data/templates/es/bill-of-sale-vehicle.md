@@ -18,25 +18,25 @@ El Vendedor por el presente vende al Comprador, y el Comprador por el presente c
 
 | Campo                                      | Descripción                         |
 |--------------------------------------------|-------------------------------------|
-| Año                                        | {{vehicle_year}}                    |
-| Marca                                      | {{vehicle_make}}                    |
-| Modelo                                     | {{vehicle_model}}                   |
-| Color                                      | {{vehicle_color}}                   |
-| Número de Identificación del Vehículo (VIN) | {{vehicle_vin}}            |
-| Lectura del Odómetro                       | {{vehicle_odometer}} millas         |
+| Año                                        | {{year}}                    |
+| Marca                                      | {{make}}                    |
+| Modelo                                     | {{model}}                   |
+| Color                                      | {{color}}                   |
+| Número de Identificación del Vehículo (VIN) | {{vin}}            |
+| Lectura del Odómetro                       | {{odometer}} millas         |
 
 ## 2. Precio de Compra y Pago
 
-1. **Precio de Venta:** El precio total de compra es **${{sale_price}}** (Dólares Estadounidenses).
+1. **Precio de Venta:** El precio total de compra es **${{price}}** (Dólares Estadounidenses).
 2. **Método de Pago:** {{payment_method}} (ej., Efectivo, Cheque, Transferencia Bancaria).
 3. **Fecha de Pago:** El pago se realizó en su totalidad el **{{sale_date}}**.
 
 ## 3. Condición "Tal Como Está" ("As-Is")
 
 El Comprador reconoce que el Vehículo se vende **"TAL COMO ESTÁ"**, sin ninguna garantía, expresa o implícita, incluyendo pero no limitándose a cualquier garantía implícita de comerciabilidad o idoneidad para un propósito particular.
-{{#if warranty_details}}
+{{#if warranty_text}}
 **Garantías (si las hay):**
-{{warranty_details}}
+{{warranty_text}}
 {{/if}}
 
 ## 4. Declaraciones y Garantías del Vendedor
