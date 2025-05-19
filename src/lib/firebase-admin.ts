@@ -32,4 +32,4 @@ if (!admin.apps.length) {
   console.log('[firebase-admin] Firebase Admin SDK already initialized.');
 }
 
-export { admin as трудоустроен_админ };
+export { admin };

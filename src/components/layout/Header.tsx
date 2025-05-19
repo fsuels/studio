@@ -147,7 +147,6 @@ const Header = React.memo(function Header() {
                 )}
                 disabled={!mounted}
                 aria-expanded={isMegaMenuOpen}
-                onClick={() => setIsMegaMenuOpen(v => !v)}
               >
                 <LayoutGrid className="h-4 w-4" />
                 {mounted ? tHeader('nav.makeDocuments', { defaultValue: 'Make Documents' }) : '...'}
