@@ -210,7 +210,7 @@ export default function StartWizardPageClient() {
               <h3 className="text-xl font-semibold mb-4 text-center text-card-foreground shrink-0 hidden lg:block">
                 {t('Live Preview')}
               </h3>
-              <div className="flex-grow overflow-hidden rounded-lg shadow-md border border-border bg-background">
+              <div className="flex-grow overflow-hidden rounded-lg shadow-md border border-border bg-card">
                  <PreviewPane docId={docIdFromPath} locale={locale} />
               </div>
             </div>
