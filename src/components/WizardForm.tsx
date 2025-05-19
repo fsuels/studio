@@ -135,25 +135,25 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
             const axiosError = error as AxiosError<{ error?: string; details?: any; code?: string }>;
             const apiErrorMsg = axiosError.response?.data?.error || axiosError.message;
             const apiErrorDetails = axiosError.response?.data?.details;
-            let userFriendlyMessage = `${t('API Error Occurred', { ns: 'translation', defaultValue: "API Error Occurred"})}: ${apiErrorMsg}`;
+            let userFriendlyMessage = `${t('API Error Occurred', { defaultValue: "API Error Occurred" })}: ${apiErrorMsg}`;
             if (apiErrorDetails && typeof apiErrorDetails === 'object') {
                  userFriendlyMessage += ` Details: ${JSON.stringify(apiErrorDetails, null, 2)}`;
             }
             toast({
-              title: t('API Error Occurred', { ns: 'translation', defaultValue: "API Error Occurred"}),
+              title: t('API Error Occurred', { defaultValue: "API Error Occurred" }),
               description: userFriendlyMessage,
               variant: "destructive",
             });
           } else {
             toast({
-              title: t('Error', { ns: 'translation', defaultValue: "Error"}),
-              description: t('An unexpected error occurred.', { ns: 'translation', defaultValue: "An unexpected error occurred."}),
+              title: t('Error', { defaultValue: "Error" }),
+              description: t('An unexpected error occurred.', { defaultValue: "An unexpected error occurred." }),
               variant: "destructive",
             });
           }
         }
       } else {
-        toast({ title: t('Validation Failed', { ns: 'translation'}), description: t('Please correct the errors in the form.',{ns: 'translation'}), variant: 'destructive' });
+        toast({ title: t('Validation Failed'), description: t('Please correct the errors in the form.'), variant: 'destructive' });
       }
       return;
     }
@@ -166,7 +166,7 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
           window.scrollTo({ top: 0, behavior: 'smooth' });
         }
       } else {
-        toast({ title: t('Validation Failed', { ns: 'translation'}), description: t('Please correct all errors before reviewing.', {ns: 'translation'}), variant: 'destructive' });
+        toast({ title: t('Validation Failed'), description: t('Please correct all errors before reviewing.'), variant: 'destructive' });
       }
       return;
     }
@@ -181,7 +181,7 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
     }
 
     if (!isValid) {
-      toast({ title: t('Validation Error', {ns: 'translation'}), description: t('Please correct the field before proceeding.',{ns: 'translation'}), variant: 'destructive'});
+      toast({ title: t('Validation Error'), description: t('Please correct the field before proceeding.'), variant: 'destructive' });
       return;
     }
 
@@ -195,12 +195,12 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
           window.scrollTo({ top: 0, behavior: 'smooth' });
         }
       } else {
-         toast({ title: t('Validation Failed', { ns: 'translation'}), description: t('Please correct all errors before reviewing.', {ns: 'translation'}), variant: 'destructive' });
+         toast({ title: t('Validation Failed'), description: t('Please correct all errors before reviewing.'), variant: 'destructive' });
       }
     }
 
     if (liveRef.current && currentField) {
-      liveRef.current.innerText = `${currentField.label} ${t('updated', { ns: 'translation', defaultValue: 'updated' })}`;
+      liveRef.current.innerText = `${currentField.label} ${t('updated', { defaultValue: 'updated' })}`;
       setTimeout(() => {
         if (liveRef.current) liveRef.current.innerText = '';
       }, 1000);
@@ -226,17 +226,17 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
       <div className="flex justify-center items-center min-h-[calc(100vh-8rem)]">
         <Loader2 className="h-12 w-12 animate-spin text-primary" />
         <p className="ml-2 text-muted-foreground">
-          {t('Loading document wizard...', { ns: 'translation' })}
+          {t('Loading document wizard...')}
         </p>
       </div>
     );
   }
 
   const buttonText = isReviewing
-    ? t('wizard.confirmChargeAndPay', { price: '$35', ns: 'translation' })
-    : (totalSteps === 0 || currentStepIndex === totalSteps - 1) 
-    ? t('Review Answers', { ns: 'translation' })
-    : t('wizard.next', { ns: 'translation' });
+    ? t('wizard.confirmChargeAndPay', { price: '$35' })
+    : (totalSteps === 0 || currentStepIndex === totalSteps - 1)
+    ? t('Review Answers')
+    : t('wizard.next');
 
 
   const formContent = currentField && currentField.id && actualSchemaShape && (actualSchemaShape as any)[currentField.id] ? (
@@ -274,7 +274,7 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
             </div>
           ) : totalSteps === 0 && !isReviewing ? (
              <div className="mt-6 min-h-[200px] flex flex-col items-center justify-center text-center">
-                <p className="text-muted-foreground mb-4">{t('dynamicForm.noQuestionsNeeded', {ns: 'translation', documentType: doc.name_es && locale==='es' ? doc.name_es : doc.name})}</p>
+                <p className="text-muted-foreground mb-4">{t('dynamicForm.noQuestionsNeeded', { documentType: doc.name_es && locale==='es' ? doc.name_es : doc.name })}</p>
              </div>
           ) : null;
 
@@ -287,7 +287,7 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
               <>
                 <Progress value={progress} className="w-full h-2" />
                  <p className="text-xs text-muted-foreground mt-1 text-right">
-                  {Math.round(progress)}% {t('Complete', {ns: 'translation'})}
+                  {Math.round(progress)}% {t('Complete')}
                 </p>
               </>
             )}
@@ -314,7 +314,7 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
                 disabled={formIsSubmitting || authIsLoading}
                 className="text-foreground border-border hover:bg-muted w-full sm:w-auto"
               >
-                {t('Back', { ns: 'translation' })}
+                {t('Back')}
               </Button>
             )}
             {!(currentStepIndex > 0 || isReviewing) && totalSteps > 0 && <div className="w-full sm:w-auto" />} {/* Placeholder for spacing */}
@@ -332,7 +332,7 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
           {isReviewing && (
             <div className="mt-4 text-center">
               <Link href={`/${locale}/#workflow-start`} className="text-sm text-primary hover:underline">
-                {t('wizard.changeDocument', { ns: 'translation', defaultValue: 'Change Document' })}
+                {t('wizard.changeDocument', { defaultValue: 'Change Document' })}
               </Link>
             </div>
           )}
