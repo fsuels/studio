@@ -7,6 +7,14 @@
     "label": "Número de teléfono del vendedor",
     "tooltip": "Un número de teléfono válido para el vendedor."
   },
+  "seller2_name": {
+    "label": "Nombre completo del segundo vendedor",
+    "tooltip": "Nombre opcional de un segundo vendedor si hay más de uno."
+  },
+  "seller2_phone": {
+    "label": "Número de teléfono del segundo vendedor",
+    "tooltip": "Teléfono del segundo vendedor, si corresponde."
+  },
   "seller_address": {
     "label": "Dirección completa del vendedor",
     "tooltip": "Incluya calle, ciudad, estado y código postal."
@@ -22,6 +30,14 @@
   "buyer_phone": {
     "label": "Número de teléfono del comprador",
     "tooltip": "Un número de teléfono válido para el comprador."
+  },
+  "buyer2_name": {
+    "label": "Nombre completo del segundo comprador",
+    "tooltip": "Nombre opcional de un segundo comprador si hay más de uno."
+  },
+  "buyer2_phone": {
+    "label": "Número de teléfono del segundo comprador",
+    "tooltip": "Teléfono del segundo comprador, si corresponde."
   },
   "year": {
     "label": "Año del vehículo",

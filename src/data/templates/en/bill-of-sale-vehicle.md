@@ -60,12 +60,24 @@ This Agreement shall be governed by and construed in accordance with the laws of
 |-------------------------|----------------------|
 | ________________________| _____________________|
 | ({{seller_name}})       |                      |
+| {{#if seller_phone}}Phone: {{seller_phone}}{{/if}} | |
+{{#if seller2_name}}
+| ________________________| _____________________|
+| ({{seller2_name}})      |                      |
+| {{#if seller2_phone}}Phone: {{seller2_phone}}{{/if}} | |
+{{/if}}
 
 
 | Buyer Signature         | Date                 |
 |-------------------------|----------------------|
 | ________________________| _____________________|
 | ({{buyer_name}})        |                      |
+| {{#if buyer_phone}}Phone: {{buyer_phone}}{{/if}} | |
+{{#if buyer2_name}}
+| ________________________| _____________________|
+| ({{buyer2_name}})       |                      |
+| {{#if buyer2_phone}}Phone: {{buyer2_phone}}{{/if}} | |
+{{/if}}
 
 ### Notary Acknowledgment
 
