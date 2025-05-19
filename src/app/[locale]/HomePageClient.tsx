@@ -64,11 +64,26 @@ export default function HomePageClient() {
 
   // Preload dynamically imported sections once on the client
   useEffect(() => {
-    HowItWorks.preload();
-    TrustAndTestimonialsSection.preload();
-    GuaranteeBadge.preload();
-    TopDocsChips.preload();
-    StickyFilterBar.preload();
+    // Use dynamic import to get the module and then call preload if available
+    import('@/components/landing/HowItWorks').then(mod => {
+      if (mod.default && mod.default.preload) mod.default.preload();
+    });
+    import('@/components/landing/TrustAndTestimonialsSection').then(mod => {
+      if (mod.default && mod.default.preload) mod.default.preload();
+    });
+    import('@/components/landing/GuaranteeBadge').then(mod => {
+      // Note: GuaranteeBadge might be a named export
+      if (mod.GuaranteeBadge && mod.GuaranteeBadge.preload) mod.GuaranteeBadge.preload();
+      else if (mod.default && mod.default.preload) mod.default.preload(); // fallback for default export
+    });
+    import('@/components/TopDocsChips').then(mod => {
+      if (mod.default && mod.default.preload) mod.default.preload();
+    });
+    import('@/components/StickyFilterBar').then(mod => {
+      if (mod.default && mod.default.preload) mod.default.preload();
+    });
+
+
   }, []);
 
   const workflowSectionId = "workflow-start";
