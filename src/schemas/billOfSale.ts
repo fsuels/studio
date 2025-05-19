@@ -22,7 +22,7 @@ export const BillOfSaleSchema = z.object({
                      }),
 
   /* ---------- Vehicle ---------- */
-  vin:              z.string().length(17, { message: 'VIN must be 17 characters.'})
+  vin:              z.string().trim().length(17, { message: 'VIN must be 17 characters.'})
                      .refine(isValidVIN, { message: 'Invalid VIN format or characters.'}),
   year:             z.coerce.number({invalid_type_error: "Vehicle year must be a number."})
                      .int({ message: "Vehicle year must be a whole number."})
