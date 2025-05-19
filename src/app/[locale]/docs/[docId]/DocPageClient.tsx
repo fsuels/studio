@@ -113,6 +113,16 @@ export default function DocPageClient({ params: routeParams }: DocPageClientProp
     }
   }, [docConfig, currentLocale, isHydrated]);
 
+  useEffect(() => {
+    if (!isHydrated) return;
+    if (typeof (DocumentDetail as any).preload === 'function') {
+      (DocumentDetail as any).preload();
+    }
+    if (docId && currentLocale) {
+      router.prefetch(`/${currentLocale}/docs/${docId}/start`);
+    }
+  }, [docId, currentLocale, isHydrated, router]);
+
 
   const handleStartWizard = () => {
     if (!docConfig || !currentLocale || !isHydrated) return;
@@ -151,7 +161,7 @@ export default function DocPageClient({ params: routeParams }: DocPageClientProp
     <main className="container mx-auto py-12 px-4 sm:px-6 lg:px-8">
        <nav className="text-sm mb-6 space-x-1 text-muted-foreground">
           <Link href={`/${currentLocale}`} className="hover:text-primary transition-colors">
-            {t('Home', { ns: 'translation' })}
+            {t('Home')}
           </Link>
           <span>/</span>
            <span className="text-foreground font-medium">
