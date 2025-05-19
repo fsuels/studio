@@ -325,6 +325,8 @@
   "Authentication Required": "Authentication Required",
   "Please sign in or create an account to save your document and proceed to payment.": "Please sign in or create an account to save your document and proceed to payment.",
   "Home": "Home",
+  "breadcrumb.home": "Home",
+  "breadcrumb.start": "Start",
   "Create": "Create",
   "What do you want to accomplish?": "What do you want to accomplish?",
   "stepOne.categoryDescription": "Select a category to find the document you need, or use the search bar.",
