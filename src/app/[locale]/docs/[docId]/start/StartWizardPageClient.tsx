@@ -41,13 +41,14 @@ export default function StartWizardPageClient() {
   }, []);
 
   const docConfig = useMemo(() => {
-    if (!isMounted || !docIdFromPath) return undefined; // Depend on isMounted
+    if (!docIdFromPath) return undefined;
     return documentLibrary.find(d => d.id === docIdFromPath);
-  }, [docIdFromPath, isMounted]);
+  }, [docIdFromPath]);
 
   const methods = useForm<z.infer<any>>({
-    defaultValues: {}, 
-    mode: 'onBlur', 
+    defaultValues: {},
+    mode: 'onBlur',
+    resolver: docConfig?.schema ? zodResolver(docConfig.schema) : undefined,
   });
   const { reset, watch } = methods;
 
@@ -57,10 +58,10 @@ export default function StartWizardPageClient() {
     }
     if (docConfig) {
       if (docConfig!.schema && typeof docConfig!.schema.safeParse === 'function') {
-        methods.reset({}, { resolver: zodResolver(docConfig!.schema) } as any);
+        methods.reset({});
       } else {
         console.warn(`[StartWizardPageClient] No valid Zod schema for doc ID: ${docIdFromPath}. Validation might not work.`);
-        methods.reset({}); 
+        methods.reset({});
       }
       setIsLoadingConfig(false);
     } else if (isMounted && docIdFromPath) {
@@ -155,7 +156,7 @@ export default function StartWizardPageClient() {
       <div className="flex justify-center items-center min-h-[calc(100vh-8rem)]">
         <Loader2 className="h-12 w-12 animate-spin text-primary" />
         <p className="ml-2 text-muted-foreground">
-          {ready ? t('Loading document wizard...', { ns: 'translation' }) : 'Preparing interface...'}
+          {ready ? t('Loading document wizard...') : 'Preparing interface...'}
         </p>
       </div>
     );
@@ -174,9 +175,9 @@ export default function StartWizardPageClient() {
       <main className="container mx-auto py-8 px-4 sm:px-6 lg:px-8">
          <Breadcrumb
           items={[
-            { label: t('breadcrumb.home', { ns: 'translation' }), href: `/${locale}` },
+            { label: t('breadcrumb.home'), href: `/${locale}` },
             { label: documentDisplayName, href: `/${locale}/docs/${docConfig!.id}` },
-            { label: t('breadcrumb.start', { ns: 'translation' }) },
+            { label: t('breadcrumb.start') },
           ]}
         />
         
@@ -184,10 +185,10 @@ export default function StartWizardPageClient() {
           <Tabs value={activeMobileTab} onValueChange={(value) => setActiveMobileTab(value as 'form' | 'preview')} className="w-full">
             <TabsList className="grid w-full grid-cols-2 h-10">
               <TabsTrigger value="form" className="text-xs sm:text-sm data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
-                <Edit className="w-4 h-4 mr-1.5" /> {t('Form', {ns: 'translation'})}
+                <Edit className="w-4 h-4 mr-1.5" /> {t('Form')}
               </TabsTrigger>
               <TabsTrigger value="preview" className="text-xs sm:text-sm data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
-                <Eye className="w-4 h-4 mr-1.5" /> {t('Preview', {ns: 'translation'})}
+                <Eye className="w-4 h-4 mr-1.5" /> {t('Preview')}
               </TabsTrigger>
             </TabsList>
           </Tabs>
@@ -207,7 +208,7 @@ export default function StartWizardPageClient() {
           <div className={cn("lg:col-span-1", activeMobileTab !== 'preview' && 'hidden lg:block')}>
              <div className="sticky top-32 lg:top-24 h-[calc(100vh-14rem)] lg:h-[calc(100vh-8rem)] max-h-[calc(100vh-14rem)] lg:max-h-[calc(100vh-6rem)] flex flex-col">
               <h3 className="text-xl font-semibold mb-4 text-center text-card-foreground shrink-0 hidden lg:block">
-                {t('Live Preview', { ns: 'translation' })}
+                {t('Live Preview')}
               </h3>
               <div className="flex-grow overflow-hidden rounded-lg shadow-md border border-border bg-background">
                  <PreviewPane docId={docIdFromPath} locale={locale} />
