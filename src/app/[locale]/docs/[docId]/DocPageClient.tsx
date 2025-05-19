@@ -15,7 +15,6 @@ import { Separator } from '@/components/ui/separator';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 const DocumentDetail = dynamic(() => import('@/components/DocumentDetail'), {
-  ssr: false,
   loading: () => (
     <div className="flex items-center justify-center border rounded-lg bg-muted p-4 aspect-[8.5/11] max-h-[500px] md:max-h-[700px] w-full shadow-lg">
       <Loader2 className="h-8 w-8 animate-spin text-primary" />
@@ -58,6 +57,14 @@ export default function DocPageClient({ params: routeParams }: DocPageClientProp
   useEffect(() => {
     setIsHydrated(true);
   }, []);
+
+  // Preload detail component and next step route for quicker interactions
+  useEffect(() => {
+    DocumentDetail.preload();
+    if (docId && currentLocale) {
+      router.prefetch(`/${currentLocale}/docs/${docId}/start`);
+    }
+  }, [router, docId, currentLocale]);
 
   useEffect(() => {
     if (isHydrated) { // Ensure this runs only after hydration
