@@ -59,6 +59,17 @@ export default function DocPageClient({ params: routeParams }: DocPageClientProp
     setIsHydrated(true);
   }, []);
 
+  // Preload the dynamic detail component and wizard route
+  useEffect(() => {
+    const preload = (DocumentDetail as any)?.preload;
+    if (typeof preload === 'function') {
+      preload();
+    }
+    if (docId && currentLocale) {
+      router.prefetch(`/${currentLocale}/docs/${docId}/start`);
+    }
+  }, [router, docId, currentLocale]);
+
   useEffect(() => {
     if (isHydrated) { // Ensure this runs only after hydration
         if (docId) {
