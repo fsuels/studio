@@ -11,11 +11,23 @@ export const BillOfSaleSchema = z.object({
                      .refine(val => val === undefined || val === "" || /^\(\d{3}\)\s\d{3}-\d{4}$/.test(val), {
                         message: "Phone number must be in (XXX) XXX-XXXX format or empty.",
                      }),
+  seller2_name:     z.string().optional(),
+  seller2_phone:    z.string()
+                     .optional()
+                     .refine(val => val === undefined || val === "" || /^\(\d{3}\)\s\d{3}-\d{4}$/.test(val), {
+                        message: "Phone number must be in (XXX) XXX-XXXX format or empty.",
+                     }),
 
   /* ---------- Buyer ---------- */
   buyer_name:       z.string().min(2, { message: "Buyer name must be at least 2 characters." }),
   buyer_address:    z.string().min(5, { message: "Buyer address must be at least 5 characters." }),
   buyer_phone:      z.string()
+                     .optional()
+                     .refine(val => val === undefined || val === "" || /^\(\d{3}\)\s\d{3}-\d{4}$/.test(val), {
+                        message: "Phone number must be in (XXX) XXX-XXXX format or empty.",
+                     }),
+  buyer2_name:      z.string().optional(),
+  buyer2_phone:     z.string()
                      .optional()
                      .refine(val => val === undefined || val === "" || /^\(\d{3}\)\s\d{3}-\d{4}$/.test(val), {
                         message: "Phone number must be in (XXX) XXX-XXXX format or empty.",

@@ -7,6 +7,14 @@
     "label": "Seller's Phone Number",
     "tooltip": "A valid phone number for the seller."
   },
+  "seller2_name": {
+    "label": "Second Seller's Full Name",
+    "tooltip": "Optional second seller name if more than one person is selling the vehicle."
+  },
+  "seller2_phone": {
+    "label": "Second Seller's Phone Number",
+    "tooltip": "Phone number for the second seller, if applicable."
+  },
   "seller_address": {
     "label": "Seller's Full Address",
     "tooltip": "Include street, city, state, and ZIP code."
@@ -22,6 +30,14 @@
   "buyer_phone": {
     "label": "Buyer's Phone Number",
     "tooltip": "A valid phone number for the buyer."
+  },
+  "buyer2_name": {
+    "label": "Second Buyer's Full Name",
+    "tooltip": "Optional second buyer name if more than one person is purchasing the vehicle."
+  },
+  "buyer2_phone": {
+    "label": "Second Buyer's Phone Number",
+    "tooltip": "Phone number for the second buyer, if applicable."
   },
   "year": {
     "label": "Vehicle Year",

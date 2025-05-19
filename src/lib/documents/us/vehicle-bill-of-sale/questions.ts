@@ -8,16 +8,31 @@ export const vehicleBillOfSaleQuestions = [
     required: true, 
     tooltip: "Enter the full legal name of the person or entity selling the vehicle." 
   },
-  { 
-    id: "seller_phone", 
-    label: "Seller's Phone Number", 
-    type: "text", 
-    required: false, 
-    placeholder: "(XXX) XXX-XXXX", 
-    tooltip: "A valid phone number for the seller." 
+  {
+    id: "seller_phone",
+    label: "Seller's Phone Number",
+    type: "text",
+    required: false,
+    placeholder: "(XXX) XXX-XXXX",
+    tooltip: "A valid phone number for the seller."
   },
-  { 
-    id: "seller_address", 
+  {
+    id: "seller2_name",
+    label: "Second Seller's Full Name",
+    type: "text",
+    required: false,
+    tooltip: "Optional second seller name if more than one person is selling the vehicle."
+  },
+  {
+    id: "seller2_phone",
+    label: "Second Seller's Phone Number",
+    type: "text",
+    required: false,
+    placeholder: "(XXX) XXX-XXXX",
+    tooltip: "Phone number for the second seller, if applicable."
+  },
+  {
+    id: "seller_address",
     label: "Seller's Full Address", 
     type: "address", 
     required: true, 
@@ -37,16 +52,31 @@ export const vehicleBillOfSaleQuestions = [
     required: true, 
     tooltip: "Include street, city, state, and ZIP code for the buyer." 
   },
-  { 
-    id: "buyer_phone", 
-    label: "Buyer's Phone Number", 
-    type: "text", 
-    required: false, 
-    placeholder: "(XXX) XXX-XXXX", 
-    tooltip: "A valid phone number for the buyer." 
+  {
+    id: "buyer_phone",
+    label: "Buyer's Phone Number",
+    type: "text",
+    required: false,
+    placeholder: "(XXX) XXX-XXXX",
+    tooltip: "A valid phone number for the buyer."
   },
-  { 
-    id: "year", 
+  {
+    id: "buyer2_name",
+    label: "Second Buyer's Full Name",
+    type: "text",
+    required: false,
+    tooltip: "Optional second buyer name if more than one person is purchasing the vehicle."
+  },
+  {
+    id: "buyer2_phone",
+    label: "Second Buyer's Phone Number",
+    type: "text",
+    required: false,
+    placeholder: "(XXX) XXX-XXXX",
+    tooltip: "Phone number for the second buyer, if applicable."
+  },
+  {
+    id: "year",
     label: "Vehicle Year", 
     type: "number", 
     placeholder: "e.g., 2020", 

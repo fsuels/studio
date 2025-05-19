@@ -60,12 +60,24 @@ Este Acuerdo se regirá e interpretará de conformidad con las leyes del Estado 
 |-------------------------|----------------------|
 | ________________________| _____________________|
 | ({{seller_name}})       |                      |
+| {{#if seller_phone}}Teléfono: {{seller_phone}}{{/if}} | |
+{{#if seller2_name}}
+| ________________________| _____________________|
+| ({{seller2_name}})      |                      |
+| {{#if seller2_phone}}Teléfono: {{seller2_phone}}{{/if}} | |
+{{/if}}
 
 
 | Firma del Comprador     | Fecha                |
 |-------------------------|----------------------|
 | ________________________| _____________________|
 | ({{buyer_name}})        |                      |
+| {{#if buyer_phone}}Teléfono: {{buyer_phone}}{{/if}} | |
+{{#if buyer2_name}}
+| ________________________| _____________________|
+| ({{buyer2_name}})       |                      |
+| {{#if buyer2_phone}}Teléfono: {{buyer2_phone}}{{/if}} | |
+{{/if}}
 
 ### Reconocimiento Notarial
 
