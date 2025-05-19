@@ -115,7 +115,7 @@ const FieldRenderer = React.memo(function FieldRenderer({ fieldKey, locale, doc 
             label={labelText}
             required={fieldSchema?.required}
             error={errors[fieldKey as any]?.message as string | undefined}
-            placeholder={placeholderText || t('Enter address...', { ns: 'translation' })}
+            placeholder={placeholderText || t('Enter address...')}
             className="max-w-sm" 
             tooltipText={tooltipText}
             value={field.value || ''} 
@@ -265,7 +265,7 @@ const FieldRenderer = React.memo(function FieldRenderer({ fieldKey, locale, doc 
           render={({ field }) => (
             <Select onValueChange={field.onChange} value={field.value as string || undefined}>
               <SelectTrigger id={fieldKey} className={cn("bg-background max-w-sm", fieldError && "border-destructive focus:ring-destructive")} aria-invalid={!!fieldError}>
-                <SelectValue placeholder={placeholderText || t("Select...", {ns: 'translation'})} />
+                <SelectValue placeholder={placeholderText || t("Select...")} />
               </SelectTrigger>
               <SelectContent>
                 {fieldSchema.options?.map(opt => (

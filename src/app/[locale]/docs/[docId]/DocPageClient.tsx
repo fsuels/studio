@@ -78,6 +78,19 @@ export default function DocPageClient({ params: routeParams }: DocPageClientProp
 
 
   useEffect(() => {
+    if (!isHydrated) return;
+    import('@/components/DocumentDetail').then(mod => {
+      if (mod && mod.default && typeof (mod.default as any).preload === 'function') {
+        (mod.default as any).preload();
+      }
+    });
+    if (docId && currentLocale) {
+      router.prefetch(`/${currentLocale}/docs/${docId}/start`);
+    }
+  }, [isHydrated, docId, currentLocale, router]);
+
+
+  useEffect(() => {
     if (currentLocale && i18n.language !== currentLocale && isHydrated) {
       i18n.changeLanguage(currentLocale);
     }
