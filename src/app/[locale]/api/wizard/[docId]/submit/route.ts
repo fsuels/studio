@@ -1,7 +1,7 @@
 // src/app/[locale]/api/wizard/[docId]/submit/route.ts
 import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
-import { трудоустроен_админ as admin } from '@/lib/firebase-admin'; // Aliased import
+import { admin } from '@/lib/firebase-admin'; // Firebase Admin SDK
 import { documentLibrary, type LegalDocument } from '@/lib/document-library'; 
 import { z } from 'zod';
 
