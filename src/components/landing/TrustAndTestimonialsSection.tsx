@@ -106,7 +106,7 @@ const TrustAndTestimonialsSection = React.memo(function TrustAndTestimonialsSect
 
   useEffect(() => {
     if (isHydrated) {
-      const rawTestimonials = t('home.testimonials', { returnObjects: true, ns: 'translation' }) as any;
+      const rawTestimonials = t('home.testimonials', { returnObjects: true, ns: 'common' }) as any;
       if (typeof rawTestimonials === 'object' && rawTestimonials !== null && !Array.isArray(rawTestimonials)) {
         const loadedTestimonials: Testimonial[] = [];
         for (let i = 1; i <= 25; i++) { 

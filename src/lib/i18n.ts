@@ -18,6 +18,7 @@ if (!i18n.isInitialized) {
         'header',
         'footer',
         'support', // Added support namespace
+        'documents/promissory-note',
         'documents/bill-of-sale-vehicle',
         // etc...
       ],

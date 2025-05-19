@@ -120,7 +120,7 @@ export default function HomePageClient() {
 
   const renderMainInteraction = () => {
     if (!isHydrated) {
-        return <div className="text-center py-10"><Loader2 className="h-8 w-8 animate-spin mx-auto" /> <p suppressHydrationWarning>{t('Loading...', {ns: 'translation'})}</p></div>;
+        return <div className="text-center py-10"><Loader2 className="h-8 w-8 animate-spin mx-auto" /> <p suppressHydrationWarning>{t('Loading...', {ns: 'common'})}</p></div>;
     }
     return (
       <Step1DocumentSelector
@@ -157,10 +157,10 @@ export default function HomePageClient() {
       <section id={workflowSectionId} className="container mx-auto px-4 py-8 md:py-12 scroll-mt-20">
          <div className="max-w-4xl mx-auto">
             {isHydrated && <h2 className="text-3xl md:text-4xl font-bold text-center mb-4 text-foreground">
-                {t('What do you want to accomplish?', {ns: 'translation'})}
+                {t('What do you want to accomplish?', {ns: 'common'})}
             </h2>}
             {isHydrated && <p className="text-lg md:text-xl text-muted-foreground text-center mb-10">
-                {t('stepOne.categoryDescription', {ns: 'translation'})}
+                {t('stepOne.categoryDescription', {ns: 'common'})}
             </p>}
 
             {isHydrated && (
