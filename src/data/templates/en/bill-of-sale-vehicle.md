@@ -18,25 +18,25 @@ The Seller hereby sells to the Buyer, and the Buyer hereby purchases from the Se
 
 | Field                          | Description                         |
 |--------------------------------|-------------------------------------|
-| Year                           | {{vehicle_year}}                    |
-| Make                           | {{vehicle_make}}                    |
-| Model                          | {{vehicle_model}}                   |
-| Color                          | {{vehicle_color}}                   |
-| Vehicle Identification Number (VIN) | {{vehicle_vin}}            |
-| Odometer Reading               | {{vehicle_odometer}} miles          |
+| Year                           | {{year}}                    |
+| Make                           | {{make}}                    |
+| Model                          | {{model}}                   |
+| Color                          | {{color}}                   |
+| Vehicle Identification Number (VIN) | {{vin}}            |
+| Odometer Reading               | {{odometer}} miles          |
 
 ## 2. Purchase Price & Payment
 
-1. **Sale Price:** The total purchase price is **${{sale_price}}** (U.S. Dollars).
+1. **Sale Price:** The total purchase price is **${{price}}** (U.S. Dollars).
 2. **Payment Method:** {{payment_method}} (e.g., Cash, Check, Wire Transfer).
 3. **Payment Date:** Payment was made in full on **{{sale_date}}**.
 
 ## 3. “As-Is” Condition
 
 The Buyer acknowledges that the Vehicle is sold **"AS-IS"**, without any warranties or guarantees, express or implied, including but not limited to any implied warranty of merchantability or fitness for a particular purpose.
-{{#if warranty_details}}
+{{#if warranty_text}}
 **Warranties (if any):**
-{{warranty_details}}
+{{warranty_text}}
 {{/if}}
 
 ## 4. Representations & Warranties of Seller
