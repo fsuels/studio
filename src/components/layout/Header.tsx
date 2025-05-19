@@ -154,21 +154,18 @@ const Header = React.memo(function Header() {
               </Button>
             </PopoverTrigger>
             <PopoverContent
-              align="center" side="bottom" sideOffset={12} // Increased sideOffset slightly
+              align="center"
+              side="bottom"
+              sideOffset={12} // Slight offset from the trigger
               className="
-                absolute 
-                left-1/2  
-                -translate-x-1/2 
-                top-full 
-                mt-1   // Reduced margin-top
                 w-[calc(100vw-4rem)] md:w-[calc(100vw-8rem)] lg:w-[calc(100vw-12rem)] xl:w-[1280px] // Responsive width
                 max-w-[90vw] md:max-w-7xl // Ensure it doesn't exceed viewport greatly
-                bg-popover // Use popover for background
+                bg-popover
                 p-0 // Remove padding, content will handle it
                 rounded-lg
-                shadow-xl // Use a more pronounced shadow
-                z-[60] // Ensure it's above other content but potentially below modals
-                overflow-hidden // Changed from visible to hidden for content scroll
+                shadow-xl
+                z-[60]
+                overflow-hidden
               "
             >
               <MegaMenuContent
