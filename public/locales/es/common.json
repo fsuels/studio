@@ -346,10 +346,12 @@
   "Live Preview": "Vista Previa en Vivo",
   "Complete": "Completado",
   "Back": "Atrás",
-  "wizard.next": "Siguiente",
+  "wizard": {
+    "next": "Siguiente",
+    "confirmChargeAndPay": "Confirmar Cargo y Pagar {{price}}",
+    "changeDocument": "Cambiar Documento"
+  },
   "Review Answers": "Revisar Respuestas",
-  "wizard.confirmChargeAndPay": "Confirmar Cargo y Pagar {{price}}",
-  "wizard.changeDocument": "Cambiar Documento",
   "API Error Occurred": "Ocurrió un Error de API",
   "An unexpected error occurred.": "Ocurrió un error inesperado.",
   "Validation Failed": "Falló la Validación",
