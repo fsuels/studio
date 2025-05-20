@@ -36,14 +36,22 @@ const TopDocsChips = React.memo(function TopDocsChips() {
 
   useEffect(() => {
     if (!isHydrated) return;
-    
+
     const resolvedTopDocs = staticTopDocIds
       .map(id => documentLibrary.find(doc => doc.id === id))
       .filter((doc): doc is LegalDocument => doc !== undefined);
-    
+
     setTopDocs(resolvedTopDocs);
     setIsLoading(false);
   }, [isHydrated]);
+
+  // Prefetch document pages for snappier navigation
+  useEffect(() => {
+    if (!isHydrated || topDocs.length === 0) return;
+    topDocs.forEach(doc => {
+      router.prefetch(`/${locale}/docs/${doc.id}`);
+    });
+  }, [isHydrated, topDocs, router, locale]);
 
   const handleChipClick = (docId: string) => {
     router.push(`/${locale}/docs/${docId}`);
