@@ -16,3 +16,8 @@ npm start
 
 Running Lighthouse against the production build will show minified JavaScript
 files.
+
+**Note:** Running Lighthouse on the development server can surface warnings
+about the back/forward cache (bfcache) because the dev server uses WebSockets
+and sets `Cache-Control: no-store` headers. Build and start the app in
+production mode before auditing to avoid these false positives.
