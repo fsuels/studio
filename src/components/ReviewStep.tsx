@@ -183,7 +183,10 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
                             value={String(commonProps.value)}
                             onValueChange={commonProps.onChange}
                           >
-                            <SelectTrigger className={cn(commonProps.className, "w-full")}>
+                            <SelectTrigger
+                              className={cn(commonProps.className, "w-full")}
+                              aria-label={field.placeholder || t('Select...')}
+                            >
                               <SelectValue placeholder={field.placeholder || t('Select...')} />
                             </SelectTrigger>
                             <SelectContent>

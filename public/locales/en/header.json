@@ -58,7 +58,9 @@
     "seeMoreDocuments": "See all in {{categoryName}}...",
     "noDocumentsInCategory": "No documents in this category yet.",
     "noDocumentsAvailable": "No documents available for the selected categories at this time.",
-    "noCategoriesAvailable": "No document categories available."
+    "noCategoriesAvailable": "No document categories available.",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu"
   },
   "SearchBar": {
     "placeholder": "Search 200+ contracts…",

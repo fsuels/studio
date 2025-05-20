@@ -243,6 +243,7 @@ export function Questionnaire({ documentType, selectedState, onAnswersSubmit, is
                            id={q.id}
                            className={`peer rounded-md shadow-sm pr-10 ${isReadOnly || !isEditing[q.id] ? 'bg-muted/50 border-dashed cursor-not-allowed' : 'bg-background'}`}
                            aria-disabled={isReadOnly || !isEditing[q.id]}
+                           aria-label={q.placeholder || 'Select...'}
                        >
                            <SelectValue placeholder={q.placeholder || 'Select...'} />
                        </SelectTrigger>

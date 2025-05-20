@@ -53,10 +53,13 @@ const StickyFilterBar = React.memo(function StickyFilterBar({
             onValueChange={(value) => onSelectedStateChange(value === 'all' ? '' : value)}
             disabled={!isHydrated} 
            >
-            <SelectTrigger className="w-full h-10 text-sm sm:pl-3 data-[placeholder]:text-muted-foreground">
-               <MapPin className="h-4 w-4 mr-2 hidden sm:inline-block text-muted-foreground" />
-              <SelectValue placeholder={placeholderState} />
-            </SelectTrigger>
+           <SelectTrigger
+             className="w-full h-10 text-sm sm:pl-3 data-[placeholder]:text-muted-foreground"
+             aria-label={placeholderState}
+           >
+             <MapPin className="h-4 w-4 mr-2 hidden sm:inline-block text-muted-foreground" />
+             <SelectValue placeholder={placeholderState} />
+           </SelectTrigger>
             <SelectContent>
               {isHydrated ? (
                 <>
