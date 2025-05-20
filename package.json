@@ -6,7 +6,7 @@
     "dev": "next dev -p 9002",
     "genkit:watch": "genkit start -- tsx --watch src/ai/dev.ts",
     "build": "npm run gen:previews && next build",
-    "start": "node server.mjs",
+    "start": "NODE_ENV=production node server.mjs",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
     "test": "node --test tests/prettify.test.js",
