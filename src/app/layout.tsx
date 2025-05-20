@@ -55,17 +55,42 @@ export default function RootLayout({
           name="viewport"
           content="width=device-width, initial-scale=1, maximum-scale=1"
         />
-        {/* Defer the layout.css file to reduce render-blocking */}
+        {/* Preload and asynchronously apply the generated layout.css file */}
         <Script id="defer-layout-css" strategy="beforeInteractive">
           {`
-            const link = document.querySelector('link[href*="layout.css"]');
-            if (link) {
-              link.rel = 'preload';
-              link.as = 'style';
-              link.addEventListener('load', () => {
-                link.rel = 'stylesheet';
-                link.as = '';
-              });
+            const setup = () => {
+              const link = document.querySelector('link[href*="layout.css"]');
+              if (!link || link.dataset.processed) return;
+              link.dataset.processed = 'true';
+
+              const href = link.href;
+
+              // Preload the stylesheet so it downloads with high priority
+              const preload = document.createElement('link');
+              preload.rel = 'preload';
+              preload.as = 'style';
+              preload.href = href;
+              preload.fetchPriority = 'high';
+              document.head.appendChild(preload);
+
+              // Apply the stylesheet without blocking rendering
+              const style = document.createElement('link');
+              style.rel = 'stylesheet';
+              style.href = href;
+              style.media = 'print';
+              style.onload = () => {
+                style.media = 'all';
+              };
+              document.head.appendChild(style);
+
+              // Remove the original blocking link
+              link.remove();
+            };
+
+            if (document.readyState === 'loading') {
+              document.addEventListener('DOMContentLoaded', setup);
+            } else {
+              setup();
             }
           `}
         </Script>
