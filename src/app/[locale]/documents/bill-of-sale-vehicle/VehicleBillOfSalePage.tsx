@@ -22,42 +22,35 @@ Requirements:
 10. 📦 Tech Stack: Next.js 15 App Router, TailwindCSS 3, Typescript, Firebase Hosting + Firestore, i18next, Markdown loader (optional)
 */
 
-'use client';
+"use client";
 
-import { useTranslation } from 'react-i18next';
-import { useEffect, useState } from 'react';
-import Head from 'next/head';
-import Link from 'next/link';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import { useTranslation } from "react-i18next";
+import { useEffect, useState } from "react";
+import Head from "next/head";
+import Link from "next/link";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from '@/components/ui/accordion';
-import { Progress } from '@/components/ui/progress';
-import { usStates } from '@/lib/document-library';
-import {
-  vehicleBillOfSaleFaqs,
-  type FaqItem,
-} from './faqs';
+} from "@/components/ui/accordion";
+import { Progress } from "@/components/ui/progress";
+import { usStates } from "@/lib/document-library";
+import { vehicleBillOfSaleFaqs, type FaqItem } from "./faqs";
 import {
   getVehicleCompliance,
   vehicleComplianceStates,
-} from '@/lib/states/vehicle-compliance';
-import { getDb } from '@/lib/firebase';
-import {
-  collection,
-  doc,
-  getDoc,
-} from 'firebase/firestore';
+} from "@/lib/states/vehicle-compliance";
+import { getDb } from "@/lib/firebase";
+import { collection, doc, getDoc } from "firebase/firestore";
 
 export default function VehicleBillOfSalePage() {
-  const { t, i18n } = useTranslation('common');
-  const [language, setLanguage] = useState<'en' | 'es'>('en');
-  const [selectedState, setSelectedState] = useState('');
-  const [complianceMessage, setComplianceMessage] = useState('');
+  const { t, i18n } = useTranslation("common");
+  const [language, setLanguage] = useState<"en" | "es">("en");
+  const [selectedState, setSelectedState] = useState("");
+  const [complianceMessage, setComplianceMessage] = useState("");
   const [faqVisits, setFaqVisits] = useState<Record<string, number>>({});
 
   useEffect(() => {
@@ -71,7 +64,7 @@ export default function VehicleBillOfSalePage() {
         setComplianceMessage(
           compliance.notarizationRequired
             ? `⚠️ Notarization required in ${compliance.state}`
-            : `✔ Valid in ${compliance.state}`
+            : `✔ Valid in ${compliance.state}`,
         );
       }
     }
@@ -82,14 +75,14 @@ export default function VehicleBillOfSalePage() {
     async function loadCompliance() {
       try {
         const db = await getDb();
-        const ref = doc(collection(db, 'compliance'), 'vehicle');
+        const ref = doc(collection(db, "compliance"), "vehicle");
         const snap = await getDoc(ref);
         if (snap.exists()) {
           // Extend compliance data if needed
-          console.log('Loaded compliance info from Firestore');
+          console.log("Loaded compliance info from Firestore");
         }
       } catch (err) {
-        console.warn('Firestore unavailable or not configured', err);
+        console.warn("Firestore unavailable or not configured", err);
       }
     }
     loadCompliance();
@@ -103,26 +96,26 @@ export default function VehicleBillOfSalePage() {
   };
 
   const faqJsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'FAQPage',
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
     mainEntity: vehicleBillOfSaleFaqs.map((faq) => ({
-      '@type': 'Question',
+      "@type": "Question",
       name: faq.questionEn,
       acceptedAnswer: {
-        '@type': 'Answer',
+        "@type": "Answer",
         text: faq.answerEn,
       },
     })),
   };
 
   const howToJsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'HowTo',
-    name: 'How to create a vehicle bill of sale',
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: "How to create a vehicle bill of sale",
     step: [
-      'Answer a few questions about the buyer, seller, and vehicle',
-      'Review state-specific compliance warnings',
-      'Download and sign your PDF',
+      "Answer a few questions about the buyer, seller, and vehicle",
+      "Review state-specific compliance warnings",
+      "Download and sign your PDF",
     ],
   };
 
@@ -145,14 +138,14 @@ export default function VehicleBillOfSalePage() {
         <section className="text-center space-y-4 mb-12">
           <h1 className="text-3xl md:text-4xl font-bold text-foreground">
             {t(
-              'vehicleBillOfSale.heroTitle',
-              'Easily Transfer Vehicle Ownership with a Legally Binding Bill of Sale'
+              "vehicleBillOfSale.heroTitle",
+              "Easily Transfer Vehicle Ownership with a Legally Binding Bill of Sale",
             )}
           </h1>
           <p className="text-muted-foreground">
             {t(
-              'vehicleBillOfSale.heroSubtitle',
-              'Attorney-reviewed. Valid in all 50 states. Instantly downloadable.'
+              "vehicleBillOfSale.heroSubtitle",
+              "Attorney-reviewed. Valid in all 50 states. Instantly downloadable.",
             )}
           </p>
           <div className="flex justify-center gap-3">
@@ -162,14 +155,14 @@ export default function VehicleBillOfSalePage() {
           </div>
           <Button size="lg" className="mt-4" asChild>
             <Link href="/#workflow-start">
-              {t('vehicleBillOfSale.startCta', 'Start My Bill of Sale')}
+              {t("vehicleBillOfSale.startCta", "Start My Bill of Sale")}
             </Link>
           </Button>
           <button
             className="ml-4 underline text-sm"
-            onClick={() => setLanguage(language === 'en' ? 'es' : 'en')}
+            onClick={() => setLanguage(language === "en" ? "es" : "en")}
           >
-            {language === 'en' ? 'ES' : 'EN'}
+            {language === "en" ? "ES" : "EN"}
           </button>
         </section>
 
@@ -195,7 +188,7 @@ export default function VehicleBillOfSalePage() {
 
         <section id="faqs" className="max-w-2xl mx-auto mb-16">
           <h2 className="text-2xl font-semibold text-center mb-6 text-foreground">
-            {t('vehicleBillOfSale.faqTitle', 'Frequently Asked Questions')}
+            {t("vehicleBillOfSale.faqTitle", "Frequently Asked Questions")}
           </h2>
           <Accordion type="single" collapsible>
             {vehicleBillOfSaleFaqs.map((faq, idx) => (
@@ -205,10 +198,10 @@ export default function VehicleBillOfSalePage() {
                 onClick={() => handleFaqToggle(faq)}
               >
                 <AccordionTrigger className="font-medium text-left">
-                  {language === 'en' ? faq.questionEn : faq.questionEs}
+                  {language === "en" ? faq.questionEn : faq.questionEs}
                 </AccordionTrigger>
                 <AccordionContent className="text-sm text-muted-foreground">
-                  {language === 'en' ? faq.answerEn : faq.answerEs}
+                  {language === "en" ? faq.answerEn : faq.answerEs}
                 </AccordionContent>
               </AccordionItem>
             ))}
@@ -216,11 +209,11 @@ export default function VehicleBillOfSalePage() {
         </section>
 
         <section className="max-w-xl mx-auto mb-12">
-          <Progress value={33} className="mb-4" />
+          <Progress value={33} className="mb-4" aria-label="Progress" />
           <p className="text-sm text-muted-foreground text-center">
             {t(
-              'vehicleBillOfSale.progressText',
-              'Step 1 of 3: Answer a few questions'
+              "vehicleBillOfSale.progressText",
+              "Step 1 of 3: Answer a few questions",
             )}
           </p>
         </section>
@@ -228,13 +221,13 @@ export default function VehicleBillOfSalePage() {
         <section className="text-center mb-20">
           <p className="text-xs text-muted-foreground mb-4">
             {t(
-              'vehicleBillOfSale.legalNotice',
-              'This page is for informational purposes only and does not constitute legal advice. Always consult a licensed attorney in your state.'
+              "vehicleBillOfSale.legalNotice",
+              "This page is for informational purposes only and does not constitute legal advice. Always consult a licensed attorney in your state.",
             )}
           </p>
           <Button asChild size="lg">
             <Link href="/#workflow-start">
-              {t('vehicleBillOfSale.footerCta', 'Create My Bill of Sale Now')}
+              {t("vehicleBillOfSale.footerCta", "Create My Bill of Sale Now")}
             </Link>
           </Button>
         </section>
