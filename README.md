@@ -6,8 +6,8 @@ To get started, take a look at src/app/page.tsx.
 
 ## Production Builds
 
-For optimal performance and minified JavaScript output, build the project in
-production mode:
+For optimal performance and minified JavaScript output, **always test Lighthouse against a production build**. Development mode includes extra debugging overhead that drastically lowers scores.
+Build the project in production mode:
 
 ```bash
 npm run build

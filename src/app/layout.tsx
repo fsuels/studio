@@ -92,6 +92,31 @@ export default function RootLayout({
           href="/images/hero-placeholder.png"
           as="image"
         />
+        {/* Preload i18n resources for faster first paint */}
+        <link
+          rel="preload"
+          href="/locales/en/common.json"
+          as="fetch"
+          crossOrigin="anonymous"
+        />
+        <link
+          rel="preload"
+          href="/locales/en/header.json"
+          as="fetch"
+          crossOrigin="anonymous"
+        />
+        <link
+          rel="preload"
+          href="/locales/es/common.json"
+          as="fetch"
+          crossOrigin="anonymous"
+        />
+        <link
+          rel="preload"
+          href="/locales/es/header.json"
+          as="fetch"
+          crossOrigin="anonymous"
+        />
         <link
           rel="alternate"
           href="https://123legaldoc.com/en/"
