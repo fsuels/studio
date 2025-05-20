@@ -55,6 +55,7 @@ export default function RootLayout({
           name="viewport"
           content="width=device-width, initial-scale=1, maximum-scale=1"
         />
+        <title>{SEO.title}</title>
         {/* Preload and asynchronously apply the generated layout.css file */}
         <Script id="defer-layout-css" strategy="beforeInteractive">
           {`
