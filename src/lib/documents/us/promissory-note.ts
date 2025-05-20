@@ -33,16 +33,7 @@ export const promissoryNote: LegalDocument = {
     { id: 'interestRate', label: 'documents.us.promissory-note.interestRate.label', type: 'number', tooltip: 'documents.us.promissory-note.interestRate.tooltip' },
     { id: 'repaymentTerms', label: 'documents.us.promissory-note.repaymentTerms.label', type: 'textarea', required: true, tooltip: 'documents.us.promissory-note.repaymentTerms.tooltip' },
   ],
-  upsellClauses: [
-    {
-      id: 'securedClause',
-      price: 2,
-      translations: {
-        en: { description: 'Add collateral details (secured note)' },
-        es: { description: 'Añadir detalles de garantía (pagaré garantizado)' }
-      }
-    }
-  ],
+  upsellClauses: [],
   translations: {
     en: {
       name: 'Promissory Note',

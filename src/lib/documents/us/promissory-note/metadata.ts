@@ -18,24 +18,7 @@ export const promissoryNoteMeta: LegalDocument = {
   templatePath_es: '/templates/es/promissory-note.md', // Path relative to public folder
   schema: PromissoryNoteSchema,
   questions: promissoryNoteQuestions,
-  upsellClauses: [
-    { 
-      id: 'lateFee', 
-      translations: {
-        en: { description: 'Late-payment fee clause' },
-        es: { description: 'Cláusula de cargo por pago atrasado' }
-      },
-      price: 1 
-    },
-    { 
-      id: 'securedClause', 
-      translations: {
-        en: { description: 'Add collateral details (secured note)' },
-        es: { description: 'Añadir detalles de garantía (pagaré garantizado)' }
-      },
-      price: 2 
-    }
-  ],
+  upsellClauses: [],
   translations: { 
     en: {
       name: 'Promissory Note',

@@ -38,8 +38,5 @@ export const divorceSettlementAgreement: LegalDocument = {
     { id: 'spousalSupport', label: 'Spousal Support (Alimony) Details', type: 'textarea', placeholder: 'e.g., Spouse 1 pays $500/month for 36 months, or waived' },
     { id: 'state', label: 'State Governing Divorce', type: 'select', required: true, options: usStates.map(s => ({ value: s.value, label: s.label })) }
   ],
-  upsellClauses: [
-    { id: "spousalSupportWaiver", description: "Include waiver of spousal support", description_es: "Incluir renuncia a la manutención conyugal", price: 2 },
-    { id: "retirementSplit", description: "Specify division of retirement accounts", description_es: "Especificar división de cuentas de jubilación", price: 2 },
-  ]
+  upsellClauses: []
 };

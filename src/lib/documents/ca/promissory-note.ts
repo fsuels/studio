@@ -46,14 +46,5 @@ export const promissoryNoteCA: LegalDocument = {
     { id: 'repaymentTerms', label: 'documents.ca.promissory-note-ca.repaymentTerms.label', type: 'textarea', required: true, placeholder: 'e.g., Monthly payments of $100 for 12 months.' }, 
     { id: 'province', label: 'documents.ca.promissory-note-ca.province.label', type: 'select', required: true, options: caProvinces } 
   ],
-  upsellClauses: [
-    {
-      id: 'bilingualClause',
-      price: 2,
-      translations: {
-         en: { description: 'Include French and English bilingual version' },
-         fr: { description: 'Inclure une version bilingue en français et en anglais' }
-      }
-    }
-  ]
+  upsellClauses: []
 };

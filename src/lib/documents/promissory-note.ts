@@ -32,7 +32,5 @@ export const promissoryNote: LegalDocument = {
     { id: 'interestRate', label: 'Interest Rate (%)', type: 'number', tooltip: "Annual interest rate. Leave blank or 0 if no interest." },
     { id: 'repaymentTerms', label: 'Repayment Terms', type: 'textarea', required: true, tooltip: "Describe how the loan will be repaid (e.g., monthly installments, lump sum)." },
   ],
-  upsellClauses: [
-    { id: 'securedClause', description: 'Add collateral details (secured note)', description_es: 'Añadir detalles de garantía (pagaré garantizado)', price: 2 }
-  ]
+  upsellClauses: []
 };

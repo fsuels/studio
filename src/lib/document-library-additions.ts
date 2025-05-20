@@ -29,10 +29,7 @@ export const documentLibraryAdditions: LegalDocument[] = [
       confidentialInfoDescription: z.string().optional(),
       termYears: z.number().int().min(0).optional(),
     }),
-    upsellClauses: [
-      { id: 'extendedTerm', description: 'Extend NDA duration beyond 1 year', description_es: 'Extender la duración del NDA más allá de 1 año', price: 1 },
-      { id: 'mutualProtection', description: 'Make NDA mutual instead of one-sided', description_es: 'Hacer que el NDA sea mutuo en lugar de unilateral', price: 2 }
-    ],
+    upsellClauses: [],
     questions: [
        { id: "party1Name", label: "Party 1 Full Name/Company", type: "text", required: true },
        { id: "party1Address", label: "Party 1 Address", type: "textarea", required: true },
@@ -164,10 +161,7 @@ export const documentLibraryAdditions: LegalDocument[] = [
         { id: 'late_fee_policy', label: 'Late Fee Policy (Optional)', type: 'textarea', placeholder: 'e.g., $50 fee if rent is more than 5 days late.', required: false },
         { id: 'state', label: 'State Governing Lease', type: 'select', required: true, options: [{value: 'CA', label: 'California'}, {value: 'NY', label: 'New York'}, {value: 'TX', label: 'Texas'}, {value: 'FL', label: 'Florida'}, {value: 'Other', label: 'Other'}] }
     ],
-    upsellClauses: [
-        { id: "lateFeeClause", description: "Add detailed late rent fee clause", description_es: "Añadir cláusula detallada de cargo por pago tardío", price: 1 },
-        { id: "petPolicy", description: "Include a specific pet policy addendum", description_es: "Incluir un anexo específico de política de mascotas", price: 1 }
-    ]
+    upsellClauses: []
   },
   {
     id: 'commercial-lease-agreement-add', 

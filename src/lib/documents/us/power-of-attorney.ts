@@ -58,24 +58,7 @@ export const powerOfAttorney: LegalDocument = {
       options: usStates.map(s => ({ value: s.value, label: s.label }))
     }
   ],
-  upsellClauses: [
-    {
-      id: "specificPowers",
-      price: 1,
-      translations: {
-        en: { description: "Grant only specific listed powers" },
-        es: { description: "Otorgar solo poderes específicos listados" }
-      }
-    },
-    {
-      id: "addWitnessClause",
-      price: 2,
-      translations: {
-        en: { description: "Add witness clause for extra validation" },
-        es: { description: "Añadir cláusula de testigo para validación adicional" }
-      }
-    }
-  ],
+  upsellClauses: [],
   translations: {
     en: {
       name: "General Power of Attorney",
