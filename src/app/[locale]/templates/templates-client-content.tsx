@@ -47,7 +47,14 @@ export default function TemplatesClientContent({ locale }: Props) {
       </ul>
 
       <div className="flex justify-center mb-10">
-        <Image src="/images/hero-placeholder.png" alt="Happy customer" width={400} height={240} className="rounded-lg" />
+        <Image
+          src="/images/hero-placeholder.png"
+          alt="Happy customer"
+          width={400}
+          height={240}
+          priority
+          className="rounded-lg"
+        />
       </div>
 
       <TrustBadges className="mb-12" />
