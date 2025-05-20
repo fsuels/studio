@@ -60,3 +60,11 @@ NODE_ENV=production npm start
 - Keep development-only dependencies out of client-side code.
 - Consider profiling with Next.js `ANALYZE=true` to inspect bundle sizes.
 
+## Reducing Unused JavaScript
+
+- Run `ANALYZE=true npm run build` to view the size of each client bundle and identify heavy modules.
+- Convert infrequently used components such as `Header`, `StickyFilterBar` and landing page sections to `next/dynamic` imports so they load only when rendered.
+- Move rarely needed imports out of `app/layout.tsx` and page-level layouts to avoid pulling them into every page's bundle.
+- Import components directly inside the pages that need them instead of in `_app` or root layouts when possible.
+- After making these changes, rebuild the project in production mode and re-run Lighthouse to verify reductions in unused JavaScript.
+
