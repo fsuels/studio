@@ -10,6 +10,7 @@ import { AuthProvider } from '@/hooks/useAuth'; // Corrected: AuthProvider is a 
 import GooglePlacesLoader from '@/components/GooglePlacesLoader';
 import { useTranslation } from 'react-i18next';
 import { Loader2 } from 'lucide-react';
+import { FooterSkeleton } from '@/components/layout/Footer';
 
 interface ClientProvidersProps {
   children: ReactNode;
@@ -18,7 +19,6 @@ interface ClientProvidersProps {
 
 // Skeleton Loaders
 const HeaderSkeleton = () => <div className="h-14 bg-muted animate-pulse"></div>; // Adjusted height
-const FooterSkeleton = () => <div className="h-40 bg-muted animate-pulse"></div>;
 
 // Dynamically import Header and Footer
 const DynamicHeader = dynamic(() => import('@/components/layout/Header'), {
