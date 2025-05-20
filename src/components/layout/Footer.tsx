@@ -31,7 +31,7 @@ export const FooterSkeleton = () => (
   </footer>
 );
 
-const Footer = React.memo(function Footer() {
+export const Footer = React.memo(function Footer() {
   const [email, setEmail] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
@@ -209,4 +209,3 @@ const Footer = React.memo(function Footer() {
   );
 });
 
-export { Footer, FooterSkeleton };
