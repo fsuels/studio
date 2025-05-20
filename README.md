@@ -19,12 +19,12 @@ files.
 
 ## Using HTTP/2
 
-The `npm start` script now launches a small Node.js server that serves the built
-Next.js app over **HTTP/2** with an automatic fallback to HTTP/1.1. This requires
-TLS certificates which are not committed to the repository.
+The `npm start` script launches a small Node.js server that serves the built
+Next.js app over **HTTP/2** with an automatic fallback to HTTP/1.1. If no TLS
+certificates are found the server will generate a self‑signed pair on first run.
 
-Create a `cert` directory with `server.crt` and `server.key` files for local
-development. You can generate self‑signed certificates using OpenSSL:
+Certificates are placed in the `cert` directory as `server.crt` and
+`server.key`. You can also generate them manually using OpenSSL:
 
 ```bash
 mkdir cert
@@ -32,7 +32,7 @@ openssl req -newkey rsa:2048 -nodes -keyout cert/server.key \
   -x509 -days 365 -out cert/server.crt
 ```
 
-After generating the certificates, build and start the app:
+After generating the certificates (or letting the server create them), build and start the app:
 
 ```bash
 npm run build
