@@ -4,13 +4,14 @@
 
 import './globals.css';
 import { Inter, Merriweather } from 'next/font/google';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { I18nextProvider } from 'react-i18next';
 import i18n from '@/lib/i18n'; // Changed this line
 import { DefaultSeo } from 'next-seo';
 import SEO from '../../next-seo.config.js';
 import Script from 'next/script';
 import { AuthProvider } from '@/hooks/useAuth';
+import { mark, measure } from '@/utils/performance';
 
 // Dev-only helper for catching missing translation keys
 if (
@@ -38,6 +39,14 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  if (typeof window !== 'undefined') {
+    mark('root-layout-start');
+  }
+
+  useEffect(() => {
+    mark('root-layout-end');
+    measure('root-layout', 'root-layout-start', 'root-layout-end');
+  }, []);
 
   return (
     <html lang="en" suppressHydrationWarning>
