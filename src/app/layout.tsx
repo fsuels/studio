@@ -51,7 +51,6 @@ export default function RootLayout({
           href="https://maps.googleapis.com"
           crossOrigin=""
         />
-        <link rel="preconnect" href="https://rsms.me" crossOrigin="" />
         <link
           rel="preload"
           href="/images/hero-placeholder.png"
