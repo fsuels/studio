@@ -61,11 +61,6 @@ export default function RootLayout({
           `}
         </Script>
         <link
-          rel="preconnect"
-          href="https://maps.googleapis.com"
-          crossOrigin=""
-        />
-        <link
           rel="preload"
           href="/images/hero-placeholder.png"
           as="image"
