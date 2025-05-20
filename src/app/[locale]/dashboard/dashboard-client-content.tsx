@@ -9,7 +9,8 @@ import { Label } from '@/components/ui/label';
 import { FileText, CreditCard, UserCircle, Settings, LogOut, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import { useAuth } from '@/hooks/useAuth';
-import { useRouter } from 'next/navigation'; 
+import { useRouter } from 'next/navigation';
+import { getUserDocuments, getUserPayments } from '@/lib/firestore/dashboardData';
 
 // Define a more specific type for Firestore Timestamps if that's what you use
 interface FirestoreTimestamp {
@@ -38,30 +39,9 @@ interface DashboardClientContentProps {
   locale: 'en' | 'es';
 }
 
-// --- Placeholder Firestore Data Fetching Functions ---
-// You MUST replace these with your actual Firestore implementation.
-
-async function getRecentDocsForUser(userId: string): Promise<DocumentData[]> {
-  console.log(`[Firestore MOCK] Fetching recent documents for user ${userId}...`);
-  await new Promise(resolve => setTimeout(resolve, 500)); // Simulate network delay
-  // Example structure - ensure your actual function returns this structure
-  // return [
-  //   { id: 'mockDoc1', name: 'Mock Lease Agreement', date: new Date().toISOString(), status: 'Draft', docType: 'lease-agreement' },
-  //   { id: 'mockDoc2', name: 'Mock NDA', date: new Date(Date.now() - 86400000 * 5).toISOString(), status: 'Signed', docType: 'nda' },
-  // ];
-  return []; // Default to empty for now
-}
-
-async function getPaymentHistoryForUser(userId: string): Promise<PaymentData[]> {
-  console.log(`[Firestore MOCK] Fetching payment history for user ${userId}...`);
-  await new Promise(resolve => setTimeout(resolve, 700)); // Simulate network delay
-  // Example structure - ensure your actual function returns this structure
-  // return [
-  //   { id: 'mockPay1', documentName: 'Mock Lease Agreement', documentId: 'mockDoc1', date: new Date().toISOString(), amount: '$35.00' },
-  // ];
-  return []; // Default to empty for now
-}
-// --- End Placeholder Functions ---
+// Firestore data helpers
+const getRecentDocsForUser = getUserDocuments;
+const getPaymentHistoryForUser = getUserPayments;
 
 export default function DashboardClientContent({ locale }: DashboardClientContentProps) {
   const { t, i18n } = useTranslation("common");
