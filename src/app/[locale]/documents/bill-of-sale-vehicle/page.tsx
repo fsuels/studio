@@ -1,22 +1,23 @@
-'use client';
+import VehicleBillOfSaleDisplay from '@/components/docs/VehicleBillOfSaleDisplay'
 
-import React from 'react';
-import { useTranslation } from 'react-i18next';
-import { useParams } from 'next/navigation';
-import BillOfSaleTemplate from '@/templates/BillOfSaleTemplate';
+export const metadata = {
+  title: 'Vehicle Bill of Sale - 100% Legal in All 50 States',
+  description: 'Create a legally binding vehicle bill of sale online in minutes. Valid in all 50 states. Free PDF, bilingual, attorney-reviewed.'
+}
 
-export default function Page() {
-  const { locale } = useParams() as { locale: 'en' | 'es' };
-  const { i18n } = useTranslation("common");
+export async function generateStaticParams() {
+  return [{ locale: 'en' }, { locale: 'es' }]
+}
 
-  // when the URL segment changes, switch i18n
-  React.useEffect(() => {
-    i18n.changeLanguage(locale);
-  }, [locale, i18n]);
+interface PageProps {
+  params: { locale: 'en' | 'es' }
+}
 
+export default function VehicleBillOfSalePage({ params }: PageProps) {
+  const { locale } = params
   return (
     <main className="py-8">
-      <BillOfSaleTemplate />
+      <VehicleBillOfSaleDisplay locale={locale} />
     </main>
-  );
+  )
 }
