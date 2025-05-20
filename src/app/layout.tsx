@@ -1,17 +1,16 @@
-'use client';
+
 /* prettier-ignore */
 // src/app/layout.tsx
 
 import './globals.css';
 import { Inter, Merriweather } from 'next/font/google';
-import React, { useEffect } from 'react';
-import { I18nextProvider } from 'react-i18next';
-import i18n from '@/lib/i18n'; // Changed this line
-import { DefaultSeo } from 'next-seo';
-import SEO from '../../next-seo.config.js';
 import Script from 'next/script';
-import { AuthProvider } from '@/hooks/useAuth';
-import { mark, measure } from '@/utils/performance';
+import SEO from '../../next-seo.config.js';
+import RootClient from './root-client';
+
+export const metadata = {
+  title: SEO.title,
+};
 
 // Dev-only helper for catching missing translation keys
 if (
@@ -39,14 +38,6 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  if (typeof window !== 'undefined') {
-    mark('root-layout-start');
-  }
-
-  useEffect(() => {
-    mark('root-layout-end');
-    measure('root-layout', 'root-layout-start', 'root-layout-end');
-  }, []);
 
   return (
     <html lang="en" suppressHydrationWarning>
@@ -114,19 +105,9 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${merriweather.variable} antialiased flex flex-col min-h-screen overflow-x-hidden`}
       >
-        {/* 1) Provide translations to the entire tree */}
-        <I18nextProvider i18n={i18n}>
-          {/* 2) Mock-auth context for client hooks */}
-          <AuthProvider>
-            {/* 3) SEO defaults */}
-            <DefaultSeo {...SEO} />
-
-            {children}
-
-            {/* Chat widget will load on user interaction. See Footer component. */}
-          </AuthProvider>
-        </I18nextProvider>
-
+        <RootClient>
+          {children}
+        </RootClient>
       </body>
     </html>
   );
