@@ -290,6 +290,7 @@
   "pdfPreview.signButton": "Firmar Documento",
   "pdfPreview.signingButton": "Firmando...",
   "pdfPreview.signedButton": "Documento Firmado",
+  "pdfPreview.openSigningLink": "Abrir enlace de firma",
   "shareDownloadStep.stepTitle": "Paso 4: Descargar y Compartir",
   "shareDownloadStep.disabledDescription": "Por favor, completa los pasos anteriores para habilitar las opciones de descarga y compartir.",
   "shareDownloadStep.description": "¡Tu documento está listo! Puedes descargarlo o compartirlo de forma segura.",
