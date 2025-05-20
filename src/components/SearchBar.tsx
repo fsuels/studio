@@ -7,6 +7,7 @@ import { Search, FileText, ExternalLink } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useRouter, useParams } from 'next/navigation';
 import { documentLibrary, type LegalDocument } from '@/lib/document-library';
+import { getDocTranslation } from '@/lib/i18nUtils';
 
 const SearchBar = React.memo(function SearchBar() {
   const { t: tHeader, i18n } = useTranslation("common");
@@ -31,16 +32,16 @@ const SearchBar = React.memo(function SearchBar() {
 
     if (searchTerm.trim().length > 1) {
       const lower = searchTerm.toLowerCase();
-      const results = documentLibrary.filter(doc => {
-        const name = locale === 'es' && doc.name_es ? doc.name_es : doc.name;
-        const description = locale === 'es' && doc.description_es ? doc.description_es : doc.description;
-        const aliases = locale === 'es' && doc.aliases_es ? doc.aliases_es : (doc.aliases || []);
-        return (
-          name.toLowerCase().includes(lower) ||
-          (description && description.toLowerCase().includes(lower)) ||
-          aliases.some(alias => alias.toLowerCase().includes(lower))
-        );
-      }).slice(0, 5);
+      const results = documentLibrary
+        .filter(doc => {
+          const { name = '', description = '', aliases = [] } = getDocTranslation(doc, locale);
+          return (
+            name.toLowerCase().includes(lower) ||
+            description.toLowerCase().includes(lower) ||
+            aliases.some(alias => alias.toLowerCase().includes(lower))
+          );
+        })
+        .slice(0, 5);
 
       setSuggestions(results);
       setShowSuggestions(true);
@@ -112,21 +113,22 @@ const SearchBar = React.memo(function SearchBar() {
             ref={suggestionsRef}
             className="absolute z-50 w-full mt-1 bg-popover border border-border rounded-md shadow-lg max-h-60 overflow-y-auto"
           >
-            {suggestions.map((suggestion) => (
-              <li key={suggestion.id}>
-                <button
-                  type="button"
-                  onClick={() => handleSuggestionClick(suggestion.id)}
-                  className="w-full text-left px-3 py-2.5 hover:bg-muted text-sm flex items-center gap-2"
-                >
-                  <FileText className="h-4 w-4 shrink-0 text-muted-foreground" />
-                  <span className="truncate">
-                    {locale === 'es' && suggestion.name_es ? suggestion.name_es : suggestion.name}
-                  </span>
-                  <ExternalLink className="h-3 w-3 ml-auto text-muted-foreground/70 shrink-0" />
-                </button>
-              </li>
-            ))}
+              {suggestions.map((suggestion) => {
+                const { name } = getDocTranslation(suggestion, locale);
+                return (
+                  <li key={suggestion.id}>
+                    <button
+                      type="button"
+                      onClick={() => handleSuggestionClick(suggestion.id)}
+                      className="w-full text-left px-3 py-2.5 hover:bg-muted text-sm flex items-center gap-2"
+                    >
+                      <FileText className="h-4 w-4 shrink-0 text-muted-foreground" />
+                      <span className="truncate">{name}</span>
+                      <ExternalLink className="h-3 w-3 ml-auto text-muted-foreground/70 shrink-0" />
+                    </button>
+                  </li>
+                );
+              })}
           </ul>
         )}
       </div>
