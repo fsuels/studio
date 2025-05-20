@@ -264,7 +264,12 @@ const FieldRenderer = React.memo(function FieldRenderer({ fieldKey, locale, doc 
           defaultValue={fieldSchemaFromZod?._def?.defaultValue}
           render={({ field }) => (
             <Select onValueChange={field.onChange} value={field.value as string || undefined}>
-              <SelectTrigger id={fieldKey} className={cn("bg-background max-w-sm", fieldError && "border-destructive focus:ring-destructive")} aria-invalid={!!fieldError}>
+              <SelectTrigger
+                id={fieldKey}
+                className={cn("bg-background max-w-sm", fieldError && "border-destructive focus:ring-destructive")}
+                aria-invalid={!!fieldError}
+                aria-label={placeholderText || t("Select...")}
+              >
                 <SelectValue placeholder={placeholderText || t("Select...")} />
               </SelectTrigger>
               <SelectContent>

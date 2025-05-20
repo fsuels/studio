@@ -275,7 +275,14 @@ const Header = React.memo(function Header() {
 
         {/* Mobile menu toggle */}
         <div className="md:hidden ml-auto flex items-center gap-1">
-          <Button variant="ghost" size="icon" className="h-9 w-9 focus-visible:ring-primary focus-visible:ring-2 focus-visible:ring-offset-2" onClick={() => setIsMobileMenuOpen(v => !v)} disabled={!mounted}>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-9 w-9 focus-visible:ring-primary focus-visible:ring-2 focus-visible:ring-offset-2"
+            onClick={() => setIsMobileMenuOpen(v => !v)}
+            disabled={!mounted}
+            aria-label={isMobileMenuOpen ? tHeader('nav.closeMenu', { defaultValue: 'Close menu' }) : tHeader('nav.openMenu', { defaultValue: 'Open menu' })}
+          >
             {isMobileMenuOpen ? <CloseIcon className="h-5 w-5" /> : <MenuIcon className="h-5 w-5" />}
           </Button>
         </div>

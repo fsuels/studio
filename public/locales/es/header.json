@@ -53,7 +53,9 @@
     "signIn": "Acceder",
     "documentCategories": "Crear Documentos",
     "seeMoreDocuments": "Ver todos en {{categoryName}}...",
-    "noDocumentsInCategory": "No hay documentos en esta categoría todavía."
+    "noDocumentsInCategory": "No hay documentos en esta categoría todavía.",
+    "openMenu": "Abrir menú",
+    "closeMenu": "Cerrar menú"
   },
   "SearchBar": {
     "placeholder": "Buscar más de 200 contratos…",

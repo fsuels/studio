@@ -263,7 +263,11 @@ export default function DynamicFormRenderer({
                       disabled={isReadOnly || isLoading}
                       name={field.id}
                     >
-                      <SelectTrigger id={field.id} className={`${borderColor} ${isReadOnly ? 'bg-muted/50 border-dashed cursor-not-allowed' : 'bg-background'}`}>
+                      <SelectTrigger
+                        id={field.id}
+                        className={`${borderColor} ${isReadOnly ? 'bg-muted/50 border-dashed cursor-not-allowed' : 'bg-background'}`}
+                        aria-label={field.placeholder || t('dynamicForm.selectPlaceholder')}
+                      >
                         <SelectValue placeholder={field.placeholder || t('dynamicForm.selectPlaceholder')} />
                       </SelectTrigger>
                       <SelectContent>

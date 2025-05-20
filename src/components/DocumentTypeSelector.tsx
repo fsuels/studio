@@ -63,7 +63,7 @@ export default function DocumentTypeSelector({ onSelect, selectedDocument }: Pro
           />
 
           <Select onValueChange={setSelectedState}>
-            <SelectTrigger>
+            <SelectTrigger aria-label={t('docTypeSelector.selectState', 'Select State')}>
               <SelectValue placeholder={t('docTypeSelector.selectState')} />
             </SelectTrigger>
             <SelectContent>

@@ -342,6 +342,7 @@
   "docTypeSelector.searchInCategoryPlaceholder": "Search in this category...",
   "docTypeSelector.noResults": "No documents found matching your criteria in this category.",
   "docTypeSelector.noDescription": "No description available.",
+  "docTypeSelector.selectState": "Select State",
   "docTypeSelector.requiresNotarization": "Requires Notarization",
   "docTypeSelector.canBeRecorded": "Can Be Recorded",
   "State Required": "State Required",
