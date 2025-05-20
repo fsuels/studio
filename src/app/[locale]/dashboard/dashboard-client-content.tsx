@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Label } from '@/components/ui/label';
+import ProfileSettings from '@/components/ProfileSettings';
 import { FileText, CreditCard, UserCircle, Settings, LogOut, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import { useAuth } from '@/hooks/useAuth';
@@ -179,23 +179,7 @@ export default function DashboardClientContent({ locale }: DashboardClientConten
           </div>
         );
       case 'profile':
-        return (
-          <Card className="shadow-sm bg-card border-border">
-            <CardHeader>
-              <CardTitle className="text-lg text-card-foreground">{t('Profile Settings')}</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div>
-                <Label className="text-sm font-medium text-muted-foreground">{t('Name')}</Label>
-                <p className="text-card-foreground">{user?.displayName || user?.email?.split('@')[0] || 'N/A'}</p> 
-              </div>
-              <div>
-                <Label className="text-sm font-medium text-muted-foreground">{t('Email')}</Label>
-                <p className="text-card-foreground">{user?.email || 'N/A'}</p>
-              </div>
-            </CardContent>
-          </Card>
-        );
+        return <ProfileSettings />;
       default:
         return null;
     }
@@ -213,7 +197,7 @@ export default function DashboardClientContent({ locale }: DashboardClientConten
       </div>
       
       <p className="text-muted-foreground mb-6">
-        {t('Welcome back, {{name}}! Manage your legal documents and account.', { name: user?.displayName || user?.email || 'User' })}
+        {t('Welcome back, {{name}}! Manage your legal documents and account.', { name: user?.name || user?.email || 'User' })}
       </p>
 
       <div className="flex flex-col md:flex-row gap-8">

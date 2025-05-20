@@ -5,8 +5,8 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Label } from '@/components/ui/label';
-import { FileText, CreditCard, UserCircle, Settings, LogOut, Loader2 } from 'lucide-react';
+import ProfileSettings from '@/components/ProfileSettings';
+import { FileText, CreditCard, UserCircle, LogOut, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 
 // Mock data - replace with actual data fetching
@@ -91,26 +91,7 @@ export default function DashboardPage() {
           </div>
         );
       case 'profile':
-        return (
-          <Card className="shadow-sm bg-card border-border">
-            <CardHeader>
-              <CardTitle className="text-lg text-card-foreground">{t('Profile Settings')}</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div>
-                <Label className="text-sm font-medium text-muted-foreground">{t('Name')}</Label>
-                <p className="text-card-foreground">{mockUser.name}</p>
-              </div>
-              <div>
-                <Label className="text-sm font-medium text-muted-foreground">{t('Email')}</Label>
-                <p className="text-card-foreground">{mockUser.email}</p>
-              </div>
-              <Button variant="outline" className="mt-4">
-                <Settings className="mr-2 h-4 w-4" /> {t('Edit Profile')}
-              </Button>
-            </CardContent>
-          </Card>
-        );
+        return <ProfileSettings />;
       default:
         return null;
     }
