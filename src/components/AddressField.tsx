@@ -2,6 +2,7 @@
 'use client';
 
 import React, { useEffect, useRef } from 'react';
+import GooglePlacesLoader from './GooglePlacesLoader';
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next'; // Added
 import { Label } from '@/components/ui/label';
@@ -124,7 +125,9 @@ const AddressField = React.memo(function AddressField({
   };
 
   return (
-    <div className={cn('space-y-1', className)}>
+    <>
+      <GooglePlacesLoader />
+      <div className={cn('space-y-1', className)}>
       <div className="flex items-center gap-1">
         <Label htmlFor={name} className={cn(fieldErrorActual && "text-destructive")}>{t(label)}{required && <span className="text-destructive">*</span>}</Label>
         {tooltip && (
@@ -155,7 +158,8 @@ const AddressField = React.memo(function AddressField({
         aria-invalid={!!fieldErrorActual}
       />
       {fieldErrorActual && <p className="text-xs text-destructive mt-1">{t(String(fieldErrorActual))}</p>} {/* Changed */}
-    </div>
+      </div>
+    </>
   );
 });
 export default AddressField;
