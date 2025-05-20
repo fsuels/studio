@@ -38,8 +38,6 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const googleMapsApiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
-
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
@@ -47,12 +45,6 @@ export default function RootLayout({
           name="viewport"
           content="width=device-width, initial-scale=1, maximum-scale=1"
         />
-        <link
-          rel="preconnect"
-          href="https://maps.googleapis.com"
-          crossOrigin=""
-        />
-        <link rel="preconnect" href="https://rsms.me" crossOrigin="" />
         <link
           rel="preload"
           href="/images/hero-placeholder.png"
@@ -90,13 +82,6 @@ export default function RootLayout({
           </AuthProvider>
         </I18nextProvider>
 
-        {/* Load Google Maps API on the client */}
-        {googleMapsApiKey && (
-          <Script
-            src={`https://maps.googleapis.com/maps/api/js?key=${googleMapsApiKey}&libraries=places&loading=async`}
-            strategy="afterInteractive"
-          />
-        )}
       </body>
     </html>
   );

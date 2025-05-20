@@ -10,7 +10,12 @@ export default function GooglePlacesLoader() {
   useEffect(() => {
     if ((window as any).google?.maps?.places) {
       setLoaded(true);
+      return;
     }
+
+    const handler = () => setLoaded(true);
+    window.addEventListener('google-maps-loaded', handler);
+    return () => window.removeEventListener('google-maps-loaded', handler);
   }, []);
 
   if (!apiKey) {
@@ -18,16 +23,19 @@ export default function GooglePlacesLoader() {
     return null;
   }
 
+  const scriptExists = typeof document !== 'undefined' &&
+    document.getElementById('google-maps-script');
+
   return (
     <>
-      {!loaded && (
+      {!loaded && !scriptExists && (
         <Script
+          id="google-maps-script"
           src={`https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places&loading=async`}
           strategy="afterInteractive"
           onLoad={() => {
             console.log('Google Maps API script loaded.');
             setLoaded(true);
-             // Dispatch a custom event to notify that Google Maps is loaded
             window.dispatchEvent(new Event('google-maps-loaded'));
           }}
           onError={(e) => {
