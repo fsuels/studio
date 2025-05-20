@@ -49,8 +49,5 @@ export const leaseAgreement: LegalDocument = {
     { id: "late_fee_policy", label: "Late Fee Policy (Optional)", type: "textarea", placeholder: "e.g., $50 fee if rent is more than 5 days late.", required: false },
     { id: "state", label: "State Governing Lease", type: "select", required: true, options: usStates.map(s => ({ value: s.value, label: s.label })) }
   ],
-  upsellClauses: [
-    { id: "lateFeeClause", description: "Add detailed late rent fee clause", description_es: "Añadir cláusula detallada de cargo por pago tardío", price: 1 },
-    { id: "petPolicy", description: "Include a specific pet policy addendum", description_es: "Incluir un anexo específico de política de mascotas", price: 1 }
-  ]
+  upsellClauses: []
 };

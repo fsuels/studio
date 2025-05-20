@@ -119,24 +119,7 @@ export const leaseAgreement: LegalDocument = {
       options: usStates.map((s) => ({ value: s.value, label: s.label })),
     },
   ],
-  upsellClauses: [
-    {
-      id: 'lateFeeClause',
-      price: 1,
-      translations: {
-        en: { description: 'Add detailed late rent fee clause' },
-        es: { description: 'Añadir cláusula detallada de cargo por pago tardío' },
-      },
-    },
-    {
-      id: 'petPolicy',
-      price: 1,
-      translations: {
-        en: { description: 'Include a specific pet policy addendum' },
-        es: { description: 'Incluir un anexo específico de política de mascotas' },
-      },
-    },
-  ],
+  upsellClauses: [],
   translations: {
     en: {
       name: 'Residential Lease Agreement',

@@ -38,8 +38,5 @@ export const powerOfAttorney: LegalDocument = {
     { id: "isDurable", label: "Is this a Durable POA (remains effective after incapacity)?", type: "select", options: [{ value: "yes", label: "Yes (Durable)" }, { value: "no", label: "No (Terminates on incapacity)" }], required: true },
     { id: "state", label: "State Governing the POA", type: "select", required: true, options: usStates.map(s => ({ value: s.value, label: s.label })) }
   ],
-  upsellClauses: [
-    { id: "specificPowers", description: "Grant only specific listed powers", description_es: "Otorgar solo poderes específicos listados", price: 1 },
-    { id: "addWitnessClause", description: "Add witness clause for extra validation", description_es: "Añadir cláusula de testigo para validación adicional", price: 2 }
-  ]
+  upsellClauses: []
 };

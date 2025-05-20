@@ -20,14 +20,7 @@ export const vehicleBillOfSaleMeta: LegalDocument = {
   requiresNotarizationStates: ['AZ','KY','LA','MT','NV','OH','OK','PA','WV','WY'], // States where notarization is mandatory
   schema: BillOfSaleSchema,
   questions: vehicleBillOfSaleQuestions,
-  upsellClauses: [
-    { 
-      id: 'includeNotaryLanguage', 
-      description: 'Include formal Notary Acknowledgment block', 
-      description_es: 'Incluir bloque formal de Reconocimiento Notarial', 
-      price: 2 
-    }
-  ],
+  upsellClauses: [],
   // Direct name/description for fallbacks or non-i18n contexts
   name: "Vehicle Bill of Sale",
   name_es: "Contrato de Compraventa de Vehículo",

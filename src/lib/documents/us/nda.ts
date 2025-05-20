@@ -32,24 +32,7 @@ export const nda: LegalDocument = {
     { id: "confidentialInfoDescription", label: "Brief Description of Confidential Information", type: "textarea", placeholder: "e.g., Business plans, customer lists, source code" },
     { id: "termYears", label: "Term of Agreement (Years, 0 for indefinite)", type: "number", placeholder: "e.g., 3" },
   ],
-  upsellClauses: [
-    {
-      id: "extendedTerm",
-      price: 1,
-      translations: {
-        en: { description: "Extend NDA duration beyond 1 year" },
-        es: { description: "Extender la duración del NDA más allá de 1 año" }
-      }
-    },
-    {
-      id: "mutualProtection",
-      price: 2,
-      translations: {
-        en: { description: "Make NDA mutual instead of one-sided" },
-        es: { description: "Hacer que el NDA sea mutuo en lugar de unilateral" }
-      }
-    }
-  ],
+  upsellClauses: [],
   // Added translations object
   translations: {
     en: {

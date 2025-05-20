@@ -77,14 +77,5 @@ export const billOfSaleVehicle: LegalDocument = {
     { id: 'state', label: 'documents.us.bill-of-sale-vehicle.state.label', type: 'select', required: true, options: usStates.map(s => ({ value: s.value, label: s.label })), tooltip: 'documents.us.bill-of-sale-vehicle.state.tooltip' }, 
     { id: 'county', label: 'documents.us.bill-of-sale-vehicle.county.label', type: 'text', required: false, tooltip: 'documents.us.bill-of-sale-vehicle.county.tooltip' }
   ],
-  upsellClauses: [
-    {
-      id: 'includeNotaryLanguage',
-      price: 2.00,
-      translations: {
-        en: { description: 'Include formal Notary Acknowledgment block' },
-        es: { description: 'Incluir bloque formal de Reconocimiento Notarial' }
-      }
-    }
-  ]
+  upsellClauses: []
 };
