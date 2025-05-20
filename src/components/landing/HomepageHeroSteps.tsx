@@ -63,22 +63,24 @@ const HomepageHeroSteps = React.memo(function HomepageHeroSteps() {
            </div>
 
             <motion.h1
-                key={`headline-${i18n.language}`} 
+                key={`headline-${i18n.language}`}
                 initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: isHydrated ? 1 : 0, y: isHydrated ? 0 : 10 }}
+                animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3, delay: 0.1 }}
                 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 text-foreground leading-tight"
+                suppressHydrationWarning
             >
-                {isHydrated ? t('headline', { defaultValue: 'Legal Docs at Your Fingertips' }) : placeholderText}
+                {t('headline', { defaultValue: 'Legal Docs at Your Fingertips' })}
             </motion.h1>
             <motion.p
-                key={`subhead-${i18n.language}`} 
+                key={`subhead-${i18n.language}`}
                 initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: isHydrated ? 1 : 0, y: isHydrated ? 0 : 10 }}
+                animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3, delay: 0.2 }}
                 className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-8"
+                suppressHydrationWarning
             >
-                {isHydrated ? t('subhead', { defaultValue: 'Create, sign & share professional contracts in minutes—no lawyer required.'}) : placeholderText}
+                {t('subhead', { defaultValue: 'Create, sign & share professional contracts in minutes—no lawyer required.'})}
             </motion.p>
             
             <motion.div 
