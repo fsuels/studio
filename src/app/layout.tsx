@@ -93,12 +93,7 @@ export default function RootLayout({
 
             {children}
 
-            {/* 4) Chat widget */}
-            <Script
-              defer
-              src="https://cdn.intercom.io/widget.js"
-              strategy="lazyOnload"
-            />
+            {/* Chat widget will load on user interaction. See Footer component. */}
           </AuthProvider>
         </I18nextProvider>
 
