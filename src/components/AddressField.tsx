@@ -2,6 +2,7 @@
 'use client';
 
 import React, { useEffect, useRef } from 'react';
+import { useLoadGoogleMaps } from '@/hooks/useLoadGoogleMaps';
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next'; // Added
 import { Label } from '@/components/ui/label';
@@ -39,6 +40,8 @@ const AddressField = React.memo(function AddressField({
   onChange: controlledOnChange,
 }: AddressFieldProps) {
   const { t } = useTranslation("common"); // Added
+  // Load Google Maps script only when this field is used
+  useLoadGoogleMaps();
   const { register, setValue: rhfSetValue, formState: { errors: formErrors } } = useFormContext();
   const inputRef = useRef<HTMLInputElement | null>(null);
   const fieldErrorActual = formErrors[name]?.message || error;
