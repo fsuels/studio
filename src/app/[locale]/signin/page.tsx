@@ -1,7 +1,7 @@
 // src/app/[locale]/signin/page.tsx
 'use client';
 
-import React, { useState } from 'react'; // Added useState
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -17,20 +17,27 @@ export default function SignInPage() {
   const { t } = useTranslation("common");
   const params = useParams();
   const router = useRouter();
-  const { login } = useAuth(); // Get login function
+  const { login } = useAuth();
   const { toast } = useToast();
   const locale = params!.locale as 'en' | 'es';
 
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState(''); // Simple password state for demo
+  const [password, setPassword] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Prefetch the dashboard route so navigation feels snappier
+  useEffect(() => {
+    router.prefetch(`/${locale}/dashboard`);
+  }, [router, locale]);
 
   const handleSignIn = (e: React.FormEvent) => {
     e.preventDefault();
     // In a real app, you'd validate credentials against a backend
-    if (email && password) { // Basic check
-      login(email); // Mock login with email
+    if (email && password) {
+      setIsSubmitting(true);
+      login(email);
       toast({ title: t('Login Successful!'), description: t('Redirecting to your dashboard...') });
-      router.push(`/${locale}/dashboard`); // Redirect to dashboard
+      router.push(`/${locale}/dashboard`);
     } else {
       toast({ title: t('Login Failed'), description: t('Please enter email and password.'), variant: 'destructive'});
     }
@@ -74,7 +81,13 @@ export default function SignInPage() {
             </div>
           </CardContent>
           <CardFooter className="flex flex-col gap-4">
-            <Button type="submit" className="w-full bg-primary text-primary-foreground hover:bg-primary/90">{t('Sign In')}</Button>
+            <Button
+              type="submit"
+              className="w-full bg-primary text-primary-foreground hover:bg-primary/90"
+              disabled={isSubmitting}
+            >
+              {t('Sign In')}
+            </Button>
             <p className="text-xs text-muted-foreground text-center">
               {t("Don't have an account?")} <Link href={`/${locale}/signup`} className="underline text-primary hover:text-primary/80">{t('Sign Up')}</Link>
             </p>
