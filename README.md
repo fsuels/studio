@@ -90,6 +90,8 @@ remains responsive.
 - Run Lighthouse against a production build to measure real-world performance.
 - Keep development-only dependencies out of client-side code.
 - Consider profiling with Next.js `ANALYZE=true` to inspect bundle sizes.
+- Enable `modularizeImports` in `next.config.js` to tree-shake icon libraries
+  like `lucide-react` and reduce the amount of JavaScript shipped.
 
 ## Reducing Unused JavaScript
 
