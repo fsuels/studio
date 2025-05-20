@@ -291,6 +291,7 @@
   "pdfPreview.signButton": "Sign Document",
   "pdfPreview.signingButton": "Signing...",
   "pdfPreview.signedButton": "Document Signed",
+  "pdfPreview.openSigningLink": "Open Signing Link",
   "shareDownloadStep.stepTitle": "Step 4: Download & Share",
   "shareDownloadStep.disabledDescription": "Please complete the previous steps to enable download and share options.",
   "shareDownloadStep.description": "Your document is ready! You can download it or share it securely.",
