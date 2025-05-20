@@ -115,45 +115,40 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
     const currentStepFieldKey = steps[currentStepIndex]?.id;
 
     if (isReviewing) {
-      isValid = await trigger(); 
-      if (isValid) {
-        if (!isLoggedIn) {
-          setShowAuthModal(true);
-          return;
-        }
-         try {
-          const response = await axios.post(`/${locale}/api/wizard/${doc.id}/submit`, { 
-            values: getValues(),
-            locale, 
-            // planType: 'single' // Implicitly single, or explicitly send
-          });
-          localStorage.removeItem(`draft-${doc.id}-${locale}`);
-          onComplete('/dashboard');
-        } catch (error) {
-          console.error("[WizardForm] API submission error:", error);
-          if (axios.isAxiosError(error)) {
-            const axiosError = error as AxiosError<{ error?: string; details?: any; code?: string }>;
-            const apiErrorMsg = axiosError.response?.data?.error || axiosError.message;
-            const apiErrorDetails = axiosError.response?.data?.details;
-            let userFriendlyMessage = `${t('API Error Occurred', { defaultValue: "API Error Occurred" })}: ${apiErrorMsg}`;
-            if (apiErrorDetails && typeof apiErrorDetails === 'object') {
-                 userFriendlyMessage += ` Details: ${JSON.stringify(apiErrorDetails, null, 2)}`;
-            }
-            toast({
-              title: t('API Error Occurred', { defaultValue: "API Error Occurred" }),
-              description: userFriendlyMessage,
-              variant: "destructive",
-            });
-          } else {
-            toast({
-              title: t('Error', { defaultValue: "Error" }),
-              description: t('An unexpected error occurred.', { defaultValue: "An unexpected error occurred." }),
-              variant: "destructive",
-            });
+      await trigger(); // mark validation errors but allow continue
+      if (!isLoggedIn) {
+        setShowAuthModal(true);
+        return;
+      }
+      try {
+        const response = await axios.post(`/${locale}/api/wizard/${doc.id}/submit`, {
+          values: getValues(),
+          locale,
+        });
+        localStorage.removeItem(`draft-${doc.id}-${locale}`);
+        onComplete('/dashboard');
+      } catch (error) {
+        console.error("[WizardForm] API submission error:", error);
+        if (axios.isAxiosError(error)) {
+          const axiosError = error as AxiosError<{ error?: string; details?: any; code?: string }>;
+          const apiErrorMsg = axiosError.response?.data?.error || axiosError.message;
+          const apiErrorDetails = axiosError.response?.data?.details;
+          let userFriendlyMessage = `${t('API Error Occurred', { defaultValue: "API Error Occurred" })}: ${apiErrorMsg}`;
+          if (apiErrorDetails && typeof apiErrorDetails === 'object') {
+               userFriendlyMessage += ` Details: ${JSON.stringify(apiErrorDetails, null, 2)}`;
           }
+          toast({
+            title: t('API Error Occurred', { defaultValue: "API Error Occurred" }),
+            description: userFriendlyMessage,
+            variant: "destructive",
+          });
+        } else {
+          toast({
+            title: t('Error', { defaultValue: "Error" }),
+            description: t('An unexpected error occurred.', { defaultValue: "An unexpected error occurred." }),
+            variant: "destructive",
+          });
         }
-      } else {
-        toast({ title: t('Validation Failed'), description: t('Please correct the errors in the form.'), variant: 'destructive' });
       }
       return;
     }
@@ -181,21 +176,16 @@ export default function WizardForm({ locale, doc, onComplete }: WizardFormProps)
     }
 
     if (!isValid) {
-      toast({ title: t('Validation Error'), description: t('Please correct the field before proceeding.'), variant: 'destructive' });
-      return;
+      toast({ title: t('wizard.incompleteFieldsNotice'), variant: 'destructive' });
     }
 
     if (currentStepIndex < totalSteps - 1) {
       setCurrentStepIndex(prev => prev + 1);
-    } else { 
-      const allFieldsValid = await trigger(); 
-      if (allFieldsValid) {
-        setIsReviewing(true);
-        if (typeof window !== 'undefined') {
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-      } else {
-         toast({ title: t('Validation Failed'), description: t('Please correct all errors before reviewing.'), variant: 'destructive' });
+    } else {
+      await trigger(); // trigger validation but continue regardless
+      setIsReviewing(true);
+      if (typeof window !== 'undefined') {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       }
     }
 

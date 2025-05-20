@@ -357,7 +357,9 @@
     "changeDocument": "Change Document",
     "saveContinue": "Save and Continue",
     "skipQuestion": "Skip this Question",
-    "generateDocument": "Generate Document"
+    "generateDocument": "Generate Document",
+    "incompleteFieldsNotice": "Some required fields are missing. You can fill them in below.",
+    "fieldRequired": "This field is required."
   },
   "Review Answers": "Review Answers",
   "API Error Occurred": "API Error Occurred",
