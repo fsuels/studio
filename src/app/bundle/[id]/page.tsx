@@ -1,5 +1,6 @@
 // src/app/bundle/[id]/page.tsx
 import React from 'react'
+import Image from 'next/image'
 import { notFound } from 'next/navigation'
 import { bundles } from '@/data/bundles'
 import { loadBundles } from '@/lib/firestore/bundles'   // harmless if collection absent
@@ -41,8 +42,13 @@ function BundleClient({ bundle }: { bundle: (typeof bundles)[number] }) {
     <main className="max-w-3xl mx-auto p-6">
       <Card className="border border-border shadow-sm">
         {bundle.imageUrl && (
-          // eslint-disable-next-line @next/next/no-img-element
-          (<img src={bundle.imageUrl} alt={bundle.name} className="h-48 w-full object-cover rounded-t" />)
+          <Image
+            src={bundle.imageUrl}
+            alt={bundle.name}
+            width={768}
+            height={192}
+            className="h-48 w-full object-cover rounded-t"
+          />
         )}
 
         <CardHeader className="space-y-1">
