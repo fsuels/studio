@@ -9,6 +9,7 @@ const nextConfig: NextConfig = {
   eslint: {
     ignoreDuringBuilds: true, // Avoid blocking builds on ESLint errors
   },
+  swcMinify: true,
   images: {
     unoptimized: true, // Disable Next.js image optimization for static export
     remotePatterns: [
