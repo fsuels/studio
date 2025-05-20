@@ -69,7 +69,7 @@ export default function BundlesCarousel({ max = 6 }: Props) {
                 <span className="text-muted-foreground"> · {b.docIds.length} docs</span>
               </p>
 
-              <Link href={`/bundle/${b.id}`} prefetch={false}>
+              <Link href={`/bundle/${b.id}`}> 
                 <Button size="sm" className="w-full">View bundle</Button>
               </Link>
               </CardContent>
