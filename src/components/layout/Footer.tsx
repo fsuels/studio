@@ -11,6 +11,26 @@ import { Logo } from '@/components/layout/Logo';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'next/navigation';
 
+export const FooterSkeleton = () => (
+  <footer className="bg-muted text-muted-foreground py-12 mt-16 border-t border-border animate-pulse">
+    <div className="container mx-auto px-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
+        {[...Array(4)].map((_, i) => (
+          <div key={i} className="space-y-3">
+            <div className="h-6 bg-gray-300 rounded w-1/2"></div>
+            <div className="h-4 bg-gray-300 rounded w-3/4"></div>
+            <div className="h-4 bg-gray-300 rounded w-2/3"></div>
+            <div className="h-4 bg-gray-300 rounded w-1/2"></div>
+          </div>
+        ))}
+      </div>
+      <div className="border-t border-border pt-6 text-center text-xs">
+        <div className="h-4 bg-gray-300 rounded w-1/3 mx-auto"></div>
+      </div>
+    </div>
+  </footer>
+);
+
 const Footer = React.memo(function Footer() {
   const [email, setEmail] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -77,25 +97,7 @@ const Footer = React.memo(function Footer() {
   ];
 
   if (!isHydrated) {
-    return (
-      <footer className="bg-muted text-muted-foreground py-12 mt-16 border-t border-border animate-pulse">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
-            {[...Array(4)].map((_, i) => (
-              <div key={i} className="space-y-3">
-                <div className="h-6 bg-gray-300 rounded w-1/2"></div>
-                <div className="h-4 bg-gray-300 rounded w-3/4"></div>
-                <div className="h-4 bg-gray-300 rounded w-2/3"></div>
-                <div className="h-4 bg-gray-300 rounded w-1/2"></div>
-              </div>
-            ))}
-          </div>
-          <div className="border-t border-border pt-6 text-center text-xs">
-            <div className="h-4 bg-gray-300 rounded w-1/3 mx-auto"></div>
-          </div>
-        </div>
-      </footer>
-    );
+    return <FooterSkeleton />;
   }
 
   return (
@@ -207,4 +209,4 @@ const Footer = React.memo(function Footer() {
   );
 });
 
-export { Footer };
+export { Footer, FooterSkeleton };
