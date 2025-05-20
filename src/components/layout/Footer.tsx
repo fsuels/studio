@@ -71,8 +71,14 @@ export const Footer = React.memo(function Footer() {
       return;
     }
 
+    const appId = process.env.NEXT_PUBLIC_INTERCOM_APP_ID;
+    if (!appId) {
+      console.error('loadIntercom: NEXT_PUBLIC_INTERCOM_APP_ID not set.');
+      return;
+    }
+
     const script = document.createElement('script');
-    script.src = 'https://cdn.intercom.io/widget.js';
+    script.src = `https://widget.intercom.io/widget/${appId}`;
     script.defer = true;
     script.onload = () => {
       setIntercomLoaded(true);
