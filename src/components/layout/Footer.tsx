@@ -39,6 +39,7 @@ export const Footer = React.memo(function Footer() {
   const params = useParams();
   const locale = (params.locale as 'en' | 'es') || 'en';
   const [isHydrated, setIsHydrated] = useState(false);
+  const [intercomLoaded, setIntercomLoaded] = useState(false);
 
   useEffect(() => {
     setIsHydrated(true);
@@ -62,6 +63,22 @@ export const Footer = React.memo(function Footer() {
     });
     setEmail('');
     setIsLoading(false);
+  };
+
+  const loadIntercom = () => {
+    if (intercomLoaded) {
+      (window as any).Intercom && (window as any).Intercom('show');
+      return;
+    }
+
+    const script = document.createElement('script');
+    script.src = 'https://cdn.intercom.io/widget.js';
+    script.defer = true;
+    script.onload = () => {
+      setIntercomLoaded(true);
+      (window as any).Intercom && (window as any).Intercom('show');
+    };
+    document.body.appendChild(script);
   };
 
   const currentYear = new Date().getFullYear();
@@ -199,7 +216,7 @@ export const Footer = React.memo(function Footer() {
         <div className="fixed bottom-4 right-4 z-50">
           <Button variant="outline" size="icon"
                   className="rounded-full shadow-lg bg-primary text-primary-foreground hover:bg-primary/90 w-12 h-12"
-                  onClick={() => (window as any).Intercom && (window as any).Intercom('show')}
+                  onClick={loadIntercom}
                   aria-label={t('footer.openChatAria', { defaultValue: "Open chat" })}>
             <MessageSquare className="h-6 w-6" />
           </Button>
