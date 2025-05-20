@@ -48,17 +48,16 @@ export default function RootLayout({
         />
         <meta name="description" content={SEO.description} />
         <title>{SEO.title}</title>
-        {/* Preload and asynchronously apply the generated layout.css file */}
+        {/* Preload and defer the generated layout.css file without blocking rendering */}
         <Script id="defer-layout-css" strategy="beforeInteractive">
           {`
-            const setup = () => {
-              const link = document.querySelector('link[href*="layout.css"]');
+            const process = (link) => {
               if (!link || link.dataset.processed) return;
               link.dataset.processed = 'true';
 
               const href = link.href;
 
-              // Preload the stylesheet so it downloads with high priority
+              // Preload the stylesheet with high priority
               const preload = document.createElement('link');
               preload.rel = 'preload';
               preload.as = 'style';
@@ -66,25 +65,44 @@ export default function RootLayout({
               preload.fetchPriority = 'high';
               document.head.appendChild(preload);
 
-              // Apply the stylesheet without blocking rendering
+              // Apply the stylesheet asynchronously
               const style = document.createElement('link');
               style.rel = 'stylesheet';
               style.href = href;
               style.media = 'print';
-              style.onload = () => {
-                style.media = 'all';
-              };
+              style.onload = () => { style.media = 'all'; };
               document.head.appendChild(style);
 
               // Remove the original blocking link
               link.remove();
             };
 
+            const init = () => {
+              const link = document.querySelector('link[href*="layout.css"]');
+              if (link) process(link);
+            };
+
             if (document.readyState === 'loading') {
-              document.addEventListener('DOMContentLoaded', setup);
+              document.addEventListener('DOMContentLoaded', init);
             } else {
-              setup();
+              init();
             }
+
+            // Watch for the stylesheet being injected after this script runs
+            const observer = new MutationObserver((mutations) => {
+              for (const m of mutations) {
+                for (const node of m.addedNodes) {
+                  if (
+                    node.tagName === 'LINK' &&
+                    node.href &&
+                    node.href.includes('layout.css')
+                  ) {
+                    process(node);
+                  }
+                }
+              }
+            });
+            observer.observe(document.head, { childList: true });
           `}
         </Script>
         <link
