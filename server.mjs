@@ -1,5 +1,6 @@
 import next from 'next';
 import { createSecureServer } from 'node:http2';
+import { createServer } from 'node:http';
 import { readFileSync } from 'node:fs';
 import { parse } from 'node:url';
 
@@ -14,13 +15,28 @@ const options = {
   allowHTTP1: true,
 };
 
+const httpPort = process.env.HTTP_PORT || 80;
+
 app.prepare().then(() => {
   const server = createSecureServer(options, (req, res) => {
     const parsedUrl = parse(req.url, true);
     handle(req, res, parsedUrl);
   });
 
+  // HTTP server that redirects all traffic to HTTPS
+  const httpServer = createServer((req, res) => {
+    const host = req.headers['host'];
+    const redirectUrl = `https://${host}${req.url}`;
+    res.statusCode = 301;
+    res.setHeader('Location', redirectUrl);
+    res.end();
+  });
+
   server.listen(port, () => {
     console.log(`> Ready on https://localhost:${port}`);
+  });
+
+  httpServer.listen(httpPort, () => {
+    console.log(`> Redirecting http://localhost:${httpPort} to https`);
   });
 });
