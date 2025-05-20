@@ -12,6 +12,9 @@ if (!i18n.isInitialized) {
     .init({
       fallbackLng: 'en',
       debug: process.env.NODE_ENV === 'development',
+      // Only allow supported languages and strip region codes like en-US
+      supportedLngs: ['en', 'es'],
+      load: 'languageOnly',
       interpolation: { escapeValue: false },
       ns: [
         'common',
