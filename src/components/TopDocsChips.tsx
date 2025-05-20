@@ -88,7 +88,10 @@ const TopDocsChips = React.memo(function TopDocsChips() {
             className="bg-card hover:bg-muted border-border text-card-foreground hover:text-primary transition-colors shadow-sm px-4 py-2 h-auto text-xs sm:text-sm"
           >
             {React.createElement(FileText, { className: "h-4 w-4 mr-2 text-primary/80 opacity-70" })}
-            {locale === 'es' && doc.name_es ? doc.name_es : doc.name}
+            {(doc.translations?.[locale as 'en' | 'es']?.name) ||
+             doc.translations?.en?.name ||
+             doc.name ||
+             doc.id}
           </Button>
         ))}
       </div>
