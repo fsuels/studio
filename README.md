@@ -39,6 +39,26 @@ npm run build
 npm start
 ```
 
+## Serving over HTTPS
+
+Lighthouse may report insecure requests if the site is served via plain HTTP.
+Run the production server with TLS so all assets load over HTTPS:
+
+1. Set the `NEXT_PUBLIC_SITE_URL` environment variable to your HTTPS domain,
+   e.g. `https://example.com`.
+2. Generate certificates as shown above or supply valid ones in the `cert`
+   directory.
+3. Build and start the app using `npm start` which launches `server.mjs` on
+   HTTPS.
+
+```bash
+NEXT_PUBLIC_SITE_URL=https://example.com npm run build
+npm start
+```
+
+The site will now be available on `https://localhost:<port>` (or your configured
+domain) and Lighthouse should no longer flag insecure requests.
+
 ## Troubleshooting Lighthouse reports
 
 If Lighthouse shows large execution times and lists files such as
