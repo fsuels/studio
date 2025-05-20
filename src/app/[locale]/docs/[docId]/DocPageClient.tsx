@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button';
 import React, { useEffect, useState, useMemo } from 'react';
 import dynamic from 'next/dynamic';
 import { Loader2, Star, ShieldCheck, Zap, HelpCircle, Award, FileText, Edit3, FileSignature, Info } from 'lucide-react';
-import { Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';
+import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from '@/components/ui/tooltip';
 import { Badge } from '@/components/ui/badge';
 import { track } from '@/lib/analytics';
 import { Separator } from '@/components/ui/separator';
@@ -215,12 +215,14 @@ export default function DocPageClient({ params: routeParams }: DocPageClientProp
                 <div className="text-center mb-4">
                     <h2 className="text-xl md:text-2xl font-semibold text-foreground mb-1 flex items-center justify-center gap-1">
                         {t('docDetail.previewTitle', {defaultValue: 'Document Preview'})}
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <Info className="h-4 w-4 text-muted-foreground cursor-help" />
-                          </TooltipTrigger>
-                          <TooltipContent side="top" className="text-xs">This shows a sample layout of your completed form.</TooltipContent>
-                        </Tooltip>
+                        <TooltipProvider>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <Info className="h-4 w-4 text-muted-foreground cursor-help" />
+                            </TooltipTrigger>
+                            <TooltipContent side="top" className="text-xs">This shows a sample layout of your completed form.</TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
                     </h2>
                     <p className="text-xs text-muted-foreground">
                         {t('docDetail.previewSubtitle', {defaultValue: "This is how your document will generally look. Specific clauses and details will be customized by your answers."})}
