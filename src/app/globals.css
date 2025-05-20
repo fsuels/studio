@@ -10,13 +10,13 @@
     --card-foreground: 224 71.4% 4.1%;
     --popover: 0 0% 100%;
     --popover-foreground: 224 71.4% 4.1%;
-    --primary: 176 100% 30%; /* Teal Accent */
+    --primary: 176 100% 25%; /* Darker Teal for better contrast */
     --primary-foreground: 210 20% 98%; /* White */
     --secondary: 207 90% 92%; /* Soft Blue (#D1E9FF) */
     --secondary-foreground: 220.9 39.3% 11%; /* Dark Blue/Black */
     --muted: 220 14.3% 95.9%;
     --muted-foreground: 220 8.9% 46.1%;
-    --accent: 176 100% 30%;  /* Teal Accent for interactive elements */
+    --accent: 176 100% 25%;  /* Darker Teal for interactive elements */
     --accent-foreground: 210 20% 98%; /* White */
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 20% 98%;
