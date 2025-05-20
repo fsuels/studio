@@ -1,7 +1,7 @@
 // src/app/[locale]/docs/[docId]/DocPageClient.tsx
 'use client';
 
-import { useParams, notFound, useRouter } from 'next/navigation';
+import { notFound, useRouter } from 'next/navigation';
 import { documentLibrary, type LegalDocument } from '@/lib/document-library';
 import { useTranslation } from 'react-i18next';
 import Link from 'next/link';
@@ -42,19 +42,21 @@ const AiHighlightPlaceholder = ({ text }: { text: string }) => (
 
 
 export default function DocPageClient({ params: routeParams }: DocPageClientProps) {
-  const params = useParams();
   const { t, i18n } = useTranslation("common");
   const router = useRouter();
 
-  const currentLocale = (Array.isArray(params!.locale) ? params!.locale[0] : params!.locale) as 'en' | 'es' | undefined;
-  const docId = Array.isArray(params!.docId) ? params!.docId[0] : params!.docId as string | undefined;
+  const currentLocale = routeParams.locale as 'en' | 'es';
+  const docId = routeParams.docId;
 
   const docConfig = useMemo(() => {
     if (!docId) return undefined;
     return documentLibrary.find(d => d.id === docId);
   }, [docId]);
+
+  if (!docConfig) {
+    notFound();
+  }
   
-  const [isLoading, setIsLoading] = useState(true); // isLoadingConfig might be more accurate if config fetching is async
   const [isHydrated, setIsHydrated] = useState(false);
 
   useEffect(() => {
@@ -71,22 +73,7 @@ export default function DocPageClient({ params: routeParams }: DocPageClientProp
     }
   }, [router, docId, currentLocale]);
 
-  useEffect(() => {
-    if (isHydrated) { // Ensure this runs only after hydration
-        if (docId) {
-            const foundDoc = documentLibrary.find(d => d.id === docId);
-            if (!foundDoc) {
-                console.error(`[DocPageClient] Doc config not found for ID: ${docId}. Triggering 404.`);
-                notFound();
-            }
-            // setDocConfig is implicitly handled by useMemo now
-        } else {
-            console.error("[DocPageClient] docId is undefined. Triggering 404.");
-            notFound();
-        }
-        setIsLoading(false); // Config is resolved (or not found)
-    }
-  }, [docId, isHydrated, notFound]); // Removed docConfig from deps as it's derived
+  // Ensure we preload resources for smoother navigation
 
 
 
@@ -119,7 +106,7 @@ export default function DocPageClient({ params: routeParams }: DocPageClientProp
 
 
   const handleStartWizard = () => {
-    if (!docConfig || !currentLocale || !isHydrated) return;
+    if (!docConfig || !currentLocale) return;
     track('add_to_cart', {
       id: docConfig.id,
       name: currentLocale === 'es' && docConfig.translations?.es?.name ? docConfig.translations.es.name : docConfig.translations?.en?.name || docConfig.name,
@@ -129,7 +116,7 @@ export default function DocPageClient({ params: routeParams }: DocPageClientProp
   };
 
 
-  if (!isHydrated || isLoading || !docConfig || !currentLocale) {
+  if (!docConfig || !currentLocale) {
     return (
        <div className="flex items-center justify-center min-h-[calc(100vh-10rem)]">
         <Loader2 className="h-12 w-12 animate-spin text-primary" />
