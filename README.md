@@ -29,3 +29,12 @@ before running Lighthouse:
 NODE_ENV=production npm run build
 NODE_ENV=production npm start
 ```
+
+## Reducing Main-Thread Work
+
+- Use dynamic imports (`next/dynamic`) for heavy components to split JavaScript bundles.
+- Avoid including large libraries in the initial bundle; load them only on pages that need them.
+- Run Lighthouse against a production build to measure real-world performance.
+- Keep development-only dependencies out of client-side code.
+- Consider profiling with Next.js `ANALYZE=true` to inspect bundle sizes.
+
