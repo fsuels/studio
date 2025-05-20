@@ -3,7 +3,7 @@
 // Firestore convenience helpers for the “recently used” widget
 //--------------------------------------------------------------
 
-import { db } from '@/lib/firebase'
+import { getDb } from '@/lib/firebase'
 import {
   collection,
   doc,
@@ -29,6 +29,7 @@ export async function loadRecentDocs(
   userId: string,
   max: number = 20,
 ): Promise<RecentDocEntry[]> {
+  const db = await getDb()
   const col = collection(db, 'users', userId, 'recentDocs')
   const q   = query(col, orderBy('lastOpened', 'desc'), limit(max))
   const snap = await getDocs(q)
@@ -42,6 +43,7 @@ export async function saveRecentDoc(
   userId: string,
   entry: RecentDocEntry,
 ): Promise<void> {
+  const db = await getDb()
   const ref = doc(db, 'users', userId, 'recentDocs', entry.id)
   await setDoc(ref, {
     ...entry,

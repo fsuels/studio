@@ -46,7 +46,7 @@ import {
   getVehicleCompliance,
   vehicleComplianceStates,
 } from '@/lib/states/vehicle-compliance';
-import { db } from '@/lib/firebase';
+import { getDb } from '@/lib/firebase';
 import {
   collection,
   doc,
@@ -81,6 +81,7 @@ export default function VehicleBillOfSalePage() {
     // Example Firestore read for compliance data
     async function loadCompliance() {
       try {
+        const db = await getDb();
         const ref = doc(collection(db, 'compliance'), 'vehicle');
         const snap = await getDoc(ref);
         if (snap.exists()) {

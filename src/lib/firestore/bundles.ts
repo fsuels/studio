@@ -3,7 +3,7 @@ ts
 // Firestore helpers for bundles (optional – can be omitted if
 // you’ll ship with static bundles only)
 //--------------------------------------------------------------
-import { db } from '@/lib/firebase'
+import { getDb } from '@/lib/firebase'
 import {
   collection,
   getDocs,
@@ -19,6 +19,7 @@ import type { Bundle } from '@/data/bundles'
  */
 export async function loadBundles(max = 20): Promise<Bundle[]> {
   try {
+    const db = await getDb()
     const col = collection(db, 'bundles')
     const q   = query(col, orderBy('name'), limit(max))
     const snap = await getDocs(q)

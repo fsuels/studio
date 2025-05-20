@@ -17,7 +17,7 @@ import {
   setDoc,
   type Timestamp // Import Timestamp type
 } from 'firebase/firestore';
-import { db } from '@/lib/firebase'; // Ensure db is correctly initialized and exported
+import { getDb } from '@/lib/firebase'; // lazily obtain Firestore instance
 
 /* ---------- types ------------------------------------------------------- */
 
@@ -34,7 +34,7 @@ export interface FormProgressDoc {
 
 /* ---------- collection helpers ----------------------------------------- */
 
-const userProgressCollection = (userId: string) =>
+const userProgressCollection = (db: Firestore, userId: string) =>
   collection(db, 'users', userId, 'formProgress');
 
 /**
@@ -78,7 +78,8 @@ export async function saveFormProgress({
     return;
   }
 
-  const ref = doc(userProgressCollection(userId), progressDocId({ docType, state: state || 'NA' }));
+  const db = await getDb();
+  const ref = doc(userProgressCollection(db, userId), progressDocId({ docType, state: state || 'NA' }));
   console.log(`[saveFormProgress] Saving progress for user: ${userId}, docId: ${progressDocId({ docType, state: state || 'NA' })}`);
   await setDoc(
     ref,
@@ -116,7 +117,8 @@ export async function loadFormProgress({
   console.log(`[loadFormProgress] Attempting to load progress for user: ${userId}, docId: ${docIdToLoad}`);
 
   // Fast path — exact ID lookup
-  const ref = doc(userProgressCollection(userId), docIdToLoad);
+  const db = await getDb();
+  const ref = doc(userProgressCollection(db, userId), docIdToLoad);
   const snap = await getDoc(ref);
 
   if (snap.exists()) {
@@ -132,7 +134,7 @@ export async function loadFormProgress({
   if (state && state !== 'NA') {
     const altDocIdToLoad = progressDocId({ docType, state: 'NA' });
     console.log(`[loadFormProgress] Attempting fallback load for user: ${userId}, docId (no state): ${altDocIdToLoad}`);
-    const altRef = doc(userProgressCollection(userId), altDocIdToLoad);
+    const altRef = doc(userProgressCollection(db, userId), altDocIdToLoad);
     const altSnap = await getDoc(altRef);
     if (altSnap.exists()) {
       const data = altSnap.data() as FormProgressDoc;
@@ -161,8 +163,9 @@ export async function listRecentProgress(
     return [];
   }
   console.log(`[listRecentProgress] Listing recent progress for user: ${userId}, max: ${maxResults}`);
+  const db = await getDb();
   const q = query(
-    userProgressCollection(userId),
+    userProgressCollection(db, userId),
     orderBy('updatedAt', 'desc'),
     limit(maxResults)
   );

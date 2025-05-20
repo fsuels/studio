@@ -1,7 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp, getApps, getApp, type FirebaseApp } from "firebase/app";
-import { getAnalytics, isSupported, type Analytics } from "firebase/analytics";
-import { getFirestore as getFirestoreFB, type Firestore } from "firebase/firestore"; //Import getFirestore and Firestore type
+import type { Analytics } from "firebase/analytics";
+import type { Firestore } from "firebase/firestore";
 
 // Default Firebase configuration provided by the user
 // Used as fallbacks if environment variables are not set.
@@ -81,42 +81,33 @@ if (typeof window !== 'undefined' && !getApps().length) {
 }
 
 
-// Initialize Analytics conditionally (client-side only)
 let analytics: Analytics | null = null;
-if (typeof window !== 'undefined' && app) { // Ensure app is initialized before trying to get analytics
-  isSupported().then((supported) => {
-    if (supported) {
-      try {
-        analytics = getAnalytics(app);
-        console.log("Firebase Analytics initialized.");
-      } catch (error) {
-         console.error("Firebase Analytics initialization failed:", error);
-      }
+let dbInstance: Firestore | null = null;
 
-    } else {
-      console.log("Firebase Analytics is not supported in this environment.");
-    }
-  }).catch(error => {
-     console.error("Error checking Firebase Analytics support:", error);
-  });
-}
-
-// Initialize Firestore instance
-// This should be 'Firestore' from 'firebase/firestore'
-// and getFirestoreFB is the alias for the actual getFirestore function.
-let db: Firestore;
-if (app) { // Ensure app is initialized before trying to get Firestore
-  try {
-    db = getFirestoreFB(app); // Call the imported getFirestoreFB function
-    console.log("Firebase Firestore initialized.");
-  } catch (error) {
-    console.error("Firebase Firestore initialization failed:", error);
-    // Handle Firestore initialization failure appropriately.
-    // db will remain undefined, so any code using it needs to handle this.
+/**
+ * Lazily load Firebase Analytics on the client.
+ */
+export async function getAnalyticsInstance(): Promise<Analytics | null> {
+  if (analytics || typeof window === 'undefined') {
+    return analytics;
   }
-} else {
-  console.error("Firebase app not initialized, cannot initialize Firestore.");
-  // db will remain undefined.
+  const { getAnalytics, isSupported } = await import('firebase/analytics');
+  if (await isSupported()) {
+    analytics = getAnalytics(app);
+  }
+  return analytics;
 }
 
-export { app, analytics, db }; // Export initialized app, analytics (which might be null), and db (which might be undefined)
+/**
+ * Lazily obtain the Firestore instance.
+ */
+export async function getDb(): Promise<Firestore> {
+  if (dbInstance) {
+    return dbInstance;
+  }
+  const { getFirestore } = await import('firebase/firestore');
+  dbInstance = getFirestore(app);
+  return dbInstance;
+}
+
+export { app };
