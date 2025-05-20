@@ -10,7 +10,7 @@ import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Button } from '@/components/ui/button'; 
 import MiniCartDrawer from '@/components/MiniCartDrawer';
-import { Check, ChevronDown, Globe, UserPlus, LogIn, Search as SearchIcon, ExternalLink, FileText, Menu as MenuIcon, X as CloseIcon, LayoutGrid, ChevronUp, LogOut } from 'lucide-react'; 
+import { Check, ChevronDown, Globe, UserPlus, LogIn, Search as SearchIcon, ExternalLink, FileText, Menu as MenuIcon, X as CloseIcon, LayoutGrid, ChevronUp, LogOut, UserCircle } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { documentLibrary, LegalDocument } from '@/lib/document-library';
 import { CATEGORY_LIST } from '@/components/Step1DocumentSelector';
@@ -232,11 +232,11 @@ const Header = React.memo(function Header() {
             <>
               <Button
                 variant="ghost" size="sm"
-                className="text-xs font-medium px-2 py-1.5 md:px-3 h-9 md:h-8 hover:bg-muted focus-visible:ring-primary focus-visible:ring-2 focus-visible:ring-offset-2"
+                className="text-xs font-medium px-2 py-1.5 md:px-3 h-9 md:h-8 hover:bg-muted focus-visible:ring-primary focus-visible:ring-2 focus-visible:ring-offset-2 flex items-center"
                 asChild
               >
                 <Link href={`/${clientLocale}/dashboard`}>
-                  {user.email || tHeader('Dashboard')} {/* Display email or generic Dashboard */}
+                  <UserCircle className="h-4 w-4 mr-1 md:mr-2" /> {tHeader('My Account')}
                 </Link>
               </Button>
               <Button
@@ -394,8 +394,8 @@ const Header = React.memo(function Header() {
                   asChild
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
-                  <Link href={`/${clientLocale}/dashboard`}>
-                    {user.email || tHeader('Dashboard')}
+                <Link href={`/${clientLocale}/dashboard`}>
+                    <UserCircle className="h-5 w-5 mr-2" /> {tHeader('My Account')}
                   </Link>
                 </Button>
                 <Button
