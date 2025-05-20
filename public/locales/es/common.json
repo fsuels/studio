@@ -356,7 +356,9 @@
     "changeDocument": "Cambiar Documento",
     "saveContinue": "Guardar y Continuar",
     "skipQuestion": "Saltar esta Pregunta",
-    "generateDocument": "Generar Documento"
+    "generateDocument": "Generar Documento",
+    "incompleteFieldsNotice": "Faltan campos requeridos. Puedes completarlos abajo.",
+    "fieldRequired": "Este campo es obligatorio."
   },
   "Review Answers": "Revisar Respuestas",
   "API Error Occurred": "Ocurrió un Error de API",
