@@ -10,6 +10,10 @@ const nextConfig: NextConfig = {
     ignoreDuringBuilds: true, // Avoid blocking builds on ESLint errors
   },
   swcMinify: true,
+  // Generate source maps for production bundles so Lighthouse can access the
+  // original TypeScript sources. This adds `.map` files next to the compiled
+  // JavaScript output and slightly increases build size.
+  productionBrowserSourceMaps: true,
   images: {
     unoptimized: true, // Disable Next.js image optimization for static export
     remotePatterns: [
