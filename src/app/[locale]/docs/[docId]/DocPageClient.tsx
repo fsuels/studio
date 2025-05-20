@@ -15,7 +15,17 @@ import { track } from '@/lib/analytics';
 import { Separator } from '@/components/ui/separator';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion';
-import TrustAndTestimonialsSection from '@/components/landing/TrustAndTestimonialsSection';
+// Lazy load testimonials section so it's only fetched when this page is viewed
+const TrustAndTestimonialsSection = dynamic(
+  () => import('@/components/landing/TrustAndTestimonialsSection'),
+  {
+    loading: () => (
+      <div className="flex justify-center items-center h-32">
+        <Loader2 className="h-6 w-6 animate-spin text-primary" />
+      </div>
+    ),
+  }
+);
 
 const DocumentDetail = dynamic(() => import('@/components/DocumentDetail'), {
   loading: () => (
