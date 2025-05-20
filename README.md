@@ -52,6 +52,17 @@ npm run build
 npm start
 ```
 
+## Avoiding Long Main-Thread Tasks
+
+If Lighthouse flags **long main‑thread tasks** while testing your pages, ensure
+the app is running a production build. Development mode bundles additional
+debugging helpers such as React's scheduler development build which can create
+long tasks and skew performance metrics. Use `npm run build` followed by
+`npm start` to serve the optimized version before profiling. If heavy components
+still cause long tasks, consider loading them with `next/dynamic` or breaking up
+expensive computations with `setTimeout` or `requestIdleCallback` so the UI
+remains responsive.
+
 ## Reducing Main-Thread Work
 
 - Use dynamic imports (`next/dynamic`) for heavy components to split JavaScript bundles.
