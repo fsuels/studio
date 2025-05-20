@@ -3,7 +3,7 @@
 
 import React, { useState, useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { documentLibrary, type LegalDocument } from "@/lib/document-library";
+import type { LegalDocument } from "@/lib/document-library";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -131,10 +131,18 @@ const Step1DocumentSelector = React.memo(function Step1DocumentSelector({
   const [selectedCategoryInternal, setSelectedCategoryInternal] = useState<string | null>(initialSelectedCategory);
   const [docSearch, setDocSearch] = useState<string>('');
   const [isHydrated, setIsHydrated] = useState(false);
+  const [documents, setDocuments] = useState<LegalDocument[]>([]);
   const { toast } = useToast();
 
   useEffect(() => {
     setIsHydrated(true);
+  }, []);
+
+  // Lazy load the document library on the client
+  useEffect(() => {
+    import('@/lib/document-library').then(mod => {
+      setDocuments(mod.documentLibrary);
+    });
   }, []);
 
   // Effect to switch view if globalSearchTerm is used
@@ -180,7 +188,7 @@ const Step1DocumentSelector = React.memo(function Step1DocumentSelector({
   const languageSupportsSpanish = (support: string[] | undefined): boolean => !!support && support.includes('es');
 
   const documentsToDisplay = useMemo(() => {
-    let docs = [...documentLibrary];
+    let docs = [...documents];
     if (!isHydrated) return [];
 
     if (currentView === 'search-results' && globalSearchTerm.trim() !== '') {
@@ -214,7 +222,7 @@ const Step1DocumentSelector = React.memo(function Step1DocumentSelector({
     }
 
     return docs.filter(doc => doc.id !== 'general-inquiry');
-  }, [selectedCategoryInternal, docSearch, globalSearchTerm, globalSelectedState, currentView, t, i18n.language, isHydrated]);
+  }, [selectedCategoryInternal, docSearch, globalSearchTerm, globalSelectedState, currentView, t, i18n.language, isHydrated, documents]);
 
 
   const handleCategoryClick = (key: string) => {
@@ -245,7 +253,7 @@ const Step1DocumentSelector = React.memo(function Step1DocumentSelector({
 
   const handleDocSelect = (doc: LegalDocument | Pick<LegalDocument, 'id' | 'name' | 'name_es' | 'category'>) => {
     if (!isHydrated) return;
-    const fullDoc = documentLibrary.find(d => d.id === doc.id);
+    const fullDoc = documents.find(d => d.id === doc.id);
     if (!fullDoc) {
         toast({ title: "Error", description: "Document details not found.", variant: "destructive"});
         return;

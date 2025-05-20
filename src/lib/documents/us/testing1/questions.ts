@@ -1,3 +1,1 @@
-import { usStates } from '@/lib/usStates';
-
-export const firstSecondQuestions = [
+export const firstSecondQuestions = [];

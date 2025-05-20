@@ -2,17 +2,13 @@
 "use client";
 
 import React, { useState, useEffect, useCallback, Suspense } from 'react';
-import dynamic from 'next/dynamic';
 import type { LegalDocument } from '@/lib/document-library';
-import { usStates, documentLibrary } from '@/lib/document-library';
+import { usStates } from '@/lib/document-library';
 import HomepageHeroSteps from '@/components/landing/HomepageHeroSteps';
-import { AnnouncementBar } from '@/components/AnnouncementBar';
 import { useToast } from '@/hooks/use-toast';
 import { Separator } from '@/components/ui/separator';
 import { Loader2 } from 'lucide-react';
-import Step1DocumentSelector, { CATEGORY_LIST } from '@/components/Step1DocumentSelector';
-import { useTranslation } from 'react-i18next';
-import { useSearchParams, useRouter, useParams } from 'next/navigation';
+import dynamic from 'next/dynamic';
 
 // Basic loading component
 const LoadingSpinner = () => (
@@ -21,6 +17,12 @@ const LoadingSpinner = () => (
     <p className="ml-2 text-muted-foreground">Loading Section...</p>
   </div>
 );
+
+const AnnouncementBar = dynamic(() => import('@/components/AnnouncementBar').then(mod => mod.AnnouncementBar), { ssr: false });
+const Step1DocumentSelector = dynamic(() => import('@/components/Step1DocumentSelector'), { loading: () => <LoadingSpinner /> });
+import { CATEGORY_LIST } from '@/components/Step1DocumentSelector';
+import { useTranslation } from 'react-i18next';
+import { useSearchParams, useRouter, useParams } from 'next/navigation';
 
 // Dynamically import components
 const HowItWorks = dynamic(() => import('@/components/landing/HowItWorks'), {
@@ -57,9 +59,16 @@ export default function HomePageClient() {
   const [selectedDocument, setSelectedDocument] = useState<LegalDocument | null>(null);
 
   const [isHydrated, setIsHydrated] = useState(false);
+  const [documentLibrary, setDocumentLibrary] = useState<LegalDocument[]>([]);
 
   useEffect(() => {
     setIsHydrated(true);
+  }, []);
+
+  useEffect(() => {
+    import('@/lib/document-library').then(mod => {
+      setDocumentLibrary(mod.documentLibrary);
+    });
   }, []);
 
   // Preload dynamically imported sections once on the client
@@ -96,7 +105,7 @@ export default function HomePageClient() {
   }, []);
 
   useEffect(() => {
-    if (!isHydrated) return;
+    if (!isHydrated || documentLibrary.length === 0) return;
 
     const docIdFromQuery = searchParams!.get('docId');
     const categoryFromQuery = searchParams!.get('category');
@@ -122,7 +131,7 @@ export default function HomePageClient() {
          scrollToWorkflow();
       }
     }
-  }, [searchParams, globalSearchTerm, selectedCategoryForFilter, selectedDocument, isHydrated, scrollToWorkflow]);
+  }, [searchParams, globalSearchTerm, selectedCategoryForFilter, selectedDocument, isHydrated, scrollToWorkflow, documentLibrary]);
 
   const handleDocumentTypeSelect = useCallback((doc: LegalDocument) => {
     if (!isHydrated) return;
