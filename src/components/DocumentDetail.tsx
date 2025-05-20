@@ -76,6 +76,8 @@ const DocumentDetail = React.memo(function DocumentDetail({ docId, locale, altTe
                 modifiedMd = modifiedMd.replace(/^# .*/m, `# ${fallbackTitle}`);
             }
         }
+        // Replace template placeholders with blank lines to mimic a fillable form
+        modifiedMd = modifiedMd.replace(/{{[^}]+}}/g, '__________');
         setMd(modifiedMd);
       })
       .catch((err) => {
@@ -116,7 +118,7 @@ const DocumentDetail = React.memo(function DocumentDetail({ docId, locale, altTe
       data-watermark={watermarkText}
       className={cn(
         "relative w-full h-auto min-h-[500px] md:min-h-[650px]",
-        "max-w-[850px] mx-auto border shadow-md bg-background text-foreground",
+        "max-w-[850px] mx-auto border shadow-md bg-white dark:bg-background text-foreground",
         "overflow-hidden select-none aspect-[8.5/11]"
       )}
       style={{
@@ -142,7 +144,7 @@ const DocumentDetail = React.memo(function DocumentDetail({ docId, locale, altTe
       )}
 
       {!isLoading && !error && md ? (
-        <div className="prose prose-sm dark:prose-invert max-w-none w-full h-full overflow-y-auto p-4 md:p-6 relative z-0 bg-background text-foreground">
+        <div className="prose prose-sm dark:prose-invert max-w-none w-full h-full overflow-y-auto p-4 md:p-6 relative z-0 bg-white dark:bg-background text-foreground">
            <ReactMarkdown
              remarkPlugins={[remarkGfm]}
              components={{

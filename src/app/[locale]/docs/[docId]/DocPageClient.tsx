@@ -8,11 +8,14 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import React, { useEffect, useState, useMemo } from 'react';
 import dynamic from 'next/dynamic';
-import { Loader2, Star, ShieldCheck, Zap, HelpCircle, Award, FileText } from 'lucide-react';
+import { Loader2, Star, ShieldCheck, Zap, HelpCircle, Award, FileText, Edit3, FileSignature, Info } from 'lucide-react';
+import { Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';
 import { Badge } from '@/components/ui/badge';
 import { track } from '@/lib/analytics';
 import { Separator } from '@/components/ui/separator';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion';
+import TrustAndTestimonialsSection from '@/components/landing/TrustAndTestimonialsSection';
 
 const DocumentDetail = dynamic(() => import('@/components/DocumentDetail'), {
   loading: () => (
@@ -144,6 +147,12 @@ export default function DocPageClient({ params: routeParams }: DocPageClientProp
     { icon: Zap, textKey: 'docDetail.benefit2', defaultText: 'Quick & Easy Customization' },
     { icon: Award, textKey: 'docDetail.benefit3', defaultText: 'Instant Download & Secure Sharing' },
   ];
+
+  const features = [
+    { icon: FileText, title: 'Fill your responses and complete your document', desc: 'Guided questions populate every field' },
+    { icon: Edit3, title: 'Personalize with a rich editor', desc: 'Make custom tweaks before finalizing' },
+    { icon: FileSignature, title: 'E-sign documents easily and securely', desc: 'Sign online and send to others' },
+  ];
   
   // Placeholder for competitive pricing data
   const competitorPrice = 200; 
@@ -190,6 +199,11 @@ export default function DocPageClient({ params: routeParams }: DocPageClientProp
             <Button size="lg" className="w-full sm:w-auto text-base px-8 py-3" onClick={handleStartWizard} disabled={!isHydrated}>
               {t('docDetail.startForFree')}
             </Button>
+            <div className="mt-4">
+              <Link href={`/${currentLocale}#workflow-start`} className="text-sm text-primary underline">
+                {t('Browse Templates', {defaultValue: 'Browse Templates'})}
+              </Link>
+            </div>
         </div>
         
         <Separator className="my-8 md:my-12" />
@@ -199,8 +213,14 @@ export default function DocPageClient({ params: routeParams }: DocPageClientProp
             {/* Document Preview Section - takes more space on larger screens */}
             <section className="md:col-span-3 bg-card shadow-xl rounded-xl p-2 md:p-4 lg:p-6 border border-border">
                 <div className="text-center mb-4">
-                    <h2 className="text-xl md:text-2xl font-semibold text-foreground mb-1">
+                    <h2 className="text-xl md:text-2xl font-semibold text-foreground mb-1 flex items-center justify-center gap-1">
                         {t('docDetail.previewTitle', {defaultValue: 'Document Preview'})}
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Info className="h-4 w-4 text-muted-foreground cursor-help" />
+                          </TooltipTrigger>
+                          <TooltipContent side="top" className="text-xs">This shows a sample layout of your completed form.</TooltipContent>
+                        </Tooltip>
                     </h2>
                     <p className="text-xs text-muted-foreground">
                         {t('docDetail.previewSubtitle', {defaultValue: "This is how your document will generally look. Specific clauses and details will be customized by your answers."})}
@@ -264,6 +284,49 @@ export default function DocPageClient({ params: routeParams }: DocPageClientProp
                     </CardContent>
                  </Card>
             </aside>
+        </div>
+
+        {/* Feature Highlights */}
+        <section className="mt-16 grid md:grid-cols-3 gap-6">
+          {features.map((f, i) => (
+            <div key={i} className="text-center p-4 bg-card border border-border rounded-lg shadow-md">
+              <f.icon className="h-6 w-6 mx-auto mb-2 text-primary" />
+              <p className="text-sm font-medium text-card-foreground mb-1">{f.title}</p>
+              <p className="text-xs text-muted-foreground">{f.desc}</p>
+            </div>
+          ))}
+        </section>
+
+        {/* How-to Guide & FAQ */}
+        <section className="mt-16 max-w-3xl mx-auto space-y-6">
+          <h2 className="text-2xl font-semibold text-center text-foreground">How to Use This Template</h2>
+          <ol className="list-decimal list-inside space-y-2 text-sm text-muted-foreground">
+            <li>Answer each question in the guided form.</li>
+            <li>Make any tweaks using the built-in editor.</li>
+            <li>E-sign and download your completed document.</li>
+          </ol>
+
+          <div>
+            <h3 className="text-xl font-semibold mb-2 text-foreground">Frequently Asked Questions</h3>
+            <Accordion type="single" collapsible className="w-full">
+              <AccordionItem value="q1">
+                <AccordionTrigger>Do I need a notary for this document?</AccordionTrigger>
+                <AccordionContent>Requirements vary by state, but notarization can add extra authenticity.</AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="q2">
+                <AccordionTrigger>Can I use it for any vehicle type?</AccordionTrigger>
+                <AccordionContent>Yes, simply describe the vehicle accurately in the form.</AccordionContent>
+              </AccordionItem>
+            </Accordion>
+            <div className="mt-4 text-center">
+              <Link href={`/${currentLocale}/faq`} className="text-sm text-primary underline">More questions? Visit our FAQ</Link>
+            </div>
+          </div>
+        </section>
+
+        {/* Testimonials */}
+        <div className="mt-16">
+          <TrustAndTestimonialsSection />
         </div>
 
 
