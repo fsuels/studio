@@ -139,9 +139,9 @@ export const Footer = React.memo(function Footer() {
           {/* Footer sections */}
           {footerLinkSections.map((section) => (
               <div key={section.sectionTitleKey}>
-                <h4 className="font-semibold text-foreground mb-3">
+                <h3 className="font-semibold text-foreground mb-3">
                   {t(section.sectionTitleKey, { defaultValue: section.defaultSectionTitle })}
-                </h4>
+                </h3>
                 <ul className="space-y-2 text-sm">
                   {section.links.map((link) => (
                     <li key={link.path}>
@@ -156,9 +156,9 @@ export const Footer = React.memo(function Footer() {
 
           {/* Community & subscription */}
           <div>
-            <h4 className="font-semibold text-foreground mb-3">
+            <h3 className="font-semibold text-foreground mb-3">
               {t('footer.sectionCommunityTitle', {defaultValue: "Community & Contact"})}
-            </h4>
+            </h3>
             <div className="flex space-x-3 mb-4">
               <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer"
                  aria-label={t('footer.socialLinkedInAria', {defaultValue: "LinkedIn Page"})}
@@ -182,9 +182,9 @@ export const Footer = React.memo(function Footer() {
               </p>
             </div>
 
-            <h4 className="font-semibold text-foreground mb-3">
+            <h3 className="font-semibold text-foreground mb-3">
               {t('footer.getCreditsTitle', {defaultValue: "Get 3 Free Credits"})}
-            </h4>
+            </h3>
             <form onSubmit={handleSubscribe} className="flex gap-2 items-center">
               <div className="relative flex-grow">
                 <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
