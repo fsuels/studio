@@ -68,8 +68,17 @@ const MemoizedDocumentCard = React.memo(function DocumentCard({ doc, onSelect, d
   return (
     <Card
       onClick={onSelect}
+      tabIndex={disabled ? -1 : 0}
+      role="button"
+      aria-label={t(doc.name, doc.name)}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          onSelect();
+        }
+      }}
       className={cn(
-        "document-card shadow hover:shadow-lg cursor-pointer transition bg-card border border-border flex flex-col active:scale-95 active:transition-transform active:duration-100",
+        'document-card shadow hover:shadow-lg cursor-pointer transition bg-card border border-border flex flex-col active:scale-95 active:transition-transform active:duration-100',
         disabled ? 'pointer-events-none opacity-50' : ''
       )}
     >
