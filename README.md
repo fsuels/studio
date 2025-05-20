@@ -11,7 +11,7 @@ production mode:
 
 ```bash
 npm run build
-npm start
+npm start   # automatically sets NODE_ENV=production
 ```
 
 Running Lighthouse against the production build will show minified JavaScript
@@ -48,8 +48,8 @@ increases bundle size and CPU usage. Build and serve the app in production mode
 before running Lighthouse:
 
 ```bash
-NODE_ENV=production npm run build
-NODE_ENV=production npm start
+npm run build
+npm start
 ```
 
 ## Reducing Main-Thread Work
