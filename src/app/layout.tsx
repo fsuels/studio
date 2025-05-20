@@ -46,6 +46,20 @@ export default function RootLayout({
           name="viewport"
           content="width=device-width, initial-scale=1, maximum-scale=1"
         />
+        {/* Defer the layout.css file to reduce render-blocking */}
+        <Script id="defer-layout-css" strategy="beforeInteractive">
+          {`
+            const link = document.querySelector('link[href*="layout.css"]');
+            if (link) {
+              link.rel = 'preload';
+              link.as = 'style';
+              link.addEventListener('load', () => {
+                link.rel = 'stylesheet';
+                link.as = '';
+              });
+            }
+          `}
+        </Script>
         <link
           rel="preconnect"
           href="https://maps.googleapis.com"
