@@ -2,15 +2,18 @@
 // This is now a Server Component
 
 import StartWizardPageClient from './StartWizardPageClient';
-import { documentLibrary } from '@/lib/document-library';
+import { documentLibrary, allDocuments } from '@/lib/document-library';
 import { localizations } from '@/lib/localizations'; // Assuming this defines your supported locales e.g. [{id: 'en'}, {id: 'es'}]
 import type { LegalDocument } from '@/lib/document-library';
 
 // generateStaticParams is crucial for static export of dynamic routes
 export async function generateStaticParams() {
   console.log('[generateStaticParams /docs/[docId]/start] Starting generation...');
-  if (!documentLibrary || documentLibrary.length === 0) {
-    console.warn('[generateStaticParams /docs/[docId]/start] documentLibrary is empty or undefined. No paths will be generated.');
+  const docs = documentLibrary && documentLibrary.length > 0
+    ? documentLibrary
+    : allDocuments;
+  if (docs.length === 0) {
+    console.warn('[generateStaticParams /docs/[docId]/start] No documents available to generate paths.');
     return [];
   }
   if (!localizations || localizations.length === 0) {
@@ -21,7 +24,7 @@ export async function generateStaticParams() {
     const defaultLocales = ['en', 'es']; 
     const params = [];
     for (const locale of defaultLocales) {
-      for (const doc of documentLibrary) {
+      for (const doc of docs) {
          // Ensure doc and doc.id are valid and it's not a general inquiry type if that shouldn't have a start page
         if (doc && doc.id && doc.id !== 'general-inquiry' && doc.schema) { // Added check for doc.schema
             params!.push({ locale: locale, docId: doc.id });
@@ -45,7 +48,7 @@ export async function generateStaticParams() {
         console.warn(`[generateStaticParams /docs/[docId]/start] Invalid locale object encountered:`, localeObj);
         continue;
     }
-    for (const doc of documentLibrary) {
+    for (const doc of docs) {
       if (!doc.id) {
         console.warn(`[generateStaticParams /docs/[docId]/start] Document with missing ID encountered:`, doc);
         continue;

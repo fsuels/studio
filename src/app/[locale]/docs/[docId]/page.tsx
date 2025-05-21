@@ -2,14 +2,17 @@
 // This is a Server Component that defines static paths and renders the client component.
 
 import DocPageClient from './DocPageClient';
-import { documentLibrary } from '@/lib/document-library';
+import { documentLibrary, allDocuments } from '@/lib/document-library';
 import { localizations } from '@/lib/localizations'; // Ensure this path is correct
 
 // generateStaticParams is crucial for static export of dynamic routes
 export async function generateStaticParams() {
   console.log('[generateStaticParams /docs] Starting generation...');
-  if (!documentLibrary || documentLibrary.length === 0) {
-    console.warn('[generateStaticParams /docs] documentLibrary is empty or undefined. No paths will be generated.');
+  const docs = documentLibrary && documentLibrary.length > 0
+    ? documentLibrary
+    : allDocuments;
+  if (docs.length === 0) {
+    console.warn('[generateStaticParams /docs] No documents available to generate paths.');
     return [];
   }
   if (!localizations || localizations.length === 0) {
@@ -19,7 +22,7 @@ export async function generateStaticParams() {
 
   const params = [];
   for (const locale of localizations) {
-    for (const doc of documentLibrary) {
+    for (const doc of docs) {
       // Ensure doc and doc.id are valid before pushing
       if (doc && doc.id && doc.id !== 'general-inquiry') { // Exclude general inquiry or other non-detail pages
         params!.push({ locale, docId: doc.id });
