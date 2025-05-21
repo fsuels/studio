@@ -2,7 +2,7 @@
 'use client';
 
 import { notFound, useRouter } from 'next/navigation';
-import { documentLibrary, type LegalDocument } from '@/lib/document-library';
+import { documentLibrary, allDocuments, type LegalDocument } from '@/lib/document-library';
 import { useTranslation } from 'react-i18next';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
@@ -60,7 +60,8 @@ export default function DocPageClient({ params: routeParams }: DocPageClientProp
 
   const docConfig = useMemo(() => {
     if (!docId) return undefined;
-    return documentLibrary.find(d => d.id === docId);
+    return documentLibrary.find(d => d.id === docId) ||
+           allDocuments.find(d => d.id === docId);
   }, [docId]);
 
   if (!docConfig) {
