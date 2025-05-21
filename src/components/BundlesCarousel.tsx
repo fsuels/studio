@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useEffect, useState } from 'react'
+import Image from 'next/image'
 import Link from 'next/link'
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -54,8 +55,14 @@ export default function BundlesCarousel({ max = 6 }: Props) {
               className="card-hover min-w-[260px] w-64 shrink-0 border border-border shadow-sm"
             >
               {b.imageUrl && (
-                // eslint-disable-next-line @next/next/no-img-element
-                (<img src={b.imageUrl} alt={b.name} className="h-32 w-full object-cover rounded-t" data-ai-hint="legal document bundle" />)
+                <Image
+                  src={b.imageUrl}
+                  alt={b.name}
+                  width={256}
+                  height={128}
+                  className="h-32 w-full object-cover rounded-t"
+                  data-ai-hint="legal document bundle"
+                />
               )}
 
               <CardHeader className="pb-1">

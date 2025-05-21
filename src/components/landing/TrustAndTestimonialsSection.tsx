@@ -1,8 +1,8 @@
 // src/components/landing/TrustAndTestimonialsSection.tsx
 'use client'
 
-import React, { useEffect, useState, useRef, useCallback } from 'react'; 
-import { useTranslation } from 'react-i18next'; 
+import React, { useEffect, useState, useRef, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { ChevronLeft, ChevronRight, FileText, Lock, ShieldCheck, Star } from 'lucide-react'; 
 import Image from 'next/image'; 
@@ -84,7 +84,7 @@ const MemoizedTestimonialCard = React.memo(function TestimonialCard({ testimonia
 });
 
 const TrustAndTestimonialsSection = React.memo(function TrustAndTestimonialsSection() {
-  const { t, i18n } = useTranslation("common");
+  const { t, i18n, ready } = useTranslation("common");
   const [docCount, setDocCount] = useState(4200);
   const [isHydrated, setIsHydrated] = useState(false);
   const [testimonialsData, setTestimonialsData] = useState<Testimonial[]>([]);
@@ -105,7 +105,7 @@ const TrustAndTestimonialsSection = React.memo(function TrustAndTestimonialsSect
   }, []);
 
   useEffect(() => {
-    if (isHydrated) {
+    if (isHydrated && ready) {
       const rawTestimonials = t('home.testimonials', { returnObjects: true, ns: 'common' }) as any;
       if (typeof rawTestimonials === 'object' && rawTestimonials !== null && !Array.isArray(rawTestimonials)) {
         const loadedTestimonials: Testimonial[] = [];
@@ -134,7 +134,7 @@ const TrustAndTestimonialsSection = React.memo(function TrustAndTestimonialsSect
         );
       }
     }
-  }, [isHydrated, t, i18n.language]);
+  }, [isHydrated, ready, i18n.language]);
 
   const placeholderText = '...';
   const formattedCount = isHydrated ? docCount.toLocaleString(i18n.language) : placeholderText;

@@ -4,13 +4,14 @@
 
 import './globals.css';
 import { Inter, Merriweather } from 'next/font/google';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { I18nextProvider } from 'react-i18next';
 import i18n from '@/lib/i18n'; // Changed this line
 import { DefaultSeo } from 'next-seo';
 import SEO from '../../next-seo.config.js';
 import Script from 'next/script';
 import { AuthProvider } from '@/hooks/useAuth';
+import { mark, measure } from '@/utils/performance';
 
 // Dev-only helper for catching missing translation keys
 if (
@@ -38,16 +39,58 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const googleMapsApiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
+  if (typeof window !== 'undefined') {
+    mark('root-layout-start');
+  }
+
+  useEffect(() => {
+    mark('root-layout-end');
+    measure('root-layout', 'root-layout-start', 'root-layout-end');
+  }, []);
 
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <meta
-          name="viewport"
-          content="width=device-width, initial-scale=1, maximum-scale=1"
-        />
-        <link rel="preconnect" href="https://maps.googleapis.com" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        {/* Preload and asynchronously apply the generated layout.css file */}
+        <Script id="defer-layout-css" strategy="beforeInteractive">
+          {`
+            const setup = () => {
+              const link = document.querySelector('link[href*="layout.css"]');
+              if (!link || link.dataset.processed) return;
+              link.dataset.processed = 'true';
+
+              const href = link.href;
+
+              // Preload the stylesheet so it downloads with high priority
+              const preload = document.createElement('link');
+              preload.rel = 'preload';
+              preload.as = 'style';
+              preload.href = href;
+              preload.fetchPriority = 'high';
+              document.head.appendChild(preload);
+
+              // Apply the stylesheet without blocking rendering
+              const style = document.createElement('link');
+              style.rel = 'stylesheet';
+              style.href = href;
+              style.media = 'print';
+              style.onload = () => {
+                style.media = 'all';
+              };
+              document.head.appendChild(style);
+
+              // Remove the original blocking link
+              link.remove();
+            };
+
+            if (document.readyState === 'loading') {
+              document.addEventListener('DOMContentLoaded', setup);
+            } else {
+              setup();
+            }
+          `}
+        </Script>
         <link
           rel="preload"
           href="/images/hero-placeholder.png"
@@ -76,22 +119,10 @@ export default function RootLayout({
 
             {children}
 
-            {/* 4) Chat widget */}
-            <Script
-              defer
-              src="https://cdn.intercom.io/widget.js"
-              strategy="lazyOnload"
-            />
+            {/* Chat widget will load on user interaction. See Footer component. */}
           </AuthProvider>
         </I18nextProvider>
 
-        {/* Load Google Maps API on the client */}
-        {googleMapsApiKey && (
-          <Script
-            src={`https://maps.googleapis.com/maps/api/js?key=${googleMapsApiKey}&libraries=places&loading=async`}
-            strategy="afterInteractive"
-          />
-        )}
       </body>
     </html>
   );
