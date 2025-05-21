@@ -65,7 +65,7 @@ const MemoizedTestimonialCard = React.memo(function TestimonialCard({ testimonia
   return (
     <div
       className="bg-card p-6 rounded-2xl shadow-lg w-72 md:w-80 text-left shrink-0 flex flex-col border border-border transition-shadow hover:shadow-xl h-full"
-    >
+    > 
       {isHydrated || testimonial ? (
         <>
           <Image
@@ -74,7 +74,7 @@ const MemoizedTestimonialCard = React.memo(function TestimonialCard({ testimonia
             width={96}
             height={96}
             loading="lazy"
-            data-ai-hint="person portrait professional" // Strong hint for face images
+            data-ai-hint="person portrait" 
             className="rounded-full mb-4 border-2 border-primary/30 mx-auto shrink-0"
           />
           <div className="flex justify-center mb-3">
