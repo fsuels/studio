@@ -4,8 +4,8 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
-import { ChevronLeft, ChevronRight, FileText, Lock, ShieldCheck, Star } from 'lucide-react'; 
-import Image from 'next/image'; 
+import { ChevronLeft, ChevronRight, FileText, Lock, ShieldCheck, Star } from 'lucide-react';
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 import Autoplay from 'embla-carousel-autoplay';
 import useEmblaCarousel from 'embla-carousel-react';
@@ -16,12 +16,34 @@ interface Testimonial {
   quote: string;
   name: string;
   title: string;
-  outcome?: string; 
-  avatarSeed?: number; // For picsum photos
+  outcome?: string;
+  avatarSeed: number; // Ensure avatarSeed is always present and unique
 }
 
+// More varied placeholder data
+const placeholderNames = ["Alex P.", "Jamie S.", "Chris L.", "Morgan B.", "Taylor K."];
+const placeholderTitles = ["Startup Founder", "Freelance Designer", "E-commerce Seller", "Consultant", "Real Estate Agent"];
+const placeholderQuotes = [
+  "This platform is a game-changer for legal documents!",
+  "Incredibly easy to use and very professional results.",
+  "Saved me so much time and potential legal fees. Highly recommend!",
+  "The best DIY legal tool I've come across. Five stars!",
+  "Finally, a service that makes legal paperwork straightforward."
+];
+const placeholderOutcomes = [
+  "Launched my business with confidence.",
+  "Secured all my client contracts.",
+  "Streamlined my sales agreements.",
+  "Protected my intellectual property.",
+  "Finalized my property lease quickly."
+];
+
+
 const MemoizedTestimonialCard = React.memo(function TestimonialCard({ testimonial, index, t, isHydrated, placeholderText }: { testimonial: Testimonial | null; index: number; t: (key: string, fallback?: string | object) => string; isHydrated: boolean; placeholderText: string; }) {
-  const rating = 5; 
+  const rating = 5;
+  // Use a more robust seed for picsum, combining a base with the index and testimonial's own seed
+  const imageSeed = testimonial ? testimonial.avatarSeed : (index * 17 + 30); // Ensure unique seed for placeholders
+
   return (
     <div
       className="bg-card p-6 rounded-2xl shadow-lg w-72 md:w-80 text-left shrink-0 flex flex-col border border-border transition-shadow hover:shadow-xl h-full"
@@ -29,12 +51,12 @@ const MemoizedTestimonialCard = React.memo(function TestimonialCard({ testimonia
       {testimonial ? (
         <>
           <Image
-            src={`https://picsum.photos/seed/${testimonial.avatarSeed || index + 30}/96/96`} 
-            alt={isHydrated ? t(`home.testimonials.t${index + 1}.name`, { defaultValue: 'Testimonial Avatar'}) : 'Loading...'}
-            width={96} 
-            height={96} 
+            src={`https://picsum.photos/seed/${imageSeed}/96/96`}
+            alt={isHydrated ? t(testimonial.name, { defaultValue: 'Testimonial Avatar'}) : 'Loading...'}
+            width={96}
+            height={96}
             loading="lazy"
-            data-ai-hint="person portrait"
+            data-ai-hint="person portrait" // Keep this hint
             className="rounded-full mb-4 border-2 border-primary/30 mx-auto shrink-0"
           />
           <div className="flex justify-center mb-3">
@@ -88,7 +110,7 @@ const TrustAndTestimonialsSection = React.memo(function TrustAndTestimonialsSect
   const [docCount, setDocCount] = useState(4200);
   const [isHydrated, setIsHydrated] = useState(false);
   const [testimonialsData, setTestimonialsData] = useState<Testimonial[]>([]);
-  
+
   const autoplayOptions = { delay: 6000, stopOnInteraction: false, stopOnMouseEnter: true };
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, align: 'start' }, [Autoplay(autoplayOptions)]);
 
@@ -107,46 +129,42 @@ const TrustAndTestimonialsSection = React.memo(function TrustAndTestimonialsSect
   useEffect(() => {
     if (isHydrated && ready) {
       const rawTestimonials = t('home.testimonials', { returnObjects: true, ns: 'common' }) as any;
+      let loadedTestimonials: Testimonial[] = [];
+
       if (typeof rawTestimonials === 'object' && rawTestimonials !== null && !Array.isArray(rawTestimonials) && Object.keys(rawTestimonials).length > 0) {
-        const loadedTestimonials: Testimonial[] = [];
-        // Assuming up to t5 for example, adjust if more needed
-        for (let i = 1; i <= 5; i++) { 
-          if (rawTestimonials[`t${i}`] && typeof rawTestimonials[`t${i}`] === 'object') {
+        for (let i = 1; i <= 5; i++) {
+          if (rawTestimonials[`t${i}`] && typeof rawTestimonials[`t${i}`] === 'object' && rawTestimonials[`t${i}`].name) { // Check if name exists
             loadedTestimonials.push({
-              quote: rawTestimonials[`t${i}`].quote || 'Great service and easy to use!',
-              name: rawTestimonials[`t${i}`].name || `User ${i}`, // Fallback to User i if name isn't translated
-              title: rawTestimonials[`t${i}`].title || `Customer`, // Fallback
+              quote: rawTestimonials[`t${i}`].quote || `Placeholder quote ${i}`,
+              name: rawTestimonials[`t${i}`].name, // Assume name exists
+              title: rawTestimonials[`t${i}`].title || `Placeholder title ${i}`,
               outcome: rawTestimonials[`t${i}`].outcome || undefined,
-              avatarSeed: i, // Use index for unique avatar
+              avatarSeed: rawTestimonials[`t${i}`].avatarSeed || (i + 1) * 100, // Use provided seed or generate unique
             });
           }
         }
-        if (loadedTestimonials.length > 0) {
-          setTestimonialsData(loadedTestimonials);
-        } else {
-           // Fallback if structured translations are present but empty
-           setTestimonialsData(
-            Array.from({ length: 5 }).map((_, i) => ({
-                quote: `This platform saved me time and money. Highly recommended!`,
-                name: `Client ${i+1}`,
-                title: `Small Business Owner`,
-                outcome: `Generated all startup documents quickly.`,
-                avatarSeed: i + 50,
-            }))
-          );
-        }
-      } else {
-        // Fallback if translations are not structured as expected or entirely missing
-        setTestimonialsData(
-            Array.from({ length: 5 }).map((_, i) => ({
-                quote: `The process was straightforward and the documents were professional.`,
-                name: `Satisfied User ${i+1}`,
-                title: `Freelancer`,
-                outcome: `Secured a new contract with ease.`,
-                avatarSeed: i + 100, // Different seed for this fallback
-            }))
-        );
       }
+
+      // If not enough testimonials loaded from translations, fill with varied placeholders
+      if (loadedTestimonials.length < 5) {
+        const numPlaceholdersNeeded = 5 - loadedTestimonials.length;
+        const existingSeeds = new Set(loadedTestimonials.map(t => t.avatarSeed));
+        for (let i = 0; i < numPlaceholdersNeeded; i++) {
+          let seed = (loadedTestimonials.length + i + 1) * 111; // Start with a base seed
+          while(existingSeeds.has(seed)) { // Ensure seed is unique
+            seed += 7;
+          }
+          existingSeeds.add(seed);
+          loadedTestimonials.push({
+            quote: placeholderQuotes[i % placeholderQuotes.length],
+            name: placeholderNames[i % placeholderNames.length],
+            title: placeholderTitles[i % placeholderTitles.length],
+            outcome: placeholderOutcomes[i % placeholderOutcomes.length],
+            avatarSeed: seed,
+          });
+        }
+      }
+      setTestimonialsData(loadedTestimonials.slice(0, 5)); // Ensure only 5 testimonials
     }
   }, [isHydrated, ready, i18n.language, t]);
 
@@ -203,7 +221,7 @@ const TrustAndTestimonialsSection = React.memo(function TrustAndTestimonialsSect
         <div className="overflow-hidden" ref={emblaRef}>
           <div className="flex -ml-4"> {/* Embla-carousel-react uses negative margin for spacing */}
             {(isHydrated && testimonialsData.length > 0 ? testimonialsData : Array(5).fill(null)).map((testimonial, i) => (
-              <div key={testimonial ? testimonial.name + i : i} className={cn("pl-4 flex-[0_0_90%] sm:flex-[0_0_45%] md:flex-[0_0_33.33%]")}> {/* Carousel item sizing */}
+              <div key={testimonial ? testimonial.avatarSeed : `skel-${i}`} className={cn("pl-4 flex-[0_0_90%] sm:flex-[0_0_45%] md:flex-[0_0_33.33%]")}> {/* Carousel item sizing */}
                 <MemoizedTestimonialCard
                   testimonial={testimonial}
                   index={i}
