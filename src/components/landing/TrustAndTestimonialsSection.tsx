@@ -4,8 +4,8 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
-import { ChevronLeft, ChevronRight, FileText, Lock, ShieldCheck, Star } from 'lucide-react'; 
-import Image from 'next/image'; 
+import { ChevronLeft, ChevronRight, FileText, Lock, ShieldCheck, Star } from 'lucide-react';
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 import Autoplay from 'embla-carousel-autoplay';
 import useEmblaCarousel from 'embla-carousel-react';
@@ -13,28 +13,68 @@ import { cn } from '@/lib/utils';
 
 
 interface Testimonial {
-  quote: string;
-  name: string;
-  title: string;
-  outcome?: string; 
-  avatarSeed?: number; // For picsum photos
+  quoteKey: string; // i18n key for the quote
+  nameKey: string; // i18n key for the name
+  titleKey: string; // i18n key for the title
+  outcomeKey?: string; // i18n key for the outcome
+  avatarSeed: number; // For unique placeholder images
+  defaultQuote: string;
+  defaultName: string;
+  defaultTitle: string;
+  defaultOutcome?: string;
 }
 
-const MemoizedTestimonialCard = React.memo(function TestimonialCard({ testimonial, index, t, isHydrated, placeholderText }: { testimonial: Testimonial | null; index: number; t: (key: string, fallback?: string | object) => string; isHydrated: boolean; placeholderText: string; }) {
-  const rating = 5; 
+// More varied and credible placeholder data arrays
+const placeholderQuotes = [
+  "This platform saved me so much time and money. The documents were professional and easy to customize!",
+  "I was able to create a legally sound contract in minutes. Highly recommend for any small business owner.",
+  "The interface is incredibly user-friendly, and the AI suggestions were surprisingly helpful. Great service!",
+  "Finally, a way to get legal documents without the hefty lawyer fees. The quality is top-notch.",
+  "As a landlord, getting lease agreements done quickly and correctly is crucial. This service is a lifesaver."
+];
+const placeholderNames = ["Alex P.", "Maria G.", "Sam K.", "Jessica L.", "David R."];
+const placeholderTitles = ["Entrepreneur", "Small Business Owner", "Freelancer", "Landlord", "Startup Founder"];
+const placeholderOutcomes = [
+  "Secured a major contract!",
+  "Launched my business smoothly!",
+  "Protected my IP easily!",
+  "Resolved a tenant issue fast!",
+  "Simplified my estate planning!"
+];
+
+
+const MemoizedTestimonialCard = React.memo(function TestimonialCard({ testimonial, index, t, isHydrated }: { testimonial: Testimonial | null; index: number; t: (key: string, fallback?: string | object) => string; isHydrated: boolean; }) {
+  const rating = 5;
+  const currentTestimonial = testimonial || { // Fallback structure if testimonial is null
+    quoteKey: `fallback.quote.${index}`,
+    nameKey: `fallback.name.${index}`,
+    titleKey: `fallback.title.${index}`,
+    outcomeKey: `fallback.outcome.${index}`,
+    avatarSeed: index + 50, // Ensure unique seed
+    defaultQuote: placeholderQuotes[index % placeholderQuotes.length],
+    defaultName: placeholderNames[index % placeholderNames.length],
+    defaultTitle: placeholderTitles[index % placeholderTitles.length],
+    defaultOutcome: placeholderOutcomes[index % placeholderOutcomes.length]
+  };
+
+  const quoteText = isHydrated ? t(currentTestimonial.quoteKey, { defaultValue: currentTestimonial.defaultQuote }) : currentTestimonial.defaultQuote;
+  const nameText = isHydrated ? t(currentTestimonial.nameKey, { defaultValue: currentTestimonial.defaultName }) : currentTestimonial.defaultName;
+  const titleText = isHydrated ? t(currentTestimonial.titleKey, { defaultValue: currentTestimonial.defaultTitle }) : currentTestimonial.defaultTitle;
+  const outcomeText = currentTestimonial.outcomeKey && currentTestimonial.defaultOutcome ? (isHydrated ? t(currentTestimonial.outcomeKey, { defaultValue: currentTestimonial.defaultOutcome }) : currentTestimonial.defaultOutcome) : undefined;
+
   return (
     <div
       className="bg-card p-6 rounded-2xl shadow-lg w-72 md:w-80 text-left shrink-0 flex flex-col border border-border transition-shadow hover:shadow-xl h-full"
     >
-      {testimonial ? (
+      {isHydrated || testimonial ? (
         <>
           <Image
-            src={`https://picsum.photos/seed/${testimonial.avatarSeed || index + 30}/96/96`} 
-            alt={isHydrated ? t(`home.testimonials.t${index + 1}.name`, { defaultValue: 'Testimonial Avatar'}) : 'Loading...'}
-            width={96} 
-            height={96} 
+            src={`https://placehold.co/96x96.png`}
+            alt={nameText}
+            width={96}
+            height={96}
             loading="lazy"
-            data-ai-hint="person portrait professional"
+            data-ai-hint="person portrait professional" // Strong hint for face images
             className="rounded-full mb-4 border-2 border-primary/30 mx-auto shrink-0"
           />
           <div className="flex justify-center mb-3">
@@ -46,19 +86,19 @@ const MemoizedTestimonialCard = React.memo(function TestimonialCard({ testimonia
             ))}
           </div>
           <p className="italic text-foreground/90 mb-4 leading-relaxed text-sm flex-grow">
-            "{isHydrated ? testimonial.quote : placeholderText}"
+            "{quoteText}"
           </p>
-          {testimonial.outcome && (
+          {outcomeText && (
             <p className="text-xs text-primary font-semibold mb-3 text-center p-1 bg-primary/10 rounded">
-              {isHydrated ? testimonial.outcome : placeholderText}
+              {outcomeText}
             </p>
           )}
           <div className="mt-auto text-center pt-3 border-t border-border/50">
             <p className="font-semibold text-sm text-foreground">
-              {isHydrated ? testimonial.name : placeholderText}
+              {nameText}
             </p>
             <p className="text-xs text-muted-foreground">
-              {isHydrated ? testimonial.title : placeholderText}
+              {titleText}
             </p>
           </div>
         </>
@@ -88,7 +128,7 @@ const TrustAndTestimonialsSection = React.memo(function TrustAndTestimonialsSect
   const [docCount, setDocCount] = useState(4200);
   const [isHydrated, setIsHydrated] = useState(false);
   const [testimonialsData, setTestimonialsData] = useState<Testimonial[]>([]);
-  
+
   const autoplayOptions = { delay: 6000, stopOnInteraction: false, stopOnMouseEnter: true };
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, align: 'start' }, [Autoplay(autoplayOptions)]);
 
@@ -107,34 +147,55 @@ const TrustAndTestimonialsSection = React.memo(function TrustAndTestimonialsSect
   useEffect(() => {
     if (isHydrated && ready) {
       const rawTestimonials = t('home.testimonials', { returnObjects: true, ns: 'common' }) as any;
+      const loadedTestimonials: Testimonial[] = [];
       if (typeof rawTestimonials === 'object' && rawTestimonials !== null && !Array.isArray(rawTestimonials)) {
-        const loadedTestimonials: Testimonial[] = [];
-        for (let i = 1; i <= 25; i++) { 
+        for (let i = 1; i <= 5; i++) { // Assuming up to 5 testimonials (t1 to t5)
           if (rawTestimonials[`t${i}`] && typeof rawTestimonials[`t${i}`] === 'object') {
             loadedTestimonials.push({
-              quote: rawTestimonials[`t${i}`].quote || 'Loading quote...',
-              name: rawTestimonials[`t${i}`].name || 'Loading name...',
-              title: rawTestimonials[`t${i}`].title || 'Loading title...',
-              outcome: rawTestimonials[`t${i}`].outcome || undefined,
-              avatarSeed: i, // Use index for unique avatar
+              quoteKey: `home.testimonials.t${i}.quote`,
+              nameKey: `home.testimonials.t${i}.name`,
+              titleKey: `home.testimonials.t${i}.title`,
+              outcomeKey: rawTestimonials[`t${i}`].outcome ? `home.testimonials.t${i}.outcome` : undefined,
+              avatarSeed: i,
+              defaultQuote: rawTestimonials[`t${i}`].quote || placeholderQuotes[(i-1) % placeholderQuotes.length],
+              defaultName: rawTestimonials[`t${i}`].name || placeholderNames[(i-1) % placeholderNames.length],
+              defaultTitle: rawTestimonials[`t${i}`].title || placeholderTitles[(i-1) % placeholderTitles.length],
+              defaultOutcome: rawTestimonials[`t${i}`].outcome || (rawTestimonials[`t${i}`].outcome !== undefined ? placeholderOutcomes[(i-1) % placeholderOutcomes.length] : undefined),
+            });
+          } else {
+             // Fill with varied placeholders if specific translation is missing
+            loadedTestimonials.push({
+              quoteKey: `fallback.quote.${i}`,
+              nameKey: `fallback.name.${i}`,
+              titleKey: `fallback.title.${i}`,
+              outcomeKey: `fallback.outcome.${i}`,
+              avatarSeed: i + 50, // Different seed for fallback
+              defaultQuote: placeholderQuotes[(i-1) % placeholderQuotes.length],
+              defaultName: placeholderNames[(i-1) % placeholderNames.length],
+              defaultTitle: placeholderTitles[(i-1) % placeholderTitles.length],
+              defaultOutcome: placeholderOutcomes[(i-1) % placeholderOutcomes.length],
             });
           }
         }
-        setTestimonialsData(loadedTestimonials);
-      } else {
-        // Fallback if translations are not structured as expected
-        setTestimonialsData(
-            Array.from({ length: 5 }).map((_, i) => ({
-                quote: `Placeholder quote ${i + 1}`,
-                name: `User ${i+1}`,
-                title: `Role ${i+1}`,
-                outcome: `Achieved great results ${i+1}`,
-                avatarSeed: i + 50, // Different seed for fallback
-            }))
-        );
       }
+      // Ensure we always have 5 testimonials for display, even if translations are incomplete
+      while (loadedTestimonials.length < 5) {
+        const i = loadedTestimonials.length + 1;
+        loadedTestimonials.push({
+            quoteKey: `fallback.quote.${i}`,
+            nameKey: `fallback.name.${i}`,
+            titleKey: `fallback.title.${i}`,
+            outcomeKey: `fallback.outcome.${i}`,
+            avatarSeed: i + 100, // Yet another seed range
+            defaultQuote: placeholderQuotes[(i-1) % placeholderQuotes.length],
+            defaultName: placeholderNames[(i-1) % placeholderNames.length],
+            defaultTitle: placeholderTitles[(i-1) % placeholderTitles.length],
+            defaultOutcome: placeholderOutcomes[(i-1) % placeholderOutcomes.length],
+        });
+      }
+      setTestimonialsData(loadedTestimonials.slice(0, 5)); // Ensure exactly 5
     }
-  }, [isHydrated, ready, i18n.language]);
+  }, [isHydrated, ready, i18n.language, t]);
 
   const placeholderText = '...';
   const formattedCount = isHydrated ? docCount.toLocaleString(i18n.language) : placeholderText;
@@ -188,14 +249,13 @@ const TrustAndTestimonialsSection = React.memo(function TrustAndTestimonialsSect
 
         <div className="overflow-hidden" ref={emblaRef}>
           <div className="flex -ml-4"> {/* Embla-carousel-react uses negative margin for spacing */}
-            {(isHydrated && testimonialsData.length > 0 ? testimonialsData : Array(5).fill(null)).map((testimonial, i) => (
-              <div key={testimonial ? testimonial.name + i : i} className={cn("pl-4 flex-[0_0_90%] sm:flex-[0_0_45%] md:flex-[0_0_33.33%]")}> {/* Carousel item sizing */}
+            {(testimonialsData.length > 0 ? testimonialsData : Array(5).fill(null)).map((testimonial, i) => (
+              <div key={testimonial ? `${testimonial.nameKey}-${i}` : `placeholder-${i}`} className={cn("pl-4 flex-[0_0_90%] sm:flex-[0_0_45%] md:flex-[0_0_33.33%]")}> {/* Carousel item sizing */}
                 <MemoizedTestimonialCard
                   testimonial={testimonial}
                   index={i}
                   t={t}
                   isHydrated={isHydrated}
-                  placeholderText={placeholderText}
                 />
               </div>
             ))}
