@@ -1,4 +1,4 @@
-import { db } from '@/lib/firebase';
+import { getDb } from '@/lib/firebase';
 import {
   collection,
   getDocs,
@@ -21,6 +21,7 @@ export async function getUserDocuments(
   userId: string,
   max = 20
 ): Promise<DashboardDocument[]> {
+  const db = await getDb();
   const col = collection(db, 'users', userId, 'documents');
   const q = query(col, orderBy('createdAt', 'desc'), limit(max));
   const snap = await getDocs(q);
@@ -50,6 +51,7 @@ export async function getUserPayments(
   userId: string,
   max = 20
 ): Promise<DashboardPayment[]> {
+  const db = await getDb();
   const col = collection(db, 'users', userId, 'payments');
   const q = query(col, orderBy('date', 'desc'), limit(max));
   const snap = await getDocs(q);

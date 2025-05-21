@@ -8,6 +8,7 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
+  swcMinify: true,
 
   images: {
     unoptimized: true, // Disable Image Optimization for static export
