@@ -7,9 +7,10 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion';
 import { Input } from '@/components/ui/input'; // For potential future use
 import { Progress } from '@/components/ui/progress';
+import { Badge } from '@/components/ui/badge'; // Added Badge import
 import {
   UploadCloud, ShieldCheck, CheckCircle, Zap, Users, Home, Briefcase,
-  FileText, Lock, Award, MessageSquare, ChevronRight, Star, Mail, Clock, HelpCircle, LifeBuoy, Link as LinkIcon, Edit3 // Added Edit3 here
+  FileText, Lock, Award, MessageSquare, ChevronRight, Star, Mail, Clock, HelpCircle, LifeBuoy, Link as LinkIcon, Edit3
 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -426,3 +427,4 @@ const PlayIcon = (props: React.SVGProps<SVGSVGElement>) => (
     <path d="M6 19V5l14 7-14 7z" />
   </svg>
 );
+
