@@ -363,6 +363,7 @@ const Header = React.memo(function Header() {
               { href: '/blog', labelKey: 'nav.blog', defaultLabel: 'Blog' },
               { href: '/faq', labelKey: 'nav.faq', defaultLabel: 'FAQ' },
               { href: '/support', labelKey: 'nav.support', defaultLabel: 'Support' },
+              { href: '/signwell', labelKey: 'nav.sign', defaultLabel: 'Sign' },
             ].map(link => (
               <Button
                 key={link.href}

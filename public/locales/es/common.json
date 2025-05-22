@@ -11,7 +11,9 @@
     "noDocumentsInCategory": "Aún no hay documentos en esta categoría.",
     "seeMoreDocuments": "Ver todo en {{categoryName}}...",
     "noDocumentsAvailable": "No hay documentos disponibles para las categorías seleccionadas en este momento.",
-    "noCategoriesAvailable": "No hay categorías de documentos disponibles."
+    "noCategoriesAvailable": "No hay categorías de documentos disponibles.",
+    "sign": "Firmar",
+    "esign": "eFirmar"
   },
   "pricing": {
     "title": "Precios Simples y Transparentes",
@@ -290,6 +292,7 @@
   "pdfPreview.signButton": "Firmar Documento",
   "pdfPreview.signingButton": "Firmando...",
   "pdfPreview.signedButton": "Documento Firmado",
+  "pdfPreview.openSigningLink": "Abrir enlace de firma",
   "shareDownloadStep.stepTitle": "Paso 4: Descargar y Compartir",
   "shareDownloadStep.disabledDescription": "Por favor, completa los pasos anteriores para habilitar las opciones de descarga y compartir.",
   "shareDownloadStep.description": "¡Tu documento está listo! Puedes descargarlo o compartirlo de forma segura.",

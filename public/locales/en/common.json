@@ -11,7 +11,9 @@
     "noDocumentsInCategory": "No documents in this category yet.",
     "seeMoreDocuments": "See all in {{categoryName}}...",
     "noDocumentsAvailable": "No documents available for the selected categories at this time.",
-    "noCategoriesAvailable": "No document categories available."
+    "noCategoriesAvailable": "No document categories available.",
+    "sign": "Sign",
+    "esign": "eSign"
   },
   "pricing": {
     "title": "Simple, Transparent Pricing",
@@ -291,6 +293,7 @@
   "pdfPreview.signButton": "Sign Document",
   "pdfPreview.signingButton": "Signing...",
   "pdfPreview.signedButton": "Document Signed",
+  "pdfPreview.openSigningLink": "Open Signing Link",
   "shareDownloadStep.stepTitle": "Step 4: Download & Share",
   "shareDownloadStep.disabledDescription": "Please complete the previous steps to enable download and share options.",
   "shareDownloadStep.description": "Your document is ready! You can download it or share it securely.",

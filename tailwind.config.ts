@@ -33,6 +33,10 @@ const config: Config = {
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',
+        'brand-blue': '#2563eb',
+        'brand-green': '#22c55e',
+        'brand-slate': '#0f172a',
+        'brand-sky': '#e0f2fe',
 
         electric: {
           50: '#f0f7ff', 100: '#e0efff', 200: '#b1d4ff', 300: '#82b8ff', 400: '#4391ff',
@@ -59,6 +63,9 @@ const config: Config = {
       boxShadow: {
         soft: '0 4px 20px rgba(0,0,0,0.06)',
         glass: '0 8px 32px rgba(0,0,0,0.12)',
+      },
+      maxWidth: {
+        'content': '1240px',
       },
       transitionTimingFunction: {
         soft: 'cubic-bezier(.16,1,.3,1)',
