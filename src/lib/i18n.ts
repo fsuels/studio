@@ -4,23 +4,18 @@ import { initReactI18next } from 'react-i18next';
 import HttpBackend from 'i18next-http-backend';
 import LanguageDetector from 'i18next-browser-languagedetector';
 
-// Check if running in a browser environment
 const isBrowser = typeof window !== 'undefined';
 
-let i18nChain = i18n;
-
-if (isBrowser) {
-  // These plugins are browser-specific
-  i18nChain = i18nChain.use(LanguageDetector);
-  i18nChain = i18nChain.use(initReactI18next);
-}
-
-// HttpBackend can be used on server/client, but configuration might differ.
-// For typical Next.js App Router, it's mainly for client-side loading from /public.
-i18nChain = i18nChain.use(HttpBackend);
-
+// Initialize i18n only once
 if (!i18n.isInitialized) {
-  i18nChain.init({
+  i18n.use(HttpBackend); // HttpBackend is safe for server and client
+
+  if (isBrowser) {
+    // These plugins are browser-specific and should only be used on the client
+    i18n.use(LanguageDetector).use(initReactI18next);
+  }
+
+  i18n.init({
     fallbackLng: 'en',
     debug: process.env.NODE_ENV === 'development',
     supportedLngs: ['en', 'es'],
@@ -31,24 +26,26 @@ if (!i18n.isInitialized) {
       'header',
       'footer',
       'support',
-      'documents',
       'electronic-signature',
-      'documents/promissory-note',
-      'documents/bill-of-sale-vehicle',
+      'documents',
+      // Removed specific document namespaces like 'documents/bill-of-sale-vehicle' for now,
+      // assuming keys within 'documents.json' are structured (e.g., 'bill-of-sale-vehicle.sellerName.label')
     ],
     defaultNS: 'common',
     backend: {
       loadPath: '/locales/{{lng}}/{{ns}}.json', // Path to your translation files in /public
     },
-    // React specific options, only apply if in browser and initReactI18next was used
+    // React specific options, only include if in browser
     ...(isBrowser ? { react: { useSuspense: false } } : {}),
     // Detection options for LanguageDetector, only if in browser
-    detection: isBrowser ? {
-      order: ['querystring', 'cookie', 'localStorage', 'navigator', 'htmlTag', 'path', 'subdomain'],
-      caches: ['localStorage', 'cookie'],
-    } : undefined,
+    detection: isBrowser
+      ? {
+          order: ['querystring', 'cookie', 'localStorage', 'navigator', 'htmlTag', 'path', 'subdomain'],
+          caches: ['localStorage', 'cookie'],
+        }
+      : undefined,
     saveMissing: process.env.NODE_ENV === 'development', // Only in dev
   });
 }
 
-export default i18n; // Export the original i18n instance which has been configured
+export default i18n;
