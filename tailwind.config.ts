@@ -43,7 +43,7 @@ const config: Config = {
           500: '#5c6595', 600: '#474f78', 700: '#343a5b', 800: '#23283d', 900: '#151824',
         },
 
-        // brand palette
+        // brand palette from prompt
         'brand-blue': '#2563eb',
         'brand-green': '#22c55e',
         'brand-slate': '#0f172a',
@@ -51,19 +51,19 @@ const config: Config = {
       },
 
       maxWidth: {
-        content: '1240px',
+        content: '1240px', // from prompt
       },
 
       fontFamily: {
-        sans: ['var(--font-geist-sans)', 'InterVariable', ...fontFamily.sans], // Added Geist Sans variable
+        sans: ['var(--font-geist-sans)', 'InterVariable', ...fontFamily.sans],
         display: ['Poppins', ...fontFamily.sans],
-        mono: ['var(--font-geist-mono)', ...fontFamily.mono], // Added Geist Mono variable
+        mono: ['var(--font-geist-mono)', ...fontFamily.mono],
       },
       
       borderRadius: {
         lg: 'var(--radius)',
-        xl: 'calc(var(--radius) + 4px)', // Adjusted for consistency
-        '2xl': 'calc(var(--radius) + 8px)', // Adjusted for consistency
+        xl: 'calc(var(--radius) + 4px)',
+        '2xl': 'calc(var(--radius) + 8px)',
       },
 
       boxShadow: {
@@ -92,20 +92,20 @@ const config: Config = {
         'accordion-down': "accordion-down 0.2s ease-out",
         'accordion-up': "accordion-up 0.2s ease-out",
       },
-      typography: { // Added typography plugin configuration
+      typography: {
         DEFAULT: {
           css: {
-            maxWidth: 'none', // tighten up the prose width
+            maxWidth: 'none',
             h1: { fontSize: '1.75rem', fontWeight: '700', letterSpacing: '-0.025em' },
             h2: { fontSize: '1.5rem', fontWeight: '600' },
             h3: { fontSize: '1.25rem', fontWeight: '500' },
             table: { width: '100%' },
-            'table th': { borderBottom: '2px solid hsl(var(--border))', padding: '0.75rem' }, // Use HSL for border
-            'table td': { borderBottom: '1px solid hsl(var(--border))', padding: '0.75rem' }, // Use HSL for border
-            'code, kbd, samp': { backgroundColor: 'hsl(var(--muted))' }, // Use HSL for background
-            'p code': { borderBottom: '1px dashed hsl(var(--border))' }, // Use HSL for border
-            'code::before': { content: '""' }, // Remove backticks from inline code
-            'code::after': { content: '""' }, // Remove backticks from inline code
+            'table th': { borderBottom: '2px solid hsl(var(--border))', padding: '0.75rem' },
+            'table td': { borderBottom: '1px solid hsl(var(--border))', padding: '0.75rem' },
+            'code, kbd, samp': { backgroundColor: 'hsl(var(--muted))' },
+            'p code': { borderBottom: '1px dashed hsl(var(--border))' },
+            'code::before': { content: '""' },
+            'code::after': { content: '""' },
             a: {
               color: 'hsl(var(--primary))',
               '&:hover': {
@@ -120,7 +120,7 @@ const config: Config = {
 
   plugins: [
     require('tailwindcss-animate'),
-    require('@tailwindcss/typography'), // Added typography plugin
+    require('@tailwindcss/typography'),
     plugin(({ addVariant }) => {
       addVariant('hocus', ['&:hover', '&:focus-visible'])
     }),

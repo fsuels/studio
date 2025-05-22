@@ -12,7 +12,6 @@ if (!i18n.isInitialized) {
     .init({
       fallbackLng: 'en',
       debug: process.env.NODE_ENV === 'development',
-      // Only allow supported languages and strip region codes like en-US
       supportedLngs: ['en', 'es'],
       load: 'languageOnly',
       interpolation: { escapeValue: false },
@@ -20,10 +19,12 @@ if (!i18n.isInitialized) {
         'common',
         'header',
         'footer',
-        'support', // Added support namespace
+        'support',
+        'documents', // For document field translations
+        'electronic-signature', // For the new eSign landing page
+        // Keep document-specific namespaces if they exist and are used
         'documents/promissory-note',
         'documents/bill-of-sale-vehicle',
-        // etc...
       ],
       defaultNS: 'common',
       backend: {

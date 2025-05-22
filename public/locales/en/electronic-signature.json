@@ -1,0 +1,108 @@
+
+{
+  "pageTitle": "Electronic Signature - Secure & Legally Binding | 123LegalDoc",
+  "pageDescription": "Send and sign documents online with 123LegalDoc, powered by SignWell. Legally compliant, easy to use, and secure.",
+  "hero": {
+    "title": "Send & Sign Legal Docs Online—Powered by SignWell",
+    "subhead": "Upload any contract, add parties, and get legally-binding signatures in minutes—not days.",
+    "ctaPrimary": "Start Signing Free",
+    "ctaSecondary": "Watch 2-min demo",
+    "trustpilot": "4.8/5 rating",
+    "complianceBadge": "ESIGN • UETA compliant"
+  },
+  "quickFacts": {
+    "fact1": "Pay per document—no monthly lock-in",
+    "fact2": "Unlimited signers, multi-device",
+    "fact3": "Bank-level AES-256 encryption"
+  },
+  "uploadCard": {
+    "stepLabel": "Step 1 • Add your document",
+    "dropzoneHint": "Drag & Drop or Click to Browse",
+    "dropzoneAccept": "Accepts PDF, DOCX, ODT",
+    "helpText": "We’ll convert your file for SignWell automatically.",
+    "ctaPrimary": "Add My Doc",
+    "ctaSecondary": "Try sample file",
+    "progressTracker": "Upload → Prepare → Sign"
+  },
+  "howItWorks": {
+    "title": "How Signing Works in 3 Steps",
+    "step1": "Upload contract",
+    "step2": "Add signers & fields",
+    "step3": "Send & track signatures",
+    "auditLogSample": "Sample audit log shows document history, views, and signatures with timestamps."
+  },
+  "securityCompliance": {
+    "title": "Security & Compliance",
+    "item1": "ESIGN & UETA compliant",
+    "item2": "Tamper-proof audit trail",
+    "item3": "SOC 2 Type II data centers",
+    "item4": "Signer ID verification",
+    "cta": "Download security white-paper →"
+  },
+  "useCases": {
+    "title": "Perfect For All Your Legal Agreements",
+    "freelance": {
+      "title": "Freelance Agreements",
+      "desc": "Secure project terms with clients."
+    },
+    "consulting": {
+      "title": "Consulting Contracts",
+      "desc": "Outline scope and payment details."
+    },
+    "realEstate": {
+      "title": "Real Estate Leases",
+      "desc": "Finalize rental agreements easily."
+    },
+    "nda": {
+      "title": "NDA & Confidentiality",
+      "desc": "Protect sensitive information."
+    },
+    "poa": {
+      "title": "Power of Attorney",
+      "desc": "Grant legal authority securely."
+    },
+    "billOfSale": {
+      "title": "Bill of Sale",
+      "desc": "Document asset transfers."
+    },
+    "generateWithAI": "Generate with AI"
+  },
+  "whyUs": {
+    "title": "Why choose 123LegalDoc • SignWell?",
+    "bullet1": "Instant AI doc builder",
+    "bullet2": "Intuitive drag-drop editor",
+    "bullet3": "Compliant in all 50 states",
+    "bullet4": "Attorney-drafted clause library",
+    "testimonial": "This service made signing my lease incredibly simple and fast!"
+  },
+  "pricingPreview": {
+    "intro": "First document free—then $4.99 per completed signature",
+    "cta": "Compare full plans →",
+    "planFree": "Free",
+    "planPayPerDoc": "Pay-Per-Doc",
+    "planVolume": "Volume (>100/mo)",
+    "featureSignatures": "Signatures",
+    "featureAuditTrail": "Audit Trail",
+    "featureStorage": "Secure Storage",
+    "featureSupport": "Support"
+  },
+  "faq": {
+    "title": "Frequently Asked Questions",
+    "q1": "Is my first document really free?",
+    "a1": "Yes, your first document signing through 123LegalDoc powered by SignWell is completely free. Subsequent documents are charged on a per-signature basis.",
+    "q2": "Do recipients need an account?",
+    "a2": "No, recipients do not need a 123LegalDoc or SignWell account to sign documents. They will receive an email with a secure link to view and sign.",
+    "q3": "Can I draw my signature on mobile?",
+    "a3": "Absolutely. Our platform is fully responsive, allowing you and your recipients to draw, type, or upload signatures on any device, including mobile phones and tablets.",
+    "q4": "What file types do you support?",
+    "a4": "You can upload PDF, DOCX, and ODT files. We automatically convert them to a secure PDF format for signing.",
+    "q5": "How do I download the audit trail?",
+    "a5": "A comprehensive, tamper-proof audit trail is generated for every signed document. You can download it from your document dashboard once all parties have signed.",
+    "q6": "Is SignWell HIPAA compliant?",
+    "a6": "SignWell offers HIPAA compliant plans for businesses dealing with Protected Health Information (PHI). Please contact us for more details on enabling HIPAA compliance for your account."
+  },
+  "ctaStrip": {
+    "demo": "Schedule demo",
+    "upload": "Upload document now"
+  }
+}

@@ -1,0 +1,108 @@
+
+{
+  "pageTitle": "Firma Electrónica - Segura y Legalmente Vinculante | 123LegalDoc",
+  "pageDescription": "Envía y firma documentos en línea con 123LegalDoc, impulsado por SignWell. Cumple con la ley, fácil de usar y seguro.",
+  "hero": {
+    "title": "Envía y Firma Documentos Legales en Línea—Impulsado por SignWell",
+    "subhead": "Sube cualquier contrato, añade las partes y obtén firmas legalmente vinculantes en minutos—no en días.",
+    "ctaPrimary": "Comienza a Firmar Gratis",
+    "ctaSecondary": "Ver demo de 2 min",
+    "trustpilot": "Calificación 4.8/5",
+    "complianceBadge": "Cumple con ESIGN • UETA"
+  },
+  "quickFacts": {
+    "fact1": "Paga por documento—sin contratos mensuales",
+    "fact2": "Firmantes ilimitados, multidispositivo",
+    "fact3": "Cifrado AES-256 de nivel bancario"
+  },
+  "uploadCard": {
+    "stepLabel": "Paso 1 • Añade tu documento",
+    "dropzoneHint": "Arrastra y Suelta o Haz Clic para Buscar",
+    "dropzoneAccept": "Acepta PDF, DOCX, ODT",
+    "helpText": "Convertiremos tu archivo para SignWell automáticamente.",
+    "ctaPrimary": "Añadir Mi Documento",
+    "ctaSecondary": "Probar archivo de muestra",
+    "progressTracker": "Subir → Preparar → Firmar"
+  },
+  "howItWorks": {
+    "title": "Cómo Funciona la Firma en 3 Pasos",
+    "step1": "Sube el contrato",
+    "step2": "Añade firmantes y campos",
+    "step3": "Envía y rastrea las firmas",
+    "auditLogSample": "El registro de auditoría de muestra muestra el historial del documento, vistas y firmas con marcas de tiempo."
+  },
+  "securityCompliance": {
+    "title": "Seguridad y Cumplimiento",
+    "item1": "Cumple con ESIGN y UETA",
+    "item2": "Registro de auditoría a prueba de manipulaciones",
+    "item3": "Centros de datos SOC 2 Tipo II",
+    "item4": "Verificación de identidad del firmante",
+    "cta": "Descargar informe de seguridad →"
+  },
+  "useCases": {
+    "title": "Perfecto Para Todos Tus Acuerdos Legales",
+    "freelance": {
+      "title": "Contratos Freelance",
+      "desc": "Asegura los términos del proyecto con clientes."
+    },
+    "consulting": {
+      "title": "Contratos de Consultoría",
+      "desc": "Define el alcance y los detalles de pago."
+    },
+    "realEstate": {
+      "title": "Contratos de Arrendamiento",
+      "desc": "Finaliza acuerdos de alquiler fácilmente."
+    },
+    "nda": {
+      "title": "NDA y Confidencialidad",
+      "desc": "Protege información sensible."
+    },
+    "poa": {
+      "title": "Poder Notarial",
+      "desc": "Otorga autoridad legal de forma segura."
+    },
+    "billOfSale": {
+      "title": "Contrato de Compraventa",
+      "desc": "Documenta transferencias de bienes."
+    },
+    "generateWithAI": "Generar con IA"
+  },
+  "whyUs": {
+    "title": "¿Por qué elegir 123LegalDoc • SignWell?",
+    "bullet1": "Constructor de documentos instantáneo con IA",
+    "bullet2": "Editor intuitivo de arrastrar y soltar",
+    "bullet3": "Cumple en los 50 estados",
+    "bullet4": "Biblioteca de cláusulas redactadas por abogados",
+    "testimonial": "¡Este servicio hizo que firmar mi contrato de arrendamiento fuera increíblemente simple y rápido!"
+  },
+  "pricingPreview": {
+    "intro": "Primer documento gratis—luego $4.99 por firma completada",
+    "cta": "Comparar planes completos →",
+    "planFree": "Gratis",
+    "planPayPerDoc": "Pago por Documento",
+    "planVolume": "Volumen (>100/mes)",
+    "featureSignatures": "Firmas",
+    "featureAuditTrail": "Registro de Auditoría",
+    "featureStorage": "Almacenamiento Seguro",
+    "featureSupport": "Soporte"
+  },
+  "faq": {
+    "title": "Preguntas Frecuentes",
+    "q1": "¿Es realmente gratis mi primer documento?",
+    "a1": "Sí, la firma de tu primer documento a través de 123LegalDoc impulsado por SignWell es completamente gratis. Los documentos posteriores se cobran por firma.",
+    "q2": "¿Necesitan los destinatarios una cuenta?",
+    "a2": "No, los destinatarios no necesitan una cuenta de 123LegalDoc o SignWell para firmar documentos. Recibirán un correo electrónico con un enlace seguro para ver y firmar.",
+    "q3": "¿Puedo dibujar mi firma en el móvil?",
+    "a3": "Absolutamente. Nuestra plataforma es totalmente responsiva, permitiéndote a ti y a tus destinatarios dibujar, escribir o subir firmas en cualquier dispositivo, incluyendo teléfonos móviles y tabletas.",
+    "q4": "¿Qué tipos de archivo admiten?",
+    "a4": "Puedes subir archivos PDF, DOCX y ODT. Los convertimos automáticamente a un formato PDF seguro para firmar.",
+    "q5": "¿Cómo descargo el registro de auditoría?",
+    "a5": "Se genera un registro de auditoría completo y a prueba de manipulaciones para cada documento firmado. Puedes descargarlo desde tu panel de documentos una vez que todas las partes hayan firmado.",
+    "q6": "¿Cumple SignWell con HIPAA?",
+    "a6": "SignWell ofrece planes que cumplen con HIPAA para empresas que manejan Información de Salud Protegida (PHI). Por favor, contáctanos para más detalles sobre cómo habilitar el cumplimiento de HIPAA para tu cuenta."
+  },
+  "ctaStrip": {
+    "demo": "Programar demo",
+    "upload": "Subir documento ahora"
+  }
+}
