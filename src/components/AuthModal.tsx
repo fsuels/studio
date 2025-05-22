@@ -115,13 +115,6 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess }: AuthModalP
               {t('authModal.createFreeAccount', { defaultValue: 'Create Free Account' })}
             </Link>
           </Button>
-          <p className="text-xs text-muted-foreground text-center pt-2">
-            {t('authModal.fullSitePrompt', {defaultValue: "For full account management or if you have issues:"})}
-            <br/>
-            <Link href={`/${locale}/signin`} onClick={handleCloseAndReset} className="font-semibold text-primary hover:underline">
-              {t('authModal.goToFullSignIn', {defaultValue: "Go to Full Sign In Page"})}
-            </Link>
-          </p>
         </DialogFooter>
       </DialogContent>
     </Dialog>
