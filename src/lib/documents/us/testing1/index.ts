@@ -1,4 +1,4 @@
-// src/lib/documents/us/"first-second-third-fourth"/index.ts
-export { "firstSecondThirdFourth"Meta as "firstSecondThirdFourth" } from './metadata';
+// src/lib/documents/us/testing1/index.ts
+export { firstSecondMeta as testing1 } from './metadata';
 export * from './schema';
 export * from './questions';
