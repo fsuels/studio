@@ -115,6 +115,16 @@ const PdfPreview = React.memo(function PdfPreview({ documentDataUrl, documentNam
                  <CheckCircle className="h-5 w-5" />
                  <span>{t('pdfPreview.signingSuccessDescription')}</span>
                </div>
+               {signatureResult.signingUrl && (
+                 <a
+                   href={signatureResult.signingUrl}
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   className="underline text-primary text-xs"
+                 >
+                   {t('pdfPreview.openSigningLink')}
+                 </a>
+               )}
             </div>
         )}
          {signatureResult && !signatureResult.success && !isSigning && (

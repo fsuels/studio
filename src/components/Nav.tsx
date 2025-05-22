@@ -42,6 +42,7 @@ const Nav = React.memo(function Nav() {
     { href: "/blog", labelKey: "nav.blog", defaultLabel: "Blog" },
     { href: "/faq", labelKey: "nav.faq", defaultLabel: "FAQ" },
     { href: "/support", labelKey: "nav.support", defaultLabel: "Support" },
+    { href: "/signwell", labelKey: "nav.sign", hoverLabelKey: "nav.esign", defaultLabel: "Sign" },
   ];
 
   return (
@@ -51,11 +52,22 @@ const Nav = React.memo(function Nav() {
           key={link.href}
           href={`/${currentLocale}${link.href}`}
           className={cn(
-            "hover:bg-primary/10 hover:text-primary focus-visible:bg-primary/10 focus-visible:text-primary transition-colors px-2 py-1.5 rounded-md",
+            "group hover:bg-primary/10 hover:text-primary focus-visible:bg-primary/10 focus-visible:text-primary transition-colors px-2 py-1.5 rounded-md",
             pathname === `/${currentLocale}${link.href}` && "bg-primary/10 text-primary font-semibold"
           )}
         >
-          {tHeader(link.labelKey, { defaultValue: link.defaultLabel })}
+          {link.hoverLabelKey ? (
+            <>
+              <span className="group-hover:hidden">
+                {tHeader(link.labelKey, { defaultValue: link.defaultLabel })}
+              </span>
+              <span className="hidden group-hover:inline">
+                {tHeader(link.hoverLabelKey, { defaultValue: link.defaultLabel })}
+              </span>
+            </>
+          ) : (
+            tHeader(link.labelKey, { defaultValue: link.defaultLabel })
+          )}
         </Link>
       ))}
     </nav>
