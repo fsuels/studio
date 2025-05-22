@@ -14,11 +14,14 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'next/navigation';
+import { Logo } from '@/components/layout/Logo'; // Import the Logo
+import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
 
 interface AuthModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onAuthSuccess: () => void;
+  onAuthSuccess: () => void; // This might not be used if we always navigate away
 }
 
 export default function AuthModal({ isOpen, onClose, onAuthSuccess }: AuthModalProps) {
@@ -26,43 +29,64 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess }: AuthModalP
   const params = useParams();
   const locale = (params.locale as 'en' | 'es') || 'en';
 
+  // Simplified handler, actual auth happens on the dedicated pages
   const handleNavigation = () => {
     onClose();
-    onAuthSuccess();
+    // onAuthSuccess might not be relevant if we always redirect
   };
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="sm:max-w-[425px] bg-card border-border">
-        <DialogHeader>
-          <DialogTitle className="text-card-foreground">
-            {t('Authentication Required', { defaultValue: 'Authentication Required' })}
+      <DialogContent className="sm:max-w-md bg-card border-border p-6 rounded-lg shadow-xl">
+        <DialogHeader className="text-center items-center space-y-3">
+          <Logo wrapperClassName="mb-3" />
+          <DialogTitle className="text-2xl font-semibold text-card-foreground">
+            {t('Sign In', { defaultValue: 'Sign In' })}
           </DialogTitle>
-          <DialogDescription className="text-muted-foreground">
-            {t(
-              'Please sign in or create an account to save your document and proceed to payment.',
-              { defaultValue: 'Please sign in or create an account to save your document and proceed to payment.' }
-            )}
+          <DialogDescription className="text-muted-foreground text-sm">
+            {t('authModal.accessDashboardDescription', { defaultValue: 'Access your 123LegalDoc dashboard' })}
           </DialogDescription>
         </DialogHeader>
-        <DialogFooter className="flex flex-col sm:flex-row gap-2 pt-4">
-          <Button
-            variant="outline"
-            onClick={onClose}
-            className="w-full sm:w-auto border-input text-foreground"
-          >
-            {t('Cancel', { defaultValue: 'Cancel' })}
-          </Button>
-          <Button asChild className="w-full sm:w-auto bg-secondary text-secondary-foreground hover:bg-secondary/90">
-            <Link href={`/${locale}/signup`} onClick={handleNavigation}>
-              {t('Sign Up', { defaultValue: 'Sign Up' })}
-            </Link>
-          </Button>
-          <Button asChild className="w-full sm:w-auto bg-primary text-primary-foreground hover:bg-primary/90">
+        
+        <div className="space-y-4 py-4">
+          <div>
+            <Label htmlFor="email-modal" className="text-xs font-medium text-muted-foreground">
+              {t('Email', { defaultValue: 'Email' })}
+            </Label>
+            <Input 
+              id="email-modal" 
+              type="email" 
+              placeholder={t('Enter your email', { defaultValue: 'Enter your email' })} 
+              className="bg-background border-input mt-1" 
+              disabled // Visual placeholder
+            />
+          </div>
+          <div>
+            <Label htmlFor="password-modal" className="text-xs font-medium text-muted-foreground">
+              {t('Password', { defaultValue: 'Password' })}
+            </Label>
+            <Input 
+              id="password-modal" 
+              type="password" 
+              placeholder={t('Enter your password', { defaultValue: 'Enter your password' })} 
+              className="bg-background border-input mt-1" 
+              disabled // Visual placeholder
+            />
+          </div>
+        </div>
+
+        <DialogFooter className="flex flex-col gap-3 pt-2">
+          <Button asChild className="w-full h-11 bg-primary text-primary-foreground hover:bg-primary/90 text-base">
             <Link href={`/${locale}/signin`} onClick={handleNavigation}>
               {t('Sign In', { defaultValue: 'Sign In' })}
             </Link>
           </Button>
+          <p className="text-xs text-muted-foreground text-center">
+            {t("Don't have an account?", { defaultValue: "Don't have an account?" })}{' '}
+            <Link href={`/${locale}/signup`} onClick={handleNavigation} className="font-semibold text-primary hover:underline">
+              {t('Sign Up', { defaultValue: 'Sign Up' })}
+            </Link>
+          </p>
         </DialogFooter>
       </DialogContent>
     </Dialog>
