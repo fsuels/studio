@@ -15,17 +15,16 @@ export async function generateMetadata({ params }: { params: { locale: 'en' | 'e
     await i18n.changeLanguage(params.locale);
   }
   
-  const title = i18n.t('pageTitle', { ns: 'electronic-signature', defaultValue: 'Electronic Signature | 123LegalDoc' });
-  const description = i18n.t('pageDescription', { ns: 'electronic-signature', defaultValue: 'Send and sign documents online securely.' });
+  const title = i18n.t('pageTitle', { ns: 'electronic-signature', defaultValue: 'eSign Documents Online Securely | 123LegalDoc' });
+  const description = i18n.t('pageDescription', { ns: 'electronic-signature', defaultValue: 'Upload, prepare, and send documents for legally binding electronic signatures with 123LegalDoc, powered by SignWell. Fast, secure, and compliant.' });
 
   return {
     title,
     description,
-    // Add other metadata like openGraph if needed
     openGraph: {
       title,
       description,
-      // images: [{ url: 'https://www.123legaldoc.com/og-esign.png' }], // Replace with actual OG image
+      // images: [{ url: 'https://www.123legaldoc.com/og-images/esign-landing.png' }], // Example OG image
     },
   };
 }

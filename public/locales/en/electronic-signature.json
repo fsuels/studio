@@ -1,108 +1,82 @@
-
 {
-  "pageTitle": "Electronic Signature - Secure & Legally Binding | 123LegalDoc",
-  "pageDescription": "Send and sign documents online with 123LegalDoc, powered by SignWell. Legally compliant, easy to use, and secure.",
+  "pageTitle": "eSign Documents Online Securely | 123LegalDoc",
+  "pageDescription": "Upload, prepare, and send documents for legally binding electronic signatures with 123LegalDoc, powered by SignWell. Fast, secure, and compliant.",
   "hero": {
-    "title": "Send & Sign Legal Docs Online—Powered by SignWell",
-    "subhead": "Upload any contract, add parties, and get legally-binding signatures in minutes—not days.",
-    "ctaPrimary": "Start Signing Free",
-    "ctaSecondary": "Watch 2-min demo",
-    "trustpilot": "4.8/5 rating",
-    "complianceBadge": "ESIGN • UETA compliant"
-  },
-  "quickFacts": {
-    "fact1": "Pay per document—no monthly lock-in",
-    "fact2": "Unlimited signers, multi-device",
-    "fact3": "Bank-level AES-256 encryption"
-  },
-  "uploadCard": {
-    "stepLabel": "Step 1 • Add your document",
-    "dropzoneHint": "Drag & Drop or Click to Browse",
-    "dropzoneAccept": "Accepts PDF, DOCX, ODT",
-    "helpText": "We’ll convert your file for SignWell automatically.",
-    "ctaPrimary": "Add My Doc",
-    "ctaSecondary": "Try sample file",
-    "progressTracker": "Upload → Prepare → Sign"
+    "title": "eSign Documents Online with 123LegalDoc",
+    "subtitle": "Securely upload, send, and sign your legal documents in minutes. Legally binding and ESIGN/UETA compliant, powered by SignWell.",
+    "dropzoneTitle": "Drag & Drop Your Document Here",
+    "dropzoneSubtitle": "or click to browse files",
+    "supportedFiles": "Supported: PDF, DOC, DOCX, TXT, ODT",
+    "ctaUpload": "Upload Document",
+    "ctaSignYourself": "Sign Yourself",
+    "noAccountNeeded": "No account needed to sign."
   },
   "howItWorks": {
-    "title": "How Signing Works in 3 Steps",
-    "step1": "Upload contract",
-    "step2": "Add signers & fields",
-    "step3": "Send & track signatures",
-    "auditLogSample": "Sample audit log shows document history, views, and signatures with timestamps."
+    "title": "Get Your Documents Signed in 3 Simple Steps",
+    "step1Title": "Upload Document",
+    "step1Desc": "Easily upload your contract, agreement, or any PDF/Word document.",
+    "step2Title": "Add Signers & Fields",
+    "step2Desc": "Specify who needs to sign and where. Add text fields, dates, and checkboxes.",
+    "step3Title": "Send & Sign",
+    "step3Desc": "Recipients get an email to sign on any device. Track progress in real-time."
   },
-  "securityCompliance": {
-    "title": "Security & Compliance",
-    "item1": "ESIGN & UETA compliant",
-    "item2": "Tamper-proof audit trail",
-    "item3": "SOC 2 Type II data centers",
-    "item4": "Signer ID verification",
-    "cta": "Download security white-paper →"
+  "legallyBinding": {
+    "title": "Legally Binding Electronic Signatures",
+    "subtitle": "Our eSignatures, powered by SignWell, comply with the U.S. ESIGN Act and UETA, making them valid in all 50 states and internationally.",
+    "auditTrail": "Every signed document includes a comprehensive, tamper-proof audit trail."
   },
-  "useCases": {
-    "title": "Perfect For All Your Legal Agreements",
-    "freelance": {
-      "title": "Freelance Agreements",
-      "desc": "Secure project terms with clients."
-    },
-    "consulting": {
-      "title": "Consulting Contracts",
-      "desc": "Outline scope and payment details."
-    },
-    "realEstate": {
-      "title": "Real Estate Leases",
-      "desc": "Finalize rental agreements easily."
-    },
-    "nda": {
-      "title": "NDA & Confidentiality",
-      "desc": "Protect sensitive information."
-    },
-    "poa": {
-      "title": "Power of Attorney",
-      "desc": "Grant legal authority securely."
-    },
-    "billOfSale": {
-      "title": "Bill of Sale",
-      "desc": "Document asset transfers."
-    },
-    "generateWithAI": "Generate with AI"
+  "benefits": {
+    "title": "Why eSign with 123LegalDoc?",
+    "fastTitle": "Sign in Minutes",
+    "fastDesc": "No printing, scanning, or faxing. Get documents signed faster than ever.",
+    "easyTitle": "Simple for Everyone",
+    "easyDesc": "Intuitive interface for both senders and signers. No training needed.",
+    "secureTitle": "Bank-Level Security",
+    "secureDesc": "AES-256 encryption ensures your documents and data are always protected.",
+    "organizedTitle": "Stay Organized",
+    "organizedDesc": "Keep all your signed documents securely stored and easily accessible."
   },
-  "whyUs": {
-    "title": "Why choose 123LegalDoc • SignWell?",
-    "bullet1": "Instant AI doc builder",
-    "bullet2": "Intuitive drag-drop editor",
-    "bullet3": "Compliant in all 50 states",
-    "bullet4": "Attorney-drafted clause library",
-    "testimonial": "This service made signing my lease incredibly simple and fast!"
+  "devices": {
+    "title": "Sign on Any Device, Anywhere",
+    "subtitle": "Empower your clients and partners to sign documents on their preferred device—desktop, tablet, or smartphone.",
+    "imageAlt": "Illustration of signing on desktop, tablet, and smartphone",
+    "desktop": "Desktop",
+    "tablet": "Tablet",
+    "mobile": "Mobile"
   },
-  "pricingPreview": {
-    "intro": "First document free—then $4.99 per completed signature",
-    "cta": "Compare full plans →",
-    "planFree": "Free",
-    "planPayPerDoc": "Pay-Per-Doc",
-    "planVolume": "Volume (>100/mo)",
-    "featureSignatures": "Signatures",
-    "featureAuditTrail": "Audit Trail",
-    "featureStorage": "Secure Storage",
-    "featureSupport": "Support"
+  "trustedBy": {
+    "title": "Trusted by Businesses and Individuals"
   },
   "faq": {
-    "title": "Frequently Asked Questions",
-    "q1": "Is my first document really free?",
-    "a1": "Yes, your first document signing through 123LegalDoc powered by SignWell is completely free. Subsequent documents are charged on a per-signature basis.",
-    "q2": "Do recipients need an account?",
-    "a2": "No, recipients do not need a 123LegalDoc or SignWell account to sign documents. They will receive an email with a secure link to view and sign.",
-    "q3": "Can I draw my signature on mobile?",
-    "a3": "Absolutely. Our platform is fully responsive, allowing you and your recipients to draw, type, or upload signatures on any device, including mobile phones and tablets.",
-    "q4": "What file types do you support?",
-    "a4": "You can upload PDF, DOCX, and ODT files. We automatically convert them to a secure PDF format for signing.",
-    "q5": "How do I download the audit trail?",
-    "a5": "A comprehensive, tamper-proof audit trail is generated for every signed document. You can download it from your document dashboard once all parties have signed.",
-    "q6": "Is SignWell HIPAA compliant?",
-    "a6": "SignWell offers HIPAA compliant plans for businesses dealing with Protected Health Information (PHI). Please contact us for more details on enabling HIPAA compliance for your account."
+    "title": "Frequently Asked Questions about eSigning",
+    "q1": {
+      "question": "Are electronic signatures legally binding?",
+      "answer": "Yes, electronic signatures provided through 123LegalDoc (powered by SignWell) are legally binding in the United States under the ESIGN Act and UETA, as well as in many other countries."
+    },
+    "q2": {
+      "question": "Do my signers need a 123LegalDoc account?",
+      "answer": "No, recipients can sign documents you send them without needing to create an account. They simply click the link in their email."
+    },
+    "q3": {
+      "question": "What file types can I upload for signing?",
+      "answer": "You can upload PDF, Microsoft Word (.doc, .docx), OpenOffice/LibreOffice (.odt), and plain text (.txt) files. We'll convert them for signing."
+    },
+    "q4": {
+      "question": "Is my data secure?",
+      "answer": "Absolutely. We use bank-level AES-256 encryption for data in transit and at rest. Our platform is designed with security as a top priority."
+    },
+    "q5": {
+      "question": "Can I track who has signed and who hasn't?",
+      "answer": "Yes, you'll have a dashboard to see the status of your documents in real-time, including who has viewed, signed, or if there are any pending signatures."
+    },
+    "q6": {
+      "question": "Is 123LegalDoc (via SignWell) HIPAA compliant?",
+      "answer": "SignWell, our e-signature partner, offers features that can help organizations meet HIPAA compliance requirements, such as Business Associate Agreements (BAA) and robust security measures. However, achieving HIPAA compliance is a shared responsibility. Please contact us to discuss your specific needs for HIPAA if you handle Protected Health Information (PHI)."
+    }
   },
-  "ctaStrip": {
-    "demo": "Schedule demo",
-    "upload": "Upload document now"
+  "finalCta": {
+    "title": "Ready to Simplify Your Document Workflow?",
+    "subtitle": "Experience the easiest way to get your legal documents signed. Try 123LegalDoc eSignatures today!",
+    "cta": "Get Started - It's Free"
   }
 }
