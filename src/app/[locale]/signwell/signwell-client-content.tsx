@@ -9,7 +9,7 @@ import { Input } from '@/components/ui/input'; // For potential future use
 import { Progress } from '@/components/ui/progress';
 import {
   UploadCloud, ShieldCheck, CheckCircle, Zap, Users, Home, Briefcase,
-  FileText, Lock, Award, MessageSquare, ChevronRight, Star, Mail, Clock, HelpCircle, LifeBuoy, Link as LinkIcon
+  FileText, Lock, Award, MessageSquare, ChevronRight, Star, Mail, Clock, HelpCircle, LifeBuoy, Link as LinkIcon, Edit3 // Added Edit3 here
 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
