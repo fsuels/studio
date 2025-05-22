@@ -10,12 +10,13 @@ import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 import {
   UploadCloud, ShieldCheck, CheckCircle, Zap, Users, Home, Briefcase,
-  FileText, Lock, Award, MessageSquare, ChevronRight, Star, Mail, Clock, HelpCircle, LifeBuoy, Link as LinkIcon, Edit3, FileUp, UserCheck, Send, Tablet, Smartphone, Laptop, X, FileIcon, Loader2
+  FileText, Lock, Award, MessageSquare, ChevronRight, Star, Mail, Clock, HelpCircle, LifeBuoy, Link as LinkIcon, Edit3, FileUp, UserCheck, Send, Tablet, Smartphone, Laptop, X, FileIcon, Loader2, Building, BookUser
 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
+import AuthModal from '@/components/AuthModal'; // Import AuthModal
 
 interface SignWellClientContentProps {
   params: { locale: 'en' | 'es' };
@@ -28,8 +29,8 @@ const DropzonePlaceholder = ({
   selectedFile,
   onClearFile,
   isHydrated,
-  tGeneral, // Pass general t function for common texts
-  tEsign, // Pass eSign specific t function
+  tGeneral, 
+  tEsign, 
 }: {
   onFiles: (files: File[]) => void;
   inputRef: React.RefObject<HTMLInputElement>;
@@ -138,6 +139,7 @@ export default function SignWellClientContent({ params }: SignWellClientContentP
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [currentFlowStep, setCurrentFlowStep] = useState<1 | 2 | 3>(1); // 1: Upload, 2: Prepare, 3: Sign
+  const [showAuthModal, setShowAuthModal] = useState(false); // State for AuthModal
 
   useEffect(() => {
     setIsHydrated(true);
@@ -150,7 +152,7 @@ export default function SignWellClientContent({ params }: SignWellClientContentP
     if (files.length > 0) {
       const file = files[0];
       setSelectedFile(file);
-      setCurrentFlowStep(1); // Start at upload step
+      setCurrentFlowStep(1); 
       setUploadProgress(0);
       let progress = 0;
       const interval = setInterval(() => {
@@ -187,6 +189,10 @@ export default function SignWellClientContent({ params }: SignWellClientContentP
     toast({ title: t('uploadCard.docPreparedTitle', {ns: 'electronic-signature'}), description: t('uploadCard.docPreparedDesc', {ns: 'electronic-signature'}) });
   }, [selectedFile, t, toast]);
 
+  const handleAddFrom123LegalDoc = () => {
+    setShowAuthModal(true);
+  };
+
   const howItWorksSteps = [
     { icon: FileUp, titleKey: 'howItWorks.step1Title', descKey: 'howItWorks.step1Desc' },
     { icon: UserCheck, titleKey: 'howItWorks.step2Title', descKey: 'howItWorks.step2Desc' },
@@ -206,7 +212,7 @@ export default function SignWellClientContent({ params }: SignWellClientContentP
     { icon: Home, titleKey: 'useCases.realEstate.title', descKey: 'useCases.realEstate.desc' },
     { icon: Lock, titleKey: 'useCases.nda.title', descKey: 'useCases.nda.desc' },
     { icon: Users, titleKey: 'useCases.poa.title', descKey: 'useCases.poa.desc' },
-    { icon: FileText, titleKey: 'useCases.billOfSale.title', descKey: 'useCases.billOfSale.desc' },
+    { icon: BookUser, titleKey: 'useCases.billOfSale.title', descKey: 'useCases.billOfSale.desc' },
   ];
 
   const whyUsBullets = [
@@ -245,7 +251,7 @@ export default function SignWellClientContent({ params }: SignWellClientContentP
   const mainButtonAction = () => {
     if (currentFlowStep === 1 && !selectedFile) fileInputRef.current?.click();
     else if (currentFlowStep === 2 && selectedFile) handlePrepareDocument();
-    // else if (currentFlowStep === 3 && selectedFile) { /* TODO: View/Sign action */ }
+    // else if (currentFlowStep === 3 && selectedFile) { /* TODO: View/Sign action - currently a placeholder */ }
   };
 
   const mainButtonTextKey = 
@@ -296,9 +302,9 @@ export default function SignWellClientContent({ params }: SignWellClientContentP
                   className="bg-brand-green hover:bg-brand-green/90 text-white flex-1"
                   onClick={mainButtonAction}
                   data-test-id="hero-cta-upload"
-                  disabled={currentFlowStep === 1 && uploadProgress > 0 && uploadProgress < 100}
+                  disabled={currentFlowStep === 1 && selectedFile != null && uploadProgress < 100}
                 >
-                  {currentFlowStep === 1 && uploadProgress > 0 && uploadProgress < 100 ? (
+                  {currentFlowStep === 1 && selectedFile != null && uploadProgress > 0 && uploadProgress < 100 ? (
                     <Loader2 className="mr-2 h-5 w-5 animate-spin" />
                   ) : (
                     selectedFile && currentFlowStep === 1 ? null : <UploadCloud className="mr-2 h-5 w-5" />
@@ -307,8 +313,13 @@ export default function SignWellClientContent({ params }: SignWellClientContentP
                 </Button>
               
                 {currentFlowStep === 1 && !selectedFile && (
-                   <Button size="lg" variant="outline" className="border-brand-blue text-brand-blue hover:bg-brand-blue/10 flex-1">
-                    {t('hero.ctaSignYourself')}
+                   <Button 
+                    size="lg" 
+                    variant="outline" 
+                    className="border-brand-blue text-brand-blue hover:bg-brand-blue/10 flex-1"
+                    onClick={handleAddFrom123LegalDoc} // Updated onClick handler
+                  >
+                    {t('hero.ctaAddFrom123LegalDoc')} {/* Updated text key */}
                   </Button>
                 )}
             </div>
@@ -316,7 +327,7 @@ export default function SignWellClientContent({ params }: SignWellClientContentP
             {(selectedFile || uploadProgress > 0) && (
               <div className="mt-8">
                 <Progress 
-                    value={currentFlowStep === 1 ? uploadProgress : (currentFlowStep -1 + (uploadProgress === 100 ? 1: 0)) * 50 } 
+                    value={currentFlowStep === 1 ? uploadProgress : (currentFlowStep -1 + (selectedFile && uploadProgress === 100 ? 1: 0)) * 50 } 
                     className="h-2 bg-muted" 
                     aria-label={t('uploadCard.progressLabel')} 
                 />
@@ -408,9 +419,6 @@ export default function SignWellClientContent({ params }: SignWellClientContentP
                     <p className="text-xs text-muted-foreground">{t(item.descKey)}</p>
                   </div>
                 </div>
-                 {/* <Button variant="ghost" size="sm" className="absolute bottom-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity text-xs text-brand-blue hover:bg-brand-blue/10">
-                  {t('useCases.generateWithAiPill')}
-                </Button> */}
               </Card>
             ))}
           </div>
@@ -463,7 +471,7 @@ export default function SignWellClientContent({ params }: SignWellClientContentP
             </Card>
           </div>
           <Button variant="outline" asChild className="mt-10 bg-white text-brand-blue hover:bg-gray-100 border-transparent">
-            <Link href={`/${params.locale}/pricing`}>{t('pricing.cta')}</Link>
+            <Link href={`/${params.locale}/pricing`}>{t('pricing.preview.cta')}</Link>
           </Button>
         </div>
       </section>
@@ -502,6 +510,16 @@ export default function SignWellClientContent({ params }: SignWellClientContentP
           </div>
         </div>
       </section>
+
+      <AuthModal
+        isOpen={showAuthModal}
+        onClose={() => setShowAuthModal(false)}
+        onAuthSuccess={() => {
+          setShowAuthModal(false);
+          toast({ title: t('common:Authentication Successful!'), description: t('common:You can now select documents from your account (feature coming soon).') });
+          // TODO: Implement logic to fetch/display documents from 123LegalDoc
+        }}
+      />
     </div>
   );
 }
