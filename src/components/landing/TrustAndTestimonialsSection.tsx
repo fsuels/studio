@@ -17,8 +17,8 @@ interface Testimonial {
   nameKey: string;
   titleKey: string;
   outcomeKey?: string;
-  avatarSeed: number; // Kept for potential future use with other image services
-  avatarUrl?: string; // New field for specific avatar URLs
+  avatarSeed: number;
+  avatarUrl?: string;
   defaultQuote: string;
   defaultName: string;
   defaultTitle: string;
@@ -52,7 +52,7 @@ const MemoizedTestimonialCard = React.memo(function TestimonialCard({ testimonia
     titleKey: `fallback.title.${index}`,
     outcomeKey: `fallback.outcome.${index}`,
     avatarSeed: index + 50,
-    avatarUrl: `https://placehold.co/96x96.png`, // Default placeholder
+    avatarUrl: `https://placehold.co/96x96.png`, 
     defaultQuote: placeholderQuotes[index % placeholderQuotes.length],
     defaultName: placeholderNames[index % placeholderNames.length],
     defaultTitle: placeholderTitles[index % placeholderTitles.length],
@@ -64,7 +64,6 @@ const MemoizedTestimonialCard = React.memo(function TestimonialCard({ testimonia
   const titleText = isHydrated ? t(currentTestimonial.titleKey, { defaultValue: currentTestimonial.defaultTitle }) : currentTestimonial.defaultTitle;
   const outcomeText = currentTestimonial.outcomeKey && currentTestimonial.defaultOutcome ? (isHydrated ? t(currentTestimonial.outcomeKey, { defaultValue: currentTestimonial.defaultOutcome }) : currentTestimonial.defaultOutcome) : undefined;
 
-  // Use testimonial.avatarUrl if available, otherwise the default placeholder
   const imageSrc = currentTestimonial.avatarUrl || `https://placehold.co/96x96.png`;
 
   return (
@@ -163,7 +162,7 @@ const TrustAndTestimonialsSection = React.memo(function TrustAndTestimonialsSect
               titleKey: `home.testimonials.${testimonialKey}.title`,
               outcomeKey: rt.outcome ? `home.testimonials.${testimonialKey}.outcome` : undefined,
               avatarSeed: i,
-              avatarUrl: rt.avatarUrl || `https://placehold.co/96x96.png`, // Use provided or fallback
+              avatarUrl: rt.avatarUrl || `https://placehold.co/96x96.png`, 
               defaultQuote: rt.quote || placeholderQuotes[(i-1) % placeholderQuotes.length],
               defaultName: rt.name || placeholderNames[(i-1) % placeholderNames.length],
               defaultTitle: rt.title || placeholderTitles[(i-1) % placeholderTitles.length],
@@ -176,7 +175,7 @@ const TrustAndTestimonialsSection = React.memo(function TrustAndTestimonialsSect
               titleKey: `fallback.title.${i}`,
               outcomeKey: `fallback.outcome.${i}`,
               avatarSeed: i + 50,
-              avatarUrl: `https://placehold.co/96x96.png`, // Default placeholder
+              avatarUrl: `https://placehold.co/96x96.png`, 
               defaultQuote: placeholderQuotes[(i-1) % placeholderQuotes.length],
               defaultName: placeholderNames[(i-1) % placeholderNames.length],
               defaultTitle: placeholderTitles[(i-1) % placeholderTitles.length],
@@ -193,7 +192,7 @@ const TrustAndTestimonialsSection = React.memo(function TrustAndTestimonialsSect
             titleKey: `fallback.title.${i}`,
             outcomeKey: `fallback.outcome.${i}`,
             avatarSeed: i + 100,
-            avatarUrl: `https://placehold.co/96x96.png`, // Default placeholder
+            avatarUrl: `https://placehold.co/96x96.png`, 
             defaultQuote: placeholderQuotes[(i-1) % placeholderQuotes.length],
             defaultName: placeholderNames[(i-1) % placeholderNames.length],
             defaultTitle: placeholderTitles[(i-1) % placeholderTitles.length],
@@ -227,7 +226,8 @@ const TrustAndTestimonialsSection = React.memo(function TrustAndTestimonialsSect
           </div>
           <div className="hidden sm:block w-px h-4 bg-border"></div>
           <div className="flex items-center gap-2">
-            <Image src="/images/trustpilot-logo-words.svg" alt="Trustpilot" width={80} height={20} data-ai-hint="trustpilot logo" />
+            {/* Replaced Image with styled text */}
+            <span className="font-bold text-foreground/90">Trustpilot</span>
             <div className="flex items-center">
                 {Array.from({length: 5}).map((_, i) => <Star key={i} className="h-4 w-4 text-green-500 fill-green-500" />)}
             </div>
