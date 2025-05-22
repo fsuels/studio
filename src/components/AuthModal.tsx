@@ -17,16 +17,18 @@ import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
+import { useAuth } from '@/hooks/useAuth'; // Import useAuth
 
 interface AuthModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onAuthSuccess: (mode: 'signin' | 'signup', email: string) => void; // Pass mode and email
+  onAuthSuccess: (mode: 'signin' | 'signup', email: string) => void;
 }
 
 export default function AuthModal({ isOpen, onClose, onAuthSuccess }: AuthModalProps) {
   const { t } = useTranslation("common");
   const { toast } = useToast();
+  const { login } = useAuth(); // Get the login function from useAuth
 
   const [authMode, setAuthMode] = useState<'signin' | 'signup'>('signin');
   const [emailModal, setEmailModal] = useState('');
@@ -35,17 +37,14 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess }: AuthModalP
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
-    // Reset fields when modal opens or mode changes
     if (isOpen) {
       setEmailModal('');
       setPasswordModal('');
       setConfirmPasswordModal('');
       setIsSubmitting(false);
-    } else {
-      // Reset to signin mode when modal is closed externally
-      setAuthMode('signin');
+      // setAuthMode('signin'); // Default to signin when opened
     }
-  }, [isOpen, authMode]);
+  }, [isOpen]);
 
   const handleAuthAction = async () => {
     setIsSubmitting(true);
@@ -80,21 +79,36 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess }: AuthModalP
       }
       // Simulate successful signup
       await new Promise(resolve => setTimeout(resolve, 700)); // Simulate API call
+      login(emailModal); // Call useAuth login
+      toast({
+        title: t('authModal.successTitle', { context: 'signup', defaultValue: 'Account Created!' }),
+        description: t('authModal.successDescription', { defaultValue: 'You can now proceed.' })
+      });
       onAuthSuccess('signup', emailModal);
-    } else {
+    } else { // authMode === 'signin'
       // Simulate successful signin
       await new Promise(resolve => setTimeout(resolve, 700)); // Simulate API call
+      login(emailModal); // Call useAuth login
+      toast({
+        title: t('authModal.successTitle', { context: 'signin', defaultValue: 'Sign In Successful!' }),
+        description: t('authModal.successDescription', { defaultValue: 'You can now proceed.' })
+      });
       onAuthSuccess('signin', emailModal);
     }
     setIsSubmitting(false);
   };
 
   const toggleAuthMode = () => {
-    setAuthMode(prevMode => prevMode === 'signin' ? 'signup' : 'signin');
+    setAuthMode(prevMode => (prevMode === 'signin' ? 'signup' : 'signin'));
+    // Clear password fields when toggling for better UX
+    setPasswordModal('');
+    setConfirmPasswordModal('');
   };
 
   const handleCloseAndReset = () => {
     onClose();
+    // Reset to signin mode when modal is closed, ready for next opening
+    // setAuthMode('signin'); // This is handled by useEffect on isOpen now
   };
 
   return (
@@ -127,6 +141,7 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess }: AuthModalP
               value={emailModal}
               onChange={(e) => setEmailModal(e.target.value)}
               disabled={isSubmitting}
+              required
             />
           </div>
           <div>
@@ -141,6 +156,7 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess }: AuthModalP
               value={passwordModal}
               onChange={(e) => setPasswordModal(e.target.value)}
               disabled={isSubmitting}
+              required
             />
           </div>
           {authMode === 'signup' && (
@@ -156,6 +172,7 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess }: AuthModalP
                 value={confirmPasswordModal}
                 onChange={(e) => setConfirmPasswordModal(e.target.value)}
                 disabled={isSubmitting}
+                required
               />
             </div>
           )}
@@ -167,7 +184,7 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess }: AuthModalP
             className="w-full h-11 bg-primary text-primary-foreground hover:bg-primary/90 text-base"
             disabled={isSubmitting}
           >
-            {isSubmitting 
+            {isSubmitting
               ? t('authModal.submitting', { defaultValue: 'Processing...' })
               : authMode === 'signin'
               ? t('Sign In', { defaultValue: 'Sign In' })
@@ -175,13 +192,13 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess }: AuthModalP
           </Button>
           <Button
             type="button"
-            variant="link"
+            variant="outline" // Changed to outline for better visibility
             onClick={toggleAuthMode}
-            className="text-sm text-primary hover:text-primary/80 font-medium"
+            className="text-sm text-primary hover:text-primary/80 font-medium w-full h-10 border-primary hover:bg-primary/10"
             disabled={isSubmitting}
           >
             {authMode === 'signin'
-              ? t('authModal.promptSignUp', { defaultValue: "Don't have an account? Create one" })
+              ? t('authModal.createFreeAccount', { defaultValue: "Create Free Account" }) // Use new key
               : t('authModal.promptSignIn', { defaultValue: 'Already have an account? Sign In' })}
           </Button>
         </DialogFooter>
