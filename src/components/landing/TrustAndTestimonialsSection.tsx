@@ -25,22 +25,26 @@ interface Testimonial {
   defaultOutcome?: string;
 }
 
-// More varied and credible placeholder data arrays
+// Expanded and more varied placeholder data arrays
 const placeholderQuotes = [
-  "This platform saved me so much time and money. The documents were professional and easy to customize!",
-  "I was able to create a legally sound contract in minutes. Highly recommend for any small business owner.",
-  "The interface is incredibly user-friendly, and the AI suggestions were surprisingly helpful. Great service!",
-  "Finally, a way to get legal documents without the hefty lawyer fees. The quality is top-notch.",
-  "As a landlord, getting lease agreements done quickly and correctly is crucial. This service is a lifesaver."
+  "The AI document generation is incredibly intuitive and saved me hours of work. This platform is a game-changer for small businesses!",
+  "I needed a solid lease agreement quickly, and this platform delivered exactly what I needed. Professional, easy to understand, and legally sound.",
+  "As a freelancer, getting contracts right is key. 123LegalDoc made it simple, affordable, and gave me peace of mind for all my client engagements.",
+  "The sheer variety of documents available is impressive. It's become my go-to legal resource for almost everything, from NDAs to partnership agreements.",
+  "Navigating legal needs as an immigrant can be daunting. This tool provided clarity, support, and the correct documents I needed, all in one place.",
+  "I was skeptical about AI for legal docs, but the quality and customization options here are outstanding. Saved a ton on lawyer fees.",
+  "Customer support was surprisingly helpful when I had a question about a specific clause. Great service overall!"
 ];
-const placeholderNames = ["Alex P.", "Maria G.", "Sam K.", "Jessica L.", "David R."];
-const placeholderTitles = ["Entrepreneur", "Small Business Owner", "Freelancer", "Landlord", "Startup Founder"];
+const placeholderNames = ["Alex P.", "Maria G.", "Samuel K.", "Jessica L.", "David R.", "Chen W.", "Aisha B.", "Kenji T."];
+const placeholderTitles = ["Entrepreneur", "Small Business Owner", "Freelance Developer", "Landlord", "Startup Founder", "Consultant", "E-commerce Seller", "Non-profit Organizer"];
 const placeholderOutcomes = [
   "Secured a major contract!",
   "Launched my business smoothly!",
-  "Protected my IP easily!",
-  "Resolved a tenant issue fast!",
-  "Simplified my estate planning!"
+  "Protected my intellectual property effectively!",
+  "Resolved a tenant issue quickly and fairly!",
+  "Simplified my estate planning process considerably!",
+  "Streamlined our hiring process with clear contracts!",
+  "Felt confident and prepared for legal eventualities."
 ];
 
 
@@ -51,8 +55,8 @@ const MemoizedTestimonialCard = React.memo(function TestimonialCard({ testimonia
     nameKey: `fallback.name.${index}`,
     titleKey: `fallback.title.${index}`,
     outcomeKey: `fallback.outcome.${index}`,
-    avatarSeed: index + 50,
-    avatarUrl: `https://placehold.co/96x96.png`, 
+    avatarSeed: index * 17 + 60, // Varied seed
+    avatarUrl: `https://picsum.photos/seed/${index * 17 + 60}/96/96`, // Use Picsum with varied seed
     defaultQuote: placeholderQuotes[index % placeholderQuotes.length],
     defaultName: placeholderNames[index % placeholderNames.length],
     defaultTitle: placeholderTitles[index % placeholderTitles.length],
@@ -64,7 +68,9 @@ const MemoizedTestimonialCard = React.memo(function TestimonialCard({ testimonia
   const titleText = isHydrated ? t(currentTestimonial.titleKey, { defaultValue: currentTestimonial.defaultTitle }) : currentTestimonial.defaultTitle;
   const outcomeText = currentTestimonial.outcomeKey && currentTestimonial.defaultOutcome ? (isHydrated ? t(currentTestimonial.outcomeKey, { defaultValue: currentTestimonial.defaultOutcome }) : currentTestimonial.defaultOutcome) : undefined;
 
-  const imageSrc = currentTestimonial.avatarUrl || `https://placehold.co/96x96.png`;
+  // Use picsum.photos for more varied placeholders, avatarUrl from data will override this.
+  const imageSrc = currentTestimonial.avatarUrl || `https://picsum.photos/seed/${currentTestimonial.avatarSeed}/96/96`;
+
 
   return (
     <div
@@ -78,8 +84,8 @@ const MemoizedTestimonialCard = React.memo(function TestimonialCard({ testimonia
             width={96}
             height={96}
             loading="lazy"
-            data-ai-hint="person portrait"
-            className="rounded-full mb-4 border-2 border-primary/30 mx-auto shrink-0"
+            data-ai-hint="person portrait" // Hint for AI image replacement
+            className="rounded-full mb-4 border-2 border-primary/30 mx-auto shrink-0 object-cover" // Added object-cover
           />
           <div className="flex justify-center mb-3">
             {Array.from({ length: rating }).map((_, i) => (
@@ -150,56 +156,58 @@ const TrustAndTestimonialsSection = React.memo(function TrustAndTestimonialsSect
   useEffect(() => {
     if (isHydrated && ready) {
       const rawTestimonials = t('home.testimonials', { returnObjects: true, ns: 'common' }) as any;
-      const loadedTestimonials: Testimonial[] = [];
+      let loadedTestimonials: Testimonial[] = [];
+      let allTranslationsValid = true;
+
       if (typeof rawTestimonials === 'object' && rawTestimonials !== null && !Array.isArray(rawTestimonials)) {
-        for (let i = 1; i <= 5; i++) {
+        for (let i = 1; i <= 5; i++) { // Assuming we always want 5 testimonials
           const testimonialKey = `t${i}`;
-          if (rawTestimonials[testimonialKey] && typeof rawTestimonials[testimonialKey] === 'object') {
-            const rt = rawTestimonials[testimonialKey];
+          const rt = rawTestimonials[testimonialKey];
+          // Check if essential fields (quote, name, title) exist in the translation
+          if (rt && typeof rt === 'object' && rt.quote && rt.name && rt.title) {
             loadedTestimonials.push({
               quoteKey: `home.testimonials.${testimonialKey}.quote`,
               nameKey: `home.testimonials.${testimonialKey}.name`,
               titleKey: `home.testimonials.${testimonialKey}.title`,
               outcomeKey: rt.outcome ? `home.testimonials.${testimonialKey}.outcome` : undefined,
-              avatarSeed: i,
-              avatarUrl: rt.avatarUrl || `https://placehold.co/96x96.png`, 
-              defaultQuote: rt.quote || placeholderQuotes[(i-1) % placeholderQuotes.length],
-              defaultName: rt.name || placeholderNames[(i-1) % placeholderNames.length],
-              defaultTitle: rt.title || placeholderTitles[(i-1) % placeholderTitles.length],
-              defaultOutcome: rt.outcome || (rt.outcome !== undefined ? placeholderOutcomes[(i-1) % placeholderOutcomes.length] : undefined),
+              avatarSeed: rt.avatarSeed || (i * 20 + 10), // Ensure avatarSeed has a default
+              avatarUrl: rt.avatarUrl || `https://picsum.photos/seed/${rt.avatarSeed || (i * 20 + 10)}/96/96`,
+              defaultQuote: rt.quote, // This will be used by t() if key resolves
+              defaultName: rt.name,
+              defaultTitle: rt.title,
+              defaultOutcome: rt.outcome,
             });
           } else {
-            loadedTestimonials.push({
-              quoteKey: `fallback.quote.${i}`,
-              nameKey: `fallback.name.${i}`,
-              titleKey: `fallback.title.${i}`,
-              outcomeKey: `fallback.outcome.${i}`,
-              avatarSeed: i + 50,
-              avatarUrl: `https://placehold.co/96x96.png`, 
-              defaultQuote: placeholderQuotes[(i-1) % placeholderQuotes.length],
-              defaultName: placeholderNames[(i-1) % placeholderNames.length],
-              defaultTitle: placeholderTitles[(i-1) % placeholderTitles.length],
-              defaultOutcome: placeholderOutcomes[(i-1) % placeholderOutcomes.length],
-            });
+            allTranslationsValid = false; // Mark as invalid if any of t1-t5 is incomplete
+            break; 
           }
         }
+        if (loadedTestimonials.length < 5) allTranslationsValid = false; // Also invalid if not enough items
+      } else {
+        allTranslationsValid = false; // rawTestimonials is not in the expected object structure
       }
-      while (loadedTestimonials.length < 5) {
-        const i = loadedTestimonials.length + 1;
-        loadedTestimonials.push({
-            quoteKey: `fallback.quote.${i}`,
+
+      if (!allTranslationsValid) {
+        // If translations are incomplete or not found, generate a full set of distinct placeholders
+        const fallbackTestimonials: Testimonial[] = [];
+        for (let i = 0; i < 5; i++) {
+          fallbackTestimonials.push({
+            quoteKey: `fallback.quote.${i}`, 
             nameKey: `fallback.name.${i}`,
             titleKey: `fallback.title.${i}`,
             outcomeKey: `fallback.outcome.${i}`,
-            avatarSeed: i + 100,
-            avatarUrl: `https://placehold.co/96x96.png`, 
-            defaultQuote: placeholderQuotes[(i-1) % placeholderQuotes.length],
-            defaultName: placeholderNames[(i-1) % placeholderNames.length],
-            defaultTitle: placeholderTitles[(i-1) % placeholderTitles.length],
-            defaultOutcome: placeholderOutcomes[(i-1) % placeholderOutcomes.length],
-        });
+            avatarSeed: i * 17 + 50, // Make seeds more distinct
+            avatarUrl: `https://picsum.photos/seed/${i * 17 + 50}/96/96`,
+            defaultQuote: placeholderQuotes[i % placeholderQuotes.length],
+            defaultName: placeholderNames[i % placeholderNames.length],
+            defaultTitle: placeholderTitles[i % placeholderTitles.length],
+            defaultOutcome: placeholderOutcomes[i % placeholderOutcomes.length]
+          });
+        }
+        setTestimonialsData(fallbackTestimonials);
+      } else {
+        setTestimonialsData(loadedTestimonials); // Already sliced to 5 if loaded from translations
       }
-      setTestimonialsData(loadedTestimonials.slice(0, 5));
     }
   }, [isHydrated, ready, i18n.language, t]);
 
@@ -226,7 +234,6 @@ const TrustAndTestimonialsSection = React.memo(function TrustAndTestimonialsSect
           </div>
           <div className="hidden sm:block w-px h-4 bg-border"></div>
           <div className="flex items-center gap-2">
-            {/* Replaced Image with styled text */}
             <span className="font-bold text-foreground/90">Trustpilot</span>
             <div className="flex items-center">
                 {Array.from({length: 5}).map((_, i) => <Star key={i} className="h-4 w-4 text-green-500 fill-green-500" />)}
@@ -256,7 +263,7 @@ const TrustAndTestimonialsSection = React.memo(function TrustAndTestimonialsSect
         <div className="overflow-hidden" ref={emblaRef}>
           <div className="flex -ml-4">
             {(testimonialsData.length > 0 ? testimonialsData : Array(5).fill(null)).map((testimonial, i) => (
-              <div key={testimonial ? `${testimonial.nameKey}-${i}` : `placeholder-${i}`} className={cn("pl-4 flex-[0_0_90%] sm:flex-[0_0_45%] md:flex-[0_0_33.33%]")}>
+              <div key={testimonial ? `${testimonial.nameKey}-${testimonial.avatarSeed}` : `placeholder-${i}`} className={cn("pl-4 flex-[0_0_90%] sm:flex-[0_0_45%] md:flex-[0_0_33.33%]")}>
                 <MemoizedTestimonialCard
                   testimonial={testimonial}
                   index={i}
@@ -298,4 +305,3 @@ const TrustAndTestimonialsSection = React.memo(function TrustAndTestimonialsSect
   );
 });
 export default TrustAndTestimonialsSection;
-
