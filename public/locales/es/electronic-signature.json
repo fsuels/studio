@@ -1,82 +1,152 @@
 {
-  "pageTitle": "Firme Documentos Electrónicamente Online | 123LegalDoc",
-  "pageDescription": "Cargue, prepare y envíe documentos para firmas electrónicas legalmente vinculantes con 123LegalDoc, impulsado por SignWell. Rápido, seguro y compatible.",
+  "pageTitle": "Firme Documentos en Línea de Forma Segura | 123LegalDoc",
+  "pageDescription": "Cargue, prepare y envíe documentos para firmas electrónicas legalmente vinculantes con 123LegalDoc, impulsado por SignWell. Rápido, seguro y conforme a la ley.",
   "hero": {
-    "title": "Firme Documentos Electrónicamente con 123LegalDoc",
-    "subtitle": "Cargue, envíe y firme sus documentos legales de forma segura en minutos. Legalmente vinculante y compatible con ESIGN/UETA, impulsado por SignWell.",
-    "dropzoneTitle": "Arrastre y Suelte Su Documento Aquí",
-    "dropzoneSubtitle": "o haga clic para buscar archivos",
-    "supportedFiles": "Soportados: PDF, DOC, DOCX, TXT, ODT",
+    "title": "Firme Documentos en Línea — Legalmente Vinculante y Seguro",
+    "subtitle": "Cargue cualquier contrato, agregue firmantes y obtenga la firma en minutos. Con tecnología SignWell para cumplimiento ESIGN y UETA.",
     "ctaUpload": "Subir Documento",
-    "ctaSignYourself": "Firmar Usted Mismo",
-    "noAccountNeeded": "No se necesita cuenta para firmar."
+    "ctaSignYourself": "Firmar Usted Mismo (Gratis)",
+    "trustpilot": "Trustpilot",
+    "trustpilotRating": "Calificación 4.8/5",
+    "complianceBadge": "Cumple con ESIGN y UETA",
+    "dropzoneTitle": "Arrastre y suelte su documento aquí",
+    "dropzoneSubtitle": "o haga clic para buscar archivos",
+    "supportedFiles": "Soportados: PDF, DOCX, DOC, TXT, RTF, ODT (Máx 10MB)",
+    "noAccountNeeded": "Los firmantes no necesitan cuenta para firmar."
+  },
+  "uploadCard": {
+    "stepLabel": "Paso 1 • Agregue su documento",
+    "helpText": "Convertiremos su archivo para SignWell automáticamente.",
+    "ctaAddDoc": "Subir Documento",
+    "ctaTrySample": "Probar archivo de muestra",
+    "progress": {
+      "upload": "Subir",
+      "prepare": "Preparar",
+      "sign": "Firmar"
+    },
+    "progressLabel": "Progreso del procesamiento del documento",
+    "fileSelectedTitle": "Archivo Seleccionado",
+    "fileSelectedDesc": "\"{{fileName}}\" está listo para ser preparado para la firma.",
+    "noFileToPrepare": "Por favor, seleccione un documento para preparar.",
+    "docPreparedTitle": "Documento Preparado",
+    "docPreparedDesc": "Su documento está listo para ser firmado.",
+    "ctaPrepareDocument": "Preparar Documento para Firmar",
+    "ctaViewDocument": "Ver y Firmar Documento"
+  },
+  "quickFacts": {
+    "fact1": "Pague por documento—sin contratos mensuales",
+    "fact2": "Firmantes ilimitados, acceso multidispositivo",
+    "fact3": "Cifrado AES-256 de nivel bancario"
   },
   "howItWorks": {
-    "title": "Obtenga Sus Documentos Firmados en 3 Simples Pasos",
-    "step1Title": "Subir Documento",
-    "step1Desc": "Cargue fácilmente su contrato, acuerdo o cualquier documento PDF/Word.",
+    "title": "Cómo Funciona la Firma Electrónica en 3 Pasos Simples",
+    "step1Title": "Subir Contrato",
+    "step1Desc": "Suba fácilmente su documento PDF, Word o texto.",
     "step2Title": "Añadir Firmantes y Campos",
-    "step2Desc": "Especifique quién necesita firmar y dónde. Agregue campos de texto, fechas y casillas de verificación.",
-    "step3Title": "Enviar y Firmar",
-    "step3Desc": "Los destinatarios reciben un correo electrónico para firmar en cualquier dispositivo. Rastree el progreso en tiempo real."
+    "step2Desc": "Especifique quién necesita firmar y dónde en el documento.",
+    "step3Title": "Enviar y Rastrear Firmas",
+    "step3Desc": "Los destinatarios firman en línea. Obtenga estado en tiempo real y una pista de auditoría completa.",
+    "auditLogSampleTitle": "Ejemplo de Registro de Auditoría:",
+    "auditLogSample": "2024-05-10 10:00: Documento Creado por usuario@example.com\n2024-05-10 10:01: Enviado a firmante1@example.com (IP: 192.168.1.1)\n2024-05-10 10:05: Documento Visto por firmante1@example.com\n2024-05-10 10:07: Firmado por firmante1@example.com"
   },
-  "legallyBinding": {
-    "title": "Firmas Electrónicas Legalmente Vinculantes",
-    "subtitle": "Nuestras firmas electrónicas, impulsadas por SignWell, cumplen con la Ley ESIGN y UETA de EE. UU., lo que las hace válidas en los 50 estados e internacionalmente.",
-    "auditTrail": "Cada documento firmado incluye una pista de auditoría completa y a prueba de manipulaciones."
+  "security": {
+    "title": "Su Seguridad es Nuestra Prioridad",
+    "compliance": {
+      "esignUeta": "Cumple con ESIGN y UETA",
+      "auditTrail": "Pista de auditoría a prueba de manipulaciones",
+      "soc2": "Centros de datos SOC 2 Tipo II",
+      "idVerification": "Verificación de identidad del firmante opcional"
+    },
+    "whitePaperLink": "Descargar informe de seguridad",
+    "imageAlt": "Ilustración de escudo de seguridad y candado"
   },
-  "benefits": {
-    "title": "¿Por Qué Firmar Electrónicamente con 123LegalDoc?",
-    "fastTitle": "Firme en Minutos",
-    "fastDesc": "Sin imprimir, escanear ni enviar faxes. Obtenga documentos firmados más rápido que nunca.",
-    "easyTitle": "Simple para Todos",
-    "easyDesc": "Interfaz intuitiva tanto para remitentes como para firmantes. No se necesita capacitación.",
-    "secureTitle": "Seguridad de Nivel Bancario",
-    "secureDesc": "El cifrado AES-256 garantiza que sus documentos y datos estén siempre protegidos.",
-    "organizedTitle": "Manténgase Organizado",
-    "organizedDesc": "Guarde todos sus documentos firmados de forma segura y acceda a ellos fácilmente."
+  "useCases": {
+    "title": "Perfecto para Cualquier Documento Que Necesite Firma",
+    "generateWithAiPill": "Generar con IA",
+    "freelance": {
+      "title": "Acuerdos Freelance",
+      "desc": "Contratos de servicios, SOWs"
+    },
+    "consulting": {
+      "title": "Contratos de Consultoría",
+      "desc": "Compromisos con clientes, propuestas"
+    },
+    "realEstate": {
+      "title": "Contratos de Arrendamiento",
+      "desc": "Acuerdos de alquiler, anexos"
+    },
+    "nda": {
+      "title": "NDAs y Confidencialidad",
+      "desc": "Proteja información sensible"
+    },
+    "poa": {
+      "title": "Poderes Notariales",
+      "desc": "Otorgue autoridad legal"
+    },
+    "billOfSale": {
+      "title": "Contratos de Compraventa",
+      "desc": "Vehículos, bienes personales"
+    }
   },
-  "devices": {
-    "title": "Firme en Cualquier Dispositivo, en Cualquier Lugar",
-    "subtitle": "Permita que sus clientes y socios firmen documentos en su dispositivo preferido: computadora, tableta o teléfono inteligente.",
-    "imageAlt": "Ilustración de firma en computadora, tableta y teléfono inteligente",
-    "desktop": "Computadora",
-    "tablet": "Tableta",
-    "mobile": "Móvil"
+  "whyUs": {
+    "title": "¿Por Qué Elegir 123LegalDoc + SignWell?",
+    "bullet1": "Constructor instantáneo de documentos IA para necesidades legales comunes.",
+    "bullet2": "Editor intuitivo de arrastrar y soltar para campos de firma.",
+    "bullet3": "Firmas electrónicas legalmente conformes aceptadas en los 50 estados.",
+    "bullet4": "Acceso a una biblioteca de cláusulas redactadas por abogados.",
+    "testimonialSliderPlaceholder": "Los testimonios de clientes aparecerán aquí."
   },
-  "trustedBy": {
-    "title": "Con la Confianza de Empresas y Particulares"
+  "pricing": {
+    "preview": {
+      "title": "Precios Simples y Transparentes para Firma Electrónica",
+      "subtitle": "Primer documento gratis—luego solo $4.99 por solicitud de firma completada."
+    },
+    "free": {
+      "title": "Nivel Gratuito",
+      "features": "Firme 1 documento usted mismo, pista de auditoría básica."
+    },
+    "payPerDoc": {
+      "title": "Pago Por Documento",
+      "price": "$4.99",
+      "features": "Firmantes ilimitados, pista de auditoría completa, almacenamiento de documentos."
+    },
+    "volume": {
+      "title": "Volumen / Negocios",
+      "features": "Precios personalizados, acceso API, funciones de equipo."
+    },
+    "cta": "Comparar Planes Completos"
   },
   "faq": {
     "title": "Preguntas Frecuentes sobre Firmas Electrónicas",
     "q1": {
-      "question": "¿Son legalmente vinculantes las firmas electrónicas?",
-      "answer": "Sí, las firmas electrónicas proporcionadas a través de 123LegalDoc (impulsadas por SignWell) son legalmente vinculantes en los Estados Unidos bajo la Ley ESIGN y UETA, así como en muchos otros países."
+      "question": "¿Es realmente gratis firmar mi primer documento?",
+      "answer": "¡Sí! Su primer documento enviado para firma (o firmado por usted mismo) es completamente gratis. Los documentos posteriores tienen un precio por solicitud de firma."
     },
     "q2": {
-      "question": "¿Necesitan mis firmantes una cuenta de 123LegalDoc?",
-      "answer": "No, los destinatarios pueden firmar los documentos que les envíe sin necesidad de crear una cuenta. Simplemente hacen clic en el enlace de su correo electrónico."
+      "question": "¿Necesitan los destinatarios una cuenta de 123LegalDoc o SignWell para firmar?",
+      "answer": "No, los destinatarios no necesitan una cuenta. Reciben un enlace seguro por correo electrónico para ver y firmar el documento directamente en su navegador."
     },
     "q3": {
-      "question": "¿Qué tipos de archivo puedo cargar para firmar?",
-      "answer": "Puede cargar archivos PDF, Microsoft Word (.doc, .docx), OpenOffice/LibreOffice (.odt) y texto sin formato (.txt). Los convertiremos para la firma."
+      "question": "¿Puedo dibujar mi firma en un dispositivo móvil?",
+      "answer": "Absolutamente. Nuestra plataforma de firma electrónica es totalmente responsiva. Los firmantes pueden dibujar, escribir o cargar su firma en computadoras de escritorio, tabletas y teléfonos inteligentes."
     },
     "q4": {
-      "question": "¿Están seguros mis datos?",
-      "answer": "Absolutamente. Utilizamos cifrado AES-256 de nivel bancario para datos en tránsito y en reposo. Nuestra plataforma está diseñada con la seguridad como máxima prioridad."
+      "question": "¿Qué tipos de archivo admiten para cargar?",
+      "answer": "Admitimos archivos PDF, DOCX, DOC, TXT, RTF y ODT. Los convertimos automáticamente a un formato PDF seguro para firmar."
     },
     "q5": {
-      "question": "¿Puedo rastrear quién ha firmado y quién no?",
-      "answer": "Sí, tendrá un panel para ver el estado de sus documentos en tiempo real, incluyendo quién ha visto, firmado o si hay firmas pendientes."
+      "question": "¿Cómo descargo la pista de auditoría?",
+      "answer": "Una vez que se completa un documento (todas las partes han firmado), se genera una pista de auditoría completa y se adjunta al PDF final. Puede descargarlo junto con el documento firmado desde su panel de control."
     },
     "q6": {
-      "question": "¿Cumple 123LegalDoc (a través de SignWell) con HIPAA?",
-      "answer": "SignWell, nuestro socio de firma electrónica, ofrece funciones que pueden ayudar a las organizaciones a cumplir con los requisitos de HIPAA, como Acuerdos de Asociado Comercial (BAA) y medidas de seguridad robustas. Sin embargo, lograr el cumplimiento de HIPAA es una responsabilidad compartida. Por favor, contáctenos para discutir sus necesidades específicas de HIPAA si maneja Información de Salud Protegida (PHI)."
+      "question": "¿Es 123LegalDoc + SignWell compatible con HIPAA?",
+      "answer": "SignWell, nuestro socio de firma electrónica, puede admitir el cumplimiento de HIPAA para entidades cubiertas. Si requiere un Acuerdo de Asociado Comercial (BAA) para HIPAA, comuníquese con nuestro equipo de ventas para nuestros planes empresariales."
     }
   },
   "finalCta": {
-    "title": "¿Listo para Simplificar su Flujo de Trabajo Documental?",
-    "subtitle": "Experimente la forma más fácil de obtener la firma de sus documentos legales. ¡Pruebe las firmas electrónicas de 123LegalDoc hoy mismo!",
-    "cta": "Comenzar - Es Gratis"
+    "title": "¿Listo para Simplificar la Firma de Sus Documentos?",
+    "subtitle": "Experimente la forma más fácil de obtener la firma segura de sus documentos legales en línea.",
+    "ctaUpload": "Subir y Firmar Gratis",
+    "ctaScheduleDemo": "Programar una Demostración"
   }
 }

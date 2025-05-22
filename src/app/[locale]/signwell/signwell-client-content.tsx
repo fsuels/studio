@@ -10,7 +10,7 @@ import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 import {
   UploadCloud, ShieldCheck, CheckCircle, Zap, Users, Home, Briefcase,
-  FileText, Lock, Award, MessageSquare, ChevronRight, Star, Mail, Clock, HelpCircle, LifeBuoy, Link as LinkIcon, Edit3, FileUp, UserCheck, Send, Tablet, Smartphone, Laptop, X, FileIcon
+  FileText, Lock, Award, MessageSquare, ChevronRight, Star, Mail, Clock, HelpCircle, LifeBuoy, Link as LinkIcon, Edit3, FileUp, UserCheck, Send, Tablet, Smartphone, Laptop, X, FileIcon, Loader2
 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -21,7 +21,7 @@ interface SignWellClientContentProps {
   params: { locale: 'en' | 'es' };
 }
 
-// Placeholder for Dropzone Component
+// Placeholder for Dropzone Component - Enhanced for selected file state
 const DropzonePlaceholder = ({
   onFiles,
   inputRef,
@@ -29,6 +29,7 @@ const DropzonePlaceholder = ({
   onClearFile,
   isHydrated,
   tGeneral, // Pass general t function for common texts
+  tEsign, // Pass eSign specific t function
 }: {
   onFiles: (files: File[]) => void;
   inputRef: React.RefObject<HTMLInputElement>;
@@ -36,8 +37,8 @@ const DropzonePlaceholder = ({
   onClearFile: () => void;
   isHydrated: boolean;
   tGeneral: (key: string, options?: any) => string;
+  tEsign: (key: string, options?: any) => string;
 }) => {
-  const { t } = useTranslation("electronic-signature");
   const [isDragging, setIsDragging] = useState(false);
 
   const handleDragEnter = (e: React.DragEvent<HTMLDivElement>) => {
@@ -90,7 +91,7 @@ const DropzonePlaceholder = ({
         <FileIcon className="h-12 w-12 text-brand-green mx-auto mb-4" />
         <p className="font-semibold text-foreground mb-1 text-lg truncate" title={selectedFile.name}>{selectedFile.name}</p>
         <p className="text-sm text-muted-foreground mb-4">
-          ({(selectedFile.size / 1024).toFixed(1)} KB) - {tGeneral('Ready to prepare', {defaultValue: 'Ready to prepare!'})}
+          ({(selectedFile.size / 1024).toFixed(1)} KB) - {tEsign('uploadCard.fileSelectedDesc', { fileName: selectedFile.name, defaultValue: `Ready to prepare!`})}
         </p>
         <Button variant="ghost" size="sm" onClick={onClearFile} className="text-xs text-destructive hover:bg-destructive/10">
           <X className="mr-1 h-3 w-3" /> {tGeneral('Clear file', {defaultValue: 'Clear file'})}
@@ -121,21 +122,22 @@ const DropzonePlaceholder = ({
         multiple={false}
       />
       <UploadCloud className="h-12 w-12 text-brand-blue mx-auto mb-4" />
-      <p className="font-semibold text-foreground mb-1 text-lg">{t('hero.dropzoneTitle')}</p>
-      <p className="text-sm text-muted-foreground">{t('hero.dropzoneSubtitle')}</p>
+      <p className="font-semibold text-foreground mb-1 text-lg">{tEsign('hero.dropzoneTitle')}</p>
+      <p className="text-sm text-muted-foreground">{tEsign('hero.dropzoneSubtitle')}</p>
     </div>
   );
 };
 
 
 export default function SignWellClientContent({ params }: SignWellClientContentProps) {
-  const { t, i18n } = useTranslation(['electronic-signature', 'common']); // Added 'common' for general terms
+  const { t, i18n } = useTranslation(['electronic-signature', 'common']);
   const [isHydrated, setIsHydrated] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
+  
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [uploadProgress, setUploadProgress] = useState(0);
-  const [currentFlowStep, setCurrentFlowStep] = useState(1); // 1: Upload, 2: Prepare, 3: Sign
+  const [currentFlowStep, setCurrentFlowStep] = useState<1 | 2 | 3>(1); // 1: Upload, 2: Prepare, 3: Sign
 
   useEffect(() => {
     setIsHydrated(true);
@@ -148,10 +150,8 @@ export default function SignWellClientContent({ params }: SignWellClientContentP
     if (files.length > 0) {
       const file = files[0];
       setSelectedFile(file);
-      setCurrentFlowStep(1); // Reset to upload step visually
+      setCurrentFlowStep(1); // Start at upload step
       setUploadProgress(0);
-
-      // Simulate upload
       let progress = 0;
       const interval = setInterval(() => {
         progress += 20;
@@ -160,61 +160,37 @@ export default function SignWellClientContent({ params }: SignWellClientContentP
         } else {
           clearInterval(interval);
           setCurrentFlowStep(2); // Move to "Prepare" step after simulated upload
-           toast({
-            title: t('uploadCard.fileSelectedTitle', { ns: 'electronic-signature', defaultValue: "File Selected" }),
-            description: t('uploadCard.fileSelectedDesc', { ns: 'electronic-signature', fileName: file.name, defaultValue: `"${file.name}" is ready to be prepared for signing.` }),
+          toast({
+            title: t('uploadCard.fileSelectedTitle', { ns: 'electronic-signature' }),
+            description: t('uploadCard.fileSelectedDesc', { ns: 'electronic-signature', fileName: file.name }),
           });
         }
       }, 150);
     }
   },[t, toast]);
 
-  const handleClearFile = () => {
+  const handleClearFile = useCallback(() => {
     setSelectedFile(null);
     setUploadProgress(0);
     setCurrentFlowStep(1);
     if (fileInputRef.current) {
-      fileInputRef.current.value = ""; // Reset file input
+      fileInputRef.current.value = ""; 
     }
-  };
+  }, []);
 
-  const handlePrepareDocument = () => {
+  const handlePrepareDocument = useCallback(() => {
     if (!selectedFile) {
-      toast({ title: t('common:Error', {defaultValue: 'Error'}), description: t('uploadCard.noFileToPrepare', {ns: 'electronic-signature', defaultValue: 'Please select a document to prepare.'}), variant: 'destructive' });
+      toast({ title: t('common:Error'), description: t('uploadCard.noFileToPrepare', {ns: 'electronic-signature'}), variant: 'destructive' });
       return;
     }
-    // Placeholder for actual prepare logic
     setCurrentFlowStep(3); // Move to "Sign" step
-    toast({ title: t('uploadCard.docPreparedTitle', {ns: 'electronic-signature', defaultValue: 'Document Prepared'}), description: t('uploadCard.docPreparedDesc', {ns: 'electronic-signature', defaultValue: 'Your document is now ready for signing.'}) });
-  };
-
+    toast({ title: t('uploadCard.docPreparedTitle', {ns: 'electronic-signature'}), description: t('uploadCard.docPreparedDesc', {ns: 'electronic-signature'}) });
+  }, [selectedFile, t, toast]);
 
   const howItWorksSteps = [
     { icon: FileUp, titleKey: 'howItWorks.step1Title', descKey: 'howItWorks.step1Desc' },
     { icon: UserCheck, titleKey: 'howItWorks.step2Title', descKey: 'howItWorks.step2Desc' },
     { icon: Send, titleKey: 'howItWorks.step3Title', descKey: 'howItWorks.step3Desc' },
-  ];
-
-  const benefitsItems = [
-    { icon: Zap, titleKey: 'benefits.fastTitle', descKey: 'benefits.fastDesc' },
-    { icon: CheckCircle, titleKey: 'benefits.easyTitle', descKey: 'benefits.easyDesc' },
-    { icon: ShieldCheck, titleKey: 'benefits.secureTitle', descKey: 'benefits.secureDesc' },
-    { icon: FileText, titleKey: 'benefits.organizedTitle', descKey: 'benefits.organizedDesc' },
-  ];
-  
-  const deviceItems = [
-    { icon: Laptop, nameKey: 'devices.desktop' },
-    { icon: Tablet, nameKey: 'devices.tablet' },
-    { icon: Smartphone, nameKey: 'devices.mobile' },
-  ];
-
-  const faqItems = [
-    { id: "faq1", questionKey: 'faq.q1.question', answerKey: 'faq.q1.answer'},
-    { id: "faq2", questionKey: 'faq.q2.question', answerKey: 'faq.q2.answer'},
-    { id: "faq3", questionKey: 'faq.q3.question', answerKey: 'faq.q3.answer'},
-    { id: "faq4", questionKey: 'faq.q4.question', answerKey: 'faq.q4.answer'},
-    { id: "faq5", questionKey: 'faq.q5.question', answerKey: 'faq.q5.answer'},
-    { id: "faq6", questionKey: 'faq.q6.question', answerKey: 'faq.q6.answer hipaa', testId: "faq-item-hipaa" },
   ];
 
   const complianceItems = [
@@ -223,7 +199,7 @@ export default function SignWellClientContent({ params }: SignWellClientContentP
     { textKey: 'security.compliance.soc2' },
     { textKey: 'security.compliance.idVerification' },
   ];
-
+  
   const useCaseItems = [
     { icon: FileText, titleKey: 'useCases.freelance.title', descKey: 'useCases.freelance.desc' },
     { icon: Briefcase, titleKey: 'useCases.consulting.title', descKey: 'useCases.consulting.desc' },
@@ -246,34 +222,56 @@ export default function SignWellClientContent({ params }: SignWellClientContentP
     volume: { titleKey: 'pricing.volume.title', featuresKey: 'pricing.volume.features' }
   };
   
+  const faqItems = [
+    { id: "faq1", questionKey: 'faq.q1.question', answerKey: 'faq.q1.answer'},
+    { id: "faq2", questionKey: 'faq.q2.question', answerKey: 'faq.q2.answer'},
+    { id: "faq3", questionKey: 'faq.q3.question', answerKey: 'faq.q3.answer'},
+    { id: "faq4", questionKey: 'faq.q4.question', answerKey: 'faq.q4.answer'},
+    { id: "faq5", questionKey: 'faq.q5.question', answerKey: 'faq.q5.answer'},
+    { id: "faq6", questionKey: 'faq.q6.question', answerKey: 'faq.q6.answer', testId: "faq-item-hipaa" },
+  ];
+  
   if (!isHydrated) {
     return (
       <div className="flex flex-col min-h-screen">
         <div className="flex-grow flex items-center justify-center">
-          <p>{t('common:Loading...', {defaultValue: 'Loading Electronic Signature Page...'})}</p>
+          <Loader2 className="h-8 w-8 animate-spin text-brand-blue" />
+          <p className="ml-2">{t('common:Loading...', {defaultValue: 'Loading Electronic Signature Page...'})}</p>
         </div>
       </div>
     );
   }
 
+  const mainButtonAction = () => {
+    if (currentFlowStep === 1 && !selectedFile) fileInputRef.current?.click();
+    else if (currentFlowStep === 2 && selectedFile) handlePrepareDocument();
+    // else if (currentFlowStep === 3 && selectedFile) { /* TODO: View/Sign action */ }
+  };
+
+  const mainButtonTextKey = 
+    currentFlowStep === 3 ? 'uploadCard.ctaViewDocument' :
+    currentFlowStep === 2 ? 'uploadCard.ctaPrepareDocument' :
+    'uploadCard.ctaAddDoc';
+
+
   return (
-    <div className="flex flex-col min-h-screen bg-background text-foreground">
+    <div className="flex flex-col min-h-screen bg-background text-brand-slate">
       {/* Hero Section */}
-      <section className="bg-gradient-to-b from-brand-sky/50 to-background py-16 md:py-20">
+      <section className="bg-gradient-to-b from-brand-sky/60 via-brand-sky/20 to-transparent py-16 md:py-20">
         <div className="container max-w-content mx-auto px-4 text-center">
           <h1 className="text-4xl md:text-5xl font-bold text-brand-slate mb-4 leading-tight">{t('hero.title')}</h1>
           <p className="text-lg text-muted-foreground max-w-xl mx-auto mb-8">{t('hero.subtitle')}</p>
           
-          <div className="flex justify-center mb-4">
-            <div className="flex items-center gap-2 text-xs text-muted-foreground">
-              <span className="font-bold text-foreground/90">Trustpilot</span>
+          <div className="flex justify-center mb-6">
+            <div className="flex items-center gap-4 text-xs text-muted-foreground">
+              <span className="font-bold text-foreground/90">{t('hero.trustpilot')}</span>
               <div className="flex items-center">
                   {Array.from({length: 5}).map((_, i) => <Star key={i} className="h-4 w-4 text-yellow-400 fill-yellow-400" />)}
               </div>
-              <span className="text-xs">{t('hero.trustpilotRating', {defaultValue: "4.8/5 rating"})}</span>
-              <span className="mx-1">|</span>
+              <span>{t('hero.trustpilotRating')}</span>
+              <span className="mx-1 hidden sm:inline">|</span>
               <Badge variant="secondary" className="bg-brand-blue/10 text-brand-blue border-brand-blue/30 text-xs">
-                 {t('hero.complianceBadge', {defaultValue: "ESIGN & UETA Compliant"})}
+                 {t('hero.complianceBadge')}
               </Badge>
             </div>
           </div>
@@ -286,41 +284,42 @@ export default function SignWellClientContent({ params }: SignWellClientContentP
               selectedFile={selectedFile}
               onClearFile={handleClearFile}
               isHydrated={isHydrated}
-              tGeneral={(key, options) => t(key, { ...options, ns: 'common' })}
+              tGeneral={(key, opts) => t(key, { ...opts, ns: 'common' })}
+              tEsign={(key, opts) => t(key, { ...opts, ns: 'electronic-signature' })}
             />
             {!selectedFile && (
               <p className="text-xs text-muted-foreground mt-4 mb-6">{t('hero.supportedFiles')}</p>
             )}
-            <div className="flex flex-col sm:flex-row gap-3 justify-center mt-6">
-              {!selectedFile ? (
-                <>
-                  <Button
-                    size="lg"
-                    className="bg-brand-green hover:bg-brand-green/90 text-white flex-1 sm:flex-none"
-                    data-test-id="hero-cta-upload"
-                    onClick={() => fileInputRef.current?.click()}
-                  >
-                    <UploadCloud className="mr-2 h-5 w-5" /> {t('hero.ctaUpload')}
-                  </Button>
-                  <Button size="lg" variant="outline" className="border-brand-blue text-brand-blue hover:bg-brand-blue/10 flex-1 sm:flex-none">
-                    {t('hero.ctaSignYourself')}
-                  </Button>
-                </>
-              ) : (
+             <div className="flex flex-col sm:flex-row gap-3 justify-center mt-6">
                 <Button
                   size="lg"
-                  className="bg-brand-blue hover:bg-brand-blue/90 text-white flex-1"
-                  onClick={handlePrepareDocument}
-                  disabled={currentFlowStep !== 2} // Enabled when file is "uploaded" (step 2)
+                  className="bg-brand-green hover:bg-brand-green/90 text-white flex-1"
+                  onClick={mainButtonAction}
+                  data-test-id="hero-cta-upload"
+                  disabled={currentFlowStep === 1 && uploadProgress > 0 && uploadProgress < 100}
                 >
-                  {currentFlowStep === 3 ? t('uploadCard.ctaViewDocument', {ns: 'electronic-signature', defaultValue: 'View & Sign Document'}) : t('uploadCard.ctaPrepareDocument', {ns: 'electronic-signature', defaultValue: 'Prepare Document for Signing'})}
+                  {currentFlowStep === 1 && uploadProgress > 0 && uploadProgress < 100 ? (
+                    <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                  ) : (
+                    selectedFile && currentFlowStep === 1 ? null : <UploadCloud className="mr-2 h-5 w-5" />
+                  )}
+                  {t(mainButtonTextKey)}
                 </Button>
-              )}
+              
+                {currentFlowStep === 1 && !selectedFile && (
+                   <Button size="lg" variant="outline" className="border-brand-blue text-brand-blue hover:bg-brand-blue/10 flex-1">
+                    {t('hero.ctaSignYourself')}
+                  </Button>
+                )}
             </div>
-             {/* Progress Tracker */}
+
             {(selectedFile || uploadProgress > 0) && (
               <div className="mt-8">
-                <Progress value={currentFlowStep === 1 ? uploadProgress : (currentFlowStep -1) * 50} className="h-2" aria-label={t('uploadCard.progressLabel')} />
+                <Progress 
+                    value={currentFlowStep === 1 ? uploadProgress : (currentFlowStep -1 + (uploadProgress === 100 ? 1: 0)) * 50 } 
+                    className="h-2 bg-muted" 
+                    aria-label={t('uploadCard.progressLabel')} 
+                />
                 <div className="flex justify-between text-xs text-muted-foreground mt-1.5">
                   <span className={cn(currentFlowStep >= 1 && "text-brand-blue font-semibold")}>{t('uploadCard.progress.upload')}</span>
                   <span className={cn(currentFlowStep >= 2 && "text-brand-blue font-semibold")}>{t('uploadCard.progress.prepare')}</span>
@@ -361,10 +360,12 @@ export default function SignWellClientContent({ params }: SignWellClientContentP
               </div>
             ))}
           </div>
-          {/* Placeholder for audit log sample */}
-          <div className="mt-12 p-4 bg-muted rounded-lg text-left max-w-2xl mx-auto">
-            <p className="text-xs font-mono text-muted-foreground">{t('howItWorks.auditLogSample')}</p>
-          </div>
+          <Card className="mt-12 p-4 bg-muted rounded-lg text-left max-w-2xl mx-auto shadow-sm border-border">
+            <CardHeader><CardTitle className="text-sm font-semibold text-foreground">{t('howItWorks.auditLogSampleTitle')}</CardTitle></CardHeader>
+            <CardContent>
+                <pre className="text-xs font-mono text-muted-foreground whitespace-pre-wrap break-all">{t('howItWorks.auditLogSample')}</pre>
+            </CardContent>
+          </Card>
         </div>
       </section>
 
@@ -407,9 +408,9 @@ export default function SignWellClientContent({ params }: SignWellClientContentP
                     <p className="text-xs text-muted-foreground">{t(item.descKey)}</p>
                   </div>
                 </div>
-                <Button variant="ghost" size="sm" className="absolute bottom-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity text-xs text-brand-blue hover:bg-brand-blue/10">
+                 {/* <Button variant="ghost" size="sm" className="absolute bottom-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity text-xs text-brand-blue hover:bg-brand-blue/10">
                   {t('useCases.generateWithAiPill')}
-                </Button>
+                </Button> */}
               </Card>
             ))}
           </div>
@@ -432,7 +433,6 @@ export default function SignWellClientContent({ params }: SignWellClientContentP
               ))}
             </ul>
           </div>
-          {/* Testimonial Slider Placeholder */}
           <div className="bg-card rounded-lg shadow-xl p-6 h-72 flex items-center justify-center">
             <p className="text-muted-foreground italic">{t('whyUs.testimonialSliderPlaceholder')}</p>
           </div>
@@ -445,7 +445,6 @@ export default function SignWellClientContent({ params }: SignWellClientContentP
           <h2 className="text-3xl font-bold mb-4">{t('pricing.preview.title')}</h2>
           <p className="text-lg opacity-90 mb-8">{t('pricing.preview.subtitle')}</p>
           
-          {/* Simplified pricing table representation */}
           <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto text-left">
             <Card className="bg-white/10 backdrop-blur-sm text-white border-white/20">
               <CardHeader><CardTitle>{t(pricingPlans.free.titleKey)}</CardTitle></CardHeader>
@@ -464,7 +463,7 @@ export default function SignWellClientContent({ params }: SignWellClientContentP
             </Card>
           </div>
           <Button variant="outline" asChild className="mt-10 bg-white text-brand-blue hover:bg-gray-100 border-transparent">
-            <Link href={`/${params.locale}/pricing`}>{t('pricing.preview.cta')}</Link>
+            <Link href={`/${params.locale}/pricing`}>{t('pricing.cta')}</Link>
           </Button>
         </div>
       </section>
@@ -488,14 +487,14 @@ export default function SignWellClientContent({ params }: SignWellClientContentP
         </div>
       </section>
 
-      {/* CTA Strip (Sticky on Desktop - handled by parent layout, simple CTA here) */}
+      {/* CTA Strip */}
       <section className="py-12 bg-muted/40 border-t border-border">
         <div className="container max-w-content mx-auto px-4 text-center">
           <h2 className="text-2xl font-bold text-brand-slate mb-4">{t('finalCta.title')}</h2>
           <p className="text-muted-foreground mb-6 max-w-md mx-auto">{t('finalCta.subtitle')}</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Button size="lg" className="bg-brand-green hover:bg-brand-green/90 text-white" onClick={() => fileInputRef.current?.click()}>
-              {t('finalCta.ctaUpload')}
+               <UploadCloud className="mr-2 h-5 w-5" />{t('finalCta.ctaUpload')}
             </Button>
             <Button size="lg" variant="outline" className="border-brand-blue text-brand-blue hover:bg-brand-blue/10">
               {t('finalCta.ctaScheduleDemo')}
