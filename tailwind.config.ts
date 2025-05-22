@@ -42,6 +42,16 @@ const config: Config = {
           50: '#f6f7fb', 100: '#e9ebf3', 200: '#c8cdde', 300: '#a3a9c6', 400: '#7b83ae',
           500: '#5c6595', 600: '#474f78', 700: '#343a5b', 800: '#23283d', 900: '#151824',
         },
+
+        // brand palette
+        'brand-blue': '#2563eb',
+        'brand-green': '#22c55e',
+        'brand-slate': '#0f172a',
+        'brand-sky': '#e0f2fe',
+      },
+
+      maxWidth: {
+        content: '1240px',
       },
 
       fontFamily: {
