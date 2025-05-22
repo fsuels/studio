@@ -367,6 +367,7 @@ const Header = React.memo(function Header() {
             {[
               { href: '/pricing', labelKey: 'nav.pricing', defaultLabel: 'Pricing' },
               { href: '/features', labelKey: 'nav.features', defaultLabel: 'Features' },
+              { href: '/signwell', labelKey: 'nav.sign', defaultLabel: 'Sign' },
               { href: '/blog', labelKey: 'nav.blog', defaultLabel: 'Blog' },
               { href: '/faq', labelKey: 'nav.faq', defaultLabel: 'FAQ' },
               { href: '/support', labelKey: 'nav.support', defaultLabel: 'Support' },
