@@ -1,7 +1,7 @@
 // src/components/AuthModal.tsx
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react'; // Added useState
 import {
   Dialog,
   DialogContent,
@@ -14,29 +14,50 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'next/navigation';
-import { Logo } from '@/components/layout/Logo'; // Import the Logo
+import { Logo } from '@/components/layout/Logo';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
+import { useToast } from '@/hooks/use-toast'; // Import useToast
 
 interface AuthModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onAuthSuccess: () => void; // This might not be used if we always navigate away
+  onAuthSuccess: () => void;
 }
 
 export default function AuthModal({ isOpen, onClose, onAuthSuccess }: AuthModalProps) {
   const { t } = useTranslation("common");
   const params = useParams();
   const locale = (params.locale as 'en' | 'es') || 'en';
+  const { toast } = useToast(); // Initialize useToast
 
-  // Simplified handler, actual auth happens on the dedicated pages
-  const handleNavigation = () => {
+  const [emailModal, setEmailModal] = useState('');
+  const [passwordModal, setPasswordModal] = useState('');
+
+  const handleSignInAttempt = () => {
+    if (!emailModal || !passwordModal) {
+      toast({
+        title: t('authModal.errorMissingFieldsTitle', { defaultValue: 'Missing Information' }),
+        description: t('authModal.errorMissingFieldsDesc', { defaultValue: 'Please enter both email and password.' }),
+        variant: 'destructive',
+      });
+      return;
+    }
+    // In a real scenario, you might attempt a quick auth here or just pass data
+    // For now, onAuthSuccess will be called, which closes the modal and shows a success toast.
+    onAuthSuccess();
+    setEmailModal(''); // Clear fields after "attempt"
+    setPasswordModal('');
+  };
+
+  const handleCloseAndReset = () => {
+    setEmailModal('');
+    setPasswordModal('');
     onClose();
-    // onAuthSuccess might not be relevant if we always redirect
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
+    <Dialog open={isOpen} onOpenChange={(open) => !open && handleCloseAndReset()}>
       <DialogContent className="sm:max-w-md bg-card border-border p-6 rounded-lg shadow-xl">
         <DialogHeader className="text-center items-center space-y-3">
           <Logo wrapperClassName="mb-3" />
@@ -58,7 +79,8 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess }: AuthModalP
               type="email" 
               placeholder={t('Enter your email', { defaultValue: 'Enter your email' })} 
               className="bg-background border-input mt-1" 
-              disabled // Visual placeholder
+              value={emailModal}
+              onChange={(e) => setEmailModal(e.target.value)}
             />
           </div>
           <div>
@@ -70,21 +92,34 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess }: AuthModalP
               type="password" 
               placeholder={t('Enter your password', { defaultValue: 'Enter your password' })} 
               className="bg-background border-input mt-1" 
-              disabled // Visual placeholder
+              value={passwordModal}
+              onChange={(e) => setPasswordModal(e.target.value)}
             />
           </div>
         </div>
 
         <DialogFooter className="flex flex-col gap-3 pt-2">
-          <Button asChild className="w-full h-11 bg-primary text-primary-foreground hover:bg-primary/90 text-base">
-            <Link href={`/${locale}/signin`} onClick={handleNavigation}>
-              {t('Sign In', { defaultValue: 'Sign In' })}
+          <Button 
+            onClick={handleSignInAttempt} 
+            className="w-full h-11 bg-primary text-primary-foreground hover:bg-primary/90 text-base"
+          >
+            {t('Sign In', { defaultValue: 'Sign In' })}
+          </Button>
+          <Button 
+            variant="outline" 
+            asChild 
+            className="w-full h-11 border-primary text-primary hover:bg-primary/10 text-base"
+            onClick={handleCloseAndReset} // Close modal when navigating
+          >
+            <Link href={`/${locale}/signup`}>
+              {t('authModal.createFreeAccount', { defaultValue: 'Create Free Account' })}
             </Link>
           </Button>
-          <p className="text-xs text-muted-foreground text-center">
-            {t("Don't have an account?", { defaultValue: "Don't have an account?" })}{' '}
-            <Link href={`/${locale}/signup`} onClick={handleNavigation} className="font-semibold text-primary hover:underline">
-              {t('Sign Up', { defaultValue: 'Sign Up' })}
+          <p className="text-xs text-muted-foreground text-center pt-2">
+            {t('authModal.fullSitePrompt', {defaultValue: "For full account management or if you have issues:"})}
+            <br/>
+            <Link href={`/${locale}/signin`} onClick={handleCloseAndReset} className="font-semibold text-primary hover:underline">
+              {t('authModal.goToFullSignIn', {defaultValue: "Go to Full Sign In Page"})}
             </Link>
           </p>
         </DialogFooter>
