@@ -96,7 +96,7 @@ export default function DocPageClient({ params: routeParams }: DocPageClientProp
         }
         setIsLoading(false); // Config is resolved (or not found)
     }
-  }, [docId, isHydrated, notFound]); // Removed docConfig from deps as it's derived
+  }, [docId, isHydrated, notFound]); 
 
 
 
@@ -207,7 +207,7 @@ export default function DocPageClient({ params: routeParams }: DocPageClientProp
             </div>
             
             <Button size="lg" className="w-full sm:w-auto text-base px-8 py-3" onClick={handleStartWizard} disabled={!isHydrated}>
-              {t('docDetail.startForFree')}
+              {t('Start For Free', {defaultValue: 'Start For Free'})}
             </Button>
             <div className="mt-4">
               <Link href={`/${currentLocale}#workflow-start`} className="text-sm text-primary underline">
@@ -259,7 +259,7 @@ export default function DocPageClient({ params: routeParams }: DocPageClientProp
                              {t('docDetail.competitivePrice', { competitorPrice: competitorPrice.toFixed(2), defaultValue: `Compare to typical attorney fees of $${competitorPrice.toFixed(2)}+`})}
                         </p>
                          <Button size="lg" className="w-full mt-2" onClick={handleStartWizard} disabled={!isHydrated}>
-                           {t('docDetail.startForFree')}
+                           {t('Start For Free', {defaultValue: 'Start For Free'})}
                          </Button>
                     </CardContent>
                  </Card>
@@ -345,7 +345,7 @@ export default function DocPageClient({ params: routeParams }: DocPageClientProp
         {/* Sticky CTA for mobile */}
         <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-t p-4 shadow-lg z-40">
           <Button size="lg" className="w-full text-base" onClick={handleStartWizard} disabled={!isHydrated}>
-             {t('docDetail.startForFree')}
+             {t('Start For Free', {defaultValue: 'Start For Free'})}
           </Button>
         </div>
     </main>
