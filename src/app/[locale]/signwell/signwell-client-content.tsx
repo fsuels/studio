@@ -10,7 +10,7 @@ import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 import {
   UploadCloud, ShieldCheck, CheckCircle, Zap, Users, Home, Briefcase,
-  FileText, Lock, Award, MessageSquare, ChevronRight, Star, Mail, Clock, HelpCircle, LifeBuoy, Link as LinkIcon, Edit3, FileUp, UserCheck, Send, Tablet, Smartphone, Laptop
+  FileText, Lock, Award, MessageSquare, ChevronRight, Star, Mail, Clock, HelpCircle, LifeBuoy, Link as LinkIcon, Edit3, FileUp, UserCheck, Send, Tablet, Smartphone, Laptop, X, FileIcon
 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -24,14 +24,21 @@ interface SignWellClientContentProps {
 // Placeholder for Dropzone Component
 const DropzonePlaceholder = ({
   onFiles,
-  inputRef // Accept the ref from the parent
+  inputRef,
+  selectedFile,
+  onClearFile,
+  isHydrated,
+  tGeneral, // Pass general t function for common texts
 }: {
   onFiles: (files: File[]) => void;
   inputRef: React.RefObject<HTMLInputElement>;
+  selectedFile: File | null;
+  onClearFile: () => void;
+  isHydrated: boolean;
+  tGeneral: (key: string, options?: any) => string;
 }) => {
   const { t } = useTranslation("electronic-signature");
   const [isDragging, setIsDragging] = useState(false);
-  // Removed local fileInputRef, using the one passed from parent
 
   const handleDragEnter = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -57,13 +64,40 @@ const DropzonePlaceholder = ({
     }
   };
   const handleFileClick = () => {
-    inputRef.current?.click(); // Use the passed ref
+    if (!selectedFile) {
+      inputRef.current?.click();
+    }
   };
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       onFiles(Array.from(e.target.files));
     }
   };
+
+  if (!isHydrated) {
+    return <div className="h-48 bg-muted rounded-xl animate-pulse"></div>;
+  }
+
+  if (selectedFile) {
+    return (
+      <div
+        data-test-id="file-selected-indicator"
+        className={cn(
+          "border-2 border-dashed rounded-xl p-8 md:p-12 text-center transition-all duration-200",
+          "border-brand-green bg-brand-green/10"
+        )}
+      >
+        <FileIcon className="h-12 w-12 text-brand-green mx-auto mb-4" />
+        <p className="font-semibold text-foreground mb-1 text-lg truncate" title={selectedFile.name}>{selectedFile.name}</p>
+        <p className="text-sm text-muted-foreground mb-4">
+          ({(selectedFile.size / 1024).toFixed(1)} KB) - {tGeneral('Ready to prepare', {defaultValue: 'Ready to prepare!'})}
+        </p>
+        <Button variant="ghost" size="sm" onClick={onClearFile} className="text-xs text-destructive hover:bg-destructive/10">
+          <X className="mr-1 h-3 w-3" /> {tGeneral('Clear file', {defaultValue: 'Clear file'})}
+        </Button>
+      </div>
+    );
+  }
 
   return (
     <div
@@ -76,15 +110,15 @@ const DropzonePlaceholder = ({
       onDragLeave={handleDragLeave}
       onDragOver={handleDragOver}
       onDrop={handleDrop}
-      onClick={handleFileClick} // Makes the dropzone area clickable
+      onClick={handleFileClick}
     >
       <input
         type="file"
-        ref={inputRef} // Assign the passed ref here
+        ref={inputRef}
         className="hidden"
-        accept=".pdf,.doc,.docx,.txt,.rtf,.odt" // Common document types
+        accept=".pdf,.doc,.docx,.txt,.rtf,.odt"
         onChange={handleFileChange}
-        multiple={false} // Typically one document for e-signing flow initially
+        multiple={false}
       />
       <UploadCloud className="h-12 w-12 text-brand-blue mx-auto mb-4" />
       <p className="font-semibold text-foreground mb-1 text-lg">{t('hero.dropzoneTitle')}</p>
@@ -95,10 +129,13 @@ const DropzonePlaceholder = ({
 
 
 export default function SignWellClientContent({ params }: SignWellClientContentProps) {
-  const { t, i18n } = useTranslation('electronic-signature');
+  const { t, i18n } = useTranslation(['electronic-signature', 'common']); // Added 'common' for general terms
   const [isHydrated, setIsHydrated] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement>(null); // Ref for the hidden file input
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [currentFlowStep, setCurrentFlowStep] = useState(1); // 1: Upload, 2: Prepare, 3: Sign
 
   useEffect(() => {
     setIsHydrated(true);
@@ -108,14 +145,49 @@ export default function SignWellClientContent({ params }: SignWellClientContentP
   }, [params.locale, i18n]);
 
   const handleFileUpload = useCallback((files: File[]) => {
-    console.log("Files selected:", files);
-    // TODO: Connect Dropzone → /api/signwell/upload (returns fileId)
-    // For now, just provide feedback
-    toast({
-      title: t('uploadCard.filesReceivedTitle', { defaultValue: "Files Received" }),
-      description: t('uploadCard.filesReceivedDesc', { count: files.length, defaultValue: `${files.length} file(s) ready for processing.` }),
-    });
+    if (files.length > 0) {
+      const file = files[0];
+      setSelectedFile(file);
+      setCurrentFlowStep(1); // Reset to upload step visually
+      setUploadProgress(0);
+
+      // Simulate upload
+      let progress = 0;
+      const interval = setInterval(() => {
+        progress += 20;
+        if (progress <= 100) {
+          setUploadProgress(progress);
+        } else {
+          clearInterval(interval);
+          setCurrentFlowStep(2); // Move to "Prepare" step after simulated upload
+           toast({
+            title: t('uploadCard.fileSelectedTitle', { ns: 'electronic-signature', defaultValue: "File Selected" }),
+            description: t('uploadCard.fileSelectedDesc', { ns: 'electronic-signature', fileName: file.name, defaultValue: `"${file.name}" is ready to be prepared for signing.` }),
+          });
+        }
+      }, 150);
+    }
   },[t, toast]);
+
+  const handleClearFile = () => {
+    setSelectedFile(null);
+    setUploadProgress(0);
+    setCurrentFlowStep(1);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ""; // Reset file input
+    }
+  };
+
+  const handlePrepareDocument = () => {
+    if (!selectedFile) {
+      toast({ title: t('common:Error', {defaultValue: 'Error'}), description: t('uploadCard.noFileToPrepare', {ns: 'electronic-signature', defaultValue: 'Please select a document to prepare.'}), variant: 'destructive' });
+      return;
+    }
+    // Placeholder for actual prepare logic
+    setCurrentFlowStep(3); // Move to "Sign" step
+    toast({ title: t('uploadCard.docPreparedTitle', {ns: 'electronic-signature', defaultValue: 'Document Prepared'}), description: t('uploadCard.docPreparedDesc', {ns: 'electronic-signature', defaultValue: 'Your document is now ready for signing.'}) });
+  };
+
 
   const howItWorksSteps = [
     { icon: FileUp, titleKey: 'howItWorks.step1Title', descKey: 'howItWorks.step1Desc' },
@@ -178,7 +250,7 @@ export default function SignWellClientContent({ params }: SignWellClientContentP
     return (
       <div className="flex flex-col min-h-screen">
         <div className="flex-grow flex items-center justify-center">
-          <p>Loading Electronic Signature Page...</p> {/* Static text for pre-hydration */}
+          <p>{t('common:Loading...', {defaultValue: 'Loading Electronic Signature Page...'})}</p>
         </div>
       </div>
     );
@@ -200,28 +272,62 @@ export default function SignWellClientContent({ params }: SignWellClientContentP
               </div>
               <span className="text-xs">{t('hero.trustpilotRating', {defaultValue: "4.8/5 rating"})}</span>
               <span className="mx-1">|</span>
-              <Badge variant="outline" className="bg-brand-blue/10 text-brand-blue border-brand-blue/30 text-xs">
+              <Badge variant="secondary" className="bg-brand-blue/10 text-brand-blue border-brand-blue/30 text-xs">
                  {t('hero.complianceBadge', {defaultValue: "ESIGN & UETA Compliant"})}
               </Badge>
             </div>
           </div>
 
+          {/* Smart Upload Card (Hero Version) */}
           <Card className="max-w-xl mx-auto bg-card/80 backdrop-blur-sm shadow-xl rounded-2xl p-6 md:p-8 text-center border-border mb-8">
-            <DropzonePlaceholder onFiles={handleFileUpload} inputRef={fileInputRef} />
-            <p className="text-xs text-muted-foreground mt-4 mb-6">{t('hero.supportedFiles')}</p>
-            <div className="flex flex-col sm:flex-row gap-3 justify-center">
-              <Button
-                size="lg"
-                className="bg-brand-green hover:bg-brand-green/90 text-white flex-1 sm:flex-none"
-                data-test-id="hero-cta-upload"
-                onClick={() => fileInputRef.current?.click()} // Triggers file input
-              >
-                <UploadCloud className="mr-2 h-5 w-5" /> {t('hero.ctaUpload')}
-              </Button>
-              <Button size="lg" variant="outline" className="border-brand-blue text-brand-blue hover:bg-brand-blue/10 flex-1 sm:flex-none">
-                {t('hero.ctaSignYourself')}
-              </Button>
+            <DropzonePlaceholder
+              onFiles={handleFileUpload}
+              inputRef={fileInputRef}
+              selectedFile={selectedFile}
+              onClearFile={handleClearFile}
+              isHydrated={isHydrated}
+              tGeneral={(key, options) => t(key, { ...options, ns: 'common' })}
+            />
+            {!selectedFile && (
+              <p className="text-xs text-muted-foreground mt-4 mb-6">{t('hero.supportedFiles')}</p>
+            )}
+            <div className="flex flex-col sm:flex-row gap-3 justify-center mt-6">
+              {!selectedFile ? (
+                <>
+                  <Button
+                    size="lg"
+                    className="bg-brand-green hover:bg-brand-green/90 text-white flex-1 sm:flex-none"
+                    data-test-id="hero-cta-upload"
+                    onClick={() => fileInputRef.current?.click()}
+                  >
+                    <UploadCloud className="mr-2 h-5 w-5" /> {t('hero.ctaUpload')}
+                  </Button>
+                  <Button size="lg" variant="outline" className="border-brand-blue text-brand-blue hover:bg-brand-blue/10 flex-1 sm:flex-none">
+                    {t('hero.ctaSignYourself')}
+                  </Button>
+                </>
+              ) : (
+                <Button
+                  size="lg"
+                  className="bg-brand-blue hover:bg-brand-blue/90 text-white flex-1"
+                  onClick={handlePrepareDocument}
+                  disabled={currentFlowStep !== 2} // Enabled when file is "uploaded" (step 2)
+                >
+                  {currentFlowStep === 3 ? t('uploadCard.ctaViewDocument', {ns: 'electronic-signature', defaultValue: 'View & Sign Document'}) : t('uploadCard.ctaPrepareDocument', {ns: 'electronic-signature', defaultValue: 'Prepare Document for Signing'})}
+                </Button>
+              )}
             </div>
+             {/* Progress Tracker */}
+            {(selectedFile || uploadProgress > 0) && (
+              <div className="mt-8">
+                <Progress value={currentFlowStep === 1 ? uploadProgress : (currentFlowStep -1) * 50} className="h-2" aria-label={t('uploadCard.progressLabel')} />
+                <div className="flex justify-between text-xs text-muted-foreground mt-1.5">
+                  <span className={cn(currentFlowStep >= 1 && "text-brand-blue font-semibold")}>{t('uploadCard.progress.upload')}</span>
+                  <span className={cn(currentFlowStep >= 2 && "text-brand-blue font-semibold")}>{t('uploadCard.progress.prepare')}</span>
+                  <span className={cn(currentFlowStep >= 3 && "text-brand-blue font-semibold")}>{t('uploadCard.progress.sign')}</span>
+                </div>
+              </div>
+            )}
           </Card>
           <p className="text-sm text-muted-foreground">{t('hero.noAccountNeeded')}</p>
         </div>
@@ -239,44 +345,6 @@ export default function SignWellClientContent({ params }: SignWellClientContentP
           </div>
         </div>
       </section>
-
-      {/* Smart Upload Card (Concept merged into Hero, progress tracker can be separate if needed) */}
-      {/*
-      <section className="py-16 relative" style={{ backgroundImage: "url('https://placehold.co/1200x600/e0f2fe/a5f3fc?text=Subtle+Mesh+BG')" }}>
-        <div className="absolute inset-0 bg-background/30 backdrop-blur-md z-0"></div>
-        <div className="container max-w-3xl mx-auto px-4 relative z-10">
-          <Card className="bg-card/90 shadow-2xl rounded-2xl p-6 md:p-10 border border-border">
-            <div className="flex items-center gap-2 text-sm text-muted-foreground mb-3">
-              <span className="font-semibold text-primary">{t('uploadCard.stepLabel')}</span> • {t('uploadCard.addDocumentLabel')}
-            </div>
-            <DropzonePlaceholder onFiles={handleFileUpload} inputRef={fileInputRef} />
-            <p className="text-xs text-muted-foreground mt-3 text-center">{t('uploadCard.convertHelpText')}</p>
-            <div className="flex flex-col sm:flex-row gap-3 justify-center mt-6">
-              <Button 
-                size="lg" 
-                className="bg-brand-green hover:bg-brand-green/90 text-white" 
-                data-test-id="upload-card-cta-add-doc"
-                onClick={() => fileInputRef.current?.click()}
-              >
-                <UploadCloud className="mr-2 h-5 w-5" /> {t('uploadCard.ctaAddDoc')}
-              </Button>
-              <Button size="lg" variant="outline" className="border-brand-blue text-brand-blue hover:bg-brand-blue/10">
-                {t('uploadCard.ctaTrySample')}
-              </Button>
-            </div>
-            <div className="mt-8">
-              <Progress value={33} className="h-2" aria-label={t('uploadCard.progressLabel')} />
-              <div className="flex justify-between text-xs text-muted-foreground mt-1.5">
-                <span>{t('uploadCard.progress.upload')}</span>
-                <span>{t('uploadCard.progress.prepare')}</span>
-                <span>{t('uploadCard.progress.sign')}</span>
-              </div>
-            </div>
-          </Card>
-        </div>
-      </section>
-      */}
-
 
       {/* How It Works Section */}
       <section id="how-it-works" className="py-16 md:py-20 bg-background">
@@ -318,7 +386,7 @@ export default function SignWellClientContent({ params }: SignWellClientContentP
             </Button>
           </div>
           <div className="flex justify-center">
-            <Image src="https://placehold.co/400x300/0f172a/e0f2fe?text=Secure+Shield" alt={t('security.imageAlt')} width={400} height={300} className="rounded-lg shadow-xl" data-ai-hint="security shield padlock"/>
+            <Image src="https://placehold.co/400x300/0f172a/e0f2fe.png" alt={t('security.imageAlt')} width={400} height={300} className="rounded-lg shadow-xl" data-ai-hint="security shield padlock"/>
           </div>
         </div>
       </section>
@@ -426,7 +494,7 @@ export default function SignWellClientContent({ params }: SignWellClientContentP
           <h2 className="text-2xl font-bold text-brand-slate mb-4">{t('finalCta.title')}</h2>
           <p className="text-muted-foreground mb-6 max-w-md mx-auto">{t('finalCta.subtitle')}</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Button size="lg" className="bg-brand-green hover:bg-brand-green/90 text-white">
+            <Button size="lg" className="bg-brand-green hover:bg-brand-green/90 text-white" onClick={() => fileInputRef.current?.click()}>
               {t('finalCta.ctaUpload')}
             </Button>
             <Button size="lg" variant="outline" className="border-brand-blue text-brand-blue hover:bg-brand-blue/10">
@@ -438,3 +506,4 @@ export default function SignWellClientContent({ params }: SignWellClientContentP
     </div>
   );
 }
+
