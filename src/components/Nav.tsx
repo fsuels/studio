@@ -68,19 +68,23 @@ const Nav = React.memo(function Nav() {
         <DropdownMenuTrigger
           className={cn(
             "group hover:bg-primary/10 hover:text-primary focus-visible:bg-primary/10 focus-visible:text-primary transition-colors px-2 py-1.5 rounded-md text-sm font-medium text-muted-foreground flex items-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
-            (pathname === `/${currentLocale}/signwell`) && "bg-primary/10 text-primary font-semibold"
+            (pathname === `/${currentLocale}/signwell` || pathname === `/${currentLocale}/online-notary`) && "bg-primary/10 text-primary font-semibold"
           )}
         >
-          {tHeader('nav.electronicSignature', { defaultValue: 'Electronic Signature' })}
+          {tHeader('nav.sign', { defaultValue: 'Sign' })}
           <ChevronDown className="ml-1 h-4 w-4 opacity-70 shrink-0 transition-transform duration-200 group-data-[state=open]:rotate-180" />
         </DropdownMenuTrigger>
         <DropdownMenuContent align="start" className="bg-popover border-border shadow-lg rounded-md">
           <DropdownMenuItem asChild className="cursor-pointer hover:bg-accent focus:bg-accent">
             <Link href={`/${currentLocale}/signwell`} className="w-full px-2 py-1.5 text-sm">
-              {tHeader('nav.electronicSignature', { defaultValue: 'Electronic Signature' })}
+              {tHeader('nav.eSign', { defaultValue: 'eSign' })}
             </Link>
           </DropdownMenuItem>
-          {/* Add other sign-related links here if needed */}
+          <DropdownMenuItem asChild className="cursor-pointer hover:bg-accent focus:bg-accent">
+            <Link href={`/${currentLocale}/online-notary`} className="w-full px-2 py-1.5 text-sm">
+              {tHeader('nav.onlineNotary', { defaultValue: 'Online Notary' })}
+            </Link>
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     </nav>
