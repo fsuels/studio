@@ -23,7 +23,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { Label } from '@/components/ui/label';
+import { Label } from '@/components/ui/label'; // Make sure Label is imported
 
 interface ReviewStepProps {
   doc: LegalDocument;
@@ -38,8 +38,10 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
   const [editingFieldId, setEditingFieldId] = useState<string | null>(null);
   const [originalFieldValue, setOriginalFieldValue] = useState<any>(null);
 
+  // Watch all form values to trigger re-computation of fieldsToReview if any value changes
+  const watchedValues = watch();
+
   useEffect(() => {
-    // This log helps see if the component re-renders when editingFieldId changes
     console.log('[ReviewStep] editingFieldId changed to:', editingFieldId);
   }, [editingFieldId]);
 
@@ -52,7 +54,8 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
   }, [doc.schema]);
 
   const fieldsToReview = useMemo(() => {
-    const currentFormData = getValues();
+    console.log('[ReviewStep] Recalculating fieldsToReview. Watched values changed.');
+    const currentFormData = getValues(); // Get current values for processing
     const allFieldKeys = Array.from(new Set([
       ...(actualSchemaShape ? Object.keys(actualSchemaShape) : []),
       ...Object.keys(currentFormData)
@@ -60,7 +63,7 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
 
     return allFieldKeys
       .filter(fieldId => {
-        if (fieldId === 'notarizationPreference') return false; // Example of a field to exclude
+        if (fieldId === 'notarizationPreference') return false;
         return true;
       })
       .map((fieldId) => {
@@ -97,14 +100,14 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
       });
   }, [doc, actualSchemaShape, getValues, t, watchedValues]); // watchedValues dependency
 
-  const handleEdit = (fieldId: string) => {
-    console.log(`[ReviewStep] handleEdit called for fieldId: ${fieldId}`);
+  const handleEdit = useCallback((fieldId: string) => {
+    console.log(`[ReviewStep] Edit button clicked for fieldId: ${fieldId}`);
     const currentValue = getValues(fieldId);
-    console.log(`[ReviewStep] Current value for ${fieldId}:`, currentValue);
+    console.log(`[ReviewStep] Storing original value for ${fieldId}:`, currentValue);
     setOriginalFieldValue(currentValue);
     setEditingFieldId(fieldId);
     console.log(`[ReviewStep] editingFieldId state set to: ${fieldId}`);
-  };
+  }, [getValues]);
 
   const handleSave = useCallback(async (fieldId: string) => {
     const isValid = await trigger(fieldId as any);
@@ -118,7 +121,8 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
   }, [trigger, toast, t, fieldsToReview]);
 
   const handleCancel = useCallback(() => {
-    if (editingFieldId && originalFieldValue !== undefined) { // Check for undefined, not null
+    if (editingFieldId && originalFieldValue !== undefined) {
+      console.log(`[ReviewStep] Cancelling edit for ${editingFieldId}. Reverting to:`, originalFieldValue);
       setValue(editingFieldId as any, originalFieldValue, { shouldValidate: true, shouldDirty: true });
     }
     setEditingFieldId(null);
@@ -141,10 +145,11 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
   const getInputType = (fieldType: Question['type']): React.HTMLInputTypeAttribute => {
     if (fieldType === 'number') return 'number';
     if (fieldType === 'date') return 'date';
-    if (fieldType === 'tel') return 'tel'; // SmartInput handles tel better
+    // SmartInput handles 'tel' type internally by setting its own input type/mode
+    // For standard Input, if we explicitly map 'tel' to type='tel', it works.
+    if (fieldType === 'tel') return 'tel';
     return 'text';
   };
-
 
   return (
     <Card className="bg-card border-border shadow-lg">
@@ -157,7 +162,7 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
       <CardContent className="space-y-2">
         {fieldsToReview.map((field) => {
           const isCurrentlyEditing = editingFieldId === field.id;
-          console.log(`[ReviewStep] Rendering field: ${field.id}, isCurrentlyEditing: ${isCurrentlyEditing}`);
+          // console.log(`[ReviewStep] Rendering field: ${field.id}, isCurrentlyEditing: ${isCurrentlyEditing}`);
           return (
             <div key={field.id} className="py-3 border-b border-border last:border-b-0">
               <div className="flex justify-between items-start gap-2">
@@ -186,7 +191,7 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
                       {(field.type === 'tel' || field.id.toLowerCase().includes('phone')) ? (
                         <SmartInput
                           id={`review-${field.id}`}
-                          type="tel"
+                          type="tel" // SmartInput expects 'tel'
                           placeholder={t(field.placeholder || '', {ns: 'documents', defaultValue: field.placeholder || ''})}
                           className={cn("max-w-md text-sm", errors[field.id] && "border-destructive")}
                           aria-invalid={!!errors[field.id]}
@@ -200,7 +205,7 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
                           render={({ field: controllerField }) => (
                             <AddressField
                               name={controllerField.name}
-                              label="" // Label is already rendered above
+                              label="" 
                               value={controllerField.value || ''}
                               onChange={(val, parts) => {
                                 controllerField.onChange(val);
@@ -214,7 +219,7 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
                               placeholder={t(field.placeholder || 'Enter address...', {ns: 'documents', defaultValue: field.placeholder || 'Enter address...'})}
                               className="max-w-md"
                               error={errors[field.id]?.message as string | undefined}
-                              tooltipText={field.tooltip ? t(field.tooltip, {ns: 'documents', defaultValue: field.tooltip}) : undefined}
+                              tooltip={field.tooltip ? t(field.tooltip, {ns: 'documents', defaultValue: field.tooltip}) : undefined}
                             />
                           )}
                         />
@@ -224,19 +229,33 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
                           control={control}
                           rules={{ required: field.required }}
                           render={({ field: controllerField }) => {
+                            const commonInputProps = {
+                              id: `review-${field.id}`,
+                              value: controllerField.value ?? '',
+                              onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+                                let valToSet: string | number = e.target.value;
+                                if (field.type === 'number') {
+                                  if (valToSet === '') { // Allow clearing number field
+                                    controllerField.onChange(''); // RHF can handle empty string for numbers if schema coerces
+                                  } else if (!isNaN(Number(valToSet))) {
+                                    controllerField.onChange(Number(valToSet));
+                                  } else {
+                                    // If not a valid number input, don't change, or handle error
+                                  }
+                                } else {
+                                  controllerField.onChange(valToSet);
+                                }
+                              },
+                              onBlur: controllerField.onBlur,
+                              name: controllerField.name,
+                              ref: controllerField.ref,
+                              placeholder: t(field.placeholder || '', {ns: 'documents', defaultValue: field.placeholder || ''}),
+                              className: cn("max-w-md text-sm", errors[field.id] && "border-destructive"),
+                              "aria-invalid": !!errors[field.id],
+                            };
+
                             if (field.type === 'textarea') {
-                              return <Textarea
-                                id={`review-${field.id}`}
-                                placeholder={t(field.placeholder || '', {ns: 'documents', defaultValue: field.placeholder || ''})}
-                                className={cn("max-w-md text-sm", errors[field.id] && "border-destructive")}
-                                value={controllerField.value ?? ''}
-                                onChange={(e) => controllerField.onChange(e.target.value)}
-                                onBlur={controllerField.onBlur}
-                                name={controllerField.name}
-                                ref={controllerField.ref}
-                                aria-invalid={!!errors[field.id]}
-                                rows={3}
-                              />;
+                              return <Textarea {...commonInputProps} rows={3} />;
                             }
                             if (field.type === 'select' && field.options) {
                               return (
@@ -269,27 +288,10 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
                                 </div>
                               );
                             }
-                            // Default to standard Input
                             return (
                               <Input
-                                id={`review-${field.id}`}
+                                {...commonInputProps}
                                 type={getInputType(field.type)}
-                                placeholder={t(field.placeholder || '', {ns: 'documents', defaultValue: field.placeholder || ''})}
-                                className={cn("max-w-md text-sm", errors[field.id] && "border-destructive")}
-                                value={controllerField.value ?? ''}
-                                onChange={(e) => {
-                                  let valToSet: string | number = e.target.value;
-                                  if (field.type === 'number' && valToSet !== '' && !isNaN(Number(valToSet))) {
-                                    valToSet = Number(valToSet);
-                                  } else if (field.type === 'number' && valToSet === '') {
-                                    valToSet = '' // Allow clearing number field, validation will handle it
-                                  }
-                                  controllerField.onChange(valToSet);
-                                }}
-                                onBlur={controllerField.onBlur}
-                                name={controllerField.name}
-                                ref={controllerField.ref}
-                                aria-invalid={!!errors[field.id]}
                               />
                             );
                           }}
@@ -316,8 +318,8 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
                     variant="ghost"
                     size="icon"
                     onClick={(e) => {
-                      console.log(`[ReviewStep] Edit button clicked for fieldId: ${field.id}`);
-                      e.stopPropagation(); // Prevent any parent click handlers if any
+                      console.log(`[ReviewStep] Edit button CLICKED for fieldId: ${field.id}`);
+                      e.stopPropagation(); 
                       handleEdit(field.id);
                     }}
                     className="mt-1 self-start shrink-0"
@@ -339,4 +341,3 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
     </Card>
   );
 }
-
