@@ -10,11 +10,21 @@ import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Button } from '@/components/ui/button';
 import dynamic from 'next/dynamic';
-import { Check, ChevronDown, Globe, UserPlus, LogIn, Search as SearchIcon, ExternalLink, FileText, Menu as MenuIcon, X as CloseIcon, LayoutGrid, ChevronUp, LogOut, UserCircle } from 'lucide-react';
+import { Check, ChevronDown, Globe, UserPlus, LogIn, Search as SearchIcon, ExternalLink, FileText, Menu as MenuIcon, X as CloseIcon, LayoutGrid, ChevronUp, LogOut, UserCircle, Loader2 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { documentLibrary, LegalDocument } from '@/lib/document-library';
 import { CATEGORY_LIST } from '@/components/Step1DocumentSelector';
-const MegaMenuContent = dynamic(() => import('@/components/mega-menu/MegaMenuContent'));
+
+const MegaMenuSkeleton = () => (
+  <div className="flex justify-center items-center p-8">
+    <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+  </div>
+);
+
+const MegaMenuContent = dynamic(() => import('@/components/mega-menu/MegaMenuContent'), {
+  loading: () => <MegaMenuSkeleton />,
+  ssr: false,
+});
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/hooks/useAuth';
 import { cn } from '@/lib/utils';
@@ -45,7 +55,12 @@ const Header = React.memo(function Header() {
   const searchInputRef = useRef<HTMLInputElement>(null);
   const searchResultsRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => { setMounted(true); }, []);
+  useEffect(() => {
+    setMounted(true);
+    if (typeof (MegaMenuContent as any).preload === 'function') {
+      (MegaMenuContent as any).preload();
+    }
+  }, []);
 
   useEffect(() => {
     if (!mounted) return;
