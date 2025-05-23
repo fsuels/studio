@@ -7,6 +7,10 @@
     "label": "Seller's Phone Number",
     "tooltip": "A valid phone number for the seller."
   },
+  "add_seller2": {
+    "label": "Add a Second Seller?",
+    "tooltip": "Select if there is more than one seller."
+  },
   "seller2_name": {
     "label": "Second Seller's Full Name",
     "tooltip": "Optional second seller name if more than one person is selling the vehicle."
@@ -30,6 +34,10 @@
   "buyer_phone": {
     "label": "Buyer's Phone Number",
     "tooltip": "A valid phone number for the buyer."
+  },
+  "add_buyer2": {
+    "label": "Add a Second Buyer?",
+    "tooltip": "Select if there is more than one buyer."
   },
   "buyer2_name": {
     "label": "Second Buyer's Full Name",

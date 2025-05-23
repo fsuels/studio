@@ -7,6 +7,10 @@
     "label": "Número de teléfono del vendedor",
     "tooltip": "Un número de teléfono válido para el vendedor."
   },
+  "add_seller2": {
+    "label": "¿Agregar un segundo vendedor?",
+    "tooltip": "Seleccione si hay más de un vendedor."
+  },
   "seller2_name": {
     "label": "Nombre completo del segundo vendedor",
     "tooltip": "Nombre opcional de un segundo vendedor si hay más de uno."
@@ -30,6 +34,10 @@
   "buyer_phone": {
     "label": "Número de teléfono del comprador",
     "tooltip": "Un número de teléfono válido para el comprador."
+  },
+  "add_buyer2": {
+    "label": "¿Agregar un segundo comprador?",
+    "tooltip": "Seleccione si hay más de un comprador."
   },
   "buyer2_name": {
     "label": "Nombre completo del segundo comprador",

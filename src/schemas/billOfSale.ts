@@ -11,6 +11,7 @@ export const BillOfSaleSchema = z.object({
                      .refine(val => val === undefined || val === "" || /^\(\d{3}\)\s\d{3}-\d{4}$/.test(val), {
                         message: "Phone number must be in (XXX) XXX-XXXX format or empty.",
                      }),
+  add_seller2:      z.boolean().optional().default(false),
   seller2_name:     z.string().optional(),
   seller2_phone:    z.string()
                      .optional()
@@ -26,6 +27,7 @@ export const BillOfSaleSchema = z.object({
                      .refine(val => val === undefined || val === "" || /^\(\d{3}\)\s\d{3}-\d{4}$/.test(val), {
                         message: "Phone number must be in (XXX) XXX-XXXX format or empty.",
                      }),
+  add_buyer2:       z.boolean().optional().default(false),
   buyer2_name:      z.string().optional(),
   buyer2_phone:     z.string()
                      .optional()
