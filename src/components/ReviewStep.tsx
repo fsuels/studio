@@ -298,10 +298,10 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
                         />
                       )}
                       <div className="flex gap-2 mt-2">
-                        <Button size="sm" onClick={() => handleSave(field.id)} className="text-xs h-8">
+                        <Button type="button" size="sm" onClick={() => handleSave(field.id)} className="text-xs h-8">
                           <Check className="w-3.5 h-3.5 mr-1" />{t('Save')}
                         </Button>
-                        <Button size="sm" variant="outline" onClick={handleCancel} className="text-xs h-8">
+                        <Button type="button" size="sm" variant="outline" onClick={handleCancel} className="text-xs h-8">
                           <X className="w-3.5 h-3.5 mr-1" />{t('Cancel')}
                         </Button>
                       </div>
