@@ -65,10 +65,19 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
   const fieldsToReview = useMemo(() => {
     console.log('[ReviewStep] Recalculating fieldsToReview. Watched values changed.');
     const currentFormData = getValues(); // Get current values for processing
-    const allFieldKeys = Array.from(new Set([
-      ...(actualSchemaShape ? Object.keys(actualSchemaShape) : []),
-      ...Object.keys(currentFormData)
-    ]));
+
+    // Start with question order if available so the review matches the wizard flow
+    const questionIds = doc.questions?.map(q => q.id) ?? [];
+    const schemaKeys = actualSchemaShape ? Object.keys(actualSchemaShape) : [];
+
+    // Combine keys keeping the question order first, then schema keys, then any extra values
+    const combinedKeys = [
+      ...questionIds,
+      ...schemaKeys.filter(k => !questionIds.includes(k)),
+      ...Object.keys(currentFormData).filter(k => !questionIds.includes(k) && !schemaKeys.includes(k))
+    ];
+
+    const allFieldKeys = Array.from(new Set(combinedKeys));
 
     return allFieldKeys
       .filter(fieldId => {
@@ -84,13 +93,17 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
         
         let fieldType: Question['type'] = questionConfig?.type || 'text';
         if (schemaFieldDef) {
-            if (schemaFieldDef.typeName === 'ZodNumber') fieldType = 'number';
-            else if (schemaFieldDef.typeName === 'ZodBoolean') fieldType = 'boolean';
-            else if (schemaFieldDef.typeName === 'ZodDate') fieldType = 'date';
-            else if (schemaFieldDef.typeName === 'ZodEnum' || schemaFieldDef.innerType?._def?.typeName === 'ZodEnum') fieldType = 'select';
-            else if (fieldId.toLowerCase().includes('address') && schemaFieldDef.typeName === 'ZodString') fieldType = 'address';
-            else if (fieldId.toLowerCase().includes('phone') && schemaFieldDef.typeName === 'ZodString') fieldType = 'tel';
-            else if (schemaFieldDef.typeName === 'ZodString' && ((schemaFieldDef as any)?.uiType === 'textarea' || questionConfig?.type === 'textarea')) fieldType = 'textarea';
+            const baseType = schemaFieldDef.typeName === 'ZodEffects'
+              ? schemaFieldDef.schema?._def?.typeName
+              : schemaFieldDef.typeName;
+
+            if (baseType === 'ZodNumber') fieldType = 'number';
+            else if (baseType === 'ZodBoolean') fieldType = 'boolean';
+            else if (baseType === 'ZodDate') fieldType = 'date';
+            else if (baseType === 'ZodEnum' || schemaFieldDef.innerType?._def?.typeName === 'ZodEnum') fieldType = 'select';
+            else if (fieldId.toLowerCase().includes('address') && baseType === 'ZodString') fieldType = 'address';
+            else if (fieldId.toLowerCase().includes('phone') && baseType === 'ZodString') fieldType = 'tel';
+            else if (baseType === 'ZodString' && ((schemaFieldDef as any)?.uiType === 'textarea' || questionConfig?.type === 'textarea')) fieldType = 'textarea';
         }
         
         const rawEnumValues = schemaFieldDef?.innerType?._def?.values ?? schemaFieldDef?.values ?? (schemaFieldDef?.typeName === 'ZodEffects' ? schemaFieldDef.schema?._def?.values : undefined);
