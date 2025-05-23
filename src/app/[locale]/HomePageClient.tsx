@@ -6,7 +6,6 @@ import dynamic from 'next/dynamic';
 import type { LegalDocument } from '@/lib/document-library';
 import { usStates, documentLibrary } from '@/lib/document-library';
 import HomepageHeroSteps from '@/components/landing/HomepageHeroSteps';
-import { AnnouncementBar } from '@/components/AnnouncementBar';
 import { useToast } from '@/hooks/use-toast';
 import { Separator } from '@/components/ui/separator';
 import { Loader2 } from 'lucide-react';
@@ -37,6 +36,10 @@ const GuaranteeBadge = dynamic(() => import('@/components/landing/GuaranteeBadge
 
 const TopDocsChips = dynamic(() => import('@/components/TopDocsChips'), {
   loading: () => <LoadingSpinner />
+});
+
+const AnnouncementBar = dynamic(() => import('@/components/AnnouncementBar'), {
+  ssr: false,
 });
 
 const StickyFilterBar = dynamic(() => import('@/components/StickyFilterBar'), {
