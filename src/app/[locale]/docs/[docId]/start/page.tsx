@@ -6,6 +6,9 @@ import { documentLibrary } from '@/lib/document-library';
 import { localizations } from '@/lib/localizations'; // Assuming this defines your supported locales e.g. [{id: 'en'}, {id: 'es'}]
 import type { LegalDocument } from '@/lib/document-library';
 
+// Revalidate every hour so start pages stay fresh without rebuilding constantly
+export const revalidate = 3600;
+
 // generateStaticParams is crucial for static export of dynamic routes
 export async function generateStaticParams() {
   console.log('[generateStaticParams /docs/[docId]/start] Starting generation...');

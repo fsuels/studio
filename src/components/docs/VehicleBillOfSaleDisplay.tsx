@@ -31,10 +31,10 @@ export default function VehicleBillOfSaleDisplay({ locale }: VehicleBillOfSaleDi
   const handleStartProcess = () => {
     if (!isHydrated) return;
     const itemName = t('metaTitle', { defaultValue: 'Vehicle Bill of Sale Template & How-To Guide | 123LegalDoc' });
-    const priceCents = 1995; 
+    const priceCents = 1995;
     track('add_to_cart', { item_id: 'bill-of-sale-vehicle', item_name: itemName, value: priceCents / 100, currency: 'USD' });
     addItem({ id: 'bill-of-sale-vehicle', type: 'doc', name: itemName, price: priceCents });
-    router.push(`/${locale}/#workflow-start?docId=bill-of-sale-vehicle`);
+    router.prefetch(`/${locale}/#workflow-start?docId=bill-of-sale-vehicle`);
   };
 
   const informationalSections = [
@@ -187,8 +187,15 @@ export default function VehicleBillOfSaleDisplay({ locale }: VehicleBillOfSaleDi
       <section className="text-center py-8 bg-secondary/30 rounded-lg border border-border">
         <h2 className="text-2xl font-semibold text-foreground mb-3">{t('finalCtaTitle')}</h2>
         <p className="text-muted-foreground mb-6 max-w-lg mx-auto">{t('finalCtaSubtitle')}</p>
-        <Button onClick={handleStartProcess} size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground">
-          {t('startMyBillOfSaleButton')}
+        <Button
+          asChild
+          size="lg"
+          className="bg-primary hover:bg-primary/90 text-primary-foreground"
+          onMouseEnter={() => router.prefetch(`/${locale}/#workflow-start?docId=bill-of-sale-vehicle`)}
+        >
+          <Link href={`/${locale}/#workflow-start?docId=bill-of-sale-vehicle`} onClick={handleStartProcess} prefetch>
+            {t('startMyBillOfSaleButton')}
+          </Link>
         </Button>
       </section>
     </div>
