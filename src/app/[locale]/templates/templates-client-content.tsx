@@ -25,9 +25,8 @@ export default function TemplatesClientContent({ locale }: Props) {
     setIsHydrated(true);
   }, []);
 
-  const handleCategoryClick = (key: string) => {
-    router.push(`/${locale}/?category=${encodeURIComponent(key)}#workflow-start`);
-  };
+  const categoryHref = (key: string) =>
+    `/${locale}/?category=${encodeURIComponent(key)}#workflow-start`;
 
   return (
     <main className="max-w-6xl mx-auto px-6 py-16">
@@ -65,9 +64,20 @@ export default function TemplatesClientContent({ locale }: Props) {
         </h2>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
           {CATEGORY_LIST.map((cat) => (
-            <Button key={cat.key} variant="outline" className="flex flex-col items-center gap-2 py-6" onClick={() => handleCategoryClick(cat.key)}>
-              {React.createElement(cat.icon || FileText, { className: 'h-5 w-5 text-primary' })}
-              <span className="text-sm text-card-foreground">{t(cat.labelKey, cat.key)}</span>
+            <Button
+              asChild
+              key={cat.key}
+              variant="outline"
+              className="flex flex-col items-center gap-2 py-6"
+            >
+              <Link
+                href={categoryHref(cat.key)}
+                prefetch
+                onMouseEnter={() => router.prefetch(categoryHref(cat.key))}
+              >
+                {React.createElement(cat.icon || FileText, { className: 'h-5 w-5 text-primary' })}
+                <span className="text-sm text-card-foreground">{t(cat.labelKey, cat.key)}</span>
+              </Link>
             </Button>
           ))}
         </div>

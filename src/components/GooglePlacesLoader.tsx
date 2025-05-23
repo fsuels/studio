@@ -23,7 +23,7 @@ export default function GooglePlacesLoader() {
       {!loaded && (
         <Script
           src={`https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places&loading=async`}
-          strategy="afterInteractive"
+          strategy="lazyOnload"
           onLoad={() => {
             console.log('Google Maps API script loaded.');
             setLoaded(true);

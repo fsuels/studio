@@ -5,6 +5,9 @@ import DocPageClient from './DocPageClient';
 import { documentLibrary } from '@/lib/document-library';
 import { localizations } from '@/lib/localizations'; // Ensure this path is correct
 
+// Revalidate this page every hour for fresh content while caching aggressively
+export const revalidate = 3600;
+
 // generateStaticParams is crucial for static export of dynamic routes
 export async function generateStaticParams() {
   console.log('[generateStaticParams /docs] Starting generation...');
