@@ -6,7 +6,7 @@ import dynamic from 'next/dynamic';
 import I18nClientProvider from '@/components/providers/I18nProvider';
 import { Toaster } from "@/components/ui/toaster";
 import { CartProvider } from '@/contexts/CartProvider';
-import { AuthProvider } from '@/hooks/useAuth'; // Corrected: AuthProvider is a named export
+import { AuthProvider } from '@/hooks/useAuth';
 import { useTranslation } from 'react-i18next';
 import { Loader2 } from 'lucide-react';
 import { FooterSkeleton } from '@/components/layout/Footer';
@@ -17,44 +17,38 @@ interface ClientProvidersProps {
 }
 
 // Skeleton Loaders
-const HeaderSkeleton = () => <div className="h-14 bg-muted animate-pulse"></div>; // Adjusted height
+const HeaderSkeleton = () => <div className="h-14 bg-muted animate-pulse"></div>;
 
 // Dynamically import Header and Footer
 const DynamicHeader = dynamic(() => import('@/components/layout/Header'), {
   loading: () => <HeaderSkeleton />,
+  ssr: false, // Often helps with hydration issues for complex headers
 });
 
 const DynamicFooter = dynamic(() => import('@/components/layout/Footer').then(mod => mod.Footer), {
   loading: () => <FooterSkeleton />,
+  ssr: false, // Often helps with hydration issues for complex footers
 });
 
 
 const AppShell = React.memo(function AppShell({ children }: { children: ReactNode }) {
-  const { ready } = useTranslation("common"); // t function not directly used here
+  // isMounted and ready might still be useful for conditional rendering *within* Header/Footer/children
+  // but should not change the fundamental structure of AppShell itself after initial render.
+  const { ready } = useTranslation("common");
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
     setIsMounted(true);
   }, []);
 
-  if (!isMounted || !ready) {
-    return (
-      <div id="app-shell-loading" style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-        <HeaderSkeleton />
-        <div style={{ display: 'flex', flexGrow: 1, justifyContent: 'center', alignItems: 'center' }}>
-          <Loader2 className="h-12 w-12 animate-spin text-primary" />
-          <p className="ml-2 mt-2 text-muted-foreground">Loading Interface...</p>
-        </div>
-        <FooterSkeleton />
-      </div>
-    );
-  }
-
+  // AppShell now always renders its main structure.
+  // Loading states for Header/Footer are handled by their dynamic import.
+  // If children need to wait for 'isMounted' or 'ready', they should handle it internally.
   return (
     <>
-      {/* <DynamicHeader /> */}
+      <DynamicHeader />
       <main className="flex-grow">{children}</main>
-      {/* <DynamicFooter /> */}
+      <DynamicFooter />
       <Toaster />
     </>
   );
