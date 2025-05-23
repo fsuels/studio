@@ -1,0 +1,30 @@
+{
+  "faq": {
+    "title": "Preguntas Frecuentes",
+    "q1": {
+      "question": "¿Es realmente gratis la firma electrónica de mi primer documento con 123LegalDoc?",
+      "answer": "¡Sí! Su primer documento enviado para firma electrónica a través de 123LegalDoc, impulsado por SignWell, es completamente gratis. Después de eso, ofrecemos precios flexibles de pago por documento o planes de volumen para empresas."
+    },
+    "q2": {
+      "question": "¿Necesitan los destinatarios una cuenta de 123LegalDoc o SignWell para firmar?",
+      "answer": "No, los destinatarios no necesitan crear una cuenta. Recibirán un enlace seguro por correo electrónico para ver y firmar el documento directamente en su navegador en cualquier dispositivo."
+    },
+    "q3": {
+      "question": "¿Puedo dibujar mi firma en un dispositivo móvil o tableta?",
+      "answer": "Absolutamente. Nuestra plataforma de firma electrónica es totalmente receptiva. Los firmantes pueden dibujar fácilmente su firma usando una pantalla táctil, escribirla o cargar una imagen de su firma."
+    },
+    "q4": {
+      "question": "¿Qué tipos de archivo admiten para cargar?",
+      "answer": "Puede cargar archivos PDF, DOC, DOCX, TXT, RTF y ODT. Los convertimos automáticamente a un formato PDF seguro para el proceso de firma."
+    },
+    "q5": {
+      "question": "¿Cómo descargo el registro de auditoría de un documento firmado?",
+      "answer": "Una vez que todos los firmantes completan un documento, se genera un registro de auditoría completo. Puede descargar este registro de auditoría (generalmente como PDF) desde su panel de 123LegalDoc junto con el documento firmado. Incluye marcas de tiempo, direcciones IP y un registro de todos los eventos."
+    },
+    "q6": {
+      "question": "¿La integración de SignWell cumple con HIPAA para documentos de atención médica?",
+      "answer": "SignWell ofrece funciones que pueden ayudar a las organizaciones a cumplir con los requisitos de HIPAA, como los Acuerdos de Socio Comercial (BAA) para planes elegibles. Es importante asegurarse de que su plan y uso específico de SignWell se alineen con las directrices de HIPAA si maneja Información de Salud Protegida (PHI). Siempre consulte la documentación de SignWell para obtener detalles específicos sobre HIPAA."
+    },
+    "subtitle": "Encuentra respuestas a las preguntas comunes a continuación."
+  }
+}
