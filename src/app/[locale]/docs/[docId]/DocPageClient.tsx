@@ -15,6 +15,8 @@ import { track } from '@/lib/analytics';
 import { Separator } from '@/components/ui/separator';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion';
+import VehicleBillOfSaleDisplay from '@/components/docs/VehicleBillOfSaleDisplay'; // Import the specific display component
+
 // Lazy load testimonials section so it's only fetched when this page is viewed
 const TrustAndTestimonialsSection = dynamic(
   () => import('@/components/landing/TrustAndTestimonialsSection'),
@@ -64,7 +66,7 @@ export default function DocPageClient({ params: routeParams }: DocPageClientProp
     return documentLibrary.find(d => d.id === docId);
   }, [docId]);
   
-  const [isLoading, setIsLoading] = useState(true); // isLoadingConfig might be more accurate if config fetching is async
+  const [isLoading, setIsLoading] = useState(true);
   const [isHydrated, setIsHydrated] = useState(false);
 
   useEffect(() => {
@@ -82,19 +84,18 @@ export default function DocPageClient({ params: routeParams }: DocPageClientProp
   }, [router, docId, currentLocale]);
 
   useEffect(() => {
-    if (isHydrated) { // Ensure this runs only after hydration
+    if (isHydrated) {
         if (docId) {
             const foundDoc = documentLibrary.find(d => d.id === docId);
             if (!foundDoc) {
                 console.error(`[DocPageClient] Doc config not found for ID: ${docId}. Triggering 404.`);
                 notFound();
             }
-            // setDocConfig is implicitly handled by useMemo now
         } else {
             console.error("[DocPageClient] docId is undefined. Triggering 404.");
             notFound();
         }
-        setIsLoading(false); // Config is resolved (or not found)
+        setIsLoading(false);
     }
   }, [docId, isHydrated, notFound]); 
 
@@ -164,7 +165,6 @@ export default function DocPageClient({ params: routeParams }: DocPageClientProp
     { icon: FileSignature, title: 'E-sign documents easily and securely', desc: 'Sign online and send to others' },
   ];
   
-  // Placeholder for competitive pricing data
   const competitorPrice = 200; 
 
   return (
@@ -191,7 +191,7 @@ export default function DocPageClient({ params: routeParams }: DocPageClientProp
                 {Array(5).fill(0).map((_, i) => (
                   <Star key={i} className="h-5 w-5 text-yellow-400 fill-yellow-400" />
                 ))}
-                <span className="text-sm text-muted-foreground">(4.9 stars - 200+ reviews)</span> {/* Placeholder */}
+                <span className="text-sm text-muted-foreground">(4.9 stars - 200+ reviews)</span>
              </div>
             <p className="text-lg text-muted-foreground mb-6 max-w-2xl mx-auto">
                {documentDescription}
@@ -220,7 +220,6 @@ export default function DocPageClient({ params: routeParams }: DocPageClientProp
 
         {/* Preview & Pricing Information Section */}
         <div className="grid grid-cols-1 md:grid-cols-5 gap-8 items-start">
-            {/* Document Preview Section - takes more space on larger screens */}
             <section className="md:col-span-3 bg-card shadow-xl rounded-xl p-2 md:p-4 lg:p-6 border border-border">
                 <div className="text-center mb-4">
                     <h2 className="text-xl md:text-2xl font-semibold text-foreground mb-1 flex items-center justify-center gap-1">
@@ -244,7 +243,6 @@ export default function DocPageClient({ params: routeParams }: DocPageClientProp
                  </p>
             </section>
 
-            {/* Pricing & Upsell Section - takes less space */}
             <aside className="md:col-span-2 space-y-6">
                  <Card className="shadow-lg border-primary">
                     <CardHeader>
@@ -282,7 +280,6 @@ export default function DocPageClient({ params: routeParams }: DocPageClientProp
                     </Card>
                  )}
 
-                 {/* Placeholder for AI dynamic highlights (more detailed) */}
                  <Card className="shadow-md">
                     <CardHeader>
                         <CardTitle className="text-md flex items-center gap-2">
@@ -298,49 +295,55 @@ export default function DocPageClient({ params: routeParams }: DocPageClientProp
             </aside>
         </div>
 
-        {/* Feature Highlights */}
-        <section className="mt-16 grid md:grid-cols-3 gap-6">
-          {features.map((f, i) => (
-            <div key={i} className="text-center p-4 bg-card border border-border rounded-lg shadow-md">
-              <f.icon className="h-6 w-6 mx-auto mb-2 text-primary" />
-              <p className="text-sm font-medium text-card-foreground mb-1">{f.title}</p>
-              <p className="text-xs text-muted-foreground">{f.desc}</p>
-            </div>
-          ))}
-        </section>
+        {/* Conditional rendering for document-specific content vs generic content */}
+        {docConfig.id === 'bill-of-sale-vehicle' ? (
+          <VehicleBillOfSaleDisplay locale={currentLocale as 'en' | 'es'} />
+        ) : (
+          <>
+            {/* Feature Highlights */}
+            <section className="mt-16 grid md:grid-cols-3 gap-6">
+              {features.map((f, i) => (
+                <div key={i} className="text-center p-4 bg-card border border-border rounded-lg shadow-md">
+                  <f.icon className="h-6 w-6 mx-auto mb-2 text-primary" />
+                  <p className="text-sm font-medium text-card-foreground mb-1">{f.title}</p>
+                  <p className="text-xs text-muted-foreground">{f.desc}</p>
+                </div>
+              ))}
+            </section>
 
-        {/* How-to Guide & FAQ */}
-        <section className="mt-16 max-w-3xl mx-auto space-y-6">
-          <h2 className="text-2xl font-semibold text-center text-foreground">How to Use This Template</h2>
-          <ol className="list-decimal list-inside space-y-2 text-sm text-muted-foreground">
-            <li>Answer each question in the guided form.</li>
-            <li>Make any tweaks using the built-in editor.</li>
-            <li>E-sign and download your completed document.</li>
-          </ol>
+            {/* How-to Guide & FAQ */}
+            <section className="mt-16 max-w-3xl mx-auto space-y-6">
+              <h2 className="text-2xl font-semibold text-center text-foreground">How to Use This Template</h2>
+              <ol className="list-decimal list-inside space-y-2 text-sm text-muted-foreground">
+                <li>Answer each question in the guided form.</li>
+                <li>Make any tweaks using the built-in editor.</li>
+                <li>E-sign and download your completed document.</li>
+              </ol>
 
-          <div>
-            <h3 className="text-xl font-semibold mb-2 text-foreground">Frequently Asked Questions</h3>
-            <Accordion type="single" collapsible className="w-full">
-              <AccordionItem value="q1">
-                <AccordionTrigger>Do I need a notary for this document?</AccordionTrigger>
-                <AccordionContent>Requirements vary by state, but notarization can add extra authenticity.</AccordionContent>
-              </AccordionItem>
-              <AccordionItem value="q2">
-                <AccordionTrigger>Can I use it for any vehicle type?</AccordionTrigger>
-                <AccordionContent>Yes, simply describe the vehicle accurately in the form.</AccordionContent>
-              </AccordionItem>
-            </Accordion>
-            <div className="mt-4 text-center">
-              <Link href={`/${currentLocale}/faq`} className="text-sm text-primary underline">More questions? Visit our FAQ</Link>
-            </div>
-          </div>
-        </section>
+              <div>
+                <h3 className="text-xl font-semibold mb-2 text-foreground">Frequently Asked Questions</h3>
+                <Accordion type="single" collapsible className="w-full">
+                  <AccordionItem value="q1">
+                    <AccordionTrigger>Do I need a notary for this document?</AccordionTrigger>
+                    <AccordionContent>Requirements vary by state, but notarization can add extra authenticity.</AccordionContent>
+                  </AccordionItem>
+                  <AccordionItem value="q2">
+                    <AccordionTrigger>Can I use it for any vehicle type?</AccordionTrigger>
+                    <AccordionContent>Yes, simply describe the vehicle accurately in the form.</AccordionContent>
+                  </AccordionItem>
+                </Accordion>
+                <div className="mt-4 text-center">
+                  <Link href={`/${currentLocale}/faq`} className="text-sm text-primary underline">More questions? Visit our FAQ</Link>
+                </div>
+              </div>
+            </section>
+          </>
+        )}
 
-        {/* Testimonials */}
+        {/* Testimonials - Rendered for all documents */}
         <div className="mt-16">
           <TrustAndTestimonialsSection />
         </div>
-
 
         {/* Sticky CTA for mobile */}
         <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-t p-4 shadow-lg z-40">
@@ -351,4 +354,3 @@ export default function DocPageClient({ params: routeParams }: DocPageClientProp
     </main>
   );
 }
-
