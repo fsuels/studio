@@ -167,7 +167,10 @@ export default function StartWizardPageClient() {
     return null; 
   }
   
-  const documentDisplayName = locale === 'es' && docConfig!.name_es ? docConfig!.name_es : docConfig!.name;
+  const documentDisplayName =
+    locale === 'es' && docConfig?.translations?.es?.name
+      ? docConfig.translations.es.name
+      : docConfig?.translations?.en?.name || docConfig?.name;
 
   return (
     <FormProvider {...methods}>
