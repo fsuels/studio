@@ -33,6 +33,8 @@
     "noFileToPrepare": "No file selected to prepare for signing.",
     "docPreparedTitle": "Document Prepared",
     "docPreparedDesc": "Your document is now ready for signing.",
+    "docPrepareErrorTitle": "Error Preparing Document",
+    "docPrepareErrorDesc": "There was a problem preparing your document. Please try again.",
     "ctaPrepareDocument": "Prepare Document for Signing",
     "ctaViewDocument": "View & Sign Document"
   },
