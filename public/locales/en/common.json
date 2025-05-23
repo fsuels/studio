@@ -163,6 +163,23 @@
   "authModal.promptSignUp": "Don't have an account? Create one",
   "authModal.promptSignIn": "Already have an account? Sign In",
   "authModal.createFreeAccount": "Create Free Account",
+  "support": {
+    "title": "Support Center",
+    "subtitle": "Need help? We're here to assist you.",
+    "contact": {
+      "title": "Contact Us",
+      "hours": "Mon–Fri, 9am–6pm EST"
+    },
+    "help": {
+      "title": "Common Help Topics",
+      "item1": "I didn’t receive my document",
+      "item2": "I need to edit a clause",
+      "item3": "I can’t download the PDF",
+      "item4": "I need a refund"
+    },
+    "note": "You can also check our FAQ for common questions.",
+    "cta": "Go to FAQ"
+  },
   "home.hero.title": "Legal Docs at Your Fingertips",
   "home.hero.subtitle": "Create, sign & share professional contracts in minutes—no lawyer required.",
   "home.hero.pricingBadge": "One-time $35/document • No subscription",

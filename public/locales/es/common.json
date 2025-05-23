@@ -163,6 +163,23 @@
   "authModal.promptSignUp": "¿No tienes cuenta? Crea una",
   "authModal.promptSignIn": "¿Ya tienes cuenta? Inicia Sesión",
   "authModal.createFreeAccount": "Crear Cuenta Gratis",
+  "support": {
+    "title": "Centro de Soporte",
+    "subtitle": "¿Necesitas ayuda? Estamos aquí para asistirte.",
+    "contact": {
+      "title": "Contáctanos",
+      "hours": "Lun–Vie, 9am–6pm EST"
+    },
+    "help": {
+      "title": "Temas de Ayuda Comunes",
+      "item1": "No recibí mi documento",
+      "item2": "Necesito editar una cláusula",
+      "item3": "No puedo descargar el PDF",
+      "item4": "Necesito un reembolso"
+    },
+    "note": "También puedes consultar nuestras Preguntas Frecuentes para preguntas comunes.",
+    "cta": "Ir a Preguntas Frecuentes"
+  },
   "home.hero.title": "Documentos Legales al Alcance de tu Mano",
   "home.hero.subtitle": "Crea, firma y comparte contratos profesionales en minutos—sin necesidad de abogado.",
   "home.hero.pricingBadge": "Pago único de $35/documento • Sin suscripción",
