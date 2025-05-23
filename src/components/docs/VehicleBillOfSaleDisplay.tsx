@@ -77,29 +77,38 @@ export default function VehicleBillOfSaleDisplay({ locale }: VehicleBillOfSaleDi
       );
     }
     if (section.type === "ordered-list" && section.itemsKey && Array.isArray(t(section.itemsKey, { returnObjects: true }))) {
+      const items = t(section.itemsKey, { returnObjects: true }) as string[];
       return (
-        <ol className="list-decimal list-outside pl-5 space-y-1 text-muted-foreground">
-          {(t(section.itemsKey, { returnObjects: true }) as string[]).map((item, i) => <li key={i}>{item}</li>)}
-        </ol>
+        <>
+          <ol className="list-decimal list-outside pl-5 space-y-1 text-muted-foreground">
+            {items.map((item, i) => <li key={i}>{item}</li>)}
+          </ol>
+          {section.totalTimeKey && <p className="text-sm text-muted-foreground mt-2">{t(section.totalTimeKey)}</p>}
+        </>
       );
     }
-     if (section.type === "mixed-list" && section.contentKey && section.itemsKey) {
+    if (section.type === "mixed-list" && section.contentKey && section.itemsKey) {
+       const items = t(section.itemsKey, { returnObjects: true });
       return (
         <>
           <p className="text-muted-foreground mb-2">{t(section.contentKey)}</p>
-          {Array.isArray(t(section.itemsKey, { returnObjects: true })) && (
+          {Array.isArray(items) && (
               <ul className="list-disc list-outside pl-5 space-y-1 text-muted-foreground">
-                  {(t(section.itemsKey, { returnObjects: true }) as string[]).map((item, i) => <li key={i}>{item}</li>)}
+                  {items.map((item: string, i: number) => <li key={i}>{item}</li>)}
               </ul>
           )}
         </>
       );
     }
     if (section.type === "checklist" && section.itemsKey && Array.isArray(t(section.itemsKey, { returnObjects: true }))) {
+      const items = t(section.itemsKey, { returnObjects: true }) as string[];
       return (
-        <ul className="list-none pl-0 space-y-1 text-muted-foreground">
-          {(t(section.itemsKey, { returnObjects: true }) as string[]).map((item, i) => <li key={i} className="flex items-center"><span className="mr-2">✓</span>{item}</li>)}
-        </ul>
+        <>
+          <ul className="list-none pl-0 space-y-1 text-muted-foreground">
+            {items.map((item, i) => <li key={i} className="flex items-center"><span className="mr-2">✓</span>{item}</li>)}
+          </ul>
+          {section.printNoteKey && <p className="text-sm text-muted-foreground mt-2 italic">{t(section.printNoteKey)}</p>}
+        </>
       );
     }
     if (section.tableKey) {
@@ -110,11 +119,11 @@ export default function VehicleBillOfSaleDisplay({ locale }: VehicleBillOfSaleDi
           <Table className="min-w-full text-sm">
             <TableHeader>
               <TableRow>
-                {Array.isArray(headers) && headers.map(header => <TableHead key={header} className="text-foreground bg-muted/50">{header}</TableHead>)}
+                {Array.isArray(headers) && headers.map((header: string) => <TableHead key={header} className="text-foreground bg-muted/50">{header}</TableHead>)}
               </TableRow>
             </TableHeader>
             <TableBody>
-              {Array.isArray(rows) && rows.map((row, rowIndex) => (
+              {Array.isArray(rows) && rows.map((row: string[], rowIndex: number) => (
                 <TableRow key={rowIndex}>
                   {Array.isArray(row) && row.map((cell, cellIndex) => <TableCell key={cellIndex} className="text-muted-foreground">{cell}</TableCell>)}
                 </TableRow>
@@ -124,18 +133,19 @@ export default function VehicleBillOfSaleDisplay({ locale }: VehicleBillOfSaleDi
         </div>
       );
     }
-    if (section.totalTimeKey) {
-        return <p className="text-sm text-muted-foreground mt-2">{t(section.totalTimeKey)}</p>;
-    }
-     if (section.printNoteKey) {
-        return <p className="text-sm text-muted-foreground mt-2 italic">{t(section.printNoteKey)}</p>;
-    }
-    if (section.ctaKey) {
-        return <p className="text-muted-foreground mt-4">{t(section.ctaKey)}</p>;
+     if (section.type === "list-cta" && section.itemsKey && section.ctaKey) {
+        const items = t(section.itemsKey, { returnObjects: true }) as string[];
+        return (
+            <>
+                <ul className="list-disc list-outside pl-5 space-y-1 text-muted-foreground">
+                    {Array.isArray(items) && items.map((item, i) => <li key={i}>{item}</li>)}
+                </ul>
+                <p className="text-muted-foreground mt-4">{t(section.ctaKey)}</p>
+            </>
+        );
     }
     return null;
   };
-
 
   if (!isHydrated) {
     return <div className="container mx-auto px-4 py-12 animate-pulse"><div className="h-12 bg-muted rounded w-3/4 mx-auto mb-6"></div><div className="h-8 bg-muted rounded w-1/2 mx-auto mb-10"></div><div className="space-y-8"><div className="h-48 bg-muted rounded"></div><div className="h-64 bg-muted rounded"></div><div className="h-32 bg-muted rounded"></div></div></div>;
@@ -157,7 +167,7 @@ export default function VehicleBillOfSaleDisplay({ locale }: VehicleBillOfSaleDi
             <AccordionContent className="px-6 pb-4 pt-0 text-muted-foreground">
               <div className="prose prose-sm dark:prose-invert max-w-none">
                 {renderSectionContent(section)}
-                {section.id === 'why-us' && (
+                {section.id === 'why-us' && ( // This was for the button, now handled by the general final CTA
                     <div className="mt-6">
                         <Button onClick={handleStartProcess} size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground">
                             {t('startMyBillOfSaleButton')}
@@ -168,16 +178,10 @@ export default function VehicleBillOfSaleDisplay({ locale }: VehicleBillOfSaleDi
             </AccordionContent>
           </AccordionItem>
         ))}
-      </Accordion>
-
-      <section id="faq" className="mb-12 scroll-mt-20">
-        <h2 className="text-2xl font-semibold text-foreground mb-6 text-center">{t('faq.title')}</h2>
-        <Accordion type="single" collapsible className="w-full space-y-3">
-          {faqItems.map((item) => (
-            <AccordionItem key={item.id} value={item.id} className="border border-border rounded-lg bg-card shadow-sm overflow-hidden">
+        {faqItems.map((item, index) => (
+            <AccordionItem key={`faq-${item.id}`} value={`faq-${item.id}`} className="border border-border rounded-lg bg-card shadow-sm overflow-hidden">
               <AccordionTrigger className={cn(
                 "px-6 py-4 text-left font-medium text-foreground hover:no-underline text-sm md:text-base",
-                // Add specific styling if needed to match the screenshot for FAQ trigger
               )}>
                 {t(item.questionKey)}
               </AccordionTrigger>
@@ -188,8 +192,7 @@ export default function VehicleBillOfSaleDisplay({ locale }: VehicleBillOfSaleDi
               </AccordionContent>
             </AccordionItem>
           ))}
-        </Accordion>
-      </section>
+      </Accordion>
 
       <section className="text-center py-8 bg-secondary/30 rounded-lg border border-border">
         <h2 className="text-2xl font-semibold text-foreground mb-3">{t('finalCtaTitle')}</h2>
