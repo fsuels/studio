@@ -300,8 +300,12 @@ const FieldRenderer = React.memo(function FieldRenderer({ fieldKey, locale, doc 
           {t("Decoded")}: {vinData.year} {vinData.make} {vinData.model} {vinData.bodyClass ? `(${vinData.bodyClass})` : ''}
         </p>
       )}
-      {fieldKey === 'vin' && vinError && <p className="text-xs text-destructive mt-1">{vinError}</p>}
-      {fieldError && <p className="text-xs text-destructive mt-1">{String(fieldError.message)}</p>}
+      {fieldKey === 'vin' && vinError && (
+        <p className="block text-xs text-destructive mt-1">{vinError}</p>
+      )}
+      {fieldError && (
+        <p className="block text-xs text-destructive mt-1">{String(fieldError.message)}</p>
+      )}
       {fieldSchema?.helperText && !fieldError && <p className="text-xs text-muted-foreground">{t(fieldSchema.helperText, {defaultValue: fieldSchema.helperText})}</p>}
     </div>
   );

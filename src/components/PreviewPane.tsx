@@ -11,6 +11,7 @@ import { debounce } from 'lodash-es';
 import { documentLibrary, type LegalDocument } from '@/lib/document-library';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
+import AutoImage from './AutoImage';
 
 interface PreviewPaneProps {
   locale: 'en' | 'es';
@@ -161,11 +162,13 @@ export default function PreviewPane({ locale, docId }: PreviewPaneProps) {
         style={{ userSelect: 'none' }}
       >
         <div className={cn("prose prose-sm max-w-none w-full h-full overflow-y-auto overflow-x-hidden p-4 md:p-6 scrollbar-hide bg-card text-card-foreground")}>
-          <ReactMarkdown 
+          <ReactMarkdown
               remarkPlugins={[remarkGfm]}
-              components={{ 
+              components={{
                 p: ({node, ...props}) => <p {...props} className="select-none" />,
                 h1: ({node, ...props}) => <h1 {...props} className="text-center" />,
+                // FIXED: ensure markdown images include dimensions
+                img: ({node, ...props}) => <AutoImage {...props} className="mx-auto" />,
               }}
           >
             {processedMarkdown}

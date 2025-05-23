@@ -186,7 +186,11 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
           const isCurrentlyEditing = editingFieldId === field.id;
           // console.log(`[ReviewStep] Rendering field: ${field.id}, isCurrentlyEditing: ${isCurrentlyEditing}`);
           return (
-            <div key={field.id} className="py-3 border-b border-border last:border-b-0">
+            <div
+              key={field.id}
+              className="py-3 border-b border-border last:border-b-0 cursor-pointer"
+              onClick={() => !isCurrentlyEditing && handleEdit(field.id)}
+            >
               <div className="flex justify-between items-start gap-2">
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-1 mb-0.5">
@@ -352,7 +356,7 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
                 )}
               </div>
               {errors[field.id] && isCurrentlyEditing && (
-                <p className="text-xs text-destructive mt-1 flex items-center gap-1">
+                <p className="block text-xs text-destructive mt-1 flex items-center gap-1">
                   <AlertTriangle className="h-3 w-3" /> {String(errors[field.id]?.message)}
                 </p>
               )}
