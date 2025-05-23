@@ -10,6 +10,8 @@ import LanguageDetector from 'i18next-browser-languagedetector';
 interface I18nProviderProps {
   children: ReactNode;
   locale: 'en' | 'es';
+  /** Optional element shown until the i18n instance is ready */
+  fallback?: ReactNode;
 }
 
 let clientSidePluginsApplied = false;
@@ -65,9 +67,12 @@ const I18nClientProvider: React.FC<I18nProviderProps> = ({ children, locale }) =
     }
   }, [locale]);
 
-  // Always render the provider so that the server and client markup match.
-  // The surrounding Suspense boundary handles displaying a fallback while
-  // initialization occurs on the client.
+  // Render children only once the client-side i18n instance is ready to
+  // avoid hydration mismatches when translations load.
+  if (!isClientInitialized) {
+    return <>{fallback || null}</>;
+  }
+
   return <I18nextProvider i18n={i18nInstance}>{children}</I18nextProvider>;
 };
 
