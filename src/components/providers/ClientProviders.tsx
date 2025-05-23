@@ -1,7 +1,7 @@
 // src/components/providers/ClientProviders.tsx
 "use client";
 
-import React, { ReactNode, useEffect, useState, Suspense } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import I18nClientProvider from '@/components/providers/I18nProvider';
 import { Toaster } from "@/components/ui/toaster";
@@ -54,19 +54,29 @@ const AppShell = React.memo(function AppShell({ children }: { children: ReactNod
 
 export function ClientProviders({ children, locale }: ClientProvidersProps) {
   return (
-    <Suspense fallback={ // Global suspense for initial provider setup
-        <div id="app-providers-loading" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+    <I18nClientProvider
+      locale={locale}
+      fallback={
+        <div
+          id="app-providers-loading"
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+            height: '100vh',
+          }}
+        >
           <Loader2 className="h-12 w-12 animate-spin text-primary" />
-           <p className="ml-2 mt-2 text-muted-foreground">Initializing Application...</p>
+          <p className="ml-2 mt-2 text-muted-foreground">Initializing Application...</p>
         </div>
-    }>
-      <I18nClientProvider locale={locale}>
-        <AuthProvider>
-          <CartProvider>
-            <AppShell>{children}</AppShell>
-          </CartProvider>
-        </AuthProvider>
-      </I18nClientProvider>
-    </Suspense>
+      }
+    >
+      <AuthProvider>
+        <CartProvider>
+          <AppShell>{children}</AppShell>
+        </CartProvider>
+      </AuthProvider>
+    </I18nClientProvider>
   );
 }
