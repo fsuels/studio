@@ -24,10 +24,12 @@ const calculateTimeLeftUntilMidnight = () => {
   return { expired: false, timeLeftString: `${hours}:${minutes}:${seconds}` };
 };
 
+const initialCountdown = { expired: false, timeLeftString: '00:00:00' };
+
 const AnnouncementBar = React.memo(function PromoBanner() {
   const { t } = useTranslation("common");
   const [isVisible, setIsVisible] = useState(true);
-  const [countdown, setCountdown] = useState(calculateTimeLeftUntilMidnight());
+  const [countdown, setCountdown] = useState(initialCountdown);
   const [isHydrated, setIsHydrated] = useState(false);
 
   useEffect(() => {
@@ -37,22 +39,18 @@ const AnnouncementBar = React.memo(function PromoBanner() {
     if (dismissedDate === today) {
       setIsVisible(false);
     }
-  }, []);
-
-  useEffect(() => {
-    if (!isHydrated) return;
-
-    if (countdown.expired) {
-      setIsVisible(false);
-      return;
-    }
-
-    const timerId = setInterval(() => {
-      setCountdown(calculateTimeLeftUntilMidnight());
-    }, 1000);
-
+    // Initialize countdown on the client to avoid server/client mismatches
+    const updateCountdown = () => {
+      const next = calculateTimeLeftUntilMidnight();
+      setCountdown(next);
+      if (next.expired) {
+        setIsVisible(false);
+      }
+    };
+    updateCountdown();
+    const timerId = setInterval(updateCountdown, 1000);
     return () => clearInterval(timerId);
-  }, [countdown.expired, isHydrated]);
+  }, []);
 
   const handleDismiss = useCallback(() => {
     setIsVisible(false);
