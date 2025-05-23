@@ -76,7 +76,7 @@ export function Questionnaire({ documentType, selectedState, onAnswersSubmit, is
     setAnswers(prev => ({ ...prev, [id]: value }));
   };
 
-   const toggleEdit = (id: string) => {
+  const toggleEdit = (id: string) => {
     if (isReadOnly || isLoading) return; // Prevent toggling if read-only or loading
 
     const currentlyEditing = isEditing[id];
@@ -95,6 +95,14 @@ export function Questionnaire({ documentType, selectedState, onAnswersSubmit, is
     }
 
     setIsEditing(prev => ({ ...prev, [id]: !currentlyEditing }));
+
+    // If enabling editing, focus the input so the user can start typing
+    if (!currentlyEditing) {
+      setTimeout(() => {
+        const el = document.getElementById(id);
+        if (el) (el as HTMLElement).focus();
+      }, 0);
+    }
   };
 
   const handleSubmit = (e?: React.FormEvent) => {
