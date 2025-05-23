@@ -57,6 +57,9 @@ export function generateIdFromName(name: string): string {
 }
 
 allDocuments.forEach(doc => {
+  if (doc.id === 'promissory-note') {
+    console.log('[document-library] processing:', doc.id, doc.translations?.en?.name);
+  }
   if (!doc.id && doc.name) { // Check top-level name for ID generation
     doc.id = generateIdFromName(doc.name);
   } else if (!doc.id && doc.translations?.en?.name) { // Fallback to translation if top-level name is missing
