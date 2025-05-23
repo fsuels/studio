@@ -65,10 +65,9 @@ const I18nClientProvider: React.FC<I18nProviderProps> = ({ children, locale }) =
     }
   }, [locale]);
 
-  if (!isClientInitialized && typeof window !== 'undefined') {
-    return null; // Or a global loader
-  }
-
+  // Always render the provider so that the server and client markup match.
+  // The surrounding Suspense boundary handles displaying a fallback while
+  // initialization occurs on the client.
   return <I18nextProvider i18n={i18nInstance}>{children}</I18nextProvider>;
 };
 
