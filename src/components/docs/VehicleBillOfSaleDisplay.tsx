@@ -30,86 +30,96 @@ export default function VehicleBillOfSaleDisplay({ locale }: VehicleBillOfSaleDi
 
   const handleStartProcess = () => {
     if (!isHydrated) return;
-    const itemName = t('metaTitle', { defaultValue: 'Vehicle Bill of Sale' });
-    const priceCents = 1995;
+    const itemName = t('metaTitle', { defaultValue: 'Vehicle Bill of Sale Template & How-To Guide | 123LegalDoc' });
+    const priceCents = 1995; // Assuming this is the price
     track('add_to_cart', { item_id: 'bill-of-sale-vehicle', item_name: itemName, value: priceCents / 100, currency: 'USD' });
     addItem({ id: 'bill-of-sale-vehicle', type: 'doc', name: itemName, price: priceCents });
     router.push(`/${locale}/#workflow-start?docId=bill-of-sale-vehicle`);
   };
 
   const sections = [
-    { id: "what-is", titleKey: "sections.whatIs.title", contentKey: "sections.whatIs.content", type: "list" },
-    { id: "why", titleKey: "sections.why.title", tableKey: "sections.why.table", type: "table" },
-    { id: "covered", titleKey: "sections.covered.title", contentKey: "sections.covered.content", type: "paragraph" },
-    { id: "types", titleKey: "sections.types.title", itemsKey: "sections.types.items", type: "list" },
-    { id: "components", titleKey: "sections.components.title", tableKey: "sections.components.table", type: "table" },
-    { id: "how-to", titleKey: "sections.howTo.title", itemsKey: "sections.howTo.items", totalTimeKey: "sections.howTo.totalTime", type: "ordered-list" },
-    { id: "state-rules", titleKey: "sections.stateRules.title", contentKey: "sections.stateRules.content", itemsKey: "sections.stateRules.items", type: "mixed-list" },
-    { id: "checklist", titleKey: "sections.checklist.title", itemsKey: "sections.checklist.items", printNoteKey: "sections.checklist.printNote", type: "checklist" },
-    { id: "supporting", titleKey: "sections.supporting.title", itemsKey: "sections.supporting.items", type: "list" },
-    { id: "why-us", titleKey: "sections.whyUs.title", itemsKey: "sections.whyUs.items", ctaKey: "sections.whyUs.cta", type: "list-cta" }
+    { id: 'what-is', titleKey: 'sections.whatIs.title', contentKey: 'sections.whatIs.content', type: 'list' },
+    { id: 'why', titleKey: 'sections.why.title', tableKey: 'sections.why.table', type: 'table' },
+    { id: 'covered', titleKey: 'sections.covered.title', contentKey: 'sections.covered.content', type: 'paragraph' },
+    { id: 'types', titleKey: 'sections.types.title', itemsKey: 'sections.types.items', type: 'list' },
+    { id: 'components', titleKey: 'sections.components.title', tableKey: 'sections.components.table', type: 'table' },
+    { id: 'how-to', titleKey: 'sections.howTo.title', itemsKey: 'sections.howTo.items', totalTimeKey: 'sections.howTo.totalTime', type: 'ordered-list' },
+    { id: 'state-rules', titleKey: 'sections.stateRules.title', contentKey: 'sections.stateRules.content', itemsKey: 'sections.stateRules.items', type: 'mixed-list' },
+    { id: 'checklist', titleKey: 'sections.checklist.title', itemsKey: 'sections.checklist.items', printNoteKey: 'sections.checklist.printNote', type: 'checklist' },
+    { id: 'supporting', titleKey: 'sections.supporting.title', itemsKey: 'sections.supporting.items', type: 'list' },
+    { id: 'why-us', titleKey: 'sections.whyUs.title', itemsKey: 'sections.whyUs.items', ctaKey: 'sections.whyUs.cta', type: 'list-cta' },
   ];
 
   const faqItems = [
-    { id: "q1", questionKey: "faq.q1.question", answerKey: "faq.q1.answer" },
-    { id: "q2", questionKey: "faq.q2.question", answerKey: "faq.q2.answer" },
-    { id: "q3", questionKey: "faq.q3.question", answerKey: "faq.q3.answer" },
-    { id: "q4", questionKey: "faq.q4.question", answerKey: "faq.q4.answer" },
-    { id: "q5", questionKey: "faq.q5.question", answerKey: "faq.q5.answer" }
+    { id: 'faq1', questionKey: 'faq.q1.question', answerKey: 'faq.q1.answer' },
+    { id: 'faq2', questionKey: 'faq.q2.question', answerKey: 'faq.q2.answer' },
+    { id: 'faq3', questionKey: 'faq.q3.question', answerKey: 'faq.q3.answer' },
+    { id: 'faq4', questionKey: 'faq.q4.question', answerKey: 'faq.q4.answer' },
+    { id: 'faq5', questionKey: 'faq.q5.question', answerKey: 'faq.q5.answer' },
   ];
 
   const renderSectionContent = (section: typeof sections[0]) => {
-    if (section.type === "paragraph" && section.contentKey) {
+    if (section.type === 'paragraph' && section.contentKey) {
       return <p className="text-muted-foreground">{t(section.contentKey)}</p>;
     }
-    if (section.type === "list" && section.contentKey && Array.isArray(t(section.contentKey, { returnObjects: true }))) {
-      return (
-        <ul className="list-disc list-outside pl-5 space-y-1 text-muted-foreground">
-          {(t(section.contentKey, { returnObjects: true }) as string[]).map((item, i) => <li key={i}>{item}</li>)}
-        </ul>
-      );
+    if (section.type === 'list' && section.contentKey) {
+      const items = t(section.contentKey, { returnObjects: true });
+      if (Array.isArray(items)) {
+        return (
+          <ul className="list-disc list-outside pl-5 space-y-1 text-muted-foreground">
+            {items.map((item: string, i: number) => <li key={i}>{item}</li>)}
+          </ul>
+        );
+      }
     }
-    if (section.type === "list" && section.itemsKey && Array.isArray(t(section.itemsKey, { returnObjects: true }))) {
-      return (
-        <ul className="list-disc list-outside pl-5 space-y-1 text-muted-foreground">
-          {(t(section.itemsKey, { returnObjects: true }) as string[]).map((item, i) => <li key={i}>{item}</li>)}
-        </ul>
-      );
+    if (section.type === 'list' && section.itemsKey) {
+      const items = t(section.itemsKey, { returnObjects: true });
+      if (Array.isArray(items)) {
+        return (
+          <ul className="list-disc list-outside pl-5 space-y-1 text-muted-foreground">
+            {items.map((item: string, i: number) => <li key={i}>{item}</li>)}
+          </ul>
+        );
+      }
     }
-    if (section.type === "ordered-list" && section.itemsKey && Array.isArray(t(section.itemsKey, { returnObjects: true }))) {
-      const items = t(section.itemsKey, { returnObjects: true }) as string[];
-      return (
-        <>
-          <ol className="list-decimal list-outside pl-5 space-y-1 text-muted-foreground">
-            {items.map((item, i) => <li key={i}>{item}</li>)}
-          </ol>
-          {section.totalTimeKey && <p className="text-sm text-muted-foreground mt-2">{t(section.totalTimeKey)}</p>}
-        </>
-      );
+    if (section.type === 'ordered-list' && section.itemsKey) {
+      const items = t(section.itemsKey, { returnObjects: true });
+      if (Array.isArray(items)) {
+        return (
+          <>
+            <ol className="list-decimal list-outside pl-5 space-y-1 text-muted-foreground">
+              {items.map((item: string, i: number) => <li key={i}>{item}</li>)}
+            </ol>
+            {section.totalTimeKey && <p className="text-sm text-muted-foreground mt-2">{t(section.totalTimeKey)}</p>}
+          </>
+        );
+      }
     }
-    if (section.type === "mixed-list" && section.contentKey && section.itemsKey) {
-       const items = t(section.itemsKey, { returnObjects: true });
+    if (section.type === 'mixed-list' && section.contentKey && section.itemsKey) {
+      const items = t(section.itemsKey, { returnObjects: true });
       return (
         <>
           <p className="text-muted-foreground mb-2">{t(section.contentKey)}</p>
           {Array.isArray(items) && (
-              <ul className="list-disc list-outside pl-5 space-y-1 text-muted-foreground">
-                  {items.map((item: string, i: number) => <li key={i}>{item}</li>)}
-              </ul>
+            <ul className="list-disc list-outside pl-5 space-y-1 text-muted-foreground">
+              {items.map((item: string, i: number) => <li key={i}>{item}</li>)}
+            </ul>
           )}
         </>
       );
     }
-    if (section.type === "checklist" && section.itemsKey && Array.isArray(t(section.itemsKey, { returnObjects: true }))) {
-      const items = t(section.itemsKey, { returnObjects: true }) as string[];
-      return (
-        <>
-          <ul className="list-none pl-0 space-y-1 text-muted-foreground">
-            {items.map((item, i) => <li key={i} className="flex items-center"><span className="mr-2">✓</span>{item}</li>)}
-          </ul>
-          {section.printNoteKey && <p className="text-sm text-muted-foreground mt-2 italic">{t(section.printNoteKey)}</p>}
-        </>
-      );
+    if (section.type === 'checklist' && section.itemsKey) {
+      const items = t(section.itemsKey, { returnObjects: true });
+      if (Array.isArray(items)) {
+        return (
+          <>
+            <ul className="list-none pl-0 space-y-1 text-muted-foreground">
+              {items.map((item: string, i: number) => <li key={i} className="flex items-center"><span className="mr-2">✓</span>{item}</li>)}
+            </ul>
+            {section.printNoteKey && <p className="text-sm text-muted-foreground mt-2 italic">{t(section.printNoteKey)}</p>}
+          </>
+        );
+      }
     }
     if (section.tableKey) {
       const headers = t(`${section.tableKey}.headers`, { returnObjects: true });
@@ -133,16 +143,18 @@ export default function VehicleBillOfSaleDisplay({ locale }: VehicleBillOfSaleDi
         </div>
       );
     }
-     if (section.type === "list-cta" && section.itemsKey && section.ctaKey) {
-        const items = t(section.itemsKey, { returnObjects: true }) as string[];
+    if (section.type === 'list-cta' && section.itemsKey && section.ctaKey) {
+      const items = t(section.itemsKey, { returnObjects: true });
+      if (Array.isArray(items)) {
         return (
-            <>
-                <ul className="list-disc list-outside pl-5 space-y-1 text-muted-foreground">
-                    {Array.isArray(items) && items.map((item, i) => <li key={i}>{item}</li>)}
-                </ul>
-                <p className="text-muted-foreground mt-4">{t(section.ctaKey)}</p>
-            </>
+          <>
+            <ul className="list-disc list-outside pl-5 space-y-1 text-muted-foreground">
+              {items.map((item: string, i: number) => <li key={i}>{item}</li>)}
+            </ul>
+            <p className="text-muted-foreground mt-4">{t(section.ctaKey)}</p>
+          </>
         );
+      }
     }
     return null;
   };
@@ -161,37 +173,32 @@ export default function VehicleBillOfSaleDisplay({ locale }: VehicleBillOfSaleDi
       <Accordion type="single" collapsible className="w-full space-y-3 mb-10">
         {sections.map((section) => (
           <AccordionItem key={section.id} value={section.id} className="border border-border rounded-lg bg-card shadow-sm overflow-hidden">
-            <AccordionTrigger className="px-6 py-4 text-left font-semibold text-foreground hover:no-underline text-md md:text-lg">
+            <AccordionTrigger className={cn(
+              "px-6 py-4 text-left font-semibold text-foreground hover:no-underline text-md md:text-lg",
+            )}>
               {t(section.titleKey)}
             </AccordionTrigger>
             <AccordionContent className="px-6 pb-4 pt-0 text-muted-foreground">
               <div className="prose prose-sm dark:prose-invert max-w-none">
                 {renderSectionContent(section)}
-                {section.id === 'why-us' && ( // This was for the button, now handled by the general final CTA
-                    <div className="mt-6">
-                        <Button onClick={handleStartProcess} size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground">
-                            {t('startMyBillOfSaleButton')}
-                        </Button>
-                    </div>
-                )}
               </div>
             </AccordionContent>
           </AccordionItem>
         ))}
-        {faqItems.map((item, index) => (
-            <AccordionItem key={`faq-${item.id}`} value={`faq-${item.id}`} className="border border-border rounded-lg bg-card shadow-sm overflow-hidden">
-              <AccordionTrigger className={cn(
-                "px-6 py-4 text-left font-medium text-foreground hover:no-underline text-sm md:text-base",
-              )}>
-                {t(item.questionKey)}
-              </AccordionTrigger>
-              <AccordionContent className="px-6 pb-4 pt-0 text-muted-foreground">
-                 <div className="prose prose-sm dark:prose-invert max-w-none">
-                    {t(item.answerKey)}
-                 </div>
-              </AccordionContent>
-            </AccordionItem>
-          ))}
+        {faqItems.map((item) => (
+          <AccordionItem key={`faq-${item.id}`} value={`faq-${item.id}`} className="border border-border rounded-lg bg-card shadow-sm overflow-hidden">
+            <AccordionTrigger className={cn(
+              "px-6 py-4 text-left font-semibold text-foreground hover:no-underline text-md md:text-base", // Matched style
+            )}>
+              {t(item.questionKey)}
+            </AccordionTrigger>
+            <AccordionContent className="px-6 pb-4 pt-0 text-muted-foreground">
+              <div className="prose prose-sm dark:prose-invert max-w-none">
+                {t(item.answerKey)}
+              </div>
+            </AccordionContent>
+          </AccordionItem>
+        ))}
       </Accordion>
 
       <section className="text-center py-8 bg-secondary/30 rounded-lg border border-border">
