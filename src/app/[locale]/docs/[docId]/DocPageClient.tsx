@@ -16,6 +16,7 @@ import { Separator } from '@/components/ui/separator';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion';
 import VehicleBillOfSaleDisplay from '@/components/docs/VehicleBillOfSaleDisplay'; // Import the specific display component
+import PromissoryNoteDisplay from '@/components/docs/PromissoryNoteDisplay';
 
 // Lazy load testimonials section so it's only fetched when this page is viewed
 const TrustAndTestimonialsSection = dynamic(
@@ -298,6 +299,8 @@ export default function DocPageClient({ params: routeParams }: DocPageClientProp
         {/* Conditional rendering for document-specific content vs generic content */}
         {docConfig.id === 'bill-of-sale-vehicle' ? (
           <VehicleBillOfSaleDisplay locale={currentLocale as 'en' | 'es'} />
+        ) : docConfig.id === 'promissory-note' ? (
+          <PromissoryNoteDisplay locale={currentLocale as 'en' | 'es'} />
         ) : (
           <>
             {/* Feature Highlights */}
