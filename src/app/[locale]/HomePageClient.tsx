@@ -38,9 +38,15 @@ const TopDocsChips = dynamic(() => import('@/components/TopDocsChips'), {
   loading: () => <LoadingSpinner />
 });
 
-const AnnouncementBar = dynamic(() => import('@/components/AnnouncementBar'), {
-  ssr: false,
-});
+// AnnouncementBar is a named export so we need to resolve it explicitly when
+// using dynamic import, otherwise `dynamic` would receive the entire module
+// object instead of the component.
+const AnnouncementBar = dynamic(
+  () => import('@/components/AnnouncementBar').then((mod) => mod.AnnouncementBar),
+  {
+    ssr: false,
+  }
+);
 
 const StickyFilterBar = dynamic(() => import('@/components/StickyFilterBar'), {
   loading: () => <div className="h-16 bg-muted" /> // Placeholder for filter bar height
