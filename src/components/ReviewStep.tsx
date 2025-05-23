@@ -4,7 +4,7 @@
 import React, { useMemo, useState, useCallback } from 'react';
 import { useFormContext, Controller } from 'react-hook-form';
 import type { LegalDocument, Question } from '@/lib/document-library';
-import { usStates } from '@/lib/document-library'; // Ensure usStates is imported if used
+import { usStates } from '@/lib/document-library';
 import { prettify } from '@/lib/schema-utils';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -13,7 +13,8 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from '@/components/ui/switch';
-import AddressField from '@/components/AddressField'; 
+import AddressField from '@/components/AddressField';
+import SmartInput from '@/components/wizard/SmartInput'; // Import SmartInput
 import { useTranslation } from 'react-i18next';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
@@ -22,7 +23,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-
+import { Label } from '@/components/ui/label'; // Import Label
 
 interface ReviewStepProps {
   doc: LegalDocument;
@@ -31,12 +32,13 @@ interface ReviewStepProps {
 
 export default function ReviewStep({ doc, locale }: ReviewStepProps) {
   const { t } = useTranslation("common");
-  const { control, getValues, setValue, trigger, formState: { errors }, watch } = useFormContext();
+  const { control, getValues, setValue, trigger, formState: { errors }, watch, register } = useFormContext(); // Added register
   const { toast } = useToast();
 
   const [editingFieldId, setEditingFieldId] = useState<string | null>(null);
-  
-  const watchedValues = watch(); 
+  const [originalFieldValue, setOriginalFieldValue] = useState<any>(null); // For cancel functionality
+
+  const watchedValues = watch();
 
   const actualSchemaShape = useMemo(() => {
     const schemaDef = doc?.schema?._def;
@@ -50,7 +52,7 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
     const currentFormData = getValues();
     const allFieldKeys = Array.from(new Set([
       ...(actualSchemaShape ? Object.keys(actualSchemaShape) : []),
-      ...Object.keys(currentFormData) 
+      ...Object.keys(currentFormData)
     ]));
 
     return allFieldKeys
@@ -65,15 +67,15 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
 
         let label = questionConfig?.label || schemaFieldDef?.description || (schemaFieldDef?.labelKey ? t(schemaFieldDef.labelKey) : null) || prettify(fieldId);
         
-        let fieldType: Question['type'] = questionConfig?.type || 'text'; 
+        let fieldType: Question['type'] = questionConfig?.type || 'text';
         if (schemaFieldDef) {
             if (schemaFieldDef.typeName === 'ZodNumber') fieldType = 'number';
             else if (schemaFieldDef.typeName === 'ZodBoolean') fieldType = 'boolean';
             else if (schemaFieldDef.typeName === 'ZodDate') fieldType = 'date';
             else if (schemaFieldDef.typeName === 'ZodEnum' || schemaFieldDef.innerType?._def?.typeName === 'ZodEnum') fieldType = 'select';
-            else if (fieldId.includes('address') && schemaFieldDef.typeName === 'ZodString') fieldType = 'address';
-            else if (fieldId.includes('phone') && schemaFieldDef.typeName === 'ZodString') fieldType = 'tel';
-            else if (schemaFieldDef.typeName === 'ZodString' && questionConfig?.type === 'textarea') fieldType = 'textarea';
+            else if (fieldId.toLowerCase().includes('address') && schemaFieldDef.typeName === 'ZodString') fieldType = 'address';
+            else if (fieldId.toLowerCase().includes('phone') && schemaFieldDef.typeName === 'ZodString') fieldType = 'tel';
+            else if (schemaFieldDef.typeName === 'ZodString' && (questionConfig?.type === 'textarea' || (schemaFieldDef as any)?.uiType === 'textarea')) fieldType = 'textarea';
         }
         
         const rawEnumValues = schemaFieldDef?.innerType?._def?.values ?? schemaFieldDef?.values ?? (schemaFieldDef?.typeName === 'ZodEffects' ? schemaFieldDef.schema?._def?.values : undefined);
@@ -90,16 +92,18 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
 
         return { id: fieldId, label, type: fieldType, options, required, placeholder, tooltip };
       });
-  }, [doc, actualSchemaShape, getValues, t, watchedValues]); 
+  }, [doc, actualSchemaShape, getValues, t, watchedValues]);
 
   const handleEdit = (fieldId: string) => {
+    setOriginalFieldValue(getValues(fieldId)); // Store current value before editing
     setEditingFieldId(fieldId);
   };
 
   const handleSave = useCallback(async (fieldId: string) => {
     const isValid = await trigger(fieldId as any);
     if (isValid) {
-      setEditingFieldId(null); 
+      setEditingFieldId(null);
+      setOriginalFieldValue(null); // Clear stored original value
       toast({ title: t('Changes Saved'), description: `${t(fieldsToReview.find(f=>f.id === fieldId)?.label || fieldId)} ${t('updated.')}` });
     } else {
       toast({ title: t('Validation Error'), description: t('Please correct the field.'), variant: 'destructive' });
@@ -107,8 +111,12 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
   }, [trigger, toast, t, fieldsToReview]);
 
   const handleCancel = useCallback(() => {
+    if (editingFieldId && originalFieldValue !== null) {
+      setValue(editingFieldId as any, originalFieldValue, { shouldValidate: true, shouldDirty: true });
+    }
     setEditingFieldId(null);
-  }, []);
+    setOriginalFieldValue(null); // Clear stored original value
+  }, [editingFieldId, originalFieldValue, setValue]);
 
   const renderFieldValue = (field: typeof fieldsToReview[number]) => {
     const value = getValues(field.id);
@@ -157,73 +165,84 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
 
                 {editingFieldId === field.id ? (
                   <div className="mt-1.5 space-y-2">
-                    <Controller
-                      name={field.id as any}
-                      control={control}
-                      render={({ field: controllerField }) => {
-                        const commonProps = {
-                          ...controllerField,
-                          value: controllerField.value ?? '', 
-                          onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | string | boolean) => {
-                            let valToSet;
-                            if (typeof e === 'object' && 'target' in e && e.target) {
-                                valToSet = field.type === 'number' && (e.target as HTMLInputElement).value !== '' ? Number((e.target as HTMLInputElement).value) : (e.target as HTMLInputElement).value;
-                            } else { 
-                                valToSet = e;
-                            }
-                            controllerField.onChange(valToSet);
-                          },
-                          className: cn("max-w-md text-sm", errors[field.id] && "border-destructive"),
-                          placeholder: field.placeholder || '',
-                        };
+                    { (field.type === 'tel' || field.id.toLowerCase().includes('phone')) ? (
+                       <SmartInput
+                          id={`review-${field.id}`}
+                          type="tel"
+                          placeholder={field.placeholder || ''}
+                          className={cn("max-w-md text-sm", errors[field.id] && "border-destructive")}
+                          aria-invalid={!!errors[field.id]}
+                          rhfProps={register(field.id as any, { required: field.required })}
+                       />
+                    ) : (
+                      <Controller
+                        name={field.id as any}
+                        control={control}
+                        render={({ field: controllerField }) => {
+                          const commonProps = {
+                            ...controllerField,
+                            value: controllerField.value ?? '',
+                            onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | string | boolean) => {
+                              let valToSet;
+                              if (typeof e === 'object' && 'target' in e && e.target) {
+                                  valToSet = field.type === 'number' && (e.target as HTMLInputElement).value !== '' ? Number((e.target as HTMLInputElement).value) : (e.target as HTMLInputElement).value;
+                              } else {
+                                  valToSet = e;
+                              }
+                              controllerField.onChange(valToSet);
+                            },
+                            className: cn("max-w-md text-sm", errors[field.id] && "border-destructive"),
+                            placeholder: field.placeholder || '',
+                          };
 
-                        if (field.type === 'textarea') return <Textarea {...commonProps} rows={3} />;
-                        if (field.type === 'select' && field.options) return (
-                          <Select
-                            value={String(commonProps.value)}
-                            onValueChange={commonProps.onChange}
-                          >
-                            <SelectTrigger
-                              className={cn(commonProps.className, "w-full")}
-                              aria-label={field.placeholder || t('Select...')}
+                          if (field.type === 'textarea') return <Textarea {...commonProps} rows={3} />;
+                          if (field.type === 'select' && field.options) return (
+                            <Select
+                              value={String(commonProps.value)}
+                              onValueChange={commonProps.onChange}
                             >
-                              <SelectValue placeholder={field.placeholder || t('Select...')} />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {field.options.map((opt) => (
-                                <SelectItem key={opt.value} value={String(opt.value)} className="text-sm">{opt.label}</SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        );
-                        if (field.type === 'boolean') return (
-                          <div className="flex items-center space-x-2">
-                            <Switch id={`review-${field.id}`} checked={Boolean(commonProps.value)} onCheckedChange={commonProps.onChange} />
-                            <Label htmlFor={`review-${field.id}`} className="text-sm font-normal">{Boolean(commonProps.value) ? t('Yes') : t('No')}</Label>
-                          </div>
-                        );
-                        if (field.type === 'address') return (
-                          <AddressField
-                            name={controllerField.name}
-                            label="" 
-                            value={controllerField.value || ''}
-                            onChange={(val, parts) => {
-                                controllerField.onChange(val);
-                                if (parts && actualSchemaShape) {
-                                    const prefix = field.id.replace(/_address$/i, '') || field.id.replace(/Address$/i, '');
-                                    if ((actualSchemaShape as any)?.[`${prefix}_city`]) setValue(`${prefix}_city`, parts.city, {shouldValidate: true, shouldDirty: true});
-                                    if ((actualSchemaShape as any)?.[`${prefix}_state`]) setValue(`${prefix}_state`, parts.state, {shouldValidate: true, shouldDirty: true});
-                                    if ((actualSchemaShape as any)?.[`${prefix}_postal_code`]) setValue(`${prefix}_postal_code`, parts.postalCode, {shouldValidate: true, shouldDirty: true});
-                                }
-                            }}
-                            placeholder={field.placeholder || t('Enter address...', {ns: 'translation'})}
-                            className="max-w-md"
-                            error={errors[field.id]?.message as string | undefined}
-                          />
-                        );
-                        return <Input {...commonProps} type={field.type === 'number' ? 'number' : field.type === 'date' ? 'date' : 'text'} />;
-                      }}
-                    />
+                              <SelectTrigger
+                                className={cn(commonProps.className, "w-full")}
+                                aria-label={field.placeholder || t('Select...')}
+                              >
+                                <SelectValue placeholder={field.placeholder || t('Select...')} />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {field.options.map((opt) => (
+                                  <SelectItem key={opt.value} value={String(opt.value)} className="text-sm">{opt.label}</SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                          );
+                          if (field.type === 'boolean') return (
+                            <div className="flex items-center space-x-2">
+                              <Switch id={`review-${field.id}`} checked={Boolean(commonProps.value)} onCheckedChange={commonProps.onChange} />
+                              <Label htmlFor={`review-${field.id}`} className="text-sm font-normal">{Boolean(commonProps.value) ? t('Yes') : t('No')}</Label>
+                            </div>
+                          );
+                          if (field.type === 'address') return (
+                            <AddressField
+                              name={controllerField.name}
+                              label=""
+                              value={controllerField.value || ''}
+                              onChange={(val, parts) => {
+                                  controllerField.onChange(val);
+                                  if (parts && actualSchemaShape) {
+                                      const prefix = field.id.replace(/_address$/i, '') || field.id.replace(/Address$/i, '');
+                                      if ((actualSchemaShape as any)?.[`${prefix}_city`]) setValue(`${prefix}_city`, parts.city, {shouldValidate: true, shouldDirty: true});
+                                      if ((actualSchemaShape as any)?.[`${prefix}_state`]) setValue(`${prefix}_state`, parts.state, {shouldValidate: true, shouldDirty: true});
+                                      if ((actualSchemaShape as any)?.[`${prefix}_postal_code`]) setValue(`${prefix}_postal_code`, parts.postalCode, {shouldValidate: true, shouldDirty: true});
+                                  }
+                              }}
+                              placeholder={field.placeholder || t('Enter address...', {ns: 'translation'})}
+                              className="max-w-md"
+                              error={errors[field.id]?.message as string | undefined}
+                            />
+                          );
+                          return <Input {...commonProps} type={field.type === 'number' ? 'number' : field.type === 'date' ? 'date' : 'text'} />;
+                        }}
+                      />
+                    )}
                     <div className="flex gap-2 mt-2">
                       <Button size="sm" onClick={() => handleSave(field.id)} className="text-xs h-8">
                         <Check className="w-3.5 h-3.5 mr-1" />{t('Save')}
