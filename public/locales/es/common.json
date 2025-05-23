@@ -122,7 +122,7 @@
   "Validation Error": "Error de Validación",
   "Please correct the field.": "Por favor, corrige el campo.",
   "Review Your Information": "Revisa Tu Información",
-  "Please confirm the details below are correct before proceeding.": "Por favor, confirma que los detalles a continuación son correctos antes de proceder.",
+  "Please confirm the details below are correct before proceeding.": "Por favor, confirma que los detalles a continuación son correctos. Haz clic en el ícono de editar para realizar cambios.",
   "Not Provided": "No Proporcionado",
   "Edit": "Editar",
   "wizard.fieldRequired": "Requerido",
