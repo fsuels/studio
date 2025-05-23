@@ -1,154 +1,125 @@
-
 {
-  "pageTitle": "Pagaré: Su Guía Esencial (con Plantilla Gratuita)",
-  "pageSubtitle": "Asegure sus préstamos con un Pagaré claro y legalmente vinculante. Nuestra guía simplifica el proceso, desde cláusulas clave hasta la firma electrónica con SignWell.",
-  "toc": {
-    "whatIs": "¿Qué Es un Pagaré?",
-    "whenToUse": "Cuándo Debe Usarlo",
-    "varieties": "Tipos de Pagaré",
-    "components": "Cláusulas Esenciales y Puntos de Datos",
-    "howTo": "Cómo Completar la Plantilla de 123LegalDoc",
-    "stateRules": "Reglas Específicas del Estado y Límites de Usura",
-    "checklist": "Lista de Verificación para Prestamista y Prestatario",
-    "supporting": "Documentos de Respaldo",
-    "whyUs": "Por Qué Elegir 123LegalDoc + SignWell",
-    "faq": "Preguntas Frecuentes"
-  },
+  "pageTitle": "Guía de Pagaré",
+  "pageSubtitle": "Todo lo que necesita para redactar un acuerdo de préstamo ejecutable.",
   "sections": {
     "whatIs": {
       "title": "¿Qué Es un Pagaré?",
-      "content": [
-        "Un Pagaré es una promesa escrita y firmada por una parte (el “Prestatario” o “Emisor”) de pagar una suma específica de dinero a otra parte (el “Prestamista” o “Tenedor”) en una fecha determinada o a la vista.",
-        "Típicamente describe el monto del préstamo (capital), la tasa de interés (si la hay), el calendario de pagos y lo que sucede si el Prestatario incumple.",
-        "Piénselo como un 'pagaré' formal que es legalmente exigible."
-      ]
+      "content": "Un pagaré es una promesa escrita de una parte (el prestatario) de reembolsar una suma específica a otra (el prestamista) bajo términos acordados. Típicamente establece el capital, intereses y calendario de pagos, creando una deuda legalmente vinculante."
     },
     "whenToUse": {
-      "title": "Cuándo Debe Usarlo",
+      "title": "Cuándo Debe Usar Uno",
       "table": {
         "headers": ["Escenario", "Por Qué un Pagaré Es Crítico"],
         "rows": [
-          ["Préstamo personal a familiares/amigos", "Evita malentendidos, preserva relaciones, prueba fiscal si se cobran intereses."],
-          ["Dueño de negocio prestando a su LLC/Corp", "Mantiene el velo corporativo, contabilidad clara, prueba de préstamo legítimo vs. contribución de capital."],
-          ["Transacciones inmobiliarias financiadas por el vendedor", "Evidencia de deuda para aseguradoras de títulos, autoridades fiscales; permite ejecución hipotecaria si no se paga."],
-          ["Equipo o vehículo vendido a plazos", "Permite al vendedor recuperar el activo en caso de incumplimiento si el pagaré está garantizado."],
-          ["Grandes adelantos de nómina a empleados", "Satisface a los auditores de nómina, documenta claramente los términos de pago."]
+          ["Préstamo personal a familiares o amigos", "Previene malentendidos y preserva relaciones"],
+          ["Dueño de negocio prestando a su propia LLC", "Mantiene el velo corporativo y una contabilidad clara"],
+          ["Acuerdo inmobiliario financiado por el vendedor", "Muestra evidencia de deuda para aseguradoras de títulos y autoridades fiscales"],
+          ["Equipo o vehículo vendido a plazos", "Permite al vendedor reclamar el activo en caso de incumplimiento"],
+          ["Adelantos de nómina de alto valor a empleados", "Satisface a los auditores de nómina"]
         ]
       }
     },
     "varieties": {
-      "title": "Tipos de Pagaré",
+      "title": "Variedades de Pagaré",
       "items": [
-        "Simple (No Garantizado): Sin garantía prendaria; depende de la solvencia crediticia del Prestatario.",
-        "Garantizado: Identifica una garantía específica (ej., automóvil, equipo, bienes raíces) que el Prestamista puede embargar si no se paga. A menudo requiere un Contrato de Garantía por separado.",
-        "A la Vista: Pagadero en cualquier momento que el Prestamista “exija” el saldo adeudado, con o sin notificación específica.",
-        "A Plazos (Amortizado): Pagos regulares de capital e intereses durante un plazo determinado.",
-        "A Plazos con Pago Global (Balloon): Pagos periódicos más pequeños (a menudo solo intereses) con un gran pago de capital al final.",
-        "Solo Intereses: El prestatario paga solo intereses durante el plazo del préstamo; el capital se reembolsa en su totalidad al vencimiento.",
-        "Pagaré Maestro / Línea de Crédito: Permite un saldo revolvente hasta un límite de crédito máximo, con disposiciones y reembolsos a lo largo del tiempo."
+        "Simple (No Garantizado) – sin garantía; depende de la solvencia del prestatario",
+        "Garantizado – identifica la garantía (ej., auto, equipo) que el prestamista puede embargar si no se paga",
+        "A la Vista – pagadero en cualquier momento que el prestamista reclame el saldo adeudado",
+        "A Plazos con Pago Global Final – pagos de intereses periódicos más el capital en una suma global al final",
+        "Solo Intereses – el prestatario paga intereses durante el plazo, el capital al vencimiento",
+        "Pagaré Maestro / Línea de Crédito – saldo revolvente con límite de crédito máximo"
       ]
     },
     "components": {
       "title": "Cláusulas Esenciales y Puntos de Datos",
       "table": {
-        "headers": ["Cláusula / Punto de Dato", "Por Qué Es Importante"],
+        "headers": ["Cláusula", "Propósito"],
         "rows": [
-          ["Nombres Legales Completos y Direcciones (Prestatario y Prestamista)", "Asegura que las partes correctas estén vinculadas; necesario para la ejecución."],
-          ["Monto del Capital", "Establece claramente la cantidad exacta prestada, evitando disputas."],
-          ["Tasa de Interés y Método de Cálculo", "Especifica la TAE, capitalización (si la hay) y verifica el cumplimiento de la ley de usura."],
-          ["Calendario de Pagos", "Fechas, frecuencia (mensual, trimestral), montos de pago o fecha de vencimiento del pago único."],
-          ["Fórmula de Cargo por Mora", "Define multas por pagos omitidos (ej., tarifa plana o porcentaje después del período de gracia)."],
-          ["Política de Pago Anticipado", "Establece si se permite el pago anticipado y si se aplica alguna penalización."],
-          ["Incumplimiento y Remedios", "Describe qué constituye un incumplimiento (ej., pago omitido) y los derechos del Prestamista (ej., cláusula de aceleración, costos de cobro)."],
-          ["Descripción de la Garantía (para Pagarés Garantizados)", "Identificación precisa de los activos que garantizan el préstamo (VIN, números de serie, descripción legal de la propiedad)."],
-          ["Ley Aplicable y Jurisdicción", "Especifica las leyes de qué estado se aplican y dónde se pueden tomar acciones legales."],
-          ["Firmas (Prestatario, Prestamista, Testigos/Notario si es necesario)", "Hace que el contrato sea legalmente vinculante. La notarización añade autenticidad y puede ser requerida en algunos estados para ciertos pagarés."]
+          ["Monto del Capital", "Registra los dólares exactos prestados, evitando disputas futuras"],
+          ["Tasa de Interés y Método de Cálculo", "TAE, interés simple diario, 30/360—el que aplique"],
+          ["Calendario de Pagos", "Fechas, frecuencia y formato (pagos iguales, pago global, etc.)"],
+          ["Fórmula de Cargo por Mora", "Dólar fijo o porcentaje que se activa después del período de gracia"],
+          ["Política de Pago Anticipado", "Permite o prohíbe el pago anticipado sin penalización"],
+          ["Descripción de la Garantía (pagarés garantizados)", "VIN, número de serie o descripción legal del activo"],
+          ["Incumplimiento y Remedios", "Aceleración, embargo, cláusula de honorarios de abogado"],
+          ["Ley Aplicable y Jurisdicción", "Especifica la ley estatal y la jurisdicción judicial"],
+          ["Firmas y Bloque Notarial", "Hace que el contrato sea ejecutable—algunos estados requieren notarización"]
         ]
       }
     },
     "howTo": {
-      "title": "Cómo Completar la Plantilla de 123LegalDoc",
+      "title": "Cómo Completar la Plantilla de 123LegalDoc en 8 Pasos",
       "items": [
-        "Elija Su Estado: Carga automáticamente los límites de usura relevantes y las reglas notariales.",
-        "Ingrese los Detalles del Prestamista y Prestatario: Los nombres y direcciones se completan automáticamente en todo el formulario.",
-        "Establezca el Capital e Intereses: Nuestra calculadora muestra el reembolso total y verifica los límites de interés estatales.",
-        "Elija el Método de Pago: Pagos iguales, solo intereses, pago global o a la vista.",
-        "Añada Garantía (Opcional para Pagarés Garantizados): Describa los activos prendados para garantizar el préstamo.",
-        "Defina Cargos por Mora y Términos de Pago Anticipado: La IA sugiere rangos estándar o personalícelos.",
-        "Revise los Remedios por Incumplimiento: Active la cláusula de aceleración, recuperación de honorarios de abogados, etc.",
-        "Firme Electrónicamente con SignWell: Ambas partes firman desde cualquier dispositivo; obtenga un PDF seguro con seguimiento de auditoría."
+        "Elija Su Estado – cargamos automáticamente la redacción legal y las reglas notariales correctas.",
+        "Ingrese los Datos del Prestatario y Prestamista – los nombres se completan automáticamente en todo el formulario.",
+        "Establezca el Capital e Intereses – la calculadora proyecta el costo total.",
+        "Seleccione el Método de Reembolso – pagos iguales, pago global o a la vista.",
+        "Añada Garantía (Opcional) – lista desplegable con validación de VIN/número de serie.",
+        "Defina Cargos por Mora y Términos de Pago Anticipado – la IA sugiere rangos estándar.",
+        "Revise los Remedios por Incumplimiento – active/desactive la aceleración y los honorarios de abogado.",
+        "Firme Electrónicamente con SignWell – registro de auditoría más notarización remota opcional."
       ],
-      "totalTime": "Tiempo total: ≈ 4-6 minutos, dependiendo de la complejidad."
+      "totalTime": "Tiempo total: ≈ 4 minutos."
     },
     "stateRules": {
       "title": "Reglas Específicas del Estado y Límites de Usura",
-      "content": "Los topes de las tasas de interés (leyes de usura) varían significativamente según el estado y el tipo de préstamo (ej., personal vs. comercial). Por ejemplo, el tope general de usura civil de Nueva York es del 16%, mientras que Texas permite hasta un 18% para la mayoría de los préstamos de consumo, pero tiene límites más altos para ciertos tipos de contratos. Nuestra plantilla:",
-      "items": [
-        "Señala las tasas de interés que probablemente excedan el límite de usura civil de su estado según los tipos de préstamo estándar.",
-        "Le alerta si la notarización es comúnmente requerida o recomendada en su estado para los pagarés.",
-        "Proporciona enlaces a recursos específicos del estado para una investigación más profunda si es necesario."
-      ],
-      "disclaimer": "Siempre verifique con los estatutos locales o un profesional legal, ya que las leyes de usura pueden ser complejas."
+      "content": "Los límites de las tasas de interés varían ampliamente (ej., 10% en Nueva York, hasta 30% para ciertos préstamos en Texas). Nuestra plantilla bloquea las tasas que exceden el límite de usura civil o criminal de su estado y marca los estados donde la notarización es obligatoria."
     },
     "checklist": {
       "title": "Lista de Verificación para Prestamista y Prestatario",
       "items": [
-        "Verificar Nombres Legales e Identificaciones: Asegúrese de que los nombres coincidan con la identificación emitida por el gobierno.",
-        "Confirmar Términos del Préstamo: Ambas partes entienden y aceptan el capital, los intereses y el reembolso.",
-        "Documentación de la Garantía (si está garantizado): Adjunte fotos, números de serie o escrituras de propiedad como referencia.",
-        "Presentar UCC-1 (para préstamos comerciales garantizados): Perfecciona el interés de seguridad del prestamista en la garantía comercial.",
-        "Mantener Registros de Pago: Ambas partes deben mantener un libro mayor de los pagos realizados y recibidos.",
-        "Proporcionar el Formulario 1099-INT del IRS (si aplica): El prestamista reporta los ingresos por intereses pagados por el prestatario si superan los $600/año en algunos casos."
-      ],
-      "printNote": "Acceda a esta lista de verificación en su panel de 123LegalDoc después de generar su pagaré."
+        "Verificar que los nombres legales coincidan con las identificaciones emitidas por el gobierno",
+        "Adjuntar fotos de la garantía y números de serie",
+        "Registrar los reembolsos (nuestro panel lo registra automáticamente)",
+        "Presentar la declaración de financiamiento UCC-1 para préstamos garantizados sobre bienes muebles",
+        "Proporcionar el Formulario 1099-INT del IRS si el interés anual es ≥ $10 (prestamista)"
+      ]
     },
     "supporting": {
       "title": "Documentos de Respaldo",
       "items": [
-        "Contrato de Garantía (si es un pagaré garantizado)",
-        "Garantía Personal (si el prestatario es una entidad como una LLC o Corporación)",
-        "Cuadro de Amortización (a menudo generado con el pagaré, mostrando el desglose de pagos)",
-        "Declaración de Financiación UCC-1 (para perfeccionar intereses de seguridad en ciertos tipos de garantía)"
+        "Acuerdo de Garantía (para la garantía)",
+        "UCC-1 (aviso público de gravamen)",
+        "Garantía Personal (si el prestatario es una entidad)",
+        "Registro de Pagos (generado automáticamente)"
       ]
     },
     "whyUs": {
       "title": "Por Qué Elegir 123LegalDoc + SignWell",
       "items": [
-        "Plantillas Redactadas por Abogados y Cumplen con el Estado: Actualizadas regularmente para mayor precisión.",
-        "Barandillas Inteligentes de Usura y Notariado: Ayuda a prevenir errores legales comunes.",
-        "Firma Electrónica Instantánea y Seguimiento de Auditoría: Firme y gestione documentos de forma segura en línea.",
-        "Calculadora de Amortización Integrada: Vea los desgloses completos de los pagos al instante.",
-        "Opciones Bilingües (EN/ES): Atienda diversas necesidades de los clientes.",
-        "Garantía de Devolución de Dinero de 30 Días: Cree su pagaré sin riesgos."
-      ],
-      "cta": "Proteja sus acuerdos financieros con un Pagaré redactado profesionalmente."
+        "Redactado por Abogados y Cumple con las Leyes Estatales – revisado cada trimestre.",
+        "Barandillas Inteligentes Contra la Usura – previene tasas de interés ilegales.",
+        "Firma Electrónica Instantánea y Registro de Auditoría – ejecutabilidad sin el papeleo.",
+        "Módulo de Enmienda y Renovación – extienda los términos con un clic.",
+        "Plantillas Bilingües (EN/ES) – acceda a mercados más amplios y mejore el SEO.",
+        "Promesa de Devolución de Dinero de 30 Días – sin riesgos."
+      ]
     }
   },
   "faq": {
+    "title": "Preguntas Frecuentes",
     "q1": {
-      "question": "¿Es legalmente vinculante un pagaré firmado electrónicamente?",
-      "answer": "Sí. Bajo la Ley de Firmas Electrónicas en el Comercio Global y Nacional (E-SIGN) de EE. UU. y la Ley Uniforme de Transacciones Electrónicas (UETA) adoptada por la mayoría de los estados, las firmas electrónicas tienen el mismo peso legal que las firmas manuscritas para la mayoría de las transacciones, incluidos los pagarés."
+      "question": "¿Es válido en un tribunal un pagaré firmado electrónicamente?",
+      "answer": "Sí. Bajo la Ley E-SIGN de EE. UU., las firmas electrónicas tienen el mismo peso legal que las firmas con tinta."
     },
     "q2": {
-      "question": "¿Necesito un testigo o notario para un pagaré?",
-      "answer": "Los requisitos varían según el estado y la naturaleza del préstamo. Aunque no siempre es obligatorio para pagarés simples, la notarización o las firmas de testigos pueden fortalecer significativamente la exigibilidad del pagaré al verificar las identidades de los firmantes. Algunos estados lo requieren para pagarés que involucran bienes raíces o sumas mayores. Nuestra plataforma indicará si se recomienda la notarización para su estado."
+      "question": "¿Necesito un testigo o notario?",
+      "answer": "La mayoría de los estados no requieren notarización, pero añade fuerza de ejecución—nuestro proceso de pago ofrece notarización remota."
     },
     "q3": {
-      "question": "¿Qué sucede si el prestatario incumple el pagaré?",
-      "answer": "Si un prestatario incumple (p. ej., omite pagos), el prestamista puede tomar acciones legales según lo descrito en la cláusula de 'Incumplimiento y Remedios' del pagaré. Esto puede incluir exigir el pago total del saldo pendiente (aceleración), demandar por la deuda o, si el pagaré está garantizado, embargar la garantía especificada. Los costos de cobro y los honorarios de abogados también pueden ser recuperables si así se estipula."
+      "question": "¿Qué sucede si el prestatario incumple?",
+      "answer": "La cláusula de incumplimiento acelera el saldo total; los prestamistas pueden demandar, embargar salarios o tomar posesión de la garantía listada, sujeto a la ley estatal."
     },
     "q4": {
-      "question": "¿Puedo cambiar los términos de un pagaré más tarde?",
-      "answer": "Sí, los términos de un pagaré pueden cambiarse si tanto el prestamista como el prestatario están de acuerdo por escrito. Esto se hace típicamente a través de una 'Enmienda al Pagaré' o 'Acuerdo de Modificación', que debe ser firmado por todas las partes. 123LegalDoc ofrece plantillas para dichas enmiendas."
+      "question": "¿Puedo cambiar los términos más tarde?",
+      "answer": "Use nuestro complemento de Enmienda de Pagaré para ajustar las tasas de interés, fechas de pago o capital sin redactar un nuevo pagaré."
     },
     "q5": {
-      "question": "¿Los intereses devengados de un pagaré son gravables?",
-      "answer": "Sí, los ingresos por intereses recibidos por el prestamista generalmente son gravables y deben informarse al IRS. El prestatario puede deducir los intereses pagados si el préstamo fue para fines comerciales, de inversión o ciertos fines educativos, sujeto a las reglas del IRS."
+      "question": "¿Son gravables los intereses?",
+      "answer": "Sí. Los prestamistas deben declarar los ingresos por intereses; los prestatarios pueden deducir los intereses de préstamos comerciales calificados."
     }
   },
-  "finalCtaTitle": "¿Listo para Asegurar Su Acuerdo de Préstamo?",
-  "finalCtaSubtitle": "No deje sus acuerdos financieros al azar. Use nuestro asistente intuitivo para generar un Pagaré completo y legalmente sólido en minutos. Firme electrónicamente con SignWell para mayor seguridad y conveniencia.",
-  "startMyPromissoryNoteButton": "Comenzar Mi Pagaré"
+  "finalCtaTitle": "¿Listo para Proteger Su Préstamo?",
+  "finalCtaSubtitle": "Haga clic en “Crear Mi Pagaré” y asegure una protección de nivel profesional en minutos.",
+  "startMyPromissoryNoteButton": "Crear Mi Pagaré"
 }
-
-    

@@ -1,154 +1,125 @@
-
 {
-  "pageTitle": "Promissory Note: Your Essential Guide (with Free Template)",
-  "pageSubtitle": "Secure your loans with a clear, legally binding Promissory Note. Our guide simplifies the process—from key clauses to e-signature with SignWell.",
-  "toc": {
-    "whatIs": "What Is a Promissory Note?",
-    "whenToUse": "When You Must Use One",
-    "varieties": "Promissory Note Varieties",
-    "components": "Essential Clauses & Data Points",
-    "howTo": "How to Complete the 123LegalDoc Template",
-    "stateRules": "State-Specific Rules & Usury Caps",
-    "checklist": "Lender & Borrower Checklist",
-    "supporting": "Supporting Documents",
-    "whyUs": "Why Choose 123LegalDoc + SignWell",
-    "faq": "Frequently Asked Questions"
-  },
+  "pageTitle": "Promissory Note Guide",
+  "pageSubtitle": "Everything you need to craft an enforceable loan agreement.",
   "sections": {
     "whatIs": {
       "title": "What Is a Promissory Note?",
-      "content": [
-        "A Promissory Note is a written, signed promise by one party (the “Borrower” or “Maker”) to pay a specific sum of money to another party (the “Lender” or “Holder”) on a certain date or on demand.",
-        "It typically outlines the loan amount (principal), interest rate (if any), repayment schedule, and what happens if the Borrower defaults.",
-        "Think of it as a formal IOU that's legally enforceable."
-      ]
+      "content": "A promissory note is a written promise by one party (the borrower) to repay a specific sum to another (the lender) under agreed terms. It typically establishes principal, interest, and repayment schedule, creating a legally binding debt."
     },
     "whenToUse": {
       "title": "When You Must Use One",
       "table": {
         "headers": ["Scenario", "Why a Note Is Critical"],
         "rows": [
-          ["Personal loan to family/friends", "Prevents misunderstandings, preserves relationships, tax proof if interest is charged."],
-          ["Business owner lending to their LLC/Corp", "Maintains corporate veil, clean bookkeeping, proves legitimate loan vs. capital contribution."],
-          ["Seller-financed real estate deals (seller carryback)", "Evidence of debt for title insurers, tax authorities; allows foreclosure if unpaid."],
-          ["Equipment or vehicle sold on installments", "Allows seller to reclaim asset on default if note is secured."],
-          ["Large payday advances to employees", "Satisfies payroll auditors, documents repayment terms clearly."]
+          ["Personal loan to family or friends", "Prevents misunderstandings and preserves relationships"],
+          ["Business owner lending to their own LLC", "Maintains corporate veil & clean bookkeeping"],
+          ["Seller-financed real-estate deal", "Shows evidence of debt for title insurers and tax authorities"],
+          ["Equipment or vehicle sold on installments", "Lets seller reclaim asset on default"],
+          ["High-value payday advances to employees", "Satisfies payroll auditors"]
         ]
       }
     },
     "varieties": {
       "title": "Promissory Note Varieties",
       "items": [
-        "Simple (Unsecured): No collateral pledged; relies on Borrower’s creditworthiness.",
-        "Secured: Identifies specific collateral (e.g., car, equipment, real estate) the Lender can seize if unpaid. Often requires a separate Security Agreement.",
-        "Demand: Payable any time the Lender “calls” the balance due, with or without specified notice.",
-        "Installment (Amortized): Regular payments of principal and interest over a set term.",
-        "Installment with Balloon: Smaller periodic payments (often interest-only) with a large lump-sum principal payment at the end.",
-        "Interest-Only: Borrower pays only interest during the loan term; principal is repaid in full at maturity.",
-        "Master Note / Line of Credit: Allows for a revolving balance up to a maximum credit limit, with draws and repayments over time."
+        "Simple (Unsecured) – no collateral; relies on borrower’s creditworthiness",
+        "Secured – identifies collateral (e.g., car, equipment) lender may seize if unpaid",
+        "Demand – payable any time lender calls the balance due",
+        "Installment with Balloon – periodic interest payments plus lump-sum principal at the end",
+        "Interest-Only – borrower pays interest during term, principal at maturity",
+        "Master Note / Line of Credit – revolving balance with maximum credit limit"
       ]
     },
     "components": {
       "title": "Essential Clauses & Data Points",
       "table": {
-        "headers": ["Clause / Data Point", "Why It Matters"],
+        "headers": ["Clause", "Purpose"],
         "rows": [
-          ["Full Legal Names & Addresses (Borrower & Lender)", "Ensures correct parties are bound; necessary for enforcement."],
-          ["Principal Amount", "Clearly states the exact amount loaned, avoiding disputes."],
-          ["Interest Rate & Calculation Method", "Specifies APR, compounding (if any), and checks for usury law compliance."],
-          ["Repayment Schedule", "Dates, frequency (monthly, quarterly), payment amounts, or lump sum maturity date."],
-          ["Late-Fee Formula", "Defines penalties for missed payments (e.g., flat fee or percentage after grace period)."],
-          ["Prepayment Policy", "States whether early payoff is allowed and if any penalty applies."],
-          ["Default & Remedies", "Outlines what constitutes a default (e.g., missed payment) and Lender’s rights (e.g., acceleration clause, collection costs)."],
-          ["Collateral Description (for Secured Notes)", "Precise identification of assets securing the loan (VIN, serial numbers, legal property description)."],
-          ["Governing Law & Venue", "Specifies which state’s laws apply and where legal action can be taken."],
-          ["Signatures (Borrower, Lender, Witnesses/Notary if required)", "Makes the contract legally binding. Notarization adds authenticity and may be required in some states for certain notes."]
+          ["Principal Amount", "Captures exact dollars loaned, avoiding future disputes"],
+          ["Interest Rate & Calculation Method", "APR, daily simple interest, 30/360—whichever applies"],
+          ["Repayment Schedule", "Dates, frequency, and format (equal payments, balloon, etc.)"],
+          ["Late-Fee Formula", "Flat dollar or percentage triggers after grace period"],
+          ["Prepayment Policy", "Allows or prohibits early payoff without penalty"],
+          ["Collateral Description (secured notes)", "VIN, serial number, or legal description of asset"],
+          ["Default & Remedies", "Acceleration, repossession, attorney-fee clause"],
+          ["Governing Law & Venue", "Specifies state law and court jurisdiction"],
+          ["Signatures & Notary Block", "Makes the contract enforceable—some states require notarization"]
         ]
       }
     },
     "howTo": {
-      "title": "How to Complete the 123LegalDoc Template",
+      "title": "How to Complete the 123LegalDoc Template in 8 Steps",
       "items": [
-        "Choose Your State: Auto-loads relevant usury limits and notary requirements.",
-        "Enter Lender & Borrower Details: Names and addresses populate throughout the form.",
-        "Set Principal & Interest: Our calculator shows total repayment and checks state interest caps.",
-        "Pick Repayment Method: Equal installments, interest-only, balloon, or demand options.",
-        "Add Collateral (Optional for Secured Notes): Describe assets pledged to secure the loan.",
-        "Define Late Fees & Prepayment Terms: AI suggests standard ranges or customize.",
-        "Review Default Remedies: Toggle acceleration clause, attorney-fee recovery, etc.",
-        "E-Sign with SignWell: Both parties sign from any device; get a secure, audit-trailed PDF."
+        "Choose Your State – auto-loads usury limits & notary rules.",
+        "Enter Borrower & Lender Details – names populate throughout.",
+        "Set Principal & Interest – calculator projects total cost.",
+        "Pick Repayment Method – equal installments, balloon, or demand.",
+        "Add Collateral (Optional) – drop-down list with VIN/serial validation.",
+        "Define Late Fees & Prepayment Terms – AI suggests standard ranges.",
+        "Review Default Remedies – toggle acceleration and attorney-fees.",
+        "E-Sign with SignWell – audit trail plus optional remote notarization."
       ],
-      "totalTime": "Total time: ≈ 4-6 minutes, depending on complexity."
+      "totalTime": "Total time: ≈ 4 minutes."
     },
     "stateRules": {
       "title": "State-Specific Rules & Usury Caps",
-      "content": "Interest-rate ceilings (usury laws) vary significantly by state and loan type (e.g., personal vs. business). For example, New York's general civil usury cap is 16%, while Texas allows up to 18% for most consumer loans but has higher limits for certain contract types. Our template:",
-      "items": [
-        "Flags interest rates that likely exceed your state’s civil usury limit based on standard loan types.",
-        "Alerts you if notarization is commonly required or recommended in your state for promissory notes.",
-        "Provides links to state-specific resources for deeper research if needed."
-      ],
-      "disclaimer": "Always verify with local statutes or a legal professional, as usury laws can be complex."
+      "content": "Interest-rate ceilings vary widely (e.g., 10% in New York, up to 30% for certain loans in Texas). Our template blocks rates that exceed your state’s civil or criminal usury limit and flags mandatory notary states."
     },
     "checklist": {
       "title": "Lender & Borrower Checklist",
       "items": [
-        "Verify Legal Names & IDs: Ensure names match government-issued identification.",
-        "Confirm Loan Terms: Both parties understand and agree on principal, interest, and repayment.",
-        "Collateral Documentation (if secured): Attach photos, serial numbers, or property deeds for reference.",
-        "File UCC-1 (for secured business loans): Perfects lender's security interest in business collateral.",
-        "Keep Payment Records: Both parties should maintain a ledger of payments made and received.",
-        "Provide IRS Form 1099-INT (if applicable): Lender reports interest income paid by borrower if over $600/year in some cases."
-      ],
-      "printNote": "Access this checklist in your 123LegalDoc dashboard after generating your note."
+        "Verify government-issued IDs",
+        "Attach collateral photos & serial numbers",
+        "Record repayments (our dashboard auto-logs)",
+        "File UCC-1 financing statement for secured personal-property loans",
+        "Provide IRS Form 1099-INT if annual interest ≥ $10 (lender)"
+      ]
     },
     "supporting": {
       "title": "Supporting Documents",
       "items": [
-        "Security Agreement (if it's a secured promissory note)",
-        "Personal Guaranty (if the borrower is an entity like an LLC or Corporation)",
-        "Amortization Schedule (often generated with the note, showing payment breakdown)",
-        "UCC-1 Financing Statement (for perfecting security interests in certain types of collateral)"
+        "Security Agreement (for collateral)",
+        "UCC-1 (public notice of lien)",
+        "Personal Guaranty (if borrower is an entity)",
+        "Payment Ledger (auto-generated)"
       ]
     },
     "whyUs": {
       "title": "Why Choose 123LegalDoc + SignWell",
       "items": [
-        "Attorney-Reviewed & State-Compliant Templates: Regularly updated for accuracy.",
-        "Smart Usury & Notary Guardrails: Helps prevent common legal pitfalls.",
-        "Instant E-Signature & Audit Trail: Securely sign and manage documents online.",
-        "Integrated Amortization Calculator: See full payment breakdowns instantly.",
-        "Bilingual Options (EN/ES): Serve diverse client needs.",
-        "30-Day Money-Back Guarantee: Create your note risk-free."
-      ],
-      "cta": "Protect your financial agreements with a professionally drafted Promissory Note."
+        "Attorney-Drafted & State-Compliant – reviewed every quarter.",
+        "Smart Usury Guardrails – prevents illegal interest rates.",
+        "Instant E-Signature & Audit Trail – enforceability without the paper chase.",
+        "Amendment & Renewal Module – extend terms in one click.",
+        "Bilingual Templates (EN/ES) – tap into broader markets.",
+        "30-Day Money-Back Promise – risk-free."
+      ]
     }
   },
   "faq": {
+    "title": "Frequently Asked Questions",
     "q1": {
-      "question": "Is an e-signed promissory note legally binding?",
-      "answer": "Yes. Under the U.S. Electronic Signatures in Global and National Commerce (E-SIGN) Act and the Uniform Electronic Transactions Act (UETA) adopted by most states, electronic signatures carry the same legal weight as handwritten signatures for most transactions, including promissory notes."
+      "question": "Is an e-signed promissory note valid in court?",
+      "answer": "Yes. Under the U.S. E-SIGN Act, electronic signatures carry the same legal weight as ink signatures."
     },
     "q2": {
-      "question": "Do I need a witness or notary for a promissory note?",
-      "answer": "Requirements vary by state and the nature of the loan. While not always mandatory for simple notes, notarization or witness signatures can significantly strengthen the note's enforceability by verifying the identities of the signers. Some states require it for notes involving real estate or larger sums. Our platform will indicate if notarization is recommended for your state."
+      "question": "Do I need a witness or notary?",
+      "answer": "Most states do not require notarization, but it adds enforcement strength—our checkout offers remote notarization."
     },
     "q3": {
-      "question": "What happens if the borrower defaults on the promissory note?",
-      "answer": "If a borrower defaults (e.g., misses payments), the lender can take legal action as outlined in the note's 'Default & Remedies' clause. This may include demanding full repayment of the outstanding balance (acceleration), suing for the debt, or, if the note is secured, seizing the specified collateral. Collection costs and attorney fees may also be recoverable if stipulated."
+      "question": "What happens if the borrower defaults?",
+      "answer": "The default clause accelerates the full balance; lenders may sue, garnish wages, or seize listed collateral, subject to state law."
     },
     "q4": {
-      "question": "Can I change the terms of a promissory note later?",
-      "answer": "Yes, the terms of a promissory note can be changed if both the lender and borrower agree in writing. This is typically done through a 'Promissory Note Amendment' or 'Modification Agreement,' which should be signed by all parties. 123LegalDoc offers templates for such amendments."
+      "question": "Can I change the terms later?",
+      "answer": "Use our Promissory Note Amendment add-on to adjust interest rates, payment dates, or principal without drafting a new note."
     },
     "q5": {
-      "question": "Is interest earned from a promissory note taxable?",
-      "answer": "Yes, interest income received by the lender is generally taxable and must be reported to the IRS. The borrower may be able to deduct interest paid if the loan was for business, investment, or certain educational purposes, subject to IRS rules."
+      "question": "Is interest taxable?",
+      "answer": "Yes. Lenders must report interest income; borrowers may deduct qualified business-loan interest."
     }
   },
-  "finalCtaTitle": "Ready to Secure Your Loan Agreement?",
-  "finalCtaSubtitle": "Don't leave your financial agreements to chance. Use our intuitive wizard to generate a comprehensive, legally sound Promissory Note in minutes. E-sign with SignWell for added security and convenience.",
-  "startMyPromissoryNoteButton": "Start My Promissory Note"
+  "finalCtaTitle": "Ready to Protect Your Loan?",
+  "finalCtaSubtitle": "Click “Create My Promissory Note” and lock in professional-grade protection in minutes.",
+  "startMyPromissoryNoteButton": "Create My Promissory Note"
 }
-
-    
