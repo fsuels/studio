@@ -1,0 +1,18 @@
+{
+  "heroHeadline": "Online Notary – Easily notarize documents online with guaranteed security and privacy. Legal in all 50 states.",
+  "addDocument": "Add Document",
+  "whatIs": "An online notary allows you to get documents notarized remotely through secure video. Your information remains encrypted and private.",
+  "howItWorksTitle": "How it works",
+  "stepUpload": "Upload the document.",
+  "stepConnect": "Connect with a notary via secure video.",
+  "stepPay": "Pay and download the notarized document.",
+  "pricingTitle": "Pricing",
+  "pricingText": "$25 for the first seal and $10 for each additional seal.",
+  "legalTitle": "Legal Across the U.S.",
+  "legalText": "Our partner service is legal in all 50 states.",
+  "securityTitle": "Security & Compliance",
+  "securityText": "Our notary API provider uses end-to-end encryption and maintains strict compliance with state laws and identity verification requirements.",
+  "learnMoreTitle": "Learn More",
+  "faq": "Online Notary FAQs",
+  "articles": "Articles about remote notarization"
+}
