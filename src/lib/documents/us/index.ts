@@ -2,7 +2,9 @@
 // This file should export all US-specific documents.
 
 export { vehicleBillOfSale } from './vehicle-bill-of-sale';
-export { promissoryNote } from './promissory-note'; // Ensures 'promissoryNote' is exported from its barrel
+// Explicitly reference the folder index to avoid picking up the legacy
+// promissory-note.ts file which lacks the full schema and question set.
+export { promissoryNote } from './promissory-note/index';
 
 // Assuming these documents are now or will be structured similarly under ./us/
 export { affidavitGeneral } from './affidavit-general';
