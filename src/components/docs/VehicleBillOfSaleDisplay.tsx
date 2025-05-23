@@ -51,29 +51,24 @@ export default function VehicleBillOfSaleDisplay({ locale }: VehicleBillOfSaleDi
   ];
 
   const faqItems = [
-    { id: 'faq1', questionKey: 'faq.q1.question', answerKey: 'faq.q1.answer' },
-    { id: 'faq2', questionKey: 'faq.q2.question', answerKey: 'faq.q2.answer' },
-    { id: 'faq3', questionKey: 'faq.q3.question', answerKey: 'faq.q3.answer' },
-    { id: 'faq4', questionKey: 'faq.q4.question', answerKey: 'faq.q4.answer' },
-    { id: 'faq5', questionKey: 'faq.q5.question', answerKey: 'faq.q5.answer' },
+    { id: 'faq1', titleKey: 'faq.q1.question', contentKey: 'faq.q1.answer', type: 'paragraph' },
+    { id: 'faq2', titleKey: 'faq.q2.question', contentKey: 'faq.q2.answer', type: 'paragraph' },
+    { id: 'faq3', titleKey: 'faq.q3.question', contentKey: 'faq.q3.answer', type: 'paragraph' },
+    { id: 'faq4', titleKey: 'faq.q4.question', contentKey: 'faq.q4.answer', type: 'paragraph' },
+    { id: 'faq5', titleKey: 'faq.q5.question', contentKey: 'faq.q5.answer', type: 'paragraph' },
   ];
 
-  const renderSectionContent = (section: typeof sections[0]) => {
+  const allSections = [...sections, ...faqItems];
+
+
+  const renderSectionContent = (section: typeof allSections[0], translate: typeof t) => {
     if (section.type === 'paragraph' && section.contentKey) {
-      return <p className="text-muted-foreground">{t(section.contentKey)}</p>;
+      return <p className="text-muted-foreground">{translate(section.contentKey)}</p>;
     }
-    if (section.type === 'list' && section.contentKey) {
-      const items = t(section.contentKey, { returnObjects: true });
-      if (Array.isArray(items)) {
-        return (
-          <ul className="list-disc list-outside pl-5 space-y-1 text-muted-foreground">
-            {items.map((item: string, i: number) => <li key={i}>{item}</li>)}
-          </ul>
-        );
-      }
-    }
-    if (section.type === 'list' && section.itemsKey) {
-      const items = t(section.itemsKey, { returnObjects: true });
+    if (section.type === 'list' && (section.contentKey || section.itemsKey)) {
+      const itemsKeyToUse = section.itemsKey || section.contentKey;
+      if (!itemsKeyToUse) return null;
+      const items = translate(itemsKeyToUse, { returnObjects: true });
       if (Array.isArray(items)) {
         return (
           <ul className="list-disc list-outside pl-5 space-y-1 text-muted-foreground">
@@ -83,23 +78,23 @@ export default function VehicleBillOfSaleDisplay({ locale }: VehicleBillOfSaleDi
       }
     }
     if (section.type === 'ordered-list' && section.itemsKey) {
-      const items = t(section.itemsKey, { returnObjects: true });
+      const items = translate(section.itemsKey, { returnObjects: true });
       if (Array.isArray(items)) {
         return (
           <>
             <ol className="list-decimal list-outside pl-5 space-y-1 text-muted-foreground">
               {items.map((item: string, i: number) => <li key={i}>{item}</li>)}
             </ol>
-            {section.totalTimeKey && <p className="text-sm text-muted-foreground mt-2">{t(section.totalTimeKey)}</p>}
+            {section.totalTimeKey && <p className="text-sm text-muted-foreground mt-2">{translate(section.totalTimeKey)}</p>}
           </>
         );
       }
     }
     if (section.type === 'mixed-list' && section.contentKey && section.itemsKey) {
-      const items = t(section.itemsKey, { returnObjects: true });
+      const items = translate(section.itemsKey, { returnObjects: true });
       return (
         <>
-          <p className="text-muted-foreground mb-2">{t(section.contentKey)}</p>
+          <p className="text-muted-foreground mb-2">{translate(section.contentKey)}</p>
           {Array.isArray(items) && (
             <ul className="list-disc list-outside pl-5 space-y-1 text-muted-foreground">
               {items.map((item: string, i: number) => <li key={i}>{item}</li>)}
@@ -109,21 +104,21 @@ export default function VehicleBillOfSaleDisplay({ locale }: VehicleBillOfSaleDi
       );
     }
     if (section.type === 'checklist' && section.itemsKey) {
-      const items = t(section.itemsKey, { returnObjects: true });
+      const items = translate(section.itemsKey, { returnObjects: true });
       if (Array.isArray(items)) {
         return (
           <>
             <ul className="list-none pl-0 space-y-1 text-muted-foreground">
               {items.map((item: string, i: number) => <li key={i} className="flex items-center"><span className="mr-2">✓</span>{item}</li>)}
             </ul>
-            {section.printNoteKey && <p className="text-sm text-muted-foreground mt-2 italic">{t(section.printNoteKey)}</p>}
+            {section.printNoteKey && <p className="text-sm text-muted-foreground mt-2 italic">{translate(section.printNoteKey)}</p>}
           </>
         );
       }
     }
     if (section.tableKey) {
-      const headers = t(`${section.tableKey}.headers`, { returnObjects: true });
-      const rows = t(`${section.tableKey}.rows`, { returnObjects: true });
+      const headers = translate(`${section.tableKey}.headers`, { returnObjects: true });
+      const rows = translate(`${section.tableKey}.rows`, { returnObjects: true });
       return (
         <div className="overflow-x-auto my-4">
           <Table className="min-w-full text-sm">
@@ -144,14 +139,14 @@ export default function VehicleBillOfSaleDisplay({ locale }: VehicleBillOfSaleDi
       );
     }
     if (section.type === 'list-cta' && section.itemsKey && section.ctaKey) {
-      const items = t(section.itemsKey, { returnObjects: true });
+      const items = translate(section.itemsKey, { returnObjects: true });
       if (Array.isArray(items)) {
         return (
           <>
             <ul className="list-disc list-outside pl-5 space-y-1 text-muted-foreground">
               {items.map((item: string, i: number) => <li key={i}>{item}</li>)}
             </ul>
-            <p className="text-muted-foreground mt-4">{t(section.ctaKey)}</p>
+            <p className="text-muted-foreground mt-4">{translate(section.ctaKey)}</p>
           </>
         );
       }
@@ -170,31 +165,22 @@ export default function VehicleBillOfSaleDisplay({ locale }: VehicleBillOfSaleDi
         <p className="text-lg text-muted-foreground">{t('pageSubtitle')}</p>
       </header>
 
-      <Accordion type="single" collapsible className="w-full space-y-3 mb-10">
-        {sections.map((section) => (
-          <AccordionItem key={section.id} value={section.id} className="border border-border rounded-lg bg-card shadow-sm overflow-hidden">
+      <Accordion type="single" collapsible className="w-full space-y-4 mb-10">
+        {allSections.map((section) => (
+          <AccordionItem
+            key={section.id}
+            value={section.id}
+            className="border border-border rounded-lg bg-card shadow-md" // Removed overflow-hidden
+          >
             <AccordionTrigger className={cn(
-              "px-6 py-4 text-left font-semibold text-foreground hover:no-underline text-md md:text-lg",
+              "px-6 py-4 text-left font-semibold text-foreground hover:no-underline", // Ensure consistent padding and alignment
+              section.titleKey.startsWith("faq.") ? "text-base" : "text-md md:text-lg" // Conditional font size for FAQ vs other sections
             )}>
               {t(section.titleKey)}
             </AccordionTrigger>
             <AccordionContent className="px-6 pb-4 pt-0 text-muted-foreground">
               <div className="prose prose-sm dark:prose-invert max-w-none">
-                {renderSectionContent(section)}
-              </div>
-            </AccordionContent>
-          </AccordionItem>
-        ))}
-        {faqItems.map((item) => (
-          <AccordionItem key={`faq-${item.id}`} value={`faq-${item.id}`} className="border border-border rounded-lg bg-card shadow-sm overflow-hidden">
-            <AccordionTrigger className={cn(
-              "px-6 py-4 text-left font-semibold text-foreground hover:no-underline text-md md:text-base", // Matched style
-            )}>
-              {t(item.questionKey)}
-            </AccordionTrigger>
-            <AccordionContent className="px-6 pb-4 pt-0 text-muted-foreground">
-              <div className="prose prose-sm dark:prose-invert max-w-none">
-                {t(item.answerKey)}
+                {renderSectionContent(section, t)}
               </div>
             </AccordionContent>
           </AccordionItem>
