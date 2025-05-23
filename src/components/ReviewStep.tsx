@@ -43,6 +43,15 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
 
   useEffect(() => {
     console.log('[ReviewStep] editingFieldId changed to:', editingFieldId);
+    if (editingFieldId) {
+      const el = document.getElementById(`review-${editingFieldId}`);
+      if (el) {
+        // Delay focus slightly to ensure element is rendered
+        setTimeout(() => {
+          (el as HTMLElement).focus();
+        }, 0);
+      }
+    }
   }, [editingFieldId]);
 
   const actualSchemaShape = useMemo(() => {

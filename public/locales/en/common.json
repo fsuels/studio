@@ -125,6 +125,7 @@
   "Please confirm the details below are correct before proceeding.": "Please confirm the details below are correct before proceeding.",
   "Not Provided": "Not Provided",
   "Edit": "Edit",
+  "wizard.fieldRequired": "Required",
   "Could not load template.": "Could not load template.",
   "Loading document wizard...": "Loading document wizard...",
   "dynamicForm.noQuestionsNeeded": "This document type ({{documentType}}) doesn't require any specific answers from you at this stage. You can proceed directly to preview and finalize.",
