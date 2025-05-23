@@ -5,14 +5,17 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import Link from 'next/link';
 import { useRouter, useParams } from 'next/navigation';
 import { Logo } from '@/components/layout/Logo';
-import Nav from '@/components/Nav';
-import { LanguageSwitcher } from '@/components/LanguageSwitcher';
+import dynamic from 'next/dynamic';
+const Nav = dynamic(() => import('@/components/Nav'), { ssr: false });
+const LanguageSwitcher = dynamic(
+  () => import('@/components/LanguageSwitcher').then((m) => m.LanguageSwitcher),
+  { ssr: false }
+);
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Button } from '@/components/ui/button';
-import dynamic from 'next/dynamic';
 import { Check, ChevronDown, Globe, UserPlus, LogIn, Search as SearchIcon, ExternalLink, FileText, Menu as MenuIcon, X as CloseIcon, LayoutGrid, ChevronUp, LogOut, UserCircle, Loader2 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
-import { documentLibrary, LegalDocument } from '@/lib/document-library';
+import type { LegalDocument } from '@/lib/document-library';
 import { CATEGORY_LIST } from '@/components/Step1DocumentSelector';
 
 const MegaMenuSkeleton = () => (
@@ -49,6 +52,7 @@ const Header = React.memo(function Header() {
 
   // Search state
   const [mounted, setMounted] = useState(false);
+  const [documentLibrary, setDocumentLibrary] = useState<LegalDocument[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState<LegalDocument[]>([]);
   const [showResults, setShowResults] = useState(false);
@@ -60,6 +64,9 @@ const Header = React.memo(function Header() {
     if (typeof (MegaMenuContent as any).preload === 'function') {
       (MegaMenuContent as any).preload();
     }
+    import('@/lib/document-library').then((mod) => {
+      setDocumentLibrary(mod.documentLibrary);
+    });
   }, []);
 
   useEffect(() => {
@@ -90,7 +97,7 @@ const Header = React.memo(function Header() {
     };
     const id = setTimeout(performSearch, 300);
     return () => clearTimeout(id);
-  }, [searchQuery, clientLocale, mounted]);
+  }, [searchQuery, clientLocale, mounted, documentLibrary]);
 
   // Click outside to close search results
   useEffect(() => {
