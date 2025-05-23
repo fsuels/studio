@@ -18,6 +18,7 @@ import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
 import AuthModal from '@/components/AuthModal';
 import { useAuth } from '@/hooks/useAuth'; // Import useAuth
+import { createSignWellDocument } from '@/services/signwell';
 
 interface SignWellClientContentProps {
   params: { locale: 'en' | 'es' };
@@ -141,6 +142,8 @@ export default function SignWellClientContent({ params }: SignWellClientContentP
   const [currentFlowStep, setCurrentFlowStep] = useState<1 | 2 | 3>(1); // 1: Upload, 2: Prepare, 3: Sign
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [authActionPending, setAuthActionPending] = useState<'upload' | 'fetch_from_account' | null>(null);
+  const [signingUrl, setSigningUrl] = useState<string | null>(null);
+  const [isPreparingDoc, setIsPreparingDoc] = useState(false);
 
 
   useEffect(() => {
@@ -182,13 +185,47 @@ export default function SignWellClientContent({ params }: SignWellClientContentP
     }
   }, []);
 
-  const handlePrepareDocument = useCallback(() => {
+  const handlePrepareDocument = useCallback(async () => {
     if (!selectedFile) {
-      toast({ title: t('common:Error'), description: t('uploadCard.noFileToPrepare', {ns: 'electronic-signature'}), variant: 'destructive' });
+      toast({ title: t('common:Error'), description: t('uploadCard.noFileToPrepare', { ns: 'electronic-signature' }), variant: 'destructive' });
       return;
     }
-    setCurrentFlowStep(3); // Move to "Sign" step
-    toast({ title: t('uploadCard.docPreparedTitle', {ns: 'electronic-signature'}), description: t('uploadCard.docPreparedDesc', {ns: 'electronic-signature'}) });
+
+    setIsPreparingDoc(true);
+    try {
+      const reader = new FileReader();
+      reader.onload = async () => {
+        const result = reader.result as string;
+        const base64 = result.split(',')[1];
+        try {
+          const doc = await createSignWellDocument(base64, selectedFile.name);
+          setSigningUrl(doc.signingUrl || null);
+          setCurrentFlowStep(3);
+          toast({
+            title: t('uploadCard.docPreparedTitle', { ns: 'electronic-signature' }),
+            description: t('uploadCard.docPreparedDesc', { ns: 'electronic-signature' })
+          });
+        } catch (err: any) {
+          console.error('createSignWellDocument failed', err);
+          toast({
+            title: t('uploadCard.docPrepareErrorTitle', { ns: 'electronic-signature', defaultValue: 'Error Preparing Document' }),
+            description: t('uploadCard.docPrepareErrorDesc', { ns: 'electronic-signature', defaultValue: 'There was a problem preparing your document. Please try again.' }),
+            variant: 'destructive'
+          });
+        } finally {
+          setIsPreparingDoc(false);
+        }
+      };
+      reader.readAsDataURL(selectedFile);
+    } catch (err) {
+      console.error('File reading failed', err);
+      toast({
+        title: t('uploadCard.docPrepareErrorTitle', { ns: 'electronic-signature', defaultValue: 'Error Preparing Document' }),
+        description: t('uploadCard.docPrepareErrorDesc', { ns: 'electronic-signature', defaultValue: 'There was a problem preparing your document. Please try again.' }),
+        variant: 'destructive'
+      });
+      setIsPreparingDoc(false);
+    }
   }, [selectedFile, t, toast]);
 
   const handleHeroUploadAttempt = () => {
@@ -290,7 +327,9 @@ export default function SignWellClientContent({ params }: SignWellClientContentP
   const mainButtonAction = () => {
     if (currentFlowStep === 1 && !selectedFile) handleHeroUploadAttempt(); // Check auth before file dialog
     else if (currentFlowStep === 2 && selectedFile) handlePrepareDocument();
-    // else if (currentFlowStep === 3 && selectedFile) { /* TODO: View/Sign action - placeholder */ }
+    else if (currentFlowStep === 3 && signingUrl) {
+      window.open(signingUrl, '_blank');
+    }
   };
 
   const mainButtonTextKey =
@@ -342,9 +381,9 @@ export default function SignWellClientContent({ params }: SignWellClientContentP
                   className="bg-brand-green hover:bg-brand-green/90 text-white flex-1"
                   onClick={mainButtonAction}
                   data-test-id="hero-cta-upload"
-                  disabled={currentFlowStep === 1 && selectedFile != null && uploadProgress < 100}
+                  disabled={(currentFlowStep === 1 && selectedFile != null && uploadProgress < 100) || isPreparingDoc}
                 >
-                  {currentFlowStep === 1 && selectedFile != null && uploadProgress > 0 && uploadProgress < 100 ? (
+                  {(currentFlowStep === 1 && selectedFile != null && uploadProgress > 0 && uploadProgress < 100) || isPreparingDoc ? (
                     <Loader2 className="mr-2 h-5 w-5 animate-spin" />
                   ) : (
                     selectedFile && currentFlowStep === 1 ? null : <UploadCloud className="mr-2 h-5 w-5" />
@@ -376,6 +415,13 @@ export default function SignWellClientContent({ params }: SignWellClientContentP
                   <span className={cn(currentFlowStep >= 2 && "text-brand-blue font-semibold")}>{t('uploadCard.progress.prepare')}</span>
                   <span className={cn(currentFlowStep >= 3 && "text-brand-blue font-semibold")}>{t('uploadCard.progress.sign')}</span>
                 </div>
+                {currentFlowStep === 3 && signingUrl && (
+                  <p className="text-sm mt-4">
+                    <Link href={signingUrl} target="_blank" className="underline text-brand-blue">
+                      {t('uploadCard.ctaViewDocument')}
+                    </Link>
+                  </p>
+                )}
               </div>
             )}
           </Card>
