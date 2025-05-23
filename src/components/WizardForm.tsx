@@ -386,7 +386,9 @@ export default function WizardForm({
         <p className="text-muted-foreground mb-4">
           {t("dynamicForm.noQuestionsNeeded", {
             documentType:
-              doc.name_es && locale === "es" ? doc.name_es : doc.name,
+              locale === "es"
+                ? doc.translations?.es?.name || doc.name_es || doc.translations?.en?.name || doc.name
+                : doc.translations?.en?.name || doc.name || doc.translations?.es?.name || doc.name_es,
           })}
         </p>
       </div>
