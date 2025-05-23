@@ -12,7 +12,8 @@ const Card = React.forwardRef<
       "rounded-lg border bg-card text-card-foreground shadow-sm", // original
       //new classes
       "hover:-translate-y-1 hover:shadow-glass transition-all duration-200",
-      "active:scale-95 motion-reduce:transform-none",
+      // Removed active scaling to prevent layout shift when interacting within the card
+      "motion-reduce:transform-none",
       className
     )}
     {...props}
