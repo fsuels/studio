@@ -6,7 +6,7 @@ import dynamic from 'next/dynamic';
 import I18nClientProvider from '@/components/providers/I18nProvider';
 import { Toaster } from "@/components/ui/toaster";
 import { CartProvider } from '@/contexts/CartProvider';
-import { AuthProvider } from '@/hooks/useAuth';
+import { AuthProvider } from '@/hooks/useAuth'; // Ensure this is the correct export
 import { useTranslation } from 'react-i18next';
 import { Loader2 } from 'lucide-react';
 import { FooterSkeleton } from '@/components/layout/Footer';
@@ -22,19 +22,17 @@ const HeaderSkeleton = () => <div className="h-14 bg-muted animate-pulse"></div>
 // Dynamically import Header and Footer
 const DynamicHeader = dynamic(() => import('@/components/layout/Header'), {
   loading: () => <HeaderSkeleton />,
-  ssr: false, // Often helps with hydration issues for complex headers
+  ssr: false,
 });
 
 const DynamicFooter = dynamic(() => import('@/components/layout/Footer').then(mod => mod.Footer), {
   loading: () => <FooterSkeleton />,
-  ssr: false, // Often helps with hydration issues for complex footers
+  ssr: false,
 });
 
 
 const AppShell = React.memo(function AppShell({ children }: { children: ReactNode }) {
-  // isMounted and ready might still be useful for conditional rendering *within* Header/Footer/children
-  // but should not change the fundamental structure of AppShell itself after initial render.
-  const { ready } = useTranslation("common");
+  const { ready } = useTranslation("common"); // This hook is fine here as AppShell is within I18nClientProvider
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
@@ -43,13 +41,13 @@ const AppShell = React.memo(function AppShell({ children }: { children: ReactNod
 
   // AppShell now always renders its main structure.
   // Loading states for Header/Footer are handled by their dynamic import.
-  // If children need to wait for 'isMounted' or 'ready', they should handle it internally.
   return (
     <>
       <DynamicHeader />
       <main className="flex-grow">{children}</main>
       <DynamicFooter />
-      <Toaster />
+      {/* Conditionally render Toaster only on the client after mount */}
+      {isMounted && <Toaster />}
     </>
   );
 });
