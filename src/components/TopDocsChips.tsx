@@ -53,10 +53,6 @@ const TopDocsChips = React.memo(function TopDocsChips() {
     });
   }, [isHydrated, topDocs, router, locale]);
 
-  const handleChipClick = (docId: string) => {
-    router.push(`/${locale}/docs/${docId}`);
-  };
-
   const handleExploreAll = () => {
     const workflowStartElement = document.getElementById('workflow-start');
     if (workflowStartElement) {
@@ -92,14 +88,18 @@ const TopDocsChips = React.memo(function TopDocsChips() {
             key={doc.id}
             variant="outline"
             size="sm"
-            onClick={() => handleChipClick(doc.id)}
+            asChild
             className="bg-card hover:bg-muted border-border text-card-foreground hover:text-primary transition-colors shadow-sm px-4 py-2 h-auto text-xs sm:text-sm"
           >
-            {React.createElement(FileText, { className: "h-4 w-4 mr-2 text-primary/80 opacity-70" })}
-            {(doc.translations?.[locale as 'en' | 'es']?.name) ||
-             doc.translations?.en?.name ||
-             doc.name ||
-             doc.id}
+            <Link href={`/${locale}/docs/${doc.id}`}
+              prefetch
+            >
+              {React.createElement(FileText, { className: "h-4 w-4 mr-2 text-primary/80 opacity-70" })}
+              {(doc.translations?.[locale as 'en' | 'es']?.name) ||
+               doc.translations?.en?.name ||
+               doc.name ||
+               doc.id}
+            </Link>
           </Button>
         ))}
       </div>
