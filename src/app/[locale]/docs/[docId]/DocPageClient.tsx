@@ -15,8 +15,8 @@ import { track } from '@/lib/analytics';
 import { Separator } from '@/components/ui/separator';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion';
-import VehicleBillOfSaleDisplay from '@/components/docs/VehicleBillOfSaleDisplay'; // Import the specific display component
-import PromissoryNoteDisplay from '@/components/docs/PromissoryNoteDisplay';
+const VehicleBillOfSaleDisplay = dynamic(() => import('@/components/docs/VehicleBillOfSaleDisplay'));
+const PromissoryNoteDisplay = dynamic(() => import('@/components/docs/PromissoryNoteDisplay'));
 
 // Lazy load testimonials section so it's only fetched when this page is viewed
 const TrustAndTestimonialsSection = dynamic(
@@ -129,6 +129,16 @@ export default function DocPageClient({ params: routeParams }: DocPageClientProp
     }
   }, [docId, currentLocale, isHydrated, router]);
 
+  useEffect(() => {
+    if (!isHydrated) return;
+    if (docId === 'bill-of-sale-vehicle' && typeof (VehicleBillOfSaleDisplay as any).preload === 'function') {
+      (VehicleBillOfSaleDisplay as any).preload();
+    }
+    if (docId === 'promissory-note' && typeof (PromissoryNoteDisplay as any).preload === 'function') {
+      (PromissoryNoteDisplay as any).preload();
+    }
+  }, [docId, isHydrated]);
+
 
   const handleStartWizard = () => {
     if (!docConfig || !currentLocale || !isHydrated) return;
@@ -138,6 +148,12 @@ export default function DocPageClient({ params: routeParams }: DocPageClientProp
       value: docConfig.basePrice
     });
     router.push(`/${currentLocale}/docs/${docConfig.id}/start`);
+  };
+
+  const handleStartWizardHover = () => {
+    if (docConfig && currentLocale) {
+      router.prefetch(`/${currentLocale}/docs/${docConfig.id}/start`);
+    }
   };
 
 
@@ -207,7 +223,7 @@ export default function DocPageClient({ params: routeParams }: DocPageClientProp
               ))}
             </div>
             
-            <Button size="lg" className="w-full sm:w-auto text-base px-8 py-3" onClick={handleStartWizard} disabled={!isHydrated}>
+            <Button size="lg" className="w-full sm:w-auto text-base px-8 py-3" onClick={handleStartWizard} onMouseEnter={handleStartWizardHover} disabled={!isHydrated}>
               {t('Start For Free', {defaultValue: 'Start For Free'})}
             </Button>
             <div className="mt-4">
@@ -257,7 +273,7 @@ export default function DocPageClient({ params: routeParams }: DocPageClientProp
                         <p className="text-xs text-muted-foreground">
                              {t('docDetail.competitivePrice', { competitorPrice: competitorPrice.toFixed(2), defaultValue: `Compare to typical attorney fees of $${competitorPrice.toFixed(2)}+`})}
                         </p>
-                         <Button size="lg" className="w-full mt-2" onClick={handleStartWizard} disabled={!isHydrated}>
+                         <Button size="lg" className="w-full mt-2" onClick={handleStartWizard} onMouseEnter={handleStartWizardHover} disabled={!isHydrated}>
                            {t('Start For Free', {defaultValue: 'Start For Free'})}
                          </Button>
                     </CardContent>
@@ -350,7 +366,7 @@ export default function DocPageClient({ params: routeParams }: DocPageClientProp
 
         {/* Sticky CTA for mobile */}
         <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-t p-4 shadow-lg z-40">
-          <Button size="lg" className="w-full text-base" onClick={handleStartWizard} disabled={!isHydrated}>
+          <Button size="lg" className="w-full text-base" onClick={handleStartWizard} onMouseEnter={handleStartWizardHover} disabled={!isHydrated}>
              {t('Start For Free', {defaultValue: 'Start For Free'})}
           </Button>
         </div>

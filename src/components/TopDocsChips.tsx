@@ -53,9 +53,6 @@ const TopDocsChips = React.memo(function TopDocsChips() {
     });
   }, [isHydrated, topDocs, router, locale]);
 
-  const handleChipClick = (docId: string) => {
-    router.push(`/${locale}/docs/${docId}`);
-  };
 
   const handleExploreAll = () => {
     const workflowStartElement = document.getElementById('workflow-start');
@@ -64,6 +61,10 @@ const TopDocsChips = React.memo(function TopDocsChips() {
     } else {
       router.push(`/${locale}/`); // Fallback to homepage
     }
+  };
+
+  const handleExploreAllHover = () => {
+    router.prefetch(`/${locale}/`);
   };
 
   if (isLoading && isHydrated) {
@@ -89,22 +90,25 @@ const TopDocsChips = React.memo(function TopDocsChips() {
       <div className="flex flex-wrap justify-center items-center gap-2 md:gap-3">
         {topDocs.map((doc) => (
           <Button
+            asChild
             key={doc.id}
             variant="outline"
             size="sm"
-            onClick={() => handleChipClick(doc.id)}
             className="bg-card hover:bg-muted border-border text-card-foreground hover:text-primary transition-colors shadow-sm px-4 py-2 h-auto text-xs sm:text-sm"
+            onMouseEnter={() => router.prefetch(`/${locale}/docs/${doc.id}`)}
           >
-            {React.createElement(FileText, { className: "h-4 w-4 mr-2 text-primary/80 opacity-70" })}
-            {(doc.translations?.[locale as 'en' | 'es']?.name) ||
-             doc.translations?.en?.name ||
-             doc.name ||
-             doc.id}
+            <Link href={`/${locale}/docs/${doc.id}`}> 
+              {React.createElement(FileText, { className: "h-4 w-4 mr-2 text-primary/80 opacity-70" })}
+              {(doc.translations?.[locale as 'en' | 'es']?.name) ||
+               doc.translations?.en?.name ||
+               doc.name ||
+               doc.id}
+            </Link>
           </Button>
         ))}
       </div>
       <div className="text-center mt-6">
-        <Button variant="link" onClick={handleExploreAll} className="text-primary text-sm">
+        <Button variant="link" onClick={handleExploreAll} onMouseEnter={handleExploreAllHover} className="text-primary text-sm">
           {tCommon('stepOne.exploreAllCategoriesButton', { defaultValue: 'Explore All Document Categories' })} →
         </Button>
       </div>
