@@ -5,29 +5,19 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import Link from 'next/link';
 import { useRouter, useParams } from 'next/navigation';
 import { Logo } from '@/components/layout/Logo';
-import dynamic from 'next/dynamic';
-const Nav = dynamic(() => import('@/components/Nav'), { ssr: false });
-const LanguageSwitcher = dynamic(
-  () => import('@/components/LanguageSwitcher').then((m) => m.LanguageSwitcher),
-  { ssr: false }
-);
+// Import navigation components statically so they are loaded with the initial
+// bundle instead of on-demand. This reduces the delay when navigating between
+// pages.
+import Nav from '@/components/Nav';
+import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Button } from '@/components/ui/button';
 import { Check, ChevronDown, Globe, UserPlus, LogIn, Search as SearchIcon, ExternalLink, FileText, Menu as MenuIcon, X as CloseIcon, LayoutGrid, ChevronUp, LogOut, UserCircle, Loader2 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import type { LegalDocument } from '@/lib/document-library';
 import { CATEGORY_LIST } from '@/components/Step1DocumentSelector';
+import MegaMenuContent from '@/components/mega-menu/MegaMenuContent';
 
-const MegaMenuSkeleton = () => (
-  <div className="flex justify-center items-center p-8">
-    <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
-  </div>
-);
-
-const MegaMenuContent = dynamic(() => import('@/components/mega-menu/MegaMenuContent'), {
-  loading: () => <MegaMenuSkeleton />,
-  ssr: false,
-});
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/hooks/useAuth';
 import { cn } from '@/lib/utils';
@@ -61,9 +51,6 @@ const Header = React.memo(function Header() {
 
   useEffect(() => {
     setMounted(true);
-    if (typeof (MegaMenuContent as any).preload === 'function') {
-      (MegaMenuContent as any).preload();
-    }
     import('@/lib/document-library').then((mod) => {
       setDocumentLibrary(mod.documentLibrary);
     });
