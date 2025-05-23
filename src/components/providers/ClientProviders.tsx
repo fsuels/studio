@@ -52,9 +52,9 @@ const AppShell = React.memo(function AppShell({ children }: { children: ReactNod
 
   return (
     <>
-      <DynamicHeader />
+      {/* <DynamicHeader /> */}
       <main className="flex-grow">{children}</main>
-      <DynamicFooter />
+      {/* <DynamicFooter /> */}
       <Toaster />
     </>
   );
