@@ -1,0 +1,158 @@
+
+{
+  "metaTitle": "Vehicle Bill of Sale Template & Complete How-To Guide | 123LegalDoc",
+  "metaDescription": "Generate a legally solid vehicle bill of sale in under 5 minutes. Free printable PDF, e-sign-ready with SignWell, attorney-reviewed, and valid in all 50 states.",
+  "pageTitle": "Vehicle Bill of Sale: The Plain-English Guide (with Free Template)",
+  "pageSubtitle": "Stop worrying about DMV paperwork. Our step-by-step wizard and SignWell e-signature transform a complex legal form into a 3-minute task—so you can close the deal and drive away with confidence.",
+  "tocTitle": "Table of Contents",
+  "toc": {
+    "whatIs": "What Is a Vehicle Bill of Sale?",
+    "why": "Why You Need One (Even in “Handshake” States)",
+    "covered": "Which Vehicles Are Covered",
+    "types": "Five Common Bill of Sale Types",
+    "components": "Essential Clauses & Data Points",
+    "howTo": "How to Fill Out the 123LegalDoc Template",
+    "stateRules": "State-Specific Rules & Notarization Map",
+    "checklist": "Buyer & Seller Checklist",
+    "supporting": "Supporting Documents You May Need",
+    "whyUs": "Why 123LegalDoc + SignWell Beats the Competition",
+    "faq": "Frequently Asked Questions"
+  },
+  "sections": {
+    "whatIs": {
+      "title": "What Is a Vehicle Bill of Sale?",
+      "content": [
+        "A vehicle bill of sale is a signed receipt that:",
+        "Transfers ownership from seller to buyer",
+        "Documents key facts (price, VIN, mileage, “as-is” notice, etc.)",
+        "Triggers title & registration at your state DMV",
+        "Protects both parties against future tax, lien, or liability disputes",
+        "Think of it as your proof of ownership and condition on the day the keys change hands."
+      ]
+    },
+    "why": {
+      "title": "Why You Need One (Even in “Handshake” States)",
+      "table": {
+        "headers": ["Risk Without a Bill of Sale", "Protection With One"],
+        "rows": [
+          ["Can’t prove you no longer own the car—tickets or tolls still arrive in your name", "Timestamped document shows the exact moment you transferred ownership"],
+          ["Buyer claims undisclosed damage", "“As-is” clause and inspection notes limit liability"],
+          ["DMV rejects title transfer due to missing data", "Template is pre-mapped to every DMV field"]
+        ]
+      }
+    },
+    "covered": {
+      "title": "Which Vehicles Are Covered?",
+      "content": "Cars • Trucks • Motorcycles • Boats • RVs • ATVs • Trailers • Snowmobiles • Personal Watercraft—any motorized or towable vehicle that needs a title or registration."
+    },
+    "types": {
+      "title": "Five Common Bill of Sale Types",
+      "items": [
+        "Standard Sale – cash or certified funds, no warranties",
+        "As-Is Sale – buyer accepts current condition, zero guarantees",
+        "Gift Transfer – records $0 or token price, tracks mileage and tax exemptions",
+        "Dealer Sale – includes dealership info & statutory warranties",
+        "Odometer Disclosure – federally required if the vehicle is < 10 years old"
+      ]
+    },
+    "components": {
+      "title": "Essential Clauses & Data Points",
+      "table": {
+        "headers": ["Clause", "Why It Matters"],
+        "rows": [
+          ["Full Legal Names & Addresses", "DMV and tax offices reject partial info"],
+          ["Vehicle Description (make, model, year, body type, color, VIN, odometer)", "Prevents title fraud and clerical errors"],
+          ["Purchase Price & Payment Method", "Sets sales-tax basis and proves consideration"],
+          ["As-Is / Warranty Language", "Shields seller from future mechanical claims"],
+          ["Lien Status & Release", "Confirms the buyer receives clear title"],
+          ["Delivery Details", "Specifies when and where risk of loss passes"],
+          ["Signatures (and Notary if required)", "Makes the document enforceable"]
+        ]
+      }
+    },
+    "howTo": {
+      "title": "How to Fill Out the 123LegalDoc Template in 9 Steps",
+      "items": [
+        "Select Your State – we auto-load the right legal phrasing and notary rules.",
+        "Enter Buyer & Seller Info – names auto-populate throughout the form.",
+        "Add Vehicle Details – scan the VIN with your phone; our AI validates length.",
+        "Set the Price & Payment Terms – lump sum, installment, or gift.",
+        "Confirm Odometer Reading – mileage locks into the PDF and audit log.",
+        "Declare Lien Status – attach lender release if applicable.",
+        "Choose Delivery Location & Date – generates a calendar reminder.",
+        "Review “As-Is” Clause & Disclosures – optional warranty add-on available.",
+        "E-Sign with SignWell – both parties sign from any device; copies auto-email to each inbox and your DMV checklist dashboard."
+      ],
+      "totalTime": "Total time: ≈ 3 minutes. No printer required."
+    },
+    "stateRules": {
+      "title": "State-Specific Rules & Notarization Map",
+      "content": "Certain states (e.g., Louisiana, Maryland, Montana, Nebraska, West Virginia, Wyoming) require notarized signatures. Use our free interactive state guide to:",
+      "items": [
+        "Check notarization and emissions test rules",
+        "Download DMV title-transfer forms",
+        "Calculate estimated sales tax"
+      ]
+    },
+    "checklist": {
+      "title": "Buyer & Seller Checklist",
+      "items": [
+        "Verify legal names match driver’s licenses",
+        "Confirm VIN on dash matches title",
+        "Remove license plates before delivery (seller)",
+        "Cancel insurance only after title transfer (seller)",
+        "Obtain temporary insurance before driving home (buyer)",
+        "File title application within state deadline (both)"
+      ],
+      "printNote": "Print this checklist or access it in your 123LegalDoc dashboard."
+    },
+    "supporting": {
+      "title": "Supporting Documents You May Need",
+      "items": [
+        "Current Title Certificate (signed over to buyer)",
+        "Lien Release from lender (if financed)",
+        "Photo IDs of all parties",
+        "Proof of Insurance for registration",
+        "Smog/Emissions Certificate (state-dependent)",
+        "Bill of Sale (our template)"
+      ]
+    },
+    "whyUs": {
+      "title": "Why Choose 123LegalDoc + SignWell",
+      "items": [
+        "Attorney-Reviewed & State-Compliant – updated quarterly.",
+        "AI-Guided Form Filling – eliminates missed fields and typos.",
+        "Instant E-Signature & Audit Trail – powered by SignWell, no extra fee.",
+        "Bilingual Templates (EN/ES) – serve wider audiences and boost SEO.",
+        "Money-Back Guarantee – hate it? Receive a full refund within 30 days."
+      ],
+      "cta": "Create your Vehicle Bill of Sale now – free preview, pay only when you’re ready to download the finalized PDF."
+    }
+  },
+  "faq": {
+    "title": "Frequently Asked Questions",
+    "q1": {
+      "question": "Do I really need a bill of sale if my state doesn’t ask for one?",
+      "answer": "Yes. It proves ownership transfer, protects you from future tickets, and sets the tax basis even in handshake states."
+    },
+    "q2": {
+      "question": "Is online notarization available?",
+      "answer": "Absolutely. Add the Remote Notary upgrade at checkout and sign via webcam in minutes."
+    },
+    "q3": {
+      "question": "Can I save the form and finish later?",
+      "answer": "Yes. Your progress auto-saves to your secure 123LegalDoc account for 30 days."
+    },
+    "q4": {
+      "question": "Does the template include the odometer disclosure?",
+      "answer": "For vehicles under 10 years old, the federal odometer statement is auto-inserted as a separate page."
+    },
+    "q5": {
+      "question": "What if I’m gifting the car?",
+      "answer": "Select “Gift” in Step 3. The price auto-sets to $0 and triggers the proper tax-exemption language."
+    }
+  },
+  "finalCtaTitle": "Ready to Close the Deal?",
+  "finalCtaSubtitle": "Skip the paperwork stress. Click “Start My Bill of Sale” below, answer a few guided questions, and download your attorney-approved document in minutes.",
+  "startMyBillOfSaleButton": "Start My Bill of Sale"
+}
