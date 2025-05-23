@@ -101,4 +101,4 @@ const AnnouncementBar = React.memo(function PromoBanner() {
     </AnimatePresence>
   );
 });
-export { AnnouncementBar };
+export default AnnouncementBar;
