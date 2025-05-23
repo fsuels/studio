@@ -5,7 +5,6 @@ import { ReactNode, useEffect, useMemo } from 'react'; // Added useMemo
 import { useParams } from 'next/navigation';
 import { ClientProviders } from '@/components/providers/ClientProviders';
 import { useTranslation } from 'react-i18next';
-import { DynamicHeader, DynamicFooter } from '@/components/providers/ClientProviders';
 
 interface LocaleLayoutProps {
   children: ReactNode;
@@ -28,12 +27,8 @@ export default function LocaleLayout({ children }: LocaleLayoutProps) {
   }, [i18n, detectedLocale]); // detectedLocale is now memoized
 
   return (
-    <>
-      <DynamicHeader />
-      <ClientProviders locale={detectedLocale}>
-        {children}
-      </ClientProviders>
-      <DynamicFooter />
-    </>
+    <ClientProviders locale={detectedLocale}>
+      {children}
+    </ClientProviders>
   );
 }
