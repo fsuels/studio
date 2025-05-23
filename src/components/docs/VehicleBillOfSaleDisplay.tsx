@@ -31,13 +31,13 @@ export default function VehicleBillOfSaleDisplay({ locale }: VehicleBillOfSaleDi
   const handleStartProcess = () => {
     if (!isHydrated) return;
     const itemName = t('metaTitle', { defaultValue: 'Vehicle Bill of Sale Template & How-To Guide | 123LegalDoc' });
-    const priceCents = 1995; // Assuming this is the price
+    const priceCents = 1995; 
     track('add_to_cart', { item_id: 'bill-of-sale-vehicle', item_name: itemName, value: priceCents / 100, currency: 'USD' });
     addItem({ id: 'bill-of-sale-vehicle', type: 'doc', name: itemName, price: priceCents });
     router.push(`/${locale}/#workflow-start?docId=bill-of-sale-vehicle`);
   };
 
-  const sections = [
+  const informationalSections = [
     { id: 'what-is', titleKey: 'sections.whatIs.title', contentKey: 'sections.whatIs.content', type: 'list' },
     { id: 'why', titleKey: 'sections.why.title', tableKey: 'sections.why.table', type: 'table' },
     { id: 'covered', titleKey: 'sections.covered.title', contentKey: 'sections.covered.content', type: 'paragraph' },
@@ -57,8 +57,8 @@ export default function VehicleBillOfSaleDisplay({ locale }: VehicleBillOfSaleDi
     { id: 'faq4', titleKey: 'faq.q4.question', contentKey: 'faq.q4.answer', type: 'paragraph' },
     { id: 'faq5', titleKey: 'faq.q5.question', contentKey: 'faq.q5.answer', type: 'paragraph' },
   ];
-
-  const allSections = [...sections, ...faqItems];
+  
+  const allSections = [...informationalSections, ...faqItems];
 
 
   const renderSectionContent = (section: typeof allSections[0], translate: typeof t) => {
@@ -164,18 +164,15 @@ export default function VehicleBillOfSaleDisplay({ locale }: VehicleBillOfSaleDi
         <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-3">{t('pageTitle')}</h1>
         <p className="text-lg text-muted-foreground">{t('pageSubtitle')}</p>
       </header>
-
+      
       <Accordion type="single" collapsible className="w-full space-y-4 mb-10">
         {allSections.map((section) => (
           <AccordionItem
             key={section.id}
             value={section.id}
-            className="border border-border rounded-lg bg-card shadow-md" // Removed overflow-hidden
+            className="border border-border rounded-lg bg-card shadow-md"
           >
-            <AccordionTrigger className={cn(
-              "px-6 py-4 text-left font-semibold text-foreground hover:no-underline", // Ensure consistent padding and alignment
-              section.titleKey.startsWith("faq.") ? "text-base" : "text-md md:text-lg" // Conditional font size for FAQ vs other sections
-            )}>
+            <AccordionTrigger className="px-6 py-4 text-left font-semibold text-foreground hover:no-underline text-md md:text-lg">
               {t(section.titleKey)}
             </AccordionTrigger>
             <AccordionContent className="px-6 pb-4 pt-0 text-muted-foreground">
