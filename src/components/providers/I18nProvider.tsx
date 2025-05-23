@@ -16,7 +16,7 @@ interface I18nProviderProps {
 
 let clientSidePluginsApplied = false;
 
-const I18nClientProvider: React.FC<I18nProviderProps> = ({ children, locale }) => {
+const I18nClientProvider: React.FC<I18nProviderProps> = ({ children, locale, fallback }) => {
   const [isClientInitialized, setIsClientInitialized] = useState(clientSidePluginsApplied);
 
   useEffect(() => {
