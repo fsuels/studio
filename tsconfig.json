@@ -15,9 +15,6 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "incremental": true,
-    "types": [
-      "node"
-    ],
     "baseUrl": ".",
     "paths": {
       "@/*": [
@@ -36,9 +33,7 @@
   "include": [
     "**/*.ts",
     "**/*.tsx",
-    "next-env.d.ts",
-    "scripts/**/*",
-    ".next/types/**/*.ts"
+    "scripts/**/*"
   ],
   "exclude": [
     "node_modules"
