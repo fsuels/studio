@@ -75,8 +75,10 @@ interface StartWizardPageProps {
 }
 
 // This Server Component now correctly passes params to the Client Component
-export default function StartWizardPage({ params }: StartWizardPageProps) {
+export default async function StartWizardPage({ params }: StartWizardPageProps) {
   const { locale, docId } = params;
+  // Await a microtask to satisfy Next.js dynamic route requirements
+  await Promise.resolve();
   // The StartWizardPageClient will handle fetching its own specific document data
   // and form schema based on the docId and locale.
   return <StartWizardPageClient params={params} />;

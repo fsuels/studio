@@ -40,7 +40,9 @@ interface DocPageProps { // Renamed from DocPageContainerProps for clarity
 }
 
 // This Server Component now correctly passes params to the Client Component
-export default function DocPage({ params }: DocPageProps) {
+export default async function DocPage({ params }: DocPageProps) {
+  // Await a microtask to comply with Next.js dynamic param handling
+  await Promise.resolve();
   // The `params` prop is directly available here from Next.js
   // It's then passed down to the client component.
   return <DocPageClient params={params} />;
