@@ -111,12 +111,6 @@ const Header = React.memo(function Header() {
     setSearchQuery(''); setShowResults(false);
     setIsMobileMenuOpen(false); setIsMegaMenuOpen(false);
   };
-  const handleResultClick = (docId: string) => {
-    setShowResults(false);
-    setSearchQuery('');
-    setIsMobileMenuOpen(false); setIsMegaMenuOpen(false);
-    router.push(`/${clientLocale}/docs/${docId}`);
-  };
   const handleLogout = () => {
     logout();
     setIsMobileMenuOpen(false);
@@ -214,17 +208,17 @@ const Header = React.memo(function Header() {
                     const docName = translatedDoc.name;
                     return (
                       <li key={doc.id}>
-                        <button
-                          type="button" // Added type="button"
-                          onClick={() => handleResultClick(doc.id)}
+                        <Link
+                          href={`/${clientLocale}/docs/${doc.id}`}
                           className="flex items-center gap-2 px-3 py-2.5 text-sm text-popover-foreground hover:bg-accent hover:text-accent-foreground transition-colors w-full text-left"
+                          prefetch
                         >
                           <FileText className="h-4 w-4 shrink-0 text-muted-foreground"/>
                           <span className="truncate">
                             {docName}
                           </span>
                           <ExternalLink className="h-3 w-3 ml-auto text-muted-foreground/70"/>
-                        </button>
+                        </Link>
                       </li>
                     );
                   })}
@@ -325,15 +319,15 @@ const Header = React.memo(function Header() {
                     const docName = translatedDoc.name;
                     return (
                       <li key={doc.id}>
-                        <button
-                          type="button" // Added type="button"
-                          onClick={() => handleResultClick(doc.id)}
+                        <Link
+                          href={`/${clientLocale}/docs/${doc.id}`}
                           className="flex items-center gap-2 px-3 py-2.5 text-sm text-popover-foreground hover:bg-accent hover:text-accent-foreground transition-colors w-full text-left"
+                          prefetch
                         >
                           <FileText className="h-4 w-4 shrink-0 text-muted-foreground" />
                           <span className="truncate">{docName}</span>
                           <ExternalLink className="h-3 w-3 ml-auto text-muted-foreground/70" />
-                        </button>
+                        </Link>
                       </li>
                     );
                   })}
