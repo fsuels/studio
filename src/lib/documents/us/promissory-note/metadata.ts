@@ -19,7 +19,7 @@ export const promissoryNoteMeta: LegalDocument = {
   schema: PromissoryNoteSchema,
   questions: promissoryNoteQuestions,
   upsellClauses: [],
-  translations: { 
+  translations: {
     en: {
       name: 'Promissory Note',
       description: 'Formalize a promise to repay a loan, with terms for principal, interest, and repayment schedule.',
@@ -32,3 +32,5 @@ export const promissoryNoteMeta: LegalDocument = {
     }
   }
 };
+
+console.log('[promissory-note metadata] questions loaded:', promissoryNoteMeta.questions?.length);

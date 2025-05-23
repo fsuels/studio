@@ -96,25 +96,39 @@ export default function WizardForm({
   }, [doc.schema]);
 
   const steps = useMemo(() => {
+    if (doc.questions && doc.questions.length > 0) {
+      return doc.questions.map((q) => {
+        const fieldDef = (actualSchemaShape as any)?.[q.id]?._def;
+        const labelFromDescription =
+          fieldDef?.description ?? fieldDef?.schema?._def?.description;
+
+        const label = q.label
+          ? t(q.label, { defaultValue: q.label })
+          : labelFromDescription
+            ? t(labelFromDescription, { defaultValue: labelFromDescription })
+            : t(`fields.${q.id}.label`, { defaultValue: prettify(q.id) });
+
+        const tooltip =
+          q.tooltip
+            ? t(q.tooltip, { defaultValue: q.tooltip })
+            : t(fieldDef?.tooltip || fieldDef?.schema?._def?.tooltip || "", {
+                defaultValue:
+                  fieldDef?.tooltip || fieldDef?.schema?._def?.tooltip || "",
+              }) || undefined;
+
+        return { id: q.id, label, tooltip };
+      });
+    }
+
     if (!actualSchemaShape) return [];
+
     return Object.keys(actualSchemaShape).map((key) => {
       const fieldDef = (actualSchemaShape as any)[key]?._def;
       const labelFromDescription =
         fieldDef?.description ?? fieldDef?.schema?._def?.description;
-      let fieldLabel = prettify(key);
-
-      const questionConfig = doc.questions?.find((q) => q.id === key);
-      if (questionConfig?.label) {
-        fieldLabel = t(questionConfig.label, {
-          defaultValue: questionConfig.label,
-        });
-      } else if (labelFromDescription) {
-        fieldLabel = t(labelFromDescription, {
-          defaultValue: labelFromDescription,
-        });
-      } else {
-        fieldLabel = t(`fields.${key}.label`, { defaultValue: prettify(key) });
-      }
+      const fieldLabel = labelFromDescription
+        ? t(labelFromDescription, { defaultValue: labelFromDescription })
+        : t(`fields.${key}.label`, { defaultValue: prettify(key) });
 
       return {
         id: key,
@@ -126,7 +140,7 @@ export default function WizardForm({
           }) || undefined,
       };
     });
-  }, [actualSchemaShape, t, doc.questions]);
+  }, [doc.questions, actualSchemaShape, t]);
 
   const totalSteps = steps.length;
   const currentField =
@@ -367,7 +381,7 @@ export default function WizardForm({
           />
         )}
       </div>
-    ) : totalSteps === 0 && !isReviewing ? (
+    ) : (doc.questions?.length || 0) === 0 && !isReviewing ? (
       <div className="mt-6 min-h-[200px] flex flex-col items-center justify-center text-center">
         <p className="text-muted-foreground mb-4">
           {t("dynamicForm.noQuestionsNeeded", {
