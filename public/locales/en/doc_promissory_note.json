@@ -1,10 +1,17 @@
+
 {
-  "pageTitle": "Promissory Note Guide",
+  "pageTitle": "Promissory Note Guide | 123LegalDoc",
   "pageSubtitle": "Everything you need to craft an enforceable loan agreement.",
   "sections": {
     "whatIs": {
       "title": "What Is a Promissory Note?",
-      "content": "A promissory note is a written promise by one party (the borrower) to repay a specific sum to another (the lender) under agreed terms. It typically establishes principal, interest, and repayment schedule, creating a legally binding debt."
+      "content": [
+        "Transfers ownership from seller to buyer",
+        "Documents key facts (price, VIN, mileage, “as-is” notice, etc.)",
+        "Triggers title & registration at your state DMV",
+        "Protects both parties against future tax, lien, or liability disputes"
+      ],
+      "footer": "Think of it as your proof of ownership and condition on the day the keys change hands."
     },
     "whenToUse": {
       "title": "When You Must Use One",
@@ -33,7 +40,7 @@
     "components": {
       "title": "Essential Clauses & Data Points",
       "table": {
-        "headers": ["Clause", "Purpose"],
+        "headers": ["Clause", "Why It Matters"],
         "rows": [
           ["Principal Amount", "Captures exact dollars loaned, avoiding future disputes"],
           ["Interest Rate & Calculation Method", "APR, daily simple interest, 30/360—whichever applies"],
@@ -89,7 +96,7 @@
       "items": [
         "Attorney-Drafted & State-Compliant – reviewed every quarter.",
         "Smart Usury Guardrails – prevents illegal interest rates.",
-        "Instant E-Signature & Audit Trail – enforceability without the paper chase.",
+        "Instant E-Signature & Audit Log – enforceability without the paper chase.",
         "Amendment & Renewal Module – extend terms in one click.",
         "Bilingual Templates (EN/ES) – tap into broader markets.",
         "30-Day Money-Back Promise – risk-free."
@@ -121,5 +128,5 @@
   },
   "finalCtaTitle": "Ready to Protect Your Loan?",
   "finalCtaSubtitle": "Click “Create My Promissory Note” and lock in professional-grade protection in minutes.",
-  "startMyPromissoryNoteButton": "Create My Promissory Note"
+  "createMyPromissoryNoteButton": "Create My Promissory Note"
 }
