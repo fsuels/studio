@@ -6,6 +6,7 @@
     "blog": "Blog",
     "faq": "Preguntas Frecuentes",
     "support": "Soporte",
+    "onlineNotary": "Notario en Línea",
     "makeDocuments": "Crear Documentos",
     "searchPlaceholder": "Buscar documentos...",
     "noDocumentsInCategory": "Aún no hay documentos en esta categoría.",
@@ -152,6 +153,24 @@
     },
     "note": "También puedes consultar nuestras Preguntas Frecuentes para preguntas comunes.",
     "cta": "Ir a Preguntas Frecuentes"
+  },
+  "onlineNotary": {
+    "headline": "Notario en Línea – Notariza documentos fácilmente con seguridad y privacidad garantizadas. Legal en los 50 estados.",
+    "addDocument": "Agregar Documento",
+    "description": "Un notario en línea te permite obtener documentos notarizados de forma remota a través de video seguro. Tu información permanece encriptada y privada.",
+    "howItWorks": "Cómo funciona",
+    "stepUpload": "Sube el documento.",
+    "stepConnect": "Conéctate con un notario por video seguro.",
+    "stepPay": "Paga y descarga el documento notarizado.",
+    "pricingTitle": "Precios",
+    "pricing": "$25 por el primer sello y $10 por cada sello adicional.",
+    "legalTitle": "Legal en Todos los EE. UU.",
+    "legalDesc": "Nuestro servicio asociado es legal en los 50 estados.",
+    "securityTitle": "Seguridad y Cumplimiento",
+    "securityDesc": "Nuestro proveedor de API de notaría utiliza cifrado de extremo a extremo y mantiene un estricto cumplimiento de las leyes estatales y los requisitos de verificación de identidad.",
+    "learnMore": "Aprende Más",
+    "faqLink": "Preguntas Frecuentes de Notario en Línea",
+    "articlesLink": "Artículos sobre notarización remota"
   },
   "blog": {
     "title": "Artículos y Perspectivas Legales",

@@ -6,6 +6,7 @@
     "blog": "Blog",
     "faq": "FAQ",
     "support": "Support",
+    "onlineNotary": "Online Notary",
     "makeDocuments": "Make Documents",
     "searchPlaceholder": "Search documents...",
     "noDocumentsInCategory": "No documents in this category yet.",
@@ -153,6 +154,24 @@
     },
     "note": "You can also check our FAQ for common questions.",
     "cta": "Go to FAQ"
+  },
+  "onlineNotary": {
+    "headline": "Online Notary – Easily notarize documents online with guaranteed security and privacy. Legal in all 50 states.",
+    "addDocument": "Add Document",
+    "description": "An online notary allows you to get documents notarized remotely through secure video. Your information remains encrypted and private.",
+    "howItWorks": "How it works",
+    "stepUpload": "Upload the document.",
+    "stepConnect": "Connect with a notary via secure video.",
+    "stepPay": "Pay and download the notarized document.",
+    "pricingTitle": "Pricing",
+    "pricing": "$25 for the first seal and $10 for each additional seal.",
+    "legalTitle": "Legal Across the U.S.",
+    "legalDesc": "Our partner service is legal in all 50 states.",
+    "securityTitle": "Security & Compliance",
+    "securityDesc": "Our notary API provider uses end-to-end encryption and maintains strict compliance with state laws and identity verification requirements.",
+    "learnMore": "Learn More",
+    "faqLink": "Online Notary FAQs",
+    "articlesLink": "Articles about remote notarization"
   },
   "blog": {
     "title": "Legal Insights & Articles",
