@@ -1,0 +1,30 @@
+{
+  "faq": {
+    "title": "Frequently Asked Questions",
+    "q1": {
+      "question": "Is my first document eSignature really free with 123LegalDoc?",
+      "answer": "Yes! Your first document sent for electronic signature through 123LegalDoc, powered by SignWell, is completely free. After that, we offer flexible pay-per-document pricing or volume plans for businesses."
+    },
+    "q2": {
+      "question": "Do recipients need a 123LegalDoc or SignWell account to sign?",
+      "answer": "No, recipients do not need to create an account. They will receive a secure email link to view and sign the document directly in their browser on any device."
+    },
+    "q3": {
+      "question": "Can I draw my signature on a mobile device or tablet?",
+      "answer": "Absolutely. Our eSignature platform is fully responsive. Signers can easily draw their signature using a touchscreen, type it, or upload an image of their signature."
+    },
+    "q4": {
+      "question": "What file types do you support for upload?",
+      "answer": "You can upload PDF, DOC, DOCX, TXT, RTF, and ODT files. We automatically convert them to a secure PDF format for the signing process."
+    },
+    "q5": {
+      "question": "How do I download the audit trail for a signed document?",
+      "answer": "Once a document is completed by all signers, a comprehensive audit trail is generated. You can download this audit trail (usually as a PDF) from your 123LegalDoc dashboard along with the signed document. It includes timestamps, IP addresses, and a record of all events."
+    },
+    "q6": {
+      "question": "Is the SignWell integration HIPAA compliant for healthcare documents?",
+      "answer": "SignWell offers features that can help organizations meet HIPAA compliance requirements, such as Business Associate Agreements (BAA) for eligible plans. It's important to ensure your specific SignWell plan and usage align with HIPAA guidelines if you are handling Protected Health Information (PHI). Always consult SignWell's documentation for specifics on HIPAA."
+    },
+    "subtitle": "Find answers to common questions below."
+  }
+}

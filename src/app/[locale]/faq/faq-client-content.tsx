@@ -1,7 +1,7 @@
 // src/app/[locale]/faq/faq-client-content.tsx
 'use client'
 
-import { useState, useEffect } from 'react' 
+import { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   Accordion,
@@ -16,12 +16,15 @@ interface FaqClientContentProps {
 }
 
 export default function FaqClientContent({ locale }: FaqClientContentProps) {
-  const { t } = useTranslation("common")
-  const [isHydrated, setIsHydrated] = useState(false); 
+  const { t, i18n } = useTranslation(['faq', 'common'])
+  const [isHydrated, setIsHydrated] = useState(false);
 
   useEffect(() => {
-    setIsHydrated(true); 
-  }, []);
+    setIsHydrated(true);
+    if (i18n.language !== locale) {
+      i18n.changeLanguage(locale)
+    }
+  }, [locale, i18n]);
 
   const questions = Array.from({ length: 6 }, (_, i) => i + 1)
 
