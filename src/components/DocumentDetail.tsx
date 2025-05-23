@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { documentLibrary, type LegalDocument } from '@/lib/document-library';
 import { Loader2, AlertTriangle } from 'lucide-react';
 import Image from 'next/image';
+import AutoImage from './AutoImage';
 import { cn } from '@/lib/utils';
 import { getTemplatePath } from '@/lib/templateUtils'; // Centralized util
 
@@ -147,13 +148,15 @@ const DocumentDetail = React.memo(function DocumentDetail({ docId, locale, altTe
         <div className="prose prose-sm dark:prose-invert max-w-none w-full h-full overflow-y-auto p-4 md:p-6 relative z-0 bg-white dark:bg-background text-foreground">
            <ReactMarkdown
              remarkPlugins={[remarkGfm]}
-             components={{
-                // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                p: ({node, ...props}) => <p {...props} className="select-none" />,
-                // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                h1: ({node, ...props}) => <h1 {...props} className="text-center" />,
-             }}
-           >
+           components={{
+              // eslint-disable-next-line @typescript-eslint/no-unused-vars
+              p: ({node, ...props}) => <p {...props} className="select-none" />,
+              // eslint-disable-next-line @typescript-eslint/no-unused-vars
+              h1: ({node, ...props}) => <h1 {...props} className="text-center" />,
+              // FIXED: ensure markdown images include dimensions
+              img: ({node, ...props}) => <AutoImage {...props} className="mx-auto" />,
+            }}
+          >
             {md}
            </ReactMarkdown>
         </div>

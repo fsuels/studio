@@ -5,7 +5,8 @@ import React, { useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { useTranslation } from 'react-i18next'; 
-import Image from 'next/image'; 
+import Image from 'next/image';
+import AutoImage from './AutoImage';
 import { Loader2 } from 'lucide-react';
 
 interface DocumentPreviewProps {
@@ -93,11 +94,15 @@ const DocumentPreview = React.memo(function DocumentPreview({
         </p>
       ) : md ? (
         <div className="prose prose-sm dark:prose-invert max-w-none w-full h-full overflow-y-auto p-4 md:p-6 bg-background text-foreground">
-          <ReactMarkdown 
+          <ReactMarkdown
             remarkPlugins={[remarkGfm]}
             components={{
               // eslint-disable-next-line @typescript-eslint/no-unused-vars
-              p: ({ node, ...props }) => <p {...props} className="select-none" />, 
+              p: ({ node, ...props }) => <p {...props} className="select-none" />,
+              // FIXED: ensure images have explicit dimensions
+              img: ({ node, ...props }) => (
+                <AutoImage {...props} className="mx-auto" />
+              ),
             }}
           >
             {md}
