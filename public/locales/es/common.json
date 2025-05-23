@@ -125,6 +125,7 @@
   "Please confirm the details below are correct before proceeding.": "Por favor, confirma que los detalles a continuación son correctos antes de proceder.",
   "Not Provided": "No Proporcionado",
   "Edit": "Editar",
+  "wizard.fieldRequired": "Requerido",
   "Could not load template.": "No se pudo cargar la plantilla.",
   "Loading document wizard...": "Cargando asistente de documento...",
   "dynamicForm.noQuestionsNeeded": "Este tipo de documento ({{documentType}}) no requiere ninguna respuesta específica de tu parte en esta etapa. Puedes proceder directamente a la vista previa y finalización.",
