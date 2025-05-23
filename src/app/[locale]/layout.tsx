@@ -1,10 +1,11 @@
 // src/app/[locale]/layout.tsx
 'use client';
 
-import { ReactNode, useEffect } from 'react'; // Added useEffect
+import { ReactNode, useEffect, useMemo } from 'react'; // Added useMemo
 import { useParams } from 'next/navigation';
 import { ClientProviders } from '@/components/providers/ClientProviders';
-import { useTranslation } from 'react-i18next'; // Import useTranslation
+import { useTranslation } from 'react-i18next';
+import { DynamicHeader, DynamicFooter } from '@/components/providers/ClientProviders';
 
 interface LocaleLayoutProps {
   children: ReactNode;
@@ -12,21 +13,27 @@ interface LocaleLayoutProps {
 
 export default function LocaleLayout({ children }: LocaleLayoutProps) {
   const params = useParams();
-  // Ensure locale is correctly typed and defaults if params!.locale is not 'en' or 'es'
-  const detectedLocale = (params?.locale === 'es' || params?.locale === 'en') ? params!.locale : 'en';
-  const { i18n } = useTranslation("common"); // Get i18n instance
+  const { i18n } = useTranslation("common");
 
-  // Effect to synchronize i18next instance with the detected locale from URL
+  // Use useMemo to stabilize detectedLocale if params.locale itself is stable
+  const detectedLocale = useMemo(() => {
+    const pathLocale = params?.locale;
+    return (pathLocale === 'es' || pathLocale === 'en') ? pathLocale : 'en';
+  }, [params?.locale]);
+
   useEffect(() => {
     if (i18n.isInitialized && i18n.language !== detectedLocale) {
       i18n.changeLanguage(detectedLocale);
     }
-  }, [i18n, detectedLocale]);
-
+  }, [i18n, detectedLocale]); // detectedLocale is now memoized
 
   return (
-    <ClientProviders locale={detectedLocale}>
-      {children}
-    </ClientProviders>
+    <>
+      <DynamicHeader />
+      <ClientProviders locale={detectedLocale}>
+        {children}
+      </ClientProviders>
+      <DynamicFooter />
+    </>
   );
 }
