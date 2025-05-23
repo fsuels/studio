@@ -19,6 +19,13 @@ const httpPort = process.env.HTTP_PORT || 80;
 
 app.prepare().then(() => {
   const server = createSecureServer(options, (req, res) => {
+    const url = req.url || '';
+    if (
+      url.startsWith('/_next/static/') ||
+      /\.(?:js|css|png|jpg|jpeg|gif|svg|webp|avif|ico|woff2?)$/.test(url)
+    ) {
+      res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+    }
     const parsedUrl = parse(req.url, true);
     handle(req, res, parsedUrl);
   });
