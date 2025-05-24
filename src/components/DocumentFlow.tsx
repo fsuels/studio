@@ -1,39 +1,39 @@
-
 // src/components/DocumentFlow.tsx
 "use client";
 
-import React, { useState, useEffect } from 'react'; // Added useEffect
-import { ProgressBar } from '@/components/ProgressBar'; // This might be replaced by ProgressSteps
-import { StepOneInput } from '@/components/StepOneInput'; // This might be replaced or refactored
-import SlideFade from '@/components/motion/SlideFade';
-import { StepTwoInput } from '@/components/StepTwoInput'; // This might be replaced or refactored
-import { StepThreeInput } from '@/components/StepThreeInput'; // This might be replaced or refactored
-import { useRouter } from 'next/navigation'; 
-import { useTranslation } from 'react-i18next'; 
-import { documentLibrary } from '@/lib/document-library/index'; // Import documentLibrary
+import React, { useState, useEffect } from "react"; // Added useEffect
+import { ProgressBar } from "@/components/ProgressBar"; // This might be replaced by ProgressSteps
+import { StepOneInput } from "@/components/StepOneInput"; // This might be replaced or refactored
+import SlideFade from "@/components/motion/SlideFade";
+import { StepTwoInput } from "@/components/StepTwoInput"; // This might be replaced or refactored
+import { StepThreeInput } from "@/components/StepThreeInput"; // This might be replaced or refactored
+import { useRouter } from "next/navigation";
+import { useTranslation } from "react-i18next";
+import { documentLibrary } from "@/lib/document-library/index"; // Import documentLibrary
+import { getDocumentUrl } from "@/lib/document-library/utils";
 
 interface DocumentFlowProps {
   initialDocId?: string;
-  initialLocale?: 'en' | 'es';
+  initialLocale?: "en" | "es";
 }
 
 export default function DocumentFlow({
   initialDocId,
-  initialLocale = 'en',
-}: DocumentFlowProps = {}) { 
+  initialLocale = "en",
+}: DocumentFlowProps = {}) {
   const router = useRouter();
   const { t } = useTranslation("common");
 
-  const [templateId, setTemplateId] = useState<string>(initialDocId ?? '');
-  const [step, setStep] = useState(initialDocId ? 2 : 1); 
+  const [templateId, setTemplateId] = useState<string>(initialDocId ?? "");
+  const [step, setStep] = useState(initialDocId ? 2 : 1);
 
-  const [category, setCategory] = useState<string>(''); 
-  const [stateCode, setStateCode] = useState<string>('');
-  
+  const [category, setCategory] = useState<string>("");
+  const [stateCode, setStateCode] = useState<string>("");
+
   // Effect to set initial category if docId is provided
   useEffect(() => {
     if (initialDocId) {
-      const doc = documentLibrary.find(d => d.id === initialDocId);
+      const doc = documentLibrary.find((d) => d.id === initialDocId);
       if (doc) {
         setCategory(doc.category);
         // No need to set step here as it's already initialized based on initialDocId
@@ -41,29 +41,32 @@ export default function DocumentFlow({
     }
   }, [initialDocId]);
 
-
   const advanceTo = (next: number) => {
     setStep(next);
-    if (typeof window !== 'undefined') {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (typeof window !== "undefined") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
   };
 
   const handleWizardComplete = (values: Record<string, any>) => {
     console.log("DocumentFlow: Wizard complete with values:", values);
-    // For a flow embedded on the homepage, this might trigger a modal or summary
-    // For the dedicated /start page, WizardLayout's onComplete will handle redirection
-    // Redirect to a checkout or review page.
-    router.push(`/${initialLocale}/docs/us/${templateId}/checkout?data=${encodeURIComponent(JSON.stringify(values))}`);
+    const docConfig = documentLibrary.find((d) => d.id === templateId);
+    const docCountry = docConfig?.jurisdiction?.toLowerCase() || "us";
+    const baseUrl = getDocumentUrl(
+      docConfig || { id: templateId, jurisdiction: docCountry.toUpperCase() },
+      initialLocale,
+    );
+    router.push(
+      `${baseUrl}/checkout?data=${encodeURIComponent(JSON.stringify(values))}`,
+    );
   };
-
 
   return (
     <div className="overflow-x-hidden">
       <ProgressBar currentStep={step} totalSteps={3} />
 
       <SlideFade key={step}>
-        {step === 1 && !initialDocId && ( 
+        {step === 1 && !initialDocId && (
           <StepOneInput
             onSelectCategory={(cat) => {
               setCategory(cat);
@@ -74,7 +77,11 @@ export default function DocumentFlow({
 
         {step === 2 && (
           <StepTwoInput
-            category={category || documentLibrary.find(d => d.id === initialDocId)?.category || ''}
+            category={
+              category ||
+              documentLibrary.find((d) => d.id === initialDocId)?.category ||
+              ""
+            }
             onStateChange={(st) => setStateCode(st)}
             onSelectTemplate={(id) => {
               setTemplateId(id);
