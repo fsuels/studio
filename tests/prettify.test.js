@@ -54,7 +54,9 @@ test('BillOfSaleSchema accepts 1 seller and 1 buyer', () => {
     price: 5000,
     odometer: 1000,
     odo_status: 'ACTUAL',
-    state: 'CA'
+    state: 'CA',
+    requireNotary: true,
+    witnessCount: 0
   });
   assert.strictEqual(result.success, true);
 });
@@ -78,7 +80,9 @@ test('BillOfSaleSchema accepts multiple sellers and buyers', () => {
     price: 10000,
     odometer: 2000,
     odo_status: 'ACTUAL',
-    state: 'TX'
+    state: 'TX',
+    requireNotary: false,
+    witnessCount: 1
   });
   assert.strictEqual(result.success, true);
 });
@@ -96,7 +100,9 @@ test('BillOfSaleSchema fails with no sellers', () => {
     price: 5000,
     odometer: 1000,
     odo_status: 'ACTUAL',
-    state: 'CA'
+    state: 'CA',
+    requireNotary: true,
+    witnessCount: 0
   });
   assert.strictEqual(result.success, false);
 });
@@ -114,7 +120,9 @@ test('BillOfSaleSchema fails with invalid phone format', () => {
     price: 5000,
     odometer: 1000,
     odo_status: 'ACTUAL',
-    state: 'CA'
+    state: 'CA',
+    requireNotary: true,
+    witnessCount: 0
   });
   assert.strictEqual(result.success, false);
 });

@@ -57,6 +57,14 @@ The Seller represents and warrants that:
 
 This Agreement shall be governed by and construed in accordance with the laws of the State of **{{state}}**.
 
+{{#if requireNotary}}
+This document must be notarized under the laws of {{state}}.
+{{/if}}
+
+{{#if witnessCount}}
+Number of Witnesses Required: {{witnessCount}}
+{{/if}}
+
 ## 6. Signatures
 
 **IN WITNESS WHEREOF**, the Parties have executed this Agreement as of the date first written above.
