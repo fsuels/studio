@@ -16,9 +16,10 @@ interface DocumentDetailProps {
   docId: string;
   locale: 'en' | 'es';
   altText?: string;
+  liveData?: Record<string, any>;
 }
 
-const DocumentDetail = React.memo(function DocumentDetail({ docId, locale, altText }: DocumentDetailProps) {
+const DocumentDetail = React.memo(function DocumentDetail({ docId, locale, altText, liveData }: DocumentDetailProps) {
   const { t } = useTranslation("common");
   const [md, setMd] = useState<string>('');
   const [isLoading, setIsLoading] = useState(true);
@@ -99,9 +100,10 @@ const DocumentDetail = React.memo(function DocumentDetail({ docId, locale, altTe
           'existing_liens': 'None'
         };
 
+        const finalData = liveData ?? sampleData;
         modifiedMd = modifiedMd.replace(/{{(?!#each)(?!\/each)[^}]+}}/g, (match) => {
           const key = match.replace(/[{}]/g, '').trim();
-          return sampleData[key] || '__________';
+          return finalData[key] || '__________';
         });
         setMd(modifiedMd);
       })
@@ -111,7 +113,7 @@ const DocumentDetail = React.memo(function DocumentDetail({ docId, locale, altTe
         setMd('');
       })
       .finally(() => setIsLoading(false));
-  }, [docId, locale, docConfig, isHydrated, t, templatePath]);
+  }, [docId, locale, docConfig, isHydrated, t, templatePath, liveData]);
 
 
   if (!isHydrated || (!docConfig && !isLoading)) {
