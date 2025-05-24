@@ -8,7 +8,6 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
-  swcMinify: true,
   // Generate source maps for production bundles so Lighthouse can access
   // original source when analyzing the site. This adds `.map` files next to
   // the JavaScript bundles and slightly increases build size.
