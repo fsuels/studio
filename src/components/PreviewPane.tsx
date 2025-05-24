@@ -1,5 +1,7 @@
 // src/components/PreviewPane.tsx
 'use client';
+// Live preview updates instantly as form data changes.
+// Debounce has been removed and detailed logging added for debugging.
 
 import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import ReactMarkdown from 'react-markdown';
