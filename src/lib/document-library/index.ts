@@ -39,7 +39,5 @@ export const documentLibrary = getDocumentsForCountry('us');
 
 export default documentLibrary;
 
-export { documentLibraryByCountry };
-
 export { usStates } from '../usStates';
 export type { Question, UpsellClause } from '@/types/documents';
