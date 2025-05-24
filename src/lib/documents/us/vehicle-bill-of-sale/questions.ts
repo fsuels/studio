@@ -1,79 +1,31 @@
 import { usStates } from '@/lib/usStates';
 
 export const vehicleBillOfSaleQuestions = [
-  { 
-    id: "seller_name", 
-    label: "Seller's Full Name", 
-    type: "text", 
-    required: true, 
-    tooltip: "Enter the full legal name of the person or entity selling the vehicle." 
+  {
+    id: 'sellers',
+    label: 'Seller(s)',
+    type: 'group-array',
+    itemLabel: 'Seller',
+    fields: [
+      { id: 'name', label: 'Full Name', type: 'text', required: true },
+      { id: 'address', label: 'Address', type: 'text', required: true },
+      { id: 'phone', label: 'Phone Number', type: 'text', required: false, placeholder: '(XXX) XXX-XXXX' }
+    ],
+    minItems: 1,
+    maxItems: 3
   },
   {
-    id: "seller_phone",
-    label: "Seller's Phone Number",
-    type: "text",
-    required: false,
-    placeholder: "(XXX) XXX-XXXX",
-    tooltip: "A valid phone number for the seller."
-  },
-  {
-    id: "seller2_name",
-    label: "Second Seller's Full Name",
-    type: "text",
-    required: false,
-    tooltip: "Optional second seller name if more than one person is selling the vehicle."
-  },
-  {
-    id: "seller2_phone",
-    label: "Second Seller's Phone Number",
-    type: "text",
-    required: false,
-    placeholder: "(XXX) XXX-XXXX",
-    tooltip: "Phone number for the second seller, if applicable."
-  },
-  {
-    id: "seller_address",
-    label: "Seller's Full Address", 
-    type: "address", 
-    required: true, 
-    tooltip: "Include street, city, state, and ZIP code." 
-  },
-  { 
-    id: "buyer_name", 
-    label: "Buyer's Full Name", 
-    type: "text", 
-    required: true, 
-    tooltip: "Enter the full legal name of the person or entity buying the vehicle." 
-  },
-  { 
-    id: "buyer_address", 
-    label: "Buyer's Full Address", 
-    type: "address", 
-    required: true, 
-    tooltip: "Include street, city, state, and ZIP code for the buyer." 
-  },
-  {
-    id: "buyer_phone",
-    label: "Buyer's Phone Number",
-    type: "text",
-    required: false,
-    placeholder: "(XXX) XXX-XXXX",
-    tooltip: "A valid phone number for the buyer."
-  },
-  {
-    id: "buyer2_name",
-    label: "Second Buyer's Full Name",
-    type: "text",
-    required: false,
-    tooltip: "Optional second buyer name if more than one person is purchasing the vehicle."
-  },
-  {
-    id: "buyer2_phone",
-    label: "Second Buyer's Phone Number",
-    type: "text",
-    required: false,
-    placeholder: "(XXX) XXX-XXXX",
-    tooltip: "Phone number for the second buyer, if applicable."
+    id: 'buyers',
+    label: 'Buyer(s)',
+    type: 'group-array',
+    itemLabel: 'Buyer',
+    fields: [
+      { id: 'name', label: 'Full Name', type: 'text', required: true },
+      { id: 'address', label: 'Address', type: 'text', required: true },
+      { id: 'phone', label: 'Phone Number', type: 'text', required: false, placeholder: '(XXX) XXX-XXXX' }
+    ],
+    minItems: 1,
+    maxItems: 3
   },
   {
     id: "year",

@@ -77,8 +77,8 @@ const DocumentDetail = React.memo(function DocumentDetail({ docId, locale, altTe
                 modifiedMd = modifiedMd.replace(/^# .*/m, `# ${fallbackTitle}`);
             }
         }
-        // Replace template placeholders with blank lines to mimic a fillable form
-        modifiedMd = modifiedMd.replace(/{{[^}]+}}/g, '__________');
+        // Replace scalar placeholders but keep loops intact
+        modifiedMd = modifiedMd.replace(/{{(?!#each)(?!\/each)[^}]+}}/g, '__________');
         setMd(modifiedMd);
       })
       .catch((err) => {
