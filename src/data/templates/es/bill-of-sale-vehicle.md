@@ -57,6 +57,14 @@ El Vendedor declara y garantiza que:
 
 Este Acuerdo se regirá e interpretará de conformidad con las leyes del Estado de **{{state}}**.
 
+{{#if requireNotary}}
+Este documento debe ser notariado bajo las leyes de {{state}}.
+{{/if}}
+
+{{#if witnessCount}}
+Número de Testigos Requeridos: {{witnessCount}}
+{{/if}}
+
 ## 6. Firmas
 
 **EN FE DE LO CUAL**, las Partes han ejecutado este Acuerdo en la fecha indicada anteriormente.

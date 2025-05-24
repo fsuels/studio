@@ -1,6 +1,7 @@
 // src/schemas/billOfSale.ts
 import { z } from 'zod';
 import { isValidVIN } from '@/utils/isValidVIN';
+import { getStateRules } from '@/lib/documents/us/vehicle-bill-of-sale/compliance';
 
 const PartySchema = z.object({
   name: z.string().min(2, { message: 'Name must be at least 2 characters.' }),
@@ -50,9 +51,31 @@ export const BillOfSaleSchema = z.object({
   existing_liens: z.string().optional(),
   state: z.string().length(2, { message: 'State must be 2 characters.' }),
   county: z.string().optional(),
-}).refine(data => data.as_is === false ? !!data.warranty_text && data.warranty_text.trim() !== '' : true, {
-  message: "Warranty details are required if not sold 'as-is'",
-  path: ['warranty_text'],
+  requireNotary: z.boolean().optional(),
+  witnessCount: z.number().optional(),
+}).superRefine((data, ctx) => {
+  if (data.as_is === false && (!data.warranty_text || data.warranty_text.trim() === '')) {
+    ctx.addIssue({
+      path: ['warranty_text'],
+      code: z.ZodIssueCode.custom,
+      message: "Warranty details are required if not sold 'as-is'",
+    });
+  }
+  const rules = getStateRules(data.state);
+  if (rules.requireNotary && data.requireNotary !== true) {
+    ctx.addIssue({
+      path: ['requireNotary'],
+      code: z.ZodIssueCode.custom,
+      message: 'A notary is required in this state.',
+    });
+  }
+  if (rules.witnessCount > 0 && (!data.witnessCount || data.witnessCount < rules.witnessCount)) {
+    ctx.addIssue({
+      path: ['witnessCount'],
+      code: z.ZodIssueCode.custom,
+      message: `At least ${rules.witnessCount} witness(es) required.`,
+    });
+  }
 });
 
 export type BillOfSaleData = z.infer<typeof BillOfSaleSchema>;
