@@ -13,6 +13,7 @@ import {
   Controller,
   useFormContext,
   useForm,
+  useWatch,
 } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios, { AxiosError } from "axios";
@@ -81,6 +82,7 @@ export default function WizardForm({
       dirtyFields,
     },
   } = useFormContext<z.infer<typeof doc.schema>>();
+  const watchedData = useWatch({ control });
 
   useEffect(() => {
     setIsHydrated(true);
@@ -151,7 +153,7 @@ export default function WizardForm({
 
   const totalRequired = doc.questions?.filter(q => q.required).length || 0;
   const completed = doc.questions?.filter(q => {
-    const val = getValues(q.id as any);
+    const val = (watchedData as Record<string, any>)[q.id];
     return val !== undefined && val !== null && String(val).trim() !== '';
   }).length || 0;
 
