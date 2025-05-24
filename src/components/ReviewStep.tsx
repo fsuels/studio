@@ -219,7 +219,7 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
                           id={`review-${field.id}`}
                           type="tel" // SmartInput expects 'tel'
                           placeholder={t(field.placeholder || '', {ns: 'documents', defaultValue: field.placeholder || ''})}
-                          className={cn("max-w-md text-sm", errors[field.id] && "border-destructive")}
+                          className={cn("w-full max-w-md text-sm", errors[field.id] && "border-destructive")}
                           aria-invalid={!!errors[field.id]}
                           rhfProps={register(field.id as any, { required: field.required })}
                         />
@@ -243,7 +243,7 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
                                 }
                               }}
                               placeholder={t(field.placeholder || 'Enter address...', {ns: 'documents', defaultValue: field.placeholder || 'Enter address...'})}
-                              className="max-w-md"
+                              className="w-full max-w-md"
                               error={errors[field.id]?.message as string | undefined}
                               tooltip={field.tooltip ? t(field.tooltip, {ns: 'documents', defaultValue: field.tooltip}) : undefined}
                             />
@@ -276,7 +276,7 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
                               name: controllerField.name,
                               ref: controllerField.ref,
                               placeholder: t(field.placeholder || '', {ns: 'documents', defaultValue: field.placeholder || ''}),
-                              className: cn("max-w-md text-sm", errors[field.id] && "border-destructive"),
+                              className: cn("w-full max-w-md text-sm", errors[field.id] && "border-destructive"),
                               "aria-invalid": !!errors[field.id],
                             };
 
@@ -292,7 +292,7 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
                                 >
                                   <SelectTrigger
                                     id={`review-${field.id}`}
-                                    className={cn("max-w-md text-sm", errors[field.id] && "border-destructive focus:ring-destructive")}
+                                    className={cn("w-full max-w-md text-sm", errors[field.id] && "border-destructive focus:ring-destructive")}
                                     aria-invalid={!!errors[field.id]}
                                     aria-label={t(field.placeholder || 'Select...', {ns: 'documents', defaultValue: field.placeholder || 'Select...'})}
                                   >
