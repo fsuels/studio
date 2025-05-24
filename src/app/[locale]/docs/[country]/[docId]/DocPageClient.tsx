@@ -2,7 +2,7 @@
 'use client';
 
 import { useParams, notFound, useRouter } from 'next/navigation';
-import { getDoc, type LegalDocument } from '@/lib/document-library/index';
+import { loadDoc, type LegalDocument } from '@/lib/document-library/index';
 import { useTranslation } from 'react-i18next';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
@@ -64,9 +64,14 @@ export default function DocPageClient({ params: routeParams }: DocPageClientProp
   const currentCountry = (Array.isArray(params!.country) ? params!.country[0] : params!.country) as string | undefined;
   const docId = Array.isArray(params!.docId) ? params!.docId[0] : params!.docId as string | undefined;
 
-  const docConfig = useMemo(() => {
-    if (!docId) return undefined;
-    return getDoc(docId, currentCountry);
+  const [docConfig, setDocConfig] = useState<LegalDocument | undefined>(undefined);
+
+  useEffect(() => {
+    if (!docId) {
+      setDocConfig(undefined);
+      return;
+    }
+    loadDoc(docId, currentCountry).then(setDocConfig);
   }, [docId, currentCountry]);
   
   const [isLoading, setIsLoading] = useState(true);
@@ -87,20 +92,18 @@ export default function DocPageClient({ params: routeParams }: DocPageClientProp
   }, [router, docId, currentLocale, currentCountry]);
 
   useEffect(() => {
-    if (isHydrated) {
-        if (docId) {
-            const foundDoc = getDoc(docId, currentCountry);
-            if (!foundDoc) {
-                console.error(`[DocPageClient] Doc config not found for ID: ${docId}. Triggering 404.`);
-                notFound();
-            }
-        } else {
-            console.error("[DocPageClient] docId is undefined. Triggering 404.");
-            notFound();
-        }
-        setIsLoading(false);
+    if (!isHydrated) return;
+    if (docId) {
+      if (!docConfig) {
+        console.error(`[DocPageClient] Doc config not found for ID: ${docId}. Triggering 404.`);
+        notFound();
+      }
+    } else {
+      console.error("[DocPageClient] docId is undefined. Triggering 404.");
+      notFound();
     }
-  }, [docId, isHydrated, notFound, currentCountry]);
+    setIsLoading(false);
+  }, [docId, docConfig, isHydrated, notFound]);
 
 
 

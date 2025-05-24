@@ -1,6 +1,7 @@
 // src/lib/document-library/index.ts
 import { z } from 'zod';
 import type { LegalDocument, LocalizedText } from '@/types/documents';
+import { docLoaders } from '../document-loaders';
 // Dynamic document discovery will replace explicit barrels
 
 // Helper function to ensure a document object is valid
@@ -88,6 +89,23 @@ export function getDoc(docId: string, country = 'us'): LegalDocument | undefined
   return registry[`${country}/${docId}`];
 }
 export { getDoc as getDocument };
+
+export async function loadDoc(
+  docId: string,
+  country = 'us'
+): Promise<LegalDocument | undefined> {
+  const loader = docLoaders[`${country}/${docId}`];
+  if (!loader) return undefined;
+  try {
+    return await loader();
+  } catch (err) {
+    console.error(
+      `[document-library] Failed to load document ${country}/${docId}:`,
+      err
+    );
+    return undefined;
+  }
+}
 
 export const allDocuments: LegalDocument[] = [...new Map(tempAllDocuments.map(doc => [doc.id, doc])).values()];
 console.log(`[document-library] Final unique documents in allDocuments: ${allDocuments.length}`);
