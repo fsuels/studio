@@ -17,7 +17,7 @@ for (const country of fs.readdirSync(docsRoot)) {
     const metaPath = path.join(docDir, 'metadata.ts');
     if (fs.existsSync(metaPath)) {
       const varName = camelize(doc);
-      const loader = `  '${country}/${doc}': () => import( /* webpackChunkName: \"doc-${country}-${doc}\" */ '../documents/${country}/${doc}' ).then(m => m.${varName})`;
+      const loader = `  '${country}/${doc}': () => import( /* webpackChunkName: \"doc-${country}-${doc}\" */ './documents/${country}/${doc}' ).then(m => m.${varName})`;
       loaders.push(loader);
     }
   }
