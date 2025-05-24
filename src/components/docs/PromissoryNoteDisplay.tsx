@@ -11,6 +11,8 @@ import { track } from "@/lib/analytics";
 import { useCart } from "@/contexts/CartProvider";
 import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils';
+import { documentLibrary } from '@/lib/document-library';
+import { getDocumentUrl } from '@/lib/document-library/utils';
 
 interface PromissoryNoteDisplayProps {
   locale: "en" | "es";
@@ -21,6 +23,9 @@ export default function PromissoryNoteDisplay({ locale }: PromissoryNoteDisplayP
   const router = useRouter();
   const { addItem } = useCart();
   const [isHydrated, setIsHydrated] = useState(false);
+
+  const docConfig = documentLibrary.find(d => d.id === 'promissory-note');
+  const docUrlBase = getDocumentUrl(docConfig || { id: 'promissory-note', jurisdiction: 'US' }, locale);
 
   useEffect(() => {
     setIsHydrated(true);
@@ -35,7 +40,7 @@ export default function PromissoryNoteDisplay({ locale }: PromissoryNoteDisplayP
     const priceCents = 500; // Assuming a base price for Promissory Note
     track("add_to_cart", { item_id: "promissory-note", item_name: itemName, value: priceCents / 100, currency: "USD" });
     addItem({ id: "promissory-note", type: "doc", name: itemName, price: priceCents });
-    router.prefetch(`/${locale}/docs/us/promissory-note/start`);
+    router.prefetch(`${docUrlBase}/start`);
   };
 
   const informationalSections = [
@@ -193,9 +198,9 @@ export default function PromissoryNoteDisplay({ locale }: PromissoryNoteDisplayP
             asChild
             size="lg"
             className="bg-primary hover:bg-primary/90 text-primary-foreground"
-            onMouseEnter={() => router.prefetch(`/${locale}/docs/us/promissory-note/start`)}
+            onMouseEnter={() => router.prefetch(`${docUrlBase}/start`)}
           >
-            <Link href={`/${locale}/docs/us/promissory-note/start`} onClick={handleStartProcess} prefetch>
+            <Link href={`${docUrlBase}/start`} onClick={handleStartProcess} prefetch>
               {t('startMyPromissoryNoteButton')}
             </Link>
           </Button>

@@ -3,8 +3,9 @@
 'use client';
 
 import Link from 'next/link';
-import { useRouter } from 'next/navigation'; 
+import { useRouter } from 'next/navigation';
 import type { LegalDocument } from '@/lib/document-library/index';
+import { getDocumentUrl } from '@/lib/document-library/utils';
 // WizardForm and PreviewPane are no longer directly rendered by WizardLayout
 // They are now part of the StartWizardPage structure.
 import React, { useEffect } from 'react'; 
@@ -34,7 +35,7 @@ export default function WizardLayout({ locale, doc, children }: WizardLayoutProp
           {t('Home', { ns: 'translation' })}
         </Link>
         <span>/</span>
-        <Link href={`/${locale}/docs/us/${doc.id}`} className="hover:text-primary transition-colors">
+        <Link href={getDocumentUrl(doc, locale)} className="hover:text-primary transition-colors">
           {documentDisplayName}
         </Link>
         <span>/</span>
