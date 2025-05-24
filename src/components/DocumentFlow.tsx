@@ -54,7 +54,7 @@ export default function DocumentFlow({
     // For a flow embedded on the homepage, this might trigger a modal or summary
     // For the dedicated /start page, WizardLayout's onComplete will handle redirection
     // Redirect to a checkout or review page.
-    router.push(`/${initialLocale}/docs/${templateId}/checkout?data=${encodeURIComponent(JSON.stringify(values))}`); 
+    router.push(`/${initialLocale}/docs/us/${templateId}/checkout?data=${encodeURIComponent(JSON.stringify(values))}`);
   };
 
 

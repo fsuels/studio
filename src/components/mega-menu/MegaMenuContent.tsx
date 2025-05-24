@@ -22,7 +22,7 @@ const MAX_DOCS_PER_CATEGORY_INITIAL = 5;
 const MemoizedDocLink = React.memo(function DocLink({ doc, locale, onClick, t }: { doc: LegalDocument; locale: 'en' | 'es'; onClick?: () => void; t: (key: string, fallback?: string | object) => string; }) {
   const translatedDoc = getDocTranslation(doc, locale); // Use utility
   const docName = translatedDoc.name;
-  const docHref = `/${locale}/docs/${doc.id}`;
+  const docHref = `/${locale}/docs/us/${doc.id}`;
   const router = useRouter();
 
   return (

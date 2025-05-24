@@ -80,7 +80,7 @@ const SearchBar = React.memo(function SearchBar() {
     if (!isHydrated) return;
     setSearchTerm('');
     setShowSuggestions(false);
-    router.push(`/${locale}/docs/${docId}`);
+    router.push(`/${locale}/docs/us/${docId}`);
   };
 
   const placeholderText = isHydrated
@@ -120,7 +120,7 @@ const SearchBar = React.memo(function SearchBar() {
                     <button
                       type="button"
                       onClick={() => handleSuggestionClick(suggestion.id)}
-                      onMouseEnter={() => router.prefetch(`/${locale}/docs/${suggestion.id}`)}
+                      onMouseEnter={() => router.prefetch(`/${locale}/docs/us/${suggestion.id}`)}
                       className="w-full text-left px-3 py-2.5 hover:bg-muted text-sm flex items-center gap-2"
                     >
                       <FileText className="h-4 w-4 shrink-0 text-muted-foreground" />

@@ -34,7 +34,7 @@ export default function WizardLayout({ locale, doc, children }: WizardLayoutProp
           {t('Home', { ns: 'translation' })}
         </Link>
         <span>/</span>
-        <Link href={`/${locale}/docs/${doc.id}`} className="hover:text-primary transition-colors">
+        <Link href={`/${locale}/docs/us/${doc.id}`} className="hover:text-primary transition-colors">
           {documentDisplayName}
         </Link>
         <span>/</span>
