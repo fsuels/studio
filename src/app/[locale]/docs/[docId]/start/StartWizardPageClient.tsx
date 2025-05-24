@@ -3,7 +3,7 @@
 
 import { useParams, notFound, useRouter } from 'next/navigation';
 import React, { useEffect, useState, useCallback, useMemo } from 'react';
-import { FormProvider, useForm } from 'react-hook-form';
+import { FormProvider, useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Loader2, Edit, Eye } from 'lucide-react';
@@ -11,7 +11,16 @@ import { Loader2, Edit, Eye } from 'lucide-react';
 import { documentLibrary, type LegalDocument } from '@/lib/document-library';
 import Breadcrumb from '@/components/Breadcrumb';
 import WizardForm from '@/components/WizardForm';
-import PreviewPane from '@/components/PreviewPane';
+import dynamic from 'next/dynamic';
+
+const DocumentDetail = dynamic(() => import('@/components/DocumentDetail'), {
+  loading: () => (
+    <div className="flex items-center justify-center border rounded-lg bg-muted p-4 aspect-[8.5/11] max-h-[500px] md:max-h-[700px] w-full shadow-lg">
+      <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      <p className="ml-2 text-muted-foreground">Loading preview...</p>
+    </div>
+  ),
+});
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/hooks/useAuth';
 import { loadFormProgress, saveFormProgress } from '@/lib/firestore/saveFormProgress';
@@ -51,6 +60,7 @@ export default function StartWizardPageClient() {
     resolver: docConfig?.schema ? zodResolver(docConfig.schema) : undefined,
   });
   const { reset, watch } = methods;
+  const watchedData = useWatch({ control: methods.control });
 
   useEffect(() => {
     if (!isMounted) {
@@ -216,7 +226,7 @@ export default function StartWizardPageClient() {
                 {t('Live Preview')}
               </h3>
               <div className="flex-grow overflow-hidden rounded-lg shadow-md border border-border bg-card">
-                 <PreviewPane docId={docIdFromPath} locale={locale} />
+                 <DocumentDetail docId={docIdFromPath} locale={locale} liveData={watchedData as Record<string, any>} />
               </div>
             </div>
           </div>
