@@ -12,12 +12,13 @@ import { useTranslation } from 'react-i18next';
 
 interface WizardLayoutProps {
   locale: 'en' | 'es';
-  doc: LegalDocument; 
+  doc: LegalDocument;
+  country?: string;
   // onComplete might be handled by WizardForm directly now
   children: React.ReactNode; // Allow children to be passed for more flexible layout
 }
 
-export default function WizardLayout({ locale, doc, children }: WizardLayoutProps) {
+export default function WizardLayout({ locale, doc, country = 'us', children }: WizardLayoutProps) {
   const router = useRouter();
   const { t } = useTranslation("common"); 
   
@@ -34,7 +35,7 @@ export default function WizardLayout({ locale, doc, children }: WizardLayoutProp
           {t('Home', { ns: 'translation' })}
         </Link>
         <span>/</span>
-        <Link href={`/${locale}/docs/${doc.id}`} className="hover:text-primary transition-colors">
+        <Link href={`/${locale}/docs/${country}/${doc.id}`} className="hover:text-primary transition-colors">
           {documentDisplayName}
         </Link>
         <span>/</span>
