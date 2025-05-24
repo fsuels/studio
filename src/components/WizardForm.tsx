@@ -324,11 +324,17 @@ export default function WizardForm({
   const formContent = currentField
     ? (
         <div className="mt-6 space-y-6 min-h-[200px]">
-          {currentQuestion?.type === 'group' ? (
+          {currentQuestion?.type === 'group-array' ? (
+            <PartyGroupField
+              name={currentQuestion.id as 'sellers' | 'buyers'}
+              locale={locale}
+              itemLabel={currentQuestion.itemLabel}
+            />
+          ) : currentQuestion?.type === 'group' ? (
             currentQuestion.id === 'seller_info' ? (
-              <PartyGroupField role="seller" locale={locale} doc={doc} />
+              <PartyGroupField name="sellers" locale={locale} />
             ) : (
-              <PartyGroupField role="buyer" locale={locale} doc={doc} />
+              <PartyGroupField name="buyers" locale={locale} />
             )
           ) : currentField.id &&
             actualSchemaShape &&

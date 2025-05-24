@@ -183,8 +183,30 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
       </CardHeader>
       <CardContent className="space-y-2">
         {fieldsToReview.map((field) => {
+          if (field.id === 'sellers' || field.id === 'buyers') {
+            const parties = getValues(field.id) || [];
+            const heading = field.id === 'sellers'
+              ? locale === 'es' ? 'Vendedor' : 'Seller'
+              : locale === 'es' ? 'Comprador' : 'Buyer';
+            return (
+              <div key={field.id} className="py-3 border-b border-border last:border-b-0">
+                <h3 className="text-sm font-medium text-muted-foreground mb-2">
+                  {t(field.label, { ns: 'documents', defaultValue: field.label })}
+                </h3>
+                <div className="space-y-2">
+                  {parties.map((p: any, i: number) => (
+                    <div key={i} className="border rounded p-3 bg-muted/40">
+                      <p className="font-semibold mb-1">{heading} {i + 1}</p>
+                      <p><strong>{t('Full Name')}:</strong> {p.name || <em>{t('Not Provided')}</em>}</p>
+                      <p><strong>{t('Address')}:</strong> {p.address || <em>{t('Not Provided')}</em>}</p>
+                      <p><strong>{t('Phone')}:</strong> {p.phone || <em>{t('Not Provided')}</em>}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            );
+          }
           const isCurrentlyEditing = editingFieldId === field.id;
-          // console.log(`[ReviewStep] Rendering field: ${field.id}, isCurrentlyEditing: ${isCurrentlyEditing}`);
           return (
             <div
               key={field.id}
