@@ -10,6 +10,7 @@ import type { CategoryInfo } from '@/components/Step1DocumentSelector';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { FileText } from 'lucide-react';
 import { getDocTranslation } from '@/lib/i18nUtils'; // Import the utility
+import { getDocumentUrl } from '@/lib/document-library/utils';
 
 interface MegaMenuContentProps {
   categories: CategoryInfo[];
@@ -22,7 +23,7 @@ const MAX_DOCS_PER_CATEGORY_INITIAL = 5;
 const MemoizedDocLink = React.memo(function DocLink({ doc, locale, onClick, t }: { doc: LegalDocument; locale: 'en' | 'es'; onClick?: () => void; t: (key: string, fallback?: string | object) => string; }) {
   const translatedDoc = getDocTranslation(doc, locale); // Use utility
   const docName = translatedDoc.name;
-  const docHref = `/${locale}/docs/us/${doc.id}`;
+  const docHref = getDocumentUrl(doc, locale);
   const router = useRouter();
 
   return (
