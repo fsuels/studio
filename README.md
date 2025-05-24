@@ -103,3 +103,32 @@ remains responsive.
 
 Set `NEXT_PUBLIC_INTERCOM_APP_ID` in your environment to enable the Intercom chat widget. The script loads only when the user clicks the chat button in the footer, minimizing third-party impact. Leave this variable unset to disable the widget entirely.
 
+
+## Document Folder Layout
+
+Documents are organized by country under `src/lib/documents/{country}/{docId}`. Each folder contains the document's `metadata.ts`, `schema.ts`, `questions.ts` and an `index.ts` that re‑exports them. Markdown templates now live under `templates/{lang}/{country}/{docId}.md`.
+
+Example:
+
+```
+src/lib/documents/us/promissory-note/metadata.ts
+templates/en/us/promissory-note.md
+```
+
+## Migrating Existing Files
+
+Run `scripts/migrate-doc-structure.ts` to move legacy files to the new layout. Execute it once without flags for a dry run:
+
+```bash
+npx ts-node scripts/migrate-doc-structure.ts
+```
+
+Add `--apply` to perform the moves and automatically update imports. Redirects are written to `config/redirects.json`.
+
+## Running Tests
+
+Use `npm run test` to execute unit tests via Node's built‑in test runner. End‑to‑end tests run with Playwright using `npm run e2e`. Install Playwright browsers first with `npx playwright install`.
+
+## Branch Workflow
+
+Development for the document refactor occurs on the `feat/doc-refactor` branch. Open pull requests against this branch instead of `main`.
