@@ -2,7 +2,7 @@
 'use client';
 
 import { useParams, notFound, useRouter } from 'next/navigation';
-import { getDocumentsForCountry, type LegalDocument } from '@/lib/document-library/index';
+import { getDoc, type LegalDocument } from '@/lib/document-library/index';
 import { useTranslation } from 'react-i18next';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
@@ -66,8 +66,7 @@ export default function DocPageClient({ params: routeParams }: DocPageClientProp
 
   const docConfig = useMemo(() => {
     if (!docId) return undefined;
-    const docs = getDocumentsForCountry(currentCountry);
-    return docs.find(d => d.id === docId);
+    return getDoc(docId, currentCountry);
   }, [docId, currentCountry]);
   
   const [isLoading, setIsLoading] = useState(true);
@@ -90,7 +89,7 @@ export default function DocPageClient({ params: routeParams }: DocPageClientProp
   useEffect(() => {
     if (isHydrated) {
         if (docId) {
-            const foundDoc = getDocumentsForCountry(currentCountry).find(d => d.id === docId);
+            const foundDoc = getDoc(docId, currentCountry);
             if (!foundDoc) {
                 console.error(`[DocPageClient] Doc config not found for ID: ${docId}. Triggering 404.`);
                 notFound();
