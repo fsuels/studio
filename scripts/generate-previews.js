@@ -5,7 +5,7 @@ import puppeteer from 'puppeteer';
 import { marked } from 'marked';
 import Handlebars from 'handlebars';
 
-const templatesDir = path.join(process.cwd(), 'public', 'templates'); // Updated to read from public/templates
+const templatesDir = path.join(process.cwd(), 'templates');
 const outDir       = path.join(process.cwd(), 'public', 'images', 'previews');
 const languages    = ['en','es'];
 

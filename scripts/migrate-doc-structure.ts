@@ -17,6 +17,9 @@ interface RedirectEntry { from: string; to: string; }
 const moves: Move[] = [];
 const redirects: RedirectEntry[] = [];
 
+interface Replacement { old: string; new: string; }
+const replacements: Replacement[] = [];
+
 function sha256(file: string): string {
   const buf = fs.readFileSync(file);
   return crypto.createHash('sha256').update(buf).digest('hex');
@@ -57,10 +60,10 @@ function scanTemplates() {
       const docId = path.basename(docFile, '.md');
       const dest = path.join(NEW_TEMPLATE_ROOT, l, country, `${docId}.md`);
       moves.push({ src: file, dest });
-      redirects.push({
-        from: path.join('public', 'templates', rel).replace(/\\/g, '/'),
-        to: path.join('templates', l, country, `${docId}.md`).replace(/\\/g, '/')
-      });
+      const oldUrl = `/templates/${rel.replace(/\\/g, '/')}`;
+      const newUrl = `/templates/${l}/${country}/${docId}.md`;
+      redirects.push({ from: oldUrl, to: newUrl });
+      replacements.push({ old: oldUrl, new: newUrl });
     });
   }
 }
@@ -98,6 +101,42 @@ function performMoves() {
         process.exit(1);
       }
     }
+  }
+}
+
+function updateTemplateReferences() {
+  if (!isApply || replacements.length === 0) return;
+
+  const exts = new Set(['.ts', '.tsx', '.js', '.mjs', '.json', '.sh']);
+
+  function collect(dir: string, out: string[]) {
+    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+      if (entry.name === 'node_modules' || entry.name === '.git' || entry.name === 'templates') continue;
+      const p = path.join(dir, entry.name);
+      if (entry.isDirectory()) collect(p, out);
+      else if (exts.has(path.extname(p))) out.push(p);
+    }
+  }
+
+  const files: string[] = [];
+  collect(ROOT, files);
+
+  for (const file of files) {
+    let content = fs.readFileSync(file, 'utf8');
+    let changed = false;
+    for (const { old, new: n } of replacements) {
+      if (content.includes(old)) {
+        content = content.split(old).join(n);
+        changed = true;
+      }
+      const oldNoSlash = old.startsWith('/') ? old.slice(1) : old;
+      const newNoSlash = n.startsWith('/') ? n.slice(1) : n;
+      if (content.includes(oldNoSlash)) {
+        content = content.split(oldNoSlash).join(newNoSlash);
+        changed = true;
+      }
+    }
+    if (changed) fs.writeFileSync(file, content);
   }
 }
 
@@ -146,6 +185,7 @@ async function main() {
   scanDocuments();
   scanTemplates();
   performMoves();
+  updateTemplateReferences();
   updateImports();
   writeRedirects();
   if (!isApply) console.log('Dry run complete. Use --apply to make changes.');
