@@ -66,6 +66,10 @@ export default function DocPageClient({ params: routeParams }: DocPageClientProp
     if (!docId) return undefined;
     return documentLibrary.find(d => d.id === docId);
   }, [docId]);
+
+  const country = useMemo(() => {
+    return docConfig?.jurisdiction?.toLowerCase() || 'us';
+  }, [docConfig]);
   
   const [isLoading, setIsLoading] = useState(true);
   const [isHydrated, setIsHydrated] = useState(false);
@@ -238,7 +242,12 @@ export default function DocPageClient({ params: routeParams }: DocPageClientProp
                         {t('docDetail.previewSubtitle', {defaultValue: "This is how your document will generally look. Specific clauses and details will be customized by your answers."})}
                     </p>
                 </div>
-                <DocumentDetail locale={currentLocale as 'en' | 'es'} docId={docId as string} altText={`${documentDisplayName} preview`} />
+                <DocumentDetail
+                  locale={currentLocale as 'en' | 'es'}
+                  docId={docId as string}
+                  country={country}
+                  altText={`${documentDisplayName} preview`}
+                />
                  <p className="text-xs text-muted-foreground mt-2 text-center italic">
                     AI Highlight: <AiHighlightPlaceholder text="Key clauses" /> will be automatically tailored.
                  </p>

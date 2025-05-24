@@ -14,13 +14,15 @@ import { documentLibrary, type LegalDocument } from '@/lib/document-library/inde
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
 import AutoImage from './AutoImage';
+import { getTemplatePath } from '@/lib/templateUtils';
 
 interface PreviewPaneProps {
   locale: 'en' | 'es';
   docId: string;
+  country: string;
 }
 
-export default function PreviewPane({ locale, docId }: PreviewPaneProps) {
+export default function PreviewPane({ locale, docId, country }: PreviewPaneProps) {
   const { t } = useTranslation("common");
   const { watch, getValues } = useFormContext();
 
@@ -35,8 +37,8 @@ export default function PreviewPane({ locale, docId }: PreviewPaneProps) {
 
   const templatePath = useMemo(() => {
     if (!docConfig) return undefined;
-    return `/templates/${locale}/${docId}.md`;
-  }, [docConfig, locale, docId]);
+    return getTemplatePath(docConfig, locale, country);
+  }, [docConfig, locale, country]);
 
   const watermarkText = t('preview.watermark', { ns: 'translation', defaultValue: 'PREVIEW' });
   const imgSrc = `/images/previews/${locale}/${docId}.png`;
@@ -87,7 +89,7 @@ export default function PreviewPane({ locale, docId }: PreviewPaneProps) {
       }
     }
     fetchTemplate();
-  }, [docId, locale, templatePath, docConfig, isHydrated, t]);
+  }, [docId, locale, country, templatePath, docConfig, isHydrated, t]);
 
   const updatePreviewContent = useCallback((formData: Record<string, any>, currentRawMarkdown: string): string => {
     console.log('[PreviewPane] updatePreviewContent called with formData:', JSON.parse(JSON.stringify(formData)), 'Raw markdown length:', currentRawMarkdown.length);

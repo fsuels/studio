@@ -54,6 +54,10 @@ export default function StartWizardPageClient() {
     return documentLibrary.find(d => d.id === docIdFromPath);
   }, [docIdFromPath]);
 
+  const country = useMemo(() => {
+    return docConfig?.jurisdiction?.toLowerCase() || 'us';
+  }, [docConfig]);
+
   const methods = useForm<z.infer<any>>({
     defaultValues: {},
     mode: 'onBlur',
@@ -225,7 +229,7 @@ export default function StartWizardPageClient() {
                 {t('Live Preview')}
               </h3>
               <div className="flex-grow overflow-hidden rounded-lg shadow-md border border-border bg-card">
-                 <PreviewPane docId={docIdFromPath} locale={locale} />
+                 <PreviewPane docId={docIdFromPath} locale={locale} country={country} />
               </div>
             </div>
           </div>
