@@ -171,6 +171,13 @@ export default function WizardForm({
         setShowAuthModal(true);
         return;
       }
+      if (!isFormValid) {
+        toast({
+          title: t("wizard.incompleteFieldsNotice"),
+          variant: "destructive",
+        });
+        return;
+      }
       try {
         const response = await axios.post(
           `/${locale}/api/wizard/${doc.id}/submit`,
@@ -433,11 +440,7 @@ export default function WizardForm({
               type="button"
               onClick={handleNextStep}
               className="bg-primary text-primary-foreground hover:bg-primary/90 min-w-[120px] w-full sm:w-auto"
-              disabled={
-                formIsSubmitting ||
-                authIsLoading ||
-                (isReviewing && !isFormValid && Object.keys(errors).length > 0)
-              }
+              disabled={formIsSubmitting || authIsLoading}
             >
               {formIsSubmitting || authIsLoading ? (
                 <Loader2 className="animate-spin h-5 w-5" />
