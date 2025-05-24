@@ -6,6 +6,7 @@
 import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import Handlebars from 'handlebars';
 import { useFormContext } from 'react-hook-form';
 import { Loader2, AlertTriangle } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
@@ -90,37 +91,28 @@ export default function PreviewPane({ locale, docId }: PreviewPaneProps) {
   }, [docId, locale, templatePath, docConfig, isHydrated, t]);
 
   const updatePreviewContent = useCallback((formData: Record<string, any>, currentRawMarkdown: string): string => {
-    console.log('[PreviewPane] updatePreviewContent called with formData:', JSON.parse(JSON.stringify(formData)), 'Raw markdown length:', currentRawMarkdown.length);
     if (!currentRawMarkdown) {
       return '';
     }
-    let tempMd = currentRawMarkdown;
 
-    for (const key in formData) {
-      if (Array.isArray(formData[key])) continue;
-      const placeholderRegex = new RegExp(`{{\\s*${key.trim()}\\s*}}`, 'g');
-      const value = formData[key];
-      tempMd = tempMd.replace(placeholderRegex, value ? `**${String(value)}**` : '____');
-    }
+    const hb = Handlebars.create();
+    hb.registerHelper('eq', (a: any, b: any) => a === b);
 
-    tempMd = tempMd.replace(/{{#each\s+(\w+)}}([\s\S]*?){{\/each}}/g, (_, arrKey: string, block: string) => {
-      const items = formData[arrKey];
-      console.log(`[PreviewPane] Processing #each for key: ${arrKey}, items:`, JSON.parse(JSON.stringify(items)));
-      if (!Array.isArray(items) || items.length === 0) return '';
-      return items.map((item: any, index: number) => {
-        let seg = block;
-        console.log(`[PreviewPane] #each item ${index} for ${arrKey}:`, JSON.parse(JSON.stringify(item)));
-        seg = seg.replace(/{{\s*this\.(\w+)\s*}}/g, (m, prop) => {
-          const val = item[prop];
-          console.log(`[PreviewPane] #each item ${index} prop ${prop}:`, val);
-          return val ? `**${String(val)}**` : '____';
-        });
-        seg = seg.replace(/{{\s*this\.[^}]+}}/g, '____'); // Clean up other 'this' references
-        return seg;
-      }).join('');
-    });
-    
-    tempMd = tempMd.replace(/\{\{.*?\}\}/g, '____');
+    const formatData = (data: any): any => {
+      if (Array.isArray(data)) return data.map(formatData);
+      if (data && typeof data === 'object') {
+        const obj: any = {};
+        for (const k in data) obj[k] = formatData(data[k]);
+        return obj;
+      }
+      if (data === undefined || data === null || data === '') return '____';
+      return `**${String(data)}**`;
+    };
+
+    const compiled = hb.compile(currentRawMarkdown);
+    let tempMd = compiled(formatData(formData));
+
+    tempMd = tempMd.replace(/\{\{[^}]+\}\}/g, '____');
     
     let titleToUse = docConfig?.translations?.en?.name;
     if (locale === 'es' && docConfig?.translations?.es?.name) {
