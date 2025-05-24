@@ -185,25 +185,16 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
       <CardContent className="space-y-2">
         {fieldsToReview.map((field) => {
           if (field.id === 'sellers' || field.id === 'buyers') {
-            const parties = getValues(field.id) || [];
-            const baseLabel = field.itemLabel || (field.id === 'sellers' ? 'Seller' : 'Buyer');
             return (
-              <div key={field.id} className="py-3 border-b border-border last:border-b-0">
-                <h3 className="text-sm font-medium text-muted-foreground mb-2">
-                  {t(field.label, { ns: 'documents', defaultValue: field.label })}
-                </h3>
-                <div className="space-y-2">
-                  {parties.map((p: any, i: number) => (
-                    <div key={i} className="border rounded p-3 bg-muted/40">
-                      <h4 className="text-sm font-semibold mb-1">
-                        {t(baseLabel, { defaultValue: baseLabel })} {i + 1}
-                      </h4>
-                      <p><strong>{t('Full Name')}:</strong> {p.name || <em>{t('Not Provided')}</em>}</p>
-                      <p><strong>{t('Address')}:</strong> {p.address || <em>{t('Not Provided')}</em>}</p>
-                      <p><strong>{t('Phone')}:</strong> {p.phone || <em>{t('Not Provided')}</em>}</p>
-                    </div>
-                  ))}
-                </div>
+              <div key={field.id} className="space-y-4">
+                <h3 className="text-md font-semibold text-muted-foreground">{field.label}</h3>
+                {getValues(field.id)?.map((entry: any, i: number) => (
+                  <div key={i} className="border rounded p-3 bg-muted/40">
+                    <p><strong>{t('Full Name')}:</strong> {entry.name || <em>{t('Not Provided')}</em>}</p>
+                    <p><strong>{t('Address')}:</strong> {entry.address || <em>{t('Not Provided')}</em>}</p>
+                    <p><strong>{t('Phone')}:</strong> {entry.phone || <em>{t('Not Provided')}</em>}</p>
+                  </div>
+                ))}
               </div>
             );
           }
