@@ -51,13 +51,15 @@ const ensureBasicTranslations = (doc: any): LegalDocument => {
 };
 
 // Dynamically import all document modules under /src/lib/documents
+// Next.js uses webpack, so we use require.context instead of import.meta.glob
 type RegistryDoc = Record<string, LegalDocument>;
-const modules = import.meta.glob<RegistryDoc>('/src/lib/documents/*/*/index.ts', { eager: true });
+const modules = (require as any).context('../documents', true, /index\.ts$/);
 
 export const registry: Record<string, LegalDocument> = {};
 export const documentLibraryByCountry: Record<string, LegalDocument[]> = {};
 
-for (const [path, mod] of Object.entries(modules)) {
+for (const path of modules.keys()) {
+  const mod = modules(path) as RegistryDoc;
   for (const exported of Object.values(mod)) {
     if (exported && typeof exported === 'object') {
       const doc = ensureBasicTranslations(exported);
