@@ -59,8 +59,9 @@ const FieldRenderer = React.memo(function FieldRenderer({ fieldKey, locale, doc 
     placeholder: (fieldSchemaFromZod._def as any)?.placeholder || undefined,
   } : undefined);
 
-  const formStateCode = watch('state'); 
-  const { isRequired: notaryIsRequiredByState } = useNotary(formStateCode);
+  const formStateCode = watch('state');
+  const { isRequired: notaryIsRequiredByState } = useNotary(formStateCode, doc);
+  const witnessRequirement = doc.compliance?.[formStateCode]?.witnessCount ?? doc.compliance?.DEFAULT?.witnessCount;
   
   const { decode, data: vinData, loading: vinLoading, error: vinError } = useVinDecoder();
 
@@ -191,8 +192,21 @@ const FieldRenderer = React.memo(function FieldRenderer({ fieldKey, locale, doc 
                 : t('Add Notarization (Optional)')}
             </Label>
           </div>
-          {notaryIsRequiredByState && <p className="text-xs text-muted-foreground">{t('Notarization is required for {{stateCode}}.', { stateCode: formStateCode })}</p>}
-          {!notaryIsRequiredByState && <p className="text-xs text-muted-foreground">{t('Notarization may incur an additional fee.')}</p>}
+          {notaryIsRequiredByState && (
+            <p className="text-xs text-muted-foreground">
+              {t('Notarization is required for {{stateCode}}.', { stateCode: formStateCode })}
+            </p>
+          )}
+          {!notaryIsRequiredByState && (
+            <p className="text-xs text-muted-foreground">
+              {t('Notarization may incur an additional fee.')}
+            </p>
+          )}
+          {witnessRequirement && witnessRequirement > 0 && (
+            <p className="text-xs text-muted-foreground">
+              {t('Witness count required: {{count}}', { count: witnessRequirement })}
+            </p>
+          )}
           {errors.notarizationPreference && <p className="text-xs text-destructive mt-1">{String(errors.notarizationPreference.message)}</p>}
         </div>
       ) : fieldKey === 'odo_status' && fieldSchema?.type === 'select' && fieldSchema?.options ? (
