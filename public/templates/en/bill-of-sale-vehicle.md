@@ -1,11 +1,17 @@
 # Vehicle Bill of Sale
+**Document ID:** `bill-of-sale-vehicle`
 
 ---
 
 This Vehicle Bill of Sale ("Agreement") is made and entered into on **{{sale_date}}**, by and between:
 
-- **Seller:** {{seller_name}}, of {{seller_address}}
-- **Buyer:**  {{buyer_name}}, of {{buyer_address}}
+{{#each sellers}}
+- **Seller:** {{this.name}}, of {{this.address}}{{#if this.phone}}, Phone: {{this.phone}}{{/if}}
+{{/each}}
+
+{{#each buyers}}
+- **Buyer:** {{this.name}}, of {{this.address}}{{#if this.phone}}, Phone: {{this.phone}}{{/if}}
+{{/each}}
 
 Collectively referred to herein as the “Parties.”
 
@@ -30,12 +36,11 @@ The Seller hereby sells to the Buyer, and the Buyer hereby purchases from the Se
 2. **Payment Method:** {{payment_method}} (e.g., Cash, Check, Wire Transfer).
 3. **Payment Date:** Payment was made in full on **{{sale_date}}**.
 
-## 3. Condition of Vehicle
+## 3. “As-Is” Condition
 
-{{#if as_is}}
 The Buyer acknowledges that the Vehicle is sold **"AS-IS"**, without any warranties or guarantees, express or implied, including but not limited to any implied warranty of merchantability or fitness for a particular purpose.
-{{else}}
-**Limited Warranty.** The Seller warrants the Vehicle under the following terms:
+{{#if warranty_text}}
+**Warranties (if any):**
 {{warranty_text}}
 {{/if}}
 
@@ -52,39 +57,41 @@ The Seller represents and warrants that:
 
 This Agreement shall be governed by and construed in accordance with the laws of the State of **{{state}}**.
 
+{{#if requireNotary}}
+This document must be notarized under the laws of {{state}}.
+{{/if}}
+
+{{#if witnessCount}}
+Number of Witnesses Required: {{witnessCount}}
+{{/if}}
+
 ## 6. Signatures
 
 **IN WITNESS WHEREOF**, the Parties have executed this Agreement as of the date first written above.
 
 | Seller Signature        | Date                 |
 |-------------------------|----------------------|
+{{#each sellers}}
 | ________________________| _____________________|
-| ({{seller_name}})       |                      |
-| {{#if seller_phone}}Phone: {{seller_phone}}{{/if}} | |
-{{#if seller2_name}}
-| ________________________| _____________________|
-| ({{seller2_name}})      |                      |
-| {{#if seller2_phone}}Phone: {{seller2_phone}}{{/if}} | |
-{{/if}}
+| ({{this.name}})       |                      |
+| {{#if this.phone}}Phone: {{this.phone}}{{/if}} | |
+{{/each}}
 
 
 | Buyer Signature         | Date                 |
 |-------------------------|----------------------|
+{{#each buyers}}
 | ________________________| _____________________|
-| ({{buyer_name}})        |                      |
-| {{#if buyer_phone}}Phone: {{buyer_phone}}{{/if}} | |
-{{#if buyer2_name}}
-| ________________________| _____________________|
-| ({{buyer2_name}})       |                      |
-| {{#if buyer2_phone}}Phone: {{buyer2_phone}}{{/if}} | |
-{{/if}}
+| ({{this.name}})        |                      |
+| {{#if this.phone}}Phone: {{this.phone}}{{/if}} | |
+{{/each}}
 
 ### Notary Acknowledgment
 
 State of **{{state}}**
 County of **{{county}}**
 
-On this **____** day of **______________, 20__**, before me, the undersigned, a Notary Public in and for said State, personally appeared **{{seller_name}}** and **{{buyer_name}}**, personally known to me (or proved to me on the basis of satisfactory evidence) to be the persons whose names are subscribed to this Agreement and acknowledged that they executed the same for the purposes therein contained.
+On this **____** day of **______________, 20__**, before me, the undersigned, a Notary Public in and for said State, personally appeared {{#each sellers}}{{this.name}}{{#unless @last}}, {{/unless}}{{/each}} and {{#each buyers}}{{this.name}}{{#unless @last}}, {{/unless}}{{/each}}, personally known to me (or proved to me on the basis of satisfactory evidence) to be the persons whose names are subscribed to this Agreement and acknowledged that they executed the same for the purposes therein contained.
 
 **Notary Public:**   __________________________
 My Commission Expires: ______________
