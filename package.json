@@ -9,7 +9,8 @@
     "start": "NODE_ENV=production node server.mjs",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
-    "test": "node --test tests/prettify.test.js",
+    "test": "node --test",
+    "e2e": "playwright test",
     "gen:previews": "node --experimental-modules scripts/generate-previews.js",
     "extract:i18n": "node_modules/.bin/i18next-parser \"src/**/*.{ts,tsx}\" --config i18next-parser.config.js"
   },
