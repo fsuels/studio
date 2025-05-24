@@ -49,7 +49,7 @@ const TopDocsChips = React.memo(function TopDocsChips() {
   useEffect(() => {
     if (!isHydrated || topDocs.length === 0) return;
     topDocs.forEach(doc => {
-      router.prefetch(`/${locale}/docs/${doc.id}`);
+      router.prefetch(`/${locale}/docs/us/${doc.id}`);
     });
   }, [isHydrated, topDocs, router, locale]);
 
@@ -91,7 +91,7 @@ const TopDocsChips = React.memo(function TopDocsChips() {
             asChild
             className="bg-card hover:bg-muted border-border text-card-foreground hover:text-primary transition-colors shadow-sm px-4 py-2 h-auto text-xs sm:text-sm"
           >
-            <Link href={`/${locale}/docs/${doc.id}`}
+            <Link href={`/${locale}/docs/us/${doc.id}`}
               prefetch
             >
               {React.createElement(FileText, { className: "h-4 w-4 mr-2 text-primary/80 opacity-70" })}

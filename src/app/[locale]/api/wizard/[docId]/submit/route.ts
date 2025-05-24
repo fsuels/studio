@@ -138,7 +138,7 @@ export async function POST(
           },
         ],
         success_url: `${siteUrl}/${effectiveLocale}/dashboard?checkout_success=true&session_id={CHECKOUT_SESSION_ID}&doc_instance_id=${documentInstanceId}`,
-        cancel_url: `${siteUrl}/${effectiveLocale}/docs/${params.docId}/start?checkout_cancelled=true`,
+        cancel_url: `${siteUrl}/${effectiveLocale}/docs/us/${params.docId}/start?checkout_cancelled=true`,
         metadata: {
           userId: user.uid,
           docId: params.docId,
