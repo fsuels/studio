@@ -78,7 +78,7 @@ export type LegalDocument = {
   requiresNotarizationStates?: string[]; // Specific states within its jurisdiction
   compliance?: Record<string, ComplianceRule>; // e.g., { CA: { requireNotary: true } }
 
-  // Template paths (relative to /public folder)
+  // Template paths (relative to project root)
   // Prefer templatePaths over individual templatePath/templatePath_es for multi-language
   templatePaths?: {
     [lang: string]: string; // e.g., { en: '/templates/en/my-doc.md', es: '/templates/es/my-doc.md' }

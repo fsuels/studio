@@ -10,8 +10,8 @@ DOC="$1"                           # e.g. "promissory-note"
 ROOT="$(pwd)"
 
 # ─── The 8 files we expect ────────────────────────────────────────
-T_EN="$ROOT/public/templates/en/${DOC}.md"
-T_ES="$ROOT/public/templates/es/${DOC}.md"
+T_EN="$ROOT/templates/en/us/${DOC}.md"
+T_ES="$ROOT/templates/es/us/${DOC}.md"
 I18N_EN="$ROOT/public/locales/en/documents/${DOC}.json"
 I18N_ES="$ROOT/public/locales/es/documents/${DOC}.json"
 SCHEMA="$ROOT/src/lib/documents/us/${DOC}/schema.ts"

@@ -10,8 +10,8 @@ DOC="$1"
 ROOT="$(pwd)"
 
 # 1️⃣ The two Markdown templates (you’ll rename .md → .tpl if you prefer)
-T_EN="$ROOT/public/templates/en/${DOC}.md"
-T_ES="$ROOT/public/templates/es/${DOC}.md"
+T_EN="$ROOT/templates/en/us/${DOC}.md"
+T_ES="$ROOT/templates/es/us/${DOC}.md"
 
 # 2️⃣ The two i18n JSON files
 I18N_EN="$ROOT/public/locales/en/documents/${DOC}.json"
