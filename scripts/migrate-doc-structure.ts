@@ -1,153 +1,157 @@
+import fs from 'fs';
+import path from 'path';
+import crypto from 'crypto';
+import { Project } from 'ts-morph';
 
-import * as fs from 'fs';
-import * as path from 'path';
-import * as crypto from 'crypto';
+const ROOT = process.cwd();
+const DOC_ROOT = path.join(ROOT, 'src', 'lib', 'documents');
+const TEMPLATE_ROOT = path.join(ROOT, 'public', 'templates');
+const NEW_TEMPLATE_ROOT = path.join(ROOT, 'templates');
+const REDIRECTS_PATH = path.join(ROOT, 'config', 'redirects.json');
 
-const ROOT_DIR = process.cwd();
-const SRC_LIB_DOCUMENTS_DIR = path.join(ROOT_DIR, 'src', 'lib', 'documents');
+const isApply = process.argv.includes('--apply');
 
-interface DocumentToMigrate {
-  docId: string;
-  oldPathRoot?: string; // Base path where old files might be (e.g., 'src/lib/documents')
-  oldFiles?: { // More specific paths if not simply {oldPathRoot}/{fileType}
-    metadata?: string;
-    questions?: string;
-    schema?: string;
-    index?: string; // Barrel file for the doc
-  };
-  targetCountry: string;
+interface Move { src: string; dest: string; }
+interface RedirectEntry { from: string; to: string; }
+
+const moves: Move[] = [];
+const redirects: RedirectEntry[] = [];
+
+function sha256(file: string): string {
+  const buf = fs.readFileSync(file);
+  return crypto.createHash('sha256').update(buf).digest('hex');
 }
 
-// --- Configuration: Define documents to migrate/verify ---
-// For existing documents already in the new structure, this script will effectively verify them.
-// For documents in older/flatter structures, specify their old paths.
-const DOCUMENTS_TO_PROCESS: DocumentToMigrate[] = [
-  {
-    docId: 'bill-of-sale-vehicle',
-    oldPathRoot: path.join(SRC_LIB_DOCUMENTS_DIR, 'us', 'vehicle-bill-of-sale'), // Current location
-    targetCountry: 'us',
-  },
-  {
-    docId: 'promissory-note',
-    oldPathRoot: path.join(SRC_LIB_DOCUMENTS_DIR, 'us', 'promissory-note'), // Current location
-    targetCountry: 'us',
-  },
-  {
-    docId: 'lease-agreement', // Example: if it was at src/lib/documents/lease-agreement.ts
-    oldFiles: {
-      metadata: path.join(SRC_LIB_DOCUMENTS_DIR, 'lease-agreement.ts'), // Assuming metadata was the main file
-    },
-    targetCountry: 'us',
-  },
-  {
-    docId: 'invoice', // Example: if it was at src/lib/documents/invoice.ts
-    oldFiles: {
-      metadata: path.join(SRC_LIB_DOCUMENTS_DIR, 'invoice.ts'), // Assuming metadata was the main file
-    },
-    targetCountry: 'us',
-  },
-  {
-    docId: 'promissory-note-ca', // Canadian promissory note
-    oldPathRoot: path.join(SRC_LIB_DOCUMENTS_DIR, 'ca', 'promissory-note'), // Current location
-    targetCountry: 'ca',
+function ensureDir(dir: string) {
+  fs.mkdirSync(dir, { recursive: true });
+}
+
+function walk(dir: string, fn: (p: string) => void) {
+  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+    const p = path.join(dir, entry.name);
+    if (entry.isDirectory()) walk(p, fn); else fn(p);
   }
-  // Add other documents here
-];
-
-const FILE_TYPES_TO_PROCESS = ['metadata.ts', 'questions.ts', 'schema.ts', 'index.ts'];
-
-function calculateHash(filePath: string): string | null {
-  if (!fs.existsSync(filePath)) return null;
-  const fileBuffer = fs.readFileSync(filePath);
-  const hashSum = crypto.createHash('sha256');
-  hashSum.update(fileBuffer);
-  return hashSum.digest('hex');
 }
 
-function ensureDirectoryExistence(filePath: string) {
-  const dirname = path.dirname(filePath);
-  if (fs.existsSync(dirname)) {
-    return true;
-  }
-  ensureDirectoryExistence(dirname);
-  fs.mkdirSync(dirname);
-}
-
-async function migrateDocuments() {
-  console.log('Starting document structure migration...\n');
-
-  for (const doc of DOCUMENTS_TO_PROCESS) {
-    console.log(`Processing document: ${doc.docId} for country: ${doc.targetCountry}`);
-    const newDocDir = path.join(SRC_LIB_DOCUMENTS_DIR, doc.targetCountry, doc.docId);
-
-    if (!fs.existsSync(newDocDir)) {
-      fs.mkdirSync(newDocDir, { recursive: true });
-      console.log(`  Created directory: ${newDocDir}`);
-    } else {
-      console.log(`  Directory already exists: ${newDocDir}`);
-    }
-
-    for (const fileType of FILE_TYPES_TO_PROCESS) {
-      const newFilePath = path.join(newDocDir, fileType);
-      let oldFilePath: string | undefined = undefined;
-      let oldFileSourceDescription: string = '';
-
-      if (doc.oldFiles && doc.oldFiles[fileType.replace('.ts', '') as keyof DocumentToMigrate['oldFiles']]) {
-        oldFilePath = doc.oldFiles[fileType.replace('.ts', '') as keyof DocumentToMigrate['oldFiles']];
-        oldFileSourceDescription = `specified old path ${oldFilePath}`;
-      } else if (doc.oldPathRoot) {
-        // Try direct file in oldPathRoot (e.g. oldPathRoot/metadata.ts for lease-agreement.ts)
-        // Or, try docId-suffixed name if that was the old pattern (e.g. oldPathRoot/invoice-metadata.ts)
-        // Or, try within a docId subfolder of oldPathRoot (e.g. oldPathRoot/invoice/metadata.ts)
-        const potentialOldPaths = [
-          path.join(doc.oldPathRoot, fileType), // e.g., src/lib/documents/us/vehicle-bill-of-sale/metadata.ts
-          path.join(doc.oldPathRoot, `${doc.docId}-${fileType}`), // Less likely given current structure
-        ];
-        if (doc.oldPathRoot.endsWith(doc.docId)) { // Handles cases like oldPathRoot = '.../us/vehicle-bill-of-sale'
-           potentialOldPaths.unshift(path.join(doc.oldPathRoot, fileType));
-        } else { // Handles cases like oldPathRoot = 'src/lib/documents' for a file named 'lease-agreement.ts'
-          if (fileType === 'metadata.ts') { // Assume the main file IS the metadata
-            potentialOldPaths.unshift(doc.oldPathRoot.endsWith('.ts') ? doc.oldPathRoot : `${doc.oldPathRoot}.ts`);
-          }
-        }
-
-
-        oldFilePath = potentialOldPaths.find(p => fs.existsSync(p));
-        if (oldFilePath) {
-          oldFileSourceDescription = `detected old path ${oldFilePath}`;
-        } else {
-           oldFileSourceDescription = `various potential old paths (none found)`;
-        }
-      }
-
-
-      if (oldFilePath && fs.existsSync(oldFilePath) && oldFilePath !== newFilePath) {
-        const oldHash = calculateHash(oldFilePath);
-        console.log(`  Attempting to move ${oldFilePath} to ${newFilePath}`);
-        ensureDirectoryExistence(newFilePath); // Ensure parent directory of newFilePath exists
-        try {
-          fs.renameSync(oldFilePath, newFilePath);
-          const newHash = calculateHash(newFilePath);
-          if (oldHash === newHash) {
-            console.log(`    ✅ Moved ${fileType}. Old SHA256: ${oldHash ? oldHash.substring(0,7) : 'N/A'}. New SHA256: ${newHash ? newHash.substring(0,7) : 'N/A'}.`);
-          } else {
-            console.error(`    ❌ ERROR: Hash mismatch for ${fileType} after moving. Aborting for this file.`);
-            // Optionally, move back: fs.renameSync(newFilePath, oldFilePath);
-          }
-        } catch (moveError) {
-          console.error(`    ❌ ERROR: Could not move ${oldFilePath} to ${newFilePath}:`, moveError);
-        }
-      } else if (fs.existsSync(newFilePath)) {
-        const hash = calculateHash(newFilePath);
-        console.log(`    ℹ️ ${fileType} already exists at ${newFilePath}. SHA256: ${hash ? hash.substring(0,7) : 'N/A'}.`);
+function scanTemplates() {
+  if (!fs.existsSync(TEMPLATE_ROOT)) return;
+  const langs = fs.readdirSync(TEMPLATE_ROOT);
+  for (const lang of langs) {
+    const langDir = path.join(TEMPLATE_ROOT, lang);
+    if (!fs.statSync(langDir).isDirectory()) continue;
+    walk(langDir, file => {
+      if (!file.endsWith('.md')) return;
+      const rel = path.relative(TEMPLATE_ROOT, file);
+      const parts = rel.split(path.sep);
+      const l = parts[0];
+      let country = 'us';
+      let docFile = '';
+      if (parts.length === 3) {
+        country = parts[1];
+        docFile = parts[2];
+      } else if (parts.length === 2) {
+        docFile = parts[1];
       } else {
-        fs.writeFileSync(newFilePath, `// TODO: Implement ${doc.docId}/${fileType}\n// Source: Could not find at ${oldFileSourceDescription}\n\nexport {};\n`);
-        console.log(`    📝 Created stub for ${fileType} at ${newFilePath} (source not found at ${oldFileSourceDescription}).`);
+        return;
       }
-    }
-    console.log(`  Finished processing ${doc.docId}.\n`);
+      const docId = path.basename(docFile, '.md');
+      const dest = path.join(NEW_TEMPLATE_ROOT, l, country, `${docId}.md`);
+      moves.push({ src: file, dest });
+      redirects.push({
+        from: path.join('public', 'templates', rel).replace(/\\/g, '/'),
+        to: path.join('templates', l, country, `${docId}.md`).replace(/\\/g, '/')
+      });
+    });
   }
-  console.log('Document structure migration/verification complete.');
 }
 
-migrateDocuments().catch(console.error);
+function scanDocuments() {
+  if (!fs.existsSync(DOC_ROOT)) return;
+  walk(DOC_ROOT, file => {
+    if (!file.endsWith('.ts')) return;
+    const rel = path.relative(DOC_ROOT, file);
+    const parts = rel.split(path.sep);
+    if (parts.length === 1) {
+      const docId = path.basename(file, '.ts');
+      const dest = path.join(DOC_ROOT, 'us', docId, 'metadata.ts');
+      moves.push({ src: file, dest });
+    } else if (parts.length === 2 && parts[1].endsWith('.ts')) {
+      const country = parts[0];
+      const docId = path.basename(parts[1], '.ts');
+      const dest = path.join(DOC_ROOT, country, docId, 'metadata.ts');
+      moves.push({ src: file, dest });
+    }
+  });
+}
+
+function performMoves() {
+  for (const m of moves) {
+    if (!fs.existsSync(m.src)) continue;
+    const srcHash = sha256(m.src);
+    console.log(`${isApply ? 'Moving' : 'Would move'} ${m.src} -> ${m.dest}`);
+    if (isApply) {
+      ensureDir(path.dirname(m.dest));
+      fs.renameSync(m.src, m.dest);
+      const destHash = sha256(m.dest);
+      if (srcHash !== destHash) {
+        console.error(`Hash mismatch for ${m.src}`);
+        process.exit(1);
+      }
+    }
+  }
+}
+
+function updateImports() {
+  const map = new Map<string, string>();
+  for (const m of moves) {
+    if (m.src.endsWith('.ts')) {
+      const oldRel = path.relative(ROOT, m.src).replace(/\.ts$/, '').replace(/\\/g, '/');
+      const newRel = path.relative(ROOT, m.dest).replace(/\.ts$/, '').replace(/\\/g, '/');
+      map.set(oldRel, newRel);
+    }
+  }
+  if (!isApply || map.size === 0) return;
+  const project = new Project({ tsConfigFilePath: path.join(ROOT, 'tsconfig.json') });
+  for (const sf of project.getSourceFiles()) {
+    let changed = false;
+    for (const imp of sf.getImportDeclarations()) {
+      const spec = imp.getModuleSpecifierValue();
+      for (const [oldP, newP] of map.entries()) {
+        if (spec === oldP || spec.endsWith(oldP)) {
+          imp.setModuleSpecifier(spec.replace(oldP, newP));
+          changed = true;
+        } else if (spec.startsWith('@/') && spec.slice(2).includes(oldP.replace(/^src\//, ''))) {
+          const replaced = spec.slice(2).replace(oldP.replace(/^src\//, ''), newP.replace(/^src\//, ''));
+          imp.setModuleSpecifier('@/' + replaced);
+          changed = true;
+        }
+      }
+    }
+    if (changed) sf.saveSync();
+  }
+}
+
+function writeRedirects() {
+  if (!isApply || redirects.length === 0) return;
+  ensureDir(path.dirname(REDIRECTS_PATH));
+  let data: RedirectEntry[] = [];
+  if (fs.existsSync(REDIRECTS_PATH)) {
+    data = JSON.parse(fs.readFileSync(REDIRECTS_PATH, 'utf8'));
+  }
+  data.push(...redirects);
+  fs.writeFileSync(REDIRECTS_PATH, JSON.stringify(data, null, 2));
+}
+
+async function main() {
+  scanDocuments();
+  scanTemplates();
+  performMoves();
+  updateImports();
+  writeRedirects();
+  if (!isApply) console.log('Dry run complete. Use --apply to make changes.');
+}
+
+main().catch(err => {
+  console.error(err);
+  process.exit(1);
+});
