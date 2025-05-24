@@ -89,11 +89,31 @@ export default function PreviewPane({ locale, docId }: PreviewPaneProps) {
       return '';
     }
     let tempMd = currentRawMarkdown;
+
+    // Handle simple {{key}} replacements
     for (const key in formData) {
+      if (Array.isArray(formData[key])) continue;
       const placeholderRegex = new RegExp(`{{\\s*${key.trim()}\\s*}}`, 'g');
       const value = formData[key];
       tempMd = tempMd.replace(placeholderRegex, value ? `**${String(value)}**` : '____');
     }
+
+    // Handle {{#each array}}...{{/each}} blocks
+    tempMd = tempMd.replace(/{{#each\s+(\w+)}}([\s\S]*?){{\/each}}/g, (_, arrKey: string, block: string) => {
+      const items = formData[arrKey];
+      if (!Array.isArray(items) || items.length === 0) return '';
+      return items.map((item: any) => {
+        let seg = block;
+        seg = seg.replace(/{{\s*this\.(\w+)\s*}}/g, (m, prop) => {
+          const val = item[prop];
+          return val ? `**${String(val)}**` : '____';
+        });
+        seg = seg.replace(/{{\s*this\.[^}]+}}/g, '____');
+        return seg;
+      }).join('');
+    });
+
+    // Replace any remaining placeholders with blanks
     tempMd = tempMd.replace(/\{\{.*?\}\}/g, '____');
     
     let titleToUse = docConfig?.translations?.en?.name; // Default to English name
