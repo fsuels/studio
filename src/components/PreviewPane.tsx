@@ -88,7 +88,7 @@ export default function PreviewPane({ locale, docId }: PreviewPaneProps) {
       }
     }
     fetchTemplate();
-  }, [docId, locale, templatePath, docConfig, isHydrated, t, watch]);
+  }, [docId, locale, templatePath, docConfig, isHydrated, t]);
 
   const updatePreviewContent = useCallback((formData: Record<string, any>, currentRawMarkdown: string): string => {
     console.log('[PreviewPane] updatePreviewContent called with formData:', JSON.parse(JSON.stringify(formData)), 'Raw markdown length:', currentRawMarkdown.length);
