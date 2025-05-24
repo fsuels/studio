@@ -8,7 +8,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Loader2, Edit, Eye } from 'lucide-react';
 
-import { getDocumentsForCountry, getDoc, type LegalDocument } from '@/lib/document-library/index';
+import { getDocumentsForCountry, loadDoc, type LegalDocument } from '@/lib/document-library/index';
 import Breadcrumb from '@/components/Breadcrumb';
 import WizardForm from '@/components/WizardForm';
 import dynamic from 'next/dynamic';
@@ -50,9 +50,14 @@ export default function StartWizardPageClient() {
     setIsHydrated(true); // Keep for consistency if other logic depends on it
   }, []);
 
-  const docConfig = useMemo(() => {
-    if (!docIdFromPath) return undefined;
-    return getDoc(docIdFromPath, country);
+  const [docConfig, setDocConfig] = useState<LegalDocument | undefined>(undefined);
+
+  useEffect(() => {
+    if (!docIdFromPath) {
+      setDocConfig(undefined);
+      return;
+    }
+    loadDoc(docIdFromPath, country).then(setDocConfig);
   }, [docIdFromPath, country]);
 
   const methods = useForm<z.infer<any>>({
