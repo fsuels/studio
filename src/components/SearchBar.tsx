@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Search, FileText, ExternalLink } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useRouter, useParams } from 'next/navigation';
-import { documentLibrary, type LegalDocument } from '@/lib/document-library';
+import { documentLibrary, type LegalDocument } from '@/lib/document-library/index';
 import { getDocTranslation } from '@/lib/i18nUtils';
 
 const SearchBar = React.memo(function SearchBar() {

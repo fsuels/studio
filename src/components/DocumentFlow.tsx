@@ -10,7 +10,7 @@ import { StepTwoInput } from '@/components/StepTwoInput'; // This might be repla
 import { StepThreeInput } from '@/components/StepThreeInput'; // This might be replaced or refactored
 import { useRouter } from 'next/navigation'; 
 import { useTranslation } from 'react-i18next'; 
-import { documentLibrary } from '@/lib/document-library'; // Import documentLibrary
+import { documentLibrary } from '@/lib/document-library/index'; // Import documentLibrary
 
 interface DocumentFlowProps {
   initialDocId?: string;

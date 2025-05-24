@@ -3,8 +3,8 @@
 
 import React, { useMemo, useState, useCallback, useEffect } from 'react';
 import { useFormContext, Controller } from 'react-hook-form';
-import type { LegalDocument, Question } from '@/lib/document-library';
-import { usStates } from '@/lib/document-library';
+import type { LegalDocument, Question } from '@/lib/document-library/index';
+import { usStates } from '@/lib/document-library/index';
 import { prettify } from '@/lib/schema-utils';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';

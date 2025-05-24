@@ -2,7 +2,7 @@
 // This is a Server Component that defines static paths and renders the client component.
 
 import DocPageClient from './DocPageClient';
-import { documentLibrary } from '@/lib/document-library';
+import { documentLibrary } from '@/lib/document-library/index';
 import { localizations } from '@/lib/localizations'; // Ensure this path is correct
 
 // Revalidate this page every hour for fresh content while caching aggressively
