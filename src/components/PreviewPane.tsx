@@ -7,7 +7,6 @@ import remarkGfm from 'remark-gfm';
 import { useFormContext } from 'react-hook-form';
 import { Loader2, AlertTriangle } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { debounce } from 'lodash-es';
 import { documentLibrary, type LegalDocument } from '@/lib/document-library';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
@@ -85,6 +84,7 @@ export default function PreviewPane({ locale, docId }: PreviewPaneProps) {
   }, [docId, locale, templatePath, docConfig, isHydrated, t]);
 
   const updatePreviewContent = useCallback((formData: Record<string, any>, currentRawMarkdown: string) => {
+    console.log('[PreviewPane] updatePreviewContent called with formData:', formData, 'and raw markdown length:', currentRawMarkdown.length);
     if (!currentRawMarkdown) {
       return '';
     }
@@ -101,6 +101,7 @@ export default function PreviewPane({ locale, docId }: PreviewPaneProps) {
     // Handle {{#each array}}...{{/each}} blocks
     tempMd = tempMd.replace(/{{#each\s+(\w+)}}([\s\S]*?){{\/each}}/g, (_, arrKey: string, block: string) => {
       const items = formData[arrKey];
+      console.log('[PreviewPane] Processing #each for key:', arrKey, 'items:', items);
       if (!Array.isArray(items) || items.length === 0) return '';
       return items.map((item: any) => {
         let seg = block;
@@ -130,10 +131,12 @@ export default function PreviewPane({ locale, docId }: PreviewPaneProps) {
     return tempMd;
   }, [docConfig, locale]);
 
-  const debouncedUpdatePreview = useMemo(
-    () => debounce((formData: Record<string, any>, currentRawMarkdown: string) => {
+  // Temporarily remove debounce for debugging so updates happen immediately
+  // This makes it easier to see form changes reflected in the preview
+  const immediateUpdatePreview = useCallback(
+    (formData: Record<string, any>, currentRawMarkdown: string) => {
       setProcessedMarkdown(updatePreviewContent(formData, currentRawMarkdown));
-    }, 300),
+    },
     [updatePreviewContent]
   );
 
@@ -142,17 +145,17 @@ export default function PreviewPane({ locale, docId }: PreviewPaneProps) {
       if (rawMarkdown && !isLoading) setProcessedMarkdown(updatePreviewContent({}, rawMarkdown));
       return;
     }
-    
-    debouncedUpdatePreview(watch(), rawMarkdown);
-    const subscription = watch((formData) => {
-      debouncedUpdatePreview(formData as Record<string, any>, rawMarkdown);
+
+    immediateUpdatePreview(watch(), rawMarkdown);
+    const subscription = watch((formData, { name, type }) => {
+      console.log(`[PreviewPane] Form data changed via watch subscription. Field: ${name}, Type: ${type}, Full data:`, formData);
+      immediateUpdatePreview(formData as Record<string, any>, rawMarkdown);
     });
     return () => {
       subscription.unsubscribe();
-      debouncedUpdatePreview.cancel();
     };
-    
-  }, [watch, rawMarkdown, isLoading, isHydrated, debouncedUpdatePreview, updatePreviewContent]);
+
+  }, [watch, rawMarkdown, isLoading, isHydrated, immediateUpdatePreview, updatePreviewContent]);
 
 
   if (!isHydrated) {
