@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useFieldArray, useFormContext } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { Plus, Trash2 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -11,11 +12,19 @@ interface PartyGroupFieldProps {
   name: 'sellers' | 'buyers';
   locale: 'en' | 'es';
   max?: number;
+  itemLabel?: string;
 }
 
-export default function PartyGroupField({ name, locale, max = 3 }: PartyGroupFieldProps) {
+export default function PartyGroupField({ name, locale, max = 3, itemLabel }: PartyGroupFieldProps) {
+  const { t } = useTranslation('common');
   const { control, register, formState: { errors } } = useFormContext();
   const { fields, append, remove } = useFieldArray({ control, name });
+
+  useEffect(() => {
+    if (fields.length === 0) {
+      append({ name: '', address: '', phone: '' });
+    }
+  }, [fields, append]);
 
   return (
     <div className="space-y-6">
@@ -24,6 +33,9 @@ export default function PartyGroupField({ name, locale, max = 3 }: PartyGroupFie
         return (
           <Card key={field.id} className="bg-muted/30 border border-muted-foreground/20">
             <CardContent className="grid grid-cols-1 gap-4 p-4">
+              <h4 className="text-sm font-semibold">
+                {t(itemLabel || (name === 'sellers' ? 'Seller' : 'Buyer'), { defaultValue: itemLabel || (name === 'sellers' ? 'Seller' : 'Buyer') })} {index + 1}
+              </h4>
               <div>
                 <Label htmlFor={`${prefix}.name`} className="text-sm font-medium">
                   {locale === 'es' ? 'Nombre completo' : 'Full Name'}
@@ -87,7 +99,10 @@ export default function PartyGroupField({ name, locale, max = 3 }: PartyGroupFie
 
       {fields.length < max && (
         <Button type="button" variant="outline" size="sm" onClick={() => append({ name: '', address: '', phone: '' })} className="text-sm">
-          <Plus className="h-4 w-4 mr-1" /> {locale === 'es' ? 'Agregar otro' : 'Add another'}
+          <Plus className="h-4 w-4 mr-1" />
+          {locale === 'es'
+            ? `Agregar otro ${name === 'sellers' ? 'vendedor' : 'comprador'}`
+            : `Add Another ${t(itemLabel || (name === 'sellers' ? 'Seller' : 'Buyer'), { defaultValue: itemLabel || (name === 'sellers' ? 'Seller' : 'Buyer') })}`}
         </Button>
       )}
     </div>

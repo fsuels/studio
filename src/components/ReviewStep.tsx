@@ -118,7 +118,8 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
         const tooltip = questionConfig?.tooltip || (schemaFieldDef as any)?.tooltip;
         const required = questionConfig?.required ?? (schemaFieldDef?.typeName !== 'ZodOptional' && schemaFieldDef?.innerType?._def?.typeName !== 'ZodOptional');
 
-        return { id: fieldId, label, type: fieldType, options, required, placeholder, tooltip };
+        const itemLabel = questionConfig?.itemLabel;
+        return { id: fieldId, label, type: fieldType, options, required, placeholder, tooltip, itemLabel };
       });
   }, [doc, actualSchemaShape, getValues, t, watchedValues]); // watchedValues dependency
 
@@ -185,6 +186,7 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
         {fieldsToReview.map((field) => {
           if (field.id === 'sellers' || field.id === 'buyers') {
             const parties = getValues(field.id) || [];
+            const baseLabel = field.itemLabel || (field.id === 'sellers' ? 'Seller' : 'Buyer');
             return (
               <div key={field.id} className="py-3 border-b border-border last:border-b-0">
                 <h3 className="text-sm font-medium text-muted-foreground mb-2">
@@ -193,6 +195,9 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
                 <div className="space-y-2">
                   {parties.map((p: any, i: number) => (
                     <div key={i} className="border rounded p-3 bg-muted/40">
+                      <h4 className="text-sm font-semibold mb-1">
+                        {t(baseLabel, { defaultValue: baseLabel })} {i + 1}
+                      </h4>
                       <p><strong>{t('Full Name')}:</strong> {p.name || <em>{t('Not Provided')}</em>}</p>
                       <p><strong>{t('Address')}:</strong> {p.address || <em>{t('Not Provided')}</em>}</p>
                       <p><strong>{t('Phone')}:</strong> {p.phone || <em>{t('Not Provided')}</em>}</p>
