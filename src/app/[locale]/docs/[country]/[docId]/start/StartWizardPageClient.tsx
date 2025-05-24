@@ -1,4 +1,4 @@
-// src/app/[locale]/docs/[docId]/start/StartWizardPageClient.tsx
+// src/app/[locale]/docs/[country]/[docId]/start/StartWizardPageClient.tsx
 'use client';
 
 import { useParams, notFound, useRouter } from 'next/navigation';
@@ -8,7 +8,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Loader2, Edit, Eye } from 'lucide-react';
 
-import { documentLibrary, type LegalDocument } from '@/lib/document-library/index';
+import { getDocumentsForCountry, type LegalDocument } from '@/lib/document-library/index';
 import Breadcrumb from '@/components/Breadcrumb';
 import WizardForm from '@/components/WizardForm';
 import dynamic from 'next/dynamic';
@@ -37,6 +37,7 @@ export default function StartWizardPageClient() {
   const { isLoggedIn, user, isLoading: authIsLoading } = useAuth();
 
   const locale = (Array.isArray(params!.locale) ? params!.locale[0] : params!.locale) as 'en' | 'es';
+  const country = Array.isArray(params!.country) ? params!.country[0] : params!.country as string;
   const docIdFromPath = (Array.isArray(params!.docId) ? params!.docId[0] : params!.docId) as string;
 
   const [isMounted, setIsMounted] = useState(false); // <-- New state for mounted status
@@ -51,8 +52,9 @@ export default function StartWizardPageClient() {
 
   const docConfig = useMemo(() => {
     if (!docIdFromPath) return undefined;
-    return documentLibrary.find(d => d.id === docIdFromPath);
-  }, [docIdFromPath]);
+    const docs = getDocumentsForCountry(country);
+    return docs.find(d => d.id === docIdFromPath);
+  }, [docIdFromPath, country]);
 
   const methods = useForm<z.infer<any>>({
     defaultValues: {},
@@ -190,7 +192,7 @@ export default function StartWizardPageClient() {
          <Breadcrumb
           items={[
             { label: t('breadcrumb.home'), href: `/${locale}` },
-            { label: documentDisplayName, href: `/${locale}/docs/${docConfig!.id}` },
+            { label: documentDisplayName, href: `/${locale}/docs/${country}/${docConfig!.id}` },
             { label: t('breadcrumb.start') },
           ]}
         />

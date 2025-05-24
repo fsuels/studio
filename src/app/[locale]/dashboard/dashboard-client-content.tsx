@@ -147,7 +147,7 @@ export default function DashboardClientContent({ locale }: DashboardClientConten
                 <CardHeader className="flex flex-row items-center justify-between pb-2">
                   <CardTitle className="text-md font-medium text-card-foreground">{t(doc.name, doc.name)}</CardTitle>
                   <Button variant="outline" size="sm" asChild>
-                    <Link href={`/${locale}/docs/${doc.docType || doc.id}/start`}>{t('View/Edit')}</Link>
+                    <Link href={`/${locale}/docs/us/${doc.docType || doc.id}/start`}>{t('View/Edit')}</Link>
                   </Button>
                 </CardHeader>
                 <CardContent>

@@ -1,8 +1,8 @@
-// src/app/[locale]/docs/[docId]/DocPageClient.tsx
+// src/app/[locale]/docs/[country]/[docId]/DocPageClient.tsx
 'use client';
 
 import { useParams, notFound, useRouter } from 'next/navigation';
-import { documentLibrary, type LegalDocument } from '@/lib/document-library/index';
+import { getDocumentsForCountry, type LegalDocument } from '@/lib/document-library/index';
 import { useTranslation } from 'react-i18next';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
@@ -42,6 +42,7 @@ const DocumentDetail = dynamic(() => import('@/components/DocumentDetail'), {
 interface DocPageClientProps {
   params: {
     locale: string;
+    country: string;
     docId: string;
   };
 }
@@ -60,12 +61,14 @@ export default function DocPageClient({ params: routeParams }: DocPageClientProp
   const router = useRouter();
 
   const currentLocale = (Array.isArray(params!.locale) ? params!.locale[0] : params!.locale) as 'en' | 'es' | undefined;
+  const country = Array.isArray(params!.country) ? params!.country[0] : params!.country as string | undefined;
   const docId = Array.isArray(params!.docId) ? params!.docId[0] : params!.docId as string | undefined;
 
   const docConfig = useMemo(() => {
     if (!docId) return undefined;
-    return documentLibrary.find(d => d.id === docId);
-  }, [docId]);
+    const docs = getDocumentsForCountry(country);
+    return docs.find(d => d.id === docId);
+  }, [docId, country]);
   
   const [isLoading, setIsLoading] = useState(true);
   const [isHydrated, setIsHydrated] = useState(false);
@@ -79,15 +82,15 @@ export default function DocPageClient({ params: routeParams }: DocPageClientProp
     if (typeof (DocumentDetail as any).preload === 'function') {
       (DocumentDetail as any).preload();
     }
-    if (docId && currentLocale) {
-      router.prefetch(`/${currentLocale}/docs/${docId}/start`);
+    if (docId && currentLocale && country) {
+      router.prefetch(`/${currentLocale}/docs/${country}/${docId}/start`);
     }
   }, [router, docId, currentLocale]);
 
   useEffect(() => {
     if (isHydrated) {
         if (docId) {
-            const foundDoc = documentLibrary.find(d => d.id === docId);
+            const foundDoc = getDocumentsForCountry(country).find(d => d.id === docId);
             if (!foundDoc) {
                 console.error(`[DocPageClient] Doc config not found for ID: ${docId}. Triggering 404.`);
                 notFound();
@@ -124,10 +127,10 @@ export default function DocPageClient({ params: routeParams }: DocPageClientProp
     if (typeof (DocumentDetail as any).preload === 'function') {
       (DocumentDetail as any).preload();
     }
-    if (docId && currentLocale) {
-      router.prefetch(`/${currentLocale}/docs/${docId}/start`);
+    if (docId && currentLocale && country) {
+      router.prefetch(`/${currentLocale}/docs/${country}/${docId}/start`);
     }
-  }, [docId, currentLocale, isHydrated, router]);
+  }, [docId, currentLocale, country, isHydrated, router]);
 
 
   const handleStartWizard = () => {
@@ -137,7 +140,9 @@ export default function DocPageClient({ params: routeParams }: DocPageClientProp
       name: currentLocale === 'es' && docConfig.translations?.es?.name ? docConfig.translations.es.name : docConfig.translations?.en?.name || docConfig.name,
       value: docConfig.basePrice
     });
-    router.push(`/${currentLocale}/docs/${docConfig.id}/start`);
+    if (country) {
+      router.push(`/${currentLocale}/docs/${country}/${docConfig.id}/start`);
+    }
   };
 
 
