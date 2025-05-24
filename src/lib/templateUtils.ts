@@ -9,27 +9,20 @@ import type { LegalDocument } from '@/types/documents';
  * @param lang The desired language code (e.g., 'es', 'en', 'fr').
  * @returns The template path string (relative to /public), or undefined if not found.
  */
-export function getTemplatePath(doc: LegalDocument | undefined | null, lang: string): string | undefined {
+export function getTemplatePath(
+  doc: LegalDocument | undefined | null,
+  lang: string,
+  country?: string
+): string | undefined {
   if (!doc) return undefined;
 
-  // Prioritize the new templatePaths structure
-  if (doc.templatePaths) {
-    if (doc.templatePaths[lang]) {
-      return doc.templatePaths[lang];
-    }
-    // Fallback to English if the specific language is not found in templatePaths
-    if (doc.templatePaths['en']) {
-      return doc.templatePaths['en'];
-    }
+  // Allow explicit paths on the document for backwards compatibility
+  if (doc.templatePaths?.[lang]) {
+    return doc.templatePaths[lang];
   }
+  if (lang === 'es' && doc.templatePath_es) return doc.templatePath_es;
+  if (lang === 'en' && doc.templatePath) return doc.templatePath;
 
-  // Fallback to old individual properties if templatePaths is not defined or doesn't have the lang/en
-  if (lang === 'es' && doc.templatePath_es) {
-    return doc.templatePath_es;
-  }
-  if (doc.templatePath) { // Default to templatePath if lang is 'en' or as a last resort
-    return doc.templatePath;
-  }
-
-  return undefined; // No suitable template path found
+  const countryCode = (country || doc.jurisdiction || 'US').toLowerCase();
+  return `/templates/${lang}/${countryCode}/${doc.id}.md`;
 }

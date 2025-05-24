@@ -15,11 +15,12 @@ import { getTemplatePath } from '@/lib/templateUtils'; // Centralized util
 interface DocumentDetailProps {
   docId: string;
   locale: 'en' | 'es';
+  country: string;
   altText?: string;
   liveData?: Record<string, any>;
 }
 
-const DocumentDetail = React.memo(function DocumentDetail({ docId, locale, altText, liveData }: DocumentDetailProps) {
+const DocumentDetail = React.memo(function DocumentDetail({ docId, locale, country, altText, liveData }: DocumentDetailProps) {
   const { t } = useTranslation("common");
   const [md, setMd] = useState<string>('');
   const [isLoading, setIsLoading] = useState(true);
@@ -28,12 +29,11 @@ const DocumentDetail = React.memo(function DocumentDetail({ docId, locale, altTe
 
   const docConfig = useMemo(() => documentLibrary.find((d: LegalDocument) => d.id === docId), [docId]);
 
-  // Use the new standardized template path structure
+  // Resolve the template path based on language and country
   const templatePath = useMemo(() => {
     if (!docConfig) return undefined;
-    // Ensure leading slash for public folder access
-    return `/templates/${locale}/${docId}.md`;
-  }, [docConfig, locale, docId]);
+    return getTemplatePath(docConfig, locale, country);
+  }, [docConfig, locale, country]);
 
   useEffect(() => {
     setIsHydrated(true);
@@ -113,7 +113,7 @@ const DocumentDetail = React.memo(function DocumentDetail({ docId, locale, altTe
         setMd('');
       })
       .finally(() => setIsLoading(false));
-  }, [docId, locale, docConfig, isHydrated, t, templatePath, liveData]);
+  }, [docId, locale, country, docConfig, isHydrated, t, templatePath, liveData]);
 
 
   if (!isHydrated || (!docConfig && !isLoading)) {

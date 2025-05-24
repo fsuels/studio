@@ -225,7 +225,11 @@ export default function StartWizardPageClient() {
                 {t('Live Preview')}
               </h3>
               <div className="flex-grow overflow-hidden rounded-lg shadow-md border border-border bg-card">
-                 <PreviewPane docId={docIdFromPath} locale={locale} />
+                 <PreviewPane
+                   docId={docIdFromPath}
+                   locale={locale}
+                   country={(docConfig?.jurisdiction || 'US').toLowerCase()}
+                 />
               </div>
             </div>
           </div>
