@@ -90,9 +90,12 @@ export default function StartWizardPageClient() {
         console.warn('[StartWizardPageClient] Draft loading failed:', e);
       }
       if (Object.keys(draftData).length > 0) {
-        reset(draftData, { keepValues: true });
+        // Replace any previously appended defaults with the saved draft
+        reset(draftData);
         console.log('[StartWizardPageClient] Draft loaded:', draftData);
       } else {
+        // Keep the initial default values (like one empty seller) if no draft exists
+        reset({}, { keepValues: true });
         console.log('[StartWizardPageClient] No draft found, using initial/empty values.');
       }
     }
