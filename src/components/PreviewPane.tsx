@@ -7,7 +7,7 @@ import remarkGfm from 'remark-gfm';
 import { useFormContext } from 'react-hook-form';
 import { Loader2, AlertTriangle } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { debounce } from 'lodash-es';
+// import { debounce } from 'lodash-es'; // Temporarily removed for debugging
 import { documentLibrary, type LegalDocument } from '@/lib/document-library';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
@@ -31,10 +31,9 @@ export default function PreviewPane({ locale, docId }: PreviewPaneProps) {
 
   const docConfig = useMemo(() => documentLibrary.find(d => d.id === docId), [docId]);
 
-  // Use the new standardized template path structure
   const templatePath = useMemo(() => {
     if (!docConfig) return undefined;
-    return `/templates/${locale}/${docId}.md`; // Path relative to public folder
+    return `/templates/${locale}/${docId}.md`;
   }, [docConfig, locale, docId]);
 
   const watermarkText = t('preview.watermark', { ns: 'translation', defaultValue: 'PREVIEW' });
@@ -67,14 +66,18 @@ export default function PreviewPane({ locale, docId }: PreviewPaneProps) {
       }
       
       try {
-        const response = await fetch(templatePath); // Path is already absolute from public
+        const response = await fetch(templatePath);
         if (!response.ok) {
           throw new Error(`Failed to fetch template (${response.status}): ${templatePath}`);
         }
         const text = await response.text();
         setRawMarkdown(text);
+        // Initial process without debouncing
+        const initialFormData = watch();
+        setProcessedMarkdown(updatePreviewContent(initialFormData, text));
+        console.log('[PreviewPane] Raw markdown fetched and initially processed:', text.substring(0,100));
       } catch (err) {
-        console.error("Error fetching Markdown template:", err);
+        console.error("[PreviewPane] Error fetching Markdown template:", err);
         setError(err instanceof Error ? err.message : t('Could not load template.', { ns: 'translation' }));
         setRawMarkdown('');
       } finally {
@@ -82,15 +85,15 @@ export default function PreviewPane({ locale, docId }: PreviewPaneProps) {
       }
     }
     fetchTemplate();
-  }, [docId, locale, templatePath, docConfig, isHydrated, t]);
+  }, [docId, locale, templatePath, docConfig, isHydrated, t, watch]);
 
-  const updatePreviewContent = useCallback((formData: Record<string, any>, currentRawMarkdown: string) => {
+  const updatePreviewContent = useCallback((formData: Record<string, any>, currentRawMarkdown: string): string => {
+    console.log('[PreviewPane] updatePreviewContent called with formData:', JSON.parse(JSON.stringify(formData)), 'Raw markdown length:', currentRawMarkdown.length);
     if (!currentRawMarkdown) {
       return '';
     }
     let tempMd = currentRawMarkdown;
 
-    // Handle simple {{key}} replacements
     for (const key in formData) {
       if (Array.isArray(formData[key])) continue;
       const placeholderRegex = new RegExp(`{{\\s*${key.trim()}\\s*}}`, 'g');
@@ -98,61 +101,65 @@ export default function PreviewPane({ locale, docId }: PreviewPaneProps) {
       tempMd = tempMd.replace(placeholderRegex, value ? `**${String(value)}**` : '____');
     }
 
-    // Handle {{#each array}}...{{/each}} blocks
     tempMd = tempMd.replace(/{{#each\s+(\w+)}}([\s\S]*?){{\/each}}/g, (_, arrKey: string, block: string) => {
       const items = formData[arrKey];
+      console.log(`[PreviewPane] Processing #each for key: ${arrKey}, items:`, JSON.parse(JSON.stringify(items)));
       if (!Array.isArray(items) || items.length === 0) return '';
-      return items.map((item: any) => {
+      return items.map((item: any, index: number) => {
         let seg = block;
+        console.log(`[PreviewPane] #each item ${index} for ${arrKey}:`, JSON.parse(JSON.stringify(item)));
         seg = seg.replace(/{{\s*this\.(\w+)\s*}}/g, (m, prop) => {
           const val = item[prop];
+          console.log(`[PreviewPane] #each item ${index} prop ${prop}:`, val);
           return val ? `**${String(val)}**` : '____';
         });
-        seg = seg.replace(/{{\s*this\.[^}]+}}/g, '____');
+        seg = seg.replace(/{{\s*this\.[^}]+}}/g, '____'); // Clean up other 'this' references
         return seg;
       }).join('');
     });
-
-    // Replace any remaining placeholders with blanks
+    
     tempMd = tempMd.replace(/\{\{.*?\}\}/g, '____');
     
-    let titleToUse = docConfig?.translations?.en?.name; // Default to English name
+    let titleToUse = docConfig?.translations?.en?.name;
     if (locale === 'es' && docConfig?.translations?.es?.name) {
       titleToUse = docConfig.translations.es.name;
-    } else if (docConfig?.name) { // Fallback to root name if translations are missing
+    } else if (docConfig?.name) {
         titleToUse = docConfig.name;
     }
 
     if (titleToUse) {
        tempMd = tempMd.replace(/^# .*/m, `# ${titleToUse}`);
     }
-
+    console.log('[PreviewPane] Processed markdown sample:', tempMd.substring(0, 200));
     return tempMd;
   }, [docConfig, locale]);
 
-  const debouncedUpdatePreview = useMemo(
-    () => debounce((formData: Record<string, any>, currentRawMarkdown: string) => {
-      setProcessedMarkdown(updatePreviewContent(formData, currentRawMarkdown));
-    }, 300),
-    [updatePreviewContent]
-  );
+  // Temporarily removed debounce for direct updates
+  // const debouncedUpdatePreview = useMemo(
+  //   () => debounce((formData: Record<string, any>, currentRawMarkdown: string) => {
+  //     setProcessedMarkdown(updatePreviewContent(formData, currentRawMarkdown));
+  //   }, 300),
+  //   [updatePreviewContent]
+  // );
 
   useEffect(() => {
-    if (!watch || !isHydrated || isLoading) {
-      if (rawMarkdown && !isLoading) setProcessedMarkdown(updatePreviewContent({}, rawMarkdown));
+    if (!watch || !isHydrated || isLoading || !rawMarkdown) {
+      // if (rawMarkdown && !isLoading) setProcessedMarkdown(updatePreviewContent({}, rawMarkdown)); // Initial render with placeholders
       return;
     }
     
-    debouncedUpdatePreview(watch(), rawMarkdown);
-    const subscription = watch((formData) => {
-      debouncedUpdatePreview(formData as Record<string, any>, rawMarkdown);
+    // Directly update preview content on form change
+    const subscription = watch((formDataValue, { name, type }) => {
+      console.log(`[PreviewPane] Form data changed via watch subscription. Field: ${name}, Type: ${type}, Full data:`, JSON.parse(JSON.stringify(formDataValue)));
+      setProcessedMarkdown(updatePreviewContent(formDataValue as Record<string, any>, rawMarkdown));
     });
+
     return () => {
       subscription.unsubscribe();
-      debouncedUpdatePreview.cancel();
+      // debouncedUpdatePreview.cancel(); // Cancel debounce if it were active
     };
     
-  }, [watch, rawMarkdown, isLoading, isHydrated, debouncedUpdatePreview, updatePreviewContent]);
+  }, [watch, rawMarkdown, isLoading, isHydrated, updatePreviewContent]);
 
 
   if (!isHydrated) {
@@ -187,7 +194,6 @@ export default function PreviewPane({ locale, docId }: PreviewPaneProps) {
               components={{
                 p: ({node, ...props}) => <p {...props} className="select-none" />,
                 h1: ({node, ...props}) => <h1 {...props} className="text-center" />,
-                // FIXED: ensure markdown images include dimensions
                 img: ({node, ...props}) => <AutoImage {...props} className="mx-auto" />,
               }}
           >
