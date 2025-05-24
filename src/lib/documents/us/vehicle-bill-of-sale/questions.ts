@@ -1,5 +1,4 @@
 import { usStates } from '@/lib/usStates';
-import { getStateRules } from './compliance';
 
 export const vehicleBillOfSaleQuestions = [
   {

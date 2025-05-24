@@ -1,7 +1,7 @@
 // src/schemas/billOfSale.ts
 import { z } from 'zod';
 import { isValidVIN } from '@/utils/isValidVIN';
-import { getStateRules } from '@/lib/documents/us/vehicle-bill-of-sale/compliance';
+import { getCompliance } from '@/lib/compliance';
 
 const PartySchema = z.object({
   name: z.string().min(2, { message: 'Name must be at least 2 characters.' }),
@@ -61,7 +61,7 @@ export const BillOfSaleSchema = z.object({
       message: "Warranty details are required if not sold 'as-is'",
     });
   }
-  const rules = getStateRules(data.state);
+  const rules = getCompliance('us', data.state);
   if (rules.requireNotary && data.requireNotary !== true) {
     ctx.addIssue({
       path: ['requireNotary'],

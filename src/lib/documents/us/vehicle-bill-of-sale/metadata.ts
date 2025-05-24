@@ -2,7 +2,7 @@
 import type { LegalDocument } from '@/types/documents';
 import { BillOfSaleSchema } from '@/schemas/billOfSale'; // Assuming schema is in a central location or adjust path
 import { vehicleBillOfSaleQuestions } from './questions';
-import { stateRules } from './compliance';
+import { rules as stateRules } from '@/lib/compliance';
 
 export const vehicleBillOfSaleMeta: LegalDocument = {
   id: 'bill-of-sale-vehicle',
