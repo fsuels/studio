@@ -48,7 +48,11 @@ const nextConfig = {
   //   return config;
   // },
   async redirects() {
-    return redirects;
+    return redirects.map(r => ({
+      source: r.source || r.from,
+      destination: r.destination || r.to,
+      permanent: typeof r.permanent === 'boolean' ? r.permanent : true,
+    }));
   },
 };
 
