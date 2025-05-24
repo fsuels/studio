@@ -17,7 +17,7 @@ function collect(dir: string, list: string[] = []) {
   return list;
 }
 
-const templatesDir = path.join(__dirname, '..', '..', 'src', 'data', 'templates');
+const templatesDir = path.join(__dirname, '..', '..', 'templates');
 const files = collect(templatesDir);
 
 const dummy = { sellers: [{ name: 'A', address: 'B', phone: 'C' }], buyers: [{ name: 'D', address: 'E', phone: 'F' }], state: 'CA', county: 'Alameda', sale_date: '2020-01-01', price: '1000', make: 'Toyota', model: 'Camry', year: '2020', color: 'Blue', vin: '1HGCM82633A004352', odometer: '1000', payment_method: 'cash', warranty_text: 'None', existing_liens: 'None', requireNotary: true, witnessCount: 0 } as any;
