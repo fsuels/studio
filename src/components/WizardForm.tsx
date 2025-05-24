@@ -364,7 +364,7 @@ export default function WizardForm({
                           setValue(`${prefix}_postal_code`, parts.postalCode, { shouldValidate: true, shouldDirty: true });
                       }
                     }}
-                    tooltipText={currentField.tooltip}
+                    tooltip={currentField.tooltip}
                   />
                 )}
               />
