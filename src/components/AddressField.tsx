@@ -125,7 +125,7 @@ const AddressField = React.memo(function AddressField({
           className={cn('w-full max-w-sm', fieldErrorActual && 'border-destructive focus-visible:ring-destructive')}
           autoComplete="on"
           aria-invalid={!!fieldErrorActual}
-          disabled={!ready}
+          disabled={!ready && !controlledOnChange}
         />
         {status === 'OK' && data.length > 0 && (
           <ul className="absolute z-10 mt-1 w-full max-w-sm bg-background border border-border rounded-md shadow-md max-h-60 overflow-auto">
