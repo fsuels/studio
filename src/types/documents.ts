@@ -38,6 +38,11 @@ export type LocalizedText = {
   aliases?: string[]; // Array of i18n keys or direct strings
 };
 
+export type ComplianceRule = {
+  requireNotary?: boolean;
+  witnessCount?: number;
+};
+
 // Define the structure for a single legal document
 export type LegalDocument = {
   id: string;
@@ -71,6 +76,7 @@ export type LegalDocument = {
   offerRecordingHelp: boolean;
   upsellClauses?: UpsellClause[];
   requiresNotarizationStates?: string[]; // Specific states within its jurisdiction
+  compliance?: Record<string, ComplianceRule>; // e.g., { CA: { requireNotary: true } }
 
   // Template paths (relative to /public folder)
   // Prefer templatePaths over individual templatePath/templatePath_es for multi-language

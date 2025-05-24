@@ -42,7 +42,6 @@ import {
   loadFormProgress,
 } from "@/lib/firestore/saveFormProgress";
 import { debounce } from "lodash-es";
-import { getStateRules } from "@/lib/documents/us/vehicle-bill-of-sale/compliance";
 
 interface WizardFormProps {
   locale: "en" | "es";
@@ -91,12 +90,18 @@ export default function WizardForm({
 
   useEffect(() => {
     const currentState = getValues('state');
-    if (currentState) {
-      const rules = getStateRules(currentState);
-      setValue('requireNotary', rules.requireNotary);
-      setValue('witnessCount', rules.witnessCount);
+    if (currentState && doc.compliance) {
+      const rules = doc.compliance[currentState] || doc.compliance.DEFAULT;
+      if (rules) {
+        if (rules.requireNotary !== undefined) {
+          setValue('requireNotary', rules.requireNotary);
+        }
+        if (rules.witnessCount !== undefined) {
+          setValue('witnessCount', rules.witnessCount);
+        }
+      }
     }
-  }, [watch('state')]);
+  }, [watch('state'), doc.compliance]);
 
   const actualSchemaShape = useMemo(() => {
     const def = doc.schema?._def;
