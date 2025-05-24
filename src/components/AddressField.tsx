@@ -15,14 +15,7 @@ import {
 } from "@/components/ui/tooltip";
 import { Button } from '@/components/ui/button';
 import usePlacesAutocomplete, { getGeocode } from 'use-places-autocomplete';
-import {
-  Combobox,
-  ComboboxInput,
-  ComboboxPopover,
-  ComboboxList,
-  ComboboxOption,
-} from '@reach/combobox';
-import '@reach/combobox/styles.css';
+import { Input } from '@/components/ui/input';
 
 const GooglePlacesLoader = dynamic(() => import('./GooglePlacesLoader'), { ssr: false });
 
@@ -118,8 +111,8 @@ const AddressField = React.memo(function AddressField({
           </Tooltip>
         )}
       </div>
-      <Combobox onSelect={handleSelect}>
-        <ComboboxInput
+      <div className="relative">
+        <Input
           id={name}
           placeholder={placeholder ? t(placeholder) : undefined}
           {...restOfRegister}
@@ -134,16 +127,20 @@ const AddressField = React.memo(function AddressField({
           aria-invalid={!!fieldErrorActual}
           disabled={!ready}
         />
-        {status === 'OK' && (
-          <ComboboxPopover>
-            <ComboboxList>
-              {data.map(({ place_id, description }) => (
-                <ComboboxOption key={place_id} value={description} />
-              ))}
-            </ComboboxList>
-          </ComboboxPopover>
+        {status === 'OK' && data.length > 0 && (
+          <ul className="absolute z-10 mt-1 w-full max-w-sm bg-background border border-border rounded-md shadow-md max-h-60 overflow-auto">
+            {data.map(({ place_id, description }) => (
+              <li
+                key={place_id}
+                className="px-2 py-1 cursor-pointer hover:bg-muted"
+                onClick={() => handleSelect(description)}
+              >
+                {description}
+              </li>
+            ))}
+          </ul>
         )}
-      </Combobox>
+      </div>
       {fieldErrorActual && <p className="text-xs text-destructive mt-1">{t(String(fieldErrorActual))}</p>} {/* Changed */}
       </div>
     </>
