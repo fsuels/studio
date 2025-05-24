@@ -238,7 +238,12 @@ export default function DocPageClient({ params: routeParams }: DocPageClientProp
                         {t('docDetail.previewSubtitle', {defaultValue: "This is how your document will generally look. Specific clauses and details will be customized by your answers."})}
                     </p>
                 </div>
-                <DocumentDetail locale={currentLocale as 'en' | 'es'} docId={docId as string} altText={`${documentDisplayName} preview`} />
+                <DocumentDetail
+                  locale={currentLocale as 'en' | 'es'}
+                  docId={docId as string}
+                  country={(docConfig.jurisdiction || 'US').toLowerCase()}
+                  altText={`${documentDisplayName} preview`}
+                />
                  <p className="text-xs text-muted-foreground mt-2 text-center italic">
                     AI Highlight: <AiHighlightPlaceholder text="Key clauses" /> will be automatically tailored.
                  </p>
