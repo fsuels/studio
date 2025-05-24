@@ -1,4 +1,14 @@
 import webpack from 'webpack';
+import fs from 'fs';
+import path from 'path';
+
+let redirects = [];
+try {
+  const redirectsJson = fs.readFileSync(path.join(process.cwd(), 'config', 'redirects.json'), 'utf-8');
+  redirects = JSON.parse(redirectsJson);
+} catch (e) {
+  console.warn('[next.config.mjs] No redirects loaded:', e);
+}
 
 const nextConfig = {
   /* config options here */
@@ -37,6 +47,9 @@ const nextConfig = {
   //   );
   //   return config;
   // },
+  async redirects() {
+    return redirects;
+  },
 };
 
 export default nextConfig;
