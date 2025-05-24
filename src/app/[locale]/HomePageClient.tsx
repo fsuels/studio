@@ -3,8 +3,8 @@
 
 import React, { useState, useEffect, useCallback, Suspense } from 'react';
 import dynamic from 'next/dynamic';
-import type { LegalDocument } from '@/lib/document-library';
-import { usStates, documentLibrary } from '@/lib/document-library';
+import type { LegalDocument } from '@/lib/document-library/index';
+import { usStates, documentLibrary } from '@/lib/document-library/index';
 import HomepageHeroSteps from '@/components/landing/HomepageHeroSteps';
 import { useToast } from '@/hooks/use-toast';
 import { Separator } from '@/components/ui/separator';

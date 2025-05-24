@@ -10,7 +10,7 @@ import { useFormContext } from 'react-hook-form';
 import { Loader2, AlertTriangle } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 // import { debounce } from 'lodash-es'; // Temporarily removed for debugging
-import { documentLibrary, type LegalDocument } from '@/lib/document-library';
+import { documentLibrary, type LegalDocument } from '@/lib/document-library/index';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
 import AutoImage from './AutoImage';

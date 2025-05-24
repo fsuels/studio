@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { useTranslation } from 'react-i18next';
 import { useParams, useRouter } from 'next/navigation';
 import { Loader2, FileText } from 'lucide-react';
-import { documentLibrary, type LegalDocument } from '@/lib/document-library'; 
+import { documentLibrary, type LegalDocument } from '@/lib/document-library/index';
 
 // Placeholder data for top docs - in a real app, this would come from Firestore
 const staticTopDocIds: string[] = [

@@ -4,7 +4,7 @@
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation'; 
-import type { LegalDocument } from '@/lib/document-library'; 
+import type { LegalDocument } from '@/lib/document-library/index';
 // WizardForm and PreviewPane are no longer directly rendered by WizardLayout
 // They are now part of the StartWizardPage structure.
 import React, { useEffect } from 'react'; 

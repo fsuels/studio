@@ -2,9 +2,9 @@
 // This is now a Server Component
 
 import StartWizardPageClient from './StartWizardPageClient';
-import { documentLibrary } from '@/lib/document-library';
+import { documentLibrary } from '@/lib/document-library/index';
 import { localizations } from '@/lib/localizations'; // Assuming this defines your supported locales e.g. [{id: 'en'}, {id: 'es'}]
-import type { LegalDocument } from '@/lib/document-library';
+import type { LegalDocument } from '@/lib/document-library/index';
 
 // Revalidate every hour so start pages stay fresh without rebuilding constantly
 export const revalidate = 3600;

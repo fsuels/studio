@@ -2,7 +2,7 @@
 'use client';
 
 import { useParams, notFound, useRouter } from 'next/navigation';
-import { documentLibrary, type LegalDocument } from '@/lib/document-library';
+import { documentLibrary, type LegalDocument } from '@/lib/document-library/index';
 import { useTranslation } from 'react-i18next';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';

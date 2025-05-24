@@ -5,7 +5,7 @@ import React from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
-import type { LegalDocument } from '@/lib/document-library'; // Use the re-exported type
+import type { LegalDocument } from '@/lib/document-library/index'; // Use the re-exported type
 import type { CategoryInfo } from '@/components/Step1DocumentSelector'; 
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { FileText } from 'lucide-react';

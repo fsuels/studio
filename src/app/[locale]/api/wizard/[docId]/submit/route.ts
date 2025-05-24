@@ -2,7 +2,7 @@
 import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { admin } from '@/lib/firebase-admin'; // Firebase Admin SDK
-import { documentLibrary, type LegalDocument } from '@/lib/document-library'; 
+import { documentLibrary, type LegalDocument } from '@/lib/document-library/index';
 import { z } from 'zod';
 
 // Placeholder for user authentication - replace with your actual auth logic

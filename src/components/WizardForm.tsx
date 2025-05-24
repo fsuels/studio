@@ -22,7 +22,7 @@ import Link from "next/link"; // Added Link
 import { z } from "zod";
 import { Loader2, Info } from "lucide-react";
 
-import type { LegalDocument } from "@/lib/document-library";
+import type { LegalDocument } from "@/lib/document-library/index";
 import { useToast } from "@/hooks/use-toast";
 import { useTranslation } from "react-i18next";
 

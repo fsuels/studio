@@ -8,7 +8,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Loader2, Edit, Eye } from 'lucide-react';
 
-import { documentLibrary, type LegalDocument } from '@/lib/document-library';
+import { documentLibrary, type LegalDocument } from '@/lib/document-library/index';
 import Breadcrumb from '@/components/Breadcrumb';
 import WizardForm from '@/components/WizardForm';
 import dynamic from 'next/dynamic';

@@ -5,7 +5,7 @@ import React, { useEffect, useState, useMemo } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { useTranslation } from 'react-i18next';
-import { documentLibrary, type LegalDocument } from '@/lib/document-library';
+import { documentLibrary, type LegalDocument } from '@/lib/document-library/index';
 import { Loader2, AlertTriangle } from 'lucide-react';
 import Image from 'next/image';
 import AutoImage from './AutoImage';

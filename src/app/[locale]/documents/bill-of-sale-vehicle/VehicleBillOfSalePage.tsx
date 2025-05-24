@@ -37,7 +37,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Progress } from "@/components/ui/progress";
-import { usStates } from "@/lib/document-library";
+import { usStates } from "@/lib/document-library/index";
 import { vehicleBillOfSaleFaqs, type FaqItem } from "./faqs";
 import {
   getVehicleCompliance,
