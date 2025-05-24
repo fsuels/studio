@@ -6,7 +6,7 @@
 import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { useFormContext } from 'react-hook-form';
+import { useFormContext, useWatch } from 'react-hook-form';
 import { Loader2, AlertTriangle } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 // import { debounce } from 'lodash-es'; // Temporarily removed for debugging
@@ -22,7 +22,8 @@ interface PreviewPaneProps {
 
 export default function PreviewPane({ locale, docId }: PreviewPaneProps) {
   const { t } = useTranslation("common");
-  const { watch } = useFormContext();
+  const { control, getValues } = useFormContext();
+  const watchedValues = useWatch({ control });
 
   const [rawMarkdown, setRawMarkdown] = useState<string>('');
   const [processedMarkdown, setProcessedMarkdown] = useState<string>('');
@@ -74,8 +75,8 @@ export default function PreviewPane({ locale, docId }: PreviewPaneProps) {
         }
         const text = await response.text();
         setRawMarkdown(text);
-        // Initial process without debouncing
-        const initialFormData = watch();
+        // Initial process with any existing form data
+        const initialFormData = getValues();
         setProcessedMarkdown(updatePreviewContent(initialFormData, text));
         console.log('[PreviewPane] Raw markdown fetched and initially processed:', text.substring(0,100));
       } catch (err) {
@@ -145,23 +146,13 @@ export default function PreviewPane({ locale, docId }: PreviewPaneProps) {
   // );
 
   useEffect(() => {
-    if (!watch || !isHydrated || isLoading || !rawMarkdown) {
-      // if (rawMarkdown && !isLoading) setProcessedMarkdown(updatePreviewContent({}, rawMarkdown)); // Initial render with placeholders
+    if (!isHydrated || isLoading || !rawMarkdown) {
       return;
     }
-    
-    // Directly update preview content on form change
-    const subscription = watch((formDataValue, { name, type }) => {
-      console.log(`[PreviewPane] Form data changed via watch subscription. Field: ${name}, Type: ${type}, Full data:`, JSON.parse(JSON.stringify(formDataValue)));
-      setProcessedMarkdown(updatePreviewContent(formDataValue as Record<string, any>, rawMarkdown));
-    });
 
-    return () => {
-      subscription.unsubscribe();
-      // debouncedUpdatePreview.cancel(); // Cancel debounce if it were active
-    };
-    
-  }, [watch, rawMarkdown, isLoading, isHydrated, updatePreviewContent]);
+    setProcessedMarkdown(updatePreviewContent(watchedValues as Record<string, any>, rawMarkdown));
+
+  }, [watchedValues, rawMarkdown, isLoading, isHydrated, updatePreviewContent]);
 
 
   if (!isHydrated) {
