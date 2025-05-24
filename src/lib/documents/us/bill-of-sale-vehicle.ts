@@ -2,6 +2,7 @@ import { z } from 'zod';
 import { BillOfSaleSchema } from '@/schemas/billOfSale';
 import type { LegalDocument } from '@/types/documents';
 import { usStates } from '@/lib/document-library/utils';
+import { stateRules } from './vehicle-bill-of-sale/compliance';
 
 export const billOfSaleVehicle: LegalDocument = {
   id: "bill-of-sale-vehicle",
@@ -14,6 +15,7 @@ export const billOfSaleVehicle: LegalDocument = {
   offerRecordingHelp: false,
   basePrice: 19.95,
   states: 'all',
+  compliance: stateRules,
   translations: {
     en: {
       name: "Vehicle Bill of Sale",

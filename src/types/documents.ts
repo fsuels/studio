@@ -39,6 +39,11 @@ export type LocalizedText = {
 };
 
 // Define the structure for a single legal document
+export type ComplianceRule = {
+  requireNotary?: boolean;
+  witnessCount?: number;
+};
+
 export type LegalDocument = {
   id: string;
   jurisdiction?: string; // e.g., 'US', 'CA'
@@ -71,6 +76,9 @@ export type LegalDocument = {
   offerRecordingHelp: boolean;
   upsellClauses?: UpsellClause[];
   requiresNotarizationStates?: string[]; // Specific states within its jurisdiction
+
+  // Optional map of state/province specific compliance rules
+  compliance?: Record<string, ComplianceRule>;
 
   // Template paths (relative to /public folder)
   // Prefer templatePaths over individual templatePath/templatePath_es for multi-language

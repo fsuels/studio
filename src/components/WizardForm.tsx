@@ -89,14 +89,23 @@ export default function WizardForm({
     setIsHydrated(true);
   }, []);
 
+  const currentState = watch('state');
   useEffect(() => {
-    const currentState = getValues('state');
-    if (currentState) {
+    if (!currentState) return;
+    const ruleFromDoc = doc.compliance?.[currentState] || doc.compliance?.DEFAULT;
+    if (ruleFromDoc) {
+      if (ruleFromDoc.requireNotary !== undefined) {
+        setValue('requireNotary', ruleFromDoc.requireNotary);
+      }
+      if (ruleFromDoc.witnessCount !== undefined) {
+        setValue('witnessCount', ruleFromDoc.witnessCount);
+      }
+    } else {
       const rules = getStateRules(currentState);
       setValue('requireNotary', rules.requireNotary);
       setValue('witnessCount', rules.witnessCount);
     }
-  }, [watch('state')]);
+  }, [currentState, doc.compliance]);
 
   const actualSchemaShape = useMemo(() => {
     const def = doc.schema?._def;
