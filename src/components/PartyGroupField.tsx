@@ -3,6 +3,8 @@ import { useFieldArray, useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Plus, Trash2 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
+import AddressField from '@/components/AddressField';
+import SmartInput from './wizard/SmartInput';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent } from '@/components/ui/card';
@@ -17,7 +19,7 @@ interface PartyGroupFieldProps {
 
 export default function PartyGroupField({ name, locale, max = 3, itemLabel }: PartyGroupFieldProps) {
   const { t } = useTranslation('common');
-  const { control, register, formState: { errors } } = useFormContext();
+  const { control, register, setValue, formState: { errors } } = useFormContext();
   const { fields, append, remove } = useFieldArray({ control, name });
 
   useEffect(() => {
@@ -53,29 +55,29 @@ export default function PartyGroupField({ name, locale, max = 3, itemLabel }: Pa
               </div>
 
               <div>
-                <Label htmlFor={`${prefix}.address`} className="text-sm font-medium">
-                  {locale === 'es' ? 'Dirección' : 'Address'}
-                </Label>
-                <Input
-                  id={`${prefix}.address`}
-                  {...register(`${prefix}.address`, { required: true })}
-                  className={cn(errors?.[name]?.[index]?.address && 'border-destructive')}
+                <AddressField
+                  name={`${prefix}.address`}
+                  label={locale === 'es' ? 'Dirección' : 'Address'}
+                  required
+                  placeholder="Enter address..."
+                  error={errors?.[name]?.[index]?.address?.message as string | undefined}
+                  onChange={(val) => {
+                    // ensure RHF state updates when using controlled component
+                    const fieldName = `${prefix}.address` as const;
+                    setValue(fieldName, val, { shouldDirty: true, shouldValidate: true });
+                  }}
                 />
-                {errors?.[name]?.[index]?.address && (
-                  <p className="text-xs text-destructive mt-1">
-                    {locale === 'es' ? 'Se requiere la dirección.' : 'Address is required.'}
-                  </p>
-                )}
               </div>
 
               <div>
                 <Label htmlFor={`${prefix}.phone`} className="text-sm font-medium">
                   {locale === 'es' ? 'Teléfono (opcional)' : 'Phone (optional)'}
                 </Label>
-                <Input
+                <SmartInput
                   id={`${prefix}.phone`}
-                  {...register(`${prefix}.phone`)}
                   placeholder="(123) 456-7890"
+                  type="tel"
+                  rhfProps={register(`${prefix}.phone`)}
                   className={cn(errors?.[name]?.[index]?.phone && 'border-destructive')}
                 />
                 {errors?.[name]?.[index]?.phone && (
