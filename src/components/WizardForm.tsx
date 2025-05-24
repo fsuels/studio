@@ -148,10 +148,14 @@ export default function WizardForm({
     !isReviewing && totalSteps > 0 && currentStepIndex < totalSteps
       ? steps[currentStepIndex]
       : null;
-  const progress =
-    totalSteps > 0
-      ? ((isReviewing ? totalSteps : currentStepIndex + 1) / totalSteps) * 100
-      : 0;
+
+  const totalRequired = doc.questions?.filter(q => q.required).length || 0;
+  const completed = doc.questions?.filter(q => {
+    const val = getValues(q.id as any);
+    return val !== undefined && val !== null && String(val).trim() !== '';
+  }).length || 0;
+
+  const progress = totalRequired > 0 ? (completed / totalRequired) * 100 : 0;
 
   const handlePreviousStep = useCallback(() => {
     if (isReviewing) {
@@ -319,23 +323,18 @@ export default function WizardForm({
     ? t("wizard.generateDocument")
     : t("wizard.saveContinue");
 
-  const currentQuestion = doc.questions?.find((q) => q.id === currentField?.id);
-
-  const formContent = currentField
-    ? (
-        <div className="mt-6 space-y-6 min-h-[200px]">
-          {currentQuestion?.type === 'group-array' ? (
-            <PartyGroupField name={currentQuestion.id as 'sellers' | 'buyers'} locale={locale} />
-          ) : currentQuestion?.type === 'group' ? (
-            currentQuestion.id === 'seller_info' ? (
-              <PartyGroupField name="sellers" locale={locale} />
-            ) : (
-              <PartyGroupField name="buyers" locale={locale} />
-            )
-          ) : currentField.id &&
+  const formContent =
+    currentField?.id === 'sellers' || currentField?.id === 'buyers'
+      ? (
+          <PartyGroupField name={currentField.id as 'sellers' | 'buyers'} locale={locale} />
+        )
+      : currentField
+      ? (
+          <div className="mt-6 space-y-6 min-h-[200px]">
+            {currentField.id &&
             actualSchemaShape &&
             (actualSchemaShape as any)[currentField.id] ? (
-            (currentField.id.includes('_address') || currentField.id.includes('Address')) ? (
+              (currentField.id.includes('_address') || currentField.id.includes('Address')) ? (
               <Controller
                 key={`${currentField.id}-controller`}
                 control={control}
