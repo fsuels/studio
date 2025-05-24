@@ -148,10 +148,13 @@ export default function WizardForm({
     !isReviewing && totalSteps > 0 && currentStepIndex < totalSteps
       ? steps[currentStepIndex]
       : null;
-  const progress =
-    totalSteps > 0
-      ? ((isReviewing ? totalSteps : currentStepIndex + 1) / totalSteps) * 100
-      : 0;
+
+  const requiredFieldCount = doc.questions?.filter(q => q.required).length || 0;
+  const completedRequiredFieldCount = doc.questions?.filter(q => {
+    const val = getValues(q.id as any);
+    return val !== undefined && val !== null && String(val).trim() !== '';
+  }).length || 0;
+  const progress = requiredFieldCount > 0 ? (completedRequiredFieldCount / requiredFieldCount) * 100 : 0;
 
   const handlePreviousStep = useCallback(() => {
     if (isReviewing) {

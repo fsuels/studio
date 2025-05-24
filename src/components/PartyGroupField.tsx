@@ -24,7 +24,7 @@ export default function PartyGroupField({ name, locale, max = 3, itemLabel }: Pa
     if (fields.length === 0) {
       append({ name: '', address: '', phone: '' });
     }
-  }, [fields, append]);
+  }, []);
 
   return (
     <div className="space-y-6">
@@ -33,9 +33,9 @@ export default function PartyGroupField({ name, locale, max = 3, itemLabel }: Pa
         return (
           <Card key={field.id} className="bg-muted/30 border border-muted-foreground/20">
             <CardContent className="grid grid-cols-1 gap-4 p-4">
-              <h4 className="text-sm font-semibold">
-                {t(itemLabel || (name === 'sellers' ? 'Seller' : 'Buyer'), { defaultValue: itemLabel || (name === 'sellers' ? 'Seller' : 'Buyer') })} {index + 1}
-              </h4>
+              <h3 className="text-sm font-semibold">
+                {name === 'sellers' ? `Seller ${index + 1}` : `Buyer ${index + 1}`}
+              </h3>
               <div>
                 <Label htmlFor={`${prefix}.name`} className="text-sm font-medium">
                   {locale === 'es' ? 'Nombre completo' : 'Full Name'}
@@ -102,7 +102,7 @@ export default function PartyGroupField({ name, locale, max = 3, itemLabel }: Pa
           <Plus className="h-4 w-4 mr-1" />
           {locale === 'es'
             ? `Agregar otro ${name === 'sellers' ? 'vendedor' : 'comprador'}`
-            : `Add Another ${t(itemLabel || (name === 'sellers' ? 'Seller' : 'Buyer'), { defaultValue: itemLabel || (name === 'sellers' ? 'Seller' : 'Buyer') })}`}
+            : `Add another ${name === 'sellers' ? 'seller' : 'buyer'}`}
         </Button>
       )}
     </div>
