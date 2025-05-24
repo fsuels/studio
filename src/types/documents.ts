@@ -72,6 +72,12 @@ export type LegalDocument = {
   upsellClauses?: UpsellClause[];
   requiresNotarizationStates?: string[]; // Specific states within its jurisdiction
 
+  // Optional map of state/province specific compliance rules
+  compliance?: Record<string, {
+    requireNotary?: boolean;
+    witnessCount?: number;
+  }>;
+
   // Template paths (relative to /public folder)
   // Prefer templatePaths over individual templatePath/templatePath_es for multi-language
   templatePaths?: {

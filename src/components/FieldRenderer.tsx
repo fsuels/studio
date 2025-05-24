@@ -59,8 +59,8 @@ const FieldRenderer = React.memo(function FieldRenderer({ fieldKey, locale, doc 
     placeholder: (fieldSchemaFromZod._def as any)?.placeholder || undefined,
   } : undefined);
 
-  const formStateCode = watch('state'); 
-  const { isRequired: notaryIsRequiredByState } = useNotary(formStateCode);
+  const formStateCode = watch('state');
+  const { isRequired: notaryIsRequiredByState } = useNotary(formStateCode, doc.compliance);
   
   const { decode, data: vinData, loading: vinLoading, error: vinError } = useVinDecoder();
 
