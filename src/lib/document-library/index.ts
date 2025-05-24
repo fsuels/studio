@@ -1,9 +1,7 @@
 // src/lib/document-library/index.ts
 import { z } from 'zod';
 import type { LegalDocument, LocalizedText } from '@/types/documents';
-import * as us_docs_barrel from '../documents/us'; // Corrected path
-import * as ca_docs_barrel from '../documents/ca'; // Corrected path
-// …other countries…
+// Dynamic document discovery will replace explicit barrels
 
 // Helper function to ensure a document object is valid
 const isValidDocument = (doc: any): doc is LegalDocument => {
@@ -51,35 +49,30 @@ const ensureBasicTranslations = (doc: any): LegalDocument => {
   return doc as LegalDocument;
 };
 
-// Process a barrel file (e.g., us_docs_barrel)
-const processBarrel = (barrel: Record<string, any>, barrelName: string): LegalDocument[] => {
-  console.log(`[document-library] Processing barrel: ${barrelName}. Raw entries: ${Object.keys(barrel).length}`);
-  const docs = Object.values(barrel)
-    .map(ensureBasicTranslations) // Ensure basic translation structure for name check
-    .filter(doc => {
-      const isValid = isValidDocument(doc);
-      if ((doc?.id === 'bill-of-sale-vehicle' || doc?.id === 'promissory-note') && !isValid) {
-        console.error(`[document-library processBarrel] CRITICAL: ${doc.id} FAILED isValidDocument check within ${barrelName}.`);
+// Dynamically import all document modules under /src/lib/documents
+type RegistryDoc = Record<string, LegalDocument>;
+const modules = import.meta.glob<RegistryDoc>('/src/lib/documents/*/*/index.ts', { eager: true });
+
+export const registry: Record<string, LegalDocument> = {};
+export const documentLibraryByCountry: Record<string, LegalDocument[]> = {};
+
+for (const [path, mod] of Object.entries(modules)) {
+  for (const exported of Object.values(mod)) {
+    if (exported && typeof exported === 'object') {
+      const doc = ensureBasicTranslations(exported);
+      if (isValidDocument(doc)) {
+        const parts = path.split('/');
+        const idx = parts.findIndex(p => p === 'documents');
+        const country = parts[idx + 1];
+        const slug = parts[idx + 2];
+        registry[`${country}/${slug}`] = doc;
+        if (!documentLibraryByCountry[country]) documentLibraryByCountry[country] = [];
+        documentLibraryByCountry[country].push(doc);
+        break;
       }
-      return isValid;
-    });
-  console.log(`[document-library] Valid documents from ${barrelName}: ${docs.length}`);
-  if (docs.find(d => d.id === 'promissory-note')) {
-    console.log(`[document-library] Promissory Note FOUND in ${barrelName} after validation.`);
+    }
   }
-  return docs;
-};
-
-const usDocsArray: LegalDocument[] = processBarrel(us_docs_barrel, 'us_docs_barrel');
-const caDocsArray: LegalDocument[] = processBarrel(ca_docs_barrel, 'ca_docs_barrel');
-// Add other countries here, e.g.:
-// const ukDocsArray: LegalDocument[] = processBarrel(uk_docs_barrel, 'uk_docs_barrel');
-
-export const documentLibraryByCountry: Record<string, LegalDocument[]> = {
-  us: usDocsArray,
-  ca: caDocsArray,
-  // uk: ukDocsArray,
-};
+}
 
 export function getDocumentsForCountry(countryCode?: string): LegalDocument[] {
   const code = (countryCode || 'us').toLowerCase();
@@ -88,19 +81,13 @@ export function getDocumentsForCountry(countryCode?: string): LegalDocument[] {
 
 export const supportedCountries = Object.keys(documentLibraryByCountry);
 
-// Start with documents from defined barrels
-let tempAllDocuments: LegalDocument[] = Object.values(documentLibraryByCountry).flat();
-console.log(`[document-library] Documents from barrels: ${tempAllDocuments.length}`);
+const tempAllDocuments: LegalDocument[] = Object.values(registry);
+console.log(`[document-library] Documents from registry: ${tempAllDocuments.length}`);
 
-// Add documents from documentLibraryAdditions if they are valid
-// Note: documentLibraryAdditions.ts itself should import 'z' if it defines schemas
-// import { documentLibraryAdditions } from './document-library-additions'; // Assuming it exists
-// const additionsArray: LegalDocument[] = documentLibraryAdditions
-//   .map(ensureBasicTranslations)
-//   .filter(isValidDocument);
-// console.log(`[document-library] Valid documents from additions: ${additionsArray.length}`);
-// tempAllDocuments = tempAllDocuments.concat(additionsArray);
-// console.log(`[document-library] Total documents after additions: ${tempAllDocuments.length}`);
+export function getDoc(docId: string, country = 'us'): LegalDocument | undefined {
+  return registry[`${country}/${docId}`];
+}
+export { getDoc as getDocument };
 
 export const allDocuments: LegalDocument[] = [...new Map(tempAllDocuments.map(doc => [doc.id, doc])).values()];
 console.log(`[document-library] Final unique documents in allDocuments: ${allDocuments.length}`);
