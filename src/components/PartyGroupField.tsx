@@ -1,4 +1,3 @@
-// src/components/PartyGroupField.tsx
 import React, { useEffect } from 'react';
 import { useFieldArray, useFormContext, Controller } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
@@ -28,9 +27,9 @@ export default function PartyGroupField({ name, locale, max = 3 }: PartyGroupFie
 
   useEffect(() => {
     if (fields.length === 0) {
-      append({ name: '', address: '', phone: '' });
+      append({ name: '', address: '', phone: '' }); // ✅ one entry only
     }
-  }, []);
+  }, [fields.length, append]);
 
   return (
     <div className="space-y-6">
@@ -42,6 +41,7 @@ export default function PartyGroupField({ name, locale, max = 3 }: PartyGroupFie
               <h3 className="text-sm font-semibold">
                 {name === 'sellers' ? `Seller ${index + 1}` : `Buyer ${index + 1}`}
               </h3>
+
               <div>
                 <Label htmlFor={`${prefix}.name`} className="text-sm font-medium">
                   {locale === 'es' ? 'Nombre completo' : 'Full Name'}
