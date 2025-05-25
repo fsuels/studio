@@ -165,7 +165,15 @@ export default function WizardForm({
     const currentStepFieldKey = steps[currentStepIndex]?.id;
 
     if (isReviewing) {
-      await trigger(); // mark validation errors but allow continue
+      const isValidForm = await trigger(); // mark validation errors
+      if (!isValidForm) {
+        toast({
+          title: t("wizard.incompleteFieldsNotice"),
+          variant: "destructive",
+        });
+        return;
+      }
+
       if (!isLoggedIn) {
         setShowAuthModal(true);
         return;
