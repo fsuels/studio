@@ -1,0 +1,40 @@
+name: Size Limit
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 20
+          cache: 'npm'
+      - run: npm ci
+      - name: Build and measure base
+        if: github.event_name == 'pull_request'
+        run: |
+          git fetch origin ${{ github.base_ref }} --depth=1
+          git checkout FETCH_HEAD
+          npm ci
+          npm run build
+          npx size-limit --json > base.json
+      - name: Build and measure PR
+        if: github.event_name == 'pull_request'
+        run: |
+          git checkout ${{ github.sha }}
+          npm ci
+          npm run build
+          npx size-limit --json > pr.json
+      - name: Compare sizes
+        if: github.event_name == 'pull_request'
+        run: node scripts/check-size.js base.json pr.json
+      - name: Measure on push
+        if: github.event_name != 'pull_request'
+        run: |
+          npm run build
+          npx size-limit

@@ -2,7 +2,7 @@
 "use client";
 
 import React, { useState } from 'react';
-import { documentLibrary } from '@/lib/document-library';
+import { documentLibrary } from '@/lib/document-library/index';
 import { analyzeFormData } from '@/ai/flows/analyze-form-data'; // Corrected import
 
 interface Props {

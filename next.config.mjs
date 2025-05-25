@@ -1,4 +1,14 @@
 import webpack from 'webpack';
+import fs from 'fs';
+import path from 'path';
+
+let redirects = [];
+try {
+  const redirectsJson = fs.readFileSync(path.join(process.cwd(), 'config', 'redirects.json'), 'utf-8');
+  redirects = JSON.parse(redirectsJson);
+} catch (e) {
+  console.warn('[next.config.mjs] No redirects loaded:', e);
+}
 
 const nextConfig = {
   /* config options here */
@@ -8,7 +18,6 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
-  swcMinify: true,
   // Generate source maps for production bundles so Lighthouse can access
   // original source when analyzing the site. This adds `.map` files next to
   // the JavaScript bundles and slightly increases build size.
@@ -38,6 +47,13 @@ const nextConfig = {
   //   );
   //   return config;
   // },
+  async redirects() {
+    return redirects.map(r => ({
+      source: r.source || r.from,
+      destination: r.destination || r.to,
+      permanent: typeof r.permanent === 'boolean' ? r.permanent : true,
+    }));
+  },
 };
 
 export default nextConfig;
