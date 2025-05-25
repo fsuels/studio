@@ -26,6 +26,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useTranslation } from "react-i18next";
 
 import FieldRenderer from "./FieldRenderer";
+import PartyGroupField from "./PartyGroupField";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import { prettify } from "@/lib/schema-utils";
@@ -147,10 +148,13 @@ export default function WizardForm({
     !isReviewing && totalSteps > 0 && currentStepIndex < totalSteps
       ? steps[currentStepIndex]
       : null;
-  const progress =
-    totalSteps > 0
-      ? ((isReviewing ? totalSteps : currentStepIndex + 1) / totalSteps) * 100
-      : 0;
+
+  const requiredFieldCount = doc.questions?.filter(q => q.required).length || 0;
+  const completedRequiredFieldCount = doc.questions?.filter(q => {
+    const val = getValues(q.id as any);
+    return val !== undefined && val !== null && String(val).trim() !== '';
+  }).length || 0;
+  const progress = requiredFieldCount > 0 ? (completedRequiredFieldCount / requiredFieldCount) * 100 : 0;
 
   const handlePreviousStep = useCallback(() => {
     if (isReviewing) {
@@ -168,6 +172,13 @@ export default function WizardForm({
       await trigger(); // mark validation errors but allow continue
       if (!isLoggedIn) {
         setShowAuthModal(true);
+        return;
+      }
+      if (!isFormValid) {
+        toast({
+          title: t("wizard.incompleteFieldsNotice"),
+          variant: "destructive",
+        });
         return;
       }
       try {
@@ -311,77 +322,59 @@ export default function WizardForm({
     ? t("wizard.generateDocument")
     : t("wizard.saveContinue");
 
-  const formContent =
-    currentField &&
-    currentField.id &&
-    actualSchemaShape &&
-    (actualSchemaShape as any)[currentField.id] ? (
-      <div className="mt-6 space-y-6 min-h-[200px]">
-        {(actualSchemaShape as any)?.[currentField.id] &&
-        ((actualSchemaShape as any)[currentField.id] instanceof z.ZodObject ||
-          ((actualSchemaShape as any)[currentField.id]._def &&
-            (actualSchemaShape as any)[currentField.id]._def.typeName ===
-              "ZodObject")) &&
-        (currentField.id.includes("_address") ||
-          currentField.id.includes("Address")) ? (
-          <Controller
-            key={`${currentField.id}-controller`}
-            control={control}
-            name={currentField.id as any}
-            render={({
-              field: { onChange: rhfOnChange, value: rhfValue, name: rhfName },
-            }) => (
-              <AddressField
-                name={rhfName}
-                label={currentField.label}
-                required={
-                  (
-                    doc.questions?.find((q) => q.id === currentField.id) ||
-                    (actualSchemaShape as any)?.[currentField.id]?._def
-                  )?.required
-                }
-                error={
-                  errors[currentField.id as any]?.message as string | undefined
-                }
-                placeholder={t("Enter address...")}
-                value={rhfValue || ""}
-                onChange={(val, parts) => {
-                  rhfOnChange(val);
-                  if (parts && actualSchemaShape) {
-                    const prefix =
-                      currentField.id.replace(/_address$/i, "") ||
-                      currentField.id.replace(/Address$/i, "");
-                    if ((actualSchemaShape as any)?.[`${prefix}_city`])
-                      setValue(`${prefix}_city`, parts.city, {
-                        shouldValidate: true,
-                        shouldDirty: true,
-                      });
-                    if ((actualSchemaShape as any)?.[`${prefix}_state`])
-                      setValue(`${prefix}_state`, parts.state, {
-                        shouldValidate: true,
-                        shouldDirty: true,
-                      });
-                    if ((actualSchemaShape as any)?.[`${prefix}_postal_code`])
-                      setValue(`${prefix}_postal_code`, parts.postalCode, {
-                        shouldValidate: true,
-                        shouldDirty: true,
-                      });
-                  }
-                }}
-                tooltipText={currentField.tooltip}
+  const currentQuestion = doc.questions?.find((q) => q.id === currentField?.id);
+
+  const formContent = currentField
+    ? (
+        <div className="mt-6 space-y-6 min-h-[200px]">
+          {currentQuestion?.type === 'group-array' ? (
+            <PartyGroupField
+              name={currentQuestion.id as 'sellers' | 'buyers'}
+              locale={locale}
+              itemLabel={currentQuestion.itemLabel}
+            />
+          ) : currentField.id &&
+            actualSchemaShape &&
+            (actualSchemaShape as any)[currentField.id] ? (
+            (currentField.id.includes('_address') || currentField.id.includes('Address')) ? (
+              <Controller
+                key={`${currentField.id}-controller`}
+                control={control}
+                name={currentField.id as any}
+                render={({ field: { onChange: rhfOnChange, value: rhfValue, name: rhfName } }) => (
+                  <AddressField
+                    name={rhfName}
+                    label={currentField.label}
+                    required={(
+                      doc.questions?.find((q) => q.id === currentField.id) ||
+                      (actualSchemaShape as any)?.[currentField.id]?._def
+                    )?.required}
+                    error={errors[currentField.id as any]?.message as string | undefined}
+                    placeholder={t('Enter address...')}
+                    value={rhfValue || ''}
+                    onChange={(val, parts) => {
+                      rhfOnChange(val);
+                      if (parts && actualSchemaShape) {
+                        const prefix = currentField.id.replace(/_address$/i, '') || currentField.id.replace(/Address$/i, '');
+                        if ((actualSchemaShape as any)?.[`${prefix}_city`])
+                          setValue(`${prefix}_city`, parts.city, { shouldValidate: true, shouldDirty: true });
+                        if ((actualSchemaShape as any)?.[`${prefix}_state`])
+                          setValue(`${prefix}_state`, parts.state, { shouldValidate: true, shouldDirty: true });
+                        if ((actualSchemaShape as any)?.[`${prefix}_postal_code`])
+                          setValue(`${prefix}_postal_code`, parts.postalCode, { shouldValidate: true, shouldDirty: true });
+                      }
+                    }}
+                    tooltipText={currentField.tooltip}
+                  />
+                )}
               />
-            )}
-          />
-        ) : (
-          <FieldRenderer
-            key={currentField.id}
-            fieldKey={currentField.id}
-            locale={locale}
-            doc={doc}
-          />
-        )}
-      </div>
-    ) : (doc.questions?.length || 0) === 0 && !isReviewing ? (
+            ) : (
+              <FieldRenderer key={currentField.id} fieldKey={currentField.id} locale={locale} doc={doc} />
+            )
+          ) : null}
+        </div>
+      )
+    : (doc.questions?.length || 0) === 0 && !isReviewing ? (
       <div className="mt-6 min-h-[200px] flex flex-col items-center justify-center text-center">
         <p className="text-muted-foreground mb-4">
           {t("dynamicForm.noQuestionsNeeded", {
@@ -450,11 +443,7 @@ export default function WizardForm({
               type="button"
               onClick={handleNextStep}
               className="bg-primary text-primary-foreground hover:bg-primary/90 min-w-[120px] w-full sm:w-auto"
-              disabled={
-                formIsSubmitting ||
-                authIsLoading ||
-                (isReviewing && !isFormValid && Object.keys(errors).length > 0)
-              }
+              disabled={formIsSubmitting || authIsLoading}
             >
               {formIsSubmitting || authIsLoading ? (
                 <Loader2 className="animate-spin h-5 w-5" />
