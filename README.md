@@ -125,6 +125,15 @@ npx ts-node scripts/migrate-doc-structure.ts
 
 Add `--apply` to perform the moves and automatically update imports. Redirects are written to `config/redirects.json`.
 
+### Update legacy usStates imports
+
+Some older files still import `usStates` from `@/lib/usStates`. After migrating the document
+structure, run the codemod below to update those references to the shared utilities module:
+
+```bash
+npx jscodeshift -t scripts/codemods/replace-us-paths.js <paths-to-update>
+```
+
 ## Running Tests
 
 Use `npm run test` to execute unit tests via Node's built‑in test runner. End‑to‑end tests run with Playwright using `npm run e2e`. Install Playwright browsers first with `npx playwright install`.
