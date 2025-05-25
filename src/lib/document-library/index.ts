@@ -6,14 +6,19 @@ import { docLoaders } from '../document-loaders';
 
 // Helper function to ensure a document object is valid
 const isValidDocument = (doc: any): doc is LegalDocument => {
-  const hasId = doc && typeof doc.id === 'string' && doc.id.trim() !== '';
-  const hasCategory = doc && typeof doc.category === 'string' && doc.category.trim() !== '';
-  const hasSchema = doc && doc.schema && typeof doc.schema.parse === 'function';
+  if (!doc || typeof doc !== 'object' || Array.isArray(doc) || !('id' in doc)) {
+    // If it doesn't even look like a document, silently ignore
+    return false;
+  }
+
+  const hasId = typeof doc.id === 'string' && doc.id.trim() !== '';
+  const hasCategory = typeof (doc as any).category === 'string' && (doc as any).category.trim() !== '';
+  const hasSchema = (doc as any).schema && typeof (doc as any).schema.parse === 'function';
 
   // Check for English translation name as the primary indicator of a valid name structure
-  const hasValidName = doc &&
-    ( (doc.translations && doc.translations.en && typeof doc.translations.en.name === 'string' && doc.translations.en.name.trim() !== '') ||
-      (typeof doc.name === 'string' && doc.name.trim() !== '') );
+  const hasValidName =
+    ((doc as any).translations && (doc as any).translations.en && typeof (doc as any).translations.en.name === 'string' && (doc as any).translations.en.name.trim() !== '') ||
+    (typeof (doc as any).name === 'string' && (doc as any).name.trim() !== '');
 
   if (!hasId) console.warn('[isValidDocument] Invalid/Missing ID:', doc?.id, doc?.name);
   if (!hasCategory) console.warn('[isValidDocument] Invalid/Missing Category for doc:', doc?.id, doc?.name);
@@ -61,7 +66,12 @@ export const documentLibraryByCountry: Record<string, LegalDocument[]> = {};
 for (const path of modules.keys()) {
   const mod = modules(path) as RegistryDoc;
   for (const exported of Object.values(mod)) {
-    if (exported && typeof exported === 'object') {
+    if (
+      exported &&
+      typeof exported === 'object' &&
+      !Array.isArray(exported) &&
+      'id' in exported
+    ) {
       const doc = ensureBasicTranslations(exported);
       if (isValidDocument(doc)) {
         const parts = path.split('/');
