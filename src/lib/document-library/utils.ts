@@ -69,3 +69,6 @@ export const caProvinces = [
   { value: 'SK', label: 'Saskatchewan' },
   { value: 'YT', label: 'Yukon' }
 ];
+export function getDocumentUrl(doc: { id: string; jurisdiction?: string }, locale: string): string {
+  return `/${locale}/docs/${(doc.jurisdiction || 'US').toLowerCase()}/${doc.id}`;
+}

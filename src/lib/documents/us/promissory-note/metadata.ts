@@ -8,17 +8,19 @@ export const promissoryNoteMeta: LegalDocument = {
   jurisdiction: 'US',
   category: 'Finance',
   languageSupport: ['en', 'es'],
-  basePrice: 5, 
+  basePrice: 5,
   requiresNotarization: false,
   canBeRecorded: false,
   offerNotarization: false,
   offerRecordingHelp: false,
   states: 'all',
-  templatePath: '/templates/en/promissory-note.md', // Path relative to public folder
-  templatePath_es: '/templates/es/promissory-note.md', // Path relative to public folder
-  schema: PromissoryNoteSchema,
-  questions: promissoryNoteQuestions,
-  upsellClauses: [],
+  // Explicit top-level name for ensureBasicTranslations
+  name: "Promissory Note",
+  name_es: "Pagaré",
+  description: 'Formalize a promise to repay a loan, with terms for principal, interest, and repayment schedule.',
+  description_es: 'Formalizar una promesa de pago de un préstamo, con plazos para el capital, intereses y calendario de pagos.',
+  aliases: ["iou", "loan paper", "promise to pay", "loan document"],
+  aliases_es: ["pagaré", "documento de préstamo", "promesa de pago"],
   translations: {
     en: {
       name: 'Promissory Note',
@@ -30,7 +32,12 @@ export const promissoryNoteMeta: LegalDocument = {
       description: 'Formalizar una promesa de pago de un préstamo, con plazos para el capital, intereses y calendario de pagos.',
       aliases: ["pagaré", "documento de préstamo", "promesa de pago"]
     }
-  }
+  },
+  templatePath: '/templates/en/promissory-note.md',
+  templatePath_es: '/templates/es/promissory-note.md',
+  schema: PromissoryNoteSchema,
+  questions: promissoryNoteQuestions,
+  upsellClauses: []
 };
 
-console.log('[promissory-note metadata] questions loaded:', promissoryNoteMeta.questions?.length);
+console.log('[promissory-note metadata] questions loaded length:', promissoryNoteMeta.questions?.length);

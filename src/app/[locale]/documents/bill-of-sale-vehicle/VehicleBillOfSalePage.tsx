@@ -37,12 +37,9 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Progress } from "@/components/ui/progress";
-import { usStates } from "@/lib/document-library";
+import { usStates } from "@/lib/document-library/index";
 import { vehicleBillOfSaleFaqs, type FaqItem } from "./faqs";
-import {
-  getVehicleCompliance,
-  vehicleComplianceStates,
-} from "@/lib/states/vehicle-compliance";
+import { billOfSaleVehicle as vehicleBillOfSale } from "@/lib/documents/us/bill-of-sale-vehicle";
 import { getDb } from "@/lib/firebase";
 import { collection, doc, getDoc } from "firebase/firestore";
 
@@ -58,15 +55,17 @@ export default function VehicleBillOfSalePage() {
   }, [language, i18n]);
 
   useEffect(() => {
-    if (selectedState) {
-      const compliance = getVehicleCompliance(selectedState);
-      if (compliance) {
-        setComplianceMessage(
-          compliance.notarizationRequired
-            ? `⚠️ Notarization required in ${compliance.state}`
-            : `✔ Valid in ${compliance.state}`,
-        );
+    if (selectedState && vehicleBillOfSale.compliance) {
+      const rules = vehicleBillOfSale.compliance[selectedState] || vehicleBillOfSale.compliance.DEFAULT;
+      if (rules) {
+        if (rules.requireNotary) {
+          setComplianceMessage(`⚠️ Notarization required in ${selectedState}`);
+        } else {
+          setComplianceMessage(`✔ Valid in ${selectedState}`);
+        }
       }
+    } else {
+      setComplianceMessage("");
     }
   }, [selectedState]);
 

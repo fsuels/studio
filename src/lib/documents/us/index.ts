@@ -1,7 +1,7 @@
 // src/lib/documents/us/index.ts
 // This file should export all US-specific documents.
 
-export { vehicleBillOfSale } from './vehicle-bill-of-sale';
+export { billOfSaleVehicle } from './bill-of-sale-vehicle';
 // Explicitly reference the folder index to avoid picking up the legacy
 // promissory-note.ts file which lacks the full schema and question set.
 export { promissoryNote } from './promissory-note/index';

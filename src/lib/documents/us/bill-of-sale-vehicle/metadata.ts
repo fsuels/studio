@@ -1,0 +1,51 @@
+// src/lib/documents/us/bill-of-sale-vehicle/metadata.ts
+import { z } from 'zod';
+import { BillOfSaleSchema } from './schema';
+import type { LegalDocument } from '@/types/documents';
+import { usStates } from '@/lib/document-library/utils';
+import { billOfSaleVehicleQuestions } from './questions';
+import { rules as stateRules } from '@/lib/compliance';
+
+export const vehicleBillOfSaleMeta: LegalDocument = {
+  id: "bill-of-sale-vehicle",
+  jurisdiction: 'US',
+  category: "Finance",
+  languageSupport: ["en", "es"],
+  requiresNotarization: true,
+  canBeRecorded: false,
+  offerNotarization: true,
+  offerRecordingHelp: false,
+  basePrice: 19.95,
+  states: 'all',
+  // Explicit top-level name for ensureBasicTranslations
+  name: "Vehicle Bill of Sale",
+  name_es: "Contrato de Compraventa de Vehículo",
+  description: "Document the sale and transfer of ownership for a vehicle, compliant with state requirements.",
+  description_es: "Documentar la venta y transferencia de propiedad de un vehículo, conforme a los requisitos estatales.",
+  aliases: ["sell car", "used item sale", "vehicle transfer", "car sale contract"],
+  aliases_es: ["venta de coche", "venta de artículo usado", "transferencia de vehículo", "contrato de venta de auto"],
+  translations: {
+    en: {
+      name: "Vehicle Bill of Sale",
+      description: "Document the sale and transfer of ownership for a vehicle, compliant with state requirements.",
+      aliases: ["sell car", "used item sale", "vehicle transfer", "car sale contract"]
+    },
+    es: {
+      name: "Contrato de Compraventa de Vehículo",
+      description: "Documentar la venta y transferencia de propiedad de un vehículo, conforme a los requisitos estatales.",
+      aliases: ["venta de coche", "venta de artículo usado", "transferencia de vehículo", "contrato de venta de auto"]
+    }
+  },
+  // Updated to new document template structure under /{lang}/{country}/{docId}
+  templatePath: '/templates/en/us/bill-of-sale-vehicle.md',
+  templatePath_es: '/templates/es/us/bill-of-sale-vehicle.md',
+  requiresNotarizationStates: ['AZ','KY','LA','MT','NV','OH','OK','PA','WV','WY'],
+  compliance: stateRules,
+  schema: BillOfSaleSchema,
+  questions: billOfSaleVehicleQuestions,
+  upsellClauses: []
+};
+
+// Provide the canonical export name used throughout the app
+export const billOfSaleVehicle = vehicleBillOfSaleMeta;
+
