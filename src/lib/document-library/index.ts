@@ -2,8 +2,8 @@
 import { z } from 'zod';
 import type { LegalDocument, LocalizedText, Question } from '@/types/documents'; // Ensure Question is imported
 import * as us_docs_barrel from '../documents/us';
-import * * as ca_docs_barrel from '../documents/ca';
-import { documentLibraryAdditions } from './document-library-additions';
+import * as ca_docs_barrel from '../documents/ca';
+import { documentLibraryAdditions } from '../document-library-additions';
 
 // Helper to ensure basic translations structure exists for name checking
 const ensureBasicTranslations = (doc: any): LegalDocument => {
@@ -36,7 +36,7 @@ const isValidDocument = (doc: any): doc is LegalDocument => {
   const hasSchema = d && d.schema && typeof d.schema.parse === 'function';
   const hasValidEnglishName = d && d.translations?.en?.name && typeof d.translations.en.name === 'string' && d.translations.en.name.trim() !== '';
 
-  if (d && d.id === 'bill-of-sale-vehicle' || d && d.id === 'promissory-note') {
+  if (d && (d.id === 'bill-of-sale-vehicle' || d.id === 'promissory-note')) {
     // console.log(`[isValidDocument] Checking ${d.id}: ID=${hasId}, Cat=${hasCategory}, Schema=${hasSchema}, NameEN=${hasValidEnglishName}`);
   }
 
@@ -52,14 +52,15 @@ const processBarrel = (barrel: any, countryCode: string): LegalDocument[] => {
   const docs: LegalDocument[] = [];
   // console.log(`[document-library] Processing barrel for country: ${countryCode}. Found ${Object.keys(barrel).length} raw exports.`);
   Object.values(barrel).forEach((exportedDoc: any) => {
-    if (isValidDocument(exportedDoc)) {
-      // console.log(`[document-library] Valid document found in ${countryCode} barrel: ${exportedDoc.id}`);
-      docs.push(exportedDoc);
-      if (exportedDoc.id === 'promissory-note') {
-        // console.log('[document-library] PROMISSORY_NOTE_FROM_BARREL (US):', JSON.stringify({id: exportedDoc.id, name_en: exportedDoc.translations?.en?.name, qCount: exportedDoc.questions?.length, schema: !!exportedDoc.schema}, null, 2));
+    const preppedDoc = ensureBasicTranslations(exportedDoc);
+    if (isValidDocument(preppedDoc)) {
+      // console.log(`[document-library] Valid document found in ${countryCode} barrel: ${preppedDoc.id}`);
+      docs.push(preppedDoc);
+      if (preppedDoc.id === 'promissory-note') {
+        // console.log('[document-library] PROMISSORY_NOTE_FROM_BARREL (US):', JSON.stringify({id: preppedDoc.id, name_en: preppedDoc.translations?.en?.name, qCount: preppedDoc.questions?.length, schema: !!preppedDoc.schema}, null, 2));
       }
     } else {
-      // console.warn(`[document-library] Invalid or incomplete document object found in ${countryCode} barrel:`, exportedDoc ? exportedDoc.id || exportedDoc.name : 'undefined doc');
+      // console.warn(`[document-library] Invalid or incomplete document object found in ${countryCode} barrel:`, preppedDoc ? preppedDoc.id || preppedDoc.name : 'undefined doc');
     }
   });
   // console.log(`[document-library] Valid documents after processing ${countryCode} barrel: ${docs.length}`);
@@ -68,7 +69,7 @@ const processBarrel = (barrel: any, countryCode: string): LegalDocument[] => {
 
 const usDocsArray: LegalDocument[] = processBarrel(us_docs_barrel, 'us');
 const caDocsArray: LegalDocument[] = processBarrel(ca_docs_barrel, 'ca');
-const additionsArray: LegalDocument[] = documentLibraryAdditions.filter(isValidDocument); // Ensure additions are also filtered
+const additionsArray: LegalDocument[] = documentLibraryAdditions.map(ensureBasicTranslations).filter(isValidDocument); // Ensure additions are also filtered and prepped
 
 export const documentLibraryByCountry: Record<string, LegalDocument[]> = {
   us: usDocsArray,
@@ -175,7 +176,36 @@ tempAllDocumentsRegistryCheck.forEach(doc => {
 export function getDoc(docId: string, country = 'us'): LegalDocument | undefined {
   return registry[`${country.toLowerCase()}/${docId}`];
 }
-export { getDoc as getDocument };
+export { getDoc as getDocument }; // Alias for backward compatibility if needed
+
+export async function loadDoc(docId: string, country = 'us'): Promise<LegalDocument | undefined> {
+  const loaderKey = `${country.toLowerCase()}/${docId}`;
+  const loader = docLoaders[loaderKey];
+  if (loader) {
+    try {
+      // The loader function returns a module, and the document is the default export
+      // or a named export matching the camelCased docId.
+      const module = await loader();
+      // Attempt to find the document configuration within the loaded module
+      // Common patterns: default export, or named export matching camelCase(docId) or the docId itself.
+      const docConfig = module.default || module[docId] || module[docId.replace(/-/g, '_')] || module[docId.replace(/-([a-z])/g, g => g[1].toUpperCase())] || Object.values(module)[0];
+
+      if (docConfig && isValidDocument(ensureBasicTranslations(docConfig))) { // Re-validate after dynamic load
+        return docConfig as LegalDocument;
+      } else {
+        console.error(`[loadDoc] Document config not found or invalid in module for key: ${loaderKey}`, module);
+        return undefined;
+      }
+    } catch (error) {
+      console.error(`[loadDoc] Error loading document for key ${loaderKey}:`, error);
+      return undefined;
+    }
+  }
+  console.warn(`[loadDoc] No loader found for key: ${loaderKey}. Falling back to registry.`);
+  // Fallback to registry if loader not found (though registry might also be incomplete if loaders are primary)
+  return getDoc(docId, country);
+}
+
 
 export function findMatchingDocuments(
   query: string,
@@ -221,4 +251,5 @@ export default defaultDocumentLibrary;
 export { defaultDocumentLibrary as documentLibrary };
 
 export { usStates } from '../usStates';
-export type { LegalDocument, Question, UpsellClause } from '@/types/documents'; // Question import added here
+export type { Question, LegalDocument, UpsellClause } from '@/types/documents'; // Question import added here
+export { docLoaders } from '../document-loaders'; // Ensure docLoaders is exported
