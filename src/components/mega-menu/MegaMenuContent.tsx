@@ -6,16 +6,16 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import type { LegalDocument } from '@/lib/document-library/index'; // Use the re-exported type
-import type { CategoryInfo } from '@/components/Step1DocumentSelector'; 
+import type { CategoryInfo } from '@/components/Step1DocumentSelector';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { FileText } from 'lucide-react';
 import { getDocTranslation } from '@/lib/i18nUtils';
-import { getDocumentUrl } from '@/lib/document-library/url'; // Correct import
+import { getDocumentUrl } from '@/lib/document-library/url';
 
 interface MegaMenuContentProps {
   categories: CategoryInfo[];
   documents: LegalDocument[];
-  onLinkClick?: () => void; 
+  onLinkClick?: () => void;
 }
 
 const MAX_DOCS_PER_CATEGORY_INITIAL = 5;
@@ -23,10 +23,9 @@ const MAX_DOCS_PER_CATEGORY_INITIAL = 5;
 const MemoizedDocLink = React.memo(function DocLink({ doc, locale, onClick, t }: { doc: LegalDocument; locale: 'en' | 'es'; onClick?: () => void; t: (key: string, fallback?: string | object) => string; }) {
   const translatedDoc = getDocTranslation(doc, locale);
   const docName = translatedDoc.name;
-  // Use getDocumentUrl for the detail page
-  const docHref = getDocumentUrl( 
+  const docHref = getDocumentUrl(
     locale,
-    (doc.jurisdiction || 'US').toLowerCase(), 
+    (doc.jurisdiction || 'US').toLowerCase(),
     doc.id
   );
   const router = useRouter();
@@ -49,12 +48,22 @@ export default function MegaMenuContent({ categories, documents, onLinkClick }: 
   const { t, i18n } = useTranslation("common");
   const currentLocale = i18n.language as 'en' | 'es';
 
+  console.log('[MegaMenuContent] Received documents count:', documents?.length);
+  if (documents && documents.length > 0) {
+    console.log('[MegaMenuContent] First few document IDs:', documents.slice(0,5).map(d => d.id));
+  }
+
+
   const getDocumentsForCategory = (categoryKey: string) => {
     const normalizedCategoryKey = categoryKey.trim().toLowerCase();
-    return documents.filter(doc => doc.category.trim().toLowerCase() === normalizedCategoryKey && doc.id !== 'general-inquiry');
+    const filteredDocs = documents.filter(doc => doc.category.trim().toLowerCase() === normalizedCategoryKey && doc.id !== 'general-inquiry');
+    // console.log(`[MegaMenuContent] Docs for category '${categoryKey}':`, filteredDocs.map(d => d.id));
+    return filteredDocs;
   };
 
   const hasContent = categories.some(category => getDocumentsForCategory(category.key).length > 0);
+  // console.log('[MegaMenuContent] Has Content:', hasContent);
+
 
   return (
     <ScrollArea className="w-full max-h-[calc(100vh-10rem-4rem)] md:max-h-[70vh] bg-popover text-popover-foreground rounded-b-lg">
@@ -62,6 +71,7 @@ export default function MegaMenuContent({ categories, documents, onLinkClick }: 
         {categories.map(category => {
             const categoryDocs = getDocumentsForCategory(category.key);
             const categoryLabel = t(category.labelKey, { defaultValue: category.key });
+            // console.log(`[MegaMenuContent] Rendering category: ${categoryLabel}, Docs found: ${categoryDocs.length}`);
             return (
             <div key={category.key}>
                 <h4 className="font-semibold mb-2 text-sm md:text-base text-foreground flex items-center border-b border-border pb-1.5">
@@ -83,8 +93,8 @@ export default function MegaMenuContent({ categories, documents, onLinkClick }: 
                     ))}
                     {categoryDocs.length > MAX_DOCS_PER_CATEGORY_INITIAL && (
                     <li>
-                        <Link 
-                            href={`/${currentLocale}/?category=${encodeURIComponent(category.key)}#workflow-start`} 
+                        <Link
+                            href={`/${currentLocale}/?category=${encodeURIComponent(category.key)}#workflow-start`}
                             className="text-xs md:text-sm text-primary font-medium hover:underline mt-1 inline-block"
                             onClick={onLinkClick}
                         >
