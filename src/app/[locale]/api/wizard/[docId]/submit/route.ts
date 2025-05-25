@@ -2,8 +2,7 @@
 import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { admin } from '@/lib/firebase-admin'; // Firebase Admin SDK
-import { documentLibrary, type LegalDocument } from '@/lib/document-library'; 
-import { z } from 'zod';
+import { documentLibrary } from '@/lib/document-library';
 
 // Placeholder for user authentication - replace with your actual auth logic
 async function getCurrentUser(): Promise<{ uid: string; email?: string | null } | null> {
