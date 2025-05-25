@@ -195,20 +195,7 @@ export default function PromissoryNoteDisplay({ locale }: PromissoryNoteDisplayP
         ))}
       </Accordion>
 
-      <section className="text-center py-8 bg-secondary/30 rounded-lg border border-border">
-        <h2 className="text-2xl font-semibold text-foreground mb-3">{t('finalCtaTitle')}</h2>
-        <p className="text-muted-foreground mb-6 max-w-lg mx-auto">{t('finalCtaSubtitle')}</p>
-          <Button
-            asChild
-            size="lg"
-            className="bg-primary hover:bg-primary/90 text-primary-foreground"
-            onMouseEnter={() => router.prefetch(`${docUrlBase}/start`)}
-          >
-            <Link href={`${docUrlBase}/start`} onClick={handleStartProcess} prefetch>
-              {t('startMyPromissoryNoteButton')}
-            </Link>
-          </Button>
-      </section>
+      {/* Final call to action handled by DocPageClient pricing card */}
     </div>
   );
 }
