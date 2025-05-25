@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { BillOfSaleSchema } from '@/schemas/billOfSale';
 import type { LegalDocument } from '@/types/documents';
 import { usStates } from '@/lib/document-library/utils';
-import { vehicleBillOfSaleQuestions } from './questions'; // Import questions
+import { billOfSaleVehicleQuestions } from './questions';
 import { rules as stateRules } from '@/lib/compliance';
 
 export const vehicleBillOfSaleMeta: LegalDocument = {
@@ -42,7 +42,7 @@ export const vehicleBillOfSaleMeta: LegalDocument = {
   requiresNotarizationStates: ['AZ','KY','LA','MT','NV','OH','OK','PA','WV','WY'],
   compliance: stateRules,
   schema: BillOfSaleSchema,
-  questions: vehicleBillOfSaleQuestions, // Assign imported questions
+  questions: billOfSaleVehicleQuestions,
   upsellClauses: []
 };
 
