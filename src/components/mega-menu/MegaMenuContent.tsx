@@ -9,24 +9,25 @@ import type { LegalDocument } from '@/lib/document-library/index'; // Use the re
 import type { CategoryInfo } from '@/components/Step1DocumentSelector'; 
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { FileText } from 'lucide-react';
-import { getDocTranslation } from '@/lib/i18nUtils'; // Import the utility
-import { getDocumentUrl } from '@/lib/document-library/url';
+import { getDocTranslation } from '@/lib/i18nUtils';
+import { getDocumentUrl } from '@/lib/document-library/url'; // Correct import
 
 interface MegaMenuContentProps {
   categories: CategoryInfo[];
-  documents: LegalDocument[]; // This will be the US documents by default if Header passes `documentLibrary`
+  documents: LegalDocument[];
   onLinkClick?: () => void; 
 }
 
 const MAX_DOCS_PER_CATEGORY_INITIAL = 5;
 
 const MemoizedDocLink = React.memo(function DocLink({ doc, locale, onClick, t }: { doc: LegalDocument; locale: 'en' | 'es'; onClick?: () => void; t: (key: string, fallback?: string | object) => string; }) {
-  const translatedDoc = getDocTranslation(doc, locale); // Use utility
+  const translatedDoc = getDocTranslation(doc, locale);
   const docName = translatedDoc.name;
-  const docHref = getDocumentUrl(
+  // Use getDocumentUrl for the detail page
+  const docHref = getDocumentUrl( 
     locale,
-    (doc.jurisdiction || 'US').toLowerCase(),
-    doc.id,
+    (doc.jurisdiction || 'US').toLowerCase(), 
+    doc.id
   );
   const router = useRouter();
 

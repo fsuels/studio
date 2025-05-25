@@ -15,8 +15,9 @@ import { track } from '@/lib/analytics';
 import { Separator } from '@/components/ui/separator';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion';
-import VehicleBillOfSaleDisplay from '@/components/docs/VehicleBillOfSaleDisplay'; // Import the specific display component
-import { getDocumentUrl } from '@/lib/document-library/url';
+import VehicleBillOfSaleDisplay from '@/components/docs/VehicleBillOfSaleDisplay';
+import PromissoryNoteDisplay from '@/components/docs/PromissoryNoteDisplay'; // Import the new display component
+import { getDocumentStartUrl } from '@/lib/document-library/url'; // Import new helper for start URL
 
 // Lazy load testimonials section so it's only fetched when this page is viewed
 const TrustAndTestimonialsSection = dynamic(
@@ -72,21 +73,23 @@ export default function DocPageClient({ params: routeParams }: DocPageClientProp
       setDocConfig(undefined);
       return;
     }
-    loadDoc(docId, currentCountry).then(setDocConfig);
+    loadDoc(docId, currentCountry).then(loadedDoc => {
+       if (!loadedDoc) {
+          console.error(`[DocPageClient] Doc config not found for ID: ${docId}, Country: ${currentCountry}. Triggering 404.`);
+          notFound();
+        } else {
+          setDocConfig(loadedDoc);
+        }
+    });
 
     // Fetch markdown content
     if (currentLocale && currentCountry && docId) {
       const fetchMarkdown = async () => {
         try {
-          const response = await fetch(`/api/document-template?locale=${currentLocale}&country=${currentCountry}&docId=${docId}`);
-          if (response.ok) {
-            const markdown = await response.text();
-            setMarkdownContent(markdown);
-          } else {
-            console.error('Failed to fetch markdown content:', response.statusText);
-          }
+          // Assuming getTemplatePath is correctly defined and used internally by DocumentDetail or if needed here.
+          // For now, DocumentDetail handles its own fetching based on props.
         } catch (error) {
-          console.error('Error fetching markdown content:', error);
+          console.error('Error fetching markdown content (though DocumentDetail handles it):', error);
         }
       };
       fetchMarkdown();
@@ -105,26 +108,27 @@ export default function DocPageClient({ params: routeParams }: DocPageClientProp
     if (typeof (DocumentDetail as any).preload === 'function') {
       (DocumentDetail as any).preload();
     }
-    if (docId && currentLocale) {
-      router.prefetch(getDocumentUrl(currentLocale, currentCountry, docId));
+    if (docId && currentLocale && currentCountry) { // Added currentCountry check
+      router.prefetch(getDocumentStartUrl(currentLocale, currentCountry, docId));
     }
-  }, [router, docId, currentLocale, currentCountry]);
+  }, [router, docId, currentLocale, currentCountry]); // Added currentCountry
 
   useEffect(() => {
     if (!isHydrated) return;
     if (docId) {
-      if (!docConfig) {
-        console.error(`[DocPageClient] Doc config not found for ID: ${docId}. Triggering 404.`);
-        notFound();
+      if (docConfig === undefined && !isLoading) { // Check isLoading to avoid premature notFound
+        // This logic might be too aggressive if loadDoc is still in progress.
+        // Consider moving notFound() to the .then of loadDoc if it's truly not found.
       }
     } else {
       console.error("[DocPageClient] docId is undefined. Triggering 404.");
       notFound();
     }
-    setIsLoading(false);
-  }, [docId, docConfig, isHydrated, notFound]);
-
-
+     // Set loading to false after docConfig has had a chance to be set
+    if (docConfig !== undefined || (docId && !docConfig)) { // If docId exists but docConfig is still undefined after attempt, it's likely not found or error
+      setIsLoading(false);
+    }
+  }, [docId, docConfig, isHydrated, isLoading]); // Added isLoading
 
 
   useEffect(() => {
@@ -143,26 +147,16 @@ export default function DocPageClient({ params: routeParams }: DocPageClientProp
     }
   }, [docConfig, currentLocale, isHydrated]);
 
-  useEffect(() => {
-    if (!isHydrated) return;
-    if (typeof (DocumentDetail as any).preload === 'function') {
-      (DocumentDetail as any).preload();
-    }
-    if (docId && currentLocale) {
-      router.prefetch(getDocumentUrl(currentLocale, currentCountry, docId));
-    }
-  }, [docId, currentLocale, currentCountry, isHydrated, router]);
-
 
   const handleStartWizard = () => {
-    if (!docConfig || !currentLocale || !isHydrated) return;
+    if (!docConfig || !currentLocale || !currentCountry || !isHydrated) return; // Added currentCountry check
     track('add_to_cart', {
       id: docConfig.id,
       name: currentLocale === 'es' && docConfig.translations?.es?.name ? docConfig.translations.es.name : docConfig.translations?.en?.name || docConfig.name,
       value: docConfig.basePrice
     });
     router.push(
-      getDocumentUrl(currentLocale, currentCountry, docConfig.id),
+      getDocumentStartUrl(currentLocale, currentCountry, docConfig.id), // Use getDocumentStartUrl
     );
   };
 
@@ -264,7 +258,7 @@ export default function DocPageClient({ params: routeParams }: DocPageClientProp
                         {t('docDetail.previewSubtitle', {defaultValue: "This is how your document will generally look. Specific clauses and details will be customized by your answers."})}
                     </p>
                 </div>
-                <DocumentDetail locale={currentLocale as 'en' | 'es'} docId={docId as string} altText={`${documentDisplayName} preview`} />
+                <DocumentDetail locale={currentLocale as 'en' | 'es'} country={currentCountry || 'us'} docId={docId as string} altText={`${documentDisplayName} preview`} />
                  <p className="text-xs text-muted-foreground mt-2 text-center italic">
                     AI Highlight: <AiHighlightPlaceholder text="Key clauses" /> will be automatically tailored.
                  </p>
@@ -273,7 +267,7 @@ export default function DocPageClient({ params: routeParams }: DocPageClientProp
             <aside className="md:col-span-2 space-y-6">
                  <Card className="shadow-lg border-primary">
                     <CardHeader>
-                        <CardTitle className="text-lg text-primary">{t('docDetail.pricingTitle', 'Transparent Pricing')}</CardTitle>
+                        <CardTitle className="text-lg text-primary">{t('docDetail.pricingTitle', {defaultValue: 'Transparent Pricing'})}</CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-3">
                         <div className="flex items-baseline justify-between">
@@ -293,7 +287,7 @@ export default function DocPageClient({ params: routeParams }: DocPageClientProp
                     <Card className="shadow-md">
                         <CardHeader>
                             <CardTitle className="text-md flex items-center gap-2">
-                                <Zap size={18} className="text-accent" /> {t('docDetail.optionalAddons', 'Optional Add-ons')}
+                                <Zap size={18} className="text-accent" /> {t('docDetail.optionalAddons', {defaultValue: 'Optional Add-ons'})}
                             </CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-2">
@@ -310,7 +304,7 @@ export default function DocPageClient({ params: routeParams }: DocPageClientProp
                  <Card className="shadow-md">
                     <CardHeader>
                         <CardTitle className="text-md flex items-center gap-2">
-                            <HelpCircle size={18} className="text-blue-500" /> {t('docDetail.aiAssistance', 'AI Assistance')}
+                            <HelpCircle size={18} className="text-blue-500" /> {t('docDetail.aiAssistance', {defaultValue: 'AI Assistance'})}
                         </CardTitle>
                     </CardHeader>
                     <CardContent>
