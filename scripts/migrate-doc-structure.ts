@@ -1,197 +1,103 @@
-import fs from 'fs';
+#!/usr/bin/env ts-node
+
+/**
+ * One-time, idempotent migration that:
+ * 1. Scans legacy locations (e.g. /src/lib/documents-old, /templates/en)
+ * 2. Moves each doc into /src/lib/documents/{country}/{docId}/...
+ * 3. Adds barrel index.ts
+ * 4. Moves templates into /templates/{lang}/{country}/{docId}.md
+ * 5. Logs every action to ./migration-log.json
+ */
+
+import { promises as fs } from 'fs';
 import path from 'path';
-import crypto from 'crypto';
-import { Project } from 'ts-morph';
+import globby from 'globby';
+import prettier from 'prettier';
 
-const ROOT = process.cwd();
-const DOC_ROOT = path.join(ROOT, 'src', 'lib', 'documents');
-const TEMPLATE_ROOT = path.join(ROOT, 'public', 'templates');
-const NEW_TEMPLATE_ROOT = path.join(ROOT, 'templates');
-const REDIRECTS_PATH = path.join(ROOT, 'config', 'redirects.json');
+const LEGACY_DOC_GLOBS = [
+  'src/lib/documents/**/schema.ts',
+  'src/schemas/**/*.ts'
+];
 
-const isApply = process.argv.includes('--apply');
+const TARGET_ROOT = 'src/lib/documents';
+const TEMPLATE_TARGET_ROOT = 'templates';
 
-interface Move { src: string; dest: string; }
-interface RedirectEntry { from: string; to: string; }
-
-const moves: Move[] = [];
-const redirects: RedirectEntry[] = [];
-
-interface Replacement { old: string; new: string; }
-const replacements: Replacement[] = [];
-
-function sha256(file: string): string {
-  const buf = fs.readFileSync(file);
-  return crypto.createHash('sha256').update(buf).digest('hex');
+interface LogEntry {
+  action: string;
+  src?: string;
+  dest?: string;
 }
 
-function ensureDir(dir: string) {
-  fs.mkdirSync(dir, { recursive: true });
-}
-
-function walk(dir: string, fn: (p: string) => void) {
-  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
-    const p = path.join(dir, entry.name);
-    if (entry.isDirectory()) walk(p, fn); else fn(p);
+async function exists(p: string): Promise<boolean> {
+  try {
+    await fs.access(p);
+    return true;
+  } catch {
+    return false;
   }
 }
 
-function scanTemplates() {
-  if (!fs.existsSync(TEMPLATE_ROOT)) return;
-  const langs = fs.readdirSync(TEMPLATE_ROOT);
-  for (const lang of langs) {
-    const langDir = path.join(TEMPLATE_ROOT, lang);
-    if (!fs.statSync(langDir).isDirectory()) continue;
-    walk(langDir, file => {
-      if (!file.endsWith('.md')) return;
-      const rel = path.relative(TEMPLATE_ROOT, file);
-      const parts = rel.split(path.sep);
-      const l = parts[0];
-      let country = 'us';
-      let docFile = '';
-      if (parts.length === 3) {
-        country = parts[1];
-        docFile = parts[2];
-      } else if (parts.length === 2) {
-        docFile = parts[1];
-      } else {
-        return;
-      }
-      const docId = path.basename(docFile, '.md');
-      const dest = path.join(NEW_TEMPLATE_ROOT, l, country, `${docId}.md`);
-      moves.push({ src: file, dest });
-      const oldUrl = `/templates/${rel.replace(/\\/g, '/')}`;
-      const newUrl = `/templates/${l}/${country}/${docId}.md`;
-      redirects.push({ from: oldUrl, to: newUrl });
-      replacements.push({ old: oldUrl, new: newUrl });
-    });
+async function move(src: string, dest: string, log: LogEntry[]) {
+  if (!(await exists(src))) return;
+  if (await exists(dest)) {
+    log.push({ action: 'skip', src, dest });
+    return;
   }
+  await fs.mkdir(path.dirname(dest), { recursive: true });
+  await fs.rename(src, dest);
+  log.push({ action: 'move', src, dest });
 }
 
-function scanDocuments() {
-  if (!fs.existsSync(DOC_ROOT)) return;
-  walk(DOC_ROOT, file => {
-    if (!file.endsWith('.ts')) return;
-    const rel = path.relative(DOC_ROOT, file);
-    const parts = rel.split(path.sep);
-    if (parts.length === 1) {
-      const docId = path.basename(file, '.ts');
-      const dest = path.join(DOC_ROOT, 'us', docId, 'metadata.ts');
-      moves.push({ src: file, dest });
-    } else if (parts.length === 2 && parts[1].endsWith('.ts')) {
-      const country = parts[0];
-      const docId = path.basename(parts[1], '.ts');
-      const dest = path.join(DOC_ROOT, country, docId, 'metadata.ts');
-      moves.push({ src: file, dest });
-    }
-  });
+async function moveSibling(file: string, targetDir: string, log: LogEntry[]) {
+  const filename = path.basename(file);
+  await move(file, path.join(targetDir, filename), log);
 }
 
-function performMoves() {
-  for (const m of moves) {
-    if (!fs.existsSync(m.src)) continue;
-    const srcHash = sha256(m.src);
-    console.log(`${isApply ? 'Moving' : 'Would move'} ${m.src} -> ${m.dest}`);
-    if (isApply) {
-      ensureDir(path.dirname(m.dest));
-      fs.renameSync(m.src, m.dest);
-      const destHash = sha256(m.dest);
-      if (srcHash !== destHash) {
-        console.error(`Hash mismatch for ${m.src}`);
-        process.exit(1);
+function inferCountry(parts: string[]): string | undefined {
+  for (const p of parts) {
+    if (/^[a-z]{2}$/.test(p)) return p;
+  }
+  return undefined;
+}
+
+async function migrate() {
+  const files = await globby(LEGACY_DOC_GLOBS);
+  const log: LogEntry[] = [];
+
+  for (const schemaPath of files) {
+    const parts = schemaPath.split(path.sep);
+    const docId = parts.at(-2);
+    const country = inferCountry(parts) ?? 'us';
+    const targetDir = path.join(TARGET_ROOT, country, docId!);
+
+    await fs.mkdir(targetDir, { recursive: true });
+
+    await moveSibling(schemaPath, targetDir, log);
+    await moveSibling(schemaPath.replace('schema.ts', 'questions.ts'), targetDir, log);
+    await moveSibling(schemaPath.replace('schema.ts', 'metadata.ts'), targetDir, log);
+
+    const barrel = `export * from './schema';\nexport * from './questions';\nexport * from './metadata';`;
+    await fs.writeFile(
+      path.join(targetDir, 'index.ts'),
+      prettier.format(barrel, { parser: 'typescript' })
+    );
+
+    for (const lang of ['en', 'es']) {
+      const legacyTmpl = path.join('templates', lang, `${docId}.md`);
+      if (await exists(legacyTmpl)) {
+        const targetTmplDir = path.join(TEMPLATE_TARGET_ROOT, lang, country);
+        await fs.mkdir(targetTmplDir, { recursive: true });
+        await move(legacyTmpl, path.join(targetTmplDir, `${docId}.md`), log);
       }
     }
   }
+
+  await fs.writeFile('migration-log.json', JSON.stringify(log, null, 2));
+  console.info(`✅ Migrated ${log.length} assets. Log written to migration-log.json`);
 }
 
-function updateTemplateReferences() {
-  if (!isApply || replacements.length === 0) return;
-
-  const exts = new Set(['.ts', '.tsx', '.js', '.mjs', '.json', '.sh']);
-
-  function collect(dir: string, out: string[]) {
-    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
-      if (entry.name === 'node_modules' || entry.name === '.git' || entry.name === 'templates') continue;
-      const p = path.join(dir, entry.name);
-      if (entry.isDirectory()) collect(p, out);
-      else if (exts.has(path.extname(p))) out.push(p);
-    }
-  }
-
-  const files: string[] = [];
-  collect(ROOT, files);
-
-  for (const file of files) {
-    let content = fs.readFileSync(file, 'utf8');
-    let changed = false;
-    for (const { old, new: n } of replacements) {
-      if (content.includes(old)) {
-        content = content.split(old).join(n);
-        changed = true;
-      }
-      const oldNoSlash = old.startsWith('/') ? old.slice(1) : old;
-      const newNoSlash = n.startsWith('/') ? n.slice(1) : n;
-      if (content.includes(oldNoSlash)) {
-        content = content.split(oldNoSlash).join(newNoSlash);
-        changed = true;
-      }
-    }
-    if (changed) fs.writeFileSync(file, content);
-  }
-}
-
-function updateImports() {
-  const map = new Map<string, string>();
-  for (const m of moves) {
-    if (m.src.endsWith('.ts')) {
-      const oldRel = path.relative(ROOT, m.src).replace(/\.ts$/, '').replace(/\\/g, '/');
-      const newRel = path.relative(ROOT, m.dest).replace(/\.ts$/, '').replace(/\\/g, '/');
-      map.set(oldRel, newRel);
-    }
-  }
-  if (!isApply || map.size === 0) return;
-  const project = new Project({ tsConfigFilePath: path.join(ROOT, 'tsconfig.json') });
-  for (const sf of project.getSourceFiles()) {
-    let changed = false;
-    for (const imp of sf.getImportDeclarations()) {
-      const spec = imp.getModuleSpecifierValue();
-      for (const [oldP, newP] of map.entries()) {
-        if (spec === oldP || spec.endsWith(oldP)) {
-          imp.setModuleSpecifier(spec.replace(oldP, newP));
-          changed = true;
-        } else if (spec.startsWith('@/') && spec.slice(2).includes(oldP.replace(/^src\//, ''))) {
-          const replaced = spec.slice(2).replace(oldP.replace(/^src\//, ''), newP.replace(/^src\//, ''));
-          imp.setModuleSpecifier('@/' + replaced);
-          changed = true;
-        }
-      }
-    }
-    if (changed) sf.saveSync();
-  }
-}
-
-function writeRedirects() {
-  if (!isApply || redirects.length === 0) return;
-  ensureDir(path.dirname(REDIRECTS_PATH));
-  let data: RedirectEntry[] = [];
-  if (fs.existsSync(REDIRECTS_PATH)) {
-    data = JSON.parse(fs.readFileSync(REDIRECTS_PATH, 'utf8'));
-  }
-  data.push(...redirects);
-  fs.writeFileSync(REDIRECTS_PATH, JSON.stringify(data, null, 2));
-}
-
-async function main() {
-  scanDocuments();
-  scanTemplates();
-  performMoves();
-  updateTemplateReferences();
-  updateImports();
-  writeRedirects();
-  if (!isApply) console.log('Dry run complete. Use --apply to make changes.');
-}
-
-main().catch(err => {
+migrate().catch(err => {
   console.error(err);
   process.exit(1);
 });
+

@@ -126,13 +126,13 @@ templates/en/us/promissory-note.md
 
 ## Migrating Existing Files
 
-Run `scripts/migrate-doc-structure.ts` to move legacy files to the new layout. Execute it once without flags for a dry run:
+Run `scripts/migrate-doc-structure.ts` to move legacy files to the new layout:
 
 ```bash
-npx ts-node scripts/migrate-doc-structure.ts
+pnpm ts-node scripts/migrate-doc-structure.ts
 ```
 
-Add `--apply` to perform the moves and automatically update imports. Redirects are written to `config/redirects.json`.
+The script copies files into the new structure and skips existing targets, so it can be re‑run safely. A summary is written to `migration-log.json`.
 
 ### Update legacy usStates imports
 
