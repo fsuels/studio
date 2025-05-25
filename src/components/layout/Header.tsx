@@ -22,7 +22,7 @@ import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/hooks/useAuth';
 import { cn } from '@/lib/utils';
 import { getDocTranslation } from '@/lib/i18nUtils';
-import { getDocumentUrl } from '@/lib/document-library/utils';
+import { getDocumentUrl } from '@/lib/document-library/url';
 
 const Header = React.memo(function Header() {
   // Scoped translations
@@ -210,7 +210,11 @@ const Header = React.memo(function Header() {
                     return (
                       <li key={doc.id}>
                         <Link
-                          href={getDocumentUrl(doc, clientLocale)}
+                          href={getDocumentUrl(
+                            clientLocale,
+                            (doc.jurisdiction || 'US').toLowerCase(),
+                            doc.id,
+                          )}
                           className="flex items-center gap-2 px-3 py-2.5 text-sm text-popover-foreground hover:bg-accent hover:text-accent-foreground transition-colors w-full text-left"
                           prefetch
                         >
@@ -321,7 +325,11 @@ const Header = React.memo(function Header() {
                     return (
                       <li key={doc.id}>
                         <Link
-                          href={getDocumentUrl(doc, clientLocale)}
+                          href={getDocumentUrl(
+                            clientLocale,
+                            (doc.jurisdiction || 'US').toLowerCase(),
+                            doc.id,
+                          )}
                           className="flex items-center gap-2 px-3 py-2.5 text-sm text-popover-foreground hover:bg-accent hover:text-accent-foreground transition-colors w-full text-left"
                           prefetch
                         >

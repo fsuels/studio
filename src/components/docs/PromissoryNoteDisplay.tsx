@@ -12,7 +12,7 @@ import { useCart } from "@/contexts/CartProvider";
 import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils';
 import { documentLibrary } from '@/lib/document-library';
-import { getDocumentUrl } from '@/lib/document-library/utils';
+import { getDocumentUrl } from '@/lib/document-library/url';
 
 interface PromissoryNoteDisplayProps {
   locale: "en" | "es";
@@ -25,7 +25,11 @@ export default function PromissoryNoteDisplay({ locale }: PromissoryNoteDisplayP
   const [isHydrated, setIsHydrated] = useState(false);
 
   const docConfig = documentLibrary.find(d => d.id === 'promissory-note');
-  const docUrlBase = getDocumentUrl(docConfig || { id: 'promissory-note', jurisdiction: 'US' }, locale);
+  const docUrlBase = getDocumentUrl(
+    locale,
+    (docConfig?.jurisdiction || 'US').toLowerCase(),
+    docConfig?.id || 'promissory-note',
+  );
 
   useEffect(() => {
     setIsHydrated(true);

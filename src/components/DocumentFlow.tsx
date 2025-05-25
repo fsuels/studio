@@ -10,7 +10,7 @@ import { StepThreeInput } from "@/components/StepThreeInput"; // This might be r
 import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import { documentLibrary } from "@/lib/document-library/index"; // Import documentLibrary
-import { getDocumentUrl } from "@/lib/document-library/utils";
+import { getDocumentUrl } from "@/lib/document-library/url";
 
 interface DocumentFlowProps {
   initialDocId?: string;
@@ -52,10 +52,8 @@ export default function DocumentFlow({
     console.log("DocumentFlow: Wizard complete with values:", values);
     const docConfig = documentLibrary.find((d) => d.id === templateId);
     const docCountry = docConfig?.jurisdiction?.toLowerCase() || "us";
-    const baseUrl = getDocumentUrl(
-      docConfig || { id: templateId, jurisdiction: docCountry.toUpperCase() },
-      initialLocale,
-    );
+    const docIdForUrl = docConfig?.id || templateId;
+    const baseUrl = getDocumentUrl(initialLocale, docCountry, docIdForUrl);
     router.push(
       `${baseUrl}/checkout?data=${encodeURIComponent(JSON.stringify(values))}`,
     );

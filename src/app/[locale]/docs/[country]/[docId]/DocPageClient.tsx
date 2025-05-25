@@ -17,6 +17,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion';
 import VehicleBillOfSaleDisplay from '@/components/docs/VehicleBillOfSaleDisplay'; // Import the specific display component
 import PromissoryNoteDisplay from '@/components/docs/PromissoryNoteDisplay';
+import { getDocumentUrl } from '@/lib/document-library/url';
 
 // Lazy load testimonials section so it's only fetched when this page is viewed
 const TrustAndTestimonialsSection = dynamic(
@@ -87,7 +88,7 @@ export default function DocPageClient({ params: routeParams }: DocPageClientProp
       (DocumentDetail as any).preload();
     }
     if (docId && currentLocale) {
-      router.prefetch(`/${currentLocale}/docs/${currentCountry}/${docId}/start`);
+      router.prefetch(getDocumentUrl(currentLocale, currentCountry, docId));
     }
   }, [router, docId, currentLocale, currentCountry]);
 
@@ -130,7 +131,7 @@ export default function DocPageClient({ params: routeParams }: DocPageClientProp
       (DocumentDetail as any).preload();
     }
     if (docId && currentLocale) {
-      router.prefetch(`/${currentLocale}/docs/${currentCountry}/${docId}/start`);
+      router.prefetch(getDocumentUrl(currentLocale, currentCountry, docId));
     }
   }, [docId, currentLocale, currentCountry, isHydrated, router]);
 
@@ -142,7 +143,9 @@ export default function DocPageClient({ params: routeParams }: DocPageClientProp
       name: currentLocale === 'es' && docConfig.translations?.es?.name ? docConfig.translations.es.name : docConfig.translations?.en?.name || docConfig.name,
       value: docConfig.basePrice
     });
-    router.push(`/${currentLocale}/docs/${currentCountry}/${docConfig.id}/start`);
+    router.push(
+      getDocumentUrl(currentLocale, currentCountry, docConfig.id),
+    );
   };
 
 

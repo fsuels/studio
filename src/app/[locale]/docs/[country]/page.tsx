@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { getDocumentsForCountry, supportedCountries } from '@/lib/document-library/index';
+import { getDocumentUrl } from '@/lib/document-library/url';
 import { localizations } from '@/lib/localizations';
 
 export const revalidate = 3600;
@@ -23,7 +24,12 @@ export default async function CountryDocsPage({ params }: { params: { locale: st
       <ul className="space-y-2">
         {docs.map(doc => (
           <li key={doc.id}>
-            <Link className="text-blue-600 underline" href={`/${locale}/docs/${country}/${doc.id}`}>{doc.translations?.[locale]?.name ?? doc.name}</Link>
+            <Link
+              className="text-blue-600 underline"
+              href={getDocumentUrl(locale, country, doc.id)}
+            >
+              {doc.translations?.[locale]?.name ?? doc.name}
+            </Link>
           </li>
         ))}
       </ul>

@@ -22,7 +22,7 @@ import {
   getUserPayments,
 } from "@/lib/firestore/dashboardData";
 import { documentLibrary } from "@/lib/document-library";
-import { getDocumentUrl } from "@/lib/document-library/utils";
+import { getDocumentUrl } from "@/lib/document-library/url";
 
 // Define a more specific type for Firestore Timestamps if that's what you use
 interface FirestoreTimestamp {
@@ -186,9 +186,11 @@ export default function DashboardClientContent({
                       const docConfig = documentLibrary.find(
                         (d) => d.id === (doc.docType || doc.id),
                       );
-                      const href = docConfig
-                        ? `${getDocumentUrl(docConfig, locale)}/start`
-                        : `/${locale}/docs/us/${doc.docType || doc.id}/start`;
+                      const href = getDocumentUrl(
+                        locale,
+                        (docConfig?.jurisdiction || 'US').toLowerCase(),
+                        docConfig ? docConfig.id : (doc.docType || doc.id),
+                      );
                       return <Link href={href}>{t("View/Edit")}</Link>;
                     })()}
                   </Button>

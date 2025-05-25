@@ -29,6 +29,7 @@ import TrustBadges from '@/components/TrustBadges';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from '@/lib/utils';
+import { getDocumentUrl } from '@/lib/document-library/url';
 
 export default function StartWizardPageClient() {
   const params = useParams();
@@ -196,7 +197,10 @@ export default function StartWizardPageClient() {
          <Breadcrumb
           items={[
             { label: t('breadcrumb.home'), href: `/${locale}` },
-            { label: documentDisplayName, href: `/${locale}/docs/${country}/${docConfig!.id}` },
+            {
+              label: documentDisplayName,
+              href: getDocumentUrl(locale, country, docConfig!.id),
+            },
             { label: t('breadcrumb.start') },
           ]}
         />
