@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Search, FileText, ExternalLink } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useRouter, useParams } from 'next/navigation';
-import { documentLibrary, type LegalDocument } from '@/lib/document-library';
+import { getDocumentsForCountry, type LegalDocument } from '@/lib/document-library';
 import { getDocTranslation } from '@/lib/i18nUtils';
 
 const SearchBar = React.memo(function SearchBar() {
@@ -14,6 +14,7 @@ const SearchBar = React.memo(function SearchBar() {
   const router = useRouter();
   const params = useParams();
   const locale = (params.locale as 'en' | 'es') || 'en';
+  const country = 'us';
   
   const [searchTerm, setSearchTerm] = useState('');
   const [suggestions, setSuggestions] = useState<LegalDocument[]>([]);
@@ -32,7 +33,7 @@ const SearchBar = React.memo(function SearchBar() {
 
     if (searchTerm.trim().length > 1) {
       const lower = searchTerm.toLowerCase();
-      const results = documentLibrary
+      const results = getDocumentsForCountry(country)
         .filter(doc => {
           const { name = '', description = '', aliases = [] } = getDocTranslation(doc, locale);
           return (
@@ -80,7 +81,7 @@ const SearchBar = React.memo(function SearchBar() {
     if (!isHydrated) return;
     setSearchTerm('');
     setShowSuggestions(false);
-    router.push(`/${locale}/docs/${docId}`);
+    router.push(`/${locale}/docs/${country}/${docId}`);
   };
 
   const placeholderText = isHydrated
@@ -120,7 +121,7 @@ const SearchBar = React.memo(function SearchBar() {
                     <button
                       type="button"
                       onClick={() => handleSuggestionClick(suggestion.id)}
-                      onMouseEnter={() => router.prefetch(`/${locale}/docs/${suggestion.id}`)}
+                      onMouseEnter={() => router.prefetch(`/${locale}/docs/${country}/${suggestion.id}`)}
                       className="w-full text-left px-3 py-2.5 hover:bg-muted text-sm flex items-center gap-2"
                     >
                       <FileText className="h-4 w-4 shrink-0 text-muted-foreground" />

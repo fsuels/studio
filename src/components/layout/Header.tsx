@@ -33,6 +33,7 @@ const Header = React.memo(function Header() {
 
   // Locale setup
   const [clientLocale, setClientLocale] = useState<'en' | 'es'>('en');
+  const country = 'us';
   useEffect(() => {
     const pathLocale = params.locale as 'en' | 'es' | undefined;
     const newLocale = pathLocale && ['en','es'].includes(pathLocale) ? pathLocale : 'en';
@@ -209,7 +210,7 @@ const Header = React.memo(function Header() {
                     return (
                       <li key={doc.id}>
                         <Link
-                          href={`/${clientLocale}/docs/${doc.id}`}
+                          href={`/${clientLocale}/docs/${country}/${doc.id}`}
                           className="flex items-center gap-2 px-3 py-2.5 text-sm text-popover-foreground hover:bg-accent hover:text-accent-foreground transition-colors w-full text-left"
                           prefetch
                         >
@@ -320,7 +321,7 @@ const Header = React.memo(function Header() {
                     return (
                       <li key={doc.id}>
                         <Link
-                          href={`/${clientLocale}/docs/${doc.id}`}
+                          href={`/${clientLocale}/docs/${country}/${doc.id}`}
                           className="flex items-center gap-2 px-3 py-2.5 text-sm text-popover-foreground hover:bg-accent hover:text-accent-foreground transition-colors w-full text-left"
                           prefetch
                         >

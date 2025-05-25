@@ -45,6 +45,7 @@ const getPaymentHistoryForUser = getUserPayments;
 
 export default function DashboardClientContent({ locale }: DashboardClientContentProps) {
   const { t, i18n } = useTranslation("common");
+  const country = 'us';
   const [activeTab, setActiveTab] = useState<'documents' | 'payments' | 'profile'>('documents');
   const { user, isLoggedIn, isLoading: authLoading, logout } = useAuth();
   const router = useRouter();
@@ -147,7 +148,7 @@ export default function DashboardClientContent({ locale }: DashboardClientConten
                 <CardHeader className="flex flex-row items-center justify-between pb-2">
                   <CardTitle className="text-md font-medium text-card-foreground">{t(doc.name, doc.name)}</CardTitle>
                   <Button variant="outline" size="sm" asChild>
-                    <Link href={`/${locale}/docs/${doc.docType || doc.id}/start`}>{t('View/Edit')}</Link>
+                    <Link href={`/${locale}/docs/${country}/${doc.docType || doc.id}/start`}>{t('View/Edit')}</Link>
                   </Button>
                 </CardHeader>
                 <CardContent>

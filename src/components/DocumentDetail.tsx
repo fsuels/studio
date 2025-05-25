@@ -16,9 +16,10 @@ interface DocumentDetailProps {
   docId: string;
   locale: 'en' | 'es';
   altText?: string;
+  liveData?: Record<string, any>;
 }
 
-const DocumentDetail = React.memo(function DocumentDetail({ docId, locale, altText }: DocumentDetailProps) {
+const DocumentDetail = React.memo(function DocumentDetail({ docId, locale, altText, liveData }: DocumentDetailProps) {
   const { t } = useTranslation("common");
   const [md, setMd] = useState<string>('');
   const [isLoading, setIsLoading] = useState(true);
@@ -77,8 +78,33 @@ const DocumentDetail = React.memo(function DocumentDetail({ docId, locale, altTe
                 modifiedMd = modifiedMd.replace(/^# .*/m, `# ${fallbackTitle}`);
             }
         }
-        // Replace template placeholders with blank lines to mimic a fillable form
-        modifiedMd = modifiedMd.replace(/{{[^}]+}}/g, '__________');
+        const sampleData: Record<string, string> = {
+          'seller_name': 'Alice Carter',
+          'seller_address': '123 Maple St, Austin, TX',
+          'seller_phone': '(512) 555-1234',
+          'buyer_name': 'Bob Rivera',
+          'buyer_address': '456 Oak Ave, Houston, TX',
+          'buyer_phone': '(832) 555-5678',
+          'vin': '1HGCM82633A004352',
+          'make': 'Toyota',
+          'model': 'Camry',
+          'year': '2018',
+          'color': 'Silver',
+          'odometer': '45,000',
+          'sale_date': 'April 10, 2024',
+          'price': '$10,000',
+          'payment_method': 'Cash',
+          'state': 'TX',
+          'county': 'Travis',
+          'warranty_text': 'Seller guarantees no defects for 30 days.',
+          'existing_liens': 'None'
+        };
+
+        const finalData = liveData ?? sampleData;
+        modifiedMd = modifiedMd.replace(/{{(?!#each)(?!\/each)[^}]+}}/g, (match) => {
+          const key = match.replace(/[{}]/g, '').trim();
+          return finalData[key] || '__________';
+        });
         setMd(modifiedMd);
       })
       .catch((err) => {
@@ -87,7 +113,7 @@ const DocumentDetail = React.memo(function DocumentDetail({ docId, locale, altTe
         setMd('');
       })
       .finally(() => setIsLoading(false));
-  }, [docId, locale, docConfig, isHydrated, t, templatePath]);
+  }, [docId, locale, docConfig, isHydrated, t, templatePath, liveData]);
 
 
   if (!isHydrated || (!docConfig && !isLoading)) {

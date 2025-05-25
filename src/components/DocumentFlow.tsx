@@ -10,7 +10,7 @@ import { StepTwoInput } from '@/components/StepTwoInput'; // This might be repla
 import { StepThreeInput } from '@/components/StepThreeInput'; // This might be replaced or refactored
 import { useRouter } from 'next/navigation'; 
 import { useTranslation } from 'react-i18next'; 
-import { documentLibrary } from '@/lib/document-library'; // Import documentLibrary
+import { getDocumentsForCountry } from '@/lib/document-library'; // Import documents per country
 
 interface DocumentFlowProps {
   initialDocId?: string;
@@ -20,8 +20,9 @@ interface DocumentFlowProps {
 export default function DocumentFlow({
   initialDocId,
   initialLocale = 'en',
-}: DocumentFlowProps = {}) { 
+}: DocumentFlowProps = {}) {
   const router = useRouter();
+  const country = 'us';
   const { t } = useTranslation("common");
 
   const [templateId, setTemplateId] = useState<string>(initialDocId ?? '');
@@ -33,7 +34,7 @@ export default function DocumentFlow({
   // Effect to set initial category if docId is provided
   useEffect(() => {
     if (initialDocId) {
-      const doc = documentLibrary.find(d => d.id === initialDocId);
+      const doc = getDocumentsForCountry(country).find(d => d.id === initialDocId);
       if (doc) {
         setCategory(doc.category);
         // No need to set step here as it's already initialized based on initialDocId
@@ -54,7 +55,7 @@ export default function DocumentFlow({
     // For a flow embedded on the homepage, this might trigger a modal or summary
     // For the dedicated /start page, WizardLayout's onComplete will handle redirection
     // Redirect to a checkout or review page.
-    router.push(`/${initialLocale}/docs/${templateId}/checkout?data=${encodeURIComponent(JSON.stringify(values))}`); 
+    router.push(`/${initialLocale}/docs/${country}/${templateId}/checkout?data=${encodeURIComponent(JSON.stringify(values))}`);
   };
 
 
@@ -74,7 +75,7 @@ export default function DocumentFlow({
 
         {step === 2 && (
           <StepTwoInput
-            category={category || documentLibrary.find(d => d.id === initialDocId)?.category || ''}
+            category={category || getDocumentsForCountry(country).find(d => d.id === initialDocId)?.category || ''}
             onStateChange={(st) => setStateCode(st)}
             onSelectTemplate={(id) => {
               setTemplateId(id);

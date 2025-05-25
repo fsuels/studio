@@ -2,7 +2,7 @@
 import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { admin } from '@/lib/firebase-admin'; // Firebase Admin SDK
-import { documentLibrary, type LegalDocument } from '@/lib/document-library'; 
+import { documentLibrary, type LegalDocument } from '@/lib/document-library';
 import { z } from 'zod';
 
 // Placeholder for user authentication - replace with your actual auth logic
@@ -30,6 +30,7 @@ export async function POST(
 
   const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL;
+  const country = 'us';
 
   if (!stripeSecretKey) {
     console.error(`${logPrefix} CRITICAL RUNTIME: STRIPE_SECRET_KEY is not set. Aborting.`);
@@ -138,7 +139,7 @@ export async function POST(
           },
         ],
         success_url: `${siteUrl}/${effectiveLocale}/dashboard?checkout_success=true&session_id={CHECKOUT_SESSION_ID}&doc_instance_id=${documentInstanceId}`,
-        cancel_url: `${siteUrl}/${effectiveLocale}/docs/${params.docId}/start?checkout_cancelled=true`,
+        cancel_url: `${siteUrl}/${effectiveLocale}/docs/${country}/${params.docId}/start?checkout_cancelled=true`,
         metadata: {
           userId: user.uid,
           docId: params.docId,

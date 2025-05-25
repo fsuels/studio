@@ -55,6 +55,7 @@ export default function HomePageClient() {
   const router = useRouter();
   const params = useParams();
   const locale = params!.locale as 'en' | 'es' || 'en';
+  const country = 'us';
 
   const [globalSearchTerm, setGlobalSearchTerm] = useState('');
   const [globalSelectedState, setGlobalSelectedState] = useState<string>('');
@@ -135,7 +136,7 @@ export default function HomePageClient() {
       console.log('[HomePageClient] Document type selected:', doc.name);
       setSelectedDocument(doc);
       toast({ title: t('toasts.docTypeConfirmedTitle'), description: t('toasts.docTypeConfirmedDescription', { docName: doc.name_es && locale === 'es' ? doc.name_es : doc.name }) });
-      router.push(`/${locale}/docs/${doc.id}/start`);
+      router.push(`/${locale}/docs/${country}/${doc.id}/start`);
     } else {
       console.warn(`[HomePageClient] Document selection received null or undefined doc.`);
     }
