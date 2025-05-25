@@ -1,7 +1,17 @@
 // src/lib/documents/us/bill-of-sale-vehicle/schema.ts
 import { z } from 'zod';
 import { isValidVIN } from '@/utils/isValidVIN';
-import { getCompliance } from '@/lib/compliance';
+
+const complianceRules = {
+  CA: { requireNotary: true, witnessCount: 0 },
+  TX: { requireNotary: false, witnessCount: 1 },
+  FL: { requireNotary: true, witnessCount: 2 },
+  NY: { requireNotary: false, witnessCount: 1 },
+  DEFAULT: { requireNotary: false, witnessCount: 0 },
+};
+const getCompliance = (st: string) =>
+  complianceRules[st.toUpperCase() as keyof typeof complianceRules] ??
+  complianceRules.DEFAULT;
 
 const PartySchema = z.object({
   name: z.string().min(2, { message: 'Name must be at least 2 characters.' }),
@@ -61,7 +71,7 @@ export const BillOfSaleSchema = z.object({
       message: "Warranty details are required if not sold 'as-is'",
     });
   }
-  const rules = getCompliance('us', data.state);
+  const rules = getCompliance(data.state);
   if (rules.requireNotary && data.requireNotary !== true) {
     ctx.addIssue({
       path: ['requireNotary'],

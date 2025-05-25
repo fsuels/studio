@@ -1,0 +1,437 @@
+[
+  {
+    "action": "skip",
+    "src": "src/lib/documents/ca/promissory-note/schema.ts",
+    "dest": "src/lib/documents/ca/promissory-note/schema.ts"
+  },
+  {
+    "action": "skip",
+    "src": "src/lib/documents/ca/promissory-note/questions.ts",
+    "dest": "src/lib/documents/ca/promissory-note/questions.ts"
+  },
+  {
+    "action": "skip",
+    "src": "src/lib/documents/ca/promissory-note/metadata.ts",
+    "dest": "src/lib/documents/ca/promissory-note/metadata.ts"
+  },
+  {
+    "action": "skip",
+    "src": "src/lib/documents/us/affidavit-general/schema.ts",
+    "dest": "src/lib/documents/us/affidavit-general/schema.ts"
+  },
+  {
+    "action": "skip",
+    "src": "src/lib/documents/us/affidavit-general/questions.ts",
+    "dest": "src/lib/documents/us/affidavit-general/questions.ts"
+  },
+  {
+    "action": "skip",
+    "src": "src/lib/documents/us/affidavit-general/metadata.ts",
+    "dest": "src/lib/documents/us/affidavit-general/metadata.ts"
+  },
+  {
+    "action": "skip",
+    "src": "src/lib/documents/us/articles-of-incorporation-biz/schema.ts",
+    "dest": "src/lib/documents/us/articles-of-incorporation-biz/schema.ts"
+  },
+  {
+    "action": "skip",
+    "src": "src/lib/documents/us/articles-of-incorporation-biz/questions.ts",
+    "dest": "src/lib/documents/us/articles-of-incorporation-biz/questions.ts"
+  },
+  {
+    "action": "skip",
+    "src": "src/lib/documents/us/articles-of-incorporation-biz/metadata.ts",
+    "dest": "src/lib/documents/us/articles-of-incorporation-biz/metadata.ts"
+  },
+  {
+    "action": "skip",
+    "src": "src/lib/documents/us/bill-of-sale-vehicle/schema.ts",
+    "dest": "src/lib/documents/us/bill-of-sale-vehicle/schema.ts"
+  },
+  {
+    "action": "skip",
+    "src": "src/lib/documents/us/bill-of-sale-vehicle/questions.ts",
+    "dest": "src/lib/documents/us/bill-of-sale-vehicle/questions.ts"
+  },
+  {
+    "action": "skip",
+    "src": "src/lib/documents/us/bill-of-sale-vehicle/metadata.ts",
+    "dest": "src/lib/documents/us/bill-of-sale-vehicle/metadata.ts"
+  },
+  {
+    "action": "skip",
+    "src": "src/lib/documents/us/child-custody-agreement/schema.ts",
+    "dest": "src/lib/documents/us/child-custody-agreement/schema.ts"
+  },
+  {
+    "action": "skip",
+    "src": "src/lib/documents/us/child-custody-agreement/questions.ts",
+    "dest": "src/lib/documents/us/child-custody-agreement/questions.ts"
+  },
+  {
+    "action": "skip",
+    "src": "src/lib/documents/us/child-custody-agreement/metadata.ts",
+    "dest": "src/lib/documents/us/child-custody-agreement/metadata.ts"
+  },
+  {
+    "action": "skip",
+    "src": "src/lib/documents/us/child-medical-consent/schema.ts",
+    "dest": "src/lib/documents/us/child-medical-consent/schema.ts"
+  },
+  {
+    "action": "skip",
+    "src": "src/lib/documents/us/child-medical-consent/questions.ts",
+    "dest": "src/lib/documents/us/child-medical-consent/questions.ts"
+  },
+  {
+    "action": "skip",
+    "src": "src/lib/documents/us/child-medical-consent/metadata.ts",
+    "dest": "src/lib/documents/us/child-medical-consent/metadata.ts"
+  },
+  {
+    "action": "skip",
+    "src": "src/lib/documents/us/commercial-lease-agreement/schema.ts",
+    "dest": "src/lib/documents/us/commercial-lease-agreement/schema.ts"
+  },
+  {
+    "action": "skip",
+    "src": "src/lib/documents/us/commercial-lease-agreement/questions.ts",
+    "dest": "src/lib/documents/us/commercial-lease-agreement/questions.ts"
+  },
+  {
+    "action": "skip",
+    "src": "src/lib/documents/us/commercial-lease-agreement/metadata.ts",
+    "dest": "src/lib/documents/us/commercial-lease-agreement/metadata.ts"
+  },
+  {
+    "action": "skip",
+    "src": "src/lib/documents/us/demand-letter-payment/schema.ts",
+    "dest": "src/lib/documents/us/demand-letter-payment/schema.ts"
+  },
+  {
+    "action": "skip",
+    "src": "src/lib/documents/us/demand-letter-payment/questions.ts",
+    "dest": "src/lib/documents/us/demand-letter-payment/questions.ts"
+  },
+  {
+    "action": "skip",
+    "src": "src/lib/documents/us/demand-letter-payment/metadata.ts",
+    "dest": "src/lib/documents/us/demand-letter-payment/metadata.ts"
+  },
+  {
+    "action": "skip",
+    "src": "src/lib/documents/us/divorce-settlement-agreement/schema.ts",
+    "dest": "src/lib/documents/us/divorce-settlement-agreement/schema.ts"
+  },
+  {
+    "action": "skip",
+    "src": "src/lib/documents/us/divorce-settlement-agreement/questions.ts",
+    "dest": "src/lib/documents/us/divorce-settlement-agreement/questions.ts"
+  },
+  {
+    "action": "skip",
+    "src": "src/lib/documents/us/divorce-settlement-agreement/metadata.ts",
+    "dest": "src/lib/documents/us/divorce-settlement-agreement/metadata.ts"
+  },
+  {
+    "action": "skip",
+    "src": "src/lib/documents/us/employment-offer-letter/schema.ts",
+    "dest": "src/lib/documents/us/employment-offer-letter/schema.ts"
+  },
+  {
+    "action": "skip",
+    "src": "src/lib/documents/us/employment-offer-letter/questions.ts",
+    "dest": "src/lib/documents/us/employment-offer-letter/questions.ts"
+  },
+  {
+    "action": "skip",
+    "src": "src/lib/documents/us/employment-offer-letter/metadata.ts",
+    "dest": "src/lib/documents/us/employment-offer-letter/metadata.ts"
+  },
+  {
+    "action": "skip",
+    "src": "src/lib/documents/us/employment-termination-letter/schema.ts",
+    "dest": "src/lib/documents/us/employment-termination-letter/schema.ts"
+  },
+  {
+    "action": "skip",
+    "src": "src/lib/documents/us/employment-termination-letter/questions.ts",
+    "dest": "src/lib/documents/us/employment-termination-letter/questions.ts"
+  },
+  {
+    "action": "skip",
+    "src": "src/lib/documents/us/employment-termination-letter/metadata.ts",
+    "dest": "src/lib/documents/us/employment-termination-letter/metadata.ts"
+  },
+  {
+    "action": "skip",
+    "src": "src/lib/documents/us/eviction-notice/schema.ts",
+    "dest": "src/lib/documents/us/eviction-notice/schema.ts"
+  },
+  {
+    "action": "skip",
+    "src": "src/lib/documents/us/eviction-notice/questions.ts",
+    "dest": "src/lib/documents/us/eviction-notice/questions.ts"
+  },
+  {
+    "action": "skip",
+    "src": "src/lib/documents/us/eviction-notice/metadata.ts",
+    "dest": "src/lib/documents/us/eviction-notice/metadata.ts"
+  },
+  {
+    "action": "skip",
+    "src": "src/lib/documents/us/general-inquiry/schema.ts",
+    "dest": "src/lib/documents/us/general-inquiry/schema.ts"
+  },
+  {
+    "action": "skip",
+    "src": "src/lib/documents/us/general-inquiry/questions.ts",
+    "dest": "src/lib/documents/us/general-inquiry/questions.ts"
+  },
+  {
+    "action": "skip",
+    "src": "src/lib/documents/us/general-inquiry/metadata.ts",
+    "dest": "src/lib/documents/us/general-inquiry/metadata.ts"
+  },
+  {
+    "action": "skip",
+    "src": "src/lib/documents/us/healthcare-power-of-attorney/schema.ts",
+    "dest": "src/lib/documents/us/healthcare-power-of-attorney/schema.ts"
+  },
+  {
+    "action": "skip",
+    "src": "src/lib/documents/us/healthcare-power-of-attorney/questions.ts",
+    "dest": "src/lib/documents/us/healthcare-power-of-attorney/questions.ts"
+  },
+  {
+    "action": "skip",
+    "src": "src/lib/documents/us/healthcare-power-of-attorney/metadata.ts",
+    "dest": "src/lib/documents/us/healthcare-power-of-attorney/metadata.ts"
+  },
+  {
+    "action": "skip",
+    "src": "src/lib/documents/us/independent-contractor-agreement/schema.ts",
+    "dest": "src/lib/documents/us/independent-contractor-agreement/schema.ts"
+  },
+  {
+    "action": "skip",
+    "src": "src/lib/documents/us/independent-contractor-agreement/questions.ts",
+    "dest": "src/lib/documents/us/independent-contractor-agreement/questions.ts"
+  },
+  {
+    "action": "skip",
+    "src": "src/lib/documents/us/independent-contractor-agreement/metadata.ts",
+    "dest": "src/lib/documents/us/independent-contractor-agreement/metadata.ts"
+  },
+  {
+    "action": "skip",
+    "src": "src/lib/documents/us/invoice/schema.ts",
+    "dest": "src/lib/documents/us/invoice/schema.ts"
+  },
+  {
+    "action": "skip",
+    "src": "src/lib/documents/us/invoice/questions.ts",
+    "dest": "src/lib/documents/us/invoice/questions.ts"
+  },
+  {
+    "action": "skip",
+    "src": "src/lib/documents/us/invoice/metadata.ts",
+    "dest": "src/lib/documents/us/invoice/metadata.ts"
+  },
+  {
+    "action": "skip",
+    "src": "src/lib/documents/us/last-will-testament/schema.ts",
+    "dest": "src/lib/documents/us/last-will-testament/schema.ts"
+  },
+  {
+    "action": "skip",
+    "src": "src/lib/documents/us/last-will-testament/questions.ts",
+    "dest": "src/lib/documents/us/last-will-testament/questions.ts"
+  },
+  {
+    "action": "skip",
+    "src": "src/lib/documents/us/last-will-testament/metadata.ts",
+    "dest": "src/lib/documents/us/last-will-testament/metadata.ts"
+  },
+  {
+    "action": "skip",
+    "src": "src/lib/documents/us/lease-agreement/schema.ts",
+    "dest": "src/lib/documents/us/lease-agreement/schema.ts"
+  },
+  {
+    "action": "skip",
+    "src": "src/lib/documents/us/lease-agreement/questions.ts",
+    "dest": "src/lib/documents/us/lease-agreement/questions.ts"
+  },
+  {
+    "action": "skip",
+    "src": "src/lib/documents/us/lease-agreement/metadata.ts",
+    "dest": "src/lib/documents/us/lease-agreement/metadata.ts"
+  },
+  {
+    "action": "skip",
+    "src": "src/lib/documents/us/living-trust/schema.ts",
+    "dest": "src/lib/documents/us/living-trust/schema.ts"
+  },
+  {
+    "action": "skip",
+    "src": "src/lib/documents/us/living-trust/questions.ts",
+    "dest": "src/lib/documents/us/living-trust/questions.ts"
+  },
+  {
+    "action": "skip",
+    "src": "src/lib/documents/us/living-trust/metadata.ts",
+    "dest": "src/lib/documents/us/living-trust/metadata.ts"
+  },
+  {
+    "action": "skip",
+    "src": "src/lib/documents/us/living-will/schema.ts",
+    "dest": "src/lib/documents/us/living-will/schema.ts"
+  },
+  {
+    "action": "skip",
+    "src": "src/lib/documents/us/living-will/questions.ts",
+    "dest": "src/lib/documents/us/living-will/questions.ts"
+  },
+  {
+    "action": "skip",
+    "src": "src/lib/documents/us/living-will/metadata.ts",
+    "dest": "src/lib/documents/us/living-will/metadata.ts"
+  },
+  {
+    "action": "skip",
+    "src": "src/lib/documents/us/nda/schema.ts",
+    "dest": "src/lib/documents/us/nda/schema.ts"
+  },
+  {
+    "action": "skip",
+    "src": "src/lib/documents/us/nda/questions.ts",
+    "dest": "src/lib/documents/us/nda/questions.ts"
+  },
+  {
+    "action": "skip",
+    "src": "src/lib/documents/us/nda/metadata.ts",
+    "dest": "src/lib/documents/us/nda/metadata.ts"
+  },
+  {
+    "action": "skip",
+    "src": "src/lib/documents/us/non-compete-agreement/schema.ts",
+    "dest": "src/lib/documents/us/non-compete-agreement/schema.ts"
+  },
+  {
+    "action": "skip",
+    "src": "src/lib/documents/us/non-compete-agreement/questions.ts",
+    "dest": "src/lib/documents/us/non-compete-agreement/questions.ts"
+  },
+  {
+    "action": "skip",
+    "src": "src/lib/documents/us/non-compete-agreement/metadata.ts",
+    "dest": "src/lib/documents/us/non-compete-agreement/metadata.ts"
+  },
+  {
+    "action": "skip",
+    "src": "src/lib/documents/us/operating-agreement/schema.ts",
+    "dest": "src/lib/documents/us/operating-agreement/schema.ts"
+  },
+  {
+    "action": "skip",
+    "src": "src/lib/documents/us/operating-agreement/questions.ts",
+    "dest": "src/lib/documents/us/operating-agreement/questions.ts"
+  },
+  {
+    "action": "skip",
+    "src": "src/lib/documents/us/operating-agreement/metadata.ts",
+    "dest": "src/lib/documents/us/operating-agreement/metadata.ts"
+  },
+  {
+    "action": "skip",
+    "src": "src/lib/documents/us/partnership-agreement/schema.ts",
+    "dest": "src/lib/documents/us/partnership-agreement/schema.ts"
+  },
+  {
+    "action": "skip",
+    "src": "src/lib/documents/us/partnership-agreement/questions.ts",
+    "dest": "src/lib/documents/us/partnership-agreement/questions.ts"
+  },
+  {
+    "action": "skip",
+    "src": "src/lib/documents/us/partnership-agreement/metadata.ts",
+    "dest": "src/lib/documents/us/partnership-agreement/metadata.ts"
+  },
+  {
+    "action": "skip",
+    "src": "src/lib/documents/us/power-of-attorney/schema.ts",
+    "dest": "src/lib/documents/us/power-of-attorney/schema.ts"
+  },
+  {
+    "action": "skip",
+    "src": "src/lib/documents/us/power-of-attorney/questions.ts",
+    "dest": "src/lib/documents/us/power-of-attorney/questions.ts"
+  },
+  {
+    "action": "skip",
+    "src": "src/lib/documents/us/power-of-attorney/metadata.ts",
+    "dest": "src/lib/documents/us/power-of-attorney/metadata.ts"
+  },
+  {
+    "action": "skip",
+    "src": "src/lib/documents/us/prenuptial-agreement/schema.ts",
+    "dest": "src/lib/documents/us/prenuptial-agreement/schema.ts"
+  },
+  {
+    "action": "skip",
+    "src": "src/lib/documents/us/prenuptial-agreement/questions.ts",
+    "dest": "src/lib/documents/us/prenuptial-agreement/questions.ts"
+  },
+  {
+    "action": "skip",
+    "src": "src/lib/documents/us/prenuptial-agreement/metadata.ts",
+    "dest": "src/lib/documents/us/prenuptial-agreement/metadata.ts"
+  },
+  {
+    "action": "skip",
+    "src": "src/lib/documents/us/promissory-note/schema.ts",
+    "dest": "src/lib/documents/us/promissory-note/schema.ts"
+  },
+  {
+    "action": "skip",
+    "src": "src/lib/documents/us/promissory-note/questions.ts",
+    "dest": "src/lib/documents/us/promissory-note/questions.ts"
+  },
+  {
+    "action": "skip",
+    "src": "src/lib/documents/us/promissory-note/metadata.ts",
+    "dest": "src/lib/documents/us/promissory-note/metadata.ts"
+  },
+  {
+    "action": "skip",
+    "src": "src/lib/documents/us/quitclaim-deed/schema.ts",
+    "dest": "src/lib/documents/us/quitclaim-deed/schema.ts"
+  },
+  {
+    "action": "skip",
+    "src": "src/lib/documents/us/quitclaim-deed/questions.ts",
+    "dest": "src/lib/documents/us/quitclaim-deed/questions.ts"
+  },
+  {
+    "action": "skip",
+    "src": "src/lib/documents/us/quitclaim-deed/metadata.ts",
+    "dest": "src/lib/documents/us/quitclaim-deed/metadata.ts"
+  },
+  {
+    "action": "skip",
+    "src": "src/lib/documents/us/service-agreement/schema.ts",
+    "dest": "src/lib/documents/us/service-agreement/schema.ts"
+  },
+  {
+    "action": "skip",
+    "src": "src/lib/documents/us/service-agreement/questions.ts",
+    "dest": "src/lib/documents/us/service-agreement/questions.ts"
+  },
+  {
+    "action": "skip",
+    "src": "src/lib/documents/us/service-agreement/metadata.ts",
+    "dest": "src/lib/documents/us/service-agreement/metadata.ts"
+  }
+]

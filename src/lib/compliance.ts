@@ -1,6 +1,6 @@
 import type { ComplianceRule } from '@/types/documents';
 
-export const rules: Record<string, ComplianceRule> = {
+const complianceRules: Record<string, ComplianceRule> = {
   CA: { requireNotary: true, witnessCount: 0 },
   TX: { requireNotary: false, witnessCount: 1 },
   FL: { requireNotary: true, witnessCount: 2 },
@@ -8,8 +8,11 @@ export const rules: Record<string, ComplianceRule> = {
   DEFAULT: { requireNotary: false, witnessCount: 0 },
 };
 
-export function getCompliance(country: string, state: string): ComplianceRule {
-  const code = state?.toUpperCase();
-  const rule = rules[code] || rules.DEFAULT;
-  return rule;
+export function getCompliance(state: string) {
+  return (
+    complianceRules[state.toUpperCase() as keyof typeof complianceRules] ?? {
+      witnessCount: 0,
+      notaryRequired: false,
+    }
+  );
 }

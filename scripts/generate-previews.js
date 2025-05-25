@@ -1,4 +1,9 @@
 // scripts/generate-previews.js
+if (process.env.SKIP_PREVIEWS) {
+  console.log('Skipping previews (SKIP_PREVIEWS=1)');
+  process.exit(0);
+}
+
 import fs from 'fs';
 import path from 'path';
 import puppeteer from 'puppeteer';
