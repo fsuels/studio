@@ -5,8 +5,13 @@
 
 Este Contrato de Compraventa de Vehículo ("Acuerdo") se celebra y entra en vigor el **{{sale_date}}**, entre:
 
-- **Vendedor:** {{seller_name}}, de {{seller_address}}
-- **Comprador:**  {{buyer_name}}, de {{buyer_address}}
+{{#each sellers}}
+- **Vendedor:** {{this.name}}, con domicilio en {{this.address}}{{#if this.phone}}, Teléfono: {{this.phone}}{{/if}}
+{{/each}}
+
+{{#each buyers}}
+- **Comprador:** {{this.name}}, con domicilio en {{this.address}}{{#if this.phone}}, Teléfono: {{this.phone}}{{/if}}
+{{/each}}
 
 Referidos colectivamente en este documento como las “Partes”.
 
@@ -58,33 +63,27 @@ Este Acuerdo se regirá e interpretará de conformidad con las leyes del Estado 
 
 | Firma del Vendedor      | Fecha                |
 |-------------------------|----------------------|
+{{#each sellers}}
 | ________________________| _____________________|
-| ({{seller_name}})       |                      |
-| {{#if seller_phone}}Teléfono: {{seller_phone}}{{/if}} | |
-{{#if seller2_name}}
-| ________________________| _____________________|
-| ({{seller2_name}})      |                      |
-| {{#if seller2_phone}}Teléfono: {{seller2_phone}}{{/if}} | |
-{{/if}}
+| ({{this.name}})       |                      |
+| {{#if this.phone}}Teléfono: {{this.phone}}{{/if}} | |
+{{/each}}
 
 
 | Firma del Comprador     | Fecha                |
 |-------------------------|----------------------|
+{{#each buyers}}
 | ________________________| _____________________|
-| ({{buyer_name}})        |                      |
-| {{#if buyer_phone}}Teléfono: {{buyer_phone}}{{/if}} | |
-{{#if buyer2_name}}
-| ________________________| _____________________|
-| ({{buyer2_name}})       |                      |
-| {{#if buyer2_phone}}Teléfono: {{buyer2_phone}}{{/if}} | |
-{{/if}}
+| ({{this.name}})        |                      |
+| {{#if this.phone}}Teléfono: {{this.phone}}{{/if}} | |
+{{/each}}
 
 ### Reconocimiento Notarial
 
 Estado de **{{state}}**
 Condado de **{{county}}**
 
-En este día **____** de **______________, 20__**, ante mí, el suscrito, Notario Público en y para dicho Estado, comparecieron personalmente **{{seller_name}}** y **{{buyer_name}}**, conocidos personalmente por mí (o comprobados ante mí sobre la base de evidencia satisfactoria) como las personas cuyos nombres están suscritos a este Acuerdo y reconocieron que lo ejecutaron para los fines contenidos en el mismo.
+En este día **____** de **______________, 20__**, ante mí, el suscrito, Notario Público en y para dicho Estado, comparecieron personalmente {{#each sellers}}{{this.name}}{{#unless @last}}, {{/unless}}{{/each}} y {{#each buyers}}{{this.name}}{{#unless @last}}, {{/unless}}{{/each}}, conocidos personalmente por mí (o comprobados ante mí sobre la base de evidencia satisfactoria) como las personas cuyos nombres están suscritos a este Acuerdo y reconocieron que lo ejecutaron para los fines contenidos en el mismo.
 
 **Notario Público:**   __________________________
 Mi Comisión Expira: ______________
