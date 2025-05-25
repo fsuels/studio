@@ -117,7 +117,7 @@ const FieldRenderer = React.memo(function FieldRenderer({ fieldKey, locale, doc 
             error={errors[fieldKey as any]?.message as string | undefined}
             placeholder={placeholderText || t('Enter address...')}
             className="max-w-sm" 
-            tooltipText={tooltipText}
+            tooltip={tooltipText}
             value={field.value || ''} 
             onChange={(val: string, parts?: any) => { 
                 field.onChange(val); 

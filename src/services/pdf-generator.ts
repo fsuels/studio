@@ -3,10 +3,14 @@
 
 import { PDFDocument, StandardFonts, rgb } from 'pdf-lib';
 import fontkit from '@pdf-lib/fontkit'; // Ensure fontkit is installed
+import fs from 'fs/promises';
+import path from 'path';
+import Handlebars from 'handlebars';
 
 interface PdfGenerationOptions {
   documentType: string;
   answers: Record<string, any>;
+  locale?: string;
 }
 
 /**
@@ -23,6 +27,16 @@ export async function generatePdfDocument(
   console.log('[pdf-generator] With answers:', options.answers);
 
   try {
+    const locale = options.locale || 'en';
+
+    const templatePath = path.join(process.cwd(), 'public', 'templates', locale, `${options.documentType}.md`);
+    const hb = Handlebars.create();
+    hb.registerHelper('eq', (a: any, b: any) => a === b);
+
+    const templateRaw = await fs.readFile(templatePath, 'utf8');
+    const compiled = hb.compile(templateRaw);
+    const markdown = compiled(options.answers || {});
+
     const pdfDoc = await PDFDocument.create();
     pdfDoc.registerFontkit(fontkit); // Register fontkit
 
@@ -61,40 +75,29 @@ export async function generatePdfDocument(
     });
     y -= 8 * 3 + 15; // Move down after disclaimer (approx 3 lines)
 
-    // 3. Add Content based on Answers
-    page.drawText('Details Provided:', {
-      x: margin,
-      y: y,
-      font: helveticaBoldFont,
-      size: fontSize,
-      color: rgb(0, 0, 0),
-    });
-    y -= fontSize + 10;
-
-    for (const [key, value] of Object.entries(options.answers)) {
-       // Basic formatting - improve as needed
-       const label = key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase()); // Format key to label
-       const text = `${label}: ${value || 'N/A'}`; // Handle empty values
-
-       // Check if text will fit on the current page
-       const textHeight = fontSize * 1.2; // Approximate height
-       if (y - textHeight < margin) {
-           // Add a new page if content doesn't fit
-           const newPage = pdfDoc.addPage();
-           y = newPage.getSize().height - margin; // Reset y to top margin
-           // Optionally repeat disclaimer on new pages
-       }
-
-       page.drawText(text, {
-           x: margin,
-           y: y,
-           font: helveticaFont,
-           size: fontSize,
-           color: rgb(0, 0, 0),
-           maxWidth: width - 2 * margin,
-           lineHeight: fontSize * 1.2,
-       });
-       y -= textHeight + 5; // Move down for next line
+    // 3. Add Content from template
+    const lines = markdown.split(/\r?\n/);
+    for (const line of lines) {
+      const text = line.trim();
+      const textHeight = fontSize * 1.2;
+      if (y - textHeight < margin) {
+        const newPage = pdfDoc.addPage();
+        y = newPage.getSize().height - margin;
+      }
+      if (text === '') {
+        y -= textHeight;
+        continue;
+      }
+      page.drawText(text, {
+        x: margin,
+        y: y,
+        font: helveticaFont,
+        size: fontSize,
+        color: rgb(0, 0, 0),
+        maxWidth: width - 2 * margin,
+        lineHeight: fontSize * 1.2,
+      });
+      y -= textHeight + 2;
     }
 
     // 4. Add Placeholder Signature Line (if applicable)

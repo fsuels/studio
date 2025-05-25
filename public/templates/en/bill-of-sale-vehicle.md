@@ -52,6 +52,10 @@ The Seller represents and warrants that:
 
 This Agreement shall be governed by and construed in accordance with the laws of the State of **{{state}}**.
 
+{{#if (eq state 'CA')}}
+This Bill of Sale complies with California Civil Code section 2982.
+{{/if}}
+
 ## 6. Signatures
 
 **IN WITNESS WHEREOF**, the Parties have executed this Agreement as of the date first written above.

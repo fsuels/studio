@@ -52,6 +52,10 @@ El Vendedor declara y garantiza que:
 
 Este Acuerdo se regirá e interpretará de conformidad con las leyes del Estado de **{{state}}**.
 
+{{#if (eq state 'CA')}}
+Este documento cumple con la sección 2982 del Código Civil de California.
+{{/if}}
+
 ## 6. Firmas
 
 **EN FE DE LO CUAL**, las Partes han ejecutado este Acuerdo en la fecha indicada anteriormente.

@@ -1,125 +1,78 @@
 import { usStates } from '@/lib/usStates';
+import { getStateRules } from './compliance';
 
 export const vehicleBillOfSaleQuestions = [
-  { 
-    id: "seller_name", 
-    label: "Seller's Full Name", 
-    type: "text", 
-    required: true, 
-    tooltip: "Enter the full legal name of the person or entity selling the vehicle." 
+  {
+    id: 'sellers',
+    label: 'Seller(s)',
+    type: 'group-array',
+    itemLabel: 'Seller',
+    fields: [
+      { id: 'name', label: 'Full Name', type: 'text', required: true },
+      { id: 'address', label: 'Address', type: 'text', required: true },
+      { id: 'phone', label: 'Phone Number', type: 'text', required: false, placeholder: '(XXX) XXX-XXXX' }
+    ],
+    minItems: 1,
+    maxItems: 3
   },
   {
-    id: "seller_phone",
-    label: "Seller's Phone Number",
-    type: "text",
-    required: false,
-    placeholder: "(XXX) XXX-XXXX",
-    tooltip: "A valid phone number for the seller."
-  },
-  {
-    id: "seller2_name",
-    label: "Second Seller's Full Name",
-    type: "text",
-    required: false,
-    tooltip: "Optional second seller name if more than one person is selling the vehicle."
-  },
-  {
-    id: "seller2_phone",
-    label: "Second Seller's Phone Number",
-    type: "text",
-    required: false,
-    placeholder: "(XXX) XXX-XXXX",
-    tooltip: "Phone number for the second seller, if applicable."
-  },
-  {
-    id: "seller_address",
-    label: "Seller's Full Address", 
-    type: "address", 
-    required: true, 
-    tooltip: "Include street, city, state, and ZIP code." 
-  },
-  { 
-    id: "buyer_name", 
-    label: "Buyer's Full Name", 
-    type: "text", 
-    required: true, 
-    tooltip: "Enter the full legal name of the person or entity buying the vehicle." 
-  },
-  { 
-    id: "buyer_address", 
-    label: "Buyer's Full Address", 
-    type: "address", 
-    required: true, 
-    tooltip: "Include street, city, state, and ZIP code for the buyer." 
-  },
-  {
-    id: "buyer_phone",
-    label: "Buyer's Phone Number",
-    type: "text",
-    required: false,
-    placeholder: "(XXX) XXX-XXXX",
-    tooltip: "A valid phone number for the buyer."
-  },
-  {
-    id: "buyer2_name",
-    label: "Second Buyer's Full Name",
-    type: "text",
-    required: false,
-    tooltip: "Optional second buyer name if more than one person is purchasing the vehicle."
-  },
-  {
-    id: "buyer2_phone",
-    label: "Second Buyer's Phone Number",
-    type: "text",
-    required: false,
-    placeholder: "(XXX) XXX-XXXX",
-    tooltip: "Phone number for the second buyer, if applicable."
+    id: 'buyers',
+    label: 'Buyer(s)',
+    type: 'group-array',
+    itemLabel: 'Buyer',
+    fields: [
+      { id: 'name', label: 'Full Name', type: 'text', required: true },
+      { id: 'address', label: 'Address', type: 'text', required: true },
+      { id: 'phone', label: 'Phone Number', type: 'text', required: false, placeholder: '(XXX) XXX-XXXX' }
+    ],
+    minItems: 1,
+    maxItems: 3
   },
   {
     id: "year",
-    label: "Vehicle Year", 
-    type: "number", 
-    placeholder: "e.g., 2020", 
-    required: true, 
-    tooltip: "The manufacturing year of the vehicle (e.g., 2022)." 
+    label: "Vehicle Year",
+    type: "number",
+    placeholder: "e.g., 2020",
+    required: true,
+    tooltip: "The manufacturing year of the vehicle (e.g., 2022)."
   },
-  { 
-    id: "make", 
-    label: "Vehicle Make", 
-    type: "text", 
-    placeholder: "e.g., Toyota", 
-    required: true, 
-    tooltip: "The manufacturer of the vehicle (e.g., Honda, Ford)." 
+  {
+    id: "make",
+    label: "Vehicle Make",
+    type: "text",
+    placeholder: "e.g., Toyota",
+    required: true,
+    tooltip: "The manufacturer of the vehicle (e.g., Honda, Ford)."
   },
-  { 
-    id: "model", 
-    label: "Vehicle Model", 
-    type: "text", 
-    placeholder: "e.g., Camry", 
-    required: true, 
-    tooltip: "The specific model of the vehicle (e.g., Civic, F-150)." 
+  {
+    id: "model",
+    label: "Vehicle Model",
+    type: "text",
+    placeholder: "e.g., Camry",
+    required: true,
+    tooltip: "The specific model of the vehicle (e.g., Civic, F-150)."
   },
-  { 
-    id: "color", 
-    label: "Vehicle Color", 
-    type: "text", 
-    placeholder: "e.g., Blue", 
-    required: true, 
-    tooltip: "The primary color of the vehicle." 
+  {
+    id: "color",
+    label: "Vehicle Color",
+    type: "text",
+    placeholder: "e.g., Blue",
+    required: true,
+    tooltip: "The primary color of the vehicle."
   },
-  { 
-    id: "vin", 
-    label: "Vehicle Identification Number (VIN)", 
-    type: "text", 
-    required: true, 
-    tooltip: "The 17-character unique identifier for the vehicle." 
+  {
+    id: "vin",
+    label: "Vehicle Identification Number (VIN)",
+    type: "text",
+    required: true,
+    tooltip: "The 17-character unique identifier for the vehicle."
   },
-  { 
-    id: "odometer", 
-    label: "Odometer Reading (miles)", 
-    type: "number", 
-    required: true, 
-    tooltip: "Current mileage shown on the vehicle's odometer." 
+  {
+    id: "odometer",
+    label: "Odometer Reading (miles)",
+    type: "number",
+    required: true,
+    tooltip: "Current mileage shown on the vehicle's odometer."
   },
   {
     id: "odo_status",
@@ -133,12 +86,12 @@ export const vehicleBillOfSaleQuestions = [
     ],
     tooltip: "Indicate if the odometer reading is accurate, has rolled over, or is known to be incorrect."
   },
-  { 
-    id: "price", 
-    label: "Sale Price ($)", 
-    type: "number", 
-    required: true, 
-    tooltip: "The total agreed-upon price for the vehicle in USD." 
+  {
+    id: "price",
+    label: "Sale Price ($)",
+    type: "number",
+    required: true,
+    tooltip: "The total agreed-upon price for the vehicle in USD."
   },
   {
     id: "payment_method",
@@ -154,12 +107,12 @@ export const vehicleBillOfSaleQuestions = [
     ],
     tooltip: "How the buyer will pay or has paid for the vehicle."
   },
-  { 
-    id: "sale_date", 
-    label: "Date of Sale", 
-    type: "date", 
-    required: true, 
-    tooltip: "The date the sale is finalized." 
+  {
+    id: "sale_date",
+    label: "Date of Sale",
+    type: "date",
+    required: true,
+    tooltip: "The date the sale is finalized."
   },
   {
     id: "existing_liens",
@@ -189,6 +142,29 @@ export const vehicleBillOfSaleQuestions = [
     required: true,
     options: usStates.map(s => ({ value: s.value, label: s.label })),
     tooltip: "The U.S. state whose laws will govern this agreement and where notarization may occur."
+  },
+  {
+    id: "requireNotary",
+    label: "Will this document be notarized?",
+    type: "select",
+    required: false,
+    options: [
+      { value: "true", label: "Yes" },
+      { value: "false", label: "No" }
+    ],
+    tooltip: "Some states require notarization to make the Bill of Sale enforceable."
+  },
+  {
+    id: "witnessCount",
+    label: "Number of Witnesses",
+    type: "select",
+    required: false,
+    options: [
+      { value: "0", label: "0" },
+      { value: "1", label: "1" },
+      { value: "2", label: "2" }
+    ],
+    tooltip: "Some states require witness signatures to make this sale legally binding."
   },
   {
     id: "county",
