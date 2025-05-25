@@ -1,5 +1,7 @@
 // src/components/PreviewPane.tsx
 'use client';
+// Live preview updates instantly as form data changes.
+// Debounce has been removed and detailed logging added for debugging.
 
 import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import ReactMarkdown from 'react-markdown';
@@ -7,20 +9,22 @@ import remarkGfm from 'remark-gfm';
 import { useFormContext } from 'react-hook-form';
 import { Loader2, AlertTriangle } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { debounce } from 'lodash-es';
+// import { debounce } from 'lodash-es'; // Temporarily removed for debugging
 import { documentLibrary, type LegalDocument } from '@/lib/document-library';
 import { cn } from '@/lib/utils';
+import { getTemplatePath } from '@/lib/templateUtils';
 import Image from 'next/image';
 import AutoImage from './AutoImage';
 
 interface PreviewPaneProps {
   locale: 'en' | 'es';
   docId: string;
+  country: string;
 }
 
-export default function PreviewPane({ locale, docId }: PreviewPaneProps) {
+export default function PreviewPane({ locale, docId, country }: PreviewPaneProps) {
   const { t } = useTranslation("common");
-  const { watch } = useFormContext();
+  const { watch, getValues } = useFormContext();
 
   const [rawMarkdown, setRawMarkdown] = useState<string>('');
   const [processedMarkdown, setProcessedMarkdown] = useState<string>('');
@@ -31,11 +35,10 @@ export default function PreviewPane({ locale, docId }: PreviewPaneProps) {
 
   const docConfig = useMemo(() => documentLibrary.find(d => d.id === docId), [docId]);
 
-  // Use the new standardized template path structure
   const templatePath = useMemo(() => {
     if (!docConfig) return undefined;
-    return `/templates/${locale}/${docId}.md`; // Path relative to public folder
-  }, [docConfig, locale, docId]);
+    return getTemplatePath(docConfig, locale, country);
+  }, [docConfig, locale, country]);
 
   const watermarkText = t('preview.watermark', { ns: 'translation', defaultValue: 'PREVIEW' });
   const imgSrc = `/images/previews/${locale}/${docId}.png`;
@@ -67,14 +70,18 @@ export default function PreviewPane({ locale, docId }: PreviewPaneProps) {
       }
       
       try {
-        const response = await fetch(templatePath); // Path is already absolute from public
+        const response = await fetch(templatePath);
         if (!response.ok) {
           throw new Error(`Failed to fetch template (${response.status}): ${templatePath}`);
         }
         const text = await response.text();
         setRawMarkdown(text);
+        // Initial process with any existing form data
+        const initialFormData = getValues();
+        setProcessedMarkdown(updatePreviewContent(initialFormData, text));
+        console.log('[PreviewPane] Raw markdown fetched and initially processed:', text.substring(0,100));
       } catch (err) {
-        console.error("Error fetching Markdown template:", err);
+        console.error("[PreviewPane] Error fetching Markdown template:", err);
         setError(err instanceof Error ? err.message : t('Could not load template.', { ns: 'translation' }));
         setRawMarkdown('');
       } finally {
@@ -82,57 +89,75 @@ export default function PreviewPane({ locale, docId }: PreviewPaneProps) {
       }
     }
     fetchTemplate();
-  }, [docId, locale, templatePath, docConfig, isHydrated, t]);
+  }, [docId, locale, country, templatePath, docConfig, isHydrated, t]);
 
-  const updatePreviewContent = useCallback((formData: Record<string, any>, currentRawMarkdown: string) => {
+  const updatePreviewContent = useCallback((formData: Record<string, any>, currentRawMarkdown: string): string => {
+    console.log('[PreviewPane] updatePreviewContent called with formData:', JSON.parse(JSON.stringify(formData)), 'Raw markdown length:', currentRawMarkdown.length);
     if (!currentRawMarkdown) {
       return '';
     }
     let tempMd = currentRawMarkdown;
+
     for (const key in formData) {
+      if (Array.isArray(formData[key])) continue;
       const placeholderRegex = new RegExp(`{{\\s*${key.trim()}\\s*}}`, 'g');
       const value = formData[key];
       tempMd = tempMd.replace(placeholderRegex, value ? `**${String(value)}**` : '____');
     }
+
+    tempMd = tempMd.replace(/{{#each\s+(\w+)}}([\s\S]*?){{\/each}}/g, (_, arrKey: string, block: string) => {
+      const items = formData[arrKey];
+      console.log(`[PreviewPane] Processing #each for key: ${arrKey}, items:`, JSON.parse(JSON.stringify(items)));
+      if (!Array.isArray(items) || items.length === 0) return '';
+      return items.map((item: any, index: number) => {
+        let seg = block;
+        console.log(`[PreviewPane] #each item ${index} for ${arrKey}:`, JSON.parse(JSON.stringify(item)));
+        seg = seg.replace(/{{\s*this\.(\w+)\s*}}/g, (m, prop) => {
+          const val = item[prop];
+          console.log(`[PreviewPane] #each item ${index} prop ${prop}:`, val);
+          return val ? `**${String(val)}**` : '____';
+        });
+        seg = seg.replace(/{{\s*this\.[^}]+}}/g, '____'); // Clean up other 'this' references
+        return seg;
+      }).join('');
+    });
+    
     tempMd = tempMd.replace(/\{\{.*?\}\}/g, '____');
     
-    let titleToUse = docConfig?.translations?.en?.name; // Default to English name
+    let titleToUse = docConfig?.translations?.en?.name;
     if (locale === 'es' && docConfig?.translations?.es?.name) {
       titleToUse = docConfig.translations.es.name;
-    } else if (docConfig?.name) { // Fallback to root name if translations are missing
+    } else if (docConfig?.name) {
         titleToUse = docConfig.name;
     }
 
     if (titleToUse) {
        tempMd = tempMd.replace(/^# .*/m, `# ${titleToUse}`);
     }
-
+    console.log('[PreviewPane] Processed markdown sample:', tempMd.substring(0, 200));
     return tempMd;
   }, [docConfig, locale]);
 
-  const debouncedUpdatePreview = useMemo(
-    () => debounce((formData: Record<string, any>, currentRawMarkdown: string) => {
-      setProcessedMarkdown(updatePreviewContent(formData, currentRawMarkdown));
-    }, 300),
-    [updatePreviewContent]
-  );
+  // Temporarily removed debounce for direct updates
+  // const debouncedUpdatePreview = useMemo(
+  //   () => debounce((formData: Record<string, any>, currentRawMarkdown: string) => {
+  //     setProcessedMarkdown(updatePreviewContent(formData, currentRawMarkdown));
+  //   }, 300),
+  //   [updatePreviewContent]
+  // );
 
   useEffect(() => {
-    if (!watch || !isHydrated || isLoading) {
-      if (rawMarkdown && !isLoading) setProcessedMarkdown(updatePreviewContent({}, rawMarkdown));
+    if (!isHydrated || isLoading || !rawMarkdown) {
       return;
     }
-    
-    debouncedUpdatePreview(watch(), rawMarkdown);
-    const subscription = watch((formData) => {
-      debouncedUpdatePreview(formData as Record<string, any>, rawMarkdown);
+
+    const subscription = watch((values) => {
+      setProcessedMarkdown(updatePreviewContent(values as Record<string, any>, rawMarkdown));
     });
-    return () => {
-      subscription.unsubscribe();
-      debouncedUpdatePreview.cancel();
-    };
-    
-  }, [watch, rawMarkdown, isLoading, isHydrated, debouncedUpdatePreview, updatePreviewContent]);
+
+    return () => subscription.unsubscribe();
+
+  }, [watch, rawMarkdown, isLoading, isHydrated, updatePreviewContent]);
 
 
   if (!isHydrated) {
@@ -167,7 +192,6 @@ export default function PreviewPane({ locale, docId }: PreviewPaneProps) {
               components={{
                 p: ({node, ...props}) => <p {...props} className="select-none" />,
                 h1: ({node, ...props}) => <h1 {...props} className="text-center" />,
-                // FIXED: ensure markdown images include dimensions
                 img: ({node, ...props}) => <AutoImage {...props} className="mx-auto" />,
               }}
           >
