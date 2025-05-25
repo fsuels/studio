@@ -90,13 +90,19 @@ export async function analyzeFormData(
     const suggestions = JSON.parse(raw) as FieldSuggestion[];
     // Shallow validation
     return Array.isArray(suggestions) ? suggestions : [];
-  } catch (err: any) {
-    console.error('[analyze-form-data.ts] Failed to get suggestions from OpenAI or parse them:', err);
+  } catch (err: unknown) {
+    console.error(
+      '[analyze-form-data.ts] Failed to get suggestions from OpenAI or parse them:',
+      err,
+    );
+    const message = err instanceof Error
+      ? err.message
+      : 'Unknown error during OpenAI API call.';
     // Return a specific error suggestion if the API call fails
     return [{
         fieldId: 'general', // A general field ID for errors not specific to one input
         importance: 'error',
-        message: `AI analysis failed: ${err.message || 'Unknown error during OpenAI API call.'}`
+        message: `AI analysis failed: ${message}`
     }];
   }
 }
