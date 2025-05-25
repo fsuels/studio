@@ -1,34 +1,11 @@
 // src/lib/document-library/index.ts
 import { z } from 'zod';
-import type { LegalDocument, LocalizedText } from '@/types/documents';
-import { docLoaders } from '../document-loaders';
-// Dynamic document discovery will replace explicit barrels
+import type { LegalDocument, LocalizedText, Question } from '@/types/documents'; // Ensure Question is imported
+import * as us_docs_barrel from '../documents/us';
+import * * as ca_docs_barrel from '../documents/ca';
+import { documentLibraryAdditions } from './document-library-additions';
 
-// Helper function to ensure a document object is valid
-const isValidDocument = (doc: any): doc is LegalDocument => {
-  if (!doc || typeof doc !== 'object' || Array.isArray(doc) || !('id' in doc)) {
-    // If it doesn't even look like a document, silently ignore
-    return false;
-  }
-
-  const hasId = typeof doc.id === 'string' && doc.id.trim() !== '';
-  const hasCategory = typeof (doc as any).category === 'string' && (doc as any).category.trim() !== '';
-  const hasSchema = (doc as any).schema && typeof (doc as any).schema.parse === 'function';
-
-  // Check for English translation name as the primary indicator of a valid name structure
-  const hasValidName =
-    ((doc as any).translations && (doc as any).translations.en && typeof (doc as any).translations.en.name === 'string' && (doc as any).translations.en.name.trim() !== '') ||
-    (typeof (doc as any).name === 'string' && (doc as any).name.trim() !== '');
-
-  if (!hasId) console.warn('[isValidDocument] Invalid/Missing ID:', doc?.id, doc?.name);
-  if (!hasCategory) console.warn('[isValidDocument] Invalid/Missing Category for doc:', doc?.id, doc?.name);
-  if (!hasSchema) console.warn('[isValidDocument] Invalid/Missing Zod Schema for doc:', doc?.id, doc?.name);
-  if (!hasValidName) console.warn('[isValidDocument] Invalid/Missing English Name (in translations or top-level) for doc:', doc?.id);
-
-  return hasId && hasCategory && hasSchema && hasValidName;
-};
-
-// Helper function to ensure basic translations exist before validation
+// Helper to ensure basic translations structure exists for name checking
 const ensureBasicTranslations = (doc: any): LegalDocument => {
   if (!doc.translations) {
     doc.translations = { en: {}, es: {} };
@@ -39,91 +16,88 @@ const ensureBasicTranslations = (doc: any): LegalDocument => {
   if (!doc.translations.es) {
     doc.translations.es = {};
   }
+  // Populate from top-level name if translations.en.name is missing
   if (!doc.translations.en.name && doc.name) {
     doc.translations.en.name = doc.name;
   }
+  // Populate from top-level name_es if translations.es.name is missing
   if (!doc.translations.es.name && doc.name_es) {
     doc.translations.es.name = doc.name_es;
-  }
-  // Ensure aliases are arrays
-  if (doc.translations.en && !Array.isArray(doc.translations.en.aliases)) {
-    doc.translations.en.aliases = doc.aliases || [];
-  }
-  if (doc.translations.es && !Array.isArray(doc.translations.es.aliases)) {
-    doc.translations.es.aliases = doc.aliases_es || [];
   }
   return doc as LegalDocument;
 };
 
-// Dynamically import all document modules under /src/lib/documents
-// Next.js uses webpack, so we use require.context instead of import.meta.glob
-type RegistryDoc = Record<string, LegalDocument>;
-const modules = (require as any).context('../documents', true, /index\.ts$/);
 
-export const registry: Record<string, LegalDocument> = {};
-export const documentLibraryByCountry: Record<string, LegalDocument[]> = {};
+const isValidDocument = (doc: any): doc is LegalDocument => {
+  const d = ensureBasicTranslations(doc); // Ensure translations.en.name can be checked
 
-for (const path of modules.keys()) {
-  const mod = modules(path) as RegistryDoc;
-  for (const exported of Object.values(mod)) {
-    if (
-      exported &&
-      typeof exported === 'object' &&
-      !Array.isArray(exported) &&
-      'id' in exported
-    ) {
-      const doc = ensureBasicTranslations(exported);
-      if (isValidDocument(doc)) {
-        const parts = path.split('/');
-        const idx = parts.findIndex(p => p === 'documents');
-        const country = parts[idx + 1];
-        const slug = parts[idx + 2];
-        registry[`${country}/${slug}`] = doc;
-        if (!documentLibraryByCountry[country]) documentLibraryByCountry[country] = [];
-        documentLibraryByCountry[country].push(doc);
-        break;
+  const hasId = d && typeof d.id === 'string' && d.id.trim() !== '';
+  const hasCategory = d && typeof d.category === 'string' && d.category.trim() !== '';
+  const hasSchema = d && d.schema && typeof d.schema.parse === 'function';
+  const hasValidEnglishName = d && d.translations?.en?.name && typeof d.translations.en.name === 'string' && d.translations.en.name.trim() !== '';
+
+  if (d && d.id === 'bill-of-sale-vehicle' || d && d.id === 'promissory-note') {
+    // console.log(`[isValidDocument] Checking ${d.id}: ID=${hasId}, Cat=${hasCategory}, Schema=${hasSchema}, NameEN=${hasValidEnglishName}`);
+  }
+
+  if (!hasId) { /* console.warn('[isValidDocument] Invalid/Missing ID:', d?.id, d?.translations?.en?.name); */ }
+  if (!hasCategory) { /* console.warn('[isValidDocument] Invalid/Missing Category for doc:', d?.id, d?.translations?.en?.name); */ }
+  if (!hasSchema) { /* console.warn('[isValidDocument] Invalid/Missing Zod Schema for doc:', d?.id, d?.translations?.en?.name); */ }
+  if (!hasValidEnglishName) { /* console.warn('[isValidDocument] Invalid/Missing English Name (in translations) for doc:', d?.id); */ }
+
+  return hasId && hasCategory && hasSchema && hasValidEnglishName;
+};
+
+const processBarrel = (barrel: any, countryCode: string): LegalDocument[] => {
+  const docs: LegalDocument[] = [];
+  // console.log(`[document-library] Processing barrel for country: ${countryCode}. Found ${Object.keys(barrel).length} raw exports.`);
+  Object.values(barrel).forEach((exportedDoc: any) => {
+    if (isValidDocument(exportedDoc)) {
+      // console.log(`[document-library] Valid document found in ${countryCode} barrel: ${exportedDoc.id}`);
+      docs.push(exportedDoc);
+      if (exportedDoc.id === 'promissory-note') {
+        // console.log('[document-library] PROMISSORY_NOTE_FROM_BARREL (US):', JSON.stringify({id: exportedDoc.id, name_en: exportedDoc.translations?.en?.name, qCount: exportedDoc.questions?.length, schema: !!exportedDoc.schema}, null, 2));
       }
+    } else {
+      // console.warn(`[document-library] Invalid or incomplete document object found in ${countryCode} barrel:`, exportedDoc ? exportedDoc.id || exportedDoc.name : 'undefined doc');
+    }
+  });
+  // console.log(`[document-library] Valid documents after processing ${countryCode} barrel: ${docs.length}`);
+  return docs;
+};
+
+const usDocsArray: LegalDocument[] = processBarrel(us_docs_barrel, 'us');
+const caDocsArray: LegalDocument[] = processBarrel(ca_docs_barrel, 'ca');
+const additionsArray: LegalDocument[] = documentLibraryAdditions.filter(isValidDocument); // Ensure additions are also filtered
+
+export const documentLibraryByCountry: Record<string, LegalDocument[]> = {
+  us: usDocsArray,
+  ca: caDocsArray,
+  // …
+};
+
+// Combine all documents from barrels and additions
+const combinedDocsBeforeDedup: LegalDocument[] = Object.values(documentLibraryByCountry)
+  .flat()
+  .concat(additionsArray); // additionsArray is already filtered
+
+// De-duplicate the combined list based on doc.id
+const uniqueDocsMap = new Map<string, LegalDocument>();
+combinedDocsBeforeDedup.forEach(doc => {
+  if (doc && doc.id) { // Ensure doc and doc.id are valid
+    if (!uniqueDocsMap.has(doc.id)) {
+      uniqueDocsMap.set(doc.id, doc);
+    } else {
+      // console.warn(`[document-library] Duplicate document ID found and overwritten during de-duplication: ${doc.id}. Keeping first encountered.`);
     }
   }
-}
+});
 
-export function getDocumentsForCountry(countryCode?: string): LegalDocument[] {
-  const code = (countryCode || 'us').toLowerCase();
-  return documentLibraryByCountry[code] || documentLibraryByCountry['us'] || [];
-}
-
-export const supportedCountries = Object.keys(documentLibraryByCountry);
-
-const tempAllDocuments: LegalDocument[] = Object.values(registry);
-console.log(`[document-library] Documents from registry: ${tempAllDocuments.length}`);
-
-export function getDoc(docId: string, country = 'us'): LegalDocument | undefined {
-  return registry[`${country}/${docId}`];
-}
-export { getDoc as getDocument };
-
-export async function loadDoc(
-  docId: string,
-  country = 'us'
-): Promise<LegalDocument | undefined> {
-  const loader = docLoaders[`${country}/${docId}`];
-  if (!loader) return undefined;
-  try {
-    return await loader();
-  } catch (err) {
-    console.error(
-      `[document-library] Failed to load document ${country}/${docId}:`,
-      err
-    );
-    return undefined;
-  }
-}
-
-export const allDocuments: LegalDocument[] = [...new Map(tempAllDocuments.map(doc => [doc.id, doc])).values()];
-console.log(`[document-library] Final unique documents in allDocuments: ${allDocuments.length}`);
+export const allDocuments: LegalDocument[] = Array.from(uniqueDocsMap.values());
+// console.log(`[document-library] Total unique documents in allDocuments after de-duplication: ${allDocuments.length}`);
 
 
-// Default schema for documents that might be missing one
+// Default schema for documents that might be missing one (should be less needed now with isValidDocument)
 const defaultSchema = z.object({
   _fallbackDetails: z.string().optional().describe("Default field for documents without a specific schema."),
 });
@@ -135,26 +109,27 @@ export function generateIdFromName(nameInput: unknown): string {
 }
 
 allDocuments.forEach(doc => {
-  // Ensure ID
+  // Ensure ID (should be less necessary if isValidDocument is effective)
   if (!doc.id) {
     doc.id = generateIdFromName(doc.translations?.en?.name || doc.name);
-    console.warn(`[document-library] Generated ID for doc without one: ${doc.id} (original name: ${doc.translations?.en?.name || doc.name})`);
+    // console.warn(`[document-library] FOR_EACH_LOOP: Generated ID for doc without one: ${doc.id} (original name: ${doc.translations?.en?.name || doc.name})`);
   }
 
   // Ensure schema
   if (!doc.schema || typeof doc.schema.parse !== 'function') {
-    console.warn(`[document-library] Document ${doc.id} is missing a valid Zod schema. Applying default.`);
+    // console.warn(`[document-library] FOR_EACH_LOOP: Document ${doc.id} is missing a valid Zod schema. Applying default.`);
     doc.schema = defaultSchema;
   }
   // Ensure questions is an array
   if (!Array.isArray(doc.questions)) {
-    doc.questions = [];
+    // console.warn(`[document-library] FOR_EACH_LOOP: Document ${doc.id} questions is not an array. Setting to empty array.`);
+    doc.questions = [] as Question[]; // Cast to Question[]
   }
 
-  // Consolidate and ensure translations structure
-  const baseTranslations = doc.translations || { en: {}, es: {} };
+  // Consolidate and ensure translations structure (already partially done by ensureBasicTranslations)
+  const baseTranslations = doc.translations || { en: {}, es: {} }; // ensure baseTranslations is initialized
   const enName = baseTranslations.en?.name || doc.name || doc.id;
-  const esName = baseTranslations.es?.name || doc.name_es || baseTranslations.en?.name || doc.name || doc.id; // Fallback to English name if Spanish name missing
+  const esName = baseTranslations.es?.name || doc.name_es || enName; // Fallback to English name if Spanish name missing
 
   doc.translations = {
     en: {
@@ -169,12 +144,38 @@ allDocuments.forEach(doc => {
     },
   };
 
-  // For debugging specific documents
+  // For debugging specific documents after all processing
   if (doc.id === 'promissory-note' || doc.id === 'bill-of-sale-vehicle') {
-    console.log(`[document-library POST-PROCESSING] Doc: ${doc.id}, Name EN: ${doc.translations.en.name}, Questions: ${doc.questions?.length}, Schema: ${!!doc.schema}`);
+    // console.log(`[document-library] FOR_EACH_LOOP - FINAL_CHECK for ${doc.id}: Name EN: ${doc.translations.en.name}, Questions: ${doc.questions?.length}, Schema Keys: ${doc.schema?.shape ? Object.keys(doc.schema.shape).join(', ') : (doc.schema?._def?.schema?.shape ? Object.keys(doc.schema._def.schema.shape).join(', ') : 'N/A')}`);
   }
 });
 
+export function getDocumentsForCountry(countryCode?: string): LegalDocument[] {
+  const code = (countryCode || 'us').toLowerCase();
+  return documentLibraryByCountry[code] || documentLibraryByCountry['us'] || [];
+}
+
+export const supportedCountries = Object.keys(documentLibraryByCountry);
+
+const tempAllDocumentsRegistryCheck: LegalDocument[] = Object.values(allDocuments); // Use the de-duplicated list
+// console.log(`[document-library] Documents from allDocuments for registry check: ${tempAllDocumentsRegistryCheck.length}`);
+
+// This registry might be redundant if allDocuments is the source of truth for UI components.
+// If used, ensure it's also built from the de-duplicated list.
+export const registry: Record<string, LegalDocument> = {};
+tempAllDocumentsRegistryCheck.forEach(doc => {
+  if (doc.jurisdiction && doc.id) {
+    registry[`${doc.jurisdiction.toLowerCase()}/${doc.id}`] = doc;
+  } else if (doc.id) { // Fallback for docs without explicit jurisdiction (treat as 'us')
+    registry[`us/${doc.id}`] = doc;
+  }
+});
+
+
+export function getDoc(docId: string, country = 'us'): LegalDocument | undefined {
+  return registry[`${country.toLowerCase()}/${docId}`];
+}
+export { getDoc as getDocument };
 
 export function findMatchingDocuments(
   query: string,
@@ -188,13 +189,14 @@ export function findMatchingDocuments(
   return allDocuments.filter(doc => {
     if (doc.id === 'general-inquiry') return false;
 
+    // Ensure translations and name exist
     const translation = doc.translations?.[lang] || doc.translations?.en;
     if (!translation || !translation.name) {
-        console.warn(`[findMatchingDocuments] Document ${doc.id} missing name in translation for lang ${lang}.`);
+        // console.warn(`[findMatchingDocuments] Document ${doc.id} missing name in translation for lang ${lang}.`);
         return false;
     }
 
-    const name = translation.name || ''; // Already guarded by above check
+    const name = translation.name; // Already guarded by above check
     const description = translation.description || '';
     const aliases = Array.isArray(translation.aliases) ? translation.aliases : [];
 
@@ -218,6 +220,5 @@ export default defaultDocumentLibrary;
 
 export { defaultDocumentLibrary as documentLibrary };
 
-export { usStates } from '../usStates'; // Corrected path
-export { getDocumentUrl } from './url';
-export type { Question, LegalDocument, UpsellClause } from '@/types/documents';
+export { usStates } from '../usStates';
+export type { LegalDocument, Question, UpsellClause } from '@/types/documents'; // Question import added here
