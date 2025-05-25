@@ -7,13 +7,14 @@
     "genkit:watch": "genkit start -- tsx --watch src/ai/dev.ts",
     "build": "npm run gen:previews && next build",
     "start": "NODE_ENV=production node server.mjs",
-    "lint": "next lint",
+    "lint": "next lint && npm run check:us-paths",
     "typecheck": "tsc --noEmit",
     "test": "node --test",
     "e2e": "playwright test",
     "gen:previews": "node --experimental-modules scripts/generate-previews.js",
     "extract:i18n": "node_modules/.bin/i18next-parser \"src/**/*.{ts,tsx}\" --config i18next-parser.config.js",
-    "size": "size-limit"
+    "size": "size-limit",
+    "check:us-paths": "bash scripts/check-doc-paths.sh"
   },
   "dependencies": {
     "@genkit-ai/googleai": "^1.6.2",
