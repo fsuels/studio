@@ -4,6 +4,8 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRouter } from 'next/navigation';
+import dynamic from 'next/dynamic';
+import { Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion';
@@ -11,6 +13,14 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { track } from '@/lib/analytics';
 import { useCart } from '@/contexts/CartProvider';
 import { cn } from '@/lib/utils';
+
+const PreviewPane = dynamic(() => import('../PreviewPane'), {
+  loading: () => (
+    <div className="flex items-center justify-center border rounded-lg bg-muted p-4 aspect-[8.5/11] max-h-[500px] w-full shadow-lg">
+      <Loader2 className="h-6 w-6 animate-spin text-primary" />
+    </div>
+  ),
+});
 
 interface VehicleBillOfSaleDisplayProps {
   locale: 'en' | 'es';
@@ -181,7 +191,11 @@ export default function VehicleBillOfSaleDisplay({ locale }: VehicleBillOfSaleDi
         <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-3">{t('pageTitle')}</h1>
         <p className="text-lg text-muted-foreground">{t('pageSubtitle')}</p>
       </header>
-      
+
+      <div className="max-w-md mx-auto mb-10">
+        <PreviewPane locale={locale} docId="bill-of-sale-vehicle" country="us" />
+      </div>
+
       <Accordion type="single" collapsible className="w-full space-y-4 mb-10">
         {allSections.map((section) => (
           <AccordionItem

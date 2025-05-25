@@ -1,1 +1,56 @@
-[]
+[
+  {
+    "id": "bill-of-sale-vehicle",
+    "country": "us",
+    "name": "Vehicle Bill of Sale",
+    "category": "Finance",
+    "languageSupport": ["en", "es"],
+    "basePrice": 19.95,
+    "requiresNotarization": true,
+    "canBeRecorded": false,
+    "offerNotarization": true,
+    "offerRecordingHelp": false,
+    "states": "all",
+    "templatePath": "/templates/en/us/bill-of-sale-vehicle.md",
+    "templatePath_es": "/templates/es/us/bill-of-sale-vehicle.md",
+    "translations": {
+      "en": {
+        "name": "Vehicle Bill of Sale",
+        "description": "Document the sale and transfer of ownership for a vehicle, compliant with state requirements.",
+        "aliases": ["sell car", "used item sale", "vehicle transfer", "car sale contract"]
+      },
+      "es": {
+        "name": "Contrato de Compraventa de Vehículo",
+        "description": "Documentar la venta y transferencia de propiedad de un vehículo, conforme a los requisitos estatales.",
+        "aliases": ["venta de coche", "venta de artículo usado", "transferencia de vehículo", "contrato de venta de auto"]
+      }
+    }
+  },
+  {
+    "id": "promissory-note",
+    "country": "us",
+    "name": "Promissory Note",
+    "category": "Finance",
+    "languageSupport": ["en", "es"],
+    "basePrice": 5,
+    "requiresNotarization": false,
+    "canBeRecorded": false,
+    "offerNotarization": false,
+    "offerRecordingHelp": false,
+    "states": "all",
+    "templatePath": "/templates/en/promissory-note.md",
+    "templatePath_es": "/templates/es/promissory-note.md",
+    "translations": {
+      "en": {
+        "name": "Promissory Note",
+        "description": "Formalize a promise to repay a loan, with terms for principal, interest, and repayment schedule.",
+        "aliases": ["iou", "loan paper", "promise to pay", "loan document"]
+      },
+      "es": {
+        "name": "Pagaré",
+        "description": "Formalizar una promesa de pago de un préstamo, con plazos para el capital, intereses y calendario de pagos.",
+        "aliases": ["pagaré", "documento de préstamo", "promesa de pago"]
+      }
+    }
+  }
+]

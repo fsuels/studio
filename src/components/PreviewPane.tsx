@@ -40,7 +40,8 @@ export default function PreviewPane({ locale, docId, country }: PreviewPaneProps
   }, [docConfig, locale, country]);
 
   const watermarkText = t('preview.watermark', { ns: 'translation', defaultValue: 'PREVIEW' });
-  const imgSrc = `/images/previews/${locale}/${docId}.png`;
+  const imgSrc = `/previews/${docId}.png`;
+  const fallbackImg = '/images/hero-placeholder.png';
 
   useEffect(() => {
     setIsHydrated(true);
@@ -196,13 +197,25 @@ export default function PreviewPane({ locale, docId, country }: PreviewPaneProps
     );
   }
   
-  if (error || imageError || (!templatePath && !rawMarkdown && !isLoading)) {
+  if (imageError && !error) {
+    return (
+      <div
+        id="live-preview"
+        data-watermark={watermarkText}
+        className="relative w-full h-full bg-card text-card-foreground rounded-lg overflow-hidden"
+        style={{ userSelect: 'none' }}
+      >
+        <Image src={fallbackImg} alt="preview unavailable" width={850} height={1100} className="object-contain w-full h-full" loading="lazy" />
+      </div>
+    );
+  }
+
+  if (error || (!templatePath && !rawMarkdown && !isLoading)) {
      return (
         <div className="flex flex-col items-center justify-center h-full text-destructive p-4 text-center bg-destructive/5 rounded-lg">
           <AlertTriangle className="h-8 w-8 mb-2" />
-          <p className="font-semibold">{error ? t('Error loading preview', { ns: 'translation', defaultValue: 'Error loading preview' }) : t('Preview Unavailable', { ns: 'translation', defaultValue: 'Preview Unavailable'})}</p>
+          <p className="font-semibold">{t('Error loading preview', { ns: 'translation', defaultValue: 'Error loading preview' })}</p>
           {error && <p className="text-xs mt-1">{error}</p>}
-          {imageError && !error && <p className="text-xs mt-1">{t('Image preview could not be loaded.', { ns: 'translation', defaultValue: 'Image preview could not be loaded.' })}</p>}
         </div>
      );
   }
