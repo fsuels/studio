@@ -46,7 +46,9 @@ export const InferDocumentTypeOutputSchema = z.object({
 export type InferDocumentTypeOutput = z.infer<typeof InferDocumentTypeOutputSchema>;
 
 // Build context string from documentLibrary
-const getAvailableDocumentsContext = (language: 'en' | 'es'): string => {
+// `language` is accepted for future localization support.
+// Prefix with underscore to avoid unused variable lint error.
+const getAvailableDocumentsContext = (_language: 'en' | 'es'): string => {
   return `Available Document Types:
 ${documentLibrary.map(doc => `- ${doc.name} (Category: ${doc.category})`).join('\n')}`;
 };
@@ -77,7 +79,8 @@ export const inferDocumentTypeFlow = ai.defineFlow<
   outputSchema: InferDocumentTypeOutputSchema,
 },
 async (input) => {
-  const log = (msg: string, ...args: any[]) => console.log(`[inferDocFlow] ${msg}`, ...args);
+  // Allow any type of additional log arguments without using `any`.
+  const log = (msg: string, ...args: unknown[]) => console.log(`[inferDocFlow] ${msg}`, ...args);
   log('Received input', input);
 
   // Trim and validate description
@@ -105,7 +108,7 @@ async (input) => {
     };
   }
 
-  const { language, state } = parsed.data;
+  const { language } = parsed.data;
   const ctx = getAvailableDocumentsContext(language);
 
   try {
@@ -139,13 +142,14 @@ async (input) => {
     log('Returning suggestions', suggestions);
     return { suggestions };
 
-  } catch (err: any) {
-    log('Error in flow', err.message);
+  } catch (err: unknown) {
+    const error = err instanceof Error ? err : new Error(String(err));
+    log('Error in flow', error.message);
     return {
       suggestions: [{
         documentType: 'General Inquiry',
         confidence: 0.05,
-        reasoning: `Unexpected error: ${err.message}`
+        reasoning: `Unexpected error: ${error.message}`
       }]
     };
   }
