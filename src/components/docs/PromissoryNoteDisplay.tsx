@@ -71,11 +71,15 @@ export default function PromissoryNoteDisplay({ locale }: PromissoryNoteDisplayP
 
   const renderSectionContent = (section: typeof allDisplaySections[0]) => {
     if (section.type === 'paragraph' && section.contentKey) {
-      return <p className="text-muted-foreground">{t(section.contentKey)}</p>;
+      return (
+        <p className="text-muted-foreground">
+          {t(section.contentKey, { defaultValue: '' })}
+        </p>
+      );
     }
     if (section.type === 'list' && section.itemsKey) {
-      const items = t(section.itemsKey, { returnObjects: true });
-      const lastParagraph = section.lastParagraphKey ? t(section.lastParagraphKey) : null;
+      const items = t(section.itemsKey, { returnObjects: true, defaultValue: [] });
+      const lastParagraph = section.lastParagraphKey ? t(section.lastParagraphKey, { defaultValue: '' }) : null;
       if (Array.isArray(items)) {
         return (
           <>
@@ -88,21 +92,25 @@ export default function PromissoryNoteDisplay({ locale }: PromissoryNoteDisplayP
       }
     }
     if (section.type === 'ordered-list' && section.itemsKey) {
-      const items = t(section.itemsKey, { returnObjects: true });
+      const items = t(section.itemsKey, { returnObjects: true, defaultValue: [] });
       if (Array.isArray(items)) {
         return (
           <>
             <ol className="list-decimal list-outside pl-5 space-y-1 text-muted-foreground">
               {items.map((item: string, i: number) => <li key={i}>{item}</li>)}
             </ol>
-            {section.totalTimeKey && <p className="text-sm text-muted-foreground mt-2">{t(section.totalTimeKey)}</p>}
+            {section.totalTimeKey && (
+              <p className="text-sm text-muted-foreground mt-2">
+                {t(section.totalTimeKey, { defaultValue: '' })}
+              </p>
+            )}
           </>
         );
       }
     }
-     if (section.type === 'mixed-list' && section.contentKey && section.itemsKey) {
-      const introContent = t(section.contentKey);
-      const items = t(section.itemsKey, { returnObjects: true });
+    if (section.type === 'mixed-list' && section.contentKey && section.itemsKey) {
+      const introContent = t(section.contentKey, { defaultValue: '' });
+      const items = t(section.itemsKey, { returnObjects: true, defaultValue: [] });
       return (
         <>
           <p className="text-muted-foreground mb-2">{introContent}</p>
@@ -115,21 +123,25 @@ export default function PromissoryNoteDisplay({ locale }: PromissoryNoteDisplayP
       );
     }
     if (section.type === 'checklist' && section.itemsKey) {
-      const items = t(section.itemsKey, { returnObjects: true });
+      const items = t(section.itemsKey, { returnObjects: true, defaultValue: [] });
       if (Array.isArray(items)) {
         return (
           <>
             <ul className="list-none pl-0 space-y-1 text-muted-foreground">
               {items.map((item: string, i: number) => <li key={i} className="flex items-center"><span className="mr-2 text-primary">✓</span>{item}</li>)}
             </ul>
-            {section.printNoteKey && <p className="text-sm text-muted-foreground mt-2 italic">{t(section.printNoteKey)}</p>}
+            {section.printNoteKey && (
+              <p className="text-sm text-muted-foreground mt-2 italic">
+                {t(section.printNoteKey, { defaultValue: '' })}
+              </p>
+            )}
           </>
         );
       }
     }
     if (section.type === 'table' && section.tableKey) {
-      const headers = t(`${section.tableKey}.headers`, { returnObjects: true });
-      const rows = t(`${section.tableKey}.rows`, { returnObjects: true });
+      const headers = t(`${section.tableKey}.headers`, { returnObjects: true, defaultValue: [] });
+      const rows = t(`${section.tableKey}.rows`, { returnObjects: true, defaultValue: [] });
       return (
         <div className="overflow-x-auto my-4">
           <Table className="min-w-full text-sm">
@@ -149,15 +161,17 @@ export default function PromissoryNoteDisplay({ locale }: PromissoryNoteDisplayP
         </div>
       );
     }
-     if (section.type === 'list-cta' && section.itemsKey && section.ctaKey) {
-      const items = t(section.itemsKey, { returnObjects: true });
+    if (section.type === 'list-cta' && section.itemsKey && section.ctaKey) {
+      const items = t(section.itemsKey, { returnObjects: true, defaultValue: [] });
       if (Array.isArray(items)) {
         return (
           <>
             <ul className="list-disc list-outside pl-5 space-y-1 text-muted-foreground">
               {items.map((item: string, i: number) => <li key={i}>{item}</li>)}
             </ul>
-            <p className="text-muted-foreground mt-4">{t(section.ctaKey)}</p>
+            <p className="text-muted-foreground mt-4">
+              {t(section.ctaKey, { defaultValue: '' })}
+            </p>
           </>
         );
       }
