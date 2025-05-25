@@ -36,8 +36,9 @@ export const vehicleBillOfSaleMeta: LegalDocument = {
       aliases: ["venta de coche", "venta de artículo usado", "transferencia de vehículo", "contrato de venta de auto"]
     }
   },
-  templatePath: '/templates/en/bill-of-sale-vehicle.md',
-  templatePath_es: '/templates/es/bill-of-sale-vehicle.md',
+  // Updated to new document template structure under /{lang}/{country}/{docId}
+  templatePath: '/templates/en/us/bill-of-sale-vehicle.md',
+  templatePath_es: '/templates/es/us/bill-of-sale-vehicle.md',
   requiresNotarizationStates: ['AZ','KY','LA','MT','NV','OH','OK','PA','WV','WY'],
   compliance: stateRules,
   schema: BillOfSaleSchema,
