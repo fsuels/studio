@@ -1,6 +1,6 @@
 // src/lib/documents/us/bill-of-sale-vehicle/metadata.ts
 import { z } from 'zod';
-import { BillOfSaleSchema } from '@/schemas/billOfSale';
+import { BillOfSaleSchema } from './schema';
 import type { LegalDocument } from '@/types/documents';
 import { usStates } from '@/lib/document-library/utils';
 import { billOfSaleVehicleQuestions } from './questions';

@@ -31,7 +31,16 @@ function isValidVIN(vin) {
   return /^[A-HJ-NPR-Z0-9]{17}$/.test(vinUpper);
 }
 
-const schemaPath = path.join(path.dirname(new URL(import.meta.url).pathname), '..', 'src', 'schemas', 'billOfSale.ts');
+const schemaPath = path.join(
+  path.dirname(new URL(import.meta.url).pathname),
+  '..',
+  'src',
+  'lib',
+  'documents',
+  'us',
+  'bill-of-sale-vehicle',
+  'schema.ts'
+);
 const schemaTs = fs.readFileSync(schemaPath, 'utf8');
 const schemaJs = schemaTs
   .replace(/import[^;]+;\n/g, '')
