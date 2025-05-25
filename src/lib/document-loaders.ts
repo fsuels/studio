@@ -30,6 +30,5 @@ export const docLoaders: Record<string, () => Promise<LegalDocument>> = {
   'us/prenuptial-agreement': () => import( /* webpackChunkName: "doc-us-prenuptial-agreement" */ './documents/us/prenuptial-agreement' ).then(m => m.prenuptialAgreement),
   'us/promissory-note': () => import( /* webpackChunkName: "doc-us-promissory-note" */ './documents/us/promissory-note' ).then(m => m.promissoryNote),
   'us/quitclaim-deed': () => import( /* webpackChunkName: "doc-us-quitclaim-deed" */ './documents/us/quitclaim-deed' ).then(m => m.quitclaimDeed),
-  'us/service-agreement': () => import( /* webpackChunkName: "doc-us-service-agreement" */ './documents/us/service-agreement' ).then(m => m.serviceAgreement),
-  'us/vehicle-bill-of-sale': () => import( /* webpackChunkName: "doc-us-vehicle-bill-of-sale" */ './documents/us/vehicle-bill-of-sale' ).then(m => m.vehicleBillOfSale)
+  'us/service-agreement': () => import( /* webpackChunkName: "doc-us-service-agreement" */ './documents/us/service-agreement' ).then(m => m.serviceAgreement)
 };

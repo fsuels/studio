@@ -44,3 +44,7 @@ export const vehicleBillOfSaleMeta: LegalDocument = {
   questions: vehicleBillOfSaleQuestions, // Assign imported questions
   upsellClauses: []
 };
+
+// Provide the canonical export name used throughout the app
+export const billOfSaleVehicle = vehicleBillOfSaleMeta;
+
