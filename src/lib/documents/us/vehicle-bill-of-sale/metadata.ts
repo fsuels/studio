@@ -1,7 +1,8 @@
 // src/lib/documents/us/vehicle-bill-of-sale/metadata.ts
 import type { LegalDocument } from '@/types/documents';
 import { BillOfSaleSchema } from '@/schemas/billOfSale'; // Assuming schema is in a central location or adjust path
-import { vehicleBillOfSaleQuestions } from './questions'; 
+import { vehicleBillOfSaleQuestions } from './questions';
+import { rules as stateRules } from '@/lib/compliance';
 
 export const vehicleBillOfSaleMeta: LegalDocument = {
   id: 'bill-of-sale-vehicle',
@@ -15,9 +16,10 @@ export const vehicleBillOfSaleMeta: LegalDocument = {
   basePrice: 19.95,
   states: 'all', // Indicates available in all US states unless overridden
   // Standardized template paths
-  templatePath: '/templates/en/bill-of-sale-vehicle.md',
-  templatePath_es: '/templates/es/bill-of-sale-vehicle.md',
+  templatePath: '/templates/en/us/bill-of-sale-vehicle.md',
+  templatePath_es: '/templates/es/us/bill-of-sale-vehicle.md',
   requiresNotarizationStates: ['AZ','KY','LA','MT','NV','OH','OK','PA','WV','WY'], // States where notarization is mandatory
+  compliance: stateRules,
   schema: BillOfSaleSchema,
   questions: vehicleBillOfSaleQuestions,
   upsellClauses: [],

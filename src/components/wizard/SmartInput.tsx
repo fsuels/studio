@@ -6,24 +6,11 @@ import { cn } from '@/lib/utils';
 import type { UseFormRegisterReturn, FieldValues, Path } from 'react-hook-form';
 import { useFormContext } from 'react-hook-form'; 
 
-const formatPhoneNumber = (value: string): string => {
-  if (!value) return '';
-  const digits = value.replace(/[^\d]/g, '');
-  const length = digits.length;
-
-  if (length === 0) return '';
-  
-  let formattedNumber = '(';
-  if (length >= 1) {
-    formattedNumber += digits.substring(0, Math.min(3, length));
-  }
-  if (length > 3) {
-    formattedNumber += ') ' + digits.substring(3, Math.min(6, length));
-  }
-  if (length > 6) {
-    formattedNumber += '-' + digits.substring(6, Math.min(10, length));
-  }
-  return formattedNumber;
+const formatPhone = (input: string): string => {
+  const cleaned = input.replace(/\D/g, '');
+  const match = cleaned.match(/^(\d{3})(\d{3})(\d{4})$/);
+  if (match) return `(${match[1]}) ${match[2]}-${match[3]}`;
+  return input;
 };
 
 interface SmartInputProps<TFieldValues extends FieldValues = FieldValues>
@@ -42,12 +29,12 @@ const SmartInput = React.memo(React.forwardRef<HTMLInputElement, SmartInputProps
 
     const [displayValue, setDisplayValue] = useState<string>(() => {
       const initialVal = typeof watchedRHFValue === 'string' ? watchedRHFValue : '';
-      return type === 'tel' ? formatPhoneNumber(initialVal) : initialVal;
+      return type === 'tel' ? formatPhone(initialVal) : initialVal;
     });
 
     useEffect(() => {
       const currentRHFValue = typeof watchedRHFValue === 'string' ? watchedRHFValue : '';
-      const newDisplayValue = type === 'tel' ? formatPhoneNumber(currentRHFValue) : currentRHFValue;
+      const newDisplayValue = type === 'tel' ? formatPhone(currentRHFValue) : currentRHFValue;
       if (newDisplayValue !== displayValue) {
         setDisplayValue(newDisplayValue);
       }
@@ -58,7 +45,7 @@ const SmartInput = React.memo(React.forwardRef<HTMLInputElement, SmartInputProps
       let valueToSetInRHF = currentValue;
 
       if (type === 'tel') {
-        const formattedValue = formatPhoneNumber(currentValue);
+        const formattedValue = formatPhone(currentValue);
         setDisplayValue(formattedValue); 
         valueToSetInRHF = formattedValue; 
       } else {
@@ -84,7 +71,7 @@ const SmartInput = React.memo(React.forwardRef<HTMLInputElement, SmartInputProps
         name={rhfName}
         type={type === 'tel' ? 'text' : type} 
         inputMode={type === 'tel' ? 'tel' : undefined}
-        className={cn("max-w-sm", className)}
+        className={cn("w-full max-w-sm", className)}
         value={displayValue} 
         onChange={handleInputChange}
         onBlur={handleBlur} 

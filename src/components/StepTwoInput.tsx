@@ -2,7 +2,7 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
-import { documentLibrary, LegalDocument, usStates } from "@/lib/document-library";
+import { documentLibrary, LegalDocument, usStates } from "@/lib/document-library/index";
 
 interface StepTwoInputProps {
   category: string;
