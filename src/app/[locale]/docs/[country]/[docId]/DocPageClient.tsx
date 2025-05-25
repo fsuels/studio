@@ -17,7 +17,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion';
 import VehicleBillOfSaleDisplay from '@/components/docs/VehicleBillOfSaleDisplay'; // Import the specific display component
 import PromissoryNoteDisplay from '@/components/docs/PromissoryNoteDisplay';
-import { getDocumentUrl } from '@/lib/document-library/url';
+import { getDocumentUrl, getDocumentStartUrl } from '@/lib/document-library/url';
 
 // Lazy load testimonials section so it's only fetched when this page is viewed
 const TrustAndTestimonialsSection = dynamic(
@@ -88,7 +88,7 @@ export default function DocPageClient({ params: routeParams }: DocPageClientProp
       (DocumentDetail as any).preload();
     }
     if (docId && currentLocale) {
-      router.prefetch(getDocumentUrl(currentLocale, currentCountry, docId));
+      router.prefetch(getDocumentStartUrl(currentLocale, currentCountry, docId));
     }
   }, [router, docId, currentLocale, currentCountry]);
 
@@ -131,7 +131,7 @@ export default function DocPageClient({ params: routeParams }: DocPageClientProp
       (DocumentDetail as any).preload();
     }
     if (docId && currentLocale) {
-      router.prefetch(getDocumentUrl(currentLocale, currentCountry, docId));
+      router.prefetch(getDocumentStartUrl(currentLocale, currentCountry, docId));
     }
   }, [docId, currentLocale, currentCountry, isHydrated, router]);
 
@@ -144,7 +144,7 @@ export default function DocPageClient({ params: routeParams }: DocPageClientProp
       value: docConfig.basePrice
     });
     router.push(
-      getDocumentUrl(currentLocale, currentCountry, docConfig.id),
+      getDocumentStartUrl(currentLocale, currentCountry, docConfig.id),
     );
   };
 

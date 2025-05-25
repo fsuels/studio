@@ -7,7 +7,7 @@ import { Search, FileText, ExternalLink } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useRouter, useParams } from 'next/navigation';
 import { documentLibrary, type LegalDocument } from '@/lib/document-library/index';
-import { getDocumentUrl } from '@/lib/document-library/url';
+import { getDocumentStartUrl } from '@/lib/document-library/url';
 import { getDocTranslation } from '@/lib/i18nUtils';
 
 const SearchBar = React.memo(function SearchBar() {
@@ -82,7 +82,7 @@ const SearchBar = React.memo(function SearchBar() {
     setSearchTerm('');
     setShowSuggestions(false);
     router.push(
-      getDocumentUrl(
+      getDocumentStartUrl(
         locale,
         (doc.jurisdiction || 'US').toLowerCase(),
         doc.id,
@@ -129,7 +129,7 @@ const SearchBar = React.memo(function SearchBar() {
                       onClick={() => handleSuggestionClick(suggestion)}
                       onMouseEnter={() =>
                         router.prefetch(
-                          getDocumentUrl(
+                          getDocumentStartUrl(
                             locale,
                             (suggestion.jurisdiction || 'US').toLowerCase(),
                             suggestion.id,

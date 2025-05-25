@@ -219,5 +219,5 @@ export default defaultDocumentLibrary;
 export { defaultDocumentLibrary as documentLibrary };
 
 export { usStates } from '../usStates'; // Corrected path
-export { getDocumentUrl } from './url';
+export { getDocumentUrl, getDocumentStartUrl } from './url';
 export type { Question, LegalDocument, UpsellClause } from '@/types/documents';

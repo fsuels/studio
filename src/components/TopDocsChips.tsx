@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { useParams, useRouter } from 'next/navigation';
 import { Loader2, FileText } from 'lucide-react';
 import { documentLibrary, type LegalDocument } from '@/lib/document-library/index';
-import { getDocumentUrl } from '@/lib/document-library/url';
+import { getDocumentStartUrl } from '@/lib/document-library/url';
 
 // Placeholder data for top docs - in a real app, this would come from Firestore
 const staticTopDocIds: string[] = [
@@ -51,7 +51,7 @@ const TopDocsChips = React.memo(function TopDocsChips() {
     if (!isHydrated || topDocs.length === 0) return;
     topDocs.forEach(doc => {
       router.prefetch(
-        getDocumentUrl(
+        getDocumentStartUrl(
           locale,
           (doc.jurisdiction || 'US').toLowerCase(),
           doc.id,
@@ -99,7 +99,7 @@ const TopDocsChips = React.memo(function TopDocsChips() {
             className="bg-card hover:bg-muted border-border text-card-foreground hover:text-primary transition-colors shadow-sm px-4 py-2 h-auto text-xs sm:text-sm"
           >
             <Link
-              href={getDocumentUrl(
+              href={getDocumentStartUrl(
                 locale,
                 (doc.jurisdiction || 'US').toLowerCase(),
                 doc.id,

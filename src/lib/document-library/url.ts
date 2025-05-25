@@ -4,8 +4,14 @@ export function getDocumentUrl(
   locale: string,
   country: string,
   docId: string,
-  step: 'start' | 'review' | 'share' = 'start'
 ) {
-  return `/${locale}/docs/${country}/${docId}/${step}`;
+  return `/${locale}/docs/${country}/${docId}`;
 }
 
+export function getDocumentStartUrl(
+  locale: string,
+  country: string,
+  docId: string,
+) {
+  return `${getDocumentUrl(locale, country, docId)}/start`;
+}

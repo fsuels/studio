@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { admin } from '@/lib/firebase-admin'; // Firebase Admin SDK
 import { documentLibrary, type LegalDocument } from '@/lib/document-library/index';
-import { getDocumentUrl } from '@/lib/document-library/url';
+import { getDocumentStartUrl } from '@/lib/document-library/url';
 import { z } from 'zod';
 
 // Placeholder for user authentication - replace with your actual auth logic
@@ -73,7 +73,7 @@ export async function POST(
       return NextResponse.json({ error: 'Document configuration not found' }, { status: 404 });
     }
     console.log(`${logPrefix} Document config found: ${docConfig.name}`);
-    const docUrlBase = getDocumentUrl(
+    const docUrlBase = getDocumentStartUrl(
       effectiveLocale,
       (docConfig.jurisdiction || 'US').toLowerCase(),
       docConfig.id,
