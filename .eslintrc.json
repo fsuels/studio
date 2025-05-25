@@ -1,0 +1,12 @@
+{
+  "extends": "next",
+  "rules": {
+    "no-restricted-syntax": [
+      "error",
+      {
+        "selector": "Literal[value=/\\/docs\\/us\\//]",
+        "message": "Hard-coded US doc path. Use getRoute()."
+      }
+    ]
+  }
+}
