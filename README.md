@@ -104,6 +104,15 @@ remains responsive.
 Set `NEXT_PUBLIC_INTERCOM_APP_ID` in your environment to enable the Intercom chat widget. The script loads only when the user clicks the chat button in the footer, minimizing third-party impact. Leave this variable unset to disable the widget entirely.
 
 
+## Firebase Configuration
+
+Set `NEXT_PUBLIC_FIREBASE_API_KEY` in your environment before running the app:
+
+```bash
+NEXT_PUBLIC_FIREBASE_API_KEY=your-key npm run dev
+```
+
+
 ## Document Folder Layout
 
 Documents are organized by country under `src/lib/documents/{country}/{docId}`. Each folder contains the document's `metadata.ts`, `schema.ts`, `questions.ts` and an `index.ts` that re‑exports them. Markdown templates now live under `templates/{lang}/{country}/{docId}.md`.
