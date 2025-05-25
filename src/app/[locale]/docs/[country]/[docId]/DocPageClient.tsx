@@ -15,8 +15,9 @@ import { track } from '@/lib/analytics';
 import { Separator } from '@/components/ui/separator';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion';
-import VehicleBillOfSaleDisplay from '@/components/docs/VehicleBillOfSaleDisplay'; // Import the specific display component
-import { getDocumentUrl } from '@/lib/document-library/url';
+import VehicleBillOfSaleDisplay from '@/components/docs/VehicleBillOfSaleDisplay';
+import PromissoryNoteDisplay from '@/components/docs/PromissoryNoteDisplay';
+import { getDocumentUrl, getDocumentStartUrl } from '@/lib/document-library/url';
 
 // Lazy load testimonials section so it's only fetched when this page is viewed
 const TrustAndTestimonialsSection = dynamic(
@@ -65,31 +66,45 @@ export default function DocPageClient({ params: routeParams }: DocPageClientProp
   const docId = Array.isArray(params!.docId) ? params!.docId[0] : params!.docId as string | undefined;
 
   const [docConfig, setDocConfig] = useState<LegalDocument | undefined>(undefined);
-  const [markdownContent, setMarkdownContent] = useState<string | null>(null);
+  const [markdownContent, setMarkdownContent] = useState<string | null>(null); // Not directly used if DocumentDetail fetches its own
 
   useEffect(() => {
-    if (!docId) {
+    if (!docId || !currentCountry) {
       setDocConfig(undefined);
       return;
     }
-    loadDoc(docId, currentCountry).then(setDocConfig);
+    // Using async immediately-invoked function expression (IIFE)
+    (async () => {
+      const loadedDoc = await loadDoc(docId, currentCountry);
+      if (!loadedDoc) {
+        console.error(`[DocPageClient] Doc config not found for ID: ${docId}, Country: ${currentCountry}. Triggering 404.`);
+        notFound();
+      } else {
+        setDocConfig(loadedDoc);
+      }
+    })();
 
-    // Fetch markdown content
+    // Fetch markdown content for DocumentDetail (can be removed if DocumentDetail handles its own fetching)
+    // This fetch is distinct from the one inside DocumentDetail/PreviewPane itself.
+    // If DocumentDetail/PreviewPane handles its own data fetching, this one might be redundant or for a different purpose.
     if (currentLocale && currentCountry && docId) {
-      const fetchMarkdown = async () => {
+      const fetchMarkdownForPage = async () => {
         try {
           const response = await fetch(`/api/document-template?locale=${currentLocale}&country=${currentCountry}&docId=${docId}`);
           if (response.ok) {
             const markdown = await response.text();
+            // This state might not be directly rendered if DocumentDetail fetches its own markdown,
+            // but could be used for other purposes on this page.
             setMarkdownContent(markdown);
+            console.log(`[DocPageClient] Markdown fetched for page context (length: ${markdown.length})`);
           } else {
-            console.error('Failed to fetch markdown content:', response.statusText);
+            console.error(`[DocPageClient] Failed to fetch markdown for page context. Status: ${response.status}, StatusText: "${response.statusText}"`);
           }
         } catch (error) {
-          console.error('Error fetching markdown content:', error);
+          console.error('[DocPageClient] Error fetching markdown for page context:', error);
         }
       };
-      fetchMarkdown();
+      fetchMarkdownForPage();
     }
   }, [docId, currentCountry, currentLocale]);
   
@@ -105,24 +120,25 @@ export default function DocPageClient({ params: routeParams }: DocPageClientProp
     if (typeof (DocumentDetail as any).preload === 'function') {
       (DocumentDetail as any).preload();
     }
-    if (docId && currentLocale) {
-      router.prefetch(getDocumentUrl(currentLocale, currentCountry, docId));
+    if (docId && currentLocale && currentCountry) {
+      router.prefetch(getDocumentStartUrl(currentLocale, currentCountry, docId));
     }
-  }, [router, docId, currentLocale, currentCountry]);
+  }, [router, docId, currentLocale, currentCountry]); 
 
   useEffect(() => {
     if (!isHydrated) return;
     if (docId) {
-      if (!docConfig) {
-        console.error(`[DocPageClient] Doc config not found for ID: ${docId}. Triggering 404.`);
-        notFound();
+      if (docConfig === undefined && !isLoading) { 
+        // Handled by the async loadDoc effect now
       }
     } else {
       console.error("[DocPageClient] docId is undefined. Triggering 404.");
       notFound();
     }
-    setIsLoading(false);
-  }, [docId, docConfig, isHydrated, notFound]);
+    if (docConfig !== undefined || (docId && !docConfig && !isLoading)) { 
+      setIsLoading(false);
+    }
+  }, [docId, docConfig, isHydrated, isLoading, notFound]);
 
 
 
@@ -136,38 +152,36 @@ export default function DocPageClient({ params: routeParams }: DocPageClientProp
   useEffect(() => {
     if (docConfig && isHydrated) {
       track('view_item', {
-        id: docConfig.id,
-        name: currentLocale === 'es' && docConfig.translations?.es?.name ? docConfig.translations.es.name : docConfig.translations?.en?.name || docConfig.name,
-        value: docConfig.basePrice
+        item_id: docConfig.id, // GA4 standard
+        item_name: currentLocale === 'es' && docConfig.translations?.es?.name ? docConfig.translations.es.name : docConfig.translations?.en?.name || docConfig.name,
+        item_category: docConfig.category, // GA4 standard
+        value: docConfig.basePrice, // GA4 standard
+        currency: "USD" // GA4 standard
       });
     }
   }, [docConfig, currentLocale, isHydrated]);
 
-  useEffect(() => {
-    if (!isHydrated) return;
-    if (typeof (DocumentDetail as any).preload === 'function') {
-      (DocumentDetail as any).preload();
-    }
-    if (docId && currentLocale) {
-      router.prefetch(getDocumentUrl(currentLocale, currentCountry, docId));
-    }
-  }, [docId, currentLocale, currentCountry, isHydrated, router]);
-
 
   const handleStartWizard = () => {
-    if (!docConfig || !currentLocale || !isHydrated) return;
-    track('add_to_cart', {
-      id: docConfig.id,
-      name: currentLocale === 'es' && docConfig.translations?.es?.name ? docConfig.translations.es.name : docConfig.translations?.en?.name || docConfig.name,
-      value: docConfig.basePrice
+    if (!docConfig || !currentLocale || !currentCountry || !isHydrated) return; 
+    track('add_to_cart', { // GA4 standard
+      currency: "USD",
+      value: docConfig.basePrice,
+      items: [{
+        item_id: docConfig.id,
+        item_name: currentLocale === 'es' && docConfig.translations?.es?.name ? docConfig.translations.es.name : docConfig.translations?.en?.name || docConfig.name,
+        item_category: docConfig.category,
+        price: docConfig.basePrice,
+        quantity: 1
+      }]
     });
     router.push(
-      getDocumentUrl(currentLocale, currentCountry, docConfig.id),
+      getDocumentStartUrl(currentLocale, currentCountry, docConfig.id), 
     );
   };
 
 
- if (!isHydrated || isLoading || !docConfig || !currentLocale) {
+ if (!isHydrated || isLoading || !docConfig || !currentLocale || !currentCountry) {
     return (
        <div className="flex items-center justify-center min-h-[calc(100vh-10rem)]">
         <Loader2 className="h-12 w-12 animate-spin text-primary" />
@@ -254,7 +268,9 @@ export default function DocPageClient({ params: routeParams }: DocPageClientProp
                         <TooltipProvider>
                           <Tooltip>
                             <TooltipTrigger asChild>
-                              <Info className="h-4 w-4 text-muted-foreground cursor-help" />
+                              <Button variant="ghost" size="icon" className="h-5 w-5 p-0 text-muted-foreground hover:text-foreground">
+                                <Info className="h-4 w-4" />
+                              </Button>
                             </TooltipTrigger>
                             <TooltipContent side="top" className="text-xs">This shows a sample layout of your completed form.</TooltipContent>
                           </Tooltip>
@@ -264,7 +280,7 @@ export default function DocPageClient({ params: routeParams }: DocPageClientProp
                         {t('docDetail.previewSubtitle', {defaultValue: "This is how your document will generally look. Specific clauses and details will be customized by your answers."})}
                     </p>
                 </div>
-                <DocumentDetail locale={currentLocale as 'en' | 'es'} docId={docId as string} altText={`${documentDisplayName} preview`} />
+                <DocumentDetail locale={currentLocale as 'en' | 'es'} country={currentCountry} docId={docId as string} altText={`${documentDisplayName} preview`} />
                  <p className="text-xs text-muted-foreground mt-2 text-center italic">
                     AI Highlight: <AiHighlightPlaceholder text="Key clauses" /> will be automatically tailored.
                  </p>
@@ -273,7 +289,7 @@ export default function DocPageClient({ params: routeParams }: DocPageClientProp
             <aside className="md:col-span-2 space-y-6">
                  <Card className="shadow-lg border-primary">
                     <CardHeader>
-                        <CardTitle className="text-lg text-primary">{t('docDetail.pricingTitle', 'Transparent Pricing')}</CardTitle>
+                        <CardTitle className="text-lg text-primary">{t('docDetail.pricingTitle', {defaultValue: 'Transparent Pricing'})}</CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-3">
                         <div className="flex items-baseline justify-between">
@@ -293,7 +309,7 @@ export default function DocPageClient({ params: routeParams }: DocPageClientProp
                     <Card className="shadow-md">
                         <CardHeader>
                             <CardTitle className="text-md flex items-center gap-2">
-                                <Zap size={18} className="text-accent" /> {t('docDetail.optionalAddons', 'Optional Add-ons')}
+                                <Zap size={18} className="text-accent" /> {t('docDetail.optionalAddons', {defaultValue: 'Optional Add-ons'})}
                             </CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-2">
@@ -310,7 +326,7 @@ export default function DocPageClient({ params: routeParams }: DocPageClientProp
                  <Card className="shadow-md">
                     <CardHeader>
                         <CardTitle className="text-md flex items-center gap-2">
-                            <HelpCircle size={18} className="text-blue-500" /> {t('docDetail.aiAssistance', 'AI Assistance')}
+                            <HelpCircle size={18} className="text-primary" /> {t('docDetail.aiAssistance', {defaultValue: 'AI Assistance'})}
                         </CardTitle>
                     </CardHeader>
                     <CardContent>
@@ -334,35 +350,35 @@ export default function DocPageClient({ params: routeParams }: DocPageClientProp
               {features.map((f, i) => (
                 <div key={i} className="text-center p-4 bg-card border border-border rounded-lg shadow-md">
                   <f.icon className="h-6 w-6 mx-auto mb-2 text-primary" />
-                  <p className="text-sm font-medium text-card-foreground mb-1">{f.title}</p>
-                  <p className="text-xs text-muted-foreground">{f.desc}</p>
+                  <p className="text-sm font-medium text-card-foreground mb-1">{t(f.title, { defaultValue: f.title})}</p>
+                  <p className="text-xs text-muted-foreground">{t(f.desc, { defaultValue: f.desc})}</p>
                 </div>
               ))}
             </section>
 
             {/* How-to Guide & FAQ */}
             <section className="mt-16 max-w-3xl mx-auto space-y-6">
-              <h2 className="text-2xl font-semibold text-center text-foreground">How to Use This Template</h2>
+              <h2 className="text-2xl font-semibold text-center text-foreground">{t('How to Use This Template', {defaultValue: 'How to Use This Template'})}</h2>
               <ol className="list-decimal list-inside space-y-2 text-sm text-muted-foreground">
-                <li>Answer each question in the guided form.</li>
-                <li>Make any tweaks using the built-in editor.</li>
-                <li>E-sign and download your completed document.</li>
+                <li>{t('Answer each question in the guided form.', { defaultValue: 'Answer each question in the guided form.'})}</li>
+                <li>{t('Make any tweaks using the built-in editor.', {defaultValue: 'Make any tweaks using the built-in editor.'})}</li>
+                <li>{t('E-sign and download your completed document.', {defaultValue: 'E-sign and download your completed document.'})}</li>
               </ol>
 
               <div>
-                <h3 className="text-xl font-semibold mb-2 text-foreground">Frequently Asked Questions</h3>
+                <h3 className="text-xl font-semibold mb-2 text-foreground">{t('Frequently Asked Questions', {defaultValue: 'Frequently Asked Questions'})}</h3>
                 <Accordion type="single" collapsible className="w-full">
                   <AccordionItem value="q1">
-                    <AccordionTrigger>Do I need a notary for this document?</AccordionTrigger>
-                    <AccordionContent>Requirements vary by state, but notarization can add extra authenticity.</AccordionContent>
+                    <AccordionTrigger>{t('Do I need a notary for this document?', {defaultValue: 'Do I need a notary for this document?'})}</AccordionTrigger>
+                    <AccordionContent>{t('Requirements vary by state, but notarization can add extra authenticity.', {defaultValue: 'Requirements vary by state, but notarization can add extra authenticity.'})}</AccordionContent>
                   </AccordionItem>
                   <AccordionItem value="q2">
-                    <AccordionTrigger>Can I use it for any vehicle type?</AccordionTrigger>
-                    <AccordionContent>Yes, simply describe the vehicle accurately in the form.</AccordionContent>
+                    <AccordionTrigger>{t('Can I use it for any vehicle type?', {defaultValue: 'Can I use it for any vehicle type?'})}</AccordionTrigger>
+                    <AccordionContent>{t('Yes, simply describe the vehicle accurately in the form.', {defaultValue: 'Yes, simply describe the vehicle accurately in the form.'})}</AccordionContent>
                   </AccordionItem>
                 </Accordion>
                 <div className="mt-4 text-center">
-                  <Link href={`/${currentLocale}/faq`} className="text-sm text-primary underline">More questions? Visit our FAQ</Link>
+                  <Link href={`/${currentLocale}/faq`} className="text-sm text-primary underline">{t('More questions? Visit our FAQ', {defaultValue: 'More questions? Visit our FAQ'})}</Link>
                 </div>
               </div>
             </section>
