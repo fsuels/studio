@@ -39,10 +39,7 @@ import {
 import { Progress } from "@/components/ui/progress";
 import { usStates } from "@/lib/document-library";
 import { vehicleBillOfSaleFaqs, type FaqItem } from "./faqs";
-import {
-  getVehicleCompliance,
-  vehicleComplianceStates,
-} from "@/lib/states/vehicle-compliance";
+import { vehicleBillOfSale } from "@/lib/documents/us";
 import { getDb } from "@/lib/firebase";
 import { collection, doc, getDoc } from "firebase/firestore";
 
@@ -59,12 +56,15 @@ export default function VehicleBillOfSalePage() {
 
   useEffect(() => {
     if (selectedState) {
-      const compliance = getVehicleCompliance(selectedState);
-      if (compliance) {
+      const rule =
+        vehicleBillOfSale.compliance?.[selectedState] ||
+        vehicleBillOfSale.compliance?.DEFAULT;
+      if (rule) {
+        const stateName = usStates.find(s => s.value === selectedState)?.label || selectedState;
         setComplianceMessage(
-          compliance.notarizationRequired
-            ? `⚠️ Notarization required in ${compliance.state}`
-            : `✔ Valid in ${compliance.state}`,
+          rule.requireNotary
+            ? `⚠️ Notarization required in ${stateName}`
+            : `✔ Valid in ${stateName}`,
         );
       }
     }
