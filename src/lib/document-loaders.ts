@@ -5,7 +5,8 @@ export const docLoaders: Record<string, () => Promise<LegalDocument>> = {
   'ca/promissory-note': () => import( /* webpackChunkName: "doc-ca-promissory-note" */ './documents/ca/promissory-note' ).then(m => m.promissoryNote),
   'us/affidavit-general': () => import( /* webpackChunkName: "doc-us-affidavit-general" */ './documents/us/affidavit-general' ).then(m => m.affidavitGeneral),
   'us/articles-of-incorporation-biz': () => import( /* webpackChunkName: "doc-us-articles-of-incorporation-biz" */ './documents/us/articles-of-incorporation-biz' ).then(m => m.articlesOfIncorporationBiz),
-  'us/bill-of-sale-vehicle': () => import( /* webpackChunkName: "doc-us-bill-of-sale-vehicle" */ './documents/us/bill-of-sale-vehicle' ).then(m => m.billOfSaleVehicle),
+  // Load the vehicle bill of sale using the new folder name but keep the legacy id
+  'us/bill-of-sale-vehicle': () => import( /* webpackChunkName: "doc-us-bill-of-sale-vehicle" */ './documents/us/vehicle-bill-of-sale' ).then(m => m.vehicleBillOfSale),
   'us/child-custody-agreement': () => import( /* webpackChunkName: "doc-us-child-custody-agreement" */ './documents/us/child-custody-agreement' ).then(m => m.childCustodyAgreement),
   'us/child-medical-consent': () => import( /* webpackChunkName: "doc-us-child-medical-consent" */ './documents/us/child-medical-consent' ).then(m => m.childMedicalConsent),
   'us/commercial-lease-agreement': () => import( /* webpackChunkName: "doc-us-commercial-lease-agreement" */ './documents/us/commercial-lease-agreement' ).then(m => m.commercialLeaseAgreement),
