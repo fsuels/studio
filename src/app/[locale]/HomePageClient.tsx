@@ -4,7 +4,7 @@
 import React, { useState, useEffect, useCallback, Suspense } from 'react';
 import dynamic from 'next/dynamic';
 import type { LegalDocument } from '@/lib/document-library';
-import { usStates, documentLibrary } from '@/lib/document-library';
+import { documentLibrary } from '@/lib/document-library';
 import HomepageHeroSteps from '@/components/landing/HomepageHeroSteps';
 import { useToast } from '@/hooks/use-toast';
 import { Separator } from '@/components/ui/separator';
@@ -49,7 +49,7 @@ const StickyFilterBar = dynamic(() => import('@/components/StickyFilterBar'), {
 });
 
 export default function HomePageClient() {
-  const { t, i18n } = useTranslation("common");
+  const { t } = useTranslation("common");
   const { toast } = useToast();
   const searchParams = useSearchParams();
   const router = useRouter();
