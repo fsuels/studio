@@ -84,7 +84,7 @@ const SmartInput = React.memo(React.forwardRef<HTMLInputElement, SmartInputProps
         name={rhfName}
         type={type === 'tel' ? 'text' : type} 
         inputMode={type === 'tel' ? 'tel' : undefined}
-        className={cn("max-w-sm", className)}
+        className={cn("w-full max-w-sm", className)}
         value={displayValue} 
         onChange={handleInputChange}
         onBlur={handleBlur} 

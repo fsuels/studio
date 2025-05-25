@@ -77,8 +77,32 @@ const DocumentDetail = React.memo(function DocumentDetail({ docId, locale, altTe
                 modifiedMd = modifiedMd.replace(/^# .*/m, `# ${fallbackTitle}`);
             }
         }
-        // Replace template placeholders with blank lines to mimic a fillable form
-        modifiedMd = modifiedMd.replace(/{{[^}]+}}/g, '__________');
+        const sampleData: Record<string, string> = {
+          'seller_name': 'Alice Carter',
+          'seller_address': '123 Maple St, Austin, TX',
+          'seller_phone': '(512) 555-1234',
+          'buyer_name': 'Bob Rivera',
+          'buyer_address': '456 Oak Ave, Houston, TX',
+          'buyer_phone': '(832) 555-5678',
+          'vin': '1HGCM82633A004352',
+          'make': 'Toyota',
+          'model': 'Camry',
+          'year': '2018',
+          'color': 'Silver',
+          'odometer': '45,000',
+          'sale_date': 'April 10, 2024',
+          'price': '$10,000',
+          'payment_method': 'Cash',
+          'state': 'TX',
+          'county': 'Travis',
+          'warranty_text': 'Seller guarantees no defects for 30 days.',
+          'existing_liens': 'None'
+        };
+
+        modifiedMd = modifiedMd.replace(/{{(?!#each)(?!\/each)[^}]+}}/g, (match) => {
+          const key = match.replace(/[{}]/g, '').trim();
+          return sampleData[key] || '__________';
+        });
         setMd(modifiedMd);
       })
       .catch((err) => {

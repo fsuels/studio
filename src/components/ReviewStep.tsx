@@ -183,8 +183,21 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
       </CardHeader>
       <CardContent className="space-y-2">
         {fieldsToReview.map((field) => {
+          if (field.id === 'sellers' || field.id === 'buyers') {
+            return (
+              <div key={field.id} className="space-y-4">
+                <h3 className="text-md font-semibold text-muted-foreground">{field.label}</h3>
+                {getValues(field.id)?.map((entry: any, i: number) => (
+                  <div key={i} className="border rounded p-3 bg-muted/40">
+                    <p><strong>{t('Full Name')}:</strong> {entry.name || <em>{t('Not Provided')}</em>}</p>
+                    <p><strong>{t('Address')}:</strong> {entry.address || <em>{t('Not Provided')}</em>}</p>
+                    <p><strong>{t('Phone')}:</strong> {entry.phone || <em>{t('Not Provided')}</em>}</p>
+                  </div>
+                ))}
+              </div>
+            );
+          }
           const isCurrentlyEditing = editingFieldId === field.id;
-          // console.log(`[ReviewStep] Rendering field: ${field.id}, isCurrentlyEditing: ${isCurrentlyEditing}`);
           return (
             <div
               key={field.id}
@@ -219,7 +232,7 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
                           id={`review-${field.id}`}
                           type="tel" // SmartInput expects 'tel'
                           placeholder={t(field.placeholder || '', {ns: 'documents', defaultValue: field.placeholder || ''})}
-                          className={cn("max-w-md text-sm", errors[field.id] && "border-destructive")}
+                          className={cn("w-full max-w-md text-sm", errors[field.id] && "border-destructive")}
                           aria-invalid={!!errors[field.id]}
                           rhfProps={register(field.id as any, { required: field.required })}
                         />
@@ -243,7 +256,7 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
                                 }
                               }}
                               placeholder={t(field.placeholder || 'Enter address...', {ns: 'documents', defaultValue: field.placeholder || 'Enter address...'})}
-                              className="max-w-md"
+                              className="w-full max-w-md"
                               error={errors[field.id]?.message as string | undefined}
                               tooltip={field.tooltip ? t(field.tooltip, {ns: 'documents', defaultValue: field.tooltip}) : undefined}
                             />
@@ -276,7 +289,7 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
                               name: controllerField.name,
                               ref: controllerField.ref,
                               placeholder: t(field.placeholder || '', {ns: 'documents', defaultValue: field.placeholder || ''}),
-                              className: cn("max-w-md text-sm", errors[field.id] && "border-destructive"),
+                              className: cn("w-full max-w-md text-sm", errors[field.id] && "border-destructive"),
                               "aria-invalid": !!errors[field.id],
                             };
 
@@ -292,7 +305,7 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
                                 >
                                   <SelectTrigger
                                     id={`review-${field.id}`}
-                                    className={cn("max-w-md text-sm", errors[field.id] && "border-destructive focus:ring-destructive")}
+                                    className={cn("w-full max-w-md text-sm", errors[field.id] && "border-destructive focus:ring-destructive")}
                                     aria-invalid={!!errors[field.id]}
                                     aria-label={t(field.placeholder || 'Select...', {ns: 'documents', defaultValue: field.placeholder || 'Select...'})}
                                   >
