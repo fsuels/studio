@@ -19,7 +19,7 @@ if (!googleApiKey || googleApiKey.trim() === '') {
     console.log(`[ai-instance.ts] SUCCESS: GOOGLE_GENAI_API_KEY environment variable found (Preview: ${keyPreview}, Length: ${googleApiKey.length}). Attempting Genkit initialization.`);
 }
 
-let ai: any;
+let ai: ReturnType<typeof genkit> | undefined;
 
 try {
   console.log('[ai-instance.ts] Initializing Genkit with googleAI plugin...');
