@@ -39,7 +39,7 @@ import {
 import { Progress } from "@/components/ui/progress";
 import { usStates } from "@/lib/document-library/index";
 import { vehicleBillOfSaleFaqs, type FaqItem } from "./faqs";
-import { vehicleBillOfSale } from "@/lib/documents/us/vehicle-bill-of-sale";
+import { billOfSaleVehicle as vehicleBillOfSale } from "@/lib/documents/us/bill-of-sale-vehicle";
 import { getDb } from "@/lib/firebase";
 import { collection, doc, getDoc } from "firebase/firestore";
 
