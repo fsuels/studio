@@ -11,8 +11,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Checkbox } from "@/components/ui/checkbox";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Switch } from "@/components/ui/switch";
-import type { LegalDocument, Question } from '@/lib/document-library';
-import { usStates } from '@/lib/document-library';
+import type { LegalDocument, Question } from '@/lib/document-library/index';
+import { usStates } from '@/lib/document-library/index';
 import { useNotary } from '@/hooks/useNotary';
 import { cn } from '@/lib/utils';
 import { useTranslation } from 'react-i18next';
@@ -59,8 +59,9 @@ const FieldRenderer = React.memo(function FieldRenderer({ fieldKey, locale, doc 
     placeholder: (fieldSchemaFromZod._def as any)?.placeholder || undefined,
   } : undefined);
 
-  const formStateCode = watch('state'); 
-  const { isRequired: notaryIsRequiredByState } = useNotary(formStateCode);
+  const formStateCode = watch('state');
+  const { isRequired: notaryIsRequiredByState } = useNotary(formStateCode, doc);
+  const witnessRequirement = doc.compliance?.[formStateCode]?.witnessCount ?? doc.compliance?.DEFAULT?.witnessCount;
   
   const { decode, data: vinData, loading: vinLoading, error: vinError } = useVinDecoder();
 
@@ -117,7 +118,7 @@ const FieldRenderer = React.memo(function FieldRenderer({ fieldKey, locale, doc 
             error={errors[fieldKey as any]?.message as string | undefined}
             placeholder={placeholderText || t('Enter address...')}
             className="max-w-sm" 
-            tooltipText={tooltipText}
+            tooltip={tooltipText}
             value={field.value || ''} 
             onChange={(val: string, parts?: any) => { 
                 field.onChange(val); 
@@ -191,8 +192,21 @@ const FieldRenderer = React.memo(function FieldRenderer({ fieldKey, locale, doc 
                 : t('Add Notarization (Optional)')}
             </Label>
           </div>
-          {notaryIsRequiredByState && <p className="text-xs text-muted-foreground">{t('Notarization is required for {{stateCode}}.', { stateCode: formStateCode })}</p>}
-          {!notaryIsRequiredByState && <p className="text-xs text-muted-foreground">{t('Notarization may incur an additional fee.')}</p>}
+          {notaryIsRequiredByState && (
+            <p className="text-xs text-muted-foreground">
+              {t('Notarization is required for {{stateCode}}.', { stateCode: formStateCode })}
+            </p>
+          )}
+          {!notaryIsRequiredByState && (
+            <p className="text-xs text-muted-foreground">
+              {t('Notarization may incur an additional fee.')}
+            </p>
+          )}
+          {witnessRequirement && witnessRequirement > 0 && (
+            <p className="text-xs text-muted-foreground">
+              {t('Witness count required: {{count}}', { count: witnessRequirement })}
+            </p>
+          )}
           {errors.notarizationPreference && <p className="text-xs text-destructive mt-1">{String(errors.notarizationPreference.message)}</p>}
         </div>
       ) : fieldKey === 'odo_status' && fieldSchema?.type === 'select' && fieldSchema?.options ? (

@@ -21,7 +21,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { useTranslation } from 'react-i18next';
-import { documentLibrary, usStates, LegalDocument, findMatchingDocuments } from '@/lib/document-library';
+import { documentLibrary, usStates, LegalDocument, findMatchingDocuments } from '@/lib/document-library/index';
 
 
 interface Props {

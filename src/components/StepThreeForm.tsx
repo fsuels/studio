@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { Check } from "lucide-react";
-import { LegalDocument } from "@/lib/document-library";
+import { LegalDocument } from "@/lib/document-library/index";
 import { PDFPreview } from "@/components/PDFPreview";
 import { Toggle } from "@/components/ui/toggle";
 

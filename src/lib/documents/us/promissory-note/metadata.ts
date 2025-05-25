@@ -14,8 +14,8 @@ export const promissoryNoteMeta: LegalDocument = {
   offerNotarization: false,
   offerRecordingHelp: false,
   states: 'all',
-  templatePath: '/templates/en/promissory-note.md', // Path relative to public folder
-  templatePath_es: '/templates/es/promissory-note.md', // Path relative to public folder
+  templatePath: '/templates/en/us/promissory-note.md',
+  templatePath_es: '/templates/es/us/promissory-note.md',
   schema: PromissoryNoteSchema,
   questions: promissoryNoteQuestions,
   upsellClauses: [],

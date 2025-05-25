@@ -3,12 +3,14 @@
 
 import React from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
-import type { LegalDocument } from '@/lib/document-library'; // Use the re-exported type
+import type { LegalDocument } from '@/lib/document-library/index'; // Use the re-exported type
 import type { CategoryInfo } from '@/components/Step1DocumentSelector'; 
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { FileText } from 'lucide-react';
 import { getDocTranslation } from '@/lib/i18nUtils'; // Import the utility
+import { getDocumentUrl } from '@/lib/document-library/url';
 
 interface MegaMenuContentProps {
   categories: CategoryInfo[];
@@ -21,16 +23,22 @@ const MAX_DOCS_PER_CATEGORY_INITIAL = 5;
 const MemoizedDocLink = React.memo(function DocLink({ doc, locale, onClick, t }: { doc: LegalDocument; locale: 'en' | 'es'; onClick?: () => void; t: (key: string, fallback?: string | object) => string; }) {
   const translatedDoc = getDocTranslation(doc, locale); // Use utility
   const docName = translatedDoc.name;
-  const docHref = `/${locale}/docs/${doc.id}`;
-  
+  const docHref = getDocumentUrl(
+    locale,
+    (doc.jurisdiction || 'US').toLowerCase(),
+    doc.id,
+  );
+  const router = useRouter();
+
   return (
     <li>
-      <Link 
-        href={docHref} 
+      <Link
+        href={docHref}
         className="text-xs md:text-sm text-muted-foreground hover:text-primary hover:underline transition-colors duration-150 block py-0.5"
         onClick={onClick}
+        onMouseEnter={() => router.prefetch(docHref)}
       >
-        {t(docName, {defaultValue: docName})}
+        {t(docName, { defaultValue: docName })}
       </Link>
     </li>
   );
