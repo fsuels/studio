@@ -2,7 +2,7 @@
 import fs from 'fs';
 import path from 'path';
 import puppeteer from 'puppeteer';
-import { marked } from 'marked';
+import MarkdownIt from 'markdown-it';
 import Handlebars from 'handlebars';
 
 const templatesDir = path.join(process.cwd(), 'templates');
@@ -49,7 +49,8 @@ async function generate() {
       const raw   = fs.readFileSync(mdPath, 'utf-8');
       const template = Handlebars.compile(raw);
       const compiled = template({ locale: lang });
-      const htmlBody = marked.parse(compiled);
+      const mdParser = new MarkdownIt();
+      const htmlBody = mdParser.render(compiled);
       const page  = await browser.newPage();
       
       await page.setViewport({ width: 816, height: 1056, deviceScaleFactor: 2 }); 
