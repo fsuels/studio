@@ -1,4 +1,4 @@
-// src/app/[locale]/docs/[docId]/start/StartWizardPageClient.tsx
+// src/app/[locale]/docs/[country]/[docId]/start/StartWizardPageClient.tsx
 'use client';
 
 import { useParams, notFound, useRouter } from 'next/navigation';
@@ -8,10 +8,19 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Loader2, Edit, Eye } from 'lucide-react';
 
-import { documentLibrary, type LegalDocument } from '@/lib/document-library';
+import { getDocumentsForCountry, type LegalDocument } from '@/lib/document-library/index';
 import Breadcrumb from '@/components/Breadcrumb';
 import WizardForm from '@/components/WizardForm';
-import PreviewPane from '@/components/PreviewPane';
+import dynamic from 'next/dynamic';
+
+const PreviewPane = dynamic(() => import('@/components/PreviewPane'), {
+  loading: () => (
+    <div className="flex items-center justify-center border rounded-lg bg-muted p-4 aspect-[8.5/11] max-h-[500px] md:max-h-[700px] w-full shadow-lg">
+      <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      <p className="ml-2 text-muted-foreground">Loading preview...</p>
+    </div>
+  ),
+});
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/hooks/useAuth';
 import { loadFormProgress, saveFormProgress } from '@/lib/firestore/saveFormProgress';
@@ -28,6 +37,7 @@ export default function StartWizardPageClient() {
   const { isLoggedIn, user, isLoading: authIsLoading } = useAuth();
 
   const locale = (Array.isArray(params!.locale) ? params!.locale[0] : params!.locale) as 'en' | 'es';
+  const country = Array.isArray(params!.country) ? params!.country[0] : params!.country as string;
   const docIdFromPath = (Array.isArray(params!.docId) ? params!.docId[0] : params!.docId) as string;
 
   const [isMounted, setIsMounted] = useState(false); // <-- New state for mounted status
@@ -42,8 +52,9 @@ export default function StartWizardPageClient() {
 
   const docConfig = useMemo(() => {
     if (!docIdFromPath) return undefined;
-    return documentLibrary.find(d => d.id === docIdFromPath);
-  }, [docIdFromPath]);
+    const docs = getDocumentsForCountry(country);
+    return docs.find(d => d.id === docIdFromPath);
+  }, [docIdFromPath, country]);
 
   const methods = useForm<z.infer<any>>({
     defaultValues: {},
@@ -90,9 +101,12 @@ export default function StartWizardPageClient() {
         console.warn('[StartWizardPageClient] Draft loading failed:', e);
       }
       if (Object.keys(draftData).length > 0) {
-        reset(draftData, { keepValues: true });
+        // Replace any previously appended defaults with the saved draft
+        reset(draftData);
         console.log('[StartWizardPageClient] Draft loaded:', draftData);
       } else {
+        // Keep the initial default values (like one empty seller) if no draft exists
+        reset({}, { keepValues: true });
         console.log('[StartWizardPageClient] No draft found, using initial/empty values.');
       }
     }
@@ -178,7 +192,7 @@ export default function StartWizardPageClient() {
          <Breadcrumb
           items={[
             { label: t('breadcrumb.home'), href: `/${locale}` },
-            { label: documentDisplayName, href: `/${locale}/docs/${docConfig!.id}` },
+            { label: documentDisplayName, href: `/${locale}/docs/${country}/${docConfig!.id}` },
             { label: t('breadcrumb.start') },
           ]}
         />

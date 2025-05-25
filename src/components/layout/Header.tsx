@@ -14,7 +14,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Button } from '@/components/ui/button';
 import { Check, ChevronDown, Globe, UserPlus, LogIn, Search as SearchIcon, ExternalLink, FileText, Menu as MenuIcon, X as CloseIcon, LayoutGrid, ChevronUp, LogOut, UserCircle, Loader2 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
-import type { LegalDocument } from '@/lib/document-library';
+import type { LegalDocument } from '@/lib/document-library/index';
 import { CATEGORY_LIST } from '@/components/Step1DocumentSelector';
 import MegaMenuContent from '@/components/mega-menu/MegaMenuContent';
 
@@ -51,7 +51,7 @@ const Header = React.memo(function Header() {
 
   useEffect(() => {
     setMounted(true);
-    import('@/lib/document-library').then((mod) => {
+    import('@/lib/document-library/index').then((mod) => {
       setDocumentLibrary(mod.documentLibrary);
     });
   }, []);
@@ -209,7 +209,7 @@ const Header = React.memo(function Header() {
                     return (
                       <li key={doc.id}>
                         <Link
-                          href={`/${clientLocale}/docs/${doc.id}`}
+                          href={`/${clientLocale}/docs/us/${doc.id}`}
                           className="flex items-center gap-2 px-3 py-2.5 text-sm text-popover-foreground hover:bg-accent hover:text-accent-foreground transition-colors w-full text-left"
                           prefetch
                         >
@@ -320,7 +320,7 @@ const Header = React.memo(function Header() {
                     return (
                       <li key={doc.id}>
                         <Link
-                          href={`/${clientLocale}/docs/${doc.id}`}
+                          href={`/${clientLocale}/docs/us/${doc.id}`}
                           className="flex items-center gap-2 px-3 py-2.5 text-sm text-popover-foreground hover:bg-accent hover:text-accent-foreground transition-colors w-full text-left"
                           prefetch
                         >

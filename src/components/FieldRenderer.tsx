@@ -11,8 +11,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Checkbox } from "@/components/ui/checkbox";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Switch } from "@/components/ui/switch";
-import type { LegalDocument, Question } from '@/lib/document-library';
-import { usStates } from '@/lib/document-library';
+import type { LegalDocument, Question } from '@/lib/document-library/index';
+import { usStates } from '@/lib/document-library/index';
 import { useNotary } from '@/hooks/useNotary';
 import { cn } from '@/lib/utils';
 import { useTranslation } from 'react-i18next';
@@ -117,7 +117,7 @@ const FieldRenderer = React.memo(function FieldRenderer({ fieldKey, locale, doc 
             error={errors[fieldKey as any]?.message as string | undefined}
             placeholder={placeholderText || t('Enter address...')}
             className="max-w-sm" 
-            tooltipText={tooltipText}
+            tooltip={tooltipText}
             value={field.value || ''} 
             onChange={(val: string, parts?: any) => { 
                 field.onChange(val); 

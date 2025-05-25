@@ -4,7 +4,7 @@
 import React from 'react';
 import { File } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { documentLibrary } from '@/lib/document-library';
+import { documentLibrary } from '@/lib/document-library/index';
 
 interface StepOneInputProps {
   onSelectCategory: (category: string) => void;

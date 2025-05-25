@@ -7,7 +7,7 @@ import {
   limit,
   type Timestamp,
 } from 'firebase/firestore';
-import { documentLibrary } from '@/lib/document-library';
+import { documentLibrary } from '@/lib/document-library/index';
 
 export interface DashboardDocument {
   id: string;

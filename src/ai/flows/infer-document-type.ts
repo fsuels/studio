@@ -8,7 +8,7 @@
 import { ai } from '@/ai/ai-instance';
 import { z } from 'genkit';
 import { GenerateResponseData } from 'genkit/generate';
-import { documentLibrary } from '@/lib/document-library';
+import { documentLibrary } from '@/lib/document-library/index';
 
 // Input Schema
 export const InferDocumentTypeInputSchema = z.object({

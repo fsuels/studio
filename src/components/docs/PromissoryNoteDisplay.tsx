@@ -35,7 +35,7 @@ export default function PromissoryNoteDisplay({ locale }: PromissoryNoteDisplayP
     const priceCents = 500; // Assuming a base price for Promissory Note
     track("add_to_cart", { item_id: "promissory-note", item_name: itemName, value: priceCents / 100, currency: "USD" });
     addItem({ id: "promissory-note", type: "doc", name: itemName, price: priceCents });
-    router.prefetch(`/${locale}/docs/promissory-note/start`);
+    router.prefetch(`/${locale}/docs/us/promissory-note/start`);
   };
 
   const informationalSections = [
@@ -193,9 +193,9 @@ export default function PromissoryNoteDisplay({ locale }: PromissoryNoteDisplayP
           asChild
           size="lg"
           className="bg-primary hover:bg-primary/90 text-primary-foreground"
-          onMouseEnter={() => router.prefetch(`/${locale}/docs/promissory-note/start`)}
+          onMouseEnter={() => router.prefetch(`/${locale}/docs/us/promissory-note/start`)}
         >
-          <Link href={`/${locale}/docs/promissory-note/start`} onClick={handleStartProcess} prefetch>
+          <Link href={`/${locale}/docs/us/promissory-note/start`} onClick={handleStartProcess} prefetch>
             {t('startMyPromissoryNoteButton')}
           </Link>
         </Button>
