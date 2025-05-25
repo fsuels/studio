@@ -1,0 +1,24 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [feat/doc-refactor]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 20
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run check:us-paths
+      - run: npm run typecheck
+      - run: npm test
+      - uses: microsoft/playwright-github-action@v1
+      - run: npm run e2e
+      - run: npm run build
+      - run: npm run size

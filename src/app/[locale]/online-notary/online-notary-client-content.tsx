@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { ShieldCheck } from 'lucide-react';
-import { usStates } from '@/lib/usStates';
+import { usStates } from '@/lib/document-library/utils';
 
 export default function OnlineNotaryClientContent({ locale }: { locale: 'en' | 'es' }) {
   const { t } = useTranslation('online-notary');

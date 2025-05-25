@@ -132,5 +132,5 @@ export default defaultDocumentLibrary;
 
 export { defaultDocumentLibrary as documentLibrary };
 
-export { usStates } from './usStates';
+export { usStates } from './document-library/utils';
 export type { Question, LegalDocument, UpsellClause } from '@/types/documents';

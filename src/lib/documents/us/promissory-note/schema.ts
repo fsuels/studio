@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { usStates } from '@/lib/usStates';
+import { usStates } from '@/lib/document-library/utils';
 
 export const PromissoryNoteSchema = z.object({
   date: z.string().min(1),

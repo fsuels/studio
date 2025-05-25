@@ -1,30 +1,44 @@
 // src/components/DocumentPreview.tsx
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { useTranslation } from 'react-i18next'; 
 import Image from 'next/image';
 import AutoImage from './AutoImage';
 import { Loader2 } from 'lucide-react';
+import { documentLibrary, type LegalDocument } from '@/lib/document-library';
+import { getTemplatePath } from '@/lib/templateUtils';
 
 interface DocumentPreviewProps {
   docId: string;
   locale?: 'en' | 'es';
   alt?: string;
+  country?: string;
 }
 
 const DocumentPreview = React.memo(function DocumentPreview({
   docId,
   locale = 'en',
   alt,
+  country = 'us',
 }: DocumentPreviewProps) {
   const { t } = useTranslation("common");
   const [imgExists, setImgExists] = useState<boolean>(true);
   const [md, setMd] = useState<string>('');
   const [isLoadingMd, setIsLoadingMd] = useState<boolean>(false);
   const [errorMd, setErrorMd] = useState<string | null>(null);
+
+  const docConfig = useMemo(
+    () => documentLibrary.find((d: LegalDocument) => d.id === docId),
+    [docId]
+  );
+
+  const templatePath = useMemo(() => {
+    if (!docConfig) return undefined;
+    return getTemplatePath(docConfig, locale, country);
+  }, [docConfig, locale, country]);
 
   const imgSrc = `/images/previews/${locale}/${docId}.png`;
   const defaultAlt = alt ?? (locale === 'es' ? t(`Vista previa de ${docId}`) : t(`${docId} preview`));
@@ -35,28 +49,31 @@ const DocumentPreview = React.memo(function DocumentPreview({
   };
 
   useEffect(() => {
-    if (!imgExists) {
-      setIsLoadingMd(true);
-      setErrorMd(null);
-      fetch(`/templates/${locale}/${docId}.md`)
-        .then(r => {
-          if (!r.ok) {
-            throw new Error(`Failed to fetch Markdown template (${r.status}): /templates/${locale}/${docId}.md`);
-          }
-          return r.text();
-        })
-        .then(text => {
-          setMd(text);
-          setIsLoadingMd(false);
-        })
-        .catch(err => {
-          console.error(`[DocumentPreview] Error fetching Markdown for ${docId} (${locale}):`, err);
-          setMd('');
-          setErrorMd(err.message || t('Error loading preview content.', {defaultValue: 'Error loading preview content.'}));
-          setIsLoadingMd(false);
-        });
+    if (!imgExists || !templatePath) {
+      return;
     }
-  }, [docId, locale, imgExists, t]);
+
+    setIsLoadingMd(true);
+    setErrorMd(null);
+
+    fetch(templatePath)
+      .then(r => {
+        if (!r.ok) {
+          throw new Error(`Failed to fetch Markdown template (${r.status}): ${templatePath}`);
+        }
+        return r.text();
+      })
+      .then(text => {
+        setMd(text);
+        setIsLoadingMd(false);
+      })
+      .catch(err => {
+        console.error(`[DocumentPreview] Error fetching Markdown for ${docId} (${locale}):`, err);
+        setMd('');
+        setErrorMd(err.message || t('Error loading preview content.', {defaultValue: 'Error loading preview content.'}));
+        setIsLoadingMd(false);
+      });
+  }, [docId, locale, country, imgExists, templatePath, t]);
 
   return (
     <div className="relative w-full h-full overflow-auto rounded-lg bg-white shadow border border-border">

@@ -5,7 +5,7 @@ import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { usStates } from '@/lib/usStates';
+import { usStates } from '@/lib/document-library/utils';
 import { Search, MapPin } from 'lucide-react';
 
 interface StickyFilterBarProps {
