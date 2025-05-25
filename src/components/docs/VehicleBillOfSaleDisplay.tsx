@@ -64,12 +64,16 @@ export default function VehicleBillOfSaleDisplay({ locale }: VehicleBillOfSaleDi
 
   const renderSectionContent = (section: typeof allSections[0], translate: typeof t) => {
     if (section.type === 'paragraph' && section.contentKey) {
-      return <p className="text-muted-foreground">{translate(section.contentKey)}</p>;
+      return (
+        <p className="text-muted-foreground">
+          {translate(section.contentKey, { defaultValue: '' })}
+        </p>
+      );
     }
     if (section.type === 'list' && (section.contentKey || section.itemsKey)) {
       const itemsKeyToUse = section.itemsKey || section.contentKey;
       if (!itemsKeyToUse) return null;
-      const items = translate(itemsKeyToUse, { returnObjects: true });
+      const items = translate(itemsKeyToUse, { returnObjects: true, defaultValue: [] });
       if (Array.isArray(items)) {
         return (
           <ul className="list-disc list-outside pl-5 space-y-1 text-muted-foreground">
@@ -79,23 +83,29 @@ export default function VehicleBillOfSaleDisplay({ locale }: VehicleBillOfSaleDi
       }
     }
     if (section.type === 'ordered-list' && section.itemsKey) {
-      const items = translate(section.itemsKey, { returnObjects: true });
+      const items = translate(section.itemsKey, { returnObjects: true, defaultValue: [] });
       if (Array.isArray(items)) {
         return (
           <>
             <ol className="list-decimal list-outside pl-5 space-y-1 text-muted-foreground">
               {items.map((item: string, i: number) => <li key={i}>{item}</li>)}
             </ol>
-            {section.totalTimeKey && <p className="text-sm text-muted-foreground mt-2">{translate(section.totalTimeKey)}</p>}
+            {section.totalTimeKey && (
+              <p className="text-sm text-muted-foreground mt-2">
+                {translate(section.totalTimeKey, { defaultValue: '' })}
+              </p>
+            )}
           </>
         );
       }
     }
     if (section.type === 'mixed-list' && section.contentKey && section.itemsKey) {
-      const items = translate(section.itemsKey, { returnObjects: true });
+      const items = translate(section.itemsKey, { returnObjects: true, defaultValue: [] });
       return (
         <>
-          <p className="text-muted-foreground mb-2">{translate(section.contentKey)}</p>
+          <p className="text-muted-foreground mb-2">
+            {translate(section.contentKey, { defaultValue: '' })}
+          </p>
           {Array.isArray(items) && (
             <ul className="list-disc list-outside pl-5 space-y-1 text-muted-foreground">
               {items.map((item: string, i: number) => <li key={i}>{item}</li>)}
@@ -105,21 +115,25 @@ export default function VehicleBillOfSaleDisplay({ locale }: VehicleBillOfSaleDi
       );
     }
     if (section.type === 'checklist' && section.itemsKey) {
-      const items = translate(section.itemsKey, { returnObjects: true });
+      const items = translate(section.itemsKey, { returnObjects: true, defaultValue: [] });
       if (Array.isArray(items)) {
         return (
           <>
             <ul className="list-none pl-0 space-y-1 text-muted-foreground">
               {items.map((item: string, i: number) => <li key={i} className="flex items-center"><span className="mr-2">✓</span>{item}</li>)}
             </ul>
-            {section.printNoteKey && <p className="text-sm text-muted-foreground mt-2 italic">{translate(section.printNoteKey)}</p>}
+            {section.printNoteKey && (
+              <p className="text-sm text-muted-foreground mt-2 italic">
+                {translate(section.printNoteKey, { defaultValue: '' })}
+              </p>
+            )}
           </>
         );
       }
     }
     if (section.tableKey) {
-      const headers = translate(`${section.tableKey}.headers`, { returnObjects: true });
-      const rows = translate(`${section.tableKey}.rows`, { returnObjects: true });
+      const headers = translate(`${section.tableKey}.headers`, { returnObjects: true, defaultValue: [] });
+      const rows = translate(`${section.tableKey}.rows`, { returnObjects: true, defaultValue: [] });
       return (
         <div className="overflow-x-auto my-4">
           <Table className="min-w-full text-sm">
@@ -140,14 +154,16 @@ export default function VehicleBillOfSaleDisplay({ locale }: VehicleBillOfSaleDi
       );
     }
     if (section.type === 'list-cta' && section.itemsKey && section.ctaKey) {
-      const items = translate(section.itemsKey, { returnObjects: true });
+      const items = translate(section.itemsKey, { returnObjects: true, defaultValue: [] });
       if (Array.isArray(items)) {
         return (
           <>
             <ul className="list-disc list-outside pl-5 space-y-1 text-muted-foreground">
               {items.map((item: string, i: number) => <li key={i}>{item}</li>)}
             </ul>
-            <p className="text-muted-foreground mt-4">{translate(section.ctaKey)}</p>
+            <p className="text-muted-foreground mt-4">
+              {translate(section.ctaKey, { defaultValue: '' })}
+            </p>
           </>
         );
       }

@@ -17,6 +17,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion';
 import VehicleBillOfSaleDisplay from '@/components/docs/VehicleBillOfSaleDisplay';
 import PromissoryNoteDisplay from '@/components/docs/PromissoryNoteDisplay';
+import SimpleErrorBoundary from '@/components/SimpleErrorBoundary';
 import { getDocumentUrl, getDocumentStartUrl } from '@/lib/document-library/url';
 
 // Lazy load testimonials section so it's only fetched when this page is viewed
@@ -340,9 +341,13 @@ export default function DocPageClient({ params: routeParams }: DocPageClientProp
 
         {/* Conditional rendering for document-specific content vs generic content */}
         {docConfig.id === 'bill-of-sale-vehicle' ? (
-          <VehicleBillOfSaleDisplay locale={currentLocale as 'en' | 'es'} />
+          <SimpleErrorBoundary fallback={<p className="text-destructive">Error loading guide.</p>}>
+            <VehicleBillOfSaleDisplay locale={currentLocale as 'en' | 'es'} />
+          </SimpleErrorBoundary>
         ) : docConfig.id === 'promissory-note' ? (
-          <PromissoryNoteDisplay locale={currentLocale as 'en' | 'es'} />
+          <SimpleErrorBoundary fallback={<p className="text-destructive">Error loading guide.</p>}>
+            <PromissoryNoteDisplay locale={currentLocale as 'en' | 'es'} />
+          </SimpleErrorBoundary>
         ) : (
           <>
             {/* Feature Highlights */}
