@@ -166,6 +166,12 @@ export function getDocumentsForCountry(countryCode?: string): LegalDocument[] {
   return documentLibraryByCountry[code] || documentLibraryByCountry['us'] || [];
 }
 
+// Maintain compatibility with older imports that expected a default US
+// document library export.
+export const defaultDocumentLibrary: LegalDocument[] = getDocumentsForCountry('us');
+export const documentLibrary = defaultDocumentLibrary;
+export default defaultDocumentLibrary;
+
 export const supportedCountries = Object.keys(documentLibraryByCountry);
 
 export const registry: Record<string, LegalDocument> = {};

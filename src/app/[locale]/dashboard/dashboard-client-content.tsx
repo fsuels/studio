@@ -21,7 +21,7 @@ import {
   getUserDocuments,
   getUserPayments,
 } from "@/lib/firestore/dashboardData";
-import { documentLibrary } from "@/lib/document-library";
+import { documentLibrary } from "@/lib/document-library/index";
 import { getDocumentUrl } from "@/lib/document-library/url";
 
 // Define a more specific type for Firestore Timestamps if that's what you use
