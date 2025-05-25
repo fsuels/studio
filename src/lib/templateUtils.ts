@@ -9,27 +9,35 @@ import type { LegalDocument } from '@/types/documents';
  * @param lang The desired language code (e.g., 'es', 'en', 'fr').
  * @returns The template path string (relative to /public), or undefined if not found.
  */
-export function getTemplatePath(doc: LegalDocument | undefined | null, lang: string): string | undefined {
+export function getTemplatePath(
+  doc: LegalDocument | undefined | null,
+  lang: string,
+  country?: string
+): string | undefined {
   if (!doc) return undefined;
 
-  // Prioritize the new templatePaths structure
+  const langCode = lang.toLowerCase();
+  const countryCode = (country || doc.jurisdiction || 'us').toLowerCase();
+
+  // Prioritize explicit templatePaths if provided
   if (doc.templatePaths) {
-    if (doc.templatePaths[lang]) {
-      return doc.templatePaths[lang];
-    }
-    // Fallback to English if the specific language is not found in templatePaths
-    if (doc.templatePaths['en']) {
-      return doc.templatePaths['en'];
+    let path = doc.templatePaths[langCode] || doc.templatePaths['en'];
+    if (path) {
+      if (!path.startsWith('/')) {
+        path = `/templates/${path}`;
+      }
+      return path.replace('{country}', countryCode);
     }
   }
 
-  // Fallback to old individual properties if templatePaths is not defined or doesn't have the lang/en
-  if (lang === 'es' && doc.templatePath_es) {
-    return doc.templatePath_es;
+  // Fallback to old individual properties
+  if (langCode === 'es' && doc.templatePath_es) {
+    return doc.templatePath_es.replace('{country}', countryCode);
   }
-  if (doc.templatePath) { // Default to templatePath if lang is 'en' or as a last resort
-    return doc.templatePath;
+  if (doc.templatePath) {
+    return doc.templatePath.replace('{country}', countryCode);
   }
 
-  return undefined; // No suitable template path found
+  // Default standardized pattern
+  return `/templates/${langCode}/${countryCode}/${doc.id}.md`;
 }

@@ -103,3 +103,50 @@ remains responsive.
 
 Set `NEXT_PUBLIC_INTERCOM_APP_ID` in your environment to enable the Intercom chat widget. The script loads only when the user clicks the chat button in the footer, minimizing third-party impact. Leave this variable unset to disable the widget entirely.
 
+
+## Firebase Configuration
+
+Set `NEXT_PUBLIC_FIREBASE_API_KEY` in your environment before running the app:
+
+```bash
+NEXT_PUBLIC_FIREBASE_API_KEY=your-key npm run dev
+```
+
+
+## Document Folder Layout
+
+Documents are organized by country under `src/lib/documents/{country}/{docId}`. Each folder contains the document's `metadata.ts`, `schema.ts`, `questions.ts` and an `index.ts` that re‑exports them. Markdown templates now live under `templates/{lang}/{country}/{docId}.md`.
+
+Example:
+
+```
+src/lib/documents/us/promissory-note/metadata.ts
+templates/en/us/promissory-note.md
+```
+
+## Migrating Existing Files
+
+Run `scripts/migrate-doc-structure.ts` to move legacy files to the new layout. Execute it once without flags for a dry run:
+
+```bash
+npx ts-node scripts/migrate-doc-structure.ts
+```
+
+Add `--apply` to perform the moves and automatically update imports. Redirects are written to `config/redirects.json`.
+
+### Update legacy usStates imports
+
+Some older files still import `usStates` from `@/lib/usStates`. After migrating the document
+structure, run the codemod below to update those references to the shared utilities module:
+
+```bash
+npx jscodeshift -t scripts/codemods/replace-us-paths.js <paths-to-update>
+```
+
+## Running Tests
+
+Use `npm run test` to execute unit tests via Node's built‑in test runner. End‑to‑end tests run with Playwright using `npm run e2e`. Install Playwright browsers first with `npx playwright install`.
+
+## Branch Workflow
+
+Development for the document refactor occurs on the `feat/doc-refactor` branch. Open pull requests against this branch instead of `main`.

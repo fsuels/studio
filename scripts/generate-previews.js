@@ -3,14 +3,23 @@ import fs from 'fs';
 import path from 'path';
 import puppeteer from 'puppeteer';
 import MarkdownIt from 'markdown-it';
+import Handlebars from 'handlebars';
 
-const templatesDir = path.join(process.cwd(), 'public', 'templates'); // Updated to read from public/templates
+const templatesDir = path.join(process.cwd(), 'templates');
 const outDir       = path.join(process.cwd(), 'public', 'images', 'previews');
 const languages    = ['en','es'];
 
 async function generate() {
   const browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox', '--disable-setuid-sandbox'] });
-  const mdInstance = new MarkdownIt();
+
+  // Register handlebars helpers
+  Handlebars.registerHelper('if', Handlebars.helpers.if);
+  Handlebars.registerHelper('unless', Handlebars.helpers.unless);
+  Handlebars.registerHelper('each', Handlebars.helpers.each);
+  Handlebars.registerHelper('ifState', function(expected, options) {
+    const current = String(this.state || '').toLowerCase();
+    return current === String(expected).toLowerCase() ? options.fn(this) : options.inverse(this);
+  });
 
   for (const lang of languages) {
     const mdLangDir  = path.join(templatesDir, lang); // Path to language-specific markdown templates
@@ -38,7 +47,10 @@ async function generate() {
 
       console.log(`🔄 Generating preview for ${lang}/${id}`);
       const raw   = fs.readFileSync(mdPath, 'utf-8');
-      const htmlBody = mdInstance.render(raw);
+      const template = Handlebars.compile(raw);
+      const compiled = template({ locale: lang });
+      const mdParser = new MarkdownIt();
+      const htmlBody = mdParser.render(compiled);
       const page  = await browser.newPage();
       
       await page.setViewport({ width: 816, height: 1056, deviceScaleFactor: 2 }); 

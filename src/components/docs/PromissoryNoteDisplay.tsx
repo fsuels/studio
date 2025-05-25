@@ -11,6 +11,8 @@ import { track } from "@/lib/analytics";
 import { useCart } from "@/contexts/CartProvider";
 import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils';
+import { documentLibrary } from '@/lib/document-library/index';
+import { getDocumentUrl } from '@/lib/document-library/url';
 
 interface PromissoryNoteDisplayProps {
   locale: "en" | "es";
@@ -21,6 +23,13 @@ export default function PromissoryNoteDisplay({ locale }: PromissoryNoteDisplayP
   const router = useRouter();
   const { addItem } = useCart();
   const [isHydrated, setIsHydrated] = useState(false);
+
+  const docConfig = documentLibrary.find(d => d.id === 'promissory-note');
+  const docUrlBase = getDocumentUrl(
+    locale,
+    (docConfig?.jurisdiction || 'US').toLowerCase(),
+    docConfig?.id || 'promissory-note',
+  );
 
   useEffect(() => {
     setIsHydrated(true);
@@ -35,7 +44,7 @@ export default function PromissoryNoteDisplay({ locale }: PromissoryNoteDisplayP
     const priceCents = 500; // Assuming a base price for Promissory Note
     track("add_to_cart", { item_id: "promissory-note", item_name: itemName, value: priceCents / 100, currency: "USD" });
     addItem({ id: "promissory-note", type: "doc", name: itemName, price: priceCents });
-    router.prefetch(`/${locale}/docs/promissory-note/start`);
+    router.prefetch(`${docUrlBase}/start`);
   };
 
   const informationalSections = [
@@ -189,16 +198,16 @@ export default function PromissoryNoteDisplay({ locale }: PromissoryNoteDisplayP
       <section className="text-center py-8 bg-secondary/30 rounded-lg border border-border">
         <h2 className="text-2xl font-semibold text-foreground mb-3">{t('finalCtaTitle')}</h2>
         <p className="text-muted-foreground mb-6 max-w-lg mx-auto">{t('finalCtaSubtitle')}</p>
-        <Button
-          asChild
-          size="lg"
-          className="bg-primary hover:bg-primary/90 text-primary-foreground"
-          onMouseEnter={() => router.prefetch(`/${locale}/docs/promissory-note/start`)}
-        >
-          <Link href={`/${locale}/docs/promissory-note/start`} onClick={handleStartProcess} prefetch>
-            {t('startMyPromissoryNoteButton')}
-          </Link>
-        </Button>
+          <Button
+            asChild
+            size="lg"
+            className="bg-primary hover:bg-primary/90 text-primary-foreground"
+            onMouseEnter={() => router.prefetch(`${docUrlBase}/start`)}
+          >
+            <Link href={`${docUrlBase}/start`} onClick={handleStartProcess} prefetch>
+              {t('startMyPromissoryNoteButton')}
+            </Link>
+          </Button>
       </section>
     </div>
   );

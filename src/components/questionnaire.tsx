@@ -10,7 +10,7 @@ import { Textarea } from '@/components/ui/textarea'; // Import Textarea
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select" // Import Select
 import { Loader2, Edit2, Lock, Check } from 'lucide-react'; // Updated icons
 import { useToast } from '@/hooks/use-toast';
-import { documentLibrary, usStates, type Question } from '@/lib/document-library'; // Import library and Question type
+import { documentLibrary, usStates, type Question } from '@/lib/document-library/index'; // Import library and Question type
 
 interface QuestionnaireProps {
   documentType: string | null; // The inferred document type NAME (e.g., "Residential Lease Agreement")

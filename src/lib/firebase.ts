@@ -6,7 +6,7 @@ import type { Firestore } from "firebase/firestore";
 // Default Firebase configuration provided by the user
 // Used as fallbacks if environment variables are not set.
 const defaultFirebaseConfig = {
-  apiKey: "AIzaSyDzchJQ-4ZypZ2Tscri3VYfJEN2Ocqx0hU",
+  // apiKey intentionally omitted - must be provided via environment variable
   authDomain: "legaldoc-26ea8.firebaseapp.com",
   projectId: "legaldoc-26ea8",
   storageBucket: "legaldoc-26ea8.appspot.com", // Corrected potential typo from .firebasestorage.app
@@ -17,8 +17,12 @@ const defaultFirebaseConfig = {
 
 // Function to get Firebase config, prioritizing environment variables
 const getFirebaseConfig = () => {
+  const apiKey = process.env.NEXT_PUBLIC_FIREBASE_API_KEY;
+  if (!apiKey) {
+    throw new Error('NEXT_PUBLIC_FIREBASE_API_KEY environment variable is required');
+  }
   const config = {
-    apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY || defaultFirebaseConfig.apiKey,
+    apiKey,
     authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN || defaultFirebaseConfig.authDomain,
     projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || defaultFirebaseConfig.projectId,
     storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET || defaultFirebaseConfig.storageBucket,
@@ -28,15 +32,16 @@ const getFirebaseConfig = () => {
   };
 
   // Basic validation: Check if essential keys are present
-  if (!config.apiKey || !config.projectId) {
-    console.error("Firebase config error: apiKey or projectId is missing. Check environment variables or default config.");
+  if (!config.projectId) {
+    console.error("Firebase config error: projectId is missing. Check environment variables or default config.");
     // Depending on requirements, you might throw an error or return null
     // For now, log the error and proceed with potentially incomplete config
     // throw new Error("Firebase configuration is incomplete.");
   }
 
   // Log which config source is being used (env vars or defaults)
-  const usingEnvVars = Object.keys(defaultFirebaseConfig).some(key => process.env[`NEXT_PUBLIC_FIREBASE_${key.toUpperCase()}`]);
+  const usingEnvVars = !!process.env.NEXT_PUBLIC_FIREBASE_API_KEY ||
+    Object.keys(defaultFirebaseConfig).some(key => process.env[`NEXT_PUBLIC_FIREBASE_${key.toUpperCase()}`]);
   console.log(`Firebase config loaded. Using ${usingEnvVars ? 'environment variables' : 'default values'}. Project ID: ${config.projectId}`);
 
 

@@ -1,0 +1,8 @@
+[
+  { "from": "/templates/en/bill-of-sale-vehicle.md", "to": "/templates/en/us/bill-of-sale-vehicle.md" },
+  { "from": "/templates/es/bill-of-sale-vehicle.md", "to": "/templates/es/us/bill-of-sale-vehicle.md" },
+  { "from": "/templates/en/promissory-note.md", "to": "/templates/en/us/promissory-note.md" },
+  { "from": "/templates/es/promissory-note.md", "to": "/templates/es/us/promissory-note.md" },
+  { "from": "/templates/en/termination-letter.md", "to": "/templates/en/us/termination-letter.md" },
+  { "from": "/templates/es/termination-letter.md", "to": "/templates/es/us/termination-letter.md" }
+]
