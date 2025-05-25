@@ -232,9 +232,8 @@ export async function loadDoc(docId: string, country = 'us'): Promise<LegalDocum
   return getDoc(docId, country); // Fallback to registry if loader doesn't exist
 }
 
-const defaultDocumentLibrary = getDocumentsForCountry('us');
-export default defaultDocumentLibrary;
-export { defaultDocumentLibrary as documentLibrary };
+// default US library is exported above for backwards compatibility
+// so avoid re-declaring it here
 
 export { usStates } from '../usStates';
 export type { Question as DocumentQuestion, LegalDocument as LegalDocumentConfig, UpsellClause } from '@/types/documents';
