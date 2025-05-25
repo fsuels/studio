@@ -5,7 +5,7 @@ import React, { useState, useEffect, useCallback, Suspense } from 'react';
 import dynamic from 'next/dynamic';
 import type { LegalDocument } from '@/lib/document-library/index';
 import { usStates, documentLibrary } from '@/lib/document-library/index';
-import { getDocumentUrl } from '@/lib/document-library/utils';
+import { getDocumentUrl } from '@/lib/document-library/url';
 import HomepageHeroSteps from '@/components/landing/HomepageHeroSteps';
 import { useToast } from '@/hooks/use-toast';
 import { Separator } from '@/components/ui/separator';
@@ -136,7 +136,13 @@ export default function HomePageClient() {
       console.log('[HomePageClient] Document type selected:', doc.name);
       setSelectedDocument(doc);
       toast({ title: t('toasts.docTypeConfirmedTitle'), description: t('toasts.docTypeConfirmedDescription', { docName: doc.name_es && locale === 'es' ? doc.name_es : doc.name }) });
-      router.push(`${getDocumentUrl(doc, locale)}/start`);
+      router.push(
+        getDocumentUrl(
+          locale,
+          (doc.jurisdiction || 'US').toLowerCase(),
+          doc.id,
+        ),
+      );
     } else {
       console.warn(`[HomePageClient] Document selection received null or undefined doc.`);
     }

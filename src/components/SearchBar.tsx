@@ -7,7 +7,7 @@ import { Search, FileText, ExternalLink } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useRouter, useParams } from 'next/navigation';
 import { documentLibrary, type LegalDocument } from '@/lib/document-library/index';
-import { getDocumentUrl } from '@/lib/document-library/utils';
+import { getDocumentUrl } from '@/lib/document-library/url';
 import { getDocTranslation } from '@/lib/i18nUtils';
 
 const SearchBar = React.memo(function SearchBar() {
@@ -81,7 +81,13 @@ const SearchBar = React.memo(function SearchBar() {
     if (!isHydrated) return;
     setSearchTerm('');
     setShowSuggestions(false);
-    router.push(getDocumentUrl(doc, locale));
+    router.push(
+      getDocumentUrl(
+        locale,
+        (doc.jurisdiction || 'US').toLowerCase(),
+        doc.id,
+      ),
+    );
   };
 
   const placeholderText = isHydrated
@@ -121,7 +127,14 @@ const SearchBar = React.memo(function SearchBar() {
                     <button
                       type="button"
                       onClick={() => handleSuggestionClick(suggestion)}
-                      onMouseEnter={() => router.prefetch(getDocumentUrl(suggestion, locale))}
+                      onMouseEnter={() =>
+                        router.prefetch(
+                          getDocumentUrl(
+                            locale,
+                            (suggestion.jurisdiction || 'US').toLowerCase(),
+                            suggestion.id,
+                          ),
+                        )}
                       className="w-full text-left px-3 py-2.5 hover:bg-muted text-sm flex items-center gap-2"
                     >
                       <FileText className="h-4 w-4 shrink-0 text-muted-foreground" />
