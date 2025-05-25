@@ -5,7 +5,7 @@
 
 import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import Handlebars from '@/lib/templateHelpers';
-import { marked } from 'marked';
+import MarkdownIt from 'markdown-it';
 import { useFormContext } from 'react-hook-form';
 import { Loader2, AlertTriangle } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
@@ -109,7 +109,8 @@ export default function PreviewPane({ locale, docId, country }: PreviewPaneProps
       compiledMd = compiledMd.replace(/^# .*/m, `# ${titleToUse}`);
     }
 
-    return marked.parse(compiledMd);
+    const mdParser = new MarkdownIt();
+    return mdParser.render(compiledMd);
   }, [docConfig, locale]);
 
   // Temporarily removed debounce for direct updates
