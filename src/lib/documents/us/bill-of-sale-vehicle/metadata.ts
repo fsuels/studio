@@ -1,9 +1,7 @@
 // src/lib/documents/us/bill-of-sale-vehicle/metadata.ts
-import { z } from 'zod';
-import { BillOfSaleSchema } from '@/schemas/billOfSale';
 import type { LegalDocument } from '@/types/documents';
-import { usStates } from '@/lib/document-library/utils';
-import { vehicleBillOfSaleQuestions } from './questions'; // Import questions
+import { BillOfSaleVehicleSchema } from './schema';
+import { vehicleBillOfSaleQuestions } from './questions';
 import { rules as stateRules } from '@/lib/compliance';
 
 export const vehicleBillOfSaleMeta: LegalDocument = {
@@ -36,11 +34,11 @@ export const vehicleBillOfSaleMeta: LegalDocument = {
       aliases: ["venta de coche", "venta de artículo usado", "transferencia de vehículo", "contrato de venta de auto"]
     }
   },
-  templatePath: '/templates/en/bill-of-sale-vehicle.md',
-  templatePath_es: '/templates/es/bill-of-sale-vehicle.md',
+  templatePath: '/templates/en/us/bill-of-sale-vehicle.md',
+  templatePath_es: '/templates/es/us/bill-of-sale-vehicle.md',
   requiresNotarizationStates: ['AZ','KY','LA','MT','NV','OH','OK','PA','WV','WY'],
   compliance: stateRules,
-  schema: BillOfSaleSchema,
+  schema: BillOfSaleVehicleSchema,
   questions: vehicleBillOfSaleQuestions, // Assign imported questions
   upsellClauses: []
 };

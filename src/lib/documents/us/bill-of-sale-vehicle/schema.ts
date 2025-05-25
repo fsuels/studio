@@ -1,2 +1,2 @@
-import { billOfSaleVehicle } from './metadata';
-export const BillOfSaleVehicleSchema = billOfSaleVehicle.schema;
+import { BillOfSaleSchema } from '@/schemas/billOfSale';
+export const BillOfSaleVehicleSchema = BillOfSaleSchema;
