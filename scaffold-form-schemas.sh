@@ -13,7 +13,7 @@ fi
 echo "👉  2. Scaffolding vehicleBillOfSale.ts…"
 cat > src/lib/formSchemas/vehicleBillOfSale.ts << 'SCRIPT'
 import type { FormField } from '@/data/formSchemas'
-import { usStates }     from '@/lib/usStates'
+import { usStates }     from '@/lib/document-library/utils'
 
 export const vehicleBillOfSale: FormField[] = [
   {

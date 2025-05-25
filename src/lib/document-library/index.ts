@@ -227,6 +227,6 @@ export async function loadDoc(docId: string, country = 'us'): Promise<LegalDocum
 }
 
 
-export { usStates } from '../usStates';
+export { usStates } from './utils';
 export type { Question as DocumentQuestion, LegalDocument as LegalDocumentConfig, UpsellClause } from '@/types/documents';
 export { docLoaders }; // Also export docLoaders itself if needed elsewhere

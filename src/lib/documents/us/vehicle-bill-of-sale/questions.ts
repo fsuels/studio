@@ -1,4 +1,4 @@
-import { usStates } from '@/lib/usStates';
+import { usStates } from '@/lib/document-library/utils';
 
 export const vehicleBillOfSaleQuestions = [
   {
