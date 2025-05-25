@@ -7,8 +7,9 @@ export type Question = {
   label: string; // Can be a direct string or an i18n key
   placeholder?: string; // Can be a direct string or an i18n key
   required?: boolean;
-  type: 'text' | 'select' | 'date' | 'number' | 'textarea' | 'boolean' | 'address';
+  type: 'text' | 'select' | 'date' | 'number' | 'textarea' | 'boolean' | 'address' | 'group';
   options?: { value: string; label: string }[]; // Labels can be direct strings or i18n keys
+  fields?: string[]; // For 'group' type to render multiple schema fields in one step
   stateSpecific?: string[];
   helperText?: string; // Can be a direct string or an i18n key
   tooltip?: string; // Can be a direct string or an i18n key
@@ -38,6 +39,11 @@ export type LocalizedText = {
 };
 
 // Define the structure for a single legal document
+export type ComplianceRule = {
+  requireNotary?: boolean;
+  witnessCount?: number;
+};
+
 export type LegalDocument = {
   id: string;
   jurisdiction?: string; // e.g., 'US', 'CA'
@@ -70,6 +76,9 @@ export type LegalDocument = {
   offerRecordingHelp: boolean;
   upsellClauses?: UpsellClause[];
   requiresNotarizationStates?: string[]; // Specific states within its jurisdiction
+
+  // Optional map of state/province specific compliance rules
+  compliance?: Record<string, ComplianceRule>;
 
   // Template paths (relative to /public folder)
   // Prefer templatePaths over individual templatePath/templatePath_es for multi-language
