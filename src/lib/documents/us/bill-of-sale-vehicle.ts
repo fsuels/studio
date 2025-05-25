@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { BillOfSaleSchema } from '@/schemas/billOfSale';
+import { BillOfSaleSchema } from '@/lib/documents/us/vehicle-bill-of-sale/schema';
 import type { LegalDocument } from '@/types/documents';
 import { usStates } from '@/lib/document-library/utils';
 

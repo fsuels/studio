@@ -1,6 +1,6 @@
 // src/lib/documents/us/vehicle-bill-of-sale/metadata.ts
 import type { LegalDocument } from '@/types/documents';
-import { BillOfSaleSchema } from '@/schemas/billOfSale'; // Assuming schema is in a central location or adjust path
+import { BillOfSaleSchema } from '@/lib/documents/us/vehicle-bill-of-sale/schema';
 import { vehicleBillOfSaleQuestions } from './questions'; 
 
 export const vehicleBillOfSaleMeta: LegalDocument = {
