@@ -8,6 +8,8 @@ const complianceRules: Record<string, ComplianceRule> = {
   DEFAULT: { requireNotary: false, witnessCount: 0 },
 };
 
+export const rules = complianceRules;
+
 export function getCompliance(state: string) {
   return (
     complianceRules[state.toUpperCase() as keyof typeof complianceRules] ?? {

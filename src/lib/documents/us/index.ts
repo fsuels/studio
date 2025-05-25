@@ -5,7 +5,7 @@ export { billOfSaleVehicle } from './bill-of-sale-vehicle';
 // Explicitly reference the folder index to avoid picking up the legacy
 // promissory-note.ts file which lacks the full schema and question set.
 export { promissoryNote } from './promissory-note/index';
-
+// TODO: promissoryNote should probably be promissoryNoteMeta
 // Assuming these documents are now or will be structured similarly under ./us/
 export { affidavitGeneral } from './affidavit-general';
 export { articlesOfIncorporationBiz } from './articles-of-incorporation-biz';

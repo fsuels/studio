@@ -3,7 +3,7 @@
 
 import React, { useState, useEffect, useCallback, Suspense } from 'react';
 import dynamic from 'next/dynamic';
-import type { LegalDocument } from '@/lib/document-library/index';
+import type { LegalDocument } from '@/lib/document-library/registry.json';
 import { usStates, documentLibrary } from '@/lib/document-library/index';
 import { getDocumentUrl } from '@/lib/document-library/url';
 import HomepageHeroSteps from '@/components/landing/HomepageHeroSteps';
