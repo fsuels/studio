@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 import Image from 'next/image';
 import AutoImage from './AutoImage';
 import { Loader2 } from 'lucide-react';
-import { documentLibrary, type LegalDocument } from '@/lib/document-library';
+import { documentLibrary, type LegalDocument } from '@/lib/document-library/index';
 import { getTemplatePath } from '@/lib/templateUtils';
 
 interface DocumentPreviewProps {

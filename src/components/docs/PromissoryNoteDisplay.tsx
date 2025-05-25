@@ -11,7 +11,7 @@ import { track } from "@/lib/analytics";
 import { useCart } from "@/contexts/CartProvider";
 import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils';
-import { documentLibrary } from '@/lib/document-library';
+import { documentLibrary } from '@/lib/document-library/index';
 import { getDocumentUrl } from '@/lib/document-library/url';
 
 interface PromissoryNoteDisplayProps {
