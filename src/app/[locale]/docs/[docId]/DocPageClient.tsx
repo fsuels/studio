@@ -44,6 +44,7 @@ interface DocPageClientProps {
     locale: string;
     docId: string;
   };
+  markdownContent?: string | null; // Add this line
 }
 
 // Placeholder for AI dynamic highlights
@@ -54,7 +55,7 @@ const AiHighlightPlaceholder = ({ text }: { text: string }) => (
 );
 
 
-export default function DocPageClient({ params: routeParams }: DocPageClientProps) {
+export default function DocPageClient({ params: routeParams, markdownContent }: DocPageClientProps) {
   const params = useParams();
   const { t, i18n } = useTranslation("common");
   const router = useRouter();
@@ -238,7 +239,12 @@ export default function DocPageClient({ params: routeParams }: DocPageClientProp
                         {t('docDetail.previewSubtitle', {defaultValue: "This is how your document will generally look. Specific clauses and details will be customized by your answers."})}
                     </p>
                 </div>
-                <DocumentDetail locale={currentLocale as 'en' | 'es'} docId={docId as string} altText={`${documentDisplayName} preview`} />
+                <DocumentDetail
+                  locale={currentLocale as 'en' | 'es'}
+                  docId={docId as string}
+                  altText={`${documentDisplayName} preview`}
+                  markdownContent={markdownContent} // Add this prop
+                />
                  <p className="text-xs text-muted-foreground mt-2 text-center italic">
                     AI Highlight: <AiHighlightPlaceholder text="Key clauses" /> will be automatically tailored.
                  </p>

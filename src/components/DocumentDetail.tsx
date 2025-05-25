@@ -16,81 +16,60 @@ interface DocumentDetailProps {
   docId: string;
   locale: 'en' | 'es';
   altText?: string;
+  markdownContent?: string | null; // Add this line
 }
 
-const DocumentDetail = React.memo(function DocumentDetail({ docId, locale, altText }: DocumentDetailProps) {
+const DocumentDetail = React.memo(function DocumentDetail({ docId, locale, altText, markdownContent: initialMarkdown }: DocumentDetailProps) {
   const { t } = useTranslation("common");
-  const [md, setMd] = useState<string>('');
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [md, setMd] = useState<string>(initialMarkdown || ''); // Initialize with prop
+  const [isLoading, setIsLoading] = useState(!initialMarkdown); // If no initial markdown, consider it loading (for fallback/image)
+  const [error, setError] = useState<string | null>(null); // Error if initialMarkdown is null/undefined and no docConfig?
   const [isHydrated, setIsHydrated] = useState(false);
 
   const docConfig = useMemo(() => documentLibrary.find((d: LegalDocument) => d.id === docId), [docId]);
 
-  // Use the new standardized template path structure
-  const templatePath = useMemo(() => {
-    if (!docConfig) return undefined;
-    // Ensure leading slash for public folder access
-    return `/templates/${locale}/${docId}.md`;
-  }, [docConfig, locale, docId]);
+  // const templatePath = useMemo(() => {
+  //   if (!docConfig) return undefined;
+  //   return `/templates/${locale}/${docId}.md`;
+  // }, [docConfig, locale, docId]);
 
   useEffect(() => {
     setIsHydrated(true);
   }, []);
 
+  // New useEffect to process initialMarkdown (e.g., title replacement, placeholder replacement)
   useEffect(() => {
-    if (!docConfig || !isHydrated ) {
-      if(isHydrated && !docConfig) {
+    if (initialMarkdown && docConfig) {
+      let modifiedMd = initialMarkdown;
+      const documentDisplayNameForTitle = locale === 'es' && docConfig.translations?.es?.name ? docConfig.translations.es.name : docConfig.translations?.en?.name;
+      if (documentDisplayNameForTitle) {
+          modifiedMd = modifiedMd.replace(/^# .*/m, `# ${documentDisplayNameForTitle}`);
+      } else {
+          const fallbackTitle = locale === 'es' ? docConfig.name_es || docConfig.name : docConfig.name;
+          if (fallbackTitle) {
+              modifiedMd = modifiedMd.replace(/^# .*/m, `# ${fallbackTitle}`);
+          }
+      }
+      modifiedMd = modifiedMd.replace(/{{[^}]+}}/g, '__________');
+      setMd(modifiedMd);
+      setIsLoading(false);
+      setError(null);
+    } else if (!initialMarkdown && docConfig) {
+      // No markdown content passed, but we have a docConfig.
+      // This means we should rely on the image preview.
+      setMd('');
+      setIsLoading(false); // Not loading markdown, but want to show image
+      setError(null); // Not an error, just no markdown
+    } else if (!docConfig && isHydrated) {
         setError(t('Document configuration not found.', {defaultValue: 'Document configuration not found.'}));
         setIsLoading(false);
-      }
-      return;
     }
-
-    if (!templatePath) {
-      console.log(`[DocumentDetail] No templatePath for docId: ${docId}, locale: ${locale}. Relying on image preview.`);
-      setMd('');
-      setIsLoading(false);
-      return;
-    }
-
-    setIsLoading(true);
-    setError(null);
-
-    fetch(templatePath) // Path is already absolute from public
-      .then((r) => {
-        if (!r.ok) {
-          throw new Error(
-            `Failed to fetch ${templatePath} (${r.status} ${r.statusText})`
-          );
-        }
-        return r.text();
-      })
-      .then(text => {
-        let modifiedMd = text;
-        const documentDisplayNameForTitle = locale === 'es' && docConfig.translations?.es?.name ? docConfig.translations.es.name : docConfig.translations?.en?.name;
-        if (documentDisplayNameForTitle) {
-            modifiedMd = modifiedMd.replace(/^# .*/m, `# ${documentDisplayNameForTitle}`);
-        } else {
-            const fallbackTitle = locale === 'es' ? docConfig.name_es || docConfig.name : docConfig.name;
-            if (fallbackTitle) {
-                modifiedMd = modifiedMd.replace(/^# .*/m, `# ${fallbackTitle}`);
-            }
-        }
-        // Replace template placeholders with blank lines to mimic a fillable form
-        modifiedMd = modifiedMd.replace(/{{[^}]+}}/g, '__________');
-        setMd(modifiedMd);
-      })
-      .catch((err) => {
-        console.error('[DocumentDetail] Error fetching Markdown:', err);
-        setError(err.message || t('Error loading preview content.', {defaultValue: 'Error loading preview content.'}));
-        setMd('');
-      })
-      .finally(() => setIsLoading(false));
-  }, [docId, locale, docConfig, isHydrated, t, templatePath]);
+  }, [initialMarkdown, docConfig, locale, t, isHydrated]); // Add dependencies
 
 
-  if (!isHydrated || (!docConfig && !isLoading)) {
+  // Initial loading state: Show if not hydrated, or if initialMarkdown is being processed and docConfig isn't ready.
+  // isLoading is true if !initialMarkdown at the start, or until initialMarkdown processing is complete.
+  if (!isHydrated || (isLoading && !docConfig && !initialMarkdown)) {
     return (
       <div className="flex flex-col items-center justify-center text-muted-foreground p-4 border rounded-lg bg-muted min-h-[300px] aspect-[8.5/11]">
         <Loader2 className="h-8 w-8 animate-spin mb-2" />
@@ -99,15 +78,19 @@ const DocumentDetail = React.memo(function DocumentDetail({ docId, locale, altTe
     );
   }
 
-  if (isHydrated && !isLoading && !docConfig) {
+  // Error state: If after hydration and loading attempts, docConfig is still not found,
+  // and we don't have initialMarkdown to display.
+  // The error state from useEffect (due to !docConfig) will be shown here.
+  if (isHydrated && !isLoading && !docConfig && !initialMarkdown) {
     return (
-         <div className="flex flex-col items-center justify-center text-destructive p-4 border rounded-lg bg-destructive/10 min-h-[300px] aspect-[8.5/11]">
-           <AlertTriangle className="h-8 w-8 mb-2" />
-           <p>{t('Document configuration not found.', {defaultValue: 'Document configuration not found.'})}</p>
-         </div>
+      <div className="flex flex-col items-center justify-center text-destructive p-4 border rounded-lg bg-destructive/10 min-h-[300px] aspect-[8.5/11]">
+        <AlertTriangle className="h-8 w-8 mb-2" />
+        <p>{error || t('Document configuration not found and no content provided.', {defaultValue: 'Document configuration not found and no content provided.'})}</p>
+      </div>
     );
   }
-
+  
+  // docConfig might be null here if initialMarkdown IS provided.
   const documentDisplayName = docConfig && (locale === 'es' && docConfig.translations?.es?.name ? docConfig.translations.es.name : docConfig.translations?.en?.name || docConfig.name);
   const imgSrc = `/images/previews/${locale}/${docId}.png`;
   const fallbackAlt = altText || `${documentDisplayName || docId} preview`;
@@ -144,7 +127,8 @@ const DocumentDetail = React.memo(function DocumentDetail({ docId, locale, altTe
          </div>
       )}
 
-      {!isLoading && !error && md ? (
+      {/* Case 1: Display Markdown if initialMarkdown was provided, processed into md, and no error occurred */}
+      {!isLoading && !error && md && initialMarkdown ? (
         <div className="prose prose-sm dark:prose-invert max-w-none w-full h-full overflow-y-auto p-4 md:p-6 relative z-0 bg-white dark:bg-background text-foreground">
            <ReactMarkdown
              remarkPlugins={[remarkGfm]}
@@ -160,11 +144,12 @@ const DocumentDetail = React.memo(function DocumentDetail({ docId, locale, altTe
             {md}
            </ReactMarkdown>
         </div>
-      ) : !isLoading && !error && !md && !templatePath ? ( // Was: templatePath === undefined, simplified
+      // Case 2: Display Image Preview if no initialMarkdown was provided, not loading, no error, and docConfig IS available
+      ) : !isLoading && !error && !md && !initialMarkdown && docConfig ? (
          <div className="absolute inset-0 flex flex-col items-center justify-center text-muted-foreground z-0 p-0 text-center">
             <Image
-              src={imgSrc}
-              alt={fallbackAlt}
+              src={imgSrc} // imgSrc relies on docId, which comes from docConfig
+              alt={fallbackAlt} // fallbackAlt relies on documentDisplayName, which comes from docConfig
               width={850}
               height={1100}
               className="object-contain w-full h-full"
@@ -175,12 +160,14 @@ const DocumentDetail = React.memo(function DocumentDetail({ docId, locale, altTe
               }}
             />
          </div>
-      ) : !isLoading && !error && !md && (
+      // Case 3: Fallback "Preview not available" if not loading, no error, but neither markdown nor image can be shown
+      // This can happen if !initialMarkdown and !docConfig (after loading attempt)
+      ) : !isLoading && !error && !md ? (
           <div className="absolute inset-0 flex flex-col items-center justify-center bg-muted/70 z-20 p-4 text-center">
             <AlertTriangle className="h-8 w-8 text-muted-foreground mb-2" />
             <p className="text-sm text-muted-foreground">{t('Preview not available for this document.', {defaultValue: 'Preview not available for this document.'})}</p>
           </div>
-      )}
+      ) : null}
     </div>
   );
 });
