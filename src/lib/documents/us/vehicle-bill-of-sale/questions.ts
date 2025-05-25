@@ -17,6 +17,13 @@ export const vehicleBillOfSaleQuestions = [
     tooltip: "A valid phone number for the seller."
   },
   {
+    id: "add_seller2",
+    label: "Add a Second Seller?",
+    type: "boolean",
+    required: false,
+    tooltip: "Toggle to provide details for an additional seller."
+  },
+  {
     id: "seller2_name",
     label: "Second Seller's Full Name",
     type: "text",
@@ -59,6 +66,13 @@ export const vehicleBillOfSaleQuestions = [
     required: false,
     placeholder: "(XXX) XXX-XXXX",
     tooltip: "A valid phone number for the buyer."
+  },
+  {
+    id: "add_buyer2",
+    label: "Add a Second Buyer?",
+    type: "boolean",
+    required: false,
+    tooltip: "Toggle to provide details for an additional buyer."
   },
   {
     id: "buyer2_name",

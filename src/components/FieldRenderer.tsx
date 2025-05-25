@@ -218,6 +218,74 @@ const FieldRenderer = React.memo(function FieldRenderer({ fieldKey, locale, doc 
             </RadioGroup>
           )}
         />
+      ) : fieldKey === 'add_seller2' ? (
+        <Controller
+          name="add_seller2"
+          control={control}
+          defaultValue={false}
+          render={({ field }) => (
+            <div className="flex items-center space-x-2">
+              <Switch id="add_seller2" checked={field.value} onCheckedChange={field.onChange} aria-invalid={!!errors.add_seller2} />
+              <Label htmlFor="add_seller2" className="text-sm font-normal">{labelText}</Label>
+            </div>
+          )}
+        />
+      ) : fieldKey === 'seller2_name' ? (
+        watch('add_seller2') && (
+          <SmartInput
+            id={fieldKey}
+            type={inputType}
+            placeholder={placeholderText}
+            className={cn('bg-background max-w-sm', fieldError && 'border-destructive focus-visible:ring-destructive')}
+            aria-invalid={!!fieldError}
+            rhfProps={register(fieldKey as any, { required: fieldSchema?.required && watch('add_seller2') })}
+          />
+        )
+      ) : fieldKey === 'seller2_phone' ? (
+        watch('add_seller2') && (
+          <SmartInput
+            id={fieldKey}
+            type="tel"
+            placeholder={placeholderText}
+            className={cn('bg-background max-w-sm', fieldError && 'border-destructive focus-visible:ring-destructive')}
+            aria-invalid={!!fieldError}
+            rhfProps={register(fieldKey as any, { required: fieldSchema?.required && watch('add_seller2') })}
+          />
+        )
+      ) : fieldKey === 'add_buyer2' ? (
+        <Controller
+          name="add_buyer2"
+          control={control}
+          defaultValue={false}
+          render={({ field }) => (
+            <div className="flex items-center space-x-2">
+              <Switch id="add_buyer2" checked={field.value} onCheckedChange={field.onChange} aria-invalid={!!errors.add_buyer2} />
+              <Label htmlFor="add_buyer2" className="text-sm font-normal">{labelText}</Label>
+            </div>
+          )}
+        />
+      ) : fieldKey === 'buyer2_name' ? (
+        watch('add_buyer2') && (
+          <SmartInput
+            id={fieldKey}
+            type={inputType}
+            placeholder={placeholderText}
+            className={cn('bg-background max-w-sm', fieldError && 'border-destructive focus-visible:ring-destructive')}
+            aria-invalid={!!fieldError}
+            rhfProps={register(fieldKey as any, { required: fieldSchema?.required && watch('add_buyer2') })}
+          />
+        )
+      ) : fieldKey === 'buyer2_phone' ? (
+        watch('add_buyer2') && (
+          <SmartInput
+            id={fieldKey}
+            type="tel"
+            placeholder={placeholderText}
+            className={cn('bg-background max-w-sm', fieldError && 'border-destructive focus-visible:ring-destructive')}
+            aria-invalid={!!fieldError}
+            rhfProps={register(fieldKey as any, { required: fieldSchema?.required && watch('add_buyer2') })}
+          />
+        )
       ) : fieldKey === 'as_is' && (fieldSchema?.type === 'boolean' || fieldSchema?.type === 'select') ? (
         <Controller
           name="as_is"
