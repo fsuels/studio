@@ -1,4 +1,3 @@
-ts
 //--------------------------------------------------------------
 // Firestore helpers for bundles (optional – can be omitted if
 // you’ll ship with static bundles only)

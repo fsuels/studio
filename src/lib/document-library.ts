@@ -1,15 +1,16 @@
 // src/lib/document-library.ts
 import { z } from 'zod';
 import { documentLibraryAdditions } from './document-library-additions';
-import type { LegalDocument, LocalizedText } from '@/types/documents'; // Ensure LocalizedText is imported
+import type { LegalDocument } from '@/types/documents'
 import * as us_docs_barrel from './documents/us';
 import * as ca_docs_barrel from './documents/ca';
 // …other countries…
 
-const isValidDocument = (doc: any): doc is LegalDocument => {
-  const hasId = doc && typeof doc.id === 'string' && doc.id.trim() !== '';
-  const hasCategory = doc && typeof doc.category === 'string' && doc.category.trim() !== '';
-  const hasSchema = doc && doc.schema && typeof doc.schema.parse === 'function';
+const isValidDocument = (doc: unknown): doc is LegalDocument => {
+  const d = doc as Partial<LegalDocument>
+  const hasId = d && typeof d.id === 'string' && d.id.trim() !== ''
+  const hasCategory = d && typeof d.category === 'string' && d.category.trim() !== ''
+  const hasSchema = d && (d as any).schema && typeof (d as any).schema.parse === 'function'
 
   // Check for English translation name as the primary indicator of a valid name structure
   // OR fallback to top-level name if translations are not yet populated by the forEach loop

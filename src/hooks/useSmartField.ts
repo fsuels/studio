@@ -3,18 +3,23 @@
 import { useEffect } from 'react';
 import type { UseFormWatch, UseFormSetValue, UseFormGetValues } from 'react-hook-form';
 
-type HookProps = {
-  name: string;
-  watch: UseFormWatch<any>;
-  setValue: UseFormSetValue<any>;
-  getValues: UseFormGetValues<any>;
-};
+type HookProps<T> = {
+  name: keyof T & string
+  watch: UseFormWatch<T>
+  setValue: UseFormSetValue<T>
+  getValues: UseFormGetValues<T>
+}
 
 /** Autocomplete + masking for VIN, color, year … 
  * Phone masking is handled directly in SmartInput.
 */
-export const useSmartField = ({ name, watch, setValue, getValues }: HookProps): void => {
-  const currentValue = watch(name); 
+export const useSmartField = <T extends Record<string, unknown>>({
+  name,
+  watch,
+  setValue,
+  getValues,
+}: HookProps<T>): void => {
+  const fieldValue = watch(name)
 
   // Year – numeric only, 4 digits
   useEffect(() => {
@@ -28,7 +33,7 @@ export const useSmartField = ({ name, watch, setValue, getValues }: HookProps): 
         setValue(name, sanitized, { shouldValidate: true, shouldDirty: true });
       }
     }
-  }, [currentValue, name, setValue, watch]);
+  }, [fieldValue, name, setValue, watch]);
 
   // Color – alphabetic only
   useEffect(() => {
@@ -40,12 +45,12 @@ export const useSmartField = ({ name, watch, setValue, getValues }: HookProps): 
         setValue(name, sanitized, { shouldValidate: true, shouldDirty: true });
       }
     }
-  }, [currentValue, name, setValue, watch]);
+  }, [fieldValue, name, setValue, watch]);
 
   // VIN - auto-populates make, model, year if these fields are empty
+  const vinVal = watch(name)
   useEffect(() => {
-    if (name === 'vin') { // Changed from 'vehicle_vin' to just 'vin' to match schema if that's the case, or adjust as needed
-      const vinVal = watch(name);
+    if (name === 'vin') {
       if (vinVal && typeof vinVal === 'string' && vinVal.length === 17) {
         // Ensure form fields like 'vehicle_make', 'vehicle_model', 'vehicle_year' exist if you're setting them.
         // Assuming they are part of the Zod schema and RHF form.
@@ -75,6 +80,6 @@ export const useSmartField = ({ name, watch, setValue, getValues }: HookProps): 
           .catch(error => console.error('VIN decoding error for auto-fill:', error));
       }
     }
-  // Ensure dependencies are correct. `currentValue` for `vin` is `vinVal`.
-  }, [watch(name), name, setValue, getValues, watch]); // watch(name) to re-run if vinVal changes
+  // Ensure dependencies are correct. `fieldValue` for `vin` is `vinVal`.
+  }, [vinVal, name, setValue, getValues, watch]);
 };

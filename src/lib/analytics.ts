@@ -1,9 +1,15 @@
 
 /* super‑light wrapper – works with GA4, Plausible, FB Pixel, ... */
-export function track(event: string, data: Record<string, any> = {}) {
+declare global {
+  interface Window {
+    gtag?: (...args: unknown[]) => void
+  }
+}
+
+export function track(event: string, data: Record<string, unknown> = {}) {
   if (typeof window === 'undefined') return
-  if ((window as any).gtag) {
-    (window as any).gtag('event', event, data)
+  if (typeof window.gtag === 'function') {
+    window.gtag('event', event, data)
   }
   // fallback – console log so you see events in dev
   if (process.env.NODE_ENV === 'development') {

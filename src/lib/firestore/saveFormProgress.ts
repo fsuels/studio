@@ -27,7 +27,7 @@ export interface FormProgressDoc {
   /** two‑letter state code or “NA” */
   state: string;
   /** raw field values keyed by FormField.id */
-  formData: Record<string, any>; // Changed from `unknown` to `Record<string, any>`
+  formData: Record<string, unknown>
   /** Firestore server timestamp */
   updatedAt: ReturnType<typeof serverTimestamp> | Timestamp; // Allow both server and client Timestamp
 }
@@ -66,7 +66,7 @@ export async function saveFormProgress({
 }: {
   userId: string;
   docType: string;
-  formData: Record<string, any>; // Ensure formData is an object
+  formData: Record<string, unknown>
   state?: string | null; 
 }): Promise<void> {
   if (!userId || !docType) {
@@ -107,7 +107,7 @@ export async function loadFormProgress({
   userId: string;
   docType: string;
   state?: string | null;
-}): Promise<Record<string, any>> {
+}): Promise<Record<string, unknown>> {
    if (!userId || !docType) {
     console.error('[loadFormProgress] Missing userId or docType. Cannot load draft.');
     return {};

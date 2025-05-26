@@ -1,6 +1,5 @@
 import { z } from 'zod';
 import type { LegalDocument } from '@/types/documents';
-import { usStates } from '../usStates'; // Adjusted path
 
 export const livingTrust: LegalDocument = {
   id: 'living-trust',
