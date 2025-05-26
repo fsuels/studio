@@ -89,25 +89,21 @@ export default function HomePageClient() {
   // Preload dynamically imported sections once on the client
   useEffect(() => {
     // Use dynamic import to get the module and then call preload if available
-    import('@/components/landing/HowItWorks').then((mod: PreloadableModule) => {
-      mod.default?.preload?.();
+    import('@/components/landing/HowItWorks').then((mod) => {
+      (mod as PreloadableModule).default?.preload?.();
     });
-    import('@/components/landing/TrustAndTestimonialsSection').then(
-      (mod: PreloadableModule) => {
-        mod.default?.preload?.();
-      },
-    );
-    import('@/components/landing/GuaranteeBadge').then(
-      (mod: PreloadableModule) => {
-        mod.GuaranteeBadge?.preload?.();
-        mod.default?.preload?.(); // fallback for default export
-      },
-    );
-    import('@/components/TopDocsChips').then((mod: PreloadableModule) => {
-      mod.default?.preload?.();
+    import('@/components/landing/TrustAndTestimonialsSection').then((mod) => {
+      (mod as PreloadableModule).default?.preload?.();
     });
-    import('@/components/StickyFilterBar').then((mod: PreloadableModule) => {
-      mod.default?.preload?.();
+    import('@/components/landing/GuaranteeBadge').then((mod) => {
+      (mod as PreloadableModule).GuaranteeBadge?.preload?.();
+      (mod as PreloadableModule).default?.preload?.(); // fallback for default export
+    });
+    import('@/components/TopDocsChips').then((mod) => {
+      (mod as PreloadableModule).default?.preload?.();
+    });
+    import('@/components/StickyFilterBar').then((mod) => {
+      (mod as PreloadableModule).default?.preload?.();
     });
   }, []);
 

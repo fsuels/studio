@@ -37,6 +37,12 @@ interface AddressComponent {
   short_name: string;
 }
 
+interface GooglePlaceResult {
+  formatted_address?: string;
+  address_components?: AddressComponent[];
+  name?: string;
+}
+
 interface AddressFieldProps {
   name: string;
   label: string; // Expected to be a translation key
@@ -103,7 +109,7 @@ const AddressField = React.memo(function AddressField({
 
       autocomplete.addListener('place_changed', () => {
         if (!autocomplete) return;
-        const place = autocomplete.getPlace();
+        const place = autocomplete.getPlace() as GooglePlaceResult;
         const formattedAddress = place.formatted_address || '';
 
         const wanted = new Set([
