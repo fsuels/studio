@@ -1,13 +1,14 @@
 // src/app/[locale]/docs/[docId]/DocPageClient.tsx
 'use client';
 
-import { useParams, notFound, useRouter } from 'next/navigation';
-import { documentLibrary, type LegalDocument } from '@/lib/document-library';
+import { notFound, useRouter } from 'next/navigation';
+import { documentLibrary } from '@/lib/document-library';
 import { useTranslation } from 'react-i18next';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import React, { useEffect, useState, useMemo } from 'react';
 import dynamic from 'next/dynamic';
+import type { DocumentDetailProps } from '@/components/DocumentDetail';
 import { Loader2, Star, ShieldCheck, Zap, HelpCircle, Award, FileText, Edit3, FileSignature, Info } from 'lucide-react';
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from '@/components/ui/tooltip';
 import { Badge } from '@/components/ui/badge';
@@ -30,6 +31,10 @@ const TrustAndTestimonialsSection = dynamic(
   }
 );
 
+type DocumentDetailComponent = React.ComponentType<DocumentDetailProps> & {
+  preload?: () => void;
+};
+
 const DocumentDetail = dynamic(() => import('@/components/DocumentDetail'), {
   loading: () => (
     <div className="flex items-center justify-center border rounded-lg bg-muted p-4 aspect-[8.5/11] max-h-[500px] md:max-h-[700px] w-full shadow-lg">
@@ -37,7 +42,7 @@ const DocumentDetail = dynamic(() => import('@/components/DocumentDetail'), {
       <p className="ml-2 text-muted-foreground">Loading preview...</p>
     </div>
   ),
-});
+}) as DocumentDetailComponent;
 
 interface DocPageClientProps {
   params: {
@@ -56,12 +61,11 @@ const AiHighlightPlaceholder = ({ text }: { text: string }) => (
 
 
 export default function DocPageClient({ params: routeParams, markdownContent }: DocPageClientProps) {
-  const params = useParams();
   const { t, i18n } = useTranslation("common");
   const router = useRouter();
 
-  const currentLocale = (Array.isArray(params!.locale) ? params!.locale[0] : params!.locale) as 'en' | 'es' | undefined;
-  const docId = Array.isArray(params!.docId) ? params!.docId[0] : params!.docId as string | undefined;
+  const currentLocale = routeParams.locale as 'en' | 'es';
+  const docId = routeParams.docId as string;
 
   const docConfig = useMemo(() => {
     if (!docId) return undefined;
@@ -77,8 +81,8 @@ export default function DocPageClient({ params: routeParams, markdownContent }: 
 
   // Preload detail component and next step route for quicker interactions
   useEffect(() => {
-    if (typeof (DocumentDetail as any).preload === 'function') {
-      (DocumentDetail as any).preload();
+    if (typeof DocumentDetail.preload === 'function') {
+      DocumentDetail.preload();
     }
     if (docId && currentLocale) {
       router.prefetch(`/${currentLocale}/docs/${docId}/start`);
@@ -99,7 +103,7 @@ export default function DocPageClient({ params: routeParams, markdownContent }: 
         }
         setIsLoading(false);
     }
-  }, [docId, isHydrated, notFound]); 
+  }, [docId, isHydrated]);
 
 
 
@@ -122,8 +126,8 @@ export default function DocPageClient({ params: routeParams, markdownContent }: 
 
   useEffect(() => {
     if (!isHydrated) return;
-    if (typeof (DocumentDetail as any).preload === 'function') {
-      (DocumentDetail as any).preload();
+    if (typeof DocumentDetail.preload === 'function') {
+      DocumentDetail.preload();
     }
     if (docId && currentLocale) {
       router.prefetch(`/${currentLocale}/docs/${docId}/start`);
