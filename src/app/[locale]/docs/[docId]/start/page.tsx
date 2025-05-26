@@ -4,9 +4,13 @@
 import StartWizardPageClient from './StartWizardPageClient';
 import { documentLibrary } from '@/lib/document-library';
 import { localizations } from '@/lib/localizations'; // Assuming this defines your supported locales e.g. [{id: 'en'}, {id: 'es'}]
-import type { PageProps } from 'next';
-
-type StartWizardPageProps = PageProps<{ locale: 'en' | 'es'; docId: string }>;
+// Define the shape of params expected for this page
+interface StartWizardPageProps {
+  params: {
+    locale: 'en' | 'es';
+    docId: string;
+  };
+}
 
 // Revalidate every hour so start pages stay fresh without rebuilding constantly
 export const revalidate = 3600;
