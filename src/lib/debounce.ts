@@ -1,26 +1,26 @@
-export type AnyFn<Args extends unknown[] = unknown[]> = (
+export type AnyFn<Args extends unknown[] = any[]> = (
   ..._args: Args
 ) => void;
 
-export interface DebouncedFunction<F extends AnyFn> {
-  (..._args: Parameters<F>): void;
+export interface DebouncedFunction<Args extends unknown[]> {
+  (..._args: Args): void;
   cancel(): void;
 }
 
-export function debounce<F extends AnyFn>(
-  fn: F,
+export function debounce<Args extends unknown[]>(
+  fn: (...args: Args) => void,
   wait: number,
-): DebouncedFunction<F> {
+): DebouncedFunction<Args> {
   let timer: ReturnType<typeof setTimeout> | null = null;
 
-  const debounced = ((...args: Parameters<F>) => {
+  const debounced = ((...args: Args) => {
     if (timer !== null) {
       clearTimeout(timer);
     }
     timer = setTimeout(() => {
       fn(...args);
     }, wait);
-  }) as DebouncedFunction<F>;
+  }) as DebouncedFunction<Args>;
 
   debounced.cancel = () => {
     if (timer !== null) {
