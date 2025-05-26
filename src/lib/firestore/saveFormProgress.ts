@@ -15,7 +15,8 @@ import {
   query,
   serverTimestamp,
   setDoc,
-  type Timestamp // Import Timestamp type
+  type Timestamp,
+  type Firestore
 } from 'firebase/firestore';
 import { getDb } from '@/lib/firebase'; // lazily obtain Firestore instance
 

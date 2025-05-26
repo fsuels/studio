@@ -1,6 +1,7 @@
 import { usStates } from '@/lib/usStates';
+import type { Question } from '@/types/documents';
 
-export const promissoryNoteQuestions = [
+export const promissoryNoteQuestions: Question[] = [
   { id: 'date',             label: 'Date of Note',           type: 'date',    required: true },
   { id: 'placeOfExecution', label: 'Place of Execution',     type: 'text',    required: true, placeholder: 'City, State' },
   { id: 'lenderName',       label: 'Lender Name',            type: 'text',    required: true },
