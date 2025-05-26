@@ -359,7 +359,6 @@ export default function WizardForm({
           <FieldRenderer
             key={currentField.id}
             fieldKey={currentField.id}
-            locale={locale}
             doc={doc}
           />
         )}
