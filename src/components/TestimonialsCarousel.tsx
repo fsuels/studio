@@ -19,16 +19,19 @@ interface Props {
 }
 
 export default function TestimonialsCarousel({ templateId }: Props) {
-  const { data: reviews, isLoading } = useQuery(
-    ['reviews', templateId],
-    async () => {
+  const { data: reviews, isPending: isLoading } = useQuery({
+    queryKey: ['reviews', templateId],
+    queryFn: async () => {
       const db = await getDb();
-      const q = query(collection(db, 'reviews'), where('templateId', '==', templateId));
+      const q = query(
+        collection(db, 'reviews'),
+        where('templateId', '==', templateId),
+      );
       const snap = await getDocs(q);
-      return snap.docs.map(d => d.data() as Review);
+      return snap.docs.map((d) => d.data() as Review);
     },
-    { suspense: true },
-  );
+    suspense: true,
+  });
 
   if (isLoading) return <CarouselSkeleton />;
 
