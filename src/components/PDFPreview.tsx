@@ -2,7 +2,7 @@ import React from 'react';
 
 interface PDFPreviewProps {
   templateId: string;
-  answers: Record<string, any>;
+  answers: Record<string, unknown>;
   upsells: {
     includeNotarization: boolean;
     includeRecording: boolean;

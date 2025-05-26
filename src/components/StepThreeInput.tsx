@@ -7,10 +7,9 @@ import { analyzeFormData } from '@/ai/flows/analyze-form-data'; // Corrected imp
 
 interface Props {
   templateId: string;
-  stateCode: string;
 }
 
-export function StepThreeInput({ templateId, stateCode }: Props) {
+export function StepThreeInput({ templateId }: Props) {
   const template = documentLibrary.find(doc => doc.id === templateId)!;
   const [formData, setFormData] = useState<Record<string, string>>({});
   const [upsells, setUpsells] = useState({ notarize: false, record: false });

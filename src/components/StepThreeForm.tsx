@@ -21,6 +21,7 @@ export function StepThreeForm({
   useEffect(() => {
     // TODO: call PDF generation API passing selectedDocument, formData, notarize
     // and setPreviewUrl(resultingUrl)
+    setPreviewUrl("");
   }, [selectedDocument, formData, notarize]);
 
   return (

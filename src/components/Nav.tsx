@@ -15,7 +15,7 @@ import {
 import { ChevronDown } from 'lucide-react';
 
 const Nav = React.memo(function Nav() {
-  const { t: tHeader, i18n } = useTranslation("header");
+  const { t: tHeader } = useTranslation("header");
   const pathname = usePathname(); 
   const params = useParams();
   const [currentLocale, setCurrentLocale] = useState<'en' | 'es'>('en');
