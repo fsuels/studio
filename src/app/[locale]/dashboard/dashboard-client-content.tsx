@@ -25,8 +25,6 @@ interface FirestoreTimestamp {
   toDate: () => Date;
 }
 
-
-
 interface DashboardClientContentProps {
   locale: 'en' | 'es';
 }

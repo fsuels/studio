@@ -115,9 +115,9 @@ const DocumentPreview = React.memo(function DocumentPreview({
             components={{
               p: (props) => <p {...props} className="select-none" />,
               // FIXED: ensure images have explicit dimensions
-                img: (props: React.ImgHTMLAttributes<HTMLImageElement>) => (
-                  <AutoImage {...props} className="mx-auto" />
-                ),
+              img: (props: React.ImgHTMLAttributes<HTMLImageElement>) => (
+                <AutoImage {...props} className="mx-auto" />
+              ),
             }}
           >
             {md}

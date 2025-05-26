@@ -1,4 +1,6 @@
-export type AnyFn<Args extends unknown[] = unknown[]> = (..._args: Args) => void;
+export type AnyFn<Args extends unknown[] = unknown[]> = (
+  ..._args: Args
+) => void;
 
 export interface DebouncedFunction<F extends AnyFn> {
   (..._args: Parameters<F>): void;
