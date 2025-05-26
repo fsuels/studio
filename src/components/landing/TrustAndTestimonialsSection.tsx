@@ -1,12 +1,11 @@
 // src/components/landing/TrustAndTestimonialsSection.tsx
 'use client'
 
-import React, { useEffect, useState, useRef, useCallback } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
-import { ChevronLeft, ChevronRight, FileText, Lock, ShieldCheck, Star } from 'lucide-react';
+import { ChevronLeft, ChevronRight, FileText, ShieldCheck, Star } from 'lucide-react';
 import Image from 'next/image';
-import { motion } from 'framer-motion';
 import Autoplay from 'embla-carousel-autoplay';
 import useEmblaCarousel from 'embla-carousel-react';
 import { cn } from '@/lib/utils';
@@ -96,7 +95,7 @@ const MemoizedTestimonialCard = React.memo(function TestimonialCard({ testimonia
             ))}
           </div>
           <p className="italic text-foreground/90 mb-4 leading-relaxed text-sm flex-grow">
-            "{quoteText}"
+            &ldquo;{quoteText}&rdquo;
           </p>
           {outcomeText && (
             <p className="text-xs text-primary font-semibold mb-3 text-center p-1 bg-primary/10 rounded">
@@ -155,8 +154,18 @@ const TrustAndTestimonialsSection = React.memo(function TrustAndTestimonialsSect
 
   useEffect(() => {
     if (isHydrated && ready) {
-      const rawTestimonials = t('home.testimonials', { returnObjects: true, ns: 'common' }) as any;
-      let loadedTestimonials: Testimonial[] = [];
+      interface TranslatedTestimonial {
+        quote: string;
+        name: string;
+        title: string;
+        outcome?: string;
+        avatarSeed?: number;
+        avatarUrl?: string;
+      }
+      type TranslatedTestimonials = Record<string, TranslatedTestimonial>;
+
+      const rawTestimonials = t('home.testimonials', { returnObjects: true, ns: 'common' }) as unknown as TranslatedTestimonials;
+      const loadedTestimonials: Testimonial[] = [];
       let allTranslationsValid = true;
 
       if (typeof rawTestimonials === 'object' && rawTestimonials !== null && !Array.isArray(rawTestimonials)) {
