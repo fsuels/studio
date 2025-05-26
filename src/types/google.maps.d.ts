@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 declare global {
   namespace google.maps.places {
     interface AutocompleteOptions {
@@ -7,9 +8,9 @@ declare global {
     }
 
     class Autocomplete {
-      constructor(_input: HTMLInputElement, _opts?: AutocompleteOptions);
+      constructor(input: HTMLInputElement, opts?: AutocompleteOptions);
       getPlace(): unknown;
-      addListener(_event: string, _handler: () => void): void;
+      addListener(event: string, handler: () => void): void;
     }
   }
 }

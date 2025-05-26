@@ -56,16 +56,16 @@ export const useSmartField = <T extends FieldValues>({
       const currentVal = watch(name as Path<T>);
       if (typeof currentVal !== 'string') return; // Only process if it's a string
       const sanitized = currentVal.replace(/[^a-zA-Z\s]/gi, '');
-        if (sanitized !== currentVal) {
-          setValue(
-            name as Path<T>,
-            sanitized as unknown as FieldPathValue<T, Path<T>>,
-            {
-              shouldValidate: true,
-              shouldDirty: true,
-            },
-          );
-        }
+      if (sanitized !== currentVal) {
+        setValue(
+          name as Path<T>,
+          sanitized as unknown as FieldPathValue<T, Path<T>>,
+          {
+            shouldValidate: true,
+            shouldDirty: true,
+          },
+        );
+      }
     }
   }, [fieldValue, name, setValue, watch]);
 
