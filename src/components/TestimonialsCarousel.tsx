@@ -1,12 +1,22 @@
-import React from 'react';
+import { useEffect, useState } from 'react';
 import Carousel from './Carousel';
-import { vehicleBillOfSaleReviews } from '@/data/reviews/vehicle-bill-of-sale';
-import type { Review } from '@/types/reviews';
+import { Spinner } from '@/components/ui/Spinner';
+import type { Review } from '@/types';
 
-export default function TestimonialsCarousel({ templateId }: { templateId: string }) {
-  const reviews: Review[] =
-    templateId === 'vehicle-bill-of-sale' ? vehicleBillOfSaleReviews : [];
+export default function TestimonialsCarousel({
+  templateId,
+}: {
+  templateId: string;
+}) {
+  const [reviews, setReviews] = useState<Review[] | null>(null);
 
+  useEffect(() => {
+    import(`@/data/reviews/${templateId}.ts`)
+      .then((mod) => setReviews(mod.reviews as Review[]))
+      .catch(() => setReviews([]));
+  }, [templateId]);
+
+  if (reviews === null) return <Spinner className="my-12" />;
   if (reviews.length === 0) return null;
   return <Carousel reviews={reviews} />;
 }

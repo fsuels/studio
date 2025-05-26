@@ -1,6 +1,6 @@
-import { Review } from '@/types/reviews';
+import { Review } from '@/types';
 
-export const vehicleBillOfSaleReviews: Review[] = [
+export const reviews: Review[] = [
   {
     name: 'Michelle R.',
     location: 'Austin, TX',

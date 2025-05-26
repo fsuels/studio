@@ -7,7 +7,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from '@/components/ui/carousel';
-import type { Review } from '@/types/reviews';
+import type { Review } from '@/types';
 
 export default function Carousel({ reviews }: { reviews: Review[] }) {
   return (
@@ -15,11 +15,17 @@ export default function Carousel({ reviews }: { reviews: Review[] }) {
       <BaseCarousel className="relative">
         <CarouselContent>
           {reviews.map((r, idx) => (
-            <CarouselItem key={idx} className="basis-3/4 sm:basis-1/2 md:basis-1/3">
+            <CarouselItem
+              key={idx}
+              className="basis-3/4 sm:basis-1/2 md:basis-1/3"
+            >
               <div className="p-4 bg-card border border-border rounded-lg shadow-sm h-full flex flex-col text-center">
                 <div className="flex justify-center mb-2">
                   {Array.from({ length: Math.round(r.rating) }).map((_, i) => (
-                    <Star key={i} className="h-4 w-4 text-yellow-400 fill-yellow-400" />
+                    <Star
+                      key={i}
+                      className="h-4 w-4 text-yellow-400 fill-yellow-400"
+                    />
                   ))}
                 </div>
                 <p className="text-sm italic mb-2">&ldquo;{r.quote}&rdquo;</p>
