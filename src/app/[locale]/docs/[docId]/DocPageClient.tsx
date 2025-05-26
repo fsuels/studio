@@ -353,13 +353,15 @@ export default function DocPageClient({
         </section>
 
         <aside className="md:col-span-2 space-y-6">
-          <Card className="shadow-lg border-primary">
-            <CardHeader>
-              <CardTitle className="text-lg text-primary">
-                {t('docDetail.pricingTitle', 'Transparent Pricing')}
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3">
+          <div className="relative">
+            <div className="sticky top-24" data-testid="price-sticky">
+              <Card className="shadow-lg border-primary">
+                <CardHeader>
+                  <CardTitle className="text-lg text-primary">
+                    {t('docDetail.pricingTitle', 'Transparent Pricing')}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
               <div className="flex items-baseline justify-between">
                 <span className="text-3xl font-bold text-foreground">
                   ${docConfig.basePrice.toFixed(2)}
@@ -383,7 +385,9 @@ export default function DocPageClient({
                 {t('Start For Free', { defaultValue: 'Start For Free' })}
               </Button>
             </CardContent>
-          </Card>
+              </Card>
+            </div>
+          </div>
 
           {docConfig.upsellClauses && docConfig.upsellClauses.length > 0 && (
             <Card className="shadow-md">
