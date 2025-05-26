@@ -6,6 +6,8 @@ import { useTranslation } from 'react-i18next';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
+import dynamic from 'next/dynamic';
+import { SkeletonPreview } from '../DocPreview';
 import {
   Accordion,
   AccordionItem,
@@ -22,6 +24,11 @@ import {
 } from '@/components/ui/table';
 import { track } from '@/lib/analytics';
 import { useCart } from '@/contexts/CartProvider';
+
+const DocPreview = dynamic(() => import('../DocPreview'), {
+  ssr: false,
+  loading: () => <SkeletonPreview />,
+});
 
 interface VehicleBillOfSaleDisplayProps {
   locale: 'en' | 'es';
@@ -362,6 +369,10 @@ export default function VehicleBillOfSaleDisplay({
         </h1>
         <p className="text-lg text-muted-foreground">{t('pageSubtitle')}</p>
       </header>
+
+      <div className="mb-10">
+        <DocPreview docId="bill-of-sale-vehicle" locale={locale} />
+      </div>
 
       <Accordion type="single" collapsible className="w-full space-y-4 mb-10">
         {allSections.map((section) => (
