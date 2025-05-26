@@ -1,4 +1,4 @@
-export type AnyFn<Args extends unknown[] = any[]> = (
+export type AnyFn<Args extends unknown[] = unknown[]> = (
   ..._args: Args
 ) => void;
 
@@ -8,7 +8,7 @@ export interface DebouncedFunction<Args extends unknown[]> {
 }
 
 export function debounce<Args extends unknown[]>(
-  fn: (...args: Args) => void,
+  fn: (..._args: Args) => void,
   wait: number,
 ): DebouncedFunction<Args> {
   let timer: ReturnType<typeof setTimeout> | null = null;
