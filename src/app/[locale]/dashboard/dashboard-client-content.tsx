@@ -76,15 +76,17 @@ export default function DashboardClientContent({ locale }: DashboardClientConten
       dateObj = (dateInput as FirestoreTimestamp).toDate();
     } else if (dateInput instanceof Date) {
       dateObj = dateInput;
-    } else {
+    } else if (typeof dateInput === 'string' || typeof dateInput === 'number') {
       try {
         dateObj = new Date(dateInput);
-        if (isNaN(dateObj.getTime())) { 
-            return String(dateInput); 
+        if (isNaN(dateObj.getTime())) {
+          return String(dateInput);
         }
       } catch {
         return String(dateInput);
       }
+    } else {
+      return String(dateInput);
     }
     return dateObj.toLocaleDateString(i18n.language || locale, { year: 'numeric', month: 'long', day: 'numeric' });
   };

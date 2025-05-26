@@ -33,7 +33,7 @@ function BundleClient({ bundle }: { bundle: (typeof bundles)[number] }) {
       id: bundle.id,
       type: 'bundle',
       name: bundle.name,
-      price: bundle.price,
+      price: bundle.priceCents,
       docIds: bundle.docIds,
     })
   }
@@ -71,7 +71,7 @@ function BundleClient({ bundle }: { bundle: (typeof bundles)[number] }) {
           </section>
 
           <div className="flex items-center justify-between pt-2">
-            <span className="text-xl font-bold text-primary">${(bundle.price / 100).toFixed(2)}</span>
+            <span className="text-xl font-bold text-primary">${(bundle.priceCents / 100).toFixed(2)}</span>
             <Button onClick={handleAdd}>Add bundle to cart</Button>
           </div>
         </CardContent>

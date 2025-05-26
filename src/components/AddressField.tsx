@@ -88,6 +88,7 @@ const AddressField = React.memo(function AddressField({
       });
 
       autocomplete.addListener('place_changed', () => {
+        if (!autocomplete) return;
         const place = autocomplete.getPlace();
         const formattedAddress = place.formatted_address || '';
 

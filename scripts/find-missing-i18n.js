@@ -31,3 +31,5 @@ if (typeof window !== 'undefined' && process.env.NODE_ENV === 'development') {
     console.error('[find-missing-i18n] Error importing i18n instance:', error);
   });
 }
+
+export {};
