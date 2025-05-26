@@ -133,11 +133,8 @@ export default function PreviewPane({ locale, docId }: PreviewPaneProps) {
 
   const debouncedUpdatePreview = useMemo(
     () =>
-      debounce<(
-        formData: Record<string, unknown>,
-        currentRawMarkdown: string
-      ) => void>(
-        (formData, currentRawMarkdown) => {
+      debounce(
+        (formData: Record<string, unknown>, currentRawMarkdown: string) => {
           setProcessedMarkdown(
             updatePreviewContent(formData, currentRawMarkdown),
           );
@@ -218,7 +215,10 @@ export default function PreviewPane({ locale, docId }: PreviewPaneProps) {
               p: (props) => <p {...props} className="select-none" />,
               h1: (props) => <h1 {...props} className="text-center" />,
               // FIXED: ensure markdown images include dimensions
-              img: ({ src = '', ...rest }: React.ImgHTMLAttributes<HTMLImageElement>) => (
+              img: ({
+                src = '',
+                ...rest
+              }: React.ImgHTMLAttributes<HTMLImageElement>) => (
                 <AutoImage src={src} {...rest} className="mx-auto" />
               ),
             }}
