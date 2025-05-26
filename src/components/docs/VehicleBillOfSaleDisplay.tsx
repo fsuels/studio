@@ -442,6 +442,17 @@ export default function VehicleBillOfSaleDisplay({
             {t('startMyBillOfSaleButton')}
           </Link>
         </Button>
+        {typeof window !== 'undefined' && (
+          <script
+            async
+            src="https://widget.trustpilot.com/bootstrap/v5/tp.widget.bootstrap.min.js"
+            data-businessunit-id="<TP_ID>"
+            data-locale="en-US"
+            data-template-id="53aa8807dec7e10d38f59f32"
+            data-style-height="24px"
+            data-style-width="100%"
+          ></script>
+        )}
       </section>
     </section>
   );

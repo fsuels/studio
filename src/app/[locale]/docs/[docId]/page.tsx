@@ -6,6 +6,7 @@ import path from 'node:path';
 import DocPageClient from './DocPageClient';
 import { documentLibrary } from '@/lib/document-library';
 import { localizations } from '@/lib/localizations'; // Ensure this path is correct
+import { vehicleBillOfSaleFaqs } from '@/app/[locale]/documents/bill-of-sale-vehicle/faqs';
 export interface DocPageParams {
   locale: 'en' | 'es';
   docId: string;
@@ -87,4 +88,54 @@ export default async function DocPage({ params }: DocPageProps) {
   // The `params` prop is directly available here from Next.js
   // It's then passed down to the client component.
   return <DocPageClient params={params} markdownContent={markdownContent} />;
+}
+
+export function Head({ params }: { params: DocPageParams }) {
+  const faqJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: vehicleBillOfSaleFaqs.map((faq, index) => ({
+      '@type': 'Question',
+      name: params.locale === 'es' ? faq.questionEs : faq.questionEn,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: params.locale === 'es' ? faq.answerEs : faq.answerEn,
+      },
+    })),
+  };
+
+  const productJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: 'Vehicle Bill of Sale',
+    description: 'Attorney-approved template for transferring a vehicle.',
+    offers: {
+      '@type': 'Offer',
+      price: '19.95',
+      priceCurrency: 'USD',
+      url: 'https://{domain}/en/docs/bill-of-sale-vehicle',
+    },
+    aggregateRating: {
+      '@type': 'AggregateRating',
+      ratingValue: '4.8',
+      reviewCount: '2026',
+    },
+  };
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(productJsonLd),
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(faqJsonLd),
+        }}
+      />
+    </>
+  );
 }
