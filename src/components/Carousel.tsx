@@ -30,6 +30,9 @@ export default function Carousel({ reviews }: { reviews: Review[] }) {
                 </div>
                 <p className="text-sm italic mb-2">&ldquo;{r.quote}&rdquo;</p>
                 <p className="text-sm font-semibold">{r.name}</p>
+                {r.location && (
+                  <p className="mt-1 text-sm text-gray-500">{r.location}</p>
+                )}
               </div>
             </CarouselItem>
           ))}
