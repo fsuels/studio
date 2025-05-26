@@ -65,8 +65,8 @@ export default function DocPageClient({ params: routeParams, markdownContent }: 
   const router = useRouter();
   const urlParams = useParams();
 
-  const currentLocale = (routeParams.locale ?? (Array.isArray(urlParams.locale) ? urlParams.locale[0] : urlParams.locale)) as 'en' | 'es';
-  const docId = (routeParams.docId ?? (Array.isArray(urlParams.docId) ? urlParams.docId[0] : urlParams.docId)) as string;
+  const currentLocale = (routeParams.locale ?? (Array.isArray(urlParams?.locale) ? urlParams!.locale[0] : urlParams?.locale)) as 'en' | 'es';
+  const docId = (routeParams.docId ?? (Array.isArray(urlParams?.docId) ? urlParams!.docId[0] : urlParams?.docId)) as string;
 
   const docConfig = useMemo(() => {
     if (!docId) return undefined;

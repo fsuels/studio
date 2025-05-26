@@ -23,6 +23,7 @@
     },
     "allowJs": true,
     "noEmit": true,
+    "types": ["node"],
     "isolatedModules": true,
     "plugins": [
       {

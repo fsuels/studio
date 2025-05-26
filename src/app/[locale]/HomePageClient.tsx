@@ -2,6 +2,10 @@
 "use client";
 
 import React, { useState, useEffect, useCallback, Suspense } from 'react';
+
+interface Preloadable {
+  preload?: () => void;
+}
 import dynamic from 'next/dynamic';
 import type { LegalDocument } from '@/lib/document-library';
 import { documentLibrary } from '@/lib/document-library';
@@ -71,21 +75,20 @@ export default function HomePageClient() {
   useEffect(() => {
     // Use dynamic import to get the module and then call preload if available
     import('@/components/landing/HowItWorks').then(mod => {
-      if (mod.default && mod.default.preload) mod.default.preload();
+      (mod.default as unknown as Preloadable)?.preload?.();
     });
     import('@/components/landing/TrustAndTestimonialsSection').then(mod => {
-      if (mod.default && mod.default.preload) mod.default.preload();
+      (mod.default as unknown as Preloadable)?.preload?.();
     });
     import('@/components/landing/GuaranteeBadge').then(mod => {
-      // Note: GuaranteeBadge might be a named export
-      if (mod.GuaranteeBadge && mod.GuaranteeBadge.preload) mod.GuaranteeBadge.preload();
-      else if (mod.default && mod.default.preload) mod.default.preload(); // fallback for default export
+      (mod.GuaranteeBadge as unknown as Preloadable)?.preload?.();
+      (mod.default as unknown as Preloadable)?.preload?.();
     });
     import('@/components/TopDocsChips').then(mod => {
-      if (mod.default && mod.default.preload) mod.default.preload();
+      (mod.default as unknown as Preloadable)?.preload?.();
     });
     import('@/components/StickyFilterBar').then(mod => {
-      if (mod.default && mod.default.preload) mod.default.preload();
+      (mod.default as unknown as Preloadable)?.preload?.();
     });
 
 

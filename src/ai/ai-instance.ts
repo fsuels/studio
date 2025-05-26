@@ -19,7 +19,7 @@ if (!googleApiKey || googleApiKey.trim() === '') {
     console.log(`[ai-instance.ts] SUCCESS: GOOGLE_GENAI_API_KEY environment variable found (Preview: ${keyPreview}, Length: ${googleApiKey.length}). Attempting Genkit initialization.`);
 }
 
-let ai: ReturnType<typeof genkit> | undefined;
+let ai!: ReturnType<typeof genkit>;
 
 try {
   console.log('[ai-instance.ts] Initializing Genkit with googleAI plugin...');
@@ -30,7 +30,6 @@ try {
         // Removed apiVersion to use default, ensure this is intended or specify if needed.
       }),
     ],
-    logLevel: 'debug', // Keep debug for detailed logs during troubleshooting
     // enableTracing: false, // Temporarily disabled for simplification
     // promptDir: './prompts', // Removed as not currently used by flows
   });

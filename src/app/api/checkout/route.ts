@@ -1,25 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { track } from '@/lib/analytics';
-import { STRIPE_PRICES as STRIPE_PRICES, STRIPE_COUPONS as STRIPE_COUPONS } from '@/lib/stripePrices';
+import { PRICE_LOOKUP as STRIPE_PRICES, COUPONS as STRIPE_COUPONS } from '@/lib/stripePrices';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2023-10-16',
+  apiVersion: '2025-04-30.basil',
 })
 
 /* Map your SKU → Stripe Price ID here */
-const STRIPE_PRICES: Record<string, string> = {
-  /* — individual documents — */
-  'bill-of-sale': 'price_1PABCDabcd1234',
-  'residential-lease': 'price_1PABCDEfgh5678',
-  /* — bundles — */
-  'landlord-starter': 'price_1PXYZxyz9876',
-};
-
-const STRIPE_COUPONS: Record<string, string> = {
-  SUMMER10: 'coupon_summer10', // 10 % off
-  BUNDLE20: 'coupon_bundle20', // 20 % off
-};
 
 export async function POST(req: NextRequest) {
   try {

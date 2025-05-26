@@ -7,7 +7,7 @@
 
 import { ai } from '@/ai/ai-instance';
 import { z } from 'genkit';
-import { GenerateResponseData } from 'genkit/generate';
+import { GenerateResponseData } from 'genkit';
 import { documentLibrary } from '@/lib/document-library';
 
 // Input Schema
@@ -23,6 +23,9 @@ export const InferDocumentTypeInputSchema = z.object({
     .describe('2-letter US state code (e.g., "CA", "NY"). Optional.'),
   language: z.enum(['en', 'es']).default('en')
     .describe('Language of the description (en or es). Defaults to en.')
+  ,
+  availableDocumentsContext: z.string().optional()
+    .describe('Internal context listing available documents')
 });
 export type InferDocumentTypeInput = z.infer<typeof InferDocumentTypeInputSchema>;
 
@@ -78,7 +81,7 @@ export const inferDocumentTypeFlow = ai.defineFlow<
   inputSchema: InferDocumentTypeInputSchema,
   outputSchema: InferDocumentTypeOutputSchema,
 },
-async (input) => {
+async (input: InferDocumentTypeInput) => {
   // Allow any type of additional log arguments without using `any`.
   const log = (msg: string, ...args: unknown[]) => console.log(`[inferDocFlow] ${msg}`, ...args);
   log('Received input', input);

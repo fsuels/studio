@@ -78,7 +78,7 @@ export default function DashboardClientContent({ locale }: DashboardClientConten
       dateObj = dateInput;
     } else {
       try {
-        dateObj = new Date(dateInput);
+        dateObj = new Date(dateInput as any);
         if (isNaN(dateObj.getTime())) { 
             return String(dateInput); 
         }
