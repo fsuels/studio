@@ -97,10 +97,9 @@ const DocumentPreview = React.memo(function DocumentPreview({
           <ReactMarkdown
             remarkPlugins={[remarkGfm]}
             components={{
-              // eslint-disable-next-line @typescript-eslint/no-unused-vars
-              p: ({ node, ...props }) => <p {...props} className="select-none" />,
+              p: (props) => <p {...props} className="select-none" />,
               // FIXED: ensure images have explicit dimensions
-              img: ({ node, ...props }) => (
+              img: (props) => (
                 <AutoImage {...props} className="mx-auto" />
               ),
             }}

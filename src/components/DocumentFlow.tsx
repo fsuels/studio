@@ -22,7 +22,7 @@ export default function DocumentFlow({
   initialLocale = 'en',
 }: DocumentFlowProps = {}) { 
   const router = useRouter();
-  const { t } = useTranslation("common");
+  useTranslation("common");
 
   const [templateId, setTemplateId] = useState<string>(initialDocId ?? '');
   const [step, setStep] = useState(initialDocId ? 2 : 1); 
@@ -49,13 +49,6 @@ export default function DocumentFlow({
     }
   };
 
-  const handleWizardComplete = (values: Record<string, any>) => {
-    console.log("DocumentFlow: Wizard complete with values:", values);
-    // For a flow embedded on the homepage, this might trigger a modal or summary
-    // For the dedicated /start page, WizardLayout's onComplete will handle redirection
-    // Redirect to a checkout or review page.
-    router.push(`/${initialLocale}/docs/${templateId}/checkout?data=${encodeURIComponent(JSON.stringify(values))}`); 
-  };
 
 
   return (
