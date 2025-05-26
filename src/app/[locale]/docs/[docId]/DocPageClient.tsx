@@ -20,6 +20,7 @@ import {
   Edit3,
   FileSignature,
   Info,
+  Car,
 } from 'lucide-react';
 import {
   Tooltip,
@@ -39,6 +40,8 @@ import {
 } from '@/components/ui/accordion';
 import VehicleBillOfSaleDisplay from '@/components/docs/VehicleBillOfSaleDisplay'; // Import the specific display component
 import PromissoryNoteDisplay from '@/components/docs/PromissoryNoteDisplay';
+import { GuaranteeBadge } from '@/components/landing/GuaranteeBadge';
+import Script from 'next/script';
 
 // Lazy load testimonials section so it's only fetched when this page is viewed
 const TrustAndTestimonialsSection = dynamic(
@@ -240,6 +243,19 @@ export default function DocPageClient({
 
   const competitorPrice = 200;
 
+  const productSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: documentDisplayName,
+    description: documentDescription,
+    offers: {
+      '@type': 'Offer',
+      priceCurrency: 'USD',
+      price: docConfig.basePrice.toFixed(2),
+      url: `${process.env.NEXT_PUBLIC_SITE_URL ?? ''}/${currentLocale}/docs/${docId}`,
+    },
+  };
+
   return (
     <main className="container mx-auto py-12 px-4 sm:px-6 lg:px-8">
       <nav className="text-sm mb-6 space-x-1 text-muted-foreground">
@@ -258,7 +274,11 @@ export default function DocPageClient({
       {/* Hero Section */}
       <div className="text-center mb-10 md:mb-16">
         <div className="inline-block p-3 mb-4 bg-primary/10 rounded-full">
-          <FileText className="h-8 w-8 text-primary" />
+          {docId === 'bill-of-sale-vehicle' ? (
+            <Car className="h-8 w-8 text-primary" />
+          ) : (
+            <FileText className="h-8 w-8 text-primary" />
+          )}
         </div>
         <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-3 text-foreground">
           {documentDisplayName}
@@ -352,7 +372,7 @@ export default function DocPageClient({
           </p>
         </section>
 
-        <aside className="md:col-span-2 space-y-6">
+        <aside className="md:col-span-2 space-y-6 md:sticky md:top-24">
           <Card className="shadow-lg border-primary">
             <CardHeader>
               <CardTitle className="text-lg text-primary">
@@ -509,6 +529,15 @@ export default function DocPageClient({
       <div className="mt-16">
         <TrustAndTestimonialsSection />
       </div>
+      <div className="mt-8">
+        <GuaranteeBadge />
+      </div>
+
+      <Script
+        id="product-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }}
+      />
 
       {/* Sticky CTA for mobile */}
       <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-t p-4 shadow-lg z-40">

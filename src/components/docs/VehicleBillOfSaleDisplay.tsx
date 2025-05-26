@@ -2,6 +2,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import { Car } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
@@ -357,13 +358,21 @@ export default function VehicleBillOfSaleDisplay({
   return (
     <div className="container mx-auto px-4 py-12">
       <header className="mb-10 text-center">
+        <div className="inline-block p-3 mb-4 bg-primary/10 rounded-full">
+          <Car className="h-8 w-8 text-primary" />
+        </div>
         <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-3">
           {t('pageTitle')}
         </h1>
         <p className="text-lg text-muted-foreground">{t('pageSubtitle')}</p>
       </header>
 
-      <Accordion type="single" collapsible className="w-full space-y-4 mb-10">
+      <Accordion
+        type="single"
+        collapsible
+        defaultValue={allSections[0]?.id}
+        className="w-full space-y-4 mb-10"
+      >
         {allSections.map((section) => (
           <AccordionItem
             key={section.id}
