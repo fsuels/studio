@@ -1,7 +1,7 @@
 // src/app/[locale]/faq/faq-client-content.tsx
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   Accordion,
@@ -19,6 +19,7 @@ export default function FaqClientContent({ locale }: FaqClientContentProps) {
   const { t, i18n } = useTranslation(['faq', 'common']);
   const [isHydrated, setIsHydrated] = useState(false);
   const [query, setQuery] = useState('');
+  const inputRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
     setIsHydrated(true);
@@ -26,6 +27,13 @@ export default function FaqClientContent({ locale }: FaqClientContentProps) {
       i18n.changeLanguage(locale);
     }
   }, [locale, i18n]);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.innerWidth < 640) {
+      inputRef.current?.focus();
+      inputRef.current?.select();
+    }
+  }, []);
 
   const placeholderTitle = 'Frequently Asked Questions';
   const placeholderSubtitle = 'Find answers to common questions below.';
@@ -64,6 +72,10 @@ export default function FaqClientContent({ locale }: FaqClientContentProps) {
         placeholder="Search FAQs..."
         value={query}
         onChange={(e) => setQuery(e.target.value)}
+        ref={inputRef}
+        onFocus={() =>
+          window.innerWidth < 640 && inputRef.current?.select()
+        }
         className="mb-4 w-full rounded-md border px-3 py-2"
       />
       <Accordion
