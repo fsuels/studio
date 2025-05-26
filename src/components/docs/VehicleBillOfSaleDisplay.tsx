@@ -374,96 +374,134 @@ export default function VehicleBillOfSaleDisplay({
   }
 
   return (
-    <section aria-label="Vehicle Bill of Sale" className="container mx-auto px-4 py-12">
-      <header className="mb-10 text-center">
-        <h1 className="flex items-center gap-2 text-3xl font-bold">
-          <Car aria-hidden="true" className="h-7 w-7 text-teal-600" />
-          <span>{t('pageTitle', 'Vehicle Bill of Sale')}</span>
-        </h1>
-        <p className="text-lg text-muted-foreground">{t('pageSubtitle')}</p>
-      </header>
+    <section aria-label="Vehicle Bill of Sale">
+      <section className="relative isolate overflow-hidden bg-gradient-to-b from-teal-50 to-white pb-8">
+        <div className="container mx-auto px-4 py-12">
+          <header className="mb-10 text-center">
+            <h1 className="flex items-center gap-2 text-3xl font-bold">
+              <Car aria-hidden="true" className="h-7 w-7 text-teal-600" />
+              <span>{t('pageTitle', 'Vehicle Bill of Sale')}</span>
+              <svg
+                viewBox="0 0 64 48"
+                aria-hidden="true"
+                className="h-24 w-24 text-teal-400 hidden md:block"
+              >
+                <rect
+                  x="1"
+                  y="1"
+                  width="30"
+                  height="20"
+                  rx="2"
+                  ry="2"
+                  fill="currentColor"
+                  className="opacity-20"
+                />
+                <path d="M5 9h22" stroke="currentColor" strokeWidth="2" />
+                <path d="M5 15h16" stroke="currentColor" strokeWidth="2" />
+                <path
+                  d="M34 24l-2 6h26l-2-6H34z"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  fill="none"
+                />
+                <circle cx="40" cy="34" r="2" fill="currentColor" />
+                <circle cx="54" cy="34" r="2" fill="currentColor" />
+              </svg>
+            </h1>
+            <p className="text-lg text-muted-foreground">{t('pageSubtitle')}</p>
+          </header>
 
-      <div className="mx-auto mb-8 max-w-3xl">
-        <DocPreview docId="bill-of-sale-vehicle" locale={locale} />
-      </div>
-
-      <div className="flex justify-center mb-6">
-        <Input
-          type="text"
-          placeholder={t('faqSearchPlaceholder', {
-            defaultValue: 'Search FAQs...',
-          })}
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          className="max-w-md"
+          <div className="mx-auto mb-8 max-w-3xl">
+            <DocPreview docId="bill-of-sale-vehicle" locale={locale} />
+          </div>
+        </div>
+        <img
+          src="/images/hero-wave.svg"
+          aria-hidden="true"
+          className="absolute inset-x-0 -top-10 w-full select-none opacity-30"
         />
-      </div>
-      {query && filteredFaqItems.length === 0 && (
-        <p className="text-center text-sm text-muted-foreground mb-4">
-          {t('noFaqResults', { defaultValue: 'No FAQs match your search.' })}
-        </p>
-      )}
-
-      <Accordion
-        type="multiple"
-        defaultValue={['what-is', 'why', 'covered']}
-        className="w-full space-y-4 mb-10"
-      >
-        {allSections.map((section) => (
-          <AccordionItem
-            key={section.id}
-            value={section.id}
-            className="border border-border rounded-lg bg-card shadow-md"
-          >
-            <AccordionTrigger className="px-6 py-4 text-left font-semibold text-foreground hover:no-underline text-md md:text-lg">
-              {t(section.titleKey)}
-            </AccordionTrigger>
-            <AccordionContent className="px-6 pb-4 pt-0 text-muted-foreground">
-              <div className="prose prose-sm dark:prose-invert max-w-none">
-                {renderSectionContent(section, t)}
-              </div>
-            </AccordionContent>
-          </AccordionItem>
-        ))}
-      </Accordion>
-
-      <section className="text-center py-8 bg-secondary/30 rounded-lg border border-border">
-        <h2 className="text-2xl font-semibold text-foreground mb-3">
-          {t('finalCtaTitle')}
-        </h2>
-        <p className="text-muted-foreground mb-6 max-w-lg mx-auto">
-          {t('finalCtaSubtitle')}
-        </p>
-        <Button
-          asChild
-          size="lg"
-          className="bg-primary hover:bg-primary/90 text-primary-foreground"
-          onMouseEnter={() =>
-            router.prefetch(
-              `/${locale}/#workflow-start?docId=bill-of-sale-vehicle`,
-            )
-          }
-        >
-          <Link
-            href={`/${locale}/#workflow-start?docId=bill-of-sale-vehicle`}
-            onClick={handleStartProcess}
-            prefetch
-          >
-            {t('startMyBillOfSaleButton')}
-          </Link>
-        </Button>
-        {typeof window !== 'undefined' && (
-          <script
-            async
-            src="https://widget.trustpilot.com/bootstrap/v5/tp.widget.bootstrap.min.js"
-            data-businessunit-id="<TP_ID>"
-            data-locale="en-US"
-            data-template-id="53aa8807dec7e10d38f59f32"
-            data-style-height="24px"
-            data-style-width="100%"
-          ></script>
-        )}
       </section>
+
+      <div className="container mx-auto px-4 py-12">
+
+        <div className="flex justify-center mb-6">
+          <Input
+            type="text"
+            placeholder={t('faqSearchPlaceholder', {
+              defaultValue: 'Search FAQs...',
+            })}
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            className="max-w-md"
+          />
+        </div>
+        {query && filteredFaqItems.length === 0 && (
+          <p className="text-center text-sm text-muted-foreground mb-4">
+            {t('noFaqResults', { defaultValue: 'No FAQs match your search.' })}
+          </p>
+        )}
+
+        <Accordion
+          type="multiple"
+          defaultValue={['what-is', 'why', 'covered']}
+          className="w-full space-y-4 mb-10"
+        >
+          {allSections.map((section) => (
+            <AccordionItem
+              key={section.id}
+              value={section.id}
+              className="border border-border rounded-lg bg-card shadow-md"
+            >
+              <AccordionTrigger className="px-6 py-4 text-left font-semibold text-foreground hover:no-underline text-md md:text-lg">
+                {t(section.titleKey)}
+              </AccordionTrigger>
+              <AccordionContent className="px-6 pb-4 pt-0 text-muted-foreground">
+                <div className="prose prose-sm dark:prose-invert max-w-none">
+                  {renderSectionContent(section, t)}
+                </div>
+              </AccordionContent>
+            </AccordionItem>
+          ))}
+        </Accordion>
+
+        <section className="text-center py-8 bg-secondary/30 rounded-lg border border-border">
+          <h2 className="text-2xl font-semibold text-foreground mb-3">
+            {t('finalCtaTitle')}
+          </h2>
+          <p className="text-muted-foreground mb-6 max-w-lg mx-auto">
+            {t('finalCtaSubtitle')}
+          </p>
+          <Button
+            asChild
+            size="lg"
+            className="bg-primary hover:bg-primary/90 text-primary-foreground"
+            onMouseEnter={() =>
+              router.prefetch(
+                `/${locale}/#workflow-start?docId=bill-of-sale-vehicle`,
+              )
+            }
+          >
+            <Link
+              href={`/${locale}/#workflow-start?docId=bill-of-sale-vehicle`}
+              onClick={handleStartProcess}
+              prefetch
+            >
+              {t('startMyBillOfSaleButton')}
+            </Link>
+          </Button>
+          {typeof window !== 'undefined' && (
+            <script
+              async
+              src="https://widget.trustpilot.com/bootstrap/v5/tp.widget.bootstrap.min.js"
+              data-businessunit-id="<TP_ID>"
+              data-locale="en-US"
+              data-template-id="53aa8807dec7e10d38f59f32"
+              data-style-height="24px"
+              data-style-width="100%"
+            ></script>
+          )}
+        </section>
+      </div>
     </section>
   );
 }
