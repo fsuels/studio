@@ -22,6 +22,7 @@ import {
 } from '@/components/ui/table';
 import { track } from '@/lib/analytics';
 import { useCart } from '@/contexts/CartProvider';
+import { Car } from 'lucide-react';
 
 interface VehicleBillOfSaleDisplayProps {
   locale: 'en' | 'es';
@@ -355,10 +356,11 @@ export default function VehicleBillOfSaleDisplay({
   }
 
   return (
-    <div className="container mx-auto px-4 py-12">
+    <section aria-label="Vehicle Bill of Sale" className="container mx-auto px-4 py-12">
       <header className="mb-10 text-center">
-        <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-3">
-          {t('pageTitle')}
+        <h1 className="flex items-center gap-2 text-3xl font-bold">
+          <Car aria-hidden="true" className="h-7 w-7 text-teal-600" />
+          <span>Vehicle Bill of Sale</span>
         </h1>
         <p className="text-lg text-muted-foreground">{t('pageSubtitle')}</p>
       </header>
@@ -408,6 +410,6 @@ export default function VehicleBillOfSaleDisplay({
           </Link>
         </Button>
       </section>
-    </div>
+    </section>
   );
 }
