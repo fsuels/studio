@@ -33,8 +33,8 @@ import { cn } from '@/lib/utils';
 
 // Helper type for a simplified translation function used internally
 type SimpleT = (
-  key: string,
-  fallback?: string | Record<string, unknown>,
+  _key: string,
+  _fallback?: string | Record<string, unknown>,
 ) => string;
 
 export interface CategoryInfo {
