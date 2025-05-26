@@ -32,7 +32,7 @@ import ReviewStep from '@/components/ReviewStep';
 interface WizardFormProps {
   locale: 'en' | 'es';
   doc: LegalDocument;
-  onComplete: (checkoutUrl: string) => void;
+  onComplete: (_checkoutUrl: string) => void;
 }
 
 export default function WizardForm({
