@@ -70,22 +70,22 @@ export default function HomePageClient() {
   // Preload dynamically imported sections once on the client
   useEffect(() => {
     // Use dynamic import to get the module and then call preload if available
-    import('@/components/landing/HowItWorks').then(mod => {
-      if (mod.default && mod.default.preload) mod.default.preload();
+    import('@/components/landing/HowItWorks').then((mod: any) => {
+      mod.default?.preload?.();
     });
-    import('@/components/landing/TrustAndTestimonialsSection').then(mod => {
-      if (mod.default && mod.default.preload) mod.default.preload();
+    import('@/components/landing/TrustAndTestimonialsSection').then((mod: any) => {
+      mod.default?.preload?.();
     });
-    import('@/components/landing/GuaranteeBadge').then(mod => {
+    import('@/components/landing/GuaranteeBadge').then((mod: any) => {
       // Note: GuaranteeBadge might be a named export
-      if (mod.GuaranteeBadge && mod.GuaranteeBadge.preload) mod.GuaranteeBadge.preload();
-      else if (mod.default && mod.default.preload) mod.default.preload(); // fallback for default export
+      mod.GuaranteeBadge?.preload?.();
+      mod.default?.preload?.(); // fallback for default export
     });
-    import('@/components/TopDocsChips').then(mod => {
-      if (mod.default && mod.default.preload) mod.default.preload();
+    import('@/components/TopDocsChips').then((mod: any) => {
+      mod.default?.preload?.();
     });
-    import('@/components/StickyFilterBar').then(mod => {
-      if (mod.default && mod.default.preload) mod.default.preload();
+    import('@/components/StickyFilterBar').then((mod: any) => {
+      mod.default?.preload?.();
     });
 
 

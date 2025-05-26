@@ -14,12 +14,12 @@ const isValidDocument = (doc: unknown): doc is LegalDocument => {
 
   // Check for English translation name as the primary indicator of a valid name structure
   // OR fallback to top-level name if translations are not yet populated by the forEach loop
-  const hasValidTranslationsOrName = doc &&
-                                   ( (doc.translations &&
-                                      doc.translations.en &&
-                                      typeof doc.translations.en.name === 'string' &&
-                                      doc.translations.en.name.trim() !== '') ||
-                                     (typeof doc.name === 'string' && doc.name.trim() !== '')
+  const hasValidTranslationsOrName = d &&
+                                   ( (d.translations &&
+                                      d.translations.en &&
+                                      typeof d.translations.en.name === 'string' &&
+                                      d.translations.en.name.trim() !== '') ||
+                                     (typeof d.name === 'string' && d.name.trim() !== '')
                                    );
 
   return hasId && hasCategory && hasSchema && hasValidTranslationsOrName;

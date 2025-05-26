@@ -49,8 +49,7 @@ const PdfPreview = React.memo(function PdfPreview({ documentDataUrl, documentNam
     }
 
     try {
-      const options = { signer: "User", reason: "Agreed to terms" }; 
-      const result = await signPdfDocument(dummyPdfData, options);
+      const result = await signPdfDocument(dummyPdfData, { fileName: documentName });
       setSignatureResult(result);
 
       if (result.success) {

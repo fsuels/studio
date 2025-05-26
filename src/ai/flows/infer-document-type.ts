@@ -7,8 +7,11 @@
 
 import { ai } from '@/ai/ai-instance';
 import { z } from 'genkit';
-import { GenerateResponseData } from 'genkit/generate';
+// GenerateResponseData import removed due to module resolution issues
 import { documentLibrary } from '@/lib/document-library';
+
+// The ai instance is guaranteed to be initialized; assert non-null for TypeScript
+const aiInstance = ai!;
 
 // Input Schema
 export const InferDocumentTypeInputSchema = z.object({
@@ -25,6 +28,12 @@ export const InferDocumentTypeInputSchema = z.object({
     .describe('Language of the description (en or es). Defaults to en.')
 });
 export type InferDocumentTypeInput = z.infer<typeof InferDocumentTypeInputSchema>;
+
+// Prompt-specific schema extends the input with context string
+export const PromptInputSchema = InferDocumentTypeInputSchema.extend({
+  availableDocumentsContext: z.string().describe('Context listing available documents')
+});
+export type PromptInput = z.infer<typeof PromptInputSchema>;
 
 // Suggestion Schema
 export const DocumentSuggestionSchema = z.object({
@@ -54,10 +63,10 @@ ${documentLibrary.map(doc => `- ${doc.name} (Category: ${doc.category})`).join('
 };
 
 // Define AI prompt
-const prompt = ai.definePrompt({
+const prompt = aiInstance.definePrompt({
   name: 'inferDocumentTypePrompt',
   model: 'googleai/gemini-2.5-pro-exp-03-25',
-  input: { schema: InferDocumentTypeInputSchema },
+  input: { schema: PromptInputSchema },
   output: { schema: InferDocumentTypeOutputSchema, format: 'json' },
   prompt: `You are a legal AI assistant. Suggest 1-3 documents based on:
 User Description: {{{description}}}
@@ -70,12 +79,12 @@ Respond with strict JSON matching schema.`
 });
 
 // Define flow
-export const inferDocumentTypeFlow = ai.defineFlow<
-  typeof InferDocumentTypeInputSchema,
+export const inferDocumentTypeFlow = aiInstance.defineFlow<
+  typeof PromptInputSchema,
   typeof InferDocumentTypeOutputSchema
 >({
   name: 'inferDocumentTypeFlow',
-  inputSchema: InferDocumentTypeInputSchema,
+  inputSchema: PromptInputSchema,
   outputSchema: InferDocumentTypeOutputSchema,
 },
 async (input) => {
@@ -111,7 +120,7 @@ async (input) => {
   const ctx = getAvailableDocumentsContext();
 
   try {
-    const response: GenerateResponseData<InferDocumentTypeOutput> = await prompt({
+    const response = await prompt({
       ...parsed.data,
       availableDocumentsContext: ctx
     });

@@ -30,7 +30,7 @@ try {
         // Removed apiVersion to use default, ensure this is intended or specify if needed.
       }),
     ],
-    logLevel: 'debug', // Keep debug for detailed logs during troubleshooting
+    // logLevel option removed - no longer supported in GenkitOptions
     // enableTracing: false, // Temporarily disabled for simplification
     // promptDir: './prompts', // Removed as not currently used by flows
   });
