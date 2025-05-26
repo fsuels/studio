@@ -27,7 +27,7 @@ import { documentLibrary, type Question } from '@/lib/document-library'; // Impo
 interface QuestionnaireProps {
   documentType: string | null; // The inferred document type NAME (e.g., "Residential Lease Agreement")
   selectedState?: string | null; // The selected US state code (e.g., "CA")
-  onAnswersSubmit: (answers: Record<string, unknown>) => void; // Callback
+  onAnswersSubmit: (_answers: Record<string, unknown>) => void; // Callback
   isReadOnly?: boolean; // Optional prop to make the form read-only
 }
 

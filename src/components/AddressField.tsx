@@ -32,6 +32,11 @@ interface InputWithAutocomplete extends HTMLInputElement {
   googleAutocomplete?: unknown;
 }
 
+interface AddressComponent {
+  types: string[];
+  short_name: string;
+}
+
 interface AddressFieldProps {
   name: string;
   label: string; // Expected to be a translation key
@@ -41,7 +46,7 @@ interface AddressFieldProps {
   error?: string; // Expected to be a translation key if it's a direct string
   tooltip?: string; // Expected to be a translation key
   value?: string;
-  onChange?: (value: string, parts?: Record<string, string>) => void;
+  onChange?: (_value: string, _parts?: Record<string, string>) => void;
 }
 
 const AddressField = React.memo(function AddressField({
@@ -111,7 +116,8 @@ const AddressField = React.memo(function AddressField({
           'country',
         ]);
         const parts: Record<string, string> = {};
-        place.address_components?.forEach((c: any) => {
+
+        place.address_components?.forEach((c: AddressComponent) => {
           const type = c.types[0];
           if (wanted.has(type)) parts[type] = c.short_name;
         });

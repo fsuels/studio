@@ -25,21 +25,7 @@ interface FirestoreTimestamp {
   toDate: () => Date;
 }
 
-interface DocumentData {
-  id: string;
-  name: string;
-  date: FirestoreTimestamp | Date | string;
-  status: string;
-  docType?: string; // Used for linking to the correct document type if different from ID
-}
 
-interface PaymentData {
-  id: string;
-  date: FirestoreTimestamp | Date | string;
-  amount: string;
-  documentName: string;
-  documentId?: string;
-}
 
 interface DashboardClientContentProps {
   locale: 'en' | 'es';

@@ -120,7 +120,7 @@ export const useSmartField = <T extends FieldValues>({
                 (formValues[yearField] === undefined ||
                   formValues[yearField] === '' ||
                   formValues[yearField] === 0 ||
-                  isNaN(parseInt(String(formValues[yearField])))
+                  isNaN(parseInt(String(formValues[yearField]))))
               ) {
                 setValue(
                   yearField,

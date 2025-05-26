@@ -215,9 +215,9 @@ export default function PreviewPane({ locale, docId }: PreviewPaneProps) {
               p: (props) => <p {...props} className="select-none" />,
               h1: (props) => <h1 {...props} className="text-center" />,
               // FIXED: ensure markdown images include dimensions
-              img: (props) => (
-                <AutoImage {...(props as any)} className="mx-auto" />
-              ),
+                img: (props: React.ImgHTMLAttributes<HTMLImageElement>) => (
+                  <AutoImage {...props} className="mx-auto" />
+                ),
             }}
           >
             {processedMarkdown}

@@ -54,8 +54,8 @@ export const CATEGORY_LIST: CategoryInfo[] = [
 
 interface Step1DocumentSelectorProps {
   selectedCategory: string | null;
-  onCategorySelect: (categoryKey: string | null) => void;
-  onDocumentSelect: (doc: LegalDocument) => void;
+  onCategorySelect: (_categoryKey: string | null) => void;
+  onDocumentSelect: (_doc: LegalDocument) => void;
   isReadOnly?: boolean;
   globalSearchTerm: string;
   globalSelectedState: string;
@@ -120,7 +120,7 @@ const MemoizedCategoryCard = React.memo(function CategoryCard({
   category: CategoryInfo;
   onClick: () => void;
   disabled: boolean;
-  t: (key: string, fallback?: string | object) => string;
+  t: (_key: string, _fallback?: string | object) => string;
 }) {
   return (
     <Button
@@ -152,7 +152,7 @@ const MemoizedDocumentCard = React.memo(function DocumentCard({
   doc: LegalDocument;
   onSelect: () => void;
   disabled: boolean;
-  t: (key: string, fallback?: string | object) => string;
+  t: (_key: string, _fallback?: string | object) => string;
   i18nLanguage: string;
   placeholderNoDescription: string;
   placeholderRequiresNotarization: string;
@@ -215,7 +215,7 @@ const MemoizedTopDocChip = React.memo(function TopDocChip({
   };
   onSelect: () => void;
   disabled: boolean;
-  t: (key: string, fallback?: string | object) => string;
+  t: (_key: string, _fallback?: string | object) => string;
   i18nLanguage: string;
 }) {
   return (
@@ -247,10 +247,10 @@ const Step1DocumentSelector = React.memo(function Step1DocumentSelector({
 }: Step1DocumentSelectorProps) {
   const { t, i18n } = useTranslation('common');
   const tSimple = React.useCallback(
-    (key: string, fallback?: string | object): string =>
+    (key: string, fallback?: string | Record<string, unknown>): string =>
       typeof fallback === 'string'
         ? (t(key, { defaultValue: fallback }) as string)
-        : (t(key, fallback as any) as string),
+        : (t(key, fallback as Record<string, unknown>) as string),
     [t],
   );
   // 'top-docs', 'all-categories', 'documents-in-category', 'search-results'

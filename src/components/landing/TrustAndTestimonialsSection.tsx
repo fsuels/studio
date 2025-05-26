@@ -77,7 +77,7 @@ const MemoizedTestimonialCard = React.memo(function TestimonialCard({
 }: {
   testimonial: Testimonial | null;
   index: number;
-  t: (key: string, fallback?: string | object) => string;
+    t: (_key: string, _fallback?: string | object) => string;
   isHydrated: boolean;
 }) {
   const rating = 5;
@@ -189,10 +189,10 @@ const TrustAndTestimonialsSection = React.memo(
   function TrustAndTestimonialsSection() {
     const { t, i18n, ready } = useTranslation('common');
     const tSimple = React.useCallback(
-      (key: string, fallback?: string | object): string =>
+      (key: string, fallback?: string | Record<string, unknown>): string =>
         typeof fallback === 'string'
           ? (t(key, { defaultValue: fallback }) as string)
-          : (t(key, fallback as any) as string),
+          : (t(key, fallback as Record<string, unknown>) as string),
       [t],
     );
     const [docCount, setDocCount] = useState(4200);

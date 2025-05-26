@@ -132,8 +132,8 @@ export const inferDocumentTypeFlow = ai.defineFlow<
         ...parsed.data,
         // Extra context isn't part of the input schema
         availableDocumentsContext: ctx,
-      } as any);
-      const output = (response as any).output as InferDocumentTypeOutput;
+      });
+      const output = response.output as InferDocumentTypeOutput;
 
       if (!output) throw new Error('AI returned no output');
 
