@@ -1,7 +1,7 @@
 // src/app/[locale]/docs/[docId]/DocPageClient.tsx
 'use client';
 
-import { notFound, useRouter } from 'next/navigation';
+import { notFound, useRouter, useParams } from 'next/navigation';
 import { documentLibrary } from '@/lib/document-library';
 import { useTranslation } from 'react-i18next';
 import Link from 'next/link';
@@ -63,9 +63,10 @@ const AiHighlightPlaceholder = ({ text }: { text: string }) => (
 export default function DocPageClient({ params: routeParams, markdownContent }: DocPageClientProps) {
   const { t, i18n } = useTranslation("common");
   const router = useRouter();
+  const urlParams = useParams();
 
-  const currentLocale = routeParams.locale as 'en' | 'es';
-  const docId = routeParams.docId as string;
+  const currentLocale = (routeParams.locale ?? (Array.isArray(urlParams.locale) ? urlParams.locale[0] : urlParams.locale)) as 'en' | 'es';
+  const docId = (routeParams.docId ?? (Array.isArray(urlParams.docId) ? urlParams.docId[0] : urlParams.docId)) as string;
 
   const docConfig = useMemo(() => {
     if (!docId) return undefined;
