@@ -7,7 +7,7 @@ import DocPageClient from './DocPageClient';
 import { documentLibrary } from '@/lib/document-library';
 import { localizations } from '@/lib/localizations'; // Ensure this path is correct
 interface DocPageProps {
-  params: { locale: string; docId: string } & Record<string, string>;
+  params: { locale: string; docId: string };
 }
 
 // Revalidate this page every hour for fresh content while caching aggressively

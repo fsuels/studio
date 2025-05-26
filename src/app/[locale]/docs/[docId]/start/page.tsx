@@ -5,7 +5,7 @@ import StartWizardPageClient from './StartWizardPageClient';
 import { documentLibrary } from '@/lib/document-library';
 import { localizations } from '@/lib/localizations'; // Assuming this defines your supported locales e.g. [{id: 'en'}, {id: 'es'}]
 interface StartWizardPageProps {
-  params: { locale: 'en' | 'es'; docId: string } & Record<string, string>;
+  params: { locale: 'en' | 'es'; docId: string };
 }
 
 // Revalidate every hour so start pages stay fresh without rebuilding constantly
