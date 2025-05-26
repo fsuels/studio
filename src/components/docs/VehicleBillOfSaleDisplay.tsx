@@ -24,6 +24,7 @@ import {
 import { track } from '@/lib/analytics';
 import { useCart } from '@/contexts/CartProvider';
 import { Car } from 'lucide-react';
+import TrustBadges from '@/components/TrustBadges';
 
 interface VehicleBillOfSaleDisplayProps {
   locale: 'en' | 'es';
@@ -454,6 +455,7 @@ export default function VehicleBillOfSaleDisplay({
           ></script>
         )}
       </section>
+      <TrustBadges className="mt-6" />
     </section>
   );
 }
