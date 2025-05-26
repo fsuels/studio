@@ -70,7 +70,7 @@ const HomepageHeroSteps = React.memo(function HomepageHeroSteps() {
                 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 text-foreground leading-tight"
                 suppressHydrationWarning
             >
-                {t('headline', { defaultValue: 'Legal Docs at Your Fingertips' })}
+                {t('home.hero.title', { defaultValue: 'Legal Docs at Your Fingertips' })}
             </motion.h1>
             <motion.p
                 key={`subhead-${i18n.language}`}
@@ -80,7 +80,7 @@ const HomepageHeroSteps = React.memo(function HomepageHeroSteps() {
                 className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-8"
                 suppressHydrationWarning
             >
-                {t('subhead', { defaultValue: 'Create, sign & share professional contracts in minutes—no lawyer required.'})}
+                {t('home.hero.subtitle', { defaultValue: 'Create, sign & share professional contracts in minutes—no lawyer required.'})}
             </motion.p>
             
             <motion.div 

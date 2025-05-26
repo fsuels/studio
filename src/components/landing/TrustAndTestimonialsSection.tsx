@@ -154,69 +154,31 @@ const TrustAndTestimonialsSection = React.memo(function TrustAndTestimonialsSect
 
   useEffect(() => {
     if (isHydrated && ready) {
-      interface TranslatedTestimonial {
-        quote: string;
-        name: string;
-        title: string;
-        outcome?: string;
-        avatarSeed?: number;
-        avatarUrl?: string;
-      }
-      type TranslatedTestimonials = Record<string, TranslatedTestimonial>;
-
-      const rawTestimonials = t('home.testimonials', { returnObjects: true, ns: 'common' }) as unknown as TranslatedTestimonials;
       const loadedTestimonials: Testimonial[] = [];
-      let allTranslationsValid = true;
 
-      if (typeof rawTestimonials === 'object' && rawTestimonials !== null && !Array.isArray(rawTestimonials)) {
-        for (let i = 1; i <= 5; i++) { // Assuming we always want 5 testimonials
-          const testimonialKey = `t${i}`;
-          const rt = rawTestimonials[testimonialKey];
-          // Check if essential fields (quote, name, title) exist in the translation
-          if (rt && typeof rt === 'object' && rt.quote && rt.name && rt.title) {
-            loadedTestimonials.push({
-              quoteKey: `home.testimonials.${testimonialKey}.quote`,
-              nameKey: `home.testimonials.${testimonialKey}.name`,
-              titleKey: `home.testimonials.${testimonialKey}.title`,
-              outcomeKey: rt.outcome ? `home.testimonials.${testimonialKey}.outcome` : undefined,
-              avatarSeed: rt.avatarSeed || (i * 20 + 10), // Ensure avatarSeed has a default
-              avatarUrl: rt.avatarUrl || `https://picsum.photos/seed/${rt.avatarSeed || (i * 20 + 10)}/96/96`,
-              defaultQuote: rt.quote, // This will be used by t() if key resolves
-              defaultName: rt.name,
-              defaultTitle: rt.title,
-              defaultOutcome: rt.outcome,
-            });
-          } else {
-            allTranslationsValid = false; // Mark as invalid if any of t1-t5 is incomplete
-            break; 
-          }
-        }
-        if (loadedTestimonials.length < 5) allTranslationsValid = false; // Also invalid if not enough items
-      } else {
-        allTranslationsValid = false; // rawTestimonials is not in the expected object structure
+      for (let i = 1; i <= 5; i++) {
+        const baseKey = `home.testimonials.t${i}`;
+        const quote = t(`${baseKey}.quote`, { defaultValue: placeholderQuotes[(i - 1) % placeholderQuotes.length] });
+        const name = t(`${baseKey}.name`, { defaultValue: placeholderNames[(i - 1) % placeholderNames.length] });
+        const title = t(`${baseKey}.title`, { defaultValue: placeholderTitles[(i - 1) % placeholderTitles.length] });
+        const outcome = t(`${baseKey}.outcome`, { defaultValue: placeholderOutcomes[(i - 1) % placeholderOutcomes.length] });
+        const avatarUrl = t(`${baseKey}.avatarUrl`, { defaultValue: `https://picsum.photos/seed/${i * 20 + 10}/96/96` });
+
+        loadedTestimonials.push({
+          quoteKey: `${baseKey}.quote`,
+          nameKey: `${baseKey}.name`,
+          titleKey: `${baseKey}.title`,
+          outcomeKey: outcome ? `${baseKey}.outcome` : undefined,
+          avatarSeed: i * 20 + 10,
+          avatarUrl,
+          defaultQuote: quote,
+          defaultName: name,
+          defaultTitle: title,
+          defaultOutcome: outcome,
+        });
       }
 
-      if (!allTranslationsValid) {
-        // If translations are incomplete or not found, generate a full set of distinct placeholders
-        const fallbackTestimonials: Testimonial[] = [];
-        for (let i = 0; i < 5; i++) {
-          fallbackTestimonials.push({
-            quoteKey: `fallback.quote.${i}`, 
-            nameKey: `fallback.name.${i}`,
-            titleKey: `fallback.title.${i}`,
-            outcomeKey: `fallback.outcome.${i}`,
-            avatarSeed: i * 17 + 50, // Make seeds more distinct
-            avatarUrl: `https://picsum.photos/seed/${i * 17 + 50}/96/96`,
-            defaultQuote: placeholderQuotes[i % placeholderQuotes.length],
-            defaultName: placeholderNames[i % placeholderNames.length],
-            defaultTitle: placeholderTitles[i % placeholderTitles.length],
-            defaultOutcome: placeholderOutcomes[i % placeholderOutcomes.length]
-          });
-        }
-        setTestimonialsData(fallbackTestimonials);
-      } else {
-        setTestimonialsData(loadedTestimonials); // Already sliced to 5 if loaded from translations
-      }
+      setTestimonialsData(loadedTestimonials);
     }
   }, [isHydrated, ready, i18n.language, t]);
 
