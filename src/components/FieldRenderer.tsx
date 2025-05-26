@@ -1,7 +1,7 @@
 // src/components/FieldRenderer.tsx
 'use client';
 
-import React, { useEffect, useState } from 'react'; 
+import React, { useEffect } from 'react';
 import { useFormContext, Controller } from 'react-hook-form';
 import SmartInput from '@/components/wizard/SmartInput';
 import AddressField from '@/components/AddressField'; 
@@ -12,13 +12,13 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Switch } from "@/components/ui/switch";
 import type { LegalDocument, Question } from '@/lib/document-library';
-import { usStates } from '@/lib/document-library';
 import { useNotary } from '@/hooks/useNotary';
 import { cn } from '@/lib/utils';
 import { useTranslation } from 'react-i18next';
 import { prettify } from '@/lib/schema-utils';
-import { useVinDecoder } from '@/hooks/useVinDecoder'; 
+import { useVinDecoder } from '@/hooks/useVinDecoder';
 import { Info, Loader2 } from 'lucide-react';
+import type { ZodTypeAny } from 'zod';
 import {
   Tooltip,
   TooltipContent,
@@ -28,20 +28,28 @@ import { Button } from '@/components/ui/button';
 
 interface FieldRendererProps {
   fieldKey: string;
-  locale: 'en' | 'es';
   doc: LegalDocument;
 }
 
-const FieldRenderer = React.memo(function FieldRenderer({ fieldKey, locale, doc }: FieldRendererProps) {
-  const { control, register, setValue, watch, formState: { errors } } = useFormContext();
+type FormValues = Record<string, unknown>;
+
+interface ZodDefExtras {
+  tooltip?: string;
+  helperText?: string;
+  placeholder?: string;
+  schema?: { _def?: { tooltip?: string } };
+}
+
+const FieldRenderer = React.memo(function FieldRenderer({ fieldKey, doc }: FieldRendererProps) {
+  const { control, register, setValue, watch, formState: { errors } } = useFormContext<FormValues>();
   const { t } = useTranslation("common");
 
   const fieldSchemaFromQuestions = doc.questions?.find(q => q.id === fieldKey);
   
-  const actualSchemaShape = doc.schema?._def?.typeName === 'ZodEffects' 
-    ? doc.schema._def.schema.shape 
+  const actualSchemaShape = doc.schema?._def?.typeName === 'ZodEffects'
+    ? (doc.schema._def.schema as typeof doc.schema).shape
     : doc.schema?.shape;
-  const fieldSchemaFromZod = (actualSchemaShape as any)?.[fieldKey];
+  const fieldSchemaFromZod = (actualSchemaShape as Record<string, ZodTypeAny> | undefined)?.[fieldKey];
   
   const fieldSchema: Question | undefined = fieldSchemaFromQuestions || (fieldSchemaFromZod ? {
     id: fieldKey,
@@ -54,9 +62,9 @@ const FieldRenderer = React.memo(function FieldRenderer({ fieldKey, locale, doc 
           'text',
     options: (fieldSchemaFromZod._def?.innerType?._def?.values || fieldSchemaFromZod._def?.values)?.map((val: string) => ({ value: val, label: prettify(val) })),
     required: fieldSchemaFromZod._def?.typeName !== 'ZodOptional' && fieldSchemaFromZod._def?.innerType?._def?.typeName !== 'ZodOptional',
-    tooltip: (fieldSchemaFromZod._def as any)?.tooltip || (fieldSchemaFromZod._def?.schema?._def as any)?.tooltip || undefined,
-    helperText: (fieldSchemaFromZod._def as any)?.helperText || undefined,
-    placeholder: (fieldSchemaFromZod._def as any)?.placeholder || undefined,
+    tooltip: (fieldSchemaFromZod._def as ZodDefExtras)?.tooltip || (fieldSchemaFromZod._def?.schema?._def as ZodDefExtras | undefined)?.tooltip || undefined,
+    helperText: (fieldSchemaFromZod._def as ZodDefExtras)?.helperText || undefined,
+    placeholder: (fieldSchemaFromZod._def as ZodDefExtras)?.placeholder || undefined,
   } : undefined);
 
   const formStateCode = watch('state'); 
@@ -107,25 +115,25 @@ const FieldRenderer = React.memo(function FieldRenderer({ fieldKey, locale, doc 
     return (
       <Controller
         control={control}
-        name={fieldKey as any}
+        name={fieldKey}
         rules={{ required: fieldSchema?.required }}
         render={({ field }) => ( 
           <AddressField
             name={field.name} 
             label={labelText}
             required={fieldSchema?.required}
-            error={errors[fieldKey as any]?.message as string | undefined}
+            error={errors[fieldKey as keyof FormValues]?.message as string | undefined}
             placeholder={placeholderText || t('Enter address...')}
             className="max-w-sm" 
             tooltipText={tooltipText}
             value={field.value || ''} 
-            onChange={(val: string, parts?: any) => { 
-                field.onChange(val); 
+            onChange={(val: string, parts?: Record<string, string>) => {
+                field.onChange(val);
                  if (parts && actualSchemaShape) {
                     const prefix = fieldKey.replace(/_address$/i, '') || fieldKey.replace(/Address$/i, '');
-                    if ((actualSchemaShape as any)?.[`${prefix}_city`]) setValue(`${prefix}_city`, parts.city, {shouldValidate: true, shouldDirty: true});
-                    if ((actualSchemaShape as any)?.[`${prefix}_state`]) setValue(`${prefix}_state`, parts.state, {shouldValidate: true, shouldDirty: true});
-                    if ((actualSchemaShape as any)?.[`${prefix}_postal_code`]) setValue(`${prefix}_postal_code`, parts.postalCode, {shouldValidate: true, shouldDirty: true});
+                    if ((actualSchemaShape as Record<string, ZodTypeAny>)?.[`${prefix}_city`]) setValue(`${prefix}_city`, parts.city, {shouldValidate: true, shouldDirty: true});
+                    if ((actualSchemaShape as Record<string, ZodTypeAny>)?.[`${prefix}_state`]) setValue(`${prefix}_state`, parts.state, {shouldValidate: true, shouldDirty: true});
+                    if ((actualSchemaShape as Record<string, ZodTypeAny>)?.[`${prefix}_postal_code`]) setValue(`${prefix}_postal_code`, parts.postalCode, {shouldValidate: true, shouldDirty: true});
                  }
             }}
           />
@@ -243,7 +251,7 @@ const FieldRenderer = React.memo(function FieldRenderer({ fieldKey, locale, doc 
           <Textarea
             id={fieldKey}
             placeholder={placeholderText || t('Describe warranty…')}
-            {...register(fieldKey as any, { required: fieldSchema?.required && !watch('as_is') })}
+            {...register(fieldKey as keyof FormValues, { required: fieldSchema?.required && !watch('as_is') })}
             className={cn("bg-background max-w-sm", fieldError && "border-destructive focus-visible:ring-destructive")}
             aria-invalid={!!fieldError}
           />
@@ -252,13 +260,13 @@ const FieldRenderer = React.memo(function FieldRenderer({ fieldKey, locale, doc 
         <Textarea
           id={fieldKey}
           placeholder={placeholderText}
-          {...register(fieldKey as any, { required: fieldSchema?.required })}
+          {...register(fieldKey as keyof FormValues, { required: fieldSchema?.required })}
           className={cn("bg-background max-w-sm", fieldError && "border-destructive focus-visible:ring-destructive")}
           aria-invalid={!!fieldError}
         />
       ) : fieldSchema?.type === 'select' && fieldSchema.options ? (
         <Controller
-          name={fieldKey as any}
+          name={fieldKey}
           control={control}
           rules={{ required: fieldSchema?.required }}
           defaultValue={fieldSchemaFromZod?._def?.defaultValue}
@@ -288,7 +296,7 @@ const FieldRenderer = React.memo(function FieldRenderer({ fieldKey, locale, doc 
           className={cn("input bg-background", fieldError && "border-destructive focus-visible:ring-destructive")}
           inputMode={inputType === 'number' || inputType === 'tel' ? 'numeric' : undefined}
           aria-invalid={!!fieldError}
-          rhfProps={register(fieldKey as any, { 
+          rhfProps={register(fieldKey as keyof FormValues, {
             required: fieldSchema?.required,
             onBlur: fieldKey === 'vin' ? (e) => decode(e.target.value) : undefined,
            })}
