@@ -70,20 +70,20 @@ export default function HomePageClient() {
   // Preload dynamically imported sections once on the client
   useEffect(() => {
     // Use dynamic import to get the module and then call preload if available
-    import('@/components/landing/HowItWorks').then((mod: any) => {
+    import('@/components/landing/HowItWorks').then(mod => {
       mod.default?.preload?.();
     });
-    import('@/components/landing/TrustAndTestimonialsSection').then((mod: any) => {
+    import('@/components/landing/TrustAndTestimonialsSection').then(mod => {
       mod.default?.preload?.();
     });
-    import('@/components/landing/GuaranteeBadge').then((mod: any) => {
+    import('@/components/landing/GuaranteeBadge').then(mod => {
       mod.GuaranteeBadge?.preload?.();
       mod.default?.preload?.(); // fallback for default export
     });
-    import('@/components/TopDocsChips').then((mod: any) => {
+    import('@/components/TopDocsChips').then(mod => {
       mod.default?.preload?.();
     });
-    import('@/components/StickyFilterBar').then((mod: any) => {
+    import('@/components/StickyFilterBar').then(mod => {
       mod.default?.preload?.();
     });
 

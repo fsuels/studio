@@ -114,8 +114,8 @@ async (input) => {
       ...parsed.data,
       // Extra context isn't part of the input schema
       availableDocumentsContext: ctx,
-    } as any);
-    const output = (response as any).output as InferDocumentTypeOutput;
+    } as unknown as InferDocumentTypeInput & { availableDocumentsContext: string });
+    const output = (response as { output: InferDocumentTypeOutput }).output;
 
     if (!output) throw new Error('AI returned no output');
 

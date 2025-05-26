@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { documentLibrary, type LegalDocument } from '@/lib/document-library';
 import { Loader2, AlertTriangle } from 'lucide-react';
 import Image from 'next/image';
-import AutoImage from './AutoImage';
+import AutoImage, { type AutoImageProps } from './AutoImage';
 import { cn } from '@/lib/utils';
 
 export interface DocumentDetailProps {
@@ -136,7 +136,7 @@ const DocumentDetail = React.memo(function DocumentDetail({ docId, locale, altTe
               h1: (props) => <h1 {...props} className="text-center" />,
               // FIXED: ensure markdown images include dimensions
               img: (props) => (
-                <AutoImage {...(props as any)} className="mx-auto" />
+                <AutoImage {...(props as AutoImageProps)} className="mx-auto" />
               ),
             }}
           >
