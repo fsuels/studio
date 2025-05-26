@@ -111,12 +111,12 @@ async (input) => {
   const ctx = getAvailableDocumentsContext();
 
   try {
-    const response: GenerateResponseData<InferDocumentTypeOutput> = await prompt({
+    const response: GenerateResponseData = await prompt({
       ...parsed.data,
       // Extra context isn't part of the input schema
       availableDocumentsContext: ctx,
     } as any);
-    const output = response.output;
+    const output = response.output as InferDocumentTypeOutput;
 
     if (!output) throw new Error('AI returned no output');
 
