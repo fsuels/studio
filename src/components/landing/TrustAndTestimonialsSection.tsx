@@ -4,13 +4,8 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
-import {
-  ChevronLeft,
-  ChevronRight,
-  FileText,
-  ShieldCheck,
-  Star,
-} from 'lucide-react';
+import { FileText, ShieldCheck, Star } from 'lucide-react';
+import CarouselNavArrow from '@/components/CarouselNavArrow';
 import Image from 'next/image';
 import Autoplay from 'embla-carousel-autoplay';
 import useEmblaCarousel from 'embla-carousel-react';
@@ -326,18 +321,15 @@ const TrustAndTestimonialsSection = React.memo(
         </h3>
 
         <div className="relative max-w-6xl mx-auto">
-          <Button
-            variant="outline"
-            size="icon"
-            className="absolute left-[-10px] md:left-[-20px] top-1/2 z-20 -translate-y-1/2 bg-card hover:bg-muted rounded-full shadow-md border-border h-10 w-10"
+          <CarouselNavArrow
+            direction="prev"
             onClick={scrollPrev}
+            disabled={!isHydrated || !emblaApi}
             aria-label={t('Previous testimonial', {
               defaultValue: 'Previous testimonial',
             })}
-            disabled={!isHydrated || !emblaApi}
-          >
-            <ChevronLeft className="h-5 w-5" />
-          </Button>
+            className="absolute left-[-10px] md:left-[-20px] top-1/2 z-20 -translate-y-1/2"
+          />
 
           <div className="overflow-hidden" ref={emblaRef}>
             <div className="flex -ml-4">
@@ -366,18 +358,15 @@ const TrustAndTestimonialsSection = React.memo(
             </div>
           </div>
 
-          <Button
-            variant="outline"
-            size="icon"
-            className="absolute right-[-10px] md:right-[-20px] top-1/2 z-20 -translate-y-1/2 bg-card hover:bg-muted rounded-full shadow-md border-border h-10 w-10"
+          <CarouselNavArrow
+            direction="next"
             onClick={scrollNext}
+            disabled={!isHydrated || !emblaApi}
             aria-label={t('Next testimonial', {
               defaultValue: 'Next testimonial',
             })}
-            disabled={!isHydrated || !emblaApi}
-          >
-            <ChevronRight className="h-5 w-5" />
-          </Button>
+            className="absolute right-[-10px] md:right-[-20px] top-1/2 z-20 -translate-y-1/2"
+          />
         </div>
 
         <div className="mt-16 md:mt-20 flex flex-col items-center space-y-6 px-4">
