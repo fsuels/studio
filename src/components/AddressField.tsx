@@ -46,7 +46,7 @@ interface AddressFieldProps {
   error?: string; // Expected to be a translation key if it's a direct string
   tooltip?: string; // Expected to be a translation key
   value?: string;
-  onChange?: (_value: string, _parts?: Record<string, string>) => void;
+  onChange?: (value: string, parts?: Record<string, string>) => void;
 }
 
 const AddressField = React.memo(function AddressField({
