@@ -6,6 +6,8 @@ export const promissoryNoteCA: LegalDocument = {
   id: 'promissory-note-ca',
   jurisdiction: 'CA',
   category: 'Finance',
+  name: 'Promissory Note (Canada)',
+  description: 'Formal promise to repay a loan in compliance with Canadian federal and provincial law.',
   languageSupport: ['en', 'fr'],
   basePrice: 7,
   requiresNotarization: false,

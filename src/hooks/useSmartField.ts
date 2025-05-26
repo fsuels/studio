@@ -1,10 +1,10 @@
 // src/hooks/useSmartField.ts
 'use client';
 import { useEffect } from 'react';
-import type { UseFormWatch, UseFormSetValue, UseFormGetValues } from 'react-hook-form';
+import type { UseFormWatch, UseFormSetValue, UseFormGetValues, Path } from 'react-hook-form';
 
-type HookProps<T> = {
-  name: keyof T & string
+type HookProps<T extends Record<string, unknown>> = {
+  name: Path<T>
   watch: UseFormWatch<T>
   setValue: UseFormSetValue<T>
   getValues: UseFormGetValues<T>
@@ -67,13 +67,13 @@ export const useSmartField = <T extends Record<string, unknown>>({
 
 
               if (result.Make && (formValues[makeField] === undefined || formValues[makeField] === '')) {
-                setValue(makeField, result.Make, { shouldValidate: true, shouldDirty: true });
+                setValue(makeField as Path<T>, result.Make, { shouldValidate: true, shouldDirty: true });
               }
               if (result.Model && (formValues[modelField] === undefined || formValues[modelField] === '')) {
-                setValue(modelField, result.Model, { shouldValidate: true, shouldDirty: true });
+                setValue(modelField as Path<T>, result.Model, { shouldValidate: true, shouldDirty: true });
               }
-              if (result.ModelYear && (formValues[yearField] === undefined || formValues[yearField] === '' || formValues[yearField] === 0 || isNaN(parseInt(formValues[yearField])) ) ) {
-                setValue(yearField, Number(result.ModelYear), { shouldValidate: true, shouldDirty: true });
+              if (result.ModelYear && (formValues[yearField] === undefined || formValues[yearField] === '' || formValues[yearField] === 0 || isNaN(parseInt(formValues[yearField] as unknown as string)) ) ) {
+                setValue(yearField as Path<T>, Number(result.ModelYear), { shouldValidate: true, shouldDirty: true });
               }
             }
           })

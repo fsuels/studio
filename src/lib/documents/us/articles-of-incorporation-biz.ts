@@ -5,6 +5,8 @@ export const articlesOfIncorporationBiz: LegalDocument = {
   id: 'articles-of-incorporation-biz',
   jurisdiction: 'US',
   category: 'Business',
+  name: 'Articles of Incorporation',
+  description: 'Formal document filed with the state to create a corporation.',
   languageSupport: ['en', 'es'],
   requiresNotarization: false,
   canBeRecorded: true,

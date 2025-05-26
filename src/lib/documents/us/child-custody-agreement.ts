@@ -5,6 +5,8 @@ export const childCustodyAgreement: LegalDocument = {
   id: 'child-custody-agreement',
   jurisdiction: 'US',
   category: 'Family',
+  name: 'Child Custody Agreement',
+  description: 'Outline legal/physical custody, visitation schedule for children.',
   languageSupport: ['en', 'es'],
   requiresNotarization: true,
   canBeRecorded: true,

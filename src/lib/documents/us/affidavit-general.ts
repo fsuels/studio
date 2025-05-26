@@ -7,6 +7,8 @@ export const affidavitGeneral: LegalDocument = {
   id: 'affidavit-general',
   jurisdiction: 'US',
   category: 'Personal',
+  name: 'Affidavit (General)',
+  description: 'A sworn written statement confirmed by oath, often used as evidence.',
   languageSupport: ['en', 'es'],
   requiresNotarization: true,
   canBeRecorded: false,

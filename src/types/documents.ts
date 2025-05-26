@@ -43,7 +43,7 @@ export type LegalDocument = {
   jurisdiction?: string; // e.g., 'US', 'CA'
   category: string;
   states?: string[] | 'all'; // Applies to the jurisdiction
-  schema: z.AnyZodObject; // Use AnyZodObject for broader compatibility
+  schema: z.ZodTypeAny; // Allow any Zod schema including effects
   questions?: Question[];
 
   // Core display text (can be direct or i18n keys)
