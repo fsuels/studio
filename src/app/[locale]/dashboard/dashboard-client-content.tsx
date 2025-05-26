@@ -10,7 +10,7 @@ import { FileText, CreditCard, UserCircle, LogOut, Loader2 } from 'lucide-react'
 import Link from 'next/link';
 import { useAuth } from '@/hooks/useAuth';
 import { useRouter } from 'next/navigation';
-import { getUserDocuments, getUserPayments } from '@/lib/firestore/dashboardData';
+import { useDashboardData } from '@/hooks/useDashboardData';
 
 // Define a more specific type for Firestore Timestamps if that's what you use
 interface FirestoreTimestamp {
@@ -39,9 +39,6 @@ interface DashboardClientContentProps {
   locale: 'en' | 'es';
 }
 
-// Firestore data helpers
-const getRecentDocsForUser = getUserDocuments;
-const getPaymentHistoryForUser = getUserPayments;
 
 export default function DashboardClientContent({ locale }: DashboardClientContentProps) {
   const { t, i18n } = useTranslation("common");
@@ -50,9 +47,11 @@ export default function DashboardClientContent({ locale }: DashboardClientConten
   const router = useRouter();
   
   const [isHydrated, setIsHydrated] = useState(false);
-  const [documents, setDocuments] = useState<DocumentData[]>([]);
-  const [payments, setPayments] = useState<PaymentData[]>([]);
-  const [isLoadingData, setIsLoadingData] = useState(true);
+
+  const { documents, payments, isLoading: isLoadingData } = useDashboardData(
+    user?.uid,
+    { enabled: isHydrated && isLoggedIn && !!user?.uid }
+  );
 
   useEffect(() => {
     setIsHydrated(true);
@@ -64,35 +63,6 @@ export default function DashboardClientContent({ locale }: DashboardClientConten
     }
   }, [isHydrated, authLoading, isLoggedIn, router, locale]);
 
-  useEffect(() => {
-    if (isHydrated && isLoggedIn && user?.uid) {
-      setIsLoadingData(true);
-      Promise.all([
-        getRecentDocsForUser(user.uid).catch(err => { 
-          console.error("Error fetching documents:", err);
-          // toast({ title: t('Error'), description: t('Could not load your documents.'), variant: 'destructive' });
-          return []; 
-        }),
-        getPaymentHistoryForUser(user.uid).catch(err => { 
-          console.error("Error fetching payments:", err);
-          // toast({ title: t('Error'), description: t('Could not load your payment history.'), variant: 'destructive' });
-          return [];
-        })
-      ]).then(([userDocs, userPayments]) => {
-        setDocuments(userDocs);
-        setPayments(userPayments); 
-        setIsLoadingData(false);
-      }).catch(error => {
-        console.error("Error fetching dashboard data:", error);
-        setIsLoadingData(false);
-      });
-    } else if (isHydrated && !isLoggedIn) {
-      // If not logged in (e.g., after logout), clear data and stop loading
-      setDocuments([]);
-      setPayments([]);
-      setIsLoadingData(false);
-    }
-  }, [isHydrated, isLoggedIn, user?.uid, t, locale]); // Added locale for consistency if used in toast
 
   const handleLogout = () => {
     logout();

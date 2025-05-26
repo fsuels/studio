@@ -2,6 +2,7 @@
 "use client";
 
 import React, { ReactNode, useEffect, useState } from 'react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import I18nClientProvider from '@/components/providers/I18nProvider';
 import { Toaster } from "@/components/ui/toaster";
 import { CartProvider } from '@/contexts/CartProvider';
@@ -41,6 +42,8 @@ const AppShell = React.memo(function AppShell({ children }: { children: ReactNod
 });
 
 export function ClientProviders({ children, locale }: ClientProvidersProps) {
+  const [queryClient] = useState(() => new QueryClient());
+
   return (
     <I18nClientProvider
       locale={locale}
@@ -60,11 +63,13 @@ export function ClientProviders({ children, locale }: ClientProvidersProps) {
         </div>
       }
     >
-      <AuthProvider>
-        <CartProvider>
-          <AppShell>{children}</AppShell>
-        </CartProvider>
-      </AuthProvider>
+      <QueryClientProvider client={queryClient}>
+        <AuthProvider>
+          <CartProvider>
+            <AppShell>{children}</AppShell>
+          </CartProvider>
+        </AuthProvider>
+      </QueryClientProvider>
     </I18nClientProvider>
   );
 }
