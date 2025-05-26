@@ -26,7 +26,7 @@ export function useVinDecoder() {
       );
 
       const out = res.data.Results.reduce(
-        (acc: Record<string, string>, r: any) => {
+        (acc: Record<string, string>, r: { Variable: string; Value: string }) => {
           acc[r.Variable] = r.Value;
           return acc;
         },
@@ -39,7 +39,7 @@ export function useVinDecoder() {
         year: parseInt(out.ModelYear, 10),
         bodyClass: out.BodyClass,
       });
-    } catch (e: any) {
+    } catch {
       setError('Unable to decode VIN');
     } finally {
       setLoading(false);

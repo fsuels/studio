@@ -25,8 +25,8 @@ export async function getUserDocuments(
   const col = collection(db, 'users', userId, 'documents');
   const q = query(col, orderBy('createdAt', 'desc'), limit(max));
   const snap = await getDocs(q);
-  return snap.docs.map((d) => {
-    const data = d.data() as any;
+  return snap.docs.map(d => {
+    const data = d.data() as Record<string, unknown>
     const docType = data.originalDocId || data.docType || d.id;
     const docConfig = documentLibrary.find((doc) => doc.id === docType);
     return {

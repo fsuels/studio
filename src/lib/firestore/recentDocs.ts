@@ -7,7 +7,6 @@ import { getDb } from '@/lib/firebase'
 import {
   collection,
   doc,
-  getDoc,
   setDoc,
   getDocs,
   query,
