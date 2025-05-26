@@ -6,18 +6,20 @@ import path from 'node:path';
 import DocPageClient from './DocPageClient';
 import { documentLibrary } from '@/lib/document-library';
 import { localizations } from '@/lib/localizations'; // Ensure this path is correct
+export interface DocPageParams {
+  locale: 'en' | 'es';
+  docId: string;
+}
+
 interface DocPageProps {
-  params: {
-    locale: 'en' | 'es';
-    docId: string;
-  };
+  params: DocPageParams;
 }
 
 // Revalidate this page every hour for fresh content while caching aggressively
 export const revalidate = 3600;
 
 // generateStaticParams is crucial for static export of dynamic routes
-export async function generateStaticParams() {
+export async function generateStaticParams(): Promise<DocPageParams[]> {
   console.log('[generateStaticParams /docs] Starting generation...');
   if (!documentLibrary || documentLibrary.length === 0) {
     console.warn(
@@ -32,7 +34,7 @@ export async function generateStaticParams() {
     return [];
   }
 
-  const params = [];
+  const params: DocPageParams[] = [];
   for (const locale of localizations) {
     for (const doc of documentLibrary) {
       // Ensure doc and doc.id are valid before pushing
