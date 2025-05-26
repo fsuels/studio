@@ -27,7 +27,7 @@ const MemoizedDocLink = React.memo(function DocLink({
   doc: LegalDocument;
   locale: 'en' | 'es';
   onClick?: () => void;
-  t: (key: string, fallback?: string | object) => string;
+  t: (_key: string, _fallback?: string | object) => string;
 }) {
   const translatedDoc = getDocTranslation(doc, locale); // Use utility
   const docName = translatedDoc.name;
@@ -53,10 +53,10 @@ export default function MegaMenuContent({
 }: MegaMenuContentProps) {
   const { t, i18n } = useTranslation('common');
   const tSimple = React.useCallback(
-    (key: string, fallback?: string | object): string =>
+    (key: string, fallback?: string | Record<string, unknown>): string =>
       typeof fallback === 'string'
         ? (t(key, { defaultValue: fallback }) as string)
-        : (t(key, fallback as any) as string),
+        : (t(key, fallback as Record<string, unknown>) as string),
     [t],
   );
   const currentLocale = i18n.language as 'en' | 'es';

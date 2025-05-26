@@ -57,13 +57,13 @@ const DropzonePlaceholder = ({
   tEsign,
   onClick, // Add onClick prop
 }: {
-  onFiles: (files: File[]) => void;
+  onFiles: (_files: File[]) => void;
   inputRef: React.RefObject<HTMLInputElement>;
   selectedFile: File | null;
   onClearFile: () => void;
   isHydrated: boolean;
-  tGeneral: (key: string, opts?: any) => string;
-  tEsign: (key: string, opts?: any) => string;
+  tGeneral: (key: string, opts?: Record<string, unknown>) => string;
+  tEsign: (key: string, opts?: Record<string, unknown>) => string;
   onClick?: () => void; // Make onClick optional or required based on usage
 }) => {
   const [isDragging, setIsDragging] = useState(false);

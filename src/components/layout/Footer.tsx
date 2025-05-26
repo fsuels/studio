@@ -80,7 +80,7 @@ export const Footer = React.memo(function Footer() {
     setIsLoading(false);
   };
 
-  type IntercomWindow = Window & { Intercom?: (cmd: string) => void };
+  type IntercomWindow = Window & { Intercom?: (_cmd: string) => void };
 
   const loadIntercom = () => {
     const win: IntercomWindow = window as IntercomWindow;

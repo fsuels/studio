@@ -10,8 +10,8 @@ import {
 
 interface StepTwoInputProps {
   category: string;
-  onStateChange: (state: string) => void;
-  onSelectTemplate: (templateId: string) => void;
+  onStateChange: (_state: string) => void;
+  onSelectTemplate: (_templateId: string) => void;
 }
 
 export function StepTwoInput({

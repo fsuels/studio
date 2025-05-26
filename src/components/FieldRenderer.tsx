@@ -63,10 +63,15 @@ const FieldRenderer = React.memo(function FieldRenderer({
     (q) => q.id === fieldKey,
   );
 
+  const zodSchema = doc.schema as unknown as {
+    _def?: { typeName?: string; schema?: { shape: Record<string, ZodTypeAny> } };
+    shape?: Record<string, ZodTypeAny>;
+  };
+
   const actualSchemaShape =
-    (doc.schema as any)?._def?.typeName === 'ZodEffects'
-      ? (doc.schema as any)._def.schema.shape
-      : (doc.schema as any)?.shape;
+    zodSchema._def?.typeName === 'ZodEffects'
+      ? zodSchema._def.schema?.shape
+      : zodSchema.shape;
   const fieldSchemaFromZod = (
     actualSchemaShape as Record<string, ZodTypeAny> | undefined
   )?.[fieldKey];

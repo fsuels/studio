@@ -7,7 +7,7 @@ import { cn } from '@/lib/utils';
 import { documentLibrary } from '@/lib/document-library';
 
 interface StepOneInputProps {
-  onSelectCategory: (category: string) => void;
+  onSelectCategory: (_category: string) => void;
 }
 
 export function StepOneInput({ onSelectCategory }: StepOneInputProps) {

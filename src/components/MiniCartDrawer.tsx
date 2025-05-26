@@ -41,11 +41,8 @@ export default function MiniCartDrawer() {
           <DrawerTitle>Your Cart</DrawerTitle>
           <DrawerDescription>
             {cartItems.length > 0
-              ? `You have ${totalItems} item${
-                  totalItems > 1 ? 's' : ''
-                } in your cart.`
-              : 'Your cart is empty.' // Removed the nested <p> tag
-            }
+              ? `You have ${totalItems} item${totalItems > 1 ? 's' : ''} in your cart.`
+              : 'Your cart is empty.'}
           </DrawerDescription>
         </DrawerHeader>
         <div className="space-y-4 px-4 pb-4">

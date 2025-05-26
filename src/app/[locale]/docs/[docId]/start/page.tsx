@@ -103,9 +103,7 @@ export async function generateStaticParams() {
 }
 
 // This Server Component now correctly passes params to the Client Component
-export default async function StartWizardPage({
-  params,
-}: StartWizardPageProps) {
+export default async function StartWizardPage({}: StartWizardPageProps) {
   // Await a microtask to satisfy Next.js dynamic route requirements
   await Promise.resolve();
   // The StartWizardPageClient will handle fetching its own specific document data

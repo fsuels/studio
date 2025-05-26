@@ -26,11 +26,11 @@ export type CartItem =
 
 interface CartState {
   items: CartItem[];
-  addItem: (i: CartItem) => void;
-  addBundle: (bundle: Bundle) => void; // ← NEW
-  incQty: (id: string) => void;
-  decQty: (id: string) => void;
-  removeItem: (id: string) => void;
+  addItem: (_i: CartItem) => void;
+  addBundle: (_bundle: Bundle) => void; // ← NEW
+  incQty: (_id: string) => void;
+  decQty: (_id: string) => void;
+  removeItem: (_id: string) => void;
   clear: () => void;
   totalCents: number;
 }

@@ -160,7 +160,16 @@ export default function PromissoryNoteDisplay({
 
   const allDisplaySections = [...informationalSections, ...faqItems];
 
-  const renderSectionContent = (section: any) => {
+  interface DisplaySection {
+    type: 'paragraph' | 'list' | 'ordered-list' | 'table';
+    contentKey?: string;
+    itemsKey?: string;
+    lastParagraphKey?: string;
+    totalTimeKey?: string;
+    tableKey?: string;
+  }
+
+  const renderSectionContent = (section: DisplaySection) => {
     if (section.type === 'paragraph' && section.contentKey) {
       return <p className="text-muted-foreground">{t(section.contentKey)}</p>;
     }

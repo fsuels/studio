@@ -16,9 +16,9 @@ import { Search, MapPin } from 'lucide-react';
 
 interface StickyFilterBarProps {
   searchTerm: string;
-  onSearchTermChange: (term: string) => void;
+  onSearchTermChange: (_term: string) => void;
   selectedState: string;
-  onSelectedStateChange: (state: string) => void;
+  onSelectedStateChange: (_state: string) => void;
 }
 
 const StickyFilterBar = React.memo(function StickyFilterBar({
