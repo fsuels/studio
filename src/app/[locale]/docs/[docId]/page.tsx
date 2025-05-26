@@ -6,6 +6,7 @@ import path from 'node:path';
 import DocPageClient from './DocPageClient';
 import { documentLibrary } from '@/lib/document-library';
 import { localizations } from '@/lib/localizations'; // Ensure this path is correct
+import type { PageProps } from 'next';
 
 // Revalidate this page every hour for fresh content while caching aggressively
 export const revalidate = 3600;
@@ -37,15 +38,13 @@ export async function generateStaticParams() {
   return params;
 }
 
-interface DocPageProps { // Renamed from DocPageContainerProps for clarity
-  params: {
-    locale: string;
-    docId: string;
-  };
+interface DocParams {
+  locale: string;
+  docId: string;
 }
 
 // This Server Component now correctly passes params to the Client Component
-export default async function DocPage({ params }: DocPageProps) {
+export default async function DocPage({ params }: PageProps<DocParams>) {
   // Await a microtask to comply with Next.js dynamic param handling
   await Promise.resolve();
 

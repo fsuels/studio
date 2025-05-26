@@ -120,15 +120,15 @@ export async function POST(
       const documentDisplayName = docConfig.name_es && effectiveLocale === 'es' ? docConfig.name_es : docConfig.name;
       const documentDisplayDescription = docConfig.description_es && effectiveLocale === 'es' ? docConfig.description_es : docConfig.description;
 
-      session = await stripe.checkout.sessions.create({
+      const sessionParams: Stripe.Checkout.SessionCreateParams = {
         mode: 'payment',
         payment_method_types: ['card'],
-        customer_email: user.email || undefined, 
+        ...(user.email ? { customer_email: user.email } : {}),
         line_items: [
           {
             price_data: {
               currency: 'usd',
-              unit_amount: FIXED_DOCUMENT_PRICE_CENTS, 
+              unit_amount: FIXED_DOCUMENT_PRICE_CENTS,
               product_data: {
                 name: documentDisplayName,
                 description: documentDisplayDescription,
@@ -142,10 +142,12 @@ export async function POST(
         metadata: {
           userId: user.uid,
           docId: params.docId,
-          documentInstanceId: documentInstanceId, 
+          documentInstanceId: documentInstanceId,
           locale: effectiveLocale,
         },
-      });
+      };
+
+      session = await stripe.checkout.sessions.create(sessionParams);
       console.log(`${logPrefix} Stripe Checkout session created: ${session.id}`);
     } catch (stripeError) {
       console.error(`${logPrefix} Stripe session creation failed:`, stripeError);
