@@ -375,10 +375,10 @@ export default function VehicleBillOfSaleDisplay({
       <div className="container mx-auto px-4 pt-6 text-center">
         <h2 className="flex items-center gap-2 text-2xl font-semibold">
           <BookOpen aria-hidden="true" className="h-6 w-6 text-teal-600" />
-          <span>Plain-English Guide &amp; Free Template</span>
+          <span>Attorney-Drafted Guide &amp; Instant Download</span>
         </h2>
-        <p className="mt-1 inline-block rounded-md bg-teal-50 px-2 py-0.5 text-xs font-medium text-teal-700">
-          Free downloadable template
+        <p className="mt-1 inline-block rounded-md bg-amber-50 px-2 py-0.5 text-xs font-medium text-amber-700">
+          Preview instantly — pay once, own forever
         </p>
       </div>
 
@@ -408,7 +408,7 @@ export default function VehicleBillOfSaleDisplay({
             })}
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            className="max-w-md"
+            className="max-w-md placeholder:text-gray-400"
           />
         </div>
         {query && filteredFaqItems.length === 0 && (

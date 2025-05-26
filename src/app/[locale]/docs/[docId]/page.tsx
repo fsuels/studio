@@ -108,7 +108,7 @@ export function Head({ params }: { params: DocPageParams }) {
     '@context': 'https://schema.org',
     '@type': 'Product',
     name: 'Vehicle Bill of Sale',
-    description: 'Attorney-approved template for transferring a vehicle.',
+    description: 'Attorney-drafted guide with instant download. Pay once, own forever.',
     offers: {
       '@type': 'Offer',
       price: '19.95',

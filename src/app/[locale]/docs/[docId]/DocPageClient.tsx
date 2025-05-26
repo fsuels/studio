@@ -298,7 +298,8 @@ export default function DocPageClient({
 
         <Button
           size="lg"
-          className="w-full sm:w-auto text-base px-8 py-3"
+          variant="outline"
+          className="w-full sm:w-auto text-base px-8 py-3 border-teal-600 text-teal-600 hover:bg-teal-50"
           onClick={handleStartWizard}
           disabled={!isHydrated}
         >
@@ -386,9 +387,12 @@ export default function DocPageClient({
                   <Clock className="h-4 w-4 text-teal-600" /> Ready in 3 minutes
                 </li>
                 <li className="flex items-center gap-2">
-                  <RotateCcw className="h-4 w-4 text-teal-600" /> 100 % money-back guarantee
+                  <RotateCcw className="h-4 w-4 text-teal-600" /> 30-day money-back guarantee
                 </li>
               </ul>
+              <p className="mt-2 text-xs text-red-600">
+                ⚡ Limited-time price — goes up June 30
+              </p>
               <Button
                 size="lg"
                 className="w-full mt-2"
