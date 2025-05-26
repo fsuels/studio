@@ -9,9 +9,10 @@ export default function TermsOfServicePage() {
         <p>Effective Date: [Insert Date]</p>
 
         <p>
-          Please read these Terms of Service ("Terms", "Terms of Service")
+          Please read these Terms of Service (&quot;Terms&quot;, &quot;Terms of Service&quot;)
           carefully before using the 123LegalDoc website and services
-          (the "Service") operated by [Your Company Name] ("us", "we", or "our").
+          (the &quot;Service&quot;) operated by [Your Company Name] (&quot;us&quot;, &quot;we&quot;, or
+          &quot;our&quot;).
         </p>
 
         <p>
@@ -34,7 +35,7 @@ export default function TermsOfServicePage() {
         <p>
           You agree not to use the Service for any unlawful purpose or in any way
           that interrupts, damages, or impairs the service. You agree to provide
-          accurate and complete information when prompted by the Service's
+          accurate and complete information when prompted by the Service&apos;s
           questionnaires.
         </p>
 
@@ -104,7 +105,7 @@ export default function TermsOfServicePage() {
         <h2 className="text-xl font-semibold text-foreground pt-4">Disclaimer</h2>
         <p>
           Your use of the Service is at your sole risk. The Service is provided on an
-          "AS IS" and "AS AVAILABLE" basis. The Service is provided without warranties
+          &quot;AS IS&quot; and &quot;AS AVAILABLE&quot; basis. The Service is provided without warranties
           of any kind, whether express or implied, including, but not limited to,
           implied warranties of merchantability, fitness for a particular purpose,
           non-infringement or course of performance. We do not warrant that the
