@@ -1,19 +1,19 @@
 // src/components/wizard/useSmartField.ts
 'use client';
 import { useEffect } from 'react';
-import type { UseFormWatch, UseFormSetValue, UseFormGetValues } from 'react-hook-form'; // Added GetValues
+import type { UseFormWatch, UseFormSetValue, UseFormGetValues, FieldValues, Path } from 'react-hook-form';
 
-type HookProps<TFieldValues = Record<string, unknown>> = {
-  name: string;
+type HookProps<TFieldValues extends FieldValues = FieldValues> = {
+  name: Path<TFieldValues>;
   watch: UseFormWatch<TFieldValues>;
   setValue: UseFormSetValue<TFieldValues>;
-  getValues: UseFormGetValues<TFieldValues>; // Added getValues
+  getValues: UseFormGetValues<TFieldValues>;
 };
 
 /** Autocomplete + masking for VIN, color, year … 
  * Phone masking is handled directly in SmartInput.
 */
-export const useSmartField = <TFieldValues = Record<string, unknown>>(
+export const useSmartField = <TFieldValues extends FieldValues = FieldValues>(
   { name, watch, setValue, getValues }: HookProps<TFieldValues>,
 ): void => {
   const currentValue = watch(name); 

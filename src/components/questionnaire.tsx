@@ -231,7 +231,7 @@ export function Questionnaire({ documentType, selectedState, onAnswersSubmit, is
                {q.type === 'textarea' ? (
                    <Textarea
                        id={q.id}
-                       value={answers[q.id] || ''}
+                       value={answers[q.id] as string || ''}
                        onChange={(e) => handleInputChange(q.id, e.target.value)}
                        required={q.required}
                        readOnly={!isEditing[q.id] || isReadOnly || isLoading}
@@ -242,7 +242,7 @@ export function Questionnaire({ documentType, selectedState, onAnswersSubmit, is
                    />
                ) : q.type === 'select' && q.options ? (
                    <Select
-                       value={answers[q.id] || ''}
+                       value={answers[q.id] as string || ''}
                        onValueChange={(value) => handleInputChange(q.id, value)}
                        disabled={!isEditing[q.id] || isReadOnly || isLoading}
                        required={q.required}
@@ -268,7 +268,7 @@ export function Questionnaire({ documentType, selectedState, onAnswersSubmit, is
                    <Input
                        id={q.id}
                        type={q.type === 'number' ? 'number' : q.type === 'date' ? 'date' : 'text'}
-                       value={answers[q.id] || ''}
+                       value={answers[q.id] as string | number | readonly string[] | undefined || ''}
                        onChange={(e) => handleInputChange(q.id, e.target.value)}
                        required={q.required}
                        readOnly={!isEditing[q.id] || isReadOnly || isLoading}

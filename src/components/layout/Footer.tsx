@@ -36,8 +36,8 @@ export const Footer = React.memo(function Footer() {
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
   const { t } = useTranslation('footer');
-  const params = useParams();
-  const locale = (params.locale as 'en' | 'es') || 'en';
+  const params = useParams() as { locale?: string } | null;
+  const locale = (params?.locale as 'en' | 'es') || 'en';
   const [isHydrated, setIsHydrated] = useState(false);
   const [intercomLoaded, setIntercomLoaded] = useState(false);
 

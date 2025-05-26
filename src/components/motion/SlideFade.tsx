@@ -1,12 +1,10 @@
 
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, type HTMLMotionProps } from "framer-motion";
 import React from "react";
 
-interface SlideFadeProps
-  extends React.HTMLAttributes<HTMLDivElement> {
-  children: React.ReactNode;
+interface SlideFadeProps extends HTMLMotionProps<"div"> {
   delay?: number;
 }
 

@@ -5,6 +5,7 @@ import React, { useState, useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { documentLibrary, type LegalDocument } from "@/lib/document-library";
 import { Button } from "@/components/ui/button";
+import type { TFunction } from 'i18next';
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowLeft, FileText, Search, Landmark, Briefcase, Home, Users, User, ScrollText, ShieldQuestion, AlertTriangle } from "lucide-react";
@@ -50,7 +51,7 @@ const placeholderTopDocs: Array<Pick<LegalDocument, 'id' | 'name' | 'name_es' | 
 ];
 
 
-const MemoizedCategoryCard = React.memo(function CategoryCard({ category, onClick, disabled, t }: { category: CategoryInfo; onClick: () => void; disabled: boolean; t: (key: string, fallback?: string | object) => string; }) {
+const MemoizedCategoryCard = React.memo(function CategoryCard({ category, onClick, disabled, t }: { category: CategoryInfo; onClick: () => void; disabled: boolean; t: TFunction; }) {
   return (
     <Button
       variant="outline"
@@ -64,7 +65,7 @@ const MemoizedCategoryCard = React.memo(function CategoryCard({ category, onClic
   );
 });
 
-const MemoizedDocumentCard = React.memo(function DocumentCard({ doc, onSelect, disabled, t, i18nLanguage, placeholderNoDescription, placeholderRequiresNotarization, placeholderCanBeRecorded }: { doc: LegalDocument; onSelect: () => void; disabled: boolean; t: (key: string, fallback?: string | object) => string; i18nLanguage: string; placeholderNoDescription: string; placeholderRequiresNotarization: string; placeholderCanBeRecorded: string; }) {
+const MemoizedDocumentCard = React.memo(function DocumentCard({ doc, onSelect, disabled, t, i18nLanguage, placeholderNoDescription, placeholderRequiresNotarization, placeholderCanBeRecorded }: { doc: LegalDocument; onSelect: () => void; disabled: boolean; t: TFunction; i18nLanguage: string; placeholderNoDescription: string; placeholderRequiresNotarization: string; placeholderCanBeRecorded: string; }) {
   return (
     <Card
       onClick={onSelect}
@@ -101,7 +102,7 @@ const MemoizedDocumentCard = React.memo(function DocumentCard({ doc, onSelect, d
   );
 });
 
-const MemoizedTopDocChip = React.memo(function TopDocChip({ doc, onSelect, disabled, t, i18nLanguage }: { doc: Pick<LegalDocument, 'id' | 'name' | 'name_es'> & { icon?: React.ElementType }; onSelect: () => void; disabled: boolean; t: (key: string, fallback?: string | object) => string; i18nLanguage: string; }) {
+const MemoizedTopDocChip = React.memo(function TopDocChip({ doc, onSelect, disabled, t, i18nLanguage }: { doc: Pick<LegalDocument, 'id' | 'name' | 'name_es'> & { icon?: React.ElementType }; onSelect: () => void; disabled: boolean; t: TFunction; i18nLanguage: string; }) {
     return (
         <Button
             variant="outline"

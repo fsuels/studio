@@ -4,6 +4,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
+import type { TFunction } from 'i18next';
 import type { LegalDocument } from '@/lib/document-library'; // Use the re-exported type
 import type { CategoryInfo } from '@/components/Step1DocumentSelector'; 
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -18,7 +19,7 @@ interface MegaMenuContentProps {
 
 const MAX_DOCS_PER_CATEGORY_INITIAL = 5;
 
-const MemoizedDocLink = React.memo(function DocLink({ doc, locale, onClick, t }: { doc: LegalDocument; locale: 'en' | 'es'; onClick?: () => void; t: (key: string, fallback?: string | object) => string; }) {
+const MemoizedDocLink = React.memo(function DocLink({ doc, locale, onClick, t }: { doc: LegalDocument; locale: 'en' | 'es'; onClick?: () => void; t: TFunction; }) {
   const translatedDoc = getDocTranslation(doc, locale); // Use utility
   const docName = translatedDoc.name;
   const docHref = `/${locale}/docs/${doc.id}`;

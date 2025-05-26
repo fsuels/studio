@@ -9,6 +9,7 @@ import Image from 'next/image';
 import Autoplay from 'embla-carousel-autoplay';
 import useEmblaCarousel from 'embla-carousel-react';
 import { cn } from '@/lib/utils';
+import type { TFunction } from 'i18next';
 
 
 interface Testimonial {
@@ -47,7 +48,7 @@ const placeholderOutcomes = [
 ];
 
 
-const MemoizedTestimonialCard = React.memo(function TestimonialCard({ testimonial, index, t, isHydrated }: { testimonial: Testimonial | null; index: number; t: (key: string, fallback?: string | object) => string; isHydrated: boolean; }) {
+const MemoizedTestimonialCard = React.memo(function TestimonialCard({ testimonial, index, t, isHydrated }: { testimonial: Testimonial | null; index: number; t: TFunction; isHydrated: boolean; }) {
   const rating = 5;
   const currentTestimonial = testimonial || {
     quoteKey: `fallback.quote.${index}`,
@@ -201,7 +202,7 @@ const TrustAndTestimonialsSection = React.memo(function TrustAndTestimonialsSect
         <div className="flex flex-col sm:flex-row flex-wrap justify-center items-center gap-x-6 gap-y-3 text-foreground/90 text-sm font-medium">
           <div className="flex items-center gap-2">
             <FileText className="h-5 w-5 text-primary" />
-            <span>{isHydrated ? t('home.trustStrip.badge1', { count: formattedCount, defaultValue: `Over ${formattedCount} documents generated` }) : placeholderText}</span>
+            <span>{isHydrated ? t('home.trustStrip.badge1', { count: formattedCount, defaultValue: 'Over {{count}} documents generated' }) : placeholderText}</span>
           </div>
           <div className="hidden sm:block w-px h-4 bg-border"></div>
           <div className="flex items-center gap-2">

@@ -27,17 +27,17 @@ const Header = React.memo(function Header() {
   // Scoped translations
   const { t: tHeader } = useTranslation("header");
   const router = useRouter();
-  const params = useParams();
+  const params = useParams() as { locale?: string } | null;
   const { isLoggedIn, logout, user } = useAuth(); // Added user from useAuth
 
   // Locale setup
   const [clientLocale, setClientLocale] = useState<'en' | 'es'>('en');
   useEffect(() => {
-    const pathLocale = params.locale as 'en' | 'es' | undefined;
+    const pathLocale = params?.locale as 'en' | 'es' | undefined;
     const newLocale = pathLocale && ['en','es'].includes(pathLocale) ? pathLocale : 'en';
     setClientLocale(newLocale);
     // i18n.changeLanguage is handled in LanguageSwitcher and I18nClientProvider
-  }, [params.locale]);
+  }, [params?.locale]);
 
   // Search state
   const [mounted, setMounted] = useState(false);
