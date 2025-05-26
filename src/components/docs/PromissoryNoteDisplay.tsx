@@ -10,7 +10,6 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { track } from "@/lib/analytics";
 import { useCart } from "@/contexts/CartProvider";
 import { useTranslation } from 'react-i18next';
-import { cn } from '@/lib/utils';
 
 interface PromissoryNoteDisplayProps {
   locale: "en" | "es";

@@ -3,11 +3,10 @@
 'use client';
 
 import Link from 'next/link';
-import { useRouter } from 'next/navigation'; 
-import type { LegalDocument } from '@/lib/document-library'; 
+import type { LegalDocument } from '@/lib/document-library';
 // WizardForm and PreviewPane are no longer directly rendered by WizardLayout
 // They are now part of the StartWizardPage structure.
-import React, { useEffect } from 'react'; 
+import React from 'react';
 import { useTranslation } from 'react-i18next'; 
 
 interface WizardLayoutProps {
@@ -18,8 +17,7 @@ interface WizardLayoutProps {
 }
 
 export default function WizardLayout({ locale, doc, children }: WizardLayoutProps) {
-  const router = useRouter();
-  const { t } = useTranslation("common"); 
+  const { t } = useTranslation("common");
   
   const documentDisplayName = locale === 'es' && doc.name_es ? doc.name_es : doc.name;
 
