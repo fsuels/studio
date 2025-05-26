@@ -2,7 +2,7 @@
 import React from 'react';
 import BlogClientContent from './blog-client-content';
 interface BlogPageProps {
-  params: { locale: 'en' | 'es' };
+  params: { locale: 'en' | 'es' } & Record<string, string>;
 }
 
 export async function generateStaticParams() {

@@ -97,7 +97,7 @@ const AddressField = React.memo(function AddressField({
           'postal_code', 'postal_code_suffix', 'country'
         ]);
         const parts: Record<string, string> = {};
-        place.address_components?.forEach(c => {
+        place.address_components?.forEach((c: any) => {
           const type = c.types[0];
           if (wanted.has(type)) parts[type] = c.short_name;
         });
