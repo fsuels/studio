@@ -4,7 +4,7 @@ import SignWellClientContent from './signwell-client-content';
 import type { Metadata } from 'next';
 
 interface SignWellPageProps {
-  params: { locale: 'en' | 'es' } & Record<string, string>;
+  params: { locale: 'en' | 'es' };
 }
 import i18n from '@/lib/i18n'; // Import i18n instance to access translations server-side for metadata
 

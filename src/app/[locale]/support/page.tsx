@@ -2,7 +2,7 @@
 import React from 'react';
 import SupportClientContent from './support-client-content';
 interface SupportPageProps {
-  params: { locale: 'en' | 'es' } & Record<string, string>;
+  params: { locale: 'en' | 'es' };
 }
 
 export async function generateStaticParams() {
