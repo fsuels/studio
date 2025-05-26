@@ -28,9 +28,10 @@ interface AuthContextType {
   isLoggedIn: boolean;
   user: User | null;
   isLoading: boolean;
-  login: (email: string, uid?: string) => void; // email is now required for login
+  // prefix unused parameter names with an underscore to satisfy lint rules
+  login: (_email: string, _uid?: string) => void; // email is now required for login
   logout: () => void;
-  updateUser: (updates: Partial<User> & { password?: string }) => void;
+  updateUser: (_updates: Partial<User> & { password?: string }) => void;
 }
 
 // 2) Create the context (default undefined to catch mis-use)
