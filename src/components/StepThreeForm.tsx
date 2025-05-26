@@ -3,7 +3,19 @@
 import React, { useState, useEffect } from "react";
 import { Check } from "lucide-react";
 import { LegalDocument } from "@/lib/document-library";
-import { PDFPreview } from "@/components/PDFPreview";
+import dynamic from "next/dynamic";
+
+const PDFPreview = dynamic(
+  () => import("@/components/PDFPreview").then(mod => mod.PDFPreview),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="flex-1 border rounded shadow bg-white flex items-center justify-center">
+        <p className="text-gray-400">PDF Preview loading…</p>
+      </div>
+    ),
+  }
+);
 import { Toggle } from "@/components/ui/toggle";
 
 interface StepThreeFormProps {
