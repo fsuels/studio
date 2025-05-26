@@ -18,12 +18,7 @@ interface Props {
 
 export default function TemplatesClientContent({ locale }: Props) {
   const { t } = useTranslation('common');
-  const [isHydrated, setIsHydrated] = useState(false);
   const router = useRouter();
-
-  useEffect(() => {
-    setIsHydrated(true);
-  }, []);
 
   const categoryHref = (key: string) =>
     `/${locale}/?category=${encodeURIComponent(key)}#workflow-start`;

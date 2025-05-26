@@ -66,10 +66,11 @@ export async function POST(req: NextRequest) {
     });
 
     return NextResponse.json({ url: session.url });
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error('Stripe checkout error →', err);
+    const message = err instanceof Error ? err.message : 'Internal error';
     return NextResponse.json(
-      { error: err.message ?? 'Internal error' },
+      { error: message },
       { status: 500 },
     );
   }

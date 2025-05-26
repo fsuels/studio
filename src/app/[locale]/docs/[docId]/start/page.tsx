@@ -4,7 +4,6 @@
 import StartWizardPageClient from './StartWizardPageClient';
 import { documentLibrary } from '@/lib/document-library';
 import { localizations } from '@/lib/localizations'; // Assuming this defines your supported locales e.g. [{id: 'en'}, {id: 'es'}]
-import type { LegalDocument } from '@/lib/document-library';
 
 // Revalidate every hour so start pages stay fresh without rebuilding constantly
 export const revalidate = 3600;
@@ -79,7 +78,6 @@ interface StartWizardPageProps {
 
 // This Server Component now correctly passes params to the Client Component
 export default async function StartWizardPage({ params }: StartWizardPageProps) {
-  const { locale, docId } = params;
   // Await a microtask to satisfy Next.js dynamic route requirements
   await Promise.resolve();
   // The StartWizardPageClient will handle fetching its own specific document data

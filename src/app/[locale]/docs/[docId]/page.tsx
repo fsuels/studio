@@ -54,11 +54,12 @@ export default async function DocPage({ params }: DocPageProps) {
 
   try {
     markdownContent = await fs.readFile(filePath, 'utf-8');
-  } catch (error: any) {
-    if (error.code === 'ENOENT') {
+  } catch (error: unknown) {
+    const err = error as NodeJS.ErrnoException;
+    if (err.code === 'ENOENT') {
       console.warn(`Markdown template not found for ${params.docId} in locale ${params.locale}. Path: ${filePath}`);
     } else {
-      console.error(`Error reading markdown file for ${params.docId} in locale ${params.locale}. Path: ${filePath}`, error);
+      console.error(`Error reading markdown file for ${params.docId} in locale ${params.locale}. Path: ${filePath}`, err);
     }
   }
 

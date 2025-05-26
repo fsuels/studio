@@ -38,10 +38,9 @@ import {
 } from "@/components/ui/accordion";
 import { Progress } from "@/components/ui/progress";
 import { usStates } from "@/lib/document-library";
-import { vehicleBillOfSaleFaqs, type FaqItem } from "./faqs";
+import { vehicleBillOfSaleFaqs } from "./faqs";
 import {
   getVehicleCompliance,
-  vehicleComplianceStates,
 } from "@/lib/states/vehicle-compliance";
 import { getDb } from "@/lib/firebase";
 import { collection, doc, getDoc } from "firebase/firestore";
@@ -51,7 +50,6 @@ export default function VehicleBillOfSalePage() {
   const [language, setLanguage] = useState<"en" | "es">("en");
   const [selectedState, setSelectedState] = useState("");
   const [complianceMessage, setComplianceMessage] = useState("");
-  const [faqVisits, setFaqVisits] = useState<Record<string, number>>({});
 
   useEffect(() => {
     i18n.changeLanguage(language);
@@ -88,12 +86,6 @@ export default function VehicleBillOfSalePage() {
     loadCompliance();
   }, []);
 
-  const handleFaqToggle = (q: FaqItem) => {
-    setFaqVisits((prev) => ({
-      ...prev,
-      [q.questionEn]: (prev[q.questionEn] || 0) + 1,
-    }));
-  };
 
   const faqJsonLd = {
     "@context": "https://schema.org",
@@ -195,7 +187,6 @@ export default function VehicleBillOfSalePage() {
               <AccordionItem
                 key={idx}
                 value={`item-${idx}`}
-                onClick={() => handleFaqToggle(faq)}
               >
                 <AccordionTrigger className="font-medium text-left">
                   {language === "en" ? faq.questionEn : faq.questionEs}
