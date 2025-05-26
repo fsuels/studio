@@ -21,7 +21,7 @@ import { useAuth } from '@/hooks/useAuth'; // Import useAuth
 interface AuthModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onAuthSuccess: (_mode: 'signin' | 'signup', _email: string) => void;
+  onAuthSuccess: (mode: 'signin' | 'signup', email: string) => void;
 }
 
 export default function AuthModal({

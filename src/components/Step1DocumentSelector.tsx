@@ -3,6 +3,7 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
+import type { TFunction } from 'i18next';
 import { documentLibrary, type LegalDocument } from '@/lib/document-library';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -54,8 +55,8 @@ export const CATEGORY_LIST: CategoryInfo[] = [
 
 interface Step1DocumentSelectorProps {
   selectedCategory: string | null;
-  onCategorySelect: (_categoryKey: string | null) => void;
-  onDocumentSelect: (_doc: LegalDocument) => void;
+  onCategorySelect: (categoryKey: string | null) => void;
+  onDocumentSelect: (doc: LegalDocument) => void;
   isReadOnly?: boolean;
   globalSearchTerm: string;
   globalSelectedState: string;
@@ -120,7 +121,7 @@ const MemoizedCategoryCard = React.memo(function CategoryCard({
   category: CategoryInfo;
   onClick: () => void;
   disabled: boolean;
-  t: (_key: string, _fallback?: string | object) => string;
+  t: TFunction;
 }) {
   return (
     <Button
@@ -152,7 +153,7 @@ const MemoizedDocumentCard = React.memo(function DocumentCard({
   doc: LegalDocument;
   onSelect: () => void;
   disabled: boolean;
-  t: (_key: string, _fallback?: string | object) => string;
+  t: TFunction;
   i18nLanguage: string;
   placeholderNoDescription: string;
   placeholderRequiresNotarization: string;
@@ -215,7 +216,7 @@ const MemoizedTopDocChip = React.memo(function TopDocChip({
   };
   onSelect: () => void;
   disabled: boolean;
-  t: (_key: string, _fallback?: string | object) => string;
+  t: TFunction;
   i18nLanguage: string;
 }) {
   return (

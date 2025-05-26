@@ -28,7 +28,7 @@ import {
 } from '@/lib/document-library';
 
 interface Props {
-  onSelect: (docType: string) => void; // Now accepts the document ID
+  onSelect: (documentId: string) => void; // Now accepts the document ID
   selectedDocument?: string; // Optional prop for pre-selecting a document
 }
 

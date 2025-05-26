@@ -2,6 +2,7 @@
 'use client';
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
+import type { TFunction } from 'i18next';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
@@ -55,16 +56,16 @@ const DropzonePlaceholder = ({
   isHydrated,
   tGeneral,
   tEsign,
-  onClick, // Add onClick prop
+  onClick,
 }: {
-  onFiles: (_files: File[]) => void;
+  onFiles: (files: File[]) => void;
   inputRef: React.RefObject<HTMLInputElement>;
   selectedFile: File | null;
   onClearFile: () => void;
   isHydrated: boolean;
-  tGeneral: (key: string, opts?: Record<string, unknown>) => string;
-  tEsign: (key: string, opts?: Record<string, unknown>) => string;
-  onClick?: () => void; // Make onClick optional or required based on usage
+  tGeneral: TFunction;
+  tEsign: TFunction;
+  onClick?: () => void;
 }) => {
   const [isDragging, setIsDragging] = useState(false);
 
