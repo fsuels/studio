@@ -38,10 +38,14 @@ export const useSmartField = <T extends FieldValues>({
       const stringVal = String(currentVal);
       const sanitized = stringVal.replace(/\D/g, '').slice(0, 4);
       if (sanitized !== stringVal) {
-        setValue(name as Path<T>, sanitized as unknown as FieldPathValue<T, Path<T>>, {
-          shouldValidate: true,
-          shouldDirty: true,
-        });
+        setValue(
+          name as Path<T>,
+          sanitized as unknown as FieldPathValue<T, Path<T>>,
+          {
+            shouldValidate: true,
+            shouldDirty: true,
+          },
+        );
       }
     }
   }, [fieldValue, name, setValue, watch]);
@@ -52,12 +56,16 @@ export const useSmartField = <T extends FieldValues>({
       const currentVal = watch(name as Path<T>);
       if (typeof currentVal !== 'string') return; // Only process if it's a string
       const sanitized = currentVal.replace(/[^a-zA-Z\s]/gi, '');
-      if (sanitized !== currentVal) {
-        setValue(name as Path<T>, sanitized as unknown as FieldPathValue<T, Path<T>>, {
-          shouldValidate: true,
-          shouldDirty: true,
-        });
-      }
+        if (sanitized !== currentVal) {
+          setValue(
+            name as Path<T>,
+            sanitized as unknown as FieldPathValue<T, Path<T>>,
+            {
+              shouldValidate: true,
+              shouldDirty: true,
+            },
+          );
+        }
     }
   }, [fieldValue, name, setValue, watch]);
 
@@ -108,7 +116,10 @@ export const useSmartField = <T extends FieldValues>({
               ) {
                 setValue(
                   modelField,
-                  result.Model as unknown as FieldPathValue<T, typeof modelField>,
+                  result.Model as unknown as FieldPathValue<
+                    T,
+                    typeof modelField
+                  >,
                   {
                     shouldValidate: true,
                     shouldDirty: true,
@@ -124,7 +135,10 @@ export const useSmartField = <T extends FieldValues>({
               ) {
                 setValue(
                   yearField,
-                  Number(result.ModelYear) as unknown as FieldPathValue<T, typeof yearField>,
+                  Number(result.ModelYear) as unknown as FieldPathValue<
+                    T,
+                    typeof yearField
+                  >,
                   {
                     shouldValidate: true,
                     shouldDirty: true,

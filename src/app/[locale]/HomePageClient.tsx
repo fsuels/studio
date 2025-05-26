@@ -97,10 +97,12 @@ export default function HomePageClient() {
         mod.default?.preload?.();
       },
     );
-    import('@/components/landing/GuaranteeBadge').then((mod: PreloadableModule) => {
-      mod.GuaranteeBadge?.preload?.();
-      mod.default?.preload?.(); // fallback for default export
-    });
+    import('@/components/landing/GuaranteeBadge').then(
+      (mod: PreloadableModule) => {
+        mod.GuaranteeBadge?.preload?.();
+        mod.default?.preload?.(); // fallback for default export
+      },
+    );
     import('@/components/TopDocsChips').then((mod: PreloadableModule) => {
       mod.default?.preload?.();
     });

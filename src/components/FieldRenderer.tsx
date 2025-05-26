@@ -64,7 +64,10 @@ const FieldRenderer = React.memo(function FieldRenderer({
   );
 
   const zodSchema = doc.schema as unknown as {
-    _def?: { typeName?: string; schema?: { shape: Record<string, ZodTypeAny> } };
+    _def?: {
+      typeName?: string;
+      schema?: { shape: Record<string, ZodTypeAny> };
+    };
     shape?: Record<string, ZodTypeAny>;
   };
 
