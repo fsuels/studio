@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import {
   Accordion,
   AccordionItem,
@@ -53,6 +54,7 @@ export default function VehicleBillOfSaleDisplay({
   const router = useRouter();
   const { addItem } = useCart();
   const [isHydrated, setIsHydrated] = useState(false);
+  const [query, setQuery] = useState('');
 
   useEffect(() => {
     setIsHydrated(true);
@@ -183,7 +185,17 @@ export default function VehicleBillOfSaleDisplay({
     },
   ];
 
-  const allSections: Section[] = [...informationalSections, ...faqItems];
+  const filteredFaqItems = faqItems.filter((faq) => {
+    if (!query) return true;
+    const q = t(faq.titleKey).toLowerCase();
+    const a = faq.contentKey ? t(faq.contentKey).toLowerCase() : '';
+    return q.includes(query.toLowerCase()) || a.includes(query.toLowerCase());
+  });
+
+  const allSections: Section[] = [
+    ...informationalSections,
+    ...filteredFaqItems,
+  ];
 
   const renderSectionContent = (section: Section, translate: typeof t) => {
     if (section.type === 'paragraph' && section.contentKey) {
@@ -363,7 +375,28 @@ export default function VehicleBillOfSaleDisplay({
         <p className="text-lg text-muted-foreground">{t('pageSubtitle')}</p>
       </header>
 
-      <Accordion type="single" collapsible className="w-full space-y-4 mb-10">
+      <div className="flex justify-center mb-6">
+        <Input
+          type="text"
+          placeholder={t('faqSearchPlaceholder', {
+            defaultValue: 'Search FAQs...',
+          })}
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          className="max-w-md"
+        />
+      </div>
+      {query && filteredFaqItems.length === 0 && (
+        <p className="text-center text-sm text-muted-foreground mb-4">
+          {t('noFaqResults', { defaultValue: 'No FAQs match your search.' })}
+        </p>
+      )}
+
+      <Accordion
+        type="multiple"
+        defaultValue={['faq1', 'faq2', 'faq3']}
+        className="w-full space-y-4 mb-10"
+      >
         {allSections.map((section) => (
           <AccordionItem
             key={section.id}
