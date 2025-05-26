@@ -140,9 +140,10 @@ export default function StartWizardPageClient() {
 
   const debouncedSave = useMemo(
     () =>
-      debounce((data: Record<string, unknown>) => {
-        // Wrap async logic to satisfy debounce's void return type
-        void (async () => {
+      debounce<(data: Record<string, unknown>) => void>(
+        (data) => {
+          // Wrap async logic to satisfy debounce's void return type
+          void (async () => {
           if (
             !docConfig?.id ||
             authIsLoading ||
@@ -186,7 +187,9 @@ export default function StartWizardPageClient() {
             relevantDataToSave,
           );
         })();
-      }, 1000),
+        },
+        1000,
+      ),
     [
       isLoggedIn,
       user?.uid,

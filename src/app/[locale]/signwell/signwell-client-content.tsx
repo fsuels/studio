@@ -2,7 +2,6 @@
 'use client';
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import type { TFunction } from 'i18next';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
@@ -63,8 +62,8 @@ const DropzonePlaceholder = ({
   selectedFile: File | null;
   onClearFile: () => void;
   isHydrated: boolean;
-  tGeneral: TFunction;
-  tEsign: TFunction;
+  tGeneral: (key: string, opts?: Record<string, unknown>) => string;
+  tEsign: (key: string, opts?: Record<string, unknown>) => string;
   onClick?: () => void;
 }) => {
   const [isDragging, setIsDragging] = useState(false);
@@ -533,13 +532,13 @@ export default function SignWellClientContent({
               onClearFile={handleClearFile}
               isHydrated={isHydrated}
               tGeneral={(key, opts) =>
-                t(key, { ...(opts ?? {}), ns: 'common' }) as string
+                t<string>(key, { ...(opts ?? {}), ns: 'common' })
               }
               tEsign={(key, opts) =>
-                t(key, {
+                t<string>(key, {
                   ...(opts ?? {}),
                   ns: 'electronic-signature',
-                }) as string
+                })
               }
               onClick={handleHeroUploadAttempt} // Gated file input trigger
             />

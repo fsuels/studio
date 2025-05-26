@@ -7,7 +7,7 @@ import remarkGfm from 'remark-gfm';
 import { useFormContext } from 'react-hook-form';
 import { Loader2, AlertTriangle } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { debounce, type AnyFn } from '@/lib/debounce';
+import { debounce } from '@/lib/debounce';
 import { documentLibrary } from '@/lib/document-library';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
@@ -133,12 +133,15 @@ export default function PreviewPane({ locale, docId }: PreviewPaneProps) {
 
   const debouncedUpdatePreview = useMemo(
     () =>
-      debounce(
-        ((formData: Record<string, unknown>, currentRawMarkdown: string) => {
+      debounce<(
+        formData: Record<string, unknown>,
+        currentRawMarkdown: string
+      ) => void>(
+        (formData, currentRawMarkdown) => {
           setProcessedMarkdown(
             updatePreviewContent(formData, currentRawMarkdown),
           );
-        }) as AnyFn<[Record<string, unknown>, string]>,
+        },
         300,
       ),
     [updatePreviewContent],
