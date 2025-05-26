@@ -62,8 +62,8 @@ const DropzonePlaceholder = ({
   selectedFile: File | null;
   onClearFile: () => void;
   isHydrated: boolean;
-  tGeneral: (key: string, opts?: Record<string, unknown>) => string;
-  tEsign: (key: string, opts?: Record<string, unknown>) => string;
+  tGeneral: (_key: string, _opts?: Record<string, unknown>) => string;
+  tEsign: (_key: string, _opts?: Record<string, unknown>) => string;
   onClick?: () => void;
 }) => {
   const [isDragging, setIsDragging] = useState(false);
