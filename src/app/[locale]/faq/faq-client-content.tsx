@@ -18,6 +18,7 @@ interface FaqClientContentProps {
 export default function FaqClientContent({ locale }: FaqClientContentProps) {
   const { t, i18n } = useTranslation(['faq', 'common']);
   const [isHydrated, setIsHydrated] = useState(false);
+  const [query, setQuery] = useState('');
 
   useEffect(() => {
     setIsHydrated(true);
@@ -26,12 +27,26 @@ export default function FaqClientContent({ locale }: FaqClientContentProps) {
     }
   }, [locale, i18n]);
 
-  const questions = Array.from({ length: 6 }, (_, i) => i + 1);
-
   const placeholderTitle = 'Frequently Asked Questions';
   const placeholderSubtitle = 'Find answers to common questions below.';
   const placeholderQuestion = 'Loading question...';
   const placeholderAnswer = 'Loading answer...';
+
+  const questions = Array.from({ length: 6 }, (_, i) => i + 1);
+
+  const faqItems = questions.map((n) => ({
+    id: `item-${n}`,
+    question: isHydrated
+      ? t(`faq.q${n}.question`, placeholderQuestion)
+      : placeholderQuestion,
+    answer: isHydrated
+      ? t(`faq.q${n}.answer`, placeholderAnswer)
+      : placeholderAnswer,
+  }));
+
+  const filteredFaqs = faqItems.filter((f) =>
+    f.question.toLowerCase().includes(query.toLowerCase()),
+  );
 
   return (
     <main className="max-w-4xl mx-auto px-6 py-20">
@@ -44,22 +59,30 @@ export default function FaqClientContent({ locale }: FaqClientContentProps) {
           : placeholderSubtitle}
       </p>
 
-      <Accordion type="single" collapsible className="w-full space-y-4">
-        {questions.map((n) => (
+      <input
+        type="search"
+        placeholder="Search FAQs..."
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+        className="mb-4 w-full rounded-md border px-3 py-2"
+      />
+      <Accordion
+        type="multiple"
+        collapsible
+        defaultValue={faqItems.slice(0, 3).map((f) => f.id)}
+        className="w-full space-y-4"
+      >
+        {filteredFaqs.map((f) => (
           <AccordionItem
-            key={n}
-            value={`item-${n}`}
+            key={f.id}
+            value={f.id}
             className="bg-card border border-border rounded-lg shadow-sm px-4"
           >
             <AccordionTrigger className="text-left font-semibold text-lg text-card-foreground hover:no-underline">
-              {isHydrated
-                ? t(`faq.q${n}.question`, placeholderQuestion)
-                : placeholderQuestion}
+              {f.question}
             </AccordionTrigger>
             <AccordionContent className="text-sm text-muted-foreground leading-relaxed pt-1 pb-4">
-              {isHydrated
-                ? t(`faq.q${n}.answer`, placeholderAnswer)
-                : placeholderAnswer}
+              {f.answer}
             </AccordionContent>
           </AccordionItem>
         ))}
