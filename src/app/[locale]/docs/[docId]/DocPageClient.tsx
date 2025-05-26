@@ -356,7 +356,10 @@ export default function DocPageClient({
 
         <aside className="md:col-span-2 space-y-6">
           <div className="relative">
-            <div className="sticky top-24" data-testid="price-sticky">
+            <div
+              className="sticky top-24 [animation:fadeUp_0.4s_ease-out]"
+              data-testid="price-sticky"
+            >
               <Card className="shadow-lg border-primary">
                 <CardHeader>
                   <CardTitle className="text-lg text-primary">
