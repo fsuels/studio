@@ -11,8 +11,8 @@ interface LogoProps {
 }
 
 const Logo = React.memo(function Logo({ wrapperClassName, svgClassName, textClassName, ...props }: LogoProps) {
-   // Use the 'common' namespace for logo translations
-   const { t } = useTranslation("common");
+   // Use the 'header' namespace for logo translations
+   const { t } = useTranslation("header");
 
   return (
     <Link

@@ -25,7 +25,7 @@ import { getDocTranslation } from '@/lib/i18nUtils';
 
 const Header = React.memo(function Header() {
   // Scoped translations
-  const { t: tHeader } = useTranslation("common");
+  const { t: tHeader } = useTranslation("header");
   const router = useRouter();
   const params = useParams();
   const { isLoggedIn, logout, user } = useAuth(); // Added user from useAuth
