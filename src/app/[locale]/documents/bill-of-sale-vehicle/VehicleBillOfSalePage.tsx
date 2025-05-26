@@ -143,7 +143,7 @@ export default function VehicleBillOfSalePage() {
             <Badge>Bilingual Support</Badge>
           </div>
           <Button size="lg" className="mt-4" asChild>
-            <Link href="/#workflow-start">
+            <Link href={`/${language}/docs/bill-of-sale-vehicle/start`}>
               {t('vehicleBillOfSale.startCta', 'Start My Bill of Sale')}
             </Link>
           </Button>
@@ -211,7 +211,7 @@ export default function VehicleBillOfSalePage() {
             )}
           </p>
           <Button asChild size="lg">
-            <Link href="/#workflow-start">
+            <Link href={`/${language}/docs/bill-of-sale-vehicle/start`}>
               {t('vehicleBillOfSale.footerCta', 'Create My Bill of Sale Now')}
             </Link>
           </Button>
