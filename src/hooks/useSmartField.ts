@@ -7,6 +7,7 @@ import type {
   UseFormGetValues,
   FieldValues,
   Path,
+  FieldPathValue,
 } from 'react-hook-form';
 
 type HookProps<T extends FieldValues> = {
@@ -37,7 +38,7 @@ export const useSmartField = <T extends FieldValues>({
       const stringVal = String(currentVal);
       const sanitized = stringVal.replace(/\D/g, '').slice(0, 4);
       if (sanitized !== stringVal) {
-        setValue(name as Path<T>, sanitized as any, {
+        setValue(name as Path<T>, sanitized as unknown as FieldPathValue<T, Path<T>>, {
           shouldValidate: true,
           shouldDirty: true,
         });
@@ -52,7 +53,7 @@ export const useSmartField = <T extends FieldValues>({
       if (typeof currentVal !== 'string') return; // Only process if it's a string
       const sanitized = currentVal.replace(/[^a-zA-Z\s]/gi, '');
       if (sanitized !== currentVal) {
-        setValue(name as Path<T>, sanitized as any, {
+        setValue(name as Path<T>, sanitized as unknown as FieldPathValue<T, Path<T>>, {
           shouldValidate: true,
           shouldDirty: true,
         });
@@ -91,32 +92,44 @@ export const useSmartField = <T extends FieldValues>({
                 (formValues[makeField] === undefined ||
                   formValues[makeField] === '')
               ) {
-                setValue(makeField, result.Make as any, {
-                  shouldValidate: true,
-                  shouldDirty: true,
-                });
+                setValue(
+                  makeField,
+                  result.Make as unknown as FieldPathValue<T, typeof makeField>,
+                  {
+                    shouldValidate: true,
+                    shouldDirty: true,
+                  },
+                );
               }
               if (
                 result.Model &&
                 (formValues[modelField] === undefined ||
                   formValues[modelField] === '')
               ) {
-                setValue(modelField, result.Model as any, {
-                  shouldValidate: true,
-                  shouldDirty: true,
-                });
+                setValue(
+                  modelField,
+                  result.Model as unknown as FieldPathValue<T, typeof modelField>,
+                  {
+                    shouldValidate: true,
+                    shouldDirty: true,
+                  },
+                );
               }
               if (
                 result.ModelYear &&
                 (formValues[yearField] === undefined ||
                   formValues[yearField] === '' ||
                   formValues[yearField] === 0 ||
-                  isNaN(parseInt(formValues[yearField] as any)))
+                  isNaN(parseInt(String(formValues[yearField])))
               ) {
-                setValue(yearField, Number(result.ModelYear) as any, {
-                  shouldValidate: true,
-                  shouldDirty: true,
-                });
+                setValue(
+                  yearField,
+                  Number(result.ModelYear) as unknown as FieldPathValue<T, typeof yearField>,
+                  {
+                    shouldValidate: true,
+                    shouldDirty: true,
+                  },
+                );
               }
             }
           })
