@@ -1,6 +1,7 @@
 // src/app/generate/page.tsx
 import React from 'react'
-import DocumentFlow from '@/components/DocumentFlow'
+import dynamic from 'next/dynamic'
+const DocumentFlow = dynamic(() => import('@/components/DocumentFlow'), { ssr: false })
 import { Button } from '@/components/ui/button'
 
 export default function GeneratePage() {

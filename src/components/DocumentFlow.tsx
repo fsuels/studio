@@ -7,7 +7,11 @@ import { ProgressBar } from '@/components/ProgressBar'; // This might be replace
 import { StepOneInput } from '@/components/StepOneInput'; // This might be replaced or refactored
 import SlideFade from '@/components/motion/SlideFade';
 import { StepTwoInput } from '@/components/StepTwoInput'; // This might be replaced or refactored
-import { StepThreeInput } from '@/components/StepThreeInput'; // This might be replaced or refactored
+import dynamic from 'next/dynamic';
+const StepThreeInput = dynamic(
+  () => import('@/components/StepThreeInput').then(mod => mod.StepThreeInput),
+  { ssr: false }
+); // This might be replaced or refactored
 import { useTranslation } from 'react-i18next';
 import { documentLibrary } from '@/lib/document-library'; // Import documentLibrary
 
