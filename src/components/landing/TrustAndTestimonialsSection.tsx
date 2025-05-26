@@ -75,10 +75,10 @@ const MemoizedTestimonialCard = React.memo(function TestimonialCard({
   t,
   isHydrated,
 }: {
-    testimonial: Testimonial | null;
-    index: number;
-    t: (_key: string, _fallback?: string | object) => string;
-    isHydrated: boolean;
+  testimonial: Testimonial | null;
+  index: number;
+  t: (_key: string, _fallback?: string | object) => string;
+  isHydrated: boolean;
 }) {
   const rating = 5;
   const currentTestimonial = testimonial || {
