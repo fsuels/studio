@@ -59,7 +59,7 @@ const MemoizedCategoryCard = React.memo(function CategoryCard({ category, onClic
       className="category-card h-auto min-h-[90px] p-4 border-border shadow-sm hover:shadow-md transition text-center flex flex-col justify-center items-center bg-card hover:bg-muted active:scale-95 active:transition-transform active:duration-100"
     >
       {React.createElement(category.icon || FileText, { className: "h-6 w-6 mb-2 text-primary/80" })}
-      <span className="font-medium text-card-foreground text-sm">{t(category.labelKey, category.key)}</span>
+      <span className="font-medium text-card-foreground text-sm">{t(category.labelKey, { defaultValue: category.key })}</span>
     </Button>
   );
 });
@@ -70,7 +70,7 @@ const MemoizedDocumentCard = React.memo(function DocumentCard({ doc, onSelect, d
       onClick={onSelect}
       tabIndex={disabled ? -1 : 0}
       role="button"
-      aria-label={t(doc.name ?? '', doc.name)}
+      aria-label={t(doc.name ?? '', { defaultValue: doc.name ?? '' })}
       onKeyDown={(e) => {
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
@@ -84,11 +84,11 @@ const MemoizedDocumentCard = React.memo(function DocumentCard({ doc, onSelect, d
     >
       <CardHeader className="pb-2 pt-4 px-4">
         <CardTitle className="text-base font-semibold text-card-foreground">
-          {i18nLanguage === 'es' && doc.name_es ? t(doc.name_es, doc.name_es) : t(doc.name ?? '', doc.name)}
+          {i18nLanguage === 'es' && doc.name_es ? t(doc.name_es, { defaultValue: doc.name_es }) : t(doc.name ?? '', { defaultValue: doc.name ?? '' })}
         </CardTitle>
       </CardHeader>
       <CardContent className="text-xs text-muted-foreground flex-grow px-4">
-        {i18nLanguage === 'es' && doc.description_es ? t(doc.description_es, doc.description_es) : t(doc.description ?? '', doc.description) || placeholderNoDescription}
+        {i18nLanguage === 'es' && doc.description_es ? t(doc.description_es, { defaultValue: doc.description_es }) : t(doc.description ?? '', { defaultValue: doc.description ?? '' }) || placeholderNoDescription}
       </CardContent>
       <CardFooter className="pt-2 pb-3 px-4 text-xs text-muted-foreground flex justify-between items-center border-t border-border mt-auto">
         <span>💲{doc.basePrice}</span>
@@ -111,7 +111,7 @@ const MemoizedTopDocChip = React.memo(function TopDocChip({ doc, onSelect, disab
             className="category-card h-auto min-h-[50px] p-3 border-border shadow-sm hover:shadow-md transition text-center flex items-center justify-center gap-2 bg-card hover:bg-muted active:scale-95 active:transition-transform active:duration-100"
         >
             {doc.icon && React.createElement(doc.icon, { className: "h-4 w-4 text-primary/80" })}
-            <span className="font-medium text-card-foreground text-xs">{i18nLanguage === 'es' && doc.name_es ? t(doc.name_es, doc.name_es) : t(doc.name ?? '', doc.name)}</span>
+            <span className="font-medium text-card-foreground text-xs">{i18nLanguage === 'es' && doc.name_es ? t(doc.name_es, { defaultValue: doc.name_es }) : t(doc.name ?? '', { defaultValue: doc.name ?? '' })}</span>
         </Button>
     );
 });
@@ -126,6 +126,13 @@ const Step1DocumentSelector = React.memo(function Step1DocumentSelector({
   globalSelectedState
 }: Step1DocumentSelectorProps) {
   const { t, i18n } = useTranslation("common");
+  const tSimple = React.useCallback(
+    (key: string, fallback?: string | object) =>
+      typeof fallback === 'string'
+        ? t(key, { defaultValue: fallback })
+        : t(key, fallback as any),
+    [t]
+  );
   // 'top-docs', 'all-categories', 'documents-in-category', 'search-results'
   const [currentView, setCurrentView] = useState<'top-docs' | 'all-categories' | 'documents-in-category' | 'search-results'>(
     initialSelectedCategory ? 'documents-in-category' : 'top-docs'
@@ -188,24 +195,24 @@ const Step1DocumentSelector = React.memo(function Step1DocumentSelector({
     if (currentView === 'search-results' && globalSearchTerm.trim() !== '') {
       const lowerGlobalSearch = globalSearchTerm.toLowerCase();
       docs = docs.filter(doc =>
-        (t(doc.name ?? '', doc.name)).toLowerCase().includes(lowerGlobalSearch) ||
+        (t(doc.name ?? '', { defaultValue: doc.name ?? '' })).toLowerCase().includes(lowerGlobalSearch) ||
         (doc.aliases?.some(alias => alias.toLowerCase().includes(lowerGlobalSearch))) ||
         (languageSupportsSpanish(doc.languageSupport) && doc.aliases_es?.some(alias => alias.toLowerCase().includes(lowerGlobalSearch))) ||
-        (languageSupportsSpanish(doc.languageSupport) && doc.name_es && t(doc.name_es, doc.name_es).toLowerCase().includes(lowerGlobalSearch)) ||
-        (t(doc.description ?? '', doc.description)).toLowerCase().includes(lowerGlobalSearch) ||
-        (languageSupportsSpanish(doc.languageSupport) && doc.description_es && t(doc.description_es, doc.description_es).toLowerCase().includes(lowerGlobalSearch))
+        (languageSupportsSpanish(doc.languageSupport) && doc.name_es && t(doc.name_es, { defaultValue: doc.name_es }).toLowerCase().includes(lowerGlobalSearch)) ||
+        (t(doc.description ?? '', { defaultValue: doc.description ?? '' })).toLowerCase().includes(lowerGlobalSearch) ||
+        (languageSupportsSpanish(doc.languageSupport) && doc.description_es && t(doc.description_es, { defaultValue: doc.description_es }).toLowerCase().includes(lowerGlobalSearch))
       );
     } else if (currentView === 'documents-in-category' && selectedCategoryInternal) {
         docs = docs.filter(doc => doc.category === selectedCategoryInternal);
         if (docSearch.trim() !== '') {
             const lowerDocSearch = docSearch.toLowerCase();
             docs = docs.filter(doc =>
-                (t(doc.name ?? '', doc.name)).toLowerCase().includes(lowerDocSearch) ||
+                (t(doc.name ?? '', { defaultValue: doc.name ?? '' })).toLowerCase().includes(lowerDocSearch) ||
                 (doc.aliases?.some(alias => alias.toLowerCase().includes(lowerDocSearch))) ||
                 (languageSupportsSpanish(doc.languageSupport) && doc.aliases_es?.some(alias => alias.toLowerCase().includes(lowerDocSearch))) ||
-                (languageSupportsSpanish(doc.languageSupport) && doc.name_es && t(doc.name_es, doc.name_es).toLowerCase().includes(lowerDocSearch)) ||
-                (t(doc.description ?? '', doc.description)).toLowerCase().includes(lowerDocSearch) ||
-                (languageSupportsSpanish(doc.languageSupport) && doc.description_es && t(doc.description_es, doc.description_es).toLowerCase().includes(lowerDocSearch))
+                (languageSupportsSpanish(doc.languageSupport) && doc.name_es && t(doc.name_es, { defaultValue: doc.name_es }).toLowerCase().includes(lowerDocSearch)) ||
+                (t(doc.description ?? '', { defaultValue: doc.description ?? '' })).toLowerCase().includes(lowerDocSearch) ||
+                (languageSupportsSpanish(doc.languageSupport) && doc.description_es && t(doc.description_es, { defaultValue: doc.description_es }).toLowerCase().includes(lowerDocSearch))
             );
         }
     } else {
@@ -361,7 +368,7 @@ const Step1DocumentSelector = React.memo(function Step1DocumentSelector({
                                       doc={doc}
                                       onSelect={() => handleDocSelect(doc)}
                                       disabled={isReadOnly || !isHydrated}
-                                      t={t}
+                                      t={tSimple}
                                       i18nLanguage={i18n.language}
                                       placeholderNoDescription={placeholderNoDescription}
                                       placeholderRequiresNotarization={placeholderRequiresNotarization}
@@ -386,7 +393,7 @@ const Step1DocumentSelector = React.memo(function Step1DocumentSelector({
                               doc={doc}
                               onSelect={() => handleDocSelect(doc)}
                               disabled={isReadOnly || !isHydrated}
-                              t={t}
+                              t={tSimple}
                               i18nLanguage={i18n.language}
                           />
                       ))}
@@ -405,7 +412,7 @@ const Step1DocumentSelector = React.memo(function Step1DocumentSelector({
                                     category={cat}
                                     onClick={() => handleCategoryClick(cat.key)}
                                     disabled={isReadOnly || !isHydrated}
-                                    t={t}
+                                    t={tSimple}
                                />
                            ))}
                        </div>
@@ -437,7 +444,7 @@ const Step1DocumentSelector = React.memo(function Step1DocumentSelector({
                                     doc={doc}
                                     onSelect={() => handleDocSelect(doc)}
                                     disabled={isReadOnly || !isHydrated}
-                                    t={t}
+                                    t={tSimple}
                                     i18nLanguage={i18n.language}
                                     placeholderNoDescription={placeholderNoDescription}
                                     placeholderRequiresNotarization={placeholderRequiresNotarization}

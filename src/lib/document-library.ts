@@ -1,7 +1,7 @@
 // src/lib/document-library.ts
 import { z } from 'zod';
 import { documentLibraryAdditions } from './document-library-additions';
-import type { LegalDocument } from '@/types/documents'
+import type { LegalDocument, LocalizedText } from '@/types/documents'
 import * as us_docs_barrel from './documents/us';
 import * as ca_docs_barrel from './documents/ca';
 // …other countries…
@@ -14,13 +14,14 @@ const isValidDocument = (doc: unknown): doc is LegalDocument => {
 
   // Check for English translation name as the primary indicator of a valid name structure
   // OR fallback to top-level name if translations are not yet populated by the forEach loop
-  const hasValidTranslationsOrName = doc &&
-                                   ( (doc.translations &&
-                                      doc.translations.en &&
-                                      typeof doc.translations.en.name === 'string' &&
-                                      doc.translations.en.name.trim() !== '') ||
-                                     (typeof doc.name === 'string' && doc.name.trim() !== '')
-                                   );
+  const dAny = doc as any;
+  const hasValidTranslationsOrName =
+    dAny &&
+    ((dAny.translations &&
+      dAny.translations.en &&
+      typeof dAny.translations.en.name === 'string' &&
+      dAny.translations.en.name.trim() !== '') ||
+      (typeof dAny.name === 'string' && dAny.name.trim() !== ''));
 
   return hasId && hasCategory && hasSchema && hasValidTranslationsOrName;
 };
@@ -78,7 +79,7 @@ allDocuments.forEach(doc => {
   }
 
   // Ensure translations object and its properties exist, and populate from top-level if necessary
-  const baseTranslations = doc.translations || { en: {}, es: {} };
+  const baseTranslations: { en?: LocalizedText; es?: LocalizedText } = doc.translations || {};
   doc.translations = {
     en: {
       name: baseTranslations.en?.name || doc.name || doc.id,

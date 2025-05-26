@@ -133,6 +133,13 @@ const MemoizedTestimonialCard = React.memo(function TestimonialCard({ testimonia
 
 const TrustAndTestimonialsSection = React.memo(function TrustAndTestimonialsSection() {
   const { t, i18n, ready } = useTranslation("common");
+  const tSimple = React.useCallback(
+    (key: string, fallback?: string | object) =>
+      typeof fallback === 'string'
+        ? t(key, { defaultValue: fallback })
+        : t(key, fallback as any),
+    [t]
+  );
   const [docCount, setDocCount] = useState(4200);
   const [isHydrated, setIsHydrated] = useState(false);
   const [testimonialsData, setTestimonialsData] = useState<Testimonial[]>([]);
@@ -201,7 +208,14 @@ const TrustAndTestimonialsSection = React.memo(function TrustAndTestimonialsSect
         <div className="flex flex-col sm:flex-row flex-wrap justify-center items-center gap-x-6 gap-y-3 text-foreground/90 text-sm font-medium">
           <div className="flex items-center gap-2">
             <FileText className="h-5 w-5 text-primary" />
-            <span>{isHydrated ? t('home.trustStrip.badge1', { count: formattedCount, defaultValue: `Over ${formattedCount} documents generated` }) : placeholderText}</span>
+            <span>
+              {isHydrated
+                ? (t('home.trustStrip.badge1', {
+                    count: formattedCount,
+                    defaultValue: `Over ${formattedCount} documents generated`,
+                  }) as string)
+                : placeholderText}
+            </span>
           </div>
           <div className="hidden sm:block w-px h-4 bg-border"></div>
           <div className="flex items-center gap-2">
@@ -238,7 +252,7 @@ const TrustAndTestimonialsSection = React.memo(function TrustAndTestimonialsSect
                 <MemoizedTestimonialCard
                   testimonial={testimonial}
                   index={i}
-                  t={t}
+                  t={tSimple}
                   isHydrated={isHydrated}
                 />
               </div>

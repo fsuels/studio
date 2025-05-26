@@ -320,9 +320,8 @@ export default function WizardForm({
                   )?.required
                 }
                 error={
-                  errors[
-                    currentField.id as keyof z.infer<typeof doc.schema>
-                  ]?.message as string | undefined
+                  (errors as Record<string, { message?: string }>)?.[currentField.id]?.message as
+                    string | undefined
                 }
                 placeholder={t("Enter address...")}
                 value={rhfValue || ""}

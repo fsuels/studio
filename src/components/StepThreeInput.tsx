@@ -28,12 +28,12 @@ export function StepThreeInput({ templateId }: Props) {
     setIsReviewing(true);
     try {
       // Call the corrected function name
-      const response = await analyzeFormData({ 
+      const response = await analyzeFormData({
         documentType: template.name || '',
-        // schema: template.questions || [], // Pass the schema if your analyzeFormData expects it
+        schema: template.questions || [],
         answers: formData,
-        // state: stateCode, // Pass state if analyzeFormData expects it
-        // language: 'en', // Pass language if analyzeFormData expects it
+        // state: stateCode,
+        // language: 'en',
       });
       // Assuming analyzeFormData returns an array of suggestions/issues objects
       // Adjust this based on the actual return type of analyzeFormData
