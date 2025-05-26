@@ -2,7 +2,6 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import dynamic from 'next/dynamic';
 import { useTranslation } from 'react-i18next';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
@@ -25,11 +24,6 @@ import {
 import { track } from '@/lib/analytics';
 import { useCart } from '@/contexts/CartProvider';
 import { Car } from 'lucide-react';
-import { SkeletonPreview } from '../DocPreview';
-const DocPreview = dynamic(() => import('../DocPreview'), {
-  ssr: false,
-  loading: () => <SkeletonPreview />,
-});
 
 interface VehicleBillOfSaleDisplayProps {
   locale: 'en' | 'es';
@@ -411,9 +405,6 @@ export default function VehicleBillOfSaleDisplay({
             <p className="text-lg text-muted-foreground">{t('pageSubtitle')}</p>
           </header>
 
-          <div className="mx-auto mb-8 max-w-3xl">
-            <DocPreview docId="bill-of-sale-vehicle" locale={locale} />
-          </div>
         </div>
         <img
           src="/images/hero-wave.svg"
