@@ -93,7 +93,7 @@ export const Footer = React.memo(function Footer() {
 
     const appId = process.env.NEXT_PUBLIC_INTERCOM_APP_ID;
     if (!appId) {
-      console.error('loadIntercom: NEXT_PUBLIC_INTERCOM_APP_ID not set.');
+      // console.error('loadIntercom: NEXT_PUBLIC_INTERCOM_APP_ID not set.');
       return;
     }
 
@@ -310,21 +310,6 @@ export const Footer = React.memo(function Footer() {
           })}
         </div>
       </div>
-
-      {/* Chat widget button */}
-      {isHydrated && (
-        <div className="fixed bottom-4 right-4 z-50">
-          <Button
-            variant="outline"
-            size="icon"
-            className="rounded-full shadow-lg bg-primary text-primary-foreground hover:bg-primary/90 w-12 h-12"
-            onClick={loadIntercom}
-            aria-label={t('openChatAria', { defaultValue: 'Open chat' })}
-          >
-            <MessageSquare className="h-6 w-6" />
-          </Button>
-        </div>
-      )}
     </footer>
   );
 });
