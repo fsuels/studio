@@ -383,10 +383,6 @@ export default function VehicleBillOfSaleDisplay({
         <p className="text-lg text-muted-foreground">{t('pageSubtitle')}</p>
       </header>
 
-      <div className="mx-auto mb-8 max-w-3xl">
-        <DocPreview docId="bill-of-sale-vehicle" locale={locale} />
-      </div>
-
       <div className="flex justify-center mb-6">
         <Input
           type="text"
