@@ -24,6 +24,7 @@ import {
 import { track } from '@/lib/analytics';
 import { useCart } from '@/contexts/CartProvider';
 import { Car, Edit, Signature, ShieldCheck } from 'lucide-react';
+import { BookOpenIcon } from '@heroicons/react/24/outline';
 import StickyMobileCTA from '@/components/StickyMobileCTA';
 
 interface VehicleBillOfSaleDisplayProps {
@@ -413,6 +414,16 @@ export default function VehicleBillOfSaleDisplay({
           className="absolute inset-x-0 -top-10 w-full select-none opacity-30"
         />
       </section>
+
+      <div className="container mx-auto px-4 pt-6 text-center">
+        <h2 className="flex items-center gap-2 text-2xl font-semibold">
+          <BookOpenIcon aria-hidden="true" className="h-6 w-6 text-teal-600" />
+          <span>Vehicle Bill of Sale: Plain-English Guide</span>
+        </h2>
+        <p className="mt-1 inline-block rounded-md bg-teal-50 px-2 py-0.5 text-xs font-medium text-teal-700">
+          Free downloadable template
+        </p>
+      </div>
 
       <ol className="mx-auto my-8 grid max-w-4xl gap-6 md:grid-cols-3">
         {[
