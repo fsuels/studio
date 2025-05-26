@@ -2,7 +2,19 @@
 'use client';
 
 import { useEffect } from 'react';
-import type { UseFormWatch, UseFormSetValue } from 'react-hook-form';
+import type {
+  FieldValues,
+  Path,
+  PathValue,
+  UseFormSetValue,
+  UseFormWatch,
+} from 'react-hook-form';
+
+interface VinDecodeResult {
+  Variable: string;
+  VariableId: number;
+  Value: string | null;
+}
 
 /**
  * Hook for autocompleting city and state from a ZIP code.
@@ -12,14 +24,16 @@ import type { UseFormWatch, UseFormSetValue } from 'react-hook-form';
  * @param cityFieldKey The name of the city field to update (e.g., 'city', 'seller_city'). Defaults to 'city'.
  * @param stateFieldKey The name of the state field to update (e.g., 'stateCode', 'seller_state'). Defaults to 'stateCode'.
  */
-export function useAddressAutocomplete(
-  watch: UseFormWatch<any>,
-  setValue: UseFormSetValue<any>,
-  zipFieldKey: string = 'zip_code',
-  cityFieldKey: string = 'city',
-  stateFieldKey: string = 'stateCode'
+export function useAddressAutocomplete<
+  TFieldValues extends FieldValues = FieldValues
+>(
+  watch: UseFormWatch<TFieldValues>,
+  setValue: UseFormSetValue<TFieldValues>,
+  zipFieldKey: Path<TFieldValues> | string = 'zip_code',
+  cityFieldKey: Path<TFieldValues> | string = 'city',
+  stateFieldKey: Path<TFieldValues> | string = 'stateCode'
 ) {
-  const zip = watch(zipFieldKey);
+  const zip = watch(zipFieldKey as Path<TFieldValues>);
 
   useEffect(() => {
     if (zip && typeof zip === 'string' && zip.length === 5) {
@@ -31,8 +45,16 @@ export function useAddressAutocomplete(
         .then(d => {
           if (d.places && d.places[0]) {
             const place = d.places[0];
-            setValue(cityFieldKey, place['place name'], { shouldValidate: true });
-            setValue(stateFieldKey, place['state abbreviation'], { shouldValidate: true });
+            setValue(
+              cityFieldKey as Path<TFieldValues>,
+              place['place name'] as PathValue<TFieldValues, Path<TFieldValues>>,
+              { shouldValidate: true }
+            );
+            setValue(
+              stateFieldKey as Path<TFieldValues>,
+              place['state abbreviation'] as PathValue<TFieldValues, Path<TFieldValues>>,
+              { shouldValidate: true }
+            );
           } else {
             console.warn(`No data found for ZIP: ${zip}`);
           }
@@ -52,15 +74,17 @@ export function useAddressAutocomplete(
  * @param modelFieldKey The name of the vehicle model field. Defaults to 'vehicle_model'.
  * @param yearFieldKey The name of the vehicle year field. Defaults to 'vehicle_year'.
  */
-export function useVinDecoder(
-  watch: UseFormWatch<any>,
-  setValue: UseFormSetValue<any>,
-  vinFieldKey: string = 'vehicle_vin',
-  makeFieldKey: string = 'vehicle_make',
-  modelFieldKey: string = 'vehicle_model',
-  yearFieldKey: string = 'vehicle_year'
+export function useVinDecoder<
+  TFieldValues extends FieldValues = FieldValues
+>(
+  watch: UseFormWatch<TFieldValues>,
+  setValue: UseFormSetValue<TFieldValues>,
+  vinFieldKey: Path<TFieldValues> | string = 'vehicle_vin',
+  makeFieldKey: Path<TFieldValues> | string = 'vehicle_make',
+  modelFieldKey: Path<TFieldValues> | string = 'vehicle_model',
+  yearFieldKey: Path<TFieldValues> | string = 'vehicle_year'
 ) {
-  const vin = watch(vinFieldKey);
+  const vin = watch(vinFieldKey as Path<TFieldValues>);
 
   useEffect(() => {
     if (vin && typeof vin === 'string' && vin.length === 17) {
@@ -69,15 +93,37 @@ export function useVinDecoder(
           if (!r.ok) throw new Error(`VIN API error: ${r.status}`);
           return r.json();
         })
-        .then(({ Results }) => {
+        .then(({ Results }: { Results?: VinDecodeResult[] }) => {
           if (Results) {
-            const make = Results.find((r: any) => r.Variable === 'Make' || r.VariableId === 26)?.Value;
-            const model = Results.find((r: any) => r.Variable === 'Model' || r.VariableId === 28)?.Value;
-            const year = Results.find((r: any) => r.Variable === 'Model Year' || r.VariableId === 29)?.Value;
+            const make = Results.find(
+              (r: VinDecodeResult) => r.Variable === 'Make' || r.VariableId === 26
+            )?.Value;
+            const model = Results.find(
+              (r: VinDecodeResult) => r.Variable === 'Model' || r.VariableId === 28
+            )?.Value;
+            const year = Results.find(
+              (r: VinDecodeResult) =>
+                r.Variable === 'Model Year' || r.VariableId === 29
+            )?.Value;
 
-            if (make) setValue(makeFieldKey, make, { shouldValidate: true });
-            if (model) setValue(modelFieldKey, model, { shouldValidate: true });
-            if (year) setValue(yearFieldKey, year, { shouldValidate: true });
+            if (make)
+              setValue(
+                makeFieldKey as Path<TFieldValues>,
+                make as PathValue<TFieldValues, Path<TFieldValues>>,
+                { shouldValidate: true }
+              );
+            if (model)
+              setValue(
+                modelFieldKey as Path<TFieldValues>,
+                model as PathValue<TFieldValues, Path<TFieldValues>>,
+                { shouldValidate: true }
+              );
+            if (year)
+              setValue(
+                yearFieldKey as Path<TFieldValues>,
+                year as PathValue<TFieldValues, Path<TFieldValues>>,
+                { shouldValidate: true }
+              );
           } else {
             console.warn(`No results found for VIN: ${vin}`);
           }
