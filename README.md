@@ -102,3 +102,15 @@ remains responsive.
 ## Intercom Chat Widget
 
 Set `NEXT_PUBLIC_INTERCOM_APP_ID` in your environment to enable the Intercom chat widget. The script loads only when the user clicks the chat button in the footer, minimizing third-party impact. Leave this variable unset to disable the widget entirely.
+
+## Seeding Template Reviews
+
+Use the provided script to add example Trustpilot-style reviews to Firestore. Supply the template ID and review details:
+
+```bash
+node scripts/seedReviews.js --templateId=vehicle-bill-of-sale \
+  --name="Sarah L." --rating=5 \
+  --quote="Saved me hours at the DMV—printed, signed and transferred the title the same day!"
+```
+
+Each run creates a new document in the `reviews` collection so that `TestimonialsCarousel` can display template‑specific feedback.

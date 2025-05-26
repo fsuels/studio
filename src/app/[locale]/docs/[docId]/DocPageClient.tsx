@@ -42,9 +42,9 @@ import {
 import VehicleBillOfSaleDisplay from '@/components/docs/VehicleBillOfSaleDisplay'; // Import the specific display component
 import PromissoryNoteDisplay from '@/components/docs/PromissoryNoteDisplay';
 
-// Lazy load testimonials section so it's only fetched when this page is viewed
-const TrustAndTestimonialsSection = dynamic(
-  () => import('@/components/landing/TrustAndTestimonialsSection'),
+// Lazy load template-specific testimonials section
+const TestimonialsCarousel = dynamic(
+  () => import('@/components/TestimonialsCarousel'),
   {
     loading: () => (
       <div className="flex justify-center items-center h-32">
@@ -522,9 +522,9 @@ export default function DocPageClient({
         </>
       )}
 
-      {/* Testimonials - Rendered for all documents */}
+      {/* Template-specific testimonials */}
       <div className="mt-16">
-        <TrustAndTestimonialsSection />
+        <TestimonialsCarousel templateId={docConfig.id} />
       </div>
 
       {/* Sticky CTA for mobile */}
