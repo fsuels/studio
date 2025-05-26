@@ -35,7 +35,7 @@ export const Footer = React.memo(function Footer() {
   const [email, setEmail] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
-  const { t, i18n } = useTranslation("common"); // Ensure "common" namespace
+  const { t } = useTranslation("common"); // Ensure "common" namespace
   const params = useParams();
   const locale = (params.locale as 'en' | 'es') || 'en';
   const [isHydrated, setIsHydrated] = useState(false);
@@ -65,9 +65,14 @@ export const Footer = React.memo(function Footer() {
     setIsLoading(false);
   };
 
+  type IntercomWindow = Window & { Intercom?: (cmd: string) => void };
+
   const loadIntercom = () => {
+    const win: IntercomWindow = window as IntercomWindow;
     if (intercomLoaded) {
-      (window as any).Intercom && (window as any).Intercom('show');
+      if (win.Intercom) {
+        win.Intercom('show');
+      }
       return;
     }
 
@@ -82,7 +87,9 @@ export const Footer = React.memo(function Footer() {
     script.defer = true;
     script.onload = () => {
       setIntercomLoaded(true);
-      (window as any).Intercom && (window as any).Intercom('show');
+      if (win.Intercom) {
+        win.Intercom('show');
+      }
     };
     document.body.appendChild(script);
   };
