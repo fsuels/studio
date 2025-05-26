@@ -2,7 +2,7 @@
 import React from 'react';
 import PricingClientContent from './pricing-client-content';
 interface PricingPageProps {
-  params: { locale: 'en' | 'es' };
+  params: { locale: 'en' | 'es' } & Record<string, string>;
 }
 
 // Add generateStaticParams for dynamic routes with static export
