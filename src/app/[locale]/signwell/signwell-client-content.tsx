@@ -63,8 +63,8 @@ const DropzonePlaceholder = ({
   selectedFile: File | null;
   onClearFile: () => void;
   isHydrated: boolean;
-  tGeneral: TFunction;
-  tEsign: TFunction;
+  tGeneral: (key: string, opts?: Record<string, unknown>) => string;
+  tEsign: (key: string, opts?: Record<string, unknown>) => string;
   onClick?: () => void;
 }) => {
   const [isDragging, setIsDragging] = useState(false);
@@ -532,12 +532,12 @@ export default function SignWellClientContent({
               selectedFile={selectedFile}
               onClearFile={handleClearFile}
               isHydrated={isHydrated}
-              tGeneral={(key, opts) =>
-                t(key, { ...(opts ?? {}), ns: 'common' }) as string
+              tGeneral={(key: string, opts?: Record<string, unknown>) =>
+                t(key, { ...(opts || {}), ns: 'common' }) as string
               }
-              tEsign={(key, opts) =>
+              tEsign={(key: string, opts?: Record<string, unknown>) =>
                 t(key, {
-                  ...(opts ?? {}),
+                  ...(opts || {}),
                   ns: 'electronic-signature',
                 }) as string
               }

@@ -8,6 +8,7 @@ import { documentLibrary } from '@/lib/document-library';
 import { localizations } from '@/lib/localizations'; // Ensure this path is correct
 type DocPageProps = {
   params: { locale: string; docId: string };
+  searchParams?: Record<string, string | string[] | undefined>;
 };
 
 // Revalidate this page every hour for fresh content while caching aggressively

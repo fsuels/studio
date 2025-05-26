@@ -1,7 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-export type AnyFn<Args extends unknown[] = unknown[]> = (
-  ...args: Args
-) => void;
+export type AnyFn<Args extends any[] = any[]> = (...args: Args) => void;
 
 export interface DebouncedFunction<F extends AnyFn> {
   (...args: Parameters<F>): void;
