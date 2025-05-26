@@ -13,7 +13,8 @@
     "test": "node --test tests/prettify.test.js",
     "gen:previews": "node --experimental-modules scripts/generate-previews.js",
     "extract:i18n": "node_modules/.bin/i18next-parser \"src/**/*.{ts,tsx}\" --config i18next-parser.config.js",
-    "seed:reviews": "node scripts/seed-reviews.ts"
+    "seed:reviews": "node scripts/seed-reviews.ts",
+    "generate:doc": "tsx scripts/generate-doc.ts"
   },
   "dependencies": {
     "@genkit-ai/googleai": "^1.6.2",
