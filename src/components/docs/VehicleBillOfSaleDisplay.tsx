@@ -378,7 +378,7 @@ export default function VehicleBillOfSaleDisplay({
       <header className="mb-10 text-center">
         <h1 className="flex items-center gap-2 text-3xl font-bold">
           <Car aria-hidden="true" className="h-7 w-7 text-teal-600" />
-          <span>Vehicle Bill of Sale</span>
+          <span>{t('pageTitle', 'Vehicle Bill of Sale')}</span>
         </h1>
         <p className="text-lg text-muted-foreground">{t('pageSubtitle')}</p>
       </header>
