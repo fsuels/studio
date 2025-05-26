@@ -1,46 +1,43 @@
-// scripts/seedReviews.js
-const admin = require('firebase-admin');
-const fs = require('fs');
+import { initializeApp, cert } from 'firebase-admin/app';
+import { getFirestore } from 'firebase-admin/firestore';
+import creds from '../serviceAccount.json' assert { type: 'json' };
 
-const serviceAccountPath = './serviceAccountKey.json';
-if (!fs.existsSync(serviceAccountPath)) {
-  console.error('Missing serviceAccountKey.json');
-  process.exit(1);
-}
+initializeApp({ credential: cert(creds) });
+const db = getFirestore();
 
-admin.initializeApp({
-  credential: admin.credential.cert(require(serviceAccountPath)),
-});
-
-const db = admin.firestore();
-
-function parseArg(name) {
-  const prefix = `--${name}=`;
-  const arg = process.argv.find((a) => a.startsWith(prefix));
-  return arg ? arg.slice(prefix.length) : undefined;
-}
-
-(async () => {
-  const templateId = parseArg('templateId');
-  const name = parseArg('name');
-  const rating = parseInt(parseArg('rating') || '0', 10);
-  const quote = parseArg('quote');
-  const avatarUrl = parseArg('avatarUrl');
-
-  if (!templateId || !name || !rating || !quote) {
-    console.error('Usage: node scripts/seedReviews.js --templateId=ID --name="Full Name" --rating=5 --quote="Your review" [--avatarUrl=url]');
-    process.exit(1);
-  }
-
-  const docId = `${templateId}-${Date.now()}`;
-  await db.collection('reviews').doc(docId).set({
+const templateId = 'vehicle-bill-of-sale';
+const reviews = [
+  {
+    name: 'Michelle R.',
+    location: 'Austin, TX',
+    rating: 5,
+    quote:
+      'Filled out the bill of sale in under 4 minutes and walked out of the DMV the same day!',
     templateId,
-    name,
-    rating,
-    quote,
-    avatarUrl: avatarUrl || null,
-    createdAt: admin.firestore.FieldValue.serverTimestamp(),
-  });
-  console.log('Review seeded:', docId);
-  process.exit(0);
-})();
+    createdAt: new Date(),
+  },
+  {
+    name: 'Aaron D.',
+    location: 'Boise, ID',
+    rating: 5,
+    quote:
+      'Loved the guided questions—caught VIN typos I would have missed. Worth every penny.',
+    templateId,
+    createdAt: new Date(),
+  },
+  {
+    name: 'Isabel G.',
+    location: 'Miami, FL',
+    rating: 4.8,
+    quote:
+      'Sold my car privately; this template made the hand-off super professional.',
+    templateId,
+    createdAt: new Date(),
+  },
+];
+
+await Promise.all(
+  reviews.map((r) => db.collection('reviews').add(r)),
+);
+console.log('✅ 3 reviews seeded');
+process.exit(0);

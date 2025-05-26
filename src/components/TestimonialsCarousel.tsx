@@ -1,7 +1,7 @@
 import React from 'react';
 import { Star } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
-import { collection, query, where, getDocs } from 'firebase/firestore';
+import { collection, query, where, orderBy, limit, getDocs } from 'firebase/firestore';
 import { getDb } from '@/lib/firebase';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -19,13 +19,15 @@ interface Props {
 }
 
 export default function TestimonialsCarousel({ templateId }: Props) {
-  const { data: reviews, isPending: isLoading } = useQuery({
+  const { data: reviews = [], isPending } = useQuery({
     queryKey: ['reviews', templateId],
     queryFn: async () => {
       const db = await getDb();
       const q = query(
         collection(db, 'reviews'),
         where('templateId', '==', templateId),
+        orderBy('createdAt', 'desc'),
+        limit(10),
       );
       const snap = await getDocs(q);
       return snap.docs.map((d) => d.data() as Review);
@@ -33,9 +35,17 @@ export default function TestimonialsCarousel({ templateId }: Props) {
     suspense: true,
   });
 
-  if (isLoading) return <CarouselSkeleton />;
+  if (isPending) return <CarouselSkeleton />;
 
-  if (!reviews.length) return null;
+  if (reviews.length === 0) {
+    return (
+      <section className="my-16 text-center">
+        <p className="text-sm text-gray-500">
+          Be the first to share your experience with this template!
+        </p>
+      </section>
+    );
+  }
 
   return (
     <section className="max-w-4xl mx-auto">
