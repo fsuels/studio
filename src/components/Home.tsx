@@ -2,13 +2,16 @@ import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 const Home: React.FC = () => {
-  const { t, ready } = useTranslation("common");
+  const { t, ready } = useTranslation('common');
   const documentCount = 4808; // Replace with your state or API call
 
   const translations = useMemo(
     () => ({
       trustStripTitle: t('home.trustStrip.title', { ns: 'home' }),
-      trustStripBadge1: t('home.trustStrip.badge1', { ns: 'home', count: documentCount }),
+      trustStripBadge1: t('home.trustStrip.badge1', {
+        ns: 'home',
+        count: documentCount,
+      }),
       testimonialsTitle: t('home.testimonials.title', { ns: 'home' }),
       moneyBackGuarantee: t('home.moneyBackGuarantee', { ns: 'home' }),
       callToAction: t('home.callToAction', { ns: 'home' }),
@@ -16,7 +19,7 @@ const Home: React.FC = () => {
       heroSubtitle: t('home.hero.subtitle', { ns: 'home' }),
       heroPricingBadge: t('home.hero.pricingBadge', { ns: 'home' }),
     }),
-    [t, documentCount]
+    [t, documentCount],
   );
 
   if (!ready) {

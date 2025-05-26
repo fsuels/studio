@@ -1,10 +1,10 @@
 // src/components/providers/ClientProviders.tsx
-"use client";
+'use client';
 
 import React, { ReactNode, useEffect, useState } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import I18nClientProvider from '@/components/providers/I18nProvider';
-import { Toaster } from "@/components/ui/toaster";
+import { Toaster } from '@/components/ui/toaster';
 import { CartProvider } from '@/contexts/CartProvider';
 import { AuthProvider } from '@/hooks/useAuth'; // Ensure this is the correct export
 import { Loader2 } from 'lucide-react';
@@ -14,14 +14,16 @@ interface ClientProvidersProps {
   locale: 'en' | 'es';
 }
 
-
 // Statically import Header and Footer so they are included in the main bundle.
 // This avoids an additional network request on every navigation.
 import Header from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 
-
-const AppShell = React.memo(function AppShell({ children }: { children: ReactNode }) {
+const AppShell = React.memo(function AppShell({
+  children,
+}: {
+  children: ReactNode;
+}) {
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
@@ -59,7 +61,9 @@ export function ClientProviders({ children, locale }: ClientProvidersProps) {
           }}
         >
           <Loader2 className="h-12 w-12 animate-spin text-primary" />
-          <p className="ml-2 mt-2 text-muted-foreground">Initializing Application...</p>
+          <p className="ml-2 mt-2 text-muted-foreground">
+            Initializing Application...
+          </p>
         </div>
       }
     >

@@ -19,6 +19,6 @@ export const prettify = (key: string): string => {
 
   // Capitalize each word
   return words
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
     .join(' ');
 };

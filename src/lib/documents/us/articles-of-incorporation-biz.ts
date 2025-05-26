@@ -12,22 +12,25 @@ export const articlesOfIncorporationBiz: LegalDocument = {
   offerRecordingHelp: true,
   basePrice: 5,
   states: 'all',
-  templatePaths: { // Assuming a template might exist or will be added
-    en: "en/us/articles-of-incorporation-biz.md", 
-    es: "es/us/articles-of-incorporation-biz.md" 
+  templatePaths: {
+    // Assuming a template might exist or will be added
+    en: 'en/us/articles-of-incorporation-biz.md',
+    es: 'es/us/articles-of-incorporation-biz.md',
   },
   translations: {
     en: {
       name: 'Articles of Incorporation',
-      description: 'Formal document filed with the state to create a corporation.',
-      aliases: ["form corporation", "incorporate business"]
+      description:
+        'Formal document filed with the state to create a corporation.',
+      aliases: ['form corporation', 'incorporate business'],
     },
     es: {
       name: 'Acta Constitutiva',
-      description: 'Documento formal presentado al estado para crear una corporación.',
-      aliases: ["formar corporación", "incorporar negocio"]
-    }
+      description:
+        'Documento formal presentado al estado para crear una corporación.',
+      aliases: ['formar corporación', 'incorporar negocio'],
+    },
   },
   schema: z.object({}), // Placeholder - Add actual schema fields if defined
-  questions: [] // Placeholder - Add actual questions with i18n keys if defined
+  questions: [], // Placeholder - Add actual questions with i18n keys if defined
 };

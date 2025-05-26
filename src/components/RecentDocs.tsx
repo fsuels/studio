@@ -1,10 +1,10 @@
-'use client'
+'use client';
 // src/components/RecentDocs.tsx
 
-import React, { useEffect, useState } from 'react'
-import Link from 'next/link'
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
-import { Loader2, FileText } from 'lucide-react'
+import React, { useEffect, useState } from 'react';
+import Link from 'next/link';
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
+import { Loader2, FileText } from 'lucide-react';
 
 /**
  * HOW WE PERSIST ▾
@@ -16,68 +16,70 @@ import { Loader2, FileText } from 'lucide-react'
  */
 
 interface RecentDocsProps {
-  userId?: string          // hand down from auth context if available
-  max?: number             // default 5
+  userId?: string; // hand down from auth context if available
+  max?: number; // default 5
 }
 
 interface RecentDocEntry {
-  id: string               // template/document id
-  name: string
-  lastOpened: number       // epoch ms
+  id: string; // template/document id
+  name: string;
+  lastOpened: number; // epoch ms
 }
 
 export default function RecentDocs({ userId, max = 5 }: RecentDocsProps) {
-  const [docs, setDocs] = useState<RecentDocEntry[] | null>(null)
+  const [docs, setDocs] = useState<RecentDocEntry[] | null>(null);
 
   /* ---------- helpers ------------------------------------- */
   const fetchLocal = (): RecentDocEntry[] => {
     try {
-      const raw = localStorage.getItem('recentDocs') || '[]'
-      return JSON.parse(raw)
+      const raw = localStorage.getItem('recentDocs') || '[]';
+      return JSON.parse(raw);
     } catch {
-      return []
+      return [];
     }
-  }
+  };
 
   const saveLocal = (entries: RecentDocEntry[]) => {
-    localStorage.setItem('recentDocs', JSON.stringify(entries))
-  }
+    localStorage.setItem('recentDocs', JSON.stringify(entries));
+  };
 
   /* ---------- load on mount -------------------------------- */
   useEffect(() => {
     const load = async () => {
       // 1) start with localStorage
-      let list = fetchLocal()
+      let list = fetchLocal();
 
       // 2) if logged in, merge with Firestore copy
       if (userId) {
-        const { loadRecentDocs } = await import('@/lib/firestore/recentDocs')
-        const remote = await loadRecentDocs(userId)
-        const map = new Map<string, RecentDocEntry>()
-        ;[...list, ...remote].forEach((d) => map.set(d.id, d)) // dedupe
+        const { loadRecentDocs } = await import('@/lib/firestore/recentDocs');
+        const remote = await loadRecentDocs(userId);
+        const map = new Map<string, RecentDocEntry>();
+        [...list, ...remote].forEach((d) => map.set(d.id, d)); // dedupe
         list = Array.from(map.values()).sort(
           (a, b) => b.lastOpened - a.lastOpened,
-        )
+        );
         // keep localStorage fresh
-        saveLocal(list)
+        saveLocal(list);
       }
 
-      setDocs(list.slice(0, max))
-    }
-    load().catch(console.error)
+      setDocs(list.slice(0, max));
+    };
+    load().catch(console.error);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userId])
+  }, [userId]);
 
   if (docs === null) {
     return (
       <div className="flex items-center gap-2 py-8 justify-center">
         <Loader2 className="h-4 w-4 animate-spin" />
-        <span className="text-sm text-muted-foreground">Loading recent&nbsp;documents…</span>
+        <span className="text-sm text-muted-foreground">
+          Loading recent&nbsp;documents…
+        </span>
       </div>
-    )
+    );
   }
 
-  if (!docs.length) return null
+  if (!docs.length) return null;
 
   return (
     <Card className="w-full shadow-sm border border-border">
@@ -99,5 +101,5 @@ export default function RecentDocs({ userId, max = 5 }: RecentDocsProps) {
         ))}
       </CardContent>
     </Card>
-  )
+  );
 }

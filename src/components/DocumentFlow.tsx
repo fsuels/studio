@@ -1,6 +1,5 @@
-
 // src/components/DocumentFlow.tsx
-"use client";
+'use client';
 
 import React, { useState, useEffect } from 'react'; // Added useEffect
 import { ProgressBar } from '@/components/ProgressBar'; // This might be replaced by ProgressSteps
@@ -9,8 +8,8 @@ import SlideFade from '@/components/motion/SlideFade';
 import { StepTwoInput } from '@/components/StepTwoInput'; // This might be replaced or refactored
 import dynamic from 'next/dynamic';
 const StepThreeInput = dynamic(
-  () => import('@/components/StepThreeInput').then(mod => mod.StepThreeInput),
-  { ssr: false }
+  () => import('@/components/StepThreeInput').then((mod) => mod.StepThreeInput),
+  { ssr: false },
 ); // This might be replaced or refactored
 import { useTranslation } from 'react-i18next';
 import { documentLibrary } from '@/lib/document-library'; // Import documentLibrary
@@ -19,27 +18,24 @@ interface DocumentFlowProps {
   initialDocId?: string;
 }
 
-export default function DocumentFlow({
-  initialDocId,
-}: DocumentFlowProps = {}) {
-  useTranslation("common");
+export default function DocumentFlow({ initialDocId }: DocumentFlowProps = {}) {
+  useTranslation('common');
 
   const [templateId, setTemplateId] = useState<string>(initialDocId ?? '');
-  const [step, setStep] = useState(initialDocId ? 2 : 1); 
+  const [step, setStep] = useState(initialDocId ? 2 : 1);
 
   const [category, setCategory] = useState<string>('');
-  
+
   // Effect to set initial category if docId is provided
   useEffect(() => {
     if (initialDocId) {
-      const doc = documentLibrary.find(d => d.id === initialDocId);
+      const doc = documentLibrary.find((d) => d.id === initialDocId);
       if (doc) {
         setCategory(doc.category);
         // No need to set step here as it's already initialized based on initialDocId
       }
     }
   }, [initialDocId]);
-
 
   const advanceTo = (next: number) => {
     setStep(next);
@@ -48,14 +44,12 @@ export default function DocumentFlow({
     }
   };
 
-
-
   return (
     <div className="overflow-x-hidden">
       <ProgressBar currentStep={step} totalSteps={3} />
 
       <SlideFade key={step}>
-        {step === 1 && !initialDocId && ( 
+        {step === 1 && !initialDocId && (
           <StepOneInput
             onSelectCategory={(cat) => {
               setCategory(cat);
@@ -66,7 +60,11 @@ export default function DocumentFlow({
 
         {step === 2 && (
           <StepTwoInput
-            category={category || documentLibrary.find(d => d.id === initialDocId)?.category || ''}
+            category={
+              category ||
+              documentLibrary.find((d) => d.id === initialDocId)?.category ||
+              ''
+            }
             onStateChange={() => {}}
             onSelectTemplate={(id) => {
               setTemplateId(id);

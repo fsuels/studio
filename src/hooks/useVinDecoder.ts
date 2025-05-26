@@ -26,7 +26,10 @@ export function useVinDecoder() {
       );
 
       const out = res.data.Results.reduce(
-        (acc: Record<string, string>, r: { Variable: string; Value: string }) => {
+        (
+          acc: Record<string, string>,
+          r: { Variable: string; Value: string },
+        ) => {
           acc[r.Variable] = r.Value;
           return acc;
         },

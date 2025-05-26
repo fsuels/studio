@@ -6,10 +6,12 @@ export const nonCompeteAgreement: LegalDocument = {
   name: 'Non-Compete Agreement',
   name_es: 'Acuerdo de No Competencia',
   category: 'Business',
-  description: 'Restrict an employee or contractor from competing after termination.',
-  description_es: 'Restringir a un empleado o contratista de competir después de la terminación.',
-  aliases: ["restrict competition", "former employee", "noncompete"],
-  aliases_es: ["restringir competencia", "ex empleado", "no competencia"],
+  description:
+    'Restrict an employee or contractor from competing after termination.',
+  description_es:
+    'Restringir a un empleado o contratista de competir después de la terminación.',
+  aliases: ['restrict competition', 'former employee', 'noncompete'],
+  aliases_es: ['restringir competencia', 'ex empleado', 'no competencia'],
   languageSupport: ['en', 'es'],
   requiresNotarization: false,
   canBeRecorded: false,
@@ -26,9 +28,30 @@ export const nonCompeteAgreement: LegalDocument = {
   }),
   questions: [
     { id: 'companyName', label: 'Company Name', type: 'text', required: true },
-    { id: 'employeeName', label: 'Employee/Contractor Name', type: 'text', required: true },
-    { id: 'restrictedActivities', label: 'Description of Restricted Activities', type: 'textarea', required: true },
-    { id: 'geographicScope', label: 'Geographic Scope of Restriction', type: 'text', placeholder: 'e.g., 50 miles radius from main office, State of California' },
-    { id: 'durationMonths', label: 'Duration of Restriction (Months after termination)', type: 'number', required: true },
-  ]
+    {
+      id: 'employeeName',
+      label: 'Employee/Contractor Name',
+      type: 'text',
+      required: true,
+    },
+    {
+      id: 'restrictedActivities',
+      label: 'Description of Restricted Activities',
+      type: 'textarea',
+      required: true,
+    },
+    {
+      id: 'geographicScope',
+      label: 'Geographic Scope of Restriction',
+      type: 'text',
+      placeholder:
+        'e.g., 50 miles radius from main office, State of California',
+    },
+    {
+      id: 'durationMonths',
+      label: 'Duration of Restriction (Months after termination)',
+      type: 'number',
+      required: true,
+    },
+  ],
 };

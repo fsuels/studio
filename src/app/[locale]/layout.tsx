@@ -15,12 +15,8 @@ export default function LocaleLayout({ children }: LocaleLayoutProps) {
   // Use useMemo to stabilize detectedLocale if params.locale itself is stable
   const detectedLocale = useMemo(() => {
     const pathLocale = params?.locale;
-    return (pathLocale === 'es' || pathLocale === 'en') ? pathLocale : 'en';
+    return pathLocale === 'es' || pathLocale === 'en' ? pathLocale : 'en';
   }, [params?.locale]);
 
-  return (
-    <ClientProviders locale={detectedLocale}>
-      {children}
-    </ClientProviders>
-  );
+  return <ClientProviders locale={detectedLocale}>{children}</ClientProviders>;
 }

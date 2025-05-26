@@ -18,11 +18,26 @@
       "table": {
         "headers": ["Situation", "Why a Promissory Note is Crucial"],
         "rows": [
-          ["Lending money to friends or family", "Avoids misunderstandings, clarifies terms, makes the loan enforceable."],
-          ["Business loans or investments", "Formalizes the debt, outlines repayment, protects both parties' interests."],
-          ["Selling goods or services on credit", "Serves as proof of debt and terms if payment isn't immediate."],
-          ["Student loans", "Legally required to document the obligation to repay educational funding."],
-          ["Real estate financing (sometimes as part of a larger package)", "Can secure a portion of the financing, separate from the mortgage itself."]
+          [
+            "Lending money to friends or family",
+            "Avoids misunderstandings, clarifies terms, makes the loan enforceable."
+          ],
+          [
+            "Business loans or investments",
+            "Formalizes the debt, outlines repayment, protects both parties' interests."
+          ],
+          [
+            "Selling goods or services on credit",
+            "Serves as proof of debt and terms if payment isn't immediate."
+          ],
+          [
+            "Student loans",
+            "Legally required to document the obligation to repay educational funding."
+          ],
+          [
+            "Real estate financing (sometimes as part of a larger package)",
+            "Can secure a portion of the financing, separate from the mortgage itself."
+          ]
         ]
       }
     },
@@ -42,13 +57,31 @@
         "headers": ["Clause/Data Point", "Why It Matters"],
         "rows": [
           ["Principal Amount", "The initial sum of money borrowed."],
-          ["Interest Rate", "The percentage charged on the loan, if any (check state usury laws)."],
+          [
+            "Interest Rate",
+            "The percentage charged on the loan, if any (check state usury laws)."
+          ],
           ["Date of Note", "When the promise to pay is made."],
-          ["Parties (Lender & Borrower)", "Full legal names and addresses of all involved."],
-          ["Repayment Terms", "How and when the loan will be repaid (installments, lump sum, due date)."],
-          ["Maturity Date", "The final date by which the loan must be fully repaid."],
-          ["Default Terms", "What happens if the borrower fails to pay as agreed (e.g., late fees, acceleration clause)."],
-          ["Governing Law", "Which state's or province's laws will apply to the note."],
+          [
+            "Parties (Lender & Borrower)",
+            "Full legal names and addresses of all involved."
+          ],
+          [
+            "Repayment Terms",
+            "How and when the loan will be repaid (installments, lump sum, due date)."
+          ],
+          [
+            "Maturity Date",
+            "The final date by which the loan must be fully repaid."
+          ],
+          [
+            "Default Terms",
+            "What happens if the borrower fails to pay as agreed (e.g., late fees, acceleration clause)."
+          ],
+          [
+            "Governing Law",
+            "Which state's or province's laws will apply to the note."
+          ],
           ["Signatures", "Makes the note legally binding."]
         ]
       }

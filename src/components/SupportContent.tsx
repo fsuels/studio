@@ -1,7 +1,7 @@
 // src/components/SupportContent.tsx
-'use client'
+'use client';
 
-import { useTranslation } from 'react-i18next'
+import { useTranslation } from 'react-i18next';
 import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Mail, Clock, HelpCircle, LifeBuoy } from 'lucide-react';
@@ -12,7 +12,7 @@ interface SupportContentProps {
 }
 
 export default function SupportContent({ locale }: SupportContentProps) {
-  const { t, i18n } = useTranslation("common");
+  const { t, i18n } = useTranslation('common');
   const [isHydrated, setIsHydrated] = useState(false);
 
   useEffect(() => {
@@ -77,16 +77,20 @@ export default function SupportContent({ locale }: SupportContentProps) {
           <CardContent>
             <ul className="text-sm text-muted-foreground list-none space-y-2">
               <li className="flex items-center gap-2">
-                <HelpCircle className="h-4 w-4 text-primary/70" /> {t('support.help.item1')}
+                <HelpCircle className="h-4 w-4 text-primary/70" />{' '}
+                {t('support.help.item1')}
               </li>
               <li className="flex items-center gap-2">
-                <HelpCircle className="h-4 w-4 text-primary/70" /> {t('support.help.item2')}
+                <HelpCircle className="h-4 w-4 text-primary/70" />{' '}
+                {t('support.help.item2')}
               </li>
               <li className="flex items-center gap-2">
-                <HelpCircle className="h-4 w-4 text-primary/70" /> {t('support.help.item3')}
+                <HelpCircle className="h-4 w-4 text-primary/70" />{' '}
+                {t('support.help.item3')}
               </li>
               <li className="flex items-center gap-2">
-                <HelpCircle className="h-4 w-4 text-primary/70" /> {t('support.help.item4')}
+                <HelpCircle className="h-4 w-4 text-primary/70" />{' '}
+                {t('support.help.item4')}
               </li>
             </ul>
           </CardContent>

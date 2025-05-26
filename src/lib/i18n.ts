@@ -16,7 +16,17 @@ if (!i18n.isInitialized) {
       fallbackLng: 'en',
       supportedLngs: ['en', 'es'],
       load: 'languageOnly', // Loads 'en' instead of 'en-US'
-      ns: ['common', 'header', 'footer', 'support', 'faq', 'electronic-signature', 'online-notary', 'documents', 'doc_bill_of_sale_vehicle'],
+      ns: [
+        'common',
+        'header',
+        'footer',
+        'support',
+        'faq',
+        'electronic-signature',
+        'online-notary',
+        'documents',
+        'doc_bill_of_sale_vehicle',
+      ],
       defaultNS: 'common',
       backend: {
         loadPath: '/locales/{{lng}}/{{ns}}.json',

@@ -10,11 +10,13 @@ import { documentLibrary, type LegalDocument } from '@/lib/document-library';
 import { getDocTranslation } from '@/lib/i18nUtils';
 
 const SearchBar = React.memo(function SearchBar() {
-  const { t: tHeader } = useTranslation("common");
+  const { t: tHeader } = useTranslation('common');
   const router = useRouter();
-  const params = (useParams<{ locale?: string }>() ?? {}) as { locale?: string };
+  const params = (useParams<{ locale?: string }>() ?? {}) as {
+    locale?: string;
+  };
   const locale = (params.locale as 'en' | 'es') || 'en';
-  
+
   const [searchTerm, setSearchTerm] = useState('');
   const [suggestions, setSuggestions] = useState<LegalDocument[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -33,12 +35,16 @@ const SearchBar = React.memo(function SearchBar() {
     if (searchTerm.trim().length > 1) {
       const lower = searchTerm.toLowerCase();
       const results = documentLibrary
-        .filter(doc => {
-          const { name = '', description = '', aliases = [] } = getDocTranslation(doc, locale);
+        .filter((doc) => {
+          const {
+            name = '',
+            description = '',
+            aliases = [],
+          } = getDocTranslation(doc, locale);
           return (
             name.toLowerCase().includes(lower) ||
             description.toLowerCase().includes(lower) ||
-            aliases.some(alias => alias.toLowerCase().includes(lower))
+            aliases.some((alias) => alias.toLowerCase().includes(lower))
           );
         })
         .slice(0, 5);
@@ -56,21 +62,25 @@ const SearchBar = React.memo(function SearchBar() {
     if (!isHydrated) return;
     function handleClickOutside(event: MouseEvent) {
       if (
-        suggestionsRef.current && !suggestionsRef.current.contains(event.target as Node) &&
-        searchInputRef.current && !searchInputRef.current.contains(event.target as Node)
+        suggestionsRef.current &&
+        !suggestionsRef.current.contains(event.target as Node) &&
+        searchInputRef.current &&
+        !searchInputRef.current.contains(event.target as Node)
       ) {
         setShowSuggestions(false);
       }
     }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [isHydrated]);
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!isHydrated) return;
     if (searchTerm.trim()) {
-      router.push(`/${locale}/?search=${encodeURIComponent(searchTerm)}#workflow-start`);
+      router.push(
+        `/${locale}/?search=${encodeURIComponent(searchTerm)}#workflow-start`,
+      );
       setSearchTerm('');
       setShowSuggestions(false);
     }
@@ -84,11 +94,16 @@ const SearchBar = React.memo(function SearchBar() {
   };
 
   const placeholderText = isHydrated
-    ? tHeader('SearchBar.placeholder', { defaultValue: 'Search 200+ contracts…' })
+    ? tHeader('SearchBar.placeholder', {
+        defaultValue: 'Search 200+ contracts…',
+      })
     : 'Loading…';
 
   return (
-    <form onSubmit={handleSearchSubmit} className="relative w-full max-w-xl mx-auto">
+    <form
+      onSubmit={handleSearchSubmit}
+      className="relative w-full max-w-xl mx-auto"
+    >
       <div className="relative">
         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground pointer-events-none" />
         <Input
@@ -113,23 +128,25 @@ const SearchBar = React.memo(function SearchBar() {
             ref={suggestionsRef}
             className="absolute z-50 w-full mt-1 bg-popover border border-border rounded-md shadow-lg max-h-60 overflow-y-auto"
           >
-              {suggestions.map((suggestion) => {
-                const { name } = getDocTranslation(suggestion, locale);
-                return (
-                  <li key={suggestion.id}>
-                    <button
-                      type="button"
-                      onClick={() => handleSuggestionClick(suggestion.id)}
-                      onMouseEnter={() => router.prefetch(`/${locale}/docs/${suggestion.id}`)}
-                      className="w-full text-left px-3 py-2.5 hover:bg-muted text-sm flex items-center gap-2"
-                    >
-                      <FileText className="h-4 w-4 shrink-0 text-muted-foreground" />
-                      <span className="truncate">{name}</span>
-                      <ExternalLink className="h-3 w-3 ml-auto text-muted-foreground/70 shrink-0" />
-                    </button>
-                  </li>
-                );
-              })}
+            {suggestions.map((suggestion) => {
+              const { name } = getDocTranslation(suggestion, locale);
+              return (
+                <li key={suggestion.id}>
+                  <button
+                    type="button"
+                    onClick={() => handleSuggestionClick(suggestion.id)}
+                    onMouseEnter={() =>
+                      router.prefetch(`/${locale}/docs/${suggestion.id}`)
+                    }
+                    className="w-full text-left px-3 py-2.5 hover:bg-muted text-sm flex items-center gap-2"
+                  >
+                    <FileText className="h-4 w-4 shrink-0 text-muted-foreground" />
+                    <span className="truncate">{name}</span>
+                    <ExternalLink className="h-3 w-3 ml-auto text-muted-foreground/70 shrink-0" />
+                  </button>
+                </li>
+              );
+            })}
           </ul>
         )}
       </div>

@@ -21,10 +21,7 @@ export async function POST(req: NextRequest) {
     };
 
     if (!items?.length) {
-      return NextResponse.json(
-        { error: 'Cart is empty' },
-        { status: 400 },
-      );
+      return NextResponse.json({ error: 'Cart is empty' }, { status: 400 });
     }
 
     /* ---------- build Stripe line‑items -------------------- */
@@ -41,9 +38,10 @@ export async function POST(req: NextRequest) {
     const params: Stripe.Checkout.SessionCreateParams = {
       mode: 'payment',
       line_items,
-      discounts: promo && STRIPE_COUPONS[promo.toUpperCase()]
-        ? [{ coupon: STRIPE_COUPONS[promo.toUpperCase()] }]
-        : undefined,
+      discounts:
+        promo && STRIPE_COUPONS[promo.toUpperCase()]
+          ? [{ coupon: STRIPE_COUPONS[promo.toUpperCase()] }]
+          : undefined,
       success_url: `${req.nextUrl.origin}/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${req.nextUrl.origin}/cart`,
       automatic_tax: { enabled: true },
@@ -61,9 +59,6 @@ export async function POST(req: NextRequest) {
   } catch (err: unknown) {
     console.error('Stripe checkout error →', err);
     const message = err instanceof Error ? err.message : 'Internal error';
-    return NextResponse.json(
-      { error: message },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }

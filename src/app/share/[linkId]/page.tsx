@@ -29,11 +29,14 @@ export default function SharePage({ params }: SharePageProps) {
     <main className="p-8 text-center">
       <h1 className="text-3xl font-bold">Shared Document</h1>
       <p className="mt-4">
-        Viewing document shared with ID: <span className="font-mono bg-muted px-2 py-1 rounded">{linkId}</span>
+        Viewing document shared with ID:{' '}
+        <span className="font-mono bg-muted px-2 py-1 rounded">{linkId}</span>
       </p>
       {/* Placeholder for displaying the shared document content */}
       <div className="mt-8 border rounded-md p-4 min-h-[200px] flex items-center justify-center bg-muted/50">
-         <p className="text-muted-foreground italic">Shared document content would appear here...</p>
+        <p className="text-muted-foreground italic">
+          Shared document content would appear here...
+        </p>
       </div>
     </main>
   );

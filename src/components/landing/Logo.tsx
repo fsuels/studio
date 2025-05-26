@@ -2,34 +2,39 @@
 import React from 'react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
-import { useTranslation } from 'react-i18next'; 
+import { useTranslation } from 'react-i18next';
 
 interface LogoProps {
   wrapperClassName?: string;
-  svgClassName?: string; 
-  textClassName?: string; 
+  svgClassName?: string;
+  textClassName?: string;
 }
 
-const Logo = React.memo(function Logo({ wrapperClassName, svgClassName, textClassName, ...props }: LogoProps) {
-   // Use the 'header' namespace for logo translations
-   const { t } = useTranslation("header");
+const Logo = React.memo(function Logo({
+  wrapperClassName,
+  svgClassName,
+  textClassName,
+  ...props
+}: LogoProps) {
+  // Use the 'header' namespace for logo translations
+  const { t } = useTranslation('header');
 
   return (
     <Link
       href="/"
       className={cn(
-        "flex flex-col items-center gap-1 text-foreground hover:opacity-90 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-sm",
-        wrapperClassName
+        'flex flex-col items-center gap-1 text-foreground hover:opacity-90 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-sm',
+        wrapperClassName,
       )}
-      aria-label={t('logoAlt', { defaultValue: "123LegalDoc Home" })}
+      aria-label={t('logoAlt', { defaultValue: '123LegalDoc Home' })}
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 32 32" 
+        viewBox="0 0 32 32"
         fill="none"
-        className={cn("h-7 w-7", svgClassName)} 
+        className={cn('h-7 w-7', svgClassName)}
         aria-hidden="true"
-        {...props} 
+        {...props}
       >
         <rect
           x="4"
@@ -69,23 +74,23 @@ const Logo = React.memo(function Logo({ wrapperClassName, svgClassName, textClas
         <line
           x1="8"
           y1="23"
-          x2="18" 
+          x2="18"
           y2="23"
           stroke="#008080"
           strokeWidth="1.5"
           strokeLinecap="round"
         />
         <circle
-          cx="23" 
-          cy="24" 
-          r="4.5"   
-          fill="white" 
-          stroke="#008080" 
+          cx="23"
+          cy="24"
+          r="4.5"
+          fill="white"
+          stroke="#008080"
           strokeWidth="1"
         />
         <path
           d="M21 24l1.5 1.5L25.5 23"
-          stroke="#008080" 
+          stroke="#008080"
           strokeWidth="1.5"
           strokeLinecap="round"
           strokeLinejoin="round"
@@ -94,7 +99,7 @@ const Logo = React.memo(function Logo({ wrapperClassName, svgClassName, textClas
       </svg>
 
       <span
-        className={cn("font-sans text-xs leading-tight", textClassName)} 
+        className={cn('font-sans text-xs leading-tight', textClassName)}
         style={{ color: '#008080' }}
       >
         <span className="font-light tracking-tight">123</span>

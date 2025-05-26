@@ -7,7 +7,8 @@ export const commercialLeaseAgreement: LegalDocument = {
   name_es: 'Contrato de Arrendamiento Comercial',
   category: 'Real Estate',
   description: 'Lease agreement specifically for commercial properties.',
-  description_es: 'Contrato de arrendamiento específico para propiedades comerciales.',
+  description_es:
+    'Contrato de arrendamiento específico para propiedades comerciales.',
   languageSupport: ['en', 'es'],
   requiresNotarization: false,
   canBeRecorded: true,
@@ -16,5 +17,5 @@ export const commercialLeaseAgreement: LegalDocument = {
   basePrice: 7,
   states: 'all',
   schema: z.object({}), // Placeholder
-  questions: [] // Placeholder
+  questions: [], // Placeholder
 };

@@ -16,19 +16,25 @@ export const promissoryNoteCA: LegalDocument = {
   translations: {
     en: {
       name: 'Promissory Note (Canada)',
-      description: 'Formal promise to repay a loan in compliance with Canadian federal and provincial law.',
-      aliases: ['IOU', 'loan document', 'payment promise']
+      description:
+        'Formal promise to repay a loan in compliance with Canadian federal and provincial law.',
+      aliases: ['IOU', 'loan document', 'payment promise'],
     },
     fr: {
       name: 'Billet à ordre (Canada)',
-      description: 'Promesse officielle de rembourser un prêt conformément à la loi canadienne.',
-      aliases: ['Reconnaissance de dette', 'document de prêt', 'promesse de paiement']
-    }
+      description:
+        'Promesse officielle de rembourser un prêt conformément à la loi canadienne.',
+      aliases: [
+        'Reconnaissance de dette',
+        'document de prêt',
+        'promesse de paiement',
+      ],
+    },
   },
   templatePaths: {
     // Relative to /src/templates/
-    en: "en/ca/promissory-note-ca.md",
-    fr: "fr/ca/promissory-note-ca.md"
+    en: 'en/ca/promissory-note-ca.md',
+    fr: 'fr/ca/promissory-note-ca.md',
   },
   schema: z.object({
     lenderName: z.string().min(1, 'Lender name is required'),
@@ -39,12 +45,45 @@ export const promissoryNoteCA: LegalDocument = {
     province: z.string().min(2, 'Province is required'),
   }),
   questions: [
-    { id: 'lenderName', label: 'documents.ca.promissory-note-ca.lenderName.label', type: 'text', required: true },
-    { id: 'borrowerName', label: 'documents.ca.promissory-note-ca.borrowerName.label', type: 'text', required: true },
-    { id: 'principalAmount', label: 'documents.ca.promissory-note-ca.principalAmount.label', type: 'number', required: true },
-    { id: 'interestRate', label: 'documents.ca.promissory-note-ca.interestRate.label', type: 'number', required: false, placeholder: 'e.g., 5' },
-    { id: 'repaymentTerms', label: 'documents.ca.promissory-note-ca.repaymentTerms.label', type: 'textarea', required: true, placeholder: 'e.g., Monthly payments of $100 for 12 months.' }, 
-    { id: 'province', label: 'documents.ca.promissory-note-ca.province.label', type: 'select', required: true, options: caProvinces } 
+    {
+      id: 'lenderName',
+      label: 'documents.ca.promissory-note-ca.lenderName.label',
+      type: 'text',
+      required: true,
+    },
+    {
+      id: 'borrowerName',
+      label: 'documents.ca.promissory-note-ca.borrowerName.label',
+      type: 'text',
+      required: true,
+    },
+    {
+      id: 'principalAmount',
+      label: 'documents.ca.promissory-note-ca.principalAmount.label',
+      type: 'number',
+      required: true,
+    },
+    {
+      id: 'interestRate',
+      label: 'documents.ca.promissory-note-ca.interestRate.label',
+      type: 'number',
+      required: false,
+      placeholder: 'e.g., 5',
+    },
+    {
+      id: 'repaymentTerms',
+      label: 'documents.ca.promissory-note-ca.repaymentTerms.label',
+      type: 'textarea',
+      required: true,
+      placeholder: 'e.g., Monthly payments of $100 for 12 months.',
+    },
+    {
+      id: 'province',
+      label: 'documents.ca.promissory-note-ca.province.label',
+      type: 'select',
+      required: true,
+      options: caProvinces,
+    },
   ],
-  upsellClauses: []
+  upsellClauses: [],
 };

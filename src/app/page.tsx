@@ -7,7 +7,7 @@ const RootPage: NextPage = () => {
   redirect('/en');
   // This return is technically unreachable due to redirect,
   // but included for completeness or if redirect behavior changes.
-  return null; 
+  return null;
 };
 
 export default RootPage;

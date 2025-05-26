@@ -3,15 +3,15 @@
  */
 export const PRICE_LOOKUP: Record<string, string> = {
   /* — individual documents — */
-  'bill-of-sale'           : 'price_1PABCDabcd1234',
-  'residential-lease'      : 'price_1PABCDEfgh5678',
+  'bill-of-sale': 'price_1PABCDabcd1234',
+  'residential-lease': 'price_1PABCDEfgh5678',
   /* — bundles — */
-  'landlord-starter'       : 'price_1PXYZxyz9876',
+  'landlord-starter': 'price_1PXYZxyz9876',
   // 🔹 add more SKUs as you publish them in Stripe
 };
 
 /** optional promo‑code → Coupon ID map  */
 export const COUPONS: Record<string, string> = {
-  SUMMER10 : 'coupon_summer10',     // 10 % off
-  BUNDLE20 : 'coupon_bundle20',     // 20 % off
+  SUMMER10: 'coupon_summer10', // 10 % off
+  BUNDLE20: 'coupon_bundle20', // 20 % off
 };

@@ -8,10 +8,10 @@ import { redirect, useParams } from 'next/navigation';
 export default function DocsIndexPage() {
   const params = useParams();
   const locale = params!.locale as string;
-  
+
   // For now, redirect to the homepage's document selection area
   redirect(`/${locale}/#workflow-start`);
-  
+
   // Or, you could render a list of all documents/categories:
   // return (
   //   <main className="container mx-auto py-8">

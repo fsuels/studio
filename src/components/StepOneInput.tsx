@@ -15,9 +15,9 @@ export function StepOneInput({ onSelectCategory }: StepOneInputProps) {
   const categories = Array.from(
     new Set(
       documentLibrary
-        .filter(doc => doc.id !== 'general-inquiry')  // if you have a “general-inquiry” placeholder
-        .map(doc => doc.category)
-    )
+        .filter((doc) => doc.id !== 'general-inquiry') // if you have a “general-inquiry” placeholder
+        .map((doc) => doc.category),
+    ),
   );
 
   return (
@@ -26,16 +26,15 @@ export function StepOneInput({ onSelectCategory }: StepOneInputProps) {
       <p className="mb-6">Choose the legal area that best fits your needs.</p>
 
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-6">
-        {categories.map(category => (
+        {categories.map((category) => (
           <button
             key={category}
             onClick={() => onSelectCategory(category)}
             className={cn(
               'flex flex-col items-center p-4 border rounded-lg shadow-sm hover:shadow-md transition',
               'hover:-translate-y-1 hover:shadow-glass transition-all duration-200',
-              'active:scale-95 motion-reduce:transform-none'
+              'active:scale-95 motion-reduce:transform-none',
             )}
-
           >
             <File className="w-6 h-6 mb-2 text-blue-600" />
             <span className="text-center">{category}</span>

@@ -13,7 +13,9 @@ export function usePdfPreview(params: PdfPreviewParams | null) {
     enabled: !!params,
     queryFn: async () => {
       if (!params) return null;
-      const res = await axios.post('/api/generate-pdf', params, { responseType: 'arraybuffer' });
+      const res = await axios.post('/api/generate-pdf', params, {
+        responseType: 'arraybuffer',
+      });
       const blob = new Blob([res.data], { type: 'application/pdf' });
       return URL.createObjectURL(blob);
     },

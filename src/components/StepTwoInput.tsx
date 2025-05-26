@@ -1,8 +1,12 @@
 // src/components/StepTwoInput.tsx
-"use client";
+'use client';
 
-import React, { useState, useMemo } from "react";
-import { documentLibrary, LegalDocument, usStates } from "@/lib/document-library";
+import React, { useState, useMemo } from 'react';
+import {
+  documentLibrary,
+  LegalDocument,
+  usStates,
+} from '@/lib/document-library';
 
 interface StepTwoInputProps {
   category: string;
@@ -15,12 +19,12 @@ export function StepTwoInput({
   onStateChange,
   onSelectTemplate,
 }: StepTwoInputProps) {
-  const [stateCode, setStateCode] = useState<string>("");
+  const [stateCode, setStateCode] = useState<string>('');
 
   // Memoize list of docs in this category
   const docsInCategory: LegalDocument[] = useMemo(
     () => documentLibrary.filter((doc) => doc.category === category),
-    [category]
+    [category],
   );
 
   // Handle state dropdown change
@@ -54,8 +58,8 @@ export function StepTwoInput({
         <option value="">-- Select your state --</option>
         {usStates.map((s) => {
           // support string[] or { value,label }[]
-          const code = typeof s === "string" ? s : s.value;
-          const name = typeof s === "string" ? s : s.label;
+          const code = typeof s === 'string' ? s : s.value;
+          const name = typeof s === 'string' ? s : s.label;
           return (
             <option key={code} value={code}>
               {name}
@@ -73,9 +77,7 @@ export function StepTwoInput({
             className="flex flex-col items-center p-4 border rounded-lg shadow-sm hover:shadow-md transition"
           >
             {/* Replace with your icon component */}
-            <div className="mb-2 text-blue-600">
-              📄
-            </div>
+            <div className="mb-2 text-blue-600">📄</div>
             <span className="text-center font-medium">{doc.name}</span>
           </button>
         ))}

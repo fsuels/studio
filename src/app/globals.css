@@ -1,7 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
- 
+
 @layer base {
   :root {
     --background: 210 40% 98%; /* Soft Bluetint White */
@@ -16,7 +16,7 @@
     --secondary-foreground: 220.9 39.3% 11%; /* Dark Blue/Black */
     --muted: 220 14.3% 95.9%;
     --muted-foreground: 220 8.9% 46.1%;
-    --accent: 176 100% 25%;  /* Darker Teal for interactive elements */
+    --accent: 176 100% 25%; /* Darker Teal for interactive elements */
     --accent-foreground: 210 20% 98%; /* White */
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 20% 98%;
@@ -48,19 +48,35 @@
     --ring: 176 100% 40%; /* Teal Accent for focus rings */
   }
 }
- 
+
 @layer base {
   * {
     @apply border-border;
   }
-  html, body, #__next { @apply overflow-x-hidden; }
+  html,
+  body,
+  #__next {
+    @apply overflow-x-hidden;
+  }
   body {
     @apply bg-background text-foreground;
     /* Example Gradient Mesh - for more complex mesh, consider SVG or a generator */
-    background: 
-      radial-gradient(ellipse at 10% 10%, hsl(var(--primary) / 0.15) 0%, transparent 50%),
-      radial-gradient(ellipse at 90% 20%, hsl(var(--secondary) / 0.2) 0%, transparent 50%),
-      radial-gradient(ellipse at 50% 90%, hsl(var(--accent) / 0.1) 0%, transparent 60%),
+    background:
+      radial-gradient(
+        ellipse at 10% 10%,
+        hsl(var(--primary) / 0.15) 0%,
+        transparent 50%
+      ),
+      radial-gradient(
+        ellipse at 90% 20%,
+        hsl(var(--secondary) / 0.2) 0%,
+        transparent 50%
+      ),
+      radial-gradient(
+        ellipse at 50% 90%,
+        hsl(var(--accent) / 0.1) 0%,
+        transparent 60%
+      ),
       hsl(var(--background));
     font-family: var(--font-geist-sans), 'InterVariable', sans-serif;
     line-height: 1.5;
@@ -74,30 +90,59 @@
   .card-hover {
     @apply transition-transform duration-150 hover:-translate-y-1 hover:shadow-lg;
   }
-  h1,h2,h3,h4,h5,h6 { @apply font-semibold text-foreground; } 
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-semibold text-foreground;
+  }
   .bg-glass {
     backdrop-filter: blur(12px) saturate(180%);
-    background: hsl(var(--card) / 0.6); 
-    box-shadow: 0 8px 32px hsla(var(--foreground) / 0.12); 
+    background: hsl(var(--card) / 0.6);
+    box-shadow: 0 8px 32px hsla(var(--foreground) / 0.12);
   }
-  ::-webkit-scrollbar { width: 8px; height: 8px; }
-  ::-webkit-scrollbar-track { @apply bg-transparent; }
-  ::-webkit-scrollbar-thumb { @apply bg-muted-foreground/50 hover:bg-muted-foreground/70 rounded-lg transition-colors duration-200; } 
-  
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-muted-foreground/50 hover:bg-muted-foreground/70 rounded-lg transition-colors duration-200;
+  }
 }
 
 @layer utilities {
   @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(8px); }
-    to   { opacity: 1; transform: translateY(0); }
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
-  .animate-fade-up      { animation: fadeUp .45s cubic-bezier(.16,1,.3,1) both; }
+  .animate-fade-up {
+    animation: fadeUp 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
 
   @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to   { opacity: 1; transform: translateY(0); }
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
-  .animate-fade-in      { animation: fadeIn 0.5s ease-out forwards; }
+  .animate-fade-in {
+    animation: fadeIn 0.5s ease-out forwards;
+  }
 
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
@@ -107,70 +152,84 @@
     scrollbar-width: none;
   }
 
-  button:focus-visible, a:focus-visible { @apply ring-2 ring-offset-2 ring-primary; }
-  
+  button:focus-visible,
+  a:focus-visible {
+    @apply ring-2 ring-offset-2 ring-primary;
+  }
+
   .card-content {
-    @apply px-4 py-3; 
+    @apply px-4 py-3;
   }
 
-  .category-grid, .document-grid { 
-    @apply grid gap-3; 
+  .category-grid,
+  .document-grid {
+    @apply grid gap-3;
   }
 
-  .step-card { 
-    @apply p-4 bg-card rounded-lg shadow-lg border border-border; 
+  .step-card {
+    @apply p-4 bg-card rounded-lg shadow-lg border border-border;
   }
-  .step-card__header { 
-    @apply mb-4 flex items-start space-x-3; 
+  .step-card__header {
+    @apply mb-4 flex items-start space-x-3;
   }
-  .step-card__icon { 
-    @apply h-7 w-7 text-primary shrink-0 mt-1; 
+  .step-card__icon {
+    @apply h-7 w-7 text-primary shrink-0 mt-1;
   }
-  .step-card__title { 
-    @apply text-xl font-semibold text-foreground; 
+  .step-card__title {
+    @apply text-xl font-semibold text-foreground;
   }
-  .step-card__subtitle { 
-    @apply text-base text-muted-foreground; 
+  .step-card__subtitle {
+    @apply text-base text-muted-foreground;
   }
-  .step-card select, 
-  .step-card input[type="text"], 
-  .step-card input[type="search"] { 
-    @apply w-full box-border mb-4 bg-background border-input placeholder:text-muted-foreground text-foreground; 
+  .step-card select,
+  .step-card input[type='text'],
+  .step-card input[type='search'] {
+    @apply w-full box-border mb-4 bg-background border-input placeholder:text-muted-foreground text-foreground;
   }
 
-  .category-card, .document-card { 
+  .category-card,
+  .document-card {
     @apply p-4 border border-border rounded-md shadow-sm text-center flex flex-col items-center justify-center bg-card text-card-foreground;
-    min-height: 56px; 
-    font-size: 1rem; 
+    min-height: 56px;
+    font-size: 1rem;
   }
-  .category-card:active, .document-card:active { 
-    @apply scale-95 transition-transform duration-100 ease-out; 
+  .category-card:active,
+  .document-card:active {
+    @apply scale-95 transition-transform duration-100 ease-out;
   }
-  @media (hover:hover) {
-    .category-card:hover, .document-card:hover { 
-      @apply shadow-md border-primary/50; 
+  @media (hover: hover) {
+    .category-card:hover,
+    .document-card:hover {
+      @apply shadow-md border-primary/50;
     }
   }
 
   @media (max-width: 639px) {
-    .category-grid, .document-grid { grid-template-columns: 1fr; }
+    .category-grid,
+    .document-grid {
+      grid-template-columns: 1fr;
+    }
   }
   @media (min-width: 640px) and (max-width: 1023px) {
-    .category-grid, .document-grid { grid-template-columns: repeat(2,1fr); }
+    .category-grid,
+    .document-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
   }
   @media (min-width: 1024px) {
-    .category-grid { grid-template-columns: repeat(3,1fr); } 
-    .document-grid { grid-template-columns: repeat(3,1fr); }
+    .category-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+    .document-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
   }
-
-
 }
 
 @layer components {
-
-  input[aria-invalid="true"],
-  select[aria-invalid="true"],
-  textarea[aria-invalid="true"] {
+  input[aria-invalid='true'],
+  select[aria-invalid='true'],
+  textarea[aria-invalid='true'] {
     @apply border-destructive ring-1 ring-destructive;
   }
 
@@ -179,24 +238,29 @@
   }
 
   #live-preview::before {
-    content: attr(data-watermark); 
+    content: attr(data-watermark);
     position: absolute;
     inset: 0;
-    font-size: 5rem; 
+    font-size: 5rem;
     font-weight: 700;
-    color: hsl(var(--muted-foreground) / 0.08); 
+    color: hsl(var(--muted-foreground) / 0.08);
     display: flex;
     align-items: center;
     justify-content: center;
     transform: rotate(-30deg);
     pointer-events: none;
-    z-index: 10; 
+    z-index: 10;
   }
 
   #live-preview .prose h1 {
-    @apply text-xl font-semibold text-center mt-4 mb-4 md:text-2xl md:mb-6; 
+    @apply text-xl font-semibold text-center mt-4 mb-4 md:text-2xl md:mb-6;
   }
 }
 
-.scrollbar-hide::-webkit-scrollbar { display: none; }
-.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

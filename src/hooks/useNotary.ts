@@ -1,4 +1,3 @@
-
 // src/hooks/useNotary.ts
 'use client';
 
@@ -17,9 +16,14 @@ export function useNotary(stateCode: string | undefined | null) {
 
   const toggleNotary = () => {
     if (!isRequired) {
-      setIsChecked(prev => !prev);
+      setIsChecked((prev) => !prev);
     }
   };
-  
-  return { isRequired, isChecked, setIsChecked: toggleNotary, setChecked: setIsChecked };
+
+  return {
+    isRequired,
+    isChecked,
+    setIsChecked: toggleNotary,
+    setChecked: setIsChecked,
+  };
 }

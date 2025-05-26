@@ -46,7 +46,9 @@ interface Section {
   ctaKey?: string;
 }
 
-export default function VehicleBillOfSaleDisplay({ locale }: VehicleBillOfSaleDisplayProps) {
+export default function VehicleBillOfSaleDisplay({
+  locale,
+}: VehicleBillOfSaleDisplayProps) {
   const { t, i18n } = useTranslation('doc_bill_of_sale_vehicle');
   const router = useRouter();
   const { addItem } = useCart();
@@ -61,123 +63,276 @@ export default function VehicleBillOfSaleDisplay({ locale }: VehicleBillOfSaleDi
 
   const handleStartProcess = () => {
     if (!isHydrated) return;
-    const itemName = t('metaTitle', { defaultValue: 'Vehicle Bill of Sale Template & How-To Guide | 123LegalDoc' });
+    const itemName = t('metaTitle', {
+      defaultValue:
+        'Vehicle Bill of Sale Template & How-To Guide | 123LegalDoc',
+    });
     const priceCents = 1995;
-    track('add_to_cart', { item_id: 'bill-of-sale-vehicle', item_name: itemName, value: priceCents / 100, currency: 'USD' });
-    addItem({ id: 'bill-of-sale-vehicle', type: 'doc', name: itemName, price: priceCents });
+    track('add_to_cart', {
+      item_id: 'bill-of-sale-vehicle',
+      item_name: itemName,
+      value: priceCents / 100,
+      currency: 'USD',
+    });
+    addItem({
+      id: 'bill-of-sale-vehicle',
+      type: 'doc',
+      name: itemName,
+      price: priceCents,
+    });
     router.prefetch(`/${locale}/#workflow-start?docId=bill-of-sale-vehicle`);
   };
 
   const informationalSections: Section[] = [
-    { id: 'what-is', titleKey: 'sections.whatIs.title', contentKey: 'sections.whatIs.content', type: 'list' },
-    { id: 'why', titleKey: 'sections.why.title', tableKey: 'sections.why.table', type: 'table' },
-    { id: 'covered', titleKey: 'sections.covered.title', contentKey: 'sections.covered.content', type: 'paragraph' },
-    { id: 'types', titleKey: 'sections.types.title', itemsKey: 'sections.types.items', type: 'list' },
-    { id: 'components', titleKey: 'sections.components.title', tableKey: 'sections.components.table', type: 'table' },
-    { id: 'how-to', titleKey: 'sections.howTo.title', itemsKey: 'sections.howTo.items', totalTimeKey: 'sections.howTo.totalTime', type: 'ordered-list' },
-    { id: 'state-rules', titleKey: 'sections.stateRules.title', contentKey: 'sections.stateRules.content', itemsKey: 'sections.stateRules.items', type: 'mixed-list' },
-    { id: 'checklist', titleKey: 'sections.checklist.title', itemsKey: 'sections.checklist.items', printNoteKey: 'sections.checklist.printNote', type: 'checklist' },
-    { id: 'supporting', titleKey: 'sections.supporting.title', itemsKey: 'sections.supporting.items', type: 'list' },
-    { id: 'why-us', titleKey: 'sections.whyUs.title', itemsKey: 'sections.whyUs.items', ctaKey: 'sections.whyUs.cta', type: 'list-cta' },
+    {
+      id: 'what-is',
+      titleKey: 'sections.whatIs.title',
+      contentKey: 'sections.whatIs.content',
+      type: 'list',
+    },
+    {
+      id: 'why',
+      titleKey: 'sections.why.title',
+      tableKey: 'sections.why.table',
+      type: 'table',
+    },
+    {
+      id: 'covered',
+      titleKey: 'sections.covered.title',
+      contentKey: 'sections.covered.content',
+      type: 'paragraph',
+    },
+    {
+      id: 'types',
+      titleKey: 'sections.types.title',
+      itemsKey: 'sections.types.items',
+      type: 'list',
+    },
+    {
+      id: 'components',
+      titleKey: 'sections.components.title',
+      tableKey: 'sections.components.table',
+      type: 'table',
+    },
+    {
+      id: 'how-to',
+      titleKey: 'sections.howTo.title',
+      itemsKey: 'sections.howTo.items',
+      totalTimeKey: 'sections.howTo.totalTime',
+      type: 'ordered-list',
+    },
+    {
+      id: 'state-rules',
+      titleKey: 'sections.stateRules.title',
+      contentKey: 'sections.stateRules.content',
+      itemsKey: 'sections.stateRules.items',
+      type: 'mixed-list',
+    },
+    {
+      id: 'checklist',
+      titleKey: 'sections.checklist.title',
+      itemsKey: 'sections.checklist.items',
+      printNoteKey: 'sections.checklist.printNote',
+      type: 'checklist',
+    },
+    {
+      id: 'supporting',
+      titleKey: 'sections.supporting.title',
+      itemsKey: 'sections.supporting.items',
+      type: 'list',
+    },
+    {
+      id: 'why-us',
+      titleKey: 'sections.whyUs.title',
+      itemsKey: 'sections.whyUs.items',
+      ctaKey: 'sections.whyUs.cta',
+      type: 'list-cta',
+    },
   ];
 
   const faqItems: Section[] = [
-    { id: 'faq1', titleKey: 'faq.q1.question', contentKey: 'faq.q1.answer', type: 'paragraph' },
-    { id: 'faq2', titleKey: 'faq.q2.question', contentKey: 'faq.q2.answer', type: 'paragraph' },
-    { id: 'faq3', titleKey: 'faq.q3.question', contentKey: 'faq.q3.answer', type: 'paragraph' },
-    { id: 'faq4', titleKey: 'faq.q4.question', contentKey: 'faq.q4.answer', type: 'paragraph' },
-    { id: 'faq5', titleKey: 'faq.q5.question', contentKey: 'faq.q5.answer', type: 'paragraph' },
+    {
+      id: 'faq1',
+      titleKey: 'faq.q1.question',
+      contentKey: 'faq.q1.answer',
+      type: 'paragraph',
+    },
+    {
+      id: 'faq2',
+      titleKey: 'faq.q2.question',
+      contentKey: 'faq.q2.answer',
+      type: 'paragraph',
+    },
+    {
+      id: 'faq3',
+      titleKey: 'faq.q3.question',
+      contentKey: 'faq.q3.answer',
+      type: 'paragraph',
+    },
+    {
+      id: 'faq4',
+      titleKey: 'faq.q4.question',
+      contentKey: 'faq.q4.answer',
+      type: 'paragraph',
+    },
+    {
+      id: 'faq5',
+      titleKey: 'faq.q5.question',
+      contentKey: 'faq.q5.answer',
+      type: 'paragraph',
+    },
   ];
-  
-  const allSections: Section[] = [...informationalSections, ...faqItems];
 
+  const allSections: Section[] = [...informationalSections, ...faqItems];
 
   const renderSectionContent = (section: Section, translate: typeof t) => {
     if (section.type === 'paragraph' && section.contentKey) {
-      return <p className="text-muted-foreground">{translate(section.contentKey)}</p>;
+      return (
+        <p className="text-muted-foreground">{translate(section.contentKey)}</p>
+      );
     }
     if (section.type === 'list' && (section.contentKey || section.itemsKey)) {
       const itemsKeyToUse = section.itemsKey || section.contentKey;
       if (!itemsKeyToUse) return null;
-      const items = translate(itemsKeyToUse, { returnObjects: true }) as string[];
+      const items = translate(itemsKeyToUse, {
+        returnObjects: true,
+      }) as string[];
       if (Array.isArray(items)) {
         return (
           <ul className="list-disc list-outside pl-5 space-y-1 text-muted-foreground">
-            {items.map((item: string, i: number) => <li key={i}>{item}</li>)}
+            {items.map((item: string, i: number) => (
+              <li key={i}>{item}</li>
+            ))}
           </ul>
         );
       }
     }
     if (section.type === 'ordered-list' && section.itemsKey) {
-      const items = translate(section.itemsKey, { returnObjects: true }) as string[];
+      const items = translate(section.itemsKey, {
+        returnObjects: true,
+      }) as string[];
       if (Array.isArray(items)) {
         return (
           <>
             <ol className="list-decimal list-outside pl-5 space-y-1 text-muted-foreground">
-              {items.map((item: string, i: number) => <li key={i}>{item}</li>)}
+              {items.map((item: string, i: number) => (
+                <li key={i}>{item}</li>
+              ))}
             </ol>
-            {section.totalTimeKey && <p className="text-sm text-muted-foreground mt-2">{translate(section.totalTimeKey)}</p>}
+            {section.totalTimeKey && (
+              <p className="text-sm text-muted-foreground mt-2">
+                {translate(section.totalTimeKey)}
+              </p>
+            )}
           </>
         );
       }
     }
-    if (section.type === 'mixed-list' && section.contentKey && section.itemsKey) {
-      const items = translate(section.itemsKey, { returnObjects: true }) as string[];
+    if (
+      section.type === 'mixed-list' &&
+      section.contentKey &&
+      section.itemsKey
+    ) {
+      const items = translate(section.itemsKey, {
+        returnObjects: true,
+      }) as string[];
       return (
         <>
-          <p className="text-muted-foreground mb-2">{translate(section.contentKey)}</p>
+          <p className="text-muted-foreground mb-2">
+            {translate(section.contentKey)}
+          </p>
           {Array.isArray(items) && (
             <ul className="list-disc list-outside pl-5 space-y-1 text-muted-foreground">
-              {items.map((item: string, i: number) => <li key={i}>{item}</li>)}
+              {items.map((item: string, i: number) => (
+                <li key={i}>{item}</li>
+              ))}
             </ul>
           )}
         </>
       );
     }
     if (section.type === 'checklist' && section.itemsKey) {
-      const items = translate(section.itemsKey, { returnObjects: true }) as string[];
+      const items = translate(section.itemsKey, {
+        returnObjects: true,
+      }) as string[];
       if (Array.isArray(items)) {
         return (
           <>
             <ul className="list-none pl-0 space-y-1 text-muted-foreground">
-              {items.map((item: string, i: number) => <li key={i} className="flex items-center"><span className="mr-2">✓</span>{item}</li>)}
+              {items.map((item: string, i: number) => (
+                <li key={i} className="flex items-center">
+                  <span className="mr-2">✓</span>
+                  {item}
+                </li>
+              ))}
             </ul>
-            {section.printNoteKey && <p className="text-sm text-muted-foreground mt-2 italic">{translate(section.printNoteKey)}</p>}
+            {section.printNoteKey && (
+              <p className="text-sm text-muted-foreground mt-2 italic">
+                {translate(section.printNoteKey)}
+              </p>
+            )}
           </>
         );
       }
     }
     if (section.tableKey) {
-      const headers = translate(`${section.tableKey}.headers`, { returnObjects: true }) as string[];
-      const rows = translate(`${section.tableKey}.rows`, { returnObjects: true }) as string[][];
+      const headers = translate(`${section.tableKey}.headers`, {
+        returnObjects: true,
+      }) as string[];
+      const rows = translate(`${section.tableKey}.rows`, {
+        returnObjects: true,
+      }) as string[][];
       return (
         <div className="overflow-x-auto my-4">
           <Table className="min-w-full text-sm">
             <TableHeader>
               <TableRow>
-                {Array.isArray(headers) && headers.map((header: string) => <TableHead key={header} className="text-foreground bg-muted/50">{header}</TableHead>)}
+                {Array.isArray(headers) &&
+                  headers.map((header: string) => (
+                    <TableHead
+                      key={header}
+                      className="text-foreground bg-muted/50"
+                    >
+                      {header}
+                    </TableHead>
+                  ))}
               </TableRow>
             </TableHeader>
             <TableBody>
-              {Array.isArray(rows) && rows.map((row: string[], rowIndex: number) => (
-                <TableRow key={rowIndex}>
-                  {Array.isArray(row) && row.map((cell, cellIndex) => <TableCell key={cellIndex} className="text-muted-foreground">{cell}</TableCell>)}
-                </TableRow>
-              ))}
+              {Array.isArray(rows) &&
+                rows.map((row: string[], rowIndex: number) => (
+                  <TableRow key={rowIndex}>
+                    {Array.isArray(row) &&
+                      row.map((cell, cellIndex) => (
+                        <TableCell
+                          key={cellIndex}
+                          className="text-muted-foreground"
+                        >
+                          {cell}
+                        </TableCell>
+                      ))}
+                  </TableRow>
+                ))}
             </TableBody>
           </Table>
         </div>
       );
     }
     if (section.type === 'list-cta' && section.itemsKey && section.ctaKey) {
-      const items = translate(section.itemsKey, { returnObjects: true }) as string[];
+      const items = translate(section.itemsKey, {
+        returnObjects: true,
+      }) as string[];
       if (Array.isArray(items)) {
         return (
           <>
             <ul className="list-disc list-outside pl-5 space-y-1 text-muted-foreground">
-              {items.map((item: string, i: number) => <li key={i}>{item}</li>)}
+              {items.map((item: string, i: number) => (
+                <li key={i}>{item}</li>
+              ))}
             </ul>
-            <p className="text-muted-foreground mt-4">{translate(section.ctaKey)}</p>
+            <p className="text-muted-foreground mt-4">
+              {translate(section.ctaKey)}
+            </p>
           </>
         );
       }
@@ -186,16 +341,28 @@ export default function VehicleBillOfSaleDisplay({ locale }: VehicleBillOfSaleDi
   };
 
   if (!isHydrated) {
-    return <div className="container mx-auto px-4 py-12 animate-pulse"><div className="h-12 bg-muted rounded w-3/4 mx-auto mb-6"></div><div className="h-8 bg-muted rounded w-1/2 mx-auto mb-10"></div><div className="space-y-8"><div className="h-48 bg-muted rounded"></div><div className="h-64 bg-muted rounded"></div><div className="h-32 bg-muted rounded"></div></div></div>;
+    return (
+      <div className="container mx-auto px-4 py-12 animate-pulse">
+        <div className="h-12 bg-muted rounded w-3/4 mx-auto mb-6"></div>
+        <div className="h-8 bg-muted rounded w-1/2 mx-auto mb-10"></div>
+        <div className="space-y-8">
+          <div className="h-48 bg-muted rounded"></div>
+          <div className="h-64 bg-muted rounded"></div>
+          <div className="h-32 bg-muted rounded"></div>
+        </div>
+      </div>
+    );
   }
 
   return (
     <div className="container mx-auto px-4 py-12">
       <header className="mb-10 text-center">
-        <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-3">{t('pageTitle')}</h1>
+        <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-3">
+          {t('pageTitle')}
+        </h1>
         <p className="text-lg text-muted-foreground">{t('pageSubtitle')}</p>
       </header>
-      
+
       <Accordion type="single" collapsible className="w-full space-y-4 mb-10">
         {allSections.map((section) => (
           <AccordionItem
@@ -216,15 +383,27 @@ export default function VehicleBillOfSaleDisplay({ locale }: VehicleBillOfSaleDi
       </Accordion>
 
       <section className="text-center py-8 bg-secondary/30 rounded-lg border border-border">
-        <h2 className="text-2xl font-semibold text-foreground mb-3">{t('finalCtaTitle')}</h2>
-        <p className="text-muted-foreground mb-6 max-w-lg mx-auto">{t('finalCtaSubtitle')}</p>
+        <h2 className="text-2xl font-semibold text-foreground mb-3">
+          {t('finalCtaTitle')}
+        </h2>
+        <p className="text-muted-foreground mb-6 max-w-lg mx-auto">
+          {t('finalCtaSubtitle')}
+        </p>
         <Button
           asChild
           size="lg"
           className="bg-primary hover:bg-primary/90 text-primary-foreground"
-          onMouseEnter={() => router.prefetch(`/${locale}/#workflow-start?docId=bill-of-sale-vehicle`)}
+          onMouseEnter={() =>
+            router.prefetch(
+              `/${locale}/#workflow-start?docId=bill-of-sale-vehicle`,
+            )
+          }
         >
-          <Link href={`/${locale}/#workflow-start?docId=bill-of-sale-vehicle`} onClick={handleStartProcess} prefetch>
+          <Link
+            href={`/${locale}/#workflow-start?docId=bill-of-sale-vehicle`}
+            onClick={handleStartProcess}
+            prefetch
+          >
             {t('startMyBillOfSaleButton')}
           </Link>
         </Button>

@@ -8,7 +8,7 @@ export const promissoryNoteMeta: LegalDocument = {
   jurisdiction: 'US',
   category: 'Finance',
   languageSupport: ['en', 'es'],
-  basePrice: 5, 
+  basePrice: 5,
   requiresNotarization: false,
   canBeRecorded: false,
   offerNotarization: false,
@@ -22,15 +22,20 @@ export const promissoryNoteMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Promissory Note',
-      description: 'Formalize a promise to repay a loan, with terms for principal, interest, and repayment schedule.',
-      aliases: ["iou", "loan paper", "promise to pay", "loan document"]
+      description:
+        'Formalize a promise to repay a loan, with terms for principal, interest, and repayment schedule.',
+      aliases: ['iou', 'loan paper', 'promise to pay', 'loan document'],
     },
     es: {
       name: 'Pagaré',
-      description: 'Formalizar una promesa de pago de un préstamo, con plazos para el capital, intereses y calendario de pagos.',
-      aliases: ["pagaré", "documento de préstamo", "promesa de pago"]
-    }
-  }
+      description:
+        'Formalizar una promesa de pago de un préstamo, con plazos para el capital, intereses y calendario de pagos.',
+      aliases: ['pagaré', 'documento de préstamo', 'promesa de pago'],
+    },
+  },
 };
 
-console.log('[promissory-note metadata] questions loaded:', promissoryNoteMeta.questions?.length);
+console.log(
+  '[promissory-note metadata] questions loaded:',
+  promissoryNoteMeta.questions?.length,
+);

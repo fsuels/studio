@@ -15,13 +15,16 @@ export interface SignPdfOptions {
 
 export async function signPdfDocument(
   pdfData: Uint8Array,
-  options: SignPdfOptions = {}
+  options: SignPdfOptions = {},
 ): Promise<DigitalSignatureResult> {
   try {
     const binary = Array.from(pdfData)
       .map((b) => String.fromCharCode(b))
       .join('');
-    const pdfBase64 = typeof btoa === 'function' ? btoa(binary) : Buffer.from(binary, 'binary').toString('base64');
+    const pdfBase64 =
+      typeof btoa === 'function'
+        ? btoa(binary)
+        : Buffer.from(binary, 'binary').toString('base64');
     const res = await fetch('/api/signwell', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -30,7 +33,11 @@ export async function signPdfDocument(
 
     if (!res.ok) {
       const err = await res.json();
-      return { success: false, message: err.error || 'Failed to create SignWell document', signedPdf: null };
+      return {
+        success: false,
+        message: err.error || 'Failed to create SignWell document',
+        signedPdf: null,
+      };
     }
 
     const data = await res.json();

@@ -1,14 +1,14 @@
 // src/components/landing/HowItWorks.tsx
-"use client";
+'use client';
 
-import React, { useEffect, useState, useRef } from "react";
-import { useTranslation } from "react-i18next";
-import { motion, useAnimation, useInView } from "framer-motion";
-import { FileText, Edit3, CheckCircle } from "lucide-react";
-import { Progress } from "@/components/ui/progress"; // Assuming ShadCN progress
+import React, { useEffect, useState, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
+import { motion, useAnimation, useInView } from 'framer-motion';
+import { FileText, Edit3, CheckCircle } from 'lucide-react';
+import { Progress } from '@/components/ui/progress'; // Assuming ShadCN progress
 
 const HowItWorks = React.memo(function HowItWorks() {
-  const { t } = useTranslation("common");
+  const { t } = useTranslation('common');
   const [isHydrated, setIsHydrated] = useState(false);
   const containerRef = useRef(null);
   const isInView = useInView(containerRef, { once: true, amount: 0.2 });
@@ -21,7 +21,7 @@ const HowItWorks = React.memo(function HowItWorks() {
 
   useEffect(() => {
     if (isInView) {
-      controls.start("visible");
+      controls.start('visible');
       // Animate progress bar
       let step = 0;
       const interval = setInterval(() => {
@@ -33,30 +33,30 @@ const HowItWorks = React.memo(function HowItWorks() {
     }
   }, [isInView, controls]);
 
-  const placeholderTitle = "...";
-  const placeholderDescription = "...";
+  const placeholderTitle = '...';
+  const placeholderDescription = '...';
 
   const stepsData = [
     {
       icon: FileText,
-      titleKey: "home.steps.step1.title",
-      descriptionKey: "home.steps.step1.desc",
-      defaultTitle: "Describe Situation",
-      defaultDescription: "Give a quick summary. Text or mic supported.",
+      titleKey: 'home.steps.step1.title',
+      descriptionKey: 'home.steps.step1.desc',
+      defaultTitle: 'Describe Situation',
+      defaultDescription: 'Give a quick summary. Text or mic supported.',
     },
     {
       icon: Edit3,
-      titleKey: "home.steps.step2.title",
-      descriptionKey: "home.steps.step2.desc",
-      defaultTitle: "Answer Simple Prompts",
-      defaultDescription: "AI will guide you through the exact info needed.",
+      titleKey: 'home.steps.step2.title',
+      descriptionKey: 'home.steps.step2.desc',
+      defaultTitle: 'Answer Simple Prompts',
+      defaultDescription: 'AI will guide you through the exact info needed.',
     },
     {
       icon: CheckCircle,
-      titleKey: "home.steps.step3.title",
-      descriptionKey: "home.steps.step3.desc",
-      defaultTitle: "Finalize & Sign",
-      defaultDescription: "Download, sign, or securely share your document.",
+      titleKey: 'home.steps.step3.title',
+      descriptionKey: 'home.steps.step3.desc',
+      defaultTitle: 'Finalize & Sign',
+      defaultDescription: 'Download, sign, or securely share your document.',
     },
   ];
 
@@ -73,8 +73,6 @@ const HowItWorks = React.memo(function HowItWorks() {
       },
     }),
   };
-
-
 
   return (
     <section
@@ -95,7 +93,7 @@ const HowItWorks = React.memo(function HowItWorks() {
           className="text-3xl sm:text-4xl font-bold mb-6 text-foreground"
         >
           {isHydrated
-            ? t("home.hero.title", { defaultValue: "Only 3 Easy Steps" })
+            ? t('home.hero.title', { defaultValue: 'Only 3 Easy Steps' })
             : placeholderTitle}
         </motion.h2>
         <motion.p
@@ -105,9 +103,9 @@ const HowItWorks = React.memo(function HowItWorks() {
           className="text-lg text-muted-foreground mb-12 md:mb-16 max-w-2xl mx-auto"
         >
           {isHydrated
-            ? t("home.hero.subtitle", {
+            ? t('home.hero.subtitle', {
                 defaultValue:
-                  "In a few guided steps, you’ll generate a fully customized legal document.",
+                  'In a few guided steps, you’ll generate a fully customized legal document.',
               })
             : placeholderDescription}
         </motion.p>
@@ -125,7 +123,7 @@ const HowItWorks = React.memo(function HowItWorks() {
                   totalSteps: stepsData.length,
                   defaultValue: `Step ${currentStepAnimated}/${stepsData.length}`,
                 })
-              : ""}
+              : ''}
           </p>
         </div>
 

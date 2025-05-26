@@ -9,14 +9,14 @@ import type { LegalDocument, LocalizedText } from '@/types/documents';
  */
 export function getDocTranslation(
   doc: LegalDocument | null | undefined,
-  lang: string
+  lang: string,
 ): LocalizedText {
   // Base fallback if no document or no translations
   if (!doc || !doc.translations) {
     return {
       name: doc?.id || 'Untitled Document',
       description: '',
-      aliases: []
+      aliases: [],
     };
   }
 
@@ -36,6 +36,6 @@ export function getDocTranslation(
   return {
     name: doc.id,
     description: '',
-    aliases: []
+    aliases: [],
   };
 }

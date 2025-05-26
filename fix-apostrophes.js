@@ -9,18 +9,16 @@ export default function transformer(file, api) {
 
   root
     .find(j.Literal)
-    .filter(path => {
+    .filter((path) => {
       if (!path.node || !path.node.raw) {
         return false;
       }
       const { raw, value } = path.node;
       return (
-        typeof value === 'string' &&
-        raw.startsWith("'") &&
-        value.includes("'")
+        typeof value === 'string' && raw.startsWith("'") && value.includes("'")
       );
     })
-    .forEach(path => {
+    .forEach((path) => {
       const text = path.node.value;
       // Escape any existing double-quotes in the text
       const escaped = text.replace(/"/g, '"'); // Corrected escaping for double quote

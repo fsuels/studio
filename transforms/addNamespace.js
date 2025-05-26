@@ -14,19 +14,19 @@ const mappings = [
   // …add more mappings as needed…
 ];
 
-module.exports = function(fileInfo, api) {
+module.exports = function (fileInfo, api) {
   const j = api.jscodeshift;
   const root = j(fileInfo.source);
 
-  const mapping = mappings.find(m => m.test.test(fileInfo.path));
+  const mapping = mappings.find((m) => m.test.test(fileInfo.path));
   if (!mapping) return null;
 
   root
     .find(j.CallExpression, {
       callee: { name: 'useTranslation' },
-      arguments: args => args.length === 0
+      arguments: (args) => args.length === 0,
     })
-    .forEach(path => {
+    .forEach((path) => {
       path.node.arguments = [j.literal(mapping.ns)];
     });
 

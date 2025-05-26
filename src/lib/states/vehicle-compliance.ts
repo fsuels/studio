@@ -17,7 +17,9 @@ const complianceData: Record<string, VehicleCompliance> = {
   WY: { state: 'Wyoming', notarizationRequired: true },
 };
 
-export function getVehicleCompliance(stateCode: string): VehicleCompliance | undefined {
+export function getVehicleCompliance(
+  stateCode: string,
+): VehicleCompliance | undefined {
   return complianceData[stateCode];
 }
 

@@ -13,7 +13,10 @@ export interface SignWellStatusResponse {
  * Calls our Next.js API route to create a SignWell document for signing.
  * Expects pdfData as base64 string and optional filename.
  */
-export async function createSignWellDocument(pdfBase64: string, fileName = 'document.pdf'): Promise<SignWellDocumentResponse> {
+export async function createSignWellDocument(
+  pdfBase64: string,
+  fileName = 'document.pdf',
+): Promise<SignWellDocumentResponse> {
   const res = await fetch('/api/signwell', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },

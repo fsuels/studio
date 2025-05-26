@@ -1,4 +1,3 @@
-
 {
   "metaTitle": "Vehicle Bill of Sale Template & Complete How-To Guide | 123LegalDoc",
   "metaDescription": "Generate a legally solid vehicle bill of sale in under 5 minutes. Free printable PDF, e-sign-ready with SignWell, attorney-reviewed, and valid in all 50 states.",
@@ -35,9 +34,18 @@
       "table": {
         "headers": ["Risk Without a Bill of Sale", "Protection With One"],
         "rows": [
-          ["Can’t prove you no longer own the car—tickets or tolls still arrive in your name", "Timestamped document shows the exact moment you transferred ownership"],
-          ["Buyer claims undisclosed damage", "“As-is” clause and inspection notes limit liability"],
-          ["DMV rejects title transfer due to missing data", "Template is pre-mapped to every DMV field"]
+          [
+            "Can’t prove you no longer own the car—tickets or tolls still arrive in your name",
+            "Timestamped document shows the exact moment you transferred ownership"
+          ],
+          [
+            "Buyer claims undisclosed damage",
+            "“As-is” clause and inspection notes limit liability"
+          ],
+          [
+            "DMV rejects title transfer due to missing data",
+            "Template is pre-mapped to every DMV field"
+          ]
         ]
       }
     },
@@ -60,13 +68,28 @@
       "table": {
         "headers": ["Clause", "Why It Matters"],
         "rows": [
-          ["Full Legal Names & Addresses", "DMV and tax offices reject partial info"],
-          ["Vehicle Description (make, model, year, body type, color, VIN, odometer)", "Prevents title fraud and clerical errors"],
-          ["Purchase Price & Payment Method", "Sets sales-tax basis and proves consideration"],
-          ["As-Is / Warranty Language", "Shields seller from future mechanical claims"],
+          [
+            "Full Legal Names & Addresses",
+            "DMV and tax offices reject partial info"
+          ],
+          [
+            "Vehicle Description (make, model, year, body type, color, VIN, odometer)",
+            "Prevents title fraud and clerical errors"
+          ],
+          [
+            "Purchase Price & Payment Method",
+            "Sets sales-tax basis and proves consideration"
+          ],
+          [
+            "As-Is / Warranty Language",
+            "Shields seller from future mechanical claims"
+          ],
           ["Lien Status & Release", "Confirms the buyer receives clear title"],
           ["Delivery Details", "Specifies when and where risk of loss passes"],
-          ["Signatures (and Notary if required)", "Makes the document enforceable"]
+          [
+            "Signatures (and Notary if required)",
+            "Makes the document enforceable"
+          ]
         ]
       }
     },

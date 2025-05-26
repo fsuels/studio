@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import React, { useState, useEffect } from "react";
-import { Check } from "lucide-react";
-import { LegalDocument } from "@/lib/document-library";
-import dynamic from "next/dynamic";
+import React, { useState, useEffect } from 'react';
+import { Check } from 'lucide-react';
+import { LegalDocument } from '@/lib/document-library';
+import dynamic from 'next/dynamic';
 
 const PDFPreview = dynamic(
-  () => import("@/components/PDFPreview").then(mod => mod.PDFPreview),
+  () => import('@/components/PDFPreview').then((mod) => mod.PDFPreview),
   {
     ssr: false,
     loading: () => (
@@ -14,33 +14,31 @@ const PDFPreview = dynamic(
         <p className="text-gray-400">PDF Preview loading…</p>
       </div>
     ),
-  }
+  },
 );
-import { Toggle } from "@/components/ui/toggle";
+import { Toggle } from '@/components/ui/toggle';
 
 interface StepThreeFormProps {
   selectedDocument: LegalDocument;
-  formData: Record<string,string>;
+  formData: Record<string, string>;
 }
 
 export function StepThreeForm({
   selectedDocument,
   formData,
 }: StepThreeFormProps) {
-  const [previewUrl, setPreviewUrl] = useState<string>("");
+  const [previewUrl, setPreviewUrl] = useState<string>('');
   const [notarize, setNotarize] = useState(false);
 
   useEffect(() => {
     // TODO: call PDF generation API passing selectedDocument, formData, notarize
     // and setPreviewUrl(resultingUrl)
-    setPreviewUrl("");
+    setPreviewUrl('');
   }, [selectedDocument, formData, notarize]);
 
   return (
     <div className="p-6">
-      <h2 className="text-2xl font-bold mb-2">
-        Step 3: Preview & Download
-      </h2>
+      <h2 className="text-2xl font-bold mb-2">Step 3: Preview & Download</h2>
 
       <div className="flex flex-col lg:flex-row gap-6">
         {/* Live PDF preview */}

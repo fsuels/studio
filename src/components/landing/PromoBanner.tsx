@@ -1,9 +1,9 @@
 // src/components/landing/PromoBanner.tsx
-"use client";
+'use client';
 
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { X, Gift } from 'lucide-react'; 
+import { X, Gift } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const PromoBanner = React.memo(function PromoBanner() {
@@ -19,7 +19,7 @@ const PromoBanner = React.memo(function PromoBanner() {
         initial={{ height: 0, opacity: 0 }}
         animate={{ height: 'auto', opacity: 1 }}
         exit={{ height: 0, opacity: 0 }}
-        transition={{ duration: 0.3, ease: "easeInOut" }}
+        transition={{ duration: 0.3, ease: 'easeInOut' }}
         className="bg-primary text-primary-foreground overflow-hidden"
         role="alert"
         aria-live="polite"

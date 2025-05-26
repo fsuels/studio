@@ -1,10 +1,9 @@
+'use client';
 
-"use client";
+import { motion, type HTMLMotionProps } from 'framer-motion';
+import React from 'react';
 
-import { motion, type HTMLMotionProps } from "framer-motion";
-import React from "react";
-
-interface SlideFadeProps extends HTMLMotionProps<"div"> {
+interface SlideFadeProps extends HTMLMotionProps<'div'> {
   children: React.ReactNode;
   delay?: number;
 }
@@ -18,7 +17,7 @@ const SlideFade: React.FC<SlideFadeProps> = ({
     <motion.div
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.45, delay, ease: "easeOut" }}
+      transition={{ duration: 0.45, delay, ease: 'easeOut' }}
       {...props}
     >
       {children}

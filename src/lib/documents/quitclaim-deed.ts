@@ -8,8 +8,12 @@ export const quitclaimDeed: LegalDocument = {
   category: 'Real Estate',
   description: 'Transfer property interest without warranty of title.',
   description_es: 'Transferir interés en una propiedad sin garantía de título.',
-  aliases: ["property transfer", "quit claim deed", "transfer ownership"],
-  aliases_es: ["transferencia de propiedad", "escritura de finiquito", "transferir titularidad"],
+  aliases: ['property transfer', 'quit claim deed', 'transfer ownership'],
+  aliases_es: [
+    'transferencia de propiedad',
+    'escritura de finiquito',
+    'transferir titularidad',
+  ],
   languageSupport: ['en', 'es'],
   requiresNotarization: true,
   canBeRecorded: true,
@@ -18,5 +22,5 @@ export const quitclaimDeed: LegalDocument = {
   basePrice: 5,
   states: 'all',
   schema: z.object({}), // Placeholder
-  questions: [] // Placeholder
+  questions: [], // Placeholder
 };

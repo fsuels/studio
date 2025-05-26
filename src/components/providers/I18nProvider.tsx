@@ -1,5 +1,5 @@
 // src/components/providers/I18nProvider.tsx
-"use client";
+'use client';
 
 import React, { ReactNode, useEffect, useState } from 'react';
 import { I18nextProvider } from 'react-i18next';
@@ -16,8 +16,14 @@ interface I18nProviderProps {
 
 let clientSidePluginsApplied = false;
 
-const I18nClientProvider: React.FC<I18nProviderProps> = ({ children, locale, fallback }) => {
-  const [isClientInitialized, setIsClientInitialized] = useState(clientSidePluginsApplied);
+const I18nClientProvider: React.FC<I18nProviderProps> = ({
+  children,
+  locale,
+  fallback,
+}) => {
+  const [isClientInitialized, setIsClientInitialized] = useState(
+    clientSidePluginsApplied,
+  );
 
   useEffect(() => {
     if (!clientSidePluginsApplied) {
@@ -33,7 +39,15 @@ const I18nClientProvider: React.FC<I18nProviderProps> = ({ children, locale, fal
               useSuspense: false, // Recommended for Next.js App Router
             },
             detection: {
-              order: ['querystring', 'cookie', 'localStorage', 'navigator', 'htmlTag', 'path', 'subdomain'],
+              order: [
+                'querystring',
+                'cookie',
+                'localStorage',
+                'navigator',
+                'htmlTag',
+                'path',
+                'subdomain',
+              ],
               caches: ['localStorage', 'cookie'],
             },
             saveMissing: process.env.NODE_ENV === 'development', // Only save missing keys in dev
@@ -46,23 +60,38 @@ const I18nClientProvider: React.FC<I18nProviderProps> = ({ children, locale, fal
           },
           (err) => {
             if (err) {
-              return console.error('Error initializing i18next for client with plugins:', err);
+              return console.error(
+                'Error initializing i18next for client with plugins:',
+                err,
+              );
             }
             clientSidePluginsApplied = true;
             setIsClientInitialized(true);
             if (i18nInstance.language !== locale) {
-              i18nInstance.changeLanguage(locale).catch(e => console.error("Error changing language post-init:", e));
+              i18nInstance
+                .changeLanguage(locale)
+                .catch((e) =>
+                  console.error('Error changing language post-init:', e),
+                );
             }
-          }
+          },
         );
     } else {
       // If plugins are already applied, just ensure language syncs
       if (i18nInstance.language !== locale) {
-        i18nInstance.changeLanguage(locale).then(() => {
-          setIsClientInitialized(true); 
-        }).catch(err => console.error("Error changing language on already initialized instance:", err));
+        i18nInstance
+          .changeLanguage(locale)
+          .then(() => {
+            setIsClientInitialized(true);
+          })
+          .catch((err) =>
+            console.error(
+              'Error changing language on already initialized instance:',
+              err,
+            ),
+          );
       } else {
-        setIsClientInitialized(true); 
+        setIsClientInitialized(true);
       }
     }
   }, [locale]);

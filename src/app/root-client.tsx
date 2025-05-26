@@ -6,7 +6,11 @@ import { mark, measure } from '@/utils/performance';
 // import { DefaultSeo } from 'next-seo'; // Temporarily removed
 // import SEO from '@/next-seo.config'; // Temporarily removed
 
-export default function RootClient({ children }: { children: React.ReactNode }) {
+export default function RootClient({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   if (typeof window !== 'undefined') {
     mark('root-layout-start');
   }

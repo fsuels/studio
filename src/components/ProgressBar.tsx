@@ -1,8 +1,8 @@
 // src/components/ProgressBar.tsx
 
-"use client";
+'use client';
 
-import React from "react";
+import React from 'react';
 
 interface ProgressBarProps {
   currentStep: number;

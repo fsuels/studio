@@ -2,19 +2,27 @@
 // Basic form schema types and shared option sets
 
 export type FormField = {
-  id: string
-  label: string
-  placeholder?: string
-  required?: boolean
-  type: 'text' | 'select' | 'date' | 'number' | 'textarea' | 'boolean' | 'address' | 'tel'
-  options?: { value: string; label: string }[]
-  tooltip?: string
-  helperText?: string
-}
+  id: string;
+  label: string;
+  placeholder?: string;
+  required?: boolean;
+  type:
+    | 'text'
+    | 'select'
+    | 'date'
+    | 'number'
+    | 'textarea'
+    | 'boolean'
+    | 'address'
+    | 'tel';
+  options?: { value: string; label: string }[];
+  tooltip?: string;
+  helperText?: string;
+};
 
 export type FormSchema = {
-  [docType: string]: FormField[]
-}
+  [docType: string]: FormField[];
+};
 
 export const usStatesOptions: { value: string; label: string }[] = [
   { value: 'AL', label: 'Alabama' },
@@ -68,5 +76,5 @@ export const usStatesOptions: { value: string; label: string }[] = [
   { value: 'WI', label: 'Wisconsin' },
   { value: 'WY', label: 'Wyoming' },
   { value: 'DC', label: 'District of Columbia' },
-  { value: 'Other', label: 'Other/Not Applicable' }
+  { value: 'Other', label: 'Other/Not Applicable' },
 ];

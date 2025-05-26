@@ -7,11 +7,23 @@ import type { LegalDocument, Question } from '@/lib/document-library';
 import { usStates } from '@/lib/document-library';
 import { prettify } from '@/lib/schema-utils';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { Edit2, Check, X, AlertTriangle, Info } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
 import AddressField from '@/components/AddressField';
 import SmartInput from '@/components/wizard/SmartInput';
@@ -22,7 +34,7 @@ import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
+} from '@/components/ui/tooltip';
 import { Label } from '@/components/ui/label';
 import type { z } from 'zod';
 
@@ -41,7 +53,7 @@ interface ZodDefExtras {
 }
 
 export default function ReviewStep({ doc, locale }: ReviewStepProps) {
-  const { t } = useTranslation("common");
+  const { t } = useTranslation('common');
   const {
     control,
     getValues,
@@ -72,10 +84,13 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
     }
   }, [editingFieldId]);
 
-  const actualSchemaShape = useMemo<Record<string, z.ZodTypeAny> | undefined>(() => {
+  const actualSchemaShape = useMemo<
+    Record<string, z.ZodTypeAny> | undefined
+  >(() => {
     const schemaDef = doc?.schema?._def;
     if (!schemaDef) return undefined;
-    if (schemaDef.typeName === 'ZodObject') return (doc.schema as any).shape as Record<string, z.ZodTypeAny>;
+    if (schemaDef.typeName === 'ZodObject')
+      return (doc.schema as any).shape as Record<string, z.ZodTypeAny>;
     if (
       schemaDef.typeName === 'ZodEffects' &&
       schemaDef.schema?._def?.typeName === 'ZodObject'
@@ -86,122 +101,228 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
   }, [doc.schema]);
 
   const fieldsToReview = useMemo(() => {
-    console.log('[ReviewStep] Recalculating fieldsToReview. Watched values changed.');
+    console.log(
+      '[ReviewStep] Recalculating fieldsToReview. Watched values changed.',
+    );
     const currentFormData = getValues(); // Get current values for processing
 
     // Start with question order if available so the review matches the wizard flow
-    const questionIds = doc.questions?.map(q => q.id) ?? [];
+    const questionIds = doc.questions?.map((q) => q.id) ?? [];
     const schemaKeys = actualSchemaShape ? Object.keys(actualSchemaShape) : [];
 
     // Combine keys keeping the question order first, then schema keys, then any extra values
     const combinedKeys = [
       ...questionIds,
-      ...schemaKeys.filter(k => !questionIds.includes(k)),
-      ...Object.keys(currentFormData).filter(k => !questionIds.includes(k) && !schemaKeys.includes(k))
+      ...schemaKeys.filter((k) => !questionIds.includes(k)),
+      ...Object.keys(currentFormData).filter(
+        (k) => !questionIds.includes(k) && !schemaKeys.includes(k),
+      ),
     ];
 
     const allFieldKeys = Array.from(new Set(combinedKeys));
 
     return allFieldKeys
-      .filter(fieldId => {
+      .filter((fieldId) => {
         if (fieldId === 'notarizationPreference') return false;
         return true;
       })
       .map((fieldId) => {
-        const questionConfig = doc.questions?.find(q => q.id === fieldId);
+        const questionConfig = doc.questions?.find((q) => q.id === fieldId);
         const schemaField = actualSchemaShape?.[fieldId];
         const schemaFieldDef = schemaField?._def as
-          (z.ZodTypeAny['_def'] & ZodDefExtras) | undefined;
+          | (z.ZodTypeAny['_def'] & ZodDefExtras)
+          | undefined;
 
         const label =
           questionConfig?.label ||
           schemaFieldDef?.description ||
           (schemaFieldDef?.labelKey ? t(schemaFieldDef.labelKey) : null) ||
           prettify(fieldId);
-        
+
         let fieldType: Question['type'] = questionConfig?.type || 'text';
         if (schemaFieldDef) {
-            const baseType = schemaFieldDef.typeName === 'ZodEffects'
+          const baseType =
+            schemaFieldDef.typeName === 'ZodEffects'
               ? schemaFieldDef.schema?._def?.typeName
               : schemaFieldDef.typeName;
 
-            if (baseType === 'ZodNumber') fieldType = 'number';
-            else if (baseType === 'ZodBoolean') fieldType = 'boolean';
-            else if (baseType === 'ZodDate') fieldType = 'date';
-            else if (baseType === 'ZodEnum' || schemaFieldDef.innerType?._def?.typeName === 'ZodEnum') fieldType = 'select';
-            else if (fieldId.toLowerCase().includes('address') && baseType === 'ZodString') fieldType = 'address';
-            else if (fieldId.toLowerCase().includes('phone') && baseType === 'ZodString') fieldType = 'tel';
-            else if (baseType === 'ZodString' && ((schemaFieldDef?.uiType === 'textarea') || questionConfig?.type === 'textarea')) fieldType = 'textarea';
+          if (baseType === 'ZodNumber') fieldType = 'number';
+          else if (baseType === 'ZodBoolean') fieldType = 'boolean';
+          else if (baseType === 'ZodDate') fieldType = 'date';
+          else if (
+            baseType === 'ZodEnum' ||
+            schemaFieldDef.innerType?._def?.typeName === 'ZodEnum'
+          )
+            fieldType = 'select';
+          else if (
+            fieldId.toLowerCase().includes('address') &&
+            baseType === 'ZodString'
+          )
+            fieldType = 'address';
+          else if (
+            fieldId.toLowerCase().includes('phone') &&
+            baseType === 'ZodString'
+          )
+            fieldType = 'tel';
+          else if (
+            baseType === 'ZodString' &&
+            (schemaFieldDef?.uiType === 'textarea' ||
+              questionConfig?.type === 'textarea')
+          )
+            fieldType = 'textarea';
         }
-        
+
         const rawEnumValues =
           schemaFieldDef?.innerType?._def?.values ??
           schemaFieldDef?.values ??
           (schemaFieldDef?.typeName === 'ZodEffects'
             ? schemaFieldDef.schema?._def?.values
             : undefined);
-        const enumOptions = Array.isArray(rawEnumValues) ? rawEnumValues.map((val: string) => ({ value: val, label: t(`documents:fields.${fieldId}.options.${val}`, {defaultValue: prettify(val)}) })) : undefined;
-        
-        const options = questionConfig?.options ??
-                        enumOptions ??
-                        (fieldId === 'state' ? usStates.map(s => ({value: s.value, label: s.label})) : undefined) ??
-                        (fieldId === 'odo_status' ? [{value: 'ACTUAL', label: t('documents:fields.odo_status.options.ACTUAL', {defaultValue: 'Actual mileage'})}, {value: 'EXCEEDS', label: t('documents:fields.odo_status.options.EXCEEDS', {defaultValue: 'Exceeds mechanical limits'})}, {value: 'NOT_ACTUAL', label: t('documents:fields.odo_status.options.NOT_ACTUAL', {defaultValue: 'Not actual mileage'})}] : undefined);
-        
-        const placeholder = questionConfig?.placeholder || schemaFieldDef?.placeholder;
-        const tooltip = questionConfig?.tooltip || schemaFieldDef?.tooltip;
-        const required = questionConfig?.required ?? (schemaFieldDef?.typeName !== 'ZodOptional' && schemaFieldDef?.innerType?._def?.typeName !== 'ZodOptional');
+        const enumOptions = Array.isArray(rawEnumValues)
+          ? rawEnumValues.map((val: string) => ({
+              value: val,
+              label: t(`documents:fields.${fieldId}.options.${val}`, {
+                defaultValue: prettify(val),
+              }),
+            }))
+          : undefined;
 
-        return { id: fieldId, label, type: fieldType, options, required, placeholder, tooltip };
+        const options =
+          questionConfig?.options ??
+          enumOptions ??
+          (fieldId === 'state'
+            ? usStates.map((s) => ({ value: s.value, label: s.label }))
+            : undefined) ??
+          (fieldId === 'odo_status'
+            ? [
+                {
+                  value: 'ACTUAL',
+                  label: t('documents:fields.odo_status.options.ACTUAL', {
+                    defaultValue: 'Actual mileage',
+                  }),
+                },
+                {
+                  value: 'EXCEEDS',
+                  label: t('documents:fields.odo_status.options.EXCEEDS', {
+                    defaultValue: 'Exceeds mechanical limits',
+                  }),
+                },
+                {
+                  value: 'NOT_ACTUAL',
+                  label: t('documents:fields.odo_status.options.NOT_ACTUAL', {
+                    defaultValue: 'Not actual mileage',
+                  }),
+                },
+              ]
+            : undefined);
+
+        const placeholder =
+          questionConfig?.placeholder || schemaFieldDef?.placeholder;
+        const tooltip = questionConfig?.tooltip || schemaFieldDef?.tooltip;
+        const required =
+          questionConfig?.required ??
+          (schemaFieldDef?.typeName !== 'ZodOptional' &&
+            schemaFieldDef?.innerType?._def?.typeName !== 'ZodOptional');
+
+        return {
+          id: fieldId,
+          label,
+          type: fieldType,
+          options,
+          required,
+          placeholder,
+          tooltip,
+        };
       });
   }, [doc, actualSchemaShape, getValues, t]);
 
-  const handleEdit = useCallback((fieldId: string) => {
-    console.log(`[ReviewStep] Edit button clicked for fieldId: ${fieldId}`);
-    const currentValue = getValues(fieldId);
-    console.log(`[ReviewStep] Storing original value for ${fieldId}:`, currentValue);
-    setOriginalFieldValue(currentValue);
-    setEditingFieldId(fieldId);
-    console.log(`[ReviewStep] editingFieldId state set to: ${fieldId}`);
-  }, [getValues]);
+  const handleEdit = useCallback(
+    (fieldId: string) => {
+      console.log(`[ReviewStep] Edit button clicked for fieldId: ${fieldId}`);
+      const currentValue = getValues(fieldId);
+      console.log(
+        `[ReviewStep] Storing original value for ${fieldId}:`,
+        currentValue,
+      );
+      setOriginalFieldValue(currentValue);
+      setEditingFieldId(fieldId);
+      console.log(`[ReviewStep] editingFieldId state set to: ${fieldId}`);
+    },
+    [getValues],
+  );
 
-  const handleSave = useCallback(async (fieldId: string) => {
-    const isValid = await trigger(fieldId);
-    if (isValid) {
-      setEditingFieldId(null);
-      setOriginalFieldValue(null);
-      toast({ title: t('Changes Saved'), description: `${t(fieldsToReview.find(f=>f.id === fieldId)?.label || fieldId, { ns: 'documents', defaultValue: fieldsToReview.find(f=>f.id === fieldId)?.label || fieldId })} ${t('updated.')}` });
-    } else {
-      toast({ title: t('Validation Error'), description: t('Please correct the field.'), variant: 'destructive' });
-    }
-  }, [trigger, toast, t, fieldsToReview]);
+  const handleSave = useCallback(
+    async (fieldId: string) => {
+      const isValid = await trigger(fieldId);
+      if (isValid) {
+        setEditingFieldId(null);
+        setOriginalFieldValue(null);
+        toast({
+          title: t('Changes Saved'),
+          description: `${t(fieldsToReview.find((f) => f.id === fieldId)?.label || fieldId, { ns: 'documents', defaultValue: fieldsToReview.find((f) => f.id === fieldId)?.label || fieldId })} ${t('updated.')}`,
+        });
+      } else {
+        toast({
+          title: t('Validation Error'),
+          description: t('Please correct the field.'),
+          variant: 'destructive',
+        });
+      }
+    },
+    [trigger, toast, t, fieldsToReview],
+  );
 
   const handleCancel = useCallback(() => {
     if (editingFieldId && originalFieldValue !== undefined) {
-      console.log(`[ReviewStep] Cancelling edit for ${editingFieldId}. Reverting to:`, originalFieldValue);
-      setValue(
-        editingFieldId as keyof FormValues,
+      console.log(
+        `[ReviewStep] Cancelling edit for ${editingFieldId}. Reverting to:`,
         originalFieldValue,
-        { shouldValidate: true, shouldDirty: true }
       );
+      setValue(editingFieldId as keyof FormValues, originalFieldValue, {
+        shouldValidate: true,
+        shouldDirty: true,
+      });
     }
     setEditingFieldId(null);
     setOriginalFieldValue(null);
   }, [editingFieldId, originalFieldValue, setValue]);
 
-  const renderFieldValue = (field: typeof fieldsToReview[number]) => {
+  const renderFieldValue = (field: (typeof fieldsToReview)[number]) => {
     const value = getValues(field.id);
-    const isMissing = field.required && (value === undefined || value === null || String(value).trim() === '');
+    const isMissing =
+      field.required &&
+      (value === undefined || value === null || String(value).trim() === '');
     if (field.type === 'boolean') return value ? t('Yes') : t('No');
-    if (field.type === 'select' && field.options && value !== undefined && value !== null) {
-      const opt = field.options.find(o => String(o.value) === String(value));
+    if (
+      field.type === 'select' &&
+      field.options &&
+      value !== undefined &&
+      value !== null
+    ) {
+      const opt = field.options.find((o) => String(o.value) === String(value));
       return opt?.label || String(value);
     }
     if (value instanceof Date) return value.toLocaleDateString(locale);
-    if (isMissing) return <span className="italic text-destructive">{t('wizard.fieldRequired')}</span>;
-    return (value !== undefined && value !== null && String(value).trim() !== '') ? String(value) : <span className="italic text-muted-foreground/70">{t('Not Provided')}</span>;
+    if (isMissing)
+      return (
+        <span className="italic text-destructive">
+          {t('wizard.fieldRequired')}
+        </span>
+      );
+    return value !== undefined &&
+      value !== null &&
+      String(value).trim() !== '' ? (
+      String(value)
+    ) : (
+      <span className="italic text-muted-foreground/70">
+        {t('Not Provided')}
+      </span>
+    );
   };
-  
-  const getInputType = (fieldType: Question['type']): React.HTMLInputTypeAttribute => {
+
+  const getInputType = (
+    fieldType: Question['type'],
+  ): React.HTMLInputTypeAttribute => {
     if (fieldType === 'number') return 'number';
     if (fieldType === 'date') return 'date';
     // SmartInput handles 'tel' type internally by setting its own input type/mode
@@ -232,18 +353,38 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-1 mb-0.5">
                     <p className="text-sm font-medium text-muted-foreground">
-                      {t(field.label, {ns: 'documents', defaultValue: field.label})}
-                      {field.required && <span className="text-destructive ml-1">*</span>}
+                      {t(field.label, {
+                        ns: 'documents',
+                        defaultValue: field.label,
+                      })}
+                      {field.required && (
+                        <span className="text-destructive ml-1">*</span>
+                      )}
                     </p>
                     {field.tooltip && !isCurrentlyEditing && (
                       <Tooltip>
                         <TooltipTrigger asChild>
-                          <Button type="button" variant="ghost" size="icon" className="h-5 w-5 p-0 text-muted-foreground hover:text-foreground" onClick={(e) => e.stopPropagation()}>
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="icon"
+                            className="h-5 w-5 p-0 text-muted-foreground hover:text-foreground"
+                            onClick={(e) => e.stopPropagation()}
+                          >
                             <Info className="h-3.5 w-3.5" />
                           </Button>
                         </TooltipTrigger>
-                        <TooltipContent side="top" align="start" className="max-w-xs text-xs bg-popover text-popover-foreground border shadow-md rounded p-1.5 z-50">
-                          <p>{t(field.tooltip, {ns: 'documents', defaultValue: field.tooltip})}</p>
+                        <TooltipContent
+                          side="top"
+                          align="start"
+                          className="max-w-xs text-xs bg-popover text-popover-foreground border shadow-md rounded p-1.5 z-50"
+                        >
+                          <p>
+                            {t(field.tooltip, {
+                              ns: 'documents',
+                              defaultValue: field.tooltip,
+                            })}
+                          </p>
                         </TooltipContent>
                       </Tooltip>
                     )}
@@ -251,14 +392,23 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
 
                   {isCurrentlyEditing ? (
                     <div className="mt-1.5 space-y-2">
-                      {(field.type === 'tel' || field.id.toLowerCase().includes('phone')) ? (
+                      {field.type === 'tel' ||
+                      field.id.toLowerCase().includes('phone') ? (
                         <SmartInput
                           id={`review-${field.id}`}
                           type="tel" // SmartInput expects 'tel'
-                          placeholder={t(field.placeholder || '', {ns: 'documents', defaultValue: field.placeholder || ''})}
-                          className={cn("max-w-md text-sm", errors[field.id] && "border-destructive")}
+                          placeholder={t(field.placeholder || '', {
+                            ns: 'documents',
+                            defaultValue: field.placeholder || '',
+                          })}
+                          className={cn(
+                            'max-w-md text-sm',
+                            errors[field.id] && 'border-destructive',
+                          )}
                           aria-invalid={!!errors[field.id]}
-                          rhfProps={register(field.id, { required: field.required })}
+                          rhfProps={register(field.id, {
+                            required: field.required,
+                          })}
                         />
                       ) : field.type === 'address' ? (
                         <Controller
@@ -268,24 +418,57 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
                           render={({ field: controllerField }) => (
                             <AddressField
                               name={controllerField.name}
-                              label="" 
+                              label=""
                               value={(controllerField.value as string) || ''}
                               onChange={(val, parts) => {
                                 controllerField.onChange(val);
                                 if (parts && actualSchemaShape) {
-                                  const prefix = field.id.replace(/_address$/i, '') || field.id.replace(/Address$/i, '');
+                                  const prefix =
+                                    field.id.replace(/_address$/i, '') ||
+                                    field.id.replace(/Address$/i, '');
                                   if (actualSchemaShape?.[`${prefix}_city`])
-                                    setValue(`${prefix}_city`, parts.city, { shouldValidate: true, shouldDirty: true });
+                                    setValue(`${prefix}_city`, parts.city, {
+                                      shouldValidate: true,
+                                      shouldDirty: true,
+                                    });
                                   if (actualSchemaShape?.[`${prefix}_state`])
-                                    setValue(`${prefix}_state`, parts.state, { shouldValidate: true, shouldDirty: true });
-                                  if (actualSchemaShape?.[`${prefix}_postal_code`])
-                                    setValue(`${prefix}_postal_code`, parts.postalCode, { shouldValidate: true, shouldDirty: true });
+                                    setValue(`${prefix}_state`, parts.state, {
+                                      shouldValidate: true,
+                                      shouldDirty: true,
+                                    });
+                                  if (
+                                    actualSchemaShape?.[`${prefix}_postal_code`]
+                                  )
+                                    setValue(
+                                      `${prefix}_postal_code`,
+                                      parts.postalCode,
+                                      {
+                                        shouldValidate: true,
+                                        shouldDirty: true,
+                                      },
+                                    );
                                 }
                               }}
-                              placeholder={t(field.placeholder || 'Enter address...', {ns: 'documents', defaultValue: field.placeholder || 'Enter address...'})}
+                              placeholder={t(
+                                field.placeholder || 'Enter address...',
+                                {
+                                  ns: 'documents',
+                                  defaultValue:
+                                    field.placeholder || 'Enter address...',
+                                },
+                              )}
                               className="max-w-md"
-                              error={errors[field.id]?.message as string | undefined}
-                              tooltip={field.tooltip ? t(field.tooltip, {ns: 'documents', defaultValue: field.tooltip}) : undefined}
+                              error={
+                                errors[field.id]?.message as string | undefined
+                              }
+                              tooltip={
+                                field.tooltip
+                                  ? t(field.tooltip, {
+                                      ns: 'documents',
+                                      defaultValue: field.tooltip,
+                                    })
+                                  : undefined
+                              }
                             />
                           )}
                         />
@@ -298,10 +481,16 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
                             const commonInputProps = {
                               id: `review-${field.id}`,
                               value: String(controllerField.value ?? ''),
-                              onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-                                const valToSet: string | number = e.target.value;
+                              onChange: (
+                                e: React.ChangeEvent<
+                                  HTMLInputElement | HTMLTextAreaElement
+                                >,
+                              ) => {
+                                const valToSet: string | number =
+                                  e.target.value;
                                 if (field.type === 'number') {
-                                  if (valToSet === '') { // Allow clearing number field
+                                  if (valToSet === '') {
+                                    // Allow clearing number field
                                     controllerField.onChange(''); // RHF can handle empty string for numbers if schema coerces
                                   } else if (!isNaN(Number(valToSet))) {
                                     controllerField.onChange(Number(valToSet));
@@ -315,13 +504,21 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
                               onBlur: controllerField.onBlur,
                               name: controllerField.name,
                               ref: controllerField.ref,
-                              placeholder: t(field.placeholder || '', {ns: 'documents', defaultValue: field.placeholder || ''}),
-                              className: cn("max-w-md text-sm", errors[field.id] && "border-destructive"),
-                              "aria-invalid": !!errors[field.id],
+                              placeholder: t(field.placeholder || '', {
+                                ns: 'documents',
+                                defaultValue: field.placeholder || '',
+                              }),
+                              className: cn(
+                                'max-w-md text-sm',
+                                errors[field.id] && 'border-destructive',
+                              ),
+                              'aria-invalid': !!errors[field.id],
                             };
 
                             if (field.type === 'textarea') {
-                              return <Textarea {...commonInputProps} rows={3} />;
+                              return (
+                                <Textarea {...commonInputProps} rows={3} />
+                              );
                             }
                             if (field.type === 'select' && field.options) {
                               return (
@@ -332,15 +529,44 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
                                 >
                                   <SelectTrigger
                                     id={`review-${field.id}`}
-                                    className={cn("max-w-md text-sm", errors[field.id] && "border-destructive focus:ring-destructive")}
+                                    className={cn(
+                                      'max-w-md text-sm',
+                                      errors[field.id] &&
+                                        'border-destructive focus:ring-destructive',
+                                    )}
                                     aria-invalid={!!errors[field.id]}
-                                    aria-label={t(field.placeholder || 'Select...', {ns: 'documents', defaultValue: field.placeholder || 'Select...'})}
+                                    aria-label={t(
+                                      field.placeholder || 'Select...',
+                                      {
+                                        ns: 'documents',
+                                        defaultValue:
+                                          field.placeholder || 'Select...',
+                                      },
+                                    )}
                                   >
-                                    <SelectValue placeholder={t(field.placeholder || 'Select...', {ns: 'documents', defaultValue: field.placeholder || 'Select...'})} />
+                                    <SelectValue
+                                      placeholder={t(
+                                        field.placeholder || 'Select...',
+                                        {
+                                          ns: 'documents',
+                                          defaultValue:
+                                            field.placeholder || 'Select...',
+                                        },
+                                      )}
+                                    />
                                   </SelectTrigger>
                                   <SelectContent>
                                     {field.options.map((opt) => (
-                                      <SelectItem key={opt.value} value={String(opt.value)} className="text-sm">{t(opt.label, {ns: 'documents', defaultValue: opt.label})}</SelectItem>
+                                      <SelectItem
+                                        key={opt.value}
+                                        value={String(opt.value)}
+                                        className="text-sm"
+                                      >
+                                        {t(opt.label, {
+                                          ns: 'documents',
+                                          defaultValue: opt.label,
+                                        })}
+                                      </SelectItem>
                                     ))}
                                   </SelectContent>
                                 </Select>
@@ -349,8 +575,20 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
                             if (field.type === 'boolean') {
                               return (
                                 <div className="flex items-center space-x-2">
-                                  <Switch id={`review-${field.id}`} checked={Boolean(controllerField.value)} onCheckedChange={controllerField.onChange} ref={controllerField.ref} />
-                                  <Label htmlFor={`review-${field.id}`} className="text-sm font-normal">{Boolean(controllerField.value) ? t('Yes') : t('No')}</Label>
+                                  <Switch
+                                    id={`review-${field.id}`}
+                                    checked={Boolean(controllerField.value)}
+                                    onCheckedChange={controllerField.onChange}
+                                    ref={controllerField.ref}
+                                  />
+                                  <Label
+                                    htmlFor={`review-${field.id}`}
+                                    className="text-sm font-normal"
+                                  >
+                                    {Boolean(controllerField.value)
+                                      ? t('Yes')
+                                      : t('No')}
+                                  </Label>
                                 </div>
                               );
                             }
@@ -364,11 +602,24 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
                         />
                       )}
                       <div className="flex gap-2 mt-2">
-                        <Button type="button" size="sm" onClick={() => handleSave(field.id)} className="text-xs h-8">
-                          <Check className="w-3.5 h-3.5 mr-1" />{t('Save')}
+                        <Button
+                          type="button"
+                          size="sm"
+                          onClick={() => handleSave(field.id)}
+                          className="text-xs h-8"
+                        >
+                          <Check className="w-3.5 h-3.5 mr-1" />
+                          {t('Save')}
                         </Button>
-                        <Button type="button" size="sm" variant="outline" onClick={handleCancel} className="text-xs h-8">
-                          <X className="w-3.5 h-3.5 mr-1" />{t('Cancel')}
+                        <Button
+                          type="button"
+                          size="sm"
+                          variant="outline"
+                          onClick={handleCancel}
+                          className="text-xs h-8"
+                        >
+                          <X className="w-3.5 h-3.5 mr-1" />
+                          {t('Cancel')}
                         </Button>
                       </div>
                     </div>
@@ -384,8 +635,10 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
                     variant="ghost"
                     size="icon"
                     onClick={(e) => {
-                      console.log(`[ReviewStep] Edit button CLICKED for fieldId: ${field.id}`);
-                      e.stopPropagation(); 
+                      console.log(
+                        `[ReviewStep] Edit button CLICKED for fieldId: ${field.id}`,
+                      );
+                      e.stopPropagation();
                       handleEdit(field.id);
                     }}
                     className="mt-1 self-start shrink-0"
@@ -397,7 +650,8 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
               </div>
               {errors[field.id] && isCurrentlyEditing && (
                 <p className="block text-xs text-destructive mt-1 flex items-center gap-1">
-                  <AlertTriangle className="h-3 w-3" /> {String(errors[field.id]?.message)}
+                  <AlertTriangle className="h-3 w-3" />{' '}
+                  {String(errors[field.id]?.message)}
                 </p>
               )}
             </div>

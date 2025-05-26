@@ -92,19 +92,19 @@
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "@types/react-places-autocomplete": "^7.2.14",
+    "@typescript-eslint/eslint-plugin": "^8.32.1",
+    "@typescript-eslint/parser": "^8.32.1",
     "eslint": "9.27.0",
     "eslint-config-next": "15.4.0-canary.51",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.4.0",
     "genkit-cli": "^1.6.1",
     "i18next-parser": "^8.13.0",
     "postcss": "^8",
+    "prettier": "^3.2.5",
     "tailwindcss": "^3.4.1",
     "typescript": "^5",
-    "webpack": "^5.99.8",
-    "@typescript-eslint/eslint-plugin": "^7.7.0",
-    "@typescript-eslint/parser": "^7.7.0",
-    "eslint-config-prettier": "^9.1.0",
-    "eslint-plugin-prettier": "^5.1.0",
-    "prettier": "^3.2.5"
+    "webpack": "^5.99.8"
   },
   "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
 }

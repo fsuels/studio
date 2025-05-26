@@ -24,7 +24,9 @@ export default function GooglePlacesLoader() {
   }, []);
 
   if (!apiKey) {
-    console.error("GooglePlacesLoader: NEXT_PUBLIC_GOOGLE_MAPS_API_KEY is not set. Autocomplete will not work.");
+    console.error(
+      'GooglePlacesLoader: NEXT_PUBLIC_GOOGLE_MAPS_API_KEY is not set. Autocomplete will not work.',
+    );
     return null;
   }
 
@@ -37,7 +39,7 @@ export default function GooglePlacesLoader() {
           onLoad={() => {
             console.log('Google Maps API script loaded.');
             setLoaded(true);
-             // Dispatch a custom event to notify that Google Maps is loaded
+            // Dispatch a custom event to notify that Google Maps is loaded
             window.dispatchEvent(new Event('google-maps-loaded'));
           }}
           onError={(e) => {

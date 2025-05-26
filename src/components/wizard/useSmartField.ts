@@ -1,2 +1,1 @@
-export { useSmartField } from '@/hooks/useSmartField'
-
+export { useSmartField } from '@/hooks/useSmartField';

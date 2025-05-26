@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { useTranslation } from 'react-i18next';
 import { useParams, useRouter } from 'next/navigation';
 import { Loader2, FileText } from 'lucide-react';
-import { documentLibrary, type LegalDocument } from '@/lib/document-library'; 
+import { documentLibrary, type LegalDocument } from '@/lib/document-library';
 
 // Placeholder data for top docs - in a real app, this would come from Firestore
 const staticTopDocIds: string[] = [
@@ -21,11 +21,13 @@ const staticTopDocIds: string[] = [
 
 const TopDocsChips = React.memo(function TopDocsChips() {
   // Use 'common' namespace for shared UI text
-  const { t: tCommon } = useTranslation("common");
-  const params = (useParams<{ locale?: string }>() ?? {}) as { locale?: string };
+  const { t: tCommon } = useTranslation('common');
+  const params = (useParams<{ locale?: string }>() ?? {}) as {
+    locale?: string;
+  };
   const router = useRouter();
   const locale = (params.locale as 'en' | 'es') || 'en';
-  
+
   const [topDocs, setTopDocs] = useState<LegalDocument[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isHydrated, setIsHydrated] = useState(false);
@@ -38,7 +40,7 @@ const TopDocsChips = React.memo(function TopDocsChips() {
     if (!isHydrated) return;
 
     const resolvedTopDocs = staticTopDocIds
-      .map(id => documentLibrary.find(doc => doc.id === id))
+      .map((id) => documentLibrary.find((doc) => doc.id === id))
       .filter((doc): doc is LegalDocument => doc !== undefined);
 
     setTopDocs(resolvedTopDocs);
@@ -48,7 +50,7 @@ const TopDocsChips = React.memo(function TopDocsChips() {
   // Prefetch document pages for snappier navigation
   useEffect(() => {
     if (!isHydrated || topDocs.length === 0) return;
-    topDocs.forEach(doc => {
+    topDocs.forEach((doc) => {
       router.prefetch(`/${locale}/docs/${doc.id}`);
     });
   }, [isHydrated, topDocs, router, locale]);
@@ -67,20 +69,24 @@ const TopDocsChips = React.memo(function TopDocsChips() {
       <div className="container mx-auto px-4 py-8 text-center">
         <Loader2 className="h-6 w-6 animate-spin mx-auto text-muted-foreground" />
         <p className="text-sm text-muted-foreground mt-2">
-          {tCommon('TopDocsChips.loading', { defaultValue: 'Loading popular documents...' })}
+          {tCommon('TopDocsChips.loading', {
+            defaultValue: 'Loading popular documents...',
+          })}
         </p>
       </div>
     );
   }
-  
+
   if (!isHydrated || topDocs.length === 0) {
-    return isHydrated ? null : <div className="h-20" />; 
+    return isHydrated ? null : <div className="h-20" />;
   }
 
   return (
     <section className="container mx-auto px-4 py-8 md:py-12">
       <h2 className="text-xl font-semibold text-center mb-6 text-foreground">
-        {tCommon('TopDocsChips.title', { defaultValue: 'Popular Legal Documents' })}
+        {tCommon('TopDocsChips.title', {
+          defaultValue: 'Popular Legal Documents',
+        })}
       </h2>
       <div className="flex flex-wrap justify-center items-center gap-2 md:gap-3">
         {topDocs.map((doc) => (
@@ -91,21 +97,28 @@ const TopDocsChips = React.memo(function TopDocsChips() {
             asChild
             className="bg-card hover:bg-muted border-border text-card-foreground hover:text-primary transition-colors shadow-sm px-4 py-2 h-auto text-xs sm:text-sm"
           >
-            <Link href={`/${locale}/docs/${doc.id}`}
-              prefetch
-            >
-              {React.createElement(FileText, { className: "h-4 w-4 mr-2 text-primary/80 opacity-70" })}
-              {(doc.translations?.[locale as 'en' | 'es']?.name) ||
-               doc.translations?.en?.name ||
-               doc.name ||
-               doc.id}
+            <Link href={`/${locale}/docs/${doc.id}`} prefetch>
+              {React.createElement(FileText, {
+                className: 'h-4 w-4 mr-2 text-primary/80 opacity-70',
+              })}
+              {doc.translations?.[locale as 'en' | 'es']?.name ||
+                doc.translations?.en?.name ||
+                doc.name ||
+                doc.id}
             </Link>
           </Button>
         ))}
       </div>
       <div className="text-center mt-6">
-        <Button variant="link" onClick={handleExploreAll} className="text-primary text-sm">
-          {tCommon('stepOne.exploreAllCategoriesButton', { defaultValue: 'Explore All Document Categories' })} →
+        <Button
+          variant="link"
+          onClick={handleExploreAll}
+          className="text-primary text-sm"
+        >
+          {tCommon('stepOne.exploreAllCategoriesButton', {
+            defaultValue: 'Explore All Document Categories',
+          })}{' '}
+          →
         </Button>
       </div>
     </section>

@@ -19,13 +19,13 @@ export interface DashboardDocument {
 
 export async function getUserDocuments(
   userId: string,
-  max = 20
+  max = 20,
 ): Promise<DashboardDocument[]> {
   const db = await getDb();
   const col = collection(db, 'users', userId, 'documents');
   const q = query(col, orderBy('createdAt', 'desc'), limit(max));
   const snap = await getDocs(q);
-  return snap.docs.map(d => {
+  return snap.docs.map((d) => {
     const data = d.data() as Record<string, unknown>;
     const docType = (data.originalDocId || data.docType || d.id) as string;
     const docConfig = documentLibrary.find((doc) => doc.id === docType);
@@ -49,7 +49,7 @@ export interface DashboardPayment {
 
 export async function getUserPayments(
   userId: string,
-  max = 20
+  max = 20,
 ): Promise<DashboardPayment[]> {
   const db = await getDb();
   const col = collection(db, 'users', userId, 'payments');

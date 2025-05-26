@@ -1,4 +1,3 @@
-
 /* prettier-ignore */
 // src/app/layout.tsx
 
@@ -13,12 +12,9 @@ export const metadata = {
 };
 
 // Dev-only helper for catching missing translation keys
-if (
-  process.env.NODE_ENV === 'development' &&
-  typeof window !== 'undefined'
-) {
+if (process.env.NODE_ENV === 'development' && typeof window !== 'undefined') {
   import('../../scripts/find-missing-i18n.js').catch((err) =>
-    console.error('Failed to load find-missing-i18n.js:', err)
+    console.error('Failed to load find-missing-i18n.js:', err),
   );
 }
 
@@ -42,7 +38,6 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
@@ -91,11 +86,7 @@ export default function RootLayout({
             }
           `}
         </Script>
-        <link
-          rel="preload"
-          href="/images/hero-placeholder.png"
-          as="image"
-        />
+        <link rel="preload" href="/images/hero-placeholder.png" as="image" />
         <link
           rel="alternate"
           href="https://123legaldoc.com/en/"
@@ -110,9 +101,7 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${merriweather.variable} antialiased flex flex-col min-h-screen overflow-x-hidden`}
       >
-        <RootClient>
-          {children}
-        </RootClient>
+        <RootClient>{children}</RootClient>
       </body>
     </html>
   );

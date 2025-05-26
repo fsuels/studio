@@ -8,7 +8,7 @@ import React, {
   useEffect,
   useCallback,
   ReactNode,
-  useMemo
+  useMemo,
 } from 'react';
 
 // 1) Define the shape of your auth context
@@ -51,7 +51,12 @@ function useAuthHook(): AuthContextType {
         try {
           const parsedData = JSON.parse(stored);
           // Check if parsedData is an object and has the expected properties
-          if (parsedData && typeof parsedData === 'object' && 'isLoggedIn' in parsedData && 'user' in parsedData) {
+          if (
+            parsedData &&
+            typeof parsedData === 'object' &&
+            'isLoggedIn' in parsedData &&
+            'user' in parsedData
+          ) {
             setIsLoggedIn(parsedData.isLoggedIn);
             setUser(parsedData.user);
           } else {
@@ -71,23 +76,29 @@ function useAuthHook(): AuthContextType {
   }, []);
 
   // login & logout update state + localStorage
-  const login = useCallback((email: string, uid?: string) => {
-    // In a real app, uid would come from backend after successful auth
-    const newUid = uid || `mock-user-${Date.now()}`;
-    const newUser: User = {
-      uid: newUid,
-      email: email,
-      // Initialize other fields as empty or default
-      name: user?.name || '', // Preserve existing name if user object was already partially there
-      phone: user?.phone || '',
-      address: user?.address || '',
-      twoStep: user?.twoStep || false,
-      textUpdates: user?.textUpdates || false,
-    };
-    localStorage.setItem('mockAuth', JSON.stringify({ isLoggedIn: true, user: newUser }));
-    setIsLoggedIn(true);
-    setUser(newUser);
-  }, [user]); // Added user to dependency array to correctly capture existing fields if any
+  const login = useCallback(
+    (email: string, uid?: string) => {
+      // In a real app, uid would come from backend after successful auth
+      const newUid = uid || `mock-user-${Date.now()}`;
+      const newUser: User = {
+        uid: newUid,
+        email: email,
+        // Initialize other fields as empty or default
+        name: user?.name || '', // Preserve existing name if user object was already partially there
+        phone: user?.phone || '',
+        address: user?.address || '',
+        twoStep: user?.twoStep || false,
+        textUpdates: user?.textUpdates || false,
+      };
+      localStorage.setItem(
+        'mockAuth',
+        JSON.stringify({ isLoggedIn: true, user: newUser }),
+      );
+      setIsLoggedIn(true);
+      setUser(newUser);
+    },
+    [user],
+  ); // Added user to dependency array to correctly capture existing fields if any
 
   const logout = useCallback(() => {
     localStorage.removeItem('mockAuth');
@@ -95,24 +106,33 @@ function useAuthHook(): AuthContextType {
     setUser(null);
   }, []);
 
-  const updateUser = useCallback((updates: Partial<User> & { password?: string }) => {
-    setUser(prevUser => {
-      if (!prevUser) return null; // Should not happen if logged in
-      const updatedUser = { ...prevUser, ...updates };
-      localStorage.setItem('mockAuth', JSON.stringify({ isLoggedIn: true, user: updatedUser }));
-      return updatedUser;
-    });
-  }, []);
+  const updateUser = useCallback(
+    (updates: Partial<User> & { password?: string }) => {
+      setUser((prevUser) => {
+        if (!prevUser) return null; // Should not happen if logged in
+        const updatedUser = { ...prevUser, ...updates };
+        localStorage.setItem(
+          'mockAuth',
+          JSON.stringify({ isLoggedIn: true, user: updatedUser }),
+        );
+        return updatedUser;
+      });
+    },
+    [],
+  );
 
   // Memoize contextValue to prevent unnecessary re-renders of consumers
-  const contextValue = useMemo(() => ({
-    isLoggedIn,
-    user,
-    isLoading,
-    login,
-    logout,
-    updateUser
-  }), [isLoggedIn, user, isLoading, login, logout, updateUser]);
+  const contextValue = useMemo(
+    () => ({
+      isLoggedIn,
+      user,
+      isLoading,
+      login,
+      logout,
+      updateUser,
+    }),
+    [isLoggedIn, user, isLoading, login, logout, updateUser],
+  );
 
   return contextValue;
 }
@@ -124,8 +144,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   // Prevent any UI flashes while loading from localStorage
   // This check ensures that children are rendered only after initial auth state is determined.
   if (authHookValue.isLoading && typeof window !== 'undefined') {
-     // Optionally render a global loading spinner here if desired for initial app load
-     return null;
+    // Optionally render a global loading spinner here if desired for initial app load
+    return null;
   }
 
   // Standard multi-line JSX for the provider, ensuring no hidden characters or subtle syntax errors.
@@ -140,7 +160,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 // 5) Hook for consuming the context
 export function useAuth() {
   const ctx = useContext(AuthContext);
-  if (ctx === undefined) { // Check for undefined, not !ctx
+  if (ctx === undefined) {
+    // Check for undefined, not !ctx
     throw new Error('useAuth must be used within an AuthProvider');
   }
   return ctx;

@@ -25,7 +25,8 @@ We appreciate the contributions you have made during your time here and wish you
 
 Sincerely,
 
-__________________________  
+---
+
 [Supervisor Name], [Title]  
 **[Company Name]**
 
@@ -35,7 +36,8 @@ __________________________
 
 I acknowledge receipt of this termination letter.
 
-__________________________  
-[Employee Signature]  
+---
 
-Date: ____________________
+[Employee Signature]
+
+Date: ********\_\_\_\_********

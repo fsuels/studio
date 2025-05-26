@@ -1,10 +1,10 @@
-import { redirect } from 'next/navigation'
+import { redirect } from 'next/navigation';
 
 export const metadata = {
-  title: 'Online Notary'
-}
+  title: 'Online Notary',
+};
 
 export default function OnlineNotaryPage() {
-  redirect('/en/online-notary')
-  return null
+  redirect('/en/online-notary');
+  return null;
 }

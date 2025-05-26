@@ -1,17 +1,10 @@
 {
   "hosting": {
     "public": "out",
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
-    ],
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
     "cleanUrls": true,
     "trailingSlash": false,
-    "predeploy": [
-      "npm run gen:previews",
-      "npm run build"
-    ],
+    "predeploy": ["npm run gen:previews", "npm run build"],
     "rewrites": [
       {
         "source": "**",

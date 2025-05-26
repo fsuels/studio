@@ -18,11 +18,26 @@
       "table": {
         "headers": ["Situación", "Por Qué un Pagaré es Crucial"],
         "rows": [
-          ["Prestar dinero a amigos o familiares", "Evita malentendidos, aclara los términos, hace que el préstamo sea ejecutable."],
-          ["Préstamos comerciales o inversiones", "Formaliza la deuda, describe el reembolso, protege los intereses de ambas partes."],
-          ["Venta de bienes o servicios a crédito", "Sirve como prueba de la deuda y los términos si el pago no es inmediato."],
-          ["Préstamos estudiantiles", "Legalmente requerido para documentar la obligación de reembolsar la financiación educativa."],
-          ["Financiamiento inmobiliario (a veces como parte de un paquete más grande)", "Puede asegurar una porción del financiamiento, aparte de la hipoteca misma."]
+          [
+            "Prestar dinero a amigos o familiares",
+            "Evita malentendidos, aclara los términos, hace que el préstamo sea ejecutable."
+          ],
+          [
+            "Préstamos comerciales o inversiones",
+            "Formaliza la deuda, describe el reembolso, protege los intereses de ambas partes."
+          ],
+          [
+            "Venta de bienes o servicios a crédito",
+            "Sirve como prueba de la deuda y los términos si el pago no es inmediato."
+          ],
+          [
+            "Préstamos estudiantiles",
+            "Legalmente requerido para documentar la obligación de reembolsar la financiación educativa."
+          ],
+          [
+            "Financiamiento inmobiliario (a veces como parte de un paquete más grande)",
+            "Puede asegurar una porción del financiamiento, aparte de la hipoteca misma."
+          ]
         ]
       }
     },
@@ -42,13 +57,31 @@
         "headers": ["Cláusula/Punto de Dato", "Por Qué Es Importante"],
         "rows": [
           ["Monto Principal", "La suma inicial de dinero prestada."],
-          ["Tasa de Interés", "El porcentaje cobrado sobre el préstamo, si lo hay (verifique las leyes de usura estatales)."],
+          [
+            "Tasa de Interés",
+            "El porcentaje cobrado sobre el préstamo, si lo hay (verifique las leyes de usura estatales)."
+          ],
           ["Fecha del Pagaré", "Cuándo se hace la promesa de pago."],
-          ["Partes (Prestamista y Prestatario)", "Nombres legales completos y direcciones de todos los involucrados."],
-          ["Términos de Reembolso", "Cómo y cuándo se reembolsará el préstamo (cuotas, suma global, fecha de vencimiento)."],
-          ["Fecha de Vencimiento", "La fecha final en la que el préstamo debe ser reembolsado en su totalidad."],
-          ["Términos de Incumplimiento", "Qué sucede si el prestatario no paga según lo acordado (por ejemplo, cargos por mora, cláusula de aceleración)."],
-          ["Ley Aplicable", "Las leyes de qué estado o provincia se aplicarán al pagaré."],
+          [
+            "Partes (Prestamista y Prestatario)",
+            "Nombres legales completos y direcciones de todos los involucrados."
+          ],
+          [
+            "Términos de Reembolso",
+            "Cómo y cuándo se reembolsará el préstamo (cuotas, suma global, fecha de vencimiento)."
+          ],
+          [
+            "Fecha de Vencimiento",
+            "La fecha final en la que el préstamo debe ser reembolsado en su totalidad."
+          ],
+          [
+            "Términos de Incumplimiento",
+            "Qué sucede si el prestatario no paga según lo acordado (por ejemplo, cargos por mora, cláusula de aceleración)."
+          ],
+          [
+            "Ley Aplicable",
+            "Las leyes de qué estado o provincia se aplicarán al pagaré."
+          ],
           ["Firmas", "Hace que el pagaré sea legalmente vinculante."]
         ]
       }

@@ -18,7 +18,10 @@ const calculateTimeLeftUntilMidnight = () => {
     return { expired: true, timeLeftString: '00:00:00' };
   }
 
-  const hours = String(Math.floor((diff / (1000 * 60 * 60)) % 24)).padStart(2, '0');
+  const hours = String(Math.floor((diff / (1000 * 60 * 60)) % 24)).padStart(
+    2,
+    '0',
+  );
   const minutes = String(Math.floor((diff / 1000 / 60) % 60)).padStart(2, '0');
   const seconds = String(Math.floor((diff / 1000) % 60)).padStart(2, '0');
   return { expired: false, timeLeftString: `${hours}:${minutes}:${seconds}` };
@@ -27,7 +30,7 @@ const calculateTimeLeftUntilMidnight = () => {
 const initialCountdown = { expired: false, timeLeftString: '00:00:00' };
 
 const AnnouncementBar = React.memo(function PromoBanner() {
-  const { t } = useTranslation("common");
+  const { t } = useTranslation('common');
   const [isVisible, setIsVisible] = useState(true);
   const [countdown, setCountdown] = useState(initialCountdown);
   const [isHydrated, setIsHydrated] = useState(false);
@@ -77,13 +80,24 @@ const AnnouncementBar = React.memo(function PromoBanner() {
           <div className="container mx-auto px-4 py-2 flex flex-col sm:flex-row items-center justify-center text-sm relative gap-2 sm:gap-4">
             <div className="flex items-center">
               <Gift className="h-4 w-4 mr-2 shrink-0" />
-              <span className="font-medium mr-1">{t('announcement.offerTitle', { defaultValue: 'Limited Time Offer:' })}</span>
-              <span>{t('announcement.offerDetails', { defaultValue: 'Get 20% off your first document!' })}</span>
+              <span className="font-medium mr-1">
+                {t('announcement.offerTitle', {
+                  defaultValue: 'Limited Time Offer:',
+                })}
+              </span>
+              <span>
+                {t('announcement.offerDetails', {
+                  defaultValue: 'Get 20% off your first document!',
+                })}
+              </span>
             </div>
             {!countdown.expired && (
               <div className="flex items-center font-mono text-xs bg-primary-foreground/20 px-2 py-0.5 rounded">
                 <Clock className="h-3 w-3 mr-1.5" />
-                <span>{t('announcement.expiresIn', { defaultValue: 'Expires in:' })} {countdown.timeLeftString}</span>
+                <span>
+                  {t('announcement.expiresIn', { defaultValue: 'Expires in:' })}{' '}
+                  {countdown.timeLeftString}
+                </span>
               </div>
             )}
             <Button
@@ -91,7 +105,9 @@ const AnnouncementBar = React.memo(function PromoBanner() {
               size="icon"
               onClick={handleDismiss}
               className="absolute right-0 top-1/2 -translate-y-1/2 h-7 w-7 text-primary-foreground/70 hover:bg-primary-foreground/10 hover:text-primary-foreground sm:h-6 sm:w-6"
-              aria-label={t('announcement.dismissLabel', { defaultValue: 'Dismiss promotional banner' })}
+              aria-label={t('announcement.dismissLabel', {
+                defaultValue: 'Dismiss promotional banner',
+              })}
             >
               <X className="h-4 w-4" />
             </Button>

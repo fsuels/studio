@@ -13,10 +13,12 @@ import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
+} from '@/components/ui/tooltip';
 import { Button } from '@/components/ui/button';
 
-const GooglePlacesLoader = dynamic(() => import('./GooglePlacesLoader'), { ssr: false });
+const GooglePlacesLoader = dynamic(() => import('./GooglePlacesLoader'), {
+  ssr: false,
+});
 
 interface WindowWithGoogle extends Window {
   google?: {
@@ -53,22 +55,29 @@ const AddressField = React.memo(function AddressField({
   value: controlledValue,
   onChange: controlledOnChange,
 }: AddressFieldProps) {
-  const { t } = useTranslation("common"); // Added
-  const { register, setValue: rhfSetValue, formState: { errors: formErrors } } = useFormContext();
+  const { t } = useTranslation('common'); // Added
+  const {
+    register,
+    setValue: rhfSetValue,
+    formState: { errors: formErrors },
+  } = useFormContext();
   const inputRef = useRef<HTMLInputElement | null>(null);
   const fieldErrorActual = formErrors[name]?.message || error;
 
   const { ref: rhfRef, ...restOfRegister } = register(name, { required });
 
-    useEffect(() => {
-      let autocomplete: google.maps.places.Autocomplete | undefined;
-      let intervalId: NodeJS.Timeout | undefined;
+  useEffect(() => {
+    let autocomplete: google.maps.places.Autocomplete | undefined;
+    let intervalId: NodeJS.Timeout | undefined;
 
     const initializeAutocomplete = () => {
       const win = window as WindowWithGoogle;
       if (!win.google?.maps?.places || !inputRef.current) {
         intervalId = setInterval(() => {
-          if ((window as WindowWithGoogle).google?.maps?.places && inputRef.current) {
+          if (
+            (window as WindowWithGoogle).google?.maps?.places &&
+            inputRef.current
+          ) {
             clearInterval(intervalId);
             intervalId = undefined;
             initializeAutocompleteInternal();
@@ -93,8 +102,13 @@ const AddressField = React.memo(function AddressField({
         const formattedAddress = place.formatted_address || '';
 
         const wanted = new Set([
-          'street_number', 'route', 'locality', 'administrative_area_level_1',
-          'postal_code', 'postal_code_suffix', 'country'
+          'street_number',
+          'route',
+          'locality',
+          'administrative_area_level_1',
+          'postal_code',
+          'postal_code_suffix',
+          'country',
         ]);
         const parts: Record<string, string> = {};
         place.address_components?.forEach((c: any) => {
@@ -102,36 +116,45 @@ const AddressField = React.memo(function AddressField({
           if (wanted.has(type)) parts[type] = c.short_name;
         });
         const addressParts = {
-            street: `${parts.street_number ?? ''} ${parts.route ?? ''}`.trim() || place.name || '',
-            city: parts.locality ?? '',
-            state: parts.administrative_area_level_1 ?? '',
-            postalCode: [parts.postal_code, parts.postal_code_suffix].filter(Boolean).join('-'),
-            country: parts.country ?? '',
+          street:
+            `${parts.street_number ?? ''} ${parts.route ?? ''}`.trim() ||
+            place.name ||
+            '',
+          city: parts.locality ?? '',
+          state: parts.administrative_area_level_1 ?? '',
+          postalCode: [parts.postal_code, parts.postal_code_suffix]
+            .filter(Boolean)
+            .join('-'),
+          country: parts.country ?? '',
         };
 
         if (controlledOnChange) {
           controlledOnChange(formattedAddress, addressParts);
         } else {
-          rhfSetValue(name, formattedAddress, { shouldValidate: true, shouldDirty: true });
+          rhfSetValue(name, formattedAddress, {
+            shouldValidate: true,
+            shouldDirty: true,
+          });
         }
 
         if (inputRef.current) {
           inputRef.current.value = formattedAddress;
         }
-        });
-        (inputRef.current as InputWithAutocomplete).googleAutocomplete = autocomplete;
-      };
+      });
+      (inputRef.current as InputWithAutocomplete).googleAutocomplete =
+        autocomplete;
+    };
 
     initializeAutocomplete();
 
-      return () => {
-        if (intervalId) clearInterval(intervalId);
-        const currentInputRef = inputRef.current as InputWithAutocomplete | null;
-        if (currentInputRef && currentInputRef.googleAutocomplete) {
-          const pacContainers = document.querySelectorAll('.pac-container');
-          pacContainers.forEach(container => container.remove());
-        }
-      };
+    return () => {
+      if (intervalId) clearInterval(intervalId);
+      const currentInputRef = inputRef.current as InputWithAutocomplete | null;
+      if (currentInputRef && currentInputRef.googleAutocomplete) {
+        const pacContainers = document.querySelectorAll('.pac-container');
+        pacContainers.forEach((container) => container.remove());
+      }
+    };
   }, [name, rhfSetValue, controlledOnChange]);
 
   const handleLocalInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -144,36 +167,64 @@ const AddressField = React.memo(function AddressField({
     <>
       <GooglePlacesLoader />
       <div className={cn('space-y-1', className)}>
-      <div className="flex items-center gap-1">
-        <Label htmlFor={name} className={cn(fieldErrorActual && "text-destructive")}>{t(label)}{required && <span className="text-destructive">*</span>}</Label>
-        {tooltip && (
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button variant="ghost" size="icon" className="h-5 w-5 p-0 text-muted-foreground hover:text-foreground">
-                <Info className="h-4 w-4" />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent side="top" align="start" className="max-w-xs text-sm bg-popover text-popover-foreground border shadow-md rounded-md p-2">
-              <p>{t(tooltip)}</p> {/* Changed from tooltipText to t(tooltip) */}
-            </TooltipContent>
-          </Tooltip>
-        )}
-      </div>
-      <Input
-        id={name}
-        placeholder={placeholder ? t(placeholder) : undefined} // Changed
-        {...restOfRegister}
-        defaultValue={controlledValue}
-        onChange={controlledOnChange ? handleLocalInputChange : restOfRegister.onChange}
-        ref={el => {
-          rhfRef(el);
-          inputRef.current = el;
-        }}
-        className={cn("w-full max-w-sm", fieldErrorActual && "border-destructive focus-visible:ring-destructive")}
-        autoComplete="off"
-        aria-invalid={!!fieldErrorActual}
-      />
-      {fieldErrorActual && <p className="text-xs text-destructive mt-1">{t(String(fieldErrorActual))}</p>} {/* Changed */}
+        <div className="flex items-center gap-1">
+          <Label
+            htmlFor={name}
+            className={cn(fieldErrorActual && 'text-destructive')}
+          >
+            {t(label)}
+            {required && <span className="text-destructive">*</span>}
+          </Label>
+          {tooltip && (
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-5 w-5 p-0 text-muted-foreground hover:text-foreground"
+                >
+                  <Info className="h-4 w-4" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent
+                side="top"
+                align="start"
+                className="max-w-xs text-sm bg-popover text-popover-foreground border shadow-md rounded-md p-2"
+              >
+                <p>{t(tooltip)}</p>{' '}
+                {/* Changed from tooltipText to t(tooltip) */}
+              </TooltipContent>
+            </Tooltip>
+          )}
+        </div>
+        <Input
+          id={name}
+          placeholder={placeholder ? t(placeholder) : undefined} // Changed
+          {...restOfRegister}
+          defaultValue={controlledValue}
+          onChange={
+            controlledOnChange
+              ? handleLocalInputChange
+              : restOfRegister.onChange
+          }
+          ref={(el) => {
+            rhfRef(el);
+            inputRef.current = el;
+          }}
+          className={cn(
+            'w-full max-w-sm',
+            fieldErrorActual &&
+              'border-destructive focus-visible:ring-destructive',
+          )}
+          autoComplete="off"
+          aria-invalid={!!fieldErrorActual}
+        />
+        {fieldErrorActual && (
+          <p className="text-xs text-destructive mt-1">
+            {t(String(fieldErrorActual))}
+          </p>
+        )}{' '}
+        {/* Changed */}
       </div>
     </>
   );

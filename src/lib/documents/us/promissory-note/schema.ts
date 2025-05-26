@@ -10,9 +10,9 @@ export const PromissoryNoteSchema = z.object({
   borrowerAddress: z.string().min(1),
   principalAmount: z.coerce.number().positive(),
   interestRate: z.coerce.number().nonnegative(),
-  paymentFrequency: z.enum(['Monthly','Quarterly','Annually','Lump Sum']),
+  paymentFrequency: z.enum(['Monthly', 'Quarterly', 'Annually', 'Lump Sum']),
   maturityDate: z.string().min(1),
-  governingLaw: z.enum(usStates.map(s => s.value) as [string, ...string[]]),
+  governingLaw: z.enum(usStates.map((s) => s.value) as [string, ...string[]]),
   lateFeeRate: z.coerce.number().optional(),
 });
 

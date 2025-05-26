@@ -4,7 +4,7 @@
 import React, { useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { useTranslation } from 'react-i18next'; 
+import { useTranslation } from 'react-i18next';
 import Image from 'next/image';
 import AutoImage from './AutoImage';
 import { Loader2 } from 'lucide-react';
@@ -20,17 +20,21 @@ const DocumentPreview = React.memo(function DocumentPreview({
   locale = 'en',
   alt,
 }: DocumentPreviewProps) {
-  const { t } = useTranslation("common");
+  const { t } = useTranslation('common');
   const [imgExists, setImgExists] = useState<boolean>(true);
   const [md, setMd] = useState<string>('');
   const [isLoadingMd, setIsLoadingMd] = useState<boolean>(false);
   const [errorMd, setErrorMd] = useState<string | null>(null);
 
   const imgSrc = `/images/previews/${locale}/${docId}.png`;
-  const defaultAlt = alt ?? (locale === 'es' ? t(`Vista previa de ${docId}`) : t(`${docId} preview`));
+  const defaultAlt =
+    alt ??
+    (locale === 'es' ? t(`Vista previa de ${docId}`) : t(`${docId} preview`));
 
   const handleImgError = () => {
-    console.warn(`[DocumentPreview] Image not found or failed to load: ${imgSrc}. Falling back to Markdown.`);
+    console.warn(
+      `[DocumentPreview] Image not found or failed to load: ${imgSrc}. Falling back to Markdown.`,
+    );
     setImgExists(false);
   };
 
@@ -39,20 +43,30 @@ const DocumentPreview = React.memo(function DocumentPreview({
       setIsLoadingMd(true);
       setErrorMd(null);
       fetch(`/templates/${locale}/${docId}.md`)
-        .then(r => {
+        .then((r) => {
           if (!r.ok) {
-            throw new Error(`Failed to fetch Markdown template (${r.status}): /templates/${locale}/${docId}.md`);
+            throw new Error(
+              `Failed to fetch Markdown template (${r.status}): /templates/${locale}/${docId}.md`,
+            );
           }
           return r.text();
         })
-        .then(text => {
+        .then((text) => {
           setMd(text);
           setIsLoadingMd(false);
         })
-        .catch(err => {
-          console.error(`[DocumentPreview] Error fetching Markdown for ${docId} (${locale}):`, err);
+        .catch((err) => {
+          console.error(
+            `[DocumentPreview] Error fetching Markdown for ${docId} (${locale}):`,
+            err,
+          );
           setMd('');
-          setErrorMd(err.message || t('Error loading preview content.', {defaultValue: 'Error loading preview content.'}));
+          setErrorMd(
+            err.message ||
+              t('Error loading preview content.', {
+                defaultValue: 'Error loading preview content.',
+              }),
+          );
           setIsLoadingMd(false);
         });
     }
@@ -65,15 +79,17 @@ const DocumentPreview = React.memo(function DocumentPreview({
         className="absolute inset-0 flex items-center justify-center z-10 select-none pointer-events-none
                    text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-widest opacity-10 rotate-[-35deg] text-muted-foreground"
       >
-        {locale === 'es' ? t('VISTA PREVIA', 'VISTA PREVIA') : t('PREVIEW', 'PREVIEW')}
+        {locale === 'es'
+          ? t('VISTA PREVIA', 'VISTA PREVIA')
+          : t('PREVIEW', 'PREVIEW')}
       </div>
-      
+
       {imgExists ? (
         <Image
           src={imgSrc}
           alt={defaultAlt}
-          width={850} 
-          height={1100} 
+          width={850}
+          height={1100}
           loading="lazy" // Added lazy loading
           className="object-contain w-full h-full"
           onError={handleImgError}
@@ -85,7 +101,7 @@ const DocumentPreview = React.memo(function DocumentPreview({
         <div className="flex flex-col items-center justify-center text-muted-foreground h-full p-4">
           <Loader2 className="h-6 w-6 animate-spin mb-2" />
           <p className="text-center text-sm ">
-            {t('Loading preview…', {defaultValue: 'Loading preview…'})}
+            {t('Loading preview…', { defaultValue: 'Loading preview…' })}
           </p>
         </div>
       ) : errorMd ? (
@@ -108,9 +124,11 @@ const DocumentPreview = React.memo(function DocumentPreview({
           </ReactMarkdown>
         </div>
       ) : (
-         <p className="text-center text-sm text-muted-foreground h-full flex items-center justify-center p-4">
-           {t('Preview not available.', {defaultValue: 'Preview not available.'})}
-         </p>
+        <p className="text-center text-sm text-muted-foreground h-full flex items-center justify-center p-4">
+          {t('Preview not available.', {
+            defaultValue: 'Preview not available.',
+          })}
+        </p>
       )}
     </div>
   );

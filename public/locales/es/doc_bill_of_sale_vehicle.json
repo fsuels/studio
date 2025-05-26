@@ -1,4 +1,3 @@
-
 {
   "metaTitle": "[ES] Vehicle Bill of Sale Template & Complete How-To Guide | 123LegalDoc",
   "metaDescription": "[ES] Generate a legally solid vehicle bill of sale in under 5 minutes. Free printable PDF, e-sign-ready with SignWell, attorney-reviewed, and valid in all 50 states.",
@@ -33,11 +32,23 @@
     "why": {
       "title": "[ES] ¿Por Qué Necesitas Uno (Incluso en Estados de \"Apretón de Manos\")?",
       "table": {
-        "headers": ["[ES] Riesgo Sin Contrato de Compraventa", "[ES] Protección Con Uno"],
+        "headers": [
+          "[ES] Riesgo Sin Contrato de Compraventa",
+          "[ES] Protección Con Uno"
+        ],
         "rows": [
-          ["[ES] No puedes probar que ya no eres dueño del auto—multas o peajes aún llegan a tu nombre", "[ES] Documento con fecha y hora muestra el momento exacto en que transferiste la propiedad"],
-          ["[ES] El comprador reclama daños no revelados", "[ES] Cláusula “tal como está” y notas de inspección limitan la responsabilidad"],
-          ["[ES] El DMV rechaza la transferencia del título debido a datos faltantes", "[ES] La plantilla está pre-mapeada a cada campo del DMV"]
+          [
+            "[ES] No puedes probar que ya no eres dueño del auto—multas o peajes aún llegan a tu nombre",
+            "[ES] Documento con fecha y hora muestra el momento exacto en que transferiste la propiedad"
+          ],
+          [
+            "[ES] El comprador reclama daños no revelados",
+            "[ES] Cláusula “tal como está” y notas de inspección limitan la responsabilidad"
+          ],
+          [
+            "[ES] El DMV rechaza la transferencia del título debido a datos faltantes",
+            "[ES] La plantilla está pre-mapeada a cada campo del DMV"
+          ]
         ]
       }
     },
@@ -60,13 +71,34 @@
       "table": {
         "headers": ["[ES] Cláusula", "[ES] Por Qué Importa"],
         "rows": [
-          ["[ES] Nombres Legales Completos y Direcciones", "[ES] El DMV y las oficinas de impuestos rechazan información parcial"],
-          ["[ES] Descripción del Vehículo (marca, modelo, año, tipo de carrocería, color, VIN, odómetro)", "[ES] Previene fraude de título y errores administrativos"],
-          ["[ES] Precio de Compra y Método de Pago", "[ES] Establece la base del impuesto sobre ventas y prueba la contraprestación"],
-          ["[ES] Lenguaje Tal Como Está / Garantía", "[ES] Protege al vendedor de futuras reclamaciones mecánicas"],
-          ["[ES] Estado de Gravamen y Liberación", "[ES] Confirma que el comprador recibe título limpio"],
-          ["[ES] Detalles de Entrega", "[ES] Especifica cuándo y dónde pasa el riesgo de pérdida"],
-          ["[ES] Firmas (y Notario si es requerido)", "[ES] Hace que el documento sea ejecutable"]
+          [
+            "[ES] Nombres Legales Completos y Direcciones",
+            "[ES] El DMV y las oficinas de impuestos rechazan información parcial"
+          ],
+          [
+            "[ES] Descripción del Vehículo (marca, modelo, año, tipo de carrocería, color, VIN, odómetro)",
+            "[ES] Previene fraude de título y errores administrativos"
+          ],
+          [
+            "[ES] Precio de Compra y Método de Pago",
+            "[ES] Establece la base del impuesto sobre ventas y prueba la contraprestación"
+          ],
+          [
+            "[ES] Lenguaje Tal Como Está / Garantía",
+            "[ES] Protege al vendedor de futuras reclamaciones mecánicas"
+          ],
+          [
+            "[ES] Estado de Gravamen y Liberación",
+            "[ES] Confirma que el comprador recibe título limpio"
+          ],
+          [
+            "[ES] Detalles de Entrega",
+            "[ES] Especifica cuándo y dónde pasa el riesgo de pérdida"
+          ],
+          [
+            "[ES] Firmas (y Notario si es requerido)",
+            "[ES] Hace que el documento sea ejecutable"
+          ]
         ]
       }
     },

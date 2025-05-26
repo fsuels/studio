@@ -1,5 +1,5 @@
 // src/components/WizardForm.tsx
-"use client";
+'use client';
 
 import React, {
   useEffect,
@@ -7,30 +7,30 @@ import React, {
   useRef,
   useCallback,
   useMemo,
-} from "react";
-import { Controller, useFormContext } from "react-hook-form";
-import axios, { AxiosError } from "axios";
-import Link from "next/link"; // Added Link
-import { z } from "zod";
-import { Loader2 } from "lucide-react";
+} from 'react';
+import { Controller, useFormContext } from 'react-hook-form';
+import axios, { AxiosError } from 'axios';
+import Link from 'next/link'; // Added Link
+import { z } from 'zod';
+import { Loader2 } from 'lucide-react';
 
-import type { LegalDocument } from "@/lib/document-library";
-import { useToast } from "@/hooks/use-toast";
-import { useTranslation } from "react-i18next";
+import type { LegalDocument } from '@/lib/document-library';
+import { useToast } from '@/hooks/use-toast';
+import { useTranslation } from 'react-i18next';
 
-import FieldRenderer from "./FieldRenderer";
-import { Progress } from "@/components/ui/progress";
-import { Button } from "@/components/ui/button";
-import { prettify } from "@/lib/schema-utils";
-import AuthModal from "@/components/AuthModal";
-import { useAuth } from "@/hooks/useAuth";
-import AddressField from "@/components/AddressField";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import TrustBadges from "@/components/TrustBadges";
-import ReviewStep from "@/components/ReviewStep";
+import FieldRenderer from './FieldRenderer';
+import { Progress } from '@/components/ui/progress';
+import { Button } from '@/components/ui/button';
+import { prettify } from '@/lib/schema-utils';
+import AuthModal from '@/components/AuthModal';
+import { useAuth } from '@/hooks/useAuth';
+import AddressField from '@/components/AddressField';
+import { TooltipProvider } from '@/components/ui/tooltip';
+import TrustBadges from '@/components/TrustBadges';
+import ReviewStep from '@/components/ReviewStep';
 
 interface WizardFormProps {
-  locale: "en" | "es";
+  locale: 'en' | 'es';
   doc: LegalDocument;
   onComplete: (checkoutUrl: string) => void;
 }
@@ -40,7 +40,7 @@ export default function WizardForm({
   doc,
   onComplete,
 }: WizardFormProps) {
-  const { t } = useTranslation("common");
+  const { t } = useTranslation('common');
   const { toast } = useToast();
   const { isLoggedIn, isLoading: authIsLoading } = useAuth();
 
@@ -56,23 +56,21 @@ export default function WizardForm({
     trigger,
     control,
     setValue,
-    formState: {
-      errors,
-      isSubmitting: formIsSubmitting,
-      isValid: isFormValid,
-    },
+    formState: { errors, isSubmitting: formIsSubmitting, isValid: isFormValid },
   } = useFormContext<z.infer<typeof doc.schema>>();
 
   useEffect(() => {
     setIsHydrated(true);
   }, []);
 
-  const actualSchemaShape = useMemo<Record<string, z.ZodTypeAny> | undefined>(() => {
+  const actualSchemaShape = useMemo<
+    Record<string, z.ZodTypeAny> | undefined
+  >(() => {
     const def = doc.schema?._def;
     if (!def) return undefined;
-    return def.typeName === "ZodEffects"
+    return def.typeName === 'ZodEffects'
       ? (def.schema.shape as Record<string, z.ZodTypeAny>)
-      : def.typeName === "ZodObject"
+      : def.typeName === 'ZodObject'
         ? (def.shape as Record<string, z.ZodTypeAny>)
         : undefined;
   }, [doc.schema]);
@@ -90,13 +88,12 @@ export default function WizardForm({
             ? t(labelFromDescription, { defaultValue: labelFromDescription })
             : t(`fields.${q.id}.label`, { defaultValue: prettify(q.id) });
 
-        const tooltip =
-          q.tooltip
-            ? t(q.tooltip, { defaultValue: q.tooltip })
-            : t(fieldDef?.tooltip || fieldDef?.schema?._def?.tooltip || "", {
-                defaultValue:
-                  fieldDef?.tooltip || fieldDef?.schema?._def?.tooltip || "",
-              }) || undefined;
+        const tooltip = q.tooltip
+          ? t(q.tooltip, { defaultValue: q.tooltip })
+          : t(fieldDef?.tooltip || fieldDef?.schema?._def?.tooltip || '', {
+              defaultValue:
+                fieldDef?.tooltip || fieldDef?.schema?._def?.tooltip || '',
+            }) || undefined;
 
         return { id: q.id, label, tooltip };
       });
@@ -116,9 +113,9 @@ export default function WizardForm({
         id: key,
         label: fieldLabel,
         tooltip:
-          t(fieldDef?.tooltip || fieldDef?.schema?._def?.tooltip || "", {
+          t(fieldDef?.tooltip || fieldDef?.schema?._def?.tooltip || '', {
             defaultValue:
-              fieldDef?.tooltip || fieldDef?.schema?._def?.tooltip || "",
+              fieldDef?.tooltip || fieldDef?.schema?._def?.tooltip || '',
           }) || undefined,
       };
     });
@@ -158,9 +155,9 @@ export default function WizardForm({
           locale,
         });
         localStorage.removeItem(`draft-${doc.id}-${locale}`);
-        onComplete("/dashboard");
+        onComplete('/dashboard');
       } catch (error) {
-        console.error("[WizardForm] API submission error:", error);
+        console.error('[WizardForm] API submission error:', error);
         if (axios.isAxiosError(error)) {
           const axiosError = error as AxiosError<{
             error?: string;
@@ -170,24 +167,24 @@ export default function WizardForm({
           const apiErrorMsg =
             axiosError.response?.data?.error || axiosError.message;
           const apiErrorDetails = axiosError.response?.data?.details;
-          let userFriendlyMessage = `${t("API Error Occurred", { defaultValue: "API Error Occurred" })}: ${apiErrorMsg}`;
-          if (apiErrorDetails && typeof apiErrorDetails === "object") {
+          let userFriendlyMessage = `${t('API Error Occurred', { defaultValue: 'API Error Occurred' })}: ${apiErrorMsg}`;
+          if (apiErrorDetails && typeof apiErrorDetails === 'object') {
             userFriendlyMessage += ` Details: ${JSON.stringify(apiErrorDetails, null, 2)}`;
           }
           toast({
-            title: t("API Error Occurred", {
-              defaultValue: "API Error Occurred",
+            title: t('API Error Occurred', {
+              defaultValue: 'API Error Occurred',
             }),
             description: userFriendlyMessage,
-            variant: "destructive",
+            variant: 'destructive',
           });
         } else {
           toast({
-            title: t("Error", { defaultValue: "Error" }),
-            description: t("An unexpected error occurred.", {
-              defaultValue: "An unexpected error occurred.",
+            title: t('Error', { defaultValue: 'Error' }),
+            description: t('An unexpected error occurred.', {
+              defaultValue: 'An unexpected error occurred.',
             }),
-            variant: "destructive",
+            variant: 'destructive',
           });
         }
       }
@@ -198,14 +195,14 @@ export default function WizardForm({
       const allValidForNoSteps = await trigger();
       if (allValidForNoSteps) {
         setIsReviewing(true);
-        if (typeof window !== "undefined") {
-          window.scrollTo({ top: 0, behavior: "smooth" });
+        if (typeof window !== 'undefined') {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
         }
       } else {
         toast({
-          title: t("Validation Failed"),
-          description: t("Please correct all errors before reviewing."),
-          variant: "destructive",
+          title: t('Validation Failed'),
+          description: t('Please correct all errors before reviewing.'),
+          variant: 'destructive',
         });
       }
       return;
@@ -215,9 +212,9 @@ export default function WizardForm({
       isValid = await trigger(currentStepFieldKey as any);
     } else if (totalSteps > 0 && currentStepIndex < totalSteps) {
       console.error(
-        "Error: currentStepFieldKey is undefined but totalSteps > 0. currentStepIndex:",
+        'Error: currentStepFieldKey is undefined but totalSteps > 0. currentStepIndex:',
         currentStepIndex,
-        "steps:",
+        'steps:',
         steps,
       );
       isValid = false;
@@ -227,8 +224,8 @@ export default function WizardForm({
 
     if (!isValid) {
       toast({
-        title: t("wizard.incompleteFieldsNotice"),
-        variant: "destructive",
+        title: t('wizard.incompleteFieldsNotice'),
+        variant: 'destructive',
       });
     }
 
@@ -237,15 +234,15 @@ export default function WizardForm({
     } else {
       await trigger(); // trigger validation but continue regardless
       setIsReviewing(true);
-      if (typeof window !== "undefined") {
-        window.scrollTo({ top: 0, behavior: "smooth" });
+      if (typeof window !== 'undefined') {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       }
     }
 
     if (liveRef.current && currentField) {
-      liveRef.current.innerText = `${currentField.label} ${t("updated", { defaultValue: "updated" })}`;
+      liveRef.current.innerText = `${currentField.label} ${t('updated', { defaultValue: 'updated' })}`;
       setTimeout(() => {
-        if (liveRef.current) liveRef.current.innerText = "";
+        if (liveRef.current) liveRef.current.innerText = '';
       }, 1000);
     }
   }, [
@@ -269,8 +266,8 @@ export default function WizardForm({
       setCurrentStepIndex((prev) => prev + 1);
     } else {
       setIsReviewing(true);
-      if (typeof window !== "undefined") {
-        window.scrollTo({ top: 0, behavior: "smooth" });
+      if (typeof window !== 'undefined') {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       }
     }
   }, [currentStepIndex, totalSteps]);
@@ -280,15 +277,15 @@ export default function WizardForm({
       <div className="flex justify-center items-center min-h-[calc(100vh-8rem)]">
         <Loader2 className="h-12 w-12 animate-spin text-primary" />
         <p className="ml-2 text-muted-foreground">
-          {t("Loading document wizard...")}
+          {t('Loading document wizard...')}
         </p>
       </div>
     );
   }
 
   const buttonText = isReviewing
-    ? t("wizard.generateDocument")
-    : t("wizard.saveContinue");
+    ? t('wizard.generateDocument')
+    : t('wizard.saveContinue');
 
   const formContent =
     currentField &&
@@ -298,11 +295,11 @@ export default function WizardForm({
       <div className="mt-6 space-y-6 min-h-[200px]">
         {actualSchemaShape[currentField.id] &&
         (actualSchemaShape[currentField.id] instanceof z.ZodObject ||
-          ("_def" in actualSchemaShape[currentField.id] &&
-            (actualSchemaShape[currentField.id] as z.ZodTypeAny)._def.typeName ===
-              "ZodObject")) &&
-        (currentField.id.includes("_address") ||
-          currentField.id.includes("Address")) ? (
+          ('_def' in actualSchemaShape[currentField.id] &&
+            (actualSchemaShape[currentField.id] as z.ZodTypeAny)._def
+              .typeName === 'ZodObject')) &&
+        (currentField.id.includes('_address') ||
+          currentField.id.includes('Address')) ? (
           <Controller
             key={`${currentField.id}-controller`}
             control={control}
@@ -320,35 +317,28 @@ export default function WizardForm({
                   )?.required
                 }
                 error={
-                  (errors as Record<string, { message?: string }>)?.[currentField.id]?.message as
-                    string | undefined
+                  (errors as Record<string, { message?: string }>)?.[
+                    currentField.id
+                  ]?.message as string | undefined
                 }
-                placeholder={t("Enter address...")}
-                value={rhfValue || ""}
+                placeholder={t('Enter address...')}
+                value={rhfValue || ''}
                 onChange={(val, parts) => {
                   rhfOnChange(val);
                   if (parts && actualSchemaShape) {
                     const prefix =
-                      currentField.id.replace(/_address$/i, "") ||
-                      currentField.id.replace(/Address$/i, "");
+                      currentField.id.replace(/_address$/i, '') ||
+                      currentField.id.replace(/Address$/i, '');
                     if (actualSchemaShape[`${prefix}_city`])
-                      setValue(
-                        `${prefix}_city` as any,
-                        parts.city,
-                        {
-                          shouldValidate: true,
-                          shouldDirty: true,
-                        },
-                      );
+                      setValue(`${prefix}_city` as any, parts.city, {
+                        shouldValidate: true,
+                        shouldDirty: true,
+                      });
                     if (actualSchemaShape[`${prefix}_state`])
-                      setValue(
-                        `${prefix}_state` as any,
-                        parts.state,
-                        {
-                          shouldValidate: true,
-                          shouldDirty: true,
-                        },
-                      );
+                      setValue(`${prefix}_state` as any, parts.state, {
+                        shouldValidate: true,
+                        shouldDirty: true,
+                      });
                     if (actualSchemaShape[`${prefix}_postal_code`])
                       setValue(
                         `${prefix}_postal_code` as any,
@@ -375,11 +365,17 @@ export default function WizardForm({
     ) : (doc.questions?.length || 0) === 0 && !isReviewing ? (
       <div className="mt-6 min-h-[200px] flex flex-col items-center justify-center text-center">
         <p className="text-muted-foreground mb-4">
-          {t("dynamicForm.noQuestionsNeeded", {
+          {t('dynamicForm.noQuestionsNeeded', {
             documentType:
-              locale === "es"
-                ? doc.translations?.es?.name || doc.name_es || doc.translations?.en?.name || doc.name
-                : doc.translations?.en?.name || doc.name || doc.translations?.es?.name || doc.name_es,
+              locale === 'es'
+                ? doc.translations?.es?.name ||
+                  doc.name_es ||
+                  doc.translations?.en?.name ||
+                  doc.name
+                : doc.translations?.en?.name ||
+                  doc.name ||
+                  doc.translations?.es?.name ||
+                  doc.name_es,
           })}
         </p>
       </div>
@@ -398,7 +394,7 @@ export default function WizardForm({
                   aria-label="Progress"
                 />
                 <p className="text-xs text-muted-foreground mt-1 text-right">
-                  {Math.round(progress)}% {t("Complete")}
+                  {Math.round(progress)}% {t('Complete')}
                 </p>
               </>
             )}
@@ -419,12 +415,12 @@ export default function WizardForm({
                 disabled={formIsSubmitting || authIsLoading}
                 className="text-foreground border-border hover:bg-muted w-full sm:w-auto"
               >
-                {t("Back")}
+                {t('Back')}
               </Button>
             )}
             {!(currentStepIndex > 0 || isReviewing) && totalSteps > 0 && (
               <div className="w-full sm:w-auto" />
-            )}{" "}
+            )}{' '}
             {/* Placeholder for spacing */}
             {!isReviewing && (
               <Button
@@ -434,7 +430,7 @@ export default function WizardForm({
                 disabled={formIsSubmitting || authIsLoading}
                 className="border border-dashed text-muted-foreground w-full sm:w-auto"
               >
-                {t("wizard.skipQuestion")}
+                {t('wizard.skipQuestion')}
               </Button>
             )}
             <Button
@@ -460,8 +456,8 @@ export default function WizardForm({
                 href={`/${locale}/#workflow-start`}
                 className="text-sm text-primary hover:underline"
               >
-                {t("wizard.changeDocument", {
-                  defaultValue: "Change Document",
+                {t('wizard.changeDocument', {
+                  defaultValue: 'Change Document',
                 })}
               </Link>
             </div>

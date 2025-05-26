@@ -25,7 +25,8 @@ Agradecemos las contribuciones que ha realizado durante su tiempo con nosotros y
 
 Atentamente,
 
-__________________________  
+---
+
 [Nombre del Supervisor], [Cargo]  
 **[Nombre de la Empresa]**
 
@@ -35,7 +36,8 @@ __________________________
 
 Reconozco haber recibido esta carta de terminación.
 
-__________________________  
-[Firma del Empleado]  
+---
 
-Fecha: ____________________
+[Firma del Empleado]
+
+Fecha: ********\_\_\_\_********

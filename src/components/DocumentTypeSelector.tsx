@@ -1,5 +1,5 @@
 // src/components/DocumentTypeSelector.tsx
-'use client'
+'use client';
 
 import React, { useState, useEffect, useMemo } from 'react';
 import {
@@ -21,19 +21,26 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { useTranslation } from 'react-i18next';
-import { documentLibrary, usStates, findMatchingDocuments } from '@/lib/document-library';
-
+import {
+  documentLibrary,
+  usStates,
+  findMatchingDocuments,
+} from '@/lib/document-library';
 
 interface Props {
   onSelect: (docType: string) => void; // Now accepts the document ID
   selectedDocument?: string; // Optional prop for pre-selecting a document
 }
 
-export default function DocumentTypeSelector({ onSelect, selectedDocument }: Props) {
-  const { t, i18n } = useTranslation("common");
+export default function DocumentTypeSelector({
+  onSelect,
+  selectedDocument,
+}: Props) {
+  const { t, i18n } = useTranslation('common');
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedState, setSelectedState] = useState<string | undefined>(undefined);
-
+  const [selectedState, setSelectedState] = useState<string | undefined>(
+    undefined,
+  );
 
   useEffect(() => {
     // Set hydrated state on client
@@ -44,7 +51,11 @@ export default function DocumentTypeSelector({ onSelect, selectedDocument }: Pro
   }, []);
 
   const filteredDocuments = useMemo(() => {
-    return findMatchingDocuments(searchQuery, i18n.language as 'en' | 'es', selectedState);
+    return findMatchingDocuments(
+      searchQuery,
+      i18n.language as 'en' | 'es',
+      selectedState,
+    );
   }, [searchQuery, selectedState, i18n.language]);
 
   return (
@@ -63,7 +74,9 @@ export default function DocumentTypeSelector({ onSelect, selectedDocument }: Pro
           />
 
           <Select onValueChange={setSelectedState}>
-            <SelectTrigger aria-label={t('docTypeSelector.selectState', 'Select State')}>
+            <SelectTrigger
+              aria-label={t('docTypeSelector.selectState', 'Select State')}
+            >
               <SelectValue placeholder={t('docTypeSelector.selectState')} />
             </SelectTrigger>
             <SelectContent>
@@ -91,7 +104,7 @@ export default function DocumentTypeSelector({ onSelect, selectedDocument }: Pro
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {filteredDocuments
                   .filter((doc) => doc.category === category)
-                    .map((doc) => (
+                  .map((doc) => (
                     <Card
                       key={doc.id}
                       tabIndex={0}
@@ -120,5 +133,3 @@ export default function DocumentTypeSelector({ onSelect, selectedDocument }: Pro
     </Card>
   );
 }
-
-

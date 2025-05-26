@@ -15,7 +15,9 @@ const AutoImage: React.FC<AutoImageProps> = ({
   alt = '',
   ...props
 }) => {
-  const [dims, setDims] = useState<{ width: number; height: number } | null>(null);
+  const [dims, setDims] = useState<{ width: number; height: number } | null>(
+    null,
+  );
 
   useEffect(() => {
     if (width && height) return;
@@ -29,7 +31,9 @@ const AutoImage: React.FC<AutoImageProps> = ({
   }, [width, height, props.src]);
 
   const finalWidth =
-    (typeof width === 'string' ? parseInt(width, 10) : width) ?? dims?.width ?? 1;
+    (typeof width === 'string' ? parseInt(width, 10) : width) ??
+    dims?.width ??
+    1;
   const finalHeight =
     (typeof height === 'string' ? parseInt(height, 10) : height) ??
     dims?.height ??

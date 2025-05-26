@@ -17,9 +17,12 @@ interface PdfGenerationOptions {
  * @returns A Promise resolving to the PDF bytes as a Uint8Array.
  */
 export async function generatePdfDocument(
-  options: PdfGenerationOptions
+  options: PdfGenerationOptions,
 ): Promise<Uint8Array> {
-  console.log('[pdf-generator] Starting PDF generation for type:', options.documentType);
+  console.log(
+    '[pdf-generator] Starting PDF generation for type:',
+    options.documentType,
+  );
   console.log('[pdf-generator] With answers:', options.answers);
 
   try {
@@ -29,7 +32,9 @@ export async function generatePdfDocument(
     // Embed a standard font (or load a custom one)
     // Using Helvetica as an example
     const helveticaFont = await pdfDoc.embedFont(StandardFonts.Helvetica);
-    const helveticaBoldFont = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
+    const helveticaBoldFont = await pdfDoc.embedFont(
+      StandardFonts.HelveticaBold,
+    );
 
     const page = pdfDoc.addPage(); // Default page size (Letter)
     const { width, height } = page.getSize();
@@ -72,62 +77,69 @@ export async function generatePdfDocument(
     y -= fontSize + 10;
 
     for (const [key, value] of Object.entries(options.answers)) {
-       // Basic formatting - improve as needed
-       const label = key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase()); // Format key to label
-       const text = `${label}: ${value || 'N/A'}`; // Handle empty values
+      // Basic formatting - improve as needed
+      const label = key
+        .replace(/([A-Z])/g, ' $1')
+        .replace(/^./, (str) => str.toUpperCase()); // Format key to label
+      const text = `${label}: ${value || 'N/A'}`; // Handle empty values
 
-       // Check if text will fit on the current page
-       const textHeight = fontSize * 1.2; // Approximate height
-       if (y - textHeight < margin) {
-           // Add a new page if content doesn't fit
-           const newPage = pdfDoc.addPage();
-           y = newPage.getSize().height - margin; // Reset y to top margin
-           // Optionally repeat disclaimer on new pages
-       }
+      // Check if text will fit on the current page
+      const textHeight = fontSize * 1.2; // Approximate height
+      if (y - textHeight < margin) {
+        // Add a new page if content doesn't fit
+        const newPage = pdfDoc.addPage();
+        y = newPage.getSize().height - margin; // Reset y to top margin
+        // Optionally repeat disclaimer on new pages
+      }
 
-       page.drawText(text, {
-           x: margin,
-           y: y,
-           font: helveticaFont,
-           size: fontSize,
-           color: rgb(0, 0, 0),
-           maxWidth: width - 2 * margin,
-           lineHeight: fontSize * 1.2,
-       });
-       y -= textHeight + 5; // Move down for next line
+      page.drawText(text, {
+        x: margin,
+        y: y,
+        font: helveticaFont,
+        size: fontSize,
+        color: rgb(0, 0, 0),
+        maxWidth: width - 2 * margin,
+        lineHeight: fontSize * 1.2,
+      });
+      y -= textHeight + 5; // Move down for next line
     }
 
     // 4. Add Placeholder Signature Line (if applicable)
     y -= 40; // Space before signature
-    if (y < margin + 20) { // Check if enough space for signature line on this page
-        const newPage = pdfDoc.addPage();
-        y = newPage.getSize().height - margin;
+    if (y < margin + 20) {
+      // Check if enough space for signature line on this page
+      const newPage = pdfDoc.addPage();
+      y = newPage.getSize().height - margin;
     }
     page.drawLine({
-        start: { x: margin, y: y },
-        end: { x: margin + 200, y: y },
-        thickness: 1,
-        color: rgb(0, 0, 0),
+      start: { x: margin, y: y },
+      end: { x: margin + 200, y: y },
+      thickness: 1,
+      color: rgb(0, 0, 0),
     });
     y -= 15;
     page.drawText('Signature', {
-        x: margin,
-        y: y,
-        font: helveticaFont,
-        size: 10,
-        color: rgb(0.5, 0.5, 0.5),
+      x: margin,
+      y: y,
+      font: helveticaFont,
+      size: 10,
+      color: rgb(0.5, 0.5, 0.5),
     });
-
 
     // 5. Serialize the PDF document to bytes (a Uint8Array)
     const pdfBytes = await pdfDoc.save();
-    console.log('[pdf-generator] PDF generation successful. Size:', pdfBytes.length, 'bytes');
+    console.log(
+      '[pdf-generator] PDF generation successful. Size:',
+      pdfBytes.length,
+      'bytes',
+    );
     return pdfBytes;
-
   } catch (error) {
     console.error('[pdf-generator] Error generating PDF:', error);
     // Depending on the context, re-throw or return an error indicator
     // For now, re-throwing to let the caller handle it
-    throw new Error(`Failed to generate PDF: ${error instanceof Error ? error.message : String(error)}`);
+    throw new Error(
+      `Failed to generate PDF: ${error instanceof Error ? error.message : String(error)}`,
+    );
   }
 }

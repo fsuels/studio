@@ -17,11 +17,15 @@ export const revalidate = 3600;
 export async function generateStaticParams() {
   console.log('[generateStaticParams /docs] Starting generation...');
   if (!documentLibrary || documentLibrary.length === 0) {
-    console.warn('[generateStaticParams /docs] documentLibrary is empty or undefined. No paths will be generated.');
+    console.warn(
+      '[generateStaticParams /docs] documentLibrary is empty or undefined. No paths will be generated.',
+    );
     return [];
   }
   if (!localizations || localizations.length === 0) {
-    console.warn('[generateStaticParams /docs] localizations is empty or undefined. No paths will be generated.');
+    console.warn(
+      '[generateStaticParams /docs] localizations is empty or undefined. No paths will be generated.',
+    );
     return [];
   }
 
@@ -29,14 +33,19 @@ export async function generateStaticParams() {
   for (const locale of localizations) {
     for (const doc of documentLibrary) {
       // Ensure doc and doc.id are valid before pushing
-      if (doc && doc.id && doc.id !== 'general-inquiry') { // Exclude general inquiry or other non-detail pages
+      if (doc && doc.id && doc.id !== 'general-inquiry') {
+        // Exclude general inquiry or other non-detail pages
         params!.push({ locale, docId: doc.id });
       } else if (!doc || !doc.id) {
-        console.warn(`[generateStaticParams /docs] Encountered a document with missing id in locale ${locale}. Skipping.`);
+        console.warn(
+          `[generateStaticParams /docs] Encountered a document with missing id in locale ${locale}. Skipping.`,
+        );
       }
     }
   }
-  console.log(`[generateStaticParams /docs] Generated ${params!.length} paths.`);
+  console.log(
+    `[generateStaticParams /docs] Generated ${params!.length} paths.`,
+  );
   return params;
 }
 
@@ -45,7 +54,13 @@ export default async function DocPage({ params }: DocPageProps) {
   // Await a microtask to comply with Next.js dynamic param handling
   await Promise.resolve();
 
-  const filePath = path.join(process.cwd(), 'public', 'templates', params.locale, `${params.docId}.md`);
+  const filePath = path.join(
+    process.cwd(),
+    'public',
+    'templates',
+    params.locale,
+    `${params.docId}.md`,
+  );
   let markdownContent: string | null = null;
 
   try {
@@ -53,9 +68,14 @@ export default async function DocPage({ params }: DocPageProps) {
   } catch (error: unknown) {
     const err = error as NodeJS.ErrnoException;
     if (err.code === 'ENOENT') {
-      console.warn(`Markdown template not found for ${params.docId} in locale ${params.locale}. Path: ${filePath}`);
+      console.warn(
+        `Markdown template not found for ${params.docId} in locale ${params.locale}. Path: ${filePath}`,
+      );
     } else {
-      console.error(`Error reading markdown file for ${params.docId} in locale ${params.locale}. Path: ${filePath}`, err);
+      console.error(
+        `Error reading markdown file for ${params.docId} in locale ${params.locale}. Path: ${filePath}`,
+        err,
+      );
     }
   }
 

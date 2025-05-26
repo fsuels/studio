@@ -7,8 +7,10 @@ export const childMedicalConsent: LegalDocument = {
   name: 'Child Medical Consent Form',
   name_es: 'Formulario de Consentimiento Médico para Menores',
   category: 'Family',
-  description: 'Authorize a caregiver to make medical decisions for your child.',
-  description_es: 'Autorizar a un cuidador a tomar decisiones médicas por su hijo.',
+  description:
+    'Authorize a caregiver to make medical decisions for your child.',
+  description_es:
+    'Autorizar a un cuidador a tomar decisiones médicas por su hijo.',
   languageSupport: ['en', 'es'],
   requiresNotarization: true,
   canBeRecorded: false,
@@ -17,5 +19,5 @@ export const childMedicalConsent: LegalDocument = {
   basePrice: 3,
   states: 'all',
   schema: z.object({}), // Placeholder
-  questions: [] // Placeholder
+  questions: [], // Placeholder
 };

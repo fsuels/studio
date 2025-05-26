@@ -17,7 +17,7 @@ export default {
   },
   twitter: {
     handle: '@yourtwitterhandle', // Replace with your Twitter handle
-    site: '@yourtwitterhandle',   // Replace with your Twitter handle
+    site: '@yourtwitterhandle', // Replace with your Twitter handle
     cardType: 'summary_large_image',
   },
   additionalLinkTags: [

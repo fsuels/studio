@@ -34,10 +34,30 @@ export default function TemplatesClientContent({ locale }: Props) {
       </div>
 
       <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-muted-foreground text-sm mb-8 list-none">
-        <li>⚖️ {t('browseTemplates.point1', 'Choose from 150+ attorney-drafted templates')}</li>
-        <li>🧩 {t('browseTemplates.point2', 'Fill quickly and reduce errors with guided questions')}</li>
-        <li>✍️ {t('browseTemplates.point3', 'Customize with a rich editor')}</li>
-        <li>🔒 {t('browseTemplates.point4', 'Sign and manage documents securely online')}</li>
+        <li>
+          ⚖️{' '}
+          {t(
+            'browseTemplates.point1',
+            'Choose from 150+ attorney-drafted templates',
+          )}
+        </li>
+        <li>
+          🧩{' '}
+          {t(
+            'browseTemplates.point2',
+            'Fill quickly and reduce errors with guided questions',
+          )}
+        </li>
+        <li>
+          ✍️ {t('browseTemplates.point3', 'Customize with a rich editor')}
+        </li>
+        <li>
+          🔒{' '}
+          {t(
+            'browseTemplates.point4',
+            'Sign and manage documents securely online',
+          )}
+        </li>
       </ul>
 
       <div className="flex justify-center mb-10">
@@ -70,8 +90,12 @@ export default function TemplatesClientContent({ locale }: Props) {
                 prefetch
                 onMouseEnter={() => router.prefetch(categoryHref(cat.key))}
               >
-                {React.createElement(cat.icon || FileText, { className: 'h-5 w-5 text-primary' })}
-                <span className="text-sm text-card-foreground">{t(cat.labelKey, cat.key)}</span>
+                {React.createElement(cat.icon || FileText, {
+                  className: 'h-5 w-5 text-primary',
+                })}
+                <span className="text-sm text-card-foreground">
+                  {t(cat.labelKey, cat.key)}
+                </span>
               </Link>
             </Button>
           ))}
@@ -90,10 +114,15 @@ export default function TemplatesClientContent({ locale }: Props) {
           {t('browseTemplates.quizTitle', 'Not sure where to start?')}
         </h3>
         <p className="text-muted-foreground mb-4">
-          {t('browseTemplates.quizDesc', 'Answer a few quick questions to get a recommendation.')}
+          {t(
+            'browseTemplates.quizDesc',
+            'Answer a few quick questions to get a recommendation.',
+          )}
         </p>
         <Button asChild size="lg">
-          <Link href={`/${locale}/generate`}>{t('browseTemplates.takeQuiz', 'Take the Quiz →')}</Link>
+          <Link href={`/${locale}/generate`}>
+            {t('browseTemplates.takeQuiz', 'Take the Quiz →')}
+          </Link>
         </Button>
       </section>
     </main>

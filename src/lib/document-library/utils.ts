@@ -51,7 +51,7 @@ export const usStates = [
   { value: 'WA', label: 'Washington' },
   { value: 'WV', label: 'West Virginia' },
   { value: 'WI', label: 'Wisconsin' },
-  { value: 'WY', label: 'Wyoming' }
+  { value: 'WY', label: 'Wyoming' },
 ];
 
 export const caProvinces = [
@@ -67,5 +67,5 @@ export const caProvinces = [
   { value: 'PE', label: 'Prince Edward Island' },
   { value: 'QC', label: 'Quebec' },
   { value: 'SK', label: 'Saskatchewan' },
-  { value: 'YT', label: 'Yukon' }
+  { value: 'YT', label: 'Yukon' },
 ];

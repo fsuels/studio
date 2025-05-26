@@ -7,7 +7,7 @@ export default function transformer(fileInfo, { j }) {
       callee: { name: 'useTranslation' },
       arguments: [],
     })
-    .forEach(path => {
+    .forEach((path) => {
       path.node.arguments = [j.literal('common')];
     });
 

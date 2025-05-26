@@ -14,28 +14,40 @@ export const leaseAgreement: LegalDocument = {
   offerRecordingHelp: true,
   basePrice: 5,
   states: 'all',
-  schema: z.object({
-    landlord_name: z.string().min(1, 'Landlord name is required.'),
-    tenant_name: z.string().min(1, 'Tenant name is required.'),
-    property_address: z.string().min(1, 'Property address is required.'),
-    lease_start: z.string().min(1, 'Lease start date is required.'),
-    lease_term: z.coerce.number().int().positive('Lease term must be a positive integer.'),
-    monthly_rent: z.coerce.number().positive('Monthly rent must be a positive number.'),
-    rent_due_date: z.string().min(1, 'Rent due date is required.'),
-    security_deposit: z.coerce.number().min(0, 'Security deposit must be non-negative.').optional(),
-    pets_allowed: z.enum(['yes', 'no', 'specific'], {
-      errorMap: () => ({ message: 'Please select if pets are allowed.' })
-    }),
-    pet_conditions: z.string().optional(),
-    late_fee_policy: z.string().optional(),
-    state: z.string().length(2, 'State must be 2 characters.'),
-  }).refine(
-    (data) => (data.pets_allowed === 'specific' ? !!data.pet_conditions : true),
-    {
-      message: 'Pet conditions are required if pets are allowed with specific conditions',
-      path: ['pet_conditions'],
-    }
-  ),
+  schema: z
+    .object({
+      landlord_name: z.string().min(1, 'Landlord name is required.'),
+      tenant_name: z.string().min(1, 'Tenant name is required.'),
+      property_address: z.string().min(1, 'Property address is required.'),
+      lease_start: z.string().min(1, 'Lease start date is required.'),
+      lease_term: z.coerce
+        .number()
+        .int()
+        .positive('Lease term must be a positive integer.'),
+      monthly_rent: z.coerce
+        .number()
+        .positive('Monthly rent must be a positive number.'),
+      rent_due_date: z.string().min(1, 'Rent due date is required.'),
+      security_deposit: z.coerce
+        .number()
+        .min(0, 'Security deposit must be non-negative.')
+        .optional(),
+      pets_allowed: z.enum(['yes', 'no', 'specific'], {
+        errorMap: () => ({ message: 'Please select if pets are allowed.' }),
+      }),
+      pet_conditions: z.string().optional(),
+      late_fee_policy: z.string().optional(),
+      state: z.string().length(2, 'State must be 2 characters.'),
+    })
+    .refine(
+      (data) =>
+        data.pets_allowed === 'specific' ? !!data.pet_conditions : true,
+      {
+        message:
+          'Pet conditions are required if pets are allowed with specific conditions',
+        path: ['pet_conditions'],
+      },
+    ),
   questions: [
     {
       id: 'landlord_name',
@@ -58,7 +70,12 @@ export const leaseAgreement: LegalDocument = {
       type: 'textarea',
       placeholder: 'e.g., 123 Main St, Unit 4B, Anytown, USA 12345',
     },
-    { id: 'lease_start', label: 'Lease Start Date', required: true, type: 'date' },
+    {
+      id: 'lease_start',
+      label: 'Lease Start Date',
+      required: true,
+      type: 'date',
+    },
     {
       id: 'lease_term',
       label: 'Lease Term (Months)',
@@ -128,8 +145,14 @@ export const leaseAgreement: LegalDocument = {
     },
     es: {
       name: 'Contrato de Arrendamiento Residencial',
-      description: 'Establecer términos para alquilar una propiedad residencial.',
-      aliases: ['alquiler de apartamento', 'inquilino', 'formulario de arrendamiento', 'acuerdo de propietario'],
+      description:
+        'Establecer términos para alquilar una propiedad residencial.',
+      aliases: [
+        'alquiler de apartamento',
+        'inquilino',
+        'formulario de arrendamiento',
+        'acuerdo de propietario',
+      ],
     },
   },
 };

@@ -29,16 +29,21 @@ const initializeOpenAI = (): OpenAI | null => {
   const openAIApiKey = process.env.NEXT_PUBLIC_OPENAI_API_KEY;
   if (!openAIApiKey) {
     console.error(
-      '[analyze-form-data.ts] CRITICAL: NEXT_PUBLIC_OPENAI_API_KEY environment variable is NOT SET or is EMPTY. AI analysis will be skipped.'
+      '[analyze-form-data.ts] CRITICAL: NEXT_PUBLIC_OPENAI_API_KEY environment variable is NOT SET or is EMPTY. AI analysis will be skipped.',
     );
     return null;
   }
   try {
     openai = new OpenAI({ apiKey: openAIApiKey });
-    console.log('[analyze-form-data.ts] OpenAI client initialized successfully.');
+    console.log(
+      '[analyze-form-data.ts] OpenAI client initialized successfully.',
+    );
     return openai;
   } catch (error) {
-    console.error('[analyze-form-data.ts] Failed to initialize OpenAI client:', error);
+    console.error(
+      '[analyze-form-data.ts] Failed to initialize OpenAI client:',
+      error,
+    );
     return null;
   }
 };
@@ -52,11 +57,14 @@ export async function analyzeFormData(
   if (!localOpenAI) {
     // Return an empty array or a specific error suggestion if the key is missing
     // This prevents the app from crashing and allows it to continue without AI analysis.
-    return [{
+    return [
+      {
         fieldId: 'general',
         importance: 'error',
-        message: 'AI analysis service is unavailable due to configuration issues. Please ensure the OpenAI API key is correctly set up.'
-    }];
+        message:
+          'AI analysis service is unavailable due to configuration issues. Please ensure the OpenAI API key is correctly set up.',
+      },
+    ];
   }
 
   // Compose a compact prompt. You can of course make this smarter.
@@ -95,14 +103,17 @@ export async function analyzeFormData(
       '[analyze-form-data.ts] Failed to get suggestions from OpenAI or parse them:',
       err,
     );
-    const message = err instanceof Error
-      ? err.message
-      : 'Unknown error during OpenAI API call.';
+    const message =
+      err instanceof Error
+        ? err.message
+        : 'Unknown error during OpenAI API call.';
     // Return a specific error suggestion if the API call fails
-    return [{
+    return [
+      {
         fieldId: 'general', // A general field ID for errors not specific to one input
         importance: 'error',
-        message: `AI analysis failed: ${message}`
-    }];
+        message: `AI analysis failed: ${message}`,
+      },
+    ];
   }
 }

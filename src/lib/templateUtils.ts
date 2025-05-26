@@ -9,7 +9,10 @@ import type { LegalDocument } from '@/types/documents';
  * @param lang The desired language code (e.g., 'es', 'en', 'fr').
  * @returns The template path string (relative to /public), or undefined if not found.
  */
-export function getTemplatePath(doc: LegalDocument | undefined | null, lang: string): string | undefined {
+export function getTemplatePath(
+  doc: LegalDocument | undefined | null,
+  lang: string,
+): string | undefined {
   if (!doc) return undefined;
 
   // Prioritize the new templatePaths structure
@@ -27,7 +30,8 @@ export function getTemplatePath(doc: LegalDocument | undefined | null, lang: str
   if (lang === 'es' && doc.templatePath_es) {
     return doc.templatePath_es;
   }
-  if (doc.templatePath) { // Default to templatePath if lang is 'en' or as a last resort
+  if (doc.templatePath) {
+    // Default to templatePath if lang is 'en' or as a last resort
     return doc.templatePath;
   }
 

@@ -5,30 +5,37 @@ import puppeteer from 'puppeteer';
 import MarkdownIt from 'markdown-it';
 
 const templatesDir = path.join(process.cwd(), 'public', 'templates'); // Updated to read from public/templates
-const outDir       = path.join(process.cwd(), 'public', 'images', 'previews');
-const languages    = ['en','es'];
+const outDir = path.join(process.cwd(), 'public', 'images', 'previews');
+const languages = ['en', 'es'];
 
 async function generate() {
-  const browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox', '--disable-setuid-sandbox'] });
+  const browser = await puppeteer.launch({
+    headless: true,
+    args: ['--no-sandbox', '--disable-setuid-sandbox'],
+  });
   const mdInstance = new MarkdownIt();
 
   for (const lang of languages) {
-    const mdLangDir  = path.join(templatesDir, lang); // Path to language-specific markdown templates
-    const pngLangDir = path.join(outDir, lang);      // Path to language-specific preview images
+    const mdLangDir = path.join(templatesDir, lang); // Path to language-specific markdown templates
+    const pngLangDir = path.join(outDir, lang); // Path to language-specific preview images
     fs.mkdirSync(pngLangDir, { recursive: true });
 
     if (!fs.existsSync(mdLangDir)) {
-        console.warn(`Markdown directory not found for language ${lang}: ${mdLangDir}`);
-        continue;
+      console.warn(
+        `Markdown directory not found for language ${lang}: ${mdLangDir}`,
+      );
+      continue;
     }
 
-    for (const file of fs.readdirSync(mdLangDir).filter(f => f.endsWith('.md'))) {
-      const id      = file.replace(/\.md$/, '');
-      const mdPath  = path.join(mdLangDir, file); // Corrected mdPath
+    for (const file of fs
+      .readdirSync(mdLangDir)
+      .filter((f) => f.endsWith('.md'))) {
+      const id = file.replace(/\.md$/, '');
+      const mdPath = path.join(mdLangDir, file); // Corrected mdPath
       const pngPath = path.join(pngLangDir, `${id}.png`);
 
       if (fs.existsSync(pngPath)) {
-        const mdTime  = fs.statSync(mdPath).mtimeMs;
+        const mdTime = fs.statSync(mdPath).mtimeMs;
         const pngTime = fs.statSync(pngPath).mtimeMs;
         if (pngTime >= mdTime) {
           console.log(`⏭ up-to-date: ${lang}/${id}.png`);
@@ -37,13 +44,18 @@ async function generate() {
       }
 
       console.log(`🔄 Generating preview for ${lang}/${id}`);
-      const raw   = fs.readFileSync(mdPath, 'utf-8');
+      const raw = fs.readFileSync(mdPath, 'utf-8');
       const htmlBody = mdInstance.render(raw);
-      const page  = await browser.newPage();
-      
-      await page.setViewport({ width: 816, height: 1056, deviceScaleFactor: 2 }); 
+      const page = await browser.newPage();
 
-      await page.setContent(`
+      await page.setViewport({
+        width: 816,
+        height: 1056,
+        deviceScaleFactor: 2,
+      });
+
+      await page.setContent(
+        `
         <html><head>
           <meta charset="UTF-8">
           <style>
@@ -69,18 +81,20 @@ async function generate() {
             .prose hr { border-top: 1px solid #e5e7eb; margin: 16px 0; }
           </style>
         </head><body class="prose">${htmlBody}</body></html>
-      `, { waitUntil: 'networkidle0' });
-      
+      `,
+        { waitUntil: 'networkidle0' },
+      );
+
       const elementToScreenshot = await page.$('body');
       if (elementToScreenshot) {
-          await elementToScreenshot.screenshot({ 
-              path: pngPath, 
-              omitBackground: false,
-              type: 'png',
-              clip: { x: 0, y: 0, width: 816, height: 1056 } 
-          });
+        await elementToScreenshot.screenshot({
+          path: pngPath,
+          omitBackground: false,
+          type: 'png',
+          clip: { x: 0, y: 0, width: 816, height: 1056 },
+        });
       } else {
-          console.error(`Could not find body element for ${lang}/${id}.png`);
+        console.error(`Could not find body element for ${lang}/${id}.png`);
       }
       await page.close();
     }
@@ -89,4 +103,7 @@ async function generate() {
   console.log('All previews checked/generated.');
 }
 
-generate().catch(err => { console.error('Error generating previews:', err); process.exit(1); });
+generate().catch((err) => {
+  console.error('Error generating previews:', err);
+  process.exit(1);
+});

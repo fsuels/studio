@@ -40,13 +40,12 @@ export default function MiniCartDrawer() {
         <DrawerHeader>
           <DrawerTitle>Your Cart</DrawerTitle>
           <DrawerDescription>
-            {cartItems.length > 0 ? (
-              `You have ${totalItems} item${
-                totalItems > 1 ? 's' : ''
-              } in your cart.`
-            ) : (
-              ("Your cart is empty.") // Removed the nested <p> tag
-            )}
+            {cartItems.length > 0
+              ? `You have ${totalItems} item${
+                  totalItems > 1 ? 's' : ''
+                } in your cart.`
+              : 'Your cart is empty.' // Removed the nested <p> tag
+            }
           </DrawerDescription>
         </DrawerHeader>
         <div className="space-y-4 px-4 pb-4">
@@ -57,8 +56,10 @@ export default function MiniCartDrawer() {
                   key={item.id} // Use item.id for key
                   className="flex items-center justify-between py-2"
                 >
-                  <span className="flex-grow">{item.name}</span> {/* Use item.name */}
-                  <span className="font-semibold ml-2">x{item.qty}</span> {/* Use item.qty */}
+                  <span className="flex-grow">{item.name}</span>{' '}
+                  {/* Use item.name */}
+                  <span className="font-semibold ml-2">x{item.qty}</span>{' '}
+                  {/* Use item.qty */}
                 </li>
               ))}
             </ul>
@@ -68,7 +69,7 @@ export default function MiniCartDrawer() {
           <Button
             className={cn(
               'w-full bg-gradient-to-r from-electric-500 to-electric-700 hover:to-electric-600 text-white shadow-glass',
-              cartItems.length === 0 && "pointer-events-none opacity-50"
+              cartItems.length === 0 && 'pointer-events-none opacity-50',
             )}
             onClick={() => {
               console.log('Checkout');

@@ -21,13 +21,7 @@ const priceFmt = (cents: number) =>
   });
 
 export default function CartDrawer() {
-  const {
-    items,
-    incQty,
-    decQty,
-    removeItem,
-    totalCents,
-  } = useCart();
+  const { items, incQty, decQty, removeItem, totalCents } = useCart();
   const [open, setOpen] = useState(false);
   const [promo, setPromo] = useState('');
   const router = useRouter();
@@ -115,14 +109,29 @@ export default function CartDrawer() {
                 </div>
 
                 <div className="flex items-center gap-1">
-                  <Button size="icon" variant="ghost" onClick={() => decQty(i.id)} aria-label="Decrease">
+                  <Button
+                    size="icon"
+                    variant="ghost"
+                    onClick={() => decQty(i.id)}
+                    aria-label="Decrease"
+                  >
                     <Minus className="h-4 w-4" />
                   </Button>
                   <span className="px-1 text-sm">{i.qty}</span>
-                  <Button size="icon" variant="ghost" onClick={() => incQty(i.id)} aria-label="Increase">
+                  <Button
+                    size="icon"
+                    variant="ghost"
+                    onClick={() => incQty(i.id)}
+                    aria-label="Increase"
+                  >
                     <Plus className="h-4 w-4" />
                   </Button>
-                  <Button size="icon" variant="ghost" onClick={() => removeItem(i.id)} aria-label="Remove">
+                  <Button
+                    size="icon"
+                    variant="ghost"
+                    onClick={() => removeItem(i.id)}
+                    aria-label="Remove"
+                  >
                     <Trash className="h-4 w-4" />
                   </Button>
                 </div>
@@ -141,7 +150,12 @@ export default function CartDrawer() {
             className="flex-1 border rounded px-3 py-2 text-sm"
           />
           {!!promo && (
-            <Button variant="ghost" size="icon" onClick={() => setPromo('')} aria-label="Clear promo">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setPromo('')}
+              aria-label="Clear promo"
+            >
               <X className="h-4 w-4" />
             </Button>
           )}
@@ -153,7 +167,11 @@ export default function CartDrawer() {
             <span>Subtotal</span>
             <span className="font-semibold">{priceFmt(totalCents)}</span>
           </div>
-          <Button disabled={!items.length} className="w-full" onClick={checkout}>
+          <Button
+            disabled={!items.length}
+            className="w-full"
+            onClick={checkout}
+          >
             Checkout
           </Button>
         </footer>

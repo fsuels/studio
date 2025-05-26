@@ -3,7 +3,10 @@ export interface DebouncedFunction<T extends (...args: any[]) => void> {
   cancel(): void;
 }
 
-export function debounce<T extends (...args: any[]) => void>(fn: T, wait: number): DebouncedFunction<T> {
+export function debounce<T extends (...args: any[]) => void>(
+  fn: T,
+  wait: number,
+): DebouncedFunction<T> {
   let timer: ReturnType<typeof setTimeout> | null = null;
 
   const debounced = ((...args: Parameters<T>) => {

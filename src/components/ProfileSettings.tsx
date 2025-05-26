@@ -10,7 +10,9 @@ import { useAuth } from '@/hooks/useAuth';
 
 export default function ProfileSettings() {
   const { user, updateUser } = useAuth();
-  const [active, setActive] = useState<'personal' | 'security' | 'notifications'>('personal');
+  const [active, setActive] = useState<
+    'personal' | 'security' | 'notifications'
+  >('personal');
   interface FormState {
     name: string;
     email: string;
@@ -33,9 +35,9 @@ export default function ProfileSettings() {
 
   const handleChange = (
     field: keyof FormState,
-    value: FormState[keyof FormState]
+    value: FormState[keyof FormState],
   ) => {
-    setForm(prev => ({ ...prev, [field]: value }));
+    setForm((prev) => ({ ...prev, [field]: value }));
   };
 
   const handleSave = () => {
@@ -51,28 +53,63 @@ export default function ProfileSettings() {
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="flex space-x-2">
-          <Button variant={active === 'personal' ? 'secondary' : 'ghost'} onClick={() => setActive('personal')}>Personal Information</Button>
-          <Button variant={active === 'security' ? 'secondary' : 'ghost'} onClick={() => setActive('security')}>Security</Button>
-          <Button variant={active === 'notifications' ? 'secondary' : 'ghost'} onClick={() => setActive('notifications')}>Notifications</Button>
+          <Button
+            variant={active === 'personal' ? 'secondary' : 'ghost'}
+            onClick={() => setActive('personal')}
+          >
+            Personal Information
+          </Button>
+          <Button
+            variant={active === 'security' ? 'secondary' : 'ghost'}
+            onClick={() => setActive('security')}
+          >
+            Security
+          </Button>
+          <Button
+            variant={active === 'notifications' ? 'secondary' : 'ghost'}
+            onClick={() => setActive('notifications')}
+          >
+            Notifications
+          </Button>
         </div>
 
         {active === 'personal' && (
           <div className="space-y-4">
             <div>
-              <Label className="text-sm font-medium text-muted-foreground">Name</Label>
-              <Input value={form.name} onChange={e => handleChange('name', e.target.value)} />
+              <Label className="text-sm font-medium text-muted-foreground">
+                Name
+              </Label>
+              <Input
+                value={form.name}
+                onChange={(e) => handleChange('name', e.target.value)}
+              />
             </div>
             <div>
-              <Label className="text-sm font-medium text-muted-foreground">Email</Label>
-              <Input value={form.email} onChange={e => handleChange('email', e.target.value)} />
+              <Label className="text-sm font-medium text-muted-foreground">
+                Email
+              </Label>
+              <Input
+                value={form.email}
+                onChange={(e) => handleChange('email', e.target.value)}
+              />
             </div>
             <div>
-              <Label className="text-sm font-medium text-muted-foreground">Phone</Label>
-              <Input value={form.phone} onChange={e => handleChange('phone', e.target.value)} />
+              <Label className="text-sm font-medium text-muted-foreground">
+                Phone
+              </Label>
+              <Input
+                value={form.phone}
+                onChange={(e) => handleChange('phone', e.target.value)}
+              />
             </div>
             <div>
-              <Label className="text-sm font-medium text-muted-foreground">Shipping address</Label>
-              <Input value={form.address} onChange={e => handleChange('address', e.target.value)} />
+              <Label className="text-sm font-medium text-muted-foreground">
+                Shipping address
+              </Label>
+              <Input
+                value={form.address}
+                onChange={(e) => handleChange('address', e.target.value)}
+              />
             </div>
           </div>
         )}
@@ -80,16 +117,32 @@ export default function ProfileSettings() {
         {active === 'security' && (
           <div className="space-y-4">
             <div>
-              <Label className="text-sm font-medium text-muted-foreground">Password</Label>
-              <Input type="password" placeholder="New password" value={form.password} onChange={e => handleChange('password', e.target.value)} />
+              <Label className="text-sm font-medium text-muted-foreground">
+                Password
+              </Label>
+              <Input
+                type="password"
+                placeholder="New password"
+                value={form.password}
+                onChange={(e) => handleChange('password', e.target.value)}
+              />
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-sm text-muted-foreground">2-step verification</span>
-              <Switch checked={form.twoStep} onCheckedChange={v => handleChange('twoStep', v)} />
+              <span className="text-sm text-muted-foreground">
+                2-step verification
+              </span>
+              <Switch
+                checked={form.twoStep}
+                onCheckedChange={(v) => handleChange('twoStep', v)}
+              />
             </div>
             <div>
-              <Label className="text-sm font-medium text-muted-foreground">Authorized contacts</Label>
-              <p className="text-sm text-muted-foreground">You currently have no authorized contacts.</p>
+              <Label className="text-sm font-medium text-muted-foreground">
+                Authorized contacts
+              </Label>
+              <p className="text-sm text-muted-foreground">
+                You currently have no authorized contacts.
+              </p>
             </div>
           </div>
         )}
@@ -97,8 +150,13 @@ export default function ProfileSettings() {
         {active === 'notifications' && (
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <span className="text-sm text-muted-foreground">Receive text updates for your order and account.</span>
-              <Switch checked={form.textUpdates} onCheckedChange={v => handleChange('textUpdates', v)} />
+              <span className="text-sm text-muted-foreground">
+                Receive text updates for your order and account.
+              </span>
+              <Switch
+                checked={form.textUpdates}
+                onCheckedChange={(v) => handleChange('textUpdates', v)}
+              />
             </div>
           </div>
         )}

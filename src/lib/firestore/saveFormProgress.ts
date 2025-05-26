@@ -16,7 +16,7 @@ import {
   serverTimestamp,
   setDoc,
   type Timestamp,
-  type Firestore
+  type Firestore,
 } from 'firebase/firestore';
 import { getDb } from '@/lib/firebase'; // lazily obtain Firestore instance
 
@@ -28,7 +28,7 @@ export interface FormProgressDoc {
   /** two‑letter state code or “NA” */
   state: string;
   /** raw field values keyed by FormField.id */
-  formData: Record<string, unknown>
+  formData: Record<string, unknown>;
   /** Firestore server timestamp */
   updatedAt: ReturnType<typeof serverTimestamp> | Timestamp; // Allow both server and client Timestamp
 }
@@ -67,21 +67,31 @@ export async function saveFormProgress({
 }: {
   userId: string;
   docType: string;
-  formData: Record<string, unknown>
-  state?: string | null; 
+  formData: Record<string, unknown>;
+  state?: string | null;
 }): Promise<void> {
   if (!userId || !docType) {
-    console.error('[saveFormProgress] Missing userId or docType. Aborting save.');
+    console.error(
+      '[saveFormProgress] Missing userId or docType. Aborting save.',
+    );
     return;
   }
   if (typeof formData !== 'object' || formData === null) {
-    console.error('[saveFormProgress] formData is not an object. Aborting save. Received:', formData);
+    console.error(
+      '[saveFormProgress] formData is not an object. Aborting save. Received:',
+      formData,
+    );
     return;
   }
 
   const db = await getDb();
-  const ref = doc(userProgressCollection(db, userId), progressDocId({ docType, state: state || 'NA' }));
-  console.log(`[saveFormProgress] Saving progress for user: ${userId}, docId: ${progressDocId({ docType, state: state || 'NA' })}`);
+  const ref = doc(
+    userProgressCollection(db, userId),
+    progressDocId({ docType, state: state || 'NA' }),
+  );
+  console.log(
+    `[saveFormProgress] Saving progress for user: ${userId}, docId: ${progressDocId({ docType, state: state || 'NA' })}`,
+  );
   await setDoc(
     ref,
     {
@@ -90,7 +100,7 @@ export async function saveFormProgress({
       formData,
       updatedAt: serverTimestamp(),
     } satisfies Partial<FormProgressDoc>, // Use satisfies for type checking without altering the object structure
-    { merge: true }
+    { merge: true },
   );
 }
 
@@ -109,13 +119,17 @@ export async function loadFormProgress({
   docType: string;
   state?: string | null;
 }): Promise<Record<string, unknown>> {
-   if (!userId || !docType) {
-    console.error('[loadFormProgress] Missing userId or docType. Cannot load draft.');
+  if (!userId || !docType) {
+    console.error(
+      '[loadFormProgress] Missing userId or docType. Cannot load draft.',
+    );
     return {};
   }
   const effectiveState = state || 'NA';
   const docIdToLoad = progressDocId({ docType, state: effectiveState });
-  console.log(`[loadFormProgress] Attempting to load progress for user: ${userId}, docId: ${docIdToLoad}`);
+  console.log(
+    `[loadFormProgress] Attempting to load progress for user: ${userId}, docId: ${docIdToLoad}`,
+  );
 
   // Fast path — exact ID lookup
   const db = await getDb();
@@ -124,28 +138,42 @@ export async function loadFormProgress({
 
   if (snap.exists()) {
     const data = snap.data() as FormProgressDoc;
-    console.log(`[loadFormProgress] Draft found for docId: ${docIdToLoad}. Data:`, data.formData);
+    console.log(
+      `[loadFormProgress] Draft found for docId: ${docIdToLoad}. Data:`,
+      data.formData,
+    );
     return data.formData || {};
   }
-  console.log(`[loadFormProgress] No exact match found for docId: ${docIdToLoad}.`);
+  console.log(
+    `[loadFormProgress] No exact match found for docId: ${docIdToLoad}.`,
+  );
 
   // Fallback: if state was provided and not found, try without state (NA)
   // This case is mostly covered if effectiveState already defaults to 'NA',
   // but good for robustness if `state` was an actual value that didn't match.
   if (state && state !== 'NA') {
     const altDocIdToLoad = progressDocId({ docType, state: 'NA' });
-    console.log(`[loadFormProgress] Attempting fallback load for user: ${userId}, docId (no state): ${altDocIdToLoad}`);
+    console.log(
+      `[loadFormProgress] Attempting fallback load for user: ${userId}, docId (no state): ${altDocIdToLoad}`,
+    );
     const altRef = doc(userProgressCollection(db, userId), altDocIdToLoad);
     const altSnap = await getDoc(altRef);
     if (altSnap.exists()) {
       const data = altSnap.data() as FormProgressDoc;
-      console.log(`[loadFormProgress] Fallback draft found for docId (no state): ${altDocIdToLoad}. Data:`, data.formData);
+      console.log(
+        `[loadFormProgress] Fallback draft found for docId (no state): ${altDocIdToLoad}. Data:`,
+        data.formData,
+      );
       return data.formData || {};
     }
-    console.log(`[loadFormProgress] No fallback draft found for docId (no state): ${altDocIdToLoad}.`);
+    console.log(
+      `[loadFormProgress] No fallback draft found for docId (no state): ${altDocIdToLoad}.`,
+    );
   }
-  
-  console.log(`[loadFormProgress] No draft found for user ${userId}, docType ${docType}, state ${effectiveState}. Returning empty object.`);
+
+  console.log(
+    `[loadFormProgress] No draft found for user ${userId}, docType ${docType}, state ${effectiveState}. Returning empty object.`,
+  );
   return {};
 }
 
@@ -157,22 +185,27 @@ export async function loadFormProgress({
  */
 export async function listRecentProgress(
   userId: string,
-  maxResults = 5
+  maxResults = 5,
 ): Promise<FormProgressDoc[]> {
   if (!userId) {
-    console.warn('[listRecentProgress] No userId provided. Cannot list recent progress.');
+    console.warn(
+      '[listRecentProgress] No userId provided. Cannot list recent progress.',
+    );
     return [];
   }
-  console.log(`[listRecentProgress] Listing recent progress for user: ${userId}, max: ${maxResults}`);
+  console.log(
+    `[listRecentProgress] Listing recent progress for user: ${userId}, max: ${maxResults}`,
+  );
   const db = await getDb();
   const q = query(
     userProgressCollection(db, userId),
     orderBy('updatedAt', 'desc'),
-    limit(maxResults)
+    limit(maxResults),
   );
   const snaps = await getDocs(q);
   const results = snaps.docs.map((d) => d.data() as FormProgressDoc);
-  console.log(`[listRecentProgress] Found ${results.length} recent documents for user ${userId}.`);
+  console.log(
+    `[listRecentProgress] Found ${results.length} recent documents for user ${userId}.`,
+  );
   return results;
 }
-

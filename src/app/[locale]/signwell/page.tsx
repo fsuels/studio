@@ -13,14 +13,25 @@ export async function generateStaticParams() {
 }
 
 // Dynamically generate metadata based on locale
-export async function generateMetadata({ params }: { params: { locale: 'en' | 'es' } }): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: {
+  params: { locale: 'en' | 'es' };
+}): Promise<Metadata> {
   // Ensure i18next is initialized for the correct language to fetch metadata
   if (i18n.language !== params.locale) {
     await i18n.changeLanguage(params.locale);
   }
-  
-  const title = i18n.t('pageTitle', { ns: 'electronic-signature', defaultValue: 'eSign Documents Online Securely | 123LegalDoc' });
-  const description = i18n.t('pageDescription', { ns: 'electronic-signature', defaultValue: 'Upload, prepare, and send documents for legally binding electronic signatures with 123LegalDoc, powered by SignWell. Fast, secure, and compliant.' });
+
+  const title = i18n.t('pageTitle', {
+    ns: 'electronic-signature',
+    defaultValue: 'eSign Documents Online Securely | 123LegalDoc',
+  });
+  const description = i18n.t('pageDescription', {
+    ns: 'electronic-signature',
+    defaultValue:
+      'Upload, prepare, and send documents for legally binding electronic signatures with 123LegalDoc, powered by SignWell. Fast, secure, and compliant.',
+  });
 
   return {
     title,
@@ -32,7 +43,6 @@ export async function generateMetadata({ params }: { params: { locale: 'en' | 'e
     },
   };
 }
-
 
 export default function SignWellPage({ params }: SignWellPageProps) {
   return <SignWellClientContent params={params} />;

@@ -1,5 +1,5 @@
 // src/components/StepThreeInput.tsx
-"use client";
+'use client';
 
 import React, { useState } from 'react';
 import { documentLibrary } from '@/lib/document-library';
@@ -11,7 +11,7 @@ interface Props {
 }
 
 export function StepThreeInput({ templateId }: Props) {
-  const template = documentLibrary.find(doc => doc.id === templateId)!;
+  const template = documentLibrary.find((doc) => doc.id === templateId)!;
   const [formData, setFormData] = useState<Record<string, string>>({});
   const [upsells, setUpsells] = useState({ notarize: false, record: false });
 
@@ -21,7 +21,7 @@ export function StepThreeInput({ templateId }: Props) {
   const [loading, setLoading] = useState(false);
 
   const handleChange = (field: string, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+    setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
   const runAiCheck = async () => {
@@ -39,42 +39,51 @@ export function StepThreeInput({ templateId }: Props) {
       // Assuming analyzeFormData returns an array of suggestions/issues objects
       // Adjust this based on the actual return type of analyzeFormData
       // For now, let's assume it returns an array of objects with a 'message' and 'type' (issue/suggestion)
-      const issues = response.filter(r => r.importance === 'error' || r.importance === 'warning').map(r => r.message);
-      const suggestions = response.filter(r => r.importance === 'info').map(r => r.message);
-      
+      const issues = response
+        .filter((r) => r.importance === 'error' || r.importance === 'warning')
+        .map((r) => r.message);
+      const suggestions = response
+        .filter((r) => r.importance === 'info')
+        .map((r) => r.message);
+
       setAiIssues(issues);
       setAiSuggestions(suggestions);
-
     } catch (err) {
-      console.error("Error during AI check:", err);
+      console.error('Error during AI check:', err);
       setAiIssues(['Unable to analyze the form. Please try again later.']);
       setAiSuggestions([]);
     }
     setLoading(false);
   };
 
-  const allFieldsFilled = template.questions?.every(q => !q.required || formData[q.id]?.trim()) ?? true;
+  const allFieldsFilled =
+    template.questions?.every((q) => !q.required || formData[q.id]?.trim()) ??
+    true;
 
   return (
     <div className="max-w-4xl mx-auto p-4">
-      <h2 className="text-2xl font-semibold mb-4">Step 3: Customize & Download</h2>
-      <p className="mb-6 text-gray-700">Fill in the details below and preview your document.</p>
+      <h2 className="text-2xl font-semibold mb-4">
+        Step 3: Customize & Download
+      </h2>
+      <p className="mb-6 text-gray-700">
+        Fill in the details below and preview your document.
+      </p>
 
-      {template.questions?.map(q => (
+      {template.questions?.map((q) => (
         <div key={q.id} className="mb-4">
           <label className="block font-medium mb-1">{q.label}</label>
           {q.type === 'textarea' ? (
             <textarea
               className="w-full border rounded p-2"
               value={formData[q.id] || ''}
-              onChange={e => handleChange(q.id, e.target.value)}
+              onChange={(e) => handleChange(q.id, e.target.value)}
             />
           ) : (
             <input
               type="text"
               className="w-full border rounded p-2"
               value={formData[q.id] || ''}
-              onChange={e => handleChange(q.id, e.target.value)}
+              onChange={(e) => handleChange(q.id, e.target.value)}
             />
           )}
         </div>
@@ -83,7 +92,9 @@ export function StepThreeInput({ templateId }: Props) {
       {/* AI Review Panel */}
       {isReviewing && (
         <div className="bg-yellow-50 border border-yellow-300 rounded p-4 my-6">
-          <h3 className="font-semibold text-lg text-yellow-800 mb-2">AI Legal Review</h3>
+          <h3 className="font-semibold text-lg text-yellow-800 mb-2">
+            AI Legal Review
+          </h3>
 
           {loading ? (
             <p className="text-yellow-700">Analyzing form responses...</p>
@@ -101,7 +112,9 @@ export function StepThreeInput({ templateId }: Props) {
               )}
               {aiSuggestions.length > 0 && (
                 <div className="mb-2">
-                  <h4 className="font-medium text-yellow-800">💡 Suggestions:</h4>
+                  <h4 className="font-medium text-yellow-800">
+                    💡 Suggestions:
+                  </h4>
                   <ul className="list-disc list-inside text-sm text-yellow-800">
                     {aiSuggestions.map((sugg, i) => (
                       <li key={`sugg-${i}`}>{sugg}</li>
@@ -145,7 +158,9 @@ export function StepThreeInput({ templateId }: Props) {
           <input
             type="checkbox"
             checked={upsells.notarize}
-            onChange={() => setUpsells(prev => ({ ...prev, notarize: !prev.notarize }))}
+            onChange={() =>
+              setUpsells((prev) => ({ ...prev, notarize: !prev.notarize }))
+            }
           />
           <span className="ml-2">Notarization ($10)</span>
         </label>
@@ -153,7 +168,9 @@ export function StepThreeInput({ templateId }: Props) {
           <input
             type="checkbox"
             checked={upsells.record}
-            onChange={() => setUpsells(prev => ({ ...prev, record: !prev.record }))}
+            onChange={() =>
+              setUpsells((prev) => ({ ...prev, record: !prev.record }))
+            }
           />
           <span className="ml-2">Recording Assistance ($15)</span>
         </label>

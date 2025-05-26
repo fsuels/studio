@@ -1,28 +1,41 @@
 // src/components/share-download-step.tsx
-"use client";
+'use client';
 
 import React, { useState, useEffect } from 'react'; // Import React
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Download, Share2, RotateCcw, CheckCircle, AlertTriangle } from 'lucide-react'; 
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import {
+  Download,
+  Share2,
+  RotateCcw,
+  CheckCircle,
+  AlertTriangle,
+} from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useTranslation } from 'react-i18next';
 
 interface ShareDownloadStepProps {
-  signedPdfData: Blob | null; 
-  documentName: string; 
+  signedPdfData: Blob | null;
+  documentName: string;
   onStartOver?: () => void;
-  isReadOnly?: boolean; 
+  isReadOnly?: boolean;
 }
 
 const ShareDownloadStep = React.memo(function ShareDownloadStep({
   signedPdfData,
   documentName,
   onStartOver,
-  isReadOnly = false
+  isReadOnly = false,
 }: ShareDownloadStepProps) {
   const { toast } = useToast();
-  const { t } = useTranslation("common");
+  const { t } = useTranslation('common');
   const [isHydrated, setIsHydrated] = useState(false);
 
   useEffect(() => {
@@ -62,7 +75,7 @@ const ShareDownloadStep = React.memo(function ShareDownloadStep({
         description: `${documentName} ${t('is downloading.')}`,
       });
     } catch (error) {
-      console.error("Error during download:", error);
+      console.error('Error during download:', error);
       toast({
         title: t('Download Failed'),
         description: t('Could not initiate the download.'),
@@ -72,18 +85,24 @@ const ShareDownloadStep = React.memo(function ShareDownloadStep({
   };
 
   if (!isHydrated) {
-     return <div className="h-72 animate-pulse bg-muted rounded-lg shadow-lg border border-border"></div>;
+    return (
+      <div className="h-72 animate-pulse bg-muted rounded-lg shadow-lg border border-border"></div>
+    );
   }
 
   const actionsDisabled = isReadOnly || !signedPdfData;
 
   return (
-    <Card className={`shadow-lg rounded-lg bg-card border border-border ${actionsDisabled && !isReadOnly ? 'opacity-70' : ''} ${isReadOnly ? 'opacity-75' : ''}`}>
+    <Card
+      className={`shadow-lg rounded-lg bg-card border border-border ${actionsDisabled && !isReadOnly ? 'opacity-70' : ''} ${isReadOnly ? 'opacity-75' : ''}`}
+    >
       <CardHeader>
-         <div className="flex items-center space-x-2">
-            <Share2 className="h-6 w-6 text-primary" /> 
-            <CardTitle className="text-2xl">{t('shareDownloadStep.stepTitle')}</CardTitle>
-         </div>
+        <div className="flex items-center space-x-2">
+          <Share2 className="h-6 w-6 text-primary" />
+          <CardTitle className="text-2xl">
+            {t('shareDownloadStep.stepTitle')}
+          </CardTitle>
+        </div>
         <CardDescription>
           {actionsDisabled && !isReadOnly
             ? t('shareDownloadStep.disabledDescription')
@@ -98,10 +117,10 @@ const ShareDownloadStep = React.memo(function ShareDownloadStep({
           </div>
         )}
         {signedPdfData && (
-             <div className="p-3 bg-green-100 border border-green-300 rounded-md text-green-800 text-sm flex items-center gap-2">
-                <CheckCircle className="h-5 w-5" />
-                <span>{t('Document signed and ready!')}</span> 
-             </div>
+          <div className="p-3 bg-green-100 border border-green-300 rounded-md text-green-800 text-sm flex items-center gap-2">
+            <CheckCircle className="h-5 w-5" />
+            <span>{t('Document signed and ready!')}</span>
+          </div>
         )}
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
@@ -132,7 +151,7 @@ const ShareDownloadStep = React.memo(function ShareDownloadStep({
             className="w-full text-muted-foreground hover:text-primary"
           >
             <RotateCcw className="mr-2 h-4 w-4" />
-            {t('Start Over')} 
+            {t('Start Over')}
           </Button>
         </CardFooter>
       )}

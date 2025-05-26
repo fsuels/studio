@@ -6,8 +6,10 @@ export const livingTrust: LegalDocument = {
   name: 'Living Trust (Revocable)',
   name_es: 'Fideicomiso en Vida (Revocable)',
   category: 'Estate Planning',
-  description: 'Manage assets during life and distribute after death, potentially avoiding probate.',
-  description_es: 'Gestionar activos durante la vida y distribuirlos después de la muerte, potencialmente evitando el proceso sucesorio.',
+  description:
+    'Manage assets during life and distribute after death, potentially avoiding probate.',
+  description_es:
+    'Gestionar activos durante la vida y distribuirlos después de la muerte, potencialmente evitando el proceso sucesorio.',
   languageSupport: ['en', 'es'],
   requiresNotarization: true,
   canBeRecorded: false,
@@ -16,5 +18,5 @@ export const livingTrust: LegalDocument = {
   basePrice: 10,
   states: 'all',
   schema: z.object({}), // Placeholder
-  questions: [] // Placeholder
+  questions: [], // Placeholder
 };

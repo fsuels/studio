@@ -17,6 +17,8 @@ export function getDocumentsForCountry(countryCode?: string): LegalDocument[] {
 
 export const supportedCountries = Object.keys(documentLibraryByCountry);
 
-export const allDocuments: LegalDocument[] = Object.values(documentLibraryByCountry).flat();
+export const allDocuments: LegalDocument[] = Object.values(
+  documentLibraryByCountry,
+).flat();
 
 export default documentLibraryByCountry['us'];

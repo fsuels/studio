@@ -1,14 +1,11 @@
-import type { Config } from 'tailwindcss'
-import { fontFamily } from 'tailwindcss/defaultTheme'
-import plugin from 'tailwindcss/plugin'
+import type { Config } from 'tailwindcss';
+import { fontFamily } from 'tailwindcss/defaultTheme';
+import plugin from 'tailwindcss/plugin';
 
 /** @type {import('tailwindcss').Config} */
 const config: Config = {
   darkMode: 'class',
-  content: [
-    './src/**/*.{ts,tsx}',
-    './public/**/*.svg',
-  ],
+  content: ['./src/**/*.{ts,tsx}', './public/**/*.svg'],
   theme: {
     container: { center: true, padding: '1rem' },
 
@@ -21,10 +18,22 @@ const config: Config = {
         popover: 'hsl(var(--popover))',
         'popover-foreground': 'hsl(var(--popover-foreground))',
 
-        primary: { DEFAULT: 'hsl(var(--primary))', foreground: 'hsl(var(--primary-foreground))' },
-        secondary: { DEFAULT: 'hsl(var(--secondary))', foreground: 'hsl(var(--secondary-foreground))' },
-        accent: { DEFAULT: 'hsl(var(--accent))', foreground: 'hsl(var(--accent-foreground))' },
-        muted: { DEFAULT: 'hsl(var(--muted))', foreground: 'hsl(var(--muted-foreground))' },
+        primary: {
+          DEFAULT: 'hsl(var(--primary))',
+          foreground: 'hsl(var(--primary-foreground))',
+        },
+        secondary: {
+          DEFAULT: 'hsl(var(--secondary))',
+          foreground: 'hsl(var(--secondary-foreground))',
+        },
+        accent: {
+          DEFAULT: 'hsl(var(--accent))',
+          foreground: 'hsl(var(--accent-foreground))',
+        },
+        muted: {
+          DEFAULT: 'hsl(var(--muted))',
+          foreground: 'hsl(var(--muted-foreground))',
+        },
         destructive: {
           DEFAULT: 'hsl(var(--destructive))',
           foreground: 'hsl(var(--destructive-foreground))',
@@ -35,12 +44,28 @@ const config: Config = {
         ring: 'hsl(var(--ring))',
 
         electric: {
-          50: '#f0f7ff', 100: '#e0efff', 200: '#b1d4ff', 300: '#82b8ff', 400: '#4391ff',
-          500: '#1e6eff', 600: '#0b54ff', 700: '#063ed2', 800: '#062f9f', 900: '#07246f',
+          50: '#f0f7ff',
+          100: '#e0efff',
+          200: '#b1d4ff',
+          300: '#82b8ff',
+          400: '#4391ff',
+          500: '#1e6eff',
+          600: '#0b54ff',
+          700: '#063ed2',
+          800: '#062f9f',
+          900: '#07246f',
         },
         midnight: {
-          50: '#f6f7fb', 100: '#e9ebf3', 200: '#c8cdde', 300: '#a3a9c6', 400: '#7b83ae',
-          500: '#5c6595', 600: '#474f78', 700: '#343a5b', 800: '#23283d', 900: '#151824',
+          50: '#f6f7fb',
+          100: '#e9ebf3',
+          200: '#c8cdde',
+          300: '#a3a9c6',
+          400: '#7b83ae',
+          500: '#5c6595',
+          600: '#474f78',
+          700: '#343a5b',
+          800: '#23283d',
+          900: '#151824',
         },
 
         // brand palette from prompt
@@ -59,7 +84,7 @@ const config: Config = {
         display: ['Poppins', ...fontFamily.sans],
         mono: ['var(--font-geist-mono)', ...fontFamily.mono],
       },
-      
+
       borderRadius: {
         lg: 'var(--radius)',
         xl: 'calc(var(--radius) + 4px)',
@@ -75,33 +100,49 @@ const config: Config = {
       },
 
       keyframes: {
-        'fade-in': { '0%': { opacity: '0', transform: 'translateY(6px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } },
-        'scale-in': { '0%': { opacity: '0', transform: 'scale(.95)' }, '100%': { opacity: '1', transform: 'scale(1)' } },
+        'fade-in': {
+          '0%': { opacity: '0', transform: 'translateY(6px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' },
+        },
+        'scale-in': {
+          '0%': { opacity: '0', transform: 'scale(.95)' },
+          '100%': { opacity: '1', transform: 'scale(1)' },
+        },
         'accordion-down': {
-          from: { height: "0" },
-          to: { height: "var(--radix-accordion-content-height)" },
+          from: { height: '0' },
+          to: { height: 'var(--radix-accordion-content-height)' },
         },
         'accordion-up': {
-          from: { height: "var(--radix-accordion-content-height)" },
-          to: { height: "0" },
+          from: { height: 'var(--radix-accordion-content-height)' },
+          to: { height: '0' },
         },
       },
       animation: {
         'fade-in': 'fade-in 0.4s ease-out both',
         'scale-in': 'scale-in .25s cubic-bezier(.16,1,.3,1) both',
-        'accordion-down': "accordion-down 0.2s ease-out",
-        'accordion-up': "accordion-up 0.2s ease-out",
+        'accordion-down': 'accordion-down 0.2s ease-out',
+        'accordion-up': 'accordion-up 0.2s ease-out',
       },
       typography: {
         DEFAULT: {
           css: {
             maxWidth: 'none',
-            h1: { fontSize: '1.75rem', fontWeight: '700', letterSpacing: '-0.025em' },
+            h1: {
+              fontSize: '1.75rem',
+              fontWeight: '700',
+              letterSpacing: '-0.025em',
+            },
             h2: { fontSize: '1.5rem', fontWeight: '600' },
             h3: { fontSize: '1.25rem', fontWeight: '500' },
             table: { width: '100%' },
-            'table th': { borderBottom: '2px solid hsl(var(--border))', padding: '0.75rem' },
-            'table td': { borderBottom: '1px solid hsl(var(--border))', padding: '0.75rem' },
+            'table th': {
+              borderBottom: '2px solid hsl(var(--border))',
+              padding: '0.75rem',
+            },
+            'table td': {
+              borderBottom: '1px solid hsl(var(--border))',
+              padding: '0.75rem',
+            },
             'code, kbd, samp': { backgroundColor: 'hsl(var(--muted))' },
             'p code': { borderBottom: '1px dashed hsl(var(--border))' },
             'code::before': { content: '""' },
@@ -112,9 +153,9 @@ const config: Config = {
                 color: 'hsl(var(--primary) / 0.8)',
               },
             },
-          }
-        }
-      }
+          },
+        },
+      },
     },
   },
 
@@ -122,9 +163,9 @@ const config: Config = {
     require('tailwindcss-animate'),
     require('@tailwindcss/typography'),
     plugin(({ addVariant }) => {
-      addVariant('hocus', ['&:hover', '&:focus-visible'])
+      addVariant('hocus', ['&:hover', '&:focus-visible']);
     }),
   ],
-}
+};
 
 export default config;
