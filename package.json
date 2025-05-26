@@ -12,7 +12,8 @@
     "typecheck": "tsc --noEmit",
     "test": "node --test tests/prettify.test.js",
     "gen:previews": "node --experimental-modules scripts/generate-previews.js",
-    "extract:i18n": "node_modules/.bin/i18next-parser \"src/**/*.{ts,tsx}\" --config i18next-parser.config.js"
+    "extract:i18n": "node_modules/.bin/i18next-parser \"src/**/*.{ts,tsx}\" --config i18next-parser.config.js",
+    "seed:reviews": "node scripts/seed-reviews.ts"
   },
   "dependencies": {
     "@genkit-ai/googleai": "^1.6.2",
