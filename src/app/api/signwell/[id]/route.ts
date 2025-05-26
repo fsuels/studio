@@ -15,8 +15,9 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
       return NextResponse.json({ error: 'SignWell API error', details: data }, { status: res.status });
     }
     return NextResponse.json({ status: data.status, raw: data });
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error('SignWell status check failed', err);
-    return NextResponse.json({ error: err.message || 'Unknown error' }, { status: 500 });
+    const message = err instanceof Error ? err.message : 'Unknown error';
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }

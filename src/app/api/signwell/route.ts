@@ -32,8 +32,9 @@ export async function POST(req: NextRequest) {
     }
 
     return NextResponse.json({ documentId: data.id, signingUrl: data.signing_links?.[0]?.url, raw: data });
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error('SignWell API call failed', err);
-    return NextResponse.json({ error: err.message || 'Unknown error' }, { status: 500 });
+    const message = err instanceof Error ? err.message : 'Unknown error';
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }

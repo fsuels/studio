@@ -1,8 +1,7 @@
 // src/app/[locale]/support/support-client-content.tsx
 'use client'
 
-import { useParams } from 'next/navigation'
-import SupportContent from '@/components/SupportContent' 
+import SupportContent from '@/components/SupportContent'
 import React from 'react';
 
 interface SupportClientContentProps {

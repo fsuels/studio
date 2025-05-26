@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import ProfileSettings from '@/components/ProfileSettings';
-import { FileText, CreditCard, UserCircle, Settings, LogOut, Loader2 } from 'lucide-react';
+import { FileText, CreditCard, UserCircle, LogOut, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import { useAuth } from '@/hooks/useAuth';
 import { useRouter } from 'next/navigation';
@@ -112,8 +112,8 @@ export default function DashboardClientContent({ locale }: DashboardClientConten
         if (isNaN(dateObj.getTime())) { 
             return String(dateInput); 
         }
-      } catch (e) {
-        return String(dateInput); 
+      } catch (_err) {
+        return String(dateInput);
       }
     }
     return dateObj.toLocaleDateString(i18n.language || locale, { year: 'numeric', month: 'long', day: 'numeric' });

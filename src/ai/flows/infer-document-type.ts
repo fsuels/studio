@@ -46,9 +46,9 @@ export const InferDocumentTypeOutputSchema = z.object({
 export type InferDocumentTypeOutput = z.infer<typeof InferDocumentTypeOutputSchema>;
 
 // Build context string from documentLibrary
-// `language` is accepted for future localization support.
-// Prefix with underscore to avoid unused variable lint error.
-const getAvailableDocumentsContext = (_language: 'en' | 'es'): string => {
+// Currently we ignore the language argument but keep the helper for
+// potential localization of document names in the future.
+const getAvailableDocumentsContext = (): string => {
   return `Available Document Types:
 ${documentLibrary.map(doc => `- ${doc.name} (Category: ${doc.category})`).join('\n')}`;
 };
@@ -108,8 +108,7 @@ async (input) => {
     };
   }
 
-  const { language } = parsed.data;
-  const ctx = getAvailableDocumentsContext(language);
+  const ctx = getAvailableDocumentsContext();
 
   try {
     const response: GenerateResponseData<InferDocumentTypeOutput> = await prompt({

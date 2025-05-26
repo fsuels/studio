@@ -251,7 +251,7 @@ export default function SignWellClientContent({ params }: SignWellClientContentP
     }
   };
 
-  const onAuthSuccessModal = (mode: 'signin' | 'signup', _email: string) => {
+  const onAuthSuccessModal = (mode: 'signin' | 'signup') => {
     setShowAuthModal(false);
     toast({
       title: t('common:authModal.successTitle', { context: mode, defaultValue: mode === 'signin' ? 'Sign In Successful!' : 'Account Created!'}),
