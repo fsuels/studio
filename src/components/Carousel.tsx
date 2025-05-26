@@ -12,7 +12,7 @@ import type { Review } from '@/types';
 export default function Carousel({ reviews }: { reviews: Review[] }) {
   return (
     <section className="max-w-4xl mx-auto">
-      <BaseCarousel className="relative">
+      <BaseCarousel className="relative" opts={{ loop: true }}>
         <CarouselContent>
           {reviews.map((r, idx) => (
             <CarouselItem
