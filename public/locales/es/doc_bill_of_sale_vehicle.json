@@ -3,6 +3,23 @@
   "metaDescription": "Genera un contrato de compraventa de vehículo con validez legal en menos de 5 minutos. PDF imprimible gratis, listo para firmarse electrónicamente con SignWell, revisado por abogados y válido en los 50 estados.",
   "pageTitle": "Contrato de Compraventa de Vehículo: Guía en Lenguaje Claro (con Plantilla Gratuita)",
   "pageSubtitle": "Deja de preocuparte por el papeleo del DMV. Nuestro asistente paso a paso y la firma electrónica de SignWell convierten un formulario legal complejo en una tarea de 3 minutos, para que cierres el trato y conduzcas con confianza.",
+  "guideSections": [
+    {
+      "id": 0,
+      "title": "¿Qué es un Contrato de Compraventa?",
+      "body": "Es un documento firmado que registra la venta y transfiere la propiedad del vehículo." 
+    },
+    {
+      "id": 1,
+      "title": "Cuándo Usarlo",
+      "body": "Utilízalo siempre que compres o vendas un vehículo para proteger a ambas partes." 
+    },
+    {
+      "id": 2,
+      "title": "Cómo Completarlo",
+      "body": "Completa los datos de vendedor, comprador y vehículo, luego firma con las divulgaciones requeridas." 
+    }
+  ],
   "tocTitle": "Tabla de Contenidos",
   "toc": {
     "whatIs": "¿Qué es un Contrato de Compraventa de Vehículo?",

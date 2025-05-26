@@ -24,7 +24,15 @@ import {
 } from '@/components/ui/table';
 import { track } from '@/lib/analytics';
 import { useCart } from '@/contexts/CartProvider';
-import { Car } from 'lucide-react';
+import {
+  Car,
+  Edit,
+  Signature,
+  ShieldCheck,
+  Clock,
+  RotateCcw,
+} from 'lucide-react';
+import StickyMobileCTA from '@/components/StickyMobileCTA';
 import { SkeletonPreview } from '../DocPreview';
 const DocPreview = dynamic(() => import('../DocPreview'), {
   ssr: false,
@@ -383,9 +391,41 @@ export default function VehicleBillOfSaleDisplay({
         <p className="text-lg text-muted-foreground">{t('pageSubtitle')}</p>
       </header>
 
+      <ol className="mx-auto my-8 grid max-w-4xl gap-6 md:grid-cols-3">
+        {[
+          { icon: Edit, title: 'Answer 9 questions', copy: 'Takes 3 min' },
+          { icon: Signature, title: 'Download & e-Sign', copy: 'Legally binding' },
+          { icon: ShieldCheck, title: 'Store & Share', copy: 'Bank-grade security' },
+        ].map(({ icon: Icon, title, copy }) => (
+          <li key={title} className="flex items-start gap-4">
+            <Icon className="h-8 w-8 text-teal-500" />
+            <div>
+              <p className="font-medium">{title}</p>
+              <p className="text-sm text-gray-600">{copy}</p>
+            </div>
+          </li>
+        ))}
+      </ol>
+
       <div className="mx-auto mb-8 max-w-3xl">
         <DocPreview docId="bill-of-sale-vehicle" locale={locale} />
       </div>
+
+      <section className="prose mx-auto max-w-2xl">
+        <h2>Vehicle Bill of Sale: Plain-English Guide</h2>
+        {(
+          t('guideSections', { returnObjects: true }) as { id: number; title: string; body: string }[]
+        ).map((s, i) => (
+          <details
+            key={s.id}
+            open={i === 0}
+            className="mb-4 rounded-lg bg-gray-50 p-4"
+          >
+            <summary className="cursor-pointer font-semibold">{s.title}</summary>
+            <p className="mt-2">{s.body}</p>
+          </details>
+        ))}
+      </section>
 
       <div className="flex justify-center mb-6">
         <Input
@@ -431,6 +471,18 @@ export default function VehicleBillOfSaleDisplay({
         <h2 className="text-2xl font-semibold text-foreground mb-3">
           {t('finalCtaTitle')}
         </h2>
+        <p className="text-2xl font-bold">$19.95</p>
+        <ul className="mt-3 space-y-1 text-sm">
+          <li className="flex items-center gap-2">
+            <ShieldCheck className="h-4 w-4 text-teal-600" /> Attorney-approved
+          </li>
+          <li className="flex items-center gap-2">
+            <Clock className="h-4 w-4 text-teal-600" /> Ready in 3 minutes
+          </li>
+          <li className="flex items-center gap-2">
+            <RotateCcw className="h-4 w-4 text-teal-600" /> 100 % money-back guarantee
+          </li>
+        </ul>
         <p className="text-muted-foreground mb-6 max-w-lg mx-auto">
           {t('finalCtaSubtitle')}
         </p>
@@ -464,6 +516,7 @@ export default function VehicleBillOfSaleDisplay({
           ></script>
         )}
       </section>
+      <StickyMobileCTA />
     </section>
   );
 }

@@ -3,6 +3,23 @@
   "metaDescription": "Generate a legally solid vehicle bill of sale in under 5 minutes. Free printable PDF, e-sign-ready with SignWell, attorney-reviewed, and valid in all 50 states.",
   "pageTitle": "Vehicle Bill of Sale: The Plain-English Guide (with Free Template)",
   "pageSubtitle": "Stop worrying about DMV paperwork. Our step-by-step wizard and SignWell e-signature transform a complex legal form into a 3-minute task—so you can close the deal and drive away with confidence.",
+  "guideSections": [
+    {
+      "id": 0,
+      "title": "What is a Bill of Sale?",
+      "body": "It's a signed document that records the sale price and transfers ownership." 
+    },
+    {
+      "id": 1,
+      "title": "When to Use It",
+      "body": "Use a bill of sale whenever buying or selling a vehicle to protect both parties." 
+    },
+    {
+      "id": 2,
+      "title": "How to Complete",
+      "body": "Fill in buyer, seller, and vehicle details, then sign with any required disclosures." 
+    }
+  ],
   "tocTitle": "Table of Contents",
   "toc": {
     "whatIs": "What Is a Vehicle Bill of Sale?",
