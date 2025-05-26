@@ -1,0 +1,23 @@
+[
+  {
+    "name": "Michelle R.",
+    "location": "Austin, TX",
+    "rating": 5,
+    "quote": "Filled out the bill of sale in under 4 minutes and walked out of the DMV the same day!",
+    "templateId": "vehicle-bill-of-sale"
+  },
+  {
+    "name": "Aaron D.",
+    "location": "Boise, ID",
+    "rating": 5,
+    "quote": "Loved the guided questions—caught a VIN typo I would have missed. Worth every penny.",
+    "templateId": "vehicle-bill-of-sale"
+  },
+  {
+    "name": "Isabel G.",
+    "location": "Miami, FL",
+    "rating": 4.8,
+    "quote": "Sold my SUV privately; this template made the hand-off feel 100 % professional.",
+    "templateId": "vehicle-bill-of-sale"
+  }
+]

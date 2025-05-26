@@ -1,10 +1,23 @@
 import React from 'react';
 import { Star } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
-import { collection, query, where, orderBy, limit, getDocs } from 'firebase/firestore';
+import {
+  collection,
+  query,
+  where,
+  orderBy,
+  limit,
+  getDocs,
+} from 'firebase/firestore';
 import { getDb } from '@/lib/firebase';
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
-import { Skeleton } from '@/components/ui/skeleton';
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from '@/components/ui/carousel';
+import { Spinner } from '@/components/ui/Spinner';
 
 interface Review {
   templateId: string;
@@ -19,7 +32,12 @@ interface Props {
 }
 
 export default function TestimonialsCarousel({ templateId }: Props) {
-  const { data: reviews = [], isPending } = useQuery({
+  const {
+    data: reviews = [],
+    isPending,
+    isError,
+    error,
+  } = useQuery({
     queryKey: ['reviews', templateId],
     queryFn: async () => {
       const db = await getDb();
@@ -32,34 +50,42 @@ export default function TestimonialsCarousel({ templateId }: Props) {
       const snap = await getDocs(q);
       return snap.docs.map((d) => d.data() as Review);
     },
-    suspense: true,
+    suspense: false,
   });
 
-  if (isPending) return <CarouselSkeleton />;
+  if (isPending) return <Spinner className="my-12" />;
 
-  if (reviews.length === 0) {
-    return (
-      <section className="my-16 text-center">
-        <p className="text-sm text-gray-500">
-          Be the first to share your experience with this template!
-        </p>
-      </section>
-    );
+  if (isError) {
+    console.error('Reviews error', error);
+    return null;
   }
+
+  if (reviews.length === 0) return null;
 
   return (
     <section className="max-w-4xl mx-auto">
       <Carousel className="relative">
         <CarouselContent>
           {reviews.map((r, idx) => (
-            <CarouselItem key={idx} className="basis-3/4 sm:basis-1/2 md:basis-1/3">
+            <CarouselItem
+              key={idx}
+              className="basis-3/4 sm:basis-1/2 md:basis-1/3"
+            >
               <div className="p-4 bg-card border border-border rounded-lg shadow-sm h-full flex flex-col text-center">
                 {r.avatarUrl && (
-                  <img src={r.avatarUrl} alt={r.name} className="w-16 h-16 rounded-full mx-auto mb-3 object-cover" loading="lazy" />
+                  <img
+                    src={r.avatarUrl}
+                    alt={r.name}
+                    className="w-16 h-16 rounded-full mx-auto mb-3 object-cover"
+                    loading="lazy"
+                  />
                 )}
                 <div className="flex justify-center mb-2">
                   {Array.from({ length: r.rating }).map((_, i) => (
-                    <Star key={i} className="h-4 w-4 text-yellow-400 fill-yellow-400" />
+                    <Star
+                      key={i}
+                      className="h-4 w-4 text-yellow-400 fill-yellow-400"
+                    />
                   ))}
                 </div>
                 <p className="text-sm italic mb-2">&ldquo;{r.quote}&rdquo;</p>
@@ -74,24 +100,3 @@ export default function TestimonialsCarousel({ templateId }: Props) {
     </section>
   );
 }
-
-export const CarouselSkeleton = () => (
-  <section className="max-w-4xl mx-auto">
-    <div className="flex gap-4">
-      {[...Array(3)].map((_, i) => (
-        <div key={i} className="basis-3/4 sm:basis-1/2 md:basis-1/3">
-          <div className="p-4 bg-muted border border-border rounded-lg shadow-sm h-full flex flex-col items-center gap-2">
-            <Skeleton className="w-16 h-16 rounded-full" />
-            <div className="flex gap-1 mb-2">
-              {[...Array(5)].map((_, j) => (
-                <Skeleton key={j} className="h-4 w-4 rounded" />
-              ))}
-            </div>
-            <Skeleton className="h-4 w-3/4" />
-            <Skeleton className="h-4 w-1/2" />
-          </div>
-        </div>
-      ))}
-    </div>
-  </section>
-);
