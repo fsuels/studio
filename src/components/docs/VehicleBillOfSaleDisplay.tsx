@@ -6,13 +6,44 @@ import { useTranslation } from 'react-i18next';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import {
+  Accordion,
+  AccordionItem,
+  AccordionTrigger,
+  AccordionContent,
+} from '@/components/ui/accordion';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
 import { track } from '@/lib/analytics';
 import { useCart } from '@/contexts/CartProvider';
 
 interface VehicleBillOfSaleDisplayProps {
   locale: 'en' | 'es';
+}
+
+interface Section {
+  id: string;
+  titleKey: string;
+  type:
+    | 'list'
+    | 'table'
+    | 'paragraph'
+    | 'ordered-list'
+    | 'mixed-list'
+    | 'checklist'
+    | 'list-cta';
+  contentKey?: string;
+  itemsKey?: string;
+  tableKey?: string;
+  totalTimeKey?: string;
+  printNoteKey?: string;
+  ctaKey?: string;
 }
 
 export default function VehicleBillOfSaleDisplay({ locale }: VehicleBillOfSaleDisplayProps) {
@@ -37,7 +68,7 @@ export default function VehicleBillOfSaleDisplay({ locale }: VehicleBillOfSaleDi
     router.prefetch(`/${locale}/#workflow-start?docId=bill-of-sale-vehicle`);
   };
 
-  const informationalSections = [
+  const informationalSections: Section[] = [
     { id: 'what-is', titleKey: 'sections.whatIs.title', contentKey: 'sections.whatIs.content', type: 'list' },
     { id: 'why', titleKey: 'sections.why.title', tableKey: 'sections.why.table', type: 'table' },
     { id: 'covered', titleKey: 'sections.covered.title', contentKey: 'sections.covered.content', type: 'paragraph' },
@@ -50,7 +81,7 @@ export default function VehicleBillOfSaleDisplay({ locale }: VehicleBillOfSaleDi
     { id: 'why-us', titleKey: 'sections.whyUs.title', itemsKey: 'sections.whyUs.items', ctaKey: 'sections.whyUs.cta', type: 'list-cta' },
   ];
 
-  const faqItems = [
+  const faqItems: Section[] = [
     { id: 'faq1', titleKey: 'faq.q1.question', contentKey: 'faq.q1.answer', type: 'paragraph' },
     { id: 'faq2', titleKey: 'faq.q2.question', contentKey: 'faq.q2.answer', type: 'paragraph' },
     { id: 'faq3', titleKey: 'faq.q3.question', contentKey: 'faq.q3.answer', type: 'paragraph' },
@@ -58,17 +89,17 @@ export default function VehicleBillOfSaleDisplay({ locale }: VehicleBillOfSaleDi
     { id: 'faq5', titleKey: 'faq.q5.question', contentKey: 'faq.q5.answer', type: 'paragraph' },
   ];
   
-  const allSections = [...informationalSections, ...faqItems];
+  const allSections: Section[] = [...informationalSections, ...faqItems];
 
 
-  const renderSectionContent = (section: typeof allSections[0], translate: typeof t) => {
+  const renderSectionContent = (section: Section, translate: typeof t) => {
     if (section.type === 'paragraph' && section.contentKey) {
       return <p className="text-muted-foreground">{translate(section.contentKey)}</p>;
     }
     if (section.type === 'list' && (section.contentKey || section.itemsKey)) {
       const itemsKeyToUse = section.itemsKey || section.contentKey;
       if (!itemsKeyToUse) return null;
-      const items = translate(itemsKeyToUse, { returnObjects: true });
+      const items = translate(itemsKeyToUse, { returnObjects: true }) as string[];
       if (Array.isArray(items)) {
         return (
           <ul className="list-disc list-outside pl-5 space-y-1 text-muted-foreground">
@@ -78,7 +109,7 @@ export default function VehicleBillOfSaleDisplay({ locale }: VehicleBillOfSaleDi
       }
     }
     if (section.type === 'ordered-list' && section.itemsKey) {
-      const items = translate(section.itemsKey, { returnObjects: true });
+      const items = translate(section.itemsKey, { returnObjects: true }) as string[];
       if (Array.isArray(items)) {
         return (
           <>
@@ -91,7 +122,7 @@ export default function VehicleBillOfSaleDisplay({ locale }: VehicleBillOfSaleDi
       }
     }
     if (section.type === 'mixed-list' && section.contentKey && section.itemsKey) {
-      const items = translate(section.itemsKey, { returnObjects: true });
+      const items = translate(section.itemsKey, { returnObjects: true }) as string[];
       return (
         <>
           <p className="text-muted-foreground mb-2">{translate(section.contentKey)}</p>
@@ -104,7 +135,7 @@ export default function VehicleBillOfSaleDisplay({ locale }: VehicleBillOfSaleDi
       );
     }
     if (section.type === 'checklist' && section.itemsKey) {
-      const items = translate(section.itemsKey, { returnObjects: true });
+      const items = translate(section.itemsKey, { returnObjects: true }) as string[];
       if (Array.isArray(items)) {
         return (
           <>
@@ -117,8 +148,8 @@ export default function VehicleBillOfSaleDisplay({ locale }: VehicleBillOfSaleDi
       }
     }
     if (section.tableKey) {
-      const headers = translate(`${section.tableKey}.headers`, { returnObjects: true });
-      const rows = translate(`${section.tableKey}.rows`, { returnObjects: true });
+      const headers = translate(`${section.tableKey}.headers`, { returnObjects: true }) as string[];
+      const rows = translate(`${section.tableKey}.rows`, { returnObjects: true }) as string[][];
       return (
         <div className="overflow-x-auto my-4">
           <Table className="min-w-full text-sm">
@@ -139,7 +170,7 @@ export default function VehicleBillOfSaleDisplay({ locale }: VehicleBillOfSaleDi
       );
     }
     if (section.type === 'list-cta' && section.itemsKey && section.ctaKey) {
-      const items = translate(section.itemsKey, { returnObjects: true });
+      const items = translate(section.itemsKey, { returnObjects: true }) as string[];
       if (Array.isArray(items)) {
         return (
           <>
