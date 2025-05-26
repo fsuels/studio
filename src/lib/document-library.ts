@@ -10,7 +10,9 @@ const isValidDocument = (doc: unknown): doc is LegalDocument => {
   const d = doc as Partial<LegalDocument>;
   const hasId = !!(d && typeof d.id === 'string' && d.id.trim() !== '');
   const hasCategory = !!(
-    d && typeof d.category === 'string' && d.category.trim() !== ''
+    d &&
+    typeof d.category === 'string' &&
+    d.category.trim() !== ''
   );
   const hasSchema = !!(d && d.schema && typeof d.schema.parse === 'function');
 
@@ -22,11 +24,11 @@ const isValidDocument = (doc: unknown): doc is LegalDocument => {
   };
   const hasValidTranslationsOrName = !!(
     dRecord &&
-      ((dRecord.translations &&
-        dRecord.translations.en &&
-        typeof dRecord.translations.en.name === 'string' &&
-        dRecord.translations.en.name.trim() !== '') ||
-        (typeof dRecord.name === 'string' && dRecord.name.trim() !== ''))
+    ((dRecord.translations &&
+      dRecord.translations.en &&
+      typeof dRecord.translations.en.name === 'string' &&
+      dRecord.translations.en.name.trim() !== '') ||
+      (typeof dRecord.name === 'string' && dRecord.name.trim() !== ''))
   );
 
   return hasId && hasCategory && hasSchema && hasValidTranslationsOrName;
