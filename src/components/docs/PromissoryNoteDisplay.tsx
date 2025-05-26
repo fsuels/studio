@@ -27,6 +27,26 @@ interface PromissoryNoteDisplayProps {
   locale: 'en' | 'es';
 }
 
+interface Section {
+  id: string;
+  titleKey: string;
+  type:
+    | 'list'
+    | 'table'
+    | 'paragraph'
+    | 'ordered-list'
+    | 'mixed-list'
+    | 'checklist'
+    | 'list-cta';
+  contentKey?: string;
+  itemsKey?: string;
+  lastParagraphKey?: string;
+  totalTimeKey?: string;
+  tableKey?: string;
+  printNoteKey?: string;
+  ctaKey?: string;
+}
+
 export default function PromissoryNoteDisplay({
   locale,
 }: PromissoryNoteDisplayProps) {
@@ -63,7 +83,7 @@ export default function PromissoryNoteDisplay({
     router.prefetch(`/${locale}/docs/promissory-note/start`);
   };
 
-  const informationalSections = [
+  const informationalSections: Section[] = [
     {
       id: 'what-is',
       titleKey: 'sections.whatIs.title',
@@ -125,7 +145,7 @@ export default function PromissoryNoteDisplay({
     },
   ];
 
-  const faqItems = [
+  const faqItems: Section[] = [
     {
       id: 'faq1',
       titleKey: 'faq.q1.question',
@@ -158,18 +178,9 @@ export default function PromissoryNoteDisplay({
     },
   ];
 
-  const allDisplaySections = [...informationalSections, ...faqItems];
+  const allDisplaySections: Section[] = [...informationalSections, ...faqItems];
 
-  interface DisplaySection {
-    type: 'paragraph' | 'list' | 'ordered-list' | 'table';
-    contentKey?: string;
-    itemsKey?: string;
-    lastParagraphKey?: string;
-    totalTimeKey?: string;
-    tableKey?: string;
-  }
-
-  const renderSectionContent = (section: DisplaySection) => {
+  const renderSectionContent = (section: Section) => {
     if (section.type === 'paragraph' && section.contentKey) {
       return <p className="text-muted-foreground">{t(section.contentKey)}</p>;
     }

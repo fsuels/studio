@@ -189,7 +189,7 @@ const TrustAndTestimonialsSection = React.memo(
   function TrustAndTestimonialsSection() {
     const { t, i18n, ready } = useTranslation('common');
     const tSimple = React.useCallback(
-      (key: string, fallback?: string | Record<string, unknown>): string =>
+      (key: string, fallback?: string | object): string =>
         typeof fallback === 'string'
           ? (t(key, { defaultValue: fallback }) as string)
           : (t(key, fallback as Record<string, unknown>) as string),
