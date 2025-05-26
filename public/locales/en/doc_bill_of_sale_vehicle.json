@@ -175,6 +175,20 @@
       "answer": "Select “Gift” in Step 3. The price auto-sets to $0 and triggers the proper tax-exemption language."
     }
   },
+  "guideSections": [
+    {
+      "title": "Why you need a bill of sale",
+      "body": "It documents the legal transfer and protects both parties."
+    },
+    {
+      "title": "Key components",
+      "body": "Include names, addresses, price, vehicle details and mileage."
+    },
+    {
+      "title": "How to finalize",
+      "body": "Sign electronically then file with your local DMV."
+    }
+  ],
   "finalCtaTitle": "Ready to Close the Deal?",
   "finalCtaSubtitle": "Skip the paperwork stress. Click “Start My Bill of Sale” below, answer a few guided questions, and download your attorney-approved document in minutes.",
   "startMyBillOfSaleButton": "Start My Bill of Sale"

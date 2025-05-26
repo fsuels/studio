@@ -24,7 +24,8 @@ import {
 } from '@/components/ui/table';
 import { track } from '@/lib/analytics';
 import { useCart } from '@/contexts/CartProvider';
-import { Car } from 'lucide-react';
+import { Car, Edit, Signature, ShieldCheck } from 'lucide-react';
+import StickyMobileCTA from '@/components/StickyMobileCTA';
 import { SkeletonPreview } from '../DocPreview';
 const DocPreview = dynamic(() => import('../DocPreview'), {
   ssr: false,
@@ -62,6 +63,10 @@ export default function VehicleBillOfSaleDisplay({
   const { addItem } = useCart();
   const [isHydrated, setIsHydrated] = useState(false);
   const [query, setQuery] = useState('');
+  const guideSections = t('guideSections', { returnObjects: true }) as {
+    title: string;
+    body: string;
+  }[];
 
   useEffect(() => {
     setIsHydrated(true);
@@ -422,6 +427,32 @@ export default function VehicleBillOfSaleDisplay({
         />
       </section>
 
+      <ol className="mx-auto my-8 grid max-w-4xl gap-6 md:grid-cols-3">
+        {[
+          { icon: Edit, title: 'Answer 9 questions', copy: 'Takes 3 min' },
+          { icon: Signature, title: 'Download & e-Sign', copy: 'Legally binding' },
+          { icon: ShieldCheck, title: 'Store & Share', copy: 'Bank-grade security' },
+        ].map(({ icon: IconComp, title, copy }) => (
+          <li key={title} className="flex items-start gap-4">
+            <IconComp className="h-8 w-8 text-teal-500" />
+            <div>
+              <p className="font-medium">{title}</p>
+              <p className="text-sm text-gray-600">{copy}</p>
+            </div>
+          </li>
+        ))}
+      </ol>
+
+      <section className="prose mx-auto max-w-2xl">
+        <h2>Vehicle Bill of Sale: Plain-English Guide</h2>
+        {guideSections.map((s, i) => (
+          <details key={i} open={i === 0} className="mb-4 rounded-lg bg-gray-50 p-4">
+            <summary className="cursor-pointer font-semibold">{s.title}</summary>
+            <p className="mt-2">{s.body}</p>
+          </details>
+        ))}
+      </section>
+
       <div className="container mx-auto px-4 py-12">
 
         <div className="flex justify-center mb-6">
@@ -502,6 +533,7 @@ export default function VehicleBillOfSaleDisplay({
           )}
         </section>
       </div>
+      <StickyMobileCTA />
     </section>
   );
 }

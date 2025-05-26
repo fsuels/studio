@@ -184,6 +184,20 @@
       "answer": "Selecciona “Regalo” en el Paso 3. El precio se establece automáticamente en $0 y activa el lenguaje de exención de impuestos adecuado."
     }
   },
+  "guideSections": [
+    {
+      "title": "Por qué necesitas un contrato de compraventa",
+      "body": "Documenta la transferencia legal y protege a ambas partes."
+    },
+    {
+      "title": "Componentes clave",
+      "body": "Incluye nombres, direcciones, precio, detalles del vehículo y kilometraje."
+    },
+    {
+      "title": "Cómo finalizar",
+      "body": "Firma electrónicamente y luego preséntalo en tu DMV local."
+    }
+  ],
   "finalCtaTitle": "¿Listo para Cerrar el Trato?",
   "finalCtaSubtitle": "Evita el estrés del papeleo. Haz clic en “Comenzar Mi Contrato de Compraventa” a continuación, responde unas pocas preguntas guiadas y descarga tu documento aprobado por abogados en minutos.",
   "startMyBillOfSaleButton": "Comenzar Mi Contrato de Compraventa"
