@@ -135,7 +135,7 @@ const MemoizedTestimonialCard = React.memo(function TestimonialCard({
             {Array.from({ length: rating }).map((_, i) => (
               <Star
                 key={i}
-                className="h-4 w-4 text-yellow-400 fill-yellow-400"
+                className="h-4 w-4 text-yellow-400 fill-yellow-400 star-gradient"
               />
             ))}
             {Array.from({ length: 5 - rating }).map((_, i) => (
@@ -303,7 +303,7 @@ const TrustAndTestimonialsSection = React.memo(
                 {Array.from({ length: 5 }).map((_, i) => (
                   <Star
                     key={i}
-                    className="h-4 w-4 text-green-500 fill-green-500"
+                    className="h-4 w-4 text-green-500 fill-green-500 star-gradient"
                   />
                 ))}
               </div>

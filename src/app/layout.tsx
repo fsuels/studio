@@ -102,6 +102,12 @@ export default function RootLayout({
         className={`${inter.variable} ${merriweather.variable} antialiased flex flex-col min-h-screen overflow-x-hidden`}
       >
         <RootClient>{children}</RootClient>
+        <svg width="0" height="0">
+          <linearGradient id="goldGradient" x1="0" x2="0" y1="0" y2="1">
+            <stop offset="0%" stopColor="#fcd34d" />
+            <stop offset="100%" stopColor="#fbbf24" />
+          </linearGradient>
+        </svg>
       </body>
     </html>
   );

@@ -264,3 +264,8 @@
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+/* Gradient fill for star icons */
+.star-gradient {
+  fill: url(#goldGradient);
+}

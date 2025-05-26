@@ -24,7 +24,7 @@ export default function Carousel({ reviews }: { reviews: Review[] }) {
                   {Array.from({ length: Math.round(r.rating) }).map((_, i) => (
                     <Star
                       key={i}
-                      className="h-4 w-4 text-yellow-400 fill-yellow-400"
+                      className="h-4 w-4 text-yellow-400 fill-yellow-400 star-gradient"
                     />
                   ))}
                 </div>
