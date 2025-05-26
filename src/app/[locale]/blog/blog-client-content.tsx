@@ -14,14 +14,14 @@ interface BlogClientContentProps {
 }
 
 const categories = [
-  'All',
-  'Business',
-  'Family',
-  'Real Estate',
-  'Immigration',
-  'Employment',
-  'Contracts',
-  'Privacy',
+  { key: 'All', labelKey: 'All' },
+  { key: 'Business', labelKey: 'Business' },
+  { key: 'Family', labelKey: 'Family' },
+  { key: 'Real Estate', labelKey: 'Real Estate' },
+  { key: 'Immigration', labelKey: 'Immigration' },
+  { key: 'Employment', labelKey: 'Employment' },
+  { key: 'Contracts', labelKey: 'Contracts' },
+  { key: 'Privacy', labelKey: 'Privacy' },
 ];
 
 function getCategory(article: (typeof blogArticles)[0]) {
@@ -79,15 +79,15 @@ export default function BlogClientContent({ locale }: BlogClientContentProps) {
         <div className="flex flex-wrap gap-2 mt-2">
           {categories.map((c) => (
             <Button
-              key={c}
+              key={c.key}
               size="sm"
-              variant={c === category ? 'default' : 'outline'}
+              variant={c.key === category ? 'default' : 'outline'}
               onClick={() => {
-                setCategory(c);
+                setCategory(c.key);
                 setPage(1);
               }}
             >
-              {c} 
+              {t(c.labelKey)}
             </Button>
           ))}
         </div>
