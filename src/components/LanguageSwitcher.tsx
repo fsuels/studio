@@ -44,9 +44,9 @@ const availableLocales: Array<'en' | 'es'> = ['en', 'es'];
 
 const LanguageSwitcher = React.memo(function LanguageSwitcher() {
   const router = useRouter();
-  const pathname = usePathname();
+  const pathname = usePathname() ?? '';
   const searchParams = useSearchParams();
-  const params = useParams();
+  const params = (useParams<{ locale?: string }>() ?? {}) as { locale?: string };
   const { t } = useTranslation("common");
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
   const [currentRouteLocale, setCurrentRouteLocale] = useState<'en' | 'es'>('en');

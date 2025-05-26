@@ -29,7 +29,7 @@ export function StepThreeInput({ templateId }: Props) {
     try {
       // Call the corrected function name
       const response = await analyzeFormData({ 
-        documentType: template.name,
+        documentType: template.name || '',
         // schema: template.questions || [], // Pass the schema if your analyzeFormData expects it
         answers: formData,
         // state: stateCode, // Pass state if analyzeFormData expects it

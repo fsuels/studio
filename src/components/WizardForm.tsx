@@ -212,9 +212,7 @@ export default function WizardForm({
     }
 
     if (currentStepFieldKey) {
-      isValid = await trigger(
-        currentStepFieldKey as keyof z.infer<typeof doc.schema>,
-      );
+      isValid = await trigger(currentStepFieldKey as any);
     } else if (totalSteps > 0 && currentStepIndex < totalSteps) {
       console.error(
         "Error: currentStepFieldKey is undefined but totalSteps > 0. currentStepIndex:",
@@ -308,7 +306,7 @@ export default function WizardForm({
           <Controller
             key={`${currentField.id}-controller`}
             control={control}
-            name={currentField.id as keyof z.infer<typeof doc.schema>}
+            name={currentField.id as any}
             render={({
               field: { onChange: rhfOnChange, value: rhfValue, name: rhfName },
             }) => (
@@ -335,23 +333,35 @@ export default function WizardForm({
                       currentField.id.replace(/_address$/i, "") ||
                       currentField.id.replace(/Address$/i, "");
                     if (actualSchemaShape[`${prefix}_city`])
-                      setValue(`${prefix}_city` as keyof z.infer<typeof doc.schema>, parts.city, {
-                        shouldValidate: true,
-                        shouldDirty: true,
-                      });
+                      setValue(
+                        `${prefix}_city` as any,
+                        parts.city,
+                        {
+                          shouldValidate: true,
+                          shouldDirty: true,
+                        },
+                      );
                     if (actualSchemaShape[`${prefix}_state`])
-                      setValue(`${prefix}_state` as keyof z.infer<typeof doc.schema>, parts.state, {
-                        shouldValidate: true,
-                        shouldDirty: true,
-                      });
+                      setValue(
+                        `${prefix}_state` as any,
+                        parts.state,
+                        {
+                          shouldValidate: true,
+                          shouldDirty: true,
+                        },
+                      );
                     if (actualSchemaShape[`${prefix}_postal_code`])
-                      setValue(`${prefix}_postal_code` as keyof z.infer<typeof doc.schema>, parts.postalCode, {
-                        shouldValidate: true,
-                        shouldDirty: true,
-                      });
+                      setValue(
+                        `${prefix}_postal_code` as any,
+                        parts.postalCode,
+                        {
+                          shouldValidate: true,
+                          shouldDirty: true,
+                        },
+                      );
                   }
                 }}
-                tooltipText={currentField.tooltip}
+                tooltip={currentField.tooltip}
               />
             )}
           />

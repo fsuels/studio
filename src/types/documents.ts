@@ -7,7 +7,7 @@ export type Question = {
   label: string; // Can be a direct string or an i18n key
   placeholder?: string; // Can be a direct string or an i18n key
   required?: boolean;
-  type: 'text' | 'select' | 'date' | 'number' | 'textarea' | 'boolean' | 'address';
+  type: 'text' | 'select' | 'date' | 'number' | 'textarea' | 'boolean' | 'address' | 'tel';
   options?: { value: string; label: string }[]; // Labels can be direct strings or i18n keys
   stateSpecific?: string[];
   helperText?: string; // Can be a direct string or an i18n key

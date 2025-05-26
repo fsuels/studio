@@ -27,7 +27,7 @@ const Header = React.memo(function Header() {
   // Scoped translations
   const { t: tHeader } = useTranslation("header");
   const router = useRouter();
-  const params = useParams();
+  const params = (useParams<{ locale?: string }>() ?? {}) as { locale?: string };
   const { isLoggedIn, logout, user } = useAuth(); // Added user from useAuth
 
   // Locale setup

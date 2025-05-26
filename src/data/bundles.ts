@@ -3,9 +3,12 @@ export interface Bundle {
   name      : string
   tagline   : string
   priceCents: number
+  price?    : number
   slug      : string          // for marketing pages (/bundles/{slug})
   docIds    : string[]        // IDs from document‑library.ts
   emoji     : string          // cute icon in UI
+  description?: string
+  imageUrl?: string
 }
 
 export const bundles: Bundle[] = [

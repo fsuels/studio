@@ -36,7 +36,7 @@ export function StepThreeForm({
 
         <div className="flex-1 space-y-4">
           <label className="flex items-center">
-            <Toggle checked={notarize} onCheckedChange={setNotarize} />
+            <Toggle pressed={notarize} onPressedChange={setNotarize} />
             <span className="ml-2">Add Notarization (+$5)</span>
           </label>
 
