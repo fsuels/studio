@@ -1,23 +1,25 @@
 'use client';
 
 import React, { useState, useEffect, useMemo } from 'react';
+import { Input } from '@/components/ui/input';
 import {
-  Input,
   Select,
   SelectTrigger,
   SelectValue,
   SelectContent,
   SelectItem,
-  Textarea,
-  Label,
-  Button,
+} from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
+import { Label } from '@/components/ui/label';
+import { Button } from '@/components/ui/button';
+import {
   Card,
   CardContent,
   CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
-} from '@/components/ui';
+} from '@/components/ui/card';
 import {
   Tooltip,
   TooltipProvider,
@@ -150,7 +152,11 @@ export default function DynamicFormRenderer({
 
     setIsLoading(true);
     try {
-      const ai = await analyzeFormData({ documentType, schema, answers: values });
+      const ai = await analyzeFormData({
+        documentType,
+        schema,
+        answers: values as Record<string, string | number | boolean | undefined>,
+      });
       setSuggestions(ai);
 
       const blocking = ai.some(s => s.importance === 'error' || s.importance === 'warning');
@@ -258,8 +264,8 @@ export default function DynamicFormRenderer({
 
                   {field.type === 'select' ? (
                     <Select
-                      value={values[field.id] || ''}
-                      onValueChange={val => handleChange(field.id, val)}
+                      value={(values[field.id] as string) || ''}
+                      onValueChange={(val: string) => handleChange(field.id, val)}
                       disabled={isReadOnly || isLoading}
                       name={field.id}
                     >
@@ -281,8 +287,10 @@ export default function DynamicFormRenderer({
                   ) : field.type === 'textarea' ? (
                     <Textarea
                       id={field.id}
-                      value={values[field.id] || ''}
-                      onChange={e => handleChange(field.id, e.target.value)}
+                      value={(values[field.id] as string) || ''}
+                      onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+                        handleChange(field.id, e.target.value)
+                      }
                       required={field.required}
                       disabled={isReadOnly || isLoading}
                       placeholder={field.placeholder || ''}
@@ -293,11 +301,13 @@ export default function DynamicFormRenderer({
                   ) : (
                     <Input
                       id={field.id}
-                      value={values[field.id] || ''}
+                      value={(values[field.id] as string) || ''}
                       placeholder={field.placeholder || ''}
                       required={field.required}
                       type={field.type === 'date' ? 'date' : field.type === 'number' ? 'number' : 'text'}
-                      onChange={e => handleChange(field.id, e.target.value)}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                        handleChange(field.id, e.target.value)
+                      }
                       disabled={isReadOnly || isLoading}
                       name={field.id}
                       className={`${borderColor} ${isReadOnly ? 'bg-muted/50 border-dashed cursor-not-allowed' : 'bg-background'}`}

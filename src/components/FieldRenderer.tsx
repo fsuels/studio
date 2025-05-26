@@ -46,9 +46,9 @@ const FieldRenderer = React.memo(function FieldRenderer({ fieldKey, doc }: Field
 
   const fieldSchemaFromQuestions = doc.questions?.find(q => q.id === fieldKey);
   
-  const actualSchemaShape = doc.schema?._def?.typeName === 'ZodEffects'
-    ? (doc.schema._def.schema as typeof doc.schema).shape
-    : doc.schema?.shape;
+  const actualSchemaShape = (doc.schema as any)?._def?.typeName === 'ZodEffects'
+    ? (doc.schema as any)._def.schema.shape
+    : (doc.schema as any)?.shape;
   const fieldSchemaFromZod = (actualSchemaShape as Record<string, ZodTypeAny> | undefined)?.[fieldKey];
   
   const fieldSchema: Question | undefined = fieldSchemaFromQuestions || (fieldSchemaFromZod ? {
@@ -67,7 +67,7 @@ const FieldRenderer = React.memo(function FieldRenderer({ fieldKey, doc }: Field
     placeholder: (fieldSchemaFromZod._def as ZodDefExtras)?.placeholder || undefined,
   } : undefined);
 
-  const formStateCode = watch('state'); 
+  const formStateCode = watch('state') as string | undefined;
   const { isRequired: notaryIsRequiredByState } = useNotary(formStateCode);
   
   const { decode, data: vinData, loading: vinLoading, error: vinError } = useVinDecoder();
@@ -125,8 +125,8 @@ const FieldRenderer = React.memo(function FieldRenderer({ fieldKey, doc }: Field
             error={errors[fieldKey as keyof FormValues]?.message as string | undefined}
             placeholder={placeholderText || t('Enter address...')}
             className="max-w-sm" 
-            tooltipText={tooltipText}
-            value={field.value || ''} 
+            tooltip={tooltipText}
+            value={(field.value as string) || ''}
             onChange={(val: string, parts?: Record<string, string>) => {
                 field.onChange(val);
                  if (parts && actualSchemaShape) {
@@ -183,7 +183,7 @@ const FieldRenderer = React.memo(function FieldRenderer({ fieldKey, doc }: Field
               render={({ field }) => (
                 <Checkbox
                   id="notarization-toggle"
-                  checked={notaryIsRequiredByState || field.value}
+                  checked={notaryIsRequiredByState || (field.value as boolean)}
                   onCheckedChange={(checked) => {
                     if (notaryIsRequiredByState && !checked) return; 
                     field.onChange(checked);
@@ -235,7 +235,7 @@ const FieldRenderer = React.memo(function FieldRenderer({ fieldKey, doc }: Field
             <div className="flex items-center space-x-2 max-w-sm">
               <Switch
                 id={field.name}
-                checked={field.value}
+                checked={field.value as boolean}
                 onCheckedChange={field.onChange}
                 aria-labelledby="as_is_label"
                 aria-invalid={!!errors.as_is}

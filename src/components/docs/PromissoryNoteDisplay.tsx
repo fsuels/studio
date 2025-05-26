@@ -59,12 +59,12 @@ export default function PromissoryNoteDisplay({ locale }: PromissoryNoteDisplayP
 
   const allDisplaySections = [...informationalSections, ...faqItems];
 
-  const renderSectionContent = (section: typeof allDisplaySections[0]) => {
+  const renderSectionContent = (section: any) => {
     if (section.type === 'paragraph' && section.contentKey) {
       return <p className="text-muted-foreground">{t(section.contentKey)}</p>;
     }
     if (section.type === 'list' && section.itemsKey) {
-      const items = t(section.itemsKey, { returnObjects: true });
+      const items = t(section.itemsKey, { returnObjects: true }) as string[];
       const lastParagraph = section.lastParagraphKey ? t(section.lastParagraphKey) : null;
       if (Array.isArray(items)) {
         return (
@@ -78,7 +78,7 @@ export default function PromissoryNoteDisplay({ locale }: PromissoryNoteDisplayP
       }
     }
     if (section.type === 'ordered-list' && section.itemsKey) {
-      const items = t(section.itemsKey, { returnObjects: true });
+      const items = t(section.itemsKey, { returnObjects: true }) as string[];
       if (Array.isArray(items)) {
         return (
           <>
@@ -92,7 +92,7 @@ export default function PromissoryNoteDisplay({ locale }: PromissoryNoteDisplayP
     }
      if (section.type === 'mixed-list' && section.contentKey && section.itemsKey) {
       const introContent = t(section.contentKey);
-      const items = t(section.itemsKey, { returnObjects: true });
+      const items = t(section.itemsKey, { returnObjects: true }) as string[];
       return (
         <>
           <p className="text-muted-foreground mb-2">{introContent}</p>
@@ -105,7 +105,7 @@ export default function PromissoryNoteDisplay({ locale }: PromissoryNoteDisplayP
       );
     }
     if (section.type === 'checklist' && section.itemsKey) {
-      const items = t(section.itemsKey, { returnObjects: true });
+      const items = t(section.itemsKey, { returnObjects: true }) as string[];
       if (Array.isArray(items)) {
         return (
           <>
@@ -118,8 +118,8 @@ export default function PromissoryNoteDisplay({ locale }: PromissoryNoteDisplayP
       }
     }
     if (section.type === 'table' && section.tableKey) {
-      const headers = t(`${section.tableKey}.headers`, { returnObjects: true });
-      const rows = t(`${section.tableKey}.rows`, { returnObjects: true });
+      const headers = t(`${section.tableKey}.headers`, { returnObjects: true }) as string[];
+      const rows = t(`${section.tableKey}.rows`, { returnObjects: true }) as string[][];
       return (
         <div className="overflow-x-auto my-4">
           <Table className="min-w-full text-sm">

@@ -12,7 +12,7 @@ import { getDocTranslation } from '@/lib/i18nUtils';
 const SearchBar = React.memo(function SearchBar() {
   const { t: tHeader } = useTranslation("common");
   const router = useRouter();
-  const params = useParams();
+  const params = useParams<{ locale?: string }>();
   const locale = (params.locale as 'en' | 'es') || 'en';
   
   const [searchTerm, setSearchTerm] = useState('');

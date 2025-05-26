@@ -75,12 +75,12 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
   const actualSchemaShape = useMemo<Record<string, z.ZodTypeAny> | undefined>(() => {
     const schemaDef = doc?.schema?._def;
     if (!schemaDef) return undefined;
-    if (schemaDef.typeName === 'ZodObject') return doc.schema.shape as Record<string, z.ZodTypeAny>;
+    if (schemaDef.typeName === 'ZodObject') return (doc.schema as any).shape as Record<string, z.ZodTypeAny>;
     if (
       schemaDef.typeName === 'ZodEffects' &&
       schemaDef.schema?._def?.typeName === 'ZodObject'
     ) {
-      return schemaDef.schema.shape as Record<string, z.ZodTypeAny>;
+      return (schemaDef.schema as any).shape as Record<string, z.ZodTypeAny>;
     }
     return undefined;
   }, [doc.schema]);
@@ -269,7 +269,7 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
                             <AddressField
                               name={controllerField.name}
                               label="" 
-                              value={controllerField.value || ''}
+                              value={(controllerField.value as string) || ''}
                               onChange={(val, parts) => {
                                 controllerField.onChange(val);
                                 if (parts && actualSchemaShape) {
@@ -297,7 +297,7 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
                           render={({ field: controllerField }) => {
                             const commonInputProps = {
                               id: `review-${field.id}`,
-                              value: controllerField.value ?? '',
+                              value: String(controllerField.value ?? ''),
                               onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
                                 const valToSet: string | number = e.target.value;
                                 if (field.type === 'number') {
