@@ -1,4 +1,5 @@
-export type AnyFn<Args extends unknown[] = unknown[]> = (
+// Allow any argument types for debounced functions
+export type AnyFn<Args extends any[] = any[]> = (
   ..._args: Args
 ) => void;
 
