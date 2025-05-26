@@ -8,7 +8,7 @@ import { useFormContext } from 'react-hook-form';
 import { Loader2, AlertTriangle } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { debounce } from 'lodash-es';
-import { documentLibrary, type LegalDocument } from '@/lib/document-library';
+import { documentLibrary } from '@/lib/document-library';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
 import AutoImage from './AutoImage';
@@ -84,7 +84,7 @@ export default function PreviewPane({ locale, docId }: PreviewPaneProps) {
     fetchTemplate();
   }, [docId, locale, templatePath, docConfig, isHydrated, t]);
 
-  const updatePreviewContent = useCallback((formData: Record<string, any>, currentRawMarkdown: string) => {
+  const updatePreviewContent = useCallback((formData: Record<string, unknown>, currentRawMarkdown: string) => {
     if (!currentRawMarkdown) {
       return '';
     }
@@ -111,7 +111,7 @@ export default function PreviewPane({ locale, docId }: PreviewPaneProps) {
   }, [docConfig, locale]);
 
   const debouncedUpdatePreview = useMemo(
-    () => debounce((formData: Record<string, any>, currentRawMarkdown: string) => {
+    () => debounce((formData: Record<string, unknown>, currentRawMarkdown: string) => {
       setProcessedMarkdown(updatePreviewContent(formData, currentRawMarkdown));
     }, 300),
     [updatePreviewContent]
@@ -124,8 +124,8 @@ export default function PreviewPane({ locale, docId }: PreviewPaneProps) {
     }
     
     debouncedUpdatePreview(watch(), rawMarkdown);
-    const subscription = watch((formData) => {
-      debouncedUpdatePreview(formData as Record<string, any>, rawMarkdown);
+      const subscription = watch((formData) => {
+        debouncedUpdatePreview(formData as Record<string, unknown>, rawMarkdown);
     });
     return () => {
       subscription.unsubscribe();
@@ -165,10 +165,10 @@ export default function PreviewPane({ locale, docId }: PreviewPaneProps) {
           <ReactMarkdown
               remarkPlugins={[remarkGfm]}
               components={{
-                p: ({node, ...props}) => <p {...props} className="select-none" />,
-                h1: ({node, ...props}) => <h1 {...props} className="text-center" />,
+                p: (props) => <p {...props} className="select-none" />,
+                h1: (props) => <h1 {...props} className="text-center" />,
                 // FIXED: ensure markdown images include dimensions
-                img: ({node, ...props}) => <AutoImage {...props} className="mx-auto" />,
+                img: (props) => <AutoImage {...props} className="mx-auto" />,
               }}
           >
             {processedMarkdown}
