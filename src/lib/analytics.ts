@@ -1,7 +1,7 @@
 /* super‑light wrapper – works with GA4, Plausible, FB Pixel, ... */
 declare global {
   interface Window {
-    gtag?: (...args: unknown[]) => void;
+    gtag?: (..._args: unknown[]) => void;
   }
 }
 

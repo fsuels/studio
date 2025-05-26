@@ -15,14 +15,17 @@ const isValidDocument = (doc: unknown): doc is LegalDocument => {
 
   // Check for English translation name as the primary indicator of a valid name structure
   // OR fallback to top-level name if translations are not yet populated by the forEach loop
-  const dAny = doc as any;
+  const dRecord = doc as {
+    translations?: { en?: { name?: string } };
+    name?: string;
+  };
   const hasValidTranslationsOrName =
-    dAny &&
-    ((dAny.translations &&
-      dAny.translations.en &&
-      typeof dAny.translations.en.name === 'string' &&
-      dAny.translations.en.name.trim() !== '') ||
-      (typeof dAny.name === 'string' && dAny.name.trim() !== ''));
+    dRecord &&
+    ((dRecord.translations &&
+      dRecord.translations.en &&
+      typeof dRecord.translations.en.name === 'string' &&
+      dRecord.translations.en.name.trim() !== '') ||
+      (typeof dRecord.name === 'string' && dRecord.name.trim() !== ''));
 
   return hasId && hasCategory && hasSchema && hasValidTranslationsOrName;
 };
