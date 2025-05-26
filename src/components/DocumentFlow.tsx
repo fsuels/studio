@@ -2,7 +2,6 @@
 'use client';
 
 import React, { useState, useEffect } from 'react'; // Added useEffect
-import { ProgressBar } from '@/components/ProgressBar'; // This might be replaced by ProgressSteps
 import { StepOneInput } from '@/components/StepOneInput'; // This might be replaced or refactored
 import SlideFade from '@/components/motion/SlideFade';
 import { StepTwoInput } from '@/components/StepTwoInput'; // This might be replaced or refactored
@@ -46,7 +45,11 @@ export default function DocumentFlow({ initialDocId }: DocumentFlowProps = {}) {
 
   return (
     <div className="overflow-x-hidden">
-      <ProgressBar currentStep={step} totalSteps={3} />
+      <progress
+        value={step}
+        max={3}
+        className="fixed top-0 left-0 h-1 w-full bg-teal-200 z-30"
+      />
 
       <SlideFade key={step}>
         {step === 1 && !initialDocId && (
