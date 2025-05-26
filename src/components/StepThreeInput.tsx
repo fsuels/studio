@@ -4,6 +4,7 @@
 import React, { useState } from 'react';
 import { documentLibrary } from '@/lib/document-library';
 import { analyzeFormData } from '@/ai/flows/analyze-form-data'; // Corrected import
+import type { FormField } from '@/data/formSchemas';
 
 interface Props {
   templateId: string;
@@ -30,7 +31,7 @@ export function StepThreeInput({ templateId }: Props) {
       // Call the corrected function name
       const response = await analyzeFormData({
         documentType: template.name || '',
-        schema: template.questions || [],
+        schema: (template.questions as unknown as FormField[]) || [],
         answers: formData,
         // state: stateCode,
         // language: 'en',

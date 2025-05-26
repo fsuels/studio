@@ -39,10 +39,10 @@ const MemoizedDocLink = React.memo(function DocLink({ doc, locale, onClick, t }:
 export default function MegaMenuContent({ categories, documents, onLinkClick }: MegaMenuContentProps) {
   const { t, i18n } = useTranslation("common");
   const tSimple = React.useCallback(
-    (key: string, fallback?: string | object) =>
+    (key: string, fallback?: string | object): string =>
       typeof fallback === 'string'
-        ? t(key, { defaultValue: fallback })
-        : t(key, fallback as any),
+        ? (t(key, { defaultValue: fallback }) as string)
+        : (t(key, fallback as any) as string),
     [t]
   );
   const currentLocale = i18n.language as 'en' | 'es';

@@ -6,7 +6,7 @@ export type FormField = {
   label: string
   placeholder?: string
   required?: boolean
-  type: 'text' | 'select' | 'date' | 'number' | 'textarea' | 'boolean' | 'address'
+  type: 'text' | 'select' | 'date' | 'number' | 'textarea' | 'boolean' | 'address' | 'tel'
   options?: { value: string; label: string }[]
   tooltip?: string
   helperText?: string

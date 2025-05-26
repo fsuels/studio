@@ -1,7 +1,11 @@
 // src/app/[locale]/signwell/page.tsx
 import React from 'react';
 import SignWellClientContent from './signwell-client-content';
-import type { Metadata, PageProps } from 'next';
+import type { Metadata } from 'next';
+
+interface SignWellPageProps {
+  params: { locale: 'en' | 'es' };
+}
 import i18n from '@/lib/i18n'; // Import i18n instance to access translations server-side for metadata
 
 export async function generateStaticParams() {
@@ -30,6 +34,6 @@ export async function generateMetadata({ params }: { params: { locale: 'en' | 'e
 }
 
 
-export default function SignWellPage({ params }: PageProps<{ locale: 'en' | 'es' }>) {
+export default function SignWellPage({ params }: SignWellPageProps) {
   return <SignWellClientContent params={params} />;
 }

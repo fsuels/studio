@@ -127,10 +127,10 @@ const Step1DocumentSelector = React.memo(function Step1DocumentSelector({
 }: Step1DocumentSelectorProps) {
   const { t, i18n } = useTranslation("common");
   const tSimple = React.useCallback(
-    (key: string, fallback?: string | object) =>
+    (key: string, fallback?: string | object): string =>
       typeof fallback === 'string'
-        ? t(key, { defaultValue: fallback })
-        : t(key, fallback as any),
+        ? (t(key, { defaultValue: fallback }) as string)
+        : (t(key, fallback as any) as string),
     [t]
   );
   // 'top-docs', 'all-categories', 'documents-in-category', 'search-results'

@@ -117,8 +117,14 @@ export async function POST(
 
     let session;
     try {
-      const documentDisplayName = docConfig.name_es && effectiveLocale === 'es' ? docConfig.name_es : docConfig.name;
-      const documentDisplayDescription = docConfig.description_es && effectiveLocale === 'es' ? docConfig.description_es : docConfig.description;
+      const documentDisplayName =
+        docConfig.name_es && effectiveLocale === 'es'
+          ? docConfig.name_es
+          : docConfig.name || docConfig.id;
+      const documentDisplayDescription =
+        docConfig.description_es && effectiveLocale === 'es'
+          ? docConfig.description_es
+          : docConfig.description || '';
 
       const sessionParams: Stripe.Checkout.SessionCreateParams = {
         mode: 'payment',

@@ -7,7 +7,6 @@
 
 import { ai } from '@/ai/ai-instance';
 import { z } from 'genkit';
-import type { GenerateResponseData } from 'genkit';
 import { documentLibrary } from '@/lib/document-library';
 
 // Input Schema
@@ -111,12 +110,12 @@ async (input) => {
   const ctx = getAvailableDocumentsContext();
 
   try {
-    const response: GenerateResponseData = await prompt({
+    const response = await prompt({
       ...parsed.data,
       // Extra context isn't part of the input schema
       availableDocumentsContext: ctx,
     } as any);
-    const output = response.output as InferDocumentTypeOutput;
+    const output = (response as any).output as InferDocumentTypeOutput;
 
     if (!output) throw new Error('AI returned no output');
 
