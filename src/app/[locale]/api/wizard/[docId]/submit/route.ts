@@ -41,7 +41,8 @@ export async function POST(
   }
 
   const stripe = new Stripe(stripeSecretKey, {
-    apiVersion: '2023-10-16', 
+    // Updated to the latest Stripe API version supported by the SDK
+    apiVersion: '2025-04-30.basil',
   });
 
   try {

@@ -19,7 +19,7 @@ if (!googleApiKey || googleApiKey.trim() === '') {
     console.log(`[ai-instance.ts] SUCCESS: GOOGLE_GENAI_API_KEY environment variable found (Preview: ${keyPreview}, Length: ${googleApiKey.length}). Attempting Genkit initialization.`);
 }
 
-let ai: ReturnType<typeof genkit> | undefined;
+let ai!: ReturnType<typeof genkit>;
 
 try {
   console.log('[ai-instance.ts] Initializing Genkit with googleAI plugin...');
@@ -30,7 +30,6 @@ try {
         // Removed apiVersion to use default, ensure this is intended or specify if needed.
       }),
     ],
-    logLevel: 'debug', // Keep debug for detailed logs during troubleshooting
     // enableTracing: false, // Temporarily disabled for simplification
     // promptDir: './prompts', // Removed as not currently used by flows
   });
@@ -50,11 +49,6 @@ try {
   console.error('[ai-instance.ts] The application will likely be unstable or crash when AI features are accessed.');
   console.error('---');
   throw new Error(`Genkit initialization failed catastrophically: ${error instanceof Error ? error.message : String(error)}`);
-}
-
-if (!ai) {
-  console.error('[ai-instance.ts] CRITICAL: Genkit "ai" instance is null or undefined AFTER initialization block. This should not happen.');
-  throw new Error('FATAL: Genkit "ai" instance is unexpectedly null after initialization.');
 }
 
 console.log('[ai-instance.ts] Module execution finished. Exporting initialized "ai" instance.');
