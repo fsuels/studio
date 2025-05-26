@@ -10,7 +10,6 @@ import { Loader2, AlertTriangle } from 'lucide-react';
 import Image from 'next/image';
 import AutoImage from './AutoImage';
 import { cn } from '@/lib/utils';
-import { getTemplatePath } from '@/lib/templateUtils'; // Centralized util
 
 export interface DocumentDetailProps {
   docId: string;
@@ -133,12 +132,10 @@ const DocumentDetail = React.memo(function DocumentDetail({ docId, locale, altTe
            <ReactMarkdown
              remarkPlugins={[remarkGfm]}
            components={{
-              // eslint-disable-next-line @typescript-eslint/no-unused-vars
-              p: ({node, ...props}) => <p {...props} className="select-none" />,
-              // eslint-disable-next-line @typescript-eslint/no-unused-vars
-              h1: ({node, ...props}) => <h1 {...props} className="text-center" />,
+              p: (props) => <p {...props} className="select-none" />,
+              h1: (props) => <h1 {...props} className="text-center" />,
               // FIXED: ensure markdown images include dimensions
-              img: ({node, ...props}) => <AutoImage {...props} className="mx-auto" />,
+              img: (props) => <AutoImage {...props} className="mx-auto" />,
             }}
           >
             {md}
@@ -155,7 +152,7 @@ const DocumentDetail = React.memo(function DocumentDetail({ docId, locale, altTe
               className="object-contain w-full h-full"
               data-ai-hint="document template screenshot"
               loading="lazy"
-              onError={(e) => {
+              onError={() => {
                   console.warn(`[DocumentDetail] Image failed to load: ${imgSrc}.`);
               }}
             />
