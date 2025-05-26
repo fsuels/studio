@@ -27,8 +27,7 @@ export default function DocumentFlow({
   const [templateId, setTemplateId] = useState<string>(initialDocId ?? '');
   const [step, setStep] = useState(initialDocId ? 2 : 1); 
 
-  const [category, setCategory] = useState<string>(''); 
-  const [stateCode, setStateCode] = useState<string>('');
+  const [category, setCategory] = useState<string>('');
   
   // Effect to set initial category if docId is provided
   useEffect(() => {
@@ -68,7 +67,7 @@ export default function DocumentFlow({
         {step === 2 && (
           <StepTwoInput
             category={category || documentLibrary.find(d => d.id === initialDocId)?.category || ''}
-            onStateChange={(st) => setStateCode(st)}
+            onStateChange={() => {}}
             onSelectTemplate={(id) => {
               setTemplateId(id);
               advanceTo(3);
@@ -79,7 +78,6 @@ export default function DocumentFlow({
         {step === 3 && (
           <StepThreeInput
             templateId={templateId}
-            stateCode={stateCode}
             // The StepThreeInput or its child (like DynamicFormRenderer) would call handleWizardComplete
             // This needs to be wired up. Assuming StepThreeInput has an onSubmit prop.
             // For now, this is a conceptual link.

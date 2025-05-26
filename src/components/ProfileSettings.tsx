@@ -11,7 +11,17 @@ import { useAuth } from '@/hooks/useAuth';
 export default function ProfileSettings() {
   const { user, updateUser } = useAuth();
   const [active, setActive] = useState<'personal' | 'security' | 'notifications'>('personal');
-  const [form, setForm] = useState({
+  interface FormState {
+    name: string;
+    email: string;
+    phone: string;
+    address: string;
+    password: string;
+    twoStep: boolean;
+    textUpdates: boolean;
+  }
+
+  const [form, setForm] = useState<FormState>({
     name: user?.name || '',
     email: user?.email || '',
     phone: user?.phone || '',
@@ -21,7 +31,10 @@ export default function ProfileSettings() {
     textUpdates: user?.textUpdates || false,
   });
 
-  const handleChange = (field: string, value: any) => {
+  const handleChange = (
+    field: keyof FormState,
+    value: FormState[keyof FormState]
+  ) => {
     setForm(prev => ({ ...prev, [field]: value }));
   };
 

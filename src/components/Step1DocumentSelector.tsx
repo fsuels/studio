@@ -7,7 +7,7 @@ import { documentLibrary, type LegalDocument } from "@/lib/document-library";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowLeft, FileText, Search, Landmark, Briefcase, Home, Users, User, ScrollText, ShieldQuestion, AlertTriangle, Star } from "lucide-react"; // Added Star for top docs
+import { ArrowLeft, FileText, Search, Landmark, Briefcase, Home, Users, User, ScrollText, ShieldQuestion, AlertTriangle } from "lucide-react";
 import { track } from "@/lib/analytics";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
@@ -214,7 +214,7 @@ const Step1DocumentSelector = React.memo(function Step1DocumentSelector({
     }
 
     return docs.filter(doc => doc.id !== 'general-inquiry');
-  }, [selectedCategoryInternal, docSearch, globalSearchTerm, globalSelectedState, currentView, t, i18n.language, isHydrated]);
+  }, [selectedCategoryInternal, docSearch, globalSearchTerm, globalSelectedState, currentView, t, isHydrated]);
 
 
   const handleCategoryClick = (key: string) => {

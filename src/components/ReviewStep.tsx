@@ -3,7 +3,6 @@
 
 import React, { useMemo, useState, useCallback, useEffect } from 'react';
 import { useFormContext, Controller } from 'react-hook-form';
-import type { FieldValues } from 'react-hook-form';
 import type { LegalDocument, Question } from '@/lib/document-library';
 import { usStates } from '@/lib/document-library';
 import { prettify } from '@/lib/schema-utils';
