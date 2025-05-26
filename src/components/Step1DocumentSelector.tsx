@@ -3,7 +3,6 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import type { TFunction } from 'i18next';
 import { documentLibrary, type LegalDocument } from '@/lib/document-library';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -31,6 +30,12 @@ import {
 import { track } from '@/lib/analytics';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
+
+// Helper type for a simplified translation function used internally
+type SimpleT = (
+  key: string,
+  fallback?: string | Record<string, unknown>,
+) => string;
 
 export interface CategoryInfo {
   key: string;
@@ -121,7 +126,7 @@ const MemoizedCategoryCard = React.memo(function CategoryCard({
   category: CategoryInfo;
   onClick: () => void;
   disabled: boolean;
-  t: TFunction;
+  t: SimpleT;
 }) {
   return (
     <Button
@@ -153,7 +158,7 @@ const MemoizedDocumentCard = React.memo(function DocumentCard({
   doc: LegalDocument;
   onSelect: () => void;
   disabled: boolean;
-  t: TFunction;
+  t: SimpleT;
   i18nLanguage: string;
   placeholderNoDescription: string;
   placeholderRequiresNotarization: string;
@@ -216,7 +221,7 @@ const MemoizedTopDocChip = React.memo(function TopDocChip({
   };
   onSelect: () => void;
   disabled: boolean;
-  t: TFunction;
+  t: SimpleT;
   i18nLanguage: string;
 }) {
   return (
