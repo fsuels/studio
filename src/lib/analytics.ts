@@ -1,8 +1,8 @@
 /* super‑light wrapper – works with GA4, Plausible, FB Pixel, ... */
 declare global {
   interface Window {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    gtag?: (...args: unknown[]) => void;
+    // use an underscore to satisfy the unused-vars rule
+    gtag?: (..._args: unknown[]) => void;
   }
 }
 
