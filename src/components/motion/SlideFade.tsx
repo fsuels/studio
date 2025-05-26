@@ -4,10 +4,10 @@
 import { motion } from "framer-motion";
 import React from "react";
 
-interface SlideFadeProps {
+interface SlideFadeProps
+  extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
   delay?: number;
-  [key: string]: any;
 }
 
 const SlideFade: React.FC<SlideFadeProps> = ({

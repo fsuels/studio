@@ -3,17 +3,19 @@
 import { useEffect } from 'react';
 import type { UseFormWatch, UseFormSetValue, UseFormGetValues } from 'react-hook-form'; // Added GetValues
 
-type HookProps = {
+type HookProps<TFieldValues = Record<string, unknown>> = {
   name: string;
-  watch: UseFormWatch<any>;
-  setValue: UseFormSetValue<any>;
-  getValues: UseFormGetValues<any>; // Added getValues
+  watch: UseFormWatch<TFieldValues>;
+  setValue: UseFormSetValue<TFieldValues>;
+  getValues: UseFormGetValues<TFieldValues>; // Added getValues
 };
 
 /** Autocomplete + masking for VIN, color, year … 
  * Phone masking is handled directly in SmartInput.
 */
-export const useSmartField = ({ name, watch, setValue, getValues }: HookProps): void => {
+export const useSmartField = <TFieldValues = Record<string, unknown>>(
+  { name, watch, setValue, getValues }: HookProps<TFieldValues>,
+): void => {
   const currentValue = watch(name); 
 
   // Year – numeric only, 4 digits
