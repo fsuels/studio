@@ -8,7 +8,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Loader2, Edit, Eye } from 'lucide-react';
 
-import { documentLibrary, type LegalDocument } from '@/lib/document-library';
+import { documentLibrary } from '@/lib/document-library';
 import Breadcrumb from '@/components/Breadcrumb';
 import WizardForm from '@/components/WizardForm';
 import PreviewPane from '@/components/PreviewPane';
@@ -17,13 +17,12 @@ import { useAuth } from '@/hooks/useAuth';
 import { loadFormProgress, saveFormProgress } from '@/lib/firestore/saveFormProgress';
 import { debounce } from 'lodash-es';
 import TrustBadges from '@/components/TrustBadges';
-import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from '@/lib/utils';
 
 export default function StartWizardPageClient() {
   const params = useParams();
-  const { t, i18n, ready } = useTranslation("common"); 
+  const { t, ready } = useTranslation("common");
   const router = useRouter();
   const { isLoggedIn, user, isLoading: authIsLoading } = useAuth();
 
@@ -32,12 +31,10 @@ export default function StartWizardPageClient() {
 
   const [isMounted, setIsMounted] = useState(false); // <-- New state for mounted status
   const [isLoadingConfig, setIsLoadingConfig] = useState(true);
-  const [isHydrated, setIsHydrated] = useState(false); // Retained for clarity, though isMounted covers initial client render
   const [activeMobileTab, setActiveMobileTab] = useState<'form' | 'preview'>('form');
   
   useEffect(() => {
     setIsMounted(true); // <-- Set mounted to true on client
-    setIsHydrated(true); // Keep for consistency if other logic depends on it
   }, []);
 
   const docConfig = useMemo(() => {
@@ -45,7 +42,7 @@ export default function StartWizardPageClient() {
     return documentLibrary.find(d => d.id === docIdFromPath);
   }, [docIdFromPath]);
 
-  const methods = useForm<z.infer<any>>({
+  const methods = useForm<z.infer<z.ZodTypeAny>>({
     defaultValues: {},
     mode: 'onBlur',
     resolver: docConfig?.schema ? zodResolver(docConfig.schema) : undefined,
@@ -77,7 +74,7 @@ export default function StartWizardPageClient() {
     if (!docConfig?.id || !isMounted || authIsLoading || isLoadingConfig || !locale || !ready) return;
     
     async function loadDraft() {
-      let draftData: Record<string, any> = {};
+      let draftData: Record<string, unknown> = {};
       try {
         if (isLoggedIn && user?.uid) {
           draftData = await loadFormProgress({ userId: user.uid, docType: docConfig!.id, state: locale });
@@ -99,14 +96,15 @@ export default function StartWizardPageClient() {
     loadDraft();
   }, [docConfig, locale, isMounted, reset, authIsLoading, isLoggedIn, user, isLoadingConfig, ready]);
 
-  const debouncedSave = useCallback(
-    debounce(async (data: Record<string, any>) => {
+  const debouncedSave = useMemo(
+    () =>
+      debounce(async (data: Record<string, unknown>) => {
       if (!docConfig?.id || authIsLoading || !isMounted || Object.keys(data).length === 0 || isLoadingConfig || !locale || !ready) return;
       
       const relevantDataToSave = Object.keys(data).reduce((acc, key) => {
         if (data[key] !== undefined) { acc[key] = data[key]; }
         return acc;
-      }, {} as Record<string,any>);
+      }, {} as Record<string, unknown>);
 
       if (Object.keys(relevantDataToSave).length === 0) return;
 
@@ -116,15 +114,15 @@ export default function StartWizardPageClient() {
          localStorage.setItem(`draft-${docConfig!.id}-${locale}`, JSON.stringify(relevantDataToSave));
       }
       console.log('[WizardForm] Autosaved draft for:', docConfig!.id, locale, relevantDataToSave);
-    }, 1000),
-    [isLoggedIn, user?.uid, docConfig, locale, authIsLoading, isMounted, isLoadingConfig, ready] 
+      }, 1000),
+    [isLoggedIn, user?.uid, docConfig, locale, authIsLoading, isMounted, isLoadingConfig, ready]
   );
 
   useEffect(() => {
     if (!docConfig?.id || authIsLoading || !isMounted || !watch || isLoadingConfig || !locale || !ready) return () => {};
     
     const subscription = watch((values) => {
-       debouncedSave(values as Record<string, any>);
+       debouncedSave(values as Record<string, unknown>);
     });
     return () => {
       subscription.unsubscribe();
