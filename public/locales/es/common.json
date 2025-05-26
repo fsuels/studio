@@ -241,5 +241,43 @@
   "Search Results": "Resultados de Búsqueda",
   "Showing documents matching your search and state criteria.": "Mostrando documentos que coinciden con tu búsqueda y criterios de estado.",
   "TopDocsChips.loading": "Cargando documentos populares...",
-  "TopDocsChips.title": "Documentos Legales Populares"
+  "TopDocsChips.title": "Documentos Legales Populares",
+  "features": {
+    "title": "Características Clave",
+    "subtitle": "Potentes herramientas para simplificar el flujo de tus documentos legales.",
+    "items": {
+      "ai": {
+        "title": "Inferencia de Documentos con IA",
+        "desc": "Sugerencias inteligentes basadas en tus necesidades."
+      },
+      "forms": {
+        "title": "Cuestionarios Dinámicos",
+        "desc": "Preguntas guiadas adaptadas al documento elegido."
+      },
+      "local": {
+        "title": "Cláusulas Específicas por Estado",
+        "desc": "Documentos adaptados a las leyes estatales de EE.UU."
+      },
+      "bilingual": {
+        "title": "Soporte Bilingüe (EN/ES)",
+        "desc": "Interfaz completa y soporte en inglés y español."
+      },
+      "pdf": {
+        "title": "Generación Instantánea de PDF",
+        "desc": "Previsualiza y descarga PDFs profesionales."
+      },
+      "sharing": {
+        "title": "Compartir de Forma Segura",
+        "desc": "Comparte documentos con enlaces de tiempo limitado (próximamente)."
+      },
+      "dashboard": {
+        "title": "Panel de Usuario",
+        "desc": "Administra tus documentos y configuraciones fácilmente."
+      },
+      "security": {
+        "title": "Privacidad y Seguridad",
+        "desc": "Datos cifrados y prácticas conformes."
+      }
+    }
+  }
 }
