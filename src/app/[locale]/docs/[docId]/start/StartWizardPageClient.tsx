@@ -140,8 +140,8 @@ export default function StartWizardPageClient() {
 
   const debouncedSave = useMemo(
     () =>
-      debounce<(data: Record<string, unknown>) => void>(
-        (data) => {
+      debounce(
+        (data: Record<string, unknown>) => {
           // Wrap async logic to satisfy debounce's void return type
           void (async () => {
           if (
