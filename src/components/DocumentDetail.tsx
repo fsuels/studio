@@ -12,7 +12,7 @@ import AutoImage from './AutoImage';
 import { cn } from '@/lib/utils';
 import { getTemplatePath } from '@/lib/templateUtils'; // Centralized util
 
-interface DocumentDetailProps {
+export interface DocumentDetailProps {
   docId: string;
   locale: 'en' | 'es';
   altText?: string;
