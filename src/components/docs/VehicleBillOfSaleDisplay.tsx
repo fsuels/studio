@@ -406,7 +406,7 @@ export default function VehicleBillOfSaleDisplay({
 
       <Accordion
         type="multiple"
-        defaultValue={['faq1', 'faq2', 'faq3']}
+        defaultValue={['what-is', 'why', 'covered']}
         className="w-full space-y-4 mb-10"
       >
         {allSections.map((section) => (
