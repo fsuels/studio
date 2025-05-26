@@ -13,6 +13,8 @@ import {
   Loader2,
   Star,
   ShieldCheck,
+  Clock,
+  RotateCcw,
   Zap,
   HelpCircle,
   Award,
@@ -363,9 +365,9 @@ export default function DocPageClient({
                 </CardHeader>
                 <CardContent className="space-y-3">
               <div className="flex items-baseline justify-between">
-                <span className="text-3xl font-bold text-foreground">
+                <p className="text-2xl font-bold">
                   ${docConfig.basePrice.toFixed(2)}
-                </span>
+                </p>
                 <span className="text-sm text-muted-foreground">
                   {t('pricing.perDocument', { defaultValue: 'per document' })}
                 </span>
@@ -376,6 +378,17 @@ export default function DocPageClient({
                   defaultValue: `Compare to typical attorney fees of $${competitorPrice.toFixed(2)}+`,
                 })}
               </p>
+              <ul className="mt-3 space-y-1 text-sm">
+                <li className="flex items-center gap-2">
+                  <ShieldCheck className="h-4 w-4 text-teal-600" /> Attorney-approved
+                </li>
+                <li className="flex items-center gap-2">
+                  <Clock className="h-4 w-4 text-teal-600" /> Ready in 3 minutes
+                </li>
+                <li className="flex items-center gap-2">
+                  <RotateCcw className="h-4 w-4 text-teal-600" /> 100 % money-back guarantee
+                </li>
+              </ul>
               <Button
                 size="lg"
                 className="w-full mt-2"
