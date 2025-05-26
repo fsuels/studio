@@ -1,7 +1,12 @@
 export interface SignWellDocumentResponse {
   documentId: string;
   signingUrl?: string;
-  raw?: any;
+  raw?: unknown;
+}
+
+export interface SignWellStatusResponse {
+  status: string;
+  raw?: unknown;
 }
 
 /**
@@ -24,10 +29,13 @@ export async function createSignWellDocument(pdfBase64: string, fileName = 'docu
 /**
  * Checks the status of a SignWell document.
  */
-export async function fetchSignWellStatus(documentId: string): Promise<any> {
+export async function fetchSignWellStatus(
+  documentId: string,
+): Promise<SignWellStatusResponse> {
   const res = await fetch(`/api/signwell/${documentId}`);
   if (!res.ok) {
     throw new Error(`Status check failed: ${res.status}`);
   }
-  return res.json();
+  const data = await res.json();
+  return data as SignWellStatusResponse;
 }
