@@ -15,7 +15,7 @@ import PreviewPane from '@/components/PreviewPane';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/hooks/useAuth';
 import { loadFormProgress, saveFormProgress } from '@/lib/firestore/saveFormProgress';
-import { debounce } from 'lodash-es';
+import { debounce } from '@/lib/debounce';
 import TrustBadges from '@/components/TrustBadges';
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from '@/lib/utils';
