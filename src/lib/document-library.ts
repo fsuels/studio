@@ -8,10 +8,11 @@ import * as ca_docs_barrel from './documents/ca';
 
 const isValidDocument = (doc: unknown): doc is LegalDocument => {
   const d = doc as Partial<LegalDocument>;
-  const hasId = d && typeof d.id === 'string' && d.id.trim() !== '';
-  const hasCategory =
-    d && typeof d.category === 'string' && d.category.trim() !== '';
-  const hasSchema = d && d.schema && typeof d.schema.parse === 'function';
+  const hasId = !!(d && typeof d.id === 'string' && d.id.trim() !== '');
+  const hasCategory = !!(
+    d && typeof d.category === 'string' && d.category.trim() !== ''
+  );
+  const hasSchema = !!(d && d.schema && typeof d.schema.parse === 'function');
 
   // Check for English translation name as the primary indicator of a valid name structure
   // OR fallback to top-level name if translations are not yet populated by the forEach loop
@@ -19,13 +20,14 @@ const isValidDocument = (doc: unknown): doc is LegalDocument => {
     translations?: { en?: { name?: string } };
     name?: string;
   };
-  const hasValidTranslationsOrName =
+  const hasValidTranslationsOrName = !!(
     dRecord &&
     ((dRecord.translations &&
       dRecord.translations.en &&
       typeof dRecord.translations.en.name === 'string' &&
       dRecord.translations.en.name.trim() !== '') ||
-      (typeof dRecord.name === 'string' && dRecord.name.trim() !== ''));
+      (typeof dRecord.name === 'string' && dRecord.name.trim() !== ''))
+  );
 
   return hasId && hasCategory && hasSchema && hasValidTranslationsOrName;
 };

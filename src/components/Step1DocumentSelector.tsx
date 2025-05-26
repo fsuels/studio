@@ -247,7 +247,7 @@ const Step1DocumentSelector = React.memo(function Step1DocumentSelector({
 }: Step1DocumentSelectorProps) {
   const { t, i18n } = useTranslation('common');
   const tSimple = React.useCallback(
-    (key: string, fallback?: string | Record<string, unknown>): string =>
+    (key: string, fallback?: string | object): string =>
       typeof fallback === 'string'
         ? (t(key, { defaultValue: fallback }) as string)
         : (t(key, fallback as Record<string, unknown>) as string),

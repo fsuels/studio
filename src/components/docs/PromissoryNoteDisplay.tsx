@@ -161,12 +161,21 @@ export default function PromissoryNoteDisplay({
   const allDisplaySections = [...informationalSections, ...faqItems];
 
   interface DisplaySection {
-    type: 'paragraph' | 'list' | 'ordered-list' | 'table';
+    type:
+      | 'paragraph'
+      | 'list'
+      | 'ordered-list'
+      | 'table'
+      | 'mixed-list'
+      | 'checklist'
+      | 'list-cta';
     contentKey?: string;
     itemsKey?: string;
     lastParagraphKey?: string;
     totalTimeKey?: string;
     tableKey?: string;
+    printNoteKey?: string;
+    ctaKey?: string;
   }
 
   const renderSectionContent = (section: DisplaySection) => {

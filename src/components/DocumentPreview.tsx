@@ -6,7 +6,7 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { useTranslation } from 'react-i18next';
 import Image from 'next/image';
-import AutoImage from './AutoImage';
+import AutoImage, { type AutoImageProps } from './AutoImage';
 import { Loader2 } from 'lucide-react';
 
 interface DocumentPreviewProps {
@@ -116,7 +116,10 @@ const DocumentPreview = React.memo(function DocumentPreview({
               p: (props) => <p {...props} className="select-none" />,
               // FIXED: ensure images have explicit dimensions
               img: (props: React.ImgHTMLAttributes<HTMLImageElement>) => (
-                <AutoImage {...props} className="mx-auto" />
+                <AutoImage
+                  {...(props as unknown as AutoImageProps)}
+                  className="mx-auto"
+                />
               ),
             }}
           >

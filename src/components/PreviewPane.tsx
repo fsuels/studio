@@ -11,7 +11,7 @@ import { debounce } from '@/lib/debounce';
 import { documentLibrary } from '@/lib/document-library';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
-import AutoImage from './AutoImage';
+import AutoImage, { type AutoImageProps } from './AutoImage';
 
 interface PreviewPaneProps {
   locale: 'en' | 'es';
@@ -133,14 +133,13 @@ export default function PreviewPane({ locale, docId }: PreviewPaneProps) {
 
   const debouncedUpdatePreview = useMemo(
     () =>
-      debounce(
-        (formData: Record<string, unknown>, currentRawMarkdown: string) => {
-          setProcessedMarkdown(
-            updatePreviewContent(formData, currentRawMarkdown),
-          );
-        },
-        300,
-      ),
+      debounce<
+        (formData: Record<string, unknown>, currentRawMarkdown: string) => void
+      >((formData, currentRawMarkdown) => {
+        setProcessedMarkdown(
+          updatePreviewContent(formData, currentRawMarkdown),
+        );
+      }, 300),
     [updatePreviewContent],
   );
 
@@ -215,9 +214,12 @@ export default function PreviewPane({ locale, docId }: PreviewPaneProps) {
               p: (props) => <p {...props} className="select-none" />,
               h1: (props) => <h1 {...props} className="text-center" />,
               // FIXED: ensure markdown images include dimensions
-              img: (props: React.ImgHTMLAttributes<HTMLImageElement>) => (
-                <AutoImage {...props} className="mx-auto" />
-              ),
+                img: (props: React.ImgHTMLAttributes<HTMLImageElement>) => (
+                  <AutoImage
+                    {...(props as unknown as AutoImageProps)}
+                    className="mx-auto"
+                  />
+                ),
             }}
           >
             {processedMarkdown}
