@@ -133,16 +133,14 @@ export default function PreviewPane({ locale, docId }: PreviewPaneProps) {
 
   const debouncedUpdatePreview = useMemo(
     () =>
-      debounce<
-        (
-          _formData: Record<string, unknown>,
-          _currentRawMarkdown: string,
-        ) => void
-      >((formData, currentRawMarkdown) => {
-        setProcessedMarkdown(
-          updatePreviewContent(formData, currentRawMarkdown),
-        );
-      }, 300),
+      debounce<[Record<string, unknown>, string]>(
+        (formData, currentRawMarkdown) => {
+          setProcessedMarkdown(
+            updatePreviewContent(formData, currentRawMarkdown),
+          );
+        },
+        300,
+      ),
     [updatePreviewContent],
   );
 
@@ -153,7 +151,10 @@ export default function PreviewPane({ locale, docId }: PreviewPaneProps) {
       return;
     }
 
-    debouncedUpdatePreview(watch(), rawMarkdown);
+    debouncedUpdatePreview(
+      watch() as Record<string, unknown>,
+      rawMarkdown,
+    );
     const subscription = watch((formData) => {
       debouncedUpdatePreview(formData as Record<string, unknown>, rawMarkdown);
     });
