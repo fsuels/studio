@@ -18,6 +18,18 @@ import { Button } from '@/components/ui/button';
 
 const GooglePlacesLoader = dynamic(() => import('./GooglePlacesLoader'), { ssr: false });
 
+interface WindowWithGoogle extends Window {
+  google?: {
+    maps?: {
+      places?: unknown;
+    };
+  };
+}
+
+interface InputWithAutocomplete extends HTMLInputElement {
+  googleAutocomplete?: unknown;
+}
+
 interface AddressFieldProps {
   name: string;
   label: string; // Expected to be a translation key
@@ -48,14 +60,15 @@ const AddressField = React.memo(function AddressField({
 
   const { ref: rhfRef, ...restOfRegister } = register(name, { required });
 
-  useEffect(() => {
-    let autocomplete: google.maps.places.Autocomplete | undefined;
-    let intervalId: NodeJS.Timeout | undefined;
+    useEffect(() => {
+      let autocomplete: google.maps.places.Autocomplete | undefined;
+      let intervalId: NodeJS.Timeout | undefined;
 
     const initializeAutocomplete = () => {
-      if (!(window as any).google?.maps?.places || !inputRef.current) {
+      const win = window as WindowWithGoogle;
+      if (!win.google?.maps?.places || !inputRef.current) {
         intervalId = setInterval(() => {
-          if ((window as any).google?.maps?.places && inputRef.current) {
+          if ((window as WindowWithGoogle).google?.maps?.places && inputRef.current) {
             clearInterval(intervalId);
             intervalId = undefined;
             initializeAutocompleteInternal();
@@ -104,20 +117,20 @@ const AddressField = React.memo(function AddressField({
         if (inputRef.current) {
           inputRef.current.value = formattedAddress;
         }
-      });
-      (inputRef.current as any).googleAutocomplete = autocomplete;
-    };
+        });
+        (inputRef.current as InputWithAutocomplete).googleAutocomplete = autocomplete;
+      };
 
     initializeAutocomplete();
 
-    return () => {
-      if (intervalId) clearInterval(intervalId);
-      const currentInputRef = inputRef.current;
-      if (currentInputRef && (currentInputRef as any).googleAutocomplete) {
-        const pacContainers = document.querySelectorAll('.pac-container');
-        pacContainers.forEach(container => container.remove());
-      }
-    };
+      return () => {
+        if (intervalId) clearInterval(intervalId);
+        const currentInputRef = inputRef.current as InputWithAutocomplete | null;
+        if (currentInputRef && currentInputRef.googleAutocomplete) {
+          const pacContainers = document.querySelectorAll('.pac-container');
+          pacContainers.forEach(container => container.remove());
+        }
+      };
   }, [name, rhfSetValue, controlledOnChange]);
 
   const handleLocalInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
