@@ -11,9 +11,16 @@ export default function TestimonialsCarousel({
   const [reviews, setReviews] = useState<Review[] | null>(null);
 
   useEffect(() => {
+    console.log('templateId:', templateId);
     import(`@/data/reviews/${templateId}.ts`)
-      .then((mod) => setReviews(mod.reviews as Review[]))
-      .catch(() => setReviews([]));
+      .then((mod) => {
+        console.log('Module loaded:', mod);
+        setReviews(mod.reviews as Review[]);
+      })
+      .catch((error) => {
+        console.error('Error loading reviews:', error);
+        setReviews([]);
+      });
   }, [templateId]);
 
   if (reviews === null) return <Spinner className="my-12" />;
