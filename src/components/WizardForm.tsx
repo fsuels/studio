@@ -8,18 +8,11 @@ import React, {
   useCallback,
   useMemo,
 } from "react";
-import {
-  FormProvider,
-  Controller,
-  useFormContext,
-  useForm,
-} from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { Controller, useFormContext } from "react-hook-form";
 import axios, { AxiosError } from "axios";
-import { useRouter, useParams } from "next/navigation";
 import Link from "next/link"; // Added Link
 import { z } from "zod";
-import { Loader2, Info } from "lucide-react";
+import { Loader2 } from "lucide-react";
 
 import type { LegalDocument } from "@/lib/document-library";
 import { useToast } from "@/hooks/use-toast";
@@ -35,11 +28,6 @@ import AddressField from "@/components/AddressField";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import TrustBadges from "@/components/TrustBadges";
 import ReviewStep from "@/components/ReviewStep";
-import {
-  saveFormProgress,
-  loadFormProgress,
-} from "@/lib/firestore/saveFormProgress";
-import { debounce } from "lodash-es";
 
 interface WizardFormProps {
   locale: "en" | "es";
@@ -53,11 +41,8 @@ export default function WizardForm({
   onComplete,
 }: WizardFormProps) {
   const { t } = useTranslation("common");
-  const router = useRouter();
-  // Params not directly used here but kept if needed for other logic based on original structure.
-  // const params = useParams();
   const { toast } = useToast();
-  const { isLoggedIn, isLoading: authIsLoading, user } = useAuth();
+  const { isLoggedIn, isLoading: authIsLoading } = useAuth();
 
   const [isHydrated, setIsHydrated] = useState(false);
   const [showAuthModal, setShowAuthModal] = useState(false);
@@ -70,14 +55,11 @@ export default function WizardForm({
     getValues,
     trigger,
     control,
-    watch,
     setValue,
-    reset,
     formState: {
       errors,
       isSubmitting: formIsSubmitting,
       isValid: isFormValid,
-      dirtyFields,
     },
   } = useFormContext<z.infer<typeof doc.schema>>();
 
@@ -85,20 +67,20 @@ export default function WizardForm({
     setIsHydrated(true);
   }, []);
 
-  const actualSchemaShape = useMemo(() => {
+  const actualSchemaShape = useMemo<Record<string, z.ZodTypeAny> | undefined>(() => {
     const def = doc.schema?._def;
     if (!def) return undefined;
     return def.typeName === "ZodEffects"
-      ? def.schema.shape
+      ? (def.schema.shape as Record<string, z.ZodTypeAny>)
       : def.typeName === "ZodObject"
-        ? def.shape
+        ? (def.shape as Record<string, z.ZodTypeAny>)
         : undefined;
   }, [doc.schema]);
 
   const steps = useMemo(() => {
     if (doc.questions && doc.questions.length > 0) {
       return doc.questions.map((q) => {
-        const fieldDef = (actualSchemaShape as any)?.[q.id]?._def;
+        const fieldDef = actualSchemaShape?.[q.id]?._def;
         const labelFromDescription =
           fieldDef?.description ?? fieldDef?.schema?._def?.description;
 
@@ -123,7 +105,7 @@ export default function WizardForm({
     if (!actualSchemaShape) return [];
 
     return Object.keys(actualSchemaShape).map((key) => {
-      const fieldDef = (actualSchemaShape as any)[key]?._def;
+      const fieldDef = actualSchemaShape[key]?._def;
       const labelFromDescription =
         fieldDef?.description ?? fieldDef?.schema?._def?.description;
       const fieldLabel = labelFromDescription
@@ -171,13 +153,10 @@ export default function WizardForm({
         return;
       }
       try {
-        const response = await axios.post(
-          `/${locale}/api/wizard/${doc.id}/submit`,
-          {
-            values: getValues(),
-            locale,
-          },
-        );
+        await axios.post(`/${locale}/api/wizard/${doc.id}/submit`, {
+          values: getValues(),
+          locale,
+        });
         localStorage.removeItem(`draft-${doc.id}-${locale}`);
         onComplete("/dashboard");
       } catch (error) {
@@ -185,7 +164,7 @@ export default function WizardForm({
         if (axios.isAxiosError(error)) {
           const axiosError = error as AxiosError<{
             error?: string;
-            details?: any;
+            details?: unknown;
             code?: string;
           }>;
           const apiErrorMsg =
@@ -233,7 +212,9 @@ export default function WizardForm({
     }
 
     if (currentStepFieldKey) {
-      isValid = await trigger(currentStepFieldKey as any);
+      isValid = await trigger(
+        currentStepFieldKey as keyof z.infer<typeof doc.schema>,
+      );
     } else if (totalSteps > 0 && currentStepIndex < totalSteps) {
       console.error(
         "Error: currentStepFieldKey is undefined but totalSteps > 0. currentStepIndex:",
@@ -315,19 +296,19 @@ export default function WizardForm({
     currentField &&
     currentField.id &&
     actualSchemaShape &&
-    (actualSchemaShape as any)[currentField.id] ? (
+    actualSchemaShape[currentField.id] ? (
       <div className="mt-6 space-y-6 min-h-[200px]">
-        {(actualSchemaShape as any)?.[currentField.id] &&
-        ((actualSchemaShape as any)[currentField.id] instanceof z.ZodObject ||
-          ((actualSchemaShape as any)[currentField.id]._def &&
-            (actualSchemaShape as any)[currentField.id]._def.typeName ===
+        {actualSchemaShape[currentField.id] &&
+        (actualSchemaShape[currentField.id] instanceof z.ZodObject ||
+          ("_def" in actualSchemaShape[currentField.id] &&
+            (actualSchemaShape[currentField.id] as z.ZodTypeAny)._def.typeName ===
               "ZodObject")) &&
         (currentField.id.includes("_address") ||
           currentField.id.includes("Address")) ? (
           <Controller
             key={`${currentField.id}-controller`}
             control={control}
-            name={currentField.id as any}
+            name={currentField.id as keyof z.infer<typeof doc.schema>}
             render={({
               field: { onChange: rhfOnChange, value: rhfValue, name: rhfName },
             }) => (
@@ -337,11 +318,13 @@ export default function WizardForm({
                 required={
                   (
                     doc.questions?.find((q) => q.id === currentField.id) ||
-                    (actualSchemaShape as any)?.[currentField.id]?._def
+                    actualSchemaShape[currentField.id]?._def
                   )?.required
                 }
                 error={
-                  errors[currentField.id as any]?.message as string | undefined
+                  errors[
+                    currentField.id as keyof z.infer<typeof doc.schema>
+                  ]?.message as string | undefined
                 }
                 placeholder={t("Enter address...")}
                 value={rhfValue || ""}
@@ -351,18 +334,18 @@ export default function WizardForm({
                     const prefix =
                       currentField.id.replace(/_address$/i, "") ||
                       currentField.id.replace(/Address$/i, "");
-                    if ((actualSchemaShape as any)?.[`${prefix}_city`])
-                      setValue(`${prefix}_city`, parts.city, {
+                    if (actualSchemaShape[`${prefix}_city`])
+                      setValue(`${prefix}_city` as keyof z.infer<typeof doc.schema>, parts.city, {
                         shouldValidate: true,
                         shouldDirty: true,
                       });
-                    if ((actualSchemaShape as any)?.[`${prefix}_state`])
-                      setValue(`${prefix}_state`, parts.state, {
+                    if (actualSchemaShape[`${prefix}_state`])
+                      setValue(`${prefix}_state` as keyof z.infer<typeof doc.schema>, parts.state, {
                         shouldValidate: true,
                         shouldDirty: true,
                       });
-                    if ((actualSchemaShape as any)?.[`${prefix}_postal_code`])
-                      setValue(`${prefix}_postal_code`, parts.postalCode, {
+                    if (actualSchemaShape[`${prefix}_postal_code`])
+                      setValue(`${prefix}_postal_code` as keyof z.infer<typeof doc.schema>, parts.postalCode, {
                         shouldValidate: true,
                         shouldDirty: true,
                       });
