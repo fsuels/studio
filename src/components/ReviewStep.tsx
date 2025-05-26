@@ -36,7 +36,7 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import { Label } from '@/components/ui/label';
-import type { z } from 'zod';
+import { z, type AnyZodObject } from 'zod';
 
 interface ReviewStepProps {
   doc: LegalDocument;
@@ -90,12 +90,12 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
     const schemaDef = doc?.schema?._def;
     if (!schemaDef) return undefined;
     if (schemaDef.typeName === 'ZodObject')
-      return (doc.schema as any).shape as Record<string, z.ZodTypeAny>;
+      return (doc.schema as unknown as AnyZodObject).shape as Record<string, z.ZodTypeAny>;
     if (
       schemaDef.typeName === 'ZodEffects' &&
       schemaDef.schema?._def?.typeName === 'ZodObject'
     ) {
-      return (schemaDef.schema as any).shape as Record<string, z.ZodTypeAny>;
+      return (schemaDef.schema as unknown as AnyZodObject).shape as Record<string, z.ZodTypeAny>;
     }
     return undefined;
   }, [doc.schema]);

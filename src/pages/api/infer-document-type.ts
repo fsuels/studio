@@ -37,12 +37,10 @@ export default async function handler(
   if (req.method !== 'POST') {
     console.warn(`${logPrefix} Method Not Allowed: ${req.method}`);
     res.setHeader('Allow', ['POST']);
-    return res
-      .status(405)
-      .json({
-        error: `Method ${req.method} Not Allowed`,
-        code: 'METHOD_NOT_ALLOWED_INFERENCE',
-      });
+    return res.status(405).json({
+      error: `Method ${req.method} Not Allowed`,
+      code: 'METHOD_NOT_ALLOWED_INFERENCE',
+    });
   }
 
   try {
