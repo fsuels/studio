@@ -134,7 +134,10 @@ export default function PreviewPane({ locale, docId }: PreviewPaneProps) {
   const debouncedUpdatePreview = useMemo(
     () =>
       debounce<
-        (formData: Record<string, unknown>, currentRawMarkdown: string) => void
+        (
+          _formData: Record<string, unknown>,
+          _currentRawMarkdown: string,
+        ) => void
       >((formData, currentRawMarkdown) => {
         setProcessedMarkdown(
           updatePreviewContent(formData, currentRawMarkdown),
