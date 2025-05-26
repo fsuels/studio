@@ -8,10 +8,7 @@ import { cn } from "@/lib/utils";
 const Progress = React.forwardRef<
   React.ElementRef<typeof ProgressPrimitive.Root>,
   React.ComponentPropsWithoutRef<typeof ProgressPrimitive.Root>
->(({ className, value, ...props }, ref) => {
-  const restProps: Record<string, any> = { ...props };
-  const ariaLabel = restProps["aria-label"] ?? "Progress";
-  delete restProps["aria-label"];
+>(({ className, value, "aria-label": ariaLabel = "Progress", ...restProps }, ref) => {
   return (
     <ProgressPrimitive.Root
       ref={ref}

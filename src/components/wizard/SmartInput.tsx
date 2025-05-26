@@ -54,7 +54,7 @@ const SmartInput = React.memo(React.forwardRef<HTMLInputElement, SmartInputProps
     }, [watchedRHFValue, type, displayValue]); 
 
     const handleInputChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-      let currentValue = event.target.value;
+      const currentValue = event.target.value;
       let valueToSetInRHF = currentValue;
 
       if (type === 'tel') {
@@ -66,7 +66,10 @@ const SmartInput = React.memo(React.forwardRef<HTMLInputElement, SmartInputProps
       }
       
       setValue(rhfName, valueToSetInRHF, { shouldValidate: true, shouldDirty: true });
-    }, [type, rhfName, setValue]);
+      if (rhfInternalOnChangeFromProps) {
+        rhfInternalOnChangeFromProps(event);
+      }
+    }, [type, rhfName, setValue, rhfInternalOnChangeFromProps]);
 
 
     const handleBlur = useCallback((event: React.FocusEvent<HTMLInputElement>) => {

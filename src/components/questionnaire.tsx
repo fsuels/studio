@@ -10,12 +10,12 @@ import { Textarea } from '@/components/ui/textarea'; // Import Textarea
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select" // Import Select
 import { Loader2, Edit2, Lock, Check } from 'lucide-react'; // Updated icons
 import { useToast } from '@/hooks/use-toast';
-import { documentLibrary, usStates, type Question } from '@/lib/document-library'; // Import library and Question type
+import { documentLibrary, type Question } from '@/lib/document-library'; // Import library and Question type
 
 interface QuestionnaireProps {
   documentType: string | null; // The inferred document type NAME (e.g., "Residential Lease Agreement")
   selectedState?: string | null; // The selected US state code (e.g., "CA")
-  onAnswersSubmit: (answers: Record<string, any>) => void; // Callback
+  onAnswersSubmit: (answers: Record<string, unknown>) => void; // Callback
   isReadOnly?: boolean; // Optional prop to make the form read-only
 }
 
@@ -25,7 +25,7 @@ const QuestionnaireIcon = () => (
 );
 
 export function Questionnaire({ documentType, selectedState, onAnswersSubmit, isReadOnly = false }: QuestionnaireProps) {
-  const [answers, setAnswers] = useState<Record<string, any>>({});
+  const [answers, setAnswers] = useState<Record<string, unknown>>({});
   const [isEditing, setIsEditing] = useState<Record<string, boolean>>({}); // Track editing state per field
   const [isLoading, setIsLoading] = useState(false);
   const [hasSubmitted, setHasSubmitted] = useState(false); // Track if submitted
@@ -71,7 +71,7 @@ export function Questionnaire({ documentType, selectedState, onAnswersSubmit, is
   }, [documentType, selectedDocument, selectedState, isReadOnly]); // Re-run when these change
 
 
-  const handleInputChange = (id: string, value: any) => {
+  const handleInputChange = (id: string, value: unknown) => {
     if (isReadOnly || !isEditing[id]) return; // Prevent changes if read-only or not editing this field
     setAnswers(prev => ({ ...prev, [id]: value }));
   };
