@@ -10,7 +10,7 @@ const isValidDocument = (doc: unknown): doc is LegalDocument => {
   const d = doc as Partial<LegalDocument>
   const hasId = d && typeof d.id === 'string' && d.id.trim() !== ''
   const hasCategory = d && typeof d.category === 'string' && d.category.trim() !== ''
-  const hasSchema = d && (d as any).schema && typeof (d as any).schema.parse === 'function'
+  const hasSchema = d && d.schema && typeof d.schema.parse === 'function'
 
   // Check for English translation name as the primary indicator of a valid name structure
   // OR fallback to top-level name if translations are not yet populated by the forEach loop

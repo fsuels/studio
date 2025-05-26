@@ -9,7 +9,12 @@ interface AutoImageProps extends Omit<ImageProps, 'width' | 'height'> {
   height?: number;
 }
 
-const AutoImage: React.FC<AutoImageProps> = ({ width, height, ...props }) => {
+const AutoImage: React.FC<AutoImageProps> = ({
+  width,
+  height,
+  alt = '',
+  ...props
+}) => {
   const [dims, setDims] = useState<{ width: number; height: number } | null>(null);
 
   useEffect(() => {
@@ -26,7 +31,7 @@ const AutoImage: React.FC<AutoImageProps> = ({ width, height, ...props }) => {
   const finalWidth = width ?? dims?.width ?? 1;
   const finalHeight = height ?? dims?.height ?? 1;
 
-  return <Image width={finalWidth} height={finalHeight} {...props} />;
+  return <Image width={finalWidth} height={finalHeight} alt={alt} {...props} />;
 };
 
 export default AutoImage;

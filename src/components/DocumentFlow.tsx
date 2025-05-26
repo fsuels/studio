@@ -8,20 +8,16 @@ import { StepOneInput } from '@/components/StepOneInput'; // This might be repla
 import SlideFade from '@/components/motion/SlideFade';
 import { StepTwoInput } from '@/components/StepTwoInput'; // This might be replaced or refactored
 import { StepThreeInput } from '@/components/StepThreeInput'; // This might be replaced or refactored
-import { useRouter } from 'next/navigation'; 
-import { useTranslation } from 'react-i18next'; 
+import { useTranslation } from 'react-i18next';
 import { documentLibrary } from '@/lib/document-library'; // Import documentLibrary
 
 interface DocumentFlowProps {
   initialDocId?: string;
-  initialLocale?: 'en' | 'es';
 }
 
 export default function DocumentFlow({
   initialDocId,
-  initialLocale = 'en',
-}: DocumentFlowProps = {}) { 
-  const router = useRouter();
+}: DocumentFlowProps = {}) {
   useTranslation("common");
 
   const [templateId, setTemplateId] = useState<string>(initialDocId ?? '');

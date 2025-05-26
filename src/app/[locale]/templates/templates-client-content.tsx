@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import SearchBar from '@/components/SearchBar';
 import { CATEGORY_LIST } from '@/components/Step1DocumentSelector';
