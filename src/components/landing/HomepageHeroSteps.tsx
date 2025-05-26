@@ -4,7 +4,7 @@
 import React, { useState, useEffect } from 'react'; 
 import { useTranslation } from 'react-i18next'
 import { Button } from '@/components/ui/button'
-import { CheckCircle, ShieldCheck, Rocket } from 'lucide-react'
+import { ShieldCheck } from 'lucide-react'
 import { motion } from 'framer-motion'; 
 import Link from 'next/link'; 
 import { Badge } from '@/components/ui/badge';

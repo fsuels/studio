@@ -10,7 +10,6 @@ import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { track } from '@/lib/analytics';
 import { useCart } from '@/contexts/CartProvider';
-import { cn } from '@/lib/utils';
 
 interface VehicleBillOfSaleDisplayProps {
   locale: 'en' | 'es';

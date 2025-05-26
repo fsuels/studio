@@ -8,7 +8,7 @@ import { FileText, Edit3, CheckCircle } from "lucide-react";
 import { Progress } from "@/components/ui/progress"; // Assuming ShadCN progress
 
 const HowItWorks = React.memo(function HowItWorks() {
-  const { t, i18n } = useTranslation("common");
+  const { t } = useTranslation("common");
   const [isHydrated, setIsHydrated] = useState(false);
   const containerRef = useRef(null);
   const isInView = useInView(containerRef, { once: true, amount: 0.2 });
@@ -74,12 +74,7 @@ const HowItWorks = React.memo(function HowItWorks() {
     }),
   };
 
-  // Parallax effect for document sheets - simple CSS approach
-  const parallaxLayerStyle = (depth: number) => ({
-    // transform: isInView ? `translateY(${depth * 5}px)` : 'translateY(0px)', // Simplified or remove if too complex for CSS only
-    // transition: 'transform 0.5s ease-out',
-    // position: 'absolute', opacity: 0.1, zIndex: -1 // Example styling
-  });
+
 
   return (
     <section
@@ -88,8 +83,8 @@ const HowItWorks = React.memo(function HowItWorks() {
     >
       {/* Placeholder for parallax document sheets - more complex to implement well without dedicated library */}
       {/* <div className="absolute inset-0 pointer-events-none opacity-5">
-        <FileText className="absolute top-1/4 left-1/4 w-32 h-32 text-muted-foreground/30 -rotate-12" style={parallaxLayerStyle(1)} />
-        <FileText className="absolute bottom-1/4 right-1/4 w-24 h-24 text-muted-foreground/30 rotate-6" style={parallaxLayerStyle(2)} />
+        <FileText className="absolute top-1/4 left-1/4 w-32 h-32 text-muted-foreground/30 -rotate-12" />
+        <FileText className="absolute bottom-1/4 right-1/4 w-24 h-24 text-muted-foreground/30 rotate-6" />
       </div> */}
 
       <div className="container mx-auto px-4 text-center relative z-10">
