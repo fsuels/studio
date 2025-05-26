@@ -154,31 +154,31 @@ export default function StartWizardPageClient() {
           )
             return;
 
-        const relevantDataToSave = Object.keys(data).reduce(
-          (acc, key) => {
-            if (data[key] !== undefined) {
-              acc[key] = data[key];
-            }
-            return acc;
-          },
-          {} as Record<string, unknown>,
-        );
-
-        if (Object.keys(relevantDataToSave).length === 0) return;
-
-        if (isLoggedIn && user?.uid) {
-          await saveFormProgress({
-            userId: user.uid,
-            docType: docConfig!.id,
-            state: locale,
-            formData: relevantDataToSave,
-          });
-        } else {
-          localStorage.setItem(
-            `draft-${docConfig!.id}-${locale}`,
-            JSON.stringify(relevantDataToSave),
+          const relevantDataToSave = Object.keys(data).reduce(
+            (acc, key) => {
+              if (data[key] !== undefined) {
+                acc[key] = data[key];
+              }
+              return acc;
+            },
+            {} as Record<string, unknown>,
           );
-        }
+
+          if (Object.keys(relevantDataToSave).length === 0) return;
+
+          if (isLoggedIn && user?.uid) {
+            await saveFormProgress({
+              userId: user.uid,
+              docType: docConfig!.id,
+              state: locale,
+              formData: relevantDataToSave,
+            });
+          } else {
+            localStorage.setItem(
+              `draft-${docConfig!.id}-${locale}`,
+              JSON.stringify(relevantDataToSave),
+            );
+          }
           console.log(
             '[WizardForm] Autosaved draft for:',
             docConfig!.id,
