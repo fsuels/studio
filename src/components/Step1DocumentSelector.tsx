@@ -55,8 +55,8 @@ export const CATEGORY_LIST: CategoryInfo[] = [
 
 interface Step1DocumentSelectorProps {
   selectedCategory: string | null;
-  onCategorySelect: (categoryKey: string | null) => void;
-  onDocumentSelect: (doc: LegalDocument) => void;
+  onCategorySelect: (_categoryKey: string | null) => void;
+  onDocumentSelect: (_doc: LegalDocument) => void;
   isReadOnly?: boolean;
   globalSearchTerm: string;
   globalSelectedState: string;

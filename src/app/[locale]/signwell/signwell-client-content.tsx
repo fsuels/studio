@@ -58,7 +58,7 @@ const DropzonePlaceholder = ({
   tEsign,
   onClick,
 }: {
-  onFiles: (files: File[]) => void;
+  onFiles: (_files: File[]) => void;
   inputRef: React.RefObject<HTMLInputElement>;
   selectedFile: File | null;
   onClearFile: () => void;

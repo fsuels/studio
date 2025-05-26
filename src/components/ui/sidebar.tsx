@@ -74,9 +74,9 @@ const SidebarProvider = React.forwardRef<
     // We use openProp and setOpenProp for control from outside the component.
     const [_open, _setOpen] = React.useState(defaultOpen);
     const open = openProp ?? _open;
-      const setOpen = React.useCallback(
-        (_value: boolean | ((_value: boolean) => boolean)) => {
-          const openState = typeof _value === 'function' ? _value(open) : _value;
+    const setOpen = React.useCallback(
+      (_value: boolean | ((_value: boolean) => boolean)) => {
+        const openState = typeof _value === 'function' ? _value(open) : _value;
         if (setOpenProp) {
           setOpenProp(openState);
         } else {

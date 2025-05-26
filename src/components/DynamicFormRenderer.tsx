@@ -39,7 +39,7 @@ import {
 interface Props {
   documentType: string;
   schema: FormField[];
-  onSubmit: (data: Record<string, unknown>) => void;
+  onSubmit: (_data: Record<string, unknown>) => void;
   isReadOnly?: boolean;
   userId?: string;
   stateCode?: string;
