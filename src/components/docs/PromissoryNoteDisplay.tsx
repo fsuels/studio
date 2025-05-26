@@ -70,7 +70,9 @@ export default function PromissoryNoteDisplay({ locale }: PromissoryNoteDisplayP
         return (
           <>
             <ul className="list-disc list-outside pl-5 space-y-1 text-muted-foreground">
-              {items.map((item: string, i: number) => <li key={i}>{item}</li>)}
+              {items.map((item, i) => (
+                <li key={i}>{String(item)}</li>
+              ))}
             </ul>
             {lastParagraph && <p className="text-muted-foreground mt-2">{lastParagraph}</p>}
           </>

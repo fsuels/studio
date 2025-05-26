@@ -74,7 +74,7 @@ const LanguageSwitcher = React.memo(function LanguageSwitcher() {
       ? pathname.replace(`/${currentRouteLocale}`, `/${newLocale}`)
       : `/${newLocale}${pathname === '/' ? '' : pathname}`;
 
-    const query = searchParams.toString();
+    const query = searchParams ? searchParams.toString() : '';
     if (query) newPath += `?${query}`;
 
     router.push(newPath);

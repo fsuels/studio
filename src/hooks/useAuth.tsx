@@ -30,7 +30,7 @@ interface AuthContextType {
   isLoading: boolean;
   login: (email: string, uid?: string) => void; // email is now required for login
   logout: () => void;
-  updateUser: (updates: Partial<User>) => void;
+  updateUser: (updates: Partial<User> & { password?: string }) => void;
 }
 
 // 2) Create the context (default undefined to catch mis-use)
@@ -95,7 +95,7 @@ function useAuthHook(): AuthContextType {
     setUser(null);
   }, []);
 
-  const updateUser = useCallback((updates: Partial<User>) => {
+  const updateUser = useCallback((updates: Partial<User> & { password?: string }) => {
     setUser(prevUser => {
       if (!prevUser) return null; // Should not happen if logged in
       const updatedUser = { ...prevUser, ...updates };
