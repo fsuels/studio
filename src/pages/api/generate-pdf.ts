@@ -4,7 +4,7 @@ import { generatePdfDocument } from '@/services/pdf-generator';
 
 type RequestData = {
   documentType: string;
-  answers: Record<string, any>;
+  answers: Record<string, unknown>;
   state?: string;
 };
 
@@ -82,7 +82,10 @@ export default async function handler(
     let statusCode = 500;
     let clientErrorMessage = 'Failed to generate PDF document due to an internal server error.';
     let errorCode = 'PDF_GENERATION_INTERNAL_ERROR';
-    let errorDetails: any = error instanceof Error ? { name: error.name, message: error.message, stack: error.stack } : { message: String(error) };
+    const errorDetails =
+      error instanceof Error
+        ? { name: error.name, message: error.message, stack: error.stack }
+        : { message: String(error) };
 
     // Modified log line
     console.error(`${logPrefix} Processed Error Details:`, JSON.stringify(errorDetails, null, 2));

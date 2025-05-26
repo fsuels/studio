@@ -9,7 +9,14 @@ export interface DigitalSignatureResult {
 /**
  * Sends the PDF data to our SignWell integration API route.
  */
-export async function signPdfDocument(pdfData: Uint8Array, options: any): Promise<DigitalSignatureResult> {
+export interface SignPdfOptions {
+  fileName?: string;
+}
+
+export async function signPdfDocument(
+  pdfData: Uint8Array,
+  options: SignPdfOptions = {}
+): Promise<DigitalSignatureResult> {
   try {
     const binary = Array.from(pdfData)
       .map((b) => String.fromCharCode(b))
@@ -34,8 +41,9 @@ export async function signPdfDocument(pdfData: Uint8Array, options: any): Promis
       signingUrl: data.signingUrl,
       documentId: data.documentId,
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('[digital-signature] Error calling SignWell API:', error);
-    return { success: false, message: error.message || 'Unknown error', signedPdf: null };
+    const message = error instanceof Error ? error.message : 'Unknown error';
+    return { success: false, message, signedPdf: null };
   }
 }

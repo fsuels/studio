@@ -6,7 +6,7 @@ import fontkit from '@pdf-lib/fontkit'; // Ensure fontkit is installed
 
 interface PdfGenerationOptions {
   documentType: string;
-  answers: Record<string, any>;
+  answers: Record<string, unknown>;
 }
 
 /**

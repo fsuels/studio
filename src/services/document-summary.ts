@@ -17,7 +17,7 @@ export async function summarizeDocument(text: string): Promise<string> {
       temperature: 0.3,
     });
     return res.choices[0].message.content ?? '';
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error('Failed to summarize document', err);
     return 'Error generating summary.';
   }
