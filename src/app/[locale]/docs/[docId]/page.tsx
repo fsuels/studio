@@ -6,12 +6,12 @@ import path from 'node:path';
 import DocPageClient from './DocPageClient';
 import { documentLibrary } from '@/lib/document-library';
 import { localizations } from '@/lib/localizations'; // Ensure this path is correct
-import type { PageProps } from 'next';
-
-type DocPageProps = PageProps<{
-  locale: string;
-  docId: string;
-}>;
+interface DocPageProps {
+  params: {
+    locale: 'en' | 'es';
+    docId: string;
+  };
+}
 
 // Revalidate this page every hour for fresh content while caching aggressively
 export const revalidate = 3600;
