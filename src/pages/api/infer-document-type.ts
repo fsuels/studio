@@ -5,7 +5,7 @@ import { z } from 'zod';
 
 type ErrorResponse = {
   error: string;
-  details?: any;
+  details?: unknown;
   code?: string;
 };
 
@@ -84,7 +84,10 @@ export default async function handler(
     let statusCode = 500;
     let clientErrorMessage = 'An internal server error occurred during document type inference.';
     let errorCode = 'INFERENCE_INTERNAL_SERVER_ERROR';
-    let errorDetails: any = error instanceof Error ? { name: error.name, message: error.message, stack: error.stack } : { message: String(error) };
+    const errorDetails =
+      error instanceof Error
+        ? { name: error.name, message: error.message, stack: error.stack }
+        : { message: String(error) };
 
     if (error instanceof z.ZodError) {
         statusCode = 502; // Bad Gateway - AI service responded with invalid format
