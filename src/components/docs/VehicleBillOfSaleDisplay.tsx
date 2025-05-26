@@ -371,54 +371,11 @@ export default function VehicleBillOfSaleDisplay({
 
   return (
     <section aria-label="Vehicle Bill of Sale">
-      <section className="relative isolate overflow-hidden bg-gradient-to-b from-teal-50 to-white pb-8">
-        <div className="container mx-auto px-4 py-12">
-          <header className="mb-10 text-center">
-            <h1 className="flex items-center gap-2 text-3xl font-bold">
-              <Car aria-hidden="true" className="h-7 w-7 text-teal-600" />
-              <span>{t('pageTitle', 'Vehicle Bill of Sale')}</span>
-              <svg
-                viewBox="0 0 64 48"
-                aria-hidden="true"
-                className="h-24 w-24 text-teal-400 hidden md:block"
-              >
-                <rect
-                  x="1"
-                  y="1"
-                  width="30"
-                  height="20"
-                  rx="2"
-                  ry="2"
-                  fill="currentColor"
-                  className="opacity-20"
-                />
-                <path d="M5 9h22" stroke="currentColor" strokeWidth="2" />
-                <path d="M5 15h16" stroke="currentColor" strokeWidth="2" />
-                <path
-                  d="M34 24l-2 6h26l-2-6H34z"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  fill="none"
-                />
-                <circle cx="40" cy="34" r="2" fill="currentColor" />
-                <circle cx="54" cy="34" r="2" fill="currentColor" />
-              </svg>
-            </h1>
-            <p className="text-lg text-muted-foreground">{t('pageSubtitle')}</p>
-          </header>
-
-        </div>
-        <img
-          src="/images/hero-wave.svg"
-          aria-hidden="true"
-          className="absolute inset-x-0 -top-10 w-full select-none opacity-30"
-        />
-      </section>
 
       <div className="container mx-auto px-4 pt-6 text-center">
         <h2 className="flex items-center gap-2 text-2xl font-semibold">
           <BookOpen aria-hidden="true" className="h-6 w-6 text-teal-600" />
-          <span>Vehicle Bill of Sale: Plain-English Guide</span>
+          <span>Plain-English Guide &amp; Free Template</span>
         </h2>
         <p className="mt-1 inline-block rounded-md bg-teal-50 px-2 py-0.5 text-xs font-medium text-teal-700">
           Free downloadable template
