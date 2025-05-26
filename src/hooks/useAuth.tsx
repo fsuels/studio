@@ -28,9 +28,9 @@ interface AuthContextType {
   isLoggedIn: boolean;
   user: User | null;
   isLoading: boolean;
-  login: (_email: string, _uid?: string) => void; // email is now required for login
+  login: (email: string, uid?: string) => void; // email is now required for login
   logout: () => void;
-  updateUser: (_updates: Partial<User> & { password?: string }) => void;
+  updateUser: (updates: Partial<User> & { password?: string }) => void;
 }
 
 // 2) Create the context (default undefined to catch mis-use)
