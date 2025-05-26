@@ -258,7 +258,7 @@ export default function WizardForm({
     isLoggedIn,
     trigger,
     locale,
-    doc.id,
+    doc,
     getValues,
     onComplete,
     toast,

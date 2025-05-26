@@ -21,7 +21,7 @@ const staticTopDocIds: string[] = [
 
 const TopDocsChips = React.memo(function TopDocsChips() {
   // Use 'common' namespace for shared UI text
-  const { t: tCommon, i18n } = useTranslation("common");
+  const { t: tCommon } = useTranslation("common");
   const params = useParams();
   const router = useRouter();
   const locale = (params.locale as 'en' | 'es') || 'en';

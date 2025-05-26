@@ -112,7 +112,7 @@ export default function DashboardClientContent({ locale }: DashboardClientConten
         if (isNaN(dateObj.getTime())) { 
             return String(dateInput); 
         }
-      } catch (_err) {
+      } catch {
         return String(dateInput);
       }
     }

@@ -3,12 +3,22 @@
 import Script from 'next/script';
 import React, { useState, useEffect } from 'react';
 
+declare global {
+  interface Window {
+    google?: {
+      maps?: {
+        places?: unknown;
+      };
+    };
+  }
+}
+
 export default function GooglePlacesLoader() {
   const [loaded, setLoaded] = useState(false);
   const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
 
   useEffect(() => {
-    if ((window as any).google?.maps?.places) {
+    if (window.google?.maps?.places) {
       setLoaded(true);
     }
   }, []);

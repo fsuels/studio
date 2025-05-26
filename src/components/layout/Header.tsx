@@ -1,7 +1,7 @@
 // src/components/layout/Header.tsx
 'use client';
 
-import React, { useState, useEffect, useRef, useCallback } from 'react'; 
+import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useRouter, useParams } from 'next/navigation';
 import { Logo } from '@/components/layout/Logo';
@@ -12,7 +12,7 @@ import Nav from '@/components/Nav';
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Button } from '@/components/ui/button';
-import { Check, ChevronDown, Globe, UserPlus, LogIn, Search as SearchIcon, ExternalLink, FileText, Menu as MenuIcon, X as CloseIcon, LayoutGrid, ChevronUp, LogOut, UserCircle, Loader2 } from 'lucide-react';
+import { ChevronDown, UserPlus, LogIn, Search as SearchIcon, ExternalLink, FileText, Menu as MenuIcon, X as CloseIcon, LayoutGrid, ChevronUp, LogOut, UserCircle } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import type { LegalDocument } from '@/lib/document-library';
 import { CATEGORY_LIST } from '@/components/Step1DocumentSelector';
@@ -25,8 +25,7 @@ import { getDocTranslation } from '@/lib/i18nUtils';
 
 const Header = React.memo(function Header() {
   // Scoped translations
-  const { i18n, t: tHeader } = useTranslation("common");
-  const { t: tCommon } = useTranslation("common"); // For general common keys if needed
+  const { t: tHeader } = useTranslation("common");
   const router = useRouter();
   const params = useParams();
   const { isLoggedIn, logout, user } = useAuth(); // Added user from useAuth

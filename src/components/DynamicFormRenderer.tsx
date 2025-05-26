@@ -40,7 +40,7 @@ import { analyzeFormData, type FieldSuggestion } from '@/ai/flows/analyze-form-d
 interface Props {
   documentType: string;
   schema: FormField[];
-  onSubmit: (values: Record<string, any>) => void;
+  onSubmit: (values: Record<string, unknown>) => void;
   isReadOnly?: boolean;
   userId?: string;
   stateCode?: string;
@@ -76,7 +76,7 @@ export default function DynamicFormRenderer({
   const { t } = useTranslation('common');
 
   /* ---------------- state ------------------ */
-  const [values, setValues] = useState<Record<string, any>>({});
+  const [values, setValues] = useState<Record<string, unknown>>({});
   const [isLoading, setIsLoading] = useState(false);
   const [hasSubmitted, setHasSubmitted] = useState(isReadOnly);
   const [isHydrated, setIsHydrated] = useState(false);
@@ -99,7 +99,7 @@ export default function DynamicFormRenderer({
   }, [userId, documentType]);
 
   /* -------------- on change ---------------- */
-  const handleChange = (id: string, value: any) => {
+  const handleChange = (id: string, value: unknown) => {
     if (isReadOnly) return;
 
     const isUpsellField = /notarize|upsell|add(?:_)?on|extra/i.test(id);
@@ -142,7 +142,7 @@ export default function DynamicFormRenderer({
   const analyzeThenSubmit = async () => {
     if (isReadOnly || isLoading || hasSubmitted) return;
 
-    const missing = schema.some(f => f.required && !values[f.id]);
+    const missing = schema.some(f => f.required && !Boolean(values[f.id]));
     if (missing) {
       alert(t('dynamicForm.errorMissingRequired'));
       return;
