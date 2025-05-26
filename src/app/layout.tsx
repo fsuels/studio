@@ -22,15 +22,19 @@ if (
   );
 }
 
-// Load our Google fonts and expose their CSS variables
+// Load Google fonts with preloading to prevent layout shift
 const inter = Inter({
   subsets: ['latin'],
-  variable: '--font-inter',
+  variable: '--font-geist-sans',
+  preload: true,
+  display: 'swap',
 });
 const merriweather = Merriweather({
   weight: ['400', '700'],
   subsets: ['latin'],
   variable: '--font-merriweather',
+  preload: true,
+  display: 'swap',
 });
 
 export default function RootLayout({
