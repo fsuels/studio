@@ -11,7 +11,7 @@ interface LogoProps {
 }
 
 export function Logo({ wrapperClassName, svgClassName, textClassName, ...props }: LogoProps) {
-   const { t } = useTranslation("common");
+   const { t } = useTranslation("header");
 
   return (
     <Link
