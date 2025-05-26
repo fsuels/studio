@@ -2,7 +2,6 @@
 'use client'
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import type { TFunction } from 'i18next';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion';
@@ -41,8 +40,8 @@ const DropzonePlaceholder = ({
   selectedFile: File | null;
   onClearFile: () => void;
   isHydrated: boolean;
-  tGeneral: TFunction;
-  tEsign: TFunction;
+  tGeneral: (key: string, opts?: any) => string;
+  tEsign: (key: string, opts?: any) => string;
   onClick?: () => void; // Make onClick optional or required based on usage
 }) => {
   const [isDragging, setIsDragging] = useState(false);
@@ -369,8 +368,8 @@ export default function SignWellClientContent({ params }: SignWellClientContentP
               selectedFile={selectedFile}
               onClearFile={handleClearFile}
               isHydrated={isHydrated}
-              tGeneral={(key, opts) => t(key, { ...opts, ns: 'common' })}
-              tEsign={(key, opts) => t(key, { ...opts, ns: 'electronic-signature' })}
+              tGeneral={(key, opts) => t(key, { ...(opts ?? {}), ns: 'common' })}
+              tEsign={(key, opts) => t(key, { ...(opts ?? {}), ns: 'electronic-signature' })}
               onClick={handleHeroUploadAttempt} // Gated file input trigger
             />
             {!selectedFile && (

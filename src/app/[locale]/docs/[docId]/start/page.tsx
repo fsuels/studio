@@ -81,5 +81,5 @@ export default async function StartWizardPage({ params }: PageProps<StartWizardP
   await Promise.resolve();
   // The StartWizardPageClient will handle fetching its own specific document data
   // and form schema based on the docId and locale.
-  return <StartWizardPageClient params={params} />;
+  return <StartWizardPageClient />;
 }
