@@ -1,9 +1,9 @@
 // src/app/[locale]/blog/page.tsx
 import React from 'react';
+import type { PageProps } from 'next';
 import BlogClientContent from './blog-client-content';
-interface BlogPageProps {
-  params: { locale: 'en' | 'es' } & Record<string, string>;
-}
+
+type BlogPageProps = PageProps<{ locale: 'en' | 'es' }>;
 
 export async function generateStaticParams() {
   return [{ locale: 'en' }, { locale: 'es' }];
