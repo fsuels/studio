@@ -26,14 +26,14 @@ export async function getUserDocuments(
   const q = query(col, orderBy('createdAt', 'desc'), limit(max));
   const snap = await getDocs(q);
   return snap.docs.map(d => {
-    const data = d.data() as Record<string, unknown>
-    const docType = data.originalDocId || data.docType || d.id;
+    const data = d.data() as Record<string, unknown>;
+    const docType = (data.originalDocId || data.docType || d.id) as string;
     const docConfig = documentLibrary.find((doc) => doc.id === docType);
     return {
       id: d.id,
-      name: docConfig ? docConfig.name : docType,
-      date: data.createdAt,
-      status: data.status || 'Draft',
+      name: docConfig?.name || docConfig?.translations?.en?.name || docType,
+      date: data.createdAt as Timestamp | Date | string,
+      status: (data.status as string) || 'Draft',
       docType,
     };
   });

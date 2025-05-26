@@ -118,7 +118,7 @@ export default async function handler(
     const responsePayload: ErrorResponse = {
       error: clientErrorMessage,
       code: errorCode,
-      details: process.env.NODE_ENV === 'development' ? errorDetails : undefined, // Full details in dev
+      details: process.env.NODE_ENV === 'development' ? JSON.stringify(errorDetails) : undefined, // Full details in dev
     };
     
     if (!res.headersSent) {

@@ -1,6 +1,7 @@
 import { usStates } from '@/lib/usStates';
+import type { Question } from '@/types/documents';
 
-export const vehicleBillOfSaleQuestions = [
+export const vehicleBillOfSaleQuestions: Question[] = [
   { 
     id: "seller_name", 
     label: "Seller's Full Name", 

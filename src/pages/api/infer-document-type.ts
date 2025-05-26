@@ -1,6 +1,6 @@
 
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { inferDocumentTypeFlow, InferDocumentTypeInputSchema, InferDocumentTypeOutput } from '@/ai/flows/infer-document-type';
+import { inferDocumentTypeFlow, InferDocumentTypeInputSchema, InferDocumentTypeOutput, InferDocumentTypeOutputSchema } from '@/ai/flows/infer-document-type';
 import { z } from 'zod';
 
 type ErrorResponse = {
@@ -84,7 +84,7 @@ export default async function handler(
     let statusCode = 500;
     let clientErrorMessage = 'An internal server error occurred during document type inference.';
     let errorCode = 'INFERENCE_INTERNAL_SERVER_ERROR';
-    const errorDetails =
+    let errorDetails: unknown =
       error instanceof Error
         ? { name: error.name, message: error.message, stack: error.stack }
         : { message: String(error) };

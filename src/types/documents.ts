@@ -43,13 +43,13 @@ export type LegalDocument = {
   jurisdiction?: string; // e.g., 'US', 'CA'
   category: string;
   states?: string[] | 'all'; // Applies to the jurisdiction
-  schema: z.AnyZodObject; // Use AnyZodObject for broader compatibility
+  schema: z.ZodTypeAny; // Allow raw objects or schemas with effects
   questions?: Question[];
 
   // Core display text (can be direct or i18n keys)
   // Prefer using the 'translations' object below for better organization
-  name: string;
-  description: string;
+  name?: string;
+  description?: string;
   name_es?: string; // Deprecated in favor of translations object
   description_es?: string; // Deprecated in favor of translations object
   aliases?: string[]; // Deprecated in favor of translations object
