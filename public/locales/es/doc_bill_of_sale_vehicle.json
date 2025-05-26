@@ -187,4 +187,7 @@
   "finalCtaTitle": "¿Listo para Cerrar el Trato?",
   "finalCtaSubtitle": "Evita el estrés del papeleo. Haz clic en “Comenzar Mi Contrato de Compraventa” a continuación, responde unas pocas preguntas guiadas y descarga tu documento aprobado por abogados en minutos.",
   "startMyBillOfSaleButton": "Comenzar Mi Contrato de Compraventa"
+,
+  "faqSearchPlaceholder": "Buscar en las preguntas...",
+  "noFaqResults": "Ninguna pregunta coincide con tu búsqueda."
 }
