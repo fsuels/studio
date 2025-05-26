@@ -5,10 +5,12 @@ import type { StaticImport } from 'next/dist/shared/lib/get-img-props';
 // src/components/AutoImage.tsx
 // FIXED: new component ensuring images always have explicit width and height
 
-interface AutoImageProps extends Omit<ImageProps, 'width' | 'height' | 'src'> {
+interface AutoImageProps
+  extends Omit<ImageProps, 'width' | 'height' | 'src' | 'alt'> {
   width?: number | string;
   height?: number | string;
-  src?: string | StaticImport;
+  src: string | StaticImport;
+  alt?: string;
 }
 
 const AutoImage: React.FC<AutoImageProps> = ({
