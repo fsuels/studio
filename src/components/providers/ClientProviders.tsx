@@ -18,6 +18,7 @@ interface ClientProvidersProps {
 // This avoids an additional network request on every navigation.
 import Header from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
+import ContactFormButton from '@/components/ContactFormButton';
 
 const AppShell = React.memo(function AppShell({
   children,
@@ -37,6 +38,7 @@ const AppShell = React.memo(function AppShell({
       <Header />
       <main className="flex-grow">{children}</main>
       <Footer />
+      <ContactFormButton />
       {/* Conditionally render Toaster only on the client after mount */}
       {isMounted && <Toaster />}
     </>
