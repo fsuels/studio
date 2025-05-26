@@ -85,7 +85,7 @@ export default function VehicleBillOfSaleDisplay({
       name: itemName,
       price: priceCents,
     });
-    router.prefetch(`/${locale}/#workflow-start?docId=bill-of-sale-vehicle`);
+    router.prefetch(`/${locale}/docs/bill-of-sale-vehicle/start`);
   };
 
   const informationalSections: Section[] = [
@@ -452,13 +452,11 @@ export default function VehicleBillOfSaleDisplay({
             size="lg"
             className="bg-primary hover:bg-primary/90 text-primary-foreground"
             onMouseEnter={() =>
-              router.prefetch(
-                `/${locale}/#workflow-start?docId=bill-of-sale-vehicle`,
-              )
+              router.prefetch(`/${locale}/docs/bill-of-sale-vehicle/start`)
             }
           >
             <Link
-              href={`/${locale}/#workflow-start?docId=bill-of-sale-vehicle`}
+              href={`/${locale}/docs/bill-of-sale-vehicle/start`}
               onClick={handleStartProcess}
               prefetch
             >
@@ -478,7 +476,7 @@ export default function VehicleBillOfSaleDisplay({
           )}
         </section>
       </div>
-      <StickyMobileCTA />
+      <StickyMobileCTA locale={locale} />
     </section>
   );
 }
