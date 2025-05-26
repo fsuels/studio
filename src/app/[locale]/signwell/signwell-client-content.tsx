@@ -368,8 +368,8 @@ export default function SignWellClientContent({ params }: SignWellClientContentP
               selectedFile={selectedFile}
               onClearFile={handleClearFile}
               isHydrated={isHydrated}
-              tGeneral={(key, opts) => t(key, { ...(opts ?? {}), ns: 'common' })}
-              tEsign={(key, opts) => t(key, { ...(opts ?? {}), ns: 'electronic-signature' })}
+              tGeneral={(key, opts) => t(key, { ...(opts ?? {}), ns: 'common' }) as string}
+              tEsign={(key, opts) => t(key, { ...(opts ?? {}), ns: 'electronic-signature' }) as string}
               onClick={handleHeroUploadAttempt} // Gated file input trigger
             />
             {!selectedFile && (

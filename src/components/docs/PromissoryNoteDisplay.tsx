@@ -142,7 +142,7 @@ export default function PromissoryNoteDisplay({ locale }: PromissoryNoteDisplayP
       );
     }
      if (section.type === 'list-cta' && section.itemsKey && section.ctaKey) {
-      const items = t(section.itemsKey, { returnObjects: true });
+      const items = t(section.itemsKey, { returnObjects: true }) as string[];
       if (Array.isArray(items)) {
         return (
           <>

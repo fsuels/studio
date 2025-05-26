@@ -4,7 +4,9 @@
 import StartWizardPageClient from './StartWizardPageClient';
 import { documentLibrary } from '@/lib/document-library';
 import { localizations } from '@/lib/localizations'; // Assuming this defines your supported locales e.g. [{id: 'en'}, {id: 'es'}]
-import type { PageProps } from 'next';
+interface StartWizardPageProps {
+  params: { locale: 'en' | 'es'; docId: string };
+}
 
 // Revalidate every hour so start pages stay fresh without rebuilding constantly
 export const revalidate = 3600;
@@ -70,13 +72,8 @@ export async function generateStaticParams() {
   return params;
 }
 
-interface StartWizardParams {
-  locale: 'en' | 'es';
-  docId: string;
-}
-
 // This Server Component now correctly passes params to the Client Component
-export default async function StartWizardPage({ params }: PageProps<StartWizardParams>) {
+export default async function StartWizardPage({ params }: StartWizardPageProps) {
   // Await a microtask to satisfy Next.js dynamic route requirements
   await Promise.resolve();
   // The StartWizardPageClient will handle fetching its own specific document data

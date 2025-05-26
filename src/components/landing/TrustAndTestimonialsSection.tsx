@@ -134,10 +134,10 @@ const MemoizedTestimonialCard = React.memo(function TestimonialCard({ testimonia
 const TrustAndTestimonialsSection = React.memo(function TrustAndTestimonialsSection() {
   const { t, i18n, ready } = useTranslation("common");
   const tSimple = React.useCallback(
-    (key: string, fallback?: string | object) =>
+    (key: string, fallback?: string | object): string =>
       typeof fallback === 'string'
-        ? t(key, { defaultValue: fallback })
-        : t(key, fallback as any),
+        ? (t(key, { defaultValue: fallback }) as string)
+        : (t(key, fallback as any) as string),
     [t]
   );
   const [docCount, setDocCount] = useState(4200);
@@ -210,10 +210,10 @@ const TrustAndTestimonialsSection = React.memo(function TrustAndTestimonialsSect
             <FileText className="h-5 w-5 text-primary" />
             <span>
               {isHydrated
-                ? (t('home.trustStrip.badge1', {
+                ? tSimple('home.trustStrip.badge1', {
                     count: formattedCount,
                     defaultValue: `Over ${formattedCount} documents generated`,
-                  }) as string)
+                  })
                 : placeholderText}
             </span>
           </div>

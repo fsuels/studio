@@ -96,7 +96,7 @@ export default function DocumentTypeSelector({ onSelect, selectedDocument }: Pro
                       key={doc.id}
                       tabIndex={0}
                       role="button"
-                      aria-label={t(doc.name ?? '', doc.name)}
+                      aria-label={t(doc.name ?? '', doc.name ?? '')}
                       className={`cursor-pointer hover:shadow-lg transition-all duration-200 ${selectedDocument === doc.id ? 'border-2 border-primary' : ''}`}
                       onClick={() => onSelect(doc.id)}
                       onKeyDown={(e) => {
