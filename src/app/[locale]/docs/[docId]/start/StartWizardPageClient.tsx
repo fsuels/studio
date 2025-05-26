@@ -140,17 +140,19 @@ export default function StartWizardPageClient() {
 
   const debouncedSave = useMemo(
     () =>
-      debounce(async (data: Record<string, unknown>) => {
-        if (
-          !docConfig?.id ||
-          authIsLoading ||
-          !isMounted ||
-          Object.keys(data).length === 0 ||
-          isLoadingConfig ||
-          !locale ||
-          !ready
-        )
-          return;
+      debounce((data: Record<string, unknown>) => {
+        // Wrap async logic to satisfy debounce's void return type
+        void (async () => {
+          if (
+            !docConfig?.id ||
+            authIsLoading ||
+            !isMounted ||
+            Object.keys(data).length === 0 ||
+            isLoadingConfig ||
+            !locale ||
+            !ready
+          )
+            return;
 
         const relevantDataToSave = Object.keys(data).reduce(
           (acc, key) => {
@@ -177,12 +179,13 @@ export default function StartWizardPageClient() {
             JSON.stringify(relevantDataToSave),
           );
         }
-        console.log(
-          '[WizardForm] Autosaved draft for:',
-          docConfig!.id,
-          locale,
-          relevantDataToSave,
-        );
+          console.log(
+            '[WizardForm] Autosaved draft for:',
+            docConfig!.id,
+            locale,
+            relevantDataToSave,
+          );
+        })();
       }, 1000),
     [
       isLoggedIn,

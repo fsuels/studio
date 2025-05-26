@@ -130,9 +130,9 @@ export const inferDocumentTypeFlow = ai.defineFlow<
     try {
       const response = await prompt({
         ...parsed.data,
-        // Extra context isn't part of the input schema
+        // Extra context isn't part of the input schema; cast to satisfy typing
         availableDocumentsContext: ctx,
-      });
+      } as InferDocumentTypeInput & { availableDocumentsContext: string });
       const output = response.output as InferDocumentTypeOutput;
 
       if (!output) throw new Error('AI returned no output');
