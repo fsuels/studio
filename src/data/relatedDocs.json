@@ -1,0 +1,10 @@
+{
+  "bill-of-sale-vehicle": [
+    { "slug": "power-of-attorney", "title": "Vehicle Power of Attorney" },
+    {
+      "slug": "vehicle-release-of-liability",
+      "title": "Vehicle Liability Release"
+    },
+    { "slug": "odometer-disclosure", "title": "Odometer Disclosure" }
+  ]
+}

@@ -41,6 +41,7 @@ import {
 } from '@/components/ui/accordion';
 import VehicleBillOfSaleDisplay from '@/components/docs/VehicleBillOfSaleDisplay'; // Import the specific display component
 import PromissoryNoteDisplay from '@/components/docs/PromissoryNoteDisplay';
+import RelatedDocs from '@/components/RelatedDocs';
 
 // Lazy load template-specific testimonials section
 const TestimonialsCarousel = dynamic(
@@ -364,40 +365,45 @@ export default function DocPageClient({
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-3">
-              <div className="flex items-baseline justify-between">
-                <p className="text-2xl font-bold">
-                  ${docConfig.basePrice.toFixed(2)}
-                </p>
-                <span className="text-sm text-muted-foreground">
-                  {t('pricing.perDocument', { defaultValue: 'per document' })}
-                </span>
-              </div>
-              <p className="text-xs text-muted-foreground">
-                {t('docDetail.competitivePrice', {
-                  competitorPrice: competitorPrice.toFixed(2),
-                  defaultValue: `Compare to typical attorney fees of $${competitorPrice.toFixed(2)}+`,
-                })}
-              </p>
-              <ul className="mt-3 space-y-1 text-sm">
-                <li className="flex items-center gap-2">
-                  <ShieldCheck className="h-4 w-4 text-teal-600" /> Attorney-approved
-                </li>
-                <li className="flex items-center gap-2">
-                  <Clock className="h-4 w-4 text-teal-600" /> Ready in 3 minutes
-                </li>
-                <li className="flex items-center gap-2">
-                  <RotateCcw className="h-4 w-4 text-teal-600" /> 100 % money-back guarantee
-                </li>
-              </ul>
-              <Button
-                size="lg"
-                className="w-full mt-2"
-                onClick={handleStartWizard}
-                disabled={!isHydrated}
-              >
-                {t('Start For Free', { defaultValue: 'Start For Free' })}
-              </Button>
-            </CardContent>
+                  <div className="flex items-baseline justify-between">
+                    <p className="text-2xl font-bold">
+                      ${docConfig.basePrice.toFixed(2)}
+                    </p>
+                    <span className="text-sm text-muted-foreground">
+                      {t('pricing.perDocument', {
+                        defaultValue: 'per document',
+                      })}
+                    </span>
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    {t('docDetail.competitivePrice', {
+                      competitorPrice: competitorPrice.toFixed(2),
+                      defaultValue: `Compare to typical attorney fees of $${competitorPrice.toFixed(2)}+`,
+                    })}
+                  </p>
+                  <ul className="mt-3 space-y-1 text-sm">
+                    <li className="flex items-center gap-2">
+                      <ShieldCheck className="h-4 w-4 text-teal-600" />{' '}
+                      Attorney-approved
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <Clock className="h-4 w-4 text-teal-600" /> Ready in 3
+                      minutes
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <RotateCcw className="h-4 w-4 text-teal-600" /> 100 %
+                      money-back guarantee
+                    </li>
+                  </ul>
+                  <Button
+                    size="lg"
+                    className="w-full mt-2"
+                    onClick={handleStartWizard}
+                    disabled={!isHydrated}
+                  >
+                    {t('Start For Free', { defaultValue: 'Start For Free' })}
+                  </Button>
+                </CardContent>
               </Card>
             </div>
           </div>
@@ -526,6 +532,8 @@ export default function DocPageClient({
       <div className="mt-16">
         <TestimonialsCarousel templateId={docConfig.id} />
       </div>
+
+      <RelatedDocs docId={docConfig.id} />
 
       {/* Sticky CTA for mobile */}
       <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-t p-4 shadow-lg z-40">
