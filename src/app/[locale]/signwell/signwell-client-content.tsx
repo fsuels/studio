@@ -2,15 +2,16 @@
 'use client'
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
+import type { TFunction } from 'i18next';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion';
-import { Input } from '@/components/ui/input';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 import {
   UploadCloud, ShieldCheck, CheckCircle, Zap, Users, Home, Briefcase,
-  FileText, Lock, Award, MessageSquare, ChevronRight, Star, Mail, Clock, HelpCircle, LifeBuoy, Link as LinkIcon, Edit3, FileUp, UserCheck, Send, Tablet, Smartphone, Laptop, X, FileIcon, Loader2, Building, BookUser
+  FileText, Lock, Award, ChevronRight, Star, Edit3, FileUp, UserCheck,
+  Send, X, FileIcon, Loader2, BookUser
 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -40,8 +41,8 @@ const DropzonePlaceholder = ({
   selectedFile: File | null;
   onClearFile: () => void;
   isHydrated: boolean;
-  tGeneral: (key: string, options?: any) => string;
-  tEsign: (key: string, options?: any) => string;
+  tGeneral: TFunction;
+  tEsign: TFunction;
   onClick?: () => void; // Make onClick optional or required based on usage
 }) => {
   const [isDragging, setIsDragging] = useState(false);
@@ -135,7 +136,7 @@ export default function SignWellClientContent({ params }: SignWellClientContentP
   const [isHydrated, setIsHydrated] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
-  const { isLoggedIn, user } = useAuth(); // Get auth status
+  const { isLoggedIn } = useAuth();
 
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [uploadProgress, setUploadProgress] = useState(0);
@@ -205,7 +206,7 @@ export default function SignWellClientContent({ params }: SignWellClientContentP
             title: t('uploadCard.docPreparedTitle', { ns: 'electronic-signature' }),
             description: t('uploadCard.docPreparedDesc', { ns: 'electronic-signature' })
           });
-        } catch (err: any) {
+        } catch (err: unknown) {
           console.error('createSignWellDocument failed', err);
           toast({
             title: t('uploadCard.docPrepareErrorTitle', { ns: 'electronic-signature', defaultValue: 'Error Preparing Document' }),
@@ -217,7 +218,7 @@ export default function SignWellClientContent({ params }: SignWellClientContentP
         }
       };
       reader.readAsDataURL(selectedFile);
-    } catch (err) {
+    } catch (err: unknown) {
       console.error('File reading failed', err);
       toast({
         title: t('uploadCard.docPrepareErrorTitle', { ns: 'electronic-signature', defaultValue: 'Error Preparing Document' }),
@@ -250,7 +251,7 @@ export default function SignWellClientContent({ params }: SignWellClientContentP
     }
   };
 
-  const onAuthSuccessModal = (mode: 'signin' | 'signup', email: string) => {
+  const onAuthSuccessModal = (mode: 'signin' | 'signup', _email: string) => {
     setShowAuthModal(false);
     toast({
       title: t('common:authModal.successTitle', { context: mode, defaultValue: mode === 'signin' ? 'Sign In Successful!' : 'Account Created!'}),
