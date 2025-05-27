@@ -565,7 +565,10 @@ export default function WizardForm({
       </TooltipProvider>
       <AuthModal
         isOpen={showAuthModal}
-        onClose={() => setShowAuthModal(false)}
+        onClose={() => {
+          setShowAuthModal(false);
+          setPendingSaveDraft(false);
+        }}
         onAuthSuccess={handleAuthSuccess}
       />
       <PaymentModal
