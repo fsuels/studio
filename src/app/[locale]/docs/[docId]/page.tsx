@@ -60,14 +60,21 @@ export default async function DocPage({ params }: DocPageProps) {
   // Await a microtask to comply with Next.js dynamic param handling
   await Promise.resolve();
 
-  const filePath = path.join(
-    process.cwd(),
-    'public',
-    'templates',
-    params.locale,
-    `${params.docId}.md`,
-  );
+  const doc = documentLibrary.find((d) => d.id === params.docId);
   let markdownContent: string | null = null;
+
+  let filePath: string | null = null;
+  if (doc && typeof (doc as any).templatePath === 'function') {
+    filePath = (doc as any).templatePath(params.locale);
+  } else {
+    filePath = path.join(
+      process.cwd(),
+      'public',
+      'templates',
+      params.locale,
+      `${params.docId}.md`,
+    );
+  }
 
   try {
     markdownContent = await fs.readFile(filePath, 'utf-8');

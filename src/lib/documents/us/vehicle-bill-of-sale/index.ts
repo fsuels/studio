@@ -1,17 +1,16 @@
 import path from 'path';
-import * as schema from './schema';
-import * as questions from './questions';
-import * as compliance from './compliance';
-import { marketing } from './metadata';
+import { vehicleBillOfSaleMeta } from './metadata';
+import { VehicleBillOfSaleCompliance } from './compliance';
 
-export const document = {
-  id: 'bill-of-sale-vehicle',
-  country: 'us',
-  languages: ['en', 'es'],
+export const vehicleBillOfSale = {
+  ...vehicleBillOfSaleMeta,
+  compliance: VehicleBillOfSaleCompliance,
   templatePath: (lang: string) =>
     path.join(__dirname, `template.${lang}.md`),
-  schema,
-  questions,
-  marketing,
-  compliance,
-} as const;
+};
+
+export { vehicleBillOfSale as document };
+
+export * from './schema';
+export * from './questions';
+export * from './compliance';
