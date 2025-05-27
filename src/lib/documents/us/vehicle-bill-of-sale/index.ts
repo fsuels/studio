@@ -1,3 +1,4 @@
+import path from 'path';
 import * as schema from './schema';
 import * as questions from './questions';
 import * as compliance from './compliance';
@@ -8,7 +9,7 @@ export const document = {
   country: 'us',
   languages: ['en', 'es'],
   templatePath: (lang: string) =>
-    require.resolve(`./template.${lang}.md`),
+    path.join(__dirname, `template.${lang}.md`),
   schema,
   questions,
   marketing,
