@@ -7,7 +7,7 @@ import DocPageClient from './DocPageClient';
 import DocumentPreview from '@/components/DocumentPreview';
 import { documentLibrary } from '@/lib/document-library';
 import { localizations } from '@/lib/localizations'; // Ensure this path is correct
-import { vehicleBillOfSaleFaqs } from '@/app/[locale]/documents/bill-of-sale-vehicle/faqs';
+import { vehicleBillOfSaleFaqs } from '@/lib/documents/us/vehicle-bill-of-sale/faqs';
 export interface DocPageParams {
   locale: 'en' | 'es';
   docId: string;
