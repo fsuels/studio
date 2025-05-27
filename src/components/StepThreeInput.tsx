@@ -5,6 +5,7 @@ import React, { useState } from 'react';
 import { documentLibrary } from '@/lib/document-library';
 import { analyzeFormData } from '@/ai/flows/analyze-form-data'; // Corrected import
 import type { FormField } from '@/data/formSchemas';
+import PaymentModal from '@/components/PaymentModal';
 
 interface Props {
   templateId: string;
@@ -19,6 +20,8 @@ export function StepThreeInput({ templateId }: Props) {
   const [aiSuggestions, setAiSuggestions] = useState<string[]>([]);
   const [isReviewing, setIsReviewing] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [paymentOpen, setPaymentOpen] = useState(false);
+  const [paymentComplete, setPaymentComplete] = useState(false);
 
   const handleChange = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -131,7 +134,7 @@ export function StepThreeInput({ templateId }: Props) {
                 </button>
                 <button
                   className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
-                  onClick={() => alert('Proceed to PDF preview...')}
+                  onClick={() => setPaymentOpen(true)}
                 >
                   Looks Good → Continue
                 </button>
@@ -184,6 +187,17 @@ export function StepThreeInput({ templateId }: Props) {
         >
           {loading ? 'Reviewing...' : 'Run Legal Health Check'}
         </button>
+      )}
+      <PaymentModal
+        open={paymentOpen}
+        onOpenChange={setPaymentOpen}
+        documentName={template.name}
+        documentId={template.id}
+        priceCents={3500}
+        onSuccess={() => setPaymentComplete(true)}
+      />
+      {paymentComplete && (
+        <p className="mt-4 text-green-700">Payment successful! Your document will be available shortly.</p>
       )}
     </div>
   );
