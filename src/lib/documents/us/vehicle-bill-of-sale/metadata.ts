@@ -77,3 +77,8 @@ export const vehicleBillOfSaleMeta: LegalDocument = {
     },
   },
 };
+
+export const marketing = {
+  displayName: 'Vehicle Bill of Sale',
+  description: 'Document the sale and transfer of ownership for a vehicle, compliant with state requirements.',
+};
