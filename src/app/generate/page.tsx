@@ -1,11 +1,8 @@
+'use client';
 // src/app/generate/page.tsx
 import React from 'react';
-import dynamic from 'next/dynamic';
-const DocumentFlow = dynamic(() => import('@/components/DocumentFlow'), {
-  ssr: false,
-});
+import GenerateClient from '@/components/GenerateClient';
 import { Button } from '@/components/ui/button';
-
 export default function GeneratePage() {
   return (
     <main className="p-8 text-center">
