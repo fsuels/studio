@@ -5,9 +5,7 @@ import dynamic from 'next/dynamic';
 import { Suspense } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 
-const DocumentDetail = dynamic(
- () => import('@/components/DocumentDetail'),
-  { ssr: false });
+const DocumentDetail = dynamic(() => import('@/components/DocumentDetail'));
 
 interface Props {
   markdown: string;
