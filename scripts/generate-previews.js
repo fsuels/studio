@@ -1,14 +1,25 @@
 // scripts/generate-previews.js
 import fs from 'fs';
 import path from 'path';
-import puppeteer from 'puppeteer';
-import MarkdownIt from 'markdown-it';
 
-const templatesDir = path.join(process.cwd(), 'public', 'templates'); // Updated to read from public/templates
+// bail out fast in CI / containers without Chrome dependencies
+if (process.env.NO_PREVIEWS) {
+  console.log('Skipping preview generation (NO_PREVIEWS=1)');
+  process.exit(0);
+}
+
+const docId = 'vehicle-bill-of-sale';
+const templatesDir = path.join(
+  process.cwd(),
+  'src/lib/documents/us',
+  `${docId}`,
+);
 const outDir = path.join(process.cwd(), 'public', 'images', 'previews');
 const languages = ['en', 'es'];
 
 async function generate() {
+  const { default: puppeteer } = await import('puppeteer');
+  const { default: MarkdownIt } = await import('markdown-it');
   const browser = await puppeteer.launch({
     headless: true,
     args: ['--no-sandbox', '--disable-setuid-sandbox'],
@@ -16,37 +27,30 @@ async function generate() {
   const mdInstance = new MarkdownIt();
 
   for (const lang of languages) {
-    const mdLangDir = path.join(templatesDir, lang); // Path to language-specific markdown templates
-    const pngLangDir = path.join(outDir, lang); // Path to language-specific preview images
+    const mdPath = path.join(templatesDir, `template.${lang}.md`);
+    const pngLangDir = path.join(outDir, lang);
     fs.mkdirSync(pngLangDir, { recursive: true });
 
-    if (!fs.existsSync(mdLangDir)) {
-      console.warn(
-        `Markdown directory not found for language ${lang}: ${mdLangDir}`,
-      );
+    if (!fs.existsSync(mdPath)) {
+      console.warn(`Markdown template not found for language ${lang}: ${mdPath}`);
       continue;
     }
 
-    for (const file of fs
-      .readdirSync(mdLangDir)
-      .filter((f) => f.endsWith('.md'))) {
-      const id = file.replace(/\.md$/, '');
-      const mdPath = path.join(mdLangDir, file); // Corrected mdPath
-      const pngPath = path.join(pngLangDir, `${id}.png`);
+    const pngPath = path.join(pngLangDir, `${docId}.png`);
 
-      if (fs.existsSync(pngPath)) {
-        const mdTime = fs.statSync(mdPath).mtimeMs;
-        const pngTime = fs.statSync(pngPath).mtimeMs;
-        if (pngTime >= mdTime) {
-          console.log(`⏭ up-to-date: ${lang}/${id}.png`);
-          continue;
-        }
+    if (fs.existsSync(pngPath)) {
+      const mdTime = fs.statSync(mdPath).mtimeMs;
+      const pngTime = fs.statSync(pngPath).mtimeMs;
+      if (pngTime >= mdTime) {
+        console.log(`⏭ up-to-date: ${lang}/${docId}.png`);
+        continue;
       }
+    }
 
-      console.log(`🔄 Generating preview for ${lang}/${id}`);
-      const raw = fs.readFileSync(mdPath, 'utf-8');
-      const htmlBody = mdInstance.render(raw);
-      const page = await browser.newPage();
+    console.log(`🔄 Generating preview for ${lang}/${docId}`);
+    const raw = fs.readFileSync(mdPath, 'utf-8');
+    const htmlBody = mdInstance.render(raw);
+    const page = await browser.newPage();
 
       await page.setViewport({
         width: 816,
@@ -94,11 +98,11 @@ async function generate() {
           clip: { x: 0, y: 0, width: 816, height: 1056 },
         });
       } else {
-        console.error(`Could not find body element for ${lang}/${id}.png`);
+        console.error(`Could not find body element for ${lang}/${docId}.png`);
       }
-      await page.close();
-    }
+    await page.close();
   }
+
   await browser.close();
   console.log('All previews checked/generated.');
 }
