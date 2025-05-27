@@ -14,3 +14,4 @@ export { vehicleBillOfSale as document };
 export * from './schema';
 export * from './questions';
 export * from './compliance';
+export * from './faqs';
