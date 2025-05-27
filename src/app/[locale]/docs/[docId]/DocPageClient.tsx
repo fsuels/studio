@@ -386,7 +386,7 @@ export default function DocPageClient({
                   <ShieldCheck className="h-4 w-4 text-teal-600" /> Attorney-approved
                 </li>
                 <li className="flex items-center gap-2">
-                  <Clock className="h-4 w-4 text-teal-600" /> Ready in 3 minutes
+                  <Clock className="h-4 w-4 text-teal-600" /> Ready in 5 minutes
                 </li>
                 <li className="flex items-center gap-2">
                   <RotateCcw className="h-4 w-4 text-teal-600" /> 100 % money-back guarantee
