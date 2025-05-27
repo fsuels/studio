@@ -352,6 +352,21 @@ export default function WizardForm({
     t,
   ]);
 
+  const handleAuthSuccess = useCallback(() => {
+    setShowAuthModal(false);
+    if (pendingSaveDraft) {
+      handleSaveAndFinishLater();
+    } else if (isLoggedIn && isReviewing) {
+      handleNextStep();
+    }
+  }, [
+    pendingSaveDraft,
+    handleSaveAndFinishLater,
+    isLoggedIn,
+    isReviewing,
+    handleNextStep,
+  ]);
+
   if (!isHydrated || authIsLoading) {
     return (
       <div className="flex justify-center items-center min-h-[calc(100vh-8rem)]">
@@ -551,14 +566,7 @@ export default function WizardForm({
       <AuthModal
         isOpen={showAuthModal}
         onClose={() => setShowAuthModal(false)}
-        onAuthSuccess={() => {
-          setShowAuthModal(false);
-          if (pendingSaveDraft) {
-            handleSaveAndFinishLater();
-          } else if (isLoggedIn && isReviewing) {
-            handleNextStep();
-          }
-        }}
+        onAuthSuccess={handleAuthSuccess}
       />
       <PaymentModal
         open={showPaymentModal}
