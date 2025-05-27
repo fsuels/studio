@@ -424,6 +424,37 @@ export default function DocPageClient({
               </Button>
             </CardContent>
               </Card>
+              {/* Trust block under price card */}
+              <div className="mt-4 space-y-2 text-center">
+                {/* Let’s Encrypt */}
+                <a href="https://letsencrypt.org" target="_blank" rel="noopener">
+                  <img
+                    src="https://letsencrypt.org/images/letsencrypt-logo.svg"
+                    alt="Protected by Let's Encrypt"
+                    className="h-6 mx-auto"
+                  />
+                </a>
+                {/* Documents generated counter */}
+                <p className="text-xs text-gray-500">
+                  <strong>104,213</strong> templates downloaded this year
+                </p>
+                {/* Refund badge */}
+                <div className="inline-flex items-center gap-1 text-xs text-gray-500">
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                  </svg>
+                  30-day money-back guarantee
+                </div>
+              </div>
             </div>
           </div>
 
