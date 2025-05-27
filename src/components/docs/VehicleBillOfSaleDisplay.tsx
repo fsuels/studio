@@ -26,6 +26,7 @@ import { useCart } from '@/contexts/CartProvider';
 import { Car, Edit, Signature, ShieldCheck } from 'lucide-react';
 import { BookOpen } from 'lucide-react';
 import StickyMobileCTA from '@/components/StickyMobileCTA';
+import StickyGuaranteeBar from '@/components/StickyGuaranteeBar';
 
 interface VehicleBillOfSaleDisplayProps {
   locale: 'en' | 'es';
@@ -477,6 +478,7 @@ export default function VehicleBillOfSaleDisplay({
         </section>
       </div>
       <StickyMobileCTA locale={locale} />
+      <StickyGuaranteeBar />
     </section>
   );
 }
