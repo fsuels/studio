@@ -392,28 +392,6 @@ export default function DocPageClient({
                   <RotateCcw className="h-4 w-4 text-teal-600" /> 100 % money-back guarantee
                 </li>
               </ul>
-              <div className="mt-3 space-y-2">
-                {/* Trustpilot */}
-                <div
-                  className="trustpilot-widget"
-                  data-locale="en-US"
-                  data-template-id="53aa8807dec7e10d38f59f32"
-                  data-businessunit-id="YOUR_TP_ID"
-                  data-style-height="24px"
-                  data-style-width="100%"
-                ></div>
-
-                {/* Norton seal */}
-                <img
-                  src="/images/norton-seal.svg"
-                  alt="Norton Secured"
-                  className="h-6 mx-auto"
-                  width="115"
-                  height="42"
-                  loading="lazy"
-                />
-              </div>
-              <script async src="https://widget.trustpilot.com/bootstrap/v5/tp.widget.bootstrap.min.js"></script>
               <Button
                 size="lg"
                 className="w-full mt-2"
