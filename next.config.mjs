@@ -29,6 +29,12 @@ const nextConfig = {
       },
     ],
   },
+  modularizeImports: {
+    'lucide-react': {
+      transform: 'lucide-react/dist/esm/icons/{{member}}',
+    },
+  },
+  transpilePackages: ['lucide-react'],
 
   // webpack(config) {
   //   // Ignore unsupported Jaeger exporter import
