@@ -2,13 +2,11 @@
 'use client';
 
 import React, { useEffect, useState, useMemo } from 'react';
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
+import MarkdownIt from 'markdown-it';
 import { useTranslation } from 'react-i18next';
 import { documentLibrary, type LegalDocument } from '@/lib/document-library';
 import { Loader2, AlertTriangle } from 'lucide-react';
 import Image from 'next/image';
-import AutoImage from './AutoImage';
 import { cn } from '@/lib/utils';
 
 export interface DocumentDetailProps {
@@ -29,6 +27,9 @@ const DocumentDetail = React.memo(function DocumentDetail({
   const [isLoading, setIsLoading] = useState(!initialMarkdown); // If no initial markdown, consider it loading (for fallback/image)
   const [error, setError] = useState<string | null>(null); // Error if initialMarkdown is null/undefined and no docConfig?
   const [isHydrated, setIsHydrated] = useState(false);
+
+  const mdParser = useMemo(() => new MarkdownIt(), []);
+  const html = useMemo(() => mdParser.render(md || ''), [md, mdParser]);
 
   const docConfig = useMemo(
     () => documentLibrary.find((d: LegalDocument) => d.id === docId),
@@ -168,24 +169,7 @@ const DocumentDetail = React.memo(function DocumentDetail({
 
       {/* Case 1: Display Markdown if initialMarkdown was provided, processed into md, and no error occurred */}
       {!isLoading && !error && md && initialMarkdown ? (
-        <div className="prose prose-sm dark:prose-invert max-w-none w-full h-full overflow-y-auto p-4 md:p-6 relative z-0 bg-white dark:bg-background text-foreground">
-          <ReactMarkdown
-            remarkPlugins={[remarkGfm]}
-            components={{
-              p: (props) => <p {...props} className="select-none" />,
-              h1: (props) => <h1 {...props} className="text-center" />,
-              // FIXED: ensure markdown images include dimensions
-              img: ({
-                src = '',
-                ...rest
-              }: React.ImgHTMLAttributes<HTMLImageElement>) => (
-                <AutoImage src={src} {...rest} className="mx-auto" />
-              ),
-            }}
-          >
-            {md}
-          </ReactMarkdown>
-        </div>
+        <div className="prose prose-sm dark:prose-invert max-w-none w-full h-full overflow-y-auto p-4 md:p-6 relative z-0 bg-white dark:bg-background text-foreground" dangerouslySetInnerHTML={{ __html: html }} />
       ) : // Case 2: Display Image Preview if no initialMarkdown was provided, not loading, no error, and docConfig IS available
       !isLoading && !error && !md && !initialMarkdown && docConfig ? (
         <div className="absolute inset-0 flex flex-col items-center justify-center text-muted-foreground z-0 p-0 text-center">
