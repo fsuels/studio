@@ -97,7 +97,7 @@ export default async function DocPage({ params }: DocPageProps) {
   // It's then passed down to the client component.
   return (
     <DocPageClient params={params}>
-      <MarkdownPreview markdown={markdownContent ?? ''} />
+      <MarkdownPreview markdown={markdownContent ?? ''} docId={params.docId} locale={params.locale} />
     </DocPageClient>
   );
 }
