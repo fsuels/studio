@@ -68,6 +68,15 @@ export default function WizardForm({
     setIsHydrated(true);
   }, []);
 
+  // Automatically open the auth modal if a save attempt was made
+  // while the auth state was still resolving. This ensures the modal
+  // appears once we know the user is not logged in.
+  useEffect(() => {
+    if (pendingSaveDraft && !isLoggedIn && !showAuthModal) {
+      setShowAuthModal(true);
+    }
+  }, [pendingSaveDraft, isLoggedIn, showAuthModal]);
+
   const actualSchemaShape = useMemo<
     Record<string, z.ZodTypeAny> | undefined
   >(() => {
@@ -565,7 +574,10 @@ export default function WizardForm({
       </TooltipProvider>
       <AuthModal
         isOpen={showAuthModal}
-        onClose={() => setShowAuthModal(false)}
+        onClose={() => {
+          setShowAuthModal(false);
+          setPendingSaveDraft(false);
+        }}
         onAuthSuccess={handleAuthSuccess}
       />
       <PaymentModal
