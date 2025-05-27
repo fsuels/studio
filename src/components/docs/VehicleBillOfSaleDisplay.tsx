@@ -385,7 +385,7 @@ export default function VehicleBillOfSaleDisplay({
 
       <ol className="mx-auto my-8 grid max-w-4xl gap-6 md:grid-cols-3">
         {[
-          { Icon: Edit, title: 'Answer 9 questions', copy: 'Takes 3 min' },
+          { Icon: Edit, title: 'Answer 9 questions', copy: 'Takes 5 minutes' },
           { Icon: Signature, title: 'Download & e-Sign', copy: 'Legally binding' },
           { Icon: ShieldCheck, title: 'Store & Share', copy: 'Bank-grade security' },
         ].map(({ Icon, title, copy }) => (
