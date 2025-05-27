@@ -68,6 +68,14 @@ export default function WizardForm({
     setIsHydrated(true);
   }, []);
 
+  // If the user initiates a save while not logged in,
+  // open the auth modal once auth state resolves.
+  useEffect(() => {
+    if (pendingSaveDraft && !isLoggedIn) {
+      setShowAuthModal(true);
+    }
+  }, [pendingSaveDraft, isLoggedIn]);
+
   const actualSchemaShape = useMemo<
     Record<string, z.ZodTypeAny> | undefined
   >(() => {
