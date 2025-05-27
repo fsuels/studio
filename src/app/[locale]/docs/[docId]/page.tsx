@@ -4,7 +4,6 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import DocPageClient from './DocPageClient';
-import MarkdownPreview from '@/components/MarkdownPreview';
 import { documentLibrary } from '@/lib/document-library';
 import { localizations } from '@/lib/localizations'; // Ensure this path is correct
 import { vehicleBillOfSaleFaqs } from '@/lib/documents/us/vehicle-bill-of-sale/faqs';
@@ -101,9 +100,7 @@ export default async function DocPage({ params }: DocPageProps) {
   // The `params` prop is directly available here from Next.js
   // It's then passed down to the client component.
   return (
-    <DocPageClient params={params}>
-      <MarkdownPreview markdown={markdownContent ?? ''} docId={docId} locale={locale} />
-    </DocPageClient>
+    <DocPageClient params={params} markdownContent={markdownContent} />
   );
 }
 
