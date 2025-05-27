@@ -1,8 +1,8 @@
 // src/app/[locale]/docs/[docId]/start/page.tsx
 'use client';
 
-import StartPageClient from './StartPageClient';
+import StartWizardPageClient from './StartWizardPageClient';
 
 export default function StartPage() {
-  return <StartPageClient />;
+  return <StartWizardPageClient />;
 }
