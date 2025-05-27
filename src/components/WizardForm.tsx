@@ -10,9 +10,9 @@ import React, {
 } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 import axios, { AxiosError } from 'axios';
-import Link from 'next/link'; // Added Link
+
 import { z } from 'zod';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Save } from 'lucide-react';
 
 import type { LegalDocument } from '@/lib/document-library';
 import { useToast } from '@/hooks/use-toast';
@@ -24,6 +24,7 @@ import { Button } from '@/components/ui/button';
 import { prettify } from '@/lib/schema-utils';
 import AuthModal from '@/components/AuthModal';
 import { useAuth } from '@/hooks/useAuth';
+import { saveFormProgress } from '@/lib/firestore/saveFormProgress';
 import AddressField from '@/components/AddressField';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import TrustBadges from '@/components/TrustBadges';
@@ -42,10 +43,11 @@ export default function WizardForm({
 }: WizardFormProps) {
   const { t } = useTranslation('common');
   const { toast } = useToast();
-  const { isLoggedIn, isLoading: authIsLoading } = useAuth();
+  const { isLoggedIn, isLoading: authIsLoading, user } = useAuth();
 
   const [isHydrated, setIsHydrated] = useState(false);
   const [showAuthModal, setShowAuthModal] = useState(false);
+  const [pendingSaveDraft, setPendingSaveDraft] = useState(false);
   const [isReviewing, setIsReviewing] = useState(false);
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
 
@@ -272,6 +274,50 @@ export default function WizardForm({
     }
   }, [currentStepIndex, totalSteps]);
 
+  const handleSaveAndFinishLater = useCallback(async () => {
+    if (!isLoggedIn) {
+      setPendingSaveDraft(true);
+      setShowAuthModal(true);
+      return;
+    }
+    try {
+      if (user?.uid) {
+        await saveFormProgress({
+          userId: user.uid,
+          docType: doc.id,
+          state: locale,
+          formData: getValues(),
+        });
+      } else {
+        localStorage.setItem(
+          `draft-${doc.id}-${locale}`,
+          JSON.stringify(getValues()),
+        );
+      }
+      onComplete('/dashboard');
+    } catch (error) {
+      console.error('[WizardForm] Failed to save draft:', error);
+      toast({
+        title: t('Error'),
+        description: t('An unexpected error occurred.', {
+          defaultValue: 'An unexpected error occurred.',
+        }),
+        variant: 'destructive',
+      });
+    } finally {
+      setPendingSaveDraft(false);
+    }
+  }, [
+    isLoggedIn,
+    user,
+    doc.id,
+    locale,
+    getValues,
+    onComplete,
+    toast,
+    t,
+  ]);
+
   if (!isHydrated || authIsLoading) {
     return (
       <div className="flex justify-center items-center min-h-[calc(100vh-8rem)]">
@@ -452,14 +498,18 @@ export default function WizardForm({
           </div>
           {isReviewing && (
             <div className="mt-4 text-center">
-              <Link
-                href={`/${locale}/#workflow-start`}
-                className="text-sm text-primary hover:underline"
+              <Button
+                type="button"
+                variant="ghost"
+                onClick={handleSaveAndFinishLater}
+                disabled={formIsSubmitting || authIsLoading}
+                className="text-sm"
               >
-                {t('wizard.changeDocument', {
-                  defaultValue: 'Change Document',
+                {t('wizard.saveFinishLater', {
+                  defaultValue: 'Save and finish later',
                 })}
-              </Link>
+                <Save className="ml-2 h-4 w-4" />
+              </Button>
             </div>
           )}
         </div>
@@ -469,7 +519,9 @@ export default function WizardForm({
         onClose={() => setShowAuthModal(false)}
         onAuthSuccess={() => {
           setShowAuthModal(false);
-          if (isLoggedIn && isReviewing) {
+          if (pendingSaveDraft) {
+            handleSaveAndFinishLater();
+          } else if (isLoggedIn && isReviewing) {
             handleNextStep();
           }
         }}

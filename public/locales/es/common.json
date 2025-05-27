@@ -45,6 +45,7 @@
   "wizard.generateDocument": "Generar Documento",
   "wizard.skipQuestion": "Omitir (Opcional)",
   "wizard.changeDocument": "Cambiar Documento",
+  "wizard.saveFinishLater": "Guardar y terminar luego",
   "What do you want to accomplish?": "¿Qué quieres lograr?",
   "stepOne.categoryDescription": "Selecciona una categoría o busca para encontrar el documento que necesitas.",
   "stepOne.selectDocDescription": "Elige un documento de la lista de abajo.",
