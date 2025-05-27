@@ -19,7 +19,12 @@ const DocumentPreview = React.memo(function DocumentPreview({
   docId,
   locale = 'en',
   alt,
-}: DocumentPreviewProps) {
+}: DocumentPreviewProps): JSX.Element {
+  console.log(
+    '[DocumentPreview] docId:', docId?.slice(0, 50),
+    'locale:', locale?.slice(0, 50),
+    'alt:', alt?.slice(0, 50)
+  );
   const { t } = useTranslation('common');
   const [imgExists, setImgExists] = useState<boolean>(true);
   const [md, setMd] = useState<string>('');

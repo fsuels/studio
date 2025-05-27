@@ -69,6 +69,7 @@ const DocumentDetail = React.memo(function DocumentDetail({
         }
       }
       modifiedMd = modifiedMd.replace(/{{[^}]+}}/g, '__________');
+      console.log('DD', {md: modifiedMd.slice(0,50), docId, locale, docConfig});
       setMd(modifiedMd);
       setIsLoading(false);
       setError(null);
