@@ -469,7 +469,7 @@ export default function VehicleBillOfSaleDisplay({
       <StickyMobileCTA locale={locale} />
       <StickyGuaranteeBar
         href={`/${locale}/docs/bill-of-sale-vehicle/start`}
-        label="Create your Vehicle Bill of Sale in 5 minutes — download, print & share"
+        label="Create your legally-binding Vehicle Bill of Sale in 5 min — e-Sign, print & share"
       />
     </section>
   );
