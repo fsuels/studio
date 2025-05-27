@@ -281,17 +281,29 @@ export default function WizardForm({
       return;
     }
     try {
+      const allValues = getValues();
+      const relevantDataToSave = Object.keys(allValues).reduce(
+        (acc, key) => {
+          const value = (allValues as Record<string, unknown>)[key];
+          if (value !== undefined) {
+            acc[key] = value;
+          }
+          return acc;
+        },
+        {} as Record<string, unknown>,
+      );
+
       if (user?.uid) {
         await saveFormProgress({
           userId: user.uid,
           docType: doc.id,
           state: locale,
-          formData: getValues(),
+          formData: relevantDataToSave,
         });
       } else {
         localStorage.setItem(
           `draft-${doc.id}-${locale}`,
-          JSON.stringify(getValues()),
+          JSON.stringify(relevantDataToSave),
         );
       }
       onComplete('/dashboard');
