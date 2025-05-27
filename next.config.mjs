@@ -8,7 +8,10 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
-  swcMinify: true,
+  env: {
+    NEXT_PUBLIC_SITE_URL:
+      process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000',
+  },
   // Generate source maps for production bundles so Lighthouse can access
   // original source when analyzing the site. This adds `.map` files next to
   // the JavaScript bundles and slightly increases build size.
