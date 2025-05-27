@@ -29,6 +29,7 @@ import AddressField from '@/components/AddressField';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import TrustBadges from '@/components/TrustBadges';
 import ReviewStep from '@/components/ReviewStep';
+import PaymentModal from '@/components/PaymentModal';
 
 interface WizardFormProps {
   locale: 'en' | 'es';
@@ -50,6 +51,8 @@ export default function WizardForm({
   const [pendingSaveDraft, setPendingSaveDraft] = useState(false);
   const [isReviewing, setIsReviewing] = useState(false);
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [paymentClientSecret, setPaymentClientSecret] = useState<string | null>(null);
 
   const liveRef = useRef<HTMLDivElement>(null);
 
@@ -146,18 +149,29 @@ export default function WizardForm({
     const currentStepFieldKey = steps[currentStepIndex]?.id;
 
     if (isReviewing) {
-      await trigger(); // mark validation errors but allow continue
+      await trigger();
       if (!isLoggedIn) {
         setShowAuthModal(true);
         return;
       }
       try {
-        await axios.post(`/${locale}/api/wizard/${doc.id}/submit`, {
+        const res = await axios.post(`/${locale}/api/wizard/${doc.id}/submit`, {
           values: getValues(),
           locale,
         });
-        localStorage.removeItem(`draft-${doc.id}-${locale}`);
-        onComplete('/dashboard');
+        const secret = res.data.clientSecret as string | undefined;
+        if (secret) {
+          setPaymentClientSecret(secret);
+          setShowPaymentModal(true);
+        } else {
+          toast({
+            title: t('Error', { defaultValue: 'Error' }),
+            description: t('Payment initiation failed', {
+              defaultValue: 'Payment initiation failed',
+            }),
+            variant: 'destructive',
+          });
+        }
       } catch (error) {
         console.error('[WizardForm] API submission error:', error);
         if (axios.isAxiosError(error)) {
@@ -261,7 +275,15 @@ export default function WizardForm({
     toast,
     t,
     currentField,
+
   ]);
+
+  const handlePaymentSuccess = useCallback(() => {
+    localStorage.removeItem(`draft-${doc.id}-${locale}`);
+    setShowPaymentModal(false);
+    setPaymentClientSecret(null);
+    onComplete('/dashboard');
+  }, [doc.id, locale, onComplete]);
 
   const handleSkipStep = useCallback(() => {
     if (currentStepIndex < totalSteps - 1) {
@@ -537,6 +559,18 @@ export default function WizardForm({
             handleNextStep();
           }
         }}
+      />
+      <PaymentModal
+        open={showPaymentModal}
+        onClose={() => setShowPaymentModal(false)}
+        clientSecret={paymentClientSecret}
+        documentName={
+          locale === 'es'
+            ? doc.translations?.es?.name || doc.name_es || doc.name
+            : doc.translations?.en?.name || doc.name || doc.name_es
+        }
+        priceCents={(doc.basePrice || 35) * 100}
+        onSuccess={handlePaymentSuccess}
       />
     </>
   );

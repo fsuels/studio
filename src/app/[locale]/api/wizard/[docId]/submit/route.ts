@@ -21,13 +21,7 @@ if (!process.env.STRIPE_SECRET_KEY) {
     '[submit/route.ts] CRITICAL AT MODULE LOAD: STRIPE_SECRET_KEY environment variable is not set.',
   );
 }
-if (!process.env.NEXT_PUBLIC_SITE_URL) {
-  console.error(
-    '[submit/route.ts] CRITICAL AT MODULE LOAD: NEXT_PUBLIC_SITE_URL environment variable is not set. Stripe success/cancel URLs will be invalid.',
-  );
-}
-
-const FIXED_DOCUMENT_PRICE_CENTS = 35 * 100; // $35 in cents
+const DEFAULT_DOCUMENT_PRICE = 35; // Fallback price in dollars
 
 export async function POST(
   req: Request,
@@ -37,7 +31,6 @@ export async function POST(
   console.log(`${logPrefix} Received POST request.`);
 
   const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL;
 
   if (!stripeSecretKey) {
     console.error(
@@ -53,18 +46,6 @@ export async function POST(
     );
   }
 
-  if (!siteUrl) {
-    console.error(
-      `${logPrefix} CRITICAL RUNTIME: NEXT_PUBLIC_SITE_URL is not set. Aborting.`,
-    );
-    return NextResponse.json(
-      {
-        error: 'Site URL configuration is missing. Please contact support.',
-        code: 'SITE_URL_MISSING',
-      },
-      { status: 503 },
-    );
-  }
 
   const stripe = new Stripe(stripeSecretKey, {
     // Updated to the latest Stripe API version supported by the SDK
@@ -169,7 +150,7 @@ export async function POST(
         data: values,
         createdAt: admin.firestore.FieldValue.serverTimestamp(),
         status: 'draft',
-        pricePaid: FIXED_DOCUMENT_PRICE_CENTS / 100, // Store the price paid in dollars
+        pricePaid: docConfig.basePrice || DEFAULT_DOCUMENT_PRICE,
       });
       console.log(
         `${logPrefix} Document draft saved to Firestore: users/${user.uid}/documents/${documentInstanceId}`,
@@ -192,7 +173,7 @@ export async function POST(
       );
     }
 
-    let session;
+    let paymentIntent;
     try {
       const documentDisplayName =
         docConfig.name_es && effectiveLocale === 'es'
@@ -203,69 +184,54 @@ export async function POST(
           ? docConfig.description_es
           : docConfig.description || '';
 
-      const sessionParams: Stripe.Checkout.SessionCreateParams = {
-        mode: 'payment',
-        payment_method_types: ['card'],
-        ...(user.email ? { customer_email: user.email } : {}),
-        line_items: [
-          {
-            price_data: {
-              currency: 'usd',
-              unit_amount: FIXED_DOCUMENT_PRICE_CENTS,
-              product_data: {
-                name: documentDisplayName,
-                description: documentDisplayDescription,
-              },
-            },
-            quantity: 1,
-          },
-        ],
-        success_url: `${siteUrl}/${effectiveLocale}/dashboard?checkout_success=true&session_id={CHECKOUT_SESSION_ID}&doc_instance_id=${documentInstanceId}`,
-        cancel_url: `${siteUrl}/${effectiveLocale}/docs/${params.docId}/start?checkout_cancelled=true`,
+      const priceCents = (docConfig.basePrice || DEFAULT_DOCUMENT_PRICE) * 100;
+      paymentIntent = await stripe.paymentIntents.create({
+        amount: priceCents,
+        currency: 'usd',
         metadata: {
           userId: user.uid,
           docId: params.docId,
           documentInstanceId: documentInstanceId,
           locale: effectiveLocale,
+          name: documentDisplayName,
+          description: documentDisplayDescription,
         },
-      };
-
-      session = await stripe.checkout.sessions.create(sessionParams);
+      });
       console.log(
-        `${logPrefix} Stripe Checkout session created: ${session.id}`,
+        `${logPrefix} Stripe payment intent created: ${paymentIntent.id}`,
       );
     } catch (stripeError) {
       console.error(
-        `${logPrefix} Stripe session creation failed:`,
+        `${logPrefix} Stripe payment intent creation failed:`,
         stripeError,
       );
       return NextResponse.json(
         {
-          error: 'Failed to create payment session.',
+          error: 'Failed to create payment intent.',
           details:
             stripeError instanceof Error
               ? stripeError.message
               : 'Unknown Stripe error',
-          code: 'STRIPE_SESSION_FAILED',
+          code: 'STRIPE_INTENT_FAILED',
         },
         { status: 500 },
       );
     }
 
-    if (!session.url) {
+    if (!paymentIntent.client_secret) {
       console.error(
-        `${logPrefix} Stripe session URL not created, though session object exists.`,
+        `${logPrefix} Stripe client secret missing after payment intent creation.`,
       );
       return NextResponse.json(
         {
-          error: 'Stripe session URL missing after creation.',
-          code: 'STRIPE_URL_MISSING',
+          error: 'Stripe client secret missing.',
+          code: 'STRIPE_SECRET_MISSING',
         },
         { status: 500 },
       );
     }
 
-    return NextResponse.json({ checkoutUrl: session.url });
+    return NextResponse.json({ clientSecret: paymentIntent.client_secret });
   } catch (error) {
     console.error(
       `${logPrefix} Unhandled error in wizard submission API:`,
