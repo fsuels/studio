@@ -5,13 +5,13 @@
   "scripts": {
     "dev": "next dev -p 9002",
     "genkit:watch": "genkit start -- tsx --watch src/ai/dev.ts",
-    "build": "npm run gen:previews && next build",
+    "build": "NODE_OPTIONS='--max_old_space_size=4096' npm run gen:previews && next build",
     "start": "NODE_ENV=production node server.mjs",
     "lint": "next lint",
     "format": "prettier --write .",
     "typecheck": "tsc --noEmit",
     "test": "node --test tests/prettify.test.js",
-    "gen:previews": "node --experimental-modules scripts/generate-previews.js",
+    "gen:previews": "NO_PREVIEWS=$CI node --experimental-modules scripts/generate-previews.js",
     "extract:i18n": "node_modules/.bin/i18next-parser \"src/**/*.{ts,tsx}\" --config i18next-parser.config.js",
     "seed:reviews": "node scripts/seed-reviews.ts",
     "generate:doc": "tsx scripts/generate-doc.ts"
