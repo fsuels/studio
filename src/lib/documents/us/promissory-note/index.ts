@@ -1,5 +1,6 @@
 // src/lib/documents/us/promissory-note/index.ts
 import path from 'path';
+import { cwd } from 'process';
 import * as schema from './schema';
 import * as questions from './questions';
 import { promissoryNoteMeta } from './metadata';
@@ -9,7 +10,15 @@ export const document = {
   country: 'us',
   languages: ['en', 'es'],
   templatePath: (lang: string) =>
-    path.join(__dirname, `template.${lang}.md`),
+    path.join(
+      cwd(),
+      'src',
+      'lib',
+      'documents',
+      'us',
+      'promissory-note',
+      `template.${lang}.md`,
+    ),
   schema,
   questions,
   marketing: promissoryNoteMeta,
