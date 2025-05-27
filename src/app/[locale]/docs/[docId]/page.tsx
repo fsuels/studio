@@ -4,7 +4,7 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import DocPageClient from './DocPageClient';
-import DocumentPreview from '@/components/DocumentPreview';
+import MarkdownPreview from '@/components/MarkdownPreview';
 import { documentLibrary } from '@/lib/document-library';
 import { localizations } from '@/lib/localizations'; // Ensure this path is correct
 import { vehicleBillOfSaleFaqs } from '@/lib/documents/us/vehicle-bill-of-sale/faqs';
@@ -97,7 +97,7 @@ export default async function DocPage({ params }: DocPageProps) {
   // It's then passed down to the client component.
   return (
     <DocPageClient params={params}>
-      <DocumentPreview markdown={markdownContent ?? ''} />
+      <MarkdownPreview markdown={markdownContent ?? ''} />
     </DocPageClient>
   );
 }
