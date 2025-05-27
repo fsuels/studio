@@ -427,13 +427,6 @@ export default function DocPageClient({
               {/* Trust block under price card */}
               <div className="mt-4 space-y-2 text-center">
                 {/* Let’s Encrypt */}
-                <a href="https://letsencrypt.org" target="_blank" rel="noopener">
-                  <img
-                    src="https://letsencrypt.org/images/letsencrypt-logo.svg"
-                    alt="Protected by Let's Encrypt"
-                    className="h-6 mx-auto"
-                  />
-                </a>
                 {/* Documents generated counter */}
                 <p className="text-xs text-gray-500">
                   <strong>104,213</strong> templates downloaded this year
