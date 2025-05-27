@@ -58,36 +58,41 @@ export async function generateStaticParams(): Promise<DocPageParams[]> {
 
 // This Server Component now correctly passes params to the Client Component
 export default async function DocPage({ params }: DocPageProps) {
+  const { docId, locale } = params; // cache params before await
   // Await a microtask to comply with Next.js dynamic param handling
   await Promise.resolve();
 
-  const doc = documentLibrary.find((d) => d.id === params.docId);
+  const doc = documentLibrary.find((d) => d.id === docId);
   let markdownContent: string | null = null;
 
   let filePath: string | null = null;
   if (doc && typeof (doc as any).templatePath === 'function') {
-    filePath = (doc as any).templatePath(params.locale);
+    filePath = (doc as any).templatePath(locale);
   } else {
     filePath = path.join(
       process.cwd(),
       'public',
       'templates',
-      params.locale,
-      `${params.docId}.md`,
+      locale,
+      `${docId}.md`,
     );
   }
 
   try {
     markdownContent = await fs.readFile(filePath, 'utf-8');
+    console.log('Markdown snippet', markdownContent?.slice(0, 100));
+    if (!markdownContent) {
+      console.warn('Empty markdown content, check path:', filePath);
+    }
   } catch (error: unknown) {
     const err = error as NodeJS.ErrnoException;
     if (err.code === 'ENOENT') {
       console.warn(
-        `Markdown template not found for ${params.docId} in locale ${params.locale}. Path: ${filePath}`,
+        `Markdown template not found for ${docId} in locale ${locale}. Path: ${filePath}`,
       );
     } else {
       console.error(
-        `Error reading markdown file for ${params.docId} in locale ${params.locale}. Path: ${filePath}`,
+        `Error reading markdown file for ${docId} in locale ${locale}. Path: ${filePath}`,
         err,
       );
     }
@@ -97,7 +102,7 @@ export default async function DocPage({ params }: DocPageProps) {
   // It's then passed down to the client component.
   return (
     <DocPageClient params={params}>
-      <MarkdownPreview markdown={markdownContent ?? ''} docId={params.docId} locale={params.locale} />
+      <MarkdownPreview markdown={markdownContent ?? ''} docId={docId} locale={locale} />
     </DocPageClient>
   );
 }
