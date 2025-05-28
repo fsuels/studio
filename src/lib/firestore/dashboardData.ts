@@ -8,6 +8,7 @@ import {
   type Timestamp,
 } from 'firebase/firestore';
 import { documentLibrary } from '@/lib/document-library';
+import { listRecentProgress, type FormProgressDoc } from './saveFormProgress';
 
 export interface DashboardDocument {
   id: string;
@@ -56,4 +57,22 @@ export async function getUserPayments(
   const q = query(col, orderBy('date', 'desc'), limit(max));
   const snap = await getDocs(q);
   return snap.docs.map((d) => d.data() as DashboardPayment);
+}
+
+export async function getUserDrafts(
+  userId: string,
+  max = 20,
+): Promise<DashboardDocument[]> {
+  const drafts = await listRecentProgress(userId, max);
+  return drafts.map((d: FormProgressDoc) => {
+    const docType = d.docType;
+    const docConfig = documentLibrary.find((doc) => doc.id === docType);
+    return {
+      id: `${encodeURIComponent(docType)}_${d.state || 'NA'}`,
+      name: docConfig?.name || docConfig?.translations?.en?.name || docType,
+      date: d.updatedAt,
+      status: 'Draft',
+      docType,
+    } as DashboardDocument;
+  });
 }
