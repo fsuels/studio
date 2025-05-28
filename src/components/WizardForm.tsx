@@ -290,7 +290,7 @@ export default function WizardForm({
     localStorage.removeItem(`draft-${doc.id}-${locale}`);
     setShowPaymentModal(false);
     setPaymentClientSecret(null);
-    onComplete('/dashboard');
+    onComplete(`/${locale}/dashboard`);
   }, [doc.id, locale, onComplete]);
 
   const handleSkipStep = useCallback(() => {
@@ -336,7 +336,7 @@ export default function WizardForm({
           JSON.stringify(relevantDataToSave),
         );
       }
-      onComplete('/dashboard');
+      onComplete(`/${locale}/dashboard`);
     } catch (error) {
       console.error('[WizardForm] Failed to save draft:', error);
       toast({
@@ -362,18 +362,15 @@ export default function WizardForm({
 
   const handleAuthSuccess = useCallback(() => {
     setShowAuthModal(false);
-    if (pendingSaveDraft) {
-      handleSaveAndFinishLater();
-    } else if (isLoggedIn && isReviewing) {
-      handleNextStep();
-    }
-  }, [
-    pendingSaveDraft,
-    handleSaveAndFinishLater,
-    isLoggedIn,
-    isReviewing,
-    handleNextStep,
-  ]);
+    // wait one tick so auth state updates propagate
+    setTimeout(() => {
+      if (pendingSaveDraft) {
+        handleSaveAndFinishLater();
+      } else if (isReviewing) {
+        handleNextStep();
+      }
+    }, 0);
+  }, [pendingSaveDraft, handleSaveAndFinishLater, isReviewing, handleNextStep]);
 
   if (!isHydrated || authIsLoading) {
     return (

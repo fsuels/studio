@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import {
   getUserDocuments,
   getUserPayments,
+  getUserDrafts,
 } from '@/lib/firestore/dashboardData';
 
 export function useDashboardData(
@@ -16,16 +17,33 @@ export function useDashboardData(
     enabled,
   });
 
+  const draftsQuery = useQuery({
+    queryKey: ['dashboardDrafts', userId],
+    queryFn: () => (userId ? getUserDrafts(userId) : Promise.resolve([])),
+    enabled,
+  });
+
   const paymentsQuery = useQuery({
     queryKey: ['dashboardPayments', userId],
     queryFn: () => (userId ? getUserPayments(userId) : Promise.resolve([])),
     enabled,
   });
 
+  const parseDate = (d: any) => {
+    if (!d) return 0;
+    if (typeof d === 'object' && 'seconds' in d) return d.seconds * 1000;
+    return new Date(d).getTime();
+  };
+
+  const documents = [...(docsQuery.data || []), ...(draftsQuery.data || [])].sort(
+    (a, b) => parseDate(b.date) - parseDate(a.date),
+  );
+
   return {
-    documents: docsQuery.data || [],
+    documents,
     payments: paymentsQuery.data || [],
-    isLoading: docsQuery.isLoading || paymentsQuery.isLoading,
-    error: docsQuery.error || paymentsQuery.error,
+    isLoading:
+      docsQuery.isLoading || draftsQuery.isLoading || paymentsQuery.isLoading,
+    error: docsQuery.error || draftsQuery.error || paymentsQuery.error,
   };
 }

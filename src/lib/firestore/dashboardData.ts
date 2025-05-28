@@ -39,6 +39,28 @@ export async function getUserDocuments(
   });
 }
 
+export async function getUserDrafts(
+  userId: string,
+  max = 20,
+): Promise<DashboardDocument[]> {
+  const db = await getDb();
+  const col = collection(db, 'users', userId, 'formProgress');
+  const q = query(col, orderBy('updatedAt', 'desc'), limit(max));
+  const snap = await getDocs(q);
+  return snap.docs.map((d) => {
+    const data = d.data() as Record<string, unknown>;
+    const docType = (data.docType || d.id.split('_')[0]) as string;
+    const docConfig = documentLibrary.find((doc) => doc.id === docType);
+    return {
+      id: d.id,
+      name: docConfig?.name || docConfig?.translations?.en?.name || docType,
+      date: data.updatedAt as Timestamp | Date | string,
+      status: 'Draft',
+      docType,
+    };
+  });
+}
+
 export interface DashboardPayment {
   id: string;
   date: Timestamp | Date | string;
