@@ -50,7 +50,7 @@ export default function WizardForm({
 
   const [isHydrated, setIsHydrated] = useState(false);
   const [showAuthModal, setShowAuthModal] = useState(false);
-  const [pendingSaveDraft, setPendingSaveDraft] = useState(false);
+  const [pendingRedirect, setPendingRedirect] = useState(false);
   const [isReviewing, setIsReviewing] = useState(false);
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
@@ -72,14 +72,6 @@ export default function WizardForm({
     setIsHydrated(true);
   }, []);
 
-  // If the user initiates a save while not logged in,
-  // open the auth modal once auth state resolves.
-  useEffect(() => {
-    if (pendingSaveDraft && !isLoggedIn && !authIsLoading) {
-      // Added !authIsLoading check
-      setShowAuthModal(true);
-    }
-  }, [pendingSaveDraft, isLoggedIn, authIsLoading]);
 
   const actualSchemaShape = useMemo<
     Record<string, z.ZodTypeAny> | undefined
@@ -335,84 +327,49 @@ export default function WizardForm({
     }
   }, [currentStepIndex, totalSteps]);
 
-  const handleSaveAndFinishLater = useCallback(
-    async (skipAuthCheck = false) => {
-      if (!skipAuthCheck && !isLoggedIn) {
-        setPendingSaveDraft(true);
-        if (!authIsLoading) {
-          setShowAuthModal(true);
+  const persistAndGo = useCallback(async () => {
+    if (!user?.uid) return;
+    const allValues = getValues();
+    const relevantDataToSave = Object.keys(allValues).reduce(
+      (acc, key) => {
+        const value = (allValues as Record<string, unknown>)[key];
+        if (value !== undefined) {
+          acc[key] = value;
         }
-        return;
-      }
-      try {
-        const allValues = getValues();
-        const relevantDataToSave = Object.keys(allValues).reduce(
-          (acc, key) => {
-            const value = (allValues as Record<string, unknown>)[key];
-            if (value !== undefined) {
-              acc[key] = value;
-            }
-            return acc;
-          },
-          {} as Record<string, unknown>,
-        );
+        return acc;
+      },
+      {} as Record<string, unknown>,
+    );
 
-        if (user?.uid) {
-          await saveFormProgress({
-            userId: user.uid,
-            docType: doc.id,
-            state: locale,
-            formData: relevantDataToSave,
-          });
-        } else {
-          localStorage.setItem(
-            `draft-${doc.id}-${locale}`,
-            JSON.stringify(relevantDataToSave),
-          );
-        }
-        toast({
-          // Added toast for save success
-          title: t('Draft Saved'),
-          description: t('Your progress has been saved to your dashboard.'),
-        });
-        onComplete(`/${locale}/dashboard`);
-      } catch (error) {
-        console.error('[WizardForm] Failed to save draft:', error);
-        toast({
-          title: t('Error'),
-          description: t('An unexpected error occurred while saving.', {
-            defaultValue: 'An unexpected error occurred while saving.',
-          }),
-          variant: 'destructive',
-        });
-      } finally {
-        setPendingSaveDraft(false);
-      }
-    },
-    [
-      isLoggedIn,
-      user,
-      doc.id,
-      locale,
-      getValues,
-      onComplete,
-      toast,
-      t,
-      authIsLoading,
-    ],
-  );
+    await saveFormProgress({
+      userId: user.uid,
+      docType: doc.id,
+      state: locale,
+      formData: relevantDataToSave,
+    });
+    toast({
+      title: t('Draft Saved'),
+      description: t('Your progress has been saved to your dashboard.'),
+    });
+    router.replace(`/${locale}/dashboard`);
+  }, [getValues, user, doc.id, locale, router, toast, t]);
 
-  const handleAuthSuccess = useCallback(() => {
-    setShowAuthModal(false);
-    if (pendingSaveDraft) {
-      // Wait a tick for auth state to update before saving
-      setTimeout(() => handleSaveAndFinishLater(true), 0);
+  const handleSaveAndFinishLater = useCallback(() => {
+    if (user) {
+      void persistAndGo();
     } else {
-      // For any other scenario where AuthModal was triggered and successful (e.g., trying to proceed to payment),
-      // redirect to the dashboard. The user can then resume their action from the dashboard.
-      router.push(`/${locale}/dashboard`);
+      setPendingRedirect(true);
+      setShowAuthModal(true);
     }
-  }, [pendingSaveDraft, handleSaveAndFinishLater, router, locale]);
+  }, [user, persistAndGo]);
+
+  useEffect(() => {
+    if (pendingRedirect && user) {
+      void persistAndGo();
+      setPendingRedirect(false);
+    }
+  }, [pendingRedirect, user, persistAndGo]);
+
 
   if (!isHydrated || authIsLoading) {
     return (
@@ -615,9 +572,9 @@ export default function WizardForm({
         isOpen={showAuthModal}
         onClose={() => {
           setShowAuthModal(false);
-          setPendingSaveDraft(false);
+          setPendingRedirect(false);
         }}
-        onAuthSuccess={handleAuthSuccess}
+        onSuccess={() => setPendingRedirect(true)}
       />
       <PaymentModal
         open={showPaymentModal}

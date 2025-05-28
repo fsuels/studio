@@ -23,14 +23,10 @@ import { useParams } from 'next/navigation';
 interface AuthModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onAuthSuccess: (_mode: 'signin' | 'signup', _email: string) => void;
+  onSuccess?: () => void;
 }
 
-export default function AuthModal({
-  isOpen,
-  onClose,
-  onAuthSuccess,
-}: AuthModalProps) {
+export default function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps) {
   const { t } = useTranslation('common');
   const { toast } = useToast();
   const { login } = useAuth(); // Get the login function from useAuth
@@ -108,7 +104,8 @@ export default function AuthModal({
           defaultValue: 'You can now proceed.',
         }),
       });
-      onAuthSuccess('signup', emailModal);
+      onClose();
+      onSuccess?.();
     } else {
       // authMode === 'signin'
       // Simulate successful signin
@@ -123,7 +120,8 @@ export default function AuthModal({
           defaultValue: 'You can now proceed.',
         }),
       });
-      onAuthSuccess('signin', emailModal);
+      onClose();
+      onSuccess?.();
     }
     setIsSubmitting(false);
   };
