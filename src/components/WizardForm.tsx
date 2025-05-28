@@ -628,7 +628,7 @@ export default function WizardForm({
               variant="ghost"
               onClick={handleSaveAndFinishLater}
               disabled={formIsSubmitting || authIsLoading}
-              className="text-sm text-muted-foreground hover:text-primary"
+              className="text-sm text-muted-foreground"
             >
               {t('wizard.saveFinishLater', {
                 defaultValue: 'Save and finish later',
