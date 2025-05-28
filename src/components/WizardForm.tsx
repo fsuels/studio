@@ -26,6 +26,8 @@ import AuthModal from '@/components/AuthModal';
 import { useAuth } from '@/hooks/useAuth';
 import { useRouter } from 'next/navigation';
 import { saveFormProgress } from '@/lib/firestore/saveFormProgress';
+import { resolveLocale } from '@/lib/i18n';
+import type { UserCredential } from 'firebase/auth';
 import AddressField from '@/components/AddressField';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import TrustBadges from '@/components/TrustBadges';
@@ -47,10 +49,12 @@ export default function WizardForm({
   const { t } = useTranslation('common');
   const { toast } = useToast();
   const { isLoggedIn, isLoading: authIsLoading, user } = useAuth();
+  const resolvedLocale = resolveLocale(locale);
 
   const [isHydrated, setIsHydrated] = useState(false);
-  const [showAuthModal, setShowAuthModal] = useState(false);
-  const [pendingRedirect, setPendingRedirect] = useState(false);
+  const [authOpen, setAuthOpen] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [draftId] = useState(() => crypto.randomUUID());
   const [isReviewing, setIsReviewing] = useState(false);
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
@@ -168,7 +172,7 @@ export default function WizardForm({
       }
 
       if (!isLoggedIn) {
-        setShowAuthModal(true);
+        setAuthOpen(true);
         return;
       }
       try {
@@ -315,11 +319,11 @@ export default function WizardForm({
   ]);
 
   const handlePaymentSuccess = useCallback(() => {
-    localStorage.removeItem(`draft-${doc.id}-${locale}`);
+    localStorage.removeItem(`draft-${doc.id}-${resolvedLocale}`);
     setShowPaymentModal(false);
     setPaymentClientSecret(null);
-    onComplete(`/${locale}/dashboard?paymentSuccess=true&docId=${doc.id}`); // Redirect to dashboard
-  }, [doc.id, locale, onComplete]);
+    onComplete(`/${resolvedLocale}/dashboard?paymentSuccess=true&docId=${doc.id}`); // Redirect to dashboard
+  }, [doc.id, resolvedLocale, onComplete]);
 
   const handleSkipStep = useCallback(async () => {
     // Validate current field before skipping, if it's required.
@@ -349,60 +353,35 @@ export default function WizardForm({
     }
   }, [currentStepIndex, totalSteps, trigger, toast, t]);
 
-  const persistAndGo = useCallback(async () => {
-    const allValues = getValues();
-    const relevantDataToSave = Object.keys(allValues).reduce(
-      (acc, key) => {
-        const value = (allValues as Record<string, unknown>)[key];
-        if (value !== undefined) {
-          acc[key] = value;
-        }
-        return acc;
-      },
-      {} as Record<string, unknown>,
-    );
-
-    if (user?.uid) {
-      await saveFormProgress({
-        userId: user.uid,
-        docType: doc.id,
-        state: locale,
-        formData: relevantDataToSave,
-      });
-    }
-
-    toast({
-      title: t('Draft Saved'),
-      description: t('Your progress has been saved to your dashboard.'),
-    });
-
-    router.replace(`/${locale}/dashboard`);
-  }, [getValues, user, doc.id, locale, toast, router, t]);
-
-  const handleSaveAndFinishLater = useCallback(async () => {
-    if (user) {
-      await persistAndGo();
-    } else {
-      setPendingRedirect(true);
-      setShowAuthModal(true);
-    }
-  }, [user, persistAndGo]);
-
-  useEffect(() => {
-    if (pendingRedirect && user) {
-      void persistAndGo();
-      setPendingRedirect(false);
-    }
-  }, [pendingRedirect, user, persistAndGo]);
-
-  const handleAuthSuccess = useCallback(
-    (_mode: 'signin' | 'signup', _email: string) => {
-      setShowAuthModal(false);
-      if (!pendingRedirect) {
-        onComplete(`/${locale}/dashboard?authSuccess=true`);
+  const persistAndExit = useCallback(
+    async (uid: string) => {
+      setSaving(true);
+      try {
+        const allValues = getValues();
+        await saveFormProgress(uid, draftId, allValues);
+        router.replace(`/${resolvedLocale}/dashboard`);
+      } catch (e) {
+        toast.error('Failed to save draft.');
+        setSaving(false);
       }
     },
-    [pendingRedirect, onComplete, locale],
+    [getValues, router, locale, draftId, toast],
+  );
+
+  const handleSaveLater = useCallback(() => {
+    if (saving) return;
+    if (user?.uid) return void persistAndExit(user.uid);
+    setAuthOpen(true);
+  }, [saving, user, persistAndExit]);
+
+  const handleAuthSuccess = useCallback(
+    (cred: UserCredential) => {
+      setAuthOpen(false);
+      if (cred?.user?.uid) {
+        void persistAndExit(cred.user.uid);
+      }
+    },
+    [persistAndExit],
   );
 
   if (!isHydrated || authIsLoading) {
@@ -589,26 +568,24 @@ export default function WizardForm({
             <Button
               type="button"
               variant="ghost"
-              onClick={handleSaveAndFinishLater}
-              disabled={formIsSubmitting || authIsLoading}
+              onClick={handleSaveLater}
+              disabled={formIsSubmitting || authIsLoading || saving}
               className="text-sm text-muted-foreground"
             >
-              {t('wizard.saveFinishLater', {
-                defaultValue: 'Save and finish later',
-              })}
+              {saving
+                ? 'Saving…'
+                : t('wizard.saveFinishLater', {
+                    defaultValue: 'Save and finish later',
+                  })}
               <Save className="ml-2 h-4 w-4" />
             </Button>
           </div>
         </div>
       </TooltipProvider>
       <AuthModal
-        isOpen={showAuthModal}
-        onClose={() => {
-          setShowAuthModal(false);
-          setPendingRedirect(false);
-        }}
-        onAuthSuccess={handleAuthSuccess}
-        onSuccess={() => setPendingRedirect(true)}
+        isOpen={authOpen}
+        onClose={() => setAuthOpen(false)}
+        onSuccess={handleAuthSuccess}
       />
       <PaymentModal
         open={showPaymentModal}
