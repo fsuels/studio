@@ -30,6 +30,7 @@ import { TooltipProvider } from '@/components/ui/tooltip';
 import TrustBadges from '@/components/TrustBadges';
 import ReviewStep from '@/components/ReviewStep';
 import PaymentModal from '@/components/PaymentModal';
+import { useRouter } from 'next/navigation'; // Added useRouter
 
 interface WizardFormProps {
   locale: 'en' | 'es';
@@ -45,6 +46,7 @@ export default function WizardForm({
   const { t } = useTranslation('common');
   const { toast } = useToast();
   const { isLoggedIn, isLoading: authIsLoading, user } = useAuth();
+  const router = useRouter(); // Added for direct navigation
 
   const [isHydrated, setIsHydrated] = useState(false);
   const [showAuthModal, setShowAuthModal] = useState(false);
@@ -55,6 +57,7 @@ export default function WizardForm({
   const [paymentClientSecret, setPaymentClientSecret] = useState<string | null>(
     null,
   );
+  const [isSavingDraft, setIsSavingDraft] = useState(false); // New state for save draft
 
   const liveRef = useRef<HTMLDivElement>(null);
 
@@ -360,11 +363,11 @@ export default function WizardForm({
       return;
     }
     if (!isLoggedIn && authIsLoading) {
-      // If auth is still loading, set pending and wait for useEffect to handle modal
       setPendingSaveDraft(true);
       return;
     }
 
+    setIsSavingDraft(true);
     try {
       const allValues = getValues();
       const relevantDataToSave = Object.keys(allValues).reduce(
@@ -386,7 +389,10 @@ export default function WizardForm({
           formData: relevantDataToSave,
         });
       } else {
-        // This case should ideally not be hit if !isLoggedIn triggers modal
+        // This fallback should ideally not be hit if auth flow is robust
+        console.warn(
+          '[WizardForm] User not fully authenticated (no UID) during save. Saving to localStorage.',
+        );
         localStorage.setItem(
           `draft-${doc.id}-${locale}`,
           JSON.stringify(relevantDataToSave),
@@ -396,7 +402,7 @@ export default function WizardForm({
         title: t('Draft Saved'),
         description: t('Your progress has been saved to your dashboard.'),
       });
-      onComplete(`/${locale}/dashboard`); // Redirect to dashboard
+      router.push(`/${locale}/dashboard`); // Use router for direct navigation
     } catch (error) {
       console.error('[WizardForm] Failed to save draft:', error);
       toast({
@@ -407,6 +413,7 @@ export default function WizardForm({
         variant: 'destructive',
       });
     } finally {
+      setIsSavingDraft(false);
       setPendingSaveDraft(false);
     }
   }, [
@@ -415,7 +422,7 @@ export default function WizardForm({
     doc.id,
     locale,
     getValues,
-    onComplete,
+    router, // Added router
     toast,
     t,
     authIsLoading,
@@ -425,21 +432,13 @@ export default function WizardForm({
     (_mode: 'signin' | 'signup', _email: string) => {
       setShowAuthModal(false);
       if (pendingSaveDraft) {
-        handleSaveAndFinishLater(); // This will now use the logged-in user
+        handleSaveAndFinishLater();
       } else {
-        // If not pending a save, auth was likely triggered by "Generate Document"
-        // Now that user is logged in, redirect to dashboard.
-        // They can resume from dashboard if they wish.
-        onComplete(`/${locale}/dashboard?authSuccess=true`);
+        router.push(`/${locale}/dashboard?authSuccess=true`); // Use router for direct navigation
       }
-      setPendingSaveDraft(false); // Reset pending state
+      setPendingSaveDraft(false);
     },
-    [
-      pendingSaveDraft,
-      handleSaveAndFinishLater,
-      onComplete,
-      locale,
-    ],
+    [pendingSaveDraft, handleSaveAndFinishLater, router, locale], // Added router
   );
 
   if (!isHydrated || authIsLoading) {
@@ -582,7 +581,7 @@ export default function WizardForm({
                 type="button"
                 variant="outline"
                 onClick={handlePreviousStep}
-                disabled={formIsSubmitting || authIsLoading}
+                disabled={formIsSubmitting || authIsLoading || isSavingDraft}
                 className="text-foreground border-border hover:bg-muted w-full sm:w-auto"
               >
                 {t('Back')}
@@ -597,7 +596,7 @@ export default function WizardForm({
                 type="button"
                 variant="ghost"
                 onClick={handleSkipStep}
-                disabled={formIsSubmitting || authIsLoading}
+                disabled={formIsSubmitting || authIsLoading || isSavingDraft}
                 className="border border-dashed text-muted-foreground w-full sm:w-auto"
               >
                 {t('wizard.skipQuestion')}
@@ -610,6 +609,7 @@ export default function WizardForm({
               disabled={
                 formIsSubmitting ||
                 authIsLoading ||
+                isSavingDraft ||
                 (isReviewing && !isFormValid && Object.keys(errors).length > 0)
               }
             >
@@ -627,13 +627,22 @@ export default function WizardForm({
               type="button"
               variant="ghost"
               onClick={handleSaveAndFinishLater}
-              disabled={formIsSubmitting || authIsLoading}
+              disabled={formIsSubmitting || authIsLoading || isSavingDraft}
               className="text-sm text-muted-foreground"
             >
-              {t('wizard.saveFinishLater', {
-                defaultValue: 'Save and finish later',
-              })}
-              <Save className="ml-2 h-4 w-4" />
+              {isSavingDraft ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  {t('wizard.savingDraft', { defaultValue: 'Saving Draft...' })}
+                </>
+              ) : (
+                <>
+                  {t('wizard.saveFinishLater', {
+                    defaultValue: 'Save and finish later',
+                  })}
+                  <Save className="ml-2 h-4 w-4" />
+                </>
+              )}
             </Button>
           </div>
         </div>
@@ -642,7 +651,7 @@ export default function WizardForm({
         isOpen={showAuthModal}
         onClose={() => {
           setShowAuthModal(false);
-          setPendingSaveDraft(false); // Reset pending state if modal is closed without auth
+          setPendingSaveDraft(false);
         }}
         onAuthSuccess={handleAuthSuccess}
       />
