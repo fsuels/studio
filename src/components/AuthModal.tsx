@@ -138,7 +138,8 @@ export default function AuthModal({
       }
 
       // update local auth context so the rest of the app knows the user
-      login(cred.user.uid);
+      // pass both email and uid so draft saving uses the real UID
+      login(cred.user.email ?? '', cred.user.uid);
 
       // notify parent (WizardForm)
       onAuthSuccess(authMode, cred.user.uid);
