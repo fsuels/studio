@@ -17,6 +17,8 @@ import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/hooks/useAuth'; // Import useAuth
+import Link from 'next/link';
+import { useParams } from 'next/navigation';
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -32,6 +34,8 @@ export default function AuthModal({
   const { t } = useTranslation('common');
   const { toast } = useToast();
   const { login } = useAuth(); // Get the login function from useAuth
+  const params = useParams();
+  const locale = (params?.locale as 'en' | 'es') || 'en';
 
   const [authMode, setAuthMode] = useState<'signin' | 'signup'>('signin');
   const [emailModal, setEmailModal] = useState('');
@@ -144,7 +148,7 @@ export default function AuthModal({
     >
       <DialogContent className="sm:max-w-md bg-card border-border p-6 rounded-lg shadow-xl">
         <DialogHeader className="text-center items-center space-y-3">
-          <Logo wrapperClassName="mb-3" />
+          <Logo wrapperClassName="mb-3" /> {/* Added margin-bottom to Logo wrapper */}
           <DialogTitle className="text-2xl font-semibold text-card-foreground">
             {authMode === 'signin'
               ? t('Sign In', { defaultValue: 'Sign In' })
@@ -167,7 +171,7 @@ export default function AuthModal({
           <div>
             <Label
               htmlFor="email-modal"
-              className="text-xs font-medium text-muted-foreground"
+              className="text-xs font-medium text-muted-foreground" // Made label smaller and muted
             >
               {t('Email', { defaultValue: 'Email' })}
             </Label>
@@ -177,7 +181,7 @@ export default function AuthModal({
               placeholder={t('Enter your email', {
                 defaultValue: 'Enter your email',
               })}
-              className="bg-background border-input mt-1"
+              className="bg-background border-input mt-1 h-10" // Ensure consistent height
               value={emailModal}
               onChange={(e) => setEmailModal(e.target.value)}
               disabled={isSubmitting}
@@ -187,7 +191,7 @@ export default function AuthModal({
           <div>
             <Label
               htmlFor="password-modal"
-              className="text-xs font-medium text-muted-foreground"
+              className="text-xs font-medium text-muted-foreground" // Made label smaller and muted
             >
               {t('Password', { defaultValue: 'Password' })}
             </Label>
@@ -197,7 +201,7 @@ export default function AuthModal({
               placeholder={t('Enter your password', {
                 defaultValue: 'Enter your password',
               })}
-              className="bg-background border-input mt-1"
+              className="bg-background border-input mt-1 h-10" // Ensure consistent height
               value={passwordModal}
               onChange={(e) => setPasswordModal(e.target.value)}
               disabled={isSubmitting}
@@ -208,7 +212,7 @@ export default function AuthModal({
             <div>
               <Label
                 htmlFor="confirm-password-modal"
-                className="text-xs font-medium text-muted-foreground"
+                className="text-xs font-medium text-muted-foreground" // Made label smaller and muted
               >
                 {t('authModal.confirmPasswordLabel', {
                   defaultValue: 'Confirm Password',
@@ -220,7 +224,7 @@ export default function AuthModal({
                 placeholder={t('authModal.confirmPasswordPlaceholder', {
                   defaultValue: 'Confirm your password',
                 })}
-                className="bg-background border-input mt-1"
+                className="bg-background border-input mt-1 h-10" // Ensure consistent height
                 value={confirmPasswordModal}
                 onChange={(e) => setConfirmPasswordModal(e.target.value)}
                 disabled={isSubmitting}
@@ -230,10 +234,10 @@ export default function AuthModal({
           )}
         </div>
 
-        <DialogFooter className="flex flex-col gap-3 pt-2">
+        <DialogFooter className="flex flex-col gap-4 pt-2"> {/* Increased gap */}
           <Button
             onClick={handleAuthAction}
-            className="w-full h-11 bg-primary text-primary-foreground hover:bg-primary/90 text-base"
+            className="w-full h-11 bg-primary text-primary-foreground hover:bg-primary/90 text-base" // Ensured height
             disabled={isSubmitting}
           >
             {isSubmitting
@@ -244,21 +248,23 @@ export default function AuthModal({
                     defaultValue: 'Create Account',
                   })}
           </Button>
-          <Button
-            type="button"
-            variant="outline" // Changed to outline for better visibility
-            onClick={toggleAuthMode}
-            className="text-sm text-primary hover:text-primary/80 font-medium w-full h-10 border-primary hover:bg-primary/10"
-            disabled={isSubmitting}
-          >
+          <p className="text-center text-sm text-muted-foreground"> {/* Changed button to p tag for link */}
             {authMode === 'signin'
-              ? t('authModal.createFreeAccount', {
-                  defaultValue: 'Create Free Account',
-                }) // Use new key
-              : t('authModal.promptSignIn', {
-                  defaultValue: 'Already have an account? Sign In',
-                })}
-          </Button>
+              ? t('authModal.promptSignUp', { defaultValue: "Don't have an account?" })
+              : t('authModal.promptSignInShort', { defaultValue: 'Already have an account?' })}{' '}
+            <Link
+              href="#"
+              onClick={(e) => {
+                e.preventDefault();
+                toggleAuthMode();
+              }}
+              className="font-medium text-primary hover:underline"
+            >
+              {authMode === 'signin'
+                ? t('Sign Up', { defaultValue: 'Sign Up' })
+                : t('Sign In', { defaultValue: 'Sign In' })}
+            </Link>
+          </p>
         </DialogFooter>
       </DialogContent>
     </Dialog>
