@@ -29,9 +29,9 @@ export default function StartWizardPageClient() {
   const router = useRouter();
   const { isLoggedIn, user, isLoading: authIsLoading } = useAuth();
 
-  // Robust locale derivation, defaulting to 'en'
-  const pathLocale = Array.isArray(params?.locale) ? params.locale[0] : params?.locale;
-  const locale = (pathLocale === 'es' ? 'es' : 'en') as 'en' | 'es';
+  // Derive locale from params with a simple fallback to 'en'
+  const rawLocale = params?.locale;
+  const locale = (rawLocale === 'es' ? 'es' : 'en') as 'en' | 'es';
 
   const docIdFromPath = (
     Array.isArray(params!.docId) ? params!.docId[0] : params!.docId

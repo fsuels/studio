@@ -24,12 +24,14 @@ interface AuthModalProps {
   isOpen: boolean;
   onClose: () => void;
   onAuthSuccess: (_mode: 'signin' | 'signup', _email: string) => void;
+  onSuccess?: () => void;
 }
 
 export default function AuthModal({
   isOpen,
   onClose,
   onAuthSuccess,
+  onSuccess,
 }: AuthModalProps) {
   const { t } = useTranslation('common');
   const { toast } = useToast();
@@ -109,6 +111,7 @@ export default function AuthModal({
         }),
       });
       onAuthSuccess('signup', emailModal);
+      onSuccess?.();
     } else {
       // authMode === 'signin'
       // Simulate successful signin
@@ -124,6 +127,7 @@ export default function AuthModal({
         }),
       });
       onAuthSuccess('signin', emailModal);
+      onSuccess?.();
     }
     setIsSubmitting(false);
   };
