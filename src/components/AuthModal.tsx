@@ -20,11 +20,13 @@ import { useAuth } from '@/hooks/useAuth'; // Import useAuth
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 
+import type { UserCredential } from 'firebase/auth';
+
 interface AuthModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onAuthSuccess: (_mode: 'signin' | 'signup', _email: string) => void;
-  onSuccess?: () => void;
+  onAuthSuccess?: (_mode: 'signin' | 'signup', _email: string) => void;
+  onSuccess?: (cred: UserCredential) => void;
 }
 
 export default function AuthModal({
@@ -110,8 +112,9 @@ export default function AuthModal({
           defaultValue: 'You can now proceed.',
         }),
       });
-      onAuthSuccess('signup', emailModal);
-      onSuccess?.();
+      const cred = { user: { uid: emailModal } } as unknown as UserCredential;
+      onAuthSuccess?.('signup', emailModal);
+      onSuccess?.(cred);
     } else {
       // authMode === 'signin'
       // Simulate successful signin
@@ -126,8 +129,9 @@ export default function AuthModal({
           defaultValue: 'You can now proceed.',
         }),
       });
-      onAuthSuccess('signin', emailModal);
-      onSuccess?.();
+      const cred = { user: { uid: emailModal } } as unknown as UserCredential;
+      onAuthSuccess?.('signin', emailModal);
+      onSuccess?.(cred);
     }
     setIsSubmitting(false);
   };
