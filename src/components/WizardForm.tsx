@@ -26,7 +26,7 @@ import AuthModal from '@/components/AuthModal';
 import { useAuth } from '@/hooks/useAuth';
 import { useRouter } from 'next/navigation';
 import { saveFormProgress } from '@/lib/firestore/saveFormProgress';
-import { resolveLocale } from '@/lib/i18n';
+import { resolveLocale } from '@/lib/locale';
 import type { UserCredential } from 'firebase/auth';
 import AddressField from '@/components/AddressField';
 import { TooltipProvider } from '@/components/ui/tooltip';
