@@ -54,7 +54,9 @@ export default function WizardForm({
   const [isReviewing, setIsReviewing] = useState(false);
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
-  const [paymentClientSecret, setPaymentClientSecret] = useState<string | null>(null);
+  const [paymentClientSecret, setPaymentClientSecret] = useState<string | null>(
+    null,
+  );
 
   const liveRef = useRef<HTMLDivElement>(null);
 
@@ -73,7 +75,8 @@ export default function WizardForm({
   // If the user initiates a save while not logged in,
   // open the auth modal once auth state resolves.
   useEffect(() => {
-    if (pendingSaveDraft && !isLoggedIn && !authIsLoading) { // Added !authIsLoading check
+    if (pendingSaveDraft && !isLoggedIn && !authIsLoading) {
+      // Added !authIsLoading check
       setShowAuthModal(true);
     }
   }, [pendingSaveDraft, isLoggedIn, authIsLoading]);
@@ -166,11 +169,13 @@ export default function WizardForm({
       }
       // Proceed to payment if logged in and form is valid (or has no errors that block submission)
       if (!isFormValid && Object.keys(errors).length > 0) {
-         toast({
-            title: t('Validation Failed'),
-            description: t('Please correct all errors before generating the document.'),
-            variant: 'destructive',
-          });
+        toast({
+          title: t('Validation Failed'),
+          description: t(
+            'Please correct all errors before generating the document.',
+          ),
+          variant: 'destructive',
+        });
         return;
       }
       try {
@@ -276,11 +281,11 @@ export default function WizardForm({
           window.scrollTo({ top: 0, behavior: 'smooth' });
         }
       } else {
-         toast({
-            title: t('Validation Failed'),
-            description: t('Please correct all errors before reviewing.'),
-            variant: 'destructive',
-          });
+        toast({
+          title: t('Validation Failed'),
+          description: t('Please correct all errors before reviewing.'),
+          variant: 'destructive',
+        });
       }
     }
 
@@ -305,20 +310,19 @@ export default function WizardForm({
     t,
     currentField,
     isFormValid,
-    errors
+    errors,
   ]);
 
   const handlePaymentSuccess = useCallback(() => {
     localStorage.removeItem(`draft-${doc.id}-${locale}`);
     setShowPaymentModal(false);
     setPaymentClientSecret(null);
-    onComplete('/dashboard'); // Or a success page specific to document generation
+    onComplete(`/${locale}/dashboard`);
     toast({
       title: t('Document Generation Successful!'),
       description: t('Your document is ready in your dashboard.'),
     });
   }, [doc.id, locale, onComplete, t, toast]);
-
 
   const handleSkipStep = useCallback(() => {
     if (currentStepIndex < totalSteps - 1) {
@@ -331,84 +335,82 @@ export default function WizardForm({
     }
   }, [currentStepIndex, totalSteps]);
 
-  const handleSaveAndFinishLater = useCallback(async () => {
-    if (!isLoggedIn && !authIsLoading) { // Added !authIsLoading
-      setPendingSaveDraft(true);
-      setShowAuthModal(true);
-      return;
-    }
-    try {
-      const allValues = getValues();
-      const relevantDataToSave = Object.keys(allValues).reduce(
-        (acc, key) => {
-          const value = (allValues as Record<string, unknown>)[key];
-          if (value !== undefined) {
-            acc[key] = value;
-          }
-          return acc;
-        },
-        {} as Record<string, unknown>,
-      );
-
-      if (user?.uid) {
-        await saveFormProgress({
-          userId: user.uid,
-          docType: doc.id,
-          state: locale,
-          formData: relevantDataToSave,
-        });
-      } else {
-        localStorage.setItem(
-          `draft-${doc.id}-${locale}`,
-          JSON.stringify(relevantDataToSave),
-        );
+  const handleSaveAndFinishLater = useCallback(
+    async (skipAuthCheck = false) => {
+      if (!skipAuthCheck && !isLoggedIn && !authIsLoading) {
+        setPendingSaveDraft(true);
+        setShowAuthModal(true);
+        return;
       }
-      toast({ // Added toast for save success
-        title: t('Draft Saved'),
-        description: t('Your progress has been saved to your dashboard.'),
-      });
-      onComplete('/dashboard'); // Redirect to dashboard
-    } catch (error) {
-      console.error('[WizardForm] Failed to save draft:', error);
-      toast({
-        title: t('Error'),
-        description: t('An unexpected error occurred while saving.', {
-          defaultValue: 'An unexpected error occurred while saving.',
-        }),
-        variant: 'destructive',
-      });
-    } finally {
-      setPendingSaveDraft(false);
-    }
-  }, [
-    isLoggedIn,
-    user,
-    doc.id,
-    locale,
-    getValues,
-    onComplete,
-    toast,
-    t,
-    authIsLoading,
-  ]);
+      try {
+        const allValues = getValues();
+        const relevantDataToSave = Object.keys(allValues).reduce(
+          (acc, key) => {
+            const value = (allValues as Record<string, unknown>)[key];
+            if (value !== undefined) {
+              acc[key] = value;
+            }
+            return acc;
+          },
+          {} as Record<string, unknown>,
+        );
+
+        if (user?.uid) {
+          await saveFormProgress({
+            userId: user.uid,
+            docType: doc.id,
+            state: locale,
+            formData: relevantDataToSave,
+          });
+        } else {
+          localStorage.setItem(
+            `draft-${doc.id}-${locale}`,
+            JSON.stringify(relevantDataToSave),
+          );
+        }
+        toast({
+          // Added toast for save success
+          title: t('Draft Saved'),
+          description: t('Your progress has been saved to your dashboard.'),
+        });
+        onComplete(`/${locale}/dashboard`);
+      } catch (error) {
+        console.error('[WizardForm] Failed to save draft:', error);
+        toast({
+          title: t('Error'),
+          description: t('An unexpected error occurred while saving.', {
+            defaultValue: 'An unexpected error occurred while saving.',
+          }),
+          variant: 'destructive',
+        });
+      } finally {
+        setPendingSaveDraft(false);
+      }
+    },
+    [
+      isLoggedIn,
+      user,
+      doc.id,
+      locale,
+      getValues,
+      onComplete,
+      toast,
+      t,
+      authIsLoading,
+    ],
+  );
 
   const handleAuthSuccess = useCallback(() => {
     setShowAuthModal(false);
     if (pendingSaveDraft) {
-      // This function already contains the logic to save and then redirect to dashboard.
-      handleSaveAndFinishLater();
+      // Wait a tick for auth state to update before saving
+      setTimeout(() => handleSaveAndFinishLater(true), 0);
     } else {
       // For any other scenario where AuthModal was triggered and successful (e.g., trying to proceed to payment),
       // redirect to the dashboard. The user can then resume their action from the dashboard.
       router.push(`/${locale}/dashboard`);
     }
-  }, [
-    pendingSaveDraft,
-    handleSaveAndFinishLater,
-    router,
-    locale,
-  ]);
-
+  }, [pendingSaveDraft, handleSaveAndFinishLater, router, locale]);
 
   if (!isHydrated || authIsLoading) {
     return (
@@ -589,7 +591,7 @@ export default function WizardForm({
             </Button>
           </div>
           {/* "Save and finish later" button is always available if not submitting */}
-          { !formIsSubmitting && (
+          {!formIsSubmitting && (
             <div className="mt-4 text-center">
               <Button
                 type="button"
