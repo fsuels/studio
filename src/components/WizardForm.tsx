@@ -9,7 +9,7 @@ import React, {
   useMemo,
 } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
-import axios, { AxiosError } from 'axios';
+import axios, { type AxiosError } from 'axios';
 
 import { z } from 'zod';
 import { Loader2, Save } from 'lucide-react';
@@ -34,7 +34,7 @@ import PaymentModal from '@/components/PaymentModal';
 interface WizardFormProps {
   locale: 'en' | 'es';
   doc: LegalDocument;
-  onComplete: (_checkoutUrl: string) => void;
+  onComplete: (_checkoutUrlOrPath: string) => void;
 }
 
 export default function WizardForm({
@@ -52,7 +52,9 @@ export default function WizardForm({
   const [isReviewing, setIsReviewing] = useState(false);
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
-  const [paymentClientSecret, setPaymentClientSecret] = useState<string | null>(null);
+  const [paymentClientSecret, setPaymentClientSecret] = useState<string | null>(
+    null,
+  );
 
   const liveRef = useRef<HTMLDivElement>(null);
 
@@ -68,13 +70,11 @@ export default function WizardForm({
     setIsHydrated(true);
   }, []);
 
-  // If the user initiates a save while not logged in,
-  // open the auth modal once auth state resolves.
   useEffect(() => {
-    if (pendingSaveDraft && !isLoggedIn) {
+    if (pendingSaveDraft && !isLoggedIn && !authIsLoading) {
       setShowAuthModal(true);
     }
-  }, [pendingSaveDraft, isLoggedIn]);
+  }, [pendingSaveDraft, isLoggedIn, authIsLoading]);
 
   const actualSchemaShape = useMemo<
     Record<string, z.ZodTypeAny> | undefined
@@ -147,6 +147,7 @@ export default function WizardForm({
   const handlePreviousStep = useCallback(() => {
     if (isReviewing) {
       setIsReviewing(false);
+      // currentStepIndex remains at last step, so user can edit last question
     } else if (currentStepIndex > 0) {
       setCurrentStepIndex((prev) => prev - 1);
     }
@@ -157,7 +158,19 @@ export default function WizardForm({
     const currentStepFieldKey = steps[currentStepIndex]?.id;
 
     if (isReviewing) {
-      await trigger();
+      // Final validation of all fields before proceeding to payment/generation
+      const allFieldsValid = await trigger();
+      if (!allFieldsValid) {
+        toast({
+          title: t('Validation Failed'),
+          description: t(
+            'Some information is still missing or invalid. Please review all fields.',
+          ),
+          variant: 'destructive',
+        });
+        return;
+      }
+
       if (!isLoggedIn) {
         setShowAuthModal(true);
         return;
@@ -216,6 +229,7 @@ export default function WizardForm({
     }
 
     if (steps.length === 0) {
+      // No questions, validate the whole form (if any fields exist outside questions array)
       const allValidForNoSteps = await trigger();
       if (allValidForNoSteps) {
         setIsReviewing(true);
@@ -232,17 +246,22 @@ export default function WizardForm({
       return;
     }
 
+    // Validate current step's field if it exists
     if (currentStepFieldKey) {
       isValid = await trigger(currentStepFieldKey as string);
     } else if (totalSteps > 0 && currentStepIndex < totalSteps) {
+      // This case should ideally not be hit if steps and currentStepIndex are managed correctly.
+      // It means there's a step but no corresponding field key.
       console.error(
         'Error: currentStepFieldKey is undefined but totalSteps > 0. currentStepIndex:',
         currentStepIndex,
         'steps:',
         steps,
       );
-      isValid = false;
+      isValid = false; // Assume invalid if field key is missing
     } else {
+      // If there are no steps or we are past the last step (which shouldn't happen if isReviewing handles the end)
+      // Validate the whole form.
       isValid = await trigger();
     }
 
@@ -251,16 +270,31 @@ export default function WizardForm({
         title: t('wizard.incompleteFieldsNotice'),
         variant: 'destructive',
       });
+      // Do not proceed if the current step is invalid
+      // return;
     }
 
+    // Proceed to next step or review
     if (currentStepIndex < totalSteps - 1) {
       setCurrentStepIndex((prev) => prev + 1);
     } else {
-      await trigger(); // trigger validation but continue regardless
-      setIsReviewing(true);
-      if (typeof window !== 'undefined') {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+      // If on the last question, validate all fields before moving to review
+      const allFieldsValid = await trigger();
+      if (allFieldsValid) {
+        setIsReviewing(true);
+      } else {
+        toast({
+          title: t('Validation Failed'),
+          description: t(
+            'Please correct all errors before reviewing your answers.',
+          ),
+          variant: 'destructive',
+        });
+        return; // Stay on current step if overall validation fails
       }
+    }
+    if (typeof window !== 'undefined') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     if (liveRef.current && currentField) {
@@ -279,37 +313,58 @@ export default function WizardForm({
     locale,
     doc,
     getValues,
-    onComplete,
     toast,
     t,
     currentField,
-
   ]);
 
   const handlePaymentSuccess = useCallback(() => {
     localStorage.removeItem(`draft-${doc.id}-${locale}`);
     setShowPaymentModal(false);
     setPaymentClientSecret(null);
-    onComplete('/dashboard');
+    onComplete(`/${locale}/dashboard?paymentSuccess=true&docId=${doc.id}`); // Redirect to dashboard
   }, [doc.id, locale, onComplete]);
 
-  const handleSkipStep = useCallback(() => {
+  const handleSkipStep = useCallback(async () => {
+    // Validate current field before skipping, if it's required.
+    // This is optional, depends on desired UX. If strict, remove this or validate.
+    // For now, let's allow skipping without validation of current field.
     if (currentStepIndex < totalSteps - 1) {
       setCurrentStepIndex((prev) => prev + 1);
     } else {
-      setIsReviewing(true);
-      if (typeof window !== 'undefined') {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+      // If on last step, "skip" means "go to review".
+      // Validate all fields before going to review.
+      const allFieldsValid = await trigger();
+      if (allFieldsValid) {
+        setIsReviewing(true);
+      } else {
+        toast({
+          title: t('Validation Failed'),
+          description: t(
+            'Please correct all errors before reviewing your answers.',
+          ),
+          variant: 'destructive',
+        });
+        return;
       }
     }
-  }, [currentStepIndex, totalSteps]);
+    if (typeof window !== 'undefined') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }, [currentStepIndex, totalSteps, trigger, toast, t]);
 
   const handleSaveAndFinishLater = useCallback(async () => {
-    if (!isLoggedIn) {
+    if (!isLoggedIn && !authIsLoading) {
       setPendingSaveDraft(true);
       setShowAuthModal(true);
       return;
     }
+    if (!isLoggedIn && authIsLoading) {
+      // If auth is still loading, set pending and wait for useEffect to handle modal
+      setPendingSaveDraft(true);
+      return;
+    }
+
     try {
       const allValues = getValues();
       const relevantDataToSave = Object.keys(allValues).reduce(
@@ -331,18 +386,23 @@ export default function WizardForm({
           formData: relevantDataToSave,
         });
       } else {
+        // This case should ideally not be hit if !isLoggedIn triggers modal
         localStorage.setItem(
           `draft-${doc.id}-${locale}`,
           JSON.stringify(relevantDataToSave),
         );
       }
-      onComplete('/dashboard');
+      toast({
+        title: t('Draft Saved'),
+        description: t('Your progress has been saved to your dashboard.'),
+      });
+      onComplete(`/${locale}/dashboard`); // Redirect to dashboard
     } catch (error) {
       console.error('[WizardForm] Failed to save draft:', error);
       toast({
         title: t('Error'),
-        description: t('An unexpected error occurred.', {
-          defaultValue: 'An unexpected error occurred.',
+        description: t('An unexpected error occurred while saving your draft.', {
+          defaultValue: 'An unexpected error occurred while saving your draft.',
         }),
         variant: 'destructive',
       });
@@ -358,22 +418,29 @@ export default function WizardForm({
     onComplete,
     toast,
     t,
+    authIsLoading,
   ]);
 
-  const handleAuthSuccess = useCallback(() => {
-    setShowAuthModal(false);
-    if (pendingSaveDraft) {
-      handleSaveAndFinishLater();
-    } else if (isLoggedIn && isReviewing) {
-      handleNextStep();
-    }
-  }, [
-    pendingSaveDraft,
-    handleSaveAndFinishLater,
-    isLoggedIn,
-    isReviewing,
-    handleNextStep,
-  ]);
+  const handleAuthSuccess = useCallback(
+    (_mode: 'signin' | 'signup', _email: string) => {
+      setShowAuthModal(false);
+      if (pendingSaveDraft) {
+        handleSaveAndFinishLater(); // This will now use the logged-in user
+      } else {
+        // If not pending a save, auth was likely triggered by "Generate Document"
+        // Now that user is logged in, redirect to dashboard.
+        // They can resume from dashboard if they wish.
+        onComplete(`/${locale}/dashboard?authSuccess=true`);
+      }
+      setPendingSaveDraft(false); // Reset pending state
+    },
+    [
+      pendingSaveDraft,
+      handleSaveAndFinishLater,
+      onComplete,
+      locale,
+    ],
+  );
 
   if (!isHydrated || authIsLoading) {
     return (
@@ -524,8 +591,8 @@ export default function WizardForm({
             {!(currentStepIndex > 0 || isReviewing) && totalSteps > 0 && (
               <div className="w-full sm:w-auto" />
             )}{' '}
-            {/* Placeholder for spacing */}
-            {!isReviewing && (
+            {/* Placeholder for spacing when Back button is not shown */}
+            {!isReviewing && totalSteps > 0 && currentStepIndex < totalSteps && (
               <Button
                 type="button"
                 variant="ghost"
@@ -553,29 +620,29 @@ export default function WizardForm({
               )}
             </Button>
           </div>
-          {isReviewing && (
-            <div className="mt-4 text-center">
-              <Button
-                type="button"
-                variant="ghost"
-                onClick={handleSaveAndFinishLater}
-                disabled={formIsSubmitting || authIsLoading}
-                className="text-sm"
-              >
-                {t('wizard.saveFinishLater', {
-                  defaultValue: 'Save and finish later',
-                })}
-                <Save className="ml-2 h-4 w-4" />
-              </Button>
-            </div>
-          )}
+
+          {/* Save and Finish Later Button - visible on all steps */}
+          <div className="mt-6 pt-4 border-t border-border text-center">
+            <Button
+              type="button"
+              variant="ghost"
+              onClick={handleSaveAndFinishLater}
+              disabled={formIsSubmitting || authIsLoading}
+              className="text-sm text-muted-foreground hover:text-primary"
+            >
+              {t('wizard.saveFinishLater', {
+                defaultValue: 'Save and finish later',
+              })}
+              <Save className="ml-2 h-4 w-4" />
+            </Button>
+          </div>
         </div>
       </TooltipProvider>
       <AuthModal
         isOpen={showAuthModal}
         onClose={() => {
           setShowAuthModal(false);
-          setPendingSaveDraft(false);
+          setPendingSaveDraft(false); // Reset pending state if modal is closed without auth
         }}
         onAuthSuccess={handleAuthSuccess}
       />
