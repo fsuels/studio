@@ -10,6 +10,7 @@ import React, {
 } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 import axios, { AxiosError } from 'axios';
+import { useRouter } from 'next/navigation'; // Added useRouter
 
 import { z } from 'zod';
 import { Loader2, Save } from 'lucide-react';
@@ -45,6 +46,7 @@ export default function WizardForm({
   const { t } = useTranslation('common');
   const { toast } = useToast();
   const { isLoggedIn, isLoading: authIsLoading, user } = useAuth();
+  const router = useRouter(); // Initialize router
 
   const [isHydrated, setIsHydrated] = useState(false);
   const [showAuthModal, setShowAuthModal] = useState(false);
@@ -71,10 +73,10 @@ export default function WizardForm({
   // If the user initiates a save while not logged in,
   // open the auth modal once auth state resolves.
   useEffect(() => {
-    if (pendingSaveDraft && !isLoggedIn) {
+    if (pendingSaveDraft && !isLoggedIn && !authIsLoading) { // Added !authIsLoading check
       setShowAuthModal(true);
     }
-  }, [pendingSaveDraft, isLoggedIn]);
+  }, [pendingSaveDraft, isLoggedIn, authIsLoading]);
 
   const actualSchemaShape = useMemo<
     Record<string, z.ZodTypeAny> | undefined
@@ -157,9 +159,18 @@ export default function WizardForm({
     const currentStepFieldKey = steps[currentStepIndex]?.id;
 
     if (isReviewing) {
-      await trigger();
+      await trigger(); // Validate all fields if in review mode
       if (!isLoggedIn) {
-        setShowAuthModal(true);
+        setShowAuthModal(true); // Show auth modal if not logged in and trying to proceed from review
+        return;
+      }
+      // Proceed to payment if logged in and form is valid (or has no errors that block submission)
+      if (!isFormValid && Object.keys(errors).length > 0) {
+         toast({
+            title: t('Validation Failed'),
+            description: t('Please correct all errors before generating the document.'),
+            variant: 'destructive',
+          });
         return;
       }
       try {
@@ -251,15 +262,25 @@ export default function WizardForm({
         title: t('wizard.incompleteFieldsNotice'),
         variant: 'destructive',
       });
+      return; // Stop advancement if current step is not valid
     }
 
     if (currentStepIndex < totalSteps - 1) {
       setCurrentStepIndex((prev) => prev + 1);
     } else {
-      await trigger(); // trigger validation but continue regardless
-      setIsReviewing(true);
-      if (typeof window !== 'undefined') {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+      // All steps completed, now trigger validation for the whole form before review
+      const allFieldsValid = await trigger();
+      if (allFieldsValid) {
+        setIsReviewing(true);
+        if (typeof window !== 'undefined') {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      } else {
+         toast({
+            title: t('Validation Failed'),
+            description: t('Please correct all errors before reviewing.'),
+            variant: 'destructive',
+          });
       }
     }
 
@@ -279,19 +300,25 @@ export default function WizardForm({
     locale,
     doc,
     getValues,
-    onComplete,
+    // onComplete, // onComplete is now called after successful payment
     toast,
     t,
     currentField,
-
+    isFormValid,
+    errors
   ]);
 
   const handlePaymentSuccess = useCallback(() => {
     localStorage.removeItem(`draft-${doc.id}-${locale}`);
     setShowPaymentModal(false);
     setPaymentClientSecret(null);
-    onComplete('/dashboard');
-  }, [doc.id, locale, onComplete]);
+    onComplete('/dashboard'); // Or a success page specific to document generation
+    toast({
+      title: t('Document Generation Successful!'),
+      description: t('Your document is ready in your dashboard.'),
+    });
+  }, [doc.id, locale, onComplete, t, toast]);
+
 
   const handleSkipStep = useCallback(() => {
     if (currentStepIndex < totalSteps - 1) {
@@ -305,7 +332,7 @@ export default function WizardForm({
   }, [currentStepIndex, totalSteps]);
 
   const handleSaveAndFinishLater = useCallback(async () => {
-    if (!isLoggedIn) {
+    if (!isLoggedIn && !authIsLoading) { // Added !authIsLoading
       setPendingSaveDraft(true);
       setShowAuthModal(true);
       return;
@@ -336,13 +363,17 @@ export default function WizardForm({
           JSON.stringify(relevantDataToSave),
         );
       }
-      onComplete('/dashboard');
+      toast({ // Added toast for save success
+        title: t('Draft Saved'),
+        description: t('Your progress has been saved to your dashboard.'),
+      });
+      onComplete('/dashboard'); // Redirect to dashboard
     } catch (error) {
       console.error('[WizardForm] Failed to save draft:', error);
       toast({
         title: t('Error'),
-        description: t('An unexpected error occurred.', {
-          defaultValue: 'An unexpected error occurred.',
+        description: t('An unexpected error occurred while saving.', {
+          defaultValue: 'An unexpected error occurred while saving.',
         }),
         variant: 'destructive',
       });
@@ -358,22 +389,26 @@ export default function WizardForm({
     onComplete,
     toast,
     t,
+    authIsLoading,
   ]);
 
   const handleAuthSuccess = useCallback(() => {
     setShowAuthModal(false);
     if (pendingSaveDraft) {
+      // This function already contains the logic to save and then redirect to dashboard.
       handleSaveAndFinishLater();
-    } else if (isLoggedIn && isReviewing) {
-      handleNextStep();
+    } else {
+      // For any other scenario where AuthModal was triggered and successful (e.g., trying to proceed to payment),
+      // redirect to the dashboard. The user can then resume their action from the dashboard.
+      router.push(`/${locale}/dashboard`);
     }
   }, [
     pendingSaveDraft,
     handleSaveAndFinishLater,
-    isLoggedIn,
-    isReviewing,
-    handleNextStep,
+    router,
+    locale,
   ]);
+
 
   if (!isHydrated || authIsLoading) {
     return (
@@ -425,7 +460,7 @@ export default function WizardForm({
                   ]?.message as string | undefined
                 }
                 placeholder={t('Enter address...')}
-                value={rhfValue || ''}
+                value={(rhfValue as string) || ''}
                 onChange={(val, parts) => {
                   rhfOnChange(val);
                   if (parts && actualSchemaShape) {
@@ -553,13 +588,14 @@ export default function WizardForm({
               )}
             </Button>
           </div>
-          {isReviewing && (
+          {/* "Save and finish later" button is always available if not submitting */}
+          { !formIsSubmitting && (
             <div className="mt-4 text-center">
               <Button
                 type="button"
                 variant="ghost"
                 onClick={handleSaveAndFinishLater}
-                disabled={formIsSubmitting || authIsLoading}
+                disabled={authIsLoading} // Disable only if auth is loading, not formIsSubmitting
                 className="text-sm"
               >
                 {t('wizard.saveFinishLater', {
