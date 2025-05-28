@@ -16,14 +16,25 @@ import { Logo } from '@/components/layout/Logo';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
-import { useAuth } from '@/hooks/useAuth'; // Import useAuth
+import { useAuth } from '@/hooks/useAuth';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
+
+/* ---------- real Firebase Auth imports -------------------------------- */
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  type UserCredential,
+} from 'firebase/auth';
+import { app } from '@/lib/firebase'; // your initialized Firebase app
+
+/* ---------------------------------------------------------------------- */
 
 interface AuthModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onAuthSuccess: (_mode: 'signin' | 'signup', _email: string) => void;
+  onAuthSuccess: (_mode: 'signin' | 'signup', _uid: string) => void;
 }
 
 export default function AuthModal({
@@ -33,7 +44,7 @@ export default function AuthModal({
 }: AuthModalProps) {
   const { t } = useTranslation('common');
   const { toast } = useToast();
-  const { login } = useAuth(); // Get the login function from useAuth
+  const { login } = useAuth(); // local auth context
   const params = useParams();
   const locale = (params?.locale as 'en' | 'es') || 'en';
 
@@ -43,18 +54,22 @@ export default function AuthModal({
   const [confirmPasswordModal, setConfirmPasswordModal] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  /* Reset fields each time the modal opens */
   useEffect(() => {
     if (isOpen) {
       setEmailModal('');
       setPasswordModal('');
       setConfirmPasswordModal('');
       setIsSubmitting(false);
-      // setAuthMode('signin'); // Default to signin when opened
     }
   }, [isOpen]);
 
+  /* ------------------------- handler ---------------------------------- */
+
   const handleAuthAction = async () => {
     setIsSubmitting(true);
+
+    // basic validation
     if (!emailModal || !passwordModal) {
       toast({
         title: t('authModal.errorMissingFieldsTitle', {
@@ -70,19 +85,6 @@ export default function AuthModal({
     }
 
     if (authMode === 'signup') {
-      if (!confirmPasswordModal) {
-        toast({
-          title: t('authModal.errorMissingFieldsTitle', {
-            defaultValue: 'Missing Information',
-          }),
-          description: t('authModal.errorConfirmPasswordDesc', {
-            defaultValue: 'Please confirm your password.',
-          }),
-          variant: 'destructive',
-        });
-        setIsSubmitting(false);
-        return;
-      }
       if (passwordModal !== confirmPasswordModal) {
         toast({
           title: t('authModal.errorPasswordMismatchTitle', {
@@ -96,49 +98,79 @@ export default function AuthModal({
         setIsSubmitting(false);
         return;
       }
-      // Simulate successful signup
-      await new Promise((resolve) => setTimeout(resolve, 700)); // Simulate API call
-      login(emailModal); // Call useAuth login
-      toast({
-        title: t('authModal.successTitle', {
-          context: 'signup',
-          defaultValue: 'Account Created!',
-        }),
-        description: t('authModal.successDescription', {
-          defaultValue: 'You can now proceed.',
-        }),
-      });
-      onAuthSuccess('signup', emailModal);
-    } else {
-      // authMode === 'signin'
-      // Simulate successful signin
-      await new Promise((resolve) => setTimeout(resolve, 700)); // Simulate API call
-      login(emailModal); // Call useAuth login
-      toast({
-        title: t('authModal.successTitle', {
-          context: 'signin',
-          defaultValue: 'Sign In Successful!',
-        }),
-        description: t('authModal.successDescription', {
-          defaultValue: 'You can now proceed.',
-        }),
-      });
-      onAuthSuccess('signin', emailModal);
     }
-    setIsSubmitting(false);
+
+    /* -- real Firebase Auth call -------------------------------------- */
+    try {
+      const auth = getAuth(app);
+      let cred: UserCredential;
+
+      if (authMode === 'signup') {
+        cred = await createUserWithEmailAndPassword(
+          auth,
+          emailModal,
+          passwordModal,
+        );
+        toast({
+          title: t('authModal.successTitle', {
+            context: 'signup',
+            defaultValue: 'Account Created!',
+          }),
+          description: t('authModal.successDescription', {
+            defaultValue: 'You can now proceed.',
+          }),
+        });
+      } else {
+        cred = await signInWithEmailAndPassword(
+          auth,
+          emailModal,
+          passwordModal,
+        );
+        toast({
+          title: t('authModal.successTitle', {
+            context: 'signin',
+            defaultValue: 'Sign In Successful!',
+          }),
+          description: t('authModal.successDescription', {
+            defaultValue: 'You can now proceed.',
+          }),
+        });
+      }
+
+      // update local auth context so the rest of the app knows the user
+      login(cred.user.uid);
+
+      // notify parent (WizardForm)
+      onAuthSuccess(authMode, cred.user.uid);
+    } catch (err: any) {
+      console.error('[AuthModal] Firebase Auth error:', err);
+      toast({
+        title: t('authModal.errorAuthFailedTitle', {
+          defaultValue: 'Authentication Failed',
+        }),
+        description:
+          err?.code === 'auth/email-already-in-use'
+            ? t('authModal.errorEmailInUse', {
+                defaultValue: 'Email already in use.',
+              })
+            : err?.message || 'Unknown error',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
+  /* ------------------------- JSX ------------------------------------- */
+
   const toggleAuthMode = () => {
-    setAuthMode((prevMode) => (prevMode === 'signin' ? 'signup' : 'signin'));
-    // Clear password fields when toggling for better UX
+    setAuthMode((prev) => (prev === 'signin' ? 'signup' : 'signin'));
     setPasswordModal('');
     setConfirmPasswordModal('');
   };
 
   const handleCloseAndReset = () => {
     onClose();
-    // Reset to signin mode when modal is closed, ready for next opening
-    // setAuthMode('signin'); // This is handled by useEffect on isOpen now
   };
 
   return (
@@ -148,7 +180,7 @@ export default function AuthModal({
     >
       <DialogContent className="sm:max-w-md bg-card border-border p-6 rounded-lg shadow-xl">
         <DialogHeader className="text-center items-center space-y-3">
-          <Logo wrapperClassName="mb-3" /> {/* Added margin-bottom to Logo wrapper */}
+          <Logo wrapperClassName="mb-3" />
           <DialogTitle className="text-2xl font-semibold text-card-foreground">
             {authMode === 'signin'
               ? t('Sign In', { defaultValue: 'Sign In' })
@@ -167,64 +199,53 @@ export default function AuthModal({
           </DialogDescription>
         </DialogHeader>
 
+        {/* ---------------- form fields ---------------- */}
         <div className="space-y-4 py-4">
           <div>
-            <Label
-              htmlFor="email-modal"
-              className="text-xs font-medium text-muted-foreground" // Made label smaller and muted
-            >
+            <Label htmlFor="email-modal" className="text-xs font-medium text-muted-foreground">
               {t('Email', { defaultValue: 'Email' })}
             </Label>
             <Input
               id="email-modal"
               type="email"
-              placeholder={t('Enter your email', {
-                defaultValue: 'Enter your email',
-              })}
-              className="bg-background border-input mt-1 h-10" // Ensure consistent height
+              placeholder={t('Enter your email', { defaultValue: 'Enter your email' })}
+              className="bg-background border-input mt-1 h-10"
               value={emailModal}
               onChange={(e) => setEmailModal(e.target.value)}
               disabled={isSubmitting}
               required
             />
           </div>
+
           <div>
-            <Label
-              htmlFor="password-modal"
-              className="text-xs font-medium text-muted-foreground" // Made label smaller and muted
-            >
+            <Label htmlFor="password-modal" className="text-xs font-medium text-muted-foreground">
               {t('Password', { defaultValue: 'Password' })}
             </Label>
             <Input
               id="password-modal"
               type="password"
-              placeholder={t('Enter your password', {
-                defaultValue: 'Enter your password',
-              })}
-              className="bg-background border-input mt-1 h-10" // Ensure consistent height
+              placeholder={t('Enter your password', { defaultValue: 'Enter your password' })}
+              className="bg-background border-input mt-1 h-10"
               value={passwordModal}
               onChange={(e) => setPasswordModal(e.target.value)}
               disabled={isSubmitting}
               required
             />
           </div>
+
           {authMode === 'signup' && (
             <div>
               <Label
                 htmlFor="confirm-password-modal"
-                className="text-xs font-medium text-muted-foreground" // Made label smaller and muted
+                className="text-xs font-medium text-muted-foreground"
               >
-                {t('authModal.confirmPasswordLabel', {
-                  defaultValue: 'Confirm Password',
-                })}
+                {t('authModal.confirmPasswordLabel', { defaultValue: 'Confirm Password' })}
               </Label>
               <Input
                 id="confirm-password-modal"
                 type="password"
-                placeholder={t('authModal.confirmPasswordPlaceholder', {
-                  defaultValue: 'Confirm your password',
-                })}
-                className="bg-background border-input mt-1 h-10" // Ensure consistent height
+                placeholder={t('authModal.confirmPasswordPlaceholder', { defaultValue: 'Confirm your password' })}
+                className="bg-background border-input mt-1 h-10"
                 value={confirmPasswordModal}
                 onChange={(e) => setConfirmPasswordModal(e.target.value)}
                 disabled={isSubmitting}
@@ -234,21 +255,21 @@ export default function AuthModal({
           )}
         </div>
 
-        <DialogFooter className="flex flex-col gap-4 pt-2"> {/* Increased gap */}
+        {/* ---------------- buttons ---------------- */}
+        <DialogFooter className="flex flex-col gap-4 pt-2">
           <Button
             onClick={handleAuthAction}
-            className="w-full h-11 bg-primary text-primary-foreground hover:bg-primary/90 text-base" // Ensured height
+            className="w-full h-11 bg-primary text-primary-foreground hover:bg-primary/90 text-base"
             disabled={isSubmitting}
           >
             {isSubmitting
               ? t('authModal.submitting', { defaultValue: 'Processing...' })
               : authMode === 'signin'
-                ? t('Sign In', { defaultValue: 'Sign In' })
-                : t('authModal.createAccountButton', {
-                    defaultValue: 'Create Account',
-                  })}
+              ? t('Sign In', { defaultValue: 'Sign In' })
+              : t('authModal.createAccountButton', { defaultValue: 'Create Account' })}
           </Button>
-          <p className="text-center text-sm text-muted-foreground"> {/* Changed button to p tag for link */}
+
+          <p className="text-center text-sm text-muted-foreground">
             {authMode === 'signin'
               ? t('authModal.promptSignUp', { defaultValue: "Don't have an account?" })
               : t('authModal.promptSignInShort', { defaultValue: 'Already have an account?' })}{' '}

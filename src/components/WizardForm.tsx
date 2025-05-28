@@ -23,13 +23,12 @@ import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
 import { prettify } from '@/lib/schema-utils';
 import AuthModal from '@/components/AuthModal';
-import { useAuth } from '@/hooks/useAuth';
 import { saveFormProgress } from '@/lib/firestore/saveFormProgress';
-import AddressField from '@/components/AddressField';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import TrustBadges from '@/components/TrustBadges';
 import ReviewStep from '@/components/ReviewStep';
 import PaymentModal from '@/components/PaymentModal';
+import { useAuth } from '@/hooks/useAuth';
 import { useRouter } from 'next/navigation'; // Added useRouter
 
 interface WizardFormProps {
@@ -44,9 +43,17 @@ export default function WizardForm({
   onComplete,
 }: WizardFormProps) {
   const { t } = useTranslation('common');
-  const { toast } = useToast();
-  const { isLoggedIn, isLoading: authIsLoading, user } = useAuth();
+  const { toast } = useToast(); 
+  const { isLoggedIn, isLoading: authIsLoading, user } = useAuth(); // Re-declared if needed, remove if already there
   const router = useRouter(); // Added for direct navigation
+
+  const {
+ getValues,
+    trigger,
+    control,
+    setValue,
+ formState: { errors, isSubmitting: formIsSubmitting, isValid: isFormValid },
+  } = useFormContext<z.infer<typeof doc.schema>>();
 
   const [isHydrated, setIsHydrated] = useState(false);
   const [showAuthModal, setShowAuthModal] = useState(false);
@@ -54,20 +61,53 @@ export default function WizardForm({
   const [isReviewing, setIsReviewing] = useState(false);
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
-  const [paymentClientSecret, setPaymentClientSecret] = useState<string | null>(
-    null,
+  const [paymentClientSecret, setPaymentClientSecret] = useState<string | null>(null,
   );
   const [isSavingDraft, setIsSavingDraft] = useState(false); // New state for save draft
 
-  const liveRef = useRef<HTMLDivElement>(null);
+  /** single source-of-truth: save → redirect → toast */
+  const saveDraftAndRedirect = useCallback(
+    async (uid: string) => {
+      setIsSavingDraft(true);
+      try {
+        // keep only defined values
+        const filtered = Object.fromEntries(
+          Object.entries(getValues()).filter(([, v]) => v !== undefined),
+        );
 
-  const {
-    getValues,
-    trigger,
-    control,
-    setValue,
-    formState: { errors, isSubmitting: formIsSubmitting, isValid: isFormValid },
-  } = useFormContext<z.infer<typeof doc.schema>>();
+        console.log('[WizardForm] saving for uid →', uid);
+        await saveFormProgress({
+          userId: uid,
+          docType: doc.id,
+          state: locale,
+          formData: filtered,
+        });
+
+        router.replace(`/${locale}/dashboard`);
+        toast({
+          title: t('Draft Saved'),
+          description: t(
+            'Your progress is saved. You can resume it from your dashboard.',
+          ),
+        });
+      } catch (err) {
+        console.error('[WizardForm] saveFormProgress failed:', err);
+        toast({
+          title: t('wizard.saveFailedTitle', { defaultValue: 'Save failed' }),
+          description: t('wizard.saveFailedDesc', {
+            defaultValue: 'We could not save your draft. Please try again.',
+          }),
+          variant: 'destructive',
+        });
+      } finally {
+        setIsSavingDraft(false);
+        setPendingSaveDraft(false);
+      }
+    },
+    [getValues, doc.id, locale, router, toast, t],
+  );
+
+  const liveRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setIsHydrated(true);
@@ -357,88 +397,28 @@ export default function WizardForm({
   }, [currentStepIndex, totalSteps, trigger, toast, t]);
 
   const handleSaveAndFinishLater = useCallback(async () => {
-    if (!isLoggedIn && !authIsLoading) {
+    if (isSavingDraft || formIsSubmitting) return;
+
+    if (user?.uid) {
+      void saveDraftAndRedirect(user.uid);
+      return;
+    }
+
+    // guest: ask for auth, remember we must save afterwards
       setPendingSaveDraft(true);
       setShowAuthModal(true);
-      return;
-    }
-    if (!isLoggedIn && authIsLoading) {
-      setPendingSaveDraft(true);
-      return;
-    }
-
-    setIsSavingDraft(true);
-    try {
-      const allValues = getValues();
-      const relevantDataToSave = Object.keys(allValues).reduce(
-        (acc, key) => {
-          const value = (allValues as Record<string, unknown>)[key];
-          if (value !== undefined) {
-            acc[key] = value;
-          }
-          return acc;
-        },
-        {} as Record<string, unknown>,
-      );
-
-      if (user?.uid) {
-        await saveFormProgress({
-          userId: user.uid,
-          docType: doc.id,
-          state: locale,
-          formData: relevantDataToSave,
-        });
-      } else {
-        // This fallback should ideally not be hit if auth flow is robust
-        console.warn(
-          '[WizardForm] User not fully authenticated (no UID) during save. Saving to localStorage.',
-        );
-        localStorage.setItem(
-          `draft-${doc.id}-${locale}`,
-          JSON.stringify(relevantDataToSave),
-        );
-      }
-      toast({
-        title: t('Draft Saved'),
-        description: t('Your progress has been saved to your dashboard.'),
-      });
-      router.push(`/${locale}/dashboard`); // Use router for direct navigation
-    } catch (error) {
-      console.error('[WizardForm] Failed to save draft:', error);
-      toast({
-        title: t('Error'),
-        description: t('An unexpected error occurred while saving your draft.', {
-          defaultValue: 'An unexpected error occurred while saving your draft.',
-        }),
-        variant: 'destructive',
-      });
-    } finally {
-      setIsSavingDraft(false);
-      setPendingSaveDraft(false);
-    }
-  }, [
-    isLoggedIn,
-    user,
-    doc.id,
-    locale,
-    getValues,
-    router, // Added router
-    toast,
-    t,
-    authIsLoading,
-  ]);
+  }, [isSavingDraft, formIsSubmitting, user?.uid, saveDraftAndRedirect]);
 
   const handleAuthSuccess = useCallback(
-    (_mode: 'signin' | 'signup', _email: string) => {
+    (_mode: 'signin' | 'signup', emailOrUid: string) => {
       setShowAuthModal(false);
       if (pendingSaveDraft) {
-        handleSaveAndFinishLater();
+        void saveDraftAndRedirect(emailOrUid);
       } else {
-        router.push(`/${locale}/dashboard?authSuccess=true`); // Use router for direct navigation
+        router.replace(`/${locale}/dashboard?authSuccess=true`);
       }
-      setPendingSaveDraft(false);
     },
-    [pendingSaveDraft, handleSaveAndFinishLater, router, locale], // Added router
+    [pendingSaveDraft, router, locale, saveDraftAndRedirect],
   );
 
   if (!isHydrated || authIsLoading) {
@@ -581,10 +561,10 @@ export default function WizardForm({
                 type="button"
                 variant="outline"
                 onClick={handlePreviousStep}
-                disabled={formIsSubmitting || authIsLoading || isSavingDraft}
+          disabled={formIsSubmitting || authIsLoading || isSavingDraft}
                 className="text-foreground border-border hover:bg-muted w-full sm:w-auto"
               >
-                {t('Back')}
+ {t('Back')}
               </Button>
             )}
             {!(currentStepIndex > 0 || isReviewing) && totalSteps > 0 && (
@@ -596,7 +576,7 @@ export default function WizardForm({
                 type="button"
                 variant="ghost"
                 onClick={handleSkipStep}
-                disabled={formIsSubmitting || authIsLoading || isSavingDraft}
+            disabled={formIsSubmitting || authIsLoading || isSavingDraft}
                 className="border border-dashed text-muted-foreground w-full sm:w-auto"
               >
                 {t('wizard.skipQuestion')}
