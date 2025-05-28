@@ -58,6 +58,7 @@ export default function WizardForm({
   const [isHydrated, setIsHydrated] = useState(false);
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [pendingSaveDraft, setPendingSaveDraft] = useState(false);
+  const [pendingRedirect, setPendingRedirect] = useState(false);
   const [isReviewing, setIsReviewing] = useState(false);
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
@@ -104,8 +105,16 @@ export default function WizardForm({
         setPendingSaveDraft(false);
       }
     },
-    [getValues, doc.id, locale, router, toast, t],
+      [getValues, doc.id, locale, router, toast, t],
   );
+
+  // After a guest successfully auth’s, run save-and-redirect exactly once
+  useEffect(() => {
+    if (pendingRedirect && user?.uid && !authIsLoading) {
+      void saveDraftAndRedirect(user.uid);
+      setPendingRedirect(false);
+    }
+  }, [pendingRedirect, user?.uid, authIsLoading, saveDraftAndRedirect]);
 
   const liveRef = useRef<HTMLDivElement>(null);
 
@@ -404,21 +413,18 @@ export default function WizardForm({
       return;
     }
 
-    // guest: ask for auth, remember we must save afterwards
-      setPendingSaveDraft(true);
-      setShowAuthModal(true);
+    // guest: ask for auth, then effect will save + redirect
+    setPendingSaveDraft(true);
+    setPendingRedirect(true);
+    setShowAuthModal(true);
   }, [isSavingDraft, formIsSubmitting, user?.uid, saveDraftAndRedirect]);
 
   const handleAuthSuccess = useCallback(
-    (_mode: 'signin' | 'signup', emailOrUid: string) => {
+    (_mode, uid) => {
       setShowAuthModal(false);
-      if (pendingSaveDraft) {
-        void saveDraftAndRedirect(emailOrUid);
-      } else {
-        router.replace(`/${locale}/dashboard?authSuccess=true`);
-      }
+      // saveDraftAndRedirect will fire via the pendingRedirect effect
     },
-    [pendingSaveDraft, router, locale, saveDraftAndRedirect],
+    [],
   );
 
   if (!isHydrated || authIsLoading) {
