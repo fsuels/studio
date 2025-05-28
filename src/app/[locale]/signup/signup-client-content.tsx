@@ -47,12 +47,12 @@ export default function SignUpClientContent({
       return;
     }
     if (email && password) {
-      login(email);
+      login(email); // This mock login sets the user state
       toast({
         title: t('Account Created!'),
         description: t('Redirecting to your dashboard...'),
       });
-      router.push(`/${locale}/dashboard`);
+      router.push(`/${locale}/dashboard`); // Redirect to dashboard
     } else {
       toast({
         title: t('Signup Failed', { defaultValue: 'Signup Failed' }),
