@@ -51,17 +51,20 @@ function useAuthHook(): AuthContextType {
       if (stored) {
         try {
           const parsedData = JSON.parse(stored);
-          // Check if parsedData is an object and has the expected properties
+          // More robust check: isLoggedIn should only be true if user and user.uid exist.
           if (
             parsedData &&
             typeof parsedData === 'object' &&
             'isLoggedIn' in parsedData &&
-            'user' in parsedData
+            'user' in parsedData &&
+            parsedData.isLoggedIn && // Was stored as logged in
+            parsedData.user &&      // User object exists
+            typeof parsedData.user.uid === 'string' && parsedData.user.uid.trim() !== '' // User has a valid UID
           ) {
-            setIsLoggedIn(parsedData.isLoggedIn);
-            setUser(parsedData.user);
+            setIsLoggedIn(true);
+            setUser(parsedData.user as User);
           } else {
-            // Data is malformed, clear it
+            // If data is malformed or user is invalid despite isLoggedIn being true, clear it.
             localStorage.removeItem('mockAuth');
             setIsLoggedIn(false);
             setUser(null);
@@ -112,11 +115,13 @@ function useAuthHook(): AuthContextType {
       setUser((prevUser) => {
         if (!prevUser) return null; // Should not happen if logged in
         const updatedUser = { ...prevUser, ...updates };
+        // Remove password from user object before saving to localStorage
+        const { password, ...userToStore } = updatedUser;
         localStorage.setItem(
           'mockAuth',
-          JSON.stringify({ isLoggedIn: true, user: updatedUser }),
+          JSON.stringify({ isLoggedIn: true, user: userToStore }),
         );
-        return updatedUser;
+        return userToStore as User; // Cast because password was removed
       });
     },
     [],
