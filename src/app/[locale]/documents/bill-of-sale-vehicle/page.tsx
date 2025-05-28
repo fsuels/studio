@@ -1,8 +1,10 @@
 // src/app/[locale]/documents/bill-of-sale-vehicle/page.tsx
-import VehicleBillOfSaleDisplay from '@/components/docs/VehicleBillOfSaleDisplay';
+import dynamic from 'next/dynamic';
 import type { Metadata } from 'next';
 import i18n from '@/lib/i18n'; // Import i18n instance
+import { lazyClient } from '@/lib/lazy-client';
 
+const VehicleBillOfSaleDisplay = lazyClient(() => import('@/components/docs/VehicleBillOfSaleDisplay'));
 // Dynamically generate metadata based on locale
 export async function generateMetadata({
   params,

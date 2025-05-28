@@ -6,6 +6,7 @@ import path from 'node:path';
 import DocPageClient from './DocPageClient';
 import { documentLibrary } from '@/lib/document-library';
 import { localizations } from '@/lib/localizations'; // Ensure this path is correct
+export const dynamic = 'force-dynamic';
 import { vehicleBillOfSaleFaqs } from '@/app/[locale]/documents/bill-of-sale-vehicle/faqs';
 export interface DocPageParams {
   locale: 'en' | 'es';
