@@ -82,11 +82,20 @@ function useAuthHook(): AuthContextType {
   // login & logout update state + localStorage
   const login = useCallback(
     (email: string, uid?: string) => {
-      // In a real app, uid would come from backend after successful auth
-      const newUid = uid || `mock-user-${Date.now()}`;
+      // Persist a uid per email so users keep their data across sessions
+      const mapRaw = localStorage.getItem('mockAuthUserMap');
+      const map: Record<string, string> = mapRaw ? JSON.parse(mapRaw) : {};
+
+      let newUid = uid || map[email];
+      if (!newUid) {
+        newUid = `mock-user-${Date.now()}`;
+        map[email] = newUid;
+        localStorage.setItem('mockAuthUserMap', JSON.stringify(map));
+      }
+
       const newUser: User = {
         uid: newUid,
-        email: email,
+        email,
         // Initialize other fields as empty or default
         name: user?.name || '', // Preserve existing name if user object was already partially there
         phone: user?.phone || '',
@@ -94,6 +103,7 @@ function useAuthHook(): AuthContextType {
         twoStep: user?.twoStep || false,
         textUpdates: user?.textUpdates || false,
       };
+
       localStorage.setItem(
         'mockAuth',
         JSON.stringify({ isLoggedIn: true, user: newUser }),
@@ -102,7 +112,7 @@ function useAuthHook(): AuthContextType {
       setUser(newUser);
     },
     [user],
-  ); // Added user to dependency array to correctly capture existing fields if any
+  );
 
   const logout = useCallback(() => {
     localStorage.removeItem('mockAuth');
