@@ -337,9 +337,11 @@ export default function WizardForm({
 
   const handleSaveAndFinishLater = useCallback(
     async (skipAuthCheck = false) => {
-      if (!skipAuthCheck && !isLoggedIn && !authIsLoading) {
+      if (!skipAuthCheck && !isLoggedIn) {
         setPendingSaveDraft(true);
-        setShowAuthModal(true);
+        if (!authIsLoading) {
+          setShowAuthModal(true);
+        }
         return;
       }
       try {
