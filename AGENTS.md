@@ -1,16 +1,27 @@
-# 123LegalDoc – Codex Contributor Guide
-
-## Where to work
-- **Next.js app:** `src/`
-- **Legal doc engine:** `src/lib/documents/`
-- **Cloud Functions:** `functions/`
-- Ignore everything in `public/` except image assets.
-
-## How to validate before a PR
-```bash
-pnpm lint        # ESLint + Prettier + TypeScript
-pnpm test        # Vitest unit tests
-pnpm e2e         # Playwright E2E
-pnpm build       # Next.js static export
-Style rules
-```
+--- /dev/null
++++ studio-master/AGENTS.md
+@@
++# 123LegalDoc – Codex Contributor Guide
++
++## Work here
++- **Next.js app:** `src/`
++- **Legal-doc engine:** `src/lib/documents/`
++- **Cloud Functions:** `functions/`
++
++## Validate before committing
++```bash
++npm run lint     # ESLint + Prettier + TS
++npm run test     # Vitest unit tests
++npm run e2e      # Playwright E2E
++npm run build    # Next.js static export
++```
++
++## Style rules
++- Use React Server Components except where `use client` is required.  
++- Never use `<img>` – always our `<AutoImage />` wrapper.  
++- Always supply **unified diffs** (`+`/`-`) with full file paths in PRs.
++
++## PR checklist
++1. All commands above pass locally.
++2. Title format: `[Scope] Imperative summary`.
++3. Explain **why** and **how**, not just **what**.
