@@ -1,3 +1,12 @@
+# 123LegalDoc – Codex Contributor Guide
+
+## Work here
+- **Next.js app:** `src/`
+- **Legal-doc engine:** `src/lib/documents/`
+- **Cloud Functions:** `functions/`
+
+## Validate before committing
+
 --- /dev/null
 +++ studio-master/AGENTS.md
 @@
