@@ -19,6 +19,21 @@ npm install -g eslint prettier typescript firebase-tools >/dev/null 2>&1
 echo "📄  Generating .env for runtime …"
 printenv | grep -E '^(NEXT_PUBLIC_|STRIPE_|OPENAI_|SIGNWELL_)' > .env
 echo "NEXT_PUBLIC_SIGNED_URL_API=$NEXT_PUBLIC_SIGNED_URL_API" >> .env
+
+# Ensure the Firebase service account JSON is provided
+if [[ -z "${FIREBASE_SERVICE_ACCOUNT_KEY_JSON:-}" ]]; then
+  echo "\u274c FIREBASE_SERVICE_ACCOUNT_KEY_JSON is not set or empty" >&2
+  exit 1
+fi
+
+# Validate that the JSON is well-formed when jq is available
+if command -v jq >/dev/null; then
+  echo "$FIREBASE_SERVICE_ACCOUNT_KEY_JSON" | jq . >/dev/null || {
+    echo "\u274c FIREBASE_SERVICE_ACCOUNT_KEY_JSON contains invalid JSON" >&2
+    exit 1
+  }
+fi
+
 echo "$FIREBASE_SERVICE_ACCOUNT_KEY_JSON" > serviceAccountKey.json
 
 echo "✅ [setup] Done — environment ready for Codex."
