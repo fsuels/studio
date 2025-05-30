@@ -80,7 +80,7 @@ export default function FaqClientContent({ locale }: FaqClientContentProps) {
       />
       <Accordion
         type="multiple"
-        collapsible
+        collapsible="true"
         defaultValue={faqItems.slice(0, 3).map((f) => f.id)}
         className="w-full space-y-4"
       >
