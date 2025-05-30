@@ -34,10 +34,10 @@ const MemoizedDocLink = React.memo(function DocLink({
   const docHref = `/${locale}/docs/${doc.id}`;
 
   return (
-    <li>
+    <li className="px-4 py-3 md:px-0 md:py-0">
       <Link
         href={docHref}
-        className="text-xs md:text-sm text-muted-foreground hover:text-primary hover:underline transition-colors duration-150 block py-0.5"
+        className="block text-base md:text-sm text-muted-foreground hover:text-primary hover:underline transition-colors duration-150"
         onClick={onClick}
       >
         {t(docName, { defaultValue: docName })}
@@ -83,7 +83,7 @@ export default function MegaMenuContent({
             defaultValue: category.key,
           });
           return (
-            <div key={category.key}>
+            <div key={category.key} className="mt-6 first:mt-0">
               <h4 className="font-semibold mb-2 text-sm md:text-base text-foreground flex items-center border-b border-border pb-1.5">
                 {React.createElement(category.icon || FileText, {
                   className: 'mr-2 h-4 w-4 md:h-5 md:w-5 text-primary',
