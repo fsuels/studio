@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import TopDocsChips from '@/components/TopDocsChips';
 import TrustBadges from '@/components/TrustBadges';
 import { FileText } from 'lucide-react';
-import Image from 'next/image';
+import AutoImage from '@/components/AutoImage';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
@@ -61,12 +61,11 @@ export default function TemplatesClientContent({ locale }: Props) {
       </ul>
 
       <div className="flex justify-center mb-10">
-        <Image
-          src="/images/hero-placeholder.png"
+        <AutoImage
+          src="/images/hero-placeholder.svg"
           alt="Happy customer"
           width={400}
           height={240}
-          priority
           className="rounded-lg"
         />
       </div>
