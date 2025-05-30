@@ -1,4 +1,4 @@
-export const dynamic = 'force-dynamic';
+export const dynamic = 'force-static';
 // src/app/[locale]/signwell/page.tsx
 import React from 'react';
 import SignWellClientContent from './signwell-client-content';
