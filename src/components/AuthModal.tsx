@@ -21,12 +21,7 @@ import Link from 'next/link';
 import { useParams } from 'next/navigation';
 
 /* ---------- real Firebase Auth imports -------------------------------- */
-import {
-  getAuth,
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  type UserCredential,
-} from 'firebase/auth';
+import type { UserCredential } from 'firebase/auth';
 import { app } from '@/lib/firebase'; // your initialized Firebase app
 
 /* ---------------------------------------------------------------------- */
@@ -102,6 +97,11 @@ export default function AuthModal({
 
     /* -- real Firebase Auth call -------------------------------------- */
     try {
+      const {
+        getAuth,
+        createUserWithEmailAndPassword,
+        signInWithEmailAndPassword,
+      } = await import('firebase/auth');
       const auth = getAuth(app);
       let cred: UserCredential;
 
