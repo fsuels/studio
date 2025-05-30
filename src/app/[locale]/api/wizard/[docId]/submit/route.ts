@@ -1,7 +1,7 @@
 // src/app/[locale]/api/wizard/[docId]/submit/route.ts
 import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
-import { admin } from '@/lib/firebase-admin'; // Firebase Admin SDK
+import { getAdmin } from '@/lib/firebase-admin'; // Firebase Admin SDK
 import { documentLibrary } from '@/lib/document-library';
 
 // Placeholder for user authentication - replace with your actual auth logic
@@ -29,6 +29,8 @@ export async function POST(
 ) {
   const logPrefix = `[API /wizard/${params.docId}/submit]`;
   console.log(`${logPrefix} Received POST request.`);
+
+  const admin = getAdmin();
 
   const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
 
