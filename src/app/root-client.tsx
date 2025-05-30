@@ -1,7 +1,9 @@
 // src/app/root-client.tsx
 'use client';
 import React, { useEffect } from 'react';
+import { I18nextProvider } from 'react-i18next';
 // import { AuthProvider } from '@/hooks/useAuth'; // Ensure this was removed if consolidated
+import i18n from '@/lib/i18n';
 import { mark, measure } from '@/utils/performance';
 // import { DefaultSeo } from 'next-seo'; // Temporarily removed
 // import SEO from '@/next-seo.config'; // Temporarily removed
@@ -27,9 +29,10 @@ export default function RootClient({
   // };
 
   return (
-    <>
+    <I18nextProvider i18n={i18n}>
+      {/* Removed the fragment <> and </> because I18nextProvider will be the root */}
       {/* <DefaultSeo {...seoProps} /> */}
       {children}
-    </>
+    </I18nextProvider>
   );
 }

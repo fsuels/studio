@@ -1,27 +1,28 @@
 // src/lib/i18n.ts
 import i18n from 'i18next';
 import HttpBackend from 'i18next-http-backend';
-// DO NOT import initReactI18next or LanguageDetector here at the top level
+import { initReactI18next } from 'react-i18next';
 
-const isBrowser = typeof window !== 'undefined';
-
-// Initialize the core i18n instance
-// This instance is server-safe and can be used in `generateMetadata`
+/** Guard so the same instance isn’t initialised twice */
 if (!i18n.isInitialized) {
   i18n
-    .use(HttpBackend) // For loading translations
+    /* Load JSON from /public/locales/{lng}/{ns}.json */
+    .use(HttpBackend)
+    /* Bridge to react-i18next so hooks work */
+    .use(initReactI18next)
+    /* Initialise once with basic config */
     .init({
-      // Core i18next options
-      debug: process.env.NODE_ENV === 'development' && isBrowser, // More targeted debug logging
+      lng: 'en',
       fallbackLng: 'en',
       supportedLngs: ['en', 'es'],
-      load: 'languageOnly', // Loads 'en' instead of 'en-US'
       ns: [
         'common',
         'header',
         'footer',
         'support',
         'faq',
+        'documents',
+        'doc_bill_of_sale_vehicle',
         'electronic-signature',
         'online-notary',
         'documents',
@@ -31,15 +32,21 @@ if (!i18n.isInitialized) {
       backend: {
         loadPath: '/locales/{{lng}}/{{ns}}.json',
       },
+
       interpolation: {
-        escapeValue: false, // React already safes from XSS
+        escapeValue: false, // React already escapes
       },
-      // Options to prevent `t()` from returning objects or complex structures
-      returnObjects: false,
-      returnEmptyString: true, // Return empty string if key not found (safer than key itself)
-      keySeparator: '.', // Default
-      nsSeparator: ':', // Default
+
+      react: {
+        useSuspense: false,
+      },
+    })
+    .catch((err) => {
+      // Prevent build/development crashes if translations are missing
+      // eslint-disable-next-line no-console
+      console.error('i18n init error', err);
     });
 }
 
+/** Export the singleton so RootClient can import `default` */
 export default i18n;
