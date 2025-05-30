@@ -23,11 +23,7 @@ const nextConfig = {
   },
 
   /* —──────── Dev-server cross-origin (fix Turbopack warning) —──────── */
-  experimental: {
-    turbo: {
-      allowedDevOrigins: ['*'], // dev-only; tighten if you proxy from another port
-    },
-  },
+  allowedDevOrigins: ['*'], // dev-only; tighten if you proxy from another port
 
   /* —──────── Custom webpack tweaks —──────── */
   webpack(config) {
