@@ -1,4 +1,3 @@
-
 import { getDb } from '@/lib/firebase';
 import {
   collection,
@@ -36,7 +35,11 @@ export async function getUserDocuments(
     const docConfig = documentLibrary.find((doc) => doc.id === docType);
     return {
       id: d.id,
-      name: docConfig?.name || docConfig?.translations?.en?.name || docType,
+      name:
+        (data.name as string) ||
+        docConfig?.name ||
+        docConfig?.translations?.en?.name ||
+        docType,
       // Use updatedAt for the date display, fallback to createdAt if updatedAt is missing
       date: data.updatedAt || data.createdAt || new Date(),
       status: (data.status as string) || 'Draft',
