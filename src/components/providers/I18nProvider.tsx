@@ -50,7 +50,8 @@ const I18nClientProvider: React.FC<I18nProviderProps> = ({
               ],
               caches: ['localStorage', 'cookie'],
             },
-            saveMissing: process.env.NODE_ENV === 'development', // Only save missing keys in dev
+            // Disable auto POST to `/locales/add` which isn't handled server-side
+            saveMissing: false,
             // Ensure these are also set for client-side instance for consistency
             interpolation: {
               escapeValue: false, // React already does escaping
