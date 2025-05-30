@@ -20,9 +20,12 @@
    /* react-hooks recommended */
    const hooksRules = pluginReactHooks.configs.recommended.rules ?? {};
    
-   export default defineConfig([
-     /* ───────── all JS/TS files ───────── */
-     {
+export default defineConfig([
+  {
+    ignores: ['.next/**', 'public/**', 'coverage/**', '*.md', '*.json']
+  },
+  /* ───────── all JS/TS files ───────── */
+  {
        files: ['**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
        plugins: {
          js,
