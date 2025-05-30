@@ -9,9 +9,7 @@ import HomepageHeroSteps from '@/components/landing/HomepageHeroSteps';
 import { useToast } from '@/hooks/use-toast';
 import { Separator } from '@/components/ui/separator';
 import { Loader2 } from 'lucide-react';
-import Step1DocumentSelector, {
-  CATEGORY_LIST,
-} from '@/components/Step1DocumentSelector';
+import { CATEGORY_LIST } from '@/components/Step1DocumentSelector';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams, useRouter, useParams } from 'next/navigation';
 
@@ -49,6 +47,12 @@ const TopDocsChips = dynamic(() => import('@/components/TopDocsChips'), {
   loading: () => <LoadingSpinner />,
 });
 
+const Step1DocumentSelector = dynamic(
+  () =>
+    import('@/components/Step1DocumentSelector').then((m) => m.default),
+  { loading: () => <LoadingSpinner /> },
+);
+
 // AnnouncementBar is the default export of the module. Using dynamic without
 // resolving a named export ensures the component itself is returned.
 const AnnouncementBar = dynamic(() => import('@/components/AnnouncementBar'), {
@@ -62,6 +66,7 @@ const StickyFilterBar = dynamic(() => import('@/components/StickyFilterBar'), {
 interface PreloadableModule {
   default?: { preload?: () => void };
   GuaranteeBadge?: { preload?: () => void };
+  Step1DocumentSelector?: { preload?: () => void };
 }
 
 export default function HomePageClient() {
@@ -103,6 +108,10 @@ export default function HomePageClient() {
       (mod as PreloadableModule).default?.preload?.();
     });
     import('@/components/StickyFilterBar').then((mod) => {
+      (mod as PreloadableModule).default?.preload?.();
+    });
+    import('@/components/Step1DocumentSelector').then((mod) => {
+      (mod as PreloadableModule).Step1DocumentSelector?.preload?.();
       (mod as PreloadableModule).default?.preload?.();
     });
   }, []);
