@@ -2,8 +2,8 @@
 'use client';
 
 import React, { useEffect, useState, useMemo } from 'react';
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
+// Lazy load react-markdown to reduce initial bundle size
+const ReactMarkdown = React.lazy(() => import('react-markdown'));
 import { useTranslation } from 'react-i18next';
 import { documentLibrary, type LegalDocument } from '@/lib/document-library';
 import { Loader2, AlertTriangle } from 'lucide-react';
@@ -29,6 +29,7 @@ const DocumentDetail = React.memo(function DocumentDetail({
   const [isLoading, setIsLoading] = useState(!initialMarkdown); // If no initial markdown, consider it loading (for fallback/image)
   const [error, setError] = useState<string | null>(null); // Error if initialMarkdown is null/undefined and no docConfig?
   const [isHydrated, setIsHydrated] = useState(false);
+  const [remarkGfmPlugin, setRemarkGfmPlugin] = useState<any | null>(null);
 
   const docConfig = useMemo(
     () => documentLibrary.find((d: LegalDocument) => d.id === docId),
@@ -42,6 +43,13 @@ const DocumentDetail = React.memo(function DocumentDetail({
 
   useEffect(() => {
     setIsHydrated(true);
+  }, []);
+
+  // Dynamically load remark-gfm so it's only loaded when this component mounts
+  useEffect(() => {
+    import('remark-gfm').then((mod) => {
+      setRemarkGfmPlugin(() => mod.default ?? mod);
+    });
   }, []);
 
   // New useEffect to process initialMarkdown (e.g., title replacement, placeholder replacement)
@@ -169,22 +177,26 @@ const DocumentDetail = React.memo(function DocumentDetail({
       {/* Case 1: Display Markdown if initialMarkdown was provided, processed into md, and no error occurred */}
       {!isLoading && !error && md && initialMarkdown ? (
         <div className="prose prose-sm dark:prose-invert max-w-none w-full h-full overflow-y-auto p-4 md:p-6 relative z-0 bg-white dark:bg-background text-foreground">
-          <ReactMarkdown
-            remarkPlugins={[remarkGfm]}
-            components={{
-              p: (props) => <p {...props} className="select-none" />,
-              h1: (props) => <h1 {...props} className="text-center" />,
-              // FIXED: ensure markdown images include dimensions
-              img: ({
-                src = '',
-                ...rest
-              }: React.ImgHTMLAttributes<HTMLImageElement>) => (
-                <AutoImage src={src} {...rest} className="mx-auto" />
-              ),
-            }}
+          <React.Suspense
+            fallback={<Loader2 className="h-8 w-8 animate-spin" />}
           >
-            {md}
-          </ReactMarkdown>
+            <ReactMarkdown
+              remarkPlugins={remarkGfmPlugin ? [remarkGfmPlugin] : []}
+              components={{
+                p: (props) => <p {...props} className="select-none" />,
+                h1: (props) => <h1 {...props} className="text-center" />,
+                // FIXED: ensure markdown images include dimensions
+                img: ({
+                  src = '',
+                  ...rest
+                }: React.ImgHTMLAttributes<HTMLImageElement>) => (
+                  <AutoImage src={src} {...rest} className="mx-auto" />
+                ),
+              }}
+            >
+              {md}
+            </ReactMarkdown>
+          </React.Suspense>
         </div>
       ) : // Case 2: Display Image Preview if no initialMarkdown was provided, not loading, no error, and docConfig IS available
       !isLoading && !error && !md && !initialMarkdown && docConfig ? (
