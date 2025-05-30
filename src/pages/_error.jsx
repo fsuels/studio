@@ -1,8 +1,12 @@
+import React from "react";
+import PropTypes from "prop-types";
 import * as Sentry from "@sentry/nextjs";
 import Error from "next/error";
 
-const CustomErrorComponent = (props) => {
-  return <Error statusCode={props.statusCode} />;
+const CustomErrorComponent = ({ statusCode }) => <Error statusCode={statusCode} />;
+
+CustomErrorComponent.propTypes = {
+  statusCode: PropTypes.number,
 };
 
 CustomErrorComponent.getInitialProps = async (contextData) => {
