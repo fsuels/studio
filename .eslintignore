@@ -1,0 +1,6 @@
+# ESLint should completely skip these
+.next
+public
+coverage
+*.md
+*.json
