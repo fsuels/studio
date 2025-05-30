@@ -1,6 +1,6 @@
 declare global {
   namespace NodeJS {
-    interface Timeout {}
+    type Timeout = unknown;
     interface ErrnoException extends Error {
       code?: string;
       errno?: number;
@@ -17,7 +17,7 @@ declare global {
 
   const process: NodeJS.Process;
 
-  interface Buffer {}
+  type Buffer = unknown;
   const Buffer: {
     from(input: string | ArrayBuffer | ArrayBufferView, encoding?: string): Buffer;
   };
