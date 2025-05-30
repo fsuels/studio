@@ -1,7 +1,8 @@
 // src/components/landing/TrustAndTestimonialsSection.tsx
 'use client';
 
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
+import { useInView } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { FileText, ShieldCheck, Star } from 'lucide-react';
@@ -193,6 +194,8 @@ const TrustAndTestimonialsSection = React.memo(
     const [docCount, setDocCount] = useState(4200);
     const [isHydrated, setIsHydrated] = useState(false);
     const [testimonialsData, setTestimonialsData] = useState<Testimonial[]>([]);
+    const sectionRef = useRef<HTMLDivElement | null>(null);
+    const isInView = useInView(sectionRef, { once: false, amount: 0.2 });
 
     const autoplayOptions = {
       delay: 6000,
@@ -215,11 +218,15 @@ const TrustAndTestimonialsSection = React.memo(
 
     useEffect(() => {
       setIsHydrated(true);
+    }, []);
+
+    useEffect(() => {
+      if (!isInView) return;
       const interval = setInterval(() => {
         setDocCount((prev) => prev + Math.floor(Math.random() * 3));
       }, 4000);
       return () => clearInterval(interval);
-    }, []);
+    }, [isInView]);
 
     useEffect(() => {
       if (isHydrated && ready) {
@@ -275,7 +282,7 @@ const TrustAndTestimonialsSection = React.memo(
     };
 
     return (
-      <section className="bg-secondary/30 py-16 md:py-20 text-center">
+      <section ref={sectionRef} className="bg-secondary/30 py-16 md:py-20 text-center">
         <div className="container mx-auto px-4 mb-12 md:mb-16">
           <p className="text-xs uppercase text-muted-foreground tracking-wider mb-3 font-medium">
             {isHydrated
