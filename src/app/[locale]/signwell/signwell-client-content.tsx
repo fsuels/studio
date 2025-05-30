@@ -2,6 +2,7 @@
 'use client';
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
+import dynamic from 'next/dynamic';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
@@ -41,6 +42,11 @@ import { useToast } from '@/hooks/use-toast';
 import AuthModal from '@/components/AuthModal';
 import { useAuth } from '@/hooks/useAuth'; // Import useAuth
 import { createSignWellDocument } from '@/services/signwell';
+
+const SignwellHeroAnimationClient = dynamic(
+  () => import('@/components/SignwellHeroAnimationClient'),
+  { ssr: false }
+);
 
 interface SignWellClientContentProps {
   params: { locale: 'en' | 'es' };
