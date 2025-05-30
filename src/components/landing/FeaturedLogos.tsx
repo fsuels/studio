@@ -2,7 +2,7 @@
 'use client';
 
 import { useTranslation } from 'react-i18next';
-import Image from 'next/image';
+import AutoImage from '@/components/AutoImage';
 import React, { useState, useEffect } from 'react';
 
 const logos = [
@@ -54,7 +54,7 @@ const FeaturedLogos = React.memo(function FeaturedLogos() {
         <div className="flex flex-wrap justify-center items-center gap-8 md:gap-12 lg:gap-16 opacity-75">
           {logos.map((logo, index) => (
             <div key={index} className="h-6 md:h-7 lg:h-8">
-              <Image
+              <AutoImage
                 src={logo.src}
                 alt={logo.alt}
                 width={120}
