@@ -1,7 +1,6 @@
-import test from 'node:test';
-import assert from 'node:assert';
-import fs from 'fs';
-import path from 'path';
+import { test, expect } from '@playwright/test';
+import fs from 'node:fs';
+import path from 'node:path';
 
 const tsPath = path.join(
   path.dirname(new URL(import.meta.url).pathname),
@@ -25,9 +24,9 @@ const load = new Function(`${jsCode}; return prettify;`);
 const prettify = load();
 
 test('prettify converts snake_case to title case', () => {
-  assert.strictEqual(prettify('buyer_name'), 'Buyer Name');
+ expect(prettify('buyer_name')).toBe('Buyer Name');
 });
 
 test('prettify converts camelCase to title case', () => {
-  assert.strictEqual(prettify('vehicleVin'), 'Vehicle Vin');
+ expect(prettify('vehicleVin')).toBe('Vehicle Vin');
 });
