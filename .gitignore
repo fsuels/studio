@@ -23,3 +23,5 @@ Thumbs.db
 
 # prototyper
 /context_backup
+# Sentry Config File
+.env.sentry-build-plugin
