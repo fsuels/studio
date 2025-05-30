@@ -222,18 +222,20 @@ export default function HomePageClient() {
         className="container mx-auto px-4 py-8 md:py-12 scroll-mt-20"
       >
         <div className="max-w-4xl mx-auto">
-          {isHydrated && (
-            <h2 className="text-3xl md:text-4xl font-bold text-center mb-4 text-foreground">
-              {t('What do you want to accomplish?', { ns: 'common' })}
-            </h2>
-          )}
-          {isHydrated && (
-            <p className="text-lg md:text-xl text-muted-foreground text-center mb-10">
-              {t('stepOne.categoryDescription', { ns: 'common' })}
-            </p>
-          )}
+          <h2
+            className="text-3xl md:text-4xl font-bold text-center mb-4 text-foreground"
+            suppressHydrationWarning
+          >
+            {t('What do you want to accomplish?', { ns: 'common' })}
+          </h2>
+          <p
+            className="text-lg md:text-xl text-muted-foreground text-center mb-10"
+            suppressHydrationWarning
+          >
+            {t('stepOne.categoryDescription', { ns: 'common' })}
+          </p>
 
-          {isHydrated && (
+          {isHydrated ? (
             <Suspense fallback={<div className="h-16 bg-muted" />}>
               <StickyFilterBar
                 searchTerm={globalSearchTerm}
@@ -249,6 +251,8 @@ export default function HomePageClient() {
                 }}
               />
             </Suspense>
+          ) : (
+            <div className="h-16 bg-muted" />
           )}
 
           <div className="mt-8 bg-card p-4 sm:p-6 md:p-8 rounded-xl shadow-2xl border border-border/20">
