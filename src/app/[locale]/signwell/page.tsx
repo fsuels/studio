@@ -1,7 +1,7 @@
 export const dynamic = 'force-static';
 // src/app/[locale]/signwell/page.tsx
 import React from 'react';
-import SignWellClientContent from './signwell-client-content';
+import dynamic from 'next/dynamic';
 import type { Metadata } from 'next';
 
 import SignwellHeroAnimationClient from '@/components/SignwellHeroAnimationClient';
@@ -46,6 +46,10 @@ export async function generateMetadata({
   };
 }
 
+const SignWellClientContent = dynamic(
+  () => import('./signwell-client-content'),
+  { ssr: false }
+);
 export default function SignWellPage({ params }: SignWellPageProps) {
   return <SignWellClientContent params={params} />;
 }
