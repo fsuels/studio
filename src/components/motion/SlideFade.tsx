@@ -1,28 +1,7 @@
 'use client';
 
-import { motion, type HTMLMotionProps } from 'framer-motion';
-import React from 'react';
+import { lazyClient } from '@/lib/lazy-client';
 
-interface SlideFadeProps extends HTMLMotionProps<'div'> {
-  children: React.ReactNode;
-  delay?: number;
-}
-
-const SlideFade: React.FC<SlideFadeProps> = ({
-  children,
-  delay = 0,
-  ...props
-}) => {
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 16 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.45, delay, ease: 'easeOut' }}
-      {...props}
-    >
-      {children}
-    </motion.div>
-  );
-};
+const SlideFade = lazyClient(() => import('./SlideFade.client'));
 
 export default SlideFade;
