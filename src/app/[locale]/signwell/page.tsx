@@ -4,8 +4,7 @@ import React from 'react';
 import SignWellClientContent from './signwell-client-content';
 import type { Metadata } from 'next';
 
-import { lazyClient } from '@/lib/lazy-client';
-const SignwellHeroAnimation = lazyClient(() => import('./SignwellHeroAnimation'));
+import SignwellHeroAnimationClient from '@/components/SignwellHeroAnimationClient';
 interface SignWellPageProps {
   params: { locale: 'en' | 'es' } & Record<string, string>;
 }

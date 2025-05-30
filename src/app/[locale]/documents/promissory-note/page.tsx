@@ -2,14 +2,6 @@ import { lazyClient } from '@/lib/lazy-client';
 import { getTranslator } from 'next-intl/server';
 import { Metadata } from 'next';
 
-// Assume these are potentially large client-only components
-const VehicleBillOfSalePageClient = lazyClient(() => import('./VehicleBillOfSalePageClient'));
-const VehicleFaqSection = lazyClient(() => import('./VehicleFaqSection')); // Assuming this exists based on previous steps
-
-interface VehicleBillOfSalePageProps {
-  params: { locale: string };
-}
-
 export async function generateMetadata({ params: { locale } }: VehicleBillOfSalePageProps): Promise<Metadata> {
   const t = await getTranslator(locale, ['doc_bill_of_sale_vehicle', 'common']);
 
@@ -20,12 +12,16 @@ export async function generateMetadata({ params: { locale } }: VehicleBillOfSale
 }
 
 export default async function BillOfSaleVehiclePage() {
-  // The actual content will be rendered by the client component
+  // This is a placeholder server component.
+  // The actual content for the Promissory Note page should be added here
+  // or within a client component imported specifically for this page.
   return (
     <>
-      {/* The client component handles the rendering */}
-      <VehicleBillOfSalePageClient />
-      <VehicleFaqSection /> {/* Render the lazy-loaded component */}
+      <h1>Promissory Note Page</h1>
+      <p>
+        This page is under construction. Please replace this content with the
+        actual Promissory Note form and information.
+      </p>
     </>
   );
 }

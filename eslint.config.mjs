@@ -16,7 +16,7 @@ export default defineConfig([
     rules: {
       'no-restricted-imports': [
         'error',
-        {
+         {
           patterns: [
             './*Faq*',
             './*Hero*',

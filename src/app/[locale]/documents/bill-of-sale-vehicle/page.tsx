@@ -1,10 +1,9 @@
 // src/app/[locale]/documents/bill-of-sale-vehicle/page.tsx
-import dynamic from 'next/dynamic';
 import type { Metadata } from 'next';
 import i18n from '@/lib/i18n'; // Import i18n instance
-import { lazyClient } from '@/lib/lazy-client';
+import VehicleBillOfSalePageClientWrapper from '@/components/VehicleBillOfSalePageClientWrapper';
 
-const VehicleBillOfSaleDisplay = lazyClient(() => import('@/components/docs/VehicleBillOfSaleDisplay'));
+// This is a Server Component that fetches metadata
 // Dynamically generate metadata based on locale
 export async function generateMetadata({
   params,
@@ -51,8 +50,8 @@ interface PageProps {
 export default function VehicleBillOfSalePage({ params }: PageProps) {
   const { locale } = params;
   return (
-    <main className="py-8">
-      <VehicleBillOfSaleDisplay locale={locale} />
+    <main className="py-8">    
+      <VehicleBillOfSalePageClientWrapper />
     </main>
   );
 }
