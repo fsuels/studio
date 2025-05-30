@@ -223,7 +223,12 @@ export default function DashboardClientContent({
                 {sorted.map((doc) => (
                   <TableRow key={doc.id} className="group">
                     <TableCell className="font-medium">
-                      {t(doc.name, doc.name)}
+                      <Link
+                        href={`/${locale}/docs/${doc.docType}/start`}
+                        className="hover:underline"
+                      >
+                        {t(doc.name, doc.name)}
+                      </Link>
                     </TableCell>
                     <TableCell>{formatDate(doc.date)}</TableCell>
                     <TableCell>{t(doc.status)}</TableCell>
@@ -239,11 +244,11 @@ export default function DashboardClientContent({
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                          <DropdownMenuItem onSelect={() => setRenameDoc(doc)}>
+                          <DropdownMenuItem onClick={() => setRenameDoc(doc)}>
                             {t('Rename')}
                           </DropdownMenuItem>
                           <DropdownMenuItem
-                            onSelect={async () => {
+                            onClick={async () => {
                               await duplicateDocument(user!.uid, doc.id);
                               toast({
                                 title: t('Document duplicated'),
@@ -256,7 +261,7 @@ export default function DashboardClientContent({
                             {t('Duplicate')}
                           </DropdownMenuItem>
                           <DropdownMenuItem
-                            onSelect={async () => {
+                            onClick={async () => {
                               await softDeleteDocument(user!.uid, doc.id);
                               toast({
                                 title: t('Document deleted'),
