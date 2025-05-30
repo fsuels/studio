@@ -7,9 +7,13 @@ import { initReactI18next } from 'react-i18next';
 if (!i18n.isInitialized) {
   i18n
     /* Load JSON from /public/locales/{lng}/{ns}.json */
-    .use(HttpBackend)
-    /* Bridge to react-i18next so hooks work */
-    .use(initReactI18next)
+    .use(HttpBackend);
+  if (typeof window !== 'undefined') {
+    // react-i18next relies on browser APIs like createContext which
+    // aren't available when this file runs on the server.
+    i18n.use(initReactI18next);
+  }
+  i18n
     /* Initialise once with basic config */
     .init({
       lng: 'en',

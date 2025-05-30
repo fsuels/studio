@@ -2,13 +2,25 @@ export const dynamic = 'force-static';
 // src/app/[locale]/signwell/page.tsx
 import React from 'react';
 import SignWellClientContent from './signwell-client-content';
-import type { Metadata } from 'next';
-
-import SignwellHeroAnimationClient from '@/components/SignwellHeroAnimationClient';
 interface SignWellPageProps {
   params: { locale: 'en' | 'es' } & Record<string, string>;
 }
-import i18n from '@/lib/i18n'; // Import i18n instance to access translations server-side for metadata
+import type { Metadata } from 'next';
+import SignwellHeroAnimationClient from '@/components/SignwellHeroAnimationClient';
+
+// Basic metadata strings to avoid loading react-i18next on the server
+const META = {
+  en: {
+    title: 'eSign Documents Online Securely | 123LegalDoc',
+    description:
+      'Upload, prepare, and send documents for legally binding electronic signatures with 123LegalDoc, powered by SignWell. Fast, secure, and compliant.',
+  },
+  es: {
+    title: 'Firmar Documentos Electrónicamente | 123LegalDoc',
+    description:
+      'Suba, prepare y envíe documentos para firmas electrónicas legalmente vinculantes con 123LegalDoc, impulsado por SignWell. Rápido, seguro y conforme.',
+  },
+} as const;
 
 export async function generateStaticParams() {
   return [{ locale: 'en' }, { locale: 'es' }];
@@ -20,21 +32,7 @@ export async function generateMetadata({
 }: {
   params: { locale: 'en' | 'es' };
 }): Promise<Metadata> {
-  // Ensure i18next is initialized for the correct language to fetch metadata
-  if (i18n.language !== params.locale) {
-    await i18n.changeLanguage(params.locale);
-  }
-
-  const title = i18n.t('pageTitle', {
-    ns: 'electronic-signature',
-    defaultValue: 'eSign Documents Online Securely | 123LegalDoc',
-  });
-  const description = i18n.t('pageDescription', {
-    ns: 'electronic-signature',
-    defaultValue:
-      'Upload, prepare, and send documents for legally binding electronic signatures with 123LegalDoc, powered by SignWell. Fast, secure, and compliant.',
-  });
-
+  const { title, description } = META[params.locale] ?? META.en;
   return {
     title,
     description,
