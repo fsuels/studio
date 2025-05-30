@@ -4,6 +4,20 @@ This is a NextJS starter in Firebase Studio.
 
 To get started, take a look at src/app/page.tsx.
 
+## Firebase configuration
+
+1. In the Firebase console open **Settings \u2192 Service accounts** and click
+   **Generate new private key**.
+2. Save the downloaded file as `serviceAccountKey.json`.
+3. Export it as a single line:
+
+```bash
+export FIREBASE_SERVICE_ACCOUNT_KEY_JSON="$(cat serviceAccountKey.json | jq -c .)"
+```
+
+The string must include properly escaped `\n` newlines in the `private_key`
+field.
+
 ## Production Builds
 
 For optimal performance and minified JavaScript output, build the project in
