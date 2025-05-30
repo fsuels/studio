@@ -7,7 +7,7 @@ import webpack from 'webpack';
 /*  Core Next.js config                                                       */
 /* -------------------------------------------------------------------------- */
 const nextConfig = {
-  /* —──────── Build safety nets —──────── */
+  turbopack: {},
   typescript: { ignoreBuildErrors: true },
   eslint: { ignoreDuringBuilds: true },
 
@@ -21,30 +21,9 @@ const nextConfig = {
       { protocol: 'https', hostname: 'picsum.photos', pathname: '/**' },
     ],
   },
+  /* Add allowedDevOrigins here as instructed */
+  allowedDevOrigins: ['*'],
 
-  /* —──────── Dev-server cross-origin (fix Turbopack warning) —──────── */
-  experimental: {
-    turbo: {
-      allowedDevOrigins: ['*'], // dev-only; tighten if you proxy from another port
-    },
-  },
-
-  /* —──────── Custom webpack tweaks —──────── */
-  webpack(config) {
-    /* Ignore Jaeger exporter that breaks in edge runtimes */
-    config.plugins.push(
-      new webpack.IgnorePlugin({
-        resourceRegExp: /^@opentelemetry\/exporter-jaeger$/,
-      }),
-    );
-
-    /* Stub out ‘handlebars’ which relies on deprecated require.extensions */
-    config.plugins.push(
-      new webpack.IgnorePlugin({ resourceRegExp: /^handlebars$/ }),
-    );
-
-    return config;
-  },
 };
 
 /* -------------------------------------------------------------------------- */
