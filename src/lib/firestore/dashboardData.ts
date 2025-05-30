@@ -27,22 +27,27 @@ export async function getUserDocuments(
   // Changed orderBy from 'createdAt' to 'updatedAt'
   const q = query(col, orderBy('updatedAt', 'desc'), limit(max));
   const snap = await getDocs(q);
-  return snap.docs.map((d) => {
-    const data = d.data() as Record<string, unknown> & {
-      updatedAt?: Timestamp | Date | string;
-      createdAt?: Timestamp | Date | string; // Keep for compatibility if some docs only have createdAt
-    };
-    const docType = (data.originalDocId || data.docType || d.id) as string;
+  return snap.docs
+    .filter((d) => {
+      const data = d.data() as { deletedAt?: unknown };
+      return !data.deletedAt;
+    })
+    .map((d) => {
+      const data = d.data() as Record<string, unknown> & {
+        updatedAt?: Timestamp | Date | string;
+        createdAt?: Timestamp | Date | string; // Keep for compatibility if some docs only have createdAt
+      };
+      const docType = (data.originalDocId || data.docType || d.id) as string;
     const docConfig = documentLibrary.find((doc) => doc.id === docType);
-    return {
-      id: d.id,
-      name: docConfig?.name || docConfig?.translations?.en?.name || docType,
-      // Use updatedAt for the date display, fallback to createdAt if updatedAt is missing
-      date: data.updatedAt || data.createdAt || new Date(),
-      status: (data.status as string) || 'Draft',
-      docType,
-    };
-  });
+      return {
+        id: d.id,
+        name: docConfig?.name || docConfig?.translations?.en?.name || docType,
+        // Use updatedAt for the date display, fallback to createdAt if updatedAt is missing
+        date: data.updatedAt || data.createdAt || new Date(),
+        status: (data.status as string) || 'Draft',
+        docType,
+      };
+    });
 }
 
 export interface DashboardPayment {
