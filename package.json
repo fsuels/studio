@@ -15,7 +15,7 @@
     "format": "prettier --write .",
     "typecheck": "tsc --noEmit",
 
-    "test": "node --test tests/prettify.test.mjs",
+    "test": "playwright test tests/prettify.test.mjs",
     "e2e": "playwright test --reporter=list || true",
 
     "gen:previews": "node --experimental-modules scripts/generate-previews.js",
