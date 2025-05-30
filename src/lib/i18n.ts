@@ -5,12 +5,16 @@ import { initReactI18next } from 'react-i18next';
 
 /** Guard so the same instance isn’t initialised twice */
 if (!i18n.isInitialized) {
+  // ── Load JSON from /public/locales/{lng}/{ns}.json (works server & client)
+  i18n.use(HttpBackend);
+
+  // ── Bridge to react-i18next **only in the browser**
+  if (typeof window !== 'undefined') {
+    i18n.use(initReactI18next);
+  }
+
+  // ── Single initialisation call
   i18n
-    /* Load JSON from /public/locales/{lng}/{ns}.json */
-    .use(HttpBackend)
-    /* Bridge to react-i18next so hooks work */
-    .use(initReactI18next)
-    /* Initialise once with basic config */
     .init({
       lng: 'en',
       fallbackLng: 'en',
@@ -25,24 +29,14 @@ if (!i18n.isInitialized) {
         'doc_bill_of_sale_vehicle',
         'electronic-signature',
         'online-notary',
-        'documents',
-        'doc_bill_of_sale_vehicle',
       ],
       defaultNS: 'common',
-      backend: {
-        loadPath: '/locales/{{lng}}/{{ns}}.json',
-      },
-
-      interpolation: {
-        escapeValue: false, // React already escapes
-      },
-
-      react: {
-        useSuspense: false,
-      },
+      backend: { loadPath: '/locales/{{lng}}/{{ns}}.json' },
+      interpolation: { escapeValue: false },
+      react: { useSuspense: false },
     })
     .catch((err) => {
-      // Prevent build/development crashes if translations are missing
+      // prevent build/dev crashes if translations are missing
       // eslint-disable-next-line no-console
       console.error('i18n init error', err);
     });
