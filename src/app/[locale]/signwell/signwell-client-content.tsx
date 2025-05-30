@@ -34,7 +34,7 @@ import {
   Loader2,
   BookUser,
 } from 'lucide-react';
-import Image from 'next/image';
+import AutoImage from '@/components/AutoImage';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
@@ -714,8 +714,8 @@ export default function SignWellClientContent({
             </Button>
           </div>
           <div className="flex justify-center">
-            <Image
-              src="https://placehold.co/400x300/0f172a/e0f2fe.png"
+            <AutoImage
+              src="/images/signwell-hero.svg"
               alt={t('security.imageAlt')}
               width={400}
               height={300}
