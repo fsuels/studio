@@ -29,7 +29,7 @@ interface AuthContextType {
   user: User | null;
   isLoading: boolean;
   // prefix unused parameter names with an underscore to satisfy lint rules
-  login: (_email: string, _uid?: string) => void; // email is now required for login
+  login: (_email: string, _uid?: string, _name?: string) => Promise<void>; // email is now required for login
   logout: () => void;
   updateUser: (_updates: Partial<User> & { password?: string }) => void;
 }
@@ -78,19 +78,33 @@ function useAuthHook(): AuthContextType {
 
   // login & logout update state + localStorage
   const login = useCallback(
-    (email: string, uid?: string) => {
+    async (email: string, uid?: string, name?: string) => {
       // In a real app, uid would come from backend after successful auth
       const newUid = uid || `mock-user-${Date.now()}`;
+
+      let finalName = name || user?.name || '';
+      if (!finalName && uid) {
+        try {
+          const { getAuth } = await import('firebase/auth');
+          const auth = getAuth(app);
+          if (auth.currentUser && auth.currentUser.uid === uid) {
+            finalName = auth.currentUser.displayName || '';
+          }
+        } catch (err) {
+          console.warn('[useAuth] Failed to retrieve username from auth service', err);
+        }
+      }
+
       const newUser: User = {
         uid: newUid,
-        email: email,
-        // Initialize other fields as empty or default
-        name: user?.name || '', // Preserve existing name if user object was already partially there
+        email,
+        name: finalName,
         phone: user?.phone || '',
         address: user?.address || '',
         twoStep: user?.twoStep || false,
         textUpdates: user?.textUpdates || false,
       };
+
       localStorage.setItem(
         'mockAuth',
         JSON.stringify({ isLoggedIn: true, user: newUser }),
@@ -99,7 +113,7 @@ function useAuthHook(): AuthContextType {
       setUser(newUser);
     },
     [user],
-  ); // Added user to dependency array to correctly capture existing fields if any
+  );
 
   const logout = useCallback(() => {
     localStorage.removeItem('mockAuth');

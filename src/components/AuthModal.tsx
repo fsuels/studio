@@ -138,7 +138,11 @@ export default function AuthModal({
       }
 
       // update local auth context so the rest of the app knows the user
-      login(cred.user.uid);
+      await login(
+        cred.user.email || '',
+        cred.user.uid,
+        cred.user.displayName || undefined,
+      );
 
       // notify parent (WizardForm)
       onAuthSuccess(authMode, cred.user.uid);
