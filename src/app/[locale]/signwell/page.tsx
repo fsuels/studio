@@ -4,7 +4,12 @@ import React from 'react';
 import dynamic from 'next/dynamic';
 import type { Metadata } from 'next';
 
-import SignwellHeroAnimationClient from '@/components/SignwellHeroAnimationClient';
+import dynamic from 'next/dynamic';
+
+const SignwellHeroAnimationClient = dynamic(
+  () => import('@/components/SignwellHeroAnimationClient'),
+  { ssr: false },
+);
 interface SignWellPageProps {
   params: { locale: 'en' | 'es' } & Record<string, string>;
 }
