@@ -3,8 +3,28 @@
 
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import RenameModal from './modals/RenameModal';
 import ProfileSettings from '@/components/ProfileSettings';
 import {
   FileText,
@@ -12,11 +32,22 @@ import {
   UserCircle,
   LogOut,
   Loader2,
+  MoreVertical,
+  ChevronUp,
+  ChevronDown,
 } from 'lucide-react';
 import Link from 'next/link';
 import { useAuth } from '@/hooks/useAuth';
 import { useRouter } from 'next/navigation';
 import { useDashboardData } from '@/hooks/useDashboardData';
+import {
+  renameDocument,
+  duplicateDocument,
+  softDeleteDocument,
+} from '@/lib/firestore/documentActions';
+import type { DashboardDocument } from '@/lib/firestore/dashboardData';
+import { useQueryClient } from '@tanstack/react-query';
+import { useToast } from '@/hooks/use-toast';
 
 // Define a more specific type for Firestore Timestamps if that's what you use
 interface FirestoreTimestamp {
@@ -40,6 +71,9 @@ export default function DashboardClientContent({
   const router = useRouter();
 
   const [isHydrated, setIsHydrated] = useState(false);
+  const [sortBy, setSortBy] = useState<'name' | 'date' | 'status'>('name');
+  const [sortDir, setSortDir] = useState<'asc' | 'desc'>('asc');
+  const [renameDoc, setRenameDoc] = useState<DashboardDocument | null>(null);
 
   const {
     documents,
@@ -63,6 +97,9 @@ export default function DashboardClientContent({
     logout();
     router.push(`/${locale}/`);
   };
+
+  const queryClient = useQueryClient();
+  const { toast } = useToast();
 
   const formatDate = (
     dateInput: FirestoreTimestamp | Date | string,
@@ -119,43 +156,144 @@ export default function DashboardClientContent({
 
     switch (activeTab) {
       case 'documents':
+        const sorted = [...documents].sort((a, b) => {
+          const dir = sortDir === 'asc' ? 1 : -1;
+          let valA: string | number = '';
+          let valB: string | number = '';
+          if (sortBy === 'name') {
+            valA = a.name.toLowerCase();
+            valB = b.name.toLowerCase();
+          } else if (sortBy === 'status') {
+            valA = a.status.toLowerCase();
+            valB = b.status.toLowerCase();
+          } else {
+            const dA = (typeof a.date === 'object' && 'toDate' in a.date)
+              ? a.date.toDate()
+              : new Date(a.date as any);
+            const dB = (typeof b.date === 'object' && 'toDate' in b.date)
+              ? b.date.toDate()
+              : new Date(b.date as any);
+            valA = dA.getTime();
+            valB = dB.getTime();
+          }
+          if (valA < valB) return -1 * dir;
+          if (valA > valB) return 1 * dir;
+          return 0;
+        });
+
+        const handleSort = (col: 'name' | 'date' | 'status') => {
+          if (sortBy === col) {
+            setSortDir(sortDir === 'asc' ? 'desc' : 'asc');
+          } else {
+            setSortBy(col);
+            setSortDir('asc');
+          }
+        };
+
         return (
-          <div className="space-y-4">
-            {documents.map((doc) => (
-              <Card
-                key={doc.id}
-                className="shadow-sm hover:shadow-md transition-shadow bg-card border-border"
-              >
-                <CardHeader className="flex flex-row items-center justify-between pb-2">
-                  <CardTitle className="text-md font-medium text-card-foreground">
-                    {t(doc.name, doc.name)}
-                  </CardTitle>
-                  <Button variant="outline" size="sm" asChild>
-                    <Link
-                      href={`/${locale}/docs/${doc.docType || doc.id}/start`}
-                    >
-                      {t('View/Edit')}
-                    </Link>
-                  </Button>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-xs text-muted-foreground">
-                    {t('Date')}: {formatDate(doc.date)} | {t('Status')}:{' '}
-                    <span
-                      className={`font-semibold ${doc.status === 'Signed' || doc.status === 'Completed' ? 'text-green-600' : 'text-orange-500'}`}
-                    >
-                      {t(doc.status)}
-                    </span>
-                  </p>
-                </CardContent>
-              </Card>
-            ))}
-            {documents.length === 0 && !isLoadingData && (
+          <>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead
+                    onClick={() => handleSort('name')}
+                    className="cursor-pointer select-none"
+                  >
+                    {t('Name')}{' '}
+                    {sortBy === 'name' && (sortDir === 'asc' ? <ChevronUp className="inline h-3 w-3" /> : <ChevronDown className="inline h-3 w-3" />)}
+                  </TableHead>
+                  <TableHead
+                    onClick={() => handleSort('date')}
+                    className="cursor-pointer select-none"
+                  >
+                    {t('LastModified', 'Last Modified')}{' '}
+                    {sortBy === 'date' && (sortDir === 'asc' ? <ChevronUp className="inline h-3 w-3" /> : <ChevronDown className="inline h-3 w-3" />)}
+                  </TableHead>
+                  <TableHead
+                    onClick={() => handleSort('status')}
+                    className="cursor-pointer select-none"
+                  >
+                    {t('Status')}{' '}
+                    {sortBy === 'status' && (sortDir === 'asc' ? <ChevronUp className="inline h-3 w-3" /> : <ChevronDown className="inline h-3 w-3" />)}
+                  </TableHead>
+                  <TableHead className="w-8"></TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {sorted.map((doc) => (
+                  <TableRow key={doc.id} className="group">
+                    <TableCell className="font-medium">
+                      {t(doc.name, doc.name)}
+                    </TableCell>
+                    <TableCell>{formatDate(doc.date)}</TableCell>
+                    <TableCell>{t(doc.status)}</TableCell>
+                    <TableCell className="text-right">
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="opacity-0 group-hover:opacity-100"
+                          >
+                            <MoreVertical className="h-4 w-4" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuItem onSelect={() => setRenameDoc(doc)}>
+                            {t('Rename')}
+                          </DropdownMenuItem>
+                          <DropdownMenuItem
+                            onSelect={async () => {
+                              await duplicateDocument(user!.uid, doc.id);
+                              toast({
+                                title: t('Document duplicated'),
+                              });
+                              queryClient.invalidateQueries({
+                                queryKey: ['dashboardDocuments', user?.uid],
+                              });
+                            }}
+                          >
+                            {t('Duplicate')}
+                          </DropdownMenuItem>
+                          <DropdownMenuItem
+                            onSelect={async () => {
+                              await softDeleteDocument(user!.uid, doc.id);
+                              toast({
+                                title: t('Document deleted'),
+                              });
+                              queryClient.invalidateQueries({
+                                queryKey: ['dashboardDocuments', user?.uid],
+                              });
+                            }}
+                          >
+                            {t('Delete')}
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+            {sorted.length === 0 && !isLoadingData && (
               <p className="text-muted-foreground">
                 {t('No documents found.')}
               </p>
             )}
-          </div>
+            <RenameModal
+              open={!!renameDoc}
+              currentName={renameDoc?.name || ''}
+              onClose={() => setRenameDoc(null)}
+              onRename={async (name) => {
+                if (!renameDoc) return;
+                await renameDocument(user!.uid, renameDoc.id, name);
+                toast({ title: t('Document renamed') });
+                queryClient.invalidateQueries({
+                  queryKey: ['dashboardDocuments', user?.uid],
+                });
+              }}
+            />
+          </>
         );
       case 'payments':
         return (
