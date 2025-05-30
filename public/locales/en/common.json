@@ -70,7 +70,7 @@
   "Payment History": "Payment History",
   "Profile": "Profile",
   "Logout": "Logout",
-  "Welcome back, {{name}}! Manage your legal documents and account.": "Welcome back, {{name}}! Manage your legal documents and account.",
+  "Welcome back, {{name}}!": "Welcome back, {{name}}!",
   "Date": "Date",
   "Status": "Status",
   "Amount": "Amount",

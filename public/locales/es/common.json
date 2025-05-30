@@ -70,7 +70,7 @@
   "Payment History": "Historial de Pagos",
   "Profile": "Perfil",
   "Logout": "Cerrar Sesión",
-  "Welcome back, {{name}}! Manage your legal documents and account.": "¡Bienvenido de nuevo, {{name}}! Administra tus documentos legales y tu cuenta.",
+  "Welcome back, {{name}}!": "¡Bienvenido de nuevo, {{name}}!",
   "Date": "Fecha",
   "Status": "Estado",
   "Amount": "Monto",

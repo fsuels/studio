@@ -207,7 +207,7 @@ export default function DashboardClientContent({
       </div>
 
       <p className="text-muted-foreground mb-6">
-        {t('Welcome back, {{name}}! Manage your legal documents and account.', {
+        {t('Welcome back, {{name}}!', {
           name: user?.name || user?.email || 'User',
         })}
       </p>

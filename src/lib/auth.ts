@@ -19,3 +19,30 @@ export async function authUser(): Promise<{
   );
   return { uid: 'test-user-123', email: 'test-user@example.com' };
 }
+
+// -----------------------------------------------------------------------------
+// Fetch user profile information
+// -----------------------------------------------------------------------------
+
+import { getDb } from '@/lib/firebase';
+import { doc, getDoc } from 'firebase/firestore';
+
+export interface UserProfile {
+  name?: string | null;
+  email?: string | null;
+}
+
+/**
+ * Retrieves the user profile from Firestore using the UID.
+ */
+export async function getUserProfile(uid: string): Promise<UserProfile | null> {
+  try {
+    const db = await getDb();
+    const ref = doc(db, 'users', uid);
+    const snap = await getDoc(ref);
+    return snap.exists() ? (snap.data() as UserProfile) : null;
+  } catch (err) {
+    console.error('[auth] Failed to load user profile', err);
+    return null;
+  }
+}

@@ -10,6 +10,7 @@ import React, {
   ReactNode,
   useMemo,
 } from 'react';
+import { getUserProfile } from '@/lib/auth';
 
 // 1) Define the shape of your auth context
 interface User {
@@ -97,6 +98,25 @@ function useAuthHook(): AuthContextType {
       );
       setIsLoggedIn(true);
       setUser(newUser);
+
+      // Fetch additional profile info like display name
+      getUserProfile(newUid)
+        .then((profile) => {
+          if (profile?.name) {
+            setUser((prev) => {
+              if (!prev) return prev;
+              const updated = { ...prev, name: profile.name };
+              localStorage.setItem(
+                'mockAuth',
+                JSON.stringify({ isLoggedIn: true, user: updated }),
+              );
+              return updated;
+            });
+          }
+        })
+        .catch((err) =>
+          console.error('[useAuth] Failed to fetch user profile', err),
+        );
     },
     [user],
   ); // Added user to dependency array to correctly capture existing fields if any

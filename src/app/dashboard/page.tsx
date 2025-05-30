@@ -180,7 +180,7 @@ export default function DashboardPage() {
       </div>
 
       <p className="text-muted-foreground mb-6">
-        {t('Welcome back, {{name}}! Manage your legal documents and account.', {
+        {t('Welcome back, {{name}}!', {
           name: mockUser.name,
         })}
       </p>
