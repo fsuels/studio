@@ -1,8 +1,8 @@
 /* prettier-ignore */
-// src/app/layout.tsx
+/* src/app/layout.tsx */
 
 import './globals.css';
-import { Inter, Merriweather } from 'next/font/google';
+import localFont from 'next/font/local';
 import Script from 'next/script';
 import SEO from '../../next-seo.config.js';
 import RootClient from './root-client';
@@ -11,23 +11,18 @@ export const metadata = {
   title: SEO.title,
 };
 
-// Dev-only helper for catching missing translation keys
-if (process.env.NODE_ENV === 'development' && typeof window !== 'undefined') {
-  import('../../scripts/find-missing-i18n.js').catch((err) =>
-    console.error('Failed to load find-missing-i18n.js:', err),
-  );
-}
-
-// Load Google fonts with preloading to prevent layout shift
-const inter = Inter({
-  subsets: ['latin'],
+/* ------------------------------------------------------------------
+   Use local WOFF2 files so the build works offline in Firebase Studio.
+   Put the font files in /public/fonts/ (one-time copy) and commit them.
+-------------------------------------------------------------------*/
+const inter = localFont({
+  src: '../../public/fonts/Inter-Variable.woff2',
   variable: '--font-geist-sans',
   preload: true,
   display: 'swap',
 });
-const merriweather = Merriweather({
-  weight: ['400', '700'],
-  subsets: ['latin'],
+const merriweather = localFont({
+  src: '../../public/fonts/Merriweather-Variable.woff2',
   variable: '--font-merriweather',
   preload: true,
   display: 'swap',
@@ -47,6 +42,9 @@ export default function RootLayout({
         />
         <meta name="description" content={SEO.description} />
         <title>{SEO.title}</title>
+
+        {/* See README/fonts.md for the one-time download step */}
+
         {/* Preload and asynchronously apply the generated layout.css file */}
         <Script id="defer-layout-css" strategy="beforeInteractive">
           {`
@@ -54,54 +52,36 @@ export default function RootLayout({
               const link = document.querySelector('link[href*="layout.css"]');
               if (!link || link.dataset.processed) return;
               link.dataset.processed = 'true';
-
               const href = link.href;
-
-              // Preload the stylesheet so it downloads with high priority
               const preload = document.createElement('link');
               preload.rel = 'preload';
               preload.as = 'style';
               preload.href = href;
               preload.fetchPriority = 'high';
               document.head.appendChild(preload);
-
-              // Apply the stylesheet without blocking rendering
               const style = document.createElement('link');
               style.rel = 'stylesheet';
               style.href = href;
               style.media = 'print';
-              style.onload = () => {
-                style.media = 'all';
-              };
+              style.onload = () => (style.media = 'all');
               document.head.appendChild(style);
-
-              // Remove the original blocking link
               link.remove();
             };
-
-            if (document.readyState === 'loading') {
-              document.addEventListener('DOMContentLoaded', setup);
-            } else {
-              setup();
-            }
+            (document.readyState === 'loading')
+              ? document.addEventListener('DOMContentLoaded', setup)
+              : setup();
           `}
         </Script>
         <link rel="preload" href="/images/hero-placeholder.png" as="image" />
-        <link
-          rel="alternate"
-          href="https://123legaldoc.com/en/"
-          hrefLang="en"
-        />
-        <link
-          rel="alternate"
-          href="https://123legaldoc.com/es/"
-          hrefLang="es"
-        />
+        <link rel="alternate" href="https://123legaldoc.com/en/" hrefLang="en" />
+        <link rel="alternate" href="https://123legaldoc.com/es/" hrefLang="es" />
       </head>
+
       <body
         className={`${inter.variable} ${merriweather.variable} antialiased flex flex-col min-h-screen overflow-x-hidden`}
       >
         <RootClient>{children}</RootClient>
+        {/* global gradient defs */}
         <svg width="0" height="0">
           <linearGradient id="goldGradient" x1="0" x2="0" y1="0" y2="1">
             <stop offset="0%" stopColor="#fcd34d" />
