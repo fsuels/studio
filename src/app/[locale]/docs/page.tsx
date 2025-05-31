@@ -1,13 +1,14 @@
 // src/app/[locale]/docs/page.tsx
 // This is an optional index page for all documents.
 // You can redirect to the main homepage or show a list of all categories/documents here.
-'use client';
+import { redirect } from 'next/navigation';
 
-import { redirect, useParams } from 'next/navigation';
+interface DocsIndexPageProps {
+  params: { locale: string };
+}
 
-export default function DocsIndexPage() {
-  const params = useParams();
-  const locale = params!.locale as string;
+export default function DocsIndexPage({ params }: DocsIndexPageProps) {
+  const locale = params.locale;
 
   // For now, redirect to the homepage's document selection area
   redirect(`/${locale}/#workflow-start`);
