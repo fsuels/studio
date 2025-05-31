@@ -1,6 +1,5 @@
 // src/hooks/useVinDecoder.ts
 import { useState, useCallback } from 'react';
-import axios from 'axios';
 
 interface DecodedVIN {
   make: string;
@@ -21,11 +20,12 @@ export function useVinDecoder() {
     setError(null);
 
     try {
-      const res = await axios.get(
+      const res = await fetch(
         `https://vpic.nhtsa.dot.gov/api/vehicles/decodevin/${vin}?format=json`,
       );
+      const json = await res.json();
 
-      const out = res.data.Results.reduce(
+      const out = json.Results.reduce(
         (
           acc: Record<string, string>,
           r: { Variable: string; Value: string },

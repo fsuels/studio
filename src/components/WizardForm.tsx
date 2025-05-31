@@ -9,7 +9,6 @@ import React, {
   useMemo,
 } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
-import axios, { type AxiosError } from 'axios';
 
 import { z } from 'zod';
 import { Loader2, Save } from 'lucide-react';
@@ -228,11 +227,12 @@ export default function WizardForm({
         return;
       }
       try {
-        const res = await axios.post(`/${locale}/api/wizard/${doc.id}/submit`, {
-          values: getValues(),
-          locale,
+        const res = await fetch(`/${locale}/api/wizard/${doc.id}/submit`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ values: getValues(), locale }),
         });
-        const secret = res.data.clientSecret as string | undefined;
+        const { clientSecret: secret } = await res.json();
         if (secret) {
           setPaymentClientSecret(secret);
           setShowPaymentModal(true);
@@ -247,35 +247,12 @@ export default function WizardForm({
         }
       } catch (error) {
         console.error('[WizardForm] API submission error:', error);
-        if (axios.isAxiosError(error)) {
-          const axiosError = error as AxiosError<{
-            error?: string;
-            details?: unknown;
-            code?: string;
-          }>;
-          const apiErrorMsg =
-            axiosError.response?.data?.error || axiosError.message;
-          const apiErrorDetails = axiosError.response?.data?.details;
-          let userFriendlyMessage = `${t('API Error Occurred', { defaultValue: 'API Error Occurred' })}: ${apiErrorMsg}`;
-          if (apiErrorDetails && typeof apiErrorDetails === 'object') {
-            userFriendlyMessage += ` Details: ${JSON.stringify(apiErrorDetails, null, 2)}`;
-          }
-          toast({
-            title: t('API Error Occurred', {
-              defaultValue: 'API Error Occurred',
-            }),
-            description: userFriendlyMessage,
-            variant: 'destructive',
-          });
-        } else {
-          toast({
-            title: t('Error', { defaultValue: 'Error' }),
-            description: t('An unexpected error occurred.', {
-              defaultValue: 'An unexpected error occurred.',
-            }),
-            variant: 'destructive',
-          });
-        }
+        toast({
+          title: t('API Error Occurred', { defaultValue: 'API Error Occurred' }),
+          description:
+            error instanceof Error ? error.message : 'Unexpected error',
+          variant: 'destructive',
+        });
       }
       return;
     }
