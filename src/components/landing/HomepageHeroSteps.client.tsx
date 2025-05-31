@@ -1,7 +1,7 @@
 // src/components/landing/HomepageHeroSteps.tsx
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { ShieldCheck } from 'lucide-react';
@@ -9,6 +9,7 @@ import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { Badge } from '@/components/ui/badge';
 import SearchBar from '@/components/SearchBar'; // Import SearchBar
+import { track } from '@/lib/analytics';
 
 // Placeholder for TrustStrip - in a real app this would be a separate component
 const TrustStripPlaceholder = () => {
@@ -42,10 +43,27 @@ const TrustStripPlaceholder = () => {
 const HomepageHeroSteps = React.memo(function HomepageHeroSteps() {
   const { t, i18n } = useTranslation('common');
   const [isHydrated, setIsHydrated] = useState(false);
+  const [variant, setVariant] = useState<'A' | 'B'>('A');
 
   useEffect(() => {
     setIsHydrated(true);
+    const stored = localStorage.getItem('docCtaVariant');
+    if (stored === 'A' || stored === 'B') {
+      setVariant(stored as 'A' | 'B');
+    } else {
+      const chosen = Math.random() < 0.5 ? 'A' : 'B';
+      localStorage.setItem('docCtaVariant', chosen);
+      setVariant(chosen);
+    }
   }, []);
+
+  const handleStartClick = useCallback(() => {
+    track('cta_click', { variant, label: 'start_button' });
+  }, [variant]);
+
+  const handleDemoClick = useCallback(() => {
+    track('cta_click', { variant, label: 'demo_button' });
+  }, [variant]);
 
   const placeholderText = '...';
 
@@ -121,9 +139,14 @@ const HomepageHeroSteps = React.memo(function HomepageHeroSteps() {
             className="text-lg px-8 py-4 bg-accent hover:bg-accent/90 text-accent-foreground shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
             disabled={!isHydrated}
           >
-            <Link href="/#workflow-start">
+            <Link href="/#workflow-start" onClick={handleStartClick}>
               {isHydrated
-                ? t('ctaPrimary', { defaultValue: 'Start Free, Pay $35/Doc →' })
+                ? t('ctaPrimary', {
+                    defaultValue:
+                      variant === 'A'
+                        ? 'Start for Free'
+                        : 'Try Now — No Account Needed',
+                  })
                 : placeholderText}
             </Link>
           </Button>
@@ -134,7 +157,7 @@ const HomepageHeroSteps = React.memo(function HomepageHeroSteps() {
             className="text-lg px-8 py-4 border-foreground/30 text-foreground hover:bg-foreground/5 shadow-sm hover:shadow-md transform hover:scale-105 transition-all duration-200"
             disabled={!isHydrated}
           >
-            <Link href="/#how-it-works">
+            <Link href="/#how-it-works" onClick={handleDemoClick}>
               {isHydrated
                 ? t('ctaSecondary', { defaultValue: 'See Demo' })
                 : placeholderText}
