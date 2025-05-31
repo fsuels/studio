@@ -1,26 +1,8 @@
 // next.config.ts
 import type { NextConfig } from 'next';
-import webpack from 'webpack'; // Import the webpack module
+// Webpack module will be imported conditionally only if needed.
 
 const isTurbopack = process.env.NEXT_TURBOPACK === '1';
-
-// Define the webpack function with the correct signature.
-const customWebpackConfig: NextConfig['webpack'] = (
-  config: webpack.Configuration,
-  // options: { isServer: boolean; dev: boolean; webpack: typeof import('webpack'); /* ...other NextJsWebpackConfigContext props */ }
-) => {
-  config.plugins = config.plugins || [];
-  // Use the imported 'webpack' module for IgnorePlugin
-  config.plugins.push(
-    new webpack.IgnorePlugin({
-      resourceRegExp: /^@opentelemetry\/exporter-jaeger$/,
-    }),
-  );
-  config.plugins.push(
-    new webpack.IgnorePlugin({ resourceRegExp: /^handlebars$/ }),
-  );
-  return config;
-};
 
 const nextConfig: NextConfig = {
   typescript: {
@@ -45,8 +27,29 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  // Conditionally apply webpack config
-  ...(isTurbopack ? {} : { webpack: customWebpackConfig }),
 };
+
+if (!isTurbopack) {
+  // Only define and use webpack config if not using Turbopack
+  // This ensures 'webpack' module and its types are only referenced when needed.
+  const webpack = require('webpack'); // Using require for truly conditional loading
+
+  const customWebpackConfig = (
+    config: import('webpack').Configuration, // Type for webpack config
+  ): import('webpack').Configuration => {
+    config.plugins = config.plugins || [];
+    // Use the imported 'webpack' module for IgnorePlugin
+    config.plugins.push(
+      new webpack.IgnorePlugin({
+        resourceRegExp: /^@opentelemetry\/exporter-jaeger$/,
+      }),
+    );
+    config.plugins.push(
+      new webpack.IgnorePlugin({ resourceRegExp: /^handlebars$/ }),
+    );
+    return config;
+  };
+  nextConfig.webpack = customWebpackConfig;
+}
 
 export default nextConfig;
