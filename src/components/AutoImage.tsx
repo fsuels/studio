@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useEffect, useState } from 'react';
 import Image, { type ImageProps } from 'next/image';
 import type { StaticImport } from 'next/dist/shared/lib/get-img-props';
