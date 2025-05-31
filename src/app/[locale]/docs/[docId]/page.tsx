@@ -21,7 +21,6 @@ export const revalidate = 3600;
 
 // generateStaticParams is crucial for static export of dynamic routes
 export async function generateStaticParams(): Promise<DocPageParams[]> {
-  console.log('[generateStaticParams /docs] Starting generation...');
   if (!documentLibrary || documentLibrary.length === 0) {
     console.warn(
       '[generateStaticParams /docs] documentLibrary is empty or undefined. No paths will be generated.',
@@ -49,9 +48,6 @@ export async function generateStaticParams(): Promise<DocPageParams[]> {
       }
     }
   }
-  console.log(
-    `[generateStaticParams /docs] Generated ${params!.length} paths.`,
-  );
   return params;
 }
 

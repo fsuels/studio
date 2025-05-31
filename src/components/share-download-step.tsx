@@ -48,7 +48,6 @@ const ShareDownloadStep = React.memo(function ShareDownloadStep({
       title: t('Share Feature Coming Soon'),
       description: t('Secure document sharing will be available shortly.'),
     });
-    console.log('Sharing document:', documentName);
   };
 
   const handleDownload = () => {

@@ -77,7 +77,6 @@ export default function WizardForm({
           Object.entries(getValues()).filter(([, v]) => v !== undefined),
         );
 
-        console.log('[WizardForm] saving for uid →', uid);
         await saveFormProgress({
           userId: uid,
           docType: doc.id,

@@ -37,7 +37,6 @@ export default function GooglePlacesLoader() {
           src={`https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places&loading=async`}
           strategy="lazyOnload"
           onLoad={() => {
-            console.log('Google Maps API script loaded.');
             setLoaded(true);
             // Dispatch a custom event to notify that Google Maps is loaded
             window.dispatchEvent(new Event('google-maps-loaded'));

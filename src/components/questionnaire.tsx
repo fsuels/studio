@@ -195,7 +195,6 @@ export function Questionnaire({
 
     // Simulate submission delay
     setTimeout(() => {
-      console.log('Submitted Answers:', answers);
       onAnswersSubmit(answers); // Pass answers to parent
       setHasSubmitted(true); // Mark as submitted
       // Lock all fields after successful submission

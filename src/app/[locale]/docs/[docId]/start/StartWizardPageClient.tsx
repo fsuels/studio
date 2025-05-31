@@ -77,9 +77,6 @@ export default function StartWizardPageClient() {
       }
       setIsLoadingConfig(false);
     } else if (isMounted && docIdFromPath) {
-      console.log(
-        `[StartWizardPageClient] docConfig not found for ${docIdFromPath} after mount. Setting isLoadingConfig to false.`,
-      );
       setIsLoadingConfig(false);
     } else if (!docIdFromPath && isMounted) {
       console.error(
@@ -119,11 +116,7 @@ export default function StartWizardPageClient() {
       }
       if (Object.keys(draftData).length > 0) {
         reset(draftData, { keepValues: true });
-        console.log('[StartWizardPageClient] Draft loaded:', draftData);
       } else {
-        console.log(
-          '[StartWizardPageClient] No draft found, using initial/empty values.',
-        );
       }
     }
     loadDraft();
@@ -180,12 +173,6 @@ export default function StartWizardPageClient() {
               JSON.stringify(relevantDataToSave),
             );
           }
-          console.log(
-            '[WizardForm] Autosaved draft for:',
-            docConfig!.id,
-            locale,
-            relevantDataToSave,
-          );
         })();
       }, 1000),
     [
