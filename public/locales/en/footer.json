@@ -32,7 +32,8 @@
   "linkSupport": "Support",
   "sectionLegalTitle": "Legal",
   "linkPrivacyPolicy": "Privacy Policy",
-  "linkTermsOfService": "Terms of Service",
+  "linkTermsOfService": "Terms",
+  "linkDocs": "Docs",
   "linkDisclaimer": "Disclaimer",
   "subhead": "AI-Powered Legal Document Generation. Fast, Affordable, Secure.",
   "sectionCommunityTitle": "Community & Contact",
@@ -40,9 +41,9 @@
   "socialTwitterAria": "Twitter Profile",
   "supportPhoneNumber": "+1 (800) 555-0199 (Support)",
   "supportHours": "Mon–Fri, 9am–6pm EST",
-  "getCreditsTitle": "Get 3 Free Credits",
+  "getCreditsTitle": "Get 3 Free Templates",
   "emailPlaceholderAria": "Email for newsletter",
   "subscribeButtonAria": "Subscribe to newsletter",
-  "joinMailingListDesc": "Join our mailing list for exclusive offers.",
+  "joinMailingListDesc": "Get 3 free templates — no spam.",
   "openChatAria": "Open chat"
 }

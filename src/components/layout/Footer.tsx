@@ -14,6 +14,7 @@ import {
   Phone,
   Clock,
 } from 'lucide-react';
+import AutoImage from '@/components/AutoImage';
 import { useToast } from '@/hooks/use-toast';
 import { Logo } from '@/components/layout/Logo';
 import { useTranslation } from 'react-i18next';
@@ -103,6 +104,7 @@ export const Footer = React.memo(function Footer() {
       defaultSectionTitle: 'Resources',
       links: [
         { path: '/blog', labelKey: 'linkBlog', defaultLabel: 'Blog' },
+        { path: '/docs', labelKey: 'linkDocs', defaultLabel: 'Docs' },
         { path: '/faq', labelKey: 'linkFaq', defaultLabel: 'FAQ' },
         { path: '/support', labelKey: 'linkSupport', defaultLabel: 'Support' },
       ],
@@ -119,7 +121,7 @@ export const Footer = React.memo(function Footer() {
         {
           path: '/terms-of-service',
           labelKey: 'linkTermsOfService',
-          defaultLabel: 'Terms of Service',
+          defaultLabel: 'Terms',
         },
         {
           path: '/disclaimer',
@@ -225,7 +227,7 @@ export const Footer = React.memo(function Footer() {
             </div>
 
             <h3 className="font-semibold text-foreground mb-3">
-              {t('getCreditsTitle', { defaultValue: 'Get 3 Free Credits' })}
+              {t('getCreditsTitle', { defaultValue: 'Get 3 Free Templates' })}
             </h3>
             <form
               onSubmit={handleSubscribe}
@@ -265,10 +267,34 @@ export const Footer = React.memo(function Footer() {
             </form>
             <p className="text-xs mt-2">
               {t('joinMailingListDesc', {
-                defaultValue: 'Join our mailing list for exclusive offers.',
+                defaultValue: 'Get 3 free templates — no spam.',
               })}
             </p>
           </div>
+        </div>
+
+        <div className="flex justify-center gap-6 mt-8" aria-hidden="true">
+          <AutoImage
+            src="https://cdn.simpleicons.org/stripe/635bff"
+            alt="Stripe logo"
+            width={80}
+            height={24}
+            className="h-6 w-auto"
+          />
+          <AutoImage
+            src="https://cdn.simpleicons.org/firebase/ffca28"
+            alt="Firebase logo"
+            width={80}
+            height={24}
+            className="h-6 w-auto"
+          />
+          <AutoImage
+            src="https://cdn.simpleicons.org/paypal/003087"
+            alt="PayPal logo"
+            width={80}
+            height={24}
+            className="h-6 w-auto"
+          />
         </div>
 
         {/* Copyright */}
