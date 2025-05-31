@@ -337,8 +337,18 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
           return (
             <div
               key={field.id}
+              role="button"
+              tabIndex={0}
               className="py-3 border-b border-border last:border-b-0 cursor-pointer"
               onClick={() => !isCurrentlyEditing && handleEdit(field.id)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  if (!isCurrentlyEditing) {
+                    handleEdit(field.id);
+                  }
+                }
+              }}
             >
               <div className="flex justify-between items-start gap-2">
                 <div className="flex-1 min-w-0">
@@ -568,7 +578,7 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
                                 <div className="flex items-center space-x-2">
                                   <Switch
                                     id={`review-${field.id}`}
-                                    checked={Boolean(controllerField.value)}
+                                    checked={!!controllerField.value}
                                     onCheckedChange={controllerField.onChange}
                                     ref={controllerField.ref}
                                   />
@@ -576,9 +586,7 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
                                     htmlFor={`review-${field.id}`}
                                     className="text-sm font-normal"
                                   >
-                                    {Boolean(controllerField.value)
-                                      ? t('Yes')
-                                      : t('No')}
+                                    {controllerField.value ? t('Yes') : t('No')}
                                   </Label>
                                 </div>
                               );
