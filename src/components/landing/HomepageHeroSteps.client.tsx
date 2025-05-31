@@ -10,6 +10,7 @@ import Link from 'next/link';
 import { Badge } from '@/components/ui/badge';
 import SearchBar from '@/components/SearchBar'; // Import SearchBar
 import { track } from '@/lib/analytics';
+import LiveActivityFeed from './LiveActivityFeed';
 
 // Placeholder for TrustStrip - in a real app this would be a separate component
 const TrustStripPlaceholder = () => {
@@ -164,6 +165,7 @@ const HomepageHeroSteps = React.memo(function HomepageHeroSteps() {
             </Link>
           </Button>
         </motion.div>
+        <LiveActivityFeed />
         {isHydrated && <TrustStripPlaceholder />}
       </div>
     </motion.section>
