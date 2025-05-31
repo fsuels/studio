@@ -30,6 +30,7 @@ import ReviewStep from '@/components/ReviewStep';
 import PaymentModal from '@/components/PaymentModal';
 import { useAuth } from '@/hooks/useAuth';
 import { useRouter } from 'next/navigation'; // Added useRouter
+import AddressField from '@/components/AddressField';
 
 interface WizardFormProps {
   locale: 'en' | 'es';
@@ -419,13 +420,10 @@ export default function WizardForm({
     setShowAuthModal(true);
   }, [isSavingDraft, formIsSubmitting, user?.uid, saveDraftAndRedirect]);
 
-  const handleAuthSuccess = useCallback(
-    (_mode, uid) => {
-      setShowAuthModal(false);
-      // saveDraftAndRedirect will fire via the pendingRedirect effect
-    },
-    [],
-  );
+  const handleAuthSuccess = useCallback(() => {
+    setShowAuthModal(false);
+    // saveDraftAndRedirect will fire via the pendingRedirect effect
+  }, []);
 
   if (!isHydrated || authIsLoading) {
     return (
