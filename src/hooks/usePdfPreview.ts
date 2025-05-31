@@ -1,5 +1,4 @@
 import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
 
 interface PdfPreviewParams {
   documentType: string;
@@ -13,10 +12,13 @@ export function usePdfPreview(params: PdfPreviewParams | null) {
     enabled: !!params,
     queryFn: async () => {
       if (!params) return null;
-      const res = await axios.post('/api/generate-pdf', params, {
-        responseType: 'arraybuffer',
+      const res = await fetch('/api/generate-pdf', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(params),
       });
-      const blob = new Blob([res.data], { type: 'application/pdf' });
+      const arrayBuffer = await res.arrayBuffer();
+      const blob = new Blob([arrayBuffer], { type: 'application/pdf' });
       return URL.createObjectURL(blob);
     },
     staleTime: 1000 * 60 * 5,
