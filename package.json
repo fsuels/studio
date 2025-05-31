@@ -11,7 +11,7 @@
     "lint": "eslint \"src/**/*.{js,jsx,ts,tsx}\" scripts || true",
     "format": "prettier --write .",
     "typecheck": "tsc --noEmit",
-    "test": "playwright test tests/prettify.test.mjs",
+    "test": "playwright test tests/prettify.test.mjs tests/isValidVIN.test.ts",
     "e2e": "playwright test --reporter=list || true",
     "gen:previews": "node --experimental-modules scripts/generate-previews.js",
     "extract:i18n": "i18next-parser \"src/**/*.{ts,tsx}\" --config i18next-parser.config.js",
