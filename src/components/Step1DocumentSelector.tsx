@@ -58,6 +58,34 @@ export const CATEGORY_LIST: CategoryInfo[] = [
   { key: 'Miscellaneous', labelKey: 'General', icon: FileText },
 ];
 
+const getDocName = (
+  doc: Pick<LegalDocument, 'translations'>,
+  locale: string,
+) =>
+  locale === 'es'
+    ? doc.translations?.es?.name || doc.translations?.en?.name || ''
+    : doc.translations?.en?.name || doc.translations?.es?.name || '';
+
+const getDocDescription = (
+  doc: Pick<LegalDocument, 'translations'>,
+  locale: string,
+) =>
+  locale === 'es'
+    ? doc.translations?.es?.description ||
+      doc.translations?.en?.description ||
+      ''
+    : doc.translations?.en?.description ||
+      doc.translations?.es?.description ||
+      '';
+
+const getDocAliases = (
+  doc: Pick<LegalDocument, 'translations'>,
+  locale: string,
+) =>
+  locale === 'es'
+    ? doc.translations?.es?.aliases || []
+    : doc.translations?.en?.aliases || [];
+
 interface Step1DocumentSelectorProps {
   selectedCategory: string | null;
   onCategorySelect: (_categoryKey: string | null) => void;
@@ -69,50 +97,62 @@ interface Step1DocumentSelectorProps {
 
 // Placeholder for top docs - in a real app, this comes from Firestore
 const placeholderTopDocs: Array<
-  Pick<LegalDocument, 'id' | 'name' | 'name_es' | 'category'> & {
+  Pick<LegalDocument, 'id' | 'category' | 'translations'> & {
     icon?: React.ElementType;
   }
 > = [
   {
     id: 'bill-of-sale-vehicle',
-    name: 'Vehicle Bill of Sale',
-    name_es: 'Contrato de Compraventa de Vehículo',
     category: 'Finance',
+    translations: {
+      en: { name: 'Vehicle Bill of Sale', description: '' },
+      es: { name: 'Contrato de Compraventa de Vehículo', description: '' },
+    },
     icon: FileText,
   },
   {
     id: 'leaseAgreement',
-    name: 'Residential Lease Agreement',
-    name_es: 'Contrato de Arrendamiento Residencial',
     category: 'Real Estate',
+    translations: {
+      en: { name: 'Residential Lease Agreement', description: '' },
+      es: { name: 'Contrato de Arrendamiento Residencial', description: '' },
+    },
     icon: Home,
   },
   {
     id: 'nda',
-    name: 'Non-Disclosure Agreement (NDA)',
-    name_es: 'Acuerdo de Confidencialidad (NDA)',
     category: 'Business',
+    translations: {
+      en: { name: 'Non-Disclosure Agreement (NDA)', description: '' },
+      es: { name: 'Acuerdo de Confidencialidad (NDA)', description: '' },
+    },
     icon: ShieldQuestion,
   },
   {
     id: 'powerOfAttorney',
-    name: 'General Power of Attorney',
-    name_es: 'Poder Notarial General',
     category: 'Personal',
+    translations: {
+      en: { name: 'General Power of Attorney', description: '' },
+      es: { name: 'Poder Notarial General', description: '' },
+    },
     icon: User,
   },
   {
     id: 'last-will-testament',
-    name: 'Last Will and Testament',
-    name_es: 'Última Voluntad y Testamento',
     category: 'Estate Planning',
+    translations: {
+      en: { name: 'Last Will and Testament', description: '' },
+      es: { name: 'Última Voluntad y Testamento', description: '' },
+    },
     icon: ScrollText,
   },
   {
     id: 'eviction-notice',
-    name: 'Eviction Notice',
-    name_es: 'Aviso de Desalojo',
     category: 'Real Estate',
+    translations: {
+      en: { name: 'Eviction Notice', description: '' },
+      es: { name: 'Aviso de Desalojo', description: '' },
+    },
     icon: AlertTriangle,
   },
 ];
@@ -169,7 +209,9 @@ const MemoizedDocumentCard = React.memo(function DocumentCard({
       onClick={onSelect}
       tabIndex={disabled ? -1 : 0}
       role="button"
-      aria-label={t(doc.name ?? '', { defaultValue: doc.name ?? '' })}
+      aria-label={t(getDocName(doc, i18nLanguage), {
+        defaultValue: getDocName(doc, i18nLanguage),
+      })}
       onKeyDown={(e) => {
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
@@ -183,16 +225,15 @@ const MemoizedDocumentCard = React.memo(function DocumentCard({
     >
       <CardHeader className="pb-2 pt-4 px-4">
         <CardTitle className="text-base font-semibold text-card-foreground">
-          {i18nLanguage === 'es' && doc.name_es
-            ? t(doc.name_es, { defaultValue: doc.name_es })
-            : t(doc.name ?? '', { defaultValue: doc.name ?? '' })}
+          {t(getDocName(doc, i18nLanguage), {
+            defaultValue: getDocName(doc, i18nLanguage),
+          })}
         </CardTitle>
       </CardHeader>
       <CardContent className="text-xs text-muted-foreground flex-grow px-4">
-        {i18nLanguage === 'es' && doc.description_es
-          ? t(doc.description_es, { defaultValue: doc.description_es })
-          : t(doc.description ?? '', { defaultValue: doc.description ?? '' }) ||
-            placeholderNoDescription}
+        {t(getDocDescription(doc, i18nLanguage), {
+          defaultValue: getDocDescription(doc, i18nLanguage),
+        }) || placeholderNoDescription}
       </CardContent>
       <CardFooter className="pt-2 pb-3 px-4 text-xs text-muted-foreground flex justify-between items-center border-t border-border mt-auto">
         <span>💲{doc.basePrice}</span>
@@ -216,7 +257,7 @@ const MemoizedTopDocChip = React.memo(function TopDocChip({
   t,
   i18nLanguage,
 }: {
-  doc: Pick<LegalDocument, 'id' | 'name' | 'name_es'> & {
+  doc: Pick<LegalDocument, 'id' | 'translations'> & {
     icon?: React.ElementType;
   };
   onSelect: () => void;
@@ -235,9 +276,9 @@ const MemoizedTopDocChip = React.memo(function TopDocChip({
       {doc.icon &&
         React.createElement(doc.icon, { className: 'h-4 w-4 text-primary/80' })}
       <span className="font-medium text-card-foreground text-xs">
-        {i18nLanguage === 'es' && doc.name_es
-          ? t(doc.name_es, { defaultValue: doc.name_es })
-          : t(doc.name ?? '', { defaultValue: doc.name ?? '' })}
+        {t(getDocName(doc, i18nLanguage), {
+          defaultValue: getDocName(doc, i18nLanguage),
+        })}
       </span>
     </Button>
   );
@@ -341,27 +382,29 @@ const Step1DocumentSelector = React.memo(function Step1DocumentSelector({
       const lowerGlobalSearch = globalSearchTerm.toLowerCase();
       docs = docs.filter(
         (doc) =>
-          t(doc.name ?? '', { defaultValue: doc.name ?? '' })
+          t(getDocName(doc, 'en'), { defaultValue: getDocName(doc, 'en') })
             .toLowerCase()
             .includes(lowerGlobalSearch) ||
-          doc.aliases?.some((alias) =>
+          getDocAliases(doc, 'en').some((alias) =>
             alias.toLowerCase().includes(lowerGlobalSearch),
           ) ||
           (languageSupportsSpanish(doc.languageSupport) &&
-            doc.aliases_es?.some((alias) =>
+            getDocAliases(doc, 'es').some((alias) =>
               alias.toLowerCase().includes(lowerGlobalSearch),
             )) ||
           (languageSupportsSpanish(doc.languageSupport) &&
-            doc.name_es &&
-            t(doc.name_es, { defaultValue: doc.name_es })
+            t(getDocName(doc, 'es'), { defaultValue: getDocName(doc, 'es') })
               .toLowerCase()
               .includes(lowerGlobalSearch)) ||
-          t(doc.description ?? '', { defaultValue: doc.description ?? '' })
+          t(getDocDescription(doc, 'en'), {
+            defaultValue: getDocDescription(doc, 'en'),
+          })
             .toLowerCase()
             .includes(lowerGlobalSearch) ||
           (languageSupportsSpanish(doc.languageSupport) &&
-            doc.description_es &&
-            t(doc.description_es, { defaultValue: doc.description_es })
+            t(getDocDescription(doc, 'es'), {
+              defaultValue: getDocDescription(doc, 'es'),
+            })
               .toLowerCase()
               .includes(lowerGlobalSearch)),
       );
@@ -374,27 +417,29 @@ const Step1DocumentSelector = React.memo(function Step1DocumentSelector({
         const lowerDocSearch = docSearch.toLowerCase();
         docs = docs.filter(
           (doc) =>
-            t(doc.name ?? '', { defaultValue: doc.name ?? '' })
+            t(getDocName(doc, 'en'), { defaultValue: getDocName(doc, 'en') })
               .toLowerCase()
               .includes(lowerDocSearch) ||
-            doc.aliases?.some((alias) =>
+            getDocAliases(doc, 'en').some((alias) =>
               alias.toLowerCase().includes(lowerDocSearch),
             ) ||
             (languageSupportsSpanish(doc.languageSupport) &&
-              doc.aliases_es?.some((alias) =>
+              getDocAliases(doc, 'es').some((alias) =>
                 alias.toLowerCase().includes(lowerDocSearch),
               )) ||
             (languageSupportsSpanish(doc.languageSupport) &&
-              doc.name_es &&
-              t(doc.name_es, { defaultValue: doc.name_es })
+              t(getDocName(doc, 'es'), { defaultValue: getDocName(doc, 'es') })
                 .toLowerCase()
                 .includes(lowerDocSearch)) ||
-            t(doc.description ?? '', { defaultValue: doc.description ?? '' })
+            t(getDocDescription(doc, 'en'), {
+              defaultValue: getDocDescription(doc, 'en'),
+            })
               .toLowerCase()
               .includes(lowerDocSearch) ||
             (languageSupportsSpanish(doc.languageSupport) &&
-              doc.description_es &&
-              t(doc.description_es, { defaultValue: doc.description_es })
+              t(getDocDescription(doc, 'es'), {
+                defaultValue: getDocDescription(doc, 'es'),
+              })
                 .toLowerCase()
                 .includes(lowerDocSearch)),
         );
@@ -450,9 +495,7 @@ const Step1DocumentSelector = React.memo(function Step1DocumentSelector({
   };
 
   const handleDocSelect = (
-    doc:
-      | LegalDocument
-      | Pick<LegalDocument, 'id' | 'name' | 'name_es' | 'category'>,
+    doc: LegalDocument | Pick<LegalDocument, 'id' | 'category' | 'translations'>,
   ) => {
     if (!isHydrated) return;
     const fullDoc = documentLibrary.find((d) => d.id === doc.id);
@@ -477,7 +520,7 @@ const Step1DocumentSelector = React.memo(function Step1DocumentSelector({
     onDocumentSelect(fullDoc);
     track('select_item', {
       item_id: fullDoc.id,
-      item_name: fullDoc.name,
+      item_name: getDocName(fullDoc, i18n.language),
       item_category: fullDoc.category,
       price: fullDoc.basePrice,
       state: globalSelectedState,

@@ -68,8 +68,12 @@ const DocumentDetail = React.memo(function DocumentDetail({
       } else {
         const fallbackTitle =
           locale === 'es'
-            ? docConfig.name_es || docConfig.name
-            : docConfig.name;
+            ? docConfig.translations?.es?.name ||
+              docConfig.translations?.en?.name ||
+              docConfig.name
+            : docConfig.translations?.en?.name ||
+              docConfig.name ||
+              docConfig.translations?.es?.name;
         if (fallbackTitle) {
           modifiedMd = modifiedMd.replace(/^# .*/m, `# ${fallbackTitle}`);
         }

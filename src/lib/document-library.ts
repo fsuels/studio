@@ -114,19 +114,16 @@ allDocuments.forEach((doc) => {
     es: {
       name:
         baseTranslations.es?.name ||
-        doc.name_es ||
         baseTranslations.en?.name ||
         doc.name ||
         doc.id,
       description:
         baseTranslations.es?.description ||
-        doc.description_es ||
         baseTranslations.en?.description ||
         doc.description ||
         '',
       aliases:
         baseTranslations.es?.aliases ||
-        doc.aliases_es ||
         baseTranslations.en?.aliases ||
         doc.aliases ||
         [],

@@ -3,14 +3,19 @@ import type { LegalDocument } from '@/types/documents';
 
 export const employmentTerminationLetter: LegalDocument = {
   id: 'employment-termination-letter',
-  // TODO: Refactor to use translations and templatePaths structures
-  name: 'Employment Termination Letter',
-  name_es: 'Carta de Terminación de Empleo',
   category: 'Employment',
-  description: 'Formally notify an employee of their termination.',
-  description_es: 'Notificar formalmente a un empleado de su despido.',
-  aliases: ['fire employee', 'layoff letter', 'termination notice'],
-  aliases_es: ['despedir empleado', 'carta de despido', 'aviso de terminación'],
+  translations: {
+    en: {
+      name: 'Employment Termination Letter',
+      description: 'Formally notify an employee of their termination.',
+      aliases: ['fire employee', 'layoff letter', 'termination notice'],
+    },
+    es: {
+      name: 'Carta de Terminación de Empleo',
+      description: 'Notificar formalmente a un empleado de su despido.',
+      aliases: ['despedir empleado', 'carta de despido', 'aviso de terminación'],
+    },
+  },
   languageSupport: ['en', 'es'],
   requiresNotarization: false,
   canBeRecorded: false,

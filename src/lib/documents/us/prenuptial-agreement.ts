@@ -3,15 +3,21 @@ import type { LegalDocument } from '@/types/documents';
 
 export const prenuptialAgreement: LegalDocument = {
   id: 'prenuptial-agreement',
-  name: 'Prenuptial Agreement',
-  name_es: 'Acuerdo Prenupcial',
   category: 'Family',
-  description:
-    'Agreement made before marriage regarding asset division if divorced.',
-  description_es:
-    'Acuerdo hecho antes del matrimonio sobre la división de bienes en caso de divorcio.',
-  aliases: ['prenup', 'marriage contract', 'before marriage agreement'],
-  aliases_es: ['prenup', 'contrato matrimonial', 'acuerdo prematrimonial'],
+  translations: {
+    en: {
+      name: 'Prenuptial Agreement',
+      description:
+        'Agreement made before marriage regarding asset division if divorced.',
+      aliases: ['prenup', 'marriage contract', 'before marriage agreement'],
+    },
+    es: {
+      name: 'Acuerdo Prenupcial',
+      description:
+        'Acuerdo hecho antes del matrimonio sobre la división de bienes en caso de divorcio.',
+      aliases: ['prenup', 'contrato matrimonial', 'acuerdo prematrimonial'],
+    },
+  },
   languageSupport: ['en', 'es'],
   requiresNotarization: true,
   canBeRecorded: false,

@@ -172,7 +172,10 @@ export default function HomePageClient() {
         toast({
           title: t('toasts.docTypeConfirmedTitle'),
           description: t('toasts.docTypeConfirmedDescription', {
-            docName: doc.name_es && locale === 'es' ? doc.name_es : doc.name,
+            docName:
+              locale === 'es'
+                ? doc.translations?.es?.name || doc.translations?.en?.name || doc.name
+                : doc.translations?.en?.name || doc.name || doc.translations?.es?.name,
           }),
         });
         router.push(`/${locale}/docs/${doc.id}/start`);

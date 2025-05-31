@@ -558,14 +558,20 @@ export const getLocalizedDocStrings = (
   doc: LegalDocument,
   locale: 'en' | 'es',
 ) => {
-  let name = doc.name;
-  let description = doc.description;
-  let aliases: string[] = doc.aliases || [];
+  let name =
+    doc.translations?.en?.name || doc.translations?.es?.name || doc.name || '';
+  let description =
+    doc.translations?.en?.description ||
+    doc.translations?.es?.description ||
+    doc.description ||
+    '';
+  let aliases: string[] =
+    doc.translations?.en?.aliases || doc.translations?.es?.aliases || doc.aliases || [];
 
   if (locale === 'es') {
-    name = doc.name_es || doc.name;
-    description = doc.description_es || doc.description;
-    aliases = doc.aliases_es || doc.aliases || [];
+    name = doc.translations?.es?.name || name;
+    description = doc.translations?.es?.description || description;
+    aliases = doc.translations?.es?.aliases || aliases;
   }
   return { name, description, aliases };
 };

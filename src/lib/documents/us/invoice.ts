@@ -3,12 +3,17 @@ import type { LegalDocument } from '@/types/documents';
 
 export const invoice: LegalDocument = {
   id: 'invoice',
-  // TODO: Refactor to use translations structure
-  name: 'Invoice',
-  name_es: 'Factura',
   category: 'Finance',
-  description: 'Request payment for goods or services rendered.',
-  description_es: 'Solicitar pago por bienes o servicios prestados.',
+  translations: {
+    en: {
+      name: 'Invoice',
+      description: 'Request payment for goods or services rendered.',
+    },
+    es: {
+      name: 'Factura',
+      description: 'Solicitar pago por bienes o servicios prestados.',
+    },
+  },
   languageSupport: ['en', 'es'],
   requiresNotarization: false,
   canBeRecorded: false,
