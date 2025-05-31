@@ -37,25 +37,6 @@ export const billOfSaleVehicle: LegalDocument = {
       ],
     },
   },
-  // Add these:
-  name: 'Vehicle Bill of Sale',
-  name_es: 'Contrato de Compraventa de Vehículo',
-  description:
-    'Document the sale and transfer of ownership for a vehicle, compliant with state requirements.',
-  description_es:
-    'Documentar la venta y transferencia de propiedad de un vehículo, conforme a los requisitos estatales.',
-  aliases: [
-    'sell car',
-    'used item sale',
-    'vehicle transfer',
-    'car sale contract',
-  ],
-  aliases_es: [
-    'venta de coche',
-    'venta de artículo usado',
-    'transferencia de vehículo',
-    'contrato de venta de auto',
-  ],
   templatePaths: {
     // Relative to /src/templates/
     en: 'en/us/bill-of-sale-vehicle.md',

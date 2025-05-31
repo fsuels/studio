@@ -4,15 +4,21 @@ import { usStates } from '@/lib/document-library/utils';
 
 export const partnershipAgreement: LegalDocument = {
   id: 'partnership-agreement',
-  name: 'Partnership Agreement',
-  name_es: 'Acuerdo de Sociedad',
   category: 'Business',
-  description:
-    'Define the terms, responsibilities, and profit sharing for business partners.',
-  description_es:
-    'Definir los términos, responsabilidades y reparto de beneficios para socios comerciales.',
-  aliases: ['business partners', 'joint venture', 'partner terms'],
-  aliases_es: ['socios de negocios', 'empresa conjunta', 'términos de socios'],
+  translations: {
+    en: {
+      name: 'Partnership Agreement',
+      description:
+        'Define the terms, responsibilities, and profit sharing for business partners.',
+      aliases: ['business partners', 'joint venture', 'partner terms'],
+    },
+    es: {
+      name: 'Acuerdo de Sociedad',
+      description:
+        'Definir los términos, responsabilidades y reparto de beneficios para socios comerciales.',
+      aliases: ['socios de negocios', 'empresa conjunta', 'términos de socios'],
+    },
+  },
   languageSupport: ['en', 'es'],
   requiresNotarization: false,
   canBeRecorded: false,

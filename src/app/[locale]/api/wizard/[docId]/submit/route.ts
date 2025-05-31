@@ -178,13 +178,25 @@ export async function POST(
     let paymentIntent;
     try {
       const documentDisplayName =
-        docConfig.name_es && effectiveLocale === 'es'
-          ? docConfig.name_es
-          : docConfig.name || docConfig.id;
+        effectiveLocale === 'es'
+          ? docConfig.translations?.es?.name ||
+            docConfig.translations?.en?.name ||
+            docConfig.name ||
+            docConfig.id
+          : docConfig.translations?.en?.name ||
+            docConfig.name ||
+            docConfig.translations?.es?.name ||
+            docConfig.id;
       const documentDisplayDescription =
-        docConfig.description_es && effectiveLocale === 'es'
-          ? docConfig.description_es
-          : docConfig.description || '';
+        effectiveLocale === 'es'
+          ? docConfig.translations?.es?.description ||
+            docConfig.translations?.en?.description ||
+            docConfig.description ||
+            ''
+          : docConfig.translations?.en?.description ||
+            docConfig.description ||
+            docConfig.translations?.es?.description ||
+            '';
 
       const priceCents = (docConfig.basePrice || DEFAULT_DOCUMENT_PRICE) * 100;
       paymentIntent = await stripe.paymentIntents.create({

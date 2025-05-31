@@ -4,28 +4,33 @@ import { usStates } from '@/lib/document-library/utils';
 
 export const divorceSettlementAgreement: LegalDocument = {
   id: 'divorce-settlement-agreement',
-  // TODO: Refactor to use translations structure
-  name: 'Divorce Settlement Agreement',
-  name_es: 'Acuerdo de Divorcio',
   category: 'Family',
-  description:
-    'Formalizes the terms of a divorce, including property division, support, and custody.',
-  description_es:
-    'Formaliza los términos de un divorcio, incluyendo división de bienes, manutención y custodia.',
-  aliases: [
-    'divorce',
-    'separation',
-    'end marriage',
-    'get divorced',
-    'marital settlement',
-  ],
-  aliases_es: [
-    'divorcio',
-    'separación',
-    'terminar matrimonio',
-    'divorciarse',
-    'acuerdo matrimonial',
-  ],
+  translations: {
+    en: {
+      name: 'Divorce Settlement Agreement',
+      description:
+        'Formalizes the terms of a divorce, including property division, support, and custody.',
+      aliases: [
+        'divorce',
+        'separation',
+        'end marriage',
+        'get divorced',
+        'marital settlement',
+      ],
+    },
+    es: {
+      name: 'Acuerdo de Divorcio',
+      description:
+        'Formaliza los términos de un divorcio, incluyendo división de bienes, manutención y custodia.',
+      aliases: [
+        'divorcio',
+        'separación',
+        'terminar matrimonio',
+        'divorciarse',
+        'acuerdo matrimonial',
+      ],
+    },
+  },
   languageSupport: ['en', 'es'],
   requiresNotarization: true,
   canBeRecorded: true,
