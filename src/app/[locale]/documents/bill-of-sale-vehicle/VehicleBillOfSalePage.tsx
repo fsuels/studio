@@ -75,7 +75,6 @@ export default function VehicleBillOfSalePage() {
         const snap = await getDoc(ref);
         if (snap.exists()) {
           // Extend compliance data if needed
-          console.log('Loaded compliance info from Firestore');
         }
       } catch (err) {
         console.warn('Firestore unavailable or not configured', err);

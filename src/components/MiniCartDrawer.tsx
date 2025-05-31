@@ -69,7 +69,6 @@ export default function MiniCartDrawer() {
               cartItems.length === 0 && 'pointer-events-none opacity-50',
             )}
             onClick={() => {
-              console.log('Checkout');
               setOpen(false);
             }}
           >

@@ -72,7 +72,6 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
   watch();
 
   useEffect(() => {
-    console.log('[ReviewStep] editingFieldId changed to:', editingFieldId);
     if (editingFieldId) {
       const el = document.getElementById(`review-${editingFieldId}`);
       if (el) {
@@ -107,9 +106,6 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
   }, [doc.schema]);
 
   const fieldsToReview = useMemo(() => {
-    console.log(
-      '[ReviewStep] Recalculating fieldsToReview. Watched values changed.',
-    );
     const currentFormData = getValues(); // Get current values for processing
 
     // Start with question order if available so the review matches the wizard flow
@@ -244,15 +240,9 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
 
   const handleEdit = useCallback(
     (fieldId: string) => {
-      console.log(`[ReviewStep] Edit button clicked for fieldId: ${fieldId}`);
       const currentValue = getValues(fieldId);
-      console.log(
-        `[ReviewStep] Storing original value for ${fieldId}:`,
-        currentValue,
-      );
       setOriginalFieldValue(currentValue);
       setEditingFieldId(fieldId);
-      console.log(`[ReviewStep] editingFieldId state set to: ${fieldId}`);
     },
     [getValues],
   );
@@ -280,10 +270,6 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
 
   const handleCancel = useCallback(() => {
     if (editingFieldId && originalFieldValue !== undefined) {
-      console.log(
-        `[ReviewStep] Cancelling edit for ${editingFieldId}. Reverting to:`,
-        originalFieldValue,
-      );
       setValue(editingFieldId as keyof FormValues, originalFieldValue, {
         shouldValidate: true,
         shouldDirty: true,
@@ -348,7 +334,6 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
       <CardContent className="space-y-2">
         {fieldsToReview.map((field) => {
           const isCurrentlyEditing = editingFieldId === field.id;
-          // console.log(`[ReviewStep] Rendering field: ${field.id}, isCurrentlyEditing: ${isCurrentlyEditing}`);
           return (
             <div
               key={field.id}
@@ -641,9 +626,6 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
                     variant="ghost"
                     size="icon"
                     onClick={(e) => {
-                      console.log(
-                        `[ReviewStep] Edit button CLICKED for fieldId: ${field.id}`,
-                      );
                       e.stopPropagation();
                       handleEdit(field.id);
                     }}

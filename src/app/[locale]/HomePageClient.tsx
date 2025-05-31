@@ -167,7 +167,6 @@ export default function HomePageClient() {
     (doc: LegalDocument) => {
       if (!isHydrated) return;
       if (doc) {
-        console.log('[HomePageClient] Document type selected:', doc.name);
         setSelectedDocument(doc);
         toast({
           title: t('toasts.docTypeConfirmedTitle'),
