@@ -19,6 +19,7 @@ interface ClientProvidersProps {
 import Header from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import ContactFormButton from '@/components/ContactFormButton';
+import ActivityTicker from '@/components/ActivityTicker';
 
 const AppShell = React.memo(function AppShell({
   children,
@@ -39,6 +40,7 @@ const AppShell = React.memo(function AppShell({
       <main className="flex-grow">{children}</main>
       <Footer />
       <ContactFormButton />
+      <ActivityTicker />
       {/* Conditionally render Toaster only on the client after mount */}
       {isMounted && <Toaster />}
     </>
