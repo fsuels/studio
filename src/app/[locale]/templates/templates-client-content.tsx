@@ -84,11 +84,7 @@ export default function TemplatesClientContent({ locale }: Props) {
               variant="outline"
               className="flex flex-col items-center gap-2 py-6"
             >
-              <Link
-                href={categoryHref(cat.key)}
-                prefetch
-                onMouseEnter={() => router.prefetch(categoryHref(cat.key))}
-              >
+              <Link href={categoryHref(cat.key)} prefetch>
                 {React.createElement(cat.icon || FileText, {
                   className: 'h-5 w-5 text-primary',
                 })}
