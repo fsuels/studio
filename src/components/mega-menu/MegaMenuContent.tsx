@@ -8,6 +8,7 @@ import type { LegalDocument } from '@/lib/document-library'; // Use the re-expor
 import type { CategoryInfo } from '@/components/Step1DocumentSelector';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { FileText } from 'lucide-react';
+import { cn } from '@/lib/utils';
 import { getDocTranslation } from '@/lib/i18nUtils'; // Import the utility
 
 interface MegaMenuContentProps {
@@ -78,15 +79,25 @@ export default function MegaMenuContent({
 
   return (
     <ScrollArea className="w-full max-h-[calc(100vh-10rem-4rem)] md:max-h-[70vh] bg-popover text-popover-foreground rounded-b-lg">
-      <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-7 gap-x-4 gap-y-6 p-4 md:p-6 min-h-[200px]">
-        {categories.map((category) => {
+      <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-7 gap-x-4 gap-y-8 p-4 md:p-6 min-h-[200px]">
+        {categories.map((category, index) => {
           const categoryDocs = getDocumentsForCategory(category.key);
           const categoryLabel = t(category.labelKey, {
             defaultValue: category.key,
           });
+          const highlight =
+            category.key === 'Finance' || category.key === 'Business';
           return (
-            <div key={category.key} className="mt-6 first:mt-0">
-              <h4 className="font-semibold mb-2 text-sm md:text-base text-foreground flex items-center border-b border-border pb-1.5">
+            <section
+              key={category.key}
+              className={cn(index !== 0 && 'border-t mt-6 pt-6')}
+            >
+              <h4
+                className={cn(
+                  'font-semibold mb-2 text-sm md:text-base flex items-center border-b border-border pb-1.5',
+                  highlight && 'text-primary',
+                )}
+              >
                 {React.createElement(category.icon || FileText, {
                   className: 'mr-2 h-4 w-4 md:h-5 md:w-5 text-primary',
                 })}
@@ -127,7 +138,7 @@ export default function MegaMenuContent({
                   )}
                 </ul>
               )}
-            </div>
+            </section>
           );
         })}
         {!hasContent && categories.length > 0 && (
