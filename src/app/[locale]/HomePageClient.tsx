@@ -1,8 +1,8 @@
 // src/app/[locale]/HomePageClient.tsx
 'use client';
 
-import React, { useState, useEffect, useCallback, Suspense } from 'react';
-import dynamic from 'next/dynamic';
+import React, { useState, useEffect, useCallback } from 'react';
+import { lazyOnView } from '@/components/LazyOnView';
 import type { LegalDocument } from '@/lib/document-library';
 import { documentLibrary } from '@/lib/document-library';
 import HomepageHeroSteps from '@/components/landing/HomepageHeroSteps';
@@ -21,53 +21,45 @@ const LoadingSpinner = () => (
   </div>
 );
 
-// Dynamically import components
-const HowItWorks = dynamic(() => import('@/components/landing/HowItWorks'), {
-  loading: () => <LoadingSpinner />,
+// Lazily load sections when they enter the viewport
+const HowItWorks = lazyOnView(() => import('@/components/landing/HowItWorks'), {
+  placeholder: <LoadingSpinner />,
 });
 
-const TrustAndTestimonialsSection = dynamic(
+const TrustAndTestimonialsSection = lazyOnView(
   () => import('@/components/landing/TrustAndTestimonialsSection'),
   {
-    loading: () => <LoadingSpinner />,
+    placeholder: <LoadingSpinner />,
   },
 );
 
-const GuaranteeBadge = dynamic(
+const GuaranteeBadge = lazyOnView(
   () =>
-    import('@/components/landing/GuaranteeBadge').then(
-      (mod) => mod.GuaranteeBadge,
-    ),
+    import('@/components/landing/GuaranteeBadge').then((mod) => mod.GuaranteeBadge),
   {
-    loading: () => <LoadingSpinner />,
+    placeholder: <LoadingSpinner />,
   },
 );
 
-const TopDocsChips = dynamic(() => import('@/components/TopDocsChips'), {
-  loading: () => <LoadingSpinner />,
+const TopDocsChips = lazyOnView(() => import('@/components/TopDocsChips'), {
+  placeholder: <LoadingSpinner />,
 });
 
-const Step1DocumentSelector = dynamic(
-  () =>
-    import('@/components/Step1DocumentSelector').then((m) => m.default),
-  { loading: () => <LoadingSpinner /> },
+const Step1DocumentSelector = lazyOnView(
+  () => import('@/components/Step1DocumentSelector').then((m) => m.default),
+  { placeholder: <LoadingSpinner /> },
 );
 
-// AnnouncementBar is the default export of the module. Using dynamic without
-// resolving a named export ensures the component itself is returned.
-const AnnouncementBar = dynamic(() => import('@/components/AnnouncementBar'), {
-  ssr: false,
+// AnnouncementBar is the default export of the module and can render immediately
+const AnnouncementBar = lazyOnView(() => import('@/components/AnnouncementBar'), {
+  placeholder: null,
 });
 
-const StickyFilterBar = dynamic(() => import('@/components/StickyFilterBar'), {
-  loading: () => <div className="h-16 bg-muted" />, // Placeholder for filter bar height
-});
+const StickyFilterBar = lazyOnView(
+  () => import('@/components/StickyFilterBar'),
+  { placeholder: <div className="h-16 bg-muted" /> },
+);
 
-interface PreloadableModule {
-  default?: { preload?: () => void };
-  GuaranteeBadge?: { preload?: () => void };
-  Step1DocumentSelector?: { preload?: () => void };
-}
 
 export default function HomePageClient() {
   const { t } = useTranslation('common');
@@ -91,29 +83,6 @@ export default function HomePageClient() {
     setIsHydrated(true);
   }, []);
 
-  // Defer preloading of heavy sections until the browser is idle
-  useEffect(() => {
-    const preload = () => {
-      void import('@/components/landing/HowItWorks');
-      void import('@/components/landing/TrustAndTestimonialsSection');
-      void import('@/components/landing/GuaranteeBadge');
-      void import('@/components/TopDocsChips');
-      void import('@/components/StickyFilterBar');
-      void import('@/components/Step1DocumentSelector');
-    };
-
-    if (typeof window === 'undefined') return;
-
-    if ('requestIdleCallback' in window) {
-      const handle = (window as unknown as { requestIdleCallback: (cb: () => void) => number }).requestIdleCallback(preload);
-      return () => {
-        (window as unknown as { cancelIdleCallback: (id: number) => void }).cancelIdleCallback(handle);
-      };
-    }
-
-    const id = window.setTimeout(preload, 2000);
-    return () => clearTimeout(id);
-  }, []);
 
   const workflowSectionId = 'workflow-start';
 
@@ -211,19 +180,10 @@ export default function HomePageClient() {
       <AnnouncementBar />
       <HomepageHeroSteps />
 
-      {/* Suspense for dynamically imported components */}
-      <Suspense fallback={<LoadingSpinner />}>
-        <HowItWorks />
-      </Suspense>
-      <Suspense fallback={<LoadingSpinner />}>
-        <TrustAndTestimonialsSection />
-      </Suspense>
-      <Suspense fallback={<LoadingSpinner />}>
-        <GuaranteeBadge />
-      </Suspense>
-      <Suspense fallback={<LoadingSpinner />}>
-        <TopDocsChips />
-      </Suspense>
+      <HowItWorks />
+      <TrustAndTestimonialsSection />
+      <GuaranteeBadge />
+      <TopDocsChips />
 
       <Separator className="my-12" />
 
@@ -246,8 +206,7 @@ export default function HomePageClient() {
           </p>
 
           {isHydrated ? (
-            <Suspense fallback={<div className="h-16 bg-muted" />}>
-              <StickyFilterBar
+            <StickyFilterBar
                 searchTerm={globalSearchTerm}
                 onSearchTermChange={(term) => {
                   setGlobalSearchTerm(term);
@@ -260,7 +219,6 @@ export default function HomePageClient() {
                   setGlobalSelectedState(state);
                 }}
               />
-            </Suspense>
           ) : (
             <div className="h-16 bg-muted" />
           )}
