@@ -12,8 +12,9 @@ import { Loader2 } from 'lucide-react';
 import { CATEGORY_LIST } from '@/components/Step1DocumentSelector';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams, useRouter, useParams } from 'next/navigation';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 
-// Basic loading component
 const LoadingSpinner = () => (
   <div className="flex justify-center items-center h-32">
     <Loader2 className="h-8 w-8 animate-spin text-primary" />
@@ -21,7 +22,6 @@ const LoadingSpinner = () => (
   </div>
 );
 
-// Lazily load sections when they enter the viewport
 const HowItWorks = lazyOnView(() => import('@/components/landing/HowItWorks'), {
   placeholder: <LoadingSpinner />,
 });
@@ -34,8 +34,7 @@ const TrustAndTestimonialsSection = lazyOnView(
 );
 
 const GuaranteeBadge = lazyOnView(
-  () =>
-    import('@/components/landing/GuaranteeBadge').then((mod) => mod.GuaranteeBadge),
+  () => import('@/components/landing/GuaranteeBadge').then((mod) => mod.GuaranteeBadge),
   {
     placeholder: <LoadingSpinner />,
   },
@@ -50,7 +49,6 @@ const Step1DocumentSelector = lazyOnView(
   { placeholder: <LoadingSpinner /> },
 );
 
-// AnnouncementBar is the default export of the module and can render immediately
 const AnnouncementBar = lazyOnView(() => import('@/components/AnnouncementBar'), {
   placeholder: null,
 });
@@ -59,7 +57,6 @@ const StickyFilterBar = lazyOnView(
   () => import('@/components/StickyFilterBar'),
   { placeholder: <div className="h-16 bg-muted" /> },
 );
-
 
 export default function HomePageClient() {
   const { t } = useTranslation('common');
@@ -71,18 +68,13 @@ export default function HomePageClient() {
 
   const [globalSearchTerm, setGlobalSearchTerm] = useState('');
   const [globalSelectedState, setGlobalSelectedState] = useState<string>('');
-  const [selectedCategoryForFilter, setSelectedCategoryForFilter] = useState<
-    string | null
-  >(null);
-  const [selectedDocument, setSelectedDocument] =
-    useState<LegalDocument | null>(null);
-
+  const [selectedCategoryForFilter, setSelectedCategoryForFilter] = useState<string | null>(null);
+  const [selectedDocument, setSelectedDocument] = useState<LegalDocument | null>(null);
   const [isHydrated, setIsHydrated] = useState(false);
 
   useEffect(() => {
     setIsHydrated(true);
   }, []);
-
 
   const workflowSectionId = 'workflow-start';
 
@@ -106,9 +98,7 @@ export default function HomePageClient() {
     }
 
     if (categoryFromQuery && !selectedCategoryForFilter) {
-      const isValidCategory = CATEGORY_LIST.some(
-        (cat) => cat.key === categoryFromQuery,
-      );
+      const isValidCategory = CATEGORY_LIST.some((cat) => cat.key === categoryFromQuery);
       if (isValidCategory) {
         setSelectedCategoryForFilter(categoryFromQuery);
         scrollToWorkflow();
@@ -122,14 +112,7 @@ export default function HomePageClient() {
         scrollToWorkflow();
       }
     }
-  }, [
-    searchParams,
-    globalSearchTerm,
-    selectedCategoryForFilter,
-    selectedDocument,
-    isHydrated,
-    scrollToWorkflow,
-  ]);
+  }, [searchParams, globalSearchTerm, selectedCategoryForFilter, selectedDocument, isHydrated, scrollToWorkflow]);
 
   const handleDocumentTypeSelect = useCallback(
     (doc: LegalDocument) => {
@@ -147,9 +130,7 @@ export default function HomePageClient() {
         });
         router.push(`/${locale}/docs/${doc.id}/start`);
       } else {
-        console.warn(
-          `[HomePageClient] Document selection received null or undefined doc.`,
-        );
+        console.warn('[HomePageClient] Document selection received null or undefined doc.');
       }
     },
     [toast, t, locale, isHydrated, router],
@@ -159,7 +140,7 @@ export default function HomePageClient() {
     if (!isHydrated) {
       return (
         <div className="text-center py-10">
-          <Loader2 className="h-8 w-8 animate-spin mx-auto" />{' '}
+          <Loader2 className="h-8 w-8 animate-spin mx-auto" />
           <p suppressHydrationWarning>{t('Loading...', { ns: 'common' })}</p>
         </div>
       );
@@ -178,8 +159,33 @@ export default function HomePageClient() {
   return (
     <>
       <AnnouncementBar />
-      <HomepageHeroSteps />
 
+      {/* HERO SECTION + AI assistant CTA */}
+      <section className="text-center px-4 pt-12 pb-6 max-w-2xl mx-auto">
+        <h1 className="text-3xl sm:text-4xl font-bold leading-tight">
+          Legal Documents in Minutes — Powered by AI
+        </h1>
+        <p className="mt-4 text-muted-foreground text-base sm:text-lg">
+          Describe your situation. Our AI will guide you step-by-step to the perfect legal form.
+        </p>
+        <div className="mt-6 flex flex-col sm:flex-row gap-3 justify-center">
+          <Link href="/generate">
+            <Button size="lg" className="text-lg px-8 py-6">
+              🚀 Start My Document
+            </Button>
+          </Link>
+          <Link href="/demo">
+            <Button size="lg" variant="outline" className="text-lg px-8 py-6">
+              🎥 See Demo
+            </Button>
+          </Link>
+        </div>
+        <div className="mt-4 text-sm text-gray-500">
+          No account required. No subscriptions. Start free.
+        </div>
+      </section>
+
+      <HomepageHeroSteps />
       <HowItWorks />
       <TrustAndTestimonialsSection />
       <GuaranteeBadge />
@@ -207,18 +213,18 @@ export default function HomePageClient() {
 
           {isHydrated ? (
             <StickyFilterBar
-                searchTerm={globalSearchTerm}
-                onSearchTermChange={(term) => {
-                  setGlobalSearchTerm(term);
-                  if (term.trim() !== '' && selectedCategoryForFilter) {
-                    setSelectedCategoryForFilter(null);
-                  }
-                }}
-                selectedState={globalSelectedState}
-                onSelectedStateChange={(state) => {
-                  setGlobalSelectedState(state);
-                }}
-              />
+              searchTerm={globalSearchTerm}
+              onSearchTermChange={(term) => {
+                setGlobalSearchTerm(term);
+                if (term.trim() !== '' && selectedCategoryForFilter) {
+                  setSelectedCategoryForFilter(null);
+                }
+              }}
+              selectedState={globalSelectedState}
+              onSelectedStateChange={(state) => {
+                setGlobalSelectedState(state);
+              }}
+            />
           ) : (
             <div className="h-16 bg-muted" />
           )}
