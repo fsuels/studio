@@ -35,8 +35,8 @@ if (!isTurbopack) {
   const webpack = require('webpack'); // Using require for truly conditional loading
 
   const customWebpackConfig = (
-    config: import('webpack').Configuration, // Type for webpack config
-  ): import('webpack').Configuration => {
+    config: any, // Changed type from import('webpack').Configuration
+  ): any => { // Changed return type
     config.plugins = config.plugins || [];
     // Use the imported 'webpack' module for IgnorePlugin
     config.plugins.push(
