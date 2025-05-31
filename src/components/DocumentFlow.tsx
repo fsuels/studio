@@ -1,17 +1,23 @@
 // src/components/DocumentFlow.tsx
 'use client';
 
-import React, { useState, useEffect } from 'react'; // Added useEffect
+import React, { useState, useEffect } from 'react';
 import { StepOneInput } from '@/components/StepOneInput'; // This might be replaced or refactored
 import SlideFade from '@/components/motion/SlideFade';
 import { StepTwoInput } from '@/components/StepTwoInput'; // This might be replaced or refactored
 import dynamic from 'next/dynamic';
+import { useTranslation } from 'react-i18next';
+import { documentLibrary } from '@/lib/document-library'; // Import documentLibrary
+
 const StepThreeInput = dynamic(
   () => import('@/components/StepThreeInput').then((mod) => mod.StepThreeInput),
   { ssr: false },
-); // This might be replaced or refactored
-import { useTranslation } from 'react-i18next';
-import { documentLibrary } from '@/lib/document-library'; // Import documentLibrary
+);
+
+// Preload the heavy final step to make the wizard snappier
+if (typeof window !== 'undefined') {
+  void StepThreeInput.preload();
+}
 
 interface DocumentFlowProps {
   initialDocId?: string;
