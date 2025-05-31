@@ -41,7 +41,13 @@ export default function MobileDocsAccordion({ categories, documents, onLinkClick
           >
             <AccordionItem value="open" className="border-none">
               <AccordionTrigger className="w-full flex justify-between items-center px-4 py-3 text-base font-medium text-gray-900 border-t border-gray-200">
-                {label}
+                <span className="flex items-center gap-2">
+                  {cat.key === 'finance' && '💰'}
+                  {cat.key === 'business' && '🏢'}
+                  {cat.key === 'real-estate' && '🏠'}
+                  {cat.key === 'family' && '👨‍👩‍👧‍👦'}
+                  {label}
+                </span>
               </AccordionTrigger>
               <AccordionContent className="pl-6 pr-4 pb-2">
                 <ul>
