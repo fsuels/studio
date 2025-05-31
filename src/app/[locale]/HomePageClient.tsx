@@ -15,6 +15,7 @@ import { useSearchParams, useRouter, useParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import Link from 'next/link';
+import PersonalizationBlock from '@/components/PersonalizationBlock';
 
 const LoadingSpinner = () => (
   <div className="flex justify-center items-center h-32">
@@ -267,6 +268,7 @@ export default function HomePageClient() {
 
           <div className="mt-8 bg-card p-4 sm:p-6 md:p-8 rounded-xl shadow-2xl border border-border/20">
             <div className="mt-6">{renderMainInteraction()}</div>
+            <PersonalizationBlock />
           </div>
         </div>
       </section>
