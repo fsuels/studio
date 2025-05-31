@@ -45,8 +45,12 @@ export function StepThreeForm({
         <PDFPreview url={previewUrl} className="flex-1 border rounded shadow" />
 
         <div className="flex-1 space-y-4">
-          <label className="flex items-center">
-            <Toggle pressed={notarize} onPressedChange={setNotarize} />
+          <label htmlFor="notarizeToggle" className="flex items-center">
+            <Toggle
+              id="notarizeToggle"
+              pressed={notarize}
+              onPressedChange={setNotarize}
+            />
             <span className="ml-2">Add Notarization (+$5)</span>
           </label>
 

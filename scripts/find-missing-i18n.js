@@ -12,11 +12,11 @@ if (typeof window !== 'undefined' && process.env.NODE_ENV === 'development') {
       if (i18nInstance) {
         const missingKeys = new Set();
 
-        i18nInstance.on('missingKey', (lngs, namespace, key, res) => {
+        i18nInstance.on('missingKey', (lngs, namespace, key) => {
           missingKeys.add(`${namespace}:${key}`);
         });
 
-        // @ts-ignore
+        // @ts-expect-error -- __printMissing is for debugging only
         window.__printMissing = () => {
           if (missingKeys.size > 0) {
             console.log('Missing i18n Keys:', [...missingKeys]);

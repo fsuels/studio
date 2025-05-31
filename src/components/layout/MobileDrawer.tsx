@@ -73,9 +73,11 @@ export default function MobileDrawer({ open, children, onClose }: MobileDrawerPr
     <AnimatePresence>
       {open && (
         <>
-          <div
+          <button
+            type="button"
             className="fixed inset-0 bg-black/40 backdrop-blur-sm z-40"
             onClick={onClose}
+            aria-label={t('Close menu')}
           />
           <motion.aside
             {...bind()}

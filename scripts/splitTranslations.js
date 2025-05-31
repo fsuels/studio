@@ -1,8 +1,8 @@
 // scripts/splitTranslations.js
 /* eslint-env node */
 
-const fs = require('fs');
-const path = require('path');
+import fs from 'node:fs';
+import path from 'node:path';
 
 // adjust these if you add/remove languages
 const LANGS = ['en', 'es'];

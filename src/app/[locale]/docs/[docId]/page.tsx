@@ -71,7 +71,7 @@ export function Head({ params }: { params: DocPageParams }) {
   const faqJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
-    mainEntity: vehicleBillOfSaleFaqs.map((faq, index) => ({
+    mainEntity: vehicleBillOfSaleFaqs.map((faq) => ({
       '@type': 'Question',
       name: params.locale === 'es' ? faq.questionEs : faq.questionEn,
       acceptedAnswer: {

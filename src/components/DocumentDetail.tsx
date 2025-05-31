@@ -29,7 +29,7 @@ const DocumentDetail = React.memo(function DocumentDetail({
   const [isLoading, setIsLoading] = useState(!initialMarkdown); // If no initial markdown, consider it loading (for fallback/image)
   const [error, setError] = useState<string | null>(null); // Error if initialMarkdown is null/undefined and no docConfig?
   const [isHydrated, setIsHydrated] = useState(false);
-  const [remarkGfmPlugin, setRemarkGfmPlugin] = useState<any | null>(null);
+  const [remarkGfmPlugin, setRemarkGfmPlugin] = useState<unknown | null>(null);
 
   const docConfig = useMemo(
     () => documentLibrary.find((d: LegalDocument) => d.id === docId),

@@ -349,13 +349,14 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
         {fieldsToReview.map((field) => {
           const isCurrentlyEditing = editingFieldId === field.id;
           // console.log(`[ReviewStep] Rendering field: ${field.id}, isCurrentlyEditing: ${isCurrentlyEditing}`);
-          return (
-            <div
-              key={field.id}
-              className="py-3 border-b border-border last:border-b-0 cursor-pointer"
-              onClick={() => !isCurrentlyEditing && handleEdit(field.id)}
-            >
-              <div className="flex justify-between items-start gap-2">
+            return (
+              <React.Fragment key={field.id}>
+                <button
+                  type="button"
+                  className="w-full text-left py-3 border-b border-border last:border-b-0 cursor-pointer"
+                  onClick={() => !isCurrentlyEditing && handleEdit(field.id)}
+                >
+                  <div className="flex justify-between items-start gap-2">
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-1 mb-0.5">
                     <p className="text-sm font-medium text-muted-foreground">
@@ -587,14 +588,12 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
                                     onCheckedChange={controllerField.onChange}
                                     ref={controllerField.ref}
                                   />
-                                  <Label
-                                    htmlFor={`review-${field.id}`}
-                                    className="text-sm font-normal"
-                                  >
-                                    {Boolean(controllerField.value)
-                                      ? t('Yes')
-                                      : t('No')}
-                                  </Label>
+                                    <Label
+                                      htmlFor={`review-${field.id}`}
+                                      className="text-sm font-normal"
+                                    >
+                                      {controllerField.value ? t('Yes') : t('No')}
+                                    </Label>
                                 </div>
                               );
                             }
@@ -653,15 +652,16 @@ export default function ReviewStep({ doc, locale }: ReviewStepProps) {
                     <Edit2 className="w-4 h-4" />
                   </Button>
                 )}
-              </div>
-              {errors[field.id] && isCurrentlyEditing && (
-                <p className="block text-xs text-destructive mt-1 flex items-center gap-1">
-                  <AlertTriangle className="h-3 w-3" />{' '}
-                  {String(errors[field.id]?.message)}
-                </p>
-              )}
-            </div>
-          );
+                </div>
+              </button>
+                {errors[field.id] && isCurrentlyEditing && (
+                  <p className="block text-xs text-destructive mt-1 flex items-center gap-1">
+                    <AlertTriangle className="h-3 w-3" />{' '}
+                    {String(errors[field.id]?.message)}
+                  </p>
+                )}
+              </React.Fragment>
+            );
         })}
       </CardContent>
     </Card>

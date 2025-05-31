@@ -10,7 +10,6 @@ import TrustBadges from '@/components/TrustBadges';
 import { FileText } from 'lucide-react';
 import AutoImage from '@/components/AutoImage';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 
 interface Props {
   locale: 'en' | 'es';
@@ -18,7 +17,6 @@ interface Props {
 
 export default function TemplatesClientContent({ locale }: Props) {
   const { t } = useTranslation('common');
-  const router = useRouter();
 
   const categoryHref = (key: string) =>
     `/${locale}/?category=${encodeURIComponent(key)}#workflow-start`;

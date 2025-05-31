@@ -155,7 +155,7 @@ export default function DashboardClientContent({
     }
 
     switch (activeTab) {
-      case 'documents':
+      case 'documents': {
         const sorted = [...documents].sort((a, b) => {
           const dir = sortDir === 'asc' ? 1 : -1;
           let valA: string | number = '';
@@ -167,12 +167,14 @@ export default function DashboardClientContent({
             valA = a.status.toLowerCase();
             valB = b.status.toLowerCase();
           } else {
-            const dA = (typeof a.date === 'object' && 'toDate' in a.date)
-              ? a.date.toDate()
-              : new Date(a.date as any);
-            const dB = (typeof b.date === 'object' && 'toDate' in b.date)
-              ? b.date.toDate()
-              : new Date(b.date as any);
+            const dA =
+              typeof a.date === 'object' && 'toDate' in a.date
+                ? a.date.toDate()
+                : new Date(a.date as unknown as string);
+            const dB =
+              typeof b.date === 'object' && 'toDate' in b.date
+                ? b.date.toDate()
+                : new Date(b.date as unknown as string);
             valA = dA.getTime();
             valB = dB.getTime();
           }
@@ -300,6 +302,7 @@ export default function DashboardClientContent({
             />
           </>
         );
+      }
       case 'payments':
         return (
           <div className="space-y-4">

@@ -18,7 +18,6 @@ import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/hooks/useAuth';
 import Link from 'next/link';
-import { useParams } from 'next/navigation';
 
 /* ---------- real Firebase Auth imports -------------------------------- */
 import type { UserCredential } from 'firebase/auth';
@@ -40,8 +39,6 @@ export default function AuthModal({
   const { t } = useTranslation('common');
   const { toast } = useToast();
   const { login } = useAuth(); // local auth context
-  const params = useParams();
-  const locale = (params?.locale as 'en' | 'es') || 'en';
 
   const [authMode, setAuthMode] = useState<'signin' | 'signup'>('signin');
   const [emailModal, setEmailModal] = useState('');
@@ -146,9 +143,9 @@ export default function AuthModal({
 
       // notify parent (WizardForm)
       onAuthSuccess(authMode, cred.user.uid);
-    } catch (err: any) {
-      console.error('[AuthModal] Firebase Auth error:', err);
-      toast({
+      } catch (err: unknown) {
+        console.error('[AuthModal] Firebase Auth error:', err);
+        toast({
         title: t('authModal.errorAuthFailedTitle', {
           defaultValue: 'Authentication Failed',
         }),
