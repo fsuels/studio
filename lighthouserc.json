@@ -1,10 +1,7 @@
-{
-  "ci": {
-    "collect": {
-      "staticDistDir": "apps/web/out", // <— make sure this matches
-      "url": ["/en", "/en/signwell", "/en/dashboard"],
-      "numberOfRuns": 3
-    },
-    "assert": { "preset": "lighthouse:recommended" }
-    }
-  }
+{ "ci": { "collect": {
+    "staticDistDir": "apps/web/out",
+    "numberOfRuns": 3,
+    "url": ["/en", "/en/signwell", "/en/dashboard"]
+  },
+  "assert": { "preset": "lighthouse:recommended" }
+} }
