@@ -145,6 +145,7 @@ const Header = React.memo(function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMegaMenuOpen, setIsMegaMenuOpen] = useState(false);
   const [showMobileCategories, setShowMobileCategories] = useState(false);
+  const [expandAllDocs, setExpandAllDocs] = useState(true);
 
   // Auto-expand "Make Documents" accordion on initial render for mobile screens
   useEffect(() => {
@@ -431,15 +432,25 @@ const Header = React.memo(function Header() {
             )}
           </Button>
           {showMobileCategories && (
-            <MobileDocsAccordion
-              categories={CATEGORY_LIST}
-              documents={documentLibrary}
-              onLinkClick={() => {
-                setIsMegaMenuOpen(false);
-                setIsMobileMenuOpen(false);
-                setShowMobileCategories(false);
-              }}
-            />
+            <>
+              <Button
+                variant="ghost"
+                className="w-full justify-center text-sm text-primary hover:underline"
+                onClick={() => setExpandAllDocs((v) => !v)}
+              >
+                {expandAllDocs ? 'Collapse All' : 'Expand All'}
+              </Button>
+              <MobileDocsAccordion
+                categories={CATEGORY_LIST}
+                documents={documentLibrary}
+                onLinkClick={() => {
+                  setIsMegaMenuOpen(false);
+                  setIsMobileMenuOpen(false);
+                  setShowMobileCategories(false);
+                }}
+                expandAll={expandAllDocs}
+              />
+            </>
           )}
 
           {/* Mobile footer links */}

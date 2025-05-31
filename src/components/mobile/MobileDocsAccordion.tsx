@@ -10,9 +10,15 @@ interface MobileDocsAccordionProps {
   categories: CategoryInfo[];
   documents: LegalDocument[];
   onLinkClick?: () => void;
+  expandAll?: boolean;
 }
 
-export default function MobileDocsAccordion({ categories, documents, onLinkClick }: MobileDocsAccordionProps) {
+export default function MobileDocsAccordion({
+  categories,
+  documents,
+  onLinkClick,
+  expandAll,
+}: MobileDocsAccordionProps) {
   const { t, i18n } = useTranslation('common');
   const locale = i18n.language as 'en' | 'es';
   const [openKey, setOpenKey] = React.useState<string | null>(null);
@@ -30,7 +36,7 @@ export default function MobileDocsAccordion({ categories, documents, onLinkClick
         const docs = docsForCategory(cat.key);
         if (docs.length === 0) return null;
         const label = t(cat.labelKey, { defaultValue: cat.key });
-        const isOpen = openKey === cat.key;
+        const isOpen = expandAll || openKey === cat.key;
         return (
           <Accordion
             key={cat.key}
