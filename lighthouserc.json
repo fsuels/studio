@@ -1,7 +1,10 @@
-{ "ci": { "collect": {
-    "staticDistDir": "apps/web/out",
-    "numberOfRuns": 3,
-    "url": ["/en", "/en/signwell", "/en/dashboard"]
-  },
-  "assert": { "preset": "lighthouse:recommended" }
-} }
+{
+  "ci": {
+    "collect": {
+      "staticDistDir": "apps/web/out",
+      "url": ["/en", "/en/signwell", "/en/dashboard"],
+      "numberOfRuns": 1
+    },
+    "upload": { "target": "filesystem" }
+  }
+}

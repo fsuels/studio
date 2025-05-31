@@ -1,24 +1,50 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Skip Playwright browser download (helps in sandbox)
+# ──────────────────────────────────────────────────────────────────────────────
+# Allow up to 15 min for the whole bootstrap (Codex reads this env-var)
+# ──────────────────────────────────────────────────────────────────────────────
+export CODEX_SETUP_TIMEOUT=$((15*60))
+
+echo "🔧 [setup] Starting environment bootstrap…"
 export PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1
+export npm_config_loglevel=error
 
-echo "🔧  Installing dependencies"
-npm ci --prefer-offline --no-audit --progress=false
-
-echo "🛠   Building and exporting Next.js site"
-npm run build
-npm run export   # puts static files in apps/web/out
-
-echo "🔍  Running Lighthouse-CI"
-if [ -f lighthouserc.json ]; then
-  npx lhci autorun || true     # never fail the container
-else
-  echo "ℹ️   No lighthouserc.json – skipping LHCI"
+# ──────────────────────────────────────────────────────────────────────────────
+# 1️⃣  Install dependencies with the package-manager your repo already uses
+# ──────────────────────────────────────────────────────────────────────────────
+if   [[ -f pnpm-lock.yaml ]]; then corepack enable pnpm && pnpm install --frozen-lockfile --prefer-offline
+elif [[ -f yarn.lock      ]]; then corepack enable yarn && yarn install --immutable
+else  npm ci --prefer-offline --no-audit --progress=false
 fi
 
-# Optional global helpers for Codex
-npm install -g eslint prettier typescript firebase-tools >/dev/null 2>&1 || true
+# ──────────────────────────────────────────────────────────────────────────────
+# 2️⃣  Persist the Firebase key into .env (Codex injects it as an env-var)
+# ──────────────────────────────────────────────────────────────────────────────
+if [[ -n "${FIREBASE_SERVICE_ACCOUNT_KEY_JSON:-}" ]]; then
+  printf "FIREBASE_SERVICE_ACCOUNT_KEY_JSON='%s'\n" \
+    "${FIREBASE_SERVICE_ACCOUNT_KEY_JSON}" >> .env
+fi
 
-echo "✅  Setup finished"
+# ──────────────────────────────────────────────────────────────────────────────
+# 3️⃣  Build ➜ Export static HTML (to apps/web/out, matches lighthouserc.json)
+# ──────────────────────────────────────────────────────────────────────────────
+echo "🛠  Building and exporting Next.js site"
+npm run build
+npm run export
+
+# ──────────────────────────────────────────────────────────────────────────────
+# 4️⃣  Download portable Chromium and run Lighthouse-CI
+# ──────────────────────────────────────────────────────────────────────────────
+echo "🌐  Fetching portable Chromium…"
+npx -y @puppeteer/browsers@~2.5.1 install chromium@latest > /dev/null
+export CHROME_PATH="$(npx -q @puppeteer/browsers executable-path chromium)"
+
+echo "🔍  Running Lighthouse-CI"
+npx -y lhci@0.14.0 autorun --collect.numberOfRuns=1 || true   # don’t fail build
+
+# ──────────────────────────────────────────────────────────────────────────────
+# 5️⃣  Global CLIs Codex sometimes calls
+# ──────────────────────────────────────────────────────────────────────────────
+npm install -g eslint prettier typescript firebase-tools > /dev/null 2>&1
+echo "✅  Setup finished – ready for Codex."
