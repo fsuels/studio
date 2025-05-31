@@ -1,12 +1,10 @@
 // src/lib/i18n.ts
 import i18n from 'i18next';
-import HttpBackend from 'i18next-http-backend';
 import { initReactI18next } from 'react-i18next';
+import { resources } from './i18nResources';
 
 /** Guard so the same instance isn’t initialised twice */
 if (!i18n.isInitialized) {
-  // ── Load JSON from /public/locales/{lng}/{ns}.json (works server & client)
-  i18n.use(HttpBackend);
 
   // ── Bridge to react-i18next **only in the browser**
   if (typeof window !== 'undefined') {
@@ -31,7 +29,7 @@ if (!i18n.isInitialized) {
         'online-notary',
       ],
       defaultNS: 'common',
-      backend: { loadPath: '/locales/{{lng}}/{{ns}}.json' },
+      resources,
       interpolation: { escapeValue: false },
       react: { useSuspense: false },
     })
