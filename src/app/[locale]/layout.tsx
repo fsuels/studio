@@ -1,22 +1,17 @@
 // src/app/[locale]/layout.tsx
-'use client';
 
-import { ReactNode, useMemo } from 'react';
-import { useParams } from 'next/navigation';
+import type { ReactNode } from 'react';
 import { ClientProviders } from '@/components/providers/ClientProviders';
 
 interface LocaleLayoutProps {
   children: ReactNode;
+  params: { locale?: string };
 }
 
-export default function LocaleLayout({ children }: LocaleLayoutProps) {
-  const params = useParams();
-
-  // Use useMemo to stabilize detectedLocale if params.locale itself is stable
-  const detectedLocale = useMemo(() => {
-    const pathLocale = params?.locale;
-    return pathLocale === 'es' || pathLocale === 'en' ? pathLocale : 'en';
-  }, [params?.locale]);
+export default function LocaleLayout({ children, params }: LocaleLayoutProps) {
+  const pathLocale = params.locale;
+  const detectedLocale =
+    pathLocale === 'es' || pathLocale === 'en' ? (pathLocale as 'en' | 'es') : 'en';
 
   return <ClientProviders locale={detectedLocale}>{children}</ClientProviders>;
 }
