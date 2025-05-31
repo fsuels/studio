@@ -34,6 +34,7 @@ import { Input } from '@/components/ui/input';
 import type { LegalDocument } from '@/lib/document-library';
 import { CATEGORY_LIST } from '@/components/Step1DocumentSelector';
 import MegaMenuContent from '@/components/mega-menu/MegaMenuContent';
+import MobileDocsAccordion from '@/components/mobile/MobileDocsAccordion';
 
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/hooks/useAuth';
@@ -414,20 +415,16 @@ const Header = React.memo(function Header() {
           {/* Mobile categories toggle */}
           <Button
             variant="ghost"
-            className="w-full justify-between text-base font-medium flex items-center gap-2 px-2 py-3 hover:bg-muted group focus-visible:ring-primary focus-visible:ring-2 focus-visible:ring-offset-2"
+            className="w-full justify-between text-base font-medium flex items-center px-4 py-3 hover:bg-muted focus-visible:ring-primary focus-visible:ring-2 focus-visible:ring-offset-2"
             onClick={() => setShowMobileCategories((v) => !v)}
             aria-expanded={showMobileCategories}
-            data-state={showMobileCategories ? 'open' : 'closed'}
             disabled={!mounted}
           >
-            <div className="flex items-center gap-2">
-              <LayoutGrid className="h-5 w-5 text-muted-foreground group-data-[state=open]:text-primary" />
-              {mounted
-                ? tHeader('nav.makeDocuments', {
-                    defaultValue: 'Make Documents',
-                  })
-                : '...'}
-            </div>
+            {mounted
+              ? tHeader('nav.makeDocuments', {
+                  defaultValue: 'Make Documents',
+                })
+              : '...'}
             {showMobileCategories ? (
               <ChevronUp className="h-5 w-5 opacity-70" />
             ) : (
@@ -435,18 +432,15 @@ const Header = React.memo(function Header() {
             )}
           </Button>
           {showMobileCategories && (
-            <div className="pl-4 mt-0 border-l-2 border-muted/70">
-              <MegaMenuContent
-                categories={CATEGORY_LIST}
-                documents={documentLibrary}
-                defaultOpenCategories={['Finance']}
-                onLinkClick={() => {
-                  setIsMegaMenuOpen(false);
-                  setIsMobileMenuOpen(false);
-                  setShowMobileCategories(false);
-                }}
-              />
-            </div>
+            <MobileDocsAccordion
+              categories={CATEGORY_LIST}
+              documents={documentLibrary}
+              onLinkClick={() => {
+                setIsMegaMenuOpen(false);
+                setIsMobileMenuOpen(false);
+                setShowMobileCategories(false);
+              }}
+            />
           )}
 
           {/* Mobile footer links */}
