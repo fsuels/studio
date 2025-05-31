@@ -184,10 +184,13 @@ const Header = React.memo(function Header() {
                 : tHeader('nav.openMenu', { defaultValue: 'Open menu' })
             }
           >
-            {isMobileMenuOpen ? (<CloseIcon className="h-5 w-5" />) : (<MenuIcon className="h-5 w-5" />)}
+            {isMobileMenuOpen ? (
+              <CloseIcon className="h-5 w-5" />
+            ) : (
+              <MenuIcon className="h-5 w-5" />
+            )}
           </Button>
         </div>
-
 
         {/* Desktop Nav */}
         <div className="hidden md:flex flex-1 items-center justify-start">
@@ -361,192 +364,212 @@ const Header = React.memo(function Header() {
 
       {/* Mobile menu content */}
       {isMobileMenuOpen && mounted && (
-        <div className="md:hidden absolute top-14 left-0 right-0 bg-background shadow-lg border-t border-border p-4 space-y-4 animate-fade-in z-[60] max-h-[calc(100vh-3.5rem)] overflow-y-auto">
-          {/* Mobile search */}
-          <form
-            onSubmit={handleSearchSubmit}
-            className="relative flex items-center w-full"
-          >
-            <SearchIcon className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground pointer-events-none" />
-            <Input
-              ref={searchInputRef}
-              type="search"
-              placeholder={placeholderSearch}
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              onFocus={() =>
-                searchQuery.trim().length > 1 &&
-                searchResults.length > 0 &&
-                setShowResults(true)
-              }
-              className="h-10 pl-10 text-sm rounded-md w-full bg-muted border-input focus:border-primary focus-visible:ring-primary focus-visible:ring-2 focus-visible:ring-offset-2"
+        <React.Fragment>
+          <div className="md:hidden absolute top-14 left-0 right-0 bg-background shadow-lg border-t border-border p-4 space-y-4 animate-fade-in z-[60] max-h-[calc(100vh-3.5rem)] overflow-y-auto">
+            {/* Mobile search */}
+            <form
+              onSubmit={handleSearchSubmit}
+              className="relative flex items-center w-full"
+            >
+              <SearchIcon className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground pointer-events-none" />
+              <Input
+                ref={searchInputRef}
+                type="search"
+                placeholder={placeholderSearch}
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onFocus={() =>
+                  searchQuery.trim().length > 1 &&
+                  searchResults.length > 0 &&
+                  setShowResults(true)
+                }
+                className="h-10 pl-10 text-sm rounded-md w-full bg-muted border-input focus:border-primary focus-visible:ring-primary focus-visible:ring-2 focus-visible:ring-offset-2"
+                disabled={!mounted}
+                aria-label={placeholderSearch}
+              />
+              {showResults && searchResults.length > 0 && (
+                <div
+                  ref={searchResultsRef}
+                  className="absolute top-full mt-1 w-full max-h-60 overflow-y-auto bg-popover border border-border rounded-md shadow-lg z-[70]"
+                >
+                  <ul>
+                    {searchResults.map((doc) => {
+                      const translatedDoc = getDocTranslation(
+                        doc,
+                        clientLocale,
+                      );
+                      const docName = translatedDoc.name;
+                      return (
+                        <li key={doc.id}>
+                          <Link
+                            href={`/${clientLocale}/docs/${doc.id}`}
+                            className="flex items-center gap-2 px-3 py-2.5 text-sm text-popover-foreground hover:bg-accent hover:text-accent-foreground transition-colors w-full text-left"
+                            prefetch
+                          >
+                            <FileText className="h-4 w-4 shrink-0 text-muted-foreground" />
+                            <span className="truncate">{docName}</span>
+                            <ExternalLink className="h-3 w-3 ml-auto text-muted-foreground/70" />
+                          </Link>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
+              )}
+            </form>
+
+            {/* Mobile categories toggle */}
+            <Button
+              variant="ghost"
+              className="w-full justify-between text-base font-medium flex items-center px-4 py-3 hover:bg-muted focus-visible:ring-primary focus-visible:ring-2 focus-visible:ring-offset-2"
+              onClick={() => setShowMobileCategories((v) => !v)}
+              aria-expanded={showMobileCategories}
               disabled={!mounted}
-              aria-label={placeholderSearch}
-            />
-            {showResults && searchResults.length > 0 && (
-              <div
-                ref={searchResultsRef}
-                className="absolute top-full mt-1 w-full max-h-60 overflow-y-auto bg-popover border border-border rounded-md shadow-lg z-[70]"
-              >
-                <ul>
-                  {searchResults.map((doc) => {
-                    const translatedDoc = getDocTranslation(doc, clientLocale);
-                    const docName = translatedDoc.name;
-                    return (
-                      <li key={doc.id}>
-                        <Link
-                          href={`/${clientLocale}/docs/${doc.id}`}
-                          className="flex items-center gap-2 px-3 py-2.5 text-sm text-popover-foreground hover:bg-accent hover:text-accent-foreground transition-colors w-full text-left"
-                          prefetch
-                        >
-                          <FileText className="h-4 w-4 shrink-0 text-muted-foreground" />
-                          <span className="truncate">{docName}</span>
-                          <ExternalLink className="h-3 w-3 ml-auto text-muted-foreground/70" />
-                        </Link>
-                      </li>
-                    );
-                  })}
-                </ul>
-              </div>
+            >
+              {mounted
+                ? tHeader('nav.makeDocuments', {
+                    defaultValue: 'Make Documents',
+                  })
+                : '...'}
+              {showMobileCategories ? (
+                <ChevronUp className="h-5 w-5 opacity-70" />
+              ) : (
+                <ChevronDown className="h-5 w-5 opacity-70" />
+              )}
+            </Button>
+            {showMobileCategories && (
+              <MobileDocsAccordion
+                categories={CATEGORY_LIST}
+                documents={documentLibrary}
+                onLinkClick={() => {
+                  setIsMegaMenuOpen(false);
+                  setIsMobileMenuOpen(false);
+                  setShowMobileCategories(false);
+                }}
+              />
             )}
-          </form>
 
-          {/* Mobile categories toggle */}
-          <Button
-            variant="ghost"
-            className="w-full justify-between text-base font-medium flex items-center px-4 py-3 hover:bg-muted focus-visible:ring-primary focus-visible:ring-2 focus-visible:ring-offset-2"
-            onClick={() => setShowMobileCategories((v) => !v)}
-            aria-expanded={showMobileCategories}
-            disabled={!mounted}
-          >
-            {mounted
-              ? tHeader('nav.makeDocuments', {
-                  defaultValue: 'Make Documents',
-                })
-              : '...'}
-            {showMobileCategories ? (
-              <ChevronUp className="h-5 w-5 opacity-70" />
-            ) : (
-              <ChevronDown className="h-5 w-5 opacity-70" />
-            )}
-          </Button>
-          {showMobileCategories && (
-            <MobileDocsAccordion
-              categories={CATEGORY_LIST}
-              documents={documentLibrary}
-              onLinkClick={() => {
-                setIsMegaMenuOpen(false);
-                setIsMobileMenuOpen(false);
-                setShowMobileCategories(false);
-              }}
-            />
-          )}
+            {/* Mobile footer links */}
+            <div className="border-t border-border pt-4 space-y-1">
+              {[
+                {
+                  href: '/pricing',
+                  labelKey: 'nav.pricing',
+                  defaultLabel: 'Pricing',
+                },
+                {
+                  href: '/features',
+                  labelKey: 'nav.features',
+                  defaultLabel: 'Features',
+                },
+                {
+                  href: '/signwell',
+                  labelKey: 'nav.sign',
+                  defaultLabel: 'Sign',
+                },
+                {
+                  href: '/online-notary',
+                  labelKey: 'nav.onlineNotary',
+                  defaultLabel: 'Online Notary',
+                },
+                { href: '/blog', labelKey: 'nav.blog', defaultLabel: 'Blog' },
+                { href: '/faq', labelKey: 'nav.faq', defaultLabel: 'FAQ' },
+                {
+                  href: '/support',
+                  labelKey: 'nav.support',
+                  defaultLabel: 'Support',
+                },
+              ].map((link) => (
+                <Button
+                  key={link.href}
+                  variant="ghost"
+                  asChild
+                  className="w-full justify-start text-base py-3 hover:bg-muted focus-visible:ring-primary focus-visible:ring-2 focus-visible:ring-offset-2"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  <Link href={`/${clientLocale}${link.href}`}>
+                    {mounted
+                      ? tHeader(link.labelKey, {
+                          defaultValue: link.defaultLabel,
+                        })
+                      : '...'}
+                  </Link>
+                </Button>
+              ))}
+            </div>
 
-          {/* Mobile footer links */}
-          <div className="border-t border-border pt-4 space-y-1">
-            {[
-              {
-                href: '/pricing',
-                labelKey: 'nav.pricing',
-                defaultLabel: 'Pricing',
-              },
-              {
-                href: '/features',
-                labelKey: 'nav.features',
-                defaultLabel: 'Features',
-              },
-              { href: '/signwell', labelKey: 'nav.sign', defaultLabel: 'Sign' },
-              {
-                href: '/online-notary',
-                labelKey: 'nav.onlineNotary',
-                defaultLabel: 'Online Notary',
-              },
-              { href: '/blog', labelKey: 'nav.blog', defaultLabel: 'Blog' },
-              { href: '/faq', labelKey: 'nav.faq', defaultLabel: 'FAQ' },
-              {
-                href: '/support',
-                labelKey: 'nav.support',
-                defaultLabel: 'Support',
-              },
-            ].map((link) => (
-              <Button
-                key={link.href}
-                variant="ghost"
-                asChild
-                className="w-full justify-start text-base py-3 hover:bg-muted focus-visible:ring-primary focus-visible:ring-2 focus-visible:ring-offset-2"
+            {/* Language */}
+            <div className="border-t pt-4 flex items-center gap-2">
+              {mounted && <LanguageSwitcher />}
+            </div>
+
+            {/* Mobile auth */}
+            <div className="border-t border-border pt-4 space-y-2">
+              {isLoggedIn && user ? ( // Check if user object exists
+                <>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="w-full justify-start text-base py-3 hover:bg-muted focus-visible:ring-primary focus-visible:ring-2 focus-visible:ring-offset-2"
+                    asChild
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    <Link href={`/${clientLocale}/dashboard`}>
+                      <UserCircle className="h-5 w-5 mr-2" />{' '}
+                      {tHeader('My Account')}
+                    </Link>
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={handleLogout}
+                    className="w-full justify-start text-base py-3 hover:bg-muted focus-visible:ring-primary focus-visible:ring-2 focus-visible:ring-offset-2"
+                  >
+                    <LogOut className="h-5 w-5 mr-2" /> {tHeader('Logout')}
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="w-full justify-start text-base py-3 hover:bg-muted focus-visible:ring-primary focus-visible:ring-2 focus-visible:ring-offset-2"
+                    asChild
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    <Link href={`/${clientLocale}/signup`}>
+                      <UserPlus className="h-5 w-5 mr-2" />
+                      {mounted ? tHeader('Sign Up') : '...'}
+                    </Link>
+                  </Button>
+                  <Button
+                    variant="default"
+                    size="sm"
+                    className="w-full justify-start text-base py-3 bg-primary text-primary-foreground hover:bg-primary/90 focus-visible:ring-primary focus-visible:ring-2 focus-visible:ring-offset-2"
+                    asChild
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    <Link href={`/${clientLocale}/signin`}>
+                      <LogIn className="h-5 w-5 mr-2" />
+                      {mounted ? tHeader('Sign In') : '...'}
+                    </Link>
+                  </Button>
+                </>
+              )}
+            </div>
+
+            {/* Sticky CTA Button */}
+            <div className="fixed bottom-4 left-4 right-4 z-[70] md:hidden">
+              <Link
+                href={`/${clientLocale}/?search=#workflow-start`}
                 onClick={() => setIsMobileMenuOpen(false)}
+                className="block w-full text-center bg-primary text-white font-semibold py-3 rounded-lg shadow-lg hover:bg-primary/90 transition"
               >
-                <Link href={`/${clientLocale}${link.href}`}>
-                  {mounted
-                    ? tHeader(link.labelKey, {
-                        defaultValue: link.defaultLabel,
-                      })
-                    : '...'}
-                </Link>
-              </Button>
-            ))}
+                Browse All Documents
+              </Link>
+            </div>
           </div>
-
-          {/* Language */}
-          <div className="border-t pt-4 flex items-center gap-2">
-            {mounted && <LanguageSwitcher />}
-          </div>
-
-          {/* Mobile auth */}
-          <div className="border-t border-border pt-4 space-y-2">
-            {isLoggedIn && user ? ( // Check if user object exists
-              <>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="w-full justify-start text-base py-3 hover:bg-muted focus-visible:ring-primary focus-visible:ring-2 focus-visible:ring-offset-2"
-                  asChild
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  <Link href={`/${clientLocale}/dashboard`}>
-                    <UserCircle className="h-5 w-5 mr-2" />{' '}
-                    {tHeader('My Account')}
-                  </Link>
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={handleLogout}
-                  className="w-full justify-start text-base py-3 hover:bg-muted focus-visible:ring-primary focus-visible:ring-2 focus-visible:ring-offset-2"
-                >
-                  <LogOut className="h-5 w-5 mr-2" /> {tHeader('Logout')}
-                </Button>
-              </>
-            ) : (
-              <>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="w-full justify-start text-base py-3 hover:bg-muted focus-visible:ring-primary focus-visible:ring-2 focus-visible:ring-offset-2"
-                  asChild
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  <Link href={`/${clientLocale}/signup`}>
-                    <UserPlus className="h-5 w-5 mr-2" />
-                    {mounted ? tHeader('Sign Up') : '...'}
-                  </Link>
-                </Button>
-                <Button
-                  variant="default"
-                  size="sm"
-                  className="w-full justify-start text-base py-3 bg-primary text-primary-foreground hover:bg-primary/90 focus-visible:ring-primary focus-visible:ring-2 focus-visible:ring-offset-2"
-                  asChild
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  <Link href={`/${clientLocale}/signin`}>
-                    <LogIn className="h-5 w-5 mr-2" />
-                    {mounted ? tHeader('Sign In') : '...'}
-                  </Link>
-                </Button>
-              </>
-            )}
-          </div>
-        </div>
+        </React.Fragment>
       )}
     </header>
   );
@@ -568,7 +591,10 @@ export const getLocalizedDocStrings = (
     doc.description ||
     '';
   let aliases: string[] =
-    doc.translations?.en?.aliases || doc.translations?.es?.aliases || doc.aliases || [];
+    doc.translations?.en?.aliases ||
+    doc.translations?.es?.aliases ||
+    doc.aliases ||
+    [];
 
   if (locale === 'es') {
     name = doc.translations?.es?.name || name;
