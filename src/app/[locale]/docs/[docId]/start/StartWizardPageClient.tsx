@@ -10,8 +10,21 @@ import { Loader2, Edit, Eye } from 'lucide-react';
 
 import { documentLibrary } from '@/lib/document-library';
 import Breadcrumb from '@/components/Breadcrumb';
-import WizardForm from '@/components/WizardForm';
-import PreviewPane from '@/components/PreviewPane';
+import dynamic from 'next/dynamic';
+
+const Loading = () => (
+  <div className="flex justify-center items-center h-32">
+    <Loader2 className="h-8 w-8 animate-spin text-primary" />
+  </div>
+);
+
+const WizardForm = dynamic(() => import('@/components/WizardForm'), {
+  loading: () => <Loading />,
+});
+
+const PreviewPane = dynamic(() => import('@/components/PreviewPane'), {
+  loading: () => <Loading />,
+});
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/hooks/useAuth';
 import {
