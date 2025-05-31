@@ -1,39 +1,24 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-echo "🔧 [setup] Installing project dependencies with npm…"
+# Skip Playwright browser download (helps in sandbox)
+export PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1
 
-# Install packages exactly as locked in package-lock.json
+echo "🔧  Installing dependencies"
 npm ci --prefer-offline --no-audit --progress=false
 
-# Pull Playwright browsers only if the repo uses Playwright tests
-grep -q '@playwright/test' package.json 2>/dev/null && 
-  npx playwright install --with-deps
+echo "🛠   Building and exporting Next.js site"
+npm run build
+npm run export   # puts static files in apps/web/out
 
-# Global CLI helpers Codex often calls
-npm install -g eslint prettier typescript firebase-tools >/dev/null 2>&1
-
-# ------------------------------------------------------------------
-# (Optional) generate runtime .env & service account during CI runs
-# ------------------------------------------------------------------
-echo "📄  Generating .env for runtime …"
-printenv | grep -E '^(NEXT_PUBLIC_|STRIPE_|OPENAI_|SIGNWELL_)' > .env
-echo "NEXT_PUBLIC_SIGNED_URL_API=$NEXT_PUBLIC_SIGNED_URL_API" >> .env
-
-# Ensure the Firebase service account JSON is provided
-if [[ -z "${FIREBASE_SERVICE_ACCOUNT_KEY_JSON:-}" ]]; then
-  echo "\u274c FIREBASE_SERVICE_ACCOUNT_KEY_JSON is not set or empty" >&2
-  exit 1
+echo "🔍  Running Lighthouse-CI"
+if [ -f lighthouserc.json ]; then
+  npx lhci autorun || true     # never fail the container
+else
+  echo "ℹ️   No lighthouserc.json – skipping LHCI"
 fi
 
-# Validate that the JSON is well-formed when jq is available
-if command -v jq >/dev/null; then
-  echo "$FIREBASE_SERVICE_ACCOUNT_KEY_JSON" | jq . >/dev/null || {
-    echo "\u274c FIREBASE_SERVICE_ACCOUNT_KEY_JSON contains invalid JSON" >&2
-    exit 1
-  }
-fi
+# Optional global helpers for Codex
+npm install -g eslint prettier typescript firebase-tools >/dev/null 2>&1 || true
 
-echo "$FIREBASE_SERVICE_ACCOUNT_KEY_JSON" > serviceAccountKey.json
-
-echo "✅ [setup] Done — environment ready for Codex."
+echo "✅  Setup finished"
