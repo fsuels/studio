@@ -2,20 +2,20 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { StepOneInput } from '@/components/StepOneInput'; // This might be replaced or refactored
+import { StepOneInput } from '@/components/StepOneInput';
 import SlideFade from '@/components/motion/SlideFade';
-import { StepTwoInput } from '@/components/StepTwoInput'; // This might be replaced or refactored
+import { StepTwoInput } from '@/components/StepTwoInput';
 import dynamic from 'next/dynamic';
 import { useTranslation } from 'react-i18next';
-import { documentLibrary } from '@/lib/document-library'; // Import documentLibrary
+import { documentLibrary } from '@/lib/document-library';
 
-const StepThreeInput = dynamic(
-  () => import('@/components/StepThreeInput').then((mod) => mod.StepThreeInput),
-  { ssr: false },
-);
+// ✅ Correct dynamic import for default export to support preload
+const StepThreeInput = dynamic(() => import('@/components/StepThreeInput'), {
+  ssr: false,
+});
 
-// Preload the heavy final step to make the wizard snappier
-if (typeof window !== 'undefined') {
+// ✅ Safe preload after dynamic import
+if (typeof window !== 'undefined' && StepThreeInput?.preload) {
   void StepThreeInput.preload();
 }
 
@@ -28,16 +28,13 @@ export default function DocumentFlow({ initialDocId }: DocumentFlowProps = {}) {
 
   const [templateId, setTemplateId] = useState<string>(initialDocId ?? '');
   const [step, setStep] = useState(initialDocId ? 2 : 1);
-
   const [category, setCategory] = useState<string>('');
 
-  // Effect to set initial category if docId is provided
   useEffect(() => {
     if (initialDocId) {
       const doc = documentLibrary.find((d) => d.id === initialDocId);
       if (doc) {
         setCategory(doc.category);
-        // No need to set step here as it's already initialized based on initialDocId
       }
     }
   }, [initialDocId]);
@@ -85,10 +82,6 @@ export default function DocumentFlow({ initialDocId }: DocumentFlowProps = {}) {
         {step === 3 && (
           <StepThreeInput
             templateId={templateId}
-            // The StepThreeInput or its child (like DynamicFormRenderer) would call handleWizardComplete
-            // This needs to be wired up. Assuming StepThreeInput has an onSubmit prop.
-            // For now, this is a conceptual link.
-            // onSubmitForm={handleWizardComplete} // Example prop
           />
         )}
       </SlideFade>
