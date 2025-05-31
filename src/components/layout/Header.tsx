@@ -217,6 +217,7 @@ const Header = React.memo(function Header() {
               <MegaMenuContent
                 categories={CATEGORY_LIST}
                 documents={documentLibrary}
+                defaultOpenCategories={['Finance']}
                 onLinkClick={() => {
                   setIsMegaMenuOpen(false);
                   setIsMobileMenuOpen(false);
@@ -438,6 +439,7 @@ const Header = React.memo(function Header() {
               <MegaMenuContent
                 categories={CATEGORY_LIST}
                 documents={documentLibrary}
+                defaultOpenCategories={['Finance']}
                 onLinkClick={() => {
                   setIsMegaMenuOpen(false);
                   setIsMobileMenuOpen(false);
