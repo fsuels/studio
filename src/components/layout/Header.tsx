@@ -360,7 +360,7 @@ const Header = React.memo(function Header() {
       </div>
 
       {/* Mobile menu content */}
-      {isMobileMenuOpen && mounted && (
+      {isMobileMenuOpen && mounted && (<>
         <div className="md:hidden absolute top-14 left-0 right-0 bg-background shadow-lg border-t border-border p-4 space-y-4 animate-fade-in z-[60] max-h-[calc(100vh-3.5rem)] overflow-y-auto">
           {/* Mobile search */}
           <form
@@ -547,7 +547,18 @@ const Header = React.memo(function Header() {
             )}
           </div>
         </div>
-      )}
+        {!isLoggedIn && (
+          <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-border px-4 py-3 z-[80] md:hidden">
+            <Link
+              href={`/${clientLocale}/signup`}
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="block w-full text-center bg-primary text-white font-semibold py-3 rounded-md shadow-md hover:bg-primary/90 transition"
+            >
+              Start For Free
+            </Link>
+          </div>
+        )}
+      </>)}
     </header>
   );
 });
