@@ -36,10 +36,10 @@ const MemoizedDocLink = React.memo(function DocLink({
 
   return (
     <li className="md:px-0 md:py-0">
-      <div className="block w-full text-left py-3 px-4 hover:bg-muted/40 active:bg-muted/60">
+      <div className="block w-full text-left py-3.5 md:py-3 px-4 md:px-4 hover:bg-muted/40 active:bg-muted/60 min-h-[44px] md:min-h-0">
         <Link
           href={docHref}
-          className="block text-base md:text-sm text-muted-foreground hover:text-primary hover:underline transition-colors duration-150"
+          className="block text-base md:text-sm text-foreground md:text-muted-foreground font-medium md:font-normal hover:text-primary hover:underline transition-colors duration-150"
           onClick={onClick}
         >
           {t(docName, { defaultValue: docName })}
