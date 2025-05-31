@@ -47,13 +47,6 @@ const TopDocsChips = React.memo(function TopDocsChips() {
     setIsLoading(false);
   }, [isHydrated]);
 
-  // Prefetch document pages for snappier navigation
-  useEffect(() => {
-    if (!isHydrated || topDocs.length === 0) return;
-    topDocs.forEach((doc) => {
-      router.prefetch(`/${locale}/docs/${doc.id}`);
-    });
-  }, [isHydrated, topDocs, router, locale]);
 
   const handleExploreAll = () => {
     const workflowStartElement = document.getElementById('workflow-start');

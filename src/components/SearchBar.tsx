@@ -135,9 +135,7 @@ const SearchBar = React.memo(function SearchBar() {
                   <button
                     type="button"
                     onClick={() => handleSuggestionClick(suggestion.id)}
-                    onMouseEnter={() =>
-                      router.prefetch(`/${locale}/docs/${suggestion.id}`)
-                    }
+                    /* Removed eager prefetch to reduce network overhead */
                     className="w-full text-left px-3 py-2.5 hover:bg-muted text-sm flex items-center gap-2"
                   >
                     <FileText className="h-4 w-4 shrink-0 text-muted-foreground" />
