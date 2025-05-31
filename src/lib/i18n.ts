@@ -35,7 +35,6 @@ if (!i18n.isInitialized) {
     })
     .catch((err) => {
       // prevent build/dev crashes if translations are missing
-      // eslint-disable-next-line no-console
       console.error('i18n init error', err);
     });
 }

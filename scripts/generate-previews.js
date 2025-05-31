@@ -1,4 +1,5 @@
 // scripts/generate-previews.js  (copy-paste over the old file)
+/* eslint-env node */
 import fs from 'fs';
 import path from 'path';
 import puppeteer from 'puppeteer';

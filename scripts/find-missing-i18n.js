@@ -1,4 +1,5 @@
 // scripts/find-missing-i18n.js
+/* eslint-env browser, node */
 // This script is intended to be imported in development mode in a client-side entry point (e.g., RootLayout or ClientProviders)
 // to attach a missingKey handler to the i18n instance.
 

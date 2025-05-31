@@ -1,3 +1,4 @@
+/* eslint-env node */
 import { initializeApp, cert } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
 import creds from '../serviceAccount.json' assert { type: 'json' };
