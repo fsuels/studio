@@ -91,29 +91,28 @@ export default function HomePageClient() {
     setIsHydrated(true);
   }, []);
 
-  // Preload dynamically imported sections once on the client
+  // Defer preloading of heavy sections until the browser is idle
   useEffect(() => {
-    // Use dynamic import to get the module and then call preload if available
-    import('@/components/landing/HowItWorks').then((mod) => {
-      (mod as PreloadableModule).default?.preload?.();
-    });
-    import('@/components/landing/TrustAndTestimonialsSection').then((mod) => {
-      (mod as PreloadableModule).default?.preload?.();
-    });
-    import('@/components/landing/GuaranteeBadge').then((mod) => {
-      (mod as PreloadableModule).GuaranteeBadge?.preload?.();
-      (mod as PreloadableModule).default?.preload?.(); // fallback for default export
-    });
-    import('@/components/TopDocsChips').then((mod) => {
-      (mod as PreloadableModule).default?.preload?.();
-    });
-    import('@/components/StickyFilterBar').then((mod) => {
-      (mod as PreloadableModule).default?.preload?.();
-    });
-    import('@/components/Step1DocumentSelector').then((mod) => {
-      (mod as PreloadableModule).Step1DocumentSelector?.preload?.();
-      (mod as PreloadableModule).default?.preload?.();
-    });
+    const preload = () => {
+      void import('@/components/landing/HowItWorks');
+      void import('@/components/landing/TrustAndTestimonialsSection');
+      void import('@/components/landing/GuaranteeBadge');
+      void import('@/components/TopDocsChips');
+      void import('@/components/StickyFilterBar');
+      void import('@/components/Step1DocumentSelector');
+    };
+
+    if (typeof window === 'undefined') return;
+
+    if ('requestIdleCallback' in window) {
+      const handle = (window as unknown as { requestIdleCallback: (cb: () => void) => number }).requestIdleCallback(preload);
+      return () => {
+        (window as unknown as { cancelIdleCallback: (id: number) => void }).cancelIdleCallback(handle);
+      };
+    }
+
+    const id = window.setTimeout(preload, 2000);
+    return () => clearTimeout(id);
   }, []);
 
   const workflowSectionId = 'workflow-start';
