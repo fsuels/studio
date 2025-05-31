@@ -23,7 +23,7 @@ import {
 } from '@/components/ui/table';
 import { track } from '@/lib/analytics';
 import { useCart } from '@/contexts/CartProvider';
-import { Car, Edit, Signature, ShieldCheck } from 'lucide-react';
+import { Edit, Signature, ShieldCheck } from 'lucide-react';
 import { BookOpen } from 'lucide-react';
 import StickyMobileCTA from '@/components/StickyMobileCTA';
 import StickyGuaranteeBar from '@/components/StickyGuaranteeBar';
