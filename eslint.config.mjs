@@ -22,7 +22,7 @@
    
 export default defineConfig([
   {
-    ignores: ['.next/**', 'public/**', 'coverage/**', '*.md', '*.json']
+    ignores: ['.next/**', 'public/**', 'coverage/**', '**/*.md', '**/*.json']
   },
   /* ───────── all JS/TS files ───────── */
   {
