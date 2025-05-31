@@ -177,10 +177,10 @@ export default function HomePageClient() {
       {/* HERO SECTION + AI assistant CTA */}
       <section className="text-center px-4 pt-12 pb-6 max-w-2xl mx-auto">
         <h1 className="text-3xl sm:text-4xl font-bold leading-tight">
-          Legal Documents in Minutes — Powered by AI
+          AI‑Powered Legal Documents in 3 Minutes
         </h1>
         <p className="mt-4 text-muted-foreground text-base sm:text-lg">
-          Describe your situation. Our AI will guide you step-by-step to the perfect legal form.
+          Describe your situation—our AI guides you to the right document instantly.
         </p>
         <div className="mt-6 flex flex-col sm:flex-row gap-3 justify-center">
           <Link href="/generate">
@@ -190,7 +190,7 @@ export default function HomePageClient() {
           </Link>
           <Link href="/demo">
             <Button size="lg" variant="outline" className="text-lg px-8 py-6">
-              🎥 See Demo
+              🎥 See 30‑Second Demo
             </Button>
           </Link>
         </div>
