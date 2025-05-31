@@ -337,11 +337,11 @@ const Header = React.memo(function Header() {
         </nav>
 
         {/* Mobile menu toggle */}
-        <div className="md:hidden ml-auto flex items-center gap-1">
+        <div className="md:hidden fixed top-4 right-4 z-50">
           <Button
-            variant="ghost"
+            variant="default"
             size="icon"
-            className="h-9 w-9 focus-visible:ring-primary focus-visible:ring-2 focus-visible:ring-offset-2"
+            className="p-2 bg-primary text-white shadow-md rounded-md focus-visible:ring-primary focus-visible:ring-2 focus-visible:ring-offset-2"
             onClick={() => setIsMobileMenuOpen((v) => !v)}
             disabled={!mounted}
             aria-label={
