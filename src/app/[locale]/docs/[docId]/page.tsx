@@ -1,8 +1,7 @@
 // src/app/[locale]/docs/[docId]/page.tsx
 // This is a Server Component that defines static paths and renders the client component.
 
-import fs from 'node:fs/promises';
-import path from 'node:path';
+import { getMarkdown } from '@/lib/markdown-cache';
 import DocPageClient from './DocPageClient';
 import { documentLibrary } from '@/lib/document-library';
 import { localizations } from '@/lib/localizations'; // Ensure this path is correct
@@ -61,30 +60,7 @@ export default async function DocPage({ params }: DocPageProps) {
   // Await a microtask to comply with Next.js dynamic param handling
   await Promise.resolve();
 
-  const filePath = path.join(
-    process.cwd(),
-    'public',
-    'templates',
-    params.locale,
-    `${params.docId}.md`,
-  );
-  let markdownContent: string | null = null;
-
-  try {
-    markdownContent = await fs.readFile(filePath, 'utf-8');
-  } catch (error: unknown) {
-    const err = error as NodeJS.ErrnoException;
-    if (err.code === 'ENOENT') {
-      console.warn(
-        `Markdown template not found for ${params.docId} in locale ${params.locale}. Path: ${filePath}`,
-      );
-    } else {
-      console.error(
-        `Error reading markdown file for ${params.docId} in locale ${params.locale}. Path: ${filePath}`,
-        err,
-      );
-    }
-  }
+  const markdownContent = await getMarkdown(params.locale, params.docId);
 
   // The `params` prop is directly available here from Next.js
   // It's then passed down to the client component.
