@@ -35,6 +35,7 @@ import { debounce } from '@/lib/debounce';
 import TrustBadges from '@/components/TrustBadges';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { cn } from '@/lib/utils';
+import ReEngagementTools from '@/components/reengagement/ReEngagementTools.client';
 
 export default function StartWizardPageClient() {
   const params = useParams();
@@ -345,6 +346,11 @@ export default function StartWizardPageClient() {
           </div>
         </div>
       </main>
+      <ReEngagementTools
+        docId={docConfig.id}
+        totalQuestions={docConfig.questions?.length || 0}
+        locale={locale}
+      />
     </FormProvider>
   );
 }
