@@ -8,11 +8,12 @@ import { documentLibrary } from '@/lib/document-library';
 import HomepageHeroSteps from '@/components/landing/HomepageHeroSteps';
 import { useToast } from '@/hooks/use-toast';
 import { Separator } from '@/components/ui/separator';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Mic, SendHorizontal } from 'lucide-react';
 import { CATEGORY_LIST } from '@/components/Step1DocumentSelector';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams, useRouter, useParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import Link from 'next/link';
 
 const LoadingSpinner = () => (
@@ -70,6 +71,7 @@ export default function HomePageClient() {
   const [globalSelectedState, setGlobalSelectedState] = useState<string>('');
   const [selectedCategoryForFilter, setSelectedCategoryForFilter] = useState<string | null>(null);
   const [selectedDocument, setSelectedDocument] = useState<LegalDocument | null>(null);
+  const [assistantQuery, setAssistantQuery] = useState('');
   const [isHydrated, setIsHydrated] = useState(false);
 
   useEffect(() => {
@@ -136,6 +138,17 @@ export default function HomePageClient() {
     [toast, t, locale, isHydrated, router],
   );
 
+  const handleAssistantSubmit = useCallback(
+    (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+      if (!isHydrated) return;
+      if (assistantQuery.trim()) {
+        router.push(`/generate?search=${encodeURIComponent(assistantQuery)}`);
+      }
+    },
+    [assistantQuery, isHydrated, router],
+  );
+
   const renderMainInteraction = () => {
     if (!isHydrated) {
       return (
@@ -183,6 +196,29 @@ export default function HomePageClient() {
         <div className="mt-4 text-sm text-gray-500">
           No account required. No subscriptions. Start free.
         </div>
+      </section>
+
+      {/* AI Assistant bar */}
+      <section className="px-4 pb-6">
+        <form
+          onSubmit={handleAssistantSubmit}
+          className="max-w-xl mx-auto flex items-center gap-2"
+        >
+          <Input
+            type="text"
+            value={assistantQuery}
+            onChange={(e) => setAssistantQuery(e.target.value)}
+            placeholder="e.g., I want to hire a freelancer"
+            aria-label="What legal help do you need?"
+            className="flex-1"
+          />
+          <Button type="button" variant="ghost" size="icon" aria-label="Voice input (coming soon)">
+            <Mic className="h-5 w-5 text-muted-foreground" />
+          </Button>
+          <Button type="submit" size="icon" aria-label="Submit query">
+            <SendHorizontal className="h-5 w-5" />
+          </Button>
+        </form>
       </section>
 
       <HomepageHeroSteps />
