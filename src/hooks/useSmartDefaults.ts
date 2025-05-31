@@ -69,7 +69,6 @@ export function useAddressAutocomplete<
           console.error(`Failed to fetch ZIP data for ${zip}:`, err),
         );
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [zip, setValue, zipFieldKey, cityFieldKey, stateFieldKey]); // watch is stable, not needed in deps
 }
 
@@ -142,6 +141,5 @@ export function useVinDecoder<TFieldValues extends FieldValues = FieldValues>(
           console.error(`Failed to fetch VIN data for ${vin}:`, err),
         );
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [vin, setValue, vinFieldKey, makeFieldKey, modelFieldKey, yearFieldKey]); // watch is stable
 }
