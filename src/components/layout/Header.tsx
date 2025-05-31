@@ -145,6 +145,13 @@ const Header = React.memo(function Header() {
   const [isMegaMenuOpen, setIsMegaMenuOpen] = useState(false);
   const [showMobileCategories, setShowMobileCategories] = useState(false);
 
+  // Auto-expand "Make Documents" accordion on initial render for mobile screens
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.innerWidth <= 768) {
+      setShowMobileCategories(true);
+    }
+  }, []);
+
   const placeholderSearch = mounted
     ? tHeader('nav.searchPlaceholder', { defaultValue: 'Search documents...' })
     : '...';
