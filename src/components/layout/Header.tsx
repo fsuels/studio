@@ -168,6 +168,27 @@ const Header = React.memo(function Header() {
           />
         </div>
 
+        {/* Mobile menu toggle */}
+        {/* This div was previously outside the container and had absolute positioning.
+            It is now inside the container and uses flex properties for alignment. */}
+        <div className="md:hidden flex items-center ml-auto">
+          <Button
+            variant="default"
+            size="icon"
+            className="p-2 bg-primary text-white shadow-md rounded-md focus-visible:ring-primary focus-visible:ring-2 focus-visible:ring-offset-2"
+            onClick={() => setIsMobileMenuOpen((v) => !v)}
+            disabled={!mounted}
+            aria-label={
+              isMobileMenuOpen
+                ? tHeader('nav.closeMenu', { defaultValue: 'Close menu' })
+                : tHeader('nav.openMenu', { defaultValue: 'Open menu' })
+            }
+          >
+            {isMobileMenuOpen ? (<CloseIcon className="h-5 w-5" />) : (<MenuIcon className="h-5 w-5" />)}
+          </Button>
+        </div>
+
+
         {/* Desktop Nav */}
         <div className="hidden md:flex flex-1 items-center justify-start">
           <Nav />
@@ -336,28 +357,6 @@ const Header = React.memo(function Header() {
               </>
             ))}
         </nav>
-
-        {/* Mobile menu toggle */}
-        <div className="md:hidden fixed top-4 right-4 z-50">
-          <Button
-            variant="default"
-            size="icon"
-            className="p-2 bg-primary text-white shadow-md rounded-md focus-visible:ring-primary focus-visible:ring-2 focus-visible:ring-offset-2"
-            onClick={() => setIsMobileMenuOpen((v) => !v)}
-            disabled={!mounted}
-            aria-label={
-              isMobileMenuOpen
-                ? tHeader('nav.closeMenu', { defaultValue: 'Close menu' })
-                : tHeader('nav.openMenu', { defaultValue: 'Open menu' })
-            }
-          >
-            {isMobileMenuOpen ? (
-              <CloseIcon className="h-5 w-5" />
-            ) : (
-              <MenuIcon className="h-5 w-5" />
-            )}
-          </Button>
-        </div>
       </div>
 
       {/* Mobile menu content */}
