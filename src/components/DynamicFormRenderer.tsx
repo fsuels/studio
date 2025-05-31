@@ -144,7 +144,7 @@ export default function DynamicFormRenderer({
   const analyzeThenSubmit = async () => {
     if (isReadOnly || isLoading || hasSubmitted) return;
 
-    const missing = schema.some((f) => f.required && !Boolean(values[f.id]));
+    const missing = schema.some((f) => f.required && !values[f.id]);
     if (missing) {
       alert(t('dynamicForm.errorMissingRequired'));
       return;
