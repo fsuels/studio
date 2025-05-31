@@ -54,8 +54,23 @@ export default defineConfig([
      /* TypeScript rules */
      tseslint.configs.recommended,
    
-     /* React flat preset (after TS to avoid overlap) */
-     pluginReact.configs.flat.recommended,
+    /* React flat preset (after TS to avoid overlap) */
+    pluginReact.configs.flat.recommended,
+
+    /* Override React rules from the preset */
+    {
+      files: ['**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
+      rules: {
+        'react/prop-types': 'off',
+        'react/react-in-jsx-scope': 'off'
+      }
+    },
+
+    /* Node environment for scripts */
+    {
+      files: ['scripts/**'],
+      languageOptions: { globals: globals.node }
+    },
    
      /* Import guard for big documents pages */
      {

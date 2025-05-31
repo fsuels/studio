@@ -13,7 +13,6 @@ import {
   Loader2,
   Phone,
   Clock,
-  MessageSquare,
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { Logo } from '@/components/layout/Logo';
@@ -50,7 +49,6 @@ export const Footer = React.memo(function Footer() {
   };
   const locale = (params.locale as 'en' | 'es') || 'en';
   const [isHydrated, setIsHydrated] = useState(false);
-  const [intercomLoaded, setIntercomLoaded] = useState(false);
 
   useEffect(() => {
     setIsHydrated(true);
@@ -78,35 +76,6 @@ export const Footer = React.memo(function Footer() {
     });
     setEmail('');
     setIsLoading(false);
-  };
-
-  type IntercomWindow = Window & { Intercom?: (_cmd: string) => void };
-
-  const loadIntercom = () => {
-    const win: IntercomWindow = window as IntercomWindow;
-    if (intercomLoaded) {
-      if (win.Intercom) {
-        win.Intercom('show');
-      }
-      return;
-    }
-
-    const appId = process.env.NEXT_PUBLIC_INTERCOM_APP_ID;
-    if (!appId) {
-      // console.error('loadIntercom: NEXT_PUBLIC_INTERCOM_APP_ID not set.');
-      return;
-    }
-
-    const script = document.createElement('script');
-    script.src = `https://widget.intercom.io/widget/${appId}`;
-    script.defer = true;
-    script.onload = () => {
-      setIntercomLoaded(true);
-      if (win.Intercom) {
-        win.Intercom('show');
-      }
-    };
-    document.body.appendChild(script);
   };
 
   const currentYear = new Date().getFullYear();
