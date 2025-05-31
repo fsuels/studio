@@ -62,18 +62,13 @@ export default function DashboardPage() {
   const [activeTab, setActiveTab] = useState<
     'documents' | 'payments' | 'profile'
   >('documents');
-  const [isLoading, setIsLoading] = useState(true);
   const [isHydrated, setIsHydrated] = useState(false);
 
   useEffect(() => {
     setIsHydrated(true);
-    // Simulate data fetching
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 1000);
   }, []);
 
-  if (!isHydrated || isLoading) {
+  if (!isHydrated) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-background">
         <Loader2 className="h-12 w-12 animate-spin text-primary" />
