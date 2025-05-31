@@ -4,9 +4,17 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import { useTranslation } from 'react-i18next';
 import { useParams, useRouter } from 'next/navigation';
-import { Loader2, FileText } from 'lucide-react';
+import {
+  Loader2,
+  FileText,
+  Folder,
+  Home,
+  Users,
+  type LucideIcon,
+} from 'lucide-react';
 import { documentLibrary, type LegalDocument } from '@/lib/document-library';
 
 // Placeholder data for top docs - in a real app, this would come from Firestore
@@ -31,6 +39,16 @@ const TopDocsChips = React.memo(function TopDocsChips() {
   const [topDocs, setTopDocs] = useState<LegalDocument[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isHydrated, setIsHydrated] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState<string>('All');
+  const badges: Record<string, 'new' | 'updated'> = {
+    powerOfAttorney: 'new',
+    leaseAgreement: 'updated',
+  };
+  const categoryIcons: Record<string, LucideIcon> = {
+    Finance: Folder,
+    'Real Estate': Home,
+    Family: Users,
+  };
 
   useEffect(() => {
     setIsHydrated(true);
@@ -46,6 +64,16 @@ const TopDocsChips = React.memo(function TopDocsChips() {
     setTopDocs(resolvedTopDocs);
     setIsLoading(false);
   }, [isHydrated]);
+
+
+  const categories = React.useMemo(
+    () => Array.from(new Set(topDocs.map((d) => d.category))).sort(),
+    [topDocs],
+  );
+  const filteredDocs =
+    selectedCategory === 'All'
+      ? topDocs
+      : topDocs.filter((d) => d.category === selectedCategory);
 
 
   const handleExploreAll = () => {
@@ -81,26 +109,60 @@ const TopDocsChips = React.memo(function TopDocsChips() {
           defaultValue: 'Popular Legal Documents',
         })}
       </h2>
-      <div className="flex flex-wrap justify-center items-center gap-2 md:gap-3">
-        {topDocs.map((doc) => (
+      {categories.length > 1 && (
+        <div className="mb-4 flex flex-wrap justify-center gap-2">
           <Button
-            key={doc.id}
-            variant="outline"
             size="sm"
-            asChild
-            className="bg-card hover:bg-muted border-border text-card-foreground hover:text-primary transition-colors shadow-sm px-4 py-2 h-auto text-xs sm:text-sm"
+            variant={selectedCategory === 'All' ? 'default' : 'outline'}
+            onClick={() => setSelectedCategory('All')}
           >
-            <Link href={`/${locale}/docs/${doc.id}`} prefetch>
-              {React.createElement(FileText, {
-                className: 'h-4 w-4 mr-2 text-primary/80 opacity-70',
-              })}
-              {doc.translations?.[locale as 'en' | 'es']?.name ||
-                doc.translations?.en?.name ||
-                doc.name ||
-                doc.id}
-            </Link>
+            All
           </Button>
-        ))}
+          {categories.map((cat) => (
+            <Button
+              key={cat}
+              size="sm"
+              variant={selectedCategory === cat ? 'default' : 'outline'}
+              onClick={() => setSelectedCategory(cat)}
+            >
+              {cat}
+            </Button>
+          ))}
+        </div>
+      )}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+        {filteredDocs.map((doc) => {
+          const Icon = categoryIcons[doc.category] || FileText;
+          const badge = badges[doc.id];
+          return (
+            <Link
+              key={doc.id}
+              href={`/${locale}/docs/${doc.id}`}
+              prefetch
+              className="p-4 border rounded-lg bg-card hover:bg-muted transition-colors shadow-sm"
+            >
+              <div className="flex items-start justify-between">
+                <div className="flex items-center gap-2">
+                  {React.createElement(Icon, {
+                    className: 'h-4 w-4 text-primary/80',
+                  })}
+                  <span className="text-sm font-medium">
+                    {doc.translations?.[locale as 'en' | 'es']?.name ||
+                      doc.translations?.en?.name ||
+                      doc.name ||
+                      doc.id}
+                  </span>
+                </div>
+                {badge && (
+                  <Badge variant="secondary">
+                    {badge === 'new' ? '🔥 New' : '🆕 Updated'}
+                  </Badge>
+                )}
+              </div>
+              <p className="text-xs text-muted-foreground mt-2">~3 min</p>
+            </Link>
+          );
+        })}
       </div>
       <div className="text-center mt-6">
         <Button
