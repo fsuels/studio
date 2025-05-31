@@ -164,6 +164,17 @@ const MemoizedDocumentCard = React.memo(function DocumentCard({
   placeholderRequiresNotarization: string;
   placeholderCanBeRecorded: string;
 }) {
+  const localizedName =
+    i18nLanguage === 'es'
+      ? doc.translations?.es?.name || doc.name_es || doc.name || ''
+      : doc.translations?.en?.name || doc.name || '';
+  const localizedDescription =
+    i18nLanguage === 'es'
+      ? doc.translations?.es?.description ||
+        doc.description_es ||
+        doc.description ||
+        ''
+      : doc.translations?.en?.description || doc.description || '';
   return (
     <Card
       onClick={onSelect}
@@ -183,16 +194,12 @@ const MemoizedDocumentCard = React.memo(function DocumentCard({
     >
       <CardHeader className="pb-2 pt-4 px-4">
         <CardTitle className="text-base font-semibold text-card-foreground">
-          {i18nLanguage === 'es' && doc.name_es
-            ? t(doc.name_es, { defaultValue: doc.name_es })
-            : t(doc.name ?? '', { defaultValue: doc.name ?? '' })}
+          {t(localizedName, { defaultValue: localizedName })}
         </CardTitle>
       </CardHeader>
       <CardContent className="text-xs text-muted-foreground flex-grow px-4">
-        {i18nLanguage === 'es' && doc.description_es
-          ? t(doc.description_es, { defaultValue: doc.description_es })
-          : t(doc.description ?? '', { defaultValue: doc.description ?? '' }) ||
-            placeholderNoDescription}
+        {t(localizedDescription, { defaultValue: localizedDescription }) ||
+          placeholderNoDescription}
       </CardContent>
       <CardFooter className="pt-2 pb-3 px-4 text-xs text-muted-foreground flex justify-between items-center border-t border-border mt-auto">
         <span>💲{doc.basePrice}</span>
@@ -235,9 +242,17 @@ const MemoizedTopDocChip = React.memo(function TopDocChip({
       {doc.icon &&
         React.createElement(doc.icon, { className: 'h-4 w-4 text-primary/80' })}
       <span className="font-medium text-card-foreground text-xs">
-        {i18nLanguage === 'es' && doc.name_es
-          ? t(doc.name_es, { defaultValue: doc.name_es })
-          : t(doc.name ?? '', { defaultValue: doc.name ?? '' })}
+        {t(
+          i18nLanguage === 'es'
+            ? doc.translations?.es?.name || doc.name_es || doc.name || ''
+            : doc.translations?.en?.name || doc.name || '',
+          {
+            defaultValue:
+              i18nLanguage === 'es'
+                ? doc.translations?.es?.name || doc.name_es || doc.name || ''
+                : doc.translations?.en?.name || doc.name || '',
+          },
+        )}
       </span>
     </Button>
   );
@@ -348,20 +363,25 @@ const Step1DocumentSelector = React.memo(function Step1DocumentSelector({
             alias.toLowerCase().includes(lowerGlobalSearch),
           ) ||
           (languageSupportsSpanish(doc.languageSupport) &&
-            doc.aliases_es?.some((alias) =>
+            doc.translations?.es?.aliases?.some((alias) =>
               alias.toLowerCase().includes(lowerGlobalSearch),
             )) ||
           (languageSupportsSpanish(doc.languageSupport) &&
-            doc.name_es &&
-            t(doc.name_es, { defaultValue: doc.name_es })
+            (doc.translations?.es?.name || doc.name_es) &&
+            t(doc.translations?.es?.name || doc.name_es || '', {
+              defaultValue: doc.translations?.es?.name || doc.name_es || '',
+            })
               .toLowerCase()
               .includes(lowerGlobalSearch)) ||
           t(doc.description ?? '', { defaultValue: doc.description ?? '' })
             .toLowerCase()
             .includes(lowerGlobalSearch) ||
           (languageSupportsSpanish(doc.languageSupport) &&
-            doc.description_es &&
-            t(doc.description_es, { defaultValue: doc.description_es })
+            (doc.translations?.es?.description || doc.description_es) &&
+            t(doc.translations?.es?.description || doc.description_es || '', {
+              defaultValue:
+                doc.translations?.es?.description || doc.description_es || '',
+            })
               .toLowerCase()
               .includes(lowerGlobalSearch)),
       );
@@ -381,20 +401,29 @@ const Step1DocumentSelector = React.memo(function Step1DocumentSelector({
               alias.toLowerCase().includes(lowerDocSearch),
             ) ||
             (languageSupportsSpanish(doc.languageSupport) &&
-              doc.aliases_es?.some((alias) =>
+              doc.translations?.es?.aliases?.some((alias) =>
                 alias.toLowerCase().includes(lowerDocSearch),
               )) ||
             (languageSupportsSpanish(doc.languageSupport) &&
-              doc.name_es &&
-              t(doc.name_es, { defaultValue: doc.name_es })
+              (doc.translations?.es?.name || doc.name_es) &&
+              t(doc.translations?.es?.name || doc.name_es || '', {
+                defaultValue:
+                  doc.translations?.es?.name || doc.name_es || '',
+              })
                 .toLowerCase()
                 .includes(lowerDocSearch)) ||
             t(doc.description ?? '', { defaultValue: doc.description ?? '' })
               .toLowerCase()
               .includes(lowerDocSearch) ||
             (languageSupportsSpanish(doc.languageSupport) &&
-              doc.description_es &&
-              t(doc.description_es, { defaultValue: doc.description_es })
+              (doc.translations?.es?.description || doc.description_es) &&
+              t(
+                doc.translations?.es?.description || doc.description_es || '',
+                {
+                  defaultValue:
+                    doc.translations?.es?.description || doc.description_es || '',
+                },
+              )
                 .toLowerCase()
                 .includes(lowerDocSearch)),
         );

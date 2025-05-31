@@ -4,14 +4,24 @@ import type { LegalDocument } from '@/types/documents';
 export const nonCompeteAgreement: LegalDocument = {
   id: 'non-compete-agreement',
   name: 'Non-Compete Agreement',
-  name_es: 'Acuerdo de No Competencia',
   category: 'Business',
   description:
     'Restrict an employee or contractor from competing after termination.',
-  description_es:
-    'Restringir a un empleado o contratista de competir después de la terminación.',
   aliases: ['restrict competition', 'former employee', 'noncompete'],
-  aliases_es: ['restringir competencia', 'ex empleado', 'no competencia'],
+  translations: {
+    en: {
+      name: 'Non-Compete Agreement',
+      description:
+        'Restrict an employee or contractor from competing after termination.',
+      aliases: ['restrict competition', 'former employee', 'noncompete'],
+    },
+    es: {
+      name: 'Acuerdo de No Competencia',
+      description:
+        'Restringir a un empleado o contratista de competir después de la terminación.',
+      aliases: ['restringir competencia', 'ex empleado', 'no competencia'],
+    },
+  },
   languageSupport: ['en', 'es'],
   requiresNotarization: false,
   canBeRecorded: false,

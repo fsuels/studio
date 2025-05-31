@@ -23,7 +23,9 @@ export default function WizardLayout({
   const { t } = useTranslation('common');
 
   const documentDisplayName =
-    locale === 'es' && doc.name_es ? doc.name_es : doc.name;
+    locale === 'es'
+      ? doc.translations?.es?.name || doc.name
+      : doc.name;
 
   // This component now acts more as a structural wrapper if still needed.
   // The core form and preview logic is expected to be handled by its children,

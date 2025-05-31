@@ -4,20 +4,28 @@ import { usStates } from '@/lib/document-library/utils';
 
 export const evictionNotice: LegalDocument = {
   id: 'eviction-notice',
-  // TODO: Refactor to use translations structure
   name: 'Eviction Notice',
-  name_es: 'Aviso de Desalojo',
   category: 'Real Estate',
   description: 'Formal notice to a tenant to vacate the property.',
-  description_es:
-    'Notificación formal a un inquilino para desalojar la propiedad.',
   aliases: ['remove tenant', 'late rent', 'kick out', 'notice to quit'],
-  aliases_es: [
-    'desalojar inquilino',
-    'renta atrasada',
-    'echar',
-    'notificación de desalojo',
-  ],
+  translations: {
+    en: {
+      name: 'Eviction Notice',
+      description: 'Formal notice to a tenant to vacate the property.',
+      aliases: ['remove tenant', 'late rent', 'kick out', 'notice to quit'],
+    },
+    es: {
+      name: 'Aviso de Desalojo',
+      description:
+        'Notificación formal a un inquilino para desalojar la propiedad.',
+      aliases: [
+        'desalojar inquilino',
+        'renta atrasada',
+        'echar',
+        'notificación de desalojo',
+      ],
+    },
+  },
   languageSupport: ['en', 'es'],
   requiresNotarization: false,
   canBeRecorded: false,

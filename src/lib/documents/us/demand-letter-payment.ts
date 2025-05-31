@@ -3,14 +3,22 @@ import type { LegalDocument } from '@/types/documents';
 
 export const demandLetterPayment: LegalDocument = {
   id: 'demand-letter-payment',
-  // TODO: Refactor to use translations structure
   name: 'Demand Letter (Payment)',
-  name_es: 'Carta de Reclamación (Pago)',
   category: 'Finance',
   description: 'Formally request payment that is overdue.',
-  description_es: 'Solicitar formalmente un pago atrasado.',
   aliases: ['request payment', 'owe money', 'legal demand'],
-  aliases_es: ['solicitar pago', 'deber dinero', 'demanda legal'],
+  translations: {
+    en: {
+      name: 'Demand Letter (Payment)',
+      description: 'Formally request payment that is overdue.',
+      aliases: ['request payment', 'owe money', 'legal demand'],
+    },
+    es: {
+      name: 'Carta de Reclamación (Pago)',
+      description: 'Solicitar formalmente un pago atrasado.',
+      aliases: ['solicitar pago', 'deber dinero', 'demanda legal'],
+    },
+  },
   languageSupport: ['en', 'es'],
   requiresNotarization: false,
   canBeRecorded: false,

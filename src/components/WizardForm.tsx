@@ -524,13 +524,11 @@ export default function WizardForm({
             documentType:
               locale === 'es'
                 ? doc.translations?.es?.name ||
-                  doc.name_es ||
                   doc.translations?.en?.name ||
                   doc.name
                 : doc.translations?.en?.name ||
                   doc.name ||
-                  doc.translations?.es?.name ||
-                  doc.name_es,
+                  doc.translations?.es?.name,
           })}
         </p>
       </div>
@@ -647,8 +645,8 @@ export default function WizardForm({
         clientSecret={paymentClientSecret}
         documentName={
           locale === 'es'
-            ? doc.translations?.es?.name || doc.name_es || doc.name
-            : doc.translations?.en?.name || doc.name || doc.name_es
+            ? doc.translations?.es?.name || doc.translations?.en?.name || doc.name
+            : doc.translations?.en?.name || doc.name
         }
         priceCents={(doc.basePrice || 35) * 100}
         onSuccess={handlePaymentSuccess}

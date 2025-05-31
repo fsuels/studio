@@ -4,15 +4,23 @@ import { usStates } from '@/lib/document-library/utils';
 
 export const lastWillTestament: LegalDocument = {
   id: 'last-will-testament',
-  // TODO: Refactor to use translations structure
   name: 'Last Will and Testament',
-  name_es: 'Última Voluntad y Testamento',
   category: 'Estate Planning',
   description: 'Specify how your assets should be distributed after death.',
-  description_es:
-    'Especificar cómo deben distribuirse sus bienes después de la muerte.',
   aliases: ['will', 'inheritance', 'distribute assets'],
-  aliases_es: ['testamento', 'herencia', 'distribuir bienes'],
+  translations: {
+    en: {
+      name: 'Last Will and Testament',
+      description: 'Specify how your assets should be distributed after death.',
+      aliases: ['will', 'inheritance', 'distribute assets'],
+    },
+    es: {
+      name: 'Última Voluntad y Testamento',
+      description:
+        'Especificar cómo deben distribuirse sus bienes después de la muerte.',
+      aliases: ['testamento', 'herencia', 'distribuir bienes'],
+    },
+  },
   languageSupport: ['en', 'es'],
   requiresNotarization: true,
   canBeRecorded: false,

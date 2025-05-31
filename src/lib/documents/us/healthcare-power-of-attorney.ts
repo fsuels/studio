@@ -5,25 +5,38 @@ import { usStates } from '@/lib/document-library/utils';
 
 export const healthcarePowerOfAttorney: LegalDocument = {
   id: 'healthcare-power-of-attorney',
-  // TODO: Refactor to use translations structure
   name: 'Healthcare Power of Attorney',
-  name_es: 'Poder Notarial para Atención Médica',
   category: 'Personal',
   description: 'Appoint an agent to make healthcare decisions if you cannot.',
-  description_es:
-    'Nombrar un agente para tomar decisiones de atención médica si usted no puede.',
   aliases: [
     'medical poa',
     'healthcare proxy',
     'appoint agent for health',
     'medical decisions',
   ],
-  aliases_es: [
-    'poder médico',
-    'proxy de salud',
-    'designar agente de salud',
-    'decisiones médicas',
-  ],
+  translations: {
+    en: {
+      name: 'Healthcare Power of Attorney',
+      description: 'Appoint an agent to make healthcare decisions if you cannot.',
+      aliases: [
+        'medical poa',
+        'healthcare proxy',
+        'appoint agent for health',
+        'medical decisions',
+      ],
+    },
+    es: {
+      name: 'Poder Notarial para Atención Médica',
+      description:
+        'Nombrar un agente para tomar decisiones de atención médica si usted no puede.',
+      aliases: [
+        'poder médico',
+        'proxy de salud',
+        'designar agente de salud',
+        'decisiones médicas',
+      ],
+    },
+  },
   languageSupport: ['en', 'es'],
   requiresNotarization: true,
   canBeRecorded: false,

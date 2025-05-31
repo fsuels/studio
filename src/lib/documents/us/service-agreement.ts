@@ -5,17 +5,26 @@ import { usStates } from '@/lib/document-library/utils';
 export const serviceAgreement: LegalDocument = {
   id: 'service-agreement',
   name: 'Service Agreement',
-  name_es: 'Acuerdo de Servicios',
   category: 'Business',
   description: 'Outline terms for providing or receiving ongoing services.',
-  description_es:
-    'Esbozar términos para proporcionar o recibir servicios continuos.',
   aliases: ['hire services', 'service provider', 'payment terms'],
-  aliases_es: [
-    'contratar servicios',
-    'proveedor de servicios',
-    'términos de pago',
-  ],
+  translations: {
+    en: {
+      name: 'Service Agreement',
+      description: 'Outline terms for providing or receiving ongoing services.',
+      aliases: ['hire services', 'service provider', 'payment terms'],
+    },
+    es: {
+      name: 'Acuerdo de Servicios',
+      description:
+        'Esbozar términos para proporcionar o recibir servicios continuos.',
+      aliases: [
+        'contratar servicios',
+        'proveedor de servicios',
+        'términos de pago',
+      ],
+    },
+  },
   languageSupport: ['en', 'es'],
   requiresNotarization: false,
   canBeRecorded: false,
