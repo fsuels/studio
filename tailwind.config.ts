@@ -73,6 +73,8 @@ const config: Config = {
         'brand-green': '#22c55e',
         'brand-slate': '#0f172a',
         'brand-sky': '#e0f2fe',
+        'make-docs-green': '#008466',
+        'make-docs-green-hover': '#00664e',
       },
 
       maxWidth: {
