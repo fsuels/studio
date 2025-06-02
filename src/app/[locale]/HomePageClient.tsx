@@ -175,27 +175,35 @@ export default function HomePageClient() {
       <AnnouncementBar />
 
       {/* HERO SECTION + AI assistant CTA */}
-      <section className="text-center px-4 pt-12 pb-6 max-w-2xl mx-auto">
-        <h1 className="text-3xl sm:text-4xl font-bold leading-tight">
-          AI‑Powered Legal Documents in 3 Minutes
-        </h1>
-        <p className="mt-4 text-muted-foreground text-base sm:text-lg">
-          Describe your situation—our AI guides you to the right document instantly.
-        </p>
-        <div className="mt-6 flex flex-col sm:flex-row gap-3 justify-center">
-          <Link href="/generate">
-            <Button size="lg" className="text-lg px-8 py-6">
-              🚀 Start My Document
-            </Button>
-          </Link>
-          <Link href="/demo">
-            <Button size="lg" variant="outline" className="text-lg px-8 py-6">
-              🎥 See 30‑Second Demo
-            </Button>
-          </Link>
-        </div>
-        <div className="mt-4 text-sm text-gray-500">
-          No account required. No subscriptions. Start free.
+      <section
+        className="relative overflow-hidden bg-gradient-to-r from-[#E0F7F5] to-[#FFFFFF] bg-no-repeat bg-cover pt-20 pb-16"
+        style={{ backgroundPosition: 'left center' }}
+      >
+        <div className="container mx-auto px-4 flex flex-col lg:flex-row items-center gap-8">
+          <div className="text-center lg:text-left max-w-2xl mx-auto">
+            <h1 className="text-3xl sm:text-4xl font-bold leading-tight">
+              AI‑Powered Legal Documents in 3 Minutes
+            </h1>
+            <p className="mt-4 text-muted-foreground text-base sm:text-lg">
+              Describe your situation—our AI guides you to the right document instantly.
+            </p>
+            <div className="mt-6 flex flex-col sm:flex-row gap-3 lg:justify-start justify-center">
+              <Link href="/generate">
+                <Button size="lg" className="text-lg px-8 py-6">
+                  🚀 Start My Document
+                </Button>
+              </Link>
+              <Link href="/demo">
+                <Button size="lg" variant="outline" className="text-lg px-8 py-6">
+                  🎥 See 30‑Second Demo
+                </Button>
+              </Link>
+            </div>
+            <div className="mt-4 text-sm text-gray-500">
+              No account required. No subscriptions. Start free.
+            </div>
+          </div>
+          {/* Decorative pattern or SVG could be placed here */}
         </div>
       </section>
 
