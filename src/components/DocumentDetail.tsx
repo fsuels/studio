@@ -1,7 +1,7 @@
 // src/components/DocumentDetail.tsx
 'use client';
 
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useState, useMemo, Children, isValidElement } from 'react';
 // Lazy load react-markdown to reduce initial bundle size
 const ReactMarkdown = React.lazy(() => import('react-markdown'));
 import { useTranslation } from 'react-i18next';
@@ -10,6 +10,15 @@ import { Loader2, AlertTriangle } from 'lucide-react';
 import Image from 'next/image';
 import AutoImage from './AutoImage';
 import { cn } from '@/lib/utils';
+import { ClauseTooltip } from '@/components/ClauseTooltip';
+
+function extractText(children: React.ReactNode): string {
+  return Children.toArray(children).reduce((acc, child) => {
+    if (typeof child === 'string') return acc + child;
+    if (isValidElement(child)) return acc + extractText(child.props.children);
+    return acc;
+  }, '');
+}
 
 export interface DocumentDetailProps {
   docId: string;
@@ -29,7 +38,7 @@ const DocumentDetail = React.memo(function DocumentDetail({
   const [isLoading, setIsLoading] = useState(!initialMarkdown); // If no initial markdown, consider it loading (for fallback/image)
   const [error, setError] = useState<string | null>(null); // Error if initialMarkdown is null/undefined and no docConfig?
   const [isHydrated, setIsHydrated] = useState(false);
-  const [remarkGfmPlugin, setRemarkGfmPlugin] = useState<any | null>(null);
+  const [remarkGfmPlugin, setRemarkGfmPlugin] = useState<unknown | null>(null);
 
   const docConfig = useMemo(
     () => documentLibrary.find((d: LegalDocument) => d.id === docId),
@@ -187,13 +196,25 @@ const DocumentDetail = React.memo(function DocumentDetail({
             <ReactMarkdown
               remarkPlugins={remarkGfmPlugin ? [remarkGfmPlugin] : []}
               components={{
-                p: (props) => <p {...props} className="select-none" />,
+                p: ({ node, ...props }) => (
+                  <ClauseTooltip
+                    id={`p-${node.position?.start.offset ?? Math.random()}`}
+                    text={extractText(props.children)}
+                  >
+                    <p {...props} className="select-none" />
+                  </ClauseTooltip>
+                ),
+                li: ({ node, ...props }) => (
+                  <ClauseTooltip
+                    id={`li-${node.position?.start.offset ?? Math.random()}`}
+                    text={extractText(props.children)}
+                  >
+                    <li {...props} />
+                  </ClauseTooltip>
+                ),
                 h1: (props) => <h1 {...props} className="text-center" />,
                 // FIXED: ensure markdown images include dimensions
-                img: ({
-                  src = '',
-                  ...rest
-                }: React.ImgHTMLAttributes<HTMLImageElement>) => (
+                img: ({ src = '', ...rest }: React.ImgHTMLAttributes<HTMLImageElement>) => (
                   <AutoImage src={src} {...rest} className="mx-auto" />
                 ),
               }}

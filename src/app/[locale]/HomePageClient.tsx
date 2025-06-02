@@ -8,14 +8,15 @@ import { documentLibrary } from '@/lib/document-library';
 import HomepageHeroSteps from '@/components/landing/HomepageHeroSteps';
 import { useToast } from '@/hooks/use-toast';
 import { Separator } from '@/components/ui/separator';
-import { Loader2, Mic, SendHorizontal } from 'lucide-react';
+import { Loader2, ShieldCheck, Globe, Users } from 'lucide-react';
 import { CATEGORY_LIST } from '@/components/Step1DocumentSelector';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams, useRouter, useParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import Link from 'next/link';
 import PersonalizationBlock from '@/components/PersonalizationBlock';
+import AutoImage from '@/components/AutoImage';
+import SmartAssistantBar from '@/components/SmartAssistantBar';
+import LiveActivityFeed from '@/components/landing/LiveActivityFeed';
 
 const LoadingSpinner = () => (
   <div className="flex justify-center items-center h-32">
@@ -72,7 +73,6 @@ export default function HomePageClient() {
   const [globalSelectedState, setGlobalSelectedState] = useState<string>('');
   const [selectedCategoryForFilter, setSelectedCategoryForFilter] = useState<string | null>(null);
   const [selectedDocument, setSelectedDocument] = useState<LegalDocument | null>(null);
-  const [assistantQuery, setAssistantQuery] = useState('');
   const [isHydrated, setIsHydrated] = useState(false);
 
   useEffect(() => {
@@ -139,16 +139,6 @@ export default function HomePageClient() {
     [toast, t, locale, isHydrated, router],
   );
 
-  const handleAssistantSubmit = useCallback(
-    (e: React.FormEvent<HTMLFormElement>) => {
-      e.preventDefault();
-      if (!isHydrated) return;
-      if (assistantQuery.trim()) {
-        router.push(`/generate?search=${encodeURIComponent(assistantQuery)}`);
-      }
-    },
-    [assistantQuery, isHydrated, router],
-  );
 
   const renderMainInteraction = () => {
     if (!isHydrated) {
@@ -174,52 +164,49 @@ export default function HomePageClient() {
     <>
       <AnnouncementBar />
 
-      {/* HERO SECTION + AI assistant CTA */}
-      <section className="text-center px-4 pt-12 pb-6 max-w-2xl mx-auto">
-        <h1 className="text-3xl sm:text-4xl font-bold leading-tight">
-          AI‑Powered Legal Documents in 3 Minutes
-        </h1>
-        <p className="mt-4 text-muted-foreground text-base sm:text-lg">
-          Describe your situation—our AI guides you to the right document instantly.
-        </p>
-        <div className="mt-6 flex flex-col sm:flex-row gap-3 justify-center">
-          <Link href="/generate">
-            <Button size="lg" className="text-lg px-8 py-6">
-              🚀 Start My Document
-            </Button>
-          </Link>
-          <Link href="/demo">
-            <Button size="lg" variant="outline" className="text-lg px-8 py-6">
-              🎥 See 30‑Second Demo
-            </Button>
-          </Link>
+      {/* HERO SECTION */}
+      <section className="px-4 pt-12 pb-12 lg:py-24">
+        <div className="mx-auto max-w-6xl lg:flex lg:items-center">
+          <div className="lg:w-1/2 lg:pr-8">
+            <h1 className="text-4xl lg:text-5xl font-bold leading-tight text-foreground">
+              AI-Powered Legal Documents in <span className="text-primary">3 Minutes</span>
+            </h1>
+            <p className="mt-4 text-lg text-muted-foreground">
+              Describe your situation—our AI guides you to the right document instantly.
+            </p>
+            <SmartAssistantBar />
+            <div className="mt-6 flex gap-4">
+              <Button className="bg-primary text-white font-medium px-6 py-2 rounded-lg shadow hover:bg-primary/90 transition">
+                Start for Free
+              </Button>
+              <Button variant="outline" className="border border-primary text-primary font-medium px-6 py-2 rounded-lg hover:bg-primary/10 transition">
+                See 30-Second Demo
+              </Button>
+            </div>
+            <div className="mt-4 flex items-center gap-6 text-xs text-muted-foreground">
+              <div className="flex items-center gap-1">
+                <ShieldCheck className="h-4 w-4 text-primary" />
+                <span>ISO 27001</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <ShieldCheck className="h-4 w-4 text-primary" />
+                <span>SOC 2 Type II</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <Globe className="h-4 w-4 text-primary" />
+                <span>GDPR Compliant</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <Users className="h-4 w-4 text-primary" />
+                <span>Trusted by 4M+ Users</span>
+              </div>
+            </div>
+            <LiveActivityFeed />
+          </div>
+          <div className="hidden lg:block w-1/2 h-96 relative">
+            <AutoImage src="/images/hero-placeholder.svg" alt="" className="object-cover w-full h-full" />
+          </div>
         </div>
-        <div className="mt-4 text-sm text-gray-500">
-          No account required. No subscriptions. Start free.
-        </div>
-      </section>
-
-      {/* AI Assistant bar */}
-      <section className="px-4 pb-6">
-        <form
-          onSubmit={handleAssistantSubmit}
-          className="max-w-xl mx-auto flex items-center gap-2"
-        >
-          <Input
-            type="text"
-            value={assistantQuery}
-            onChange={(e) => setAssistantQuery(e.target.value)}
-            placeholder="e.g., I want to hire a freelancer"
-            aria-label="What legal help do you need?"
-            className="flex-1"
-          />
-          <Button type="button" variant="ghost" size="icon" aria-label="Voice input (coming soon)">
-            <Mic className="h-5 w-5 text-muted-foreground" />
-          </Button>
-          <Button type="submit" size="icon" aria-label="Submit query">
-            <SendHorizontal className="h-5 w-5" />
-          </Button>
-        </form>
       </section>
 
       <HomepageHeroSteps />
