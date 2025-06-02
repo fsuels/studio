@@ -158,9 +158,10 @@ const Header = React.memo(function Header() {
     : '...';
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 overflow-visible">
-      <div className="container flex h-14 items-center px-4 md:px-6">
-        <div className="mr-auto md:mr-4 flex items-center">
+    <>
+      <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 overflow-visible">
+        <div className="container flex h-14 items-center px-4 md:px-6">
+          <div className="mr-auto md:mr-4 flex items-center">
           <Logo
             wrapperClassName="items-center self-center mr-2 md:mr-4"
             svgClassName="h-6 w-6 md:h-7 md:w-7"
@@ -571,7 +572,14 @@ const Header = React.memo(function Header() {
           </div>
         </React.Fragment>
       )}
-    </header>
+      </header>
+      <div className="bg-[#F0FDF4] py-2 flex justify-center gap-6 text-sm font-medium">
+        <Link href="/docs/ca" className="hover:underline">🇺🇸 California</Link>
+        <Link href="/docs/tx" className="hover:underline">🇺🇸 Texas</Link>
+        <Link href="/docs/fl" className="hover:underline">🇺🇸 Florida</Link>
+        <Link href="/docs/all" className="hover:underline">All States</Link>
+      </div>
+    </>
   );
 });
 
