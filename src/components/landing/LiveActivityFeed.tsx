@@ -43,7 +43,7 @@ const LiveActivityFeed = React.memo(function LiveActivityFeed() {
   }, []);
 
   return (
-    <div className="text-sm text-muted-foreground mt-2 h-5">
+    <div className="mt-4 text-sm text-primary font-medium h-5">
       <AnimatePresence>
         {visible && (
           <motion.div
@@ -54,7 +54,7 @@ const LiveActivityFeed = React.memo(function LiveActivityFeed() {
             transition={{ duration: 0.3 }}
             className="inline-block"
           >
-            {message}
+            {message} <span className="animate-pulse">•</span>
           </motion.div>
         )}
       </AnimatePresence>
