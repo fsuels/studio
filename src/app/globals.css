@@ -255,6 +255,10 @@
   #live-preview .prose h1 {
     @apply text-xl font-semibold text-center mt-4 mb-4 md:text-2xl md:mb-6;
   }
+
+  nav.scrolled {
+    @apply backdrop-blur bg-white/75 shadow-md;
+  }
 }
 
 .scrollbar-hide::-webkit-scrollbar {

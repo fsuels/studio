@@ -22,6 +22,7 @@ const Nav = React.memo(function Nav() {
   };
   const [currentLocale, setCurrentLocale] = useState<'en' | 'es'>('en');
   const [mounted, setMounted] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
     setMounted(true);
@@ -33,13 +34,26 @@ const Nav = React.memo(function Nav() {
     }
   }, [pathname, params.locale]);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 10);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
   if (!mounted) {
     return (
-      <nav className="flex items-center gap-3 md:gap-4 text-sm font-medium text-muted-foreground h-9 animate-pulse">
-        {[...Array(5)].map((_, i) => (
-          <div key={i} className="h-5 w-16 bg-muted rounded-md" />
-        ))}
-      </nav>
+      <div className="sticky top-0 z-50">
+        <nav className="flex items-center gap-3 md:gap-4 text-sm font-medium text-muted-foreground h-9 animate-pulse">
+          {[...Array(5)].map((_, i) => (
+            <div key={i} className="h-5 w-16 bg-muted rounded-md" />
+          ))}
+        </nav>
+      </div>
     );
   }
 
@@ -52,10 +66,16 @@ const Nav = React.memo(function Nav() {
   ];
 
   return (
-    <nav className="flex items-center gap-3 md:gap-4 text-sm font-medium text-muted-foreground">
-      {navLinks.map((link) => (
-        <Link
-          key={link.href}
+    <div className="sticky top-0 z-50">
+      <nav
+        className={cn(
+          'flex items-center gap-3 md:gap-4 text-sm font-medium text-muted-foreground',
+          isScrolled && 'scrolled', // This class will be used to change appearance
+        )}
+      >
+        {navLinks.map((link) => (
+          <Link
+            key={link.href}
           href={`/${currentLocale}${link.href}`}
           className={cn(
             'group hover:bg-primary/10 hover:text-primary focus-visible:bg-primary/10 focus-visible:text-primary transition-colors px-2 py-1.5 rounded-md',
@@ -108,6 +128,7 @@ const Nav = React.memo(function Nav() {
         </DropdownMenuContent>
       </DropdownMenu>
     </nav>
+    </div>
   );
 });
 
