@@ -165,9 +165,16 @@ export default function HomePageClient() {
       <AnnouncementBar />
 
       {/* HERO SECTION */}
-      <section className="px-4 pt-12 pb-12 lg:py-24">
-        <div className="mx-auto max-w-6xl lg:flex lg:items-center">
-          <div className="lg:w-1/2 lg:pr-8">
+      <section
+        className="relative overflow-hidden bg-gradient-to-r from-[#E0F7F5] to-[#FFFFFF] pt-20 pb-16"
+        style={{
+          backgroundPosition: 'left center',
+          backgroundSize: 'cover',
+          backgroundRepeat: 'no-repeat',
+        }}
+      >
+        <div className="container mx-auto px-4 flex flex-col lg:flex-row items-center gap-8">
+          <div className="flex-1 lg:pr-8 text-center lg:text-left">
             <h1 className="text-4xl lg:text-5xl font-bold leading-tight text-foreground">
               AI-Powered Legal Documents in <span className="text-primary">3 Minutes</span>
             </h1>
@@ -203,7 +210,7 @@ export default function HomePageClient() {
             </div>
             <LiveActivityFeed />
           </div>
-          <div className="hidden lg:block w-1/2 h-96 relative">
+          <div className="flex-1 hidden lg:block h-96 relative">
             <AutoImage src="/images/hero-placeholder.svg" alt="" className="object-cover w-full h-full" />
           </div>
         </div>
