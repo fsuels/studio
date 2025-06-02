@@ -163,7 +163,7 @@ const Header = React.memo(function Header() {
         <div className="mr-auto md:mr-4 flex items-center">
           <Logo
             wrapperClassName="items-center self-center mr-2 md:mr-4"
-            svgClassName="h-6 w-6 md:h-7 md:w-7"
+            svgClassName="h-7 w-7 md:h-8 md:w-8"
             textClassName="text-xs md:text-sm"
           />
         </div>
@@ -205,8 +205,8 @@ const Header = React.memo(function Header() {
                 variant="default"
                 size="sm"
                 className={cn(
-                  'text-sm font-medium flex items-center gap-1 px-3 h-9 bg-primary text-primary-foreground hover:bg-primary/90 focus-visible:ring-primary focus-visible:ring-2 focus-visible:ring-offset-2',
-                  isMegaMenuOpen && 'bg-primary/80',
+                  'text-sm font-medium flex items-center gap-1 px-3 h-9 bg-[#008466] text-white drop-shadow-lg hover:bg-[#00664e] focus-visible:ring-primary focus-visible:ring-2 focus-visible:ring-offset-2',
+                  isMegaMenuOpen && 'bg-[#00664e]',
                 )}
                 disabled={!mounted}
                 aria-expanded={isMegaMenuOpen}
@@ -331,32 +331,26 @@ const Header = React.memo(function Header() {
               </>
             ) : (
               <>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="text-xs font-medium text-foreground/80 hover:bg-muted px-2 py-1.5 md:px-3 h-9 md:h-8 flex items-center focus-visible:ring-primary focus-visible:ring-2 focus-visible:ring-offset-2"
-                  asChild
-                >
-                  <Link href={`/${clientLocale}/signup`}>
+                <div className="flex items-center gap-2 ml-2 border border-primary px-3 py-1 rounded-md hover:bg-primary/10">
+                  <Link
+                    href={`/${clientLocale}/signup`}
+                    className="flex items-center text-xs font-medium"
+                  >
                     <UserPlus className="h-4 w-4 mr-1 md:mr-2" />
                     <span className="hidden sm:inline">
                       {tHeader('Sign Up')}
                     </span>
                   </Link>
-                </Button>
-                <Button
-                  variant="default"
-                  size="sm"
-                  className="text-xs font-medium px-2 py-1.5 md:px-3 h-9 md:h-8 shadow-sm bg-primary text-primary-foreground hover:bg-primary/90 focus-visible:ring-primary focus-visible:ring-2 focus-visible:ring-offset-2"
-                  asChild
-                >
-                  <Link href={`/${clientLocale}/signin`}>
+                  <Link
+                    href={`/${clientLocale}/signin`}
+                    className="flex items-center text-xs font-medium"
+                  >
                     <LogIn className="h-4 w-4 mr-1 md:mr-2" />
                     <span className="hidden sm:inline">
                       {tHeader('Sign In')}
                     </span>
                   </Link>
-                </Button>
+                </div>
               </>
             ))}
         </nav>
