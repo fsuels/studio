@@ -173,6 +173,7 @@ export default function HomePageClient() {
           backgroundRepeat: 'no-repeat',
         }}
       >
+        <div id="morphBg" aria-hidden="true" />
         <div className="container mx-auto px-4 flex flex-col lg:flex-row items-center gap-8">
           <div className="flex-1 lg:pr-8 text-center lg:text-left">
             <h1 className="text-4xl lg:text-5xl font-bold leading-tight text-foreground">
