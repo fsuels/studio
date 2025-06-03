@@ -80,6 +80,7 @@ const HomepageHeroSteps = React.memo(function HomepageHeroSteps() {
           'radial-gradient(ellipse at top, hsl(var(--secondary)) 0%, hsl(var(--background)) 70%)',
       }}
     >
+      <div id="morphBg" aria-hidden="true" />
       <div className="relative z-10">
         {' '}
         {/* Ensure content is above background elements */}

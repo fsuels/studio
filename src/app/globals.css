@@ -144,6 +144,28 @@
     animation: fadeIn 0.5s ease-out forwards;
   }
 
+  @keyframes morphGradient {
+    0% {
+      background: linear-gradient(to right, #E0F7F5, #FFFFFF);
+    }
+    33% {
+      background: linear-gradient(to right, #D0F5FF, #E6FFF5);
+    }
+    66% {
+      background: linear-gradient(to right, #E0F7F5, #C0EAF5);
+    }
+    100% {
+      background: linear-gradient(to right, #E0F7F5, #FFFFFF);
+    }
+  }
+
+  #morphBg {
+    animation: morphGradient 20s infinite alternate ease-in-out;
+    position: absolute;
+    inset: 0;
+    z-index: -10;
+  }
+
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
   }
