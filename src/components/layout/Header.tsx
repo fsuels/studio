@@ -145,6 +145,7 @@ const Header = React.memo(function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMegaMenuOpen, setIsMegaMenuOpen] = useState(false);
   const [showMobileCategories, setShowMobileCategories] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
   // Auto-expand "Make Documents" accordion on initial render for mobile screens
   useEffect(() => {
@@ -157,8 +158,23 @@ const Header = React.memo(function Header() {
     ? tHeader('nav.searchPlaceholder', { defaultValue: 'Search documents...' })
     : '...';
 
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 10);
+    };
+    handleScroll();
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 overflow-visible">
+    <div className="sticky top-0 z-50">
+      <header
+        className={cn(
+          'header w-full border-b border-border/40 bg-background/95 supports-[backdrop-filter]:bg-background/60 overflow-visible transition-shadow',
+          scrolled && 'scrolled',
+        )}
+      >
       <div className="container flex h-14 items-center px-4 md:px-6">
         <div className="mr-auto md:mr-4 flex items-center">
           <Logo
@@ -566,6 +582,7 @@ const Header = React.memo(function Header() {
         </React.Fragment>
       )}
     </header>
+    </div>
   );
 });
 
