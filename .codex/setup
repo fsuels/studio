@@ -2,25 +2,51 @@
 set -euo pipefail
 
 # ╔══════════════════════════════════════════════════════════════════════════╗
-# ║  Codex bootstrap: minimal setup only (skip npm ci & next build) to avoid  ║
-# ║  300 s timeout.                                                            ║
+# ║  Codex bootstrap: install dependencies + Next.js build (skip export/LHCI) ║
 # ╚══════════════════════════════════════════════════════════════════════════╝
 
 export npm_config_loglevel=error
+echo "🔧  [setup] Installing dependencies and building Next.js…"
 
-echo "🔧  [setup] Starting minimal environment bootstrap…"
-
-# 1️⃣  Persist Firebase key (if Codex injected it)
-if [[ -n "${FIREBASE_SERVICE_ACCOUNT_KEY_JSON:-}" ]]; then
-  printf "FIREBASE_SERVICE_ACCOUNT_KEY_JSON='%s'\n" \
-    "${FIREBASE_SERVICE_ACCOUNT_KEY_JSON}" >> .env
+###############################################################################
+# 1 — Dependency installation                                                 #
+###############################################################################
+if [[ -f pnpm-lock.yaml ]]; then
+  corepack enable pnpm
+  echo "📦  Installing via pnpm ci"
+  pnpm install --frozen-lockfile --prefer-offline
+elif [[ -f yarn.lock ]]; then
+  corepack enable yarn
+  echo "📦  Installing via yarn install"
+  yarn install --immutable --check-cache
+else
+  echo "📦  Installing via npm ci"
+  npm ci --prefer-offline --no-audit --progress=false
 fi
 
-# 2️⃣  Skip installing all dependencies and skip building the Next.js site.
-#     (npm ci + npm run build routinely exceed 300 s on a fresh workspace.)
-echo "⚠️   Skipping 'npm ci' and 'npm run build' to prevent startup timeout."
+###############################################################################
+# 2 — Persist Firebase key into .env                                           #
+###############################################################################
+if [[ -n "${FIREBASE_SERVICE_ACCOUNT_KEY_JSON:-}" ]]; then
+  echo "🗝   Writing FIREBASE_SERVICE_ACCOUNT_KEY_JSON to .env"
+  printf "FIREBASE_SERVICE_ACCOUNT_KEY_JSON='%s'\n" \
+    "${FIREBASE_SERVICE_ACCOUNT_KEY_JSON}" > .env
+fi
 
-# 3️⃣  Install only the small CLIs Codex sometimes calls (these are quick)
-npm install -g eslint prettier typescript firebase-tools > /dev/null 2>&1
+###############################################################################
+# 3 — Next.js build (skip static export and LHCI to keep under 300 s)         #
+###############################################################################
+echo "🛠   Running npm run build"
+npm run build
 
-echo "✅  Minimal setup finished – ready for Codex."
+###############################################################################
+# 4 — Do NOT run `npm run export` or LHCI here (would exceed 300 s)          #
+###############################################################################
+echo "⚠️   Skipping `next export` and `lhci autorun` to avoid 300 s timeout."
+
+###############################################################################
+# 5 — Helpful global tools (silent)                                           #
+###############################################################################
+npm install -g eslint prettier typescript firebase-tools > /dev/null 2>&1 || true
+
+echo "✅  [setup] Dependencies installed and site built (ready for Codex)."
