@@ -81,7 +81,7 @@ const config: Config = {
 
       fontFamily: {
         sans: ['var(--font-geist-sans)', 'InterVariable', ...fontFamily.sans],
-        display: ['Poppins', ...fontFamily.sans],
+        display: ['var(--font-merriweather)', ...fontFamily.serif],
         mono: ['var(--font-geist-mono)', ...fontFamily.mono],
       },
 

@@ -8,8 +8,9 @@
 
 ## Style Guidelines:
 
-- Use soft blue (#D1E9FF) and white for a trustworthy and clean feel.
-- Accent color: Teal (#008080) for interactive elements and call-to-action buttons.
+- Use brand blue (#2563EB) with white for a crisp, professional look.
+- Accent color: teal (#0D9488) highlights interactive elements.
 - Mobile-first design with a clean and intuitive layout for easy navigation.
 - Use simple, semantic icons from Lucide or Heroicons to represent actions and concepts.
 - Subtle loading states and spinners during AI processing or transitions to improve user experience.
+- Typography combines Inter for body text with Merriweather headings.
