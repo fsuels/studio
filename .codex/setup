@@ -36,8 +36,8 @@ echo "🌐  Installing portable Chromium…"
 npx -y @puppeteer/browsers@~2.5.1 install chromium@latest > /dev/null
 export CHROME_PATH="$(npx -q @puppeteer/browsers executable-path chromium)"
 
-echo "��  Running Lighthouse-CI…"
-npx -y lhci@0.14.0 autorun --collect.numberOfRuns=1 || true
+echo "🌐  Running Lighthouse-CI…"
+npx -y lhci@0.14.0 autorun --collect.numberOfRuns=1 --chromePath="$CHROME_PATH" || true
 
 # 5️⃣  Small CLIs Codex sometimes calls
 npm install -g eslint prettier typescript firebase-tools > /dev/null 2>&1
