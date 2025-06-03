@@ -72,7 +72,7 @@ const HeroAIExperience = React.memo(function HeroAIExperience() {
               )}
             </div>
             <h1
-              className="text-4xl lg:text-5xl font-bold leading-tight text-foreground mb-4"
+              className="text-6xl lg:text-7xl font-extrabold leading-tight text-foreground mb-4 font-sans"
               suppressHydrationWarning
             >
               {t('home.hero.title', {
@@ -80,7 +80,7 @@ const HeroAIExperience = React.memo(function HeroAIExperience() {
               })}
             </h1>
             <p
-              className="text-lg text-muted-foreground mb-6"
+              className="text-xl lg:text-2xl text-muted-foreground mb-6 font-medium"
               suppressHydrationWarning
             >
               {t('home.hero.subtitle', {

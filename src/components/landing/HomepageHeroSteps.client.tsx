@@ -101,11 +101,11 @@ const HomepageHeroSteps = React.memo(function HomepageHeroSteps() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3, delay: 0.1 }}
-          className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 text-foreground leading-tight"
+          className="text-6xl md:text-7xl lg:text-8xl font-extrabold mb-4 text-foreground leading-tight font-sans"
           suppressHydrationWarning
         >
           {t('home.hero.title', {
-            defaultValue: 'Instant Legal Documents, Tailored to You',
+            defaultValue: 'Legal Peace of Mind. Instant. Intelligent.',
           })}
         </motion.h1>
         <motion.p
@@ -113,12 +113,12 @@ const HomepageHeroSteps = React.memo(function HomepageHeroSteps() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3, delay: 0.2 }}
-          className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-8"
+          className="text-xl md:text-2xl text-muted-foreground max-w-2xl mx-auto mb-8 font-medium"
           suppressHydrationWarning
         >
           {t('home.hero.subtitle', {
             defaultValue:
-              'Create, sign & share professional contracts in minutes—no lawyer required.',
+              'Say goodbye to confusion. Our AI crafts precise, professional legal documents tailored to your unique needs, fast.',
           })}
         </motion.p>
         <motion.div

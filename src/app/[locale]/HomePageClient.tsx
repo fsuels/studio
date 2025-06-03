@@ -186,11 +186,11 @@ export default function HomePageClient() {
         <div id="morphBg" aria-hidden="true" />
         <div className="container mx-auto px-4 flex flex-col lg:flex-row items-center gap-8">
           <div className="flex-1 lg:pr-8 text-center lg:text-left">
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-black leading-tight text-foreground font-sans">
-              Your AI Legal Assistant. Documents Ready in Minutes.
+            <h1 className="text-6xl md:text-7xl lg:text-8xl font-extrabold leading-tight text-foreground font-sans">
+              Legal Peace of Mind. Instant. Intelligent.
             </h1>
-            <p className="mt-4 text-xl text-muted-foreground font-medium">
-              Answer a few questions and instantly receive lawyer-grade paperwork.
+            <p className="mt-4 text-xl md:text-2xl text-muted-foreground font-medium">
+              Say goodbye to confusion. Our AI crafts precise, professional legal documents tailored to your unique needs, fast.
             </p>
             <SmartAssistantBar />
             <div className="mt-6 flex gap-4">
