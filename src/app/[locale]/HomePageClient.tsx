@@ -212,7 +212,7 @@ export default function HomePageClient() {
             <LiveActivityFeed />
           </div>
           <div className="flex-1 hidden lg:block h-96 relative">
-            <AutoImage src="/images/hero-placeholder.svg" alt="" className="object-cover w-full h-full" />
+            <AutoImage src="/images/hero-homepage.png" alt="" className="object-cover w-full h-full" />
           </div>
         </div>
       </section>
