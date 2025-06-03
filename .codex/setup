@@ -2,10 +2,10 @@
 set -euo pipefail
 
 # ╔══════════════════════════════════════════════════════════════════════╗
-# ║  Codex bootstrap: build → export → Lighthouse-CI with portable Chrome ║
+# ║  Codex bootstrap: build only (skip long export → LHCI to avoid 300 s timeout) ║
 # ╚══════════════════════════════════════════════════════════════════════╝
 
-export CODEX_SETUP_TIMEOUT=$((15*60))   # 15-min allowance
+export CODEX_SETUP_TIMEOUT=$((15*60))   # 15-minute allowance
 export PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1
 export npm_config_loglevel=error
 
@@ -26,20 +26,17 @@ if [[ -n "${FIREBASE_SERVICE_ACCOUNT_KEY_JSON:-}" ]]; then
     "${FIREBASE_SERVICE_ACCOUNT_KEY_JSON}" >> .env
 fi
 
-# 3️⃣  Build → static export (to apps/web/out for LHCI)
-echo "🛠  Building and exporting Next.js site…"
+# 3️⃣  Build only (skip `npm run export` → static export takes too long)
+echo "🛠  Building Next.js site…"
 npm run build
-npm run export          # needs "export": "next export -o apps/web/out" in package.json
 
-# 4️⃣  Portable Chromium + Lighthouse-CI
-echo "🌐  Installing portable Chromium…"
-npx -y @puppeteer/browsers@~2.5.1 install chromium@latest > /dev/null
-export CHROME_PATH="$(npx -q @puppeteer/browsers executable-path chromium)"
+# ──────────────────────────────────────────────────────────────────────
+# ─── LONG RUN STEPS REMOVED TO PREVENT STARTUP TIMEOUT (300 s) ─────────
+# ── `npm run export` (static‐export of 1609 pages) is skipped here ────
+# ─── `lhci autorun` (runs Portable Chrome + Lighthouse) is skipped ────
+# ──────────────────────────────────────────────────────────────────────
 
-echo "🌐  Running Lighthouse-CI…"
-npx -y lhci@0.14.0 autorun --collect.numberOfRuns=1 --chromePath="$CHROME_PATH" || true
-
-# 5️⃣  Small CLIs Codex sometimes calls
+# 4️⃣  Small CLIs Codex sometimes calls
 npm install -g eslint prettier typescript firebase-tools > /dev/null 2>&1
 
 echo "✅  Setup finished – ready for Codex."
