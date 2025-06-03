@@ -89,7 +89,7 @@ const StickyFilterBar = React.memo(function StickyFilterBar({
             placeholder={placeholderSearch}
             value={searchTerm}
             onChange={(e) => onSearchTermChange(e.target.value)}
-            className="w-full pl-12 h-12 text-base border-2 border-primary/40 bg-muted/30"
+            className="w-full pl-12 h-14 text-base rounded-full border-2 border-primary/50 bg-background shadow-md"
             aria-label={placeholderSearch}
             disabled={!isHydrated}
           />
@@ -115,7 +115,7 @@ const StickyFilterBar = React.memo(function StickyFilterBar({
             disabled={!isHydrated}
           >
             <SelectTrigger
-              className="w-full h-10 text-sm sm:pl-3 data-[placeholder]:text-muted-foreground"
+              className="w-full h-10 text-sm sm:pl-3 data-[placeholder]:text-muted-foreground rounded-full shadow-md"
               aria-label={placeholderState}
             >
               <MapPin className="h-4 w-4 mr-2 hidden sm:inline-block text-muted-foreground" />
