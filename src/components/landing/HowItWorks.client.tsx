@@ -3,28 +3,33 @@
 import React, { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ArrowDown, ArrowRight } from 'lucide-react';
+import {
+  StepOneIllustration,
+  StepTwoIllustration,
+  StepThreeIllustration,
+} from './HowItWorksIllustrations';
 
 const steps = [
   {
-    emoji: '🗣️',
+    Illustration: StepOneIllustration,
     titleKey: 'home.steps.step1.title',
     descKey: 'home.steps.step1.desc',
-    defaultTitle: 'Describe Your Situation',
-    defaultDesc: 'Skip forms—just speak or type.',
+    defaultTitle: 'Tell Us Your Needs',
+    defaultDesc: 'Answer a few quick prompts for tailored guidance.',
   },
   {
-    emoji: '🤖',
+    Illustration: StepTwoIllustration,
     titleKey: 'home.steps.step2.title',
     descKey: 'home.steps.step2.desc',
-    defaultTitle: 'Let AI Guide You',
-    defaultDesc: "AI asks only what's needed.",
+    defaultTitle: 'AI Crafts Your Document',
+    defaultDesc: 'Our system builds a professional draft automatically.',
   },
   {
-    emoji: '✅',
+    Illustration: StepThreeIllustration,
     titleKey: 'home.steps.step3.title',
     descKey: 'home.steps.step3.desc',
-    defaultTitle: 'Download, Sign & Share',
-    defaultDesc: 'Download a compliant doc in minutes.',
+    defaultTitle: 'Securely Download & Share',
+    defaultDesc: 'Your final document is ready to print or send.',
   },
 ] as const;
 
@@ -41,20 +46,21 @@ const HowItWorks = React.memo(function HowItWorks() {
           {steps.map((step, index) => (
             <Fragment key={step.titleKey}>
               <div className="flex flex-col items-center text-center p-6 bg-card rounded-xl border border-border shadow-sm">
-                <div className="text-4xl mb-6" aria-hidden="true">
-                  {step.emoji}
-                </div>
-                <h3 className="text-xl font-semibold mb-3 text-card-foreground">
+                <step.Illustration
+                  className="h-16 w-16 mb-6 text-brand-blue"
+                  aria-hidden="true"
+                />
+                <h3 className="text-xl font-bold mb-3 text-card-foreground">
                   {t(step.titleKey, { defaultValue: step.defaultTitle })}
                 </h3>
-                <p className="text-muted-foreground">
+                <p className="text-muted-foreground text-sm">
                   {t(step.descKey, { defaultValue: step.defaultDesc })}
                 </p>
               </div>
               {index < steps.length - 1 && (
                 <>
-                  <ArrowDown className="md:hidden h-6 w-6 text-muted-foreground" aria-hidden="true" />
-                  <ArrowRight className="hidden md:block h-6 w-6 text-muted-foreground" aria-hidden="true" />
+                  <ArrowDown className="md:hidden h-8 w-8 text-brand-blue" aria-hidden="true" />
+                  <ArrowRight className="hidden md:block h-8 w-8 text-brand-blue" aria-hidden="true" />
                 </>
               )}
             </Fragment>
