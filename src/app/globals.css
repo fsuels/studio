@@ -291,3 +291,7 @@
 .star-gradient {
   fill: url(#goldGradient);
 }
+
+.header.scrolled {
+  @apply backdrop-blur bg-white/75 shadow-md;
+}
