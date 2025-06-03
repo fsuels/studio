@@ -1,42 +1,26 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# ╔══════════════════════════════════════════════════════════════════════╗
-# ║  Codex bootstrap: build only (skip long export → LHCI to avoid 300 s timeout) ║
-# ╚══════════════════════════════════════════════════════════════════════╝
+# ╔══════════════════════════════════════════════════════════════════════════╗
+# ║  Codex bootstrap: minimal setup only (skip npm ci & next build) to avoid  ║
+# ║  300 s timeout.                                                            ║
+# ╚══════════════════════════════════════════════════════════════════════════╝
 
-export CODEX_SETUP_TIMEOUT=$((15*60))   # 15-minute allowance
-export PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1
 export npm_config_loglevel=error
 
-echo "🔧  [setup] Starting environment bootstrap…"
+echo "🔧  [setup] Starting minimal environment bootstrap…"
 
-# 1️⃣  Install deps with existing lock-file
-if   [[ -f pnpm-lock.yaml ]]; then
-  corepack enable pnpm && pnpm install --frozen-lockfile --prefer-offline
-elif [[ -f yarn.lock ]]; then
-  corepack enable yarn && yarn install --immutable
-else
-  npm ci --prefer-offline --no-audit --progress=false
-fi
-
-# 2️⃣  Persist Firebase key (if Codex injected it)
+# 1️⃣  Persist Firebase key (if Codex injected it)
 if [[ -n "${FIREBASE_SERVICE_ACCOUNT_KEY_JSON:-}" ]]; then
   printf "FIREBASE_SERVICE_ACCOUNT_KEY_JSON='%s'\n" \
     "${FIREBASE_SERVICE_ACCOUNT_KEY_JSON}" >> .env
 fi
 
-# 3️⃣  Build only (skip `npm run export` → static export takes too long)
-echo "🛠  Building Next.js site…"
-npm run build
+# 2️⃣  Skip installing all dependencies and skip building the Next.js site.
+#     (npm ci + npm run build routinely exceed 300 s on a fresh workspace.)
+echo "⚠️   Skipping 'npm ci' and 'npm run build' to prevent startup timeout."
 
-# ──────────────────────────────────────────────────────────────────────
-# ─── LONG RUN STEPS REMOVED TO PREVENT STARTUP TIMEOUT (300 s) ─────────
-# ── `npm run export` (static‐export of 1609 pages) is skipped here ────
-# ─── `lhci autorun` (runs Portable Chrome + Lighthouse) is skipped ────
-# ──────────────────────────────────────────────────────────────────────
-
-# 4️⃣  Small CLIs Codex sometimes calls
+# 3️⃣  Install only the small CLIs Codex sometimes calls (these are quick)
 npm install -g eslint prettier typescript firebase-tools > /dev/null 2>&1
 
-echo "✅  Setup finished – ready for Codex."
+echo "✅  Minimal setup finished – ready for Codex."
