@@ -26,7 +26,14 @@ import {
   TooltipTrigger,
   TooltipContent,
 } from '@/components/ui/tooltip';
-import { Check, Loader2, Info, AlertTriangle, AlertCircle } from 'lucide-react';
+import {
+  Check,
+  Loader2,
+  Info,
+  AlertTriangle,
+  AlertCircle,
+  ClipboardList as QuestionnaireIcon,
+} from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { saveFormProgress } from '@/lib/firestore/saveFormProgress';
 import { track } from '@/lib/analytics';
@@ -45,27 +52,7 @@ interface Props {
   stateCode?: string;
 }
 
-/* ----------------- svg icon --------------- */
-const QuestionnaireIcon = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    className="h-6 w-6 text-primary"
-    fill="none"
-    viewBox="0 0 24 24"
-    stroke="currentColor"
-  >
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth={2}
-      d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"
-    />
-    <polyline points="14 2 14 8 20 8" />
-    <line x1="16" y1="13" x2="8" y2="13" />
-    <line x1="16" y1="17" x2="8" y2="17" />
-    <line x1="10" y1="9" x2="8" y2="9" />
-  </svg>
-);
+/* ----------------- consistent icon --------------- */
 
 export default function DynamicFormRenderer({
   documentType,
