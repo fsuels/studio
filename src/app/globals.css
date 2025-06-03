@@ -146,16 +146,16 @@
 
   @keyframes morphGradient {
     0% {
-      background: linear-gradient(to right, #E0F7F5, #FFFFFF);
+      background: linear-gradient(to right, #e0f7f5, #ffffff);
     }
     33% {
-      background: linear-gradient(to right, #D0F5FF, #E6FFF5);
+      background: linear-gradient(to right, #d0f5ff, #e6fff5);
     }
     66% {
-      background: linear-gradient(to right, #E0F7F5, #C0EAF5);
+      background: linear-gradient(to right, #e0f7f5, #c0eaf5);
     }
     100% {
-      background: linear-gradient(to right, #E0F7F5, #FFFFFF);
+      background: linear-gradient(to right, #e0f7f5, #ffffff);
     }
   }
 
@@ -185,7 +185,7 @@
 
   .category-grid,
   .document-grid {
-    @apply grid gap-3;
+    @apply grid gap-4;
   }
 
   .step-card {
@@ -211,7 +211,7 @@
 
   .category-card,
   .document-card {
-    @apply p-4 border border-border rounded-md shadow-sm text-center flex flex-col items-center justify-center bg-card text-card-foreground;
+    @apply p-6 border border-border rounded-md shadow-sm text-center flex flex-col items-center justify-center bg-card text-card-foreground;
     min-height: 56px;
     font-size: 1rem;
   }
@@ -222,7 +222,7 @@
   @media (hover: hover) {
     .category-card:hover,
     .document-card:hover {
-      @apply shadow-md border-primary/50;
+      @apply shadow-lg border-primary/50;
     }
   }
 

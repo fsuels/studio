@@ -173,12 +173,12 @@ const MemoizedCategoryCard = React.memo(function CategoryCard({
       variant="outline"
       onClick={onClick}
       disabled={disabled}
-      className="category-card h-auto min-h-[90px] p-4 border-border shadow-sm hover:shadow-md transition text-center flex flex-col justify-center items-center bg-card hover:bg-muted active:scale-95 active:transition-transform active:duration-100"
+      className="category-card h-auto min-h-[100px] p-6 border-border shadow-sm hover:shadow-lg transition text-center flex flex-col justify-center items-center bg-card hover:bg-muted active:scale-95 active:transition-transform active:duration-100"
     >
       {React.createElement(category.icon || FileText, {
-        className: 'h-6 w-6 mb-2 text-primary/80',
+        className: 'h-8 w-8 mb-3 text-primary/80',
       })}
-      <span className="font-medium text-card-foreground text-sm">
+      <span className="font-medium text-card-foreground text-base">
         {t(category.labelKey, { defaultValue: category.key })}
       </span>
     </Button>
@@ -271,11 +271,11 @@ const MemoizedTopDocChip = React.memo(function TopDocChip({
       size="sm"
       onClick={onSelect}
       disabled={disabled}
-      className="category-card h-auto min-h-[50px] p-3 border-border shadow-sm hover:shadow-md transition text-center flex items-center justify-center gap-2 bg-card hover:bg-muted active:scale-95 active:transition-transform active:duration-100"
+      className="category-card h-auto min-h-[60px] p-4 border-border shadow-sm hover:shadow-lg transition text-center flex items-center justify-center gap-2 bg-card hover:bg-muted active:scale-95 active:transition-transform active:duration-100"
     >
       {doc.icon &&
-        React.createElement(doc.icon, { className: 'h-4 w-4 text-primary/80' })}
-      <span className="font-medium text-card-foreground text-xs">
+        React.createElement(doc.icon, { className: 'h-5 w-5 text-primary/80' })}
+      <span className="font-medium text-card-foreground text-sm">
         {t(getDocName(doc, i18nLanguage), {
           defaultValue: getDocName(doc, i18nLanguage),
         })}
@@ -495,7 +495,9 @@ const Step1DocumentSelector = React.memo(function Step1DocumentSelector({
   };
 
   const handleDocSelect = (
-    doc: LegalDocument | Pick<LegalDocument, 'id' | 'category' | 'translations'>,
+    doc:
+      | LegalDocument
+      | Pick<LegalDocument, 'id' | 'category' | 'translations'>,
   ) => {
     if (!isHydrated) return;
     const fullDoc = documentLibrary.find((d) => d.id === doc.id);
@@ -574,9 +576,9 @@ const Step1DocumentSelector = React.memo(function Step1DocumentSelector({
             {[...Array(6)].map((_, i) => (
               <div
                 key={i}
-                className="category-card h-auto min-h-[90px] p-4 border-border shadow-sm bg-muted flex flex-col justify-center items-center"
+                className="category-card h-auto min-h-[100px] p-6 border-border shadow-sm bg-muted flex flex-col justify-center items-center"
               >
-                <div className="h-6 w-6 mb-2 bg-muted-foreground/20 rounded-full"></div>
+                <div className="h-8 w-8 mb-3 bg-muted-foreground/20 rounded-full"></div>
                 <div className="h-4 bg-muted-foreground/10 rounded w-20"></div>
               </div>
             ))}
@@ -701,7 +703,7 @@ const Step1DocumentSelector = React.memo(function Step1DocumentSelector({
           </div>
         ) : currentView === 'top-docs' ? (
           <div className="animate-fade-in space-y-4">
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
               {placeholderTopDocs.map((doc) => (
                 <MemoizedTopDocChip
                   key={doc.id}

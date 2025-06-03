@@ -63,7 +63,9 @@ const StickyFilterBar = React.memo(function StickyFilterBar({
   }, [onSearchTermChange]);
 
   const placeholderSearch = isHydrated
-    ? t('Search all documents...')
+    ? t("Search for a document (e.g., 'Will', 'Lease Agreement')", {
+        defaultValue: "Search for a document (e.g., 'Will', 'Lease Agreement')",
+      })
     : 'Loading...';
   const placeholderState = isHydrated ? t('All States') : 'Loading...';
 
@@ -81,13 +83,13 @@ const StickyFilterBar = React.memo(function StickyFilterBar({
     <div className="sticky top-0 z-40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b shadow-sm mb-6">
       <div className="container mx-auto px-4 h-16 flex flex-col sm:flex-row items-center justify-between gap-4 py-2">
         <div className="relative w-full sm:flex-1">
-          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
           <Input
             type="search"
             placeholder={placeholderSearch}
             value={searchTerm}
             onChange={(e) => onSearchTermChange(e.target.value)}
-            className="w-full pl-10 h-10 text-sm"
+            className="w-full pl-12 h-12 text-base border-2 border-primary/40 bg-muted/30"
             aria-label={placeholderSearch}
             disabled={!isHydrated}
           />
