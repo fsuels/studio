@@ -35,7 +35,7 @@
   "linkTermsOfService": "Términos",
   "linkDocs": "Documentos",
   "linkDisclaimer": "Descargo de Responsabilidad",
-  "subhead": "Generación de documentos legales con IA. Rápido, accesible y seguro.",
+  "subhead": "Documentos legales con IA en minutos: seguros, precisos y económicos.",
   "sectionCommunityTitle": "Comunidad y Contacto",
   "socialLinkedInAria": "Página de LinkedIn",
   "socialTwitterAria": "Perfil de Twitter",
@@ -45,5 +45,6 @@
   "emailPlaceholderAria": "Correo para boletín",
   "subscribeButtonAria": "Suscribirse al boletín",
   "joinMailingListDesc": "Recibe 3 plantillas gratis — sin spam.",
+  "securityNote": "Tu información está cifrada con SSL de 256 bits.",
   "openChatAria": "Abrir chat"
 }

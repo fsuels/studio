@@ -35,7 +35,7 @@
   "linkTermsOfService": "Terms",
   "linkDocs": "Docs",
   "linkDisclaimer": "Disclaimer",
-  "subhead": "AI-Powered Legal Document Generation. Fast, Affordable, Secure.",
+  "subhead": "AI-powered legal docs in minutes—secure, accurate, affordable.",
   "sectionCommunityTitle": "Community & Contact",
   "socialLinkedInAria": "LinkedIn Page",
   "socialTwitterAria": "Twitter Profile",
@@ -45,5 +45,6 @@
   "emailPlaceholderAria": "Email for newsletter",
   "subscribeButtonAria": "Subscribe to newsletter",
   "joinMailingListDesc": "Get 3 free templates — no spam.",
+  "securityNote": "Your info is encrypted with 256-bit SSL.",
   "openChatAria": "Open chat"
 }

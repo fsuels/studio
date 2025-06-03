@@ -181,8 +181,8 @@
     "note": "You can also check our FAQ for common questions.",
     "cta": "Go to FAQ"
   },
-  "home.hero.title": "Legal Peace of Mind. Instant. Intelligent.",
-  "home.hero.subtitle": "Say goodbye to confusion. Our AI crafts precise, professional legal documents tailored to your unique needs, fast.",
+  "home.hero.title": "Instant, Reliable Legal Documents",
+  "home.hero.subtitle": "Our friendly AI delivers attorney-reviewed contracts in minutes—no confusion.",
   "home.hero.pricingBadge": "One-time $35/document • No subscription",
   "home.steps.step1.title": "Tell Us Your Needs",
   "home.steps.step1.desc": "Answer a few quick prompts for tailored guidance.",
@@ -287,5 +287,9 @@
         "desc": "Encrypted data and compliant practices."
       }
     }
+  },
+  "mission": {
+    "title": "Our Mission",
+    "body": "123LegalDoc empowers everyone to handle routine legal needs quickly and confidently by blending attorney insight with intuitive AI."
   }
 }

@@ -181,8 +181,8 @@
     "note": "También puedes consultar nuestras Preguntas Frecuentes para preguntas comunes.",
     "cta": "Ir a Preguntas Frecuentes"
   },
-  "home.hero.title": "Documentos legales instantáneos, hechos a tu medida",
-  "home.hero.subtitle": "Crea, firma y comparte contratos profesionales en minutos—sin necesidad de abogado.",
+  "home.hero.title": "Documentos legales confiables al instante",
+  "home.hero.subtitle": "Nuestra IA te entrega contratos revisados por abogados en minutos, sin complicaciones.",
   "home.hero.pricingBadge": "Pago único de $35/documento • Sin suscripción",
   "home.steps.step1.title": "Cuéntanos tus necesidades",
   "home.steps.step1.desc": "Responde unas breves preguntas para recibir orientación.",
@@ -288,5 +288,9 @@
         "desc": "Datos cifrados y prácticas conformes."
       }
     }
+  },
+  "mission": {
+    "title": "Nuestra Misión",
+    "body": "En 123LegalDoc creemos que todos merecen documentos legales claros y asequibles. Combinamos experiencia legal con IA intuitiva para que resuelvas trámites rápido y con confianza."
   }
 }
