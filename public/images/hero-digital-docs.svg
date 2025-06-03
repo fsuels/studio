@@ -1,0 +1,19 @@
+<svg width="800" height="500" viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <defs>
+    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4f46e5" />
+      <stop offset="100%" stop-color="#06b6d4" />
+    </linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#grad)" rx="20" />
+  <g fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M220 160h160v180H220z" fill="#1e293b" stroke="none" />
+    <path d="M300 100v60" />
+    <path d="M280 120h40" />
+    <path d="M520 200h80v80h-80z" fill="#1e293b" stroke="none" />
+    <path d="M560 160v40" />
+    <path d="M540 180h40" />
+    <path d="M380 320l40 40l80-80" />
+  </g>
+  <text x="50%" y="90%" text-anchor="middle" fill="#e0f2fe" font-size="24" font-family="Arial">Instant AI Document Generation</text>
+</svg>
