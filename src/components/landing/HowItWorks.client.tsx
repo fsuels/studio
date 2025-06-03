@@ -8,21 +8,21 @@ const steps = [
     emoji: '🗣️',
     titleKey: 'home.steps.step1.title',
     descKey: 'home.steps.step1.desc',
-    defaultTitle: 'Describe Your Situation',
+    defaultTitle: 'Tell Us Your Needs',
     defaultDesc: 'Use voice or text to tell us what you need.',
   },
   {
     emoji: '🤖',
     titleKey: 'home.steps.step2.title',
     descKey: 'home.steps.step2.desc',
-    defaultTitle: 'Let AI Guide You',
+    defaultTitle: 'AI Crafts Your Document',
     defaultDesc: 'Answer a few smart prompts.',
   },
   {
     emoji: '✅',
     titleKey: 'home.steps.step3.title',
     descKey: 'home.steps.step3.desc',
-    defaultTitle: 'Download, Sign & Share',
+    defaultTitle: 'Securely Download & Share',
     defaultDesc: 'Fully compliant and ready in minutes.',
   },
 ] as const;
@@ -45,7 +45,7 @@ const HowItWorks = React.memo(function HowItWorks() {
               <div className="text-4xl mb-4" aria-hidden="true">
                 {step.emoji}
               </div>
-              <h3 className="text-xl font-semibold mb-2 text-card-foreground">
+              <h3 className="text-2xl font-bold mb-2 text-card-foreground">
                 {t(step.titleKey, { defaultValue: step.defaultTitle })}
               </h3>
               <p className="text-muted-foreground">

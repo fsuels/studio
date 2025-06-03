@@ -41,21 +41,21 @@ const HowItWorks = React.memo(function HowItWorks() {
       icon: FileText,
       titleKey: 'home.steps.step1.title',
       descriptionKey: 'home.steps.step1.desc',
-      defaultTitle: 'Describe Situation',
+      defaultTitle: 'Tell Us Your Needs',
       defaultDescription: 'Give a quick summary. Text or mic supported.',
     },
     {
       icon: Edit3,
       titleKey: 'home.steps.step2.title',
       descriptionKey: 'home.steps.step2.desc',
-      defaultTitle: 'Answer Simple Prompts',
+      defaultTitle: 'AI Crafts Your Document',
       defaultDescription: 'AI will guide you through the exact info needed.',
     },
     {
       icon: CheckCircle,
       titleKey: 'home.steps.step3.title',
       descriptionKey: 'home.steps.step3.desc',
-      defaultTitle: 'Finalize & Sign',
+      defaultTitle: 'Securely Download & Share',
       defaultDescription: 'Download, sign, or securely share your document.',
     },
   ];
@@ -141,7 +141,7 @@ const HowItWorks = React.memo(function HowItWorks() {
                 <div className="mb-6 p-4 bg-primary/10 rounded-full inline-flex items-center justify-center">
                   <step.icon className="h-8 w-8 md:h-10 md:w-10 text-primary" />
                 </div>
-                <h3 className="text-xl font-semibold mb-2 text-card-foreground">
+                <h3 className="text-2xl font-bold mb-2 text-card-foreground">
                   {isHydrated
                     ? t(step.titleKey, { defaultValue: step.defaultTitle })
                     : placeholderTitle}
