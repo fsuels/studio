@@ -117,7 +117,7 @@ const MemoizedTestimonialCard = React.memo(function TestimonialCard({
   // Use picsum.photos for more varied placeholders, avatarUrl from data will override this.
   const imageSrc =
     currentTestimonial.avatarUrl ||
-    `https://picsum.photos/seed/${currentTestimonial.avatarSeed}/96/96`;
+    `https://picsum.photos/seed/${currentTestimonial.avatarSeed}/112/112`;
 
   return (
     <div className="bg-card p-6 rounded-2xl shadow-lg w-72 md:w-80 text-left shrink-0 flex flex-col border border-border transition-shadow hover:shadow-xl h-full">
@@ -126,11 +126,11 @@ const MemoizedTestimonialCard = React.memo(function TestimonialCard({
           <Image
             src={imageSrc}
             alt={nameText}
-            width={96}
-            height={96}
+            width={112}
+            height={112}
             loading="lazy"
             data-ai-hint="person portrait" // Hint for AI image replacement
-            className="rounded-full mb-4 border-2 border-primary/30 mx-auto shrink-0 object-cover" // Added object-cover
+            className="rounded-full mb-4 border-2 border-primary/30 shadow-md mx-auto shrink-0 object-cover"
           />
           <div className="flex justify-center mb-3">
             {Array.from({ length: rating }).map((_, i) => (
@@ -143,7 +143,7 @@ const MemoizedTestimonialCard = React.memo(function TestimonialCard({
               <Star key={`empty-${i}`} className="h-4 w-4 text-yellow-400" />
             ))}
           </div>
-          <p className="italic text-foreground/90 mb-4 leading-relaxed text-sm flex-grow">
+          <p className="italic text-foreground/90 mb-4 leading-relaxed text-base flex-grow">
             &ldquo;{quoteText}&rdquo;
           </p>
           {outcomeText && (
@@ -282,7 +282,10 @@ const TrustAndTestimonialsSection = React.memo(
     };
 
     return (
-      <section ref={sectionRef} className="bg-secondary/30 py-16 md:py-20 text-center">
+      <section
+        ref={sectionRef}
+        className="bg-gradient-to-b from-secondary/40 to-secondary/20 py-16 md:py-20 text-center"
+      >
         <div className="container mx-auto px-4 mb-12 md:mb-16">
           <p className="text-xs uppercase text-muted-foreground tracking-wider mb-3 font-medium">
             {isHydrated

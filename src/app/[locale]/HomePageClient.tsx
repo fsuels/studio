@@ -36,6 +36,11 @@ const TrustAndTestimonialsSection = lazyOnView(
   },
 );
 
+const FeaturedLogosSection = lazyOnView(
+  () => import('@/components/landing/FeaturedLogos').then((m) => m.FeaturedLogos),
+  { placeholder: <LoadingSpinner /> },
+);
+
 const GuaranteeBadge = lazyOnView(
   () => import('@/components/landing/GuaranteeBadge').then((mod) => mod.GuaranteeBadge),
   {
@@ -220,6 +225,7 @@ export default function HomePageClient() {
       <HomepageHeroSteps />
       <HowItWorks />
       <TrustAndTestimonialsSection />
+      <FeaturedLogosSection />
       <GuaranteeBadge />
       <TopDocsChips />
 
