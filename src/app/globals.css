@@ -4,48 +4,48 @@
 
 @layer base {
   :root {
-    --background: 210 40% 98%; /* Soft Bluetint White */
-    --foreground: 220.9 39.3% 11%; /* Dark Blue/Black */
+    --background: 0 0% 100%;
+    --foreground: 222 35% 17%;
     --card: 0 0% 100%;
-    --card-foreground: 224 71.4% 4.1%;
+    --card-foreground: 222 35% 17%;
     --popover: 0 0% 100%;
-    --popover-foreground: 224 71.4% 4.1%;
-    --primary: 176 100% 25%; /* Darker Teal for better contrast */
-    --primary-foreground: 210 20% 98%; /* White */
-    --secondary: 207 90% 92%; /* Soft Blue (#D1E9FF) */
-    --secondary-foreground: 220.9 39.3% 11%; /* Dark Blue/Black */
-    --muted: 220 14.3% 95.9%;
-    --muted-foreground: 220 8.9% 46.1%;
-    --accent: 176 100% 25%; /* Darker Teal for interactive elements */
-    --accent-foreground: 210 20% 98%; /* White */
-    --destructive: 0 84.2% 60.2%;
+    --popover-foreground: 222 35% 17%;
+    --primary: 220 60% 42%;
+    --primary-foreground: 210 20% 98%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222 35% 17%;
+    --muted: 210 16% 93%;
+    --muted-foreground: 214 9% 46%;
+    --accent: 28 90% 55%;
+    --accent-foreground: 210 20% 98%;
+    --destructive: 0 84% 60%;
     --destructive-foreground: 210 20% 98%;
-    --border: 220 13% 91%;
-    --input: 220 13% 91%;
-    --ring: 176 100% 30%; /* Teal Accent for focus rings */
+    --border: 210 16% 90%;
+    --input: 210 16% 90%;
+    --ring: 220 60% 42%;
     --radius: 0.5rem;
   }
 
   .dark {
-    --background: 224 71.4% 4.1%; /* Dark Blue/Black */
-    --foreground: 210 40% 98%; /* Soft Blue-tint White */
-    --card: 224 71.4% 4.1%;
-    --card-foreground: 210 20% 98%;
-    --popover: 224 71.4% 4.1%;
-    --popover-foreground: 210 20% 98%;
-    --primary: 176 100% 40%; /* Slightly lighter Teal for dark mode */
-    --primary-foreground: 220.9 39.3% 11%; /* Dark Blue/Black */
-    --secondary: 220 14.3% 15%; /* Darker Soft Blue */
-    --secondary-foreground: 210 20% 98%; /* White */
-    --muted: 215 27.9% 16.9%;
-    --muted-foreground: 217.9 10.6% 64.9%;
-    --accent: 176 100% 40%; /* Slightly lighter Teal for dark mode */
-    --accent-foreground: 220.9 39.3% 11%; /* Dark Blue/Black */
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 20% 98%;
-    --border: 215 27.9% 16.9%;
-    --input: 215 27.9% 16.9%;
-    --ring: 176 100% 40%; /* Teal Accent for focus rings */
+    --background: 218 33% 15%;
+    --foreground: 210 40% 98%;
+    --card: 218 33% 15%;
+    --card-foreground: 210 40% 98%;
+    --popover: 218 33% 15%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 220 60% 55%;
+    --primary-foreground: 218 33% 15%;
+    --secondary: 215 25% 25%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 215 27% 18%;
+    --muted-foreground: 217 10% 65%;
+    --accent: 28 90% 60%;
+    --accent-foreground: 218 33% 15%;
+    --destructive: 0 63% 31%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 215 27% 25%;
+    --input: 215 27% 25%;
+    --ring: 220 60% 55%;
   }
 }
 
@@ -90,13 +90,22 @@
   .card-hover {
     @apply transition-transform duration-150 hover:-translate-y-1 hover:shadow-lg;
   }
-  h1,
-  h2,
-  h3,
+  .section-spacing {
+    @apply py-12 md:py-16 lg:py-20;
+  }
+  h1 {
+    @apply font-display font-bold text-4xl md:text-5xl text-foreground;
+  }
+  h2 {
+    @apply font-display font-semibold text-3xl md:text-4xl text-foreground;
+  }
+  h3 {
+    @apply font-display font-medium text-2xl text-foreground;
+  }
   h4,
   h5,
   h6 {
-    @apply font-semibold text-foreground;
+    @apply font-display font-medium text-foreground;
   }
   .bg-glass {
     backdrop-filter: blur(12px) saturate(180%);
