@@ -1,7 +1,7 @@
 // next.config.ts
 import type { NextConfig } from 'next';
 
-const isTurbopack = process.env.NEXT_TURBOPACK === '1';
+const isTurbopack = process.env.TURBOPACK === '1'; // Changed NEXT_TURBOPACK to TURBOPACK
 
 // Base configuration applicable to both Webpack and Turbopack
 const baseConfig: Omit<NextConfig, 'webpack'> = {

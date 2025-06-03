@@ -182,7 +182,7 @@ export default function HomePageClient() {
         <div className="container mx-auto px-4 flex flex-col lg:flex-row items-center gap-8">
           <div className="flex-1 lg:pr-8 text-center lg:text-left">
             <h1 className="text-5xl md:text-6xl lg:text-7xl font-black leading-tight text-foreground font-sans">
-              Your AI Legal Assistant. Documents Ready in Minutes.
+            Legal Peace of Mind. Instant. Intelligent.
             </h1>
             <p className="mt-4 text-xl text-muted-foreground font-medium">
               Answer a few questions and instantly receive lawyer-grade paperwork.
@@ -218,7 +218,7 @@ export default function HomePageClient() {
           </div>
           <div className="flex-1 hidden lg:block h-96 relative">
             <AutoImage
-              src="/images/hero-digital-docs.svg"
+              src="/images/hero-homepage.png"
               alt="Illustration of AI generating legal documents"
               className="object-cover w-full h-full"
             />
