@@ -270,6 +270,12 @@ export const Footer = React.memo(function Footer() {
                 defaultValue: 'Get 3 free templates — no spam.',
               })}
             </p>
+            <p className="text-xs mt-1 text-muted-foreground">
+              {t('securityNote', {
+                ns: 'footer',
+                defaultValue: 'Your information is protected by 256-bit SSL encryption.',
+              })}
+            </p>
           </div>
         </div>
 

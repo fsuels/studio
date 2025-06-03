@@ -45,5 +45,6 @@
   "emailPlaceholderAria": "Correo para boletín",
   "subscribeButtonAria": "Suscribirse al boletín",
   "joinMailingListDesc": "Recibe 3 plantillas gratis — sin spam.",
+  "securityNote": "Tu información está protegida con cifrado SSL de 256 bits.",
   "openChatAria": "Abrir chat"
 }
