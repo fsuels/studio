@@ -1,7 +1,8 @@
 'use client';
 
-import React from 'react';
+import React, { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
+import { ArrowDown, ArrowRight } from 'lucide-react';
 
 const steps = [
   {
@@ -9,21 +10,21 @@ const steps = [
     titleKey: 'home.steps.step1.title',
     descKey: 'home.steps.step1.desc',
     defaultTitle: 'Describe Your Situation',
-    defaultDesc: 'Use voice or text to tell us what you need.',
+    defaultDesc: 'Skip forms—just speak or type.',
   },
   {
     emoji: '🤖',
     titleKey: 'home.steps.step2.title',
     descKey: 'home.steps.step2.desc',
     defaultTitle: 'Let AI Guide You',
-    defaultDesc: 'Answer a few smart prompts.',
+    defaultDesc: "AI asks only what's needed.",
   },
   {
     emoji: '✅',
     titleKey: 'home.steps.step3.title',
     descKey: 'home.steps.step3.desc',
     defaultTitle: 'Download, Sign & Share',
-    defaultDesc: 'Fully compliant and ready in minutes.',
+    defaultDesc: 'Download a compliant doc in minutes.',
   },
 ] as const;
 
@@ -36,22 +37,27 @@ const HowItWorks = React.memo(function HowItWorks() {
         <h2 className="text-center text-3xl sm:text-4xl font-bold mb-8 text-foreground">
           {t('linkHowItWorks', { ns: 'footer', defaultValue: 'How It Works' })}
         </h2>
-        <div className="grid gap-6 md:grid-cols-3">
-          {steps.map((step) => (
-            <div
-              key={step.titleKey}
-              className="flex flex-col items-center text-center p-6 bg-card rounded-xl border border-border shadow-sm"
-            >
-              <div className="text-4xl mb-4" aria-hidden="true">
-                {step.emoji}
+        <div className="flex flex-col md:flex-row items-center md:justify-between gap-6">
+          {steps.map((step, index) => (
+            <Fragment key={step.titleKey}>
+              <div className="flex flex-col items-center text-center p-6 bg-card rounded-xl border border-border shadow-sm">
+                <div className="text-4xl mb-6" aria-hidden="true">
+                  {step.emoji}
+                </div>
+                <h3 className="text-xl font-semibold mb-3 text-card-foreground">
+                  {t(step.titleKey, { defaultValue: step.defaultTitle })}
+                </h3>
+                <p className="text-muted-foreground">
+                  {t(step.descKey, { defaultValue: step.defaultDesc })}
+                </p>
               </div>
-              <h3 className="text-xl font-semibold mb-2 text-card-foreground">
-                {t(step.titleKey, { defaultValue: step.defaultTitle })}
-              </h3>
-              <p className="text-muted-foreground">
-                {t(step.descKey, { defaultValue: step.defaultDesc })}
-              </p>
-            </div>
+              {index < steps.length - 1 && (
+                <>
+                  <ArrowDown className="md:hidden h-6 w-6 text-muted-foreground" aria-hidden="true" />
+                  <ArrowRight className="hidden md:block h-6 w-6 text-muted-foreground" aria-hidden="true" />
+                </>
+              )}
+            </Fragment>
           ))}
         </div>
       </div>
