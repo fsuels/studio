@@ -62,7 +62,7 @@ export default function TemplatesClientContent({ locale }: Props) {
 
       <div className="flex justify-center mb-10">
         <AutoImage
-          src="/images/hero-placeholder.svg"
+          src="/images/hero-homepage.png"
           alt="Happy customer"
           width={400}
           height={240}

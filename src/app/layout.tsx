@@ -72,7 +72,7 @@ export default function RootLayout({
               : setup();
           `}
         </Script>
-        <link rel="preload" href="/images/hero-placeholder.svg" as="image" />
+        <link rel="preload" href="/images/hero-homepage.png" as="image" />
         <link rel="preload" href="/images/signwell-hero.svg" as="image" />
         <link rel="alternate" href="https://123legaldoc.com/en/" hrefLang="en" />
         <link rel="alternate" href="https://123legaldoc.com/es/" hrefLang="es" />
