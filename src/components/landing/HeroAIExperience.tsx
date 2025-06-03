@@ -76,7 +76,7 @@ const HeroAIExperience = React.memo(function HeroAIExperience() {
               suppressHydrationWarning
             >
               {t('home.hero.title', {
-                defaultValue: 'Instant Legal Documents, Tailored to You',
+                defaultValue: 'Legal Peace of Mind. Instant. Intelligent.',
               })}
             </h1>
             <p
@@ -85,7 +85,7 @@ const HeroAIExperience = React.memo(function HeroAIExperience() {
             >
               {t('home.hero.subtitle', {
                 defaultValue:
-                  'Describe your situation—our AI guides you to the right document instantly.',
+                  'Say goodbye to confusion. Our AI crafts precise, professional legal documents tailored to your unique needs, fast.',
               })}
             </p>
 
