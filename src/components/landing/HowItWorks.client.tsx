@@ -37,7 +37,7 @@ const HowItWorks = React.memo(function HowItWorks() {
   const { t } = useTranslation('common');
 
   return (
-    <section id="how-it-works" className="bg-background py-16 md:py-24">
+    <section id="how-it-works" className="bg-background section-spacing">
       <div className="container mx-auto px-4">
         <h2 className="text-center text-3xl sm:text-4xl font-bold mb-8 text-foreground">
           {t('linkHowItWorks', { ns: 'footer', defaultValue: 'How It Works' })}
@@ -47,7 +47,7 @@ const HowItWorks = React.memo(function HowItWorks() {
             <Fragment key={step.titleKey}>
               <div className="flex flex-col items-center text-center p-6 bg-card rounded-xl border border-border shadow-sm">
                 <step.Illustration
-                  className="h-16 w-16 mb-6 text-brand-blue"
+                  className="h-16 w-16 mb-6 text-primary"
                   aria-hidden="true"
                 />
                 <h3 className="text-xl font-bold mb-3 text-card-foreground">

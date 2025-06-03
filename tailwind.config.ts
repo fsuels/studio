@@ -69,9 +69,9 @@ const config: Config = {
         },
 
         // brand palette from prompt
-        'brand-blue': '#2563eb',
+        'brand-blue': '#1e3a8a',
         'brand-green': '#22c55e',
-        'brand-slate': '#0f172a',
+        'brand-slate': '#1f2937',
         'brand-sky': '#e0f2fe',
       },
 
@@ -81,7 +81,7 @@ const config: Config = {
 
       fontFamily: {
         sans: ['var(--font-geist-sans)', 'InterVariable', ...fontFamily.sans],
-        display: ['Poppins', ...fontFamily.sans],
+        display: ['var(--font-merriweather)', 'Merriweather', ...fontFamily.serif],
         mono: ['var(--font-geist-mono)', ...fontFamily.mono],
       },
 
