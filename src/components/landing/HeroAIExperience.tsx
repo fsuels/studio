@@ -114,7 +114,7 @@ const HeroAIExperience = React.memo(function HeroAIExperience() {
               <Button
                 asChild
                 size="lg"
-                className="bg-accent hover:bg-accent/90 text-accent-foreground shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 text-base px-8 py-3"
+                className="bg-brand-blue text-white hover:bg-brand-blue/90 shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 text-base h-12 px-10 py-4"
               >
                 <Link href="/#workflow-start">
                   {isHydrated
@@ -130,7 +130,7 @@ const HeroAIExperience = React.memo(function HeroAIExperience() {
               >
                 <Link href="/#how-it-works">
                   {isHydrated
-                    ? t('ctaSecondary', { defaultValue: 'See How It Works' })
+                    ? t('ctaSecondary', { defaultValue: 'Learn More' })
                     : placeholderText}
                 </Link>
               </Button>

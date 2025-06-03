@@ -390,12 +390,14 @@ const TrustAndTestimonialsSection = React.memo(
           </div>
           <Button
             size="lg"
-            className="mt-6 px-8 py-3 text-lg bg-accent hover:bg-accent/90 text-accent-foreground transition rounded-full font-semibold shadow-lg hover:shadow-xl transform hover:scale-105"
+            className="mt-6 h-12 px-10 py-4 text-lg bg-brand-blue text-white hover:bg-brand-blue/90 transition rounded-full font-semibold shadow-lg hover:shadow-xl transform hover:scale-105"
             onClick={scrollToWorkflow}
             disabled={!isHydrated}
           >
             {isHydrated
-              ? t('home.callToAction', { defaultValue: 'Get Started Now' })
+              ? t('home.callToAction', {
+                  defaultValue: 'Create Your Document Now',
+                })
               : placeholderText}
           </Button>
         </div>

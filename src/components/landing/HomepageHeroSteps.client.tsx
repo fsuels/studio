@@ -138,7 +138,7 @@ const HomepageHeroSteps = React.memo(function HomepageHeroSteps() {
           <Button
             asChild
             size="lg"
-            className="text-lg px-8 py-4 bg-accent hover:bg-accent/90 text-accent-foreground shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
+            className="text-lg h-12 px-10 py-4 bg-brand-blue text-white hover:bg-brand-blue/90 shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
             disabled={!isHydrated}
           >
             <Link href="/#workflow-start" onClick={handleStartClick}>
@@ -161,7 +161,7 @@ const HomepageHeroSteps = React.memo(function HomepageHeroSteps() {
           >
             <Link href="/#how-it-works" onClick={handleDemoClick}>
               {isHydrated
-                ? t('ctaSecondary', { defaultValue: 'See Demo' })
+                ? t('ctaSecondary', { defaultValue: 'Learn More' })
                 : placeholderText}
             </Link>
           </Button>
