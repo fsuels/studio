@@ -376,30 +376,21 @@ const TrustAndTestimonialsSection = React.memo(
           />
         </div>
 
-        <div className="mt-16 md:mt-20 flex flex-col items-center space-y-6 px-4">
-          <div className="inline-flex items-center gap-2 bg-card text-sm px-5 py-3 rounded-full shadow-md border border-border">
-            <ShieldCheck className="h-5 w-5 text-primary" />
-            <span className="font-medium text-foreground/90">
-              {isHydrated
-                ? t('home.moneyBackGuarantee', {
-                    defaultValue:
-                      '100% Satisfaction Guarantee or Your Money Back',
-                  })
-                : placeholderText}
-            </span>
+        <div className="mt-16 md:mt-20 px-4">
+          <div className="bg-secondary/50 border border-border rounded-2xl p-8 md:p-10 flex flex-col items-center space-y-6 text-center shadow-md">
+            <h3 className="text-2xl font-semibold text-foreground">
+              {isHydrated ? t('home.midCtaHeadline', { defaultValue: "Ready to Simplify Your Legal Needs?" }) : placeholderText}
+            </h3>
+            <div className="inline-flex items-center gap-2 bg-card text-sm px-5 py-3 rounded-full shadow-md border border-border">
+              <ShieldCheck className="h-5 w-5 text-primary" />
+              <span className="font-medium text-foreground/90">
+                {isHydrated ? t('home.moneyBackGuarantee', { defaultValue: "100% Satisfaction Guarantee or Your Money Back" }) : placeholderText}
+              </span>
+            </div>
+            <Button size="lg" className="h-14 px-12 text-lg bg-brand-blue text-white hover:bg-brand-blue/90 transition rounded-full font-semibold shadow-lg hover:shadow-xl transform hover:scale-105" onClick={scrollToWorkflow} disabled={!isHydrated}>
+              {isHydrated ? t('home.callToAction', { defaultValue: "Create My First Document" }) : placeholderText}
+            </Button>
           </div>
-          <Button
-            size="lg"
-            className="mt-6 h-12 px-10 py-4 text-lg bg-brand-blue text-white hover:bg-brand-blue/90 transition rounded-full font-semibold shadow-lg hover:shadow-xl transform hover:scale-105"
-            onClick={scrollToWorkflow}
-            disabled={!isHydrated}
-          >
-            {isHydrated
-              ? t('home.callToAction', {
-                  defaultValue: 'Create Your Document Now',
-                })
-              : placeholderText}
-          </Button>
         </div>
       </section>
     );
