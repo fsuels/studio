@@ -105,7 +105,7 @@ const HomepageHeroSteps = React.memo(function HomepageHeroSteps() {
           suppressHydrationWarning
         >
           {t('home.hero.title', {
-            defaultValue: 'Legal Docs at Your Fingertips',
+            defaultValue: 'Instant Legal Documents, Tailored to You',
           })}
         </motion.h1>
         <motion.p
