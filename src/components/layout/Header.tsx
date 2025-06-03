@@ -5,8 +5,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useRouter, useParams } from 'next/navigation';
 import { Logo } from '@/components/layout/Logo';
-// Import navigation components statically so they are loaded with the initial
-// bundle instead of on-demand. This reduces the delay when navigating between
+// Import navigation components statically so they are included in the main bundle
+// instead of on-demand. This reduces the delay when navigating between
 // pages.
 import Nav from '@/components/Nav';
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
@@ -162,7 +162,7 @@ const Header = React.memo(function Header() {
     const handleScroll = () => {
       setScrolled(window.scrollY > 10);
     };
-    handleScroll();
+    handleScroll(); // Check on mount
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -171,22 +171,22 @@ const Header = React.memo(function Header() {
     <div className="sticky top-0 z-50">
       <header
         className={cn(
-          'header w-full border-b border-border/40 bg-background/95 supports-[backdrop-filter]:bg-background/60 overflow-visible transition-shadow',
-          scrolled && 'scrolled',
+          'header w-full border-b border-border/40 overflow-visible transition-shadow duration-300 ease-in-out',
+          scrolled
+            ? 'bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 shadow-lg'
+            : 'bg-background',
         )}
       >
       <div className="container flex h-14 items-center px-4 md:px-6">
         <div className="mr-auto md:mr-4 flex items-center">
           <Logo
             wrapperClassName="items-center self-center mr-2 md:mr-4"
-            svgClassName="h-7 w-7 md:h-8 md:w-8"
+            svgClassName="h-7 w-7 md:h-9 md:w-9" // Updated logo size
             textClassName="text-xs md:text-sm"
           />
         </div>
 
         {/* Mobile menu toggle */}
-        {/* This div was previously outside the container and had absolute positioning.
-            It is now inside the container and uses flex properties for alignment. */}
         <div className="md:hidden flex items-center ml-auto">
           <Button
             variant="default"
@@ -221,7 +221,8 @@ const Header = React.memo(function Header() {
                 variant="default"
                 size="sm"
                 className={cn(
-                  'text-sm font-medium flex items-center gap-1 px-3 h-9 bg-[#008466] text-white drop-shadow-lg hover:bg-[#00664e] focus-visible:ring-primary focus-visible:ring-2 focus-visible:ring-offset-2',
+                  'text-sm font-medium flex items-center gap-1 px-3 h-9 text-white drop-shadow-lg focus-visible:ring-2 focus-visible:ring-offset-2',
+                  'bg-[#008466] hover:bg-[#00664e] focus-visible:ring-[#008466]', // Specific green
                   isMegaMenuOpen && 'bg-[#00664e]',
                 )}
                 disabled={!mounted}
@@ -243,12 +244,12 @@ const Header = React.memo(function Header() {
             <PopoverContent
               align="center"
               side="bottom"
-              sideOffset={12} // Slight offset from the trigger
+              sideOffset={12}
               className="
-                w-[calc(100vw-4rem)] md:w-[calc(100vw-8rem)] lg:w-[calc(100vw-12rem)] xl:w-[1280px] // Responsive width
-                max-w-[90vw] md:max-w-7xl // Ensure it doesn't exceed viewport greatly
+                w-[calc(100vw-4rem)] md:w-[calc(100vw-8rem)] lg:w-[calc(100vw-12rem)] xl:w-[1280px]
+                max-w-[90vw] md:max-w-7xl
                 bg-popover
-                p-0 // Remove padding, content will handle it
+                p-0 
                 rounded-lg
                 shadow-xl
                 z-[60]
@@ -322,16 +323,16 @@ const Header = React.memo(function Header() {
 
           {/* Auth buttons */}
           {mounted &&
-            (isLoggedIn && user ? ( // Check if user object exists
+            (isLoggedIn && user ? ( 
               <>
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="text-xs font-medium px-2 py-1.5 md:px-3 h-9 md:h-8 hover:bg-muted focus-visible:ring-primary focus-visible:ring-2 focus-visible:ring-offset-2 flex items-center"
+                  className="text-sm font-medium px-3 h-9 hover:bg-muted focus-visible:ring-primary focus-visible:ring-2 focus-visible:ring-offset-2 flex items-center"
                   asChild
                 >
                   <Link href={`/${clientLocale}/dashboard`}>
-                    <UserCircle className="h-4 w-4 mr-1 md:mr-2" />{' '}
+                    <UserCircle className="h-4 w-4 mr-1 md:mr-2" />
                     {tHeader('My Account')}
                   </Link>
                 </Button>
@@ -339,34 +340,36 @@ const Header = React.memo(function Header() {
                   variant="outline"
                   size="sm"
                   onClick={handleLogout}
-                  className="text-xs font-medium px-2 py-1.5 md:px-3 h-9 md:h-8 hover:bg-muted focus-visible:ring-primary focus-visible:ring-2 focus-visible:ring-offset-2"
+                  className="text-sm font-medium px-3 h-9 hover:bg-muted focus-visible:ring-primary focus-visible:ring-2 focus-visible:ring-offset-2"
                 >
-                  <LogOut className="h-4 w-4 mr-1 md:mr-2" />{' '}
+                  <LogOut className="h-4 w-4 mr-1 md:mr-2" />
                   {tHeader('Logout')}
                 </Button>
               </>
             ) : (
               <>
-                <div className="flex items-center gap-2 ml-2 border border-primary px-3 py-1 rounded-md hover:bg-primary/10">
-                  <Link
-                    href={`/${clientLocale}/signup`}
-                    className="flex items-center text-xs font-medium"
-                  >
+                <Button
+                  variant="outline"
+                  size="sm"
+                  asChild
+                  className="text-sm font-medium px-3 h-9 border-primary text-primary hover:bg-primary/10 hover:text-primary focus-visible:ring-primary"
+                >
+                  <Link href={`/${clientLocale}/signup`}>
                     <UserPlus className="h-4 w-4 mr-1 md:mr-2" />
-                    <span className="hidden sm:inline">
-                      {tHeader('Sign Up')}
-                    </span>
+                    {tHeader('Sign Up')}
                   </Link>
-                  <Link
-                    href={`/${clientLocale}/signin`}
-                    className="flex items-center text-xs font-medium"
-                  >
+                </Button>
+                <Button
+                  variant="default"
+                  size="sm"
+                  asChild
+                  className="text-sm font-medium px-3 h-9 focus-visible:ring-primary"
+                >
+                  <Link href={`/${clientLocale}/signin`}>
                     <LogIn className="h-4 w-4 mr-1 md:mr-2" />
-                    <span className="hidden sm:inline">
-                      {tHeader('Sign In')}
-                    </span>
+                    {tHeader('Sign In')}
                   </Link>
-                </div>
+                </Button>
               </>
             ))}
         </nav>
@@ -515,7 +518,7 @@ const Header = React.memo(function Header() {
 
             {/* Mobile auth */}
             <div className="border-t border-border pt-4 space-y-2">
-              {isLoggedIn && user ? ( // Check if user object exists
+              {isLoggedIn && user ? ( 
                 <>
                   <Button
                     variant="ghost"
@@ -525,7 +528,7 @@ const Header = React.memo(function Header() {
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     <Link href={`/${clientLocale}/dashboard`}>
-                      <UserCircle className="h-5 w-5 mr-2" />{' '}
+                      <UserCircle className="h-5 w-5 mr-2" />
                       {tHeader('My Account')}
                     </Link>
                   </Button>

@@ -32,7 +32,7 @@ export function Logo({
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 32 32" // Square viewBox for the icon itself
         fill="none"
-        className={cn('h-8 w-8', svgClassName)} // Default size, can be overridden
+        className={cn('h-8 w-8', svgClassName)} // Default size updated to h-8 w-8
         aria-hidden="true"
         {...props} // Pass other SVG props
       >
@@ -90,7 +90,7 @@ export function Logo({
 
       {/* Text Part - HTML text below the icon, styled with primary color */}
       <span
-        className={cn('font-sans text-base leading-tight', textClassName)} // Adjusted text size for balance
+        className={cn('font-sans text-sm leading-tight', textClassName)} // Adjusted text size for balance
         style={{ color: 'hsl(var(--primary))' }}
       >
         <span className="font-light tracking-tight">123</span>
