@@ -13,6 +13,7 @@ import { CATEGORY_LIST } from '@/components/Step1DocumentSelector';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams, useRouter, useParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import PersonalizationBlock from '@/components/PersonalizationBlock';
 import AutoImage from '@/components/AutoImage';
 import SmartAssistantBar from '@/components/SmartAssistantBar';
@@ -80,6 +81,13 @@ export default function HomePageClient() {
   }, []);
 
   const workflowSectionId = 'workflow-start';
+
+  const exampleQueries = [
+    'I want to rent out my house',
+    'Hire a freelancer',
+    'Sell a used car',
+    'Start a daycare',
+  ];
 
   const scrollToWorkflow = useCallback(() => {
     const section = document.getElementById(workflowSectionId);
@@ -173,7 +181,9 @@ export default function HomePageClient() {
           backgroundRepeat: 'no-repeat',
         }}
       >
-        <div className="container mx-auto px-4 flex flex-col lg:flex-row items-center gap-8">
+        <div
+          className="container mx-auto px-4 flex flex-col items-center text-center gap-4 sm:gap-6 lg:flex-row lg:text-left lg:items-start lg:gap-8"
+        >
           <div className="flex-1 lg:pr-8 text-center lg:text-left">
             <h1 className="text-4xl lg:text-5xl font-bold leading-tight text-foreground">
               AI-Powered Legal Documents in <span className="text-primary">3 Minutes</span>
@@ -182,6 +192,13 @@ export default function HomePageClient() {
               Describe your situation—our AI guides you to the right document instantly.
             </p>
             <SmartAssistantBar />
+            <div className="flex gap-2 overflow-x-auto py-2 scrollbar-hide w-full max-w-md">
+              {exampleQueries.map((text) => (
+                <Badge key={text} variant="outline" className="whitespace-nowrap">
+                  {text}
+                </Badge>
+              ))}
+            </div>
             <div className="mt-6 flex gap-4">
               <Button className="bg-primary text-white font-medium px-6 py-2 rounded-lg shadow hover:bg-primary/90 transition">
                 Start for Free
