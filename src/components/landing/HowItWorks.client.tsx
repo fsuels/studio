@@ -2,24 +2,28 @@
 
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import AutoImage from '@/components/AutoImage';
 
 const steps = [
   {
-    emoji: '🗣️',
+    image: '/images/how-it-works-step1.svg',
+    alt: 'Chat bubble with document',
     titleKey: 'home.steps.step1.title',
     descKey: 'home.steps.step1.desc',
     defaultTitle: 'Describe Your Situation',
     defaultDesc: 'Use voice or text to tell us what you need.',
   },
   {
-    emoji: '🤖',
+    image: '/images/how-it-works-step2.svg',
+    alt: 'AI assisting with document',
     titleKey: 'home.steps.step2.title',
     descKey: 'home.steps.step2.desc',
     defaultTitle: 'Let AI Guide You',
     defaultDesc: 'Answer a few smart prompts.',
   },
   {
-    emoji: '✅',
+    image: '/images/how-it-works-step3.svg',
+    alt: 'Download or share document',
     titleKey: 'home.steps.step3.title',
     descKey: 'home.steps.step3.desc',
     defaultTitle: 'Download, Sign & Share',
@@ -42,9 +46,13 @@ const HowItWorks = React.memo(function HowItWorks() {
               key={step.titleKey}
               className="flex flex-col items-center text-center p-6 bg-card rounded-xl border border-border shadow-sm"
             >
-              <div className="text-4xl mb-4" aria-hidden="true">
-                {step.emoji}
-              </div>
+              <AutoImage
+                src={step.image}
+                alt={step.alt}
+                width={80}
+                height={80}
+                className="mb-6"
+              />
               <h3 className="text-xl font-semibold mb-2 text-card-foreground">
                 {t(step.titleKey, { defaultValue: step.defaultTitle })}
               </h3>
