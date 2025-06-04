@@ -8,7 +8,7 @@ import { documentLibrary } from '@/lib/document-library';
 import HomepageHeroSteps from '@/components/landing/HomepageHeroSteps';
 import { useToast } from '@/hooks/use-toast';
 import { Separator } from '@/components/ui/separator';
-import { Loader2, ShieldCheck, Globe, Users } from 'lucide-react';
+import { Loader2, Star } from 'lucide-react';
 import { CATEGORY_LIST } from '@/components/Step1DocumentSelector';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams, useRouter, useParams } from 'next/navigation';
@@ -185,13 +185,20 @@ export default function HomePageClient() {
             <p className="mt-4 text-lg text-gray-700 max-w-md">
               Smart forms. Clear guidance. Ready-to-sign results. Just answer a few simple questions. We'll generate ready-to-sign legal documents—no lawyer required.
             </p>
+            <p className="mt-2 text-sm text-gray-600">Trusted by startups, landlords, families</p>
+            <p className="mt-1 text-sm text-gray-600">Over 420,000 documents created and counting</p>
             <div className="mt-6 flex gap-4">
               <Button size="lg" className="bg-primary text-white">Start Free</Button>
               <Button variant="outline" size="lg">See 30-Second Demo</Button>
             </div>
             <div className="mt-4 text-sm text-gray-500">
-              <ShieldCheck className="inline-block w-4 h-4 mr-1 text-green-500" />
-              SSL Secured · Trusted by 40K+ users · No subscription required
+              <span className="inline-flex items-center gap-1">
+                <Star className="w-4 h-4 text-yellow-400" />
+              </span>
+              ·
+              Over 40,000 users
+              ·
+              SSL Secure Checkout
             </div>
           </div>
 
