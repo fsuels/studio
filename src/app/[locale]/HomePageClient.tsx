@@ -180,17 +180,6 @@ export default function HomePageClient() {
         </div>
       </section>
 
-      <section className="bg-white py-16">
-        <div className="max-w-4xl mx-auto px-6 text-center">
-          <h2 className="text-4xl font-extrabold text-gray-800">
-            {t(
-              'howItWorks.sectionTitle',
-              'Create, Edit and Print Your Document in Minutes'
-            )}
-          </h2>
-        </div>
-      </section>
-
       {/* Lazy-loaded “How It Works” section */}
       <HowItWorks />
 
