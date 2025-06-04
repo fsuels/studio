@@ -170,57 +170,36 @@ export default function HomePageClient() {
       <AnnouncementBar />
 
       {/* HERO SECTION */}
-      <section
-        className="relative overflow-hidden bg-gradient-to-r from-[#E0F7F5] to-[#FFFFFF] pt-20 pb-16"
-        style={{
-          backgroundPosition: 'left center',
-          backgroundSize: 'cover',
-          backgroundRepeat: 'no-repeat',
-        }}
-      >
-        <div id="morphBg" aria-hidden="true" />
-        <div className="container mx-auto px-4 flex flex-col lg:flex-row items-center gap-8">
-          <div className="flex-1 lg:pr-8 text-center lg:text-left">
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-black leading-tight text-foreground font-sans">
-              Your AI Legal Assistant. Documents Ready in Minutes.
+      <section className="bg-white py-16 md:py-24">
+        <div className="container mx-auto px-4 grid md:grid-cols-2 gap-12 items-center">
+          {/* Left column: Text */}
+          <div className="max-w-xl">
+            <h1 className="text-4xl md:text-5xl font-extrabold leading-tight tracking-tight text-gray-900">
+              Handle Legal Documents with Confidence. In Minutes.
             </h1>
-            <p className="mt-4 text-xl text-muted-foreground font-medium">
-              Answer a few questions and instantly receive lawyer-grade paperwork.
+            <p className="mt-4 text-lg text-gray-700">
+              Smart forms. Clear guidance. Ready-to-sign results.
+              Just answer a few simple questions. We'll generate ready-to-sign legal documents—no lawyer required.
             </p>
-            <SmartAssistantBar />
             <div className="mt-6 flex gap-4">
-              <Button className="bg-primary text-white font-medium px-6 py-2 rounded-lg shadow hover:bg-primary/90 transition">
-                Start for Free
-              </Button>
-              <Button variant="outline" className="border border-primary text-primary font-medium px-6 py-2 rounded-lg hover:bg-primary/10 transition">
-                See 30-Second Demo
-              </Button>
+              <Button size="lg" className="bg-primary text-white">Start Free</Button>
+              <Button variant="outline" size="lg">See 30-Second Demo</Button>
             </div>
-            <div className="mt-4 flex items-center gap-6 text-xs text-muted-foreground">
-              <div className="flex items-center gap-1">
-                <ShieldCheck className="h-4 w-4 text-primary" />
-                <span>ISO 27001</span>
-              </div>
-              <div className="flex items-center gap-1">
-                <ShieldCheck className="h-4 w-4 text-primary" />
-                <span>SOC 2 Type II</span>
-              </div>
-              <div className="flex items-center gap-1">
-                <Globe className="h-4 w-4 text-primary" />
-                <span>GDPR Compliant</span>
-              </div>
-              <div className="flex items-center gap-1">
-                <Users className="h-4 w-4 text-primary" />
-                <span>Trusted by 4M+ Users</span>
-              </div>
+            <div className="mt-4 text-sm text-gray-500">
+              <ShieldCheck className="inline-block w-4 h-4 mr-1 text-green-500" />
+              SSL Secured · Trusted by 40K+ users · No subscription required
             </div>
-            <LiveActivityFeed />
           </div>
-          <div className="flex-1 hidden lg:block h-96 relative">
+
+          {/* Right column: Image */}
+          <div className="flex justify-center">
             <AutoImage
-              src="/images/hero-digital-docs.svg"
-              alt="Illustration of AI generating legal documents"
-              className="object-cover w-full h-full"
+              src="/images/hero-homepage.png"
+              alt="People using AI legal assistant"
+              width={500}
+              height={400}
+              className="rounded-xl shadow-lg"
+              priority
             />
           </div>
         </div>
