@@ -5,24 +5,16 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { lazyOnView } from '@/components/LazyOnView';
 import type { LegalDocument } from '@/lib/document-library';
 import { documentLibrary } from '@/lib/document-library';
-import HomepageHeroSteps from '@/components/landing/HomepageHeroSteps';
 import { useToast } from '@/hooks/use-toast';
 import { Separator } from '@/components/ui/separator';
-import { Loader2, Star, Info } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 import { CATEGORY_LIST } from '@/components/Step1DocumentSelector';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams, useRouter, useParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import PersonalizationBlock from '@/components/PersonalizationBlock';
 import AutoImage from '@/components/AutoImage';
-import SmartAssistantBar from '@/components/SmartAssistantBar';
-import LiveActivityFeed from '@/components/landing/LiveActivityFeed';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
+import SearchBar from '@/components/SearchBar';
 
 const LoadingSpinner = () => (
   <div className="flex justify-center items-center h-32">
@@ -181,61 +173,48 @@ export default function HomePageClient() {
       <AnnouncementBar />
 
       {/* HERO SECTION */}
-      <section className="bg-white py-12 md:py-20">
-        <div className="container mx-auto px-4 grid md:grid-cols-2 gap-x-12 gap-y-4 md:gap-y-0 items-center">
-          {/* Left column: Text */}
-          <div className="max-w-xl mb-2 md:-mb-6">
-            <h1 className="text-4xl md:text-5xl font-extrabold leading-tight tracking-tight text-gray-900 mb-2">
-              Handle Legal Documents with Confidence. In Minutes.
+      <section className="bg-white py-16">
+        <div className="max-w-7xl mx-auto px-6 lg:grid lg:grid-cols-2 lg:gap-8 items-center">
+          {/* Left column */}
+          <div>
+            <h1 className="text-4xl sm:text-5xl font-bold text-gray-800 leading-tight">
+              Handle Legal Documents with Confidence—in Minutes.
             </h1>
-            <p className="mt-3 mb-3 text-lg text-gray-700 max-w-md">
-              <span>Smart forms. Clear guidance.</span>
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Info className="inline h-4 w-4 ml-1 text-muted-foreground cursor-help" />
-                  </TooltipTrigger>
-                  <TooltipContent side="top" className="max-w-xs text-sm">
-                    Our AI wizard asks you simple prompts—no legal jargon.
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>{' '}
-              Ready-to-sign results. Just answer a few simple questions. We'll generate ready-to-sign legal documents—no lawyer required.
+            <p className="mt-4 text-lg text-gray-600">
+              Smart forms. Clear guidance. Ready-to-sign results. Just answer a few simple questions and receive lawyer-quality paperwork—no attorney required.
             </p>
-            <p className="mt-1 mb-1 text-sm text-gray-600">Trusted by startups, landlords, families</p>
-            <p className="mt-1 mb-4 text-sm text-gray-600">Over 420,000 documents created and counting</p>
-            <div className="mt-4 flex gap-4">
-              <Button size="lg" className="bg-primary text-white">Start Free</Button>
-              <Button variant="outline" size="lg">See 30-Second Demo</Button>
+            <div className="mt-6 space-y-4 sm:space-y-0 sm:flex sm:items-center sm:space-x-4">
+              <Button className="bg-emerald-500 hover:bg-emerald-600 text-white px-5 py-3 rounded-lg font-semibold text-lg">
+                Start Free
+              </Button>
+              <Button variant="outline" className="border-gray-300 hover:border-gray-400 text-gray-700 px-5 py-3 rounded-lg font-medium text-lg">
+                See 30-Second Demo
+              </Button>
             </div>
-            <div className="mt-4 text-sm text-gray-500">
-              <span className="inline-flex items-center gap-1">
-                <Star className="w-4 h-4 text-yellow-400" />
-              </span>
-              ·
-              Over 40,000 users
-              ·
-              SSL Secure Checkout
+            {/* Search Bar + Secondary CTA */}
+            <div className="mt-8">
+              <div className="relative max-w-md">
+                <SearchBar />
+                <Button className="absolute right-1 top-1/2 -translate-y-1/2 bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-full text-sm font-medium">
+                  Start Free, Pay $35/Doc →
+                </Button>
+              </div>
+              <p className="mt-2 text-sm text-gray-500">
+                Trusted by 4,200+ docs generated • SSL Secure Checkout • Attorney-Reviewed Templates • Trustpilot ★★★★★
+              </p>
             </div>
           </div>
-
-          {/* Right column: Image */}
-          <div className="flex justify-center lg:-mt-12">
+          {/* Right column */}
+          <div className="mt-10 lg:mt-0 flex justify-center lg:justify-end">
             <AutoImage
-              src="/images/hero-homepage.png"
-              alt="People using AI legal assistant"
-              width={500}
-              height={400}
-              className="rounded-xl shadow-md"
-              priority
+              src="/images/hero-laptop.svg"
+              alt="Contract on Laptop Illustration"
+              className="w-full max-w-lg"
+              placeholder="blur"
             />
           </div>
         </div>
       </section>
-
-      <div className="pt-8 md:pt-12">
-        <HomepageHeroSteps />
-      </div>
       <HowItWorks />
       <TrustAndTestimonialsSection />
       <FeaturedLogosSection />

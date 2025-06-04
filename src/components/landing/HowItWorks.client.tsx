@@ -36,7 +36,7 @@ const HowItWorks = React.memo(function HowItWorks() {
   const { t } = useTranslation('common');
 
   return (
-    <section id="how-it-works" className="bg-background py-16 md:py-24">
+    <section id="how-it-works" className="bg-background py-12">
       <div className="container mx-auto px-4">
         <h2 className="text-center text-3xl sm:text-4xl font-bold mb-8 text-foreground">
           {t('linkHowItWorks', { ns: 'footer', defaultValue: 'How It Works' })}
