@@ -182,10 +182,10 @@ export default function HomePageClient() {
         <div className="container mx-auto px-4 flex flex-col lg:flex-row items-center gap-8">
           <div className="flex-1 lg:pr-8 text-center lg:text-left">
             <h1 className="text-5xl md:text-6xl lg:text-7xl font-black leading-tight text-foreground font-sans">
-            Legal Peace of Mind. Instant. Intelligent.
+            Handle Legal Documents with Confidence. In Minutes. Smart forms. Clear guidance. Ready-to-sign results.
             </h1>
             <p className="mt-4 text-xl text-muted-foreground font-medium">
-              Answer a few questions and instantly receive lawyer-grade paperwork.
+            Just answer a few simple questions. We'll generate ready-to-sign legal documents—no lawyer required.
             </p>
             <SmartAssistantBar />
             <div className="mt-6 flex gap-4">
