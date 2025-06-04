@@ -284,7 +284,7 @@ const TrustAndTestimonialsSection = React.memo(
     return (
       <section
         ref={sectionRef}
-        className="bg-gradient-to-b from-secondary/40 to-secondary/20 py-16 md:py-20 text-center"
+        className="bg-gradient-to-b from-secondary/40 to-secondary/20 py-16 text-center"
       >
         <div className="container mx-auto px-4 mb-12 md:mb-16">
           <p className="text-xs uppercase text-muted-foreground tracking-wider mb-3 font-medium">

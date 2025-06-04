@@ -103,7 +103,7 @@ const TopDocsChips = React.memo(function TopDocsChips() {
   }
 
   return (
-    <section className="container mx-auto px-4 py-8 md:py-12">
+    <section className="container mx-auto px-4 py-16">
       <h2 className="text-xl font-semibold text-center mb-6 text-foreground">
         {tCommon('TopDocsChips.title', {
           defaultValue: 'Popular Legal Documents',
