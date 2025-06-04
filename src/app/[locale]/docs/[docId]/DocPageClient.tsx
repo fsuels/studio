@@ -2,6 +2,7 @@
 'use client';
 
 import { notFound, useRouter, useParams } from 'next/navigation';
+import { TooltipProvider } from '@/components/ui/tooltip';
 import { documentLibrary } from '@/lib/document-library';
 import { useTranslation } from 'react-i18next';
 import Link from 'next/link';
@@ -27,7 +28,6 @@ import {
   Tooltip,
   TooltipTrigger,
   TooltipContent,
-  TooltipProvider,
 } from '@/components/ui/tooltip';
 import { Badge } from '@/components/ui/badge';
 import { track } from '@/lib/analytics';
@@ -243,88 +243,88 @@ export default function DocPageClient({
   const competitorPrice = 200;
 
   return (
-    <main className="container mx-auto py-12 px-4 sm:px-6 lg:px-8">
-      <nav className="text-sm mb-6 space-x-1 text-muted-foreground">
-        <Link
-          href={`/${currentLocale}`}
-          className="hover:text-primary transition-colors"
-        >
-          {t('Home')}
-        </Link>
-        <span>/</span>
-        <span className="text-foreground font-medium">
-          {documentDisplayName}
-        </span>
-      </nav>
-
-      {/* Hero Section */}
-      <div className="text-center mb-10 md:mb-16">
-        <div className="inline-block p-3 mb-4 bg-primary/10 rounded-full">
-          <FileText className="h-8 w-8 text-primary" />
-        </div>
-        <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-3 text-foreground">
-          {documentDisplayName}
-        </h1>
-        <div className="flex items-center justify-center space-x-2 mb-3">
-          {Array(5)
-            .fill(0)
-            .map((_, i) => (
-              <Star
-                key={i}
-                className="h-5 w-5 text-yellow-400 fill-yellow-400 star-gradient"
-              />
-            ))}
-          <span className="text-sm text-muted-foreground">
-            (4.9 stars - 200+ reviews)
-          </span>
-        </div>
-        <p className="text-lg text-muted-foreground mb-6 max-w-2xl mx-auto">
-          {documentDescription}
-        </p>
-
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-3xl mx-auto mb-8">
-          {benefits.map((benefit, index) => (
-            <div
-              key={index}
-              className="flex items-center space-x-2 p-3 bg-card border border-border rounded-lg text-left"
-            >
-              <benefit.icon className="h-5 w-5 text-primary shrink-0" />
-              <span className="text-xs text-card-foreground">
-                {t(benefit.textKey, benefit.defaultText)}
-              </span>
-            </div>
-          ))}
-        </div>
-
-        <Button
-          size="lg"
-          className="w-full sm:w-auto text-base px-8 py-3"
-          onClick={handleStartWizard}
-          disabled={!isHydrated}
-        >
-          {t('Start For Free', { defaultValue: 'Start For Free' })}
-        </Button>
-        <div className="mt-4">
+    <TooltipProvider>
+      <main className="container mx-auto py-12 px-4 sm:px-6 lg:px-8">
+        <nav className="text-sm mb-6 space-x-1 text-muted-foreground">
           <Link
-            href={`/${currentLocale}#workflow-start`}
-            className="text-sm text-primary underline"
+            href={`/${currentLocale}`}
+            className="hover:text-primary transition-colors"
           >
-            {t('Browse Templates', { defaultValue: 'Browse Templates' })}
+            {t('Home')}
           </Link>
+          <span>/</span>
+          <span className="text-foreground font-medium">
+            {documentDisplayName}
+          </span>
+        </nav>
+
+        {/* Hero Section */}
+        <div className="text-center mb-10 md:mb-16">
+          <div className="inline-block p-3 mb-4 bg-primary/10 rounded-full">
+            <FileText className="h-8 w-8 text-primary" />
+          </div>
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-3 text-foreground">
+            {documentDisplayName}
+          </h1>
+          <div className="flex items-center justify-center space-x-2 mb-3">
+            {Array(5)
+              .fill(0)
+              .map((_, i) => (
+                <Star
+                  key={i}
+                  className="h-5 w-5 text-yellow-400 fill-yellow-400 star-gradient"
+                />
+              ))}
+            <span className="text-sm text-muted-foreground">
+              (4.9 stars - 200+ reviews)
+            </span>
+          </div>
+          <p className="text-lg text-muted-foreground mb-6 max-w-2xl mx-auto">
+            {documentDescription}
+          </p>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-3xl mx-auto mb-8">
+            {benefits.map((benefit, index) => (
+              <div
+                key={index}
+                className="flex items-center space-x-2 p-3 bg-card border border-border rounded-lg text-left"
+              >
+                <benefit.icon className="h-5 w-5 text-primary shrink-0" />
+                <span className="text-xs text-card-foreground">
+                  {t(benefit.textKey, benefit.defaultText)}
+                </span>
+              </div>
+            ))}
+          </div>
+
+          <Button
+            size="lg"
+            className="w-full sm:w-auto text-base px-8 py-3"
+            onClick={handleStartWizard}
+            disabled={!isHydrated}
+          >
+            {t('Start For Free', { defaultValue: 'Start For Free' })}
+          </Button>
+          <div className="mt-4">
+            <Link
+              href={`/${currentLocale}#workflow-start`}
+              className="text-sm text-primary underline"
+            >
+              {t('Browse Templates', { defaultValue: 'Browse Templates' })}
+            </Link>
+          </div>
         </div>
-      </div>
 
-      <Separator className="my-8 md:my-12" />
+        <Separator className="my-8 md:my-12" />
 
-      {/* Preview & Pricing Information Section */}
-      <div className="grid grid-cols-1 md:grid-cols-5 gap-8 items-start">
-        <section className="md:col-span-3 bg-card shadow-xl rounded-xl p-2 md:p-4 lg:p-6 border border-border">
-          <div className="text-center mb-4">
-            <h2 className="text-xl md:text-2xl font-semibold text-foreground mb-1 flex items-center justify-center gap-1">
-              {t('docDetail.previewTitle', {
-                defaultValue: 'Document Preview',
-              })}
-              <TooltipProvider>
+        {/* Preview & Pricing Information Section */}
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-8 items-start">
+          <section className="md:col-span-3 bg-card shadow-xl rounded-xl p-2 md:p-4 lg:p-6 border border-border">
+            <div className="text-center mb-4">
+              <h2 className="text-xl md:text-2xl font-semibold text-foreground mb-1 flex items-center justify-center gap-1">
+                {t('docDetail.previewTitle', {
+                  defaultValue: 'Document Preview',
+                })}
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <Info className="h-4 w-4 text-muted-foreground cursor-help" />
@@ -333,238 +333,243 @@ export default function DocPageClient({
                     This shows a sample layout of your completed form.
                   </TooltipContent>
                 </Tooltip>
-              </TooltipProvider>
-            </h2>
-            <p className="text-xs text-muted-foreground">
-              {t('docDetail.previewSubtitle', {
-                defaultValue:
-                  'This is how your document will generally look. Specific clauses and details will be customized by your answers.',
-              })}
-            </p>
-          </div>
-          <DocumentDetail
-            locale={currentLocale as 'en' | 'es'}
-            docId={docId as string}
-            altText={`${documentDisplayName} preview`}
-            markdownContent={markdownContent} // Add this prop
-          />
-          <p className="text-xs text-muted-foreground mt-2 text-center italic">
-            AI Highlight: <AiHighlightPlaceholder text="Key clauses" /> will be
-            automatically tailored.
-          </p>
-        </section>
-
-        <aside className="md:col-span-2 space-y-6">
-          <div className="relative">
-            <div
-              className="sticky top-24 [animation:fadeUp_0.4s_ease-out]"
-              data-testid="price-sticky"
-            >
-              <Card className="shadow-lg border-primary">
-                <CardHeader>
-                  <CardTitle className="text-lg text-primary">
-                    {t('docDetail.pricingTitle', 'Transparent Pricing')}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-3">
-              <div className="flex items-baseline justify-between">
-                <p className="text-2xl font-bold">
-                  ${docConfig.basePrice.toFixed(2)}
-                </p>
-                <span className="text-sm text-muted-foreground">
-                  {t('pricing.perDocument', { defaultValue: 'per document' })}
-                </span>
-              </div>
+              </h2>
               <p className="text-xs text-muted-foreground">
-                {t('docDetail.competitivePrice', {
-                  competitorPrice: competitorPrice.toFixed(2),
-                  defaultValue: `Compare to typical attorney fees of $${competitorPrice.toFixed(2)}+`,
+                {t('docDetail.previewSubtitle', {
+                  defaultValue:
+                    'This is how your document will generally look. Specific clauses and details will be customized by your answers.',
                 })}
               </p>
-              <ul className="mt-3 space-y-1 text-sm">
-                <li className="flex items-center gap-2">
-                  <ShieldCheck className="h-4 w-4 text-teal-600" /> Attorney-approved
-                </li>
-                <li className="flex items-center gap-2">
-                  <Clock className="h-4 w-4 text-teal-600" /> Ready in 3 minutes
-                </li>
-                <li className="flex items-center gap-2">
-                  <RotateCcw className="h-4 w-4 text-teal-600" /> 100 % money-back guarantee
-                </li>
-              </ul>
-              <Button
-                size="lg"
-                className="w-full mt-2"
-                onClick={handleStartWizard}
-                disabled={!isHydrated}
+            </div>
+            <DocumentDetail
+              locale={currentLocale as 'en' | 'es'}
+              docId={docId as string}
+              altText={`${documentDisplayName} preview`}
+              markdownContent={markdownContent} // Add this prop
+            />
+            <p className="text-xs text-muted-foreground mt-2 text-center italic">
+              AI Highlight: <AiHighlightPlaceholder text="Key clauses" /> will
+              be automatically tailored.
+            </p>
+          </section>
+
+          <aside className="md:col-span-2 space-y-6">
+            <div className="relative">
+              <div
+                className="sticky top-24 [animation:fadeUp_0.4s_ease-out]"
+                data-testid="price-sticky"
               >
-                {t('Start For Free', { defaultValue: 'Start For Free' })}
-              </Button>
-            </CardContent>
-              </Card>
-              {/* Trust block under price card */}
-              <div className="mt-4 space-y-2 text-center">
-                {/* Let’s Encrypt */}
-                {/* Documents generated counter */}
-                <p className="text-xs text-gray-500">
-                  <strong>104,213</strong> templates downloaded this year
-                </p>
-                {/* Refund badge */}
-                <div className="inline-flex items-center gap-1 text-xs text-gray-500">
-                  <svg
-                    width="14"
-                    height="14"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-                  </svg>
-                  30-day money-back guarantee
+                <Card className="shadow-lg border-primary">
+                  <CardHeader>
+                    <CardTitle className="text-lg text-primary">
+                      {t('docDetail.pricingTitle', 'Transparent Pricing')}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    <div className="flex items-baseline justify-between">
+                      <p className="text-2xl font-bold">
+                        ${docConfig.basePrice.toFixed(2)}
+                      </p>
+                      <span className="text-sm text-muted-foreground">
+                        {t('pricing.perDocument', {
+                          defaultValue: 'per document',
+                        })}
+                      </span>
+                    </div>
+                    <p className="text-xs text-muted-foreground">
+                      {t('docDetail.competitivePrice', {
+                        competitorPrice: competitorPrice.toFixed(2),
+                        defaultValue: `Compare to typical attorney fees of $${competitorPrice.toFixed(2)}+`,
+                      })}
+                    </p>
+                    <ul className="mt-3 space-y-1 text-sm">
+                      <li className="flex items-center gap-2">
+                        <ShieldCheck className="h-4 w-4 text-teal-600" />{' '}
+                        Attorney-approved
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <Clock className="h-4 w-4 text-teal-600" /> Ready in 3
+                        minutes
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <RotateCcw className="h-4 w-4 text-teal-600" /> 100 %
+                        money-back guarantee
+                      </li>
+                    </ul>
+                    <Button
+                      size="lg"
+                      className="w-full mt-2"
+                      onClick={handleStartWizard}
+                      disabled={!isHydrated}
+                    >
+                      {t('Start For Free', { defaultValue: 'Start For Free' })}
+                    </Button>
+                  </CardContent>
+                </Card>
+                {/* Trust block under price card */}
+                <div className="mt-4 space-y-2 text-center">
+                  {/* Let’s Encrypt */}
+                  {/* Documents generated counter */}
+                  <p className="text-xs text-gray-500">
+                    <strong>104,213</strong> templates downloaded this year
+                  </p>
+                  {/* Refund badge */}
+                  <div className="inline-flex items-center gap-1 text-xs text-gray-500">
+                    <svg
+                      width="14"
+                      height="14"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                    </svg>
+                    30-day money-back guarantee
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
 
-          {docConfig.upsellClauses && docConfig.upsellClauses.length > 0 && (
+            {docConfig.upsellClauses && docConfig.upsellClauses.length > 0 && (
+              <Card className="shadow-md">
+                <CardHeader>
+                  <CardTitle className="text-md flex items-center gap-2">
+                    <Zap size={18} className="text-accent" />{' '}
+                    {t('docDetail.optionalAddons', 'Optional Add-ons')}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-2">
+                  {docConfig.upsellClauses.map((clause) => (
+                    <div
+                      key={clause.id}
+                      className="text-xs flex justify-between items-center p-2 bg-muted/50 rounded-md"
+                    >
+                      <span>
+                        {currentLocale === 'es' &&
+                        clause.translations?.es?.description
+                          ? clause.translations.es.description
+                          : clause.translations?.en?.description ||
+                            clause.description}
+                      </span>
+                      <Badge variant="secondary">
+                        +${clause.price.toFixed(2)}
+                      </Badge>
+                    </div>
+                  ))}
+                </CardContent>
+              </Card>
+            )}
+
             <Card className="shadow-md">
               <CardHeader>
                 <CardTitle className="text-md flex items-center gap-2">
-                  <Zap size={18} className="text-accent" />{' '}
-                  {t('docDetail.optionalAddons', 'Optional Add-ons')}
+                  <HelpCircle size={18} className="text-blue-500" />{' '}
+                  {t('docDetail.aiAssistance', 'AI Assistance')}
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-2">
-                {docConfig.upsellClauses.map((clause) => (
-                  <div
-                    key={clause.id}
-                    className="text-xs flex justify-between items-center p-2 bg-muted/50 rounded-md"
-                  >
-                    <span>
-                      {currentLocale === 'es' &&
-                      clause.translations?.es?.description
-                        ? clause.translations.es.description
-                        : clause.translations?.en?.description ||
-                          clause.description}
-                    </span>
-                    <Badge variant="secondary">
-                      +${clause.price.toFixed(2)}
-                    </Badge>
-                  </div>
-                ))}
+              <CardContent>
+                <p className="text-xs text-muted-foreground">
+                  Our AI will help suggest{' '}
+                  <AiHighlightPlaceholder text="relevant clauses" /> and ensure
+                  your document is tailored to the{' '}
+                  <AiHighlightPlaceholder text="specifics of your situation" />{' '}
+                  as you answer questions in the next step.
+                </p>
               </CardContent>
             </Card>
-          )}
+          </aside>
+        </div>
 
-          <Card className="shadow-md">
-            <CardHeader>
-              <CardTitle className="text-md flex items-center gap-2">
-                <HelpCircle size={18} className="text-blue-500" />{' '}
-                {t('docDetail.aiAssistance', 'AI Assistance')}
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-xs text-muted-foreground">
-                Our AI will help suggest{' '}
-                <AiHighlightPlaceholder text="relevant clauses" /> and ensure
-                your document is tailored to the{' '}
-                <AiHighlightPlaceholder text="specifics of your situation" /> as
-                you answer questions in the next step.
-              </p>
-            </CardContent>
-          </Card>
-        </aside>
-      </div>
-
-      {/* Conditional rendering for document-specific content vs generic content */}
-      {docConfig.id === 'bill-of-sale-vehicle' ? (
-        <VehicleBillOfSaleDisplay locale={currentLocale as 'en' | 'es'} />
-      ) : docConfig.id === 'promissory-note' ? (
-        <PromissoryNoteDisplay locale={currentLocale as 'en' | 'es'} />
-      ) : (
-        <>
-          {/* Feature Highlights */}
-          <section className="mt-16 grid md:grid-cols-3 gap-6">
-            {features.map((f, i) => (
-              <div
-                key={i}
-                className="text-center p-4 bg-card border border-border rounded-lg shadow-md"
-              >
-                <f.icon className="h-6 w-6 mx-auto mb-2 text-primary" />
-                <p className="text-sm font-medium text-card-foreground mb-1">
-                  {f.title}
-                </p>
-                <p className="text-xs text-muted-foreground">{f.desc}</p>
-              </div>
-            ))}
-          </section>
-
-          {/* How-to Guide & FAQ */}
-          <section className="mt-16 max-w-3xl mx-auto space-y-6">
-            <h2 className="text-2xl font-semibold text-center text-foreground">
-              How to Use This Template
-            </h2>
-            <ol className="list-decimal list-inside space-y-2 text-sm text-muted-foreground">
-              <li>Answer each question in the guided form.</li>
-              <li>Make any tweaks using the built-in editor.</li>
-              <li>E-sign and download your completed document.</li>
-            </ol>
-
-            <div>
-              <h3 className="text-xl font-semibold mb-2 text-foreground">
-                Frequently Asked Questions
-              </h3>
-              <Accordion type="single" collapsible className="w-full">
-                <AccordionItem value="q1">
-                  <AccordionTrigger>
-                    Do I need a notary for this document?
-                  </AccordionTrigger>
-                  <AccordionContent>
-                    Requirements vary by state, but notarization can add extra
-                    authenticity.
-                  </AccordionContent>
-                </AccordionItem>
-                <AccordionItem value="q2">
-                  <AccordionTrigger>
-                    Can I use it for any vehicle type?
-                  </AccordionTrigger>
-                  <AccordionContent>
-                    Yes, simply describe the vehicle accurately in the form.
-                  </AccordionContent>
-                </AccordionItem>
-              </Accordion>
-              <div className="mt-4 text-center">
-                <Link
-                  href={`/${currentLocale}/faq`}
-                  className="text-sm text-primary underline"
+        {/* Conditional rendering for document-specific content vs generic content */}
+        {docConfig.id === 'bill-of-sale-vehicle' ? (
+          <VehicleBillOfSaleDisplay locale={currentLocale as 'en' | 'es'} />
+        ) : docConfig.id === 'promissory-note' ? (
+          <PromissoryNoteDisplay locale={currentLocale as 'en' | 'es'} />
+        ) : (
+          <>
+            {/* Feature Highlights */}
+            <section className="mt-16 grid md:grid-cols-3 gap-6">
+              {features.map((f, i) => (
+                <div
+                  key={i}
+                  className="text-center p-4 bg-card border border-border rounded-lg shadow-md"
                 >
-                  More questions? Visit our FAQ
-                </Link>
+                  <f.icon className="h-6 w-6 mx-auto mb-2 text-primary" />
+                  <p className="text-sm font-medium text-card-foreground mb-1">
+                    {f.title}
+                  </p>
+                  <p className="text-xs text-muted-foreground">{f.desc}</p>
+                </div>
+              ))}
+            </section>
+
+            {/* How-to Guide & FAQ */}
+            <section className="mt-16 max-w-3xl mx-auto space-y-6">
+              <h2 className="text-2xl font-semibold text-center text-foreground">
+                How to Use This Template
+              </h2>
+              <ol className="list-decimal list-inside space-y-2 text-sm text-muted-foreground">
+                <li>Answer each question in the guided form.</li>
+                <li>Make any tweaks using the built-in editor.</li>
+                <li>E-sign and download your completed document.</li>
+              </ol>
+
+              <div>
+                <h3 className="text-xl font-semibold mb-2 text-foreground">
+                  Frequently Asked Questions
+                </h3>
+                <Accordion type="single" collapsible className="w-full">
+                  <AccordionItem value="q1">
+                    <AccordionTrigger>
+                      Do I need a notary for this document?
+                    </AccordionTrigger>
+                    <AccordionContent>
+                      Requirements vary by state, but notarization can add extra
+                      authenticity.
+                    </AccordionContent>
+                  </AccordionItem>
+                  <AccordionItem value="q2">
+                    <AccordionTrigger>
+                      Can I use it for any vehicle type?
+                    </AccordionTrigger>
+                    <AccordionContent>
+                      Yes, simply describe the vehicle accurately in the form.
+                    </AccordionContent>
+                  </AccordionItem>
+                </Accordion>
+                <div className="mt-4 text-center">
+                  <Link
+                    href={`/${currentLocale}/faq`}
+                    className="text-sm text-primary underline"
+                  >
+                    More questions? Visit our FAQ
+                  </Link>
+                </div>
               </div>
-            </div>
-          </section>
-        </>
-      )}
+            </section>
+          </>
+        )}
 
-      {/* Template-specific testimonials */}
-      <div className="mt-16">
-        <TestimonialsCarousel templateId={docConfig.id} />
-      </div>
+        {/* Template-specific testimonials */}
+        <div className="mt-16">
+          <TestimonialsCarousel templateId={docConfig.id} />
+        </div>
 
-      {/* Sticky CTA for mobile */}
-      <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-t p-4 shadow-lg z-40">
-        <Button
-          size="lg"
-          className="w-full text-base"
-          onClick={handleStartWizard}
-          disabled={!isHydrated}
-        >
-          {t('Start For Free', { defaultValue: 'Start For Free' })}
-        </Button>
-      </div>
-    </main>
+        {/* Sticky CTA for mobile */}
+        <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-t p-4 shadow-lg z-40">
+          <Button
+            size="lg"
+            className="w-full text-base"
+            onClick={handleStartWizard}
+            disabled={!isHydrated}
+          >
+            {t('Start For Free', { defaultValue: 'Start For Free' })}
+          </Button>
+        </div>
+      </main>
+    </TooltipProvider>
   );
 }
