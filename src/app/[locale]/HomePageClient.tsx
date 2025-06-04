@@ -183,21 +183,10 @@ export default function HomePageClient() {
             <p className="mt-4 text-lg text-gray-600">
               Smart forms. Clear guidance. Ready-to-sign results. Just answer a few simple questions and receive lawyer-quality paperwork—no attorney required.
             </p>
-            <div className="mt-6 space-y-4 sm:space-y-0 sm:flex sm:items-center sm:space-x-4">
-              <Button className="bg-emerald-500 hover:bg-emerald-600 text-white px-5 py-3 rounded-lg font-semibold text-lg">
-                Start Free
-              </Button>
-              <Button variant="outline" className="border-gray-300 hover:border-gray-400 text-gray-700 px-5 py-3 rounded-lg font-medium text-lg">
-                See 30-Second Demo
-              </Button>
-            </div>
-            {/* Search Bar + Secondary CTA */}
+            {/* Search Bar */}
             <div className="mt-8">
               <div className="relative max-w-md">
                 <SearchBar />
-                <Button className="absolute right-1 top-1/2 -translate-y-1/2 bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-full text-sm font-medium">
-                  Start Free, Pay $35/Doc →
-                </Button>
               </div>
               <p className="mt-2 text-sm text-gray-500">
                 Trusted by 4,200+ docs generated • SSL Secure Checkout • Attorney-Reviewed Templates • Trustpilot ★★★★★
