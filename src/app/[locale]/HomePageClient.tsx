@@ -88,19 +88,9 @@ const TopDocsChips = lazyOnView(() => import('@/components/TopDocsChips'), {
   placeholder: <TopDocsSkeleton />,
 });
 
-const Step1DocumentSelector = lazyOnView(
-  () => import('@/components/Step1DocumentSelector').then((m) => m.default),
-  { placeholder: <MinimalLoadingSpinner /> },
-);
-
 const AnnouncementBar = lazyOnView(() => import('@/components/AnnouncementBar'), {
   placeholder: null,
 });
-
-const StickyFilterBar = lazyOnView(
-  () => import('@/components/StickyFilterBar'),
-  { placeholder: <div className="h-16 bg-muted" /> },
-);
 
 export default function HomePageClient() {
   const { t } = useTranslation('common');
@@ -111,7 +101,6 @@ export default function HomePageClient() {
   const locale = (params!.locale as 'en' | 'es') || 'en';
 
   const [globalSearchTerm, setGlobalSearchTerm] = useState('');
-  const [globalSelectedState, setGlobalSelectedState] = useState<string>('');
   const [selectedCategoryForFilter, setSelectedCategoryForFilter] = useState<string | null>(null);
   const [selectedDocument, setSelectedDocument] = useState<LegalDocument | null>(null);
   const [isHydrated, setIsHydrated] = useState(false);
@@ -120,14 +109,17 @@ export default function HomePageClient() {
     setIsHydrated(true);
   }, []);
 
-  const workflowSectionId = 'workflow-start';
+  const workflowSectionId = 'workflow-start'; // This ID is now unused as the section is removed
 
   const scrollToWorkflow = useCallback(() => {
+    // Since the section is removed, this function might not be needed
+    // or could be repurposed if there's another target section.
+    // For now, it will do nothing if the element is not found.
     const section = document.getElementById(workflowSectionId);
     if (section) {
       section.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
-  }, []);
+  }, [workflowSectionId]);
 
   useEffect(() => {
     if (!isHydrated) return;
@@ -138,14 +130,14 @@ export default function HomePageClient() {
 
     if (searchFromQuery && !globalSearchTerm) {
       setGlobalSearchTerm(searchFromQuery);
-      scrollToWorkflow();
+      // scrollToWorkflow(); // May not be needed as section is removed
     }
 
     if (categoryFromQuery && !selectedCategoryForFilter) {
       const isValidCategory = CATEGORY_LIST.some((cat) => cat.key === categoryFromQuery);
       if (isValidCategory) {
         setSelectedCategoryForFilter(categoryFromQuery);
-        scrollToWorkflow();
+        // scrollToWorkflow(); // May not be needed
       }
     }
 
@@ -153,53 +145,11 @@ export default function HomePageClient() {
       const foundDoc = documentLibrary.find((d) => d.id === docIdFromQuery);
       if (foundDoc) {
         setSelectedCategoryForFilter(foundDoc.category);
-        scrollToWorkflow();
+        // scrollToWorkflow(); // May not be needed
       }
     }
   }, [searchParams, globalSearchTerm, selectedCategoryForFilter, selectedDocument, isHydrated, scrollToWorkflow]);
 
-  const handleDocumentTypeSelect = useCallback(
-    (doc: LegalDocument) => {
-      if (!isHydrated) return;
-      if (doc) {
-        setSelectedDocument(doc);
-        toast({
-          title: t('toasts.docTypeConfirmedTitle'),
-          description: t('toasts.docTypeConfirmedDescription', {
-            docName:
-              locale === 'es'
-                ? doc.translations?.es?.name || doc.translations?.en?.name || doc.name
-                : doc.translations?.en?.name || doc.name || doc.translations?.es?.name,
-          }),
-        });
-        router.push(`/${locale}/docs/${doc.id}/start`);
-      } else {
-        console.warn('[HomePageClient] Document selection received null or undefined doc.');
-      }
-    },
-    [toast, t, locale, isHydrated, router],
-  );
-
-
-  const renderMainInteraction = () => {
-    if (!isHydrated) {
-      return (
-        <div className="text-center py-10">
-          <Loader2 className="h-8 w-8 animate-spin mx-auto" />
-          <p suppressHydrationWarning>{t('Loading...', { ns: 'common' })}</p>
-        </div>
-      );
-    }
-    return (
-      <Step1DocumentSelector
-        selectedCategory={selectedCategoryForFilter}
-        onCategorySelect={setSelectedCategoryForFilter}
-        onDocumentSelect={handleDocumentTypeSelect}
-        globalSelectedState={globalSelectedState}
-        globalSearchTerm={globalSearchTerm}
-      />
-    );
-  };
 
   return (
     <>
@@ -211,10 +161,10 @@ export default function HomePageClient() {
           {/* Left column */}
           <div>
             <h1 className="text-4xl sm:text-5xl font-bold text-gray-800 leading-tight">
-              Handle Legal Documents with Confidence—in Minutes.
+              Legal Peace of Mind. Instant. Intelligent.
             </h1>
             <p className="mt-4 text-lg text-gray-600">
-              Smart forms. Clear guidance. Ready-to-sign results. Just answer a few simple questions and receive lawyer-quality paperwork—no attorney required.
+              Say goodbye to confusion. Our AI crafts precise, professional legal documents tailored to your unique needs, fast.
             </p>
             {/* Search Bar */}
             <div className="mt-8">
@@ -229,10 +179,11 @@ export default function HomePageClient() {
           {/* Right column */}
           <div className="mt-10 lg:mt-0 flex justify-center lg:justify-end">
             <AutoImage
-              src="/images/hero-laptop.svg"
-              alt="Contract on Laptop Illustration"
+              src="https://placehold.co/800x500.png"
+              alt="Hero image illustrating legal document generation"
               className="w-full max-w-lg"
-              data-ai-hint="legal document laptop"
+              data-ai-hint="team collaboration"
+              priority
             />
           </div>
         </div>
@@ -251,55 +202,13 @@ export default function HomePageClient() {
       <StepTwoExplanation />
       <StepThreeExplanation />
       <TrustAndTestimonialsSection />
-      {/* FeaturedLogosSection removed */}
-      {/* GuaranteeBadge removed */}
-      {/* UseCasesSection removed */}
       <TopDocsChips />
 
       <Separator className="my-12" />
 
-      <section
-        id={workflowSectionId}
-        className="container mx-auto px-4 py-8 md:py-12 scroll-mt-20"
-      >
-        <div className="max-w-4xl mx-auto">
-          <h2
-            className="text-3xl md:text-4xl font-bold text-center mb-4 text-foreground"
-            suppressHydrationWarning
-          >
-            {t('What do you want to accomplish?', { ns: 'common' })}
-          </h2>
-          <p
-            className="text-lg md:text-xl text-muted-foreground text-center mb-10"
-            suppressHydrationWarning
-          >
-            {t('stepOne.categoryDescription', { ns: 'common' })}
-          </p>
+      {/* The "What do you want to accomplish?" section and its contents have been removed. */}
+      {/* The PersonalizationBlock that was inside it is also removed. If it's needed elsewhere, it can be re-added. */}
 
-          {isHydrated ? (
-            <StickyFilterBar
-              searchTerm={globalSearchTerm}
-              onSearchTermChange={(term) => {
-                setGlobalSearchTerm(term);
-                if (term.trim() !== '' && selectedCategoryForFilter) {
-                  setSelectedCategoryForFilter(null);
-                }
-              }}
-              selectedState={globalSelectedState}
-              onSelectedStateChange={(state) => {
-                setGlobalSelectedState(state);
-              }}
-            />
-          ) : (
-            <div className="h-16 bg-muted" />
-          )}
-
-          <div className="mt-8 bg-card p-4 sm:p-6 md:p-8 rounded-xl shadow-2xl border border-border/20">
-            <div className="mt-6">{renderMainInteraction()}</div>
-            <PersonalizationBlock />
-          </div>
-        </div>
-      </section>
     </>
   );
 }
