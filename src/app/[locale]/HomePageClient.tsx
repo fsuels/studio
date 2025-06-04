@@ -48,6 +48,11 @@ const GuaranteeBadge = lazyOnView(
   },
 );
 
+const UseCasesSection = lazyOnView(
+  () => import('@/components/landing/UseCasesSection').then((m) => m.UseCasesSection),
+  { placeholder: <LoadingSpinner /> },
+);
+
 const TopDocsChips = lazyOnView(() => import('@/components/TopDocsChips'), {
   placeholder: <LoadingSpinner />,
 });
@@ -231,6 +236,7 @@ export default function HomePageClient() {
       <TrustAndTestimonialsSection />
       <FeaturedLogosSection />
       <GuaranteeBadge />
+      <UseCasesSection />
       <TopDocsChips />
 
       <Separator className="my-12" />

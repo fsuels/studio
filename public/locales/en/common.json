@@ -251,6 +251,24 @@
   "Showing documents matching your search and state criteria.": "Showing documents matching your search and state criteria.",
   "TopDocsChips.loading": "Loading popular documents...",
   "TopDocsChips.title": "Popular Legal Documents",
+  "useCases": {
+    "freelancers": {
+      "title": "For Freelancers",
+      "docs": "NDAs, Client Contracts"
+    },
+    "landlords": {
+      "title": "For Landlords",
+      "docs": "Leases, Eviction Notices"
+    },
+    "smallBusiness": {
+      "title": "For Small Businesses",
+      "docs": "Operating Agreements, Invoices"
+    },
+    "families": {
+      "title": "For Families",
+      "docs": "Wills, Power of Attorney"
+    }
+  },
   "features": {
     "title": "Key Features",
     "subtitle": "Powerful tools to simplify your legal document workflow.",
