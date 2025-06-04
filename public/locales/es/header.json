@@ -19,7 +19,8 @@
   },
   "logoAlt": "123LegalDoc Inicio",
   "SearchBar": {
-    "placeholder": "Buscar más de 200 contratos y formularios..."
+    "placeholder": "p. ej. Arrendamiento, Testamento, NDA...",
+    "suggestionsHint": "Popular: Arrendamiento · Testamento · Factura de venta · Poder Notarial"
   },
   "TopDocsChips": {
     "title": "Documentos Legales Populares",
