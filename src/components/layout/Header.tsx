@@ -171,13 +171,13 @@ const Header = React.memo(function Header() {
     <div className="sticky top-0 z-50">
       <header
         className={cn(
-          'header w-full border-b border-border/40 overflow-visible transition-shadow duration-300 ease-in-out',
+          'header w-full border-b border-border/40 overflow-visible transition-shadow duration-300 ease-in-out shadow-sm',
           scrolled
             ? 'bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 shadow-lg'
             : 'bg-background',
         )}
       >
-      <div className="container flex h-14 items-center px-4 md:px-6">
+      <div className="container flex h-16 items-center px-4 md:px-6">
         <div className="mr-auto md:mr-4 flex items-center">
           <Logo
             wrapperClassName="items-center self-center mr-2 md:mr-4"
