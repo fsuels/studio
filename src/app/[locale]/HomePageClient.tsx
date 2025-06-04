@@ -8,7 +8,7 @@ import { documentLibrary } from '@/lib/document-library';
 import HomepageHeroSteps from '@/components/landing/HomepageHeroSteps';
 import { useToast } from '@/hooks/use-toast';
 import { Separator } from '@/components/ui/separator';
-import { Loader2, ShieldCheck, Globe, Users } from 'lucide-react';
+import { Loader2, ShieldCheck, Globe, Users, Star } from 'lucide-react';
 import { CATEGORY_LIST } from '@/components/Step1DocumentSelector';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams, useRouter, useParams } from 'next/navigation';
@@ -195,6 +195,17 @@ export default function HomePageClient() {
               <Button variant="outline" className="border border-primary text-primary font-medium px-6 py-2 rounded-lg hover:bg-primary/10 transition">
                 See 30-Second Demo
               </Button>
+            </div>
+            <div className="mt-4 text-sm text-muted-foreground">
+              <span className="inline-flex items-center gap-1">
+                <Star className="w-4 h-4 text-yellow-400" />
+              </span>
+              {' '}·{' '}
+              Trusted by startups, landlords, families
+              {' '}·{' '}
+              Over 420,000 documents created and counting
+              {' '}·{' '}
+              SSL Secure Checkout
             </div>
             <div className="mt-4 flex items-center gap-6 text-xs text-muted-foreground">
               <div className="flex items-center gap-1">
