@@ -58,24 +58,9 @@ const TopDocsSkeleton = () => (
   </div>
 );
 
-<<<<<<< HEAD
-const StepOneExplanation = lazyOnView(
-  () => import('@/components/landing/StepOneExplanation'),
-  { placeholder: <LoadingSpinner /> },
-);
-const StepTwoExplanation = lazyOnView(
-  () => import('@/components/landing/StepTwoExplanation'),
-  { placeholder: <LoadingSpinner /> },
-);
-const StepThreeExplanation = lazyOnView(
-  () => import('@/components/landing/StepThreeExplanation'),
-  { placeholder: <LoadingSpinner /> },
-);
-=======
 const HowItWorks = lazyOnView(() => import('@/components/landing/HowItWorks'), {
   placeholder: <HowItWorksSkeleton />,
 });
->>>>>>> 122f303 (Just remove the sections I marked in red circle.)
 
 const TrustAndTestimonialsSection = lazyOnView(
   () => import('@/components/landing/TrustAndTestimonialsSection'),
@@ -148,8 +133,14 @@ export default function HomePageClient() {
         // scrollToWorkflow(); // May not be needed
       }
     }
-  }, [searchParams, globalSearchTerm, selectedCategoryForFilter, selectedDocument, isHydrated, scrollToWorkflow]);
-
+  }, [
+    searchParams,
+    globalSearchTerm,
+    selectedCategoryForFilter,
+    selectedDocument,
+    isHydrated,
+    scrollToWorkflow,
+  ]);
 
   return (
     <>
@@ -188,19 +179,21 @@ export default function HomePageClient() {
           </div>
         </div>
       </section>
+
       <section className="bg-white py-16">
         <div className="max-w-4xl mx-auto px-6 text-center">
           <h2 className="text-4xl font-extrabold text-gray-800">
             {t(
               'howItWorks.sectionTitle',
-              'Create, Edit and Print Your Document in Minutes',
+              'Create, Edit and Print Your Document in Minutes'
             )}
           </h2>
         </div>
       </section>
-      <StepOneExplanation />
-      <StepTwoExplanation />
-      <StepThreeExplanation />
+
+      {/* Lazy-loaded “How It Works” section */}
+      <HowItWorks />
+
       <TrustAndTestimonialsSection />
       <TopDocsChips />
 
@@ -208,7 +201,6 @@ export default function HomePageClient() {
 
       {/* The "What do you want to accomplish?" section and its contents have been removed. */}
       {/* The PersonalizationBlock that was inside it is also removed. If it's needed elsewhere, it can be re-added. */}
-
     </>
   );
 }
