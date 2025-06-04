@@ -210,7 +210,6 @@ export default function HomePageClient() {
               src="/images/hero-laptop.svg"
               alt="Contract on Laptop Illustration"
               className="w-full max-w-lg"
-              placeholder="blur"
             />
           </div>
         </div>
