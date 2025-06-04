@@ -36,12 +36,12 @@ const HowItWorks = React.memo(function HowItWorks() {
   const { t } = useTranslation('common');
 
   return (
-    <section id="how-it-works" className="bg-background py-12">
-      <div className="container mx-auto px-4">
-        <h2 className="text-center text-3xl sm:text-4xl font-bold mb-8 text-foreground">
+    <section id="how-it-works" className="bg-gray-50 py-12">
+      <div className="max-w-5xl mx-auto text-center">
+        <h2 className="text-3xl font-bold text-gray-900">
           {t('linkHowItWorks', { ns: 'footer', defaultValue: 'How It Works' })}
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+        <div className="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-6">
           {steps.map((step) => (
             <StepCard
               key={step.titleKey}
