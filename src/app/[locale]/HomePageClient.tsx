@@ -8,7 +8,7 @@ import { documentLibrary } from '@/lib/document-library';
 import HomepageHeroSteps from '@/components/landing/HomepageHeroSteps';
 import { useToast } from '@/hooks/use-toast';
 import { Separator } from '@/components/ui/separator';
-import { Loader2, Star } from 'lucide-react';
+import { Loader2, Star, Info } from 'lucide-react';
 import { CATEGORY_LIST } from '@/components/Step1DocumentSelector';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams, useRouter, useParams } from 'next/navigation';
@@ -17,6 +17,12 @@ import PersonalizationBlock from '@/components/PersonalizationBlock';
 import AutoImage from '@/components/AutoImage';
 import SmartAssistantBar from '@/components/SmartAssistantBar';
 import LiveActivityFeed from '@/components/landing/LiveActivityFeed';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 
 const LoadingSpinner = () => (
   <div className="flex justify-center items-center h-32">
@@ -183,7 +189,18 @@ export default function HomePageClient() {
               Handle Legal Documents with Confidence. In Minutes.
             </h1>
             <p className="mt-4 text-lg text-gray-700 max-w-md">
-              Smart forms. Clear guidance. Ready-to-sign results. Just answer a few simple questions. We'll generate ready-to-sign legal documents—no lawyer required.
+              <span>Smart forms. Clear guidance.</span>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Info className="inline h-4 w-4 ml-1 text-muted-foreground cursor-help" />
+                  </TooltipTrigger>
+                  <TooltipContent side="top" className="max-w-xs text-sm">
+                    Our AI wizard asks you simple prompts—no legal jargon.
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>{' '}
+              Ready-to-sign results. Just answer a few simple questions. We'll generate ready-to-sign legal documents—no lawyer required.
             </p>
             <p className="mt-2 text-sm text-gray-600">Trusted by startups, landlords, families</p>
             <p className="mt-1 text-sm text-gray-600">Over 420,000 documents created and counting</p>
