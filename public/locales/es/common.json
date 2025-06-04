@@ -306,5 +306,12 @@
         "desc": "Datos cifrados y prácticas conformes."
       }
     }
+  },
+  "whyChooseUs": {
+    "title": "¿Por Qué Elegirnos?",
+    "aiDrafting": "Redacción con IA",
+    "instantDownload": "Descarga Instantánea del Documento",
+    "bilingualSupport": "Soporte Bilingüe Completo",
+    "oneTimePayment": "Pago Único"
   }
 }
