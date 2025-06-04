@@ -95,14 +95,19 @@ const SearchBar = React.memo(function SearchBar() {
 
   const placeholderText = isHydrated
     ? tHeader('SearchBar.placeholder', {
-        defaultValue: 'Search 200+ contracts…',
+        defaultValue: 'e.g. Lease, Will, NDA...',
       })
     : 'Loading…';
+  const suggestionsHint = isHydrated
+    ? tHeader('SearchBar.suggestionsHint', {
+        defaultValue: 'Popular: Lease \u00b7 Will \u00b7 Bill of Sale \u00b7 Power of Attorney',
+      })
+    : '';
 
   return (
     <form
       onSubmit={handleSearchSubmit}
-      className="relative w-full max-w-xl mx-auto"
+      className="relative w-full max-w-md mx-auto"
     >
       <div className="relative">
         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground pointer-events-none" />
@@ -148,6 +153,11 @@ const SearchBar = React.memo(function SearchBar() {
           </ul>
         )}
       </div>
+      {suggestionsHint && (
+        <p className="mt-2 text-center text-sm text-muted-foreground">
+          {suggestionsHint}
+        </p>
+      )}
     </form>
   );
 });
