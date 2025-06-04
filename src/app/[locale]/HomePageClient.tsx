@@ -182,9 +182,9 @@ export default function HomePageClient() {
 
       {/* HERO SECTION */}
       <section className="bg-white py-12 md:py-20">
-        <div className="container mx-auto px-4 grid md:grid-cols-2 gap-12 items-center">
+        <div className="container mx-auto px-4 grid md:grid-cols-2 gap-x-12 gap-y-8 md:gap-y-0 items-center">
           {/* Left column: Text */}
-          <div className="max-w-xl mb-4">
+          <div className="max-w-xl mb-2">
             <h1 className="text-4xl md:text-5xl font-extrabold leading-tight tracking-tight text-gray-900 mb-2">
               Handle Legal Documents with Confidence. In Minutes.
             </h1>
