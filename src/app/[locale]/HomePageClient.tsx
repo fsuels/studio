@@ -181,14 +181,14 @@ export default function HomePageClient() {
       <AnnouncementBar />
 
       {/* HERO SECTION */}
-      <section className="bg-white py-16 md:py-24">
+      <section className="bg-white py-12 md:py-20">
         <div className="container mx-auto px-4 grid md:grid-cols-2 gap-12 items-center">
           {/* Left column: Text */}
-          <div className="max-w-xl">
-            <h1 className="text-4xl md:text-5xl font-extrabold leading-tight tracking-tight text-gray-900">
+          <div className="max-w-xl mb-4">
+            <h1 className="text-4xl md:text-5xl font-extrabold leading-tight tracking-tight text-gray-900 mb-2">
               Handle Legal Documents with Confidence. In Minutes.
             </h1>
-            <p className="mt-4 text-lg text-gray-700 max-w-md">
+            <p className="mt-3 mb-3 text-lg text-gray-700 max-w-md">
               <span>Smart forms. Clear guidance.</span>
               <TooltipProvider>
                 <Tooltip>
@@ -202,9 +202,9 @@ export default function HomePageClient() {
               </TooltipProvider>{' '}
               Ready-to-sign results. Just answer a few simple questions. We'll generate ready-to-sign legal documents—no lawyer required.
             </p>
-            <p className="mt-2 text-sm text-gray-600">Trusted by startups, landlords, families</p>
-            <p className="mt-1 text-sm text-gray-600">Over 420,000 documents created and counting</p>
-            <div className="mt-6 flex gap-4">
+            <p className="mt-1 mb-1 text-sm text-gray-600">Trusted by startups, landlords, families</p>
+            <p className="mt-1 mb-4 text-sm text-gray-600">Over 420,000 documents created and counting</p>
+            <div className="mt-4 flex gap-4">
               <Button size="lg" className="bg-primary text-white">Start Free</Button>
               <Button variant="outline" size="lg">See 30-Second Demo</Button>
             </div>
@@ -220,20 +220,22 @@ export default function HomePageClient() {
           </div>
 
           {/* Right column: Image */}
-          <div className="flex justify-center">
+          <div className="flex justify-center lg:-mt-6">
             <AutoImage
               src="/images/hero-homepage.png"
               alt="People using AI legal assistant"
               width={500}
               height={400}
-              className="rounded-xl shadow-lg"
+              className="rounded-xl shadow-md"
               priority
             />
           </div>
         </div>
       </section>
 
-      <HomepageHeroSteps />
+      <div className="pt-8 md:pt-12">
+        <HomepageHeroSteps />
+      </div>
       <HowItWorks />
       <TrustAndTestimonialsSection />
       <FeaturedLogosSection />
