@@ -218,12 +218,9 @@ const Header = React.memo(function Header() {
           <Popover open={isMegaMenuOpen} onOpenChange={setIsMegaMenuOpen}>
             <PopoverTrigger asChild>
               <Button
-                variant="default"
-                size="sm"
                 className={cn(
-                  'text-sm font-medium flex items-center gap-1 px-3 h-9 text-white drop-shadow-lg focus-visible:ring-2 focus-visible:ring-offset-2',
-                  'bg-[#008466] hover:bg-[#00664e] focus-visible:ring-[#008466]', // Specific green
-                  isMegaMenuOpen && 'bg-[#00664e]',
+                  'bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-lg font-medium flex items-center gap-1 drop-shadow-lg focus-visible:ring-2 focus-visible:ring-offset-2',
+                  isMegaMenuOpen && 'bg-emerald-600',
                 )}
                 disabled={!mounted}
                 aria-expanded={isMegaMenuOpen}
