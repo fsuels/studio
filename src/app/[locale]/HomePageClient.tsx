@@ -15,14 +15,50 @@ import { Button } from '@/components/ui/button';
 import PersonalizationBlock from '@/components/PersonalizationBlock';
 import AutoImage from '@/components/AutoImage';
 import SearchBar from '@/components/SearchBar';
+import { Skeleton } from '@/components/ui/skeleton'; // Import Skeleton
 
-const LoadingSpinner = () => (
+// Minimal loading spinner without text
+const MinimalLoadingSpinner = () => (
   <div className="flex justify-center items-center h-32">
     <Loader2 className="h-8 w-8 animate-spin text-primary" />
-    <p className="ml-2 text-muted-foreground">Loading Section...</p>
   </div>
 );
 
+// Skeletons for lazy-loaded sections
+const HowItWorksSkeleton = () => (
+  <div className="container mx-auto px-4 py-12">
+    <div className="h-8 bg-muted rounded w-1/3 mx-auto mb-8"></div>
+    <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+      {[...Array(3)].map((_, i) => (
+        <div key={i} className="bg-muted rounded-lg p-6 h-40"></div>
+      ))}
+    </div>
+  </div>
+);
+
+const TestimonialsSkeleton = () => (
+  <div className="container mx-auto px-4 py-12">
+    <div className="h-8 bg-muted rounded w-1/3 mx-auto mb-8"></div>
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      {[...Array(2)].map((_, i) => (
+        <div key={i} className="bg-muted rounded-lg p-6 h-48"></div>
+      ))}
+    </div>
+  </div>
+);
+
+const TopDocsSkeleton = () => (
+  <div className="container mx-auto px-4 py-8">
+    <div className="h-8 bg-muted rounded w-1/4 mx-auto mb-6"></div>
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+      {[...Array(6)].map((_, i) => (
+        <div key={i} className="bg-muted rounded-lg h-16"></div>
+      ))}
+    </div>
+  </div>
+);
+
+<<<<<<< HEAD
 const StepOneExplanation = lazyOnView(
   () => import('@/components/landing/StepOneExplanation'),
   { placeholder: <LoadingSpinner /> },
@@ -35,38 +71,26 @@ const StepThreeExplanation = lazyOnView(
   () => import('@/components/landing/StepThreeExplanation'),
   { placeholder: <LoadingSpinner /> },
 );
+=======
+const HowItWorks = lazyOnView(() => import('@/components/landing/HowItWorks'), {
+  placeholder: <HowItWorksSkeleton />,
+});
+>>>>>>> 122f303 (Just remove the sections I marked in red circle.)
 
 const TrustAndTestimonialsSection = lazyOnView(
   () => import('@/components/landing/TrustAndTestimonialsSection'),
   {
-    placeholder: <LoadingSpinner />,
+    placeholder: <TestimonialsSkeleton />,
   },
-);
-
-const FeaturedLogosSection = lazyOnView(
-  () => import('@/components/landing/FeaturedLogos').then((m) => m.FeaturedLogos),
-  { placeholder: <LoadingSpinner /> },
-);
-
-const GuaranteeBadge = lazyOnView(
-  () => import('@/components/landing/GuaranteeBadge').then((mod) => mod.GuaranteeBadge),
-  {
-    placeholder: <LoadingSpinner />,
-  },
-);
-
-const UseCasesSection = lazyOnView(
-  () => import('@/components/landing/UseCasesSection').then((m) => m.UseCasesSection),
-  { placeholder: <LoadingSpinner /> },
 );
 
 const TopDocsChips = lazyOnView(() => import('@/components/TopDocsChips'), {
-  placeholder: <LoadingSpinner />,
+  placeholder: <TopDocsSkeleton />,
 });
 
 const Step1DocumentSelector = lazyOnView(
   () => import('@/components/Step1DocumentSelector').then((m) => m.default),
-  { placeholder: <LoadingSpinner /> },
+  { placeholder: <MinimalLoadingSpinner /> },
 );
 
 const AnnouncementBar = lazyOnView(() => import('@/components/AnnouncementBar'), {
@@ -208,6 +232,7 @@ export default function HomePageClient() {
               src="/images/hero-laptop.svg"
               alt="Contract on Laptop Illustration"
               className="w-full max-w-lg"
+              data-ai-hint="legal document laptop"
             />
           </div>
         </div>
@@ -226,9 +251,9 @@ export default function HomePageClient() {
       <StepTwoExplanation />
       <StepThreeExplanation />
       <TrustAndTestimonialsSection />
-      <FeaturedLogosSection />
-      <GuaranteeBadge />
-      <UseCasesSection />
+      {/* FeaturedLogosSection removed */}
+      {/* GuaranteeBadge removed */}
+      {/* UseCasesSection removed */}
       <TopDocsChips />
 
       <Separator className="my-12" />
