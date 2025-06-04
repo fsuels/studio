@@ -23,9 +23,18 @@ const LoadingSpinner = () => (
   </div>
 );
 
-const HowItWorks = lazyOnView(() => import('@/components/landing/HowItWorks'), {
-  placeholder: <LoadingSpinner />,
-});
+const StepOneExplanation = lazyOnView(
+  () => import('@/components/landing/StepOneExplanation'),
+  { placeholder: <LoadingSpinner /> },
+);
+const StepTwoExplanation = lazyOnView(
+  () => import('@/components/landing/StepTwoExplanation'),
+  { placeholder: <LoadingSpinner /> },
+);
+const StepThreeExplanation = lazyOnView(
+  () => import('@/components/landing/StepThreeExplanation'),
+  { placeholder: <LoadingSpinner /> },
+);
 
 const TrustAndTestimonialsSection = lazyOnView(
   () => import('@/components/landing/TrustAndTestimonialsSection'),
@@ -203,7 +212,19 @@ export default function HomePageClient() {
           </div>
         </div>
       </section>
-      <HowItWorks />
+      <section className="bg-white py-16">
+        <div className="max-w-4xl mx-auto px-6 text-center">
+          <h2 className="text-4xl font-extrabold text-gray-800">
+            {t(
+              'howItWorks.sectionTitle',
+              'Create, Edit and Print Your Document in Minutes',
+            )}
+          </h2>
+        </div>
+      </section>
+      <StepOneExplanation />
+      <StepTwoExplanation />
+      <StepThreeExplanation />
       <TrustAndTestimonialsSection />
       <FeaturedLogosSection />
       <GuaranteeBadge />
