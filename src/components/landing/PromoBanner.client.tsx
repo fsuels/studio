@@ -20,14 +20,16 @@ const PromoBanner = React.memo(function PromoBanner() {
         animate={{ height: 'auto', opacity: 1 }}
         exit={{ height: 0, opacity: 0 }}
         transition={{ duration: 0.3, ease: 'easeInOut' }}
-        className="bg-primary text-primary-foreground overflow-hidden"
+        className="bg-blue-600 text-white text-sm py-1 flex justify-center overflow-hidden"
         role="alert"
         aria-live="polite"
       >
-        <div className="container mx-auto px-4 py-2 flex items-center justify-center text-sm relative">
+        <div className="container mx-auto px-4 py-1 flex items-center justify-center text-sm relative">
           <Gift className="h-4 w-4 mr-2 shrink-0" />
-          <span className="font-medium mr-1">Limited Time Offer:</span>
-          <span>Get 20% off your first document! Expires soon.</span>
+          <span>
+            Limited Time: 20% off your first document!{' '}
+            <span className="font-semibold">Expires in 17:05:08</span>
+          </span>
           <Button
             variant="ghost"
             size="icon"
