@@ -11,6 +11,8 @@ import {
   Share2,
   LayoutDashboard,
   ShieldCheck,
+  Check,
+  X,
 } from 'lucide-react';
 import React from 'react';
 
@@ -120,6 +122,90 @@ export default function FeaturesClientContent() {
           )}
         />
       </div>
+
+      <section className="mt-16 max-w-4xl mx-auto">
+        <h2 className="text-2xl md:text-3xl font-bold mb-8 text-center text-foreground">
+          {t('whyChooseUs.title', 'Why Choose Us?')}
+        </h2>
+        <Card className="shadow-lg border-border">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="w-[200px]">
+                  {t('pricing.featureHeader', 'Feature')}
+                </TableHead>
+                <TableHead className="text-center text-primary font-semibold">
+                  123LegalDoc
+                </TableHead>
+                <TableHead className="text-center text-muted-foreground">
+                  LegalZoom
+                </TableHead>
+                <TableHead className="text-center text-muted-foreground">
+                  LawDepot
+                </TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              <TableRow>
+                <TableCell>
+                  {t('whyChooseUs.aiDrafting', 'AI-Powered Drafting')}
+                </TableCell>
+                <TableCell className="text-center">
+                  <Check className="h-5 w-5 text-green-500 mx-auto" />
+                </TableCell>
+                <TableCell className="text-center">
+                  <X className="h-5 w-5 text-destructive mx-auto" />
+                </TableCell>
+                <TableCell className="text-center">
+                  <X className="h-5 w-5 text-destructive mx-auto" />
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>
+                  {t('whyChooseUs.instantDownload', 'Instant Document Download')}
+                </TableCell>
+                <TableCell className="text-center">
+                  <Check className="h-5 w-5 text-green-500 mx-auto" />
+                </TableCell>
+                <TableCell className="text-center">
+                  <X className="h-5 w-5 text-destructive mx-auto" />
+                </TableCell>
+                <TableCell className="text-center">
+                  <Check className="h-5 w-5 text-green-500 mx-auto" />
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>
+                  {t('whyChooseUs.bilingualSupport', 'Fully Bilingual Support')}
+                </TableCell>
+                <TableCell className="text-center">
+                  <Check className="h-5 w-5 text-green-500 mx-auto" />
+                </TableCell>
+                <TableCell className="text-center">
+                  <X className="h-5 w-5 text-destructive mx-auto" />
+                </TableCell>
+                <TableCell className="text-center">
+                  <X className="h-5 w-5 text-destructive mx-auto" />
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>
+                  {t('whyChooseUs.oneTimePayment', 'One-Time Payment Option')}
+                </TableCell>
+                <TableCell className="text-center">
+                  <Check className="h-5 w-5 text-green-500 mx-auto" />
+                </TableCell>
+                <TableCell className="text-center">
+                  <X className="h-5 w-5 text-destructive mx-auto" />
+                </TableCell>
+                <TableCell className="text-center">
+                  <X className="h-5 w-5 text-destructive mx-auto" />
+                </TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+        </Card>
+      </section>
     </main>
   );
 }

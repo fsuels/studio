@@ -283,10 +283,17 @@
         "title": "User Dashboard",
         "desc": "Manage your documents and settings easily."
       },
-      "security": {
-        "title": "Privacy & Security",
-        "desc": "Encrypted data and compliant practices."
-      }
+    "security": {
+      "title": "Privacy & Security",
+      "desc": "Encrypted data and compliant practices."
     }
+    }
+  },
+  "whyChooseUs": {
+    "title": "Why Choose Us?",
+    "aiDrafting": "AI-Powered Drafting",
+    "instantDownload": "Instant Document Download",
+    "bilingualSupport": "Fully Bilingual Support",
+    "oneTimePayment": "One-Time Payment Option"
   }
 }
