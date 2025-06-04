@@ -15,6 +15,7 @@ import {
   X,
 } from 'lucide-react';
 import React from 'react';
+import CustomizeDocBlock from '@/components/landing/CustomizeDocBlock';
 
 // Feature sub-component
 function Feature({
@@ -122,6 +123,8 @@ export default function FeaturesClientContent() {
           )}
         />
       </div>
+
+      <CustomizeDocBlock />
 
       <section className="mt-16 max-w-4xl mx-auto">
         <h2 className="text-2xl md:text-3xl font-bold mb-8 text-center text-foreground">
