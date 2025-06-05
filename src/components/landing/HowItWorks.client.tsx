@@ -40,7 +40,13 @@ const HowItWorks = React.memo(function HowItWorks() {
     <section id="how-it-works" className="bg-gray-50 py-12">
       <div className="max-w-5xl mx-auto text-center">
         <h2 className="text-3xl font-bold text-gray-900">
-          {t('home.howItWorksSectionTitle', { defaultValue: 'Generate and Personalize Professional Legal Forms — Fast • Easy • No Hidden Fees' })}
+          <span>
+            {t('home.howItWorksSectionTitle.main', { defaultValue: 'Generate and Personalize Professional Legal Forms' })}
+          </span>
+          <br />
+          <span className="block mt-2 text-xl font-medium text-gray-600">
+            {t('home.howItWorksSectionTitle.sub', { defaultValue: '• Fast • Easy • No Hidden Fees' })}
+          </span>
         </h2>
         <div className="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-6">
           {steps.map((step) => (
