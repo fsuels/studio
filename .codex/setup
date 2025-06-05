@@ -13,19 +13,33 @@ echo "🔧  [setup] Installing dependencies and building Next.js…"
 ###############################################################################
 if [[ -f pnpm-lock.yaml ]]; then
   corepack enable pnpm
-  echo "📦  Installing via pnpm ci"
+  echo "📦  Installing via pnpm ci (including devDependencies)"
   pnpm install --frozen-lockfile --prefer-offline
 elif [[ -f yarn.lock ]]; then
   corepack enable yarn
-  echo "📦  Installing via yarn install"
+  echo "📦  Installing via yarn install (including devDependencies)"
   yarn install --immutable --check-cache
 else
-  echo "📦  Installing via npm ci"
+  echo "📦  Installing via npm ci (including devDependencies)"
   npm ci --prefer-offline --no-audit --progress=false
 fi
 
 ###############################################################################
-# 2 — Persist Firebase key into .env                                           #
+# 2 — Ensure critical dev tools are available                                  #
+###############################################################################
+echo "🛠  Ensuring ESLint, Playwright, and Next.js binaries are available…"
+# Install required packages globally if they are missing locally
+# (This prevents "failed to find" errors for @eslint/js, playwright, next, etc.)
+npm install -g eslint @eslint/js playwright @playwright/test next > /dev/null 2>&1 || true
+
+# If Playwright tests are used, install its browser binaries
+if command -v playwright &> /dev/null; then
+  echo "🎭  Installing Playwright browser binaries…"
+  npx playwright install --with-deps
+fi
+
+###############################################################################
+# 3 — Persist Firebase key into .env                                           #
 ###############################################################################
 if [[ -n "${FIREBASE_SERVICE_ACCOUNT_KEY_JSON:-}" ]]; then
   echo "🗝   Writing FIREBASE_SERVICE_ACCOUNT_KEY_JSON to .env"
@@ -34,19 +48,20 @@ if [[ -n "${FIREBASE_SERVICE_ACCOUNT_KEY_JSON:-}" ]]; then
 fi
 
 ###############################################################################
-# 3 — Next.js build (skip static export and LHCI to keep under 300 s)         #
+# 4 — Next.js build (skip static export and LHCI to keep under 300 s)         #
 ###############################################################################
 echo "🛠   Running npm run build"
 npm run build
 
 ###############################################################################
-# 4 — Do NOT run `npm run export` or LHCI here (would exceed 300 s)          #
+# 5 — Do NOT run `npm run export` or LHCI here (would exceed 300 s)          #
 ###############################################################################
-echo "⚠️   Skipping `next export` and `lhci autorun` to avoid 300 s timeout."
+echo "⚠️   Skipping \`next export\` and \`lhci autorun\` to avoid 300 s timeout."
 
 ###############################################################################
-# 5 — Helpful global tools (silent)                                           #
+# 6 — Helpful global tools (silent)                                           #
 ###############################################################################
+echo "🔧  Installing global helpers silently (eslint, prettier, typescript, firebase-tools)…"
 npm install -g eslint prettier typescript firebase-tools > /dev/null 2>&1 || true
 
-echo "✅  [setup] Dependencies installed and site built (ready for Codex)."
+echo "✅  [setup] Dependencies installed, dev tools available, and site built."
