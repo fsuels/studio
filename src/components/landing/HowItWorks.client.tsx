@@ -34,13 +34,13 @@ const steps = [
 ] as const;
 
 const HowItWorks = React.memo(function HowItWorks() {
-  const { t } = useTranslation('common');
+  const { t } = useTranslation('common'); // Uses 'common' namespace
 
   return (
     <section id="how-it-works" className="bg-gray-50 py-12">
       <div className="max-w-5xl mx-auto text-center">
         <h2 className="text-3xl font-bold text-gray-900">
-          {t('linkHowItWorks', { ns: 'footer', defaultValue: 'Generate and Personalize Professional Legal Forms — Fast • Easy • No Hidden Fees' })}
+          {t('home.howItWorksSectionTitle', { defaultValue: 'Generate and Personalize Professional Legal Forms — Fast • Easy • No Hidden Fees' })}
         </h2>
         <div className="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-6">
           {steps.map((step) => (
