@@ -1,3 +1,4 @@
+// src/components/landing/HowItWorks.client.tsx
 'use client';
 
 import React from 'react';
@@ -39,7 +40,7 @@ const HowItWorks = React.memo(function HowItWorks() {
     <section id="how-it-works" className="bg-gray-50 py-12">
       <div className="max-w-5xl mx-auto text-center">
         <h2 className="text-3xl font-bold text-gray-900">
-          {t('linkHowItWorks', { ns: 'footer', defaultValue: 'How It Works' })}
+          {t('linkHowItWorks', { ns: 'footer', defaultValue: 'Generate and Personalize Professional Legal Forms — Fast • Easy • No Hidden Fees' })}
         </h2>
         <div className="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-6">
           {steps.map((step) => (
@@ -48,7 +49,6 @@ const HowItWorks = React.memo(function HowItWorks() {
               number={step.number}
               title={t(step.titleKey, { defaultValue: step.defaultTitle })}
               desc={t(step.descKey, { defaultValue: step.defaultDesc })}
-              icon={<step.Icon className="h-8 w-8" />}
             />
           ))}
         </div>
