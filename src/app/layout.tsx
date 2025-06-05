@@ -33,51 +33,49 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const headElements = [
+    <meta
+      key="viewport"
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1"
+    />,
+    <meta key="description" name="description" content={SEOConfig.description} />,
+    <title key="title">{SEOConfig.title}</title>,
+    <Script key="defer-css" id="defer-layout-css" strategy="beforeInteractive">
+      {`
+        const setup = () => {
+          const link = document.querySelector('link[href*="layout.css"]');
+          if (!link || link.dataset.processed) return;
+          link.dataset.processed = 'true';
+          const href = link.href;
+          const preload = document.createElement('link');
+          preload.rel = 'preload';
+          preload.as = 'style';
+          preload.href = href;
+          preload.fetchPriority = 'high';
+          document.head.appendChild(preload);
+          const style = document.createElement('link');
+          style.rel = 'stylesheet';
+          style.href = href;
+          style.media = 'print';
+          style.onload = () => (style.media = 'all');
+          document.head.appendChild(style);
+          link.remove();
+        };
+        (document.readyState === 'loading')
+          ? document.addEventListener('DOMContentLoaded', setup)
+          : setup();
+      `}
+    </Script>,
+    <link key="preload-hero" rel="preload" href="/images/hero-homepage.png" as="image" />,
+    <link key="preload-signwell" rel="preload" href="/images/signwell-hero.svg" as="image" />,
+    <link key="alt-en" rel="alternate" href="https://123legaldoc.com/en/" hrefLang="en" />,
+    <link key="alt-es" rel="alternate" href="https://123legaldoc.com/es/" hrefLang="es" />,
+  ];
+
   return (
     <html lang="en" suppressHydrationWarning>
-      <head>
-        <meta
-          name="viewport"
-          content="width=device-width, initial-scale=1, maximum-scale=1"
-        />
-        <meta name="description" content={SEOConfig.description} /> {/* Use imported config */}
-        <title>{SEOConfig.title}</title> {/* Use imported config */}
-
-        {/* See README/fonts.md for the one-time download step */}
-
-        {/* Preload and asynchronously apply the generated layout.css file */}
-        <Script id="defer-layout-css" strategy="beforeInteractive">
-          {`
-            const setup = () => {
-              const link = document.querySelector('link[href*="layout.css"]');
-              if (!link || link.dataset.processed) return;
-              link.dataset.processed = 'true';
-              const href = link.href;
-              const preload = document.createElement('link');
-              preload.rel = 'preload';
-              preload.as = 'style';
-              preload.href = href;
-              preload.fetchPriority = 'high';
-              document.head.appendChild(preload);
-              const style = document.createElement('link');
-              style.rel = 'stylesheet';
-              style.href = href;
-              style.media = 'print';
-              style.onload = () => (style.media = 'all');
-              document.head.appendChild(style);
-              link.remove();
-            };
-            (document.readyState === 'loading')
-              ? document.addEventListener('DOMContentLoaded', setup)
-              : setup();
-          `}
-        </Script>
-        <link rel="preload" href="/images/hero-homepage.png" as="image" />
-        <link rel="preload" href="/images/signwell-hero.svg" as="image" />
-        <link rel="alternate" href="https://123legaldoc.com/en/" hrefLang="en" />
-        <link rel="alternate" href="https://123legaldoc.com/es/" hrefLang="es" />
-      </head>
-
+      <head>{headElements}</head>
       <body
         className={`${inter.variable} ${merriweather.variable} antialiased flex flex-col min-h-screen overflow-x-hidden`}
       >
