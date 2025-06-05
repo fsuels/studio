@@ -10,9 +10,9 @@ const steps = [
   {
     number: 1,
     Icon: Target,
-    titleKey: 'home.steps.step1.title',
+    titleKey: 'home.steps.step1.title', // Keep the key for potential translations
     descKey: 'home.steps.step1.desc',
-    defaultTitle: 'Choose an Attorney-Approved Legal Template',
+    defaultTitle: 'Select a Professional Legal Template', // Updated text
     defaultDesc: 'Answer a few quick prompts for tailored guidance.',
   },
   {
