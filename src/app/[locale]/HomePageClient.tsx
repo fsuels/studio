@@ -180,12 +180,15 @@ export default function HomePageClient() {
         </div>
       </section>
 
-      {/* Lazy-loaded “How It Works” section */}
+      {/* "Popular Legal Documents" section */}
+      <TopDocsChips />
+      
+      {/* "Generate and Personalize Legal Forms" section (formerly "How It Works") */}
       <HowItWorks />
 
+      {/* "Trust and Testimonials" section */}
       <TrustAndTestimonialsSection />
-      <TopDocsChips />
-
+      
       <Separator className="my-12" />
 
       {/* The "What do you want to accomplish?" section and its contents have been removed. */}
