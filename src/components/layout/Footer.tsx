@@ -137,13 +137,13 @@ export const Footer = React.memo(function Footer() {
   }
 
   return (
-    <footer className="bg-muted text-muted-foreground py-12 mt-16 border-t border-border">
+    <footer className="bg-[#1F2937] text-gray-300 py-12 mt-16">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
           {/* Logo & Subhead */}
           <div className="space-y-4">
             <Logo
-              wrapperClassName="mb-1 items-start"
+              wrapperClassName="mb-1 items-start [--primary:0_0%_100%] [--primary-foreground:0_0%_100%]"
               svgClassName="h-7 w-7"
               textClassName="text-sm"
             />
@@ -158,7 +158,7 @@ export const Footer = React.memo(function Footer() {
           {/* Footer sections */}
           {footerLinkSections.map((section) => (
             <div key={section.sectionTitleKey}>
-              <h3 className="font-semibold text-foreground mb-3">
+              <h3 className="font-semibold text-white mb-3">
                 {t(section.sectionTitleKey, {
                   defaultValue: section.defaultSectionTitle,
                 })}
@@ -168,7 +168,7 @@ export const Footer = React.memo(function Footer() {
                   <li key={link.path}>
                     <Link
                       href={`/${locale}${link.path}`}
-                      className="hover:text-primary hover:underline"
+                      className="hover:text-white hover:underline"
                     >
                       {t(link.labelKey, { defaultValue: link.defaultLabel })}
                     </Link>
@@ -180,61 +180,18 @@ export const Footer = React.memo(function Footer() {
 
           {/* Community & subscription */}
           <div>
-            <h3 className="font-semibold text-foreground mb-3">
+            <h3 className="font-semibold text-white mb-3">
               {t('sectionCommunityTitle', {
                 defaultValue: 'Community & Contact',
               })}
             </h3>
-            <div className="flex space-x-3 mb-4">
-              <a
-                href="https://linkedin.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={t('socialLinkedInAria', {
-                  defaultValue: 'LinkedIn Page',
-                })}
-                className="text-muted-foreground hover:text-primary transition-colors"
-              >
-                <Linkedin className="h-5 w-5" />
-              </a>
-              <a
-                href="https://twitter.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={t('socialTwitterAria', {
-                  defaultValue: 'Twitter Profile',
-                })}
-                className="text-muted-foreground hover:text-primary transition-colors"
-              >
-                <Twitter className="h-5 w-5" />
-              </a>
-            </div>
-            <div className="text-xs space-y-1 mb-6">
-              <p className="flex items-center gap-1.5">
-                <Phone className="h-3.5 w-3.5 text-primary/80" />
-                <span>
-                  {t('supportPhoneNumber', {
-                    defaultValue: '+1 (800) 555-0199 (Support)',
-                  })}
-                </span>
-              </p>
-              <p className="flex items-center gap-1.5">
-                <Clock className="h-3.5 w-3.5 text-primary/80" />
-                <span>
-                  {t('supportHours', { defaultValue: 'Mon–Fri, 9am–6pm EST' })}
-                </span>
-              </p>
-            </div>
 
-            <h3 className="font-semibold text-foreground mb-3">
+            <h3 className="font-semibold text-white mb-3">
               {t('getCreditsTitle', { defaultValue: 'Get 3 Free Templates' })}
             </h3>
-            <form
-              onSubmit={handleSubscribe}
-              className="flex gap-2 items-center"
-            >
-              <div className="relative flex-grow">
-                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
+            <form onSubmit={handleSubscribe} className="flex items-center gap-2">
+              <div className="relative flex-grow rounded-full bg-[#F3F4F6] focus-within:ring-2 focus-within:ring-[#00C3A3] focus-within:ring-offset-2">
+                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500 pointer-events-none" />
                 <Input
                   type="email"
                   placeholder={t('emailPlaceholder', {
@@ -242,7 +199,7 @@ export const Footer = React.memo(function Footer() {
                   })}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="pl-10 pr-2 py-2 h-12 text-base bg-background border-input"
+                  className="pl-10 pr-2 py-2 h-12 text-base bg-transparent border-0 placeholder:text-gray-500 focus-visible:ring-0"
                   aria-label={t('emailPlaceholderAria', {
                     defaultValue: 'Email for newsletter',
                   })}
@@ -252,7 +209,7 @@ export const Footer = React.memo(function Footer() {
               <Button
                 type="submit"
                 size="icon"
-                className="bg-primary text-primary-foreground hover:bg-primary/90 h-12 w-12 shrink-0"
+                className="relative ml-1 h-12 w-12 shrink-0 rounded-full bg-brand-green text-white hover:bg-brand-green/90 overflow-hidden before:absolute before:inset-0 before:rounded-full before:bg-[#00C3A3]/30 before:content-[''] before:scale-0 before:transition-transform before:duration-300 hover:before:scale-125"
                 aria-label={t('subscribeButtonAria', {
                   defaultValue: 'Subscribe to newsletter',
                 })}
@@ -267,8 +224,51 @@ export const Footer = React.memo(function Footer() {
             </form>
             <p className="text-xs mt-2">
               {t('joinMailingListDesc', {
-                defaultValue: 'Get 3 free templates — no spam.',
+                defaultValue: 'We respect your inbox. Unsubscribe anytime.',
               })}
+            </p>
+          </div>
+        </div>
+
+        <div className="mt-8 flex flex-col items-center space-y-4">
+          <div className="flex space-x-3">
+            <a
+              href="https://linkedin.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={t('socialLinkedInAria', {
+                defaultValue: 'LinkedIn Page',
+              })}
+              className="text-gray-300 hover:text-white transition-colors"
+            >
+              <Linkedin className="h-5 w-5" />
+            </a>
+            <a
+              href="https://twitter.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={t('socialTwitterAria', {
+                defaultValue: 'Twitter Profile',
+              })}
+              className="text-gray-300 hover:text-white transition-colors"
+            >
+              <Twitter className="h-5 w-5" />
+            </a>
+          </div>
+          <div className="text-xs space-y-1 text-gray-300 text-center">
+            <p className="flex items-center justify-center gap-1.5">
+              <Phone className="h-3.5 w-3.5 text-brand-green" />
+              <span>
+                {t('supportPhoneNumber', {
+                  defaultValue: '+1 (800) 555-0199 (Support)',
+                })}
+              </span>
+            </p>
+            <p className="flex items-center justify-center gap-1.5">
+              <Clock className="h-3.5 w-3.5 text-brand-green" />
+              <span>
+                {t('supportHours', { defaultValue: 'Mon–Fri, 9am–6pm EST' })}
+              </span>
             </p>
           </div>
         </div>
