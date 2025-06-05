@@ -12,7 +12,7 @@ const steps = [
     Icon: Target,
     titleKey: 'home.steps.step1.titleUpdated', // Changed key
     descKey: 'home.steps.step1.desc',
-    defaultTitle: 'Select a Professional Legal Template', // Ensured default is correct
+    defaultTitle: 'Select a Legal Template', // Ensured default is correct
     defaultDesc: 'Answer a few quick prompts for tailored guidance.',
   },
   {
@@ -41,7 +41,7 @@ const HowItWorks = React.memo(function HowItWorks() {
       <div className="max-w-5xl mx-auto text-center">
         <h2 className="text-3xl font-bold text-gray-900">
           <span>
-            {t('home.howItWorksSectionTitle.main', { defaultValue: 'Generate and Personalize Professional Legal Forms' })}
+            {t('home.howItWorksSectionTitle.main', { defaultValue: 'Generate and Personalize Legal Forms' })}
           </span>
           <br />
           <span className="block mt-2 text-xl font-medium text-gray-600">
