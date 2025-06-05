@@ -32,7 +32,7 @@ export const resources: Resource = {
     documents: enDocuments,
     doc_bill_of_sale_vehicle: enDocBillOfSaleVehicle,
     doc_promissory_note: enDocPromissoryNote,
-    online_notary: enOnlineNotary,
+    'online-notary': enOnlineNotary,
     'electronic-signature': enElectronicSignature,
   },
   es: {
@@ -44,7 +44,7 @@ export const resources: Resource = {
     documents: esDocuments,
     doc_bill_of_sale_vehicle: esDocBillOfSaleVehicle,
     doc_promissory_note: esDocPromissoryNote,
-    online_notary: esOnlineNotary,
+    'online-notary': esOnlineNotary,
     'electronic-signature': esElectronicSignature,
   },
 };
