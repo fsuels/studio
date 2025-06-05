@@ -1,10 +1,9 @@
 // next.config.ts
 import type { NextConfig } from 'next';
+import type { Configuration as WebpackConfiguration } from 'webpack';
 
-const isTurbopack = process.env.TURBOPACK === '1'; // Changed NEXT_TURBOPACK to TURBOPACK
-
-// Base configuration applicable to both Webpack and Turbopack
-const baseConfig: Omit<NextConfig, 'webpack'> = {
+// Base configuration applicable to all environments
+const config: NextConfig = {
   typescript: {
     ignoreBuildErrors: true, // Temporarily ignore TS build errors
   },
@@ -22,40 +21,38 @@ const baseConfig: Omit<NextConfig, 'webpack'> = {
         port: '',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'placehold.co', // Added for placeholder images
+        port: '',
+        pathname: '/**',
+      }
     ],
   },
+  // No webpack property here by default for Turbopack
 };
 
-let finalConfig: NextConfig;
-
-if (!isTurbopack) {
-  // Only define and use webpack config if not using Turbopack
-  const webpack = require('webpack'); // Using require for truly conditional loading
+// Conditionally add webpack configuration if Next.js is running with Webpack
+if (process.env.NEXT_WEBPACK === '1') {
+  const webpack = require('webpack'); // Lazy require for webpack
 
   const customWebpackConfig = (
-    config: any, // Webpack config type
-  ): any => { // Return Webpack config type
-    config.plugins = config.plugins || [];
-    config.plugins.push(
+    webpackConfig: WebpackConfiguration,
+    // options: any // Next.js provides options here, like buildId, dev, isServer etc.
+  ): WebpackConfiguration => {
+    webpackConfig.plugins = webpackConfig.plugins || [];
+    webpackConfig.plugins.push(
       new webpack.IgnorePlugin({
         resourceRegExp: /^@opentelemetry\/exporter-jaeger$/,
       }),
     );
-    config.plugins.push(
+    webpackConfig.plugins.push(
       new webpack.IgnorePlugin({ resourceRegExp: /^handlebars$/ }),
     );
-    return config;
+    return webpackConfig;
   };
 
-  finalConfig = {
-    ...baseConfig,
-    webpack: customWebpackConfig,
-  };
-} else {
-  // For Turbopack, do not include the webpack property
-  finalConfig = {
-    ...baseConfig,
-  };
+  config.webpack = customWebpackConfig as any; // Cast to any if type signature needs to be relaxed
 }
 
-export default finalConfig;
+export default config;

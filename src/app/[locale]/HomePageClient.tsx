@@ -170,7 +170,7 @@ export default function HomePageClient() {
           {/* Right column */}
           <div className="mt-10 lg:mt-0 flex justify-center lg:justify-end">
             <AutoImage
-              src="https://placehold.co/800x500.png"
+              src="/images/hero-main.png"
               alt="Hero image illustrating legal document generation"
               className="w-full max-w-lg"
               data-ai-hint="team collaboration"
