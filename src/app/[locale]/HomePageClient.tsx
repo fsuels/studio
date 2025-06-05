@@ -152,10 +152,15 @@ export default function HomePageClient() {
           {/* Left column */}
           <div>
             <h1 className="text-4xl lg:text-5xl font-bold text-[#1F2937] leading-tight">
-            Your Legal Forms. Expertly Crafted.
+              {t('home.hero2.title', {
+                defaultValue: 'Your Legal Forms. Expertly Crafted.',
+              })}
             </h1>
             <p className="mt-6 text-lg text-gray-700 tracking-wide leading-relaxed">
-            Eliminate guesswork. Create fully customized, professional legal documents in minutes.
+              {t('home.hero2.subtitle', {
+                defaultValue:
+                  'Eliminate guesswork. Create fully customized, professional legal documents in minutes.',
+              })}
             </p>
             {/* Search Bar */}
             <div className="mt-8">
@@ -163,7 +168,10 @@ export default function HomePageClient() {
                 <SearchBar />
               </div>
               <p className="mt-2 text-sm text-gray-500">
-                Trusted by 4,200+ docs generated • SSL Secure Checkout • Attorney-Reviewed Templates • Trustpilot ★★★★★
+                {t('home.hero2.trustline', {
+                  defaultValue:
+                    'Trusted by 4,200+ docs generated • SSL Secure Checkout • Attorney-Reviewed Templates • Trustpilot ★★★★★',
+                })}
               </p>
             </div>
           </div>
