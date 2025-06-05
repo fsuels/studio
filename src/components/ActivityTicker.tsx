@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
+import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 
 const messages = [
@@ -11,7 +12,13 @@ const messages = [
 ];
 
 export default function ActivityTicker() {
+  const pathname = usePathname();
+  const isHomePage = pathname === '/en' || pathname === '/es' || pathname === '/';
   const [index, setIndex] = useState(0);
+
+  if (!isHomePage) {
+    return null;
+  }
 
   useEffect(() => {
     const id = setInterval(() => {
