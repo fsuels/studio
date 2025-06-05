@@ -3,9 +3,7 @@
 
 import React, { ReactNode, useEffect, useState } from 'react';
 import { I18nextProvider } from 'react-i18next';
-import i18nInstance from '@/lib/i18n'; // Import the server-safe instance
-import { initReactI18next } from 'react-i18next';
-import LanguageDetector from 'i18next-browser-languagedetector';
+import i18nInstance from '@/lib/i18n'; // Import the server-safe and client-configured instance
 
 interface I18nProviderProps {
   children: ReactNode;
@@ -14,92 +12,62 @@ interface I18nProviderProps {
   fallback?: ReactNode;
 }
 
-let clientSidePluginsApplied = false;
-
 const I18nClientProvider: React.FC<I18nProviderProps> = ({
   children,
   locale,
   fallback,
 }) => {
-  const [isClientInitialized, setIsClientInitialized] = useState(
-    clientSidePluginsApplied,
-  );
+  // i18nInstance from i18n.ts is already initialized (or being initialized).
+  // We just need to ensure the language is correctly set.
+  const [isLanguageSynced, setIsLanguageSynced] = useState(false);
 
   useEffect(() => {
-    if (!clientSidePluginsApplied) {
-      i18nInstance
-        .use(LanguageDetector)
-        .use(initReactI18next)
-        .init(
-          {
-            ...i18nInstance.options, // Inherit server-safe options
-            lng: locale, // Set initial language based on prop
-            // Override or add React-specific and browser-specific options
-            react: {
-              useSuspense: false, // Recommended for Next.js App Router
-            },
-            detection: {
-              order: [
-                'querystring',
-                'cookie',
-                'localStorage',
-                'navigator',
-                'htmlTag',
-                'path',
-                'subdomain',
-              ],
-              caches: ['localStorage', 'cookie'],
-            },
-            // Disable auto POST to `/locales/add` which isn't handled server-side
-            saveMissing: false,
-            // Ensure these are also set for client-side instance for consistency
-            interpolation: {
-              escapeValue: false, // React already does escaping
-            },
-            returnObjects: false, // Explicitly ensure objects are not returned
-            returnEmptyString: true, // Return empty string for missing keys
-          },
-          (err) => {
-            if (err) {
-              return console.error(
-                'Error initializing i18next for client with plugins:',
-                err,
-              );
-            }
-            clientSidePluginsApplied = true;
-            setIsClientInitialized(true);
-            if (i18nInstance.language !== locale) {
-              i18nInstance
-                .changeLanguage(locale)
-                .catch((e) =>
-                  console.error('Error changing language post-init:', e),
-                );
-            }
-          },
-        );
-    } else {
-      // If plugins are already applied, just ensure language syncs
+    // Ensure the i18n instance is fully initialized before trying to change language.
+    // The `i18n.isInitialized` check in i18n.ts handles the init call.
+    // Here, we primarily focus on setting the correct language.
+    if (i18nInstance.isInitialized) {
       if (i18nInstance.language !== locale) {
         i18nInstance
           .changeLanguage(locale)
           .then(() => {
-            setIsClientInitialized(true);
+            setIsLanguageSynced(true);
           })
-          .catch((err) =>
+          .catch((err) => {
             console.error(
-              'Error changing language on already initialized instance:',
+              '[I18nClientProvider] Failed to change language:',
               err,
-            ),
-          );
+            );
+            setIsLanguageSynced(true); // Still allow app to render
+          });
       } else {
-        setIsClientInitialized(true);
+        setIsLanguageSynced(true);
       }
+    } else {
+      // If not initialized yet, wait for the 'initialized' event.
+      const handleInitialized = () => {
+        if (i18nInstance.language !== locale) {
+          i18nInstance
+            .changeLanguage(locale)
+            .then(() => setIsLanguageSynced(true))
+            .catch((err) => {
+              console.error(
+                '[I18nClientProvider] Failed to change language post-init event:',
+                err,
+              );
+              setIsLanguageSynced(true);
+            });
+        } else {
+          setIsLanguageSynced(true);
+        }
+      };
+      i18nInstance.on('initialized', handleInitialized);
+      return () => {
+        i18nInstance.off('initialized', handleInitialized);
+      };
     }
   }, [locale]);
 
-  // Render children only once the client-side i18n instance is ready to
-  // avoid hydration mismatches when translations load.
-  if (!isClientInitialized) {
+  if (!isLanguageSynced) {
     return <>{fallback || null}</>;
   }
 
