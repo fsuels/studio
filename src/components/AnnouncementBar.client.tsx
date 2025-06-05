@@ -3,7 +3,7 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
-import { X, Gift, Clock } from 'lucide-react';
+import { X, Clock } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 
@@ -73,13 +73,13 @@ const AnnouncementBar = React.memo(function PromoBanner() {
           animate={{ height: 'auto', opacity: 1 }}
           exit={{ height: 0, opacity: 0 }}
           transition={{ duration: 0.3, ease: 'easeInOut' }}
-          className="bg-primary text-primary-foreground overflow-hidden"
+          className="bg-blue-900/80 text-white overflow-hidden"
           role="alert"
           aria-live="polite"
         >
           <div className="container mx-auto px-4 py-2 flex flex-col sm:flex-row items-center justify-center text-sm relative gap-2 sm:gap-4">
             <div className="flex items-center">
-              <Gift className="h-4 w-4 mr-2 shrink-0" />
+              <Clock className="h-4 w-4 mr-2 shrink-0" />
               <span className="font-medium mr-1">
                 {t('announcement.offerTitle', {
                   defaultValue: 'Limited Time Offer:',
@@ -92,7 +92,7 @@ const AnnouncementBar = React.memo(function PromoBanner() {
               </span>
             </div>
             {!countdown.expired && (
-              <div className="flex items-center font-mono text-xs bg-primary-foreground/20 px-2 py-0.5 rounded">
+              <div className="flex items-center font-mono text-xs bg-white/20 px-2 py-0.5 rounded">
                 <Clock className="h-3 w-3 mr-1.5" />
                 <span>
                   {t('announcement.expiresIn', { defaultValue: 'Expires in:' })}{' '}
