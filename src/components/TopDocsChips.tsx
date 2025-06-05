@@ -142,7 +142,7 @@ const TopDocsChips = React.memo(function TopDocsChips() {
             variant={selectedCategory === 'All' ? 'default' : 'outline'}
             onClick={() => setSelectedCategory('All')}
           >
-            All
+            {tCommon('All', { defaultValue: 'All' })}
           </Button>
           {categoriesToShow.map((cat) => (
             <Button
@@ -151,7 +151,7 @@ const TopDocsChips = React.memo(function TopDocsChips() {
               variant={selectedCategory === cat ? 'default' : 'outline'}
               onClick={() => setSelectedCategory(cat)}
             >
-              {cat}
+              {tCommon(cat, { defaultValue: cat })}
             </Button>
           ))}
           {isMobile && moreCategories.length > 0 && (
@@ -167,7 +167,7 @@ const TopDocsChips = React.memo(function TopDocsChips() {
                     key={cat}
                     onSelect={() => setSelectedCategory(cat)}
                   >
-                    {cat}
+                    {tCommon(cat, { defaultValue: cat })}
                   </DropdownMenuItem>
                 ))}
               </DropdownMenuContent>
