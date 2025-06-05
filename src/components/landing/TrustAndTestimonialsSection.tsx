@@ -11,6 +11,12 @@ import Image from 'next/image';
 import Autoplay from 'embla-carousel-autoplay';
 import useEmblaCarousel from 'embla-carousel-react';
 import { cn } from '@/lib/utils';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 
 interface Testimonial {
   quoteKey: string;
@@ -194,6 +200,7 @@ const TrustAndTestimonialsSection = React.memo(
     const [docCount, setDocCount] = useState(4200);
     const [isHydrated, setIsHydrated] = useState(false);
     const [testimonialsData, setTestimonialsData] = useState<Testimonial[]>([]);
+    const [showRefundModal, setShowRefundModal] = useState(false);
     const sectionRef = useRef<HTMLDivElement | null>(null);
     const isInView = useInView(sectionRef, { once: false, amount: 0.2 });
 
@@ -379,21 +386,36 @@ const TrustAndTestimonialsSection = React.memo(
           />
         </div>
 
-        <div className="mt-16 md:mt-20 px-4">
-          <div className="bg-secondary/50 border border-border rounded-2xl p-8 md:p-10 flex flex-col items-center space-y-6 text-center shadow-md">
-            <h3 className="text-2xl font-semibold text-foreground">
+        <div className="mt-16 md:mt-20 px-4 py-16">
+          <div className="mx-auto max-w-2xl bg-gradient-to-r from-[#E5F6FF] to-white border border-border rounded-2xl p-8 md:p-10 flex flex-col items-center space-y-6 text-center shadow-md">
+            <h3 className="text-3xl lg:text-4xl font-semibold text-[#1F2937]">
               {isHydrated ? t('home.midCtaHeadline', { defaultValue: "Ready to Simplify Your Legal Needs?" }) : placeholderText}
             </h3>
-            <div className="inline-flex items-center gap-2 bg-card text-sm px-5 py-3 rounded-full shadow-md border border-border">
-              <ShieldCheck className="h-5 w-5 text-primary" />
-              <span className="font-medium text-foreground/90">
-                {isHydrated ? t('home.moneyBackGuarantee', { defaultValue: "100% Satisfaction Guarantee or Your Money Back" }) : placeholderText}
-              </span>
+            <div className="flex flex-col items-center space-y-2">
+              <div className="flex items-center gap-2">
+                <span className="inline-flex items-center bg-[#00C3A3] text-white rounded-full px-3 py-1 text-xs font-semibold">
+                  <ShieldCheck className="h-4 w-4" />
+                </span>
+                <span className="font-medium text-sm text-foreground/90">
+                  {isHydrated ? t('home.moneyBackGuarantee', { defaultValue: "100% Satisfaction Guarantee or Your Money Back" }) : placeholderText}
+                </span>
+              </div>
+              <Button variant="link" className="text-xs p-0" onClick={() => setShowRefundModal(true)}>
+                Learn More
+              </Button>
             </div>
-            <Button size="lg" className="h-14 px-12 text-lg bg-brand-blue text-white hover:bg-brand-blue/90 transition rounded-full font-semibold shadow-lg hover:shadow-xl transform hover:scale-105" onClick={scrollToWorkflow} disabled={!isHydrated}>
-              {isHydrated ? t('home.callToAction', { defaultValue: "Create My First Document" }) : placeholderText}
+            <Button size="lg" className="h-14 px-12 text-lg bg-gradient-to-r from-[#006EFF] to-[#00C3A3] text-white transition rounded-full font-semibold shadow-lg hover:shadow-xl transform hover:scale-105" onClick={scrollToWorkflow} disabled={!isHydrated}>
+              {isHydrated ? t('home.callToAction', { defaultValue: "Explore All Legal Templates" }) : placeholderText}
             </Button>
           </div>
+          <Dialog open={showRefundModal} onOpenChange={setShowRefundModal}>
+            <DialogContent className="sm:max-w-md">
+              <DialogHeader>
+                <DialogTitle>Refund Policy</DialogTitle>
+              </DialogHeader>
+              <p className="text-sm text-foreground">We stand behind our templates with a 30-day money-back guarantee. If you&apos;re not satisfied, contact support for a full refund.</p>
+            </DialogContent>
+          </Dialog>
         </div>
       </section>
     );
