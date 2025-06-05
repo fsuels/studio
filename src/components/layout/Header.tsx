@@ -219,8 +219,8 @@ const Header = React.memo(function Header() {
             <PopoverTrigger asChild>
               <Button
                 className={cn(
-                  'bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-lg font-medium flex items-center gap-1 drop-shadow-lg focus-visible:ring-2 focus-visible:ring-offset-2',
-                  isMegaMenuOpen && 'bg-emerald-600',
+                  'bg-gradient-to-r from-[#006EFF] to-[#00C3A3] hover:from-[#0057CC] hover:to-[#00A38A] text-white px-4 py-2 rounded-lg font-medium flex items-center gap-1 drop-shadow-lg focus-visible:ring-2 focus-visible:ring-offset-2 transition-colors',
+                  isMegaMenuOpen && 'from-[#0057CC] to-[#00A38A]',
                 )}
                 disabled={!mounted}
                 aria-expanded={isMegaMenuOpen}
@@ -430,8 +430,8 @@ const Header = React.memo(function Header() {
 
             {/* Mobile categories toggle */}
             <Button
-              variant="ghost"
-              className="w-full justify-between text-base font-medium flex items-center px-4 py-3 hover:bg-muted focus-visible:ring-primary focus-visible:ring-2 focus-visible:ring-offset-2"
+              variant="default"
+              className="w-full justify-between text-base font-medium flex items-center px-4 py-3 bg-gradient-to-r from-[#006EFF] to-[#00C3A3] hover:from-[#0057CC] hover:to-[#00A38A] text-white focus-visible:ring-primary focus-visible:ring-2 focus-visible:ring-offset-2"
               onClick={() => setShowMobileCategories((v) => !v)}
               aria-expanded={showMobileCategories}
               disabled={!mounted}
