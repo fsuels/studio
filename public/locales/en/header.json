@@ -20,7 +20,8 @@
   "logoAlt": "123LegalDoc Home",
   "SearchBar": {
     "placeholder": "e.g. Lease, Will, NDA...",
-    "suggestionsHint": "Popular: Lease · Will · Bill of Sale · Power of Attorney"
+    "suggestionsHint": "Popular: Lease · Will · Bill of Sale · Power of Attorney",
+    "cta": "Find Template"
   },
   "TopDocsChips": {
     "title": "Popular Legal Documents",

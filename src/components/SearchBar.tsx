@@ -109,8 +109,8 @@ const SearchBar = React.memo(function SearchBar() {
       onSubmit={handleSearchSubmit}
       className="relative w-full max-w-md mx-auto"
     >
-      <div className="relative">
-        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground pointer-events-none" />
+      <div className="relative flex items-center shadow-lg rounded-full border border-gray-300 bg-background">
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
         <Input
           ref={searchInputRef}
           type="search"
@@ -123,10 +123,16 @@ const SearchBar = React.memo(function SearchBar() {
             setShowSuggestions(true)
           }
           placeholder={placeholderText}
-          className="w-full pl-10 pr-4 py-3 h-12 text-base rounded-full shadow-lg border-border focus:ring-primary focus:border-primary bg-background"
+          className="flex-grow pl-10 pr-32 py-3 h-12 text-base rounded-full border-none placeholder-gray-400 focus:border-[#006EFF] focus:ring-2 focus:ring-offset-2 focus:ring-[#00C3A3]"
           aria-label={placeholderText}
           disabled={!isHydrated}
         />
+        <button
+          type="submit"
+          className="absolute right-1.5 top-1/2 -translate-y-1/2 whitespace-nowrap text-sm font-medium text-white px-3 py-2 rounded-full bg-gradient-to-r from-electric-500 to-electric-700 hover:to-electric-600"
+        >
+          {tHeader('SearchBar.cta', { defaultValue: 'Find Template' })}
+        </button>
 
         {isHydrated && showSuggestions && suggestions.length > 0 && (
           <ul

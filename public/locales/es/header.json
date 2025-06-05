@@ -20,7 +20,8 @@
   "logoAlt": "123LegalDoc Inicio",
   "SearchBar": {
     "placeholder": "p. ej. Arrendamiento, Testamento, NDA...",
-    "suggestionsHint": "Popular: Arrendamiento · Testamento · Factura de venta · Poder Notarial"
+    "suggestionsHint": "Popular: Arrendamiento · Testamento · Factura de venta · Poder Notarial",
+    "cta": "Buscar Plantilla"
   },
   "TopDocsChips": {
     "title": "Documentos Legales Populares",
