@@ -283,15 +283,12 @@ const TrustAndTestimonialsSection = React.memo(
               <div className="flex items-center gap-2">
                 <FileText className="h-5 w-5 text-primary" />
                 <span>
-                  {isHydrated ? (
-                    <>
-                      Over{' '}
-                      <span className="font-semibold leading-5">{formattedCount}</span>{' '}
-                      documents generated
-                    </>
-                  ) : (
-                    placeholderText
-                  )}
+                  {isHydrated
+                    ? t('home.trustStrip.badge1', {
+                        count: formattedCount,
+                        defaultValue: `Over ${formattedCount} documents generated`,
+                      })
+                    : placeholderText}
                 </span>
               </div>
               <div className="flex items-center gap-1">
@@ -305,7 +302,9 @@ const TrustAndTestimonialsSection = React.memo(
                 <span className="ml-1 font-semibold leading-5">4.9/5</span>
               </div>
               <div className="flex items-center gap-2 opacity-50">
-                <span className="text-xs">Used by:</span>
+                <span className="text-xs">
+                  {t('home.trustStrip.usedBy', 'Used by:')}
+                </span>
                 <AutoImage src="/images/logos/forbes-logo.svg" alt="Forbes logo" width={80} height={16} className="h-4 w-auto" />
                 <AutoImage src="/images/logos/bloomberg-logo.svg" alt="Bloomberg logo" width={80} height={16} className="h-4 w-auto" />
                 <AutoImage src="/images/logos/nyt-logo.svg" alt="New York Times logo" width={80} height={16} className="h-4 w-auto" />
