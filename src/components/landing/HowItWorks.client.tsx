@@ -14,7 +14,7 @@ const steps = [
     descKey: 'home.steps.step1.descUpdated',
     defaultTitle: 'Select a Legal Template', // Ensured default is correct
     defaultDesc:
-      'Browse our extensive library of legal forms built on current statutes, regulations, and industry best practices so you can start with confidence. Each template uses real laws and guidelines and is fully ready for customization.',
+      'Choose from 1,000+ state-specific templates built on up-to-date statutes & best practices.',
   },
   {
     number: 2,
@@ -38,8 +38,15 @@ const HowItWorks = React.memo(function HowItWorks() {
   const { t } = useTranslation('common'); // Uses 'common' namespace
 
   return (
-    <section id="how-it-works" className="bg-gray-50 py-12">
-      <div className="max-w-5xl mx-auto text-center">
+    <section
+      id="how-it-works"
+      className="relative bg-gradient-to-b from-gray-50 to-white border-t border-gray-200 py-12"
+    >
+      <div
+        className="pointer-events-none absolute inset-0 bg-[url('/images/pattern-legal.svg')] bg-repeat bg-[length:40px_40px] opacity-5"
+        aria-hidden="true"
+      />
+      <div className="relative max-w-5xl mx-auto text-center">
         <h2 className="text-3xl font-bold text-gray-900">
           <span>
             {t('home.howItWorksSectionTitle.main', {
@@ -54,7 +61,7 @@ const HowItWorks = React.memo(function HowItWorks() {
             })}
           </span>
         </h2>
-        <div className="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-6">
+        <div className="mt-8 flex flex-col space-y-8 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-6">
           {steps.map((step) => (
             <StepCard
               key={step.titleKey}
