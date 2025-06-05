@@ -172,7 +172,7 @@ export default function HomePageClient() {
             <AutoImage
               src="/images/hero-main.png"
               alt="Hero image illustrating legal document generation"
-              className="w-full max-w-lg"
+              className="w-full max-w-lg rounded-xl shadow-lg"
               data-ai-hint="team collaboration"
               priority
             />
