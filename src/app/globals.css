@@ -304,3 +304,18 @@
 .header.scrolled {
   @apply backdrop-blur bg-white/75 shadow-md;
 }
+
+@keyframes starPulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+@media (min-width: 768px) {
+  .star-pulse {
+    animation: starPulse 5s ease-in-out infinite;
+  }
+}
