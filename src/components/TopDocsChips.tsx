@@ -5,6 +5,12 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { useTranslation } from 'react-i18next';
 import { useParams, useRouter } from 'next/navigation';
 import {
@@ -13,6 +19,7 @@ import {
   Folder,
   Home,
   Users,
+  ChevronDown,
   type LucideIcon,
 } from 'lucide-react';
 import { documentLibrary, type LegalDocument } from '@/lib/document-library';
@@ -35,6 +42,8 @@ const TopDocsChips = React.memo(function TopDocsChips() {
   };
   const router = useRouter();
   const locale = (params.locale as 'en' | 'es') || 'en';
+
+  const moreLabel = tCommon('TopDocsChips.more', { defaultValue: 'More' });
 
   const [topDocs, setTopDocs] = useState<LegalDocument[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -75,6 +84,9 @@ const TopDocsChips = React.memo(function TopDocsChips() {
       ? topDocs
       : topDocs.filter((d) => d.category === selectedCategory);
 
+  const visibleCategoriesMobile = categories.slice(0, 3);
+  const overflowCategoriesMobile = categories.slice(3);
+
 
   const handleExploreAll = () => {
     const workflowStartElement = document.getElementById('workflow-start');
@@ -110,27 +122,69 @@ const TopDocsChips = React.memo(function TopDocsChips() {
         })}
       </h2>
       {categories.length > 1 && (
-        <div className="mb-4 flex flex-wrap justify-center gap-2">
-          <Button
-            size="sm"
-            variant={selectedCategory === 'All' ? 'default' : 'outline'}
-            onClick={() => setSelectedCategory('All')}
-          >
-            All
-          </Button>
-          {categories.map((cat) => (
+        <>
+          <div className="mb-4 hidden flex-wrap justify-center gap-2 sm:flex">
             <Button
-              key={cat}
               size="sm"
-              variant={selectedCategory === cat ? 'default' : 'outline'}
-              onClick={() => setSelectedCategory(cat)}
+              variant={selectedCategory === 'All' ? 'default' : 'outline'}
+              onClick={() => setSelectedCategory('All')}
             >
-              {cat}
+              {tCommon('All', 'All')}
             </Button>
-          ))}
-        </div>
+            {categories.map((cat) => (
+              <Button
+                key={cat}
+                size="sm"
+                variant={selectedCategory === cat ? 'default' : 'outline'}
+                onClick={() => setSelectedCategory(cat)}
+              >
+                {cat}
+              </Button>
+            ))}
+          </div>
+          <div className="mb-4 flex justify-center gap-2 sm:hidden">
+            <Button
+              size="sm"
+              variant={selectedCategory === 'All' ? 'default' : 'outline'}
+              onClick={() => setSelectedCategory('All')}
+            >
+              {tCommon('All', 'All')}
+            </Button>
+            {visibleCategoriesMobile.map((cat) => (
+              <Button
+                key={cat}
+                size="sm"
+                variant={selectedCategory === cat ? 'default' : 'outline'}
+                onClick={() => setSelectedCategory(cat)}
+              >
+                {cat}
+              </Button>
+            ))}
+            {overflowCategoriesMobile.length > 0 && (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button size="sm" variant="outline">
+                    {moreLabel}
+                    <ChevronDown className="ml-1 h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="center">
+                  {overflowCategoriesMobile.map((cat) => (
+                    <DropdownMenuItem
+                      key={cat}
+                      onSelect={() => setSelectedCategory(cat)}
+                      className="cursor-pointer"
+                    >
+                      {cat}
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            )}
+          </div>
+        </>
       )}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {filteredDocs.map((doc) => {
           const Icon = categoryIcons[doc.category] || FileText;
           const badge = badges[doc.id];
