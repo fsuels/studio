@@ -1,15 +1,12 @@
 // src/components/landing/TrustAndTestimonialsSection.tsx
 'use client';
 
-import React, { useEffect, useState, useCallback, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useInView } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { FileText, ShieldCheck, Star } from 'lucide-react';
-import CarouselNavArrow from '@/components/CarouselNavArrow';
 import Image from 'next/image';
-import Autoplay from 'embla-carousel-autoplay';
-import useEmblaCarousel from 'embla-carousel-react';
 import { cn } from '@/lib/utils';
 import {
   Dialog,
@@ -126,7 +123,7 @@ const MemoizedTestimonialCard = React.memo(function TestimonialCard({
     `https://picsum.photos/seed/${currentTestimonial.avatarSeed}/112/112`;
 
   return (
-    <div className="bg-card p-6 rounded-2xl shadow-lg w-72 md:w-80 text-left shrink-0 flex flex-col border border-border transition-shadow hover:shadow-xl h-full">
+    <div className="bg-white p-8 rounded-2xl shadow-xl w-full text-left shrink-0 flex flex-col">
       {isHydrated || testimonial ? (
         <>
           <Image
@@ -140,16 +137,13 @@ const MemoizedTestimonialCard = React.memo(function TestimonialCard({
           />
           <div className="flex justify-center mb-3">
             {Array.from({ length: rating }).map((_, i) => (
-              <Star
-                key={i}
-                className="h-4 w-4 text-yellow-400 fill-yellow-400 star-gradient"
-              />
+              <Star key={i} className="h-5 w-5 text-[#FFB800] fill-[#FFB800]" />
             ))}
             {Array.from({ length: 5 - rating }).map((_, i) => (
-              <Star key={`empty-${i}`} className="h-4 w-4 text-yellow-400" />
+              <Star key={`empty-${i}`} className="h-5 w-5 text-[#FFB800]" />
             ))}
           </div>
-          <p className="italic text-foreground/90 mb-4 leading-relaxed text-base flex-grow">
+          <p className="italic text-gray-800 leading-relaxed mb-4 text-base flex-grow">
             &ldquo;{quoteText}&rdquo;
           </p>
           {outcomeText && (
@@ -158,8 +152,8 @@ const MemoizedTestimonialCard = React.memo(function TestimonialCard({
             </p>
           )}
           <div className="mt-auto text-center pt-3 border-t border-border/50">
-            <p className="font-semibold text-sm text-foreground">{nameText}</p>
-            <p className="text-xs text-muted-foreground">{titleText}</p>
+            <p className="font-medium text-gray-600">{nameText}</p>
+            <p className="text-sm text-gray-600">{titleText}</p>
           </div>
         </>
       ) : (
@@ -204,24 +198,6 @@ const TrustAndTestimonialsSection = React.memo(
     const sectionRef = useRef<HTMLDivElement | null>(null);
     const isInView = useInView(sectionRef, { once: false, amount: 0.2 });
 
-    const autoplayOptions = {
-      delay: 6000,
-      stopOnInteraction: false,
-      stopOnMouseEnter: true,
-    };
-    const [emblaRef, emblaApi] = useEmblaCarousel(
-      { loop: true, align: 'start' },
-      [Autoplay(autoplayOptions)],
-    );
-
-    const scrollPrev = useCallback(
-      () => emblaApi && emblaApi.scrollPrev(),
-      [emblaApi],
-    );
-    const scrollNext = useCallback(
-      () => emblaApi && emblaApi.scrollNext(),
-      [emblaApi],
-    );
 
     useEffect(() => {
       setIsHydrated(true);
@@ -338,31 +314,15 @@ const TrustAndTestimonialsSection = React.memo(
         </h3>
 
         <div className="relative max-w-6xl mx-auto">
-          <CarouselNavArrow
-            direction="prev"
-            onClick={scrollPrev}
-            disabled={!isHydrated || !emblaApi}
-            aria-label={t('Previous testimonial', {
-              defaultValue: 'Previous testimonial',
-            })}
-            className="absolute left-[-10px] md:left-[-20px] top-1/2 z-20 -translate-y-1/2"
-          />
-
-          <div className="overflow-hidden" ref={emblaRef}>
-            <div className="flex -ml-4">
-              {(testimonialsData.length > 0
-                ? testimonialsData
-                : Array(5).fill(null)
-              ).map((testimonial, i) => (
+          <div className="absolute -top-10 -left-10 w-40 h-40 bg-teal-500/10 rounded-full blur-3xl pointer-events-none"></div>
+          <div className="overflow-x-auto pb-4 sm:overflow-visible">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 snap-x sm:snap-none">
+              {(testimonialsData.length > 0 ? testimonialsData : Array(5).fill(null)).map((testimonial, i) => (
                 <div
                   key={
-                    testimonial
-                      ? `${testimonial.nameKey}-${testimonial.avatarSeed}`
-                      : `placeholder-${i}`
+                    testimonial ? `${testimonial.nameKey}-${testimonial.avatarSeed}` : `placeholder-${i}`
                   }
-                  className={cn(
-                    'pl-4 flex-[0_0_90%] sm:flex-[0_0_45%] md:flex-[0_0_33.33%]',
-                  )}
+                  className="snap-start"
                 >
                   <MemoizedTestimonialCard
                     testimonial={testimonial}
@@ -374,16 +334,6 @@ const TrustAndTestimonialsSection = React.memo(
               ))}
             </div>
           </div>
-
-          <CarouselNavArrow
-            direction="next"
-            onClick={scrollNext}
-            disabled={!isHydrated || !emblaApi}
-            aria-label={t('Next testimonial', {
-              defaultValue: 'Next testimonial',
-            })}
-            className="absolute right-[-10px] md:right-[-20px] top-1/2 z-20 -translate-y-1/2"
-          />
         </div>
 
         <div className="mt-16 md:mt-20 px-4 py-16">
