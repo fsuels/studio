@@ -178,7 +178,7 @@ export default function HomePageClient() {
           {/* Right column */}
           <div className="mt-10 lg:mt-0 flex justify-center lg:justify-end mx-auto lg:ml-auto lg:mr-8">
             <AutoImage
-              src="/images/hero-main.png"
+              src={locale === 'es' ? '/images/hero-main-es.png' : '/images/hero-main.png'}
               alt="Hero image illustrating legal document generation"
               className="w-full max-w-lg rounded-xl shadow-lg"
               data-ai-hint="team collaboration"
