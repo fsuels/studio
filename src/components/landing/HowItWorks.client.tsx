@@ -11,9 +11,10 @@ const steps = [
     number: 1,
     Icon: Target,
     titleKey: 'home.steps.step1.titleUpdated', // Changed key
-    descKey: 'home.steps.step1.desc',
+    descKey: 'home.steps.step1.descUpdated',
     defaultTitle: 'Select a Legal Template', // Ensured default is correct
-    defaultDesc: 'Answer a few quick prompts for tailored guidance.',
+    defaultDesc:
+      'Browse our extensive library of legal forms built on current statutes, regulations, and industry best practices so you can start with confidence. Each template uses real laws and guidelines and is fully ready for customization.',
   },
   {
     number: 2,
@@ -41,11 +42,16 @@ const HowItWorks = React.memo(function HowItWorks() {
       <div className="max-w-5xl mx-auto text-center">
         <h2 className="text-3xl font-bold text-gray-900">
           <span>
-            {t('home.howItWorksSectionTitle.main', { defaultValue: 'Generate and Personalize Legal Forms' })}
+            {t('home.howItWorksSectionTitle.main', {
+              defaultValue:
+                'Generate and Personalize Legal Forms',
+            })}
           </span>
           <br />
           <span className="block mt-2 text-xl font-medium text-gray-600">
-            {t('home.howItWorksSectionTitle.sub', { defaultValue: '• Fast • Easy • No Hidden Fees' })}
+            {t('home.howItWorksSectionTitle.sub', {
+              defaultValue: '• Fast • Easy • No Hidden Fees',
+            })}
           </span>
         </h2>
         <div className="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-6">
