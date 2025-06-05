@@ -322,7 +322,11 @@
       "title": "Privacy & Security",
       "desc": "Encrypted data and compliant practices."
     }
-    }
+  },
+  "customize": {
+    "title": "Customize Your Document",
+    "desc": "Make edits with our built-in editor so every clause fits your exact situation."
+  }
   },
   "whyChooseUs": {
     "title": "Why Choose Us?",

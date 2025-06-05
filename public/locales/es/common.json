@@ -322,6 +322,10 @@
         "title": "Privacidad y Seguridad",
         "desc": "Datos cifrados y prácticas conformes."
       }
+    },
+    "customize": {
+      "title": "Personaliza tu Documento",
+      "desc": "Haz ediciones con nuestro editor integrado para que cada cláusula se ajuste a tu situación."
     }
   },
   "whyChooseUs": {
