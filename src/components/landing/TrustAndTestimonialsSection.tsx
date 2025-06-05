@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { FileText, ShieldCheck, Star } from 'lucide-react';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
+import AutoImage from '@/components/AutoImage';
 import {
   Dialog,
   DialogContent,
@@ -269,7 +270,7 @@ const TrustAndTestimonialsSection = React.memo(
         ref={sectionRef}
         className="bg-gradient-to-b from-secondary/40 to-secondary/20 py-16 text-center"
       >
-        <div className="container mx-auto px-4 mb-12 md:mb-16">
+        <div className="mb-12 md:mb-16">
           <p className="text-xs uppercase text-muted-foreground tracking-wider mb-3 font-medium">
             {isHydrated
               ? t('home.trustStrip.title', {
@@ -277,30 +278,38 @@ const TrustAndTestimonialsSection = React.memo(
                 })
               : placeholderText}
           </p>
-          <div className="flex flex-col sm:flex-row flex-wrap justify-center items-center gap-x-6 gap-y-3 text-foreground/90 text-sm font-medium">
-            <div className="flex items-center gap-2">
-              <FileText className="h-5 w-5 text-primary" />
-              <span>
-                {isHydrated
-                  ? tSimple('home.trustStrip.badge1', {
-                      count: formattedCount,
-                      defaultValue: `Over ${formattedCount} documents generated`,
-                    })
-                  : placeholderText}
-              </span>
-            </div>
-            <div className="hidden sm:block w-px h-4 bg-border"></div>
-            <div className="flex items-center gap-2">
-              <span className="font-bold text-foreground/90">Trustpilot</span>
-              <div className="flex items-center">
-                {Array.from({ length: 5 }).map((_, i) => (
-                  <Star
-                    key={i}
-                    className="h-4 w-4 text-green-500 fill-green-500 star-gradient"
-                  />
-                ))}
+          <div className="w-full bg-[#F9FAFB] py-3">
+            <div className="container mx-auto px-4 flex flex-col sm:flex-row items-center justify-center sm:justify-between gap-4 text-gray-700 text-sm">
+              <div className="flex items-center gap-2">
+                <FileText className="h-5 w-5 text-primary" />
+                <span>
+                  {isHydrated ? (
+                    <>
+                      Over{' '}
+                      <span className="font-semibold leading-5">{formattedCount}</span>{' '}
+                      documents generated
+                    </>
+                  ) : (
+                    placeholderText
+                  )}
+                </span>
               </div>
-              <span className="text-xs text-muted-foreground">(4.9/5)</span>
+              <div className="flex items-center gap-1">
+                <span className="font-bold">Trustpilot</span>
+                <div className="flex items-center ml-1">
+                  {Array.from({ length: 4 }).map((_, i) => (
+                    <Star key={i} className="h-4 w-4 text-green-500 fill-green-500 star-gradient" />
+                  ))}
+                  <Star className="h-4 w-4 text-green-500 fill-green-500 star-gradient star-pulse" />
+                </div>
+                <span className="ml-1 font-semibold leading-5">4.9/5</span>
+              </div>
+              <div className="flex items-center gap-2 opacity-50">
+                <span className="text-xs">Used by:</span>
+                <AutoImage src="/images/logos/forbes-logo.svg" alt="Forbes logo" width={80} height={16} className="h-4 w-auto" />
+                <AutoImage src="/images/logos/bloomberg-logo.svg" alt="Bloomberg logo" width={80} height={16} className="h-4 w-auto" />
+                <AutoImage src="/images/logos/nyt-logo.svg" alt="New York Times logo" width={80} height={16} className="h-4 w-auto" />
+              </div>
             </div>
           </div>
         </div>
