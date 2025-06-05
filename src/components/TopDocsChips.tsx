@@ -5,6 +5,12 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 import { useTranslation } from 'react-i18next';
 import { useParams, useRouter } from 'next/navigation';
 import {
@@ -13,6 +19,9 @@ import {
   Folder,
   Home,
   Users,
+  Clock,
+  Zap,
+  RefreshCcw,
   type LucideIcon,
 } from 'lucide-react';
 import { documentLibrary, type LegalDocument } from '@/lib/document-library';
@@ -103,7 +112,8 @@ const TopDocsChips = React.memo(function TopDocsChips() {
   }
 
   return (
-    <section className="container mx-auto px-4 py-16">
+    <TooltipProvider>
+      <section className="container mx-auto px-4 py-16">
       <h2 className="text-xl font-semibold text-center mb-6 text-foreground">
         {tCommon('TopDocsChips.title', {
           defaultValue: 'Popular Legal Documents',
@@ -139,7 +149,7 @@ const TopDocsChips = React.memo(function TopDocsChips() {
               key={doc.id}
               href={`/${locale}/docs/${doc.id}`}
               prefetch
-              className="p-4 border rounded-lg bg-card hover:bg-muted transition-colors shadow-sm"
+              className="p-4 border border-gray-200 rounded-lg bg-card shadow-sm transition-all hover:-translate-y-[2px] hover:shadow-lg hover:border-[#006EFF] hover:bg-muted"
             >
               <div className="flex items-start justify-between">
                 <div className="flex items-center gap-2">
@@ -154,12 +164,32 @@ const TopDocsChips = React.memo(function TopDocsChips() {
                   </span>
                 </div>
                 {badge && (
-                  <Badge variant="secondary">
-                    {badge === 'new' ? '🔥 New' : '🆕 Updated'}
-                  </Badge>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Badge variant="secondary" className="flex items-center space-x-1">
+                        {badge === 'new' ? (
+                          <Zap className="h-3 w-3" />
+                        ) : (
+                          <RefreshCcw className="h-3 w-3" />
+                        )}
+                        <span className="capitalize">{badge}</span>
+                      </Badge>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      {badge === 'new' ? 'Recently added' : 'Recently refreshed'}
+                    </TooltipContent>
+                  </Tooltip>
                 )}
               </div>
-              <p className="text-xs text-muted-foreground mt-2">~3 min</p>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <span className="mt-2 flex items-center gap-1 text-xs text-muted-foreground">
+                    <Clock className="h-3 w-3" />
+                    ~3 min
+                  </span>
+                </TooltipTrigger>
+                <TooltipContent>Average completion time</TooltipContent>
+              </Tooltip>
             </Link>
           );
         })}
@@ -176,7 +206,8 @@ const TopDocsChips = React.memo(function TopDocsChips() {
           →
         </Button>
       </div>
-    </section>
+      </section>
+    </TooltipProvider>
   );
 });
 export default TopDocsChips;
