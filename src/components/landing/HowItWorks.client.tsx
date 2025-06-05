@@ -20,9 +20,9 @@ const steps = [
     number: 2,
     Icon: Sparkles,
     titleKey: 'home.steps.step2.titleUpdated',
-    descKey: 'home.steps.step2.desc',
+    descKey: 'home.steps.step2.descUpdated',
     defaultTitle: 'Answer Quick Prompts',
-    defaultDesc: 'Our system builds a professional draft automatically.',
+    defaultDesc: 'Fill in simple fields—no legal expertise needed. As you answer plain-language questions, your document populates in real time. Then edit any clause or section until it’s exactly what you need.',
   },
   {
     number: 3,
