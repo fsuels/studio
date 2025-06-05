@@ -151,7 +151,7 @@ export default function HomePageClient() {
         <div className="max-w-7xl mx-auto px-6 lg:grid lg:grid-cols-2 lg:gap-8 items-center">
           {/* Left column */}
           <div>
-            <h1 className="text-4xl sm:text-5xl font-bold text-primary leading-tight">
+            <h1 className="text-4xl lg:text-5xl font-bold text-[#1F2937] leading-tight">
             Your Legal Forms. Expertly Crafted.
             </h1>
             <p className="mt-6 text-lg text-gray-700 tracking-wide leading-relaxed">
@@ -168,7 +168,7 @@ export default function HomePageClient() {
             </div>
           </div>
           {/* Right column */}
-          <div className="mt-10 lg:mt-0 flex justify-center lg:justify-end">
+          <div className="mt-10 lg:mt-0 flex justify-center lg:justify-end mx-auto lg:ml-auto lg:mr-8">
             <AutoImage
               src="/images/hero-main.png"
               alt="Hero image illustrating legal document generation"
