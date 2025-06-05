@@ -11,6 +11,12 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { useTranslation } from 'react-i18next';
 import { useParams, useRouter } from 'next/navigation';
 import {
@@ -25,6 +31,7 @@ import {
   type LucideIcon,
 } from 'lucide-react';
 import { documentLibrary, type LegalDocument } from '@/lib/document-library';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 // Placeholder data for top docs - in a real app, this would come from Firestore
 const staticTopDocIds: string[] = [
@@ -79,6 +86,15 @@ const TopDocsChips = React.memo(function TopDocsChips() {
     () => Array.from(new Set(topDocs.map((d) => d.category))).sort(),
     [topDocs],
   );
+  const isMobile = useIsMobile();
+  const categoriesToShow = React.useMemo(
+    () => (isMobile ? categories.slice(0, 3) : categories),
+    [isMobile, categories],
+  );
+  const moreCategories = React.useMemo(
+    () => (isMobile ? categories.slice(3) : []),
+    [isMobile, categories],
+  );
   const filteredDocs =
     selectedCategory === 'All'
       ? topDocs
@@ -128,7 +144,7 @@ const TopDocsChips = React.memo(function TopDocsChips() {
           >
             All
           </Button>
-          {categories.map((cat) => (
+          {categoriesToShow.map((cat) => (
             <Button
               key={cat}
               size="sm"
@@ -138,9 +154,28 @@ const TopDocsChips = React.memo(function TopDocsChips() {
               {cat}
             </Button>
           ))}
+          {isMobile && moreCategories.length > 0 && (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button size="sm" variant="outline">
+                  {tCommon('more', { defaultValue: 'More' })}
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="center">
+                {moreCategories.map((cat) => (
+                  <DropdownMenuItem
+                    key={cat}
+                    onSelect={() => setSelectedCategory(cat)}
+                  >
+                    {cat}
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )}
         </div>
       )}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {filteredDocs.map((doc) => {
           const Icon = categoryIcons[doc.category] || FileText;
           const badge = badges[doc.id];
