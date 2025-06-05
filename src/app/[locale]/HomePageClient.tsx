@@ -152,10 +152,10 @@ export default function HomePageClient() {
           {/* Left column */}
           <div>
             <h1 className="text-4xl sm:text-5xl font-bold text-gray-800 leading-tight">
-              Legal Peace of Mind. Instant. Intelligent.
+            Your Legal Forms. Expertly Crafted.
             </h1>
             <p className="mt-4 text-lg text-gray-600">
-              Say goodbye to confusion. Our AI crafts precise, professional legal documents tailored to your unique needs, fast.
+            Eliminate guesswork. Create fully customized, professional legal documents in minutes.
             </p>
             {/* Search Bar */}
             <div className="mt-8">
