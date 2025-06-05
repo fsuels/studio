@@ -35,7 +35,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <head>
+      <head><>
         <meta
           name="viewport"
           content="width=device-width, initial-scale=1, maximum-scale=1"
@@ -76,9 +76,7 @@ export default function RootLayout({
         <link rel="preload" href="/images/signwell-hero.svg" as="image" />
         <link rel="alternate" href="https://123legaldoc.com/en/" hrefLang="en" />
         <link rel="alternate" href="https://123legaldoc.com/es/" hrefLang="es" />
-      </head>
-
-      <body
+      </></head><body
         className={`${inter.variable} ${merriweather.variable} antialiased flex flex-col min-h-screen overflow-x-hidden`}
       >
         <RootClient>{children}</RootClient>
