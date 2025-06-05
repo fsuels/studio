@@ -15,6 +15,17 @@ import {
   X,
 } from 'lucide-react';
 import React from 'react';
+import {
+  Card,
+} from '@/components/ui/card';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
 import CustomizeDocBlock from '@/components/landing/CustomizeDocBlock';
 
 // Feature sub-component
