@@ -359,8 +359,12 @@ const TrustAndTestimonialsSection = React.memo(
                   {isHydrated ? t('home.moneyBackGuarantee', { defaultValue: "100% Satisfaction Guarantee or Your Money Back" }) : placeholderText}
                 </span>
               </div>
-              <Button variant="link" className="text-xs p-0" onClick={() => setShowRefundModal(true)}>
-                Learn More
+              <Button
+                variant="link"
+                className="text-xs p-0"
+                onClick={() => setShowRefundModal(true)}
+              >
+                {t('ctaSecondary', { defaultValue: 'Learn More' })}
               </Button>
             </div>
             <Button size="lg" className="h-14 px-12 text-lg bg-gradient-to-r from-[#006EFF] to-[#00C3A3] text-white transition rounded-full font-semibold shadow-lg hover:shadow-xl transform hover:scale-105" onClick={scrollToWorkflow} disabled={!isHydrated}>
