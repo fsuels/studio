@@ -2,8 +2,8 @@
 export const dynamic = 'force-static';
 
 import type { Metadata } from 'next';
-import dynamic from 'next/dynamic';
 import React from 'react';
+import SignWellPageClient from './SignWellPageClient';
 
 interface SignWellPageProps {
   params: { locale: 'en' | 'es' } & Record<string, string>;
@@ -36,11 +36,6 @@ export async function generateMetadata({
   return { title, description, openGraph: { title, description } };
 }
 
-/* ───────── Client content — NEVER loaded on the server ───────── */
-const SignWellClientContent = typeof window === 'undefined'
-  ? () => null
-  : dynamic(() => import('./signwell-client-content'), { ssr: false });
-
 export default function SignWellPage({ params }: SignWellPageProps) {
-  return <SignWellClientContent params={params} />;
+  return <SignWellPageClient params={params} />;
 }
