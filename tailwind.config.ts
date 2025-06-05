@@ -116,12 +116,17 @@ const config: Config = {
           from: { height: 'var(--radix-accordion-content-height)' },
           to: { height: '0' },
         },
+        'star-pulse': {
+          '0%, 100%': { transform: 'scale(1)' },
+          '50%': { transform: 'scale(1.05)' },
+        },
       },
       animation: {
         'fade-in': 'fade-in 0.4s ease-out both',
         'scale-in': 'scale-in .25s cubic-bezier(.16,1,.3,1) both',
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
+        'star-pulse': 'star-pulse 5s ease-in-out infinite',
       },
       typography: {
         DEFAULT: {

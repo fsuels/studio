@@ -194,6 +194,7 @@
   "You're {{currentStep}} of {{totalSteps}} done!": "¡Has completado {{currentStep}} de {{totalSteps}}!",
   "home.trustStrip.title": "Confiado por Profesionales",
   "home.trustStrip.badge1": "Más de {{count}} documentos generados",
+  "home.trustStrip.usedBy": "Utilizado por:",
   "home.testimonials.title": "Lo Que Dicen Nuestros Usuarios",
   "home.testimonials.t1.quote": "¡Increíblemente intuitivo! Esta plataforma me ahorró incontables horas y miles en honorarios legales para mi startup. Las sugerencias de la IA fueron perfectas y me permitieron lanzar con plena confianza.",
   "home.testimonials.t1.name": "Sofía L.",

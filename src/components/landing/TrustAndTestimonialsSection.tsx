@@ -11,6 +11,7 @@ import Image from 'next/image';
 import Autoplay from 'embla-carousel-autoplay';
 import useEmblaCarousel from 'embla-carousel-react';
 import { cn } from '@/lib/utils';
+import AutoImage from '@/components/AutoImage';
 
 interface Testimonial {
   quoteKey: string;
@@ -63,6 +64,12 @@ const placeholderOutcomes = [
   'Simplified my estate planning process considerably!',
   'Streamlined our hiring process with clear contracts!',
   'Felt confident and prepared for legal eventualities.',
+];
+
+const usedByLogos = [
+  { src: '/images/logos/forbes-logo.svg', alt: 'Forbes' },
+  { src: '/images/logos/techcrunch-logo.svg', alt: 'TechCrunch' },
+  { src: '/images/logos/bloomberg-logo.svg', alt: 'Bloomberg' },
 ];
 
 const MemoizedTestimonialCard = React.memo(function TestimonialCard({
@@ -286,18 +293,18 @@ const TrustAndTestimonialsSection = React.memo(
         ref={sectionRef}
         className="bg-gradient-to-b from-secondary/40 to-secondary/20 py-16 text-center"
       >
-        <div className="container mx-auto px-4 mb-12 md:mb-16">
-          <p className="text-xs uppercase text-muted-foreground tracking-wider mb-3 font-medium">
+        <div className="w-full bg-[#F9FAFB] text-gray-700 mb-12 md:mb-16">
+          <p className="text-xs uppercase text-muted-foreground tracking-wider text-center font-medium pt-2">
             {isHydrated
               ? t('home.trustStrip.title', {
                   defaultValue: 'Trusted By Professionals',
                 })
               : placeholderText}
           </p>
-          <div className="flex flex-col sm:flex-row flex-wrap justify-center items-center gap-x-6 gap-y-3 text-foreground/90 text-sm font-medium">
+          <div className="container mx-auto flex flex-col sm:flex-row items-center justify-center sm:justify-between gap-y-2 py-2 px-4 text-sm">
             <div className="flex items-center gap-2">
               <FileText className="h-5 w-5 text-primary" />
-              <span>
+              <span className="font-semibold leading-snug">
                 {isHydrated
                   ? tSimple('home.trustStrip.badge1', {
                       count: formattedCount,
@@ -306,18 +313,37 @@ const TrustAndTestimonialsSection = React.memo(
                   : placeholderText}
               </span>
             </div>
-            <div className="hidden sm:block w-px h-4 bg-border"></div>
             <div className="flex items-center gap-2">
-              <span className="font-bold text-foreground/90">Trustpilot</span>
+              <AutoImage
+                src="/images/trustpilot-logo-words.svg"
+                alt="Trustpilot"
+                width={90}
+                height={16}
+                className="h-4 w-auto"
+              />
               <div className="flex items-center">
-                {Array.from({ length: 5 }).map((_, i) => (
+                {Array.from({ length: 4 }).map((_, i) => (
                   <Star
                     key={i}
                     className="h-4 w-4 text-green-500 fill-green-500 star-gradient"
                   />
                 ))}
+                <Star className="h-4 w-4 text-green-500 fill-green-500 star-gradient md:animate-star-pulse" />
               </div>
-              <span className="text-xs text-muted-foreground">(4.9/5)</span>
+              <span className="font-semibold leading-snug">4.9/5</span>
+            </div>
+            <div className="flex items-center gap-2 opacity-50">
+              <span>{t('home.trustStrip.usedBy', { defaultValue: 'Used by:' })}</span>
+              {usedByLogos.map((logo) => (
+                <AutoImage
+                  key={logo.src}
+                  src={logo.src}
+                  alt={logo.alt}
+                  width={80}
+                  height={20}
+                  className="h-5 w-auto"
+                />
+              ))}
             </div>
           </div>
         </div>
