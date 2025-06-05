@@ -3,34 +3,47 @@
 
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Target, Sparkles, Download } from 'lucide-react';
+import {
+  FolderOpen,
+  FileQuestion,
+  Lock,
+  Share2,
+  ArrowRight,
+} from 'lucide-react';
 import StepCard from './StepCard';
 
 const steps = [
   {
     number: 1,
-    Icon: Target,
-    titleKey: 'home.steps.step1.titleUpdated', // Changed key
+    Icon: FolderOpen,
+    titleKey: 'home.steps.step1.titleUpdated',
     descKey: 'home.steps.step1.descUpdated',
-    defaultTitle: 'Select a Legal Template', // Ensured default is correct
+    defaultTitle: 'Select a Legal Template',
     defaultDesc:
       'Choose from 1,000+ state-specific templates built on up-to-date statutes & best practices.',
   },
   {
     number: 2,
-    Icon: Sparkles,
+    Icon: FileQuestion,
     titleKey: 'home.steps.step2.titleUpdated',
     descKey: 'home.steps.step2.descUpdated',
     defaultTitle: 'Answer Quick Prompts',
-    defaultDesc: 'Fill in simple fields—no legal expertise needed. As you answer plain-language questions, your document populates in real time. Then edit any clause or section until it’s exactly what you need.',
+    defaultDesc:
+      'Fill in simple fields—no legal expertise needed. As you answer plain-language questions, your document populates in real time. Then edit any clause or section until it’s exactly what you need.',
   },
   {
     number: 3,
-    Icon: Download,
+    Icon: () => (
+      <span className="relative inline-block w-8 h-8">
+        <Lock className="absolute inset-0" />
+        <Share2 className="absolute -right-2 -bottom-2 w-4 h-4" />
+      </span>
+    ),
     titleKey: 'home.steps.step3.title',
-    descKey: 'home.steps.step3.descUpdated', // Changed key
+    descKey: 'home.steps.step3.descUpdated',
     defaultTitle: 'Securely Download & Share',
-    defaultDesc: 'Once you’ve double-checked every detail, hit “Complete.” Your polished PDF is ready to download, print, or share via a protected link—controlled by you, accessible to anyone you choose.',
+    defaultDesc:
+      'Once you’ve double-checked every detail, hit “Complete.” Your polished PDF is ready to download, print, or share via a protected link—controlled by you, accessible to anyone you choose.',
   },
 ] as const;
 
@@ -61,14 +74,17 @@ const HowItWorks = React.memo(function HowItWorks() {
             })}
           </span>
         </h2>
-        <div className="mt-8 flex flex-col space-y-8 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-6">
-          {steps.map((step) => (
-            <StepCard
-              key={step.titleKey}
-              number={step.number}
-              title={t(step.titleKey, { defaultValue: step.defaultTitle })}
-              desc={t(step.descKey, { defaultValue: step.defaultDesc })}
-            />
+        <div className="mt-8 flex flex-col items-center space-y-8 sm:flex-row sm:space-y-0 sm:space-x-6 justify-center">
+          {steps.map((step, idx) => (
+            <div key={step.titleKey} className="flex items-center group">
+              <StepCard
+                number={step.number}
+                title={t(step.titleKey, { defaultValue: step.defaultTitle })}
+                desc={t(step.descKey, { defaultValue: step.defaultDesc })}
+                icon={<step.Icon className="w-8 h-8" />}
+                showConnector={idx < steps.length - 1}
+              />
+            </div>
           ))}
         </div>
       </div>
