@@ -177,12 +177,25 @@ const Header = React.memo(function Header() {
             : 'bg-background',
         )}
       >
-      <div className="container flex h-16 items-center px-4 md:px-6">
+      <div
+        className={cn(
+          'container flex items-center px-4 md:px-6 transition-all duration-200 ease-in-out',
+          scrolled ? 'h-12 py-3' : 'h-14 py-3',
+        )}
+      >
         <div className="mr-auto md:mr-4 flex items-center">
           <Logo
-            wrapperClassName="items-center self-center mr-2 md:mr-4"
-            svgClassName="h-7 w-7 md:h-9 md:w-9" // Updated logo size
-            textClassName="text-xs md:text-sm"
+            wrapperClassName={cn(
+              'items-center self-center mr-2 md:mr-4 transition-all duration-200 ease-in-out',
+            )}
+            svgClassName={cn(
+              'h-7 w-7 md:h-9 md:w-9 transition-all duration-200 ease-in-out',
+              scrolled && 'h-6 w-6 md:h-8 md:w-8',
+            )}
+            textClassName={cn(
+              'text-xs md:text-sm transition-all duration-200 ease-in-out',
+              scrolled && 'text-[0.65rem] md:text-xs',
+            )}
           />
         </div>
 
@@ -209,7 +222,12 @@ const Header = React.memo(function Header() {
         </div>
 
         {/* Desktop Nav */}
-        <div className="hidden md:flex flex-1 items-center justify-start">
+        <div
+          className={cn(
+            'hidden md:flex flex-1 items-center justify-start transition-opacity duration-200 ease-in-out',
+            scrolled && 'opacity-60',
+          )}
+        >
           <Nav />
         </div>
 
@@ -219,8 +237,8 @@ const Header = React.memo(function Header() {
             <PopoverTrigger asChild>
               <Button
                 className={cn(
-                  'bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-lg font-medium flex items-center gap-1 drop-shadow-lg focus-visible:ring-2 focus-visible:ring-offset-2',
-                  isMegaMenuOpen && 'bg-emerald-600',
+                  'bg-gradient-to-br from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white px-4 py-2 rounded-lg font-semibold text-base flex items-center gap-1 drop-shadow-lg focus-visible:ring-2 focus-visible:ring-offset-2',
+                  isMegaMenuOpen && 'from-emerald-600 to-emerald-700',
                 )}
                 disabled={!mounted}
                 aria-expanded={isMegaMenuOpen}
