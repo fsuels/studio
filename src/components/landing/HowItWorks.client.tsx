@@ -28,9 +28,9 @@ const steps = [
     number: 3,
     Icon: Download,
     titleKey: 'home.steps.step3.title',
-    descKey: 'home.steps.step3.desc',
+    descKey: 'home.steps.step3.descUpdated', // Changed key
     defaultTitle: 'Securely Download & Share',
-    defaultDesc: 'Your final document is ready to print or send.',
+    defaultDesc: 'Once you’ve double-checked every detail, hit “Complete.” Your polished PDF is ready to download, print, or share via a protected link—controlled by you, accessible to anyone you choose.',
   },
 ] as const;
 
