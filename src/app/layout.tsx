@@ -4,11 +4,11 @@
 import './globals.css';
 import localFont from 'next/font/local';
 import Script from 'next/script';
-import SEO from '../../next-seo.config.js';
+import SEOConfig from '../../next-seo.config.ts'; // Changed import
 import RootClient from './root-client';
 
 export const metadata = {
-  title: SEO.title,
+  title: SEOConfig.title, // Use imported config
 };
 
 /* ------------------------------------------------------------------
@@ -40,8 +40,8 @@ export default function RootLayout({
           name="viewport"
           content="width=device-width, initial-scale=1, maximum-scale=1"
         />
-        <meta name="description" content={SEO.description} />
-        <title>{SEO.title}</title>
+        <meta name="description" content={SEOConfig.description} /> {/* Use imported config */}
+        <title>{SEOConfig.title}</title> {/* Use imported config */}
 
         {/* See README/fonts.md for the one-time download step */}
 
