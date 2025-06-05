@@ -152,10 +152,15 @@ export default function HomePageClient() {
           {/* Left column */}
           <div>
             <h1 className="text-4xl sm:text-5xl font-bold text-gray-800 leading-tight">
-              Legal Peace of Mind. Instant. Intelligent.
+              {t('home.hero.title', {
+                defaultValue: 'Legal Peace of Mind. Instant. Intelligent.',
+              })}
             </h1>
             <p className="mt-4 text-lg text-gray-600">
-              Say goodbye to confusion. Our AI crafts precise, professional legal documents tailored to your unique needs, fast.
+              {t('home.hero.subtitle', {
+                defaultValue:
+                  'Say goodbye to confusion. Our AI crafts precise, professional legal documents tailored to your unique needs, fast.',
+              })}
             </p>
             {/* Search Bar */}
             <div className="mt-8">
@@ -163,7 +168,10 @@ export default function HomePageClient() {
                 <SearchBar />
               </div>
               <p className="mt-2 text-sm text-gray-500">
-                Trusted by 4,200+ docs generated • SSL Secure Checkout • Attorney-Reviewed Templates • Trustpilot ★★★★★
+                {t('home.hero.trustLine', {
+                  defaultValue:
+                    'Trusted by 4,200+ docs generated \u2022 SSL Secure Checkout \u2022 Attorney-Reviewed Templates \u2022 Trustpilot \u2605\u2605\u2605\u2605\u2605',
+                })}
               </p>
             </div>
           </div>
