@@ -58,7 +58,7 @@ const Nav = React.memo(function Nav() {
           key={link.href}
           href={`/${currentLocale}${link.href}`}
           className={cn(
-            'group hover:bg-primary/10 hover:text-primary focus-visible:bg-primary/10 focus-visible:text-primary transition-colors px-2 py-1.5 rounded-md',
+            'group border-b-2 border-transparent hover:bg-primary/10 hover:text-primary focus-visible:bg-primary/10 focus-visible:text-primary group-hover:border-[#006EFF] transition-colors px-2 py-1.5 rounded-md',
             pathname === `/${currentLocale}${link.href}` &&
               'bg-primary/10 text-primary font-semibold',
           )}

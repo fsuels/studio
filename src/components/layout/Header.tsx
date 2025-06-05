@@ -237,8 +237,8 @@ const Header = React.memo(function Header() {
             <PopoverTrigger asChild>
               <Button
                 className={cn(
-                  'bg-gradient-to-br from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white px-4 py-2 rounded-lg font-semibold text-base flex items-center gap-1 drop-shadow-lg focus-visible:ring-2 focus-visible:ring-offset-2',
-                  isMegaMenuOpen && 'from-emerald-600 to-emerald-700',
+                  'bg-gradient-to-r from-[#006EFF] to-[#00C3A3] hover:from-[#0057CC] hover:to-[#00A38A] text-white px-4 py-2 rounded-lg font-semibold text-base flex items-center gap-1 drop-shadow-lg focus-visible:ring-2 focus-visible:ring-offset-2',
+                  isMegaMenuOpen && 'from-[#0057CC] to-[#00A38A]',
                 )}
                 disabled={!mounted}
                 aria-expanded={isMegaMenuOpen}
