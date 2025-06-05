@@ -4,6 +4,7 @@
 import './globals.css';
 import localFont from 'next/font/local';
 import Script from 'next/script';
+import Head from 'next/head';
 import SEOConfig from '../../next-seo.config.ts'; // Changed import
 import RootClient from './root-client';
 
@@ -75,8 +76,7 @@ export default function RootLayout({
 
   return (
     <html lang="en" suppressHydrationWarning>
-      <head>{headElements}</head>
-      <body
+      <Head>{headElements}</Head><body
         className={`${inter.variable} ${merriweather.variable} antialiased flex flex-col min-h-screen overflow-x-hidden`}
       >
         <RootClient>{children}</RootClient>
