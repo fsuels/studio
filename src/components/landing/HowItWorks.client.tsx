@@ -12,7 +12,7 @@ const steps = [
     Icon: Target,
     titleKey: 'home.steps.step1.title',
     descKey: 'home.steps.step1.desc',
-    defaultTitle: 'Tell Us Your Needs',
+    defaultTitle: 'Choose an Attorney-Approved Legal Template',
     defaultDesc: 'Answer a few quick prompts for tailored guidance.',
   },
   {
