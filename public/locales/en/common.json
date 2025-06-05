@@ -398,5 +398,30 @@
       "Maria from Texas finished a Promissory Note",
       "Someone in California started a Living Will"
     ]
-  }
+  },
+  "docDetail.benefit1": "Legally Sound & State-Specific",
+  "docDetail.benefit2": "Quick & Easy Customization",
+  "docDetail.benefit3": "Instant Download & Secure Sharing",
+  "Browse Templates": "Browse Templates",
+  "docDetail.previewTitle": "Document Preview",
+  "docDetail.previewSubtitle": "This is how your document will generally look. Specific clauses and details will be customized by your answers.",
+  "docDetail.pricingTitle": "Transparent Pricing",
+  "pricing.perDocument": "per document",
+  "docDetail.competitivePrice": "Compare to typical attorney fees of ${{competitorPrice}}+",
+  "docDetail.attorneyApproved": "Attorney-approved",
+  "docDetail.readyInMinutes": "Ready in 3 minutes",
+  "docDetail.moneyBackGuarantee": "100 % money-back guarantee",
+  "docDetail.templatesDownloaded": "templates downloaded this year",
+  "docDetail.moneyBack30": "30-day money-back guarantee",
+  "docDetail.optionalAddons": "Optional Add-ons",
+  "docDetail.aiAssistance": "AI Assistance",
+  "docDetail.aiAssistP1": "Our AI will help suggest",
+  "docDetail.relevantClauses": "relevant clauses",
+  "docDetail.aiAssistP2": "and ensure your document is tailored to the",
+  "docDetail.specificsOfYourSituation": "specifics of your situation",
+  "docDetail.aiAssistP3": "as you answer questions in the next step.",
+  "docDetail.aiHighlightPre": "AI Highlight:",
+  "docDetail.keyClauses": "Key clauses",
+  "docDetail.aiHighlightPost": "will be automatically tailored.",
+  "docDetail.aiHighlightTitle": "AI Highlight: This section will be auto-customized based on your answers."
 }
