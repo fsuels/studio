@@ -76,10 +76,15 @@ interface DocPageClientProps {
 }
 
 // Placeholder for AI dynamic highlights
-const AiHighlightPlaceholder = ({ text }: { text: string }) => (
+interface AiHighlightPlaceholderProps {
+  text: string;
+  title: string;
+}
+
+const AiHighlightPlaceholder = ({ text, title }: AiHighlightPlaceholderProps) => (
   <span
     className="bg-primary/10 text-primary px-1 py-0.5 rounded-sm text-xs font-medium border border-primary/30 cursor-help"
-    title="AI Highlight: This section will be auto-customized based on your answers."
+    title={title}
   >
     {text} <Zap size={12} className="inline ml-1" />
   </span>
@@ -90,6 +95,10 @@ export default function DocPageClient({
   markdownContent,
 }: DocPageClientProps) {
   const { t, i18n } = useTranslation('common');
+  const aiHighlightTitle = t(
+    'docDetail.aiHighlightTitle',
+    'AI Highlight: This section will be auto-customized based on your answers.'
+  );
   const router = useRouter();
   const urlParams = (useParams() ?? {}) as Record<string, string | string[]>;
 
@@ -348,8 +357,12 @@ export default function DocPageClient({
               markdownContent={markdownContent} // Add this prop
             />
             <p className="text-xs text-muted-foreground mt-2 text-center italic">
-              AI Highlight: <AiHighlightPlaceholder text="Key clauses" /> will
-              be automatically tailored.
+              {t('docDetail.aiHighlightPre', 'AI Highlight:')}{' '}
+              <AiHighlightPlaceholder
+                text={t('docDetail.keyClauses', 'Key clauses')}
+                title={aiHighlightTitle}
+              />{' '}
+              {t('docDetail.aiHighlightPost', 'will be automatically tailored.')}
             </p>
           </section>
 
@@ -385,15 +398,15 @@ export default function DocPageClient({
                     <ul className="mt-3 space-y-1 text-sm">
                       <li className="flex items-center gap-2">
                         <ShieldCheck className="h-4 w-4 text-teal-600" />{' '}
-                        Attorney-approved
+                        {t('docDetail.attorneyApproved', 'Attorney-approved')}
                       </li>
                       <li className="flex items-center gap-2">
-                        <Clock className="h-4 w-4 text-teal-600" /> Ready in 3
-                        minutes
+                        <Clock className="h-4 w-4 text-teal-600" />{' '}
+                        {t('docDetail.readyInMinutes', 'Ready in 3 minutes')}
                       </li>
                       <li className="flex items-center gap-2">
-                        <RotateCcw className="h-4 w-4 text-teal-600" /> 100 %
-                        money-back guarantee
+                        <RotateCcw className="h-4 w-4 text-teal-600" />{' '}
+                        {t('docDetail.moneyBackGuarantee', '100 % money-back guarantee')}
                       </li>
                     </ul>
                     <Button
@@ -411,7 +424,8 @@ export default function DocPageClient({
                   {/* Let’s Encrypt */}
                   {/* Documents generated counter */}
                   <p className="text-xs text-gray-500">
-                    <strong>104,213</strong> templates downloaded this year
+                    <strong>104,213</strong>{' '}
+                    {t('docDetail.templatesDownloaded', 'templates downloaded this year')}
                   </p>
                   {/* Refund badge */}
                   <div className="inline-flex items-center gap-1 text-xs text-gray-500">
@@ -427,7 +441,7 @@ export default function DocPageClient({
                     >
                       <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
                     </svg>
-                    30-day money-back guarantee
+                    {t('docDetail.moneyBack30', '30-day money-back guarantee')}
                   </div>
                 </div>
               </div>
@@ -472,11 +486,17 @@ export default function DocPageClient({
               </CardHeader>
               <CardContent>
                 <p className="text-xs text-muted-foreground">
-                  Our AI will help suggest{' '}
-                  <AiHighlightPlaceholder text="relevant clauses" /> and ensure
-                  your document is tailored to the{' '}
-                  <AiHighlightPlaceholder text="specifics of your situation" />{' '}
-                  as you answer questions in the next step.
+                  {t('docDetail.aiAssistP1', 'Our AI will help suggest')}{' '}
+                  <AiHighlightPlaceholder
+                    text={t('docDetail.relevantClauses', 'relevant clauses')}
+                    title={aiHighlightTitle}
+                  />{' '}
+                  {t('docDetail.aiAssistP2', 'and ensure your document is tailored to the')}{' '}
+                  <AiHighlightPlaceholder
+                    text={t('docDetail.specificsOfYourSituation', 'specifics of your situation')}
+                    title={aiHighlightTitle}
+                  />{' '}
+                  {t('docDetail.aiAssistP3', 'as you answer questions in the next step.')}
                 </p>
               </CardContent>
             </Card>

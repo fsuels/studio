@@ -337,5 +337,30 @@
       "María de Texas finalizó un Pagaré",
       "Alguien en California inició un Testamento en Vida"
     ]
-  }
+  },
+  "docDetail.benefit1": "Legalmente sólido y específico para cada estado",
+  "docDetail.benefit2": "Personalización rápida y sencilla",
+  "docDetail.benefit3": "Descarga instantánea y compartición segura",
+  "Browse Templates": "Explorar Plantillas",
+  "docDetail.previewTitle": "Vista previa del documento",
+  "docDetail.previewSubtitle": "Así se verá tu documento en general. Las cláusulas y detalles específicos se personalizarán según tus respuestas.",
+  "docDetail.pricingTitle": "Precios Transparentes",
+  "pricing.perDocument": "por documento",
+  "docDetail.competitivePrice": "Compara con los honorarios típicos de abogados de ${{competitorPrice}}+",
+  "docDetail.attorneyApproved": "Aprobado por abogados",
+  "docDetail.readyInMinutes": "Listo en 3 minutos",
+  "docDetail.moneyBackGuarantee": "Garantía de devolución del 100%",
+  "docDetail.templatesDownloaded": "plantillas descargadas este año",
+  "docDetail.moneyBack30": "Garantía de devolución de dinero de 30 días",
+  "docDetail.optionalAddons": "Complementos opcionales",
+  "docDetail.aiAssistance": "Asistencia de IA",
+  "docDetail.aiAssistP1": "Nuestra IA sugerirá",
+  "docDetail.relevantClauses": "cláusulas relevantes",
+  "docDetail.aiAssistP2": "y asegurará que tu documento se adapte a los",
+  "docDetail.specificsOfYourSituation": "detalles de tu situación",
+  "docDetail.aiAssistP3": "mientras respondes las preguntas en el siguiente paso.",
+  "docDetail.aiHighlightPre": "Resaltado de IA:",
+  "docDetail.keyClauses": "Cláusulas clave",
+  "docDetail.aiHighlightPost": "se personalizarán automáticamente.",
+  "docDetail.aiHighlightTitle": "Resaltado de IA: esta sección se personalizará automáticamente según tus respuestas."
 }
