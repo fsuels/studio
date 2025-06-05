@@ -10,7 +10,7 @@ import { documentLibrary, type LegalDocument } from '@/lib/document-library';
 import { getDocTranslation } from '@/lib/i18nUtils';
 
 const SearchBar = React.memo(function SearchBar() {
-  const { t: tHeader } = useTranslation('common');
+  const { t: tHeader } = useTranslation('header');
   const router = useRouter();
   const params = (useParams<{ locale?: string }>() ?? {}) as {
     locale?: string;
