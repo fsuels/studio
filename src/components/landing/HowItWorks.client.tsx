@@ -19,9 +19,9 @@ const steps = [
   {
     number: 2,
     Icon: Sparkles,
-    titleKey: 'home.steps.step2.title',
+    titleKey: 'home.steps.step2.titleUpdated',
     descKey: 'home.steps.step2.desc',
-    defaultTitle: 'AI Crafts Your Document',
+    defaultTitle: 'Answer Quick Prompts',
     defaultDesc: 'Our system builds a professional draft automatically.',
   },
   {
