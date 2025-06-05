@@ -207,11 +207,21 @@ const TopDocsChips = React.memo(function TopDocsChips() {
                         ) : (
                           <RefreshCcw className="h-3 w-3" />
                         )}
-                        <span className="capitalize">{badge}</span>
+                        <span className="capitalize">
+                          {tCommon(`TopDocsChips.badge.${badge}`, {
+                            defaultValue: badge === 'new' ? 'New' : 'Updated',
+                          })}
+                        </span>
                       </Badge>
                     </TooltipTrigger>
                     <TooltipContent>
-                      {badge === 'new' ? 'Recently added' : 'Recently refreshed'}
+                      {badge === 'new'
+                        ? tCommon('TopDocsChips.tooltip.new', {
+                            defaultValue: 'Recently added',
+                          })
+                        : tCommon('TopDocsChips.tooltip.updated', {
+                            defaultValue: 'Recently refreshed',
+                          })}
                     </TooltipContent>
                   </Tooltip>
                 )}

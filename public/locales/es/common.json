@@ -263,6 +263,10 @@
   "Showing documents matching your search and state criteria.": "Mostrando documentos que coinciden con tu búsqueda y criterios de estado.",
   "TopDocsChips.loading": "Cargando documentos populares...",
   "TopDocsChips.title": "Documentos Legales Populares",
+  "TopDocsChips.badge.new": "Nuevo",
+  "TopDocsChips.badge.updated": "Actualizado",
+  "TopDocsChips.tooltip.new": "Agregado recientemente",
+  "TopDocsChips.tooltip.updated": "Actualizado recientemente",
   "useCases": {
     "freelancers": {
       "title": "Para Freelancers",
