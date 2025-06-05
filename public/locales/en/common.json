@@ -329,5 +329,12 @@
     "instantDownload": "Instant Document Download",
     "bilingualSupport": "Fully Bilingual Support",
     "oneTimePayment": "One-Time Payment Option"
+  },
+  "activityTicker": {
+    "messages": [
+      "Ben from Ohio just created a Lease Agreement",
+      "Maria from Texas finished a Promissory Note",
+      "Someone in California started a Living Will"
+    ]
   }
 }

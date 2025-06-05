@@ -3,17 +3,16 @@
 import React, { useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { usePathname } from 'next/navigation';
+import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils';
 
-const messages = [
-  'Ben from Ohio just created a Lease Agreement',
-  'Maria from Texas finished a Promissory Note',
-  'Someone in California started a Living Will',
-];
 
 export default function ActivityTicker() {
+  const { t } = useTranslation('common');
   const pathname = usePathname();
   const isHomePage = pathname === '/en' || pathname === '/es' || pathname === '/';
+  const messages =
+    (t('activityTicker.messages', { returnObjects: true }) as string[]) || [];
   const [index, setIndex] = useState(0);
 
   if (!isHomePage) {
@@ -25,9 +24,9 @@ export default function ActivityTicker() {
       setIndex((prev) => (prev + 1) % messages.length);
     }, 4000);
     return () => clearInterval(id);
-  }, []);
+  }, [messages.length]);
 
-  const message = messages[index];
+  const message = messages[index % messages.length];
 
   return (
     <div className="fixed bottom-4 right-4 z-[99] pointer-events-none">

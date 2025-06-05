@@ -329,5 +329,12 @@
     "instantDownload": "Descarga Instantánea del Documento",
     "bilingualSupport": "Soporte Bilingüe Completo",
     "oneTimePayment": "Pago Único"
+  },
+  "activityTicker": {
+    "messages": [
+      "Ben de Ohio acaba de crear un Contrato de Arrendamiento",
+      "María de Texas finalizó un Pagaré",
+      "Alguien en California inició un Testamento en Vida"
+    ]
   }
 }
