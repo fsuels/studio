@@ -324,6 +324,63 @@
     }
     }
   },
+  "pricing": {
+    "title": "Simple, Transparent Pricing",
+    "payPerDocBadge": "One-time $35/document • No subscription",
+    "freeCreditTitle": "Your Free Document Credit",
+    "freeCreditStatus": "You've used {{used}} of {{total}} free document credits.",
+    "claimFreeCredit": "Sign Up to Claim Your Free Document!",
+    "plans": {
+      "single": {
+        "title": "Single Document",
+        "description": "Perfect for one-off needs.",
+        "item1": "1 downloadable legal PDF",
+        "item2": "Clause customization",
+        "item3": "Email support",
+        "item4": "Secure sharing (soon)"
+      },
+      "bundle": {
+        "title": "5-Document Bundle",
+        "description": "Ideal for multiple related documents.",
+        "item1": "5 downloadable PDFs",
+        "item2": "All single document features",
+        "item3": "Credits never expire",
+        "item4": "Best value per document"
+      },
+      "unlimited": {
+        "title": "Business Pro",
+        "description": "For frequent users & businesses.",
+        "item1": "Unlimited documents",
+        "item2": "Priority support",
+        "item3": "Team features (coming soon)",
+        "item4": "Cancel anytime"
+      }
+    },
+    "perDocument": "document",
+    "bundleOf5": "bundle of 5",
+    "perMonth": "month",
+    "cta": "Get Started",
+    "ctaContact": "Contact Sales",
+    "mostPopular": "Most Popular",
+    "comparisonTitle": "How We Compare",
+    "featureHeader": "Feature",
+    "competitorHeader": "Traditional Lawyer",
+    "competitorOnlineHeader": "Other Online Services",
+    "pricePerDocLabel": "Avg. Price Per Document",
+    "customizationLabel": "Customization Level",
+    "highLabel": "High (AI-assisted)",
+    "veryHighLabel": "Very High (Tailored)",
+    "mediumLabel": "Medium (Templates)",
+    "speedLabel": "Speed",
+    "minutesLabel": "Minutes",
+    "daysWeeksLabel": "Days/Weeks",
+    "hoursDaysLabel": "Hours/Days",
+    "accessibilityLabel": "Accessibility",
+    "accessible247Label": "24/7 Online",
+    "officeHoursLabel": "Office Hours, Appointments",
+    "onlineLimitedSupportLabel": "Online, Support Varies",
+    "guarantee": "100% Satisfaction Guarantee or Your Money Back on single/bundle purchases."
+  },
   "whyChooseUs": {
     "title": "Why Choose Us?",
     "aiDrafting": "AI-Powered Drafting",
