@@ -15,16 +15,17 @@ export default function ActivityTicker() {
     (t('activityTicker.messages', { returnObjects: true }) as string[]) || [];
   const [index, setIndex] = useState(0);
 
-  if (!isHomePage) {
-    return null;
-  }
-
   useEffect(() => {
+    if (!isHomePage) return;
     const id = setInterval(() => {
       setIndex((prev) => (prev + 1) % messages.length);
     }, 4000);
     return () => clearInterval(id);
-  }, [messages.length]);
+  }, [isHomePage, messages.length]);
+
+  if (!isHomePage) {
+    return null;
+  }
 
   const message = messages[index % messages.length];
 
