@@ -324,6 +324,63 @@
       }
     }
   },
+  "pricing": {
+    "title": "Precios Simples y Transparentes",
+    "payPerDocBadge": "Pago único de $35/documento • Sin suscripción",
+    "freeCreditTitle": "Tu Crédito de Documento Gratis",
+    "freeCreditStatus": "Has usado {{used}} de {{total}} créditos de documentos gratuitos.",
+    "claimFreeCredit": "¡Regístrate para reclamar tu documento gratis!",
+    "plans": {
+      "single": {
+        "title": "Documento Único",
+        "description": "Perfecto para necesidades puntuales.",
+        "item1": "1 PDF legal descargable",
+        "item2": "Personalización de cláusulas",
+        "item3": "Soporte por correo electrónico",
+        "item4": "Compartir seguro (próximamente)"
+      },
+      "bundle": {
+        "title": "Paquete de 5 Documentos",
+        "description": "Ideal para varios documentos relacionados.",
+        "item1": "5 PDFs descargables",
+        "item2": "Todas las características del documento único",
+        "item3": "Los créditos nunca vencen",
+        "item4": "Mejor valor por documento"
+      },
+      "unlimited": {
+        "title": "Negocios Pro",
+        "description": "Para usuarios frecuentes y empresas.",
+        "item1": "Documentos ilimitados",
+        "item2": "Soporte prioritario",
+        "item3": "Funciones de equipo (próximamente)",
+        "item4": "Cancela en cualquier momento"
+      }
+    },
+    "perDocument": "documento",
+    "bundleOf5": "paquete de 5",
+    "perMonth": "mes",
+    "cta": "Comenzar",
+    "ctaContact": "Contactar Ventas",
+    "mostPopular": "Más Popular",
+    "comparisonTitle": "Cómo Nos Comparamos",
+    "featureHeader": "Característica",
+    "competitorHeader": "Abogado Tradicional",
+    "competitorOnlineHeader": "Otros Servicios en Línea",
+    "pricePerDocLabel": "Precio Promedio por Documento",
+    "customizationLabel": "Nivel de Personalización",
+    "highLabel": "Alto (con IA)",
+    "veryHighLabel": "Muy Alto (Personalizado)",
+    "mediumLabel": "Medio (Plantillas)",
+    "speedLabel": "Velocidad",
+    "minutesLabel": "Minutos",
+    "daysWeeksLabel": "Días/Semanas",
+    "hoursDaysLabel": "Horas/Días",
+    "accessibilityLabel": "Accesibilidad",
+    "accessible247Label": "En línea 24/7",
+    "officeHoursLabel": "Horario de Oficina, Citas",
+    "onlineLimitedSupportLabel": "En línea, Soporte Variable",
+    "guarantee": "Garantía de Satisfacción 100% o le Devolvemos su Dinero en compras individuales/paquetes."
+  },
   "whyChooseUs": {
     "title": "¿Por Qué Elegirnos?",
     "aiDrafting": "Redacción con IA",
