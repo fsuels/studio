@@ -30,6 +30,7 @@ import {
 import { track } from '@/lib/analytics';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
+import styles from './Step1DocumentSelector.module.css';
 
 // Helper type for a simplified translation function used internally
 type SimpleT = (
@@ -173,7 +174,10 @@ const MemoizedCategoryCard = React.memo(function CategoryCard({
       variant="outline"
       onClick={onClick}
       disabled={disabled}
-      className="category-card h-auto min-h-[110px] p-6 border-border shadow-sm hover:shadow-lg transition text-center flex flex-col justify-center items-center bg-card hover:bg-muted active:scale-95 active:transition-transform active:duration-100 rounded-xl"
+      className={cn(
+        styles['category-card'],
+        'h-auto min-h-[110px] border-border shadow-sm hover:shadow-lg transition text-center flex flex-col justify-center items-center bg-card hover:bg-muted active:scale-95 active:transition-transform active:duration-100 rounded-xl p-6'
+      )}
     >
       <span className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
         {React.createElement(category.icon || FileText, {
@@ -221,7 +225,8 @@ const MemoizedDocumentCard = React.memo(function DocumentCard({
         }
       }}
       className={cn(
-        'document-card shadow hover:shadow-lg cursor-pointer transition bg-card border border-border flex flex-col active:scale-95 active:transition-transform active:duration-100',
+        styles['document-card'],
+        'shadow hover:shadow-lg cursor-pointer transition bg-card border border-border flex flex-col active:scale-95 active:transition-transform active:duration-100',
         disabled ? 'pointer-events-none opacity-50' : '',
       )}
     >
@@ -273,7 +278,10 @@ const MemoizedTopDocChip = React.memo(function TopDocChip({
       size="sm"
       onClick={onSelect}
       disabled={disabled}
-      className="category-card h-auto min-h-[60px] p-4 border-border shadow-sm hover:shadow-lg transition text-center flex items-center justify-center gap-2 bg-card hover:bg-muted active:scale-95 active:transition-transform active:duration-100"
+      className={cn(
+        styles['category-card'],
+        'h-auto min-h-[60px] p-4 border-border shadow-sm hover:shadow-lg transition text-center flex items-center justify-center gap-2 bg-card hover:bg-muted active:scale-95 active:transition-transform active:duration-100'
+      )}
     >
       {doc.icon &&
         React.createElement(doc.icon, { className: 'h-5 w-5 text-primary/80' })}
@@ -564,21 +572,34 @@ const Step1DocumentSelector = React.memo(function Step1DocumentSelector({
 
   if (!isHydrated) {
     return (
-      <Card className="step-card opacity-50">
-        <CardHeader className="step-card__header">
-          <FileText className="step-card__icon animate-pulse" />
+      <Card className={cn(styles['step-card'], 'opacity-50')}>
+        <CardHeader className={styles['step-card__header']}>
+          <FileText className={cn(styles['step-card__icon'], 'animate-pulse')} />
           <div>
-            <CardTitle className="step-card__title h-6 bg-muted-foreground/20 rounded w-3/4 mb-1"></CardTitle>
-            <CardDescription className="step-card__subtitle h-4 bg-muted-foreground/10 rounded w-full"></CardDescription>
+            <CardTitle
+              className={cn(
+                styles['step-card__title'],
+                'h-6 bg-muted-foreground/20 rounded w-3/4 mb-1',
+              )}
+            ></CardTitle>
+            <CardDescription
+              className={cn(
+                styles['step-card__subtitle'],
+                'h-4 bg-muted-foreground/10 rounded w-full',
+              )}
+            ></CardDescription>
           </div>
         </CardHeader>
         <CardContent className="step-content space-y-6 pt-6">
           <div className="h-10 bg-muted-foreground/10 rounded w-full mb-4"></div>
-          <div className="category-grid pt-2">
+          <div className={cn(styles['category-grid'], 'pt-2')}>
             {[...Array(6)].map((_, i) => (
               <div
                 key={i}
-                className="category-card h-auto min-h-[100px] p-6 border-border shadow-sm bg-muted flex flex-col justify-center items-center"
+                className={cn(
+                  styles['category-card'],
+                  'h-auto min-h-[100px] p-6 border-border shadow-sm bg-muted flex flex-col justify-center items-center'
+                )}
               >
                 <div className="h-8 w-8 mb-3 bg-muted-foreground/20 rounded-full"></div>
                 <div className="h-4 bg-muted-foreground/10 rounded w-20"></div>
@@ -612,17 +633,17 @@ const Step1DocumentSelector = React.memo(function Step1DocumentSelector({
   return (
     <Card
       className={cn(
-        'step-card',
+        styles['step-card'],
         isReadOnly
           ? 'opacity-50 cursor-not-allowed pointer-events-none'
           : 'opacity-100',
       )}
     >
-      <CardHeader className="step-card__header">
-        <FileText className="step-card__icon" />
+      <CardHeader className={styles['step-card__header']}>
+        <FileText className={styles['step-card__icon']} />
         <div>
-          <CardTitle className="step-card__title">{cardTitle}</CardTitle>
-          <CardDescription className="step-card__subtitle">
+          <CardTitle className={styles['step-card__title']}>{cardTitle}</CardTitle>
+          <CardDescription className={styles['step-card__subtitle']}>
             {cardDescription}
           </CardDescription>
         </div>
@@ -670,7 +691,7 @@ const Step1DocumentSelector = React.memo(function Step1DocumentSelector({
             {globalSelectedState ? (
               <>
                 {documentsToDisplay.length > 0 ? (
-                  <div className="document-grid pt-4 animate-fade-in">
+                  <div className={cn(styles['document-grid'], 'pt-4 animate-fade-in')}>
                     {documentsToDisplay.map((doc) => (
                       <MemoizedDocumentCard
                         key={doc.id}
@@ -732,7 +753,7 @@ const Step1DocumentSelector = React.memo(function Step1DocumentSelector({
         ) : currentView === 'all-categories' ? (
           <div className="animate-fade-in space-y-4">
             {sortedCategories.length > 0 ? (
-              <div className="category-grid pt-2">
+              <div className={cn(styles['category-grid'], 'pt-2')}>
                 {sortedCategories.map((cat) => (
                   <MemoizedCategoryCard
                     key={cat.key}
@@ -767,7 +788,7 @@ const Step1DocumentSelector = React.memo(function Step1DocumentSelector({
             {globalSelectedState ? (
               <>
                 {documentsToDisplay.length > 0 ? (
-                  <div className="document-grid pt-4 animate-fade-in">
+                  <div className={cn(styles['document-grid'], 'pt-4 animate-fade-in')}>
                     {documentsToDisplay.map((doc) => (
                       <MemoizedDocumentCard
                         key={doc.id}
