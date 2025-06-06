@@ -2,6 +2,8 @@
 import type { NextConfig } from 'next';
 import type { Configuration as WebpackConfiguration } from 'webpack';
 
+const isTurbopack = !!process.env.NEXT_TURBOPACK;
+
 // Base configuration applicable to all environments
 const config: NextConfig = {
   typescript: {
@@ -10,7 +12,6 @@ const config: NextConfig = {
   eslint: {
     ignoreDuringBuilds: true, // Avoid blocking builds on ESLint errors
   },
-  swcMinify: true,
   productionBrowserSourceMaps: true,
   images: {
     unoptimized: true, // Disable Next.js image optimization for static export
@@ -27,9 +28,10 @@ const config: NextConfig = {
   // No webpack property here by default for Turbopack
 };
 
-// Conditionally add webpack configuration if Next.js is running with Webpack
-if (process.env.NEXT_WEBPACK === '1') {
-  const webpack = require('webpack'); // Lazy require for webpack
+// Conditionally add webpack configuration if Next.js is running with Webpack (i.e., not Turbopack)
+if (!isTurbopack) {
+  // Lazy require webpack only when not using Turbopack
+  const webpack = require('webpack');
 
   const customWebpackConfig = (
     webpackConfig: WebpackConfiguration,
