@@ -161,7 +161,7 @@ const HeroAIExperience = React.memo(function HeroAIExperience() {
               <div className="absolute -bottom-1/4 -right-1/4 w-1/2 h-1/2 bg-sky-300 dark:bg-sky-800 rounded-full filter blur-3xl animate-pulse animation-delay-2000"></div>
             </div> */}
             <AutoImage
-              src="https://placehold.co/800x500.png"
+              src="/images/hero-homepage.png"
               alt={t('Hero image illustrating legal document generation', {
                 defaultValue: 'AI legal assistant helping users',
               })}

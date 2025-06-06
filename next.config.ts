@@ -21,12 +21,7 @@ const config: NextConfig = {
         port: '',
         pathname: '/**',
       },
-      {
-        protocol: 'https',
-        hostname: 'placehold.co', // Added for placeholder images
-        port: '',
-        pathname: '/**',
-      }
+      // Removed placeholder image pattern as all hero assets are local
     ],
   },
   // No webpack property here by default for Turbopack
