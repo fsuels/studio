@@ -11,9 +11,6 @@ const nextConfig = {
   typescript: { ignoreBuildErrors: true },
   eslint: { ignoreDuringBuilds: true },
 
-  /* —──────── Source-maps in prod for Sentry / Lighthouse —──────── */
-  productionBrowserSourceMaps: true,
-
   /* —──────── Static-export image handling —──────── */
   images: {
     unoptimized: true,
@@ -26,6 +23,7 @@ const nextConfig = {
 
 };
 
+<<<<<<< HEAD
 /* -------------------------------------------------------------------------- */
 /*  Sentry wrapper                                                            */
 /* -------------------------------------------------------------------------- */
@@ -34,6 +32,9 @@ export default withSentryConfig(
   {
     org: '123legaldoc',
     project: 'javascript-nextjs',
+=======
+const config = nextConfig;
+>>>>>>> 9ce587d (removing sentry)
 
     /* quieter local builds, verbose in CI */
     silent: !process.env.CI,
