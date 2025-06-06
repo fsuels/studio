@@ -25,15 +25,19 @@ else
 fi
 
 ###############################################################################
-# 2 — Ensure critical dev tools are available                                  #
+# 2 — Ensure critical dev tools are installed locally                          #
 ###############################################################################
-echo "🛠  Ensuring ESLint, Playwright, and Next.js binaries are available…"
-# Install required packages globally if they are missing locally
-# (This prevents "failed to find" errors for @eslint/js, playwright, next, etc.)
-npm install -g eslint @eslint/js playwright @playwright/test next > /dev/null 2>&1 || true
+echo "🛠  Ensuring ESLint, Playwright, and Next.js binaries are installed locally…"
+if [[ -f pnpm-lock.yaml ]]; then
+  pnpm add -D eslint @eslint/js playwright @playwright/test next
+elif [[ -f yarn.lock ]]; then
+  yarn add -D eslint @eslint/js playwright @playwright/test next
+else
+  npm install --save-dev eslint @eslint/js playwright @playwright/test next
+fi
 
-# If Playwright tests are used, install its browser binaries
-if command -v playwright &> /dev/null; then
+# Install Playwright browser binaries if Playwright is available
+if command -v npx &> /dev/null && npx playwright --version &> /dev/null; then
   echo "🎭  Installing Playwright browser binaries…"
   npx playwright install --with-deps
 fi
@@ -43,8 +47,8 @@ fi
 ###############################################################################
 if [[ -n "${FIREBASE_SERVICE_ACCOUNT_KEY_JSON:-}" ]]; then
   echo "🗝   Writing FIREBASE_SERVICE_ACCOUNT_KEY_JSON to .env"
-  printf "FIREBASE_SERVICE_ACCOUNT_KEY_JSON='%s'\n" \
-    "${FIREBASE_SERVICE_ACCOUNT_KEY_JSON}" > .env
+  printf "FIREBASE_SERVICE_ACCOUNT_KEY_JSON=%s\n" \
+    "${FIREBASE_SERVICE_ACCOUNT_KEY_JSON}" > .env.local
 fi
 
 ###############################################################################
