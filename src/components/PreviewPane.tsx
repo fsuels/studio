@@ -2,7 +2,8 @@
 'use client';
 
 import React, { useEffect, useState, useCallback, useMemo } from 'react';
-import ReactMarkdown from 'react-markdown';
+import dynamic from 'next/dynamic';
+const ReactMarkdown = dynamic(() => import('react-markdown'), { ssr: false });
 import remarkGfm from 'remark-gfm';
 import { useFormContext } from 'react-hook-form';
 import { Loader2, AlertTriangle } from 'lucide-react';
