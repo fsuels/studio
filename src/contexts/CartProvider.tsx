@@ -7,6 +7,7 @@ import React, {
   useMemo,
   useState,
 } from 'react';
+import { parseLargeJSON } from '@/lib/parseLargeJSON';
 import { track } from '@/lib/analytics';
 import type { Bundle } from '@/data/bundles';
 
@@ -43,11 +44,14 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
   /* ---------- persistence --------------------------------------- */
   useEffect(() => {
-    try {
-      setItems(JSON.parse(localStorage.getItem('cartItems') || '[]'));
-    } catch {
-      /* ignore */
-    }
+    const raw = localStorage.getItem('cartItems');
+    if (!raw) return;
+    const parse = raw.length > 2000 ? parseLargeJSON<CartItem[]>(raw) : Promise.resolve(JSON.parse(raw));
+    parse
+      .then((data) => setItems(Array.isArray(data) ? data : []))
+      .catch(() => {
+        /* ignore */
+      });
   }, []);
 
   useEffect(() => {

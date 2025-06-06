@@ -10,6 +10,7 @@ import React, {
   ReactNode,
   useMemo,
 } from 'react';
+import { parseLargeJSON } from '@/lib/parseLargeJSON';
 
 // 1) Define the shape of your auth context
 interface User {
@@ -50,7 +51,10 @@ function useAuthHook(): AuthContextType {
       const stored = localStorage.getItem('mockAuth');
       if (stored) {
         try {
-          const parsedData = JSON.parse(stored);
+          const parsedData =
+            stored.length > 2000
+              ? await parseLargeJSON<{ isLoggedIn: boolean; user: User }>(stored)
+              : JSON.parse(stored);
           // Check if parsedData is an object and has the expected properties
           if (
             parsedData &&

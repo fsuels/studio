@@ -31,6 +31,7 @@ import {
   loadFormProgress,
   saveFormProgress,
 } from '@/lib/firestore/saveFormProgress';
+import { parseLargeJSON } from '@/lib/parseLargeJSON';
 import { debounce } from '@/lib/debounce';
 import TrustBadges from '@/components/TrustBadges';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -123,7 +124,7 @@ export default function StartWizardPageClient() {
         } else {
           const lsKey = `draft-${docConfig!.id}-${locale}`;
           const lsDraft = localStorage.getItem(lsKey);
-          if (lsDraft) draftData = JSON.parse(lsDraft);
+          if (lsDraft) draftData = await parseLargeJSON(lsDraft);
         }
       } catch (e) {
         console.warn('[StartWizardPageClient] Draft loading failed:', e);
