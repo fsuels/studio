@@ -182,7 +182,8 @@ export default function HomePageClient() {
               alt="Hero image illustrating legal document generation"
               className="w-full max-w-lg rounded-xl shadow-lg"
               data-ai-hint="team collaboration"
-              priority
+              width={768}
+              height={512}
             />
           </div>
         </div>

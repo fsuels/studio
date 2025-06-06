@@ -19,7 +19,9 @@ interface ClientProvidersProps {
 import Header from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import ContactFormButton from '@/components/ContactFormButton';
-import ActivityTicker from '@/components/ActivityTicker';
+// Defer loading of ActivityTicker to keep initial JS lighter
+import { lazyClient } from '@/lib/lazy-client';
+const ActivityTicker = lazyClient(() => import('@/components/ActivityTicker'));
 
 const AppShell = React.memo(function AppShell({
   children,

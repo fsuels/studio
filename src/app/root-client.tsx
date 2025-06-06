@@ -6,6 +6,7 @@ import dynamic from 'next/dynamic';
 import { I18nextProvider } from 'react-i18next';
 import i18n from '@/lib/i18n';
 import { mark, measure } from '@/utils/performance';
+import { initWebVitals } from '@/lib/webVitals';
 
 // ✅ Dynamically load DocumentFlow to allow preload
 const DocumentFlow = dynamic(() => import('@/components/DocumentFlow'), {
@@ -29,6 +30,12 @@ export default function RootClient({
     if (typeof DocumentFlow?.preload === 'function') {
       void DocumentFlow.preload();
     }
+    // REMOVED: Problematic line below as StepThreeInput is not defined here.
+    // if (typeof window !== 'undefined' && StepThreeInput?.preload) {
+    //   void StepThreeInput.preload();
+    // }
+
+    initWebVitals();
   }, []);
 
   return (

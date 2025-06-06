@@ -1,7 +1,8 @@
-/* next.config.mjs — Next 15 App Router, Sentry + Turbopack friendly  */
+/* next.config.mjs — Next 15 App Router with bundle analysis support */
 
-import { withSentryConfig } from '@sentry/nextjs';
-import webpack from 'webpack';
+import createAnalyzer from '@next/bundle-analyzer';
+
+const withBundleAnalyzer = createAnalyzer({ enabled: process.env.ANALYZE === 'true' });
 
 /* -------------------------------------------------------------------------- */
 /*  Core Next.js config                                                       */
@@ -16,40 +17,33 @@ const nextConfig = {
 
   /* —──────── Static-export image handling —──────── */
   images: {
-    unoptimized: true,
+    formats: ['image/avif', 'image/webp'],
     remotePatterns: [
       { protocol: 'https', hostname: 'picsum.photos', pathname: '/**' },
+      { protocol: 'https', hostname: 'placehold.co', pathname: '/**' },
+      { protocol: 'https', hostname: 'cdn.simpleicons.org', pathname: '/**' },
     ],
   },
   /* Add allowedDevOrigins here as instructed */
   allowedDevOrigins: ['*'],
+
+  async redirects() {
+    return [
+      {
+        source: '/',
+        destination: '/en',
+        permanent: false,
+      },
+    ];
+  },
 
 };
 
 /* -------------------------------------------------------------------------- */
 /*  Sentry wrapper                                                            */
 /* -------------------------------------------------------------------------- */
-export default withSentryConfig(
-  nextConfig,
-  {
-    org: '123legaldoc',
-    project: 'javascript-nextjs',
+const config = nextConfig;
 
-    /* quieter local builds, verbose in CI */
-    silent: !process.env.CI,
-
-    /* upload more source-maps for cleaner stack traces */
-    widenClientFileUpload: true,
-
-    /* client-side tunnel to dodge ad-blockers */
-    tunnelRoute: '/monitoring',
-
-    /* strip Sentry logger calls from bundles */
-    disableLogger: true,
-
-    /* auto-instrument Vercel Cron monitors (non-blocking if unsupported) */
-    automaticVercelMonitors: true,
-  },
-  /* Sentry Webpack Plugin options (leave empty → defaults) */
-  {},
-);
+export default process.env.ANALYZE === 'true'
+  ? withBundleAnalyzer(config)
+  : config;
