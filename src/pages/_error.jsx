@@ -1,6 +1,7 @@
+// src/pages/_error.jsx
+
 import React from "react";
 import PropTypes from "prop-types";
-import * as Sentry from "@sentry/nextjs";
 import Error from "next/error";
 
 const CustomErrorComponent = ({ statusCode }) => <Error statusCode={statusCode} />;
@@ -10,11 +11,7 @@ CustomErrorComponent.propTypes = {
 };
 
 CustomErrorComponent.getInitialProps = async (contextData) => {
-  // In case this is running in a serverless function, await this in order to give Sentry
-  // time to send the error before the lambda exits
-  await Sentry.captureUnderscoreErrorException(contextData);
-
-  // This will contain the status code of the response
+  // Sentry capture removed
   return Error.getInitialProps(contextData);
 };
 

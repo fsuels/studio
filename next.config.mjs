@@ -1,6 +1,5 @@
-/* next.config.mjs — Next 15 App Router, Sentry + Turbopack friendly  */
+// next.config.mjs — Next 15 App Router friendly
 
-import { withSentryConfig } from '@sentry/nextjs';
 import webpack from 'webpack';
 
 /* -------------------------------------------------------------------------- */
@@ -20,37 +19,7 @@ const nextConfig = {
   },
   /* Add allowedDevOrigins here as instructed */
   allowedDevOrigins: ['*'],
-
 };
 
-<<<<<<< HEAD
-/* -------------------------------------------------------------------------- */
-/*  Sentry wrapper                                                            */
-/* -------------------------------------------------------------------------- */
-export default withSentryConfig(
-  nextConfig,
-  {
-    org: '123legaldoc',
-    project: 'javascript-nextjs',
-=======
-const config = nextConfig;
->>>>>>> 9ce587d (removing sentry)
-
-    /* quieter local builds, verbose in CI */
-    silent: !process.env.CI,
-
-    /* upload more source-maps for cleaner stack traces */
-    widenClientFileUpload: true,
-
-    /* client-side tunnel to dodge ad-blockers */
-    tunnelRoute: '/monitoring',
-
-    /* strip Sentry logger calls from bundles */
-    disableLogger: true,
-
-    /* auto-instrument Vercel Cron monitors (non-blocking if unsupported) */
-    automaticVercelMonitors: true,
-  },
-  /* Sentry Webpack Plugin options (leave empty → defaults) */
-  {},
-);
+// Export the plain Next.js configuration (Sentry removed)
+export default nextConfig;

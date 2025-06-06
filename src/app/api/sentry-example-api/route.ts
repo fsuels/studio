@@ -1,14 +1,19 @@
+// src/app/api/sentry-example-api/route.ts
+
 import { NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
-class SentryExampleAPIError extends Error {
+
+class ExampleAPIError extends Error {
   constructor(message: string | undefined) {
     super(message);
-    this.name = "SentryExampleAPIError";
+    this.name = "ExampleAPIError";
   }
 }
-// A faulty API route to test Sentry's error monitoring
+
 export function GET() {
-  throw new SentryExampleAPIError("This error is raised on the backend called by the example page.");
-  return NextResponse.json({ data: "Testing Sentry Error..." });
+  // Throwing a custom error for demonstration (no external SDK involved)
+  throw new ExampleAPIError("This error is raised on the backend by the example API route.");
+  // If you wanted to return a normal response instead of throwing:
+  // return NextResponse.json({ data: "Testing error handling without Sentry..." });
 }
