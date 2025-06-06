@@ -21,12 +21,14 @@ import FieldRenderer from './FieldRenderer';
 import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
 import { prettify } from '@/lib/schema-utils';
-import AuthModal from '@/components/AuthModal';
+import dynamic from 'next/dynamic';
+
+const AuthModal = dynamic(() => import('@/components/AuthModal'));
 import { saveFormProgress } from '@/lib/firestore/saveFormProgress';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import TrustBadges from '@/components/TrustBadges';
 import ReviewStep from '@/components/ReviewStep';
-import PaymentModal from '@/components/PaymentModal';
+const PaymentModal = dynamic(() => import('@/components/PaymentModal'));
 import { useAuth } from '@/hooks/useAuth';
 import { useRouter } from 'next/navigation'; // Added useRouter
 import AddressField from '@/components/AddressField';

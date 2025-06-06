@@ -39,7 +39,9 @@ import AutoImage from '@/components/AutoImage';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
-import AuthModal from '@/components/AuthModal';
+import dynamic from 'next/dynamic';
+
+const AuthModal = dynamic(() => import('@/components/AuthModal'));
 import { useAuth } from '@/hooks/useAuth'; // Import useAuth
 import { createSignWellDocument } from '@/services/signwell';
 
