@@ -13,7 +13,7 @@ const config: NextConfig = {
   swcMinify: true,
   productionBrowserSourceMaps: true,
   images: {
-    unoptimized: true, // Disable Next.js image optimization for static export
+    formats: ['image/avif', 'image/webp'],
     remotePatterns: [
       {
         protocol: 'https',
