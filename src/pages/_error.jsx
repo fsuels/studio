@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import * as Sentry from "@sentry/nextjs";
+import * as Sentry from "@sentry/react";
 import Error from "next/error";
 
 const CustomErrorComponent = ({ statusCode }) => <Error statusCode={statusCode} />;

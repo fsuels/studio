@@ -1,7 +1,7 @@
 "use client";
 
 import Head from "next/head";
-import * as Sentry from "@sentry/nextjs";
+import * as Sentry from "@sentry/react";
 import { useState, useEffect } from "react";
 
 class SentryExampleFrontendError extends Error {
@@ -47,16 +47,14 @@ export default function Page() {
         <button
           type="button"
           onClick={async () => {
-            await Sentry.startSpan({
-              name: 'Example Frontend Span',
-              op: 'test'
-            }, async () => {
-              const res = await fetch("/api/sentry-example-api");
-              if (!res.ok) {
-                setHasSentError(true);
-                throw new SentryExampleFrontendError("This error is raised on the frontend of the example page.");
-              }
-            });
+            const res = await fetch("/api/sentry-example-api");
+            if (!res.ok) {
+              setHasSentError(true);
+              const err = new SentryExampleFrontendError(
+                "This error is raised on the frontend of the example page."
+              );
+              Sentry.captureException(err);
+            }
           }}
         >
           <span>
