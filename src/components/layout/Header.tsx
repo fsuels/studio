@@ -10,6 +10,7 @@ import { Logo } from '@/components/layout/Logo';
 // pages.
 import Nav from '@/components/Nav';
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
+import dynamic from 'next/dynamic';
 import {
   Popover,
   PopoverContent,
@@ -33,8 +34,9 @@ import {
 import { Input } from '@/components/ui/input';
 import type { LegalDocument } from '@/lib/document-library';
 import { CATEGORY_LIST } from '@/components/Step1DocumentSelector';
-import MegaMenuContent from '@/components/mega-menu/MegaMenuContent';
-import MobileDocsAccordion from '@/components/mobile/MobileDocsAccordion';
+// Load expensive menu components only when needed
+const MegaMenuContent = dynamic(() => import('@/components/mega-menu/MegaMenuContent'));
+const MobileDocsAccordion = dynamic(() => import('@/components/mobile/MobileDocsAccordion'));
 
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/hooks/useAuth';

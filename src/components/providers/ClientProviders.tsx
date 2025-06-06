@@ -18,8 +18,11 @@ interface ClientProvidersProps {
 // This avoids an additional network request on every navigation.
 import Header from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
-import ContactFormButton from '@/components/ContactFormButton';
-import ActivityTicker from '@/components/ActivityTicker';
+import dynamic from 'next/dynamic';
+
+// Load non-critical widgets lazily
+const ContactFormButton = dynamic(() => import('@/components/ContactFormButton'));
+const ActivityTicker = dynamic(() => import('@/components/ActivityTicker'));
 
 const AppShell = React.memo(function AppShell({
   children,
