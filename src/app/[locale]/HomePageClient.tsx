@@ -14,7 +14,7 @@ import { useSearchParams, useRouter, useParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import PersonalizationBlock from '@/components/PersonalizationBlock';
 import AutoImage from '@/components/AutoImage';
-import SearchBar from '@/components/SearchBar';
+// import SearchBar from '@/components/SearchBar'; // Original import
 import { Skeleton } from '@/components/ui/skeleton'; // Import Skeleton
 
 // Minimal loading spinner without text
@@ -57,6 +57,17 @@ const TopDocsSkeleton = () => (
     </div>
   </div>
 );
+
+const SearchBarSkeleton = () => (
+  <div className="relative max-w-md">
+    <div className="h-12 bg-muted rounded-full w-full"></div> {/* Input field skeleton */}
+    <div className="mt-2 h-4 bg-muted rounded w-3/4"></div> {/* Trustline/Hint skeleton */}
+  </div>
+);
+
+const SearchBar = lazyOnView(() => import('@/components/SearchBar'), {
+  placeholder: <SearchBarSkeleton />,
+});
 
 const HowItWorks = lazyOnView(() => import('@/components/landing/HowItWorks'), {
   placeholder: <HowItWorksSkeleton />,
