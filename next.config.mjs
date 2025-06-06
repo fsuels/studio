@@ -16,9 +16,10 @@ const nextConfig = {
 
   /* —──────── Static-export image handling —──────── */
   images: {
-    unoptimized: true,
+    formats: ['image/avif', 'image/webp'],
     remotePatterns: [
       { protocol: 'https', hostname: 'picsum.photos', pathname: '/**' },
+      { protocol: 'https', hostname: 'placehold.co', pathname: '/**' },
     ],
   },
   /* Add allowedDevOrigins here as instructed */
