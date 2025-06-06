@@ -2,6 +2,7 @@
 // src/components/RecentDocs.tsx
 
 import React, { useEffect, useState } from 'react';
+import { parseLargeJSON } from '@/lib/parseLargeJSON';
 import Link from 'next/link';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Loader2, FileText } from 'lucide-react';
@@ -30,10 +31,14 @@ export default function RecentDocs({ userId, max = 5 }: RecentDocsProps) {
   const [docs, setDocs] = useState<RecentDocEntry[] | null>(null);
 
   /* ---------- helpers ------------------------------------- */
-  const fetchLocal = (): RecentDocEntry[] => {
+  const fetchLocal = async (): Promise<RecentDocEntry[]> => {
+    const raw = localStorage.getItem('recentDocs');
+    if (!raw) return [];
     try {
-      const raw = localStorage.getItem('recentDocs') || '[]';
-      return JSON.parse(raw);
+      if (raw.length > 2000) {
+        return await parseLargeJSON<RecentDocEntry[]>(raw);
+      }
+      return JSON.parse(raw) as RecentDocEntry[];
     } catch {
       return [];
     }
@@ -47,7 +52,7 @@ export default function RecentDocs({ userId, max = 5 }: RecentDocsProps) {
   useEffect(() => {
     const load = async () => {
       // 1) start with localStorage
-      let list = fetchLocal();
+      let list = await fetchLocal();
 
       // 2) if logged in, merge with Firestore copy
       if (userId) {

@@ -2,6 +2,7 @@
 
 import { useAuth } from '@/hooks/useAuth';
 import { useEffect, useState } from 'react';
+import { parseLargeJSON } from '@/lib/parseLargeJSON';
 
 interface RecentDocEntry {
   id: string;
@@ -14,15 +15,18 @@ export default function PersonalizationBlock() {
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
-    try {
-      const raw = localStorage.getItem('recentDocs') || '[]';
-      const docs: RecentDocEntry[] = JSON.parse(raw);
-      if (Array.isArray(docs) && docs.length > 0) {
-        setLastDoc(docs[0].name);
-      }
-    } catch {
-      setLastDoc(null);
-    }
+    const raw = localStorage.getItem('recentDocs');
+    if (!raw) return;
+    const parse = raw.length > 2000 ? parseLargeJSON<RecentDocEntry[]>(raw) : Promise.resolve(JSON.parse(raw));
+    parse
+      .then((docs) => {
+        if (Array.isArray(docs) && docs.length > 0) {
+          setLastDoc(docs[0].name);
+        }
+      })
+      .catch(() => {
+        setLastDoc(null);
+      });
   }, []);
 
   if (!isLoggedIn) {

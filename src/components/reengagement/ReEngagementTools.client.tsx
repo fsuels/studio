@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { parseLargeJSON } from '@/lib/parseLargeJSON'
 import { Progress } from '@/components/ui/progress'
 import { HelpCircle, X } from 'lucide-react'
 import Link from 'next/link'
@@ -47,13 +48,16 @@ export default function ReEngagementTools({ docId, totalQuestions = 0, locale }:
 
   useEffect(() => {
     if (!docId || totalQuestions === 0) return
-    try {
-      const draft = JSON.parse(localStorage.getItem(`draft-${docId}-${locale}`) || '{}')
-      const filled = Object.keys(draft).filter((k) => draft[k]).length
-      setProgress(Math.min(100, (filled / totalQuestions) * 100))
-    } catch {
-      setProgress(0)
-    }
+    const raw = localStorage.getItem(`draft-${docId}-${locale}`)
+    if (!raw) return
+    parseLargeJSON<Record<string, unknown>>(raw)
+      .then((draft) => {
+        const filled = Object.keys(draft).filter((k) => draft[k]).length
+        setProgress(Math.min(100, (filled / totalQuestions) * 100))
+      })
+      .catch(() => {
+        setProgress(0)
+      })
   }, [docId, totalQuestions, locale])
 
   const minutes = Math.max(0, Math.ceil(timeLeft / 60000))
