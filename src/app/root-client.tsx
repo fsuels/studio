@@ -29,6 +29,10 @@ export default function RootClient({
     if (typeof DocumentFlow?.preload === 'function') {
       void DocumentFlow.preload();
     }
+    // REMOVED: Problematic line below as StepThreeInput is not defined here.
+    // if (typeof window !== 'undefined' && StepThreeInput?.preload) {
+    //   void StepThreeInput.preload();
+    // }
   }, []);
 
   return (
