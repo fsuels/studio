@@ -24,6 +24,16 @@ const nextConfig = {
   /* Add allowedDevOrigins here as instructed */
   allowedDevOrigins: ['*'],
 
+  async redirects() {
+    return [
+      {
+        source: '/',
+        destination: '/en',
+        permanent: false,
+      },
+    ];
+  },
+
 };
 
 /* -------------------------------------------------------------------------- */
