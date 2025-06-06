@@ -114,6 +114,10 @@ remains responsive.
 - Import components directly inside the pages that need them instead of in `_app` or root layouts when possible.
 - After making these changes, rebuild the project in production mode and re-run Lighthouse to verify reductions in unused JavaScript.
 
+## Performance Budgets
+
+Continuous integration runs `npm run check:bundles` after building. The script fails the job when any file in `.next/static` exceeds **250 KB**, helping avoid regressions. Run `npm run analyze` locally to open webpack-bundle-analyzer and inspect bundle contents.
+
 ## Intercom Chat Widget
 
 Set `NEXT_PUBLIC_INTERCOM_APP_ID` in your environment to enable the Intercom chat widget. The script loads only when the user clicks the chat button in the footer, minimizing third-party impact. Leave this variable unset to disable the widget entirely.
