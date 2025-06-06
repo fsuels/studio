@@ -26,6 +26,12 @@ const config: NextConfig = {
         hostname: 'placehold.co', // Added for placeholder images
         port: '',
         pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'cdn.simpleicons.org',
+        port: '',
+        pathname: '/**',
       }
     ],
   },

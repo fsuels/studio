@@ -20,6 +20,7 @@ const nextConfig = {
     remotePatterns: [
       { protocol: 'https', hostname: 'picsum.photos', pathname: '/**' },
       { protocol: 'https', hostname: 'placehold.co', pathname: '/**' },
+      { protocol: 'https', hostname: 'cdn.simpleicons.org', pathname: '/**' },
     ],
   },
   /* Add allowedDevOrigins here as instructed */
