@@ -14,11 +14,11 @@ interface ClientProvidersProps {
   locale: 'en' | 'es';
 }
 
-// Statically import Header and Footer so they are included in the main bundle.
-// This avoids an additional network request on every navigation.
-import Header from '@/components/layout/Header';
-import { Footer } from '@/components/layout/Footer';
 import dynamic from 'next/dynamic';
+
+// Lazily load the header and footer to reduce the initial JS bundle size
+const Header = dynamic(() => import('@/components/layout/Header'));
+const Footer = dynamic(() => import('@/components/layout/Footer'));
 
 // Load non-critical widgets lazily
 const ContactFormButton = dynamic(() => import('@/components/ContactFormButton'));
