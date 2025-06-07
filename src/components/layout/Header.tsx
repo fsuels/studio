@@ -179,13 +179,13 @@ const Header = React.memo(function Header() {
             : 'bg-background',
         )}
       >
-      <div
-        className={cn(
-          'container relative flex items-center px-4 md:px-6 transition-all duration-200 ease-in-out',
-          scrolled ? 'h-12 py-3' : 'h-14 py-3',
-        )}
-      >
-        <div className="mr-auto md:mr-4 flex items-center">
+        <div
+          className={cn(
+            'container relative flex items-center justify-between px-4 md:px-6 transition-all duration-200 ease-in-out',
+            scrolled ? 'h-12 py-3' : 'h-14 py-3',
+          )}
+        >
+        <div className="flex items-center flex-1">
           <Logo
             wrapperClassName={cn(
               'items-center self-center mr-2 md:mr-4 transition-all duration-200 ease-in-out',
@@ -202,7 +202,7 @@ const Header = React.memo(function Header() {
         </div>
 
         {/* Mobile menu toggle */}
-        <div className="md:hidden flex items-center ml-auto">
+        <div className="md:hidden flex items-center">
           <Button
             variant="default"
             size="icon"
@@ -226,14 +226,14 @@ const Header = React.memo(function Header() {
         {/* Desktop Nav */}
         <div
           className={cn(
-            'hidden md:flex items-center justify-center md:absolute md:left-1/2 md:top-1/2 md:-translate-x-1/2 md:-translate-y-1/2 transition-opacity duration-200 ease-in-out',
+            'hidden md:flex flex-1 justify-center items-center transition-opacity duration-200 ease-in-out',
             scrolled && 'opacity-60',
           )}
         >
           <Nav />
         </div>
 
-        <nav className="hidden md:flex items-center gap-3 md:gap-4">
+        <nav className="hidden md:flex flex-1 items-center justify-end gap-3 md:gap-4">
           {/* Mega-menu */}
           <Popover open={isMegaMenuOpen} onOpenChange={setIsMegaMenuOpen}>
             <PopoverTrigger asChild>
