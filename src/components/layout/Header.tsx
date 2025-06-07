@@ -185,7 +185,7 @@ const Header = React.memo(function Header() {
             scrolled ? 'h-12 py-3' : 'h-14 py-3',
           )}
         >
-        <div className="flex items-center flex-1">
+        <div className="flex items-center flex-shrink-0">
           <Logo
             wrapperClassName={cn(
               'items-center self-center mr-2 md:mr-4 transition-all duration-200 ease-in-out',
@@ -233,7 +233,7 @@ const Header = React.memo(function Header() {
           <Nav />
         </div>
 
-        <nav className="hidden md:flex flex-1 items-center justify-end gap-3 md:gap-4">
+        <nav className="hidden md:flex items-center justify-end gap-3 md:gap-4 flex-shrink-0">
           {/* Mega-menu */}
           <Popover open={isMegaMenuOpen} onOpenChange={setIsMegaMenuOpen}>
             <PopoverTrigger asChild>
