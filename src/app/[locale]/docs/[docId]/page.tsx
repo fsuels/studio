@@ -4,9 +4,10 @@
 import { getMarkdown } from '@/lib/markdown-cache';
 import DocPageClient from './DocPageClient';
 import { documentLibrary } from '@/lib/document-library';
-import { localizations } from '@/lib/localizations'; // Ensure this path is correct
+import { localizations } from '@/lib/localizations';
 export const dynamic = 'force-static';
 import { vehicleBillOfSaleFaqs } from '@/app/[locale]/documents/bill-of-sale-vehicle/faqs';
+
 export interface DocPageParams {
   locale: 'en' | 'es';
   docId: string;
@@ -21,15 +22,27 @@ export const revalidate = 3600;
 
 // generateStaticParams is crucial for static export of dynamic routes
 export async function generateStaticParams(): Promise<DocPageParams[]> {
+  // 1) In CI with LIMIT_SSG, only build these “critical” pages:
+  if (process.env.LIMIT_SSG === 'true') {
+    return [
+      { locale: 'en', docId: 'affidavit-general' },
+      { locale: 'es', docId: 'affidavit-general' },
+      { locale: 'en', docId: 'dashboard' },
+      { locale: 'es', docId: 'dashboard' },
+      // → add more page pairs here if needed
+    ];
+  }
+
+  // 2) Otherwise (normal build), build them all:
   if (!documentLibrary || documentLibrary.length === 0) {
     console.warn(
-      '[generateStaticParams /docs] documentLibrary is empty or undefined. No paths will be generated.',
+      '[generateStaticParams /docs] documentLibrary is empty or undefined. No paths will be generated.'
     );
     return [];
   }
   if (!localizations || localizations.length === 0) {
     console.warn(
-      '[generateStaticParams /docs] localizations is empty or undefined. No paths will be generated.',
+      '[generateStaticParams /docs] localizations is empty or undefined. No paths will be generated.'
     );
     return [];
   }
@@ -37,13 +50,11 @@ export async function generateStaticParams(): Promise<DocPageParams[]> {
   const params: DocPageParams[] = [];
   for (const locale of localizations) {
     for (const doc of documentLibrary) {
-      // Ensure doc and doc.id are valid before pushing
       if (doc && doc.id && doc.id !== 'general-inquiry') {
-        // Exclude general inquiry or other non-detail pages
-        params!.push({ locale, docId: doc.id });
-      } else if (!doc || !doc.id) {
+        params.push({ locale, docId: doc.id });
+      } else {
         console.warn(
-          `[generateStaticParams /docs] Encountered a document with missing id in locale ${locale}. Skipping.`,
+          `[generateStaticParams /docs] Skipping invalid doc entry for locale ${locale}`
         );
       }
     }
@@ -53,13 +64,8 @@ export async function generateStaticParams(): Promise<DocPageParams[]> {
 
 // This Server Component now correctly passes params to the Client Component
 export default async function DocPage({ params }: DocPageProps) {
-  // Await a microtask to comply with Next.js dynamic param handling
-  await Promise.resolve();
-
+  await Promise.resolve(); // ensure Next.js handles dynamic params
   const markdownContent = await getMarkdown(params.locale, params.docId);
-
-  // The `params` prop is directly available here from Next.js
-  // It's then passed down to the client component.
   return <DocPageClient params={params} markdownContent={markdownContent} />;
 }
 
@@ -67,7 +73,7 @@ export function Head({ params }: { params: DocPageParams }) {
   const faqJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
-    mainEntity: vehicleBillOfSaleFaqs.map((faq, index) => ({
+    mainEntity: vehicleBillOfSaleFaqs.map((faq) => ({
       '@type': 'Question',
       name: params.locale === 'es' ? faq.questionEs : faq.questionEn,
       acceptedAnswer: {
@@ -86,7 +92,7 @@ export function Head({ params }: { params: DocPageParams }) {
       '@type': 'Offer',
       price: '19.95',
       priceCurrency: 'USD',
-      url: 'https://{domain}/en/docs/bill-of-sale-vehicle',
+      url: `https://{domain}/${params.locale}/docs/bill-of-sale-vehicle`,
     },
     aggregateRating: {
       '@type': 'AggregateRating',
@@ -99,15 +105,11 @@ export function Head({ params }: { params: DocPageParams }) {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(productJsonLd),
-        }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(faqJsonLd),
-        }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
       />
     </>
   );
