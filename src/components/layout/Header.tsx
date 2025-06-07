@@ -181,7 +181,7 @@ const Header = React.memo(function Header() {
       >
       <div
         className={cn(
-          'container flex items-center px-4 md:px-6 transition-all duration-200 ease-in-out',
+          'container relative flex items-center px-4 md:px-6 transition-all duration-200 ease-in-out',
           scrolled ? 'h-12 py-3' : 'h-14 py-3',
         )}
       >
@@ -226,7 +226,7 @@ const Header = React.memo(function Header() {
         {/* Desktop Nav */}
         <div
           className={cn(
-            'hidden md:flex flex-1 items-center justify-center transition-opacity duration-200 ease-in-out',
+            'hidden md:flex items-center justify-center md:absolute md:left-1/2 md:top-1/2 md:-translate-x-1/2 md:-translate-y-1/2 transition-opacity duration-200 ease-in-out',
             scrolled && 'opacity-60',
           )}
         >
@@ -239,7 +239,7 @@ const Header = React.memo(function Header() {
             <PopoverTrigger asChild>
               <Button
                 className={cn(
-                  'bg-gradient-to-r from-[#006EFF] to-[#00C3A3] hover:from-[#0057CC] hover:to-[#00A38A] text-white px-4 py-2 rounded-lg font-semibold text-base flex items-center gap-1 drop-shadow-lg focus-visible:ring-2 focus-visible:ring-offset-2 whitespace-nowrap',
+                  'bg-gradient-to-r from-[#006EFF] to-[#00C3A3] hover:from-[#0057CC] hover:to-[#00A38A] text-white px-3 py-1.5 rounded-md font-semibold text-sm flex items-center gap-1 drop-shadow-lg focus-visible:ring-2 focus-visible:ring-offset-2 whitespace-nowrap',
                   isMegaMenuOpen && 'from-[#0057CC] to-[#00A38A]',
                 )}
                 disabled={!mounted}
