@@ -8,7 +8,6 @@ import {
   FileQuestion,
   Lock,
   Share2,
-  ArrowRight,
 } from 'lucide-react';
 import StepCard from './StepCard';
 
@@ -53,36 +52,34 @@ const HowItWorks = React.memo(function HowItWorks() {
   return (
     <section
       id="how-it-works"
-      className="relative bg-gradient-to-b from-gray-50 to-white border-t border-gray-200 py-12"
+      className="relative bg-gradient-to-b from-background to-secondary/20 border-t border-border py-16 md:py-20"
     >
       <div
-        className="pointer-events-none absolute inset-0 bg-[url('/images/pattern-legal.svg')] bg-repeat bg-[length:40px_40px] opacity-5"
+        className="pointer-events-none absolute inset-0 bg-[url('/images/pattern-legal.svg')] bg-repeat bg-[length:40px_40px] opacity-[0.02]"
         aria-hidden="true"
       />
-      <div className="relative max-w-5xl mx-auto text-center">
-        <h2 className="text-3xl font-bold text-gray-900">
+      <div className="relative max-w-5xl mx-auto text-center px-4">
+        <h2 className="text-3xl font-bold text-foreground">
           <span>
             {t('home.howItWorksSectionTitle.main', {
               defaultValue:
                 'Generate and Personalize Legal Forms',
             })}
           </span>
-          <br />
-          <span className="block mt-2 text-xl font-medium text-gray-600">
-            {t('home.howItWorksSectionTitle.sub', {
-              defaultValue: '• Fast • Easy • No Hidden Fees',
-            })}
-          </span>
         </h2>
-        <div className="mt-8 flex flex-col items-center space-y-8 sm:flex-row sm:space-y-0 sm:space-x-6 justify-center">
-          {steps.map((step, idx) => (
-            <div key={step.titleKey} className="flex items-center group">
+        <span className="block mt-3 mb-10 text-lg text-muted-foreground">
+          {t('home.howItWorksSectionTitle.sub', {
+            defaultValue: '• Fast • Easy • No Hidden Fees •',
+          })}
+        </span>
+        <div className="mt-8 flex flex-col items-stretch space-y-8 sm:flex-row sm:space-y-0 sm:space-x-4 justify-center">
+          {steps.map((step) => (
+            <div key={step.titleKey} className="flex sm:flex-1">
               <StepCard
                 number={step.number}
                 title={t(step.titleKey, { defaultValue: step.defaultTitle })}
                 desc={t(step.descKey, { defaultValue: step.defaultDesc })}
-                icon={<step.Icon className="w-8 h-8" />}
-                showConnector={idx < steps.length - 1}
+                icon={<step.Icon className="w-8 h-8 text-primary" />}
               />
             </div>
           ))}
