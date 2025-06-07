@@ -226,20 +226,20 @@ const Header = React.memo(function Header() {
         {/* Desktop Nav */}
         <div
           className={cn(
-            'hidden md:flex items-center justify-center md:absolute md:left-1/2 md:top-1/2 md:-translate-x-1/2 md:-translate-y-1/2 transition-opacity duration-200 ease-in-out',
+            'hidden md:flex flex-1 items-center justify-center transition-opacity duration-200 ease-in-out',
             scrolled && 'opacity-60',
           )}
         >
           <Nav />
         </div>
 
-        <nav className="hidden md:flex items-center gap-3 md:gap-4">
+        <nav className="hidden md:flex items-center gap-3 md:gap-4 ml-auto">
           {/* Mega-menu */}
           <Popover open={isMegaMenuOpen} onOpenChange={setIsMegaMenuOpen}>
             <PopoverTrigger asChild>
               <Button
                 className={cn(
-                  'bg-gradient-to-r from-[#006EFF] to-[#00C3A3] hover:from-[#0057CC] hover:to-[#00A38A] text-white px-3 py-1.5 rounded-md font-semibold text-sm flex items-center gap-1 drop-shadow-lg focus-visible:ring-2 focus-visible:ring-offset-2 whitespace-nowrap',
+                  'bg-gradient-to-r from-[#006EFF] to-[#00C3A3] hover:from-[#0057CC] hover:to-[#00A38A] text-white px-2 py-1.5 rounded-md font-semibold text-sm flex items-center gap-1 drop-shadow-lg focus-visible:ring-2 focus-visible:ring-offset-2 whitespace-nowrap',
                   isMegaMenuOpen && 'from-[#0057CC] to-[#00A38A]',
                 )}
                 disabled={!mounted}
@@ -345,7 +345,7 @@ const Header = React.memo(function Header() {
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="text-sm font-medium px-3 h-9 hover:bg-muted focus-visible:ring-primary focus-visible:ring-2 focus-visible:ring-offset-2 flex items-center"
+                  className="text-sm font-medium px-2 h-9 hover:bg-muted focus-visible:ring-primary focus-visible:ring-2 focus-visible:ring-offset-2 flex items-center"
                   asChild
                 >
                   <Link href={`/${clientLocale}/dashboard`}>
@@ -357,7 +357,7 @@ const Header = React.memo(function Header() {
                   variant="outline"
                   size="sm"
                   onClick={handleLogout}
-                  className="text-sm font-medium px-3 h-9 hover:bg-muted focus-visible:ring-primary focus-visible:ring-2 focus-visible:ring-offset-2"
+                  className="text-sm font-medium px-2 h-9 hover:bg-muted focus-visible:ring-primary focus-visible:ring-2 focus-visible:ring-offset-2"
                 >
                   <LogOut className="h-4 w-4 mr-1 md:mr-2" />
                   {tHeader('Logout')}
@@ -369,7 +369,7 @@ const Header = React.memo(function Header() {
                   variant="outline"
                   size="sm"
                   asChild
-                  className="text-sm font-medium px-3 h-9 border-primary text-primary hover:bg-primary/10 hover:text-primary focus-visible:ring-primary"
+                  className="text-sm font-medium px-2 h-9 border-primary text-primary hover:bg-primary/10 hover:text-primary focus-visible:ring-primary"
                 >
                   <Link href={`/${clientLocale}/signup`}>
                     <UserPlus className="h-4 w-4 mr-1 md:mr-2" />
@@ -380,7 +380,7 @@ const Header = React.memo(function Header() {
                   variant="default"
                   size="sm"
                   asChild
-                  className="text-sm font-medium px-3 h-9 focus-visible:ring-primary"
+                  className="text-sm font-medium px-2 h-9 focus-visible:ring-primary"
                 >
                   <Link href={`/${clientLocale}/signin`}>
                     <LogIn className="h-4 w-4 mr-1 md:mr-2" />
