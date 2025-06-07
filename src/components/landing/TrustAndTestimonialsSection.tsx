@@ -301,13 +301,37 @@ const TrustAndTestimonialsSection = React.memo(
                 </div>
                 <span className="ml-1 font-semibold leading-5">4.9/5</span>
               </div>
-              <div className="flex items-center gap-2 opacity-50">
+              <div className="flex flex-nowrap items-center gap-2 overflow-x-auto opacity-50 py-4">
                 <span className="text-xs">
                   {t('home.trustStrip.usedBy', 'Used by:')}
                 </span>
-                <AutoImage src="/images/logos/forbes-logo.svg" alt="Forbes logo" width={80} height={16} className="h-4 w-auto" />
-                <AutoImage src="/images/logos/bloomberg-logo.svg" alt="Bloomberg logo" width={80} height={16} className="h-4 w-auto" />
-                <AutoImage src="/images/logos/nyt-logo.svg" alt="New York Times logo" width={80} height={16} className="h-4 w-auto" />
+                <AutoImage
+                  src="/images/logos/forbes-logo.svg"
+                  alt="Forbes logo"
+                  width={80}
+                  height={16}
+                  unoptimized={true}
+                  data-ai-hint="trust-logo"
+                  className="h-4 w-auto flex-shrink-0 object-contain"
+                />
+                <AutoImage
+                  src="/images/logos/bloomberg-logo.svg"
+                  alt="Bloomberg logo"
+                  width={80}
+                  height={16}
+                  unoptimized={true}
+                  data-ai-hint="trust-logo"
+                  className="h-4 w-auto flex-shrink-0 object-contain"
+                />
+                <AutoImage
+                  src="/images/logos/nyt-logo.svg"
+                  alt="New York Times logo"
+                  width={80}
+                  height={16}
+                  unoptimized={true}
+                  data-ai-hint="trust-logo"
+                  className="h-4 w-auto flex-shrink-0 object-contain"
+                />
               </div>
             </div>
           </div>
