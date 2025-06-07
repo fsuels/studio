@@ -70,7 +70,7 @@ const Nav = React.memo(function Nav() {
       <DropdownMenu>
         <DropdownMenuTrigger
           className={cn(
-            'group hover:bg-primary/10 hover:text-primary focus-visible:bg-primary/10 focus-visible:text-primary transition-colors px-2 py-1.5 rounded-md text-sm font-medium text-muted-foreground flex items-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
+            'group hover:bg-primary/10 hover:text-primary focus-visible:bg-primary/10 focus-visible:text-primary transition-colors px-2 py-1.5 rounded-md text-sm font-medium text-muted-foreground flex items-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 whitespace-nowrap',
             (pathname === `/${currentLocale}/signwell` ||
               pathname === `/${currentLocale}/online-notary`) &&
               'bg-primary/10 text-primary font-semibold',

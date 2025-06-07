@@ -226,20 +226,20 @@ const Header = React.memo(function Header() {
         {/* Desktop Nav */}
         <div
           className={cn(
-            'hidden md:flex flex-1 items-center justify-start transition-opacity duration-200 ease-in-out',
+            'hidden md:flex flex-1 items-center justify-center transition-opacity duration-200 ease-in-out',
             scrolled && 'opacity-60',
           )}
         >
           <Nav />
         </div>
 
-        <nav className="hidden md:flex items-center gap-2 ml-auto">
+        <nav className="hidden md:flex items-center gap-3 md:gap-4">
           {/* Mega-menu */}
           <Popover open={isMegaMenuOpen} onOpenChange={setIsMegaMenuOpen}>
             <PopoverTrigger asChild>
               <Button
                 className={cn(
-                  'bg-gradient-to-r from-[#006EFF] to-[#00C3A3] hover:from-[#0057CC] hover:to-[#00A38A] text-white px-4 py-2 rounded-lg font-semibold text-base flex items-center gap-1 drop-shadow-lg focus-visible:ring-2 focus-visible:ring-offset-2',
+                  'bg-gradient-to-r from-[#006EFF] to-[#00C3A3] hover:from-[#0057CC] hover:to-[#00A38A] text-white px-4 py-2 rounded-lg font-semibold text-base flex items-center gap-1 drop-shadow-lg focus-visible:ring-2 focus-visible:ring-offset-2 whitespace-nowrap',
                   isMegaMenuOpen && 'from-[#0057CC] to-[#00A38A]',
                 )}
                 disabled={!mounted}
