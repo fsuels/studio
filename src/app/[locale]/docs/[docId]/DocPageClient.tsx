@@ -1,4 +1,3 @@
-// src/app/[locale]/docs/[docId]/DocPageClient.tsx
 'use client';
 
 import { notFound, useRouter, useParams } from 'next/navigation';
@@ -39,7 +38,7 @@ import {
   AccordionTrigger,
   AccordionContent,
 } from '@/components/ui/accordion';
-import VehicleBillOfSaleDisplay from '@/components/docs/VehicleBillOfSaleDisplay'; // Import the specific display component
+import VehicleBillOfSaleDisplay from '@/components/docs/VehicleBillOfSaleDisplay';
 import PromissoryNoteDisplay from '@/components/docs/PromissoryNoteDisplay';
 
 // Lazy load template-specific testimonials section
@@ -51,7 +50,7 @@ const TestimonialsCarousel = dynamic(
         <Loader2 className="h-6 w-6 animate-spin text-primary" />
       </div>
     ),
-  },
+  }
 );
 
 type DocumentDetailComponent = React.ComponentType<DocumentDetailProps> & {
@@ -72,7 +71,7 @@ interface DocPageClientProps {
     locale: string;
     docId: string;
   };
-  markdownContent?: string | null; // Add this line
+  markdownContent?: string | null;
 }
 
 // Placeholder for AI dynamic highlights
@@ -80,8 +79,10 @@ interface AiHighlightPlaceholderProps {
   text: string;
   title: string;
 }
-
-const AiHighlightPlaceholder = ({ text, title }: AiHighlightPlaceholderProps) => (
+const AiHighlightPlaceholder = ({
+  text,
+  title,
+}: AiHighlightPlaceholderProps) => (
   <span
     className="bg-primary/10 text-primary px-1 py-0.5 rounded-sm text-xs font-medium border border-primary/30 cursor-help"
     title={title}
@@ -123,7 +124,7 @@ export default function DocPageClient({
     setIsHydrated(true);
   }, []);
 
-  // Preload detail component and next step route for quicker interactions
+  // Preload detail + next-step route
   useEffect(() => {
     if (typeof DocumentDetail.preload === 'function') {
       DocumentDetail.preload();
@@ -136,10 +137,10 @@ export default function DocPageClient({
   useEffect(() => {
     if (isHydrated) {
       if (docId) {
-        const foundDoc = documentLibrary.find((d) => d.id === docId);
-        if (!foundDoc) {
+        const found = documentLibrary.find((d) => d.id === docId);
+        if (!found) {
           console.error(
-            `[DocPageClient] Doc config not found for ID: ${docId}. Triggering 404.`,
+            `[DocPageClient] Doc config not found for ID: ${docId}. Triggering 404.`
           );
           notFound();
         }
@@ -170,16 +171,6 @@ export default function DocPageClient({
     }
   }, [docConfig, currentLocale, isHydrated]);
 
-  useEffect(() => {
-    if (!isHydrated) return;
-    if (typeof DocumentDetail.preload === 'function') {
-      DocumentDetail.preload();
-    }
-    if (docId && currentLocale) {
-      router.prefetch(`/${currentLocale}/docs/${docId}/start`);
-    }
-  }, [docId, currentLocale, isHydrated, router]);
-
   const handleStartWizard = () => {
     if (!docConfig || !currentLocale || !isHydrated) return;
     track('add_to_cart', {
@@ -197,9 +188,7 @@ export default function DocPageClient({
     return (
       <div className="flex items-center justify-center min-h-[calc(100vh-10rem)]">
         <Loader2 className="h-12 w-12 animate-spin text-primary" />
-        <p className="ml-2 text-muted-foreground">
-          Loading document details...
-        </p>
+        <p className="ml-2 text-muted-foreground">Loading document details...</p>
       </div>
     );
   }
@@ -354,7 +343,7 @@ export default function DocPageClient({
               locale={currentLocale as 'en' | 'es'}
               docId={docId as string}
               altText={`${documentDisplayName} preview`}
-              markdownContent={markdownContent} // Add this prop
+              markdownContent={markdownContent}
             />
             <p className="text-xs text-muted-foreground mt-2 text-center italic">
               {t('docDetail.aiHighlightPre', 'AI Highlight:')}{' '}
@@ -362,7 +351,10 @@ export default function DocPageClient({
                 text={t('docDetail.keyClauses', 'Key clauses')}
                 title={aiHighlightTitle}
               />{' '}
-              {t('docDetail.aiHighlightPost', 'will be automatically tailored.')}
+              {t(
+                'docDetail.aiHighlightPost',
+                'will be automatically tailored.'
+              )}
             </p>
           </section>
 
@@ -392,13 +384,18 @@ export default function DocPageClient({
                     <p className="text-xs text-muted-foreground">
                       {t('docDetail.competitivePrice', {
                         competitorPrice: competitorPrice.toFixed(2),
-                        defaultValue: `Compare to typical attorney fees of $${competitorPrice.toFixed(2)}+`,
+                        defaultValue: `Compare to typical attorney fees of $${competitorPrice.toFixed(
+                          2
+                        )}+`,
                       })}
                     </p>
                     <ul className="mt-3 space-y-1 text-sm">
                       <li className="flex items-center gap-2">
                         <ShieldCheck className="h-4 w-4 text-teal-600" />{' '}
-                        {t('docDetail.attorneyApproved', 'Attorney-approved')}
+                        {t(
+                          'docDetail.attorneyApproved',
+                          'Attorney-approved'
+                        )}
                       </li>
                       <li className="flex items-center gap-2">
                         <Clock className="h-4 w-4 text-teal-600" />{' '}
@@ -406,7 +403,10 @@ export default function DocPageClient({
                       </li>
                       <li className="flex items-center gap-2">
                         <RotateCcw className="h-4 w-4 text-teal-600" />{' '}
-                        {t('docDetail.moneyBackGuarantee', '100 % money-back guarantee')}
+                        {t(
+                          'docDetail.moneyBackGuarantee',
+                          '100 % money-back guarantee'
+                        )}
                       </li>
                     </ul>
                     <Button
@@ -421,13 +421,13 @@ export default function DocPageClient({
                 </Card>
                 {/* Trust block under price card */}
                 <div className="mt-4 space-y-2 text-center">
-                  {/* Let’s Encrypt */}
-                  {/* Documents generated counter */}
                   <p className="text-xs text-gray-500">
                     <strong>104,213</strong>{' '}
-                    {t('docDetail.templatesDownloaded', 'templates downloaded this year')}
+                    {t(
+                      'docDetail.templatesDownloaded',
+                      'templates downloaded this year'
+                    )}
                   </p>
-                  {/* Refund badge */}
                   <div className="inline-flex items-center gap-1 text-xs text-gray-500">
                     <svg
                       width="14"
@@ -441,7 +441,10 @@ export default function DocPageClient({
                     >
                       <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
                     </svg>
-                    {t('docDetail.moneyBack30', '30-day money-back guarantee')}
+                    {t(
+                      'docDetail.moneyBack30',
+                      '30-day money-back guarantee'
+                    )}
                   </div>
                 </div>
               </div>
@@ -452,7 +455,10 @@ export default function DocPageClient({
                 <CardHeader>
                   <CardTitle className="text-md flex items-center gap-2">
                     <Zap size={18} className="text-accent" />{' '}
-                    {t('docDetail.optionalAddons', 'Optional Add-ons')}
+                    {t(
+                      'docDetail.optionalAddons',
+                      'Optional Add-ons'
+                    )}
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-2">
@@ -488,29 +494,41 @@ export default function DocPageClient({
                 <p className="text-xs text-muted-foreground">
                   {t('docDetail.aiAssistP1', 'Our AI will help suggest')}{' '}
                   <AiHighlightPlaceholder
-                    text={t('docDetail.relevantClauses', 'relevant clauses')}
+                    text={t(
+                      'docDetail.relevantClauses',
+                      'relevant clauses'
+                    )}
                     title={aiHighlightTitle}
                   />{' '}
-                  {t('docDetail.aiAssistP2', 'and ensure your document is tailored to the')}{' '}
+                  {t(
+                    'docDetail.aiAssistP2',
+                    'and ensure your document is tailored to the'
+                  )}{' '}
                   <AiHighlightPlaceholder
-                    text={t('docDetail.specificsOfYourSituation', 'specifics of your situation')}
+                    text={t(
+                      'docDetail.specificsOfYourSituation',
+                      'specifics of your situation'
+                    )}
                     title={aiHighlightTitle}
                   />{' '}
-                  {t('docDetail.aiAssistP3', 'as you answer questions in the next step.')}
+                  {t(
+                    'docDetail.aiAssistP3',
+                    'as you answer questions in the next step.'
+                  )}
                 </p>
               </CardContent>
             </Card>
           </aside>
         </div>
 
-        {/* Conditional rendering for document-specific content vs generic content */}
+        {/* Conditional rendering */}
         {docConfig.id === 'bill-of-sale-vehicle' ? (
           <VehicleBillOfSaleDisplay locale={currentLocale as 'en' | 'es'} />
         ) : docConfig.id === 'promissory-note' ? (
           <PromissoryNoteDisplay locale={currentLocale as 'en' | 'es'} />
         ) : (
           <>
-            {/* Feature Highlights */}
+            {/* Generic features & FAQ... */}
             <section className="mt-16 grid md:grid-cols-3 gap-6">
               {features.map((f, i) => (
                 <div
@@ -526,7 +544,6 @@ export default function DocPageClient({
               ))}
             </section>
 
-            {/* How-to Guide & FAQ */}
             <section className="mt-16 max-w-3xl mx-auto space-y-6">
               <h2 className="text-2xl font-semibold text-center text-foreground">
                 How to Use This Template
@@ -547,8 +564,8 @@ export default function DocPageClient({
                       Do I need a notary for this document?
                     </AccordionTrigger>
                     <AccordionContent>
-                      Requirements vary by state, but notarization can add extra
-                      authenticity.
+                      Requirements vary by state, but notarization can add
+                      extra authenticity.
                     </AccordionContent>
                   </AccordionItem>
                   <AccordionItem value="q2">
@@ -573,12 +590,12 @@ export default function DocPageClient({
           </>
         )}
 
-        {/* Template-specific testimonials */}
+        {/* Testimonials */}
         <div className="mt-16">
           <TestimonialsCarousel templateId={docConfig.id} />
         </div>
 
-        {/* Sticky CTA for mobile */}
+        {/* Mobile CTA */}
         <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-t p-4 shadow-lg z-40">
           <Button
             size="lg"

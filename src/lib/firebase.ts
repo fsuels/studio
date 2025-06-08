@@ -1,15 +1,15 @@
+// src/lib/firebase.ts
 // -----------------------------------------------------------------------------
 // Firebase bootstrap (client + server safe)
 // -----------------------------------------------------------------------------
 
 import { initializeApp, getApps, getApp, type FirebaseApp } from 'firebase/app';
 import type { Analytics } from 'firebase/analytics';
-import type { Firestore } from 'firebase/firestore'; // ← keep the type only
+import type { Firestore } from 'firebase/firestore';
 
 /* ------------------------------------------------------------------ */
 /* Fallback config (env vars override)                                */
 /* ------------------------------------------------------------------ */
-
 const defaultFirebaseConfig = {
   apiKey: 'AIzaSyDzchJQ-4ZypZ2Tscri3VYfJEN2Ocqx0hU',
   authDomain: 'legaldoc-26ea8.firebaseapp.com',
@@ -43,56 +43,46 @@ const getFirebaseConfig = () => ({
 });
 
 /* ------------------------------------------------------------------ */
-/* Initialise the Firebase **App** (only once)                        */
+/* Initialize the Firebase App (only once)                            */
 /* ------------------------------------------------------------------ */
-
 let app: FirebaseApp;
-
-if (typeof window !== 'undefined') {
-  // Client
-  app = getApps().length ? getApp() : initializeApp(getFirebaseConfig());
+if (!getApps().length) {
+  app = initializeApp(getFirebaseConfig());
 } else {
-  // Server / SSR
-  app = getApps().length ? getApp() : initializeApp(getFirebaseConfig());
+  app = getApp();
 }
 
 /* ------------------------------------------------------------------ */
 /* Lazy Analytics (client only)                                       */
 /* ------------------------------------------------------------------ */
-
 let analytics: Analytics | null = null;
-
 export async function getAnalyticsInstance(): Promise<Analytics | null> {
   if (analytics || typeof window === 'undefined') return analytics;
-
   const { getAnalytics, isSupported } = await import('firebase/analytics');
-  if (await isSupported()) analytics = getAnalytics(app);
+  if (await isSupported()) {
+    analytics = getAnalytics(app);
+  }
   return analytics;
 }
 
 /* ------------------------------------------------------------------ */
-/* Firestore – force long-polling (solves WebChannel transport errors)*/
+/* Firestore – client vs. server                                      */
 /* ------------------------------------------------------------------ */
-
 let dbInstance: Firestore | null = null;
-
-/**
- * Returns a singleton Firestore instance.
- * Forces long-polling so it works inside Firebase Studio / Cloud Workstations
- * where WebChannel streaming is blocked.
- */
 export async function getDb(): Promise<Firestore> {
   if (dbInstance) return dbInstance;
 
-  // Lazily load Firestore and configure long-polling **before any other import
-  // can create a default instance**.
-  const { initializeFirestore } = await import('firebase/firestore');
-
-  dbInstance = initializeFirestore(app, {
-    experimentalForceLongPolling: true,
-    // For SDK ≥ 11.15 you could use:
-    // experimentalAutoDetectLongPolling: true,
-  });
+  if (typeof window === 'undefined') {
+    // Server: force long-polling to avoid WebChannel errors
+    const { initializeFirestore } = await import('firebase/firestore');
+    dbInstance = initializeFirestore(app, {
+      experimentalForceLongPolling: true,
+    });
+  } else {
+    // Client: use normal Firestore
+    const { getFirestore } = await import('firebase/firestore');
+    dbInstance = getFirestore(app);
+  }
 
   return dbInstance;
 }
@@ -100,5 +90,4 @@ export async function getDb(): Promise<Firestore> {
 /* ------------------------------------------------------------------ */
 /* Exports                                                            */
 /* ------------------------------------------------------------------ */
-
 export { app };

@@ -1,6 +1,7 @@
 // src/app/[locale]/docs/[docId]/page.tsx
 // This is a Server Component that defines static paths and renders the client component.
 
+import React from 'react';
 import { getMarkdown } from '@/lib/markdown-cache';
 import DocPageClient from './DocPageClient';
 import { documentLibrary } from '@/lib/document-library';
@@ -62,11 +63,18 @@ export async function generateStaticParams(): Promise<DocPageParams[]> {
   return params;
 }
 
-// This Server Component now correctly passes params to the Client Component
+// This Server Component now correctly passes params + markdown to the Client Component
 export default async function DocPage({ params }: DocPageProps) {
-  await Promise.resolve(); // ensure Next.js handles dynamic params
+  // satisfy Next.js server component requirements
+  await Promise.resolve();
+
   const markdownContent = await getMarkdown(params.locale, params.docId);
-  return <DocPageClient params={params} markdownContent={markdownContent} />;
+  return (
+    <DocPageClient
+      params={params}
+      markdownContent={markdownContent}
+    />
+  );
 }
 
 export function Head({ params }: { params: DocPageParams }) {
@@ -92,7 +100,7 @@ export function Head({ params }: { params: DocPageParams }) {
       '@type': 'Offer',
       price: '19.95',
       priceCurrency: 'USD',
-      url: `https://{domain}/${params.locale}/docs/bill-of-sale-vehicle`,
+      url: `https://your-domain.com/${params.locale}/docs/${params.docId}`,
     },
     aggregateRating: {
       '@type': 'AggregateRating',
@@ -105,11 +113,15 @@ export function Head({ params }: { params: DocPageParams }) {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(productJsonLd),
+        }}
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(faqJsonLd),
+        }}
       />
     </>
   );

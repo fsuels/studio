@@ -1,9 +1,10 @@
 // src/app/[locale]/docs/[docId]/start/page.tsx
 
-// Force dynamic rendering to avoid static-generation errors
+// Force dynamic rendering—this page needs user-specific data
 export const dynamic = 'force-dynamic';
 
 import React from 'react';
+import { notFound } from 'next/navigation';
 import StartWizardPageClient from './StartWizardPageClient';
 import { documentLibrary } from '@/lib/document-library';
 import { localizations } from '@/lib/localizations';
@@ -18,41 +19,45 @@ export const revalidate = 3600;
 const isDev = process.env.NODE_ENV === 'development';
 
 /**
- * Generate all combinations of locale + document for static paths.
- * In development, logs detailed warnings for missing data.
+ * Statically pre-generate all locale+docId combos,
+ * but only log warnings in dev.
  */
-export async function generateStaticParams() {
-  if (isDev) {
-    console.log('[generateStaticParams] Starting generation…');
-  }
+export async function generateStaticParams(): Promise<
+  Array<{ locale: 'en' | 'es'; docId: string }>
+> {
+  if (isDev) console.log('[generateStaticParams] Starting generation…');
 
-  const locales =
+  // derive locales array
+  const locales: ('en' | 'es')[] =
     Array.isArray(localizations) && localizations.length > 0
-      ? localizations.map((l) => (typeof l === 'string' ? l : l.id))
-      : ['en', 'es'];
+      ? localizations.map((l) =>
+          typeof l === 'string' ? l : l.id
+        ) as ('en' | 'es')[]
+      : (['en', 'es'] as ('en' | 'es')[]);
 
-  const params: Array<{ locale: string; docId: string }> = [];
+  const params: Array<{ locale: 'en' | 'es'; docId: string }> = [];
 
   for (const locale of locales) {
     for (const doc of documentLibrary) {
       if (!doc.id) {
-        if (isDev) {
-          console.warn(`[generateStaticParams] Skipping doc with missing id for locale "${locale}".`);
-        }
+        if (isDev)
+          console.warn(
+            `[generateStaticParams] Skipping doc with missing id for locale "${locale}".`
+          );
         continue;
       }
       if (doc.id === 'general-inquiry') {
-        if (isDev) {
-          console.warn(`[generateStaticParams] Skipping "general-inquiry" doc for locale "${locale}".`);
-        }
+        if (isDev)
+          console.warn(
+            `[generateStaticParams] Skipping "general-inquiry" doc for locale "${locale}".`
+          );
         continue;
       }
       if (!doc.schema) {
-        if (isDev) {
+        if (isDev)
           console.warn(
-            `[generateStaticParams] Document "${doc.id}" missing schema in locale "${locale}". Skipping.`
+            `[generateStaticParams] Document "${doc.id}" missing schema for locale "${locale}". Skipping.`
           );
-        }
         continue;
       }
       params.push({ locale, docId: doc.id });
@@ -60,10 +65,12 @@ export async function generateStaticParams() {
   }
 
   if (isDev) {
-    console.log(`[generateStaticParams] Generated ${params.length} params.`);
+    console.log(
+      `[generateStaticParams] Generated ${params.length} params.`
+    );
     if (params.length === 0) {
       console.warn(
-        '[generateStaticParams] No params generated—please check documentLibrary and localizations.'
+        '[generateStaticParams] No params generated—check documentLibrary & localizations.'
       );
     }
   }
@@ -71,10 +78,23 @@ export async function generateStaticParams() {
   return params;
 }
 
-// Server Component that delegates to client for rendering & data-loading
-export default async function StartWizardPage({ params }: StartWizardPageProps) {
-  // Required to satisfy Next.js server component signature
-  await Promise.resolve();
+/**
+ * Server Component wrapper. Validates params,
+ * then hands off to the client component to do all the data-loading.
+ */
+export default async function StartWizardPage({
+  params,
+}: StartWizardPageProps) {
+  const { locale, docId } = params;
 
-  return <StartWizardPageClient locale={params.locale} docId={params.docId} />;
+  // Guard: if someone hits a /docs/…/start for an unknown docId, 404.
+  const docConfig = documentLibrary.find((d) => d.id === docId);
+  if (!docConfig) {
+    notFound();
+  }
+
+  // Delegate to the client for the form + preview + autosave logic
+  return (
+    <StartWizardPageClient locale={locale} docId={docId} />
+  );
 }
