@@ -1,7 +1,7 @@
 // src/app/[locale]/dashboard/dashboard-client-content.tsx
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   Card,
@@ -101,6 +101,42 @@ export default function DashboardClientContent({
   const queryClient = useQueryClient();
   const { toast } = useToast();
 
+  const sortedDocuments = useMemo(() => {
+    const dir = sortDir === 'asc' ? 1 : -1;
+    return [...documents].sort((a, b) => {
+      let valA: string | number = '';
+      let valB: string | number = '';
+      if (sortBy === 'name') {
+        valA = a.name.toLowerCase();
+        valB = b.name.toLowerCase();
+      } else if (sortBy === 'status') {
+        valA = a.status.toLowerCase();
+        valB = b.status.toLowerCase();
+      } else {
+        const dA = typeof a.date === 'object' && 'toDate' in a.date
+          ? a.date.toDate()
+          : new Date(a.date as any);
+        const dB = typeof b.date === 'object' && 'toDate' in b.date
+          ? b.date.toDate()
+          : new Date(b.date as any);
+        valA = dA.getTime();
+        valB = dB.getTime();
+      }
+      if (valA < valB) return -1 * dir;
+      if (valA > valB) return 1 * dir;
+      return 0;
+    });
+  }, [documents, sortBy, sortDir]);
+
+  const handleSort = useCallback((col: 'name' | 'date' | 'status') => {
+    if (sortBy === col) {
+      setSortDir(sortDir === 'asc' ? 'desc' : 'asc');
+    } else {
+      setSortBy(col);
+      setSortDir('asc');
+    }
+  }, [sortBy, sortDir]);
+
   const formatDate = (
     dateInput: FirestoreTimestamp | Date | string,
   ): string => {
@@ -156,39 +192,6 @@ export default function DashboardClientContent({
 
     switch (activeTab) {
       case 'documents':
-        const sorted = [...documents].sort((a, b) => {
-          const dir = sortDir === 'asc' ? 1 : -1;
-          let valA: string | number = '';
-          let valB: string | number = '';
-          if (sortBy === 'name') {
-            valA = a.name.toLowerCase();
-            valB = b.name.toLowerCase();
-          } else if (sortBy === 'status') {
-            valA = a.status.toLowerCase();
-            valB = b.status.toLowerCase();
-          } else {
-            const dA = (typeof a.date === 'object' && 'toDate' in a.date)
-              ? a.date.toDate()
-              : new Date(a.date as any);
-            const dB = (typeof b.date === 'object' && 'toDate' in b.date)
-              ? b.date.toDate()
-              : new Date(b.date as any);
-            valA = dA.getTime();
-            valB = dB.getTime();
-          }
-          if (valA < valB) return -1 * dir;
-          if (valA > valB) return 1 * dir;
-          return 0;
-        });
-
-        const handleSort = (col: 'name' | 'date' | 'status') => {
-          if (sortBy === col) {
-            setSortDir(sortDir === 'asc' ? 'desc' : 'asc');
-          } else {
-            setSortBy(col);
-            setSortDir('asc');
-          }
-        };
 
         return (
           <>
@@ -220,7 +223,7 @@ export default function DashboardClientContent({
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {sorted.map((doc) => (
+                {sortedDocuments.map((doc) => (
                   <TableRow key={doc.id} className="group">
                     <TableCell className="font-medium">
                       <Link
@@ -280,7 +283,7 @@ export default function DashboardClientContent({
                 ))}
               </TableBody>
             </Table>
-            {sorted.length === 0 && !isLoadingData && (
+            {sortedDocuments.length === 0 && !isLoadingData && (
               <p className="text-muted-foreground">
                 {t('No documents found.')}
               </p>
