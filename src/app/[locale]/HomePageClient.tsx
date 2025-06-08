@@ -181,7 +181,7 @@ export default function HomePageClient() {
               <p className="mt-2 text-sm text-gray-500">
                 {t('home.hero2.trustline', {
                   defaultValue:
-                    'Trusted by 4,200+ docs generated • SSL Secure Checkout • Attorney-Reviewed Templates • Trustpilot ★★★★★',
+                    'Trusted by 1,640,200+ docs generated • SSL Secure Checkout • Attorney-Reviewed Templates • Trustpilot ★★★★★',
                 })}
               </p>
             </div>

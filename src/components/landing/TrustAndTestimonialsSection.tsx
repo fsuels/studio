@@ -192,7 +192,7 @@ const TrustAndTestimonialsSection = React.memo(
           : (t(key, fallback as Record<string, unknown>) as string),
       [t],
     );
-    const [docCount, setDocCount] = useState(4200);
+    const [docCount, setDocCount] = useState(1640200);
     const [isHydrated, setIsHydrated] = useState(false);
     const [testimonialsData, setTestimonialsData] = useState<Testimonial[]>([]);
     const [showRefundModal, setShowRefundModal] = useState(false);
@@ -300,38 +300,6 @@ const TrustAndTestimonialsSection = React.memo(
                   <Star className="h-4 w-4 text-green-500 fill-green-500 star-gradient star-pulse" />
                 </div>
                 <span className="ml-1 font-semibold leading-5">4.9/5</span>
-              </div>
-              <div className="flex flex-nowrap items-center gap-2 overflow-x-auto opacity-50 py-4">
-                <span className="text-xs">
-                  {t('home.trustStrip.usedBy', 'Used by:')}
-                </span>
-                <AutoImage
-                  src="/images/logos/forbes-logo.svg"
-                  alt="Forbes logo"
-                  width={80}
-                  height={16}
-                  unoptimized={true}
-                  data-ai-hint="trust-logo"
-                  className="h-4 w-auto flex-shrink-0 object-contain"
-                />
-                <AutoImage
-                  src="/images/logos/bloomberg-logo.svg"
-                  alt="Bloomberg logo"
-                  width={80}
-                  height={16}
-                  unoptimized={true}
-                  data-ai-hint="trust-logo"
-                  className="h-4 w-auto flex-shrink-0 object-contain"
-                />
-                <AutoImage
-                  src="/images/logos/nyt-logo.svg"
-                  alt="New York Times logo"
-                  width={80}
-                  height={16}
-                  unoptimized={true}
-                  data-ai-hint="trust-logo"
-                  className="h-4 w-auto flex-shrink-0 object-contain"
-                />
               </div>
             </div>
           </div>
