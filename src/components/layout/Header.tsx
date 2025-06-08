@@ -181,11 +181,13 @@ const Header = React.memo(function Header() {
       >
         <div
           className={cn(
-            'container relative flex items-center justify-between px-4 md:px-6 transition-all duration-200 ease-in-out',
+            // switch to 3-column grid on md+ so logo stays left, nav/actions stay centered
+            'container relative flex items-center justify-between px-4 md:px-6 transition-all duration-200 ease-in-out md:grid md:grid-cols-3',
             scrolled ? 'h-12 py-3' : 'h-14 py-3',
           )}
         >
-        <div className="flex items-center flex-shrink-0">
+        {/* Logo in its own grid column */}
+        <div className="flex items-center flex-shrink-0 z-20 md:col-start-1">
           <Logo
             wrapperClassName={cn(
               'items-center self-center mr-2 md:mr-4 transition-all duration-200 ease-in-out',
@@ -223,11 +225,11 @@ const Header = React.memo(function Header() {
           </Button>
         </div>
 
-        {/* Centered Desktop Nav & Actions */}
+        {/* Nav + MegaMenu + Search + Lang + Auth all centered in grid column 2 */}
         <div
           className={cn(
-            'hidden md:flex items-center absolute inset-x-0 justify-center gap-3 md:gap-4 transition-opacity duration-200 ease-in-out',
-            scrolled && 'opacity-60',
+            'hidden md:flex items-center justify-center gap-3 md:gap-4 transition-opacity duration-200 ease-in-out md:col-start-2 md:justify-self-center',
+            scrolled && 'opacity-60'
           )}
         >
           <Nav />
