@@ -1,29 +1,13 @@
+// src/lib/firestore/saveFormProgress.ts
 // -----------------------------------------------------------------------------
-// Firestore helpers for “save & resume” + “recently used” logic.
-//
-// • Saves progress per-user in a sub-collection   users/{uid}/documents
-// • setDoc(..., { merge:true }) lets you call it repeatedly without clobbering
-// • loadFormProgress retrieves the latest draft (with state fallback)
-// • listRecentProgress lists the N most-recent documents for a home-page widget
+// Firestore helpers for “save & resume” + “recently used” logic with long-polling fix
 // -----------------------------------------------------------------------------
 
-import {
-  collection,
-  doc,
-  getDoc,
-  getDocs,
-  limit,
-  orderBy,
-  query,
-  serverTimestamp,
-  setDoc,
-  type Timestamp,
-  type Firestore,
-} from 'firebase/firestore';
+import type { Firestore } from 'firebase/firestore';
+import type { Timestamp } from 'firebase/firestore';
 import { getDb } from '@/lib/firebase';
 
 /* ---------- types ------------------------------------------------------- */
-
 export interface FormProgressDoc {
   /** e.g. “Residential Lease Agreement” */
   docType: string;
@@ -32,26 +16,38 @@ export interface FormProgressDoc {
   /** raw field values keyed by FormField.id */
   formData: Record<string, unknown>;
   /** Firestore server timestamp */
-  updatedAt: ReturnType<typeof serverTimestamp> | Timestamp;
+  updatedAt: ReturnType<() => Timestamp> | Timestamp;
 }
 
-/* ---------- collection helpers ----------------------------------------- */
+/* ---------- helpers ----------------------------------------------------- */
+const userProgressCollection = (db: Firestore, userId: string) =>
+  db.collection?.( 'users', userId, 'documents') ??
+  // fallback if using v9 modular API
+  (db as any).collection('users').doc(userId).collection('documents');
 
-const userProgressCollection = (db: Firestore, userId: string) => collection(db, 'users', userId, 'documents'); // <— match Dashboard
+const progressDocId = ({ docType, state }: { docType: string; state: string }) =>
+  `${encodeURIComponent(docType)}_${state}`;
 
-const progressDocId = ({
-  docType,
-  state,
-}: {
-  docType: string;
-  state: string;
-}) => `${encodeURIComponent(docType)}_${state}`;
+// Dynamically import Firestore functions after long-polling init
+async function getFirestoreFns() {
+  const mod = await import('firebase/firestore');
+  return {
+    collection: mod.collection,
+    doc: mod.doc,
+    setDoc: mod.setDoc,
+    getDoc: mod.getDoc,
+    getDocs: mod.getDocs,
+    query: mod.query,
+    orderBy: mod.orderBy,
+    limit: mod.limit,
+    serverTimestamp: mod.serverTimestamp,
+    // types for internal use
+    Timestamp: mod.Timestamp,
+    Firestore: mod.Firestore,
+  };
+}
 
 /* ---------- save -------------------------------------------------------- */
-
-/**
- * Save (or merge) form progress for a user.
- */
 export async function saveFormProgress({
   userId,
   docType,
@@ -63,37 +59,32 @@ export async function saveFormProgress({
   formData: Record<string, unknown>;
   state?: string | null;
 }): Promise<void> {
-  if (!userId || !docType) {
-    console.error(
-      '[saveFormProgress] Missing userId or docType. Aborting save.',
-    );
-    return;
-  }
+  if (!userId || !docType) return;
 
   const db = await getDb();
-  const ref = doc( // in saveFormProgress
-    userProgressCollection(db, userId), // was userDocumentsCollection, should be userProgressCollection
-    progressDocId({ docType, state }),
-  );
+  const {
+    collection,
+    doc,
+    setDoc,
+    serverTimestamp,
+  } = await getFirestoreFns();
+
+  const colRef = collection(db, 'users', userId, 'documents');
+  const docRef = doc(colRef, progressDocId({ docType, state }));
 
   await setDoc(
-    ref,
+    docRef,
     {
       docType,
       state,
       formData,
       updatedAt: serverTimestamp(),
     } satisfies Partial<FormProgressDoc>,
-    { merge: true },
+    { merge: true }
   );
 }
 
 /* ---------- load -------------------------------------------------------- */
-
-/**
- * Load the *latest* saved progress for a given docType (+optional state).
- * Returns an empty object if nothing exists so calling code can spread it.
- */
 export async function loadFormProgress({
   userId,
   docType,
@@ -103,22 +94,15 @@ export async function loadFormProgress({
   docType: string;
   state?: string | null;
 }): Promise<Record<string, unknown>> {
-  if (!userId || !docType) {
-    console.error(
-      '[loadFormProgress] Missing userId or docType. Cannot load draft.',
-    );
-    return {};
-  }
+  if (!userId || !docType) return {};
 
   const effectiveState = state || 'NA';
   const db = await getDb();
+  const { collection, doc, getDoc } = await getFirestoreFns();
 
-  // exact-match first
-  const ref = doc( // in loadFormProgress
-    userProgressCollection(db, userId), // was userDocumentsCollection, should be userProgressCollection
-    progressDocId({ docType, state: effectiveState }),
-  );
-  const snap = await getDoc(ref);
+  const colRef = collection(db, 'users', userId, 'documents');
+  const docRef = doc(colRef, progressDocId({ docType, state: effectiveState }));
+  const snap = await getDoc(docRef);
   if (snap.exists()) {
     const data = snap.data() as FormProgressDoc;
     return data.formData || {};
@@ -126,10 +110,7 @@ export async function loadFormProgress({
 
   // fallback to generic state 'NA'
   if (state && state !== 'NA') {
-    const fallbackRef = doc(
-      userProgressCollection(db, userId), // was userDocumentsCollection, should be userProgressCollection
-      progressDocId({ docType, state: 'NA' }),
-    );
+    const fallbackRef = doc(colRef, progressDocId({ docType, state: 'NA' }));
     const fallbackSnap = await getDoc(fallbackRef);
     if (fallbackSnap.exists()) {
       const data = fallbackSnap.data() as FormProgressDoc;
@@ -141,30 +122,17 @@ export async function loadFormProgress({
 }
 
 /* ---------- list-recent ------------------------------------------------- */
-
-/**
- * Returns the N most-recent documents a user has worked on.
- */
 export async function listRecentProgress(
   userId: string,
-  maxResults = 5,
+  maxResults = 5
 ): Promise<FormProgressDoc[]> {
-  if (!userId) {
-    console.warn(
-      '[listRecentProgress] No userId provided. Cannot list recent progress.',
-    );
-    return [];
-  }
+  if (!userId) return [];
 
   const db = await getDb();
-  const q = query(
-    userProgressCollection(db, userId), // was userDocumentsCollection, should be userProgressCollection
-    orderBy('updatedAt', 'desc'),
-    limit(maxResults),
-  );
+  const { collection, query, orderBy, limit, getDocs } = await getFirestoreFns();
+
+  const colRef = collection(db, 'users', userId, 'documents');
+  const q = query(colRef, orderBy('updatedAt', 'desc'), limit(maxResults));
   const snaps = await getDocs(q);
   return snaps.docs.map((d) => d.data() as FormProgressDoc);
 }
-
-/* ---------- module surface --------------------------------------------- */
-

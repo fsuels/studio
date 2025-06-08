@@ -1,0 +1,66 @@
+
+> nextn@0.1.0 dev
+> next dev --turbopack
+
+   ▲ Next.js 15.3.3 (Turbopack)
+   - Local:        http://localhost:3000
+   - Network:      http://10.88.0.3:3000
+   - Environments: .env
+
+ ✓ Starting...
+ ⚠ Invalid next.config.mjs options detected: 
+ ⚠     Unrecognized key(s) in object: 'swcMinify'
+ ⚠ See more info here: https://nextjs.org/docs/messages/invalid-next-config
+2025-06-08T08:44:53.137Z next:router-server:filesystem nextDataRoutes Set(0) {}
+2025-06-08T08:44:53.146Z next:router-server:filesystem dynamicRoutes []
+2025-06-08T08:44:53.146Z next:router-server:filesystem customRoutes {
+  headers: [],
+  rewrites: { beforeFiles: [], afterFiles: [], fallback: [] },
+  redirects: [
+    {
+      source: '/:path+/',
+      destination: '/:path+',
+      permanent: true,
+      locale: undefined,
+      internal: true
+    }
+  ]
+}
+2025-06-08T08:44:53.152Z next:router-server:filesystem publicFolderItems Set(0) {}
+2025-06-08T08:44:53.152Z next:router-server:filesystem nextStaticFolderItems Set(0) {}
+2025-06-08T08:44:53.152Z next:router-server:filesystem pageFiles Set(0) {}
+2025-06-08T08:44:53.152Z next:router-server:filesystem appFiles Set(0) {}
+Creating turbopack project { dir: '/home/user/studio', testMode: true }
+ ✓ Compiled instrumentation Node.js in 74ms
+ ✓ Compiled instrumentation Edge in 94ms
+ ✓ Ready in 2.6s
+ ⚠ Found a change in next.config.mjs. Restarting the server to apply the changes...
+   ▲ Next.js 15.3.3 (Turbopack)
+   - Local:        http://localhost:3000
+   - Network:      http://10.88.0.3:3000
+   - Environments: .env
+
+ ✓ Starting...
+2025-06-08T08:47:05.744Z next:router-server:filesystem nextDataRoutes Set(0) {}
+2025-06-08T08:47:05.747Z next:router-server:filesystem dynamicRoutes []
+2025-06-08T08:47:05.747Z next:router-server:filesystem customRoutes {
+  headers: [],
+  rewrites: { beforeFiles: [], afterFiles: [], fallback: [] },
+  redirects: [
+    {
+      source: '/:path+/',
+      destination: '/:path+',
+      permanent: true,
+      locale: undefined,
+      internal: true
+    }
+  ]
+}
+2025-06-08T08:47:05.756Z next:router-server:filesystem publicFolderItems Set(0) {}
+2025-06-08T08:47:05.756Z next:router-server:filesystem nextStaticFolderItems Set(0) {}
+2025-06-08T08:47:05.756Z next:router-server:filesystem pageFiles Set(0) {}
+2025-06-08T08:47:05.756Z next:router-server:filesystem appFiles Set(0) {}
+Creating turbopack project { dir: '/home/user/studio', testMode: true }
+ ✓ Compiled instrumentation Node.js in 176ms
+ ✓ Compiled instrumentation Edge in 309ms
+ ✓ Ready in 8.8s

@@ -8,8 +8,7 @@ import webpack from 'webpack';
 const nextConfig = {
   turbopack: {},
   typescript: { ignoreBuildErrors: true },
-  eslint: { ignoreDuringBuilds: true },
-  swcMinify: true,
+  eslint:       { ignoreDuringBuilds: true },
 
   /* —──────── Static-export image handling —──────── */
   images: {
@@ -18,9 +17,9 @@ const nextConfig = {
       { protocol: 'https', hostname: 'picsum.photos', pathname: '/**' },
     ],
   },
+
   /* Add allowedDevOrigins here as instructed */
   allowedDevOrigins: ['*'],
 };
 
-// Export the plain Next.js configuration (Sentry removed)
 export default nextConfig;
