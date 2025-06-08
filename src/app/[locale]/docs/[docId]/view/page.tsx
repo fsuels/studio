@@ -1,86 +1,96 @@
 // src/app/[locale]/docs/[docId]/view/page.tsx
-'use client';
-
-import React, { useEffect, useState } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import fs from 'fs/promises';
+import path from 'path';
 import Link from 'next/link';
-import { useTranslation } from 'react-i18next';
-import { Button } from '@/components/ui/button';
-import { X, Edit, FileSignature, Download } from 'lucide-react';
+import { notFound } from 'next/navigation';
 import DocumentDetail from '@/components/DocumentDetail';
+import { Locale } from '@/lib/localizations'; // adjust import if you have a type for your locales
 
-// TODO: implement these Firestore/Stripe helpers:
-async function checkPayment(docId: string): Promise<boolean> {
-  // return true if user has paid for docId
-  // e.g. await getUserPayments(...).then(...)
-  return false;
-}
-async function getPdfUrl(docId: string): Promise<string> {
-  // return a Storage download URL or generate-on-the-fly URL
-  return `/api/generate-pdf?docId=${encodeURIComponent(docId)}`;
+interface ViewPageProps {
+  params: { locale: Locale; docId: string };
 }
 
-export default function DocumentViewPage() {
-  const { locale, docId } = useParams() as { locale: string; docId: string };
-  const router = useRouter();
-  const { t } = useTranslation('common');
+export const revalidate = 3600;
 
-  const [isPaid, setIsPaid] = useState<boolean>(false);
+export default async function ViewPage({ params }: ViewPageProps) {
+  const { locale, docId } = params;
 
-  useEffect(() => {
-    checkPayment(docId).then(setIsPaid);
-  }, [docId]);
+  // 1) Verify this docId exists in your library
+  //    (optional, but helpful to 404 early)
+  const { documentLibrary } = await import('@/lib/document-library');
+  const docConfig = documentLibrary.find((d) => d.id === docId);
+  if (!docConfig) return notFound();
 
-  const handleDownload = async () => {
-    if (isPaid) {
-      const url = await getPdfUrl(docId);
-      window.location.href = url;
-    } else {
-      router.push(`/${locale}/checkout?docId=${encodeURIComponent(docId)}`);
-    }
-  };
+  // 2) Attempt to load the markdown source for this template
+  let markdownContent: string | null = null;
+  try {
+    const mdPath = path.join(
+      process.cwd(),
+      'templates',
+      locale,
+      `${docId}.md`
+    );
+    markdownContent = await fs.readFile(mdPath, 'utf8');
+  } catch {
+    // file not found: we'll fall back to your PNG preview
+    markdownContent = null;
+  }
 
   return (
-    <main className="container mx-auto px-4 py-8">
-      {/* Header */}
-      <div className="flex justify-between items-center mb-6">
+    <div className="min-h-screen bg-background">
+      {/* HEADER BAR */}
+      <header className="flex items-center justify-between p-6 bg-white shadow">
         <div className="flex items-center space-x-4">
-          <Link href={`/${locale}/dashboard`} className="text-muted-foreground hover:text-primary">
-            <X className="h-5 w-5" />
-          </Link>
-          <h1 className="text-2xl font-bold text-foreground">
-            {t('View Document')}
-          </h1>
-        </div>
-        <div className="flex space-x-2">
-          {/* Edit */}
-          <Link href={`/${locale}/docs/${docId}/start`} passHref>
-            <Button asChild size="sm">
-              <a>
-                <Edit className="mr-2 h-4 w-4" /> {t('Edit')}
-              </a>
-            </Button>
-          </Link>
-          {/* Sign */}
-          <Button
-            size="sm"
-            onClick={() =>
-              window.open(`/${locale}/signwell?docId=${encodeURIComponent(docId)}`, '_blank')
-            }
+          {/* Close button */}
+          <Link
+            href={`/${locale}/dashboard`}
+            className="text-2xl font-bold text-gray-700 hover:text-gray-900"
+            aria-label="Close viewer"
           >
-            <FileSignature className="mr-2 h-4 w-4" /> {t('Sign')}
-          </Button>
-          {/* Download */}
-          <Button size="sm" onClick={handleDownload}>
-            <Download className="mr-2 h-4 w-4" /> {t('Download')}
-          </Button>
+            ×
+          </Link>
+          <h1 className="text-xl font-semibold">View Document</h1>
         </div>
-      </div>
 
-      {/* Document preview area */}
-      <div className="bg-card p-4 rounded-xl shadow-lg border border-border">
-        <DocumentDetail docId={docId} locale={locale as 'en' | 'es'} />
-      </div>
-    </main>
+        <div className="flex items-center gap-3">
+          {/* Edit */}
+          <Link
+            href={`/${locale}/docs/${docId}/start`}
+            className="inline-flex items-center gap-1 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+          >
+            Edit
+          </Link>
+
+          {/* Sign */}
+          <button
+            onClick={() =>
+              window.open(`/${locale}/signwell?docId=${docId}`, '_blank')
+            }
+            className="inline-flex items-center gap-1 px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
+          >
+            Sign
+          </button>
+
+          {/* Download */}
+          <button
+            onClick={() =>
+              window.location.href = `/${locale}/checkout?docId=${docId}`
+            }
+            className="inline-flex items-center gap-1 px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700"
+          >
+            Download
+          </button>
+        </div>
+      </header>
+
+      {/* DOCUMENT PREVIEW */}
+      <main className="p-8">
+        <DocumentDetail
+          docId={docId}
+          locale={locale}
+          markdownContent={markdownContent}
+        />
+      </main>
+    </div>
   );
 }
