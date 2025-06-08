@@ -226,7 +226,7 @@ const Header = React.memo(function Header() {
         {/* Centered Desktop Nav & Actions */}
         <div
           className={cn(
-            'hidden md:flex items-center absolute inset-x-0 justify-center gap-3 md:gap-4 transition-opacity duration-200 ease-in-out',
+            'hidden md:flex items-center flex-1 justify-center gap-3 md:gap-4 transition-opacity duration-200 ease-in-out',
             scrolled && 'opacity-60',
           )}
         >
