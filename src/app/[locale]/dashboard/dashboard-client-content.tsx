@@ -130,7 +130,7 @@ export default function DashboardClientContent({
   };
 
   if (authLoading || !isHydrated) {
-    // Removed !isLoggedIn from here as redirect handles it
+    // Redirect handles not-logged-in, so simply show loading
     return (
       <div className="flex items-center justify-center min-h-screen bg-background">
         <Loader2 className="h-12 w-12 animate-spin text-primary" />
@@ -200,21 +200,27 @@ export default function DashboardClientContent({
                     className="cursor-pointer select-none"
                   >
                     {t('Name')}{' '}
-                    {sortBy === 'name' && (sortDir === 'asc' ? <ChevronUp className="inline h-3 w-3" /> : <ChevronDown className="inline h-3 w-3" />)}
+                    {sortBy === 'name' && (sortDir === 'asc'
+                      ? <ChevronUp className="inline h-3 w-3" />
+                      : <ChevronDown className="inline h-3 w-3" />)}
                   </TableHead>
                   <TableHead
                     onClick={() => handleSort('date')}
                     className="cursor-pointer select-none"
                   >
                     {t('LastModified', 'Last Modified')}{' '}
-                    {sortBy === 'date' && (sortDir === 'asc' ? <ChevronUp className="inline h-3 w-3" /> : <ChevronDown className="inline h-3 w-3" />)}
+                    {sortBy === 'date' && (sortDir === 'asc'
+                      ? <ChevronUp className="inline h-3 w-3" />
+                      : <ChevronDown className="inline h-3 w-3" />)}
                   </TableHead>
                   <TableHead
                     onClick={() => handleSort('status')}
                     className="cursor-pointer select-none"
                   >
                     {t('Status')}{' '}
-                    {sortBy === 'status' && (sortDir === 'asc' ? <ChevronUp className="inline h-3 w-3" /> : <ChevronDown className="inline h-3 w-3" />)}
+                    {sortBy === 'status' && (sortDir === 'asc'
+                      ? <ChevronUp className="inline h-3 w-3" />
+                      : <ChevronDown className="inline h-3 w-3" />)}
                   </TableHead>
                   <TableHead className="w-8"></TableHead>
                 </TableRow>
@@ -238,7 +244,6 @@ export default function DashboardClientContent({
                           <Button
                             variant="ghost"
                             size="icon"
-                            className="opacity-0 group-hover:opacity-100"
                           >
                             <MoreVertical className="h-4 w-4" />
                           </Button>
