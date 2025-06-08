@@ -1,96 +1,98 @@
 // src/app/[locale]/docs/[docId]/view/page.tsx
-import fs from 'fs/promises';
-import path from 'path';
-import Link from 'next/link';
-import { notFound } from 'next/navigation';
-import DocumentDetail from '@/components/DocumentDetail';
-import { Locale } from '@/lib/localizations'; // adjust import if you have a type for your locales
+'use client';
 
-interface ViewPageProps {
-  params: { locale: Locale; docId: string };
+import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import DocumentDetail from '@/components/DocumentDetail';
+import { useAuth } from '@/hooks/useAuth';
+import { getSignWellUrl } from '@/services/signwell';
+import { Button } from '@/components/ui/button';
+import { Loader2 } from 'lucide-react';
+
+interface ViewDocumentPageProps {
+  params: { locale: 'en' | 'es'; docId: string };
 }
 
-export const revalidate = 3600;
-
-export default async function ViewPage({ params }: ViewPageProps) {
+export default function ViewDocumentPage({ params }: ViewDocumentPageProps) {
   const { locale, docId } = params;
+  const { isLoggedIn, isLoading: authLoading } = useAuth();
+  const router = useRouter();
 
-  // 1) Verify this docId exists in your library
-  //    (optional, but helpful to 404 early)
-  const { documentLibrary } = await import('@/lib/document-library');
-  const docConfig = documentLibrary.find((d) => d.id === docId);
-  if (!docConfig) return notFound();
+  const [isSigning, setIsSigning] = useState(false);
 
-  // 2) Attempt to load the markdown source for this template
-  let markdownContent: string | null = null;
-  try {
-    const mdPath = path.join(
-      process.cwd(),
-      'templates',
-      locale,
-      `${docId}.md`
+  // Navigate back to the start‐wizard, preserving any saved data
+  const handleEdit = () => {
+    router.push(`/${locale}/docs/${docId}/start`);
+  };
+
+  // Opens SignWell flow in a new tab
+  const handleSign = async () => {
+    setIsSigning(true);
+    try {
+      const url = await getSignWellUrl(docId);
+      window.open(url, '_blank');
+    } catch (err) {
+      console.error('Error fetching SignWell URL', err);
+    } finally {
+      setIsSigning(false);
+    }
+  };
+
+  // Simple guard: only logged in users can download (you'd replace with real payment check)
+  const handleDownload = () => {
+    if (!isLoggedIn) {
+      router.push(`/${locale}/signin`);
+    } else {
+      router.push(`/${locale}/checkout?docId=${docId}`);
+    }
+  };
+
+  if (authLoading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
     );
-    markdownContent = await fs.readFile(mdPath, 'utf8');
-  } catch {
-    // file not found: we'll fall back to your PNG preview
-    markdownContent = null;
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* HEADER BAR */}
-      <header className="flex items-center justify-between p-6 bg-white shadow">
-        <div className="flex items-center space-x-4">
-          {/* Close button */}
-          <Link
-            href={`/${locale}/dashboard`}
-            className="text-2xl font-bold text-gray-700 hover:text-gray-900"
-            aria-label="Close viewer"
+    <div className="container mx-auto p-6">
+      {/* Header */}
+      <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center space-x-3">
+          <button
+            onClick={() => router.back()}
+            className="text-2xl leading-none"
+            aria-label="Close"
           >
             ×
-          </Link>
-          <h1 className="text-xl font-semibold">View Document</h1>
+          </button>
+          <h1 className="text-2xl font-bold">
+            {/* Ideally replace docId with a friendly title lookup */}
+            {docId.replace(/-/g, ' ')}
+          </h1>
         </div>
 
-        <div className="flex items-center gap-3">
-          {/* Edit */}
-          <Link
-            href={`/${locale}/docs/${docId}/start`}
-            className="inline-flex items-center gap-1 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-          >
-            Edit
-          </Link>
+        <div className="flex space-x-2">
+          <Button onClick={handleEdit}>Edit</Button>
 
-          {/* Sign */}
-          <button
-            onClick={() =>
-              window.open(`/${locale}/signwell?docId=${docId}`, '_blank')
-            }
-            className="inline-flex items-center gap-1 px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
-          >
+          <Button onClick={handleSign} disabled={isSigning}>
+            {isSigning ? (
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            ) : null}
             Sign
-          </button>
+          </Button>
 
-          {/* Download */}
-          <button
-            onClick={() =>
-              window.location.href = `/${locale}/checkout?docId=${docId}`
-            }
-            className="inline-flex items-center gap-1 px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700"
-          >
+          <Button variant="secondary" onClick={handleDownload}>
             Download
-          </button>
+          </Button>
         </div>
-      </header>
+      </div>
 
-      {/* DOCUMENT PREVIEW */}
-      <main className="p-8">
-        <DocumentDetail
-          docId={docId}
-          locale={locale}
-          markdownContent={markdownContent}
-        />
-      </main>
+      {/* Document preview */}
+      <div className="border rounded-lg overflow-hidden">
+        <DocumentDetail docId={docId} locale={locale} />
+      </div>
     </div>
   );
 }

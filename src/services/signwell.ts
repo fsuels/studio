@@ -1,17 +1,20 @@
+// src/services/signwell.ts
+
 export interface SignWellDocumentResponse {
-  documentId: string;
-  signingUrl?: string;
-  raw?: unknown;
+  documentId: string
+  signingUrl?: string
+  raw?: unknown
 }
 
 export interface SignWellStatusResponse {
-  status: string;
-  raw?: unknown;
+  status: string
+  signingUrl?: string
+  raw?: unknown
 }
 
 /**
- * Calls our Next.js API route to create a SignWell document for signing.
- * Expects pdfData as base64 string and optional filename.
+ * Create a new SignWell document for signing.
+ * POSTs to your Next.js API route at /api/signwell.
  */
 export async function createSignWellDocument(
   pdfBase64: string,
@@ -21,24 +24,41 @@ export async function createSignWellDocument(
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ pdfBase64, fileName }),
-  });
+  })
   if (!res.ok) {
-    throw new Error(`SignWell API error: ${res.status}`);
+    throw new Error(`SignWell API error: ${res.status} ${res.statusText}`)
   }
-  const data = await res.json();
-  return data as SignWellDocumentResponse;
+  return (await res.json()) as SignWellDocumentResponse
 }
 
 /**
- * Checks the status of a SignWell document.
+ * Fetches the current status *and* signingUrl of an existing SignWell doc.
+ * GETs from /api/signwell/[documentId].
+ * Your API route should return JSON: { status, signingUrl, … }.
  */
 export async function fetchSignWellStatus(
   documentId: string,
 ): Promise<SignWellStatusResponse> {
-  const res = await fetch(`/api/signwell/${documentId}`);
+  const res = await fetch(`/api/signwell/${encodeURIComponent(documentId)}`)
   if (!res.ok) {
-    throw new Error(`Status check failed: ${res.status}`);
+    throw new Error(`SignWell status check failed: ${res.status} ${res.statusText}`)
   }
-  const data = await res.json();
-  return data as SignWellStatusResponse;
+  const data = await res.json()
+  return {
+    status: data.status as string,
+    signingUrl: data.signingUrl as string | undefined,
+    raw: data,
+  }
+}
+
+/**
+ * Convenience alias for retrieving just the signingUrl.
+ * View pages can `import { getSignWellUrl }` directly.
+ */
+export async function getSignWellUrl(documentId: string): Promise<string> {
+  const { signingUrl } = await fetchSignWellStatus(documentId)
+  if (!signingUrl) {
+    throw new Error(`No signingUrl returned for document ${documentId}`)
+  }
+  return signingUrl
 }
