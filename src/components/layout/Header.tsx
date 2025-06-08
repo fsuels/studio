@@ -223,17 +223,14 @@ const Header = React.memo(function Header() {
           </Button>
         </div>
 
-        {/* Desktop Nav */}
+        {/* Centered Desktop Nav & Actions */}
         <div
           className={cn(
-            'hidden md:flex flex-1 justify-center items-center transition-opacity duration-200 ease-in-out',
+            'hidden md:flex items-center absolute inset-x-0 justify-center gap-3 md:gap-4 transition-opacity duration-200 ease-in-out',
             scrolled && 'opacity-60',
           )}
         >
           <Nav />
-        </div>
-
-        <nav className="hidden md:flex items-center justify-end gap-3 md:gap-4 flex-shrink-0">
           {/* Mega-menu */}
           <Popover open={isMegaMenuOpen} onOpenChange={setIsMegaMenuOpen}>
             <PopoverTrigger asChild>
@@ -389,7 +386,7 @@ const Header = React.memo(function Header() {
                 </Button>
               </>
             ))}
-        </nav>
+        </div>
       </div>
 
       {/* Mobile menu content */}
