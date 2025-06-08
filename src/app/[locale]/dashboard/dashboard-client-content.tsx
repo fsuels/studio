@@ -1,7 +1,6 @@
-// src/app/[locale]/dashboard/dashboard-client-content.tsx
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   Card,
@@ -37,6 +36,8 @@ import {
   ChevronDown,
 } from 'lucide-react';
 import Link from 'next/link';
+import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { getFirestore, doc as firestoreDoc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { useAuth } from '@/hooks/useAuth';
 import { useRouter } from 'next/navigation';
 import { useDashboardData } from '@/hooks/useDashboardData';
@@ -64,9 +65,7 @@ export default function DashboardClientContent({
   locale,
 }: DashboardClientContentProps) {
   const { t, i18n } = useTranslation('common');
-  const [activeTab, setActiveTab] = useState<
-    'documents' | 'payments' | 'profile'
-  >('documents');
+  const [activeTab, setActiveTab] = useState<'documents' | 'payments' | 'profile'>('documents');
   const { user, isLoggedIn, isLoading: authLoading, logout } = useAuth();
   const router = useRouter();
 
@@ -101,6 +100,43 @@ export default function DashboardClientContent({
   const queryClient = useQueryClient();
   const { toast } = useToast();
 
+  // --- Upload File logic ---
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [showFolderModal, setShowFolderModal] = useState(false);
+
+  const handleUploadClick = () => {
+    if (!user?.uid) {
+      router.push(`/${locale}/signin`);
+      return;
+    }
+    fileInputRef.current?.click();
+  };
+
+  const handleFileSelected = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !user) return;
+    const storage = getStorage();
+    const db = getFirestore();
+    const newId = `uploaded-${Date.now()}`;
+    const path = `users/${user.uid}/documents/${newId}-${file.name}`;
+    const fileRef = storageRef(storage, path);
+    await uploadBytes(fileRef, file);
+    const url = await getDownloadURL(fileRef);
+    await setDoc(
+      firestoreDoc(db, 'users', user.uid, 'documents', newId),
+      {
+        name: file.name,
+        date: serverTimestamp(),
+        status: 'Uploaded',
+        docType: 'uploaded',
+        storagePath: path,
+        url,
+      }
+    );
+    queryClient.invalidateQueries({ queryKey: ['dashboardDocuments', user.uid] });
+    toast({ title: t('Document uploaded') });
+  };
+
   const formatDate = (
     dateInput: FirestoreTimestamp | Date | string,
   ): string => {
@@ -130,7 +166,6 @@ export default function DashboardClientContent({
   };
 
   if (authLoading || !isHydrated) {
-    // Redirect handles not-logged-in, so simply show loading
     return (
       <div className="flex items-center justify-center min-h-screen bg-background">
         <Loader2 className="h-12 w-12 animate-spin text-primary" />
@@ -155,7 +190,7 @@ export default function DashboardClientContent({
     }
 
     switch (activeTab) {
-      case 'documents':
+      case 'documents': {
         const sorted = [...documents].sort((a, b) => {
           const dir = sortDir === 'asc' ? 1 : -1;
           let valA: string | number = '';
@@ -192,6 +227,40 @@ export default function DashboardClientContent({
 
         return (
           <>
+            {/* Upload & New controls */}
+            <input
+              type="file"
+              accept=".pdf"
+              className="hidden"
+              ref={fileInputRef}
+              onChange={handleFileSelected}
+            />
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex space-x-2">
+                <Button onClick={handleUploadClick}>{t('Upload File')}</Button>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="outline">{t('New')} ▼</Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="start">
+                    <DropdownMenuItem onClick={() => setShowFolderModal(true)}>
+                      {t('Folder')}
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link href={`/${locale}/templates`}>{t('Document')}</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => router.push(`/${locale}/online-notary`)}>
+                      {t('Notarization')}
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => router.push(`/${locale}/signwell`)}>
+                      {t('eSign')}
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+            {/* TODO: Folder modal implementation */}
+            </div>
+
             <Table>
               <TableHeader>
                 <TableRow>
@@ -249,18 +318,15 @@ export default function DashboardClientContent({
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
++                         <DropdownMenuItem onClick={() => router.push(`/${locale}/docs/${doc.docType}/view?docId=${doc.id}`)}>{t('View')}</DropdownMenuItem>
                           <DropdownMenuItem onClick={() => setRenameDoc(doc)}>
                             {t('Rename')}
                           </DropdownMenuItem>
                           <DropdownMenuItem
                             onClick={async () => {
                               await duplicateDocument(user!.uid, doc.id);
-                              toast({
-                                title: t('Document duplicated'),
-                              });
-                              queryClient.invalidateQueries({
-                                queryKey: ['dashboardDocuments', user?.uid],
-                              });
+                              toast({ title: t('Document duplicated') });
+                              queryClient.invalidateQueries({ queryKey: ['dashboardDocuments', user!.uid] });
                             }}
                           >
                             {t('Duplicate')}
@@ -268,12 +334,8 @@ export default function DashboardClientContent({
                           <DropdownMenuItem
                             onClick={async () => {
                               await softDeleteDocument(user!.uid, doc.id);
-                              toast({
-                                title: t('Document deleted'),
-                              });
-                              queryClient.invalidateQueries({
-                                queryKey: ['dashboardDocuments', user?.uid],
-                              });
+                              toast({ title: t('Document deleted') });
+                              queryClient.invalidateQueries({ queryKey: ['dashboardDocuments', user!.uid] });
                             }}
                           >
                             {t('Delete')}
@@ -298,13 +360,12 @@ export default function DashboardClientContent({
                 if (!renameDoc) return;
                 await renameDocument(user!.uid, renameDoc.id, name);
                 toast({ title: t('Document renamed') });
-                queryClient.invalidateQueries({
-                  queryKey: ['dashboardDocuments', user?.uid],
-                });
+                queryClient.invalidateQueries({ queryKey: ['dashboardDocuments', user!.uid] });
               }}
             />
           </>
         );
+      }
       case 'payments':
         return (
           <div className="space-y-4">
@@ -320,8 +381,7 @@ export default function DashboardClientContent({
                 </CardHeader>
                 <CardContent>
                   <p className="text-xs text-muted-foreground">
-                    {t('Date')}: {formatDate(payment.date)} | {t('Amount')}:{' '}
-                    {payment.amount}
+                    {t('Date')}: {formatDate(payment.date)} | {t('Amount')}: {payment.amount}
                   </p>
                 </CardContent>
               </Card>
