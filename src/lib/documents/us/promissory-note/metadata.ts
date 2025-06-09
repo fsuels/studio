@@ -1,4 +1,5 @@
 // src/lib/documents/us/promissory-note/metadata.ts
+
 import type { LegalDocument } from '@/types/documents';
 import { PromissoryNoteSchema } from './schema';
 import { promissoryNoteQuestions } from './questions';
@@ -34,8 +35,3 @@ export const promissoryNoteMeta: LegalDocument = {
     },
   },
 };
-
-console.log(
-  '[promissory-note metadata] questions loaded:',
-  promissoryNoteMeta.questions?.length,
-);
