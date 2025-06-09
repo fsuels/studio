@@ -9,9 +9,9 @@
    - Environments: .env
 
  ✓ Starting...
-2025-06-08T08:52:31.854Z next:router-server:filesystem nextDataRoutes Set(0) {}
-2025-06-08T08:52:31.857Z next:router-server:filesystem dynamicRoutes []
-2025-06-08T08:52:31.857Z next:router-server:filesystem customRoutes {
+2025-06-09T00:38:48.181Z next:router-server:filesystem nextDataRoutes Set(0) {}
+2025-06-09T00:38:48.188Z next:router-server:filesystem dynamicRoutes []
+2025-06-09T00:38:48.195Z next:router-server:filesystem customRoutes {
   headers: [],
   rewrites: { beforeFiles: [], afterFiles: [], fallback: [] },
   redirects: [
@@ -24,15 +24,15 @@
     }
   ]
 }
-2025-06-08T08:52:31.859Z next:router-server:filesystem publicFolderItems Set(0) {}
-2025-06-08T08:52:31.859Z next:router-server:filesystem nextStaticFolderItems Set(0) {}
-2025-06-08T08:52:31.859Z next:router-server:filesystem pageFiles Set(0) {}
-2025-06-08T08:52:31.860Z next:router-server:filesystem appFiles Set(0) {}
+2025-06-09T00:38:48.204Z next:router-server:filesystem publicFolderItems Set(0) {}
+2025-06-09T00:38:48.204Z next:router-server:filesystem nextStaticFolderItems Set(0) {}
+2025-06-09T00:38:48.204Z next:router-server:filesystem pageFiles Set(0) {}
+2025-06-09T00:38:48.205Z next:router-server:filesystem appFiles Set(0) {}
 Creating turbopack project { dir: '/home/user/studio', testMode: true }
- ✓ Compiled instrumentation Node.js in 54ms
- ✓ Compiled instrumentation Edge in 104ms
- ✓ Ready in 2.3s
-2025-06-08T08:52:33.856Z next:router-server:main requestHandler! / {
+ ✓ Compiled instrumentation Node.js in 163ms
+ ✓ Compiled instrumentation Edge in 183ms
+ ✓ Ready in 7.3s
+2025-06-09T00:38:54.503Z next:router-server:main requestHandler! / {
   matchedOutput: {
     type: 'appFile',
     fsPath: undefined,
@@ -46,7 +46,7 @@ Creating turbopack project { dir: '/home/user/studio', testMode: true }
   parsedUrl: { pathname: '/', query: [Object: null prototype] {} },
   finished: true
 }
-2025-06-08T08:52:33.860Z next:router-server:main invokeRender / {
+2025-06-09T00:38:54.504Z next:router-server:main invokeRender / {
   host: '127.0.0.1:3001',
   'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36',
   accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
@@ -70,16 +70,15 @@ Creating turbopack project { dir: '/home/user/studio', testMode: true }
   'sec-fetch-mode': 'navigate',
   'sec-fetch-site': 'cross-site',
   'sec-fetch-storage-access': 'active',
-  'sec-fetch-user': '?1',
-  'sec-user-ip': '10.20.20.195',
+  'sec-user-ip': '10.20.20.194',
   'upgrade-insecure-requests': '1',
   'x-forwarded-host': '3001-idx-studio-1746374904264.cluster-ux5mmlia3zhhask7riihruxydo.cloudworkstations.dev',
-  'x-goog-workstations-endpoint': 'workstations-662d52fb-ee93-455d-8b52-09b22baec5ed.us-east4-b.c.monospace-1.internal.:980'
+  'x-goog-workstations-endpoint': 'workstations-b19796e6-21e8-4472-8fa2-55af2351925d.us-east4-a.c.monospace-1.internal.:980'
 }
  ○ Compiling / ...
- ✓ Compiled / in 24.1s
- GET / 307 in 25587ms
-2025-06-08T08:52:59.567Z next:router-server:main requestHandler! /en {
+ ✓ Compiled / in 45.3s
+ GET / 307 in 46756ms
+2025-06-09T00:39:41.376Z next:router-server:main requestHandler! /en {
   matchedOutput: {
     type: 'appFile',
     fsPath: undefined,
@@ -93,7 +92,7 @@ Creating turbopack project { dir: '/home/user/studio', testMode: true }
   parsedUrl: { pathname: '/en', query: [Object: null prototype] {} },
   finished: true
 }
-2025-06-08T08:52:59.568Z next:router-server:main invokeRender /en {
+2025-06-09T00:39:41.379Z next:router-server:main invokeRender /en {
   host: '127.0.0.1:3001',
   'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36',
   accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
@@ -117,112 +116,24 @@ Creating turbopack project { dir: '/home/user/studio', testMode: true }
   'sec-fetch-mode': 'navigate',
   'sec-fetch-site': 'cross-site',
   'sec-fetch-storage-access': 'active',
-  'sec-fetch-user': '?1',
-  'sec-user-ip': '10.20.20.195',
+  'sec-user-ip': '10.20.20.194',
   'upgrade-insecure-requests': '1',
   'x-forwarded-host': '3001-idx-studio-1746374904264.cluster-ux5mmlia3zhhask7riihruxydo.cloudworkstations.dev',
-  'x-goog-workstations-endpoint': 'workstations-662d52fb-ee93-455d-8b52-09b22baec5ed.us-east4-b.c.monospace-1.internal.:980'
+  'x-goog-workstations-endpoint': 'workstations-b19796e6-21e8-4472-8fa2-55af2351925d.us-east4-a.c.monospace-1.internal.:980'
 }
  ○ Compiling /[locale] ...
- ✓ Compiled /[locale] in 40.9s
+ ✓ Compiled /[locale] in 31s
 Error: Route "/[locale]" used `params.locale`. `params` should be awaited before using its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
-    at LocaleLayout (src/app/[locale]/layout.tsx:12:28)
-  10 |
-  11 | export default function LocaleLayout({ children, params }: LocaleLayoutProps) {
-> 12 |   const pathLocale = params.locale;
+    at LocaleLayout (src/app/[locale]/layout.tsx:16:28)
+  14 |   params,
+  15 | }: LocaleLayoutProps) {
+> 16 |   const pathLocale = params.locale
      |                            ^
-  13 |   const detectedLocale =
-  14 |     pathLocale === 'es' || pathLocale === 'en' ? (pathLocale as 'en' | 'es') : 'en';
-  15 |
-[promissory-note metadata] questions loaded: 12
-[document-library] processing: promissory-note Promissory Note
- GET /en 200 in 44163ms
-2025-06-08T08:53:43.863Z next:router-server:main requestHandler! /_next/static/media/Inter_Variable-s.p.4f851744.woff2 {
-  matchedOutput: {
-    type: 'nextStaticFolder',
-    fsPath: '/home/user/studio/.next/static/media/Inter_Variable-s.p.4f851744.woff2',
-    locale: undefined,
-    itemsRoot: '/home/user/studio/.next/static',
-    itemPath: '/media/Inter_Variable-s.p.4f851744.woff2'
-  },
-  statusCode: undefined,
-  resHeaders: {},
-  bodyStream: false,
-  parsedUrl: {
-    pathname: '/_next/static/media/Inter_Variable-s.p.4f851744.woff2',
-    query: [Object: null prototype] {}
-  },
-  finished: true
-}
-2025-06-08T08:53:43.876Z next:router-server:main requestHandler! /_next/static/media/Merriweather_Variable-s.p.24463397.woff2 {
-  matchedOutput: {
-    type: 'nextStaticFolder',
-    fsPath: '/home/user/studio/.next/static/media/Merriweather_Variable-s.p.24463397.woff2',
-    locale: undefined,
-    itemsRoot: '/home/user/studio/.next/static',
-    itemPath: '/media/Merriweather_Variable-s.p.24463397.woff2'
-  },
-  statusCode: undefined,
-  resHeaders: {},
-  bodyStream: false,
-  parsedUrl: {
-    pathname: '/_next/static/media/Merriweather_Variable-s.p.24463397.woff2',
-    query: [Object: null prototype] {}
-  },
-  finished: true
-}
-2025-06-08T08:53:43.916Z next:router-server:main requestHandler! /_next/static/chunks/node_modules_next_dist_client_8f19e6fb._.js {
-  matchedOutput: {
-    type: 'nextStaticFolder',
-    fsPath: '/home/user/studio/.next/static/chunks/node_modules_next_dist_client_8f19e6fb._.js',
-    locale: undefined,
-    itemsRoot: '/home/user/studio/.next/static',
-    itemPath: '/chunks/node_modules_next_dist_client_8f19e6fb._.js'
-  },
-  statusCode: undefined,
-  resHeaders: {},
-  bodyStream: false,
-  parsedUrl: {
-    pathname: '/_next/static/chunks/node_modules_next_dist_client_8f19e6fb._.js',
-    query: [Object: null prototype] {}
-  },
-  finished: true
-}
-2025-06-08T08:53:43.935Z next:router-server:main requestHandler! /_next/static/chunks/src_app_52e5b652._.css {
-  matchedOutput: {
-    type: 'nextStaticFolder',
-    fsPath: '/home/user/studio/.next/static/chunks/src_app_52e5b652._.css',
-    locale: undefined,
-    itemsRoot: '/home/user/studio/.next/static',
-    itemPath: '/chunks/src_app_52e5b652._.css'
-  },
-  statusCode: undefined,
-  resHeaders: {},
-  bodyStream: false,
-  parsedUrl: {
-    pathname: '/_next/static/chunks/src_app_52e5b652._.css',
-    query: [Object: null prototype] {}
-  },
-  finished: true
-}
-2025-06-08T08:53:43.960Z next:router-server:main requestHandler! /_next/static/chunks/node_modules_next_dist_compiled_2ce9398a._.js {
-  matchedOutput: {
-    type: 'nextStaticFolder',
-    fsPath: '/home/user/studio/.next/static/chunks/node_modules_next_dist_compiled_2ce9398a._.js',
-    locale: undefined,
-    itemsRoot: '/home/user/studio/.next/static',
-    itemPath: '/chunks/node_modules_next_dist_compiled_2ce9398a._.js'
-  },
-  statusCode: undefined,
-  resHeaders: {},
-  bodyStream: false,
-  parsedUrl: {
-    pathname: '/_next/static/chunks/node_modules_next_dist_compiled_2ce9398a._.js',
-    query: [Object: null prototype] {}
-  },
-  finished: true
-}
-2025-06-08T08:53:43.999Z next:router-server:main requestHandler! /_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_3863bb79._.js {
+  17 |   const detectedLocale =
+  18 |     pathLocale === 'es' || pathLocale === 'en'
+  19 |       ? (pathLocale as 'en' | 'es')
+ GET /en 200 in 33366ms
+2025-06-09T00:40:14.816Z next:router-server:main requestHandler! /_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_3863bb79._.js {
   matchedOutput: {
     type: 'nextStaticFolder',
     fsPath: '/home/user/studio/.next/static/chunks/[turbopack]_browser_dev_hmr-client_hmr-client_ts_3863bb79._.js',
@@ -239,7 +150,58 @@ Error: Route "/[locale]" used `params.locale`. `params` should be awaited before
   },
   finished: true
 }
-2025-06-08T08:53:44.060Z next:router-server:main requestHandler! /_next/static/chunks/node_modules_next_dist_2ecbf5fa._.js {
+2025-06-09T00:40:14.836Z next:router-server:main requestHandler! /_next/static/chunks/src_app_52e5b652._.css {
+  matchedOutput: {
+    type: 'nextStaticFolder',
+    fsPath: '/home/user/studio/.next/static/chunks/src_app_52e5b652._.css',
+    locale: undefined,
+    itemsRoot: '/home/user/studio/.next/static',
+    itemPath: '/chunks/src_app_52e5b652._.css'
+  },
+  statusCode: undefined,
+  resHeaders: {},
+  bodyStream: false,
+  parsedUrl: {
+    pathname: '/_next/static/chunks/src_app_52e5b652._.css',
+    query: [Object: null prototype] {}
+  },
+  finished: true
+}
+2025-06-09T00:40:14.899Z next:router-server:main requestHandler! /_next/static/chunks/node_modules_next_dist_compiled_2ce9398a._.js {
+  matchedOutput: {
+    type: 'nextStaticFolder',
+    fsPath: '/home/user/studio/.next/static/chunks/node_modules_next_dist_compiled_2ce9398a._.js',
+    locale: undefined,
+    itemsRoot: '/home/user/studio/.next/static',
+    itemPath: '/chunks/node_modules_next_dist_compiled_2ce9398a._.js'
+  },
+  statusCode: undefined,
+  resHeaders: {},
+  bodyStream: false,
+  parsedUrl: {
+    pathname: '/_next/static/chunks/node_modules_next_dist_compiled_2ce9398a._.js',
+    query: [Object: null prototype] {}
+  },
+  finished: true
+}
+2025-06-09T00:40:14.945Z next:router-server:main requestHandler! /_next/static/chunks/node_modules_next_dist_client_8f19e6fb._.js {
+  matchedOutput: {
+    type: 'nextStaticFolder',
+    fsPath: '/home/user/studio/.next/static/chunks/node_modules_next_dist_client_8f19e6fb._.js',
+    locale: undefined,
+    itemsRoot: '/home/user/studio/.next/static',
+    itemPath: '/chunks/node_modules_next_dist_client_8f19e6fb._.js'
+  },
+  statusCode: undefined,
+  resHeaders: {},
+  bodyStream: false,
+  parsedUrl: {
+    pathname: '/_next/static/chunks/node_modules_next_dist_client_8f19e6fb._.js',
+    query: [Object: null prototype] {}
+  },
+  finished: true
+}
+2025-06-09T00:40:15.180Z next:router-server:main requestHandler! /_next/static/chunks/node_modules_next_dist_2ecbf5fa._.js {
   matchedOutput: {
     type: 'nextStaticFolder',
     fsPath: '/home/user/studio/.next/static/chunks/node_modules_next_dist_2ecbf5fa._.js',
@@ -256,7 +218,7 @@ Error: Route "/[locale]" used `params.locale`. `params` should be awaited before
   },
   finished: true
 }
-2025-06-08T08:53:44.113Z next:router-server:main requestHandler! /_next/static/chunks/node_modules_%40swc_helpers_cjs_00636ac3._.js {
+2025-06-09T00:40:15.220Z next:router-server:main requestHandler! /_next/static/chunks/node_modules_%40swc_helpers_cjs_00636ac3._.js {
   matchedOutput: {
     type: 'nextStaticFolder',
     fsPath: '/home/user/studio/.next/static/chunks/node_modules_@swc_helpers_cjs_00636ac3._.js',
@@ -273,7 +235,7 @@ Error: Route "/[locale]" used `params.locale`. `params` should be awaited before
   },
   finished: true
 }
-2025-06-08T08:53:44.156Z next:router-server:main requestHandler! /_next/static/chunks/src_instrumentation-client_ts_4aba9a11._.js {
+2025-06-09T00:40:15.263Z next:router-server:main requestHandler! /_next/static/chunks/src_instrumentation-client_ts_4aba9a11._.js {
   matchedOutput: {
     type: 'nextStaticFolder',
     fsPath: '/home/user/studio/.next/static/chunks/src_instrumentation-client_ts_4aba9a11._.js',
@@ -290,7 +252,7 @@ Error: Route "/[locale]" used `params.locale`. `params` should be awaited before
   },
   finished: true
 }
-2025-06-08T08:53:44.200Z next:router-server:main requestHandler! /_next/static/chunks/_e69f0d32._.js {
+2025-06-09T00:40:15.294Z next:router-server:main requestHandler! /_next/static/chunks/_e69f0d32._.js {
   matchedOutput: {
     type: 'nextStaticFolder',
     fsPath: '/home/user/studio/.next/static/chunks/_e69f0d32._.js',
@@ -307,7 +269,7 @@ Error: Route "/[locale]" used `params.locale`. `params` should be awaited before
   },
   finished: true
 }
-2025-06-08T08:53:44.269Z next:router-server:main requestHandler! /_next/static/chunks/_1658c2b7._.js {
+2025-06-09T00:40:15.327Z next:router-server:main requestHandler! /_next/static/chunks/_1658c2b7._.js {
   matchedOutput: {
     type: 'nextStaticFolder',
     fsPath: '/home/user/studio/.next/static/chunks/_1658c2b7._.js',
@@ -324,7 +286,7 @@ Error: Route "/[locale]" used `params.locale`. `params` should be awaited before
   },
   finished: true
 }
-2025-06-08T08:53:44.316Z next:router-server:main requestHandler! /_next/static/chunks/node_modules_next_dist_1a6ee436._.js {
+2025-06-09T00:40:15.365Z next:router-server:main requestHandler! /_next/static/chunks/node_modules_next_dist_1a6ee436._.js {
   matchedOutput: {
     type: 'nextStaticFolder',
     fsPath: '/home/user/studio/.next/static/chunks/node_modules_next_dist_1a6ee436._.js',
@@ -341,7 +303,7 @@ Error: Route "/[locale]" used `params.locale`. `params` should be awaited before
   },
   finished: true
 }
-2025-06-08T08:53:44.332Z next:router-server:main requestHandler! /_next/static/chunks/src_app_favicon_ico_mjs_21cefb57._.js {
+2025-06-09T00:40:15.409Z next:router-server:main requestHandler! /_next/static/chunks/src_app_favicon_ico_mjs_21cefb57._.js {
   matchedOutput: {
     type: 'nextStaticFolder',
     fsPath: '/home/user/studio/.next/static/chunks/src_app_favicon_ico_mjs_21cefb57._.js',
@@ -358,7 +320,7 @@ Error: Route "/[locale]" used `params.locale`. `params` should be awaited before
   },
   finished: true
 }
-2025-06-08T08:53:44.363Z next:router-server:main requestHandler! /_next/static/chunks/src_components_DocumentFlow_tsx_0bbd894c._.js {
+2025-06-09T00:40:15.459Z next:router-server:main requestHandler! /_next/static/chunks/src_components_DocumentFlow_tsx_0bbd894c._.js {
   matchedOutput: {
     type: 'nextStaticFolder',
     fsPath: '/home/user/studio/.next/static/chunks/src_components_DocumentFlow_tsx_0bbd894c._.js',
@@ -375,7 +337,7 @@ Error: Route "/[locale]" used `params.locale`. `params` should be awaited before
   },
   finished: true
 }
-2025-06-08T08:53:44.446Z next:router-server:main requestHandler! /_next/static/chunks/_3fad0c1f._.js {
+2025-06-09T00:40:15.483Z next:router-server:main requestHandler! /_next/static/chunks/_3fad0c1f._.js {
   matchedOutput: {
     type: 'nextStaticFolder',
     fsPath: '/home/user/studio/.next/static/chunks/_3fad0c1f._.js',
@@ -392,7 +354,7 @@ Error: Route "/[locale]" used `params.locale`. `params` should be awaited before
   },
   finished: true
 }
-2025-06-08T08:53:44.506Z next:router-server:main requestHandler! /_next/static/chunks/node_modules_d998ff04._.js {
+2025-06-09T00:40:15.523Z next:router-server:main requestHandler! /_next/static/chunks/node_modules_d998ff04._.js {
   matchedOutput: {
     type: 'nextStaticFolder',
     fsPath: '/home/user/studio/.next/static/chunks/node_modules_d998ff04._.js',
@@ -409,7 +371,7 @@ Error: Route "/[locale]" used `params.locale`. `params` should be awaited before
   },
   finished: true
 }
-2025-06-08T08:53:44.509Z next:router-server:main requestHandler! /_next/static/chunks/src_app_layout_tsx_b18a8ef4._.js {
+2025-06-09T00:40:15.567Z next:router-server:main requestHandler! /_next/static/chunks/src_app_layout_tsx_b18a8ef4._.js {
   matchedOutput: {
     type: 'nextStaticFolder',
     fsPath: '/home/user/studio/.next/static/chunks/src_app_layout_tsx_b18a8ef4._.js',
@@ -426,7 +388,7 @@ Error: Route "/[locale]" used `params.locale`. `params` should be awaited before
   },
   finished: true
 }
-2025-06-08T08:53:44.520Z next:router-server:main requestHandler! /_next/static/chunks/_483a162b._.js {
+2025-06-09T00:40:15.618Z next:router-server:main requestHandler! /_next/static/chunks/_483a162b._.js {
   matchedOutput: {
     type: 'nextStaticFolder',
     fsPath: '/home/user/studio/.next/static/chunks/_483a162b._.js',
@@ -443,7 +405,7 @@ Error: Route "/[locale]" used `params.locale`. `params` should be awaited before
   },
   finished: true
 }
-2025-06-08T08:53:44.604Z next:router-server:main requestHandler! /_next/static/chunks/src_d1f6e0d1._.js {
+2025-06-09T00:40:15.649Z next:router-server:main requestHandler! /_next/static/chunks/src_d1f6e0d1._.js {
   matchedOutput: {
     type: 'nextStaticFolder',
     fsPath: '/home/user/studio/.next/static/chunks/src_d1f6e0d1._.js',
@@ -460,7 +422,7 @@ Error: Route "/[locale]" used `params.locale`. `params` should be awaited before
   },
   finished: true
 }
-2025-06-08T08:53:44.624Z next:router-server:main requestHandler! /_next/static/chunks/node_modules_tailwind-merge_dist_bundle-mjs_mjs_b854acb4._.js {
+2025-06-09T00:40:15.687Z next:router-server:main requestHandler! /_next/static/chunks/node_modules_tailwind-merge_dist_bundle-mjs_mjs_b854acb4._.js {
   matchedOutput: {
     type: 'nextStaticFolder',
     fsPath: '/home/user/studio/.next/static/chunks/node_modules_tailwind-merge_dist_bundle-mjs_mjs_b854acb4._.js',
@@ -477,7 +439,7 @@ Error: Route "/[locale]" used `params.locale`. `params` should be awaited before
   },
   finished: true
 }
-2025-06-08T08:53:44.671Z next:router-server:main requestHandler! /_next/static/chunks/node_modules_next_75e52325._.js {
+2025-06-09T00:40:15.762Z next:router-server:main requestHandler! /_next/static/chunks/node_modules_next_75e52325._.js {
   matchedOutput: {
     type: 'nextStaticFolder',
     fsPath: '/home/user/studio/.next/static/chunks/node_modules_next_75e52325._.js',
@@ -494,7 +456,7 @@ Error: Route "/[locale]" used `params.locale`. `params` should be awaited before
   },
   finished: true
 }
-2025-06-08T08:53:44.739Z next:router-server:main requestHandler! /_next/static/chunks/node_modules_zod_dist_esm_fc28aa98._.js {
+2025-06-09T00:40:15.782Z next:router-server:main requestHandler! /_next/static/chunks/node_modules_zod_dist_esm_fc28aa98._.js {
   matchedOutput: {
     type: 'nextStaticFolder',
     fsPath: '/home/user/studio/.next/static/chunks/node_modules_zod_dist_esm_fc28aa98._.js',
@@ -511,7 +473,7 @@ Error: Route "/[locale]" used `params.locale`. `params` should be awaited before
   },
   finished: true
 }
-2025-06-08T08:53:44.755Z next:router-server:main requestHandler! /_next/static/chunks/node_modules_d8d47fcb._.js {
+2025-06-09T00:40:15.888Z next:router-server:main requestHandler! /_next/static/chunks/node_modules_d8d47fcb._.js {
   matchedOutput: {
     type: 'nextStaticFolder',
     fsPath: '/home/user/studio/.next/static/chunks/node_modules_d8d47fcb._.js',
@@ -528,7 +490,7 @@ Error: Route "/[locale]" used `params.locale`. `params` should be awaited before
   },
   finished: true
 }
-2025-06-08T08:53:44.848Z next:router-server:main requestHandler! /_next/static/chunks/src_app_%5Blocale%5D_layout_tsx_7f6457fc._.js {
+2025-06-09T00:40:15.904Z next:router-server:main requestHandler! /_next/static/chunks/src_app_%5Blocale%5D_layout_tsx_7f6457fc._.js {
   matchedOutput: {
     type: 'nextStaticFolder',
     fsPath: '/home/user/studio/.next/static/chunks/src_app_[locale]_layout_tsx_7f6457fc._.js',
@@ -545,7 +507,7 @@ Error: Route "/[locale]" used `params.locale`. `params` should be awaited before
   },
   finished: true
 }
-2025-06-08T08:53:44.872Z next:router-server:main requestHandler! /_next/static/chunks/src_components_a1afac48._.js {
+2025-06-09T00:40:15.983Z next:router-server:main requestHandler! /_next/static/chunks/src_components_a1afac48._.js {
   matchedOutput: {
     type: 'nextStaticFolder',
     fsPath: '/home/user/studio/.next/static/chunks/src_components_a1afac48._.js',
@@ -562,7 +524,7 @@ Error: Route "/[locale]" used `params.locale`. `params` should be awaited before
   },
   finished: true
 }
-2025-06-08T08:53:44.923Z next:router-server:main requestHandler! /_next/static/chunks/_ebd4d2d7._.js {
+2025-06-09T00:40:16.053Z next:router-server:main requestHandler! /_next/static/chunks/_ebd4d2d7._.js {
   matchedOutput: {
     type: 'nextStaticFolder',
     fsPath: '/home/user/studio/.next/static/chunks/_ebd4d2d7._.js',
@@ -579,7 +541,7 @@ Error: Route "/[locale]" used `params.locale`. `params` should be awaited before
   },
   finished: true
 }
-2025-06-08T08:53:44.971Z next:router-server:main requestHandler! /_next/static/chunks/src_app_%5Blocale%5D_page_tsx_4f36d886._.js {
+2025-06-09T00:40:16.134Z next:router-server:main requestHandler! /_next/static/chunks/src_app_%5Blocale%5D_page_tsx_4f36d886._.js {
   matchedOutput: {
     type: 'nextStaticFolder',
     fsPath: '/home/user/studio/.next/static/chunks/src_app_[locale]_page_tsx_4f36d886._.js',
@@ -596,7 +558,7 @@ Error: Route "/[locale]" used `params.locale`. `params` should be awaited before
   },
   finished: true
 }
-2025-06-08T08:53:45.006Z next:router-server:main requestHandler! /_next/static/chunks/_e5ae3868._.js {
+2025-06-09T00:40:16.159Z next:router-server:main requestHandler! /_next/static/chunks/_e5ae3868._.js {
   matchedOutput: {
     type: 'nextStaticFolder',
     fsPath: '/home/user/studio/.next/static/chunks/_e5ae3868._.js',
@@ -613,7 +575,7 @@ Error: Route "/[locale]" used `params.locale`. `params` should be awaited before
   },
   finished: true
 }
-2025-06-08T08:53:45.032Z next:router-server:main requestHandler! /_next/static/chunks/src_app_global-error_tsx_7f6457fc._.js {
+2025-06-09T00:40:16.236Z next:router-server:main requestHandler! /_next/static/chunks/src_app_global-error_tsx_7f6457fc._.js {
   matchedOutput: {
     type: 'nextStaticFolder',
     fsPath: '/home/user/studio/.next/static/chunks/src_app_global-error_tsx_7f6457fc._.js',
@@ -630,7 +592,7 @@ Error: Route "/[locale]" used `params.locale`. `params` should be awaited before
   },
   finished: true
 }
-2025-06-08T08:53:45.250Z next:router-server:main requestHandler! /_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_bfb8c0ef._.js {
+2025-06-09T00:40:16.404Z next:router-server:main requestHandler! /_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_bfb8c0ef._.js {
   matchedOutput: {
     type: 'nextStaticFolder',
     fsPath: '/home/user/studio/.next/static/chunks/[turbopack]_browser_dev_hmr-client_hmr-client_ts_bfb8c0ef._.js',
@@ -647,7 +609,7 @@ Error: Route "/[locale]" used `params.locale`. `params` should be awaited before
   },
   finished: true
 }
-2025-06-08T08:53:45.251Z next:router-server:main requestHandler! /_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_61dcf9ba._.js {
+2025-06-09T00:40:16.406Z next:router-server:main requestHandler! /_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_61dcf9ba._.js {
   matchedOutput: {
     type: 'nextStaticFolder',
     fsPath: '/home/user/studio/.next/static/chunks/[turbopack]_browser_dev_hmr-client_hmr-client_ts_61dcf9ba._.js',
@@ -664,7 +626,7 @@ Error: Route "/[locale]" used `params.locale`. `params` should be awaited before
   },
   finished: true
 }
-2025-06-08T08:53:45.310Z next:router-server:main requestHandler! /images/hero-main.png {
+2025-06-09T00:40:16.472Z next:router-server:main requestHandler! /images/hero-main.png {
   matchedOutput: {
     type: 'publicFolder',
     fsPath: '/home/user/studio/public/images/hero-main.png',
@@ -681,7 +643,7 @@ Error: Route "/[locale]" used `params.locale`. `params` should be awaited before
   },
   finished: true
 }
-2025-06-08T08:53:45.348Z next:router-server:main requestHandler! /_next/static/chunks/src_components_ContactFormButton_tsx_ea64e8c3._.js {
+2025-06-09T00:40:16.502Z next:router-server:main requestHandler! /_next/static/chunks/src_components_ContactFormButton_tsx_ea64e8c3._.js {
   matchedOutput: {
     type: 'nextStaticFolder',
     fsPath: '/home/user/studio/.next/static/chunks/src_components_ContactFormButton_tsx_ea64e8c3._.js',
@@ -698,7 +660,9 @@ Error: Route "/[locale]" used `params.locale`. `params` should be awaited before
   },
   finished: true
 }
-2025-06-08T08:53:45.350Z next:router-server:main requestHandler! /_next/static/chunks/src_components_ContactFormButton_tsx_9fedb1c4._.js {
+ ⚠ Blocked cross-origin request from 3001-idx-studio-1746374904264.cluster-ux5mmlia3zhhask7riihruxydo.cloudworkstations.dev to /_next/* resource. To allow this, configure "allowedDevOrigins" in next.config
+Read more: https://nextjs.org/docs/app/api-reference/config/next-config-js/allowedDevOrigins
+2025-06-09T00:40:16.541Z next:router-server:main requestHandler! /_next/static/chunks/src_components_ContactFormButton_tsx_9fedb1c4._.js {
   matchedOutput: {
     type: 'nextStaticFolder',
     fsPath: '/home/user/studio/.next/static/chunks/src_components_ContactFormButton_tsx_9fedb1c4._.js',
@@ -715,7 +679,7 @@ Error: Route "/[locale]" used `params.locale`. `params` should be awaited before
   },
   finished: true
 }
-2025-06-08T08:53:45.358Z next:router-server:main requestHandler! /_next/static/chunks/node_modules_67995762._.js {
+2025-06-09T00:40:16.671Z next:router-server:main requestHandler! /_next/static/chunks/node_modules_67995762._.js {
   matchedOutput: {
     type: 'nextStaticFolder',
     fsPath: '/home/user/studio/.next/static/chunks/node_modules_67995762._.js',
@@ -732,7 +696,7 @@ Error: Route "/[locale]" used `params.locale`. `params` should be awaited before
   },
   finished: true
 }
-2025-06-08T08:53:45.374Z next:router-server:main requestHandler! /_next/static/chunks/src_components_ActivityTicker_tsx_3d61ccfa._.js {
+2025-06-09T00:40:16.838Z next:router-server:main requestHandler! /_next/static/chunks/src_components_ActivityTicker_tsx_3d61ccfa._.js {
   matchedOutput: {
     type: 'nextStaticFolder',
     fsPath: '/home/user/studio/.next/static/chunks/src_components_ActivityTicker_tsx_3d61ccfa._.js',
@@ -749,7 +713,7 @@ Error: Route "/[locale]" used `params.locale`. `params` should be awaited before
   },
   finished: true
 }
-2025-06-08T08:53:45.442Z next:router-server:main requestHandler! /_next/static/chunks/src_components_ActivityTicker_tsx_9fedb1c4._.js {
+2025-06-09T00:40:16.900Z next:router-server:main requestHandler! /_next/static/chunks/src_components_ActivityTicker_tsx_9fedb1c4._.js {
   matchedOutput: {
     type: 'nextStaticFolder',
     fsPath: '/home/user/studio/.next/static/chunks/src_components_ActivityTicker_tsx_9fedb1c4._.js',
@@ -766,24 +730,7 @@ Error: Route "/[locale]" used `params.locale`. `params` should be awaited before
   },
   finished: true
 }
-2025-06-08T08:53:45.778Z next:router-server:main requestHandler! /_next/static/chunks/src_lib_document-library_ts_b2d7f814._.js {
-  matchedOutput: {
-    type: 'nextStaticFolder',
-    fsPath: '/home/user/studio/.next/static/chunks/src_lib_document-library_ts_b2d7f814._.js',
-    locale: undefined,
-    itemsRoot: '/home/user/studio/.next/static',
-    itemPath: '/chunks/src_lib_document-library_ts_b2d7f814._.js'
-  },
-  statusCode: undefined,
-  resHeaders: {},
-  bodyStream: false,
-  parsedUrl: {
-    pathname: '/_next/static/chunks/src_lib_document-library_ts_b2d7f814._.js',
-    query: [Object: null prototype] {}
-  },
-  finished: true
-}
-2025-06-08T08:53:45.780Z next:router-server:main requestHandler! /_next/static/chunks/src_lib_document-library_ts_c1ef219b._.js {
+2025-06-09T00:40:17.068Z next:router-server:main requestHandler! /_next/static/chunks/src_lib_document-library_ts_c1ef219b._.js {
   matchedOutput: {
     type: 'nextStaticFolder',
     fsPath: '/home/user/studio/.next/static/chunks/src_lib_document-library_ts_c1ef219b._.js',
@@ -800,5 +747,70 @@ Error: Route "/[locale]" used `params.locale`. `params` should be awaited before
   },
   finished: true
 }
- ⚠ Blocked cross-origin request from 3001-idx-studio-1746374904264.cluster-ux5mmlia3zhhask7riihruxydo.cloudworkstations.dev to /_next/* resource. To allow this, configure "allowedDevOrigins" in next.config
-Read more: https://nextjs.org/docs/app/api-reference/config/next-config-js/allowedDevOrigins
+2025-06-09T00:40:17.084Z next:router-server:main requestHandler! /_next/static/chunks/src_lib_document-library_ts_b2d7f814._.js {
+  matchedOutput: {
+    type: 'nextStaticFolder',
+    fsPath: '/home/user/studio/.next/static/chunks/src_lib_document-library_ts_b2d7f814._.js',
+    locale: undefined,
+    itemsRoot: '/home/user/studio/.next/static',
+    itemPath: '/chunks/src_lib_document-library_ts_b2d7f814._.js'
+  },
+  statusCode: undefined,
+  resHeaders: {},
+  bodyStream: false,
+  parsedUrl: {
+    pathname: '/_next/static/chunks/src_lib_document-library_ts_b2d7f814._.js',
+    query: [Object: null prototype] {}
+  },
+  finished: true
+}
+ ✓ Compiled in 2.7s
+outer-server:main requestHandler! /en/docs/bill-of-sale-vehicle {
+  matchedOutput: {
+    type: 'appFile',
+    fsPath: undefined,
+    locale: undefined,
+    itemsRoot: undefined,
+    itemPath: '/[locale]/docs/[docId]'
+  },
+  statusCode: undefined,
+  resHeaders: {},
+  bodyStream: false,
+  parsedUrl: {
+    pathname: '/en/docs/bill-of-sale-vehicle',
+    query: [Object: null prototype] {}
+  },
+  finished: true
+}
+2025-06-09T00:38:46.557Z next:router-server:main invokeRender /en/docs/bill-of-sale-vehicle { host: 'localhost:3000', 'user-agent': 'curl/8.12.1', accept: '*/*' }
+ ○ Compiling /[locale]/docs/[docId] ...
+ ✓ Compiled /[locale]/docs/[docId] in 49.8s
+Error: Route "/[locale]/docs/[docId]" used `params.locale`. `params` should be awaited before using its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at LocaleLayout (src/app/[locale]/layout.tsx:16:28)
+  14 |   params,
+  15 | }: LocaleLayoutProps) {
+> 16 |   const pathLocale = params.locale
+     |                            ^
+  17 |   const detectedLocale =
+  18 |     pathLocale === 'es' || pathLocale === 'en'
+  19 |       ? (pathLocale as 'en' | 'es')
+Error: Route "/[locale]/docs/[docId]" used `params.locale`. `params` should be awaited before using its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at DocPage (src/app/[locale]/docs/[docId]/page.tsx:55:10)
+  53 |   await Promise.resolve()
+  54 |
+> 55 |   const { locale, docId } = params
+     |          ^
+  56 |
+  57 |   // optional guard
+  58 |   if (!documentLibrary.find((d) => d.id === docId)) {
+Error: Route "/[locale]/docs/[docId]" used `params.docId`. `params` should be awaited before using its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at DocPage (src/app/[locale]/docs/[docId]/page.tsx:55:18)
+  53 |   await Promise.resolve()
+  54 |
+> 55 |   const { locale, docId } = params
+     |                  ^
+  56 |
+  57 |   // optional guard
+  58 |   if (!documentLibrary.find((d) => d.id === docId)) {
+ GET /en/docs/bill-of-sale-vehicle 200 in 53132ms
+ ✓ Compiled in 2.4s

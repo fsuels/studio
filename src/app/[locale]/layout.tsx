@@ -8,16 +8,14 @@ interface LocaleLayoutProps {
   params: { locale?: string }
 }
 
-// 🔑 Mark as async so Next.js can await params before you use them
 export default async function LocaleLayout({
   children,
   params,
 }: LocaleLayoutProps) {
+  // Now safe to read params.locale because this is async
   const pathLocale = params.locale
   const detectedLocale =
-    pathLocale === 'es' || pathLocale === 'en'
-      ? (pathLocale as 'en' | 'es')
-      : 'en'
+    pathLocale === 'es' || pathLocale === 'en' ? (pathLocale as 'en' | 'es') : 'en'
 
   return <ClientProviders locale={detectedLocale}>{children}</ClientProviders>
 }
