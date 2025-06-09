@@ -69,7 +69,8 @@ export default async function DocPage({ params }: DocPageProps) {
   )
 }
 
-export function Head({ params }: { params: DocPageParams }) {
+export async function Head({ params }: { params: DocPageParams }) {
+  await Promise.resolve();
   const faqJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
