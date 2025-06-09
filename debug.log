@@ -1,0 +1,946 @@
+
+> nextn@0.1.0 dev
+> next dev --turbopack
+
+   ▲ Next.js 15.3.3 (Turbopack)
+   - Local:        http://localhost:3000
+   - Network:      http://10.88.0.3:3000
+   - Environments: .env
+
+ ✓ Starting...
+2025-06-08T22:49:14.771Z next:router-server:filesystem nextDataRoutes Set(0) {}
+2025-06-08T22:49:14.772Z next:router-server:filesystem dynamicRoutes []
+2025-06-08T22:49:14.773Z next:router-server:filesystem customRoutes {
+  headers: [],
+  rewrites: { beforeFiles: [], afterFiles: [], fallback: [] },
+  redirects: [
+    {
+      source: '/:path+/',
+      destination: '/:path+',
+      permanent: true,
+      locale: undefined,
+      internal: true
+    }
+  ]
+}
+2025-06-08T22:49:14.774Z next:router-server:filesystem publicFolderItems Set(0) {}
+2025-06-08T22:49:14.774Z next:router-server:filesystem nextStaticFolderItems Set(0) {}
+2025-06-08T22:49:14.774Z next:router-server:filesystem pageFiles Set(0) {}
+2025-06-08T22:49:14.774Z next:router-server:filesystem appFiles Set(0) {}
+Creating turbopack project { dir: '/home/user/studio', testMode: true }
+ ✓ Compiled instrumentation Node.js in 56ms
+ ✓ Compiled instrumentation Edge in 98ms
+ ✓ Ready in 2s
+2025-06-08T22:49:16.521Z next:router-server:main requestHandler! / {
+  matchedOutput: {
+    type: 'appFile',
+    fsPath: undefined,
+    locale: undefined,
+    itemsRoot: undefined,
+    itemPath: '/'
+  },
+  statusCode: undefined,
+  resHeaders: {},
+  bodyStream: false,
+  parsedUrl: { pathname: '/', query: [Object: null prototype] {} },
+  finished: true
+}
+2025-06-08T22:49:16.522Z next:router-server:main invokeRender / {
+  host: '127.0.0.1:3000',
+  'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36',
+  accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
+  'accept-encoding': 'gzip, deflate, br, zstd',
+  'accept-language': 'en-US,en;q=0.9',
+  dnt: '1',
+  priority: 'u=0, i',
+  referer: 'https://studio.firebase.google.com/',
+  'sec-ch-ua': '"Chromium";v="136", "Google Chrome";v="136", "Not.A/Brand";v="99"',
+  'sec-ch-ua-arch': '"x86"',
+  'sec-ch-ua-bitness': '"64"',
+  'sec-ch-ua-form-factors': '"Desktop"',
+  'sec-ch-ua-full-version': '"136.0.7103.114"',
+  'sec-ch-ua-full-version-list': '"Chromium";v="136.0.7103.114", "Google Chrome";v="136.0.7103.114", "Not.A/Brand";v="99.0.0.0"',
+  'sec-ch-ua-mobile': '?0',
+  'sec-ch-ua-model': '""',
+  'sec-ch-ua-platform': '"Windows"',
+  'sec-ch-ua-platform-version': '"10.0.0"',
+  'sec-ch-ua-wow64': '?0',
+  'sec-fetch-dest': 'iframe',
+  'sec-fetch-mode': 'navigate',
+  'sec-fetch-site': 'cross-site',
+  'sec-fetch-storage-access': 'active',
+  'sec-fetch-user': '?1',
+  'sec-user-ip': '10.20.20.209',
+  'upgrade-insecure-requests': '1',
+  'x-forwarded-host': '3000-idx-studio-1746374904264.cluster-ux5mmlia3zhhask7riihruxydo.cloudworkstations.dev',
+  'x-goog-workstations-endpoint': 'workstations-20d84835-d606-499c-b998-957d006c4120.us-east4-a.c.monospace-1.internal.:980'
+}
+ ○ Compiling / ...
+2025-06-08T22:49:28.307Z next:router-server:main requestHandler! /en/docs/bill-of-sale-vehicle {
+  matchedOutput: {
+    type: 'appFile',
+    fsPath: undefined,
+    locale: undefined,
+    itemsRoot: undefined,
+    itemPath: '/[locale]/docs/[docId]'
+  },
+  statusCode: undefined,
+  resHeaders: {},
+  bodyStream: false,
+  parsedUrl: {
+    pathname: '/en/docs/bill-of-sale-vehicle',
+    query: [Object: null prototype] {}
+  },
+  finished: true
+}
+2025-06-08T22:49:28.310Z next:router-server:main invokeRender /en/docs/bill-of-sale-vehicle { host: 'localhost:3000', 'user-agent': 'curl/8.12.1', accept: '*/*' }
+2025-06-08T22:49:41.009Z next:router-server:main requestHandler! /en/docs/bill-of-sale-vehicle {
+  matchedOutput: {
+    type: 'appFile',
+    fsPath: undefined,
+    locale: undefined,
+    itemsRoot: undefined,
+    itemPath: '/[locale]/docs/[docId]'
+  },
+  statusCode: undefined,
+  resHeaders: {},
+  bodyStream: false,
+  parsedUrl: {
+    pathname: '/en/docs/bill-of-sale-vehicle',
+    query: [Object: null prototype] {}
+  },
+  finished: true
+}
+2025-06-08T22:49:41.012Z next:router-server:main invokeRender /en/docs/bill-of-sale-vehicle { host: 'localhost:3000', 'user-agent': 'curl/8.12.1', accept: '*/*' }
+ GET / 307 in 31954ms
+2025-06-08T22:49:48.548Z next:router-server:main requestHandler! /en {
+  matchedOutput: {
+    type: 'appFile',
+    fsPath: undefined,
+    locale: undefined,
+    itemsRoot: undefined,
+    itemPath: '/[locale]'
+  },
+  statusCode: undefined,
+  resHeaders: {},
+  bodyStream: false,
+  parsedUrl: { pathname: '/en', query: [Object: null prototype] {} },
+  finished: true
+}
+2025-06-08T22:49:48.554Z next:router-server:main invokeRender /en {
+  host: '127.0.0.1:3000',
+  'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36',
+  accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
+  'accept-encoding': 'gzip, deflate, br, zstd',
+  'accept-language': 'en-US,en;q=0.9',
+  dnt: '1',
+  priority: 'u=0, i',
+  referer: 'https://studio.firebase.google.com/',
+  'sec-ch-ua': '"Chromium";v="136", "Google Chrome";v="136", "Not.A/Brand";v="99"',
+  'sec-ch-ua-arch': '"x86"',
+  'sec-ch-ua-bitness': '"64"',
+  'sec-ch-ua-form-factors': '"Desktop"',
+  'sec-ch-ua-full-version': '"136.0.7103.114"',
+  'sec-ch-ua-full-version-list': '"Chromium";v="136.0.7103.114", "Google Chrome";v="136.0.7103.114", "Not.A/Brand";v="99.0.0.0"',
+  'sec-ch-ua-mobile': '?0',
+  'sec-ch-ua-model': '""',
+  'sec-ch-ua-platform': '"Windows"',
+  'sec-ch-ua-platform-version': '"10.0.0"',
+  'sec-ch-ua-wow64': '?0',
+  'sec-fetch-dest': 'iframe',
+  'sec-fetch-mode': 'navigate',
+  'sec-fetch-site': 'cross-site',
+  'sec-fetch-storage-access': 'active',
+  'sec-fetch-user': '?1',
+  'sec-user-ip': '10.20.20.209',
+  'upgrade-insecure-requests': '1',
+  'x-forwarded-host': '3000-idx-studio-1746374904264.cluster-ux5mmlia3zhhask7riihruxydo.cloudworkstations.dev',
+  'x-goog-workstations-endpoint': 'workstations-20d84835-d606-499c-b998-957d006c4120.us-east4-a.c.monospace-1.internal.:980'
+}
+2025-06-08T22:49:54.614Z next:router-server:main requestHandler! /en/docs/bill-of-sale-vehicle {
+  matchedOutput: {
+    type: 'appFile',
+    fsPath: undefined,
+    locale: undefined,
+    itemsRoot: undefined,
+    itemPath: '/[locale]/docs/[docId]'
+  },
+  statusCode: undefined,
+  resHeaders: {},
+  bodyStream: false,
+  parsedUrl: {
+    pathname: '/en/docs/bill-of-sale-vehicle',
+    query: [Object: null prototype] {}
+  },
+  finished: true
+}
+2025-06-08T22:49:54.616Z next:router-server:main invokeRender /en/docs/bill-of-sale-vehicle { host: 'localhost:3000', 'user-agent': 'curl/8.12.1', accept: '*/*' }
+[promissory-note metadata] questions loaded: 12
+[document-library] processing: promissory-note Promissory Note
+ ✓ Compiled / in 56.7s
+[promissory-note metadata] questions loaded: 12
+[document-library] processing: promissory-note Promissory Note
+[generateStaticParams /docs] Skipping invalid doc entry for locale en
+[generateStaticParams /docs] Skipping invalid doc entry for locale es
+Error: Route "/[locale]/docs/[docId]" used `params.locale`. `params` should be awaited before using its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at LocaleLayout (src/app/[locale]/layout.tsx:15:28)
+  13 |   params,
+  14 | }: LocaleLayoutProps) {
+> 15 |   const pathLocale = params.locale
+     |                            ^
+  16 |   const detectedLocale =
+  17 |     pathLocale === 'es' || pathLocale === 'en'
+  18 |       ? (pathLocale as 'en' | 'es')
+Error: Route "/[locale]/docs/[docId]" used `params.locale`. `params` should be awaited before using its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at DocPage (src/app/[locale]/docs/[docId]/page.tsx:71:51)
+  69 |   await Promise.resolve();
+  70 |
+> 71 |   const markdownContent = await getMarkdown(params.locale, params.docId);
+     |                                                   ^
+  72 |   return (
+  73 |     <DocPageClient
+  74 |       params={params}
+Error: Route "/[locale]/docs/[docId]" used `params.docId`. `params` should be awaited before using its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at DocPage (src/app/[locale]/docs/[docId]/page.tsx:71:66)
+  69 |   await Promise.resolve();
+  70 |
+> 71 |   const markdownContent = await getMarkdown(params.locale, params.docId);
+     |                                                                  ^
+  72 |   return (
+  73 |     <DocPageClient
+  74 |       params={params}
+Error: Route "/[locale]/docs/[docId]" used `params.locale`. `params` should be awaited before using its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at LocaleLayout (src/app/[locale]/layout.tsx:15:28)
+  13 |   params,
+  14 | }: LocaleLayoutProps) {
+> 15 |   const pathLocale = params.locale
+     |                            ^
+  16 |   const detectedLocale =
+  17 |     pathLocale === 'es' || pathLocale === 'en'
+  18 |       ? (pathLocale as 'en' | 'es')
+Error: Route "/[locale]/docs/[docId]" used `params.locale`. `params` should be awaited before using its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at LocaleLayout (src/app/[locale]/layout.tsx:15:28)
+  13 |   params,
+  14 | }: LocaleLayoutProps) {
+> 15 |   const pathLocale = params.locale
+     |                            ^
+  16 |   const detectedLocale =
+  17 |     pathLocale === 'es' || pathLocale === 'en'
+  18 |       ? (pathLocale as 'en' | 'es')
+Error: Route "/[locale]/docs/[docId]" used `params.locale`. `params` should be awaited before using its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at DocPage (src/app/[locale]/docs/[docId]/page.tsx:71:51)
+  69 |   await Promise.resolve();
+  70 |
+> 71 |   const markdownContent = await getMarkdown(params.locale, params.docId);
+     |                                                   ^
+  72 |   return (
+  73 |     <DocPageClient
+  74 |       params={params}
+Error: Route "/[locale]/docs/[docId]" used `params.docId`. `params` should be awaited before using its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at DocPage (src/app/[locale]/docs/[docId]/page.tsx:71:66)
+  69 |   await Promise.resolve();
+  70 |
+> 71 |   const markdownContent = await getMarkdown(params.locale, params.docId);
+     |                                                                  ^
+  72 |   return (
+  73 |     <DocPageClient
+  74 |       params={params}
+Error: Route "/[locale]/docs/[docId]" used `params.locale`. `params` should be awaited before using its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at DocPage (src/app/[locale]/docs/[docId]/page.tsx:71:51)
+  69 |   await Promise.resolve();
+  70 |
+> 71 |   const markdownContent = await getMarkdown(params.locale, params.docId);
+     |                                                   ^
+  72 |   return (
+  73 |     <DocPageClient
+  74 |       params={params}
+Error: Route "/[locale]/docs/[docId]" used `params.docId`. `params` should be awaited before using its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at DocPage (src/app/[locale]/docs/[docId]/page.tsx:71:66)
+  69 |   await Promise.resolve();
+  70 |
+> 71 |   const markdownContent = await getMarkdown(params.locale, params.docId);
+     |                                                                  ^
+  72 |   return (
+  73 |     <DocPageClient
+  74 |       params={params}
+Error: Route "/[locale]" used `params.locale`. `params` should be awaited before using its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at LocaleLayout (src/app/[locale]/layout.tsx:15:28)
+  13 |   params,
+  14 | }: LocaleLayoutProps) {
+> 15 |   const pathLocale = params.locale
+     |                            ^
+  16 |   const detectedLocale =
+  17 |     pathLocale === 'es' || pathLocale === 'en'
+  18 |       ? (pathLocale as 'en' | 'es')
+[promissory-note metadata] questions loaded: 12
+[document-library] processing: promissory-note Promissory Note
+ GET /en/docs/bill-of-sale-vehicle 200 in 21753ms
+ GET /en/docs/bill-of-sale-vehicle 200 in 48101ms
+2025-06-08T22:50:16.557Z next:router-server:main requestHandler! /_next/static/media/Merriweather_Variable-s.p.24463397.woff2 {
+  matchedOutput: {
+    type: 'nextStaticFolder',
+    fsPath: '/home/user/studio/.next/static/media/Merriweather_Variable-s.p.24463397.woff2',
+    locale: undefined,
+    itemsRoot: '/home/user/studio/.next/static',
+    itemPath: '/media/Merriweather_Variable-s.p.24463397.woff2'
+  },
+  statusCode: undefined,
+  resHeaders: {},
+  bodyStream: false,
+  parsedUrl: {
+    pathname: '/_next/static/media/Merriweather_Variable-s.p.24463397.woff2',
+    query: [Object: null prototype] {}
+  },
+  finished: true
+}
+2025-06-08T22:50:16.592Z next:router-server:main requestHandler! /_next/static/media/Inter_Variable-s.p.4f851744.woff2 {
+  matchedOutput: {
+    type: 'nextStaticFolder',
+    fsPath: '/home/user/studio/.next/static/media/Inter_Variable-s.p.4f851744.woff2',
+    locale: undefined,
+    itemsRoot: '/home/user/studio/.next/static',
+    itemPath: '/media/Inter_Variable-s.p.4f851744.woff2'
+  },
+  statusCode: undefined,
+  resHeaders: {},
+  bodyStream: false,
+  parsedUrl: {
+    pathname: '/_next/static/media/Inter_Variable-s.p.4f851744.woff2',
+    query: [Object: null prototype] {}
+  },
+  finished: true
+}
+2025-06-08T22:50:16.612Z next:router-server:main requestHandler! /_next/static/chunks/src_app_52e5b652._.css {
+  matchedOutput: {
+    type: 'nextStaticFolder',
+    fsPath: '/home/user/studio/.next/static/chunks/src_app_52e5b652._.css',
+    locale: undefined,
+    itemsRoot: '/home/user/studio/.next/static',
+    itemPath: '/chunks/src_app_52e5b652._.css'
+  },
+  statusCode: undefined,
+  resHeaders: {},
+  bodyStream: false,
+  parsedUrl: {
+    pathname: '/_next/static/chunks/src_app_52e5b652._.css',
+    query: [Object: null prototype] {}
+  },
+  finished: true
+}
+2025-06-08T22:50:16.682Z next:router-server:main requestHandler! /_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_3863bb79._.js {
+  matchedOutput: {
+    type: 'nextStaticFolder',
+    fsPath: '/home/user/studio/.next/static/chunks/[turbopack]_browser_dev_hmr-client_hmr-client_ts_3863bb79._.js',
+    locale: undefined,
+    itemsRoot: '/home/user/studio/.next/static',
+    itemPath: '/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_3863bb79._.js'
+  },
+  statusCode: undefined,
+  resHeaders: {},
+  bodyStream: false,
+  parsedUrl: {
+    pathname: '/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_3863bb79._.js',
+    query: [Object: null prototype] {}
+  },
+  finished: true
+}
+2025-06-08T22:50:16.686Z next:router-server:main requestHandler! /_next/static/chunks/node_modules_next_dist_client_8f19e6fb._.js {
+  matchedOutput: {
+    type: 'nextStaticFolder',
+    fsPath: '/home/user/studio/.next/static/chunks/node_modules_next_dist_client_8f19e6fb._.js',
+    locale: undefined,
+    itemsRoot: '/home/user/studio/.next/static',
+    itemPath: '/chunks/node_modules_next_dist_client_8f19e6fb._.js'
+  },
+  statusCode: undefined,
+  resHeaders: {},
+  bodyStream: false,
+  parsedUrl: {
+    pathname: '/_next/static/chunks/node_modules_next_dist_client_8f19e6fb._.js',
+    query: [Object: null prototype] {}
+  },
+  finished: true
+}
+2025-06-08T22:50:16.706Z next:router-server:main requestHandler! /_next/static/chunks/node_modules_next_dist_compiled_2ce9398a._.js {
+  matchedOutput: {
+    type: 'nextStaticFolder',
+    fsPath: '/home/user/studio/.next/static/chunks/node_modules_next_dist_compiled_2ce9398a._.js',
+    locale: undefined,
+    itemsRoot: '/home/user/studio/.next/static',
+    itemPath: '/chunks/node_modules_next_dist_compiled_2ce9398a._.js'
+  },
+  statusCode: undefined,
+  resHeaders: {},
+  bodyStream: false,
+  parsedUrl: {
+    pathname: '/_next/static/chunks/node_modules_next_dist_compiled_2ce9398a._.js',
+    query: [Object: null prototype] {}
+  },
+  finished: true
+}
+2025-06-08T22:50:16.795Z next:router-server:main requestHandler! /_next/static/chunks/src_instrumentation-client_ts_4aba9a11._.js {
+  matchedOutput: {
+    type: 'nextStaticFolder',
+    fsPath: '/home/user/studio/.next/static/chunks/src_instrumentation-client_ts_4aba9a11._.js',
+    locale: undefined,
+    itemsRoot: '/home/user/studio/.next/static',
+    itemPath: '/chunks/src_instrumentation-client_ts_4aba9a11._.js'
+  },
+  statusCode: undefined,
+  resHeaders: {},
+  bodyStream: false,
+  parsedUrl: {
+    pathname: '/_next/static/chunks/src_instrumentation-client_ts_4aba9a11._.js',
+    query: [Object: null prototype] {}
+  },
+  finished: true
+}
+2025-06-08T22:50:16.797Z next:router-server:main requestHandler! /_next/static/chunks/node_modules_next_dist_2ecbf5fa._.js {
+  matchedOutput: {
+    type: 'nextStaticFolder',
+    fsPath: '/home/user/studio/.next/static/chunks/node_modules_next_dist_2ecbf5fa._.js',
+    locale: undefined,
+    itemsRoot: '/home/user/studio/.next/static',
+    itemPath: '/chunks/node_modules_next_dist_2ecbf5fa._.js'
+  },
+  statusCode: undefined,
+  resHeaders: {},
+  bodyStream: false,
+  parsedUrl: {
+    pathname: '/_next/static/chunks/node_modules_next_dist_2ecbf5fa._.js',
+    query: [Object: null prototype] {}
+  },
+  finished: true
+}
+2025-06-08T22:50:16.836Z next:router-server:main requestHandler! /_next/static/chunks/node_modules_%40swc_helpers_cjs_00636ac3._.js {
+  matchedOutput: {
+    type: 'nextStaticFolder',
+    fsPath: '/home/user/studio/.next/static/chunks/node_modules_@swc_helpers_cjs_00636ac3._.js',
+    locale: undefined,
+    itemsRoot: '/home/user/studio/.next/static',
+    itemPath: '/chunks/node_modules_%40swc_helpers_cjs_00636ac3._.js'
+  },
+  statusCode: undefined,
+  resHeaders: {},
+  bodyStream: false,
+  parsedUrl: {
+    pathname: '/_next/static/chunks/node_modules_%40swc_helpers_cjs_00636ac3._.js',
+    query: [Object: null prototype] {}
+  },
+  finished: true
+}
+2025-06-08T22:50:16.865Z next:router-server:main requestHandler! /_next/static/chunks/_e69f0d32._.js {
+  matchedOutput: {
+    type: 'nextStaticFolder',
+    fsPath: '/home/user/studio/.next/static/chunks/_e69f0d32._.js',
+    locale: undefined,
+    itemsRoot: '/home/user/studio/.next/static',
+    itemPath: '/chunks/_e69f0d32._.js'
+  },
+  statusCode: undefined,
+  resHeaders: {},
+  bodyStream: false,
+  parsedUrl: {
+    pathname: '/_next/static/chunks/_e69f0d32._.js',
+    query: [Object: null prototype] {}
+  },
+  finished: true
+}
+2025-06-08T22:50:16.925Z next:router-server:main requestHandler! /_next/static/chunks/_1658c2b7._.js {
+  matchedOutput: {
+    type: 'nextStaticFolder',
+    fsPath: '/home/user/studio/.next/static/chunks/_1658c2b7._.js',
+    locale: undefined,
+    itemsRoot: '/home/user/studio/.next/static',
+    itemPath: '/chunks/_1658c2b7._.js'
+  },
+  statusCode: undefined,
+  resHeaders: {},
+  bodyStream: false,
+  parsedUrl: {
+    pathname: '/_next/static/chunks/_1658c2b7._.js',
+    query: [Object: null prototype] {}
+  },
+  finished: true
+}
+2025-06-08T22:50:16.994Z next:router-server:main requestHandler! /_next/static/chunks/node_modules_next_dist_1a6ee436._.js {
+  matchedOutput: {
+    type: 'nextStaticFolder',
+    fsPath: '/home/user/studio/.next/static/chunks/node_modules_next_dist_1a6ee436._.js',
+    locale: undefined,
+    itemsRoot: '/home/user/studio/.next/static',
+    itemPath: '/chunks/node_modules_next_dist_1a6ee436._.js'
+  },
+  statusCode: undefined,
+  resHeaders: {},
+  bodyStream: false,
+  parsedUrl: {
+    pathname: '/_next/static/chunks/node_modules_next_dist_1a6ee436._.js',
+    query: [Object: null prototype] {}
+  },
+  finished: true
+}
+2025-06-08T22:50:17.026Z next:router-server:main requestHandler! /_next/static/chunks/src_components_DocumentFlow_tsx_0bbd894c._.js {
+  matchedOutput: {
+    type: 'nextStaticFolder',
+    fsPath: '/home/user/studio/.next/static/chunks/src_components_DocumentFlow_tsx_0bbd894c._.js',
+    locale: undefined,
+    itemsRoot: '/home/user/studio/.next/static',
+    itemPath: '/chunks/src_components_DocumentFlow_tsx_0bbd894c._.js'
+  },
+  statusCode: undefined,
+  resHeaders: {},
+  bodyStream: false,
+  parsedUrl: {
+    pathname: '/_next/static/chunks/src_components_DocumentFlow_tsx_0bbd894c._.js',
+    query: [Object: null prototype] {}
+  },
+  finished: true
+}
+2025-06-08T22:50:17.027Z next:router-server:main requestHandler! /_next/static/chunks/src_app_favicon_ico_mjs_21cefb57._.js {
+  matchedOutput: {
+    type: 'nextStaticFolder',
+    fsPath: '/home/user/studio/.next/static/chunks/src_app_favicon_ico_mjs_21cefb57._.js',
+    locale: undefined,
+    itemsRoot: '/home/user/studio/.next/static',
+    itemPath: '/chunks/src_app_favicon_ico_mjs_21cefb57._.js'
+  },
+  statusCode: undefined,
+  resHeaders: {},
+  bodyStream: false,
+  parsedUrl: {
+    pathname: '/_next/static/chunks/src_app_favicon_ico_mjs_21cefb57._.js',
+    query: [Object: null prototype] {}
+  },
+  finished: true
+}
+2025-06-08T22:50:17.079Z next:router-server:main requestHandler! /_next/static/chunks/_3fad0c1f._.js {
+  matchedOutput: {
+    type: 'nextStaticFolder',
+    fsPath: '/home/user/studio/.next/static/chunks/_3fad0c1f._.js',
+    locale: undefined,
+    itemsRoot: '/home/user/studio/.next/static',
+    itemPath: '/chunks/_3fad0c1f._.js'
+  },
+  statusCode: undefined,
+  resHeaders: {},
+  bodyStream: false,
+  parsedUrl: {
+    pathname: '/_next/static/chunks/_3fad0c1f._.js',
+    query: [Object: null prototype] {}
+  },
+  finished: true
+}
+2025-06-08T22:50:17.124Z next:router-server:main requestHandler! /_next/static/chunks/node_modules_d998ff04._.js {
+  matchedOutput: {
+    type: 'nextStaticFolder',
+    fsPath: '/home/user/studio/.next/static/chunks/node_modules_d998ff04._.js',
+    locale: undefined,
+    itemsRoot: '/home/user/studio/.next/static',
+    itemPath: '/chunks/node_modules_d998ff04._.js'
+  },
+  statusCode: undefined,
+  resHeaders: {},
+  bodyStream: false,
+  parsedUrl: {
+    pathname: '/_next/static/chunks/node_modules_d998ff04._.js',
+    query: [Object: null prototype] {}
+  },
+  finished: true
+}
+2025-06-08T22:50:17.154Z next:router-server:main requestHandler! /_next/static/chunks/src_app_layout_tsx_b18a8ef4._.js {
+  matchedOutput: {
+    type: 'nextStaticFolder',
+    fsPath: '/home/user/studio/.next/static/chunks/src_app_layout_tsx_b18a8ef4._.js',
+    locale: undefined,
+    itemsRoot: '/home/user/studio/.next/static',
+    itemPath: '/chunks/src_app_layout_tsx_b18a8ef4._.js'
+  },
+  statusCode: undefined,
+  resHeaders: {},
+  bodyStream: false,
+  parsedUrl: {
+    pathname: '/_next/static/chunks/src_app_layout_tsx_b18a8ef4._.js',
+    query: [Object: null prototype] {}
+  },
+  finished: true
+}
+2025-06-08T22:50:17.158Z next:router-server:main requestHandler! /_next/static/chunks/_483a162b._.js {
+  matchedOutput: {
+    type: 'nextStaticFolder',
+    fsPath: '/home/user/studio/.next/static/chunks/_483a162b._.js',
+    locale: undefined,
+    itemsRoot: '/home/user/studio/.next/static',
+    itemPath: '/chunks/_483a162b._.js'
+  },
+  statusCode: undefined,
+  resHeaders: {},
+  bodyStream: false,
+  parsedUrl: {
+    pathname: '/_next/static/chunks/_483a162b._.js',
+    query: [Object: null prototype] {}
+  },
+  finished: true
+}
+2025-06-08T22:50:17.194Z next:router-server:main requestHandler! /_next/static/chunks/src_d1f6e0d1._.js {
+  matchedOutput: {
+    type: 'nextStaticFolder',
+    fsPath: '/home/user/studio/.next/static/chunks/src_d1f6e0d1._.js',
+    locale: undefined,
+    itemsRoot: '/home/user/studio/.next/static',
+    itemPath: '/chunks/src_d1f6e0d1._.js'
+  },
+  statusCode: undefined,
+  resHeaders: {},
+  bodyStream: false,
+  parsedUrl: {
+    pathname: '/_next/static/chunks/src_d1f6e0d1._.js',
+    query: [Object: null prototype] {}
+  },
+  finished: true
+}
+2025-06-08T22:50:17.257Z next:router-server:main requestHandler! /_next/static/chunks/node_modules_tailwind-merge_dist_bundle-mjs_mjs_b854acb4._.js {
+  matchedOutput: {
+    type: 'nextStaticFolder',
+    fsPath: '/home/user/studio/.next/static/chunks/node_modules_tailwind-merge_dist_bundle-mjs_mjs_b854acb4._.js',
+    locale: undefined,
+    itemsRoot: '/home/user/studio/.next/static',
+    itemPath: '/chunks/node_modules_tailwind-merge_dist_bundle-mjs_mjs_b854acb4._.js'
+  },
+  statusCode: undefined,
+  resHeaders: {},
+  bodyStream: false,
+  parsedUrl: {
+    pathname: '/_next/static/chunks/node_modules_tailwind-merge_dist_bundle-mjs_mjs_b854acb4._.js',
+    query: [Object: null prototype] {}
+  },
+  finished: true
+}
+2025-06-08T22:50:17.268Z next:router-server:main requestHandler! /_next/static/chunks/node_modules_next_75e52325._.js {
+  matchedOutput: {
+    type: 'nextStaticFolder',
+    fsPath: '/home/user/studio/.next/static/chunks/node_modules_next_75e52325._.js',
+    locale: undefined,
+    itemsRoot: '/home/user/studio/.next/static',
+    itemPath: '/chunks/node_modules_next_75e52325._.js'
+  },
+  statusCode: undefined,
+  resHeaders: {},
+  bodyStream: false,
+  parsedUrl: {
+    pathname: '/_next/static/chunks/node_modules_next_75e52325._.js',
+    query: [Object: null prototype] {}
+  },
+  finished: true
+}
+2025-06-08T22:50:17.281Z next:router-server:main requestHandler! /_next/static/chunks/node_modules_zod_dist_esm_fc28aa98._.js {
+  matchedOutput: {
+    type: 'nextStaticFolder',
+    fsPath: '/home/user/studio/.next/static/chunks/node_modules_zod_dist_esm_fc28aa98._.js',
+    locale: undefined,
+    itemsRoot: '/home/user/studio/.next/static',
+    itemPath: '/chunks/node_modules_zod_dist_esm_fc28aa98._.js'
+  },
+  statusCode: undefined,
+  resHeaders: {},
+  bodyStream: false,
+  parsedUrl: {
+    pathname: '/_next/static/chunks/node_modules_zod_dist_esm_fc28aa98._.js',
+    query: [Object: null prototype] {}
+  },
+  finished: true
+}
+2025-06-08T22:50:17.315Z next:router-server:main requestHandler! /_next/static/chunks/node_modules_d8d47fcb._.js {
+  matchedOutput: {
+    type: 'nextStaticFolder',
+    fsPath: '/home/user/studio/.next/static/chunks/node_modules_d8d47fcb._.js',
+    locale: undefined,
+    itemsRoot: '/home/user/studio/.next/static',
+    itemPath: '/chunks/node_modules_d8d47fcb._.js'
+  },
+  statusCode: undefined,
+  resHeaders: {},
+  bodyStream: false,
+  parsedUrl: {
+    pathname: '/_next/static/chunks/node_modules_d8d47fcb._.js',
+    query: [Object: null prototype] {}
+  },
+  finished: true
+}
+2025-06-08T22:50:17.357Z next:router-server:main requestHandler! /_next/static/chunks/src_app_%5Blocale%5D_layout_tsx_7f6457fc._.js {
+  matchedOutput: {
+    type: 'nextStaticFolder',
+    fsPath: '/home/user/studio/.next/static/chunks/src_app_[locale]_layout_tsx_7f6457fc._.js',
+    locale: undefined,
+    itemsRoot: '/home/user/studio/.next/static',
+    itemPath: '/chunks/src_app_%5Blocale%5D_layout_tsx_7f6457fc._.js'
+  },
+  statusCode: undefined,
+  resHeaders: {},
+  bodyStream: false,
+  parsedUrl: {
+    pathname: '/_next/static/chunks/src_app_%5Blocale%5D_layout_tsx_7f6457fc._.js',
+    query: [Object: null prototype] {}
+  },
+  finished: true
+}
+2025-06-08T22:50:17.404Z next:router-server:main requestHandler! /_next/static/chunks/src_components_a1afac48._.js {
+  matchedOutput: {
+    type: 'nextStaticFolder',
+    fsPath: '/home/user/studio/.next/static/chunks/src_components_a1afac48._.js',
+    locale: undefined,
+    itemsRoot: '/home/user/studio/.next/static',
+    itemPath: '/chunks/src_components_a1afac48._.js'
+  },
+  statusCode: undefined,
+  resHeaders: {},
+  bodyStream: false,
+  parsedUrl: {
+    pathname: '/_next/static/chunks/src_components_a1afac48._.js',
+    query: [Object: null prototype] {}
+  },
+  finished: true
+}
+2025-06-08T22:50:17.438Z next:router-server:main requestHandler! /_next/static/chunks/_ebd4d2d7._.js {
+  matchedOutput: {
+    type: 'nextStaticFolder',
+    fsPath: '/home/user/studio/.next/static/chunks/_ebd4d2d7._.js',
+    locale: undefined,
+    itemsRoot: '/home/user/studio/.next/static',
+    itemPath: '/chunks/_ebd4d2d7._.js'
+  },
+  statusCode: undefined,
+  resHeaders: {},
+  bodyStream: false,
+  parsedUrl: {
+    pathname: '/_next/static/chunks/_ebd4d2d7._.js',
+    query: [Object: null prototype] {}
+  },
+  finished: true
+}
+2025-06-08T22:50:17.466Z next:router-server:main requestHandler! /_next/static/chunks/src_app_%5Blocale%5D_page_tsx_4f36d886._.js {
+  matchedOutput: {
+    type: 'nextStaticFolder',
+    fsPath: '/home/user/studio/.next/static/chunks/src_app_[locale]_page_tsx_4f36d886._.js',
+    locale: undefined,
+    itemsRoot: '/home/user/studio/.next/static',
+    itemPath: '/chunks/src_app_%5Blocale%5D_page_tsx_4f36d886._.js'
+  },
+  statusCode: undefined,
+  resHeaders: {},
+  bodyStream: false,
+  parsedUrl: {
+    pathname: '/_next/static/chunks/src_app_%5Blocale%5D_page_tsx_4f36d886._.js',
+    query: [Object: null prototype] {}
+  },
+  finished: true
+}
+2025-06-08T22:50:17.475Z next:router-server:main requestHandler! /_next/static/chunks/_e5ae3868._.js {
+  matchedOutput: {
+    type: 'nextStaticFolder',
+    fsPath: '/home/user/studio/.next/static/chunks/_e5ae3868._.js',
+    locale: undefined,
+    itemsRoot: '/home/user/studio/.next/static',
+    itemPath: '/chunks/_e5ae3868._.js'
+  },
+  statusCode: undefined,
+  resHeaders: {},
+  bodyStream: false,
+  parsedUrl: {
+    pathname: '/_next/static/chunks/_e5ae3868._.js',
+    query: [Object: null prototype] {}
+  },
+  finished: true
+}
+2025-06-08T22:50:17.478Z next:router-server:main requestHandler! /_next/static/chunks/src_app_global-error_tsx_7f6457fc._.js {
+  matchedOutput: {
+    type: 'nextStaticFolder',
+    fsPath: '/home/user/studio/.next/static/chunks/src_app_global-error_tsx_7f6457fc._.js',
+    locale: undefined,
+    itemsRoot: '/home/user/studio/.next/static',
+    itemPath: '/chunks/src_app_global-error_tsx_7f6457fc._.js'
+  },
+  statusCode: undefined,
+  resHeaders: {},
+  bodyStream: false,
+  parsedUrl: {
+    pathname: '/_next/static/chunks/src_app_global-error_tsx_7f6457fc._.js',
+    query: [Object: null prototype] {}
+  },
+  finished: true
+}
+2025-06-08T22:50:17.723Z next:router-server:main requestHandler! /_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_bfb8c0ef._.js {
+  matchedOutput: {
+    type: 'nextStaticFolder',
+    fsPath: '/home/user/studio/.next/static/chunks/[turbopack]_browser_dev_hmr-client_hmr-client_ts_bfb8c0ef._.js',
+    locale: undefined,
+    itemsRoot: '/home/user/studio/.next/static',
+    itemPath: '/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_bfb8c0ef._.js'
+  },
+  statusCode: undefined,
+  resHeaders: {},
+  bodyStream: false,
+  parsedUrl: {
+    pathname: '/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_bfb8c0ef._.js',
+    query: [Object: null prototype] {}
+  },
+  finished: true
+}
+2025-06-08T22:50:17.725Z next:router-server:main requestHandler! /_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_61dcf9ba._.js {
+  matchedOutput: {
+    type: 'nextStaticFolder',
+    fsPath: '/home/user/studio/.next/static/chunks/[turbopack]_browser_dev_hmr-client_hmr-client_ts_61dcf9ba._.js',
+    locale: undefined,
+    itemsRoot: '/home/user/studio/.next/static',
+    itemPath: '/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_61dcf9ba._.js'
+  },
+  statusCode: undefined,
+  resHeaders: {},
+  bodyStream: false,
+  parsedUrl: {
+    pathname: '/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_61dcf9ba._.js',
+    query: [Object: null prototype] {}
+  },
+  finished: true
+}
+2025-06-08T22:50:17.790Z next:router-server:main requestHandler! /images/hero-main.png {
+  matchedOutput: {
+    type: 'publicFolder',
+    fsPath: '/home/user/studio/public/images/hero-main.png',
+    locale: undefined,
+    itemsRoot: '/home/user/studio/public',
+    itemPath: '/images/hero-main.png'
+  },
+  statusCode: undefined,
+  resHeaders: {},
+  bodyStream: false,
+  parsedUrl: {
+    pathname: '/images/hero-main.png',
+    query: [Object: null prototype] {}
+  },
+  finished: true
+}
+2025-06-08T22:50:17.807Z next:router-server:main requestHandler! /_next/static/chunks/src_components_ContactFormButton_tsx_ea64e8c3._.js {
+  matchedOutput: {
+    type: 'nextStaticFolder',
+    fsPath: '/home/user/studio/.next/static/chunks/src_components_ContactFormButton_tsx_ea64e8c3._.js',
+    locale: undefined,
+    itemsRoot: '/home/user/studio/.next/static',
+    itemPath: '/chunks/src_components_ContactFormButton_tsx_ea64e8c3._.js'
+  },
+  statusCode: undefined,
+  resHeaders: {},
+  bodyStream: false,
+  parsedUrl: {
+    pathname: '/_next/static/chunks/src_components_ContactFormButton_tsx_ea64e8c3._.js',
+    query: [Object: null prototype] {}
+  },
+  finished: true
+}
+ ⚠ Blocked cross-origin request from 3000-idx-studio-1746374904264.cluster-ux5mmlia3zhhask7riihruxydo.cloudworkstations.dev to /_next/* resource. To allow this, configure "allowedDevOrigins" in next.config
+Read more: https://nextjs.org/docs/app/api-reference/config/next-config-js/allowedDevOrigins
+2025-06-08T22:50:17.882Z next:router-server:main requestHandler! /_next/static/chunks/src_components_ContactFormButton_tsx_9fedb1c4._.js {
+  matchedOutput: {
+    type: 'nextStaticFolder',
+    fsPath: '/home/user/studio/.next/static/chunks/src_components_ContactFormButton_tsx_9fedb1c4._.js',
+    locale: undefined,
+    itemsRoot: '/home/user/studio/.next/static',
+    itemPath: '/chunks/src_components_ContactFormButton_tsx_9fedb1c4._.js'
+  },
+  statusCode: undefined,
+  resHeaders: {},
+  bodyStream: false,
+  parsedUrl: {
+    pathname: '/_next/static/chunks/src_components_ContactFormButton_tsx_9fedb1c4._.js',
+    query: [Object: null prototype] {}
+  },
+  finished: true
+}
+2025-06-08T22:50:17.990Z next:router-server:main requestHandler! /_next/static/chunks/node_modules_67995762._.js {
+  matchedOutput: {
+    type: 'nextStaticFolder',
+    fsPath: '/home/user/studio/.next/static/chunks/node_modules_67995762._.js',
+    locale: undefined,
+    itemsRoot: '/home/user/studio/.next/static',
+    itemPath: '/chunks/node_modules_67995762._.js'
+  },
+  statusCode: undefined,
+  resHeaders: {},
+  bodyStream: false,
+  parsedUrl: {
+    pathname: '/_next/static/chunks/node_modules_67995762._.js',
+    query: [Object: null prototype] {}
+  },
+  finished: true
+}
+2025-06-08T22:50:17.991Z next:router-server:main requestHandler! /_next/static/chunks/src_components_ActivityTicker_tsx_3d61ccfa._.js {
+  matchedOutput: {
+    type: 'nextStaticFolder',
+    fsPath: '/home/user/studio/.next/static/chunks/src_components_ActivityTicker_tsx_3d61ccfa._.js',
+    locale: undefined,
+    itemsRoot: '/home/user/studio/.next/static',
+    itemPath: '/chunks/src_components_ActivityTicker_tsx_3d61ccfa._.js'
+  },
+  statusCode: undefined,
+  resHeaders: {},
+  bodyStream: false,
+  parsedUrl: {
+    pathname: '/_next/static/chunks/src_components_ActivityTicker_tsx_3d61ccfa._.js',
+    query: [Object: null prototype] {}
+  },
+  finished: true
+}
+2025-06-08T22:50:18.057Z next:router-server:main requestHandler! /_next/static/chunks/src_components_ActivityTicker_tsx_9fedb1c4._.js {
+  matchedOutput: {
+    type: 'nextStaticFolder',
+    fsPath: '/home/user/studio/.next/static/chunks/src_components_ActivityTicker_tsx_9fedb1c4._.js',
+    locale: undefined,
+    itemsRoot: '/home/user/studio/.next/static',
+    itemPath: '/chunks/src_components_ActivityTicker_tsx_9fedb1c4._.js'
+  },
+  statusCode: undefined,
+  resHeaders: {},
+  bodyStream: false,
+  parsedUrl: {
+    pathname: '/_next/static/chunks/src_components_ActivityTicker_tsx_9fedb1c4._.js',
+    query: [Object: null prototype] {}
+  },
+  finished: true
+}
+2025-06-08T22:50:18.175Z next:router-server:main requestHandler! /_next/static/chunks/src_lib_document-library_ts_c1ef219b._.js {
+  matchedOutput: {
+    type: 'nextStaticFolder',
+    fsPath: '/home/user/studio/.next/static/chunks/src_lib_document-library_ts_c1ef219b._.js',
+    locale: undefined,
+    itemsRoot: '/home/user/studio/.next/static',
+    itemPath: '/chunks/src_lib_document-library_ts_c1ef219b._.js'
+  },
+  statusCode: undefined,
+  resHeaders: {},
+  bodyStream: false,
+  parsedUrl: {
+    pathname: '/_next/static/chunks/src_lib_document-library_ts_c1ef219b._.js',
+    query: [Object: null prototype] {}
+  },
+  finished: true
+}
+2025-06-08T22:50:18.183Z next:router-server:main requestHandler! /_next/static/chunks/src_lib_document-library_ts_b2d7f814._.js {
+  matchedOutput: {
+    type: 'nextStaticFolder',
+    fsPath: '/home/user/studio/.next/static/chunks/src_lib_document-library_ts_b2d7f814._.js',
+    locale: undefined,
+    itemsRoot: '/home/user/studio/.next/static',
+    itemPath: '/chunks/src_lib_document-library_ts_b2d7f814._.js'
+  },
+  statusCode: undefined,
+  resHeaders: {},
+  bodyStream: false,
+  parsedUrl: {
+    pathname: '/_next/static/chunks/src_lib_document-library_ts_b2d7f814._.js',
+    query: [Object: null prototype] {}
+  },
+  finished: true
+}
+ ✓ Compiled in 1972ms
+ ✓ Compiled in 1662ms
+ ✓ Compiled in 862ms

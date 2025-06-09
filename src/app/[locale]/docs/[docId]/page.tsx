@@ -1,80 +1,72 @@
 // src/app/[locale]/docs/[docId]/page.tsx
-// This is a Server Component that defines static paths and renders the client component.
 
-import React from 'react';
-import { getMarkdown } from '@/lib/markdown-cache';
-import DocPageClient from './DocPageClient';
-import { documentLibrary } from '@/lib/document-library';
-import { localizations } from '@/lib/localizations';
-export const dynamic = 'force-static';
-import { vehicleBillOfSaleFaqs } from '@/app/[locale]/documents/bill-of-sale-vehicle/faqs';
+import { getMarkdown } from '@/lib/markdown-cache'
+import DocPageClient from './DocPageClient'
+import { documentLibrary } from '@/lib/document-library'
+import { localizations } from '@/lib/localizations'
+export const dynamic = 'force-static'
+import { vehicleBillOfSaleFaqs } from '@/app/[locale]/documents/bill-of-sale-vehicle/faqs'
 
 export interface DocPageParams {
-  locale: 'en' | 'es';
-  docId: string;
+  locale: 'en' | 'es'
+  docId: string
 }
 
 interface DocPageProps {
-  params: DocPageParams;
+  params: DocPageParams
 }
 
-// Revalidate this page every hour for fresh content while caching aggressively
-export const revalidate = 3600;
+// Revalidate every hour
+export const revalidate = 3600
 
-// generateStaticParams is crucial for static export of dynamic routes
 export async function generateStaticParams(): Promise<DocPageParams[]> {
-  // 1) In CI with LIMIT_SSG, only build these “critical” pages:
   if (process.env.LIMIT_SSG === 'true') {
     return [
       { locale: 'en', docId: 'affidavit-general' },
       { locale: 'es', docId: 'affidavit-general' },
       { locale: 'en', docId: 'dashboard' },
       { locale: 'es', docId: 'dashboard' },
-      // → add more page pairs here if needed
-    ];
+    ]
   }
 
-  // 2) Otherwise (normal build), build them all:
-  if (!documentLibrary || documentLibrary.length === 0) {
+  if (!documentLibrary?.length || !localizations?.length) {
     console.warn(
-      '[generateStaticParams /docs] documentLibrary is empty or undefined. No paths will be generated.'
-    );
-    return [];
-  }
-  if (!localizations || localizations.length === 0) {
-    console.warn(
-      '[generateStaticParams /docs] localizations is empty or undefined. No paths will be generated.'
-    );
-    return [];
+      '[generateStaticParams /docs] documentLibrary or localizations empty'
+    )
+    return []
   }
 
-  const params: DocPageParams[] = [];
-  for (const locale of localizations) {
+  const params: DocPageParams[] = []
+  for (const locale of localizations as Array<'en' | 'es'>) {
     for (const doc of documentLibrary) {
-      if (doc && doc.id && doc.id !== 'general-inquiry') {
-        params.push({ locale, docId: doc.id });
-      } else {
-        console.warn(
-          `[generateStaticParams /docs] Skipping invalid doc entry for locale ${locale}`
-        );
+      if (doc.id && doc.id !== 'general-inquiry' && doc.schema) {
+        params.push({ locale, docId: doc.id })
       }
     }
   }
-  return params;
+  return params
 }
 
-// This Server Component now correctly passes params + markdown to the Client Component
+// 🔑 Also mark your Page component async
 export default async function DocPage({ params }: DocPageProps) {
-  // satisfy Next.js server component requirements
-  await Promise.resolve();
+  // no-op await to satisfy Next.js
+  await Promise.resolve()
 
-  const markdownContent = await getMarkdown(params.locale, params.docId);
+  const { locale, docId } = params
+
+  // optional guard
+  if (!documentLibrary.find((d) => d.id === docId)) {
+    // you can throw notFound() here if you import it from 'next/navigation'
+  }
+
+  const markdownContent = await getMarkdown(locale, docId)
+
   return (
     <DocPageClient
       params={params}
       markdownContent={markdownContent}
     />
-  );
+  )
 }
 
 export function Head({ params }: { params: DocPageParams }) {
@@ -89,7 +81,7 @@ export function Head({ params }: { params: DocPageParams }) {
         text: params.locale === 'es' ? faq.answerEs : faq.answerEn,
       },
     })),
-  };
+  }
 
   const productJsonLd = {
     '@context': 'https://schema.org',
@@ -100,29 +92,25 @@ export function Head({ params }: { params: DocPageParams }) {
       '@type': 'Offer',
       price: '19.95',
       priceCurrency: 'USD',
-      url: `https://your-domain.com/${params.locale}/docs/${params.docId}`,
+      url: `https://{domain}/${params.locale}/docs/bill-of-sale-vehicle`,
     },
     aggregateRating: {
       '@type': 'AggregateRating',
       ratingValue: '4.8',
       reviewCount: '2026',
     },
-  };
+  }
 
   return (
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(productJsonLd),
-        }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(faqJsonLd),
-        }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
       />
     </>
-  );
+  )
 }
