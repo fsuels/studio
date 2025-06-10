@@ -6,7 +6,7 @@
     "dev": "next dev --turbopack",
     "dev:alt": "next dev --turbopack -p 9003",
     "build": "next build",
-    "export": "next export -o apps/web/out",
+    "export": "next export apps/web/out",
     "start": "NODE_ENV=production node server.mjs",
     "lint": "eslint \"src/**/*.{js,jsx,ts,tsx}\" scripts || true",
     "format": "prettier --write .",
@@ -16,7 +16,8 @@
     "gen:previews": "node --experimental-modules scripts/generate-previews.js",
     "extract:i18n": "i18next-parser \"src/**/*.{ts,tsx}\" --config i18next-parser.config.js",
     "seed:reviews": "node scripts/seed-reviews.ts",
-    "generate:doc": "tsx scripts/generate-doc.ts"
+    "generate:doc": "tsx scripts/generate-doc.ts",
+    "preview": "npm run build && npm run export && firebase hosting:channel:deploy dev"
   },
   "dependencies": {
     "@genkit-ai/googleai": "^1.6.2",

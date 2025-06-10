@@ -4,8 +4,17 @@ import type { Configuration as WebpackConfiguration } from 'webpack';
 
 const isTurbopack = !!process.env.NEXT_TURBOPACK;
 
-// Base configuration applicable to all environments
 const config: NextConfig = {
+  // Enable static export in Next.js 15+
+  output: 'export',
+
+  // Allow your Studio preview origin to load _next assets
+  experimental: {
+    allowedDevOrigins: [
+      'https://9000-idx-studio-1746374904264.cluster-ux5mmlia3zhhask7riihruxydo.cloudworkstations.dev'
+    ],
+  },
+
   typescript: {
     ignoreBuildErrors: true, // Temporarily ignore TS build errors
   },
@@ -22,34 +31,29 @@ const config: NextConfig = {
         port: '',
         pathname: '/**',
       },
-      // Removed placeholder image pattern as all hero assets are local
     ],
   },
-  // No webpack property here by default for Turbopack
 };
 
-// Conditionally add webpack configuration if Next.js is running with Webpack (i.e., not Turbopack)
+// Conditionally add Webpack plugins when not using Turbopack
 if (!isTurbopack) {
-  // Lazy require webpack only when not using Turbopack
   const webpack = require('webpack');
-
   const customWebpackConfig = (
-    webpackConfig: WebpackConfiguration,
-    // options: any // Next.js provides options here, like buildId, dev, isServer etc.
+    webpackConfig: WebpackConfiguration
   ): WebpackConfiguration => {
     webpackConfig.plugins = webpackConfig.plugins || [];
     webpackConfig.plugins.push(
       new webpack.IgnorePlugin({
         resourceRegExp: /^@opentelemetry\/exporter-jaeger$/,
-      }),
+      })
     );
     webpackConfig.plugins.push(
-      new webpack.IgnorePlugin({ resourceRegExp: /^handlebars$/ }),
+      new webpack.IgnorePlugin({ resourceRegExp: /^handlebars$/ })
     );
     return webpackConfig;
   };
-
-  config.webpack = customWebpackConfig as any; // Cast to any if type signature needs to be relaxed
+  // @ts-ignore: relax typing to assign custom webpack config
+  config.webpack = customWebpackConfig;
 }
 
 export default config;
