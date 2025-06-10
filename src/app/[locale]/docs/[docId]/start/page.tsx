@@ -30,9 +30,9 @@ export async function generateStaticParams(): Promise<
   // derive locales array
   const locales: ('en' | 'es')[] =
     Array.isArray(localizations) && localizations.length > 0
-      ? localizations.map((l) =>
+      ? (localizations.map((l) =>
           typeof l === 'string' ? l : l.id
-        ) as ('en' | 'es')[]
+        ) as ('en' | 'es')[])
       : (['en', 'es'] as ('en' | 'es')[]);
 
   const params: Array<{ locale: 'en' | 'es'; docId: string }> = [];
@@ -79,15 +79,16 @@ export async function generateStaticParams(): Promise<
 }
 
 /**
- * Server Component wrapper. Validates params,
- * then hands off to the client component to do all the data-loading.
+ * Server Component wrapper.
+ * Validates params, then hands off to the client component.
  */
 export default async function StartWizardPage({
   params,
 }: StartWizardPageProps) {
-  const { locale, docId } = params;
+  // Await params before destructuring to satisfy Next.js 15’s async API
+  const { locale, docId } = await params;
 
-  // Guard: if someone hits a /docs/…/start for an unknown docId, 404.
+  // Guard: if someone hits /docs/…/start for an unknown docId, 404.
   const docConfig = documentLibrary.find((d) => d.id === docId);
   if (!docConfig) {
     notFound();
