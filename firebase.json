@@ -1,10 +1,26 @@
+// firebase.json
 {
   "hosting": {
+    // Point Hosting at your Next.js static export directory
     "public": "out",
-    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+
+    // Ignore these files in the deploy
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+
+    // Remove file extensions from URLs, no trailing slashes
     "cleanUrls": true,
     "trailingSlash": false,
-    "predeploy": ["npm run gen:previews", "npm run build"],
+
+    // Before each deploy, build (and export) your Next.js site
+    "predeploy": [
+      "npm run build"
+    ],
+
+    // Ensure all client-side routes serve index.html
     "rewrites": [
       {
         "source": "**",
