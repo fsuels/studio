@@ -4,8 +4,12 @@ import { getMarkdown } from '@/lib/markdown-cache'
 import DocPageClient from './DocPageClient'
 import { documentLibrary } from '@/lib/document-library'
 import { localizations } from '@/lib/localizations'
-export const dynamic = 'force-static'
 import { vehicleBillOfSaleFaqs } from '@/app/[locale]/documents/bill-of-sale-vehicle/faqs'
+
+export const dynamic = 'force-static'
+
+// Revalidate every hour
+export const revalidate = 3600
 
 export interface DocPageParams {
   locale: 'en' | 'es'
@@ -15,9 +19,6 @@ export interface DocPageParams {
 interface DocPageProps {
   params: DocPageParams
 }
-
-// Revalidate every hour
-export const revalidate = 3600
 
 export async function generateStaticParams(): Promise<DocPageParams[]> {
   if (process.env.LIMIT_SSG === 'true') {
@@ -47,16 +48,13 @@ export async function generateStaticParams(): Promise<DocPageParams[]> {
   return params
 }
 
-// 🔑 Also mark your Page component async
+// 🔑 Mark your Page component async and await params before using them
 export default async function DocPage({ params }: DocPageProps) {
-  // no-op await to satisfy Next.js
-  await Promise.resolve()
-
-  const { locale, docId } = params
+  const { locale, docId } = await params
 
   // optional guard
   if (!documentLibrary.find((d) => d.id === docId)) {
-    // you can throw notFound() here if you import it from 'next/navigation'
+    // throw notFound() here if desired
   }
 
   const markdownContent = await getMarkdown(locale, docId)
@@ -69,16 +67,20 @@ export default async function DocPage({ params }: DocPageProps) {
   )
 }
 
-export function Head({ params }: { params: DocPageParams }) {
+// 🔑 Mark Head async, await params, and use your NEXT_PUBLIC_SITE_URL env var
+export async function Head({ params }: { params: DocPageParams }) {
+  const { locale, docId } = await params
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL!
+
   const faqJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
     mainEntity: vehicleBillOfSaleFaqs.map((faq) => ({
       '@type': 'Question',
-      name: params.locale === 'es' ? faq.questionEs : faq.questionEn,
+      name: locale === 'es' ? faq.questionEs : faq.questionEn,
       acceptedAnswer: {
         '@type': 'Answer',
-        text: params.locale === 'es' ? faq.answerEs : faq.answerEn,
+        text: locale === 'es' ? faq.answerEs : faq.answerEn,
       },
     })),
   }
@@ -92,7 +94,7 @@ export function Head({ params }: { params: DocPageParams }) {
       '@type': 'Offer',
       price: '19.95',
       priceCurrency: 'USD',
-      url: `https://{domain}/${params.locale}/docs/bill-of-sale-vehicle`,
+      url: `${siteUrl}/${locale}/docs/${docId}`,
     },
     aggregateRating: {
       '@type': 'AggregateRating',

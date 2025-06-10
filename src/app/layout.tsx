@@ -34,6 +34,9 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  // Use the preview or production origin from env
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL!;
+
   const headElements = [
     <meta
       key="viewport"
@@ -70,13 +73,24 @@ export default function RootLayout({
     </Script>,
     <link key="preload-hero" rel="preload" href="/images/hero-homepage.png" as="image" />,
     <link key="preload-signwell" rel="preload" href="/images/signwell-hero.svg" as="image" />,
-    <link key="alt-en" rel="alternate" href="https://123legaldoc.com/en/" hrefLang="en" />,
-    <link key="alt-es" rel="alternate" href="https://123legaldoc.com/es/" hrefLang="es" />,
+    <link
+      key="alt-en"
+      rel="alternate"
+      href={`${siteUrl}/en/`}
+      hrefLang="en"
+    />,
+    <link
+      key="alt-es"
+      rel="alternate"
+      href={`${siteUrl}/es/`}
+      hrefLang="es"
+    />,
   ];
 
   return (
     <html lang="en" suppressHydrationWarning>
-      <Head>{headElements}</Head><body
+      <Head>{headElements}</Head>
+      <body
         className={`${inter.variable} ${merriweather.variable} antialiased flex flex-col min-h-screen overflow-x-hidden`}
       >
         <RootClient>{children}</RootClient>
