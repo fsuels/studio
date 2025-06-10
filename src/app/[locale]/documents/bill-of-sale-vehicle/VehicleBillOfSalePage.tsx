@@ -1,3 +1,5 @@
+'use client';
+'use client';
 /*
 Prompt Objective:
 Create a fully functional `VehicleBillOfSalePage.tsx` React component for a Next.js 15 static-export project using Tailwind CSS, Firebase, and i18next.

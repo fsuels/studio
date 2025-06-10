@@ -1,3 +1,8 @@
+'use client';
+'use client';
+// src/lib/firestore/dashboardData.ts
+'use client';
+
 import { getDb } from '@/lib/firebase';
 import {
   collection,

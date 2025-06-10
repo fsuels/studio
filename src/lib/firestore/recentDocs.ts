@@ -1,4 +1,8 @@
+'use client';
+'use client';
 // src/lib/firestore/recentDocs.ts
+'use client';
+
 //--------------------------------------------------------------
 // Firestore convenience helpers for the “recently used” widget
 //--------------------------------------------------------------
@@ -56,7 +60,7 @@ export async function saveRecentDoc(
 }
 
 /* ----------------------------------------------------------- */
-/*  (utility) merge localStorage‑based list with Firestore      */
+/*  (utility) merge localStorage-based list with Firestore      */
 /* ----------------------------------------------------------- */
 export function mergeRecentLists(
   local: RecentDocEntry[],

@@ -1,3 +1,4 @@
+// src/components/DynamicFormRenderer.tsx
 'use client';
 
 import React, { useState, useEffect, useMemo } from 'react';
@@ -35,7 +36,7 @@ import {
   ClipboardList as QuestionnaireIcon,
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { saveFormProgress } from '@/lib/firestore/saveFormProgress';
+import { saveFormProgress, loadFormProgress } from '@/lib/firestore/saveFormProgress';
 import { track } from '@/lib/analytics';
 import type { FormField } from '@/data/formSchemas';
 import {
@@ -52,8 +53,6 @@ interface Props {
   stateCode?: string;
 }
 
-/* ----------------- consistent icon --------------- */
-
 export default function DynamicFormRenderer({
   documentType,
   schema,
@@ -64,13 +63,10 @@ export default function DynamicFormRenderer({
 }: Props) {
   const { t } = useTranslation('common');
 
-  /* ---------------- state ------------------ */
   const [values, setValues] = useState<Record<string, unknown>>({});
   const [isLoading, setIsLoading] = useState(false);
   const [hasSubmitted, setHasSubmitted] = useState(isReadOnly);
   const [isHydrated, setIsHydrated] = useState(false);
-
-  /* ------- AI suggestions ------------------ */
   const [suggestions, setSuggestions] = useState<FieldSuggestion[]>([]);
 
   /* ------- hydration / load draft ---------- */
@@ -78,21 +74,29 @@ export default function DynamicFormRenderer({
     setIsHydrated(true);
     if (userId && documentType) {
       (async () => {
-        const { loadFormProgress } = await import(
-          '@/lib/firestore/saveFormProgress'
-        );
-        const saved = await loadFormProgress({ userId, docType: documentType });
-        if (saved) setValues(saved);
-      })().catch(console.error);
+        try {
+          const state = stateCode ?? 'NA';
+          console.log('[DynamicFormRenderer] loadFormProgress args →', { userId, documentType, state });
+          const saved = await loadFormProgress({
+            userId,
+            docType: documentType,
+            state,
+          });
+          if (saved && Object.keys(saved).length > 0) {
+            setValues(saved);
+          }
+        } catch (e) {
+          console.error('[DynamicFormRenderer] loadFormProgress error:', e);
+        }
+      })();
     }
-  }, [userId, documentType]);
+  }, [userId, documentType, stateCode]);
 
   /* -------------- on change ---------------- */
   const handleChange = (id: string, value: unknown) => {
     if (isReadOnly) return;
 
-    const isUpsellField = /notarize|upsell|add(?:_)?on|extra/i.test(id);
-    setValues((prev) => {
+    setValues(prev => {
       const updated = { ...prev, [id]: value };
 
       if (userId && documentType && stateCode) {
@@ -104,7 +108,7 @@ export default function DynamicFormRenderer({
         }).catch(console.error);
       }
 
-      if (isUpsellField) {
+      if (/notarize|upsell|add(?:_)?on|extra/i.test(id)) {
         track('add_payment_info', {
           upsell_id: id,
           enabled: !!value,
@@ -117,7 +121,7 @@ export default function DynamicFormRenderer({
   };
 
   /* ------------------------------------------------------------
-     analyze + submit
+     analyze + submit (unchanged from original)
   ------------------------------------------------------------ */
   const suggestionsByField = useMemo(
     () =>
@@ -130,33 +134,23 @@ export default function DynamicFormRenderer({
 
   const analyzeThenSubmit = async () => {
     if (isReadOnly || isLoading || hasSubmitted) return;
-
-    const missing = schema.some((f) => f.required && !values[f.id]);
+    const missing = schema.some(f => f.required && !values[f.id]);
     if (missing) {
       alert(t('dynamicForm.errorMissingRequired'));
       return;
     }
-
     setIsLoading(true);
     try {
       const ai = await analyzeFormData({
         documentType,
         schema,
-        answers: values as Record<
-          string,
-          string | number | boolean | undefined
-        >,
+        answers: values as Record<string, string | number | boolean>,
       });
       setSuggestions(ai);
-
-      const blocking = ai.some(
-        (s) => s.importance === 'error' || s.importance === 'warning',
-      );
-      if (blocking) {
+      if (ai.some(s => s.importance === 'error' || s.importance === 'warning')) {
         setIsLoading(false);
         return;
       }
-
       onSubmit(values);
       setHasSubmitted(true);
     } catch {
@@ -175,9 +169,7 @@ export default function DynamicFormRenderer({
 
   if (schema.length === 0) {
     return (
-      <Card
-        className={`shadow-lg bg-card border border-border ${isReadOnly ? 'opacity-75' : ''}`}
-      >
+      <Card className={`shadow-lg bg-card border border-border ${isReadOnly ? 'opacity-75' : ''}`}>
         <CardHeader>
           <div className="flex items-center space-x-2">
             <QuestionnaireIcon />
@@ -185,14 +177,10 @@ export default function DynamicFormRenderer({
               {t('dynamicForm.stepTitle', { documentType })}
             </CardTitle>
           </div>
-          <CardDescription>
-            {t('dynamicForm.noQuestionsNeeded')}
-          </CardDescription>
+          <CardDescription>{t('dynamicForm.noQuestionsNeeded')}</CardDescription>
         </CardHeader>
         <CardContent>
-          <p className="text-muted-foreground italic">
-            {t('dynamicForm.proceedMessage')}
-          </p>
+          <p className="text-muted-foreground italic">{t('dynamicForm.proceedMessage')}</p>
         </CardContent>
         <CardFooter>
           <Button
@@ -221,20 +209,18 @@ export default function DynamicFormRenderer({
     sug?.importance === 'error'
       ? 'border-red-500'
       : sug?.importance === 'warning'
-        ? 'border-yellow-400'
-        : '';
+      ? 'border-yellow-400'
+      : '';
 
   const getIconColor = (sug?: FieldSuggestion) =>
     sug?.importance === 'error'
       ? 'text-red-600'
       : sug?.importance === 'warning'
-        ? 'text-yellow-600'
-        : '';
+      ? 'text-yellow-600'
+      : '';
 
   return (
-    <Card
-      className={`shadow-lg bg-card border border-border ${isReadOnly ? 'opacity-75' : ''}`}
-    >
+    <Card className={`shadow-lg bg-card border border-border ${isReadOnly ? 'opacity-75' : ''}`}>
       <CardHeader>
         <div className="flex items-center space-x-2">
           <QuestionnaireIcon />
@@ -250,8 +236,8 @@ export default function DynamicFormRenderer({
       </CardHeader>
       <CardContent>
         <TooltipProvider>
-          <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
-            {schema.map((field) => {
+          <form className="space-y-6" onSubmit={e => e.preventDefault()}>
+            {schema.map(field => {
               const sug = suggestionsByField[field.id];
               const borderColor = getBorderColor(sug);
 
@@ -260,9 +246,7 @@ export default function DynamicFormRenderer({
                   <div className="flex items-center gap-1">
                     <Label htmlFor={field.id} className="font-medium">
                       {field.label}
-                      {field.required && (
-                        <span className="ml-0.5 text-destructive">*</span>
-                      )}
+                      {field.required && <span className="ml-0.5 text-destructive">*</span>}
                     </Label>
                     {field.tooltip && (
                       <Tooltip>
@@ -275,33 +259,28 @@ export default function DynamicFormRenderer({
                       </Tooltip>
                     )}
                   </div>
-
                   {field.type === 'select' ? (
                     <Select
                       value={(values[field.id] as string) || ''}
-                      onValueChange={(val: string) =>
-                        handleChange(field.id, val)
-                      }
+                      onValueChange={val => handleChange(field.id, val)}
                       disabled={isReadOnly || isLoading}
                       name={field.id}
                     >
                       <SelectTrigger
                         id={field.id}
-                        className={`${borderColor} ${isReadOnly ? 'bg-muted/50 border-dashed cursor-not-allowed' : 'bg-background'}`}
-                        aria-label={
-                          field.placeholder ||
-                          t('dynamicForm.selectPlaceholder')
-                        }
+                        className={`${borderColor} ${
+                          isReadOnly
+                            ? 'bg-muted/50 border-dashed cursor-not-allowed'
+                            : 'bg-background'
+                        }`}
+                        aria-label={field.placeholder || t('dynamicForm.selectPlaceholder')}
                       >
                         <SelectValue
-                          placeholder={
-                            field.placeholder ||
-                            t('dynamicForm.selectPlaceholder')
-                          }
+                          placeholder={field.placeholder || t('dynamicForm.selectPlaceholder')}
                         />
                       </SelectTrigger>
                       <SelectContent>
-                        {field.options?.map((opt) => (
+                        {field.options?.map(opt => (
                           <SelectItem key={opt.value} value={opt.value}>
                             {opt.label}
                           </SelectItem>
@@ -312,15 +291,17 @@ export default function DynamicFormRenderer({
                     <Textarea
                       id={field.id}
                       value={(values[field.id] as string) || ''}
-                      onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
-                        handleChange(field.id, e.target.value)
-                      }
+                      onChange={e => handleChange(field.id, e.target.value)}
                       required={field.required}
                       disabled={isReadOnly || isLoading}
                       placeholder={field.placeholder || ''}
                       rows={3}
                       name={field.id}
-                      className={`${borderColor} resize-none ${isReadOnly ? 'bg-muted/50 border-dashed cursor-not-allowed' : 'bg-background'}`}
+                      className={`${borderColor} resize-none ${
+                        isReadOnly
+                          ? 'bg-muted/50 border-dashed cursor-not-allowed'
+                          : 'bg-background'
+                      }`}
                     />
                   ) : (
                     <Input
@@ -332,33 +313,30 @@ export default function DynamicFormRenderer({
                         field.type === 'date'
                           ? 'date'
                           : field.type === 'number'
-                            ? 'number'
-                            : 'text'
+                          ? 'number'
+                          : 'text'
                       }
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                        handleChange(field.id, e.target.value)
-                      }
+                      onChange={e => handleChange(field.id, e.target.value)}
                       disabled={isReadOnly || isLoading}
                       name={field.id}
-                      className={`${borderColor} ${isReadOnly ? 'bg-muted/50 border-dashed cursor-not-allowed' : 'bg-background'}`}
+                      className={`${borderColor} ${
+                        isReadOnly
+                          ? 'bg-muted/50 border-dashed cursor-not-allowed'
+                          : 'bg-background'
+                      }`}
                     />
                   )}
-
                   <p className="text-xs text-muted-foreground mt-0.5">
                     {sug?.message || field.helperText || ''}
                   </p>
                   {sug?.importance === 'error' && (
-                    <p
-                      className={`flex items-center gap-1 text-xs ${getIconColor(sug)}`}
-                    >
+                    <p className={`flex items-center gap-1 text-xs ${getIconColor(sug)}`}>
                       <AlertCircle className="h-3 w-3" />
                       {sug.message}
                     </p>
                   )}
                   {sug?.importance === 'warning' && (
-                    <p
-                      className={`flex items-center gap-1 text-xs ${getIconColor(sug)}`}
-                    >
+                    <p className={`flex items-center gap-1 text-xs ${getIconColor(sug)}`}>
                       <AlertTriangle className="h-3 w-3" />
                       {sug.message}
                     </p>

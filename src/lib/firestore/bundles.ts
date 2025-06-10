@@ -1,7 +1,8 @@
-//--------------------------------------------------------------
-// Firestore helpers for bundles (optional – can be omitted if
-// you’ll ship with static bundles only)
-//--------------------------------------------------------------
+'use client';
+'use client';
+// src/lib/bundles.ts
+'use client';  // Ensure Firestore client SDK runs in the browser
+
 import { getDb } from '@/lib/firebase';
 import { collection, getDocs, query, orderBy, limit } from 'firebase/firestore';
 import type { Bundle } from '@/data/bundles';

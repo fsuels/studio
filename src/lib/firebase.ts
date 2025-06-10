@@ -1,6 +1,6 @@
 // src/lib/firebase.ts
 // -----------------------------------------------------------------------------
-// Firebase bootstrap (client + server safe)
+// Firebase bootstrap (client + server safe) with forced HTTP long-polling and error-only logging
 // -----------------------------------------------------------------------------
 
 import { initializeApp, getApps, getApp, type FirebaseApp } from 'firebase/app';
@@ -11,7 +11,7 @@ import type { Firestore } from 'firebase/firestore';
 /* Fallback config (env vars override)                                */
 /* ------------------------------------------------------------------ */
 const defaultFirebaseConfig = {
-  apiKey: 'AIzaSyDzchJQ-4ZypZ2Tscri3VYfJEN2Ocqx0hU',
+  apiKey: 'AIzaSyDzchJQ-4ZypZ2Tscri3VfJEN2Ocqx0hU',
   authDomain: 'legaldoc-26ea8.firebaseapp.com',
   projectId: 'legaldoc-26ea8',
   storageBucket: 'legaldoc-26ea8.appspot.com',
@@ -66,23 +66,22 @@ export async function getAnalyticsInstance(): Promise<Analytics | null> {
 }
 
 /* ------------------------------------------------------------------ */
-/* Firestore – client vs. server                                      */
+/* Firestore – force HTTP long-polling and show only errors           */
 /* ------------------------------------------------------------------ */
 let dbInstance: Firestore | null = null;
 export async function getDb(): Promise<Firestore> {
   if (dbInstance) return dbInstance;
 
-  if (typeof window === 'undefined') {
-    // Server: force long-polling to avoid WebChannel errors
-    const { initializeFirestore } = await import('firebase/firestore');
-    dbInstance = initializeFirestore(app, {
-      experimentalForceLongPolling: true,
-    });
-  } else {
-    // Client: use normal Firestore
-    const { getFirestore } = await import('firebase/firestore');
-    dbInstance = getFirestore(app);
-  }
+  const { initializeFirestore, setLogLevel } = await import(
+    'firebase/firestore'
+  );
+
+  dbInstance = initializeFirestore(app, {
+    experimentalForceLongPolling: true,
+  });
+
+  // Suppress all Firestore logs except errors
+  setLogLevel('error');
 
   return dbInstance;
 }
