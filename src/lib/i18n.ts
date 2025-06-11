@@ -2,7 +2,7 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
-import { resources } from './i18nResources';
+import { loadAllResources } from './i18nResources';
 
 /** Guard so the same instance isn’t initialised twice */
 if (!i18n.isInitialized) {
@@ -14,7 +14,9 @@ if (!i18n.isInitialized) {
   }
 
   // ── Single initialisation call
-  i18nInstance
+  const resources = await loadAllResources();
+
+  await i18nInstance
     .init({
       lng: 'en', // Default language
       fallbackLng: 'en',
