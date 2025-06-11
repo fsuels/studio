@@ -70,8 +70,15 @@ NEXT_PUBLIC_SITE_URL=https://example.com npm run build
 npm start
 ```
 
+
 The site will now be available on `https://localhost:<port>` (or your configured
 domain) and Lighthouse should no longer flag insecure requests.
+
+## Firestore Connectivity
+
+The Firestore client uses gRPC transport by default. If your network blocks
+gRPC, set `NEXT_PUBLIC_FIRESTORE_FORCE_POLLING=true` to fall back to HTTP long
+polling. Polling is slower and should be enabled only when required.
 
 ## Troubleshooting Lighthouse reports
 

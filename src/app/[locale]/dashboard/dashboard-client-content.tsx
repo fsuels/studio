@@ -76,6 +76,7 @@ export default function DashboardClientContent({
   const [sortBy, setSortBy] = useState<'name' | 'date' | 'status'>('name');
   const [sortDir, setSortDir] = useState<'asc' | 'desc'>('asc');
   const [renameDoc, setRenameDoc] = useState<DashboardDocument | null>(null);
+  const [duplicatingDocId, setDuplicatingDocId] = useState<string | null>(null);
 
   const {
     documents,
@@ -349,13 +350,28 @@ export default function DashboardClientContent({
                             {t('Rename')}
                           </DropdownMenuItem>
                           <DropdownMenuItem
+                            disabled={duplicatingDocId === doc.id}
                             onSelect={async () => {
-                              await duplicateDocument(user!.uid, doc.id);
-                              toast({ title: t('Document duplicated') });
-                              queryClient.invalidateQueries({ queryKey: ['dashboardDocuments', user!.uid] });
+                              setDuplicatingDocId(doc.id);
+                              try {
+                                await duplicateDocument(user!.uid, doc.id);
+                                toast({ title: t('Document duplicated') });
+                              } catch {
+                                toast({
+                                  title: t('Error duplicating document'),
+                                  variant: 'destructive',
+                                });
+                              } finally {
+                                setDuplicatingDocId(null);
+                                queryClient.invalidateQueries({ queryKey: ['dashboardDocuments', user!.uid] });
+                              }
                             }}
                           >
-                            {t('Duplicate')}
+                            {duplicatingDocId === doc.id ? (
+                              <Loader2 className="h-4 w-4 animate-spin" />
+                            ) : (
+                              t('Duplicate')
+                            )}
                           </DropdownMenuItem>
                           <DropdownMenuItem
                             onSelect={async () => {
