@@ -79,10 +79,16 @@ export async function getDb(): Promise<Firestore> {
   const forcePolling =
     process.env.NEXT_PUBLIC_FIRESTORE_FORCE_POLLING === 'true';
 
-  dbInstance = initializeFirestore(
-    app,
-    forcePolling ? { experimentalForceLongPolling: true } : undefined,
-  );
+  /* -------------------------------------------------------------
+     ✅  initializeFirestore **requires** a settings object.
+        If we omit it (i.e. pass `undefined`) the SDK dereferences
+        `settings.cacheSizeBytes` and crashes.
+     ------------------------------------------------------------- */
+  const settings = forcePolling
+    ? { experimentalForceLongPolling: true }
+    : {};
+
+  dbInstance = initializeFirestore(app, settings);
 
   // Suppress all Firestore logs except errors
   setLogLevel('error');
