@@ -66,6 +66,7 @@ export default function TemplatesClientContent({ locale }: Props) {
           alt="Happy customer"
           width={400}
           height={240}
+          priority
           className="rounded-lg"
         />
       </div>
