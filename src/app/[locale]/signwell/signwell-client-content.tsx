@@ -726,6 +726,7 @@ export default function SignWellClientContent({
               alt={t('security.imageAlt')}
               width={400}
               height={300}
+              priority
               className="rounded-lg shadow-xl"
               data-ai-hint="security shield padlock"
             />
