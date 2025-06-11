@@ -245,16 +245,16 @@ export default function DashboardClientContent({
                     <Button variant="outline">{t('New')} ▼</Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="start">
-                    <DropdownMenuItem onClick={() => setShowFolderModal(true)}>
+                    <DropdownMenuItem onSelect={() => setShowFolderModal(true)}>
                       {t('Folder')}
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
                       <Link href={`/${locale}/templates`}>{t('Document')}</Link>
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => router.push(`/${locale}/online-notary`)}>
+                    <DropdownMenuItem onSelect={() => router.push(`/${locale}/online-notary`)}>
                       {t('Notarization')}
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => router.push(`/${locale}/signwell`)}>
+                    <DropdownMenuItem onSelect={() => router.push(`/${locale}/signwell`)}>
                       {t('eSign')}
                     </DropdownMenuItem>
                   </DropdownMenuContent>
@@ -320,12 +320,12 @@ export default function DashboardClientContent({
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-+                         <DropdownMenuItem onClick={() => router.push(`/${locale}/docs/${doc.docType}/view?docId=${doc.id}`)}>{t('View')}</DropdownMenuItem>
-                          <DropdownMenuItem onClick={() => setRenameDoc(doc)}>
+                          <DropdownMenuItem onSelect={() => router.push(`/${locale}/docs/${doc.docType}/view?docId=${doc.id}`)}>{t('View')}</DropdownMenuItem>
+                          <DropdownMenuItem onSelect={() => setRenameDoc(doc)}>
                             {t('Rename')}
                           </DropdownMenuItem>
                           <DropdownMenuItem
-                            onClick={async () => {
+                            onSelect={async () => {
                               await duplicateDocument(user!.uid, doc.id);
                               toast({ title: t('Document duplicated') });
                               queryClient.invalidateQueries({ queryKey: ['dashboardDocuments', user!.uid] });
@@ -334,7 +334,7 @@ export default function DashboardClientContent({
                             {t('Duplicate')}
                           </DropdownMenuItem>
                           <DropdownMenuItem
-                            onClick={async () => {
+                            onSelect={async () => {
                               await softDeleteDocument(user!.uid, doc.id);
                               toast({ title: t('Document deleted') });
                               queryClient.invalidateQueries({ queryKey: ['dashboardDocuments', user!.uid] });
