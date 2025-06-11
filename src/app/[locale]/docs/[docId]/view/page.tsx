@@ -1,8 +1,10 @@
 // src/app/[locale]/docs/[docId]/view/page.tsx
 'use client';
 
-import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import React, { useState, useEffect } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { getFirestore, doc as firestoreDoc, getDoc } from 'firebase/firestore';
+import { getStorage, ref as storageRef, getDownloadURL } from 'firebase/storage';
 import DocumentDetail from '@/components/DocumentDetail';
 import { useAuth } from '@/hooks/useAuth';
 import { getSignWellUrl } from '@/services/signwell';
@@ -15,10 +17,65 @@ interface ViewDocumentPageProps {
 
 export default function ViewDocumentPage({ params }: ViewDocumentPageProps) {
   const { locale, docId } = params;
-  const { isLoggedIn, isLoading: authLoading } = useAuth();
+  const { isLoggedIn, isLoading: authLoading, user } = useAuth();
   const router = useRouter();
+  const search = useSearchParams();
+  const savedDocId = search.get('savedDocId');
+
+  const [savedContent, setSavedContent] = useState<string | null>(null);
+  const [contentLoading, setContentLoading] = useState(false);
+  const [contentError, setContentError] = useState<string | null>(null);
 
   const [isSigning, setIsSigning] = useState(false);
+
+  useEffect(() => {
+    async function loadSaved() {
+      if (!savedDocId || !isLoggedIn) return;
+      setContentLoading(true);
+      setContentError(null);
+      try {
+        const db = getFirestore();
+        const ref = firestoreDoc(db, 'users', user?.uid ?? '', 'documents', savedDocId);
+        const snap = await getDoc(ref);
+        if (!snap.exists()) {
+          setContentError('Saved document not found.');
+          setContentLoading(false);
+          return;
+        }
+        const data = snap.data() as any;
+        if (data.markdown) {
+          setSavedContent(data.markdown as string);
+        } else if (data.storagePath) {
+          const storage = getStorage();
+          const fileRef = storageRef(storage, data.storagePath);
+          const url = await getDownloadURL(fileRef);
+          const res = await fetch(url);
+          if (res.ok) {
+            const text = await res.text();
+            setSavedContent(text);
+          } else {
+            setContentError('Unable to fetch saved content.');
+          }
+        } else if (data.url) {
+          const res = await fetch(data.url);
+          if (res.ok) {
+            const text = await res.text();
+            setSavedContent(text);
+          } else {
+            setContentError('Unable to fetch saved content.');
+          }
+        } else {
+          setContentError('No saved content available.');
+        }
+      } catch (err) {
+        console.error('[view] failed to load saved document', err);
+        setContentError('Failed to load saved document.');
+      } finally {
+        setContentLoading(false);
+      }
+    }
+    loadSaved();
+  }, [savedDocId, isLoggedIn, user]);
 
   // Navigate back to the start‐wizard, preserving any saved data
   const handleEdit = () => {
@@ -91,7 +148,17 @@ export default function ViewDocumentPage({ params }: ViewDocumentPageProps) {
 
       {/* Document preview */}
       <div className="border rounded-lg overflow-hidden">
-        <DocumentDetail docId={docId} locale={locale} />
+        {contentLoading ? (
+          <div className="flex justify-center items-center h-64">
+            <Loader2 className="h-8 w-8 animate-spin text-primary" />
+          </div>
+        ) : contentError ? (
+          <div className="p-4 text-center text-destructive text-sm">
+            {contentError}
+          </div>
+        ) : (
+          <DocumentDetail docId={docId} locale={locale} markdownContent={savedContent ?? undefined} />
+        )}
       </div>
     </div>
   );
