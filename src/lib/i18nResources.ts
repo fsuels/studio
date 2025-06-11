@@ -1,52 +1,67 @@
 import type { Resource } from 'i18next';
 
-import enCommon from '../../public/locales/en/common.json';
-import enHeader from '../../public/locales/en/header.json';
-import enFooter from '../../public/locales/en/footer.json';
-import enSupport from '../../public/locales/en/support.json';
-import enFaq from '../../public/locales/en/faq.json';
-import enDocuments from '../../public/locales/en/documents/bill-of-sale-vehicle.json';
-import enDocBillOfSaleVehicle from '../../public/locales/en/doc_bill_of_sale_vehicle.json';
-import enDocPromissoryNote from '../../public/locales/en/doc_promissory_note.json';
-import enOnlineNotary from '../../public/locales/en/online-notary.json';
-import enElectronicSignature from '../../public/locales/en/electronic-signature.json';
+type Locale = 'en' | 'es';
 
-import esCommon from '../../public/locales/es/common.json';
-import esHeader from '../../public/locales/es/header.json';
-import esFooter from '../../public/locales/es/footer.json';
-import esSupport from '../../public/locales/es/support.json';
-import esFaq from '../../public/locales/es/faq.json';
-import esDocuments from '../../public/locales/es/documents/bill-of-sale-vehicle.json';
-import esDocBillOfSaleVehicle from '../../public/locales/es/doc_bill_of_sale_vehicle.json';
-import esDocPromissoryNote from '../../public/locales/es/doc_promissory_note.json';
-import esOnlineNotary from '../../public/locales/es/online-notary.json';
-import esElectronicSignature from '../../public/locales/es/electronic-signature.json';
+/**
+ * Dynamically import all JSON resources for a given locale.
+ */
+export async function loadLocaleResources(locale: Locale): Promise<Resource[string]> {
+  const [
+    common,
+    header,
+    footer,
+    support,
+    faq,
+    documents,
+    docBillOfSaleVehicle,
+    docPromissoryNote,
+    onlineNotary,
+    electronicSignature,
+  ] = await Promise.all([
+    import(`../../public/locales/${locale}/common.json`).then((m) => m.default),
+    import(`../../public/locales/${locale}/header.json`).then((m) => m.default),
+    import(`../../public/locales/${locale}/footer.json`).then((m) => m.default),
+    import(`../../public/locales/${locale}/support.json`).then((m) => m.default),
+    import(`../../public/locales/${locale}/faq.json`).then((m) => m.default),
+    import(`../../public/locales/${locale}/documents/bill-of-sale-vehicle.json`).then(
+      (m) => m.default,
+    ),
+    import(`../../public/locales/${locale}/doc_bill_of_sale_vehicle.json`).then(
+      (m) => m.default,
+    ),
+    import(`../../public/locales/${locale}/doc_promissory_note.json`).then(
+      (m) => m.default,
+    ),
+    import(`../../public/locales/${locale}/online-notary.json`).then(
+      (m) => m.default,
+    ),
+    import(`../../public/locales/${locale}/electronic-signature.json`).then(
+      (m) => m.default,
+    ),
+  ]);
 
-export const resources: Resource = {
-  en: {
-    common: enCommon,
-    header: enHeader,
-    footer: enFooter,
-    support: enSupport,
-    faq: enFaq,
-    documents: enDocuments,
-    doc_bill_of_sale_vehicle: enDocBillOfSaleVehicle,
-    doc_promissory_note: enDocPromissoryNote,
-    'online-notary': enOnlineNotary,
-    'electronic-signature': enElectronicSignature,
-  },
-  es: {
-    common: esCommon,
-    header: esHeader,
-    footer: esFooter,
-    support: esSupport,
-    faq: esFaq,
-    documents: esDocuments,
-    doc_bill_of_sale_vehicle: esDocBillOfSaleVehicle,
-    doc_promissory_note: esDocPromissoryNote,
-    'online-notary': esOnlineNotary,
-    'electronic-signature': esElectronicSignature,
-  },
-};
+  return {
+    common,
+    header,
+    footer,
+    support,
+    faq,
+    documents,
+    doc_bill_of_sale_vehicle: docBillOfSaleVehicle,
+    doc_promissory_note: docPromissoryNote,
+    'online-notary': onlineNotary,
+    'electronic-signature': electronicSignature,
+  } as Resource[string];
+}
 
-export default resources;
+/**
+ * Load resources for all supported locales.
+ */
+export async function loadAllResources(): Promise<Resource> {
+  const locales: Locale[] = ['en', 'es'];
+  const resources: Resource = {} as Resource;
+  for (const locale of locales) {
+    resources[locale] = await loadLocaleResources(locale);
+  }
+  return resources;
+}
