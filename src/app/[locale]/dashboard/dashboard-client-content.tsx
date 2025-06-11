@@ -84,6 +84,13 @@ export default function DashboardClientContent({
     enabled: isHydrated && isLoggedIn && !!user?.uid,
   });
 
+  // Prefetch document view pages after documents load
+  useEffect(() => {
+    documents.forEach((doc) => {
+      router.prefetch(`/${locale}/docs/${doc.docType}/view?docId=${doc.id}`);
+    });
+  }, [documents, router, locale]);
+
   useEffect(() => {
     setIsHydrated(true);
   }, []);
