@@ -13,6 +13,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { createFolder } from '@/lib/firestore/folderActions';
+import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/hooks/useAuth';
 
 interface FolderModalProps {
@@ -29,10 +30,26 @@ export default function FolderModal({ open, onClose }: FolderModalProps) {
     if (open) setName('');
   }, [open]);
 
+  const { toast } = useToast();
+
   const handleCreate = async () => {
     if (!user?.uid) return;
-    await createFolder(user.uid, name || t('UntitledFolder', 'Untitled Folder'));
-    onClose();
+    try {
+      await createFolder(
+        user.uid,
+        name || t('UntitledFolder', 'Untitled Folder'),
+      );
+      toast({ title: t('Folder created') });
+    } catch (err: any) {
+      console.error('[FolderModal] create folder failed', err);
+      toast({
+        title: t('Error creating folder'),
+        description: err?.message || String(err),
+        variant: 'destructive',
+      });
+    } finally {
+      onClose();
+    }
   };
 
   return (
