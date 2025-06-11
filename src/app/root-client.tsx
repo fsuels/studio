@@ -2,15 +2,9 @@
 'use client';
 
 import React, { useEffect } from 'react';
-import dynamic from 'next/dynamic';
 import { I18nextProvider } from 'react-i18next';
 import i18n from '@/lib/i18n';
 import { mark, measure } from '@/utils/performance';
-
-// ✅ Dynamically load DocumentFlow to allow preload
-const DocumentFlow = dynamic(() => import('@/components/DocumentFlow'), {
-  ssr: false,
-}) as any; // 👈 temporary `any` so we can safely check .preload()
 
 export default function RootClient({
   children,
@@ -24,11 +18,6 @@ export default function RootClient({
   useEffect(() => {
     mark('root-layout-end');
     measure('root-layout', 'root-layout-start', 'root-layout-end');
-
-    // ✅ Prevent runtime error: check preload exists
-    if (typeof DocumentFlow?.preload === 'function') {
-      void DocumentFlow.preload();
-    }
   }, []);
 
   return (
