@@ -71,8 +71,6 @@ export default function RootLayout({
           : setup();
       `}
     </Script>,
-    <link key="preload-hero" rel="preload" href="/images/hero-homepage.png" as="image" />,
-    <link key="preload-signwell" rel="preload" href="/images/signwell-hero.svg" as="image" />,
     <link
       key="alt-en"
       rel="alternate"
