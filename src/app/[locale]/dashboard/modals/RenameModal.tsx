@@ -33,8 +33,8 @@ export default function RenameModal({
   }, [open, currentName]);
 
   const handleSave = async () => {
-    await onRename(name);
     onClose();
+    await onRename(name);
   };
 
   return (

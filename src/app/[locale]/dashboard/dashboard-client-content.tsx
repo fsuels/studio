@@ -367,9 +367,20 @@ export default function DashboardClientContent({
               onClose={() => setRenameDoc(null)}
               onRename={async (name) => {
                 if (!renameDoc) return;
-                await renameDocument(user!.uid, renameDoc.id, name);
-                toast({ title: t('Document renamed') });
-                queryClient.invalidateQueries({ queryKey: ['dashboardDocuments', user!.uid] });
+                const key = ['dashboardDocuments', user!.uid] as const;
+                const previous = queryClient.getQueryData<DashboardDocument[]>(key);
+                queryClient.setQueryData<DashboardDocument[]>(key, (old) =>
+                  old?.map((d) => (d.id === renameDoc.id ? { ...d, name } : d)) || []
+                );
+                try {
+                  await renameDocument(user!.uid, renameDoc.id, name);
+                  toast({ title: t('Document renamed') });
+                } catch {
+                  if (previous) queryClient.setQueryData(key, previous);
+                  toast({ title: t('Error renaming document'), variant: 'destructive' });
+                } finally {
+                  queryClient.invalidateQueries({ queryKey: key });
+                }
               }}
             />
           </>
