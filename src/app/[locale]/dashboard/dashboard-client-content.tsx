@@ -26,6 +26,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import RenameModal from './modals/RenameModal';
+import FolderModal from './modals/FolderModal';
 import ProfileSettings from '@/components/ProfileSettings';
 import {
   FileText,
@@ -267,7 +268,10 @@ export default function DashboardClientContent({
                   </DropdownMenuContent>
                 </DropdownMenu>
               </div>
-            {/* TODO: Folder modal implementation */}
+              <FolderModal
+                open={showFolderModal}
+                onClose={() => setShowFolderModal(false)}
+              />
             </div>
 
             <Table>
