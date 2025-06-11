@@ -29,14 +29,14 @@ export default function SignUpClientContent({
 }: SignUpClientContentProps) {
   const { t } = useTranslation('common');
   const router = useRouter();
-  const { login } = useAuth();
+  const { signUp } = useAuth();
   const { toast } = useToast();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
-  const handleSignUp = (e: React.FormEvent) => {
+  const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
     if (password !== confirmPassword) {
       toast({
@@ -47,12 +47,20 @@ export default function SignUpClientContent({
       return;
     }
     if (email && password) {
-      login(email);
-      toast({
-        title: t('Account Created!'),
-        description: t('Redirecting to your dashboard...'),
-      });
-      router.push(`/${locale}/dashboard`);
+      try {
+        await signUp(email, password);
+        toast({
+          title: t('Account Created!'),
+          description: t('Redirecting to your dashboard...'),
+        });
+        router.push(`/${locale}/dashboard`);
+      } catch (err: any) {
+        toast({
+          title: t('Signup Failed', { defaultValue: 'Signup Failed' }),
+          description: err?.message || 'Authentication error',
+          variant: 'destructive',
+        });
+      }
     } else {
       toast({
         title: t('Signup Failed', { defaultValue: 'Signup Failed' }),
