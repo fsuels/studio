@@ -11,7 +11,14 @@ import React, {
   useMemo,
 } from 'react';
 import { app } from '@/lib/firebase';        // ← Corrected import path
-import { getAuth } from 'firebase/auth';     // ← Use getAuth with the initialized app
+import {
+  getAuth,
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  signOut,
+  updateProfile,
+} from 'firebase/auth';
 
 // 1) Define the shape of your auth context
 interface User {
@@ -28,7 +35,13 @@ interface AuthContextType {
   isLoggedIn: boolean;
   user: User | null;
   isLoading: boolean;
-  login: (email: string, uid?: string, name?: string) => Promise<void>;
+  login: (
+    email: string,
+    password?: string,
+    uid?: string,
+    name?: string,
+  ) => Promise<void>;
+  signUp: (email: string, password: string, name?: string) => Promise<void>;
   logout: () => void;
   updateUser: (updates: Partial<User> & { password?: string }) => void;
 }
@@ -42,75 +55,98 @@ function useAuthHook(): AuthContextType {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // On mount, read from localStorage
+  // Sync with Firebase auth state
   useEffect(() => {
+    const auth = getAuth(app);
     setIsLoading(true);
-    if (typeof window !== 'undefined') {
-      const stored = localStorage.getItem('mockAuth');
-      if (stored) {
-        try {
-          const parsedData = JSON.parse(stored);
-          if (
-            parsedData &&
-            typeof parsedData === 'object' &&
-            'isLoggedIn' in parsedData &&
-            'user' in parsedData
-          ) {
-            setIsLoggedIn(parsedData.isLoggedIn);
-            setUser(parsedData.user);
-          } else {
-            localStorage.removeItem('mockAuth');
-            setIsLoggedIn(false);
-            setUser(null);
-          }
-        } catch {
-          localStorage.removeItem('mockAuth');
-          setIsLoggedIn(false);
-          setUser(null);
+    const unsubscribe = onAuthStateChanged(auth, (fbUser) => {
+      if (fbUser) {
+        const newUser: User = {
+          uid: fbUser.uid,
+          email: fbUser.email,
+          name: fbUser.displayName || '',
+          phone: user?.phone || '',
+          address: user?.address || '',
+          twoStep: user?.twoStep || false,
+          textUpdates: user?.textUpdates || false,
+        };
+        setIsLoggedIn(true);
+        setUser(newUser);
+        if (typeof window !== 'undefined') {
+          localStorage.setItem(
+            'mockAuth',
+            JSON.stringify({ isLoggedIn: true, user: newUser })
+          );
         }
+      } else {
+        if (typeof window !== 'undefined') {
+          localStorage.removeItem('mockAuth');
+        }
+        setIsLoggedIn(false);
+        setUser(null);
       }
-    }
-    setIsLoading(false);
+      setIsLoading(false);
+    });
+    return () => unsubscribe();
   }, []);
 
   // login & logout update state + localStorage
   const login = useCallback(
-    async (email: string, uid?: string, name?: string) => {
-      const newUid = uid || `mock-user-${Date.now()}`;
-      let finalName = name || user?.name || '';
-
-      if (!finalName && uid) {
-        try {
-          const auth = getAuth(app);  // ← Now works correctly
-          if (auth.currentUser?.uid === uid) {
-            finalName = auth.currentUser.displayName || '';
-          }
-        } catch (err) {
-          console.warn('[useAuth] Failed to retrieve username from auth service', err);
+    async (
+      email: string,
+      password?: string,
+      uid?: string,
+      name?: string,
+    ) => {
+      try {
+        const auth = getAuth(app);
+        let fbUser = auth.currentUser;
+        if (password) {
+          const cred = await signInWithEmailAndPassword(auth, email, password);
+          fbUser = cred.user;
+          uid = cred.user.uid;
+          name = cred.user.displayName || name;
         }
+
+        const newUser: User = {
+          uid: uid || fbUser?.uid || `mock-user-${Date.now()}`,
+          email: fbUser?.email || email,
+          name: name || fbUser?.displayName || '',
+          phone: user?.phone || '',
+          address: user?.address || '',
+          twoStep: user?.twoStep || false,
+          textUpdates: user?.textUpdates || false,
+        };
+
+        localStorage.setItem(
+          'mockAuth',
+          JSON.stringify({ isLoggedIn: true, user: newUser })
+        );
+        setIsLoggedIn(true);
+        setUser(newUser);
+      } catch (err) {
+        console.error('[useAuth] login error', err);
+        throw err;
       }
-
-      const newUser: User = {
-        uid: newUid,
-        email,
-        name: finalName,
-        phone: user?.phone || '',
-        address: user?.address || '',
-        twoStep: user?.twoStep || false,
-        textUpdates: user?.textUpdates || false,
-      };
-
-      localStorage.setItem(
-        'mockAuth',
-        JSON.stringify({ isLoggedIn: true, user: newUser })
-      );
-      setIsLoggedIn(true);
-      setUser(newUser);
     },
     [user]
   );
 
+  const signUp = useCallback(
+    async (email: string, password: string, name?: string) => {
+      const auth = getAuth(app);
+      const cred = await createUserWithEmailAndPassword(auth, email, password);
+      if (name) {
+        await updateProfile(cred.user, { displayName: name });
+      }
+      await login(email, undefined, cred.user.uid, name);
+    },
+    [login]
+  );
+
   const logout = useCallback(() => {
+    const auth = getAuth(app);
+    signOut(auth).catch((err) => console.error('[useAuth] signOut error', err));
     localStorage.removeItem('mockAuth');
     setIsLoggedIn(false);
     setUser(null);
@@ -132,8 +168,8 @@ function useAuthHook(): AuthContextType {
   );
 
   const contextValue = useMemo(
-    () => ({ isLoggedIn, user, isLoading, login, logout, updateUser }),
-    [isLoggedIn, user, isLoading, login, logout, updateUser]
+    () => ({ isLoggedIn, user, isLoading, login, signUp, logout, updateUser }),
+    [isLoggedIn, user, isLoading, login, signUp, logout, updateUser]
   );
 
   return contextValue;

@@ -37,17 +37,26 @@ export default function SignInPage() {
     router.prefetch(`/${locale}/dashboard`);
   }, [router, locale]);
 
-  const handleSignIn = (e: React.FormEvent) => {
+  const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
-    // In a real app, you'd validate credentials against a backend
     if (email && password) {
       setIsSubmitting(true);
-      login(email);
-      toast({
-        title: t('Login Successful!'),
-        description: t('Redirecting to your dashboard...'),
-      });
-      router.push(`/${locale}/dashboard`);
+      try {
+        await login(email, password);
+        toast({
+          title: t('Login Successful!'),
+          description: t('Redirecting to your dashboard...'),
+        });
+        router.push(`/${locale}/dashboard`);
+      } catch (err: any) {
+        toast({
+          title: t('Login Failed'),
+          description: err?.message || 'Authentication error',
+          variant: 'destructive',
+        });
+      } finally {
+        setIsSubmitting(false);
+      }
     } else {
       toast({
         title: t('Login Failed'),

@@ -140,6 +140,7 @@ export default function AuthModal({
       // update local auth context so the rest of the app knows the user
       await login(
         cred.user.email || '',
+        undefined,
         cred.user.uid,
         cred.user.displayName || undefined,
       );

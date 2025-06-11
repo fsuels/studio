@@ -124,26 +124,39 @@ export default function DashboardClientContent({
   const handleFileSelected = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file || !user) return;
-    const storage = getStorage();
-    const db = getFirestore();
-    const newId = `uploaded-${Date.now()}`;
-    const path = `users/${user.uid}/documents/${newId}-${file.name}`;
-    const fileRef = storageRef(storage, path);
-    await uploadBytes(fileRef, file);
-    const url = await getDownloadURL(fileRef);
-    await setDoc(
-      firestoreDoc(db, 'users', user.uid, 'documents', newId),
-      {
-        name: file.name,
-        date: serverTimestamp(),
-        status: 'Uploaded',
-        docType: 'uploaded',
-        storagePath: path,
-        url,
-      }
-    );
-    queryClient.invalidateQueries({ queryKey: ['dashboardDocuments', user.uid] });
-    toast({ title: t('Document uploaded') });
+    try {
+      const storage = getStorage();
+      const db = getFirestore();
+      const newId = `uploaded-${Date.now()}`;
+      const path = `users/${user.uid}/documents/${newId}-${file.name}`;
+      const fileRef = storageRef(storage, path);
+      await uploadBytes(fileRef, file);
+      const url = await getDownloadURL(fileRef);
+      await setDoc(
+        firestoreDoc(db, 'users', user.uid, 'documents', newId),
+        {
+          name: file.name,
+          date: serverTimestamp(),
+          status: 'Uploaded',
+          docType: 'uploaded',
+          storagePath: path,
+          url,
+        },
+      );
+      queryClient.invalidateQueries({
+        queryKey: ['dashboardDocuments', user.uid],
+      });
+      toast({ title: t('Document uploaded') });
+    } catch (err: any) {
+      console.error('[dashboard] upload failed', err);
+      toast({
+        title: t('Upload failed'),
+        description: err?.message || String(err),
+        variant: 'destructive',
+      });
+    } finally {
+      if (fileInputRef.current) fileInputRef.current.value = '';
+    }
   };
 
   const formatDate = (
