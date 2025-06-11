@@ -1,6 +1,6 @@
 // src/lib/firebase.ts
 // -----------------------------------------------------------------------------
-// Firebase bootstrap (client + server safe) with forced HTTP long-polling and error-only logging
+// Firebase bootstrap (client + server safe) with optional HTTP long-polling and error-only logging
 // -----------------------------------------------------------------------------
 
 import { initializeApp, getApps, getApp, type FirebaseApp } from 'firebase/app';
@@ -66,7 +66,7 @@ export async function getAnalyticsInstance(): Promise<Analytics | null> {
 }
 
 /* ------------------------------------------------------------------ */
-/* Firestore – force HTTP long-polling and show only errors           */
+/* Firestore – optional HTTP long-polling and show only errors        */
 /* ------------------------------------------------------------------ */
 let dbInstance: Firestore | null = null;
 export async function getDb(): Promise<Firestore> {
@@ -76,9 +76,13 @@ export async function getDb(): Promise<Firestore> {
     'firebase/firestore'
   );
 
-  dbInstance = initializeFirestore(app, {
-    experimentalForceLongPolling: true,
-  });
+  const forcePolling =
+    process.env.NEXT_PUBLIC_FIRESTORE_FORCE_POLLING === 'true';
+
+  dbInstance = initializeFirestore(
+    app,
+    forcePolling ? { experimentalForceLongPolling: true } : undefined,
+  );
 
   // Suppress all Firestore logs except errors
   setLogLevel('error');
