@@ -54,12 +54,14 @@ const DocumentDetail = React.memo(function DocumentDetail({
     setIsHydrated(true);
   }, []);
 
-  // Dynamically load remark-gfm so it's only loaded when this component mounts
+  // Dynamically load remark-gfm only when markdown is provided
   useEffect(() => {
-    import('remark-gfm').then((mod) => {
-      setRemarkGfmPlugin(() => mod.default ?? mod);
-    });
-  }, []);
+    if (initialMarkdown) {
+      import('remark-gfm').then((mod) => {
+        setRemarkGfmPlugin(() => mod.default ?? mod);
+      });
+    }
+  }, [initialMarkdown]);
 
   // New useEffect to process initialMarkdown (e.g., title replacement, placeholder replacement)
   useEffect(() => {
