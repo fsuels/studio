@@ -1,13 +1,16 @@
 // src/app/[locale]/docs/[docId]/view/page.tsx
 'use client';
 
-import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import React, { useState, useEffect } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import DocumentDetail from '@/components/DocumentDetail';
 import { useAuth } from '@/hooks/useAuth';
 import { getSignWellUrl } from '@/services/signwell';
 import { Button } from '@/components/ui/button';
 import { Loader2 } from 'lucide-react';
+import { getDb } from '@/lib/firebase';
+import { doc, getDoc } from 'firebase/firestore';
+import { getStorage, ref as storageRef, getDownloadURL } from 'firebase/storage';
 
 interface ViewDocumentPageProps {
   params: { locale: 'en' | 'es'; docId: string };
@@ -15,8 +18,60 @@ interface ViewDocumentPageProps {
 
 export default function ViewDocumentPage({ params }: ViewDocumentPageProps) {
   const { locale, docId } = params;
-  const { isLoggedIn, isLoading: authLoading } = useAuth();
+  const searchParams = useSearchParams();
+  const savedDocId = searchParams.get('docId');
+  const { isLoggedIn, isLoading: authLoading, user } = useAuth();
   const router = useRouter();
+
+  const [markdownContent, setMarkdownContent] = useState<string | null>(null);
+  const [isLoadingContent, setIsLoadingContent] = useState(false);
+  const [loadError, setLoadError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const uid = user?.uid;
+    if (!uid || !savedDocId) return;
+    let cancelled = false;
+    async function fetchContent() {
+      setIsLoadingContent(true);
+      try {
+        const db = await getDb();
+        const docRef = doc(db, 'users', uid, 'documents', savedDocId);
+        const snap = await getDoc(docRef);
+        if (!snap.exists()) {
+          setLoadError('Document not found.');
+          return;
+        }
+        const data = snap.data() as Record<string, any>;
+        if (typeof data.markdown === 'string') {
+          setMarkdownContent(data.markdown);
+          setLoadError(null);
+        } else if (data.storagePath) {
+          const storage = getStorage();
+          const url = await getDownloadURL(storageRef(storage, data.storagePath));
+          const res = await fetch(url);
+          const text = await res.text();
+          setMarkdownContent(text);
+          setLoadError(null);
+        } else if (data.url) {
+          const res = await fetch(data.url);
+          const text = await res.text();
+          setMarkdownContent(text);
+          setLoadError(null);
+        } else {
+          setLoadError('Document content not found.');
+        }
+      } catch (err) {
+        console.error('[view page] failed to load saved content', err);
+        setLoadError('Failed to load document.');
+      } finally {
+        if (!cancelled) setIsLoadingContent(false);
+      }
+    }
+    fetchContent();
+    return () => {
+      cancelled = true;
+    };
+  }, [savedDocId, user]);
 
   const [isSigning, setIsSigning] = useState(false);
 
@@ -47,7 +102,7 @@ export default function ViewDocumentPage({ params }: ViewDocumentPageProps) {
     }
   };
 
-  if (authLoading) {
+  if (authLoading || isLoadingContent) {
     return (
       <div className="flex items-center justify-center h-64">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
@@ -91,7 +146,17 @@ export default function ViewDocumentPage({ params }: ViewDocumentPageProps) {
 
       {/* Document preview */}
       <div className="border rounded-lg overflow-hidden">
-        <DocumentDetail docId={docId} locale={locale} />
+        {loadError ? (
+          <div className="p-6 text-center text-sm text-muted-foreground">
+            {loadError}
+          </div>
+        ) : (
+          <DocumentDetail
+            docId={docId}
+            locale={locale}
+            markdownContent={markdownContent || undefined}
+          />
+        )}
       </div>
     </div>
   );
