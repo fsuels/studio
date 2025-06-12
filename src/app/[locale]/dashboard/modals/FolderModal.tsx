@@ -33,7 +33,10 @@ export default function FolderModal({ open, onClose }: FolderModalProps) {
   const { toast } = useToast();
 
   const handleCreate = async () => {
-    if (!user?.uid) return;
+    if (!user?.uid) {
+      onClose();
+      return;
+    }
     try {
       await createFolder(
         user.uid,
