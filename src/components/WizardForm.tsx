@@ -60,7 +60,6 @@ export default function WizardForm({
   const [isHydrated, setIsHydrated] = useState(false);
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [pendingSaveDraft, setPendingSaveDraft] = useState(false);
-  const [pendingRedirect, setPendingRedirect] = useState(false);
   const [isReviewing, setIsReviewing] = useState(false);
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
@@ -73,19 +72,19 @@ export default function WizardForm({
     async (uid: string) => {
       setIsSavingDraft(true);
       try {
-        // keep only defined values
         const filtered = Object.fromEntries(
           Object.entries(getValues()).filter(([, v]) => v !== undefined),
         );
 
-        await saveFormProgress({
+        void saveFormProgress({
           userId: uid,
           docType: doc.id,
           state: locale,
           formData: filtered,
-        });
+        }).catch(console.error);
 
         router.replace(`/${locale}/dashboard`);
+        // show toast after nav – no blocking
         toast({
           title: t('Draft Saved'),
           description: t(
@@ -106,16 +105,9 @@ export default function WizardForm({
         setPendingSaveDraft(false);
       }
     },
-      [getValues, doc.id, locale, router, toast, t],
+    [getValues, doc.id, locale, router, toast, t],
   );
 
-  // After a guest successfully auth’s, run save-and-redirect exactly once
-  useEffect(() => {
-    if (pendingRedirect && user?.uid && !authIsLoading) {
-      void saveDraftAndRedirect(user.uid);
-      setPendingRedirect(false);
-    }
-  }, [pendingRedirect, user?.uid, authIsLoading, saveDraftAndRedirect]);
 
   const liveRef = useRef<HTMLDivElement>(null);
 
@@ -392,22 +384,28 @@ export default function WizardForm({
       return;
     }
 
-    // guest: ask for auth, then effect will save + redirect
+    // guest: ask for auth – saveDraftAndRedirect will run on success
     setPendingSaveDraft(true);
-    setPendingRedirect(true);
     setShowAuthModal(true);
   }, [isSavingDraft, formIsSubmitting, user?.uid, saveDraftAndRedirect]);
 
-  const handleAuthSuccess = useCallback(() => {
-    setShowAuthModal(false);
-    /* --------------------------------------------------------------
-       Guest just became an authenticated user.
-       Draft is still in RHF state → save & go NOW.
-    -------------------------------------------------------------- */
-    if (user?.uid) {
-      void saveDraftAndRedirect(user.uid);
-    }
-  }, []);
+  const handleAuthSuccess = useCallback(
+    (freshUid?: string) => {
+      setShowAuthModal(false);
+
+      /* ----------------------------------------------------------
+         We redirect immediately.  The draft write runs in the
+         background; on failure we only console.warn – the user
+         won’t be stuck in the wizard.
+      ---------------------------------------------------------- */
+      const uid = freshUid || user?.uid;
+      if (!uid) return;
+
+      // optimistic nav – don’t await Firestore
+      saveDraftAndRedirect(uid).catch(console.error);
+    },
+    [user?.uid, saveDraftAndRedirect],
+  );
 
   if (!isHydrated || authIsLoading) {
     return (

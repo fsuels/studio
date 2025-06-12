@@ -29,7 +29,7 @@ import { app } from '@/lib/firebase'; // your initialized Firebase app
 interface AuthModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onAuthSuccess: (_mode: 'signin' | 'signup', _uid: string) => void;
+  onAuthSuccess: (uid?: string) => void;
 }
 
 export default function AuthModal({
@@ -145,8 +145,12 @@ export default function AuthModal({
         cred.user.displayName || undefined,
       );
 
-      // notify parent (WizardForm)
-      onAuthSuccess(authMode, cred.user.uid);
+      // notify parent with UID immediately
+      if (cred.user?.uid) {
+        onAuthSuccess(cred.user.uid);
+      } else {
+        onAuthSuccess();
+      }
     } catch (err: any) {
       console.error('[AuthModal] Firebase Auth error:', err);
       toast({
