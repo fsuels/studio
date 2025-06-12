@@ -1,11 +1,17 @@
 // src/app/dashboard/page.tsx
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import ProfileSettings from '@/components/ProfileSettings';
+import dynamic from 'next/dynamic';
+import { Suspense } from 'react';
+
+const DynamicProfileSettings = dynamic(
+  () => import('@/components/ProfileSettings'),
+  { ssr: false },
+);
 import {
   FileText,
   CreditCard,
@@ -62,22 +68,7 @@ export default function DashboardPage() {
   const [activeTab, setActiveTab] = useState<
     'documents' | 'payments' | 'profile'
   >('documents');
-  const [isHydrated, setIsHydrated] = useState(false);
 
-  useEffect(() => {
-    setIsHydrated(true);
-  }, []);
-
-  if (!isHydrated) {
-    return (
-      <div className="flex items-center justify-center min-h-screen bg-background">
-        <Loader2 className="h-12 w-12 animate-spin text-primary" />
-        <p className="ml-2 text-muted-foreground">
-          {t('Loading dashboard data...')}
-        </p>
-      </div>
-    );
-  }
 
   const renderContent = () => {
     switch (activeTab) {
@@ -150,7 +141,20 @@ export default function DashboardPage() {
           </div>
         );
       case 'profile':
-        return <ProfileSettings />;
+        return (
+          <Suspense
+            fallback={
+              <div className="flex items-center justify-center py-10">
+                <Loader2 className="h-6 w-6 animate-spin text-primary" />
+                <p className="ml-2 text-muted-foreground">
+                  {t('Loading profile settings...')}
+                </p>
+              </div>
+            }
+          >
+            <DynamicProfileSettings />
+          </Suspense>
+        );
       default:
         return null;
     }
