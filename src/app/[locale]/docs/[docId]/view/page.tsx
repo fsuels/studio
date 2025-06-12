@@ -2,6 +2,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import EmptyState from '@/components/EmptyState';
 import { useRouter, useSearchParams } from 'next/navigation';
 import DocumentDetail from '@/components/DocumentDetail';
 import { useAuth } from '@/hooks/useAuth';
@@ -58,7 +59,7 @@ export default function ViewDocumentPage({ params }: ViewDocumentPageProps) {
           setMarkdownContent(text);
           setLoadError(null);
         } else {
-          setLoadError('Document content not found.');
+          setLoadError('Draft saved – final content will appear once generated.');
         }
       } catch (err) {
         console.error('[view page] failed to load saved content', err);
@@ -147,9 +148,10 @@ export default function ViewDocumentPage({ params }: ViewDocumentPageProps) {
       {/* Document preview */}
       <div className="border rounded-lg overflow-hidden">
         {loadError ? (
-          <div className="p-6 text-center text-sm text-muted-foreground">
-            {loadError}
-          </div>
+          <EmptyState
+            title={loadError}
+            description="Refresh this page in a few seconds or continue editing."
+          />
         ) : (
           <DocumentDetail
             docId={docId}
