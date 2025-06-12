@@ -400,7 +400,13 @@ export default function WizardForm({
 
   const handleAuthSuccess = useCallback(() => {
     setShowAuthModal(false);
-    // saveDraftAndRedirect will fire via the pendingRedirect effect
+    /* --------------------------------------------------------------
+       Guest just became an authenticated user.
+       Draft is still in RHF state → save & go NOW.
+    -------------------------------------------------------------- */
+    if (user?.uid) {
+      void saveDraftAndRedirect(user.uid);
+    }
   }, []);
 
   if (!isHydrated || authIsLoading) {

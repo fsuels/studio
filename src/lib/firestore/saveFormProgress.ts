@@ -41,7 +41,7 @@ export async function saveFormProgress({
 }): Promise<void> {
   if (!userId || !docType) return;
 
-  const db = await getDb();
+  const db = await getDb();            // already cached singleton
   const {
     doc,
     setDoc,
@@ -141,8 +141,15 @@ export async function listRecentProgress(
   } = await import('firebase/firestore');
 
   try {
+    /* -------------------------------------------------------------
+       Firestore can serve this out of an index directly.
+    ------------------------------------------------------------- */
     const colRef = collection(db, 'users', userId, 'documents');
-    const q = query(colRef, orderBy('updatedAt', 'desc'), limit(maxResults));
+    const q = query(
+      colRef,
+      orderBy('updatedAt', 'desc'),
+      limit(maxResults)
+    );
     const snaps = await getDocs(q);
     return snaps.docs.map((d) => d.data() as FormProgressDoc);
   } catch (err) {
