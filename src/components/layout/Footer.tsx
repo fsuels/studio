@@ -279,21 +279,21 @@ export const Footer = React.memo(function Footer() {
             alt="Stripe logo"
             width={80}
             height={24}
-            className="h-6 w-auto"
+            className="h-6 w-20"
           />
           <AutoImage
             src="https://cdn.simpleicons.org/firebase/ffca28"
             alt="Firebase logo"
             width={80}
             height={24}
-            className="h-6 w-auto"
+            className="h-6 w-20"
           />
           <AutoImage
             src="https://cdn.simpleicons.org/paypal/003087"
             alt="PayPal logo"
             width={80}
             height={24}
-            className="h-6 w-auto"
+            className="h-6 w-20"
           />
         </div>
 
