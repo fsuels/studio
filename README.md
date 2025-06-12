@@ -76,9 +76,11 @@ domain) and Lighthouse should no longer flag insecure requests.
 
 ## Firestore Connectivity
 
-The Firestore client uses gRPC transport by default. If your network blocks
-gRPC, set `NEXT_PUBLIC_FIRESTORE_FORCE_POLLING=true` to fall back to HTTP long
-polling. Polling is slower and should be enabled only when required.
+The Firestore client now auto‑detects whether your network supports gRPC. If
+gRPC is blocked, it automatically falls back to HTTP long polling.
+You can still force polling by setting
+`NEXT_PUBLIC_FIRESTORE_FORCE_POLLING=true`, but polling is slower and should be
+enabled only when required.
 
 ## Troubleshooting Lighthouse reports
 
