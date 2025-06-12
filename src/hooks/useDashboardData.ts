@@ -8,7 +8,9 @@ export function useDashboardData(
   userId?: string,
   options?: { enabled?: boolean },
 ) {
-  const enabled = options?.enabled ?? !!userId;
+  const isOnline =
+    typeof navigator === 'undefined' ? true : navigator.onLine;
+  const enabled = (options?.enabled ?? !!userId) && isOnline;
 
   const docsQuery = useQuery({
     queryKey: ['dashboardDocuments', userId],
