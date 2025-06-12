@@ -82,6 +82,7 @@ export default function DashboardClientContent({
     documents,
     payments,
     isLoading: isLoadingData,
+    isFetching: isFetchingData,
   } = useDashboardData(user?.uid, {
     enabled: isHydrated && isLoggedIn && !!user?.uid,
   });
@@ -191,24 +192,20 @@ export default function DashboardClientContent({
 
   if (authLoading || !isHydrated) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-background">
-        <Loader2 className="h-12 w-12 animate-spin text-primary" />
-        <p className="ml-2 text-muted-foreground">
-          {t('Loading dashboard data...')}
+      <div className="flex flex-col items-center justify-center min-h-screen">
+        <Loader2 className="h-6 w-6 animate-spin text-primary" />
+        <p className="mt-2 text-muted-foreground">
+          {t('Preparing your dashboard…')}
         </p>
       </div>
     );
   }
 
   const renderContent = () => {
-    if (
-      isLoadingData &&
-      (activeTab === 'documents' || activeTab === 'payments')
-    ) {
+    if (!documents.length && isFetchingData) {
       return (
-        <div className="flex items-center justify-center p-8 min-h-[200px]">
-          <Loader2 className="h-8 w-8 animate-spin text-primary" />
-          <p className="ml-2 text-muted-foreground">{t('Loading...')}</p>
+        <div className="p-6 text-muted-foreground">
+          {t('Loading documents...')}
         </div>
       );
     }
@@ -353,17 +350,25 @@ export default function DashboardClientContent({
                             disabled={duplicatingDocId === doc.id}
                             onSelect={async () => {
                               setDuplicatingDocId(doc.id);
+                              const key = ['dashboardDocuments', user!.uid] as const;
+                              const previous = queryClient.getQueryData<DashboardDocument[]>(key);
+                              const tempId = `copy-${Date.now()}`;
+                              queryClient.setQueryData<DashboardDocument[]>(key, (old = []) => [
+                                ...old,
+                                { ...doc, id: tempId, name: `${doc.name} (Copy)` },
+                              ]);
                               try {
                                 await duplicateDocument(user!.uid, doc.id);
                                 toast({ title: t('Document duplicated') });
                               } catch {
+                                if (previous) queryClient.setQueryData(key, previous);
                                 toast({
                                   title: t('Error duplicating document'),
                                   variant: 'destructive',
                                 });
                               } finally {
                                 setDuplicatingDocId(null);
-                                queryClient.invalidateQueries({ queryKey: ['dashboardDocuments', user!.uid] });
+                                queryClient.invalidateQueries({ queryKey: key });
                               }
                             }}
                           >
@@ -375,9 +380,20 @@ export default function DashboardClientContent({
                           </DropdownMenuItem>
                           <DropdownMenuItem
                             onSelect={async () => {
-                              await softDeleteDocument(user!.uid, doc.id);
-                              toast({ title: t('Document deleted') });
-                              queryClient.invalidateQueries({ queryKey: ['dashboardDocuments', user!.uid] });
+                              const key = ['dashboardDocuments', user!.uid] as const;
+                              const previous = queryClient.getQueryData<DashboardDocument[]>(key);
+                              queryClient.setQueryData<DashboardDocument[]>(key, (old) =>
+                                old?.filter((d) => d.id !== doc.id) || []
+                              );
+                              try {
+                                await softDeleteDocument(user!.uid, doc.id);
+                                toast({ title: t('Document deleted') });
+                              } catch {
+                                if (previous) queryClient.setQueryData(key, previous);
+                                toast({ title: t('Error deleting document'), variant: 'destructive' });
+                              } finally {
+                                queryClient.invalidateQueries({ queryKey: key });
+                              }
                             }}
                           >
                             {t('Delete')}

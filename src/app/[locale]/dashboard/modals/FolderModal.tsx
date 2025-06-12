@@ -13,6 +13,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { createFolder } from '@/lib/firestore/folderActions';
+import { useQueryClient } from '@tanstack/react-query';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/hooks/useAuth';
 
@@ -31,6 +32,7 @@ export default function FolderModal({ open, onClose }: FolderModalProps) {
   }, [open]);
 
   const { toast } = useToast();
+  const queryClient = useQueryClient();
 
   const handleCreate = async () => {
     if (!user?.uid) {
@@ -42,6 +44,9 @@ export default function FolderModal({ open, onClose }: FolderModalProps) {
         user.uid,
         name || t('UntitledFolder', 'Untitled Folder'),
       );
+      queryClient.invalidateQueries({
+        queryKey: ['dashboardDocuments', user.uid],
+      });
       toast({ title: t('Folder created') });
     } catch (err: any) {
       console.error('[FolderModal] create folder failed', err);
