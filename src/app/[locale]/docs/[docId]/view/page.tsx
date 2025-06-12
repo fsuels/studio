@@ -21,8 +21,10 @@ interface ViewDocumentPageProps {
 
 export default function ViewDocumentPage({ params }: ViewDocumentPageProps) {
   const { locale, docId } = params;
-  const searchParams = useSearchParams();
-  const savedDocId = searchParams.get('docId');
+  const searchParams   = useSearchParams();
+  /* Dashboard passes ?docId=abc123, but direct navigation (or refresh)
+     gives you only the route param.  */
+  const savedDocId     = searchParams.get('docId') || docId;
   const { isLoggedIn, isLoading: authLoading, user } = useAuth();
   const router = useRouter();
 
@@ -31,8 +33,8 @@ export default function ViewDocumentPage({ params }: ViewDocumentPageProps) {
   const [loadError, setLoadError] = useState<string | null>(null);
 
   useEffect(() => {
-    const uid = user?.uid; // TODO: use context/hook for userId
-    if (!uid || !savedDocId) return; // TODO: if not logged in, maybe show a different message/CTA
+    const uid = user?.uid;
+    if (!uid || !savedDocId) return;
     let cancelled = false;
     async function fetchContent() {
       setIsLoadingContent(true);

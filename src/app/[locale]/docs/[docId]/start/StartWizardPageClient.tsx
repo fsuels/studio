@@ -120,7 +120,9 @@ export default function StartWizardPageClient() {
         setDraftLoaded(true);
       }
     }
-    loadDraft();
+    if (ready) {
+      void loadDraft();
+    }
   }, [
     authIsLoading,
     isLoadingConfig,
