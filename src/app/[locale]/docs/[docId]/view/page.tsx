@@ -3,6 +3,8 @@
 
 import React, { useState, useEffect } from 'react';
 import EmptyState from '@/components/EmptyState';
+import { renderMarkdown } from '@/lib/markdown-renderer';
+import { serverTimestamp, setDoc } from 'firebase/firestore';
 import { useRouter, useSearchParams } from 'next/navigation';
 import DocumentDetail from '@/components/DocumentDetail';
 import { useAuth } from '@/hooks/useAuth';
@@ -43,24 +45,39 @@ export default function ViewDocumentPage({ params }: ViewDocumentPageProps) {
           return;
         }
         const data = snap.data() as Record<string, any>;
+        let markdown: string | undefined;
         if (typeof data.markdown === 'string') {
-          setMarkdownContent(data.markdown);
-          setLoadError(null);
+          markdown = data.markdown;
         } else if (data.storagePath) {
           const storage = getStorage();
           const url = await getDownloadURL(storageRef(storage, data.storagePath));
           const res = await fetch(url);
-          const text = await res.text();
-          setMarkdownContent(text);
-          setLoadError(null);
+          markdown = await res.text();
         } else if (data.url) {
           const res = await fetch(data.url);
-          const text = await res.text();
-          setMarkdownContent(text);
-          setLoadError(null);
+          markdown = await res.text();
+        } else if (data.formData) {
+          markdown = await renderMarkdown(
+            data.docType,
+            data.formData,
+            data.state ?? 'NA',
+          );
+          try {
+            await setDoc(
+              docRef,
+              { markdown, updatedAt: serverTimestamp() },
+              { merge: true },
+            );
+          } catch (_) {
+            /* ignore permission errors */
+          }
         } else {
-          setLoadError('Draft saved – final content will appear once generated.');
+          setLoadError('Document content not found.');
+          return;
         }
+
+        setMarkdownContent(markdown || null);
+        setLoadError(null);
       } catch (err) {
         console.error('[view page] failed to load saved content', err);
         setLoadError('Failed to load document.');

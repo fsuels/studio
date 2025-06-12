@@ -53,6 +53,7 @@ export default function StartWizardPageClient() {
   ) as string;
 
   const [isMounted, setIsMounted] = useState(false);
+  const [draftLoaded, setDraftLoaded] = useState(false);
   const [isLoadingConfig, setIsLoadingConfig] = useState(true);
   const [activeMobileTab, setActiveMobileTab] = useState<'form' | 'preview'>(
     'form'
@@ -113,6 +114,10 @@ export default function StartWizardPageClient() {
       }
       if (Object.keys(draftData).length > 0) {
         reset(draftData, { keepValues: true });
+        setDraftLoaded(true);
+      } else {
+        // even an empty draft counts as "loaded"
+        setDraftLoaded(true);
       }
     }
     loadDraft();
@@ -190,11 +195,13 @@ export default function StartWizardPageClient() {
     [router]
   );
 
-  if (!isMounted) {
+  if (!isMounted || !draftLoaded) {
     return (
       <div className="flex justify-center items-center min-h-[calc(100vh-8rem)]">
         <Loader2 className="h-12 w-12 animate-spin text-primary" />
-        <p className="ml-2 text-muted-foreground">Loading...</p>
+        <p className="ml-2 text-muted-foreground">
+          {t('Loading draft...')}
+        </p>
       </div>
     );
   }
