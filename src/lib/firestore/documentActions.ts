@@ -39,9 +39,13 @@ export async function duplicateDocument(
   if (!snap.exists()) return null;
 
   const data = snap.data() as Record<string, unknown>;
+  const answers =
+    (data as Record<string, unknown>)['formData'] ??
+    (data as Record<string, unknown>)['data'];
   const newRef = doc(collection(db, 'users', userId, 'documents'));
   await setDoc(newRef, {
     ...data,
+    ...(answers ? { formData: answers, data: answers } : {}),
     name: `${(data.name as string) || docId} Copy`,
     createdAt: serverTimestamp(),
     updatedAt: serverTimestamp(),
