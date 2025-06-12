@@ -84,9 +84,11 @@ export async function getDb(): Promise<Firestore> {
         If we omit it (i.e. pass `undefined`) the SDK dereferences
         `settings.cacheSizeBytes` and crashes.
      ------------------------------------------------------------- */
+  // Auto-detect whether the network requires long polling. Allow forcing
+  // polling via environment variable when gRPC is blocked.
   const settings = forcePolling
     ? { experimentalForceLongPolling: true }
-    : {};
+    : { experimentalAutoDetectLongPolling: true };
 
   dbInstance = initializeFirestore(app, settings);
 
