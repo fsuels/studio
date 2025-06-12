@@ -28,6 +28,7 @@ export function useDashboardData(
     documents: docsQuery.data || [],
     payments: paymentsQuery.data || [],
     isLoading: docsQuery.isLoading || paymentsQuery.isLoading,
+    isFetching: docsQuery.isFetching || paymentsQuery.isFetching,
     error: docsQuery.error || paymentsQuery.error,
   };
 }
