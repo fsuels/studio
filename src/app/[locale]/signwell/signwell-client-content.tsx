@@ -339,13 +339,11 @@ export default function SignWellClientContent({
     }
   };
 
-  const onAuthSuccessModal = (mode: 'signin' | 'signup') => {
+  const onAuthSuccessModal = (_uid?: string) => {
     setShowAuthModal(false);
     toast({
       title: t('common:authModal.successTitle', {
-        context: mode,
-        defaultValue:
-          mode === 'signin' ? 'Sign In Successful!' : 'Account Created!',
+        defaultValue: 'Authentication Successful!',
       }),
       description: t('common:authModal.successDescription', {
         defaultValue: 'You can now proceed.',

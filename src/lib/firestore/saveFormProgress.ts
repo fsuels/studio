@@ -56,16 +56,23 @@ export async function saveFormProgress({
     progressDocId(docType, state || 'NA')
   );
 
-  await setDoc(
-    ref,
-    {
-      docType,
-      state: state || 'NA',
-      formData,
-      updatedAt: serverTimestamp(),
-    },
-    { merge: true }
-  );
+  const payload: Partial<FormProgressDoc> = {
+    docType,
+    state: state || 'NA',
+    updatedAt: serverTimestamp(),
+  };
+  if (Object.keys(formData || {}).length > 0) {
+    payload.formData = formData;
+  }
+
+  console.debug('saveFormProgress payload', {
+    userId,
+    docType,
+    state,
+    keys: Object.keys(formData),
+  });
+
+  await setDoc(ref, payload, { merge: true });
 }
 
 /* ---------- load -------------------------------------------------------- */
@@ -99,7 +106,7 @@ export async function loadFormProgress({
     const snap = await getDoc(ref);
     if (snap.exists()) {
       const data = snap.data() as FormProgressDoc;
-      return data.formData || {};
+      return (data?.formData as Record<string, unknown>) ?? {};
     }
 
     // Fallback to 'NA' if nothing for the specific state
@@ -114,7 +121,7 @@ export async function loadFormProgress({
       const fallbackSnap = await getDoc(fallbackRef);
       if (fallbackSnap.exists()) {
         const fallbackData = fallbackSnap.data() as FormProgressDoc;
-        return fallbackData.formData || {};
+        return (fallbackData?.formData as Record<string, unknown>) ?? {};
       }
     }
   } catch (err) {
