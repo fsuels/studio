@@ -31,8 +31,8 @@ export default function ViewDocumentPage({ params }: ViewDocumentPageProps) {
   const [loadError, setLoadError] = useState<string | null>(null);
 
   useEffect(() => {
-    const uid = user?.uid;
-    if (!uid || !savedDocId) return;
+    const uid = user?.uid; // TODO: use context/hook for userId
+    if (!uid || !savedDocId) return; // TODO: if not logged in, maybe show a different message/CTA
     let cancelled = false;
     async function fetchContent() {
       setIsLoadingContent(true);
@@ -45,35 +45,35 @@ export default function ViewDocumentPage({ params }: ViewDocumentPageProps) {
           return;
         }
         const data = snap.data() as Record<string, any>;
-        let markdown: string | undefined;
-        if (typeof data.markdown === 'string') {
-          markdown = data.markdown;
+        let markdown = data.contentMarkdown as string | undefined;
+
+        // Check for other sources (legacy or alternative storage)
+        if (typeof data.markdown === 'string' && !markdown) {
+          markdown = data.markdown; // legacy markdown field
         } else if (data.storagePath) {
           const storage = getStorage();
           const url = await getDownloadURL(storageRef(storage, data.storagePath));
           const res = await fetch(url);
           markdown = await res.text();
         } else if (data.url) {
-          const res = await fetch(data.url);
+          // Direct URL storage (less common now)
+          const res = await fetch(data.url); // Assuming data.url is a publicly accessible URL
           markdown = await res.text();
-        } else if (data.formData) {
+        }
+
+        // ---------- Fallback: generate from formData on‑the‑fly ----------
+        if (!markdown && data.formData) {
           markdown = await renderMarkdown(
             data.docType,
             data.formData,
             data.state ?? 'NA',
           );
+
+          /*  Optional but highly recommended: write it back so subsequent
+              visits are instant. Fail‑safe — ignore any permission errors.  */
           try {
-            await setDoc(
-              docRef,
-              { markdown, updatedAt: serverTimestamp() },
-              { merge: true },
-            );
-          } catch (_) {
-            /* ignore permission errors */
-          }
-        } else {
-          setLoadError('Document content not found.');
-          return;
+            await setDoc(docRef, { contentMarkdown: markdown, updatedAt: serverTimestamp() }, { merge: true });
+          } catch (_) {} // read‑only environments (preview channels) can skip this
         }
 
         setMarkdownContent(markdown || null);
@@ -167,7 +167,7 @@ export default function ViewDocumentPage({ params }: ViewDocumentPageProps) {
         {loadError ? (
           <EmptyState
             title={loadError}
-            description="Refresh this page in a few seconds or continue editing."
+            description="Edit the draft to finish generating your document."
           />
         ) : (
           <DocumentDetail

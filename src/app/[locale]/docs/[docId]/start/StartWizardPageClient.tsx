@@ -122,8 +122,6 @@ export default function StartWizardPageClient() {
     }
     loadDraft();
   }, [
-    docConfig,
-    isMounted,
     authIsLoading,
     isLoadingConfig,
     isLoggedIn,
