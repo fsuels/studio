@@ -10,9 +10,10 @@ import DocumentDetail from '@/components/DocumentDetail';
 import { useAuth } from '@/hooks/useAuth';
 import { getSignWellUrl } from '@/services/signwell';
 import { Button } from '@/components/ui/button';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Share2 } from 'lucide-react';
 import { getDb } from '@/lib/firebase';
 import { doc, getDoc } from 'firebase/firestore';
+import { hasUserPaidForDocument } from '@/lib/firestore/paymentActions';
 import { getStorage, ref as storageRef, getDownloadURL } from 'firebase/storage';
 
 interface ViewDocumentPageProps {
@@ -31,6 +32,7 @@ export default function ViewDocumentPage({ params }: ViewDocumentPageProps) {
   const [markdownContent, setMarkdownContent] = useState<string | null>(null);
   const [isLoadingContent, setIsLoadingContent] = useState(false);
   const [loadError, setLoadError] = useState<string | null>(null);
+  const [hasPaid, setHasPaid] = useState<boolean>(false);
 
   useEffect(() => {
     const uid = user?.uid;
@@ -82,6 +84,8 @@ export default function ViewDocumentPage({ params }: ViewDocumentPageProps) {
 
         setMarkdownContent(markdown || null);
         setLoadError(null);
+        const paid = await hasUserPaidForDocument(uid, savedDocId);
+        setHasPaid(paid);
       } catch (err) {
         console.error('[view page] failed to load saved content', err);
         setLoadError('Failed to load document.');
@@ -104,6 +108,14 @@ export default function ViewDocumentPage({ params }: ViewDocumentPageProps) {
 
   // Opens SignWell flow in a new tab
   const handleSign = async () => {
+    if (!isLoggedIn) {
+      router.push(`/${locale}/signin`);
+      return;
+    }
+    if (!hasPaid) {
+      router.push(`/${locale}/checkout?docId=${docId}`);
+      return;
+    }
     setIsSigning(true);
     try {
       const url = await getSignWellUrl(docId);
@@ -115,12 +127,48 @@ export default function ViewDocumentPage({ params }: ViewDocumentPageProps) {
     }
   };
 
-  // Simple guard: only logged in users can download (you'd replace with real payment check)
+  const handleShare = async () => {
+    if (!isLoggedIn) {
+      router.push(`/${locale}/signin`);
+      return;
+    }
+    if (!hasPaid) {
+      router.push(`/${locale}/checkout?docId=${docId}`);
+      return;
+    }
+    const shareData = {
+      title: 'Document',
+      text: 'View my document',
+      url: window.location.href,
+    };
+    try {
+      if (navigator.share) {
+        await navigator.share(shareData);
+      } else {
+        await navigator.clipboard.writeText(shareData.url);
+      }
+    } catch (err) {
+      console.error('Error sharing document', err);
+    }
+  };
+
   const handleDownload = () => {
     if (!isLoggedIn) {
       router.push(`/${locale}/signin`);
-    } else {
+    } else if (!hasPaid) {
       router.push(`/${locale}/checkout?docId=${docId}`);
+    } else {
+      router.push(`/${locale}/api/generate-pdf?docId=${docId}`);
+    }
+  };
+
+  const handleDownloadDocx = () => {
+    if (!isLoggedIn) {
+      router.push(`/${locale}/signin`);
+    } else if (!hasPaid) {
+      router.push(`/${locale}/checkout?docId=${docId}`);
+    } else {
+      router.push(`/${locale}/api/generate-docx?docId=${docId}`);
     }
   };
 
@@ -157,11 +205,18 @@ export default function ViewDocumentPage({ params }: ViewDocumentPageProps) {
             {isSigning ? (
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
             ) : null}
-            Sign
+            E-sign
+          </Button>
+
+          <Button onClick={handleShare} variant="outline">
+            <Share2 className="mr-2 h-4 w-4" />Share
           </Button>
 
           <Button variant="secondary" onClick={handleDownload}>
-            Download
+            Download PDF
+          </Button>
+          <Button variant="secondary" onClick={handleDownloadDocx}>
+            Download DOCX
           </Button>
         </div>
       </div>
