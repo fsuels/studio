@@ -20,6 +20,7 @@ export interface DashboardDocument {
   date: Timestamp | Date | string; // This will represent updatedAt
   status: string;
   docType: string;
+  folderId?: string;
 }
 
 export async function getUserDocuments(
@@ -54,6 +55,7 @@ export async function getUserDocuments(
         date: data.updatedAt || data.createdAt || new Date(),
         status: (data.status as string) || 'Draft',
         docType,
+        folderId: data.folderId as string | undefined,
       };
     });
 }
@@ -66,6 +68,11 @@ export interface DashboardPayment {
   documentId?: string;
 }
 
+export interface DashboardFolder {
+  id: string;
+  name: string;
+}
+
 export async function getUserPayments(
   userId: string,
   max = 20,
@@ -75,4 +82,14 @@ export async function getUserPayments(
   const q = query(col, orderBy('date', 'desc'), limit(max));
   const snap = await getDocs(q);
   return snap.docs.map((d) => d.data() as DashboardPayment);
+}
+
+export async function getUserFolders(
+  userId: string,
+): Promise<DashboardFolder[]> {
+  const db = await getDb();
+  const col = collection(db, 'users', userId, 'folders');
+  const q = query(col, orderBy('createdAt', 'asc'));
+  const snap = await getDocs(q);
+  return snap.docs.map((d) => ({ id: d.id, name: (d.data().name as string) || d.id }));
 }

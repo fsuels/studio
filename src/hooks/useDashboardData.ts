@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import {
   getUserDocuments,
   getUserPayments,
+  getUserFolders,
 } from '@/lib/firestore/dashboardData';
 
 export function useDashboardData(
@@ -24,11 +25,18 @@ export function useDashboardData(
     enabled,
   });
 
+  const foldersQuery = useQuery({
+    queryKey: ['dashboardFolders', userId],
+    queryFn: () => (userId ? getUserFolders(userId) : Promise.resolve([])),
+    enabled,
+  });
+
   return {
     documents: docsQuery.data || [],
     payments: paymentsQuery.data || [],
-    isLoading: docsQuery.isLoading || paymentsQuery.isLoading,
-    isFetching: docsQuery.isFetching || paymentsQuery.isFetching,
-    error: docsQuery.error || paymentsQuery.error,
+    folders: foldersQuery.data || [],
+    isLoading: docsQuery.isLoading || paymentsQuery.isLoading || foldersQuery.isLoading,
+    isFetching: docsQuery.isFetching || paymentsQuery.isFetching || foldersQuery.isFetching,
+    error: docsQuery.error || paymentsQuery.error || foldersQuery.error,
   };
 }

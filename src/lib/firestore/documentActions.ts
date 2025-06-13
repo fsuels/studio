@@ -68,3 +68,13 @@ export async function softDeleteDocument(
     updatedAt: serverTimestamp(),
   });
 }
+
+export async function updateDocumentFolder(
+  userId: string,
+  docId: string,
+  folderId: string | null,
+): Promise<void> {
+  const db = await getDb();
+  const ref = doc(db, 'users', userId, 'documents', docId);
+  await updateDoc(ref, { folderId: folderId || null, updatedAt: serverTimestamp() });
+}

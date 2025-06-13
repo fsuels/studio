@@ -23,6 +23,9 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import RenameModal from './modals/RenameModal';
@@ -48,6 +51,7 @@ import {
   renameDocument,
   duplicateDocument,
   softDeleteDocument,
+  updateDocumentFolder,
 } from '@/lib/firestore/documentActions';
 import type { DashboardDocument } from '@/lib/firestore/dashboardData';
 import { useQueryClient } from '@tanstack/react-query';
@@ -81,6 +85,7 @@ export default function DashboardClientContent({
   const {
     documents,
     payments,
+    folders,
     isLoading: isLoadingData,
     isFetching: isFetchingData,
   } = useDashboardData(user?.uid, {
@@ -159,6 +164,23 @@ export default function DashboardClientContent({
       });
     } finally {
       if (fileInputRef.current) fileInputRef.current.value = '';
+    }
+  };
+
+  const handleMove = async (docId: string, folderId: string | null) => {
+    const key = ['dashboardDocuments', user!.uid] as const;
+    const previous = queryClient.getQueryData<DashboardDocument[]>(key);
+    queryClient.setQueryData<DashboardDocument[]>(key, (old) =>
+      old?.map((d) => (d.id === docId ? { ...d, folderId: folderId || undefined } : d)) || [],
+    );
+    try {
+      await updateDocumentFolder(user!.uid, docId, folderId);
+      toast({ title: t('Document moved') });
+    } catch {
+      if (previous) queryClient.setQueryData(key, previous);
+      toast({ title: t('Error moving document'), variant: 'destructive' });
+    } finally {
+      queryClient.invalidateQueries({ queryKey: key });
     }
   };
 
@@ -346,6 +368,19 @@ export default function DashboardClientContent({
                           <DropdownMenuItem onSelect={() => setRenameDoc(doc)}>
                             {t('Rename')}
                           </DropdownMenuItem>
+                          <DropdownMenuSub>
+                            <DropdownMenuSubTrigger>{t('Move to Folder')}</DropdownMenuSubTrigger>
+                            <DropdownMenuSubContent>
+                              <DropdownMenuItem onSelect={() => handleMove(doc.id, null)}>
+                                {t('None')}
+                              </DropdownMenuItem>
+                              {folders.map((f) => (
+                                <DropdownMenuItem key={f.id} onSelect={() => handleMove(doc.id, f.id)}>
+                                  {t(f.name, f.name)}
+                                </DropdownMenuItem>
+                              ))}
+                            </DropdownMenuSubContent>
+                          </DropdownMenuSub>
                           <DropdownMenuItem
                             disabled={duplicatingDocId === doc.id}
                             onSelect={async () => {
