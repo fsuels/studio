@@ -735,7 +735,7 @@ export default function DashboardClientContent({
                                    paymentDate.getFullYear() === now.getFullYear();
                           })
                           .reduce((sum, p) => sum + (parseFloat(p.amount.replace(/[^0-9.]/g, '')) || 0), 0)
-                          .toFixed(2)} // This line already has the replace on p.amount, but let's ensure consistency with String()
+                          .toFixed(2)}
                       </p>
                     </div>
                     <TrendingUp className="h-8 w-8 text-green-500" />
@@ -912,7 +912,7 @@ export default function DashboardClientContent({
 
                 </CardContent>
               </Card>
-            ))}
+          
           </div>
         );
         
