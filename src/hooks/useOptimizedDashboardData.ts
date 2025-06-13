@@ -38,7 +38,17 @@ export function useOptimizedDashboardData(
     },
     getNextPageParam: (lastPage) => {
       // Add safety check for undefined lastPage
-      if (!lastPage || typeof lastPage !== 'object') {
+      // Enhanced safety checks with debugging
+      if (!lastPage) {
+        console.warn('getNextPageParam: lastPage is null/undefined');
+        return undefined;
+      }
+      if (typeof lastPage !== 'object') {
+        console.warn('getNextPageParam: lastPage is not an object:', typeof lastPage);
+        return undefined;
+      }
+      if (!('hasMore' in lastPage) || !('lastDocId' in lastPage)) {
+        console.warn('getNextPageParam: lastPage missing expected properties:', lastPage);
         return undefined;
       }
       return lastPage.hasMore ? lastPage.lastDocId : undefined;
@@ -74,9 +84,16 @@ export function useOptimizedDashboardData(
 
   const documents = useMemo(() => {
     // Add safety check for pages
-    if (!documentsQuery.data?.pages) {
+    // Enhanced safety checks for pages
+    if (!documentsQuery.data?.pages || !Array.isArray(documentsQuery.data.pages)) {
+      console.warn('documents useMemo: pages is not a valid array:', documentsQuery.data?.pages);
       return [];
     }
+
+    // Additional validation
+    const validPages = documentsQuery.data.pages.filter(page =>
+      page && typeof page === 'object' && Array.isArray(page.documents)
+    );
     return documentsQuery.data.pages
       .filter(page => page && Array.isArray(page.documents))
       .flatMap((p) => p.documents) || [];
