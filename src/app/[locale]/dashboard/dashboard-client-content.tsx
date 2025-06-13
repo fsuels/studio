@@ -430,16 +430,9 @@ const handleFileSelected = async (e: React.ChangeEvent<HTMLInputElement>) => {
           onClose={() => setShowFolderModal(false)}
         />
       </div>
-      {folders.length > 0 && (
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-4">
-          {folders.map((f) => (
-            <div key={f.id} className="flex items-center gap-2">
-              <Folder className="h-4 w-4 text-muted-foreground" />
-              <span>{t(f.name, f.name)}</span>
-            </div>
-          ))}
-        </div>
-      )}
+
+      {/* REMOVED: The yellow folder icons grid section that was here */}
+
       {isUploading && (
         <div className="mb-4">
           <Progress value={uploadProgress} aria-label={t('Upload progress')} />
