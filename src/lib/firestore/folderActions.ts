@@ -1,7 +1,14 @@
 'use client';
 
 import { getDb } from '@/lib/firebase';
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import {
+  collection,
+  addDoc,
+  getDocs,
+  query,
+  orderBy,
+  serverTimestamp,
+} from 'firebase/firestore';
 
 export async function createFolder(userId: string, name: string): Promise<void> {
   const db = await getDb();
@@ -10,4 +17,17 @@ export async function createFolder(userId: string, name: string): Promise<void> 
     createdAt: serverTimestamp(),
     updatedAt: serverTimestamp(),
   });
+}
+
+export interface UserFolder {
+  id: string;
+  name: string;
+}
+
+export async function getUserFolders(userId: string): Promise<UserFolder[]> {
+  const db = await getDb();
+  const col = collection(db, 'users', userId, 'folders');
+  const q = query(col, orderBy('createdAt', 'asc'));
+  const snap = await getDocs(q);
+  return snap.docs.map((d) => ({ id: d.id, name: (d.data().name as string) || d.id }));
 }
