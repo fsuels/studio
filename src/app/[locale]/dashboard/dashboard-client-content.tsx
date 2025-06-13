@@ -51,7 +51,7 @@ import {
 import { getFirestore, doc as firestoreDoc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { useAuth } from '@/hooks/useAuth';
 import { useRouter } from 'next/navigation';
-import { useDashboardData } from '@/hooks/useDashboardData';
+import { useOptimizedDashboardData } from '@/hooks/useOptimizedDashboardData';
 import { DocumentsSkeleton } from './DocumentsSkeleton';
 import {
   renameDocument,
@@ -102,9 +102,8 @@ export default function DashboardClientContent({
     folders,
     isLoading: isLoadingData,
     isFetching: isFetchingData,
-  } = useDashboardData(user?.uid, {
+  } = useOptimizedDashboardData(user?.uid, {
     enabled: isHydrated && isLoggedIn && !!user?.uid,
-    priorityLoad: true,
   });
 
   const files: DashboardFile[] = React.useMemo(
