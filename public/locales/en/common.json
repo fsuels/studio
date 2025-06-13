@@ -423,5 +423,9 @@
   "docDetail.aiHighlightPre": "AI Highlight:",
   "docDetail.keyClauses": "Key clauses",
   "docDetail.aiHighlightPost": "will be automatically tailored.",
-  "docDetail.aiHighlightTitle": "AI Highlight: This section will be auto-customized based on your answers."
+  "docDetail.aiHighlightTitle": "AI Highlight: This section will be auto-customized based on your answers.",
+  "Select all": "Select all",
+  "Select document": "Select document",
+  "Move": "Move",
+  "selected": "selected"
 }
