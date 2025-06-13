@@ -17,8 +17,12 @@ import { Label } from '@/components/ui/label';
 import Link from 'next/link';
 import { Logo } from '@/components/layout/Logo';
 import { useParams, useRouter } from 'next/navigation'; // Added useRouter
-import { useAuth } from '@/hooks/useAuth'; // Import useAuth
-import { useToast } from '@/hooks/use-toast'; // Import useToast
+import { useAuth } from '@/hooks/useAuth';
+import { useToast } from '@/hooks/use-toast';
+import { useQueryClient } from '@tanstack/react-query';
+import { getAuth } from 'firebase/auth';
+import { app } from '@/lib/firebase';
+import { getUserDocuments, getUserPayments } from '@/lib/firestore/dashboardData';
 
 export default function SignInPage() {
   const { t } = useTranslation('common');
@@ -26,6 +30,7 @@ export default function SignInPage() {
   const router = useRouter();
   const { login } = useAuth();
   const { toast } = useToast();
+  const queryClient = useQueryClient();
   const locale = params!.locale as 'en' | 'es';
 
   const [email, setEmail] = useState('');
@@ -43,6 +48,17 @@ export default function SignInPage() {
       setIsSubmitting(true);
       try {
         await login(email, password);
+        const uid = getAuth(app).currentUser?.uid;
+        if (uid) {
+          await Promise.all([
+            queryClient.prefetchQuery(['dashboardDocuments', uid], () =>
+              getUserDocuments(uid),
+            ),
+            queryClient.prefetchQuery(['dashboardPayments', uid], () =>
+              getUserPayments(uid),
+            ),
+          ]);
+        }
         toast({
           title: t('Login Successful!'),
           description: t('Redirecting to your dashboard...'),
