@@ -29,6 +29,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import RenameModal from './modals/RenameModal';
 import FolderModal from './modals/FolderModal';
+import MoveToFolderModal from './modals/MoveToFolderModal';
 import ProfileSettings from '@/components/ProfileSettings';
 import {
   FileText,
@@ -109,6 +110,12 @@ export default function DashboardClientContent({
   const [renameDoc, setRenameDoc] = useState<DashboardDocument | null>(null);
   const [duplicatingDocId, setDuplicatingDocId] = useState<string | null>(null);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [currentFolderId, setCurrentFolderId] = useState<string | null>(null);
+  const [moveModalState, setMoveModalState] = useState<{
+    open: boolean;
+    documentId?: string;
+    documentName?: string;
+  }>({ open: false });
 
   const {
     documents,
@@ -123,10 +130,26 @@ export default function DashboardClientContent({
   const files: DashboardFile[] = React.useMemo(
     () => [
       ...folders.map((f) => ({ ...f, type: 'folder' as const })),
-      ...documents.map((d) => ({ ...d, type: 'document' as const })),
+      ...documents
+        .filter(
+          (d) =>
+            d.folderId === currentFolderId || (!currentFolderId && !d.folderId),
+        )
+        .map((d) => ({ ...d, type: 'document' as const })),
     ],
-    [folders, documents],
+    [folders, documents, currentFolderId],
   );
+
+  // Calculate document counts per folder
+  const documentsPerFolder = React.useMemo(() => {
+    const counts: Record<string, number> = {};
+    documents.forEach((doc) => {
+      if (doc.folderId) {
+        counts[doc.folderId] = (counts[doc.folderId] || 0) + 1;
+      }
+    });
+    return counts;
+  }, [documents]);
 
   const queryClient = useQueryClient();
   const { toast } = useToast();
@@ -303,6 +326,11 @@ export default function DashboardClientContent({
       queryClient.invalidateQueries({ queryKey: key });
     }
   };
+
+  // Reset selected items when folder changes
+  useEffect(() => {
+    setSelectedIds([]);
+  }, [currentFolderId]);
 
   const openItem = (item: DashboardFile) => {
     if (item.type === 'folder') {
@@ -524,7 +552,11 @@ export default function DashboardClientContent({
                 {sorted.map((item) => (
                   <TableRow
                     key={item.id}
-                    className="group"
+                    className={
+                      item.type === 'folder'
+                        ? 'group cursor-pointer hover:bg-muted/50'
+                        : 'group'
+                    }
                     onClick={() => item.type === 'folder' && openItem(item)}
                   >
                     <TableCell>
@@ -534,7 +566,13 @@ export default function DashboardClientContent({
                         aria-label={t('Select document')}
                       />
                     </TableCell>
-                    <TableCell className="font-medium">
+                    <TableCell
+                      className={`font-medium ${
+                        item.type === 'folder'
+                          ? 'cursor-pointer hover:underline'
+                          : ''
+                      }`}
+                    >
                       <span className="flex items-center gap-2">
                         {item.type === 'folder' ? (
                           <Folder className="h-4 w-4 text-muted-foreground" />
@@ -545,7 +583,7 @@ export default function DashboardClientContent({
                           <span>{t(item.name, item.name)}</span>
                         ) : (
                           <Link
-                            href={`/${locale}/docs/${item.docType}/start`}
+                            href={`/${locale}/docs/${item.docType}/view?docId=${item.id}`}
                             className="hover:underline"
                           >
                             {t(item.name, item.name)}
@@ -568,19 +606,18 @@ export default function DashboardClientContent({
                             <DropdownMenuItem onSelect={() => setRenameDoc(item)}>
                               {t('Rename')}
                             </DropdownMenuItem>
-                            <DropdownMenuSub>
-                              <DropdownMenuSubTrigger>{t('Move to Folder')}</DropdownMenuSubTrigger>
-                              <DropdownMenuSubContent>
-                                <DropdownMenuItem onSelect={() => handleMove(item.id, null)}>
-                                  {t('None')}
-                                </DropdownMenuItem>
-                                {folders.map((f) => (
-                                  <DropdownMenuItem key={f.id} onSelect={() => handleMove(item.id, f.id)}>
-                                    {t(f.name, f.name)}
-                                  </DropdownMenuItem>
-                                ))}
-                              </DropdownMenuSubContent>
-                            </DropdownMenuSub>
+                            <DropdownMenuItem
+                              onSelect={() =>
+                                setMoveModalState({
+                                  open: true,
+                                  documentId: item.id,
+                                  documentName: item.name,
+                                })
+                              }
+                            >
+                              <Folder className="mr-2 h-4 w-4" />
+                              {t('Move to Folder')}
+                            </DropdownMenuItem>
                             <DropdownMenuItem
                               disabled={duplicatingDocId === item.id}
                               onSelect={async () => {
@@ -676,6 +713,21 @@ export default function DashboardClientContent({
                 } finally {
                   queryClient.invalidateQueries({ queryKey: key });
                 }
+              }}
+            />
+
+            <MoveToFolderModal
+              open={moveModalState.open}
+              onClose={() => setMoveModalState({ open: false })}
+              folders={folders}
+              currentFolderId={documents.find((d) => d.id === moveModalState.documentId)?.folderId}
+              documentName={moveModalState.documentName}
+              documentsCount={documentsPerFolder}
+              onMove={async (folderId) => {
+                if (moveModalState.documentId) {
+                  await handleMove(moveModalState.documentId, folderId);
+                }
+                setMoveModalState({ open: false });
               }}
             />
           </>
