@@ -32,6 +32,7 @@ import FolderModal from './modals/FolderModal';
 import ProfileSettings from '@/components/ProfileSettings';
 import {
   FileText,
+  Folder,
   CreditCard,
   UserCircle,
   LogOut,
@@ -405,11 +406,21 @@ const handleFileSelected = async (e: React.ChangeEvent<HTMLInputElement>) => {
           onClose={() => setShowFolderModal(false)}
         />
       </div>
-          {isUploading && (
-            <div className="mb-4">
-              <Progress value={uploadProgress} aria-label={t('Upload progress')} />
+      {folders.length > 0 && (
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-4">
+          {folders.map((f) => (
+            <div key={f.id} className="flex items-center gap-2">
+              <Folder className="h-4 w-4 text-muted-foreground" />
+              <span>{t(f.name, f.name)}</span>
             </div>
-          )}
+          ))}
+        </div>
+      )}
+      {isUploading && (
+        <div className="mb-4">
+          <Progress value={uploadProgress} aria-label={t('Upload progress')} />
+        </div>
+      )}
 
           <Table>
               <TableHeader>
@@ -464,9 +475,10 @@ const handleFileSelected = async (e: React.ChangeEvent<HTMLInputElement>) => {
                     <TableCell className="font-medium">
                       <Link
                         href={`/${locale}/docs/${doc.docType}/start`}
-                        className="hover:underline"
+                        className="hover:underline flex items-center gap-2"
                       >
-                        {t(doc.name, doc.name)}
+                        <FileText className="h-4 w-4 text-muted-foreground" />
+                        <span>{t(doc.name, doc.name)}</span>
                       </Link>
                     </TableCell>
                     <TableCell>{formatDate(doc.date)}</TableCell>
