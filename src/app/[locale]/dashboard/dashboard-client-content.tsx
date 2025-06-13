@@ -53,6 +53,7 @@ import { getFirestore, doc as firestoreDoc, setDoc, serverTimestamp } from 'fire
 import { useAuth } from '@/hooks/useAuth';
 import { useRouter } from 'next/navigation';
 import { useDashboardData } from '@/hooks/useDashboardData';
+import { DocumentsSkeleton } from './DocumentsSkeleton';
 import {
   renameDocument,
   duplicateDocument,
@@ -252,8 +253,8 @@ const handleFileSelected = async (e: React.ChangeEvent<HTMLInputElement>) => {
   const renderContent = () => {
     if (!documents.length && isFetchingData) {
       return (
-        <div className="p-6 text-muted-foreground">
-          {t('Loading documents...')}
+        <div className="p-6">
+          <DocumentsSkeleton />
         </div>
       );
     }
