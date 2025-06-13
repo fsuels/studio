@@ -44,8 +44,9 @@ export default function FolderModal({ open, onClose }: FolderModalProps) {
         user.uid,
         name || t('UntitledFolder', 'Untitled Folder'),
       );
+      // Refresh folder list so new folder appears immediately
       queryClient.invalidateQueries({
-        queryKey: ['dashboardDocuments', user.uid],
+        queryKey: ['dashboardFolders', user.uid],
       });
       toast({ title: t('Folder created') });
     } catch (err: any) {
