@@ -61,6 +61,7 @@ import {
   bulkMoveDocuments,
 } from '@/lib/firestore/documentActions';
 import type { DashboardDocument, DashboardFolder } from '@/lib/firestore/dashboardData';
+import { getUserDocuments } from '@/lib/firestore/dashboardData';
 import { useQueryClient } from '@tanstack/react-query';
 import { useToast } from '@/hooks/use-toast';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -103,6 +104,7 @@ export default function DashboardClientContent({
     isFetching: isFetchingData,
   } = useDashboardData(user?.uid, {
     enabled: isHydrated && isLoggedIn && !!user?.uid,
+    priorityLoad: true,
   });
 
   const files: DashboardFile[] = React.useMemo(
@@ -121,8 +123,28 @@ export default function DashboardClientContent({
   }, [documents, router, locale]);
 
   useEffect(() => {
+    if (user?.uid) {
+      const commonDocTypes = [
+        'vehicle-bill-of-sale',
+        'lease-agreement',
+        'purchase-agreement',
+      ];
+      commonDocTypes.forEach((docType) => {
+        router.prefetch(`/${locale}/docs/${docType}/start`);
+      });
+    }
+  }, [user?.uid, router, locale]);
+
+  useEffect(() => {
     setIsHydrated(true);
-  }, []);
+    if (user?.uid && !isLoadingData) {
+      queryClient.prefetchQuery({
+        queryKey: ['dashboardDocuments', user.uid],
+        queryFn: () => getUserDocuments(user.uid, 5),
+        staleTime: 5 * 60 * 1000,
+      });
+    }
+  }, [user?.uid, queryClient, isLoadingData]);
 
   useEffect(() => {
     if (isHydrated && !authLoading && !isLoggedIn) {
@@ -308,19 +330,19 @@ const handleFileSelected = async (e: React.ChangeEvent<HTMLInputElement>) => {
   if (authLoading || !isHydrated) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen">
-        <Loader2 className="h-6 w-6 animate-spin text-primary" />
-        <p className="mt-2 text-muted-foreground">
-          {t('Preparing your dashboard…')}
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        <p className="mt-4 text-lg text-muted-foreground">
+          {t('Loading your dashboard...')}
         </p>
       </div>
     );
   }
 
   const renderContent = () => {
-    if (!documents.length && isFetchingData) {
+    if (documents.length === 0 && isLoadingData) {
       return (
         <div className="p-6">
-          <DocumentsSkeleton />
+          <DocumentsSkeleton rows={3} />
         </div>
       );
     }
@@ -403,6 +425,12 @@ const handleFileSelected = async (e: React.ChangeEvent<HTMLInputElement>) => {
                 </DropdownMenuContent>
           </DropdownMenu>
         </div>
+        {isFetchingData && !isLoadingData && (
+          <div className="flex items-center text-sm text-muted-foreground">
+            <Loader2 className="mr-2 h-3 w-3 animate-spin" />
+            {t('Updating...')}
+          </div>
+        )}
         {selectedIds.length > 0 && (
           <div className="flex items-center space-x-2 mt-2">
             <DropdownMenu>
@@ -601,9 +629,13 @@ const handleFileSelected = async (e: React.ChangeEvent<HTMLInputElement>) => {
               </TableBody>
             </Table>
             {sorted.length === 0 && !isLoadingData && (
-              <p className="text-muted-foreground">
-                {t('No documents found.')}
-              </p>
+              <div className="text-center py-8">
+                <FileText className="mx-auto h-12 w-12 text-muted-foreground/50" />
+                <h3 className="mt-4 text-lg font-medium">{t('No documents yet')}</h3>
+                <p className="mt-2 text-sm text-muted-foreground">
+                  {t('Upload a file or create a new document to get started.')}
+                </p>
+              </div>
             )}
             <RenameModal
               open={!!renameDoc}
