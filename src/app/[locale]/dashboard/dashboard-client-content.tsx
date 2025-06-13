@@ -19,6 +19,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -81,6 +82,7 @@ export default function DashboardClientContent({
   const [sortDir, setSortDir] = useState<'asc' | 'desc'>('asc');
   const [renameDoc, setRenameDoc] = useState<DashboardDocument | null>(null);
   const [duplicatingDocId, setDuplicatingDocId] = useState<string | null>(null);
+  const [selectedDocs, setSelectedDocs] = useState<string[]>([]);
 
   const {
     documents,
@@ -179,6 +181,44 @@ export default function DashboardClientContent({
     } catch {
       if (previous) queryClient.setQueryData(key, previous);
       toast({ title: t('Error moving document'), variant: 'destructive' });
+    } finally {
+      queryClient.invalidateQueries({ queryKey: key });
+    }
+  };
+
+  const toggleSelect = (id: string) => {
+    setSelectedDocs((prev) =>
+      prev.includes(id) ? prev.filter((d) => d !== id) : [...prev, id],
+    );
+  };
+
+  const toggleSelectAll = () => {
+    if (selectedDocs.length === documents.length) {
+      setSelectedDocs([]);
+    } else {
+      setSelectedDocs(documents.map((d) => d.id));
+    }
+  };
+
+  const moveSelected = async (folderId: string | null) => {
+    const key = ['dashboardDocuments', user!.uid] as const;
+    const previous = queryClient.getQueryData<DashboardDocument[]>(key);
+    setSelectedDocs([]);
+    queryClient.setQueryData<DashboardDocument[]>(key, (old) =>
+      old?.map((d) =>
+        selectedDocs.includes(d.id)
+          ? { ...d, folderId: folderId || undefined }
+          : d,
+      ) || [],
+    );
+    try {
+      await Promise.all(
+        selectedDocs.map((id) => updateDocumentFolder(user!.uid, id, folderId)),
+      );
+      toast({ title: t('Documents moved') });
+    } catch {
+      if (previous) queryClient.setQueryData(key, previous);
+      toast({ title: t('Error moving documents'), variant: 'destructive' });
     } finally {
       queryClient.invalidateQueries({ queryKey: key });
     }
@@ -300,6 +340,23 @@ export default function DashboardClientContent({
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="outline" disabled={selectedDocs.length === 0}>
+                      {t('Move Selected')} ▼
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="start">
+                    <DropdownMenuItem onSelect={() => moveSelected(null)}>
+                      {t('None')}
+                    </DropdownMenuItem>
+                    {folders.map((f) => (
+                      <DropdownMenuItem key={f.id} onSelect={() => moveSelected(f.id)}>
+                        {t(f.name, f.name)}
+                      </DropdownMenuItem>
+                    ))}
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </div>
               <FolderModal
                 open={showFolderModal}
@@ -310,6 +367,13 @@ export default function DashboardClientContent({
             <Table>
               <TableHeader>
                 <TableRow>
+                  <TableHead className="w-4">
+                    <Checkbox
+                      checked={selectedDocs.length === documents.length && documents.length > 0}
+                      onCheckedChange={toggleSelectAll}
+                      aria-label={t('Select all')}
+                    />
+                  </TableHead>
                   <TableHead
                     onClick={() => handleSort('name')}
                     className="cursor-pointer select-none"
@@ -343,6 +407,13 @@ export default function DashboardClientContent({
               <TableBody>
                 {sorted.map((doc) => (
                   <TableRow key={doc.id} className="group">
+                    <TableCell className="w-4">
+                      <Checkbox
+                        checked={selectedDocs.includes(doc.id)}
+                        onCheckedChange={() => toggleSelect(doc.id)}
+                        aria-label={t('Select document')}
+                      />
+                    </TableCell>
                     <TableCell className="font-medium">
                       <Link
                         href={`/${locale}/docs/${doc.docType}/start`}
