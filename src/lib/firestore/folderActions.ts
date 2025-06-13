@@ -10,13 +10,17 @@ import {
   serverTimestamp,
 } from 'firebase/firestore';
 
-export async function createFolder(userId: string, name: string): Promise<void> {
+export async function createFolder(
+  userId: string,
+  name: string,
+): Promise<string> {
   const db = await getDb();
-  await addDoc(collection(db, 'users', userId, 'folders'), {
+  const docRef = await addDoc(collection(db, 'users', userId, 'folders'), {
     name,
     createdAt: serverTimestamp(),
     updatedAt: serverTimestamp(),
   });
+  return docRef.id;
 }
 
 export interface UserFolder {
