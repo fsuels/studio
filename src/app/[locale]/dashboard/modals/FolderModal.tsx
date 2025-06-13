@@ -12,6 +12,7 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { Spinner } from '@/components/ui/Spinner';
 import { createFolder } from '@/lib/firestore/folderActions';
 import { useQueryClient } from '@tanstack/react-query';
 import { useToast } from '@/hooks/use-toast';
@@ -26,6 +27,7 @@ export default function FolderModal({ open, onClose }: FolderModalProps) {
   const { t } = useTranslation('common');
   const { user } = useAuth();
   const [name, setName] = useState('');
+  const [isCreating, setIsCreating] = useState(false);
 
   useEffect(() => {
     if (open) setName('');
@@ -35,6 +37,7 @@ export default function FolderModal({ open, onClose }: FolderModalProps) {
   const queryClient = useQueryClient();
 
   const handleCreate = async () => {
+    setIsCreating(true);
     if (!user?.uid) { onClose(); return; }
     const key = ['dashboardFolders', user.uid] as const;
     const tmpId = `tmp-${Date.now()}`;
@@ -56,6 +59,7 @@ export default function FolderModal({ open, onClose }: FolderModalProps) {
       console.error('[FolderModal] create folder failed', err);
       toast({ title: t('Error creating folder'), variant: 'destructive' });
     } finally {
+      setIsCreating(false);
       onClose();
     }
   };
@@ -74,7 +78,8 @@ export default function FolderModal({ open, onClose }: FolderModalProps) {
           <Button variant="outline" onClick={onClose} type="button">
             {t('cancel', 'Cancel')}
           </Button>
-          <Button onClick={handleCreate} type="button">
+          <Button onClick={handleCreate} type="button" disabled={isCreating}>
+            {isCreating && <Spinner className="mr-2 h-4 w-4" />}
             {t('create', 'Create')}
           </Button>
         </DialogFooter>
