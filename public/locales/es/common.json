@@ -427,5 +427,6 @@
   "Select all": "Seleccionar todo",
   "Select document": "Seleccionar documento",
   "Move": "Mover",
-  "selected": "seleccionados"
+  "selected": "seleccionados",
+  "duplicateNameError": "Ya existe un documento con ese nombre."
 }
