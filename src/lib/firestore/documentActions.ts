@@ -74,6 +74,7 @@ export async function softDeleteDocument(
   const db = await getDb();
   const ref = doc(db, 'users', userId, 'documents', docId);
   await updateDoc(ref, {
+    /* Use a real number so the client filter matches immediately */
     deletedAt: Date.now(),
     updatedAt: serverTimestamp(),
   });

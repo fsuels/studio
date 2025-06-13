@@ -91,6 +91,10 @@ export async function getDb(): Promise<Firestore> {
     : { experimentalAutoDetectLongPolling: true };
 
   dbInstance = initializeFirestore(app, settings);
+  /* Enable local-first reads so the dashboard can paint instantly
+     from IndexedDB while the network revalidates in background. */
+  const { enableIndexedDbPersistence } = await import('firebase/firestore');
+  enableIndexedDbPersistence(dbInstance).catch(() => undefined); // ignore incognito failures
 
   // Suppress all Firestore logs except errors
   setLogLevel('error');

@@ -1,13 +1,12 @@
 'use client';
-'use client';
 // src/lib/firestore/dashboardData.ts
-'use client';
 
 import { getDb } from '@/lib/firebase';
 import {
   collection,
   getDocs,
   query,
+  where,
   orderBy,
   limit,
   type Timestamp,
@@ -31,17 +30,17 @@ export async function getUserDocuments(
   const db = await getDb();
   const col = collection(db, 'users', userId, 'documents');
   // Changed orderBy from 'createdAt' to 'updatedAt'
-  const q = query(col, orderBy('updatedAt', 'desc'), limit(max));
+  const q = query(
+    col,
+    where('deletedAt', '==', null),   // server-side filter → deleted docs never flash back
+    orderBy('updatedAt', 'desc'),
+    limit(max),
+  );
   const snap = await getDocs(q);
   console.info(
     `[dashboardData] fetched ${snap.size} docs for ${userId} in ${Date.now() - start}ms`,
   );
-  return snap.docs
-    .filter((d) => {
-      const data = d.data() as { deletedAt?: unknown };
-      return !data.deletedAt;
-    })
-    .map((d) => {
+  return snap.docs.map((d) => {
       const data = d.data() as Record<string, unknown> & {
         updatedAt?: Timestamp | Date | string;
         createdAt?: Timestamp | Date | string; // Keep for compatibility if some docs only have createdAt

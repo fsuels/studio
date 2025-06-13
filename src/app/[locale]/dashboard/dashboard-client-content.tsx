@@ -144,15 +144,19 @@ const handleFileSelected = async (e: React.ChangeEvent<HTMLInputElement>) => {
   if (!file || !user) return;
   setIsUploading(true);
   setUploadProgress(0);
-  const key = ['dashboardDocuments', user.uid] as const;
+  const docsKey = ['dashboardDocuments', user.uid] as const;
   const optimistic: DashboardDocument = {
     id: `upload-${Date.now()}`,
     name: file.name,
     date: new Date(),
-    status: 'Uploading',
+    status: t('Uploading'),
     docType: 'uploaded',
   };
-  queryClient.setQueryData<DashboardDocument[]>(key, (old = []) => [...old, optimistic]);
+  const prev = queryClient.getQueryData<DashboardDocument[]>(docsKey);
+  queryClient.setQueryData<DashboardDocument[]>(docsKey, (old = []) => [
+    ...old,
+    optimistic,
+  ]);
   try {
     const storage = getStorage();
     const db = getFirestore();
@@ -186,7 +190,7 @@ const handleFileSelected = async (e: React.ChangeEvent<HTMLInputElement>) => {
         url,
       },
     );
-    queryClient.invalidateQueries({ queryKey: key });
+    queryClient.invalidateQueries({ queryKey: docsKey });
       toast({ title: t('Document uploaded') });
     setUploadProgress(100);
     } catch (err: unknown) {
@@ -197,6 +201,7 @@ const handleFileSelected = async (e: React.ChangeEvent<HTMLInputElement>) => {
         description: desc,
         variant: 'destructive',
       });
+      if (prev) queryClient.setQueryData(docsKey, prev); // rollback on fail
   } finally {
     setIsUploading(false);
     setUploadProgress(0);
@@ -512,15 +517,16 @@ const handleFileSelected = async (e: React.ChangeEvent<HTMLInputElement>) => {
                               ]);
                               try {
                                 await duplicateDocument(user!.uid, doc.id);
+                                setDuplicatingDocId(null); // stop after network OK
                                 toast({ title: t('Document duplicated') });
                               } catch {
                                 if (previous) queryClient.setQueryData(key, previous);
+                                setDuplicatingDocId(null);
                                 toast({
                                   title: t('Error duplicating document'),
                                   variant: 'destructive',
                                 });
                               } finally {
-                                setDuplicatingDocId(null);
                                 queryClient.invalidateQueries({ queryKey: key });
                               }
                             }}

@@ -17,7 +17,9 @@ export function useDashboardData(
     queryKey: ['dashboardDocuments', userId],
     queryFn: () => (userId ? getUserDocuments(userId) : Promise.resolve([])),
     enabled,
-    staleTime: 30_000,
+    /* keep cached list for 60 s so tab switches are instant and
+       docs don’t “pop-in” one by one */
+    staleTime: 60_000,
     keepPreviousData: true,
   });
 
@@ -31,7 +33,7 @@ export function useDashboardData(
     queryKey: ['dashboardFolders', userId],
     queryFn: () => (userId ? getUserFolders(userId) : Promise.resolve([])),
     enabled,
-    staleTime: 30_000,
+    staleTime: 60_000,
     keepPreviousData: true,
   });
 
