@@ -31,31 +31,63 @@ export function useOptimizedDashboardData(
   const documentsQuery = useInfiniteQuery({
     queryKey: ['dashboardDocuments', userId],
     queryFn: async ({ pageParam }) => {
-      if (!userId)
+      if (!userId) {
         return { documents: [], hasMore: false, lastDocId: undefined };
-      const size = pageParam === undefined ? initialPageSize : pageSize;
-      return getUserDocumentsPaginated(userId, size, pageParam);
+      }
+      
+      try {
+        const size = pageParam === undefined ? initialPageSize : pageSize;
+        const result = await getUserDocumentsPaginated(userId, size, pageParam);
+        
+        // Ensure the result has the expected shape
+        if (!result || typeof result !== 'object') {
+          console.error('getUserDocumentsPaginated returned invalid result:', result);
+          return { documents: [], hasMore: false, lastDocId: undefined };
+        }
+        
+        // If result is an array, wrap it in the expected object structure
+        if (Array.isArray(result)) {
+          return {
+            documents: result,
+            hasMore: false,
+            lastDocId: undefined
+          };
+        }
+        
+        // Ensure result has required properties
+        return {
+          documents: result.documents || [],
+          hasMore: result.hasMore || false,
+          lastDocId: result.lastDocId || undefined
+        };
+      } catch (error) {
+        console.error('Error in getUserDocumentsPaginated:', error);
+        return { documents: [], hasMore: false, lastDocId: undefined };
+      }
     },
-    getNextPageParam: (lastPage) => {
-      // Add safety check for undefined lastPage
-      // Enhanced safety checks with debugging
+    getNextPageParam: (lastPage, allPages) => {
+      // Extra defensive checks
       if (!lastPage) {
-        console.warn('getNextPageParam: lastPage is null/undefined');
         return undefined;
       }
-      if (typeof lastPage !== 'object') {
-        console.warn('getNextPageParam: lastPage is not an object:', typeof lastPage);
+      
+      // If lastPage is somehow an array (shouldn't happen with our queryFn)
+      if (Array.isArray(lastPage)) {
+        console.warn('getNextPageParam received array instead of object');
         return undefined;
       }
-      if (!('hasMore' in lastPage) || !('lastDocId' in lastPage)) {
-        console.warn('getNextPageParam: lastPage missing expected properties:', lastPage);
+      
+      // Check for expected shape
+      if (typeof lastPage !== 'object' || !('hasMore' in lastPage)) {
+        console.warn('getNextPageParam: invalid lastPage structure:', lastPage);
         return undefined;
       }
+      
       return lastPage.hasMore ? lastPage.lastDocId : undefined;
     },
     enabled: queryEnabled,
     staleTime: 2 * 60 * 1000,
-    gcTime: 5 * 60 * 1000, // Updated from deprecated cacheTime
+    gcTime: 5 * 60 * 1000,
     refetchOnWindowFocus: false,
     retry: 2,
     retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 5000),
@@ -67,7 +99,7 @@ export function useOptimizedDashboardData(
     queryFn: () => (userId ? getUserFolders(userId) : Promise.resolve([])),
     enabled: queryEnabled && documentsQuery.data !== undefined,
     staleTime: 10 * 60 * 1000,
-    gcTime: 20 * 60 * 1000, // Updated from deprecated cacheTime
+    gcTime: 20 * 60 * 1000,
     refetchOnWindowFocus: false,
     retry: 1,
   });
@@ -77,35 +109,41 @@ export function useOptimizedDashboardData(
     queryFn: () => (userId ? getUserPayments(userId, 3) : Promise.resolve([])),
     enabled: queryEnabled && documentsQuery.data !== undefined,
     staleTime: 10 * 60 * 1000,
-    gcTime: 15 * 60 * 1000, // Updated from deprecated cacheTime
+    gcTime: 15 * 60 * 1000,
     refetchOnWindowFocus: false,
     retry: 1,
   });
 
   const documents = useMemo(() => {
-    // Early return if no data yet - prevents infinite loop
     if (!documentsQuery.data) {
       return [];
     }
     
     if (!documentsQuery.data.pages || !Array.isArray(documentsQuery.data.pages)) {
-      console.warn('documents useMemo: pages is not a valid array:', documentsQuery.data.pages);
+      console.warn('documents useMemo: pages is not a valid array:', documentsQuery.data);
       return [];
     }
 
     return documentsQuery.data.pages
-      .filter((page): page is NonNullable<typeof page> => 
-        page != null && 
-        typeof page === 'object' && 
-        'documents' in page &&
-        Array.isArray(page.documents)
-      )
-      .flatMap(page => page.documents);
-  }, [documentsQuery.data]); // Back to original dependency but with proper guard
+      .filter((page): page is NonNullable<typeof page> => {
+        if (!page) return false;
+        
+        // Handle if page is an array (backward compatibility)
+        if (Array.isArray(page)) {
+          console.warn('Page is an array, expected object with documents property');
+          return false;
+        }
+        
+        return typeof page === 'object' && 
+               'documents' in page &&
+               Array.isArray(page.documents);
+      })
+      .flatMap(page => page.documents || []);
+  }, [documentsQuery.data]);
 
   const isInitialLoading = documentsQuery.isLoading;
   const isLoadingMore = documentsQuery.isFetchingNextPage;
-  const hasNextPage = documentsQuery.hasNextPage;
+  const hasNextPage = documentsQuery.hasNextPage || false;
   const isSecondaryLoading = foldersQuery.isLoading || paymentsQuery.isLoading;
 
   const loadMore = useCallback(() => {
@@ -135,6 +173,7 @@ export function useOptimizedDashboardData(
     documents,
     folders: foldersQuery.data || [],
     payments: paymentsQuery.data || [],
+    isLoading: isInitialLoading || isSecondaryLoading,
     isInitialLoading,
     isLoadingMore,
     isSecondaryLoading,
@@ -142,7 +181,7 @@ export function useOptimizedDashboardData(
       documentsQuery.isFetching ||
       foldersQuery.isFetching ||
       paymentsQuery.isFetching,
-    hasNextPage: !!hasNextPage,
+    hasNextPage,
     loadMore,
     errors,
     hasDocumentError,
