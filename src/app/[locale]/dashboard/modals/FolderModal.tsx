@@ -39,12 +39,16 @@ export default function FolderModal({ open, onClose }: FolderModalProps) {
     const key = ['dashboardFolders', user.uid] as const;
     const tmpId = `tmp-${Date.now()}`;
     const prev = queryClient.getQueryData(key);
+    const folderName = name || t('UntitledFolder', 'Untitled Folder');
     queryClient.setQueryData(key, (old: any = []) => [
       ...old,
-      { id: tmpId, name: name || t('UntitledFolder', 'Untitled Folder') },
+      { id: tmpId, name: folderName },
     ]);
     try {
-      await createFolder(user.uid, name || t('UntitledFolder', 'Untitled Folder'));
+      const newId = await createFolder(user.uid, folderName);
+      queryClient.setQueryData(key, (old: any = []) =>
+        old.map((f: any) => (f.id === tmpId ? { id: newId, name: folderName } : f)),
+      );
       queryClient.invalidateQueries({ queryKey: key });
       toast({ title: t('Folder created') });
     } catch (err: any) {
