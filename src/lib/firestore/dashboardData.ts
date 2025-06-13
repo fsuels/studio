@@ -27,11 +27,15 @@ export async function getUserDocuments(
   userId: string,
   max = 20,
 ): Promise<DashboardDocument[]> {
+  const start = Date.now();
   const db = await getDb();
   const col = collection(db, 'users', userId, 'documents');
   // Changed orderBy from 'createdAt' to 'updatedAt'
   const q = query(col, orderBy('updatedAt', 'desc'), limit(max));
   const snap = await getDocs(q);
+  console.info(
+    `[dashboardData] fetched ${snap.size} docs for ${userId} in ${Date.now() - start}ms`,
+  );
   return snap.docs
     .filter((d) => {
       const data = d.data() as { deletedAt?: unknown };
@@ -77,19 +81,27 @@ export async function getUserPayments(
   userId: string,
   max = 20,
 ): Promise<DashboardPayment[]> {
+  const start = Date.now();
   const db = await getDb();
   const col = collection(db, 'users', userId, 'payments');
   const q = query(col, orderBy('date', 'desc'), limit(max));
   const snap = await getDocs(q);
+  console.info(
+    `[dashboardData] fetched ${snap.size} payments for ${userId} in ${Date.now() - start}ms`,
+  );
   return snap.docs.map((d) => d.data() as DashboardPayment);
 }
 
 export async function getUserFolders(
   userId: string,
 ): Promise<DashboardFolder[]> {
+  const start = Date.now();
   const db = await getDb();
   const col = collection(db, 'users', userId, 'folders');
   const q = query(col, orderBy('createdAt', 'asc'));
   const snap = await getDocs(q);
+  console.info(
+    `[dashboardData] fetched ${snap.size} folders for ${userId} in ${Date.now() - start}ms`,
+  );
   return snap.docs.map((d) => ({ id: d.id, name: (d.data().name as string) || d.id }));
 }
