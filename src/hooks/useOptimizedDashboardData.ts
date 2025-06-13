@@ -36,11 +36,16 @@ export function useOptimizedDashboardData(
       const size = pageParam === undefined ? initialPageSize : pageSize;
       return getUserDocumentsPaginated(userId, size, pageParam);
     },
-    getNextPageParam: (lastPage) =>
-      lastPage.hasMore ? lastPage.lastDocId : undefined,
+    getNextPageParam: (lastPage) => {
+      // Add safety check for undefined lastPage
+      if (!lastPage || typeof lastPage !== 'object') {
+        return undefined;
+      }
+      return lastPage.hasMore ? lastPage.lastDocId : undefined;
+    },
     enabled: queryEnabled,
     staleTime: 2 * 60 * 1000,
-    cacheTime: 5 * 60 * 1000,
+    gcTime: 5 * 60 * 1000, // Updated from deprecated cacheTime
     refetchOnWindowFocus: false,
     retry: 2,
     retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 5000),
@@ -52,7 +57,7 @@ export function useOptimizedDashboardData(
     queryFn: () => (userId ? getUserFolders(userId) : Promise.resolve([])),
     enabled: queryEnabled && documentsQuery.data !== undefined,
     staleTime: 10 * 60 * 1000,
-    cacheTime: 20 * 60 * 1000,
+    gcTime: 20 * 60 * 1000, // Updated from deprecated cacheTime
     refetchOnWindowFocus: false,
     retry: 1,
   });
@@ -62,15 +67,20 @@ export function useOptimizedDashboardData(
     queryFn: () => (userId ? getUserPayments(userId, 3) : Promise.resolve([])),
     enabled: queryEnabled && documentsQuery.data !== undefined,
     staleTime: 10 * 60 * 1000,
-    cacheTime: 15 * 60 * 1000,
+    gcTime: 15 * 60 * 1000, // Updated from deprecated cacheTime
     refetchOnWindowFocus: false,
     retry: 1,
   });
 
-  const documents = useMemo(
-    () => documentsQuery.data?.pages.flatMap((p) => p.documents) || [],
-    [documentsQuery.data],
-  );
+  const documents = useMemo(() => {
+    // Add safety check for pages
+    if (!documentsQuery.data?.pages) {
+      return [];
+    }
+    return documentsQuery.data.pages
+      .filter(page => page && Array.isArray(page.documents))
+      .flatMap((p) => p.documents) || [];
+  }, [documentsQuery.data]);
 
   const isInitialLoading = documentsQuery.isLoading;
   const isLoadingMore = documentsQuery.isFetchingNextPage;
@@ -121,7 +131,7 @@ export function useOptimizedDashboardData(
     paymentsStatus: paymentsQuery.status,
     loadingStage: getLoadingStage(),
     documentCount: documents.length,
-    totalPages: documentsQuery.data?.pages.length || 0,
+    totalPages: documentsQuery.data?.pages?.length || 0,
     refetchDocuments: documentsQuery.refetch,
     refetchFolders: foldersQuery.refetch,
     refetchPayments: paymentsQuery.refetch,
