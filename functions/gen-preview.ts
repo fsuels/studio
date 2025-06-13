@@ -14,7 +14,7 @@ export const onDraftWrite = functions.firestore
     const markdown = await renderMarkdown(
       after.docType,
       after.formData,
-      after.state || 'NA'
+      after.locale || 'en'
     );
 
     return change.after.ref.set(
