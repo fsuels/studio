@@ -59,6 +59,7 @@ import {
   duplicateDocument,
   softDeleteDocument,
   updateDocumentFolder,
+  getUniqueDocumentName,
 } from '@/lib/firestore/documentActions';
 import type { DashboardDocument } from '@/lib/firestore/dashboardData';
 import { useQueryClient } from '@tanstack/react-query';
@@ -164,10 +165,11 @@ const handleFileSelected = async (e: React.ChangeEvent<HTMLInputElement>) => {
       );
     });
     const url = await getDownloadURL(task.snapshot.ref);
+    const uniqueName = await getUniqueDocumentName(user.uid, file.name);
     await setDoc(
       firestoreDoc(db, 'users', user.uid, 'documents', newId),
       {
-        name: file.name,
+        name: uniqueName,
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp(),
         status: 'Uploaded',

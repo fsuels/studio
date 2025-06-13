@@ -145,10 +145,41 @@ export async function POST(
       .collection('documents')
       .doc(documentInstanceId);
 
+    async function getUniqueName(baseName: string): Promise<string> {
+      let candidate = baseName;
+      let counter = 1;
+      while (true) {
+        const qSnap = await db
+          .collection('users')
+          .doc(user.uid)
+          .collection('documents')
+          .where('name', '==', candidate)
+          .limit(1)
+          .get();
+        if (qSnap.empty) break;
+        counter += 1;
+        candidate = `${baseName} (${counter})`;
+      }
+      return candidate;
+    }
+
+    const baseName =
+      effectiveLocale === 'es'
+        ? docConfig.translations?.es?.name ||
+          docConfig.translations?.en?.name ||
+          docConfig.name ||
+          params.docId
+        : docConfig.translations?.en?.name ||
+          docConfig.name ||
+          docConfig.translations?.es?.name ||
+          params.docId;
+    const uniqueName = await getUniqueName(baseName);
+
     try {
       await docRef.set({
         originalDocId: params.docId,
         locale: effectiveLocale,
+        name: uniqueName,
         data: values,
         createdAt: admin.firestore.FieldValue.serverTimestamp(),
         status: 'draft',
