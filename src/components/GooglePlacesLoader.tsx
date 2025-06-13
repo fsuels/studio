@@ -1,7 +1,7 @@
 // src/components/GooglePlacesLoader.tsx
 'use client';
-import Script from 'next/script';
-import React, { useState, useEffect } from 'react';
+import React from 'react';
+import { APILoader } from '@googlemaps/extended-component-library/react';
 
 declare global {
   interface Window {
@@ -14,14 +14,7 @@ declare global {
 }
 
 export default function GooglePlacesLoader() {
-  const [loaded, setLoaded] = useState(false);
   const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
-
-  useEffect(() => {
-    if (window.google?.maps?.places) {
-      setLoaded(true);
-    }
-  }, []);
 
   if (!apiKey) {
     console.error(
@@ -30,22 +23,5 @@ export default function GooglePlacesLoader() {
     return null;
   }
 
-  return (
-    <>
-      {!loaded && (
-        <Script
-          src={`https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places&loading=async`}
-          strategy="lazyOnload"
-          onLoad={() => {
-            setLoaded(true);
-            // Dispatch a custom event to notify that Google Maps is loaded
-            window.dispatchEvent(new Event('google-maps-loaded'));
-          }}
-          onError={(e) => {
-            console.error('Failed to load Google Maps API script:', e);
-          }}
-        />
-      )}
-    </>
-  );
+  return <APILoader apiKey={apiKey} />;
 }

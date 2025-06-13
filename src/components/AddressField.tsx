@@ -1,12 +1,11 @@
 // src/components/AddressField.tsx
 'use client';
 
-import React, { useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 import dynamic from 'next/dynamic';
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next'; // Added
 import { Label } from '@/components/ui/label';
-import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 import { Info } from 'lucide-react';
 import {
@@ -19,29 +18,16 @@ import { Button } from '@/components/ui/button';
 const GooglePlacesLoader = dynamic(() => import('./GooglePlacesLoader'), {
   ssr: false,
 });
+const PlacePicker = dynamic(
+  () =>
+    import('@googlemaps/extended-component-library/react').then(
+      (m) => m.PlacePicker,
+    ),
+  { ssr: false },
+);
 
-interface WindowWithGoogle extends Window {
-  google?: {
-    maps?: {
-      places?: unknown;
-    };
-  };
-}
 
-interface InputWithAutocomplete extends HTMLInputElement {
-  googleAutocomplete?: unknown;
-}
 
-interface AddressComponent {
-  types: string[];
-  short_name: string;
-}
-
-interface GooglePlaceResult {
-  formatted_address?: string;
-  address_components?: AddressComponent[];
-  name?: string;
-}
 
 interface AddressFieldProps {
   name: string;
@@ -72,108 +58,57 @@ const AddressField = React.memo(function AddressField({
     setValue: rhfSetValue,
     formState: { errors: formErrors },
   } = useFormContext();
-  const inputRef = useRef<HTMLInputElement | null>(null);
+  const pickerRef = useRef<HTMLElement | null>(null);
   const fieldErrorActual = formErrors[name]?.message || error;
 
   const { ref: rhfRef, ...restOfRegister } = register(name, { required });
+  const handlePlaceChange = (e: Event) => {
+    const target = e.target as any;
+    const place = target.value as {
+      formattedAddress?: string;
+      displayName?: string;
+      addressComponents?: { types: string[]; shortText: string }[];
+    } | null;
+    const formattedAddress = place?.formattedAddress || '';
 
-  useEffect(() => {
-    let autocomplete: google.maps.places.Autocomplete | undefined;
-    let intervalId: NodeJS.Timeout | undefined;
+    const wanted = new Set([
+      'street_number',
+      'route',
+      'locality',
+      'administrative_area_level_1',
+      'postal_code',
+      'postal_code_suffix',
+      'country',
+    ]);
+    const parts: Record<string, string> = {};
 
-    const initializeAutocomplete = () => {
-      const win = window as WindowWithGoogle;
-      if (!win.google?.maps?.places || !inputRef.current) {
-        intervalId = setInterval(() => {
-          if (
-            (window as WindowWithGoogle).google?.maps?.places &&
-            inputRef.current
-          ) {
-            clearInterval(intervalId);
-            intervalId = undefined;
-            initializeAutocompleteInternal();
-          }
-        }, 100);
-        return;
-      }
-      initializeAutocompleteInternal();
+    place?.addressComponents?.forEach((c) => {
+      const type = c.types[0];
+      if (wanted.has(type)) parts[type] = c.shortText;
+    });
+    const addressParts = {
+      street:
+        `${parts.street_number ?? ''} ${parts.route ?? ''}`.trim() ||
+        place?.displayName ||
+        '',
+      city: parts.locality ?? '',
+      state: parts.administrative_area_level_1 ?? '',
+      postalCode: [parts.postal_code, parts.postal_code_suffix]
+        .filter(Boolean)
+        .join('-'),
+      country: parts.country ?? '',
     };
 
-    const initializeAutocompleteInternal = () => {
-      if (!inputRef.current) return;
-      autocomplete = new google.maps.places.Autocomplete(inputRef.current, {
-        types: ['address'],
-        fields: ['address_components', 'formatted_address', 'name'],
-        componentRestrictions: { country: ['us', 'ca', 'mx'] },
-      });
-
-      autocomplete.addListener('place_changed', () => {
-        if (!autocomplete) return;
-        const place = autocomplete.getPlace() as GooglePlaceResult;
-        const formattedAddress = place.formatted_address || '';
-
-        const wanted = new Set([
-          'street_number',
-          'route',
-          'locality',
-          'administrative_area_level_1',
-          'postal_code',
-          'postal_code_suffix',
-          'country',
-        ]);
-        const parts: Record<string, string> = {};
-
-        place.address_components?.forEach((c: AddressComponent) => {
-          const type = c.types[0];
-          if (wanted.has(type)) parts[type] = c.short_name;
-        });
-        const addressParts = {
-          street:
-            `${parts.street_number ?? ''} ${parts.route ?? ''}`.trim() ||
-            place.name ||
-            '',
-          city: parts.locality ?? '',
-          state: parts.administrative_area_level_1 ?? '',
-          postalCode: [parts.postal_code, parts.postal_code_suffix]
-            .filter(Boolean)
-            .join('-'),
-          country: parts.country ?? '',
-        };
-
-        if (controlledOnChange) {
-          controlledOnChange(formattedAddress, addressParts);
-        } else {
-          rhfSetValue(name, formattedAddress, {
-            shouldValidate: true,
-            shouldDirty: true,
-          });
-        }
-
-        if (inputRef.current) {
-          inputRef.current.value = formattedAddress;
-        }
-      });
-      (inputRef.current as InputWithAutocomplete).googleAutocomplete =
-        autocomplete;
-    };
-
-    initializeAutocomplete();
-
-    return () => {
-      if (intervalId) clearInterval(intervalId);
-      const currentInputRef = inputRef.current as InputWithAutocomplete | null;
-      if (currentInputRef && currentInputRef.googleAutocomplete) {
-        const pacContainers = document.querySelectorAll('.pac-container');
-        pacContainers.forEach((container) => container.remove());
-      }
-    };
-  }, [name, rhfSetValue, controlledOnChange]);
-
-  const handleLocalInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (controlledOnChange) {
-      controlledOnChange(e.target.value);
+      controlledOnChange(formattedAddress, addressParts);
+    } else {
+      rhfSetValue(name, formattedAddress, {
+        shouldValidate: true,
+        shouldDirty: true,
+      });
     }
   };
+
 
   return (
     <>
@@ -209,27 +144,17 @@ const AddressField = React.memo(function AddressField({
             </Tooltip>
           )}
         </div>
-        <Input
-          id={name}
-          placeholder={placeholder ? t(placeholder) : undefined} // Changed
-          {...restOfRegister}
-          defaultValue={controlledValue}
-          onChange={
-            controlledOnChange
-              ? handleLocalInputChange
-              : restOfRegister.onChange
-          }
+        <input type="hidden" id={name} {...restOfRegister} />
+        <PlacePicker
+          placeholder={placeholder ? t(placeholder) : undefined}
+          country={["us", "ca", "mx"]}
+          type="address"
+          onPlaceChange={handlePlaceChange}
           ref={(el) => {
-            rhfRef(el);
-            inputRef.current = el;
+            rhfRef(el as unknown as HTMLInputElement);
+            pickerRef.current = el;
           }}
-          className={cn(
-            'w-full max-w-sm',
-            fieldErrorActual &&
-              'border-destructive focus-visible:ring-destructive',
-          )}
-          autoComplete="off"
-          aria-invalid={!!fieldErrorActual}
+          style={{ width: '100%' }}
         />
         {fieldErrorActual && (
           <p className="text-xs text-destructive mt-1">
