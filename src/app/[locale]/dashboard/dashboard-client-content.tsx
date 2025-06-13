@@ -184,13 +184,14 @@ const handleFileSelected = async (e: React.ChangeEvent<HTMLInputElement>) => {
       });
       toast({ title: t('Document uploaded') });
     setUploadProgress(100);
-  } catch (err: any) {
-    console.error('[dashboard] upload failed', err);
-    toast({
-      title: t('Upload failed'),
-      description: err?.message || String(err),
-      variant: 'destructive',
-    });
+    } catch (err: unknown) {
+      console.error('[dashboard] upload failed', err);
+      const desc = err instanceof Error ? err.message : String(err);
+      toast({
+        title: t('Upload failed'),
+        description: desc,
+        variant: 'destructive',
+      });
   } finally {
     setIsUploading(false);
     if (fileInputRef.current) fileInputRef.current.value = '';
@@ -312,10 +313,10 @@ const handleFileSelected = async (e: React.ChangeEvent<HTMLInputElement>) => {
           } else {
             const dA = (typeof a.date === 'object' && 'toDate' in a.date)
               ? a.date.toDate()
-              : new Date(a.date as any);
+              : new Date(a.date as string);
             const dB = (typeof b.date === 'object' && 'toDate' in b.date)
               ? b.date.toDate()
-              : new Date(b.date as any);
+              : new Date(b.date as string);
             valA = dA.getTime();
             valB = dB.getTime();
           }
@@ -571,9 +572,13 @@ const handleFileSelected = async (e: React.ChangeEvent<HTMLInputElement>) => {
                 try {
                   await renameDocument(user!.uid, renameDoc.id, name);
                   toast({ title: t('Document renamed') });
-                } catch {
+                } catch (err: unknown) {
                   if (previous) queryClient.setQueryData(key, previous);
-                  toast({ title: t('Error renaming document'), variant: 'destructive' });
+                  const message =
+                    err instanceof Error && err.message === 'duplicate-name'
+                      ? t('duplicateNameError')
+                      : t('Error renaming document');
+                  toast({ title: message, variant: 'destructive' });
                 } finally {
                   queryClient.invalidateQueries({ queryKey: key });
                 }

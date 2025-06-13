@@ -8,6 +8,9 @@ import {
   collection,
   doc,
   getDoc,
+  getDocs,
+  query,
+  where,
   setDoc,
   updateDoc,
   serverTimestamp,
@@ -22,6 +25,13 @@ export async function renameDocument(
   name: string,
 ): Promise<void> {
   const db = await getDb();
+  const colRef = collection(db, 'users', userId, 'documents');
+  const q = query(colRef, where('name', '==', name));
+  const snap = await getDocs(q);
+  const exists = snap.docs.some((d) => d.id !== docId && !d.data().deletedAt);
+  if (exists) {
+    throw new Error('duplicate-name');
+  }
   const ref = doc(db, 'users', userId, 'documents', docId);
   await updateDoc(ref, { name, updatedAt: serverTimestamp() });
 }
