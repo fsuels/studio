@@ -3,11 +3,13 @@
 import { getDb } from '@/lib/firebase';
 import {
   collection,
-  addDoc,
+  doc,
+  setDoc,
   getDocs,
   query,
   orderBy,
   serverTimestamp,
+  where,
 } from 'firebase/firestore';
 
 export async function createFolder(
@@ -15,12 +17,19 @@ export async function createFolder(
   name: string,
 ): Promise<string> {
   const db = await getDb();
-  const docRef = await addDoc(collection(db, 'users', userId, 'folders'), {
+  const col = collection(db, 'users', userId, 'folders');
+  const q = query(col, where('name', '==', name));
+  const snapshot = await getDocs(q);
+  if (!snapshot.empty) {
+    throw new Error('A folder with that name already exists.');
+  }
+  const folderRef = doc(col, name);
+  await setDoc(folderRef, {
     name,
     createdAt: serverTimestamp(),
     updatedAt: serverTimestamp(),
   });
-  return docRef.id;
+  return folderRef.id;
 }
 
 export interface UserFolder {
