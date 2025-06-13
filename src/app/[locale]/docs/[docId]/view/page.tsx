@@ -40,10 +40,16 @@ export default function ViewDocumentPage({ params }: ViewDocumentPageProps) {
     let cancelled = false;
     async function fetchContent() {
       setIsLoadingContent(true);
+      const timeoutMs = 15000;
       try {
         const db = await getDb();
         const docRef = doc(db, 'users', uid, 'documents', savedDocId);
-        const snap = await getDoc(docRef);
+        const snap = await Promise.race([
+          getDoc(docRef),
+          new Promise<never>((_, reject) =>
+            setTimeout(() => reject(new Error('timeout')), timeoutMs),
+          ),
+        ]);
         if (!snap.exists()) {
           setLoadError('Document not found.');
           return;
@@ -86,9 +92,12 @@ export default function ViewDocumentPage({ params }: ViewDocumentPageProps) {
         setLoadError(null);
         const paid = await hasUserPaidForDocument(uid, savedDocId);
         setHasPaid(paid);
-      } catch (err) {
+      } catch (err: any) {
         console.error('[view page] failed to load saved content', err);
-        setLoadError('Failed to load document.');
+        const msg = err?.message === 'timeout'
+          ? 'Request timed out. Please try again.'
+          : 'Failed to load document.';
+        setLoadError(msg);
       } finally {
         if (!cancelled) setIsLoadingContent(false);
       }
