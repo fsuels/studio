@@ -48,6 +48,8 @@ export default function ViewDocumentPage({ params }: ViewDocumentPageProps) {
         }
         const data = snap.data() as Record<string, any>;
         let markdown = data.contentMarkdown as string | undefined;
+        const formData = data.formData ?? data.data;
+        const effectiveDocType = data.docType || data.originalDocId || docId;
 
         // Check for other sources (legacy or alternative storage)
         if (typeof data.markdown === 'string' && !markdown) {
@@ -64,11 +66,11 @@ export default function ViewDocumentPage({ params }: ViewDocumentPageProps) {
         }
 
         // ---------- Fallback: generate from formData on‑the‑fly ----------
-        if (!markdown && data.formData) {
+        if (!markdown && formData) {
           markdown = await renderMarkdown(
-            data.docType,
-            data.formData,
-            data.state ?? 'NA',
+            effectiveDocType,
+            formData,
+            data.state ?? locale,
           );
 
           /*  Optional but highly recommended: write it back so subsequent

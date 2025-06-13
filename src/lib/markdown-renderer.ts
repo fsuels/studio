@@ -6,8 +6,9 @@
 export async function renderMarkdown(
   docType: string,
   formData: Record<string, unknown>,
+  locale: 'en' | 'es' = 'en',
 ): Promise<string> {
-  const templateUrl = `/templates/en/${docType}.md`;
+  const templateUrl = `/templates/${locale}/${docType}.md`;
   let template = '';
   try {
     const res = await fetch(templateUrl);
