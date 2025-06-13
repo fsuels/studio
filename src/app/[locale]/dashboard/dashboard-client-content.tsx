@@ -91,7 +91,7 @@ type DashboardFile =
   | (DashboardDocument & { type: 'document' })
   | (DashboardFolder & { type: 'folder'; status?: string; date?: FirestoreTimestamp | Date | string; docType?: string });
 
-interface DashboardClientContentProps {
+export interface DashboardClientContentProps {
   locale: 'en' | 'es';
 }
 
@@ -109,8 +109,10 @@ export default function DashboardClientContent({
   const [renameDoc, setRenameDoc] = useState<DashboardDocument | null>(null);
   const [duplicatingDocId, setDuplicatingDocId] = useState<string | null>(null);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [currentFolderId, setCurrentFolderId] = useState<string | null>(null);
 
-  const {
+
+	const {
     documents,
     payments,
     folders,
@@ -120,13 +122,20 @@ export default function DashboardClientContent({
     enabled: isHydrated && isLoggedIn && !!user?.uid,
   });
 
-  const files: DashboardFile[] = React.useMemo(
-    () => [
-      ...folders.map((f) => ({ ...f, type: 'folder' as const })),
-      ...documents.map((d) => ({ ...d, type: 'document' as const })),
-    ],
-    [folders, documents],
-  );
+  const files: DashboardFile[] = React.useMemo(() => {
+    // Filter documents based on current folder
+    const filteredDocs = currentFolderId 
+      ? documents.filter(d => d.folderId === currentFolderId)
+      : documents.filter(d => !d.folderId); // Root level documents only
+    
+    // Only show folders at root level
+    const displayFolders = currentFolderId ? [] : folders;
+    
+    return [
+      ...displayFolders.map((f) => ({ ...f, type: 'folder' as const })),
+      ...filteredDocs.map((d) => ({ ...d, type: 'document' as const })),
+    ];
+  }, [folders, documents, currentFolderId]);
 
   const queryClient = useQueryClient();
   const { toast } = useToast();
@@ -306,11 +315,17 @@ export default function DashboardClientContent({
 
   const openItem = (item: DashboardFile) => {
     if (item.type === 'folder') {
-      router.push(`/${locale}/folders/${item.id}`);
+      // Navigate to folder contents within dashboard
+      setCurrentFolderId(item.id);
     } else {
       router.push(`/${locale}/docs/${item.docType}/view?docId=${item.id}`);
     }
   };
+
+  // Reset selected items when folder changes
+  useEffect(() => {
+    setSelectedIds([]);
+  }, [currentFolderId]);
 
   const formatDate = (
     dateInput: FirestoreTimestamp | Date | string,
@@ -402,18 +417,18 @@ export default function DashboardClientContent({
 
         return (
           <>
-            {/* Upload & New controls */}
-            <input
-              type="file"
-              accept=".pdf"
-              className="hidden"
-              ref={fileInputRef}
-              onChange={handleFileSelected}
-            />
-            <div className="flex items-center justify-between mb-4">
+ {/* Upload & New controls */}
+ <input
+ type="file"
+ accept=".pdf"
+ ref={fileInputRef}
+ onChange={handleFileSelected}
+ />
+ </div></>
+ <div className="flex items-center justify-between mb-4">
               <div className="flex space-x-2 items-center">
                 <Button onClick={handleUploadClick} disabled={isUploading}>
-                  {isUploading && (
+ {isUploading && (
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   )}
                   {t('Upload File')}
@@ -445,6 +460,27 @@ export default function DashboardClientContent({
                 </div>
               )}
             </div>
+
+            {/* Breadcrumb navigation for folders */}
+            {currentFolderId && (
+              <div className="flex items-center gap-2 mb-4 text-sm">
+                <Button
+                  variant="link"
+                  size="sm"
+                  className="p-0 h-auto"
+                  onClick={() => setCurrentFolderId(null)}
+                >
+                  {t('All Documents')}
+                </Button>
+                <span className="text-muted-foreground">/</span>
+                <span className="font-medium">
+                  {folders.find(f => f.id === currentFolderId)?.name || currentFolderId}
+                </span>
+                <span className="text-muted-foreground ml-2">
+                  ({documents.filter(d => d.folderId === currentFolderId).length} {t('items')})
+                </span>
+              </div>
+            )}
 
             {selectedIds.length > 0 && (
               <div className="flex items-center space-x-2 mb-4">
@@ -525,7 +561,7 @@ export default function DashboardClientContent({
                   <TableRow
                     key={item.id}
                     className="group"
-                    onClick={() => item.type === 'folder' && openItem(item)}
+                    className={item.type === 'folder' ? 'cursor-pointer hover:bg-muted/50' : ''}
                   >
                     <TableCell>
                       <Checkbox
@@ -537,16 +573,27 @@ export default function DashboardClientContent({
                     <TableCell className="font-medium">
                       <span className="flex items-center gap-2">
                         {item.type === 'folder' ? (
-                          <Folder className="h-4 w-4 text-muted-foreground" />
+                          <>
+                            <Folder className="h-4 w-4 text-muted-foreground" />
+                            <button
+                              onClick={() => openItem(item)}
+                              className="hover:underline text-left"
+                            >
+                              {t(item.name, item.name)}
+                              <span className="ml-2 text-xs text-muted-foreground">
+                                ({documents.filter(d => d.folderId === item.id).length})
+                              </span>
+                            </button>
+                          </>
                         ) : (
-                          <FileText className="h-4 w-4 text-muted-foreground" />
-                        )}
-                        {item.type === 'folder' ? (
-                          <span>{t(item.name, item.name)}</span>
-                        ) : (
-                          <Link
-                            href={`/${locale}/docs/${item.docType}/start`}
-                            className="hover:underline"
+                          <>
+                            <FileText className="h-4 w-4 text-muted-foreground" />
+ <Link
+ href={`/${locale}/docs/${item.docType}/view?docId=${item.id}`}
+ className="hover:underline"
+                            // Pass the item.id to the href
+
+ // Pass the item.id to the href
                           >
                             {t(item.name, item.name)}
                           </Link>
@@ -569,15 +616,22 @@ export default function DashboardClientContent({
                               {t('Rename')}
                             </DropdownMenuItem>
                             <DropdownMenuSub>
-                              <DropdownMenuSubTrigger>{t('Move to Folder')}</DropdownMenuSubTrigger>
+                              <DropdownMenuSubTrigger>
+                                <Folder className="mr-2 h-4 w-4" />
+                                {t('Move to Folder')}
+                              </DropdownMenuSubTrigger>
                               <DropdownMenuSubContent>
                                 <DropdownMenuItem onSelect={() => handleMove(item.id, null)}>
-                                  {t('None')}
+                                  <FileText className="mr-2 h-4 w-4 opacity-50" />
+                                  {t('Root (No Folder)')}
                                 </DropdownMenuItem>
                                 {folders.map((f) => (
+                                  // Only show folders that are not the current parent
+                                  f.id !== currentFolderId && (
                                   <DropdownMenuItem key={f.id} onSelect={() => handleMove(item.id, f.id)}>
+                                    <Folder className="mr-2 h-4 w-4" />
                                     {t(f.name, f.name)}
-                                  </DropdownMenuItem>
+                                  </DropdownMenuItem>)
                                 ))}
                               </DropdownMenuSubContent>
                             </DropdownMenuSub>
@@ -711,8 +765,8 @@ export default function DashboardClientContent({
                 <CardContent className="p-4">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm font-medium text-blue-600">{t('Total Spent')}</p>
-                      <p className="text-2xl font-bold text-blue-900">
+                      <p className="text-sm font-medium text-gray-600">{t('Total Spent')}</p>
+                      <p className="text-2xl font-bold text-gray-900">
                         ${payments.reduce((sum, p) => sum + (parseFloat(String(p.amount).replace(/[^0-9.]/g, '')) || 0), 0).toFixed(2)}
                       </p>
                     </div>
@@ -723,10 +777,10 @@ export default function DashboardClientContent({
               
               <Card className="bg-gradient-to-r from-green-50 to-green-100 border-green-200">
                 <CardContent className="p-4">
-                  <div className="flex items-center justify-between">
+                  <div className="flex items-center justify-between gap-4">
                     <div>
-                      <p className="text-sm font-medium text-green-600">{t('This Month')}</p>
-                      <p className="text-2xl font-bold text-green-900">
+                      <p className="text-sm font-medium text-gray-600">{t('This Month')}</p>
+                      <p className="text-2xl font-bold text-gray-900">
                         ${payments
                           .filter(p => {
                             const paymentDate = new Date(p.date);
@@ -745,10 +799,10 @@ export default function DashboardClientContent({
               
               <Card className="bg-gradient-to-r from-purple-50 to-purple-100 border-purple-200">
                 <CardContent className="p-4">
-                  <div className="flex items-center justify-between">
+                  <div className="flex items-center justify-between gap-4">
                     <div>
-                      <p className="text-sm font-medium text-purple-600">{t('Total Orders')}</p>
-                      <p className="text-2xl font-bold text-purple-900">{payments.length}</p>
+                      <p className="text-sm font-medium text-gray-600">{t('Total Orders')}</p>
+                      <p className="text-2xl font-bold text-gray-900">{payments.length}</p>
                     </div>
                     <ShoppingBag className="h-8 w-8 text-purple-500" />
                   </div>
@@ -832,8 +886,8 @@ export default function DashboardClientContent({
                                       minute: '2-digit'
                                     })}
                                   </p>
-                                </div>
-                              </TableCell>
+                            </div>
+                          </TableCell>
                               
                               <TableCell className="py-4">
                                 <div className="text-sm">
