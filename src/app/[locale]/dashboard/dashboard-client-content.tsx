@@ -146,6 +146,15 @@ const handleFileSelected = async (e: React.ChangeEvent<HTMLInputElement>) => {
   if (!file || !user) return;
   setIsUploading(true);
   setUploadProgress(0);
+  const key = ['dashboardDocuments', user.uid] as const;
+  const optimistic: DashboardDocument = {
+    id: `upload-${Date.now()}`,
+    name: file.name,
+    date: new Date(),
+    status: 'Uploading',
+    docType: 'uploaded',
+  };
+  queryClient.setQueryData<DashboardDocument[]>(key, (old = []) => [...old, optimistic]);
   try {
     const storage = getStorage();
     const db = getFirestore();
@@ -179,9 +188,7 @@ const handleFileSelected = async (e: React.ChangeEvent<HTMLInputElement>) => {
         url,
       },
     );
-      queryClient.invalidateQueries({
-        queryKey: ['dashboardDocuments', user.uid],
-      });
+    queryClient.invalidateQueries({ queryKey: key });
       toast({ title: t('Document uploaded') });
     setUploadProgress(100);
     } catch (err: unknown) {
@@ -194,6 +201,7 @@ const handleFileSelected = async (e: React.ChangeEvent<HTMLInputElement>) => {
       });
   } finally {
     setIsUploading(false);
+    setUploadProgress(0);
     if (fileInputRef.current) fileInputRef.current.value = '';
   }
 };
@@ -504,8 +512,6 @@ const handleFileSelected = async (e: React.ChangeEvent<HTMLInputElement>) => {
                                 ...old,
                                 { ...doc, id: tempId, name: `${doc.name} (Copy)` },
                               ]);
-                              // Hide spinner once optimistic update is applied
-                              setDuplicatingDocId(null);
                               try {
                                 await duplicateDocument(user!.uid, doc.id);
                                 toast({ title: t('Document duplicated') });
@@ -516,6 +522,7 @@ const handleFileSelected = async (e: React.ChangeEvent<HTMLInputElement>) => {
                                   variant: 'destructive',
                                 });
                               } finally {
+                                setDuplicatingDocId(null);
                                 queryClient.invalidateQueries({ queryKey: key });
                               }
                             }}
