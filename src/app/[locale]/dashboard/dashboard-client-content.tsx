@@ -357,6 +357,8 @@ export default function DashboardClientContent({
                                 ...old,
                                 { ...doc, id: tempId, name: `${doc.name} (Copy)` },
                               ]);
+                              // Hide spinner once optimistic update is applied
+                              setDuplicatingDocId(null);
                               try {
                                 await duplicateDocument(user!.uid, doc.id);
                                 toast({ title: t('Document duplicated') });
@@ -367,7 +369,6 @@ export default function DashboardClientContent({
                                   variant: 'destructive',
                                 });
                               } finally {
-                                setDuplicatingDocId(null);
                                 queryClient.invalidateQueries({ queryKey: key });
                               }
                             }}
