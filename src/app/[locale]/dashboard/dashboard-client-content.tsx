@@ -787,13 +787,13 @@ export default function DashboardClientContent({
                         </TableRow>
                       </TableHeader>
                       <TableBody>
-                        {payments.map((payment) => {
+                        {payments.map((payment, index) => {
                           const amount = parseFloat(String(payment.amount).replace(/[^0-9.]/g, '')) || 0;
                           const isRecent = new Date(payment.date) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
                           
                           return (
                             <TableRow 
-                              key={payment.id} 
+                              key={payment.id || `payment-${index}`}
                               className="hover:bg-gray-50/50 transition-colors border-b border-gray-100"
                             >
                               <TableCell className="py-4">
