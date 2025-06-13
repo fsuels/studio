@@ -17,6 +17,8 @@ export function useDashboardData(
     queryKey: ['dashboardDocuments', userId],
     queryFn: () => (userId ? getUserDocuments(userId) : Promise.resolve([])),
     enabled,
+    staleTime: 30_000,
+    keepPreviousData: true,
   });
 
   const paymentsQuery = useQuery({
@@ -29,6 +31,8 @@ export function useDashboardData(
     queryKey: ['dashboardFolders', userId],
     queryFn: () => (userId ? getUserFolders(userId) : Promise.resolve([])),
     enabled,
+    staleTime: 30_000,
+    keepPreviousData: true,
   });
 
   return {

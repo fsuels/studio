@@ -35,27 +35,22 @@ export default function FolderModal({ open, onClose }: FolderModalProps) {
   const queryClient = useQueryClient();
 
   const handleCreate = async () => {
-    if (!user?.uid) {
-      onClose();
-      return;
-    }
+    if (!user?.uid) { onClose(); return; }
+    const key = ['dashboardFolders', user.uid] as const;
+    const tmpId = `tmp-${Date.now()}`;
+    const prev = queryClient.getQueryData(key);
+    queryClient.setQueryData(key, (old: any = []) => [
+      ...old,
+      { id: tmpId, name: name || t('UntitledFolder', 'Untitled Folder') },
+    ]);
     try {
-      await createFolder(
-        user.uid,
-        name || t('UntitledFolder', 'Untitled Folder'),
-      );
-      // Refresh folder list so new folder appears immediately
-      queryClient.invalidateQueries({
-        queryKey: ['dashboardFolders', user.uid],
-      });
+      await createFolder(user.uid, name || t('UntitledFolder', 'Untitled Folder'));
+      queryClient.invalidateQueries({ queryKey: key });
       toast({ title: t('Folder created') });
     } catch (err: any) {
+      if (prev) queryClient.setQueryData(key, prev);
       console.error('[FolderModal] create folder failed', err);
-      toast({
-        title: t('Error creating folder'),
-        description: err?.message || String(err),
-        variant: 'destructive',
-      });
+      toast({ title: t('Error creating folder'), variant: 'destructive' });
     } finally {
       onClose();
     }
