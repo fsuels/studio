@@ -78,8 +78,14 @@ export function useOptimizedDashboardData(
       }
       
       // Check for expected shape
-      if (typeof lastPage !== 'object' || !('hasMore' in lastPage)) {
+      if (typeof lastPage !== 'object' || lastPage === null || !('hasMore' in lastPage)) {
         console.warn('getNextPageParam: invalid lastPage structure:', lastPage);
+        return undefined;
+      }
+      
+      // Additional safety check for hasMore property
+      if (typeof lastPage.hasMore !== 'boolean') {
+        console.warn('getNextPageParam: hasMore is not a boolean:', lastPage.hasMore);
         return undefined;
       }
       
