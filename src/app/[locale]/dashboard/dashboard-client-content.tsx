@@ -114,6 +114,9 @@ export default function DashboardClientContent({
     [folders, documents],
   );
 
+  const queryClient = useQueryClient();
+  const { toast } = useToast();
+
   // Prefetch document view pages after documents load
   useEffect(() => {
     documents.forEach((doc) => {
@@ -136,7 +139,7 @@ export default function DashboardClientContent({
 
   useEffect(() => {
     setIsHydrated(true);
-    if (user?.uid && !isLoadingData) {
+    if (user?.uid && !isLoadingData && queryClient) {
       queryClient.prefetchQuery({
         queryKey: ['dashboardDocuments', user.uid],
         queryFn: () => getUserDocuments(user.uid, 5),
@@ -156,14 +159,11 @@ export default function DashboardClientContent({
     router.push(`/${locale}/`);
   };
 
-  const queryClient = useQueryClient();
-  const { toast } = useToast();
-
   // --- Upload File logic ---
-const fileInputRef = useRef<HTMLInputElement>(null);
-const [showFolderModal, setShowFolderModal] = useState(false);
-const [isUploading, setIsUploading] = useState(false);
-const [uploadProgress, setUploadProgress] = useState(0);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [showFolderModal, setShowFolderModal] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
 
   const handleUploadClick = () => {
     if (!user?.uid) {
@@ -173,56 +173,56 @@ const [uploadProgress, setUploadProgress] = useState(0);
     fileInputRef.current?.click();
   };
 
-const handleFileSelected = async (e: React.ChangeEvent<HTMLInputElement>) => {
-  const file = e.target.files?.[0];
-  if (!file || !user) return;
-  setIsUploading(true);
-  setUploadProgress(0);
-  const key = ['dashboardDocuments', user.uid] as const;
-  const optimistic: DashboardDocument = {
-    id: `upload-${Date.now()}`,
-    name: file.name,
-    date: new Date(),
-    status: 'Uploading',
-    docType: 'uploaded',
-  };
-  queryClient.setQueryData<DashboardDocument[]>(key, (old = []) => [...old, optimistic]);
-  try {
-    const storage = getStorage();
-    const db = getFirestore();
-    const newId = `uploaded-${Date.now()}`;
-    const path = `users/${user.uid}/documents/${newId}-${file.name}`;
-    const fileRef = storageRef(storage, path);
-    const task = uploadBytesResumable(fileRef, file);
-    await new Promise<void>((resolve, reject) => {
-      task.on(
-        'state_changed',
-        (snap) => {
-          const pct = Math.round(
-            (snap.bytesTransferred / snap.totalBytes) * 100,
-          );
-          setUploadProgress(pct);
+  const handleFileSelected = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !user) return;
+    setIsUploading(true);
+    setUploadProgress(0);
+    const key = ['dashboardDocuments', user.uid] as const;
+    const optimistic: DashboardDocument = {
+      id: `upload-${Date.now()}`,
+      name: file.name,
+      date: new Date(),
+      status: 'Uploading',
+      docType: 'uploaded',
+    };
+    queryClient.setQueryData<DashboardDocument[]>(key, (old = []) => [...old, optimistic]);
+    try {
+      const storage = getStorage();
+      const db = getFirestore();
+      const newId = `uploaded-${Date.now()}`;
+      const path = `users/${user.uid}/documents/${newId}-${file.name}`;
+      const fileRef = storageRef(storage, path);
+      const task = uploadBytesResumable(fileRef, file);
+      await new Promise<void>((resolve, reject) => {
+        task.on(
+          'state_changed',
+          (snap) => {
+            const pct = Math.round(
+              (snap.bytesTransferred / snap.totalBytes) * 100,
+            );
+            setUploadProgress(pct);
+          },
+          reject,
+          () => resolve(),
+        );
+      });
+      const url = await getDownloadURL(task.snapshot.ref);
+      await setDoc(
+        firestoreDoc(db, 'users', user.uid, 'documents', newId),
+        {
+          name: file.name,
+          createdAt: serverTimestamp(),
+          updatedAt: serverTimestamp(),
+          status: 'Uploaded',
+          docType: 'uploaded',
+          storagePath: path,
+          url,
         },
-        reject,
-        () => resolve(),
       );
-    });
-    const url = await getDownloadURL(task.snapshot.ref);
-    await setDoc(
-      firestoreDoc(db, 'users', user.uid, 'documents', newId),
-      {
-        name: file.name,
-        createdAt: serverTimestamp(),
-        updatedAt: serverTimestamp(),
-        status: 'Uploaded',
-        docType: 'uploaded',
-        storagePath: path,
-        url,
-      },
-    );
-    queryClient.invalidateQueries({ queryKey: key });
+      queryClient.invalidateQueries({ queryKey: key });
       toast({ title: t('Document uploaded') });
-    setUploadProgress(100);
+      setUploadProgress(100);
     } catch (err: unknown) {
       console.error('[dashboard] upload failed', err);
       const desc = err instanceof Error ? err.message : String(err);
@@ -231,12 +231,12 @@ const handleFileSelected = async (e: React.ChangeEvent<HTMLInputElement>) => {
         description: desc,
         variant: 'destructive',
       });
-  } finally {
-    setIsUploading(false);
-    setUploadProgress(0);
-    if (fileInputRef.current) fileInputRef.current.value = '';
-  }
-};
+    } finally {
+      setIsUploading(false);
+      setUploadProgress(0);
+      if (fileInputRef.current) fileInputRef.current.value = '';
+    }
+  };
 
   const toggleSelect = (id: string) => {
     setSelectedIds((prev) =>
@@ -396,22 +396,22 @@ const handleFileSelected = async (e: React.ChangeEvent<HTMLInputElement>) => {
               ref={fileInputRef}
               onChange={handleFileSelected}
             />
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex space-x-2 items-center">
-                  <Button onClick={handleUploadClick} disabled={isUploading}>
-                    {isUploading && (
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    )}
-                    {t('Upload File')}
-                  </Button>
-                  <DropdownMenu>
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex space-x-2 items-center">
+                <Button onClick={handleUploadClick} disabled={isUploading}>
+                  {isUploading && (
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  )}
+                  {t('Upload File')}
+                </Button>
+                <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button variant="outline">{t('New')} ▼</Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="start">
-            <DropdownMenuItem onSelect={() => setShowFolderModal(true)}>
-              {t('Folder')}
-            </DropdownMenuItem>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="start">
+                    <DropdownMenuItem onSelect={() => setShowFolderModal(true)}>
+                      {t('Folder')}
+                    </DropdownMenuItem>
                     <DropdownMenuItem asChild>
                       <Link href={`/${locale}/templates`}>{t('Document')}</Link>
                     </DropdownMenuItem>
@@ -421,52 +421,52 @@ const handleFileSelected = async (e: React.ChangeEvent<HTMLInputElement>) => {
                     <DropdownMenuItem onSelect={() => router.push(`/${locale}/signwell`)}>
                       {t('eSign')}
                     </DropdownMenuItem>
-                </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-        {isFetchingData && !isLoadingData && (
-          <div className="flex items-center text-sm text-muted-foreground">
-            <Loader2 className="mr-2 h-3 w-3 animate-spin" />
-            {t('Updating...')}
-          </div>
-        )}
-        {selectedIds.length > 0 && (
-          <div className="flex items-center space-x-2 mt-2">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button size="sm">{t('Move')}</Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="start">
-                <DropdownMenuItem onSelect={() => handleBulkMove(null)}>
-                  {t('None')}
-                </DropdownMenuItem>
-                {folders.map((f) => (
-                  <DropdownMenuItem key={f.id} onSelect={() => handleBulkMove(f.id)}>
-                    {t(f.name, f.name)}
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
-            <span className="text-sm text-muted-foreground">
-              {selectedIds.length} {t('selected')}
-            </span>
-          </div>
-        )}
-        <FolderModal
-          open={showFolderModal}
-          onClose={() => setShowFolderModal(false)}
-        />
-      </div>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+              {isFetchingData && !isLoadingData && (
+                <div className="flex items-center text-sm text-muted-foreground">
+                  <Loader2 className="mr-2 h-3 w-3 animate-spin" />
+                  {t('Updating...')}
+                </div>
+              )}
+            </div>
 
-      {/* REMOVED: The yellow folder icons grid section that was here */}
+            {selectedIds.length > 0 && (
+              <div className="flex items-center space-x-2 mb-4">
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button size="sm">{t('Move')}</Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="start">
+                    <DropdownMenuItem onSelect={() => handleBulkMove(null)}>
+                      {t('None')}
+                    </DropdownMenuItem>
+                    {folders.map((f) => (
+                      <DropdownMenuItem key={f.id} onSelect={() => handleBulkMove(f.id)}>
+                        {t(f.name, f.name)}
+                      </DropdownMenuItem>
+                    ))}
+                  </DropdownMenuContent>
+                </DropdownMenu>
+                <span className="text-sm text-muted-foreground">
+                  {selectedIds.length} {t('selected')}
+                </span>
+              </div>
+            )}
 
-      {isUploading && (
-        <div className="mb-4">
-          <Progress value={uploadProgress} aria-label={t('Upload progress')} />
-        </div>
-      )}
+            <FolderModal
+              open={showFolderModal}
+              onClose={() => setShowFolderModal(false)}
+            />
 
-          <Table>
+            {isUploading && (
+              <div className="mb-4">
+                <Progress value={uploadProgress} aria-label={t('Upload progress')} />
+              </div>
+            )}
+
+            <Table>
               <TableHeader>
                 <TableRow>
                   <TableHead className="w-4">
@@ -627,6 +627,7 @@ const handleFileSelected = async (e: React.ChangeEvent<HTMLInputElement>) => {
                 ))}
               </TableBody>
             </Table>
+            
             {sorted.length === 0 && !isLoadingData && (
               <div className="text-center py-8">
                 <FileText className="mx-auto h-12 w-12 text-muted-foreground/50" />
@@ -636,6 +637,7 @@ const handleFileSelected = async (e: React.ChangeEvent<HTMLInputElement>) => {
                 </p>
               </div>
             )}
+            
             <RenameModal
               open={!!renameDoc}
               currentName={renameDoc?.name || ''}
@@ -665,6 +667,7 @@ const handleFileSelected = async (e: React.ChangeEvent<HTMLInputElement>) => {
           </>
         );
       }
+      
       case 'payments':
         return (
           <div className="space-y-4">
@@ -692,15 +695,17 @@ const handleFileSelected = async (e: React.ChangeEvent<HTMLInputElement>) => {
             )}
           </div>
         );
+        
       case 'profile':
         return <ProfileSettings />;
+        
       default:
         return null;
     }
   };
 
   return (
-    <main className="container mx-auto px-4 py-8 md:py-12">
+      <main className="container mx-auto px-4 py-8 md:py-12">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
         <h1 className="text-3xl font-bold text-foreground">{t('Dashboard')}</h1>
         <Button

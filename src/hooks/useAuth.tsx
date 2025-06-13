@@ -179,9 +179,6 @@ function useAuthHook(): AuthContextType {
 export function AuthProvider({ children }: { children: ReactNode }) {
   const authHookValue = useAuthHook();
 
-  if (authHookValue.isLoading && typeof window !== 'undefined') {
-    return null;
-  }
 
   return (
     <AuthContext.Provider value={authHookValue}>

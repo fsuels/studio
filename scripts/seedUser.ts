@@ -19,7 +19,7 @@ const db = getFirestore(app);
 
 // 🔁 Enhanced seed routine for legal platform
 async function seedAll() {
-  const userId = "testUser";
+  const userId = "d3bMZOfpsWgnvPm07QOyjMbwr8l1";
 
   // 👤 Enhanced User profile
   await setDoc(doc(db, "users", userId), {
