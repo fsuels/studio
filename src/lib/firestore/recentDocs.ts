@@ -1,7 +1,4 @@
 'use client';
-'use client';
-// src/lib/firestore/recentDocs.ts
-'use client';
 
 //--------------------------------------------------------------
 // Firestore convenience helpers for the “recently used” widget

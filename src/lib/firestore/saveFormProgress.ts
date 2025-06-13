@@ -1,7 +1,4 @@
 'use client';
-'use client';
-// src/lib/firestore/saveFormProgress.ts
-'use client';
 
 /* -----------------------------------------------------------------------------
   Firestore helpers for “save & resume” + “recently used” logic

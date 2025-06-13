@@ -1,7 +1,4 @@
 'use client';
-'use client';
-// src/lib/firestore/documentActions.ts
-'use client';
 
 import { getDb } from '@/lib/firebase';
 import { documentLibrary } from '@/lib/document-library';
@@ -46,11 +43,12 @@ export async function renameDocument(
   userId: string,
   docId: string,
   name: string,
-): Promise<void> {
+): Promise<string> {
   const db = await getDb();
   const ref = doc(db, 'users', userId, 'documents', docId);
   const uniqueName = await getUniqueDocumentName(userId, name);
   await updateDoc(ref, { name: uniqueName, updatedAt: serverTimestamp() });
+  return uniqueName;
 }
 
 /**
@@ -59,7 +57,7 @@ export async function renameDocument(
 export async function duplicateDocument(
   userId: string,
   docId: string,
-): Promise<string | null> {
+): Promise<{ id: string; name: string } | null> {
   const db = await getDb();
   const srcRef = doc(db, 'users', userId, 'documents', docId);
   const snap = await getDoc(srcRef);
@@ -83,7 +81,7 @@ export async function duplicateDocument(
     updatedAt: serverTimestamp(),
   });
 
-  return newRef.id;
+  return { id: newRef.id, name: uniqueName };
 }
 
 /**

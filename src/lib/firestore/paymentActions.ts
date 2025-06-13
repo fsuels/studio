@@ -1,7 +1,4 @@
 'use client';
-'use client';
-// src/lib/firestore/paymentActions.ts
-'use client';
 
 import { getDb } from '@/lib/firebase';
 import {

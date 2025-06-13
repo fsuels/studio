@@ -1,6 +1,4 @@
 'use client';
-'use client';
-'use client';
 
 import React, { useEffect, useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -427,15 +425,28 @@ const handleFileSelected = async (e: React.ChangeEvent<HTMLInputElement>) => {
                               const key = ['dashboardDocuments', user!.uid] as const;
                               const previous = queryClient.getQueryData<DashboardDocument[]>(key);
                               const tempId = `copy-${Date.now()}`;
+                              const optimisticName = await getUniqueDocumentName(
+                                user!.uid,
+                                `${doc.name} Copy`,
+                              );
                               queryClient.setQueryData<DashboardDocument[]>(key, (old = []) => [
                                 ...old,
-                                { ...doc, id: tempId, name: `${doc.name} (Copy)` },
+                                { ...doc, id: tempId, name: optimisticName },
                               ]);
                               // Hide spinner once optimistic update is applied
                               setDuplicatingDocId(null);
                               try {
-                                await duplicateDocument(user!.uid, doc.id);
-                                toast({ title: t('Document duplicated') });
+                                const result = await duplicateDocument(user!.uid, doc.id);
+                                if (result) {
+                                  queryClient.setQueryData<DashboardDocument[]>(key, (old) =>
+                                    old?.map((d) =>
+                                      d.id === tempId ? { ...d, id: result.id, name: result.name } : d,
+                                    ) || [],
+                                  );
+                                  toast({ title: t('Document duplicated') });
+                                } else {
+                                  throw new Error('Duplicate failed');
+                                }
                               } catch {
                                 if (previous) queryClient.setQueryData(key, previous);
                                 toast({
@@ -493,12 +504,18 @@ const handleFileSelected = async (e: React.ChangeEvent<HTMLInputElement>) => {
                 if (!renameDoc) return;
                 const key = ['dashboardDocuments', user!.uid] as const;
                 const previous = queryClient.getQueryData<DashboardDocument[]>(key);
-                queryClient.setQueryData<DashboardDocument[]>(key, (old) =>
-                  old?.map((d) => (d.id === renameDoc.id ? { ...d, name } : d)) || []
-                );
                 try {
-                  await renameDocument(user!.uid, renameDoc.id, name);
+                  const newName = await renameDocument(
+                    user!.uid,
+                    renameDoc.id,
+                    name,
+                  );
                   toast({ title: t('Document renamed') });
+                  queryClient.setQueryData<DashboardDocument[]>(key, (old) =>
+                    old?.map((d) =>
+                      d.id === renameDoc.id ? { ...d, name: newName } : d,
+                    ) || [],
+                  );
                 } catch {
                   if (previous) queryClient.setQueryData(key, previous);
                   toast({ title: t('Error renaming document'), variant: 'destructive' });
