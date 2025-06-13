@@ -60,7 +60,7 @@ import {
   updateDocumentFolder,
   bulkMoveDocuments,
 } from '@/lib/firestore/documentActions';
-import type { DashboardDocument } from '@/lib/firestore/dashboardData';
+import type { DashboardDocument, DashboardFolder } from '@/lib/firestore/dashboardData';
 import { useQueryClient } from '@tanstack/react-query';
 import { useToast } from '@/hooks/use-toast';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -71,6 +71,10 @@ interface FirestoreTimestamp {
   nanoseconds: number;
   toDate: () => Date;
 }
+
+type DashboardFile =
+  | (DashboardDocument & { type: 'document' })
+  | (DashboardFolder & { type: 'folder'; status?: string; date?: FirestoreTimestamp | Date | string; docType?: string });
 
 interface DashboardClientContentProps {
   locale: 'en' | 'es';
@@ -100,6 +104,14 @@ export default function DashboardClientContent({
   } = useDashboardData(user?.uid, {
     enabled: isHydrated && isLoggedIn && !!user?.uid,
   });
+
+  const files: DashboardFile[] = React.useMemo(
+    () => [
+      ...folders.map((f) => ({ ...f, type: 'folder' as const })),
+      ...documents.map((d) => ({ ...d, type: 'document' as const })),
+    ],
+    [folders, documents],
+  );
 
   // Prefetch document view pages after documents load
   useEffect(() => {
@@ -212,10 +224,10 @@ const handleFileSelected = async (e: React.ChangeEvent<HTMLInputElement>) => {
   };
 
   const toggleSelectAll = () => {
-    if (selectedIds.length === documents.length) {
+    if (selectedIds.length === files.length) {
       setSelectedIds([]);
     } else {
-      setSelectedIds(documents.map((d) => d.id));
+      setSelectedIds(files.map((f) => f.id));
     }
   };
 
@@ -254,6 +266,14 @@ const handleFileSelected = async (e: React.ChangeEvent<HTMLInputElement>) => {
       toast({ title: t('Error moving document'), variant: 'destructive' });
     } finally {
       queryClient.invalidateQueries({ queryKey: key });
+    }
+  };
+
+  const openItem = (item: DashboardFile) => {
+    if (item.type === 'folder') {
+      router.push(`/${locale}/folders/${item.id}`);
+    } else {
+      router.push(`/${locale}/docs/${item.docType}/view?docId=${item.id}`);
     }
   };
 
@@ -307,7 +327,7 @@ const handleFileSelected = async (e: React.ChangeEvent<HTMLInputElement>) => {
 
     switch (activeTab) {
       case 'documents': {
-        const sorted = [...documents].sort((a, b) => {
+        const sorted = [...files].sort((a, b) => {
           const dir = sortDir === 'asc' ? 1 : -1;
           let valA: string | number = '';
           let valB: string | number = '';
@@ -315,15 +335,19 @@ const handleFileSelected = async (e: React.ChangeEvent<HTMLInputElement>) => {
             valA = a.name.toLowerCase();
             valB = b.name.toLowerCase();
           } else if (sortBy === 'status') {
-            valA = a.status.toLowerCase();
-            valB = b.status.toLowerCase();
+            valA = (a.status || '').toLowerCase();
+            valB = (b.status || '').toLowerCase();
           } else {
-            const dA = (typeof a.date === 'object' && 'toDate' in a.date)
-              ? a.date.toDate()
-              : new Date(a.date as string);
-            const dB = (typeof b.date === 'object' && 'toDate' in b.date)
-              ? b.date.toDate()
-              : new Date(b.date as string);
+            const dA = (typeof a.date === 'object' && a.date && 'toDate' in a.date)
+              ? (a.date as FirestoreTimestamp).toDate()
+              : a.date
+                ? new Date(a.date as string)
+                : new Date(0);
+            const dB = (typeof b.date === 'object' && b.date && 'toDate' in b.date)
+              ? (b.date as FirestoreTimestamp).toDate()
+              : b.date
+                ? new Date(b.date as string)
+                : new Date(0);
             valA = dA.getTime();
             valB = dB.getTime();
           }
@@ -427,7 +451,7 @@ const handleFileSelected = async (e: React.ChangeEvent<HTMLInputElement>) => {
                 <TableRow>
                   <TableHead className="w-4">
                     <Checkbox
-                      checked={selectedIds.length === documents.length && documents.length > 0}
+                      checked={selectedIds.length === files.length && files.length > 0}
                       onCheckedChange={toggleSelectAll}
                       aria-label={t('Select all')}
                     />
@@ -463,108 +487,121 @@ const handleFileSelected = async (e: React.ChangeEvent<HTMLInputElement>) => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {sorted.map((doc) => (
-                  <TableRow key={doc.id} className="group">
+                {sorted.map((item) => (
+                  <TableRow
+                    key={item.id}
+                    className="group"
+                    onClick={() => item.type === 'folder' && openItem(item)}
+                  >
                     <TableCell>
                       <Checkbox
-                        checked={selectedIds.includes(doc.id)}
-                        onCheckedChange={() => toggleSelect(doc.id)}
+                        checked={selectedIds.includes(item.id)}
+                        onCheckedChange={() => toggleSelect(item.id)}
                         aria-label={t('Select document')}
                       />
                     </TableCell>
                     <TableCell className="font-medium">
-                      <Link
-                        href={`/${locale}/docs/${doc.docType}/start`}
-                        className="hover:underline flex items-center gap-2"
-                      >
-                        <FileText className="h-4 w-4 text-muted-foreground" />
-                        <span>{t(doc.name, doc.name)}</span>
-                      </Link>
+                      <span className="flex items-center gap-2">
+                        {item.type === 'folder' ? (
+                          <Folder className="h-4 w-4 text-muted-foreground" />
+                        ) : (
+                          <FileText className="h-4 w-4 text-muted-foreground" />
+                        )}
+                        {item.type === 'folder' ? (
+                          <span>{t(item.name, item.name)}</span>
+                        ) : (
+                          <Link
+                            href={`/${locale}/docs/${item.docType}/start`}
+                            className="hover:underline"
+                          >
+                            {t(item.name, item.name)}
+                          </Link>
+                        )}
+                      </span>
                     </TableCell>
-                    <TableCell>{formatDate(doc.date)}</TableCell>
-                    <TableCell>{t(doc.status)}</TableCell>
+                    <TableCell>{item.date ? formatDate(item.date) : '-'}</TableCell>
+                    <TableCell>{item.type === 'folder' ? '-' : t(item.status)}</TableCell>
                     <TableCell className="text-right">
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                          >
-                            <MoreVertical className="h-4 w-4" />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuItem onSelect={() => router.push(`/${locale}/docs/${doc.docType}/view?docId=${doc.id}`)}>{t('View')}</DropdownMenuItem>
-                          <DropdownMenuItem onSelect={() => setRenameDoc(doc)}>
-                            {t('Rename')}
-                          </DropdownMenuItem>
-                          <DropdownMenuSub>
-                            <DropdownMenuSubTrigger>{t('Move to Folder')}</DropdownMenuSubTrigger>
-                            <DropdownMenuSubContent>
-                              <DropdownMenuItem onSelect={() => handleMove(doc.id, null)}>
-                                {t('None')}
-                              </DropdownMenuItem>
-                              {folders.map((f) => (
-                                <DropdownMenuItem key={f.id} onSelect={() => handleMove(doc.id, f.id)}>
-                                  {t(f.name, f.name)}
+                      {item.type === 'document' && (
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" size="icon">
+                              <MoreVertical className="h-4 w-4" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            <DropdownMenuItem onSelect={() => router.push(`/${locale}/docs/${item.docType}/view?docId=${item.id}`)}>{t('View')}</DropdownMenuItem>
+                            <DropdownMenuItem onSelect={() => setRenameDoc(item)}>
+                              {t('Rename')}
+                            </DropdownMenuItem>
+                            <DropdownMenuSub>
+                              <DropdownMenuSubTrigger>{t('Move to Folder')}</DropdownMenuSubTrigger>
+                              <DropdownMenuSubContent>
+                                <DropdownMenuItem onSelect={() => handleMove(item.id, null)}>
+                                  {t('None')}
                                 </DropdownMenuItem>
-                              ))}
-                            </DropdownMenuSubContent>
-                          </DropdownMenuSub>
-                          <DropdownMenuItem
-                            disabled={duplicatingDocId === doc.id}
-                            onSelect={async () => {
-                              setDuplicatingDocId(doc.id);
-                              const key = ['dashboardDocuments', user!.uid] as const;
-                              const previous = queryClient.getQueryData<DashboardDocument[]>(key);
-                              const tempId = `copy-${Date.now()}`;
-                              queryClient.setQueryData<DashboardDocument[]>(key, (old = []) => [
-                                ...old,
-                                { ...doc, id: tempId, name: `${doc.name} (Copy)` },
-                              ]);
-                              try {
-                                await duplicateDocument(user!.uid, doc.id);
-                                toast({ title: t('Document duplicated') });
-                              } catch {
-                                if (previous) queryClient.setQueryData(key, previous);
-                                toast({
-                                  title: t('Error duplicating document'),
-                                  variant: 'destructive',
-                                });
-                              } finally {
-                                setDuplicatingDocId(null);
-                                queryClient.invalidateQueries({ queryKey: key });
-                              }
-                            }}
-                          >
-                            {duplicatingDocId === doc.id ? (
-                              <Loader2 className="h-4 w-4 animate-spin" />
-                            ) : (
-                              t('Duplicate')
-                            )}
-                          </DropdownMenuItem>
-                          <DropdownMenuItem
-                            onSelect={async () => {
-                              const key = ['dashboardDocuments', user!.uid] as const;
-                              const previous = queryClient.getQueryData<DashboardDocument[]>(key);
-                              queryClient.setQueryData<DashboardDocument[]>(key, (old) =>
-                                old?.filter((d) => d.id !== doc.id) || []
-                              );
-                              try {
-                                await softDeleteDocument(user!.uid, doc.id);
-                                toast({ title: t('Document deleted') });
-                              } catch {
-                                if (previous) queryClient.setQueryData(key, previous);
-                                toast({ title: t('Error deleting document'), variant: 'destructive' });
-                              } finally {
-                                queryClient.invalidateQueries({ queryKey: key });
-                              }
-                            }}
-                          >
-                            {t('Delete')}
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
+                                {folders.map((f) => (
+                                  <DropdownMenuItem key={f.id} onSelect={() => handleMove(item.id, f.id)}>
+                                    {t(f.name, f.name)}
+                                  </DropdownMenuItem>
+                                ))}
+                              </DropdownMenuSubContent>
+                            </DropdownMenuSub>
+                            <DropdownMenuItem
+                              disabled={duplicatingDocId === item.id}
+                              onSelect={async () => {
+                                setDuplicatingDocId(item.id);
+                                const key = ['dashboardDocuments', user!.uid] as const;
+                                const previous = queryClient.getQueryData<DashboardDocument[]>(key);
+                                const tempId = `copy-${Date.now()}`;
+                                queryClient.setQueryData<DashboardDocument[]>(key, (old = []) => [
+                                  ...old,
+                                  { ...(item as DashboardDocument), id: tempId, name: `${item.name} (Copy)` },
+                                ]);
+                                try {
+                                  await duplicateDocument(user!.uid, item.id);
+                                  toast({ title: t('Document duplicated') });
+                                } catch {
+                                  if (previous) queryClient.setQueryData(key, previous);
+                                  toast({
+                                    title: t('Error duplicating document'),
+                                    variant: 'destructive',
+                                  });
+                                } finally {
+                                  setDuplicatingDocId(null);
+                                  queryClient.invalidateQueries({ queryKey: key });
+                                }
+                              }}
+                            >
+                              {duplicatingDocId === item.id ? (
+                                <Loader2 className="h-4 w-4 animate-spin" />
+                              ) : (
+                                t('Duplicate')
+                              )}
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                              onSelect={async () => {
+                                const key = ['dashboardDocuments', user!.uid] as const;
+                                const previous = queryClient.getQueryData<DashboardDocument[]>(key);
+                                queryClient.setQueryData<DashboardDocument[]>(key, (old) =>
+                                  old?.filter((d) => d.id !== item.id) || []
+                                );
+                                try {
+                                  await softDeleteDocument(user!.uid, item.id);
+                                  toast({ title: t('Document deleted') });
+                                } catch {
+                                  if (previous) queryClient.setQueryData(key, previous);
+                                  toast({ title: t('Error deleting document'), variant: 'destructive' });
+                                } finally {
+                                  queryClient.invalidateQueries({ queryKey: key });
+                                }
+                              }}
+                            >
+                              {t('Delete')}
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      )}
                     </TableCell>
                   </TableRow>
                 ))}
