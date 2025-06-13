@@ -83,21 +83,25 @@ export function useOptimizedDashboardData(
   });
 
   const documents = useMemo(() => {
-    // Add safety check for pages
-    // Enhanced safety checks for pages
-    if (!documentsQuery.data?.pages || !Array.isArray(documentsQuery.data.pages)) {
-      console.warn('documents useMemo: pages is not a valid array:', documentsQuery.data?.pages);
+    // Early return if no data yet - prevents infinite loop
+    if (!documentsQuery.data) {
+      return [];
+    }
+    
+    if (!documentsQuery.data.pages || !Array.isArray(documentsQuery.data.pages)) {
+      console.warn('documents useMemo: pages is not a valid array:', documentsQuery.data.pages);
       return [];
     }
 
-    // Additional validation
-    const validPages = documentsQuery.data.pages.filter(page =>
-      page && typeof page === 'object' && Array.isArray(page.documents)
-    );
     return documentsQuery.data.pages
-      .filter(page => page && Array.isArray(page.documents))
-      .flatMap((p) => p.documents) || [];
-  }, [documentsQuery.data]);
+      .filter((page): page is NonNullable<typeof page> => 
+        page != null && 
+        typeof page === 'object' && 
+        'documents' in page &&
+        Array.isArray(page.documents)
+      )
+      .flatMap(page => page.documents);
+  }, [documentsQuery.data]); // Back to original dependency but with proper guard
 
   const isInitialLoading = documentsQuery.isLoading;
   const isLoadingMore = documentsQuery.isFetchingNextPage;
