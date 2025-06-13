@@ -40,6 +40,20 @@ import {
   MoreVertical,
   ChevronUp,
   ChevronDown,
+  Download,
+  Filter,
+  TrendingUp,
+  ShoppingBag,
+  RefreshCw,
+  Stamp,
+  PenTool,
+  CheckCircle,
+  Eye,
+  ExternalLink,
+  AlertCircle,
+  Receipt,
+  Plus,
+  Info,
 } from 'lucide-react';
 import Link from 'next/link';
 import {
@@ -670,29 +684,233 @@ export default function DashboardClientContent({
       
       case 'payments':
         return (
-          <div className="space-y-4">
-            {payments.map((payment) => (
-              <Card
-                key={payment.id}
-                className="shadow-sm bg-card border-border"
-              >
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-md font-medium text-card-foreground">
-                    {t(payment.documentName, payment.documentName)}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-xs text-muted-foreground">
-                    {t('Date')}: {formatDate(payment.date)} | {t('Amount')}: {payment.amount}
-                  </p>
+          <div className="space-y-6">
+            {/* Header with summary stats */}
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+              <div>
+                <h2 className="text-xl font-semibold text-foreground">{t('Payment History')}</h2>
+                <p className="text-sm text-muted-foreground">
+                  {t('Manage and view your billing history and invoices')}
+                </p>
+              </div>
+              <div className="flex gap-2">
+                <Button variant="outline" size="sm">
+                  <Download className="mr-2 h-4 w-4" />
+                  {t('Download All')}
+                </Button>
+                <Button variant="outline" size="sm">
+                  <Filter className="mr-2 h-4 w-4" />
+                  {t('Filter')}
+                </Button>
+              </div>
+            </div>
+
+            {/* Summary Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+              <Card className="bg-gradient-to-r from-blue-50 to-blue-100 border-blue-200">
+                <CardContent className="p-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-medium text-blue-600">{t('Total Spent')}</p>
+                      <p className="text-2xl font-bold text-blue-900">
+                        ${payments.reduce((sum, p) => sum + (parseFloat(p.amount.replace(/[^0-9.]/g, '')) || 0), 0).toFixed(2)}
+                      </p>
+                    </div>
+                    <CreditCard className="h-8 w-8 text-blue-500" />
+                  </div>
                 </CardContent>
               </Card>
-            ))}
-            {payments.length === 0 && !isLoadingData && (
-              <p className="text-muted-foreground">
-                {t('No payment history.')}
-              </p>
-            )}
+
+              <Card className="bg-gradient-to-r from-green-50 to-green-100 border-green-200">
+                <CardContent className="p-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-medium text-green-600">{t('This Month')}</p>
+                      <p className="text-2xl font-bold text-green-900">
+                        ${payments
+                          .filter(p => {
+                            const paymentDate = new Date(p.date);
+                            const now = new Date();
+                            return paymentDate.getMonth() === now.getMonth() && 
+                                   paymentDate.getFullYear() === now.getFullYear();
+                          })
+                          .reduce((sum, p) => sum + (parseFloat(p.amount.replace(/[^0-9.]/g, '')) || 0), 0)
+                          .toFixed(2)}
+                      </p>
+                    </div>
+                    <TrendingUp className="h-8 w-8 text-green-500" />
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="bg-gradient-to-r from-purple-50 to-purple-100 border-purple-200">
+                <CardContent className="p-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-medium text-purple-600">{t('Total Orders')}</p>
+                      <p className="text-2xl font-bold text-purple-900">{payments.length}</p>
+                    </div>
+                    <ShoppingBag className="h-8 w-8 text-purple-500" />
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Professional Payment Table */}
+            <Card className="shadow-sm">
+              <CardHeader className="border-b bg-gray-50/50">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <CardTitle className="text-lg font-semibold">{t('Transaction History')}</CardTitle>
+                    <p className="text-sm text-muted-foreground mt-1">
+                      {t('Displaying transactions from all services')}
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs text-muted-foreground">
+                      {payments.length} {t('transactions')}
+                    </span>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent className="p-0">
+                {payments.length > 0 ? (
+                  <div className="overflow-x-auto">
+                    <Table>
+                      <TableHeader>
+                        <TableRow className="bg-gray-50/30">
+                          <TableHead className="font-semibold text-gray-700 py-4">{t('Product/Service')}</TableHead>
+                          <TableHead className="font-semibold text-gray-700">{t('Purchase Date')}</TableHead>
+                          <TableHead className="font-semibold text-gray-700">{t('Amount')}</TableHead>
+                          <TableHead className="font-semibold text-gray-700">{t('Status')}</TableHead>
+                          <TableHead className="font-semibold text-gray-700 text-right">{t('Actions')}</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {payments.map((payment) => {
+                          const amount = parseFloat(payment.amount.replace(/[^0-9.]/g, '')) || 0;
+                          const isRecent = new Date(payment.date) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+
+                          return (
+                            <TableRow 
+                              key={payment.id} 
+                              className="hover:bg-gray-50/50 transition-colors border-b border-gray-100"
+                            >
+                              <TableCell className="py-4">
+                                <div className="flex items-start gap-3">
+                                  <div className="flex-shrink-0 mt-1">
+                                    <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+                                      <Receipt className="h-4 w-4 text-blue-600" />
+                                    </div>
+                                  </div>
+                                  <div className="min-w-0 flex-1">
+                                    <p className="font-medium text-gray-900 truncate">
+                                      {t(payment.documentName, payment.documentName)}
+                                    </p>
+                                    <div className="flex items-center gap-2 mt-1">
+                                      <span className="text-xs text-gray-500">
+                                        {t('Service Payment')}
+                                      </span>
+                                      {isRecent && (
+                                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                          {t('Recent')}
+                                        </span>
+                                      )}
+                                    </div>
+                                  </div>
+                                </div>
+                              </TableCell>
+
+                              <TableCell className="py-4">
+                                <div className="text-sm">
+                                  <p className="font-medium text-gray-900">
+                                    {formatDate(payment.date)}
+                                  </p>
+                                  <p className="text-gray-500 text-xs mt-1">
+                                    {new Date(payment.date).toLocaleTimeString([], {
+                                      hour: '2-digit',
+                                      minute: '2-digit'
+                                    })}
+                                  </p>
+                                </div>
+                              </TableCell>
+
+                              <TableCell className="py-4">
+                                <div className="text-sm">
+                                  <p className="font-semibold text-gray-900">
+                                    ${amount.toFixed(2)}
+                                  </p>
+                                </div>
+                              </TableCell>
+
+                              <TableCell className="py-4">
+                                <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 border border-green-200">
+                                  <CheckCircle className="mr-1 h-3 w-3" />
+                                  {t('Completed')}
+                                </span>
+                              </TableCell>
+
+                              <TableCell className="py-4 text-right">
+                                <DropdownMenu>
+                                  <DropdownMenuTrigger asChild>
+                                    <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                                      <MoreVertical className="h-4 w-4" />
+                                    </Button>
+                                  </DropdownMenuTrigger>
+                                  <DropdownMenuContent align="end" className="w-48">
+                                    <DropdownMenuItem className="cursor-pointer">
+                                      <Download className="mr-2 h-4 w-4" />
+                                      {t('Download Invoice')}
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem className="cursor-pointer">
+                                      <Eye className="mr-2 h-4 w-4" />
+                                      {t('View Details')}
+                                    </DropdownMenuItem>
+                                  </DropdownMenuContent>
+                                </DropdownMenu>
+                              </TableCell>
+                            </TableRow>
+                          );
+                        })}
+                      </TableBody>
+                    </Table>
+                  </div>
+                ) : (
+                  <div className="text-center py-12">
+                    <div className="mx-auto w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+                      <Receipt className="h-12 w-12 text-gray-400" />
+                    </div>
+                    <h3 className="text-lg font-medium text-gray-900 mb-2">
+                      {t('No payment history')}
+                    </h3>
+                    <p className="text-gray-500 mb-6 max-w-sm mx-auto">
+                      {t('When you make purchases or subscribe to services, your payment history will appear here.')}
+                    </p>
+                    <Button onClick={() => router.push(`/${locale}/templates`)}>
+                      <Plus className="mr-2 h-4 w-4" />
+                      {t('Create Your First Document')}
+                    </Button>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+
+            {/* Additional Info */}
+            <Card className="bg-blue-50 border-blue-200">
+              <CardContent className="p-4">
+                <div className="flex items-start gap-3">
+                  <Info className="h-5 w-5 text-blue-600 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <h4 className="font-medium text-blue-900 mb-1">
+                      {t('Payment Information')}
+                    </h4>
+                    <p className="text-sm text-blue-700 leading-relaxed">
+                      {t('All payments are processed securely through Stripe. You can download invoices and receipts at any time. For billing questions, contact our support team.')}
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
           </div>
         );
         
