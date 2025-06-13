@@ -11,6 +11,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Progress } from '@/components/ui/progress';
 import {
   Table,
   TableBody,
@@ -42,7 +43,12 @@ import {
   ChevronDown,
 } from 'lucide-react';
 import Link from 'next/link';
-import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
+import {
+  getStorage,
+  ref as storageRef,
+  uploadBytesResumable,
+  getDownloadURL,
+} from 'firebase/storage';
 import { getFirestore, doc as firestoreDoc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { useAuth } from '@/hooks/useAuth';
 import { useRouter } from 'next/navigation';
@@ -118,8 +124,10 @@ export default function DashboardClientContent({
   const { toast } = useToast();
 
   // --- Upload File logic ---
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const [showFolderModal, setShowFolderModal] = useState(false);
+const fileInputRef = useRef<HTMLInputElement>(null);
+const [showFolderModal, setShowFolderModal] = useState(false);
+const [isUploading, setIsUploading] = useState(false);
+const [uploadProgress, setUploadProgress] = useState(0);
 
   const handleUploadClick = () => {
     if (!user?.uid) {
@@ -129,43 +137,61 @@ export default function DashboardClientContent({
     fileInputRef.current?.click();
   };
 
-  const handleFileSelected = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file || !user) return;
-    try {
-      const storage = getStorage();
-      const db = getFirestore();
-      const newId = `uploaded-${Date.now()}`;
-      const path = `users/${user.uid}/documents/${newId}-${file.name}`;
-      const fileRef = storageRef(storage, path);
-      await uploadBytes(fileRef, file);
-      const url = await getDownloadURL(fileRef);
-      await setDoc(
-        firestoreDoc(db, 'users', user.uid, 'documents', newId),
-        {
-          name: file.name,
-          date: serverTimestamp(),
-          status: 'Uploaded',
-          docType: 'uploaded',
-          storagePath: path,
-          url,
+const handleFileSelected = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const file = e.target.files?.[0];
+  if (!file || !user) return;
+  setIsUploading(true);
+  setUploadProgress(0);
+  try {
+    const storage = getStorage();
+    const db = getFirestore();
+    const newId = `uploaded-${Date.now()}`;
+    const path = `users/${user.uid}/documents/${newId}-${file.name}`;
+    const fileRef = storageRef(storage, path);
+    const task = uploadBytesResumable(fileRef, file);
+    await new Promise<void>((resolve, reject) => {
+      task.on(
+        'state_changed',
+        (snap) => {
+          const pct = Math.round(
+            (snap.bytesTransferred / snap.totalBytes) * 100,
+          );
+          setUploadProgress(pct);
         },
+        reject,
+        () => resolve(),
       );
+    });
+    const url = await getDownloadURL(task.snapshot.ref);
+    await setDoc(
+      firestoreDoc(db, 'users', user.uid, 'documents', newId),
+      {
+        name: file.name,
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp(),
+        status: 'Uploaded',
+        docType: 'uploaded',
+        storagePath: path,
+        url,
+      },
+    );
       queryClient.invalidateQueries({
         queryKey: ['dashboardDocuments', user.uid],
       });
       toast({ title: t('Document uploaded') });
-    } catch (err: any) {
-      console.error('[dashboard] upload failed', err);
-      toast({
-        title: t('Upload failed'),
-        description: err?.message || String(err),
-        variant: 'destructive',
-      });
-    } finally {
-      if (fileInputRef.current) fileInputRef.current.value = '';
-    }
-  };
+    setUploadProgress(100);
+  } catch (err: any) {
+    console.error('[dashboard] upload failed', err);
+    toast({
+      title: t('Upload failed'),
+      description: err?.message || String(err),
+      variant: 'destructive',
+    });
+  } finally {
+    setIsUploading(false);
+    if (fileInputRef.current) fileInputRef.current.value = '';
+  }
+};
 
   const handleMove = async (docId: string, folderId: string | null) => {
     const key = ['dashboardDocuments', user!.uid] as const;
@@ -278,10 +304,15 @@ export default function DashboardClientContent({
               ref={fileInputRef}
               onChange={handleFileSelected}
             />
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex space-x-2">
-                <Button onClick={handleUploadClick}>{t('Upload File')}</Button>
-                <DropdownMenu>
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex space-x-2 items-center">
+                  <Button onClick={handleUploadClick} disabled={isUploading}>
+                    {isUploading && (
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    )}
+                    {t('Upload File')}
+                  </Button>
+                  <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button variant="outline">{t('New')} ▼</Button>
                   </DropdownMenuTrigger>
@@ -298,16 +329,21 @@ export default function DashboardClientContent({
                     <DropdownMenuItem onSelect={() => router.push(`/${locale}/signwell`)}>
                       {t('eSign')}
                     </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </div>
-              <FolderModal
-                open={showFolderModal}
-                onClose={() => setShowFolderModal(false)}
-              />
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
+            <FolderModal
+              open={showFolderModal}
+              onClose={() => setShowFolderModal(false)}
+            />
+          </div>
+          {isUploading && (
+            <div className="mb-4">
+              <Progress value={uploadProgress} aria-label={t('Upload progress')} />
+            </div>
+          )}
 
-            <Table>
+          <Table>
               <TableHeader>
                 <TableRow>
                   <TableHead
