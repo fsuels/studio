@@ -78,3 +78,17 @@ export async function updateDocumentFolder(
   const ref = doc(db, 'users', userId, 'documents', docId);
   await updateDoc(ref, { folderId: folderId || null, updatedAt: serverTimestamp() });
 }
+
+export async function bulkMoveDocuments(
+  userId: string,
+  docIds: string[],
+  folderId: string | null,
+): Promise<void> {
+  const db = await getDb();
+  const batch = (await import('firebase/firestore')).writeBatch(db);
+  for (const id of docIds) {
+    const ref = doc(db, 'users', userId, 'documents', id);
+    batch.update(ref, { folderId: folderId || null, updatedAt: serverTimestamp() });
+  }
+  await batch.commit();
+}

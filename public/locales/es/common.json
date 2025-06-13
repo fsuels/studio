@@ -423,5 +423,9 @@
   "docDetail.aiHighlightPre": "Resaltado de IA:",
   "docDetail.keyClauses": "Cláusulas clave",
   "docDetail.aiHighlightPost": "se personalizarán automáticamente.",
-  "docDetail.aiHighlightTitle": "Resaltado de IA: esta sección se personalizará automáticamente según tus respuestas."
+  "docDetail.aiHighlightTitle": "Resaltado de IA: esta sección se personalizará automáticamente según tus respuestas.",
+  "Select all": "Seleccionar todo",
+  "Select document": "Seleccionar documento",
+  "Move": "Mover",
+  "selected": "seleccionados"
 }

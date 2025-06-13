@@ -59,10 +59,12 @@ import {
   duplicateDocument,
   softDeleteDocument,
   updateDocumentFolder,
+  bulkMoveDocuments,
 } from '@/lib/firestore/documentActions';
 import type { DashboardDocument } from '@/lib/firestore/dashboardData';
 import { useQueryClient } from '@tanstack/react-query';
 import { useToast } from '@/hooks/use-toast';
+import { Checkbox } from '@/components/ui/checkbox';
 
 // Define a more specific type for Firestore Timestamps if that's what you use
 interface FirestoreTimestamp {
@@ -88,6 +90,7 @@ export default function DashboardClientContent({
   const [sortDir, setSortDir] = useState<'asc' | 'desc'>('asc');
   const [renameDoc, setRenameDoc] = useState<DashboardDocument | null>(null);
   const [duplicatingDocId, setDuplicatingDocId] = useState<string | null>(null);
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
 
   const {
     documents,
@@ -193,6 +196,41 @@ const handleFileSelected = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (fileInputRef.current) fileInputRef.current.value = '';
   }
 };
+
+  const toggleSelect = (id: string) => {
+    setSelectedIds((prev) =>
+      prev.includes(id) ? prev.filter((d) => d !== id) : [...prev, id],
+    );
+  };
+
+  const toggleSelectAll = () => {
+    if (selectedIds.length === documents.length) {
+      setSelectedIds([]);
+    } else {
+      setSelectedIds(documents.map((d) => d.id));
+    }
+  };
+
+  const handleBulkMove = async (folderId: string | null) => {
+    const ids = selectedIds;
+    setSelectedIds([]);
+    const key = ['dashboardDocuments', user!.uid] as const;
+    const previous = queryClient.getQueryData<DashboardDocument[]>(key);
+    queryClient.setQueryData<DashboardDocument[]>(key, (old) =>
+      old?.map((d) =>
+        ids.includes(d.id) ? { ...d, folderId: folderId || undefined } : d,
+      ) || [],
+    );
+    try {
+      await bulkMoveDocuments(user!.uid, ids, folderId);
+      toast({ title: t('Document moved') });
+    } catch {
+      if (previous) queryClient.setQueryData(key, previous);
+      toast({ title: t('Error moving document'), variant: 'destructive' });
+    } finally {
+      queryClient.invalidateQueries({ queryKey: key });
+    }
+  };
 
   const handleMove = async (docId: string, folderId: string | null) => {
     const key = ['dashboardDocuments', user!.uid] as const;
@@ -316,11 +354,11 @@ const handleFileSelected = async (e: React.ChangeEvent<HTMLInputElement>) => {
                   <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button variant="outline">{t('New')} ▼</Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="start">
-                    <DropdownMenuItem onSelect={() => setShowFolderModal(true)}>
-                      {t('Folder')}
-                    </DropdownMenuItem>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="start">
+            <DropdownMenuItem onSelect={() => setShowFolderModal(true)}>
+              {t('Folder')}
+            </DropdownMenuItem>
                     <DropdownMenuItem asChild>
                       <Link href={`/${locale}/templates`}>{t('Document')}</Link>
                     </DropdownMenuItem>
@@ -331,13 +369,35 @@ const handleFileSelected = async (e: React.ChangeEvent<HTMLInputElement>) => {
                       {t('eSign')}
                     </DropdownMenuItem>
                 </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
-            <FolderModal
-              open={showFolderModal}
-              onClose={() => setShowFolderModal(false)}
-            />
+          </DropdownMenu>
+        </div>
+        {selectedIds.length > 0 && (
+          <div className="flex items-center space-x-2 mt-2">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button size="sm">{t('Move')}</Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="start">
+                <DropdownMenuItem onSelect={() => handleBulkMove(null)}>
+                  {t('None')}
+                </DropdownMenuItem>
+                {folders.map((f) => (
+                  <DropdownMenuItem key={f.id} onSelect={() => handleBulkMove(f.id)}>
+                    {t(f.name, f.name)}
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+            <span className="text-sm text-muted-foreground">
+              {selectedIds.length} {t('selected')}
+            </span>
           </div>
+        )}
+        <FolderModal
+          open={showFolderModal}
+          onClose={() => setShowFolderModal(false)}
+        />
+      </div>
           {isUploading && (
             <div className="mb-4">
               <Progress value={uploadProgress} aria-label={t('Upload progress')} />
@@ -347,6 +407,13 @@ const handleFileSelected = async (e: React.ChangeEvent<HTMLInputElement>) => {
           <Table>
               <TableHeader>
                 <TableRow>
+                  <TableHead className="w-4">
+                    <Checkbox
+                      checked={selectedIds.length === documents.length && documents.length > 0}
+                      onCheckedChange={toggleSelectAll}
+                      aria-label={t('Select all')}
+                    />
+                  </TableHead>
                   <TableHead
                     onClick={() => handleSort('name')}
                     className="cursor-pointer select-none"
@@ -380,6 +447,13 @@ const handleFileSelected = async (e: React.ChangeEvent<HTMLInputElement>) => {
               <TableBody>
                 {sorted.map((doc) => (
                   <TableRow key={doc.id} className="group">
+                    <TableCell>
+                      <Checkbox
+                        checked={selectedIds.includes(doc.id)}
+                        onCheckedChange={() => toggleSelect(doc.id)}
+                        aria-label={t('Select document')}
+                      />
+                    </TableCell>
                     <TableCell className="font-medium">
                       <Link
                         href={`/${locale}/docs/${doc.docType}/start`}
