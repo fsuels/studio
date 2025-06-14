@@ -29,6 +29,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import RenameModal from './modals/RenameModal';
 import FolderModal from './modals/FolderModal';
+import MoveToFolderModal from './modals/MoveToFolderModal';
 import ProfileSettings from '@/components/ProfileSettings';
 import {
   FileText,
@@ -110,9 +111,13 @@ export default function DashboardClientContent({
   const [duplicatingDocId, setDuplicatingDocId] = useState<string | null>(null);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [currentFolderId, setCurrentFolderId] = useState<string | null>(null);
+  const [moveModalState, setMoveModalState] = useState<{
+    open: boolean;
+    documentId?: string;
+    documentName?: string;
+  }>({ open: false });
 
-
-	const {
+  const {
     documents,
     payments,
     folders,
@@ -136,6 +141,17 @@ export default function DashboardClientContent({
       ...filteredDocs.map((d) => ({ ...d, type: 'document' as const })),
     ];
   }, [folders, documents, currentFolderId]);
+
+  // Calculate document counts per folder
+  const documentsPerFolder = React.useMemo(() => {
+    const counts: Record<string, number> = {};
+    documents.forEach(doc => {
+      if (doc.folderId) {
+        counts[doc.folderId] = (counts[doc.folderId] || 0) + 1;
+      }
+    });
+    return counts;
+  }, [documents]);
 
   const queryClient = useQueryClient();
   const { toast } = useToast();
@@ -417,18 +433,18 @@ export default function DashboardClientContent({
 
         return (
           <>
- {/* Upload & New controls */}
- <input
- type="file"
- accept=".pdf"
- ref={fileInputRef}
- onChange={handleFileSelected}
- />
- </div></>
- <div className="flex items-center justify-between mb-4">
+            {/* Upload & New controls */}
+            <input
+              type="file"
+              accept=".pdf"
+              className="hidden"
+              ref={fileInputRef}
+              onChange={handleFileSelected}
+            />
+            <div className="flex items-center justify-between mb-4">
               <div className="flex space-x-2 items-center">
                 <Button onClick={handleUploadClick} disabled={isUploading}>
- {isUploading && (
+                  {isUploading && (
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   )}
                   {t('Upload File')}
@@ -560,8 +576,7 @@ export default function DashboardClientContent({
                 {sorted.map((item) => (
                   <TableRow
                     key={item.id}
-                    className="group"
-                    className={item.type === 'folder' ? 'cursor-pointer hover:bg-muted/50' : ''}
+                    className={`group ${item.type === 'folder' ? 'cursor-pointer hover:bg-muted/50' : ''}`}
                   >
                     <TableCell>
                       <Checkbox
@@ -581,22 +596,20 @@ export default function DashboardClientContent({
                             >
                               {t(item.name, item.name)}
                               <span className="ml-2 text-xs text-muted-foreground">
-                                ({documents.filter(d => d.folderId === item.id).length})
+                                ({documentsPerFolder[item.id] || 0})
                               </span>
                             </button>
                           </>
                         ) : (
                           <>
                             <FileText className="h-4 w-4 text-muted-foreground" />
- <Link
- href={`/${locale}/docs/${item.docType}/view?docId=${item.id}`}
- className="hover:underline"
-                            // Pass the item.id to the href
-
- // Pass the item.id to the href
-                          >
-                            {t(item.name, item.name)}
-                          </Link>
+                            <Link
+                              href={`/${locale}/docs/${item.docType}/view?docId=${item.id}`}
+                              className="hover:underline"
+                            >
+                              {t(item.name, item.name)}
+                            </Link>
+                          </>
                         )}
                       </span>
                     </TableCell>
@@ -615,26 +628,14 @@ export default function DashboardClientContent({
                             <DropdownMenuItem onSelect={() => setRenameDoc(item)}>
                               {t('Rename')}
                             </DropdownMenuItem>
-                            <DropdownMenuSub>
-                              <DropdownMenuSubTrigger>
-                                <Folder className="mr-2 h-4 w-4" />
-                                {t('Move to Folder')}
-                              </DropdownMenuSubTrigger>
-                              <DropdownMenuSubContent>
-                                <DropdownMenuItem onSelect={() => handleMove(item.id, null)}>
-                                  <FileText className="mr-2 h-4 w-4 opacity-50" />
-                                  {t('Root (No Folder)')}
-                                </DropdownMenuItem>
-                                {folders.map((f) => (
-                                  // Only show folders that are not the current parent
-                                  f.id !== currentFolderId && (
-                                  <DropdownMenuItem key={f.id} onSelect={() => handleMove(item.id, f.id)}>
-                                    <Folder className="mr-2 h-4 w-4" />
-                                    {t(f.name, f.name)}
-                                  </DropdownMenuItem>)
-                                ))}
-                              </DropdownMenuSubContent>
-                            </DropdownMenuSub>
+                            <DropdownMenuItem onSelect={() => setMoveModalState({
+                              open: true,
+                              documentId: item.id,
+                              documentName: item.name
+                            })}>
+                              <Folder className="mr-2 h-4 w-4" />
+                              {t('Move to Folder')}
+                            </DropdownMenuItem>
                             <DropdownMenuItem
                               disabled={duplicatingDocId === item.id}
                               onSelect={async () => {
@@ -732,13 +733,28 @@ export default function DashboardClientContent({
                 }
               }}
             />
+            
+            <MoveToFolderModal
+              open={moveModalState.open}
+              onClose={() => setMoveModalState({ open: false })}
+              folders={folders}
+              currentFolderId={documents.find(d => d.id === moveModalState.documentId)?.folderId}
+              documentName={moveModalState.documentName}
+              documentsCount={documentsPerFolder}
+              onMove={async (folderId) => {
+                if (moveModalState.documentId) {
+                  await handleMove(moveModalState.documentId, folderId);
+                }
+                setMoveModalState({ open: false });
+              }}
+            />
           </>
         );
       }
       
       case 'payments':
         return (
- <div className="space-y-6">
+          <div className="space-y-6">
             {/* Header with summary stats */}
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
               <div>
@@ -886,8 +902,8 @@ export default function DashboardClientContent({
                                       minute: '2-digit'
                                     })}
                                   </p>
-                            </div>
-                          </TableCell>
+                                </div>
+                              </TableCell>
                               
                               <TableCell className="py-4">
                                 <div className="text-sm">
@@ -963,10 +979,8 @@ export default function DashboardClientContent({
                     </p>
                   </div>
                 </div>
-
-                </CardContent>
-              </Card>
-          
+              </CardContent>
+            </Card>
           </div>
         );
         
@@ -979,7 +993,7 @@ export default function DashboardClientContent({
   };
 
   return (
-      <main className="container mx-auto px-4 py-8 md:py-12">
+    <main className="container mx-auto px-4 py-8 md:py-12">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
         <h1 className="text-3xl font-bold text-foreground">{t('Dashboard')}</h1>
         <Button
