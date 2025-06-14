@@ -2,11 +2,11 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import EmptyState from '@/components/EmptyState';
+import EmptyState from '@/components/shared/EmptyState';
 import { renderMarkdown } from '@/lib/markdown-renderer';
 import { serverTimestamp, setDoc } from 'firebase/firestore';
 import { useRouter, useSearchParams } from 'next/navigation';
-import DocumentDetail from '@/components/DocumentDetail';
+import DocumentDetail from '@/components/document/DocumentDetail';
 import { useAuth } from '@/hooks/useAuth';
 import { getSignWellUrl } from '@/services/signwell';
 import { Button } from '@/components/ui/button';

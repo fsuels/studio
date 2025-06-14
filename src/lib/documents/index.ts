@@ -3,7 +3,7 @@
 // It should re-export from jurisdictional barrels (like ./us) and any non-jurisdictional common documents.
 
 export * from './us'; // Exports all US documents
-// export * from './ca'; // Example for Canadian documents, if added later
+export * from './ca'; // Exports all Canadian documents
 
 // If you had any truly non-jurisdictional documents that lived directly in src/lib/documents/,
 // they would be exported here. However, the current trend is to place them under a jurisdiction (even if 'all' states).

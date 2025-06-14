@@ -8,7 +8,7 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import React, { useEffect, useState, useMemo } from 'react';
 import dynamic from 'next/dynamic';
-import type { DocumentDetailProps } from '@/components/DocumentDetail';
+import type { DocumentDetailProps } from '@/components/document/DocumentDetail';
 import {
   Loader2,
   Star,
@@ -57,7 +57,7 @@ type DocumentDetailComponent = React.ComponentType<DocumentDetailProps> & {
   preload?: () => void;
 };
 
-const DocumentDetail = dynamic(() => import('@/components/DocumentDetail'), {
+const DocumentDetail = dynamic(() => import('@/components/document/DocumentDetail'), {
   loading: () => (
     <div className="flex items-center justify-center border rounded-lg bg-muted p-4 aspect-[8.5/11] max-h-[500px] md:max-h-[700px] w-full shadow-lg">
       <Loader2 className="h-8 w-8 animate-spin text-primary" />

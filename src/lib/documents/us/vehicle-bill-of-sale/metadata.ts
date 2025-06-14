@@ -15,8 +15,10 @@ export const vehicleBillOfSaleMeta: LegalDocument = {
   basePrice: 19.95,
   states: 'all', // Indicates available in all US states unless overridden
   // Standardized template paths
-  templatePath: '/templates/en/bill-of-sale-vehicle.md',
-  templatePath_es: '/templates/es/bill-of-sale-vehicle.md',
+  templatePaths: {
+    en: '/templates/en/bill-of-sale-vehicle.md',
+    es: '/templates/es/bill-of-sale-vehicle.md',
+  },
   requiresNotarizationStates: [
     'AZ',
     'KY',

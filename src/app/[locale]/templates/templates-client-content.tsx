@@ -2,8 +2,8 @@
 
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import SearchBar from '@/components/SearchBar';
-import { CATEGORY_LIST } from '@/components/Step1DocumentSelector';
+import SearchBar from '@/components/shared/SearchBar';
+import { CATEGORY_LIST } from '@/components/workflow/Step1DocumentSelector';
 import { Button } from '@/components/ui/button';
 import TopDocsChips from '@/components/TopDocsChips';
 import TrustBadges from '@/components/TrustBadges';

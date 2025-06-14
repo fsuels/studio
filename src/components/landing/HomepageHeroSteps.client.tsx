@@ -8,7 +8,7 @@ import { ShieldCheck } from 'lucide-react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { Badge } from '@/components/ui/badge';
-import SearchBar from '@/components/SearchBar'; // Import SearchBar
+import SearchBar from '@/components/shared/SearchBar'; // Import SearchBar
 import { track } from '@/lib/analytics';
 import LiveActivityFeed from './LiveActivityFeed';
 

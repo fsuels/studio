@@ -2,7 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 import type { LegalDocument } from '@/lib/document-library';
-import type { CategoryInfo } from '@/components/Step1DocumentSelector';
+import type { CategoryInfo } from '@/components/workflow/Step1DocumentSelector';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { getDocTranslation } from '@/lib/i18nUtils';
 

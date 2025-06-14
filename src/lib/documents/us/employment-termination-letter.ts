@@ -23,8 +23,10 @@ export const employmentTerminationLetter: LegalDocument = {
   offerRecordingHelp: false,
   basePrice: 5,
   states: 'all',
-  templatePath: '/templates/en/termination-letter.md',
-  templatePath_es: '/templates/es/termination-letter.md',
+  templatePaths: {
+    en: '/templates/en/termination-letter.md',
+    es: '/templates/es/termination-letter.md',
+  },
   schema: z.object({
     employerName: z.string().min(1, 'Employer name is required.'),
     employerAddress: z.string().min(1, 'Employer address is required.'),

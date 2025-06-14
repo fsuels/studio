@@ -8,7 +8,7 @@ import { documentLibrary } from '@/lib/document-library';
 import { useToast } from '@/hooks/use-toast';
 import { Separator } from '@/components/ui/separator';
 import { Loader2 } from 'lucide-react';
-import { CATEGORY_LIST } from '@/components/Step1DocumentSelector';
+import { CATEGORY_LIST } from '@/components/workflow/Step1DocumentSelector';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams, useRouter, useParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
@@ -65,7 +65,7 @@ const SearchBarSkeleton = () => (
   </div>
 );
 
-const SearchBar = lazyOnView(() => import('@/components/SearchBar'), {
+const SearchBar = lazyOnView(() => import('@/components/shared/SearchBar'), {
   placeholder: <SearchBarSkeleton />,
 });
 

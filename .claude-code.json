@@ -1,0 +1,25 @@
+{
+  "context": {
+    "framework": "next.js",
+    "firebase_services": ["firestore", "auth", "storage", "hosting", "functions"],
+    "key_files": [
+      "src/lib/firebase.ts",
+      "src/hooks/useAuth.tsx",
+      "firestore.rules",
+      "firebase.json",
+      "functions/gen-preview.ts"
+    ],
+    "coding_standards": [
+      "Use React Server Components",
+      "Use <AutoImage /> component",
+      "Follow validation checklist in AGENTS.md"
+    ]
+  },
+  "ignore_patterns": [
+    "node_modules/",
+    ".git/",
+    "out/",
+    "test-results/",
+    ".firebase/"
+  ]
+}
