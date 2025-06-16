@@ -1,8 +1,6 @@
-import { z } from 'zod';
-import type { LegalDocument } from '@/types/documents';
+import type { LegalDocumentMetadata } from '@/types/documents';
 
-export const operatingAgreement: LegalDocument = {
-  id: 'operating-agreement',
+export const operatingAgreementMetadata: LegalDocumentMetadata = {
   category: 'Business',
   translations: {
     en: {
@@ -25,6 +23,4 @@ export const operatingAgreement: LegalDocument = {
   offerRecordingHelp: false,
   basePrice: 7,
   states: 'all',
-  schema: z.object({}), // Placeholder
-  questions: [], // Placeholder
 };

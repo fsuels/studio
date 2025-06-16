@@ -1,8 +1,6 @@
-import { z } from 'zod';
-import type { LegalDocument } from '@/types/documents';
+import type { LegalDocumentMetadata } from '@/types/documents';
 
-export const quitclaimDeed: LegalDocument = {
-  id: 'quitclaim-deed',
+export const quitclaimDeedMetadata: LegalDocumentMetadata = {
   category: 'Real Estate',
   translations: {
     en: {
@@ -27,6 +25,4 @@ export const quitclaimDeed: LegalDocument = {
   offerRecordingHelp: true,
   basePrice: 5,
   states: 'all',
-  schema: z.object({}), // Placeholder
-  questions: [], // Placeholder
 };

@@ -7,6 +7,7 @@
    import pluginReact from 'eslint-plugin-react';
    import pluginReactHooks from 'eslint-plugin-react-hooks';
    import pluginA11y from 'eslint-plugin-jsx-a11y';
+   import pluginImport from 'eslint-plugin-import';
    import { defineConfig } from 'eslint/config';
    
    /* pull a11y recommended rules and down-grade them to “warn” */
@@ -31,7 +32,8 @@ export default defineConfig([
          js,
          react: pluginReact,
          'react-hooks': pluginReactHooks,
-         'jsx-a11y': pluginA11y
+         'jsx-a11y': pluginA11y,
+         import: pluginImport
        },
        extends: ['js/recommended'],
        languageOptions: { globals: globals.browser },
@@ -42,6 +44,18 @@ export default defineConfig([
          ...a11yWarnRules,
          /* react-hooks rules */
          ...hooksRules,
+   
+         /* import rules */
+         'import/order': [
+           'error',
+           {
+             groups: ['builtin', 'external', 'internal', 'parent', 'sibling', 'index'],
+             'newlines-between': 'always',
+             alphabetize: { order: 'asc', caseInsensitive: true }
+           }
+         ],
+         'import/no-unused-modules': ['error', { unusedExports: true }],
+         '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
    
          /* never-break-the-build overrides */
          'react/react-in-jsx-scope': 'off',

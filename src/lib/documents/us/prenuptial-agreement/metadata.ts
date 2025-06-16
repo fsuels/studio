@@ -1,8 +1,6 @@
-import { z } from 'zod';
-import type { LegalDocument } from '@/types/documents';
+import type { LegalDocumentMetadata } from '@/types/documents';
 
-export const prenuptialAgreement: LegalDocument = {
-  id: 'prenuptial-agreement',
+export const prenuptialAgreementMetadata: LegalDocumentMetadata = {
   category: 'Family',
   translations: {
     en: {
@@ -25,6 +23,4 @@ export const prenuptialAgreement: LegalDocument = {
   offerRecordingHelp: false,
   basePrice: 7,
   states: 'all',
-  schema: z.object({}), // Placeholder
-  questions: [], // Placeholder
 };

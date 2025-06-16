@@ -7,8 +7,8 @@ import webpack from 'webpack';
 /* -------------------------------------------------------------------------- */
 const nextConfig = {
   turbopack: {},
-  typescript: { ignoreBuildErrors: true },
-  eslint:       { ignoreDuringBuilds: true },
+  typescript: { ignoreBuildErrors: false },
+  eslint:       { ignoreDuringBuilds: false },
 
   /* —──────── Static-export image handling —──────── */
   images: {
