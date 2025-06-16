@@ -1,4 +1,4 @@
-// src/components/disclaimer-step.tsx
+// src/components/workflow/DisclaimerStep.tsx
 'use client';
 
 import { useState, useEffect } from 'react'; // Import useEffect

@@ -2,9 +2,10 @@
 const fs = require('fs');
 const path = require('path');
 
+// Note: These files have been moved/removed during reorganization
 const files = [
-  'src/lib/documents/invoice.ts',
-  'src/lib/documents/vehicle-bill-of-sale.ts',
+  // 'src/lib/documents/invoice.ts', // File removed during document library reorganization
+  // 'src/lib/documents/vehicle-bill-of-sale.ts', // File removed during document library reorganization
 ];
 
 files.forEach((rel) => {

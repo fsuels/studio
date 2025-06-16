@@ -1,4 +1,4 @@
-// src/components/share-download-step.tsx
+// src/components/workflow/ShareDownloadStep.tsx
 'use client';
 
 import React, { useState, useEffect } from 'react'; // Import React
