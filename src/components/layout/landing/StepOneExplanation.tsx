@@ -1,5 +1,5 @@
 import React from 'react';
-import AutoImage from '@/components/AutoImage';
+import { AutoImage } from '@/components/shared';
 import { PlusIcon } from '@heroicons/react/outline';
 
 export default function StepOneExplanation() {
@@ -10,7 +10,7 @@ export default function StepOneExplanation() {
           <div className="flex-1 flex justify-center">
             <div className="relative">
               <AutoImage
-                src={require('@/public/images/step1-questions.svg')}
+                src="/images/step1-questions.svg"
                 alt="Answer simple questions illustration"
                 width={400}
                 height={400}

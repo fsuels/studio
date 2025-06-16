@@ -1,7 +1,9 @@
 import TemplatesClientContent from './templates-client-content';
-import { generateStaticParams } from '../page';
 
-export { generateStaticParams };
+// Generate static params for both locales
+export async function generateStaticParams() {
+  return [{ locale: 'en' }, { locale: 'es' }];
+}
 
 export default function TemplatesPage({
   params,

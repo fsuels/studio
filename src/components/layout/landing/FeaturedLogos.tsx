@@ -2,7 +2,7 @@
 'use client';
 
 import { useTranslation } from 'react-i18next';
-import AutoImage from '@/components/AutoImage';
+import { AutoImage } from '@/components/shared';
 import React, { useState, useEffect } from 'react';
 
 const logos = [

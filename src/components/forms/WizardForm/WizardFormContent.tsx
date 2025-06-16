@@ -5,7 +5,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import FieldRenderer from '../FieldRenderer';
 import ReviewStep from '@/components/workflow/ReviewStep';
-import TrustBadges from '@/components/TrustBadges';
+import { TrustBadges } from '@/components/shared';
 import type { LegalDocument } from '@/lib/document-library';
 import type { WizardStep } from './WizardStepManager';
 

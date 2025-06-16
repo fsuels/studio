@@ -1,4 +1,5 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
+// src/app/api/infer-document-type/route.ts
+import { NextRequest, NextResponse } from 'next/server';
 import {
   inferDocumentTypeFlow,
   InferDocumentTypeInputSchema,
@@ -13,42 +14,31 @@ type ErrorResponse = {
   code?: string;
 };
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse<InferDocumentTypeOutput | ErrorResponse>,
-) {
+export async function POST(request: NextRequest) {
   const requestId = `req_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
   const logPrefix = `[API /infer-document-type] [${requestId}]`;
 
-  console.log(`${logPrefix} Received request: ${req.method} ${req.url}`);
+  console.log(`${logPrefix} Received request: ${request.method} ${request.url}`);
 
   if (process.env.NEXT_PUBLIC_DISABLE_API_ROUTES === 'true') {
     console.warn(
       `${logPrefix} API Route Disabled (NEXT_PUBLIC_DISABLE_API_ROUTES=true). Returning 503.`,
     );
-    return res.status(503).json({
+    return NextResponse.json({
       error: 'AI document inference is disabled in the current environment.',
       details:
         'This API route is not available when NEXT_PUBLIC_DISABLE_API_ROUTES is set to true.',
       code: 'API_DISABLED_INFERENCE',
-    });
-  }
-
-  if (req.method !== 'POST') {
-    console.warn(`${logPrefix} Method Not Allowed: ${req.method}`);
-    res.setHeader('Allow', ['POST']);
-    return res.status(405).json({
-      error: `Method ${req.method} Not Allowed`,
-      code: 'METHOD_NOT_ALLOWED_INFERENCE',
-    });
+    }, { status: 503 });
   }
 
   try {
+    const body = await request.json();
     console.log(
       `${logPrefix} Validating request body. Body received:`,
-      JSON.stringify(req.body),
+      JSON.stringify(body),
     );
-    const validationResult = InferDocumentTypeInputSchema.safeParse(req.body);
+    const validationResult = InferDocumentTypeInputSchema.safeParse(body);
     if (!validationResult.success) {
       const validationErrors = validationResult.error.flatten();
       console.error(
@@ -58,11 +48,11 @@ export default async function handler(
       const errorMessages = validationResult.error.errors
         .map((e) => `${e.path.join('.') || 'input'}: ${e.message}`)
         .join('; ');
-      return res.status(400).json({
+      return NextResponse.json({
         error: `Invalid input for document inference: ${errorMessages}`,
         details: validationErrors,
         code: 'INVALID_INPUT_INFERENCE',
-      });
+      }, { status: 400 });
     }
 
     const input = validationResult.data;
@@ -108,7 +98,7 @@ export default async function handler(
     }
 
     console.log(`${logPrefix} Sending successful response status 200.`);
-    return res.status(200).json(output);
+    return NextResponse.json(output, { status: 200 });
   } catch (error: unknown) {
     console.error(
       `${logPrefix} === UNHANDLED ERROR IN API HANDLER (/infer-document-type) START ===`,
@@ -202,12 +192,6 @@ export default async function handler(
         process.env.NODE_ENV === 'development' ? errorDetails : undefined, // Only send full details in dev
     };
 
-    if (!res.headersSent) {
-      return res.status(statusCode).json(responsePayload);
-    } else {
-      console.error(
-        `${logPrefix} Error handler attempted to send response, but headers were already sent. This indicates a critical failure or double-response attempt.`,
-      );
-    }
+    return NextResponse.json(responsePayload, { status: statusCode });
   }
 }

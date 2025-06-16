@@ -1,5 +1,5 @@
 import React from 'react';
-import AutoImage from '@/components/AutoImage';
+import { AutoImage } from '@/components/shared';
 
 export default function StepTwoExplanation() {
   return (
@@ -8,7 +8,7 @@ export default function StepTwoExplanation() {
         <div className="flex flex-col lg:flex-row-reverse items-center gap-8">
           <div className="flex-1 flex justify-center relative">
             <AutoImage
-              src={require('@/public/images/step2-customize.svg')}
+              src="/images/step2-customize.svg"
               alt="Customize your document illustration"
               width={400}
               height={400}

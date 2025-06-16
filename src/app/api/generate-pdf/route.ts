@@ -1,5 +1,5 @@
-// src/pages/api/generate-pdf.ts
-import type { NextApiRequest, NextApiResponse } from 'next';
+// src/app/api/generate-pdf/route.ts
+import { NextRequest, NextResponse } from 'next/server';
 import { generatePdfDocument } from '@/services/pdf-generator';
 
 type RequestData = {
@@ -14,38 +14,27 @@ type ErrorResponse = {
   code?: string;
 };
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse<Buffer | ErrorResponse>,
-) {
+export async function POST(request: NextRequest) {
   const requestId = `req_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
   const logPrefix = `[API /generate-pdf] [${requestId}]`;
 
-  console.log(`${logPrefix} Received request: ${req.method} ${req.url}`);
+  console.log(`${logPrefix} Received request: ${request.method} ${request.url}`);
 
   if (process.env.NEXT_PUBLIC_DISABLE_API_ROUTES === 'true') {
     console.warn(
       `${logPrefix} API Route Disabled (NEXT_PUBLIC_DISABLE_API_ROUTES=true). Returning 503.`,
     );
-    return res.status(503).json({
+    return NextResponse.json({
       error: 'PDF Generation is disabled in the current environment.',
       details:
         'This API route is not available when NEXT_PUBLIC_DISABLE_API_ROUTES is set to true.',
       code: 'API_DISABLED_PDF_GENERATION',
-    });
-  }
-
-  if (req.method !== 'POST') {
-    console.warn(`${logPrefix} Method Not Allowed: ${req.method}`);
-    res.setHeader('Allow', ['POST']);
-    return res.status(405).json({
-      error: `Method ${req.method} Not Allowed`,
-      code: 'METHOD_NOT_ALLOWED_PDF',
-    });
+    }, { status: 503 });
   }
 
   try {
-    const { documentType, answers, state } = req.body as RequestData;
+    const body: RequestData = await request.json();
+    const { documentType, answers, state } = body;
     console.log(
       `${logPrefix} Request body parsed. DocumentType: "${documentType}", State: "${state || 'N/A'}", Answers keys:`,
       Object.keys(answers || {}),
@@ -59,11 +48,11 @@ export default async function handler(
       console.error(
         `${logPrefix} Invalid input: Missing or invalid documentType.`,
       );
-      return res.status(400).json({
+      return NextResponse.json({
         error:
           'Invalid input for PDF generation: documentType is required and must be a non-empty string.',
         code: 'INVALID_INPUT_PDF_DOCTYPE',
-      });
+      }, { status: 400 });
     }
     if (
       !answers ||
@@ -90,19 +79,21 @@ export default async function handler(
       throw new Error('PDF generation process completed but returned no data.');
     }
 
-    res.setHeader('Content-Type', 'application/pdf');
     const safeDocumentName =
       documentType.replace(/[^a-zA-Z0-9_.-]/g, '_') || 'document';
-    res.setHeader(
-      'Content-Disposition',
-      `inline; filename="${safeDocumentName}.pdf"`,
-    );
-    res.setHeader('Content-Length', pdfBytes.length);
 
     console.log(
       `${logPrefix} Successfully generated PDF (${pdfBytes.length} bytes) for "${documentType}". Sending response.`,
     );
-    return res.status(200).send(Buffer.from(pdfBytes));
+    
+    return new NextResponse(Buffer.from(pdfBytes), {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/pdf',
+        'Content-Disposition': `inline; filename="${safeDocumentName}.pdf"`,
+        'Content-Length': pdfBytes.length.toString(),
+      },
+    });
   } catch (error: unknown) {
     console.error(`${logPrefix} === PDF GENERATION ERROR HANDLER START ===`);
     console.error(`${logPrefix} Timestamp: ${new Date().toISOString()}`);
@@ -135,7 +126,7 @@ export default async function handler(
         error.message.includes('No questions found')
       ) {
         statusCode = 404; // Or 400 if it's considered a client error for requesting non-existent type
-        clientErrorMessage = `Could not generate PDF: The document type "${req.body?.documentType}" or its template is not found or is misconfigured.`;
+        clientErrorMessage = `Could not generate PDF: The document type is not found or is misconfigured.`;
         errorCode = 'PDF_TEMPLATE_NOT_FOUND';
       } else if (
         error.message.includes(
@@ -143,7 +134,7 @@ export default async function handler(
         )
       ) {
         statusCode = 500;
-        clientErrorMessage = `PDF generation for "${req.body?.documentType}" resulted in an empty document. This might indicate an issue with the template or data.`;
+        clientErrorMessage = `PDF generation resulted in an empty document. This might indicate an issue with the template or data.`;
         errorCode = 'PDF_EMPTY_GENERATION';
       }
       // Add more specific error checks if pdf-lib or your generator throws distinct error types/messages
@@ -169,12 +160,6 @@ export default async function handler(
           : undefined, // Full details in dev
     };
 
-    if (!res.headersSent) {
-      return res.status(statusCode).json(responsePayload);
-    } else {
-      console.error(
-        `${logPrefix} PDF error handler: Headers already sent. Cannot send error response.`,
-      );
-    }
+    return NextResponse.json(responsePayload, { status: statusCode });
   }
 }

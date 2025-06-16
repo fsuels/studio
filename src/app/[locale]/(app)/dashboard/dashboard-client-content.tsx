@@ -30,7 +30,7 @@ import {
 import RenameModal from './modals/RenameModal';
 import FolderModal from './modals/FolderModal';
 import MoveToFolderModal from './modals/MoveToFolderModal';
-import ProfileSettings from '@/components/ProfileSettings';
+import ProfileSettings from '@/components/shared/ProfileSettings';
 import {
   FileText,
   Folder,

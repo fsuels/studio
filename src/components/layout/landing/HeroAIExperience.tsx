@@ -5,10 +5,10 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import SmartAssistantBar from '@/components/landing/SmartAssistantBar';
+import { SmartAssistantBar } from '@/components/shared';
 import LiveActivityFeed from './LiveActivityFeed';
 import { TrustBanner } from './TrustBanner'; // Assuming TrustBanner is a separate component
-import AutoImage from '@/components/AutoImage'; // Import AutoImage
+import { AutoImage } from '@/components/shared'; // Import AutoImage
 import { ShieldCheck, Users, Globe, Zap, FileText, UserCheck, Send } from 'lucide-react';
 import Link from 'next/link';
 import { track } from '@/lib/analytics';

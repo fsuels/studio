@@ -26,7 +26,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import CustomizeDocBlock from '@/components/landing/CustomizeDocBlock';
+import { CustomizeDocBlock } from '@/components/layout';
 
 // Feature sub-component
 function Feature({

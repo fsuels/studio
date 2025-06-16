@@ -1,5 +1,4 @@
 // src/app/[locale]/privacy-policy/page.tsx
-import PrivacyPolicyPage from '@/app/privacy-policy/page';
 
 // Static generation for legal pages (revalidate weekly)
 export const dynamic = 'force-static';
@@ -10,5 +9,12 @@ export async function generateStaticParams() {
 }
 
 export default function LocalePrivacyPolicyPage() {
-  return <PrivacyPolicyPage />;
+  return (
+    <div className="container mx-auto px-4 py-8">
+      <h1 className="text-3xl font-bold mb-6">Privacy Policy</h1>
+      <p className="text-muted-foreground">
+        This page is under construction.
+      </p>
+    </div>
+  );
 }

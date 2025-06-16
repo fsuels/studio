@@ -21,8 +21,8 @@ import { Footer } from '@/components/layout/Footer';
 import dynamic from 'next/dynamic';
 
 // Load non-critical widgets lazily
-const ContactFormButton = dynamic(() => import('@/components/ContactFormButton'));
-const ActivityTicker = dynamic(() => import('@/components/ActivityTicker'));
+const ContactFormButton = dynamic(() => import('@/components/shared').then(m => ({ default: m.ContactFormButton })));
+const ActivityTicker = dynamic(() => import('@/components/shared').then(m => ({ default: m.ActivityTicker })));
 
 const AppShell = React.memo(function AppShell({
   children,

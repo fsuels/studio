@@ -5,10 +5,10 @@ import { useTranslation } from 'react-i18next';
 import SearchBar from '@/components/shared/SearchBar';
 import { CATEGORY_LIST } from '@/components/workflow/Step1DocumentSelector';
 import { Button } from '@/components/ui/button';
-import TopDocsChips from '@/components/TopDocsChips';
-import TrustBadges from '@/components/TrustBadges';
+import { TopDocsChips } from '@/components/shared';
+import { TrustBadges } from '@/components/shared';
 import { FileText } from 'lucide-react';
-import AutoImage from '@/components/AutoImage';
+import { AutoImage } from '@/components/shared';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 

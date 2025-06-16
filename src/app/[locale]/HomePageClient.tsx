@@ -2,7 +2,7 @@
 'use client';
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { lazyOnView } from '@/components/LazyOnView';
+import { lazyOnView } from '@/components/shared';
 import type { LegalDocument } from '@/lib/document-library';
 import { documentLibrary } from '@/lib/document-library';
 import { useToast } from '@/hooks/use-toast';
@@ -13,7 +13,7 @@ import { useTranslation } from 'react-i18next';
 import { useSearchParams, useRouter, useParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import PersonalizationBlock from '@/components/PersonalizationBlock';
-import AutoImage from '@/components/AutoImage';
+import { AutoImage } from '@/components/shared';
 // import SearchBar from '@/components/SearchBar'; // Original import
 import { Skeleton } from '@/components/ui/skeleton'; // Import Skeleton
 
@@ -69,22 +69,22 @@ const SearchBar = lazyOnView(() => import('@/components/shared/SearchBar'), {
   placeholder: <SearchBarSkeleton />,
 });
 
-const HowItWorks = lazyOnView(() => import('@/components/landing/HowItWorks'), {
+const HowItWorks = lazyOnView(() => import('@/components/layout').then(m => ({ default: m.HowItWorks })), {
   placeholder: <HowItWorksSkeleton />,
 });
 
 const TrustAndTestimonialsSection = lazyOnView(
-  () => import('@/components/landing/TrustAndTestimonialsSection'),
+  () => import('@/components/layout').then(m => ({ default: m.TrustAndTestimonialsSection })),
   {
     placeholder: <TestimonialsSkeleton />,
   },
 );
 
-const TopDocsChips = lazyOnView(() => import('@/components/TopDocsChips'), {
+const TopDocsChips = lazyOnView(() => import('@/components/shared/TopDocsChips'), {
   placeholder: <TopDocsSkeleton />,
 });
 
-const AnnouncementBar = lazyOnView(() => import('@/components/AnnouncementBar'), {
+const AnnouncementBar = lazyOnView(() => import('@/components/shared').then(m => ({ default: m.AnnouncementBar })), {
   placeholder: null,
 });
 

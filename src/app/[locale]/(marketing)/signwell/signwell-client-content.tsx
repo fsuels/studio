@@ -35,17 +35,17 @@ import {
   Loader2,
   BookUser,
 } from 'lucide-react';
-import AutoImage from '@/components/AutoImage';
+import { AutoImage } from '@/components/shared';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
 
-const AuthModal = dynamic(() => import('@/components/AuthModal'));
+const AuthModal = dynamic(() => import('@/components/shared/AuthModal'));
 import { useAuth } from '@/hooks/useAuth'; // Import useAuth
 import { createSignWellDocument } from '@/services/signwell';
 
 const SignwellHeroAnimationClient = dynamic(
-  () => import('@/components/SignwellHeroAnimationClient'),
+  () => import('@/components/motion/SignwellHeroAnimationClient'),
   { ssr: false }
 );
 

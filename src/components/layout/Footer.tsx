@@ -14,7 +14,7 @@ import {
   Phone,
   Clock,
 } from 'lucide-react';
-import AutoImage from '@/components/AutoImage';
+import { AutoImage } from '@/components/shared';
 import { useToast } from '@/hooks/use-toast';
 import { Logo } from '@/components/layout/Logo';
 import { useTranslation } from 'react-i18next';

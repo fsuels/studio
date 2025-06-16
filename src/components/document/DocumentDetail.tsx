@@ -8,9 +8,9 @@ import { useTranslation } from 'react-i18next';
 import { documentLibrary, type LegalDocument } from '@/lib/document-library';
 import { Loader2, AlertTriangle } from 'lucide-react';
 import Image from 'next/image';
-import AutoImage from '../AutoImage';
+import { AutoImage } from '@/components/shared';
 import { cn } from '@/lib/utils';
-import { ClauseTooltip } from '@/components/ClauseTooltip';
+import { ClauseTooltip } from '@/components/shared';
 
 function extractText(children: React.ReactNode): string {
   return Children.toArray(children).reduce((acc, child) => {

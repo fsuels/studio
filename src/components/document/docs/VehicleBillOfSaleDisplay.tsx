@@ -25,8 +25,8 @@ import { track } from '@/lib/analytics';
 import { useCart } from '@/contexts/CartProvider';
 import { Edit, Signature, ShieldCheck } from 'lucide-react';
 import { BookOpen } from 'lucide-react';
-import StickyMobileCTA from '@/components/StickyMobileCTA';
-import StickyGuaranteeBar from '@/components/StickyGuaranteeBar';
+import { StickyMobileCTA } from '@/components/shared';
+import { StickyGuaranteeBar } from '@/components/shared';
 
 interface VehicleBillOfSaleDisplayProps {
   locale: 'en' | 'es';

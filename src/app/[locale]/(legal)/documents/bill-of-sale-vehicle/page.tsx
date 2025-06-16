@@ -3,7 +3,7 @@
    Replace with full implementation once build performance is confirmed. */
 
    import type { Metadata } from 'next';
-   import VehicleBillOfSalePageClientWrapper from '@/components/VehicleBillOfSalePageClientWrapper';
+   import VehicleBillOfSalePageClientWrapper from '@/components/document/VehicleBillOfSalePageClientWrapper';
    
    /* -------------------------------------------------------------------------- */
    /*  Static metadata so Next.js can prerender quickly                          */

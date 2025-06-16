@@ -1,5 +1,5 @@
 import React from 'react';
-import AutoImage from '@/components/AutoImage';
+import { AutoImage } from '@/components/shared';
 
 export default function StepThreeExplanation() {
   return (
@@ -8,7 +8,7 @@ export default function StepThreeExplanation() {
         <div className="flex flex-col lg:flex-row items-center gap-8">
           <div className="flex-1 flex justify-center relative">
             <AutoImage
-              src={require('@/public/images/step3-save-print.svg')}
+              src="/images/step3-save-print.svg"
               alt="Save, print, download, share illustration"
               width={400}
               height={400}

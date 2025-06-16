@@ -11,7 +11,7 @@ import { debounce } from '@/lib/debounce';
 import { documentLibrary } from '@/lib/document-library';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
-import AutoImage from '../AutoImage';
+import { AutoImage } from '@/components/shared';
 
 interface PreviewPaneProps {
   locale: 'en' | 'es';

@@ -3,7 +3,7 @@
 
 import React, { useEffect } from 'react';
 import { useFormContext, Controller } from 'react-hook-form';
-import SmartInput from '@/components/wizard/SmartInput';
+import SmartInput from '@/components/forms/wizard/SmartInput';
 import AddressField from './AddressField';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';

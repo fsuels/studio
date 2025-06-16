@@ -15,7 +15,7 @@ import {
 } from '@/components/ui/tooltip';
 import { Button } from '@/components/ui/button';
 
-const GooglePlacesLoader = dynamic(() => import('../GooglePlacesLoader'), {
+const GooglePlacesLoader = dynamic(() => import('@/components/shared').then(m => ({ default: m.GooglePlacesLoader })), {
   ssr: false,
 });
 const PlacePicker = dynamic(

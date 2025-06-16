@@ -1,6 +1,6 @@
 // src/components/landing/CustomizeDocBlock.tsx
 'use client';
-import AutoImage from '@/components/AutoImage';
+import { AutoImage } from '@/components/shared';
 import { useTranslation } from 'react-i18next';
 
 export default function CustomizeDocBlock() {

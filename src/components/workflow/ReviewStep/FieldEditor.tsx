@@ -16,7 +16,7 @@ import {
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import AddressField from '@/components/forms/AddressField';
-import SmartInput from '@/components/wizard/SmartInput';
+import SmartInput from '@/components/forms/wizard/SmartInput';
 import { cn } from '@/lib/utils';
 import { z, type AnyZodObject } from 'zod';
 import type { ReviewField, FormValues } from './types';

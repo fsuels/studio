@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event'
 import HeaderMegaMenu from '../HeaderMegaMenu'
 
 // Mock the MegaMenuContent component
-jest.mock('@/components/layout/MegaMenuContent', () => {
+jest.mock('@/components/layout/mega-menu/MegaMenuContent', () => {
   return function MockMegaMenuContent({ locale }: { locale: string }) {
     return <div data-testid="mega-menu-content">Mega Menu Content for {locale}</div>
   }

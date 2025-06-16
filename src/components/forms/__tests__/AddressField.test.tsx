@@ -19,7 +19,7 @@ jest.mock('next/dynamic', () => (component: any) => {
 })
 
 // Mock GooglePlacesLoader
-jest.mock('../../GooglePlacesLoader', () => {
+jest.mock('@/components/shared/GooglePlacesLoader', () => {
   return function MockGooglePlacesLoader() {
     return <div data-testid="google-places-loader">Google Places Loader</div>
   }

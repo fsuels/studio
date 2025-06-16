@@ -1,7 +1,7 @@
 // src/app/[locale]/support/support-client-content.tsx
 'use client';
 
-import SupportContent from '@/components/SupportContent';
+import { SupportContent } from '@/components/shared';
 import React from 'react';
 
 interface SupportClientContentProps {

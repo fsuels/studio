@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event'
 import HeaderMobileMenu from '../HeaderMobileMenu'
 
 // Mock the MobileDocsAccordion component
-jest.mock('@/components/layout/MobileDocsAccordion', () => {
+jest.mock('@/components/mobile/MobileDocsAccordion', () => {
   return function MockMobileDocsAccordion({ locale, onClose }: { locale: string; onClose: () => void }) {
     return (
       <div data-testid="mobile-docs-accordion">

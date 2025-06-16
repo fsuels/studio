@@ -4,7 +4,7 @@
 import React from 'react';
 import dynamic from 'next/dynamic';
 
-const AuthModal = dynamic(() => import('@/components/AuthModal'));
+const AuthModal = dynamic(() => import('@/components/shared/AuthModal'));
 
 interface WizardAuthProps {
   showAuthModal: boolean;

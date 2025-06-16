@@ -18,7 +18,7 @@ import {
   saveFormProgress,
 } from '@/lib/firestore/saveFormProgress';
 import { debounce } from '@/lib/debounce';
-import TrustBadges from '@/components/TrustBadges';
+import TrustBadges from '@/components/shared/TrustBadges';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { cn } from '@/lib/utils';
 import ReEngagementTools from '@/components/reengagement/ReEngagementTools.client';

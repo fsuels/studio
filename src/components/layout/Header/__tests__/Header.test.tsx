@@ -39,7 +39,7 @@ jest.mock('../HeaderMobileMenu', () => {
 })
 
 // Mock other components
-jest.mock('@/components/shared/Logo', () => {
+jest.mock('@/components/layout/Logo', () => {
   return function MockLogo() {
     return <div data-testid="logo">Logo</div>
   }

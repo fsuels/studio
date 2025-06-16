@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { FileText, ShieldCheck, Star } from 'lucide-react';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
-import AutoImage from '@/components/AutoImage';
+import { AutoImage } from '@/components/shared';
 import {
   Dialog,
   DialogContent,

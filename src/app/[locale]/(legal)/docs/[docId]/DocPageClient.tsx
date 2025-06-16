@@ -38,12 +38,11 @@ import {
   AccordionTrigger,
   AccordionContent,
 } from '@/components/ui/accordion';
-import VehicleBillOfSaleDisplay from '@/components/docs/VehicleBillOfSaleDisplay';
-import PromissoryNoteDisplay from '@/components/docs/PromissoryNoteDisplay';
+import { VehicleBillOfSaleDisplay, PromissoryNoteDisplay } from '@/components/document';
 
 // Lazy load template-specific testimonials section
 const TestimonialsCarousel = dynamic(
-  () => import('@/components/TestimonialsCarousel'),
+  () => import('@/components/shared/TestimonialsCarousel'),
   {
     loading: () => (
       <div className="flex justify-center items-center h-32">
