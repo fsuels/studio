@@ -2,9 +2,8 @@
 import React from 'react';
 import DashboardClientContent from './dashboard-client-content';
 
-export async function generateStaticParams() {
-  return [{ locale: 'en' }, { locale: 'es' }];
-}
+// Force dynamic rendering for user-specific dashboard content
+export const dynamic = 'force-dynamic';
 
 interface DashboardPageProps {
   params: {

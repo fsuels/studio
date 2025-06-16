@@ -3,6 +3,14 @@
 
 import type { Metadata } from 'next';
 
+// Static generation for document template pages (revalidate hourly)
+export const dynamic = 'force-static';
+export const revalidate = 3600; // 1 hour
+
+export async function generateStaticParams() {
+  return [{ locale: 'en' }, { locale: 'es' }];
+}
+
 export const metadata: Metadata = {
   title: 'Promissory Note Template | 123LegalDoc',
   description:

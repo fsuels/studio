@@ -1,7 +1,7 @@
 /* eslint.config.mjs — Flat config for ESLint 9
    Core: @eslint/js, @typescript-eslint, react, react-hooks, jsx-a11y        */
 
-   import js from '@eslint/js';
+import js from '@eslint/js';
    import globals from 'globals';
    import tseslint from 'typescript-eslint';
    import pluginReact from 'eslint-plugin-react';
@@ -112,6 +112,26 @@ export default defineConfig([
                    "const Foo = lazyClient(() => import('./Foo'));"
                }
              ]
+           }
+         ]
+       }
+     },
+     
+     /* Custom rules for document schema consistency */
+     {
+       files: ['src/lib/documents/**/*.ts'],
+       rules: {
+         // Enforce consistent document ID naming (kebab-case)
+         'id-match': ['error', '^[a-z][a-z0-9]*(-[a-z0-9]+)*$', {
+           properties: false,
+           onlyDeclarations: false
+         }],
+         // Require templatePaths object
+         'no-restricted-syntax': [
+           'error',
+           {
+             selector: "Property[key.name='templatePath']",
+             message: 'Use templatePaths (plural) object instead of templatePath (singular)'
            }
          ]
        }

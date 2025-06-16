@@ -2,9 +2,8 @@
 import React from 'react';
 import SignUpClientContent from './signup-client-content';
 
-export async function generateStaticParams() {
-  return [{ locale: 'en' }, { locale: 'es' }];
-}
+// Force dynamic rendering for form handling and real-time validation
+export const dynamic = 'force-dynamic';
 
 interface SignUpPageProps {
   params: {

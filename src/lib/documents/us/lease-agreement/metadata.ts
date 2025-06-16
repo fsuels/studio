@@ -1,5 +1,5 @@
 export const metadata = {
-  id: 'leaseAgreement',
+  id: 'lease-agreement',
   jurisdiction: 'US',
   category: 'Real Estate',
   languageSupport: ['en', 'es'],
