@@ -5,3 +5,6 @@ export { default as WizardForm } from './WizardForm';
 export { default as WizardLayout } from './WizardLayout';
 export { default as Questionnaire } from './Questionnaire';
 export { default as AddressField } from './AddressField';
+
+// Wizard components (moved into forms)
+export * from './wizard';

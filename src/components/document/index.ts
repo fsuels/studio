@@ -6,3 +6,6 @@ export { PDFPreview } from './PDFPreview';
 export { default as BillOfSalePreview } from './BillOfSalePreview';
 export { default as DocumentTypeSelector } from './DocumentTypeSelector';
 export { default as PreviewPane } from './PreviewPane';
+
+// Document display components (moved into document)
+export * from './docs';

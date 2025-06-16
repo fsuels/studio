@@ -45,13 +45,9 @@ export * from './workflow';
 
 // Document Components
 export * from './document';
-export * from './docs';
 
 // Shared Utility Components
 export * from './shared';
-
-// Landing Page Components
-export * from './landing';
 
 // Motion/Animation Components
 export * from './motion';
@@ -62,14 +58,8 @@ export * from './providers';
 // Mobile Components
 export * from './mobile';
 
-// Mega Menu Components
-export * from './mega-menu';
-
 // Re-engagement Components
 export * from './reengagement';
-
-// Wizard Components
-export * from './wizard';
 
 // Standalone Components (exported individually)
 export { default as ActivityTicker } from './ActivityTicker';

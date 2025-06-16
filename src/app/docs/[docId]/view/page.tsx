@@ -5,8 +5,8 @@ export const dynamic = 'force-static';
 export default function LegacyDocViewRedirect({
   params,
 }: {
-  params: { doc: string };
+  params: { docId: string };
 }) {
-  redirect(`/en/docs/${params.doc}/view`);
+  redirect(`/en/docs/${params.docId}/view`);
 }
 
