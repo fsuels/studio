@@ -1,0 +1,67 @@
+{
+  "timestamp": "2025-06-16T08:40:57.399Z",
+  "session": "test-suite-1750063257399",
+  "phases": {
+    "Performance Benchmarks": {
+      "description": "Analyzing performance metrics and Core Web Vitals",
+      "command": "node scripts/performance-benchmark.js",
+      "success": true,
+      "duration": 238,
+      "output": "🚀 Starting performance benchmarks...\n\n📦 Analyzing bundle sizes...\nBundle size: 0.00KB (threshold: 250KB)\n🎯 Measuring Core Web Vitals...\nCore Web Vitals measured\n🧠 Analyzing memory usage...\nMemory usage: 4.33MB\n⚛️  Benchmarking component render performance...\nComponent render benchmarking completed\n🔍 Analyzing SEO performance...\nSEO performance analyzed\n💰 Analyzing cost efficiency...\nEstimated Firebase costs: $35/month\n\n📊 Performance Benchmark Results\n================================\nOverall Score: 95/100 (A)\nReport saved: performance-results-1750063257632.json\nBundle Size: 0.00KB\nLCP: 2335.55ms (A)\nFirebase Costs: $35/month\n\n💡 Recommendations:\n1. Continue monitoring performance metrics regularly\n\n✅ Performance benchmarking completed!\n",
+      "error": ""
+    },
+    "Accessibility Tests": {
+      "description": "Testing WCAG 2.1 AA compliance and keyboard navigation",
+      "command": "npx playwright test e2e/accessibility-tests.spec.ts",
+      "success": false,
+      "duration": 4000,
+      "output": "",
+      "error": "Command failed: npx playwright test e2e/accessibility-tests.spec.ts\nnpm warn exec The following package was not found and will be installed: playwright@1.53.0\nError: Cannot find module '@playwright/test'\nRequire stack:\n- /mnt/c/Users/Fsuels/OneDrive/Desktop/123legaldoc/studio-master/playwright.config.ts\n- /home/fsuels/.npm/_npx/e41f203b7505f1fb/node_modules/playwright/lib/transform/transform.js\n- /home/fsuels/.npm/_npx/e41f203b7505f1fb/node_modules/playwright/lib/common/configLoader.js\n- /home/f"
+    },
+    "Visual Regression Tests": {
+      "description": "Checking visual consistency across components and viewports",
+      "command": "npx playwright test e2e/visual-regression.spec.ts",
+      "success": false,
+      "duration": 1982,
+      "output": "",
+      "error": "Command failed: npx playwright test e2e/visual-regression.spec.ts\nError: Cannot find module '@playwright/test'\nRequire stack:\n- /mnt/c/Users/Fsuels/OneDrive/Desktop/123legaldoc/studio-master/playwright.config.ts\n- /home/fsuels/.npm/_npx/e41f203b7505f1fb/node_modules/playwright/lib/transform/transform.js\n- /home/fsuels/.npm/_npx/e41f203b7505f1fb/node_modules/playwright/lib/common/configLoader.js\n- /home/fsuels/.npm/_npx/e41f203b7505f1fb/node_modules/playwright/lib/program.js\n- /home/fsuels/.npm/_"
+    },
+    "E2E User Journeys": {
+      "description": "Testing critical user paths and workflows",
+      "command": "npx playwright test e2e/user-journeys.spec.ts",
+      "success": false,
+      "duration": 2000,
+      "output": "",
+      "error": "Command failed: npx playwright test e2e/user-journeys.spec.ts\nError: Cannot find module '@playwright/test'\nRequire stack:\n- /mnt/c/Users/Fsuels/OneDrive/Desktop/123legaldoc/studio-master/playwright.config.ts\n- /home/fsuels/.npm/_npx/e41f203b7505f1fb/node_modules/playwright/lib/transform/transform.js\n- /home/fsuels/.npm/_npx/e41f203b7505f1fb/node_modules/playwright/lib/common/configLoader.js\n- /home/fsuels/.npm/_npx/e41f203b7505f1fb/node_modules/playwright/lib/program.js\n- /home/fsuels/.npm/_npx/"
+    },
+    "Unit Tests": {
+      "description": "Component unit tests",
+      "skipped": true,
+      "reason": "Jest not configured"
+    },
+    "Document Library Validation": {
+      "description": "Validating all 38 document types and schemas",
+      "command": "node scripts/validate-document-library.js",
+      "success": true,
+      "duration": 853,
+      "output": "📚 Validating document library...\n✅ Document validation complete: 196 files validated, 0 errors\n",
+      "error": ""
+    },
+    "SEO Validation": {
+      "description": "Checking SEO metadata, sitemaps, and structured data",
+      "command": "node scripts/validate-seo-infrastructure.js",
+      "success": true,
+      "duration": 60,
+      "output": "🔍 Validating SEO infrastructure...\n✅ src/components/seo/SchemaMarkup.tsx exists\n✅ src/components/seo/MetaTags.tsx exists\n✅ src/components/seo/Breadcrumbs.tsx exists\n✅ Sitemap generator exists\n✅ Robots.txt generator exists\n✅ SEO validation complete: 5 components validated, 0 errors\n",
+      "error": ""
+    }
+  },
+  "summary": {
+    "totalTests": 6,
+    "passed": 3,
+    "failed": 3,
+    "duration": 9140,
+    "successRate": "50.0",
+    "overallStatus": "FAILED"
+  }
+}

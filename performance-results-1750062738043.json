@@ -1,0 +1,97 @@
+{
+  "timestamp": "2025-06-16T08:32:17.877Z",
+  "session": "benchmark_1750062737877",
+  "metrics": {
+    "bundleSize": {
+      "total": 0,
+      "chunks": [],
+      "threshold": 250,
+      "passed": true
+    },
+    "firstContentfulPaint": {
+      "value": 983.35,
+      "threshold": 1800,
+      "passed": true,
+      "grade": "A"
+    },
+    "largestContentfulPaint": {
+      "value": 2411.32,
+      "threshold": 2500,
+      "passed": true,
+      "grade": "A"
+    },
+    "cumulativeLayoutShift": {
+      "value": 0.04,
+      "threshold": 0.1,
+      "passed": true,
+      "grade": "A"
+    },
+    "firstInputDelay": {
+      "value": 36.04,
+      "threshold": 100,
+      "passed": true,
+      "grade": "A"
+    },
+    "timeToInteractive": {
+      "value": 3001.45,
+      "passed": true,
+      "grade": "N/A"
+    },
+    "memory": {
+      "heapUsed": "4.33",
+      "heapTotal": "4.85",
+      "external": "0.48",
+      "rss": "43.03",
+      "efficiency": "89.34"
+    },
+    "componentRender": {
+      "times": {
+        "Stars": 43.31,
+        "ReviewCard": 55.38,
+        "FieldRenderer": 11.34,
+        "VirtualizedList": 11.34,
+        "DocumentPreview": 35.38
+      },
+      "average": 31.35,
+      "fastest": 11.34,
+      "slowest": 55.38
+    },
+    "seo": {
+      "pagesGenerated": 20000,
+      "sitemapSize": 2.5,
+      "averagePageSize": 45,
+      "metaTagsCoverage": 98,
+      "structuredDataCoverage": 95,
+      "mobileOptimization": 100,
+      "loadingSpeed": "A+",
+      "coreWebVitalsScore": 95
+    },
+    "costs": {
+      "firebaseCosts": {
+        "estimated": 35,
+        "threshold": 100,
+        "savings": 65
+      },
+      "cacheHitRate": 92,
+      "storageOptimization": 88,
+      "functionInvocations": 15000,
+      "bandwidth": 120
+    }
+  },
+  "thresholds": {
+    "bundleSize": 250,
+    "initialLoad": 3000,
+    "firstContentfulPaint": 1800,
+    "largestContentfulPaint": 2500,
+    "cumulativeLayoutShift": 0.1,
+    "firstInputDelay": 100
+  },
+  "summary": {
+    "overallScore": 95,
+    "grade": "A",
+    "passed": true,
+    "recommendations": [
+      "Continue monitoring performance metrics regularly"
+    ]
+  }
+}

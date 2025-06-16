@@ -1,95 +1,242 @@
-# Vehicle Bill of Sale
+# General Affidavit
 
 ---
 
-This Vehicle Bill of Sale ("Agreement") is made and entered into on **{{sale_date}}**, by and between:
+**GENERAL AFFIDAVIT**
 
-- **Seller:** {{seller_name}}, of {{seller_address}}
-- **Buyer:** {{buyer_name}}, of {{buyer_address}}
-
-Collectively referred to herein as the “Parties.”
+**State of {{state}}**  
+**County of {{county}}**
 
 ---
 
-## 1. Vehicle Description
+## 1. Affiant Information
 
-The Seller hereby sells to the Buyer, and the Buyer hereby purchases from the Seller, the following motor vehicle (the “Vehicle”):
+I, **{{affiant_name}}**, being duly sworn, depose and state as follows:
 
-| Field                               | Description        |
-| ----------------------------------- | ------------------ |
-| Year                                | {{year}}           |
-| Make                                | {{make}}           |
-| Model                               | {{model}}          |
-| Color                               | {{color}}          |
-| Vehicle Identification Number (VIN) | {{vin}}            |
-| Odometer Reading                    | {{odometer}} miles |
+**Affiant's Information:**
+- **Full Name:** {{affiant_name}}
+- **Address:** {{affiant_address}}
+- **Date of Birth:** {{affiant_dob}}
+- **Occupation:** {{affiant_occupation}}
+- **Phone:** {{affiant_phone}}
 
-## 2. Purchase Price & Payment
+---
 
-1. **Sale Price:** The total purchase price is **${{price}}** (U.S. Dollars).
-2. **Payment Method:** {{payment_method}} (e.g., Cash, Check, Wire Transfer).
-3. **Payment Date:** Payment was made in full on **{{sale_date}}**.
+## 2. Purpose of Affidavit
 
-## 3. Condition of Vehicle
+This Affidavit is made for the following purpose:
+{{affidavit_purpose}}
 
-{{#if as_is}}
-The Buyer acknowledges that the Vehicle is sold **"AS-IS"**, without any warranties or guarantees, express or implied, including but not limited to any implied warranty of merchantability or fitness for a particular purpose.
+**Related Matter:** {{related_matter}}  
+**Case Number (if applicable):** {{case_number}}
+
+---
+
+## 3. Statement of Facts
+
+### 3.1 Personal Knowledge
+I have personal knowledge of the facts stated in this Affidavit, and if called upon to testify, I could competently testify to the truth of the matters stated herein.
+
+### 3.2 Factual Statements
+{{#if numbered_facts}}
+1. {{fact_1}}
+
+2. {{fact_2}}
+
+3. {{fact_3}}
+
+4. {{fact_4}}
+
+5. {{fact_5}}
+
+{{additional_numbered_facts}}
 {{else}}
-**Limited Warranty.** The Seller warrants the Vehicle under the following terms:
-{{warranty_text}}
+**Statement of Facts:**
+{{factual_narrative}}
 {{/if}}
 
-## 4. Representations & Warranties of Seller
-
-The Seller represents and warrants that:
-
-1. The Seller is the lawful owner of the Vehicle and has full authority to sell it.
-2. The Vehicle is free and clear of all liens, encumbrances, and security interests except as disclosed:
-   - {{existing_liens}}
-3. To the best of the Seller’s knowledge, the odometer reading is accurate.
-
-## 5. Governing Law
-
-This Agreement shall be governed by and construed in accordance with the laws of the State of **{{state}}**.
-
-## 6. Signatures
-
-**IN WITNESS WHEREOF**, the Parties have executed this Agreement as of the date first written above.
-
-| Seller Signature                                   | Date                   |
-| -------------------------------------------------- | ---------------------- |
-| **********\_\_\_\_**********                       | **********\_********** |
-| ({{seller_name}})                                  |                        |
-| {{#if seller_phone}}Phone: {{seller_phone}}{{/if}} |                        |
-
-{{#if seller2_name}}
-| **********\_\_\_\_**********| **********\_**********|
-| ({{seller2_name}}) | |
-| {{#if seller2_phone}}Phone: {{seller2_phone}}{{/if}} | |
+### 3.3 Supporting Information
+{{#if supporting_documents}}
+**Supporting Documents:** The following documents are attached and incorporated by reference:
+{{supporting_document_list}}
 {{/if}}
 
-| Buyer Signature                                  | Date                   |
-| ------------------------------------------------ | ---------------------- |
-| **********\_\_\_\_**********                     | **********\_********** |
-| ({{buyer_name}})                                 |                        |
-| {{#if buyer_phone}}Phone: {{buyer_phone}}{{/if}} |                        |
-
-{{#if buyer2_name}}
-| **********\_\_\_\_**********| **********\_**********|
-| ({{buyer2_name}}) | |
-| {{#if buyer2_phone}}Phone: {{buyer2_phone}}{{/if}} | |
+{{#if witness_information}}
+**Witnesses Present:** {{witness_information}}
 {{/if}}
-
-### Notary Acknowledgment
-
-State of **{{state}}**
-County of **{{county}}**
-
-On this **\_\_\_\_** day of ********\_\_******, 20\_\_**, before me, the undersigned, a Notary Public in and for said State, personally appeared **{{seller_name}}** and **{{buyer_name}}**, personally known to me (or proved to me on the basis of satisfactory evidence) to be the persons whose names are subscribed to this Agreement and acknowledged that they executed the same for the purposes therein contained.
-
-**Notary Public:** ************\_\_************
-My Commission Expires: ******\_\_******
 
 ---
 
-_Template generated by 123 LegalDoc. Replace bracketed fields with actual data._
+## 4. Circumstances and Context
+
+### 4.1 Date and Time of Events
+**Date(s) of Relevant Events:** {{event_dates}}  
+**Time(s) of Relevant Events:** {{event_times}}  
+**Location(s) of Relevant Events:** {{event_locations}}
+
+### 4.2 Relationship to Matter
+**My Relationship to This Matter:** {{relationship_to_matter}}
+
+### 4.3 How I Obtained Knowledge
+**Source of Knowledge:** {{knowledge_source}}
+
+---
+
+## 5. Additional Declarations
+
+### 5.1 Memory and Mental State
+I was mentally competent and of sound mind during the events described herein, and my memory of these events is clear and accurate.
+
+### 5.2 No Compensation
+{{#if no_compensation}}
+I am not being compensated or promised any benefit for making this Affidavit.
+{{else}}
+**Compensation/Interest:** {{compensation_details}}
+{{/if}}
+
+### 5.3 No Coercion
+I am making this Affidavit voluntarily, without coercion, duress, or undue influence from any person.
+
+---
+
+## 6. Verification and Oath
+
+### 6.1 Truth and Accuracy
+I declare under penalty of perjury that the foregoing statements are true and correct to the best of my knowledge, information, and belief.
+
+### 6.2 Complete Disclosure
+I have disclosed all material facts known to me regarding this matter and have not withheld any relevant information.
+
+### 6.3 Updates or Corrections
+{{#if corrections_needed}}
+**Corrections to Previous Statements:** {{corrections_details}}
+{{else}}
+This Affidavit supersedes any previous statements I may have made regarding this matter.
+{{/if}}
+
+---
+
+## 7. Attachments and Exhibits
+
+{{#if has_attachments}}
+The following items are attached to and made part of this Affidavit:
+
+**Exhibit A:** {{exhibit_a_description}}  
+**Exhibit B:** {{exhibit_b_description}}  
+**Exhibit C:** {{exhibit_c_description}}  
+{{additional_exhibits}}
+{{else}}
+No attachments are included with this Affidavit.
+{{/if}}
+
+---
+
+## 8. Legal Consequences Notice
+
+I understand that:
+- This Affidavit may be used in legal proceedings
+- False statements made herein may subject me to penalties for perjury
+- This Affidavit has the same force and effect as if given under oath in open court
+- I may be called to testify regarding the matters stated herein
+
+---
+
+## 9. Affiant's Signature
+
+**EXECUTED** on **{{execution_date}}** at {{execution_location}}.
+
+**AFFIANT:**
+
+| Signature | Date |
+|-----------|------|
+| _________________________________ | {{execution_date}} |
+| {{affiant_name}} | |
+| Print Name: {{affiant_name}} | |
+
+---
+
+## 10. Notarization
+
+**SUBSCRIBED AND SWORN** to before me this **{{execution_date}}** by {{affiant_name}}, who proved to me on the basis of satisfactory evidence to be the person who appeared before me.
+
+**State of {{state}}**  
+**County of {{county}}**
+
+I certify under PENALTY OF PERJURY under the laws of the State of {{state}} that the foregoing paragraph is true and correct.
+
+**WITNESS** my hand and official seal.
+
+**Notary Public:** _________________________________  
+**My Commission Expires:** _________________________
+
+**[Notary Seal]**
+
+{{#if witnesses_present}}
+---
+
+## 11. Witnesses
+
+**WITNESS 1:**
+
+I witnessed the signing of this Affidavit by {{affiant_name}}.
+
+| Signature | Date |
+|-----------|------|
+| _________________________________ | {{execution_date}} |
+| {{witness_1_name}} | |
+| Address: {{witness_1_address}} | |
+
+**WITNESS 2:**
+
+I witnessed the signing of this Affidavit by {{affiant_name}}.
+
+| Signature | Date |
+|-----------|------|
+| _________________________________ | {{execution_date}} |
+| {{witness_2_name}} | |
+| Address: {{witness_2_address}} | |
+{{/if}}
+
+---
+
+## 12. Certificate of Service (if applicable)
+
+{{#if service_required}}
+I hereby certify that a true and correct copy of this Affidavit was served upon the following parties on {{service_date}}:
+
+**Service Method:** {{service_method}} (Hand delivery/Certified mail/Email/Other)
+
+**Parties Served:**
+{{parties_served}}
+
+**Served by:** {{served_by_name}}  
+**Date of Service:** {{service_date}}
+
+| Signature of Person Serving | Date |
+|----------------------------|------|
+| _________________________________ | {{service_date}} |
+| {{served_by_name}} | |
+{{/if}}
+
+---
+
+## 13. Attorney Information (if applicable)
+
+{{#if attorney_prepared}}
+**Prepared by Attorney:**
+
+**Attorney Name:** {{attorney_name}}  
+**State Bar Number:** {{attorney_bar_number}}  
+**Law Firm:** {{law_firm_name}}  
+**Address:** {{attorney_address}}  
+**Phone:** {{attorney_phone}}  
+**Email:** {{attorney_email}}
+
+**Attorney for:** {{attorney_represents}}
+{{/if}}
+
+---
+
+**IMPORTANT LEGAL NOTICE:** This general affidavit should be reviewed by qualified legal counsel to ensure it meets the specific requirements for its intended use. Affidavits must be truthful and complete, as false statements may result in perjury charges. The format and requirements for affidavits may vary by jurisdiction and purpose.
+
+*Template generated by 123LegalDoc - Professional Legal Document Platform*

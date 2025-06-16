@@ -1,0 +1,16 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+# Run template verification before committing
+echo "🔍 Verifying legal document templates..."
+npm run verify-templates
+
+# If verification fails, prevent commit
+if [ $? -ne 0 ]; then
+  echo "❌ Template verification failed. Please fix the issues before committing."
+  exit 1
+fi
+
+# Run existing pre-commit checks
+npm run lint-staged
+npm run type-check
