@@ -26,7 +26,7 @@ export default function MobileDocsAccordion({ categories, documents, onLinkClick
 
   return (
     <div className="divide-y border-t border-gray-200">
-      {categories.map((cat) => {
+      {(categories || []).map((cat) => {
         const docs = docsForCategory(cat.key);
         if (docs.length === 0) return null;
         const label = t(cat.labelKey, { defaultValue: cat.key });

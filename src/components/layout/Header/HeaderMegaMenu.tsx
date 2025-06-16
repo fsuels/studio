@@ -11,8 +11,8 @@ import {
 } from '@/components/ui/popover';
 import { LayoutGrid, ChevronDown, ChevronUp } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { ProgressiveLoader } from '@/components/ui/progressive-loader';
-import { MegaMenuSkeleton } from '@/components/ui/skeleton-variants';
+import { ProgressiveLoader } from '@/components/ui/ProgressiveLoader';
+import { MegaMenuSkeleton } from '@/components/ui/SkeletonVariants';
 
 interface HeaderMegaMenuProps {
   clientLocale: 'en' | 'es';

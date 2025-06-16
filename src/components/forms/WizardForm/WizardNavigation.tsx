@@ -4,7 +4,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
-import { TouchButton } from '@/components/ui/touch-interactions';
+import { TouchButton } from '@/components/ui/TouchInteractions';
 import { Loader2, Save } from 'lucide-react';
 
 interface WizardNavigationProps {

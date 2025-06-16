@@ -6,8 +6,8 @@ import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { Menu as MenuIcon, X as CloseIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { ProgressiveLoader } from '@/components/ui/progressive-loader';
-import { MobileNavigation, MobileNavigationSkeleton } from '@/components/ui/mobile-navigation';
+import { ProgressiveLoader } from '@/components/ui/ProgressiveLoader';
+import { MobileNavigation, MobileNavigationSkeleton } from '@/components/ui/MobileNavigation';
 
 interface HeaderMobileMenuProps {
   clientLocale: 'en' | 'es';

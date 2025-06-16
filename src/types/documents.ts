@@ -87,3 +87,9 @@ export type LegalDocument = {
   templatePath?: string; // Fallback for English if templatePaths.en is not set
   templatePath_es?: string; // Fallback for Spanish if templatePaths.es is not set
 };
+
+// Type for document metadata (everything except schema and questions)
+export type DocumentMetadata = Omit<LegalDocument, 'schema' | 'questions'>;
+
+// Alias for backward compatibility
+export type QuestionConfig = Question;

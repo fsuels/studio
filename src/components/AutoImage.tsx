@@ -62,7 +62,7 @@ const AutoImage: React.FC<AutoImageProps> = ({
     }
   }, [width, height, props.src]);
 
-  const finalWidth =
+  let finalWidth =
     (typeof width === 'string' ? parseInt(width, 10) : width) ??
     dims?.width ??
     400;
@@ -124,7 +124,6 @@ const AutoImage: React.FC<AutoImageProps> = ({
         alt={alt}
         placeholder={placeholder}
         blurDataURL={defaultBlurDataURL}
-        loading={lazy ? 'lazy' : 'eager'}
         onLoad={handleLoad}
         onError={handleError}
         className={cn(

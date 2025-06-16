@@ -15,7 +15,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { saveFormProgress } from '@/lib/firestore/saveFormProgress';
 import type { LegalDocument } from '@/lib/document-library';
-import { WizardSkeleton } from '@/components/ui/skeleton-variants';
+import { WizardSkeleton } from '@/components/ui/SkeletonVariants';
 
 import { useWizardSteps, calculateProgress } from './WizardStepManager';
 import WizardProgress from './WizardProgress';

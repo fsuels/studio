@@ -17,7 +17,7 @@ import {
   LogOut,
   UserCircle,
 } from 'lucide-react';
-import { UserMenuSkeleton } from '@/components/ui/skeleton-variants';
+import { UserMenuSkeleton } from '@/components/ui/SkeletonVariants';
 
 interface HeaderUserMenuProps {
   clientLocale: 'en' | 'es';

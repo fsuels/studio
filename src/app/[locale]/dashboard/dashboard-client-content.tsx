@@ -26,7 +26,7 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+} from '@/components/ui/DropdownMenu';
 import RenameModal from './modals/RenameModal';
 import FolderModal from './modals/FolderModal';
 import MoveToFolderModal from './modals/MoveToFolderModal';

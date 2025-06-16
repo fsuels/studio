@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 import type { LegalDocument } from '@/lib/document-library'; // Use the re-exported type
 import type { CategoryInfo } from '@/components/workflow/Step1DocumentSelector';
-import { ScrollArea } from '@/components/ui/scroll-area';
+import { ScrollArea } from '@/components/ui/ScrollArea';
 import { FileText } from 'lucide-react';
 import {
   Accordion,
@@ -83,13 +83,13 @@ export default function MegaMenuContent({
     );
   };
 
-  const hasContent = categories.some(
+  const hasContent = (categories || []).some(
     (category) => getDocumentsForCategory(category.key).length > 0,
   );
 
   const [openMap, setOpenMap] = React.useState<Record<string, boolean>>(() => {
     const map: Record<string, boolean> = {};
-    categories.forEach((cat) => {
+    (categories || []).forEach((cat) => {
       map[cat.key] = defaultOpenCategories.includes(cat.key);
     });
     return map;

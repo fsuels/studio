@@ -149,6 +149,10 @@ export function findMatchingDocuments(
   })
 }
 
+export function search(query: string, lang: 'en' | 'es', state?: string): LegalDocument[] {
+  return findMatchingDocuments(query, lang, state);
+}
+
 const defaultDocumentLibrary = getDocumentsForCountry('us')
 export default defaultDocumentLibrary
 export { defaultDocumentLibrary as documentLibrary }
