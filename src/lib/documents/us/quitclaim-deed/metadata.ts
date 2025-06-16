@@ -2,6 +2,10 @@ import type { LegalDocumentMetadata } from '@/types/documents';
 
 export const quitclaimDeedMetadata: LegalDocumentMetadata = {
   category: 'Real Estate',
+  templatePaths: {
+    en: '/templates/en/quitclaim-deed.md',
+    es: '/templates/es/quitclaim-deed.md'
+  },
   translations: {
     en: {
       name: 'Quitclaim Deed',

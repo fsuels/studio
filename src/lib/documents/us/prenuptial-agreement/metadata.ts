@@ -2,6 +2,10 @@ import type { LegalDocumentMetadata } from '@/types/documents';
 
 export const prenuptialAgreementMetadata: LegalDocumentMetadata = {
   category: 'Family',
+  templatePaths: {
+    en: '/templates/en/prenuptial-agreement.md',
+    es: '/templates/es/prenuptial-agreement.md'
+  },
   translations: {
     en: {
       name: 'Prenuptial Agreement',

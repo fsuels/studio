@@ -2,6 +2,10 @@ import type { LegalDocumentMetadata } from '@/types/documents';
 
 export const serviceAgreementMetadata: LegalDocumentMetadata = {
   category: 'Business',
+  templatePaths: {
+    en: '/templates/en/service-agreement.md',
+    es: '/templates/es/service-agreement.md'
+  },
   translations: {
     en: {
       name: 'Service Agreement',

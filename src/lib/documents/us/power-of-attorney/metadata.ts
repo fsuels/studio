@@ -3,6 +3,10 @@ import type { LegalDocumentMetadata } from '@/types/documents';
 export const powerOfAttorneyMetadata: LegalDocumentMetadata = {
   jurisdiction: 'US',
   category: 'Personal',
+  templatePaths: {
+    en: '/templates/en/power-of-attorney.md',
+    es: '/templates/es/power-of-attorney.md'
+  },
   languageSupport: ['en', 'es'],
   requiresNotarization: true,
   canBeRecorded: false,

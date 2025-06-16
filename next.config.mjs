@@ -10,6 +10,35 @@ const nextConfig = {
   typescript: { ignoreBuildErrors: false },
   eslint:       { ignoreDuringBuilds: false },
 
+  /* Performance budgets and optimization */
+  experimental: {
+    bundlePagesRouterDependencies: true,
+    optimizePackageImports: ['@radix-ui/react-icons', 'lucide-react'],
+  },
+  
+  /* Bundle analysis configuration */
+  webpack: (config, { dev, isServer }) => {
+    // Bundle analyzer in development
+    if (dev && !isServer && process.env.ANALYZE === 'true') {
+      const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+      config.plugins.push(
+        new BundleAnalyzerPlugin({
+          analyzerMode: 'server',
+          openAnalyzer: true,
+        })
+      );
+    }
+    
+    // Performance budgets
+    config.performance = {
+      maxAssetSize: 300000, // 300KB
+      maxEntrypointSize: 300000, // 300KB
+      hints: dev ? false : 'warning',
+    };
+    
+    return config;
+  },
+
   /* —──────── Static-export image handling —──────── */
   images: {
     unoptimized: true, // Required for static export
