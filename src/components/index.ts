@@ -61,36 +61,5 @@ export * from './mobile';
 // Re-engagement Components
 export * from './reengagement';
 
-// Standalone Components (exported individually)
-export { default as ActivityTicker } from './ActivityTicker';
-export { default as AnnouncementBar } from './AnnouncementBar';
-export { default as AuthModal } from './AuthModal';
-export { default as AutoImage } from './AutoImage';
-export { default as BundleSlider } from './BundleSlider';
-export { default as BundlesCarousel } from './BundlesCarousel';
-export { default as Carousel } from './Carousel';
-export { default as CarouselNavArrow } from './CarouselNavArrow';
-export { default as CartDrawer } from './CartDrawer';
-export { default as ClauseTooltip } from './ClauseTooltip';
-export { default as ContactFormButton } from './ContactFormButton';
-export { default as GooglePlacesLoader } from './GooglePlacesLoader';
-export { default as Home } from './Home';
-export { default as LanguageSwitcher } from './LanguageSwitcher';
-export { default as LazyOnView } from './LazyOnView';
-export { default as MiniCartDrawer } from './MiniCartDrawer';
-export { default as Nav } from './Nav';
-export { default as PaymentModal } from './PaymentModal';
-export { default as PersonalizationBlock } from './PersonalizationBlock';
-export { default as ProfileSettings } from './ProfileSettings';
-export { default as RecentDocs } from './RecentDocs';
-export { default as ReviewCard } from './ReviewCard';
-export { default as SignwellHeroAnimation } from './SignwellHeroAnimation';
-export { default as SmartAssistantBar } from './SmartAssistantBar';
-export { default as StickyFilterBar } from './StickyFilterBar';
-export { default as StickyGuaranteeBar } from './StickyGuaranteeBar';
-export { default as StickyMobileCTA } from './StickyMobileCTA';
-export { default as SupportContent } from './SupportContent';
-export { default as TestimonialsCarousel } from './TestimonialsCarousel';
-export { default as TopDocsChips } from './TopDocsChips';
-export { default as TrustBadges } from './TrustBadges';
-export { default as VehicleBillOfSalePageClientWrapper } from './VehicleBillOfSalePageClientWrapper';
+// All standalone components are now organized within their respective categories
+// They can be imported through the category barrel exports above

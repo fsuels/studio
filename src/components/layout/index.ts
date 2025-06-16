@@ -4,6 +4,7 @@ export { default as Header } from './Header';
 export { default as Layout } from './Layout';
 export { default as Logo } from './Logo';
 export { default as MobileDrawer } from './MobileDrawer';
+export { default as Home } from './Home';
 
 // Landing page components (moved into layout)
 export * from './landing';
