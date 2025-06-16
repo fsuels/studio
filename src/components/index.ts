@@ -61,5 +61,8 @@ export * from './mobile';
 // Re-engagement Components
 export * from './reengagement';
 
+// SEO Components
+export * from './seo';
+
 // All standalone components are now organized within their respective categories
 // They can be imported through the category barrel exports above

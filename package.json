@@ -25,7 +25,11 @@
     "generate:doc": "tsx scripts/generate-doc.ts",
     "seed:user": "tsx scripts/seedUser.ts",
     "preview": "npm run build && npm run export && firebase hosting:channel:deploy dev",
-    "analyze": "ANALYZE=true npm run dev"
+    "analyze": "ANALYZE=true npm run dev",
+    "verify-templates": "tsx scripts/verify-templates.ts",
+    "monitor-templates": "tsx scripts/template-monitor.ts",
+    "fix-templates": "tsx scripts/auto-fix-templates.ts",
+    "template-report": "tsx scripts/verify-templates.ts --report-only"
   },
   "dependencies": {
     "@genkit-ai/googleai": "^1.6.2",

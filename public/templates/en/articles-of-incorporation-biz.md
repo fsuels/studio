@@ -1,95 +1,323 @@
-# Vehicle Bill of Sale
+# Articles of Incorporation (Business)
 
 ---
 
-This Vehicle Bill of Sale ("Agreement") is made and entered into on **{{sale_date}}**, by and between:
+**ARTICLES OF INCORPORATION**
 
-- **Seller:** {{seller_name}}, of {{seller_address}}
-- **Buyer:** {{buyer_name}}, of {{buyer_address}}
-
-Collectively referred to herein as the “Parties.”
+**Submitted to the Secretary of State of {{state}}**
 
 ---
 
-## 1. Vehicle Description
+## 1. Corporate Name
 
-The Seller hereby sells to the Buyer, and the Buyer hereby purchases from the Seller, the following motor vehicle (the “Vehicle”):
+The name of the corporation is:
 
-| Field                               | Description        |
-| ----------------------------------- | ------------------ |
-| Year                                | {{year}}           |
-| Make                                | {{make}}           |
-| Model                               | {{model}}          |
-| Color                               | {{color}}          |
-| Vehicle Identification Number (VIN) | {{vin}}            |
-| Odometer Reading                    | {{odometer}} miles |
+**{{corporation_name}}**
 
-## 2. Purchase Price & Payment
+{{#if name_reservation}}
+This name has been reserved under Reservation Number {{reservation_number}} dated {{reservation_date}}.
+{{/if}}
 
-1. **Sale Price:** The total purchase price is **${{price}}** (U.S. Dollars).
-2. **Payment Method:** {{payment_method}} (e.g., Cash, Check, Wire Transfer).
-3. **Payment Date:** Payment was made in full on **{{sale_date}}**.
+---
 
-## 3. Condition of Vehicle
+## 2. Registered Office and Agent
 
-{{#if as_is}}
-The Buyer acknowledges that the Vehicle is sold **"AS-IS"**, without any warranties or guarantees, express or implied, including but not limited to any implied warranty of merchantability or fitness for a particular purpose.
+### 2.1 Registered Office
+The street address of the registered office is:
+{{registered_office_address}}
+
+### 2.2 Registered Agent
+The name of the registered agent at the registered office is:
+**{{registered_agent_name}}**
+
+{{#if registered_agent_entity}}
+**Registered Agent Entity:** {{registered_agent_entity_name}}
+{{/if}}
+
+The registered agent accepts appointment as registered agent for this corporation.
+
+---
+
+## 3. Purpose and Powers
+
+### 3.1 General Purpose
+The purpose for which this corporation is organized is:
+{{#if general_purpose}}
+To engage in any lawful act or activity for which corporations may be organized under the {{state}} Business Corporation Act.
 {{else}}
-**Limited Warranty.** The Seller warrants the Vehicle under the following terms:
-{{warranty_text}}
+**Specific Purpose:** {{specific_purpose}}
 {{/if}}
 
-## 4. Representations & Warranties of Seller
+### 3.2 Specific Business Activities
+The corporation is organized to engage in the following business activities:
+{{business_activities}}
 
-The Seller represents and warrants that:
-
-1. The Seller is the lawful owner of the Vehicle and has full authority to sell it.
-2. The Vehicle is free and clear of all liens, encumbrances, and security interests except as disclosed:
-   - {{existing_liens}}
-3. To the best of the Seller’s knowledge, the odometer reading is accurate.
-
-## 5. Governing Law
-
-This Agreement shall be governed by and construed in accordance with the laws of the State of **{{state}}**.
-
-## 6. Signatures
-
-**IN WITNESS WHEREOF**, the Parties have executed this Agreement as of the date first written above.
-
-| Seller Signature                                   | Date                   |
-| -------------------------------------------------- | ---------------------- |
-| **********\_\_\_\_**********                       | **********\_********** |
-| ({{seller_name}})                                  |                        |
-| {{#if seller_phone}}Phone: {{seller_phone}}{{/if}} |                        |
-
-{{#if seller2_name}}
-| **********\_\_\_\_**********| **********\_**********|
-| ({{seller2_name}}) | |
-| {{#if seller2_phone}}Phone: {{seller2_phone}}{{/if}} | |
-{{/if}}
-
-| Buyer Signature                                  | Date                   |
-| ------------------------------------------------ | ---------------------- |
-| **********\_\_\_\_**********                     | **********\_********** |
-| ({{buyer_name}})                                 |                        |
-| {{#if buyer_phone}}Phone: {{buyer_phone}}{{/if}} |                        |
-
-{{#if buyer2_name}}
-| **********\_\_\_\_**********| **********\_**********|
-| ({{buyer2_name}}) | |
-| {{#if buyer2_phone}}Phone: {{buyer2_phone}}{{/if}} | |
-{{/if}}
-
-### Notary Acknowledgment
-
-State of **{{state}}**
-County of **{{county}}**
-
-On this **\_\_\_\_** day of ********\_\_******, 20\_\_**, before me, the undersigned, a Notary Public in and for said State, personally appeared **{{seller_name}}** and **{{buyer_name}}**, personally known to me (or proved to me on the basis of satisfactory evidence) to be the persons whose names are subscribed to this Agreement and acknowledged that they executed the same for the purposes therein contained.
-
-**Notary Public:** ************\_\_************
-My Commission Expires: ******\_\_******
+### 3.3 Powers
+The corporation shall have all powers granted to corporations under the laws of {{state}}, including but not limited to the power to:
+- Conduct business and carry on operations
+- Purchase, lease, or otherwise acquire property
+- Sell, convey, mortgage, or otherwise dispose of property
+- Borrow money and issue bonds, notes, and other obligations
+- Lend money and invest funds
+- Enter into contracts and agreements
+- Sue and be sued in its corporate name
 
 ---
 
-_Template generated by 123 LegalDoc. Replace bracketed fields with actual data._
+## 4. Capital Stock
+
+### 4.1 Authorized Shares
+The total number of shares of stock that the corporation is authorized to issue is:
+**{{total_authorized_shares}}** shares
+
+### 4.2 Classes of Stock
+{{#if multiple_stock_classes}}
+The corporation is authorized to issue the following classes of stock:
+
+**Class A Common Stock:**
+- Number of Shares: {{class_a_shares}}
+- Par Value: ${{class_a_par_value}} per share
+- Rights and Privileges: {{class_a_rights}}
+
+**Class B Common Stock:**
+- Number of Shares: {{class_b_shares}}
+- Par Value: ${{class_b_par_value}} per share
+- Rights and Privileges: {{class_b_rights}}
+
+{{#if preferred_stock}}
+**Preferred Stock:**
+- Number of Shares: {{preferred_shares}}
+- Par Value: ${{preferred_par_value}} per share
+- Rights and Privileges: {{preferred_rights}}
+{{/if}}
+{{else}}
+**Common Stock:**
+- Number of Shares: {{common_shares}}
+- Par Value: {{#if par_value}}${{par_value}} per share{{else}}No par value{{/if}}
+{{/if}}
+
+### 4.3 Stock Rights and Restrictions
+{{stock_rights_restrictions}}
+
+---
+
+## 5. Incorporators
+
+The name(s) and address(es) of the incorporator(s) is/are:
+
+**Incorporator 1:**
+**Name:** {{incorporator_1_name}}
+**Address:** {{incorporator_1_address}}
+**Signature:** _________________________________
+
+{{#if incorporator_2_name}}
+**Incorporator 2:**
+**Name:** {{incorporator_2_name}}
+**Address:** {{incorporator_2_address}}
+**Signature:** _________________________________
+{{/if}}
+
+{{#if incorporator_3_name}}
+**Incorporator 3:**
+**Name:** {{incorporator_3_name}}
+**Address:** {{incorporator_3_address}}
+**Signature:** _________________________________
+{{/if}}
+
+---
+
+## 6. Initial Directors
+
+{{#if initial_directors_named}}
+The name(s) and address(es) of the initial director(s) is/are:
+
+**Director 1:**
+**Name:** {{director_1_name}}
+**Address:** {{director_1_address}}
+
+**Director 2:**
+**Name:** {{director_2_name}}
+**Address:** {{director_2_address}}
+
+**Director 3:**
+**Name:** {{director_3_name}}
+**Address:** {{director_3_address}}
+
+{{additional_directors}}
+{{else}}
+The number of initial directors is {{initial_director_count}}, but their names and addresses are not set forth herein. The initial directors will be elected by the incorporators or shareholders in accordance with the bylaws.
+{{/if}}
+
+---
+
+## 7. Principal Office
+
+The street address of the principal office of the corporation is:
+{{principal_office_address}}
+
+**Mailing Address (if different):**
+{{#if different_mailing_address}}
+{{mailing_address}}
+{{else}}
+Same as principal office address
+{{/if}}
+
+---
+
+## 8. Duration
+
+{{#if perpetual_duration}}
+The corporation shall have perpetual existence.
+{{else}}
+The period of duration for the corporation is {{duration_period}}.
+{{/if}}
+
+---
+
+## 9. Additional Provisions
+
+{{#if additional_provisions}}
+### 9.1 Limitation of Director Liability
+{{director_liability_limitation}}
+
+### 9.2 Indemnification
+{{indemnification_provisions}}
+
+### 9.3 Business Combinations
+{{business_combination_provisions}}
+
+### 9.4 Other Provisions
+{{other_provisions}}
+{{else}}
+None.
+{{/if}}
+
+---
+
+## 10. Federal Tax Election
+
+{{#if s_corporation_election}}
+### 10.1 S Corporation Election
+The corporation elects to be treated as an S Corporation for federal tax purposes and will file Form 2553 with the Internal Revenue Service.
+{{/if}}
+
+{{#if close_corporation}}
+### 10.2 Close Corporation Election
+The corporation elects to be treated as a close corporation under {{state}} law.
+{{/if}}
+
+---
+
+## 11. Effective Date
+
+{{#if delayed_effective_date}}
+These Articles of Incorporation shall become effective on {{effective_date}}.
+{{else}}
+These Articles of Incorporation shall become effective upon filing with the Secretary of State.
+{{/if}}
+
+---
+
+## 12. Incorporator Acknowledgment
+
+The undersigned incorporator(s) acknowledge(s) that:
+- The information contained in these Articles of Incorporation is true and correct
+- The corporation has been organized for legitimate business purposes
+- The incorporator(s) have the authority to execute these Articles of Incorporation
+
+---
+
+## 13. Signatures
+
+**IN WITNESS WHEREOF**, the undersigned incorporator(s) have executed these Articles of Incorporation on {{execution_date}}.
+
+**INCORPORATOR SIGNATURES:**
+
+**{{incorporator_1_name}}:**
+
+| Signature | Date |
+|-----------|------|
+| _________________________________ | {{execution_date}} |
+| {{incorporator_1_name}}, Incorporator | |
+
+{{#if incorporator_2_name}}
+**{{incorporator_2_name}}:**
+
+| Signature | Date |
+|-----------|------|
+| _________________________________ | {{execution_date}} |
+| {{incorporator_2_name}}, Incorporator | |
+{{/if}}
+
+{{#if incorporator_3_name}}
+**{{incorporator_3_name}}:**
+
+| Signature | Date |
+|-----------|------|
+| _________________________________ | {{execution_date}} |
+| {{incorporator_3_name}}, Incorporator | |
+{{/if}}
+
+---
+
+## 14. Registered Agent Acceptance
+
+{{#if registered_agent_acceptance_required}}
+I, {{registered_agent_name}}, hereby accept appointment as registered agent for {{corporation_name}}.
+
+**REGISTERED AGENT:**
+
+| Signature | Date |
+|-----------|------|
+| _________________________________ | {{execution_date}} |
+| {{registered_agent_name}} | |
+| Registered Agent | |
+{{/if}}
+
+---
+
+## 15. Filing Information
+
+**For Secretary of State Use Only:**
+
+**Filing Fee:** $__________  
+**File Number:** __________  
+**Filing Date:** __________  
+**Effective Date:** __________
+
+**Filed by:** _________________________  
+**Secretary of State of {{state}}**
+
+---
+
+## 16. Contact Information
+
+**Primary Contact for Corporation:**
+**Name:** {{primary_contact_name}}  
+**Title:** {{primary_contact_title}}  
+**Phone:** {{primary_contact_phone}}  
+**Email:** {{primary_contact_email}}
+
+**Attorney (if applicable):**
+**Name:** {{attorney_name}}  
+**Firm:** {{law_firm_name}}  
+**Phone:** {{attorney_phone}}  
+**Email:** {{attorney_email}}  
+**State Bar Number:** {{attorney_bar_number}}
+
+---
+
+## 17. Required Attachments
+
+{{#if required_attachments}}
+The following documents are attached to these Articles of Incorporation:
+{{attachment_list}}
+{{else}}
+No additional documents are attached.
+{{/if}}
+
+---
+
+**IMPORTANT LEGAL NOTICE:** These Articles of Incorporation should be reviewed by qualified legal counsel to ensure compliance with state corporation laws and specific business requirements. Corporation formation requirements vary by state, and proper legal and tax advice should be obtained before filing. Additional documents such as bylaws, shareholder agreements, and federal tax elections may be necessary to complete the incorporation process.
+
+*Template generated by 123LegalDoc - Professional Legal Document Platform*
