@@ -590,7 +590,7 @@ All documents include:
 
   // Handle general inquiries
   private handleGeneralInquiry(session: ChatSession, message: string): ChatMessage {
-    const content = "I'm here to help with your legal document needs! I can assist with:
+    const content = `I'm here to help with your legal document needs! I can assist with:
 
 • Choosing the right document type
 • Explaining legal terms and concepts
@@ -598,7 +598,7 @@ All documents include:
 • Understanding state-specific requirements
 • Pricing and billing questions
 
-What would you like help with today?";
+What would you like help with today?`;
 
     return {
       id: this.generateMessageId(),

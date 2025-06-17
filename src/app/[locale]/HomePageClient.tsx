@@ -176,7 +176,7 @@ export default function HomePageClient() {
             {/* Search Bar */}
             <div className="mt-8">
               <div className="relative max-w-md">
-                <SearchBar />
+                {/* <SearchBar /> */}
               </div>
               <p className="mt-2 text-sm text-gray-500">
                 {t('home.hero2.trustline', {

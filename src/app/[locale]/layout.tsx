@@ -2,6 +2,7 @@
 
 import type { ReactNode } from 'react'
 import { ClientProviders } from '@/components/providers/ClientProviders'
+import { Layout } from '@/components/layout/Layout'
 
 interface LocaleLayoutProps {
   children: ReactNode
@@ -21,7 +22,9 @@ export default async function LocaleLayout({
 
   return (
     <ClientProviders locale={detectedLocale}>
-      {children}
+      <Layout>
+        {children}
+      </Layout>
     </ClientProviders>
   )
 }

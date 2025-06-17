@@ -1,6 +1,6 @@
 // src/components/layout/Layout.tsx
 import React from 'react';
-import Header from './Header'; // Changed to default import
+import Header from './Header/index'; // Import from Header directory
 import { Footer } from './Footer';
 
 interface LayoutProps {

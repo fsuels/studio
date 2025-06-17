@@ -14,9 +14,8 @@ interface ClientProvidersProps {
   locale: 'en' | 'es';
 }
 
-// Statically import Header and Footer so they are included in the main bundle.
+// Statically import Footer so it is included in the main bundle.
 // This avoids an additional network request on every navigation.
-import Header from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import dynamic from 'next/dynamic';
 
@@ -35,13 +34,11 @@ const AppShell = React.memo(function AppShell({
     setIsMounted(true);
   }, []);
 
-  // AppShell now always renders its main structure without waiting for
-  // dynamic imports of the header and footer.
+  // AppShell now renders child content and global components
+  // The Layout component will handle Header and main structure
   return (
     <>
-      <Header />
-      <main className="flex-grow">{children}</main>
-      <Footer />
+      {children}
       <ContactFormButton />
       <ActivityTicker />
       {/* Conditionally render Toaster only on the client after mount */}

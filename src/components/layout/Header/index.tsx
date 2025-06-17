@@ -4,8 +4,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import { Logo } from '@/components/layout/Logo';
-import Nav from '@/components/Nav';
-import { LanguageSwitcher } from '@/components/LanguageSwitcher';
+import Nav from '@/components/shared/navigation/Nav';
+import LanguageSwitcher from '@/components/shared/navigation/LanguageSwitcher';
 import { cn } from '@/lib/utils';
 
 import HeaderSearch from './HeaderSearch';

@@ -28,7 +28,8 @@
       "Bash(python3:*)",
       "Bash(/home/user/studio/add_ids_final.sh:*)",
       "Bash(rm:*)",
-      "Bash(do echo \"=== $file ===\")"
+      "Bash(do echo \"=== $file ===\")",
+      "Bash(pkill:*)"
     ],
     "deny": []
   }
