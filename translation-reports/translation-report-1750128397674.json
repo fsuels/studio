@@ -1,0 +1,910 @@
+{
+  "timestamp": "2025-06-17T02:46:37.672Z",
+  "summary": {
+    "totalValidated": 52,
+    "totalFallbacks": 45,
+    "totalIssues": 49,
+    "qualityRate": 13
+  },
+  "results": {
+    "affidavit-general": {
+      "confidence": 72,
+      "issues": [
+        "Missing translation for legal term: notarization",
+        "Template variable mismatch between languages"
+      ],
+      "recommendations": [
+        "Consider using: notarización or notariado"
+      ],
+      "shouldFallback": true
+    },
+    "affidavit": {
+      "confidence": 75,
+      "issues": [
+        "Missing translation for legal term: notarization",
+        "Template variable mismatch between languages"
+      ],
+      "recommendations": [
+        "Consider using: notarización or notariado"
+      ],
+      "shouldFallback": true
+    },
+    "articles-of-incorporation-biz": {
+      "confidence": 69,
+      "issues": [
+        "Significant length difference between translations",
+        "Missing translation for legal term: lease",
+        "Template variable mismatch between languages"
+      ],
+      "recommendations": [
+        "Consider using: arrendamiento or alquiler"
+      ],
+      "shouldFallback": true
+    },
+    "articles-of-incorporation": {
+      "confidence": 76,
+      "issues": [
+        "Missing translation for legal term: notarization",
+        "Template variable mismatch between languages"
+      ],
+      "recommendations": [
+        "Consider using: notarización or notariado"
+      ],
+      "shouldFallback": true
+    },
+    "bill-of-sale-vehicle": {
+      "confidence": 93,
+      "issues": [],
+      "recommendations": [],
+      "shouldFallback": false
+    },
+    "boat-bill-of-sale": {
+      "confidence": 75,
+      "issues": [
+        "Missing translation for legal term: notarization",
+        "Template variable mismatch between languages"
+      ],
+      "recommendations": [
+        "Consider using: notarización or notariado"
+      ],
+      "shouldFallback": true
+    },
+    "child-custody-agreement": {
+      "confidence": 67,
+      "issues": [
+        "Significant length difference between translations",
+        "Missing translation for legal term: notarization",
+        "Template variable mismatch between languages"
+      ],
+      "recommendations": [
+        "Consider using: notarización or notariado"
+      ],
+      "shouldFallback": true
+    },
+    "child-medical-consent": {
+      "confidence": 84,
+      "issues": [
+        "Missing translation for legal term: notarization",
+        "Template variable mismatch between languages"
+      ],
+      "recommendations": [
+        "Consider using: notarización or notariado"
+      ],
+      "shouldFallback": false
+    },
+    "commercial-lease-agreement": {
+      "confidence": 47,
+      "issues": [
+        "Significant length difference between translations",
+        "Missing translation for legal term: notarization",
+        "Missing translation for legal term: lease",
+        "Missing translation for legal term: tenant",
+        "Template variable mismatch between languages"
+      ],
+      "recommendations": [
+        "Consider using: notarización or notariado",
+        "Consider using: arrendamiento or alquiler",
+        "Consider using: inquilino or arrendatario"
+      ],
+      "shouldFallback": true
+    },
+    "consignment-agreement": {
+      "confidence": 75,
+      "issues": [
+        "Missing translation for legal term: notarization",
+        "Template variable mismatch between languages"
+      ],
+      "recommendations": [
+        "Consider using: notarización or notariado"
+      ],
+      "shouldFallback": true
+    },
+    "copyright-assignment": {
+      "confidence": 76,
+      "issues": [
+        "Missing translation for legal term: notarization",
+        "Template variable mismatch between languages"
+      ],
+      "recommendations": [
+        "Consider using: notarización or notariado"
+      ],
+      "shouldFallback": true
+    },
+    "demand-letter-payment": {
+      "confidence": 79,
+      "issues": [
+        "Template variable mismatch between languages"
+      ],
+      "recommendations": [],
+      "shouldFallback": true
+    },
+    "demand-letter": {
+      "confidence": 76,
+      "issues": [
+        "Missing translation for legal term: notarization",
+        "Template variable mismatch between languages"
+      ],
+      "recommendations": [
+        "Consider using: notarización or notariado"
+      ],
+      "shouldFallback": true
+    },
+    "divorce-settlement-agreement": {
+      "confidence": 54,
+      "issues": [
+        "Significant length difference between translations",
+        "Missing translation for legal term: notarization",
+        "Missing translation for legal term: lease",
+        "Template variable mismatch between languages"
+      ],
+      "recommendations": [
+        "Consider using: notarización or notariado",
+        "Consider using: arrendamiento or alquiler"
+      ],
+      "shouldFallback": true
+    },
+    "divorce-settlement": {
+      "confidence": 77,
+      "issues": [
+        "Missing translation for legal term: notarization",
+        "Template variable mismatch between languages"
+      ],
+      "recommendations": [
+        "Consider using: notarización or notariado"
+      ],
+      "shouldFallback": true
+    },
+    "employment-contract": {
+      "confidence": 75,
+      "issues": [
+        "Missing translation for legal term: notarization",
+        "Template variable mismatch between languages"
+      ],
+      "recommendations": [
+        "Consider using: notarización or notariado"
+      ],
+      "shouldFallback": true
+    },
+    "employment-offer-letter": {
+      "confidence": 74,
+      "issues": [
+        "Missing translation for legal term: lease",
+        "Template variable mismatch between languages"
+      ],
+      "recommendations": [
+        "Consider using: arrendamiento or alquiler"
+      ],
+      "shouldFallback": true
+    },
+    "employment-termination-letter": {
+      "confidence": 70,
+      "issues": [
+        "Missing translation for legal term: lease",
+        "Template variable mismatch between languages"
+      ],
+      "recommendations": [
+        "Consider using: arrendamiento or alquiler"
+      ],
+      "shouldFallback": true
+    },
+    "eviction-notice": {
+      "confidence": 62,
+      "issues": [
+        "Missing translation for legal term: lease",
+        "Missing translation for legal term: tenant",
+        "Template variable mismatch between languages"
+      ],
+      "recommendations": [
+        "Consider using: arrendamiento or alquiler",
+        "Consider using: inquilino or arrendatario"
+      ],
+      "shouldFallback": true
+    },
+    "general-inquiry": {
+      "confidence": 88,
+      "issues": [
+        "Missing translation for legal term: lease"
+      ],
+      "recommendations": [
+        "Consider using: arrendamiento or alquiler"
+      ],
+      "shouldFallback": false
+    },
+    "healthcare-power-of-attorney": {
+      "confidence": 57,
+      "issues": [
+        "Significant length difference between translations",
+        "Missing translation for legal term: notarization",
+        "Missing translation for legal term: lease",
+        "Template variable mismatch between languages"
+      ],
+      "recommendations": [
+        "Consider using: notarización or notariado",
+        "Consider using: arrendamiento or alquiler"
+      ],
+      "shouldFallback": true
+    },
+    "independent-contractor-agreement": {
+      "confidence": 78,
+      "issues": [
+        "Significant length difference between translations",
+        "Template variable mismatch between languages"
+      ],
+      "recommendations": [],
+      "shouldFallback": true
+    },
+    "invoice": {
+      "confidence": 71,
+      "issues": [
+        "Missing translation for legal term: lease",
+        "Template variable mismatch between languages"
+      ],
+      "recommendations": [
+        "Consider using: arrendamiento or alquiler"
+      ],
+      "shouldFallback": true
+    },
+    "last-will-testament": {
+      "confidence": 68,
+      "issues": [
+        "Significant length difference between translations",
+        "Missing translation for legal term: notarization",
+        "Template variable mismatch between languages"
+      ],
+      "recommendations": [
+        "Consider using: notarización or notariado"
+      ],
+      "shouldFallback": true
+    },
+    "lease-agreement": {
+      "confidence": 98,
+      "issues": [],
+      "recommendations": [],
+      "shouldFallback": false
+    },
+    "leaseAgreement": {
+      "confidence": 58,
+      "issues": [
+        "Significant length difference between translations",
+        "Missing translation for legal term: lease",
+        "Missing translation for legal term: tenant",
+        "Template variable mismatch between languages"
+      ],
+      "recommendations": [
+        "Consider using: arrendamiento or alquiler",
+        "Consider using: inquilino or arrendatario"
+      ],
+      "shouldFallback": true
+    },
+    "licensing-agreement": {
+      "confidence": 76,
+      "issues": [
+        "Missing translation for legal term: notarization",
+        "Template variable mismatch between languages"
+      ],
+      "recommendations": [
+        "Consider using: notarización or notariado"
+      ],
+      "shouldFallback": true
+    },
+    "living-trust": {
+      "confidence": 56,
+      "issues": [
+        "Significant length difference between translations",
+        "Missing translation for legal term: notarization",
+        "Missing translation for legal term: lease",
+        "Template variable mismatch between languages"
+      ],
+      "recommendations": [
+        "Consider using: notarización or notariado",
+        "Consider using: arrendamiento or alquiler"
+      ],
+      "shouldFallback": true
+    },
+    "living-will": {
+      "confidence": 55,
+      "issues": [
+        "Significant length difference between translations",
+        "Missing translation for legal term: notarization",
+        "Missing translation for legal term: lease",
+        "Template variable mismatch between languages"
+      ],
+      "recommendations": [
+        "Consider using: notarización or notariado",
+        "Consider using: arrendamiento or alquiler"
+      ],
+      "shouldFallback": true
+    },
+    "llc-operating-agreement": {
+      "confidence": 75,
+      "issues": [
+        "Missing translation for legal term: notarization",
+        "Template variable mismatch between languages"
+      ],
+      "recommendations": [
+        "Consider using: notarización or notariado"
+      ],
+      "shouldFallback": true
+    },
+    "loan-agreement": {
+      "confidence": 76,
+      "issues": [
+        "Missing translation for legal term: notarization",
+        "Template variable mismatch between languages"
+      ],
+      "recommendations": [
+        "Consider using: notarización or notariado"
+      ],
+      "shouldFallback": true
+    },
+    "medical-consent": {
+      "confidence": 76,
+      "issues": [
+        "Missing translation for legal term: notarization",
+        "Template variable mismatch between languages"
+      ],
+      "recommendations": [
+        "Consider using: notarización or notariado"
+      ],
+      "shouldFallback": true
+    },
+    "nda": {
+      "confidence": 70,
+      "issues": [
+        "Missing translation for legal term: notarization",
+        "Template variable mismatch between languages"
+      ],
+      "recommendations": [
+        "Consider using: notarización or notariado"
+      ],
+      "shouldFallback": true
+    },
+    "non-compete-agreement": {
+      "confidence": 65,
+      "issues": [
+        "Significant length difference between translations",
+        "Missing translation for legal term: notarization",
+        "Template variable mismatch between languages"
+      ],
+      "recommendations": [
+        "Consider using: notarización or notariado"
+      ],
+      "shouldFallback": true
+    },
+    "non-disclosure-agreement": {
+      "confidence": 75,
+      "issues": [
+        "Missing translation for legal term: notarization",
+        "Template variable mismatch between languages"
+      ],
+      "recommendations": [
+        "Consider using: notarización or notariado"
+      ],
+      "shouldFallback": true
+    },
+    "offer-letter": {
+      "confidence": 76,
+      "issues": [
+        "Missing translation for legal term: notarization",
+        "Template variable mismatch between languages"
+      ],
+      "recommendations": [
+        "Consider using: notarización or notariado"
+      ],
+      "shouldFallback": true
+    },
+    "operating-agreement": {
+      "confidence": 78,
+      "issues": [
+        "Significant length difference between translations",
+        "Template variable mismatch between languages"
+      ],
+      "recommendations": [],
+      "shouldFallback": true
+    },
+    "partnership-agreement": {
+      "confidence": 64,
+      "issues": [
+        "Significant length difference between translations",
+        "Missing translation for legal term: notarization",
+        "Template variable mismatch between languages"
+      ],
+      "recommendations": [
+        "Consider using: notarización or notariado"
+      ],
+      "shouldFallback": true
+    },
+    "power-of-attorney": {
+      "confidence": 88,
+      "issues": [
+        "Missing translation for legal term: lease"
+      ],
+      "recommendations": [
+        "Consider using: arrendamiento or alquiler"
+      ],
+      "shouldFallback": false
+    },
+    "powerOfAttorney": {
+      "confidence": 60,
+      "issues": [
+        "Missing translation for legal term: notarization",
+        "Missing translation for legal term: lease",
+        "Template variable mismatch between languages"
+      ],
+      "recommendations": [
+        "Consider using: notarización or notariado",
+        "Consider using: arrendamiento or alquiler"
+      ],
+      "shouldFallback": true
+    },
+    "prenuptial-agreement": {
+      "confidence": 67,
+      "issues": [
+        "Significant length difference between translations",
+        "Missing translation for legal term: notarization",
+        "Template variable mismatch between languages"
+      ],
+      "recommendations": [
+        "Consider using: notarización or notariado"
+      ],
+      "shouldFallback": true
+    },
+    "promissory-note": {
+      "confidence": 99,
+      "issues": [],
+      "recommendations": [],
+      "shouldFallback": false
+    },
+    "property-deed": {
+      "confidence": 76,
+      "issues": [
+        "Missing translation for legal term: notarization",
+        "Template variable mismatch between languages"
+      ],
+      "recommendations": [
+        "Consider using: notarización or notariado"
+      ],
+      "shouldFallback": true
+    },
+    "purchase-agreement": {
+      "confidence": 76,
+      "issues": [
+        "Missing translation for legal term: notarization",
+        "Template variable mismatch between languages"
+      ],
+      "recommendations": [
+        "Consider using: notarización or notariado"
+      ],
+      "shouldFallback": true
+    },
+    "quitclaim-deed": {
+      "confidence": 50,
+      "issues": [
+        "Missing translation for legal term: notarization",
+        "Missing translation for legal term: lease",
+        "Missing translation for legal term: tenant",
+        "Template variable mismatch between languages"
+      ],
+      "recommendations": [
+        "Consider using: notarización or notariado",
+        "Consider using: arrendamiento or alquiler",
+        "Consider using: inquilino or arrendatario"
+      ],
+      "shouldFallback": true
+    },
+    "rental-agreement": {
+      "confidence": 75,
+      "issues": [
+        "Missing translation for legal term: notarization",
+        "Template variable mismatch between languages"
+      ],
+      "recommendations": [
+        "Consider using: notarización or notariado"
+      ],
+      "shouldFallback": true
+    },
+    "residential-lease-agreement": {
+      "confidence": 75,
+      "issues": [
+        "Missing translation for legal term: notarization",
+        "Template variable mismatch between languages"
+      ],
+      "recommendations": [
+        "Consider using: notarización or notariado"
+      ],
+      "shouldFallback": true
+    },
+    "service-agreement": {
+      "confidence": 79,
+      "issues": [
+        "Significant length difference between translations",
+        "Template variable mismatch between languages"
+      ],
+      "recommendations": [],
+      "shouldFallback": true
+    },
+    "severance-agreement": {
+      "confidence": 75,
+      "issues": [
+        "Missing translation for legal term: notarization",
+        "Template variable mismatch between languages"
+      ],
+      "recommendations": [
+        "Consider using: notarización or notariado"
+      ],
+      "shouldFallback": true
+    },
+    "termination-letter": {
+      "confidence": 76,
+      "issues": [
+        "Missing translation for legal term: notarization",
+        "Template variable mismatch between languages"
+      ],
+      "recommendations": [
+        "Consider using: notarización or notariado"
+      ],
+      "shouldFallback": true
+    },
+    "trademark-assignment": {
+      "confidence": 76,
+      "issues": [
+        "Missing translation for legal term: notarization",
+        "Template variable mismatch between languages"
+      ],
+      "recommendations": [
+        "Consider using: notarización or notariado"
+      ],
+      "shouldFallback": true
+    },
+    "vehicle-bill-of-sale": {
+      "confidence": 87,
+      "issues": [
+        "Missing translation for legal term: lease"
+      ],
+      "recommendations": [
+        "Consider using: arrendamiento or alquiler"
+      ],
+      "shouldFallback": false
+    }
+  },
+  "errors": [
+    {
+      "timestamp": "2025-06-17T02:46:37.031Z",
+      "documentId": "affidavit-general",
+      "errorType": "low_confidence_translation",
+      "message": "Confidence 72% below threshold 80%",
+      "severity": "warning"
+    },
+    {
+      "timestamp": "2025-06-17T02:46:37.045Z",
+      "documentId": "affidavit",
+      "errorType": "low_confidence_translation",
+      "message": "Confidence 75% below threshold 80%",
+      "severity": "warning"
+    },
+    {
+      "timestamp": "2025-06-17T02:46:37.061Z",
+      "documentId": "articles-of-incorporation-biz",
+      "errorType": "low_confidence_translation",
+      "message": "Confidence 69% below threshold 80%",
+      "severity": "warning"
+    },
+    {
+      "timestamp": "2025-06-17T02:46:37.077Z",
+      "documentId": "articles-of-incorporation",
+      "errorType": "low_confidence_translation",
+      "message": "Confidence 76% below threshold 80%",
+      "severity": "warning"
+    },
+    {
+      "timestamp": "2025-06-17T02:46:37.101Z",
+      "documentId": "boat-bill-of-sale",
+      "errorType": "low_confidence_translation",
+      "message": "Confidence 75% below threshold 80%",
+      "severity": "warning"
+    },
+    {
+      "timestamp": "2025-06-17T02:46:37.115Z",
+      "documentId": "child-custody-agreement",
+      "errorType": "low_confidence_translation",
+      "message": "Confidence 67% below threshold 80%",
+      "severity": "warning"
+    },
+    {
+      "timestamp": "2025-06-17T02:46:37.144Z",
+      "documentId": "commercial-lease-agreement",
+      "errorType": "low_confidence_translation",
+      "message": "Confidence 47% below threshold 80%",
+      "severity": "warning"
+    },
+    {
+      "timestamp": "2025-06-17T02:46:37.156Z",
+      "documentId": "consignment-agreement",
+      "errorType": "low_confidence_translation",
+      "message": "Confidence 75% below threshold 80%",
+      "severity": "warning"
+    },
+    {
+      "timestamp": "2025-06-17T02:46:37.168Z",
+      "documentId": "copyright-assignment",
+      "errorType": "low_confidence_translation",
+      "message": "Confidence 76% below threshold 80%",
+      "severity": "warning"
+    },
+    {
+      "timestamp": "2025-06-17T02:46:37.182Z",
+      "documentId": "demand-letter-payment",
+      "errorType": "low_confidence_translation",
+      "message": "Confidence 79% below threshold 80%",
+      "severity": "warning"
+    },
+    {
+      "timestamp": "2025-06-17T02:46:37.194Z",
+      "documentId": "demand-letter",
+      "errorType": "low_confidence_translation",
+      "message": "Confidence 76% below threshold 80%",
+      "severity": "warning"
+    },
+    {
+      "timestamp": "2025-06-17T02:46:37.207Z",
+      "documentId": "divorce-settlement-agreement",
+      "errorType": "low_confidence_translation",
+      "message": "Confidence 54% below threshold 80%",
+      "severity": "warning"
+    },
+    {
+      "timestamp": "2025-06-17T02:46:37.220Z",
+      "documentId": "divorce-settlement",
+      "errorType": "low_confidence_translation",
+      "message": "Confidence 77% below threshold 80%",
+      "severity": "warning"
+    },
+    {
+      "timestamp": "2025-06-17T02:46:37.232Z",
+      "documentId": "employment-contract",
+      "errorType": "low_confidence_translation",
+      "message": "Confidence 75% below threshold 80%",
+      "severity": "warning"
+    },
+    {
+      "timestamp": "2025-06-17T02:46:37.244Z",
+      "documentId": "employment-offer-letter",
+      "errorType": "low_confidence_translation",
+      "message": "Confidence 74% below threshold 80%",
+      "severity": "warning"
+    },
+    {
+      "timestamp": "2025-06-17T02:46:37.256Z",
+      "documentId": "employment-termination-letter",
+      "errorType": "low_confidence_translation",
+      "message": "Confidence 70% below threshold 80%",
+      "severity": "warning"
+    },
+    {
+      "timestamp": "2025-06-17T02:46:37.268Z",
+      "documentId": "eviction-notice",
+      "errorType": "low_confidence_translation",
+      "message": "Confidence 62% below threshold 80%",
+      "severity": "warning"
+    },
+    {
+      "timestamp": "2025-06-17T02:46:37.295Z",
+      "documentId": "healthcare-power-of-attorney",
+      "errorType": "low_confidence_translation",
+      "message": "Confidence 57% below threshold 80%",
+      "severity": "warning"
+    },
+    {
+      "timestamp": "2025-06-17T02:46:37.307Z",
+      "documentId": "independent-contractor-agreement",
+      "errorType": "low_confidence_translation",
+      "message": "Confidence 78% below threshold 80%",
+      "severity": "warning"
+    },
+    {
+      "timestamp": "2025-06-17T02:46:37.321Z",
+      "documentId": "invoice",
+      "errorType": "low_confidence_translation",
+      "message": "Confidence 71% below threshold 80%",
+      "severity": "warning"
+    },
+    {
+      "timestamp": "2025-06-17T02:46:37.335Z",
+      "documentId": "last-will-testament",
+      "errorType": "low_confidence_translation",
+      "message": "Confidence 68% below threshold 80%",
+      "severity": "warning"
+    },
+    {
+      "timestamp": "2025-06-17T02:46:37.361Z",
+      "documentId": "leaseAgreement",
+      "errorType": "low_confidence_translation",
+      "message": "Confidence 58% below threshold 80%",
+      "severity": "warning"
+    },
+    {
+      "timestamp": "2025-06-17T02:46:37.372Z",
+      "documentId": "licensing-agreement",
+      "errorType": "low_confidence_translation",
+      "message": "Confidence 76% below threshold 80%",
+      "severity": "warning"
+    },
+    {
+      "timestamp": "2025-06-17T02:46:37.386Z",
+      "documentId": "living-trust",
+      "errorType": "low_confidence_translation",
+      "message": "Confidence 56% below threshold 80%",
+      "severity": "warning"
+    },
+    {
+      "timestamp": "2025-06-17T02:46:37.402Z",
+      "documentId": "living-will",
+      "errorType": "low_confidence_translation",
+      "message": "Confidence 55% below threshold 80%",
+      "severity": "warning"
+    },
+    {
+      "timestamp": "2025-06-17T02:46:37.413Z",
+      "documentId": "llc-operating-agreement",
+      "errorType": "low_confidence_translation",
+      "message": "Confidence 75% below threshold 80%",
+      "severity": "warning"
+    },
+    {
+      "timestamp": "2025-06-17T02:46:37.425Z",
+      "documentId": "loan-agreement",
+      "errorType": "low_confidence_translation",
+      "message": "Confidence 76% below threshold 80%",
+      "severity": "warning"
+    },
+    {
+      "timestamp": "2025-06-17T02:46:37.435Z",
+      "documentId": "medical-consent",
+      "errorType": "low_confidence_translation",
+      "message": "Confidence 76% below threshold 80%",
+      "severity": "warning"
+    },
+    {
+      "timestamp": "2025-06-17T02:46:37.447Z",
+      "documentId": "nda",
+      "errorType": "low_confidence_translation",
+      "message": "Confidence 70% below threshold 80%",
+      "severity": "warning"
+    },
+    {
+      "timestamp": "2025-06-17T02:46:37.459Z",
+      "documentId": "non-compete-agreement",
+      "errorType": "low_confidence_translation",
+      "message": "Confidence 65% below threshold 80%",
+      "severity": "warning"
+    },
+    {
+      "timestamp": "2025-06-17T02:46:37.472Z",
+      "documentId": "non-disclosure-agreement",
+      "errorType": "low_confidence_translation",
+      "message": "Confidence 75% below threshold 80%",
+      "severity": "warning"
+    },
+    {
+      "timestamp": "2025-06-17T02:46:37.484Z",
+      "documentId": "offer-letter",
+      "errorType": "low_confidence_translation",
+      "message": "Confidence 76% below threshold 80%",
+      "severity": "warning"
+    },
+    {
+      "timestamp": "2025-06-17T02:46:37.496Z",
+      "documentId": "operating-agreement",
+      "errorType": "low_confidence_translation",
+      "message": "Confidence 78% below threshold 80%",
+      "severity": "warning"
+    },
+    {
+      "timestamp": "2025-06-17T02:46:37.510Z",
+      "documentId": "partnership-agreement",
+      "errorType": "low_confidence_translation",
+      "message": "Confidence 64% below threshold 80%",
+      "severity": "warning"
+    },
+    {
+      "timestamp": "2025-06-17T02:46:37.535Z",
+      "documentId": "powerOfAttorney",
+      "errorType": "low_confidence_translation",
+      "message": "Confidence 60% below threshold 80%",
+      "severity": "warning"
+    },
+    {
+      "timestamp": "2025-06-17T02:46:37.547Z",
+      "documentId": "prenuptial-agreement",
+      "errorType": "low_confidence_translation",
+      "message": "Confidence 67% below threshold 80%",
+      "severity": "warning"
+    },
+    {
+      "timestamp": "2025-06-17T02:46:37.569Z",
+      "documentId": "property-deed",
+      "errorType": "low_confidence_translation",
+      "message": "Confidence 76% below threshold 80%",
+      "severity": "warning"
+    },
+    {
+      "timestamp": "2025-06-17T02:46:37.579Z",
+      "documentId": "purchase-agreement",
+      "errorType": "low_confidence_translation",
+      "message": "Confidence 76% below threshold 80%",
+      "severity": "warning"
+    },
+    {
+      "timestamp": "2025-06-17T02:46:37.590Z",
+      "documentId": "quitclaim-deed",
+      "errorType": "low_confidence_translation",
+      "message": "Confidence 50% below threshold 80%",
+      "severity": "warning"
+    },
+    {
+      "timestamp": "2025-06-17T02:46:37.601Z",
+      "documentId": "rental-agreement",
+      "errorType": "low_confidence_translation",
+      "message": "Confidence 75% below threshold 80%",
+      "severity": "warning"
+    },
+    {
+      "timestamp": "2025-06-17T02:46:37.611Z",
+      "documentId": "residential-lease-agreement",
+      "errorType": "low_confidence_translation",
+      "message": "Confidence 75% below threshold 80%",
+      "severity": "warning"
+    },
+    {
+      "timestamp": "2025-06-17T02:46:37.624Z",
+      "documentId": "service-agreement",
+      "errorType": "low_confidence_translation",
+      "message": "Confidence 79% below threshold 80%",
+      "severity": "warning"
+    },
+    {
+      "timestamp": "2025-06-17T02:46:37.637Z",
+      "documentId": "severance-agreement",
+      "errorType": "low_confidence_translation",
+      "message": "Confidence 75% below threshold 80%",
+      "severity": "warning"
+    },
+    {
+      "timestamp": "2025-06-17T02:46:37.648Z",
+      "documentId": "termination-letter",
+      "errorType": "low_confidence_translation",
+      "message": "Confidence 76% below threshold 80%",
+      "severity": "warning"
+    },
+    {
+      "timestamp": "2025-06-17T02:46:37.660Z",
+      "documentId": "trademark-assignment",
+      "errorType": "low_confidence_translation",
+      "message": "Confidence 76% below threshold 80%",
+      "severity": "warning"
+    }
+  ],
+  "thresholds": {
+    "confidenceThreshold": 80
+  }
+}

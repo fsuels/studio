@@ -1,11 +1,26 @@
-import type { LegalDocumentMetadata } from '@/types/documents';
+// src/lib/documents/us/service-agreement/metadata.ts
+import type { LegalDocument } from '@/types/documents';
+import { ServiceAgreementSchema } from './schema';
+import { serviceAgreementQuestions } from './questions';
 
-export const serviceAgreementMetadata: LegalDocumentMetadata = {
+export const serviceAgreementMeta: LegalDocument = {
+  id: 'service-agreement',
+  jurisdiction: 'US',
   category: 'Business',
+  languageSupport: ['en', 'es'],
+  requiresNotarization: false,
+  canBeRecorded: false,
+  offerNotarization: false,
+  offerRecordingHelp: false,
+  basePrice: 15,
+  states: 'all',
   templatePaths: {
     en: '/templates/en/service-agreement.md',
-    es: '/templates/es/service-agreement.md'
+    es: '/templates/es/service-agreement.md',
   },
+  schema: ServiceAgreementSchema,
+  questions: serviceAgreementQuestions,
+  upsellClauses: [],
   translations: {
     en: {
       name: 'Service Agreement',
@@ -23,11 +38,4 @@ export const serviceAgreementMetadata: LegalDocumentMetadata = {
       ],
     },
   },
-  languageSupport: ['en', 'es'],
-  requiresNotarization: false,
-  canBeRecorded: false,
-  offerNotarization: false,
-  offerRecordingHelp: false,
-  basePrice: 5,
-  states: 'all',
 };

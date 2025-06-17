@@ -1,11 +1,26 @@
-import type { LegalDocumentMetadata } from '@/types/documents';
+// src/lib/documents/us/prenuptial-agreement/metadata.ts
+import type { LegalDocument } from '@/types/documents';
+import { PrenuptialAgreementSchema } from './schema';
+import { prenuptialAgreementQuestions } from './questions';
 
-export const prenuptialAgreementMetadata: LegalDocumentMetadata = {
+export const prenuptialAgreementMeta: LegalDocument = {
+  id: 'prenuptial-agreement',
+  jurisdiction: 'US',
   category: 'Family',
+  languageSupport: ['en', 'es'],
+  requiresNotarization: true,
+  canBeRecorded: false,
+  offerNotarization: true,
+  offerRecordingHelp: false,
+  basePrice: 22,
+  states: 'all',
   templatePaths: {
     en: '/templates/en/prenuptial-agreement.md',
-    es: '/templates/es/prenuptial-agreement.md'
+    es: '/templates/es/prenuptial-agreement.md',
   },
+  schema: PrenuptialAgreementSchema,
+  questions: prenuptialAgreementQuestions,
+  upsellClauses: [],
   translations: {
     en: {
       name: 'Prenuptial Agreement',
@@ -20,11 +35,4 @@ export const prenuptialAgreementMetadata: LegalDocumentMetadata = {
       aliases: ['prenup', 'contrato matrimonial', 'acuerdo prematrimonial'],
     },
   },
-  languageSupport: ['en', 'es'],
-  requiresNotarization: true,
-  canBeRecorded: false,
-  offerNotarization: true,
-  offerRecordingHelp: false,
-  basePrice: 7,
-  states: 'all',
 };

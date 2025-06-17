@@ -1,0 +1,1317 @@
+{
+  "timestamp": "2025-06-17T01:37:59.999Z",
+  "summary": {
+    "totalDocuments": 49,
+    "passedChecks": 771,
+    "failedChecks": 160,
+    "warningChecks": 26
+  },
+  "errors": [
+    {
+      "check": "Metadata",
+      "message": "Missing required field: id",
+      "file": "affidavit/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: jurisdiction",
+      "file": "affidavit/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: category",
+      "file": "affidavit/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: languageSupport",
+      "file": "affidavit/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: basePrice",
+      "file": "affidavit/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: translations",
+      "file": "affidavit/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing translations object",
+      "file": "affidavit/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: id",
+      "file": "articles-of-incorporation/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: jurisdiction",
+      "file": "articles-of-incorporation/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: category",
+      "file": "articles-of-incorporation/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: languageSupport",
+      "file": "articles-of-incorporation/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: basePrice",
+      "file": "articles-of-incorporation/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: translations",
+      "file": "articles-of-incorporation/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing translations object",
+      "file": "articles-of-incorporation/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: id",
+      "file": "boat-bill-of-sale/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: jurisdiction",
+      "file": "boat-bill-of-sale/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: category",
+      "file": "boat-bill-of-sale/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: languageSupport",
+      "file": "boat-bill-of-sale/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: basePrice",
+      "file": "boat-bill-of-sale/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: translations",
+      "file": "boat-bill-of-sale/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing translations object",
+      "file": "boat-bill-of-sale/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: id",
+      "file": "consignment-agreement/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: jurisdiction",
+      "file": "consignment-agreement/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: category",
+      "file": "consignment-agreement/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: languageSupport",
+      "file": "consignment-agreement/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: basePrice",
+      "file": "consignment-agreement/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: translations",
+      "file": "consignment-agreement/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing translations object",
+      "file": "consignment-agreement/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: id",
+      "file": "copyright-assignment/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: jurisdiction",
+      "file": "copyright-assignment/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: category",
+      "file": "copyright-assignment/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: languageSupport",
+      "file": "copyright-assignment/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: basePrice",
+      "file": "copyright-assignment/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: translations",
+      "file": "copyright-assignment/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing translations object",
+      "file": "copyright-assignment/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: id",
+      "file": "demand-letter/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: jurisdiction",
+      "file": "demand-letter/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: category",
+      "file": "demand-letter/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: languageSupport",
+      "file": "demand-letter/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: basePrice",
+      "file": "demand-letter/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: translations",
+      "file": "demand-letter/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing translations object",
+      "file": "demand-letter/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: id",
+      "file": "divorce-settlement/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: jurisdiction",
+      "file": "divorce-settlement/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: category",
+      "file": "divorce-settlement/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: languageSupport",
+      "file": "divorce-settlement/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: basePrice",
+      "file": "divorce-settlement/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: translations",
+      "file": "divorce-settlement/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing translations object",
+      "file": "divorce-settlement/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: id",
+      "file": "employment-contract/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: jurisdiction",
+      "file": "employment-contract/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: category",
+      "file": "employment-contract/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: languageSupport",
+      "file": "employment-contract/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: basePrice",
+      "file": "employment-contract/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: translations",
+      "file": "employment-contract/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing translations object",
+      "file": "employment-contract/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: id",
+      "file": "licensing-agreement/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: jurisdiction",
+      "file": "licensing-agreement/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: category",
+      "file": "licensing-agreement/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: languageSupport",
+      "file": "licensing-agreement/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: basePrice",
+      "file": "licensing-agreement/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: translations",
+      "file": "licensing-agreement/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing translations object",
+      "file": "licensing-agreement/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: id",
+      "file": "llc-operating-agreement/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: jurisdiction",
+      "file": "llc-operating-agreement/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: category",
+      "file": "llc-operating-agreement/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: languageSupport",
+      "file": "llc-operating-agreement/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: basePrice",
+      "file": "llc-operating-agreement/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: translations",
+      "file": "llc-operating-agreement/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing translations object",
+      "file": "llc-operating-agreement/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: id",
+      "file": "loan-agreement/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: jurisdiction",
+      "file": "loan-agreement/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: category",
+      "file": "loan-agreement/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: languageSupport",
+      "file": "loan-agreement/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: basePrice",
+      "file": "loan-agreement/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: translations",
+      "file": "loan-agreement/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing translations object",
+      "file": "loan-agreement/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: id",
+      "file": "medical-consent/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: jurisdiction",
+      "file": "medical-consent/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: category",
+      "file": "medical-consent/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: languageSupport",
+      "file": "medical-consent/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: basePrice",
+      "file": "medical-consent/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: translations",
+      "file": "medical-consent/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing translations object",
+      "file": "medical-consent/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: id",
+      "file": "non-disclosure-agreement/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: jurisdiction",
+      "file": "non-disclosure-agreement/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: category",
+      "file": "non-disclosure-agreement/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: languageSupport",
+      "file": "non-disclosure-agreement/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: basePrice",
+      "file": "non-disclosure-agreement/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: translations",
+      "file": "non-disclosure-agreement/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing translations object",
+      "file": "non-disclosure-agreement/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: id",
+      "file": "offer-letter/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: jurisdiction",
+      "file": "offer-letter/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: category",
+      "file": "offer-letter/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: languageSupport",
+      "file": "offer-letter/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: basePrice",
+      "file": "offer-letter/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: translations",
+      "file": "offer-letter/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing translations object",
+      "file": "offer-letter/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: id",
+      "file": "operating-agreement/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: jurisdiction",
+      "file": "operating-agreement/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: id",
+      "file": "partnership-agreement/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: jurisdiction",
+      "file": "partnership-agreement/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: id",
+      "file": "power-of-attorney/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: id",
+      "file": "prenuptial-agreement/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: jurisdiction",
+      "file": "prenuptial-agreement/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: id",
+      "file": "property-deed/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: jurisdiction",
+      "file": "property-deed/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: category",
+      "file": "property-deed/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: languageSupport",
+      "file": "property-deed/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: basePrice",
+      "file": "property-deed/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: translations",
+      "file": "property-deed/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing translations object",
+      "file": "property-deed/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: id",
+      "file": "purchase-agreement/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: jurisdiction",
+      "file": "purchase-agreement/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: category",
+      "file": "purchase-agreement/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: languageSupport",
+      "file": "purchase-agreement/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: basePrice",
+      "file": "purchase-agreement/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: translations",
+      "file": "purchase-agreement/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing translations object",
+      "file": "purchase-agreement/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: id",
+      "file": "quitclaim-deed/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: jurisdiction",
+      "file": "quitclaim-deed/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: id",
+      "file": "rental-agreement/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: jurisdiction",
+      "file": "rental-agreement/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: category",
+      "file": "rental-agreement/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: languageSupport",
+      "file": "rental-agreement/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: basePrice",
+      "file": "rental-agreement/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: translations",
+      "file": "rental-agreement/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing translations object",
+      "file": "rental-agreement/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: id",
+      "file": "residential-lease-agreement/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: jurisdiction",
+      "file": "residential-lease-agreement/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: category",
+      "file": "residential-lease-agreement/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: languageSupport",
+      "file": "residential-lease-agreement/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: basePrice",
+      "file": "residential-lease-agreement/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: translations",
+      "file": "residential-lease-agreement/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing translations object",
+      "file": "residential-lease-agreement/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: id",
+      "file": "service-agreement/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: jurisdiction",
+      "file": "service-agreement/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: id",
+      "file": "severance-agreement/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: jurisdiction",
+      "file": "severance-agreement/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: category",
+      "file": "severance-agreement/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: languageSupport",
+      "file": "severance-agreement/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: basePrice",
+      "file": "severance-agreement/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: translations",
+      "file": "severance-agreement/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing translations object",
+      "file": "severance-agreement/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: id",
+      "file": "termination-letter/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: jurisdiction",
+      "file": "termination-letter/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: category",
+      "file": "termination-letter/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: languageSupport",
+      "file": "termination-letter/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: basePrice",
+      "file": "termination-letter/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: translations",
+      "file": "termination-letter/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing translations object",
+      "file": "termination-letter/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: id",
+      "file": "trademark-assignment/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: jurisdiction",
+      "file": "trademark-assignment/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: category",
+      "file": "trademark-assignment/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: languageSupport",
+      "file": "trademark-assignment/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: basePrice",
+      "file": "trademark-assignment/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing required field: translations",
+      "file": "trademark-assignment/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "Missing translations object",
+      "file": "trademark-assignment/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "Metadata",
+      "message": "ID \"bill-of-sale-vehicle\" doesn't match directory name \"vehicle-bill-of-sale\"",
+      "file": "vehicle-bill-of-sale/metadata.ts",
+      "severity": "error"
+    },
+    {
+      "check": "TypeScript",
+      "message": "Compilation errors found: Command failed: npx tsc --noEmit --skipLibCheck\nnpm warn exec The following package was not found and will be installed: tsc@2.0.4\n",
+      "file": null,
+      "severity": "error"
+    }
+  ],
+  "warnings": [
+    {
+      "check": "Metadata",
+      "message": "No search aliases defined",
+      "file": "affidavit/metadata.ts",
+      "severity": "warning"
+    },
+    {
+      "check": "Metadata",
+      "message": "No search aliases defined",
+      "file": "articles-of-incorporation/metadata.ts",
+      "severity": "warning"
+    },
+    {
+      "check": "Metadata",
+      "message": "No search aliases defined",
+      "file": "boat-bill-of-sale/metadata.ts",
+      "severity": "warning"
+    },
+    {
+      "check": "Metadata",
+      "message": "No search aliases defined",
+      "file": "consignment-agreement/metadata.ts",
+      "severity": "warning"
+    },
+    {
+      "check": "Metadata",
+      "message": "No search aliases defined",
+      "file": "copyright-assignment/metadata.ts",
+      "severity": "warning"
+    },
+    {
+      "check": "Metadata",
+      "message": "No search aliases defined",
+      "file": "demand-letter/metadata.ts",
+      "severity": "warning"
+    },
+    {
+      "check": "Metadata",
+      "message": "No search aliases defined",
+      "file": "divorce-settlement/metadata.ts",
+      "severity": "warning"
+    },
+    {
+      "check": "Metadata",
+      "message": "No search aliases defined",
+      "file": "employment-contract/metadata.ts",
+      "severity": "warning"
+    },
+    {
+      "check": "Metadata",
+      "message": "No search aliases defined",
+      "file": "invoice/metadata.ts",
+      "severity": "warning"
+    },
+    {
+      "check": "Metadata",
+      "message": "No search aliases defined",
+      "file": "licensing-agreement/metadata.ts",
+      "severity": "warning"
+    },
+    {
+      "check": "Metadata",
+      "message": "No search aliases defined",
+      "file": "llc-operating-agreement/metadata.ts",
+      "severity": "warning"
+    },
+    {
+      "check": "Metadata",
+      "message": "No search aliases defined",
+      "file": "loan-agreement/metadata.ts",
+      "severity": "warning"
+    },
+    {
+      "check": "Metadata",
+      "message": "No search aliases defined",
+      "file": "medical-consent/metadata.ts",
+      "severity": "warning"
+    },
+    {
+      "check": "Metadata",
+      "message": "No search aliases defined",
+      "file": "non-disclosure-agreement/metadata.ts",
+      "severity": "warning"
+    },
+    {
+      "check": "Metadata",
+      "message": "No search aliases defined",
+      "file": "offer-letter/metadata.ts",
+      "severity": "warning"
+    },
+    {
+      "check": "Metadata",
+      "message": "No search aliases defined",
+      "file": "property-deed/metadata.ts",
+      "severity": "warning"
+    },
+    {
+      "check": "Metadata",
+      "message": "No search aliases defined",
+      "file": "purchase-agreement/metadata.ts",
+      "severity": "warning"
+    },
+    {
+      "check": "Metadata",
+      "message": "No search aliases defined",
+      "file": "rental-agreement/metadata.ts",
+      "severity": "warning"
+    },
+    {
+      "check": "Metadata",
+      "message": "No search aliases defined",
+      "file": "residential-lease-agreement/metadata.ts",
+      "severity": "warning"
+    },
+    {
+      "check": "Metadata",
+      "message": "No search aliases defined",
+      "file": "severance-agreement/metadata.ts",
+      "severity": "warning"
+    },
+    {
+      "check": "Metadata",
+      "message": "No search aliases defined",
+      "file": "termination-letter/metadata.ts",
+      "severity": "warning"
+    },
+    {
+      "check": "Metadata",
+      "message": "No search aliases defined",
+      "file": "trademark-assignment/metadata.ts",
+      "severity": "warning"
+    },
+    {
+      "check": "Schema",
+      "message": "No zod object schema found",
+      "file": "eviction-notice/schema.ts",
+      "severity": "warning"
+    },
+    {
+      "check": "Schema",
+      "message": "No zod object schema found",
+      "file": "lease-agreement/schema.ts",
+      "severity": "warning"
+    },
+    {
+      "check": "Schema",
+      "message": "No zod object schema found",
+      "file": "vehicle-bill-of-sale/schema.ts",
+      "severity": "warning"
+    },
+    {
+      "check": "Linting",
+      "message": "Linting issues found: Command failed: npx eslint src/ --ext .ts,.tsx --max-warnings 0\nnpm warn exec The following package was not found and will be installed: eslint@9.29.0\n\nOops! Something went wrong! :(\n\nESLint: 9.29.0\n\nError [ERR_MODULE_NOT_FOUND]: Cannot find package '@eslint/js' imported from /mnt/c/Users/Fsuels/OneDrive/Desktop/123legaldoc/studio-master/eslint.config.mjs\n    at new NodeError (node:internal/errors:405:5)\n    at packageResolve (node:internal/modules/esm/resolve:916:9)\n    at moduleResolve (node:internal/modules/esm/resolve:973:20)\n    at defaultResolve (node:internal/modules/esm/resolve:1206:11)\n    at ModuleLoader.defaultResolve (node:internal/modules/esm/loader:404:12)\n    at ModuleLoader.resolve (node:internal/modules/esm/loader:373:25)\n    at ModuleLoader.getModuleJob (node:internal/modules/esm/loader:250:38)\n    at ModuleWrap.<anonymous> (node:internal/modules/esm/module_job:76:39)\n    at link (node:internal/modules/esm/module_job:75:36)\n",
+      "file": null,
+      "severity": "warning"
+    }
+  ],
+  "score": 65.2,
+  "recommendations": [
+    {
+      "priority": "high",
+      "category": "Critical Issues",
+      "message": "Fix 160 critical errors immediately",
+      "actions": [
+        "Fix Metadata: Missing required field: id",
+        "Fix Metadata: Missing required field: jurisdiction",
+        "Fix Metadata: Missing required field: category",
+        "Fix Metadata: Missing required field: languageSupport",
+        "Fix Metadata: Missing required field: basePrice",
+        "Fix Metadata: Missing required field: translations",
+        "Fix Metadata: Missing translations object",
+        "Fix Metadata: Missing required field: id",
+        "Fix Metadata: Missing required field: jurisdiction",
+        "Fix Metadata: Missing required field: category",
+        "Fix Metadata: Missing required field: languageSupport",
+        "Fix Metadata: Missing required field: basePrice",
+        "Fix Metadata: Missing required field: translations",
+        "Fix Metadata: Missing translations object",
+        "Fix Metadata: Missing required field: id",
+        "Fix Metadata: Missing required field: jurisdiction",
+        "Fix Metadata: Missing required field: category",
+        "Fix Metadata: Missing required field: languageSupport",
+        "Fix Metadata: Missing required field: basePrice",
+        "Fix Metadata: Missing required field: translations",
+        "Fix Metadata: Missing translations object",
+        "Fix Metadata: Missing required field: id",
+        "Fix Metadata: Missing required field: jurisdiction",
+        "Fix Metadata: Missing required field: category",
+        "Fix Metadata: Missing required field: languageSupport",
+        "Fix Metadata: Missing required field: basePrice",
+        "Fix Metadata: Missing required field: translations",
+        "Fix Metadata: Missing translations object",
+        "Fix Metadata: Missing required field: id",
+        "Fix Metadata: Missing required field: jurisdiction",
+        "Fix Metadata: Missing required field: category",
+        "Fix Metadata: Missing required field: languageSupport",
+        "Fix Metadata: Missing required field: basePrice",
+        "Fix Metadata: Missing required field: translations",
+        "Fix Metadata: Missing translations object",
+        "Fix Metadata: Missing required field: id",
+        "Fix Metadata: Missing required field: jurisdiction",
+        "Fix Metadata: Missing required field: category",
+        "Fix Metadata: Missing required field: languageSupport",
+        "Fix Metadata: Missing required field: basePrice",
+        "Fix Metadata: Missing required field: translations",
+        "Fix Metadata: Missing translations object",
+        "Fix Metadata: Missing required field: id",
+        "Fix Metadata: Missing required field: jurisdiction",
+        "Fix Metadata: Missing required field: category",
+        "Fix Metadata: Missing required field: languageSupport",
+        "Fix Metadata: Missing required field: basePrice",
+        "Fix Metadata: Missing required field: translations",
+        "Fix Metadata: Missing translations object",
+        "Fix Metadata: Missing required field: id",
+        "Fix Metadata: Missing required field: jurisdiction",
+        "Fix Metadata: Missing required field: category",
+        "Fix Metadata: Missing required field: languageSupport",
+        "Fix Metadata: Missing required field: basePrice",
+        "Fix Metadata: Missing required field: translations",
+        "Fix Metadata: Missing translations object",
+        "Fix Metadata: Missing required field: id",
+        "Fix Metadata: Missing required field: jurisdiction",
+        "Fix Metadata: Missing required field: category",
+        "Fix Metadata: Missing required field: languageSupport",
+        "Fix Metadata: Missing required field: basePrice",
+        "Fix Metadata: Missing required field: translations",
+        "Fix Metadata: Missing translations object",
+        "Fix Metadata: Missing required field: id",
+        "Fix Metadata: Missing required field: jurisdiction",
+        "Fix Metadata: Missing required field: category",
+        "Fix Metadata: Missing required field: languageSupport",
+        "Fix Metadata: Missing required field: basePrice",
+        "Fix Metadata: Missing required field: translations",
+        "Fix Metadata: Missing translations object",
+        "Fix Metadata: Missing required field: id",
+        "Fix Metadata: Missing required field: jurisdiction",
+        "Fix Metadata: Missing required field: category",
+        "Fix Metadata: Missing required field: languageSupport",
+        "Fix Metadata: Missing required field: basePrice",
+        "Fix Metadata: Missing required field: translations",
+        "Fix Metadata: Missing translations object",
+        "Fix Metadata: Missing required field: id",
+        "Fix Metadata: Missing required field: jurisdiction",
+        "Fix Metadata: Missing required field: category",
+        "Fix Metadata: Missing required field: languageSupport",
+        "Fix Metadata: Missing required field: basePrice",
+        "Fix Metadata: Missing required field: translations",
+        "Fix Metadata: Missing translations object",
+        "Fix Metadata: Missing required field: id",
+        "Fix Metadata: Missing required field: jurisdiction",
+        "Fix Metadata: Missing required field: category",
+        "Fix Metadata: Missing required field: languageSupport",
+        "Fix Metadata: Missing required field: basePrice",
+        "Fix Metadata: Missing required field: translations",
+        "Fix Metadata: Missing translations object",
+        "Fix Metadata: Missing required field: id",
+        "Fix Metadata: Missing required field: jurisdiction",
+        "Fix Metadata: Missing required field: category",
+        "Fix Metadata: Missing required field: languageSupport",
+        "Fix Metadata: Missing required field: basePrice",
+        "Fix Metadata: Missing required field: translations",
+        "Fix Metadata: Missing translations object",
+        "Fix Metadata: Missing required field: id",
+        "Fix Metadata: Missing required field: jurisdiction",
+        "Fix Metadata: Missing required field: id",
+        "Fix Metadata: Missing required field: jurisdiction",
+        "Fix Metadata: Missing required field: id",
+        "Fix Metadata: Missing required field: id",
+        "Fix Metadata: Missing required field: jurisdiction",
+        "Fix Metadata: Missing required field: id",
+        "Fix Metadata: Missing required field: jurisdiction",
+        "Fix Metadata: Missing required field: category",
+        "Fix Metadata: Missing required field: languageSupport",
+        "Fix Metadata: Missing required field: basePrice",
+        "Fix Metadata: Missing required field: translations",
+        "Fix Metadata: Missing translations object",
+        "Fix Metadata: Missing required field: id",
+        "Fix Metadata: Missing required field: jurisdiction",
+        "Fix Metadata: Missing required field: category",
+        "Fix Metadata: Missing required field: languageSupport",
+        "Fix Metadata: Missing required field: basePrice",
+        "Fix Metadata: Missing required field: translations",
+        "Fix Metadata: Missing translations object",
+        "Fix Metadata: Missing required field: id",
+        "Fix Metadata: Missing required field: jurisdiction",
+        "Fix Metadata: Missing required field: id",
+        "Fix Metadata: Missing required field: jurisdiction",
+        "Fix Metadata: Missing required field: category",
+        "Fix Metadata: Missing required field: languageSupport",
+        "Fix Metadata: Missing required field: basePrice",
+        "Fix Metadata: Missing required field: translations",
+        "Fix Metadata: Missing translations object",
+        "Fix Metadata: Missing required field: id",
+        "Fix Metadata: Missing required field: jurisdiction",
+        "Fix Metadata: Missing required field: category",
+        "Fix Metadata: Missing required field: languageSupport",
+        "Fix Metadata: Missing required field: basePrice",
+        "Fix Metadata: Missing required field: translations",
+        "Fix Metadata: Missing translations object",
+        "Fix Metadata: Missing required field: id",
+        "Fix Metadata: Missing required field: jurisdiction",
+        "Fix Metadata: Missing required field: id",
+        "Fix Metadata: Missing required field: jurisdiction",
+        "Fix Metadata: Missing required field: category",
+        "Fix Metadata: Missing required field: languageSupport",
+        "Fix Metadata: Missing required field: basePrice",
+        "Fix Metadata: Missing required field: translations",
+        "Fix Metadata: Missing translations object",
+        "Fix Metadata: Missing required field: id",
+        "Fix Metadata: Missing required field: jurisdiction",
+        "Fix Metadata: Missing required field: category",
+        "Fix Metadata: Missing required field: languageSupport",
+        "Fix Metadata: Missing required field: basePrice",
+        "Fix Metadata: Missing required field: translations",
+        "Fix Metadata: Missing translations object",
+        "Fix Metadata: Missing required field: id",
+        "Fix Metadata: Missing required field: jurisdiction",
+        "Fix Metadata: Missing required field: category",
+        "Fix Metadata: Missing required field: languageSupport",
+        "Fix Metadata: Missing required field: basePrice",
+        "Fix Metadata: Missing required field: translations",
+        "Fix Metadata: Missing translations object",
+        "Fix Metadata: ID \"bill-of-sale-vehicle\" doesn't match directory name \"vehicle-bill-of-sale\"",
+        "Fix TypeScript: Compilation errors found: Command failed: npx tsc --noEmit --skipLibCheck\nnpm warn exec The following package was not found and will be installed: tsc@2.0.4\n"
+      ]
+    },
+    {
+      "priority": "medium",
+      "category": "Code Quality",
+      "message": "Address 26 warnings to improve quality",
+      "actions": [
+        "Review and fix warning messages",
+        "Consider adding more comprehensive checks"
+      ]
+    },
+    {
+      "priority": "low",
+      "category": "Search Optimization",
+      "message": "Add search aliases to 22 documents",
+      "actions": [
+        "Run add-aliases script",
+        "Review document discoverability"
+      ]
+    }
+  ]
+}

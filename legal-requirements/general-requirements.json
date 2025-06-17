@@ -1,0 +1,300 @@
+{
+  "vehicle-bill-of-sale": {
+    "requiredClauses": [
+      "seller-identification",
+      "buyer-identification",
+      "vehicle-description",
+      "sale-price",
+      "as-is-clause",
+      "signatures",
+      "date-of-sale"
+    ],
+    "conditionalClauses": {
+      "odometer-disclosure": "vehicle.year >= currentYear - 10",
+      "emissions-compliance": "state.hasEmissionsRequirements"
+    },
+    "stateSpecific": {
+      "notarization": ["LA", "MT", "WV", "OH", "PA", "NV", "OK", "AZ", "KY", "WY"],
+      "title-transfer-required": "all"
+    },
+    "mandatoryDisclosures": [
+      "vehicle-condition",
+      "known-defects"
+    ]
+  },
+  "lease-agreement": {
+    "requiredClauses": [
+      "landlord-info",
+      "tenant-info",
+      "property-description",
+      "lease-term",
+      "rent-amount",
+      "security-deposit",
+      "tenant-obligations",
+      "landlord-obligations",
+      "termination-clause",
+      "default-provisions"
+    ],
+    "stateSpecific": {
+      "rent-control-disclosure": ["CA", "NY", "OR", "NJ", "MD"],
+      "lead-paint-disclosure": "propertyBuiltBefore1978",
+      "bedbug-disclosure": ["NY", "ME", "AZ"],
+      "mold-disclosure": ["CA", "TX", "NJ", "VA"]
+    },
+    "federalRequirements": [
+      "fair-housing-statement",
+      "lead-based-paint-disclosure"
+    ]
+  },
+  "power-of-attorney": {
+    "requiredClauses": [
+      "principal-info",
+      "agent-info",
+      "powers-granted",
+      "effective-date",
+      "termination-conditions",
+      "principal-signature",
+      "acceptance-by-agent"
+    ],
+    "stateSpecific": {
+      "notarization": "all",
+      "witness-requirements": {
+        "FL": 2,
+        "SC": 2,
+        "VT": 1,
+        "default": 0
+      },
+      "statutory-form-required": ["CA", "NY", "TX", "FL"]
+    },
+    "types": {
+      "general": "all-powers",
+      "limited": "specific-powers",
+      "durable": "survives-incapacity",
+      "springing": "effective-upon-condition"
+    }
+  },
+  "promissory-note": {
+    "requiredClauses": [
+      "lender-info",
+      "borrower-info",
+      "principal-amount",
+      "interest-rate",
+      "payment-terms",
+      "maturity-date",
+      "default-provisions",
+      "governing-law"
+    ],
+    "regulatoryLimits": {
+      "max-interest-rate": {
+        "default": 10,
+        "CA": 10,
+        "NY": 16,
+        "TX": 18,
+        "FL": 18,
+        "IL": 9,
+        "PA": 6
+      },
+      "usury-exceptions": {
+        "business-loans": "> $5000",
+        "commercial-purpose": true
+      }
+    },
+    "requiredDisclosures": [
+      "total-interest",
+      "payment-schedule",
+      "prepayment-terms"
+    ]
+  },
+  "nda": {
+    "requiredClauses": [
+      "disclosing-party",
+      "receiving-party",
+      "confidential-information-definition",
+      "obligations",
+      "exceptions",
+      "term-duration",
+      "return-of-information",
+      "remedies"
+    ],
+    "recommendedClauses": [
+      "non-solicitation",
+      "non-circumvention",
+      "residual-knowledge",
+      "third-party-disclosure"
+    ],
+    "enforceabilityFactors": {
+      "reasonable-scope": true,
+      "legitimate-business-interest": true,
+      "time-limitation": "typically 2-5 years"
+    }
+  },
+  "employment-contract": {
+    "requiredClauses": [
+      "employer-info",
+      "employee-info",
+      "job-title",
+      "job-description",
+      "compensation",
+      "benefits",
+      "term-of-employment",
+      "termination-provisions",
+      "confidentiality"
+    ],
+    "federalRequirements": [
+      "at-will-disclosure",
+      "equal-opportunity-statement",
+      "i9-verification"
+    ],
+    "stateSpecific": {
+      "non-compete-banned": ["CA", "ND", "OK"],
+      "wage-disclosure-required": ["CA", "CO", "NY", "WA"],
+      "sick-leave-requirements": ["CA", "NY", "NJ", "IL", "WA"]
+    }
+  },
+  "partnership-agreement": {
+    "requiredClauses": [
+      "partner-identification",
+      "business-purpose",
+      "capital-contributions",
+      "profit-loss-allocation",
+      "management-structure",
+      "decision-making",
+      "withdrawal-provisions",
+      "dissolution-terms",
+      "dispute-resolution"
+    ],
+    "taxConsiderations": [
+      "partnership-tax-election",
+      "allocation-of-tax-items",
+      "tax-year"
+    ],
+    "filingRequirements": {
+      "ein-required": true,
+      "state-registration": "varies",
+      "partnership-agreement-filing": "not typically required"
+    }
+  },
+  "last-will-testament": {
+    "requiredClauses": [
+      "testator-identification",
+      "revocation-clause",
+      "executor-appointment",
+      "beneficiary-designations",
+      "residuary-clause",
+      "signature",
+      "witness-signatures",
+      "date"
+    ],
+    "stateSpecific": {
+      "witness-requirements": {
+        "default": 2,
+        "VT": 3
+      },
+      "holographic-will-allowed": ["CA", "TX", "VA", "WV", "AK", "AZ"],
+      "self-proving-affidavit": "recommended in all states"
+    },
+    "capacityRequirements": [
+      "age-majority",
+      "sound-mind",
+      "free-from-duress"
+    ]
+  },
+  "divorce-settlement-agreement": {
+    "requiredClauses": [
+      "party-identification",
+      "property-division",
+      "debt-allocation",
+      "spousal-support",
+      "child-custody",
+      "child-support",
+      "tax-considerations",
+      "dispute-resolution",
+      "full-disclosure"
+    ],
+    "courtRequirements": [
+      "fair-and-equitable",
+      "best-interests-of-children",
+      "full-financial-disclosure"
+    ],
+    "stateSpecific": {
+      "community-property": ["CA", "TX", "AZ", "NV", "WA", "ID", "LA", "WI"],
+      "equitable-distribution": "all other states",
+      "mandatory-waiting-period": "varies by state"
+    }
+  },
+  "llc-operating-agreement": {
+    "requiredClauses": [
+      "member-identification",
+      "ownership-percentages",
+      "capital-contributions",
+      "profit-distributions",
+      "management-structure",
+      "voting-rights",
+      "transfer-restrictions",
+      "dissolution-events",
+      "buyout-provisions"
+    ],
+    "stateSpecific": {
+      "written-agreement-required": ["CA", "NY", "MO", "ME"],
+      "single-member-allowed": "all states",
+      "series-llc-allowed": ["DE", "NV", "TX", "IL"]
+    },
+    "taxElections": [
+      "disregarded-entity",
+      "partnership",
+      "s-corp",
+      "c-corp"
+    ]
+  },
+  "quitclaim-deed": {
+    "requiredClauses": [
+      "grantor-identification",
+      "grantee-identification",
+      "property-legal-description",
+      "consideration",
+      "granting-clause",
+      "habendum-clause",
+      "grantor-signature",
+      "notarization"
+    ],
+    "recordingRequirements": {
+      "notarization": "all states",
+      "witness-requirements": {
+        "FL": 2,
+        "GA": 2,
+        "SC": 2,
+        "default": 0
+      },
+      "recording-required": true,
+      "transfer-tax": "varies by state and locality"
+    },
+    "warnings": [
+      "no-warranty-of-title",
+      "no-guarantee-of-ownership",
+      "existing-liens-remain"
+    ]
+  },
+  "service-agreement": {
+    "requiredClauses": [
+      "service-provider",
+      "client-identification",
+      "scope-of-services",
+      "payment-terms",
+      "timeline",
+      "deliverables",
+      "termination-clause",
+      "liability-limitation",
+      "indemnification"
+    ],
+    "industrySpecific": {
+      "professional-services": ["errors-omissions", "professional-standards"],
+      "construction": ["mechanics-lien-rights", "change-orders"],
+      "technology": ["intellectual-property", "data-security"]
+    },
+    "paymentProtections": [
+      "late-payment-fees",
+      "collection-costs",
+      "attorneys-fees"
+    ]
+  }
+}

@@ -1,37 +1,55 @@
 // src/lib/documents/us/index.ts
-// This file should export all US-specific documents.
+// Auto-generated US documents index - connects all document folders
 
-export { vehicleBillOfSale } from './vehicle-bill-of-sale';
-// Explicitly reference the folder index to avoid picking up the legacy
-// promissory-note.ts file which lacks the full schema and question set.
-export { promissoryNote } from './promissory-note/index';
-
-// Assuming these documents are now or will be structured similarly under ./us/
+export { affidavit } from './affidavit';
 export { affidavitGeneral } from './affidavit-general';
+export { articlesOfIncorporation } from './articles-of-incorporation';
 export { articlesOfIncorporationBiz } from './articles-of-incorporation-biz';
+export { boatBillOfSale } from './boat-bill-of-sale';
 export { childCustodyAgreement } from './child-custody-agreement';
 export { childMedicalConsent } from './child-medical-consent';
 export { commercialLeaseAgreement } from './commercial-lease-agreement';
+export { consignmentAgreement } from './consignment-agreement';
+export { copyrightAssignment } from './copyright-assignment';
+export { demandLetter } from './demand-letter';
 export { demandLetterPayment } from './demand-letter-payment';
-export { divorceSettlementAgreement } from './divorce-settlement-agreement/index';
-export { employmentOfferLetter } from './employment-offer-letter/index';
-export { employmentTerminationLetter } from './employment-termination-letter/index';
-export { evictionNotice } from './eviction-notice/index';
-export { generalInquiry } from './general-inquiry/index';
-export { healthcarePowerOfAttorney } from './healthcare-power-of-attorney/index';
-export { independentContractorAgreement } from './independent-contractor-agreement/index';
-export { invoice } from './invoice/index';
-export { lastWillTestament } from './last-will-testament/index';
-export { leaseAgreement } from './lease-agreement/index';
-export { livingTrust } from './living-trust/index';
-export { livingWill } from './living-will/index';
-export { nda } from './nda/index';
-export { nonCompeteAgreement } from './non-compete-agreement/index';
+export { divorceSettlement } from './divorce-settlement';
+export { divorceSettlementAgreement } from './divorce-settlement-agreement';
+export { employmentContract } from './employment-contract';
+export { employmentOfferLetter } from './employment-offer-letter';
+export { employmentTerminationLetter } from './employment-termination-letter';
+export { evictionNotice } from './eviction-notice';
+export { generalInquiry } from './general-inquiry';
+export { healthcarePowerOfAttorney } from './healthcare-power-of-attorney';
+export { independentContractorAgreement } from './independent-contractor-agreement';
+export { invoice } from './invoice';
+export { lastWillTestament } from './last-will-testament';
+export { leaseAgreement } from './lease-agreement';
+export { licensingAgreement } from './licensing-agreement';
+export { livingTrust } from './living-trust';
+export { livingWill } from './living-will';
+export { llcOperatingAgreement } from './llc-operating-agreement';
+export { loanAgreement } from './loan-agreement';
+export { medicalConsent } from './medical-consent';
+export { nda } from './nda';
+export { nonCompeteAgreement } from './non-compete-agreement';
+export { nonDisclosureAgreement } from './non-disclosure-agreement';
+export { offerLetter } from './offer-letter';
 export { operatingAgreement } from './operating-agreement';
 export { partnershipAgreement } from './partnership-agreement';
 export { powerOfAttorney } from './power-of-attorney';
 export { prenuptialAgreement } from './prenuptial-agreement';
+export { promissoryNote } from './promissory-note';
+export { propertyDeed } from './property-deed';
+export { purchaseAgreement } from './purchase-agreement';
 export { quitclaimDeed } from './quitclaim-deed';
+export { rentalAgreement } from './rental-agreement';
+export { residentialLeaseAgreement } from './residential-lease-agreement';
 export { serviceAgreement } from './service-agreement';
-// Add any other US-specific documents here following the same export pattern
-// e.g., export { yourNewUsDoc } from './your-new-us-doc-slug';
+export { severanceAgreement } from './severance-agreement';
+export { terminationLetter } from './termination-letter';
+export { trademarkAssignment } from './trademark-assignment';
+export { vehicleBillOfSale } from './vehicle-bill-of-sale';
+
+// Export count for verification
+export const US_DOCUMENT_COUNT = 49;

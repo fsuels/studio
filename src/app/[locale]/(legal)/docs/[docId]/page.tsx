@@ -72,7 +72,25 @@ export async function Head({ params }: { params: DocPageParams }) {
   const { locale, docId } = await params
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL!
 
-  const faqJsonLd = {
+  // Find the document configuration
+  const docConfig = documentLibrary.find((d) => d.id === docId)
+  if (!docConfig) {
+    return null
+  }
+
+  const documentName = 
+    locale === 'es' && docConfig.translations?.es?.name
+      ? docConfig.translations.es.name
+      : docConfig.translations?.en?.name || docConfig.name
+
+  const documentDescription = 
+    locale === 'es' && docConfig.translations?.es?.description
+      ? docConfig.translations.es.description
+      : docConfig.translations?.en?.description || docConfig.description
+
+  // Use vehicle bill of sale FAQs only for that specific document
+  const shouldIncludeFAQ = docId === 'bill-of-sale-vehicle'
+  const faqJsonLd = shouldIncludeFAQ ? {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
     mainEntity: vehicleBillOfSaleFaqs.map((faq) => ({
@@ -83,16 +101,16 @@ export async function Head({ params }: { params: DocPageParams }) {
         text: locale === 'es' ? faq.answerEs : faq.answerEn,
       },
     })),
-  }
+  } : null
 
   const productJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Product',
-    name: 'Vehicle Bill of Sale',
-    description: 'Attorney-approved template for transferring a vehicle.',
+    name: documentName,
+    description: documentDescription,
     offers: {
       '@type': 'Offer',
-      price: '19.95',
+      price: docConfig.basePrice.toString(),
       priceCurrency: 'USD',
       url: `${siteUrl}/${locale}/docs/${docId}`,
     },
@@ -109,10 +127,12 @@ export async function Head({ params }: { params: DocPageParams }) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
       />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
-      />
+      {faqJsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+        />
+      )}
     </>
   )
 }

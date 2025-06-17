@@ -1,0 +1,30 @@
+[
+  {
+    "timestamp": "2025-06-17T04:22:31.708Z",
+    "documentId": "commercial-lease-agreement",
+    "errorType": "low_confidence_translation",
+    "message": "Confidence 52% below threshold 70%",
+    "severity": "warning"
+  },
+  {
+    "timestamp": "2025-06-17T04:22:31.760Z",
+    "documentId": "divorce-settlement-agreement",
+    "errorType": "low_confidence_translation",
+    "message": "Confidence 54% below threshold 70%",
+    "severity": "warning"
+  },
+  {
+    "timestamp": "2025-06-17T04:22:31.895Z",
+    "documentId": "last-will-testament",
+    "errorType": "low_confidence_translation",
+    "message": "Confidence 65% below threshold 70%",
+    "severity": "warning"
+  },
+  {
+    "timestamp": "2025-06-17T04:22:31.909Z",
+    "documentId": "lease-agreement",
+    "errorType": "low_confidence_translation",
+    "message": "Confidence 44% below threshold 70%",
+    "severity": "warning"
+  }
+]

@@ -1,19 +1,25 @@
-import type { LegalDocumentMetadata } from '@/types/documents';
+// src/lib/documents/us/power-of-attorney/metadata.ts
+import type { LegalDocument } from '@/types/documents';
+import { PowerOfAttorneySchema } from './schema';
+import { powerOfAttorneyQuestions } from './questions';
 
-export const powerOfAttorneyMetadata: LegalDocumentMetadata = {
+export const powerOfAttorneyMeta: LegalDocument = {
+  id: 'power-of-attorney',
   jurisdiction: 'US',
   category: 'Personal',
-  templatePaths: {
-    en: '/templates/en/power-of-attorney.md',
-    es: '/templates/es/power-of-attorney.md'
-  },
   languageSupport: ['en', 'es'],
   requiresNotarization: true,
   canBeRecorded: false,
   offerNotarization: true,
   offerRecordingHelp: false,
-  basePrice: 5,
+  basePrice: 12,
   states: 'all',
+  templatePaths: {
+    en: '/templates/en/powerOfAttorney.md',
+    es: '/templates/es/powerOfAttorney.md',
+  },
+  schema: PowerOfAttorneySchema,
+  questions: powerOfAttorneyQuestions,
   upsellClauses: [],
   translations: {
     en: {

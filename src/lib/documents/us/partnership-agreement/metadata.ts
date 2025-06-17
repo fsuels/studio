@@ -1,11 +1,26 @@
-import type { LegalDocumentMetadata } from '@/types/documents';
+// src/lib/documents/us/partnership-agreement/metadata.ts
+import type { LegalDocument } from '@/types/documents';
+import { PartnershipAgreementSchema } from './schema';
+import { partnershipAgreementQuestions } from './questions';
 
-export const partnershipAgreementMetadata: LegalDocumentMetadata = {
+export const partnershipAgreementMeta: LegalDocument = {
+  id: 'partnership-agreement',
+  jurisdiction: 'US',
   category: 'Business',
+  languageSupport: ['en', 'es'],
+  requiresNotarization: false,
+  canBeRecorded: false,
+  offerNotarization: false,
+  offerRecordingHelp: false,
+  basePrice: 18,
+  states: 'all',
   templatePaths: {
     en: '/templates/en/partnership-agreement.md',
-    es: '/templates/es/partnership-agreement.md'
+    es: '/templates/es/partnership-agreement.md',
   },
+  schema: PartnershipAgreementSchema,
+  questions: partnershipAgreementQuestions,
+  upsellClauses: [],
   translations: {
     en: {
       name: 'Partnership Agreement',
@@ -20,11 +35,4 @@ export const partnershipAgreementMetadata: LegalDocumentMetadata = {
       aliases: ['socios de negocios', 'empresa conjunta', 'términos de socios'],
     },
   },
-  languageSupport: ['en', 'es'],
-  requiresNotarization: false,
-  canBeRecorded: false,
-  offerNotarization: false,
-  offerRecordingHelp: false,
-  basePrice: 7,
-  states: 'all',
 };

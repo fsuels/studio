@@ -1,28 +1,44 @@
-export const affidavitMetadata = {
-  "id": "affidavit",
-  "name": "General Affidavit",
-  "category": "Legal",
-  "complexity": "low",
-  "estimatedTime": "5-10 minutes",
-  "offerNotarization": true,
-  "states": "all",
-  "tags": [
-    "legal",
-    "low",
-    "legal",
-    "template",
-    "notarization"
-  ],
-  "translations": {
-    "en": {
-      "name": "General Affidavit",
-      "description": "Create a legally binding General Affidavit with our easy-to-use template. State-specific requirements included.",
-      "aliases": []
+import type { LegalDocument } from '@/types/documents';
+import { affidavitSchema } from './schema';
+import { affidavitQuestions } from './questions';
+
+export const affidavitMeta: LegalDocument = {
+  id: 'affidavit',
+  jurisdiction: 'US',
+  category: 'Personal',
+  languageSupport: ['en', 'es'],
+  requiresNotarization: true,
+  canBeRecorded: false,
+  offerNotarization: true,
+  offerRecordingHelp: false,
+  basePrice: 5.95,
+  states: 'all',
+  templatePaths: {
+    en: '/templates/en/affidavit.md',
+    es: '/templates/es/affidavit.md',
+  },
+  schema: affidavitSchema,
+  questions: affidavitQuestions,
+  upsellClauses: [],
+  translations: {
+    en: {
+      name: 'General Affidavit',
+      description: 'Create a legally binding general affidavit with our easy-to-use template. State-specific requirements included.',
+      aliases: [
+        'sworn statement',
+        'sworn declaration',
+        'statement under oath',
+        'legal affidavit'
+      ],
     },
-    "es": {
-      "name": "General Affidavit",
-      "description": "Crea un General Affidavit legalmente válido con nuestra plantilla fácil de usar. Incluye requisitos específicos del estado.",
-      "aliases": []
-    }
-  }
+    es: {
+      name: 'Declaración Jurada General',
+      description: 'Crea una declaración jurada general legalmente válida con nuestra plantilla fácil de usar. Incluye requisitos específicos del estado.',
+      aliases: [
+        'declaración jurada',
+        'declaración bajo juramento',
+        'afidávit legal'
+      ],
+    },
+  },
 };

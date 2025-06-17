@@ -1,9 +1,26 @@
-import type { DocumentMetadata } from '@/types/documents';
+// src/lib/documents/us/healthcare-power-of-attorney/metadata.ts
+import type { LegalDocument } from '@/types/documents';
+import { HealthcarePowerOfAttorneySchema } from './schema';
+import { healthcarePowerOfAttorneyQuestions } from './questions';
 
-export const metadata: DocumentMetadata = {
+export const healthcarePowerOfAttorneyMeta: LegalDocument = {
   id: 'healthcare-power-of-attorney',
   jurisdiction: 'US',
   category: 'Personal',
+  languageSupport: ['en', 'es'],
+  requiresNotarization: true,
+  canBeRecorded: false,
+  offerNotarization: true,
+  offerRecordingHelp: false,
+  basePrice: 12,
+  states: 'all',
+  templatePaths: {
+    en: '/templates/en/healthcare-power-of-attorney.md',
+    es: '/templates/es/healthcare-power-of-attorney.md',
+  },
+  schema: HealthcarePowerOfAttorneySchema,
+  questions: healthcarePowerOfAttorneyQuestions,
+  upsellClauses: [],
   translations: {
     en: {
       name: 'Healthcare Power of Attorney',
@@ -27,16 +44,4 @@ export const metadata: DocumentMetadata = {
       ],
     },
   },
-  languageSupport: ['en', 'es'],
-  requiresNotarization: true,
-  canBeRecorded: false,
-  offerNotarization: true,
-  offerRecordingHelp: false,
-  basePrice: 5,
-  states: 'all',
-  templatePaths: {
-    en: '/templates/en/healthcare-power-of-attorney.md',
-    es: '/templates/es/healthcare-power-of-attorney.md',
-  },
-  upsellClauses: [],
 };

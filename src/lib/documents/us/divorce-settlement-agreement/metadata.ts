@@ -1,9 +1,26 @@
-import type { DocumentMetadata } from '@/types/documents';
+// src/lib/documents/us/divorce-settlement-agreement/metadata.ts
+import type { LegalDocument } from '@/types/documents';
+import { DivorceSettlementAgreementSchema } from './schema';
+import { divorceSettlementAgreementQuestions } from './questions';
 
-export const metadata: DocumentMetadata = {
+export const divorceSettlementAgreementMeta: LegalDocument = {
   id: 'divorce-settlement-agreement',
   jurisdiction: 'US',
   category: 'Family',
+  languageSupport: ['en', 'es'],
+  requiresNotarization: true,
+  canBeRecorded: true,
+  offerNotarization: true,
+  offerRecordingHelp: true,
+  basePrice: 25,
+  states: 'all',
+  templatePaths: {
+    en: '/templates/en/divorce-settlement-agreement.md',
+    es: '/templates/es/divorce-settlement-agreement.md',
+  },
+  schema: DivorceSettlementAgreementSchema,
+  questions: divorceSettlementAgreementQuestions,
+  upsellClauses: [],
   translations: {
     en: {
       name: 'Divorce Settlement Agreement',
@@ -30,16 +47,4 @@ export const metadata: DocumentMetadata = {
       ],
     },
   },
-  languageSupport: ['en', 'es'],
-  requiresNotarization: true,
-  canBeRecorded: true,
-  offerNotarization: true,
-  offerRecordingHelp: true,
-  basePrice: 7,
-  states: 'all',
-  templatePaths: {
-    en: '/templates/en/divorce-settlement-agreement.md',
-    es: '/templates/es/divorce-settlement-agreement.md',
-  },
-  upsellClauses: [],
 };

@@ -1,9 +1,26 @@
-import type { DocumentMetadata } from '@/types/documents';
+// src/lib/documents/us/eviction-notice/metadata.ts
+import type { LegalDocument } from '@/types/documents';
+import { EvictionNoticeSchema } from './schema';
+import { evictionNoticeQuestions } from './questions';
 
-export const metadata: DocumentMetadata = {
+export const evictionNoticeMeta: LegalDocument = {
   id: 'eviction-notice',
   jurisdiction: 'US',
   category: 'Real Estate',
+  languageSupport: ['en', 'es'],
+  requiresNotarization: false,
+  canBeRecorded: false,
+  offerNotarization: false,
+  offerRecordingHelp: false,
+  basePrice: 10,
+  states: 'all',
+  templatePaths: {
+    en: '/templates/en/eviction-notice.md',
+    es: '/templates/es/eviction-notice.md',
+  },
+  schema: EvictionNoticeSchema,
+  questions: evictionNoticeQuestions,
+  upsellClauses: [],
   translations: {
     en: {
       name: 'Eviction Notice',
@@ -22,16 +39,4 @@ export const metadata: DocumentMetadata = {
       ],
     },
   },
-  languageSupport: ['en', 'es'],
-  requiresNotarization: false,
-  canBeRecorded: false,
-  offerNotarization: false,
-  offerRecordingHelp: false,
-  basePrice: 5,
-  states: 'all',
-  templatePaths: {
-    en: '/templates/en/eviction-notice.md',
-    es: '/templates/es/eviction-notice.md',
-  },
-  upsellClauses: [],
 };

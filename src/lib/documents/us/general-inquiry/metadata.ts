@@ -1,9 +1,26 @@
-import type { DocumentMetadata } from '@/types/documents';
+// src/lib/documents/us/general-inquiry/metadata.ts
+import type { LegalDocument } from '@/types/documents';
+import { GeneralInquirySchema } from './schema';
+import { generalInquiryQuestions } from './questions';
 
-export const metadata: DocumentMetadata = {
+export const generalInquiryMeta: LegalDocument = {
   id: 'general-inquiry',
   jurisdiction: 'US',
   category: 'Miscellaneous',
+  languageSupport: ['en', 'es'],
+  requiresNotarization: false,
+  canBeRecorded: false,
+  offerNotarization: false,
+  offerRecordingHelp: false,
+  basePrice: 0,
+  states: 'all',
+  templatePaths: {
+    en: '/templates/en/general-inquiry.md',
+    es: '/templates/es/general-inquiry.md',
+  },
+  schema: GeneralInquirySchema,
+  questions: generalInquiryQuestions,
+  upsellClauses: [],
   translations: {
     en: {
       name: 'General Inquiry',
@@ -18,16 +35,4 @@ export const metadata: DocumentMetadata = {
       aliases: ['ayuda', 'pregunta', 'consejo legal', 'no estoy seguro'],
     },
   },
-  languageSupport: ['en', 'es'],
-  requiresNotarization: false,
-  canBeRecorded: false,
-  offerNotarization: false,
-  offerRecordingHelp: false,
-  basePrice: 0,
-  states: 'all',
-  templatePaths: {
-    en: '/templates/en/general-inquiry.md',
-    es: '/templates/es/general-inquiry.md',
-  },
-  upsellClauses: [],
 };

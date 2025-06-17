@@ -13,9 +13,35 @@ Collectively referred to herein as the "Parties."
 
 ---
 
-## 1. Background and Recitals
+## 1. Party Identification
 
-### 1.1 Marriage Information
+### 1.1 Petitioner/Plaintiff Identification
+**Full Legal Name:** {{petitioner_name}}  
+**Date of Birth:** {{petitioner_dob}}  
+**Social Security Number:** {{petitioner_ssn}}  
+**Driver's License:** {{petitioner_license}}  
+**Current Address:** {{petitioner_address}}  
+**Phone Number:** {{petitioner_phone}}  
+**Email Address:** {{petitioner_email}}  
+**Occupation:** {{petitioner_occupation}}  
+**Employer:** {{petitioner_employer}}
+
+### 1.2 Respondent/Defendant Identification
+**Full Legal Name:** {{respondent_name}}  
+**Date of Birth:** {{respondent_dob}}  
+**Social Security Number:** {{respondent_ssn}}  
+**Driver's License:** {{respondent_license}}  
+**Current Address:** {{respondent_address}}  
+**Phone Number:** {{respondent_phone}}  
+**Email Address:** {{respondent_email}}  
+**Occupation:** {{respondent_occupation}}  
+**Employer:** {{respondent_employer}}
+
+---
+
+## 2. Background and Recitals
+
+### 2.1 Marriage Information
 **Date of Marriage:** {{marriage_date}}  
 **Place of Marriage:** {{marriage_location}}  
 **Marriage Certificate Number:** {{marriage_certificate_number}}
@@ -40,7 +66,7 @@ Both parties are representing themselves pro se in this matter.
 
 ---
 
-## 2. Children of the Marriage
+## 3. Children of the Marriage
 
 ### 2.1 Minor Children
 {{#if minor_children}}
@@ -82,7 +108,7 @@ The Parties have no adult children together.
 
 ---
 
-## 3. Child Custody and Visitation
+## 4. Child Custody and Visitation
 
 {{#if minor_children}}
 ### 3.1 Legal Custody
@@ -116,7 +142,7 @@ The Parties have no adult children together.
 
 ---
 
-## 4. Child Support
+## 5. Child Support
 
 {{#if minor_children}}
 ### 4.1 Support Obligation
@@ -153,7 +179,7 @@ Child support shall terminate when the child reaches age {{support_termination_a
 
 ---
 
-## 5. Spousal Support/Alimony
+## 6. Spousal Support/Alimony
 
 ### 5.1 Spousal Support Award
 {{#if spousal_support_awarded}}
@@ -179,7 +205,7 @@ Spousal support shall terminate upon:
 
 ---
 
-## 6. Property Division
+## 7. Property Division
 
 ### 6.1 Marital Home
 **Property Address:** {{marital_home_address}}  
@@ -247,7 +273,7 @@ Neither Party owns any business interests.
 
 ---
 
-## 7. Debt Allocation
+## 8. Debt Allocation
 
 ### 7.1 Joint Debts
 **Mortgage:** {{mortgage_responsibility}}  
@@ -264,7 +290,7 @@ Each Party shall be responsible for debts allocated to them and shall hold the o
 
 ---
 
-## 8. Insurance
+## 9. Insurance
 
 ### 8.1 Health Insurance
 {{#if minor_children}}
@@ -290,24 +316,82 @@ No life insurance requirements.
 
 ---
 
-## 9. Taxes
+## 10. Tax Considerations
 
-### 9.1 Tax Returns
-**Prior Year Returns:** {{prior_tax_returns}}  
-**Current Year Return:** {{current_year_tax_filing}}
+### 9.1 Federal and State Tax Returns
+**Prior Year Returns ({{prior_tax_year}}):** {{prior_tax_returns}}  
+**Current Year Return ({{current_tax_year}}):** {{current_year_tax_filing}}  
+**Filing Status:** {{tax_filing_status}}  
+**Preparation Responsibility:** {{tax_preparation_responsibility}}  
+**Cost Allocation:** {{tax_preparation_cost_allocation}}
 
 ### 9.2 Tax Refunds and Liabilities
-**Outstanding Refunds:** {{tax_refunds_allocation}}  
-**Outstanding Liabilities:** {{tax_liabilities_allocation}}
+**Outstanding Federal Refunds:** {{federal_tax_refunds_allocation}}  
+**Outstanding State Refunds:** {{state_tax_refunds_allocation}}  
+**Outstanding Federal Liabilities:** {{federal_tax_liabilities_allocation}}  
+**Outstanding State Liabilities:** {{state_tax_liabilities_allocation}}  
+**Payment Responsibility:** {{tax_payment_responsibility}}
 
-### 9.3 Dependency Exemptions
+### 9.3 Dependency Exemptions and Tax Credits
 {{#if minor_children}}
-**Child Tax Exemptions:** {{tax_exemption_allocation}}
+**Child Tax Exemptions:** {{tax_exemption_allocation}}  
+**Child Tax Credit:** {{child_tax_credit_allocation}}  
+**Earned Income Tax Credit:** {{eitc_allocation}}  
+**Child and Dependent Care Credit:** {{child_care_credit_allocation}}  
+**Education Credits:** {{education_credit_allocation}}
 {{/if}}
+
+### 9.4 Property Transfer Tax Implications
+**Real Estate Transfer Tax:** {{real_estate_transfer_tax}}  
+**Capital Gains Considerations:** {{capital_gains_implications}}  
+**Basis Step-Up:** {{property_basis_considerations}}  
+**Section 1041 Treatment:** Property transfers between spouses pursuant to divorce are generally non-taxable under IRC Section 1041.
+
+### 9.5 Retirement Account Tax Implications
+**401(k)/403(b) Division:** {{retirement_division_tax_implications}}  
+**IRA Division:** {{ira_division_tax_implications}}  
+**Pension Division:** {{pension_division_tax_implications}}  
+**QDRO Tax Treatment:** {{qdro_tax_implications}}  
+**Early Withdrawal Penalties:** {{early_withdrawal_considerations}}
+
+### 9.6 Spousal Support Tax Treatment
+{{#if spousal_support_awarded}}
+**Deductibility for Payor:** {{spousal_support_deduction}}  
+**Taxability for Recipient:** {{spousal_support_income_tax}}  
+**Alimony Recapture Rules:** {{alimony_recapture_provisions}}  
+**Tax Compliance:** Both parties acknowledge understanding of current federal tax treatment of spousal support payments.
+{{/if}}
+
+### 9.7 Business Interest Tax Implications
+{{#if business_interests}}
+**Business Valuation Date:** {{business_valuation_date}}  
+**Tax Basis:** {{business_tax_basis}}  
+**Depreciation Recapture:** {{depreciation_recapture_implications}}  
+**Future Tax Obligations:** {{business_future_tax_obligations}}
+{{/if}}
+
+### 9.8 Debt Forgiveness and Tax Consequences
+**Cancelled Debt Income:** {{cancelled_debt_tax_implications}}  
+**Insolvency Exception:** {{insolvency_considerations}}  
+**Form 1099-C Reporting:** {{debt_forgiveness_reporting}}
+
+### 9.9 State-Specific Tax Considerations
+**State Income Tax:** {{state_income_tax_implications}}  
+**State Property Tax:** {{state_property_tax_allocation}}  
+**Local Tax Obligations:** {{local_tax_considerations}}  
+**Multi-State Issues:** {{multi_state_tax_implications}}
+
+### 9.10 Future Tax Cooperation
+**Document Sharing:** Both parties agree to provide tax-related documents upon reasonable request for five (5) years following the divorce.  
+**Amendment Cooperation:** Both parties agree to cooperate in any future tax audits or amendments related to joint returns.  
+**Indemnification:** {{tax_indemnification_provisions}}
+
+### 9.11 Tax Professional Consultation
+Both parties acknowledge they have been advised to consult with qualified tax professionals regarding the tax implications of this divorce settlement.
 
 ---
 
-## 10. Name Change
+## 11. Name Change
 
 ### 10.1 Name Restoration
 {{#if name_change_requested}}
@@ -318,7 +402,7 @@ Neither Party requests a name change.
 
 ---
 
-## 11. Restraining Orders and Protection
+## 12. Restraining Orders and Protection
 
 ### 11.1 Mutual Restraining Orders
 {{#if restraining_orders}}
@@ -332,7 +416,7 @@ Both Parties agree to refrain from harassing, threatening, or bothering the othe
 
 ---
 
-## 12. Dispute Resolution
+## 13. Dispute Resolution
 
 ### 12.1 Mediation
 {{#if mediation_required}}
@@ -349,7 +433,7 @@ This Agreement shall be subject to the jurisdiction of {{court_name}} for enforc
 
 ---
 
-## 13. General Provisions
+## 14. General Provisions
 
 ### 13.1 Full Disclosure
 Each Party represents that they have made full disclosure of all assets, debts, income, and liabilities to the other Party.
@@ -377,7 +461,7 @@ This Agreement shall be incorporated into the final divorce decree.
 
 ---
 
-## 14. Mutual Releases
+## 15. Mutual Releases
 
 ### 14.1 General Release
 Except as provided in this Agreement, each Party releases and forever discharges the other from all claims, demands, and causes of action arising from the marriage relationship.
@@ -392,7 +476,7 @@ Each Party waives all rights to inherit from the other Party's estate, except as
 
 ---
 
-## 15. Enforcement
+## 16. Enforcement
 
 ### 15.1 Contempt of Court
 Violation of this Agreement may result in contempt of court proceedings.
@@ -405,7 +489,7 @@ In addition to other remedies, the non-breaching Party may seek monetary damages
 
 ---
 
-## 16. Acknowledgments
+## 17. Acknowledgments
 
 ### 16.1 Party Acknowledgments
 Each Party acknowledges:
@@ -420,7 +504,7 @@ Each Party has provided complete and accurate financial information to the other
 
 ---
 
-## 17. Signatures
+## 18. Signatures
 
 **IN WITNESS WHEREOF**, the Parties have executed this Divorce Settlement Agreement as of the date first written above.
 
@@ -442,7 +526,7 @@ Each Party has provided complete and accurate financial information to the other
 
 ---
 
-## 18. Attorney Acknowledgments
+## 19. Attorney Acknowledgments
 
 {{#if legal_representation}}
 **ATTORNEY FOR PETITIONER:**
@@ -468,7 +552,7 @@ I have advised my client regarding this Agreement and believe it to be fair and 
 
 ---
 
-## 19. Notarization
+## 20. Notarization
 
 **State of {{state}}**  
 **County of {{county}}**
@@ -484,7 +568,7 @@ I certify under PENALTY OF PERJURY under the laws of the State of {{state}} that
 
 ---
 
-## 20. Court Approval
+## 21. Court Approval
 
 **FOR COURT USE ONLY:**
 

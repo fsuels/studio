@@ -1,0 +1,17 @@
+{
+  "timestamp": "2025-06-17T04:16:34.514Z",
+  "summary": {
+    "totalIssues": 0,
+    "criticalIssues": 0,
+    "highIssues": 0,
+    "mediumIssues": 0,
+    "lowIssues": 0,
+    "autoFixAttempts": 0,
+    "autoFixSuccesses": 0,
+    "escalatedIssues": 0,
+    "blockedDeployment": false
+  },
+  "decisions": [],
+  "escalationQueue": [],
+  "recommendations": []
+}

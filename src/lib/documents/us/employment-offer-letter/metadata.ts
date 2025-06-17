@@ -1,9 +1,26 @@
-import type { DocumentMetadata } from '@/types/documents';
+// src/lib/documents/us/employment-offer-letter/metadata.ts
+import type { LegalDocument } from '@/types/documents';
+import { EmploymentOfferLetterSchema } from './schema';
+import { employmentOfferLetterQuestions } from './questions';
 
-export const metadata: DocumentMetadata = {
+export const employmentOfferLetterMeta: LegalDocument = {
   id: 'employment-offer-letter',
   jurisdiction: 'US',
   category: 'Employment',
+  languageSupport: ['en', 'es'],
+  requiresNotarization: false,
+  canBeRecorded: false,
+  offerNotarization: false,
+  offerRecordingHelp: false,
+  basePrice: 8,
+  states: 'all',
+  templatePaths: {
+    en: '/templates/en/employment-offer-letter.md',
+    es: '/templates/es/employment-offer-letter.md',
+  },
+  schema: EmploymentOfferLetterSchema,
+  questions: employmentOfferLetterQuestions,
+  upsellClauses: [],
   translations: {
     en: {
       name: 'Employment Offer Letter',
@@ -18,16 +35,4 @@ export const metadata: DocumentMetadata = {
       aliases: ['contratar empleado', 'oferta de trabajo', 'términos de empleo'],
     },
   },
-  languageSupport: ['en', 'es'],
-  requiresNotarization: false,
-  canBeRecorded: false,
-  offerNotarization: false,
-  offerRecordingHelp: false,
-  basePrice: 5,
-  states: 'all',
-  templatePaths: {
-    en: '/templates/en/employment-offer-letter.md',
-    es: '/templates/es/employment-offer-letter.md',
-  },
-  upsellClauses: [],
 };

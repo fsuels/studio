@@ -1,27 +1,44 @@
-export const offerLetterMetadata = {
-  "id": "offer-letter",
-  "name": "Employment Offer Letter",
-  "category": "Employment",
-  "complexity": "low",
-  "estimatedTime": "5-10 minutes",
-  "offerNotarization": false,
-  "states": "all",
-  "tags": [
-    "employment",
-    "low",
-    "legal",
-    "template"
-  ],
-  "translations": {
-    "en": {
-      "name": "Employment Offer Letter",
-      "description": "Create a legally binding Employment Offer Letter with our easy-to-use template. State-specific requirements included.",
-      "aliases": []
+import type { LegalDocument } from '@/types/documents';
+import { offerLetterSchema } from './schema';
+import { offerLetterQuestions } from './questions';
+
+export const offerLetterMeta: LegalDocument = {
+  id: 'offer-letter',
+  jurisdiction: 'US',
+  category: 'Employment',
+  languageSupport: ['en', 'es'],
+  requiresNotarization: false,
+  canBeRecorded: false,
+  offerNotarization: false,
+  offerRecordingHelp: false,
+  basePrice: 7.95,
+  states: 'all',
+  templatePaths: {
+    en: '/templates/en/offer-letter.md',
+    es: '/templates/es/offer-letter.md',
+  },
+  schema: offerLetterSchema,
+  questions: offerLetterQuestions,
+  upsellClauses: [],
+  translations: {
+    en: {
+      name: 'Employment Offer Letter',
+      description: 'Create a professional employment offer letter with our easy-to-use template. State-specific requirements included.',
+      aliases: [
+        'job offer letter',
+        'employment offer',
+        'offer of employment',
+        'job offer'
+      ],
     },
-    "es": {
-      "name": "Empleo Offer Carta",
-      "description": "Crea un Empleo Offer Carta legalmente válido con nuestra plantilla fácil de usar. Incluye requisitos específicos del estado.",
-      "aliases": []
-    }
-  }
+    es: {
+      name: 'Carta de Oferta de Empleo',
+      description: 'Crea una carta de oferta de empleo profesional con nuestra plantilla fácil de usar. Incluye requisitos específicos del estado.',
+      aliases: [
+        'oferta de trabajo',
+        'carta de trabajo',
+        'oferta de empleo'
+      ],
+    },
+  },
 };

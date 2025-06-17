@@ -180,22 +180,112 @@ Future employment verifications will confirm:
 
 ---
 
-## 9. Legal Considerations
+## 9. State-Specific Employment Law Compliance
 
-### 9.1 Separation Agreement
+### 9.1 Final Pay Requirements
+{{#if state_california}}
+**California Law:** Final pay must be provided immediately upon termination for involuntary terminations, or within 72 hours for voluntary resignations without notice.
+{{/if}}
+{{#if state_new_york}}
+**New York Law:** Final pay must be provided by the next regular payday following termination.
+{{/if}}
+{{#if state_texas}}
+**Texas Law:** Final pay must be provided within 6 days of termination.
+{{/if}}
+{{#if state_florida}}
+**Florida Law:** Final pay must be provided by the next regular payday following termination.
+{{/if}}
+**{{state}} Requirements:** {{state_final_pay_requirements}}
+
+### 9.2 State Vacation Pay Laws
+{{#if state_california}}
+**California Law:** Accrued vacation must be paid out upon termination. "Use it or lose it" policies are prohibited.
+{{/if}}
+{{#if state_massachusetts}}
+**Massachusetts Law:** Accrued vacation must be paid if company policy provides for such payment.
+{{/if}}
+**{{state}} Vacation Laws:** {{state_vacation_payout_requirements}}
+
+### 9.3 WARN Act Compliance
+{{#if warn_act_applicable}}
+**Worker Adjustment and Retraining Notification (WARN) Act:** This termination {{#if warn_notice_given}}has been preceded by the required 60-day notice{{else}}does not trigger WARN Act requirements{{/if}}.
+{{/if}}
+
+### 9.4 State Mini-WARN Laws
+{{#if state_warn_law}}
+**{{state}} WARN Requirements:** {{state_warn_law_details}}
+{{/if}}
+
+### 9.5 At-Will Employment Acknowledgment
+{{#if at_will_employment}}
+This termination is consistent with the at-will employment relationship. Either party may terminate the employment relationship at any time, with or without cause, and with or without notice.
+{{/if}}
+
+### 9.6 State Discrimination Laws
+This termination is not based on any protected characteristic under federal, state, or local anti-discrimination laws, including but not limited to:
+- Race, color, religion, sex, national origin, age, disability (federal protections)
+- {{state_protected_classes}}
+
+### 9.7 State Whistleblower Protections
+{{#if whistleblower_protections}}
+This termination is not in retaliation for any protected whistleblower activity under {{state}} law.
+{{/if}}
+
+### 9.8 Right to Work Laws
+{{#if right_to_work_state}}
+**{{state}} Right to Work:** This state has right-to-work laws. Union membership is not required for employment.
+{{/if}}
+
+---
+
+## 10. Federal Employment Law Compliance
+
+### 10.1 COBRA Notification Requirements
+{{#if cobra_eligible}}
+**Federal COBRA Requirements:** You have the right to continue health insurance coverage under COBRA for up to 18 months (or 36 months for certain qualifying events). You must be provided written notice of COBRA rights within 44 days of termination.
+{{/if}}
+
+### 10.2 Equal Employment Opportunity
+This termination complies with all federal EEO laws and is not based on any protected characteristic under Title VII, ADA, ADEA, or other federal anti-discrimination statutes.
+
+### 10.3 Family and Medical Leave Act (FMLA)
+{{#if fmla_eligible}}
+This termination does not violate your rights under the Family and Medical Leave Act.
+{{/if}}
+
+### 10.4 Worker Classification
+{{#if contractor_classification}}
+**Independent Contractor Notice:** Please note that post-termination work arrangements must comply with proper worker classification laws.
+{{/if}}
+
+---
+
+## 11. Legal Considerations
+
+### 11.1 Separation Agreement
 {{#if separation_agreement}}
 A separation agreement is attached that addresses additional terms of your termination. Please review and sign if you agree to the terms.
 {{/if}}
 
-### 9.2 Unemployment Benefits
+### 11.2 Unemployment Benefits
 {{unemployment_benefits_info}}
 
-### 9.3 Dispute Resolution
+**State Requirements:** Under {{state}} law, we are required to provide information about unemployment benefits. Contact your state unemployment office at {{state_unemployment_contact}}.
+
+### 11.3 Dispute Resolution
 {{dispute_resolution_clause}}
+
+### 11.4 Legal Time Limits
+{{#if legal_time_limits}}
+**Important:** Certain legal claims have time limits. For example:
+- Federal discrimination claims: 180 days (300 days in states with approved agencies)
+- State discrimination claims: {{state_discrimination_deadline}}
+- Wage and hour claims: {{state_wage_hour_deadline}}
+{{/if}}
 
 ---
 
-## 10. Contact Information
+## 12. Contact Information
 
 For questions regarding this termination or your final benefits, please contact:
 
@@ -209,7 +299,7 @@ For questions regarding this termination or your final benefits, please contact:
 
 ---
 
-## 11. Acknowledgment
+## 13. Acknowledgment
 
 Please sign and return one copy of this letter to acknowledge receipt.
 
@@ -225,7 +315,7 @@ I acknowledge that I have received and understand this Employment Termination Le
 
 ---
 
-## 12. Company Representative
+## 14. Company Representative
 
 **Issued By:**
 
@@ -247,7 +337,7 @@ I acknowledge that I have received and understand this Employment Termination Le
 
 ---
 
-## 13. Important Reminders
+## 15. Important Reminders
 
 - Return all company property by {{property_return_deadline}}
 - Review and retain this letter for your records

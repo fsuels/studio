@@ -1,11 +1,26 @@
-import type { LegalDocumentMetadata } from '@/types/documents';
+// src/lib/documents/us/quitclaim-deed/metadata.ts
+import type { LegalDocument } from '@/types/documents';
+import { QuitclaimDeedSchema } from './schema';
+import { quitclaimDeedQuestions } from './questions';
 
-export const quitclaimDeedMetadata: LegalDocumentMetadata = {
+export const quitclaimDeedMeta: LegalDocument = {
+  id: 'quitclaim-deed',
+  jurisdiction: 'US',
   category: 'Real Estate',
+  languageSupport: ['en', 'es'],
+  requiresNotarization: true,
+  canBeRecorded: true,
+  offerNotarization: true,
+  offerRecordingHelp: true,
+  basePrice: 18,
+  states: 'all',
   templatePaths: {
     en: '/templates/en/quitclaim-deed.md',
-    es: '/templates/es/quitclaim-deed.md'
+    es: '/templates/es/quitclaim-deed.md',
   },
+  schema: QuitclaimDeedSchema,
+  questions: quitclaimDeedQuestions,
+  upsellClauses: [],
   translations: {
     en: {
       name: 'Quitclaim Deed',
@@ -22,11 +37,4 @@ export const quitclaimDeedMetadata: LegalDocumentMetadata = {
       ],
     },
   },
-  languageSupport: ['en', 'es'],
-  requiresNotarization: true,
-  canBeRecorded: true,
-  offerNotarization: true,
-  offerRecordingHelp: true,
-  basePrice: 5,
-  states: 'all',
 };

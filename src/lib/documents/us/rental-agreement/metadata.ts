@@ -1,30 +1,44 @@
-export const rentalAgreementMetadata = {
-  "id": "rental-agreement",
-  "name": "Rental Agreement",
-  "category": "Real Estate",
-  "complexity": "medium",
-  "estimatedTime": "10-20 minutes",
-  "offerNotarization": false,
-  "states": "all",
-  "tags": [
-    "real estate",
-    "medium",
-    "legal",
-    "template",
-    "popular"
-  ],
-  "translations": {
-    "en": {
-      "name": "Rental Agreement",
-      "description": "Create a legally binding Rental Agreement with our easy-to-use template. State-specific requirements included.",
-      "aliases": [
-        "rental contract"
-      ]
+import type { LegalDocument } from '@/types/documents';
+import { rentalAgreementSchema } from './schema';
+import { rentalAgreementQuestions } from './questions';
+
+export const rentalAgreementMeta: LegalDocument = {
+  id: 'rental-agreement',
+  jurisdiction: 'US',
+  category: 'Real Estate',
+  languageSupport: ['en', 'es'],
+  requiresNotarization: false,
+  canBeRecorded: true,
+  offerNotarization: false,
+  offerRecordingHelp: true,
+  basePrice: 9.95,
+  states: 'all',
+  templatePaths: {
+    en: '/templates/en/rental-agreement.md',
+    es: '/templates/es/rental-agreement.md',
+  },
+  schema: rentalAgreementSchema,
+  questions: rentalAgreementQuestions,
+  upsellClauses: [],
+  translations: {
+    en: {
+      name: 'Rental Agreement',
+      description: 'Create a legally binding rental agreement with our easy-to-use template. State-specific requirements included.',
+      aliases: [
+        'rental contract',
+        'property rental',
+        'lease contract',
+        'tenancy agreement'
+      ],
     },
-    "es": {
-      "name": "Rental Acuerdo",
-      "description": "Crea un Rental Acuerdo legalmente válido con nuestra plantilla fácil de usar. Incluye requisitos específicos del estado.",
-      "aliases": []
-    }
-  }
+    es: {
+      name: 'Acuerdo de Alquiler',
+      description: 'Crea un acuerdo de alquiler legalmente válido con nuestra plantilla fácil de usar. Incluye requisitos específicos del estado.',
+      aliases: [
+        'contrato de alquiler',
+        'contrato de renta',
+        'acuerdo de arrendamiento'
+      ],
+    },
+  },
 };

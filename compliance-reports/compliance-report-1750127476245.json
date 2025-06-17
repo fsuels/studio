@@ -1,0 +1,1335 @@
+{
+  "timestamp": "2025-06-17T02:31:16.243Z",
+  "summary": {
+    "documentsChecked": 49,
+    "statesChecked": 5,
+    "totalIssues": null,
+    "totalWarnings": 213
+  },
+  "issues": [
+    {
+      "documentId": "divorce-settlement-agreement",
+      "type": "missing-clauses",
+      "message": "Missing required clauses: party-identification, tax-considerations"
+    },
+    {
+      "documentId": "divorce-settlement-agreement",
+      "type": "missing-clauses",
+      "message": "Missing required clauses: party-identification, tax-considerations"
+    },
+    {
+      "documentId": "divorce-settlement-agreement",
+      "type": "missing-clauses",
+      "message": "Missing required clauses: party-identification, tax-considerations"
+    },
+    {
+      "documentId": "divorce-settlement-agreement",
+      "type": "missing-clauses",
+      "message": "Missing required clauses: party-identification, tax-considerations"
+    },
+    {
+      "documentId": "employment-contract",
+      "type": "missing-clauses",
+      "message": "Missing required clauses: employer-info, employee-info, job-title, job-description, compensation, benefits, term-of-employment, termination-provisions, confidentiality"
+    },
+    {
+      "documentId": "employment-contract",
+      "type": "missing-clauses",
+      "message": "Missing required clauses: employer-info, employee-info, job-title, job-description, compensation, benefits, term-of-employment, termination-provisions, confidentiality"
+    },
+    {
+      "documentId": "employment-contract",
+      "type": "missing-clauses",
+      "message": "Missing required clauses: employer-info, employee-info, job-title, job-description, compensation, benefits, term-of-employment, termination-provisions, confidentiality"
+    },
+    {
+      "documentId": "employment-contract",
+      "type": "missing-clauses",
+      "message": "Missing required clauses: employer-info, employee-info, job-title, job-description, compensation, benefits, term-of-employment, termination-provisions, confidentiality"
+    },
+    {
+      "documentId": "last-will-testament",
+      "type": "missing-clauses",
+      "message": "Missing required clauses: testator-identification, revocation-clause, executor-appointment, beneficiary-designations, residuary-clause, witness-signatures"
+    },
+    {
+      "documentId": "last-will-testament",
+      "type": "missing-clauses",
+      "message": "Missing required clauses: testator-identification, revocation-clause, executor-appointment, beneficiary-designations, residuary-clause, witness-signatures"
+    },
+    {
+      "documentId": "last-will-testament",
+      "type": "missing-clauses",
+      "message": "Missing required clauses: testator-identification, revocation-clause, executor-appointment, beneficiary-designations, residuary-clause, witness-signatures"
+    },
+    {
+      "documentId": "last-will-testament",
+      "type": "missing-clauses",
+      "message": "Missing required clauses: testator-identification, revocation-clause, executor-appointment, beneficiary-designations, residuary-clause, witness-signatures"
+    },
+    {
+      "documentId": "lease-agreement",
+      "type": "missing-clauses",
+      "message": "Missing required clauses: landlord-info, tenant-info, rent-amount, security-deposit, tenant-obligations, landlord-obligations, termination-clause, default-provisions"
+    },
+    {
+      "documentId": "lease-agreement",
+      "type": "missing-clauses",
+      "message": "Missing required clauses: landlord-info, tenant-info, rent-amount, security-deposit, tenant-obligations, landlord-obligations, termination-clause, default-provisions"
+    },
+    {
+      "documentId": "lease-agreement",
+      "type": "missing-clauses",
+      "message": "Missing required clauses: landlord-info, tenant-info, rent-amount, security-deposit, tenant-obligations, landlord-obligations, termination-clause, default-provisions"
+    },
+    {
+      "documentId": "lease-agreement",
+      "type": "missing-clauses",
+      "message": "Missing required clauses: landlord-info, tenant-info, rent-amount, security-deposit, tenant-obligations, landlord-obligations, termination-clause, default-provisions"
+    },
+    {
+      "documentId": "llc-operating-agreement",
+      "type": "missing-clauses",
+      "message": "Missing required clauses: member-identification, ownership-percentages, capital-contributions, profit-distributions, management-structure, voting-rights, transfer-restrictions, dissolution-events, buyout-provisions"
+    },
+    {
+      "documentId": "llc-operating-agreement",
+      "type": "missing-clauses",
+      "message": "Missing required clauses: member-identification, ownership-percentages, capital-contributions, profit-distributions, management-structure, voting-rights, transfer-restrictions, dissolution-events, buyout-provisions"
+    },
+    {
+      "documentId": "llc-operating-agreement",
+      "type": "missing-clauses",
+      "message": "Missing required clauses: member-identification, ownership-percentages, capital-contributions, profit-distributions, management-structure, voting-rights, transfer-restrictions, dissolution-events, buyout-provisions"
+    },
+    {
+      "documentId": "llc-operating-agreement",
+      "type": "missing-clauses",
+      "message": "Missing required clauses: member-identification, ownership-percentages, capital-contributions, profit-distributions, management-structure, voting-rights, transfer-restrictions, dissolution-events, buyout-provisions"
+    },
+    {
+      "documentId": "nda",
+      "type": "missing-clauses",
+      "message": "Missing required clauses: confidential-information-definition, exceptions, term-duration"
+    },
+    {
+      "documentId": "nda",
+      "type": "missing-clauses",
+      "message": "Missing required clauses: confidential-information-definition, exceptions, term-duration"
+    },
+    {
+      "documentId": "nda",
+      "type": "missing-clauses",
+      "message": "Missing required clauses: confidential-information-definition, exceptions, term-duration"
+    },
+    {
+      "documentId": "nda",
+      "type": "missing-clauses",
+      "message": "Missing required clauses: confidential-information-definition, exceptions, term-duration"
+    },
+    {
+      "documentId": "partnership-agreement",
+      "type": "missing-clauses",
+      "message": "Missing required clauses: partner-identification, profit-loss-allocation, withdrawal-provisions, dissolution-terms"
+    },
+    {
+      "documentId": "partnership-agreement",
+      "type": "missing-clauses",
+      "message": "Missing required clauses: partner-identification, profit-loss-allocation, withdrawal-provisions, dissolution-terms"
+    },
+    {
+      "documentId": "partnership-agreement",
+      "type": "missing-clauses",
+      "message": "Missing required clauses: partner-identification, profit-loss-allocation, withdrawal-provisions, dissolution-terms"
+    },
+    {
+      "documentId": "partnership-agreement",
+      "type": "missing-clauses",
+      "message": "Missing required clauses: partner-identification, profit-loss-allocation, withdrawal-provisions, dissolution-terms"
+    },
+    {
+      "documentId": "power-of-attorney",
+      "type": "missing-clauses",
+      "message": "Missing required clauses: principal-info, agent-info, powers-granted, termination-conditions, principal-signature, acceptance-by-agent"
+    },
+    {
+      "documentId": "power-of-attorney",
+      "type": "missing-clauses",
+      "message": "Missing required clauses: principal-info, agent-info, powers-granted, termination-conditions, principal-signature, acceptance-by-agent"
+    },
+    {
+      "documentId": "power-of-attorney",
+      "type": "missing-clauses",
+      "message": "Missing required clauses: principal-info, agent-info, powers-granted, termination-conditions, principal-signature, acceptance-by-agent"
+    },
+    {
+      "documentId": "power-of-attorney",
+      "type": "missing-clauses",
+      "message": "Missing required clauses: principal-info, agent-info, powers-granted, termination-conditions, principal-signature, acceptance-by-agent"
+    },
+    {
+      "documentId": "promissory-note",
+      "type": "missing-clauses",
+      "message": "Missing required clauses: lender-info, borrower-info, principal-amount, interest-rate, payment-terms, maturity-date, default-provisions"
+    },
+    {
+      "documentId": "promissory-note",
+      "type": "missing-clauses",
+      "message": "Missing required clauses: lender-info, borrower-info, principal-amount, interest-rate, payment-terms, maturity-date, default-provisions"
+    },
+    {
+      "documentId": "promissory-note",
+      "type": "missing-clauses",
+      "message": "Missing required clauses: lender-info, borrower-info, principal-amount, interest-rate, payment-terms, maturity-date, default-provisions"
+    },
+    {
+      "documentId": "promissory-note",
+      "type": "missing-clauses",
+      "message": "Missing required clauses: lender-info, borrower-info, principal-amount, interest-rate, payment-terms, maturity-date, default-provisions"
+    },
+    {
+      "documentId": "quitclaim-deed",
+      "type": "missing-clauses",
+      "message": "Missing required clauses: grantor-identification, grantee-identification, property-legal-description, granting-clause, habendum-clause, grantor-signature"
+    },
+    {
+      "documentId": "quitclaim-deed",
+      "type": "missing-clauses",
+      "message": "Missing required clauses: grantor-identification, grantee-identification, property-legal-description, granting-clause, habendum-clause, grantor-signature"
+    },
+    {
+      "documentId": "quitclaim-deed",
+      "type": "missing-clauses",
+      "message": "Missing required clauses: grantor-identification, grantee-identification, property-legal-description, granting-clause, habendum-clause, grantor-signature"
+    },
+    {
+      "documentId": "quitclaim-deed",
+      "type": "missing-clauses",
+      "message": "Missing required clauses: grantor-identification, grantee-identification, property-legal-description, granting-clause, habendum-clause, grantor-signature"
+    },
+    {
+      "documentId": "service-agreement",
+      "type": "missing-clauses",
+      "message": "Missing required clauses: client-identification, termination-clause, liability-limitation"
+    },
+    {
+      "documentId": "service-agreement",
+      "type": "missing-clauses",
+      "message": "Missing required clauses: client-identification, termination-clause, liability-limitation"
+    },
+    {
+      "documentId": "service-agreement",
+      "type": "missing-clauses",
+      "message": "Missing required clauses: client-identification, termination-clause, liability-limitation"
+    },
+    {
+      "documentId": "service-agreement",
+      "type": "missing-clauses",
+      "message": "Missing required clauses: client-identification, termination-clause, liability-limitation"
+    },
+    {
+      "documentId": "vehicle-bill-of-sale",
+      "type": "missing-clauses",
+      "message": "Missing required clauses: seller-identification, buyer-identification, sale-price, signatures"
+    },
+    {
+      "documentId": "vehicle-bill-of-sale",
+      "type": "missing-clauses",
+      "message": "Missing required clauses: seller-identification, buyer-identification, sale-price, signatures"
+    },
+    {
+      "documentId": "vehicle-bill-of-sale",
+      "type": "missing-clauses",
+      "message": "Missing required clauses: seller-identification, buyer-identification, sale-price, signatures"
+    },
+    {
+      "documentId": "vehicle-bill-of-sale",
+      "type": "missing-clauses",
+      "message": "Missing required clauses: seller-identification, buyer-identification, sale-price, signatures"
+    }
+  ],
+  "warnings": [
+    {
+      "documentId": "affidavit",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for affidavit"
+    },
+    {
+      "documentId": "affidavit",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for affidavit"
+    },
+    {
+      "documentId": "affidavit",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for affidavit"
+    },
+    {
+      "documentId": "affidavit",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for affidavit"
+    },
+    {
+      "documentId": "affidavit",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for affidavit"
+    },
+    {
+      "documentId": "affidavit-general",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for affidavit-general"
+    },
+    {
+      "documentId": "affidavit-general",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for affidavit-general"
+    },
+    {
+      "documentId": "affidavit-general",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for affidavit-general"
+    },
+    {
+      "documentId": "affidavit-general",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for affidavit-general"
+    },
+    {
+      "documentId": "affidavit-general",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for affidavit-general"
+    },
+    {
+      "documentId": "articles-of-incorporation",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for articles-of-incorporation"
+    },
+    {
+      "documentId": "articles-of-incorporation",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for articles-of-incorporation"
+    },
+    {
+      "documentId": "articles-of-incorporation",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for articles-of-incorporation"
+    },
+    {
+      "documentId": "articles-of-incorporation",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for articles-of-incorporation"
+    },
+    {
+      "documentId": "articles-of-incorporation",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for articles-of-incorporation"
+    },
+    {
+      "documentId": "articles-of-incorporation-biz",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for articles-of-incorporation-biz"
+    },
+    {
+      "documentId": "articles-of-incorporation-biz",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for articles-of-incorporation-biz"
+    },
+    {
+      "documentId": "articles-of-incorporation-biz",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for articles-of-incorporation-biz"
+    },
+    {
+      "documentId": "articles-of-incorporation-biz",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for articles-of-incorporation-biz"
+    },
+    {
+      "documentId": "articles-of-incorporation-biz",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for articles-of-incorporation-biz"
+    },
+    {
+      "documentId": "boat-bill-of-sale",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for boat-bill-of-sale"
+    },
+    {
+      "documentId": "boat-bill-of-sale",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for boat-bill-of-sale"
+    },
+    {
+      "documentId": "boat-bill-of-sale",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for boat-bill-of-sale"
+    },
+    {
+      "documentId": "boat-bill-of-sale",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for boat-bill-of-sale"
+    },
+    {
+      "documentId": "boat-bill-of-sale",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for boat-bill-of-sale"
+    },
+    {
+      "documentId": "child-custody-agreement",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for child-custody-agreement"
+    },
+    {
+      "documentId": "child-custody-agreement",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for child-custody-agreement"
+    },
+    {
+      "documentId": "child-custody-agreement",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for child-custody-agreement"
+    },
+    {
+      "documentId": "child-custody-agreement",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for child-custody-agreement"
+    },
+    {
+      "documentId": "child-custody-agreement",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for child-custody-agreement"
+    },
+    {
+      "documentId": "child-medical-consent",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for child-medical-consent"
+    },
+    {
+      "documentId": "child-medical-consent",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for child-medical-consent"
+    },
+    {
+      "documentId": "child-medical-consent",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for child-medical-consent"
+    },
+    {
+      "documentId": "child-medical-consent",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for child-medical-consent"
+    },
+    {
+      "documentId": "child-medical-consent",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for child-medical-consent"
+    },
+    {
+      "documentId": "commercial-lease-agreement",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for commercial-lease-agreement"
+    },
+    {
+      "documentId": "commercial-lease-agreement",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for commercial-lease-agreement"
+    },
+    {
+      "documentId": "commercial-lease-agreement",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for commercial-lease-agreement"
+    },
+    {
+      "documentId": "commercial-lease-agreement",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for commercial-lease-agreement"
+    },
+    {
+      "documentId": "commercial-lease-agreement",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for commercial-lease-agreement"
+    },
+    {
+      "documentId": "consignment-agreement",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for consignment-agreement"
+    },
+    {
+      "documentId": "consignment-agreement",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for consignment-agreement"
+    },
+    {
+      "documentId": "consignment-agreement",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for consignment-agreement"
+    },
+    {
+      "documentId": "consignment-agreement",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for consignment-agreement"
+    },
+    {
+      "documentId": "consignment-agreement",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for consignment-agreement"
+    },
+    {
+      "documentId": "copyright-assignment",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for copyright-assignment"
+    },
+    {
+      "documentId": "copyright-assignment",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for copyright-assignment"
+    },
+    {
+      "documentId": "copyright-assignment",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for copyright-assignment"
+    },
+    {
+      "documentId": "copyright-assignment",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for copyright-assignment"
+    },
+    {
+      "documentId": "copyright-assignment",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for copyright-assignment"
+    },
+    {
+      "documentId": "demand-letter",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for demand-letter"
+    },
+    {
+      "documentId": "demand-letter",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for demand-letter"
+    },
+    {
+      "documentId": "demand-letter",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for demand-letter"
+    },
+    {
+      "documentId": "demand-letter",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for demand-letter"
+    },
+    {
+      "documentId": "demand-letter",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for demand-letter"
+    },
+    {
+      "documentId": "demand-letter-payment",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for demand-letter-payment"
+    },
+    {
+      "documentId": "demand-letter-payment",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for demand-letter-payment"
+    },
+    {
+      "documentId": "demand-letter-payment",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for demand-letter-payment"
+    },
+    {
+      "documentId": "demand-letter-payment",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for demand-letter-payment"
+    },
+    {
+      "documentId": "demand-letter-payment",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for demand-letter-payment"
+    },
+    {
+      "documentId": "divorce-settlement",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for divorce-settlement"
+    },
+    {
+      "documentId": "divorce-settlement",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for divorce-settlement"
+    },
+    {
+      "documentId": "divorce-settlement",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for divorce-settlement"
+    },
+    {
+      "documentId": "divorce-settlement",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for divorce-settlement"
+    },
+    {
+      "documentId": "divorce-settlement",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for divorce-settlement"
+    },
+    {
+      "documentId": "divorce-settlement-agreement",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for divorce-settlement-agreement"
+    },
+    {
+      "documentId": "divorce-settlement-agreement",
+      "type": "state-requirement",
+      "message": "community-property required in TX",
+      "state": "TX"
+    },
+    {
+      "documentId": "employment-contract",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for employment-contract"
+    },
+    {
+      "documentId": "employment-contract",
+      "type": "state-requirement",
+      "message": "wage-disclosure-required required in NY",
+      "state": "NY"
+    },
+    {
+      "documentId": "employment-contract",
+      "type": "state-requirement",
+      "message": "sick-leave-requirements required in NY",
+      "state": "NY"
+    },
+    {
+      "documentId": "employment-offer-letter",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for employment-offer-letter"
+    },
+    {
+      "documentId": "employment-offer-letter",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for employment-offer-letter"
+    },
+    {
+      "documentId": "employment-offer-letter",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for employment-offer-letter"
+    },
+    {
+      "documentId": "employment-offer-letter",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for employment-offer-letter"
+    },
+    {
+      "documentId": "employment-offer-letter",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for employment-offer-letter"
+    },
+    {
+      "documentId": "employment-termination-letter",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for employment-termination-letter"
+    },
+    {
+      "documentId": "employment-termination-letter",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for employment-termination-letter"
+    },
+    {
+      "documentId": "employment-termination-letter",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for employment-termination-letter"
+    },
+    {
+      "documentId": "employment-termination-letter",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for employment-termination-letter"
+    },
+    {
+      "documentId": "employment-termination-letter",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for employment-termination-letter"
+    },
+    {
+      "documentId": "eviction-notice",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for eviction-notice"
+    },
+    {
+      "documentId": "eviction-notice",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for eviction-notice"
+    },
+    {
+      "documentId": "eviction-notice",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for eviction-notice"
+    },
+    {
+      "documentId": "eviction-notice",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for eviction-notice"
+    },
+    {
+      "documentId": "eviction-notice",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for eviction-notice"
+    },
+    {
+      "documentId": "general-inquiry",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for general-inquiry"
+    },
+    {
+      "documentId": "general-inquiry",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for general-inquiry"
+    },
+    {
+      "documentId": "general-inquiry",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for general-inquiry"
+    },
+    {
+      "documentId": "general-inquiry",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for general-inquiry"
+    },
+    {
+      "documentId": "general-inquiry",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for general-inquiry"
+    },
+    {
+      "documentId": "healthcare-power-of-attorney",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for healthcare-power-of-attorney"
+    },
+    {
+      "documentId": "healthcare-power-of-attorney",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for healthcare-power-of-attorney"
+    },
+    {
+      "documentId": "healthcare-power-of-attorney",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for healthcare-power-of-attorney"
+    },
+    {
+      "documentId": "healthcare-power-of-attorney",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for healthcare-power-of-attorney"
+    },
+    {
+      "documentId": "healthcare-power-of-attorney",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for healthcare-power-of-attorney"
+    },
+    {
+      "documentId": "independent-contractor-agreement",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for independent-contractor-agreement"
+    },
+    {
+      "documentId": "independent-contractor-agreement",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for independent-contractor-agreement"
+    },
+    {
+      "documentId": "independent-contractor-agreement",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for independent-contractor-agreement"
+    },
+    {
+      "documentId": "independent-contractor-agreement",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for independent-contractor-agreement"
+    },
+    {
+      "documentId": "independent-contractor-agreement",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for independent-contractor-agreement"
+    },
+    {
+      "documentId": "invoice",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for invoice"
+    },
+    {
+      "documentId": "invoice",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for invoice"
+    },
+    {
+      "documentId": "invoice",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for invoice"
+    },
+    {
+      "documentId": "invoice",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for invoice"
+    },
+    {
+      "documentId": "invoice",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for invoice"
+    },
+    {
+      "documentId": "last-will-testament",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for last-will-testament"
+    },
+    {
+      "documentId": "last-will-testament",
+      "type": "state-requirement",
+      "message": "holographic-will-allowed required in TX",
+      "state": "TX"
+    },
+    {
+      "documentId": "lease-agreement",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for lease-agreement"
+    },
+    {
+      "documentId": "lease-agreement",
+      "type": "state-requirement",
+      "message": "rent-control-disclosure required in NY",
+      "state": "NY"
+    },
+    {
+      "documentId": "lease-agreement",
+      "type": "state-requirement",
+      "message": "bedbug-disclosure required in NY",
+      "state": "NY"
+    },
+    {
+      "documentId": "lease-agreement",
+      "type": "state-requirement",
+      "message": "mold-disclosure required in TX",
+      "state": "TX"
+    },
+    {
+      "documentId": "licensing-agreement",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for licensing-agreement"
+    },
+    {
+      "documentId": "licensing-agreement",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for licensing-agreement"
+    },
+    {
+      "documentId": "licensing-agreement",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for licensing-agreement"
+    },
+    {
+      "documentId": "licensing-agreement",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for licensing-agreement"
+    },
+    {
+      "documentId": "licensing-agreement",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for licensing-agreement"
+    },
+    {
+      "documentId": "living-trust",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for living-trust"
+    },
+    {
+      "documentId": "living-trust",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for living-trust"
+    },
+    {
+      "documentId": "living-trust",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for living-trust"
+    },
+    {
+      "documentId": "living-trust",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for living-trust"
+    },
+    {
+      "documentId": "living-trust",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for living-trust"
+    },
+    {
+      "documentId": "living-will",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for living-will"
+    },
+    {
+      "documentId": "living-will",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for living-will"
+    },
+    {
+      "documentId": "living-will",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for living-will"
+    },
+    {
+      "documentId": "living-will",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for living-will"
+    },
+    {
+      "documentId": "living-will",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for living-will"
+    },
+    {
+      "documentId": "llc-operating-agreement",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for llc-operating-agreement"
+    },
+    {
+      "documentId": "llc-operating-agreement",
+      "type": "state-requirement",
+      "message": "written-agreement-required required in NY",
+      "state": "NY"
+    },
+    {
+      "documentId": "llc-operating-agreement",
+      "type": "state-requirement",
+      "message": "series-llc-allowed required in TX",
+      "state": "TX"
+    },
+    {
+      "documentId": "loan-agreement",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for loan-agreement"
+    },
+    {
+      "documentId": "loan-agreement",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for loan-agreement"
+    },
+    {
+      "documentId": "loan-agreement",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for loan-agreement"
+    },
+    {
+      "documentId": "loan-agreement",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for loan-agreement"
+    },
+    {
+      "documentId": "loan-agreement",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for loan-agreement"
+    },
+    {
+      "documentId": "medical-consent",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for medical-consent"
+    },
+    {
+      "documentId": "medical-consent",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for medical-consent"
+    },
+    {
+      "documentId": "medical-consent",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for medical-consent"
+    },
+    {
+      "documentId": "medical-consent",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for medical-consent"
+    },
+    {
+      "documentId": "medical-consent",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for medical-consent"
+    },
+    {
+      "documentId": "nda",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for nda"
+    },
+    {
+      "documentId": "non-compete-agreement",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for non-compete-agreement"
+    },
+    {
+      "documentId": "non-compete-agreement",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for non-compete-agreement"
+    },
+    {
+      "documentId": "non-compete-agreement",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for non-compete-agreement"
+    },
+    {
+      "documentId": "non-compete-agreement",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for non-compete-agreement"
+    },
+    {
+      "documentId": "non-compete-agreement",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for non-compete-agreement"
+    },
+    {
+      "documentId": "non-disclosure-agreement",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for non-disclosure-agreement"
+    },
+    {
+      "documentId": "non-disclosure-agreement",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for non-disclosure-agreement"
+    },
+    {
+      "documentId": "non-disclosure-agreement",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for non-disclosure-agreement"
+    },
+    {
+      "documentId": "non-disclosure-agreement",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for non-disclosure-agreement"
+    },
+    {
+      "documentId": "non-disclosure-agreement",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for non-disclosure-agreement"
+    },
+    {
+      "documentId": "offer-letter",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for offer-letter"
+    },
+    {
+      "documentId": "offer-letter",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for offer-letter"
+    },
+    {
+      "documentId": "offer-letter",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for offer-letter"
+    },
+    {
+      "documentId": "offer-letter",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for offer-letter"
+    },
+    {
+      "documentId": "offer-letter",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for offer-letter"
+    },
+    {
+      "documentId": "operating-agreement",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for operating-agreement"
+    },
+    {
+      "documentId": "operating-agreement",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for operating-agreement"
+    },
+    {
+      "documentId": "operating-agreement",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for operating-agreement"
+    },
+    {
+      "documentId": "operating-agreement",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for operating-agreement"
+    },
+    {
+      "documentId": "operating-agreement",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for operating-agreement"
+    },
+    {
+      "documentId": "partnership-agreement",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for partnership-agreement"
+    },
+    {
+      "documentId": "power-of-attorney",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for power-of-attorney"
+    },
+    {
+      "documentId": "power-of-attorney",
+      "type": "state-requirement",
+      "message": "statutory-form-required required in NY",
+      "state": "NY"
+    },
+    {
+      "documentId": "power-of-attorney",
+      "type": "state-requirement",
+      "message": "statutory-form-required required in TX",
+      "state": "TX"
+    },
+    {
+      "documentId": "power-of-attorney",
+      "type": "state-requirement",
+      "message": "statutory-form-required required in FL",
+      "state": "FL"
+    },
+    {
+      "documentId": "prenuptial-agreement",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for prenuptial-agreement"
+    },
+    {
+      "documentId": "prenuptial-agreement",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for prenuptial-agreement"
+    },
+    {
+      "documentId": "prenuptial-agreement",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for prenuptial-agreement"
+    },
+    {
+      "documentId": "prenuptial-agreement",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for prenuptial-agreement"
+    },
+    {
+      "documentId": "prenuptial-agreement",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for prenuptial-agreement"
+    },
+    {
+      "documentId": "promissory-note",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for promissory-note"
+    },
+    {
+      "documentId": "promissory-note",
+      "type": "regulatory-limit",
+      "message": "max-interest-rate: 16 in NY",
+      "state": "NY"
+    },
+    {
+      "documentId": "promissory-note",
+      "type": "regulatory-limit",
+      "message": "max-interest-rate: 18 in TX",
+      "state": "TX"
+    },
+    {
+      "documentId": "promissory-note",
+      "type": "regulatory-limit",
+      "message": "max-interest-rate: 18 in FL",
+      "state": "FL"
+    },
+    {
+      "documentId": "promissory-note",
+      "type": "regulatory-limit",
+      "message": "max-interest-rate: 10 in general",
+      "state": "general"
+    },
+    {
+      "documentId": "property-deed",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for property-deed"
+    },
+    {
+      "documentId": "property-deed",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for property-deed"
+    },
+    {
+      "documentId": "property-deed",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for property-deed"
+    },
+    {
+      "documentId": "property-deed",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for property-deed"
+    },
+    {
+      "documentId": "property-deed",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for property-deed"
+    },
+    {
+      "documentId": "purchase-agreement",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for purchase-agreement"
+    },
+    {
+      "documentId": "purchase-agreement",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for purchase-agreement"
+    },
+    {
+      "documentId": "purchase-agreement",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for purchase-agreement"
+    },
+    {
+      "documentId": "purchase-agreement",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for purchase-agreement"
+    },
+    {
+      "documentId": "purchase-agreement",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for purchase-agreement"
+    },
+    {
+      "documentId": "quitclaim-deed",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for quitclaim-deed"
+    },
+    {
+      "documentId": "rental-agreement",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for rental-agreement"
+    },
+    {
+      "documentId": "rental-agreement",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for rental-agreement"
+    },
+    {
+      "documentId": "rental-agreement",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for rental-agreement"
+    },
+    {
+      "documentId": "rental-agreement",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for rental-agreement"
+    },
+    {
+      "documentId": "rental-agreement",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for rental-agreement"
+    },
+    {
+      "documentId": "residential-lease-agreement",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for residential-lease-agreement"
+    },
+    {
+      "documentId": "residential-lease-agreement",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for residential-lease-agreement"
+    },
+    {
+      "documentId": "residential-lease-agreement",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for residential-lease-agreement"
+    },
+    {
+      "documentId": "residential-lease-agreement",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for residential-lease-agreement"
+    },
+    {
+      "documentId": "residential-lease-agreement",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for residential-lease-agreement"
+    },
+    {
+      "documentId": "service-agreement",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for service-agreement"
+    },
+    {
+      "documentId": "severance-agreement",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for severance-agreement"
+    },
+    {
+      "documentId": "severance-agreement",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for severance-agreement"
+    },
+    {
+      "documentId": "severance-agreement",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for severance-agreement"
+    },
+    {
+      "documentId": "severance-agreement",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for severance-agreement"
+    },
+    {
+      "documentId": "severance-agreement",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for severance-agreement"
+    },
+    {
+      "documentId": "termination-letter",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for termination-letter"
+    },
+    {
+      "documentId": "termination-letter",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for termination-letter"
+    },
+    {
+      "documentId": "termination-letter",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for termination-letter"
+    },
+    {
+      "documentId": "termination-letter",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for termination-letter"
+    },
+    {
+      "documentId": "termination-letter",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for termination-letter"
+    },
+    {
+      "documentId": "trademark-assignment",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for trademark-assignment"
+    },
+    {
+      "documentId": "trademark-assignment",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for trademark-assignment"
+    },
+    {
+      "documentId": "trademark-assignment",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for trademark-assignment"
+    },
+    {
+      "documentId": "trademark-assignment",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for trademark-assignment"
+    },
+    {
+      "documentId": "trademark-assignment",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for trademark-assignment"
+    },
+    {
+      "documentId": "vehicle-bill-of-sale",
+      "type": "missing-requirements",
+      "message": "No compliance requirements defined for vehicle-bill-of-sale"
+    }
+  ],
+  "complianceScore": null
+}

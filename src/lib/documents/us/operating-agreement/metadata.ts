@@ -1,11 +1,26 @@
-import type { LegalDocumentMetadata } from '@/types/documents';
+// src/lib/documents/us/operating-agreement/metadata.ts
+import type { LegalDocument } from '@/types/documents';
+import { OperatingAgreementSchema } from './schema';
+import { operatingAgreementQuestions } from './questions';
 
-export const operatingAgreementMetadata: LegalDocumentMetadata = {
+export const operatingAgreementMeta: LegalDocument = {
+  id: 'operating-agreement',
+  jurisdiction: 'US',
   category: 'Business',
+  languageSupport: ['en', 'es'],
+  requiresNotarization: false,
+  canBeRecorded: false,
+  offerNotarization: false,
+  offerRecordingHelp: false,
+  basePrice: 20,
+  states: 'all',
   templatePaths: {
     en: '/templates/en/operating-agreement.md',
-    es: '/templates/es/operating-agreement.md'
+    es: '/templates/es/operating-agreement.md',
   },
+  schema: OperatingAgreementSchema,
+  questions: operatingAgreementQuestions,
+  upsellClauses: [],
   translations: {
     en: {
       name: 'Operating Agreement (LLC)',
@@ -20,11 +35,4 @@ export const operatingAgreementMetadata: LegalDocumentMetadata = {
       aliases: ['acuerdo de LLC', 'sociedad de responsabilidad limitada'],
     },
   },
-  languageSupport: ['en', 'es'],
-  requiresNotarization: false,
-  canBeRecorded: false,
-  offerNotarization: false,
-  offerRecordingHelp: false,
-  basePrice: 7,
-  states: 'all',
 };

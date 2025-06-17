@@ -4,19 +4,30 @@
 
 **LAST WILL AND TESTAMENT**
 
-I, **{{testator_name}}**, a resident of {{testator_city}}, {{testator_state}}, being of sound mind and memory, do hereby make, publish, and declare this to be my Last Will and Testament, hereby revoking all former wills and codicils by me made.
+I, **{{testator_name}}**, a resident of {{testator_city}}, {{testator_state}}, being of sound mind and memory, and being at least eighteen (18) years of age, do hereby make, publish, and declare this to be my Last Will and Testament, hereby expressly revoking all former wills and codicils by me made.
 
----
+## TESTATOR IDENTIFICATION
 
-## 1. Personal Information
-
-**Full Name:** {{testator_name}}  
+**Full Legal Name:** {{testator_name}}  
 **Date of Birth:** {{testator_dob}}  
-**Address:** {{testator_address}}  
 **Social Security Number:** {{testator_ssn}}  
-**State of Residence:** {{testator_state}}
+**Current Address:** {{testator_address}}  
+**County:** {{testator_county}}  
+**State:** {{testator_state}}  
+**Zip Code:** {{testator_zip}}  
+**Length of Residence:** {{residence_duration}}
+
+I declare that I am of sound mind and memory, not under any duress, menace, fraud, or undue influence of any person, and that I am competent to make this Will.
 
 ---
+
+## ARTICLE I: REVOCATION CLAUSE
+
+I hereby expressly revoke all prior wills, codicils, and testamentary dispositions heretofore made by me. This Will supersedes and replaces all previous wills and codicils, and I declare this to be my only valid Last Will and Testament.
+
+---
+
+## ARTICLE II: FAMILY INFORMATION AND BENEFICIARY DESIGNATIONS
 
 ## 2. Family Information
 
@@ -41,21 +52,71 @@ All references in this Will to "my children" refer to the individuals named abov
 
 ---
 
-## 3. Appointment of Personal Representative (Executor)
+## ARTICLE III: EXECUTOR APPOINTMENT WITH COMPREHENSIVE POWERS
 
-### 3.1 Primary Personal Representative
-I hereby nominate and appoint **{{executor_name}}** of {{executor_address}} to serve as the Personal Representative (Executor) of my estate.
+### Section 3.1 Primary Personal Representative/Executor
+I hereby nominate, constitute, and appoint **{{executor_name}}** of {{executor_address}} to serve as the Personal Representative (Executor) of this Will and of my estate.
 
-### 3.2 Successor Personal Representative
-If {{executor_name}} is unable or unwilling to serve, I nominate **{{successor_executor_name}}** of {{successor_executor_address}} as successor Personal Representative.
+**Primary Executor Details:**
+- **Full Name:** {{executor_name}}
+- **Relationship:** {{executor_relationship}}
+- **Address:** {{executor_address}}
+- **Phone:** {{executor_phone}}
+- **Email:** {{executor_email}}
 
-### 3.3 Powers of Personal Representative
-I grant my Personal Representative full power and authority to:
-- Collect, manage, and distribute my assets
-- Pay all debts, taxes, and administration expenses
-- Sell, transfer, or distribute property as necessary
-- Take all actions required for proper estate administration
-- Serve without bond unless required by law
+### Section 3.2 Successor Personal Representative/Executor
+If {{executor_name}} is unable, unwilling, or fails to qualify to serve as Personal Representative, I nominate **{{successor_executor_name}}** of {{successor_executor_address}} as successor Personal Representative.
+
+**Successor Executor Details:**
+- **Full Name:** {{successor_executor_name}}
+- **Relationship:** {{successor_executor_relationship}}
+- **Address:** {{successor_executor_address}}
+- **Phone:** {{successor_executor_phone}}
+- **Email:** {{successor_executor_email}}
+
+### Section 3.3 Bond Waiver
+I direct that no bond or other security shall be required of any Personal Representative appointed under this Will, unless required by applicable law.
+
+### Section 3.4 Comprehensive Powers of Personal Representative
+I grant my Personal Representative full power and authority to administer my estate, including but not limited to the following powers, all to be exercised in a fiduciary capacity:
+
+**A. General Administrative Powers:**
+- To collect, receive, and take possession of all assets of my estate
+- To manage, control, and protect all estate assets
+- To invest and reinvest estate funds in any property or securities
+- To continue or terminate any business interests
+- To employ attorneys, accountants, investment advisors, and other professionals
+- To determine which assets are income or principal
+
+**B. Real Estate Powers:**
+- To sell, exchange, lease, or mortgage any real property
+- To grant easements, restrictions, or other rights in real property
+- To subdivide, develop, or improve real property
+- To abandon property of little or no value
+
+**C. Personal Property Powers:**
+- To sell, exchange, or distribute any personal property
+- To store, insure, repair, or dispose of tangible personal property
+- To collect debts owed to the estate
+- To compromise, settle, or abandon claims
+
+**D. Financial Powers:**
+- To open, maintain, and close bank accounts and investment accounts
+- To borrow money and pledge estate assets as security
+- To make loans to beneficiaries or others
+- To purchase insurance or cease paying premiums on existing policies
+
+**E. Tax and Legal Powers:**
+- To prepare, file, and pay all taxes
+- To make tax elections and allocations
+- To represent the estate in audits and proceedings
+- To settle, compromise, or litigate claims for or against the estate
+
+**F. Distribution Powers:**
+- To make distributions in cash or in kind
+- To allocate specific assets to satisfy general bequests
+- To value assets for distribution purposes
+- To establish trusts as provided in this Will
 
 ---
 
@@ -101,22 +162,31 @@ I make the following bequests of real property:
 
 ---
 
-## 6. Residuary Estate
+## ARTICLE VI: RESIDUARY CLAUSE (ESSENTIAL PROVISION)
 
-### 6.1 Distribution of Residuary Estate
-I give, devise, and bequeath all the rest, residue, and remainder of my estate, both real and personal, of every kind and description, wherever located (my "residuary estate") as follows:
+### Section 6.1 Primary Residuary Distribution
+I give, devise, and bequeath all the rest, residue, and remainder of my estate, both real and personal, of every kind and description, wherever located, including any property that I may acquire after the execution of this Will and any property as to which I or my estate may be entitled and any property over which I may have a power of appointment (collectively, my "residuary estate"), as follows:
 
 {{#if married}}
-**To my spouse {{spouse_name}}:** {{spouse_percentage}}% of my residuary estate, if {{spouse_name}} survives me by {{survivorship_period}} days.
+**First, to my spouse {{spouse_name}}:** {{spouse_percentage}}% of my residuary estate, if {{spouse_name}} survives me by {{survivorship_period}} days and is not divorced from me at the time of my death.
 {{/if}}
 
 {{#if has_children}}
-**To my children:** {{children_percentage}}% of my residuary estate, to be divided equally among my children who survive me, per stirpes.
+**Second, to my children:** {{children_percentage}}% of my residuary estate, to be divided equally among all my children who survive me, per stirpes. If any child predeceases me but leaves descendants who survive me, such descendants shall take by representation.
 {{/if}}
 
-### 6.2 Contingent Beneficiaries
-If none of the above beneficiaries survive me, I give my residuary estate to:
-{{contingent_beneficiaries}}
+### Section 6.2 Contingent Residuary Beneficiaries
+If none of the primary beneficiaries survive me, or if the primary residuary distribution fails for any reason, I give my entire residuary estate to:
+
+**Primary Contingent:** {{contingent_beneficiary_1}}  
+**Secondary Contingent:** {{contingent_beneficiary_2}}  
+**Tertiary Contingent:** {{contingent_beneficiary_3}}
+
+### Section 6.3 Ultimate Contingent Disposition
+If all named beneficiaries predecease me or the gifts otherwise fail, I give my entire residuary estate to {{ultimate_beneficiary}} or, if no such organization exists at my death, to such charitable organizations as my Personal Representative may select in their absolute discretion.
+
+### Section 6.4 Anti-Lapse Protection
+This Will is intended to comply with anti-lapse statutes. If any beneficiary predeceases me but is survived by descendants, and if such beneficiary is my grandparent or a descendant of my grandparent, then such descendants shall take by representation the gift that would have been made to the predeceased beneficiary.
 
 ---
 
@@ -193,9 +263,10 @@ Words of one gender include the other gender, and words in the singular include 
 
 ---
 
-## 14. Execution and Attestation
+## ARTICLE XIV: EXECUTION AND ATTESTATION WITH PROPER WITNESS SIGNATURES
 
-IN WITNESS WHEREOF, I have hereunto set my hand and seal this **{{execution_date}}**.
+### Testator's Execution
+IN WITNESS WHEREOF, I, {{testator_name}}, the Testator, sign my name to this Will, consisting of {{page_count}} pages including this page, and being first duly sworn, do hereby declare to the undersigned authority that I sign and execute this instrument as my Last Will and Testament and that I sign it willingly, that I execute it as my free and voluntary act for the purposes therein expressed, and that I am eighteen (18) years of age or older, of sound mind, and under no constraint or undue influence.
 
 **TESTATOR:**
 
@@ -203,24 +274,42 @@ IN WITNESS WHEREOF, I have hereunto set my hand and seal this **{{execution_date
 |-----------|------|
 | _________________________________ | {{execution_date}} |
 | {{testator_name}} | |
+| (Testator's Signature) | |
 
-**WITNESSES:**
+### Witness Attestation Clause
+We, {{witness_1_name}} and {{witness_2_name}}, the witnesses, sign our names to this Will, being first duly sworn, and do hereby declare to the undersigned authority that the Testator signs and executes this instrument as the Testator's Last Will and Testament and that the Testator signs it willingly, and that each of us, in the presence and hearing of the Testator, hereby signs this Will as witness to the Testator's signing, and that to the best of our knowledge the Testator is eighteen (18) years of age or older, of sound mind, and under no constraint or undue influence.
 
-We, the undersigned, do hereby certify that the above-named Testator subscribed, published, and declared the foregoing instrument to be {{testator_name}}'s Last Will and Testament in our presence, and at {{testator_name}}'s request, and in the presence of each other, we have hereunto subscribed our names as witnesses this **{{execution_date}}**.
+**WITNESS REQUIREMENTS:**
+- Witnesses must be at least 18 years of age
+- Witnesses should not be beneficiaries under this Will
+- Witnesses must be mentally competent
+- Witnesses must sign in the presence of the Testator and each other
 
 **WITNESS 1:**
 
-| Signature | Address | Date |
-|-----------|---------|------|
-| _________________________________ | {{witness_1_address}} | {{execution_date}} |
-| {{witness_1_name}} | | |
+| Signature | Print Name | Address | Date |
+|-----------|------------|---------|------|
+| _________________________________ | {{witness_1_name}} | {{witness_1_address}} | {{execution_date}} |
+| (Witness 1 Signature) | | {{witness_1_city}}, {{witness_1_state}} {{witness_1_zip}} | |
+| | Phone: {{witness_1_phone}} | | |
 
 **WITNESS 2:**
 
-| Signature | Address | Date |
-|-----------|---------|------|
-| _________________________________ | {{witness_2_address}} | {{execution_date}} |
-| {{witness_2_name}} | | |
+| Signature | Print Name | Address | Date |
+|-----------|------------|---------|------|
+| _________________________________ | {{witness_2_name}} | {{witness_2_address}} | {{execution_date}} |
+| (Witness 2 Signature) | | {{witness_2_city}}, {{witness_2_state}} {{witness_2_zip}} | |
+| | Phone: {{witness_2_phone}} | | |
+
+### Attestation Affidavit
+The State of {{state}} requires that this Will be properly witnessed. By signing below, the witnesses attest to the following:
+
+1. The Testator declared this instrument to be their Will
+2. The Testator signed the Will in our presence or acknowledged their signature
+3. The Testator appeared to be of sound mind and not under duress
+4. We signed as witnesses in the presence of the Testator and each other
+5. We are both over 18 years of age and competent to witness
+6. To our knowledge, we are not named as beneficiaries in this Will
 
 ---
 

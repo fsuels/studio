@@ -1,30 +1,44 @@
-export const employmentContractMetadata = {
-  "id": "employment-contract",
-  "name": "Employment Contract",
-  "category": "Employment",
-  "complexity": "medium",
-  "estimatedTime": "10-20 minutes",
-  "offerNotarization": false,
-  "states": "all",
-  "tags": [
-    "employment",
-    "medium",
-    "legal",
-    "template",
-    "popular"
-  ],
-  "translations": {
-    "en": {
-      "name": "Employment Contract",
-      "description": "Create a legally binding Employment Contract with our easy-to-use template. State-specific requirements included.",
-      "aliases": [
-        "employment agreement"
-      ]
+import type { LegalDocument } from '@/types/documents';
+import { employmentContractSchema } from './schema';
+import { employmentContractQuestions } from './questions';
+
+export const employmentContractMeta: LegalDocument = {
+  id: 'employment-contract',
+  jurisdiction: 'US',
+  category: 'Employment',
+  languageSupport: ['en', 'es'],
+  requiresNotarization: false,
+  canBeRecorded: false,
+  offerNotarization: false,
+  offerRecordingHelp: false,
+  basePrice: 12.95,
+  states: 'all',
+  templatePaths: {
+    en: '/templates/en/employment-contract.md',
+    es: '/templates/es/employment-contract.md',
+  },
+  schema: employmentContractSchema,
+  questions: employmentContractQuestions,
+  upsellClauses: [],
+  translations: {
+    en: {
+      name: 'Employment Contract',
+      description: 'Create a legally binding employment contract with our easy-to-use template. State-specific requirements included.',
+      aliases: [
+        'employment agreement',
+        'job contract',
+        'work agreement',
+        'employee contract'
+      ],
     },
-    "es": {
-      "name": "Empleo Contrato",
-      "description": "Crea un Empleo Contrato legalmente válido con nuestra plantilla fácil de usar. Incluye requisitos específicos del estado.",
-      "aliases": []
-    }
-  }
+    es: {
+      name: 'Contrato de Empleo',
+      description: 'Crea un contrato de empleo legalmente válido con nuestra plantilla fácil de usar. Incluye requisitos específicos del estado.',
+      aliases: [
+        'acuerdo de empleo',
+        'contrato laboral',
+        'acuerdo de trabajo'
+      ],
+    },
+  },
 };

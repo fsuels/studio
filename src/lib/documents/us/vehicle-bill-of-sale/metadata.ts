@@ -4,7 +4,7 @@ import { BillOfSaleSchema } from '@/lib/documents/us/vehicle-bill-of-sale/schema
 import { vehicleBillOfSaleQuestions } from './questions';
 
 export const vehicleBillOfSaleMeta: LegalDocument = {
-  id: 'bill-of-sale-vehicle',
+  id: 'vehicle-bill-of-sale',
   jurisdiction: 'US', // Ensure jurisdiction is set
   category: 'Finance', // Or "Transactions"
   languageSupport: ['en', 'es'],
@@ -16,8 +16,8 @@ export const vehicleBillOfSaleMeta: LegalDocument = {
   states: 'all', // Indicates available in all US states unless overridden
   // Standardized template paths
   templatePaths: {
-    en: '/templates/en/bill-of-sale-vehicle.md',
-    es: '/templates/es/bill-of-sale-vehicle.md',
+    en: '/templates/en/vehicle-bill-of-sale.md',
+    es: '/templates/es/vehicle-bill-of-sale.md',
   },
   requiresNotarizationStates: [
     'AZ',

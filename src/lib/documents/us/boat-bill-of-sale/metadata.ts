@@ -1,28 +1,44 @@
-export const boatBillOfSaleMetadata = {
-  "id": "boat-bill-of-sale",
-  "name": "Boat Bill of Sale",
-  "category": "Transportation",
-  "complexity": "medium",
-  "estimatedTime": "10-20 minutes",
-  "offerNotarization": true,
-  "states": "all",
-  "tags": [
-    "transportation",
-    "medium",
-    "legal",
-    "template",
-    "notarization"
-  ],
-  "translations": {
-    "en": {
-      "name": "Boat Bill of Sale",
-      "description": "Create a legally binding Boat Bill of Sale with our easy-to-use template. State-specific requirements included.",
-      "aliases": []
+import type { LegalDocument } from '@/types/documents';
+import { boatBillOfSaleSchema } from './schema';
+import { boatBillOfSaleQuestions } from './questions';
+
+export const boatBillOfSaleMeta: LegalDocument = {
+  id: 'boat-bill-of-sale',
+  jurisdiction: 'US',
+  category: 'Finance',
+  languageSupport: ['en', 'es'],
+  requiresNotarization: true,
+  canBeRecorded: true,
+  offerNotarization: true,
+  offerRecordingHelp: true,
+  basePrice: 19.95,
+  states: 'all',
+  templatePaths: {
+    en: '/templates/en/boat-bill-of-sale.md',
+    es: '/templates/es/boat-bill-of-sale.md',
+  },
+  schema: boatBillOfSaleSchema,
+  questions: boatBillOfSaleQuestions,
+  upsellClauses: [],
+  translations: {
+    en: {
+      name: 'Boat Bill of Sale',
+      description: 'Create a legally binding boat bill of sale with our easy-to-use template. State-specific requirements included.',
+      aliases: [
+        'vessel bill of sale',
+        'watercraft sale',
+        'boat purchase agreement',
+        'marine bill of sale'
+      ],
     },
-    "es": {
-      "name": "Boat Contrato de Compraventa",
-      "description": "Crea un Boat Contrato de Compraventa legalmente válido con nuestra plantilla fácil de usar. Incluye requisitos específicos del estado.",
-      "aliases": []
-    }
-  }
+    es: {
+      name: 'Contrato de Compraventa de Embarcación',
+      description: 'Crea un contrato de compraventa de embarcación legalmente válido con nuestra plantilla fácil de usar. Incluye requisitos específicos del estado.',
+      aliases: [
+        'venta de barco',
+        'compraventa de embarcación',
+        'contrato de venta marina'
+      ],
+    },
+  },
 };

@@ -7,7 +7,15 @@
       "Bash(npm test:*)",
       "Bash(npx tsx:*)",
       "Bash(node:*)",
-      "Bash(chmod:*)"
+      "Bash(chmod:*)",
+      "Bash(npm run build:*)",
+      "Bash(grep:*)",
+      "Bash(npx tsc:*)",
+      "Bash(npm run type-check:*)",
+      "Bash(npx typescript:*)",
+      "Bash(timeout:*)",
+      "Bash(npm run quality-check:*)",
+      "Bash(npm run:*)"
     ],
     "deny": []
   }

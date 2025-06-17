@@ -1,0 +1,31 @@
+{
+  "timestamp": "2025-06-17T03:15:53.432Z",
+  "alertType": "SEO_HEALTH_WARNING",
+  "healthScore": 0,
+  "criticalIssues": 2244,
+  "actionRequired": "IMMEDIATE",
+  "recommendations": [
+    {
+      "priority": "HIGH",
+      "action": "Fix Content Duplicates",
+      "description": "2135 pages have >20% content overlap",
+      "steps": [
+        "Rewrite duplicate content to be unique",
+        "Consolidate similar pages where appropriate",
+        "Add unique value propositions to each page",
+        "Consider canonical tags for necessary duplicates"
+      ]
+    },
+    {
+      "priority": "HIGH",
+      "action": "Expand Thin Content",
+      "description": "109 pages have <300 words",
+      "steps": [
+        "Add comprehensive content to short pages",
+        "Include FAQs, examples, and detailed explanations",
+        "Add state-specific information",
+        "Include related legal requirements"
+      ]
+    }
+  ]
+}

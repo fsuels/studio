@@ -1,0 +1,50 @@
+{
+  "timestamp": "2025-06-17T02:04:38.116Z",
+  "summary": {
+    "totalDocuments": 49,
+    "passedChecks": 978,
+    "failedChecks": 0,
+    "warningChecks": 6
+  },
+  "errors": [],
+  "warnings": [
+    {
+      "check": "Metadata",
+      "message": "No search aliases defined",
+      "file": "invoice/metadata.ts",
+      "severity": "warning"
+    },
+    {
+      "check": "Schema",
+      "message": "No zod object schema found",
+      "file": "eviction-notice/schema.ts",
+      "severity": "warning"
+    },
+    {
+      "check": "Schema",
+      "message": "No zod object schema found",
+      "file": "lease-agreement/schema.ts",
+      "severity": "warning"
+    },
+    {
+      "check": "Schema",
+      "message": "No zod object schema found",
+      "file": "vehicle-bill-of-sale/schema.ts",
+      "severity": "warning"
+    },
+    {
+      "check": "TypeScript",
+      "message": "TypeScript compiler not found, skipping compilation check",
+      "file": null,
+      "severity": "warning"
+    },
+    {
+      "check": "Linting",
+      "message": "Linting issues found but not blocking: Command failed: npx eslint src/ --ext .ts,.tsx --max-warnings 10",
+      "file": null,
+      "severity": "warning"
+    }
+  ],
+  "score": 99.7,
+  "recommendations": []
+}

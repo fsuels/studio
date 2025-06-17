@@ -1,9 +1,26 @@
-import type { DocumentMetadata } from '@/types/documents';
+// src/lib/documents/us/employment-termination-letter/metadata.ts
+import type { LegalDocument } from '@/types/documents';
+import { EmploymentTerminationLetterSchema } from './schema';
+import { employmentTerminationLetterQuestions } from './questions';
 
-export const metadata: DocumentMetadata = {
+export const employmentTerminationLetterMeta: LegalDocument = {
   id: 'employment-termination-letter',
   jurisdiction: 'US',
   category: 'Employment',
+  languageSupport: ['en', 'es'],
+  requiresNotarization: false,
+  canBeRecorded: false,
+  offerNotarization: false,
+  offerRecordingHelp: false,
+  basePrice: 8,
+  states: 'all',
+  templatePaths: {
+    en: '/templates/en/employment-termination-letter.md',
+    es: '/templates/es/employment-termination-letter.md',
+  },
+  schema: EmploymentTerminationLetterSchema,
+  questions: employmentTerminationLetterQuestions,
+  upsellClauses: [],
   translations: {
     en: {
       name: 'Employment Termination Letter',
@@ -16,16 +33,4 @@ export const metadata: DocumentMetadata = {
       aliases: ['despedir empleado', 'carta de despido', 'aviso de terminación'],
     },
   },
-  languageSupport: ['en', 'es'],
-  requiresNotarization: false,
-  canBeRecorded: false,
-  offerNotarization: false,
-  offerRecordingHelp: false,
-  basePrice: 5,
-  states: 'all',
-  templatePaths: {
-    en: '/templates/en/termination-letter.md',
-    es: '/templates/es/termination-letter.md',
-  },
-  upsellClauses: [],
 };

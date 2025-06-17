@@ -1,0 +1,99 @@
+{
+  "stateInfo": {
+    "name": "California",
+    "code": "CA",
+    "lastUpdated": "2024-01-01"
+  },
+  "specificRequirements": {
+    "vehicle-bill-of-sale": {
+      "additionalRequirements": [
+        "smog-certificate-required",
+        "dmv-transfer-within-10-days",
+        "use-tax-disclosure"
+      ],
+      "notarization": false,
+      "dmvForm": "REG 135"
+    },
+    "lease-agreement": {
+      "mandatoryDisclosures": [
+        "rent-control-ordinance",
+        "bed-bug-disclosure",
+        "mold-disclosure",
+        "military-ordnance-disclosure",
+        "flooding-disclosure",
+        "death-on-property-disclosure"
+      ],
+      "tenantProtections": [
+        "just-cause-eviction",
+        "rent-increase-limits",
+        "security-deposit-limit-2x-rent"
+      ]
+    },
+    "employment-contract": {
+      "prohibitions": [
+        "non-compete-clauses-void",
+        "no-rehire-provisions-limited"
+      ],
+      "requiredNotices": [
+        "wage-rate-disclosure",
+        "sick-leave-policy",
+        "workers-comp-notice",
+        "harassment-policy"
+      ],
+      "minimumRequirements": {
+        "minimum-wage": 16.00,
+        "overtime-after": 8,
+        "meal-break": "30 min after 5 hours"
+      }
+    },
+    "nda": {
+      "limitations": [
+        "cannot-prevent-whistleblowing",
+        "cannot-restrict-right-to-work",
+        "trade-secret-definition-narrow"
+      ],
+      "silenceProhibitions": [
+        "sexual-harassment-claims",
+        "discrimination-claims",
+        "wage-violations"
+      ]
+    },
+    "power-of-attorney": {
+      "statutoryForm": "California Probate Code §4401",
+      "witnessRequirements": 0,
+      "notarizationRequired": true,
+      "specificPowers": [
+        "real-estate-transactions",
+        "banking-transactions",
+        "tax-matters",
+        "litigation"
+      ]
+    },
+    "promissory-note": {
+      "usuryLaws": {
+        "personal-loans": 10,
+        "business-loans-exempt": "> $300,000",
+        "seller-financed-real-estate": "exempt"
+      },
+      "requiredLanguage": {
+        "spanish-translation": "if negotiated in Spanish"
+      }
+    },
+    "llc-operating-agreement": {
+      "filingRequirements": [
+        "statement-of-information-90-days",
+        "franchise-tax-$800-minimum"
+      ],
+      "memberRights": [
+        "inspection-rights",
+        "information-rights",
+        "derivative-action-rights"
+      ]
+    }
+  },
+  "generalProvisions": {
+    "languageRequirements": "Contracts negotiated in Spanish, Chinese, Tagalog, Vietnamese, or Korean must include translation",
+    "arbitrationLimitations": "Cannot waive PAGA claims",
+    "consumerProtections": "Strong consumer protection laws apply"
+  }
+}

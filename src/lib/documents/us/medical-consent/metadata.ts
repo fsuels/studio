@@ -1,28 +1,46 @@
-export const medicalConsentMetadata = {
-  "id": "medical-consent",
-  "name": "Child Medical Consent Form",
-  "category": "Personal",
-  "complexity": "low",
-  "estimatedTime": "5-10 minutes",
-  "offerNotarization": true,
-  "states": "all",
-  "tags": [
-    "personal",
-    "low",
-    "legal",
-    "template",
-    "notarization"
-  ],
-  "translations": {
-    "en": {
-      "name": "Child Medical Consent Form",
-      "description": "Create a legally binding Child Medical Consent Form with our easy-to-use template. State-specific requirements included.",
-      "aliases": []
+// src/lib/documents/us/medical-consent/metadata.ts
+import type { LegalDocument } from '@/types/documents';
+import { MedicalConsentSchema } from './schema';
+import { medicalConsentQuestions } from './questions';
+
+export const medicalConsentMeta: LegalDocument = {
+  id: 'medical-consent',
+  jurisdiction: 'US',
+  category: 'Personal',
+  languageSupport: ['en', 'es'],
+  requiresNotarization: true,
+  canBeRecorded: false,
+  offerNotarization: true,
+  offerRecordingHelp: false,
+  basePrice: 8,
+  states: 'all',
+  templatePaths: {
+    en: '/templates/en/child-medical-consent.md',
+    es: '/templates/es/child-medical-consent.md',
+  },
+  schema: MedicalConsentSchema,
+  questions: medicalConsentQuestions,
+  upsellClauses: [],
+  translations: {
+    en: {
+      name: 'Child Medical Consent Form',
+      description:
+        'Create a legally binding Child Medical Consent Form with our easy-to-use template. State-specific requirements included.',
+      aliases: [
+        'medical consent',
+        'child medical form',
+        'medical authorization',
+      ],
     },
-    "es": {
-      "name": "Child Medical Consent Form",
-      "description": "Crea un Child Medical Consent Form legalmente válido con nuestra plantilla fácil de usar. Incluye requisitos específicos del estado.",
-      "aliases": []
-    }
-  }
+    es: {
+      name: 'Formulario de Consentimiento Médico Infantil',
+      description:
+        'Crea un Formulario de Consentimiento Médico Infantil legalmente válido con nuestra plantilla fácil de usar. Incluye requisitos específicos del estado.',
+      aliases: [
+        'consentimiento médico',
+        'formulario médico infantil',
+        'autorización médica',
+      ],
+    },
+  },
 };

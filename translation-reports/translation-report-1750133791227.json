@@ -1,0 +1,1271 @@
+{
+  "timestamp": "2025-06-17T04:16:31.226Z",
+  "summary": {
+    "totalValidated": 52,
+    "totalFallbacks": 10,
+    "totalIssues": 51,
+    "qualityRate": 81
+  },
+  "results": {
+    "affidavit-general": {
+      "confidence": 86,
+      "issues": [
+        "Missing translation for legal term: notarization",
+        "Template variable mismatch between languages"
+      ],
+      "recommendations": [
+        "Consider using: notarización or notariado"
+      ],
+      "shouldFallback": false,
+      "businessMetrics": {
+        "documentType": "affidavit-general",
+        "baseConfidence": 72,
+        "impact": 5,
+        "risk": 1.5,
+        "cost": 4,
+        "businessMultiplier": 1.88,
+        "weightedConfidence": 86,
+        "finalConfidence": 86,
+        "riskCategory": "MEDIUM"
+      }
+    },
+    "affidavit": {
+      "confidence": 89,
+      "issues": [
+        "Missing translation for legal term: notarization",
+        "Template variable mismatch between languages"
+      ],
+      "recommendations": [
+        "Consider using: notarización or notariado"
+      ],
+      "shouldFallback": false,
+      "businessMetrics": {
+        "documentType": "affidavit",
+        "baseConfidence": 75,
+        "impact": 5,
+        "risk": 1.5,
+        "cost": 4,
+        "businessMultiplier": 1.88,
+        "weightedConfidence": 89,
+        "finalConfidence": 89,
+        "riskCategory": "MEDIUM"
+      }
+    },
+    "articles-of-incorporation-biz": {
+      "confidence": 82,
+      "issues": [
+        "Significant length difference between translations",
+        "Missing translation for legal term: lease",
+        "Template variable mismatch between languages"
+      ],
+      "recommendations": [
+        "Consider using: arrendamiento or alquiler"
+      ],
+      "shouldFallback": false,
+      "businessMetrics": {
+        "documentType": "articles-of-incorporation-biz",
+        "baseConfidence": 69,
+        "impact": 5,
+        "risk": 1.5,
+        "cost": 4,
+        "businessMultiplier": 1.88,
+        "weightedConfidence": 82,
+        "finalConfidence": 82,
+        "riskCategory": "MEDIUM"
+      }
+    },
+    "articles-of-incorporation": {
+      "confidence": 90,
+      "issues": [
+        "Missing translation for legal term: notarization",
+        "Template variable mismatch between languages"
+      ],
+      "recommendations": [
+        "Consider using: notarización or notariado"
+      ],
+      "shouldFallback": false,
+      "businessMetrics": {
+        "documentType": "articles-of-incorporation",
+        "baseConfidence": 76,
+        "impact": 5,
+        "risk": 1.5,
+        "cost": 4,
+        "businessMultiplier": 1.88,
+        "weightedConfidence": 90,
+        "finalConfidence": 90,
+        "riskCategory": "MEDIUM"
+      }
+    },
+    "bill-of-sale-vehicle": {
+      "confidence": 100,
+      "issues": [],
+      "recommendations": [],
+      "shouldFallback": false,
+      "businessMetrics": {
+        "documentType": "bill-of-sale-vehicle",
+        "baseConfidence": 93,
+        "impact": 6,
+        "risk": 1.2,
+        "cost": 2,
+        "businessMultiplier": 3.6,
+        "weightedConfidence": 100,
+        "finalConfidence": 100,
+        "riskCategory": "LOW"
+      }
+    },
+    "boat-bill-of-sale": {
+      "confidence": 89,
+      "issues": [
+        "Missing translation for legal term: notarization",
+        "Template variable mismatch between languages"
+      ],
+      "recommendations": [
+        "Consider using: notarización or notariado"
+      ],
+      "shouldFallback": false,
+      "businessMetrics": {
+        "documentType": "boat-bill-of-sale",
+        "baseConfidence": 75,
+        "impact": 5,
+        "risk": 1.5,
+        "cost": 4,
+        "businessMultiplier": 1.88,
+        "weightedConfidence": 89,
+        "finalConfidence": 89,
+        "riskCategory": "MEDIUM"
+      }
+    },
+    "child-custody-agreement": {
+      "confidence": 80,
+      "issues": [
+        "Significant length difference between translations",
+        "Missing translation for legal term: notarization",
+        "Template variable mismatch between languages"
+      ],
+      "recommendations": [
+        "Consider using: notarización or notariado"
+      ],
+      "shouldFallback": false,
+      "businessMetrics": {
+        "documentType": "child-custody-agreement",
+        "baseConfidence": 67,
+        "impact": 5,
+        "risk": 1.5,
+        "cost": 4,
+        "businessMultiplier": 1.88,
+        "weightedConfidence": 80,
+        "finalConfidence": 80,
+        "riskCategory": "MEDIUM"
+      }
+    },
+    "child-medical-consent": {
+      "confidence": 100,
+      "issues": [
+        "Missing translation for legal term: notarization",
+        "Template variable mismatch between languages"
+      ],
+      "recommendations": [
+        "Consider using: notarización or notariado"
+      ],
+      "shouldFallback": false,
+      "businessMetrics": {
+        "documentType": "child-medical-consent",
+        "baseConfidence": 84,
+        "impact": 5,
+        "risk": 1.5,
+        "cost": 4,
+        "businessMultiplier": 1.88,
+        "weightedConfidence": 100,
+        "finalConfidence": 100,
+        "riskCategory": "MEDIUM"
+      }
+    },
+    "commercial-lease-agreement": {
+      "confidence": 52,
+      "issues": [
+        "Significant length difference between translations",
+        "Missing translation for legal term: notarization",
+        "Missing translation for legal term: lease",
+        "Missing translation for legal term: tenant",
+        "Template variable mismatch between languages"
+      ],
+      "recommendations": [
+        "Consider using: notarización or notariado",
+        "Consider using: arrendamiento or alquiler",
+        "Consider using: inquilino or arrendatario"
+      ],
+      "shouldFallback": true,
+      "businessMetrics": {
+        "documentType": "commercial-lease-agreement",
+        "baseConfidence": 47,
+        "impact": 8,
+        "risk": 2.2,
+        "cost": 8,
+        "businessMultiplier": 2.2,
+        "weightedConfidence": 57,
+        "finalConfidence": 52,
+        "riskCategory": "MEDIUM-HIGH"
+      }
+    },
+    "consignment-agreement": {
+      "confidence": 89,
+      "issues": [
+        "Missing translation for legal term: notarization",
+        "Template variable mismatch between languages"
+      ],
+      "recommendations": [
+        "Consider using: notarización or notariado"
+      ],
+      "shouldFallback": false,
+      "businessMetrics": {
+        "documentType": "consignment-agreement",
+        "baseConfidence": 75,
+        "impact": 5,
+        "risk": 1.5,
+        "cost": 4,
+        "businessMultiplier": 1.88,
+        "weightedConfidence": 89,
+        "finalConfidence": 89,
+        "riskCategory": "MEDIUM"
+      }
+    },
+    "copyright-assignment": {
+      "confidence": 90,
+      "issues": [
+        "Missing translation for legal term: notarization",
+        "Template variable mismatch between languages"
+      ],
+      "recommendations": [
+        "Consider using: notarización or notariado"
+      ],
+      "shouldFallback": false,
+      "businessMetrics": {
+        "documentType": "copyright-assignment",
+        "baseConfidence": 76,
+        "impact": 5,
+        "risk": 1.5,
+        "cost": 4,
+        "businessMultiplier": 1.88,
+        "weightedConfidence": 90,
+        "finalConfidence": 90,
+        "riskCategory": "MEDIUM"
+      }
+    },
+    "demand-letter-payment": {
+      "confidence": 94,
+      "issues": [
+        "Template variable mismatch between languages"
+      ],
+      "recommendations": [],
+      "shouldFallback": false,
+      "businessMetrics": {
+        "documentType": "demand-letter-payment",
+        "baseConfidence": 79,
+        "impact": 5,
+        "risk": 1.5,
+        "cost": 4,
+        "businessMultiplier": 1.88,
+        "weightedConfidence": 94,
+        "finalConfidence": 94,
+        "riskCategory": "MEDIUM"
+      }
+    },
+    "demand-letter": {
+      "confidence": 87,
+      "issues": [
+        "Missing translation for legal term: notarization",
+        "Template variable mismatch between languages"
+      ],
+      "recommendations": [
+        "Consider using: notarización or notariado"
+      ],
+      "shouldFallback": false,
+      "businessMetrics": {
+        "documentType": "demand-letter",
+        "baseConfidence": 76,
+        "impact": 4,
+        "risk": 1.5,
+        "cost": 4,
+        "businessMultiplier": 1.5,
+        "weightedConfidence": 87,
+        "finalConfidence": 87,
+        "riskCategory": "MEDIUM"
+      }
+    },
+    "divorce-settlement-agreement": {
+      "confidence": 54,
+      "issues": [
+        "Significant length difference between translations",
+        "Missing translation for legal term: notarization",
+        "Missing translation for legal term: lease",
+        "Template variable mismatch between languages"
+      ],
+      "recommendations": [
+        "Consider using: notarización or notariado",
+        "Consider using: arrendamiento or alquiler"
+      ],
+      "shouldFallback": true,
+      "businessMetrics": {
+        "documentType": "divorce-settlement-agreement",
+        "baseConfidence": 54,
+        "impact": 9,
+        "risk": 2.5,
+        "cost": 12,
+        "businessMultiplier": 1.88,
+        "weightedConfidence": 64,
+        "finalConfidence": 54,
+        "riskCategory": "HIGH"
+      }
+    },
+    "divorce-settlement": {
+      "confidence": 91,
+      "issues": [
+        "Missing translation for legal term: notarization",
+        "Template variable mismatch between languages"
+      ],
+      "recommendations": [
+        "Consider using: notarización or notariado"
+      ],
+      "shouldFallback": false,
+      "businessMetrics": {
+        "documentType": "divorce-settlement",
+        "baseConfidence": 77,
+        "impact": 5,
+        "risk": 1.5,
+        "cost": 4,
+        "businessMultiplier": 1.88,
+        "weightedConfidence": 91,
+        "finalConfidence": 91,
+        "riskCategory": "MEDIUM"
+      }
+    },
+    "employment-contract": {
+      "confidence": 86,
+      "issues": [
+        "Missing translation for legal term: notarization",
+        "Template variable mismatch between languages"
+      ],
+      "recommendations": [
+        "Consider using: notarización or notariado"
+      ],
+      "shouldFallback": false,
+      "businessMetrics": {
+        "documentType": "employment-contract",
+        "baseConfidence": 75,
+        "impact": 7,
+        "risk": 2,
+        "cost": 6,
+        "businessMultiplier": 2.33,
+        "weightedConfidence": 93,
+        "finalConfidence": 86,
+        "riskCategory": "MEDIUM-HIGH"
+      }
+    },
+    "employment-offer-letter": {
+      "confidence": 88,
+      "issues": [
+        "Missing translation for legal term: lease",
+        "Template variable mismatch between languages"
+      ],
+      "recommendations": [
+        "Consider using: arrendamiento or alquiler"
+      ],
+      "shouldFallback": false,
+      "businessMetrics": {
+        "documentType": "employment-offer-letter",
+        "baseConfidence": 74,
+        "impact": 5,
+        "risk": 1.5,
+        "cost": 4,
+        "businessMultiplier": 1.88,
+        "weightedConfidence": 88,
+        "finalConfidence": 88,
+        "riskCategory": "MEDIUM"
+      }
+    },
+    "employment-termination-letter": {
+      "confidence": 83,
+      "issues": [
+        "Missing translation for legal term: lease",
+        "Template variable mismatch between languages"
+      ],
+      "recommendations": [
+        "Consider using: arrendamiento or alquiler"
+      ],
+      "shouldFallback": false,
+      "businessMetrics": {
+        "documentType": "employment-termination-letter",
+        "baseConfidence": 70,
+        "impact": 5,
+        "risk": 1.5,
+        "cost": 4,
+        "businessMultiplier": 1.88,
+        "weightedConfidence": 83,
+        "finalConfidence": 83,
+        "riskCategory": "MEDIUM"
+      }
+    },
+    "eviction-notice": {
+      "confidence": 74,
+      "issues": [
+        "Missing translation for legal term: lease",
+        "Missing translation for legal term: tenant",
+        "Template variable mismatch between languages"
+      ],
+      "recommendations": [
+        "Consider using: arrendamiento or alquiler",
+        "Consider using: inquilino or arrendatario"
+      ],
+      "shouldFallback": false,
+      "businessMetrics": {
+        "documentType": "eviction-notice",
+        "baseConfidence": 62,
+        "impact": 5,
+        "risk": 1.5,
+        "cost": 4,
+        "businessMultiplier": 1.88,
+        "weightedConfidence": 74,
+        "finalConfidence": 74,
+        "riskCategory": "MEDIUM"
+      }
+    },
+    "general-inquiry": {
+      "confidence": 100,
+      "issues": [
+        "Missing translation for legal term: lease"
+      ],
+      "recommendations": [
+        "Consider using: arrendamiento or alquiler"
+      ],
+      "shouldFallback": false,
+      "businessMetrics": {
+        "documentType": "general-inquiry",
+        "baseConfidence": 88,
+        "impact": 5,
+        "risk": 1.5,
+        "cost": 4,
+        "businessMultiplier": 1.88,
+        "weightedConfidence": 100,
+        "finalConfidence": 100,
+        "riskCategory": "MEDIUM"
+      }
+    },
+    "healthcare-power-of-attorney": {
+      "confidence": 71,
+      "issues": [
+        "Significant length difference between translations",
+        "Missing translation for legal term: notarization",
+        "Missing translation for legal term: lease",
+        "Template variable mismatch between languages"
+      ],
+      "recommendations": [
+        "Consider using: notarización or notariado",
+        "Consider using: arrendamiento or alquiler"
+      ],
+      "shouldFallback": false,
+      "businessMetrics": {
+        "documentType": "healthcare-power-of-attorney",
+        "baseConfidence": 57,
+        "impact": 9,
+        "risk": 3,
+        "cost": 6,
+        "businessMultiplier": 4.5,
+        "weightedConfidence": 83,
+        "finalConfidence": 71,
+        "riskCategory": "HIGH"
+      }
+    },
+    "independent-contractor-agreement": {
+      "confidence": 93,
+      "issues": [
+        "Significant length difference between translations",
+        "Template variable mismatch between languages"
+      ],
+      "recommendations": [],
+      "shouldFallback": false,
+      "businessMetrics": {
+        "documentType": "independent-contractor-agreement",
+        "baseConfidence": 78,
+        "impact": 5,
+        "risk": 1.5,
+        "cost": 4,
+        "businessMultiplier": 1.88,
+        "weightedConfidence": 93,
+        "finalConfidence": 93,
+        "riskCategory": "MEDIUM"
+      }
+    },
+    "invoice": {
+      "confidence": 92,
+      "issues": [
+        "Missing translation for legal term: lease",
+        "Template variable mismatch between languages"
+      ],
+      "recommendations": [
+        "Consider using: arrendamiento or alquiler"
+      ],
+      "shouldFallback": false,
+      "businessMetrics": {
+        "documentType": "invoice",
+        "baseConfidence": 71,
+        "impact": 3,
+        "risk": 1,
+        "cost": 1,
+        "businessMultiplier": 3,
+        "weightedConfidence": 92,
+        "finalConfidence": 92,
+        "riskCategory": "LOW"
+      }
+    },
+    "last-will-testament": {
+      "confidence": 80,
+      "issues": [
+        "Significant length difference between translations",
+        "Missing translation for legal term: notarization",
+        "Template variable mismatch between languages"
+      ],
+      "recommendations": [
+        "Consider using: notarización or notariado"
+      ],
+      "shouldFallback": false,
+      "businessMetrics": {
+        "documentType": "last-will-testament",
+        "baseConfidence": 68,
+        "impact": 10,
+        "risk": 3,
+        "cost": 8,
+        "businessMultiplier": 3.75,
+        "weightedConfidence": 94,
+        "finalConfidence": 80,
+        "riskCategory": "HIGH"
+      }
+    },
+    "lease-agreement": {
+      "confidence": 44,
+      "issues": [
+        "Significant length difference between translations",
+        "Missing translation for legal term: signature",
+        "Missing translation for legal term: notarization",
+        "Missing translation for legal term: tenant",
+        "Missing translation for legal term: landlord",
+        "Template variable mismatch between languages"
+      ],
+      "recommendations": [
+        "Consider using: firma or signatura",
+        "Consider using: notarización or notariado",
+        "Consider using: inquilino or arrendatario",
+        "Consider using: propietario or arrendador"
+      ],
+      "shouldFallback": true,
+      "businessMetrics": {
+        "documentType": "lease-agreement",
+        "baseConfidence": 32,
+        "impact": 8,
+        "risk": 1.8,
+        "cost": 4,
+        "businessMultiplier": 3.6,
+        "weightedConfidence": 44,
+        "finalConfidence": 44,
+        "riskCategory": "MEDIUM"
+      }
+    },
+    "leaseAgreement": {
+      "confidence": 69,
+      "issues": [
+        "Significant length difference between translations",
+        "Missing translation for legal term: lease",
+        "Missing translation for legal term: tenant",
+        "Template variable mismatch between languages"
+      ],
+      "recommendations": [
+        "Consider using: arrendamiento or alquiler",
+        "Consider using: inquilino or arrendatario"
+      ],
+      "shouldFallback": true,
+      "businessMetrics": {
+        "documentType": "leaseAgreement",
+        "baseConfidence": 58,
+        "impact": 5,
+        "risk": 1.5,
+        "cost": 4,
+        "businessMultiplier": 1.88,
+        "weightedConfidence": 69,
+        "finalConfidence": 69,
+        "riskCategory": "MEDIUM"
+      }
+    },
+    "licensing-agreement": {
+      "confidence": 90,
+      "issues": [
+        "Missing translation for legal term: notarization",
+        "Template variable mismatch between languages"
+      ],
+      "recommendations": [
+        "Consider using: notarización or notariado"
+      ],
+      "shouldFallback": false,
+      "businessMetrics": {
+        "documentType": "licensing-agreement",
+        "baseConfidence": 76,
+        "impact": 5,
+        "risk": 1.5,
+        "cost": 4,
+        "businessMultiplier": 1.88,
+        "weightedConfidence": 90,
+        "finalConfidence": 90,
+        "riskCategory": "MEDIUM"
+      }
+    },
+    "living-trust": {
+      "confidence": 61,
+      "issues": [
+        "Significant length difference between translations",
+        "Missing translation for legal term: notarization",
+        "Missing translation for legal term: lease",
+        "Template variable mismatch between languages"
+      ],
+      "recommendations": [
+        "Consider using: notarización or notariado",
+        "Consider using: arrendamiento or alquiler"
+      ],
+      "shouldFallback": true,
+      "businessMetrics": {
+        "documentType": "living-trust",
+        "baseConfidence": 56,
+        "impact": 10,
+        "risk": 2.8,
+        "cost": 10,
+        "businessMultiplier": 2.8,
+        "weightedConfidence": 72,
+        "finalConfidence": 61,
+        "riskCategory": "HIGH"
+      }
+    },
+    "living-will": {
+      "confidence": 65,
+      "issues": [
+        "Significant length difference between translations",
+        "Missing translation for legal term: notarization",
+        "Missing translation for legal term: lease",
+        "Template variable mismatch between languages"
+      ],
+      "recommendations": [
+        "Consider using: notarización or notariado",
+        "Consider using: arrendamiento or alquiler"
+      ],
+      "shouldFallback": true,
+      "businessMetrics": {
+        "documentType": "living-will",
+        "baseConfidence": 55,
+        "impact": 5,
+        "risk": 1.5,
+        "cost": 4,
+        "businessMultiplier": 1.88,
+        "weightedConfidence": 65,
+        "finalConfidence": 65,
+        "riskCategory": "MEDIUM"
+      }
+    },
+    "llc-operating-agreement": {
+      "confidence": 89,
+      "issues": [
+        "Missing translation for legal term: notarization",
+        "Template variable mismatch between languages"
+      ],
+      "recommendations": [
+        "Consider using: notarización or notariado"
+      ],
+      "shouldFallback": false,
+      "businessMetrics": {
+        "documentType": "llc-operating-agreement",
+        "baseConfidence": 75,
+        "impact": 5,
+        "risk": 1.5,
+        "cost": 4,
+        "businessMultiplier": 1.88,
+        "weightedConfidence": 89,
+        "finalConfidence": 89,
+        "riskCategory": "MEDIUM"
+      }
+    },
+    "loan-agreement": {
+      "confidence": 90,
+      "issues": [
+        "Missing translation for legal term: notarization",
+        "Template variable mismatch between languages"
+      ],
+      "recommendations": [
+        "Consider using: notarización or notariado"
+      ],
+      "shouldFallback": false,
+      "businessMetrics": {
+        "documentType": "loan-agreement",
+        "baseConfidence": 76,
+        "impact": 5,
+        "risk": 1.5,
+        "cost": 4,
+        "businessMultiplier": 1.88,
+        "weightedConfidence": 90,
+        "finalConfidence": 90,
+        "riskCategory": "MEDIUM"
+      }
+    },
+    "medical-consent": {
+      "confidence": 90,
+      "issues": [
+        "Missing translation for legal term: notarization",
+        "Template variable mismatch between languages"
+      ],
+      "recommendations": [
+        "Consider using: notarización or notariado"
+      ],
+      "shouldFallback": false,
+      "businessMetrics": {
+        "documentType": "medical-consent",
+        "baseConfidence": 76,
+        "impact": 5,
+        "risk": 1.5,
+        "cost": 4,
+        "businessMultiplier": 1.88,
+        "weightedConfidence": 90,
+        "finalConfidence": 90,
+        "riskCategory": "MEDIUM"
+      }
+    },
+    "nda": {
+      "confidence": 95,
+      "issues": [
+        "Missing translation for legal term: notarization",
+        "Template variable mismatch between languages"
+      ],
+      "recommendations": [
+        "Consider using: notarización or notariado"
+      ],
+      "shouldFallback": false,
+      "businessMetrics": {
+        "documentType": "nda",
+        "baseConfidence": 70,
+        "impact": 7,
+        "risk": 1.5,
+        "cost": 3,
+        "businessMultiplier": 3.5,
+        "weightedConfidence": 95,
+        "finalConfidence": 95,
+        "riskCategory": "MEDIUM"
+      }
+    },
+    "non-compete-agreement": {
+      "confidence": 77,
+      "issues": [
+        "Significant length difference between translations",
+        "Missing translation for legal term: notarization",
+        "Template variable mismatch between languages"
+      ],
+      "recommendations": [
+        "Consider using: notarización or notariado"
+      ],
+      "shouldFallback": false,
+      "businessMetrics": {
+        "documentType": "non-compete-agreement",
+        "baseConfidence": 65,
+        "impact": 5,
+        "risk": 1.5,
+        "cost": 4,
+        "businessMultiplier": 1.88,
+        "weightedConfidence": 77,
+        "finalConfidence": 77,
+        "riskCategory": "MEDIUM"
+      }
+    },
+    "non-disclosure-agreement": {
+      "confidence": 89,
+      "issues": [
+        "Missing translation for legal term: notarization",
+        "Template variable mismatch between languages"
+      ],
+      "recommendations": [
+        "Consider using: notarización or notariado"
+      ],
+      "shouldFallback": false,
+      "businessMetrics": {
+        "documentType": "non-disclosure-agreement",
+        "baseConfidence": 75,
+        "impact": 5,
+        "risk": 1.5,
+        "cost": 4,
+        "businessMultiplier": 1.88,
+        "weightedConfidence": 89,
+        "finalConfidence": 89,
+        "riskCategory": "MEDIUM"
+      }
+    },
+    "offer-letter": {
+      "confidence": 90,
+      "issues": [
+        "Missing translation for legal term: notarization",
+        "Template variable mismatch between languages"
+      ],
+      "recommendations": [
+        "Consider using: notarización or notariado"
+      ],
+      "shouldFallback": false,
+      "businessMetrics": {
+        "documentType": "offer-letter",
+        "baseConfidence": 76,
+        "impact": 5,
+        "risk": 1.5,
+        "cost": 4,
+        "businessMultiplier": 1.88,
+        "weightedConfidence": 90,
+        "finalConfidence": 90,
+        "riskCategory": "MEDIUM"
+      }
+    },
+    "operating-agreement": {
+      "confidence": 93,
+      "issues": [
+        "Significant length difference between translations",
+        "Template variable mismatch between languages"
+      ],
+      "recommendations": [],
+      "shouldFallback": false,
+      "businessMetrics": {
+        "documentType": "operating-agreement",
+        "baseConfidence": 78,
+        "impact": 5,
+        "risk": 1.5,
+        "cost": 4,
+        "businessMultiplier": 1.88,
+        "weightedConfidence": 93,
+        "finalConfidence": 93,
+        "riskCategory": "MEDIUM"
+      }
+    },
+    "partnership-agreement": {
+      "confidence": 81,
+      "issues": [
+        "Significant length difference between translations",
+        "Missing translation for legal term: notarization",
+        "Template variable mismatch between languages"
+      ],
+      "recommendations": [
+        "Consider using: notarización or notariado"
+      ],
+      "shouldFallback": false,
+      "businessMetrics": {
+        "documentType": "partnership-agreement",
+        "baseConfidence": 64,
+        "impact": 7,
+        "risk": 1.5,
+        "cost": 4,
+        "businessMultiplier": 2.63,
+        "weightedConfidence": 81,
+        "finalConfidence": 81,
+        "riskCategory": "MEDIUM"
+      }
+    },
+    "power-of-attorney": {
+      "confidence": 55,
+      "issues": [
+        "Significant length difference between translations",
+        "Missing translation for legal term: signature",
+        "Missing translation for legal term: notarization",
+        "Missing translation for legal term: lease",
+        "Template variable mismatch between languages"
+      ],
+      "recommendations": [
+        "Consider using: firma or signatura",
+        "Consider using: notarización or notariado",
+        "Consider using: arrendamiento or alquiler"
+      ],
+      "shouldFallback": true,
+      "businessMetrics": {
+        "documentType": "power-of-attorney",
+        "baseConfidence": 41,
+        "impact": 9,
+        "risk": 1.5,
+        "cost": 4,
+        "businessMultiplier": 3.38,
+        "weightedConfidence": 55,
+        "finalConfidence": 55,
+        "riskCategory": "MEDIUM"
+      }
+    },
+    "powerOfAttorney": {
+      "confidence": 71,
+      "issues": [
+        "Missing translation for legal term: notarization",
+        "Missing translation for legal term: lease",
+        "Template variable mismatch between languages"
+      ],
+      "recommendations": [
+        "Consider using: notarización or notariado",
+        "Consider using: arrendamiento or alquiler"
+      ],
+      "shouldFallback": false,
+      "businessMetrics": {
+        "documentType": "powerOfAttorney",
+        "baseConfidence": 60,
+        "impact": 5,
+        "risk": 1.5,
+        "cost": 4,
+        "businessMultiplier": 1.88,
+        "weightedConfidence": 71,
+        "finalConfidence": 71,
+        "riskCategory": "MEDIUM"
+      }
+    },
+    "prenuptial-agreement": {
+      "confidence": 80,
+      "issues": [
+        "Significant length difference between translations",
+        "Missing translation for legal term: notarization",
+        "Template variable mismatch between languages"
+      ],
+      "recommendations": [
+        "Consider using: notarización or notariado"
+      ],
+      "shouldFallback": false,
+      "businessMetrics": {
+        "documentType": "prenuptial-agreement",
+        "baseConfidence": 67,
+        "impact": 5,
+        "risk": 1.5,
+        "cost": 4,
+        "businessMultiplier": 1.88,
+        "weightedConfidence": 80,
+        "finalConfidence": 80,
+        "riskCategory": "MEDIUM"
+      }
+    },
+    "promissory-note": {
+      "confidence": 53,
+      "issues": [
+        "Significant length difference between translations",
+        "Missing translation for legal term: agreement",
+        "Missing translation for legal term: signature",
+        "Missing translation for legal term: notarization",
+        "Template variable mismatch between languages"
+      ],
+      "recommendations": [
+        "Consider using: acuerdo or convenio or contrato",
+        "Consider using: firma or signatura",
+        "Consider using: notarización or notariado"
+      ],
+      "shouldFallback": true,
+      "businessMetrics": {
+        "documentType": "promissory-note",
+        "baseConfidence": 41,
+        "impact": 6,
+        "risk": 1.5,
+        "cost": 3,
+        "businessMultiplier": 3,
+        "weightedConfidence": 53,
+        "finalConfidence": 53,
+        "riskCategory": "MEDIUM"
+      }
+    },
+    "property-deed": {
+      "confidence": 90,
+      "issues": [
+        "Missing translation for legal term: notarization",
+        "Template variable mismatch between languages"
+      ],
+      "recommendations": [
+        "Consider using: notarización or notariado"
+      ],
+      "shouldFallback": false,
+      "businessMetrics": {
+        "documentType": "property-deed",
+        "baseConfidence": 76,
+        "impact": 5,
+        "risk": 1.5,
+        "cost": 4,
+        "businessMultiplier": 1.88,
+        "weightedConfidence": 90,
+        "finalConfidence": 90,
+        "riskCategory": "MEDIUM"
+      }
+    },
+    "purchase-agreement": {
+      "confidence": 90,
+      "issues": [
+        "Missing translation for legal term: notarization",
+        "Template variable mismatch between languages"
+      ],
+      "recommendations": [
+        "Consider using: notarización or notariado"
+      ],
+      "shouldFallback": false,
+      "businessMetrics": {
+        "documentType": "purchase-agreement",
+        "baseConfidence": 76,
+        "impact": 5,
+        "risk": 1.5,
+        "cost": 4,
+        "businessMultiplier": 1.88,
+        "weightedConfidence": 90,
+        "finalConfidence": 90,
+        "riskCategory": "MEDIUM"
+      }
+    },
+    "quitclaim-deed": {
+      "confidence": 59,
+      "issues": [
+        "Missing translation for legal term: notarization",
+        "Missing translation for legal term: lease",
+        "Missing translation for legal term: tenant",
+        "Template variable mismatch between languages"
+      ],
+      "recommendations": [
+        "Consider using: notarización or notariado",
+        "Consider using: arrendamiento or alquiler",
+        "Consider using: inquilino or arrendatario"
+      ],
+      "shouldFallback": true,
+      "businessMetrics": {
+        "documentType": "quitclaim-deed",
+        "baseConfidence": 50,
+        "impact": 5,
+        "risk": 1.5,
+        "cost": 4,
+        "businessMultiplier": 1.88,
+        "weightedConfidence": 59,
+        "finalConfidence": 59,
+        "riskCategory": "MEDIUM"
+      }
+    },
+    "rental-agreement": {
+      "confidence": 89,
+      "issues": [
+        "Missing translation for legal term: notarization",
+        "Template variable mismatch between languages"
+      ],
+      "recommendations": [
+        "Consider using: notarización or notariado"
+      ],
+      "shouldFallback": false,
+      "businessMetrics": {
+        "documentType": "rental-agreement",
+        "baseConfidence": 75,
+        "impact": 5,
+        "risk": 1.5,
+        "cost": 4,
+        "businessMultiplier": 1.88,
+        "weightedConfidence": 89,
+        "finalConfidence": 89,
+        "riskCategory": "MEDIUM"
+      }
+    },
+    "residential-lease-agreement": {
+      "confidence": 89,
+      "issues": [
+        "Missing translation for legal term: notarization",
+        "Template variable mismatch between languages"
+      ],
+      "recommendations": [
+        "Consider using: notarización or notariado"
+      ],
+      "shouldFallback": false,
+      "businessMetrics": {
+        "documentType": "residential-lease-agreement",
+        "baseConfidence": 75,
+        "impact": 5,
+        "risk": 1.5,
+        "cost": 4,
+        "businessMultiplier": 1.88,
+        "weightedConfidence": 89,
+        "finalConfidence": 89,
+        "riskCategory": "MEDIUM"
+      }
+    },
+    "service-agreement": {
+      "confidence": 94,
+      "issues": [
+        "Significant length difference between translations",
+        "Template variable mismatch between languages"
+      ],
+      "recommendations": [],
+      "shouldFallback": false,
+      "businessMetrics": {
+        "documentType": "service-agreement",
+        "baseConfidence": 79,
+        "impact": 5,
+        "risk": 1.5,
+        "cost": 4,
+        "businessMultiplier": 1.88,
+        "weightedConfidence": 94,
+        "finalConfidence": 94,
+        "riskCategory": "MEDIUM"
+      }
+    },
+    "severance-agreement": {
+      "confidence": 89,
+      "issues": [
+        "Missing translation for legal term: notarization",
+        "Template variable mismatch between languages"
+      ],
+      "recommendations": [
+        "Consider using: notarización or notariado"
+      ],
+      "shouldFallback": false,
+      "businessMetrics": {
+        "documentType": "severance-agreement",
+        "baseConfidence": 75,
+        "impact": 5,
+        "risk": 1.5,
+        "cost": 4,
+        "businessMultiplier": 1.88,
+        "weightedConfidence": 89,
+        "finalConfidence": 89,
+        "riskCategory": "MEDIUM"
+      }
+    },
+    "termination-letter": {
+      "confidence": 90,
+      "issues": [
+        "Missing translation for legal term: notarization",
+        "Template variable mismatch between languages"
+      ],
+      "recommendations": [
+        "Consider using: notarización or notariado"
+      ],
+      "shouldFallback": false,
+      "businessMetrics": {
+        "documentType": "termination-letter",
+        "baseConfidence": 76,
+        "impact": 5,
+        "risk": 1.5,
+        "cost": 4,
+        "businessMultiplier": 1.88,
+        "weightedConfidence": 90,
+        "finalConfidence": 90,
+        "riskCategory": "MEDIUM"
+      }
+    },
+    "trademark-assignment": {
+      "confidence": 90,
+      "issues": [
+        "Missing translation for legal term: notarization",
+        "Template variable mismatch between languages"
+      ],
+      "recommendations": [
+        "Consider using: notarización or notariado"
+      ],
+      "shouldFallback": false,
+      "businessMetrics": {
+        "documentType": "trademark-assignment",
+        "baseConfidence": 76,
+        "impact": 5,
+        "risk": 1.5,
+        "cost": 4,
+        "businessMultiplier": 1.88,
+        "weightedConfidence": 90,
+        "finalConfidence": 90,
+        "riskCategory": "MEDIUM"
+      }
+    },
+    "vehicle-bill-of-sale": {
+      "confidence": 49,
+      "issues": [
+        "Significant length difference between translations",
+        "Missing translation for legal term: signature",
+        "Missing translation for legal term: notarization",
+        "Missing translation for legal term: lease",
+        "Template variable mismatch between languages"
+      ],
+      "recommendations": [
+        "Consider using: firma or signatura",
+        "Consider using: notarización or notariado",
+        "Consider using: arrendamiento or alquiler"
+      ],
+      "shouldFallback": true,
+      "businessMetrics": {
+        "documentType": "vehicle-bill-of-sale",
+        "baseConfidence": 41,
+        "impact": 5,
+        "risk": 1.5,
+        "cost": 4,
+        "businessMultiplier": 1.88,
+        "weightedConfidence": 49,
+        "finalConfidence": 49,
+        "riskCategory": "MEDIUM"
+      }
+    }
+  },
+  "errors": [
+    {
+      "timestamp": "2025-06-17T04:16:30.684Z",
+      "documentId": "commercial-lease-agreement",
+      "errorType": "low_confidence_translation",
+      "message": "Confidence 52% below threshold 70%",
+      "severity": "warning"
+    },
+    {
+      "timestamp": "2025-06-17T04:16:30.739Z",
+      "documentId": "divorce-settlement-agreement",
+      "errorType": "low_confidence_translation",
+      "message": "Confidence 54% below threshold 70%",
+      "severity": "warning"
+    },
+    {
+      "timestamp": "2025-06-17T04:16:30.884Z",
+      "documentId": "lease-agreement",
+      "errorType": "low_confidence_translation",
+      "message": "Confidence 44% below threshold 70%",
+      "severity": "warning"
+    },
+    {
+      "timestamp": "2025-06-17T04:16:30.898Z",
+      "documentId": "leaseAgreement",
+      "errorType": "low_confidence_translation",
+      "message": "Confidence 69% below threshold 70%",
+      "severity": "warning"
+    },
+    {
+      "timestamp": "2025-06-17T04:16:30.923Z",
+      "documentId": "living-trust",
+      "errorType": "low_confidence_translation",
+      "message": "Confidence 61% below threshold 70%",
+      "severity": "warning"
+    },
+    {
+      "timestamp": "2025-06-17T04:16:30.940Z",
+      "documentId": "living-will",
+      "errorType": "low_confidence_translation",
+      "message": "Confidence 65% below threshold 70%",
+      "severity": "warning"
+    },
+    {
+      "timestamp": "2025-06-17T04:16:31.068Z",
+      "documentId": "power-of-attorney",
+      "errorType": "low_confidence_translation",
+      "message": "Confidence 55% below threshold 70%",
+      "severity": "warning"
+    },
+    {
+      "timestamp": "2025-06-17T04:16:31.107Z",
+      "documentId": "promissory-note",
+      "errorType": "low_confidence_translation",
+      "message": "Confidence 53% below threshold 70%",
+      "severity": "warning"
+    },
+    {
+      "timestamp": "2025-06-17T04:16:31.141Z",
+      "documentId": "quitclaim-deed",
+      "errorType": "low_confidence_translation",
+      "message": "Confidence 59% below threshold 70%",
+      "severity": "warning"
+    },
+    {
+      "timestamp": "2025-06-17T04:16:31.225Z",
+      "documentId": "vehicle-bill-of-sale",
+      "errorType": "low_confidence_translation",
+      "message": "Confidence 49% below threshold 70%",
+      "severity": "warning"
+    }
+  ],
+  "thresholds": {
+    "confidenceThreshold": 70
+  }
+}
