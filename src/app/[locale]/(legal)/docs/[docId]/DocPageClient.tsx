@@ -165,7 +165,7 @@ export default function DocPageClient({
           currentLocale === 'es' && docConfig.translations?.es?.name
             ? docConfig.translations.es.name
             : docConfig.translations?.en?.name || docConfig.name,
-        value: docConfig.basePrice,
+        value: docConfig.basePrice || 0,
       });
     }
   }, [docConfig, currentLocale, isHydrated]);
@@ -372,7 +372,7 @@ export default function DocPageClient({
                   <CardContent className="space-y-3">
                     <div className="flex items-baseline justify-between">
                       <p className="text-2xl font-bold">
-                        ${docConfig.basePrice.toFixed(2)}
+                        ${(docConfig?.basePrice || 0).toFixed(2)}
                       </p>
                       <span className="text-sm text-muted-foreground">
                         {t('pricing.perDocument', {
@@ -474,7 +474,7 @@ export default function DocPageClient({
                             clause.description}
                       </span>
                       <Badge variant="secondary">
-                        +${clause.price.toFixed(2)}
+                        +${(clause.price || 0).toFixed(2)}
                       </Badge>
                     </div>
                   ))}

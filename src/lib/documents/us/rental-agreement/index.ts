@@ -19,6 +19,7 @@ export const rentalAgreement: LegalDocument = {
   id: 'rental-agreement',
   name: 'Rental Agreement',
   category: 'Real Estate',
+  basePrice: 35,
   schema,
   questions: [
   {
