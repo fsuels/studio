@@ -1,7 +1,7 @@
 // src/lib/documents/us/healthcare-power-of-attorney/metadata.ts
 import type { LegalDocument } from '@/types/documents';
-import { HealthcarePowerOfAttorneySchema } from './schema';
-import { healthcarePowerOfAttorneyQuestions } from './questions';
+import { schema } from './schema';
+import { questions } from './questions';
 
 export const healthcarePowerOfAttorneyMeta: LegalDocument = {
   id: 'healthcare-power-of-attorney',
@@ -18,8 +18,8 @@ export const healthcarePowerOfAttorneyMeta: LegalDocument = {
     en: '/templates/en/healthcare-power-of-attorney.md',
     es: '/templates/es/healthcare-power-of-attorney.md',
   },
-  schema: HealthcarePowerOfAttorneySchema,
-  questions: healthcarePowerOfAttorneyQuestions,
+  schema,
+  questions: questions,
   upsellClauses: [],
   translations: {
     en: {

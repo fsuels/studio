@@ -1,7 +1,7 @@
 // src/lib/documents/us/employment-offer-letter/metadata.ts
 import type { LegalDocument } from '@/types/documents';
-import { EmploymentOfferLetterSchema } from './schema';
-import { employmentOfferLetterQuestions } from './questions';
+import { schema } from './schema';
+import { questions } from './questions';
 
 export const employmentOfferLetterMeta: LegalDocument = {
   id: 'employment-offer-letter',
@@ -18,8 +18,8 @@ export const employmentOfferLetterMeta: LegalDocument = {
     en: '/templates/en/employment-offer-letter.md',
     es: '/templates/es/employment-offer-letter.md',
   },
-  schema: EmploymentOfferLetterSchema,
-  questions: employmentOfferLetterQuestions,
+  schema,
+  questions: questions,
   upsellClauses: [],
   translations: {
     en: {

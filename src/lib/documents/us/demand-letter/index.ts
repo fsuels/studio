@@ -19,81 +19,75 @@ export const demandLetter: LegalDocument = {
   schema,
   questions: [
   {
-    "id": "name",
-    "label": "Name",
-    "type": "text",
-    "required": true,
-    "placeholder": "Enter name..."
+    id: "name",
+    label: "Name",
+    type: "text",
+    required: true,
+    placeholder: "Enter name..."
   },
   {
-    "id": "email",
-    "label": "Email",
-    "type": "text",
-    "required": false,
-    "placeholder": "Enter email..."
+    id: "email",
+    label: "Email",
+    type: "text",
+    required: false,
+    placeholder: "Enter email..."
   },
   {
-    "id": "address",
-    "label": "Address",
-    "type": "address",
-    "required": true,
-    "placeholder": "Enter address..."
+    id: "address",
+    label: "Address",
+    type: "address",
+    required: true,
+    placeholder: "Enter address..."
   },
   {
-    "id": "city",
-    "label": "City",
-    "type": "text",
-    "required": true,
-    "placeholder": "Enter city..."
+    id: "city",
+    label: "City",
+    type: "text",
+    required: true,
+    placeholder: "Enter city..."
   },
   {
-    "id": "state",
-    "label": "State",
-    "type": "text",
-    "required": true,
-    "placeholder": "Enter state..."
+    id: "state",
+    label: "State",
+    type: "text",
+    required: true,
+    placeholder: "Enter state..."
   },
   {
-    "id": "zipCode",
-    "label": "Zip Code",
-    "type": "text",
-    "required": true,
-    "placeholder": "Enter zip code..."
+    id: "zipCode",
+    label: "Zip Code",
+    type: "text",
+    required: true,
+    placeholder: "Enter zip code..."
   },
   {
-    "id": "date",
-    "label": "Date",
-    "type": "date",
-    "required": true,
-    "placeholder": "Enter date..."
+    id: "date",
+    label: "Date",
+    type: "date",
+    required: true,
+    placeholder: "Enter date..."
   }
 ],
   offerNotarization: false,
   states: "all",
-  ...
-  "id": "demand-letter",
-  "name": "Demand Letter for Payment",
-  "category": "Legal",
-  "complexity": "low",
-  "estimatedTime": "5-10 minutes",
-  "offerNotarization": false,
-  "states": "all",
-  "tags": [
+  complexity: "low",
+  estimatedTime: "5-10 minutes",
+  tags: [
     "legal",
     "low",
     "legal",
     "template"
   ],
-  "translations": {
-    "en": {
-      "name": "Demand Letter for Payment",
-      "description": "Create a legally binding Demand Letter for Payment with our easy-to-use template. State-specific requirements included.",
-      "aliases": []
+  translations: {
+    en: {
+      name: "Demand Letter for Payment",
+      description: "Create a legally binding Demand Letter for Payment with our easy-to-use template. State-specific requirements included.",
+      aliases: []
     },
-    "es": {
-      "name": "Demand Carta for Payment",
-      "description": "Crea un Demand Carta for Payment legalmente válido con nuestra plantilla fácil de usar. Incluye requisitos específicos del estado.",
-      "aliases": []
+    es: {
+      name: "Demand Carta for Payment",
+      description: "Crea un Demand Carta for Payment legalmente válido con nuestra plantilla fácil de usar. Incluye requisitos específicos del estado.",
+      aliases: []
     }
   }
 

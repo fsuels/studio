@@ -33,4 +33,4 @@ const GuaranteeBadge = React.memo(function GuaranteeBadge() {
     </section>
   );
 });
-export { GuaranteeBadge };
+export default GuaranteeBadge;

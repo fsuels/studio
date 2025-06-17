@@ -1,6 +1,6 @@
 // src/lib/documents/us/prenuptial-agreement/metadata.ts
 import type { LegalDocument } from '@/types/documents';
-import { PrenuptialAgreementSchema } from './schema';
+import { prenuptialAgreementSchema } from './schema';
 import { prenuptialAgreementQuestions } from './questions';
 
 export const prenuptialAgreementMeta: LegalDocument = {
@@ -18,7 +18,7 @@ export const prenuptialAgreementMeta: LegalDocument = {
     en: '/templates/en/prenuptial-agreement.md',
     es: '/templates/es/prenuptial-agreement.md',
   },
-  schema: PrenuptialAgreementSchema,
+  schema: prenuptialAgreementSchema,
   questions: prenuptialAgreementQuestions,
   upsellClauses: [],
   translations: {

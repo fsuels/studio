@@ -1,6 +1,6 @@
 // src/lib/documents/us/power-of-attorney/metadata.ts
 import type { LegalDocument } from '@/types/documents';
-import { PowerOfAttorneySchema } from './schema';
+import { powerOfAttorneySchema } from './schema';
 import { powerOfAttorneyQuestions } from './questions';
 
 export const powerOfAttorneyMeta: LegalDocument = {
@@ -18,7 +18,7 @@ export const powerOfAttorneyMeta: LegalDocument = {
     en: '/templates/en/powerOfAttorney.md',
     es: '/templates/es/powerOfAttorney.md',
   },
-  schema: PowerOfAttorneySchema,
+  schema: powerOfAttorneySchema,
   questions: powerOfAttorneyQuestions,
   upsellClauses: [],
   translations: {

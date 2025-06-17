@@ -22,105 +22,99 @@ export const residentialLeaseAgreement: LegalDocument = {
   schema,
   questions: [
   {
-    "id": "name",
-    "label": "Name",
-    "type": "text",
-    "required": true,
-    "placeholder": "Enter name..."
+    id: "name",
+    label: "Name",
+    type: "text",
+    required: true,
+    placeholder: "Enter name..."
   },
   {
-    "id": "email",
-    "label": "Email",
-    "type": "text",
-    "required": false,
-    "placeholder": "Enter email..."
+    id: "email",
+    label: "Email",
+    type: "text",
+    required: false,
+    placeholder: "Enter email..."
   },
   {
-    "id": "address",
-    "label": "Address",
-    "type": "address",
-    "required": true,
-    "placeholder": "Enter address..."
+    id: "address",
+    label: "Address",
+    type: "address",
+    required: true,
+    placeholder: "Enter address..."
   },
   {
-    "id": "city",
-    "label": "City",
-    "type": "text",
-    "required": true,
-    "placeholder": "Enter city..."
+    id: "city",
+    label: "City",
+    type: "text",
+    required: true,
+    placeholder: "Enter city..."
   },
   {
-    "id": "state",
-    "label": "State",
-    "type": "text",
-    "required": true,
-    "placeholder": "Enter state..."
+    id: "state",
+    label: "State",
+    type: "text",
+    required: true,
+    placeholder: "Enter state..."
   },
   {
-    "id": "zipCode",
-    "label": "Zip Code",
-    "type": "text",
-    "required": true,
-    "placeholder": "Enter zip code..."
+    id: "zipCode",
+    label: "Zip Code",
+    type: "text",
+    required: true,
+    placeholder: "Enter zip code..."
   },
   {
-    "id": "date",
-    "label": "Date",
-    "type": "date",
-    "required": true,
-    "placeholder": "Enter date..."
+    id: "date",
+    label: "Date",
+    type: "date",
+    required: true,
+    placeholder: "Enter date..."
   },
   {
-    "id": "propertyAddress",
-    "label": "Property Address",
-    "type": "address",
-    "required": true,
-    "placeholder": "Enter property address..."
+    id: "propertyAddress",
+    label: "Property Address",
+    type: "address",
+    required: true,
+    placeholder: "Enter property address..."
   },
   {
-    "id": "rentAmount",
-    "label": "Rent Amount",
-    "type": "number",
-    "required": false,
-    "placeholder": "Enter rent amount..."
+    id: "rentAmount",
+    label: "Rent Amount",
+    type: "number",
+    required: false,
+    placeholder: "Enter rent amount..."
   },
   {
-    "id": "leaseTerms",
-    "label": "Lease Terms",
-    "type": "text",
-    "required": false,
-    "placeholder": "Enter lease terms..."
+    id: "leaseTerms",
+    label: "Lease Terms",
+    type: "text",
+    required: false,
+    placeholder: "Enter lease terms..."
   }
 ],
   offerNotarization: false,
   states: "all",
-  ...
-  "id": "residential-lease-agreement",
-  "name": "Residential Lease Agreement",
-  "category": "Real Estate",
-  "complexity": "medium",
-  "estimatedTime": "10-20 minutes",
-  "offerNotarization": false,
-  "states": "all",
-  "tags": [
+  complexity: "medium",
+  estimatedTime: "10-20 minutes",
+  tags: [
     "real estate",
     "medium",
     "legal",
     "template",
     "popular"
   ],
-  "translations": {
-    "en": {
-      "name": "Residential Lease Agreement",
-      "description": "Create a legally binding Residential Lease Agreement with our easy-to-use template. State-specific requirements included.",
-      "aliases": [
+  translations: {
+    en: {
+      name: "Residential Lease Agreement",
+      description: "Create a legally binding Residential Lease Agreement with our easy-to-use template. State-specific requirements included.",
+      aliases: [
         "residential lease contract"
       ]
     },
-    "es": {
-      "name": "Residential Arrendamiento Acuerdo",
-      "description": "Crea un Residential Arrendamiento Acuerdo legalmente válido con nuestra plantilla fácil de usar. Incluye requisitos específicos del estado.",
-      "aliases": []
+    es: {
+      name: "Contrato de Arrendamiento Residencial",
+      description: "Crea un Residential Arrendamiento Acuerdo legalmente válido con nuestra plantilla fácil de usar. Incluye requisitos específicos del estado.",
+      aliases: []
     }
   }
 

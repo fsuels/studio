@@ -150,4 +150,4 @@ const LanguageSwitcher = React.memo(function LanguageSwitcher() {
   );
 });
 
-export { LanguageSwitcher };
+export default LanguageSwitcher;

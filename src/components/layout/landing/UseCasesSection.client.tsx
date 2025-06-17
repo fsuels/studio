@@ -40,7 +40,7 @@ const cases = [
   },
 ];
 
-export const UseCasesSection = React.memo(function UseCasesSection() {
+const UseCasesSection = React.memo(function UseCasesSection() {
   const { t } = useTranslation('common');
   const params = useParams<{ locale?: string }>();
   const locale = (params?.locale as 'en' | 'es') || 'en';
@@ -68,3 +68,5 @@ export const UseCasesSection = React.memo(function UseCasesSection() {
     </section>
   );
 });
+
+export default UseCasesSection;

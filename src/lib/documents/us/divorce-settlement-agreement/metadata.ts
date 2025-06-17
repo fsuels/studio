@@ -1,7 +1,7 @@
 // src/lib/documents/us/divorce-settlement-agreement/metadata.ts
 import type { LegalDocument } from '@/types/documents';
-import { DivorceSettlementAgreementSchema } from './schema';
-import { divorceSettlementAgreementQuestions } from './questions';
+import { schema } from './schema';
+import { questions } from './questions';
 
 export const divorceSettlementAgreementMeta: LegalDocument = {
   id: 'divorce-settlement-agreement',
@@ -18,8 +18,8 @@ export const divorceSettlementAgreementMeta: LegalDocument = {
     en: '/templates/en/divorce-settlement-agreement.md',
     es: '/templates/es/divorce-settlement-agreement.md',
   },
-  schema: DivorceSettlementAgreementSchema,
-  questions: divorceSettlementAgreementQuestions,
+  schema: schema,
+  questions: questions,
   upsellClauses: [],
   translations: {
     en: {

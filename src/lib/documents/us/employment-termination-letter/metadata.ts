@@ -1,7 +1,7 @@
 // src/lib/documents/us/employment-termination-letter/metadata.ts
 import type { LegalDocument } from '@/types/documents';
-import { EmploymentTerminationLetterSchema } from './schema';
-import { employmentTerminationLetterQuestions } from './questions';
+import { schema } from './schema';
+import { questions } from './questions';
 
 export const employmentTerminationLetterMeta: LegalDocument = {
   id: 'employment-termination-letter',
@@ -18,8 +18,8 @@ export const employmentTerminationLetterMeta: LegalDocument = {
     en: '/templates/en/employment-termination-letter.md',
     es: '/templates/es/employment-termination-letter.md',
   },
-  schema: EmploymentTerminationLetterSchema,
-  questions: employmentTerminationLetterQuestions,
+  schema,
+  questions: questions,
   upsellClauses: [],
   translations: {
     en: {

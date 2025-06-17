@@ -44,4 +44,4 @@ const PromoBanner = React.memo(function PromoBanner() {
     </AnimatePresence>
   );
 });
-export { PromoBanner };
+export default PromoBanner;

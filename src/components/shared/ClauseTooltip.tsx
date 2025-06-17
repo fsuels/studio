@@ -31,7 +31,7 @@ interface ClauseTooltipProps {
   children: React.ReactNode;
 }
 
-export function ClauseTooltip({ id, text, children }: ClauseTooltipProps) {
+function ClauseTooltip({ id, text, children }: ClauseTooltipProps) {
   const [content, setContent] = useState<string>('');
   const [loading, setLoading] = useState(false);
 
@@ -65,3 +65,5 @@ export function ClauseTooltip({ id, text, children }: ClauseTooltipProps) {
     </Tooltip>
   );
 }
+
+export default ClauseTooltip;

@@ -1,6 +1,6 @@
 // src/lib/documents/us/operating-agreement/metadata.ts
 import type { LegalDocument } from '@/types/documents';
-import { OperatingAgreementSchema } from './schema';
+import { operatingAgreementSchema } from './schema';
 import { operatingAgreementQuestions } from './questions';
 
 export const operatingAgreementMeta: LegalDocument = {
@@ -18,7 +18,7 @@ export const operatingAgreementMeta: LegalDocument = {
     en: '/templates/en/operating-agreement.md',
     es: '/templates/es/operating-agreement.md',
   },
-  schema: OperatingAgreementSchema,
+  schema: operatingAgreementSchema,
   questions: operatingAgreementQuestions,
   upsellClauses: [],
   translations: {

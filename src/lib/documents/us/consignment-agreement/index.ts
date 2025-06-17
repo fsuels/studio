@@ -70,32 +70,26 @@ export const consignmentAgreement: LegalDocument = {
 ],
   offerNotarization: false,
   states: "all",
-  ...
-  "id": "consignment-agreement",
-  "name": "Consignment Agreement",
-  "category": "Sales",
-  "complexity": "medium",
-  "estimatedTime": "10-20 minutes",
-  "offerNotarization": false,
-  "states": "all",
-  "tags": [
+  complexity: "medium",
+  estimatedTime: "10-20 minutes",
+  tags: [
     "sales",
     "medium",
     "legal",
     "template"
   ],
-  "translations": {
-    "en": {
-      "name": "Consignment Agreement",
-      "description": "Create a legally binding Consignment Agreement with our easy-to-use template. State-specific requirements included.",
-      "aliases": [
+  translations: {
+    en: {
+      name: "Consignment Agreement",
+      description: "Create a legally binding Consignment Agreement with our easy-to-use template. State-specific requirements included.",
+      aliases: [
         "consignment contract"
       ]
     },
-    "es": {
-      "name": "Consignment Acuerdo",
-      "description": "Crea un Consignment Acuerdo legalmente válido con nuestra plantilla fácil de usar. Incluye requisitos específicos del estado.",
-      "aliases": []
+    es: {
+      name: "Consignment Acuerdo",
+      description: "Crea un Consignment Acuerdo legalmente válido con nuestra plantilla fácil de usar. Incluye requisitos específicos del estado.",
+      aliases: []
     }
   }
 

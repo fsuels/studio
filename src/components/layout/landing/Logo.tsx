@@ -108,4 +108,4 @@ const Logo = React.memo(function Logo({
     </Link>
   );
 });
-export { Logo };
+export default Logo;

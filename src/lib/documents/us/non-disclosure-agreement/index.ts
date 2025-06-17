@@ -23,114 +23,108 @@ export const nonDisclosureAgreement: LegalDocument = {
   schema,
   questions: [
   {
-    "id": "name",
-    "label": "Name",
-    "type": "text",
-    "required": true,
-    "placeholder": "Enter name..."
+    id: "name",
+    label: "Name",
+    type: "text",
+    required: true,
+    placeholder: "Enter name..."
   },
   {
-    "id": "email",
-    "label": "Email",
-    "type": "text",
-    "required": false,
-    "placeholder": "Enter email..."
+    id: "email",
+    label: "Email",
+    type: "text",
+    required: false,
+    placeholder: "Enter email..."
   },
   {
-    "id": "address",
-    "label": "Address",
-    "type": "address",
-    "required": true,
-    "placeholder": "Enter address..."
+    id: "address",
+    label: "Address",
+    type: "address",
+    required: true,
+    placeholder: "Enter address..."
   },
   {
-    "id": "city",
-    "label": "City",
-    "type": "text",
-    "required": true,
-    "placeholder": "Enter city..."
+    id: "city",
+    label: "City",
+    type: "text",
+    required: true,
+    placeholder: "Enter city..."
   },
   {
-    "id": "state",
-    "label": "State",
-    "type": "text",
-    "required": true,
-    "placeholder": "Enter state..."
+    id: "state",
+    label: "State",
+    type: "text",
+    required: true,
+    placeholder: "Enter state..."
   },
   {
-    "id": "zipCode",
-    "label": "Zip Code",
-    "type": "text",
-    "required": true,
-    "placeholder": "Enter zip code..."
+    id: "zipCode",
+    label: "Zip Code",
+    type: "text",
+    required: true,
+    placeholder: "Enter zip code..."
   },
   {
-    "id": "date",
-    "label": "Date",
-    "type": "date",
-    "required": true,
-    "placeholder": "Enter date..."
+    id: "date",
+    label: "Date",
+    type: "date",
+    required: true,
+    placeholder: "Enter date..."
   },
   {
-    "id": "companyName",
-    "label": "Company Name",
-    "type": "text",
-    "required": true,
-    "placeholder": "Enter company name..."
+    id: "companyName",
+    label: "Company Name",
+    type: "text",
+    required: true,
+    placeholder: "Enter company name..."
   },
   {
-    "id": "businessAddress",
-    "label": "Business Address",
-    "type": "address",
-    "required": true,
-    "placeholder": "Enter business address..."
+    id: "businessAddress",
+    label: "Business Address",
+    type: "address",
+    required: true,
+    placeholder: "Enter business address..."
   },
   {
-    "id": "taxId",
-    "label": "Tax Id",
-    "type": "text",
-    "required": false,
-    "placeholder": "Enter tax id..."
+    id: "taxId",
+    label: "Tax Id",
+    type: "text",
+    required: false,
+    placeholder: "Enter tax id..."
   },
   {
-    "id": "businessType",
-    "label": "Business Type",
-    "type": "select",
-    "required": true,
-    "placeholder": "Enter business type..."
+    id: "businessType",
+    label: "Business Type",
+    type: "select",
+    required: true,
+    placeholder: "Enter business type..."
   }
 ],
   offerNotarization: false,
   states: "all",
-  ...
-  "id": "non-disclosure-agreement",
-  "name": "Non-Disclosure Agreement (NDA)",
-  "category": "Business",
-  "complexity": "medium",
-  "estimatedTime": "10-20 minutes",
-  "offerNotarization": false,
-  "states": "all",
-  "tags": [
+  complexity: "medium",
+  estimatedTime: "10-20 minutes",
+  tags: [
     "business",
     "medium",
     "legal",
     "template",
     "popular"
   ],
-  "translations": {
-    "en": {
-      "name": "Non-Disclosure Agreement (NDA)",
-      "description": "Create a legally binding Non-Disclosure Agreement (NDA) with our easy-to-use template. State-specific requirements included.",
-      "aliases": [
+  translations: {
+    en: {
+      name: "Non-Disclosure Agreement (NDA)",
+      description: "Create a legally binding Non-Disclosure Agreement (NDA) with our easy-to-use template. State-specific requirements included.",
+      aliases: [
         "non-disclosure contract (nda)",
         "business document",
         "commercial agreement"
       ]
     },
-    "es": {
-      "name": "Confidencialidad Acuerdo (NDA)",
-      "description": "Crea un Confidencialidad Acuerdo (NDA) legalmente válido con nuestra plantilla fácil de usar. Incluye requisitos específicos del estado.",
-      "aliases": []
+    es: {
+      name: "Acuerdo de Confidencialidad (NDA)",
+      description: "Crea un Confidencialidad Acuerdo (NDA) legalmente válido con nuestra plantilla fácil de usar. Incluye requisitos específicos del estado.",
+      aliases: []
     }
   }
 

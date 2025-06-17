@@ -1,6 +1,6 @@
 // src/lib/documents/us/consignment-agreement/metadata.ts
 import type { LegalDocument } from '@/types/documents';
-import { ConsignmentAgreementSchema } from './schema';
+import { consignmentAgreementSchema } from './schema';
 import { consignmentAgreementQuestions } from './questions';
 
 export const consignmentAgreementMeta: LegalDocument = {
@@ -18,7 +18,7 @@ export const consignmentAgreementMeta: LegalDocument = {
     en: '/templates/en/us/consignment-agreement.md',
     es: '/templates/es/us/consignment-agreement.md',
   },
-  schema: ConsignmentAgreementSchema,
+  schema: consignmentAgreementSchema,
   questions: consignmentAgreementQuestions,
   upsellClauses: [],
   translations: {

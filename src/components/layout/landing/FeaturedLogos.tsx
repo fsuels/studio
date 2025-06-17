@@ -70,4 +70,4 @@ const FeaturedLogos = React.memo(function FeaturedLogos() {
     </section>
   );
 });
-export { FeaturedLogos };
+export default FeaturedLogos;

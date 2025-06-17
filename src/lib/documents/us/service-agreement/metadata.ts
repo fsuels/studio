@@ -1,6 +1,6 @@
 // src/lib/documents/us/service-agreement/metadata.ts
 import type { LegalDocument } from '@/types/documents';
-import { ServiceAgreementSchema } from './schema';
+import { serviceAgreementSchema } from './schema';
 import { serviceAgreementQuestions } from './questions';
 
 export const serviceAgreementMeta: LegalDocument = {
@@ -18,7 +18,7 @@ export const serviceAgreementMeta: LegalDocument = {
     en: '/templates/en/service-agreement.md',
     es: '/templates/es/service-agreement.md',
   },
-  schema: ServiceAgreementSchema,
+  schema: serviceAgreementSchema,
   questions: serviceAgreementQuestions,
   upsellClauses: [],
   translations: {

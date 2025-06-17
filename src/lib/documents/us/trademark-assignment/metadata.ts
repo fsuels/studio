@@ -1,6 +1,6 @@
 // src/lib/documents/us/trademark-assignment/metadata.ts
 import type { LegalDocument } from '@/types/documents';
-import { TrademarkAssignmentSchema } from './schema';
+import { trademarkAssignmentSchema } from './schema';
 import { trademarkAssignmentQuestions } from './questions';
 
 export const trademarkAssignmentMeta: LegalDocument = {
@@ -18,7 +18,7 @@ export const trademarkAssignmentMeta: LegalDocument = {
     en: '/templates/en/us/trademark-assignment.md',
     es: '/templates/es/us/trademark-assignment.md',
   },
-  schema: TrademarkAssignmentSchema,
+  schema: trademarkAssignmentSchema,
   questions: trademarkAssignmentQuestions,
   upsellClauses: [],
   translations: {

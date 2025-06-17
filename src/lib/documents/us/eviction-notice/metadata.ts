@@ -1,7 +1,7 @@
 // src/lib/documents/us/eviction-notice/metadata.ts
 import type { LegalDocument } from '@/types/documents';
-import { EvictionNoticeSchema } from './schema';
-import { evictionNoticeQuestions } from './questions';
+import { schema } from './schema';
+import { questions } from './questions';
 
 export const evictionNoticeMeta: LegalDocument = {
   id: 'eviction-notice',
@@ -18,8 +18,8 @@ export const evictionNoticeMeta: LegalDocument = {
     en: '/templates/en/eviction-notice.md',
     es: '/templates/es/eviction-notice.md',
   },
-  schema: EvictionNoticeSchema,
-  questions: evictionNoticeQuestions,
+  schema,
+  questions: questions,
   upsellClauses: [],
   translations: {
     en: {

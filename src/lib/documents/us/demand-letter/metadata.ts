@@ -1,6 +1,6 @@
 // src/lib/documents/us/demand-letter/metadata.ts
 import type { LegalDocument } from '@/types/documents';
-import { DemandLetterSchema } from './schema';
+import { demandLetterSchema } from './schema';
 import { demandLetterQuestions } from './questions';
 
 export const demandLetterMeta: LegalDocument = {
@@ -18,7 +18,7 @@ export const demandLetterMeta: LegalDocument = {
     en: '/templates/en/us/demand-letter-payment.md',
     es: '/templates/es/us/demand-letter-payment.md',
   },
-  schema: DemandLetterSchema,
+  schema: demandLetterSchema,
   questions: demandLetterQuestions,
   upsellClauses: [],
   translations: {

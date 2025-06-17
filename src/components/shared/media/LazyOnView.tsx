@@ -1,7 +1,7 @@
 'use client';
 import React, { useEffect, useRef, useState, type ComponentType } from 'react';
 
-export function lazyOnView<T>(
+function lazyOnView<T>(
   loader: () => Promise<{ default: ComponentType<T> }>,
   options?: { placeholder?: React.ReactNode; rootMargin?: string }
 ) {
@@ -32,3 +32,5 @@ export function lazyOnView<T>(
     );
   };
 }
+
+export default lazyOnView;

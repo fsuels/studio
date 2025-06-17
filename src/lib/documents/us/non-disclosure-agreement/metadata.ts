@@ -1,6 +1,6 @@
 // src/lib/documents/us/non-disclosure-agreement/metadata.ts
 import type { LegalDocument } from '@/types/documents';
-import { NonDisclosureAgreementSchema } from './schema';
+import { nonDisclosureAgreementSchema } from './schema';
 import { nonDisclosureAgreementQuestions } from './questions';
 
 export const nonDisclosureAgreementMeta: LegalDocument = {
@@ -18,7 +18,7 @@ export const nonDisclosureAgreementMeta: LegalDocument = {
     en: '/templates/en/nda.md',
     es: '/templates/es/nda.md',
   },
-  schema: NonDisclosureAgreementSchema,
+  schema: nonDisclosureAgreementSchema,
   questions: nonDisclosureAgreementQuestions,
   upsellClauses: [],
   translations: {

@@ -70,22 +70,15 @@ export const affidavit: LegalDocument = {
 ],
   offerNotarization: true,
   states: "all",
-  ...
-  "id": "affidavit",
-  "name": "General Affidavit",
-  "category": "Legal",
-  "complexity": "low",
-  "estimatedTime": "5-10 minutes",
-  "offerNotarization": true,
-  "states": "all",
-  "tags": [
+  complexity: "low",
+  estimatedTime: "5-10 minutes",
+  tags: [
     "legal",
     "low",
-    "legal",
     "template",
     "notarization"
   ],
-  "translations": {
+  translations: {
     "en": {
       "name": "General Affidavit",
       "description": "Create a legally binding General Affidavit with our easy-to-use template. State-specific requirements included.",

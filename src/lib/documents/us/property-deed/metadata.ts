@@ -1,6 +1,6 @@
 // src/lib/documents/us/property-deed/metadata.ts
 import type { LegalDocument } from '@/types/documents';
-import { PropertyDeedSchema } from './schema';
+import { propertyDeedSchema } from './schema';
 import { propertyDeedQuestions } from './questions';
 
 export const propertyDeedMeta: LegalDocument = {
@@ -18,7 +18,7 @@ export const propertyDeedMeta: LegalDocument = {
     en: '/templates/en/us/property-deed.md',
     es: '/templates/es/us/property-deed.md',
   },
-  schema: PropertyDeedSchema,
+  schema: propertyDeedSchema,
   questions: propertyDeedQuestions,
   upsellClauses: [],
   translations: {

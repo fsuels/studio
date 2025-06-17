@@ -1,11 +1,11 @@
 import type { LegalDocument } from '@/types/documents';
-import { quitclaimDeedMetadata } from './metadata';
+import { quitclaimDeedMeta } from './metadata';
 import { quitclaimDeedQuestions } from './questions';
 import { quitclaimDeedSchema } from './schema';
 
 export const quitclaimDeed: LegalDocument = {
   id: 'quitclaim-deed',
-  ...quitclaimDeedMetadata,
+  ...quitclaimDeedMeta,
   schema: quitclaimDeedSchema,
   questions: quitclaimDeedQuestions,
 };

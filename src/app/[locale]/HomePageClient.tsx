@@ -2,7 +2,7 @@
 'use client';
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { lazyOnView } from '@/components/shared/media/LazyOnView';
+import lazyOnView from '@/components/shared/media/LazyOnView';
 import type { LegalDocument } from '@/lib/document-library';
 import { documentLibrary } from '@/lib/document-library';
 import { useToast } from '@/hooks/use-toast';

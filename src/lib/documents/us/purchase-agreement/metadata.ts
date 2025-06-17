@@ -1,6 +1,6 @@
 // src/lib/documents/us/purchase-agreement/metadata.ts
 import type { LegalDocument } from '@/types/documents';
-import { PurchaseAgreementSchema } from './schema';
+import { purchaseAgreementSchema } from './schema';
 import { purchaseAgreementQuestions } from './questions';
 
 export const purchaseAgreementMeta: LegalDocument = {
@@ -18,7 +18,7 @@ export const purchaseAgreementMeta: LegalDocument = {
     en: '/templates/en/us/purchase-agreement.md',
     es: '/templates/es/us/purchase-agreement.md',
   },
-  schema: PurchaseAgreementSchema,
+  schema: purchaseAgreementSchema,
   questions: purchaseAgreementQuestions,
   upsellClauses: [],
   translations: {

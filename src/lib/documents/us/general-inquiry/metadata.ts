@@ -1,7 +1,7 @@
 // src/lib/documents/us/general-inquiry/metadata.ts
 import type { LegalDocument } from '@/types/documents';
-import { GeneralInquirySchema } from './schema';
-import { generalInquiryQuestions } from './questions';
+import { schema } from './schema';
+import { questions } from './questions';
 
 export const generalInquiryMeta: LegalDocument = {
   id: 'general-inquiry',
@@ -18,8 +18,8 @@ export const generalInquiryMeta: LegalDocument = {
     en: '/templates/en/general-inquiry.md',
     es: '/templates/es/general-inquiry.md',
   },
-  schema: GeneralInquirySchema,
-  questions: generalInquiryQuestions,
+  schema,
+  questions: questions,
   upsellClauses: [],
   translations: {
     en: {

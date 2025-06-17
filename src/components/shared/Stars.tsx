@@ -35,7 +35,7 @@ const COLOR_CLASSES = {
   }
 } as const;
 
-export const Stars = React.memo<StarsProps>(function Stars({
+const Stars = React.memo<StarsProps>(function Stars({
   rating,
   maxRating = 5,
   size = 'md',

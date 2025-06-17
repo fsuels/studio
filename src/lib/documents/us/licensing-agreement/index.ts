@@ -19,83 +19,77 @@ export const licensingAgreement: LegalDocument = {
   schema,
   questions: [
   {
-    "id": "name",
-    "label": "Name",
-    "type": "text",
-    "required": true,
-    "placeholder": "Enter name..."
+    id: "name",
+    label: "Name",
+    type: "text",
+    required: true,
+    placeholder: "Enter name..."
   },
   {
-    "id": "email",
-    "label": "Email",
-    "type": "text",
-    "required": false,
-    "placeholder": "Enter email..."
+    id: "email",
+    label: "Email",
+    type: "text",
+    required: false,
+    placeholder: "Enter email..."
   },
   {
-    "id": "address",
-    "label": "Address",
-    "type": "address",
-    "required": true,
-    "placeholder": "Enter address..."
+    id: "address",
+    label: "Address",
+    type: "address",
+    required: true,
+    placeholder: "Enter address..."
   },
   {
-    "id": "city",
-    "label": "City",
-    "type": "text",
-    "required": true,
-    "placeholder": "Enter city..."
+    id: "city",
+    label: "City",
+    type: "text",
+    required: true,
+    placeholder: "Enter city..."
   },
   {
-    "id": "state",
-    "label": "State",
-    "type": "text",
-    "required": true,
-    "placeholder": "Enter state..."
+    id: "state",
+    label: "State",
+    type: "text",
+    required: true,
+    placeholder: "Enter state..."
   },
   {
-    "id": "zipCode",
-    "label": "Zip Code",
-    "type": "text",
-    "required": true,
-    "placeholder": "Enter zip code..."
+    id: "zipCode",
+    label: "Zip Code",
+    type: "text",
+    required: true,
+    placeholder: "Enter zip code..."
   },
   {
-    "id": "date",
-    "label": "Date",
-    "type": "date",
-    "required": true,
-    "placeholder": "Enter date..."
+    id: "date",
+    label: "Date",
+    type: "date",
+    required: true,
+    placeholder: "Enter date..."
   }
 ],
   offerNotarization: false,
   states: "all",
-  ...
-  "id": "licensing-agreement",
-  "name": "Licensing Agreement",
-  "category": "Intellectual Property",
-  "complexity": "high",
-  "estimatedTime": "20-40 minutes",
-  "offerNotarization": false,
-  "states": "all",
-  "tags": [
+  complexity: "high",
+  estimatedTime: "20-40 minutes",
+  tags: [
     "intellectual property",
     "high",
     "legal",
     "template"
   ],
-  "translations": {
-    "en": {
-      "name": "Licensing Agreement",
-      "description": "Create a legally binding Licensing Agreement with our easy-to-use template. State-specific requirements included.",
-      "aliases": [
+  translations: {
+    en: {
+      name: "Licensing Agreement",
+      description: "Create a legally binding Licensing Agreement with our easy-to-use template. State-specific requirements included.",
+      aliases: [
         "licensing contract"
       ]
     },
-    "es": {
-      "name": "Licensing Acuerdo",
-      "description": "Crea un Licensing Acuerdo legalmente válido con nuestra plantilla fácil de usar. Incluye requisitos específicos del estado.",
-      "aliases": []
+    es: {
+      name: "Acuerdo de Licencia",
+      description: "Crea un Licensing Acuerdo legalmente válido con nuestra plantilla fácil de usar. Incluye requisitos específicos del estado.",
+      aliases: []
     }
   }
 

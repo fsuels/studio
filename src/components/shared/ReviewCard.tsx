@@ -17,7 +17,7 @@ const SIZE_CLASSES = {
   lg: 'px-8 py-10 text-lg'
 } as const;
 
-export const ReviewCard = React.memo<ReviewCardProps>(function ReviewCard({
+const ReviewCard = React.memo<ReviewCardProps>(function ReviewCard({
   review,
   size = 'md',
   variant = 'outlined',

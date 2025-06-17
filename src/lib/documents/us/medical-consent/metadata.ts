@@ -1,6 +1,6 @@
 // src/lib/documents/us/medical-consent/metadata.ts
 import type { LegalDocument } from '@/types/documents';
-import { MedicalConsentSchema } from './schema';
+import { medicalConsentSchema } from './schema';
 import { medicalConsentQuestions } from './questions';
 
 export const medicalConsentMeta: LegalDocument = {
@@ -18,7 +18,7 @@ export const medicalConsentMeta: LegalDocument = {
     en: '/templates/en/child-medical-consent.md',
     es: '/templates/es/child-medical-consent.md',
   },
-  schema: MedicalConsentSchema,
+  schema: medicalConsentSchema,
   questions: medicalConsentQuestions,
   upsellClauses: [],
   translations: {

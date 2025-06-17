@@ -1,6 +1,6 @@
 // src/lib/documents/us/copyright-assignment/metadata.ts
 import type { LegalDocument } from '@/types/documents';
-import { CopyrightAssignmentSchema } from './schema';
+import { copyrightAssignmentSchema } from './schema';
 import { copyrightAssignmentQuestions } from './questions';
 
 export const copyrightAssignmentMeta: LegalDocument = {
@@ -18,7 +18,7 @@ export const copyrightAssignmentMeta: LegalDocument = {
     en: '/templates/en/us/copyright-assignment.md',
     es: '/templates/es/us/copyright-assignment.md',
   },
-  schema: CopyrightAssignmentSchema,
+  schema: copyrightAssignmentSchema,
   questions: copyrightAssignmentQuestions,
   upsellClauses: [],
   translations: {

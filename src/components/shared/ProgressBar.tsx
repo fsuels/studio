@@ -9,7 +9,7 @@ interface ProgressBarProps {
   totalSteps: number;
 }
 
-export function ProgressBar({ currentStep, totalSteps }: ProgressBarProps) {
+function ProgressBar({ currentStep, totalSteps }: ProgressBarProps) {
   const percentage = (currentStep / totalSteps) * 100;
   return (
     <div
@@ -27,3 +27,5 @@ export function ProgressBar({ currentStep, totalSteps }: ProgressBarProps) {
     </div>
   );
 }
+
+export default ProgressBar;

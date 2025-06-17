@@ -1,6 +1,6 @@
 // src/lib/documents/us/licensing-agreement/metadata.ts
 import type { LegalDocument } from '@/types/documents';
-import { LicensingAgreementSchema } from './schema';
+import { licensingAgreementSchema } from './schema';
 import { licensingAgreementQuestions } from './questions';
 
 export const licensingAgreementMeta: LegalDocument = {
@@ -18,7 +18,7 @@ export const licensingAgreementMeta: LegalDocument = {
     en: '/templates/en/us/licensing-agreement.md',
     es: '/templates/es/us/licensing-agreement.md',
   },
-  schema: LicensingAgreementSchema,
+  schema: licensingAgreementSchema,
   questions: licensingAgreementQuestions,
   upsellClauses: [],
   translations: {

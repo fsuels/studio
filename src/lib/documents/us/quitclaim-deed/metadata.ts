@@ -1,6 +1,6 @@
 // src/lib/documents/us/quitclaim-deed/metadata.ts
 import type { LegalDocument } from '@/types/documents';
-import { QuitclaimDeedSchema } from './schema';
+import { quitclaimDeedSchema } from './schema';
 import { quitclaimDeedQuestions } from './questions';
 
 export const quitclaimDeedMeta: LegalDocument = {
@@ -18,7 +18,7 @@ export const quitclaimDeedMeta: LegalDocument = {
     en: '/templates/en/quitclaim-deed.md',
     es: '/templates/es/quitclaim-deed.md',
   },
-  schema: QuitclaimDeedSchema,
+  schema: quitclaimDeedSchema,
   questions: quitclaimDeedQuestions,
   upsellClauses: [],
   translations: {
