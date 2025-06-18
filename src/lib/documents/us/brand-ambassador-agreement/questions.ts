@@ -1,0 +1,82 @@
+// src/lib/documents/us/brand-ambassador-agreement/questions.ts
+import type { FormQuestion } from '@/types/documents';
+
+export const brandAmbassadorAgreementQuestions: FormQuestion[] = [
+  {
+    id: 'brandName',
+    type: 'text',
+    label: 'Brand Name',
+    placeholder: 'Enter brand or company name',
+    required: true,
+    group: 'brand',
+  },
+  {
+    id: 'brandAddress',
+    type: 'text',
+    label: 'Brand Address',
+    placeholder: 'Enter complete business address',
+    required: true,
+    group: 'brand',
+  },
+  {
+    id: 'ambassadorName',
+    type: 'text',
+    label: 'Ambassador Name',
+    placeholder: 'Enter ambassador full name',
+    required: true,
+    group: 'ambassador',
+  },
+  {
+    id: 'ambassadorAddress',
+    type: 'text',
+    label: 'Ambassador Address',
+    placeholder: 'Enter complete address',
+    required: true,
+    group: 'ambassador',
+  },
+  {
+    id: 'programName',
+    type: 'text',
+    label: 'Program Name',
+    placeholder: 'Enter ambassador program name',
+    required: true,
+    group: 'program',
+  },
+  {
+    id: 'programDescription',
+    type: 'textarea',
+    label: 'Program Description',
+    placeholder: 'Describe the ambassador program',
+    required: true,
+    group: 'program',
+  },
+  {
+    id: 'compensationType',
+    type: 'select',
+    label: 'Compensation Type',
+    options: [
+      { value: 'monthly-stipend', label: 'Monthly Stipend' },
+      { value: 'product-only', label: 'Product Only' },
+      { value: 'commission', label: 'Commission Based' },
+      { value: 'tiered', label: 'Tiered Structure' },
+      { value: 'hybrid', label: 'Hybrid' },
+    ],
+    required: true,
+    group: 'compensation',
+  },
+  {
+    id: 'platforms',
+    type: 'multiselect',
+    label: 'Social Media Platforms',
+    options: [
+      { value: 'instagram', label: 'Instagram' },
+      { value: 'tiktok', label: 'TikTok' },
+      { value: 'youtube', label: 'YouTube' },
+      { value: 'twitter', label: 'Twitter/X' },
+      { value: 'facebook', label: 'Facebook' },
+      { value: 'linkedin', label: 'LinkedIn' },
+    ],
+    required: false,
+    group: 'platforms',
+  },
+];

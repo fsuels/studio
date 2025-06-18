@@ -22,7 +22,7 @@ export const divorceSettlementMeta: LegalDocument = {
   upsellClauses: [],
   translations: {
     en: {
-      name: 'Divorce Settlement Agreement',
+      name: 'Divorce Settlement Contract',
       description: 'Create a legally binding divorce settlement agreement with our easy-to-use template. State-specific requirements included.',
       aliases: [
         'divorce settlement contract',
@@ -32,7 +32,7 @@ export const divorceSettlementMeta: LegalDocument = {
       ],
     },
     es: {
-      name: 'Acuerdo de Liquidación de Divorcio',
+      name: 'Contrato de Liquidación de Divorcio',
       description: 'Crea un acuerdo de liquidación de divorcio legalmente válido con nuestra plantilla fácil de usar. Incluye requisitos específicos del estado.',
       aliases: [
         'contrato de divorcio',

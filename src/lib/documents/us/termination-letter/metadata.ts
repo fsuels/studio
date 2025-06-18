@@ -22,7 +22,7 @@ export const terminationLetterMeta: LegalDocument = {
   upsellClauses: [],
   translations: {
     en: {
-      name: 'Employment Termination Letter',
+      name: 'Employee Termination Letter',
       description: 'Create a professional employment termination letter with our easy-to-use template. State-specific requirements included.',
       aliases: [
         'termination notice',
@@ -32,7 +32,7 @@ export const terminationLetterMeta: LegalDocument = {
       ],
     },
     es: {
-      name: 'Carta de Terminación de Empleo',
+      name: 'Carta de Despido de Empleado',
       description: 'Crea una carta de terminación de empleo profesional con nuestra plantilla fácil de usar. Incluye requisitos específicos del estado.',
       aliases: [
         'aviso de terminación',

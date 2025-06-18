@@ -23,16 +23,16 @@ export const articlesOfIncorporationBizMeta: LegalDocument = {
   upsellClauses: [],
   translations: {
     en: {
-      name: 'Articles of Incorporation',
+      name: 'Articles of Incorporation (Business)',
       description:
-        'Formal document filed with the state to create a corporation.',
-      aliases: ['form corporation', 'incorporate business'],
+        'Formal document filed with the state to create a corporation for business entities.',
+      aliases: ['form corporation', 'incorporate business', 'business incorporation'],
     },
     es: {
-      name: 'Acta Constitutiva',
+      name: 'Acta Constitutiva (Empresarial)',
       description:
-        'Documento formal presentado al estado para crear una corporación.',
-      aliases: ['formar corporación', 'incorporar negocio'],
+        'Documento formal presentado al estado para crear una corporación empresarial.',
+      aliases: ['formar corporación', 'incorporar negocio', 'incorporación empresarial'],
     },
   },
 };

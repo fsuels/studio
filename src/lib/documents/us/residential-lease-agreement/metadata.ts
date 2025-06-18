@@ -22,7 +22,7 @@ export const residentialLeaseAgreementMeta: LegalDocument = {
   upsellClauses: [],
   translations: {
     en: {
-      name: 'Residential Lease Agreement',
+      name: 'Residential Rental Agreement',
       description: 'Create a legally binding residential lease agreement with our easy-to-use template. State-specific requirements included.',
       aliases: [
         'residential lease contract',
@@ -32,7 +32,7 @@ export const residentialLeaseAgreementMeta: LegalDocument = {
       ],
     },
     es: {
-      name: 'Acuerdo de Arrendamiento Residencial',
+      name: 'Contrato de Alquiler Residencial',
       description: 'Crea un acuerdo de arrendamiento residencial legalmente válido con nuestra plantilla fácil de usar. Incluye requisitos específicos del estado.',
       aliases: [
         'contrato de arrendamiento residencial',

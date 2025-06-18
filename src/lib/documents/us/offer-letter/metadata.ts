@@ -22,7 +22,7 @@ export const offerLetterMeta: LegalDocument = {
   upsellClauses: [],
   translations: {
     en: {
-      name: 'Employment Offer Letter',
+      name: 'Job Offer Letter',
       description: 'Create a professional employment offer letter with our easy-to-use template. State-specific requirements included.',
       aliases: [
         'job offer letter',
@@ -32,7 +32,7 @@ export const offerLetterMeta: LegalDocument = {
       ],
     },
     es: {
-      name: 'Carta de Oferta de Empleo',
+      name: 'Carta de Oferta Laboral',
       description: 'Crea una carta de oferta de empleo profesional con nuestra plantilla fácil de usar. Incluye requisitos específicos del estado.',
       aliases: [
         'oferta de trabajo',

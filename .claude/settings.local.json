@@ -43,7 +43,8 @@
       "Bash(fi)",
       "Bash(wc:*)",
       "Bash(npm:*)",
-      "Bash(curl:*)"
+      "Bash(curl:*)",
+      "Bash(npx ts-node:*)"
     ],
     "deny": []
   }

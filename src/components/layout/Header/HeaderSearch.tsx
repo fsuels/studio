@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 import { Search as SearchIcon, FileText, ExternalLink } from 'lucide-react';
 import { Input } from '@/components/ui/input';
-import { documentLibrary } from '@/lib/document-library';
+import { search } from '@/lib/document-library';
 import { getDocTranslation } from '@/lib/i18nUtils';
 import type { LegalDocument } from '@/lib/document-library';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -37,11 +37,7 @@ export default function HeaderSearch({
   // Search functionality
   useEffect(() => {
     if (searchQuery.trim().length > 1) {
-      const results = documentLibrary.search(searchQuery, {
-        includeArchived: false,
-        includeOnlyBestMatches: true,
-        locale: clientLocale,
-      });
+      const results = search(searchQuery, clientLocale);
       setSearchResults(results.slice(0, 8));
       setShowResults(results.length > 0);
     } else {

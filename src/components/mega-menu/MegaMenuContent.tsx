@@ -33,50 +33,204 @@ interface MegaMenuContentProps {
 // Define document categories with icons and improved organization
 const CATEGORIES = [
   { 
-    key: 'Business', 
-    icon: Briefcase, 
-    labelKey: 'categories.business',
-    priority: 1
-  },
-  { 
-    key: 'Real Estate', 
+    key: 'Real Estate & Property', 
     icon: Home, 
     labelKey: 'categories.realEstate',
-    priority: 2
+    priority: 1,
+    subcategories: [
+      'Residential Leasing',
+      'Commercial Leasing', 
+      'Real-Estate Transactions',
+      'Deeds & Financing'
+    ]
   },
   { 
-    key: 'Finance', 
-    icon: DollarSign, 
-    labelKey: 'categories.finance',
-    priority: 3
+    key: 'Estate Planning', 
+    icon: FileText, 
+    labelKey: 'categories.estatePlanning',
+    priority: 2,
+    subcategories: [
+      'Wills & Codicils',
+      'Trusts',
+      'Powers of Attorney',
+      'Advance Directives',
+      'Estate Administration'
+    ]
   },
   { 
-    key: 'Legal', 
-    icon: Scale, 
-    labelKey: 'categories.legal',
-    priority: 4
+    key: 'Business & Commercial', 
+    icon: Briefcase, 
+    labelKey: 'categories.business',
+    priority: 3,
+    subcategories: [
+      'General Contracts',
+      'Sales & Purchasing',
+      'Company Formation & Governance',
+      'Marketing & Services',
+      'Tech & Web'
+    ]
   },
   { 
-    key: 'Family', 
-    icon: Users, 
-    labelKey: 'categories.family',
-    priority: 5
-  },
-  { 
-    key: 'Employment', 
+    key: 'Employment & HR', 
     icon: Building, 
     labelKey: 'categories.employment',
-    priority: 6
+    priority: 4,
+    subcategories: [
+      'Hiring & On-boarding',
+      'Policies & Benefits',
+      'Performance & Discipline',
+      'Separation',
+      'Restrictions'
+    ]
   },
   { 
-    key: 'Personal', 
+    key: 'Finance & Lending', 
+    icon: DollarSign, 
+    labelKey: 'categories.finance',
+    priority: 5,
+    subcategories: [
+      'Loans & Notes',
+      'Security & Collateral',
+      'Debt & Collection',
+      'Instruments'
+    ]
+  },
+  { 
+    key: 'Intellectual Property', 
+    icon: Scale, 
+    labelKey: 'categories.intellectualProperty',
+    priority: 6,
+    subcategories: [
+      'Confidentiality & NDAs',
+      'Trademark',
+      'Patent & Invention',
+      'Copyright & Media'
+    ]
+  },
+  { 
+    key: 'Risk & Liability', 
     icon: Heart, 
-    labelKey: 'categories.personal',
-    priority: 7
+    labelKey: 'categories.riskLiability',
+    priority: 7,
+    subcategories: [
+      'Waivers & Releases',
+      'Reports'
+    ]
+  },
+  { 
+    key: 'Family & Personal', 
+    icon: Users, 
+    labelKey: 'categories.family',
+    priority: 8,
+    subcategories: [
+      'Parenting & Childcare',
+      'Affidavits'
+    ]
+  },
+  { 
+    key: 'Construction & Home Improvement', 
+    icon: Building, 
+    labelKey: 'categories.construction',
+    priority: 9,
+    subcategories: [
+      'Contracts',
+      'Bids, Bonds & Liens'
+    ]
+  },
+  { 
+    key: 'Dispute Resolution', 
+    icon: Scale, 
+    labelKey: 'categories.disputeResolution',
+    priority: 10,
+    subcategories: [
+      'Demand & Warnings',
+      'ADR & Settlement',
+      'Court Prep'
+    ]
   },
 ];
 
 const MAX_DOCS_PER_CATEGORY = 8;
+
+// Document category mapping based on document IDs
+const DOCUMENT_CATEGORY_MAPPING: Record<string, string> = {
+  // Real Estate & Property
+  'lease-agreement': 'Real Estate & Property',
+  'residential-lease-agreement': 'Real Estate & Property', 
+  'room-rental-agreement': 'Real Estate & Property',
+  'sublease-agreement': 'Real Estate & Property',
+  'lease-renewal-agreement': 'Real Estate & Property',
+  'lease-termination-letter': 'Real Estate & Property',
+  'roommate-agreement': 'Real Estate & Property',
+  'pet-agreement': 'Real Estate & Property',
+  'commercial-lease-agreement': 'Real Estate & Property',
+  'rental-agreement': 'Real Estate & Property',
+  'eviction-notice': 'Real Estate & Property',
+  'quitclaim-deed': 'Real Estate & Property',
+  'property-deed': 'Real Estate & Property',
+  
+  // Estate Planning
+  'last-will-testament': 'Estate Planning',
+  'simple-will': 'Estate Planning',
+  'codicil-to-will': 'Estate Planning',
+  'living-trust': 'Estate Planning',
+  'living-will': 'Estate Planning',
+  'power-of-attorney': 'Estate Planning',
+  'durable-power-of-attorney': 'Estate Planning',
+  'healthcare-power-of-attorney': 'Estate Planning',
+  
+  // Business & Commercial
+  'articles-of-incorporation': 'Business & Commercial',
+  'articles-of-incorporation-biz': 'Business & Commercial',
+  'business-contract': 'Business & Commercial',
+  'letter-of-intent': 'Business & Commercial',
+  'sales-agreement': 'Business & Commercial',
+  'consulting-agreement': 'Business & Commercial',
+  'llc-operating-agreement': 'Business & Commercial',
+  'partnership-agreement': 'Business & Commercial',
+  'service-agreement': 'Business & Commercial',
+  'independent-contractor-agreement': 'Business & Commercial',
+  'purchase-agreement': 'Business & Commercial',
+  'consignment-agreement': 'Business & Commercial',
+  'licensing-agreement': 'Business & Commercial',
+  
+  // Employment & HR
+  'employment-offer-letter': 'Employment & HR',
+  'offer-letter': 'Employment & HR',
+  'employment-contract': 'Employment & HR',
+  'employment-termination-letter': 'Employment & HR',
+  'termination-letter': 'Employment & HR',
+  'severance-agreement': 'Employment & HR',
+  'non-compete-agreement': 'Employment & HR',
+  
+  // Finance & Lending
+  'promissory-note': 'Finance & Lending',
+  'loan-agreement': 'Finance & Lending',
+  'vehicle-bill-of-sale': 'Finance & Lending',
+  'boat-bill-of-sale': 'Finance & Lending',
+  'demand-letter': 'Finance & Lending',
+  'demand-letter-payment': 'Finance & Lending',
+  'invoice': 'Finance & Lending',
+  
+  // Intellectual Property
+  'nda': 'Intellectual Property',
+  'non-disclosure-agreement': 'Intellectual Property',
+  'copyright-assignment': 'Intellectual Property',
+  'trademark-assignment': 'Intellectual Property',
+  
+  // Family & Personal
+  'child-custody-agreement': 'Family & Personal',
+  'child-medical-consent': 'Family & Personal',
+  'medical-consent': 'Family & Personal',
+  'prenuptial-agreement': 'Family & Personal',
+  'divorce-settlement': 'Family & Personal',
+  'divorce-settlement-agreement': 'Family & Personal',
+  'affidavit': 'Family & Personal',
+  'affidavit-general': 'Family & Personal',
+  
+  // Dispute Resolution (fallback for demand letters and legal documents)
+  // Note: Some documents like demand-letter could be in multiple categories
+};
 
 const MemoizedDocLink = React.memo(function DocLink({
   doc,
@@ -135,20 +289,45 @@ export default function MegaMenuContent({
     );
 
     validDocuments.forEach(doc => {
-      const category = doc.category || 'Legal';
+      // Use explicit mapping first, then fallback to document's category
+      let mappedCategory = DOCUMENT_CATEGORY_MAPPING[doc.id];
       
-      // Map similar categories to our defined ones
-      let mappedCategory = category;
-      if (category === 'Estate Planning') mappedCategory = 'Family';
-      if (category === 'Transactions') mappedCategory = 'Finance';
-      if (category === 'Property') mappedCategory = 'Real Estate';
-      if (category === 'Corporate') mappedCategory = 'Business';
+      if (!mappedCategory) {
+        // Fallback mapping based on original document category
+        const originalCategory = doc.category || 'Business';
+        switch (originalCategory) {
+          case 'Real Estate':
+          case 'Property':
+            mappedCategory = 'Real Estate & Property';
+            break;
+          case 'Business':
+          case 'Corporate':
+            mappedCategory = 'Business & Commercial';
+            break;
+          case 'Employment':
+            mappedCategory = 'Employment & HR';
+            break;
+          case 'Finance':
+          case 'Transactions':
+            mappedCategory = 'Finance & Lending';
+            break;
+          case 'Legal':
+            mappedCategory = 'Dispute Resolution';
+            break;
+          case 'Family':
+          case 'Personal':
+            mappedCategory = 'Family & Personal';
+            break;
+          default:
+            mappedCategory = 'Business & Commercial'; // Default fallback
+        }
+      }
       
       if (categories[mappedCategory]) {
         categories[mappedCategory].push(doc);
       } else {
-        // If category doesn't exist, add to Legal
-        categories['Legal'].push(doc);
+        // If category doesn't exist, add to Business & Commercial as fallback
+        categories['Business & Commercial'].push(doc);
       }
     });
 

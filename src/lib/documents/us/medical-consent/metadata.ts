@@ -23,7 +23,7 @@ export const medicalConsentMeta: LegalDocument = {
   upsellClauses: [],
   translations: {
     en: {
-      name: 'Child Medical Consent Form',
+      name: 'General Medical Consent Form',
       description:
         'Create a legally binding Child Medical Consent Form with our easy-to-use template. State-specific requirements included.',
       aliases: [
@@ -33,7 +33,7 @@ export const medicalConsentMeta: LegalDocument = {
       ],
     },
     es: {
-      name: 'Formulario de Consentimiento Médico Infantil',
+      name: 'Formulario de Consentimiento Médico General',
       description:
         'Crea un Formulario de Consentimiento Médico Infantil legalmente válido con nuestra plantilla fácil de usar. Incluye requisitos específicos del estado.',
       aliases: [

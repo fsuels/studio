@@ -23,7 +23,7 @@ export const nonDisclosureAgreementMeta: LegalDocument = {
   upsellClauses: [],
   translations: {
     en: {
-      name: 'Non-Disclosure Agreement (NDA)',
+      name: 'Confidentiality Agreement (NDA)',
       description:
         'Create a legally binding Non-Disclosure Agreement (NDA) with our easy-to-use template. State-specific requirements included.',
       aliases: [
