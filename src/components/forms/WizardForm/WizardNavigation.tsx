@@ -51,58 +51,60 @@ export default function WizardNavigation({
 
   return (
     <>
-      {/* Main Navigation - Touch Optimized */}
-      <div className="mt-8 flex flex-col sm:flex-row justify-between items-center gap-4">
-        {canGoBack && (
+      {/* Main Navigation - Enhanced Professional Design */}
+      <div className="mt-12 pt-8 border-t border-border">
+        <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
+          {canGoBack && (
+            <TouchButton
+              variant="outline"
+              size="lg"
+              onClick={onPreviousStep}
+              disabled={isDisabled}
+              className="w-full sm:w-auto h-12 px-8 text-base font-medium border-2 hover:bg-muted transition-all duration-200"
+            >
+              {t('wizard.previous', { defaultValue: 'Previous' })}
+            </TouchButton>
+          )}
+
           <TouchButton
-            variant="outline"
+            variant="default"
             size="lg"
-            onClick={onPreviousStep}
+            onClick={onNextStep}
             disabled={isDisabled}
-            className="w-full sm:w-auto"
+            className="w-full sm:w-auto sm:ml-auto h-12 px-8 text-base font-semibold bg-primary hover:bg-primary/90 transition-all duration-200 shadow-lg hover:shadow-xl"
           >
-            {t('wizard.previous', { defaultValue: 'Previous' })}
+            {formIsSubmitting || authIsLoading ? (
+              <Loader2 className="animate-spin h-5 w-5" />
+            ) : (
+              getButtonText()
+            )}
           </TouchButton>
-        )}
+        </div>
 
-        <TouchButton
-          variant="default"
-          size="lg"
-          onClick={onNextStep}
-          disabled={isDisabled}
-          className="w-full sm:w-auto sm:ml-auto"
-        >
-          {formIsSubmitting || authIsLoading ? (
-            <Loader2 className="animate-spin h-5 w-5" />
-          ) : (
-            getButtonText()
-          )}
-        </TouchButton>
-      </div>
-
-      {/* Save and Finish Later - Touch Optimized */}
-      <div className="mt-6 pt-4 border-t border-border text-center">
-        <TouchButton
-          variant="ghost"
-          size="md"
-          onClick={onSaveAndFinishLater}
-          disabled={isDisabled}
-          className="text-sm text-muted-foreground min-h-[44px]"
-        >
-          {isSavingDraft ? (
-            <>
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              {t('wizard.savingDraft', { defaultValue: 'Saving Draft...' })}
-            </>
-          ) : (
-            <>
-              {t('wizard.saveFinishLater', {
-                defaultValue: 'Save and finish later',
-              })}
-              <Save className="ml-2 h-4 w-4" />
-            </>
-          )}
-        </TouchButton>
+        {/* Save and Finish Later - Enhanced Design */}
+        <div className="mt-8 text-center">
+          <TouchButton
+            variant="ghost"
+            size="md"
+            onClick={onSaveAndFinishLater}
+            disabled={isDisabled}
+            className="text-sm text-muted-foreground hover:text-foreground min-h-[44px] transition-colors duration-200"
+          >
+            {isSavingDraft ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                {t('wizard.savingDraft', { defaultValue: 'Saving Draft...' })}
+              </>
+            ) : (
+              <>
+                <Save className="mr-2 h-4 w-4" />
+                {t('wizard.saveFinishLater', {
+                  defaultValue: 'Save and finish later',
+                })}
+              </>
+            )}
+          </TouchButton>
+        </div>
       </div>
     </>
   );

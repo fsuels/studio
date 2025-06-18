@@ -31,10 +31,12 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import { Button } from '@/components/ui/button';
+import { createPortal } from 'react-dom';
 
 interface FieldRendererProps {
   fieldKey: string;
   doc: LegalDocument;
+  onFocus?: () => void;
 }
 
 type FormValues = Record<string, unknown>;
@@ -49,6 +51,7 @@ interface ZodDefExtras {
 const FieldRenderer = React.memo(function FieldRenderer({
   fieldKey,
   doc,
+  onFocus,
 }: FieldRendererProps) {
   const {
     control,
@@ -58,6 +61,18 @@ const FieldRenderer = React.memo(function FieldRenderer({
     formState: { errors },
   } = useFormContext<FormValues>();
   const { t } = useTranslation('common');
+  const [isMounted, setIsMounted] = React.useState(false);
+  const [showTooltip, setShowTooltip] = React.useState(false);
+
+  React.useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  if (!doc) {
+    console.error('FieldRenderer: doc prop is undefined');
+    return null;
+  }
+
 
   const fieldSchemaFromQuestions = doc.questions?.find(
     (q) => q.id === fieldKey,
@@ -184,6 +199,8 @@ const FieldRenderer = React.memo(function FieldRenderer({
   const tooltipText = fieldSchema?.tooltip
     ? t(fieldSchema.tooltip, { defaultValue: fieldSchema.tooltip })
     : '';
+
+
   const fieldError = errors[fieldKey];
 
   let inputType: React.HTMLInputTypeAttribute = 'text';
@@ -234,6 +251,7 @@ const FieldRenderer = React.memo(function FieldRenderer({
             placeholder={placeholderText || t('Enter address...')}
             className="max-w-sm"
             tooltip={tooltipText}
+            onFocus={onFocus}
             value={(field.value as string) || ''}
             onChange={(val: string, parts?: Record<string, string>) => {
               field.onChange(val);
@@ -277,36 +295,50 @@ const FieldRenderer = React.memo(function FieldRenderer({
   }
 
   return (
-    <div className="space-y-2">
-      <div className="flex items-center gap-1">
+    <div className="space-y-4">
+      <div className="flex items-start gap-2">
         <Label
           htmlFor={fieldKey}
-          className={cn('font-medium', fieldError && 'text-destructive')}
+          className={cn('font-semibold text-lg leading-relaxed', fieldError && 'text-destructive')}
         >
           {labelText}{' '}
-          {fieldSchema?.required && <span className="text-destructive">*</span>}
+          {fieldSchema?.required && <span className="text-destructive text-sm">*</span>}
         </Label>
         {tooltipText && (
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                type="button"
-                variant="ghost"
-                size="icon"
-                className="h-5 w-5 p-0 text-muted-foreground hover:text-foreground focus-visible:ring-1 focus-visible:ring-ring" // Ensure focus ring is subtle if needed
-                aria-label={`Info for ${labelText}`}
-              >
-                <Info className="h-4 w-4" />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent
-              side="bottom"
-              align="start"
-              className="max-w-xs text-sm bg-popover text-popover-foreground border shadow-md rounded-md p-2 z-50"
+          <div className="relative">
+            <Button
+              type="button"
+              variant="outline"
+              size="icon"
+              className="h-7 w-7 p-0 text-blue-600 hover:text-blue-700 hover:bg-blue-50 border-blue-200 transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 touch-manipulation"
+              aria-label={`Help for ${labelText}`}
+              onClick={() => setShowTooltip(!showTooltip)}
+              onBlur={() => setTimeout(() => setShowTooltip(false), 150)}
             >
-              <p>{tooltipText}</p>
-            </TooltipContent>
-          </Tooltip>
+              <Info className="h-4 w-4" />
+            </Button>
+            {showTooltip && isMounted && (
+              <div
+                className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 w-80 max-w-[90vw] text-sm bg-blue-50 text-blue-900 border-blue-200 border shadow-xl rounded-lg p-4 z-[999999]"
+                style={{ 
+                  position: 'fixed',
+                  left: '50%',
+                  transform: 'translateX(-50%)',
+                  top: 'auto',
+                  bottom: '50%'
+                }}
+              >
+                <p className="leading-relaxed font-medium whitespace-normal">{tooltipText}</p>
+                <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-blue-200"></div>
+              </div>
+            )}
+            {showTooltip && (
+              <div 
+                className="fixed inset-0 z-[999998]" 
+                onClick={() => setShowTooltip(false)}
+              />
+            )}
+          </div>
         )}
       </div>
 
@@ -441,6 +473,7 @@ const FieldRenderer = React.memo(function FieldRenderer({
         <Textarea
           id={fieldKey}
           placeholder={placeholderText}
+          onFocus={onFocus}
           {...register(fieldKey as keyof FormValues, {
             required: fieldSchema?.required,
           })}
@@ -463,6 +496,7 @@ const FieldRenderer = React.memo(function FieldRenderer({
             >
               <SelectTrigger
                 id={fieldKey}
+                onFocus={onFocus}
                 className={cn(
                   'bg-background max-w-sm',
                   fieldError && 'border-destructive focus:ring-destructive',
@@ -488,7 +522,7 @@ const FieldRenderer = React.memo(function FieldRenderer({
           type={inputType}
           placeholder={placeholderText}
           className={cn(
-            'input bg-background',
+            'input bg-background h-12 text-base transition-all duration-200 focus:ring-2 focus:ring-primary focus:border-primary',
             fieldError && 'border-destructive focus-visible:ring-destructive',
           )}
           inputMode={
@@ -497,6 +531,7 @@ const FieldRenderer = React.memo(function FieldRenderer({
               : undefined
           }
           aria-invalid={!!fieldError}
+          onFocus={onFocus}
           rhfProps={register(fieldKey as keyof FormValues, {
             required: fieldSchema?.required,
             onBlur:

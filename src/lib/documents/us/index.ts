@@ -28,14 +28,13 @@ export { leaseAgreement } from './lease-agreement';
 export { licensingAgreement } from './licensing-agreement';
 export { livingTrust } from './living-trust';
 export { livingWill } from './living-will';
-export { llcOperatingAgreement } from './llc-operating-agreement';
 export { loanAgreement } from './loan-agreement';
 export { medicalConsent } from './medical-consent';
 export { nda } from './nda';
 export { nonCompeteAgreement } from './non-compete-agreement';
 export { nonDisclosureAgreement } from './non-disclosure-agreement';
 export { offerLetter } from './offer-letter';
-export { operatingAgreement } from './operating-agreement';
+export { llcOperatingAgreement } from './operating-agreement';
 export { partnershipAgreement } from './partnership-agreement';
 export { powerOfAttorney } from './power-of-attorney';
 export { prenuptialAgreement } from './prenuptial-agreement';
@@ -52,4 +51,4 @@ export { trademarkAssignment } from './trademark-assignment';
 export { vehicleBillOfSale } from './vehicle-bill-of-sale';
 
 // Export count for verification
-export const US_DOCUMENT_COUNT = 49;
+export const US_DOCUMENT_COUNT = 48;

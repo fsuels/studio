@@ -61,6 +61,10 @@ const useFieldSchema = (
   doc: LegalDocument
 ): Question | undefined => {
   return useMemo(() => {
+    if (!doc) {
+      return undefined;
+    }
+    
     const fieldSchemaFromQuestions = doc.questions?.find(
       (q) => q.id === fieldKey
     );
@@ -222,6 +226,11 @@ export const OptimizedFieldRenderer = React.memo<FieldRendererProps>(
       formState: { errors },
     } = useFormContext<FormValues>();
     const { t } = useTranslation('common');
+
+    if (!doc) {
+      console.error('OptimizedFieldRenderer: doc prop is undefined');
+      return null;
+    }
 
     const fieldSchema = useFieldSchema(fieldKey, doc);
     const inputType = useInputType(fieldKey, fieldSchema);

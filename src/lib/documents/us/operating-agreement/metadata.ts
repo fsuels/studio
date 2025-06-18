@@ -4,7 +4,7 @@ import { operatingAgreementSchema } from './schema';
 import { operatingAgreementQuestions } from './questions';
 
 export const operatingAgreementMeta: LegalDocument = {
-  id: 'operating-agreement',
+  id: 'llc-operating-agreement',
   jurisdiction: 'US',
   category: 'Business',
   languageSupport: ['en', 'es'],
@@ -15,8 +15,8 @@ export const operatingAgreementMeta: LegalDocument = {
   basePrice: 20,
   states: 'all',
   templatePaths: {
-    en: '/templates/en/operating-agreement.md',
-    es: '/templates/es/operating-agreement.md',
+    en: '/templates/en/llc-operating-agreement.md',
+    es: '/templates/es/llc-operating-agreement.md',
   },
   schema: operatingAgreementSchema,
   questions: operatingAgreementQuestions,

@@ -16,9 +16,9 @@ declare global {
 export default function GooglePlacesLoader() {
   const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
 
-  if (!apiKey) {
-    console.error(
-      'GooglePlacesLoader: NEXT_PUBLIC_GOOGLE_MAPS_API_KEY is not set. Autocomplete will not work.',
+  if (!apiKey || apiKey === 'your_google_maps_api_key_here') {
+    console.warn(
+      'GooglePlacesLoader: NEXT_PUBLIC_GOOGLE_MAPS_API_KEY is not configured. Address autocomplete will fall back to regular text input.',
     );
     return null;
   }

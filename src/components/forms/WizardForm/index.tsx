@@ -6,6 +6,8 @@ import React, {
   useState,
   useRef,
   useCallback,
+  forwardRef,
+  useImperativeHandle,
 } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
@@ -28,13 +30,19 @@ interface WizardFormProps {
   locale: 'en' | 'es';
   doc: LegalDocument;
   onComplete: (checkoutUrlOrPath: string) => void;
+  onFieldFocus?: (fieldId: string | undefined) => void;
 }
 
-export default function WizardForm({
+export interface WizardFormRef {
+  navigateToField: (fieldId: string) => void;
+}
+
+const WizardForm = forwardRef<WizardFormRef, WizardFormProps>(function WizardForm({
   locale,
   doc,
   onComplete,
-}: WizardFormProps) {
+  onFieldFocus,
+}, ref) {
   const { t } = useTranslation('common');
   const { toast } = useToast();
   const { isLoggedIn, isLoading: authIsLoading, user } = useAuth();
@@ -65,6 +73,35 @@ export default function WizardForm({
   useEffect(() => {
     setIsHydrated(true);
   }, []);
+
+  // Track current field focus for preview highlighting
+  useEffect(() => {
+    if (currentField && onFieldFocus && !isReviewing) {
+      onFieldFocus(currentField.id);
+    } else if (isReviewing && onFieldFocus) {
+      // Clear focus when in review mode
+      onFieldFocus(undefined);
+    }
+  }, [currentField, onFieldFocus, isReviewing]);
+
+  // Navigation to specific field
+  const navigateToField = useCallback((fieldId: string) => {
+    const fieldIndex = steps.findIndex(step => step.id === fieldId);
+    if (fieldIndex !== -1) {
+      setCurrentStepIndex(fieldIndex);
+      setIsReviewing(false);
+      
+      // Scroll to top
+      if (typeof window !== 'undefined') {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
+  }, [steps]);
+
+  // Expose navigation function through ref
+  useImperativeHandle(ref, () => ({
+    navigateToField,
+  }), [navigateToField]);
 
   useEffect(() => {
     if (pendingSaveDraft && !isLoggedIn && !authIsLoading) {
@@ -201,7 +238,7 @@ export default function WizardForm({
   if (!isHydrated || authIsLoading) {
     return (
       <TooltipProvider>
-        <div className="bg-card rounded-lg shadow-xl p-4 md:p-6 border border-border">
+        <div className="bg-card rounded-xl shadow-2xl p-6 md:p-8 border border-border/50 backdrop-blur-sm">
           <WizardSkeleton />
         </div>
       </TooltipProvider>
@@ -211,17 +248,20 @@ export default function WizardForm({
   return (
     <>
       <TooltipProvider>
-        <div className="bg-card rounded-lg shadow-xl p-4 md:p-6 border border-border">
+        <div className="bg-card rounded-xl shadow-2xl p-6 md:p-8 border border-border/50 backdrop-blur-sm transition-all duration-300 hover:shadow-3xl">
           <WizardProgress progress={progress} totalSteps={totalSteps} />
           
-          <WizardFormContent
-            doc={doc}
-            locale={locale}
-            currentStepIndex={currentStepIndex}
-            isReviewing={isReviewing}
-            steps={steps}
-            isHydrated={isHydrated}
-          />
+          <div className="min-h-[400px] flex flex-col justify-center">
+            <WizardFormContent
+              doc={doc}
+              locale={locale}
+              currentStepIndex={currentStepIndex}
+              isReviewing={isReviewing}
+              steps={steps}
+              isHydrated={isHydrated}
+              onFieldFocus={onFieldFocus}
+            />
+          </div>
 
           <div className="sr-only" aria-live="polite" ref={liveRef}></div>
 
@@ -258,4 +298,6 @@ export default function WizardForm({
       />
     </>
   );
-}
+});
+
+export default WizardForm;

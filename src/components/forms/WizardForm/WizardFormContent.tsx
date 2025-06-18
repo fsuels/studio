@@ -16,6 +16,7 @@ interface WizardFormContentProps {
   isReviewing: boolean;
   steps: WizardStep[];
   isHydrated: boolean;
+  onFieldFocus?: (fieldId: string | undefined) => void;
 }
 
 export default function WizardFormContent({
@@ -25,6 +26,7 @@ export default function WizardFormContent({
   isReviewing,
   steps,
   isHydrated,
+  onFieldFocus,
 }: WizardFormContentProps) {
   const { t } = useTranslation('common');
 
@@ -36,23 +38,22 @@ export default function WizardFormContent({
   const currentField = steps[currentStepIndex];
   
   const formContent = isHydrated && currentField ? (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <div className="text-center mb-6">
-        <h2 className="text-xl font-semibold text-foreground mb-2">
-          {currentField.label}
-        </h2>
-        {currentField.tooltip && (
-          <p className="text-sm text-muted-foreground">
-            {currentField.tooltip}
-          </p>
+        {currentField.section && (
+          <div className="inline-flex items-center px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-medium mb-4">
+            {currentField.section}
+          </div>
         )}
       </div>
       
-      <FieldRenderer
-        question={currentField}
-        actualSchemaShape={{}}
-        className="max-w-md mx-auto"
-      />
+      <div className="max-w-md mx-auto">
+        <FieldRenderer
+          fieldKey={currentField.id}
+          doc={doc}
+          onFocus={() => onFieldFocus?.(currentField.id)}
+        />
+      </div>
     </div>
   ) : steps.length === 0 ? (
     <div className="mt-6 min-h-[200px] flex flex-col items-center justify-center text-center">

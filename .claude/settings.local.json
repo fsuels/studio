@@ -42,7 +42,8 @@
       "Bash(echo:*)",
       "Bash(fi)",
       "Bash(wc:*)",
-      "Bash(npm:*)"
+      "Bash(npm:*)",
+      "Bash(curl:*)"
     ],
     "deny": []
   }
