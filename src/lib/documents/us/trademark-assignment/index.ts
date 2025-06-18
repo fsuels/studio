@@ -1,6 +1,6 @@
 // Trademark Assignment Agreement
 import { z } from 'zod';
-import type { LegalDocument } from '../../types';
+import type { LegalDocument } from '@/types/documents';
 
 const schema = z.object({
   name: z.string().min(1, "Name is required"),
@@ -16,6 +16,11 @@ export const trademarkAssignment: LegalDocument = {
   id: 'trademark-assignment',
   name: 'Trademark Assignment Agreement',
   category: 'Intellectual Property',
+  languageSupport: ['en', 'es'],
+  basePrice: 29,
+  requiresNotarization: false,
+  canBeRecorded: false,
+  offerRecordingHelp: false,
   schema,
   questions: [
   {

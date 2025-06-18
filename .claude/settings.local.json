@@ -29,7 +29,20 @@
       "Bash(/home/user/studio/add_ids_final.sh:*)",
       "Bash(rm:*)",
       "Bash(do echo \"=== $file ===\")",
-      "Bash(pkill:*)"
+      "Bash(pkill:*)",
+      "Bash(npm install)",
+      "Bash(test:*)",
+      "Bash(npm install:*)",
+      "Bash(npm cache clean:*)",
+      "Bash(npx next:*)",
+      "Bash(yarn --version)",
+      "Bash(do)",
+      "Bash(if grep -q \"import.*from.*\\.\\./\\.\\./types\" \"$file\")",
+      "Bash(then)",
+      "Bash(echo:*)",
+      "Bash(fi)",
+      "Bash(wc:*)",
+      "Bash(npm:*)"
     ],
     "deny": []
   }

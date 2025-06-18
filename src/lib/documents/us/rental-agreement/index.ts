@@ -1,6 +1,6 @@
 // Rental Agreement
 import { z } from 'zod';
-import type { LegalDocument } from '../../types';
+import type { LegalDocument } from '@/types/documents';
 
 const schema = z.object({
   name: z.string().min(1, "Name is required"),
@@ -19,7 +19,11 @@ export const rentalAgreement: LegalDocument = {
   id: 'rental-agreement',
   name: 'Rental Agreement',
   category: 'Real Estate',
+  languageSupport: ['en', 'es'],
   basePrice: 35,
+  requiresNotarization: false,
+  canBeRecorded: false,
+  offerRecordingHelp: false,
   schema,
   questions: [
   {

@@ -1,6 +1,6 @@
 // Divorce Settlement Agreement
 import { z } from 'zod';
-import type { LegalDocument } from '../../types';
+import type { LegalDocument } from '@/types/documents';
 
 const schema = z.object({
   name: z.string().min(1, "Name is required"),
