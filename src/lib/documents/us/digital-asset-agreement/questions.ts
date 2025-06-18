@@ -1,0 +1,76 @@
+// src/lib/documents/us/digital-asset-agreement/questions.ts
+import type { FormQuestion } from '@/types/documents';
+
+export const digitalAssetAgreementQuestions: FormQuestion[] = [
+  {
+    id: 'party1Name',
+    type: 'text',
+    label: 'Party 1 Name',
+    placeholder: 'Enter first party name',
+    required: true,
+    group: 'parties',
+  },
+  {
+    id: 'party2Name',
+    type: 'text',
+    label: 'Party 2 Name',
+    placeholder: 'Enter second party name',
+    required: true,
+    group: 'parties',
+  },
+  {
+    id: 'assetType',
+    type: 'select',
+    label: 'Digital Asset Type',
+    options: [
+      { value: 'cryptocurrency', label: 'Cryptocurrency' },
+      { value: 'nft', label: 'NFT' },
+      { value: 'token', label: 'Token' },
+      { value: 'dao-token', label: 'DAO Token' },
+      { value: 'utility-token', label: 'Utility Token' },
+      { value: 'security-token', label: 'Security Token' },
+      { value: 'stablecoin', label: 'Stablecoin' },
+    ],
+    required: false,
+    group: 'asset',
+  },
+  {
+    id: 'blockchain',
+    type: 'select',
+    label: 'Blockchain Network',
+    options: [
+      { value: 'ethereum', label: 'Ethereum' },
+      { value: 'bitcoin', label: 'Bitcoin' },
+      { value: 'polygon', label: 'Polygon' },
+      { value: 'solana', label: 'Solana' },
+      { value: 'cardano', label: 'Cardano' },
+      { value: 'binance-smart-chain', label: 'Binance Smart Chain' },
+      { value: 'other', label: 'Other' },
+    ],
+    required: false,
+    group: 'asset',
+  },
+  {
+    id: 'transactionType',
+    type: 'select',
+    label: 'Transaction Type',
+    options: [
+      { value: 'sale', label: 'Sale' },
+      { value: 'purchase', label: 'Purchase' },
+      { value: 'transfer', label: 'Transfer' },
+      { value: 'exchange', label: 'Exchange' },
+      { value: 'mining', label: 'Mining' },
+      { value: 'staking', label: 'Staking' },
+      { value: 'lending', label: 'Lending' },
+    ],
+    required: false,
+    group: 'transaction',
+  },
+  {
+    id: 'smartContract',
+    type: 'boolean',
+    label: 'Use smart contract?',
+    required: false,
+    group: 'technical',
+  },
+];

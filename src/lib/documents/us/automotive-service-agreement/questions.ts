@@ -1,0 +1,83 @@
+// src/lib/documents/us/automotive-service-agreement/questions.ts
+import type { FormQuestion } from '@/types/documents';
+
+export const automotiveServiceAgreementQuestions: FormQuestion[] = [
+  {
+    id: 'serviceProviderName',
+    type: 'text',
+    label: 'Service Provider Name',
+    placeholder: 'Enter service provider name',
+    required: true,
+    group: 'provider',
+  },
+  {
+    id: 'customerName',
+    type: 'text',
+    label: 'Customer Name',
+    placeholder: 'Enter customer name',
+    required: true,
+    group: 'customer',
+  },
+  {
+    id: 'vehicleMake',
+    type: 'text',
+    label: 'Vehicle Make',
+    placeholder: 'Enter vehicle make',
+    required: false,
+    group: 'vehicle',
+  },
+  {
+    id: 'vehicleModel',
+    type: 'text',
+    label: 'Vehicle Model',
+    placeholder: 'Enter vehicle model',
+    required: false,
+    group: 'vehicle',
+  },
+  {
+    id: 'vehicleYear',
+    type: 'text',
+    label: 'Vehicle Year',
+    placeholder: 'Enter vehicle year',
+    required: false,
+    group: 'vehicle',
+  },
+  {
+    id: 'serviceType',
+    type: 'select',
+    label: 'Service Type',
+    options: [
+      { value: 'repair', label: 'Repair' },
+      { value: 'maintenance', label: 'Maintenance' },
+      { value: 'inspection', label: 'Inspection' },
+      { value: 'diagnostic', label: 'Diagnostic' },
+      { value: 'comprehensive', label: 'Comprehensive Service' },
+    ],
+    required: false,
+    group: 'service',
+  },
+  {
+    id: 'serviceDescription',
+    type: 'textarea',
+    label: 'Service Description',
+    placeholder: 'Describe the services to be performed',
+    required: false,
+    group: 'service',
+  },
+  {
+    id: 'totalEstimate',
+    type: 'text',
+    label: 'Total Estimate',
+    placeholder: 'Enter estimated total cost',
+    required: false,
+    group: 'pricing',
+  },
+  {
+    id: 'warrantyPeriod',
+    type: 'text',
+    label: 'Warranty Period',
+    placeholder: 'Enter warranty period',
+    required: false,
+    group: 'warranty',
+  },
+];
