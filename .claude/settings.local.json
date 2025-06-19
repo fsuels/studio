@@ -57,7 +57,9 @@
       "Bash(else echo \"✗ Missing files\")",
       "Bash(if [ -f \"public/templates/en/$doc.md\" ])",
       "Bash(then echo \"✓ EN template exists\")",
-      "Bash(else echo \"✗ EN template missing\")"
+      "Bash(else echo \"✗ EN template missing\")",
+      "Bash(rg:*)",
+      "Bash(cat:*)"
     ],
     "deny": []
   }
