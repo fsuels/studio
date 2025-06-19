@@ -196,7 +196,6 @@ const DOCUMENT_CATEGORY_MAPPING: Record<string, string> = {
   
   // Employment & HR
   'employment-offer-letter': 'Employment & HR',
-  'offer-letter': 'Employment & HR',
   'employment-contract': 'Employment & HR',
   'employment-termination-letter': 'Employment & HR',
   'termination-letter': 'Employment & HR',
@@ -213,7 +212,6 @@ const DOCUMENT_CATEGORY_MAPPING: Record<string, string> = {
   'invoice': 'Finance & Lending',
   
   // Intellectual Property
-  'nda': 'Intellectual Property',
   'non-disclosure-agreement': 'Intellectual Property',
   'copyright-assignment': 'Intellectual Property',
   'trademark-assignment': 'Intellectual Property',
@@ -225,7 +223,6 @@ const DOCUMENT_CATEGORY_MAPPING: Record<string, string> = {
   'prenuptial-agreement': 'Family & Personal',
   'divorce-settlement': 'Family & Personal',
   'divorce-settlement-agreement': 'Family & Personal',
-  'affidavit': 'Family & Personal',
   'affidavit-general': 'Family & Personal',
   
   // Dispute Resolution (fallback for demand letters and legal documents)

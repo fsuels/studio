@@ -15,8 +15,8 @@ export const oilGasLeaseMeta: LegalDocument = {
   basePrice: 29.95,
   states: 'all',
   templatePaths: {
-    en: '/templates/en/oil-gas-lease.md',
-    es: '/templates/es/oil-gas-lease.md',
+    en: '/templates/en/oil-gas-lease-agreement.md',
+    es: '/templates/es/oil-gas-lease-agreement.md',
   },
   schema: OilGasLeaseSchema,
   questions: oilGasLeaseQuestions,

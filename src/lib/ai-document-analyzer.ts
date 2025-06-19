@@ -267,7 +267,7 @@ export class AIDocumentAnalyzer {
     
     // NDAs
     if (textLower.includes('non-disclosure') || textLower.includes('confidentiality')) {
-      return { type: 'nda', confidence: 0.92 };
+      return { type: 'non-disclosure-agreement', confidence: 0.92 };
     }
     
     // Service agreements
@@ -358,7 +358,7 @@ export class AIDocumentAnalyzer {
       }
     }
 
-    if (documentType === 'nda') {
+    if (documentType === 'non-disclosure-agreement') {
       if (!textLower.includes('term') && !textLower.includes('duration')) {
         issues.push({
           issue: 'Undefined Agreement Term',
@@ -542,7 +542,7 @@ export class AIDocumentAnalyzer {
       });
     }
 
-    if (documentType === 'nda') {
+    if (documentType === 'non-disclosure-agreement') {
       suggestions.push({
         type: 'improvement' as const,
         priority: 'medium' as const,

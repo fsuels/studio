@@ -15,8 +15,8 @@ export const nonDisclosureAgreementMeta: LegalDocument = {
   basePrice: 15,
   states: 'all',
   templatePaths: {
-    en: '/templates/en/nda.md',
-    es: '/templates/es/nda.md',
+    en: '/templates/en/non-disclosure-agreement.md',
+    es: '/templates/es/non-disclosure-agreement.md',
   },
   schema: nonDisclosureAgreementSchema,
   questions: nonDisclosureAgreementQuestions,

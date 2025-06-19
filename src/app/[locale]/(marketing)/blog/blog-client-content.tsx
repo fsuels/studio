@@ -60,7 +60,7 @@ function getCategory(article: (typeof blogArticles)[0]) {
     return 'Employment';
   if (
     title.includes('contract') ||
-    title.includes('nda') ||
+    title.includes('non-disclosure') ||
     title.includes('bill of sale')
   )
     return 'Contracts';

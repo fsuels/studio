@@ -14,8 +14,8 @@ export const offerLetterMeta: LegalDocument = {
   basePrice: 7.95,
   states: 'all',
   templatePaths: {
-    en: '/templates/en/offer-letter.md',
-    es: '/templates/es/offer-letter.md',
+    en: '/templates/en/employment-offer-letter.md',
+    es: '/templates/es/employment-offer-letter.md',
   },
   schema: offerLetterSchema,
   questions: offerLetterQuestions,

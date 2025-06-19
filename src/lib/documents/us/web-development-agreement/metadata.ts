@@ -12,8 +12,8 @@ export const webDevelopmentAgreementMeta: Omit<LegalDocument, 'schema' | 'questi
   basePrice: 30,
   states: 'all',
   templatePaths: {
-    en: '/templates/en/web-development-agreement.md',
-    es: '/templates/es/web-development-agreement.md',
+    en: '/templates/en/website-development-agreement.md',
+    es: '/templates/es/website-development-agreement.md',
   },
   upsellClauses: [],
   translations: {

@@ -15,8 +15,8 @@ export const patentLicensingAgreementMeta: LegalDocument = {
   basePrice: 44.95,
   states: 'all',
   templatePaths: {
-    en: '/templates/en/patent-licensing-agreement.md',
-    es: '/templates/es/patent-licensing-agreement.md',
+    en: '/templates/en/patent-license-agreement.md',
+    es: '/templates/es/patent-license-agreement.md',
   },
   schema: PatentLicensingAgreementSchema,
   questions: patentLicensingAgreementQuestions,

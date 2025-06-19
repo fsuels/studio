@@ -53,7 +53,7 @@ export const PLACEHOLDER_TOP_DOCS: Array<
     icon: Home,
   },
   {
-    id: 'nda',
+    id: 'non-disclosure-agreement',
     category: 'Business',
     translations: {
       en: { name: 'Non-Disclosure Agreement (NDA)', description: '' },

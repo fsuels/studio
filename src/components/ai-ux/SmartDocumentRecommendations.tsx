@@ -71,7 +71,7 @@ export function SmartDocumentRecommendations({
         popularity: 92
       },
       {
-        id: 'nda',
+        id: 'non-disclosure-agreement',
         name: 'Non-Disclosure Agreement',
         category: 'Business',
         estimatedTime: '10-15 minutes',
@@ -130,7 +130,7 @@ export function SmartDocumentRecommendations({
         // Related documents logic
         const relatedDocs: string[] = [];
         if (currentDocument === 'llc-operating-agreement') {
-          if (doc.id === 'employment-contract' || doc.id === 'nda') {
+          if (doc.id === 'employment-contract' || doc.id === 'non-disclosure-agreement') {
             confidence += 30;
             reason = 'Often needed together';
             relatedDocs.push(currentDocument);

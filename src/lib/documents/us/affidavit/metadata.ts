@@ -14,8 +14,8 @@ export const affidavitMeta: LegalDocument = {
   basePrice: 5.95,
   states: 'all',
   templatePaths: {
-    en: '/templates/en/affidavit.md',
-    es: '/templates/es/affidavit.md',
+    en: '/templates/en/affidavit-general.md',
+    es: '/templates/es/affidavit-general.md',
   },
   schema: affidavitSchema,
   questions: affidavitQuestions,

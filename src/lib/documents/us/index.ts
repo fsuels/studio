@@ -1,7 +1,7 @@
 // src/lib/documents/us/index.ts
 // Auto-generated US documents index - connects all document folders
 
-export { affidavit } from './affidavit';
+// Removed: export { affidavit } from './affidavit'; // Use affidavit-general instead
 export { affidavitGeneral } from './affidavit-general';
 export { articlesOfIncorporation } from './articles-of-incorporation';
 export { articlesOfIncorporationBiz } from './articles-of-incorporation-biz';
@@ -52,10 +52,10 @@ export { loanAgreement } from './loan-agreement';
 export { loanModificationAgreementMeta as loanModificationAgreement } from './loan-modification-agreement';
 export { medicalConsent } from './medical-consent';
 export { medicalPowerOfAttorney } from './medical-power-of-attorney';
-export { nda } from './nda';
+// Removed: export { nda } from './nda'; // Use non-disclosure-agreement instead
 export { nonCompeteAgreement } from './non-compete-agreement';
 export { nonDisclosureAgreement } from './non-disclosure-agreement';
-export { offerLetter } from './offer-letter';
+// Removed: export { offerLetter } from './offer-letter'; // Use employment-offer-letter instead
 export { llcOperatingAgreement } from './operating-agreement';
 export { partnershipAgreement } from './partnership-agreement';
 export { patentLicenseAgreementMeta as patentLicenseAgreement } from './patent-license-agreement';
@@ -158,7 +158,7 @@ export { dogBreedingAgreementMeta as dogBreedingAgreement } from './dog-breeding
 export { horseBoardingAgreementMeta as horseBoardingAgreement } from './horse-boarding-agreement';
 export { cropSharingAgreementMeta as cropSharingAgreement } from './crop-sharing-agreement';
 export { miningAgreementMeta as miningAgreement } from './mining-agreement';
-export { oilGasLeaseMeta as oilGasLease } from './oil-gas-lease';
+// Removed: export { oilGasLeaseMeta as oilGasLease } from './oil-gas-lease'; // Use oil-gas-lease-agreement instead
 export { appDevelopmentAgreementMeta as appDevelopmentAgreement } from './app-development-agreement';
 export { cloudServicesAgreementMeta as cloudServicesAgreement } from './cloud-services-agreement';
 export { cybersecurityAgreementMeta as cybersecurityAgreement } from './cybersecurity-agreement';

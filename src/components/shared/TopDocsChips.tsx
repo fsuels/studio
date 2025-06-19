@@ -37,7 +37,7 @@ import { useIsMobile } from '@/hooks/use-mobile';
 const staticTopDocIds: string[] = [
   'bill-of-sale-vehicle',
   'leaseAgreement',
-  'nda',
+  'non-disclosure-agreement',
   'powerOfAttorney',
   'eviction-notice',
   'last-will-testament',
