@@ -44,7 +44,20 @@
       "Bash(wc:*)",
       "Bash(npm:*)",
       "Bash(curl:*)",
-      "Bash(npx ts-node:*)"
+      "Bash(npx ts-node:*)",
+      "Bash(do if [ -d \"$dir\" ])",
+      "Bash(then echo \"Directory $dir exists, files:\")",
+      "Bash(else echo \"Directory $dir does not exist\")",
+      "Bash(do echo -n \"$doc: \")",
+      "Bash(if [ -f \"$doc/index.ts\" ])",
+      "Bash([ -f \"$doc/metadata.ts\" ])",
+      "Bash([ -f \"$doc/schema.ts\" ])",
+      "Bash([ -f \"$doc/questions.ts\" ])",
+      "Bash(then echo \"✓ Complete\")",
+      "Bash(else echo \"✗ Missing files\")",
+      "Bash(if [ -f \"public/templates/en/$doc.md\" ])",
+      "Bash(then echo \"✓ EN template exists\")",
+      "Bash(else echo \"✗ EN template missing\")"
     ],
     "deny": []
   }

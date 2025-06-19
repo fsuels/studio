@@ -1,0 +1,96 @@
+// src/lib/documents/us/marriage-separation-agreement/questions.ts
+import type { FormQuestion } from '@/types/documents';
+
+export const marriageSeparationAgreementQuestions: FormQuestion[] = [
+  {
+    id: 'spouse1Name',
+    type: 'text',
+    label: 'First Spouse Name',
+    placeholder: 'Enter first spouse full name',
+    required: true,
+    group: 'spouses',
+  },
+  {
+    id: 'spouse2Name',
+    type: 'text',
+    label: 'Second Spouse Name',
+    placeholder: 'Enter second spouse full name',
+    required: true,
+    group: 'spouses',
+  },
+  {
+    id: 'separationDate',
+    type: 'text',
+    label: 'Separation Date',
+    placeholder: 'Enter date of separation',
+    required: false,
+    group: 'separation',
+  },
+  {
+    id: 'minorChildren',
+    type: 'boolean',
+    label: 'Are there minor children?',
+    required: false,
+    group: 'children',
+  },
+  {
+    id: 'childrenNames',
+    type: 'textarea',
+    label: 'Children Names and Ages',
+    placeholder: 'List all children with ages',
+    required: false,
+    group: 'children',
+  },
+  {
+    id: 'legalCustody',
+    type: 'select',
+    label: 'Legal Custody',
+    options: [
+      { value: 'joint', label: 'Joint Custody' },
+      { value: 'spouse1', label: 'First Spouse' },
+      { value: 'spouse2', label: 'Second Spouse' },
+    ],
+    required: false,
+    group: 'custody',
+  },
+  {
+    id: 'physicalCustody',
+    type: 'select',
+    label: 'Physical Custody',
+    options: [
+      { value: 'joint', label: 'Joint Physical Custody' },
+      { value: 'spouse1', label: 'Primary with First Spouse' },
+      { value: 'spouse2', label: 'Primary with Second Spouse' },
+    ],
+    required: false,
+    group: 'custody',
+  },
+  {
+    id: 'childSupportAmount',
+    type: 'text',
+    label: 'Child Support Amount',
+    placeholder: 'Enter monthly support amount',
+    required: false,
+    group: 'support',
+  },
+  {
+    id: 'spousalSupport',
+    type: 'boolean',
+    label: 'Spousal support required?',
+    required: false,
+    group: 'support',
+  },
+  {
+    id: 'maritalHome',
+    type: 'select',
+    label: 'Marital Home',
+    options: [
+      { value: 'spouse1', label: 'First Spouse Keeps' },
+      { value: 'spouse2', label: 'Second Spouse Keeps' },
+      { value: 'sell', label: 'Sell and Divide' },
+      { value: 'joint', label: 'Joint Ownership' },
+    ],
+    required: false,
+    group: 'property',
+  },
+];
