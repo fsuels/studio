@@ -14,403 +14,382 @@ Collectively referred to herein as the "Parties."
 
 ---
 
-## 1. Appointment and Territory
+## 1. Products and Distribution Rights
 
-### 1.1 Distributor Appointment
-Supplier hereby appoints Distributor as its {{distribution_exclusivity}} distributor for the Products within the Territory, and Distributor accepts such appointment.
+### 1.1 Product Description
+**Product Categories:** {{product_categories_description}}
+**Product Lines:** {{product_lines_included}}
+**Specifications:** {{product_specifications_details}}
+**Models and Variants:** {{product_models_variants}}
 
-### 1.2 Territory Definition
-**Territory:** {{distribution_territory}}
-**Geographic Boundaries:** {{geographic_boundaries}}
-**Population Centers:** {{major_population_centers}}
-**Market Size:** {{estimated_market_size}}
+### 1.2 Distribution Rights
+**Distribution Type:** {{distribution_type_exclusive_nonexclusive}}
+**Geographic Territory:** {{distribution_territory_boundaries}}
+**Market Segments:** {{authorized_market_segments}}
+**Customer Categories:** {{authorized_customer_categories}}
 
-### 1.3 Distribution Rights
-**Distribution Type:** {{distribution_type}}
-**Channel Restrictions:** {{channel_restrictions}}
-**Customer Segments:** {{approved_customer_segments}}
-**Market Limitations:** {{market_limitations}}
+### 1.3 Authorized Products
+**Current Product List:** {{current_authorized_products}}
+**New Product Introduction:** {{new_product_introduction_procedures}}
+**Product Updates:** {{product_update_notification_process}}
+**Discontinued Products:** {{product_discontinuation_procedures}}
 
-### 1.4 Exclusivity Terms
-{{#if exclusive_distribution}}
-**Exclusive Rights:** Distributor has exclusive rights in Territory
-**Non-Compete:** Supplier will not appoint other distributors in Territory
-**Direct Sales Restriction:** {{direct_sales_restrictions}}
-{{else}}
-**Non-Exclusive Rights:** Supplier may appoint additional distributors
-**Competition:** {{competition_with_other_distributors}}
-{{/if}}
-
----
-
-## 2. Products and Services
-
-### 2.1 Product Description
-**Product Lines:** {{product_lines}}
-**Product Categories:** {{product_categories}}
-**SKU Count:** {{sku_count}} products
-**Product Documentation:** As detailed in Exhibit A
-
-### 2.2 Product Specifications
-**Technical Specifications:** {{technical_specifications}}
-**Quality Standards:** {{product_quality_standards}}
-**Regulatory Compliance:** {{regulatory_compliance_requirements}}
-**Certification Requirements:** {{product_certifications}}
-
-### 2.3 New Products
-**Product Additions:** {{new_product_addition_process}}
-**Launch Requirements:** {{new_product_launch_requirements}}
-**Training for New Products:** {{new_product_training}}
-**Marketing Support:** {{new_product_marketing_support}}
-
-### 2.4 Product Modifications
-**Change Notification:** {{product_change_notification}} days advance notice
-**Modification Approval:** {{product_modification_approval}}
-**Inventory Transition:** {{product_modification_inventory_transition}}
-**Customer Communication:** {{product_change_customer_communication}}
+### 1.4 Distribution Exclusivity
+**Exclusive Rights:** {{exclusive_distribution_rights}}
+**Non-Exclusive Arrangements:** {{non_exclusive_distribution_terms}}
+**Territory Protection:** {{territory_protection_provisions}}
+**Customer Protection:** {{customer_protection_arrangements}}
 
 ---
 
-## 3. Distribution Obligations
+## 2. Territory and Market Definition
 
-### 3.1 Distribution Requirements
-**Market Development:** {{market_development_requirements}}
-**Sales Efforts:** {{minimum_sales_efforts}}
-**Customer Coverage:** {{customer_coverage_requirements}}
-**Market Presence:** {{market_presence_requirements}}
+### 2.1 Geographic Boundaries
+**Primary Territory:** {{primary_distribution_territory}}
+**Secondary Markets:** {{secondary_market_rights}}
+**Restricted Areas:** {{restricted_territory_limitations}}
+**Border Markets:** {{border_market_arrangements}}
 
-### 3.2 Sales Targets
-**Annual Sales Target:** ${{annual_sales_target}}
-**Quarterly Milestones:** {{quarterly_sales_milestones}}
-**Growth Targets:** {{annual_growth_targets}}%
-**Performance Reviews:** {{sales_performance_review_schedule}}
+### 2.2 Market Segmentation
+**Target Markets:** {{target_market_definitions}}
+**Vertical Markets:** {{vertical_market_authorizations}}
+**Customer Classifications:** {{customer_classification_system}}
+**Market Development:** {{market_development_obligations}}
 
-### 3.3 Inventory Requirements
-**Minimum Inventory:** {{minimum_inventory_levels}}
-**Inventory Investment:** ${{minimum_inventory_investment}}
-**Stock Rotation:** {{inventory_rotation_requirements}}
+### 2.3 Territory Expansion
+**Expansion Procedures:** {{territory_expansion_procedures}}
+**Performance Requirements:** {{expansion_performance_requirements}}
+**Additional Investment:** {{expansion_investment_requirements}}
+**Approval Process:** {{territory_expansion_approval}}
+
+### 2.4 Territorial Restrictions
+**Sales Restrictions:** {{territorial_sales_restrictions}}
+**Online Sales:** {{online_sales_territory_rules}}
+**Cross-Border Sales:** {{cross_border_sales_restrictions}}
+**Export Limitations:** {{export_limitation_terms}}
+
+---
+
+## 3. Financial Terms and Pricing
+
+### 3.1 Purchase Terms
+**Wholesale Pricing:** {{wholesale_pricing_structure}}
+**Volume Discounts:** {{volume_discount_tiers}}
+**Payment Terms:** {{payment_terms_conditions}}
+**Credit Limits:** ${{distributor_credit_limit}}
+
+### 3.2 Pricing Structure
+**Base Pricing:** {{base_pricing_methodology}}
+**Price Adjustments:** {{price_adjustment_procedures}}
+**Promotional Pricing:** {{promotional_pricing_authorization}}
+**Minimum Pricing:** {{minimum_pricing_requirements}}
+
+### 3.3 Commission and Fees
+**Distribution Commission:** {{distribution_commission_rate}}%
+**Performance Bonuses:** {{performance_bonus_structure}}
+**Administrative Fees:** ${{administrative_fee_amount}}
+**Service Fees:** {{service_fee_structure}}
+
+### 3.4 Payment and Billing
+**Payment Schedule:** {{payment_schedule_terms}}
+**Billing Procedures:** {{billing_procedure_requirements}}
+**Late Payment Charges:** {{late_payment_penalty_rate}}%
+**Currency and Exchange:** {{currency_exchange_terms}}
+
+---
+
+## 4. Performance Obligations and Targets
+
+### 4.1 Sales Targets
+**Minimum Sales Quotas:** ${{minimum_annual_sales_quota}}
+**Quarterly Targets:** {{quarterly_sales_targets}}
+**Product Mix Requirements:** {{product_mix_requirements}}
+**Market Share Goals:** {{market_share_objectives}}
+
+### 4.2 Marketing Obligations
+**Marketing Commitment:** ${{annual_marketing_commitment}}
+**Advertising Requirements:** {{advertising_requirement_specifications}}
+**Promotional Activities:** {{promotional_activity_obligations}}
+**Trade Show Participation:** {{trade_show_participation_requirements}}
+
+### 4.3 Service Standards
+**Customer Service:** {{customer_service_standards}}
+**Technical Support:** {{technical_support_requirements}}
+**Warranty Support:** {{warranty_support_obligations}}
+**Training Programs:** {{distributor_training_requirements}}
+
+### 4.4 Performance Measurement
+**Key Performance Indicators:** {{kpi_measurement_criteria}}
+**Reporting Requirements:** {{performance_reporting_obligations}}
+**Review Periods:** {{performance_review_schedule}}
+**Improvement Plans:** {{performance_improvement_procedures}}
+
+---
+
+## 5. Inventory and Order Management
+
+### 5.1 Inventory Requirements
+**Minimum Inventory Levels:** {{minimum_inventory_requirements}}
+**Safety Stock:** {{safety_stock_requirements}}
 **Seasonal Adjustments:** {{seasonal_inventory_adjustments}}
+**Obsolete Inventory:** {{obsolete_inventory_management}}
 
-### 3.4 Customer Service
-**Service Standards:** {{customer_service_standards}}
-**Response Times:** {{customer_response_times}}
-**Technical Support:** {{technical_support_responsibilities}}
-**Warranty Service:** {{warranty_service_obligations}}
-
----
-
-## 4. Marketing and Promotion
-
-### 4.1 Marketing Obligations
-**Marketing Investment:** ${{minimum_marketing_investment}} annually
-**Marketing Plan:** {{marketing_plan_requirements}}
-**Advertising Standards:** {{advertising_standards}}
-**Brand Compliance:** {{brand_compliance_requirements}}
-
-### 4.2 Promotional Activities
-**Trade Shows:** {{trade_show_participation}}
-**Sales Events:** {{sales_event_requirements}}
-**Digital Marketing:** {{digital_marketing_obligations}}
-**Customer Demonstrations:** {{customer_demonstration_requirements}}
-
-### 4.3 Marketing Materials
-**Supplier Support:** {{marketing_material_support}}
-**Co-op Advertising:** {{cooperative_advertising_terms}}
-**Material Approval:** {{marketing_material_approval_process}}
-**Translation Requirements:** {{marketing_translation_requirements}}
-
-### 4.4 Brand Protection
-**Brand Guidelines:** {{brand_guideline_compliance}}
-**Trademark Usage:** {{trademark_usage_restrictions}}
-**Brand Monitoring:** {{brand_monitoring_obligations}}
-**Unauthorized Use:** {{unauthorized_brand_use_reporting}}
-
----
-
-## 5. Pricing and Payment Terms
-
-### 5.1 Product Pricing
-**Distributor Pricing:** {{distributor_pricing_structure}}
-**Volume Discounts:** {{volume_discount_structure}}
-**Seasonal Pricing:** {{seasonal_pricing_adjustments}}
-**Price Protection:** {{price_protection_terms}}
-
-### 5.2 Suggested Retail Pricing
-**MSRP:** {{msrp_requirements}}
-**Pricing Flexibility:** {{pricing_flexibility_limits}}
-**Price Monitoring:** {{price_monitoring_procedures}}
-**MAP Policy:** {{minimum_advertised_price_policy}}
-
-### 5.3 Payment Terms
-**Payment Schedule:** {{payment_terms}} days net
-**Payment Method:** {{payment_methods}}
-**Credit Terms:** {{credit_terms}}
-**Late Payment Penalties:** {{late_payment_penalties}}
-
-### 5.4 Financial Requirements
-**Credit Requirements:** {{distributor_credit_requirements}}
-**Financial Statements:** {{financial_reporting_requirements}}
-**Credit Insurance:** {{credit_insurance_requirements}}
-**Payment Guarantees:** {{payment_guarantee_requirements}}
-
----
-
-## 6. Order Processing and Fulfillment
-
-### 6.1 Ordering Procedures
-**Order Methods:** {{order_submission_methods}}
-**Order Minimums:** {{minimum_order_quantities}}
+### 5.2 Ordering Procedures
+**Order Placement:** {{order_placement_procedures}}
 **Lead Times:** {{standard_lead_times}}
 **Rush Orders:** {{rush_order_procedures}}
+**Order Modifications:** {{order_modification_policies}}
 
-### 6.2 Order Acceptance
-**Order Confirmation:** {{order_confirmation_timeframe}}
-**Capacity Allocation:** {{capacity_allocation_procedures}}
-**Backorder Policy:** {{backorder_policy}}
-**Order Modifications:** {{order_modification_procedures}}
+### 5.3 Delivery and Fulfillment
+**Delivery Terms:** {{delivery_terms_conditions}}
+**Shipping Responsibility:** {{shipping_responsibility_allocation}}
+**Delivery Schedules:** {{delivery_schedule_requirements}}
+**Freight and Logistics:** {{freight_logistics_arrangements}}
 
-### 6.3 Delivery Terms
-**Shipping Terms:** {{shipping_terms}}
-**Delivery Schedule:** {{delivery_schedule_requirements}}
-**Freight Responsibilities:** {{freight_responsibility}}
-**Delivery Performance:** {{delivery_performance_standards}}
+### 5.4 Inventory Management
+**Inventory Monitoring:** {{inventory_monitoring_systems}}
+**Stock Rotation:** {{stock_rotation_requirements}}
+**Return Policies:** {{product_return_policies}}
+**Damaged Goods:** {{damaged_goods_procedures}}
 
-### 6.4 Returns and Exchanges
-**Return Policy:** {{return_policy_terms}}
-**Defective Products:** {{defective_product_procedures}}
-**Excess Inventory:** {{excess_inventory_return_policy}}
-**Return Authorization:** {{return_authorization_procedures}}
+---
+
+## 6. Marketing and Promotion
+
+### 6.1 Marketing Support
+**Marketing Materials:** {{marketing_material_provision}}
+**Co-op Advertising:** {{cooperative_advertising_programs}}
+**Marketing Fund Contribution:** {{marketing_fund_contribution}}%
+**Brand Guidelines:** {{brand_guideline_compliance}}
+
+### 6.2 Promotional Activities
+**Sales Promotions:** {{sales_promotion_authorization}}
+**Trade Promotions:** {{trade_promotion_programs}}
+**Customer Incentives:** {{customer_incentive_programs}}
+**Seasonal Campaigns:** {{seasonal_campaign_coordination}}
+
+### 6.3 Digital Marketing
+**Online Presence:** {{online_presence_requirements}}
+**Social Media:** {{social_media_marketing_guidelines}}
+**E-commerce Support:** {{ecommerce_support_provisions}}
+**Digital Advertising:** {{digital_advertising_coordination}}
+
+### 6.4 Brand Protection
+**Brand Usage:** {{brand_usage_authorization}}
+**Quality Standards:** {{brand_quality_standards}}
+**Trademark Compliance:** {{trademark_compliance_requirements}}
+**Brand Damage Prevention:** {{brand_damage_prevention_measures}}
 
 ---
 
 ## 7. Training and Support
 
 ### 7.1 Initial Training
-**Sales Training:** {{initial_sales_training}} hours
-**Product Training:** {{product_training_requirements}}
-**Training Location:** {{training_location}}
-**Training Costs:** {{training_cost_responsibility}}
+**Product Training:** {{initial_product_training_program}}
+**Sales Training:** {{sales_training_requirements}}
+**Technical Training:** {{technical_training_programs}}
+**System Training:** {{system_training_provisions}}
 
 ### 7.2 Ongoing Support
+**Continuing Education:** {{continuing_education_programs}}
 **Technical Support:** {{ongoing_technical_support}}
-**Sales Support:** {{ongoing_sales_support}}
+**Sales Support:** {{sales_support_services}}
 **Marketing Support:** {{ongoing_marketing_support}}
-**Account Management:** {{account_management_support}}
 
-### 7.3 Training Updates
-**Product Updates:** {{product_update_training}}
-**System Training:** {{system_training_requirements}}
-**Certification Programs:** {{certification_program_requirements}}
-**Refresher Training:** {{refresher_training_schedule}}
+### 7.3 Certification Programs
+**Distributor Certification:** {{distributor_certification_requirements}}
+**Staff Certification:** {{staff_certification_programs}}
+**Ongoing Certification:** {{ongoing_certification_maintenance}}
+**Certification Benefits:** {{certification_benefit_programs}}
 
-### 7.4 Support Resources
-**Documentation:** {{support_documentation}}
-**Online Resources:** {{online_support_resources}}
-**Help Desk:** {{help_desk_availability}}
-**Field Support:** {{field_support_availability}}
+### 7.4 Knowledge Transfer
+**Best Practices:** {{best_practice_sharing}}
+**Performance Data:** {{performance_data_sharing}}
+**Market Intelligence:** {{market_intelligence_sharing}}
+**Feedback Systems:** {{feedback_system_implementation}}
 
 ---
 
-## 8. Performance Standards
+## 8. Quality Control and Standards
 
-### 8.1 Sales Performance
-**Sales Metrics:** {{sales_performance_metrics}}
-**Market Share Targets:** {{market_share_targets}}
-**Customer Acquisition:** {{customer_acquisition_targets}}
-**Account Growth:** {{account_growth_requirements}}
+### 8.1 Quality Standards
+**Product Quality:** {{product_quality_standards}}
+**Service Quality:** {{service_quality_requirements}}
+**Facility Standards:** {{facility_standard_requirements}}
+**Process Standards:** {{process_standard_compliance}}
 
-### 8.2 Service Performance
-**Service Level Metrics:** {{service_level_metrics}}
-**Customer Satisfaction:** {{customer_satisfaction_targets}}
-**Response Time Standards:** {{response_time_standards}}
-**Quality Metrics:** {{service_quality_metrics}}
+### 8.2 Quality Assurance
+**Quality Monitoring:** {{quality_monitoring_procedures}}
+**Inspection Rights:** {{supplier_inspection_rights}}
+**Quality Audits:** {{quality_audit_procedures}}
+**Corrective Actions:** {{quality_corrective_actions}}
 
-### 8.3 Reporting Requirements
-**Monthly Reports:** {{monthly_reporting_requirements}}
-**Quarterly Reviews:** {{quarterly_review_procedures}}
-**Annual Planning:** {{annual_planning_requirements}}
-**Performance Dashboards:** {{performance_dashboard_requirements}}
+### 8.3 Compliance Requirements
+**Regulatory Compliance:** {{regulatory_compliance_obligations}}
+**Industry Standards:** {{industry_standard_adherence}}
+**Certification Requirements:** {{certification_requirement_compliance}}
+**Safety Standards:** {{safety_standard_compliance}}
 
-### 8.4 Performance Improvement
-**Improvement Plans:** {{performance_improvement_procedures}}
-**Corrective Actions:** {{corrective_action_procedures}}
-**Best Practices:** {{best_practices_sharing}}
-**Benchmarking:** {{performance_benchmarking}}
+### 8.4 Quality Improvement
+**Continuous Improvement:** {{continuous_improvement_programs}}
+**Quality Metrics:** {{quality_measurement_metrics}}
+**Improvement Plans:** {{quality_improvement_planning}}
+**Best Practice Implementation:** {{best_practice_implementation}}
 
 ---
 
 ## 9. Intellectual Property and Confidentiality
 
 ### 9.1 Intellectual Property Rights
-**Trademark License:** {{trademark_license_terms}}
-**Patent Rights:** {{patent_rights_coverage}}
+**Trademark Usage:** {{trademark_usage_rights}}
 **Copyright Materials:** {{copyright_material_usage}}
-**Trade Secrets:** {{trade_secret_access}}
+**Patent Rights:** {{patent_rights_provisions}}
+**Trade Secrets:** {{trade_secret_access_rights}}
 
-### 9.2 Confidential Information
-**Definition:** {{confidential_information_definition}}
-**Protection Obligations:** {{confidentiality_protection_obligations}}
-**Employee Training:** {{employee_confidentiality_training}}
-**Third-Party Disclosure:** {{third_party_disclosure_restrictions}}
+### 9.2 Confidentiality Obligations
+**Confidential Information:** {{confidential_information_definition}}
+**Non-Disclosure:** {{non_disclosure_obligations}}
+**Information Security:** {{information_security_requirements}}
+**Third-Party Information:** {{third_party_information_protection}}
 
-### 9.3 Intellectual Property Protection
-**IP Enforcement:** {{ip_enforcement_cooperation}}
-**Infringement Reporting:** {{infringement_reporting_obligations}}
-**Defense Cooperation:** {{ip_defense_cooperation}}
-**Counterfeiting:** {{counterfeit_protection_measures}}
+### 9.3 IP Protection
+**Brand Protection:** {{brand_protection_obligations}}
+**Infringement Reporting:** {{infringement_reporting_procedures}}
+**Enforcement Cooperation:** {{ip_enforcement_cooperation}}
+**Violation Consequences:** {{ip_violation_consequences}}
 
 ### 9.4 Data Protection
 **Customer Data:** {{customer_data_protection}}
-**Sales Data:** {{sales_data_confidentiality}}
-**Business Information:** {{business_information_protection}}
+**Privacy Compliance:** {{privacy_law_compliance}}
 **Data Security:** {{data_security_requirements}}
+**Data Retention:** {{data_retention_policies}}
 
 ---
 
-## 10. Quality Control and Compliance
+## 10. Warranties and Representations
 
-### 10.1 Quality Standards
-**Product Quality:** {{product_quality_requirements}}
-**Service Quality:** {{service_quality_standards}}
-**Compliance Standards:** {{regulatory_compliance_standards}}
-**Quality Certifications:** {{quality_certification_requirements}}
+### 10.1 Supplier Warranties
+**Product Warranties:** {{product_warranty_terms}}
+**Quality Warranties:** {{quality_warranty_provisions}}
+**Compliance Warranties:** {{compliance_warranty_terms}}
+**Non-Infringement:** {{non_infringement_warranty}}
 
-### 10.2 Regulatory Compliance
-**Local Regulations:** {{local_regulatory_compliance}}
-**Import/Export:** {{import_export_compliance}}
-**Product Registrations:** {{product_registration_requirements}}
-**Safety Standards:** {{safety_standard_compliance}}
+### 10.2 Distributor Warranties
+**Authority Warranty:** {{distributor_authority_warranty}}
+**Capability Warranty:** {{distributor_capability_warranty}}
+**Compliance Warranty:** {{distributor_compliance_warranty}}
+**Performance Warranty:** {{distributor_performance_warranty}}
 
-### 10.3 Quality Monitoring
-**Quality Audits:** {{quality_audit_schedule}}
-**Customer Feedback:** {{customer_feedback_monitoring}}
-**Corrective Actions:** {{quality_corrective_actions}}
-**Continuous Improvement:** {{quality_improvement_programs}}
+### 10.3 Mutual Warranties
+**Legal Standing:** {{mutual_legal_standing_warranty}}
+**Good Faith:** {{good_faith_warranty}}
+**Accurate Information:** {{accurate_information_warranty}}
+**Professional Conduct:** {{professional_conduct_warranty}}
 
-### 10.4 Compliance Reporting
-**Compliance Reports:** {{compliance_reporting_requirements}}
-**Incident Reporting:** {{incident_reporting_procedures}}
-**Regulatory Updates:** {{regulatory_update_procedures}}
-**Training Records:** {{compliance_training_records}}
-
----
-
-## 11. Territory Protection and Competition
-
-### 11.1 Territory Protection
-{{#if exclusive_distribution}}
-**Exclusive Protection:** {{exclusive_territory_protection}}
-**Border Enforcement:** {{territory_border_enforcement}}
-**Crossover Sales:** {{crossover_sales_policy}}
-{{/if}}
-
-### 11.2 Non-Compete Obligations
-**Competing Products:** {{competing_product_restrictions}}
-**Direct Competition:** {{direct_competition_limitations}}
-**Supplier Approval:** {{competitive_product_approval}}
-**Conflict Resolution:** {{competition_conflict_resolution}}
-
-### 11.3 Online Sales
-**Internet Sales:** {{internet_sales_permissions}}
-**Website Requirements:** {{distributor_website_requirements}}
-**Online Marketing:** {{online_marketing_restrictions}}
-**E-commerce Platforms:** {{ecommerce_platform_approval}}
-
-### 11.4 Territory Disputes
-**Dispute Resolution:** {{territory_dispute_procedures}}
-**Border Definitions:** {{territory_border_clarifications}}
-**Customer Assignment:** {{customer_assignment_procedures}}
-**Market Development:** {{overlapping_market_development}}
+### 10.4 Warranty Disclaimers
+**Performance Disclaimers:** {{performance_warranty_disclaimers}}
+**Market Success:** {{market_success_disclaimers}}
+**Third-Party Claims:** {{third_party_claims_disclaimers}}
+**Fitness Disclaimers:** {{fitness_purpose_disclaimers}}
 
 ---
 
-## 12. Termination and Post-Termination
+## 11. Risk Management and Insurance
 
-### 12.1 Termination Rights
-**Termination for Cause:** {{termination_cause_events}}
-**Termination for Convenience:** {{termination_convenience_notice}} days notice
-**Automatic Termination:** {{automatic_termination_events}}
-**Termination Procedures:** {{termination_notification_procedures}}
+### 11.1 Risk Allocation
+**Commercial Risk:** {{commercial_risk_allocation}}
+**Product Liability:** {{product_liability_allocation}}
+**Market Risk:** {{market_risk_sharing}}
+**Operational Risk:** {{operational_risk_management}}
 
-### 12.2 Effects of Termination
-**Immediate Effects:** {{immediate_termination_effects}}
-**Inventory Repurchase:** {{inventory_repurchase_terms}}
+### 11.2 Insurance Requirements
+**General Liability:** ${{general_liability_insurance_requirement}}
+**Product Liability:** ${{product_liability_insurance_requirement}}
+**Professional Liability:** ${{professional_liability_insurance_requirement}}
+**Cargo Insurance:** ${{cargo_insurance_requirements}}
+
+### 11.3 Indemnification
+**Supplier Indemnification:** {{supplier_indemnification_scope}}
+**Distributor Indemnification:** {{distributor_indemnification_scope}}
+**Third-Party Claims:** {{third_party_claims_indemnification}}
+**Defense Obligations:** {{indemnification_defense_obligations}}
+
+### 11.4 Limitation of Liability
+**Liability Cap:** ${{liability_limitation_amount}}
+**Excluded Damages:** {{excluded_damage_types}}
+**Consequential Damages:** {{consequential_damage_exclusions}}
+**Force Majeure:** {{force_majeure_provisions}}
+
+---
+
+## 12. Termination and Transition
+
+### 12.1 Termination Events
+**Term Expiration:** {{natural_term_expiration}}
+**Termination for Cause:** {{cause_termination_events}}
+**Convenience Termination:** {{convenience_termination_terms}}
+**Performance Termination:** {{performance_based_termination}}
+
+### 12.2 Termination Procedures
+**Notice Requirements:** {{termination_notice_requirements}}
+**Cure Periods:** {{termination_cure_periods}}
+**Wind-Down Process:** {{termination_wind_down_process}}
+**Asset Transfer:** {{asset_transfer_procedures}}
+
+### 12.3 Post-Termination Obligations
+**Inventory Disposition:** {{inventory_disposition_procedures}}
 **Customer Transition:** {{customer_transition_procedures}}
-**Final Settlement:** {{final_settlement_procedures}}
+**Continuing Obligations:** {{post_termination_obligations}}
+**Non-Compete Restrictions:** {{post_termination_non_compete}}
 
-### 12.3 Post-Termination Restrictions
-**Non-Competition:** {{post_termination_non_compete}} months
-**Customer Solicitation:** {{customer_solicitation_restrictions}}
-**Employee Solicitation:** {{employee_solicitation_restrictions}}
-**Confidentiality:** {{post_termination_confidentiality}}
-
-### 12.4 Transition Assistance
-**Customer Communication:** {{termination_customer_communication}}
-**Warranty Support:** {{post_termination_warranty_support}}
+### 12.4 Transition Support
+**Transition Assistance:** {{transition_assistance_obligations}}
+**Customer Notifications:** {{customer_notification_procedures}}
 **Service Continuity:** {{service_continuity_arrangements}}
-**Asset Return:** {{asset_return_requirements}}
+**New Distributor Selection:** {{new_distributor_selection_cooperation}}
 
 ---
 
-## 13. Insurance and Liability
+## 13. General Provisions
 
-### 13.1 Insurance Requirements
-**General Liability:** ${{general_liability_coverage}}
-**Product Liability:** ${{product_liability_coverage}}
-**Commercial Property:** ${{commercial_property_coverage}}
-**Business Interruption:** ${{business_interruption_coverage}}
-
-### 13.2 Indemnification
-**Distributor Indemnification:** {{distributor_indemnification_terms}}
-**Supplier Indemnification:** {{supplier_indemnification_terms}}
-**Third-Party Claims:** {{third_party_claim_procedures}}
-**Defense Costs:** {{defense_cost_allocation}}
-
-### 13.3 Limitation of Liability
-**Liability Caps:** {{liability_limitation_amounts}}
-**Excluded Damages:** {{excluded_damages_types}}
-**Exceptions:** {{liability_limitation_exceptions}}
-**Insurance Coverage:** {{insurance_coverage_requirements}}
-
-### 13.4 Risk Management
-**Risk Assessment:** {{risk_assessment_procedures}}
-**Risk Mitigation:** {{risk_mitigation_measures}}
-**Business Continuity:** {{business_continuity_planning}}
-**Crisis Management:** {{crisis_management_procedures}}
-
----
-
-## 14. General Provisions
-
-### 14.1 Governing Law
+### 13.1 Governing Law
 This Agreement shall be governed by the laws of {{governing_state}}.
 
-### 14.2 Dispute Resolution
+### 13.2 Dispute Resolution
 {{#if arbitration}}
-**Arbitration:** Binding arbitration in {{arbitration_location}}
-**Arbitration Rules:** {{arbitration_rules}}
-**Arbitrator Selection:** {{arbitrator_selection_process}}
+Disputes shall be resolved through binding arbitration in {{arbitration_location}}.
 {{else}}
-**Court Jurisdiction:** {{court_jurisdiction}}
-**Venue:** {{legal_venue}}
+Disputes shall be resolved in the courts of {{jurisdiction}}.
 {{/if}}
 
-### 14.3 Entire Agreement
+### 13.3 Entire Agreement
 This Agreement constitutes the entire agreement and supersedes all prior negotiations.
 
-### 14.4 Amendment
+### 13.4 Amendment
 This Agreement may only be amended by written agreement signed by both parties.
 
-### 14.5 Assignment
+### 13.5 Assignment
 {{#if assignment_permitted}}
 This Agreement may be assigned with written consent of both parties.
 {{else}}
 This Agreement may not be assigned without written consent of both parties.
 {{/if}}
 
+### 13.6 Severability
+If any provision is deemed invalid, the remainder shall remain in full force and effect.
+
+### 13.7 Force Majeure
+Neither party shall be liable for delays due to circumstances beyond their reasonable control.
+
+### 13.8 Notices
+All notices shall be delivered in writing to the addresses specified herein.
+
+### 13.9 Independent Contractors
+The parties are independent contractors and this Agreement creates no partnership or joint venture.
+
 ---
 
-## 15. Signatures
+## 14. Signatures
 
 **IN WITNESS WHEREOF**, the parties have executed this Agreement as of the date first written above.
 
@@ -421,7 +400,7 @@ This Agreement may not be assigned without written consent of both parties.
 | _________________________________ | _____________ |
 | {{supplier_name}} | |
 | By: {{supplier_signatory}} | |
-| Title: {{supplier_title}} | |
+| Title: {{supplier_signatory_title}} | |
 
 **DISTRIBUTOR:**
 
@@ -430,10 +409,10 @@ This Agreement may not be assigned without written consent of both parties.
 | _________________________________ | _____________ |
 | {{distributor_name}} | |
 | By: {{distributor_signatory}} | |
-| Title: {{distributor_title}} | |
+| Title: {{distributor_signatory_title}} | |
 
 ---
 
-**IMPORTANT LEGAL NOTICE:** This distribution agreement involves complex commercial, territorial, and regulatory considerations. It should be reviewed by qualified legal, business, and distribution professionals to ensure compliance with applicable laws and proper allocation of rights and responsibilities.
+**IMPORTANT LEGAL NOTICE:** This distribution agreement involves complex commercial, territorial, and performance considerations. It should be reviewed by qualified legal and business professionals to ensure proper protection of rights, compliance with applicable laws, and achievement of business objectives.
 
 *Template generated by 123LegalDoc - Professional Legal Document Platform*

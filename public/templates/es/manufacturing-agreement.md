@@ -6,424 +6,413 @@
 
 Este Contrato de Manufactura ("Contrato") se celebra el **{{agreement_date}}**, entre:
 
-- **Compañía:** {{company_name}}, una {{company_entity_type}} organizada bajo las leyes de {{company_state}}, con su lugar principal de negocios en {{company_address}}
+- **Empresa:** {{company_name}}, una {{company_entity_type}} organizada bajo las leyes de {{company_state}}, con su lugar principal de negocios en {{company_address}}
 
 - **Fabricante:** {{manufacturer_name}}, una {{manufacturer_entity_type}} organizada bajo las leyes de {{manufacturer_state}}, con su lugar principal de negocios en {{manufacturer_address}}
 
-Referidas colectivamente como las "Partes".
+Referidas colectivamente como las "Partes."
 
 ---
 
-## 1. Especificaciones de Producto y Alcance
+## 1. Servicios de Manufactura y Productos
 
-### 1.1 Productos a Fabricar
-**Descripción del Producto:** {{product_description}}
-**Categorías de Producto:** {{product_categories}}
-**Cantidad de SKU:** {{sku_count}} productos individuales
-**Especificaciones del Producto:** Según se detalla en Anexo A
+### 1.1 Especificaciones del Producto
+**Descripción del Producto:** {{product_description_details}}
+**Categorías de Productos:** {{product_categories_manufactured}}
+**Especificaciones Técnicas:** {{technical_specifications_requirements}}
+**Estándares de Calidad:** {{quality_standards_compliance}}
 
-### 1.2 Alcance de la Manufactura
-El Fabricante acuerda proporcionar:
-- Servicios completos de manufactura
-- Control de calidad y pruebas
-- Empaque y etiquetado
-- {{additional_manufacturing_services}}
+### 1.2 Alcance de Manufactura
+**Servicios de Manufactura:** {{manufacturing_services_scope}}
+**Procesos de Producción:** {{production_processes_description}}
+**Requisitos de Ensamblaje:** {{assembly_requirements_details}}
+**Servicios de Empaque:** {{packaging_services_included}}
 
-### 1.3 Estándares de Producto
-**Estándares de Calidad:** {{quality_standards}}
-**Especificaciones de Rendimiento:** {{performance_specifications}}
-**Requisitos de Seguridad:** {{safety_requirements}}
-**Cumplimiento Regulatorio:** {{regulatory_compliance_standards}}
+### 1.3 Documentación del Producto
+**Especificaciones de Diseño:** {{design_specifications_provided}}
+**Dibujos de Ingeniería:** {{engineering_drawings_requirements}}
+**Lista de Materiales:** {{bill_of_materials_specifications}}
+**Instrucciones de Producción:** {{production_instructions_details}}
 
-### 1.4 Diseño e Ingeniería
-**Propiedad del Diseño:** {{design_ownership}}
-**Cambios de Ingeniería:** {{engineering_change_process}}
-**Desarrollo de Prototipos:** {{prototype_development_responsibility}}
-**Modificaciones de Diseño:** {{design_modification_approval}}
+### 1.4 Personalización y Modificaciones
+**Manufactura Personalizada:** {{custom_manufacturing_capabilities}}
+**Cambios de Diseño:** {{design_change_procedures}}
+**Soporte de Ingeniería:** {{engineering_support_provisions}}
+**Desarrollo de Prototipos:** {{prototype_development_services}}
 
 ---
 
-## 2. Requisitos de Manufactura
+## 2. Términos y Condiciones de Manufactura
 
-### 2.1 Capacidad de Producción
-**Capacidad Máxima:** {{maximum_production_capacity}} unidades por {{capacity_time_period}}
-**Compromiso Mínimo:** {{minimum_production_commitment}} unidades anualmente
-**Asignación de Capacidad:** {{capacity_allocation_percentage}}% dedicado a la Compañía
-**Requisitos de Escalamiento:** {{scaling_requirements}}
+### 2.1 Compromiso de Manufactura
+**Manufactura Exclusiva:** {{exclusive_manufacturing_arrangement}}
+**Capacidad de Producción:** {{production_capacity_allocation}}
+**Volúmenes Mínimos de Producción:** {{minimum_production_volumes}}
+**Capacidad Máxima de Producción:** {{maximum_production_capacity}}
 
-### 2.2 Planeación de Producción
-**Requisitos de Pronóstico:** {{forecast_requirements}} meses de aviso anticipado
-**Programación de Producción:** {{production_scheduling_process}}
-**Órdenes Urgentes:** {{rush_order_terms}}
-**Ajustes Estacionales:** {{seasonal_production_adjustments}}
+### 2.2 Planificación de Producción
+**Cronogramas de Producción:** {{production_schedule_requirements}}
+**Tiempos de Entrega:** {{standard_manufacturing_lead_times}}
+**Órdenes Urgentes:** {{rush_order_procedures}}
+**Planificación de Capacidad:** {{capacity_planning_procedures}}
 
 ### 2.3 Materiales y Componentes
 **Abastecimiento de Materiales:** {{material_sourcing_responsibility}}
-**Proveedores Aprobados:** {{approved_supplier_list}}
-**Calidad de Materiales:** {{material_quality_standards}}
-**Gestión de Inventario:** {{inventory_management_responsibility}}
+**Suministro de Componentes:** {{component_supply_arrangements}}
+**Gestión de Inventario:** {{inventory_management_procedures}}
+**Calidad de Materiales:** {{material_quality_requirements}}
 
-### 2.4 Procesos de Manufactura
-**Métodos de Producción:** {{production_methods}}
-**Requisitos de Equipo:** {{equipment_requirements}}
-**Controles de Proceso:** {{process_control_procedures}}
-**Mejora Continua:** {{continuous_improvement_programs}}
+### 2.4 Estándares de Manufactura
+**Estándares de la Industria:** {{industry_standards_compliance}}
+**Certificación ISO:** {{iso_certification_requirements}}
+**Procesos de Manufactura:** {{manufacturing_process_standards}}
+**Estándares Ambientales:** {{environmental_standards_compliance}}
 
 ---
 
-## 3. Control de Calidad y Pruebas
+## 3. Precios y Términos de Pago
 
-### 3.1 Sistema de Gestión de Calidad
-**Estándares SGC:** {{qms_standards}}
-**Certificaciones de Calidad:** {{required_quality_certifications}}
-**Manual de Calidad:** {{quality_manual_requirements}}
-**Control de Documentos:** {{document_control_procedures}}
+### 3.1 Costos de Manufactura
+**Costo Base de Manufactura:** ${{base_manufacturing_cost_per_unit}}
+**Costos de Configuración:** ${{setup_cost_per_product}}
+**Costos de Herramientas:** ${{tooling_cost_allocation}}
+**Costos de Materiales:** {{material_cost_structure}}
 
-### 3.2 Inspección y Pruebas
-**Inspección de Entrada:** {{incoming_inspection_procedures}}
-**Pruebas en Proceso:** {{in_process_testing_requirements}}
+### 3.2 Estructura de Precios
+**Precios por Volumen:** {{volume_pricing_tiers}}
+**Precios a Largo Plazo:** {{long_term_pricing_agreements}}
+**Ajustes de Precios:** {{price_adjustment_mechanisms}}
+**Términos de Moneda:** {{pricing_currency_terms}}
+
+### 3.3 Términos de Pago
+**Cronograma de Pagos:** {{payment_terms_net_days}} días neto
+**Métodos de Pago:** {{accepted_payment_methods}}
+**Pagos Anticipados:** {{advance_payment_requirements}}
+**Penalidades por Pago Tardío:** {{late_payment_penalty_rate}}%
+
+### 3.4 Gestión de Costos
+**Reporte de Costos:** {{cost_reporting_requirements}}
+**Control de Costos:** {{cost_control_procedures}}
+**Reducción de Costos:** {{cost_reduction_initiatives}}
+**Gestión de Presupuesto:** {{budget_management_procedures}}
+
+---
+
+## 4. Control y Aseguramiento de Calidad
+
+### 4.1 Estándares de Calidad
+**Requisitos de Calidad:** {{quality_requirements_specifications}}
+**Procedimientos de Pruebas:** {{testing_procedures_requirements}}
+**Protocolos de Inspección:** {{inspection_protocol_standards}}
+**Certificaciones de Calidad:** {{quality_certification_requirements}}
+
+### 4.2 Procesos de Control de Calidad
+**Control de Calidad en Proceso:** {{in_process_quality_control}}
 **Inspección Final:** {{final_inspection_procedures}}
-**Control Estadístico de Procesos:** {{spc_requirements}}
+**Documentación de Calidad:** {{quality_documentation_requirements}}
+**Acciones Correctivas:** {{quality_corrective_actions}}
 
-### 3.3 Estándares de Calidad
-**Criterios de Aceptación:** {{acceptance_criteria}}
-**Tasas de Defecto:** Máximo {{maximum_defect_rate}}%
-**Métricas de Calidad:** {{quality_metrics}}
-**Quejas de Clientes:** {{quality_complaint_procedures}}
+### 4.3 Aseguramiento de Calidad
+**Sistema de QA:** {{quality_assurance_system}}
+**Derechos de Auditoría:** {{quality_audit_rights}}
+**Mejora Continua:** {{continuous_improvement_programs}}
+**Métricas de Calidad:** {{quality_measurement_metrics}}
 
-### 3.4 Acciones Correctivas
-**Manejo de No Conformidades:** {{non_conformance_procedures}}
-**Análisis de Causa Raíz:** {{root_cause_analysis_requirements}}
-**Planes de Acción Correctiva:** {{corrective_action_timeframes}}
-**Auditorías de Calidad:** {{quality_audit_schedule}}
-
----
-
-## 4. Entrega y Logística
-
-### 4.1 Términos de Entrega
-**Cronograma de Entrega:** {{delivery_schedule}}
-**Tiempos de Entrega:** {{standard_lead_times}} semanas
-**Términos de Envío:** {{shipping_terms}}
-**Ubicación de Entrega:** {{delivery_location}}
-
-### 4.2 Empaque y Etiquetado
-**Estándares de Empaque:** {{packaging_standards}}
-**Requisitos de Etiquetado:** {{labeling_requirements}}
-**Empaque Personalizado:** {{custom_packaging_terms}}
-**Materiales de Empaque:** {{packaging_material_responsibility}}
-
-### 4.3 Gestión Logística
-**Responsabilidad de Envío:** {{shipping_responsibility}}
-**Costos de Flete:** {{freight_cost_responsibility}}
-**Seguimiento y Documentación:** {{tracking_documentation_requirements}}
-**Seguro:** {{shipping_insurance_requirements}}
-
-### 4.4 Métricas de Rendimiento
-**Entrega a Tiempo:** {{on_time_delivery_target}}%
-**Precisión de Órdenes:** {{order_accuracy_target}}%
-**Tasas de Daño:** Máximo {{maximum_damage_rate}}%
-**Reporte de Rendimiento:** {{performance_reporting_frequency}}
+### 4.4 Productos Defectuosos
+**Gestión de Defectos:** {{defect_management_procedures}}
+**Procedimientos de Retrabajo:** {{rework_procedures_requirements}}
+**Procesos de Rechazo:** {{product_rejection_processes}}
+**Reclamaciones de Garantía:** {{warranty_claim_procedures}}
 
 ---
 
-## 5. Precios y Términos de Pago
+## 5. Producción y Entrega
 
-### 5.1 Estructura de Precios
-{{#if cost_plus_pricing}}
-**Precios Costo-Plus:** Costo + {{markup_percentage}}% margen
-**Componentes de Costo:** {{cost_components}}
-**Verificación de Costos:** {{cost_verification_procedures}}
-{{else}}
-**Precios Fijos:** ${{unit_price}} por unidad
-**Descuentos por Volumen:** {{volume_discount_structure}}
-**Validez de Precios:** {{price_validity_period}}
-{{/if}}
+### 5.1 Requisitos de Producción
+**Estándares de Producción:** {{production_standards_requirements}}
+**Especificaciones de Salida:** {{output_specifications_details}}
+**Monitoreo de Producción:** {{production_monitoring_procedures}}
+**Objetivos de Eficiencia:** {{production_efficiency_targets}}
 
-### 5.2 Ajustes de Precios
-**Revisiones Anuales de Precios:** {{annual_price_review_process}}
-**Escalación de Costos:** {{cost_escalation_factors}}
-**Cambios en Costos de Material:** {{material_cost_adjustment_terms}}
-**Ajustes de Costos de Mano de Obra:** {{labor_cost_adjustment_terms}}
+### 5.2 Términos de Entrega
+**Cronogramas de Entrega:** {{delivery_schedule_commitments}}
+**Términos de Envío:** {{shipping_terms_conditions}}
+**Ubicaciones de Entrega:** {{delivery_locations_specified}}
+**Requisitos de Empaque:** {{packaging_requirements_details}}
 
-### 5.3 Términos de Pago
-**Cronograma de Pagos:** {{payment_schedule}}
-**Términos de Pago:** {{payment_terms}} días neto
-**Descuento por Pago Anticipado:** {{early_payment_discount}}%
-**Penalidad por Pago Tardío:** {{late_payment_penalty}}% por mes
+### 5.3 Logística y Transporte
+**Responsabilidad de Envío:** {{shipping_responsibility_allocation}}
+**Métodos de Transporte:** {{transportation_methods_available}}
+**Cobertura de Seguro:** {{shipping_insurance_requirements}}
+**Sistemas de Seguimiento:** {{shipment_tracking_systems}}
 
-### 5.4 Costos Adicionales
-**Costos de Herramientas:** {{tooling_cost_responsibility}}
-**Cargos de Configuración:** {{setup_charge_terms}}
-**Costos de Ingeniería:** {{engineering_cost_allocation}}
-**Costos de Empaque:** {{packaging_cost_terms}}
+### 5.4 Métricas de Rendimiento
+**Entrega a Tiempo:** {{on_time_delivery_targets}}%
+**Rendimiento de Calidad:** {{quality_performance_standards}}
+**Eficiencia de Producción:** {{production_efficiency_metrics}}
+**Satisfacción del Cliente:** {{customer_satisfaction_measures}}
 
 ---
 
-## 6. Propiedad Intelectual y Confidencialidad
+## 6. Materiales y Cadena de Suministro
 
-### 6.1 Derechos de Propiedad Intelectual
-**PI Existente:** {{existing_ip_ownership}}
-**Diseños de Producto:** {{product_design_ownership}}
-**Mejoras de Proceso:** {{process_improvement_ownership}}
-**Trabajo por Contrato:** {{work_for_hire_terms}}
+### 6.1 Requisitos de Materiales
+**Especificaciones de Materiales:** {{material_specifications_requirements}}
+**Aprobación de Proveedores:** {{supplier_approval_procedures}}
+**Calidad de Materiales:** {{material_quality_standards}}
+**Materiales Alternativos:** {{alternative_material_procedures}}
 
-### 6.2 Información Confidencial
-**Definición:** {{confidential_information_definition}}
-**Obligaciones de Protección:** {{confidentiality_protection_obligations}}
-**Entrenamiento de Empleados:** {{employee_confidentiality_training}}
-**Devolución de Información:** {{information_return_requirements}}
+### 6.2 Gestión de Cadena de Suministro
+**Relaciones con Proveedores:** {{supplier_relationship_management}}
+**Control de Inventario:** {{inventory_control_procedures}}
+**Planificación de Materiales:** {{material_planning_procedures}}
+**Riesgo de Cadena de Suministro:** {{supply_chain_risk_management}}
 
-### 6.3 Secretos Comerciales
-**Protección de Secretos Comerciales:** {{trade_secret_protection_measures}}
-**Controles de Acceso:** {{trade_secret_access_controls}}
-**No Divulgación:** {{trade_secret_nda_requirements}}
-**Notificación de Violación:** {{trade_secret_breach_notification}}
+### 6.3 Adquisiciones
+**Procedimientos de Compra:** {{purchasing_procedures_requirements}}
+**Gestión de Proveedores:** {{vendor_management_procedures}}
+**Optimización de Costos:** {{procurement_cost_optimization}}
+**Abastecimiento Ético:** {{ethical_sourcing_requirements}}
 
-### 6.4 PI de Terceros
-**Autorización de PI:** {{third_party_ip_clearance}}
-**Indemnización por Infracción:** {{ip_infringement_indemnification}}
-**Cumplimiento de Licencia:** {{third_party_license_compliance}}
-**Auditorías de PI:** {{ip_audit_requirements}}
-
----
-
-## 7. Cumplimiento Regulatorio y Certificaciones
-
-### 7.1 Requisitos Regulatorios
-**Regulaciones de la Industria:** {{industry_regulations}}
-**Estándares de Seguridad:** {{safety_standard_compliance}}
-**Regulaciones Ambientales:** {{environmental_compliance}}
-**Estándares Internacionales:** {{international_standard_requirements}}
-
-### 7.2 Certificaciones y Aprobaciones
-**Certificaciones Requeridas:** {{required_certifications}}
-**Mantenimiento de Certificaciones:** {{certification_maintenance_responsibility}}
-**Apoyo en Auditorías:** {{regulatory_audit_support}}
-**Documentación:** {{regulatory_documentation_requirements}}
-
-### 7.3 Pruebas y Validación de Producto
-**Pruebas Requeridas:** {{required_product_testing}}
-**Laboratorios de Prueba:** {{approved_testing_laboratories}}
-**Reportes de Prueba:** {{test_report_requirements}}
-**Procedimientos de Validación:** {{validation_procedures}}
-
-### 7.4 Monitoreo de Cumplimiento
-**Auditorías de Cumplimiento:** {{compliance_audit_schedule}}
-**Actualizaciones Regulatorias:** {{regulatory_update_procedures}}
-**Gestión de Cambios:** {{regulatory_change_management}}
-**Requisitos de Entrenamiento:** {{regulatory_training_requirements}}
-
----
-
-## 8. Gestión de Cadena de Suministro
-
-### 8.1 Gestión de Proveedores
-**Calificación de Proveedores:** {{supplier_qualification_process}}
-**Auditorías de Proveedores:** {{supplier_audit_requirements}}
-**Rendimiento de Proveedores:** {{supplier_performance_metrics}}
-**Proveedores Alternativos:** {{alternative_supplier_requirements}}
-
-### 8.2 Requisitos de Materiales
-**Lista de Materiales:** {{bill_of_materials_management}}
-**Especificaciones de Materiales:** {{material_specification_control}}
-**Pruebas de Materiales:** {{material_testing_requirements}}
-**Trazabilidad de Materiales:** {{material_traceability_requirements}}
-
-### 8.3 Gestión de Inventario
+### 6.4 Gestión de Inventario
 **Niveles de Inventario:** {{inventory_level_requirements}}
-**Stock de Seguridad:** {{safety_stock_requirements}}
-**Propiedad de Inventario:** {{inventory_ownership_terms}}
-**Inventario Obsoleto:** {{obsolete_inventory_handling}}
-
-### 8.4 Procedimientos de Adquisición
-**Autoridad de Compra:** {{purchasing_authority_limits}}
-**Licitación Competitiva:** {{competitive_bidding_requirements}}
-**Contratos a Largo Plazo:** {{long_term_contract_approval}}
-**Adquisición de Emergencia:** {{emergency_procurement_procedures}}
+**Requisitos de Almacenamiento:** {{storage_requirements_specifications}}
+**Manejo de Materiales:** {{material_handling_procedures}}
+**Inventario Obsoleto:** {{obsolete_inventory_management}}
 
 ---
 
-## 9. Gestión de Riesgos y Seguros
+## 7. Propiedad Intelectual y Confidencialidad
 
-### 9.1 Requisitos de Seguro
-**Responsabilidad General:** ${{general_liability_coverage}} por ocurrencia
-**Responsabilidad del Producto:** ${{product_liability_coverage}}
-**Seguro de Propiedad:** ${{property_insurance_coverage}}
-**Interrupción de Negocio:** ${{business_interruption_coverage}}
+### 7.1 Derechos de Propiedad Intelectual
+**PI de la Empresa:** {{company_ip_ownership}}
+**PI de Manufactura:** {{manufacturing_ip_rights}}
+**Mejoras de Procesos:** {{process_improvement_ip}}
+**Transferencia de Tecnología:** {{technology_transfer_arrangements}}
 
-### 9.2 Asignación de Riesgos
-**Riesgos de Manufactura:** {{manufacturing_risk_allocation}}
-**Riesgos de Diseño:** {{design_risk_allocation}}
-**Riesgos de Materiales:** {{material_risk_allocation}}
-**Riesgos de Entrega:** {{delivery_risk_allocation}}
+### 7.2 Obligaciones de Confidencialidad
+**Información Confidencial:** {{confidential_information_definition}}
+**No Divulgación:** {{non_disclosure_obligations}}
+**Secretos Comerciales:** {{trade_secret_protection}}
+**Confidencialidad de Terceros:** {{third_party_confidentiality}}
 
-### 9.3 Fuerza Mayor
+### 7.3 Protección de PI
+**Protección de Patentes:** {{patent_protection_arrangements}}
+**Materiales con Derechos de Autor:** {{copyright_material_protection}}
+**Uso de Marcas Comerciales:** {{trademark_usage_rights}}
+**Infracción de PI:** {{ip_infringement_procedures}}
+
+### 7.4 Seguridad de Datos
+**Protección de Datos:** {{data_protection_measures}}
+**Seguridad de la Información:** {{information_security_requirements}}
+**Controles de Acceso:** {{access_control_procedures}}
+**Ciberseguridad:** {{cybersecurity_requirements}}
+
+---
+
+## 8. Cumplimiento y Regulatorio
+
+### 8.1 Cumplimiento Regulatorio
+**Regulaciones de Manufactura:** {{manufacturing_regulations_compliance}}
+**Estándares de Seguridad:** {{safety_standards_adherence}}
+**Regulaciones Ambientales:** {{environmental_regulations_compliance}}
+**Certificaciones de la Industria:** {{industry_certification_requirements}}
+
+### 8.2 Salud y Seguridad
+**Seguridad en el Lugar de Trabajo:** {{workplace_safety_requirements}}
+**Entrenamiento de Seguridad:** {{safety_training_programs}}
+**Reporte de Accidentes:** {{accident_reporting_procedures}}
+**Auditorías de Seguridad:** {{safety_audit_requirements}}
+
+### 8.3 Cumplimiento Ambiental
+**Estándares Ambientales:** {{environmental_standards_requirements}}
+**Gestión de Residuos:** {{waste_management_procedures}}
+**Control de Emisiones:** {{emissions_control_requirements}}
+**Sostenibilidad:** {{sustainability_practices}}
+
+### 8.4 Documentación y Registros
+**Documentación de Cumplimiento:** {{compliance_documentation_requirements}}
+**Mantenimiento de Registros:** {{manufacturing_record_keeping}}
+**Pistas de Auditoría:** {{audit_trail_requirements}}
+**Reporte Regulatorio:** {{regulatory_reporting_obligations}}
+
+---
+
+## 9. Gestión de Rendimiento
+
+### 9.1 Estándares de Rendimiento
+**KPIs de Manufactura:** {{manufacturing_kpi_requirements}}
+**Métricas de Calidad:** {{quality_metrics_standards}}
+**Rendimiento de Entrega:** {{delivery_performance_metrics}}
+**Rendimiento de Costos:** {{cost_performance_indicators}}
+
+### 9.2 Monitoreo de Rendimiento
+**Sistemas de Monitoreo:** {{performance_monitoring_systems}}
+**Frecuencia de Reportes:** {{performance_reporting_frequency}}
+**Revisiones de Rendimiento:** {{performance_review_schedule}}
+**Planes de Mejora:** {{performance_improvement_planning}}
+
+### 9.3 Niveles de Servicio
+**Acuerdos de Nivel de Servicio:** {{service_level_agreements}}
+**Tiempos de Respuesta:** {{response_time_requirements}}
+**Procedimientos de Escalación:** {{escalation_procedures}}
+**Servicio al Cliente:** {{customer_service_standards}}
+
+### 9.4 Mejora Continua
+**Programas de Mejora:** {{continuous_improvement_programs}}
+**Mejores Prácticas:** {{best_practice_implementation}}
+**Iniciativas de Innovación:** {{innovation_initiatives}}
+**Optimización de Procesos:** {{process_optimization_procedures}}
+
+---
+
+## 10. Gestión de Riesgos y Seguros
+
+### 10.1 Asignación de Riesgos
+**Riesgo de Manufactura:** {{manufacturing_risk_allocation}}
+**Riesgo de Calidad:** {{quality_risk_management}}
+**Riesgo de Cadena de Suministro:** {{supply_chain_risk_allocation}}
+**Riesgo Operacional:** {{operational_risk_management}}
+
+### 10.2 Requisitos de Seguros
+**Responsabilidad General:** ${{general_liability_insurance}}
+**Responsabilidad del Producto:** ${{product_liability_insurance}}
+**Responsabilidad Profesional:** ${{professional_liability_insurance}}
+**Seguro de Propiedad:** ${{property_insurance_requirements}}
+
+### 10.3 Continuidad del Negocio
+**Planificación de Continuidad:** {{business_continuity_planning}}
+**Recuperación de Desastres:** {{disaster_recovery_procedures}}
+**Manufactura de Respaldo:** {{backup_manufacturing_arrangements}}
+**Procedimientos de Emergencia:** {{emergency_response_procedures}}
+
+### 10.4 Fuerza Mayor
 **Eventos de Fuerza Mayor:** {{force_majeure_definition}}
 **Requisitos de Notificación:** {{force_majeure_notification}}
 **Esfuerzos de Mitigación:** {{force_majeure_mitigation}}
 **Arreglos Alternativos:** {{force_majeure_alternatives}}
 
-### 9.4 Continuidad del Negocio
-**Planeación de Contingencia:** {{business_continuity_planning}}
-**Recuperación de Desastres:** {{disaster_recovery_procedures}}
-**Manufactura Alternativa:** {{alternative_manufacturing_arrangements}}
-**Protocolos de Comunicación:** {{emergency_communication_protocols}}
-
 ---
 
-## 10. Estándares de Rendimiento y Métricas
+## 11. Tecnología y Equipos
 
-### 10.1 Indicadores Clave de Rendimiento
-**Métricas de Calidad:** {{quality_performance_metrics}}
-**Rendimiento de Entrega:** {{delivery_performance_metrics}}
-**Rendimiento de Costos:** {{cost_performance_metrics}}
-**Métricas de Nivel de Servicio:** {{service_level_metrics}}
+### 11.1 Equipos de Manufactura
+**Requisitos de Equipos:** {{equipment_requirements_specifications}}
+**Estándares de Tecnología:** {{technology_standards_requirements}}
+**Mantenimiento de Equipos:** {{equipment_maintenance_procedures}}
+**Actualizaciones de Capacidad:** {{capacity_upgrade_procedures}}
 
-### 10.2 Reporte de Rendimiento
-**Reportes Mensuales:** {{monthly_performance_reports}}
-**Revisiones Trimestrales:** {{quarterly_performance_reviews}}
-**Evaluaciones Anuales:** {{annual_performance_assessments}}
-**Monitoreo Continuo:** {{continuous_monitoring_procedures}}
+### 11.2 Transferencia de Tecnología
+**Conocimiento Técnico:** {{technical_knowledge_transfer}}
+**Documentación de Procesos:** {{process_documentation_requirements}}
+**Programas de Entrenamiento:** {{technology_training_programs}}
+**Servicios de Soporte:** {{technical_support_services}}
 
-### 10.3 Mejora de Rendimiento
-**Objetivos de Mejora:** {{performance_improvement_targets}}
-**Acciones Correctivas:** {{performance_corrective_actions}}
-**Mejores Prácticas:** {{best_practices_sharing}}
-**Programas de Innovación:** {{innovation_collaboration_programs}}
+### 11.3 Innovación y Desarrollo
+**Innovación de Procesos:** {{process_innovation_initiatives}}
+**Mejoras Tecnológicas:** {{technology_improvement_programs}}
+**Colaboración en I+D:** {{rd_collaboration_arrangements}}
+**Integración de Nueva Tecnología:** {{new_technology_integration}}
 
-### 10.4 Benchmarking
-**Benchmarks de la Industria:** {{industry_benchmark_standards}}
-**Análisis Competitivo:** {{competitive_performance_analysis}}
-**Comparaciones de Rendimiento:** {{performance_comparison_procedures}}
-**Oportunidades de Mejora:** {{improvement_opportunity_identification}}
-
----
-
-## 11. Gestión de Cambios
-
-### 11.1 Cambios de Ingeniería
-**Proceso de Solicitud de Cambio:** {{engineering_change_process}}
-**Autoridad de Aprobación de Cambios:** {{change_approval_authority}}
-**Evaluación de Impacto:** {{change_impact_assessment}}
-**Cronograma de Implementación:** {{change_implementation_timeline}}
-
-### 11.2 Cambios de Proceso
-**Mejora de Procesos:** {{process_improvement_procedures}}
-**Validación de Cambios:** {{process_change_validation}}
-**Actualizaciones de Documentación:** {{process_documentation_updates}}
-**Requisitos de Entrenamiento:** {{process_change_training}}
-
-### 11.3 Modificaciones de Producto
-**Solicitudes de Modificación:** {{product_modification_requests}}
-**Requisitos de Prueba:** {{modification_testing_requirements}}
-**Procedimientos de Aprobación:** {{modification_approval_procedures}}
-**Control de Implementación:** {{modification_implementation_control}}
-
-### 11.4 Cambios en Cadena de Suministro
-**Cambios de Proveedor:** {{supplier_change_procedures}}
-**Sustituciones de Material:** {{material_substitution_approval}}
-**Reubicaciones de Proceso:** {{process_relocation_procedures}}
-**Actualizaciones de Tecnología:** {{technology_upgrade_management}}
+### 11.4 Manufactura Digital
+**Industria 4.0:** {{industry_4_0_implementation}}
+**Sistemas de Automatización:** {{automation_system_requirements}}
+**Análisis de Datos:** {{manufacturing_data_analytics}}
+**Integración Digital:** {{digital_integration_requirements}}
 
 ---
 
 ## 12. Terminación y Transición
 
-### 12.1 Derechos de Terminación
-**Terminación por Causa:** {{termination_cause_events}}
-**Terminación por Conveniencia:** {{termination_convenience_notice}} días de aviso
-**Terminación Automática:** {{automatic_termination_events}}
-**Procedimientos de Terminación:** {{termination_procedures}}
+### 12.1 Eventos de Terminación
+**Vencimiento del Término:** {{natural_term_expiration}}
+**Terminación por Causa:** {{termination_for_cause_events}}
+**Terminación por Conveniencia:** {{convenience_termination_terms}}
+**Terminación por Rendimiento:** {{performance_based_termination}}
 
-### 12.2 Planeación de Transición
-**Período de Transición:** {{transition_period_duration}} meses
-**Transferencia de Conocimiento:** {{knowledge_transfer_requirements}}
-**Transferencia de Activos:** {{asset_transfer_procedures}}
-**Transición de Clientes:** {{customer_transition_support}}
+### 12.2 Procedimientos de Terminación
+**Requisitos de Aviso:** {{termination_notice_requirements}}
+**Período de Cierre:** {{termination_wind_down_period}}
+**Producción Final:** {{final_production_obligations}}
+**Devolución de Activos:** {{asset_return_procedures}}
 
-### 12.3 Liquidación Final
-**Factura Final:** {{final_invoice_procedures}}
-**Liquidación de Inventario:** {{inventory_settlement_terms}}
-**Propiedad de Herramientas:** {{tooling_ownership_transfer}}
-**Devolución de Documentación:** {{documentation_return_requirements}}
+### 12.3 Servicios de Transición
+**Planificación de Transición:** {{transition_planning_requirements}}
+**Transferencia de Conocimiento:** {{knowledge_transfer_obligations}}
+**Transferencia de Manufactura:** {{manufacturing_transfer_procedures}}
+**Configuración de Nuevo Fabricante:** {{new_manufacturer_setup}}
 
-### 12.4 Obligaciones Post-Terminación
-**Confidencialidad:** {{post_termination_confidentiality}}
-**No Competencia:** {{post_termination_non_compete}}
-**Soporte de Garantía:** {{post_termination_warranty_support}}
-**Soporte Continuo:** {{ongoing_support_obligations}}
+### 12.4 Post-Terminación
+**Obligaciones Continuas:** {{post_termination_obligations}}
+**Continuación de Confidencialidad:** {{post_termination_confidentiality}}
+**Derechos de PI:** {{post_termination_ip_rights}}
+**Liquidación Final:** {{final_settlement_procedures}}
 
 ---
 
-## 13. Resolución de Disputas y Legal
+## 13. Resolución de Disputas
 
-### 13.1 Resolución de Disputas
+### 13.1 Proceso de Resolución de Disputas
+**Negociación Directa:** {{dispute_negotiation_procedures}}
+**Mediación:** {{mediation_procedures}}
 {{#if arbitration}}
-**Arbitraje:** Arbitraje vinculante en {{arbitration_location}}
-**Reglas de Arbitraje:** {{arbitration_rules}}
-**Selección de Árbitro:** {{arbitrator_selection_process}}
+**Arbitraje:** {{arbitration_procedures}} en {{arbitration_location}}
 {{else}}
-**Litigio:** Cortes de {{court_jurisdiction}}
-**Jurisdicción:** {{litigation_venue}}
+**Litigio:** Procedimientos judiciales en {{jurisdiction}}
 {{/if}}
 
-### 13.2 Ley Aplicable
-**Ley Aplicable:** {{governing_law}}
-**Interpretación de Contrato:** {{contract_interpretation_principles}}
-**Resolución de Conflictos:** {{conflict_resolution_procedures}}
-
-### 13.3 Cumplimiento Legal
-**Cumplimiento Regulatorio:** {{regulatory_compliance_obligations}}
-**Controles de Exportación:** {{export_control_compliance}}
-**Anti-Corrupción:** {{anti_corruption_compliance}}
-**Leyes Laborales:** {{labor_law_compliance}}
-
-### 13.4 Indemnización
-**Indemnización del Fabricante:** {{manufacturer_indemnification_terms}}
-**Indemnización de la Compañía:** {{company_indemnification_terms}}
-**Reclamos de Terceros:** {{third_party_claim_procedures}}
-**Cooperación en Defensa:** {{defense_cooperation_requirements}}
+### 13.2 Disputas Técnicas
+**Revisión Técnica:** {{technical_dispute_review}}
+**Determinación de Expertos:** {{expert_determination_procedures}}
+**Disputas de Pruebas:** {{testing_dispute_resolution}}
+**Disputas de Calidad:** {{quality_dispute_procedures}}
 
 ---
 
 ## 14. Disposiciones Generales
 
-### 14.1 Acuerdo Completo
+### 14.1 Ley Aplicable
+Este Contrato se regirá por las leyes de {{governing_state}}.
+
+### 14.2 Acuerdo Completo
 Este Contrato constituye el acuerdo completo y reemplaza todas las negociaciones previas.
 
-### 14.2 Modificación
-Este Contrato solo puede modificarse por acuerdo escrito firmado por ambas partes.
+### 14.3 Modificación
+Este Contrato solo puede modificarse por acuerdo escrito firmado por ambas Partes.
 
-### 14.3 Cesión
+### 14.4 Cesión
 {{#if assignment_permitted}}
-Este Contrato puede cederse con consentimiento escrito de ambas partes.
+Este Contrato puede cederse con consentimiento escrito de ambas Partes.
 {{else}}
-Este Contrato no puede cederse sin consentimiento escrito de ambas partes.
+Este Contrato no puede cederse sin consentimiento escrito de ambas Partes.
 {{/if}}
 
-### 14.4 Divisibilidad
+### 14.5 Divisibilidad
 Si alguna disposición se considera inválida, el resto permanecerá en pleno vigor y efecto.
 
-### 14.5 Requisitos de Aviso
-**Método de Aviso:** {{notice_method}}
-**Direcciones de Aviso:** Según se especifica en el preámbulo
-**Aviso Electrónico:** {{electronic_notice_terms}}
+### 14.6 Fuerza Mayor
+Ninguna Parte será responsable por retrasos debido a circunstancias fuera de su control razonable.
+
+### 14.7 Notificaciones
+Todas las notificaciones se entregarán por escrito a las direcciones especificadas aquí.
+
+### 14.8 Contratistas Independientes
+Las Partes son contratistas independientes y este Contrato no crea ninguna asociación o empresa conjunta.
 
 ---
 
 ## 15. Firmas
 
-**EN FE DE LO CUAL**, las partes han ejecutado este Contrato en la fecha arriba escrita.
+**EN FE DE LO CUAL**, las Partes han ejecutado este Contrato en la fecha arriba escrita.
 
-**COMPAÑÍA:**
+**EMPRESA:**
 
 | Firma | Fecha |
 |-------|-------|
 | _________________________________ | _____________ |
 | {{company_name}} | |
 | Por: {{company_signatory}} | |
-| Título: {{company_title}} | |
+| Título: {{company_signatory_title}} | |
 
 **FABRICANTE:**
 
@@ -432,10 +421,10 @@ Si alguna disposición se considera inválida, el resto permanecerá en pleno vi
 | _________________________________ | _____________ |
 | {{manufacturer_name}} | |
 | Por: {{manufacturer_signatory}} | |
-| Título: {{manufacturer_title}} | |
+| Título: {{manufacturer_signatory_title}} | |
 
 ---
 
-**AVISO LEGAL IMPORTANTE:** Este contrato de manufactura involucra consideraciones operacionales, de calidad y regulatorias complejas. Debe ser revisado por profesionales legales, de manufactura y comerciales calificados para asegurar cumplimiento con leyes aplicables y asignación apropiada de responsabilidades y riesgos.
+**AVISO LEGAL IMPORTANTE:** Este contrato de manufactura involucra consideraciones técnicas, de calidad y operacionales complejas. Debe ser revisado por profesionales legales y de manufactura calificados para asegurar la protección apropiada de derechos, cumplimiento con leyes aplicables y logro de objetivos de manufactura.
 
 *Plantilla generada por 123LegalDoc - Plataforma Profesional de Documentos Legales*

@@ -14,406 +14,367 @@ Referidas colectivamente como las "Partes".
 
 ---
 
-## 1. Descripción de la Tecnología
+## 1. Descripción y Antecedentes de la Tecnología
 
-### 1.1 Tecnología Licenciada
-La tecnología sujeta a este Contrato incluye:
-
+### 1.1 Resumen de la Tecnología
 **Nombre de la Tecnología:** {{technology_name}}
-**Tipo de Tecnología:** {{technology_type}}
-**Campo de Uso:** {{field_of_use}}
-**Descripción de la Tecnología:** {{technology_description}}
+**Tipo de Tecnología:** {{technology_type_classification}}
+**Campo de Uso:** {{technology_field_of_use}}
+**Etapa de Desarrollo:** {{technology_development_stage}}
 
-### 1.2 Componentes de la Tecnología
-La Tecnología Licenciada comprende:
-- {{technology_component_1}}
-- {{technology_component_2}}
-- {{technology_component_3}}
-- {{technology_component_4}}
-- {{additional_technology_components}}
+### 1.2 Especificaciones Técnicas
+**Componentes Centrales de Tecnología:** {{core_technology_components}}
+**Parámetros Técnicos:** {{technical_specifications_details}}
+**Características de Rendimiento:** {{performance_characteristics_description}}
+**Requisitos Funcionales:** {{functional_requirements_specification}}
 
-### 1.3 Derechos de Propiedad Intelectual
-**Patentes:** {{patent_numbers}}
-**Solicitudes de Patente:** {{patent_applications}}
-**Marcas Comerciales:** {{trademark_registrations}}
-**Derechos de Autor:** {{copyright_registrations}}
-**Secretos Comerciales:** {{trade_secret_description}}
+### 1.3 Activos de Propiedad Intelectual
+**Portafolio de Patentes:** {{patent_portfolio_description}}
+**Secretos Comerciales:** {{trade_secret_components}}
+**Know-how:** {{technical_know_how_description}}
+**Materiales con Derechos de Autor:** {{copyrighted_materials_description}}
 
-### 1.4 Conocimientos Técnicos y Datos
-La transferencia incluye:
-- Especificaciones técnicas y dibujos
-- Procesos y procedimientos de manufactura
-- Estándares de control de calidad
-- Manuales operativos y documentación
-- {{additional_know_how}}
+### 1.4 Historia de Desarrollo
+**Antecedentes de Investigación y Desarrollo:** {{rd_background_information}}
+**Aplicaciones Comerciales Previas:** {{prior_commercial_applications}}
+**Inversión en Desarrollo:** {{development_investment_amount}}
+**Inventores/Desarrolladores Clave:** {{key_inventors_information}}
 
 ---
 
-## 2. Otorgamiento de Derechos
+## 2. Concesión de Derechos y Alcance de Licencia
 
-### 2.1 Otorgamiento de Licencia
-El Licenciante otorga al Licenciatario una licencia {{license_exclusivity}} para:
-- Usar la Tecnología Licenciada
-- Fabricar productos que incorporen la Tecnología
-- Vender productos en el {{licensed_territory}}
-- {{additional_licensed_rights}}
+### 2.1 Concesión de Licencia
+**Tipo de Licencia:** {{license_type_exclusive_nonexclusive}}
+**Tecnología Licenciada:** {{licensed_technology_definition}}
+**Alcance Geográfico:** {{geographic_license_scope}}
+**Limitaciones de Campo de Uso:** {{field_of_use_restrictions}}
 
-### 2.2 Alcance de la Licencia
-**Territorio:** {{licensed_territory}}
-**Campo de Uso:** {{field_of_use_restriction}}
-**Término:** {{license_term}} años
-**Exclusividad:** {{exclusivity_status}}
+### 2.2 Derechos de Propiedad Intelectual
+**Derechos de Patente Incluidos:** {{patent_rights_scope}}
+**Transferencia de Know-how:** {{know_how_transfer_scope}}
+**Acceso a Secretos Comerciales:** {{trade_secret_access_rights}}
+**Permisos de Derechos de Autor:** {{copyright_usage_permissions}}
 
-### 2.3 Derechos de Sublicencia
-{{#if sublicensing_permitted}}
-El Licenciatario puede otorgar sublicencias sujeto a:
-- Consentimiento previo por escrito del Licenciante
-- Cumplimiento con todos los términos del Contrato
-- {{sublicensing_conditions}}
-{{else}}
-No se permite la sublicencia bajo este Contrato.
-{{/if}}
+### 2.3 Derechos y Restricciones
+**Derechos de Fabricación:** {{manufacturing_rights_scope}}
+**Derechos de Distribución:** {{distribution_rights_parameters}}
+**Derechos de Sublicencia:** {{sublicensing_permissions}}
+**Derechos de Modificación:** {{technology_modification_rights}}
 
-### 2.4 Derechos Retenidos
-El Licenciante retiene todos los derechos no expresamente otorgados, incluyendo:
-- Derechos en otros territorios
-- Derechos en otros campos de uso
-- Derechos para desarrollar adicionalmente la Tecnología
-- {{retained_rights}}
+### 2.4 Mejoras y Mejoras
+**Propiedad de Mejoras:** {{improvement_ownership_allocation}}
+**Derechos de Mejora:** {{enhancement_development_rights}}
+**Desarrollo Conjunto:** {{joint_development_opportunities}}
+**Evolución de Tecnología:** {{technology_evolution_management}}
 
 ---
 
-## 3. Proceso de Transferencia de Tecnología
+## 3. Términos Financieros y Estructura de Regalías
 
-### 3.1 Cronograma de Transferencia
-**Divulgación Técnica:** {{disclosure_deadline}} días después de la ejecución
-**Transferencia de Documentación:** {{documentation_transfer_date}}
-**Finalización de Entrenamiento:** {{training_completion_date}}
-**Transferencia Completa:** {{full_transfer_date}}
-
-### 3.2 Documentación Técnica
-El Licenciante proporcionará:
-- Especificaciones técnicas completas
-- Procedimientos y protocolos de manufactura
-- Estándares de aseguramiento de calidad
-- Documentación de cumplimiento regulatorio
-- {{additional_documentation}}
-
-### 3.3 Entrenamiento y Apoyo
-**Duración del Entrenamiento:** {{training_duration}} semanas
-**Ubicación del Entrenamiento:** {{training_location}}
-**Número de Aprendices:** {{number_of_trainees}}
-**Período de Apoyo:** {{support_period}} meses
-
-### 3.4 Hitos de Transferencia de Tecnología
-| Hito | Descripción | Fecha Objetivo | Entregable |
-|------|-------------|----------------|------------|
-| 1 | {{milestone_1_description}} | {{milestone_1_date}} | {{milestone_1_deliverable}} |
-| 2 | {{milestone_2_description}} | {{milestone_2_date}} | {{milestone_2_deliverable}} |
-| 3 | {{milestone_3_description}} | {{milestone_3_date}} | {{milestone_3_deliverable}} |
-| 4 | {{milestone_4_description}} | {{milestone_4_date}} | {{milestone_4_deliverable}} |
-
----
-
-## 4. Términos Financieros
-
-### 4.1 Tarifas de Licencia
+### 3.1 Pagos Iniciales
 **Tarifa Inicial de Licencia:** ${{initial_license_fee}}
-**Tarifa Anual de Licencia:** ${{annual_license_fee}}
 **Tarifa de Transferencia de Tecnología:** ${{technology_transfer_fee}}
-**Tarifa de Entrenamiento y Apoyo:** ${{training_support_fee}}
+**Tarifa de Documentación:** ${{documentation_transfer_fee}}
+**Tarifa de Entrenamiento y Soporte:** ${{training_support_fee}}
 
-### 4.2 Estructura de Regalías
-{{#if royalty_based}}
-**Tasa de Regalías:** {{royalty_rate}}% de Ventas Netas
+### 3.2 Estructura de Regalías
+**Tasa de Regalías:** {{royalty_percentage_rate}}%
+**Base de Regalías:** {{royalty_calculation_base}}
 **Regalía Anual Mínima:** ${{minimum_annual_royalty}}
-**Reporte de Regalías:** {{royalty_reporting_frequency}}
-**Términos de Pago de Regalías:** {{royalty_payment_terms}}
-{{else}}
-Este Contrato está estructurado como una licencia de tarifa fija sin regalías continuas.
-{{/if}}
+**Frecuencia de Pago de Regalías:** {{royalty_payment_schedule}}
 
-### 4.3 Cronograma de Pagos
-| Pago | Monto | Fecha de Vencimiento | Descripción |
-|------|-------|---------------------|-------------|
-| Firma | ${{payment_1_amount}} | Al ejecutar | Tarifa inicial de licencia |
-| {{payment_2_milestone}} | ${{payment_2_amount}} | {{payment_2_date}} | Tarifa de transferencia de tecnología |
-| {{payment_3_milestone}} | ${{payment_3_amount}} | {{payment_3_date}} | Finalización de entrenamiento |
-| Anual | ${{annual_payment}} | {{annual_payment_date}} | Tarifa continua de licencia |
+### 3.3 Pagos de Hitos
+**Hitos de Desarrollo:** {{development_milestone_payments}}
+**Hitos Comerciales:** {{commercial_milestone_structure}}
+**Bonos de Umbral de Ventas:** {{sales_threshold_bonuses}}
+**Incentivos de Rendimiento:** {{performance_incentive_payments}}
 
-### 4.4 Costos Adicionales
-**Procesamiento de Patentes:** {{patent_cost_responsibility}}
-**Cumplimiento Regulatorio:** {{regulatory_cost_responsibility}}
-**Costos de Mejoras:** {{improvement_cost_sharing}}
-**Viajes y Gastos:** {{travel_expense_responsibility}}
+### 3.4 Reportes Financieros
+**Requisitos de Reporte de Ventas:** {{sales_reporting_obligations}}
+**Métodos de Cálculo de Regalías:** {{royalty_calculation_procedures}}
+**Derechos de Auditoría:** {{financial_audit_provisions}}
+**Términos de Pago:** {{payment_terms_conditions}}
 
 ---
 
-## 5. Estándares de Rendimiento e Hitos
+## 4. Proceso de Transferencia de Tecnología
 
-### 5.1 Hitos de Desarrollo
-**Prueba de Concepto:** {{proof_of_concept_date}}
-**Desarrollo de Prototipo:** {{prototype_development_date}}
-**Producción Comercial:** {{commercial_production_date}}
-**Lanzamiento al Mercado:** {{market_launch_date}}
+### 4.1 Plan de Transferencia de Conocimiento
+**Cronograma de Transferencia:** {{technology_transfer_timeline}}
+**Entrega de Documentación:** {{technical_documentation_delivery}}
+**Programa de Entrenamiento:** {{technical_training_program}}
+**Duración de Soporte:** {{post_transfer_support_period}}
 
-### 5.2 Puntos de Referencia de Rendimiento
-**Rendimiento Técnico:** {{technical_performance_standards}}
-**Estándares de Calidad:** {{quality_benchmarks}}
-**Capacidad de Producción:** {{production_capacity_targets}}
-**Hitos Comerciales:** {{commercial_milestones}}
+### 4.2 Documentación Técnica
+**Especificaciones Técnicas:** {{technical_specification_delivery}}
+**Procedimientos Operativos:** {{operating_procedure_documentation}}
+**Estándares de Calidad:** {{quality_standard_documentation}}
+**Protocolos de Seguridad:** {{safety_protocol_information}}
 
-### 5.3 Objetivos de Ventas y Marketing
-{{#if sales_targets}}
-**Objetivo de Ventas Año 1:** ${{year_1_sales_target}}
-**Objetivo de Ventas Año 2:** ${{year_2_sales_target}}
-**Objetivo de Ventas Año 3:** ${{year_3_sales_target}}
-**Metas de Penetración de Mercado:** {{market_penetration_goals}}
-{{/if}}
+### 4.3 Entrenamiento y Soporte
+**Entrenamiento Técnico:** {{technical_training_requirements}}
+**Entrenamiento de Personal:** {{personnel_training_program}}
+**Soporte Continuo:** {{ongoing_technical_support}}
+**Asistencia de Solución de Problemas:** {{troubleshooting_support_terms}}
 
-### 5.4 Reporte de Hitos
-El Licenciatario proporcionará:
-- Reportes mensuales de progreso durante el período de transferencia
-- Actualizaciones trimestrales del estado de hitos
-- Revisiones anuales de rendimiento
-- {{additional_reporting_requirements}}
+### 4.4 Asistencia de Implementación
+**Soporte de Instalación:** {{installation_assistance_scope}}
+**Servicios de Puesta en Marcha:** {{commissioning_service_provision}}
+**Optimización de Procesos:** {{process_optimization_support}}
+**Pruebas de Rendimiento:** {{performance_testing_assistance}}
 
 ---
 
-## 6. Control de Calidad y Estándares
+## 5. Derechos de Fabricación y Producción
 
-### 6.1 Estándares de Calidad
-Los productos deben cumplir o exceder:
-- Especificaciones de calidad del Licenciante
-- Requisitos estándar de la industria
-- Estándares de cumplimiento regulatorio
-- {{additional_quality_requirements}}
+### 5.1 Autorización de Fabricación
+**Derechos de Fabricación:** {{manufacturing_authorization_scope}}
+**Instalaciones de Producción:** {{production_facility_requirements}}
+**Sistemas de Control de Calidad:** {{quality_control_system_requirements}}
+**Estándares de Fabricación:** {{manufacturing_standard_compliance}}
 
-### 6.2 Procedimientos de Control de Calidad
-**Derechos de Inspección:** El Licenciante puede inspeccionar instalaciones con {{inspection_notice_period}} días de aviso
-**Auditorías de Calidad:** {{quality_audit_frequency}} auditorías por año
-**Acciones Correctivas:** {{corrective_action_timeframe}} días para remediar deficiencias
-**Certificaciones de Calidad:** {{required_quality_certifications}}
+### 5.2 Gestión de Cadena de Suministro
+**Calificaciones de Proveedores:** {{supplier_qualification_requirements}}
+**Especificaciones de Materias Primas:** {{raw_material_specification_standards}}
+**Abastecimiento de Componentes:** {{component_sourcing_guidelines}}
+**Seguridad de Cadena de Suministro:** {{supply_chain_security_requirements}}
 
-### 6.3 Estándares de Manufactura
-**Buenas Prácticas de Manufactura:** {{gmp_requirements}}
-**Estándares Ambientales:** {{environmental_compliance}}
-**Requisitos de Seguridad:** {{safety_standards}}
-**Cumplimiento Regulatorio:** {{regulatory_requirements}}
-
-### 6.4 Aprobación de Producto
-{{#if product_approval_required}}
-El Licenciatario debe obtener aprobación del Licenciante antes de:
-- Producción comercial
-- Modificaciones del producto
-- Materiales de marketing
-- {{additional_approval_requirements}}
-{{/if}}
-
----
-
-## 7. Gestión de Propiedad Intelectual
-
-### 7.1 Propiedad de PI Existente
-**PI del Licenciante:** Permanece propiedad del Licenciante
-**PI del Licenciatario:** PI de fondo permanece con el Licenciatario
-**PI Conjunta:** {{joint_ip_ownership_terms}}
-
-### 7.2 Mejoras y Desarrollos
-**Mejoras del Licenciante:** {{licensor_improvement_rights}}
-**Mejoras del Licenciatario:** {{licensee_improvement_ownership}}
-**Mejoras Conjuntas:** {{joint_improvement_terms}}
-**Licenciamiento de Mejoras:** {{improvement_licensing_terms}}
-
-### 7.3 Procesamiento y Mantenimiento de Patentes
-**Responsabilidad:** {{patent_maintenance_responsibility}}
-**Participación en Costos:** {{patent_cost_sharing}}
-**Autoridad de Decisión:** {{patent_decision_authority}}
-**Estrategia de Procesamiento:** {{patent_prosecution_strategy}}
-
-### 7.4 Protección y Cumplimiento de PI
-**Notificación de Infracción:** {{infringement_notification_timeframe}} días
-**Acción de Cumplimiento:** {{enforcement_action_responsibility}}
-**Costos Legales:** {{legal_cost_sharing}}
-**Autoridad de Arreglo:** {{settlement_authority}}
-
----
-
-## 8. Cumplimiento Regulatorio
-
-### 8.1 Aprobaciones Regulatorias
-**Aprobaciones Requeridas:** {{required_regulatory_approvals}}
-**Responsabilidad de Aprobación:** {{approval_responsibility}}
-**Cronograma de Aprobación:** {{approval_timeline}}
-**Estrategia Regulatoria:** {{regulatory_strategy}}
-
-### 8.2 Estándares de Cumplimiento
-**Cumplimiento FDA:** {{fda_compliance_requirements}}
-**Estándares Internacionales:** {{international_compliance}}
-**Regulaciones Ambientales:** {{environmental_regulations}}
-**Regulaciones de Seguridad:** {{safety_regulatory_compliance}}
-
-### 8.3 Reporte Regulatorio
-**Eventos Adversos:** {{adverse_event_reporting}}
-**Actualizaciones de Seguridad:** {{safety_update_requirements}}
-**Correspondencia Regulatoria:** {{regulatory_correspondence_sharing}}
+### 5.3 Aseguramiento de Calidad
+**Sistemas de Gestión de Calidad:** {{quality_management_requirements}}
+**Protocolos de Prueba:** {{testing_protocol_specifications}}
+**Certificación de Productos:** {{product_certification_requirements}}
 **Monitoreo de Cumplimiento:** {{compliance_monitoring_procedures}}
 
-### 8.4 Asignación de Costos Regulatorios
-**Aprobaciones Iniciales:** {{initial_approval_costs}}
-**Cumplimiento Continuo:** {{ongoing_compliance_costs}}
-**Cambios Regulatorios:** {{regulatory_change_costs}}
-**Aprobaciones Internacionales:** {{international_approval_costs}}
+### 5.4 Escalamiento de Producción
+**Construcción de Capacidad:** {{production_capacity_development}}
+**Soporte de Escalamiento:** {{manufacturing_scale_up_assistance}}
+**Optimización de Procesos:** {{production_process_optimization}}
+**Mejoras de Eficiencia:** {{manufacturing_efficiency_enhancement}}
 
 ---
 
-## 9. Apoyo Técnico y Entrenamiento
+## 6. Comercialización y Desarrollo de Mercado
 
-### 9.1 Programa de Entrenamiento Inicial
-**Currículo de Entrenamiento:** {{training_curriculum}}
-**Duración:** {{training_duration}} semanas
-**Ubicación:** {{training_location}}
-**Calificaciones de Aprendices:** {{trainee_requirements}}
+### 6.1 Derechos de Mercado y Territorios
+**Territorio de Mercado:** {{commercialization_territory_definition}}
+**Segmentos de Mercado:** {{target_market_segments}}
+**Clasificaciones de Clientes:** {{customer_classification_rights}}
+**Canales de Distribución:** {{distribution_channel_permissions}}
 
-### 9.2 Apoyo Técnico Continuo
-**Período de Apoyo:** {{ongoing_support_period}} meses
-**Alcance del Apoyo:** {{support_scope}}
-**Tiempos de Respuesta:** {{support_response_times}}
-**Canales de Apoyo:** {{support_channels}}
+### 6.2 Marketing y Promoción
+**Derechos de Marketing:** {{marketing_rights_allocation}}
+**Uso de Marca:** {{brand_usage_permissions}}
+**Actividades Promocionales:** {{promotional_activity_rights}}
+**Oportunidades de Co-marketing:** {{co_marketing_collaboration}}
 
-### 9.3 Transferencia de Conocimiento
-**Transferencia de Documentación:** {{documentation_transfer_scope}}
-**Transferencia de Procesos:** {{process_transfer_details}}
-**Intercambio de Personal:** {{personnel_exchange_terms}}
-**Compartir Mejores Prácticas:** {{best_practices_sharing}}
+### 6.3 Ventas y Distribución
+**Gestión de Canales de Ventas:** {{sales_channel_management_rights}}
+**Relaciones con Distribuidores:** {{distributor_relationship_management}}
+**Autoridad de Precios:** {{pricing_authority_allocation}}
+**Gestión de Relaciones con Clientes:** {{customer_relationship_responsibilities}}
 
-### 9.4 Mejora Continua
-**Actualizaciones de Tecnología:** {{technology_update_terms}}
-**Mejoras de Procesos:** {{process_improvement_sharing}}
-**Colaboración en Innovación:** {{innovation_collaboration}}
-**Cooperación en Investigación:** {{research_cooperation_terms}}
+### 6.4 Desarrollo Comercial
+**Obligaciones de Desarrollo de Mercado:** {{market_development_requirements}}
+**Soporte de Lanzamiento Comercial:** {{commercial_launch_assistance}}
+**Desarrollo de Negocios:** {{business_development_collaboration}}
+**Asociaciones Estratégicas:** {{strategic_partnership_development}}
+
+---
+
+## 7. Colaboración en Investigación y Desarrollo
+
+### 7.1 Actividades de Investigación Conjunta
+**Alcance de Investigación Colaborativa:** {{collaborative_research_definition}}
+**Objetivos de Investigación:** {{joint_research_objectives}}
+**Asignación de Recursos:** {{research_resource_allocation}}
+**Cronograma de Investigación:** {{research_development_timeline}}
+
+### 7.2 Responsabilidades de Desarrollo
+**Obligaciones de Desarrollo del Licenciante:** {{licensor_development_responsibilities}}
+**Contribuciones de Desarrollo del Licenciatario:** {{licensee_development_obligations}}
+**Costos de Desarrollo Compartidos:** {{shared_development_cost_allocation}}
+**Gestión de Hitos de Desarrollo:** {{development_milestone_coordination}}
+
+### 7.3 Propiedad Intelectual de Colaboración
+**Propiedad de PI Conjunta:** {{joint_ip_ownership_terms}}
+**Derechos de PI Individual:** {{individual_ip_rights_allocation}}
+**Protección de PI de Fondo:** {{background_ip_protection}}
+**Gestión de PI de Primer Plano:** {{foreground_ip_development_rights}}
+
+### 7.4 Innovación y Mejoras
+**Programas de Mejora de Tecnología:** {{technology_enhancement_initiatives}}
+**Compartir Innovación:** {{innovation_sharing_protocols}}
+**Integración de Mejoras:** {{improvement_integration_procedures}}
+**Desarrollo de Próxima Generación:** {{next_generation_technology_development}}
+
+---
+
+## 8. Obligaciones de Rendimiento y Hitos
+
+### 8.1 Requisitos de Rendimiento Comercial
+**Objetivos Mínimos de Ventas:** {{minimum_sales_performance_targets}}
+**Metas de Penetración de Mercado:** {{market_penetration_objectives}}
+**Cronograma de Lanzamiento Comercial:** {{commercial_launch_requirements}}
+**Períodos de Revisión de Rendimiento:** {{performance_review_schedule}}
+
+### 8.2 Estándares de Rendimiento Técnico
+**Métricas de Rendimiento Técnico:** {{technical_performance_standards}}
+**Puntos de Referencia de Calidad:** {{quality_performance_benchmarks}}
+**Requisitos de Confiabilidad:** {{reliability_performance_standards}}
+**Estándares de Rendimiento de Seguridad:** {{safety_performance_requirements}}
+
+### 8.3 Hitos de Desarrollo
+**Hitos de Desarrollo de Tecnología:** {{technology_development_milestones}}
+**Objetivos de Desarrollo de Productos:** {{product_development_timeline}}
+**Hitos de Aprobación Regulatoria:** {{regulatory_approval_targets}}
+**Hitos de Entrada al Mercado:** {{market_entry_timeline}}
+
+### 8.4 Consecuencias de No Rendimiento
+**Remediación de Rendimiento:** {{performance_remediation_procedures}}
+**Planes de Mejora:** {{performance_improvement_requirements}}
+**Disposiciones de Penalidad:** {{performance_penalty_structure}}
+**Terminación por No Rendimiento:** {{non_performance_termination_rights}}
+
+---
+
+## 9. Cumplimiento Regulatorio y Aprobaciones
+
+### 9.1 Requisitos Regulatorios
+**Regulaciones Aplicables:** {{applicable_regulatory_framework}}
+**Obligaciones de Cumplimiento:** {{regulatory_compliance_responsibilities}}
+**Requisitos de Aprobación:** {{regulatory_approval_requirements}}
+**Estándares de Documentación:** {{regulatory_documentation_standards}}
+
+### 9.2 Aprobaciones de Productos
+**Registro de Productos:** {{product_registration_requirements}}
+**Procesos de Certificación:** {{certification_process_management}}
+**Pruebas y Validación:** {{regulatory_testing_requirements}}
+**Gestión de Cronograma de Aprobación:** {{approval_timeline_coordination}}
+
+### 9.3 Monitoreo de Cumplimiento
+**Procedimientos de Auditoría de Cumplimiento:** {{compliance_audit_requirements}}
+**Obligaciones de Reporte:** {{regulatory_reporting_obligations}}
+**Respuesta a Violaciones:** {{regulatory_violation_procedures}}
+**Planes de Acción Correctiva:** {{corrective_action_implementation}}
+
+### 9.4 Cumplimiento Internacional
+**Cumplimiento Multi-Jurisdiccional:** {{international_compliance_requirements}}
+**Cumplimiento de Control de Exportaciones:** {{export_control_obligations}}
+**Regulaciones de Importación:** {{import_regulation_compliance}}
+**Reglas de Transferencia Transfronteriza:** {{cross_border_transfer_regulations}}
 
 ---
 
 ## 10. Confidencialidad y Secretos Comerciales
 
-### 10.1 Información Confidencial
-Ambas partes acuerdan proteger:
-- Especificaciones técnicas y datos
-- Procesos de manufactura y conocimientos técnicos
-- Información comercial y financiera
-- Información de clientes y proveedores
-- {{additional_confidential_categories}}
+### 10.1 Definición de Información Confidencial
+**Alcance de Información Confidencial:** {{confidential_information_definition}}
+**Protección de Secretos Comerciales:** {{trade_secret_protection_requirements}}
+**Información Propietaria:** {{proprietary_information_classification}}
+**Confidencialidad de Datos Técnicos:** {{technical_data_confidentiality_terms}}
 
-### 10.2 Obligaciones de Protección
-**Medidas de Seguridad:** {{security_measures_required}}
-**Restricciones de Acceso:** {{access_restriction_requirements}}
-**Entrenamiento de Empleados:** {{employee_confidentiality_training}}
-**Acuerdos con Terceros:** {{third_party_confidentiality}}
+### 10.2 Obligaciones de Confidencialidad
+**Requisitos de No Divulgación:** {{non_disclosure_obligation_scope}}
+**Controles de Acceso a Información:** {{information_access_control_procedures}}
+**Confidencialidad de Empleados:** {{employee_confidentiality_requirements}}
+**Confidencialidad de Terceros:** {{third_party_confidentiality_obligations}}
 
-### 10.3 Protección de Secretos Comerciales
-**Identificación:** {{trade_secret_identification}}
-**Requisitos de Marcado:** {{trade_secret_marking}}
-**Controles de Acceso:** {{trade_secret_access_controls}}
-**Notificación de Violación:** {{trade_secret_breach_notification}}
+### 10.3 Seguridad de la Información
+**Medidas de Seguridad de Datos:** {{data_security_requirement_standards}}
+**Seguridad de Sistemas de Información:** {{information_system_security_protocols}}
+**Requisitos de Seguridad Física:** {{physical_security_obligations}}
+**Protecciones de Ciberseguridad:** {{cybersecurity_protection_requirements}}
 
 ### 10.4 Devolución de Información
-Al terminar:
-- Toda información confidencial debe devolverse
-- Las copias deben destruirse o devolverse
-- El acceso debe terminarse
-- {{information_return_requirements}}
+**Procedimientos de Devolución de Información:** {{confidential_information_return}}
+**Requisitos de Destrucción de Datos:** {{data_destruction_procedures}}
+**Confidencialidad Continua:** {{post_agreement_confidentiality}}
+**Archivo y Retención:** {{information_retention_policies}}
 
 ---
 
-## 11. Obligaciones de Rendimiento
+## 11. Protección de Propiedad Intelectual
 
-### 11.1 Obligaciones del Licenciante
-El Licenciante deberá:
-- Transferir documentación completa de tecnología
-- Proporcionar entrenamiento y apoyo inicial
-- Mantener protección de patentes
-- Compartir mejoras relevantes
-- {{additional_licensor_obligations}}
+### 11.1 Protección y Procesamiento de Patentes
+**Responsabilidades de Procesamiento de Patentes:** {{patent_prosecution_obligations}}
+**Mantenimiento de Patentes:** {{patent_maintenance_responsibilities}}
+**Protección Internacional de Patentes:** {{international_patent_strategy}}
+**Gestión de Portafolio de Patentes:** {{patent_portfolio_management}}
 
-### 11.2 Obligaciones del Licenciatario
-El Licenciatario deberá:
-- Implementar tecnología según estándares
-- Cumplir hitos de rendimiento
-- Pagar todas las tarifas cuando venzan
-- Mantener estándares de calidad
-- {{additional_licensee_obligations}}
+### 11.2 Protección de Marcas Comerciales y Marca
+**Derechos de Uso de Marcas Comerciales:** {{trademark_usage_permissions}}
+**Obligaciones de Protección de Marca:** {{brand_protection_responsibilities}}
+**Registro de Marcas Comerciales:** {{trademark_registration_requirements}}
+**Cumplimiento de Marca:** {{brand_compliance_standards}}
 
-### 11.3 Requisitos de Diligencia
-**Diligencia de Desarrollo:** {{development_diligence_requirements}}
-**Diligencia Comercial:** {{commercial_diligence_requirements}}
-**Esfuerzos de Marketing:** {{marketing_effort_requirements}}
-**Compromisos de Inversión:** {{investment_commitment_requirements}}
+### 11.3 Derechos de Autor y Documentación
+**Propiedad de Derechos de Autor:** {{copyright_ownership_allocation}}
+**Derechos de Documentación:** {{technical_documentation_rights}}
+**Licenciamiento de Software:** {{software_licensing_terms}}
+**Derechos de Uso de Contenido:** {{content_usage_permissions}}
 
-### 11.4 Reporte de Progreso
-**Frecuencia de Reporte:** {{progress_reporting_frequency}}
-**Contenido del Reporte:** {{progress_report_content}}
-**Métricas de Rendimiento:** {{performance_metrics}}
-**Acciones Remediales:** {{remedial_action_procedures}}
+### 11.4 Protección contra Infracción
+**Detección de Infracción:** {{infringement_detection_procedures}}
+**Acciones de Cumplimiento:** {{ip_enforcement_responsibilities}}
+**Obligaciones de Defensa:** {{ip_defense_obligations}}
+**Respuesta a Infracción:** {{infringement_response_procedures}}
 
 ---
 
-## 12. Garantía y Responsabilidad
+## 12. Terminación y Transición
 
-### 12.1 Garantías de Tecnología
-El Licenciante garantiza que:
-- Tiene el derecho de otorgar la licencia
-- La Tecnología no infringe derechos de terceros
-- La Tecnología es como se describe en documentación
-- {{additional_technology_warranties}}
+### 12.1 Derechos de Terminación
+**Terminación por Conveniencia:** {{termination_convenience_provisions}}
+**Terminación por Causa:** {{termination_cause_events}}
+**Terminación por Incumplimiento Material:** {{material_breach_termination}}
+**Terminación por Insolvencia:** {{insolvency_termination_rights}}
 
-### 12.2 Garantías de Rendimiento
-{{#if performance_warranties}}
-El Licenciante garantiza que la Tecnología:
-- Cumplirá criterios de rendimiento especificados
-- Funcionará como se describe en documentación
-- Logrará objetivos comerciales declarados
-- {{additional_performance_warranties}}
-{{else}}
-LA TECNOLOGÍA SE PROPORCIONA "COMO ESTÁ" SIN GARANTÍAS DE RENDIMIENTO.
-{{/if}}
+### 12.2 Procedimientos de Terminación
+**Requisitos de Aviso de Terminación:** {{termination_notice_procedures}}
+**Período de Cierre:** {{agreement_wind_down_period}}
+**Transferencia de Activos:** {{technology_asset_transfer}}
+**Entregables Finales:** {{final_deliverable_requirements}}
 
-### 12.3 Limitación de Responsabilidad
-**Límite de Responsabilidad:** {{liability_cap_amount}} o total de tarifas pagadas, lo que sea mayor
-**Daños Excluidos:** Daños indirectos, consecuenciales, punitivos
-**Excepciones:** {{liability_exceptions}}
+### 12.3 Obligaciones Post-Terminación
+**Obligaciones Continuas:** {{post_termination_obligations}}
+**Devolución de Tecnología:** {{technology_return_requirements}}
+**Continuación de Confidencialidad:** {{post_termination_confidentiality}}
+**Restricciones de No Competencia:** {{post_termination_non_compete}}
 
-### 12.4 Indemnización
-**El Licenciante Indemniza:** Reclamos de infracción de PI
-**El Licenciatario Indemniza:** Reclamos de responsabilidad del producto
-**Indemnización Mutua:** {{mutual_indemnification_terms}}
+### 12.4 Soporte de Transición
+**Transición de Tecnología:** {{technology_transition_assistance}}
+**Transferencia de Conocimiento:** {{post_termination_knowledge_transfer}}
+**Transición de Clientes:** {{customer_transition_support}}
+**Transición Regulatoria:** {{regulatory_transition_assistance}}
 
 ---
 
-## 13. Término y Terminación
+## 13. Garantías y Representaciones
 
-### 13.1 Término del Contrato
-**Término Inicial:** {{initial_term}} años
-**Términos de Renovación:** períodos de {{renewal_term_years}} años
-**Renovación Automática:** {{automatic_renewal_terms}}
+### 13.1 Garantías del Licenciante
+**Propiedad de Tecnología:** {{technology_ownership_warranty}}
+**No Infracción:** {{non_infringement_warranty}}
+**Funcionalidad de Tecnología:** {{technology_functionality_warranty}}
+**Cumplimiento Regulatorio:** {{regulatory_compliance_warranty}}
 
-### 13.2 Derechos de Terminación
-**Terminación por Causa:** {{termination_cause_notice}} días de aviso
-**Terminación por Conveniencia:** {{termination_convenience_notice}} días de aviso
-**Eventos Específicos de Terminación:** {{specific_termination_events}}
+### 13.2 Garantías del Licenciatario
+**Autoridad Corporativa:** {{licensee_authority_warranty}}
+**Capacidad de Cumplimiento:** {{compliance_capability_warranty}}
+**Capacidad Financiera:** {{financial_capability_warranty}}
+**Capacidad Técnica:** {{technical_capability_warranty}}
 
-### 13.3 Consecuencias de Terminación
-Al terminar:
-- Los derechos de licencia terminan inmediatamente
-- Las obligaciones de confidencialidad sobreviven
-- Se requiere devolución de información confidencial
-- {{additional_termination_consequences}}
+### 13.3 Garantías Mutuas
+**Cumplimiento Legal:** {{mutual_legal_compliance_warranty}}
+**Rendimiento de Buena Fe:** {{good_faith_performance_warranty}}
+**Información Precisa:** {{accurate_information_warranty}}
+**Conducta Profesional:** {{professional_conduct_warranty}}
 
-### 13.4 Derechos Post-Terminación
-**Período de Liquidación:** {{sell_off_period}} meses
-**Inventario Existente:** {{existing_inventory_rights}}
-**Apoyo al Cliente:** {{post_termination_support}}
-**Asistencia de Transición:** {{transition_assistance_terms}}
+### 13.4 Exenciones de Garantía
+**Exenciones de Rendimiento de Tecnología:** {{technology_performance_disclaimers}}
+**Exenciones de Éxito de Mercado:** {{market_success_disclaimers}}
+**Exenciones de Aprobación Regulatoria:** {{regulatory_approval_disclaimers}}
+**Exenciones de Derechos de Terceros:** {{third_party_rights_disclaimers}}
 
 ---
 
@@ -429,11 +390,11 @@ Las disputas se resolverán a través de arbitraje vinculante en {{arbitration_l
 Las disputas se resolverán en las cortes de {{jurisdiction}}.
 {{/if}}
 
-### 14.3 Fuerza Mayor
-Ninguna parte será responsable por retrasos debido a circunstancias fuera de su control razonable.
+### 14.3 Acuerdo Completo
+Este Contrato constituye el acuerdo completo y reemplaza todas las negociaciones previas.
 
-### 14.4 Controles de Exportación
-Ambas partes acuerdan cumplir con todas las leyes y regulaciones aplicables de control de exportación.
+### 14.4 Modificación
+Este Contrato solo puede modificarse por acuerdo escrito firmado por ambas partes.
 
 ### 14.5 Cesión
 {{#if assignment_permitted}}
@@ -441,6 +402,18 @@ Este Contrato puede cederse con consentimiento escrito de ambas partes.
 {{else}}
 Este Contrato no puede cederse sin consentimiento escrito de ambas partes.
 {{/if}}
+
+### 14.6 Divisibilidad
+Si alguna disposición se considera inválida, el resto permanecerá en pleno vigor y efecto.
+
+### 14.7 Fuerza Mayor
+Ninguna parte será responsable por retrasos debido a circunstancias fuera de su control razonable.
+
+### 14.8 Notificaciones
+Todas las notificaciones se entregarán por escrito a las direcciones especificadas aquí.
+
+### 14.9 Controles de Exportación
+Ambas partes cumplirán con todas las regulaciones aplicables de control de exportaciones y comercio internacional.
 
 ---
 
@@ -455,7 +428,7 @@ Este Contrato no puede cederse sin consentimiento escrito de ambas partes.
 | _________________________________ | _____________ |
 | {{licensor_name}} | |
 | Por: {{licensor_signatory}} | |
-| Título: {{licensor_title}} | |
+| Título: {{licensor_signatory_title}} | |
 
 **LICENCIATARIO:**
 
@@ -464,10 +437,10 @@ Este Contrato no puede cederse sin consentimiento escrito de ambas partes.
 | _________________________________ | _____________ |
 | {{licensee_name}} | |
 | Por: {{licensee_signatory}} | |
-| Título: {{licensee_title}} | |
+| Título: {{licensee_signatory_title}} | |
 
 ---
 
-**AVISO LEGAL IMPORTANTE:** Este contrato de transferencia de tecnología involucra consideraciones complejas de propiedad intelectual, regulatorias y comerciales. Debe ser revisado por profesionales legales, técnicos y comerciales calificados para asegurar cumplimiento con leyes aplicables y protección apropiada de intereses.
+**AVISO LEGAL IMPORTANTE:** Este contrato de transferencia de tecnología involucra consideraciones complejas de propiedad intelectual, licenciamiento y comerciales. Debe ser revisado por profesionales legales, técnicos y comerciales calificados para asegurar la protección apropiada de derechos de tecnología, cumplimiento con regulaciones aplicables y logro de objetivos comerciales.
 
 *Plantilla generada por 123LegalDoc - Plataforma Profesional de Documentos Legales*

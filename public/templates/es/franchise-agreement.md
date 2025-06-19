@@ -8,339 +8,414 @@ Este Contrato de Franquicia ("Contrato") se celebra el **{{agreement_date}}**, e
 
 - **Franquiciador:** {{franchisor_name}}, una {{franchisor_entity_type}} organizada bajo las leyes de {{franchisor_state}}, con su lugar principal de negocios en {{franchisor_address}}
 
-- **Franquiciatario:** {{franchisee_name}}, una {{franchisee_entity_type}} organizada bajo las leyes de {{franchisee_state}}, con su lugar principal de negocios en {{franchisee_address}}
+- **Franquiciado:** {{franchisee_name}}, una {{franchisee_entity_type}} organizada bajo las leyes de {{franchisee_state}}, con su lugar principal de negocios en {{franchisee_address}}
 
-Referidas colectivamente como las "Partes".
+Referidas colectivamente como las "Partes."
 
 ---
 
 ## 1. Otorgamiento de Franquicia
 
-### 1.1 Concesión de Franquicia
-El Franquiciador por la presente otorga al Franquiciatario una franquicia para operar un negocio bajo el nombre comercial y sistema de {{franchise_brand_name}} (el "Sistema") en el territorio especificado aquí.
+### 1.1 Derechos de Franquicia
+**Otorgamiento de Franquicia:** {{franchise_grant_description}}
+**Sistema de Negocio:** {{franchise_business_system}}
+**Nombre de Marca:** {{franchise_brand_name}}
+**Marcas de Servicio:** {{franchise_service_marks}}
 
-### 1.2 Descripción del Negocio
-**Tipo de Negocio:** {{business_type}}
-**Descripción de Productos/Servicios:** {{products_services_description}}
-**Concepto de Negocio:** {{business_concept}}
+### 1.2 Territorio de Franquicia
+**Territorio Exclusivo:** {{exclusive_territory_boundaries}}
+**Área Protegida:** {{protected_area_description}}
+**Restricciones Territoriales:** {{territory_restrictions}}
+**Zona de No Competencia:** {{non_compete_zone_definition}}
 
-### 1.3 Marcas Registradas y Propiedad Intelectual
-Esta franquicia incluye el derecho a usar:
-- **Nombre Comercial:** {{trade_name}}
-- **Marcas Registradas:** {{trademarks}}
-- **Logotipos y Diseños:** {{logos_designs}}
-- **Manuales Operativos:** {{operating_manuals}}
-- **Sistemas Propietarios:** {{proprietary_systems}}
+### 1.3 Ubicación de la Franquicia
+**Ubicación Aprobada:** {{franchise_location_address}}
+**Requisitos del Sitio:** {{site_requirements_specifications}}
+**Aprobación de Ubicación:** {{location_approval_procedures}}
+**Derechos de Reubicación:** {{relocation_rights_provisions}}
 
-### 1.4 Territorio
-**Territorio Protegido:** {{protected_territory}}
-**Restricciones Territoriales:** {{territorial_restrictions}}
-**Derechos de Expansión:** {{expansion_rights}}
-
----
-
-## 2. Término y Renovación
-
-### 2.1 Término Inicial
-**Fecha de Inicio:** {{commencement_date}}
-**Término Inicial:** {{initial_term}} años
-**Fecha de Expiración:** {{expiration_date}}
-
-### 2.2 Opciones de Renovación
-{{#if renewal_options}}
-**Períodos de Renovación:** {{number_of_renewals}} períodos de {{renewal_term}} años cada uno
-**Aviso de Renovación:** {{renewal_notice_period}} meses antes de la expiración
-**Condiciones de Renovación:**
-- {{renewal_condition_1}}
-- {{renewal_condition_2}}
-- {{renewal_condition_3}}
-- Pago de tarifa de renovación de ${{renewal_fee}}
-{{/if}}
-
-### 2.3 Requisitos para Renovación
-Para renovar esta franquicia, el Franquiciatario debe:
-- Estar en cumplimiento sustancial con todos los términos del contrato
-- Satisfacer estándares operativos y financieros actuales
-- Completar cualquier remodelación requerida
-- Firmar el contrato de franquicia estándar entonces vigente
+### 1.4 Término de la Franquicia
+**Término Inicial:** {{initial_franchise_term}} años
+**Fecha de Inicio:** {{franchise_commencement_date}}
+**Términos de Renovación:** {{renewal_term_options}}
+**Extensiones del Término:** {{term_extension_provisions}}
 
 ---
 
-## 3. Tarifas e Inversión
+## 2. Tarifas y Regalías
 
-### 3.1 Tarifa Inicial de Franquicia
+### 2.1 Tarifa Inicial de Franquicia
 **Tarifa de Franquicia:** ${{initial_franchise_fee}}
-**Fecha de Vencimiento:** Al firmar este contrato
-**No Reembolsable:** Esta tarifa no es reembolsable bajo ninguna circunstancia
+**Términos de Pago:** {{franchise_fee_payment_terms}}
+**Cobertura de la Tarifa:** {{franchise_fee_coverage}}
+**No Reembolsable:** {{fee_refund_policy}}
 
-### 3.2 Regalías Continuas
-**Regalía de Franquicia:** {{royalty_percentage}}% de Ventas Brutas mensuales
-**Fecha de Vencimiento:** El {{payment_due_date}} de cada mes
-**Ventas Brutas Definidas:** {{gross_sales_definition}}
+### 2.2 Regalías Continuas
+**Tasa de Regalías:** {{royalty_percentage}}% de Ingresos Brutos
+**Frecuencia de Pago:** {{royalty_payment_frequency}}
+**Método de Cálculo:** {{royalty_calculation_method}}
+**Regalías Mínimas:** ${{minimum_royalty_amount}}
 
-### 3.3 Tarifa de Marketing/Publicidad
-**Fondo de Marketing:** {{marketing_fee_percentage}}% de Ventas Brutas mensuales
-**Fondo Nacional de Publicidad:** {{national_advertising_percentage}}%
-**Fondo Local de Marketing:** {{local_marketing_percentage}}%
+### 2.3 Tarifas de Marketing
+**Fondo de Marketing:** {{marketing_fund_percentage}}% de Ingresos Brutos
+**Publicidad Local:** {{local_advertising_requirement}}%
+**Publicidad Cooperativa:** {{coop_advertising_participation}}
+**Aprobación de Marketing:** {{marketing_approval_requirements}}
 
-### 3.4 Inversión Inicial Estimada
-**Inversión Total Estimada:** ${{total_investment_low}} - ${{total_investment_high}}
-
-**Desglose de Inversión:**
-- **Tarifa de Franquicia:** ${{franchise_fee}}
-- **Equipo y Suministros:** ${{equipment_supplies}}
-- **Mejoras del Local:** ${{leasehold_improvements}}
-- **Inventario Inicial:** ${{initial_inventory}}
-- **Señalización:** ${{signage_costs}}
-- **Entrenamiento y Viaje:** ${{training_travel}}
-- **Capital de Trabajo:** ${{working_capital}}
-- **Otros Costos:** ${{other_costs}}
-
-### 3.5 Financiamiento
-{{#if financing_available}}
-**Asistencia de Financiamiento:** El Franquiciador puede ayudar a facilitar financiamiento a través de terceros aprobados.
-**Términos de Financiamiento:** {{financing_terms}}
-{{else}}
-**Financiamiento:** El Franquiciatario es responsable de obtener todo el financiamiento necesario.
-{{/if}}
+### 2.4 Tarifas Adicionales
+**Tarifas de Tecnología:** ${{technology_fee_amount}}
+**Tarifas de Capacitación:** ${{additional_training_fees}}
+**Tarifas de Transferencia:** ${{transfer_fee_amount}}
+**Otras Tarifas:** {{other_fee_descriptions}}
 
 ---
 
-## 4. Ubicación y Desarrollo
+## 3. Obligaciones del Franquiciador
 
-### 4.1 Selección de Sitio
-**Responsabilidad de Sitio:** {{site_selection_responsibility}}
-**Criterios de Ubicación:** {{location_criteria}}
-**Proceso de Aprobación:** {{approval_process}}
+### 3.1 Apoyo Inicial
+**Selección del Sitio:** {{site_selection_assistance}}
+**Capacitación Inicial:** {{initial_training_program}}
+**Asistencia de Apertura:** {{grand_opening_support}}
+**Inventario Inicial:** {{initial_inventory_assistance}}
 
-### 4.2 Desarrollo de la Unidad
-**Cronograma de Desarrollo:**
-- **Ubicación Asegurada:** Dentro de {{site_securing_days}} días
-- **Inicio de Construcción:** Dentro de {{construction_start_days}} días
-- **Apertura de Negocio:** Dentro de {{opening_days}} días
+### 3.2 Apoyo Continuo
+**Apoyo Operacional:** {{ongoing_operations_support}}
+**Apoyo de Marketing:** {{ongoing_marketing_support}}
+**Programas de Capacitación:** {{continuing_training_programs}}
+**Consultoría Empresarial:** {{business_consultation_services}}
 
-### 4.3 Especificaciones de Construcción
-**Planos y Especificaciones:** {{construction_specifications}}
-**Contratistas Aprobados:** {{approved_contractors}}
-**Estándares de Diseño:** {{design_standards}}
+### 3.3 Desarrollo del Sistema
+**Desarrollo de Productos:** {{product_development_obligations}}
+**Actualizaciones Tecnológicas:** {{technology_update_provisions}}
+**Mejoras del Sistema:** {{system_improvement_commitments}}
+**Mejora de la Marca:** {{brand_enhancement_efforts}}
 
-### 4.4 Equipos y Suministros
-**Proveedores Aprobados:** {{approved_suppliers}}
-**Especificaciones de Equipo:** {{equipment_specifications}}
-**Requisitos de Inventario:** {{inventory_requirements}}
-
----
-
-## 5. Entrenamiento y Apoyo
-
-### 5.1 Entrenamiento Inicial
-**Programa de Entrenamiento:** {{training_program_duration}} horas/días
-**Ubicación del Entrenamiento:** {{training_location}}
-**Asistentes Requeridos:** {{required_attendees}}
-**Costos Cubiertos:** {{training_costs_covered}}
-
-### 5.2 Entrenamiento Continuo
-**Programas de Educación Continua:** {{continuing_education}}
-**Entrenamientos de Actualización:** {{refresher_training}}
-**Nuevos Programas/Productos:** {{new_program_training}}
-
-### 5.3 Apoyo Operativo
-**Asistencia de Apertura:** {{opening_assistance}}
-**Visitas de Campo:** {{field_visits_frequency}}
-**Soporte Técnico:** {{technical_support}}
-**Consultoría de Negocio:** {{business_consulting}}
-
-### 5.4 Materiales de Marketing
-**Materiales Proporcionados:** {{marketing_materials_provided}}
-**Campañas Publicitarias:** {{advertising_campaigns}}
-**Presencia Digital:** {{digital_presence_support}}
+### 3.4 Manual y Estándares
+**Manual de Operaciones:** {{operations_manual_provision}}
+**Actualizaciones del Manual:** {{manual_update_procedures}}
+**Mantenimiento de Estándares:** {{standards_maintenance_obligations}}
+**Control de Calidad:** {{quality_control_systems}}
 
 ---
 
-## 6. Estándares Operativos
+## 4. Obligaciones del Franquiciado
 
-### 6.1 Horarios de Operación
-**Horarios Mínimos:** {{minimum_operating_hours}}
-**Días de Operación:** {{operating_days}}
-**Horarios de Temporada:** {{seasonal_hours}}
+### 4.1 Operaciones del Negocio
+**Estándares Operativos:** {{operating_standards_compliance}}
+**Horario de Negocios:** {{required_business_hours}}
+**Requisitos de Personal:** {{minimum_staffing_requirements}}
+**Estándares de Servicio:** {{service_standard_requirements}}
 
-### 6.2 Estándares de Calidad
-**Especificaciones de Producto:** {{product_specifications}}
-**Estándares de Servicio:** {{service_standards}}
-**Procedimientos Operativos:** {{operating_procedures}}
+### 4.2 Obligaciones Financieras
+**Requisitos de Capital:** ${{minimum_capital_requirements}}
+**Capital de Trabajo:** ${{working_capital_requirements}}
+**Reportes Financieros:** {{financial_reporting_obligations}}
+**Obligaciones de Pago:** {{payment_obligation_terms}}
 
-### 6.3 Personal
-**Requisitos de Personal:** {{staffing_requirements}}
-**Entrenamiento de Empleados:** {{employee_training}}
-**Estándares de Uniforme:** {{uniform_standards}}
+### 4.3 Requisitos de Cumplimiento
+**Cumplimiento del Sistema:** {{franchise_system_compliance}}
+**Cumplimiento Legal:** {{legal_compliance_obligations}}
+**Requisitos de Seguro:** {{insurance_requirement_details}}
+**Mantenimiento de Permisos:** {{permit_maintenance_obligations}}
 
-### 6.4 Inventario y Suministros
-**Niveles Mínimos de Inventario:** {{minimum_inventory}}
-**Frecuencia de Pedidos:** {{ordering_frequency}}
-**Proveedores Autorizados:** {{authorized_vendors}}
+### 4.4 Obligaciones de Marketing
+**Marketing Local:** {{local_marketing_obligations}}
+**Gran Apertura:** {{grand_opening_requirements}}
+**Participación Promocional:** {{promotional_participation_requirements}}
+**Estándares de Marca:** {{brand_standard_compliance}}
+
+---
+
+## 5. Propiedad Intelectual
+
+### 5.1 Licencia de Marca Comercial
+**Marcas Licenciadas:** {{licensed_trademark_list}}
+**Derechos de Uso:** {{trademark_usage_rights}}
+**Estándares de Calidad:** {{trademark_quality_standards}}
+**Restricciones de Uso:** {{trademark_usage_restrictions}}
+
+### 5.2 Secretos Comerciales
+**Información Confidencial:** {{confidential_information_definition}}
+**Conocimiento del Sistema:** {{system_knowledge_protection}}
+**Métodos Propietarios:** {{proprietary_method_protection}}
+**No Divulgación:** {{non_disclosure_obligations}}
+
+### 5.3 Materiales con Derechos de Autor
+**Materiales Licenciados:** {{licensed_copyright_materials}}
+**Permisos de Uso:** {{copyright_usage_permissions}}
+**Derechos de Modificación:** {{copyright_modification_rights}}
+**Propiedad:** {{copyright_ownership_provisions}}
+
+### 5.4 Protección de PI
+**Obligaciones de Protección:** {{ip_protection_obligations}}
+**Reporte de Infracciones:** {{infringement_reporting_procedures}}
+**Cooperación en Aplicación:** {{enforcement_cooperation_requirements}}
+**Mejoras de PI:** {{ip_improvement_ownership}}
+
+---
+
+## 6. Capacitación y Asistencia
+
+### 6.1 Programa de Capacitación Inicial
+**Duración de la Capacitación:** {{initial_training_duration}}
+**Ubicación de Capacitación:** {{training_location}}
+**Asistentes Requeridos:** {{required_training_attendees}}
+**Contenido de Capacitación:** {{training_content_overview}}
+
+### 6.2 Capacitación Continua
+**Capacitación Anual:** {{annual_training_requirements}}
+**Capacitación de Nuevos Productos:** {{new_product_training}}
+**Actualizaciones del Sistema:** {{system_update_training}}
+**Programas Opcionales:** {{optional_training_programs}}
+
+### 6.3 Costos de Capacitación
+**Capacitación Inicial:** {{initial_training_cost_coverage}}
+**Gastos de Viaje:** {{training_travel_expenses}}
+**Capacitación Adicional:** {{additional_training_costs}}
+**Materiales:** {{training_material_costs}}
+
+### 6.4 Apoyo Operacional
+**Apoyo de Apertura:** {{opening_support_duration}}
+**Visitas Periódicas:** {{periodic_visit_frequency}}
+**Soporte Telefónico:** {{phone_support_availability}}
+**Soporte de Emergencia:** {{emergency_support_procedures}}
 
 ---
 
 ## 7. Marketing y Publicidad
 
-### 7.1 Publicidad Nacional
-**Campañas Nacionales:** {{national_campaigns}}
-**Medios de Comunicación:** {{advertising_media}}
-**Contribución Requerida:** {{advertising_contribution}}
+### 7.1 Fondo de Marketing
+**Administración del Fondo:** {{marketing_fund_administration}}
+**Uso del Fondo:** {{marketing_fund_usage}}
+**Reportes:** {{marketing_fund_reporting}}
+**Aporte del Franquiciado:** {{franchisee_marketing_input}}
 
-### 7.2 Marketing Local
-**Gastos Mínimos Locales:** {{minimum_local_marketing}}% de ventas brutas
-**Actividades Aprobadas:** {{approved_marketing_activities}}
-**Cooperativas Publicitarias:** {{advertising_cooperatives}}
+### 7.2 Publicidad Local
+**Gasto Mínimo:** {{minimum_local_advertising}}
+**Medios Aprobados:** {{approved_advertising_media}}
+**Aprobación Previa:** {{advertising_approval_requirements}}
+**Programas Cooperativos:** {{cooperative_advertising_programs}}
 
-### 7.3 Promociones Especiales
-**Promociones del Sistema:** {{system_promotions}}
-**Promociones Locales:** {{local_promotions_approval}}
-**Descuentos y Ofertas:** {{discounts_offers}}
+### 7.3 Estándares de Marketing
+**Directrices de Marca:** {{brand_guideline_compliance}}
+**Estándares de Calidad:** {{marketing_quality_standards}}
+**Marketing Prohibido:** {{prohibited_marketing_activities}}
+**Marketing en Línea:** {{online_marketing_requirements}}
 
-### 7.4 Presencia Digital
-**Sitio Web:** {{website_requirements}}
-**Redes Sociales:** {{social_media_guidelines}}
-**Marketing en Línea:** {{online_marketing_standards}}
-
----
-
-## 8. Registros Financieros y Reportes
-
-### 8.1 Mantenimiento de Registros
-**Sistema de Contabilidad:** {{accounting_system_requirements}}
-**Retención de Registros:** {{record_retention_period}} años
-**Acceso a Registros:** {{franchisor_access_rights}}
-
-### 8.2 Reportes Financieros
-**Reportes Mensuales:** Vencen el {{monthly_report_due}} de cada mes
-**Estados Financieros Anuales:** Vencen el {{annual_report_due}}
-**Declaraciones de Impuestos:** Copias proporcionadas anualmente
-
-### 8.3 Auditorías
-**Derechos de Auditoría:** El Franquiciador puede auditar con {{audit_notice}} días de aviso
-**Frecuencia de Auditoría:** No más de {{audit_frequency}} por año
-**Costos de Auditoría:** {{audit_cost_responsibility}}
+### 7.4 Gran Apertura
+**Campaña de Apertura:** {{grand_opening_campaign}}
+**Inversión Mínima:** ${{grand_opening_minimum_investment}}
+**Requisitos de Tiempo:** {{grand_opening_timing}}
+**Apoyo del Franquiciador:** {{grand_opening_support}}
 
 ---
 
-## 9. Seguros y Responsabilidad
+## 8. Productos y Servicios
 
-### 9.1 Requisitos de Seguros
-**Seguros Requeridos:**
-- **Responsabilidad General:** ${{general_liability_amount}}
-- **Responsabilidad del Producto:** ${{product_liability_amount}}
-- **Propiedad/Casualidad:** ${{property_casualty_amount}}
-- **Compensación de Trabajadores:** Según requerido por ley
-- **Cobertura de Negocio:** ${{business_coverage_amount}}
+### 8.1 Productos Aprobados
+**Lista de Productos:** {{approved_product_list}}
+**Ofertas de Servicios:** {{approved_service_offerings}}
+**Estándares de Calidad:** {{product_quality_standards}}
+**Requisitos de Abastecimiento:** {{product_sourcing_requirements}}
 
-### 9.2 Requisitos de Póliza
-**Asegurado Adicional:** El Franquiciador debe nombrarse como asegurado adicional
-**Aviso de Cancelación:** {{cancellation_notice_days}} días de aviso requerido
-**Certificados de Seguro:** Proporcionados anualmente
+### 8.2 Relaciones con Proveedores
+**Proveedores Aprobados:** {{approved_supplier_list}}
+**Requisitos de Compra:** {{purchasing_requirements}}
+**Proveedores Alternativos:** {{alternative_supplier_procedures}}
+**Descuentos por Volumen:** {{volume_discount_arrangements}}
 
-### 9.3 Indemnización
-**Indemnización del Franquiciatario:** {{franchisee_indemnification}}
-**Limitación de Responsabilidad:** {{liability_limitations}}
+### 8.3 Cambios de Productos
+**Nuevos Productos:** {{new_product_introduction}}
+**Eliminación de Productos:** {{product_deletion_procedures}}
+**Marketing de Prueba:** {{test_marketing_participation}}
+**Artículos Estacionales:** {{seasonal_item_requirements}}
+
+### 8.4 Precios
+**Directrices de Precios:** {{pricing_guideline_requirements}}
+**Precios Máximos:** {{maximum_pricing_restrictions}}
+**Precios Promocionales:** {{promotional_pricing_guidelines}}
+**Publicidad de Precios:** {{price_advertising_requirements}}
+
+---
+
+## 9. Control de Calidad y Estándares
+
+### 9.1 Estándares Operativos
+**Estándares de Servicio:** {{service_standard_specifications}}
+**Estándares de Limpieza:** {{cleanliness_standard_requirements}}
+**Estándares de Seguridad:** {{safety_standard_compliance}}
+**Servicio al Cliente:** {{customer_service_standards}}
+
+### 9.2 Inspecciones
+**Derechos de Inspección:** {{franchisor_inspection_rights}}
+**Frecuencia de Inspección:** {{inspection_frequency}}
+**Cliente Misterioso:** {{mystery_shopping_programs}}
+**Sistema de Calificación:** {{compliance_scoring_system}}
+
+### 9.3 Incumplimiento
+**Avisos de Violación:** {{violation_notice_procedures}}
+**Períodos de Cura:** {{compliance_cure_periods}}
+**Acciones Remediales:** {{remedial_action_requirements}}
+**Consecuencias del Incumplimiento:** {{default_consequences}}
+
+### 9.4 Mejora Continua
+**Actualizaciones del Sistema:** {{system_update_requirements}}
+**Mejores Prácticas:** {{best_practice_implementation}}
+**Sistemas de Retroalimentación:** {{feedback_system_participation}}
+**Adopción de Innovaciones:** {{innovation_adoption_requirements}}
 
 ---
 
 ## 10. Transferencia y Cesión
 
 ### 10.1 Restricciones de Transferencia
-**Aprobación del Franquiciador:** Requerida para toda transferencia
-**Criterios de Aprobación:** {{transfer_approval_criteria}}
-**Tarifa de Transferencia:** ${{transfer_fee}}
+**Aprobación de Transferencia:** {{transfer_approval_requirements}}
+**Cesionario Calificado:** {{transferee_qualification_standards}}
+**Condiciones de Transferencia:** {{transfer_condition_requirements}}
+**Derecho de Primera Negativa:** {{franchisor_first_refusal_rights}}
 
-### 10.2 Muerte o Discapacidad
-**Transferencia por Herencia:** {{inheritance_transfer_rights}}
-**Discapacidad del Franquiciatario:** {{disability_provisions}}
-**Cronograma de Transferencia:** {{transfer_timeline}}
+### 10.2 Procedimientos de Transferencia
+**Requisitos de Aviso:** {{transfer_notice_requirements}}
+**Proceso de Evaluación:** {{transferee_evaluation_process}}
+**Requisitos de Capacitación:** {{transferee_training_requirements}}
+**Documentación de Transferencia:** {{transfer_documentation_requirements}}
 
-### 10.3 Derecho de Primera Negativa
-{{#if right_of_first_refusal}}
-El Franquiciador tiene derecho de primera negativa en cualquier transferencia propuesta.
-{{/if}}
+### 10.3 Tarifas de Transferencia
+**Tarifa de Transferencia:** ${{transfer_fee_amount}}
+**Costos de Capacitación:** {{transferee_training_costs}}
+**Costos Legales:** {{transfer_legal_cost_allocation}}
+**Otros Gastos:** {{other_transfer_expenses}}
 
----
-
-## 11. Terminación
-
-### 11.1 Terminación por Causa
-El Franquiciador puede terminar inmediatamente por:
-- Incumplimiento de pagos después de {{payment_cure_period}} días de aviso
-- Violación de estándares de calidad
-- Uso no autorizado de marcas registradas
-- Bancarrota o insolvencia
-- Conducta criminal que afecte el negocio
-
-### 11.2 Terminación sin Causa
-{{#if termination_without_cause}}
-Cualquier parte puede terminar con {{termination_notice}} días de aviso escrito sin causa.
-{{/if}}
-
-### 11.3 Efectos de la Terminación
-Al terminar:
-- Cesación inmediata de uso de marcas registradas
-- Devolución de manuales y materiales propietarios
-- Cumplimiento de convenios post-terminación
-- Liquidación de cuentas pendientes
-
-### 11.4 Convenios Post-Terminación
-**No Competencia:** {{non_compete_period}} años dentro de {{non_compete_radius}} millas
-**No Solicitación:** {{non_solicitation_period}} años
-**Confidencialidad:** Obligación permanente
+### 10.4 Muerte e Incapacidad
+**Derechos de Sucesión:** {{succession_right_provisions}}
+**Herederos Calificados:** {{heir_qualification_requirements}}
+**Período de Transición:** {{succession_transition_period}}
+**Disposiciones de Apoyo:** {{succession_support_provisions}}
 
 ---
 
-## 12. Resolución de Disputas
+## 11. Terminación y Vencimiento
 
-### 12.1 Mediación
-Las disputas primero serán sometidas a mediación en {{mediation_location}}.
+### 11.1 Terminación por el Franquiciador
+**Terminación Inmediata:** {{immediate_termination_grounds}}
+**Terminación con Aviso:** {{notice_termination_grounds}}
+**Períodos de Cura:** {{termination_cure_periods}}
+**Incumplimientos Materiales:** {{material_breach_definitions}}
 
-### 12.2 Arbitraje
-{{#if arbitration_required}}
-Si la mediación falla, las disputas serán resueltas por arbitraje vinculante bajo las reglas de {{arbitration_rules}}.
+### 11.2 Procedimientos de Terminación
+**Requisitos de Aviso:** {{termination_notice_requirements}}
+**Oportunidad de Cura:** {{cure_opportunity_provisions}}
+**Fecha Efectiva de Terminación:** {{termination_effective_date}}
+**Derechos de Apelación:** {{termination_appeal_rights}}
+
+### 11.3 Obligaciones Post-Terminación
+**Cesar Operaciones:** {{cease_operation_requirements}}
+**Desidentificación:** {{de_identification_requirements}}
+**Devolución de Propiedad:** {{property_return_obligations}}
+**Listas de Clientes:** {{customer_list_disposition}}
+
+### 11.4 Restricciones Post-Terminación
+**Período de No Competencia:** {{post_termination_non_compete}}
+**Alcance Geográfico:** {{non_compete_geographic_scope}}
+**Actividades Prohibidas:** {{prohibited_post_termination_activities}}
+**Restricciones de Empleados:** {{employee_restriction_provisions}}
+
+---
+
+## 12. Renovación
+
+### 12.1 Derechos de Renovación
+**Términos de Renovación:** {{available_renewal_terms}}
+**Aviso de Renovación:** {{renewal_notice_timing}}
+**Condiciones de Renovación:** {{renewal_condition_requirements}}
+**Tarifas de Renovación:** ${{renewal_fee_amount}}
+
+### 12.2 Requisitos de Renovación
+**Cumplimiento Actual:** {{renewal_compliance_requirements}}
+**Remodelación:** {{renewal_remodeling_requirements}}
+**Nuevo Contrato:** {{renewal_agreement_requirements}}
+**Actualizaciones de Capacitación:** {{renewal_training_requirements}}
+
+### 12.3 No Renovación
+**Aviso de No Renovación:** {{non_renewal_notice_period}}
+**Motivos de No Renovación:** {{non_renewal_grounds}}
+**Opciones de Transición:** {{non_renewal_transition_options}}
+**Obligaciones Finales:** {{non_renewal_final_obligations}}
+
+---
+
+## 13. Indemnización y Seguros
+
+### 13.1 Indemnización
+**Indemnización del Franquiciado:** {{franchisee_indemnification_scope}}
+**Reclamaciones Cubiertas:** {{indemnification_covered_claims}}
+**Obligaciones de Defensa:** {{indemnification_defense_obligations}}
+**Procedimientos de Indemnización:** {{indemnification_procedures}}
+
+### 13.2 Requisitos de Seguro
+**Responsabilidad General:** ${{general_liability_minimum}}
+**Seguro de Propiedad:** ${{property_insurance_requirements}}
+**Interrupción de Negocios:** ${{business_interruption_insurance}}
+**Coberturas Adicionales:** {{additional_insurance_requirements}}
+
+### 13.3 Términos del Seguro
+**Franquiciador como Asegurado Adicional:** {{additional_insured_requirements}}
+**Términos de la Póliza:** {{insurance_policy_terms}}
+**Prueba de Seguro:** {{insurance_proof_requirements}}
+**Mantenimiento de Póliza:** {{insurance_maintenance_obligations}}
+
+---
+
+## 14. Resolución de Disputas
+
+### 14.1 Resolución Interna
+**Negociación Directa:** {{direct_negotiation_procedures}}
+**Escalación de Administración:** {{management_escalation_process}}
+**Mediación Interna:** {{internal_mediation_options}}
+**Límites de Tiempo:** {{internal_resolution_time_limits}}
+
+### 14.2 Resolución Formal de Disputas
+{{#if arbitration}}
+**Arbitraje:** Todas las disputas se resolverán mediante arbitraje vinculante en {{arbitration_location}}
+**Reglas de Arbitraje:** {{arbitration_rules}}
 {{else}}
-Si la mediación falla, las disputas pueden llevarse a corte en {{jurisdiction}}.
+**Litigio:** Las disputas se resolverán en los tribunales de {{litigation_jurisdiction}}
 {{/if}}
 
-### 12.3 Ley Aplicable
+### 14.3 Costos de Disputas
+**Asignación de Costos:** {{dispute_cost_allocation}}
+**Honorarios de Abogados:** {{attorney_fee_provisions}}
+**Costos de Arbitraje:** {{arbitration_cost_sharing}}
+**Parte Prevaleciente:** {{prevailing_party_provisions}}
+
+---
+
+## 15. Disposiciones Generales
+
+### 15.1 Ley Aplicable
 Este Contrato se regirá por las leyes de {{governing_state}}.
 
----
+### 15.2 Acuerdo Completo
+Este Contrato constituye el acuerdo completo entre las partes y reemplaza todas las negociaciones previas.
 
-## 13. Disposiciones Generales
+### 15.3 Modificación
+Este Contrato solo puede modificarse por acuerdo escrito firmado por ambas partes.
 
-### 13.1 Contrato Completo
-Este Contrato constituye el acuerdo completo y reemplaza el Documento de Divulgación de Franquicia.
+### 15.4 Relación
+Las partes son contratistas independientes. Este Contrato no crea una relación de empleo, agencia o asociación.
 
-### 13.2 Modificaciones
-Las modificaciones deben ser por escrito y firmadas por ambas partes.
+### 15.5 Divisibilidad
+Si alguna disposición se considera inválida, el resto permanecerá en pleno vigor y efecto.
 
-### 13.3 Separabilidad
-Si alguna disposición es inválida, el resto permanecerá en vigor.
+### 15.6 Notificaciones
+Todas las notificaciones se entregarán por escrito a las direcciones especificadas aquí.
 
-### 13.4 Avisos
-Todos los avisos deben ser por escrito a las direcciones especificadas aquí.
-
----
-
-## 14. Reconocimientos
-
-### 14.1 Reconocimientos del Franquiciatario
-El Franquiciatario reconoce que:
-- Ha recibido y revisado el Documento de Divulgación de Franquicia
-- Ha consultado con asesores legales y financieros
-- Entiende los riesgos de inversión
-- No se han hecho representaciones fuera de este contrato
-
-### 14.2 Relación Independiente
-Las partes son contratistas independientes; no se crea relación de empleador-empleado o sociedad.
+### 15.7 Fuerza Mayor
+Ninguna parte será responsable por retrasos debido a circunstancias fuera de su control razonable.
 
 ---
 
-## 15. Firmas
+## 16. Firmas
 
 **EN FE DE LO CUAL**, las partes han ejecutado este Contrato en la fecha arriba escrita.
 
@@ -351,28 +426,19 @@ Las partes son contratistas independientes; no se crea relación de empleador-em
 | _________________________________ | _____________ |
 | {{franchisor_name}} | |
 | Por: {{franchisor_signatory}} | |
-| Título: {{franchisor_title}} | |
+| Título: {{franchisor_signatory_title}} | |
 
-**FRANQUICIATARIO:**
+**FRANQUICIADO:**
 
 | Firma | Fecha |
 |-------|-------|
 | _________________________________ | _____________ |
 | {{franchisee_name}} | |
 | Por: {{franchisee_signatory}} | |
-| Título: {{franchisee_title}} | |
-
-{{#if guarantor_required}}
-**GARANTE:**
-
-| Firma | Fecha |
-|-------|-------|
-| _________________________________ | _____________ |
-| {{guarantor_name}} | |
-{{/if}}
+| Título: {{franchisee_signatory_title}} | |
 
 ---
 
-**AVISO LEGAL IMPORTANTE:** Este contrato de franquicia debe ser revisado por abogados especializados en derecho de franquicias. Las leyes de franquicia varían por estado y pueden requerir documentación y divulgaciones adicionales antes de la venta de cualquier franquicia.
+**AVISO LEGAL IMPORTANTE:** Este contrato de franquicia involucra relaciones comerciales y legales complejas sujetas a las leyes federales y estatales de franquicias. Debe ser revisado por abogados de franquicias calificados y asesores comerciales antes de la ejecución. Muchos estados requieren divulgaciones y registros específicos de franquicias.
 
 *Plantilla generada por 123LegalDoc - Plataforma Profesional de Documentos Legales*

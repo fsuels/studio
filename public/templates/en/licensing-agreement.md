@@ -1,341 +1,435 @@
-# Intellectual Property Licensing Agreement
-
-## Overview
-This Intellectual Property Licensing Agreement is designed to meet the legal requirements for intellectual property licensing documents in the United States. It establishes the terms for licensing intellectual property rights from a licensor to a licensee.
-
-## Key Provisions
-- Defines scope of license grant and permitted uses
-- Establishes territory and term limitations
-- Details royalty and payment obligations
-- Includes warranties and indemnification provisions
-- Outlines termination and dispute resolution procedures
-
-## When to Use
-Use this Licensing Agreement when you need to grant or obtain rights to use intellectual property including patents, trademarks, copyrights, trade secrets, or other proprietary technology.
-
-## State Requirements
-This document is valid in all 50 states with appropriate customization. Some states may have specific requirements for certain types of intellectual property licenses.
-
-## Important Notes
-- Review all intellectual property rights carefully
-- Consider registering key intellectual property before licensing
-- Ensure compliance with export control laws if applicable
-- Consult with IP attorney for complex licensing arrangements
-- Maintain detailed records of licensed property and usage
+# Licensing Agreement
 
 ---
 
-**Document ID**: {{document_id}}
-**Created**: {{creation_date}}
-**Parties**: {{licensor_name}} and {{licensee_name}}
+**LICENSING AGREEMENT**
 
-# INTELLECTUAL PROPERTY LICENSING AGREEMENT
+This Licensing Agreement ("Agreement") is made and entered into on **{{agreement_date}}**, by and between:
 
-This Intellectual Property Licensing Agreement ("Agreement") is entered into on {{agreement_date}}, between:
+- **Licensor:** {{licensor_name}}, a {{licensor_entity_type}} organized under the laws of {{licensor_state}}, with its principal place of business at {{licensor_address}}
 
-**LICENSOR**: {{licensor_name}}
-{{licensor_address}}
-{{licensor_city}}, {{licensor_state}} {{licensor_zip}}
+- **Licensee:** {{licensee_name}}, a {{licensee_entity_type}} organized under the laws of {{licensee_state}}, with its principal place of business at {{licensee_address}}
 
-**LICENSEE**: {{licensee_name}}
-{{licensee_address}}
-{{licensee_city}}, {{licensee_state}} {{licensee_zip}}
+Collectively referred to herein as the "Parties."
 
 ---
 
-## RECITALS
-
-WHEREAS, Licensor is the owner of certain intellectual property rights described herein;
-
-WHEREAS, Licensee desires to obtain a license to use such intellectual property rights;
-
-WHEREAS, Licensor is willing to grant such license subject to the terms and conditions set forth herein;
-
-NOW, THEREFORE, in consideration of the mutual covenants and agreements contained herein, the parties agree as follows:
-
-## 1. DEFINITIONS
-
-For purposes of this Agreement, the following terms shall have the meanings set forth below:
-
-**1.1 Licensed Property**: The intellectual property rights licensed hereunder, including:
-- [ ] Patents: {{patent_numbers}}
-- [ ] Trademarks: {{trademark_registrations}}
-- [ ] Copyrights: {{copyright_registrations}}
-- [ ] Trade Secrets: {{trade_secret_description}}
-- [ ] Know-How: {{know_how_description}}
-- [ ] Other: {{other_ip_description}}
-
-**1.2 Licensed Products**: Products that incorporate, use, or are manufactured using the Licensed Property, specifically: {{licensed_products_description}}
-
-**1.3 Licensed Services**: Services that utilize or incorporate the Licensed Property, specifically: {{licensed_services_description}}
-
-**1.4 Territory**: The geographical area where this license applies: {{license_territory}}
-
-**1.5 Field of Use**: The specific field or industry in which the license may be exercised: {{field_of_use}}
-
-## 2. GRANT OF LICENSE
-
-**2.1 License Grant**: Subject to the terms and conditions of this Agreement, Licensor hereby grants to Licensee a {{license_type}} license to:
-
-- [ ] Make Licensed Products
-- [ ] Use Licensed Products  
-- [ ] Sell Licensed Products
-- [ ] Distribute Licensed Products
-- [ ] Import Licensed Products
-- [ ] Export Licensed Products
-- [ ] Provide Licensed Services
-- [ ] Other: {{other_licensed_rights}}
-
-**2.2 License Type**: This license is:
-- [ ] Exclusive
-- [ ] Non-exclusive
-- [ ] Sole license
-
-**2.3 Sublicensing**: 
-- [ ] Licensee may sublicense the Licensed Property with Licensor's prior written consent
-- [ ] Licensee may not sublicense the Licensed Property
-- [ ] Other sublicensing terms: {{sublicensing_terms}}
-
-**2.4 Reservation of Rights**: All rights not expressly granted to Licensee are reserved by Licensor.
-
-## 3. TERM AND TERMINATION
-
-**3.1 Term**: This Agreement shall commence on {{commencement_date}} and shall continue for {{license_term}}, unless earlier terminated in accordance with this Agreement.
-
-**3.2 Renewal**: 
-- [ ] This Agreement shall automatically renew for additional {{renewal_term}} periods
-- [ ] This Agreement may be renewed by mutual written agreement
-- [ ] This Agreement shall not renew
-
-**3.3 Termination for Cause**: Either party may terminate this Agreement immediately upon written notice if:
-- The other party materially breaches this Agreement and fails to cure such breach within {{cure_period}} days
-- The other party becomes insolvent, makes an assignment for creditors, or files for bankruptcy
-- {{additional_termination_causes}}
-
-**3.4 Termination by Licensee**: Licensee may terminate this Agreement at any time upon {{licensee_termination_notice}} days written notice.
-
-**3.5 Effect of Termination**: Upon termination:
-- All rights granted hereunder shall immediately cease
-- Licensee shall cease all use of Licensed Property
-- Licensee shall return or destroy all materials containing Licensed Property
-- Accrued obligations shall survive termination
-- {{additional_termination_obligations}}
-
-## 4. ROYALTIES AND PAYMENTS
-
-**4.1 Royalty Structure**: Licensee shall pay Licensor the following:
-
-**Upfront Payment**: ${{upfront_payment}} due upon execution of this Agreement
-
-**Royalty Rate**: {{royalty_percentage}}% of Net Sales of Licensed Products/Services
-
-**Minimum Royalty**: ${{minimum_annual_royalty}} per year
-
-**Milestone Payments**:
-- {{milestone_1_description}}: ${{milestone_1_amount}}
-- {{milestone_2_description}}: ${{milestone_2_amount}}
-- {{milestone_3_description}}: ${{milestone_3_amount}}
-
-**4.2 Net Sales Definition**: "Net Sales" means gross sales less:
-- Returns and allowances
-- Taxes and duties
-- Shipping and handling costs
-- Distributor/retailer discounts not exceeding {{maximum_discount}}%
-- {{other_deductions}}
-
-**4.3 Payment Terms**: 
-- Royalty payments shall be made quarterly within {{payment_days}} days after each calendar quarter
-- Payments shall include detailed sales reports
-- Late payments shall incur interest at {{interest_rate}}% per month
-
-**4.4 Records and Audit**: Licensee shall maintain complete records of sales and shall permit Licensor to audit such records upon {{audit_notice}} days notice, not more than once per year.
-
-## 5. INTELLECTUAL PROPERTY PROTECTION
-
-**5.1 Prosecution and Maintenance**: 
-- [ ] Licensor shall maintain and prosecute Licensed Property at its expense
-- [ ] Licensee shall reimburse Licensor for maintenance and prosecution costs
-- [ ] Costs shall be shared equally
-
-**5.2 Enforcement**: 
-- Licensor has the primary right to enforce Licensed Property against infringement
-- If Licensor fails to act within {{enforcement_period}} days, Licensee may enforce rights
-- Costs and recoveries shall be allocated as follows: {{cost_recovery_allocation}}
-
-**5.3 Improvements**: 
-- Improvements made by Licensee shall belong to: {{improvement_ownership}}
-- Cross-licenses to improvements shall be granted on the following terms: {{improvement_licensing}}
-
-## 6. WARRANTIES AND REPRESENTATIONS
-
-**6.1 Licensor Warranties**: Licensor represents and warrants that:
-- It has full right and authority to grant the license herein
-- The Licensed Property is owned by Licensor or properly licensed
-- The Licensed Property does not infringe third-party rights (to Licensor's knowledge)
-- {{additional_licensor_warranties}}
-
-**6.2 Licensee Warranties**: Licensee represents and warrants that:
-- It has full authority to enter into this Agreement
-- It will comply with all applicable laws and regulations
-- It will use the Licensed Property in accordance with this Agreement
-- {{additional_licensee_warranties}}
-
-**6.3 DISCLAIMER**: EXCEPT AS EXPRESSLY SET FORTH HEREIN, THE LICENSED PROPERTY IS PROVIDED "AS IS" WITHOUT WARRANTIES OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, OR NON-INFRINGEMENT.
-
-## 7. INDEMNIFICATION
-
-**7.1 Licensor Indemnification**: Licensor shall indemnify and hold harmless Licensee from claims that the Licensed Property, as licensed hereunder, infringes third-party intellectual property rights.
-
-**7.2 Licensee Indemnification**: Licensee shall indemnify and hold harmless Licensor from claims arising from:
-- Licensee's use of Licensed Property outside the scope of this Agreement
-- Modifications to Licensed Property made by Licensee
-- Combination of Licensed Property with other technology
-- {{additional_licensee_indemnity}}
-
-**7.3 Indemnification Procedures**: The indemnified party shall promptly notify the indemnifying party of any claim and cooperate in the defense thereof.
-
-## 8. CONFIDENTIALITY
-
-**8.1 Confidential Information**: Each party acknowledges that it may receive confidential information of the other party. Confidential information includes:
-- Technical data and know-how
-- Business and financial information
-- Licensed Property details
-- Terms of this Agreement
-- {{additional_confidential_info}}
-
-**8.2 Obligations**: Each party agrees to:
-- Maintain confidentiality of the other party's confidential information
-- Use confidential information solely for purposes of this Agreement
-- Limit access to confidential information to employees with a need to know
-- Return confidential information upon termination
-
-**8.3 Exceptions**: Obligations do not apply to information that:
-- Is publicly available through no breach of this Agreement
-- Was known prior to disclosure
-- Is independently developed
-- Is required to be disclosed by law
-
-## 9. QUALITY CONTROL
-
-**9.1 Quality Standards**: Licensee agrees to maintain quality standards for Licensed Products/Services consistent with {{quality_standards}}.
-
-**9.2 Samples and Inspection**: Licensee shall provide samples of Licensed Products to Licensor for quality review upon request.
-
-**9.3 Marketing Materials**: All marketing materials using Licensed Property must be approved by Licensor in advance.
-
-## 10. COMPLIANCE AND REGULATORY
-
-**10.1 Legal Compliance**: Licensee shall comply with all applicable laws, regulations, and industry standards in its use of Licensed Property.
-
-**10.2 Export Control**: If applicable, Licensee shall comply with all export control laws and regulations.
-
-**10.3 Product Liability**: Licensee shall maintain product liability insurance of not less than ${{insurance_amount}} per occurrence.
-
-## 11. DISPUTE RESOLUTION
-
-**11.1 Governing Law**: This Agreement shall be governed by the laws of {{governing_state}}.
-
-**11.2 Dispute Resolution**: Disputes shall be resolved through:
-- [ ] Binding arbitration under {{arbitration_rules}}
-- [ ] Mediation followed by litigation if necessary
-- [ ] Litigation in courts of {{jurisdiction}}
-
-**11.3 Equitable Relief**: Either party may seek equitable relief for breach of confidentiality or intellectual property rights.
-
-## 12. GENERAL PROVISIONS
-
-**12.1 Entire Agreement**: This Agreement constitutes the entire agreement between the parties and supersedes all prior agreements and understandings.
-
-**12.2 Amendment**: This Agreement may only be amended by written agreement signed by both parties.
-
-**12.3 Assignment**: 
-- [ ] This Agreement may be assigned with prior written consent
-- [ ] This Agreement may not be assigned
-- [ ] Assignment permitted to affiliates or in connection with merger/acquisition
-
-**12.4 Severability**: If any provision is held invalid, the remainder shall remain in full force and effect.
-
-**12.5 Force Majeure**: Neither party shall be liable for delays due to circumstances beyond its reasonable control.
-
-**12.6 Notices**: All notices shall be in writing and delivered to:
-
-**Licensor**:
-{{licensor_notice_name}}
-{{licensor_notice_address}}
-{{licensor_notice_city}}, {{licensor_notice_state}} {{licensor_notice_zip}}
-Email: {{licensor_email}}
-
-**Licensee**:
-{{licensee_notice_name}}
-{{licensee_notice_address}}
-{{licensee_notice_city}}, {{licensee_notice_state}} {{licensee_notice_zip}}
-Email: {{licensee_email}}
-
-**12.7 Counterparts**: This Agreement may be executed in counterparts, including electronic signatures.
-
-## 13. SPECIAL PROVISIONS
-
-{{special_provisions}}
+## 1. Licensed Property and Grant
+
+### 1.1 Licensed Property Description
+**Property Type:** {{licensed_property_type}}
+**Property Name/Title:** {{licensed_property_name}}
+**Property Description:** {{licensed_property_description}}
+**Intellectual Property Rights:** {{ip_rights_included}}
+
+### 1.2 Grant of License
+**License Type:** {{license_type_exclusive_nonexclusive}}
+**Scope of License:** {{license_scope_description}}
+**Field of Use:** {{field_of_use_definition}}
+**Geographic Territory:** {{geographic_territory_limits}}
+
+### 1.3 License Rights
+**Usage Rights:** {{specific_usage_rights}}
+**Reproduction Rights:** {{reproduction_rights_scope}}
+**Distribution Rights:** {{distribution_rights_parameters}}
+**Modification Rights:** {{modification_rights_allowance}}
+
+### 1.4 Restrictions and Limitations
+**Prohibited Uses:** {{prohibited_uses_list}}
+**Territory Restrictions:** {{territory_restriction_details}}
+**Time Limitations:** {{license_time_limitations}}
+**Quality Standards:** {{quality_standard_requirements}}
 
 ---
+
+## 2. Term and Renewal
+
+### 2.1 Initial Term
+**License Duration:** {{initial_license_term}}
+**Effective Date:** {{license_effective_date}}
+**Expiration Date:** {{license_expiration_date}}
+**Term Calculation:** {{term_calculation_method}}
+
+### 2.2 Renewal Options
+**Renewal Terms:** {{renewal_term_duration}}
+**Renewal Procedures:** {{renewal_process_requirements}}
+**Renewal Notice Period:** {{renewal_notice_period}}
+**Renewal Conditions:** {{renewal_condition_requirements}}
+
+### 2.3 Automatic Renewal
+**Auto-Renewal Provisions:** {{automatic_renewal_terms}}
+**Opt-Out Requirements:** {{renewal_opt_out_procedures}}
+**Terms Modification:** {{renewal_terms_modification}}
+**Rate Adjustments:** {{renewal_rate_adjustments}}
+
+### 2.4 Early Termination
+**Termination Rights:** {{early_termination_conditions}}
+**Notice Requirements:** {{termination_notice_requirements}}
+**Cause Events:** {{termination_cause_events}}
+**Cure Periods:** {{breach_cure_periods}}
+
+---
+
+## 3. Financial Terms and Royalties
+
+### 3.1 License Fees
+**Initial License Fee:** ${{initial_license_fee}}
+**Annual License Fee:** ${{annual_license_fee}}
+**Setup Fee:** ${{license_setup_fee}}
+**Administrative Fee:** ${{administrative_fee_amount}}
+
+### 3.2 Royalty Structure
+**Royalty Rate:** {{royalty_percentage_rate}}%
+**Royalty Base:** {{royalty_calculation_base}}
+**Minimum Royalty:** ${{minimum_royalty_amount}}
+**Maximum Royalty:** ${{maximum_royalty_cap}}
+
+### 3.3 Payment Terms
+**Payment Schedule:** {{payment_schedule_frequency}}
+**Due Dates:** {{payment_due_dates}}
+**Payment Methods:** {{accepted_payment_methods}}
+**Late Payment Penalties:** {{late_payment_penalty_rate}}%
+
+### 3.4 Additional Fees
+**Sublicense Fees:** {{sublicense_fee_structure}}
+**Modification Fees:** {{modification_approval_fees}}
+**Territory Expansion Fees:** {{territory_expansion_costs}}
+**Renewal Fees:** ${{license_renewal_fees}}
+
+---
+
+## 4. Intellectual Property Rights
+
+### 4.1 Ownership Rights
+**IP Ownership:** {{ip_ownership_retention}}
+**License vs. Assignment:** {{license_assignment_clarification}}
+**Retained Rights:** {{licensor_retained_rights}}
+**Licensee Rights:** {{licensee_granted_rights}}
+
+### 4.2 Patent Rights
+**Patent License Scope:** {{patent_license_coverage}}
+**Patent Prosecution:** {{patent_prosecution_responsibilities}}
+**Patent Defense:** {{patent_defense_obligations}}
+**Patent Improvements:** {{patent_improvement_handling}}
+
+### 4.3 Trademark Rights
+**Trademark Usage:** {{trademark_usage_permissions}}
+**Brand Guidelines:** {{brand_guideline_compliance}}
+**Quality Control:** {{trademark_quality_control}}
+**Co-branding Rights:** {{co_branding_permissions}}
+
+### 4.4 Copyright and Trade Secrets
+**Copyright License:** {{copyright_license_scope}}
+**Trade Secret Access:** {{trade_secret_access_rights}}
+**Confidentiality:** {{confidentiality_requirements}}
+**Documentation Rights:** {{documentation_usage_rights}}
+
+---
+
+## 5. Sublicensing and Assignment
+
+### 5.1 Sublicensing Rights
+**Sublicense Permission:** {{sublicense_permission_scope}}
+**Sublicense Approval:** {{sublicense_approval_process}}
+**Sublicense Terms:** {{sublicense_terms_requirements}}
+**Sublicense Revenue:** {{sublicense_revenue_sharing}}
+
+### 5.2 Assignment Restrictions
+**Assignment Limitations:** {{assignment_restriction_terms}}
+**Approval Requirements:** {{assignment_approval_process}}
+**Assignment Conditions:** {{assignment_condition_requirements}}
+**Transfer Procedures:** {{license_transfer_procedures}}
+
+### 5.3 Third-Party Rights
+**Third-Party Licenses:** {{third_party_license_requirements}}
+**Authorized Users:** {{authorized_user_definitions}}
+**User Restrictions:** {{third_party_user_limitations}}
+**Compliance Monitoring:** {{third_party_compliance_monitoring}}
+
+### 5.4 Change of Control
+**Control Change Notification:** {{control_change_notification_requirements}}
+**Approval Rights:** {{control_change_approval_rights}}
+**Termination Rights:** {{control_change_termination_rights}}
+**Successor Obligations:** {{successor_obligation_terms}}
+
+---
+
+## 6. Performance Obligations
+
+### 6.1 Licensee Obligations
+**Performance Standards:** {{licensee_performance_standards}}
+**Quality Compliance:** {{quality_compliance_requirements}}
+**Marketing Efforts:** {{marketing_effort_obligations}}
+**Sales Targets:** {{minimum_sales_targets}}
+
+### 6.2 Licensor Obligations
+**Support Services:** {{licensor_support_obligations}}
+**Technical Assistance:** {{technical_assistance_provision}}
+**Updates and Improvements:** {{update_improvement_delivery}}
+**Training Programs:** {{training_program_provision}}
+
+### 6.3 Reporting Requirements
+**Performance Reports:** {{performance_reporting_requirements}}
+**Sales Reporting:** {{sales_reporting_obligations}}
+**Usage Reporting:** {{usage_reporting_requirements}}
+**Compliance Reports:** {{compliance_reporting_obligations}}
+
+### 6.4 Quality Control
+**Quality Standards:** {{quality_standard_specifications}}
+**Inspection Rights:** {{quality_inspection_rights}}
+**Compliance Monitoring:** {{quality_compliance_monitoring}}
+**Corrective Actions:** {{quality_corrective_actions}}
+
+---
+
+## 7. Marketing and Promotion
+
+### 7.1 Marketing Rights
+**Marketing Authorization:** {{marketing_authorization_scope}}
+**Promotional Materials:** {{promotional_material_usage}}
+**Advertising Guidelines:** {{advertising_guideline_compliance}}
+**Brand Usage:** {{brand_usage_authorization}}
+
+### 7.2 Co-Marketing Activities
+**Joint Marketing:** {{joint_marketing_opportunities}}
+**Marketing Costs:** {{marketing_cost_allocation}}
+**Campaign Approval:** {{marketing_campaign_approval}}
+**Cross-Promotion:** {{cross_promotion_activities}}
+
+### 7.3 Marketing Standards
+**Message Consistency:** {{marketing_message_standards}}
+**Quality Requirements:** {{marketing_quality_requirements}}
+**Approval Processes:** {{marketing_approval_processes}}
+**Brand Protection:** {{brand_protection_requirements}}
+
+### 7.4 Promotional Support
+**Marketing Support:** {{licensor_marketing_support}}
+**Sales Tools:** {{sales_tool_provision}}
+**Trade Show Participation:** {{trade_show_participation_rights}}
+**Public Relations:** {{public_relations_coordination}}
+
+---
+
+## 8. Compliance and Regulatory Requirements
+
+### 8.1 Legal Compliance
+**Applicable Laws:** {{applicable_law_compliance}}
+**Regulatory Requirements:** {{regulatory_compliance_obligations}}
+**Industry Standards:** {{industry_standard_compliance}}
+**Best Practices:** {{best_practice_adherence}}
+
+### 8.2 Export Controls
+**Export Regulations:** {{export_control_compliance}}
+**International Trade:** {{international_trade_restrictions}}
+**Restricted Countries:** {{restricted_country_limitations}}
+**Documentation Requirements:** {{export_documentation_requirements}}
+
+### 8.3 Data Protection
+**Privacy Laws:** {{privacy_law_compliance}}
+**Data Security:** {{data_security_requirements}}
+**Personal Information:** {{personal_information_handling}}
+**Cross-Border Transfers:** {{cross_border_data_transfers}}
+
+### 8.4 Industry Regulations
+**Sector-Specific Rules:** {{sector_specific_regulations}}
+**Professional Standards:** {{professional_standard_compliance}}
+**Certification Requirements:** {{certification_requirement_compliance}}
+**Audit Obligations:** {{regulatory_audit_obligations}}
+
+---
+
+## 9. Warranties and Representations
+
+### 9.1 Licensor Warranties
+**Ownership Warranty:** {{ownership_warranty_terms}}
+**Authority Warranty:** {{licensor_authority_warranty}}
+**Non-Infringement:** {{non_infringement_warranty}}
+**Functionality Warranty:** {{functionality_warranty_terms}}
+
+### 9.2 Licensee Warranties
+**Authority Warranty:** {{licensee_authority_warranty}}
+**Compliance Warranty:** {{compliance_warranty_terms}}
+**Financial Capability:** {{financial_capability_warranty}}
+**Use Limitation:** {{use_limitation_warranty}}
+
+### 9.3 Mutual Warranties
+**Legal Standing:** {{legal_standing_warranty}}
+**Good Faith:** {{good_faith_warranty}}
+**Accurate Information:** {{accurate_information_warranty}}
+**Professional Conduct:** {{professional_conduct_warranty}}
+
+### 9.4 Warranty Disclaimers
+**Performance Disclaimers:** {{performance_warranty_disclaimers}}
+**Market Success:** {{market_success_disclaimers}}
+**Fitness for Purpose:** {{fitness_purpose_disclaimers}}
+**Third-Party Claims:** {{third_party_claims_disclaimers}}
+
+---
+
+## 10. Indemnification and Liability
+
+### 10.1 Indemnification Obligations
+**Licensor Indemnification:** {{licensor_indemnification_scope}}
+**Licensee Indemnification:** {{licensee_indemnification_scope}}
+**Third-Party Claims:** {{third_party_claims_indemnification}}
+**Defense Obligations:** {{indemnification_defense_obligations}}
+
+### 10.2 Liability Limitations
+**Liability Cap:** ${{liability_limitation_amount}}
+**Excluded Damages:** {{excluded_damage_types}}
+**Consequential Damages:** {{consequential_damage_exclusions}}
+**Lost Profits:** {{lost_profits_exclusions}}
+
+### 10.3 Insurance Requirements
+**General Liability:** ${{general_liability_coverage}}
+**Professional Liability:** ${{professional_liability_coverage}}
+**Product Liability:** ${{product_liability_coverage}}
+**Cyber Liability:** ${{cyber_liability_coverage}}
+
+### 10.4 Risk Allocation
+**Risk Distribution:** {{risk_distribution_allocation}}
+**Force Majeure:** {{force_majeure_provisions}}
+**Business Interruption:** {{business_interruption_handling}}
+**Acts of Third Parties:** {{third_party_acts_allocation}}
+
+---
+
+## 11. Confidentiality and Non-Disclosure
+
+### 11.1 Confidential Information
+**Information Definition:** {{confidential_information_definition}}
+**Trade Secrets:** {{trade_secret_protection}}
+**Proprietary Data:** {{proprietary_data_handling}}
+**Business Information:** {{business_information_confidentiality}}
+
+### 11.2 Non-Disclosure Obligations
+**Disclosure Restrictions:** {{disclosure_restriction_terms}}
+**Access Controls:** {{information_access_controls}}
+**Employee Obligations:** {{employee_confidentiality_requirements}}
+**Third-Party Disclosures:** {{third_party_disclosure_restrictions}}
+
+### 11.3 Permitted Disclosures
+**Legal Requirements:** {{legal_disclosure_exceptions}}
+**Court Orders:** {{court_order_disclosure}}
+**Regulatory Demands:** {{regulatory_disclosure_requirements}}
+**Public Information:** {{public_information_exceptions}}
+
+### 11.4 Return of Information
+**Information Return:** {{information_return_requirements}}
+**Data Destruction:** {{data_destruction_procedures}}
+**Continuing Obligations:** {{post_termination_confidentiality}}
+**Audit Rights:** {{confidentiality_audit_rights}}
+
+---
+
+## 12. Termination and Post-Termination
+
+### 12.1 Termination Events
+**Automatic Termination:** {{automatic_termination_events}}
+**Termination for Cause:** {{cause_termination_events}}
+**Convenience Termination:** {{convenience_termination_terms}}
+**Insolvency Termination:** {{insolvency_termination_provisions}}
+
+### 12.2 Termination Procedures
+**Notice Requirements:** {{termination_notice_requirements}}
+**Cure Periods:** {{termination_cure_periods}}
+**Wind-Down Process:** {{termination_wind_down_process}}
+**Final Payments:** {{final_payment_obligations}}
+
+### 12.3 Post-Termination Obligations
+**License Cessation:** {{license_cessation_requirements}}
+**Property Return:** {{property_return_obligations}}
+**Continuing Restrictions:** {{post_termination_restrictions}}
+**Survival Clauses:** {{surviving_obligations}}
+
+### 12.4 Transition Assistance
+**Transition Support:** {{transition_support_obligations}}
+**Customer Notifications:** {{customer_notification_requirements}}
+**Data Transfer:** {{data_transfer_obligations}}
+**Successor Rights:** {{successor_rights_provisions}}
+
+---
+
+## 13. Dispute Resolution
+
+### 13.1 Dispute Resolution Process
+**Negotiation Period:** {{dispute_negotiation_period}}
+**Mediation Requirements:** {{mediation_process_requirements}}
+**Arbitration Procedures:** {{arbitration_procedure_terms}}
+**Court Jurisdiction:** {{court_jurisdiction_selection}}
+
+### 13.2 Governing Law
+**Applicable Law:** {{governing_law_jurisdiction}}
+**Conflict of Laws:** {{conflict_of_laws_rules}}
+**International Considerations:** {{international_law_considerations}}
+**Regulatory Compliance:** {{regulatory_law_compliance}}
+
+### 13.3 Enforcement
+**Injunctive Relief:** {{injunctive_relief_availability}}
+**Specific Performance:** {{specific_performance_rights}}
+**Monetary Damages:** {{monetary_damage_remedies}}
+**Attorney Fees:** {{attorney_fee_allocation}}
+
+### 13.4 Alternative Resolution
+**Expert Determination:** {{expert_determination_procedures}}
+**Industry Arbitration:** {{industry_arbitration_options}}
+**Settlement Conferences:** {{settlement_conference_requirements}}
+**Escalation Procedures:** {{dispute_escalation_procedures}}
+
+---
+
+## 14. General Provisions
+
+### 14.1 Entire Agreement
+This Agreement constitutes the entire agreement between the parties and supersedes all prior negotiations.
+
+### 14.2 Amendment
+This Agreement may only be amended by written agreement signed by both parties.
+
+### 14.3 Severability
+If any provision is deemed invalid, the remainder shall remain in full force and effect.
+
+### 14.4 Force Majeure
+Neither party shall be liable for delays due to circumstances beyond their reasonable control.
+
+### 14.5 Notices
+All notices shall be delivered in writing to the addresses specified herein.
+
+### 14.6 Waiver
+No waiver of any breach shall constitute a waiver of any other breach.
+
+### 14.7 Relationship of Parties
+The parties are independent contractors and this Agreement creates no partnership or joint venture.
+
+### 14.8 Survival
+Certain provisions shall survive termination as specified herein.
+
+---
+
+## 15. Signatures
 
 **IN WITNESS WHEREOF**, the parties have executed this Agreement as of the date first written above.
 
 **LICENSOR:**
 
-{{licensor_signature}}
-{{licensor_name}}
-{{licensor_title}}
-Date: {{licensor_signature_date}}
+| Signature | Date |
+|-----------|------|
+| _________________________________ | _____________ |
+| {{licensor_name}} | |
+| By: {{licensor_signatory}} | |
+| Title: {{licensor_signatory_title}} | |
 
 **LICENSEE:**
 
-{{licensee_signature}}
-{{licensee_name}}
-{{licensee_title}}
-Date: {{licensee_signature_date}}
+| Signature | Date |
+|-----------|------|
+| _________________________________ | _____________ |
+| {{licensee_name}} | |
+| By: {{licensee_signatory}} | |
+| Title: {{licensee_signatory_title}} | |
 
 ---
 
-## SCHEDULE A - LICENSED PROPERTY DETAILS
+**IMPORTANT LEGAL NOTICE:** This licensing agreement involves complex intellectual property and commercial considerations. It should be reviewed by qualified legal and business professionals to ensure proper protection of rights, compliance with applicable laws, and achievement of business objectives.
 
-{{licensed_property_schedule}}
-
-## SCHEDULE B - ROYALTY CALCULATION EXAMPLES
-
-{{royalty_calculation_examples}}
-
-## SCHEDULE C - QUALITY STANDARDS
-
-{{quality_standards_schedule}}
-
----
-
-## LEGAL DISCLAIMER
-
-This document is provided as a general template and may not be suitable for all situations. Intellectual property law is complex and varies by jurisdiction and type of property. This template should not be considered legal advice.
-
-**Important Considerations:**
-- Consult with a qualified intellectual property attorney before using this document
-- Ensure all intellectual property rights are properly identified and cleared
-- Consider registration of key intellectual property before licensing
-- Verify compliance with export control and other applicable laws
-- Review tax implications of licensing arrangements
-
-**Specialized Requirements:**
-- Patent licenses may require specific claim language
-- Trademark licenses must include quality control provisions
-- Copyright licenses should specify moral rights treatment
-- Trade secret licenses require enhanced confidentiality measures
-
-Users of this template assume all responsibility for ensuring legal compliance and should seek professional legal advice for complex intellectual property licensing arrangements.
-
----
-
-*This document was created using 123LegalDoc.com - Professional Legal Document Templates*
-
-**Document Version**: 2.1
-**Last Updated**: {{current_date}}
-**Template ID**: LICENSE-AGREEMENT-001
-
-For additional legal resources and document templates, visit www.123legaldoc.com
+*Template generated by 123LegalDoc - Professional Legal Document Platform*

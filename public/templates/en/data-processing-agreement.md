@@ -4,7 +4,7 @@
 
 **DATA PROCESSING AGREEMENT**
 
-This Data Processing Agreement ("DPA") is made and entered into on **{{agreement_date}}**, by and between:
+This Data Processing Agreement ("Agreement") is made and entered into on **{{agreement_date}}**, by and between:
 
 - **Data Controller:** {{controller_name}}, a {{controller_entity_type}} organized under the laws of {{controller_state}}, with its principal place of business at {{controller_address}}
 
@@ -14,353 +14,450 @@ Collectively referred to herein as the "Parties."
 
 ---
 
-## 1. Background and Definitions
+## 1. Processing Framework
 
-### 1.1 Background
-This DPA governs the processing of personal data by the Data Processor on behalf of the Data Controller in connection with {{service_description}}.
+### 1.1 Processing Activities
+**Processing Purpose:** {{processing_purpose_description}}
+**Processing Categories:** {{data_processing_categories}}
+**Processing Operations:** {{processing_operations_performed}}
+**Processing Duration:** {{processing_duration_period}}
 
-### 1.2 Legal Framework
-This DPA is designed to ensure compliance with applicable data protection laws, including:
-- {{applicable_data_laws}}
-- General Data Protection Regulation (GDPR) (EU) 2016/679
-- California Consumer Privacy Act (CCPA)
-- {{additional_privacy_laws}}
+### 1.2 Data Categories
+**Personal Data Types:** {{personal_data_types_processed}}
+**Special Categories:** {{special_category_data_types}}
+**Data Subject Categories:** {{data_subject_categories}}
+**Data Volume:** {{approximate_data_volume}}
 
-### 1.3 Key Definitions
-**"Personal Data"** means any information relating to an identified or identifiable natural person.
+### 1.3 Processing Scope
+**Geographic Scope:** {{processing_geographic_scope}}
+**Temporal Scope:** {{processing_temporal_limitations}}
+**Subject Scope:** {{data_subject_scope_definition}}
+**Technical Scope:** {{technical_processing_scope}}
 
-**"Processing"** means any operation performed on personal data, including collection, use, storage, transmission, and deletion.
-
-**"Data Subject"** means an identified or identifiable natural person whose personal data is processed.
-
-**"Data Breach"** means a breach of security leading to accidental or unlawful destruction, loss, alteration, unauthorized disclosure of, or access to personal data.
-
-### 1.4 Relationship to Main Agreement
-This DPA supplements the main service agreement dated {{main_agreement_date}} ("Main Agreement"). In case of conflict, this DPA prevails regarding data protection matters.
-
----
-
-## 2. Scope and Nature of Processing
-
-### 2.1 Categories of Personal Data
-The Processor may process the following categories of personal data:
-- {{data_category_1}}
-- {{data_category_2}}
-- {{data_category_3}}
-- {{additional_data_categories}}
-
-### 2.2 Categories of Data Subjects
-The personal data concerns the following categories of data subjects:
-- {{data_subject_category_1}}
-- {{data_subject_category_2}}
-- {{data_subject_category_3}}
-- {{additional_subject_categories}}
-
-### 2.3 Purpose of Processing
-The Processor shall process personal data only for the following purposes:
-- {{processing_purpose_1}}
-- {{processing_purpose_2}}
-- {{processing_purpose_3}}
-- Such other purposes as documented in writing and agreed by the Controller
-
-### 2.4 Nature and Duration of Processing
-**Processing Activities:** {{processing_activities}}
-**Processing Duration:** For the term of the Main Agreement plus {{retention_period}} for data retention
-**Processing Location:** {{processing_locations}}
+### 1.4 Legal Basis
+**Processing Legal Basis:** {{processing_legal_basis}}
+**Consent Requirements:** {{consent_processing_requirements}}
+**Legitimate Interest:** {{legitimate_interest_assessments}}
+**Special Category Basis:** {{special_category_legal_basis}}
 
 ---
 
-## 3. Processor Obligations
+## 2. Data Controller Obligations
 
-### 3.1 Processing Instructions
-The Processor shall:
-- Process personal data only on documented instructions from the Controller
-- Not process personal data for any purpose other than as instructed
-- Immediately inform Controller if instructions violate applicable law
-- Seek clarification when instructions are unclear or incomplete
+### 2.1 Controller Responsibilities
+**Data Accuracy:** {{controller_data_accuracy_obligations}}
+**Data Minimization:** {{controller_data_minimization_duties}}
+**Purpose Limitation:** {{controller_purpose_limitation_compliance}}
+**Storage Limitation:** {{controller_storage_limitation_requirements}}
 
-### 3.2 Confidentiality
-The Processor shall ensure that persons authorized to process personal data:
-- Are subject to appropriate confidentiality obligations
-- Receive adequate training on data protection
-- Understand their responsibilities under this DPA
-- Are authorized to access only the minimum data necessary
+### 2.2 Instructions to Processor
+**Processing Instructions:** {{detailed_processing_instructions}}
+**Instruction Changes:** {{processing_instruction_change_procedures}}
+**Documented Instructions:** {{instruction_documentation_requirements}}
+**Lawful Instructions:** {{lawful_instruction_compliance}}
 
-### 3.3 Security Measures
-The Processor shall implement appropriate technical and organizational measures including:
-- {{security_measure_1}}
-- {{security_measure_2}}
-- {{security_measure_3}}
-- Regular security assessments and updates
+### 2.3 Data Subject Rights
+**Rights Facilitation:** {{controller_data_subject_rights_facilitation}}
+**Response Procedures:** {{data_subject_response_procedures}}
+**Rights Assessment:** {{data_subject_rights_impact_assessment}}
+**Verification Procedures:** {{data_subject_identity_verification}}
 
-### 3.4 Data Minimization
-The Processor shall:
-- Process only the minimum personal data necessary
-- Not collect additional data without Controller authorization
-- Regularly review data processing activities
-- Delete or anonymize data when no longer needed
+### 2.4 Compliance Monitoring
+**Compliance Oversight:** {{controller_compliance_monitoring}}
+**Audit Requirements:** {{controller_audit_obligations}}
+**Documentation Maintenance:** {{controller_documentation_requirements}}
+**Regulatory Reporting:** {{controller_regulatory_reporting}}
 
 ---
 
-## 4. Technical and Organizational Security Measures
+## 3. Data Processor Obligations
+
+### 3.1 Processing Compliance
+**Instruction Compliance:** {{processor_instruction_compliance}}
+**Purpose Limitation:** {{processor_purpose_limitation_adherence}}
+**Processing Records:** {{processor_processing_records}}
+**Unauthorized Processing:** {{unauthorized_processing_prohibitions}}
+
+### 3.2 Technical Measures
+**Security Measures:** {{processor_technical_security_measures}}
+**Access Controls:** {{processor_access_control_measures}}
+**Encryption Requirements:** {{processor_encryption_requirements}}
+**Data Minimization:** {{processor_data_minimization_implementation}}
+
+### 3.3 Organizational Measures
+**Staff Training:** {{processor_staff_training_requirements}}
+**Access Management:** {{processor_access_management_procedures}}
+**Confidentiality:** {{processor_confidentiality_obligations}}
+**Incident Response:** {{processor_incident_response_procedures}}
+
+### 3.4 Transparency Obligations
+**Processing Transparency:** {{processor_transparency_requirements}}
+**Documentation Provision:** {{processor_documentation_provision}}
+**Assistance Obligations:** {{processor_assistance_obligations}}
+**Cooperation Requirements:** {{processor_cooperation_duties}}
+
+---
+
+## 4. Security Measures
 
 ### 4.1 Technical Safeguards
-**Encryption:** {{encryption_standards}}
-**Access Controls:** {{access_control_measures}}
-**Network Security:** {{network_security_measures}}
-**Data Backup:** {{backup_procedures}}
+**Encryption Standards:** {{encryption_standards_implementation}}
+**Pseudonymization:** {{pseudonymization_techniques}}
+**Access Authentication:** {{access_authentication_mechanisms}}
+**Activity Logging:** {{activity_logging_requirements}}
 
-### 4.2 Organizational Measures
+### 4.2 Organizational Safeguards
+**Security Policies:** {{organizational_security_policies}}
 **Personnel Security:** {{personnel_security_measures}}
-**Training Programs:** {{training_requirements}}
-**Incident Response:** {{incident_response_procedures}}
-**Vendor Management:** {{vendor_security_requirements}}
+**Training Programs:** {{security_training_programs}}
+**Access Reviews:** {{periodic_access_reviews}}
 
-### 4.3 Physical Security
-**Facility Security:** {{physical_security_measures}}
-**Equipment Protection:** {{equipment_security}}
-**Secure Disposal:** {{disposal_procedures}}
+### 4.3 Physical Safeguards
+**Facility Security:** {{physical_facility_security}}
+**Equipment Protection:** {{equipment_protection_measures}}
+**Media Controls:** {{media_handling_controls}}
+**Disposal Procedures:** {{secure_disposal_procedures}}
 
-### 4.4 Security Monitoring
-- **Continuous Monitoring:** {{monitoring_procedures}}
-- **Vulnerability Assessments:** {{assessment_frequency}}
-- **Penetration Testing:** {{penetration_testing_schedule}}
-- **Security Audits:** {{audit_requirements}}
+### 4.4 Network Security
+**Network Controls:** {{network_security_controls}}
+**Transmission Security:** {{data_transmission_security}}
+**Firewall Protection:** {{firewall_protection_measures}}
+**Intrusion Detection:** {{intrusion_detection_systems}}
 
 ---
 
-## 5. Sub-processing
+## 5. Data Subject Rights
 
-### 5.1 Sub-processor Authorization
-{{#if general_authorization}}
-The Controller provides general authorization for the Processor to engage sub-processors, subject to the conditions in this section.
+### 5.1 Rights Framework
+**Access Rights:** {{data_subject_access_rights}}
+**Rectification Rights:** {{data_subject_rectification_rights}}
+**Erasure Rights:** {{data_subject_erasure_rights}}
+**Restriction Rights:** {{data_subject_restriction_rights}}
+
+### 5.2 Rights Procedures
+**Request Processing:** {{data_subject_request_processing}}
+**Response Timeframes:** {{data_subject_response_timeframes}}
+**Verification Procedures:** {{data_subject_verification_procedures}}
+**Assistance Obligations:** {{processor_rights_assistance}}
+
+### 5.3 Portability and Objection
+**Data Portability:** {{data_portability_procedures}}
+**Processing Objection:** {{processing_objection_handling}}
+**Automated Decision-Making:** {{automated_decision_objection_rights}}
+**Profiling Rights:** {{profiling_objection_procedures}}
+
+### 5.4 Rights Implementation
+**Technical Implementation:** {{rights_technical_implementation}}
+**Process Integration:** {{rights_process_integration}}
+**Documentation Requirements:** {{rights_documentation_requirements}}
+**Training Requirements:** {{rights_training_obligations}}
+
+---
+
+## 6. International Transfers
+
+### 6.1 Transfer Framework
+**Transfer Mechanisms:** {{international_transfer_mechanisms}}
+**Adequacy Decisions:** {{adequacy_decision_reliance}}
+**Appropriate Safeguards:** {{appropriate_safeguards_implementation}}
+**Transfer Documentation:** {{transfer_documentation_requirements}}
+
+### 6.2 Standard Contractual Clauses
+**SCC Implementation:** {{scc_implementation_procedures}}
+**SCC Compliance:** {{scc_compliance_monitoring}}
+**SCC Updates:** {{scc_update_procedures}}
+**SCC Documentation:** {{scc_documentation_requirements}}
+
+### 6.3 Transfer Impact Assessment
+**TIA Requirements:** {{transfer_impact_assessment_requirements}}
+**Risk Assessment:** {{transfer_risk_assessment}}
+**Supplementary Measures:** {{supplementary_measures_implementation}}
+**Regular Reviews:** {{transfer_review_procedures}}
+
+### 6.4 Third Country Processing
+**Third Country Identification:** {{third_country_processing_locations}}
+**Local Law Assessment:** {{local_law_assessment_procedures}}
+**Government Access:** {{government_access_risk_assessment}}
+**Notification Requirements:** {{third_country_notification_obligations}}
+
+---
+
+## 7. Sub-Processing
+
+### 7.1 Sub-Processor Authorization
+**Authorization Requirements:** {{sub_processor_authorization_requirements}}
+**Prior Approval:** {{sub_processor_prior_approval_procedures}}
+**General Authorization:** {{general_authorization_procedures}}
+**Objection Rights:** {{sub_processor_objection_rights}}
+
+### 7.2 Sub-Processor Obligations
+**Contractual Requirements:** {{sub_processor_contractual_obligations}}
+**Same Obligations:** {{sub_processor_equivalent_obligations}}
+**Liability Chain:** {{sub_processor_liability_arrangements}}
+**Compliance Monitoring:** {{sub_processor_compliance_monitoring}}
+
+### 7.3 Sub-Processor Management
+**Due Diligence:** {{sub_processor_due_diligence}}
+**Contract Management:** {{sub_processor_contract_management}}
+**Performance Monitoring:** {{sub_processor_performance_monitoring}}
+**Termination Procedures:** {{sub_processor_termination_procedures}}
+
+### 7.4 Sub-Processor Documentation
+**Registry Maintenance:** {{sub_processor_registry_maintenance}}
+**Change Notifications:** {{sub_processor_change_notifications}}
+**Documentation Access:** {{sub_processor_documentation_access}}
+**Audit Rights:** {{sub_processor_audit_rights}}
+
+---
+
+## 8. Data Breach Management
+
+### 8.1 Breach Detection
+**Detection Mechanisms:** {{breach_detection_mechanisms}}
+**Monitoring Systems:** {{breach_monitoring_systems}}
+**Alert Procedures:** {{breach_alert_procedures}}
+**Assessment Criteria:** {{breach_assessment_criteria}}
+
+### 8.2 Breach Notification
+**Notification Timeframes:** {{breach_notification_timeframes}}
+**Notification Content:** {{breach_notification_content_requirements}}
+**Notification Procedures:** {{breach_notification_procedures}}
+**Documentation Requirements:** {{breach_documentation_requirements}}
+
+### 8.3 Breach Response
+**Immediate Response:** {{breach_immediate_response_procedures}}
+**Containment Measures:** {{breach_containment_measures}}
+**Investigation Procedures:** {{breach_investigation_procedures}}
+**Remediation Actions:** {{breach_remediation_actions}}
+
+### 8.4 Communication Management
+**Internal Communication:** {{breach_internal_communication}}
+**External Communication:** {{breach_external_communication}}
+**Media Management:** {{breach_media_management}}
+**Stakeholder Communication:** {{breach_stakeholder_communication}}
+
+---
+
+## 9. Auditing and Compliance
+
+### 9.1 Audit Framework
+**Audit Rights:** {{audit_rights_framework}}
+**Audit Scope:** {{audit_scope_definition}}
+**Audit Frequency:** {{audit_frequency_requirements}}
+**Audit Procedures:** {{audit_execution_procedures}}
+
+### 9.2 Compliance Monitoring
+**Continuous Monitoring:** {{continuous_compliance_monitoring}}
+**Performance Metrics:** {{compliance_performance_metrics}}
+**Reporting Requirements:** {{compliance_reporting_requirements}}
+**Issue Resolution:** {{compliance_issue_resolution}}
+
+### 9.3 Documentation Requirements
+**Processing Records:** {{processing_records_maintenance}}
+**Evidence Collection:** {{compliance_evidence_collection}}
+**Documentation Access:** {{documentation_access_procedures}}
+**Retention Requirements:** {{documentation_retention_requirements}}
+
+### 9.4 Certification and Assessment
+**Certification Requirements:** {{certification_requirement_compliance}}
+**Assessment Procedures:** {{compliance_assessment_procedures}}
+**Third-Party Assessments:** {{third_party_assessment_requirements}}
+**Improvement Planning:** {{compliance_improvement_planning}}
+
+---
+
+## 10. Data Retention and Deletion
+
+### 10.1 Retention Framework
+**Retention Periods:** {{data_retention_periods}}
+**Retention Criteria:** {{retention_criteria_application}}
+**Legal Hold:** {{legal_hold_procedures}}
+**Retention Reviews:** {{retention_review_procedures}}
+
+### 10.2 Deletion Procedures
+**Deletion Triggers:** {{data_deletion_triggers}}
+**Deletion Methods:** {{secure_deletion_methods}}
+**Deletion Verification:** {{deletion_verification_procedures}}
+**Deletion Documentation:** {{deletion_documentation_requirements}}
+
+### 10.3 Data Disposal
+**Disposal Standards:** {{data_disposal_standards}}
+**Physical Destruction:** {{physical_destruction_procedures}}
+**Digital Erasure:** {{digital_erasure_procedures}}
+**Disposal Certification:** {{disposal_certification_requirements}}
+
+### 10.4 Return and Transfer
+**Data Return:** {{data_return_procedures}}
+**Transfer Procedures:** {{data_transfer_procedures}}
+**Format Requirements:** {{data_return_format_requirements}}
+**Verification Procedures:** {{return_verification_procedures}}
+
+---
+
+## 11. Privacy Impact Assessment
+
+### 11.1 PIA Requirements
+**PIA Triggers:** {{pia_trigger_conditions}}
+**PIA Scope:** {{pia_scope_definition}}
+**PIA Methodology:** {{pia_methodology_requirements}}
+**PIA Documentation:** {{pia_documentation_requirements}}
+
+### 11.2 Risk Assessment
+**Risk Identification:** {{privacy_risk_identification}}
+**Risk Analysis:** {{privacy_risk_analysis}}
+**Risk Evaluation:** {{privacy_risk_evaluation}}
+**Risk Treatment:** {{privacy_risk_treatment}}
+
+### 11.3 Consultation Requirements
+**Stakeholder Consultation:** {{pia_stakeholder_consultation}}
+**Data Subject Consultation:** {{data_subject_consultation_procedures}}
+**Expert Consultation:** {{expert_consultation_requirements}}
+**Authority Consultation:** {{supervisory_authority_consultation}}
+
+### 11.4 PIA Maintenance
+**Review Requirements:** {{pia_review_requirements}}
+**Update Procedures:** {{pia_update_procedures}}
+**Change Management:** {{pia_change_management}}
+**Continuous Monitoring:** {{pia_continuous_monitoring}}
+
+---
+
+## 12. Regulatory Compliance
+
+### 12.1 GDPR Compliance
+**GDPR Obligations:** {{gdpr_compliance_obligations}}
+**Lawfulness Assessment:** {{gdpr_lawfulness_assessment}}
+**Rights Implementation:** {{gdpr_rights_implementation}}
+**Documentation Requirements:** {{gdpr_documentation_requirements}}
+
+### 12.2 Other Regulations
+**Additional Regulations:** {{additional_regulation_compliance}}
+**Sector-Specific Rules:** {{sector_specific_compliance}}
+**National Implementations:** {{national_law_compliance}}
+**Future Regulations:** {{future_regulation_preparedness}}
+
+### 12.3 Supervisory Cooperation
+**Authority Relations:** {{supervisory_authority_relations}}
+**Cooperation Procedures:** {{authority_cooperation_procedures}}
+**Investigation Support:** {{investigation_support_obligations}}
+**Enforcement Response:** {{enforcement_response_procedures}}
+
+### 12.4 Compliance Training
+**Training Programs:** {{compliance_training_programs}}
+**Training Requirements:** {{mandatory_training_requirements}}
+**Training Documentation:** {{training_documentation_requirements}}
+**Competency Assessment:** {{competency_assessment_procedures}}
+
+---
+
+## 13. Liability and Indemnification
+
+### 13.1 Liability Framework
+**Liability Allocation:** {{liability_allocation_framework}}
+**Joint Liability:** {{joint_liability_arrangements}}
+**Liability Limitations:** {{liability_limitation_provisions}}
+**Damage Assessment:** {{damage_assessment_procedures}}
+
+### 13.2 Indemnification
+**Indemnification Scope:** {{indemnification_scope_definition}}
+**Indemnification Triggers:** {{indemnification_trigger_events}}
+**Defense Obligations:** {{indemnification_defense_obligations}}
+**Settlement Authority:** {{indemnification_settlement_authority}}
+
+### 13.3 Insurance Requirements
+**Insurance Coverage:** {{required_insurance_coverage}}
+**Coverage Amounts:** {{minimum_coverage_amounts}}
+**Additional Insured:** {{additional_insured_requirements}}
+**Proof of Insurance:** {{insurance_proof_requirements}}
+
+### 13.4 Damage Mitigation
+**Mitigation Obligations:** {{damage_mitigation_obligations}}
+**Preventive Measures:** {{preventive_measure_requirements}}
+**Incident Response:** {{liability_incident_response}}
+**Recovery Procedures:** {{damage_recovery_procedures}}
+
+---
+
+## 14. Termination and Transition
+
+### 14.1 Termination Events
+**Natural Expiration:** {{natural_term_expiration}}
+**Termination for Cause:** {{termination_for_cause_events}}
+**Convenience Termination:** {{convenience_termination_provisions}}
+**Regulatory Termination:** {{regulatory_termination_events}}
+
+### 14.2 Data Handling on Termination
+**Data Return:** {{termination_data_return}}
+**Data Deletion:** {{termination_data_deletion}}
+**Data Transfer:** {{termination_data_transfer}}
+**Certification Requirements:** {{termination_certification_requirements}}
+
+### 14.3 Transition Procedures
+**Transition Planning:** {{termination_transition_planning}}
+**Knowledge Transfer:** {{termination_knowledge_transfer}}
+**Service Continuity:** {{termination_service_continuity}}
+**Documentation Transfer:** {{termination_documentation_transfer}}
+
+### 14.4 Post-Termination Obligations
+**Surviving Obligations:** {{post_termination_obligations}}
+**Confidentiality Survival:** {{post_termination_confidentiality}}
+**Compliance Survival:** {{post_termination_compliance}}
+**Documentation Retention:** {{post_termination_documentation}}
+
+---
+
+## 15. Dispute Resolution
+
+### 15.1 Dispute Resolution Framework
+**Resolution Procedures:** {{dispute_resolution_procedures}}
+**Escalation Matrix:** {{dispute_escalation_matrix}}
+**Mediation Requirements:** {{mediation_requirement_procedures}}
+**Expert Determination:** {{expert_determination_procedures}}
+
+### 15.2 Regulatory Disputes
+**Authority Involvement:** {{regulatory_dispute_authority_involvement}}
+**Compliance Disputes:** {{compliance_dispute_resolution}}
+**Enforcement Actions:** {{enforcement_action_response}}
+**Appeal Procedures:** {{regulatory_appeal_procedures}}
+
+---
+
+## 16. General Provisions
+
+### 16.1 Governing Law
+This Agreement shall be governed by the laws of {{governing_jurisdiction}}.
+
+### 16.2 Entire Agreement
+This Agreement constitutes the entire agreement regarding data processing and supersedes all prior negotiations.
+
+### 16.3 Amendment
+This Agreement may only be amended by written agreement signed by both Parties.
+
+### 16.4 Assignment
+{{#if assignment_permitted}}
+This Agreement may be assigned with written consent of both Parties.
 {{else}}
-The Processor must obtain specific written authorization for each sub-processor.
+This Agreement may not be assigned without written consent of both Parties.
 {{/if}}
 
-### 5.2 Current Sub-processors
-The following sub-processors are currently authorized:
-| Sub-processor | Location | Services | Security Standards |
-|---------------|----------|----------|-------------------|
-| {{subprocessor_1_name}} | {{subprocessor_1_location}} | {{subprocessor_1_services}} | {{subprocessor_1_security}} |
-| {{subprocessor_2_name}} | {{subprocessor_2_location}} | {{subprocessor_2_services}} | {{subprocessor_2_security}} |
+### 16.5 Severability
+If any provision is held invalid, the remainder shall remain in full force and effect.
 
-### 5.3 New Sub-processor Procedures
-Before engaging a new sub-processor, the Processor shall:
-- Notify Controller at least {{subprocessor_notice_period}} days in advance
-- Provide details of the sub-processor and intended processing
-- Allow Controller to object within {{objection_period}} days
-- Terminate sub-processor relationship if Controller objects
+### 16.6 Force Majeure
+Neither Party shall be liable for delays due to circumstances beyond their reasonable control.
 
-### 5.4 Sub-processor Requirements
-The Processor shall ensure that sub-processors:
-- Provide sufficient guarantees of data protection compliance
-- Are bound by data protection obligations equivalent to this DPA
-- Implement appropriate technical and organizational measures
-- Submit to regular audits and assessments
+### 16.7 Notices
+All notices shall be delivered in writing to the addresses specified herein.
+
+### 16.8 Data Protection Officer
+**DPO Contact:** {{dpo_contact_information}}
+**DPO Involvement:** {{dpo_involvement_procedures}}
 
 ---
 
-## 6. Data Subject Rights
+## 17. Signatures
 
-### 6.1 Rights Support
-The Processor shall assist the Controller in responding to data subject rights requests including:
-- **Right of Access:** Providing copies of personal data
-- **Right of Rectification:** Correcting inaccurate data
-- **Right of Erasure:** Deleting personal data when required
-- **Right of Portability:** Providing data in a structured format
-- **Right to Object:** Stopping certain types of processing
-
-### 6.2 Response Procedures
-When the Processor receives a data subject request:
-- Forward the request to Controller within {{forwarding_timeframe}} hours
-- Do not respond directly to the data subject
-- Provide reasonable assistance to Controller
-- Document all requests and responses
-
-### 6.3 Technical Assistance
-The Processor shall implement systems that enable:
-- Identification of data subject's personal data
-- Retrieval of data in commonly used formats
-- Correction or deletion of data upon instruction
-- {{technical_capabilities}}
-
----
-
-## 7. Data Breach Notification
-
-### 7.1 Breach Detection and Response
-The Processor shall:
-- Implement monitoring systems to detect breaches
-- Investigate suspected breaches immediately
-- Contain and mitigate breach impacts
-- Document all breach incidents
-
-### 7.2 Notification Requirements
-Upon becoming aware of a personal data breach, the Processor shall:
-- Notify Controller without undue delay and within {{breach_notification_timeframe}} hours
-- Provide all available information about the breach
-- Continue to provide updates as investigation progresses
-- Assist Controller with regulatory notifications if required
-
-### 7.3 Breach Information
-Breach notifications shall include:
-- Nature of the breach and categories of data affected
-- Number of data subjects and data records involved
-- Likely consequences of the breach
-- Measures taken or proposed to address the breach
-- Contact information for further information
-
-### 7.4 Remediation
-The Processor shall:
-- Take immediate steps to mitigate breach effects
-- Prevent similar breaches in the future
-- Bear costs of remediation if breach results from Processor's fault
-- Cooperate with any investigations or enforcement actions
-
----
-
-## 8. Data Transfers
-
-### 8.1 Transfer Restrictions
-The Processor shall not transfer personal data outside of {{authorized_locations}} without Controller's prior written authorization.
-
-### 8.2 International Transfers
-{{#if international_transfers}}
-For transfers to countries without adequate protection:
-- **Transfer Mechanism:** {{transfer_mechanism}}
-- **Safeguards:** {{transfer_safeguards}}
-- **Additional Protections:** {{additional_protections}}
-{{else}}
-No international transfers are authorized under this DPA.
-{{/if}}
-
-### 8.3 Transfer Documentation
-All authorized transfers must be documented including:
-- Legal basis for transfer
-- Destination countries and recipients
-- Safeguards implemented
-- Data categories and purposes
-
----
-
-## 9. Data Retention and Deletion
-
-### 9.1 Retention Periods
-**Standard Retention:** {{standard_retention_period}}
-**Legal Hold:** As required by applicable law or legal proceedings
-**Business Requirements:** {{business_retention_requirements}}
-
-### 9.2 Deletion Procedures
-Upon termination of processing or Controller instruction, the Processor shall:
-- Delete all personal data within {{deletion_timeframe}} days
-- Provide certification of deletion upon request
-- Return data to Controller if requested instead of deletion
-- Ensure sub-processors also delete data
-
-### 9.3 Deletion Exceptions
-Data may be retained only if:
-- Required by applicable law
-- Necessary for legal defense
-- Anonymized beyond possibility of re-identification
-- Approved in writing by Controller
-
----
-
-## 10. Audits and Compliance
-
-### 10.1 Audit Rights
-The Controller may audit Processor's compliance through:
-- **Self-Assessment:** Annual compliance questionnaires
-- **Third-Party Audits:** Independent security assessments
-- **On-Site Inspections:** With reasonable notice
-- **Documentation Review:** Policies, procedures, and records
-
-### 10.2 Audit Frequency
-**Regular Audits:** {{audit_frequency}}
-**Additional Audits:** Upon reasonable suspicion of non-compliance
-**Post-Breach Audits:** Following any security incident
-
-### 10.3 Compliance Reporting
-The Processor shall provide:
-- Annual compliance certifications
-- Security assessment reports
-- Breach incident reports
-- {{additional_reporting_requirements}}
-
-### 10.4 Remediation
-If audits identify non-compliance:
-- Processor shall remedy issues within {{remediation_timeframe}} days
-- Controller may suspend processing if issues are not resolved
-- Costs of remediation borne by the non-compliant party
-
----
-
-## 11. Liability and Indemnification
-
-### 11.1 Data Protection Liability
-{{#if joint_liability}}
-Each party shall be liable for damages resulting from their own violations of data protection law.
-{{else}}
-Processor shall indemnify Controller for damages resulting from Processor's violations of data protection law.
-{{/if}}
-
-### 11.2 Limitation of Liability
-{{#if liability_cap}}
-Total liability for data protection violations shall not exceed {{liability_cap_amount}} or {{liability_cap_percentage}}% of fees paid in the preceding 12 months, whichever is greater.
-{{else}}
-No limitation on liability for data protection violations.
-{{/if}}
-
-### 11.3 Regulatory Fines
-- Each party responsible for fines resulting from their own violations
-- Processor shall indemnify Controller for fines caused by Processor's non-compliance
-- {{fine_allocation_terms}}
-
----
-
-## 12. Term and Termination
-
-### 12.1 Term
-This DPA shall remain in effect for the duration of the Main Agreement and any subsequent data retention periods.
-
-### 12.2 Termination Rights
-Either party may terminate this DPA:
-- Upon termination of the Main Agreement
-- Upon material breach uncured within {{cure_period}} days
-- If processing becomes unlawful
-
-### 12.3 Effect of Termination
-Upon termination:
-- Processing activities must cease immediately
-- Personal data must be deleted or returned as specified
-- Sub-processor agreements must be terminated
-- Confidentiality obligations survive termination
-
----
-
-## 13. General Provisions
-
-### 13.1 Governing Law
-This DPA shall be governed by the laws of {{governing_jurisdiction}}.
-
-### 13.2 Jurisdiction
-Data protection disputes shall be resolved in {{dispute_jurisdiction}}.
-
-### 13.3 Amendment
-This DPA may only be amended to maintain compliance with applicable data protection laws.
-
-### 13.4 Severability
-If any provision is held invalid, the remainder shall remain in effect.
-
-### 13.5 Precedence
-This DPA takes precedence over conflicting provisions in the Main Agreement regarding data protection.
-
----
-
-## 14. Signatures
-
-**IN WITNESS WHEREOF**, the parties have executed this DPA as of the date first written above.
+**IN WITNESS WHEREOF**, the Parties have executed this Agreement as of the date first written above.
 
 **DATA CONTROLLER:**
 
@@ -369,7 +466,7 @@ This DPA takes precedence over conflicting provisions in the Main Agreement rega
 | _________________________________ | _____________ |
 | {{controller_name}} | |
 | By: {{controller_signatory}} | |
-| Title: {{controller_title}} | |
+| Title: {{controller_signatory_title}} | |
 
 **DATA PROCESSOR:**
 
@@ -378,10 +475,10 @@ This DPA takes precedence over conflicting provisions in the Main Agreement rega
 | _________________________________ | _____________ |
 | {{processor_name}} | |
 | By: {{processor_signatory}} | |
-| Title: {{processor_title}} | |
+| Title: {{processor_signatory_title}} | |
 
 ---
 
-**IMPORTANT LEGAL NOTICE:** This data processing agreement should be reviewed by legal counsel specializing in data protection law to ensure compliance with applicable regulations. Data protection requirements vary by jurisdiction and continue to evolve.
+**IMPORTANT LEGAL NOTICE:** This data processing agreement involves complex privacy and data protection obligations under various jurisdictions including GDPR and other applicable laws. It should be reviewed by qualified data protection and privacy legal professionals to ensure compliance with all applicable regulations and adequate protection of personal data.
 
 *Template generated by 123LegalDoc - Professional Legal Document Platform*

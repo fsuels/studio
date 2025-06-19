@@ -2,13 +2,13 @@
 
 ---
 
-**PROFESSIONAL CONSULTING AGREEMENT**
+**CONSULTING AGREEMENT**
 
 This Consulting Agreement ("Agreement") is made and entered into on **{{agreement_date}}**, by and between:
 
-- **Consultant:** {{consultant_name}}, a {{consultant_entity_type}} with its principal place of business at {{consultant_address}}
+- **Company:** {{company_name}}, a {{company_entity_type}} organized under the laws of {{company_state}}, with its principal place of business at {{company_address}}
 
-- **Client:** {{client_name}}, a {{client_entity_type}} organized under the laws of {{client_state}}, with its principal place of business at {{client_address}}
+- **Consultant:** {{consultant_name}}, a {{consultant_entity_type}} {{#if consultant_individual}}individual{{else}}organized under the laws of {{consultant_state}}{{/if}}, with {{#if consultant_individual}}residence{{else}}principal place of business{{/if}} at {{consultant_address}}
 
 Collectively referred to herein as the "Parties."
 
@@ -17,257 +17,382 @@ Collectively referred to herein as the "Parties."
 ## 1. Consulting Services
 
 ### 1.1 Scope of Services
-The Consultant agrees to provide the following consulting services ("Services") to the Client:
+**Services Description:** {{services_description_detailed}}
+**Primary Deliverables:** {{primary_deliverables_list}}
+**Service Categories:** {{service_categories_included}}
+**Expected Outcomes:** {{expected_outcomes_description}}
 
-**Primary Consulting Areas:**
-{{consulting_services_description}}
+### 1.2 Specific Responsibilities
+**Consultant Responsibilities:**
+- {{consultant_responsibility_1}}
+- {{consultant_responsibility_2}}
+- {{consultant_responsibility_3}}
+- {{additional_consultant_responsibilities}}
 
-**Specific Deliverables:**
-{{deliverables_list}}
+**Company Responsibilities:**
+- {{company_responsibility_1}}
+- {{company_responsibility_2}}
+- {{company_responsibility_3}}
+- {{additional_company_responsibilities}}
 
-### 1.2 Service Categories
-- **Consulting Type:** {{consulting_type}}
-- **Industry Focus:** {{industry_focus}}
-- **Expertise Areas:** {{expertise_areas}}
-- **Project Objectives:** {{project_objectives}}
+### 1.3 Service Standards
+**Quality Standards:** {{quality_standards_requirements}}
+**Performance Metrics:** {{performance_metrics_criteria}}
+**Professional Standards:** {{professional_standards_compliance}}
+**Industry Best Practices:** {{industry_best_practices_adherence}}
 
-### 1.3 Performance Standards
-Consultant shall perform all Services:
-- In accordance with professional standards in the industry
-- With the degree of care and skill ordinarily exercised by consultants
-- In compliance with all applicable laws and regulations
-- Meeting agreed-upon quality metrics: {{quality_metrics}}
+### 1.4 Service Modifications
+**Change Procedures:** {{service_change_procedures}}
+**Additional Services:** {{additional_services_authorization}}
+**Scope Expansion:** {{scope_expansion_procedures}}
+**Service Reduction:** {{service_reduction_procedures}}
 
 ---
 
-## 2. Term and Timeline
+## 2. Term and Schedule
 
 ### 2.1 Agreement Term
-This Agreement shall commence on **{{start_date}}** and shall continue until **{{end_date}}**, unless terminated earlier in accordance with the terms herein.
+**Start Date:** {{project_start_date}}
+**End Date:** {{project_end_date}}
+**Total Duration:** {{total_project_duration}}
+**Renewal Options:** {{renewal_options_available}}
 
-### 2.2 Project Schedule
-| Phase | Description | Start Date | End Date | Deliverable |
-|-------|-------------|------------|----------|-------------|
-| {{phase_1_name}} | {{phase_1_description}} | {{phase_1_start}} | {{phase_1_end}} | {{phase_1_deliverable}} |
-| {{phase_2_name}} | {{phase_2_description}} | {{phase_2_start}} | {{phase_2_end}} | {{phase_2_deliverable}} |
-| {{phase_3_name}} | {{phase_3_description}} | {{phase_3_start}} | {{phase_3_end}} | {{phase_3_deliverable}} |
+### 2.2 Work Schedule
+**Working Hours:** {{consultant_working_hours}}
+**Work Location:** {{work_location_requirements}}
+**Availability Requirements:** {{availability_requirements}}
+**Meeting Schedule:** {{meeting_schedule_frequency}}
 
-### 2.3 Time Commitment
-- **Expected Hours:** {{expected_hours}} hours per {{time_period}}
-- **Schedule:** {{work_schedule}}
-- **Availability:** {{availability_requirements}}
+### 2.3 Project Milestones
+**Phase 1:** {{phase_1_description}} - Due: {{phase_1_deadline}}
+**Phase 2:** {{phase_2_description}} - Due: {{phase_2_deadline}}
+**Phase 3:** {{phase_3_description}} - Due: {{phase_3_deadline}}
+**Final Delivery:** {{final_delivery_date}}
+
+### 2.4 Time Tracking
+**Time Recording:** {{time_tracking_requirements}}
+**Reporting Frequency:** {{time_reporting_frequency}}
+**Approval Process:** {{time_approval_procedures}}
+**Overtime Authorization:** {{overtime_authorization_procedures}}
 
 ---
 
-## 3. Compensation and Expenses
+## 3. Compensation and Payment
 
-### 3.1 Consulting Fees
-**Fee Structure:** {{fee_structure}}
-- {{#if hourly_rate}}**Hourly Rate:** ${{hourly_rate}} per hour{{/if}}
-- {{#if daily_rate}}**Daily Rate:** ${{daily_rate}} per day{{/if}}
-- {{#if project_fee}}**Fixed Project Fee:** ${{project_fee}}{{/if}}
-- {{#if retainer}}**Monthly Retainer:** ${{retainer_amount}}{{/if}}
+### 3.1 Fee Structure
+**Consulting Fee:** ${{consulting_fee_amount}} {{fee_structure_type}}
+**Hourly Rate:** ${{hourly_rate_amount}} per hour
+**Project Rate:** ${{project_total_fee}}
+**Retainer Fee:** ${{retainer_fee_amount}}
 
 ### 3.2 Payment Terms
-- **Payment Schedule:** {{payment_schedule}}
-- **Invoice Frequency:** {{invoice_frequency}}
-- **Payment Due:** Net {{payment_terms}} days
-- **Late Payment Fee:** {{late_fee_rate}}% per month
+**Payment Schedule:** {{payment_schedule_terms}}
+**Invoice Frequency:** {{invoice_frequency}}
+**Payment Terms:** Net {{payment_terms_days}} days
+**Late Payment Penalty:** {{late_payment_penalty_rate}}%
 
 ### 3.3 Expenses
-{{#if expenses_reimbursed}}
-Client agrees to reimburse Consultant for reasonable expenses including:
-- Travel and accommodation: {{travel_policy}}
-- Materials and supplies: {{materials_policy}}
-- Other pre-approved expenses: {{other_expenses}}
+**Reimbursable Expenses:** {{reimbursable_expenses_categories}}
+**Expense Approval:** {{expense_approval_procedures}}
+**Expense Reporting:** {{expense_reporting_requirements}}
+**Maximum Expense Limit:** ${{maximum_expense_limit}}
+
+### 3.4 Additional Compensation
+**Performance Bonuses:** {{performance_bonus_structure}}
+**Success Fees:** {{success_fee_arrangements}}
+**Equity Compensation:** {{equity_compensation_terms}}
+**Benefits:** {{consultant_benefits_provided}}
+
+---
+
+## 4. Work Product and Deliverables
+
+### 4.1 Deliverables
+**Primary Deliverables:**
+- {{deliverable_1_description}}
+- {{deliverable_2_description}}
+- {{deliverable_3_description}}
+- {{additional_deliverables}}
+
+### 4.2 Delivery Schedule
+**Interim Deliverables:** {{interim_delivery_schedule}}
+**Final Deliverables:** {{final_delivery_requirements}}
+**Delivery Format:** {{delivery_format_specifications}}
+**Quality Standards:** {{deliverable_quality_standards}}
+
+### 4.3 Review and Acceptance
+**Review Period:** {{review_period_duration}}
+**Acceptance Criteria:** {{acceptance_criteria_definition}}
+**Revision Process:** {{revision_process_procedures}}
+**Final Acceptance:** {{final_acceptance_procedures}}
+
+### 4.4 Work Product Ownership
+**Ownership Rights:** {{work_product_ownership}}
+**Copyright Assignment:** {{copyright_assignment_terms}}
+**Work for Hire:** {{work_for_hire_provisions}}
+**Retained Rights:** {{consultant_retained_rights}}
+
+---
+
+## 5. Intellectual Property
+
+### 5.1 Intellectual Property Rights
+**Pre-existing IP:** {{pre_existing_ip_rights}}
+**Developed IP:** {{developed_ip_ownership}}
+**Joint IP:** {{joint_ip_arrangements}}
+**IP Licensing:** {{ip_licensing_provisions}}
+
+### 5.2 IP Assignment
+**Assignment Scope:** {{ip_assignment_scope}}
+**Assignment Timing:** {{ip_assignment_timing}}
+**Documentation Requirements:** {{ip_documentation_requirements}}
+**Moral Rights:** {{moral_rights_provisions}}
+
+### 5.3 IP Protection
+**Protection Obligations:** {{ip_protection_obligations}}
+**Infringement Procedures:** {{ip_infringement_procedures}}
+**Defense Cooperation:** {{ip_defense_cooperation}}
+**Enforcement Rights:** {{ip_enforcement_rights}}
+
+### 5.4 Third-Party IP
+**Third-Party Rights:** {{third_party_ip_considerations}}
+**Clearance Procedures:** {{ip_clearance_procedures}}
+**Indemnification:** {{ip_indemnification_provisions}}
+**Usage Rights:** {{third_party_ip_usage_rights}}
+
+---
+
+## 6. Confidentiality and Non-Disclosure
+
+### 6.1 Confidential Information
+**Definition:** {{confidential_information_definition}}
+**Company Information:** {{company_confidential_information}}
+**Consultant Information:** {{consultant_confidential_information}}
+**Third-Party Information:** {{third_party_confidential_information}}
+
+### 6.2 Non-Disclosure Obligations
+**Protection Duties:** {{confidentiality_protection_duties}}
+**Usage Restrictions:** {{confidential_information_usage_restrictions}}
+**Disclosure Limitations:** {{disclosure_limitation_requirements}}
+**Access Controls:** {{information_access_controls}}
+
+### 6.3 Confidentiality Period
+**Duration:** {{confidentiality_period_duration}}
+**Survival:** {{confidentiality_survival_terms}}
+**Return of Information:** {{information_return_procedures}}
+**Destruction Requirements:** {{information_destruction_requirements}}
+
+### 6.4 Exceptions
+**Public Information:** {{public_information_exceptions}}
+**Prior Knowledge:** {{prior_knowledge_exceptions}}
+**Independent Development:** {{independent_development_exceptions}}
+**Legal Requirements:** {{legal_disclosure_requirements}}
+
+---
+
+## 7. Non-Compete and Non-Solicitation
+
+### 7.1 Non-Compete Restrictions
+**Competitive Activities:** {{non_compete_restrictions}}
+**Geographic Scope:** {{non_compete_geographic_scope}}
+**Time Period:** {{non_compete_time_period}}
+**Excluded Activities:** {{non_compete_exclusions}}
+
+### 7.2 Non-Solicitation
+**Employee Solicitation:** {{employee_solicitation_restrictions}}
+**Customer Solicitation:** {{customer_solicitation_restrictions}}
+**Vendor Solicitation:** {{vendor_solicitation_restrictions}}
+**Time Limitations:** {{solicitation_time_limitations}}
+
+### 7.3 Enforcement
+**Enforcement Rights:** {{non_compete_enforcement_rights}}
+**Remedies:** {{non_compete_remedies}}
+**Injunctive Relief:** {{injunctive_relief_provisions}}
+**Damages:** {{non_compete_damages}}
+
+### 7.4 Reasonableness
+**Scope Limitations:** {{non_compete_scope_limitations}}
+**Geographic Reasonableness:** {{geographic_reasonableness}}
+**Time Reasonableness:** {{time_period_reasonableness}}
+**Business Protection:** {{legitimate_business_interests}}
+
+---
+
+## 8. Independent Contractor Relationship
+
+### 8.1 Contractor Status
+**Independent Contractor:** {{independent_contractor_status}}
+**No Employment:** {{no_employment_relationship}}
+**Control and Direction:** {{contractor_control_limitations}}
+**Business Relationship:** {{business_relationship_nature}}
+
+### 8.2 Contractor Obligations
+**Business License:** {{contractor_business_license}}
+**Insurance Requirements:** {{contractor_insurance_requirements}}
+**Tax Obligations:** {{contractor_tax_obligations}}
+**Regulatory Compliance:** {{contractor_regulatory_compliance}}
+
+### 8.3 Company Obligations
+**Payment Only:** {{company_payment_obligations}}
+**No Benefits:** {{no_employee_benefits}}
+**No Taxes:** {{no_tax_withholding}}
+**No Control:** {{no_employment_control}}
+
+### 8.4 IRS Compliance
+**1099 Reporting:** {{1099_reporting_requirements}}
+**Tax Documentation:** {{tax_documentation_requirements}}
+**Compliance Standards:** {{irs_compliance_standards}}
+**Record Keeping:** {{tax_record_keeping}}
+
+---
+
+## 9. Representations and Warranties
+
+### 9.1 Consultant Warranties
+**Authority:** {{consultant_authority_warranty}}
+**Capability:** {{consultant_capability_warranty}}
+**No Conflicts:** {{consultant_no_conflicts_warranty}}
+**Compliance:** {{consultant_compliance_warranty}}
+
+### 9.2 Company Warranties
+**Authority:** {{company_authority_warranty}}
+**Information Accuracy:** {{company_information_accuracy}}
+**Payment Capability:** {{company_payment_capability}}
+**Legal Compliance:** {{company_legal_compliance}}
+
+### 9.3 Mutual Warranties
+**Legal Standing:** {{mutual_legal_standing}}
+**Enforceability:** {{agreement_enforceability}}
+**No Violations:** {{no_law_violations}}
+**Good Faith:** {{good_faith_performance}}
+
+### 9.4 Warranty Disclaimers
+**Performance Results:** {{performance_results_disclaimer}}
+**Market Success:** {{market_success_disclaimer}}
+**Third-Party Actions:** {{third_party_actions_disclaimer}}
+**Implied Warranties:** {{implied_warranties_disclaimer}}
+
+---
+
+## 10. Indemnification and Liability
+
+### 10.1 Consultant Indemnification
+**Indemnification Scope:** {{consultant_indemnification_scope}}
+**Covered Claims:** {{consultant_covered_claims}}
+**Defense Obligations:** {{consultant_defense_obligations}}
+**Settlement Authority:** {{consultant_settlement_authority}}
+
+### 10.2 Company Indemnification
+**Indemnification Scope:** {{company_indemnification_scope}}
+**Covered Claims:** {{company_covered_claims}}
+**Defense Obligations:** {{company_defense_obligations}}
+**Settlement Authority:** {{company_settlement_authority}}
+
+### 10.3 Limitation of Liability
+**Liability Caps:** ${{liability_limitation_amount}}
+**Excluded Damages:** {{excluded_damage_types}}
+**Consequential Damages:** {{consequential_damage_exclusions}}
+**Special Damages:** {{special_damage_limitations}}
+
+### 10.4 Insurance Requirements
+**Professional Liability:** ${{professional_liability_insurance}}
+**General Liability:** ${{general_liability_insurance}}
+**Errors and Omissions:** ${{errors_omissions_insurance}}
+**Additional Coverage:** {{additional_insurance_requirements}}
+
+---
+
+## 11. Termination
+
+### 11.1 Termination Events
+**Term Expiration:** {{natural_term_expiration}}
+**Termination for Cause:** {{termination_for_cause_events}}
+**Termination for Convenience:** {{termination_for_convenience}}
+**Material Breach:** {{material_breach_termination}}
+
+### 11.2 Termination Procedures
+**Notice Requirements:** {{termination_notice_requirements}}
+**Cure Periods:** {{termination_cure_periods}}
+**Immediate Termination:** {{immediate_termination_circumstances}}
+**Wind-Down Period:** {{termination_wind_down_period}}
+
+### 11.3 Post-Termination Obligations
+**Work Product Delivery:** {{post_termination_work_product}}
+**Final Payment:** {{final_payment_procedures}}
+**Return of Materials:** {{material_return_obligations}}
+**Continuing Obligations:** {{continuing_post_termination_obligations}}
+
+### 11.4 Survival Provisions
+**Surviving Terms:** {{surviving_agreement_terms}}
+**Confidentiality Survival:** {{confidentiality_survival}}
+**IP Rights Survival:** {{ip_rights_survival}}
+**Indemnification Survival:** {{indemnification_survival}}
+
+---
+
+## 12. Dispute Resolution
+
+### 12.1 Dispute Resolution Process
+**Direct Negotiation:** {{dispute_negotiation_procedures}}
+**Mediation:** {{mediation_procedures}}
+{{#if arbitration}}
+**Arbitration:** {{arbitration_procedures}} in {{arbitration_location}}
 {{else}}
-All expenses are included in the consulting fee.
+**Litigation:** Court proceedings in {{jurisdiction}}
 {{/if}}
 
-### 3.4 Maximum Fee Cap
-{{#if fee_cap}}
-Total fees under this Agreement shall not exceed ${{maximum_fee}} without written authorization.
-{{/if}}
+### 12.2 Escalation Procedures
+**Management Involvement:** {{management_dispute_involvement}}
+**Executive Escalation:** {{executive_escalation_procedures}}
+**Time Limits:** {{dispute_resolution_time_limits}}
+**Good Faith Requirements:** {{good_faith_dispute_resolution}}
 
 ---
 
-## 4. Consultant Responsibilities
+## 13. General Provisions
 
-### 4.1 Service Delivery
-Consultant agrees to:
-- Provide Services with professional competence and integrity
-- Meet all agreed-upon deadlines and milestones
-- Maintain regular communication with Client
-- Provide progress reports: {{reporting_schedule}}
-
-### 4.2 Professional Standards
-Consultant warrants that they:
-- Possess the necessary skills and experience
-- Will maintain professional licenses as required
-- Will stay current with industry best practices
-- Will not engage in any conflicts of interest
-
-### 4.3 Work Product
-All reports, analyses, recommendations, and other work products shall be:
-- Original work of the Consultant
-- Professionally prepared and presented
-- Delivered in the format specified: {{deliverable_format}}
-- Completed by the agreed deadlines
-
----
-
-## 5. Client Responsibilities
-
-### 5.1 Cooperation and Support
-Client agrees to:
-- Provide timely access to necessary information and personnel
-- Make key personnel available for meetings and interviews
-- Review and provide feedback on deliverables within {{review_timeframe}} business days
-- Make timely payments as specified in this Agreement
-
-### 5.2 Information and Resources
-Client shall provide:
-- Access to relevant company data and systems: {{data_access}}
-- Workspace and facilities as needed: {{workspace_requirements}}
-- Administrative support: {{admin_support}}
-- Contact person: {{client_contact_person}}
-
----
-
-## 6. Independent Contractor Relationship
-
-### 6.1 Contractor Status
-Consultant is an independent contractor and not an employee of Client. This relationship does not create:
-- An employment relationship
-- A partnership or joint venture
-- An agency relationship
-- Any employee benefits entitlement
-
-### 6.2 Control and Direction
-- Consultant retains control over the methods and means of performing Services
-- Client may specify desired results but not how to achieve them
-- Consultant may use assistants or subcontractors with Client approval
-
-### 6.3 Business Operations
-Consultant:
-- Is responsible for their own taxes and business expenses
-- May work for other clients simultaneously
-- Maintains their own business operations and equipment
-
----
-
-## 7. Intellectual Property and Confidentiality
-
-### 7.1 Work Product Ownership
-{{#if client_owns_work}}
-All work products and deliverables created under this Agreement shall be owned by Client.
-{{else}}
-Consultant retains ownership of methodologies and general knowledge, while Client owns specific deliverables and recommendations.
-{{/if}}
-
-### 7.2 Confidential Information
-Consultant agrees to:
-- Maintain strict confidentiality of all Client information
-- Use confidential information solely for performing Services
-- Not disclose confidential information to third parties
-- Return all confidential materials upon termination
-
-### 7.3 Confidentiality Period
-Confidentiality obligations shall remain in effect for {{confidentiality_period}} years after termination.
-
-### 7.4 Non-Solicitation
-{{#if non_solicitation}}
-For {{non_solicitation_period}} after termination, Consultant agrees not to solicit Client's employees or customers.
-{{/if}}
-
----
-
-## 8. Warranties and Disclaimers
-
-### 8.1 Consultant Warranties
-Consultant warrants that:
-- Services will be performed professionally and competently
-- Work product will be original and not infringe third-party rights
-- Consultant has the authority to enter into this Agreement
-- All recommendations will be based on good faith professional judgment
-
-### 8.2 Client Warranties
-Client warrants that:
-- Client has authority to enter into this Agreement
-- All information provided to Consultant is accurate and complete
-- Client owns or has rights to use all materials provided
-
-### 8.3 Disclaimer
-CONSULTANT MAKES NO WARRANTIES BEYOND THOSE EXPRESSLY SET FORTH HEREIN. ALL SERVICES ARE PROVIDED WITHOUT IMPLIED WARRANTIES OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
-
----
-
-## 9. Limitation of Liability
-
-### 9.1 Liability Cap
-Consultant's total liability under this Agreement shall not exceed the total fees paid by Client under this Agreement.
-
-### 9.2 Consequential Damages
-CONSULTANT SHALL NOT BE LIABLE FOR INDIRECT, INCIDENTAL, SPECIAL, OR CONSEQUENTIAL DAMAGES, INCLUDING LOST PROFITS.
-
-### 9.3 Client Decisions
-Consultant provides advice and recommendations only. Client makes all business decisions and assumes all risks related to implementation.
-
----
-
-## 10. Termination
-
-### 10.1 Termination for Convenience
-Either Party may terminate this Agreement with {{termination_notice}} days written notice.
-
-### 10.2 Termination for Cause
-Either Party may terminate immediately for:
-- Material breach uncured after {{cure_period}} days written notice
-- Insolvency or bankruptcy
-- Violation of confidentiality provisions
-
-### 10.3 Effect of Termination
-Upon termination:
-- Consultant shall be paid for Services performed through termination date
-- All confidential information shall be returned
-- Both Parties shall cooperate in transition activities
-- Survival provisions shall remain in effect
-
----
-
-## 11. General Provisions
-
-### 11.1 Governing Law
+### 13.1 Governing Law
 This Agreement shall be governed by the laws of {{governing_state}}.
 
-### 11.2 Dispute Resolution
-{{#if arbitration}}
-Disputes shall be resolved through binding arbitration in {{arbitration_location}}.
-{{else}}
-Disputes shall be resolved in the courts of {{jurisdiction}}.
-{{/if}}
-
-### 11.3 Entire Agreement
+### 13.2 Entire Agreement
 This Agreement constitutes the entire agreement and supersedes all prior negotiations.
 
-### 11.4 Amendment
-This Agreement may only be amended in writing signed by both Parties.
+### 13.3 Amendment
+This Agreement may only be amended by written agreement signed by both Parties.
 
-### 11.5 Assignment
-{{#if assignment_allowed}}
-This Agreement may be assigned with prior written consent.
+### 13.4 Assignment
+{{#if assignment_permitted}}
+This Agreement may be assigned with written consent of both Parties.
 {{else}}
 This Agreement may not be assigned without written consent of both Parties.
 {{/if}}
 
-### 11.6 Severability
-Invalid provisions shall not affect the validity of remaining provisions.
+### 13.5 Severability
+If any provision is held invalid, the remainder shall remain in full force and effect.
+
+### 13.6 Force Majeure
+Neither Party shall be liable for delays due to circumstances beyond their reasonable control.
+
+### 13.7 Notices
+All notices shall be delivered in writing to the addresses specified herein.
+
+### 13.8 Waiver
+No waiver of any provision shall be deemed a waiver of any other provision or subsequent breach.
 
 ---
 
-## 12. Signatures
+## 14. Signatures
 
 **IN WITNESS WHEREOF**, the Parties have executed this Agreement as of the date first written above.
+
+**COMPANY:**
+
+| Signature | Date |
+|-----------|------|
+| _________________________________ | _____________ |
+| {{company_name}} | |
+| By: {{company_signatory}} | |
+| Title: {{company_signatory_title}} | |
 
 **CONSULTANT:**
 
@@ -275,19 +400,15 @@ Invalid provisions shall not affect the validity of remaining provisions.
 |-----------|------|
 | _________________________________ | _____________ |
 | {{consultant_name}} | |
-| {{consultant_title}} | |
-
-**CLIENT:**
-
-| Signature | Date |
-|-----------|------|
-| _________________________________ | _____________ |
-| {{client_name}} | |
-| By: {{client_signatory}} | |
-| Title: {{client_title}} | |
+{{#if consultant_individual}}
+| Individual Consultant | |
+{{else}}
+| By: {{consultant_signatory}} | |
+| Title: {{consultant_signatory_title}} | |
+{{/if}}
 
 ---
 
-**IMPORTANT LEGAL NOTICE:** This consulting agreement should be reviewed by legal counsel to ensure compliance with applicable laws and specific business requirements. Terms should be tailored to the specific nature of consulting services and industry requirements.
+**IMPORTANT LEGAL NOTICE:** This consulting agreement establishes an independent contractor relationship and involves complex employment law considerations. It should be reviewed by qualified legal professionals to ensure compliance with applicable laws and protection of both parties' interests.
 
 *Template generated by 123LegalDoc - Professional Legal Document Platform*
