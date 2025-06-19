@@ -97,6 +97,21 @@ export { autoRepairAgreementMeta as autoRepairAgreement } from './auto-repair-ag
 export { vehicleLeaseAgreementMeta as vehicleLeaseAgreement } from './vehicle-lease-agreement';
 export { transportationServiceAgreementMeta as transportationServiceAgreement } from './transportation-service-agreement';
 export { medicalConsentFormMeta as medicalConsentForm } from './medical-consent-form';
+
+// New Employment Documents
+export { executiveEmploymentAgreement } from './executive-employment-agreement';
+export { telecommutingAgreement } from './telecommuting-agreement';
+export { progressiveDisciplinePolicy } from './progressive-discipline-policy';
+export { employeeBonusPlan } from './employee-bonus-plan';
+export { directDepositForm } from './direct-deposit-form';
+export { proofOfIncomeLetter } from './proof-of-income-letter';
+export { equityIncentivePlan } from './equity-incentive-plan';
+export { leaveOfAbsenceRequestForm } from './leave-of-absence-request-form';
+export { employeeWarningNotice } from './employee-warning-notice';
+export { resignationLetter } from './resignation-letter';
+export { twoWeeksNoticeLetter } from './two-weeks-notice-letter';
+export { employeeNonDisclosureAgreement } from './employee-non-disclosure-agreement';
+export { salaryVerificationLetter } from './salary-verification-letter';
 export { hipaaAuthorizationFormMeta as hipaaAuthorizationForm } from './hipaa-authorization-form';
 export { softwareLicenseAgreementMeta as softwareLicenseAgreement } from './software-license-agreement';
 export { dataProcessingAgreementMeta as dataProcessingAgreement } from './data-processing-agreement';
