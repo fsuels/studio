@@ -23,6 +23,7 @@ export { demandLetterPayment } from './demand-letter-payment';
 export { divorceSettlement } from './divorce-settlement';
 export { divorceSettlementAgreement } from './divorce-settlement-agreement';
 export { durablePowerOfAttorney } from './durable-power-of-attorney';
+export { educationTrust } from './education-trust';
 export { employeeEvaluationFormMeta as employeeEvaluationForm } from './employee-evaluation-form';
 export { employeeHandbookMeta as employeeHandbook } from './employee-handbook';
 export { employmentContract } from './employment-contract';
@@ -31,11 +32,13 @@ export { employmentTerminationLetter } from './employment-termination-letter';
 export { employmentVerificationLetterMeta as employmentVerificationLetter } from './employment-verification-letter';
 export { evictionNotice } from './eviction-notice';
 export { generalInquiry } from './general-inquiry';
+export { healthCareDirective } from './health-care-directive';
 export { healthcarePowerOfAttorney } from './healthcare-power-of-attorney';
 export { homeImprovementContractMeta as homeImprovementContract } from './home-improvement-contract';
 export { independentContractorAgreement } from './independent-contractor-agreement';
 export { invoice } from './invoice';
 export { jobApplicationFormMeta as jobApplicationForm } from './job-application-form';
+export { jointLivingTrust } from './joint-living-trust';
 export { lastWillTestament } from './last-will-testament';
 export { leaseAgreement } from './lease-agreement';
 export { leaseRenewalAgreement } from './lease-renewal-agreement';
@@ -43,10 +46,12 @@ export { leaseTerminationLetter } from './lease-termination-letter';
 export { letterOfIntent } from './letter-of-intent';
 export { licensingAgreement } from './licensing-agreement';
 export { livingTrust } from './living-trust';
+export { livingTrustAmendment } from './living-trust-amendment';
 export { livingWill } from './living-will';
 export { loanAgreement } from './loan-agreement';
 export { loanModificationAgreementMeta as loanModificationAgreement } from './loan-modification-agreement';
 export { medicalConsent } from './medical-consent';
+export { medicalPowerOfAttorney } from './medical-power-of-attorney';
 export { nda } from './nda';
 export { nonCompeteAgreement } from './non-compete-agreement';
 export { nonDisclosureAgreement } from './non-disclosure-agreement';
@@ -58,7 +63,9 @@ export { personalCareAgreementMeta as personalCareAgreement } from './personal-c
 export { personalLoanAgreementMeta as personalLoanAgreement } from './personal-loan-agreement';
 export { petAgreement } from './pet-agreement';
 export { petCustodyAgreementMeta as petCustodyAgreement } from './pet-custody-agreement';
+export { pourOverWill } from './pour-over-will';
 export { powerOfAttorney } from './power-of-attorney';
+export { powerOfAttorneyForChild } from './power-of-attorney-for-child';
 export { prenuptialAgreement } from './prenuptial-agreement';
 export { promissoryNote } from './promissory-note';
 export { propertyDeed } from './property-deed';
@@ -66,6 +73,7 @@ export { purchaseAgreement } from './purchase-agreement';
 export { quitclaimDeed } from './quitclaim-deed';
 export { rentalAgreement } from './rental-agreement';
 export { residentialLeaseAgreement } from './residential-lease-agreement';
+export { revocationOfPowerOfAttorney } from './revocation-of-power-of-attorney';
 export { roomRentalAgreement } from './room-rental-agreement';
 export { roommateAgreement } from './roommate-agreement';
 export { salesAgreement } from './sales-agreement';
@@ -240,5 +248,13 @@ export { smallClaimsWorksheetMeta as smallClaimsWorksheet } from './small-claims
 export { forceMajeureNoticeMeta as forceMajeureNotice } from './force-majeure-notice';
 export { breachContractNoticeMeta as breachContractNotice } from './breach-contract-notice';
 
+// New Business Documents
+export { privatePlacementMemorandum } from './private-placement-memorandum';
+export { buySellAgreement } from './buy-sell-agreement';
+export { limitedPartnershipAgreement } from './limited-partnership-agreement';
+export { partnershipAmendment } from './partnership-amendment';
+export { partnershipDissolutionAgreement } from './partnership-dissolution-agreement';
+export { jointVentureAgreement } from './joint-venture-agreement';
+
 // Export count for verification
-export const US_DOCUMENT_COUNT = 231;
+export const US_DOCUMENT_COUNT = 245;

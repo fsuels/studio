@@ -60,7 +60,10 @@
       "Bash(else echo \"✗ EN template missing\")",
       "Bash(rg:*)",
       "Bash(cat:*)",
-      "Bash(/mnt/c/Users/Fsuels/OneDrive/Desktop/123legaldoc/studio-master/create_construction_docs.sh:*)"
+      "Bash(/mnt/c/Users/Fsuels/OneDrive/Desktop/123legaldoc/studio-master/create_construction_docs.sh:*)",
+      "Bash(do echo \"=== $dir ===\")",
+      "Bash(./create_remaining_docs.sh:*)",
+      "Bash(touch:*)"
     ],
     "deny": []
   }

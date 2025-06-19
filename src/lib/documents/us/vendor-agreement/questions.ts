@@ -1,0 +1,229 @@
+import type { FormQuestion } from '@/types/documents';
+
+export const vendorAgreementQuestions: FormQuestion[] = [
+  {
+    id: 'companyName',
+    type: 'text',
+    label: 'Company Name',
+    required: true,
+    placeholder: 'Enter your company name',
+    validation: { min: 1 }
+  },
+  {
+    id: 'companyAddress',
+    type: 'textarea',
+    label: 'Company Address',
+    required: true,
+    placeholder: 'Enter the complete address of your company',
+    validation: { min: 10, max: 300 }
+  },
+  {
+    id: 'vendorName',
+    type: 'text',
+    label: 'Vendor Name',
+    required: true,
+    placeholder: 'Enter the vendor\'s name or company name',
+    validation: { min: 1 }
+  },
+  {
+    id: 'vendorAddress',
+    type: 'textarea',
+    label: 'Vendor Address',
+    required: true,
+    placeholder: 'Enter the complete address of the vendor',
+    validation: { min: 10, max: 300 }
+  },
+  {
+    id: 'agreementType',
+    type: 'radio',
+    label: 'Agreement Type',
+    required: true,
+    options: [
+      { value: 'goods', label: 'Supply of Goods' },
+      { value: 'services', label: 'Provision of Services' },
+      { value: 'both', label: 'Both Goods and Services' }
+    ]
+  },
+  {
+    id: 'productsServices',
+    type: 'array',
+    label: 'Products/Services',
+    required: true,
+    arrayConfig: {
+      addButtonText: 'Add Product/Service',
+      minItems: 1,
+      fields: [
+        {
+          id: 'name',
+          type: 'text',
+          label: 'Product/Service Name',
+          required: true,
+          placeholder: 'Enter product or service name'
+        },
+        {
+          id: 'description',
+          type: 'textarea',
+          label: 'Description',
+          required: false,
+          placeholder: 'Detailed description (optional)'
+        },
+        {
+          id: 'unitPrice',
+          type: 'number',
+          label: 'Unit Price ($)',
+          required: false,
+          validation: { min: 0 }
+        },
+        {
+          id: 'unit',
+          type: 'text',
+          label: 'Unit',
+          required: false,
+          placeholder: 'e.g., each, per hour, per pound'
+        }
+      ]
+    }
+  },
+  {
+    id: 'contractTerm',
+    type: 'text',
+    label: 'Contract Term',
+    required: true,
+    placeholder: 'e.g., 1 year, 6 months, ongoing',
+    validation: { min: 1 }
+  },
+  {
+    id: 'renewalTerms',
+    type: 'text',
+    label: 'Renewal Terms',
+    required: false,
+    placeholder: 'Automatic renewal terms (if applicable)'
+  },
+  {
+    id: 'minimumOrder',
+    type: 'text',
+    label: 'Minimum Order Requirements',
+    required: false,
+    placeholder: 'Minimum order quantity or value (if applicable)'
+  },
+  {
+    id: 'paymentTerms.paymentMethod',
+    type: 'select',
+    label: 'Payment Terms',
+    required: true,
+    options: [
+      { value: 'net-30', label: 'Net 30 days' },
+      { value: 'net-60', label: 'Net 60 days' },
+      { value: 'net-90', label: 'Net 90 days' },
+      { value: 'cod', label: 'Cash on Delivery (COD)' },
+      { value: 'prepaid', label: 'Prepaid' },
+      { value: 'other', label: 'Other' }
+    ]
+  },
+  {
+    id: 'paymentTerms.lateFees',
+    type: 'checkbox',
+    label: 'Include Late Payment Fees',
+    required: false,
+    defaultValue: true
+  },
+  {
+    id: 'paymentTerms.lateFeeRate',
+    type: 'number',
+    label: 'Late Fee Rate (%)',
+    required: false,
+    validation: { min: 0, max: 100 },
+    placeholder: 'Enter monthly late fee percentage',
+    conditional: { field: 'paymentTerms.lateFees', value: true }
+  },
+  {
+    id: 'deliveryTerms.deliveryTime',
+    type: 'text',
+    label: 'Delivery Time',
+    required: false,
+    placeholder: 'e.g., 5-7 business days, 2 weeks'
+  },
+  {
+    id: 'deliveryTerms.shippingTerms',
+    type: 'text',
+    label: 'Shipping Terms',
+    required: false,
+    placeholder: 'e.g., FOB destination, vendor pays shipping'
+  },
+  {
+    id: 'qualityStandards',
+    type: 'textarea',
+    label: 'Quality Standards',
+    required: false,
+    placeholder: 'Describe quality standards and requirements',
+    validation: { max: 500 }
+  },
+  {
+    id: 'inspectionPeriod',
+    type: 'text',
+    label: 'Inspection Period',
+    required: false,
+    defaultValue: '5 business days',
+    placeholder: 'Time allowed for inspection of goods/services'
+  },
+  {
+    id: 'confidentialityClause',
+    type: 'checkbox',
+    label: 'Include Confidentiality Clause',
+    required: false,
+    defaultValue: true
+  },
+  {
+    id: 'warranties.warrantyPeriod',
+    type: 'text',
+    label: 'Warranty Period',
+    required: false,
+    defaultValue: '1 year',
+    placeholder: 'e.g., 1 year, 6 months, 90 days'
+  },
+  {
+    id: 'limitationOfLiability',
+    type: 'checkbox',
+    label: 'Include Limitation of Liability Clause',
+    required: false,
+    defaultValue: true
+  },
+  {
+    id: 'terminationClause.terminationNotice',
+    type: 'text',
+    label: 'Termination Notice Period',
+    required: false,
+    defaultValue: '30 days',
+    placeholder: 'e.g., 30 days, 60 days'
+  },
+  {
+    id: 'insuranceRequired',
+    type: 'checkbox',
+    label: 'Require Vendor Insurance',
+    required: false,
+    defaultValue: false
+  },
+  {
+    id: 'insuranceRequirements',
+    type: 'textarea',
+    label: 'Insurance Requirements',
+    required: false,
+    placeholder: 'Describe required insurance coverage and limits',
+    conditional: { field: 'insuranceRequired', value: true }
+  },
+  {
+    id: 'additionalTerms',
+    type: 'textarea',
+    label: 'Additional Terms',
+    required: false,
+    placeholder: 'Enter any additional terms or conditions',
+    validation: { max: 1000 }
+  },
+  {
+    id: 'agreementDate',
+    type: 'date',
+    label: 'Agreement Date',
+    required: true,
+    helpText: 'Date this vendor agreement is signed'
+  }
+];

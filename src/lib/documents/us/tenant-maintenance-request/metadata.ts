@@ -6,13 +6,13 @@ import { tenantMaintenanceRequestQuestions } from './questions';
 export const tenantMaintenanceRequestMeta: LegalDocument = {
   id: 'tenant-maintenance-request',
   jurisdiction: 'US',
-  category: 'Real Estate & Property',
+  category: 'Property Management',
   languageSupport: ['en', 'es'],
   requiresNotarization: false,
   canBeRecorded: false,
   offerNotarization: false,
   offerRecordingHelp: false,
-  basePrice: 9.95,
+  basePrice: 4.95,
   states: 'all',
   templatePaths: {
     en: '/templates/en/tenant-maintenance-request.md',
@@ -24,13 +24,24 @@ export const tenantMaintenanceRequestMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Tenant Maintenance Request',
-      description: 'Formal maintenance request form for tenants to report issues',
-      aliases: [],
+      description:
+        'Submit a formal maintenance or repair request to your landlord with our comprehensive form template.',
+      aliases: [
+        'repair request',
+        'maintenance form',
+        'tenant repair request',
+        'property maintenance request'
+      ],
     },
     es: {
-      name: 'Tenant Maintenance Request', // TODO: Add Spanish translation
-      description: 'Formal maintenance request form for tenants to report issues', // TODO: Add Spanish translation
-      aliases: [],
+      name: 'Solicitud de Mantenimiento del Inquilino',
+      description:
+        'Presenta una solicitud formal de mantenimiento o reparación a tu arrendador con nuestra plantilla de formulario completa.',
+      aliases: [
+        'solicitud de reparación',
+        'formulario de mantenimiento',
+        'solicitud de reparación del inquilino'
+      ],
     },
   },
 };

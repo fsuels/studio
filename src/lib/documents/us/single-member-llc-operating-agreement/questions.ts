@@ -1,0 +1,216 @@
+import type { FormQuestion } from '@/types/documents';
+
+export const singleMemberLlcOperatingAgreementQuestions: FormQuestion[] = [
+  {
+    id: 'companyName',
+    type: 'text',
+    label: 'LLC Company Name',
+    required: true,
+    placeholder: 'Enter the full legal name of your LLC',
+    validation: { min: 1 }
+  },
+  {
+    id: 'stateOfFormation',
+    type: 'select',
+    label: 'State of Formation',
+    required: true,
+    options: [
+      { value: 'AL', label: 'Alabama' },
+      { value: 'AK', label: 'Alaska' },
+      { value: 'AZ', label: 'Arizona' },
+      { value: 'AR', label: 'Arkansas' },
+      { value: 'CA', label: 'California' },
+      { value: 'CO', label: 'Colorado' },
+      { value: 'CT', label: 'Connecticut' },
+      { value: 'DE', label: 'Delaware' },
+      { value: 'FL', label: 'Florida' },
+      { value: 'GA', label: 'Georgia' },
+      { value: 'HI', label: 'Hawaii' },
+      { value: 'ID', label: 'Idaho' },
+      { value: 'IL', label: 'Illinois' },
+      { value: 'IN', label: 'Indiana' },
+      { value: 'IA', label: 'Iowa' },
+      { value: 'KS', label: 'Kansas' },
+      { value: 'KY', label: 'Kentucky' },
+      { value: 'LA', label: 'Louisiana' },
+      { value: 'ME', label: 'Maine' },
+      { value: 'MD', label: 'Maryland' },
+      { value: 'MA', label: 'Massachusetts' },
+      { value: 'MI', label: 'Michigan' },
+      { value: 'MN', label: 'Minnesota' },
+      { value: 'MS', label: 'Mississippi' },
+      { value: 'MO', label: 'Missouri' },
+      { value: 'MT', label: 'Montana' },
+      { value: 'NE', label: 'Nebraska' },
+      { value: 'NV', label: 'Nevada' },
+      { value: 'NH', label: 'New Hampshire' },
+      { value: 'NJ', label: 'New Jersey' },
+      { value: 'NM', label: 'New Mexico' },
+      { value: 'NY', label: 'New York' },
+      { value: 'NC', label: 'North Carolina' },
+      { value: 'ND', label: 'North Dakota' },
+      { value: 'OH', label: 'Ohio' },
+      { value: 'OK', label: 'Oklahoma' },
+      { value: 'OR', label: 'Oregon' },
+      { value: 'PA', label: 'Pennsylvania' },
+      { value: 'RI', label: 'Rhode Island' },
+      { value: 'SC', label: 'South Carolina' },
+      { value: 'SD', label: 'South Dakota' },
+      { value: 'TN', label: 'Tennessee' },
+      { value: 'TX', label: 'Texas' },
+      { value: 'UT', label: 'Utah' },
+      { value: 'VT', label: 'Vermont' },
+      { value: 'VA', label: 'Virginia' },
+      { value: 'WA', label: 'Washington' },
+      { value: 'WV', label: 'West Virginia' },
+      { value: 'WI', label: 'Wisconsin' },
+      { value: 'WY', label: 'Wyoming' }
+    ]
+  },
+  {
+    id: 'dateOfFormation',
+    type: 'date',
+    label: 'Date of Formation',
+    required: true,
+    helpText: 'The date when the LLC was officially formed with the state'
+  },
+  {
+    id: 'principalPlaceOfBusiness',
+    type: 'textarea',
+    label: 'Principal Place of Business',
+    required: true,
+    placeholder: 'Enter the complete address of the LLC\'s main business location',
+    validation: { min: 10, max: 500 }
+  },
+  {
+    id: 'businessPurpose',
+    type: 'textarea',
+    label: 'Business Purpose',
+    required: true,
+    placeholder: 'Describe the primary business activities and purpose of the LLC',
+    validation: { min: 20, max: 1000 }
+  },
+  {
+    id: 'memberName',
+    type: 'text',
+    label: 'Member Name',
+    required: true,
+    placeholder: 'Enter the full legal name of the sole member',
+    validation: { min: 2 }
+  },
+  {
+    id: 'memberAddress',
+    type: 'textarea',
+    label: 'Member Address',
+    required: true,
+    placeholder: 'Enter the complete address of the sole member',
+    validation: { min: 10, max: 300 }
+  },
+  {
+    id: 'initialCapitalContribution',
+    type: 'text',
+    label: 'Initial Capital Contribution',
+    required: true,
+    placeholder: 'Enter the amount of initial capital contributed (e.g., $10,000)',
+    helpText: 'The initial amount of money, property, or services contributed to the LLC'
+  },
+  {
+    id: 'managementStructure',
+    type: 'radio',
+    label: 'Management Structure',
+    required: true,
+    options: [
+      { value: 'member-managed', label: 'Member-Managed (Member directly manages the LLC)' },
+      { value: 'manager-managed', label: 'Manager-Managed (Appointed manager manages the LLC)' }
+    ],
+    defaultValue: 'member-managed'
+  },
+  {
+    id: 'managerName',
+    type: 'text',
+    label: 'Manager Name',
+    required: false,
+    placeholder: 'Enter the name of the appointed manager',
+    conditional: { field: 'managementStructure', value: 'manager-managed' }
+  },
+  {
+    id: 'managerAddress',
+    type: 'textarea',
+    label: 'Manager Address',
+    required: false,
+    placeholder: 'Enter the complete address of the manager',
+    conditional: { field: 'managementStructure', value: 'manager-managed' }
+  },
+  {
+    id: 'fiscalYearEnd',
+    type: 'select',
+    label: 'Fiscal Year End',
+    required: false,
+    defaultValue: 'December 31',
+    options: [
+      { value: 'December 31', label: 'December 31 (Calendar Year)' },
+      { value: 'March 31', label: 'March 31' },
+      { value: 'June 30', label: 'June 30' },
+      { value: 'September 30', label: 'September 30' }
+    ]
+  },
+  {
+    id: 'bankingInstitution',
+    type: 'text',
+    label: 'Banking Institution',
+    required: false,
+    placeholder: 'Enter the name of the primary banking institution'
+  },
+  {
+    id: 'distributionsPolicy',
+    type: 'textarea',
+    label: 'Distributions Policy',
+    required: false,
+    placeholder: 'Describe how and when distributions will be made to the member',
+    validation: { max: 500 }
+  },
+  {
+    id: 'meetingsRequired',
+    type: 'checkbox',
+    label: 'Require Annual Member Meetings',
+    required: false,
+    defaultValue: false
+  },
+  {
+    id: 'recordsLocation',
+    type: 'text',
+    label: 'Records Location',
+    required: false,
+    placeholder: 'Where will LLC records and books be kept?'
+  },
+  {
+    id: 'transferRestrictions',
+    type: 'checkbox',
+    label: 'Include Transfer Restrictions',
+    required: false,
+    defaultValue: true,
+    helpText: 'Restrict transfer of membership interests without consent'
+  },
+  {
+    id: 'additionalProvisions',
+    type: 'textarea',
+    label: 'Additional Provisions',
+    required: false,
+    placeholder: 'Enter any additional terms or provisions for this operating agreement',
+    validation: { max: 1000 }
+  },
+  {
+    id: 'signatureDate',
+    type: 'date',
+    label: 'Agreement Date',
+    required: true,
+    helpText: 'The date this operating agreement is signed'
+  },
+  {
+    id: 'notarization',
+    type: 'checkbox',
+    label: 'Require Notarization',
+    required: false,
+    defaultValue: false
+  }
+];

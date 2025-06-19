@@ -1,0 +1,207 @@
+import type { FormQuestion } from '@/types/documents';
+
+export const webDevelopmentAgreementQuestions: FormQuestion[] = [
+  {
+    id: 'clientName',
+    type: 'text',
+    label: 'Client Name',
+    required: true,
+    placeholder: 'Enter the client\'s full name or company name',
+    validation: { min: 1 }
+  },
+  {
+    id: 'clientAddress',
+    type: 'textarea',
+    label: 'Client Address',
+    required: true,
+    placeholder: 'Enter the complete address of the client',
+    validation: { min: 10, max: 300 }
+  },
+  {
+    id: 'developerName',
+    type: 'text',
+    label: 'Developer/Company Name',
+    required: true,
+    placeholder: 'Enter the developer\'s or development company\'s name',
+    validation: { min: 1 }
+  },
+  {
+    id: 'developerAddress',
+    type: 'textarea',
+    label: 'Developer Address',
+    required: true,
+    placeholder: 'Enter the complete address of the developer',
+    validation: { min: 10, max: 300 }
+  },
+  {
+    id: 'projectName',
+    type: 'text',
+    label: 'Project Name',
+    required: true,
+    placeholder: 'Enter the name of the web development project',
+    validation: { min: 1 }
+  },
+  {
+    id: 'projectDescription',
+    type: 'textarea',
+    label: 'Project Description',
+    required: true,
+    placeholder: 'Provide a detailed description of the project requirements',
+    validation: { min: 20, max: 1000 }
+  },
+  {
+    id: 'websiteUrl',
+    type: 'text',
+    label: 'Website URL (if existing)',
+    required: false,
+    placeholder: 'https://example.com'
+  },
+  {
+    id: 'scopeOfWork',
+    type: 'array',
+    label: 'Scope of Work',
+    required: true,
+    arrayConfig: {
+      addButtonText: 'Add Work Item',
+      minItems: 1,
+      fields: [
+        {
+          id: 'item',
+          type: 'text',
+          label: 'Work Item',
+          required: true,
+          placeholder: 'e.g., Homepage design, Contact form development'
+        }
+      ]
+    }
+  },
+  {
+    id: 'technicalRequirements.responsiveDesign',
+    type: 'checkbox',
+    label: 'Responsive Design Required',
+    required: false,
+    defaultValue: true
+  },
+  {
+    id: 'projectStartDate',
+    type: 'date',
+    label: 'Project Start Date',
+    required: true
+  },
+  {
+    id: 'projectEndDate',
+    type: 'date',
+    label: 'Project End Date',
+    required: true
+  },
+  {
+    id: 'totalProjectCost',
+    type: 'number',
+    label: 'Total Project Cost',
+    required: true,
+    validation: { min: 0 },
+    placeholder: 'Enter the total project cost in dollars'
+  },
+  {
+    id: 'paymentStructure',
+    type: 'select',
+    label: 'Payment Structure',
+    required: true,
+    options: [
+      { value: 'fixed', label: 'Fixed Price' },
+      { value: 'hourly', label: 'Hourly Rate' },
+      { value: 'milestone-based', label: 'Milestone-Based' }
+    ]
+  },
+  {
+    id: 'hourlyRate',
+    type: 'number',
+    label: 'Hourly Rate',
+    required: false,
+    validation: { min: 0 },
+    placeholder: 'Enter hourly rate in dollars',
+    conditional: { field: 'paymentStructure', value: 'hourly' }
+  },
+  {
+    id: 'paymentSchedule',
+    type: 'textarea',
+    label: 'Payment Schedule',
+    required: true,
+    placeholder: 'Describe when and how payments will be made',
+    validation: { min: 10, max: 500 }
+  },
+  {
+    id: 'intellectualProperty.ownership',
+    type: 'radio',
+    label: 'Intellectual Property Ownership',
+    required: true,
+    defaultValue: 'client',
+    options: [
+      { value: 'client', label: 'Client owns all IP' },
+      { value: 'developer', label: 'Developer retains IP' },
+      { value: 'shared', label: 'Shared ownership' }
+    ]
+  },
+  {
+    id: 'revisionsIncluded',
+    type: 'number',
+    label: 'Number of Revisions Included',
+    required: false,
+    defaultValue: 3,
+    validation: { min: 0 },
+    placeholder: 'Number of free revisions included'
+  },
+  {
+    id: 'supportPeriod',
+    type: 'text',
+    label: 'Support Period',
+    required: false,
+    defaultValue: '30 days',
+    placeholder: 'e.g., 30 days, 3 months'
+  },
+  {
+    id: 'maintenanceIncluded',
+    type: 'checkbox',
+    label: 'Include Ongoing Maintenance',
+    required: false,
+    defaultValue: false
+  },
+  {
+    id: 'maintenanceTerms',
+    type: 'textarea',
+    label: 'Maintenance Terms',
+    required: false,
+    placeholder: 'Describe ongoing maintenance terms and costs',
+    conditional: { field: 'maintenanceIncluded', value: true }
+  },
+  {
+    id: 'confidentialityClause',
+    type: 'checkbox',
+    label: 'Include Confidentiality Clause',
+    required: false,
+    defaultValue: true
+  },
+  {
+    id: 'terminationNotice',
+    type: 'text',
+    label: 'Termination Notice Period',
+    required: false,
+    defaultValue: '30 days',
+    placeholder: 'e.g., 30 days, 2 weeks'
+  },
+  {
+    id: 'additionalTerms',
+    type: 'textarea',
+    label: 'Additional Terms',
+    required: false,
+    placeholder: 'Enter any additional terms or conditions',
+    validation: { max: 1000 }
+  },
+  {
+    id: 'agreementDate',
+    type: 'date',
+    label: 'Agreement Date',
+    required: true,
+    helpText: 'Date this web development agreement is signed'
+  }
+];

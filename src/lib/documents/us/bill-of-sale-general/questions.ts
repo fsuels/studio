@@ -1,0 +1,378 @@
+// src/lib/documents/us/bill-of-sale-general/questions.ts
+import type { FormQuestion } from '@/types/documents';
+
+export const billOfSaleGeneralQuestions: FormQuestion[] = [
+  // Seller Information
+  {
+    id: 'sellerName',
+    type: 'text',
+    label: 'Seller Full Name',
+    placeholder: 'Enter seller\'s full name',
+    required: true,
+    section: 'Seller Information',
+  },
+  {
+    id: 'sellerAddress',
+    type: 'address',
+    label: 'Seller Address',
+    placeholder: 'Enter seller\'s complete address',
+    required: true,
+    section: 'Seller Information',
+  },
+  {
+    id: 'sellerPhone',
+    type: 'tel',
+    label: 'Seller Phone Number',
+    placeholder: 'Enter phone number',
+    required: false,
+    section: 'Seller Information',
+  },
+  {
+    id: 'sellerEmail',
+    type: 'email',
+    label: 'Seller Email',
+    placeholder: 'Enter email address',
+    required: false,
+    section: 'Seller Information',
+  },
+
+  // Buyer Information
+  {
+    id: 'buyerName',
+    type: 'text',
+    label: 'Buyer Full Name',
+    placeholder: 'Enter buyer\'s full name',
+    required: true,
+    section: 'Buyer Information',
+  },
+  {
+    id: 'buyerAddress',
+    type: 'address',
+    label: 'Buyer Address',
+    placeholder: 'Enter buyer\'s complete address',
+    required: true,
+    section: 'Buyer Information',
+  },
+  {
+    id: 'buyerPhone',
+    type: 'tel',
+    label: 'Buyer Phone Number',
+    placeholder: 'Enter phone number',
+    required: false,
+    section: 'Buyer Information',
+  },
+  {
+    id: 'buyerEmail',
+    type: 'email',
+    label: 'Buyer Email',
+    placeholder: 'Enter email address',
+    required: false,
+    section: 'Buyer Information',
+  },
+
+  // Item Details
+  {
+    id: 'itemDescription',
+    type: 'textarea',
+    label: 'Item Description',
+    placeholder: 'Provide detailed description of the item being sold',
+    required: true,
+    section: 'Item Details',
+  },
+  {
+    id: 'itemCondition',
+    type: 'select',
+    label: 'Item Condition',
+    options: [
+      { value: 'new', label: 'New' },
+      { value: 'used', label: 'Used' },
+      { value: 'refurbished', label: 'Refurbished' },
+      { value: 'as_is', label: 'As-Is' },
+    ],
+    required: true,
+    section: 'Item Details',
+  },
+  {
+    id: 'itemCategory',
+    type: 'select',
+    label: 'Item Category',
+    options: [
+      { value: 'electronics', label: 'Electronics' },
+      { value: 'furniture', label: 'Furniture' },
+      { value: 'appliances', label: 'Appliances' },
+      { value: 'tools', label: 'Tools' },
+      { value: 'equipment', label: 'Equipment' },
+      { value: 'collectibles', label: 'Collectibles' },
+      { value: 'jewelry', label: 'Jewelry' },
+      { value: 'artwork', label: 'Artwork' },
+      { value: 'books', label: 'Books' },
+      { value: 'clothing', label: 'Clothing' },
+      { value: 'sports_equipment', label: 'Sports Equipment' },
+      { value: 'musical_instruments', label: 'Musical Instruments' },
+      { value: 'other', label: 'Other' },
+    ],
+    required: true,
+    section: 'Item Details',
+  },
+  {
+    id: 'serialNumber',
+    type: 'text',
+    label: 'Serial Number (if applicable)',
+    placeholder: 'Enter serial number',
+    required: false,
+    section: 'Item Details',
+  },
+  {
+    id: 'modelNumber',
+    type: 'text',
+    label: 'Model Number (if applicable)',
+    placeholder: 'Enter model number',
+    required: false,
+    section: 'Item Details',
+  },
+  {
+    id: 'brandManufacturer',
+    type: 'text',
+    label: 'Brand/Manufacturer (if applicable)',
+    placeholder: 'Enter brand or manufacturer name',
+    required: false,
+    section: 'Item Details',
+  },
+  {
+    id: 'yearMade',
+    type: 'text',
+    label: 'Year Made (if applicable)',
+    placeholder: 'Enter year manufactured',
+    required: false,
+    section: 'Item Details',
+  },
+
+  // Sale Details
+  {
+    id: 'salePrice',
+    type: 'currency',
+    label: 'Sale Price',
+    placeholder: 'Enter total sale price',
+    required: true,
+    section: 'Sale Information',
+  },
+  {
+    id: 'currency',
+    type: 'select',
+    label: 'Currency',
+    options: [
+      { value: 'USD', label: 'US Dollar (USD)' },
+      { value: 'EUR', label: 'Euro (EUR)' },
+      { value: 'CAD', label: 'Canadian Dollar (CAD)' },
+      { value: 'GBP', label: 'British Pound (GBP)' },
+    ],
+    required: true,
+    section: 'Sale Information',
+  },
+  {
+    id: 'paymentMethod',
+    type: 'select',
+    label: 'Payment Method',
+    options: [
+      { value: 'cash', label: 'Cash' },
+      { value: 'check', label: 'Check' },
+      { value: 'money_order', label: 'Money Order' },
+      { value: 'electronic_transfer', label: 'Electronic Transfer' },
+      { value: 'credit_card', label: 'Credit Card' },
+      { value: 'other', label: 'Other' },
+    ],
+    required: true,
+    section: 'Sale Information',
+  },
+  {
+    id: 'paymentReceived',
+    type: 'radio',
+    label: 'Payment received in full?',
+    options: [
+      { value: true, label: 'Yes, payment received in full' },
+      { value: false, label: 'No, partial payment or payment pending' },
+    ],
+    required: true,
+    section: 'Sale Information',
+  },
+  {
+    id: 'saleDate',
+    type: 'date',
+    label: 'Sale Date',
+    required: true,
+    section: 'Sale Information',
+  },
+
+  // Transfer Details
+  {
+    id: 'deliveryMethod',
+    type: 'select',
+    label: 'Delivery/Transfer Method',
+    options: [
+      { value: 'immediate_pickup', label: 'Immediate pickup by buyer' },
+      { value: 'seller_delivery', label: 'Delivery by seller' },
+      { value: 'buyer_pickup', label: 'Scheduled pickup by buyer' },
+      { value: 'shipping', label: 'Shipping/Mail' },
+      { value: 'other', label: 'Other' },
+    ],
+    required: true,
+    section: 'Transfer Details',
+  },
+  {
+    id: 'deliveryDate',
+    type: 'date',
+    label: 'Delivery/Pickup Date (if not immediate)',
+    required: false,
+    section: 'Transfer Details',
+  },
+  {
+    id: 'deliveryLocation',
+    type: 'text',
+    label: 'Delivery/Pickup Location',
+    placeholder: 'Enter location for delivery or pickup',
+    required: false,
+    section: 'Transfer Details',
+  },
+
+  // Warranties and Condition
+  {
+    id: 'asIsClause',
+    type: 'radio',
+    label: 'Sold "As-Is"?',
+    options: [
+      { value: true, label: 'Yes, item sold as-is with no warranties' },
+      { value: false, label: 'No, warranties or guarantees provided' },
+    ],
+    required: true,
+    section: 'Warranties',
+  },
+  {
+    id: 'warrantyOffered',
+    type: 'radio',
+    label: 'Warranty offered?',
+    options: [
+      { value: true, label: 'Yes, warranty is offered' },
+      { value: false, label: 'No warranty offered' },
+    ],
+    required: true,
+    section: 'Warranties',
+    conditional: {
+      field: 'asIsClause',
+      value: [false],
+    },
+  },
+  {
+    id: 'warrantyPeriod',
+    type: 'text',
+    label: 'Warranty Period',
+    placeholder: 'e.g., 30 days, 1 year',
+    required: false,
+    section: 'Warranties',
+    conditional: {
+      field: 'warrantyOffered',
+      value: [true],
+    },
+  },
+  {
+    id: 'warrantyTerms',
+    type: 'textarea',
+    label: 'Warranty Terms',
+    placeholder: 'Describe warranty coverage and limitations',
+    required: false,
+    section: 'Warranties',
+    conditional: {
+      field: 'warrantyOffered',
+      value: [true],
+    },
+  },
+
+  // Legal Aspects
+  {
+    id: 'titleTransfer',
+    type: 'radio',
+    label: 'Clear title transferred?',
+    options: [
+      { value: true, label: 'Yes, clear title is transferred' },
+      { value: false, label: 'No, title issues exist' },
+    ],
+    required: true,
+    section: 'Legal Information',
+  },
+  {
+    id: 'lienDisclosure',
+    type: 'radio',
+    label: 'Any liens or encumbrances?',
+    options: [
+      { value: true, label: 'Yes, liens or encumbrances exist' },
+      { value: false, label: 'No liens or encumbrances' },
+    ],
+    required: true,
+    section: 'Legal Information',
+  },
+  {
+    id: 'lienDetails',
+    type: 'textarea',
+    label: 'Lien/Encumbrance Details',
+    placeholder: 'Describe any liens or encumbrances',
+    required: false,
+    section: 'Legal Information',
+    conditional: {
+      field: 'lienDisclosure',
+      value: [true],
+    },
+  },
+
+  // Additional Terms
+  {
+    id: 'additionalTerms',
+    type: 'textarea',
+    label: 'Additional Terms',
+    placeholder: 'Enter any additional terms or conditions',
+    required: false,
+    section: 'Additional Terms',
+  },
+  {
+    id: 'specialConditions',
+    type: 'textarea',
+    label: 'Special Conditions',
+    placeholder: 'Enter any special conditions',
+    required: false,
+    section: 'Additional Terms',
+  },
+
+  // Signatures
+  {
+    id: 'witnessRequired',
+    type: 'radio',
+    label: 'Witness required?',
+    options: [
+      { value: true, label: 'Yes, witness required' },
+      { value: false, label: 'No witness required' },
+    ],
+    required: true,
+    section: 'Signatures',
+  },
+  {
+    id: 'witnessName',
+    type: 'text',
+    label: 'Witness Name',
+    placeholder: 'Enter witness full name',
+    required: false,
+    section: 'Signatures',
+    conditional: {
+      field: 'witnessRequired',
+      value: [true],
+    },
+  },
+  {
+    id: 'notaryRequired',
+    type: 'radio',
+    label: 'Notarization required?',
+    options: [
+      { value: true, label: 'Yes, notarization required' },
+      { value: false, label: 'No notarization required' },
+    ],
+    required: true,
+    section: 'Signatures',
+  },
+];
