@@ -50,5 +50,39 @@ service cloud.firestore {
       // Never allow updates or deletes
       allow update, delete: if false;
     }
+    
+    // Operational metrics collection
+    match /operational_metrics/{metricId} {
+      // Only authenticated users can create metrics (system events)
+      allow create: if request.auth != null &&
+        request.resource.data.keys().hasAll(['metricType', 'value', 'timestamp']) &&
+        request.resource.data.timestamp == request.time;
+      
+      // Only admins can read metrics
+      allow read: if request.auth != null && request.auth.token.admin == true;
+      
+      // Never allow updates or deletes (immutable)
+      allow update, delete: if false;
+    }
+    
+    // Operational alerts collection
+    match /operational_alerts/{alertId} {
+      // Only authenticated users can create alerts (system events)
+      allow create: if request.auth != null &&
+        request.resource.data.keys().hasAll(['type', 'severity', 'message', 'timestamp']) &&
+        request.resource.data.timestamp == request.time;
+      
+      // Only admins can read alerts
+      allow read: if request.auth != null && request.auth.token.admin == true;
+      
+      // Only admins can update alerts (to resolve them)
+      allow update: if request.auth != null && 
+        request.auth.token.admin == true &&
+        request.resource.data.keys().hasOnly(['resolved']) &&
+        request.resource.data.resolved == true;
+      
+      // Never allow deletes
+      allow delete: if false;
+    }
   }
 }

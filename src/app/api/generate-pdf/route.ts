@@ -3,6 +3,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { generatePdfDocument } from '@/services/pdf-generator';
 import { auditService } from '@/services/firebase-audit-service';
 import { requireAuth } from '@/lib/server-auth';
+import { withHealthMonitoring } from '@/middleware/health-monitoring';
+import { operationalHealth } from '@/lib/operational-health';
 
 type RequestData = {
   documentType: string;
@@ -215,4 +217,64 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(responsePayload, { status: statusCode });
   }
+}
+
+// Wrap the POST function with health monitoring
+const originalPOST = POST;
+export { originalPOST as POST };
+
+// Create a monitored version of the POST function
+export const monitoredPOST = withHealthMonitoring(async (request: NextRequest) => {
+  const startTime = performance.now();
+  
+  try {
+    // Record queue depth before processing
+    await operationalHealth.recordQueueOperation('pdf_generation', 'depth', getPdfQueueDepth());
+    
+    const response = await originalPOST(request);
+    
+    // Record successful PDF generation metrics
+    const endTime = performance.now();
+    const duration = endTime - startTime;
+    
+    await operationalHealth.recordMetric({
+      metricType: 'latency',
+      value: duration,
+      endpoint: '/api/generate-pdf',
+      metadata: {
+        success: response.status < 400,
+        statusCode: response.status,
+        operation: 'pdf_generation'
+      }
+    });
+    
+    // Record queue depth after processing
+    await operationalHealth.recordQueueOperation('pdf_generation', 'dequeue', getPdfQueueDepth());
+    
+    return response;
+  } catch (error) {
+    // Record error metrics
+    const endTime = performance.now();
+    const duration = endTime - startTime;
+    
+    await operationalHealth.recordMetric({
+      metricType: 'error_rate',
+      value: 1,
+      endpoint: '/api/generate-pdf',
+      metadata: {
+        error: error instanceof Error ? error.message : String(error),
+        duration,
+        operation: 'pdf_generation'
+      }
+    });
+    
+    throw error;
+  }
+});
+
+// Helper function to get current PDF queue depth (placeholder)
+function getPdfQueueDepth(): number {
+  // In a real implementation, this would check your actual PDF generation queue
+  // For demonstration, return a random number between 0-20
+  return Math.floor(Math.random() * 20);
 }
