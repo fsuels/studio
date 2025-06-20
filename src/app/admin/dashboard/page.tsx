@@ -1,0 +1,283 @@
+// Admin dashboard page with compliance monitoring
+'use client';
+
+import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import ComplianceDashboard from '@/components/compliance/ComplianceDashboard';
+import { 
+  LogOut, 
+  Shield, 
+  User, 
+  Clock,
+  Loader2,
+  Settings,
+  Database,
+  BarChart3,
+  Users,
+  AlertTriangle
+} from 'lucide-react';
+
+interface AdminUser {
+  username: string;
+  role: string;
+  loginTime: string;
+}
+
+export default function AdminDashboardPage() {
+  const [adminUser, setAdminUser] = useState<AdminUser | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [loggingOut, setLoggingOut] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
+
+  useEffect(() => {
+    checkAuthentication();
+  }, []);
+
+  const checkAuthentication = async () => {
+    try {
+      const response = await fetch('/api/admin/auth');
+      const data = await response.json();
+      
+      if (data.authenticated) {
+        setAdminUser(data.user);
+      } else {
+        router.push('/admin');
+      }
+    } catch (err) {
+      setError('Failed to verify authentication');
+      router.push('/admin');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleLogout = async () => {
+    setLoggingOut(true);
+    try {
+      await fetch('/api/admin/auth', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          action: 'logout',
+          username: adminUser?.username,
+        }),
+      });
+      
+      router.push('/admin');
+    } catch (err) {
+      setError('Logout failed');
+    } finally {
+      setLoggingOut(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center space-y-4">
+          <Loader2 className="h-8 w-8 animate-spin mx-auto text-primary" />
+          <p className="text-sm text-muted-foreground">Loading admin dashboard...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!adminUser) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Alert variant="destructive" className="max-w-md">
+          <AlertTriangle className="h-4 w-4" />
+          <AlertDescription>
+            Authentication required. Redirecting to login...
+          </AlertDescription>
+        </Alert>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      {/* Admin Header */}
+      <header className="bg-white border-b border-gray-200 shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16">
+            {/* Left side - Logo & Title */}
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2">
+                <Shield className="h-6 w-6 text-primary" />
+                <h1 className="text-xl font-semibold">123LegalDoc Admin</h1>
+              </div>
+              <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
+                LIVE SYSTEM
+              </Badge>
+            </div>
+
+            {/* Right side - User info & Logout */}
+            <div className="flex items-center gap-4">
+              <div className="text-right text-sm">
+                <div className="flex items-center gap-2">
+                  <User className="h-4 w-4 text-muted-foreground" />
+                  <span className="font-medium">{adminUser.username}</span>
+                  <Badge variant="secondary">{adminUser.role}</Badge>
+                </div>
+                <div className="flex items-center gap-1 text-xs text-muted-foreground mt-1">
+                  <Clock className="h-3 w-3" />
+                  <span>Since {new Date(adminUser.loginTime).toLocaleTimeString()}</span>
+                </div>
+              </div>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={handleLogout}
+                disabled={loggingOut}
+              >
+                {loggingOut ? (
+                  <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                ) : (
+                  <LogOut className="h-4 w-4 mr-2" />
+                )}
+                {loggingOut ? 'Signing Out...' : 'Sign Out'}
+              </Button>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      {/* Error Alert */}
+      {error && (
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4">
+          <Alert variant="destructive">
+            <AlertTriangle className="h-4 w-4" />
+            <AlertDescription>{error}</AlertDescription>
+          </Alert>
+        </div>
+      )}
+
+      {/* Main Content */}
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <Tabs defaultValue="compliance" className="space-y-6">
+          {/* Tab Navigation */}
+          <TabsList className="grid w-full grid-cols-4">
+            <TabsTrigger value="compliance" className="flex items-center gap-2">
+              <BarChart3 className="h-4 w-4" />
+              Compliance
+            </TabsTrigger>
+            <TabsTrigger value="waitlist" className="flex items-center gap-2">
+              <Users className="h-4 w-4" />
+              Waitlist
+            </TabsTrigger>
+            <TabsTrigger value="regulations" className="flex items-center gap-2">
+              <Database className="h-4 w-4" />
+              Regulations
+            </TabsTrigger>
+            <TabsTrigger value="settings" className="flex items-center gap-2">
+              <Settings className="h-4 w-4" />
+              Settings
+            </TabsTrigger>
+          </TabsList>
+
+          {/* Compliance Tab */}
+          <TabsContent value="compliance" className="space-y-6">
+            <div>
+              <h2 className="text-2xl font-bold mb-2">Real-Time Compliance Monitoring</h2>
+              <p className="text-muted-foreground">
+                Monitor UPL compliance across all 50 states with real-time analytics and alerts.
+              </p>
+            </div>
+            <ComplianceDashboard />
+          </TabsContent>
+
+          {/* Waitlist Tab */}
+          <TabsContent value="waitlist" className="space-y-6">
+            <div>
+              <h2 className="text-2xl font-bold mb-2">Waitlist Management</h2>
+              <p className="text-muted-foreground">
+                Manage signups from restricted states and track expansion opportunities.
+              </p>
+            </div>
+            <WaitlistManagement />
+          </TabsContent>
+
+          {/* Regulations Tab */}
+          <TabsContent value="regulations" className="space-y-6">
+            <div>
+              <h2 className="text-2xl font-bold mb-2">State Regulations Editor</h2>
+              <p className="text-muted-foreground">
+                Update state risk classifications and compliance requirements.
+              </p>
+            </div>
+            <RegulationsEditor />
+          </TabsContent>
+
+          {/* Settings Tab */}
+          <TabsContent value="settings" className="space-y-6">
+            <div>
+              <h2 className="text-2xl font-bold mb-2">System Settings</h2>
+              <p className="text-muted-foreground">
+                Configure compliance thresholds, monitoring alerts, and system preferences.
+              </p>
+            </div>
+            <SystemSettings />
+          </TabsContent>
+        </Tabs>
+      </main>
+    </div>
+  );
+}
+
+// Placeholder components for other tabs
+function WaitlistManagement() {
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>Waitlist Analytics</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <p className="text-muted-foreground">
+          Waitlist management interface will be displayed here.
+          This includes signup analytics, priority management, and notification systems.
+        </p>
+      </CardContent>
+    </Card>
+  );
+}
+
+function RegulationsEditor() {
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>State Regulations Database</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <p className="text-muted-foreground">
+          State regulations editor will be displayed here.
+          This includes risk level adjustments, requirement updates, and source documentation.
+        </p>
+      </CardContent>
+    </Card>
+  );
+}
+
+function SystemSettings() {
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>Configuration Management</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <p className="text-muted-foreground">
+          System settings interface will be displayed here.
+          This includes compliance thresholds, alert configurations, and API settings.
+        </p>
+      </CardContent>
+    </Card>
+  );
+}
