@@ -165,10 +165,14 @@ export default function AdminDashboardPage() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <Tabs defaultValue="compliance" className="space-y-6">
           {/* Tab Navigation */}
-          <TabsList className="grid w-full grid-cols-4">
+          <TabsList className="grid w-full grid-cols-5">
             <TabsTrigger value="compliance" className="flex items-center gap-2">
               <BarChart3 className="h-4 w-4" />
               Compliance
+            </TabsTrigger>
+            <TabsTrigger value="customer360" className="flex items-center gap-2">
+              <Users className="h-4 w-4" />
+              Customer 360
             </TabsTrigger>
             <TabsTrigger value="waitlist" className="flex items-center gap-2">
               <Users className="h-4 w-4" />
@@ -193,6 +197,17 @@ export default function AdminDashboardPage() {
               </p>
             </div>
             <ComplianceDashboard />
+          </TabsContent>
+
+          {/* Customer 360 Tab */}
+          <TabsContent value="customer360" className="space-y-6">
+            <div>
+              <h2 className="text-2xl font-bold mb-2">Customer 360 Intelligence</h2>
+              <p className="text-muted-foreground">
+                Complete customer insights with timeline, orders, support tickets, NPS, and churn risk analysis.
+              </p>
+            </div>
+            <Customer360Management />
           </TabsContent>
 
           {/* Waitlist Tab */}
@@ -261,6 +276,51 @@ function RegulationsEditor() {
           State regulations editor will be displayed here.
           This includes risk level adjustments, requirement updates, and source documentation.
         </p>
+      </CardContent>
+    </Card>
+  );
+}
+
+function Customer360Management() {
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>Customer 360 Analytics</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <div className="space-y-4">
+          <p className="text-muted-foreground">
+            Advanced customer intelligence dashboard with timeline views, churn risk analysis, and lifetime value tracking.
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="p-4 border rounded-lg">
+              <h3 className="font-semibold text-lg mb-2">Customer Timeline</h3>
+              <p className="text-sm text-muted-foreground">
+                Complete customer journey with orders, support tickets, NPS responses, and document interactions.
+              </p>
+            </div>
+            <div className="p-4 border rounded-lg">
+              <h3 className="font-semibold text-lg mb-2">Churn Risk Analysis</h3>
+              <p className="text-sm text-muted-foreground">
+                AI-powered churn prediction with health scores and proactive intervention recommendations.
+              </p>
+            </div>
+            <div className="p-4 border rounded-lg">
+              <h3 className="font-semibold text-lg mb-2">LTV & Plan Tiers</h3>
+              <p className="text-sm text-muted-foreground">
+                Lifetime value calculations with plan tier badges and upgrade opportunities.
+              </p>
+            </div>
+          </div>
+          <div className="pt-4">
+            <Button 
+              onClick={() => window.open('/admin/customer-360', '_blank')}
+              className="w-full"
+            >
+              Open Customer 360 Dashboard
+            </Button>
+          </div>
+        </div>
       </CardContent>
     </Card>
   );
