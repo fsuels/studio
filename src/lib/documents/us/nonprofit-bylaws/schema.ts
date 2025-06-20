@@ -158,7 +158,7 @@ export const NonprofitBylawsSchema = z.object({
   // Special Provisions
   religiousExemptions: z.string().optional(),
   politicalActivity: z.boolean().default(false),
-  lobbying Limitations: z.string().optional(),
+  lobbyingLimitations: z.string().optional(),
   internationalActivities: z.boolean().default(false),
   
   // Emergency Succession

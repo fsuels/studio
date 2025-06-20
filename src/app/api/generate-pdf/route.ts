@@ -21,7 +21,6 @@ type ErrorResponse = {
 export async function POST(request: NextRequest) {
   const requestId = `req_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
   const logPrefix = `[API /generate-pdf] [${requestId}]`;
-  let user: any = null;
   let documentType: string = 'unknown';
 
   console.log(`${logPrefix} Received request: ${request.method} ${request.url}`);
@@ -218,10 +217,6 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(responsePayload, { status: statusCode });
   }
 }
-
-// Wrap the POST function with health monitoring
-const originalPOST = POST;
-export { originalPOST as POST };
 
 // Create a monitored version of the POST function
 export const monitoredPOST = withHealthMonitoring(async (request: NextRequest) => {

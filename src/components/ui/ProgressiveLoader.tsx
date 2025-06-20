@@ -1,3 +1,5 @@
+'use client'
+
 import React, { useState, useEffect, ComponentType } from 'react'
 import { Skeleton } from './skeleton'
 

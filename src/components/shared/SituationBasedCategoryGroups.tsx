@@ -215,7 +215,7 @@ const SituationBasedCategoryGroups: React.FC<SituationBasedCategoryGroupsProps> 
                   <div className="text-2xl">{group.icon}</div>
                   <div>
                     <h3 className="font-semibold text-base leading-tight">
-                      {group.label.replace(/^[🔄-🿿]\s*/, '')}
+                      {group.label.replace(/^[\u{1F500}-\u{1F7FF}]\s*/u, '')}
                     </h3>
                     <p className="text-sm text-muted-foreground mt-1">
                       {group.totalDocs} {t('situations.documents', { defaultValue: 'documents' })}

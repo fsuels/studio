@@ -76,7 +76,7 @@ export const WaterRightsAgreementSchema = z.object({
   
   // Environmental Considerations
   environmentalCompliance: z.boolean().default(true),
-  endangered Species: z.boolean().default(false),
+  endangeredSpecies: z.boolean().default(false),
   instreamFlows: z.boolean().default(false),
   environmentalMitigation: z.string().optional(),
   returnFlowRequirements: z.boolean().default(false),

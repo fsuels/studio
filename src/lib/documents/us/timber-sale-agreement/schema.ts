@@ -106,7 +106,7 @@ export const TimberSaleAgreementSchema = z.object({
   forestPracticesAct: z.boolean().default(true),
   stateRegulations: z.boolean().default(true),
   localOrdinances: z.boolean().default(true),
-  permits Required: z.boolean().default(true),
+  permitsRequired: z.boolean().default(true),
   bestManagementPractices: z.boolean().default(true),
   
   // Scaling and Measurement

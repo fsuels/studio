@@ -1,3 +1,5 @@
+'use client';
+
 import React, { Suspense, lazy, ComponentType } from 'react';
 import { Spinner } from '@/components/ui/Spinner';
 import { BaseComponentProps, ClassNameHelpers } from '@/lib/component-standards';

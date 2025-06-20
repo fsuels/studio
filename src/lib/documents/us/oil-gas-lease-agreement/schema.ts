@@ -74,7 +74,7 @@ export const OilGasLeaseAgreementSchema = z.object({
   
   // Environmental Protection
   environmentalCompliance: z.boolean().default(true),
-  spill Prevention: z.boolean().default(true),
+  spillPrevention: z.boolean().default(true),
   restoration: z.boolean().default(true),
   reclamation: z.boolean().default(true),
   bondingRequirement: z.string().optional(),
@@ -103,7 +103,7 @@ export const OilGasLeaseAgreementSchema = z.object({
   // Operations and Production
   operationStandards: z.string().optional(),
   productionMethods: z.string().optional(),
-  enhanced Recovery: z.boolean().default(true),
+  enhancedRecovery: z.boolean().default(true),
   artificialLift: z.boolean().default(true),
   workoverRights: z.boolean().default(true),
   abandonmentRights: z.boolean().default(true),
@@ -112,7 +112,7 @@ export const OilGasLeaseAgreementSchema = z.object({
   gasMarketingRights: z.enum(['lessor', 'lessee', 'shared']).default('lessee'),
   takeOrPay: z.boolean().default(false),
   transportation: z.boolean().default(true),
-  gathering Systems: z.boolean().default(true),
+  gatheringSystems: z.boolean().default(true),
   dedicationClause: z.boolean().default(false),
   
   // Regulatory Compliance

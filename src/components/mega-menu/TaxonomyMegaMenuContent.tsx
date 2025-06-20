@@ -283,13 +283,13 @@ const SituationCard: React.FC<{
               onClick={onLinkClick}
               className="flex items-center gap-1 text-xs text-primary hover:underline mt-2"
             >
-              View all {situation.label.replace(/^[🔄-🿿]\s*/, '')}
+              View all {situation.label.replace(/^[\u{1F500}-\u{1F7FF}]\s*/u, '')}
               <ArrowRight className="h-3 w-3" />
             </Link>
           </>
         ) : (
           <div className="text-xs text-muted-foreground italic">
-            Explore {situation.label.replace(/^[🔄-🿿]\s*/, '')} documents
+            Explore {situation.label.replace(/^[\u{1F500}-\u{1F7FF}]\s*/u, '')} documents
           </div>
         )}
       </CardContent>

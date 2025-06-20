@@ -23,10 +23,17 @@ function getRandomInterval() {
 }
 
 const LiveActivityFeed = React.memo(function LiveActivityFeed() {
-  const [message, setMessage] = useState(messages[0]);
-  const [visible, setVisible] = useState(true);
+  const [message, setMessage] = useState('');
+  const [visible, setVisible] = useState(false);
 
   useEffect(() => {
+    // Initialize message on client side to avoid hydration mismatch
+    setMessage(messages[0]);
+    setVisible(true);
+  }, []);
+
+  useEffect(() => {
+    if (!message) return; // Skip if message not initialized
     let timer: NodeJS.Timeout;
     const scheduleNext = () => {
       timer = setTimeout(() => {

@@ -84,7 +84,7 @@ export const RealEstatePurchaseAgreementSchema = z.object({
   
   // Contingencies
   saleOfCurrentHome: z.boolean().default(false),
-  hoa Approval: z.boolean().default(false),
+  hoaApproval: z.boolean().default(false),
   attorneyReview: z.boolean().default(false),
   otherContingencies: z.string().optional(),
   
@@ -104,7 +104,7 @@ export const RealEstatePurchaseAgreementSchema = z.object({
   buyerClosingCosts: z.string().optional(),
   sellerClosingCosts: z.string().optional(),
   titleInsuranceCost: z.enum(['buyer', 'seller', 'shared']).default('buyer'),
-  recordingFees: z.enum(['buyer', 'seller', 'shared']).default('buyer),
+  recordingFees: z.enum(['buyer', 'seller', 'shared']).default('buyer'),
   
   // Risk of Loss
   riskOfLoss: z.enum(['buyer', 'seller', 'insurance']).default('seller'),

@@ -1,3 +1,5 @@
+'use client'
+
 // src/examples/auth-api-usage.tsx
 // Example component showing how to use authenticated API calls
 

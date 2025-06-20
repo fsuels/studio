@@ -1,3 +1,5 @@
+'use client';
+
 import { useEffect, useState } from 'react';
 import Carousel from './Carousel';
 import { Spinner } from '@/components/ui/Spinner';

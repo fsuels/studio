@@ -73,7 +73,7 @@ export const MaritimeCharterAgreementSchema = z.object({
   // Legal and Regulatory
   flagStateCompliance: z.boolean().default(true),
   portStateCompliance: z.boolean().default(true),
-  ism Code: z.boolean().default(true),
+  ismCode: z.boolean().default(true),
   ispsCode: z.boolean().default(true),
   
   // Environmental

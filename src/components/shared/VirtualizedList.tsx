@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useRef, useEffect, useCallback } from 'react';
 import { useVirtual } from '@tanstack/react-virtual';
 import { BaseComponentProps, ListComponentProps, ClassNameHelpers } from '@/lib/component-standards';

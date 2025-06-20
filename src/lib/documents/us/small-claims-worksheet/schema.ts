@@ -193,4 +193,7 @@ export const smallClaimsWorksheetSchema = z.object({
     collectionMethods: z.array(z.string()).optional(),
     appealConsidered: z.boolean().optional(),
     lessonsLearned: z.string().optional()
-  })\n});\n\nexport type SmallClaimsWorksheet = z.infer<typeof smallClaimsWorksheetSchema>;"}]
+  })
+});
+
+export type SmallClaimsWorksheet = z.infer<typeof smallClaimsWorksheetSchema>;
