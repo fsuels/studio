@@ -19,8 +19,10 @@ import {
   Database,
   BarChart3,
   Users,
-  AlertTriangle
+  AlertTriangle,
+  TrendingUp
 } from 'lucide-react';
+import MarketingInsightsDashboard from '@/components/admin/MarketingInsightsDashboard';
 
 interface AdminUser {
   username: string;
@@ -165,7 +167,7 @@ export default function AdminDashboardPage() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <Tabs defaultValue="compliance" className="space-y-6">
           {/* Tab Navigation */}
-          <TabsList className="grid w-full grid-cols-6">
+          <TabsList className="grid w-full grid-cols-7">
             <TabsTrigger value="compliance" className="flex items-center gap-2">
               <BarChart3 className="h-4 w-4" />
               Compliance
@@ -177,6 +179,10 @@ export default function AdminDashboardPage() {
             <TabsTrigger value="roleops" className="flex items-center gap-2">
               <Shield className="h-4 w-4" />
               Role Ops
+            </TabsTrigger>
+            <TabsTrigger value="marketing" className="flex items-center gap-2">
+              <TrendingUp className="h-4 w-4" />
+              Marketing
             </TabsTrigger>
             <TabsTrigger value="waitlist" className="flex items-center gap-2">
               <Users className="h-4 w-4" />
@@ -223,6 +229,11 @@ export default function AdminDashboardPage() {
               </p>
             </div>
             <RoleOperationsManagement />
+          </TabsContent>
+
+          {/* Marketing Insights Tab */}
+          <TabsContent value="marketing" className="space-y-6">
+            <MarketingInsightsDashboard />
           </TabsContent>
 
           {/* Waitlist Tab */}
