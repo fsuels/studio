@@ -20,9 +20,13 @@ import {
   BarChart3,
   Users,
   AlertTriangle,
-  TrendingUp
+  TrendingUp,
+  Globe,
+  FileBarChart
 } from 'lucide-react';
 import MarketingInsightsDashboard from '@/components/admin/MarketingInsightsDashboard';
+import { WebhookDashboard } from '@/components/admin/webhooks/WebhookDashboard';
+import { ReportBuilder } from '@/components/admin/reports/ReportBuilder';
 
 interface AdminUser {
   username: string;
@@ -167,7 +171,7 @@ export default function AdminDashboardPage() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <Tabs defaultValue="compliance" className="space-y-6">
           {/* Tab Navigation */}
-          <TabsList className="grid w-full grid-cols-8">
+          <TabsList className="grid w-full grid-cols-10">
             <TabsTrigger value="compliance" className="flex items-center gap-2">
               <BarChart3 className="h-4 w-4" />
               Compliance
@@ -187,6 +191,14 @@ export default function AdminDashboardPage() {
             <TabsTrigger value="marketing" className="flex items-center gap-2">
               <TrendingUp className="h-4 w-4" />
               Marketing
+            </TabsTrigger>
+            <TabsTrigger value="webhooks" className="flex items-center gap-2">
+              <Globe className="h-4 w-4" />
+              Webhooks
+            </TabsTrigger>
+            <TabsTrigger value="reports" className="flex items-center gap-2">
+              <FileBarChart className="h-4 w-4" />
+              Reports
             </TabsTrigger>
             <TabsTrigger value="waitlist" className="flex items-center gap-2">
               <Users className="h-4 w-4" />
@@ -249,6 +261,28 @@ export default function AdminDashboardPage() {
           {/* Marketing Insights Tab */}
           <TabsContent value="marketing" className="space-y-6">
             <MarketingInsightsDashboard />
+          </TabsContent>
+
+          {/* Webhooks Tab */}
+          <TabsContent value="webhooks" className="space-y-6">
+            <div>
+              <h2 className="text-2xl font-bold mb-2">Webhook Management</h2>
+              <p className="text-muted-foreground">
+                Manage webhook subscriptions, monitor delivery status, and view event logs for real-time integrations.
+              </p>
+            </div>
+            <WebhookDashboard />
+          </TabsContent>
+
+          {/* Reports Tab */}
+          <TabsContent value="reports" className="space-y-6">
+            <div>
+              <h2 className="text-2xl font-bold mb-2">Report Builder</h2>
+              <p className="text-muted-foreground">
+                Create custom reports and visualizations from your data with low-code SQL→chart builder.
+              </p>
+            </div>
+            <ReportBuilder />
           </TabsContent>
 
           {/* Waitlist Tab */}
