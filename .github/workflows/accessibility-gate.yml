@@ -1,0 +1,294 @@
+name: Accessibility Gate
+
+on:
+  pull_request:
+    branches: [ master, main ]
+    types: [opened, synchronize, reopened]
+  push:
+    branches: [ master, main ]
+
+concurrency:
+  group: accessibility-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  accessibility-tests:
+    name: Accessibility Testing
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+
+      - name: Build application
+        run: npm run build
+        env:
+          NODE_ENV: production
+
+      - name: Start application
+        run: |
+          npm start &
+          npx wait-on http://localhost:3000 --timeout 60000
+        env:
+          NODE_ENV: production
+          PORT: 3000
+
+      - name: Run accessibility tests
+        run: npm run test:accessibility:ci
+        env:
+          CI: true
+
+      - name: Upload accessibility test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: accessibility-test-results
+          path: |
+            playwright-report/
+            test-results/
+            accessibility-results.xml
+          retention-days: 30
+
+      - name: Parse accessibility results
+        if: always()
+        id: parse-results
+        run: |
+          if [ -f "test-results.json" ]; then
+            VIOLATIONS=$(jq -r '.suites[].specs[] | select(.tests[].results[].status == "failed") | .title' test-results.json | wc -l)
+            TOTAL_TESTS=$(jq -r '.suites[].specs[].tests[] | length' test-results.json | wc -l)
+            echo "violations=$VIOLATIONS" >> $GITHUB_OUTPUT
+            echo "total_tests=$TOTAL_TESTS" >> $GITHUB_OUTPUT
+          else
+            echo "violations=0" >> $GITHUB_OUTPUT
+            echo "total_tests=0" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Generate accessibility report
+        if: always()
+        run: |
+          echo "## 🎯 Accessibility Test Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          if [ -f "test-results.json" ]; then
+            PASSED=$(jq -r '[.suites[].specs[].tests[] | select(.results[].status == "passed")] | length' test-results.json || echo "0")
+            FAILED=$(jq -r '[.suites[].specs[].tests[] | select(.results[].status == "failed")] | length' test-results.json || echo "0")
+            TOTAL=$((PASSED + FAILED))
+            
+            echo "| Metric | Count |" >> $GITHUB_STEP_SUMMARY
+            echo "|--------|-------|" >> $GITHUB_STEP_SUMMARY
+            echo "| ✅ Passed | $PASSED |" >> $GITHUB_STEP_SUMMARY
+            echo "| ❌ Failed | $FAILED |" >> $GITHUB_STEP_SUMMARY
+            echo "| 📊 Total | $TOTAL |" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            
+            if [ $FAILED -gt 0 ]; then
+              echo "### ❌ Accessibility Violations Found" >> $GITHUB_STEP_SUMMARY
+              echo "" >> $GITHUB_STEP_SUMMARY
+              echo "The following accessibility tests failed:" >> $GITHUB_STEP_SUMMARY
+              echo "" >> $GITHUB_STEP_SUMMARY
+              
+              # Extract failed test details
+              jq -r '.suites[].specs[] | select(.tests[].results[].status == "failed") | "- **" + .title + "**: " + (.tests[].results[].error // "Unknown error")' test-results.json >> $GITHUB_STEP_SUMMARY || echo "- Unable to parse detailed errors" >> $GITHUB_STEP_SUMMARY
+              
+              echo "" >> $GITHUB_STEP_SUMMARY
+              echo "### 🔧 How to Fix" >> $GITHUB_STEP_SUMMARY
+              echo "" >> $GITHUB_STEP_SUMMARY
+              echo "1. **Run tests locally**: \`npm run test:accessibility\`" >> $GITHUB_STEP_SUMMARY
+              echo "2. **Check the detailed report**: Download the accessibility-test-results artifact" >> $GITHUB_STEP_SUMMARY
+              echo "3. **Fix violations**: Use the axe-playwright suggestions in the test output" >> $GITHUB_STEP_SUMMARY
+              echo "4. **Re-run tests**: Ensure all accessibility tests pass before pushing" >> $GITHUB_STEP_SUMMARY
+              echo "" >> $GITHUB_STEP_SUMMARY
+              echo "📚 **Resources**:" >> $GITHUB_STEP_SUMMARY
+              echo "- [WCAG 2.2 Guidelines](https://www.w3.org/WAI/WCAG22/quickref/)" >> $GITHUB_STEP_SUMMARY
+              echo "- [axe-core Rules](https://dequeuniversity.com/rules/axe/)" >> $GITHUB_STEP_SUMMARY
+              echo "- [Accessibility Testing Guide](https://playwright.dev/docs/accessibility-testing)" >> $GITHUB_STEP_SUMMARY
+            else
+              echo "### ✅ All Accessibility Tests Passed!" >> $GITHUB_STEP_SUMMARY
+              echo "" >> $GITHUB_STEP_SUMMARY
+              echo "Great job! Your changes maintain the accessibility standards." >> $GITHUB_STEP_SUMMARY
+            fi
+          else
+            echo "⚠️ **Warning**: Could not find test results file." >> $GITHUB_STEP_SUMMARY
+            echo "Please check if the accessibility tests ran correctly." >> $GITHUB_STEP_SUMMARY
+          fi
+
+      - name: Comment PR with accessibility results
+        if: github.event_name == 'pull_request' && always()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            
+            let comment = '## 🎯 Accessibility Test Results\n\n';
+            
+            try {
+              if (fs.existsSync('test-results.json')) {
+                const results = JSON.parse(fs.readFileSync('test-results.json', 'utf8'));
+                
+                const allTests = results.suites?.flatMap(suite => 
+                  suite.specs?.flatMap(spec => spec.tests || []) || []
+                ) || [];
+                
+                const passed = allTests.filter(test => test.results?.[0]?.status === 'passed').length;
+                const failed = allTests.filter(test => test.results?.[0]?.status === 'failed').length;
+                const total = passed + failed;
+                
+                if (failed > 0) {
+                  comment += '❌ **Accessibility violations found!**\n\n';
+                  comment += `| Status | Count |\n|--------|-------|\n`;
+                  comment += `| ✅ Passed | ${passed} |\n`;
+                  comment += `| ❌ Failed | ${failed} |\n`;
+                  comment += `| 📊 Total | ${total} |\n\n`;
+                  comment += '**This PR cannot be merged until all accessibility tests pass.**\n\n';
+                  comment += '### Next Steps:\n';
+                  comment += '1. Download the `accessibility-test-results` artifact for detailed reports\n';
+                  comment += '2. Run `npm run test:accessibility` locally to reproduce\n';
+                  comment += '3. Fix the violations using WCAG 2.2 guidelines\n';
+                  comment += '4. Push your fixes to re-run the tests\n\n';
+                  comment += '📚 [WCAG 2.2 Quick Reference](https://www.w3.org/WAI/WCAG22/quickref/) | [axe Rules](https://dequeuniversity.com/rules/axe/)';
+                } else {
+                  comment += '✅ **All accessibility tests passed!**\n\n';
+                  comment += `| Status | Count |\n|--------|-------|\n`;
+                  comment += `| ✅ Passed | ${passed} |\n`;
+                  comment += `| ❌ Failed | ${failed} |\n`;
+                  comment += `| 📊 Total | ${total} |\n\n`;
+                  comment += 'Great job maintaining accessibility standards! 🎉';
+                }
+              } else {
+                comment += '⚠️ **Warning**: Could not find accessibility test results.\n\n';
+                comment += 'The accessibility tests may not have run correctly. Please check the workflow logs.';
+              }
+            } catch (error) {
+              comment += '❌ **Error**: Failed to parse accessibility test results.\n\n';
+              comment += `Error: ${error.message}`;
+            }
+            
+            // Find existing comment and update it, or create new one
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+            
+            const botComment = comments.find(comment => 
+              comment.user.type === 'Bot' && 
+              comment.body.includes('🎯 Accessibility Test Results')
+            );
+            
+            if (botComment) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: botComment.id,
+                body: comment
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body: comment
+              });
+            }
+
+      - name: Fail if accessibility violations found
+        if: always()
+        run: |
+          if [ -f "test-results.json" ]; then
+            FAILED=$(jq -r '[.suites[].specs[].tests[] | select(.results[].status == "failed")] | length' test-results.json || echo "0")
+            if [ $FAILED -gt 0 ]; then
+              echo "❌ Accessibility tests failed with $FAILED violations"
+              echo "This PR cannot be merged until all accessibility issues are resolved."
+              exit 1
+            else
+              echo "✅ All accessibility tests passed!"
+            fi
+          else
+            echo "⚠️ Could not find test results - treating as failure"
+            exit 1
+          fi
+
+  lighthouse-audit:
+    name: Lighthouse Accessibility Audit
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build application
+        run: npm run build
+
+      - name: Start application
+        run: |
+          npm start &
+          npx wait-on http://localhost:3000 --timeout 60000
+
+      - name: Run Lighthouse accessibility audit
+        uses: treosh/lighthouse-ci-action@v10
+        with:
+          configPath: './lighthouserc.json'
+          temporaryPublicStorage: true
+          uploadArtifacts: true
+          annotate: true
+
+      - name: Check Lighthouse accessibility score
+        run: |
+          if [ -f ".lighthouseci/lhci_reports/manifest.json" ]; then
+            ACCESSIBILITY_SCORE=$(jq -r '.[0].summary.accessibility' .lighthouseci/lhci_reports/manifest.json)
+            echo "Accessibility score: $ACCESSIBILITY_SCORE"
+            
+            # Fail if accessibility score is below 90
+            if (( $(echo "$ACCESSIBILITY_SCORE < 0.9" | bc -l) )); then
+              echo "❌ Lighthouse accessibility score ($ACCESSIBILITY_SCORE) is below required threshold (0.9)"
+              exit 1
+            else
+              echo "✅ Lighthouse accessibility score meets requirements"
+            fi
+          fi
+
+  accessibility-status:
+    name: Accessibility Status Check
+    runs-on: ubuntu-latest
+    needs: [accessibility-tests, lighthouse-audit]
+    if: always()
+    
+    steps:
+      - name: Check accessibility test results
+        run: |
+          if [ "${{ needs.accessibility-tests.result }}" != "success" ]; then
+            echo "❌ Accessibility tests failed"
+            exit 1
+          fi
+          
+          if [ "${{ needs.lighthouse-audit.result }}" != "success" ]; then
+            echo "❌ Lighthouse accessibility audit failed"
+            exit 1
+          fi
+          
+          echo "✅ All accessibility checks passed!"

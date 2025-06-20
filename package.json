@@ -51,11 +51,14 @@
     "accessibility:audit": "pa11y --config .pa11yrc.json",
     "accessibility:test": "jest src/components/ui/__tests__/accessibility.test.tsx",
     "accessibility:e2e": "playwright test e2e/accessibility.spec.ts",
-    "accessibility:full": "npm run accessibility:test && npm run accessibility:e2e"
+    "accessibility:full": "npm run accessibility:test && npm run accessibility:e2e",
+    "test:accessibility": "playwright test e2e/accessibility*.spec.ts --reporter=html,json",
+    "test:accessibility:ci": "playwright test e2e/accessibility*.spec.ts --reporter=json --output-dir=test-results"
   },
   "dependencies": {
     "@genkit-ai/googleai": "^1.6.2",
     "@genkit-ai/next": "^1.6.2",
+    "@monaco-editor/react": "^4.6.0",
     "@googlemaps/extended-component-library": "^0.6.10",
     "@heroicons/react": "^2.2.0",
     "@hookform/resolvers": "^4.1.3",
