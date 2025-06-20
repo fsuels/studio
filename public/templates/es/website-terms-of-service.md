@@ -4,459 +4,551 @@
 
 **TÉRMINOS DE SERVICIO DEL SITIO WEB**
 
-Estos Términos de Servicio ("Términos") rigen su acceso y uso del sitio web **{{website_name}}** (el "Sitio Web") operado por **{{company_name}}**, una {{company_entity_type}} organizada bajo las leyes de {{company_state}} ("Compañía," "nosotros," "nos," o "nuestro").
+Estos Términos de Servicio del Sitio Web ("Términos") rigen su uso del sitio web y servicios en línea proporcionados por **{{company_name}}**, una {{company_entity_type}} organizada bajo las leyes de {{company_state}}, con su lugar principal de negocios en {{company_address}} ("Compañía," "nosotros," "nos," o "nuestro").
 
+Al acceder o usar nuestro sitio web ubicado en **{{website_url}}** (el "Sitio Web"), usted ("Usuario," "usted," o "su") acepta estar sujeto a estos Términos. Si no está de acuerdo con estos Términos, por favor no use el Sitio Web.
+
+**Fecha Efectiva:** {{effective_date}}
 **Última Actualización:** {{last_updated_date}}
-**Fecha de Vigencia:** {{effective_date}}
 
 ---
 
 ## 1. Aceptación de Términos
 
-### 1.1 Acuerdo a los Términos
-Al acceder o usar nuestro Sitio Web, usted acepta estar obligado por estos Términos y todas las leyes y regulaciones aplicables. Si no está de acuerdo con cualquiera de estos Términos, tiene prohibido usar o acceder a este Sitio Web.
+### 1.1 Formación del Acuerdo
+**Acuerdo Vinculante:** {{agreement_formation_terms}}
+**Métodos de Aceptación:** {{terms_acceptance_methods}}
+**Requisitos de Edad:** {{minimum_age_requirements}}
+**Capacidad para Contratar:** {{legal_capacity_requirements}}
 
-### 1.2 Elegibilidad
-**Edad Mínima:** {{minimum_age}} años
-**Capacidad Legal:** Debe tener la capacidad legal para celebrar acuerdos vinculantes
-**Restricciones Geográficas:** {{geographic_restrictions}}
-**Requisitos de Uso Comercial:** {{business_use_requirements}}
+### 1.2 Actualizaciones de Términos
+**Derechos de Modificación:** {{terms_modification_rights}}
+**Notificación de Actualización:** {{update_notification_procedures}}
+**Aceptación por Uso Continuo:** {{continued_use_acceptance_terms}}
+**Control de Versiones:** {{terms_version_control_procedures}}
 
-### 1.3 Modificaciones a los Términos
-**Derechos de Modificación:** {{amendment_rights}}
-**Período de Aviso:** {{notice_period_days}} días
-**Aceptación por Uso Continuado:** {{continued_use_acceptance}}
-**Control de Versiones:** {{version_control_procedures}}
+### 1.3 Términos Adicionales
+**Términos Específicos del Servicio:** {{additional_service_terms}}
+**Términos de Terceros:** {{third_party_terms_incorporation}}
+**Acuerdos Suplementarios:** {{supplemental_agreement_terms}}
+**Términos Promocionales:** {{promotional_terms_conditions}}
 
-### 1.4 Términos Adicionales
-**Política de Privacidad:** {{privacy_policy_location}}
-**Política de Cookies:** {{cookie_policy_location}}
-**Términos Suplementarios:** {{supplemental_terms}}
-**Términos de Terceros:** {{third_party_terms}}
-
----
-
-## 2. Descripción del Sitio Web y Servicios
-
-### 2.1 Propósito del Sitio Web
-**Servicios Principales:** {{primary_website_services}}
-**Modelo de Negocio:** {{business_model_description}}
-**Audiencia Objetivo:** {{target_audience}}
-**Categorías de Servicio:** {{service_categories}}
-
-### 2.2 Características Disponibles
-**Características Principales:** {{core_website_features}}
-**Características Premium:** {{premium_features}}
-**Aplicaciones Móviles:** {{mobile_app_features}}
-**Acceso API:** {{api_access_terms}}
-
-### 2.3 Disponibilidad del Servicio
-**Compromiso de Tiempo de Actividad:** {{uptime_commitment}}%
-**Ventanas de Mantenimiento:** {{maintenance_window_schedule}}
-**Disponibilidad Geográfica:** {{geographic_service_availability}}
-**Expectativas de Nivel de Servicio:** {{service_level_expectations}}
-
-### 2.4 Modificaciones del Servicio
-**Derechos de Modificación:** {{service_modification_rights}}
-**Cambios de Características:** {{feature_change_procedures}}
-**Aviso de Discontinuación:** {{service_discontinuation_notice}}
-**Soporte Heredado:** {{legacy_support_terms}}
+### 1.4 Conflictos y Precedencia
+**Jerarquía de Términos:** {{terms_hierarchy_resolution}}
+**Resolución de Conflictos:** {{terms_conflict_resolution}}
+**Divisibilidad:** {{terms_severability_provisions}}
+**Interpretación:** {{terms_interpretation_guidelines}}
 
 ---
 
-## 3. Cuentas de Usuario y Registro
+## 2. Uso y Acceso al Sitio Web
 
-### 3.1 Creación de Cuenta
-**Requisitos de Registro:** {{registration_requirements}}
-**Proceso de Verificación:** {{account_verification_process}}
-**Precisión de Información:** {{information_accuracy_requirements}}
-**Aprobación de Cuenta:** {{account_approval_process}}
+### 2.1 Uso Permitido
+**Actividades Autorizadas:** {{permitted_website_activities}}
+**Uso Personal:** {{personal_use_limitations}}
+**Uso Comercial:** {{commercial_use_restrictions}}
+**Uso Educativo:** {{educational_use_permissions}}
 
-### 3.2 Seguridad de Cuenta
-**Requisitos de Contraseña:** {{password_requirements}}
-**Autenticación de Dos Factores:** {{two_factor_authentication}}
-**Notificaciones de Seguridad:** {{security_notification_procedures}}
-**Reporte de Violaciones:** {{security_breach_reporting}}
+### 2.2 Requisitos de Acceso
+**Requisitos Técnicos:** {{website_access_requirements}}
+**Compatibilidad del Navegador:** {{browser_compatibility_specifications}}
+**Requisitos del Dispositivo:** {{device_access_requirements}}
+**Conexión a Internet:** {{internet_connection_requirements}}
 
-### 3.3 Responsabilidades de Cuenta
-**Mantenimiento de Cuenta:** {{account_maintenance_obligations}}
-**Solo Uso Autorizado:** {{authorized_use_requirements}}
-**Actualizaciones de Información:** {{information_update_requirements}}
-**Monitoreo de Actividad:** {{account_activity_monitoring}}
+### 2.3 Registro de Cuenta
+**Creación de Cuenta:** {{user_account_creation_process}}
+**Información de Registro:** {{account_registration_requirements}}
+**Verificación de Cuenta:** {{account_verification_procedures}}
+**Seguridad de Cuenta:** {{account_security_obligations}}
 
-### 3.4 Terminación de Cuenta
-**Derechos de Terminación:** {{account_termination_rights}}
-**Procedimientos de Terminación:** {{account_termination_procedures}}
-**Retención de Datos:** {{account_data_retention}}
-**Proceso de Reactivación:** {{account_reactivation_process}}
+### 2.4 Credenciales de Usuario
+**Seguridad de Inicio de Sesión:** {{user_credential_security}}
+**Requisitos de Contraseña:** {{password_security_requirements}}
+**Autenticación Multi-Factor:** {{mfa_requirements}}
+**Compartir Credenciales:** {{credential_sharing_prohibitions}}
 
 ---
 
-## 4. Política de Uso Aceptable
+## 3. Actividades Prohibidas
 
-### 4.1 Usos Permitidos
-**Actividades Autorizadas:** {{authorized_website_activities}}
-**Uso Comercial:** {{commercial_use_permissions}}
-**Uso Educativo:** {{educational_use_terms}}
-**Uso de Investigación:** {{research_use_permissions}}
+### 3.1 Prohibiciones Generales
+**Actividades Ilegales:** {{prohibited_unlawful_activities}}
+**Actividades Dañinas:** {{prohibited_harmful_activities}}
+**Actividades Disruptivas:** {{prohibited_disruptive_activities}}
+**Actividades Fraudulentas:** {{prohibited_fraudulent_activities}}
 
-### 4.2 Actividades Prohibidas
-**Actividades Ilegales:** {{prohibited_illegal_activities}}
-**Contenido Dañino:** {{prohibited_harmful_content}}
-**Spam y Abuso:** {{spam_abuse_prohibitions}}
+### 3.2 Restricciones Técnicas
 **Interferencia del Sistema:** {{system_interference_prohibitions}}
-
-### 4.3 Restricciones de Contenido
-**Tipos de Contenido Prohibido:** {{prohibited_content_types}}
-**Violaciones de Derechos de Autor:** {{copyright_violation_prohibitions}}
-**Infracción de Marca Comercial:** {{trademark_infringement_prohibitions}}
-**Contenido Difamatorio:** {{defamatory_content_prohibitions}}
-
-### 4.4 Restricciones Técnicas
-**Ingeniería Inversa:** {{reverse_engineering_prohibitions}}
-**Pruebas de Seguridad:** {{security_testing_restrictions}}
-**Minería de Datos:** {{data_mining_restrictions}}
+**Eludir Seguridad:** {{security_bypass_prohibitions}}
 **Acceso Automatizado:** {{automated_access_restrictions}}
+**Ingeniería Inversa:** {{reverse_engineering_prohibitions}}
+
+### 3.3 Restricciones de Contenido
+**Contenido Inapropiado:** {{inappropriate_content_prohibitions}}
+**Violaciones de Propiedad Intelectual:** {{ip_violation_prohibitions}}
+**Spam y Solicitud:** {{spam_solicitation_restrictions}}
+**Contenido Malicioso:** {{malicious_content_prohibitions}}
+
+### 3.4 Restricciones Comerciales
+**Ventas No Autorizadas:** {{unauthorized_sales_prohibitions}}
+**Actividades Competitivas:** {{competitive_activity_restrictions}}
+**Minería de Datos:** {{data_mining_prohibitions}}
+**Restricciones de Reventa:** {{service_resale_restrictions}}
 
 ---
 
-## 5. Contenido del Usuario y Propiedad Intelectual
+## 4. Contenido Generado por Usuario
 
-### 5.1 Contenido Generado por el Usuario
-**Propiedad del Contenido:** {{user_content_ownership}}
-**Otorgamiento de Licencia:** {{user_content_license_grant}}
-**Estándares de Contenido:** {{user_content_standards}}
+### 4.1 Envío de Contenido
+**Derechos de Envío:** {{content_submission_rights}}
+**Tipos de Contenido:** {{accepted_content_types}}
+**Proceso de Envío:** {{content_submission_procedures}}
+**Estándares de Contenido:** {{content_quality_standards}}
+
+### 4.2 Propiedad del Contenido
+**Derechos de Contenido del Usuario:** {{user_content_ownership}}
+**Concesión de Licencia:** {{content_license_grant_terms}}
+**Derechos Retenidos:** {{user_retained_content_rights}}
+**Atribución de Contenido:** {{content_attribution_requirements}}
+
+### 4.3 Moderación de Contenido
 **Derechos de Moderación:** {{content_moderation_rights}}
+**Proceso de Revisión:** {{content_review_procedures}}
+**Eliminación de Contenido:** {{content_removal_procedures}}
+**Proceso de Apelación:** {{content_appeal_procedures}}
 
-### 5.2 Responsabilidades del Contenido
-**Requisitos de Precisión:** {{content_accuracy_requirements}}
+### 4.4 Responsabilidad del Contenido
+**Responsabilidad del Usuario:** {{user_content_responsibility}}
+**Precisión del Contenido:** {{content_accuracy_obligations}}
 **Cumplimiento Legal:** {{content_legal_compliance}}
-**Autorización de Derechos:** {{content_rights_clearance}}
-**Responsabilidades de Respaldo:** {{content_backup_responsibilities}}
-
-### 5.3 Propiedad Intelectual de la Compañía
-**Derechos Propietarios:** {{company_proprietary_rights}}
-**Uso de Marca Comercial:** {{company_trademark_usage}}
-**Protección de Derechos de Autor:** {{company_copyright_protection}}
-**Protección de Secretos Comerciales:** {{company_trade_secret_protection}}
-
-### 5.4 Contenido de Terceros
-**Derechos de Terceros:** {{third_party_content_rights}}
-**Cumplimiento de Licencias:** {{third_party_license_compliance}}
-**Procedimientos DMCA:** {{dmca_takedown_procedures}}
-**Requisitos de Atribución:** {{attribution_requirements}}
+**Prevención de Daños:** {{content_harm_prevention}}
 
 ---
 
-## 6. Privacidad y Protección de Datos
+## 5. Privacidad y Protección de Datos
 
-### 6.1 Recolección de Datos
-**Información Recolectada:** {{information_collected}}
-**Métodos de Recolección:** {{data_collection_methods}}
-**Cookies y Seguimiento:** {{cookies_tracking_disclosure}}
-**Análisis de Terceros:** {{third_party_analytics_disclosure}}
+### 5.1 Política de Privacidad
+**Integración de Política de Privacidad:** {{privacy_policy_integration}}
+**Recolección de Datos:** {{data_collection_practices}}
+**Uso de Datos:** {{data_use_purposes}}
+**Compartir Datos:** {{data_sharing_practices}}
 
-### 6.2 Uso de Datos
-**Usos Principales:** {{data_primary_uses}}
-**Usos Secundarios:** {{data_secondary_uses}}
-**Comunicaciones de Marketing:** {{marketing_communications_use}}
-**Intercambio de Datos:** {{data_sharing_practices}}
+### 5.2 Cookies y Seguimiento
+**Uso de Cookies:** {{cookie_usage_policies}}
+**Tecnologías de Seguimiento:** {{tracking_technology_use}}
+**Análisis:** {{website_analytics_usage}}
+**Gestión de Consentimiento:** {{cookie_consent_management}}
 
-### 6.3 Derechos de Protección de Datos
-**Derechos de Acceso:** {{data_access_rights}}
-**Derechos de Corrección:** {{data_correction_rights}}
-**Derechos de Eliminación:** {{data_deletion_rights}}
-**Derechos de Portabilidad:** {{data_portability_rights}}
-
-### 6.4 Seguridad de Datos
+### 5.3 Seguridad de Datos
 **Medidas de Seguridad:** {{data_security_measures}}
-**Notificación de Violaciones:** {{data_breach_notification}}
-**Transferencias Internacionales:** {{international_data_transfers}}
-**Períodos de Retención:** {{data_retention_periods}}
+**Protección de Datos:** {{personal_data_protection}}
+**Notificación de Violación:** {{data_breach_notification}}
+**Cumplimiento de Seguridad:** {{security_compliance_standards}}
+
+### 5.4 Transferencias Internacionales
+**Transferencias de Datos:** {{international_data_transfers}}
+**Salvaguardas de Transferencia:** {{data_transfer_safeguards}}
+**Cumplimiento Jurisdiccional:** {{data_jurisdiction_compliance}}
+**Procesamiento Transfronterizo:** {{cross_border_processing_terms}}
 
 ---
 
-## 7. Términos de Pago y Facturación
+## 6. Derechos de Propiedad Intelectual
 
-### 7.1 Estructura de Precios
-**Tarifas de Servicio:** {{service_pricing_structure}}
-**Planes de Suscripción:** {{subscription_plan_options}}
-**Precios Basados en Uso:** {{usage_based_pricing}}
-**Precios Empresariales:** {{enterprise_pricing_terms}}
+### 6.1 PI de la Compañía
+**Contenido del Sitio Web:** {{company_website_content_rights}}
+**Marcas Comerciales:** {{company_trademark_rights}}
+**Derechos de Autor:** {{company_copyright_protection}}
+**Secretos Comerciales:** {{company_trade_secret_protection}}
 
-### 7.2 Procesamiento de Pagos
-**Métodos Aceptados:** {{accepted_payment_methods}}
-**Procesadores de Pago:** {{payment_processor_disclosure}}
-**Moneda:** {{accepted_currencies}}
+### 6.2 Licencia del Usuario
+**Licencia Limitada:** {{user_website_license}}
+**Alcance de Licencia:** {{user_license_scope_limitations}}
+**Restricciones de Licencia:** {{user_license_restrictions}}
+**Terminación de Licencia:** {{user_license_termination}}
+
+### 6.3 PI de Terceros
+**Contenido de Terceros:** {{third_party_content_rights}}
+**Materiales Licenciados:** {{licensed_content_usage}}
+**Requisitos de Atribución:** {{third_party_attribution}}
+**Infracción de PI:** {{ip_infringement_procedures}}
+
+### 6.4 Cumplimiento DMCA
+**Procedimientos DMCA:** {{dmca_takedown_procedures}}
+**Requisitos de Notificación:** {{dmca_notice_requirements}}
+**Proceso de Contra-Notificación:** {{dmca_counter_notice_process}}
+**Política de Infractor Reincidente:** {{repeat_infringer_policy}}
+
+---
+
+## 7. Comercio Electrónico y Transacciones
+
+### 7.1 Información del Producto
+**Descripciones de Productos:** {{product_description_accuracy}}
+**Información de Precios:** {{pricing_accuracy_standards}}
+**Disponibilidad:** {{product_availability_terms}}
+**Especificaciones:** {{product_specification_accuracy}}
+
+### 7.2 Proceso de Pedidos
+**Colocación de Pedidos:** {{order_placement_procedures}}
+**Confirmación de Pedidos:** {{order_confirmation_process}}
+**Modificación de Pedidos:** {{order_modification_procedures}}
+**Cancelación de Pedidos:** {{order_cancellation_terms}}
+
+### 7.3 Términos de Pago
+**Métodos de Pago:** {{accepted_payment_methods}}
+**Procesamiento de Pagos:** {{payment_processing_terms}}
+**Moneda:** {{transaction_currency_terms}}
 **Seguridad de Pagos:** {{payment_security_measures}}
 
-### 7.3 Facturación y Invoices
-**Ciclos de Facturación:** {{billing_cycle_terms}}
-**Entrega de Facturas:** {{invoice_delivery_methods}}
-**Fechas de Vencimiento de Pago:** {{payment_due_dates}}
-**Tarifas por Pago Tardío:** {{late_payment_fee_structure}}
+### 7.4 Envío y Entrega
+**Opciones de Envío:** {{available_shipping_options}}
+**Términos de Entrega:** {{delivery_timeline_commitments}}
+**Costos de Envío:** {{shipping_cost_terms}}
+**Riesgo de Pérdida:** {{shipping_risk_allocation}}
 
-### 7.4 Reembolsos y Cancelaciones
-**Política de Reembolso:** {{refund_policy_terms}}
-**Procedimientos de Cancelación:** {{cancellation_procedures}}
-**Reembolsos Prorrateados:** {{prorated_refund_terms}}
+---
+
+## 8. Devoluciones y Reembolsos
+
+### 8.1 Política de Devoluciones
+**Elegibilidad para Devolución:** {{return_eligibility_criteria}}
+**Proceso de Devolución:** {{product_return_procedures}}
+**Plazo de Devolución:** {{return_time_limitations}}
+**Condiciones de Devolución:** {{return_condition_requirements}}
+
+### 8.2 Proceso de Reembolso
+**Elegibilidad para Reembolso:** {{refund_eligibility_terms}}
+**Procesamiento de Reembolsos:** {{refund_processing_procedures}}
+**Plazo de Reembolso:** {{refund_processing_timeframe}}
+**Métodos de Reembolso:** {{refund_payment_methods}}
+
+### 8.3 Intercambios
+**Opciones de Intercambio:** {{product_exchange_options}}
+**Proceso de Intercambio:** {{product_exchange_procedures}}
+**Limitaciones de Intercambio:** {{exchange_limitation_terms}}
+**Costos de Intercambio:** {{exchange_cost_allocation}}
+
+### 8.4 Productos Digitales
+**Devoluciones de Productos Digitales:** {{digital_product_return_policy}}
+**Problemas de Descarga:** {{download_issue_resolution}}
+**Revocación de Licencia:** {{digital_license_revocation}}
+**Soporte Técnico:** {{digital_product_support}}
+
+---
+
+## 9. Servicios de Terceros
+
+### 9.1 Servicios de Integración
+**Integraciones de Terceros:** {{third_party_service_integrations}}
+**Disponibilidad del Servicio:** {{third_party_service_availability}}
+**Funcionalidad de Integración:** {{integration_functionality_terms}}
+**Dependencias del Servicio:** {{third_party_dependency_risks}}
+
+### 9.2 Enlaces Externos
+**Enlaces a Sitios Web Externos:** {{external_link_policies}}
+**Responsabilidad de Enlaces:** {{external_link_responsibility}}
+**Descargo de Responsabilidad de Contenido:** {{external_content_disclaimers}}
+**Monitoreo de Enlaces:** {{external_link_monitoring}}
+
+### 9.3 Procesadores de Pago
+**Procesamiento de Pagos:** {{third_party_payment_processing}}
+**Términos del Procesador:** {{payment_processor_terms}}
+**Seguridad de Procesamiento:** {{payment_processing_security}}
 **Resolución de Disputas:** {{payment_dispute_procedures}}
 
+### 9.4 Análisis y Publicidad
+**Servicios de Análisis:** {{third_party_analytics_services}}
+**Redes Publicitarias:** {{third_party_advertising_networks}}
+**Compartir Datos:** {{third_party_data_sharing}}
+**Opciones de Exclusión:** {{third_party_opt_out_options}}
+
 ---
 
-## 8. Exenciones de Responsabilidad y Limitaciones
+## 10. Descargos de Responsabilidad y Garantías
 
-### 8.1 Exenciones de Servicio
-**Provisión "Tal Como Está":** {{as_is_service_disclaimer}}
-**Sin Garantías:** {{warranty_disclaimers}}
-**Exenciones de Precisión:** {{accuracy_disclaimers}}
-**Exenciones de Disponibilidad:** {{availability_disclaimers}}
+### 10.1 Descargos de Responsabilidad del Servicio
+**Provisión Como Está:** {{service_as_is_disclaimers}}
+**Descargos de Disponibilidad:** {{service_availability_disclaimers}}
+**Descargos de Precisión:** {{information_accuracy_disclaimers}}
+**Descargos de Funcionalidad:** {{service_functionality_disclaimers}}
 
-### 8.2 Servicios de Terceros
-**Integraciones de Terceros:** {{third_party_integration_disclaimers}}
-**Enlaces Externos:** {{external_link_disclaimers}}
-**Servicios de Socios:** {{partner_service_disclaimers}}
-**Dependencias de API:** {{api_dependency_disclaimers}}
+### 10.2 Descargos de Garantía
+**Garantías Implícitas:** {{implied_warranty_disclaimers}}
+**Comerciabilidad:** {{merchantability_disclaimer}}
+**Aptitud para un Propósito:** {{fitness_purpose_disclaimer}}
+**No Infracción:** {{non_infringement_disclaimer}}
 
-### 8.3 Limitación de Responsabilidad
-**Límite de Responsabilidad:** ${{liability_cap_amount}}
-**Daños Excluidos:** {{excluded_damages_types}}
-**Fuerza Mayor:** {{force_majeure_provisions}}
-**Limitaciones Jurisdiccionales:** {{jurisdictional_liability_limitations}}
+### 10.3 Descargos de Contenido
+**Precisión del Contenido:** {{content_accuracy_disclaimers}}
+**Contenido de Terceros:** {{third_party_content_disclaimers}}
+**Contenido del Usuario:** {{user_content_disclaimers}}
+**Consejo Profesional:** {{professional_advice_disclaimers}}
 
-### 8.4 Indemnización
+### 10.4 Descargos Técnicos
+**Rendimiento del Sistema:** {{system_performance_disclaimers}}
+**Descargos de Seguridad:** {{security_measure_disclaimers}}
+**Compatibilidad:** {{compatibility_disclaimers}}
+**Operación Libre de Errores:** {{error_free_operation_disclaimers}}
+
+---
+
+## 11. Limitación de Responsabilidad
+
+### 11.1 Exclusiones de Responsabilidad
+**Daños Excluidos:** {{excluded_damage_types}}
+**Daños Consecuentes:** {{consequential_damage_exclusions}}
+**Daños Indirectos:** {{indirect_damage_exclusions}}
+**Pérdida de Ganancias:** {{lost_profit_exclusions}}
+
+### 11.2 Límites de Responsabilidad
+**Responsabilidad Máxima:** ${{maximum_liability_amount}}
+**Período de Cálculo:** {{liability_calculation_timeframe}}
+**Excepciones del Límite:** {{liability_cap_exceptions}}
+**Límites Agregados:** {{aggregate_liability_limits}}
+
+### 11.3 Fuerza Mayor
+**Eventos de Fuerza Mayor:** {{force_majeure_event_definitions}}
+**Alivio de Responsabilidad:** {{force_majeure_liability_relief}}
+**Requisitos de Notificación:** {{force_majeure_notice_requirements}}
+**Esfuerzos de Mitigación:** {{force_majeure_mitigation_obligations}}
+
+### 11.4 Indemnización
 **Indemnización del Usuario:** {{user_indemnification_obligations}}
-**Indemnización de la Compañía:** {{company_indemnification_limits}}
-**Reclamaciones de Terceros:** {{third_party_claim_procedures}}
-**Obligaciones de Defensa:** {{defense_obligation_terms}}
+**Alcance de Indemnización:** {{indemnification_scope_definition}}
+**Obligaciones de Defensa:** {{indemnification_defense_obligations}}
+**Autoridad de Acuerdo:** {{indemnification_settlement_authority}}
 
 ---
 
-## 9. Terminación y Suspensión
+## 12. Gestión de Cuentas
 
-### 9.1 Derechos de Terminación
-**Terminación del Usuario:** {{user_termination_rights}}
-**Terminación de la Compañía:** {{company_termination_rights}}
-**Terminación Inmediata:** {{immediate_termination_events}}
-**Requisitos de Aviso:** {{termination_notice_requirements}}
+### 12.1 Creación de Cuenta
+**Proceso de Registro:** {{account_registration_process}}
+**Requisitos de Información:** {{account_information_requirements}}
+**Procedimientos de Verificación:** {{account_verification_procedures}}
+**Aprobación de Cuenta:** {{account_approval_process}}
 
-### 9.2 Procedimientos de Suspensión
-**Fundamentos para Suspensión:** {{account_suspension_grounds}}
-**Aviso de Suspensión:** {{suspension_notice_procedures}}
-**Períodos de Corrección:** {{suspension_cure_periods}}
-**Proceso de Apelación:** {{suspension_appeal_process}}
+### 12.2 Mantenimiento de Cuenta
+**Actualizaciones de Información:** {{account_information_updates}}
+**Mantenimiento de Seguridad:** {{account_security_maintenance}}
+**Monitoreo de Actividad:** {{account_activity_monitoring}}
+**Cuentas Inactivas:** {{inactive_account_management}}
 
-### 9.3 Efectos de Terminación
-**Acceso a Datos:** {{post_termination_data_access}}
-**Discontinuación del Servicio:** {{service_discontinuation_effects}}
-**Obligaciones Pendientes:** {{post_termination_obligations}}
-**Cláusulas de Supervivencia:** {{surviving_terms_post_termination}}
+### 12.3 Suspensión de Cuenta
+**Motivos de Suspensión:** {{account_suspension_grounds}}
+**Proceso de Suspensión:** {{account_suspension_procedures}}
+**Proceso de Apelación:** {{suspension_appeal_procedures}}
+**Reintegración:** {{account_reinstatement_terms}}
 
-### 9.4 Exportación y Eliminación de Datos
-**Derechos de Exportación de Datos:** {{data_export_procedures}}
-**Cronograma de Eliminación:** {{data_deletion_timeline}}
-**Retención de Respaldos:** {{backup_data_retention}}
-**Datos de Terceros:** {{third_party_data_handling}}
-
----
-
-## 10. Cumplimiento y Requisitos Legales
-
-### 10.1 Cumplimiento Regulatorio
-**Regulaciones de la Industria:** {{applicable_industry_regulations}}
-**Leyes de Protección de Datos:** {{data_protection_law_compliance}}
-**Estándares de Accesibilidad:** {{accessibility_compliance_standards}}
-**Leyes Internacionales:** {{international_law_compliance}}
-
-### 10.2 Controles de Exportación
-**Restricciones de Exportación:** {{export_control_restrictions}}
-**Cumplimiento de Sanciones:** {{sanctions_compliance_requirements}}
-**Transferencia de Tecnología:** {{technology_transfer_restrictions}}
-**Representaciones del Usuario:** {{user_export_compliance_representations}}
-
-### 10.3 Verificación de Edad
-**Restricciones de Edad:** {{age_restriction_requirements}}
-**Consentimiento Parental:** {{parental_consent_procedures}}
-**Cumplimiento COPPA:** {{coppa_compliance_measures}}
-**Métodos de Verificación de Edad:** {{age_verification_methods}}
-
-### 10.4 Moderación de Contenido
-**Políticas de Moderación:** {{content_moderation_policies}}
-**Mecanismos de Reporte:** {{content_reporting_mechanisms}}
-**Procedimientos de Revisión:** {{content_review_procedures}}
-**Derechos de Apelación:** {{content_appeal_rights}}
+### 12.4 Terminación de Cuenta
+**Derechos de Terminación:** {{account_termination_rights}}
+**Proceso de Terminación:** {{account_termination_procedures}}
+**Retención de Datos:** {{post_termination_data_retention}}
+**Facturación Final:** {{termination_final_billing}}
 
 ---
 
-## 11. Comunicación y Notificaciones
+## 13. Comunicación y Notificaciones
 
-### 11.1 Comunicaciones Oficiales
-**Información de Contacto:** {{official_contact_information}}
-**Métodos de Comunicación Preferidos:** {{preferred_communication_methods}}
-**Tiempos de Respuesta:** {{communication_response_times}}
-**Horario Comercial:** {{business_hours_availability}}
+### 13.1 Entrega de Notificaciones
+**Métodos de Notificación:** {{notice_delivery_methods}}
+**Información de Contacto:** {{notice_contact_requirements}}
+**Confirmación de Entrega:** {{notice_delivery_confirmation}}
+**Requisitos de Idioma:** {{notice_language_requirements}}
 
-### 11.2 Notificaciones de Servicio
-**Notificaciones del Sistema:** {{system_notification_methods}}
-**Alertas de Mantenimiento:** {{maintenance_alert_procedures}}
-**Avisos de Seguridad:** {{security_notification_procedures}}
-**Actualizaciones de Políticas:** {{policy_update_notifications}}
+### 13.2 Comunicaciones de Marketing
+**Consentimiento de Marketing:** {{marketing_communication_consent}}
+**Derechos de Exclusión:** {{marketing_opt_out_procedures}}
+**Tipos de Comunicación:** {{marketing_communication_types}}
+**Límites de Frecuencia:** {{marketing_frequency_limitations}}
 
-### 11.3 Comunicaciones de Marketing
-**Requisitos de Opt-In:** {{marketing_opt_in_requirements}}
-**Derechos de Cancelación de Suscripción:** {{marketing_unsubscribe_rights}}
-**Frecuencia de Comunicación:** {{marketing_communication_frequency}}
-**Tipos de Contenido:** {{marketing_content_types}}
-
-### 11.4 Avisos Legales
-**Servicio de Proceso:** {{legal_service_of_process}}
-**Notificaciones de Disputas:** {{dispute_notification_procedures}}
-**Avisos de Cumplimiento:** {{compliance_notice_requirements}}
+### 13.3 Comunicaciones del Servicio
+**Notificaciones del Servicio:** {{service_notification_types}}
+**Alertas del Sistema:** {{system_alert_procedures}}
+**Avisos de Mantenimiento:** {{maintenance_notification_requirements}}
 **Comunicaciones de Emergencia:** {{emergency_communication_procedures}}
 
----
-
-## 12. Usuarios Internacionales y Localización
-
-### 12.1 Accesibilidad Global
-**Países Soportados:** {{supported_countries_list}}
-**Territorios Restringidos:** {{restricted_territories}}
-**Representantes Locales:** {{local_legal_representatives}}
-**Variaciones de Cumplimiento:** {{local_compliance_variations}}
-
-### 12.2 Idioma y Localización
-**Idiomas Disponibles:** {{available_languages}}
-**Precisión de Traducción:** {{translation_accuracy_disclaimers}}
-**Soporte de Moneda Local:** {{local_currency_support}}
-**Características Regionales:** {{regional_feature_variations}}
-
-### 12.3 Transferencias Transfronterizas de Datos
-**Mecanismos de Transferencia:** {{data_transfer_mechanisms}}
-**Decisiones de Adecuación:** {{adequacy_decision_compliance}}
-**Cláusulas Contractuales Estándar:** {{standard_contractual_clauses}}
-**Consentimiento del Usuario:** {{cross_border_transfer_consent}}
-
-### 12.4 Cumplimiento de Leyes Locales
-**Conflicto de Leyes:** {{conflict_of_laws_resolution}}
-**Regulaciones Locales:** {{local_regulation_compliance}}
-**Solicitudes Gubernamentales:** {{government_request_procedures}}
-**Divulgaciones Obligatorias:** {{mandatory_disclosure_requirements}}
+### 13.4 Avisos Legales
+**Requisitos de Aviso Legal:** {{legal_notice_requirements}}
+**Notificaciones de Cumplimiento:** {{compliance_notification_procedures}}
+**Avisos de Disputa:** {{dispute_notice_requirements}}
+**Comunicaciones Regulatorias:** {{regulatory_communication_obligations}}
 
 ---
 
-## 13. Tecnología y Seguridad
+## 14. Restricciones de Edad y Menores
 
-### 13.1 Requisitos Técnicos
-**Requisitos de Navegador:** {{browser_compatibility_requirements}}
-**Soporte de Sistema Operativo:** {{operating_system_support}}
-**Conexión a Internet:** {{internet_connection_requirements}}
-**Especificaciones de Hardware:** {{minimum_hardware_specifications}}
+### 14.1 Requisitos de Edad
+**Edad Mínima:** {{minimum_user_age_requirements}}
+**Verificación de Edad:** {{age_verification_procedures}}
+**Consentimiento Parental:** {{parental_consent_requirements}}
+**Autorización del Tutor:** {{guardian_authorization_terms}}
 
-### 13.2 Medidas de Seguridad
-**Estándares de Encriptación:** {{encryption_standards_used}}
-**Controles de Acceso:** {{access_control_measures}}
-**Gestión de Vulnerabilidades:** {{vulnerability_management_procedures}}
-**Respuesta a Incidentes:** {{security_incident_response}}
+### 14.2 Privacidad de Niños
+**Cumplimiento COPPA:** {{coppa_compliance_measures}}
+**Datos de Niños:** {{childrens_data_protection}}
+**Derechos Parentales:** {{parental_privacy_rights}}
+**Eliminación de Datos:** {{childrens_data_deletion}}
 
-### 13.3 Monitoreo del Sistema
-**Monitoreo de Rendimiento:** {{system_performance_monitoring}}
-**Monitoreo de Seguridad:** {{security_monitoring_procedures}}
-**Registros de Actividad del Usuario:** {{user_activity_logging}}
-**Auditoría de Cumplimiento:** {{compliance_audit_procedures}}
+### 14.3 Monitoreo y Aplicación
+**Monitoreo de Edad:** {{age_compliance_monitoring}}
+**Terminación de Cuenta:** {{underage_account_termination}}
+**Eliminación de Datos:** {{underage_data_removal}}
+**Notificación Parental:** {{parental_notification_procedures}}
 
-### 13.4 Actualizaciones de Tecnología
-**Actualizaciones de Software:** {{software_update_procedures}}
-**Lanzamientos de Características:** {{feature_rollout_procedures}}
-**Avisos de Deprecación:** {{technology_deprecation_notices}}
-**Soporte de Sistemas Heredados:** {{legacy_system_support_timeline}}
+### 14.4 Uso Educativo
+**Excepciones Educativas:** {{educational_use_exceptions}}
+**Autorización Escolar:** {{school_authorization_requirements}}
+**Privacidad Educativa:** {{educational_privacy_protections}}
+**Uso Supervisado:** {{supervised_use_requirements}}
 
 ---
 
-## 14. Resolución de Disputas y Legal
+## 15. Uso Internacional
 
-### 14.1 Proceso de Resolución de Disputas
-{{#if mediation_required}}
-**Requisitos de Mediación:** {{mediation_requirements}}
-**Ubicación de Mediación:** {{mediation_location}}
-**Reglas de Mediación:** {{mediation_rules}}
-{{/if}}
+### 15.1 Accesibilidad Global
+**Acceso Internacional:** {{international_access_terms}}
+**Restricciones Geográficas:** {{geographic_access_restrictions}}
+**Cumplimiento de Ley Local:** {{local_law_compliance_requirements}}
+**Disponibilidad del Servicio:** {{international_service_availability}}
 
+### 15.2 Controles de Exportación
+**Cumplimiento de Exportación:** {{export_control_compliance}}
+**Países Restringidos:** {{export_restricted_countries}}
+**Transferencia de Tecnología:** {{technology_transfer_restrictions}}
+**Obligaciones del Usuario:** {{export_compliance_user_obligations}}
+
+### 15.3 Moneda e Impuestos
+**Conversión de Moneda:** {{currency_conversion_terms}}
+**Impuestos Locales:** {{local_tax_obligations}}
+**Requisitos de IVA:** {{vat_compliance_requirements}}
+**Documentación Fiscal:** {{tax_documentation_requirements}}
+
+### 15.4 Idioma y Localización
+**Idioma Primario:** {{primary_service_language}}
+**Servicios de Traducción:** {{translation_service_availability}}
+**Localización:** {{service_localization_terms}}
+**Adaptación Cultural:** {{cultural_adaptation_considerations}}
+
+---
+
+## 16. Terminación
+
+### 16.1 Derechos de Terminación
+**Terminación del Usuario:** {{user_termination_rights}}
+**Terminación de la Compañía:** {{company_termination_rights}}
+**Terminación Inmediata:** {{immediate_termination_grounds}}
+**Requisitos de Notificación:** {{termination_notice_requirements}}
+
+### 16.2 Efectos de la Terminación
+**Cesación del Servicio:** {{post_termination_service_cessation}}
+**Acceso a Datos:** {{post_termination_data_access}}
+**Obligaciones Pendientes:** {{post_termination_obligations}}
+**Derechos de Reembolso:** {{termination_refund_rights}}
+
+### 16.3 Manejo de Datos
+**Exportación de Datos:** {{termination_data_export_rights}}
+**Eliminación de Datos:** {{termination_data_deletion}}
+**Retención de Respaldo:** {{post_termination_backup_retention}}
+**Recuperación de Datos:** {{post_termination_data_recovery}}
+
+### 16.4 Supervivencia
+**Disposiciones Supervivientes:** {{surviving_contract_provisions}}
+**Obligaciones Continuas:** {{post_termination_ongoing_obligations}}
+**Períodos de Limitación:** {{post_termination_limitation_periods}}
+**Resolución de Disputas:** {{post_termination_dispute_resolution}}
+
+---
+
+## 17. Resolución de Disputas
+
+### 17.1 Resolución Informal
+**Negociación Directa:** {{informal_dispute_resolution_procedures}}
+**Información de Contacto:** {{dispute_contact_information}}
+**Plazo de Respuesta:** {{dispute_response_timeframes}}
+**Requisitos de Buena Fe:** {{good_faith_negotiation_requirements}}
+
+### 17.2 Resolución Formal de Disputas
 {{#if arbitration_required}}
-**Arbitraje:** Arbitraje vinculante en {{arbitration_location}}
-**Reglas de Arbitraje:** {{arbitration_rules}}
+**Arbitraje Obligatorio:** {{arbitration_procedures}}
+**Reglas de Arbitraje:** {{arbitration_rules_application}}
 **Selección de Árbitro:** {{arbitrator_selection_process}}
+**Ubicación de Arbitraje:** {{arbitration_venue}}
 {{else}}
-**Jurisdicción de Corte:** {{court_jurisdiction}}
-**Foro:** {{litigation_venue}}
+**Jurisdicción del Tribunal:** {{court_jurisdiction_selection}}
+**Sede:** {{litigation_venue_requirements}}
+**Renuncia al Jurado:** {{jury_trial_waiver}}
+**Renuncia a Acción de Clase:** {{class_action_waiver}}
 {{/if}}
 
-### 14.2 Ley Aplicable
-**Ley Aplicable:** {{governing_law}}
-**Conflicto de Leyes:** {{conflict_of_laws_rules}}
-**Convenciones Internacionales:** {{international_convention_applicability}}
+### 17.3 Costos de Disputa
+**Asignación de Costos:** {{dispute_cost_allocation}}
+**Honorarios de Abogados:** {{attorney_fee_provisions}}
+**Tasas de Presentación:** {{dispute_filing_fee_responsibilities}}
+**Costos de Acuerdo:** {{settlement_cost_sharing}}
 
-### 14.3 Renuncia a Acción Colectiva
-**Solo Disputas Individuales:** {{class_action_waiver_terms}}
-**Acciones Representativas:** {{representative_action_waiver}}
-**Alivio Colectivo:** {{collective_relief_waiver}}
-
-### 14.4 Honorarios Legales y Costos
-**Honorarios de Abogado:** {{attorney_fee_allocation}}
-**Costos de Corte:** {{court_cost_allocation}}
-**Honorarios de Testigos Expertos:** {{expert_witness_fee_allocation}}
-**Derechos de Apelación:** {{appeal_rights_limitations}}
+### 17.4 Alivio de Emergencia
+**Alivio Preventivo:** {{emergency_injunctive_relief}}
+**Órdenes de Restricción Temporal:** {{temporary_restraining_order_rights}}
+**Daño Irreparable:** {{irreparable_harm_definitions}}
+**Procedimientos Expeditos:** {{expedited_dispute_procedures}}
 
 ---
 
-## 15. Disposiciones Generales
+## 18. Disposiciones Generales
 
-### 15.1 Acuerdo Completo
+### 18.1 Ley Aplicable
+Este Acuerdo se regirá e interpretará de acuerdo con las leyes de {{governing_state}}, sin considerar sus principios de conflicto de leyes.
+
+### 18.2 Acuerdo Completo
 Estos Términos constituyen el acuerdo completo entre usted y la Compañía con respecto a su uso del Sitio Web y reemplazan todos los acuerdos y entendimientos previos.
 
-### 15.2 Procedimientos de Modificación
-**Derechos de Modificación:** Solo la Compañía puede modificar estos Términos
-**Requisitos de Aviso:** {{amendment_notice_requirements}}
-**Fecha de Vigencia:** {{amendment_effective_date_rules}}
+### 18.3 Modificación
+La Compañía se reserva el derecho de modificar estos Términos en cualquier momento. Los cambios serán efectivos al publicarse en el Sitio Web con fecha efectiva actualizada.
 
-### 15.3 Divisibilidad
-Si cualquier disposición de estos Términos se considera inválida o inaplicable, las disposiciones restantes permanecerán en pleno vigor y efecto.
+### 18.4 Cesión
+{{#if assignment_permitted}}
+Estos Términos pueden ser cedidos por la Compañía sin su consentimiento. Usted no puede ceder sus derechos bajo estos Términos sin nuestro consentimiento escrito.
+{{else}}
+Estos Términos no pueden ser cedidos por ninguna de las partes sin el consentimiento escrito de la otra parte.
+{{/if}}
 
-### 15.4 Cesión
-**Cesión del Usuario:** {{user_assignment_restrictions}}
-**Cesión de la Compañía:** {{company_assignment_rights}}
-**Obligaciones del Sucesor:** {{successor_obligation_terms}}
+### 18.5 Divisibilidad
+Si alguna disposición de estos Términos se considera inválida o inaplicable, las disposiciones restantes permanecerán en pleno vigor y efecto.
 
-### 15.5 Renuncia
-**Requisitos de Renuncia:** {{waiver_requirements}}
-**Disposición de No Renuncia:** {{non_waiver_provisions}}
-**Obligaciones Continuas:** {{continuing_obligation_terms}}
+### 18.6 Renuncia
+Ninguna renuncia a cualquier término o condición se considerará una renuncia continua a dicho término o cualquier otro término.
 
----
+### 18.7 Fuerza Mayor
+Ninguna parte será responsable por cualquier falla en el rendimiento debido a circunstancias fuera de su control razonable.
 
-## 16. Información de Contacto
-
-### 16.1 Consultas Generales
-**Email de Soporte:** {{support_email_address}}
-**Teléfono de Soporte:** {{support_phone_number}}
-**Dirección Comercial:** {{business_mailing_address}}
-**Horario Comercial:** {{customer_support_hours}}
-
-### 16.2 Avisos Legales
-**Departamento Legal:** {{legal_department_contact}}
-**Servicio de Proceso:** {{service_of_process_address}}
-**Oficial de Cumplimiento:** {{compliance_officer_contact}}
-**Oficial de Protección de Datos:** {{data_protection_officer_contact}}
-
-### 16.3 Contactos de Emergencia
-**Incidentes de Seguridad:** {{security_incident_contact}}
-**Emergencias Técnicas:** {{technical_emergency_contact}}
-**Soporte Fuera de Horario:** {{after_hours_support_availability}}
+### 18.8 Relación
+Estos Términos no crean ninguna sociedad, empresa conjunta, empleo o relación de agencia entre usted y la Compañía.
 
 ---
 
-**AVISO LEGAL IMPORTANTE:** Estos Términos de Servicio constituyen un acuerdo legalmente vinculante. Al usar este sitio web, usted reconoce que ha leído, entendido y acepta estar obligado por estos términos. Si no está de acuerdo con estos términos, por favor discontinúe el uso del sitio web inmediatamente.
+## 19. Información de Contacto
 
-**Fecha de Vigencia:** {{terms_effective_date}}
-**Versión del Documento:** {{document_version}}
+Para preguntas sobre estos Términos, contáctenos en:
+
+**{{company_name}}**
+Dirección: {{company_address}}
+Correo: {{legal_contact_email}}
+Teléfono: {{legal_contact_phone}}
+Departamento Legal: {{legal_department_contact}}
+
+**Servicio al Cliente:**
+Correo: {{customer_service_email}}
+Teléfono: {{customer_service_phone}}
+Horarios: {{customer_service_hours}}
+
+**Agente DMCA:**
+Correo: {{dmca_agent_email}}
+Dirección: {{dmca_agent_address}}
+
+---
+
+**AVISO LEGAL IMPORTANTE:** Estos Términos de Servicio del Sitio Web crean obligaciones legales vinculantes y afectan sus derechos y remedios legales. Por favor léalos cuidadosamente antes de usar el sitio web. Si no está de acuerdo con estos términos, no debe acceder o usar el sitio web o sus servicios.
 
 *Plantilla generada por 123LegalDoc - Plataforma Profesional de Documentos Legales*
