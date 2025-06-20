@@ -18,6 +18,7 @@ import {
   UserCircle,
 } from 'lucide-react';
 import { UserMenuSkeleton } from '@/components/ui/SkeletonVariants';
+import { RoleSelector } from '@/components/shared';
 
 interface HeaderUserMenuProps {
   clientLocale: 'en' | 'es';
@@ -51,6 +52,8 @@ export default function HeaderUserMenu({
   if (isLoggedIn && user) {
     return (
       <div className="flex items-center gap-2">
+        <RoleSelector size="sm" className="hidden md:flex" />
+        
         <Link href={`/${clientLocale}/dashboard`}>
           <Button
             variant="outline"
@@ -74,11 +77,17 @@ export default function HeaderUserMenu({
               </span>
             </Button>
           </PopoverTrigger>
-          <PopoverContent className="w-48 p-2" align="end">
-            <div className="space-y-1">
+          <PopoverContent className="w-56 p-2" align="end">
+            <div className="space-y-2">
               <div className="px-2 py-1.5 text-sm text-muted-foreground border-b">
                 {user.email}
               </div>
+              
+              {/* Role selector for mobile */}
+              <div className="md:hidden px-2">
+                <RoleSelector size="sm" className="w-full" />
+              </div>
+              
               <Button
                 variant="ghost"
                 size="sm"
@@ -97,6 +106,8 @@ export default function HeaderUserMenu({
 
   return (
     <div className="flex items-center gap-2">
+      <RoleSelector size="sm" className="hidden lg:flex" />
+      
       <Link href={`/${clientLocale}/signin`}>
         <Button
           variant="outline"
@@ -104,7 +115,9 @@ export default function HeaderUserMenu({
           className="gap-2"
         >
           <LogIn className="h-4 w-4" />
-          {tHeader('nav.signin', { defaultValue: 'Sign In' })}
+          <span className="hidden sm:inline">
+            {tHeader('nav.signin', { defaultValue: 'Sign In' })}
+          </span>
         </Button>
       </Link>
       <Link href={`/${clientLocale}/signup`}>
@@ -113,7 +126,9 @@ export default function HeaderUserMenu({
           className="gap-2 bg-primary hover:bg-primary/90"
         >
           <UserPlus className="h-4 w-4" />
-          {tHeader('nav.signup', { defaultValue: 'Sign Up' })}
+          <span className="hidden sm:inline">
+            {tHeader('nav.signup', { defaultValue: 'Sign Up' })}
+          </span>
         </Button>
       </Link>
     </div>

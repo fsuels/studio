@@ -8,7 +8,7 @@ import Nav from '@/components/shared/navigation/Nav';
 import LanguageSwitcher from '@/components/shared/navigation/LanguageSwitcher';
 import { cn } from '@/lib/utils';
 
-import HeaderSearch from './HeaderSearch';
+import SmartHeaderSearch from './SmartHeaderSearch';
 import HeaderUserMenu from './HeaderUserMenu';
 import HeaderMegaMenu from './HeaderMegaMenu';
 import HeaderMobileMenu from './HeaderMobileMenu';
@@ -67,7 +67,7 @@ const Header = React.memo(function Header() {
 
           {/* Desktop Search */}
           <div className="hidden md:flex items-center flex-1 max-w-md mx-4">
-            <HeaderSearch 
+            <SmartHeaderSearch 
               clientLocale={clientLocale} 
               mounted={mounted} 
             />
@@ -111,7 +111,7 @@ const Header = React.memo(function Header() {
 
         {/* Mobile Search */}
         <div className="md:hidden pb-3">
-          <HeaderSearch 
+          <SmartHeaderSearch 
             clientLocale={clientLocale} 
             mounted={mounted}
             className="w-full"

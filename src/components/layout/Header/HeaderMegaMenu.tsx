@@ -59,10 +59,10 @@ export default function HeaderMegaMenu({
         sideOffset={8}
       >
         <ProgressiveLoader
-          component={() => import('@/components/mega-menu/MegaMenuContent')}
+          component={() => import('@/components/mega-menu/EnhancedMegaMenuContent')}
           fallback={<MegaMenuSkeleton />}
           delay={100}
-          props={{ locale: clientLocale }}
+          props={{ locale: clientLocale, onLinkClick: () => onOpenChange(false) }}
         />
       </PopoverContent>
     </Popover>
