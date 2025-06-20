@@ -20,11 +20,5 @@ This document is valid in all 50 states with appropriate customization.
 - Consider consulting with a legal professional for complex situations
 - Ensure all parties receive signed copies
 
-
 ---
-
-**Document ID**: {{document_id}}
-**Created**: {{creation_date}}
-**Parties**: {{parties}}
-
-{{document_content}}
+© 2025 123LegalDoc · DIY form · Not legal advice · Terms: 123LegalDoc.com/terms

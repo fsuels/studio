@@ -34,3 +34,6 @@ Esta Nota se regirá por las leyes del Estado de **{{governingLaw}}**.
 ---
 
 _Marcador de posición para el contenido del Pagaré. Reemplazar con la plantilla real._
+
+---
+© 2025 123LegalDoc · Formulario DIY · No es asesoramiento legal · Términos: 123LegalDoc.com/terms

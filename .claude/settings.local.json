@@ -65,7 +65,8 @@
       "Bash(./create_remaining_docs.sh:*)",
       "Bash(touch:*)",
       "Bash(./cleanup-duplicate-docs.sh:*)",
-      "Bash(#!/bin/bash\n# Remove definite duplicates\nrm -f templates/affidavit.*\nrm -f templates/nda.*\nrm -f templates/oil-gas-lease.*\nrm -f templates/patent-licensing-agreement.*\nrm -f templates/web-development-agreement.*\nrm -f templates/offer-letter.*)"
+      "Bash(#!/bin/bash\n# Remove definite duplicates\nrm -f templates/affidavit.*\nrm -f templates/nda.*\nrm -f templates/oil-gas-lease.*\nrm -f templates/patent-licensing-agreement.*\nrm -f templates/web-development-agreement.*\nrm -f templates/offer-letter.*)",
+      "Bash(\"/mnt/c/Users/Fsuels/OneDrive/Desktop/123legaldoc/studio-master/update-disclaimers.sh\")"
     ],
     "deny": []
   }

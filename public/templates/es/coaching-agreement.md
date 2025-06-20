@@ -12,4 +12,4 @@ Esta es una plantilla provisional para coaching-agreement. Se necesita agregar c
 [Agregar contenido de la plantilla aquí]
 
 ---
-*Esta plantilla se proporciona únicamente con fines informativos y no debe considerarse asesoramiento legal. Consulte con un abogado calificado para obtener orientación legal.*
+© 2025 123LegalDoc · Formulario DIY · No es asesoramiento legal · Términos: 123LegalDoc.com/terms

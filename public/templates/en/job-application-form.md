@@ -12,4 +12,4 @@ This is a placeholder template for job-application-form. Content needs to be add
 [Add template content here]
 
 ---
-*This template is provided for informational purposes only and should not be considered legal advice. Please consult with a qualified attorney for legal guidance.*
+© 2025 123LegalDoc · DIY form · Not legal advice · Terms: 123LegalDoc.com/terms
