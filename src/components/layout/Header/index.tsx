@@ -12,6 +12,7 @@ import SmartHeaderSearch from './SmartHeaderSearch';
 import HeaderUserMenu from './HeaderUserMenu';
 import HeaderMegaMenu from './HeaderMegaMenu';
 import HeaderMobileMenu from './HeaderMobileMenu';
+import CommandPaletteTrigger from './CommandPaletteTrigger';
 
 const Header = React.memo(function Header() {
   const params = (useParams<{ locale?: string }>() ?? {}) as {
@@ -101,6 +102,7 @@ const Header = React.memo(function Header() {
 
           {/* Right side actions */}
           <div className="hidden md:flex items-center gap-3">
+            <CommandPaletteTrigger />
             <LanguageSwitcher />
             <HeaderUserMenu 
               clientLocale={clientLocale} 
