@@ -147,20 +147,39 @@ export default function OrdersTable({ className }: OrdersTableProps) {
   const getFraudBadge = (fraudAnalysis: any) => {
     const { recommendation, score, distanceAlert } = fraudAnalysis;
     
-    if (recommendation === 'decline' || score >= 70) {
+    // Enhanced risk level determination
+    if (recommendation === 'decline' || score >= 800) {
       return (
         <Badge variant="destructive" className="gap-1">
           <XCircle className="h-3 w-3" />
+          Very High Risk
+        </Badge>
+      );
+    }
+    
+    if (score >= 600) {
+      return (
+        <Badge variant="destructive" className="gap-1 bg-orange-100 text-orange-700 border-orange-300">
+          <AlertTriangle className="h-3 w-3" />
           High Risk
         </Badge>
       );
     }
     
-    if (recommendation === 'review' || score >= 30 || distanceAlert) {
+    if (recommendation === 'review' || score >= 400 || distanceAlert) {
       return (
         <Badge variant="outline" className="gap-1 text-amber-600 border-amber-200 bg-amber-50">
           <AlertTriangle className="h-3 w-3" />
-          Review
+          Medium Risk
+        </Badge>
+      );
+    }
+    
+    if (score >= 200) {
+      return (
+        <Badge variant="outline" className="gap-1 text-blue-600 border-blue-200 bg-blue-50">
+          <CheckCircle className="h-3 w-3" />
+          Low Risk
         </Badge>
       );
     }
@@ -168,7 +187,7 @@ export default function OrdersTable({ className }: OrdersTableProps) {
     return (
       <Badge variant="outline" className="gap-1 text-green-600 border-green-200 bg-green-50">
         <CheckCircle className="h-3 w-3" />
-        Low Risk
+        Very Low Risk
       </Badge>
     );
   };
