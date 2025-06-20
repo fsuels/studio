@@ -23,6 +23,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { getAuth } from 'firebase/auth';
 import { app } from '@/lib/firebase';
 import { getUserDocuments, getUserPayments } from '@/lib/firestore/dashboardData';
+import { auditService } from '@/services/firebase-audit-service';
 
 export default function SignInPage() {
   const { t } = useTranslation('common');
@@ -49,6 +50,16 @@ export default function SignInPage() {
       try {
         await login(email, password);
         const uid = getAuth(app).currentUser?.uid;
+        
+        // Log successful signin
+        await auditService.logAuthEvent('signin', {
+          email,
+          ipAddress: window.location.hostname,
+          userAgent: navigator.userAgent,
+          locale,
+          success: true
+        });
+        
         if (uid) {
           await Promise.all([
             queryClient.prefetchQuery(['dashboardDocuments', uid], () =>
@@ -65,6 +76,16 @@ export default function SignInPage() {
         });
         router.push(`/${locale}/dashboard`);
       } catch (err: any) {
+        // Log failed signin attempt
+        await auditService.logAuthEvent('signin', {
+          email,
+          ipAddress: window.location.hostname,
+          userAgent: navigator.userAgent,
+          locale,
+          success: false,
+          error: err?.message || 'Authentication error'
+        });
+        
         toast({
           title: t('Login Failed'),
           description: err?.message || 'Authentication error',

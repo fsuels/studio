@@ -15,6 +15,7 @@ import {
   updateDoc,
   serverTimestamp,
 } from 'firebase/firestore';
+import { auditService } from '@/services/firebase-audit-service';
 
 /**
  * Rename an existing user document.
@@ -34,6 +35,19 @@ export async function renameDocument(
   }
   const ref = doc(db, 'users', userId, 'documents', docId);
   await updateDoc(ref, { name, updatedAt: serverTimestamp() });
+  
+  // Log document rename
+  await auditService.logDocumentEvent(
+    'edit',
+    docId,
+    'document',
+    {
+      userId,
+      action: 'rename',
+      newName: name,
+      oldName: 'unknown' // We could fetch this if needed
+    }
+  );
 }
 
 /**
@@ -61,6 +75,19 @@ export async function duplicateDocument(
     updatedAt: serverTimestamp(),
   });
 
+  // Log document duplication
+  await auditService.logDocumentEvent(
+    'create',
+    newRef.id,
+    (data.docType as string) || 'document',
+    {
+      userId,
+      action: 'duplicate',
+      originalDocId: docId,
+      originalName: data.name as string || docId
+    }
+  );
+
   return newRef.id;
 }
 
@@ -77,6 +104,17 @@ export async function softDeleteDocument(
     deletedAt: Date.now(),
     updatedAt: serverTimestamp(),
   });
+  
+  // Log document deletion
+  await auditService.logDocumentEvent(
+    'delete',
+    docId,
+    'document',
+    {
+      userId,
+      action: 'soft_delete'
+    }
+  );
 }
 
 export async function updateDocumentFolder(
@@ -87,6 +125,19 @@ export async function updateDocumentFolder(
   const db = await getDb();
   const ref = doc(db, 'users', userId, 'documents', docId);
   await updateDoc(ref, { folderId: folderId || null, updatedAt: serverTimestamp() });
+  
+  // Log document folder change
+  await auditService.logDocumentEvent(
+    'edit',
+    docId,
+    'document',
+    {
+      userId,
+      action: 'move_folder',
+      newFolderId: folderId || 'root',
+      oldFolderId: 'unknown' // We could fetch this if needed
+    }
+  );
 }
 
 export async function bulkMoveDocuments(
@@ -101,4 +152,18 @@ export async function bulkMoveDocuments(
     batch.update(ref, { folderId: folderId || null, updatedAt: serverTimestamp() });
   }
   await batch.commit();
+  
+  // Log bulk document move
+  await auditService.logDocumentEvent(
+    'edit',
+    `bulk-${Date.now()}`,
+    'document',
+    {
+      userId,
+      action: 'bulk_move',
+      documentIds: docIds,
+      newFolderId: folderId || 'root',
+      count: docIds.length
+    }
+  );
 }

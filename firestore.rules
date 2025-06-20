@@ -15,5 +15,40 @@ service cloud.firestore {
       allow read: if true;
       allow write: if false;
     }
+    
+    // Immutable audit trail collection
+    match /audit_events/{eventId} {
+      // Only allow creates (no updates or deletes for immutability)
+      allow create: if request.auth != null &&
+        // Ensure the event has required fields
+        request.resource.data.keys().hasAll(['userId', 'eventType', 'timestamp', 'metadata', 'hash']) &&
+        // Ensure the userId matches the authenticated user (or system events)
+        (request.resource.data.userId == request.auth.uid || 
+         request.resource.data.eventType in ['SYSTEM_STARTUP', 'SYSTEM_SHUTDOWN', 'COMPLIANCE_SCAN']) &&
+        // Ensure timestamp is server timestamp
+        request.resource.data.timestamp == request.time;
+      
+      // Users can only read their own events, admins can read all
+      allow read: if request.auth != null && 
+        (request.auth.uid == resource.data.userId ||
+         request.auth.token.admin == true);
+      
+      // Never allow updates or deletes (immutability)
+      allow update, delete: if false;
+    }
+    
+    // Compliance reports collection
+    match /compliance_reports/{reportId} {
+      // Only admins can create compliance reports
+      allow create: if request.auth != null && request.auth.token.admin == true;
+      
+      // Users can read their own reports, admins can read all
+      allow read: if request.auth != null && 
+        (request.auth.uid == resource.data.userId ||
+         request.auth.token.admin == true);
+      
+      // Never allow updates or deletes
+      allow update, delete: if false;
+    }
   }
 }

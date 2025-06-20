@@ -9,6 +9,7 @@
 
 import { getDb } from '@/lib/firebase';
 import type { Timestamp } from 'firebase/firestore';
+import { auditService } from '@/services/firebase-audit-service';
 
 /* ---------- types ------------------------------------------------------- */
 export interface FormProgressDoc {
@@ -73,6 +74,20 @@ export async function saveFormProgress({
   });
 
   await setDoc(ref, payload, { merge: true });
+  
+  // Log form progress save
+  await auditService.logDocumentEvent(
+    'edit',
+    progressDocId(docType, state || 'NA'),
+    docType,
+    {
+      userId,
+      action: 'form_save',
+      state: state || 'NA',
+      fieldCount: Object.keys(formData || {}).length,
+      isAutoSave: true
+    }
+  );
 }
 
 /* ---------- load -------------------------------------------------------- */

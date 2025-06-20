@@ -19,6 +19,7 @@ import { Logo } from '@/components/layout/Logo';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
+import { auditService } from '@/services/firebase-audit-service';
 
 interface SignUpClientContentProps {
   locale: 'en' | 'es';
@@ -49,12 +50,32 @@ export default function SignUpClientContent({
     if (email && password) {
       try {
         await signUp(email, password);
+        
+        // Log successful signup
+        await auditService.logAuthEvent('signup', {
+          email,
+          ipAddress: window.location.hostname,
+          userAgent: navigator.userAgent,
+          locale,
+          success: true
+        });
+        
         toast({
           title: t('Account Created!'),
           description: t('Redirecting to your dashboard...'),
         });
         router.push(`/${locale}/dashboard`);
       } catch (err: any) {
+        // Log failed signup attempt
+        await auditService.logAuthEvent('signup', {
+          email,
+          ipAddress: window.location.hostname,
+          userAgent: navigator.userAgent,
+          locale,
+          success: false,
+          error: err?.message || 'Authentication error'
+        });
+        
         toast({
           title: t('Signup Failed', { defaultValue: 'Signup Failed' }),
           description: err?.message || 'Authentication error',

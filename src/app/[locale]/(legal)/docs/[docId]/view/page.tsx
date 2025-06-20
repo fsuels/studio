@@ -15,6 +15,7 @@ import { getDb } from '@/lib/firebase';
 import { doc, getDoc } from 'firebase/firestore';
 import { hasUserPaidForDocument } from '@/lib/firestore/paymentActions';
 import { getStorage, ref as storageRef, getDownloadURL } from 'firebase/storage';
+import { auditService } from '@/services/firebase-audit-service';
 
 interface ViewDocumentPageProps {
   params: { locale: 'en' | 'es'; docId: string };
@@ -90,6 +91,23 @@ export default function ViewDocumentPage({ params }: ViewDocumentPageProps) {
 
         setMarkdownContent(markdown || null);
         setLoadError(null);
+        
+        // Log document view event
+        if (markdown) {
+          await auditService.logDocumentEvent(
+            'view',
+            savedDocId,
+            effectiveDocType,
+            {
+              userId: uid,
+              locale,
+              hasContent: !!markdown,
+              contentSource: data.contentMarkdown ? 'cached' : 'generated',
+              documentLength: markdown.length
+            }
+          );
+        }
+        
         const paid = await hasUserPaidForDocument(uid, savedDocId);
         setHasPaid(paid);
       } catch (err: any) {

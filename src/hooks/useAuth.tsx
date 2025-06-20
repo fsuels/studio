@@ -19,6 +19,7 @@ import {
   signOut,
   updateProfile,
 } from 'firebase/auth';
+import { auditService } from '@/services/firebase-audit-service';
 
 // 1) Define the shape of your auth context
 interface User {
@@ -42,7 +43,7 @@ interface AuthContextType {
     name?: string,
   ) => Promise<void>;
   signUp: (email: string, password: string, name?: string) => Promise<void>;
-  logout: () => void;
+  logout: () => Promise<void>;
   updateUser: (updates: Partial<User> & { password?: string }) => void;
 }
 
@@ -144,9 +145,26 @@ function useAuthHook(): AuthContextType {
     [login]
   );
 
-  const logout = useCallback(() => {
+  const logout = useCallback(async () => {
     const auth = getAuth(app);
-    signOut(auth).catch((err) => console.error('[useAuth] signOut error', err));
+    const currentUser = auth.currentUser;
+    
+    try {
+      // Log logout event before signing out
+      if (currentUser) {
+        await auditService.logAuthEvent('logout', {
+          email: currentUser.email,
+          ipAddress: typeof window !== 'undefined' ? window.location.hostname : 'unknown',
+          userAgent: typeof window !== 'undefined' ? navigator.userAgent : 'unknown',
+          success: true
+        });
+      }
+      
+      await signOut(auth);
+    } catch (err) {
+      console.error('[useAuth] signOut error', err);
+    }
+    
     localStorage.removeItem('mockAuth');
     setIsLoggedIn(false);
     setUser(null);

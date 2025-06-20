@@ -1,5 +1,6 @@
 // src/app/api/legal/log-acceptance/route.ts
 import { NextRequest, NextResponse } from 'next/server';
+import { auditService } from '@/services/firebase-audit-service';
 
 interface TermsAcceptance {
   userId?: string;
@@ -67,40 +68,39 @@ export async function POST(request: NextRequest) {
 }
 
 async function logTermsAcceptance(acceptance: TermsAcceptance): Promise<void> {
-  // In production, this would save to your database
-  // For now, we'll log to console and could save to file/database
-  
-  const logEntry = {
-    ...acceptance,
-    loggedAt: new Date().toISOString(),
-    compliantLogging: true
-  };
-
-  console.log('Terms Acceptance Logged:', JSON.stringify(logEntry, null, 2));
-
-  // Example database save (uncomment and adapt for your database)
-  /*
   try {
-    await db.collection('terms_acceptances').add(logEntry);
-    
-    // Also log to audit trail
-    await db.collection('audit_logs').add({
-      action: 'terms_accepted',
-      userId: acceptance.userId,
-      timestamp: acceptance.timestamp,
-      metadata: {
+    // Log to our immutable audit trail
+    await auditService.logComplianceEvent(
+      'terms_accepted',
+      {
         termsVersion: acceptance.termsVersion,
         documentType: acceptance.documentType,
         state: acceptance.state,
-        scrolledToBottom: acceptance.scrolledToBottom
+        scrolledToBottom: acceptance.scrolledToBottom,
+        ipAddress: acceptance.ip,
+        userAgent: acceptance.userAgent,
+        sessionId: acceptance.sessionId,
+        timestamp: acceptance.timestamp.toISOString(),
+        compliantLogging: true
       }
+    );
+    
+    console.log('Terms Acceptance Logged to Audit Trail:', {
+      userId: acceptance.userId,
+      termsVersion: acceptance.termsVersion,
+      documentType: acceptance.documentType,
+      timestamp: acceptance.timestamp
     });
-  } catch (dbError) {
-    console.error('Database logging failed:', dbError);
-    // Fallback to file logging or other persistent storage
-    await logToFile(logEntry);
+  } catch (error) {
+    console.error('Failed to log to audit trail:', error);
+    // Fallback to console logging
+    const logEntry = {
+      ...acceptance,
+      loggedAt: new Date().toISOString(),
+      compliantLogging: true
+    };
+    console.log('Fallback Terms Acceptance Log:', JSON.stringify(logEntry, null, 2));
   }
-  */
 }
 
 async function performComplianceChecks(acceptance: TermsAcceptance): Promise<{

@@ -1,6 +1,8 @@
 // src/app/api/generate-pdf/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { generatePdfDocument } from '@/services/pdf-generator';
+import { auditService } from '@/services/firebase-audit-service';
+import { requireAuth } from '@/lib/server-auth';
 
 type RequestData = {
   documentType: string;
@@ -17,8 +19,19 @@ type ErrorResponse = {
 export async function POST(request: NextRequest) {
   const requestId = `req_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
   const logPrefix = `[API /generate-pdf] [${requestId}]`;
+  let user: any = null;
+  let documentType: string = 'unknown';
 
   console.log(`${logPrefix} Received request: ${request.method} ${request.url}`);
+
+  // Authenticate user first
+  const authResult = await requireAuth(request);
+  if (authResult instanceof Response) {
+    console.log(`${logPrefix} Authentication failed`);
+    return authResult;
+  }
+  const user = authResult;
+  console.log(`${logPrefix} User authenticated: ${user.uid} (${user.email})`);
 
   if (process.env.NEXT_PUBLIC_DISABLE_API_ROUTES === 'true') {
     console.warn(
@@ -33,8 +46,14 @@ export async function POST(request: NextRequest) {
   }
 
   try {
+    // Authenticate user
+    const authResult = await requireAuth(request);
+    if (authResult instanceof Response) return authResult;
+    user = authResult;
+
     const body: RequestData = await request.json();
-    const { documentType, answers, state } = body;
+    const { answers, state } = body;
+    documentType = body.documentType;
     console.log(
       `${logPrefix} Request body parsed. DocumentType: "${documentType}", State: "${state || 'N/A'}", Answers keys:`,
       Object.keys(answers || {}),
@@ -84,6 +103,22 @@ export async function POST(request: NextRequest) {
 
     console.log(
       `${logPrefix} Successfully generated PDF (${pdfBytes.length} bytes) for "${documentType}". Sending response.`,
+    );
+    
+    // Log successful PDF download
+    await auditService.logDocumentEvent(
+      'download',
+      `${documentType}-${Date.now()}`,
+      documentType,
+      {
+        userId: user.uid,
+        email: user.email,
+        state: state || 'unknown',
+        pdfSize: pdfBytes.length,
+        requestId,
+        ipAddress: request.headers.get('x-forwarded-for') || 'unknown',
+        userAgent: request.headers.get('user-agent') || 'unknown'
+      }
     );
     
     return new NextResponse(Buffer.from(pdfBytes), {
@@ -144,6 +179,24 @@ export async function POST(request: NextRequest) {
         error,
       );
       errorCode = 'UNKNOWN_EXCEPTION_PDF_GENERATION';
+    }
+
+    // Log failed PDF generation attempt
+    if (user) {
+      await auditService.logDocumentEvent(
+        'download',
+        `${documentType}-${Date.now()}`,
+        documentType,
+        {
+          userId: user.uid,
+          email: user.email,
+          success: false,
+          error: clientErrorMessage,
+          requestId,
+          ipAddress: request.headers.get('x-forwarded-for') || 'unknown',
+          userAgent: request.headers.get('user-agent') || 'unknown'
+        }
+      );
     }
 
     console.error(`${logPrefix} === PDF GENERATION ERROR HANDLER END ===`);
