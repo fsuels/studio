@@ -45,6 +45,7 @@
     "market-staged": "node scripts/market-readiness-validation-system.js staged",
     "market-scores": "node scripts/market-readiness-validation-system.js scores",
     "monitor": "node scripts/monitoring-dashboard.js",
+    "ab-test": "tsx src/scripts/setup-ab-tests.ts",
     "type-check": "echo 'TypeScript checking requires installing typescript package' && exit 0",
     "lint-staged": "eslint src/ --ext .ts,.tsx --fix --max-warnings 5"
   },

@@ -218,3 +218,20 @@ export function cleanupOldSessions(): void {
     }
   }
 }
+
+// Server-side authentication guard for admin pages
+export async function requireAdminAuth(): Promise<AdminUser> {
+  const cookieStore = await cookies();
+  const token = cookieStore.get('admin-token')?.value;
+  
+  if (!token) {
+    throw new Error('Admin authentication required');
+  }
+  
+  const adminUser = await verifyAdminToken(token);
+  if (!adminUser) {
+    throw new Error('Invalid admin session');
+  }
+  
+  return adminUser;
+}

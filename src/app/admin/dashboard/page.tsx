@@ -167,10 +167,14 @@ export default function AdminDashboardPage() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <Tabs defaultValue="compliance" className="space-y-6">
           {/* Tab Navigation */}
-          <TabsList className="grid w-full grid-cols-7">
+          <TabsList className="grid w-full grid-cols-8">
             <TabsTrigger value="compliance" className="flex items-center gap-2">
               <BarChart3 className="h-4 w-4" />
               Compliance
+            </TabsTrigger>
+            <TabsTrigger value="experiments" className="flex items-center gap-2">
+              <TrendingUp className="h-4 w-4" />
+              A/B Tests
             </TabsTrigger>
             <TabsTrigger value="customer360" className="flex items-center gap-2">
               <Users className="h-4 w-4" />
@@ -207,6 +211,17 @@ export default function AdminDashboardPage() {
               </p>
             </div>
             <ComplianceDashboard />
+          </TabsContent>
+
+          {/* A/B Testing Experiments Tab */}
+          <TabsContent value="experiments" className="space-y-6">
+            <div>
+              <h2 className="text-2xl font-bold mb-2">A/B Testing & Experimentation</h2>
+              <p className="text-muted-foreground">
+                Optimize conversion rates with statistical experiments and Bayesian impact analysis.
+              </p>
+            </div>
+            <ExperimentsManagement />
           </TabsContent>
 
           {/* Customer 360 Tab */}
@@ -275,6 +290,51 @@ export default function AdminDashboardPage() {
 }
 
 // Placeholder components for other tabs
+function ExperimentsManagement() {
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>A/B Testing & Conversion Optimization</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <div className="space-y-4">
+          <p className="text-muted-foreground">
+            Advanced experimentation platform with statistical significance testing, Bayesian analysis, and revenue impact measurement.
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="p-4 border rounded-lg">
+              <h3 className="font-semibold text-lg mb-2">Statistical Analysis</h3>
+              <p className="text-sm text-muted-foreground">
+                Bayesian and Frequentist analysis with automatic winner detection and confidence intervals.
+              </p>
+            </div>
+            <div className="p-4 border rounded-lg">
+              <h3 className="font-semibold text-lg mb-2">Revenue Impact</h3>
+              <p className="text-sm text-muted-foreground">
+                Real-time revenue tracking with estimated monthly and annual impact calculations.
+              </p>
+            </div>
+            <div className="p-4 border rounded-lg">
+              <h3 className="font-semibold text-lg mb-2">Funnel Integration</h3>
+              <p className="text-sm text-muted-foreground">
+                Seamless integration with existing funnel analytics and conversion tracking.
+              </p>
+            </div>
+          </div>
+          <div className="pt-4">
+            <Button 
+              onClick={() => window.open('/admin/experiments', '_blank')}
+              className="w-full"
+            >
+              Open A/B Testing Dashboard
+            </Button>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
 function WaitlistManagement() {
   return (
     <Card>

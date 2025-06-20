@@ -20,6 +20,16 @@ export {
   type ExperimentAwareFunnelSession
 } from './integration';
 
+export {
+  useExperimentWithAuth,
+  useFeatureFlagWithExperiments,
+  useFunnelTrackingWithAuth,
+  getCurrentUserId,
+  generateSessionId,
+  createExperimentUserContext,
+  type ExperimentUserContext
+} from './auth-integration';
+
 export { ExperimentDashboard } from '@/components/admin/ExperimentDashboard';
 
 // Quick Start Guide for Implementation:
