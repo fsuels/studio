@@ -1,0 +1,388 @@
+{
+  "cease-desist-letter": {
+    "title": "Cease Desist Letter",
+    "complexity": "easy",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Cease Desist Letter.",
+    "popular": false,
+    "fieldCount": 5,
+    "avgCompletionTime": 3
+  },
+  "breach-contract-notice": {
+    "title": "Breach Contract Notice",
+    "complexity": "easy",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Breach Contract Notice.",
+    "popular": false,
+    "fieldCount": 5,
+    "avgCompletionTime": 3
+  },
+  "complaint-letter": {
+    "title": "Complaint Letter",
+    "complexity": "easy",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Complaint Letter.",
+    "popular": false,
+    "fieldCount": 5,
+    "avgCompletionTime": 3
+  },
+  "arbitration-agreement": {
+    "title": "Arbitration Agreement",
+    "complexity": "medium",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Arbitration Agreement.",
+    "popular": false,
+    "fieldCount": 15,
+    "avgCompletionTime": 9
+  },
+  "mediation-agreement": {
+    "title": "Mediation Agreement",
+    "complexity": "medium",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Mediation Agreement.",
+    "popular": false,
+    "fieldCount": 15,
+    "avgCompletionTime": 9
+  },
+  "settlement-agreement": {
+    "title": "Settlement Agreement",
+    "complexity": "medium",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Settlement Agreement.",
+    "popular": false,
+    "fieldCount": 15,
+    "avgCompletionTime": 9
+  },
+  "small-claims-worksheet": {
+    "title": "Small Claims Worksheet",
+    "complexity": "easy",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Small Claims Worksheet.",
+    "popular": false,
+    "fieldCount": 5,
+    "avgCompletionTime": 3
+  },
+  "court-filing-document": {
+    "title": "Court Filing Document",
+    "complexity": "medium",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Court Filing Document.",
+    "popular": false,
+    "fieldCount": 15,
+    "avgCompletionTime": 9
+  },
+  "termination-letter": {
+    "title": "Termination Letter",
+    "complexity": "easy",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Termination Letter.",
+    "popular": false,
+    "fieldCount": 5,
+    "avgCompletionTime": 3
+  },
+  "contract-termination-letter": {
+    "title": "Contract Termination Letter",
+    "complexity": "easy",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Contract Termination Letter.",
+    "popular": false,
+    "fieldCount": 5,
+    "avgCompletionTime": 3
+  },
+  "name-change-notification-letter": {
+    "title": "Name Change Notification Letter",
+    "complexity": "easy",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Name Change Notification Letter.",
+    "popular": false,
+    "fieldCount": 5,
+    "avgCompletionTime": 3
+  },
+  "force-majeure-notice": {
+    "title": "Force Majeure Notice",
+    "complexity": "easy",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Force Majeure Notice.",
+    "popular": false,
+    "fieldCount": 5,
+    "avgCompletionTime": 3
+  },
+  "notarization-request": {
+    "title": "Notarization Request",
+    "complexity": "medium",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Notarization Request.",
+    "popular": false,
+    "fieldCount": 15,
+    "avgCompletionTime": 9
+  },
+  "general-inquiry": {
+    "title": "General Inquiry",
+    "complexity": "medium",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for General Inquiry.",
+    "popular": false,
+    "fieldCount": 15,
+    "avgCompletionTime": 9
+  },
+  "affidavit": {
+    "title": "Affidavit",
+    "complexity": "medium",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign",
+      "notary"
+    ],
+    "description": "Template for Affidavit.",
+    "popular": false,
+    "fieldCount": 15,
+    "avgCompletionTime": 9
+  },
+  "affidavit-general": {
+    "title": "Affidavit General",
+    "complexity": "medium",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign",
+      "notary"
+    ],
+    "description": "Template for Affidavit General.",
+    "popular": false,
+    "fieldCount": 15,
+    "avgCompletionTime": 9
+  },
+  "affidavit-of-death": {
+    "title": "Affidavit Of Death",
+    "complexity": "medium",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign",
+      "notary"
+    ],
+    "description": "Template for Affidavit Of Death.",
+    "popular": false,
+    "fieldCount": 15,
+    "avgCompletionTime": 9
+  },
+  "affidavit-of-heirship": {
+    "title": "Affidavit Of Heirship",
+    "complexity": "medium",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign",
+      "notary"
+    ],
+    "description": "Template for Affidavit Of Heirship.",
+    "popular": false,
+    "fieldCount": 15,
+    "avgCompletionTime": 9
+  },
+  "affidavit-of-identity": {
+    "title": "Affidavit Of Identity",
+    "complexity": "medium",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign",
+      "notary"
+    ],
+    "description": "Template for Affidavit Of Identity.",
+    "popular": false,
+    "fieldCount": 15,
+    "avgCompletionTime": 9
+  },
+  "affidavit-of-survivorship": {
+    "title": "Affidavit Of Survivorship",
+    "complexity": "medium",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign",
+      "notary"
+    ],
+    "description": "Template for Affidavit Of Survivorship.",
+    "popular": false,
+    "fieldCount": 15,
+    "avgCompletionTime": 9
+  },
+  "immigration-affidavit": {
+    "title": "Immigration Affidavit",
+    "complexity": "medium",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign",
+      "notary"
+    ],
+    "description": "Template for Immigration Affidavit.",
+    "popular": false,
+    "fieldCount": 15,
+    "avgCompletionTime": 9
+  },
+  "small-estate-affidavit": {
+    "title": "Small Estate Affidavit",
+    "complexity": "medium",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign",
+      "notary"
+    ],
+    "description": "Template for Small Estate Affidavit.",
+    "popular": false,
+    "fieldCount": 15,
+    "avgCompletionTime": 9
+  },
+  "incident-report": {
+    "title": "Incident Report",
+    "complexity": "easy",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Incident Report.",
+    "popular": false,
+    "fieldCount": 5,
+    "avgCompletionTime": 3
+  },
+  "accident-report": {
+    "title": "Accident Report",
+    "complexity": "easy",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Accident Report.",
+    "popular": false,
+    "fieldCount": 5,
+    "avgCompletionTime": 3
+  },
+  "covid19-health-screening": {
+    "title": "Covid19 Health Screening",
+    "complexity": "medium",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Covid19 Health Screening.",
+    "popular": false,
+    "fieldCount": 15,
+    "avgCompletionTime": 9
+  },
+  "insurance-claim-form": {
+    "title": "Insurance Claim Form",
+    "complexity": "easy",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Insurance Claim Form.",
+    "popular": false,
+    "fieldCount": 5,
+    "avgCompletionTime": 3
+  },
+  "bid-proposal": {
+    "title": "Bid Proposal",
+    "complexity": "easy",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Bid Proposal.",
+    "popular": false,
+    "fieldCount": 5,
+    "avgCompletionTime": 3
+  }
+}

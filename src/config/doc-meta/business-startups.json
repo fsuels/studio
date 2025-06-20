@@ -1,0 +1,618 @@
+{
+  "affiliate-marketing-agreement": {
+    "title": "Affiliate Marketing Agreement",
+    "complexity": "medium",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Affiliate Marketing Agreement.",
+    "popular": false,
+    "fieldCount": 15,
+    "avgCompletionTime": 9
+  },
+  "articles-of-incorporation": {
+    "title": "Articles Of Incorporation",
+    "complexity": "medium",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Articles Of Incorporation.",
+    "popular": false,
+    "fieldCount": 15,
+    "avgCompletionTime": 9
+  },
+  "articles-of-incorporation-biz": {
+    "title": "Articles Of Incorporation Biz",
+    "complexity": "medium",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Articles Of Incorporation Biz.",
+    "popular": false,
+    "fieldCount": 15,
+    "avgCompletionTime": 9
+  },
+  "bar-agreement": {
+    "title": "Bar Agreement",
+    "complexity": "medium",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Bar Agreement.",
+    "popular": false,
+    "fieldCount": 15,
+    "avgCompletionTime": 9
+  },
+  "board-resolution": {
+    "title": "Board Resolution",
+    "complexity": "medium",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Board Resolution.",
+    "popular": false,
+    "fieldCount": 15,
+    "avgCompletionTime": 9
+  },
+  "bookkeeping-services-agreement": {
+    "title": "Bookkeeping Services Agreement",
+    "complexity": "medium",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Bookkeeping Services Agreement.",
+    "popular": false,
+    "fieldCount": 15,
+    "avgCompletionTime": 9
+  },
+  "brand-ambassador-agreement": {
+    "title": "Brand Ambassador Agreement",
+    "complexity": "medium",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Brand Ambassador Agreement.",
+    "popular": false,
+    "fieldCount": 15,
+    "avgCompletionTime": 9
+  },
+  "business-contract": {
+    "title": "Business Contract",
+    "complexity": "medium",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Business Contract.",
+    "popular": false,
+    "fieldCount": 15,
+    "avgCompletionTime": 9
+  },
+  "business-plan": {
+    "title": "Business Plan",
+    "complexity": "advanced",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Business Plan.",
+    "popular": false,
+    "fieldCount": 30,
+    "avgCompletionTime": 18
+  },
+  "catering-agreement": {
+    "title": "Catering Agreement",
+    "complexity": "medium",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Catering Agreement.",
+    "popular": false,
+    "fieldCount": 15,
+    "avgCompletionTime": 9
+  },
+  "commission-agreement": {
+    "title": "Commission Agreement",
+    "complexity": "medium",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Commission Agreement.",
+    "popular": false,
+    "fieldCount": 15,
+    "avgCompletionTime": 9
+  },
+  "corporate-bylaws": {
+    "title": "Corporate Bylaws",
+    "complexity": "medium",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Corporate Bylaws.",
+    "popular": false,
+    "fieldCount": 15,
+    "avgCompletionTime": 9
+  },
+  "endorsement-agreement": {
+    "title": "Endorsement Agreement",
+    "complexity": "medium",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Endorsement Agreement.",
+    "popular": false,
+    "fieldCount": 15,
+    "avgCompletionTime": 9
+  },
+  "event-planning-contract": {
+    "title": "Event Planning Contract",
+    "complexity": "advanced",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Event Planning Contract.",
+    "popular": false,
+    "fieldCount": 30,
+    "avgCompletionTime": 18
+  },
+  "food-truck-agreement": {
+    "title": "Food Truck Agreement",
+    "complexity": "medium",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Food Truck Agreement.",
+    "popular": false,
+    "fieldCount": 15,
+    "avgCompletionTime": 9
+  },
+  "government-contract-agreement": {
+    "title": "Government Contract Agreement",
+    "complexity": "medium",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Government Contract Agreement.",
+    "popular": false,
+    "fieldCount": 15,
+    "avgCompletionTime": 9
+  },
+  "hotel-agreement": {
+    "title": "Hotel Agreement",
+    "complexity": "medium",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Hotel Agreement.",
+    "popular": false,
+    "fieldCount": 15,
+    "avgCompletionTime": 9
+  },
+  "influencer-agreement": {
+    "title": "Influencer Agreement",
+    "complexity": "medium",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Influencer Agreement.",
+    "popular": false,
+    "fieldCount": 15,
+    "avgCompletionTime": 9
+  },
+  "investment-agreement": {
+    "title": "Investment Agreement",
+    "complexity": "medium",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Investment Agreement.",
+    "popular": false,
+    "fieldCount": 15,
+    "avgCompletionTime": 9
+  },
+  "joint-venture-agreement": {
+    "title": "Joint Venture Agreement",
+    "complexity": "medium",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Joint Venture Agreement.",
+    "popular": false,
+    "fieldCount": 15,
+    "avgCompletionTime": 9
+  },
+  "letter-of-intent": {
+    "title": "Letter Of Intent",
+    "complexity": "easy",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Letter Of Intent.",
+    "popular": false,
+    "fieldCount": 5,
+    "avgCompletionTime": 3
+  },
+  "limited-partnership-agreement": {
+    "title": "Limited Partnership Agreement",
+    "complexity": "medium",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Limited Partnership Agreement.",
+    "popular": false,
+    "fieldCount": 15,
+    "avgCompletionTime": 9
+  },
+  "marketing-agreement": {
+    "title": "Marketing Agreement",
+    "complexity": "medium",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Marketing Agreement.",
+    "popular": false,
+    "fieldCount": 15,
+    "avgCompletionTime": 9
+  },
+  "memorandum-of-agreement": {
+    "title": "Memorandum Of Agreement",
+    "complexity": "advanced",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Memorandum Of Agreement.",
+    "popular": false,
+    "fieldCount": 30,
+    "avgCompletionTime": 18
+  },
+  "memorandum-of-understanding": {
+    "title": "Memorandum Of Understanding",
+    "complexity": "advanced",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Memorandum Of Understanding.",
+    "popular": false,
+    "fieldCount": 30,
+    "avgCompletionTime": 18
+  },
+  "nonprofit-bylaws": {
+    "title": "Nonprofit Bylaws",
+    "complexity": "medium",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Nonprofit Bylaws.",
+    "popular": false,
+    "fieldCount": 15,
+    "avgCompletionTime": 9
+  },
+  "operating-agreement": {
+    "title": "Operating Agreement",
+    "complexity": "medium",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Operating Agreement.",
+    "popular": true,
+    "fieldCount": 15,
+    "avgCompletionTime": 9
+  },
+  "partnership-agreement": {
+    "title": "Partnership Agreement",
+    "complexity": "medium",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Partnership Agreement.",
+    "popular": false,
+    "fieldCount": 15,
+    "avgCompletionTime": 9
+  },
+  "recording-artist-agreement": {
+    "title": "Recording Artist Agreement",
+    "complexity": "medium",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Recording Artist Agreement.",
+    "popular": false,
+    "fieldCount": 15,
+    "avgCompletionTime": 9
+  },
+  "restaurant-agreement": {
+    "title": "Restaurant Agreement",
+    "complexity": "medium",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Restaurant Agreement.",
+    "popular": false,
+    "fieldCount": 15,
+    "avgCompletionTime": 9
+  },
+  "restaurant-lease": {
+    "title": "Restaurant Lease",
+    "complexity": "medium",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Restaurant Lease.",
+    "popular": false,
+    "fieldCount": 15,
+    "avgCompletionTime": 9
+  },
+  "service-agreement": {
+    "title": "Service Agreement",
+    "complexity": "medium",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Service Agreement.",
+    "popular": false,
+    "fieldCount": 15,
+    "avgCompletionTime": 9
+  },
+  "service-level-agreement": {
+    "title": "Service Level Agreement",
+    "complexity": "medium",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Service Level Agreement.",
+    "popular": false,
+    "fieldCount": 15,
+    "avgCompletionTime": 9
+  },
+  "single-member-llc-operating-agreement": {
+    "title": "Single Member Llc Operating Agreement",
+    "complexity": "medium",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Single Member Llc Operating Agreement.",
+    "popular": false,
+    "fieldCount": 15,
+    "avgCompletionTime": 9
+  },
+  "social-media-management-agreement": {
+    "title": "Social Media Management Agreement",
+    "complexity": "medium",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Social Media Management Agreement.",
+    "popular": false,
+    "fieldCount": 15,
+    "avgCompletionTime": 9
+  },
+  "sponsorship-agreement": {
+    "title": "Sponsorship Agreement",
+    "complexity": "medium",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Sponsorship Agreement.",
+    "popular": false,
+    "fieldCount": 15,
+    "avgCompletionTime": 9
+  },
+  "statement-of-work": {
+    "title": "Statement Of Work",
+    "complexity": "medium",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Statement Of Work.",
+    "popular": false,
+    "fieldCount": 15,
+    "avgCompletionTime": 9
+  },
+  "talent-agreement": {
+    "title": "Talent Agreement",
+    "complexity": "medium",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Talent Agreement.",
+    "popular": false,
+    "fieldCount": 15,
+    "avgCompletionTime": 9
+  },
+  "talent-management-agreement": {
+    "title": "Talent Management Agreement",
+    "complexity": "medium",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Talent Management Agreement.",
+    "popular": false,
+    "fieldCount": 15,
+    "avgCompletionTime": 9
+  },
+  "tax-preparation-agreement": {
+    "title": "Tax Preparation Agreement",
+    "complexity": "medium",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Tax Preparation Agreement.",
+    "popular": false,
+    "fieldCount": 15,
+    "avgCompletionTime": 9
+  },
+  "term-sheet": {
+    "title": "Term Sheet",
+    "complexity": "medium",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Term Sheet.",
+    "popular": false,
+    "fieldCount": 15,
+    "avgCompletionTime": 9
+  },
+  "transportation-service-agreement": {
+    "title": "Transportation Service Agreement",
+    "complexity": "medium",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Transportation Service Agreement.",
+    "popular": false,
+    "fieldCount": 15,
+    "avgCompletionTime": 9
+  },
+  "vendor-agreement": {
+    "title": "Vendor Agreement",
+    "complexity": "medium",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Vendor Agreement.",
+    "popular": false,
+    "fieldCount": 15,
+    "avgCompletionTime": 9
+  },
+  "warehouse-agreement": {
+    "title": "Warehouse Agreement",
+    "complexity": "medium",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Warehouse Agreement.",
+    "popular": false,
+    "fieldCount": 15,
+    "avgCompletionTime": 9
+  }
+}

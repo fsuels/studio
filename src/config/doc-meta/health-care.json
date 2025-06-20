@@ -1,0 +1,201 @@
+{
+  "advance-directive": {
+    "title": "Advance Directive",
+    "complexity": "medium",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Advance Directive.",
+    "popular": false,
+    "fieldCount": 15,
+    "avgCompletionTime": 9
+  },
+  "advance-directive-revocation": {
+    "title": "Advance Directive Revocation",
+    "complexity": "medium",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Advance Directive Revocation.",
+    "popular": false,
+    "fieldCount": 15,
+    "avgCompletionTime": 9
+  },
+  "clinical-trial-agreement": {
+    "title": "Clinical Trial Agreement",
+    "complexity": "medium",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Clinical Trial Agreement.",
+    "popular": false,
+    "fieldCount": 15,
+    "avgCompletionTime": 9
+  },
+  "coaching-agreement": {
+    "title": "Coaching Agreement",
+    "complexity": "medium",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Coaching Agreement.",
+    "popular": false,
+    "fieldCount": 15,
+    "avgCompletionTime": 9
+  },
+  "fitness-waiver": {
+    "title": "Fitness Waiver",
+    "complexity": "medium",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Fitness Waiver.",
+    "popular": false,
+    "fieldCount": 15,
+    "avgCompletionTime": 9
+  },
+  "health-care-directive": {
+    "title": "Health Care Directive",
+    "complexity": "medium",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Health Care Directive.",
+    "popular": false,
+    "fieldCount": 15,
+    "avgCompletionTime": 9
+  },
+  "healthcare-power-of-attorney": {
+    "title": "Healthcare Power Of Attorney",
+    "complexity": "medium",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign",
+      "notary"
+    ],
+    "description": "Template for Healthcare Power Of Attorney.",
+    "popular": false,
+    "fieldCount": 15,
+    "avgCompletionTime": 9
+  },
+  "hipaa-authorization-form": {
+    "title": "Hipaa Authorization Form",
+    "complexity": "easy",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Hipaa Authorization Form.",
+    "popular": false,
+    "fieldCount": 5,
+    "avgCompletionTime": 3
+  },
+  "living-will": {
+    "title": "Living Will",
+    "complexity": "advanced",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign",
+      "notary"
+    ],
+    "description": "Template for Living Will.",
+    "popular": false,
+    "fieldCount": 30,
+    "avgCompletionTime": 18
+  },
+  "medical-consent": {
+    "title": "Medical Consent",
+    "complexity": "medium",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Medical Consent.",
+    "popular": false,
+    "fieldCount": 15,
+    "avgCompletionTime": 9
+  },
+  "medical-consent-form": {
+    "title": "Medical Consent Form",
+    "complexity": "easy",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Medical Consent Form.",
+    "popular": false,
+    "fieldCount": 5,
+    "avgCompletionTime": 3
+  },
+  "medical-power-of-attorney": {
+    "title": "Medical Power Of Attorney",
+    "complexity": "medium",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign",
+      "notary"
+    ],
+    "description": "Template for Medical Power Of Attorney.",
+    "popular": false,
+    "fieldCount": 15,
+    "avgCompletionTime": 9
+  },
+  "personal-training-agreement": {
+    "title": "Personal Training Agreement",
+    "complexity": "medium",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Personal Training Agreement.",
+    "popular": false,
+    "fieldCount": 15,
+    "avgCompletionTime": 9
+  },
+  "telemedicine-agreement": {
+    "title": "Telemedicine Agreement",
+    "complexity": "medium",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Telemedicine Agreement.",
+    "popular": false,
+    "fieldCount": 15,
+    "avgCompletionTime": 9
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "model-release": {
+    "title": "Model Release",
+    "complexity": "medium",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Model Release.",
+    "popular": false,
+    "fieldCount": 15,
+    "avgCompletionTime": 9
+  },
+  "photo-release-form": {
+    "title": "Photo Release Form",
+    "complexity": "easy",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Photo Release Form.",
+    "popular": false,
+    "fieldCount": 5,
+    "avgCompletionTime": 3
+  },
+  "photography-release": {
+    "title": "Photography Release",
+    "complexity": "medium",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Photography Release.",
+    "popular": false,
+    "fieldCount": 15,
+    "avgCompletionTime": 9
+  }
+}

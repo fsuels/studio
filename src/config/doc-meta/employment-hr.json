@@ -1,0 +1,403 @@
+{
+  "consulting-agreement": {
+    "title": "Consulting Agreement",
+    "complexity": "medium",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Consulting Agreement.",
+    "popular": false,
+    "fieldCount": 15,
+    "avgCompletionTime": 9
+  },
+  "employee-bonus-plan": {
+    "title": "Employee Bonus Plan",
+    "complexity": "advanced",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Employee Bonus Plan.",
+    "popular": false,
+    "fieldCount": 30,
+    "avgCompletionTime": 18
+  },
+  "employee-evaluation-form": {
+    "title": "Employee Evaluation Form",
+    "complexity": "easy",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Employee Evaluation Form.",
+    "popular": false,
+    "fieldCount": 5,
+    "avgCompletionTime": 3
+  },
+  "employee-handbook": {
+    "title": "Employee Handbook",
+    "complexity": "medium",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Employee Handbook.",
+    "popular": false,
+    "fieldCount": 15,
+    "avgCompletionTime": 9
+  },
+  "employee-non-disclosure-agreement": {
+    "title": "Employee Non Disclosure Agreement",
+    "complexity": "medium",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Employee Non Disclosure Agreement.",
+    "popular": false,
+    "fieldCount": 15,
+    "avgCompletionTime": 9
+  },
+  "employee-warning-notice": {
+    "title": "Employee Warning Notice",
+    "complexity": "easy",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Employee Warning Notice.",
+    "popular": false,
+    "fieldCount": 5,
+    "avgCompletionTime": 3
+  },
+  "employment-contract": {
+    "title": "Employment Contract",
+    "complexity": "medium",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Employment Contract.",
+    "popular": true,
+    "fieldCount": 15,
+    "avgCompletionTime": 9,
+    "relatedDocs": [
+      "employee-handbook",
+      "non-compete-agreement",
+      "employee-non-disclosure-agreement"
+    ],
+    "nextSteps": [
+      "direct-deposit-form",
+      "employee-evaluation-form"
+    ]
+  },
+  "employment-offer-letter": {
+    "title": "Employment Offer Letter",
+    "complexity": "easy",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Employment Offer Letter.",
+    "popular": false,
+    "fieldCount": 5,
+    "avgCompletionTime": 3
+  },
+  "employment-termination-letter": {
+    "title": "Employment Termination Letter",
+    "complexity": "easy",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Employment Termination Letter.",
+    "popular": false,
+    "fieldCount": 5,
+    "avgCompletionTime": 3
+  },
+  "employment-verification-letter": {
+    "title": "Employment Verification Letter",
+    "complexity": "easy",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Employment Verification Letter.",
+    "popular": false,
+    "fieldCount": 5,
+    "avgCompletionTime": 3
+  },
+  "equity-incentive-plan": {
+    "title": "Equity Incentive Plan",
+    "complexity": "advanced",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Equity Incentive Plan.",
+    "popular": false,
+    "fieldCount": 30,
+    "avgCompletionTime": 18
+  },
+  "executive-employment-agreement": {
+    "title": "Executive Employment Agreement",
+    "complexity": "medium",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Executive Employment Agreement.",
+    "popular": false,
+    "fieldCount": 15,
+    "avgCompletionTime": 9
+  },
+  "independent-contractor-agreement": {
+    "title": "Independent Contractor Agreement",
+    "complexity": "medium",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Independent Contractor Agreement.",
+    "popular": true,
+    "fieldCount": 15,
+    "avgCompletionTime": 9
+  },
+  "internship-agreement": {
+    "title": "Internship Agreement",
+    "complexity": "medium",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Internship Agreement.",
+    "popular": false,
+    "fieldCount": 15,
+    "avgCompletionTime": 9
+  },
+  "invention-assignment-agreement": {
+    "title": "Invention Assignment Agreement",
+    "complexity": "advanced",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Invention Assignment Agreement.",
+    "popular": false,
+    "fieldCount": 30,
+    "avgCompletionTime": 18
+  },
+  "job-application-form": {
+    "title": "Job Application Form",
+    "complexity": "easy",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Job Application Form.",
+    "popular": false,
+    "fieldCount": 5,
+    "avgCompletionTime": 3
+  },
+  "leave-of-absence-request-form": {
+    "title": "Leave Of Absence Request Form",
+    "complexity": "easy",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Leave Of Absence Request Form.",
+    "popular": false,
+    "fieldCount": 5,
+    "avgCompletionTime": 3
+  },
+  "non-compete-agreement": {
+    "title": "Non Compete Agreement",
+    "complexity": "medium",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Non Compete Agreement.",
+    "popular": false,
+    "fieldCount": 15,
+    "avgCompletionTime": 9
+  },
+  "offer-letter": {
+    "title": "Offer Letter",
+    "complexity": "easy",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Offer Letter.",
+    "popular": false,
+    "fieldCount": 5,
+    "avgCompletionTime": 3
+  },
+  "progressive-discipline-policy": {
+    "title": "Progressive Discipline Policy",
+    "complexity": "medium",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Progressive Discipline Policy.",
+    "popular": false,
+    "fieldCount": 15,
+    "avgCompletionTime": 9
+  },
+  "proof-of-income-letter": {
+    "title": "Proof Of Income Letter",
+    "complexity": "easy",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Proof Of Income Letter.",
+    "popular": false,
+    "fieldCount": 5,
+    "avgCompletionTime": 3
+  },
+  "resignation-letter": {
+    "title": "Resignation Letter",
+    "complexity": "easy",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Resignation Letter.",
+    "popular": false,
+    "fieldCount": 5,
+    "avgCompletionTime": 3
+  },
+  "resignation-letter-personal": {
+    "title": "Resignation Letter Personal",
+    "complexity": "easy",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Resignation Letter Personal.",
+    "popular": false,
+    "fieldCount": 5,
+    "avgCompletionTime": 3
+  },
+  "salary-verification-letter": {
+    "title": "Salary Verification Letter",
+    "complexity": "easy",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Salary Verification Letter.",
+    "popular": false,
+    "fieldCount": 5,
+    "avgCompletionTime": 3
+  },
+  "severance-agreement": {
+    "title": "Severance Agreement",
+    "complexity": "medium",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Severance Agreement.",
+    "popular": false,
+    "fieldCount": 15,
+    "avgCompletionTime": 9
+  },
+  "telecommuting-agreement": {
+    "title": "Telecommuting Agreement",
+    "complexity": "medium",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Telecommuting Agreement.",
+    "popular": false,
+    "fieldCount": 15,
+    "avgCompletionTime": 9
+  },
+  "two-weeks-notice-letter": {
+    "title": "Two Weeks Notice Letter",
+    "complexity": "easy",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Two Weeks Notice Letter.",
+    "popular": false,
+    "fieldCount": 5,
+    "avgCompletionTime": 3
+  },
+  "work-from-home-agreement": {
+    "title": "Work From Home Agreement",
+    "complexity": "medium",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign"
+    ],
+    "description": "Template for Work From Home Agreement.",
+    "popular": false,
+    "fieldCount": 15,
+    "avgCompletionTime": 9
+  }
+}

@@ -1,0 +1,152 @@
+{
+  "codicil-to-will": {
+    "title": "Codicil To Will",
+    "complexity": "advanced",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign",
+      "notary"
+    ],
+    "description": "Template for Codicil To Will.",
+    "popular": false,
+    "fieldCount": 30,
+    "avgCompletionTime": 18
+  },
+  "durable-power-of-attorney": {
+    "title": "Durable Power Of Attorney",
+    "complexity": "medium",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign",
+      "notary"
+    ],
+    "description": "Template for Durable Power Of Attorney.",
+    "popular": false,
+    "fieldCount": 15,
+    "avgCompletionTime": 9
+  },
+  "joint-living-trust": {
+    "title": "Joint Living Trust",
+    "complexity": "advanced",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign",
+      "notary"
+    ],
+    "description": "Template for Joint Living Trust.",
+    "popular": false,
+    "fieldCount": 30,
+    "avgCompletionTime": 18
+  },
+  "last-will-testament": {
+    "title": "Last Will Testament",
+    "complexity": "advanced",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign",
+      "notary"
+    ],
+    "description": "Template for Last Will Testament.",
+    "popular": true,
+    "fieldCount": 30,
+    "avgCompletionTime": 18
+  },
+  "living-trust": {
+    "title": "Living Trust",
+    "complexity": "advanced",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign",
+      "notary"
+    ],
+    "description": "Template for Living Trust.",
+    "popular": false,
+    "fieldCount": 30,
+    "avgCompletionTime": 18
+  },
+  "living-trust-amendment": {
+    "title": "Living Trust Amendment",
+    "complexity": "advanced",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign",
+      "notary"
+    ],
+    "description": "Template for Living Trust Amendment.",
+    "popular": false,
+    "fieldCount": 30,
+    "avgCompletionTime": 18
+  },
+  "pour-over-will": {
+    "title": "Pour Over Will",
+    "complexity": "advanced",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign",
+      "notary"
+    ],
+    "description": "Template for Pour Over Will.",
+    "popular": false,
+    "fieldCount": 30,
+    "avgCompletionTime": 18
+  },
+  "power-of-attorney": {
+    "title": "Power Of Attorney",
+    "complexity": "medium",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign",
+      "notary"
+    ],
+    "description": "Template for Power Of Attorney.",
+    "popular": true,
+    "fieldCount": 15,
+    "avgCompletionTime": 9
+  },
+  "revocation-of-power-of-attorney": {
+    "title": "Revocation Of Power Of Attorney",
+    "complexity": "medium",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign",
+      "notary"
+    ],
+    "description": "Template for Revocation Of Power Of Attorney.",
+    "popular": false,
+    "fieldCount": 15,
+    "avgCompletionTime": 9
+  },
+  "simple-will": {
+    "title": "Simple Will",
+    "complexity": "advanced",
+    "jurisdiction": [
+      "US-ALL"
+    ],
+    "sign_method": [
+      "e-sign",
+      "notary"
+    ],
+    "description": "Template for Simple Will.",
+    "popular": false,
+    "fieldCount": 30,
+    "avgCompletionTime": 18
+  }
+}
