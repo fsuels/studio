@@ -319,3 +319,80 @@
     animation: starPulse 5s ease-in-out infinite;
   }
 }
+
+/* Skeleton Loader Animations */
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes wave {
+  0% {
+    transform: translateX(-100%);
+  }
+  50% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes skeleton-pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}
+
+/* Enhanced skeleton styles */
+.skeleton {
+  @apply bg-gray-200 animate-pulse rounded;
+}
+
+.skeleton-shimmer {
+  @apply relative overflow-hidden bg-gray-200 rounded;
+}
+
+.skeleton-shimmer::before {
+  @apply absolute inset-0 bg-gradient-to-r from-transparent via-white/60 to-transparent;
+  content: '';
+  animation: shimmer 2s infinite;
+}
+
+.skeleton-wave {
+  @apply relative overflow-hidden bg-gray-200 rounded;
+}
+
+.skeleton-wave::before {
+  @apply absolute inset-0 bg-gradient-to-r from-transparent via-gray-300/60 to-transparent;
+  content: '';
+  animation: wave 1.5s ease-in-out infinite;
+}
+
+/* Optimistic update styles */
+.optimistic-update {
+  @apply bg-blue-50/50 transition-colors duration-300;
+}
+
+.optimistic-update::after {
+  content: '';
+  @apply absolute inset-0 bg-blue-100/20 animate-pulse rounded;
+  pointer-events: none;
+}
+
+/* Loading state overlays */
+.loading-overlay {
+  @apply absolute inset-0 bg-white/80 backdrop-blur-sm flex items-center justify-center;
+  z-index: 10;
+}
+
+.loading-spinner {
+  @apply h-8 w-8 border-4 border-gray-200 border-t-blue-600 rounded-full animate-spin;
+}
