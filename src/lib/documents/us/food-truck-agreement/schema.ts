@@ -150,9 +150,8 @@ export const FoodTruckAgreementSchema = z.object({
   
   // Legal Compliance
   localOrdinanceCompliance: z.boolean().default(true),
-  zoning Compliance: z.boolean().default(true),
+  zoningCompliance: z.boolean().default(true),
   adaCompliance: z.boolean().default(true),
-  laborLawCompliance: z.boolean().default(true),
   
   // Termination and Cancellation
   terminationNotice: z.string().optional(),

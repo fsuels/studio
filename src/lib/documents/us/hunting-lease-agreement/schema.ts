@@ -165,7 +165,7 @@ export const HuntingLeaseAgreementSchema = z.object({
   photographyRights: z.boolean().default(true),
   
   // Additional Rights
-  scouting Rights: z.boolean().default(true),
+  scoutingRights: z.boolean().default(true),
   scoutingDates: z.string().optional(),
   photographyRights: z.boolean().default(true),
   videographyRights: z.boolean().default(true),

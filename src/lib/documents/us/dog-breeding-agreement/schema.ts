@@ -115,7 +115,7 @@ export const DogBreedingAgreementSchema = z.object({
   showRequirements: z.string().optional(),
   competitionRestrictions: z.string().optional(),
   titleRequirements: z.string().optional(),
-  conformation Standards: z.string().optional(),
+  conformationStandards: z.string().optional(),
   
   // Contract Duration
   agreementStartDate: z.string().optional(),

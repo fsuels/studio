@@ -61,7 +61,7 @@ export const HorseBoardingAgreementSchema = z.object({
   // Financial Terms
   monthlyBoardingFee: z.string().optional(),
   feedCosts: z.string().optional(),
-  bedding Costs: z.string().optional(),
+  beddingCosts: z.string().optional(),
   additionalServices: z.string().optional(),
   paymentDueDate: z.string().optional(),
   lateFee: z.string().optional(),

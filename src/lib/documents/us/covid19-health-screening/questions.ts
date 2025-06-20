@@ -160,7 +160,8 @@ export const covid19HealthScreeningQuestions: DocumentQuestion[] = [
 
   // Vaccination Questions
   {
-    id: 'vaccinationQuestions.includeVaccinationStatus',\n    text: 'Include vaccination status questions?',
+    id: 'vaccinationQuestions.includeVaccinationStatus',
+    text: 'Include vaccination status questions?',
     type: 'boolean',
     required: true,
     helpText: 'Note: Vaccination requirements vary by location and industry'

@@ -115,7 +115,7 @@ export const LivestockPurchaseAgreementSchema = z.object({
   
   // Regulatory Compliance
   animalWelfareCompliance: z.boolean().default(true),
-  usda Regulations: z.boolean().default(true),
+  usdaRegulations: z.boolean().default(true),
   stateRegulations: z.boolean().default(true),
   transportationRegulations: z.boolean().default(true),
   recordKeeping: z.boolean().default(true),
@@ -125,7 +125,7 @@ export const LivestockPurchaseAgreementSchema = z.object({
   pastureManagement: z.string().optional(),
   feedingPractices: z.string().optional(),
   antibioticFree: z.boolean().default(false),
-  hormoneF ree: z.boolean().default(false),
+  hormoneFree: z.boolean().default(false),
   
   // Default and Remedies
   defaultDefinition: z.string().optional(),

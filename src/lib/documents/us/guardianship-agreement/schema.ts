@@ -74,7 +74,7 @@ export const GuardianshipAgreementSchema = z.object({
   realEstateManagement: z.boolean().default(true),
   personalPropertyManagement: z.boolean().default(true),
   businessInterests: z.boolean().default(false),
-  insurance Management: z.boolean().default(true),
+  insuranceManagement: z.boolean().default(true),
   retirementAccounts: z.boolean().default(true),
   
   // Reporting Requirements
@@ -95,7 +95,7 @@ export const GuardianshipAgreementSchema = z.object({
   endDate: z.string().optional(),
   reviewDate: z.string().optional(),
   termConditions: z.string().optional(),
-  successor Guardian: z.string().optional(),
+  successorGuardian: z.string().optional(),
   
   // Communication and Visitation
   familyContact: z.boolean().default(true),

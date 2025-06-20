@@ -35,7 +35,7 @@ export const CybersecurityAgreementSchema = z.object({
   assessmentFrequency: z.string().optional(),
   testingSchedule: z.string().optional(),
   reportingTimeline: z.string().optional(),
-  remediation Timeline: z.string().optional(),
+  remediationTimeline: z.string().optional(),
   retestingPolicy: z.string().optional(),
   
   // Monitoring Services

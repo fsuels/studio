@@ -175,7 +175,7 @@ export const GovernmentContractAgreementSchema = z.object({
   foreignInfluence: z.boolean().default(false),
   
   // Special Contract Types
-  gsa Schedule: z.boolean().default(false),
+  gsaSchedule: z.boolean().default(false),
   blanketPurchaseAgreement: z.boolean().default(false),
   indefiniteQuantity: z.boolean().default(false),
   multipleAward: z.boolean().default(false),

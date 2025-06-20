@@ -49,7 +49,7 @@ export const ChildCareContractSchema = z.object({
   bedtimeRoutine: z.boolean().default(true),
   educationalActivities: z.boolean().default(true),
   outdoorPlay: z.boolean().default(true),
-  homework Help: z.boolean().default(false),
+  homeworkHelp: z.boolean().default(false),
   lightHousekeeping: z.boolean().default(false),
   
   // House Rules
@@ -127,7 +127,7 @@ export const ChildCareContractSchema = z.object({
   liability: z.string().optional(),
   insuranceCoverage: z.boolean().default(false),
   confidentiality: z.boolean().default(true),
-  photography Consent: z.boolean().default(false),
+  photographyConsent: z.boolean().default(false),
   
   // Special Instructions
   bedtimeRoutineDetails: z.string().optional(),

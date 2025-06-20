@@ -75,7 +75,7 @@ export const DigitalAssetAgreementSchema = z.object({
   amlCompliance: z.boolean().default(false),
   sanctionsCompliance: z.boolean().default(true),
   regulatoryJurisdiction: z.string().optional(),
-  securities Laws: z.boolean().default(false),
+  securitiesLaws: z.boolean().default(false),
   
   // Tax Considerations
   taxReporting: z.boolean().default(true),

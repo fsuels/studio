@@ -52,4 +52,145 @@ export const smallClaimsWorksheetSchema = z.object({
     factualDescription: z.string().min(100, 'Please provide a detailed description (at least 100 characters)'),
     chronologyOfEvents: z.array(z.object({
       date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Date must be in YYYY-MM-DD format'),
-      description: z.string().min(10, 'Description required')\n    })).min(1, 'Please provide at least one event'),\n    attemptedResolution: z.string().optional(),\n    demandLetterSent: z.boolean(),\n    demandLetterDate: z.string().regex(/^\\d{4}-\\d{2}-\\d{2}$/, 'Date must be in YYYY-MM-DD format').optional(),\n    defendantResponse: z.string().optional()\n  }),\n\n  // Legal Basis\n  legalBasis: z.object({\n    contractExists: z.boolean(),\n    contractType: z.enum(['written', 'oral', 'implied']).optional(),\n    contractTerms: z.string().optional(),\n    breachOfContract: z.string().optional(),\n    negligenceAlleged: z.boolean(),\n    negligenceDescription: z.string().optional(),\n    applicableLaws: z.array(z.string()).optional(),\n    statuteOfLimitations: z.object({\n      withinTimeLimit: z.boolean(),\n      timeLimit: z.string().optional(),\n      calculationBasis: z.string().optional()\n    })\n  }),\n\n  // Damages Calculation\n  damages: z.object({\n    directDamages: z.array(z.object({\n      type: z.string(),\n      description: z.string(),\n      amount: z.number().min(0),\n      documentation: z.string().optional()\n    })),\n    indirectDamages: z.array(z.object({\n      type: z.string(),\n      description: z.string(),\n      amount: z.number().min(0),\n      documentation: z.string().optional()\n    })).optional(),\n    lostWages: z.object({\n      applicable: z.boolean(),\n      dailyWage: z.number().min(0).optional(),\n      daysLost: z.number().min(0).optional(),\n      totalAmount: z.number().min(0).optional()\n    }),\n    outOfPocketExpenses: z.array(z.object({\n      expense: z.string(),\n      amount: z.number().min(0),\n      receipt: z.boolean()\n    })).optional(),\n    courtCosts: z.object({\n      filingFee: z.number().min(0).optional(),\n      serviceFee: z.number().min(0).optional(),\n      otherCosts: z.number().min(0).optional()\n    }),\n    interestRequested: z.boolean(),\n    interestRate: z.number().min(0).max(100).optional(),\n    interestFromDate: z.string().regex(/^\\d{4}-\\d{2}-\\d{2}$/, 'Date must be in YYYY-MM-DD format').optional()\n  }),\n\n  // Evidence\n  evidence: z.object({\n    documents: z.array(z.object({\n      type: z.string(),\n      description: z.string(),\n      dateCreated: z.string().regex(/^\\d{4}-\\d{2}-\\d{2}$/, 'Date must be in YYYY-MM-DD format').optional(),\n      originalAvailable: z.boolean(),\n      relevance: z.string()\n    })).optional(),\n    photographs: z.array(z.object({\n      description: z.string(),\n      dateTaken: z.string().regex(/^\\d{4}-\\d{2}-\\d{2}$/, 'Date must be in YYYY-MM-DD format').optional(),\n      relevance: z.string()\n    })).optional(),\n    physicalEvidence: z.array(z.object({\n      item: z.string(),\n      condition: z.string(),\n      location: z.string(),\n      relevance: z.string()\n    })).optional(),\n    electronicEvidence: z.array(z.object({\n      type: z.enum(['email', 'text', 'social_media', 'website', 'audio', 'video', 'other']),\n      description: z.string(),\n      dateCreated: z.string().regex(/^\\d{4}-\\d{2}-\\d{2}$/, 'Date must be in YYYY-MM-DD format').optional(),\n      authenticated: z.boolean()\n    })).optional()\n  }),\n\n  // Witnesses\n  witnesses: z.array(z.object({\n    name: z.string().min(1, 'Witness name is required'),\n    relationship: z.string(),\n    address: z.string().optional(),\n    phone: z.string().regex(/^\\(\\d{3}\\) \\d{3}-\\d{4}$/, 'Phone must be in format (XXX) XXX-XXXX').optional(),\n    email: z.string().email('Invalid email address').optional(),\n    relevantKnowledge: z.string().min(20, 'Please describe what the witness knows'),\n    willTestify: z.enum(['yes', 'no', 'unknown']),\n    statementObtained: z.boolean(),\n    credibility: z.enum(['excellent', 'good', 'fair', 'poor']).optional()\n  })).optional(),\n\n  // Court Preparation\n  courtPreparation: z.object({\n    courtName: z.string().optional(),\n    courtAddress: z.string().optional(),\n    judgeAssigned: z.string().optional(),\n    hearingDate: z.string().regex(/^\\d{4}-\\d{2}-\\d{2}$/, 'Date must be in YYYY-MM-DD format').optional(),\n    hearingTime: z.string().regex(/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/, 'Time must be in HH:MM format').optional(),\n    estimatedDuration: z.string().optional(),\n    presentationOutline: z.string().optional(),\n    questionsForDefendant: z.array(z.string()).optional(),\n    anticipatedDefenses: z.array(z.string()).optional(),\n    responsesToDefenses: z.array(z.string()).optional()\n  }),\n\n  // Settlement Considerations\n  settlement: z.object({\n    willingToSettle: z.boolean(),\n    minimumAcceptable: z.number().min(0).optional(),\n    settlementTerms: z.string().optional(),\n    mediationConsidered: z.boolean(),\n    timelineForSettlement: z.string().optional(),\n    alternativeResolution: z.string().optional()\n  }),\n\n  // Service of Process\n  serviceOfProcess: z.object({\n    serviceMethod: z.enum(['personal_service', 'substituted_service', 'certified_mail', 'publication', 'other']).optional(),\n    serviceDate: z.string().regex(/^\\d{4}-\\d{2}-\\d{2}$/, 'Date must be in YYYY-MM-DD format').optional(),\n    serverName: z.string().optional(),\n    serviceDetails: z.string().optional(),\n    proofOfService: z.boolean().optional()\n  }),\n\n  // Follow-up Actions\n  followUp: z.object({\n    judgmentObtained: z.boolean().optional(),\n    judgmentAmount: z.number().min(0).optional(),\n    collectionNeeded: z.boolean().optional(),\n    collectionMethods: z.array(z.string()).optional(),\n    appealConsidered: z.boolean().optional(),\n    lessonsLearned: z.string().optional()\n  })\n});\n\nexport type SmallClaimsWorksheet = z.infer<typeof smallClaimsWorksheetSchema>;"}]
+      description: z.string().min(10, 'Description required')
+    })).min(1, 'Please provide at least one event'),
+    attemptedResolution: z.string().optional(),
+    demandLetterSent: z.boolean(),
+    demandLetterDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Date must be in YYYY-MM-DD format').optional(),
+    defendantResponse: z.string().optional()
+  }),
+
+  // Legal Basis
+  legalBasis: z.object({
+    contractExists: z.boolean(),
+    contractType: z.enum(['written', 'oral', 'implied']).optional(),
+    contractTerms: z.string().optional(),
+    breachOfContract: z.string().optional(),
+    negligenceAlleged: z.boolean(),
+    negligenceDescription: z.string().optional(),
+    applicableLaws: z.array(z.string()).optional(),
+    statuteOfLimitations: z.object({
+      withinTimeLimit: z.boolean(),
+      timeLimit: z.string().optional(),
+      calculationBasis: z.string().optional()
+    })
+  }),
+
+  // Damages Calculation
+  damages: z.object({
+    directDamages: z.array(z.object({
+      type: z.string(),
+      description: z.string(),
+      amount: z.number().min(0),
+      documentation: z.string().optional()
+    })),
+    indirectDamages: z.array(z.object({
+      type: z.string(),
+      description: z.string(),
+      amount: z.number().min(0),
+      documentation: z.string().optional()
+    })).optional(),
+    lostWages: z.object({
+      applicable: z.boolean(),
+      dailyWage: z.number().min(0).optional(),
+      daysLost: z.number().min(0).optional(),
+      totalAmount: z.number().min(0).optional()
+    }),
+    outOfPocketExpenses: z.array(z.object({
+      expense: z.string(),
+      amount: z.number().min(0),
+      receipt: z.boolean()
+    })).optional(),
+    courtCosts: z.object({
+      filingFee: z.number().min(0).optional(),
+      serviceFee: z.number().min(0).optional(),
+      otherCosts: z.number().min(0).optional()
+    }),
+    interestRequested: z.boolean(),
+    interestRate: z.number().min(0).max(100).optional(),
+    interestFromDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Date must be in YYYY-MM-DD format').optional()
+  }),
+
+  // Evidence
+  evidence: z.object({
+    documents: z.array(z.object({
+      type: z.string(),
+      description: z.string(),
+      dateCreated: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Date must be in YYYY-MM-DD format').optional(),
+      originalAvailable: z.boolean(),
+      relevance: z.string()
+    })).optional(),
+    photographs: z.array(z.object({
+      description: z.string(),
+      dateTaken: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Date must be in YYYY-MM-DD format').optional(),
+      relevance: z.string()
+    })).optional(),
+    physicalEvidence: z.array(z.object({
+      item: z.string(),
+      condition: z.string(),
+      location: z.string(),
+      relevance: z.string()
+    })).optional(),
+    electronicEvidence: z.array(z.object({
+      type: z.enum(['email', 'text', 'social_media', 'website', 'audio', 'video', 'other']),
+      description: z.string(),
+      dateCreated: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Date must be in YYYY-MM-DD format').optional(),
+      authenticated: z.boolean()
+    })).optional()
+  }),
+
+  // Witnesses
+  witnesses: z.array(z.object({
+    name: z.string().min(1, 'Witness name is required'),
+    relationship: z.string(),
+    address: z.string().optional(),
+    phone: z.string().regex(/^\(\d{3}\) \d{3}-\d{4}$/, 'Phone must be in format (XXX) XXX-XXXX').optional(),
+    email: z.string().email('Invalid email address').optional(),
+    relevantKnowledge: z.string().min(20, 'Please describe what the witness knows'),
+    willTestify: z.enum(['yes', 'no', 'unknown']),
+    statementObtained: z.boolean(),
+    credibility: z.enum(['excellent', 'good', 'fair', 'poor']).optional()
+  })).optional(),
+
+  // Court Preparation
+  courtPreparation: z.object({
+    courtName: z.string().optional(),
+    courtAddress: z.string().optional(),
+    judgeAssigned: z.string().optional(),
+    hearingDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Date must be in YYYY-MM-DD format').optional(),
+    hearingTime: z.string().regex(/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/, 'Time must be in HH:MM format').optional(),
+    estimatedDuration: z.string().optional(),
+    presentationOutline: z.string().optional(),
+    questionsForDefendant: z.array(z.string()).optional(),
+    anticipatedDefenses: z.array(z.string()).optional(),
+    responsesToDefenses: z.array(z.string()).optional()
+  }),
+
+  // Settlement Considerations
+  settlement: z.object({
+    willingToSettle: z.boolean(),
+    minimumAcceptable: z.number().min(0).optional(),
+    settlementTerms: z.string().optional(),
+    mediationConsidered: z.boolean(),
+    timelineForSettlement: z.string().optional(),
+    alternativeResolution: z.string().optional()
+  }),
+
+  // Service of Process
+  serviceOfProcess: z.object({
+    serviceMethod: z.enum(['personal_service', 'substituted_service', 'certified_mail', 'publication', 'other']).optional(),
+    serviceDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Date must be in YYYY-MM-DD format').optional(),
+    serverName: z.string().optional(),
+    serviceDetails: z.string().optional(),
+    proofOfService: z.boolean().optional()
+  }),
+
+  // Follow-up Actions
+  followUp: z.object({
+    judgmentObtained: z.boolean().optional(),
+    judgmentAmount: z.number().min(0).optional(),
+    collectionNeeded: z.boolean().optional(),
+    collectionMethods: z.array(z.string()).optional(),
+    appealConsidered: z.boolean().optional(),
+    lessonsLearned: z.string().optional()
+  })\n});\n\nexport type SmallClaimsWorksheet = z.infer<typeof smallClaimsWorksheetSchema>;"}]

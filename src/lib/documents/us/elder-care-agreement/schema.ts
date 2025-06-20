@@ -107,7 +107,7 @@ export const ElderCareAgreementSchema = z.object({
   
   // Special Needs
   dementiaCare: z.boolean().default(false),
-  alzheimers Care: z.boolean().default(false),
+  alzheimersCare: z.boolean().default(false),
   physicalDisability: z.boolean().default(false),
   mobilityAssistance: z.boolean().default(false),
   specialDiet: z.boolean().default(false),

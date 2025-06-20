@@ -60,7 +60,7 @@ export const InternationalTradeAgreementSchema = z.object({
   // Quality Control
   inspectionRights: z.boolean().default(true),
   qualityAssurance: z.string().optional(),
-  testing Requirements: z.string().optional(),
+  testingRequirements: z.string().optional(),
   rejectionRights: z.boolean().default(true),
   qualityClaims: z.string().optional(),
   
