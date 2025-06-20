@@ -165,7 +165,7 @@ export default function AdminDashboardPage() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <Tabs defaultValue="compliance" className="space-y-6">
           {/* Tab Navigation */}
-          <TabsList className="grid w-full grid-cols-5">
+          <TabsList className="grid w-full grid-cols-6">
             <TabsTrigger value="compliance" className="flex items-center gap-2">
               <BarChart3 className="h-4 w-4" />
               Compliance
@@ -173,6 +173,10 @@ export default function AdminDashboardPage() {
             <TabsTrigger value="customer360" className="flex items-center gap-2">
               <Users className="h-4 w-4" />
               Customer 360
+            </TabsTrigger>
+            <TabsTrigger value="roleops" className="flex items-center gap-2">
+              <Shield className="h-4 w-4" />
+              Role Ops
             </TabsTrigger>
             <TabsTrigger value="waitlist" className="flex items-center gap-2">
               <Users className="h-4 w-4" />
@@ -208,6 +212,17 @@ export default function AdminDashboardPage() {
               </p>
             </div>
             <Customer360Management />
+          </TabsContent>
+
+          {/* Role Operations Tab */}
+          <TabsContent value="roleops" className="space-y-6">
+            <div>
+              <h2 className="text-2xl font-bold mb-2">Team & Role Operations</h2>
+              <p className="text-muted-foreground">
+                Manage user roles, permissions, feature toggles, and impersonation capabilities.
+              </p>
+            </div>
+            <RoleOperationsManagement />
           </TabsContent>
 
           {/* Waitlist Tab */}
@@ -318,6 +333,51 @@ function Customer360Management() {
               className="w-full"
             >
               Open Customer 360 Dashboard
+            </Button>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
+function RoleOperationsManagement() {
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>Team & Role Operations</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <div className="space-y-4">
+          <p className="text-muted-foreground">
+            Complete role-based access control with user impersonation, feature toggles, and team management.
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="p-4 border rounded-lg">
+              <h3 className="font-semibold text-lg mb-2">Role-Based Permissions</h3>
+              <p className="text-sm text-muted-foreground">
+                Manage user roles, permissions, and access controls with granular security settings.
+              </p>
+            </div>
+            <div className="p-4 border rounded-lg">
+              <h3 className="font-semibold text-lg mb-2">User Impersonation</h3>
+              <p className="text-sm text-muted-foreground">
+                Login-as functionality for support teams with full audit trails and security controls.
+              </p>
+            </div>
+            <div className="p-4 border rounded-lg">
+              <h3 className="font-semibold text-lg mb-2">Feature Toggles</h3>
+              <p className="text-sm text-muted-foreground">
+                Role-based feature flags for controlled rollouts and A/B testing capabilities.
+              </p>
+            </div>
+          </div>
+          <div className="pt-4">
+            <Button 
+              onClick={() => window.open('/admin/role-operations', '_blank')}
+              className="w-full"
+            >
+              Open Role Operations Dashboard
             </Button>
           </div>
         </div>
