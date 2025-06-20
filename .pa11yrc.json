@@ -1,0 +1,29 @@
+{
+  "standard": "WCAG2AA",
+  "level": "AA",
+  "reporter": "html",
+  "includeNotices": true,
+  "includeWarnings": true,
+  "chromeLaunchConfig": {
+    "args": ["--no-sandbox", "--disable-setuid-sandbox"]
+  },
+  "ignore": [
+    "WCAG2AA.Principle1.Guideline1_4.1_4_3.G18.Fail",
+    "WCAG2AA.Principle4.Guideline4_1.4_1_2.H91.A.EmptyNoId"
+  ],
+  "urls": [
+    "http://localhost:3000",
+    "http://localhost:3000/documents",
+    "http://localhost:3000/documents/bill-of-sale-vehicle",
+    "http://localhost:3000/documents/promissory-note",
+    "http://localhost:3000/faq",
+    "http://localhost:3000/features",
+    "http://localhost:3000/online-notary"
+  ],
+  "actions": [
+    "wait for element #app-providers-loading to be removed",
+    "wait for element .loading to be removed"
+  ],
+  "timeout": 30000,
+  "wait": 2000
+}

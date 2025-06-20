@@ -8,6 +8,7 @@ import { Menu as MenuIcon, X as CloseIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { ProgressiveLoader } from '@/components/ui/ProgressiveLoader';
 import { MobileNavigation, MobileNavigationSkeleton } from '@/components/ui/MobileNavigation';
+import { ThemeToggleButton } from '@/components/ui/theme-toggle';
 
 interface HeaderMobileMenuProps {
   clientLocale: 'en' | 'es';
@@ -63,14 +64,17 @@ export default function HeaderMobileMenu({
             <h2 className="text-lg font-semibold">
               {tHeader('nav.documents', { defaultValue: 'Documents' })}
             </h2>
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={onClose}
-              aria-label={tHeader('nav.closeMenu', { defaultValue: 'Close menu' })}
-            >
-              <CloseIcon className="h-5 w-5" />
-            </Button>
+            <div className="flex items-center gap-2">
+              <ThemeToggleButton />
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={onClose}
+                aria-label={tHeader('nav.closeMenu', { defaultValue: 'Close menu' })}
+              >
+                <CloseIcon className="h-5 w-5" />
+              </Button>
+            </div>
           </div>
 
           {/* Content */}

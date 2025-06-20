@@ -1,4 +1,16 @@
 import '@testing-library/jest-dom'
+import { configureAxe } from 'jest-axe'
+
+// Configure axe for jest
+const axe = configureAxe({
+  rules: {
+    // Customize axe rules for your specific needs
+    'color-contrast': { enabled: true },
+    'focus-order-semantics': { enabled: true },
+    'keyboard': { enabled: true },
+    'wcag2aa': { enabled: true },
+  },
+})
 
 // Mock Next.js router
 jest.mock('next/navigation', () => ({

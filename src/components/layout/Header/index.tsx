@@ -13,6 +13,7 @@ import HeaderUserMenu from './HeaderUserMenu';
 import HeaderMegaMenu from './HeaderMegaMenu';
 import HeaderMobileMenu from './HeaderMobileMenu';
 import CommandPaletteTrigger from './CommandPaletteTrigger';
+import { ThemeToggleButton } from '@/components/ui/theme-toggle';
 
 const Header = React.memo(function Header() {
   const params = (useParams<{ locale?: string }>() ?? {}) as {
@@ -104,6 +105,7 @@ const Header = React.memo(function Header() {
           <div className="hidden md:flex items-center gap-3">
             <CommandPaletteTrigger />
             <LanguageSwitcher />
+            <ThemeToggleButton />
             <HeaderUserMenu 
               clientLocale={clientLocale} 
               mounted={mounted} 

@@ -8,6 +8,7 @@ import { Toaster } from '@/components/ui/toaster';
 import { CartProvider } from '@/contexts/CartProvider';
 import { AuthProvider } from '@/hooks/useAuth'; // Ensure this is the correct export
 import { Loader2 } from 'lucide-react';
+import { ThemeProvider } from 'next-themes';
 
 interface ClientProvidersProps {
   children: ReactNode;
@@ -51,33 +52,40 @@ export function ClientProviders({ children, locale }: ClientProvidersProps) {
   const [queryClient] = useState(() => new QueryClient());
 
   return (
-    <I18nClientProvider
-      locale={locale}
-      fallback={
-        <div
-          id="app-providers-loading"
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'center',
-            height: '100vh',
-          }}
-        >
-          <Loader2 className="h-12 w-12 animate-spin text-primary" />
-          <p className="ml-2 mt-2 text-muted-foreground">
-            Initializing Application...
-          </p>
-        </div>
-      }
+    <ThemeProvider
+      attribute="class"
+      defaultTheme="system"
+      enableSystem
+      disableTransitionOnChange
     >
-      <QueryClientProvider client={queryClient}>
-        <AuthProvider>
-          <CartProvider>
-            <AppShell>{children}</AppShell>
-          </CartProvider>
-        </AuthProvider>
-      </QueryClientProvider>
-    </I18nClientProvider>
+      <I18nClientProvider
+        locale={locale}
+        fallback={
+          <div
+            id="app-providers-loading"
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              alignItems: 'center',
+              height: '100vh',
+            }}
+          >
+            <Loader2 className="h-12 w-12 animate-spin text-primary" />
+            <p className="ml-2 mt-2 text-muted-foreground">
+              Initializing Application...
+            </p>
+          </div>
+        }
+      >
+        <QueryClientProvider client={queryClient}>
+          <AuthProvider>
+            <CartProvider>
+              <AppShell>{children}</AppShell>
+            </CartProvider>
+          </AuthProvider>
+        </QueryClientProvider>
+      </I18nClientProvider>
+    </ThemeProvider>
   );
 }

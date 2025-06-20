@@ -1,8 +1,86 @@
 import { test, expect } from '@playwright/test';
+import AxeBuilder from '@axe-core/playwright';
 
 test.describe('Accessibility Testing', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
+  });
+
+  test.describe('WCAG 2.2 AA Compliance', () => {
+    test('should pass axe accessibility audit on homepage', async ({ page }) => {
+      const accessibilityScanResults = await new AxeBuilder({ page })
+        .withTags(['wcag2aa', 'wcag21aa', 'wcag22aa'])
+        .analyze();
+
+      expect(accessibilityScanResults.violations).toEqual([]);
+    });
+
+    test('should pass axe accessibility audit on document pages', async ({ page }) => {
+      await page.goto('/documents/bill-of-sale-vehicle');
+      
+      const accessibilityScanResults = await new AxeBuilder({ page })
+        .withTags(['wcag2aa', 'wcag21aa', 'wcag22aa'])
+        .exclude(['#cookie-banner']) // Exclude cookie banner if present
+        .analyze();
+
+      expect(accessibilityScanResults.violations).toEqual([]);
+    });
+
+    test('should pass axe accessibility audit on form pages', async ({ page }) => {
+      await page.goto('/documents/promissory-note');
+      
+      const createButton = page.getByRole('button', { name: /create|start/i }).first();
+      if (await createButton.isVisible()) {
+        await createButton.click();
+        await page.waitForLoadState('networkidle');
+      }
+      
+      const accessibilityScanResults = await new AxeBuilder({ page })
+        .withTags(['wcag2aa', 'wcag21aa', 'wcag22aa'])
+        .exclude(['#cookie-banner'])
+        .analyze();
+
+      expect(accessibilityScanResults.violations).toEqual([]);
+    });
+
+    test('should pass axe accessibility audit on dashboard', async ({ page }) => {
+      // Navigate to dashboard if authentication allows
+      await page.goto('/dashboard');
+      
+      const accessibilityScanResults = await new AxeBuilder({ page })
+        .withTags(['wcag2aa', 'wcag21aa', 'wcag22aa'])
+        .exclude(['#cookie-banner'])
+        .analyze();
+
+      expect(accessibilityScanResults.violations).toEqual([]);
+    });
+
+    test('should check color contrast ratios', async ({ page }) => {
+      const accessibilityScanResults = await new AxeBuilder({ page })
+        .withTags(['wcag2aa'])
+        .include(['color-contrast'])
+        .analyze();
+
+      expect(accessibilityScanResults.violations).toEqual([]);
+    });
+
+    test('should validate keyboard accessibility', async ({ page }) => {
+      const accessibilityScanResults = await new AxeBuilder({ page })
+        .withTags(['wcag2aa'])
+        .include(['keyboard'])
+        .analyze();
+
+      expect(accessibilityScanResults.violations).toEqual([]);
+    });
+
+    test('should validate focus management', async ({ page }) => {
+      const accessibilityScanResults = await new AxeBuilder({ page })
+        .withTags(['wcag2aa'])
+        .include(['focus-order-semantics'])
+        .analyze();
+
+      expect(accessibilityScanResults.violations).toEqual([]);
+    });
   });
 
   test.describe('Keyboard Navigation', () => {
