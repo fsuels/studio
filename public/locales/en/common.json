@@ -182,11 +182,11 @@
     "cta": "Go to FAQ"
   },
   "home.hero.title": "Your AI Legal Assistant. Documents Ready in Minutes.",
-  "home.hero.subtitle": "Answer a few questions and instantly receive lawyer-grade paperwork.",
+  "home.hero.subtitle": "Eliminate guesswork. Create fully customized, professional legal documents in minutes.",
   "home.hero.pricingBadge": "One-time $35/document • No subscription",
   "home.hero2.title": "Your Legal Forms. Expertly Crafted.",
   "home.hero2.subtitle": "Eliminate guesswork. Create fully customized, professional legal documents in minutes.",
-  "home.hero2.trustline": "Trusted by 1,640,200+ docs generated • SSL Secure Checkout • Attorney-Reviewed Templates • Trustpilot ★★★★★",
+  "home.hero2.trustline": "Trusted by 1,640,200+ docs generated • SSL Secure Checkout • Templates Reviewed by Legal Pros • Trustpilot ★★★★★",
   "home.howItWorksSectionTitle.main": "Generate and Personalize Legal Forms",
   "home.howItWorksSectionTitle.sub": "• Fast • Easy • No Hidden Fees",
   "howItWorks.sectionTitle": "Create, Edit and Print Your Document in Minutes",
@@ -231,13 +231,13 @@
   "home.testimonials.t5.title": "Teacher & Parent",
   "home.testimonials.t5.outcome": "Secured my family's future.",
   "home.testimonials.t5.avatarUrl": "/images/reviews/Emily R-Teacher-Parent.png",
-  "home.moneyBackGuarantee": "100% Satisfaction Guarantee or Your Money Back",
+  "home.moneyBackGuarantee": "30-Day No-Questions Refund*",
   "home.midCtaHeadline": "Ready to Simplify Your Legal Needs?",
   "home.callToAction": "Explore All Legal Templates",
   "home.featuredIn": "FEATURED IN",
   "trustBadges.secure": "SSL Secure Checkout",
   "trustBadges.privacy": "Privacy Protected",
-  "trustBadges.attorneyReviewed": "Attorney-Reviewed Templates",
+  "trustBadges.attorneyReviewed": "Templates Reviewed by Legal Pros",
   "ctaPrimary": "Start Free, Pay $35/Doc →",
   "ctaSecondary": "Learn More",
   "Clear file": "Clear file",
@@ -383,7 +383,7 @@
     "accessible247Label": "24/7 Online",
     "officeHoursLabel": "Office Hours, Appointments",
     "onlineLimitedSupportLabel": "Online, Support Varies",
-    "guarantee": "100% Satisfaction Guarantee or Your Money Back on single/bundle purchases."
+    "guarantee": "30-Day No-Questions Refund* on single/bundle purchases."
   },
   "whyChooseUs": {
     "title": "Why Choose Us?",

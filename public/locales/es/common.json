@@ -182,11 +182,11 @@
     "cta": "Ir a Preguntas Frecuentes"
   },
   "home.hero.title": "Tu asistente legal con IA, documentos listos en minutos",
-  "home.hero.subtitle": "Responde unas preguntas y obtén documentos de calidad profesional al instante.",
+  "home.hero.subtitle": "Elimina las conjeturas. Crea documentos legales profesionales totalmente personalizados en minutos.",
   "home.hero.pricingBadge": "Pago único de $35/documento • Sin suscripción",
   "home.hero2.title": "Tus formularios legales elaborados por expertos.",
   "home.hero2.subtitle": "Elimina las conjeturas. Crea documentos legales profesionales totalmente personalizados en minutos.",
-  "home.hero2.trustline": "Con la confianza de más de 4,200 documentos generados • Pago Seguro SSL • Plantillas revisadas por abogados • Trustpilot ★★★★★",
+  "home.hero2.trustline": "Con la confianza de más de 4,200 documentos generados • Pago Seguro SSL • Plantillas revisadas por profesionales legales • Trustpilot ★★★★★",
   "home.howItWorksSectionTitle.main": "Genera y personaliza formularios legales",
   "home.howItWorksSectionTitle.sub": "• Rápido • Fácil • Sin tarifas ocultas",
   "howItWorks.sectionTitle": "Crea, edita e imprime tu documento en minutos",
@@ -231,13 +231,13 @@
   "home.testimonials.t5.title": "Maestra y Madre",
   "home.testimonials.t5.outcome": "Aseguré el futuro de mi familia.",
   "home.testimonials.t5.avatarUrl": "/images/reviews/Emily R-Teacher-Parent.png",
-  "home.moneyBackGuarantee": "Garantía de Satisfacción del 100% o Devolución de tu Dinero",
+  "home.moneyBackGuarantee": "Reembolso sin preguntas de 30 días*",
   "home.midCtaHeadline": "¿Listo para simplificar tus necesidades legales?",
   "home.callToAction": "Crea mi primer documento",
   "home.featuredIn": "PRESENTADO EN",
   "trustBadges.secure": "Pago Seguro SSL",
   "trustBadges.privacy": "Privacidad Protegida",
-  "trustBadges.attorneyReviewed": "Plantillas Revisadas por Abogados",
+  "trustBadges.attorneyReviewed": "Plantillas Revisadas por Profesionales Legales",
   "ctaPrimary": "Comenzar Gratis, Paga $35/Doc →",
   "ctaSecondary": "Aprende más",
   "Clear file": "Quitar archivo",
@@ -383,7 +383,7 @@
     "accessible247Label": "En línea 24/7",
     "officeHoursLabel": "Horario de Oficina, Citas",
     "onlineLimitedSupportLabel": "En línea, Soporte Variable",
-    "guarantee": "Garantía de Satisfacción 100% o le Devolvemos su Dinero en compras individuales/paquetes."
+    "guarantee": "Reembolso sin preguntas de 30 días* en compras individuales/paquetes."
   },
   "whyChooseUs": {
     "title": "¿Por Qué Elegirnos?",
