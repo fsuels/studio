@@ -80,6 +80,9 @@ import { getUserDocuments } from '@/lib/firestore/dashboardData';
 import { useQueryClient } from '@tanstack/react-query';
 import { useToast } from '@/hooks/use-toast';
 import { Checkbox } from '@/components/ui/checkbox';
+import OnboardingWizard from '@/components/onboarding/OnboardingWizard';
+import OnboardingChecklist from '@/components/onboarding/OnboardingChecklist';
+import { useOnboarding } from '@/hooks/useOnboarding';
 
 // Define a more specific type for Firestore Timestamps if that's what you use
 interface FirestoreTimestamp {
@@ -103,6 +106,7 @@ export default function DashboardClientContent({
   const [activeTab, setActiveTab] = useState<'documents' | 'payments' | 'profile'>('documents');
   const { user, isLoggedIn, isLoading: authLoading, logout } = useAuth();
   const router = useRouter();
+  const { shouldShowOnboarding, markMilestone } = useOnboarding();
 
   const [isHydrated, setIsHydrated] = useState(false);
   const [sortBy, setSortBy] = useState<'name' | 'date' | 'status'>('name');
@@ -451,7 +455,7 @@ export default function DashboardClientContent({
                 </Button>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button variant="outline">{t('New')} ▼</Button>
+                    <Button variant="outline" data-tour="create-document">{t('New')} ▼</Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="start">
                     <DropdownMenuItem onSelect={() => setShowFolderModal(true)}>
@@ -1013,7 +1017,7 @@ export default function DashboardClientContent({
       </p>
 
       <div className="flex flex-col md:flex-row gap-8">
-        <nav className="w-full md:w-64 space-y-2 shrink-0">
+        <nav className="w-full md:w-64 space-y-2 shrink-0" data-tour="dashboard-nav">
           <Button
             variant={activeTab === 'documents' ? 'secondary' : 'ghost'}
             className="w-full justify-start text-left"
@@ -1038,9 +1042,24 @@ export default function DashboardClientContent({
         </nav>
 
         <div className="flex-1 bg-card p-4 sm:p-6 rounded-xl shadow-xl border border-border min-h-[300px]">
+          {/* Show onboarding checklist if user hasn't completed onboarding */}
+          {shouldShowOnboarding && activeTab === 'documents' && (
+            <OnboardingChecklist 
+              onDismiss={() => {/* Handle dismiss */}}
+            />
+          )}
           {renderContent()}
         </div>
       </div>
+
+      {/* Onboarding Wizard - shows on first visit */}
+      <OnboardingWizard 
+        autoStart={shouldShowOnboarding}
+        onComplete={async () => {
+          await markMilestone('dashboardTour');
+        }}
+        onSkip={() => {/* Handle skip */}}
+      />
     </main>
   );
 }
