@@ -7,7 +7,7 @@ export const singleMemberLlcOperatingAgreementQuestions: FormQuestion[] = [
     label: 'LLC Company Name',
     required: true,
     placeholder: 'Enter the full legal name of your LLC',
-    validation: { min: 1 }
+    validation: { min: 1 },
   },
   {
     id: 'stateOfFormation',
@@ -64,31 +64,33 @@ export const singleMemberLlcOperatingAgreementQuestions: FormQuestion[] = [
       { value: 'WA', label: 'Washington' },
       { value: 'WV', label: 'West Virginia' },
       { value: 'WI', label: 'Wisconsin' },
-      { value: 'WY', label: 'Wyoming' }
-    ]
+      { value: 'WY', label: 'Wyoming' },
+    ],
   },
   {
     id: 'dateOfFormation',
     type: 'date',
     label: 'Date of Formation',
     required: true,
-    helpText: 'The date when the LLC was officially formed with the state'
+    helpText: 'The date when the LLC was officially formed with the state',
   },
   {
     id: 'principalPlaceOfBusiness',
     type: 'textarea',
     label: 'Principal Place of Business',
     required: true,
-    placeholder: 'Enter the complete address of the LLC\'s main business location',
-    validation: { min: 10, max: 500 }
+    placeholder:
+      "Enter the complete address of the LLC's main business location",
+    validation: { min: 10, max: 500 },
   },
   {
     id: 'businessPurpose',
     type: 'textarea',
     label: 'Business Purpose',
     required: true,
-    placeholder: 'Describe the primary business activities and purpose of the LLC',
-    validation: { min: 20, max: 1000 }
+    placeholder:
+      'Describe the primary business activities and purpose of the LLC',
+    validation: { min: 20, max: 1000 },
   },
   {
     id: 'memberName',
@@ -96,7 +98,7 @@ export const singleMemberLlcOperatingAgreementQuestions: FormQuestion[] = [
     label: 'Member Name',
     required: true,
     placeholder: 'Enter the full legal name of the sole member',
-    validation: { min: 2 }
+    validation: { min: 2 },
   },
   {
     id: 'memberAddress',
@@ -104,15 +106,17 @@ export const singleMemberLlcOperatingAgreementQuestions: FormQuestion[] = [
     label: 'Member Address',
     required: true,
     placeholder: 'Enter the complete address of the sole member',
-    validation: { min: 10, max: 300 }
+    validation: { min: 10, max: 300 },
   },
   {
     id: 'initialCapitalContribution',
     type: 'text',
     label: 'Initial Capital Contribution',
     required: true,
-    placeholder: 'Enter the amount of initial capital contributed (e.g., $10,000)',
-    helpText: 'The initial amount of money, property, or services contributed to the LLC'
+    placeholder:
+      'Enter the amount of initial capital contributed (e.g., $10,000)',
+    helpText:
+      'The initial amount of money, property, or services contributed to the LLC',
   },
   {
     id: 'managementStructure',
@@ -120,10 +124,16 @@ export const singleMemberLlcOperatingAgreementQuestions: FormQuestion[] = [
     label: 'Management Structure',
     required: true,
     options: [
-      { value: 'member-managed', label: 'Member-Managed (Member directly manages the LLC)' },
-      { value: 'manager-managed', label: 'Manager-Managed (Appointed manager manages the LLC)' }
+      {
+        value: 'member-managed',
+        label: 'Member-Managed (Member directly manages the LLC)',
+      },
+      {
+        value: 'manager-managed',
+        label: 'Manager-Managed (Appointed manager manages the LLC)',
+      },
     ],
-    defaultValue: 'member-managed'
+    defaultValue: 'member-managed',
   },
   {
     id: 'managerName',
@@ -131,7 +141,7 @@ export const singleMemberLlcOperatingAgreementQuestions: FormQuestion[] = [
     label: 'Manager Name',
     required: false,
     placeholder: 'Enter the name of the appointed manager',
-    conditional: { field: 'managementStructure', value: 'manager-managed' }
+    conditional: { field: 'managementStructure', value: 'manager-managed' },
   },
   {
     id: 'managerAddress',
@@ -139,7 +149,7 @@ export const singleMemberLlcOperatingAgreementQuestions: FormQuestion[] = [
     label: 'Manager Address',
     required: false,
     placeholder: 'Enter the complete address of the manager',
-    conditional: { field: 'managementStructure', value: 'manager-managed' }
+    conditional: { field: 'managementStructure', value: 'manager-managed' },
   },
   {
     id: 'fiscalYearEnd',
@@ -151,37 +161,38 @@ export const singleMemberLlcOperatingAgreementQuestions: FormQuestion[] = [
       { value: 'December 31', label: 'December 31 (Calendar Year)' },
       { value: 'March 31', label: 'March 31' },
       { value: 'June 30', label: 'June 30' },
-      { value: 'September 30', label: 'September 30' }
-    ]
+      { value: 'September 30', label: 'September 30' },
+    ],
   },
   {
     id: 'bankingInstitution',
     type: 'text',
     label: 'Banking Institution',
     required: false,
-    placeholder: 'Enter the name of the primary banking institution'
+    placeholder: 'Enter the name of the primary banking institution',
   },
   {
     id: 'distributionsPolicy',
     type: 'textarea',
     label: 'Distributions Policy',
     required: false,
-    placeholder: 'Describe how and when distributions will be made to the member',
-    validation: { max: 500 }
+    placeholder:
+      'Describe how and when distributions will be made to the member',
+    validation: { max: 500 },
   },
   {
     id: 'meetingsRequired',
     type: 'checkbox',
     label: 'Require Annual Member Meetings',
     required: false,
-    defaultValue: false
+    defaultValue: false,
   },
   {
     id: 'recordsLocation',
     type: 'text',
     label: 'Records Location',
     required: false,
-    placeholder: 'Where will LLC records and books be kept?'
+    placeholder: 'Where will LLC records and books be kept?',
   },
   {
     id: 'transferRestrictions',
@@ -189,28 +200,29 @@ export const singleMemberLlcOperatingAgreementQuestions: FormQuestion[] = [
     label: 'Include Transfer Restrictions',
     required: false,
     defaultValue: true,
-    helpText: 'Restrict transfer of membership interests without consent'
+    helpText: 'Restrict transfer of membership interests without consent',
   },
   {
     id: 'additionalProvisions',
     type: 'textarea',
     label: 'Additional Provisions',
     required: false,
-    placeholder: 'Enter any additional terms or provisions for this operating agreement',
-    validation: { max: 1000 }
+    placeholder:
+      'Enter any additional terms or provisions for this operating agreement',
+    validation: { max: 1000 },
   },
   {
     id: 'signatureDate',
     type: 'date',
     label: 'Agreement Date',
     required: true,
-    helpText: 'The date this operating agreement is signed'
+    helpText: 'The date this operating agreement is signed',
   },
   {
     id: 'notarization',
     type: 'checkbox',
     label: 'Require Notarization',
     required: false,
-    defaultValue: false
-  }
+    defaultValue: false,
+  },
 ];

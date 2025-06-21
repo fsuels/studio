@@ -13,13 +13,13 @@ export async function POST(request: NextRequest) {
       documentType,
       legalTermMap,
       preservedTerms,
-      legalSystem
+      legalSystem,
     } = body;
 
     if (!text || !sourceLanguage || !targetLanguage) {
       return NextResponse.json(
         { error: 'Text, source language, and target language are required' },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -30,7 +30,7 @@ export async function POST(request: NextRequest) {
       documentType,
       legalTermMap: legalTermMap || {},
       preservedTerms: preservedTerms || [],
-      legalSystem
+      legalSystem,
     });
 
     return NextResponse.json({
@@ -40,16 +40,12 @@ export async function POST(request: NextRequest) {
         targetLanguage,
         preservedTermsCount: preservedTerms?.length || 0,
         legalTermsTranslated: Object.keys(legalTermMap || {}).length,
-        processingTime: Date.now()
-      }
+        processingTime: Date.now(),
+      },
     });
-
   } catch (error) {
     console.error('Legal translation failed:', error);
-    return NextResponse.json(
-      { error: 'Translation failed' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Translation failed' }, { status: 500 });
   }
 }
 
@@ -63,32 +59,34 @@ async function translateWithLegalPreservation(
     legalTermMap: Record<string, string>;
     preservedTerms: string[];
     legalSystem?: string;
-  }
+  },
 ): Promise<string> {
   try {
     // Create term protection markers
     let protectedText = text;
     const termMarkers: Record<string, string> = {};
-    
+
     // Mark preserved terms to prevent translation
     context.preservedTerms.forEach((term, index) => {
       const marker = `__PRESERVED_${index}__`;
       termMarkers[marker] = term;
       protectedText = protectedText.replace(
         new RegExp(`\\b${escapeRegExp(term)}\\b`, 'gi'),
-        marker
+        marker,
       );
     });
 
     // Mark legal terms for controlled translation
-    Object.entries(context.legalTermMap).forEach(([original, translation], index) => {
-      const marker = `__LEGAL_${index}__`;
-      termMarkers[marker] = translation;
-      protectedText = protectedText.replace(
-        new RegExp(`\\b${escapeRegExp(original)}\\b`, 'gi'),
-        marker
-      );
-    });
+    Object.entries(context.legalTermMap).forEach(
+      ([original, translation], index) => {
+        const marker = `__LEGAL_${index}__`;
+        termMarkers[marker] = translation;
+        protectedText = protectedText.replace(
+          new RegExp(`\\b${escapeRegExp(original)}\\b`, 'gi'),
+          marker,
+        );
+      },
+    );
 
     const prompt = `
 You are a professional legal translator specializing in ${context.sourceLanguage} to ${context.targetLanguage} translation.
@@ -117,7 +115,7 @@ Maintain all marker placeholders exactly as they appear.
 `;
 
     const translatedText = await aiInstance.generateText(prompt);
-    
+
     // Restore protected terms
     let finalText = translatedText.trim();
     Object.entries(termMarkers).forEach(([marker, replacement]) => {
@@ -125,10 +123,9 @@ Maintain all marker placeholders exactly as they appear.
     });
 
     return finalText;
-
   } catch (error) {
     console.error('AI translation failed:', error);
-    
+
     // Fallback to basic translation with term preservation
     return await fallbackTranslation(text, context);
   }
@@ -141,25 +138,27 @@ async function fallbackTranslation(
     targetLanguage: string;
     legalTermMap: Record<string, string>;
     preservedTerms: string[];
-  }
+  },
 ): Promise<string> {
   // Simple fallback: apply term mappings and preserve terms
   let result = text;
-  
+
   // Apply legal term translations
   Object.entries(context.legalTermMap).forEach(([original, translation]) => {
     result = result.replace(
       new RegExp(`\\b${escapeRegExp(original)}\\b`, 'gi'),
-      translation
+      translation,
     );
   });
 
   // Note: In a real implementation, you would integrate with a translation service
   // For now, we'll just apply the term mappings and add a note
-  
+
   if (context.sourceLanguage !== context.targetLanguage) {
     // Could integrate with Google Translate API, Azure Translator, etc.
-    console.warn('Fallback translation: only legal terms translated, full translation needs service integration');
+    console.warn(
+      'Fallback translation: only legal terms translated, full translation needs service integration',
+    );
   }
 
   return result;

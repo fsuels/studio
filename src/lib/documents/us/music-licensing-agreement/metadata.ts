@@ -24,12 +24,14 @@ export const musicLicensingAgreementMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Music Licensing Agreement',
-      description: 'Agreement for licensing music compositions and recordings for various uses.',
+      description:
+        'Agreement for licensing music compositions and recordings for various uses.',
       aliases: ['music license', 'sync license', 'performance license'],
     },
     es: {
       name: 'Acuerdo de Licencia Musical',
-      description: 'Acuerdo para licenciar composiciones musicales y grabaciones para varios usos.',
+      description:
+        'Acuerdo para licenciar composiciones musicales y grabaciones para varios usos.',
       aliases: ['licencia musical', 'licencia de sincronización'],
     },
   },

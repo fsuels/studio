@@ -95,7 +95,10 @@ export const buySellAgreementQuestions: Question[] = [
     type: 'select',
     required: true,
     options: [
-      { value: 'fair_market_value', label: 'Fair Market Value (Professional Appraisal)' },
+      {
+        value: 'fair_market_value',
+        label: 'Fair Market Value (Professional Appraisal)',
+      },
       { value: 'book_value', label: 'Book Value' },
       { value: 'formula', label: 'Formula-Based Valuation' },
       { value: 'appraisal', label: 'Independent Appraisal' },
@@ -107,14 +110,16 @@ export const buySellAgreementQuestions: Question[] = [
     label: 'Valuation Details',
     type: 'textarea',
     required: true,
-    placeholder: 'Describe the specific valuation methodology, formulas, or appraisal process',
+    placeholder:
+      'Describe the specific valuation methodology, formulas, or appraisal process',
   },
   {
     id: 'paymentTerms',
     label: 'Payment Terms',
     type: 'textarea',
     required: true,
-    placeholder: 'e.g., Lump sum within 90 days, or installments over 5 years at 6% interest',
+    placeholder:
+      'e.g., Lump sum within 90 days, or installments over 5 years at 6% interest',
   },
   {
     id: 'fundingMechanism',
@@ -138,7 +143,8 @@ export const buySellAgreementQuestions: Question[] = [
     id: 'restrictionsOnTransfer',
     label: 'Restrictions on Transfer',
     type: 'textarea',
-    placeholder: 'Any restrictions on transferring ownership interests to third parties',
+    placeholder:
+      'Any restrictions on transferring ownership interests to third parties',
   },
   {
     id: 'disputeResolution',

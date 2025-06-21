@@ -24,12 +24,18 @@ export const influencerAgreementMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Influencer Agreement',
-      description: 'Professional agreement for influencer marketing partnerships and brand collaborations.',
-      aliases: ['brand partnership agreement', 'influencer contract', 'social media collaboration agreement'],
+      description:
+        'Professional agreement for influencer marketing partnerships and brand collaborations.',
+      aliases: [
+        'brand partnership agreement',
+        'influencer contract',
+        'social media collaboration agreement',
+      ],
     },
     es: {
       name: 'Acuerdo de Influencer',
-      description: 'Acuerdo profesional para asociaciones de marketing de influencers y colaboraciones de marca.',
+      description:
+        'Acuerdo profesional para asociaciones de marketing de influencers y colaboraciones de marca.',
       aliases: ['acuerdo de colaboración de marca', 'contrato de influencer'],
     },
   },

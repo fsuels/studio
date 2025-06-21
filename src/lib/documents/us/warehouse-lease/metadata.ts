@@ -24,12 +24,14 @@ export const warehouseLeaseMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Warehouse Lease',
-      description: 'Industrial lease agreement for warehouse and storage facilities',
+      description:
+        'Industrial lease agreement for warehouse and storage facilities',
       aliases: [],
     },
     es: {
       name: 'Warehouse Lease', // TODO: Add Spanish translation
-      description: 'Industrial lease agreement for warehouse and storage facilities', // TODO: Add Spanish translation
+      description:
+        'Industrial lease agreement for warehouse and storage facilities', // TODO: Add Spanish translation
       aliases: [],
     },
   },

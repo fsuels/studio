@@ -47,7 +47,7 @@ Don't risk using generic templates that may not comply with Arkansas law. Get a 
 
 [Create Arkansas Partnership Agreement]
 
-*Trusted by thousands of Arkansas businesses*
+_Trusted by thousands of Arkansas businesses_
 
 ---
 

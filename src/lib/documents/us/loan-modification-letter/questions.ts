@@ -98,7 +98,12 @@ export const loanModificationLetterQuestions: Question[] = [
       { value: 'Permanent', label: 'Permanent' },
     ],
   },
-  { id: 'requestedStartDate', label: 'Requested Start Date', type: 'date', required: true },
+  {
+    id: 'requestedStartDate',
+    label: 'Requested Start Date',
+    type: 'date',
+    required: true,
+  },
   {
     id: 'contactPhone',
     label: 'Contact Phone',

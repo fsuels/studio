@@ -2,12 +2,8 @@
   "payment-bond": {
     "title": "Payment Bond",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Payment Bond.",
     "popular": false,
     "fieldCount": 15,
@@ -16,12 +12,8 @@
   "security-agreement": {
     "title": "Security Agreement",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Security Agreement.",
     "popular": false,
     "fieldCount": 15,

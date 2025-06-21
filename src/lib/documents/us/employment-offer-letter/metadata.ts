@@ -32,7 +32,11 @@ export const employmentOfferLetterMeta: LegalDocument = {
       name: 'Carta de Oferta de Empleo',
       description:
         'Formalizar una oferta de trabajo con términos clave como salario, fecha de inicio y puesto.',
-      aliases: ['contratar empleado', 'oferta de trabajo', 'términos de empleo'],
+      aliases: [
+        'contratar empleado',
+        'oferta de trabajo',
+        'términos de empleo',
+      ],
     },
   },
 };

@@ -11,9 +11,9 @@ const path = require('path');
 // Severity levels
 const SEVERITY = {
   CRITICAL: 'CRITICAL',
-  HIGH: 'HIGH', 
+  HIGH: 'HIGH',
   MEDIUM: 'MEDIUM',
-  LOW: 'LOW'
+  LOW: 'LOW',
 };
 
 // Issue types
@@ -25,7 +25,7 @@ const ISSUE_TYPES = {
   TEMPLATE_ERROR: 'template_error',
   TECHNICAL_DEBT: 'technical_debt',
   SEO_ISSUE: 'seo_issue',
-  MARKET_READINESS: 'market_readiness'
+  MARKET_READINESS: 'market_readiness',
 };
 
 // Escalation channels
@@ -36,7 +36,7 @@ const ESCALATION_CHANNELS = {
   DEV_TEAM: 'dev_team',
   CTO_ALERT: 'cto_alert',
   AUTO_FIX: 'auto_fix',
-  LOG_ONLY: 'log_only'
+  LOG_ONLY: 'log_only',
 };
 
 class DecisionEngine {
@@ -45,7 +45,7 @@ class DecisionEngine {
     this.escalationQueue = [];
     this.actionResults = [];
     this.reportsDir = path.join(__dirname, '../decision-reports');
-    
+
     // Ensure reports directory exists
     if (!fs.existsSync(this.reportsDir)) {
       fs.mkdirSync(this.reportsDir, { recursive: true });
@@ -57,220 +57,275 @@ class DecisionEngine {
     return {
       // Legal compliance violations
       [ISSUE_TYPES.LEGAL_VIOLATION]: {
-        'missing_required_clause': {
+        missing_required_clause: {
           severity: SEVERITY.CRITICAL,
-          actions: [ESCALATION_CHANNELS.BLOCK_DEPLOYMENT, ESCALATION_CHANNELS.LEGAL_TEAM, ESCALATION_CHANNELS.CTO_ALERT],
+          actions: [
+            ESCALATION_CHANNELS.BLOCK_DEPLOYMENT,
+            ESCALATION_CHANNELS.LEGAL_TEAM,
+            ESCALATION_CHANNELS.CTO_ALERT,
+          ],
           autoFix: false,
           description: 'Missing legally required clause',
-          urgency: 'immediate'
+          urgency: 'immediate',
         },
-        'regulatory_violation': {
+        regulatory_violation: {
           severity: SEVERITY.CRITICAL,
-          actions: [ESCALATION_CHANNELS.BLOCK_DEPLOYMENT, ESCALATION_CHANNELS.LEGAL_TEAM],
+          actions: [
+            ESCALATION_CHANNELS.BLOCK_DEPLOYMENT,
+            ESCALATION_CHANNELS.LEGAL_TEAM,
+          ],
           autoFix: false,
           description: 'Violates state/federal regulations',
-          urgency: 'immediate'
+          urgency: 'immediate',
         },
-        'state_compliance_gap': {
+        state_compliance_gap: {
           severity: SEVERITY.HIGH,
-          actions: [ESCALATION_CHANNELS.LEGAL_TEAM, ESCALATION_CHANNELS.DEV_TEAM],
+          actions: [
+            ESCALATION_CHANNELS.LEGAL_TEAM,
+            ESCALATION_CHANNELS.DEV_TEAM,
+          ],
           autoFix: false,
           description: 'Missing state-specific requirements',
-          urgency: 'within_24h'
-        }
+          urgency: 'within_24h',
+        },
       },
 
       // Translation safety issues
       [ISSUE_TYPES.TRANSLATION_RISK]: {
-        'low_confidence_legal_term': {
+        low_confidence_legal_term: {
           severity: SEVERITY.HIGH,
-          actions: [ESCALATION_CHANNELS.CONTENT_TEAM, ESCALATION_CHANNELS.AUTO_FIX],
+          actions: [
+            ESCALATION_CHANNELS.CONTENT_TEAM,
+            ESCALATION_CHANNELS.AUTO_FIX,
+          ],
           autoFix: true,
           autoFixAction: 'fallback_to_english',
           description: 'Spanish legal translation below confidence threshold',
-          urgency: 'within_24h'
+          urgency: 'within_24h',
         },
-        'missing_translation': {
+        missing_translation: {
           severity: SEVERITY.MEDIUM,
-          actions: [ESCALATION_CHANNELS.CONTENT_TEAM, ESCALATION_CHANNELS.AUTO_FIX],
+          actions: [
+            ESCALATION_CHANNELS.CONTENT_TEAM,
+            ESCALATION_CHANNELS.AUTO_FIX,
+          ],
           autoFix: true,
           autoFixAction: 'use_english_version',
           description: 'Spanish translation not available',
-          urgency: 'within_week'
+          urgency: 'within_week',
         },
-        'terminology_mismatch': {
+        terminology_mismatch: {
           severity: SEVERITY.MEDIUM,
           actions: [ESCALATION_CHANNELS.CONTENT_TEAM],
           autoFix: false,
           description: 'Legal terminology inconsistency',
-          urgency: 'within_week'
-        }
+          urgency: 'within_week',
+        },
       },
 
       // Quality issues
       [ISSUE_TYPES.QUALITY_DEGRADATION]: {
-        'quality_score_drop': {
+        quality_score_drop: {
           severity: SEVERITY.MEDIUM,
           actions: [ESCALATION_CHANNELS.DEV_TEAM, ESCALATION_CHANNELS.AUTO_FIX],
           autoFix: true,
           autoFixAction: 'run_quality_fixes',
           description: 'Quality score below threshold',
-          urgency: 'within_week'
+          urgency: 'within_week',
         },
-        'metadata_incomplete': {
+        metadata_incomplete: {
           severity: SEVERITY.LOW,
           actions: [ESCALATION_CHANNELS.AUTO_FIX, ESCALATION_CHANNELS.LOG_ONLY],
           autoFix: true,
           autoFixAction: 'generate_metadata',
           description: 'Missing or incomplete metadata',
-          urgency: 'next_sprint'
-        }
+          urgency: 'next_sprint',
+        },
       },
 
       // Template errors
       [ISSUE_TYPES.TEMPLATE_ERROR]: {
-        'template_syntax_error': {
+        template_syntax_error: {
           severity: SEVERITY.HIGH,
-          actions: [ESCALATION_CHANNELS.BLOCK_DEPLOYMENT, ESCALATION_CHANNELS.DEV_TEAM],
+          actions: [
+            ESCALATION_CHANNELS.BLOCK_DEPLOYMENT,
+            ESCALATION_CHANNELS.DEV_TEAM,
+          ],
           autoFix: false,
           description: 'Template compilation failure',
-          urgency: 'immediate'
+          urgency: 'immediate',
         },
-        'template_variable_mismatch': {
+        template_variable_mismatch: {
           severity: SEVERITY.MEDIUM,
           actions: [ESCALATION_CHANNELS.DEV_TEAM, ESCALATION_CHANNELS.AUTO_FIX],
           autoFix: true,
           autoFixAction: 'sync_template_variables',
           description: 'Template variables out of sync',
-          urgency: 'within_24h'
-        }
+          urgency: 'within_24h',
+        },
       },
 
-      // Security issues  
+      // Security issues
       [ISSUE_TYPES.SECURITY_ISSUE]: {
-        'exposed_sensitive_data': {
+        exposed_sensitive_data: {
           severity: SEVERITY.CRITICAL,
-          actions: [ESCALATION_CHANNELS.BLOCK_DEPLOYMENT, ESCALATION_CHANNELS.CTO_ALERT, ESCALATION_CHANNELS.DEV_TEAM],
+          actions: [
+            ESCALATION_CHANNELS.BLOCK_DEPLOYMENT,
+            ESCALATION_CHANNELS.CTO_ALERT,
+            ESCALATION_CHANNELS.DEV_TEAM,
+          ],
           autoFix: false,
           description: 'Potential sensitive data exposure',
-          urgency: 'immediate'
-        }
+          urgency: 'immediate',
+        },
       },
 
       // Technical debt
       [ISSUE_TYPES.TECHNICAL_DEBT]: {
-        'code_quality_warning': {
+        code_quality_warning: {
           severity: SEVERITY.LOW,
           actions: [ESCALATION_CHANNELS.LOG_ONLY],
           autoFix: false,
           description: 'Code quality warning',
-          urgency: 'next_sprint'
-        }
+          urgency: 'next_sprint',
+        },
       },
 
       // SEO Content Issues
       [ISSUE_TYPES.SEO_ISSUE]: {
-        'duplicate_content': {
+        duplicate_content: {
           severity: SEVERITY.HIGH,
-          actions: [ESCALATION_CHANNELS.CONTENT_TEAM, ESCALATION_CHANNELS.AUTO_FIX],
+          actions: [
+            ESCALATION_CHANNELS.CONTENT_TEAM,
+            ESCALATION_CHANNELS.AUTO_FIX,
+          ],
           autoFix: true,
           autoFixAction: 'rewrite_duplicate_content',
           description: 'Content overlap >20% detected - Google penalty risk',
-          urgency: 'within_24h'
+          urgency: 'within_24h',
         },
-        'thin_content': {
+        thin_content: {
           severity: SEVERITY.HIGH,
-          actions: [ESCALATION_CHANNELS.CONTENT_TEAM, ESCALATION_CHANNELS.AUTO_FIX],
+          actions: [
+            ESCALATION_CHANNELS.CONTENT_TEAM,
+            ESCALATION_CHANNELS.AUTO_FIX,
+          ],
           autoFix: true,
           autoFixAction: 'expand_thin_content',
           description: 'Page content below minimum word count',
-          urgency: 'within_24h'
+          urgency: 'within_24h',
         },
-        'keyword_over_optimization': {
+        keyword_over_optimization: {
           severity: SEVERITY.MEDIUM,
-          actions: [ESCALATION_CHANNELS.CONTENT_TEAM, ESCALATION_CHANNELS.AUTO_FIX],
+          actions: [
+            ESCALATION_CHANNELS.CONTENT_TEAM,
+            ESCALATION_CHANNELS.AUTO_FIX,
+          ],
           autoFix: true,
           autoFixAction: 'adjust_keyword_density',
           description: 'Keyword density too high - penalty risk',
-          urgency: 'within_week'
+          urgency: 'within_week',
         },
-        'keyword_under_optimization': {
+        keyword_under_optimization: {
           severity: SEVERITY.LOW,
-          actions: [ESCALATION_CHANNELS.CONTENT_TEAM, ESCALATION_CHANNELS.AUTO_FIX],
+          actions: [
+            ESCALATION_CHANNELS.CONTENT_TEAM,
+            ESCALATION_CHANNELS.AUTO_FIX,
+          ],
           autoFix: true,
           autoFixAction: 'increase_keyword_usage',
           description: 'Keywords under-optimized for target terms',
-          urgency: 'next_sprint'
+          urgency: 'next_sprint',
         },
-        'seo_health_critical': {
+        seo_health_critical: {
           severity: SEVERITY.CRITICAL,
-          actions: [ESCALATION_CHANNELS.BLOCK_DEPLOYMENT, ESCALATION_CHANNELS.CONTENT_TEAM, ESCALATION_CHANNELS.CTO_ALERT],
+          actions: [
+            ESCALATION_CHANNELS.BLOCK_DEPLOYMENT,
+            ESCALATION_CHANNELS.CONTENT_TEAM,
+            ESCALATION_CHANNELS.CTO_ALERT,
+          ],
           autoFix: false,
           description: 'SEO health score <70% - immediate action required',
-          urgency: 'immediate'
-        }
+          urgency: 'immediate',
+        },
       },
 
       // Market Readiness Issues
       [ISSUE_TYPES.MARKET_READINESS]: {
-        'compliance_below_threshold': {
+        compliance_below_threshold: {
           severity: SEVERITY.CRITICAL,
-          actions: [ESCALATION_CHANNELS.BLOCK_DEPLOYMENT, ESCALATION_CHANNELS.LEGAL_TEAM, ESCALATION_CHANNELS.CTO_ALERT],
+          actions: [
+            ESCALATION_CHANNELS.BLOCK_DEPLOYMENT,
+            ESCALATION_CHANNELS.LEGAL_TEAM,
+            ESCALATION_CHANNELS.CTO_ALERT,
+          ],
           autoFix: false,
-          description: 'Market compliance score below 0.85 threshold - launch blocked',
-          urgency: 'immediate'
+          description:
+            'Market compliance score below 0.85 threshold - launch blocked',
+          urgency: 'immediate',
         },
-        'critical_legal_blocker': {
+        critical_legal_blocker: {
           severity: SEVERITY.CRITICAL,
-          actions: [ESCALATION_CHANNELS.BLOCK_DEPLOYMENT, ESCALATION_CHANNELS.LEGAL_TEAM],
+          actions: [
+            ESCALATION_CHANNELS.BLOCK_DEPLOYMENT,
+            ESCALATION_CHANNELS.LEGAL_TEAM,
+          ],
           autoFix: false,
           description: 'Critical legal requirement not met for market launch',
-          urgency: 'immediate'
+          urgency: 'immediate',
         },
-        'regulatory_compliance_gap': {
+        regulatory_compliance_gap: {
           severity: SEVERITY.HIGH,
-          actions: [ESCALATION_CHANNELS.LEGAL_TEAM, ESCALATION_CHANNELS.DEV_TEAM],
+          actions: [
+            ESCALATION_CHANNELS.LEGAL_TEAM,
+            ESCALATION_CHANNELS.DEV_TEAM,
+          ],
           autoFix: false,
           description: 'Regulatory compliance requirements not satisfied',
-          urgency: 'within_24h'
+          urgency: 'within_24h',
         },
-        'technical_readiness_low': {
+        technical_readiness_low: {
           severity: SEVERITY.HIGH,
           actions: [ESCALATION_CHANNELS.DEV_TEAM, ESCALATION_CHANNELS.AUTO_FIX],
           autoFix: true,
           autoFixAction: 'improve_technical_readiness',
           description: 'Technical infrastructure not ready for market launch',
-          urgency: 'within_week'
+          urgency: 'within_week',
         },
-        'market_preparation_incomplete': {
+        market_preparation_incomplete: {
           severity: SEVERITY.MEDIUM,
-          actions: [ESCALATION_CHANNELS.CONTENT_TEAM, ESCALATION_CHANNELS.DEV_TEAM],
+          actions: [
+            ESCALATION_CHANNELS.CONTENT_TEAM,
+            ESCALATION_CHANNELS.DEV_TEAM,
+          ],
           autoFix: false,
           description: 'Market preparation activities incomplete',
-          urgency: 'within_week'
+          urgency: 'within_week',
         },
-        'operational_readiness_gap': {
+        operational_readiness_gap: {
           severity: SEVERITY.MEDIUM,
           actions: [ESCALATION_CHANNELS.DEV_TEAM, ESCALATION_CHANNELS.AUTO_FIX],
           autoFix: true,
           autoFixAction: 'improve_operational_readiness',
           description: 'Operational processes not ready for market',
-          urgency: 'within_week'
-        }
-      }
+          urgency: 'within_week',
+        },
+      },
     };
   }
 
   // Process an issue through the decision engine
   processIssue(issue) {
     const { type, subtype, context, metadata } = issue;
-    
+
     console.log(`🎯 Processing ${type}:${subtype}...`);
-    
+
     // Get decision rule
     const rule = this.getDecisionRule(type, subtype);
     if (!rule) {
-      console.log(`⚠️  No decision rule found for ${type}:${subtype}, using default`);
+      console.log(
+        `⚠️  No decision rule found for ${type}:${subtype}, using default`,
+      );
       return this.handleUnknownIssue(issue);
     }
 
@@ -284,12 +339,12 @@ class DecisionEngine {
       autoFixAttempted: false,
       autoFixSuccessful: false,
       escalated: false,
-      escalationTargets: []
+      escalationTargets: [],
     };
 
     // Execute decision logic
     this.executeDecision(decision);
-    
+
     return decision;
   }
 
@@ -309,8 +364,11 @@ class DecisionEngine {
     if (rule.autoFix) {
       console.log(`🔧 Attempting auto-fix: ${rule.autoFixAction}`);
       decision.autoFixAttempted = true;
-      decision.autoFixSuccessful = this.attemptAutoFix(rule.autoFixAction, issue);
-      
+      decision.autoFixSuccessful = this.attemptAutoFix(
+        rule.autoFixAction,
+        issue,
+      );
+
       if (decision.autoFixSuccessful) {
         console.log(`✅ Auto-fix successful`);
         // If auto-fix successful, reduce severity
@@ -325,7 +383,7 @@ class DecisionEngine {
     }
 
     // 2. Execute escalation actions
-    rule.actions.forEach(action => {
+    rule.actions.forEach((action) => {
       switch (action) {
         case ESCALATION_CHANNELS.BLOCK_DEPLOYMENT:
           this.blockDeployment(decision);
@@ -384,7 +442,9 @@ class DecisionEngine {
 
   // Auto-fix implementations
   applyTranslationFallback(issue) {
-    console.log(`🌐 Applying translation fallback for ${issue.context?.documentId}`);
+    console.log(
+      `🌐 Applying translation fallback for ${issue.context?.documentId}`,
+    );
     // In real implementation, this would update the component to show English
     return true;
   }
@@ -395,7 +455,9 @@ class DecisionEngine {
   }
 
   syncTemplateVariables(issue) {
-    console.log(`🔄 Syncing template variables for ${issue.context?.documentId}`);
+    console.log(
+      `🔄 Syncing template variables for ${issue.context?.documentId}`,
+    );
     // In real implementation, this would fix template variable mismatches
     return Math.random() > 0.3; // Simulate 70% success rate
   }
@@ -412,48 +474,62 @@ class DecisionEngine {
 
   // SEO Auto-fix implementations
   rewriteDuplicateContent(issue) {
-    console.log(`📝 Rewriting duplicate content for ${issue.context?.file1} and ${issue.context?.file2}`);
+    console.log(
+      `📝 Rewriting duplicate content for ${issue.context?.file1} and ${issue.context?.file2}`,
+    );
     // In real implementation, this would use AI to rewrite content to be unique
     return Math.random() > 0.3; // Simulate 70% success rate
   }
 
   expandThinContent(issue) {
-    console.log(`📄 Expanding thin content for ${issue.context?.file} (${issue.context?.wordCount} words)`);
+    console.log(
+      `📄 Expanding thin content for ${issue.context?.file} (${issue.context?.wordCount} words)`,
+    );
     // In real implementation, this would add relevant content to reach minimum word count
     return Math.random() > 0.2; // Simulate 80% success rate
   }
 
   adjustKeywordDensity(issue) {
-    console.log(`🎯 Adjusting keyword density for "${issue.context?.keyword}" in ${issue.context?.file}`);
+    console.log(
+      `🎯 Adjusting keyword density for "${issue.context?.keyword}" in ${issue.context?.file}`,
+    );
     // In real implementation, this would optimize keyword usage to ideal 1-3%
     return Math.random() > 0.1; // Simulate 90% success rate
   }
 
   increaseKeywordUsage(issue) {
-    console.log(`📈 Increasing keyword usage for "${issue.context?.keyword}" in ${issue.context?.file}`);
+    console.log(
+      `📈 Increasing keyword usage for "${issue.context?.keyword}" in ${issue.context?.file}`,
+    );
     // In real implementation, this would naturally integrate more keywords
     return Math.random() > 0.15; // Simulate 85% success rate
   }
 
   // Market Readiness Auto-fix implementations
   improveTechnicalReadiness(issue) {
-    console.log(`⚙️ Improving technical readiness for ${issue.context?.country}`);
+    console.log(
+      `⚙️ Improving technical readiness for ${issue.context?.country}`,
+    );
     // In real implementation, this would update infrastructure, localization, payments
     return Math.random() > 0.4; // Simulate 60% success rate
   }
 
   improveOperationalReadiness(issue) {
-    console.log(`🔧 Improving operational readiness for ${issue.context?.country}`);
+    console.log(
+      `🔧 Improving operational readiness for ${issue.context?.country}`,
+    );
     // In real implementation, this would update processes, documentation, training
     return Math.random() > 0.3; // Simulate 70% success rate
   }
 
   // Escalation implementations
   blockDeployment(decision) {
-    console.log(`🚫 BLOCKING DEPLOYMENT due to ${decision.rule.severity} issue`);
+    console.log(
+      `🚫 BLOCKING DEPLOYMENT due to ${decision.rule.severity} issue`,
+    );
     decision.escalated = true;
     decision.escalationTargets.push('deployment_pipeline');
-    
+
     // In real implementation, this would set deployment gates
     process.env.BLOCK_DEPLOYMENT = 'true';
   }
@@ -462,13 +538,13 @@ class DecisionEngine {
     console.log(`⚖️  Escalating to Legal Team`);
     decision.escalated = true;
     decision.escalationTargets.push('legal_team');
-    
+
     this.escalationQueue.push({
       team: 'legal',
       urgency: decision.rule.urgency,
       issue: decision.issue,
       description: decision.rule.description,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
   }
 
@@ -476,13 +552,13 @@ class DecisionEngine {
     console.log(`📝 Escalating to Content Team`);
     decision.escalated = true;
     decision.escalationTargets.push('content_team');
-    
+
     this.escalationQueue.push({
       team: 'content',
       urgency: decision.rule.urgency,
       issue: decision.issue,
       description: decision.rule.description,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
   }
 
@@ -490,13 +566,13 @@ class DecisionEngine {
     console.log(`👨‍💻 Escalating to Dev Team`);
     decision.escalated = true;
     decision.escalationTargets.push('dev_team');
-    
+
     this.escalationQueue.push({
       team: 'dev',
       urgency: decision.rule.urgency,
       issue: decision.issue,
       description: decision.rule.description,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
   }
 
@@ -504,14 +580,14 @@ class DecisionEngine {
     console.log(`🚨 ALERTING CTO - Critical Issue Detected`);
     decision.escalated = true;
     decision.escalationTargets.push('cto');
-    
+
     this.escalationQueue.push({
       team: 'cto',
       urgency: 'immediate',
       issue: decision.issue,
       description: decision.rule.description,
       timestamp: new Date().toISOString(),
-      priority: 'P0'
+      priority: 'P0',
     });
   }
 
@@ -523,7 +599,7 @@ class DecisionEngine {
   // Handle unknown issue types
   handleUnknownIssue(issue) {
     console.log(`❓ Unknown issue type, applying default handling`);
-    
+
     const decision = {
       timestamp: new Date().toISOString(),
       issue,
@@ -532,7 +608,7 @@ class DecisionEngine {
       autoFixAttempted: false,
       autoFixSuccessful: false,
       escalated: true,
-      escalationTargets: ['dev_team']
+      escalationTargets: ['dev_team'],
     };
 
     this.escalateToDevTeam(decision);
@@ -542,7 +618,7 @@ class DecisionEngine {
   // Process quality verification results
   processQualityResults(qualityReport) {
     console.log('\n🎯 Processing Quality Verification Results...');
-    
+
     const issues = [];
 
     // Check quality score
@@ -551,80 +627,82 @@ class DecisionEngine {
         type: ISSUE_TYPES.QUALITY_DEGRADATION,
         subtype: 'quality_score_drop',
         context: { currentScore: qualityReport.score, threshold: 95 },
-        metadata: { report: qualityReport }
+        metadata: { report: qualityReport },
       });
     }
 
     // Check for errors
     if (qualityReport.summary?.failedChecks > 0) {
-      qualityReport.errors?.forEach(error => {
+      qualityReport.errors?.forEach((error) => {
         if (error.check === 'Metadata') {
           issues.push({
             type: ISSUE_TYPES.QUALITY_DEGRADATION,
             subtype: 'metadata_incomplete',
             context: { documentId: error.file, error: error.message },
-            metadata: error
+            metadata: error,
           });
         }
       });
     }
 
-    return issues.map(issue => this.processIssue(issue));
+    return issues.map((issue) => this.processIssue(issue));
   }
 
   // Process legal compliance results
   processLegalResults(legalReport) {
     console.log('\n⚖️  Processing Legal Compliance Results...');
-    
+
     const issues = [];
 
     // Check for compliance violations
-    legalReport.errors?.forEach(error => {
+    legalReport.errors?.forEach((error) => {
       if (error.type === 'missing-clauses') {
         issues.push({
           type: ISSUE_TYPES.LEGAL_VIOLATION,
           subtype: 'missing_required_clause',
-          context: { 
-            documentId: error.documentId, 
-            missingClauses: error.message 
+          context: {
+            documentId: error.documentId,
+            missingClauses: error.message,
           },
-          metadata: error
+          metadata: error,
         });
       }
     });
 
-    return issues.map(issue => this.processIssue(issue));
+    return issues.map((issue) => this.processIssue(issue));
   }
 
   // Process translation results
   processTranslationResults(translationReport) {
     console.log('\n🌐 Processing Translation Validation Results...');
-    
+
     const issues = [];
 
     // Check for low confidence translations
-    Object.entries(translationReport.results || {}).forEach(([docId, result]) => {
-      if (result.shouldFallback) {
-        issues.push({
-          type: ISSUE_TYPES.TRANSLATION_RISK,
-          subtype: 'low_confidence_legal_term',
-          context: { 
-            documentId: docId, 
-            confidence: result.confidence,
-            issues: result.issues 
-          },
-          metadata: result
-        });
-      }
-    });
+    Object.entries(translationReport.results || {}).forEach(
+      ([docId, result]) => {
+        if (result.shouldFallback) {
+          issues.push({
+            type: ISSUE_TYPES.TRANSLATION_RISK,
+            subtype: 'low_confidence_legal_term',
+            context: {
+              documentId: docId,
+              confidence: result.confidence,
+              issues: result.issues,
+            },
+            metadata: result,
+          });
+        }
+      },
+    );
 
-    return issues.map(issue => this.processIssue(issue));
+    return issues.map((issue) => this.processIssue(issue));
   }
 
   // Process SEO content uniqueness results
   processSEOResults(seoReport) {
     console.log('\n🔍 Processing SEO Content Uniqueness Results...');
-    
+
     const issues = [];
 
     // Check for critical SEO health issues
@@ -632,89 +710,93 @@ class DecisionEngine {
       issues.push({
         type: ISSUE_TYPES.SEO_ISSUE,
         subtype: 'seo_health_critical',
-        context: { 
+        context: {
           healthScore: seoReport.summary.overallHealthScore,
-          criticalIssues: seoReport.summary.duplicateIssues + seoReport.summary.thinContentIssues
+          criticalIssues:
+            seoReport.summary.duplicateIssues +
+            seoReport.summary.thinContentIssues,
         },
-        metadata: seoReport.summary
+        metadata: seoReport.summary,
       });
     }
 
     // Check for duplicate content issues
-    seoReport.issues?.duplicates?.forEach(duplicate => {
+    seoReport.issues?.duplicates?.forEach((duplicate) => {
       issues.push({
         type: ISSUE_TYPES.SEO_ISSUE,
         subtype: 'duplicate_content',
-        context: { 
+        context: {
           file1: duplicate.file1,
           file2: duplicate.file2,
           similarity: duplicate.similarity,
-          severity: duplicate.severity
+          severity: duplicate.severity,
         },
-        metadata: duplicate
+        metadata: duplicate,
       });
     });
 
     // Check for thin content issues
-    seoReport.issues?.thinContent?.forEach(thinContent => {
+    seoReport.issues?.thinContent?.forEach((thinContent) => {
       issues.push({
         type: ISSUE_TYPES.SEO_ISSUE,
         subtype: 'thin_content',
-        context: { 
+        context: {
           file: thinContent.file,
           wordCount: thinContent.wordCount,
-          minRequired: 300
+          minRequired: 300,
         },
-        metadata: thinContent
+        metadata: thinContent,
       });
     });
 
     // Check for keyword optimization issues
-    seoReport.issues?.keywords?.forEach(keywordIssue => {
-      const subtype = keywordIssue.issue === 'Keyword over-optimization' ? 
-        'keyword_over_optimization' : 'keyword_under_optimization';
-      
+    seoReport.issues?.keywords?.forEach((keywordIssue) => {
+      const subtype =
+        keywordIssue.issue === 'Keyword over-optimization'
+          ? 'keyword_over_optimization'
+          : 'keyword_under_optimization';
+
       issues.push({
         type: ISSUE_TYPES.SEO_ISSUE,
         subtype: subtype,
-        context: { 
+        context: {
           file: keywordIssue.file,
           keyword: keywordIssue.keyword,
-          density: keywordIssue.density
+          density: keywordIssue.density,
         },
-        metadata: keywordIssue
+        metadata: keywordIssue,
       });
     });
 
-    return issues.map(issue => this.processIssue(issue));
+    return issues.map((issue) => this.processIssue(issue));
   }
 
   // Process market readiness validation results
   processMarketReadinessResults(validationReport) {
     console.log('\n🌍 Processing Market Readiness Validation Results...');
-    
+
     const issues = [];
 
     // Single market validation
     if (validationReport.country) {
       const validation = validationReport;
-      
+
       if (!validation.launchApproved) {
         // Critical compliance issue
         issues.push({
           type: ISSUE_TYPES.MARKET_READINESS,
           subtype: 'compliance_below_threshold',
-          context: { 
+          context: {
             country: validation.country,
             complianceScore: validation.complianceScore,
             adjustedScore: validation.adjustedScore,
-            threshold: validation.threshold
+            threshold: validation.threshold,
           },
-          metadata: validation
+          metadata: validation,
         });
 
         // Process specific blockers
-        validation.blockers?.forEach(blocker => {
+        validation.blockers?.forEach((blocker) => {
           if (blocker.severity === 'critical') {
             let subtype = 'critical_legal_blocker';
             if (blocker.category === 'regulatoryCompliance') {
@@ -730,14 +812,14 @@ class DecisionEngine {
             issues.push({
               type: ISSUE_TYPES.MARKET_READINESS,
               subtype: subtype,
-              context: { 
+              context: {
                 country: validation.country,
                 category: blocker.category,
                 requirement: blocker.requirement,
                 score: blocker.score,
-                issue: blocker.issue
+                issue: blocker.issue,
               },
-              metadata: blocker
+              metadata: blocker,
             });
           }
         });
@@ -747,19 +829,19 @@ class DecisionEngine {
     // Staged rollout validation
     if (validationReport.countries) {
       const results = validationReport;
-      
+
       // Process blocked markets
-      results.blockedMarkets?.forEach(blockedMarket => {
+      results.blockedMarkets?.forEach((blockedMarket) => {
         issues.push({
           type: ISSUE_TYPES.MARKET_READINESS,
           subtype: 'compliance_below_threshold',
-          context: { 
+          context: {
             country: blockedMarket.country,
             complianceScore: blockedMarket.score,
             criticalBlockers: blockedMarket.blockers,
-            estimatedReadyDate: blockedMarket.estimatedReadyDate
+            estimatedReadyDate: blockedMarket.estimatedReadyDate,
           },
-          metadata: blockedMarket
+          metadata: blockedMarket,
         });
       });
 
@@ -768,19 +850,19 @@ class DecisionEngine {
         issues.push({
           type: ISSUE_TYPES.MARKET_READINESS,
           subtype: 'compliance_below_threshold',
-          context: { 
+          context: {
             rolloutType: 'staged',
             totalMarkets: results.summary.total,
             blockedMarkets: results.summary.blocked,
             approvedMarkets: results.summary.approved,
-            averageScore: results.summary.averageScore
+            averageScore: results.summary.averageScore,
           },
-          metadata: results.summary
+          metadata: results.summary,
         });
       }
     }
 
-    return issues.map(issue => this.processIssue(issue));
+    return issues.map((issue) => this.processIssue(issue));
   }
 
   // Generate decision report
@@ -789,21 +871,33 @@ class DecisionEngine {
       timestamp: new Date().toISOString(),
       summary: {
         totalIssues: this.actionResults.length,
-        criticalIssues: this.actionResults.filter(r => r.severity === SEVERITY.CRITICAL).length,
-        highIssues: this.actionResults.filter(r => r.severity === SEVERITY.HIGH).length,
-        mediumIssues: this.actionResults.filter(r => r.severity === SEVERITY.MEDIUM).length,
-        lowIssues: this.actionResults.filter(r => r.severity === SEVERITY.LOW).length,
-        autoFixAttempts: this.actionResults.filter(r => r.autoFixAttempted).length,
-        autoFixSuccesses: this.actionResults.filter(r => r.autoFixSuccessful).length,
-        escalatedIssues: this.actionResults.filter(r => r.escalated).length,
-        blockedDeployment: process.env.BLOCK_DEPLOYMENT === 'true'
+        criticalIssues: this.actionResults.filter(
+          (r) => r.severity === SEVERITY.CRITICAL,
+        ).length,
+        highIssues: this.actionResults.filter(
+          (r) => r.severity === SEVERITY.HIGH,
+        ).length,
+        mediumIssues: this.actionResults.filter(
+          (r) => r.severity === SEVERITY.MEDIUM,
+        ).length,
+        lowIssues: this.actionResults.filter((r) => r.severity === SEVERITY.LOW)
+          .length,
+        autoFixAttempts: this.actionResults.filter((r) => r.autoFixAttempted)
+          .length,
+        autoFixSuccesses: this.actionResults.filter((r) => r.autoFixSuccessful)
+          .length,
+        escalatedIssues: this.actionResults.filter((r) => r.escalated).length,
+        blockedDeployment: process.env.BLOCK_DEPLOYMENT === 'true',
       },
       decisions: this.actionResults,
       escalationQueue: this.escalationQueue,
-      recommendations: this.generateRecommendations()
+      recommendations: this.generateRecommendations(),
     };
 
-    const reportPath = path.join(this.reportsDir, `decision-report-${Date.now()}.json`);
+    const reportPath = path.join(
+      this.reportsDir,
+      `decision-report-${Date.now()}.json`,
+    );
     fs.writeFileSync(reportPath, JSON.stringify(report, null, 2));
 
     return { report, reportPath };
@@ -812,21 +906,25 @@ class DecisionEngine {
   generateRecommendations() {
     const recommendations = [];
 
-    const criticalCount = this.actionResults.filter(r => r.severity === SEVERITY.CRITICAL).length;
+    const criticalCount = this.actionResults.filter(
+      (r) => r.severity === SEVERITY.CRITICAL,
+    ).length;
     if (criticalCount > 0) {
       recommendations.push({
         priority: 'P0',
         message: `${criticalCount} critical issues require immediate attention`,
-        action: 'Review escalation queue and address critical issues first'
+        action: 'Review escalation queue and address critical issues first',
       });
     }
 
-    const failedAutoFixes = this.actionResults.filter(r => r.autoFixAttempted && !r.autoFixSuccessful).length;
+    const failedAutoFixes = this.actionResults.filter(
+      (r) => r.autoFixAttempted && !r.autoFixSuccessful,
+    ).length;
     if (failedAutoFixes > 2) {
       recommendations.push({
         priority: 'P1',
         message: `${failedAutoFixes} auto-fix attempts failed`,
-        action: 'Review auto-fix implementations and improve success rate'
+        action: 'Review auto-fix implementations and improve success rate',
       });
     }
 
@@ -841,16 +939,22 @@ class DecisionEngine {
 
     const summary = {
       totalIssues: this.actionResults.length,
-      critical: this.actionResults.filter(r => r.severity === SEVERITY.CRITICAL).length,
-      high: this.actionResults.filter(r => r.severity === SEVERITY.HIGH).length,
-      medium: this.actionResults.filter(r => r.severity === SEVERITY.MEDIUM).length,
-      low: this.actionResults.filter(r => r.severity === SEVERITY.LOW).length,
-      autoFixed: this.actionResults.filter(r => r.autoFixSuccessful).length,
-      escalated: this.actionResults.filter(r => r.escalated).length
+      critical: this.actionResults.filter(
+        (r) => r.severity === SEVERITY.CRITICAL,
+      ).length,
+      high: this.actionResults.filter((r) => r.severity === SEVERITY.HIGH)
+        .length,
+      medium: this.actionResults.filter((r) => r.severity === SEVERITY.MEDIUM)
+        .length,
+      low: this.actionResults.filter((r) => r.severity === SEVERITY.LOW).length,
+      autoFixed: this.actionResults.filter((r) => r.autoFixSuccessful).length,
+      escalated: this.actionResults.filter((r) => r.escalated).length,
     };
 
     console.log(`📊 Issues Processed: ${summary.totalIssues}`);
-    console.log(`🚨 Critical: ${summary.critical} | High: ${summary.high} | Medium: ${summary.medium} | Low: ${summary.low}`);
+    console.log(
+      `🚨 Critical: ${summary.critical} | High: ${summary.high} | Medium: ${summary.medium} | Low: ${summary.low}`,
+    );
     console.log(`🔧 Auto-Fixed: ${summary.autoFixed}`);
     console.log(`📤 Escalated: ${summary.escalated}`);
 
@@ -859,9 +963,13 @@ class DecisionEngine {
     }
 
     if (this.escalationQueue.length > 0) {
-      console.log(`\n📋 Escalation Queue (${this.escalationQueue.length} items):`);
-      this.escalationQueue.forEach(item => {
-        console.log(`   ${item.urgency.toUpperCase()}: ${item.team} - ${item.description}`);
+      console.log(
+        `\n📋 Escalation Queue (${this.escalationQueue.length} items):`,
+      );
+      this.escalationQueue.forEach((item) => {
+        console.log(
+          `   ${item.urgency.toUpperCase()}: ${item.team} - ${item.description}`,
+        );
       });
     }
 

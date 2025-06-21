@@ -26,15 +26,18 @@ import type {
  */
 export async function GET(
   request: NextRequest,
-  { params }: { params: { userId: string } }
+  { params }: { params: { userId: string } },
 ) {
   try {
     const { userId } = params;
     const url = new URL(request.url);
-    
-    const includeTemplates = url.searchParams.get('includeTemplates') === 'true';
+
+    const includeTemplates =
+      url.searchParams.get('includeTemplates') === 'true';
     const includeStats = url.searchParams.get('includeStats') === 'true';
-    const templateLimit = parseInt(url.searchParams.get('templateLimit') || '10');
+    const templateLimit = parseInt(
+      url.searchParams.get('templateLimit') || '10',
+    );
 
     const db = await getDb();
 
@@ -72,11 +75,11 @@ export async function GET(
         where('moderationStatus', '==', 'approved'),
         where('visibility', '==', 'public'),
         orderBy('stats.totalDownloads', 'desc'),
-        limit(templateLimit)
+        limit(templateLimit),
       );
 
       const templatesSnap = await getDocs(templatesQuery);
-      const templates = templatesSnap.docs.map(doc => ({
+      const templates = templatesSnap.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
       })) as MarketplaceTemplate[];
@@ -94,16 +97,15 @@ export async function GET(
       success: true,
       data: response,
     });
-
   } catch (error) {
     console.error('Get creator profile error:', error);
-    
+
     return NextResponse.json(
-      { 
-        success: false, 
-        error: 'Failed to fetch creator profile' 
+      {
+        success: false,
+        error: 'Failed to fetch creator profile',
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -114,7 +116,7 @@ export async function GET(
  */
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { userId: string } }
+  { params }: { params: { userId: string } },
 ) {
   try {
     // TODO: Add authentication
@@ -160,7 +162,7 @@ export async function PATCH(
     if (Object.keys(updateData).length === 0) {
       return NextResponse.json(
         { error: 'No valid fields to update' },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -184,16 +186,15 @@ export async function PATCH(
         message: 'Profile updated successfully',
       },
     });
-
   } catch (error) {
     console.error('Update creator profile error:', error);
-    
+
     return NextResponse.json(
-      { 
-        success: false, 
-        error: 'Failed to update profile' 
+      {
+        success: false,
+        error: 'Failed to update profile',
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -201,9 +202,11 @@ export async function PATCH(
 /**
  * Create default creator profile
  */
-async function createDefaultCreatorProfile(userId: string): Promise<CreatorProfile> {
+async function createDefaultCreatorProfile(
+  userId: string,
+): Promise<CreatorProfile> {
   const db = await getDb();
-  
+
   const profile: CreatorProfile = {
     userId,
     displayName: `Creator ${userId.slice(0, 8)}`,
@@ -240,44 +243,69 @@ async function calculateCreatorStats(userId: string) {
   // Get all creator's templates
   const templatesQuery = query(
     collection(db, 'marketplace-templates'),
-    where('createdBy', '==', userId)
+    where('createdBy', '==', userId),
   );
   const templatesSnap = await getDocs(templatesQuery);
-  const templates = templatesSnap.docs.map(doc => doc.data()) as MarketplaceTemplate[];
+  const templates = templatesSnap.docs.map((doc) =>
+    doc.data(),
+  ) as MarketplaceTemplate[];
 
   // Aggregate statistics
   const stats = {
     totalTemplates: templates.length,
-    publishedTemplates: templates.filter(t => t.moderationStatus === 'approved').length,
-    draftTemplates: templates.filter(t => t.moderationStatus === 'pending').length,
-    
-    totalDownloads: templates.reduce((sum, t) => sum + (t.stats.totalDownloads || 0), 0),
-    totalInstalls: templates.reduce((sum, t) => sum + (t.stats.totalInstalls || 0), 0),
-    totalRevenue: templates.reduce((sum, t) => sum + (t.stats.totalRevenue || 0), 0),
-    
+    publishedTemplates: templates.filter(
+      (t) => t.moderationStatus === 'approved',
+    ).length,
+    draftTemplates: templates.filter((t) => t.moderationStatus === 'pending')
+      .length,
+
+    totalDownloads: templates.reduce(
+      (sum, t) => sum + (t.stats.totalDownloads || 0),
+      0,
+    ),
+    totalInstalls: templates.reduce(
+      (sum, t) => sum + (t.stats.totalInstalls || 0),
+      0,
+    ),
+    totalRevenue: templates.reduce(
+      (sum, t) => sum + (t.stats.totalRevenue || 0),
+      0,
+    ),
+
     averageRating: calculateWeightedAverageRating(templates),
-    totalRatings: templates.reduce((sum, t) => sum + (t.ratings.totalRatings || 0), 0),
-    
+    totalRatings: templates.reduce(
+      (sum, t) => sum + (t.ratings.totalRatings || 0),
+      0,
+    ),
+
     // Monthly metrics
-    monthlyDownloads: templates.reduce((sum, t) => sum + (t.stats.downloadsThisMonth || 0), 0),
-    monthlyRevenue: templates.reduce((sum, t) => sum + (t.stats.revenueThisMonth || 0), 0),
-    
+    monthlyDownloads: templates.reduce(
+      (sum, t) => sum + (t.stats.downloadsThisMonth || 0),
+      0,
+    ),
+    monthlyRevenue: templates.reduce(
+      (sum, t) => sum + (t.stats.revenueThisMonth || 0),
+      0,
+    ),
+
     // Template categories
     categoriesBreakdown: calculateCategoryBreakdown(templates),
-    
+
     // Top performing templates
     topTemplates: templates
-      .filter(t => t.moderationStatus === 'approved')
-      .sort((a, b) => (b.stats.totalDownloads || 0) - (a.stats.totalDownloads || 0))
+      .filter((t) => t.moderationStatus === 'approved')
+      .sort(
+        (a, b) => (b.stats.totalDownloads || 0) - (a.stats.totalDownloads || 0),
+      )
       .slice(0, 5)
-      .map(t => ({
+      .map((t) => ({
         id: t.id,
         name: t.name,
         downloads: t.stats.totalDownloads,
         rating: t.ratings.averageRating,
         revenue: t.stats.totalRevenue,
       })),
-    
+
     // Performance trends (simplified)
     growthMetrics: {
       templatesGrowth: 0, // TODO: Calculate month-over-month growth
@@ -293,34 +321,41 @@ async function calculateCreatorStats(userId: string) {
 /**
  * Calculate weighted average rating across all templates
  */
-function calculateWeightedAverageRating(templates: MarketplaceTemplate[]): number {
+function calculateWeightedAverageRating(
+  templates: MarketplaceTemplate[],
+): number {
   let totalWeightedScore = 0;
   let totalRatings = 0;
 
   for (const template of templates) {
     const ratings = template.ratings.totalRatings || 0;
     const average = template.ratings.averageRating || 0;
-    
+
     totalWeightedScore += average * ratings;
     totalRatings += ratings;
   }
 
-  return totalRatings > 0 ? Math.round((totalWeightedScore / totalRatings) * 100) / 100 : 0;
+  return totalRatings > 0
+    ? Math.round((totalWeightedScore / totalRatings) * 100) / 100
+    : 0;
 }
 
 /**
  * Calculate breakdown by template categories
  */
 function calculateCategoryBreakdown(templates: MarketplaceTemplate[]) {
-  const breakdown: Record<string, {
-    count: number;
-    downloads: number;
-    revenue: number;
-  }> = {};
+  const breakdown: Record<
+    string,
+    {
+      count: number;
+      downloads: number;
+      revenue: number;
+    }
+  > = {};
 
   for (const template of templates) {
     const category = template.category || 'Other';
-    
+
     if (!breakdown[category]) {
       breakdown[category] = {
         count: 0,
@@ -346,7 +381,7 @@ export async function awardBadge(
   badgeName: string,
   badgeDescription: string,
   badgeIcon: string,
-  category: 'quality' | 'popularity' | 'contribution' | 'expertise'
+  category: 'quality' | 'popularity' | 'contribution' | 'expertise',
 ) {
   const db = await getDb();
   const profileRef = doc(db, 'creator-profiles', userId);
@@ -367,7 +402,7 @@ export async function awardBadge(
 
   // Add badge to profile
   await updateDoc(profileRef, {
-    badges: [...((profileSnap.data()?.badges || [])), newBadge],
+    badges: [...(profileSnap.data()?.badges || []), newBadge],
     updatedAt: serverTimestamp(),
   });
 }

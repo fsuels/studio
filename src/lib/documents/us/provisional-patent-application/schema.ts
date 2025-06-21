@@ -8,7 +8,9 @@ export const ProvisionalPatentApplicationSchema = z.object({
   inventorPhone: z.string().min(1, 'Phone number is required.'),
   inventorCitizenship: z.string().min(1, 'Citizenship is required.'),
   inventionTitle: z.string().min(1, 'Invention title is required.'),
-  inventionDescription: z.string().min(1, 'Detailed invention description is required.'),
+  inventionDescription: z
+    .string()
+    .min(1, 'Detailed invention description is required.'),
   technicalField: z.string().min(1, 'Technical field is required.'),
   backgroundArt: z.string().optional(),
   inventionSummary: z.string().min(1, 'Invention summary is required.'),
@@ -20,7 +22,12 @@ export const ProvisionalPatentApplicationSchema = z.object({
   advantages: z.string().optional(),
   attorney: z.string().optional(),
   attorneyAddress: z.string().optional(),
-  filingDate: z.string().min(1, 'Filing date is required.').regex(/^\d{4}-\d{2}-\d{2}$/, 'Date must be in YYYY-MM-DD format'),
+  filingDate: z
+    .string()
+    .min(1, 'Filing date is required.')
+    .regex(/^\d{4}-\d{2}-\d{2}$/, 'Date must be in YYYY-MM-DD format'),
 });
 
-export type ProvisionalPatentApplicationData = z.infer<typeof ProvisionalPatentApplicationSchema>;
+export type ProvisionalPatentApplicationData = z.infer<
+  typeof ProvisionalPatentApplicationSchema
+>;

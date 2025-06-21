@@ -9,12 +9,12 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { 
-  useExperimentMonitoring, 
-  monitoringService, 
-  type MonitoringAlert, 
+import {
+  useExperimentMonitoring,
+  monitoringService,
+  type MonitoringAlert,
   type ExperimentHealth,
-  type GrowthMetrics 
+  type GrowthMetrics,
 } from '@/lib/ab-testing/monitoring-service';
 
 // Alert priority colors
@@ -22,7 +22,7 @@ const alertColors = {
   low: 'bg-blue-50 border-blue-200',
   medium: 'bg-yellow-50 border-yellow-200',
   high: 'bg-orange-50 border-orange-200',
-  critical: 'bg-red-50 border-red-200'
+  critical: 'bg-red-50 border-red-200',
 };
 
 const alertIcons = {
@@ -30,14 +30,14 @@ const alertIcons = {
   sample_size_reached: '📊',
   duration_exceeded: '⏰',
   performance_drop: '📉',
-  error_rate_high: '⚠️'
+  error_rate_high: '⚠️',
 };
 
 // Health status indicators
 const healthColors = {
   healthy: 'text-green-600 bg-green-100',
   warning: 'text-yellow-600 bg-yellow-100',
-  critical: 'text-red-600 bg-red-100'
+  critical: 'text-red-600 bg-red-100',
 };
 
 function AlertsPanel() {
@@ -78,7 +78,9 @@ function AlertsPanel() {
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-1">
                   <span>{alertIcons[alert.type] || '📢'}</span>
-                  <span className="font-medium capitalize">{alert.type.replace('_', ' ')}</span>
+                  <span className="font-medium capitalize">
+                    {alert.type.replace('_', ' ')}
+                  </span>
                   <Badge variant="outline" className="text-xs">
                     {alert.priority}
                   </Badge>
@@ -92,8 +94,8 @@ function AlertsPanel() {
                   </div>
                 )}
               </div>
-              <Button 
-                size="sm" 
+              <Button
+                size="sm"
                 variant="outline"
                 onClick={() => acknowledgeAlert(alert.id)}
                 className="ml-3"
@@ -118,10 +120,13 @@ function AlertsPanel() {
 function ExperimentHealthOverview() {
   const { healthData } = useExperimentMonitoring();
 
-  const healthCounts = healthData.reduce((counts, health) => {
-    counts[health.status] = (counts[health.status] || 0) + 1;
-    return counts;
-  }, {} as Record<string, number>);
+  const healthCounts = healthData.reduce(
+    (counts, health) => {
+      counts[health.status] = (counts[health.status] || 0) + 1;
+      return counts;
+    },
+    {} as Record<string, number>,
+  );
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
@@ -138,7 +143,7 @@ function ExperimentHealthOverview() {
           </div>
         </CardContent>
       </Card>
-      
+
       <Card>
         <CardContent className="p-4">
           <div className="flex items-center justify-between">
@@ -152,7 +157,7 @@ function ExperimentHealthOverview() {
           </div>
         </CardContent>
       </Card>
-      
+
       <Card>
         <CardContent className="p-4">
           <div className="flex items-center justify-between">
@@ -195,29 +200,38 @@ function ExperimentHealthTable() {
                     {health.status}
                   </Badge>
                 </div>
-                
+
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
                   <div>
                     <div className="text-gray-600">Sample Size</div>
-                    <div className="font-medium">{health.metrics.sampleSize.toLocaleString()}</div>
+                    <div className="font-medium">
+                      {health.metrics.sampleSize.toLocaleString()}
+                    </div>
                   </div>
                   <div>
                     <div className="text-gray-600">Conversion Rate</div>
-                    <div className="font-medium">{(health.metrics.conversionRate * 100).toFixed(2)}%</div>
+                    <div className="font-medium">
+                      {(health.metrics.conversionRate * 100).toFixed(2)}%
+                    </div>
                   </div>
                   <div>
                     <div className="text-gray-600">Days Running</div>
-                    <div className="font-medium">{health.metrics.daysRunning}</div>
+                    <div className="font-medium">
+                      {health.metrics.daysRunning}
+                    </div>
                   </div>
                   <div>
                     <div className="text-gray-600">Confidence</div>
-                    <div className="font-medium">{(health.metrics.confidenceLevel * 100).toFixed(1)}%</div>
+                    <div className="font-medium">
+                      {(health.metrics.confidenceLevel * 100).toFixed(1)}%
+                    </div>
                   </div>
                 </div>
 
                 {health.metrics.estimatedTimeToSignificance && (
                   <div className="mt-2 text-sm text-gray-600">
-                    📅 Estimated {health.metrics.estimatedTimeToSignificance} days to significance
+                    📅 Estimated {health.metrics.estimatedTimeToSignificance}{' '}
+                    days to significance
                   </div>
                 )}
 
@@ -225,11 +239,15 @@ function ExperimentHealthTable() {
                   <div className="mt-3 space-y-1">
                     {health.issues.map((issue, index) => (
                       <div key={index} className="text-sm">
-                        <span className={`px-2 py-1 rounded text-xs ${
-                          issue.severity === 'high' ? 'bg-red-100 text-red-700' :
-                          issue.severity === 'medium' ? 'bg-yellow-100 text-yellow-700' :
-                          'bg-blue-100 text-blue-700'
-                        }`}>
+                        <span
+                          className={`px-2 py-1 rounded text-xs ${
+                            issue.severity === 'high'
+                              ? 'bg-red-100 text-red-700'
+                              : issue.severity === 'medium'
+                                ? 'bg-yellow-100 text-yellow-700'
+                                : 'bg-blue-100 text-blue-700'
+                          }`}
+                        >
                           {issue.severity}
                         </span>
                         <span className="ml-2">{issue.message}</span>
@@ -247,7 +265,8 @@ function ExperimentHealthTable() {
 }
 
 function GrowthMetricsPanel() {
-  const [growthMetrics, setGrowthMetrics] = React.useState<GrowthMetrics | null>(null);
+  const [growthMetrics, setGrowthMetrics] =
+    React.useState<GrowthMetrics | null>(null);
   const [timeframe, setTimeframe] = React.useState<'24h' | '7d' | '30d'>('7d');
   const [loading, setLoading] = React.useState(false);
 
@@ -349,20 +368,29 @@ function GrowthMetricsPanel() {
           <div>
             <h4 className="font-medium mb-3">Top Performing Experiments</h4>
             <div className="space-y-2">
-              {growthMetrics.topPerformingExperiments.map((experiment, index) => (
-                <div key={experiment.experimentId} className="flex items-center justify-between p-2 bg-gray-50 rounded">
-                  <div>
-                    <div className="font-medium text-sm">{experiment.name}</div>
-                    <div className="text-xs text-gray-600">
-                      {(experiment.confidence * 100).toFixed(1)}% confidence
+              {growthMetrics.topPerformingExperiments.map(
+                (experiment, index) => (
+                  <div
+                    key={experiment.experimentId}
+                    className="flex items-center justify-between p-2 bg-gray-50 rounded"
+                  >
+                    <div>
+                      <div className="font-medium text-sm">
+                        {experiment.name}
+                      </div>
+                      <div className="text-xs text-gray-600">
+                        {(experiment.confidence * 100).toFixed(1)}% confidence
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <div className="font-bold text-green-600">
+                        +{experiment.impact.toFixed(1)}%
+                      </div>
+                      <div className="text-xs text-gray-600">impact</div>
                     </div>
                   </div>
-                  <div className="text-right">
-                    <div className="font-bold text-green-600">+{experiment.impact.toFixed(1)}%</div>
-                    <div className="text-xs text-gray-600">impact</div>
-                  </div>
-                </div>
-              ))}
+                ),
+              )}
             </div>
           </div>
         )}
@@ -413,31 +441,41 @@ function PerformanceReport() {
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
         <Card>
           <CardContent className="p-4 text-center">
-            <div className="text-2xl font-bold">{report.summary.totalExperiments}</div>
+            <div className="text-2xl font-bold">
+              {report.summary.totalExperiments}
+            </div>
             <div className="text-sm text-gray-600">Total Experiments</div>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-4 text-center">
-            <div className="text-2xl font-bold text-blue-600">{report.summary.activeExperiments}</div>
+            <div className="text-2xl font-bold text-blue-600">
+              {report.summary.activeExperiments}
+            </div>
             <div className="text-sm text-gray-600">Active</div>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-4 text-center">
-            <div className="text-2xl font-bold text-green-600">{report.summary.completedExperiments}</div>
+            <div className="text-2xl font-bold text-green-600">
+              {report.summary.completedExperiments}
+            </div>
             <div className="text-sm text-gray-600">Completed</div>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-4 text-center">
-            <div className="text-2xl font-bold text-purple-600">{report.summary.successRate.toFixed(1)}%</div>
+            <div className="text-2xl font-bold text-purple-600">
+              {report.summary.successRate.toFixed(1)}%
+            </div>
             <div className="text-sm text-gray-600">Success Rate</div>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-4 text-center">
-            <div className="text-2xl font-bold text-orange-600">+{report.summary.avgImpact.toFixed(1)}%</div>
+            <div className="text-2xl font-bold text-orange-600">
+              +{report.summary.avgImpact.toFixed(1)}%
+            </div>
             <div className="text-sm text-gray-600">Avg Impact</div>
           </CardContent>
         </Card>
@@ -454,7 +492,9 @@ export default function ExperimentMonitoringDashboard() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold">A/B Testing Monitor</h1>
-          <p className="text-gray-600">Real-time experiment health and performance tracking</p>
+          <p className="text-gray-600">
+            Real-time experiment health and performance tracking
+          </p>
         </div>
         <div className="flex items-center gap-2">
           <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>

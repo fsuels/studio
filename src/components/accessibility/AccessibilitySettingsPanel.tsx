@@ -12,7 +12,13 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { Slider } from '@/components/ui/slider';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -37,18 +43,25 @@ interface AccessibilitySettingsPanelProps {
   className?: string;
 }
 
-export function AccessibilitySettingsPanel({ className }: AccessibilitySettingsPanelProps) {
-  const { preferences, updatePreferences, resetPreferences, isAccessibilityModeActive } = useAccessibility();
+export function AccessibilitySettingsPanel({
+  className,
+}: AccessibilitySettingsPanelProps) {
+  const {
+    preferences,
+    updatePreferences,
+    resetPreferences,
+    isAccessibilityModeActive,
+  } = useAccessibility();
   const { toast } = useToast();
   const [activeTab, setActiveTab] = useState('reading');
 
   const handleToggle = (key: keyof typeof preferences, value: boolean) => {
     updatePreferences({ [key]: value });
-    
+
     // Show confirmation toast
     toast({
       title: value ? 'Feature Enabled' : 'Feature Disabled',
-      description: `${key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())} has been ${value ? 'enabled' : 'disabled'}.`,
+      description: `${key.replace(/([A-Z])/g, ' $1').replace(/^./, (str) => str.toUpperCase())} has been ${value ? 'enabled' : 'disabled'}.`,
       duration: 2000,
     });
   };
@@ -57,7 +70,7 @@ export function AccessibilitySettingsPanel({ className }: AccessibilitySettingsP
     updatePreferences({ [key]: value as any });
     toast({
       title: 'Setting Updated',
-      description: `${key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())} has been updated.`,
+      description: `${key.replace(/([A-Z])/g, ' $1').replace(/^./, (str) => str.toUpperCase())} has been updated.`,
       duration: 2000,
     });
   };
@@ -71,19 +84,19 @@ export function AccessibilitySettingsPanel({ className }: AccessibilitySettingsP
     });
   };
 
-  const QuickToggleButton = ({ 
-    icon: Icon, 
-    label, 
-    isActive, 
-    onClick 
-  }: { 
-    icon: React.ComponentType<any>; 
-    label: string; 
-    isActive: boolean; 
+  const QuickToggleButton = ({
+    icon: Icon,
+    label,
+    isActive,
+    onClick,
+  }: {
+    icon: React.ComponentType<any>;
+    label: string;
+    isActive: boolean;
     onClick: () => void;
   }) => (
     <Button
-      variant={isActive ? "default" : "outline"}
+      variant={isActive ? 'default' : 'outline'}
       size="sm"
       onClick={onClick}
       className="flex items-center gap-2"
@@ -117,38 +130,58 @@ export function AccessibilitySettingsPanel({ className }: AccessibilitySettingsP
           </Button>
         </div>
         <CardDescription>
-          Customize your reading and accessibility experience. These settings are saved to your device and sync across sessions.
+          Customize your reading and accessibility experience. These settings
+          are saved to your device and sync across sessions.
         </CardDescription>
       </CardHeader>
 
       <CardContent>
         {/* Quick Toggle Bar */}
         <div className="mb-6">
-          <Label className="text-sm font-medium mb-3 block">Quick Actions</Label>
+          <Label className="text-sm font-medium mb-3 block">
+            Quick Actions
+          </Label>
           <div className="flex flex-wrap gap-2">
             <QuickToggleButton
               icon={FileText}
               label="Plain Language"
               isActive={preferences.plainLanguageMode}
-              onClick={() => handleToggle('plainLanguageMode', !preferences.plainLanguageMode)}
+              onClick={() =>
+                handleToggle(
+                  'plainLanguageMode',
+                  !preferences.plainLanguageMode,
+                )
+              }
             />
             <QuickToggleButton
               icon={Type}
               label="Dyslexia Font"
               isActive={preferences.dyslexiaFriendlyFont}
-              onClick={() => handleToggle('dyslexiaFriendlyFont', !preferences.dyslexiaFriendlyFont)}
+              onClick={() =>
+                handleToggle(
+                  'dyslexiaFriendlyFont',
+                  !preferences.dyslexiaFriendlyFont,
+                )
+              }
             />
             <QuickToggleButton
               icon={Contrast}
               label="High Contrast"
               isActive={preferences.highContrast}
-              onClick={() => handleToggle('highContrast', !preferences.highContrast)}
+              onClick={() =>
+                handleToggle('highContrast', !preferences.highContrast)
+              }
             />
             <QuickToggleButton
               icon={Lightbulb}
               label="Auto Explain"
               isActive={preferences.autoExplainClauses}
-              onClick={() => handleToggle('autoExplainClauses', !preferences.autoExplainClauses)}
+              onClick={() =>
+                handleToggle(
+                  'autoExplainClauses',
+                  !preferences.autoExplainClauses,
+                )
+              }
             />
           </div>
         </div>
@@ -183,12 +216,15 @@ export function AccessibilitySettingsPanel({ className }: AccessibilitySettingsP
                 <div className="space-y-0.5">
                   <Label>Plain Language Mode</Label>
                   <p className="text-sm text-muted-foreground">
-                    Simplify legal documents with AI-powered plain English summaries
+                    Simplify legal documents with AI-powered plain English
+                    summaries
                   </p>
                 </div>
                 <Switch
                   checked={preferences.plainLanguageMode}
-                  onCheckedChange={(checked) => handleToggle('plainLanguageMode', checked)}
+                  onCheckedChange={(checked) =>
+                    handleToggle('plainLanguageMode', checked)
+                  }
                 />
               </div>
 
@@ -201,7 +237,9 @@ export function AccessibilitySettingsPanel({ className }: AccessibilitySettingsP
                 </div>
                 <Switch
                   checked={preferences.showDocumentSummary}
-                  onCheckedChange={(checked) => handleToggle('showDocumentSummary', checked)}
+                  onCheckedChange={(checked) =>
+                    handleToggle('showDocumentSummary', checked)
+                  }
                 />
               </div>
 
@@ -214,7 +252,9 @@ export function AccessibilitySettingsPanel({ className }: AccessibilitySettingsP
                 </div>
                 <Switch
                   checked={preferences.simplifyLegalJargon}
-                  onCheckedChange={(checked) => handleToggle('simplifyLegalJargon', checked)}
+                  onCheckedChange={(checked) =>
+                    handleToggle('simplifyLegalJargon', checked)
+                  }
                 />
               </div>
 
@@ -222,15 +262,23 @@ export function AccessibilitySettingsPanel({ className }: AccessibilitySettingsP
                 <Label>Reading Level</Label>
                 <Select
                   value={preferences.readingLevel}
-                  onValueChange={(value) => handleSelectChange('readingLevel', value)}
+                  onValueChange={(value) =>
+                    handleSelectChange('readingLevel', value)
+                  }
                 >
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="simple">Simple (6th grade level)</SelectItem>
-                    <SelectItem value="standard">Standard (high school level)</SelectItem>
-                    <SelectItem value="advanced">Advanced (college level)</SelectItem>
+                    <SelectItem value="simple">
+                      Simple (6th grade level)
+                    </SelectItem>
+                    <SelectItem value="standard">
+                      Standard (high school level)
+                    </SelectItem>
+                    <SelectItem value="advanced">
+                      Advanced (college level)
+                    </SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -249,7 +297,9 @@ export function AccessibilitySettingsPanel({ className }: AccessibilitySettingsP
                 </div>
                 <Switch
                   checked={preferences.dyslexiaFriendlyFont}
-                  onCheckedChange={(checked) => handleToggle('dyslexiaFriendlyFont', checked)}
+                  onCheckedChange={(checked) =>
+                    handleToggle('dyslexiaFriendlyFont', checked)
+                  }
                 />
               </div>
 
@@ -257,7 +307,9 @@ export function AccessibilitySettingsPanel({ className }: AccessibilitySettingsP
                 <Label>Font Size</Label>
                 <Select
                   value={preferences.fontSize}
-                  onValueChange={(value) => handleSelectChange('fontSize', value)}
+                  onValueChange={(value) =>
+                    handleSelectChange('fontSize', value)
+                  }
                 >
                   <SelectTrigger>
                     <SelectValue />
@@ -266,7 +318,9 @@ export function AccessibilitySettingsPanel({ className }: AccessibilitySettingsP
                     <SelectItem value="small">Small (14px)</SelectItem>
                     <SelectItem value="medium">Medium (16px)</SelectItem>
                     <SelectItem value="large">Large (18px)</SelectItem>
-                    <SelectItem value="extra-large">Extra Large (20px)</SelectItem>
+                    <SelectItem value="extra-large">
+                      Extra Large (20px)
+                    </SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -275,13 +329,17 @@ export function AccessibilitySettingsPanel({ className }: AccessibilitySettingsP
                 <Label>Line Spacing</Label>
                 <Select
                   value={preferences.lineHeight}
-                  onValueChange={(value) => handleSelectChange('lineHeight', value)}
+                  onValueChange={(value) =>
+                    handleSelectChange('lineHeight', value)
+                  }
                 >
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="comfortable">Comfortable (1.5x)</SelectItem>
+                    <SelectItem value="comfortable">
+                      Comfortable (1.5x)
+                    </SelectItem>
                     <SelectItem value="relaxed">Relaxed (1.6x)</SelectItem>
                     <SelectItem value="loose">Loose (1.8x)</SelectItem>
                   </SelectContent>
@@ -297,7 +355,9 @@ export function AccessibilitySettingsPanel({ className }: AccessibilitySettingsP
                 </div>
                 <Switch
                   checked={preferences.highContrast}
-                  onCheckedChange={(checked) => handleToggle('highContrast', checked)}
+                  onCheckedChange={(checked) =>
+                    handleToggle('highContrast', checked)
+                  }
                 />
               </div>
 
@@ -310,7 +370,9 @@ export function AccessibilitySettingsPanel({ className }: AccessibilitySettingsP
                 </div>
                 <Switch
                   checked={preferences.reduceMotion}
-                  onCheckedChange={(checked) => handleToggle('reduceMotion', checked)}
+                  onCheckedChange={(checked) =>
+                    handleToggle('reduceMotion', checked)
+                  }
                 />
               </div>
             </div>
@@ -328,7 +390,9 @@ export function AccessibilitySettingsPanel({ className }: AccessibilitySettingsP
                 </div>
                 <Switch
                   checked={preferences.showProgressIndicators}
-                  onCheckedChange={(checked) => handleToggle('showProgressIndicators', checked)}
+                  onCheckedChange={(checked) =>
+                    handleToggle('showProgressIndicators', checked)
+                  }
                 />
               </div>
 
@@ -341,7 +405,9 @@ export function AccessibilitySettingsPanel({ className }: AccessibilitySettingsP
                 </div>
                 <Switch
                   checked={preferences.breakDownComplexForms}
-                  onCheckedChange={(checked) => handleToggle('breakDownComplexForms', checked)}
+                  onCheckedChange={(checked) =>
+                    handleToggle('breakDownComplexForms', checked)
+                  }
                 />
               </div>
 
@@ -354,7 +420,9 @@ export function AccessibilitySettingsPanel({ className }: AccessibilitySettingsP
                 </div>
                 <Switch
                   checked={preferences.highlightImportantSections}
-                  onCheckedChange={(checked) => handleToggle('highlightImportantSections', checked)}
+                  onCheckedChange={(checked) =>
+                    handleToggle('highlightImportantSections', checked)
+                  }
                 />
               </div>
 
@@ -367,7 +435,9 @@ export function AccessibilitySettingsPanel({ className }: AccessibilitySettingsP
                 </div>
                 <Switch
                   checked={preferences.autoExplainClauses}
-                  onCheckedChange={(checked) => handleToggle('autoExplainClauses', checked)}
+                  onCheckedChange={(checked) =>
+                    handleToggle('autoExplainClauses', checked)
+                  }
                 />
               </div>
 
@@ -380,7 +450,9 @@ export function AccessibilitySettingsPanel({ className }: AccessibilitySettingsP
                 </div>
                 <Switch
                   checked={preferences.contextualHelp}
-                  onCheckedChange={(checked) => handleToggle('contextualHelp', checked)}
+                  onCheckedChange={(checked) =>
+                    handleToggle('contextualHelp', checked)
+                  }
                 />
               </div>
             </div>
@@ -398,7 +470,9 @@ export function AccessibilitySettingsPanel({ className }: AccessibilitySettingsP
                 </div>
                 <Switch
                   checked={preferences.keyboardShortcutsEnabled}
-                  onCheckedChange={(checked) => handleToggle('keyboardShortcutsEnabled', checked)}
+                  onCheckedChange={(checked) =>
+                    handleToggle('keyboardShortcutsEnabled', checked)
+                  }
                 />
               </div>
 
@@ -411,7 +485,9 @@ export function AccessibilitySettingsPanel({ className }: AccessibilitySettingsP
                 </div>
                 <Switch
                   checked={preferences.focusIndicatorEnhanced}
-                  onCheckedChange={(checked) => handleToggle('focusIndicatorEnhanced', checked)}
+                  onCheckedChange={(checked) =>
+                    handleToggle('focusIndicatorEnhanced', checked)
+                  }
                 />
               </div>
 
@@ -424,7 +500,9 @@ export function AccessibilitySettingsPanel({ className }: AccessibilitySettingsP
                 </div>
                 <Switch
                   checked={preferences.skipLinksVisible}
-                  onCheckedChange={(checked) => handleToggle('skipLinksVisible', checked)}
+                  onCheckedChange={(checked) =>
+                    handleToggle('skipLinksVisible', checked)
+                  }
                 />
               </div>
 
@@ -437,7 +515,9 @@ export function AccessibilitySettingsPanel({ className }: AccessibilitySettingsP
                 </div>
                 <Switch
                   checked={preferences.voiceGuidance}
-                  onCheckedChange={(checked) => handleToggle('voiceGuidance', checked)}
+                  onCheckedChange={(checked) =>
+                    handleToggle('voiceGuidance', checked)
+                  }
                 />
               </div>
 
@@ -468,8 +548,9 @@ export function AccessibilitySettingsPanel({ className }: AccessibilitySettingsP
               </span>
             </div>
             <p className="text-sm text-blue-700 dark:text-blue-200">
-              Your customized accessibility settings are improving your experience. 
-              These preferences are automatically saved and will apply across all sessions.
+              Your customized accessibility settings are improving your
+              experience. These preferences are automatically saved and will
+              apply across all sessions.
             </p>
           </div>
         )}

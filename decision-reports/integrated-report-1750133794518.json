@@ -21300,19 +21300,14 @@
             "type": "RANKING_DECLINE",
             "message": "2 keywords losing rankings",
             "action": "Content optimization needed",
-            "keywords": [
-              "florida bill of sale",
-              "new york employment contract"
-            ]
+            "keywords": ["florida bill of sale", "new york employment contract"]
           },
           {
             "priority": "MEDIUM",
             "type": "GROWTH_OPPORTUNITY",
             "message": "1 high-volume keywords can be improved",
             "action": "Focus optimization efforts",
-            "keywords": [
-              "florida bill of sale"
-            ]
+            "keywords": ["florida bill of sale"]
           }
         ]
       },

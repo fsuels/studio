@@ -10,7 +10,8 @@ export const questions: Question[] = [
     required: true,
     section: 'Principal Information',
     placeholder: 'Enter your full legal name',
-    description: 'You are the person who created the original advance directive.',
+    description:
+      'You are the person who created the original advance directive.',
   },
   {
     id: 'principalAddress',
@@ -228,9 +229,19 @@ export const questions: Question[] = [
     required: true,
     section: 'Revocation Details',
     options: [
-      { value: 'complete', label: 'Complete revocation - I want to revoke my entire advance directive' },
-      { value: 'partial', label: 'Partial revocation - I want to revoke only certain provisions' },
-      { value: 'replacement', label: 'Replacement - I am creating a new advance directive' },
+      {
+        value: 'complete',
+        label:
+          'Complete revocation - I want to revoke my entire advance directive',
+      },
+      {
+        value: 'partial',
+        label: 'Partial revocation - I want to revoke only certain provisions',
+      },
+      {
+        value: 'replacement',
+        label: 'Replacement - I am creating a new advance directive',
+      },
     ],
   },
   {
@@ -240,7 +251,8 @@ export const questions: Question[] = [
     required: true,
     section: 'Revocation Details',
     placeholder: 'Explain why you are revoking your advance directive...',
-    description: 'Provide a clear explanation for why you are revoking the directive.',
+    description:
+      'Provide a clear explanation for why you are revoking the directive.',
   },
   {
     id: 'specificProvisionsRevoked',
@@ -250,7 +262,8 @@ export const questions: Question[] = [
     section: 'Revocation Details',
     placeholder: 'Describe the specific provisions you are revoking...',
     condition: { field: 'revocationType', value: 'partial' },
-    description: 'For partial revocation, specify exactly which provisions are being revoked.',
+    description:
+      'For partial revocation, specify exactly which provisions are being revoked.',
   },
 
   // Section 6: Mental Capacity Declaration
@@ -261,7 +274,11 @@ export const questions: Question[] = [
     required: true,
     section: 'Mental Capacity',
     options: [
-      { value: 'true', label: 'I confirm that I am of sound mind and capable of making this decision' },
+      {
+        value: 'true',
+        label:
+          'I confirm that I am of sound mind and capable of making this decision',
+      },
       { value: 'false', label: 'I have concerns about my mental capacity' },
     ],
     description: 'You must be mentally capable to revoke an advance directive.',
@@ -294,7 +311,10 @@ export const questions: Question[] = [
     section: 'Agent Notification',
     options: [
       { value: 'true', label: 'Yes, I have notified my health care agent' },
-      { value: 'false', label: 'No, I have not yet notified my health care agent' },
+      {
+        value: 'false',
+        label: 'No, I have not yet notified my health care agent',
+      },
     ],
   },
   {
@@ -363,7 +383,8 @@ export const questions: Question[] = [
     required: false,
     section: 'Medical Provider Notification',
     condition: { field: 'physiciansNotified', value: 'true' },
-    description: 'List all physicians who should be notified of this revocation.',
+    description:
+      'List all physicians who should be notified of this revocation.',
     arrayConfig: {
       minItems: 1,
       maxItems: 10,
@@ -408,7 +429,10 @@ export const questions: Question[] = [
     section: 'Medical Facilities Notification',
     options: [
       { value: 'true', label: 'Yes, I need to notify medical facilities' },
-      { value: 'false', label: 'No, no medical facilities need to be notified' },
+      {
+        value: 'false',
+        label: 'No, no medical facilities need to be notified',
+      },
     ],
   },
   {
@@ -418,7 +442,8 @@ export const questions: Question[] = [
     required: false,
     section: 'Medical Facilities Notification',
     condition: { field: 'facilitiesNotified', value: 'true' },
-    description: 'List all hospitals or medical facilities that should be notified.',
+    description:
+      'List all hospitals or medical facilities that should be notified.',
     arrayConfig: {
       minItems: 1,
       maxItems: 10,
@@ -462,7 +487,10 @@ export const questions: Question[] = [
     required: true,
     section: 'Family Notification',
     options: [
-      { value: 'true', label: 'Yes, I need to notify family members or others' },
+      {
+        value: 'true',
+        label: 'Yes, I need to notify family members or others',
+      },
       { value: 'false', label: 'No, no family members need to be notified' },
     ],
   },
@@ -473,7 +501,8 @@ export const questions: Question[] = [
     required: false,
     section: 'Family Notification',
     condition: { field: 'familyNotified', value: 'true' },
-    description: 'List family members or others who should be notified of this revocation.',
+    description:
+      'List family members or others who should be notified of this revocation.',
     arrayConfig: {
       minItems: 1,
       maxItems: 10,
@@ -599,7 +628,8 @@ export const questions: Question[] = [
     label: 'Location of Copies',
     required: false,
     section: 'Document Destruction',
-    placeholder: 'Describe where copies of the original directive exist and your plan for them...',
+    placeholder:
+      'Describe where copies of the original directive exist and your plan for them...',
     description: 'List any copies that exist and how they will be handled.',
   },
 
@@ -611,7 +641,8 @@ export const questions: Question[] = [
     required: false,
     section: 'Additional Information',
     placeholder: 'Provide any additional instructions or information...',
-    description: 'Include any other relevant information about this revocation.',
+    description:
+      'Include any other relevant information about this revocation.',
   },
   {
     id: 'emergencyContact',
@@ -639,7 +670,8 @@ export const questions: Question[] = [
     required: true,
     section: 'Witnesses',
     placeholder: 'Enter first witness full name',
-    description: 'Witnesses should be disinterested parties who can verify your identity and mental capacity.',
+    description:
+      'Witnesses should be disinterested parties who can verify your identity and mental capacity.',
   },
   {
     id: 'witness1Address',
@@ -749,7 +781,8 @@ export const questions: Question[] = [
     label: 'Effective Date of Revocation',
     required: true,
     section: 'Legal Information',
-    description: 'The date when this revocation becomes effective (usually today).',
+    description:
+      'The date when this revocation becomes effective (usually today).',
   },
 
   // Section 16: Notarization

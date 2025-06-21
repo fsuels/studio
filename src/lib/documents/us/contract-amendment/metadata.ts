@@ -24,12 +24,14 @@ export const contractAmendmentMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Contract Amendment',
-      description: 'Create a formal amendment to modify existing contract terms and conditions.',
+      description:
+        'Create a formal amendment to modify existing contract terms and conditions.',
       aliases: ['contract amendment', 'contract modification', 'addendum'],
     },
     es: {
       name: 'Enmienda de Contrato',
-      description: 'Crea una enmienda formal para modificar términos y condiciones de contrato existente.',
+      description:
+        'Crea una enmienda formal para modificar términos y condiciones de contrato existente.',
       aliases: ['enmienda de contrato', 'modificación de contrato', 'adenda'],
     },
   },

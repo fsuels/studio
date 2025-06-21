@@ -59,7 +59,12 @@ export const collectionLetterQuestions: Question[] = [
       { value: 'Pre-Legal', label: 'Pre-Legal Notice' },
     ],
   },
-  { id: 'responseDeadline', label: 'Response Deadline', type: 'date', required: true },
+  {
+    id: 'responseDeadline',
+    label: 'Response Deadline',
+    type: 'date',
+    required: true,
+  },
   {
     id: 'lateFees',
     label: 'Late Fees',

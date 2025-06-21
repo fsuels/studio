@@ -6,7 +6,7 @@ export const onDraftWrite = functions.firestore
   .document('users/{uid}/documents/{docId}')
   .onWrite(async (change, ctx) => {
     const after = change.after.data();
-    if (!after?.formData) return null;             // not a draft
+    if (!after?.formData) return null; // not a draft
 
     // Skip if content already exists
     if (after.contentMarkdown) return null;
@@ -14,11 +14,8 @@ export const onDraftWrite = functions.firestore
     const markdown = await renderMarkdown(
       after.docType,
       after.formData,
-      after.locale || 'en'
+      after.locale || 'en',
     );
 
-    return change.after.ref.set(
-      { contentMarkdown: markdown },
-      { merge: true }
-    );
+    return change.after.ref.set({ contentMarkdown: markdown }, { merge: true });
   });

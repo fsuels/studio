@@ -5,13 +5,18 @@ import React from 'react';
 import Link from 'next/link';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { 
-  Star, 
-  Download, 
-  Eye, 
-  Shield, 
+import {
+  Star,
+  Download,
+  Eye,
+  Shield,
   Crown,
   DollarSign,
   Clock,
@@ -76,29 +81,35 @@ export function TemplateCard({
                 {template.category}
               </Badge>
             </div>
-            
+
             <h3 className="font-semibold text-lg leading-tight mb-1 line-clamp-2">
-              <Link 
+              <Link
                 href={`/marketplace/templates/${template.id}`}
                 className="hover:text-primary transition-colors"
               >
                 {template.name}
               </Link>
             </h3>
-            
+
             <p className="text-sm text-muted-foreground line-clamp-2 mb-3">
               {template.description}
             </p>
           </div>
-          
+
           {/* Price */}
           <div className="text-right flex-shrink-0">
             <div className="font-bold text-lg">
-              {formatPrice(template.pricing.basePrice, template.pricing.currency)}
+              {formatPrice(
+                template.pricing.basePrice,
+                template.pricing.currency,
+              )}
             </div>
             {template.pricing.discountedPrice && (
               <div className="text-xs text-muted-foreground line-through">
-                {formatPrice(template.pricing.basePrice, template.pricing.currency)}
+                {formatPrice(
+                  template.pricing.basePrice,
+                  template.pricing.currency,
+                )}
               </div>
             )}
           </div>
@@ -108,8 +119,8 @@ export function TemplateCard({
         {showCreator && (
           <div className="flex items-center gap-2">
             <Avatar className="h-6 w-6">
-              <AvatarImage 
-                src={template.creatorProfile?.avatar} 
+              <AvatarImage
+                src={template.creatorProfile?.avatar}
                 alt={template.creatorProfile?.displayName}
               />
               <AvatarFallback className="text-xs">
@@ -140,19 +151,20 @@ export function TemplateCard({
                 ({formatNumber(template.ratings.totalRatings)})
               </span>
             </div>
-            
+
             {/* Downloads */}
             <div className="flex items-center gap-1">
               <Download className="h-4 w-4" />
               <span>{formatNumber(template.stats.totalDownloads)}</span>
             </div>
           </div>
-          
+
           {/* Last Updated */}
           <div className="flex items-center gap-1 text-xs">
             <Clock className="h-3 w-3" />
             <span>
-              Updated {new Date(template.lastUpdated as any).toLocaleDateString()}
+              Updated{' '}
+              {new Date(template.lastUpdated as any).toLocaleDateString()}
             </span>
           </div>
         </div>

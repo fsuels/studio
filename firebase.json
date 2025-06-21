@@ -5,20 +5,14 @@
     "public": "out",
 
     // Ignore these files in the deploy
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
-    ],
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
 
     // Remove file extensions from URLs, no trailing slashes
     "cleanUrls": true,
     "trailingSlash": false,
 
     // Before each deploy, build (and export) your Next.js site
-    "predeploy": [
-      "npm run build"
-    ],
+    "predeploy": ["npm run build"],
 
     // Ensure all client-side routes serve index.html
     "rewrites": [

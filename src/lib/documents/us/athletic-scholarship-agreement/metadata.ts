@@ -24,12 +24,18 @@ export const athleticScholarshipAgreementMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Athletic Scholarship Agreement',
-      description: 'Agreement for athletic scholarships and student-athlete commitments.',
-      aliases: ['sports scholarship contract', 'student athlete agreement', 'athletic aid agreement'],
+      description:
+        'Agreement for athletic scholarships and student-athlete commitments.',
+      aliases: [
+        'sports scholarship contract',
+        'student athlete agreement',
+        'athletic aid agreement',
+      ],
     },
     es: {
       name: 'Acuerdo de Beca Atlética',
-      description: 'Acuerdo para becas atléticas y compromisos de estudiante-atleta.',
+      description:
+        'Acuerdo para becas atléticas y compromisos de estudiante-atleta.',
       aliases: ['contrato de beca deportiva', 'acuerdo de atleta estudiantil'],
     },
   },

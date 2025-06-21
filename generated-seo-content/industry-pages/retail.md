@@ -15,6 +15,7 @@ Retail & E-commerce businesses face unique legal challenges requiring specialize
 ### Why Retail & E-commerce Needs Specialized Legal Documents
 
 Retail & E-commerce businesses require documents that address:
+
 - Industry-specific regulations and compliance requirements
 - Common retail & e-commerce business practices and terminology
 - Risk management specific to retail & e-commerce operations
@@ -31,4 +32,4 @@ Our retail & e-commerce templates include:
 
 [Browse Retail & E-commerce Documents]
 
-*Trusted by thousands of retail & e-commerce professionals*
+_Trusted by thousands of retail & e-commerce professionals_

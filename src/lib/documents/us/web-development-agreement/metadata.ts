@@ -1,6 +1,9 @@
 import type { LegalDocument } from '@/types/documents';
 
-export const webDevelopmentAgreementMeta: Omit<LegalDocument, 'schema' | 'questions'> = {
+export const webDevelopmentAgreementMeta: Omit<
+  LegalDocument,
+  'schema' | 'questions'
+> = {
   id: 'web-development-agreement',
   jurisdiction: 'US',
   category: 'Business',
@@ -21,13 +24,21 @@ export const webDevelopmentAgreementMeta: Omit<LegalDocument, 'schema' | 'questi
       name: 'Web Development Agreement',
       description:
         'Professional agreement for web development services between developer and client.',
-      aliases: ['Website development contract', 'Web design agreement', 'Software development agreement'],
+      aliases: [
+        'Website development contract',
+        'Web design agreement',
+        'Software development agreement',
+      ],
     },
     es: {
       name: 'Acuerdo de Desarrollo Web',
       description:
         'Acuerdo profesional para servicios de desarrollo web entre desarrollador y cliente.',
-      aliases: ['Contrato desarrollo web', 'Acuerdo diseño web', 'Contrato desarrollo software'],
+      aliases: [
+        'Contrato desarrollo web',
+        'Acuerdo diseño web',
+        'Contrato desarrollo software',
+      ],
     },
   },
 };

@@ -1,7 +1,11 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';
+import {
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+} from '@/components/ui/tooltip';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { explainClause } from '@/ai/flows/explain-clause';
@@ -37,12 +41,12 @@ interface ClauseTooltipProps {
   importance?: 'low' | 'medium' | 'high';
 }
 
-function ClauseTooltip({ 
-  id, 
-  text, 
-  children, 
+function ClauseTooltip({
+  id,
+  text,
+  children,
   className,
-  importance = 'medium' 
+  importance = 'medium',
 }: ClauseTooltipProps) {
   const { preferences } = useAccessibility();
   const [content, setContent] = useState<string>('');
@@ -92,7 +96,7 @@ function ClauseTooltip({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ text }),
       });
-      
+
       if (response.ok) {
         const data = await response.json();
         if (data.success) {
@@ -122,9 +126,12 @@ function ClauseTooltip({
 
   const getImportanceColor = () => {
     switch (importance) {
-      case 'high': return 'text-red-600 dark:text-red-400';
-      case 'medium': return 'text-yellow-600 dark:text-yellow-400';
-      case 'low': return 'text-gray-600 dark:text-gray-400';
+      case 'high':
+        return 'text-red-600 dark:text-red-400';
+      case 'medium':
+        return 'text-yellow-600 dark:text-yellow-400';
+      case 'low':
+        return 'text-gray-600 dark:text-gray-400';
     }
   };
 
@@ -133,8 +140,8 @@ function ClauseTooltip({
       return (
         <span className="legal-jargon-simplified relative">
           {simplifiedText}
-          <Badge 
-            variant="secondary" 
+          <Badge
+            variant="secondary"
             className="ml-1 text-xs"
             title="This text has been simplified"
           >
@@ -143,23 +150,22 @@ function ClauseTooltip({
         </span>
       );
     }
-    
+
     if (preferences.highlightImportantSections && importance === 'high') {
-      return (
-        <span className="important-section-highlight">
-          {children}
-        </span>
-      );
+      return <span className="important-section-highlight">{children}</span>;
     }
 
     return children;
   };
 
   return (
-    <Tooltip onOpenChange={handleOpenChange} delayDuration={preferences.autoExplainClauses ? 0 : 200}>
+    <Tooltip
+      onOpenChange={handleOpenChange}
+      delayDuration={preferences.autoExplainClauses ? 0 : 200}
+    >
       <span className={`inline-flex items-start gap-1 ${className || ''}`}>
         {renderChildren()}
-        
+
         <TooltipTrigger asChild>
           <Button
             variant="ghost"
@@ -176,8 +182,8 @@ function ClauseTooltip({
             <Lightbulb className="h-3 w-3" />
           </Button>
         </TooltipTrigger>
-        
-        <TooltipContent 
+
+        <TooltipContent
           id={`tooltip-${id}`}
           className={`
             max-w-xs text-xs leading-snug
@@ -196,7 +202,7 @@ function ClauseTooltip({
             ) : content ? (
               <>
                 <div className="text-left">{content}</div>
-                
+
                 {preferences.voiceGuidance && (
                   <div className="flex items-center gap-2 pt-1 border-t border-border">
                     <Button
@@ -208,10 +214,12 @@ function ClauseTooltip({
                     >
                       <Volume2 className="h-3 w-3" />
                     </Button>
-                    <span className="text-xs text-muted-foreground">Click to hear</span>
+                    <span className="text-xs text-muted-foreground">
+                      Click to hear
+                    </span>
                   </div>
                 )}
-                
+
                 {importance === 'high' && (
                   <Badge variant="destructive" className="text-xs">
                     Important

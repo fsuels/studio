@@ -23,10 +23,10 @@ interface RoleSelectorProps {
   size?: 'sm' | 'md' | 'lg';
 }
 
-const RoleSelector: React.FC<RoleSelectorProps> = ({ 
-  onRoleChange, 
+const RoleSelector: React.FC<RoleSelectorProps> = ({
+  onRoleChange,
   className,
-  size = 'md' 
+  size = 'md',
 }) => {
   const { t } = useTranslation('common');
   const [selectedRole, setSelectedRole] = React.useState<string | null>(null);
@@ -46,40 +46,42 @@ const RoleSelector: React.FC<RoleSelectorProps> = ({
   }, []);
 
   // Save role to localStorage and notify parent
-  const handleRoleSelect = React.useCallback((role: string | null) => {
-    setSelectedRole(role);
-    
-    try {
-      if (role) {
-        localStorage.setItem('userRole', role);
-      } else {
-        localStorage.removeItem('userRole');
-      }
-    } catch (error) {
-      console.warn('Could not save role to localStorage');
-    }
+  const handleRoleSelect = React.useCallback(
+    (role: string | null) => {
+      setSelectedRole(role);
 
-    onRoleChange?.(role);
-  }, [onRoleChange]);
+      try {
+        if (role) {
+          localStorage.setItem('userRole', role);
+        } else {
+          localStorage.removeItem('userRole');
+        }
+      } catch (error) {
+        console.warn('Could not save role to localStorage');
+      }
+
+      onRoleChange?.(role);
+    },
+    [onRoleChange],
+  );
 
   // Get sorted roles by popularity (based on quickDocs count)
   const sortedRoles = React.useMemo(() => {
-    return Object.entries(taxonomy.roles)
-      .sort(([,a], [,b]) => {
-        const aQuickDocs = Object.keys(a.quickDocs || {}).length;
-        const bQuickDocs = Object.keys(b.quickDocs || {}).length;
-        return bQuickDocs - aQuickDocs; // Sort by number of quick docs descending
-      });
+    return Object.entries(taxonomy.roles).sort(([, a], [, b]) => {
+      const aQuickDocs = Object.keys(a.quickDocs || {}).length;
+      const bQuickDocs = Object.keys(b.quickDocs || {}).length;
+      return bQuickDocs - aQuickDocs; // Sort by number of quick docs descending
+    });
   }, []);
 
   const selectedRoleData = selectedRole ? taxonomy.roles[selectedRole] : null;
 
   if (!mounted) {
     return (
-      <Button 
-        variant="ghost" 
+      <Button
+        variant="ghost"
         size={size}
-        className={cn("opacity-50", className)}
+        className={cn('opacity-50', className)}
         disabled
       >
         <Users className="h-4 w-4" />
@@ -90,41 +92,44 @@ const RoleSelector: React.FC<RoleSelectorProps> = ({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button 
-          variant="outline" 
+        <Button
+          variant="outline"
           size={size}
           className={cn(
-            "gap-2 max-w-[200px]",
-            selectedRole && "border-primary bg-primary/5",
-            className
+            'gap-2 max-w-[200px]',
+            selectedRole && 'border-primary bg-primary/5',
+            className,
           )}
         >
           <Users className="h-4 w-4" />
           <span className="truncate">
-            {selectedRoleData 
-              ? selectedRoleData.name 
-              : t('roleSelector.selectRole', { defaultValue: 'Select Role' })
-            }
+            {selectedRoleData
+              ? selectedRoleData.name
+              : t('roleSelector.selectRole', { defaultValue: 'Select Role' })}
           </span>
           <ChevronDown className="h-3 w-3 opacity-50" />
         </Button>
       </DropdownMenuTrigger>
-      
+
       <DropdownMenuContent align="end" className="w-56">
         <DropdownMenuLabel className="text-xs font-medium text-muted-foreground">
-          {t('roleSelector.yourRole', { defaultValue: 'What best describes you?' })}
+          {t('roleSelector.yourRole', {
+            defaultValue: 'What best describes you?',
+          })}
         </DropdownMenuLabel>
-        
+
         <DropdownMenuSeparator />
-        
+
         {/* Clear Selection */}
         {selectedRole && (
           <>
-            <DropdownMenuItem 
+            <DropdownMenuItem
               onClick={() => handleRoleSelect(null)}
               className="text-muted-foreground"
             >
-              {t('roleSelector.clearSelection', { defaultValue: 'Clear selection' })}
+              {t('roleSelector.clearSelection', {
+                defaultValue: 'Clear selection',
+              })}
             </DropdownMenuItem>
             <DropdownMenuSeparator />
           </>
@@ -134,14 +139,14 @@ const RoleSelector: React.FC<RoleSelectorProps> = ({
         {sortedRoles.map(([roleKey, role]) => {
           const isSelected = selectedRole === roleKey;
           const quickDocsCount = Object.keys(role.quickDocs || {}).length;
-          
+
           return (
             <DropdownMenuItem
               key={roleKey}
               onClick={() => handleRoleSelect(roleKey)}
               className={cn(
-                "flex items-center justify-between",
-                isSelected && "bg-primary/10"
+                'flex items-center justify-between',
+                isSelected && 'bg-primary/10',
               )}
             >
               <div className="flex flex-col gap-0.5">
@@ -155,7 +160,7 @@ const RoleSelector: React.FC<RoleSelectorProps> = ({
                   </span>
                 )}
               </div>
-              
+
               {quickDocsCount > 0 && (
                 <Badge variant="secondary" className="text-xs">
                   {quickDocsCount}

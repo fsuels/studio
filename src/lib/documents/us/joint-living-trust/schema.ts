@@ -11,16 +11,24 @@ export const schema = z.object({
   trustorTwoAddress: z.string().min(1, 'Trustor two address is required'),
   initialTrustees: z.string().min(1, 'Initial trustees are required'),
   successorTrustee: z.string().min(1, 'Successor trustee is required'),
-  successorTrusteeAddress: z.string().min(1, 'Successor trustee address is required'),
+  successorTrusteeAddress: z
+    .string()
+    .min(1, 'Successor trustee address is required'),
   backupSuccessorTrustee: z.string().optional(),
   backupSuccessorTrusteeAddress: z.string().optional(),
   trustPurpose: z.string().min(1, 'Trust purpose is required'),
   jointAssets: z.string().min(1, 'Joint assets description is required'),
   separateAssetsSpouseOne: z.string().optional(),
   separateAssetsSpouseTwo: z.string().optional(),
-  distributionDuringLifetime: z.string().min(1, 'Lifetime distribution terms are required'),
-  distributionUponFirstDeath: z.string().min(1, 'Distribution upon first death is required'),
-  distributionUponSecondDeath: z.string().min(1, 'Distribution upon second death is required'),
+  distributionDuringLifetime: z
+    .string()
+    .min(1, 'Lifetime distribution terms are required'),
+  distributionUponFirstDeath: z
+    .string()
+    .min(1, 'Distribution upon first death is required'),
+  distributionUponSecondDeath: z
+    .string()
+    .min(1, 'Distribution upon second death is required'),
   primaryBeneficiaries: z.string().min(1, 'Primary beneficiaries are required'),
   contingentBeneficiaries: z.string().optional(),
   specialProvisions: z.string().optional(),

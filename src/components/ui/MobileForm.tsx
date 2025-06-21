@@ -1,15 +1,15 @@
-'use client'
+'use client';
 
-import React from 'react'
-import { cn } from '@/lib/utils'
-import { TouchInput, TouchSelect, TouchButton } from './TouchInteractions'
-import { Skeleton } from './skeleton'
+import React from 'react';
+import { cn } from '@/lib/utils';
+import { TouchInput, TouchSelect, TouchButton } from './TouchInteractions';
+import { Skeleton } from './skeleton';
 
 // Mobile-optimized form container
 interface MobileFormProps {
-  children: React.ReactNode
-  className?: string
-  onSubmit?: (e: React.FormEvent) => void
+  children: React.ReactNode;
+  className?: string;
+  onSubmit?: (e: React.FormEvent) => void;
 }
 
 export function MobileForm({ children, className, onSubmit }: MobileFormProps) {
@@ -18,24 +18,29 @@ export function MobileForm({ children, className, onSubmit }: MobileFormProps) {
       className={cn(
         'space-y-6 px-4 pb-6', // Extra padding for mobile
         'focus-within:pb-20', // Extra space when keyboard is open
-        className
+        className,
       )}
       onSubmit={onSubmit}
     >
       {children}
     </form>
-  )
+  );
 }
 
 // Form section with proper spacing and visual separation
 interface FormSectionProps {
-  title?: string
-  description?: string
-  children: React.ReactNode
-  className?: string
+  title?: string;
+  description?: string;
+  children: React.ReactNode;
+  className?: string;
 }
 
-export function FormSection({ title, description, children, className }: FormSectionProps) {
+export function FormSection({
+  title,
+  description,
+  children,
+  className,
+}: FormSectionProps) {
   return (
     <div className={cn('space-y-4', className)}>
       {(title || description) && (
@@ -48,37 +53,42 @@ export function FormSection({ title, description, children, className }: FormSec
           )}
         </div>
       )}
-      <div className="space-y-4">
-        {children}
-      </div>
+      <div className="space-y-4">{children}</div>
     </div>
-  )
+  );
 }
 
 // Field group for related inputs
 interface FieldGroupProps {
-  children: React.ReactNode
-  className?: string
-  columns?: 1 | 2
+  children: React.ReactNode;
+  className?: string;
+  columns?: 1 | 2;
 }
 
-export function FieldGroup({ children, className, columns = 1 }: FieldGroupProps) {
+export function FieldGroup({
+  children,
+  className,
+  columns = 1,
+}: FieldGroupProps) {
   return (
-    <div className={cn(
-      'space-y-4',
-      columns === 2 && 'sm:grid sm:grid-cols-2 sm:gap-4 sm:space-y-0',
-      className
-    )}>
+    <div
+      className={cn(
+        'space-y-4',
+        columns === 2 && 'sm:grid sm:grid-cols-2 sm:gap-4 sm:space-y-0',
+        className,
+      )}
+    >
       {children}
     </div>
-  )
+  );
 }
 
 // Mobile-optimized textarea with auto-resize
-interface MobileTextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
-  label?: string
-  error?: string
-  autoResize?: boolean
+interface MobileTextareaProps
+  extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
+  label?: string;
+  error?: string;
+  autoResize?: boolean;
 }
 
 export function MobileTextarea({
@@ -88,20 +98,20 @@ export function MobileTextarea({
   className,
   ...props
 }: MobileTextareaProps) {
-  const textareaRef = React.useRef<HTMLTextAreaElement>(null)
+  const textareaRef = React.useRef<HTMLTextAreaElement>(null);
 
   const adjustHeight = React.useCallback(() => {
     if (autoResize && textareaRef.current) {
-      textareaRef.current.style.height = 'auto'
-      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`
+      textareaRef.current.style.height = 'auto';
+      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
     }
-  }, [autoResize])
+  }, [autoResize]);
 
   React.useEffect(() => {
     if (autoResize) {
-      adjustHeight()
+      adjustHeight();
     }
-  }, [adjustHeight, props.value])
+  }, [adjustHeight, props.value]);
 
   return (
     <div className="space-y-2">
@@ -119,27 +129,25 @@ export function MobileTextarea({
           'disabled:opacity-50 disabled:cursor-not-allowed',
           'text-base resize-none', // Prevent zoom on iOS, disable manual resize if auto-resize
           error && 'border-destructive focus:ring-destructive',
-          className
+          className,
         )}
         onInput={adjustHeight}
         {...props}
       />
-      {error && (
-        <p className="text-sm text-destructive">{error}</p>
-      )}
+      {error && <p className="text-sm text-destructive">{error}</p>}
     </div>
-  )
+  );
 }
 
 // Mobile checkbox with larger touch target
 interface MobileCheckboxProps {
-  id: string
-  label: string
-  checked?: boolean
-  onChange?: (checked: boolean) => void
-  disabled?: boolean
-  error?: string
-  className?: string
+  id: string;
+  label: string;
+  checked?: boolean;
+  onChange?: (checked: boolean) => void;
+  disabled?: boolean;
+  error?: string;
+  className?: string;
 }
 
 export function MobileCheckbox({
@@ -149,7 +157,7 @@ export function MobileCheckbox({
   onChange,
   disabled = false,
   error,
-  className
+  className,
 }: MobileCheckboxProps) {
   return (
     <div className={cn('space-y-2', className)}>
@@ -157,7 +165,7 @@ export function MobileCheckbox({
         htmlFor={id}
         className={cn(
           'flex items-start space-x-3 cursor-pointer min-h-[44px] py-2',
-          disabled && 'cursor-not-allowed opacity-50'
+          disabled && 'cursor-not-allowed opacity-50',
         )}
       >
         <div className="relative flex-shrink-0 mt-1">
@@ -169,15 +177,17 @@ export function MobileCheckbox({
             disabled={disabled}
             className="sr-only"
           />
-          <div className={cn(
-            'w-5 h-5 rounded border-2 transition-all duration-200',
-            'flex items-center justify-center',
-            checked 
-              ? 'bg-primary border-primary' 
-              : 'bg-background border-border hover:border-primary',
-            error && 'border-destructive',
-            disabled && 'opacity-50'
-          )}>
+          <div
+            className={cn(
+              'w-5 h-5 rounded border-2 transition-all duration-200',
+              'flex items-center justify-center',
+              checked
+                ? 'bg-primary border-primary'
+                : 'bg-background border-border hover:border-primary',
+              error && 'border-destructive',
+              disabled && 'opacity-50',
+            )}
+          >
             {checked && (
               <svg
                 className="w-3 h-3 text-primary-foreground"
@@ -194,37 +204,37 @@ export function MobileCheckbox({
           </div>
         </div>
         <div className="flex-1 text-sm leading-6">
-          <span className={cn(
-            'font-medium text-foreground',
-            error && 'text-destructive'
-          )}>
+          <span
+            className={cn(
+              'font-medium text-foreground',
+              error && 'text-destructive',
+            )}
+          >
             {label}
           </span>
         </div>
       </label>
-      {error && (
-        <p className="text-sm text-destructive pl-8">{error}</p>
-      )}
+      {error && <p className="text-sm text-destructive pl-8">{error}</p>}
     </div>
-  )
+  );
 }
 
 // Mobile radio group with proper spacing
 interface RadioOption {
-  value: string
-  label: string
-  description?: string
+  value: string;
+  label: string;
+  description?: string;
 }
 
 interface MobileRadioGroupProps {
-  name: string
-  options: RadioOption[]
-  value?: string
-  onChange?: (value: string) => void
-  label?: string
-  error?: string
-  disabled?: boolean
-  className?: string
+  name: string;
+  options: RadioOption[];
+  value?: string;
+  onChange?: (value: string) => void;
+  label?: string;
+  error?: string;
+  disabled?: boolean;
+  className?: string;
 }
 
 export function MobileRadioGroup({
@@ -235,7 +245,7 @@ export function MobileRadioGroup({
   label,
   error,
   disabled = false,
-  className
+  className,
 }: MobileRadioGroupProps) {
   return (
     <div className={cn('space-y-3', className)}>
@@ -253,7 +263,7 @@ export function MobileRadioGroup({
               'border border-border rounded-md px-3',
               'transition-colors duration-200',
               value === option.value && 'border-primary bg-primary/5',
-              disabled && 'cursor-not-allowed opacity-50'
+              disabled && 'cursor-not-allowed opacity-50',
             )}
           >
             <div className="relative flex-shrink-0 mt-1">
@@ -266,14 +276,14 @@ export function MobileRadioGroup({
                 disabled={disabled}
                 className="sr-only"
               />
-              <div className={cn(
-                'w-4 h-4 rounded-full border-2 transition-all duration-200',
-                'flex items-center justify-center',
-                value === option.value
-                  ? 'border-primary' 
-                  : 'border-border',
-                error && 'border-destructive'
-              )}>
+              <div
+                className={cn(
+                  'w-4 h-4 rounded-full border-2 transition-all duration-200',
+                  'flex items-center justify-center',
+                  value === option.value ? 'border-primary' : 'border-border',
+                  error && 'border-destructive',
+                )}
+              >
                 {value === option.value && (
                   <div className="w-2 h-2 rounded-full bg-primary" />
                 )}
@@ -292,24 +302,22 @@ export function MobileRadioGroup({
           </label>
         ))}
       </div>
-      {error && (
-        <p className="text-sm text-destructive">{error}</p>
-      )}
+      {error && <p className="text-sm text-destructive">{error}</p>}
     </div>
-  )
+  );
 }
 
 // Mobile number input with increment/decrement buttons
 interface MobileNumberInputProps {
-  label?: string
-  value?: number
-  onChange?: (value: number) => void
-  min?: number
-  max?: number
-  step?: number
-  error?: string
-  disabled?: boolean
-  className?: string
+  label?: string;
+  value?: number;
+  onChange?: (value: number) => void;
+  min?: number;
+  max?: number;
+  step?: number;
+  error?: string;
+  disabled?: boolean;
+  className?: string;
 }
 
 export function MobileNumberInput({
@@ -321,28 +329,31 @@ export function MobileNumberInput({
   step = 1,
   error,
   disabled = false,
-  className
+  className,
 }: MobileNumberInputProps) {
   const increment = () => {
-    const newValue = value + step
+    const newValue = value + step;
     if (max === undefined || newValue <= max) {
-      onChange?.(newValue)
+      onChange?.(newValue);
     }
-  }
+  };
 
   const decrement = () => {
-    const newValue = value - step
+    const newValue = value - step;
     if (min === undefined || newValue >= min) {
-      onChange?.(newValue)
+      onChange?.(newValue);
     }
-  }
+  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = parseFloat(e.target.value) || 0
-    if ((min === undefined || newValue >= min) && (max === undefined || newValue <= max)) {
-      onChange?.(newValue)
+    const newValue = parseFloat(e.target.value) || 0;
+    if (
+      (min === undefined || newValue >= min) &&
+      (max === undefined || newValue <= max)
+    ) {
+      onChange?.(newValue);
     }
-  }
+  };
 
   return (
     <div className={cn('space-y-2', className)}>
@@ -375,7 +386,7 @@ export function MobileNumberInput({
             'focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent',
             'disabled:opacity-50 disabled:cursor-not-allowed',
             'text-base',
-            error && 'border-destructive focus:ring-destructive'
+            error && 'border-destructive focus:ring-destructive',
           )}
         />
         <TouchButton
@@ -388,11 +399,9 @@ export function MobileNumberInput({
           +
         </TouchButton>
       </div>
-      {error && (
-        <p className="text-sm text-destructive">{error}</p>
-      )}
+      {error && <p className="text-sm text-destructive">{error}</p>}
     </div>
-  )
+  );
 }
 
 // Form loading skeleton
@@ -413,5 +422,5 @@ export function MobileFormSkeleton() {
       </div>
       <Skeleton className="h-12 w-full" />
     </div>
-  )
+  );
 }

@@ -1,14 +1,14 @@
 // A/B Testing & Experimentation System for 123LegalDoc
 // Complete experimentation platform with statistical analysis and Firestore integration
 
-export { 
+export {
   experimentEngine,
   useExperiment,
   type Experiment,
   type ExperimentVariant,
   type ExperimentResults,
   type ExperimentEvent,
-  type MetricResults
+  type MetricResults,
 } from './experiment-engine';
 
 export {
@@ -17,7 +17,7 @@ export {
   useFunnelTrackingWithExperiments,
   useExperimentRecommendations,
   type ExperimentAwareFeatureContext,
-  type ExperimentAwareFunnelSession
+  type ExperimentAwareFunnelSession,
 } from './integration';
 
 export {
@@ -27,7 +27,7 @@ export {
   getCurrentUserId,
   generateSessionId,
   createExperimentUserContext,
-  type ExperimentUserContext
+  type ExperimentUserContext,
 } from './auth-integration';
 
 export { ExperimentDashboard } from '@/components/admin/ExperimentDashboard';

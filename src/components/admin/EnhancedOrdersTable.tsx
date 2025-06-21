@@ -7,13 +7,13 @@ import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { 
-  Table, 
-  TableBody, 
-  TableCell, 
-  TableHead, 
-  TableHeader, 
-  TableRow 
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
 } from '@/components/ui/table';
 import {
   Select,
@@ -28,10 +28,10 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { 
-  Search, 
-  Filter, 
-  ArrowUpDown, 
+import {
+  Search,
+  Filter,
+  ArrowUpDown,
   MoreHorizontal,
   Eye,
   AlertTriangle,
@@ -68,21 +68,25 @@ interface OptimisticUpdate {
   timestamp: number;
 }
 
-export default function EnhancedOrdersTable({ className }: EnhancedOrdersTableProps) {
+export default function EnhancedOrdersTable({
+  className,
+}: EnhancedOrdersTableProps) {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [summary, setSummary] = useState<any>(null);
-  const [optimisticUpdates, setOptimisticUpdates] = useState<OptimisticUpdate[]>([]);
+  const [optimisticUpdates, setOptimisticUpdates] = useState<
+    OptimisticUpdate[]
+  >([]);
   const { toast } = useToast();
-  
+
   // Filters and search
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
   const [riskFilter, setRiskFilter] = useState('');
   const [dateFrom, setDateFrom] = useState('');
   const [dateTo, setDateTo] = useState('');
-  
+
   // Pagination and sorting
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -95,7 +99,16 @@ export default function EnhancedOrdersTable({ className }: EnhancedOrdersTablePr
 
   useEffect(() => {
     fetchOrders();
-  }, [page, search, statusFilter, riskFilter, dateFrom, dateTo, sortBy, sortOrder]);
+  }, [
+    page,
+    search,
+    statusFilter,
+    riskFilter,
+    dateFrom,
+    dateTo,
+    sortBy,
+    sortOrder,
+  ]);
 
   const fetchOrders = async () => {
     try {
@@ -111,7 +124,7 @@ export default function EnhancedOrdersTable({ className }: EnhancedOrdersTablePr
         dateFrom,
         dateTo,
         sortBy,
-        sortOrder
+        sortOrder,
       });
 
       const response = await fetch(`/api/admin/orders?${params}`);
@@ -133,31 +146,37 @@ export default function EnhancedOrdersTable({ className }: EnhancedOrdersTablePr
   };
 
   // Optimistic update helper
-  const addOptimisticUpdate = (orderId: string, type: OptimisticUpdate['type']) => {
+  const addOptimisticUpdate = (
+    orderId: string,
+    type: OptimisticUpdate['type'],
+  ) => {
     const update: OptimisticUpdate = {
       orderId,
       type,
-      timestamp: Date.now()
+      timestamp: Date.now(),
     };
-    
-    setOptimisticUpdates(prev => [...prev, update]);
-    
+
+    setOptimisticUpdates((prev) => [...prev, update]);
+
     // Remove after 5 seconds
     setTimeout(() => {
-      setOptimisticUpdates(prev => prev.filter(u => u !== update));
+      setOptimisticUpdates((prev) => prev.filter((u) => u !== update));
     }, 5000);
   };
 
   // Check if order has pending optimistic update
-  const hasPendingUpdate = (orderId: string, type?: OptimisticUpdate['type']) => {
-    return optimisticUpdates.some(update => 
-      update.orderId === orderId && (!type || update.type === type)
+  const hasPendingUpdate = (
+    orderId: string,
+    type?: OptimisticUpdate['type'],
+  ) => {
+    return optimisticUpdates.some(
+      (update) => update.orderId === orderId && (!type || update.type === type),
     );
   };
 
   // Set loading state for specific action
   const setActionLoading = (key: string, loading: boolean) => {
-    setActionStates(prev => ({ ...prev, [key]: loading }));
+    setActionStates((prev) => ({ ...prev, [key]: loading }));
   };
 
   // Quick actions
@@ -176,22 +195,24 @@ export default function EnhancedOrdersTable({ className }: EnhancedOrdersTablePr
           amount: order.payment.amount,
           reason: 'customer_request',
           agentId: 'current_admin',
-          agentName: 'Admin User'
-        })
+          agentName: 'Admin User',
+        }),
       });
 
       const data = await response.json();
-      
+
       if (data.success) {
         toast({
           title: 'Refund Processed',
           description: `Refund of ${formatCurrency(order.payment.amount)} initiated for order ${order.orderNumber}`,
         });
-        
+
         // Update order status optimistically
-        setOrders(prev => prev.map(o => 
-          o.id === order.id ? { ...o, status: 'refunded' } : o
-        ));
+        setOrders((prev) =>
+          prev.map((o) =>
+            o.id === order.id ? { ...o, status: 'refunded' } : o,
+          ),
+        );
       } else {
         throw new Error(data.error);
       }
@@ -199,7 +220,7 @@ export default function EnhancedOrdersTable({ className }: EnhancedOrdersTablePr
       toast({
         title: 'Refund Failed',
         description: error.message,
-        variant: 'destructive'
+        variant: 'destructive',
       });
     } finally {
       setActionLoading(actionKey, false);
@@ -213,8 +234,8 @@ export default function EnhancedOrdersTable({ className }: EnhancedOrdersTablePr
 
     try {
       // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
       toast({
         title: 'Email Sent',
         description: `Confirmation email resent to ${order.customer.email}`,
@@ -223,7 +244,7 @@ export default function EnhancedOrdersTable({ className }: EnhancedOrdersTablePr
       toast({
         title: 'Email Failed',
         description: 'Failed to resend confirmation email',
-        variant: 'destructive'
+        variant: 'destructive',
       });
     } finally {
       setActionLoading(actionKey, false);
@@ -237,27 +258,29 @@ export default function EnhancedOrdersTable({ className }: EnhancedOrdersTablePr
 
     try {
       // Update order status optimistically
-      setOrders(prev => prev.map(o => 
-        o.id === order.id ? { ...o, status: newStatus } : o
-      ));
+      setOrders((prev) =>
+        prev.map((o) => (o.id === order.id ? { ...o, status: newStatus } : o)),
+      );
 
       // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 800));
-      
+      await new Promise((resolve) => setTimeout(resolve, 800));
+
       toast({
         title: 'Status Updated',
         description: `Order ${order.orderNumber} status changed to ${newStatus}`,
       });
     } catch (error) {
       // Revert optimistic update
-      setOrders(prev => prev.map(o => 
-        o.id === order.id ? { ...o, status: order.status } : o
-      ));
-      
+      setOrders((prev) =>
+        prev.map((o) =>
+          o.id === order.id ? { ...o, status: order.status } : o,
+        ),
+      );
+
       toast({
         title: 'Update Failed',
         description: 'Failed to update order status',
-        variant: 'destructive'
+        variant: 'destructive',
       });
     } finally {
       setActionLoading(actionKey, false);
@@ -283,28 +306,33 @@ export default function EnhancedOrdersTable({ className }: EnhancedOrdersTablePr
 
   const getStatusBadge = (status: string, orderId: string) => {
     const isUpdating = hasPendingUpdate(orderId, 'status_change');
-    
+
     const variants = {
       completed: 'bg-green-100 text-green-800 border-green-200',
       processing: 'bg-blue-100 text-blue-800 border-blue-200',
       pending: 'bg-yellow-100 text-yellow-800 border-yellow-200',
       cancelled: 'bg-gray-100 text-gray-800 border-gray-200',
-      refunded: 'bg-red-100 text-red-800 border-red-200'
+      refunded: 'bg-red-100 text-red-800 border-red-200',
     };
-    
+
     return (
       <div className="flex items-center gap-2">
-        <Badge variant="outline" className={variants[status as keyof typeof variants] || 'bg-gray-100'}>
+        <Badge
+          variant="outline"
+          className={variants[status as keyof typeof variants] || 'bg-gray-100'}
+        >
           {status.charAt(0).toUpperCase() + status.slice(1)}
         </Badge>
-        {isUpdating && <Loader2 className="h-3 w-3 animate-spin text-blue-600" />}
+        {isUpdating && (
+          <Loader2 className="h-3 w-3 animate-spin text-blue-600" />
+        )}
       </div>
     );
   };
 
   const getFraudBadge = (fraudAnalysis: any) => {
     const { recommendation, score, distanceAlert } = fraudAnalysis;
-    
+
     if (recommendation === 'decline' || score >= 800) {
       return (
         <Badge variant="destructive" className="gap-1">
@@ -313,27 +341,36 @@ export default function EnhancedOrdersTable({ className }: EnhancedOrdersTablePr
         </Badge>
       );
     }
-    
+
     if (score >= 600) {
       return (
-        <Badge variant="destructive" className="gap-1 bg-orange-100 text-orange-700 border-orange-300">
+        <Badge
+          variant="destructive"
+          className="gap-1 bg-orange-100 text-orange-700 border-orange-300"
+        >
           <AlertTriangle className="h-3 w-3" />
           High Risk
         </Badge>
       );
     }
-    
+
     if (recommendation === 'review' || score >= 400 || distanceAlert) {
       return (
-        <Badge variant="outline" className="gap-1 text-amber-600 border-amber-200 bg-amber-50">
+        <Badge
+          variant="outline"
+          className="gap-1 text-amber-600 border-amber-200 bg-amber-50"
+        >
           <AlertTriangle className="h-3 w-3" />
           Medium Risk
         </Badge>
       );
     }
-    
+
     return (
-      <Badge variant="outline" className="gap-1 text-green-600 border-green-200 bg-green-50">
+      <Badge
+        variant="outline"
+        className="gap-1 text-green-600 border-green-200 bg-green-50"
+      >
         <CheckCircle className="h-3 w-3" />
         Low Risk
       </Badge>
@@ -353,7 +390,7 @@ export default function EnhancedOrdersTable({ className }: EnhancedOrdersTablePr
       day: 'numeric',
       year: 'numeric',
       hour: '2-digit',
-      minute: '2-digit'
+      minute: '2-digit',
     });
   };
 
@@ -371,8 +408,12 @@ export default function EnhancedOrdersTable({ className }: EnhancedOrdersTablePr
               <CardContent className="p-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-muted-foreground">Total Revenue</p>
-                    <p className="text-2xl font-bold">{formatCurrency(summary.totalRevenue)}</p>
+                    <p className="text-sm font-medium text-muted-foreground">
+                      Total Revenue
+                    </p>
+                    <p className="text-2xl font-bold">
+                      {formatCurrency(summary.totalRevenue)}
+                    </p>
                     <p className="text-xs text-green-600 flex items-center gap-1 mt-1">
                       <TrendingUp className="h-3 w-3" />
                       +12.5% from last week
@@ -382,13 +423,17 @@ export default function EnhancedOrdersTable({ className }: EnhancedOrdersTablePr
                 </div>
               </CardContent>
             </Card>
-            
+
             <Card className="border-l-4 border-l-blue-500">
               <CardContent className="p-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-muted-foreground">Total Orders</p>
-                    <p className="text-2xl font-bold">{summary.totalOrders.toLocaleString()}</p>
+                    <p className="text-sm font-medium text-muted-foreground">
+                      Total Orders
+                    </p>
+                    <p className="text-2xl font-bold">
+                      {summary.totalOrders.toLocaleString()}
+                    </p>
                     <p className="text-xs text-blue-600 flex items-center gap-1 mt-1">
                       <TrendingUp className="h-3 w-3" />
                       +8.2% from last week
@@ -398,13 +443,17 @@ export default function EnhancedOrdersTable({ className }: EnhancedOrdersTablePr
                 </div>
               </CardContent>
             </Card>
-            
+
             <Card className="border-l-4 border-l-purple-500">
               <CardContent className="p-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-muted-foreground">Avg Order Value</p>
-                    <p className="text-2xl font-bold">{formatCurrency(summary.averageOrderValue)}</p>
+                    <p className="text-sm font-medium text-muted-foreground">
+                      Avg Order Value
+                    </p>
+                    <p className="text-2xl font-bold">
+                      {formatCurrency(summary.averageOrderValue)}
+                    </p>
                     <p className="text-xs text-purple-600 flex items-center gap-1 mt-1">
                       <TrendingUp className="h-3 w-3" />
                       +3.1% from last week
@@ -414,13 +463,17 @@ export default function EnhancedOrdersTable({ className }: EnhancedOrdersTablePr
                 </div>
               </CardContent>
             </Card>
-            
+
             <Card className="border-l-4 border-l-red-500">
               <CardContent className="p-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-muted-foreground">Fraud Alerts</p>
-                    <p className="text-2xl font-bold text-red-600">{summary.fraudAlerts}</p>
+                    <p className="text-sm font-medium text-muted-foreground">
+                      Fraud Alerts
+                    </p>
+                    <p className="text-2xl font-bold text-red-600">
+                      {summary.fraudAlerts}
+                    </p>
                     <p className="text-xs text-red-600 flex items-center gap-1 mt-1">
                       <AlertTriangle className="h-3 w-3" />
                       Requires attention
@@ -439,8 +492,15 @@ export default function EnhancedOrdersTable({ className }: EnhancedOrdersTablePr
             <CardTitle className="flex items-center justify-between">
               <span>Orders Management</span>
               <div className="flex items-center gap-2">
-                <Button variant="outline" size="sm" onClick={fetchOrders} disabled={loading}>
-                  <RefreshCw className={`h-4 w-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={fetchOrders}
+                  disabled={loading}
+                >
+                  <RefreshCw
+                    className={`h-4 w-4 mr-2 ${loading ? 'animate-spin' : ''}`}
+                  />
                   Refresh
                 </Button>
                 <Button variant="outline" size="sm">
@@ -463,7 +523,7 @@ export default function EnhancedOrdersTable({ className }: EnhancedOrdersTablePr
                   />
                 </div>
               </div>
-              
+
               <Select value={statusFilter} onValueChange={setStatusFilter}>
                 <SelectTrigger className="w-40">
                   <SelectValue placeholder="Status" />
@@ -477,7 +537,7 @@ export default function EnhancedOrdersTable({ className }: EnhancedOrdersTablePr
                   <SelectItem value="refunded">Refunded</SelectItem>
                 </SelectContent>
               </Select>
-              
+
               <Select value={riskFilter} onValueChange={setRiskFilter}>
                 <SelectTrigger className="w-40">
                   <SelectValue placeholder="Risk Level" />
@@ -504,20 +564,32 @@ export default function EnhancedOrdersTable({ className }: EnhancedOrdersTablePr
                 <TableHeader>
                   <TableRow>
                     <TableHead>
-                      <Button variant="ghost" size="sm" onClick={() => handleSort('orderNumber')}>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => handleSort('orderNumber')}
+                      >
                         Order
                         <ArrowUpDown className="ml-2 h-4 w-4" />
                       </Button>
                     </TableHead>
                     <TableHead>
-                      <Button variant="ghost" size="sm" onClick={() => handleSort('customerName')}>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => handleSort('customerName')}
+                      >
                         Customer
                         <ArrowUpDown className="ml-2 h-4 w-4" />
                       </Button>
                     </TableHead>
                     <TableHead>Document</TableHead>
                     <TableHead>
-                      <Button variant="ghost" size="sm" onClick={() => handleSort('amount')}>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => handleSort('amount')}
+                      >
                         Amount
                         <ArrowUpDown className="ml-2 h-4 w-4" />
                       </Button>
@@ -526,7 +598,11 @@ export default function EnhancedOrdersTable({ className }: EnhancedOrdersTablePr
                     <TableHead>Fraud Risk</TableHead>
                     <TableHead>Location</TableHead>
                     <TableHead>
-                      <Button variant="ghost" size="sm" onClick={() => handleSort('createdAt')}>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => handleSort('createdAt')}
+                      >
                         Date
                         <ArrowUpDown className="ml-2 h-4 w-4" />
                       </Button>
@@ -536,8 +612,8 @@ export default function EnhancedOrdersTable({ className }: EnhancedOrdersTablePr
                 </TableHeader>
                 <TableBody>
                   {orders.map((order) => (
-                    <TableRow 
-                      key={order.id} 
+                    <TableRow
+                      key={order.id}
                       className={`hover:bg-muted/50 transition-colors ${
                         hasPendingUpdate(order.id) ? 'bg-blue-50/50' : ''
                       }`}
@@ -545,16 +621,22 @@ export default function EnhancedOrdersTable({ className }: EnhancedOrdersTablePr
                       <TableCell className="font-medium">
                         <div className="flex items-center gap-2">
                           <div>
-                            <div className="font-semibold">{order.orderNumber}</div>
-                            <div className="text-xs text-muted-foreground">{order.id.slice(0, 8)}</div>
+                            <div className="font-semibold">
+                              {order.orderNumber}
+                            </div>
+                            <div className="text-xs text-muted-foreground">
+                              {order.id.slice(0, 8)}
+                            </div>
                           </div>
                           <Tooltip>
                             <TooltipTrigger asChild>
-                              <Button 
-                                variant="ghost" 
-                                size="sm" 
+                              <Button
+                                variant="ghost"
+                                size="sm"
                                 className="h-6 w-6 p-0"
-                                onClick={() => copyToClipboard(order.id, 'Order ID')}
+                                onClick={() =>
+                                  copyToClipboard(order.id, 'Order ID')
+                                }
                               >
                                 <Copy className="h-3 w-3" />
                               </Button>
@@ -563,26 +645,36 @@ export default function EnhancedOrdersTable({ className }: EnhancedOrdersTablePr
                           </Tooltip>
                         </div>
                       </TableCell>
-                      
+
                       <TableCell>
                         <div className="flex items-center gap-2">
                           <div>
                             <div className="font-medium">
-                              {order.customer.firstName} {order.customer.lastName}
+                              {order.customer.firstName}{' '}
+                              {order.customer.lastName}
                             </div>
-                            <div className="text-sm text-muted-foreground">{order.customer.email}</div>
+                            <div className="text-sm text-muted-foreground">
+                              {order.customer.email}
+                            </div>
                             {order.customer.phone && (
-                              <div className="text-xs text-muted-foreground">{order.customer.phone}</div>
+                              <div className="text-xs text-muted-foreground">
+                                {order.customer.phone}
+                              </div>
                             )}
                           </div>
                           <div className="flex flex-col gap-1">
                             <Tooltip>
                               <TooltipTrigger asChild>
-                                <Button 
-                                  variant="ghost" 
-                                  size="sm" 
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
                                   className="h-6 w-6 p-0"
-                                  onClick={() => copyToClipboard(order.customer.email, 'Email')}
+                                  onClick={() =>
+                                    copyToClipboard(
+                                      order.customer.email,
+                                      'Email',
+                                    )
+                                  }
                                 >
                                   <Mail className="h-3 w-3" />
                                 </Button>
@@ -592,11 +684,16 @@ export default function EnhancedOrdersTable({ className }: EnhancedOrdersTablePr
                             {order.customer.phone && (
                               <Tooltip>
                                 <TooltipTrigger asChild>
-                                  <Button 
-                                    variant="ghost" 
-                                    size="sm" 
+                                  <Button
+                                    variant="ghost"
+                                    size="sm"
                                     className="h-6 w-6 p-0"
-                                    onClick={() => copyToClipboard(order.customer.phone, 'Phone')}
+                                    onClick={() =>
+                                      copyToClipboard(
+                                        order.customer.phone,
+                                        'Phone',
+                                      )
+                                    }
                                   >
                                     <Phone className="h-3 w-3" />
                                   </Button>
@@ -607,30 +704,36 @@ export default function EnhancedOrdersTable({ className }: EnhancedOrdersTablePr
                           </div>
                         </div>
                       </TableCell>
-                      
+
                       <TableCell>
                         <div>
-                          <div className="font-medium">{order.items[0]?.documentType}</div>
+                          <div className="font-medium">
+                            {order.items[0]?.documentType}
+                          </div>
                           <div className="text-sm text-muted-foreground">
-                            {order.items.length} item{order.items.length > 1 ? 's' : ''}
+                            {order.items.length} item
+                            {order.items.length > 1 ? 's' : ''}
                           </div>
                         </div>
                       </TableCell>
-                      
+
                       <TableCell>
                         <div>
-                          <div className="font-semibold">{formatCurrency(order.payment.amount)}</div>
+                          <div className="font-semibold">
+                            {formatCurrency(order.payment.amount)}
+                          </div>
                           <div className="text-xs text-muted-foreground flex items-center gap-1">
                             <CreditCard className="h-3 w-3" />
-                            {order.payment.cardBrand} •••• {order.payment.cardLast4}
+                            {order.payment.cardBrand} ••••{' '}
+                            {order.payment.cardLast4}
                           </div>
                         </div>
                       </TableCell>
-                      
+
                       <TableCell>
                         {getStatusBadge(order.status, order.id)}
                       </TableCell>
-                      
+
                       <TableCell>
                         <div className="space-y-1">
                           {getFraudBadge(order.fraudAnalysis)}
@@ -639,28 +742,32 @@ export default function EnhancedOrdersTable({ className }: EnhancedOrdersTablePr
                           </div>
                         </div>
                       </TableCell>
-                      
+
                       <TableCell>
                         <div>
                           <div className="text-sm font-medium">
-                            {order.customer.billingAddress.city}, {order.customer.billingAddress.state}
+                            {order.customer.billingAddress.city},{' '}
+                            {order.customer.billingAddress.state}
                           </div>
                           <div className="text-xs text-muted-foreground">
-                            IP: {order.customer.ipLocation.city}, {order.customer.ipLocation.state}
+                            IP: {order.customer.ipLocation.city},{' '}
+                            {order.customer.ipLocation.state}
                           </div>
                         </div>
                       </TableCell>
-                      
+
                       <TableCell>
                         <div>
-                          <div className="text-sm">{formatDate(order.createdAt)}</div>
+                          <div className="text-sm">
+                            {formatDate(order.createdAt)}
+                          </div>
                           <div className="text-xs text-muted-foreground flex items-center gap-1">
                             <Clock className="h-3 w-3" />
                             {new Date(order.createdAt).toLocaleTimeString()}
                           </div>
                         </div>
                       </TableCell>
-                      
+
                       {/* Enhanced Quick Actions */}
                       <TableCell>
                         <div className="flex items-center gap-1">
@@ -672,7 +779,10 @@ export default function EnhancedOrdersTable({ className }: EnhancedOrdersTablePr
                                 size="sm"
                                 className="h-8 w-8 p-0 text-red-600 hover:text-red-700 hover:bg-red-50"
                                 onClick={() => handleQuickRefund(order)}
-                                disabled={actionStates[`refund_${order.id}`] || order.status === 'refunded'}
+                                disabled={
+                                  actionStates[`refund_${order.id}`] ||
+                                  order.status === 'refunded'
+                                }
                               >
                                 {actionStates[`refund_${order.id}`] ? (
                                   <Loader2 className="h-4 w-4 animate-spin" />
@@ -745,15 +855,16 @@ export default function EnhancedOrdersTable({ className }: EnhancedOrdersTablePr
                 Showing {orders.length} of {total.toLocaleString()} orders
                 {optimisticUpdates.length > 0 && (
                   <span className="ml-2 text-blue-600">
-                    • {optimisticUpdates.length} pending update{optimisticUpdates.length > 1 ? 's' : ''}
+                    • {optimisticUpdates.length} pending update
+                    {optimisticUpdates.length > 1 ? 's' : ''}
                   </span>
                 )}
               </div>
               <div className="flex items-center gap-2">
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  onClick={() => setPage(p => Math.max(1, p - 1))}
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setPage((p) => Math.max(1, p - 1))}
                   disabled={page === 1}
                 >
                   Previous
@@ -761,10 +872,10 @@ export default function EnhancedOrdersTable({ className }: EnhancedOrdersTablePr
                 <span className="text-sm">
                   Page {page} of {totalPages}
                 </span>
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  onClick={() => setPage(p => Math.min(totalPages, p + 1))}
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
                   disabled={page === totalPages}
                 >
                   Next

@@ -23,15 +23,12 @@ export async function POST(req: NextRequest) {
     };
 
     if (!items?.length) {
-      return NextResponse.json(
-        { error: 'Cart is empty' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'Cart is empty' }, { status: 400 });
     }
 
     // Build Stripe line items
-    const line_items: Stripe.Checkout.SessionCreateParams.LineItem[] = items.map(
-      (i) => {
+    const line_items: Stripe.Checkout.SessionCreateParams.LineItem[] =
+      items.map((i) => {
         const priceId = STRIPE_PRICES[i.id];
         if (!priceId) {
           throw new Error(`Unknown SKU: ${i.id}`);
@@ -40,8 +37,7 @@ export async function POST(req: NextRequest) {
           price: priceId,
           quantity: Math.max(1, i.qty ?? 1),
         };
-      }
-    );
+      });
 
     // Create the Checkout session
     const session = await stripe.checkout.sessions.create({
@@ -66,9 +62,6 @@ export async function POST(req: NextRequest) {
   } catch (err: unknown) {
     console.error('Stripe checkout error →', err);
     const message = err instanceof Error ? err.message : 'Internal error';
-    return NextResponse.json(
-      { error: message },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }

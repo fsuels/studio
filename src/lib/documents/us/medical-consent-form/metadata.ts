@@ -24,13 +24,22 @@ export const medicalConsentFormMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Medical Consent Form',
-      description: 'Form granting permission for medical treatment or procedures.',
-      aliases: ['medical authorization form', 'treatment consent form', 'healthcare consent'],
+      description:
+        'Form granting permission for medical treatment or procedures.',
+      aliases: [
+        'medical authorization form',
+        'treatment consent form',
+        'healthcare consent',
+      ],
     },
     es: {
       name: 'Formulario de Consentimiento Médico',
-      description: 'Formulario que otorga permiso para tratamiento o procedimientos médicos.',
-      aliases: ['formulario de autorización médica', 'consentimiento de tratamiento'],
+      description:
+        'Formulario que otorga permiso para tratamiento o procedimientos médicos.',
+      aliases: [
+        'formulario de autorización médica',
+        'consentimiento de tratamiento',
+      ],
     },
   },
 };

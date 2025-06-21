@@ -24,13 +24,25 @@ export const mutualNdaMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Mutual Non-Disclosure Agreement (Mutual NDA)',
-      description: 'Two-way confidentiality agreement protecting information shared by both parties.',
-      aliases: ['mutual confidentiality', 'bilateral nda', 'two-way nda', 'mutual secrecy'],
+      description:
+        'Two-way confidentiality agreement protecting information shared by both parties.',
+      aliases: [
+        'mutual confidentiality',
+        'bilateral nda',
+        'two-way nda',
+        'mutual secrecy',
+      ],
     },
     es: {
       name: 'Acuerdo Mutuo de Confidencialidad (NDA Mutuo)',
-      description: 'Acuerdo de confidencialidad bilateral que protege la información compartida por ambas partes.',
-      aliases: ['confidencialidad mutua', 'nda bilateral', 'nda de dos vías', 'secreto mutuo'],
+      description:
+        'Acuerdo de confidencialidad bilateral que protege la información compartida por ambas partes.',
+      aliases: [
+        'confidencialidad mutua',
+        'nda bilateral',
+        'nda de dos vías',
+        'secreto mutuo',
+      ],
     },
   },
 };

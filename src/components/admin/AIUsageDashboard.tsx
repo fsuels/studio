@@ -16,7 +16,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { 
+import {
   Brain,
   DollarSign,
   Zap,
@@ -55,9 +55,14 @@ import {
   Info,
   Wallet,
   CreditCard,
-  TrendingUpIcon
+  TrendingUpIcon,
 } from 'lucide-react';
-import { formatCurrency, formatTokens, type AIModel, type AIEndpoint } from '@/lib/ai-usage-analytics';
+import {
+  formatCurrency,
+  formatTokens,
+  type AIModel,
+  type AIEndpoint,
+} from '@/lib/ai-usage-analytics';
 
 interface AIUsageDashboardProps {
   className?: string;
@@ -70,7 +75,7 @@ export default function AIUsageDashboard({ className }: AIUsageDashboardProps) {
   const [activeTab, setActiveTab] = useState('overview');
   const [modelFilter, setModelFilter] = useState('');
   const [endpointFilter, setEndpointFilter] = useState('');
-  
+
   // Data states
   const [overview, setOverview] = useState<any>(null);
   const [modelAnalysis, setModelAnalysis] = useState<any>(null);
@@ -82,7 +87,7 @@ export default function AIUsageDashboard({ className }: AIUsageDashboardProps) {
 
   useEffect(() => {
     fetchData();
-    
+
     // Set up real-time updates
     const interval = setInterval(fetchRealtimeData, 30000); // Every 30 seconds
     return () => clearInterval(interval);
@@ -96,39 +101,39 @@ export default function AIUsageDashboard({ className }: AIUsageDashboardProps) {
       const params = new URLSearchParams({
         timeframe,
         ...(modelFilter && { model: modelFilter }),
-        ...(endpointFilter && { endpoint: endpointFilter })
+        ...(endpointFilter && { endpoint: endpointFilter }),
       });
 
       const [
-        overviewRes, 
-        modelRes, 
-        endpointRes, 
-        optimizationRes, 
-        budgetRes, 
-        performanceRes
+        overviewRes,
+        modelRes,
+        endpointRes,
+        optimizationRes,
+        budgetRes,
+        performanceRes,
       ] = await Promise.all([
         fetch(`/api/admin/ai-usage?type=overview&${params}`),
         fetch(`/api/admin/ai-usage?type=model_analysis&${params}`),
         fetch(`/api/admin/ai-usage?type=endpoint_analysis&${params}`),
         fetch(`/api/admin/ai-usage?type=cost_optimization&${params}`),
         fetch(`/api/admin/ai-usage?type=budget_monitoring&${params}`),
-        fetch(`/api/admin/ai-usage?type=performance_metrics&${params}`)
+        fetch(`/api/admin/ai-usage?type=performance_metrics&${params}`),
       ]);
 
       const [
-        overviewData, 
-        modelData, 
-        endpointData, 
-        optimizationData, 
-        budgetData, 
-        performanceData
+        overviewData,
+        modelData,
+        endpointData,
+        optimizationData,
+        budgetData,
+        performanceData,
       ] = await Promise.all([
         overviewRes.json(),
         modelRes.json(),
         endpointRes.json(),
         optimizationRes.json(),
         budgetRes.json(),
-        performanceRes.json()
+        performanceRes.json(),
       ]);
 
       if (overviewData.success) setOverview(overviewData.data);
@@ -137,7 +142,6 @@ export default function AIUsageDashboard({ className }: AIUsageDashboardProps) {
       if (optimizationData.success) setCostOptimization(optimizationData.data);
       if (budgetData.success) setBudgetMonitoring(budgetData.data);
       if (performanceData.success) setPerformanceMetrics(performanceData.data);
-
     } catch (err) {
       setError('Failed to load AI usage analytics');
     } finally {
@@ -149,7 +153,7 @@ export default function AIUsageDashboard({ className }: AIUsageDashboardProps) {
     try {
       const response = await fetch('/api/admin/ai-usage?type=realtime_status');
       const data = await response.json();
-      
+
       if (data.success) {
         setRealtimeStatus(data.data);
       }
@@ -167,7 +171,7 @@ export default function AIUsageDashboard({ className }: AIUsageDashboardProps) {
       'claude-3-sonnet': <Activity className="h-4 w-4" />,
       'claude-3-haiku': <Timer className="h-4 w-4" />,
       'gemini-pro': <Eye className="h-4 w-4" />,
-      'custom': <Settings className="h-4 w-4" />
+      custom: <Settings className="h-4 w-4" />,
     };
     return icons[model] || <Brain className="h-4 w-4" />;
   };
@@ -182,7 +186,7 @@ export default function AIUsageDashboard({ className }: AIUsageDashboardProps) {
       document_analysis: <Database className="h-4 w-4" />,
       customer_support: <Users className="h-4 w-4" />,
       translation: <ArrowRight className="h-4 w-4" />,
-      template_creation: <Settings className="h-4 w-4" />
+      template_creation: <Settings className="h-4 w-4" />,
     };
     return icons[endpoint] || <Activity className="h-4 w-4" />;
   };
@@ -190,16 +194,21 @@ export default function AIUsageDashboard({ className }: AIUsageDashboardProps) {
   const getEfficiencyColor = (efficiency: number) => {
     if (efficiency >= 80) return 'text-green-600 bg-green-50 border-green-200';
     if (efficiency >= 60) return 'text-blue-600 bg-blue-50 border-blue-200';
-    if (efficiency >= 40) return 'text-yellow-600 bg-yellow-50 border-yellow-200';
+    if (efficiency >= 40)
+      return 'text-yellow-600 bg-yellow-50 border-yellow-200';
     return 'text-red-600 bg-red-50 border-red-200';
   };
 
   const getAlertSeverityColor = (severity: string) => {
     switch (severity) {
-      case 'critical': return 'border-red-500 bg-red-50';
-      case 'warning': return 'border-yellow-500 bg-yellow-50';
-      case 'info': return 'border-blue-500 bg-blue-50';
-      default: return 'border-gray-300 bg-gray-50';
+      case 'critical':
+        return 'border-red-500 bg-red-50';
+      case 'warning':
+        return 'border-yellow-500 bg-yellow-50';
+      case 'info':
+        return 'border-blue-500 bg-blue-50';
+      default:
+        return 'border-gray-300 bg-gray-50';
     }
   };
 
@@ -277,22 +286,30 @@ export default function AIUsageDashboard({ className }: AIUsageDashboardProps) {
               <div className="flex items-center gap-6 text-sm">
                 <div className="flex items-center gap-1">
                   <Activity className="h-4 w-4 text-blue-600" />
-                  <span className="font-semibold">{realtimeStatus.activeRequests}</span>
+                  <span className="font-semibold">
+                    {realtimeStatus.activeRequests}
+                  </span>
                   <span className="text-muted-foreground">active</span>
                 </div>
                 <div className="flex items-center gap-1">
                   <Clock className="h-4 w-4 text-yellow-600" />
-                  <span className="font-semibold">{formatLatency(realtimeStatus.avgLatency)}</span>
+                  <span className="font-semibold">
+                    {formatLatency(realtimeStatus.avgLatency)}
+                  </span>
                   <span className="text-muted-foreground">avg latency</span>
                 </div>
                 <div className="flex items-center gap-1">
                   <DollarSign className="h-4 w-4 text-green-600" />
-                  <span className="font-semibold">{formatCurrency(realtimeStatus.costPerHour)}</span>
+                  <span className="font-semibold">
+                    {formatCurrency(realtimeStatus.costPerHour)}
+                  </span>
                   <span className="text-muted-foreground">per hour</span>
                 </div>
                 <div className="flex items-center gap-1">
                   <AlertCircle className="h-4 w-4 text-red-600" />
-                  <span className="font-semibold">{formatPercentage(realtimeStatus.errorRate)}</span>
+                  <span className="font-semibold">
+                    {formatPercentage(realtimeStatus.errorRate)}
+                  </span>
                   <span className="text-muted-foreground">error rate</span>
                 </div>
               </div>
@@ -302,23 +319,30 @@ export default function AIUsageDashboard({ className }: AIUsageDashboardProps) {
       )}
 
       {/* Critical Alerts */}
-      {overview && overview.criticalAlerts && overview.criticalAlerts.length > 0 && (
-        <div className="space-y-3">
-          {overview.criticalAlerts.map((alert: any, index: number) => (
-            <Alert key={index} className={getAlertSeverityColor(alert.severity)}>
-              <AlertTriangle className="h-4 w-4" />
-              <AlertDescription className="flex items-center justify-between">
-                <span>{alert.message}</span>
-                {alert.value && (
-                  <span className="font-semibold">
-                    {alert.type.includes('budget') ? formatCurrency(alert.value) : alert.value}
-                  </span>
-                )}
-              </AlertDescription>
-            </Alert>
-          ))}
-        </div>
-      )}
+      {overview &&
+        overview.criticalAlerts &&
+        overview.criticalAlerts.length > 0 && (
+          <div className="space-y-3">
+            {overview.criticalAlerts.map((alert: any, index: number) => (
+              <Alert
+                key={index}
+                className={getAlertSeverityColor(alert.severity)}
+              >
+                <AlertTriangle className="h-4 w-4" />
+                <AlertDescription className="flex items-center justify-between">
+                  <span>{alert.message}</span>
+                  {alert.value && (
+                    <span className="font-semibold">
+                      {alert.type.includes('budget')
+                        ? formatCurrency(alert.value)
+                        : alert.value}
+                    </span>
+                  )}
+                </AlertDescription>
+              </Alert>
+            ))}
+          </div>
+        )}
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
         <TabsList className="grid w-full grid-cols-6">
@@ -338,8 +362,12 @@ export default function AIUsageDashboard({ className }: AIUsageDashboardProps) {
                 <CardContent className="p-4">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm font-medium text-muted-foreground">Total Cost</p>
-                      <p className="text-2xl font-bold">{formatCurrency(overview.overview.totalCost)}</p>
+                      <p className="text-sm font-medium text-muted-foreground">
+                        Total Cost
+                      </p>
+                      <p className="text-2xl font-bold">
+                        {formatCurrency(overview.overview.totalCost)}
+                      </p>
                       <div className="text-sm text-muted-foreground">
                         {formatTokens(overview.overview.totalTokens)} tokens
                       </div>
@@ -353,10 +381,15 @@ export default function AIUsageDashboard({ className }: AIUsageDashboardProps) {
                 <CardContent className="p-4">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm font-medium text-muted-foreground">Total Requests</p>
-                      <p className="text-2xl font-bold">{overview.overview.totalRequests.toLocaleString()}</p>
+                      <p className="text-sm font-medium text-muted-foreground">
+                        Total Requests
+                      </p>
+                      <p className="text-2xl font-bold">
+                        {overview.overview.totalRequests.toLocaleString()}
+                      </p>
                       <div className="text-sm text-muted-foreground">
-                        {formatPercentage(overview.overview.successRate)} success
+                        {formatPercentage(overview.overview.successRate)}{' '}
+                        success
                       </div>
                     </div>
                     <Activity className="h-8 w-8 text-blue-600" />
@@ -368,8 +401,12 @@ export default function AIUsageDashboard({ className }: AIUsageDashboardProps) {
                 <CardContent className="p-4">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm font-medium text-muted-foreground">Avg Latency</p>
-                      <p className="text-2xl font-bold">{formatLatency(overview.overview.avgLatency)}</p>
+                      <p className="text-sm font-medium text-muted-foreground">
+                        Avg Latency
+                      </p>
+                      <p className="text-2xl font-bold">
+                        {formatLatency(overview.overview.avgLatency)}
+                      </p>
                       <div className="text-sm text-muted-foreground">
                         Per request
                       </div>
@@ -383,8 +420,12 @@ export default function AIUsageDashboard({ className }: AIUsageDashboardProps) {
                 <CardContent className="p-4">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm font-medium text-muted-foreground">Cost per Document</p>
-                      <p className="text-2xl font-bold">{formatCurrency(overview.overview.costPerDocument)}</p>
+                      <p className="text-sm font-medium text-muted-foreground">
+                        Cost per Document
+                      </p>
+                      <p className="text-2xl font-bold">
+                        {formatCurrency(overview.overview.costPerDocument)}
+                      </p>
                       <div className="text-sm text-muted-foreground">
                         Avg AI cost
                       </div>
@@ -410,7 +451,8 @@ export default function AIUsageDashboard({ className }: AIUsageDashboardProps) {
                   <div className="flex items-center justify-between">
                     <div>
                       <div className="text-2xl font-bold">
-                        {formatCurrency(overview.budgetTracking.currentSpend)} / {formatCurrency(overview.budgetTracking.monthlyBudget)}
+                        {formatCurrency(overview.budgetTracking.currentSpend)} /{' '}
+                        {formatCurrency(overview.budgetTracking.monthlyBudget)}
                       </div>
                       <div className="text-sm text-muted-foreground">
                         {overview.budgetTracking.daysRemaining} days remaining
@@ -418,30 +460,40 @@ export default function AIUsageDashboard({ className }: AIUsageDashboardProps) {
                     </div>
                     <div className="text-right">
                       <div className="text-lg font-semibold">
-                        {formatPercentage(overview.budgetTracking.budgetUtilization)}
+                        {formatPercentage(
+                          overview.budgetTracking.budgetUtilization,
+                        )}
                       </div>
                       <div className="text-sm text-muted-foreground">
                         utilized
                       </div>
                     </div>
                   </div>
-                  
-                  <Progress 
-                    value={overview.budgetTracking.budgetUtilization} 
+
+                  <Progress
+                    value={overview.budgetTracking.budgetUtilization}
                     className="h-3"
                   />
-                  
+
                   <div className="flex items-center justify-between text-sm">
                     <div>
-                      <span className="text-muted-foreground">Daily burn rate: </span>
-                      <span className="font-semibold">{formatCurrency(overview.budgetTracking.burnRate)}</span>
+                      <span className="text-muted-foreground">
+                        Daily burn rate:{' '}
+                      </span>
+                      <span className="font-semibold">
+                        {formatCurrency(overview.budgetTracking.burnRate)}
+                      </span>
                     </div>
                     <div>
                       <span className="text-muted-foreground">Projected: </span>
-                      <span className={`font-semibold ${
-                        overview.budgetTracking.projectedSpend > overview.budgetTracking.monthlyBudget 
-                          ? 'text-red-600' : 'text-green-600'
-                      }`}>
+                      <span
+                        className={`font-semibold ${
+                          overview.budgetTracking.projectedSpend >
+                          overview.budgetTracking.monthlyBudget
+                            ? 'text-red-600'
+                            : 'text-green-600'
+                        }`}
+                      >
                         {formatCurrency(overview.budgetTracking.projectedSpend)}
                       </span>
                     </div>
@@ -465,7 +517,10 @@ export default function AIUsageDashboard({ className }: AIUsageDashboardProps) {
                 <CardContent>
                   <div className="space-y-3">
                     {overview.topModels.map((model: any, index: number) => (
-                      <div key={index} className="flex items-center justify-between p-3 border rounded-lg">
+                      <div
+                        key={index}
+                        className="flex items-center justify-between p-3 border rounded-lg"
+                      >
                         <div className="flex items-center gap-3">
                           {getModelIcon(model.model)}
                           <div>
@@ -476,7 +531,9 @@ export default function AIUsageDashboard({ className }: AIUsageDashboardProps) {
                           </div>
                         </div>
                         <div className="text-right">
-                          <div className="font-semibold">{formatCurrency(model.cost)}</div>
+                          <div className="font-semibold">
+                            {formatCurrency(model.cost)}
+                          </div>
                           <div className="text-sm text-muted-foreground">
                             {formatPercentage(model.successRate)} success
                           </div>
@@ -499,25 +556,34 @@ export default function AIUsageDashboard({ className }: AIUsageDashboardProps) {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-3">
-                    {overview.topEndpoints.map((endpoint: any, index: number) => (
-                      <div key={index} className="flex items-center justify-between p-3 border rounded-lg">
-                        <div className="flex items-center gap-3">
-                          {getEndpointIcon(endpoint.endpoint)}
-                          <div>
-                            <div className="font-medium capitalize">{endpoint.endpoint.replace('_', ' ')}</div>
+                    {overview.topEndpoints.map(
+                      (endpoint: any, index: number) => (
+                        <div
+                          key={index}
+                          className="flex items-center justify-between p-3 border rounded-lg"
+                        >
+                          <div className="flex items-center gap-3">
+                            {getEndpointIcon(endpoint.endpoint)}
+                            <div>
+                              <div className="font-medium capitalize">
+                                {endpoint.endpoint.replace('_', ' ')}
+                              </div>
+                              <div className="text-sm text-muted-foreground">
+                                {endpoint.requests.toLocaleString()} requests
+                              </div>
+                            </div>
+                          </div>
+                          <div className="text-right">
+                            <div className="font-semibold">
+                              {formatCurrency(endpoint.cost)}
+                            </div>
                             <div className="text-sm text-muted-foreground">
-                              {endpoint.requests.toLocaleString()} requests
+                              {formatLatency(endpoint.avgLatency)}
                             </div>
                           </div>
                         </div>
-                        <div className="text-right">
-                          <div className="font-semibold">{formatCurrency(endpoint.cost)}</div>
-                          <div className="text-sm text-muted-foreground">
-                            {formatLatency(endpoint.avgLatency)}
-                          </div>
-                        </div>
-                      </div>
-                    ))}
+                      ),
+                    )}
                   </div>
                 </CardContent>
               </Card>
@@ -538,43 +604,64 @@ export default function AIUsageDashboard({ className }: AIUsageDashboardProps) {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
-                    {modelAnalysis.modelBreakdown.map((model: any, index: number) => (
-                      <div key={index} className="p-4 border rounded-lg">
-                        <div className="flex items-center justify-between mb-3">
-                          <div className="flex items-center gap-3">
-                            {getModelIcon(model.model)}
+                    {modelAnalysis.modelBreakdown.map(
+                      (model: any, index: number) => (
+                        <div key={index} className="p-4 border rounded-lg">
+                          <div className="flex items-center justify-between mb-3">
+                            <div className="flex items-center gap-3">
+                              {getModelIcon(model.model)}
+                              <div>
+                                <h3 className="font-semibold">{model.model}</h3>
+                                <p className="text-sm text-muted-foreground">
+                                  {model.requests.toLocaleString()} requests •{' '}
+                                  {formatTokens(model.tokens)} tokens
+                                </p>
+                              </div>
+                            </div>
+                            <Badge
+                              className={getEfficiencyColor(model.efficiency)}
+                            >
+                              Efficiency: {model.efficiency.toFixed(1)}
+                            </Badge>
+                          </div>
+
+                          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                             <div>
-                              <h3 className="font-semibold">{model.model}</h3>
-                              <p className="text-sm text-muted-foreground">
-                                {model.requests.toLocaleString()} requests • {formatTokens(model.tokens)} tokens
-                              </p>
+                              <span className="text-muted-foreground">
+                                Total Cost
+                              </span>
+                              <div className="font-semibold">
+                                {formatCurrency(model.cost)}
+                              </div>
+                            </div>
+                            <div>
+                              <span className="text-muted-foreground">
+                                Avg Latency
+                              </span>
+                              <div className="font-semibold">
+                                {formatLatency(model.avgLatency)}
+                              </div>
+                            </div>
+                            <div>
+                              <span className="text-muted-foreground">
+                                Success Rate
+                              </span>
+                              <div className="font-semibold">
+                                {formatPercentage(model.successRate)}
+                              </div>
+                            </div>
+                            <div>
+                              <span className="text-muted-foreground">
+                                Cost per Request
+                              </span>
+                              <div className="font-semibold">
+                                {formatCurrency(model.costPerRequest)}
+                              </div>
                             </div>
                           </div>
-                          <Badge className={getEfficiencyColor(model.efficiency)}>
-                            Efficiency: {model.efficiency.toFixed(1)}
-                          </Badge>
                         </div>
-
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-                          <div>
-                            <span className="text-muted-foreground">Total Cost</span>
-                            <div className="font-semibold">{formatCurrency(model.cost)}</div>
-                          </div>
-                          <div>
-                            <span className="text-muted-foreground">Avg Latency</span>
-                            <div className="font-semibold">{formatLatency(model.avgLatency)}</div>
-                          </div>
-                          <div>
-                            <span className="text-muted-foreground">Success Rate</span>
-                            <div className="font-semibold">{formatPercentage(model.successRate)}</div>
-                          </div>
-                          <div>
-                            <span className="text-muted-foreground">Cost per Request</span>
-                            <div className="font-semibold">{formatCurrency(model.costPerRequest)}</div>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
+                      ),
+                    )}
                   </div>
                 </CardContent>
               </Card>
@@ -593,44 +680,69 @@ export default function AIUsageDashboard({ className }: AIUsageDashboardProps) {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {endpointAnalysis.endpointAnalysis.map((endpoint: any, index: number) => (
-                    <div key={index} className="p-4 border rounded-lg">
-                      <div className="flex items-center justify-between mb-3">
-                        <div className="flex items-center gap-3">
-                          {getEndpointIcon(endpoint.endpoint)}
-                          <div>
-                            <h3 className="font-semibold capitalize">{endpoint.endpoint.replace('_', ' ')}</h3>
-                            <p className="text-sm text-muted-foreground">
-                              {endpoint.requests.toLocaleString()} requests • Top model: {endpoint.topModel}
-                            </p>
+                  {endpointAnalysis.endpointAnalysis.map(
+                    (endpoint: any, index: number) => (
+                      <div key={index} className="p-4 border rounded-lg">
+                        <div className="flex items-center justify-between mb-3">
+                          <div className="flex items-center gap-3">
+                            {getEndpointIcon(endpoint.endpoint)}
+                            <div>
+                              <h3 className="font-semibold capitalize">
+                                {endpoint.endpoint.replace('_', ' ')}
+                              </h3>
+                              <p className="text-sm text-muted-foreground">
+                                {endpoint.requests.toLocaleString()} requests •
+                                Top model: {endpoint.topModel}
+                              </p>
+                            </div>
+                          </div>
+                          <div className="text-right">
+                            <div className="text-lg font-bold">
+                              {formatCurrency(endpoint.cost)}
+                            </div>
+                            <div className="text-sm text-muted-foreground">
+                              total cost
+                            </div>
                           </div>
                         </div>
-                        <div className="text-right">
-                          <div className="text-lg font-bold">{formatCurrency(endpoint.cost)}</div>
-                          <div className="text-sm text-muted-foreground">total cost</div>
-                        </div>
-                      </div>
 
-                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-                        <div>
-                          <span className="text-muted-foreground">Avg Latency</span>
-                          <div className="font-semibold">{formatLatency(endpoint.avgLatency)}</div>
-                        </div>
-                        <div>
-                          <span className="text-muted-foreground">Success Rate</span>
-                          <div className="font-semibold">{formatPercentage(endpoint.successRate)}</div>
-                        </div>
-                        <div>
-                          <span className="text-muted-foreground">Conversion Impact</span>
-                          <div className="font-semibold">{formatPercentage(endpoint.conversionImpact)}</div>
-                        </div>
-                        <div>
-                          <span className="text-muted-foreground">Revenue Attribution</span>
-                          <div className="font-semibold">{formatCurrency(endpoint.revenueAttribution)}</div>
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                          <div>
+                            <span className="text-muted-foreground">
+                              Avg Latency
+                            </span>
+                            <div className="font-semibold">
+                              {formatLatency(endpoint.avgLatency)}
+                            </div>
+                          </div>
+                          <div>
+                            <span className="text-muted-foreground">
+                              Success Rate
+                            </span>
+                            <div className="font-semibold">
+                              {formatPercentage(endpoint.successRate)}
+                            </div>
+                          </div>
+                          <div>
+                            <span className="text-muted-foreground">
+                              Conversion Impact
+                            </span>
+                            <div className="font-semibold">
+                              {formatPercentage(endpoint.conversionImpact)}
+                            </div>
+                          </div>
+                          <div>
+                            <span className="text-muted-foreground">
+                              Revenue Attribution
+                            </span>
+                            <div className="font-semibold">
+                              {formatCurrency(endpoint.revenueAttribution)}
+                            </div>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
+                    ),
+                  )}
                 </div>
               </CardContent>
             </Card>
@@ -647,63 +759,90 @@ export default function AIUsageDashboard({ className }: AIUsageDashboardProps) {
                     <Lightbulb className="h-5 w-5" />
                     Cost Saving Opportunities
                     <Badge variant="outline" className="ml-2">
-                      {formatCurrency(costOptimization.totalPotentialSaving)} potential saving
+                      {formatCurrency(costOptimization.totalPotentialSaving)}{' '}
+                      potential saving
                     </Badge>
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
-                    {costOptimization.costSavingOpportunities.map((opportunity: any, index: number) => (
-                      <div key={index} className="p-4 border rounded-lg">
-                        <div className="flex items-start justify-between mb-3">
-                          <div className="flex items-start gap-3">
-                            <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                              opportunity.impact === 'high' ? 'bg-red-100 text-red-600' :
-                              opportunity.impact === 'medium' ? 'bg-yellow-100 text-yellow-600' :
-                              'bg-blue-100 text-blue-600'
-                            }`}>
-                              {index + 1}
+                    {costOptimization.costSavingOpportunities.map(
+                      (opportunity: any, index: number) => (
+                        <div key={index} className="p-4 border rounded-lg">
+                          <div className="flex items-start justify-between mb-3">
+                            <div className="flex items-start gap-3">
+                              <div
+                                className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                                  opportunity.impact === 'high'
+                                    ? 'bg-red-100 text-red-600'
+                                    : opportunity.impact === 'medium'
+                                      ? 'bg-yellow-100 text-yellow-600'
+                                      : 'bg-blue-100 text-blue-600'
+                                }`}
+                              >
+                                {index + 1}
+                              </div>
+                              <div>
+                                <h3 className="font-semibold">
+                                  {opportunity.description}
+                                </h3>
+                                <p className="text-sm text-muted-foreground mt-1">
+                                  {opportunity.recommendation}
+                                </p>
+                              </div>
                             </div>
-                            <div>
-                              <h3 className="font-semibold">{opportunity.description}</h3>
-                              <p className="text-sm text-muted-foreground mt-1">
-                                {opportunity.recommendation}
-                              </p>
+                            <div className="text-right">
+                              <div className="text-lg font-bold text-green-600">
+                                {formatCurrency(opportunity.potentialSaving)}
+                              </div>
+                              <div className="text-xs text-muted-foreground">
+                                savings
+                              </div>
                             </div>
                           </div>
-                          <div className="text-right">
-                            <div className="text-lg font-bold text-green-600">
-                              {formatCurrency(opportunity.potentialSaving)}
+
+                          <div className="flex items-center justify-between text-sm">
+                            <div className="flex items-center gap-4">
+                              <div>
+                                <span className="text-muted-foreground">
+                                  Current Cost:{' '}
+                                </span>
+                                <span className="font-semibold">
+                                  {formatCurrency(opportunity.currentCost)}
+                                </span>
+                              </div>
+                              <div>
+                                <span className="text-muted-foreground">
+                                  Effort:{' '}
+                                </span>
+                                <Badge
+                                  variant={
+                                    opportunity.effort === 'high'
+                                      ? 'destructive'
+                                      : opportunity.effort === 'medium'
+                                        ? 'default'
+                                        : 'secondary'
+                                  }
+                                >
+                                  {opportunity.effort}
+                                </Badge>
+                              </div>
                             </div>
-                            <div className="text-xs text-muted-foreground">savings</div>
+                            <Badge
+                              variant={
+                                opportunity.impact === 'high'
+                                  ? 'destructive'
+                                  : opportunity.impact === 'medium'
+                                    ? 'default'
+                                    : 'secondary'
+                              }
+                            >
+                              {opportunity.impact} impact
+                            </Badge>
                           </div>
                         </div>
-                        
-                        <div className="flex items-center justify-between text-sm">
-                          <div className="flex items-center gap-4">
-                            <div>
-                              <span className="text-muted-foreground">Current Cost: </span>
-                              <span className="font-semibold">{formatCurrency(opportunity.currentCost)}</span>
-                            </div>
-                            <div>
-                              <span className="text-muted-foreground">Effort: </span>
-                              <Badge variant={
-                                opportunity.effort === 'high' ? 'destructive' :
-                                opportunity.effort === 'medium' ? 'default' : 'secondary'
-                              }>
-                                {opportunity.effort}
-                              </Badge>
-                            </div>
-                          </div>
-                          <Badge variant={
-                            opportunity.impact === 'high' ? 'destructive' :
-                            opportunity.impact === 'medium' ? 'default' : 'secondary'
-                          }>
-                            {opportunity.impact} impact
-                          </Badge>
-                        </div>
-                      </div>
-                    ))}
+                      ),
+                    )}
                   </div>
                 </CardContent>
               </Card>
@@ -719,33 +858,39 @@ export default function AIUsageDashboard({ className }: AIUsageDashboardProps) {
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-3">
-                      {costOptimization.modelRecommendations.map((rec: any, index: number) => (
-                        <div key={index} className="flex items-center justify-between p-3 border rounded-lg">
-                          <div className="flex items-center gap-3">
-                            <div>
-                              <div className="font-medium">
-                                {rec.endpoint.replace('_', ' ')} endpoint
-                              </div>
-                              <div className="text-sm text-muted-foreground">
-                                Switch from {rec.currentModel} to {rec.recommendedModel}
-                              </div>
-                            </div>
-                          </div>
-                          <div className="flex items-center gap-4">
-                            <div className="text-right">
-                              <div className="text-sm font-semibold text-green-600">
-                                {formatCurrency(rec.costSaving)} saving
-                              </div>
-                              <div className="text-xs text-muted-foreground">
-                                {rec.performanceImpact}
+                      {costOptimization.modelRecommendations.map(
+                        (rec: any, index: number) => (
+                          <div
+                            key={index}
+                            className="flex items-center justify-between p-3 border rounded-lg"
+                          >
+                            <div className="flex items-center gap-3">
+                              <div>
+                                <div className="font-medium">
+                                  {rec.endpoint.replace('_', ' ')} endpoint
+                                </div>
+                                <div className="text-sm text-muted-foreground">
+                                  Switch from {rec.currentModel} to{' '}
+                                  {rec.recommendedModel}
+                                </div>
                               </div>
                             </div>
-                            <Button size="sm" variant="outline">
-                              Implement
-                            </Button>
+                            <div className="flex items-center gap-4">
+                              <div className="text-right">
+                                <div className="text-sm font-semibold text-green-600">
+                                  {formatCurrency(rec.costSaving)} saving
+                                </div>
+                                <div className="text-xs text-muted-foreground">
+                                  {rec.performanceImpact}
+                                </div>
+                              </div>
+                              <Button size="sm" variant="outline">
+                                Implement
+                              </Button>
+                            </div>
                           </div>
-                        </div>
-                      ))}
+                        ),
+                      )}
                     </div>
                   </CardContent>
                 </Card>
@@ -763,8 +908,14 @@ export default function AIUsageDashboard({ className }: AIUsageDashboardProps) {
                   <CardContent className="p-4">
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="text-sm font-medium text-muted-foreground">Monthly Budget</p>
-                        <p className="text-2xl font-bold">{formatCurrency(budgetMonitoring.budgetTracking.monthlyBudget)}</p>
+                        <p className="text-sm font-medium text-muted-foreground">
+                          Monthly Budget
+                        </p>
+                        <p className="text-2xl font-bold">
+                          {formatCurrency(
+                            budgetMonitoring.budgetTracking.monthlyBudget,
+                          )}
+                        </p>
                       </div>
                       <CreditCard className="h-8 w-8 text-blue-600" />
                     </div>
@@ -775,10 +926,19 @@ export default function AIUsageDashboard({ className }: AIUsageDashboardProps) {
                   <CardContent className="p-4">
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="text-sm font-medium text-muted-foreground">Current Spend</p>
-                        <p className="text-2xl font-bold">{formatCurrency(budgetMonitoring.budgetTracking.currentSpend)}</p>
+                        <p className="text-sm font-medium text-muted-foreground">
+                          Current Spend
+                        </p>
+                        <p className="text-2xl font-bold">
+                          {formatCurrency(
+                            budgetMonitoring.budgetTracking.currentSpend,
+                          )}
+                        </p>
                         <div className="text-sm text-muted-foreground">
-                          {formatPercentage(budgetMonitoring.budgetTracking.budgetUtilization)} utilized
+                          {formatPercentage(
+                            budgetMonitoring.budgetTracking.budgetUtilization,
+                          )}{' '}
+                          utilized
                         </div>
                       </div>
                       <Wallet className="h-8 w-8 text-green-600" />
@@ -790,15 +950,24 @@ export default function AIUsageDashboard({ className }: AIUsageDashboardProps) {
                   <CardContent className="p-4">
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="text-sm font-medium text-muted-foreground">Projected Spend</p>
-                        <p className={`text-2xl font-bold ${
-                          budgetMonitoring.budgetTracking.projectedSpend > budgetMonitoring.budgetTracking.monthlyBudget 
-                            ? 'text-red-600' : 'text-green-600'
-                        }`}>
-                          {formatCurrency(budgetMonitoring.budgetTracking.projectedSpend)}
+                        <p className="text-sm font-medium text-muted-foreground">
+                          Projected Spend
+                        </p>
+                        <p
+                          className={`text-2xl font-bold ${
+                            budgetMonitoring.budgetTracking.projectedSpend >
+                            budgetMonitoring.budgetTracking.monthlyBudget
+                              ? 'text-red-600'
+                              : 'text-green-600'
+                          }`}
+                        >
+                          {formatCurrency(
+                            budgetMonitoring.budgetTracking.projectedSpend,
+                          )}
                         </p>
                         <div className="text-sm text-muted-foreground">
-                          {budgetMonitoring.budgetTracking.daysRemaining} days remaining
+                          {budgetMonitoring.budgetTracking.daysRemaining} days
+                          remaining
                         </div>
                       </div>
                       <TrendingUpIcon className="h-8 w-8 text-yellow-600" />
@@ -817,20 +986,32 @@ export default function AIUsageDashboard({ className }: AIUsageDashboardProps) {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
-                    {budgetMonitoring.dailyCosts.slice(-7).map((day: any, index: number) => (
-                      <div key={index} className="flex items-center justify-between p-3 border rounded-lg">
-                        <div>
-                          <div className="font-medium">{new Date(day.date).toLocaleDateString()}</div>
-                          <div className="text-sm text-muted-foreground">
-                            {day.requests.toLocaleString()} requests • {formatTokens(day.tokens)} tokens
+                    {budgetMonitoring.dailyCosts
+                      .slice(-7)
+                      .map((day: any, index: number) => (
+                        <div
+                          key={index}
+                          className="flex items-center justify-between p-3 border rounded-lg"
+                        >
+                          <div>
+                            <div className="font-medium">
+                              {new Date(day.date).toLocaleDateString()}
+                            </div>
+                            <div className="text-sm text-muted-foreground">
+                              {day.requests.toLocaleString()} requests •{' '}
+                              {formatTokens(day.tokens)} tokens
+                            </div>
+                          </div>
+                          <div className="text-right">
+                            <div className="font-semibold">
+                              {formatCurrency(day.cost)}
+                            </div>
+                            <div className="text-sm text-muted-foreground">
+                              daily cost
+                            </div>
                           </div>
                         </div>
-                        <div className="text-right">
-                          <div className="font-semibold">{formatCurrency(day.cost)}</div>
-                          <div className="text-sm text-muted-foreground">daily cost</div>
-                        </div>
-                      </div>
-                    ))}
+                      ))}
                   </div>
                 </CardContent>
               </Card>
@@ -847,12 +1028,17 @@ export default function AIUsageDashboard({ className }: AIUsageDashboardProps) {
                   <CardContent className="p-4">
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="text-sm font-medium text-muted-foreground">Avg Latency</p>
+                        <p className="text-sm font-medium text-muted-foreground">
+                          Avg Latency
+                        </p>
                         <p className="text-2xl font-bold">
-                          {performanceMetrics.latencyTrends.length > 0 
-                            ? formatLatency(performanceMetrics.latencyTrends[performanceMetrics.latencyTrends.length - 1].avgLatency)
-                            : '0ms'
-                          }
+                          {performanceMetrics.latencyTrends.length > 0
+                            ? formatLatency(
+                                performanceMetrics.latencyTrends[
+                                  performanceMetrics.latencyTrends.length - 1
+                                ].avgLatency,
+                              )
+                            : '0ms'}
                         </p>
                       </div>
                       <Clock className="h-8 w-8 text-yellow-600" />
@@ -864,12 +1050,17 @@ export default function AIUsageDashboard({ className }: AIUsageDashboardProps) {
                   <CardContent className="p-4">
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="text-sm font-medium text-muted-foreground">Quality Score</p>
+                        <p className="text-sm font-medium text-muted-foreground">
+                          Quality Score
+                        </p>
                         <p className="text-2xl font-bold">
-                          {performanceMetrics.qualityTrends.length > 0 
-                            ? formatPercentage(performanceMetrics.qualityTrends[performanceMetrics.qualityTrends.length - 1].avgQuality)
-                            : '0%'
-                          }
+                          {performanceMetrics.qualityTrends.length > 0
+                            ? formatPercentage(
+                                performanceMetrics.qualityTrends[
+                                  performanceMetrics.qualityTrends.length - 1
+                                ].avgQuality,
+                              )
+                            : '0%'}
                         </p>
                       </div>
                       <Target className="h-8 w-8 text-green-600" />
@@ -881,12 +1072,13 @@ export default function AIUsageDashboard({ className }: AIUsageDashboardProps) {
                   <CardContent className="p-4">
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="text-sm font-medium text-muted-foreground">User Rating</p>
+                        <p className="text-sm font-medium text-muted-foreground">
+                          User Rating
+                        </p>
                         <p className="text-2xl font-bold">
-                          {performanceMetrics.qualityTrends.length > 0 
+                          {performanceMetrics.qualityTrends.length > 0
                             ? `${performanceMetrics.qualityTrends[performanceMetrics.qualityTrends.length - 1].userRating.toFixed(1)}/5`
-                            : '0/5'
-                          }
+                            : '0/5'}
                         </p>
                       </div>
                       <Users className="h-8 w-8 text-blue-600" />
@@ -896,21 +1088,29 @@ export default function AIUsageDashboard({ className }: AIUsageDashboardProps) {
               </div>
 
               {/* Performance Alerts */}
-              {performanceMetrics.performanceAlerts && performanceMetrics.performanceAlerts.length > 0 && (
-                <div className="space-y-3">
-                  {performanceMetrics.performanceAlerts.map((alert: any, index: number) => (
-                    <Alert key={index} className={getAlertSeverityColor(alert.severity)}>
-                      <AlertTriangle className="h-4 w-4" />
-                      <AlertDescription className="flex items-center justify-between">
-                        <span>{alert.message}</span>
-                        <span className="font-semibold">
-                          {alert.type === 'high_latency' ? formatLatency(alert.value) : formatPercentage(alert.value)}
-                        </span>
-                      </AlertDescription>
-                    </Alert>
-                  ))}
-                </div>
-              )}
+              {performanceMetrics.performanceAlerts &&
+                performanceMetrics.performanceAlerts.length > 0 && (
+                  <div className="space-y-3">
+                    {performanceMetrics.performanceAlerts.map(
+                      (alert: any, index: number) => (
+                        <Alert
+                          key={index}
+                          className={getAlertSeverityColor(alert.severity)}
+                        >
+                          <AlertTriangle className="h-4 w-4" />
+                          <AlertDescription className="flex items-center justify-between">
+                            <span>{alert.message}</span>
+                            <span className="font-semibold">
+                              {alert.type === 'high_latency'
+                                ? formatLatency(alert.value)
+                                : formatPercentage(alert.value)}
+                            </span>
+                          </AlertDescription>
+                        </Alert>
+                      ),
+                    )}
+                  </div>
+                )}
             </>
           )}
         </TabsContent>

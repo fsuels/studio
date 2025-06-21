@@ -24,12 +24,18 @@ export const brandAmbassadorAgreementMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Brand Ambassador Agreement',
-      description: 'Agreement for brand ambassador relationships and long-term brand partnerships.',
-      aliases: ['brand partnership agreement', 'ambassador contract', 'brand representative agreement'],
+      description:
+        'Agreement for brand ambassador relationships and long-term brand partnerships.',
+      aliases: [
+        'brand partnership agreement',
+        'ambassador contract',
+        'brand representative agreement',
+      ],
     },
     es: {
       name: 'Acuerdo de Embajador de Marca',
-      description: 'Acuerdo para relaciones de embajadores de marca y asociaciones de marca a largo plazo.',
+      description:
+        'Acuerdo para relaciones de embajadores de marca y asociaciones de marca a largo plazo.',
       aliases: ['acuerdo de asociación de marca', 'contrato de embajador'],
     },
   },

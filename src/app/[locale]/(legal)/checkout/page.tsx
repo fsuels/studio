@@ -9,7 +9,7 @@ import { Loader2 } from 'lucide-react';
 
 // Load stripe.js just once
 const stripePromise = loadStripe(
-  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
+  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!,
 );
 
 export default function CheckoutPage() {
@@ -93,11 +93,7 @@ export default function CheckoutPage() {
             'Pay with Card'
           )}
         </Button>
-        <Button
-          variant="ghost"
-          className="ml-4"
-          onClick={() => router.back()}
-        >
+        <Button variant="ghost" className="ml-4" onClick={() => router.back()}>
           Cancel
         </Button>
       </div>

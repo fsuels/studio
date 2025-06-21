@@ -25,11 +25,16 @@ export const waterRightsAgreementMeta: LegalDocument = {
     en: {
       name: 'Water Rights Agreement',
       description: 'Agreement for the transfer, lease, or use of water rights.',
-      aliases: ['water transfer agreement', 'irrigation rights', 'water usage agreement'],
+      aliases: [
+        'water transfer agreement',
+        'irrigation rights',
+        'water usage agreement',
+      ],
     },
     es: {
       name: 'Acuerdo de Derechos de Agua',
-      description: 'Acuerdo para la transferencia, arrendamiento o uso de derechos de agua.',
+      description:
+        'Acuerdo para la transferencia, arrendamiento o uso de derechos de agua.',
       aliases: ['acuerdo de transferencia de agua', 'derechos de riego'],
     },
   },

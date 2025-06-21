@@ -29,7 +29,8 @@ export const cateringAgreementMeta: LegalDocument = {
     },
     es: {
       name: 'Acuerdo de Catering',
-      description: 'Acuerdo para servicios de catering para eventos y ocasiones.',
+      description:
+        'Acuerdo para servicios de catering para eventos y ocasiones.',
       aliases: ['contrato de catering', 'acuerdo de servicio de comida'],
     },
   },

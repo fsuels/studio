@@ -28,35 +28,43 @@ import type {
  */
 export async function GET(
   request: NextRequest,
-  { params }: { params: { templateId: string } }
+  { params }: { params: { templateId: string } },
 ) {
   try {
     const { templateId } = params;
     const url = new URL(request.url);
-    
+
     const page = parseInt(url.searchParams.get('page') || '1');
-    const pageSize = Math.min(parseInt(url.searchParams.get('limit') || '10'), 50);
+    const pageSize = Math.min(
+      parseInt(url.searchParams.get('limit') || '10'),
+      50,
+    );
     const rating = url.searchParams.get('rating');
     const sortBy = url.searchParams.get('sortBy') || 'newest';
     const verified = url.searchParams.get('verified') === 'true';
 
     const db = await getDb();
-    
+
     // Check if template exists
     const templateRef = doc(db, 'marketplace-templates', templateId);
     const templateSnap = await getDoc(templateRef);
-    
+
     if (!templateSnap.exists()) {
       return NextResponse.json(
         { error: 'Template not found' },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
     const template = templateSnap.data() as MarketplaceTemplate;
 
     // Build query
-    const reviewsRef = collection(db, 'marketplace-templates', templateId, 'reviews');
+    const reviewsRef = collection(
+      db,
+      'marketplace-templates',
+      templateId,
+      'reviews',
+    );
     let q = query(reviewsRef);
 
     // Add filters
@@ -98,7 +106,7 @@ export async function GET(
       const prevQuery = query(
         collection(db, 'marketplace-templates', templateId, 'reviews'),
         orderBy('createdAt', 'desc'),
-        limit(offset)
+        limit(offset),
       );
       const prevSnap = await getDocs(prevQuery);
       if (prevSnap.docs.length > 0) {
@@ -108,7 +116,7 @@ export async function GET(
     }
 
     const reviewsSnap = await getDocs(q);
-    const reviews = reviewsSnap.docs.map(doc => ({
+    const reviews = reviewsSnap.docs.map((doc) => ({
       id: doc.id,
       ...doc.data(),
     })) as TemplateReview[];
@@ -134,16 +142,15 @@ export async function GET(
         },
       },
     });
-
   } catch (error) {
     console.error('Get reviews error:', error);
-    
+
     return NextResponse.json(
-      { 
-        success: false, 
-        error: 'Failed to fetch reviews' 
+      {
+        success: false,
+        error: 'Failed to fetch reviews',
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -154,7 +161,7 @@ export async function GET(
  */
 export async function POST(
   request: NextRequest,
-  { params }: { params: { templateId: string } }
+  { params }: { params: { templateId: string } },
 ) {
   try {
     // TODO: Add authentication
@@ -165,20 +172,13 @@ export async function POST(
 
     const { templateId } = params;
     const body = await request.json();
-    const {
-      rating,
-      title,
-      comment,
-      pros,
-      cons,
-      templateVersion,
-    } = body;
+    const { rating, title, comment, pros, cons, templateVersion } = body;
 
     // Validate required fields
     if (!rating || rating < 1 || rating > 5) {
       return NextResponse.json(
         { error: 'Valid rating (1-5) is required' },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -188,11 +188,11 @@ export async function POST(
     // Check if template exists
     const templateRef = doc(db, 'marketplace-templates', templateId);
     const templateSnap = await getDoc(templateRef);
-    
+
     if (!templateSnap.exists()) {
       return NextResponse.json(
         { error: 'Template not found' },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
@@ -201,14 +201,14 @@ export async function POST(
     // Check if user has already reviewed this template
     const existingReviewQuery = query(
       collection(db, 'marketplace-templates', templateId, 'reviews'),
-      where('reviewerId', '==', userId)
+      where('reviewerId', '==', userId),
     );
     const existingReviewSnap = await getDocs(existingReviewQuery);
 
     if (!existingReviewSnap.empty) {
       return NextResponse.json(
         { error: 'You have already reviewed this template' },
-        { status: 409 }
+        { status: 409 },
       );
     }
 
@@ -216,13 +216,15 @@ export async function POST(
     const installationQuery = query(
       collection(db, 'users', userId, 'template-installations'),
       where('templateId', '==', templateId),
-      where('status', 'in', ['active', 'expired'])
+      where('status', 'in', ['active', 'expired']),
     );
     const installationSnap = await getDocs(installationQuery);
     const hasInstalled = !installationSnap.empty;
 
     // Create review
-    const reviewRef = doc(collection(db, 'marketplace-templates', templateId, 'reviews'));
+    const reviewRef = doc(
+      collection(db, 'marketplace-templates', templateId, 'reviews'),
+    );
     const review: TemplateReview = {
       id: reviewRef.id,
       templateId,
@@ -254,16 +256,15 @@ export async function POST(
         message: 'Review submitted successfully',
       },
     });
-
   } catch (error) {
     console.error('Create review error:', error);
-    
+
     return NextResponse.json(
-      { 
-        success: false, 
-        error: 'Failed to submit review' 
+      {
+        success: false,
+        error: 'Failed to submit review',
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -274,16 +275,17 @@ export async function POST(
 async function updateTemplateRatings(
   templateId: string,
   template: MarketplaceTemplate,
-  newRating: number
+  newRating: number,
 ) {
   const db = await getDb();
   const templateRef = doc(db, 'marketplace-templates', templateId);
 
   const currentRatings = template.ratings;
   const totalRatings = currentRatings.totalRatings + 1;
-  
+
   // Calculate new average
-  const currentTotal = currentRatings.averageRating * currentRatings.totalRatings;
+  const currentTotal =
+    currentRatings.averageRating * currentRatings.totalRatings;
   const newAverage = (currentTotal + newRating) / totalRatings;
 
   // Update rating distribution
@@ -298,7 +300,7 @@ async function updateTemplateRatings(
     const recentAverage = newAverage;
     const previousAverage = currentRatings.averageRating;
     const change = ((recentAverage - previousAverage) / previousAverage) * 100;
-    
+
     if (change > 2) {
       recentTrend = 'improving';
       trendChange = change;

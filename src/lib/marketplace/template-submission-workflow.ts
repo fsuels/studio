@@ -62,7 +62,7 @@ export class TemplateSubmissionWorkflow {
     };
   }): Promise<{ templateId: string; versionId: string }> {
     const db = await this.ensureDb();
-    
+
     // Generate template ID
     const templateRef = doc(collection(db, 'marketplace-templates'));
     const templateId = templateRef.id;
@@ -79,7 +79,7 @@ export class TemplateSubmissionWorkflow {
       jurisdiction: params.jurisdiction,
       states: params.states || 'all',
       languageSupport: params.languageSupport,
-      
+
       // Initial state
       visibility: 'private',
       pricing: {
@@ -90,21 +90,21 @@ export class TemplateSubmissionWorkflow {
         platformFee: 100 - (params.pricing.creatorShare || 70), // Platform takes remainder
       },
       licenseType: params.pricing.type === 'free' ? 'free' : 'premium',
-      
+
       // Version info
       currentVersion: '1.0.0',
       latestVersionId: `${templateId}-v1.0.0`,
       versions: ['1.0.0'],
-      
+
       // Stats (initialized)
       stats: this.createInitialStats(),
       ratings: this.createInitialRatings(),
-      
+
       // Workflow state
       moderationStatus: 'pending',
       featured: false,
       verified: false,
-      
+
       // Timestamps
       lastUpdated: serverTimestamp() as any,
     };
@@ -157,7 +157,7 @@ export class TemplateSubmissionWorkflow {
     reviewerPreferences?: string[];
   }): Promise<{ submissionId: string; estimatedReviewTime: string }> {
     const db = await this.ensureDb();
-    
+
     // Update template status
     const templateRef = doc(db, 'marketplace-templates', params.templateId);
     await updateDoc(templateRef, {
@@ -201,16 +201,16 @@ export class TemplateSubmissionWorkflow {
     priority?: 'low' | 'normal' | 'high' | 'urgent';
   }): Promise<void> {
     const db = await this.ensureDb();
-    
+
     const submissionRef = doc(db, 'template-submissions', params.submissionId);
     const submissionSnap = await getDoc(submissionRef);
-    
+
     if (!submissionSnap.exists()) {
       throw new Error('Submission not found');
     }
 
     const submission = submissionSnap.data();
-    
+
     // Update submission with reviewer assignment
     await updateDoc(submissionRef, {
       status: 'in_review',
@@ -218,7 +218,9 @@ export class TemplateSubmissionWorkflow {
       assignedBy: params.assignedBy,
       assignedAt: serverTimestamp(),
       priority: params.priority || 'normal',
-      estimatedCompletionDate: this.calculateEstimatedCompletion(params.priority),
+      estimatedCompletionDate: this.calculateEstimatedCompletion(
+        params.priority,
+      ),
     });
 
     // Update template status
@@ -255,16 +257,16 @@ export class TemplateSubmissionWorkflow {
     requiredChanges?: string[];
   }): Promise<{ decision: string; nextSteps: string[] }> {
     const db = await this.ensureDb();
-    
+
     const submissionRef = doc(db, 'template-submissions', params.submissionId);
     const submissionSnap = await getDoc(submissionRef);
-    
+
     if (!submissionSnap.exists()) {
       throw new Error('Submission not found');
     }
 
     const submission = submissionSnap.data();
-    
+
     // Create detailed review record
     const reviewRecord = {
       submissionId: params.submissionId,
@@ -276,13 +278,18 @@ export class TemplateSubmissionWorkflow {
       issues: params.issues || [],
       requiredChanges: params.requiredChanges || [],
       reviewedAt: serverTimestamp(),
-      reviewDuration: Date.now() - (submission.assignedAt?.toMillis() || Date.now()),
+      reviewDuration:
+        Date.now() - (submission.assignedAt?.toMillis() || Date.now()),
     };
 
     // Update submission status
     await updateDoc(submissionRef, {
-      status: params.decision === 'approved' ? 'approved' : 
-              params.decision === 'rejected' ? 'rejected' : 'changes_required',
+      status:
+        params.decision === 'approved'
+          ? 'approved'
+          : params.decision === 'rejected'
+            ? 'rejected'
+            : 'changes_required',
       review: reviewRecord,
       completedAt: serverTimestamp(),
     });
@@ -291,9 +298,16 @@ export class TemplateSubmissionWorkflow {
     if (params.decision === 'approved') {
       await this.approveTemplate(submission.templateId, params.reviewerId);
     } else if (params.decision === 'rejected') {
-      await this.rejectTemplate(submission.templateId, params.reviewerId, params.feedback);
+      await this.rejectTemplate(
+        submission.templateId,
+        params.reviewerId,
+        params.feedback,
+      );
     } else {
-      await this.requestChanges(submission.templateId, params.requiredChanges || []);
+      await this.requestChanges(
+        submission.templateId,
+        params.requiredChanges || [],
+      );
     }
 
     // Notify template creator
@@ -315,12 +329,15 @@ export class TemplateSubmissionWorkflow {
   /**
    * Step 5: Approve template (internal)
    */
-  private async approveTemplate(templateId: string, reviewerId: string): Promise<void> {
+  private async approveTemplate(
+    templateId: string,
+    reviewerId: string,
+  ): Promise<void> {
     const db = await this.ensureDb();
-    
+
     const templateRef = doc(db, 'marketplace-templates', templateId);
     const templateSnap = await getDoc(templateRef);
-    
+
     if (!templateSnap.exists()) {
       throw new Error('Template not found');
     }
@@ -340,7 +357,7 @@ export class TemplateSubmissionWorkflow {
     await templateVersionManager.publishVersion(
       templateId,
       template.currentVersion,
-      reviewerId
+      reviewerId,
     );
 
     // Update creator profile stats
@@ -353,9 +370,13 @@ export class TemplateSubmissionWorkflow {
   /**
    * Step 6: Handle template rejection
    */
-  private async rejectTemplate(templateId: string, reviewerId: string, reason: string): Promise<void> {
+  private async rejectTemplate(
+    templateId: string,
+    reviewerId: string,
+    reason: string,
+  ): Promise<void> {
     const db = await this.ensureDb();
-    
+
     const templateRef = doc(db, 'marketplace-templates', templateId);
     await updateDoc(templateRef, {
       moderationStatus: 'rejected',
@@ -368,9 +389,12 @@ export class TemplateSubmissionWorkflow {
   /**
    * Step 7: Request changes
    */
-  private async requestChanges(templateId: string, requiredChanges: string[]): Promise<void> {
+  private async requestChanges(
+    templateId: string,
+    requiredChanges: string[],
+  ): Promise<void> {
     const db = await this.ensureDb();
-    
+
     const templateRef = doc(db, 'marketplace-templates', templateId);
     await updateDoc(templateRef, {
       moderationStatus: 'changes_required',
@@ -432,7 +456,7 @@ export class TemplateSubmissionWorkflow {
   }) {
     const db = await this.ensureDb();
     const submissionRef = doc(collection(db, 'template-submissions'));
-    
+
     await setDoc(submissionRef, {
       ...params,
       submittedAt: serverTimestamp(),
@@ -445,13 +469,22 @@ export class TemplateSubmissionWorkflow {
     return '3-5 business days';
   }
 
-  private calculateSubmissionPriority(templateId: string): 'low' | 'normal' | 'high' {
+  private calculateSubmissionPriority(
+    templateId: string,
+  ): 'low' | 'normal' | 'high' {
     // Simple algorithm - could be based on creator reputation, template complexity, etc.
     return 'normal';
   }
 
   private calculateEstimatedCompletion(priority?: string): Date {
-    const days = priority === 'urgent' ? 1 : priority === 'high' ? 2 : priority === 'normal' ? 3 : 5;
+    const days =
+      priority === 'urgent'
+        ? 1
+        : priority === 'high'
+          ? 2
+          : priority === 'normal'
+            ? 3
+            : 5;
     return new Date(Date.now() + days * 24 * 60 * 60 * 1000);
   }
 

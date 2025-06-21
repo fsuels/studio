@@ -71,7 +71,14 @@ export const questions: Question[] = [
     label: 'Type of Violation',
     required: true,
     category: 'Violation Information',
-    options: ['Attendance', 'Performance', 'Conduct', 'Policy Violation', 'Safety', 'Other'],
+    options: [
+      'Attendance',
+      'Performance',
+      'Conduct',
+      'Policy Violation',
+      'Safety',
+      'Other',
+    ],
   },
   {
     id: 'violationDescription',

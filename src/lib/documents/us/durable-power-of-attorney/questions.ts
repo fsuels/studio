@@ -125,7 +125,8 @@ export const durablePowerOfAttorneyQuestions: FormQuestion[] = [
   {
     id: 'springingPOA',
     type: 'checkbox',
-    label: 'This is a "springing" power of attorney (becomes effective upon my incapacity)',
+    label:
+      'This is a "springing" power of attorney (becomes effective upon my incapacity)',
     required: false,
     group: 'effective',
   },
@@ -133,7 +134,8 @@ export const durablePowerOfAttorneyQuestions: FormQuestion[] = [
     id: 'springingConditions',
     type: 'textarea',
     label: 'Conditions for Springing POA',
-    placeholder: 'Describe the conditions that must be met for the POA to become effective',
+    placeholder:
+      'Describe the conditions that must be met for the POA to become effective',
     required: false,
     group: 'effective',
     dependsOn: 'springingPOA',
@@ -172,7 +174,7 @@ export const durablePowerOfAttorneyQuestions: FormQuestion[] = [
     id: 'powerLimitations',
     type: 'textarea',
     label: 'Limitations on Agent Powers',
-    placeholder: 'Specify any limitations on the agent\'s authority',
+    placeholder: "Specify any limitations on the agent's authority",
     required: false,
     group: 'limitations',
   },
@@ -180,7 +182,8 @@ export const durablePowerOfAttorneyQuestions: FormQuestion[] = [
     id: 'prohibitedActions',
     type: 'textarea',
     label: 'Prohibited Actions',
-    placeholder: 'List any actions the agent is specifically prohibited from taking',
+    placeholder:
+      'List any actions the agent is specifically prohibited from taking',
     required: false,
     group: 'limitations',
   },

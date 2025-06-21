@@ -29,7 +29,8 @@ export const creditCardAgreementMeta: LegalDocument = {
     },
     es: {
       name: 'Acuerdo de Tarjeta de Crédito',
-      description: 'Acuerdo que describe los términos de uso y pago de tarjeta de crédito.',
+      description:
+        'Acuerdo que describe los términos de uso y pago de tarjeta de crédito.',
       aliases: ['acuerdo de crédito', 'contrato de tarjetahabiente'],
     },
   },

@@ -16,7 +16,7 @@ const DOCUMENT_LIBRARY = [
     complexity: 'medium',
     states: 'all',
     notarization: false,
-    priority: 'high'
+    priority: 'high',
   },
   {
     id: 'commercial-lease-agreement',
@@ -25,7 +25,7 @@ const DOCUMENT_LIBRARY = [
     complexity: 'high',
     states: 'all',
     notarization: true,
-    priority: 'high'
+    priority: 'high',
   },
   {
     id: 'rental-agreement',
@@ -34,7 +34,7 @@ const DOCUMENT_LIBRARY = [
     complexity: 'medium',
     states: 'all',
     notarization: false,
-    priority: 'high'
+    priority: 'high',
   },
   {
     id: 'property-deed',
@@ -43,7 +43,7 @@ const DOCUMENT_LIBRARY = [
     complexity: 'high',
     states: 'all',
     notarization: true,
-    priority: 'medium'
+    priority: 'medium',
   },
   {
     id: 'quitclaim-deed',
@@ -52,7 +52,7 @@ const DOCUMENT_LIBRARY = [
     complexity: 'high',
     states: 'all',
     notarization: true,
-    priority: 'medium'
+    priority: 'medium',
   },
 
   // Business Documents
@@ -63,7 +63,7 @@ const DOCUMENT_LIBRARY = [
     complexity: 'high',
     states: 'all',
     notarization: false,
-    priority: 'high'
+    priority: 'high',
   },
   {
     id: 'articles-of-incorporation',
@@ -72,7 +72,7 @@ const DOCUMENT_LIBRARY = [
     complexity: 'high',
     states: 'all',
     notarization: true,
-    priority: 'high'
+    priority: 'high',
   },
   {
     id: 'partnership-agreement',
@@ -81,7 +81,7 @@ const DOCUMENT_LIBRARY = [
     complexity: 'high',
     states: 'all',
     notarization: false,
-    priority: 'high'
+    priority: 'high',
   },
   {
     id: 'non-disclosure-agreement',
@@ -90,7 +90,7 @@ const DOCUMENT_LIBRARY = [
     complexity: 'medium',
     states: 'all',
     notarization: false,
-    priority: 'high'
+    priority: 'high',
   },
   {
     id: 'independent-contractor-agreement',
@@ -99,7 +99,7 @@ const DOCUMENT_LIBRARY = [
     complexity: 'medium',
     states: 'all',
     notarization: false,
-    priority: 'high'
+    priority: 'high',
   },
   {
     id: 'non-compete-agreement',
@@ -108,7 +108,7 @@ const DOCUMENT_LIBRARY = [
     complexity: 'medium',
     states: ['CA', 'TX', 'NY', 'FL'], // Some states restrict
     notarization: false,
-    priority: 'medium'
+    priority: 'medium',
   },
   {
     id: 'service-agreement',
@@ -117,7 +117,7 @@ const DOCUMENT_LIBRARY = [
     complexity: 'medium',
     states: 'all',
     notarization: false,
-    priority: 'high'
+    priority: 'high',
   },
 
   // Employment Documents
@@ -128,7 +128,7 @@ const DOCUMENT_LIBRARY = [
     complexity: 'medium',
     states: 'all',
     notarization: false,
-    priority: 'high'
+    priority: 'high',
   },
   {
     id: 'offer-letter',
@@ -137,7 +137,7 @@ const DOCUMENT_LIBRARY = [
     complexity: 'low',
     states: 'all',
     notarization: false,
-    priority: 'medium'
+    priority: 'medium',
   },
   {
     id: 'termination-letter',
@@ -146,7 +146,7 @@ const DOCUMENT_LIBRARY = [
     complexity: 'low',
     states: 'all',
     notarization: false,
-    priority: 'medium'
+    priority: 'medium',
   },
   {
     id: 'severance-agreement',
@@ -155,7 +155,7 @@ const DOCUMENT_LIBRARY = [
     complexity: 'medium',
     states: 'all',
     notarization: false,
-    priority: 'medium'
+    priority: 'medium',
   },
 
   // Estate Planning Documents
@@ -166,7 +166,7 @@ const DOCUMENT_LIBRARY = [
     complexity: 'high',
     states: 'all',
     notarization: true,
-    priority: 'high'
+    priority: 'high',
   },
   {
     id: 'living-will',
@@ -175,7 +175,7 @@ const DOCUMENT_LIBRARY = [
     complexity: 'medium',
     states: 'all',
     notarization: true,
-    priority: 'high'
+    priority: 'high',
   },
   {
     id: 'power-of-attorney',
@@ -184,7 +184,7 @@ const DOCUMENT_LIBRARY = [
     complexity: 'medium',
     states: 'all',
     notarization: true,
-    priority: 'high'
+    priority: 'high',
   },
   {
     id: 'healthcare-power-of-attorney',
@@ -193,7 +193,7 @@ const DOCUMENT_LIBRARY = [
     complexity: 'medium',
     states: 'all',
     notarization: true,
-    priority: 'high'
+    priority: 'high',
   },
   {
     id: 'living-trust',
@@ -202,7 +202,7 @@ const DOCUMENT_LIBRARY = [
     complexity: 'high',
     states: 'all',
     notarization: true,
-    priority: 'medium'
+    priority: 'medium',
   },
 
   // Financial Documents
@@ -213,7 +213,7 @@ const DOCUMENT_LIBRARY = [
     complexity: 'medium',
     states: 'all',
     notarization: false,
-    priority: 'high'
+    priority: 'high',
   },
   {
     id: 'loan-agreement',
@@ -222,7 +222,7 @@ const DOCUMENT_LIBRARY = [
     complexity: 'medium',
     states: 'all',
     notarization: true,
-    priority: 'medium'
+    priority: 'medium',
   },
   {
     id: 'invoice',
@@ -231,7 +231,7 @@ const DOCUMENT_LIBRARY = [
     complexity: 'low',
     states: 'all',
     notarization: false,
-    priority: 'low'
+    priority: 'low',
   },
 
   // Personal Documents
@@ -242,7 +242,7 @@ const DOCUMENT_LIBRARY = [
     complexity: 'high',
     states: 'all',
     notarization: true,
-    priority: 'medium'
+    priority: 'medium',
   },
   {
     id: 'divorce-settlement',
@@ -251,7 +251,7 @@ const DOCUMENT_LIBRARY = [
     complexity: 'high',
     states: 'all',
     notarization: true,
-    priority: 'medium'
+    priority: 'medium',
   },
   {
     id: 'child-custody-agreement',
@@ -260,7 +260,7 @@ const DOCUMENT_LIBRARY = [
     complexity: 'high',
     states: 'all',
     notarization: true,
-    priority: 'medium'
+    priority: 'medium',
   },
   {
     id: 'medical-consent',
@@ -269,7 +269,7 @@ const DOCUMENT_LIBRARY = [
     complexity: 'low',
     states: 'all',
     notarization: true,
-    priority: 'low'
+    priority: 'low',
   },
 
   // Vehicle/Transportation
@@ -280,7 +280,7 @@ const DOCUMENT_LIBRARY = [
     complexity: 'medium',
     states: 'all',
     notarization: true,
-    priority: 'high'
+    priority: 'high',
   },
   {
     id: 'boat-bill-of-sale',
@@ -289,7 +289,7 @@ const DOCUMENT_LIBRARY = [
     complexity: 'medium',
     states: 'all',
     notarization: true,
-    priority: 'low'
+    priority: 'low',
   },
 
   // Legal Documents
@@ -300,7 +300,7 @@ const DOCUMENT_LIBRARY = [
     complexity: 'low',
     states: 'all',
     notarization: true,
-    priority: 'medium'
+    priority: 'medium',
   },
   {
     id: 'demand-letter',
@@ -309,7 +309,7 @@ const DOCUMENT_LIBRARY = [
     complexity: 'low',
     states: 'all',
     notarization: false,
-    priority: 'medium'
+    priority: 'medium',
   },
   {
     id: 'eviction-notice',
@@ -318,7 +318,7 @@ const DOCUMENT_LIBRARY = [
     complexity: 'medium',
     states: 'all',
     notarization: false,
-    priority: 'medium'
+    priority: 'medium',
   },
 
   // Additional High-Value Documents
@@ -329,7 +329,7 @@ const DOCUMENT_LIBRARY = [
     complexity: 'medium',
     states: 'all',
     notarization: false,
-    priority: 'low'
+    priority: 'low',
   },
   {
     id: 'trademark-assignment',
@@ -338,7 +338,7 @@ const DOCUMENT_LIBRARY = [
     complexity: 'medium',
     states: 'all',
     notarization: false,
-    priority: 'low'
+    priority: 'low',
   },
   {
     id: 'licensing-agreement',
@@ -347,7 +347,7 @@ const DOCUMENT_LIBRARY = [
     complexity: 'high',
     states: 'all',
     notarization: false,
-    priority: 'medium'
+    priority: 'medium',
   },
   {
     id: 'purchase-agreement',
@@ -356,7 +356,7 @@ const DOCUMENT_LIBRARY = [
     complexity: 'medium',
     states: 'all',
     notarization: false,
-    priority: 'medium'
+    priority: 'medium',
   },
   {
     id: 'consignment-agreement',
@@ -365,8 +365,8 @@ const DOCUMENT_LIBRARY = [
     complexity: 'medium',
     states: 'all',
     notarization: false,
-    priority: 'low'
-  }
+    priority: 'low',
+  },
 ];
 
 class DocumentLibraryGenerator {
@@ -386,21 +386,23 @@ class DocumentLibraryGenerator {
       city: 'z.string().min(1, "City is required")',
       state: 'z.string().min(2, "State is required")',
       zipCode: 'z.string().min(5, "Valid ZIP code required")',
-      date: 'z.string().min(1, "Date is required")'
+      date: 'z.string().min(1, "Date is required")',
     };
 
     const businessFields = {
       companyName: 'z.string().min(1, "Company name is required")',
       businessAddress: 'z.string().min(1, "Business address is required")',
       taxId: 'z.string().optional()',
-      businessType: 'z.enum(["LLC", "Corporation", "Partnership", "Sole Proprietorship"])'
+      businessType:
+        'z.enum(["LLC", "Corporation", "Partnership", "Sole Proprietorship"])',
     };
 
     const financialFields = {
       amount: 'z.number().min(0, "Amount must be positive")',
-      interestRate: 'z.number().min(0).max(100, "Interest rate must be between 0-100%")',
+      interestRate:
+        'z.number().min(0).max(100, "Interest rate must be between 0-100%")',
       paymentTerms: 'z.string().min(1, "Payment terms required")',
-      dueDate: 'z.string().min(1, "Due date required")'
+      dueDate: 'z.string().min(1, "Due date required")',
     };
 
     let fields = { ...baseFields };
@@ -416,8 +418,9 @@ class DocumentLibraryGenerator {
       fields = {
         ...fields,
         propertyAddress: 'z.string().min(1, "Property address required")',
-        rentAmount: 'z.number().min(0, "Rent amount must be positive").optional()',
-        leaseTerms: 'z.string().min(1, "Lease terms required").optional()'
+        rentAmount:
+          'z.number().min(0, "Rent amount must be positive").optional()',
+        leaseTerms: 'z.string().min(1, "Lease terms required").optional()',
       };
     }
 
@@ -427,14 +430,14 @@ class DocumentLibraryGenerator {
   // Generate questions array based on schema
   generateQuestions(document, schema) {
     const questions = [];
-    
+
     Object.entries(schema).forEach(([key, validation]) => {
       questions.push({
         id: key,
         label: this.humanize(key),
         type: this.getFieldType(key, validation),
         required: !validation.includes('optional()'),
-        placeholder: `Enter ${this.humanize(key).toLowerCase()}...`
+        placeholder: `Enter ${this.humanize(key).toLowerCase()}...`,
       });
     });
 
@@ -445,7 +448,7 @@ class DocumentLibraryGenerator {
   humanize(str) {
     return str
       .replace(/([A-Z])/g, ' $1')
-      .replace(/^./, str => str.toUpperCase())
+      .replace(/^./, (str) => str.toUpperCase())
       .trim();
   }
 
@@ -508,24 +511,28 @@ ${document.notarization ? '- Document must be notarized to be legally valid' : '
         en: {
           name: document.name,
           description: `Create a legally binding ${document.name} with our easy-to-use template. State-specific requirements included.`,
-          aliases: this.generateAliases(document)
+          aliases: this.generateAliases(document),
         },
         es: {
           name: this.translateToSpanish(document.name),
           description: `Crea un ${this.translateToSpanish(document.name)} legalmente válido con nuestra plantilla fácil de usar. Incluye requisitos específicos del estado.`,
-          aliases: []
-        }
-      }
+          aliases: [],
+        },
+      },
     };
   }
 
   // Get estimated completion time
   getEstimatedTime(complexity) {
     switch (complexity) {
-      case 'low': return '5-10 minutes';
-      case 'medium': return '10-20 minutes';
-      case 'high': return '20-40 minutes';
-      default: return '10-15 minutes';
+      case 'low':
+        return '5-10 minutes';
+      case 'medium':
+        return '10-20 minutes';
+      case 'high':
+        return '20-40 minutes';
+      default:
+        return '10-15 minutes';
     }
   }
 
@@ -535,12 +542,12 @@ ${document.notarization ? '- Document must be notarized to be legally valid' : '
       document.category.toLowerCase(),
       document.complexity,
       'legal',
-      'template'
+      'template',
     ];
-    
+
     if (document.notarization) tags.push('notarization');
     if (document.priority === 'high') tags.push('popular');
-    
+
     return tags;
   }
 
@@ -548,7 +555,7 @@ ${document.notarization ? '- Document must be notarized to be legally valid' : '
   generateAliases(document) {
     const aliases = [];
     const name = document.name.toLowerCase();
-    
+
     // Add common variations
     if (name.includes('agreement')) {
       aliases.push(name.replace('agreement', 'contract'));
@@ -556,44 +563,44 @@ ${document.notarization ? '- Document must be notarized to be legally valid' : '
     if (name.includes('contract')) {
       aliases.push(name.replace('contract', 'agreement'));
     }
-    
+
     // Add category-specific aliases
     if (document.category === 'Business') {
       aliases.push('business document', 'commercial agreement');
     }
-    
+
     return aliases;
   }
 
   // Basic Spanish translation (would use proper translation service in production)
   translateToSpanish(name) {
     const translations = {
-      'Agreement': 'Acuerdo',
-      'Contract': 'Contrato',
-      'Letter': 'Carta',
-      'Notice': 'Aviso',
-      'Will': 'Testamento',
+      Agreement: 'Acuerdo',
+      Contract: 'Contrato',
+      Letter: 'Carta',
+      Notice: 'Aviso',
+      Will: 'Testamento',
       'Power of Attorney': 'Poder Notarial',
-      'Lease': 'Arrendamiento',
+      Lease: 'Arrendamiento',
       'Bill of Sale': 'Contrato de Compraventa',
-      'Employment': 'Empleo',
-      'Termination': 'Terminación',
+      Employment: 'Empleo',
+      Termination: 'Terminación',
       'Non-Disclosure': 'Confidencialidad',
-      'Partnership': 'Sociedad'
+      Partnership: 'Sociedad',
     };
-    
+
     let translated = name;
     Object.entries(translations).forEach(([en, es]) => {
       translated = translated.replace(new RegExp(en, 'gi'), es);
     });
-    
+
     return translated;
   }
 
   // Create document files
   async createDocumentFiles(document) {
     const docDir = path.join(this.baseDir, document.id);
-    
+
     // Create directory
     if (!fs.existsSync(docDir)) {
       fs.mkdirSync(docDir, { recursive: true });
@@ -602,14 +609,16 @@ ${document.notarization ? '- Document must be notarized to be legally valid' : '
     const schema = this.generateSchema(document);
     const questions = this.generateQuestions(document, schema);
     const metadata = this.generateMetadata(document);
-    
+
     // Generate index.ts
     const indexContent = `// ${document.name}
 import { z } from 'zod';
 import type { LegalDocument } from '../../types';
 
 const schema = z.object({
-${Object.entries(schema).map(([key, validation]) => `  ${key}: ${validation}`).join(',\n')}
+${Object.entries(schema)
+  .map(([key, validation]) => `  ${key}: ${validation}`)
+  .join(',\n')}
 });
 
 export const ${this.toCamelCase(document.id)}: LegalDocument = {
@@ -630,7 +639,9 @@ export const ${this.toCamelCase(document.id)}: LegalDocument = {
     const schemaContent = `import { z } from 'zod';
 
 export const ${this.toCamelCase(document.id)}Schema = z.object({
-${Object.entries(schema).map(([key, validation]) => `  ${key}: ${validation}`).join(',\n')}
+${Object.entries(schema)
+  .map(([key, validation]) => `  ${key}: ${validation}`)
+  .join(',\n')}
 });
 
 export type ${this.toPascalCase(document.id)}Data = z.infer<typeof ${this.toCamelCase(document.id)}Schema>;
@@ -655,7 +666,7 @@ export const ${this.toCamelCase(document.id)}Questions: Question[] = ${JSON.stri
     // Generate template file
     const templateDir = path.join(this.templatesDir, document.id + '.md');
     const templateContent = this.generateTemplate(document);
-    
+
     if (!fs.existsSync(path.dirname(templateDir))) {
       fs.mkdirSync(path.dirname(templateDir), { recursive: true });
     }
@@ -696,7 +707,7 @@ export const ${this.toCamelCase(document.id)}Questions: Question[] = ${JSON.stri
 
     for (const document of sortedDocs) {
       const docDir = path.join(this.baseDir, document.id);
-      
+
       if (fs.existsSync(docDir)) {
         console.log(`⏭️  Skipping ${document.name} - already exists`);
         this.skipped++;
@@ -709,7 +720,9 @@ export const ${this.toCamelCase(document.id)}Questions: Question[] = ${JSON.stri
     console.log(`\n🎉 Document library generation completed!`);
     console.log(`Created: ${this.created} documents`);
     console.log(`Skipped: ${this.skipped} documents`);
-    console.log(`Total: ${this.created + this.skipped}/${DOCUMENT_LIBRARY.length} documents`);
+    console.log(
+      `Total: ${this.created + this.skipped}/${DOCUMENT_LIBRARY.length} documents`,
+    );
   }
 }
 

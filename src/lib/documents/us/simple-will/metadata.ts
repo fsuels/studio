@@ -26,22 +26,13 @@ export const simpleWillMeta: LegalDocument = {
       name: 'Simple Will',
       description:
         'Create a basic last will and testament for straightforward estate planning with our easy-to-use template.',
-      aliases: [
-        'basic will',
-        'last will',
-        'testament',
-        'simple last will'
-      ],
+      aliases: ['basic will', 'last will', 'testament', 'simple last will'],
     },
     es: {
       name: 'Testamento Simple',
       description:
         'Crea un testamento básico para planificación patrimonial sencilla con nuestra plantilla fácil de usar.',
-      aliases: [
-        'testamento básico',
-        'última voluntad',
-        'testamento sencillo'
-      ],
+      aliases: ['testamento básico', 'última voluntad', 'testamento sencillo'],
     },
   },
 };

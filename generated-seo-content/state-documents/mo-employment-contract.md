@@ -47,7 +47,7 @@ Don't risk using generic templates that may not comply with Missouri law. Get a 
 
 [Create Missouri Employment Contract]
 
-*Trusted by thousands of Missouri businesses*
+_Trusted by thousands of Missouri businesses_
 
 ---
 

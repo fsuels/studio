@@ -14,7 +14,11 @@ interface TermMapping {
   sourceTerm: string;
   targetTerm: string;
   confidence: number;
-  category: 'direct_equivalent' | 'functional_equivalent' | 'approximate' | 'no_equivalent';
+  category:
+    | 'direct_equivalent'
+    | 'functional_equivalent'
+    | 'approximate'
+    | 'no_equivalent';
   contextRequired: boolean;
   explanationNeeded: boolean;
   alternativeTerms: string[];
@@ -122,10 +126,10 @@ class JurisdictionTermMappingEngine {
   async getJurisdictionMapping(
     sourceJurisdiction: string,
     targetJurisdiction: string,
-    documentType?: string
+    documentType?: string,
   ): Promise<JurisdictionMapping | null> {
     const mappingKey = `${sourceJurisdiction}->${targetJurisdiction}`;
-    
+
     // Check if mapping exists in cache
     if (this.mappingDatabase.has(mappingKey)) {
       return this.mappingDatabase.get(mappingKey)!;
@@ -135,7 +139,7 @@ class JurisdictionTermMappingEngine {
     const mapping = await this.generateJurisdictionMapping(
       sourceJurisdiction,
       targetJurisdiction,
-      documentType
+      documentType,
     );
 
     // Cache the mapping
@@ -153,11 +157,11 @@ class JurisdictionTermMappingEngine {
     term: string,
     sourceJurisdiction: string,
     targetJurisdiction: string,
-    context?: string
+    context?: string,
   ): Promise<TermMapping | null> {
     const jurisdictionMapping = await this.getJurisdictionMapping(
       sourceJurisdiction,
-      targetJurisdiction
+      targetJurisdiction,
     );
 
     if (!jurisdictionMapping) {
@@ -166,7 +170,7 @@ class JurisdictionTermMappingEngine {
 
     // Find exact term mapping
     let termMapping = jurisdictionMapping.termMappings.find(
-      mapping => mapping.sourceTerm.toLowerCase() === term.toLowerCase()
+      (mapping) => mapping.sourceTerm.toLowerCase() === term.toLowerCase(),
     );
 
     if (!termMapping) {
@@ -175,7 +179,7 @@ class JurisdictionTermMappingEngine {
         term,
         sourceJurisdiction,
         targetJurisdiction,
-        context
+        context,
       );
     }
 
@@ -187,9 +191,12 @@ class JurisdictionTermMappingEngine {
    */
   async getJurisdictionConflicts(
     sourceJurisdiction: string,
-    targetJurisdiction: string
+    targetJurisdiction: string,
   ): Promise<ConflictArea[]> {
-    const mapping = await this.getJurisdictionMapping(sourceJurisdiction, targetJurisdiction);
+    const mapping = await this.getJurisdictionMapping(
+      sourceJurisdiction,
+      targetJurisdiction,
+    );
     return mapping?.conflictAreas || [];
   }
 
@@ -200,7 +207,7 @@ class JurisdictionTermMappingEngine {
     text: string,
     sourceJurisdiction: string,
     targetJurisdiction: string,
-    documentType: string
+    documentType: string,
   ): Promise<{
     adaptedText: string;
     appliedRules: AdaptationRule[];
@@ -208,7 +215,7 @@ class JurisdictionTermMappingEngine {
   }> {
     const rulesKey = `${sourceJurisdiction}->${targetJurisdiction}`;
     const applicableRules = this.adaptationRules.get(rulesKey) || [];
-    
+
     let adaptedText = text;
     const appliedRules: AdaptationRule[] = [];
     const warnings: string[] = [];
@@ -217,12 +224,16 @@ class JurisdictionTermMappingEngine {
     const sortedRules = applicableRules.sort((a, b) => b.priority - a.priority);
 
     for (const rule of sortedRules) {
-      const result = await this.applyAdaptationRule(adaptedText, rule, documentType);
-      
+      const result = await this.applyAdaptationRule(
+        adaptedText,
+        rule,
+        documentType,
+      );
+
       if (result.applied) {
         adaptedText = result.adaptedText;
         appliedRules.push(rule);
-        
+
         if (result.warnings) {
           warnings.push(...result.warnings);
         }
@@ -232,7 +243,7 @@ class JurisdictionTermMappingEngine {
     return {
       adaptedText,
       appliedRules,
-      warnings
+      warnings,
     };
   }
 
@@ -241,7 +252,7 @@ class JurisdictionTermMappingEngine {
    */
   async validateJurisdictionCompatibility(
     sourceJurisdiction: string,
-    targetJurisdiction: string
+    targetJurisdiction: string,
   ): Promise<{
     compatible: boolean;
     compatibility: string;
@@ -256,7 +267,7 @@ class JurisdictionTermMappingEngine {
         compatible: false,
         compatibility: 'incompatible',
         issues: ['Unknown jurisdiction(s)'],
-        recommendations: ['Verify jurisdiction codes and availability']
+        recommendations: ['Verify jurisdiction codes and availability'],
       };
     }
 
@@ -265,17 +276,24 @@ class JurisdictionTermMappingEngine {
 
     // Legal system compatibility
     if (sourceProfile.legalSystem !== targetProfile.legalSystem) {
-      issues.push(`Different legal systems: ${sourceProfile.legalSystem} vs ${targetProfile.legalSystem}`);
-      recommendations.push('Legal expert review required for cross-system translation');
+      issues.push(
+        `Different legal systems: ${sourceProfile.legalSystem} vs ${targetProfile.legalSystem}`,
+      );
+      recommendations.push(
+        'Legal expert review required for cross-system translation',
+      );
     }
 
     // Language compatibility
-    const languageCompatible = sourceProfile.primaryLanguage === targetProfile.primaryLanguage ||
-                              targetProfile.secondaryLanguages.includes(sourceProfile.primaryLanguage);
-    
+    const languageCompatible =
+      sourceProfile.primaryLanguage === targetProfile.primaryLanguage ||
+      targetProfile.secondaryLanguages.includes(sourceProfile.primaryLanguage);
+
     if (!languageCompatible) {
       issues.push('No common language between jurisdictions');
-      recommendations.push('Professional translation and cultural adaptation required');
+      recommendations.push(
+        'Professional translation and cultural adaptation required',
+      );
     }
 
     // Determine overall compatibility
@@ -296,14 +314,16 @@ class JurisdictionTermMappingEngine {
     } else {
       compatibility = 'incompatible';
       compatible = false;
-      recommendations.push('Translation not recommended without significant legal restructuring');
+      recommendations.push(
+        'Translation not recommended without significant legal restructuring',
+      );
     }
 
     return {
       compatible,
       compatibility,
       issues,
-      recommendations
+      recommendations,
     };
   }
 
@@ -313,14 +333,16 @@ class JurisdictionTermMappingEngine {
   async getJurisdictionTermSuggestions(
     term: string,
     targetJurisdiction: string,
-    category?: string
-  ): Promise<Array<{
-    term: string;
-    definition: string;
-    confidence: number;
-    usage: string;
-    source: string;
-  }>> {
+    category?: string,
+  ): Promise<
+    Array<{
+      term: string;
+      definition: string;
+      confidence: number;
+      usage: string;
+      source: string;
+    }>
+  > {
     const suggestions: Array<{
       term: string;
       definition: string;
@@ -335,18 +357,21 @@ class JurisdictionTermMappingEngine {
 
     // Search for similar terms in jurisdiction's legal framework
     const conceptualFramework = profile.legalConcepts;
-    
+
     for (const [categoryName, terms] of Object.entries(conceptualFramework)) {
       if (category && categoryName !== category) continue;
-      
+
       for (const jurisdictionTerm of terms) {
         if (this.isTermSimilar(term, jurisdictionTerm)) {
           suggestions.push({
             term: jurisdictionTerm,
-            definition: await this.getTermDefinition(jurisdictionTerm, targetJurisdiction),
+            definition: await this.getTermDefinition(
+              jurisdictionTerm,
+              targetJurisdiction,
+            ),
             confidence: this.calculateTermSimilarity(term, jurisdictionTerm),
             usage: categoryName,
-            source: targetJurisdiction
+            source: targetJurisdiction,
           });
         }
       }
@@ -359,7 +384,7 @@ class JurisdictionTermMappingEngine {
   private async generateJurisdictionMapping(
     sourceJurisdiction: string,
     targetJurisdiction: string,
-    documentType?: string
+    documentType?: string,
   ): Promise<JurisdictionMapping | null> {
     const sourceProfile = this.jurisdictionProfiles.get(sourceJurisdiction);
     const targetProfile = this.jurisdictionProfiles.get(targetJurisdiction);
@@ -371,23 +396,26 @@ class JurisdictionTermMappingEngine {
     // Determine legal system compatibility
     const compatibility = this.determineLegalSystemCompatibility(
       sourceProfile.legalSystem,
-      targetProfile.legalSystem
+      targetProfile.legalSystem,
     );
 
     // Generate term mappings
     const termMappings = await this.generateTermMappings(
       sourceProfile,
       targetProfile,
-      documentType
+      documentType,
     );
 
     // Identify conflict areas
-    const conflictAreas = this.identifyConflictAreas(sourceProfile, targetProfile);
+    const conflictAreas = this.identifyConflictAreas(
+      sourceProfile,
+      targetProfile,
+    );
 
     // Generate adaptation rules
     const adaptationRules = this.generateAdaptationRules(
       sourceProfile,
-      targetProfile
+      targetProfile,
     );
 
     return {
@@ -397,7 +425,7 @@ class JurisdictionTermMappingEngine {
       compatibility,
       termMappings,
       conflictAreas,
-      adaptationRules
+      adaptationRules,
     };
   }
 
@@ -405,12 +433,12 @@ class JurisdictionTermMappingEngine {
     term: string,
     sourceJurisdiction: string,
     targetJurisdiction: string,
-    context?: string
+    context?: string,
   ): Promise<TermMapping | null> {
     // Attempt to find equivalent term in target jurisdiction
     const suggestions = await this.getJurisdictionTermSuggestions(
       term,
-      targetJurisdiction
+      targetJurisdiction,
     );
 
     if (suggestions.length === 0) {
@@ -426,55 +454,59 @@ class JurisdictionTermMappingEngine {
           frequency: 'rare',
           formality: 'formal',
           contexts: [context || 'legal'],
-          restrictions: ['Requires explanation in target jurisdiction']
+          restrictions: ['Requires explanation in target jurisdiction'],
         },
         verification: {
           sources: ['AI_generated'],
           lastVerified: new Date(),
           verifiedBy: 'system',
-          reliability: 'uncertain'
-        }
+          reliability: 'uncertain',
+        },
       };
     }
 
     const bestMatch = suggestions[0];
-    
+
     return {
       sourceTerm: term,
       targetTerm: bestMatch.term,
       confidence: bestMatch.confidence,
-      category: bestMatch.confidence > 0.8 ? 'direct_equivalent' : 
-               bestMatch.confidence > 0.6 ? 'functional_equivalent' : 'approximate',
+      category:
+        bestMatch.confidence > 0.8
+          ? 'direct_equivalent'
+          : bestMatch.confidence > 0.6
+            ? 'functional_equivalent'
+            : 'approximate',
       contextRequired: bestMatch.confidence < 0.8,
       explanationNeeded: bestMatch.confidence < 0.6,
-      alternativeTerms: suggestions.slice(1, 4).map(s => s.term),
+      alternativeTerms: suggestions.slice(1, 4).map((s) => s.term),
       usage: {
         frequency: 'common',
         formality: 'formal',
         contexts: [bestMatch.usage],
-        restrictions: []
+        restrictions: [],
       },
       verification: {
         sources: [bestMatch.source],
         lastVerified: new Date(),
         verifiedBy: 'system',
-        reliability: 'probable'
-      }
+        reliability: 'probable',
+      },
     };
   }
 
   private async applyAdaptationRule(
     text: string,
     rule: AdaptationRule,
-    documentType: string
+    documentType: string,
   ): Promise<{
     applied: boolean;
     adaptedText: string;
     warnings?: string[];
   }> {
     // Check if rule applies to any terms in the text
-    const applicableTerms = rule.applicableTerms.filter(term =>
-      text.toLowerCase().includes(term.toLowerCase())
+    const applicableTerms = rule.applicableTerms.filter((term) =>
+      text.toLowerCase().includes(term.toLowerCase()),
     );
 
     if (applicableTerms.length === 0) {
@@ -488,16 +520,18 @@ class JurisdictionTermMappingEngine {
     for (const term of applicableTerms) {
       // Simple implementation - in real system, would use more sophisticated NLP
       const regex = new RegExp(`\\b${term}\\b`, 'gi');
-      
+
       if (regex.test(adaptedText)) {
         // Find appropriate adaptation from examples
-        const example = rule.examples.find(ex =>
-          ex.originalContext.toLowerCase().includes(documentType.toLowerCase())
+        const example = rule.examples.find((ex) =>
+          ex.originalContext.toLowerCase().includes(documentType.toLowerCase()),
         );
 
         if (example) {
           adaptedText = adaptedText.replace(regex, example.adaptedContext);
-          warnings.push(`Applied adaptation rule: ${rule.name} for term "${term}"`);
+          warnings.push(
+            `Applied adaptation rule: ${rule.name} for term "${term}"`,
+          );
         }
       }
     }
@@ -505,61 +539,69 @@ class JurisdictionTermMappingEngine {
     return {
       applied: adaptedText !== text,
       adaptedText,
-      warnings: warnings.length > 0 ? warnings : undefined
+      warnings: warnings.length > 0 ? warnings : undefined,
     };
   }
 
   private determineLegalSystemCompatibility(
     sourceSystem: string,
-    targetSystem: string
+    targetSystem: string,
   ): 'high' | 'medium' | 'low' | 'incompatible' {
     if (sourceSystem === targetSystem) return 'high';
-    
+
     const compatibilityMatrix: Record<string, Record<string, string>> = {
-      'common_law': {
-        'mixed': 'medium',
-        'civil_law': 'low',
-        'religious': 'low',
-        'socialist': 'incompatible'
+      common_law: {
+        mixed: 'medium',
+        civil_law: 'low',
+        religious: 'low',
+        socialist: 'incompatible',
       },
-      'civil_law': {
-        'mixed': 'medium',
-        'common_law': 'low',
-        'religious': 'low',
-        'socialist': 'medium'
+      civil_law: {
+        mixed: 'medium',
+        common_law: 'low',
+        religious: 'low',
+        socialist: 'medium',
       },
-      'mixed': {
-        'common_law': 'medium',
-        'civil_law': 'medium',
-        'religious': 'low',
-        'socialist': 'low'
-      }
+      mixed: {
+        common_law: 'medium',
+        civil_law: 'medium',
+        religious: 'low',
+        socialist: 'low',
+      },
     };
 
-    return compatibilityMatrix[sourceSystem]?.[targetSystem] as any || 'incompatible';
+    return (
+      (compatibilityMatrix[sourceSystem]?.[targetSystem] as any) ||
+      'incompatible'
+    );
   }
 
   private async generateTermMappings(
     sourceProfile: JurisdictionProfile,
     targetProfile: JurisdictionProfile,
-    documentType?: string
+    documentType?: string,
   ): Promise<TermMapping[]> {
     const mappings: TermMapping[] = [];
-    
+
     // Compare conceptual frameworks
-    for (const [category, sourceTerms] of Object.entries(sourceProfile.legalConcepts)) {
+    for (const [category, sourceTerms] of Object.entries(
+      sourceProfile.legalConcepts,
+    )) {
       const targetTerms = (targetProfile.legalConcepts as any)[category] || [];
-      
+
       for (const sourceTerm of sourceTerms) {
         // Find best match in target terms
         const bestMatch = this.findBestTermMatch(sourceTerm, targetTerms);
-        
+
         if (bestMatch) {
           mappings.push({
             sourceTerm,
             targetTerm: bestMatch.term,
             confidence: bestMatch.confidence,
-            category: bestMatch.confidence > 0.8 ? 'direct_equivalent' : 'functional_equivalent',
+            category:
+              bestMatch.confidence > 0.8
+                ? 'direct_equivalent'
+                : 'functional_equivalent',
             contextRequired: bestMatch.confidence < 0.8,
             explanationNeeded: bestMatch.confidence < 0.6,
             alternativeTerms: [],
@@ -567,14 +609,14 @@ class JurisdictionTermMappingEngine {
               frequency: 'common',
               formality: 'formal',
               contexts: [category],
-              restrictions: []
+              restrictions: [],
             },
             verification: {
               sources: [targetProfile.jurisdiction],
               lastVerified: new Date(),
               verifiedBy: 'system',
-              reliability: 'probable'
-            }
+              reliability: 'probable',
+            },
           });
         }
       }
@@ -585,7 +627,7 @@ class JurisdictionTermMappingEngine {
 
   private identifyConflictAreas(
     sourceProfile: JurisdictionProfile,
-    targetProfile: JurisdictionProfile
+    targetProfile: JurisdictionProfile,
   ): ConflictArea[] {
     const conflicts: ConflictArea[] = [];
 
@@ -599,12 +641,19 @@ class JurisdictionTermMappingEngine {
         conflictType: 'conceptual',
         severity: 'major',
         resolutionStrategy: 'Extensive adaptation and explanation required',
-        examples: ['Precedent vs. Code', 'Judge vs. Magistrate roles', 'Jury vs. Professional judges']
+        examples: [
+          'Precedent vs. Code',
+          'Judge vs. Magistrate roles',
+          'Jury vs. Professional judges',
+        ],
       });
     }
 
     // Compare institutional structures
-    if (sourceProfile.institutionalStructure.courts.length !== targetProfile.institutionalStructure.courts.length) {
+    if (
+      sourceProfile.institutionalStructure.courts.length !==
+      targetProfile.institutionalStructure.courts.length
+    ) {
       conflicts.push({
         conceptName: 'Court System Structure',
         description: 'Different court hierarchies and specializations',
@@ -612,8 +661,12 @@ class JurisdictionTermMappingEngine {
         targetDefinition: `${targetProfile.institutionalStructure.courts.length} court levels`,
         conflictType: 'institutional',
         severity: 'moderate',
-        resolutionStrategy: 'Map equivalent court levels and explain differences',
-        examples: ['District vs. Regional courts', 'Supreme vs. Constitutional courts']
+        resolutionStrategy:
+          'Map equivalent court levels and explain differences',
+        examples: [
+          'District vs. Regional courts',
+          'Supreme vs. Constitutional courts',
+        ],
       });
     }
 
@@ -622,7 +675,7 @@ class JurisdictionTermMappingEngine {
 
   private generateAdaptationRules(
     sourceProfile: JurisdictionProfile,
-    targetProfile: JurisdictionProfile
+    targetProfile: JurisdictionProfile,
   ): AdaptationRule[] {
     const rules: AdaptationRule[] = [];
 
@@ -634,12 +687,14 @@ class JurisdictionTermMappingEngine {
         description: 'Adapt currency references to target jurisdiction',
         applicableTerms: ['dollar', 'USD', 'currency', 'payment'],
         rule: 'Replace currency references with target jurisdiction equivalent',
-        examples: [{
-          originalContext: 'Payment of $1000 USD',
-          adaptedContext: 'Payment of [TARGET_CURRENCY] equivalent',
-          explanation: 'Currency adapted for target jurisdiction'
-        }],
-        priority: 8
+        examples: [
+          {
+            originalContext: 'Payment of $1000 USD',
+            adaptedContext: 'Payment of [TARGET_CURRENCY] equivalent',
+            explanation: 'Currency adapted for target jurisdiction',
+          },
+        ],
+        priority: 8,
       });
     }
 
@@ -651,12 +706,14 @@ class JurisdictionTermMappingEngine {
         description: 'Adapt court references to target jurisdiction structure',
         applicableTerms: ['court', 'judge', 'tribunal', 'magistrate'],
         rule: 'Replace court system references with target jurisdiction equivalents',
-        examples: [{
-          originalContext: 'District Court jurisdiction',
-          adaptedContext: '[TARGET_COURT_EQUIVALENT] jurisdiction',
-          explanation: 'Court system adapted for target legal framework'
-        }],
-        priority: 9
+        examples: [
+          {
+            originalContext: 'District Court jurisdiction',
+            adaptedContext: '[TARGET_COURT_EQUIVALENT] jurisdiction',
+            explanation: 'Court system adapted for target legal framework',
+          },
+        ],
+        priority: 9,
       });
     }
 
@@ -665,7 +722,7 @@ class JurisdictionTermMappingEngine {
 
   private findBestTermMatch(
     sourceTerm: string,
-    targetTerms: string[]
+    targetTerms: string[],
   ): { term: string; confidence: number } | null {
     if (targetTerms.length === 0) return null;
 
@@ -680,7 +737,9 @@ class JurisdictionTermMappingEngine {
       }
     }
 
-    return bestConfidence > 0.3 ? { term: bestMatch, confidence: bestConfidence } : null;
+    return bestConfidence > 0.3
+      ? { term: bestMatch, confidence: bestConfidence }
+      : null;
   }
 
   private isTermSimilar(term1: string, term2: string): boolean {
@@ -694,12 +753,12 @@ class JurisdictionTermMappingEngine {
 
     if (lower1 === lower2) return 1.0;
     if (lower1.includes(lower2) || lower2.includes(lower1)) return 0.8;
-    
+
     // Calculate edit distance-based similarity
     const maxLength = Math.max(term1.length, term2.length);
     const editDistance = this.levenshteinDistance(lower1, lower2);
-    
-    return Math.max(0, 1 - (editDistance / maxLength));
+
+    return Math.max(0, 1 - editDistance / maxLength);
   }
 
   private levenshteinDistance(str1: string, str2: string): number {
@@ -721,7 +780,7 @@ class JurisdictionTermMappingEngine {
           matrix[i][j] = Math.min(
             matrix[i - 1][j - 1] + 1,
             matrix[i][j - 1] + 1,
-            matrix[i - 1][j] + 1
+            matrix[i - 1][j] + 1,
           );
         }
       }
@@ -730,7 +789,10 @@ class JurisdictionTermMappingEngine {
     return matrix[str2.length][str1.length];
   }
 
-  private async getTermDefinition(term: string, jurisdiction: string): Promise<string> {
+  private async getTermDefinition(
+    term: string,
+    jurisdiction: string,
+  ): Promise<string> {
     // In real implementation, fetch from legal dictionary
     return `Legal definition of "${term}" in ${jurisdiction} jurisdiction`;
   }
@@ -745,20 +807,40 @@ class JurisdictionTermMappingEngine {
       documentTypes: ['contract', 'agreement', 'litigation', 'regulatory'],
       institutionalStructure: {
         courts: [
-          { name: 'Supreme Court', level: 'federal', jurisdiction: 'national', specializations: ['constitutional'] },
-          { name: 'Circuit Courts', level: 'federal', jurisdiction: 'regional', specializations: ['appeals'] },
-          { name: 'District Courts', level: 'federal', jurisdiction: 'local', specializations: ['trial'] }
+          {
+            name: 'Supreme Court',
+            level: 'federal',
+            jurisdiction: 'national',
+            specializations: ['constitutional'],
+          },
+          {
+            name: 'Circuit Courts',
+            level: 'federal',
+            jurisdiction: 'regional',
+            specializations: ['appeals'],
+          },
+          {
+            name: 'District Courts',
+            level: 'federal',
+            jurisdiction: 'local',
+            specializations: ['trial'],
+          },
         ],
         legislativeBody: 'Congress',
         executiveBranch: 'Executive',
-        legalProfessions: ['attorney', 'lawyer', 'counsel']
+        legalProfessions: ['attorney', 'lawyer', 'counsel'],
       },
       legalConcepts: {
         propertyRights: ['fee simple', 'easement', 'mortgage', 'lien'],
         contractLaw: ['consideration', 'offer', 'acceptance', 'breach'],
-        criminalLaw: ['felony', 'misdemeanor', 'plea bargain', 'miranda rights'],
+        criminalLaw: [
+          'felony',
+          'misdemeanor',
+          'plea bargain',
+          'miranda rights',
+        ],
         familyLaw: ['custody', 'alimony', 'prenuptial', 'adoption'],
-        commercialLaw: ['partnership', 'corporation', 'LLC', 'securities']
+        commercialLaw: ['partnership', 'corporation', 'LLC', 'securities'],
       },
       procedureTypes: [
         {
@@ -766,9 +848,9 @@ class JurisdictionTermMappingEngine {
           description: 'Dispute resolution between private parties',
           stages: ['filing', 'discovery', 'trial', 'judgment'],
           participants: ['plaintiff', 'defendant', 'attorney', 'judge'],
-          timeframe: '6-24 months'
-        }
-      ]
+          timeframe: '6-24 months',
+        },
+      ],
     };
 
     const esProfile: JurisdictionProfile = {
@@ -779,20 +861,50 @@ class JurisdictionTermMappingEngine {
       documentTypes: ['contrato', 'acuerdo', 'litigio', 'regulatorio'],
       institutionalStructure: {
         courts: [
-          { name: 'Tribunal Supremo', level: 'nacional', jurisdiction: 'nacional', specializations: ['casación'] },
-          { name: 'Audiencias Provinciales', level: 'provincial', jurisdiction: 'provincial', specializations: ['apelación'] },
-          { name: 'Juzgados de Primera Instancia', level: 'local', jurisdiction: 'local', specializations: ['primera instancia'] }
+          {
+            name: 'Tribunal Supremo',
+            level: 'nacional',
+            jurisdiction: 'nacional',
+            specializations: ['casación'],
+          },
+          {
+            name: 'Audiencias Provinciales',
+            level: 'provincial',
+            jurisdiction: 'provincial',
+            specializations: ['apelación'],
+          },
+          {
+            name: 'Juzgados de Primera Instancia',
+            level: 'local',
+            jurisdiction: 'local',
+            specializations: ['primera instancia'],
+          },
         ],
         legislativeBody: 'Cortes Generales',
         executiveBranch: 'Gobierno',
-        legalProfessions: ['abogado', 'procurador', 'notario']
+        legalProfessions: ['abogado', 'procurador', 'notario'],
       },
       legalConcepts: {
         propertyRights: ['propiedad', 'servidumbre', 'hipoteca', 'embargo'],
-        contractLaw: ['contraprestación', 'oferta', 'aceptación', 'incumplimiento'],
-        criminalLaw: ['delito', 'falta', 'conformidad', 'derechos fundamentales'],
-        familyLaw: ['custodia', 'pensión alimenticia', 'capitulaciones', 'adopción'],
-        commercialLaw: ['sociedad', 'corporación', 'SL', 'valores']
+        contractLaw: [
+          'contraprestación',
+          'oferta',
+          'aceptación',
+          'incumplimiento',
+        ],
+        criminalLaw: [
+          'delito',
+          'falta',
+          'conformidad',
+          'derechos fundamentales',
+        ],
+        familyLaw: [
+          'custodia',
+          'pensión alimenticia',
+          'capitulaciones',
+          'adopción',
+        ],
+        commercialLaw: ['sociedad', 'corporación', 'SL', 'valores'],
       },
       procedureTypes: [
         {
@@ -800,9 +912,9 @@ class JurisdictionTermMappingEngine {
           description: 'Resolución de disputas entre partes privadas',
           stages: ['demanda', 'instrucción', 'juicio', 'sentencia'],
           participants: ['demandante', 'demandado', 'abogado', 'juez'],
-          timeframe: '8-18 meses'
-        }
-      ]
+          timeframe: '8-18 meses',
+        },
+      ],
     };
 
     this.jurisdictionProfiles.set('US-ALL', usProfile);
@@ -824,11 +936,18 @@ class JurisdictionTermMappingEngine {
 export const jurisdictionMapper = new JurisdictionTermMappingEngine();
 
 // Convenience functions
-export const getJurisdictionMapping = (source: string, target: string, docType?: string) =>
-  jurisdictionMapper.getJurisdictionMapping(source, target, docType);
+export const getJurisdictionMapping = (
+  source: string,
+  target: string,
+  docType?: string,
+) => jurisdictionMapper.getJurisdictionMapping(source, target, docType);
 
-export const mapLegalTerm = (term: string, source: string, target: string, context?: string) =>
-  jurisdictionMapper.mapLegalTerm(term, source, target, context);
+export const mapLegalTerm = (
+  term: string,
+  source: string,
+  target: string,
+  context?: string,
+) => jurisdictionMapper.mapLegalTerm(term, source, target, context);
 
 export const validateJurisdictions = (source: string, target: string) =>
   jurisdictionMapper.validateJurisdictionCompatibility(source, target);

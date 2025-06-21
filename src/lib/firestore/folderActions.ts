@@ -42,5 +42,8 @@ export async function getUserFolders(userId: string): Promise<UserFolder[]> {
   const col = collection(db, 'users', userId, 'folders');
   const q = query(col, orderBy('createdAt', 'asc'));
   const snap = await getDocs(q);
-  return snap.docs.map((d) => ({ id: d.id, name: (d.data().name as string) || d.id }));
+  return snap.docs.map((d) => ({
+    id: d.id,
+    name: (d.data().name as string) || d.id,
+  }));
 }

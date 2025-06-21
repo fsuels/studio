@@ -24,13 +24,22 @@ export const petCustodyAgreementMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Pet Custody Agreement',
-      description: 'Agreement establishing custody, care, and financial responsibilities for pets.',
-      aliases: ['pet custody contract', 'animal custody agreement', 'pet sharing agreement'],
+      description:
+        'Agreement establishing custody, care, and financial responsibilities for pets.',
+      aliases: [
+        'pet custody contract',
+        'animal custody agreement',
+        'pet sharing agreement',
+      ],
     },
     es: {
       name: 'Acuerdo de Custodia de Mascotas',
-      description: 'Acuerdo que establece custodia, cuidado y responsabilidades financieras para mascotas.',
-      aliases: ['contrato de custodia de mascotas', 'acuerdo de cuidado animal'],
+      description:
+        'Acuerdo que establece custodia, cuidado y responsabilidades financieras para mascotas.',
+      aliases: [
+        'contrato de custodia de mascotas',
+        'acuerdo de cuidado animal',
+      ],
     },
   },
 };

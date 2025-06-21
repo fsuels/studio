@@ -24,12 +24,14 @@ export const generalLiabilityWaiverMeta: LegalDocument = {
   translations: {
     en: {
       name: 'General Liability Waiver',
-      description: 'Comprehensive liability waiver and release form for activities and services.',
+      description:
+        'Comprehensive liability waiver and release form for activities and services.',
       aliases: ['liability release', 'waiver of liability', 'release form'],
     },
     es: {
       name: 'Exención de Responsabilidad General',
-      description: 'Formulario integral de exención y liberación de responsabilidad para actividades y servicios.',
+      description:
+        'Formulario integral de exención y liberación de responsabilidad para actividades y servicios.',
       aliases: ['liberación de responsabilidad', 'exención de responsabilidad'],
     },
   },

@@ -21,7 +21,13 @@ interface Subscription {
   id: string;
   customerId: string;
   planId: string;
-  status: 'active' | 'canceled' | 'past_due' | 'trialing' | 'incomplete' | 'paused';
+  status:
+    | 'active'
+    | 'canceled'
+    | 'past_due'
+    | 'trialing'
+    | 'incomplete'
+    | 'paused';
   currentPeriodStart: string;
   currentPeriodEnd: string;
   trialEnd?: string;
@@ -73,7 +79,12 @@ interface UsageRecord {
   subscriptionId: string;
   timestamp: string;
   quantity: number;
-  action: 'document_generated' | 'signature_sent' | 'ai_analysis' | 'translation' | 'storage_used';
+  action:
+    | 'document_generated'
+    | 'signature_sent'
+    | 'ai_analysis'
+    | 'translation'
+    | 'storage_used';
   metadata: {
     documentId?: string;
     documentType?: string;
@@ -113,14 +124,14 @@ export class PaymentProcessor {
         '5 documents per month',
         'Basic templates',
         'Email support',
-        'PDF download'
+        'PDF download',
       ],
       limits: {
         documentsPerMonth: 5,
         storageGB: 1,
         aiAnalysis: 10,
-        signatures: 5
-      }
+        signatures: 5,
+      },
     });
 
     this.billingPlans.set('professional', {
@@ -135,14 +146,14 @@ export class PaymentProcessor {
         'Priority support',
         'PDF + Word download',
         'E-signatures included',
-        'AI document analysis'
+        'AI document analysis',
       ],
       limits: {
         documentsPerMonth: 25,
         storageGB: 10,
         aiAnalysis: 100,
-        signatures: 25
-      }
+        signatures: 25,
+      },
     });
 
     this.billingPlans.set('business', {
@@ -158,14 +169,14 @@ export class PaymentProcessor {
         'Custom templates',
         'Phone support',
         'Advanced AI features',
-        'Multi-language support'
+        'Multi-language support',
       ],
       limits: {
         documentsPerMonth: -1, // unlimited
         storageGB: 100,
         aiAnalysis: -1, // unlimited
-        signatures: -1 // unlimited
-      }
+        signatures: -1, // unlimited
+      },
     });
 
     this.billingPlans.set('enterprise', {
@@ -180,14 +191,14 @@ export class PaymentProcessor {
         'Dedicated support',
         'Custom integrations',
         'SLA guarantee',
-        'On-premise deployment'
+        'On-premise deployment',
       ],
       limits: {
         documentsPerMonth: -1,
         storageGB: -1,
         aiAnalysis: -1,
-        signatures: -1
-      }
+        signatures: -1,
+      },
     });
   }
 
@@ -196,7 +207,7 @@ export class PaymentProcessor {
     customerId: string,
     planId: string,
     paymentMethodId: string,
-    trialDays?: number
+    trialDays?: number,
   ): Promise<Subscription> {
     console.log(`💳 Creating subscription for customer ${customerId}`);
 
@@ -229,13 +240,13 @@ export class PaymentProcessor {
       metadata: {
         documentsIncluded: plan.limits.documentsPerMonth,
         features: plan.features,
-        billingCycle: plan.interval === 'month' ? 'monthly' : 'annual'
+        billingCycle: plan.interval === 'month' ? 'monthly' : 'annual',
       },
       pricing: {
         amount: plan.price,
         currency: plan.currency,
-        interval: plan.interval
-      }
+        interval: plan.interval,
+      },
     };
 
     this.subscriptions.set(subscriptionId, subscription);
@@ -254,7 +265,7 @@ export class PaymentProcessor {
     customerId: string,
     subscriptionId?: string,
     amount?: number,
-    items?: any[]
+    items?: any[],
   ): Promise<Invoice> {
     console.log(`📄 Creating invoice for customer ${customerId}`);
 
@@ -273,13 +284,15 @@ export class PaymentProcessor {
         const plan = this.billingPlans.get(subscription.planId);
         if (plan) {
           invoiceAmount = plan.price;
-          invoiceItems = [{
-            description: `${plan.name} - ${plan.interval}ly subscription`,
-            quantity: 1,
-            unitAmount: plan.price,
-            totalAmount: plan.price,
-            metadata: { planId: subscription.planId }
-          }];
+          invoiceItems = [
+            {
+              description: `${plan.name} - ${plan.interval}ly subscription`,
+              quantity: 1,
+              unitAmount: plan.price,
+              totalAmount: plan.price,
+              metadata: { planId: subscription.planId },
+            },
+          ];
         }
       }
     }
@@ -301,8 +314,8 @@ export class PaymentProcessor {
       tax: {
         amount: taxAmount,
         rate: taxRate,
-        jurisdiction: 'US'
-      }
+        jurisdiction: 'US',
+      },
     };
 
     this.invoices.set(invoiceId, invoice);
@@ -315,7 +328,7 @@ export class PaymentProcessor {
   async processPayment(
     invoiceId: string,
     paymentMethodId: string,
-    metadata?: any
+    metadata?: any,
   ): Promise<{ success: boolean; transactionId: string; error?: string }> {
     console.log(`💰 Processing payment for invoice ${invoiceId}`);
 
@@ -325,14 +338,16 @@ export class PaymentProcessor {
     }
 
     if (invoice.status !== 'open') {
-      throw new Error(`Invoice ${invoiceId} is not payable (status: ${invoice.status})`);
+      throw new Error(
+        `Invoice ${invoiceId} is not payable (status: ${invoice.status})`,
+      );
     }
 
     // Simulate Stripe payment processing
     const paymentResult = await this.simulateStripePayment(
       invoice.amount,
       invoice.currency,
-      paymentMethodId
+      paymentMethodId,
     );
 
     if (paymentResult.success) {
@@ -361,7 +376,7 @@ export class PaymentProcessor {
     customerId: string,
     action: UsageRecord['action'],
     quantity: number = 1,
-    metadata?: any
+    metadata?: any,
   ): Promise<void> {
     const subscription = this.getActiveSubscription(customerId);
     if (!subscription) {
@@ -375,7 +390,7 @@ export class PaymentProcessor {
       timestamp: new Date().toISOString(),
       quantity,
       action,
-      metadata: metadata || {}
+      metadata: metadata || {},
     };
 
     const customerUsage = this.usageRecords.get(customerId) || [];
@@ -385,11 +400,16 @@ export class PaymentProcessor {
     // Check if usage exceeds plan limits
     await this.checkUsageLimits(customerId, action);
 
-    console.log(`📊 Usage tracked: ${action} (${quantity}) for customer ${customerId}`);
+    console.log(
+      `📊 Usage tracked: ${action} (${quantity}) for customer ${customerId}`,
+    );
   }
 
   // Check usage limits
-  private async checkUsageLimits(customerId: string, action: string): Promise<void> {
+  private async checkUsageLimits(
+    customerId: string,
+    action: string,
+  ): Promise<void> {
     const subscription = this.getActiveSubscription(customerId);
     if (!subscription) return;
 
@@ -401,7 +421,9 @@ export class PaymentProcessor {
 
     // Check document generation limit
     if (action === 'document_generated' && plan.limits.documentsPerMonth > 0) {
-      const documentCount = monthlyUsage.filter(u => u.action === 'document_generated').length;
+      const documentCount = monthlyUsage.filter(
+        (u) => u.action === 'document_generated',
+      ).length;
       if (documentCount >= plan.limits.documentsPerMonth) {
         console.log(`⚠️ Document limit reached for customer ${customerId}`);
         // Could trigger upgrade prompt or block further generation
@@ -410,7 +432,9 @@ export class PaymentProcessor {
 
     // Check AI analysis limit
     if (action === 'ai_analysis' && plan.limits.aiAnalysis > 0) {
-      const analysisCount = monthlyUsage.filter(u => u.action === 'ai_analysis').length;
+      const analysisCount = monthlyUsage.filter(
+        (u) => u.action === 'ai_analysis',
+      ).length;
       if (analysisCount >= plan.limits.aiAnalysis) {
         console.log(`⚠️ AI analysis limit reached for customer ${customerId}`);
       }
@@ -420,13 +444,13 @@ export class PaymentProcessor {
   // Get monthly usage
   private getMonthlyUsage(customerId: string, month: string): UsageRecord[] {
     const allUsage = this.usageRecords.get(customerId) || [];
-    return allUsage.filter(record => record.timestamp.startsWith(month));
+    return allUsage.filter((record) => record.timestamp.startsWith(month));
   }
 
   // Cancel subscription
   async cancelSubscription(
     subscriptionId: string,
-    cancelAtPeriodEnd: boolean = true
+    cancelAtPeriodEnd: boolean = true,
   ): Promise<Subscription> {
     const subscription = this.subscriptions.get(subscriptionId);
     if (!subscription) {
@@ -435,7 +459,9 @@ export class PaymentProcessor {
 
     if (cancelAtPeriodEnd) {
       subscription.cancelAtPeriodEnd = true;
-      console.log(`📅 Subscription ${subscriptionId} will cancel at period end`);
+      console.log(
+        `📅 Subscription ${subscriptionId} will cancel at period end`,
+      );
     } else {
       subscription.status = 'canceled';
       subscription.canceledAt = new Date().toISOString();
@@ -449,10 +475,10 @@ export class PaymentProcessor {
   async addPaymentMethod(
     customerId: string,
     type: PaymentMethod['type'],
-    details: any
+    details: any,
   ): Promise<PaymentMethod> {
     const paymentMethodId = this.generatePaymentMethodId();
-    
+
     const paymentMethod: PaymentMethod = {
       id: paymentMethodId,
       type,
@@ -465,17 +491,17 @@ export class PaymentProcessor {
       metadata: {
         fingerprint: this.generateFingerprint(),
         country: details.country || 'US',
-        funding: details.funding || 'credit'
-      }
+        funding: details.funding || 'credit',
+      },
     };
 
     const customerMethods = this.paymentMethods.get(customerId) || [];
-    
+
     // If this is the first payment method, make it default
     if (customerMethods.length === 0) {
       paymentMethod.isDefault = true;
     }
-    
+
     customerMethods.push(paymentMethod);
     this.paymentMethods.set(customerId, customerMethods);
 
@@ -485,20 +511,27 @@ export class PaymentProcessor {
 
   // Get active subscription
   getActiveSubscription(customerId: string): Subscription | undefined {
-    return Array.from(this.subscriptions.values())
-      .find(sub => sub.customerId === customerId && 
-                   ['active', 'trialing'].includes(sub.status));
+    return Array.from(this.subscriptions.values()).find(
+      (sub) =>
+        sub.customerId === customerId &&
+        ['active', 'trialing'].includes(sub.status),
+    );
   }
 
   // Get customer invoices
   getCustomerInvoices(customerId: string): Invoice[] {
     return Array.from(this.invoices.values())
-      .filter(invoice => invoice.customerId === customerId)
-      .sort((a, b) => new Date(b.dueDate).getTime() - new Date(a.dueDate).getTime());
+      .filter((invoice) => invoice.customerId === customerId)
+      .sort(
+        (a, b) => new Date(b.dueDate).getTime() - new Date(a.dueDate).getTime(),
+      );
   }
 
   // Get usage analytics
-  getUsageAnalytics(customerId: string, timeframe: 'month' | 'quarter' | 'year' = 'month'): {
+  getUsageAnalytics(
+    customerId: string,
+    timeframe: 'month' | 'quarter' | 'year' = 'month',
+  ): {
     period: string;
     documentsGenerated: number;
     signaturesProcessed: number;
@@ -523,13 +556,19 @@ export class PaymentProcessor {
     }
 
     const usage = this.usageRecords.get(customerId) || [];
-    const periodUsage = usage.filter(record => 
-      new Date(record.timestamp) >= startDate
+    const periodUsage = usage.filter(
+      (record) => new Date(record.timestamp) >= startDate,
     );
 
-    const documentsGenerated = periodUsage.filter(r => r.action === 'document_generated').length;
-    const signaturesProcessed = periodUsage.filter(r => r.action === 'signature_sent').length;
-    const aiAnalyses = periodUsage.filter(r => r.action === 'ai_analysis').length;
+    const documentsGenerated = periodUsage.filter(
+      (r) => r.action === 'document_generated',
+    ).length;
+    const signaturesProcessed = periodUsage.filter(
+      (r) => r.action === 'signature_sent',
+    ).length;
+    const aiAnalyses = periodUsage.filter(
+      (r) => r.action === 'ai_analysis',
+    ).length;
 
     // Calculate projected costs based on usage
     const subscription = this.getActiveSubscription(customerId);
@@ -542,12 +581,15 @@ export class PaymentProcessor {
       signaturesProcessed,
       aiAnalyses,
       totalUsage: periodUsage.length,
-      projectedCosts: baseCost + overageCosts
+      projectedCosts: baseCost + overageCosts,
     };
   }
 
   // Calculate overage costs
-  private calculateOverageCosts(customerId: string, usage: UsageRecord[]): number {
+  private calculateOverageCosts(
+    customerId: string,
+    usage: UsageRecord[],
+  ): number {
     const subscription = this.getActiveSubscription(customerId);
     if (!subscription) return 0;
 
@@ -557,14 +599,19 @@ export class PaymentProcessor {
     let overageCost = 0;
 
     // Calculate document overage
-    const documentsUsed = usage.filter(r => r.action === 'document_generated').length;
-    if (plan.limits.documentsPerMonth > 0 && documentsUsed > plan.limits.documentsPerMonth) {
+    const documentsUsed = usage.filter(
+      (r) => r.action === 'document_generated',
+    ).length;
+    if (
+      plan.limits.documentsPerMonth > 0 &&
+      documentsUsed > plan.limits.documentsPerMonth
+    ) {
       const overage = documentsUsed - plan.limits.documentsPerMonth;
       overageCost += overage * 5; // $5 per additional document
     }
 
     // Calculate AI analysis overage
-    const aiUsed = usage.filter(r => r.action === 'ai_analysis').length;
+    const aiUsed = usage.filter((r) => r.action === 'ai_analysis').length;
     if (plan.limits.aiAnalysis > 0 && aiUsed > plan.limits.aiAnalysis) {
       const overage = aiUsed - plan.limits.aiAnalysis;
       overageCost += overage * 1; // $1 per additional AI analysis
@@ -577,10 +624,10 @@ export class PaymentProcessor {
   private async simulateStripePayment(
     amount: number,
     currency: string,
-    paymentMethodId: string
+    paymentMethodId: string,
   ): Promise<{ success: boolean; transactionId: string; error?: string }> {
     // Simulate processing delay
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise((resolve) => setTimeout(resolve, 1000));
 
     // Simulate 95% success rate
     const success = Math.random() > 0.05;
@@ -588,19 +635,19 @@ export class PaymentProcessor {
     if (success) {
       return {
         success: true,
-        transactionId: `txn_${Date.now()}_${Math.random().toString(36).substr(2, 8)}`
+        transactionId: `txn_${Date.now()}_${Math.random().toString(36).substr(2, 8)}`,
       };
     } else {
       const errors = [
         'Insufficient funds',
         'Card declined',
         'Expired card',
-        'Invalid CVV'
+        'Invalid CVV',
       ];
       return {
         success: false,
         transactionId: '',
-        error: errors[Math.floor(Math.random() * errors.length)]
+        error: errors[Math.floor(Math.random() * errors.length)],
       };
     }
   }
@@ -638,22 +685,34 @@ export class PaymentProcessor {
     outstandingAmount: number;
   } {
     const allSubscriptions = Array.from(this.subscriptions.values());
-    const activeSubscriptions = allSubscriptions.filter(s => s.status === 'active');
-    
+    const activeSubscriptions = allSubscriptions.filter(
+      (s) => s.status === 'active',
+    );
+
     const mrr = activeSubscriptions.reduce((sum, sub) => {
       return sum + sub.pricing.amount;
     }, 0);
 
     const allInvoices = Array.from(this.invoices.values());
-    const paidInvoices = allInvoices.filter(inv => inv.status === 'paid');
-    const outstandingInvoices = allInvoices.filter(inv => inv.status === 'open');
+    const paidInvoices = allInvoices.filter((inv) => inv.status === 'paid');
+    const outstandingInvoices = allInvoices.filter(
+      (inv) => inv.status === 'open',
+    );
 
-    const outstandingAmount = outstandingInvoices.reduce((sum, inv) => sum + inv.amount, 0);
-    const arpu = activeSubscriptions.length > 0 ? mrr / activeSubscriptions.length : 0;
+    const outstandingAmount = outstandingInvoices.reduce(
+      (sum, inv) => sum + inv.amount,
+      0,
+    );
+    const arpu =
+      activeSubscriptions.length > 0 ? mrr / activeSubscriptions.length : 0;
 
     // Simplified churn rate calculation
-    const churnRate = allSubscriptions.length > 0 ? 
-      (allSubscriptions.filter(s => s.status === 'canceled').length / allSubscriptions.length) * 100 : 0;
+    const churnRate =
+      allSubscriptions.length > 0
+        ? (allSubscriptions.filter((s) => s.status === 'canceled').length /
+            allSubscriptions.length) *
+          100
+        : 0;
 
     return {
       totalSubscriptions: allSubscriptions.length,
@@ -663,7 +722,7 @@ export class PaymentProcessor {
       averageRevenuePerUser: Math.round(arpu * 100) / 100,
       totalInvoices: allInvoices.length,
       paidInvoices: paidInvoices.length,
-      outstandingAmount: Math.round(outstandingAmount * 100) / 100
+      outstandingAmount: Math.round(outstandingAmount * 100) / 100,
     };
   }
 }

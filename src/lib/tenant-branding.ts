@@ -49,7 +49,9 @@ export interface BrandingTheme {
 }
 
 // Convert tenant branding to a complete theme
-export function createBrandingTheme(branding: TenantBranding | null): BrandingTheme {
+export function createBrandingTheme(
+  branding: TenantBranding | null,
+): BrandingTheme {
   const defaultTheme: BrandingTheme = {
     colors: {
       primary: '#2563eb',
@@ -108,18 +110,24 @@ export function createBrandingTheme(branding: TenantBranding | null): BrandingTh
       ...defaultTheme.colors,
       primary: branding.primaryColor || defaultTheme.colors.primary,
       secondary: branding.secondaryColor || defaultTheme.colors.secondary,
-      accent: branding.accentColor || branding.primaryColor || defaultTheme.colors.accent,
+      accent:
+        branding.accentColor ||
+        branding.primaryColor ||
+        defaultTheme.colors.accent,
     },
     typography: {
       ...defaultTheme.typography,
       fontFamily: branding.fontFamily || defaultTheme.typography.fontFamily,
-      headingFontFamily: branding.fontFamily || defaultTheme.typography.fontFamily,
+      headingFontFamily:
+        branding.fontFamily || defaultTheme.typography.fontFamily,
     },
   };
 }
 
 // Generate CSS variables from branding theme
-export function generateCSSVariables(theme: BrandingTheme): Record<string, string> {
+export function generateCSSVariables(
+  theme: BrandingTheme,
+): Record<string, string> {
   return {
     '--brand-primary': theme.colors.primary,
     '--brand-secondary': theme.colors.secondary,
@@ -142,7 +150,8 @@ export function generateCSSVariables(theme: BrandingTheme): Record<string, strin
     '--brand-font-size-4xl': theme.typography.fontSize['4xl'],
     '--brand-font-weight-normal': theme.typography.fontWeight.normal.toString(),
     '--brand-font-weight-medium': theme.typography.fontWeight.medium.toString(),
-    '--brand-font-weight-semibold': theme.typography.fontWeight.semibold.toString(),
+    '--brand-font-weight-semibold':
+      theme.typography.fontWeight.semibold.toString(),
     '--brand-font-weight-bold': theme.typography.fontWeight.bold.toString(),
     '--brand-spacing-xs': theme.spacing.xs,
     '--brand-spacing-sm': theme.spacing.sm,
@@ -244,25 +253,28 @@ export function getContrastColor(backgroundColor: string): string {
   const b = parseInt(hex.substr(4, 2), 16) / 255;
 
   const luminance = 0.299 * r + 0.587 * g + 0.114 * b;
-  
+
   // Return black or white based on luminance
   return luminance > 0.5 ? '#000000' : '#ffffff';
 }
 
-export function validateBrandingColors(branding: Partial<TenantBranding>): { valid: boolean; errors: string[] } {
+export function validateBrandingColors(branding: Partial<TenantBranding>): {
+  valid: boolean;
+  errors: string[];
+} {
   const errors: string[] = [];
-  
+
   // Validate hex color format
   const hexRegex = /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/;
-  
+
   if (branding.primaryColor && !hexRegex.test(branding.primaryColor)) {
     errors.push('Primary color must be a valid hex color (e.g., #2563eb)');
   }
-  
+
   if (branding.secondaryColor && !hexRegex.test(branding.secondaryColor)) {
     errors.push('Secondary color must be a valid hex color (e.g., #64748b)');
   }
-  
+
   if (branding.accentColor && !hexRegex.test(branding.accentColor)) {
     errors.push('Accent color must be a valid hex color (e.g., #0f172a)');
   }
@@ -277,12 +289,16 @@ export function validateBrandingColors(branding: Partial<TenantBranding>): { val
       'Arial',
       'sans-serif',
       'serif',
-      'monospace'
+      'monospace',
     ];
-    
-    const fontParts = branding.fontFamily.split(',').map(f => f.trim().replace(/['"]/g, ''));
-    const hasValidFont = fontParts.some(font => validFonts.includes(font) || font.includes('font-'));
-    
+
+    const fontParts = branding.fontFamily
+      .split(',')
+      .map((f) => f.trim().replace(/['"]/g, ''));
+    const hasValidFont = fontParts.some(
+      (font) => validFonts.includes(font) || font.includes('font-'),
+    );
+
     if (!hasValidFont) {
       errors.push('Font family should include a web-safe fallback font');
     }
@@ -290,11 +306,11 @@ export function validateBrandingColors(branding: Partial<TenantBranding>): { val
 
   // Validate URLs
   const urlRegex = /^https?:\/\/.+/;
-  
+
   if (branding.logoUrl && !urlRegex.test(branding.logoUrl)) {
     errors.push('Logo URL must be a valid HTTP/HTTPS URL');
   }
-  
+
   if (branding.faviconUrl && !urlRegex.test(branding.faviconUrl)) {
     errors.push('Favicon URL must be a valid HTTP/HTTPS URL');
   }

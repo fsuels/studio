@@ -3,9 +3,18 @@
 import React, { useState, useEffect } from 'react';
 import { Tenant } from '@/types/tenant';
 import { useTenant } from '@/contexts/TenantContext';
-import { useTenantBranding, useCompanyInfo } from '@/contexts/TenantBrandingContext';
+import {
+  useTenantBranding,
+  useCompanyInfo,
+} from '@/contexts/TenantBrandingContext';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
 import {
@@ -76,13 +85,17 @@ export function TenantDashboard({ tenant }: TenantDashboardProps) {
       href: `/tenant/${tenant.slug}/templates`,
       color: 'bg-green-500',
     },
-    ...(hasPermission('tenant.manage_users') ? [{
-      title: 'Invite Team Members',
-      description: 'Add colleagues to collaborate',
-      icon: Users,
-      href: `/tenant/${tenant.slug}/team/invite`,
-      color: 'bg-purple-500',
-    }] : []),
+    ...(hasPermission('tenant.manage_users')
+      ? [
+          {
+            title: 'Invite Team Members',
+            description: 'Add colleagues to collaborate',
+            icon: Users,
+            href: `/tenant/${tenant.slug}/team/invite`,
+            color: 'bg-purple-500',
+          },
+        ]
+      : []),
     {
       title: 'Get Support',
       description: 'Chat with our legal document experts',
@@ -107,11 +120,9 @@ export function TenantDashboard({ tenant }: TenantDashboardProps) {
           Welcome to {companyName}
         </h1>
         <p className="text-lg text-gray-600">
-          {tenantUser ? (
-            `Create professional legal documents for your business needs.`
-          ) : (
-            'You\'ve been invited to collaborate on legal documents. Sign in to get started.'
-          )}
+          {tenantUser
+            ? `Create professional legal documents for your business needs.`
+            : "You've been invited to collaborate on legal documents. Sign in to get started."}
         </p>
       </div>
 
@@ -120,7 +131,9 @@ export function TenantDashboard({ tenant }: TenantDashboardProps) {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Total Documents</CardTitle>
+              <CardTitle className="text-sm font-medium">
+                Total Documents
+              </CardTitle>
               <FileText className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
@@ -133,7 +146,9 @@ export function TenantDashboard({ tenant }: TenantDashboardProps) {
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Team Members</CardTitle>
+              <CardTitle className="text-sm font-medium">
+                Team Members
+              </CardTitle>
               <Users className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
@@ -150,16 +165,18 @@ export function TenantDashboard({ tenant }: TenantDashboardProps) {
               <BookOpen className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{stats.templatesAvailable}</div>
-              <p className="text-xs text-muted-foreground">
-                Ready to use
-              </p>
+              <div className="text-2xl font-bold">
+                {stats.templatesAvailable}
+              </div>
+              <p className="text-xs text-muted-foreground">Ready to use</p>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Success Rate</CardTitle>
+              <CardTitle className="text-sm font-medium">
+                Success Rate
+              </CardTitle>
               <TrendingUp className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
@@ -174,13 +191,17 @@ export function TenantDashboard({ tenant }: TenantDashboardProps) {
 
       {/* Quick Actions */}
       <div className="mb-8">
-        <h2 className="text-xl font-semibold text-gray-900 mb-4">Quick Actions</h2>
+        <h2 className="text-xl font-semibold text-gray-900 mb-4">
+          Quick Actions
+        </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {quickActions.map((action, index) => (
             <Link key={index} href={action.href}>
               <Card className="hover:shadow-md transition-shadow cursor-pointer">
                 <CardHeader className="pb-3">
-                  <div className={`inline-flex p-2 rounded-lg ${action.color} w-fit`}>
+                  <div
+                    className={`inline-flex p-2 rounded-lg ${action.color} w-fit`}
+                  >
                     <action.icon className="h-5 w-5 text-white" />
                   </div>
                   <CardTitle className="text-base">{action.title}</CardTitle>
@@ -199,7 +220,9 @@ export function TenantDashboard({ tenant }: TenantDashboardProps) {
         {tenantUser && (
           <div className="lg:col-span-2">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xl font-semibold text-gray-900">Recent Documents</h2>
+              <h2 className="text-xl font-semibold text-gray-900">
+                Recent Documents
+              </h2>
               <Link href={`/tenant/${tenant.slug}/documents`}>
                 <Button variant="outline" size="sm">
                   View All
@@ -207,11 +230,14 @@ export function TenantDashboard({ tenant }: TenantDashboardProps) {
                 </Button>
               </Link>
             </div>
-            
+
             {recentDocuments.length > 0 ? (
               <div className="space-y-3">
                 {recentDocuments.slice(0, 5).map((doc: any, index) => (
-                  <Card key={index} className="hover:shadow-sm transition-shadow">
+                  <Card
+                    key={index}
+                    className="hover:shadow-sm transition-shadow"
+                  >
                     <CardContent className="p-4">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center space-x-3">
@@ -219,12 +245,20 @@ export function TenantDashboard({ tenant }: TenantDashboardProps) {
                             <FileText className="h-4 w-4 text-blue-600" />
                           </div>
                           <div>
-                            <h3 className="font-medium text-gray-900">{doc.title}</h3>
+                            <h3 className="font-medium text-gray-900">
+                              {doc.title}
+                            </h3>
                             <p className="text-sm text-gray-500">{doc.type}</p>
                           </div>
                         </div>
                         <div className="text-right">
-                          <Badge variant={doc.status === 'completed' ? 'default' : 'secondary'}>
+                          <Badge
+                            variant={
+                              doc.status === 'completed'
+                                ? 'default'
+                                : 'secondary'
+                            }
+                          >
                             {doc.status}
                           </Badge>
                           <p className="text-xs text-gray-500 mt-1">
@@ -240,7 +274,9 @@ export function TenantDashboard({ tenant }: TenantDashboardProps) {
               <Card>
                 <CardContent className="p-8 text-center">
                   <FileText className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                  <h3 className="text-lg font-medium text-gray-900 mb-2">No documents yet</h3>
+                  <h3 className="text-lg font-medium text-gray-900 mb-2">
+                    No documents yet
+                  </h3>
                   <p className="text-gray-500 mb-4">
                     Get started by creating your first legal document.
                   </p>
@@ -258,7 +294,9 @@ export function TenantDashboard({ tenant }: TenantDashboardProps) {
 
         {/* Popular Templates */}
         <div>
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">Popular Templates</h2>
+          <h2 className="text-xl font-semibold text-gray-900 mb-4">
+            Popular Templates
+          </h2>
           <Card>
             <CardContent className="p-0">
               {popularTemplates.map((template, index) => (
@@ -268,8 +306,12 @@ export function TenantDashboard({ tenant }: TenantDashboardProps) {
                 >
                   <div className="flex items-center justify-between">
                     <div>
-                      <h4 className="font-medium text-gray-900">{template.name}</h4>
-                      <p className="text-sm text-gray-500">{template.category}</p>
+                      <h4 className="font-medium text-gray-900">
+                        {template.name}
+                      </h4>
+                      <p className="text-sm text-gray-500">
+                        {template.category}
+                      </p>
                     </div>
                     <div className="text-right">
                       <div className="flex items-center text-sm text-gray-500">

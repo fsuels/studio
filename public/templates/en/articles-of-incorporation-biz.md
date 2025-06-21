@@ -23,10 +23,12 @@ This name has been reserved under Reservation Number {{reservation_number}} date
 ## 2. Registered Office and Agent
 
 ### 2.1 Registered Office
+
 The street address of the registered office is:
 {{registered_office_address}}
 
 ### 2.2 Registered Agent
+
 The name of the registered agent at the registered office is:
 **{{registered_agent_name}}**
 
@@ -41,6 +43,7 @@ The registered agent accepts appointment as registered agent for this corporatio
 ## 3. Purpose and Powers
 
 ### 3.1 General Purpose
+
 The purpose for which this corporation is organized is:
 {{#if general_purpose}}
 To engage in any lawful act or activity for which corporations may be organized under the {{state}} Business Corporation Act.
@@ -49,11 +52,14 @@ To engage in any lawful act or activity for which corporations may be organized 
 {{/if}}
 
 ### 3.2 Specific Business Activities
+
 The corporation is organized to engage in the following business activities:
 {{business_activities}}
 
 ### 3.3 Powers
+
 The corporation shall have all powers granted to corporations under the laws of {{state}}, including but not limited to the power to:
+
 - Conduct business and carry on operations
 - Purchase, lease, or otherwise acquire property
 - Sell, convey, mortgage, or otherwise dispose of property
@@ -67,36 +73,42 @@ The corporation shall have all powers granted to corporations under the laws of 
 ## 4. Capital Stock
 
 ### 4.1 Authorized Shares
+
 The total number of shares of stock that the corporation is authorized to issue is:
 **{{total_authorized_shares}}** shares
 
 ### 4.2 Classes of Stock
+
 {{#if multiple_stock_classes}}
 The corporation is authorized to issue the following classes of stock:
 
 **Class A Common Stock:**
+
 - Number of Shares: {{class_a_shares}}
 - Par Value: ${{class_a_par_value}} per share
 - Rights and Privileges: {{class_a_rights}}
 
 **Class B Common Stock:**
+
 - Number of Shares: {{class_b_shares}}
 - Par Value: ${{class_b_par_value}} per share
 - Rights and Privileges: {{class_b_rights}}
 
 {{#if preferred_stock}}
 **Preferred Stock:**
+
 - Number of Shares: {{preferred_shares}}
 - Par Value: ${{preferred_par_value}} per share
 - Rights and Privileges: {{preferred_rights}}
-{{/if}}
-{{else}}
-**Common Stock:**
+  {{/if}}
+  {{else}}
+  **Common Stock:**
 - Number of Shares: {{common_shares}}
 - Par Value: {{#if par_value}}${{par_value}} per share{{else}}No par value{{/if}}
-{{/if}}
+  {{/if}}
 
 ### 4.3 Stock Rights and Restrictions
+
 {{stock_rights_restrictions}}
 
 ---
@@ -108,20 +120,20 @@ The name(s) and address(es) of the incorporator(s) is/are:
 **Incorporator 1:**
 **Name:** {{incorporator_1_name}}
 **Address:** {{incorporator_1_address}}
-**Signature:** _________________________________
+**Signature:** ****************\_****************
 
 {{#if incorporator_2_name}}
 **Incorporator 2:**
 **Name:** {{incorporator_2_name}}
 **Address:** {{incorporator_2_address}}
-**Signature:** _________________________________
+**Signature:** ****************\_****************
 {{/if}}
 
 {{#if incorporator_3_name}}
 **Incorporator 3:**
 **Name:** {{incorporator_3_name}}
 **Address:** {{incorporator_3_address}}
-**Signature:** _________________________________
+**Signature:** ****************\_****************
 {{/if}}
 
 ---
@@ -177,16 +189,21 @@ The period of duration for the corporation is {{duration_period}}.
 ## 9. Additional Provisions
 
 {{#if additional_provisions}}
+
 ### 9.1 Limitation of Director Liability
+
 {{director_liability_limitation}}
 
 ### 9.2 Indemnification
+
 {{indemnification_provisions}}
 
 ### 9.3 Business Combinations
+
 {{business_combination_provisions}}
 
 ### 9.4 Other Provisions
+
 {{other_provisions}}
 {{else}}
 None.
@@ -197,12 +214,16 @@ None.
 ## 10. Federal Tax Election
 
 {{#if s_corporation_election}}
+
 ### 10.1 S Corporation Election
+
 The corporation elects to be treated as an S Corporation for federal tax purposes and will file Form 2553 with the Internal Revenue Service.
 {{/if}}
 
 {{#if close_corporation}}
+
 ### 10.2 Close Corporation Election
+
 The corporation elects to be treated as a close corporation under {{state}} law.
 {{/if}}
 
@@ -221,6 +242,7 @@ These Articles of Incorporation shall become effective upon filing with the Secr
 ## 12. Incorporator Acknowledgment
 
 The undersigned incorporator(s) acknowledge(s) that:
+
 - The information contained in these Articles of Incorporation is true and correct
 - The corporation has been organized for legitimate business purposes
 - The incorporator(s) have the authority to execute these Articles of Incorporation
@@ -235,27 +257,29 @@ The undersigned incorporator(s) acknowledge(s) that:
 
 **{{incorporator_1_name}}:**
 
-| Signature | Date |
-|-----------|------|
-| _________________________________ | {{execution_date}} |
-| {{incorporator_1_name}}, Incorporator | |
+| Signature                             | Date               |
+| ------------------------------------- | ------------------ |
+| ****************\_****************    | {{execution_date}} |
+| {{incorporator_1_name}}, Incorporator |                    |
 
 {{#if incorporator_2_name}}
 **{{incorporator_2_name}}:**
 
-| Signature | Date |
-|-----------|------|
-| _________________________________ | {{execution_date}} |
-| {{incorporator_2_name}}, Incorporator | |
+| Signature                             | Date               |
+| ------------------------------------- | ------------------ |
+| ****************\_****************    | {{execution_date}} |
+| {{incorporator_2_name}}, Incorporator |                    |
+
 {{/if}}
 
 {{#if incorporator_3_name}}
 **{{incorporator_3_name}}:**
 
-| Signature | Date |
-|-----------|------|
-| _________________________________ | {{execution_date}} |
-| {{incorporator_3_name}}, Incorporator | |
+| Signature                             | Date               |
+| ------------------------------------- | ------------------ |
+| ****************\_****************    | {{execution_date}} |
+| {{incorporator_3_name}}, Incorporator |                    |
+
 {{/if}}
 
 ---
@@ -267,11 +291,12 @@ I, {{registered_agent_name}}, hereby accept appointment as registered agent for 
 
 **REGISTERED AGENT:**
 
-| Signature | Date |
-|-----------|------|
-| _________________________________ | {{execution_date}} |
-| {{registered_agent_name}} | |
-| Registered Agent | |
+| Signature                          | Date               |
+| ---------------------------------- | ------------------ |
+| ****************\_**************** | {{execution_date}} |
+| {{registered_agent_name}}          |                    |
+| Registered Agent                   |                    |
+
 {{/if}}
 
 ---
@@ -280,12 +305,12 @@ I, {{registered_agent_name}}, hereby accept appointment as registered agent for 
 
 **For Secretary of State Use Only:**
 
-**Filing Fee:** $__________  
-**File Number:** __________  
-**Filing Date:** __________  
-**Effective Date:** __________
+**Filing Fee:** $****\_\_****  
+**File Number:** ****\_\_****  
+**Filing Date:** ****\_\_****  
+**Effective Date:** ****\_\_****
 
-**Filed by:** _________________________  
+**Filed by:** ************\_************  
 **Secretary of State of {{state}}**
 
 ---
@@ -320,6 +345,6 @@ No additional documents are attached.
 
 **IMPORTANT LEGAL NOTICE:** These Articles of Incorporation should be reviewed by qualified legal counsel to ensure compliance with state corporation laws and specific business requirements. Corporation formation requirements vary by state, and proper legal and tax advice should be obtained before filing. Additional documents such as bylaws, shareholder agreements, and federal tax elections may be necessary to complete the incorporation process.
 
-*Template generated by 123LegalDoc - Professional Legal Document Platform*
----
+## _Template generated by 123LegalDoc - Professional Legal Document Platform_
+
 © 2025 123LegalDoc · DIY form · Not legal advice · Terms: 123LegalDoc.com/terms

@@ -2,7 +2,8 @@ import React from 'react';
 import CategoryCard from './CategoryCard';
 import { ViewComponentProps, CategoryInfo } from './types';
 
-interface AllCategoriesViewProps extends Omit<ViewComponentProps, 'documentsToDisplay'> {
+interface AllCategoriesViewProps
+  extends Omit<ViewComponentProps, 'documentsToDisplay'> {
   sortedCategories: CategoryInfo[];
   onCategoryClick: (key: string) => void;
   placeholderNoCategories: string;

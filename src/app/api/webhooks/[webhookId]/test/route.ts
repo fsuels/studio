@@ -9,15 +9,15 @@ interface RouteParams {
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: RouteParams }
+  { params }: { params: RouteParams },
 ) {
   try {
     // Validate authentication
     const { user, error: authError } = await validateRequest(request);
     if (authError || !user) {
       return NextResponse.json(
-        { error: 'Authentication required' }, 
-        { status: 401 }
+        { error: 'Authentication required' },
+        { status: 401 },
       );
     }
 
@@ -42,26 +42,25 @@ export async function POST(
         createdAt: delivery.createdAt,
         deliveredAt: delivery.deliveredAt,
         errorMessage: delivery.errorMessage,
-        responseBody: delivery.responseBody?.substring(0, 1000) // Limit response body size
-      }
+        responseBody: delivery.responseBody?.substring(0, 1000), // Limit response body size
+      },
     });
-
   } catch (error: any) {
     console.error('Error sending test webhook:', error);
-    
-    if (error.message.includes('not found') || error.message.includes('unauthorized')) {
-      return NextResponse.json(
-        { error: 'Webhook not found' },
-        { status: 404 }
-      );
+
+    if (
+      error.message.includes('not found') ||
+      error.message.includes('unauthorized')
+    ) {
+      return NextResponse.json({ error: 'Webhook not found' }, { status: 404 });
     }
-    
+
     return NextResponse.json(
-      { 
+      {
         error: 'Failed to send test webhook',
-        message: error.message 
-      }, 
-      { status: 500 }
+        message: error.message,
+      },
+      { status: 500 },
     );
   }
 }

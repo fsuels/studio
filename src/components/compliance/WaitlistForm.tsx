@@ -9,13 +9,13 @@ import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
-import { 
-  Users, 
-  Mail, 
-  MapPin, 
+import {
+  Users,
+  Mail,
+  MapPin,
   CheckCircle,
   Loader2,
-  AlertCircle
+  AlertCircle,
 } from 'lucide-react';
 
 interface WaitlistFormProps {
@@ -43,12 +43,12 @@ export default function WaitlistForm({
   stateName,
   riskLevel,
   reason,
-  onSubmitted
+  onSubmitted,
 }: WaitlistFormProps) {
   const [formData, setFormData] = useState<Partial<WaitlistData>>({
     stateCode,
     stateName,
-    priority: 'standard'
+    priority: 'standard',
   });
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -69,7 +69,7 @@ export default function WaitlistForm({
           ...formData,
           timestamp: new Date().toISOString(),
           reason,
-          riskLevel
+          riskLevel,
         }),
       });
 
@@ -81,7 +81,6 @@ export default function WaitlistForm({
 
       setSubmitted(true);
       onSubmitted?.();
-
     } catch (err) {
       setError((err as Error).message);
     } finally {
@@ -90,7 +89,7 @@ export default function WaitlistForm({
   };
 
   const handleInputChange = (field: keyof WaitlistData, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+    setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
   if (submitted) {
@@ -104,20 +103,21 @@ export default function WaitlistForm({
         </CardHeader>
         <CardContent className="text-center space-y-4">
           <p className="text-sm text-muted-foreground">
-            Thanks for joining our waitlist for {stateName}. We&apos;ll notify you 
-            as soon as service becomes available in your state.
+            Thanks for joining our waitlist for {stateName}. We&apos;ll notify
+            you as soon as service becomes available in your state.
           </p>
           <Alert>
             <Mail className="h-4 w-4" />
             <AlertDescription className="text-xs">
-              Check your email for a confirmation message with updates on our progress.
+              Check your email for a confirmation message with updates on our
+              progress.
             </AlertDescription>
           </Alert>
           <div className="pt-4">
-            <Button 
-              variant="outline" 
-              size="sm" 
-              onClick={() => window.location.href = '/'}
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => (window.location.href = '/')}
             >
               Return to Homepage
             </Button>
@@ -139,9 +139,13 @@ export default function WaitlistForm({
             <div className="flex items-center gap-2 mt-1">
               <MapPin className="h-3 w-3 text-muted-foreground" />
               <span className="text-xs text-muted-foreground">{stateName}</span>
-              <Badge 
-                variant="outline" 
-                className={riskLevel === 'red' ? 'text-red-600 border-red-200' : 'text-amber-600 border-amber-200'}
+              <Badge
+                variant="outline"
+                className={
+                  riskLevel === 'red'
+                    ? 'text-red-600 border-red-200'
+                    : 'text-amber-600 border-amber-200'
+                }
               >
                 {riskLevel === 'red' ? 'Restricted' : 'Pending'}
               </Badge>
@@ -207,7 +211,9 @@ export default function WaitlistForm({
               id="documentType"
               placeholder="e.g., LLC Operating Agreement, Lease Agreement"
               value={formData.documentType || ''}
-              onChange={(e) => handleInputChange('documentType', e.target.value)}
+              onChange={(e) =>
+                handleInputChange('documentType', e.target.value)
+              }
               required
               className="text-sm"
             />
@@ -222,7 +228,9 @@ export default function WaitlistForm({
               id="businessType"
               placeholder="e.g., Small Business, Freelancer, Individual"
               value={formData.businessType || ''}
-              onChange={(e) => handleInputChange('businessType', e.target.value)}
+              onChange={(e) =>
+                handleInputChange('businessType', e.target.value)
+              }
               className="text-sm"
             />
           </div>
@@ -237,7 +245,9 @@ export default function WaitlistForm({
                   name="priority"
                   value="standard"
                   checked={formData.priority === 'standard'}
-                  onChange={(e) => handleInputChange('priority', e.target.value)}
+                  onChange={(e) =>
+                    handleInputChange('priority', e.target.value)
+                  }
                   className="text-primary"
                 />
                 Standard (notify when available)
@@ -248,7 +258,9 @@ export default function WaitlistForm({
                   name="priority"
                   value="urgent"
                   checked={formData.priority === 'urgent'}
-                  onChange={(e) => handleInputChange('priority', e.target.value)}
+                  onChange={(e) =>
+                    handleInputChange('priority', e.target.value)
+                  }
                   className="text-primary"
                 />
                 Urgent (priority notification)
@@ -275,9 +287,7 @@ export default function WaitlistForm({
           {error && (
             <Alert variant="destructive">
               <AlertCircle className="h-4 w-4" />
-              <AlertDescription className="text-xs">
-                {error}
-              </AlertDescription>
+              <AlertDescription className="text-xs">{error}</AlertDescription>
             </Alert>
           )}
 
@@ -285,16 +295,23 @@ export default function WaitlistForm({
           <Alert>
             <AlertCircle className="h-4 w-4" />
             <AlertDescription className="text-xs">
-              <strong>Why we&apos;re not available in {stateName}:</strong><br />
+              <strong>Why we&apos;re not available in {stateName}:</strong>
+              <br />
               {reason}
             </AlertDescription>
           </Alert>
 
           {/* Submit Button */}
-          <Button 
-            type="submit" 
-            className="w-full" 
-            disabled={loading || !formData.email || !formData.firstName || !formData.lastName || !formData.documentType}
+          <Button
+            type="submit"
+            className="w-full"
+            disabled={
+              loading ||
+              !formData.email ||
+              !formData.firstName ||
+              !formData.lastName ||
+              !formData.documentType
+            }
           >
             {loading && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
             Join Waitlist for {stateName}
@@ -302,8 +319,9 @@ export default function WaitlistForm({
 
           {/* Privacy Notice */}
           <p className="text-xs text-muted-foreground text-center">
-            We&apos;ll only use your information to notify you about service availability 
-            in {stateName}. We respect your privacy and won&apos;t spam you.
+            We&apos;ll only use your information to notify you about service
+            availability in {stateName}. We respect your privacy and won&apos;t
+            spam you.
           </p>
         </form>
       </CardContent>

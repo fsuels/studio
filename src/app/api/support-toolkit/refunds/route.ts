@@ -30,8 +30,11 @@ export async function GET(request: NextRequest) {
       refunds = await RefundSystem.getRefundsByUser(userId);
     } else {
       return NextResponse.json(
-        { success: false, error: 'orderId, userId, or pending=true parameter required' },
-        { status: 400 }
+        {
+          success: false,
+          error: 'orderId, userId, or pending=true parameter required',
+        },
+        { status: 400 },
       );
     }
 
@@ -39,15 +42,23 @@ export async function GET(request: NextRequest) {
     const summary = {
       total: refunds.length,
       totalAmount: refunds.reduce((sum, r) => sum + r.amount, 0),
-      byStatus: refunds.reduce((acc, r) => {
-        acc[r.status] = (acc[r.status] || 0) + 1;
-        return acc;
-      }, {} as Record<string, number>),
-      byReason: refunds.reduce((acc, r) => {
-        acc[r.reason] = (acc[r.reason] || 0) + 1;
-        return acc;
-      }, {} as Record<string, number>),
-      autoApprovalRate: refunds.filter(r => r.metadata.autoApprovalRules?.length).length / refunds.length,
+      byStatus: refunds.reduce(
+        (acc, r) => {
+          acc[r.status] = (acc[r.status] || 0) + 1;
+          return acc;
+        },
+        {} as Record<string, number>,
+      ),
+      byReason: refunds.reduce(
+        (acc, r) => {
+          acc[r.reason] = (acc[r.reason] || 0) + 1;
+          return acc;
+        },
+        {} as Record<string, number>,
+      ),
+      autoApprovalRate:
+        refunds.filter((r) => r.metadata.autoApprovalRules?.length).length /
+        refunds.length,
       averageProcessingTime: calculateAverageProcessingTime(refunds),
     };
 
@@ -55,19 +66,18 @@ export async function GET(request: NextRequest) {
       success: true,
       data: {
         refunds: refunds.sort((a, b) => b.createdAt - a.createdAt),
-        summary
-      }
+        summary,
+      },
     });
-
   } catch (error) {
     console.error('Refunds GET API error:', error);
-    
+
     return NextResponse.json(
-      { 
-        success: false, 
-        error: 'Failed to retrieve refunds' 
+      {
+        success: false,
+        error: 'Failed to retrieve refunds',
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -80,14 +90,27 @@ export async function POST(request: NextRequest) {
 
   try {
     const body = await request.json();
-    const { action, orderId, amount, reason, refundId, agentId, agentName, notes, metadata = {} } = body;
+    const {
+      action,
+      orderId,
+      amount,
+      reason,
+      refundId,
+      agentId,
+      agentName,
+      notes,
+      metadata = {},
+    } = body;
 
     switch (action) {
       case 'create_refund':
         if (!orderId || !amount || !reason) {
           return NextResponse.json(
-            { success: false, error: 'orderId, amount, and reason are required' },
-            { status: 400 }
+            {
+              success: false,
+              error: 'orderId, amount, and reason are required',
+            },
+            { status: 400 },
           );
         }
 
@@ -98,64 +121,73 @@ export async function POST(request: NextRequest) {
           {
             type: 'support_agent',
             agentId,
-            name: agentName
+            name: agentName,
           },
           {
             ...metadata,
-            internalNotes: notes
-          }
+            internalNotes: notes,
+          },
         );
 
         return NextResponse.json({
           success: true,
           data: refund,
-          message: refund.status === 'approved' ? 'Refund auto-approved and processing' : 'Refund request created'
+          message:
+            refund.status === 'approved'
+              ? 'Refund auto-approved and processing'
+              : 'Refund request created',
         });
 
       case 'approve_refund':
         if (!refundId || !agentId || !agentName) {
           return NextResponse.json(
-            { success: false, error: 'refundId, agentId, and agentName are required' },
-            { status: 400 }
+            {
+              success: false,
+              error: 'refundId, agentId, and agentName are required',
+            },
+            { status: 400 },
           );
         }
 
         const approvedRefund = await RefundSystem.approveRefund(
           refundId,
           { agentId, name: agentName },
-          notes
+          notes,
         );
 
         return NextResponse.json({
           success: true,
           data: approvedRefund,
-          message: 'Refund approved and processed'
+          message: 'Refund approved and processed',
         });
 
       case 'get_store_credit_balance':
         if (!body.userId) {
           return NextResponse.json(
             { success: false, error: 'userId is required' },
-            { status: 400 }
+            { status: 400 },
           );
         }
 
         const balance = await RefundSystem.getStoreCreditBalance(body.userId);
-        
+
         return NextResponse.json({
           success: true,
-          data: { 
+          data: {
             userId: body.userId,
             balance,
-            formattedBalance: `$${balance.toFixed(2)}`
-          }
+            formattedBalance: `$${balance.toFixed(2)}`,
+          },
         });
 
       case 'add_store_credit':
         if (!body.userId || !amount || !reason) {
           return NextResponse.json(
-            { success: false, error: 'userId, amount, and reason are required' },
-            { status: 400 }
+            {
+              success: false,
+              error: 'userId, amount, and reason are required',
+            },
+            { status: 400 },
           );
         }
 
@@ -163,44 +195,43 @@ export async function POST(request: NextRequest) {
           body.userId,
           amount,
           reason,
-          orderId
+          orderId,
         );
 
         return NextResponse.json({
           success: true,
           data: creditTransaction,
-          message: `Store credit of $${amount} added successfully`
+          message: `Store credit of $${amount} added successfully`,
         });
 
       default:
         return NextResponse.json(
           { success: false, error: 'Invalid action' },
-          { status: 400 }
+          { status: 400 },
         );
     }
-
   } catch (error) {
     console.error('Refunds POST API error:', error);
-    
+
     return NextResponse.json(
-      { 
-        success: false, 
-        error: error.message || 'Failed to process refund request' 
+      {
+        success: false,
+        error: error.message || 'Failed to process refund request',
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
 
 // Helper function to calculate average processing time
 function calculateAverageProcessingTime(refunds: any[]): number {
-  const processedRefunds = refunds.filter(r => r.processedAt && r.createdAt);
-  
+  const processedRefunds = refunds.filter((r) => r.processedAt && r.createdAt);
+
   if (processedRefunds.length === 0) return 0;
-  
+
   const totalTime = processedRefunds.reduce((sum, r) => {
     return sum + (r.processedAt - r.createdAt);
   }, 0);
-  
+
   return totalTime / processedRefunds.length;
 }

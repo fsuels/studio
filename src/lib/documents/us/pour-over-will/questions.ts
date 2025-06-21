@@ -6,14 +6,16 @@ export const questions: Question[] = [
     label: 'Your Full Legal Name (Testator)',
     type: 'text',
     required: true,
-    placeholder: 'Enter your full legal name as it appears on official documents',
+    placeholder:
+      'Enter your full legal name as it appears on official documents',
   },
   {
     id: 'testatorAddress',
     label: 'Your Current Address',
     type: 'textarea',
     required: true,
-    placeholder: 'Enter your complete address including street, city, state, and ZIP code',
+    placeholder:
+      'Enter your complete address including street, city, state, and ZIP code',
   },
   {
     id: 'trustName',
@@ -33,7 +35,8 @@ export const questions: Question[] = [
     label: 'Executor Full Name',
     type: 'text',
     required: true,
-    placeholder: 'Person who will execute this will and transfer assets to trust',
+    placeholder:
+      'Person who will execute this will and transfer assets to trust',
   },
   {
     id: 'executorAddress',
@@ -70,7 +73,8 @@ export const questions: Question[] = [
     id: 'specificBequests',
     label: 'Specific Bequests (Optional)',
     type: 'textarea',
-    placeholder: 'Any specific gifts not going to the trust (e.g., personal items, small monetary gifts)',
+    placeholder:
+      'Any specific gifts not going to the trust (e.g., personal items, small monetary gifts)',
   },
   {
     id: 'residualClause',

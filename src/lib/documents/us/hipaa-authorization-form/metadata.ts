@@ -24,13 +24,22 @@ export const hipaaAuthorizationFormMeta: LegalDocument = {
   translations: {
     en: {
       name: 'HIPAA Authorization Form',
-      description: 'Form authorizing disclosure of protected health information under HIPAA.',
-      aliases: ['medical records release', 'health information authorization', 'HIPAA release form'],
+      description:
+        'Form authorizing disclosure of protected health information under HIPAA.',
+      aliases: [
+        'medical records release',
+        'health information authorization',
+        'HIPAA release form',
+      ],
     },
     es: {
       name: 'Formulario de Autorización HIPAA',
-      description: 'Formulario que autoriza la divulgación de información de salud protegida bajo HIPAA.',
-      aliases: ['liberación de registros médicos', 'autorización de información de salud'],
+      description:
+        'Formulario que autoriza la divulgación de información de salud protegida bajo HIPAA.',
+      aliases: [
+        'liberación de registros médicos',
+        'autorización de información de salud',
+      ],
     },
   },
 };

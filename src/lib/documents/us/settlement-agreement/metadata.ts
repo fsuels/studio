@@ -24,13 +24,22 @@ export const settlementAgreementMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Settlement Agreement',
-      description: 'Comprehensive agreement to resolve disputes and settle claims between parties.',
-      aliases: ['dispute settlement agreement', 'claim settlement agreement', 'release and settlement'],
+      description:
+        'Comprehensive agreement to resolve disputes and settle claims between parties.',
+      aliases: [
+        'dispute settlement agreement',
+        'claim settlement agreement',
+        'release and settlement',
+      ],
     },
     es: {
       name: 'Acuerdo de Liquidación',
-      description: 'Acuerdo integral para resolver disputas y liquidar reclamos entre las partes.',
-      aliases: ['acuerdo de resolución de disputas', 'acuerdo de liquidación de reclamos'],
+      description:
+        'Acuerdo integral para resolver disputas y liquidar reclamos entre las partes.',
+      aliases: [
+        'acuerdo de resolución de disputas',
+        'acuerdo de liquidación de reclamos',
+      ],
     },
   },
 };

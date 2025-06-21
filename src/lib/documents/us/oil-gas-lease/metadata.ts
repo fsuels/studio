@@ -24,12 +24,14 @@ export const oilGasLeaseMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Oil & Gas Lease',
-      description: 'Lease agreement for oil and gas exploration and extraction.',
+      description:
+        'Lease agreement for oil and gas exploration and extraction.',
       aliases: ['mineral lease', 'drilling rights', 'energy lease'],
     },
     es: {
       name: 'Arrendamiento de Petróleo y Gas',
-      description: 'Acuerdo de arrendamiento para exploración y extracción de petróleo y gas.',
+      description:
+        'Acuerdo de arrendamiento para exploración y extracción de petróleo y gas.',
       aliases: ['arrendamiento mineral', 'derechos de perforación'],
     },
   },

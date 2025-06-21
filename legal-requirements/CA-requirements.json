@@ -41,7 +41,7 @@
         "harassment-policy"
       ],
       "minimumRequirements": {
-        "minimum-wage": 16.00,
+        "minimum-wage": 16.0,
         "overtime-after": 8,
         "meal-break": "30 min after 5 hours"
       }

@@ -1,11 +1,14 @@
-'use client'
+'use client';
 
 // src/examples/auth-api-usage.tsx
 // Example component showing how to use authenticated API calls
 
 import React, { useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
-import { generateAuthenticatedPdf, authenticatedFetch } from '@/lib/client-auth';
+import {
+  generateAuthenticatedPdf,
+  authenticatedFetch,
+} from '@/lib/client-auth';
 
 export function AuthApiUsageExample() {
   const { isLoggedIn, user } = useAuth();
@@ -31,9 +34,9 @@ export function AuthApiUsageExample() {
           vehicleYear: '2020',
           vehicleMake: 'Toyota',
           vehicleModel: 'Camry',
-          salePrice: '15000'
+          salePrice: '15000',
         },
-        state: 'CA'
+        state: 'CA',
       });
 
       // Create download link
@@ -45,7 +48,6 @@ export function AuthApiUsageExample() {
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
-
     } catch (err) {
       console.error('PDF generation failed:', err);
       setError(err instanceof Error ? err.message : 'Failed to generate PDF');
@@ -62,9 +64,12 @@ export function AuthApiUsageExample() {
 
     try {
       // Example: Make any authenticated API call
-      const response = await authenticatedFetch('/api/some-protected-endpoint', {
-        method: 'GET',
-      });
+      const response = await authenticatedFetch(
+        '/api/some-protected-endpoint',
+        {
+          method: 'GET',
+        },
+      );
 
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);
@@ -72,7 +77,6 @@ export function AuthApiUsageExample() {
 
       const data = await response.json();
       console.log('API response:', data);
-      
     } catch (err) {
       console.error('API call failed:', err);
       setError(err instanceof Error ? err.message : 'API call failed');
@@ -82,7 +86,9 @@ export function AuthApiUsageExample() {
   if (!isLoggedIn) {
     return (
       <div className="p-4 border border-yellow-300 bg-yellow-50 rounded-md">
-        <p className="text-yellow-800">Please log in to use authenticated API features.</p>
+        <p className="text-yellow-800">
+          Please log in to use authenticated API features.
+        </p>
       </div>
     );
   }
@@ -90,7 +96,7 @@ export function AuthApiUsageExample() {
   return (
     <div className="p-6 max-w-md mx-auto bg-white rounded-lg shadow-lg">
       <h2 className="text-xl font-bold mb-4">Authenticated API Usage</h2>
-      
+
       <div className="mb-4">
         <p className="text-sm text-gray-600">
           Logged in as: <strong>{user?.email}</strong>

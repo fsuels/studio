@@ -24,12 +24,14 @@ export const rentReceiptMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Rent Receipt',
-      description: 'Generate official rent payment receipts for landlords and tenants',
+      description:
+        'Generate official rent payment receipts for landlords and tenants',
       aliases: [],
     },
     es: {
       name: 'Rent Receipt', // TODO: Add Spanish translation
-      description: 'Generate official rent payment receipts for landlords and tenants', // TODO: Add Spanish translation
+      description:
+        'Generate official rent payment receipts for landlords and tenants', // TODO: Add Spanish translation
       aliases: [],
     },
   },

@@ -18,7 +18,7 @@ const JURISDICTIONS: Record<string, JurisdictionInfo> = {
   'CA-ALL': { code: 'CA-ALL', name: 'All Canada', flag: '🇨🇦', priority: 3 },
   'CA-ON': { code: 'CA-ON', name: 'Ontario', flag: '🇨🇦', priority: 4 },
   'CA-BC': { code: 'CA-BC', name: 'British Columbia', flag: '🇨🇦', priority: 4 },
-  'INTL': { code: 'INTL', name: 'International', flag: '🌍', priority: 5 },
+  INTL: { code: 'INTL', name: 'International', flag: '🌍', priority: 5 },
 };
 
 interface JurisdictionFilterOptions {
@@ -73,13 +73,13 @@ export class JurisdictionFilter {
       // Replace with your geolocation service
       const response = await fetch('/api/detect-location');
       const data = await response.json();
-      
+
       if (data.country === 'US') {
         return data.state ? `US-${data.state}` : 'US-ALL';
       } else if (data.country === 'CA') {
         return data.province ? `CA-${data.province}` : 'CA-ALL';
       }
-      
+
       return 'INTL';
     } catch (error) {
       return null;
@@ -88,13 +88,13 @@ export class JurisdictionFilter {
 
   // Filter documents by jurisdiction relevance
   async filterDocuments(
-    slugs: string[], 
-    options: JurisdictionFilterOptions = {}
+    slugs: string[],
+    options: JurisdictionFilterOptions = {},
   ): Promise<FilteredDocument[]> {
     const {
       userLocation = this.userJurisdiction,
       prioritizeLocal = true,
-      showAll = false
+      showAll = false,
     } = options;
 
     const results: FilteredDocument[] = [];
@@ -104,12 +104,26 @@ export class JurisdictionFilter {
       const meta = metadataMap[slug];
       if (!meta) continue;
 
-      const jurisdictions = Array.isArray(meta.jurisdiction) ? meta.jurisdiction : [meta.jurisdiction];
-      const isLocallyRelevant = this.isLocallyRelevant(jurisdictions, userLocation);
-      const relevanceScore = this.calculateRelevanceScore(jurisdictions, userLocation, prioritizeLocal);
+      const jurisdictions = Array.isArray(meta.jurisdiction)
+        ? meta.jurisdiction
+        : [meta.jurisdiction];
+      const isLocallyRelevant = this.isLocallyRelevant(
+        jurisdictions,
+        userLocation,
+      );
+      const relevanceScore = this.calculateRelevanceScore(
+        jurisdictions,
+        userLocation,
+        prioritizeLocal,
+      );
 
       // Filter out non-relevant documents unless showAll is true
-      if (!showAll && !isLocallyRelevant && !jurisdictions.includes('US-ALL') && !jurisdictions.includes('INTL')) {
+      if (
+        !showAll &&
+        !isLocallyRelevant &&
+        !jurisdictions.includes('US-ALL') &&
+        !jurisdictions.includes('INTL')
+      ) {
         continue;
       }
 
@@ -118,7 +132,7 @@ export class JurisdictionFilter {
         title: meta.title,
         jurisdiction: jurisdictions,
         relevanceScore,
-        locallyRelevant: isLocallyRelevant
+        locallyRelevant: isLocallyRelevant,
       });
     }
 
@@ -126,22 +140,29 @@ export class JurisdictionFilter {
     return results.sort((a, b) => b.relevanceScore - a.relevanceScore);
   }
 
-  private async getDocumentsMetadata(slugs: string[]): Promise<Record<string, any>> {
+  private async getDocumentsMetadata(
+    slugs: string[],
+  ): Promise<Record<string, any>> {
     const { getCachedDocMetaBatch } = await import('./metadata-cache');
     return getCachedDocMetaBatch(slugs);
   }
 
-  private isLocallyRelevant(jurisdictions: string[], userLocation: string | null): boolean {
+  private isLocallyRelevant(
+    jurisdictions: string[],
+    userLocation: string | null,
+  ): boolean {
     if (!userLocation) return true;
 
     // Direct match
     if (jurisdictions.includes(userLocation)) return true;
 
     // US state matches US-ALL
-    if (userLocation.startsWith('US-') && jurisdictions.includes('US-ALL')) return true;
+    if (userLocation.startsWith('US-') && jurisdictions.includes('US-ALL'))
+      return true;
 
     // Canada province matches CA-ALL
-    if (userLocation.startsWith('CA-') && jurisdictions.includes('CA-ALL')) return true;
+    if (userLocation.startsWith('CA-') && jurisdictions.includes('CA-ALL'))
+      return true;
 
     // International documents are relevant everywhere
     if (jurisdictions.includes('INTL')) return true;
@@ -150,9 +171,9 @@ export class JurisdictionFilter {
   }
 
   private calculateRelevanceScore(
-    jurisdictions: string[], 
-    userLocation: string | null, 
-    prioritizeLocal: boolean
+    jurisdictions: string[],
+    userLocation: string | null,
+    prioritizeLocal: boolean,
   ): number {
     let score = 50; // Base score
 
@@ -168,7 +189,10 @@ export class JurisdictionFilter {
     // Country-level match
     if (userLocation.startsWith('US-') && jurisdictions.includes('US-ALL')) {
       score += 30;
-    } else if (userLocation.startsWith('CA-') && jurisdictions.includes('CA-ALL')) {
+    } else if (
+      userLocation.startsWith('CA-') &&
+      jurisdictions.includes('CA-ALL')
+    ) {
       score += 30;
     }
 
@@ -178,10 +202,18 @@ export class JurisdictionFilter {
     }
 
     // Penalize irrelevant jurisdictions
-    const hasIrrelevantJurisdictions = jurisdictions.some(j => {
+    const hasIrrelevantJurisdictions = jurisdictions.some((j) => {
       if (j === 'INTL' || j === userLocation) return false;
-      if (userLocation.startsWith('US-') && (j === 'US-ALL' || j.startsWith('US-'))) return false;
-      if (userLocation.startsWith('CA-') && (j === 'CA-ALL' || j.startsWith('CA-'))) return false;
+      if (
+        userLocation.startsWith('US-') &&
+        (j === 'US-ALL' || j.startsWith('US-'))
+      )
+        return false;
+      if (
+        userLocation.startsWith('CA-') &&
+        (j === 'CA-ALL' || j.startsWith('CA-'))
+      )
+        return false;
       return true;
     });
 
@@ -220,7 +252,10 @@ export class JurisdictionFilter {
   }
 
   // Check if document is available in user's jurisdiction
-  async isDocumentAvailable(slug: string, userJurisdiction?: string): Promise<boolean> {
+  async isDocumentAvailable(
+    slug: string,
+    userJurisdiction?: string,
+  ): Promise<boolean> {
     try {
       const meta = await getCachedDocMeta(slug);
       if (!meta) return false;
@@ -228,7 +263,9 @@ export class JurisdictionFilter {
       const jurisdiction = userJurisdiction || this.userJurisdiction;
       if (!jurisdiction) return true;
 
-      const docJurisdictions = Array.isArray(meta.jurisdiction) ? meta.jurisdiction : [meta.jurisdiction];
+      const docJurisdictions = Array.isArray(meta.jurisdiction)
+        ? meta.jurisdiction
+        : [meta.jurisdiction];
       return this.isLocallyRelevant(docJurisdictions, jurisdiction);
     } catch (error) {
       console.warn(`Failed to check availability for ${slug}:`, error);
@@ -238,8 +275,8 @@ export class JurisdictionFilter {
 
   // Get jurisdiction-specific disclaimer text
   getJurisdictionDisclaimer(jurisdictions: string[]): string {
-    const hasUS = jurisdictions.some(j => j.startsWith('US-'));
-    const hasCA = jurisdictions.some(j => j.startsWith('CA-'));
+    const hasUS = jurisdictions.some((j) => j.startsWith('US-'));
+    const hasCA = jurisdictions.some((j) => j.startsWith('CA-'));
     const hasIntl = jurisdictions.includes('INTL');
 
     if (hasIntl) {
@@ -260,8 +297,10 @@ export class JurisdictionFilter {
 export const jurisdictionFilter = new JurisdictionFilter();
 
 // Convenience functions
-export const filterDocumentsByJurisdiction = (slugs: string[], options?: JurisdictionFilterOptions) =>
-  jurisdictionFilter.filterDocuments(slugs, options);
+export const filterDocumentsByJurisdiction = (
+  slugs: string[],
+  options?: JurisdictionFilterOptions,
+) => jurisdictionFilter.filterDocuments(slugs, options);
 
 export const isDocumentAvailable = (slug: string, jurisdiction?: string) =>
   jurisdictionFilter.isDocumentAvailable(slug, jurisdiction);

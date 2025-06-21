@@ -9,7 +9,9 @@ interface PrivacyPolicyPageProps {
   params: { locale: 'en' | 'es' };
 }
 
-export default function LocalePrivacyPolicyPage({ params }: PrivacyPolicyPageProps) {
+export default function LocalePrivacyPolicyPage({
+  params,
+}: PrivacyPolicyPageProps) {
   const { locale } = params;
   const { user } = useAuth();
 
@@ -22,7 +24,7 @@ export default function LocalePrivacyPolicyPage({ params }: PrivacyPolicyPagePro
           userAgent: navigator.userAgent,
           referrer: document.referrer,
           timestamp: new Date().toISOString(),
-          pageUrl: window.location.href
+          pageUrl: window.location.href,
         });
       } catch (error) {
         console.error('Failed to log privacy policy view:', error);
@@ -39,41 +41,50 @@ export default function LocalePrivacyPolicyPage({ params }: PrivacyPolicyPagePro
         <p className="text-muted-foreground mb-4">
           Last updated: {new Date().toLocaleDateString()}
         </p>
-        
-        <h2 className="text-2xl font-semibold mt-8 mb-4">Information We Collect</h2>
+
+        <h2 className="text-2xl font-semibold mt-8 mb-4">
+          Information We Collect
+        </h2>
         <p className="mb-4">
-          We collect information you provide directly to us, such as when you create an account, 
-          generate documents, or contact us for support.
+          We collect information you provide directly to us, such as when you
+          create an account, generate documents, or contact us for support.
         </p>
-        
-        <h2 className="text-2xl font-semibold mt-8 mb-4">How We Use Your Information</h2>
+
+        <h2 className="text-2xl font-semibold mt-8 mb-4">
+          How We Use Your Information
+        </h2>
         <p className="mb-4">
-          We use the information we collect to provide, maintain, and improve our services, 
-          including to generate legal documents and provide customer support.
+          We use the information we collect to provide, maintain, and improve
+          our services, including to generate legal documents and provide
+          customer support.
         </p>
-        
-        <h2 className="text-2xl font-semibold mt-8 mb-4">Information Sharing</h2>
+
+        <h2 className="text-2xl font-semibold mt-8 mb-4">
+          Information Sharing
+        </h2>
         <p className="mb-4">
-          We do not share your personal information with third parties except as described 
-          in this privacy policy or with your consent.
+          We do not share your personal information with third parties except as
+          described in this privacy policy or with your consent.
         </p>
-        
+
         <h2 className="text-2xl font-semibold mt-8 mb-4">Data Security</h2>
         <p className="mb-4">
-          We implement appropriate technical and organizational measures to protect your 
-          personal information against unauthorized access, alteration, disclosure, or destruction.
+          We implement appropriate technical and organizational measures to
+          protect your personal information against unauthorized access,
+          alteration, disclosure, or destruction.
         </p>
-        
+
         <h2 className="text-2xl font-semibold mt-8 mb-4">Your Rights</h2>
         <p className="mb-4">
-          You have the right to access, update, or delete your personal information. 
-          You may also have additional rights under applicable privacy laws.
+          You have the right to access, update, or delete your personal
+          information. You may also have additional rights under applicable
+          privacy laws.
         </p>
-        
+
         <h2 className="text-2xl font-semibold mt-8 mb-4">Contact Us</h2>
         <p className="mb-4">
-          If you have any questions about this Privacy Policy, please contact us at 
-          privacy@123legaldoc.com.
+          If you have any questions about this Privacy Policy, please contact us
+          at privacy@123legaldoc.com.
         </p>
       </div>
     </div>

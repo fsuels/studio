@@ -23,21 +23,23 @@ export const articlesOfIncorporationMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Articles of Incorporation',
-      description: 'Create legally binding articles of incorporation with our easy-to-use template. State-specific requirements included.',
+      description:
+        'Create legally binding articles of incorporation with our easy-to-use template. State-specific requirements included.',
       aliases: [
         'business incorporation',
         'corporate charter',
         'incorporation documents',
-        'company formation'
+        'company formation',
       ],
     },
     es: {
       name: 'Acta Constitutiva',
-      description: 'Crea un acta constitutiva legalmente válida con nuestra plantilla fácil de usar. Incluye requisitos específicos del estado.',
+      description:
+        'Crea un acta constitutiva legalmente válida con nuestra plantilla fácil de usar. Incluye requisitos específicos del estado.',
       aliases: [
         'incorporación de negocio',
         'estatutos corporativos',
-        'documentos de incorporación'
+        'documentos de incorporación',
       ],
     },
   },

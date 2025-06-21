@@ -24,13 +24,25 @@ export const provisionalPatentApplicationMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Provisional Patent Application',
-      description: 'Prepare a provisional patent application to establish an early filing date for your invention.',
-      aliases: ['provisional patent', 'patent application', 'provisional filing', 'invention filing'],
+      description:
+        'Prepare a provisional patent application to establish an early filing date for your invention.',
+      aliases: [
+        'provisional patent',
+        'patent application',
+        'provisional filing',
+        'invention filing',
+      ],
     },
     es: {
       name: 'Solicitud de Patente Provisional',
-      description: 'Prepare una solicitud de patente provisional para establecer una fecha de presentación temprana para su invención.',
-      aliases: ['patente provisional', 'solicitud patente', 'presentación provisional', 'registro invención'],
+      description:
+        'Prepare una solicitud de patente provisional para establecer una fecha de presentación temprana para su invención.',
+      aliases: [
+        'patente provisional',
+        'solicitud patente',
+        'presentación provisional',
+        'registro invención',
+      ],
     },
   },
 };

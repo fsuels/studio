@@ -37,16 +37,21 @@ export default function ReviewFieldItem({
   onCancel,
 }: ReviewFieldItemProps) {
   const { t } = useTranslation('common');
-  const { formState: { errors } } = useFormContext<FormValues>();
+  const {
+    formState: { errors },
+  } = useFormContext<FormValues>();
 
-  const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
-      if (!isEditing) {
-        onEdit(field.id);
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        if (!isEditing) {
+          onEdit(field.id);
+        }
       }
-    }
-  }, [isEditing, onEdit, field.id]);
+    },
+    [isEditing, onEdit, field.id],
+  );
 
   const handleClick = useCallback(() => {
     if (!isEditing) {
@@ -106,7 +111,10 @@ export default function ReviewFieldItem({
 
           {isEditing ? (
             <div className="mt-1.5 space-y-2">
-              <FieldEditor field={field} actualSchemaShape={actualSchemaShape} />
+              <FieldEditor
+                field={field}
+                actualSchemaShape={actualSchemaShape}
+              />
               <div className="flex gap-2 mt-2">
                 <Button
                   type="button"

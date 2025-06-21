@@ -26,13 +26,21 @@ export const progressiveDisciplinePolicyMeta: LegalDocument = {
       name: 'Progressive Discipline Policy',
       description:
         'Comprehensive company policy outlining disciplinary procedures and progressive corrective actions.',
-      aliases: ['disciplinary policy', 'employee discipline procedures', 'corrective action policy'],
+      aliases: [
+        'disciplinary policy',
+        'employee discipline procedures',
+        'corrective action policy',
+      ],
     },
     es: {
       name: 'Política de Disciplina Progresiva',
       description:
         'Política integral de la empresa que describe los procedimientos disciplinarios y las acciones correctivas progresivas.',
-      aliases: ['política disciplinaria', 'procedimientos de disciplina de empleados', 'política de acción correctiva'],
+      aliases: [
+        'política disciplinaria',
+        'procedimientos de disciplina de empleados',
+        'política de acción correctiva',
+      ],
     },
   },
 };

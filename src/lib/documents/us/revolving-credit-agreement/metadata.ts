@@ -26,13 +26,23 @@ export const revolvingCreditAgreementMeta: LegalDocument = {
       name: 'Revolving Credit Agreement',
       description:
         'Establish a revolving credit line with terms, limits, and payment requirements.',
-      aliases: ['credit line agreement', 'revolving loan', 'line of credit', 'credit facility'],
+      aliases: [
+        'credit line agreement',
+        'revolving loan',
+        'line of credit',
+        'credit facility',
+      ],
     },
     es: {
       name: 'Acuerdo de Crédito Rotativo',
       description:
         'Establecer una línea de crédito rotativo con términos, límites y requisitos de pago.',
-      aliases: ['acuerdo de línea de crédito', 'préstamo rotativo', 'línea de crédito', 'facilidad de crédito'],
+      aliases: [
+        'acuerdo de línea de crédito',
+        'préstamo rotativo',
+        'línea de crédito',
+        'facilidad de crédito',
+      ],
     },
   },
 };

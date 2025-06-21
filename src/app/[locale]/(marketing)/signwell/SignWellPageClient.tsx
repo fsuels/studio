@@ -11,6 +11,8 @@ const SignWellClientContent = dynamic(
   { ssr: false },
 );
 
-export default function SignWellPageClient({ params }: SignWellPageClientProps) {
+export default function SignWellPageClient({
+  params,
+}: SignWellPageClientProps) {
   return <SignWellClientContent params={params} />;
 }

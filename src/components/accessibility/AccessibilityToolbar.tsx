@@ -2,8 +2,19 @@
 
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from '@/components/ui/sheet';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 import { useAccessibility } from '@/contexts/AccessibilityProvider';
 import AccessibilitySettingsPanel from './AccessibilitySettingsPanel';
 import {
@@ -22,13 +33,13 @@ interface AccessibilityToolbarProps {
 }
 
 export function AccessibilityToolbar({ className }: AccessibilityToolbarProps) {
-  const { 
-    preferences, 
-    togglePlainLanguageMode, 
-    updatePreferences, 
-    isAccessibilityModeActive 
+  const {
+    preferences,
+    togglePlainLanguageMode,
+    updatePreferences,
+    isAccessibilityModeActive,
   } = useAccessibility();
-  
+
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
@@ -47,7 +58,10 @@ export function AccessibilityToolbar({ className }: AccessibilityToolbarProps) {
       label: 'Dyslexia Font',
       shortcut: 'Alt+D',
       isActive: preferences.dyslexiaFriendlyFont,
-      action: () => updatePreferences({ dyslexiaFriendlyFont: !preferences.dyslexiaFriendlyFont }),
+      action: () =>
+        updatePreferences({
+          dyslexiaFriendlyFont: !preferences.dyslexiaFriendlyFont,
+        }),
     },
     {
       id: 'highContrast',
@@ -55,7 +69,8 @@ export function AccessibilityToolbar({ className }: AccessibilityToolbarProps) {
       label: 'High Contrast',
       shortcut: 'Alt+C',
       isActive: preferences.highContrast,
-      action: () => updatePreferences({ highContrast: !preferences.highContrast }),
+      action: () =>
+        updatePreferences({ highContrast: !preferences.highContrast }),
     },
     {
       id: 'autoExplain',
@@ -63,7 +78,10 @@ export function AccessibilityToolbar({ className }: AccessibilityToolbarProps) {
       label: 'Auto Explain',
       shortcut: 'Alt+E',
       isActive: preferences.autoExplainClauses,
-      action: () => updatePreferences({ autoExplainClauses: !preferences.autoExplainClauses }),
+      action: () =>
+        updatePreferences({
+          autoExplainClauses: !preferences.autoExplainClauses,
+        }),
     },
   ];
 
@@ -72,12 +90,18 @@ export function AccessibilityToolbar({ className }: AccessibilityToolbarProps) {
     return null;
   }
 
-  const ToolbarButton = ({ action, isActive, icon: Icon, label, shortcut }: typeof quickActions[0]) => (
+  const ToolbarButton = ({
+    action,
+    isActive,
+    icon: Icon,
+    label,
+    shortcut,
+  }: (typeof quickActions)[0]) => (
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>
           <Button
-            variant={isActive ? "default" : "secondary"}
+            variant={isActive ? 'default' : 'secondary'}
             size="icon"
             onClick={action}
             className={`
@@ -97,7 +121,9 @@ export function AccessibilityToolbar({ className }: AccessibilityToolbarProps) {
         <TooltipContent side="left" className="flex flex-col items-start">
           <span className="font-medium">{label}</span>
           <span className="text-xs text-muted-foreground">{shortcut}</span>
-          <span className="text-xs">{isActive ? 'Click to disable' : 'Click to enable'}</span>
+          <span className="text-xs">
+            {isActive ? 'Click to disable' : 'Click to enable'}
+          </span>
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>
@@ -106,13 +132,15 @@ export function AccessibilityToolbar({ className }: AccessibilityToolbarProps) {
   return (
     <div className={`accessibility-toolbar ${className || ''}`}>
       <div className="fixed top-1/2 right-4 transform -translate-y-1/2 z-50">
-        <div className={`
+        <div
+          className={`
           bg-white dark:bg-gray-900 
           border border-gray-200 dark:border-gray-700 
           rounded-xl shadow-lg 
           transition-all duration-300 ease-in-out
           ${isCollapsed ? 'p-2' : 'p-3'}
-        `}>
+        `}
+        >
           {/* Header */}
           <div className="flex items-center justify-between mb-3">
             {!isCollapsed && (
@@ -124,13 +152,17 @@ export function AccessibilityToolbar({ className }: AccessibilityToolbarProps) {
                 )}
               </div>
             )}
-            
+
             <Button
               variant="ghost"
               size="icon"
               onClick={() => setIsCollapsed(!isCollapsed)}
               className="h-6 w-6 p-0"
-              aria-label={isCollapsed ? 'Expand accessibility toolbar' : 'Collapse accessibility toolbar'}
+              aria-label={
+                isCollapsed
+                  ? 'Expand accessibility toolbar'
+                  : 'Collapse accessibility toolbar'
+              }
             >
               {isCollapsed ? (
                 <ChevronLeft className="h-3 w-3" />
@@ -157,12 +189,16 @@ export function AccessibilityToolbar({ className }: AccessibilityToolbarProps) {
                   <TooltipTrigger asChild>
                     <Button
                       variant="outline"
-                      size={isCollapsed ? "icon" : "sm"}
+                      size={isCollapsed ? 'icon' : 'sm'}
                       className={`w-full ${isCollapsed ? 'h-10' : 'h-9'}`}
                       aria-label="Open accessibility settings"
                     >
-                      <Settings className={`${isCollapsed ? 'h-4 w-4' : 'h-4 w-4 mr-2'}`} />
-                      {!isCollapsed && <span className="text-xs">Settings</span>}
+                      <Settings
+                        className={`${isCollapsed ? 'h-4 w-4' : 'h-4 w-4 mr-2'}`}
+                      />
+                      {!isCollapsed && (
+                        <span className="text-xs">Settings</span>
+                      )}
                     </Button>
                   </TooltipTrigger>
                   <TooltipContent side="left">
@@ -171,9 +207,9 @@ export function AccessibilityToolbar({ className }: AccessibilityToolbarProps) {
                 </Tooltip>
               </TooltipProvider>
             </SheetTrigger>
-            
-            <SheetContent 
-              side="right" 
+
+            <SheetContent
+              side="right"
               className="w-[400px] sm:w-[500px] overflow-y-auto"
             >
               <SheetHeader>
@@ -182,7 +218,7 @@ export function AccessibilityToolbar({ className }: AccessibilityToolbarProps) {
                   Accessibility Settings
                 </SheetTitle>
               </SheetHeader>
-              
+
               <div className="mt-6">
                 <AccessibilitySettingsPanel />
               </div>

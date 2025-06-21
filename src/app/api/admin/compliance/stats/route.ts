@@ -2,7 +2,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { requireAdmin } from '@/lib/admin-auth';
 import { complianceMonitor } from '@/lib/compliance';
-import { getRedStates, getGreenStates, getAmberStates } from '@/lib/state-regulations';
+import {
+  getRedStates,
+  getGreenStates,
+  getAmberStates,
+} from '@/lib/state-regulations';
 
 export async function GET(request: NextRequest) {
   // Require admin authentication
@@ -14,32 +18,34 @@ export async function GET(request: NextRequest) {
   try {
     // Get compliance metrics from monitor
     const metrics = complianceMonitor.getMetrics();
-    
+
     // Get state classifications
     const stateBreakdown = {
       green: getGreenStates(),
-      amber: getAmberStates(), 
-      red: getRedStates()
+      amber: getAmberStates(),
+      red: getRedStates(),
     };
 
     // Calculate additional stats
-    const conversionRate = metrics.totalChecks > 0 
-      ? ((metrics.allowedPurchases / metrics.totalChecks) * 100).toFixed(1)
-      : '0.0';
+    const conversionRate =
+      metrics.totalChecks > 0
+        ? ((metrics.allowedPurchases / metrics.totalChecks) * 100).toFixed(1)
+        : '0.0';
 
-    const blockRate = metrics.totalChecks > 0
-      ? ((metrics.blockedPurchases / metrics.totalChecks) * 100).toFixed(1) 
-      : '0.0';
+    const blockRate =
+      metrics.totalChecks > 0
+        ? ((metrics.blockedPurchases / metrics.totalChecks) * 100).toFixed(1)
+        : '0.0';
 
     // Get top blocked states
     const blockedStates = complianceMonitor.getBlockedStates();
-    
+
     // Generate trending data (mock for now - you'd store historical data)
     const hourlyTrend = Array.from({ length: 24 }, (_, i) => ({
       hour: i,
       checks: Math.floor(Math.random() * 50) + 10,
       allowed: Math.floor(Math.random() * 40) + 8,
-      blocked: Math.floor(Math.random() * 10) + 2
+      blocked: Math.floor(Math.random() * 10) + 2,
     }));
 
     return NextResponse.json({
@@ -49,16 +55,16 @@ export async function GET(request: NextRequest) {
         metrics: {
           ...metrics,
           conversionRate: parseFloat(conversionRate),
-          blockRate: parseFloat(blockRate)
+          blockRate: parseFloat(blockRate),
         },
-        
+
         // State breakdown
         stateBreakdown,
-        
+
         // Trending data
         trends: {
           hourly: hourlyTrend,
-          blockedStates: blockedStates.slice(0, 10)
+          blockedStates: blockedStates.slice(0, 10),
         },
 
         // System health
@@ -66,25 +72,24 @@ export async function GET(request: NextRequest) {
           geolocationService: 'online',
           complianceAPI: 'online',
           failureRate: metrics.geolocationFailures > 10 ? 'warning' : 'good',
-          uptime: '99.9%'
+          uptime: '99.9%',
         },
 
         // Real-time alerts
         alerts: generateComplianceAlerts(metrics, blockedStates),
-        
-        lastUpdated: new Date().toISOString()
-      }
-    });
 
+        lastUpdated: new Date().toISOString(),
+      },
+    });
   } catch (error) {
     console.error('Admin compliance stats error:', error);
-    
+
     return NextResponse.json(
-      { 
-        success: false, 
-        error: 'Failed to retrieve compliance statistics' 
+      {
+        success: false,
+        error: 'Failed to retrieve compliance statistics',
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -102,7 +107,7 @@ function generateComplianceAlerts(metrics: any, blockedStates: string[]) {
         title: 'High Block Rate Detected',
         message: `${blockRate.toFixed(1)}% of requests are being blocked. Consider reviewing state classifications.`,
         action: 'Review Regulations',
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       });
     }
   }
@@ -114,7 +119,7 @@ function generateComplianceAlerts(metrics: any, blockedStates: string[]) {
       title: 'Geolocation Service Issues',
       message: `${metrics.geolocationFailures} geolocation failures detected. Service degradation possible.`,
       action: 'Check Service Status',
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
   }
 
@@ -125,20 +130,21 @@ function generateComplianceAlerts(metrics: any, blockedStates: string[]) {
       title: 'Expansion Opportunity',
       message: `${blockedStates.length} states generating waitlist signups. Consider attorney partnerships.`,
       action: 'View Waitlist',
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
   }
 
   // Low conversion in green states
   if (metrics.byRiskLevel.green > 0) {
-    const greenConversion = (metrics.byRiskLevel.green / metrics.totalChecks) * 100;
+    const greenConversion =
+      (metrics.byRiskLevel.green / metrics.totalChecks) * 100;
     if (greenConversion < 5) {
       alerts.push({
         type: 'info',
         title: 'Low Green State Traffic',
         message: `Only ${greenConversion.toFixed(1)}% of traffic from green states. Marketing opportunity.`,
         action: 'Boost Marketing',
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       });
     }
   }

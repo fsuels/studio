@@ -47,7 +47,7 @@ Don't risk using generic templates that may not comply with Illinois law. Get a 
 
 [Create Illinois Employment Contract]
 
-*Trusted by thousands of Illinois businesses*
+_Trusted by thousands of Illinois businesses_
 
 ---
 

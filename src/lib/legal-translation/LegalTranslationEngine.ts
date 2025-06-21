@@ -5,14 +5,17 @@ interface LegalTerm {
   term: string;
   definition: string;
   jurisdiction: string[];
-  translations: Record<string, {
-    term: string;
-    definition: string;
-    confidence: number;
-    source: 'legal_dictionary' | 'ai_translation' | 'human_verified';
-    alternatives?: string[];
-    context?: string;
-  }>;
+  translations: Record<
+    string,
+    {
+      term: string;
+      definition: string;
+      confidence: number;
+      source: 'legal_dictionary' | 'ai_translation' | 'human_verified';
+      alternatives?: string[];
+      context?: string;
+    }
+  >;
 }
 
 interface TranslationContext {
@@ -39,7 +42,11 @@ interface TranslationResult {
 }
 
 interface TranslationWarning {
-  type: 'legal_concept_mismatch' | 'jurisdiction_conflict' | 'cultural_adaptation' | 'untranslatable_term';
+  type:
+    | 'legal_concept_mismatch'
+    | 'jurisdiction_conflict'
+    | 'cultural_adaptation'
+    | 'untranslatable_term';
   message: string;
   originalTerm: string;
   position: number;
@@ -79,30 +86,44 @@ class LegalTranslationEngine {
    */
   async translateLegalText(
     text: string,
-    context: TranslationContext
+    context: TranslationContext,
   ): Promise<TranslationResult> {
     const startTime = Date.now();
-    
+
     try {
       // 1. Pre-process text to identify legal terms
       const legalTerms = await this.identifyLegalTerms(text, context);
-      
+
       // 2. Check for jurisdiction compatibility
       const jurisdictionWarnings = this.checkJurisdictionCompatibility(context);
-      
+
       // 3. Perform context-aware translation
-      const translationResult = await this.performContextualTranslation(text, context, legalTerms);
-      
+      const translationResult = await this.performContextualTranslation(
+        text,
+        context,
+        legalTerms,
+      );
+
       // 4. Post-process for legal accuracy
-      const refinedResult = await this.refineLegalAccuracy(translationResult, context, legalTerms);
-      
+      const refinedResult = await this.refineLegalAccuracy(
+        translationResult,
+        context,
+        legalTerms,
+      );
+
       // 5. Generate warnings and suggestions
       const warnings = [...jurisdictionWarnings, ...refinedResult.warnings];
-      const suggestions = await this.generateTranslationSuggestions(refinedResult, context);
-      
+      const suggestions = await this.generateTranslationSuggestions(
+        refinedResult,
+        context,
+      );
+
       // 6. Calculate confidence score
-      const confidence = this.calculateTranslationConfidence(refinedResult, legalTerms);
-      
+      const confidence = this.calculateTranslationConfidence(
+        refinedResult,
+        legalTerms,
+      );
+
       return {
         translatedText: refinedResult.text,
         confidence,
@@ -113,8 +134,9 @@ class LegalTranslationEngine {
         metadata: {
           processingTime: Date.now() - startTime,
           method: this.determineTranslationMethod(legalTerms.length, context),
-          reviewRequired: confidence < 0.85 || warnings.some(w => w.severity === 'high')
-        }
+          reviewRequired:
+            confidence < 0.85 || warnings.some((w) => w.severity === 'high'),
+        },
       };
     } catch (error) {
       console.error('Legal translation failed:', error);
@@ -125,16 +147,19 @@ class LegalTranslationEngine {
   /**
    * Identify legal terms in the source text
    */
-  private async identifyLegalTerms(text: string, context: TranslationContext): Promise<LegalTerm[]> {
+  private async identifyLegalTerms(
+    text: string,
+    context: TranslationContext,
+  ): Promise<LegalTerm[]> {
     const identifiedTerms: LegalTerm[] = [];
     const words = text.toLowerCase().split(/\s+/);
-    
+
     // Check single words and phrases (up to 4 words)
     for (let i = 0; i < words.length; i++) {
       for (let j = 1; j <= Math.min(4, words.length - i); j++) {
         const phrase = words.slice(i, i + j).join(' ');
         const legalTerm = this.legalDictionary.get(phrase);
-        
+
         if (legalTerm && this.isTermApplicable(legalTerm, context)) {
           identifiedTerms.push(legalTerm);
         }
@@ -151,7 +176,10 @@ class LegalTranslationEngine {
   /**
    * AI-powered legal concept identification
    */
-  private async aiIdentifyLegalConcepts(text: string, context: TranslationContext): Promise<LegalTerm[]> {
+  private async aiIdentifyLegalConcepts(
+    text: string,
+    context: TranslationContext,
+  ): Promise<LegalTerm[]> {
     try {
       const response = await fetch('/api/ai/identify-legal-terms', {
         method: 'POST',
@@ -160,8 +188,8 @@ class LegalTranslationEngine {
           text,
           jurisdiction: context.jurisdiction,
           documentType: context.documentType,
-          language: context.sourceLanguage
-        })
+          language: context.sourceLanguage,
+        }),
       });
 
       const { legalTerms } = await response.json();
@@ -178,7 +206,7 @@ class LegalTranslationEngine {
   private async performContextualTranslation(
     text: string,
     context: TranslationContext,
-    legalTerms: LegalTerm[]
+    legalTerms: LegalTerm[],
   ): Promise<{
     text: string;
     warnings: TranslationWarning[];
@@ -192,10 +220,10 @@ class LegalTranslationEngine {
 
     // Create legal term preservation map
     const termMap = new Map<string, string>();
-    
+
     for (const legalTerm of legalTerms) {
       const translation = legalTerm.translations[context.targetLanguage];
-      
+
       if (translation) {
         if (translation.confidence >= 0.9) {
           // High confidence - use translation
@@ -206,7 +234,7 @@ class LegalTranslationEngine {
             confidence: translation.confidence,
             definition: translation.definition,
             equivalentConcept: true,
-            requiresAdaptation: false
+            requiresAdaptation: false,
           });
         } else if (translation.confidence >= 0.7) {
           // Medium confidence - use with warning
@@ -217,16 +245,16 @@ class LegalTranslationEngine {
             confidence: translation.confidence,
             definition: translation.definition,
             equivalentConcept: true,
-            requiresAdaptation: true
+            requiresAdaptation: true,
           });
-          
+
           warnings.push({
             type: 'legal_concept_mismatch',
             message: `"${legalTerm.term}" may not have direct equivalent in ${context.targetLanguage}`,
             originalTerm: legalTerm.term,
             position: text.indexOf(legalTerm.term),
             severity: 'medium',
-            suggestion: translation.alternatives?.[0]
+            suggestion: translation.alternatives?.[0],
           });
         } else {
           // Low confidence - preserve original with explanation
@@ -237,7 +265,7 @@ class LegalTranslationEngine {
             originalTerm: legalTerm.term,
             position: text.indexOf(legalTerm.term),
             severity: 'high',
-            suggestion: `Add explanatory note: ${translation.definition}`
+            suggestion: `Add explanatory note: ${translation.definition}`,
           });
         }
       } else {
@@ -248,19 +276,24 @@ class LegalTranslationEngine {
           message: `"${legalTerm.term}" has no translation in legal context`,
           originalTerm: legalTerm.term,
           position: text.indexOf(legalTerm.term),
-          severity: 'high'
+          severity: 'high',
         });
       }
     }
 
     // Apply AI translation with legal term preservation
-    translatedText = await this.aiTranslateWithPreservation(text, context, termMap, preservedTerms);
+    translatedText = await this.aiTranslateWithPreservation(
+      text,
+      context,
+      termMap,
+      preservedTerms,
+    );
 
     return {
       text: translatedText,
       warnings,
       legalTermMatches,
-      preservedTerms
+      preservedTerms,
     };
   }
 
@@ -271,7 +304,7 @@ class LegalTranslationEngine {
     text: string,
     context: TranslationContext,
     termMap: Map<string, string>,
-    preservedTerms: string[]
+    preservedTerms: string[],
   ): Promise<string> {
     try {
       const response = await fetch('/api/ai/legal-translate', {
@@ -285,8 +318,8 @@ class LegalTranslationEngine {
           documentType: context.documentType,
           legalTermMap: Object.fromEntries(termMap),
           preservedTerms,
-          legalSystem: context.legalSystem
-        })
+          legalSystem: context.legalSystem,
+        }),
       });
 
       const { translatedText } = await response.json();
@@ -302,35 +335,55 @@ class LegalTranslationEngine {
    * Refine translation for legal accuracy
    */
   private async refineLegalAccuracy(
-    translation: { text: string; warnings: TranslationWarning[]; legalTermMatches: LegalTermMatch[]; preservedTerms: string[] },
+    translation: {
+      text: string;
+      warnings: TranslationWarning[];
+      legalTermMatches: LegalTermMatch[];
+      preservedTerms: string[];
+    },
     context: TranslationContext,
-    originalTerms: LegalTerm[]
+    originalTerms: LegalTerm[],
   ): Promise<typeof translation> {
     // Check for legal consistency
-    const consistencyWarnings = this.checkLegalConsistency(translation.text, context);
-    
+    const consistencyWarnings = this.checkLegalConsistency(
+      translation.text,
+      context,
+    );
+
     // Validate jurisdiction-specific requirements
-    const jurisdictionWarnings = this.validateJurisdictionRequirements(translation.text, context);
-    
+    const jurisdictionWarnings = this.validateJurisdictionRequirements(
+      translation.text,
+      context,
+    );
+
     // Refine based on document type
-    const refinedText = await this.refineByDocumentType(translation.text, context);
+    const refinedText = await this.refineByDocumentType(
+      translation.text,
+      context,
+    );
 
     return {
       ...translation,
       text: refinedText,
-      warnings: [...translation.warnings, ...consistencyWarnings, ...jurisdictionWarnings]
+      warnings: [
+        ...translation.warnings,
+        ...consistencyWarnings,
+        ...jurisdictionWarnings,
+      ],
     };
   }
 
   /**
    * Check jurisdiction compatibility
    */
-  private checkJurisdictionCompatibility(context: TranslationContext): TranslationWarning[] {
+  private checkJurisdictionCompatibility(
+    context: TranslationContext,
+  ): TranslationWarning[] {
     const warnings: TranslationWarning[] = [];
-    
+
     const sourceSystem = this.getLegalSystem(context.jurisdiction);
     const targetSystem = this.getTargetLegalSystem(context.targetLanguage);
-    
+
     if (sourceSystem !== targetSystem) {
       warnings.push({
         type: 'jurisdiction_conflict',
@@ -338,7 +391,7 @@ class LegalTranslationEngine {
         originalTerm: context.jurisdiction,
         position: 0,
         severity: 'high',
-        suggestion: 'Legal review recommended for jurisdiction compatibility'
+        suggestion: 'Legal review recommended for jurisdiction compatibility',
       });
     }
 
@@ -350,22 +403,25 @@ class LegalTranslationEngine {
    */
   private async generateTranslationSuggestions(
     result: { text: string; legalTermMatches: LegalTermMatch[] },
-    context: TranslationContext
+    context: TranslationContext,
   ): Promise<TranslationSuggestion[]> {
     const suggestions: TranslationSuggestion[] = [];
-    
+
     // Suggest improvements for low-confidence terms
     for (const match of result.legalTermMatches) {
       if (match.confidence < 0.8 && match.requiresAdaptation) {
-        const alternatives = await this.getAlternativeTranslations(match.term, context);
-        
+        const alternatives = await this.getAlternativeTranslations(
+          match.term,
+          context,
+        );
+
         for (const alt of alternatives) {
           suggestions.push({
             original: match.translation,
             suggested: alt.term,
             reason: alt.reason,
             confidence: alt.confidence,
-            legalBasis: alt.legalBasis
+            legalBasis: alt.legalBasis,
           });
         }
       }
@@ -379,21 +435,25 @@ class LegalTranslationEngine {
    */
   private calculateTranslationConfidence(
     result: { legalTermMatches: LegalTermMatch[]; preservedTerms: string[] },
-    originalTerms: LegalTerm[]
+    originalTerms: LegalTerm[],
   ): number {
     if (originalTerms.length === 0) return 0.95; // Non-legal text
 
     const totalTerms = originalTerms.length;
-    const highConfidenceTerms = result.legalTermMatches.filter(m => m.confidence >= 0.9).length;
-    const mediumConfidenceTerms = result.legalTermMatches.filter(m => m.confidence >= 0.7 && m.confidence < 0.9).length;
+    const highConfidenceTerms = result.legalTermMatches.filter(
+      (m) => m.confidence >= 0.9,
+    ).length;
+    const mediumConfidenceTerms = result.legalTermMatches.filter(
+      (m) => m.confidence >= 0.7 && m.confidence < 0.9,
+    ).length;
     const preservedTermsCount = result.preservedTerms.length;
 
     // Weight: High confidence = 1.0, Medium = 0.8, Preserved = 0.6, Missing = 0.0
-    const score = (
-      highConfidenceTerms * 1.0 +
-      mediumConfidenceTerms * 0.8 +
-      preservedTermsCount * 0.6
-    ) / totalTerms;
+    const score =
+      (highConfidenceTerms * 1.0 +
+        mediumConfidenceTerms * 0.8 +
+        preservedTermsCount * 0.6) /
+      totalTerms;
 
     return Math.max(0.1, Math.min(1.0, score));
   }
@@ -406,54 +466,61 @@ class LegalTranslationEngine {
     const terms: LegalTerm[] = [
       {
         term: 'consideration',
-        definition: 'Something of value exchanged between parties in a contract',
+        definition:
+          'Something of value exchanged between parties in a contract',
         jurisdiction: ['US-ALL', 'CA-ALL', 'UK'],
         translations: {
-          'es': {
+          es: {
             term: 'contraprestación',
-            definition: 'Algo de valor intercambiado entre las partes en un contrato',
+            definition:
+              'Algo de valor intercambiado entre las partes en un contrato',
             confidence: 0.95,
             source: 'legal_dictionary',
-            alternatives: ['consideración', 'causa']
+            alternatives: ['consideración', 'causa'],
           },
-          'fr': {
+          fr: {
             term: 'contrepartie',
-            definition: 'Quelque chose de valeur échangé entre les parties dans un contrat',
+            definition:
+              'Quelque chose de valeur échangé entre les parties dans un contrat',
             confidence: 0.92,
-            source: 'legal_dictionary'
+            source: 'legal_dictionary',
           },
-          'de': {
+          de: {
             term: 'Gegenleistung',
-            definition: 'Etwas Wertvolles, das zwischen Vertragsparteien ausgetauscht wird',
+            definition:
+              'Etwas Wertvolles, das zwischen Vertragsparteien ausgetauscht wird',
             confidence: 0.88,
-            source: 'legal_dictionary'
-          }
-        }
+            source: 'legal_dictionary',
+          },
+        },
       },
       {
         term: 'force majeure',
-        definition: 'Unforeseeable circumstances that prevent a party from fulfilling a contract',
+        definition:
+          'Unforeseeable circumstances that prevent a party from fulfilling a contract',
         jurisdiction: ['US-ALL', 'CA-ALL', 'UK', 'FR'],
         translations: {
-          'es': {
+          es: {
             term: 'fuerza mayor',
-            definition: 'Circunstancias imprevistas que impiden a una parte cumplir un contrato',
+            definition:
+              'Circunstancias imprevistas que impiden a una parte cumplir un contrato',
             confidence: 0.98,
-            source: 'legal_dictionary'
+            source: 'legal_dictionary',
           },
-          'de': {
+          de: {
             term: 'höhere Gewalt',
-            definition: 'Unvorhersehbare Umstände, die eine Partei daran hindern, einen Vertrag zu erfüllen',
+            definition:
+              'Unvorhersehbare Umstände, die eine Partei daran hindern, einen Vertrag zu erfüllen',
             confidence: 0.85,
             source: 'legal_dictionary',
-            alternatives: ['unabwendbares Ereignis']
-          }
-        }
-      }
+            alternatives: ['unabwendbares Ereignis'],
+          },
+        },
+      },
       // Add more terms...
     ];
 
-    terms.forEach(term => {
+    terms.forEach((term) => {
       this.legalDictionary.set(term.term.toLowerCase(), term);
     });
   }
@@ -462,22 +529,40 @@ class LegalTranslationEngine {
    * Setup jurisdiction to legal system mappings
    */
   private setupJurisdictionMappings(): void {
-    this.jurisdictionMappings.set('common_law', ['US-ALL', 'CA-ALL', 'UK', 'AU', 'IN']);
-    this.jurisdictionMappings.set('civil_law', ['FR', 'DE', 'ES', 'IT', 'BR', 'MX']);
+    this.jurisdictionMappings.set('common_law', [
+      'US-ALL',
+      'CA-ALL',
+      'UK',
+      'AU',
+      'IN',
+    ]);
+    this.jurisdictionMappings.set('civil_law', [
+      'FR',
+      'DE',
+      'ES',
+      'IT',
+      'BR',
+      'MX',
+    ]);
     this.jurisdictionMappings.set('mixed', ['ZA', 'QC', 'LA', 'PH']);
   }
 
   /**
    * Helper methods
    */
-  private isTermApplicable(term: LegalTerm, context: TranslationContext): boolean {
-    return term.jurisdiction.includes(context.jurisdiction) || 
-           term.jurisdiction.includes('UNIVERSAL');
+  private isTermApplicable(
+    term: LegalTerm,
+    context: TranslationContext,
+  ): boolean {
+    return (
+      term.jurisdiction.includes(context.jurisdiction) ||
+      term.jurisdiction.includes('UNIVERSAL')
+    );
   }
 
   private deduplicateTerms(terms: LegalTerm[]): LegalTerm[] {
     const seen = new Set<string>();
-    return terms.filter(term => {
+    return terms.filter((term) => {
       if (seen.has(term.term)) return false;
       seen.add(term.term);
       return true;
@@ -493,48 +578,68 @@ class LegalTranslationEngine {
 
   private getTargetLegalSystem(language: string): string {
     const languageToSystem: Record<string, string> = {
-      'en': 'common_law',
-      'es': 'civil_law',
-      'fr': 'civil_law',
-      'de': 'civil_law',
-      'pt': 'civil_law'
+      en: 'common_law',
+      es: 'civil_law',
+      fr: 'civil_law',
+      de: 'civil_law',
+      pt: 'civil_law',
     };
     return languageToSystem[language] || 'unknown';
   }
 
-  private determineTranslationMethod(legalTermsCount: number, context: TranslationContext): 'ai_enhanced' | 'dictionary_lookup' | 'hybrid' {
+  private determineTranslationMethod(
+    legalTermsCount: number,
+    context: TranslationContext,
+  ): 'ai_enhanced' | 'dictionary_lookup' | 'hybrid' {
     if (legalTermsCount === 0) return 'ai_enhanced';
     if (legalTermsCount > 10) return 'hybrid';
     return 'dictionary_lookup';
   }
 
-  private async fallbackTranslation(text: string, context: TranslationContext): Promise<string> {
+  private async fallbackTranslation(
+    text: string,
+    context: TranslationContext,
+  ): Promise<string> {
     // Implement fallback to basic translation service
     // This could be Google Translate, Azure Translator, etc.
     return text; // Placeholder
   }
 
-  private checkLegalConsistency(text: string, context: TranslationContext): TranslationWarning[] {
+  private checkLegalConsistency(
+    text: string,
+    context: TranslationContext,
+  ): TranslationWarning[] {
     // Implement legal consistency checks
     return [];
   }
 
-  private validateJurisdictionRequirements(text: string, context: TranslationContext): TranslationWarning[] {
+  private validateJurisdictionRequirements(
+    text: string,
+    context: TranslationContext,
+  ): TranslationWarning[] {
     // Implement jurisdiction-specific validation
     return [];
   }
 
-  private async refineByDocumentType(text: string, context: TranslationContext): Promise<string> {
+  private async refineByDocumentType(
+    text: string,
+    context: TranslationContext,
+  ): Promise<string> {
     // Implement document type-specific refinements
     return text;
   }
 
-  private async getAlternativeTranslations(term: string, context: TranslationContext): Promise<Array<{
-    term: string;
-    reason: string;
-    confidence: number;
-    legalBasis?: string;
-  }>> {
+  private async getAlternativeTranslations(
+    term: string,
+    context: TranslationContext,
+  ): Promise<
+    Array<{
+      term: string;
+      reason: string;
+      confidence: number;
+      legalBasis?: string;
+    }>
+  > {
     // Implement alternative translation lookup
     return [];
   }

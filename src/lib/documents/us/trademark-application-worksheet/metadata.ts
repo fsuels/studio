@@ -24,13 +24,25 @@ export const trademarkApplicationWorksheetMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Trademark Application Worksheet',
-      description: 'Comprehensive preparation document for USPTO trademark application filing.',
-      aliases: ['trademark prep', 'trademark application prep', 'uspto worksheet', 'trademark filing prep'],
+      description:
+        'Comprehensive preparation document for USPTO trademark application filing.',
+      aliases: [
+        'trademark prep',
+        'trademark application prep',
+        'uspto worksheet',
+        'trademark filing prep',
+      ],
     },
     es: {
       name: 'Hoja de Trabajo para Solicitud de Marca Registrada',
-      description: 'Documento integral de preparación para la presentación de solicitud de marca registrada USPTO.',
-      aliases: ['prep de marca', 'preparación solicitud marca', 'hoja trabajo uspto', 'prep presentación marca'],
+      description:
+        'Documento integral de preparación para la presentación de solicitud de marca registrada USPTO.',
+      aliases: [
+        'prep de marca',
+        'preparación solicitud marca',
+        'hoja trabajo uspto',
+        'prep presentación marca',
+      ],
     },
   },
 };

@@ -8,10 +8,10 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Progress } from '@/components/ui/progress';
-import { 
-  Star, 
-  Download, 
-  Shield, 
+import {
+  Star,
+  Download,
+  Shield,
   Award,
   Calendar,
   Globe,
@@ -22,7 +22,10 @@ import {
   FileText,
   MessageSquare,
 } from 'lucide-react';
-import type { CreatorProfile as CreatorProfileType, CreatorBadge } from '@/types/marketplace';
+import type {
+  CreatorProfile as CreatorProfileType,
+  CreatorBadge,
+} from '@/types/marketplace';
 import { TemplateCard } from './TemplateCard';
 
 interface CreatorProfileProps {
@@ -77,7 +80,9 @@ function CreatorStats({ stats }: CreatorStatsProps) {
       <Card>
         <CardContent className="p-4 text-center">
           <Download className="h-8 w-8 text-green-500 mx-auto mb-2" />
-          <div className="text-2xl font-bold">{formatNumber(stats.totalDownloads)}</div>
+          <div className="text-2xl font-bold">
+            {formatNumber(stats.totalDownloads)}
+          </div>
           <div className="text-sm text-muted-foreground">Total Downloads</div>
           <div className="text-xs text-blue-600 mt-1">
             {formatNumber(stats.monthlyDownloads)} this month
@@ -88,7 +93,9 @@ function CreatorStats({ stats }: CreatorStatsProps) {
       <Card>
         <CardContent className="p-4 text-center">
           <Star className="h-8 w-8 text-yellow-500 mx-auto mb-2" />
-          <div className="text-2xl font-bold">{stats.averageRating.toFixed(1)}</div>
+          <div className="text-2xl font-bold">
+            {stats.averageRating.toFixed(1)}
+          </div>
           <div className="text-sm text-muted-foreground">Average Rating</div>
           <div className="flex justify-center mt-1">
             {Array.from({ length: 5 }, (_, i) => (
@@ -108,7 +115,9 @@ function CreatorStats({ stats }: CreatorStatsProps) {
       <Card>
         <CardContent className="p-4 text-center">
           <DollarSign className="h-8 w-8 text-purple-500 mx-auto mb-2" />
-          <div className="text-2xl font-bold">{formatCurrency(stats.totalRevenue)}</div>
+          <div className="text-2xl font-bold">
+            {formatCurrency(stats.totalRevenue)}
+          </div>
           <div className="text-sm text-muted-foreground">Total Earnings</div>
           <div className="text-xs text-green-600 mt-1">
             <TrendingUp className="inline h-3 w-3 mr-1" />
@@ -140,7 +149,9 @@ function BadgeDisplay({ badge }: { badge: CreatorBadge }) {
     <div className="flex items-center gap-2 p-2 rounded-lg border bg-card">
       <div className="text-lg">{badge.icon}</div>
       <div>
-        <div className={`text-xs font-semibold ${getBadgeColor(badge.category)}`}>
+        <div
+          className={`text-xs font-semibold ${getBadgeColor(badge.category)}`}
+        >
           {badge.name}
         </div>
         <div className="text-xs text-muted-foreground">{badge.description}</div>
@@ -150,7 +161,9 @@ function BadgeDisplay({ badge }: { badge: CreatorBadge }) {
 }
 
 export function CreatorProfile({ creatorId, profile }: CreatorProfileProps) {
-  const [creatorData, setCreatorData] = useState<CreatorProfileType | null>(profile || null);
+  const [creatorData, setCreatorData] = useState<CreatorProfileType | null>(
+    profile || null,
+  );
   const [creatorStats, setCreatorStats] = useState<any>(null);
   const [templates, setTemplates] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(!profile);
@@ -165,9 +178,11 @@ export function CreatorProfile({ creatorId, profile }: CreatorProfileProps) {
   const loadCreatorData = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch(`/api/marketplace/creators/${creatorId}?includeTemplates=true&includeStats=true`);
+      const response = await fetch(
+        `/api/marketplace/creators/${creatorId}?includeTemplates=true&includeStats=true`,
+      );
       const data = await response.json();
-      
+
       if (data.success) {
         setCreatorData(data.data.profile);
         setCreatorStats(data.data.stats);
@@ -219,7 +234,9 @@ export function CreatorProfile({ creatorId, profile }: CreatorProfileProps) {
       <Card>
         <CardContent className="p-12 text-center">
           <Users className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-          <h3 className="text-lg font-semibold mb-2">Creator profile not found</h3>
+          <h3 className="text-lg font-semibold mb-2">
+            Creator profile not found
+          </h3>
           <p className="text-muted-foreground">
             This creator's profile is not available or has been removed.
           </p>
@@ -237,12 +254,15 @@ export function CreatorProfile({ creatorId, profile }: CreatorProfileProps) {
             {/* Avatar and Basic Info */}
             <div className="flex flex-col items-center md:items-start gap-4">
               <Avatar className="h-20 w-20">
-                <AvatarImage src={creatorData.avatar} alt={creatorData.displayName} />
+                <AvatarImage
+                  src={creatorData.avatar}
+                  alt={creatorData.displayName}
+                />
                 <AvatarFallback className="text-2xl">
                   {creatorData.displayName.charAt(0)}
                 </AvatarFallback>
               </Avatar>
-              
+
               {creatorData.verified && (
                 <Badge className="bg-blue-100 text-blue-800 border-blue-300">
                   <Shield className="h-3 w-3 mr-1" />
@@ -254,9 +274,13 @@ export function CreatorProfile({ creatorId, profile }: CreatorProfileProps) {
             {/* Creator Details */}
             <div className="flex-1 space-y-4">
               <div>
-                <h1 className="text-2xl font-bold">{creatorData.displayName}</h1>
+                <h1 className="text-2xl font-bold">
+                  {creatorData.displayName}
+                </h1>
                 {creatorData.bio && (
-                  <p className="text-muted-foreground mt-1">{creatorData.bio}</p>
+                  <p className="text-muted-foreground mt-1">
+                    {creatorData.bio}
+                  </p>
                 )}
               </div>
 
@@ -264,14 +288,15 @@ export function CreatorProfile({ creatorId, profile }: CreatorProfileProps) {
               <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
                 <div className="flex items-center gap-1">
                   <Calendar className="h-4 w-4" />
-                  Member since {new Date().getFullYear() - 1} {/* TODO: Get actual join date */}
+                  Member since {new Date().getFullYear() - 1}{' '}
+                  {/* TODO: Get actual join date */}
                 </div>
-                
+
                 {creatorData.website && (
                   <div className="flex items-center gap-1">
                     <Globe className="h-4 w-4" />
-                    <Link 
-                      href={creatorData.website} 
+                    <Link
+                      href={creatorData.website}
                       target="_blank"
                       className="hover:text-primary flex items-center gap-1"
                     >
@@ -281,42 +306,48 @@ export function CreatorProfile({ creatorId, profile }: CreatorProfileProps) {
                   </div>
                 )}
 
-                {creatorData.yearsExperience && creatorData.yearsExperience > 0 && (
-                  <div className="flex items-center gap-1">
-                    <Award className="h-4 w-4" />
-                    {creatorData.yearsExperience} years experience
-                  </div>
-                )}
+                {creatorData.yearsExperience &&
+                  creatorData.yearsExperience > 0 && (
+                    <div className="flex items-center gap-1">
+                      <Award className="h-4 w-4" />
+                      {creatorData.yearsExperience} years experience
+                    </div>
+                  )}
               </div>
 
               {/* Specializations */}
-              {creatorData.specializations && creatorData.specializations.length > 0 && (
-                <div>
-                  <h4 className="font-medium mb-2">Specializations:</h4>
-                  <div className="flex flex-wrap gap-1">
-                    {creatorData.specializations.map((spec) => (
-                      <Badge key={spec} variant="outline" className="text-xs">
-                        {spec}
-                      </Badge>
-                    ))}
+              {creatorData.specializations &&
+                creatorData.specializations.length > 0 && (
+                  <div>
+                    <h4 className="font-medium mb-2">Specializations:</h4>
+                    <div className="flex flex-wrap gap-1">
+                      {creatorData.specializations.map((spec) => (
+                        <Badge key={spec} variant="outline" className="text-xs">
+                          {spec}
+                        </Badge>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
 
               {/* Credentials */}
-              {creatorData.credentials && creatorData.credentials.length > 0 && (
-                <div>
-                  <h4 className="font-medium mb-2">Credentials:</h4>
-                  <div className="space-y-1">
-                    {creatorData.credentials.map((credential, index) => (
-                      <div key={index} className="flex items-center gap-2 text-sm">
-                        <Award className="h-4 w-4 text-yellow-500" />
-                        {credential}
-                      </div>
-                    ))}
+              {creatorData.credentials &&
+                creatorData.credentials.length > 0 && (
+                  <div>
+                    <h4 className="font-medium mb-2">Credentials:</h4>
+                    <div className="space-y-1">
+                      {creatorData.credentials.map((credential, index) => (
+                        <div
+                          key={index}
+                          className="flex items-center gap-2 text-sm"
+                        >
+                          <Award className="h-4 w-4 text-yellow-500" />
+                          {credential}
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
             </div>
 
             {/* Contact Button */}
@@ -373,20 +404,27 @@ export function CreatorProfile({ creatorId, profile }: CreatorProfileProps) {
           <CardContent>
             <div className="space-y-4">
               {creatorStats.topTemplates.map((template: any, index: number) => (
-                <div key={template.id} className="flex items-center gap-4 p-3 bg-muted/30 rounded-lg">
+                <div
+                  key={template.id}
+                  className="flex items-center gap-4 p-3 bg-muted/30 rounded-lg"
+                >
                   <div className="text-2xl font-bold text-muted-foreground">
                     #{index + 1}
                   </div>
                   <div className="flex-1">
                     <h4 className="font-semibold">{template.name}</h4>
                     <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                      <span>{template.downloads.toLocaleString()} downloads</span>
+                      <span>
+                        {template.downloads.toLocaleString()} downloads
+                      </span>
                       <div className="flex items-center gap-1">
                         <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
                         {template.rating.toFixed(1)}
                       </div>
                       {template.revenue && (
-                        <span>${(template.revenue / 100).toLocaleString()} revenue</span>
+                        <span>
+                          ${(template.revenue / 100).toLocaleString()} revenue
+                        </span>
                       )}
                     </div>
                   </div>
@@ -421,7 +459,7 @@ export function CreatorProfile({ creatorId, profile }: CreatorProfileProps) {
                 />
               ))}
             </div>
-            
+
             {templates.length > 6 && (
               <div className="text-center mt-6">
                 <Button variant="outline" asChild>

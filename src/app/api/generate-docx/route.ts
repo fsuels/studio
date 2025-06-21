@@ -9,10 +9,12 @@ export async function POST(request: NextRequest) {
     return authResult;
   }
   const user = authResult;
-  console.log(`[API /generate-docx] User authenticated: ${user.uid} (${user.email})`);
+  console.log(
+    `[API /generate-docx] User authenticated: ${user.uid} (${user.email})`,
+  );
 
   return NextResponse.json(
     { error: 'DOCX generation not implemented.' },
-    { status: 501 }
+    { status: 501 },
   );
 }

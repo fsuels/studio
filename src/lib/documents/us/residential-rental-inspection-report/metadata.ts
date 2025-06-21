@@ -24,12 +24,14 @@ export const residentialRentalInspectionReportMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Residential Rental Inspection Report',
-      description: 'Document property condition for move-in and move-out inspections',
+      description:
+        'Document property condition for move-in and move-out inspections',
       aliases: [],
     },
     es: {
       name: 'Residential Rental Inspection Report', // TODO: Add Spanish translation
-      description: 'Document property condition for move-in and move-out inspections', // TODO: Add Spanish translation
+      description:
+        'Document property condition for move-in and move-out inspections', // TODO: Add Spanish translation
       aliases: [],
     },
   },

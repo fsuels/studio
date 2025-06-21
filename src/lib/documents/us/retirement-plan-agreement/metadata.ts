@@ -24,12 +24,18 @@ export const retirementPlanAgreementMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Retirement Plan Agreement',
-      description: 'Agreement for employer-sponsored retirement plan participation.',
-      aliases: ['401k agreement', 'pension plan agreement', 'retirement benefit plan'],
+      description:
+        'Agreement for employer-sponsored retirement plan participation.',
+      aliases: [
+        '401k agreement',
+        'pension plan agreement',
+        'retirement benefit plan',
+      ],
     },
     es: {
       name: 'Acuerdo de Plan de Jubilación',
-      description: 'Acuerdo para participación en plan de jubilación patrocinado por empleador.',
+      description:
+        'Acuerdo para participación en plan de jubilación patrocinado por empleador.',
       aliases: ['plan de pensiones', 'acuerdo de beneficios'],
     },
   },

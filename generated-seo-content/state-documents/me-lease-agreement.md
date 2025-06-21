@@ -47,7 +47,7 @@ Don't risk using generic templates that may not comply with Maine law. Get a pro
 
 [Create Maine Lease Agreement]
 
-*Trusted by thousands of Maine businesses*
+_Trusted by thousands of Maine businesses_
 
 ---
 

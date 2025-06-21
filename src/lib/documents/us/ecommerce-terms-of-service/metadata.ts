@@ -24,12 +24,14 @@ export const ecommerceTermsOfServiceMeta: LegalDocument = {
   translations: {
     en: {
       name: 'E-commerce Terms of Service',
-      description: 'Terms of service agreement for online retail and e-commerce businesses.',
+      description:
+        'Terms of service agreement for online retail and e-commerce businesses.',
       aliases: ['online store terms', 'website terms', 'user agreement'],
     },
     es: {
       name: 'Términos de Servicio de Comercio Electrónico',
-      description: 'Acuerdo de términos de servicio para negocios de venta en línea.',
+      description:
+        'Acuerdo de términos de servicio para negocios de venta en línea.',
       aliases: ['términos de tienda en línea', 'acuerdo de usuario'],
     },
   },

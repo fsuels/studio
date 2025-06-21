@@ -24,12 +24,18 @@ export const digitalAssetAgreementMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Digital Asset Agreement',
-      description: 'Agreement for trading, managing, and transferring digital assets and cryptocurrencies.',
-      aliases: ['crypto agreement', 'nft agreement', 'blockchain asset agreement'],
+      description:
+        'Agreement for trading, managing, and transferring digital assets and cryptocurrencies.',
+      aliases: [
+        'crypto agreement',
+        'nft agreement',
+        'blockchain asset agreement',
+      ],
     },
     es: {
       name: 'Acuerdo de Activos Digitales',
-      description: 'Acuerdo para comerciar, gestionar y transferir activos digitales y criptomonedas.',
+      description:
+        'Acuerdo para comerciar, gestionar y transferir activos digitales y criptomonedas.',
       aliases: ['acuerdo crypto', 'contrato de NFT'],
     },
   },

@@ -48,21 +48,24 @@ export const partnershipDissolutionAgreementQuestions: Question[] = [
     label: 'Business Assets',
     type: 'textarea',
     required: true,
-    placeholder: 'List all partnership assets including cash, inventory, equipment, real estate, etc.',
+    placeholder:
+      'List all partnership assets including cash, inventory, equipment, real estate, etc.',
   },
   {
     id: 'businessLiabilities',
     label: 'Business Liabilities',
     type: 'textarea',
     required: true,
-    placeholder: 'List all partnership debts, loans, obligations, and liabilities',
+    placeholder:
+      'List all partnership debts, loans, obligations, and liabilities',
   },
   {
     id: 'assetDistribution',
     label: 'Asset Distribution Plan',
     type: 'textarea',
     required: true,
-    placeholder: 'How assets will be distributed among partners after liquidation',
+    placeholder:
+      'How assets will be distributed among partners after liquidation',
   },
   {
     id: 'liabilityAllocation',
@@ -94,14 +97,16 @@ export const partnershipDissolutionAgreementQuestions: Question[] = [
     id: 'confidentialityTerms',
     label: 'Confidentiality Terms',
     type: 'textarea',
-    placeholder: 'Ongoing confidentiality obligations for trade secrets, client lists, etc.',
+    placeholder:
+      'Ongoing confidentiality obligations for trade secrets, client lists, etc.',
   },
   {
     id: 'finalAccounting',
     label: 'Final Accounting',
     type: 'textarea',
     required: true,
-    placeholder: 'Process for final accounting and settlement of partner accounts',
+    placeholder:
+      'Process for final accounting and settlement of partner accounts',
   },
   {
     id: 'releaseClaims',

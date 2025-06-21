@@ -56,7 +56,8 @@ export const mutualNdaQuestions: Question[] = [
     id: 'confidentialInfoDescription',
     label: 'Brief Description of Confidential Information',
     type: 'textarea',
-    placeholder: 'e.g., Business plans, financial data, proprietary technology, customer lists',
+    placeholder:
+      'e.g., Business plans, financial data, proprietary technology, customer lists',
   },
   {
     id: 'termYears',

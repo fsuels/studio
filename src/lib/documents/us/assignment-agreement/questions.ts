@@ -116,7 +116,8 @@ export const assignmentAgreementQuestions: FormQuestion[] = [
     id: 'contractDescription',
     type: 'textarea',
     label: 'Contract Description',
-    placeholder: 'Briefly describe the nature and subject matter of the original contract',
+    placeholder:
+      'Briefly describe the nature and subject matter of the original contract',
     required: true,
     section: 'Original Contract Details',
   },
@@ -127,7 +128,10 @@ export const assignmentAgreementQuestions: FormQuestion[] = [
     type: 'radio',
     label: 'Type of Assignment',
     options: [
-      { value: 'complete', label: 'Complete Assignment (all rights and obligations)' },
+      {
+        value: 'complete',
+        label: 'Complete Assignment (all rights and obligations)',
+      },
       { value: 'partial', label: 'Partial Assignment (specific rights only)' },
     ],
     required: true,
@@ -160,7 +164,8 @@ export const assignmentAgreementQuestions: FormQuestion[] = [
     id: 'assignmentConsideration',
     type: 'textarea',
     label: 'Consideration for Assignment',
-    placeholder: 'Describe what the assignee is providing in exchange (money, services, etc.)',
+    placeholder:
+      'Describe what the assignee is providing in exchange (money, services, etc.)',
     required: true,
     section: 'Assignment Details',
   },

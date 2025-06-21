@@ -6,11 +6,11 @@ import { usePathname } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils';
 
-
 export default function ActivityTicker() {
   const { t } = useTranslation('common');
   const pathname = usePathname();
-  const isHomePage = pathname === '/en' || pathname === '/es' || pathname === '/';
+  const isHomePage =
+    pathname === '/en' || pathname === '/es' || pathname === '/';
   const messages =
     (t('activityTicker.messages', { returnObjects: true }) as string[]) || [];
   const [index, setIndex] = useState(0);
@@ -39,7 +39,7 @@ export default function ActivityTicker() {
           exit={{ opacity: 0, y: -8 }}
           transition={{ duration: 0.3 }}
           className={cn(
-            'bg-background border border-border shadow px-4 py-2 rounded text-sm pointer-events-auto'
+            'bg-background border border-border shadow px-4 py-2 rounded text-sm pointer-events-auto',
           )}
         >
           {message}

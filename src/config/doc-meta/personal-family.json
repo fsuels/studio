@@ -2,12 +2,8 @@
   "child-care-authorization-form": {
     "title": "Child Care Authorization Form",
     "complexity": "easy",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Child Care Authorization Form.",
     "popular": false,
     "fieldCount": 5,
@@ -16,12 +12,8 @@
   "child-care-contract": {
     "title": "Child Care Contract",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Child Care Contract.",
     "popular": false,
     "fieldCount": 15,
@@ -30,12 +22,8 @@
   "child-custody-agreement": {
     "title": "Child Custody Agreement",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Child Custody Agreement.",
     "popular": false,
     "fieldCount": 15,
@@ -44,12 +32,8 @@
   "child-medical-consent": {
     "title": "Child Medical Consent",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Child Medical Consent.",
     "popular": false,
     "fieldCount": 15,
@@ -58,12 +42,8 @@
   "child-support-agreement": {
     "title": "Child Support Agreement",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Child Support Agreement.",
     "popular": false,
     "fieldCount": 15,
@@ -72,12 +52,8 @@
   "child-travel-consent": {
     "title": "Child Travel Consent",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Child Travel Consent.",
     "popular": false,
     "fieldCount": 15,
@@ -86,12 +62,8 @@
   "cohabitation-agreement": {
     "title": "Cohabitation Agreement",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Cohabitation Agreement.",
     "popular": false,
     "fieldCount": 15,
@@ -100,12 +72,8 @@
   "divorce-settlement": {
     "title": "Divorce Settlement",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Divorce Settlement.",
     "popular": false,
     "fieldCount": 15,
@@ -114,12 +82,8 @@
   "divorce-settlement-agreement": {
     "title": "Divorce Settlement Agreement",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Divorce Settlement Agreement.",
     "popular": true,
     "fieldCount": 15,
@@ -128,12 +92,8 @@
   "dog-breeding-agreement": {
     "title": "Dog Breeding Agreement",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Dog Breeding Agreement.",
     "popular": false,
     "fieldCount": 15,
@@ -142,12 +102,8 @@
   "elder-care-agreement": {
     "title": "Elder Care Agreement",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Elder Care Agreement.",
     "popular": false,
     "fieldCount": 15,
@@ -156,12 +112,8 @@
   "guardianship-agreement": {
     "title": "Guardianship Agreement",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Guardianship Agreement.",
     "popular": false,
     "fieldCount": 15,
@@ -170,12 +122,8 @@
   "horse-boarding-agreement": {
     "title": "Horse Boarding Agreement",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Horse Boarding Agreement.",
     "popular": false,
     "fieldCount": 15,
@@ -184,12 +132,8 @@
   "marriage-separation-agreement": {
     "title": "Marriage Separation Agreement",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Marriage Separation Agreement.",
     "popular": false,
     "fieldCount": 15,
@@ -198,12 +142,8 @@
   "parenting-plan": {
     "title": "Parenting Plan",
     "complexity": "advanced",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Parenting Plan.",
     "popular": false,
     "fieldCount": 30,
@@ -212,12 +152,8 @@
   "personal-care-agreement": {
     "title": "Personal Care Agreement",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Personal Care Agreement.",
     "popular": false,
     "fieldCount": 15,
@@ -226,12 +162,8 @@
   "pet-addendum": {
     "title": "Pet Addendum",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Pet Addendum.",
     "popular": false,
     "fieldCount": 15,
@@ -240,12 +172,8 @@
   "pet-agreement": {
     "title": "Pet Agreement",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Pet Agreement.",
     "popular": false,
     "fieldCount": 15,
@@ -254,12 +182,8 @@
   "pet-custody-agreement": {
     "title": "Pet Custody Agreement",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Pet Custody Agreement.",
     "popular": false,
     "fieldCount": 15,
@@ -268,12 +192,8 @@
   "postnuptial-agreement": {
     "title": "Postnuptial Agreement",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Postnuptial Agreement.",
     "popular": false,
     "fieldCount": 15,
@@ -282,13 +202,8 @@
   "power-of-attorney-for-child": {
     "title": "Power Of Attorney For Child",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign",
-      "notary"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign", "notary"],
     "description": "Template for Power Of Attorney For Child.",
     "popular": false,
     "fieldCount": 15,
@@ -297,12 +212,8 @@
   "prenuptial-agreement": {
     "title": "Prenuptial Agreement",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Prenuptial Agreement.",
     "popular": true,
     "fieldCount": 15,
@@ -311,12 +222,8 @@
   "separation-agreement": {
     "title": "Separation Agreement",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Separation Agreement.",
     "popular": false,
     "fieldCount": 15,

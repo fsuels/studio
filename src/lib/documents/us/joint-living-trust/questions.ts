@@ -100,7 +100,8 @@ export const questions: Question[] = [
     label: 'Joint Assets to be Placed in Trust',
     type: 'textarea',
     required: true,
-    placeholder: 'Describe all joint assets including real estate, bank accounts, investments, etc.',
+    placeholder:
+      'Describe all joint assets including real estate, bank accounts, investments, etc.',
   },
   {
     id: 'separateAssetsSpouseOne',
@@ -116,7 +117,7 @@ export const questions: Question[] = [
   },
   {
     id: 'distributionDuringLifetime',
-    label: 'Distribution Terms During Both Spouses\' Lifetime',
+    label: "Distribution Terms During Both Spouses' Lifetime",
     type: 'textarea',
     required: true,
     placeholder: 'How trust assets may be used while both spouses are alive',
@@ -146,14 +147,16 @@ export const questions: Question[] = [
     id: 'contingentBeneficiaries',
     label: 'Contingent Beneficiaries (Optional)',
     type: 'textarea',
-    placeholder: 'Alternative beneficiaries if primary beneficiaries cannot inherit',
+    placeholder:
+      'Alternative beneficiaries if primary beneficiaries cannot inherit',
   },
   {
     id: 'incapacityProvisions',
     label: 'Incapacity Provisions',
     type: 'textarea',
     required: true,
-    placeholder: 'Instructions for trust management if one or both spouses become incapacitated',
+    placeholder:
+      'Instructions for trust management if one or both spouses become incapacitated',
   },
   {
     id: 'specialProvisions',

@@ -234,7 +234,8 @@ export const purchaseOrderQuestions: FormQuestion[] = [
     id: 'lineItems',
     type: 'textarea',
     label: 'Line Items',
-    placeholder: 'List items to purchase:\n\nItem 1: Description, Quantity, Unit Price\nItem 2: Description, Quantity, Unit Price\n\nExample:\nOffice Chairs, 10, $150.00 each\nDesks, 5, $300.00 each',
+    placeholder:
+      'List items to purchase:\n\nItem 1: Description, Quantity, Unit Price\nItem 2: Description, Quantity, Unit Price\n\nExample:\nOffice Chairs, 10, $150.00 each\nDesks, 5, $300.00 each',
     required: true,
     section: 'Items to Purchase',
   },

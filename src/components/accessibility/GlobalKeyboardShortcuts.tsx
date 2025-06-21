@@ -1,10 +1,13 @@
 'use client';
 
 import React from 'react';
-import KeyboardShortcutsModal, { useGlobalKeyboardShortcuts } from './KeyboardShortcutsModal';
+import KeyboardShortcutsModal, {
+  useGlobalKeyboardShortcuts,
+} from './KeyboardShortcutsModal';
 
 export function GlobalKeyboardShortcuts() {
-  const { isShortcutsModalOpen, setIsShortcutsModalOpen } = useGlobalKeyboardShortcuts();
+  const { isShortcutsModalOpen, setIsShortcutsModalOpen } =
+    useGlobalKeyboardShortcuts();
 
   return (
     <KeyboardShortcutsModal

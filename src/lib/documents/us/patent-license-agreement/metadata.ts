@@ -24,13 +24,22 @@ export const patentLicenseAgreementMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Patent License Agreement',
-      description: 'Comprehensive agreement for licensing patent rights with royalty and technical provisions.',
-      aliases: ['patent licensing contract', 'technology license agreement', 'patent usage agreement'],
+      description:
+        'Comprehensive agreement for licensing patent rights with royalty and technical provisions.',
+      aliases: [
+        'patent licensing contract',
+        'technology license agreement',
+        'patent usage agreement',
+      ],
     },
     es: {
       name: 'Acuerdo de Licencia de Patente',
-      description: 'Acuerdo integral para licenciar derechos de patente con provisiones técnicas y de regalías.',
-      aliases: ['contrato de licencia de patente', 'acuerdo de licencia tecnológica'],
+      description:
+        'Acuerdo integral para licenciar derechos de patente con provisiones técnicas y de regalías.',
+      aliases: [
+        'contrato de licencia de patente',
+        'acuerdo de licencia tecnológica',
+      ],
     },
   },
 };

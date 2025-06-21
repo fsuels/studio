@@ -47,7 +47,7 @@ Don't risk using generic templates that may not comply with Massachusetts law. G
 
 [Create Massachusetts Independent Contractor Agreement]
 
-*Trusted by thousands of Massachusetts businesses*
+_Trusted by thousands of Massachusetts businesses_
 
 ---
 

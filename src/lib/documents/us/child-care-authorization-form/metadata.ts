@@ -24,13 +24,18 @@ export const childCareAuthorizationFormMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Child Care Authorization Form',
-      description: 'Authorization form for temporary child care and emergency decisions.',
+      description:
+        'Authorization form for temporary child care and emergency decisions.',
       aliases: ['childcare authorization', 'temporary custody form'],
     },
     es: {
       name: 'Formulario de Autorización de Cuidado Infantil',
-      description: 'Formulario de autorización para cuidado temporal y decisiones de emergencia.',
-      aliases: ['autorización de cuidado infantil', 'formulario de custodia temporal'],
+      description:
+        'Formulario de autorización para cuidado temporal y decisiones de emergencia.',
+      aliases: [
+        'autorización de cuidado infantil',
+        'formulario de custodia temporal',
+      ],
     },
   },
 };

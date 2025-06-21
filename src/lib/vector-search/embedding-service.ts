@@ -34,7 +34,7 @@ export class EmbeddingService {
   constructor() {
     this.project = process.env.GOOGLE_CLOUD_PROJECT || '';
     this.location = process.env.GOOGLE_CLOUD_LOCATION || 'us-central1';
-    
+
     if (!this.project) {
       throw new Error('GOOGLE_CLOUD_PROJECT environment variable is required');
     }
@@ -71,7 +71,9 @@ export class EmbeddingService {
       throw new Error('No embeddings returned from Vertex AI');
     } catch (error) {
       console.error('Error generating embedding:', error);
-      throw new Error(`Failed to generate embedding: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      throw new Error(
+        `Failed to generate embedding: ${error instanceof Error ? error.message : 'Unknown error'}`,
+      );
     }
   }
 
@@ -80,7 +82,7 @@ export class EmbeddingService {
    */
   async generateBatchEmbeddings(texts: string[]): Promise<EmbeddingResponse> {
     try {
-      const instances = texts.map(text => ({
+      const instances = texts.map((text) => ({
         content: text.slice(0, 8000),
       }));
 
@@ -94,20 +96,25 @@ export class EmbeddingService {
       });
 
       if (response.predictions && response.predictions.length > 0) {
-        const embeddings = response.predictions.map((pred: any) => 
-          pred.embeddings?.values || []
+        const embeddings = response.predictions.map(
+          (pred: any) => pred.embeddings?.values || [],
         );
-        
+
         return {
           embeddings,
-          tokens: texts.reduce((sum, text) => sum + this.estimateTokens(text), 0),
+          tokens: texts.reduce(
+            (sum, text) => sum + this.estimateTokens(text),
+            0,
+          ),
         };
       }
 
       throw new Error('No embeddings returned from Vertex AI');
     } catch (error) {
       console.error('Error generating batch embeddings:', error);
-      throw new Error(`Failed to generate batch embeddings: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      throw new Error(
+        `Failed to generate batch embeddings: ${error instanceof Error ? error.message : 'Unknown error'}`,
+      );
     }
   }
 
@@ -117,18 +124,18 @@ export class EmbeddingService {
   async processDocument(
     docId: string,
     content: string,
-    metadata: Omit<DocumentEmbedding['metadata'], 'docId'>
+    metadata: Omit<DocumentEmbedding['metadata'], 'docId'>,
   ): Promise<DocumentEmbedding> {
     try {
       // Extract key content for embedding
       const processedContent = this.preprocessContent(content);
-      
+
       // Generate embedding
       const embedding = await this.generateEmbedding(processedContent);
-      
+
       // Extract entities from content
       const extractedEntities = this.extractEntities(content);
-      
+
       return {
         id: `${docId}_${Date.now()}`,
         content: processedContent,
@@ -151,26 +158,28 @@ export class EmbeddingService {
   private preprocessContent(content: string): string {
     // Remove excessive whitespace
     let processed = content.replace(/\s+/g, ' ').trim();
-    
+
     // Extract key sections (title, definitions, main clauses)
     const sections = [];
-    
+
     // Extract title/header
     const titleMatch = content.match(/^#\s*(.*?)$/m);
     if (titleMatch) {
       sections.push(`Title: ${titleMatch[1]}`);
     }
-    
+
     // Extract definitions section
-    const definitionsMatch = content.match(/(?:definitions?|defined terms?)[:\s]*(.*?)(?=\n\n|\n#|$)/si);
+    const definitionsMatch = content.match(
+      /(?:definitions?|defined terms?)[:\s]*(.*?)(?=\n\n|\n#|$)/is,
+    );
     if (definitionsMatch) {
       sections.push(`Definitions: ${definitionsMatch[1].slice(0, 500)}`);
     }
-    
+
     // Extract main content (first 2000 chars)
     const mainContent = processed.slice(0, 2000);
     sections.push(mainContent);
-    
+
     return sections.join(' ');
   }
 
@@ -189,21 +198,24 @@ export class EmbeddingService {
     } = {};
 
     // Extract monetary amounts
-    const amountRegex = /\$[\d,]+(?:\.\d{2})?|\d+(?:,\d{3})*(?:\.\d{2})?\s*dollars?/gi;
+    const amountRegex =
+      /\$[\d,]+(?:\.\d{2})?|\d+(?:,\d{3})*(?:\.\d{2})?\s*dollars?/gi;
     const amounts = content.match(amountRegex);
     if (amounts && amounts.length > 0) {
       entities.amounts = [...new Set(amounts.slice(0, 10))];
     }
 
     // Extract dates
-    const dateRegex = /\b(?:\d{1,2}\/\d{1,2}\/\d{4}|\d{4}-\d{2}-\d{2}|(?:January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{1,2},?\s+\d{4})\b/gi;
+    const dateRegex =
+      /\b(?:\d{1,2}\/\d{1,2}\/\d{4}|\d{4}-\d{2}-\d{2}|(?:January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{1,2},?\s+\d{4})\b/gi;
     const dates = content.match(dateRegex);
     if (dates && dates.length > 0) {
       entities.dates = [...new Set(dates.slice(0, 10))];
     }
 
     // Extract potential party names (capitalized words/phrases)
-    const partyRegex = /\b[A-Z][a-z]+(?:\s+[A-Z][a-z]+)*\s+(?:LLC|Inc|Corp|Corporation|Company|Co\.|Ltd|Limited)\b/g;
+    const partyRegex =
+      /\b[A-Z][a-z]+(?:\s+[A-Z][a-z]+)*\s+(?:LLC|Inc|Corp|Corporation|Company|Co\.|Ltd|Limited)\b/g;
     const parties = content.match(partyRegex);
     if (parties && parties.length > 0) {
       entities.parties = [...new Set(parties.slice(0, 10))];

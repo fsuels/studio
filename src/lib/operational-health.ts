@@ -1,10 +1,25 @@
 // src/lib/operational-health.ts
 import { getDb } from '@/lib/firebase';
-import { collection, addDoc, query, where, orderBy, limit, getDocs, serverTimestamp } from 'firebase/firestore';
+import {
+  collection,
+  addDoc,
+  query,
+  where,
+  orderBy,
+  limit,
+  getDocs,
+  serverTimestamp,
+} from 'firebase/firestore';
 
 export interface HealthMetric {
   timestamp: number;
-  metricType: 'error_rate' | 'latency' | 'queue_depth' | 'success_rate' | 'memory_usage' | 'cpu_usage';
+  metricType:
+    | 'error_rate'
+    | 'latency'
+    | 'queue_depth'
+    | 'success_rate'
+    | 'memory_usage'
+    | 'cpu_usage';
   value: number;
   endpoint?: string;
   userId?: string;
@@ -13,7 +28,12 @@ export interface HealthMetric {
 
 export interface Alert {
   id: string;
-  type: 'error_spike' | 'high_latency' | 'queue_overflow' | 'anomaly' | 'downtime';
+  type:
+    | 'error_spike'
+    | 'high_latency'
+    | 'queue_overflow'
+    | 'anomaly'
+    | 'downtime';
   severity: 'low' | 'medium' | 'high' | 'critical';
   message: string;
   timestamp: number;
@@ -55,10 +75,10 @@ class OperationalHealthMonitor {
   private metrics: HealthMetric[] = [];
   private alerts: Alert[] = [];
   private thresholds = {
-    errorRate: { warning: 0.05, critical: 0.10 }, // 5% warning, 10% critical
+    errorRate: { warning: 0.05, critical: 0.1 }, // 5% warning, 10% critical
     latencyP95: { warning: 2000, critical: 5000 }, // 2s warning, 5s critical
     queueDepth: { warning: 100, critical: 500 },
-    memoryUsage: { warning: 0.80, critical: 0.95 }
+    memoryUsage: { warning: 0.8, critical: 0.95 },
   };
 
   private constructor() {
@@ -76,7 +96,7 @@ class OperationalHealthMonitor {
   async recordMetric(metric: Omit<HealthMetric, 'timestamp'>): Promise<void> {
     const timestampedMetric: HealthMetric = {
       ...metric,
-      timestamp: Date.now()
+      timestamp: Date.now(),
     };
 
     this.metrics.push(timestampedMetric);
@@ -91,7 +111,7 @@ class OperationalHealthMonitor {
       const db = await getDb();
       await addDoc(collection(db, 'operational_metrics'), {
         ...timestampedMetric,
-        timestamp: serverTimestamp()
+        timestamp: serverTimestamp(),
       });
     } catch (error) {
       console.error('Failed to store metric:', error);
@@ -107,7 +127,7 @@ class OperationalHealthMonitor {
       metricType: 'latency',
       value: duration,
       endpoint,
-      metadata: { success }
+      metadata: { success },
     });
 
     // Also record success/error rate
@@ -115,78 +135,109 @@ class OperationalHealthMonitor {
       metricType: success ? 'success_rate' : 'error_rate',
       value: success ? 1 : 0,
       endpoint,
-      metadata: { duration }
+      metadata: { duration },
     });
   }
 
   // Record queue operations
-  recordQueueOperation(queueName: string, operation: 'enqueue' | 'dequeue' | 'depth', value: number): void {
+  recordQueueOperation(
+    queueName: string,
+    operation: 'enqueue' | 'dequeue' | 'depth',
+    value: number,
+  ): void {
     this.recordMetric({
       metricType: 'queue_depth',
       value,
-      metadata: { queueName, operation }
+      metadata: { queueName, operation },
     });
   }
 
   // Get current operational metrics
   async getOperationalMetrics(): Promise<OperationalMetrics> {
     const now = Date.now();
-    const oneHourAgo = now - (60 * 60 * 1000);
-    const recentMetrics = this.metrics.filter(m => m.timestamp >= oneHourAgo);
+    const oneHourAgo = now - 60 * 60 * 1000;
+    const recentMetrics = this.metrics.filter((m) => m.timestamp >= oneHourAgo);
 
     // Calculate error rate
-    const errorMetrics = recentMetrics.filter(m => m.metricType === 'error_rate');
-    const totalRequests = recentMetrics.filter(m => m.metricType === 'error_rate' || m.metricType === 'success_rate').length;
+    const errorMetrics = recentMetrics.filter(
+      (m) => m.metricType === 'error_rate',
+    );
+    const totalRequests = recentMetrics.filter(
+      (m) => m.metricType === 'error_rate' || m.metricType === 'success_rate',
+    ).length;
     const errorCount = errorMetrics.reduce((sum, m) => sum + m.value, 0);
     const currentErrorRate = totalRequests > 0 ? errorCount / totalRequests : 0;
 
     // Calculate latency percentiles
     const latencyMetrics = recentMetrics
-      .filter(m => m.metricType === 'latency')
-      .map(m => m.value)
+      .filter((m) => m.metricType === 'latency')
+      .map((m) => m.value)
       .sort((a, b) => a - b);
 
     const latency = {
       p50: this.percentile(latencyMetrics, 0.5),
       p95: this.percentile(latencyMetrics, 0.95),
       p99: this.percentile(latencyMetrics, 0.99),
-      avg: latencyMetrics.length > 0 ? latencyMetrics.reduce((a, b) => a + b, 0) / latencyMetrics.length : 0
+      avg:
+        latencyMetrics.length > 0
+          ? latencyMetrics.reduce((a, b) => a + b, 0) / latencyMetrics.length
+          : 0,
     };
 
     // Calculate throughput
-    const successCount = recentMetrics.filter(m => m.metricType === 'success_rate').reduce((sum, m) => sum + m.value, 0);
+    const successCount = recentMetrics
+      .filter((m) => m.metricType === 'success_rate')
+      .reduce((sum, m) => sum + m.value, 0);
     const requestsPerMinute = totalRequests / 60; // Approximate
 
     // Calculate queue depth
-    const queueMetrics = recentMetrics.filter(m => m.metricType === 'queue_depth');
-    const currentQueueDepth = queueMetrics.length > 0 ? queueMetrics[queueMetrics.length - 1].value : 0;
-    const maxQueueDepth = queueMetrics.length > 0 ? Math.max(...queueMetrics.map(m => m.value)) : 0;
+    const queueMetrics = recentMetrics.filter(
+      (m) => m.metricType === 'queue_depth',
+    );
+    const currentQueueDepth =
+      queueMetrics.length > 0 ? queueMetrics[queueMetrics.length - 1].value : 0;
+    const maxQueueDepth =
+      queueMetrics.length > 0
+        ? Math.max(...queueMetrics.map((m) => m.value))
+        : 0;
 
     // Calculate system health score
-    const healthScore = this.calculateHealthScore(currentErrorRate, latency.p95, currentQueueDepth);
+    const healthScore = this.calculateHealthScore(
+      currentErrorRate,
+      latency.p95,
+      currentQueueDepth,
+    );
 
     return {
       errorRate: {
         current: currentErrorRate,
-        p95: this.percentile(errorMetrics.map(m => m.value), 0.95),
-        trend: this.calculateTrend(errorMetrics.map(m => m.value))
+        p95: this.percentile(
+          errorMetrics.map((m) => m.value),
+          0.95,
+        ),
+        trend: this.calculateTrend(errorMetrics.map((m) => m.value)),
       },
       latency,
       throughput: {
         requestsPerMinute,
         successfulRequests: successCount,
-        failedRequests: errorCount
+        failedRequests: errorCount,
       },
       queueDepth: {
         current: currentQueueDepth,
         max: maxQueueDepth,
-        processing: 0 // Would need actual queue implementation
+        processing: 0, // Would need actual queue implementation
       },
       systemHealth: {
         score: healthScore,
-        status: healthScore > 90 ? 'healthy' : healthScore > 70 ? 'degraded' : 'critical',
-        uptime: this.calculateUptime()
-      }
+        status:
+          healthScore > 90
+            ? 'healthy'
+            : healthScore > 70
+              ? 'degraded'
+              : 'critical',
+        uptime: this.calculateUptime(),
+      },
     };
   }
 
@@ -198,36 +249,60 @@ class OperationalHealthMonitor {
     if (metric.metricType === 'error_rate') {
       const recentErrorRate = this.calculateRecentErrorRate();
       if (recentErrorRate > this.thresholds.errorRate.critical) {
-        await this.createAlert('error_spike', 'critical', 
-          `Critical error rate: ${(recentErrorRate * 100).toFixed(2)}%`, 
-          { errorRate: recentErrorRate, endpoint: metric.endpoint });
+        await this.createAlert(
+          'error_spike',
+          'critical',
+          `Critical error rate: ${(recentErrorRate * 100).toFixed(2)}%`,
+          { errorRate: recentErrorRate, endpoint: metric.endpoint },
+        );
         alertCreated = true;
       } else if (recentErrorRate > this.thresholds.errorRate.warning) {
-        await this.createAlert('error_spike', 'high', 
-          `High error rate: ${(recentErrorRate * 100).toFixed(2)}%`, 
-          { errorRate: recentErrorRate, endpoint: metric.endpoint });
+        await this.createAlert(
+          'error_spike',
+          'high',
+          `High error rate: ${(recentErrorRate * 100).toFixed(2)}%`,
+          { errorRate: recentErrorRate, endpoint: metric.endpoint },
+        );
         alertCreated = true;
       }
     }
 
     // High latency detection
-    if (metric.metricType === 'latency' && metric.value > this.thresholds.latencyP95.critical) {
-      await this.createAlert('high_latency', 'critical',
+    if (
+      metric.metricType === 'latency' &&
+      metric.value > this.thresholds.latencyP95.critical
+    ) {
+      await this.createAlert(
+        'high_latency',
+        'critical',
         `Critical latency: ${metric.value}ms on ${metric.endpoint}`,
-        { latency: metric.value, endpoint: metric.endpoint });
+        { latency: metric.value, endpoint: metric.endpoint },
+      );
       alertCreated = true;
-    } else if (metric.metricType === 'latency' && metric.value > this.thresholds.latencyP95.warning) {
-      await this.createAlert('high_latency', 'medium',
+    } else if (
+      metric.metricType === 'latency' &&
+      metric.value > this.thresholds.latencyP95.warning
+    ) {
+      await this.createAlert(
+        'high_latency',
+        'medium',
         `High latency: ${metric.value}ms on ${metric.endpoint}`,
-        { latency: metric.value, endpoint: metric.endpoint });
+        { latency: metric.value, endpoint: metric.endpoint },
+      );
       alertCreated = true;
     }
 
     // Queue overflow detection
-    if (metric.metricType === 'queue_depth' && metric.value > this.thresholds.queueDepth.critical) {
-      await this.createAlert('queue_overflow', 'critical',
+    if (
+      metric.metricType === 'queue_depth' &&
+      metric.value > this.thresholds.queueDepth.critical
+    ) {
+      await this.createAlert(
+        'queue_overflow',
+        'critical',
         `Queue overflow: ${metric.value} items`,
-        { queueDepth: metric.value, queue: metric.metadata?.queueName });
+        { queueDepth: metric.value, queue: metric.metadata?.queueName },
+      );
       alertCreated = true;
     }
 
@@ -239,10 +314,10 @@ class OperationalHealthMonitor {
 
   // Create an alert
   private async createAlert(
-    type: Alert['type'], 
-    severity: Alert['severity'], 
-    message: string, 
-    metadata: Record<string, any>
+    type: Alert['type'],
+    severity: Alert['severity'],
+    message: string,
+    metadata: Record<string, any>,
   ): Promise<void> {
     const alert: Alert = {
       id: `alert_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
@@ -251,7 +326,7 @@ class OperationalHealthMonitor {
       message,
       timestamp: Date.now(),
       resolved: false,
-      metadata
+      metadata,
     };
 
     this.alerts.push(alert);
@@ -261,7 +336,7 @@ class OperationalHealthMonitor {
       const db = await getDb();
       await addDoc(collection(db, 'operational_alerts'), {
         ...alert,
-        timestamp: serverTimestamp()
+        timestamp: serverTimestamp(),
       });
     } catch (error) {
       console.error('Failed to store alert:', error);
@@ -281,7 +356,10 @@ class OperationalHealthMonitor {
     }
 
     // Log to console as fallback
-    console.error(`🚨 OPERATIONAL ALERT [${alert.severity.toUpperCase()}]: ${alert.message}`, alert.metadata);
+    console.error(
+      `🚨 OPERATIONAL ALERT [${alert.severity.toUpperCase()}]: ${alert.message}`,
+      alert.metadata,
+    );
   }
 
   // Send Slack notification
@@ -294,38 +372,40 @@ class OperationalHealthMonitor {
         low: '#36a64f',
         medium: '#ff9900',
         high: '#ff6600',
-        critical: '#cc0000'
+        critical: '#cc0000',
       }[alert.severity];
 
       const payload = {
         channel: process.env.SLACK_ALERT_CHANNEL || '#alerts',
         username: '123LegalDoc Monitor',
         icon_emoji: ':warning:',
-        attachments: [{
-          color,
-          title: `${alert.severity.toUpperCase()} Alert: ${alert.type.replace('_', ' ')}`,
-          text: alert.message,
-          fields: [
-            {
-              title: 'Severity',
-              value: alert.severity,
-              short: true
-            },
-            {
-              title: 'Timestamp',
-              value: new Date(alert.timestamp).toISOString(),
-              short: true
-            }
-          ],
-          footer: '123LegalDoc Operational Health',
-          ts: Math.floor(alert.timestamp / 1000)
-        }]
+        attachments: [
+          {
+            color,
+            title: `${alert.severity.toUpperCase()} Alert: ${alert.type.replace('_', ' ')}`,
+            text: alert.message,
+            fields: [
+              {
+                title: 'Severity',
+                value: alert.severity,
+                short: true,
+              },
+              {
+                title: 'Timestamp',
+                value: new Date(alert.timestamp).toISOString(),
+                short: true,
+              },
+            ],
+            footer: '123LegalDoc Operational Health',
+            ts: Math.floor(alert.timestamp / 1000),
+          },
+        ],
       };
 
       await fetch(webhookUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
+        body: JSON.stringify(payload),
       });
     } catch (error) {
       console.error('Failed to send Slack alert:', error);
@@ -348,8 +428,8 @@ class OperationalHealthMonitor {
           message: alert.message,
           timestamp: alert.timestamp,
           metadata: alert.metadata,
-          service: '123LegalDoc'
-        })
+          service: '123LegalDoc',
+        }),
       });
     } catch (error) {
       console.error('Failed to send webhook alert:', error);
@@ -367,41 +447,51 @@ class OperationalHealthMonitor {
     if (values.length < 2) return 'stable';
     const recent = values.slice(-10);
     const older = values.slice(-20, -10);
-    
+
     const recentAvg = recent.reduce((a, b) => a + b, 0) / recent.length;
-    const olderAvg = older.length > 0 ? older.reduce((a, b) => a + b, 0) / older.length : recentAvg;
-    
+    const olderAvg =
+      older.length > 0
+        ? older.reduce((a, b) => a + b, 0) / older.length
+        : recentAvg;
+
     const change = (recentAvg - olderAvg) / olderAvg;
-    
+
     if (change > 0.1) return 'up';
     if (change < -0.1) return 'down';
     return 'stable';
   }
 
   private calculateRecentErrorRate(): number {
-    const recentMetrics = this.metrics.filter(m => 
-      m.timestamp > Date.now() - (5 * 60 * 1000) && // Last 5 minutes
-      (m.metricType === 'error_rate' || m.metricType === 'success_rate')
+    const recentMetrics = this.metrics.filter(
+      (m) =>
+        m.timestamp > Date.now() - 5 * 60 * 1000 && // Last 5 minutes
+        (m.metricType === 'error_rate' || m.metricType === 'success_rate'),
     );
-    
+
     if (recentMetrics.length === 0) return 0;
-    
-    const errors = recentMetrics.filter(m => m.metricType === 'error_rate').reduce((sum, m) => sum + m.value, 0);
+
+    const errors = recentMetrics
+      .filter((m) => m.metricType === 'error_rate')
+      .reduce((sum, m) => sum + m.value, 0);
     return errors / recentMetrics.length;
   }
 
-  private calculateHealthScore(errorRate: number, latency: number, queueDepth: number): number {
+  private calculateHealthScore(
+    errorRate: number,
+    latency: number,
+    queueDepth: number,
+  ): number {
     let score = 100;
-    
+
     // Deduct for error rate
     score -= errorRate * 500; // 10% error rate = -50 points
-    
+
     // Deduct for high latency
     if (latency > 1000) score -= Math.min(30, (latency - 1000) / 100);
-    
+
     // Deduct for queue depth
     if (queueDepth > 50) score -= Math.min(20, (queueDepth - 50) / 10);
-    
+
     return Math.max(0, Math.min(100, score));
   }
 
@@ -424,7 +514,7 @@ class OperationalHealthMonitor {
       this.recordMetric({
         metricType: 'memory_usage',
         value: memory.heapUsed / memory.heapTotal,
-        metadata: { heapUsed: memory.heapUsed, heapTotal: memory.heapTotal }
+        metadata: { heapUsed: memory.heapUsed, heapTotal: memory.heapTotal },
       });
     }
 
@@ -433,31 +523,31 @@ class OperationalHealthMonitor {
       this.recordMetric({
         metricType: 'cpu_usage',
         value: Math.random() * 100, // Placeholder - would need actual CPU monitoring
-        metadata: { timestamp: performance.now() }
+        metadata: { timestamp: performance.now() },
       });
     }
   }
 
   // Get active alerts
   getActiveAlerts(): Alert[] {
-    return this.alerts.filter(alert => !alert.resolved);
+    return this.alerts.filter((alert) => !alert.resolved);
   }
 
   // Resolve an alert
   async resolveAlert(alertId: string): Promise<void> {
-    const alert = this.alerts.find(a => a.id === alertId);
+    const alert = this.alerts.find((a) => a.id === alertId);
     if (alert) {
       alert.resolved = true;
-      
+
       // Update in Firebase
       try {
         const db = await getDb();
         const alertsQuery = query(
           collection(db, 'operational_alerts'),
-          where('id', '==', alertId)
+          where('id', '==', alertId),
         );
         const snapshot = await getDocs(alertsQuery);
-        
+
         if (!snapshot.empty) {
           // Would update the document here
         }
@@ -471,22 +561,22 @@ class OperationalHealthMonitor {
 // Express/Next.js middleware for automatic monitoring
 export function createMonitoringMiddleware() {
   const monitor = OperationalHealthMonitor.getInstance();
-  
+
   return async (req: any, res: any, next: any) => {
     const startTime = Date.now();
     const originalSend = res.send;
-    
-    res.send = function(data: any) {
+
+    res.send = function (data: any) {
       const endTime = Date.now();
       const duration = endTime - startTime;
       const success = res.statusCode < 400;
-      
+
       // Record metrics
       monitor.recordLatency(req.path || req.url, duration, success);
-      
+
       return originalSend.call(this, data);
     };
-    
+
     next();
   };
 }

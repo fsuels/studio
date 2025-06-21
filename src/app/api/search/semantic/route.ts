@@ -40,7 +40,7 @@ export async function GET(request: NextRequest) {
     if (!params.q?.trim()) {
       return NextResponse.json(
         { error: 'Query parameter "q" is required' },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -50,16 +50,19 @@ export async function GET(request: NextRequest) {
       complexity: params.complexity,
       jurisdiction: params.jurisdiction,
       governingLaw: params.governingLaw,
-      dateRange: params.dateStart && params.dateEnd ? {
-        start: params.dateStart,
-        end: params.dateEnd,
-      } : undefined,
+      dateRange:
+        params.dateStart && params.dateEnd
+          ? {
+              start: params.dateStart,
+              end: params.dateEnd,
+            }
+          : undefined,
       tags: params.tags,
       parties: params.parties,
     };
 
     // Remove undefined values
-    Object.keys(filters).forEach(key => {
+    Object.keys(filters).forEach((key) => {
       if (filters[key as keyof typeof filters] === undefined) {
         delete filters[key as keyof typeof filters];
       }
@@ -77,14 +80,14 @@ export async function GET(request: NextRequest) {
     const searchResponse = await pineconeService.semanticSearch(
       params.q,
       Object.keys(filters).length > 0 ? filters : undefined,
-      options
+      options,
     );
 
     // Handle CSV export
     if (params.format === 'csv') {
       const csvData = generateCSV(searchResponse.results);
       const filename = `legal-docs-search-${Date.now()}.csv`;
-      
+
       return new NextResponse(csvData, {
         status: 200,
         headers: {
@@ -95,7 +98,9 @@ export async function GET(request: NextRequest) {
     }
 
     // Log search analytics (async, don't wait)
-    logSearchAnalytics(params.q, filters, searchResponse.totalResults).catch(console.error);
+    logSearchAnalytics(params.q, filters, searchResponse.totalResults).catch(
+      console.error,
+    );
 
     // Update saved view usage if applicable
     if (params.savedView) {
@@ -112,16 +117,15 @@ export async function GET(request: NextRequest) {
       suggestions: searchResponse.suggestions,
       responseTime: Date.now(),
     });
-
   } catch (error) {
     console.error('Semantic search API error:', error);
-    
+
     return NextResponse.json(
-      { 
+      {
         error: 'Internal server error',
         message: error instanceof Error ? error.message : 'Unknown error',
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -134,32 +138,28 @@ export async function POST(request: NextRequest) {
     switch (action) {
       case 'bulk_search':
         return await handleBulkSearch(params);
-      
+
       case 'save_view':
         return await handleSaveView(params);
-      
+
       case 'export_async':
         return await handleAsyncExport(params);
-      
+
       case 'similar_docs':
         return await handleSimilarDocuments(params);
-      
-      default:
-        return NextResponse.json(
-          { error: 'Invalid action' },
-          { status: 400 }
-        );
-    }
 
+      default:
+        return NextResponse.json({ error: 'Invalid action' }, { status: 400 });
+    }
   } catch (error) {
     console.error('Semantic search POST error:', error);
-    
+
     return NextResponse.json(
-      { 
+      {
         error: 'Internal server error',
         message: error instanceof Error ? error.message : 'Unknown error',
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -190,21 +190,29 @@ function parseSearchParams(searchParams: URLSearchParams): SearchParams {
  * Generate CSV from search results
  */
 function generateCSV(results: any[]): string {
-  const csvData = results.map(result => ({
+  const csvData = results.map((result) => ({
     'Document ID': result.id,
-    'Title': result.metadata.title,
-    'Category': result.metadata.category,
-    'Complexity': result.metadata.complexity,
-    'Jurisdiction': result.metadata.jurisdiction || '',
+    Title: result.metadata.title,
+    Category: result.metadata.category,
+    Complexity: result.metadata.complexity,
+    Jurisdiction: result.metadata.jurisdiction || '',
     'Governing Law': result.metadata.governingLaw || '',
     'Created Date': result.metadata.createdAt,
     'Last Modified': result.metadata.lastModified,
     'Relevance Score': result.score.toFixed(3),
-    'Tags': Array.isArray(result.metadata.tags) ? result.metadata.tags.join('; ') : '',
-    'Parties': Array.isArray(result.metadata.parties) ? result.metadata.parties.join('; ') : '',
-    'Amounts': Array.isArray(result.metadata.amounts) ? result.metadata.amounts.join('; ') : '',
-    'Key Dates': Array.isArray(result.metadata.dates) ? result.metadata.dates.join('; ') : '',
-    'Explanation': result.explanation || '',
+    Tags: Array.isArray(result.metadata.tags)
+      ? result.metadata.tags.join('; ')
+      : '',
+    Parties: Array.isArray(result.metadata.parties)
+      ? result.metadata.parties.join('; ')
+      : '',
+    Amounts: Array.isArray(result.metadata.amounts)
+      ? result.metadata.amounts.join('; ')
+      : '',
+    'Key Dates': Array.isArray(result.metadata.dates)
+      ? result.metadata.dates.join('; ')
+      : '',
+    Explanation: result.explanation || '',
     'Content Preview': result.metadata.content?.slice(0, 200) + '...' || '',
   }));
 
@@ -223,14 +231,14 @@ async function handleBulkSearch(params: any) {
   if (!Array.isArray(queries) || queries.length === 0) {
     return NextResponse.json(
       { error: 'Queries array is required' },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
   if (queries.length > 50) {
     return NextResponse.json(
       { error: 'Maximum 50 queries allowed per bulk request' },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
@@ -239,22 +247,27 @@ async function handleBulkSearch(params: any) {
       const searchResponse = await pineconeService.semanticSearch(
         query,
         filters,
-        options
+        options,
       );
       return {
         query,
         results: searchResponse.results,
         totalResults: searchResponse.totalResults,
       };
-    })
+    }),
   );
 
   const successfulResults = results
-    .filter((result): result is PromiseFulfilledResult<any> => result.status === 'fulfilled')
-    .map(result => result.value);
+    .filter(
+      (result): result is PromiseFulfilledResult<any> =>
+        result.status === 'fulfilled',
+    )
+    .map((result) => result.value);
 
   const failedResults = results
-    .filter((result): result is PromiseRejectedResult => result.status === 'rejected')
+    .filter(
+      (result): result is PromiseRejectedResult => result.status === 'rejected',
+    )
     .map((result, index) => ({
       query: queries[index],
       error: result.reason.message,
@@ -278,7 +291,7 @@ async function handleSaveView(params: any) {
   if (!name || !query || !userId) {
     return NextResponse.json(
       { error: 'Name, query, and userId are required' },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
@@ -311,7 +324,7 @@ async function handleAsyncExport(params: any) {
   if (!query || !email) {
     return NextResponse.json(
       { error: 'Query and email are required for async export' },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
@@ -344,7 +357,7 @@ async function handleSimilarDocuments(params: any) {
   if (!docId) {
     return NextResponse.json(
       { error: 'Document ID is required' },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
@@ -352,7 +365,7 @@ async function handleSimilarDocuments(params: any) {
     const similarDocs = await pineconeService.findSimilarDocuments(
       docId,
       topK,
-      minScore
+      minScore,
     );
 
     return NextResponse.json({
@@ -360,14 +373,13 @@ async function handleSimilarDocuments(params: any) {
       similarDocuments: similarDocs,
       totalFound: similarDocs.length,
     });
-
   } catch (error) {
     return NextResponse.json(
-      { 
+      {
         error: 'Failed to find similar documents',
         message: error instanceof Error ? error.message : 'Unknown error',
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -378,7 +390,7 @@ async function handleSimilarDocuments(params: any) {
 async function logSearchAnalytics(
   query: string,
   filters: any,
-  totalResults: number
+  totalResults: number,
 ): Promise<void> {
   try {
     // TODO: Implement analytics logging

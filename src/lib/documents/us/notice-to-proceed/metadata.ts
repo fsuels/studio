@@ -24,12 +24,18 @@ export const noticetoproceedMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Notice to Proceed',
-      description: 'Official authorization for contractor to begin construction work on a project.',
-      aliases: ['commencement notice', 'start work authorization', 'proceed order'],
+      description:
+        'Official authorization for contractor to begin construction work on a project.',
+      aliases: [
+        'commencement notice',
+        'start work authorization',
+        'proceed order',
+      ],
     },
     es: {
       name: 'Aviso para Proceder',
-      description: 'Autorización oficial para que el contratista comience el trabajo de construcción en un proyecto.',
+      description:
+        'Autorización oficial para que el contratista comience el trabajo de construcción en un proyecto.',
       aliases: ['aviso de inicio', 'autorización de trabajo'],
     },
   },

@@ -20,7 +20,7 @@ export async function POST(request: NextRequest) {
     if (!reviewId || !stageId || !reviewerId) {
       return NextResponse.json(
         { error: 'Review ID, stage ID, and reviewer ID are required' },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
       reviewId,
       stageId,
       reviewerId,
-      priority
+      priority,
     });
 
     // Send notification to reviewer
@@ -38,14 +38,13 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       success: true,
       assignment,
-      message: 'Reviewer assigned successfully'
+      message: 'Reviewer assigned successfully',
     });
-
   } catch (error) {
     console.error('Failed to assign reviewer:', error);
     return NextResponse.json(
       { error: 'Failed to assign reviewer' },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -63,13 +62,13 @@ async function assignReviewerToStage(params: {
     reviewerId: params.reviewerId,
     assignedAt: new Date(),
     status: 'assigned',
-    priority: params.priority as any
+    priority: params.priority as any,
   };
 
   // Calculate estimated completion based on reviewer workload and priority
   assignment.estimatedCompletion = calculateEstimatedCompletion(
     params.reviewerId,
-    params.priority
+    params.priority,
   );
 
   // In a real implementation, save to database
@@ -85,7 +84,7 @@ async function notifyReviewer(assignment: ReviewAssignment) {
   try {
     // Get reviewer details
     const reviewer = await getReviewerById(assignment.reviewerId);
-    
+
     if (!reviewer) {
       console.error('Reviewer not found:', assignment.reviewerId);
       return;
@@ -93,7 +92,7 @@ async function notifyReviewer(assignment: ReviewAssignment) {
 
     // Get review details
     const review = await getReviewById(assignment.reviewId);
-    
+
     const notificationData = {
       type: 'review_assignment',
       reviewerId: assignment.reviewerId,
@@ -106,8 +105,8 @@ async function notifyReviewer(assignment: ReviewAssignment) {
         documentType: review?.documentType,
         sourceLanguage: review?.sourceLanguage,
         targetLanguage: review?.targetLanguage,
-        wordCount: review?.wordCount
-      }
+        wordCount: review?.wordCount,
+      },
     };
 
     // Send email notification
@@ -117,14 +116,16 @@ async function notifyReviewer(assignment: ReviewAssignment) {
     await sendInAppNotification(notificationData);
 
     console.log('Reviewer notification sent successfully');
-
   } catch (error) {
     console.error('Failed to notify reviewer:', error);
     // Don't throw error - assignment should still succeed even if notification fails
   }
 }
 
-function calculateEstimatedCompletion(reviewerId: string, priority: string): Date {
+function calculateEstimatedCompletion(
+  reviewerId: string,
+  priority: string,
+): Date {
   const now = new Date();
   let hoursToAdd = 24; // Default 24 hours
 
@@ -152,7 +153,9 @@ function calculateEstimatedCompletion(reviewerId: string, priority: string): Dat
   return new Date(now.getTime() + hoursToAdd * 60 * 60 * 1000);
 }
 
-async function saveAssignmentToDatabase(assignment: ReviewAssignment): Promise<void> {
+async function saveAssignmentToDatabase(
+  assignment: ReviewAssignment,
+): Promise<void> {
   // In a real implementation, save to your database
   // For now, log the assignment
   console.log('Assignment saved:', {
@@ -161,39 +164,39 @@ async function saveAssignmentToDatabase(assignment: ReviewAssignment): Promise<v
     stageId: assignment.stageId,
     reviewerId: assignment.reviewerId,
     status: assignment.status,
-    assignedAt: assignment.assignedAt
+    assignedAt: assignment.assignedAt,
   });
 }
 
 async function updateReviewStageStatus(
   reviewId: string,
   stageId: string,
-  status: string
+  status: string,
 ): Promise<void> {
   // In a real implementation, update the review stage status in database
   console.log('Review stage status updated:', {
     reviewId,
     stageId,
     status,
-    updatedAt: new Date()
+    updatedAt: new Date(),
   });
 }
 
 async function getReviewerById(reviewerId: string): Promise<any> {
   // Mock reviewer data - in real implementation, fetch from database
   const mockReviewers: Record<string, any> = {
-    'reviewer_1': {
+    reviewer_1: {
       id: 'reviewer_1',
       name: 'Maria González',
       email: 'maria.gonzalez@legalreview.com',
-      type: 'legal_professional'
+      type: 'legal_professional',
     },
-    'reviewer_2': {
+    reviewer_2: {
       id: 'reviewer_2',
       name: 'Jean-Pierre Dubois',
       email: 'jp.dubois@legalfr.com',
-      type: 'legal_professional'
-    }
+      type: 'legal_professional',
+    },
   };
 
   return mockReviewers[reviewerId] || null;
@@ -207,7 +210,7 @@ async function getReviewById(reviewId: string): Promise<any> {
     sourceLanguage: 'en',
     targetLanguage: 'es',
     wordCount: 1250,
-    createdAt: new Date()
+    createdAt: new Date(),
   };
 }
 
@@ -217,7 +220,7 @@ async function sendEmailNotification(data: any): Promise<void> {
     to: data.reviewerEmail,
     subject: `New Translation Review Assignment - ${data.priority.toUpperCase()} Priority`,
     type: data.type,
-    reviewId: data.reviewId
+    reviewId: data.reviewId,
   });
 }
 
@@ -227,6 +230,6 @@ async function sendInAppNotification(data: any): Promise<void> {
     userId: data.reviewerId,
     type: data.type,
     message: `You have been assigned to review a ${data.reviewDetails.documentType} translation`,
-    priority: data.priority
+    priority: data.priority,
   });
 }

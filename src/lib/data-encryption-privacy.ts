@@ -53,7 +53,16 @@ interface DataPrivacyRule {
 
 interface PIIDataField {
   fieldName: string;
-  dataType: 'email' | 'phone' | 'ssn' | 'passport' | 'address' | 'name' | 'dob' | 'ip_address' | 'device_id';
+  dataType:
+    | 'email'
+    | 'phone'
+    | 'ssn'
+    | 'passport'
+    | 'address'
+    | 'name'
+    | 'dob'
+    | 'ip_address'
+    | 'device_id';
   sensitivity: 'low' | 'medium' | 'high' | 'critical';
   encrypted: boolean;
   masked: boolean;
@@ -75,9 +84,9 @@ export class DataEncryptionPrivacy {
       ivSize: 12,
       tagSize: 16,
       keyDerivation: 'Argon2',
-      iterations: 100000
+      iterations: 100000,
     };
-    
+
     this.initializePrivacyRules();
     this.initializePIIFields();
     this.setupKeyRotation();
@@ -103,23 +112,23 @@ export class DataEncryptionPrivacy {
       retention: {
         period: 1095, // 3 years
         reason: 'Legal obligation and legitimate business interest',
-        autoDelete: true
+        autoDelete: true,
       },
       access: {
         allowedRoles: ['user', 'support', 'legal'],
         requiresConsent: true,
-        auditLevel: 'comprehensive'
+        auditLevel: 'comprehensive',
       },
       processing: {
         allowedOperations: ['read', 'update', 'export', 'delete'],
         requiresNotification: true,
-        anonymizationRequired: false
+        anonymizationRequired: false,
       },
       compliance: {
         regulations: ['GDPR', 'ePrivacy Directive'],
         jurisdiction: ['EU', 'EEA'],
-        certifications: ['ISO 27001', 'SOC 2 Type II']
-      }
+        certifications: ['ISO 27001', 'SOC 2 Type II'],
+      },
     });
 
     // CCPA-compliant California consumer data rule
@@ -131,23 +140,23 @@ export class DataEncryptionPrivacy {
       retention: {
         period: 730, // 2 years
         reason: 'Business operations and customer service',
-        autoDelete: true
+        autoDelete: true,
       },
       access: {
         allowedRoles: ['user', 'support'],
         requiresConsent: false, // Opt-out model
-        auditLevel: 'detailed'
+        auditLevel: 'detailed',
       },
       processing: {
         allowedOperations: ['read', 'update', 'export', 'delete', 'sell'],
         requiresNotification: true,
-        anonymizationRequired: true
+        anonymizationRequired: true,
       },
       compliance: {
         regulations: ['CCPA', 'CPRA'],
         jurisdiction: ['California', 'US'],
-        certifications: ['AICPA SOC 2']
-      }
+        certifications: ['AICPA SOC 2'],
+      },
     });
 
     // HIPAA-compliant healthcare data rule
@@ -159,23 +168,23 @@ export class DataEncryptionPrivacy {
       retention: {
         period: 2555, // 7 years
         reason: 'Medical record retention requirement',
-        autoDelete: false // Manual review required
+        autoDelete: false, // Manual review required
       },
       access: {
         allowedRoles: ['healthcare_provider', 'patient'],
         requiresConsent: true,
-        auditLevel: 'comprehensive'
+        auditLevel: 'comprehensive',
       },
       processing: {
         allowedOperations: ['read', 'update', 'transmit'],
         requiresNotification: true,
-        anonymizationRequired: true
+        anonymizationRequired: true,
       },
       compliance: {
         regulations: ['HIPAA', 'HITECH'],
         jurisdiction: ['US'],
-        certifications: ['HITRUST', 'SOC 2 Type II']
-      }
+        certifications: ['HITRUST', 'SOC 2 Type II'],
+      },
     });
 
     // Financial data PCI DSS compliance
@@ -187,23 +196,23 @@ export class DataEncryptionPrivacy {
       retention: {
         period: 365, // 1 year
         reason: 'Payment processing and dispute resolution',
-        autoDelete: true
+        autoDelete: true,
       },
       access: {
         allowedRoles: ['payment_processor', 'finance'],
         requiresConsent: false, // Transaction consent
-        auditLevel: 'comprehensive'
+        auditLevel: 'comprehensive',
       },
       processing: {
         allowedOperations: ['read', 'process', 'transmit'],
         requiresNotification: false,
-        anonymizationRequired: true
+        anonymizationRequired: true,
       },
       compliance: {
         regulations: ['PCI DSS', 'PSD2'],
         jurisdiction: ['Global'],
-        certifications: ['PCI DSS Level 1', 'ISO 27001']
-      }
+        certifications: ['PCI DSS Level 1', 'ISO 27001'],
+      },
     });
   }
 
@@ -217,7 +226,7 @@ export class DataEncryptionPrivacy {
         encrypted: true,
         masked: false,
         retention: 1095,
-        consentRequired: true
+        consentRequired: true,
       },
       {
         fieldName: 'phone',
@@ -226,7 +235,7 @@ export class DataEncryptionPrivacy {
         encrypted: true,
         masked: true,
         retention: 1095,
-        consentRequired: true
+        consentRequired: true,
       },
       {
         fieldName: 'ssn',
@@ -235,7 +244,7 @@ export class DataEncryptionPrivacy {
         encrypted: true,
         masked: true,
         retention: 2555,
-        consentRequired: true
+        consentRequired: true,
       },
       {
         fieldName: 'full_name',
@@ -244,7 +253,7 @@ export class DataEncryptionPrivacy {
         encrypted: true,
         masked: false,
         retention: 1095,
-        consentRequired: true
+        consentRequired: true,
       },
       {
         fieldName: 'address',
@@ -253,7 +262,7 @@ export class DataEncryptionPrivacy {
         encrypted: true,
         masked: true,
         retention: 1095,
-        consentRequired: true
+        consentRequired: true,
       },
       {
         fieldName: 'date_of_birth',
@@ -262,7 +271,7 @@ export class DataEncryptionPrivacy {
         encrypted: true,
         masked: true,
         retention: 2555,
-        consentRequired: true
+        consentRequired: true,
       },
       {
         fieldName: 'ip_address',
@@ -271,11 +280,11 @@ export class DataEncryptionPrivacy {
         encrypted: false,
         masked: true,
         retention: 365,
-        consentRequired: false
-      }
+        consentRequired: false,
+      },
     ];
 
-    piiFields.forEach(field => {
+    piiFields.forEach((field) => {
       this.piiFields.set(field.fieldName, field);
     });
 
@@ -286,23 +295,27 @@ export class DataEncryptionPrivacy {
   async encryptData(
     data: string | object,
     dataClassification: EncryptedData['metadata']['dataClassification'] = 'internal',
-    keyId?: string
+    keyId?: string,
   ): Promise<EncryptedData> {
     console.log(`🔐 Encrypting ${dataClassification} data...`);
 
     // Convert object to string if needed
     const plaintext = typeof data === 'string' ? data : JSON.stringify(data);
-    
+
     // Generate or retrieve encryption key
     const encryptionKeyId = keyId || this.generateKeyId();
     const encryptionKey = this.getOrCreateKey(encryptionKeyId);
-    
+
     // Generate random IV
     const iv = this.generateRandomBytes(this.encryptionConfig.ivSize);
-    
+
     // Simulate encryption process
-    const encrypted = await this.performEncryption(plaintext, encryptionKey, iv);
-    
+    const encrypted = await this.performEncryption(
+      plaintext,
+      encryptionKey,
+      iv,
+    );
+
     const encryptedData: EncryptedData = {
       data: encrypted.ciphertext,
       iv: this.bytesToBase64(iv),
@@ -313,8 +326,8 @@ export class DataEncryptionPrivacy {
       metadata: {
         originalSize: plaintext.length,
         compressionUsed: plaintext.length > 1024, // Compress large data
-        dataClassification
-      }
+        dataClassification,
+      },
     };
 
     console.log(`✅ Data encrypted with key ${encryptionKeyId}`);
@@ -331,13 +344,13 @@ export class DataEncryptionPrivacy {
     }
 
     const iv = this.base64ToBytes(encryptedData.iv);
-    
+
     // Simulate decryption process
     const decrypted = await this.performDecryption(
       encryptedData.data,
       encryptionKey,
       iv,
-      encryptedData.tag
+      encryptedData.tag,
     );
 
     console.log(`✅ Data decrypted successfully`);
@@ -352,10 +365,14 @@ export class DataEncryptionPrivacy {
 
     const maskedData = { ...data };
 
-    Object.keys(maskedData).forEach(key => {
+    Object.keys(maskedData).forEach((key) => {
       const piiField = this.piiFields.get(key);
       if (piiField && piiField.masked) {
-        maskedData[key] = this.applyMasking(maskedData[key], piiField.dataType, maskingLevel);
+        maskedData[key] = this.applyMasking(
+          maskedData[key],
+          piiField.dataType,
+          maskingLevel,
+        );
       }
     });
 
@@ -363,7 +380,11 @@ export class DataEncryptionPrivacy {
   }
 
   // Apply data masking based on type
-  private applyMasking(value: string, dataType: PIIDataField['dataType'], level: 'partial' | 'full'): string {
+  private applyMasking(
+    value: string,
+    dataType: PIIDataField['dataType'],
+    level: 'partial' | 'full',
+  ): string {
     if (!value) return value;
 
     switch (dataType) {
@@ -383,9 +404,11 @@ export class DataEncryptionPrivacy {
       case 'name':
         if (level === 'full') return '*** ***';
         const names = value.split(' ');
-        return names.map((name, index) => 
-          index === 0 ? name : name.substring(0, 1) + '***'
-        ).join(' ');
+        return names
+          .map((name, index) =>
+            index === 0 ? name : name.substring(0, 1) + '***',
+          )
+          .join(' ');
 
       case 'address':
         if (level === 'full') return '*** Street, City, State';
@@ -407,22 +430,24 @@ export class DataEncryptionPrivacy {
   // Hash sensitive data for pseudonymization
   async hashData(data: string, salt?: string): Promise<string> {
     const actualSalt = salt || this.generateSalt();
-    
+
     // Simulate secure hashing (PBKDF2, Argon2, etc.)
     const hash = await this.performSecureHashing(data, actualSalt);
-    
+
     console.log(`🔐 Data hashed with secure algorithm`);
     return hash;
   }
 
   // Anonymize dataset
   async anonymizeData(dataset: any[], fields: string[]): Promise<any[]> {
-    console.log(`🎭 Anonymizing dataset with ${fields.length} sensitive fields...`);
+    console.log(
+      `🎭 Anonymizing dataset with ${fields.length} sensitive fields...`,
+    );
 
-    const anonymized = dataset.map(record => {
+    const anonymized = dataset.map((record) => {
       const anonymizedRecord = { ...record };
-      
-      fields.forEach(field => {
+
+      fields.forEach((field) => {
         if (anonymizedRecord[field]) {
           const piiField = this.piiFields.get(field);
           if (piiField) {
@@ -432,13 +457,23 @@ export class DataEncryptionPrivacy {
                 delete anonymizedRecord[field]; // Remove entirely
                 break;
               case 'high':
-                anonymizedRecord[field] = this.generateSyntheticValue(piiField.dataType);
+                anonymizedRecord[field] = this.generateSyntheticValue(
+                  piiField.dataType,
+                );
                 break;
               case 'medium':
-                anonymizedRecord[field] = this.applyMasking(anonymizedRecord[field], piiField.dataType, 'full');
+                anonymizedRecord[field] = this.applyMasking(
+                  anonymizedRecord[field],
+                  piiField.dataType,
+                  'full',
+                );
                 break;
               case 'low':
-                anonymizedRecord[field] = this.applyMasking(anonymizedRecord[field], piiField.dataType, 'partial');
+                anonymizedRecord[field] = this.applyMasking(
+                  anonymizedRecord[field],
+                  piiField.dataType,
+                  'partial',
+                );
                 break;
             }
           }
@@ -499,23 +534,25 @@ export class DataEncryptionPrivacy {
         id: 'user_001_email',
         dataType: 'email',
         retentionExpiry: '2024-01-15T00:00:00Z',
-        action: 'anonymize' as const
+        action: 'anonymize' as const,
       },
       {
         id: 'payment_002_card',
         dataType: 'credit_card',
         retentionExpiry: '2024-02-01T00:00:00Z',
-        action: 'delete' as const
-      }
+        action: 'delete' as const,
+      },
     ];
 
     const summary = {
       totalRecords: 1000,
       expiredRecords: expiredData.length,
-      actionsRequired: expiredData.length
+      actionsRequired: expiredData.length,
     };
 
-    console.log(`📊 Retention check complete: ${expiredData.length} expired records found`);
+    console.log(
+      `📊 Retention check complete: ${expiredData.length} expired records found`,
+    );
     return { expiredData, summary };
   }
 
@@ -523,7 +560,7 @@ export class DataEncryptionPrivacy {
   async generatePrivacyImpactAssessment(
     dataTypes: string[],
     processingActivities: string[],
-    jurisdiction: string
+    jurisdiction: string,
   ): Promise<{
     riskLevel: 'low' | 'medium' | 'high' | 'critical';
     assessment: {
@@ -540,14 +577,24 @@ export class DataEncryptionPrivacy {
 
     // Assess risk based on data types and processing
     let riskScore = 0;
-    dataTypes.forEach(dataType => {
-      const piiField = Array.from(this.piiFields.values()).find(f => f.dataType === dataType);
+    dataTypes.forEach((dataType) => {
+      const piiField = Array.from(this.piiFields.values()).find(
+        (f) => f.dataType === dataType,
+      );
       if (piiField) {
         switch (piiField.sensitivity) {
-          case 'critical': riskScore += 4; break;
-          case 'high': riskScore += 3; break;
-          case 'medium': riskScore += 2; break;
-          case 'low': riskScore += 1; break;
+          case 'critical':
+            riskScore += 4;
+            break;
+          case 'high':
+            riskScore += 3;
+            break;
+          case 'medium':
+            riskScore += 2;
+            break;
+          case 'low':
+            riskScore += 1;
+            break;
         }
       }
     });
@@ -560,20 +607,24 @@ export class DataEncryptionPrivacy {
     else riskLevel = 'low';
 
     const assessment = {
-      dataMinimization: riskLevel === 'low' ? 'Adequate' : 'Requires improvement',
+      dataMinimization:
+        riskLevel === 'low' ? 'Adequate' : 'Requires improvement',
       purposeLimitation: 'Data collection limited to stated business purposes',
       storageMinimization: 'Automated retention and deletion policies in place',
       transparency: 'Clear privacy notices and consent mechanisms implemented',
-      security: 'End-to-end encryption and access controls implemented'
+      security: 'End-to-end encryption and access controls implemented',
     };
 
-    const recommendations = this.generatePIARecommendations(riskLevel, dataTypes);
+    const recommendations = this.generatePIARecommendations(
+      riskLevel,
+      dataTypes,
+    );
 
     const compliance = {
       gdpr: jurisdiction.includes('EU'),
       ccpa: jurisdiction.includes('CA') || jurisdiction.includes('US'),
-      hipaa: dataTypes.some(dt => dt.includes('health')),
-      pci_dss: dataTypes.some(dt => dt.includes('payment'))
+      hipaa: dataTypes.some((dt) => dt.includes('health')),
+      pci_dss: dataTypes.some((dt) => dt.includes('payment')),
     };
 
     console.log(`✅ PIA generated with ${riskLevel} risk level`);
@@ -581,7 +632,10 @@ export class DataEncryptionPrivacy {
   }
 
   // Generate PIA recommendations
-  private generatePIARecommendations(riskLevel: string, dataTypes: string[]): string[] {
+  private generatePIARecommendations(
+    riskLevel: string,
+    dataTypes: string[],
+  ): string[] {
     const recommendations = [];
 
     if (riskLevel === 'critical' || riskLevel === 'high') {
@@ -590,12 +644,14 @@ export class DataEncryptionPrivacy {
       recommendations.push('Enhance staff training on data protection');
     }
 
-    if (dataTypes.some(dt => dt.includes('health'))) {
+    if (dataTypes.some((dt) => dt.includes('health'))) {
       recommendations.push('Ensure HIPAA compliance for health data');
-      recommendations.push('Implement additional access controls for medical information');
+      recommendations.push(
+        'Implement additional access controls for medical information',
+      );
     }
 
-    if (dataTypes.some(dt => dt.includes('payment'))) {
+    if (dataTypes.some((dt) => dt.includes('payment'))) {
       recommendations.push('Maintain PCI DSS compliance for payment data');
       recommendations.push('Implement payment data tokenization');
     }
@@ -618,45 +674,62 @@ export class DataEncryptionPrivacy {
 
   private setupKeyRotation(): void {
     // Rotate keys every 90 days
-    setInterval(() => {
-      this.rotateEncryptionKeys();
-    }, 90 * 24 * 60 * 60 * 1000);
-    
+    setInterval(
+      () => {
+        this.rotateEncryptionKeys();
+      },
+      90 * 24 * 60 * 60 * 1000,
+    );
+
     console.log('🔄 Key rotation scheduled every 90 days');
   }
 
   private rotateEncryptionKeys(): void {
     console.log('🔄 Performing key rotation...');
-    
+
     // In production, this would:
     // 1. Generate new keys
     // 2. Re-encrypt data with new keys
     // 3. Securely destroy old keys
     // 4. Update key metadata
-    
+
     console.log('✅ Key rotation completed');
   }
 
   // Utility methods for encryption simulation
-  private async performEncryption(plaintext: string, key: string, iv: Uint8Array): Promise<{ciphertext: string; tag: string}> {
+  private async performEncryption(
+    plaintext: string,
+    key: string,
+    iv: Uint8Array,
+  ): Promise<{ ciphertext: string; tag: string }> {
     // Simulate AES-256-GCM encryption
     const ciphertext = Buffer.from(plaintext).toString('base64');
     const tag = this.generateRandomBytes(16);
-    
+
     return {
       ciphertext,
-      tag: this.bytesToBase64(tag)
+      tag: this.bytesToBase64(tag),
     };
   }
 
-  private async performDecryption(ciphertext: string, key: string, iv: Uint8Array, tag: string): Promise<string> {
+  private async performDecryption(
+    ciphertext: string,
+    key: string,
+    iv: Uint8Array,
+    tag: string,
+  ): Promise<string> {
     // Simulate AES-256-GCM decryption
     return Buffer.from(ciphertext, 'base64').toString('utf-8');
   }
 
-  private async performSecureHashing(data: string, salt: string): Promise<string> {
+  private async performSecureHashing(
+    data: string,
+    salt: string,
+  ): Promise<string> {
     // Simulate Argon2 or PBKDF2 hashing
-    return `hash_${Buffer.from(data + salt).toString('base64').substring(0, 32)}`;
+    return `hash_${Buffer.from(data + salt)
+      .toString('base64')
+      .substring(0, 32)}`;
   }
 
   private generateEncryptionKey(): string {
@@ -672,7 +745,9 @@ export class DataEncryptionPrivacy {
   }
 
   private generateRandomBytes(size: number): Uint8Array {
-    return new Uint8Array(Array.from({length: size}, () => Math.floor(Math.random() * 256)));
+    return new Uint8Array(
+      Array.from({ length: size }, () => Math.floor(Math.random() * 256)),
+    );
   }
 
   private bytesToBase64(bytes: Uint8Array): string {
@@ -700,7 +775,9 @@ export class DataEncryptionPrivacy {
       decryptionOperations: 987, // Simulated
       averageEncryptionTime: 5.2, // ms
       averageDecryptionTime: 3.8, // ms
-      keyRotationDue: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000).toISOString()
+      keyRotationDue: new Date(
+        Date.now() + 90 * 24 * 60 * 60 * 1000,
+      ).toISOString(),
     };
   }
 
@@ -713,14 +790,14 @@ export class DataEncryptionPrivacy {
     dataMinimizationScore: number;
   } {
     const piiFields = Array.from(this.piiFields.values());
-    
+
     return {
       totalPIIFields: piiFields.length,
-      encryptedFields: piiFields.filter(f => f.encrypted).length,
-      maskedFields: piiFields.filter(f => f.masked).length,
+      encryptedFields: piiFields.filter((f) => f.encrypted).length,
+      maskedFields: piiFields.filter((f) => f.masked).length,
       retentionPolicies: this.privacyRules.size,
       complianceRegulations: 4, // GDPR, CCPA, HIPAA, PCI DSS
-      dataMinimizationScore: 92 // Simulated compliance score
+      dataMinimizationScore: 92, // Simulated compliance score
     };
   }
 }

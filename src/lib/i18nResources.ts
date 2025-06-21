@@ -5,7 +5,9 @@ type Locale = 'en' | 'es';
 /**
  * Dynamically import all JSON resources for a given locale.
  */
-export async function loadLocaleResources(locale: Locale): Promise<Resource[string]> {
+export async function loadLocaleResources(
+  locale: Locale,
+): Promise<Resource[string]> {
   const [
     common,
     header,
@@ -21,11 +23,13 @@ export async function loadLocaleResources(locale: Locale): Promise<Resource[stri
     import(`../../public/locales/${locale}/common.json`).then((m) => m.default),
     import(`../../public/locales/${locale}/header.json`).then((m) => m.default),
     import(`../../public/locales/${locale}/footer.json`).then((m) => m.default),
-    import(`../../public/locales/${locale}/support.json`).then((m) => m.default),
-    import(`../../public/locales/${locale}/faq.json`).then((m) => m.default),
-    import(`../../public/locales/${locale}/documents/bill-of-sale-vehicle.json`).then(
+    import(`../../public/locales/${locale}/support.json`).then(
       (m) => m.default,
     ),
+    import(`../../public/locales/${locale}/faq.json`).then((m) => m.default),
+    import(
+      `../../public/locales/${locale}/documents/bill-of-sale-vehicle.json`
+    ).then((m) => m.default),
     import(`../../public/locales/${locale}/doc_bill_of_sale_vehicle.json`).then(
       (m) => m.default,
     ),

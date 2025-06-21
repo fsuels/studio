@@ -3,7 +3,10 @@ import type { LegalDocument } from '@/types/documents';
 import { assignmentAgreementSchema } from './schema';
 import { assignmentAgreementQuestions } from './questions';
 
-export const assignmentAgreementMeta: Omit<LegalDocument, 'schema' | 'questions'> = {
+export const assignmentAgreementMeta: Omit<
+  LegalDocument,
+  'schema' | 'questions'
+> = {
   id: 'assignment-agreement',
   jurisdiction: 'US',
   category: 'Business',
@@ -24,13 +27,21 @@ export const assignmentAgreementMeta: Omit<LegalDocument, 'schema' | 'questions'
       name: 'Assignment Agreement',
       description:
         'Transfer contract rights and obligations from one party to another.',
-      aliases: ['contract assignment', 'right assignment', 'assignment agreement'],
+      aliases: [
+        'contract assignment',
+        'right assignment',
+        'assignment agreement',
+      ],
     },
     es: {
       name: 'Acuerdo de Cesión',
       description:
         'Transferir derechos y obligaciones contractuales de una parte a otra.',
-      aliases: ['cesión de contrato', 'cesión de derechos', 'acuerdo de cesión'],
+      aliases: [
+        'cesión de contrato',
+        'cesión de derechos',
+        'acuerdo de cesión',
+      ],
     },
   },
 };

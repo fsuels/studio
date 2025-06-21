@@ -7,21 +7,21 @@ export const covid19HealthScreeningQuestions: DocumentQuestion[] = [
     text: 'Organization/Business name',
     type: 'text',
     required: true,
-    placeholder: 'ABC Company, Inc.'
+    placeholder: 'ABC Company, Inc.',
   },
   {
     id: 'organization.address',
     text: 'Organization address',
     type: 'text',
     required: true,
-    placeholder: '123 Main Street, City, State 12345'
+    placeholder: '123 Main Street, City, State 12345',
   },
   {
     id: 'organization.phone',
     text: 'Contact phone number',
     type: 'tel',
     required: true,
-    placeholder: '(555) 123-4567'
+    placeholder: '(555) 123-4567',
   },
 
   // Screening Configuration
@@ -34,8 +34,8 @@ export const covid19HealthScreeningQuestions: DocumentQuestion[] = [
       { value: 'daily', label: 'Daily screening' },
       { value: 'weekly', label: 'Weekly screening' },
       { value: 'event_based', label: 'Before each event/visit' },
-      { value: 'as_needed', label: 'As needed' }
-    ]
+      { value: 'as_needed', label: 'As needed' },
+    ],
   },
   {
     id: 'screeningConfig.participantType',
@@ -46,15 +46,15 @@ export const covid19HealthScreeningQuestions: DocumentQuestion[] = [
       { value: 'employees', label: 'Employees only' },
       { value: 'visitors', label: 'Visitors only' },
       { value: 'contractors', label: 'Contractors only' },
-      { value: 'all', label: 'All persons entering facility' }
-    ]
+      { value: 'all', label: 'All persons entering facility' },
+    ],
   },
   {
     id: 'screeningConfig.temperatureCheck',
     text: 'Include temperature check requirement?',
     type: 'boolean',
     required: true,
-    helpText: 'Temperature readings help identify potential fever symptoms'
+    helpText: 'Temperature readings help identify potential fever symptoms',
   },
   {
     id: 'screeningConfig.temperatureThreshold',
@@ -63,7 +63,7 @@ export const covid19HealthScreeningQuestions: DocumentQuestion[] = [
     required: false,
     placeholder: '100.4',
     conditionalOn: { field: 'screeningConfig.temperatureCheck', value: true },
-    helpText: 'CDC recommends 100.4°F (38.0°C) as fever threshold'
+    helpText: 'CDC recommends 100.4°F (38.0°C) as fever threshold',
   },
 
   // Personal Information Requirements
@@ -71,26 +71,26 @@ export const covid19HealthScreeningQuestions: DocumentQuestion[] = [
     id: 'personalInfo.requireEmployeeId',
     text: 'Require employee ID or badge number?',
     type: 'boolean',
-    required: true
+    required: true,
   },
   {
     id: 'personalInfo.requireDepartment',
     text: 'Require department information?',
     type: 'boolean',
-    required: true
+    required: true,
   },
   {
     id: 'personalInfo.requireContactInfo',
     text: 'Require contact information (phone/email)?',
     type: 'boolean',
     required: true,
-    helpText: 'Useful for contact tracing if needed'
+    helpText: 'Useful for contact tracing if needed',
   },
   {
     id: 'personalInfo.requireEmergencyContact',
     text: 'Require emergency contact information?',
     type: 'boolean',
-    required: true
+    required: true,
   },
 
   // Health Questions - Symptoms
@@ -103,9 +103,9 @@ export const covid19HealthScreeningQuestions: DocumentQuestion[] = [
       { value: '24_hours', label: 'Past 24 hours' },
       { value: '48_hours', label: 'Past 48 hours' },
       { value: '72_hours', label: 'Past 72 hours' },
-      { value: '14_days', label: 'Past 14 days' }
+      { value: '14_days', label: 'Past 14 days' },
     ],
-    helpText: 'CDC typically recommends 24-48 hours for symptom monitoring'
+    helpText: 'CDC typically recommends 24-48 hours for symptom monitoring',
   },
   {
     id: 'healthQuestions.symptomQuestions.customSymptoms',
@@ -113,7 +113,8 @@ export const covid19HealthScreeningQuestions: DocumentQuestion[] = [
     type: 'array',
     required: false,
     placeholder: 'E.g., skin rash, pink eye',
-    helpText: 'Add any organization-specific symptoms beyond standard COVID-19 symptoms'
+    helpText:
+      'Add any organization-specific symptoms beyond standard COVID-19 symptoms',
   },
 
   // Exposure Questions
@@ -122,13 +123,13 @@ export const covid19HealthScreeningQuestions: DocumentQuestion[] = [
     text: 'Include travel-related questions?',
     type: 'boolean',
     required: true,
-    helpText: 'Ask about recent travel to high-risk areas'
+    helpText: 'Ask about recent travel to high-risk areas',
   },
   {
     id: 'exposureQuestions.healthcareFacilityQuestion',
     text: 'Ask about visits to healthcare facilities?',
     type: 'boolean',
-    required: true
+    required: true,
   },
   {
     id: 'exposureQuestions.timeframeForExposure',
@@ -138,9 +139,9 @@ export const covid19HealthScreeningQuestions: DocumentQuestion[] = [
     options: [
       { value: '7_days', label: 'Past 7 days' },
       { value: '10_days', label: 'Past 10 days' },
-      { value: '14_days', label: 'Past 14 days' }
+      { value: '14_days', label: 'Past 14 days' },
     ],
-    helpText: 'CDC recommends 14 days for exposure monitoring'
+    helpText: 'CDC recommends 14 days for exposure monitoring',
   },
 
   // Testing Questions
@@ -148,14 +149,15 @@ export const covid19HealthScreeningQuestions: DocumentQuestion[] = [
     id: 'testingQuestions.recentTestQuestion',
     text: 'Ask about recent COVID-19 tests?',
     type: 'boolean',
-    required: true
+    required: true,
   },
   {
     id: 'testingQuestions.pendingResultsQuestion',
     text: 'Ask about pending test results?',
     type: 'boolean',
     required: true,
-    helpText: 'People with pending results should not enter until results are known'
+    helpText:
+      'People with pending results should not enter until results are known',
   },
 
   // Vaccination Questions
@@ -164,21 +166,27 @@ export const covid19HealthScreeningQuestions: DocumentQuestion[] = [
     text: 'Include vaccination status questions?',
     type: 'boolean',
     required: true,
-    helpText: 'Note: Vaccination requirements vary by location and industry'
+    helpText: 'Note: Vaccination requirements vary by location and industry',
   },
   {
     id: 'vaccinationQuestions.boosterStatus',
     text: 'Ask about booster vaccination status?',
     type: 'boolean',
     required: false,
-    conditionalOn: { field: 'vaccinationQuestions.includeVaccinationStatus', value: true }
+    conditionalOn: {
+      field: 'vaccinationQuestions.includeVaccinationStatus',
+      value: true,
+    },
   },
   {
     id: 'vaccinationQuestions.vaccinationProofRequired',
     text: 'Require proof of vaccination?',
     type: 'boolean',
     required: false,
-    conditionalOn: { field: 'vaccinationQuestions.includeVaccinationStatus', value: true }
+    conditionalOn: {
+      field: 'vaccinationQuestions.includeVaccinationStatus',
+      value: true,
+    },
   },
 
   // Risk Factors
@@ -187,7 +195,7 @@ export const covid19HealthScreeningQuestions: DocumentQuestion[] = [
     text: 'Include questions about high-risk factors?',
     type: 'boolean',
     required: true,
-    helpText: 'Optional questions about age, chronic conditions, etc.'
+    helpText: 'Optional questions about age, chronic conditions, etc.',
   },
 
   // Response Protocols
@@ -200,22 +208,25 @@ export const covid19HealthScreeningQuestions: DocumentQuestion[] = [
       { value: 'deny_entry', label: 'Deny entry to facility' },
       { value: 'isolate', label: 'Isolate in designated area' },
       { value: 'send_home', label: 'Send home immediately' },
-      { value: 'refer_medical', label: 'Refer to medical professional' }
-    ]
+      { value: 'refer_medical', label: 'Refer to medical professional' },
+    ],
   },
   {
     id: 'responseProtocols.notificationRequired',
     text: 'Require notification of failed screenings?',
     type: 'boolean',
     required: true,
-    helpText: 'Notify supervisors, HR, or health departments as required'
+    helpText: 'Notify supervisors, HR, or health departments as required',
   },
   {
     id: 'responseProtocols.managerNotification',
     text: 'Notify manager/supervisor of failed screenings?',
     type: 'boolean',
     required: false,
-    conditionalOn: { field: 'responseProtocols.notificationRequired', value: true }
+    conditionalOn: {
+      field: 'responseProtocols.notificationRequired',
+      value: true,
+    },
   },
 
   // Privacy and Data Handling
@@ -225,14 +236,14 @@ export const covid19HealthScreeningQuestions: DocumentQuestion[] = [
     type: 'text',
     required: true,
     placeholder: 'E.g., 30 days, 6 months, as required by law',
-    helpText: 'Check local requirements for data retention periods'
+    helpText: 'Check local requirements for data retention periods',
   },
   {
     id: 'privacy.shareWithHealthDept',
     text: 'Share positive screening results with health department?',
     type: 'boolean',
     required: true,
-    helpText: 'May be required by local health department protocols'
+    helpText: 'May be required by local health department protocols',
   },
 
   // Digital Options
@@ -240,19 +251,19 @@ export const covid19HealthScreeningQuestions: DocumentQuestion[] = [
     id: 'digitalOptions.allowElectronicSignature',
     text: 'Allow electronic signatures?',
     type: 'boolean',
-    required: true
+    required: true,
   },
   {
     id: 'digitalOptions.qrCodeAccess',
     text: 'Provide QR code for mobile access?',
     type: 'boolean',
     required: true,
-    helpText: 'Allows contactless completion on personal devices'
+    helpText: 'Allows contactless completion on personal devices',
   },
   {
     id: 'digitalOptions.mobileOptimized',
     text: 'Optimize form for mobile devices?',
     type: 'boolean',
-    required: true
-  }
+    required: true,
+  },
 ];

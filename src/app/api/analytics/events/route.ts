@@ -4,7 +4,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { pubsubAnalytics } from '@/lib/pubsub-analytics';
 
 // BigQuery streaming configuration
-const BIGQUERY_PROJECT_ID = process.env.BIGQUERY_PROJECT_ID || 'your-project-id';
+const BIGQUERY_PROJECT_ID =
+  process.env.BIGQUERY_PROJECT_ID || 'your-project-id';
 const BIGQUERY_DATASET_ID = process.env.BIGQUERY_DATASET_ID || 'analytics';
 const BIGQUERY_TABLE_ID = process.env.BIGQUERY_TABLE_ID || 'events';
 
@@ -14,10 +15,13 @@ export async function POST(request: NextRequest) {
     const { event, properties, sessionId, timestamp } = body;
 
     if (!event || !sessionId) {
-      return NextResponse.json({
-        success: false,
-        error: 'Missing required fields: event, sessionId'
-      }, { status: 400 });
+      return NextResponse.json(
+        {
+          success: false,
+          error: 'Missing required fields: event, sessionId',
+        },
+        { status: 400 },
+      );
     }
 
     // Prepare event data for BigQuery
@@ -28,7 +32,7 @@ export async function POST(request: NextRequest) {
       user_id: properties.userId,
       device_id: properties.deviceId,
       timestamp: timestamp || new Date().toISOString(),
-      
+
       // User properties
       user_properties: {
         country: properties.country,
@@ -40,9 +44,9 @@ export async function POST(request: NextRequest) {
         referrer: properties.referrer,
         utm_source: properties.utm_source,
         utm_medium: properties.utm_medium,
-        utm_campaign: properties.utm_campaign
+        utm_campaign: properties.utm_campaign,
       },
-      
+
       // Event properties
       event_properties: {
         page_path: properties.page_path,
@@ -57,9 +61,9 @@ export async function POST(request: NextRequest) {
         time_on_page: properties.timeOnPage,
         scroll_depth: properties.scrollDepth,
         click_count: properties.clickCount,
-        form_interactions: properties.formInteractions
+        form_interactions: properties.formInteractions,
       },
-      
+
       // Technical properties
       technical_properties: {
         user_agent: request.headers.get('user-agent'),
@@ -67,13 +71,13 @@ export async function POST(request: NextRequest) {
         screen_resolution: properties.screenResolution,
         viewport_size: properties.viewportSize,
         page_load_time: properties.pageLoadTime,
-        connection_type: properties.connectionType
+        connection_type: properties.connectionType,
       },
-      
+
       // Calculated fields
       created_at: new Date().toISOString(),
       date: new Date().toISOString().split('T')[0], // YYYY-MM-DD
-      hour: new Date().getHours()
+      hour: new Date().getHours(),
     };
 
     // Stream to Pub/Sub first (if enabled), then BigQuery as fallback
@@ -92,7 +96,7 @@ export async function POST(request: NextRequest) {
     if (!pubsubSuccess) {
       await streamToBigQuery(eventData);
     }
-    
+
     // Also store locally for real-time analytics
     await storeEventLocally(eventData);
 
@@ -101,17 +105,19 @@ export async function POST(request: NextRequest) {
       data: {
         event_id: eventData.event_id,
         streamed_via_pubsub: pubsubSuccess,
-        streamed_to_bigquery: !pubsubSuccess
-      }
+        streamed_to_bigquery: !pubsubSuccess,
+      },
     });
-
   } catch (error) {
     console.error('Event streaming error:', error);
-    
-    return NextResponse.json({
-      success: false,
-      error: 'Failed to stream event'
-    }, { status: 500 });
+
+    return NextResponse.json(
+      {
+        success: false,
+        error: 'Failed to stream event',
+      },
+      { status: 500 },
+    );
   }
 }
 
@@ -122,18 +128,21 @@ export async function PUT(request: NextRequest) {
     const { events } = body;
 
     if (!Array.isArray(events) || events.length === 0) {
-      return NextResponse.json({
-        success: false,
-        error: 'Events array is required'
-      }, { status: 400 });
+      return NextResponse.json(
+        {
+          success: false,
+          error: 'Events array is required',
+        },
+        { status: 400 },
+      );
     }
 
-    const processedEvents = events.map(event => ({
+    const processedEvents = events.map((event) => ({
       event_id: generateEventId(),
       ...event,
       created_at: new Date().toISOString(),
       user_agent: request.headers.get('user-agent'),
-      ip_address: getClientIP(request)
+      ip_address: getClientIP(request),
     }));
 
     // Batch stream to BigQuery
@@ -143,17 +152,19 @@ export async function PUT(request: NextRequest) {
       success: true,
       data: {
         events_processed: processedEvents.length,
-        streamed_to_bigquery: true
-      }
+        streamed_to_bigquery: true,
+      },
     });
-
   } catch (error) {
     console.error('Batch event streaming error:', error);
-    
-    return NextResponse.json({
-      success: false,
-      error: 'Failed to stream batch events'
-    }, { status: 500 });
+
+    return NextResponse.json(
+      {
+        success: false,
+        error: 'Failed to stream batch events',
+      },
+      { status: 500 },
+    );
   }
 }
 
@@ -163,18 +174,17 @@ async function streamToBigQuery(eventData: any): Promise<void> {
     // In production, use the actual BigQuery client library
     // const { BigQuery } = require('@google-cloud/bigquery');
     // const bigquery = new BigQuery({ projectId: BIGQUERY_PROJECT_ID });
-    
+
     // For now, log the data that would be streamed
     console.log('Streaming to BigQuery:', {
       project: BIGQUERY_PROJECT_ID,
       dataset: BIGQUERY_DATASET_ID,
       table: BIGQUERY_TABLE_ID,
-      data: eventData
+      data: eventData,
     });
 
     // Simulate BigQuery streaming
     await simulateBigQueryInsert(eventData);
-    
   } catch (error) {
     console.error('BigQuery streaming error:', error);
     throw error;
@@ -188,12 +198,11 @@ async function batchStreamToBigQuery(events: any[]): Promise<void> {
       dataset: BIGQUERY_DATASET_ID,
       table: BIGQUERY_TABLE_ID,
       batch_size: events.length,
-      events: events
+      events: events,
     });
 
     // Simulate batch insert
     await simulateBigQueryBatchInsert(events);
-    
   } catch (error) {
     console.error('BigQuery batch streaming error:', error);
     throw error;
@@ -205,19 +214,20 @@ async function storeEventLocally(eventData: any): Promise<void> {
   try {
     // In production, store in Redis or fast database
     // For demo, we'll use memory storage
-    
+
     if (typeof window !== 'undefined') {
-      const events = JSON.parse(localStorage.getItem('analytics_events') || '[]');
+      const events = JSON.parse(
+        localStorage.getItem('analytics_events') || '[]',
+      );
       events.push(eventData);
-      
+
       // Keep only last 1000 events
       if (events.length > 1000) {
         events.splice(0, events.length - 1000);
       }
-      
+
       localStorage.setItem('analytics_events', JSON.stringify(events));
     }
-    
   } catch (error) {
     console.error('Local event storage error:', error);
   }
@@ -251,11 +261,11 @@ function getClientIP(request: NextRequest): string {
   const forwarded = request.headers.get('x-forwarded-for');
   const realIp = request.headers.get('x-real-ip');
   const cfConnectingIp = request.headers.get('cf-connecting-ip');
-  
+
   if (cfConnectingIp) return cfConnectingIp;
   if (forwarded) return forwarded.split(',')[0];
   if (realIp) return realIp;
-  
+
   return 'unknown';
 }
 

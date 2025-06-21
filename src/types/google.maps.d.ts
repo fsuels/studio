@@ -10,7 +10,7 @@ declare global {
           REQUEST_DENIED = 'REQUEST_DENIED',
           INVALID_REQUEST = 'INVALID_REQUEST',
           NOT_FOUND = 'NOT_FOUND',
-          UNKNOWN_ERROR = 'UNKNOWN_ERROR'
+          UNKNOWN_ERROR = 'UNKNOWN_ERROR',
         }
 
         // Interfaces
@@ -66,7 +66,10 @@ declare global {
           constructor();
           getPlacePredictions(
             request: AutocompleteRequest,
-            callback: (predictions: AutocompletePrediction[] | null, status: PlacesServiceStatus) => void
+            callback: (
+              predictions: AutocompletePrediction[] | null,
+              status: PlacesServiceStatus,
+            ) => void,
           ): void;
         }
 
@@ -74,7 +77,10 @@ declare global {
           constructor(attrContainer: HTMLElement);
           getDetails(
             request: PlaceDetailsRequest,
-            callback: (place: PlaceResult | null, status: PlacesServiceStatus) => void
+            callback: (
+              place: PlaceResult | null,
+              status: PlacesServiceStatus,
+            ) => void,
           ): void;
         }
       }

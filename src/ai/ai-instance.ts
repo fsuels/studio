@@ -8,7 +8,7 @@ const ai: any = {
   run: async (...args: unknown[]) => {
     console.warn('AI functionality is currently disabled.');
     return null;
-  }
+  },
 };
 
 export { ai };

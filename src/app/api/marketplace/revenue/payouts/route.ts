@@ -29,7 +29,10 @@ export async function GET(request: NextRequest) {
     const status = url.searchParams.get('status') || 'all';
     const period = url.searchParams.get('period') || 'all'; // 'current_month', 'last_month', 'year', 'all'
     const page = parseInt(url.searchParams.get('page') || '1');
-    const pageSize = Math.min(parseInt(url.searchParams.get('limit') || '20'), 50);
+    const pageSize = Math.min(
+      parseInt(url.searchParams.get('limit') || '20'),
+      50,
+    );
 
     // Check permissions
     const userId = 'user-id'; // TODO: Get from auth
@@ -38,7 +41,7 @@ export async function GET(request: NextRequest) {
     // }
 
     const db = await getDb();
-    
+
     // Build query for payouts
     let payoutsQuery = query(collection(db, 'creator-payouts'));
 
@@ -59,7 +62,7 @@ export async function GET(request: NextRequest) {
         payoutsQuery = query(
           payoutsQuery,
           where('createdAt', '>=', dateFilter.startDate),
-          where('createdAt', '<=', dateFilter.endDate)
+          where('createdAt', '<=', dateFilter.endDate),
         );
       }
     }
@@ -68,11 +71,11 @@ export async function GET(request: NextRequest) {
     payoutsQuery = query(
       payoutsQuery,
       orderBy('createdAt', 'desc'),
-      limit(pageSize)
+      limit(pageSize),
     );
 
     const payoutsSnap = await getDocs(payoutsQuery);
-    const payouts = payoutsSnap.docs.map(doc => ({
+    const payouts = payoutsSnap.docs.map((doc) => ({
       id: doc.id,
       ...doc.data(),
     }));
@@ -105,16 +108,15 @@ export async function GET(request: NextRequest) {
         },
       },
     });
-
   } catch (error) {
     console.error('Get payouts error:', error);
-    
+
     return NextResponse.json(
-      { 
-        success: false, 
-        error: 'Failed to fetch payouts' 
+      {
+        success: false,
+        error: 'Failed to fetch payouts',
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -145,36 +147,38 @@ export async function POST(request: NextRequest) {
     if (!creatorId) {
       return NextResponse.json(
         { error: 'Missing required field: creatorId' },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
     // Get creator's pending earnings
-    const earningsSummary = await revenueShareSystem.getCreatorEarnings(creatorId);
-    
+    const earningsSummary =
+      await revenueShareSystem.getCreatorEarnings(creatorId);
+
     const payoutAmount = amount || earningsSummary.pendingEarnings;
     const minimumPayoutThreshold = 5000; // $50.00 in cents
 
     // Check minimum payout threshold
     if (!force && payoutAmount < minimumPayoutThreshold) {
       return NextResponse.json(
-        { 
+        {
           error: 'Payout amount below minimum threshold',
           minimumAmount: minimumPayoutThreshold,
           currentAmount: payoutAmount,
           code: 'BELOW_MINIMUM_THRESHOLD',
         },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
     // Get transactions to pay out
-    const transactionsToPayOut = transactionIds || await getPendingTransactionIds(creatorId);
-    
+    const transactionsToPayOut =
+      transactionIds || (await getPendingTransactionIds(creatorId));
+
     if (transactionsToPayOut.length === 0) {
       return NextResponse.json(
         { error: 'No pending transactions found for payout' },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -200,17 +204,16 @@ export async function POST(request: NextRequest) {
         message: 'Payout processed successfully',
       },
     });
-
   } catch (error) {
     console.error('Process payout error:', error);
-    
+
     return NextResponse.json(
-      { 
-        success: false, 
+      {
+        success: false,
         error: 'Failed to process payout',
         details: error instanceof Error ? error.message : 'Unknown error',
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -221,26 +224,26 @@ export async function POST(request: NextRequest) {
 
 function calculateDateFilter(period: string) {
   const now = new Date();
-  
+
   switch (period) {
     case 'current_month':
       return {
         startDate: new Date(now.getFullYear(), now.getMonth(), 1),
         endDate: new Date(now.getFullYear(), now.getMonth() + 1, 0),
       };
-    
+
     case 'last_month':
       return {
         startDate: new Date(now.getFullYear(), now.getMonth() - 1, 1),
         endDate: new Date(now.getFullYear(), now.getMonth(), 0),
       };
-    
+
     case 'year':
       return {
         startDate: new Date(now.getFullYear(), 0, 1),
         endDate: new Date(now.getFullYear(), 11, 31),
       };
-    
+
     default:
       return null;
   }
@@ -248,39 +251,44 @@ function calculateDateFilter(period: string) {
 
 async function calculatePendingPayouts(creatorId?: string) {
   const db = await getDb();
-  
+
   // Query pending transactions
   let transactionsQuery = query(
     collection(db, 'revenue-transactions'),
-    where('status', '==', 'pending_transfer')
+    where('status', '==', 'pending_transfer'),
   );
 
   if (creatorId) {
-    transactionsQuery = query(transactionsQuery, where('creatorId', '==', creatorId));
+    transactionsQuery = query(
+      transactionsQuery,
+      where('creatorId', '==', creatorId),
+    );
   }
 
   const transactionsSnap = await getDocs(transactionsQuery);
-  const transactions = transactionsSnap.docs.map(doc => doc.data());
+  const transactions = transactionsSnap.docs.map((doc) => doc.data());
 
   // Group by creator
   const pendingByCreator = new Map();
-  
-  transactions.forEach(transaction => {
+
+  transactions.forEach((transaction) => {
     const existing = pendingByCreator.get(transaction.creatorId) || {
       creatorId: transaction.creatorId,
       amount: 0,
       transactionCount: 0,
       oldestTransaction: null,
     };
-    
+
     existing.amount += transaction.creatorShare || 0;
     existing.transactionCount += 1;
-    
-    if (!existing.oldestTransaction || 
-        transaction.createdAt.toMillis() < existing.oldestTransaction.toMillis()) {
+
+    if (
+      !existing.oldestTransaction ||
+      transaction.createdAt.toMillis() < existing.oldestTransaction.toMillis()
+    ) {
       existing.oldestTransaction = transaction.createdAt;
     }
-    
+
     pendingByCreator.set(transaction.creatorId, existing);
   });
 
@@ -289,15 +297,15 @@ async function calculatePendingPayouts(creatorId?: string) {
 
 async function getPendingTransactionIds(creatorId: string): Promise<string[]> {
   const db = await getDb();
-  
+
   const transactionsQuery = query(
     collection(db, 'revenue-transactions'),
     where('creatorId', '==', creatorId),
-    where('status', '==', 'pending_transfer')
+    where('status', '==', 'pending_transfer'),
   );
 
   const transactionsSnap = await getDocs(transactionsQuery);
-  return transactionsSnap.docs.map(doc => doc.id);
+  return transactionsSnap.docs.map((doc) => doc.id);
 }
 
 function getCurrentPayoutPeriod(): string {

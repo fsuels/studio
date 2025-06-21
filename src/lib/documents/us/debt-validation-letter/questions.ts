@@ -10,7 +10,12 @@ export const debtValidationLetterQuestions: Question[] = [
     required: true,
     placeholder: 'Street, City, State, ZIP',
   },
-  { id: 'collectorName', label: 'Debt Collector Name', type: 'text', required: true },
+  {
+    id: 'collectorName',
+    label: 'Debt Collector Name',
+    type: 'text',
+    required: true,
+  },
   {
     id: 'collectorAddress',
     label: 'Debt Collector Address',
@@ -65,7 +70,10 @@ export const debtValidationLetterQuestions: Question[] = [
     options: [
       { value: 'Not My Debt', label: 'This is not my debt' },
       { value: 'Amount Incorrect', label: 'Amount is incorrect' },
-      { value: 'Statute of Limitations', label: 'Statute of limitations expired' },
+      {
+        value: 'Statute of Limitations',
+        label: 'Statute of limitations expired',
+      },
       { value: 'Already Paid', label: 'Debt already paid' },
       { value: 'Identity Theft', label: 'Result of identity theft' },
       { value: 'Other', label: 'Other reason' },

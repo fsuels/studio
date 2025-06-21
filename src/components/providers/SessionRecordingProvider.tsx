@@ -8,24 +8,51 @@ interface SessionRecordingContextType {
   sessionId: string | undefined;
   trackEvent: {
     documentStarted: (documentType: string, step: string) => void;
-    documentCompleted: (documentType: string, totalSteps: number, completedSteps: number) => void;
-    documentAbandoned: (documentType: string, step: string, reason?: string) => void;
+    documentCompleted: (
+      documentType: string,
+      totalSteps: number,
+      completedSteps: number,
+    ) => void;
+    documentAbandoned: (
+      documentType: string,
+      step: string,
+      reason?: string,
+    ) => void;
     paymentStarted: (amount: number, documentType: string) => void;
-    paymentCompleted: (amount: number, documentType: string, paymentMethod: string) => void;
-    paymentFailed: (amount: number, documentType: string, errorCode?: string) => void;
-    supportRequest: (type: 'chat' | 'phone' | 'email', context?: string) => void;
-    formValidationError: (field: string, errorType: string, documentType: string) => void;
+    paymentCompleted: (
+      amount: number,
+      documentType: string,
+      paymentMethod: string,
+    ) => void;
+    paymentFailed: (
+      amount: number,
+      documentType: string,
+      errorCode?: string,
+    ) => void;
+    supportRequest: (
+      type: 'chat' | 'phone' | 'email',
+      context?: string,
+    ) => void;
+    formValidationError: (
+      field: string,
+      errorType: string,
+      documentType: string,
+    ) => void;
     searchPerformed: (query: string, resultsCount: number) => void;
   };
 }
 
-const SessionRecordingContext = createContext<SessionRecordingContextType | undefined>(undefined);
+const SessionRecordingContext = createContext<
+  SessionRecordingContextType | undefined
+>(undefined);
 
 interface SessionRecordingProviderProps {
   children: ReactNode;
 }
 
-export function SessionRecordingProvider({ children }: SessionRecordingProviderProps) {
+export function SessionRecordingProvider({
+  children,
+}: SessionRecordingProviderProps) {
   const sessionRecording = useSessionRecording();
 
   return (
@@ -52,7 +79,7 @@ export function useSessionRecordingContext() {
         supportRequest: () => {},
         formValidationError: () => {},
         searchPerformed: () => {},
-      }
+      },
     };
   }
   return context;

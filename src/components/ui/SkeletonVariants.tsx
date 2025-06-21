@@ -1,5 +1,5 @@
-import { Skeleton } from './skeleton'
-import { cn } from '@/lib/utils'
+import { Skeleton } from './skeleton';
+import { cn } from '@/lib/utils';
 
 export function HeaderSkeleton({ className }: { className?: string }) {
   return (
@@ -10,7 +10,7 @@ export function HeaderSkeleton({ className }: { className?: string }) {
         <Skeleton className="h-3 w-16" />
       </div>
     </div>
-  )
+  );
 }
 
 export function DocumentCardSkeleton({ className }: { className?: string }) {
@@ -26,7 +26,7 @@ export function DocumentCardSkeleton({ className }: { className?: string }) {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 export function FormFieldSkeleton({ className }: { className?: string }) {
@@ -36,7 +36,7 @@ export function FormFieldSkeleton({ className }: { className?: string }) {
       <Skeleton className="h-10 w-full rounded-md" />
       <Skeleton className="h-3 w-32" />
     </div>
-  )
+  );
 }
 
 export function WizardSkeleton({ className }: { className?: string }) {
@@ -47,28 +47,37 @@ export function WizardSkeleton({ className }: { className?: string }) {
         <Skeleton className="h-2 w-full rounded-full" />
         <Skeleton className="h-3 w-20" />
       </div>
-      
+
       {/* Form fields */}
       <div className="space-y-4">
         <FormFieldSkeleton />
         <FormFieldSkeleton />
         <FormFieldSkeleton />
       </div>
-      
+
       {/* Navigation buttons */}
       <div className="flex justify-between">
         <Skeleton className="h-10 w-20 rounded-md" />
         <Skeleton className="h-10 w-20 rounded-md" />
       </div>
     </div>
-  )
+  );
 }
 
-export function SearchResultsSkeleton({ count = 5, className }: { count?: number; className?: string }) {
+export function SearchResultsSkeleton({
+  count = 5,
+  className,
+}: {
+  count?: number;
+  className?: string;
+}) {
   return (
     <div className={cn('space-y-3', className)}>
       {Array.from({ length: count }, (_, i) => (
-        <div key={i} className="flex items-center space-x-3 p-3 border rounded-lg">
+        <div
+          key={i}
+          className="flex items-center space-x-3 p-3 border rounded-lg"
+        >
           <Skeleton className="h-12 w-12 rounded-md" />
           <div className="flex-1 space-y-2">
             <Skeleton className="h-4 w-3/4" />
@@ -78,17 +87,17 @@ export function SearchResultsSkeleton({ count = 5, className }: { count?: number
         </div>
       ))}
     </div>
-  )
+  );
 }
 
-export function TableSkeleton({ 
-  rows = 5, 
-  columns = 4, 
-  className 
-}: { 
-  rows?: number
-  columns?: number
-  className?: string 
+export function TableSkeleton({
+  rows = 5,
+  columns = 4,
+  className,
+}: {
+  rows?: number;
+  columns?: number;
+  className?: string;
 }) {
   return (
     <div className={cn('space-y-3', className)}>
@@ -98,7 +107,7 @@ export function TableSkeleton({
           <Skeleton key={i} className="h-4 flex-1" />
         ))}
       </div>
-      
+
       {/* Table rows */}
       {Array.from({ length: rows }, (_, i) => (
         <div key={i} className="flex space-x-4">
@@ -108,7 +117,7 @@ export function TableSkeleton({
         </div>
       ))}
     </div>
-  )
+  );
 }
 
 export function NavigationSkeleton({ className }: { className?: string }) {
@@ -119,7 +128,7 @@ export function NavigationSkeleton({ className }: { className?: string }) {
       <Skeleton className="h-6 w-18" />
       <Skeleton className="h-6 w-22" />
     </div>
-  )
+  );
 }
 
 export function MegaMenuSkeleton({ className }: { className?: string }) {
@@ -136,7 +145,7 @@ export function MegaMenuSkeleton({ className }: { className?: string }) {
         </div>
       ))}
     </div>
-  )
+  );
 }
 
 export function UserMenuSkeleton({ className }: { className?: string }) {
@@ -145,5 +154,5 @@ export function UserMenuSkeleton({ className }: { className?: string }) {
       <Skeleton className="h-8 w-8 rounded-full" />
       <Skeleton className="h-4 w-16" />
     </div>
-  )
+  );
 }

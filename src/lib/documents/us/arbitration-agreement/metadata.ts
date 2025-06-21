@@ -24,13 +24,21 @@ export const arbitrationAgreementMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Arbitration Agreement',
-      description: 'Agreement requiring disputes to be resolved through arbitration instead of court litigation.',
-      aliases: ['binding arbitration agreement', 'dispute resolution agreement'],
+      description:
+        'Agreement requiring disputes to be resolved through arbitration instead of court litigation.',
+      aliases: [
+        'binding arbitration agreement',
+        'dispute resolution agreement',
+      ],
     },
     es: {
       name: 'Acuerdo de Arbitraje',
-      description: 'Acuerdo que requiere resolver disputas a través de arbitraje en lugar de litigio judicial.',
-      aliases: ['acuerdo de arbitraje vinculante', 'acuerdo de resolución de disputas'],
+      description:
+        'Acuerdo que requiere resolver disputas a través de arbitraje en lugar de litigio judicial.',
+      aliases: [
+        'acuerdo de arbitraje vinculante',
+        'acuerdo de resolución de disputas',
+      ],
     },
   },
 };

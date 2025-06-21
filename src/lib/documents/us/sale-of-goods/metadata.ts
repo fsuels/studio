@@ -24,13 +24,20 @@ export const saleOfGoodsMeta: Omit<LegalDocument, 'schema' | 'questions'> = {
       name: 'Sale of Goods Agreement',
       description:
         'Comprehensive agreement for the sale and purchase of physical goods.',
-      aliases: ['goods purchase agreement', 'sales contract', 'product sale agreement'],
+      aliases: [
+        'goods purchase agreement',
+        'sales contract',
+        'product sale agreement',
+      ],
     },
     es: {
       name: 'Acuerdo de Venta de Bienes',
-      description:
-        'Acuerdo integral para la venta y compra de bienes físicos.',
-      aliases: ['acuerdo de compra de bienes', 'contrato de ventas', 'acuerdo de venta de productos'],
+      description: 'Acuerdo integral para la venta y compra de bienes físicos.',
+      aliases: [
+        'acuerdo de compra de bienes',
+        'contrato de ventas',
+        'acuerdo de venta de productos',
+      ],
     },
   },
 };

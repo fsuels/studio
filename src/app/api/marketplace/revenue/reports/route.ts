@@ -19,7 +19,8 @@ export async function GET(request: NextRequest) {
     const period = url.searchParams.get('period') || 'current_month'; // 'current_month', 'last_month', 'quarter', 'year', 'all_time', 'custom'
     const startDate = url.searchParams.get('startDate');
     const endDate = url.searchParams.get('endDate');
-    const includeBreakdown = url.searchParams.get('includeBreakdown') === 'true';
+    const includeBreakdown =
+      url.searchParams.get('includeBreakdown') === 'true';
     const reportType = url.searchParams.get('type') || 'summary'; // 'summary', 'detailed', 'analytics'
 
     const userId = 'user-id'; // TODO: Get from auth
@@ -70,7 +71,10 @@ export async function GET(request: NextRequest) {
 
     // Add creator-specific insights
     if (creatorId) {
-      const creatorEarnings = await revenueShareSystem.getCreatorEarnings(creatorId, dateRange);
+      const creatorEarnings = await revenueShareSystem.getCreatorEarnings(
+        creatorId,
+        dateRange,
+      );
       responseData.creatorInsights = {
         totalEarnings: creatorEarnings.totalEarnings,
         pendingEarnings: creatorEarnings.pendingEarnings,
@@ -85,16 +89,15 @@ export async function GET(request: NextRequest) {
       success: true,
       data: responseData,
     });
-
   } catch (error) {
     console.error('Generate revenue report error:', error);
-    
+
     return NextResponse.json(
-      { 
-        success: false, 
-        error: 'Failed to generate revenue report' 
+      {
+        success: false,
+        error: 'Failed to generate revenue report',
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -102,48 +105,52 @@ export async function GET(request: NextRequest) {
 /**
  * Helper function to calculate date range based on period
  */
-function calculateDateRange(period: string, startDate?: string | null, endDate?: string | null) {
+function calculateDateRange(
+  period: string,
+  startDate?: string | null,
+  endDate?: string | null,
+) {
   const now = new Date();
-  
+
   if (period === 'custom' && startDate && endDate) {
     return {
       startDate: new Date(startDate),
       endDate: new Date(endDate),
     };
   }
-  
+
   switch (period) {
     case 'current_month':
       return {
         startDate: new Date(now.getFullYear(), now.getMonth(), 1),
         endDate: new Date(now.getFullYear(), now.getMonth() + 1, 0),
       };
-    
+
     case 'last_month':
       return {
         startDate: new Date(now.getFullYear(), now.getMonth() - 1, 1),
         endDate: new Date(now.getFullYear(), now.getMonth(), 0),
       };
-    
+
     case 'quarter':
       const quarter = Math.floor(now.getMonth() / 3);
       return {
         startDate: new Date(now.getFullYear(), quarter * 3, 1),
         endDate: new Date(now.getFullYear(), (quarter + 1) * 3, 0),
       };
-    
+
     case 'year':
       return {
         startDate: new Date(now.getFullYear(), 0, 1),
         endDate: new Date(now.getFullYear(), 11, 31),
       };
-    
+
     case 'all_time':
       return {
         startDate: new Date(2020, 0, 1), // Platform launch date
         endDate: now,
       };
-    
+
     default:
       // Default to current month
       return {
@@ -163,7 +170,7 @@ async function generateAdvancedAnalytics(params: {
 }) {
   // Calculate growth metrics
   const previousPeriod = calculatePreviousPeriod(params.period);
-  
+
   // Get previous period data for comparison
   const previousReport = await revenueShareSystem.generateRevenueReport({
     creatorId: params.creatorId || undefined,
@@ -174,17 +181,17 @@ async function generateAdvancedAnalytics(params: {
   // Calculate growth rates
   const revenueGrowth = calculateGrowthRate(
     params.summary.totalRevenue,
-    previousReport.summary.totalRevenue
+    previousReport.summary.totalRevenue,
   );
 
   const transactionGrowth = calculateGrowthRate(
     params.summary.transactionCount,
-    previousReport.summary.transactionCount
+    previousReport.summary.transactionCount,
   );
 
   const avgTransactionGrowth = calculateGrowthRate(
     params.summary.averageTransactionValue,
-    previousReport.summary.averageTransactionValue
+    previousReport.summary.averageTransactionValue,
   );
 
   // Performance metrics
@@ -200,25 +207,35 @@ async function generateAdvancedAnalytics(params: {
         current: params.summary.transactionCount,
         previous: previousReport.summary.transactionCount,
         growth: transactionGrowth,
-        trend: transactionGrowth > 0 ? 'up' : transactionGrowth < 0 ? 'down' : 'flat',
+        trend:
+          transactionGrowth > 0
+            ? 'up'
+            : transactionGrowth < 0
+              ? 'down'
+              : 'flat',
       },
       averageValue: {
         current: params.summary.averageTransactionValue,
         previous: previousReport.summary.averageTransactionValue,
         growth: avgTransactionGrowth,
-        trend: avgTransactionGrowth > 0 ? 'up' : avgTransactionGrowth < 0 ? 'down' : 'flat',
+        trend:
+          avgTransactionGrowth > 0
+            ? 'up'
+            : avgTransactionGrowth < 0
+              ? 'down'
+              : 'flat',
       },
     },
-    
+
     performance: {
       conversionRate: calculateConversionRate(params.summary),
       customerRetention: calculateRetentionRate(params.summary),
       marketShare: calculateMarketShare(params.summary, params.creatorId),
       profitMargin: calculateProfitMargin(params.summary),
     },
-    
+
     insights: generateInsights(params.summary, previousReport.summary),
-    
+
     forecasting: generateForecast(params.summary, previousReport.summary),
   };
 
@@ -230,7 +247,7 @@ async function generateAdvancedAnalytics(params: {
  */
 function calculatePreviousPeriod(period: { startDate: Date; endDate: Date }) {
   const periodLength = period.endDate.getTime() - period.startDate.getTime();
-  
+
   return {
     startDate: new Date(period.startDate.getTime() - periodLength),
     endDate: new Date(period.startDate.getTime() - 1),
@@ -265,9 +282,12 @@ function calculateRetentionRate(summary: any): number {
 /**
  * Calculate market share (if creator specified)
  */
-function calculateMarketShare(summary: any, creatorId?: string | null): number | null {
+function calculateMarketShare(
+  summary: any,
+  creatorId?: string | null,
+): number | null {
   if (!creatorId) return null;
-  
+
   // This would require total marketplace revenue data
   // For now, return a mock percentage
   return Math.random() * 10 + 1; // 1-11% mock market share
@@ -278,12 +298,12 @@ function calculateMarketShare(summary: any, creatorId?: string | null): number |
  */
 function calculateProfitMargin(summary: any): number {
   if (summary.totalRevenue === 0) return 0;
-  
+
   // Platform profit = platform revenue minus operational costs
   // Simplified calculation assuming 20% operational costs
   const operationalCosts = summary.platformRevenue * 0.2;
   const profit = summary.platformRevenue - operationalCosts;
-  
+
   return Math.round((profit / summary.totalRevenue) * 100 * 100) / 100;
 }
 
@@ -292,9 +312,12 @@ function calculateProfitMargin(summary: any): number {
  */
 function generateInsights(current: any, previous: any) {
   const insights = [];
-  
-  const revenueGrowth = calculateGrowthRate(current.totalRevenue, previous.totalRevenue);
-  
+
+  const revenueGrowth = calculateGrowthRate(
+    current.totalRevenue,
+    previous.totalRevenue,
+  );
+
   if (revenueGrowth > 20) {
     insights.push({
       type: 'positive',
@@ -310,8 +333,11 @@ function generateInsights(current: any, previous: any) {
       impact: 'high',
     });
   }
-  
-  if (current.averageTransactionValue > previous.averageTransactionValue * 1.15) {
+
+  if (
+    current.averageTransactionValue >
+    previous.averageTransactionValue * 1.15
+  ) {
     insights.push({
       type: 'positive',
       title: 'Higher Value Transactions',
@@ -319,7 +345,7 @@ function generateInsights(current: any, previous: any) {
       impact: 'medium',
     });
   }
-  
+
   return insights;
 }
 
@@ -327,13 +353,20 @@ function generateInsights(current: any, previous: any) {
  * Generate simple forecast
  */
 function generateForecast(current: any, previous: any) {
-  const revenueGrowth = calculateGrowthRate(current.totalRevenue, previous.totalRevenue);
-  const transactionGrowth = calculateGrowthRate(current.transactionCount, previous.transactionCount);
-  
+  const revenueGrowth = calculateGrowthRate(
+    current.totalRevenue,
+    previous.totalRevenue,
+  );
+  const transactionGrowth = calculateGrowthRate(
+    current.transactionCount,
+    previous.transactionCount,
+  );
+
   // Simple linear projection for next period
   const nextPeriodRevenue = current.totalRevenue * (1 + revenueGrowth / 100);
-  const nextPeriodTransactions = current.transactionCount * (1 + transactionGrowth / 100);
-  
+  const nextPeriodTransactions =
+    current.transactionCount * (1 + transactionGrowth / 100);
+
   return {
     nextPeriod: {
       estimatedRevenue: Math.round(nextPeriodRevenue),

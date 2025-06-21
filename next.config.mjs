@@ -8,14 +8,14 @@ import webpack from 'webpack';
 const nextConfig = {
   turbopack: {},
   typescript: { ignoreBuildErrors: false },
-  eslint:       { ignoreDuringBuilds: false },
+  eslint: { ignoreDuringBuilds: false },
 
   /* Performance budgets and optimization */
   experimental: {
     bundlePagesRouterDependencies: true,
     optimizePackageImports: ['@radix-ui/react-icons', 'lucide-react'],
   },
-  
+
   /* Bundle analysis configuration */
   webpack: (config, { dev, isServer }) => {
     // Bundle analyzer in development
@@ -25,17 +25,17 @@ const nextConfig = {
         new BundleAnalyzerPlugin({
           analyzerMode: 'server',
           openAnalyzer: true,
-        })
+        }),
       );
     }
-    
+
     // Performance budgets
     config.performance = {
       maxAssetSize: 300000, // 300KB
       maxEntrypointSize: 300000, // 300KB
       hints: dev ? false : 'warning',
     };
-    
+
     return config;
   },
 
@@ -46,7 +46,11 @@ const nextConfig = {
       { protocol: 'https', hostname: 'picsum.photos', pathname: '/**' },
       { protocol: 'https', hostname: 'images.unsplash.com', pathname: '/**' },
       { protocol: 'https', hostname: 'cdn.123legaldoc.com', pathname: '/**' },
-      { protocol: 'https', hostname: 'firebasestorage.googleapis.com', pathname: '/**' },
+      {
+        protocol: 'https',
+        hostname: 'firebasestorage.googleapis.com',
+        pathname: '/**',
+      },
     ],
     // Formats for better compression (when optimization is enabled)
     formats: ['image/avif', 'image/webp'],

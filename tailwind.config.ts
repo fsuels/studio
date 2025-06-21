@@ -165,7 +165,7 @@ const config: Config = {
     require('tailwindcss-rtl'),
     plugin(({ addVariant, addUtilities }) => {
       addVariant('hocus', ['&:hover', '&:focus-visible']);
-      
+
       // Add logical properties for RTL support
       addUtilities({
         '.ms-auto': {

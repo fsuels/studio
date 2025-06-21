@@ -11,9 +11,9 @@ interface CommandPaletteTriggerProps {
   variant?: 'button' | 'search-hint';
 }
 
-export default function CommandPaletteTrigger({ 
+export default function CommandPaletteTrigger({
   className,
-  variant = 'button'
+  variant = 'button',
 }: CommandPaletteTriggerProps) {
   const { open } = useCommandPalette();
 
@@ -22,8 +22,8 @@ export default function CommandPaletteTrigger({
       <button
         onClick={open}
         className={cn(
-          "flex items-center gap-2 px-3 py-2 text-sm text-muted-foreground bg-muted/50 rounded-md border border-border/40 hover:bg-muted transition-colors",
-          className
+          'flex items-center gap-2 px-3 py-2 text-sm text-muted-foreground bg-muted/50 rounded-md border border-border/40 hover:bg-muted transition-colors',
+          className,
         )}
         aria-label="Open command palette"
       >
@@ -45,8 +45,8 @@ export default function CommandPaletteTrigger({
       size="sm"
       onClick={open}
       className={cn(
-        "relative flex items-center gap-2 text-muted-foreground hover:text-foreground",
-        className
+        'relative flex items-center gap-2 text-muted-foreground hover:text-foreground',
+        className,
       )}
       aria-label="Open command palette (⌘K)"
     >

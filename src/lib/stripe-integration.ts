@@ -25,7 +25,14 @@ interface StripePaymentIntent {
   id: string;
   amount: number;
   currency: string;
-  status: 'requires_payment_method' | 'requires_confirmation' | 'requires_action' | 'processing' | 'requires_capture' | 'canceled' | 'succeeded';
+  status:
+    | 'requires_payment_method'
+    | 'requires_confirmation'
+    | 'requires_action'
+    | 'processing'
+    | 'requires_capture'
+    | 'canceled'
+    | 'succeeded';
   clientSecret: string;
   customerId?: string;
   metadata: Record<string, any>;
@@ -38,42 +45,45 @@ export class StripeIntegration {
 
   constructor() {
     this.config = {
-      publishableKey: process.env.STRIPE_PUBLISHABLE_KEY || 'pk_test_123legaldoc',
+      publishableKey:
+        process.env.STRIPE_PUBLISHABLE_KEY || 'pk_test_123legaldoc',
       secretKey: process.env.STRIPE_SECRET_KEY || 'sk_test_123legaldoc',
       webhookSecret: process.env.STRIPE_WEBHOOK_SECRET || 'whsec_123legaldoc',
-      apiVersion: '2023-10-16'
+      apiVersion: '2023-10-16',
     };
   }
 
   // Initialize Stripe (client-side)
   async initializeStripe(): Promise<any> {
     console.log('🔷 Initializing Stripe...');
-    
+
     // In production, this would load the actual Stripe.js library
     const stripeClient = {
       elements: () => ({
         create: (type: string, options?: any) => ({
-          mount: (element: string) => console.log(`Mounted ${type} to ${element}`),
+          mount: (element: string) =>
+            console.log(`Mounted ${type} to ${element}`),
           unmount: () => console.log('Element unmounted'),
-          on: (event: string, handler: Function) => console.log(`Event listener added: ${event}`)
+          on: (event: string, handler: Function) =>
+            console.log(`Event listener added: ${event}`),
         }),
-        getElement: (type: string) => null
+        getElement: (type: string) => null,
       }),
       createToken: async (element: any, data?: any) => ({
         token: { id: 'tok_test_123', card: { last4: '4242' } },
-        error: null
+        error: null,
       }),
       createPaymentMethod: async (data: any) => ({
         paymentMethod: { id: 'pm_test_123', card: { last4: '4242' } },
-        error: null
+        error: null,
       }),
       confirmCardPayment: async (clientSecret: string, data?: any) => ({
         paymentIntent: { id: 'pi_test_123', status: 'succeeded' },
-        error: null
+        error: null,
       }),
       retrievePaymentIntent: async (clientSecret: string) => ({
-        paymentIntent: { id: 'pi_test_123', status: 'succeeded' }
-      })
+        paymentIntent: { id: 'pi_test_123', status: 'succeeded' },
+      }),
     };
 
     console.log('✅ Stripe initialized');
@@ -84,7 +94,7 @@ export class StripeIntegration {
   async createCustomer(
     email: string,
     name?: string,
-    metadata?: Record<string, string>
+    metadata?: Record<string, string>,
   ): Promise<StripeCustomer> {
     console.log(`👤 Creating Stripe customer: ${email}`);
 
@@ -94,7 +104,7 @@ export class StripeIntegration {
       email,
       name,
       metadata: metadata || {},
-      created: Math.floor(Date.now() / 1000)
+      created: Math.floor(Date.now() / 1000),
     };
 
     this.customers.set(customerId, customer);
@@ -108,9 +118,11 @@ export class StripeIntegration {
     amount: number,
     currency: string = 'usd',
     customerId?: string,
-    metadata?: Record<string, any>
+    metadata?: Record<string, any>,
   ): Promise<StripePaymentIntent> {
-    console.log(`💳 Creating payment intent: $${amount / 100} ${currency.toUpperCase()}`);
+    console.log(
+      `💳 Creating payment intent: $${amount / 100} ${currency.toUpperCase()}`,
+    );
 
     const paymentIntentId = this.generatePaymentIntentId();
     const clientSecret = `${paymentIntentId}_secret_${Math.random().toString(36).substr(2, 8)}`;
@@ -122,7 +134,7 @@ export class StripeIntegration {
       status: 'requires_payment_method',
       clientSecret,
       customerId,
-      metadata: metadata || {}
+      metadata: metadata || {},
     };
 
     this.paymentIntents.set(paymentIntentId, paymentIntent);
@@ -134,8 +146,12 @@ export class StripeIntegration {
   // Confirm payment intent
   async confirmPaymentIntent(
     paymentIntentId: string,
-    paymentMethodId: string
-  ): Promise<{ success: boolean; paymentIntent?: StripePaymentIntent; error?: string }> {
+    paymentMethodId: string,
+  ): Promise<{
+    success: boolean;
+    paymentIntent?: StripePaymentIntent;
+    error?: string;
+  }> {
     console.log(`🔄 Confirming payment intent: ${paymentIntentId}`);
 
     const paymentIntent = this.paymentIntents.get(paymentIntentId);
@@ -148,13 +164,13 @@ export class StripeIntegration {
 
     if (success) {
       paymentIntent.status = 'succeeded';
-      
+
       // Process payment in our system
       if (paymentIntent.metadata.invoiceId) {
         await paymentProcessor.processPayment(
           paymentIntent.metadata.invoiceId,
           paymentMethodId,
-          { stripePaymentIntentId: paymentIntentId }
+          { stripePaymentIntentId: paymentIntentId },
         );
       }
 
@@ -172,7 +188,7 @@ export class StripeIntegration {
     customerId: string,
     priceId: string,
     paymentMethodId: string,
-    trialPeriodDays?: number
+    trialPeriodDays?: number,
   ): Promise<{ subscription: any; clientSecret?: string }> {
     console.log(`📅 Creating subscription for customer: ${customerId}`);
 
@@ -183,10 +199,10 @@ export class StripeIntegration {
 
     // Map Stripe price IDs to our internal plan IDs
     const priceToPlantMapping: Record<string, string> = {
-      'price_starter_monthly': 'starter',
-      'price_professional_monthly': 'professional',
-      'price_business_monthly': 'business',
-      'price_enterprise_monthly': 'enterprise'
+      price_starter_monthly: 'starter',
+      price_professional_monthly: 'professional',
+      price_business_monthly: 'business',
+      price_enterprise_monthly: 'enterprise',
     };
 
     const planId = priceToPlantMapping[priceId];
@@ -199,7 +215,7 @@ export class StripeIntegration {
       customerId,
       planId,
       paymentMethodId,
-      trialPeriodDays
+      trialPeriodDays,
     );
 
     // Generate Stripe subscription object
@@ -207,21 +223,29 @@ export class StripeIntegration {
       id: `sub_stripe_${subscription.id}`,
       customer: customerId,
       status: subscription.status,
-      current_period_start: Math.floor(new Date(subscription.currentPeriodStart).getTime() / 1000),
-      current_period_end: Math.floor(new Date(subscription.currentPeriodEnd).getTime() / 1000),
-      trial_end: subscription.trialEnd ? Math.floor(new Date(subscription.trialEnd).getTime() / 1000) : null,
+      current_period_start: Math.floor(
+        new Date(subscription.currentPeriodStart).getTime() / 1000,
+      ),
+      current_period_end: Math.floor(
+        new Date(subscription.currentPeriodEnd).getTime() / 1000,
+      ),
+      trial_end: subscription.trialEnd
+        ? Math.floor(new Date(subscription.trialEnd).getTime() / 1000)
+        : null,
       items: {
-        data: [{
-          id: `si_${Date.now()}`,
-          price: {
-            id: priceId,
-            unit_amount: subscription.pricing.amount * 100,
-            currency: subscription.pricing.currency.toLowerCase(),
-            interval: subscription.pricing.interval
-          }
-        }]
+        data: [
+          {
+            id: `si_${Date.now()}`,
+            price: {
+              id: priceId,
+              unit_amount: subscription.pricing.amount * 100,
+              currency: subscription.pricing.currency.toLowerCase(),
+              interval: subscription.pricing.interval,
+            },
+          },
+        ],
       },
-      latest_invoice: null
+      latest_invoice: null,
     };
 
     console.log(`✅ Subscription created: ${stripeSubscription.id}`);
@@ -229,7 +253,10 @@ export class StripeIntegration {
   }
 
   // Handle webhooks
-  async handleWebhook(payload: string, signature: string): Promise<{ received: boolean; processed?: string }> {
+  async handleWebhook(
+    payload: string,
+    signature: string,
+  ): Promise<{ received: boolean; processed?: string }> {
     console.log('🪝 Processing Stripe webhook...');
 
     // In production, verify the webhook signature
@@ -281,12 +308,12 @@ export class StripeIntegration {
   // Webhook handlers
   private async handlePaymentSucceeded(paymentIntent: any): Promise<void> {
     console.log(`💰 Payment succeeded: ${paymentIntent.id}`);
-    
+
     if (paymentIntent.metadata.invoiceId) {
       await paymentProcessor.processPayment(
         paymentIntent.metadata.invoiceId,
         paymentIntent.payment_method,
-        { stripePaymentIntentId: paymentIntent.id }
+        { stripePaymentIntentId: paymentIntent.id },
       );
     }
   }
@@ -323,14 +350,16 @@ export class StripeIntegration {
 
   // Get customer by email
   async getCustomerByEmail(email: string): Promise<StripeCustomer | null> {
-    const customer = Array.from(this.customers.values()).find(c => c.email === email);
+    const customer = Array.from(this.customers.values()).find(
+      (c) => c.email === email,
+    );
     return customer || null;
   }
 
   // Update customer
   async updateCustomer(
     customerId: string,
-    updates: Partial<StripeCustomer>
+    updates: Partial<StripeCustomer>,
   ): Promise<StripeCustomer> {
     const customer = this.customers.get(customerId);
     if (!customer) {
@@ -345,7 +374,10 @@ export class StripeIntegration {
   }
 
   // Cancel subscription
-  async cancelSubscription(subscriptionId: string, cancelAtPeriodEnd: boolean = true): Promise<any> {
+  async cancelSubscription(
+    subscriptionId: string,
+    cancelAtPeriodEnd: boolean = true,
+  ): Promise<any> {
     console.log(`❌ Canceling subscription: ${subscriptionId}`);
 
     // Find corresponding internal subscription
@@ -356,12 +388,14 @@ export class StripeIntegration {
       id: subscriptionId,
       status: cancelAtPeriodEnd ? 'active' : 'canceled',
       cancel_at_period_end: cancelAtPeriodEnd,
-      canceled_at: cancelAtPeriodEnd ? null : Math.floor(Date.now() / 1000)
+      canceled_at: cancelAtPeriodEnd ? null : Math.floor(Date.now() / 1000),
     };
   }
 
   // Get setup intent for saving payment methods
-  async createSetupIntent(customerId: string): Promise<{ setupIntent: any; clientSecret: string }> {
+  async createSetupIntent(
+    customerId: string,
+  ): Promise<{ setupIntent: any; clientSecret: string }> {
     console.log(`🔧 Creating setup intent for customer: ${customerId}`);
 
     const setupIntentId = `seti_${Date.now()}_${Math.random().toString(36).substr(2, 8)}`;
@@ -372,7 +406,7 @@ export class StripeIntegration {
       client_secret: clientSecret,
       customer: customerId,
       status: 'requires_payment_method',
-      usage: 'off_session'
+      usage: 'off_session',
     };
 
     console.log(`✅ Setup intent created: ${setupIntentId}`);
@@ -402,8 +436,8 @@ export class StripeIntegration {
           '5 documents per month',
           'Basic templates',
           'PDF download',
-          'Email support'
-        ]
+          'Email support',
+        ],
       },
       {
         id: 'professional',
@@ -419,8 +453,8 @@ export class StripeIntegration {
           'PDF + Word download',
           'E-signatures included',
           'AI document analysis',
-          'Priority support'
-        ]
+          'Priority support',
+        ],
       },
       {
         id: 'business',
@@ -435,8 +469,8 @@ export class StripeIntegration {
           'API access',
           'Custom templates',
           'Advanced AI features',
-          'Phone support'
-        ]
+          'Phone support',
+        ],
       },
       {
         id: 'enterprise',
@@ -451,9 +485,9 @@ export class StripeIntegration {
           'Dedicated support',
           'Custom integrations',
           'SLA guarantee',
-          'On-premise deployment'
-        ]
-      }
+          'On-premise deployment',
+        ],
+      },
     ];
   }
 
@@ -462,7 +496,7 @@ export class StripeIntegration {
     // In production, use Stripe's signature verification
     // const computedSignature = crypto.createHmac('sha256', this.config.webhookSecret).update(payload).digest('hex');
     // return signature.includes(computedSignature);
-    
+
     // For demo purposes, always return true
     return true;
   }
@@ -487,12 +521,17 @@ export class StripeIntegration {
   } {
     const allCustomers = Array.from(this.customers.values());
     const allPaymentIntents = Array.from(this.paymentIntents.values());
-    
-    const successfulPayments = allPaymentIntents.filter(pi => pi.status === 'succeeded');
-    const failedPayments = allPaymentIntents.filter(pi => pi.status === 'requires_payment_method');
-    
-    const totalRevenue = successfulPayments.reduce((sum, pi) => sum + pi.amount, 0) / 100; // Convert from cents
-    
+
+    const successfulPayments = allPaymentIntents.filter(
+      (pi) => pi.status === 'succeeded',
+    );
+    const failedPayments = allPaymentIntents.filter(
+      (pi) => pi.status === 'requires_payment_method',
+    );
+
+    const totalRevenue =
+      successfulPayments.reduce((sum, pi) => sum + pi.amount, 0) / 100; // Convert from cents
+
     // Get MRR from payment processor
     const metrics = paymentProcessor.getPerformanceMetrics();
 
@@ -502,7 +541,7 @@ export class StripeIntegration {
       activeCustomers: allCustomers.length,
       successfulPayments: successfulPayments.length,
       failedPayments: failedPayments.length,
-      churnRate: metrics.churnRate
+      churnRate: metrics.churnRate,
     };
   }
 }

@@ -199,7 +199,6 @@ const TrustAndTestimonialsSection = React.memo(
     const sectionRef = useRef<HTMLDivElement | null>(null);
     const isInView = useInView(sectionRef, { once: false, amount: 0.2 });
 
-
     useEffect(() => {
       setIsHydrated(true);
     }, []);
@@ -295,7 +294,10 @@ const TrustAndTestimonialsSection = React.memo(
                 <span className="font-bold">Trustpilot</span>
                 <div className="flex items-center ml-1">
                   {Array.from({ length: 4 }).map((_, i) => (
-                    <Star key={i} className="h-4 w-4 text-green-500 fill-green-500 star-gradient" />
+                    <Star
+                      key={i}
+                      className="h-4 w-4 text-green-500 fill-green-500 star-gradient"
+                    />
                   ))}
                   <Star className="h-4 w-4 text-green-500 fill-green-500 star-gradient star-pulse" />
                 </div>
@@ -317,10 +319,15 @@ const TrustAndTestimonialsSection = React.memo(
           <div className="absolute -top-10 -left-10 w-40 h-40 bg-teal-500/10 rounded-full blur-3xl pointer-events-none"></div>
           <div className="overflow-x-auto pb-4 sm:overflow-visible">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 snap-x sm:snap-none">
-              {(testimonialsData.length > 0 ? testimonialsData : Array(5).fill(null)).map((testimonial, i) => (
+              {(testimonialsData.length > 0
+                ? testimonialsData
+                : Array(5).fill(null)
+              ).map((testimonial, i) => (
                 <div
                   key={
-                    testimonial ? `${testimonial.nameKey}-${testimonial.avatarSeed}` : `placeholder-${i}`
+                    testimonial
+                      ? `${testimonial.nameKey}-${testimonial.avatarSeed}`
+                      : `placeholder-${i}`
                   }
                   className="snap-start"
                 >
@@ -339,7 +346,11 @@ const TrustAndTestimonialsSection = React.memo(
         <div className="mt-16 md:mt-20 px-4 py-16">
           <div className="mx-auto max-w-2xl bg-gradient-to-r from-[#E5F6FF] to-white border border-border rounded-2xl p-8 md:p-10 flex flex-col items-center space-y-6 text-center shadow-md">
             <h3 className="text-3xl lg:text-4xl font-semibold text-[#1F2937]">
-              {isHydrated ? t('home.midCtaHeadline', { defaultValue: "Ready to Simplify Your Legal Needs?" }) : placeholderText}
+              {isHydrated
+                ? t('home.midCtaHeadline', {
+                    defaultValue: 'Ready to Simplify Your Legal Needs?',
+                  })
+                : placeholderText}
             </h3>
             <div className="flex flex-col items-center space-y-2">
               <div className="flex items-center gap-2">
@@ -347,7 +358,12 @@ const TrustAndTestimonialsSection = React.memo(
                   <ShieldCheck className="h-4 w-4" />
                 </span>
                 <span className="font-medium text-sm text-foreground/90">
-                  {isHydrated ? t('home.moneyBackGuarantee', { defaultValue: "100% Satisfaction Guarantee or Your Money Back" }) : placeholderText}
+                  {isHydrated
+                    ? t('home.moneyBackGuarantee', {
+                        defaultValue:
+                          '100% Satisfaction Guarantee or Your Money Back',
+                      })
+                    : placeholderText}
                 </span>
               </div>
               <Button
@@ -358,8 +374,17 @@ const TrustAndTestimonialsSection = React.memo(
                 {t('ctaSecondary', { defaultValue: 'Learn More' })}
               </Button>
             </div>
-            <Button size="lg" className="h-14 px-12 text-lg bg-gradient-to-r from-[#006EFF] to-[#00C3A3] text-white transition rounded-full font-semibold shadow-lg hover:shadow-xl transform hover:scale-105" onClick={scrollToWorkflow} disabled={!isHydrated}>
-              {isHydrated ? t('home.callToAction', { defaultValue: "Explore All Legal Templates" }) : placeholderText}
+            <Button
+              size="lg"
+              className="h-14 px-12 text-lg bg-gradient-to-r from-[#006EFF] to-[#00C3A3] text-white transition rounded-full font-semibold shadow-lg hover:shadow-xl transform hover:scale-105"
+              onClick={scrollToWorkflow}
+              disabled={!isHydrated}
+            >
+              {isHydrated
+                ? t('home.callToAction', {
+                    defaultValue: 'Explore All Legal Templates',
+                  })
+                : placeholderText}
             </Button>
           </div>
           <Dialog open={showRefundModal} onOpenChange={setShowRefundModal}>
@@ -367,7 +392,11 @@ const TrustAndTestimonialsSection = React.memo(
               <DialogHeader>
                 <DialogTitle>Refund Policy</DialogTitle>
               </DialogHeader>
-              <p className="text-sm text-foreground">We stand behind our templates with a 30-day money-back guarantee. If you&apos;re not satisfied, contact support for a full refund.</p>
+              <p className="text-sm text-foreground">
+                We stand behind our templates with a 30-day money-back
+                guarantee. If you&apos;re not satisfied, contact support for a
+                full refund.
+              </p>
             </DialogContent>
           </Dialog>
         </div>

@@ -47,7 +47,7 @@ Don't risk using generic templates that may not comply with West Virginia law. G
 
 [Create West Virginia Independent Contractor Agreement]
 
-*Trusted by thousands of West Virginia businesses*
+_Trusted by thousands of West Virginia businesses_
 
 ---
 

@@ -3,7 +3,9 @@ import { z } from 'zod';
 export const schema = z.object({
   declarantName: z.string().min(1, 'Declarant name is required'),
   declarantAddress: z.string().min(1, 'Declarant address is required'),
-  declarantDateOfBirth: z.string().min(1, 'Declarant date of birth is required'),
+  declarantDateOfBirth: z
+    .string()
+    .min(1, 'Declarant date of birth is required'),
   declarantSSN: z.string().optional(),
   healthcareAgent: z.string().optional(),
   healthcareAgentAddress: z.string().optional(),
@@ -11,7 +13,12 @@ export const schema = z.object({
   alternateHealthcareAgent: z.string().optional(),
   alternateHealthcareAgentAddress: z.string().optional(),
   alternateHealthcareAgentPhone: z.string().optional(),
-  lifeSustainingTreatment: z.enum(['continue', 'discontinue', 'trial_period', 'specific_conditions']),
+  lifeSustainingTreatment: z.enum([
+    'continue',
+    'discontinue',
+    'trial_period',
+    'specific_conditions',
+  ]),
   lifeSustainingConditions: z.string().optional(),
   artificialNutrition: z.enum(['yes', 'no', 'temporary', 'comfort_only']),
   artificialHydration: z.enum(['yes', 'no', 'temporary', 'comfort_only']),
@@ -21,9 +28,15 @@ export const schema = z.object({
   antibiotics: z.enum(['yes', 'no', 'infection_only', 'comfort_only']),
   painManagement: z.enum(['maximum', 'moderate', 'minimal', 'comfort_focused']),
   sedation: z.enum(['yes', 'no', 'comfort_only', 'end_of_life_only']),
-  terminalConditionDefinition: z.string().min(1, 'Terminal condition definition is required'),
-  persistentVegetativeState: z.string().min(1, 'Persistent vegetative state preferences are required'),
-  irreversibleCondition: z.string().min(1, 'Irreversible condition preferences are required'),
+  terminalConditionDefinition: z
+    .string()
+    .min(1, 'Terminal condition definition is required'),
+  persistentVegetativeState: z
+    .string()
+    .min(1, 'Persistent vegetative state preferences are required'),
+  irreversibleCondition: z
+    .string()
+    .min(1, 'Irreversible condition preferences are required'),
   qualityOfLifeFactors: z.string().optional(),
   religiousBeliefs: z.string().optional(),
   culturalConsiderations: z.string().optional(),
@@ -34,7 +47,12 @@ export const schema = z.object({
   bodyDonation: z.enum(['yes', 'no', 'medical_research', 'education']),
   autopsy: z.enum(['yes', 'no', 'medical_necessity_only']),
   funeralArrangements: z.string().optional(),
-  burialCremationPreference: z.enum(['burial', 'cremation', 'no_preference', 'other']),
+  burialCremationPreference: z.enum([
+    'burial',
+    'cremation',
+    'no_preference',
+    'other',
+  ]),
   burialCremationDetails: z.string().optional(),
   pregnancyConsiderations: z.string().optional(),
   specificMedicalConditions: z.string().optional(),

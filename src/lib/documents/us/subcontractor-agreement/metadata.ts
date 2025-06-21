@@ -24,13 +24,22 @@ export const subcontractorAgreementMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Subcontractor Agreement',
-      description: 'Agreement between general contractor and subcontractor for construction services.',
-      aliases: ['subcontract agreement', 'trade contractor agreement', 'specialty contractor agreement'],
+      description:
+        'Agreement between general contractor and subcontractor for construction services.',
+      aliases: [
+        'subcontract agreement',
+        'trade contractor agreement',
+        'specialty contractor agreement',
+      ],
     },
     es: {
       name: 'Acuerdo de Subcontratista',
-      description: 'Acuerdo entre contratista general y subcontratista para servicios de construcción.',
-      aliases: ['acuerdo de subcontrato', 'contrato de contratista especializado'],
+      description:
+        'Acuerdo entre contratista general y subcontratista para servicios de construcción.',
+      aliases: [
+        'acuerdo de subcontrato',
+        'contrato de contratista especializado',
+      ],
     },
   },
 };

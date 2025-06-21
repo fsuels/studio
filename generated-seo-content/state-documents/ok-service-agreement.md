@@ -47,7 +47,7 @@ Don't risk using generic templates that may not comply with Oklahoma law. Get a 
 
 [Create Oklahoma Service Agreement]
 
-*Trusted by thousands of Oklahoma businesses*
+_Trusted by thousands of Oklahoma businesses_
 
 ---
 

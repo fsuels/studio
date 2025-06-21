@@ -12,7 +12,7 @@ export async function startCollaborationServer(): Promise<void> {
   try {
     collaborationServer = new YjsCollaborationServer();
     await collaborationServer.start();
-    
+
     // Handle graceful shutdown
     process.on('SIGINT', async () => {
       console.log('Received SIGINT, shutting down collaboration server...');
@@ -29,7 +29,6 @@ export async function startCollaborationServer(): Promise<void> {
         process.exit(0);
       }
     });
-
   } catch (error) {
     console.error('Failed to start collaboration server:', error);
     throw error;
@@ -48,6 +47,9 @@ export function getCollaborationServer(): YjsCollaborationServer | null {
 }
 
 // Auto-start in production
-if (process.env.NODE_ENV === 'production' && process.env.ENABLE_COLLABORATION === 'true') {
+if (
+  process.env.NODE_ENV === 'production' &&
+  process.env.ENABLE_COLLABORATION === 'true'
+) {
   startCollaborationServer().catch(console.error);
 }

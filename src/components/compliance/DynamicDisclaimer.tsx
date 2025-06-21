@@ -5,13 +5,13 @@ import React from 'react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
-import { 
-  Shield, 
-  AlertTriangle, 
-  Info, 
+import {
+  Shield,
+  AlertTriangle,
+  Info,
   ExternalLink,
   CheckCircle,
-  Scale
+  Scale,
 } from 'lucide-react';
 
 export interface DisclaimerProps {
@@ -31,55 +31,66 @@ export default function DynamicDisclaimer({
   disclaimerLevel,
   requirements = [],
   showMinimal = false,
-  placement = 'inline'
+  placement = 'inline',
 }: DisclaimerProps) {
   const getIcon = () => {
     switch (riskLevel) {
-      case 'green': return <CheckCircle className="h-4 w-4 text-green-600" />;
-      case 'amber': return <AlertTriangle className="h-4 w-4 text-amber-600" />;
-      case 'red': return <Shield className="h-4 w-4 text-red-600" />;
-      default: return <Info className="h-4 w-4" />;
+      case 'green':
+        return <CheckCircle className="h-4 w-4 text-green-600" />;
+      case 'amber':
+        return <AlertTriangle className="h-4 w-4 text-amber-600" />;
+      case 'red':
+        return <Shield className="h-4 w-4 text-red-600" />;
+      default:
+        return <Info className="h-4 w-4" />;
     }
   };
 
   const getAlertVariant = () => {
     switch (riskLevel) {
-      case 'red': return 'destructive';
-      case 'amber': return 'default';
-      default: return 'default';
+      case 'red':
+        return 'destructive';
+      case 'amber':
+        return 'default';
+      default:
+        return 'default';
     }
   };
 
   const getDisclaimerText = () => {
-    const baseText = "123LegalDoc provides self-help legal document templates and is not a law firm.";
-    
+    const baseText =
+      '123LegalDoc provides self-help legal document templates and is not a law firm.';
+
     switch (disclaimerLevel) {
       case 'basic':
         return {
           primary: baseText,
-          secondary: "These templates are provided for informational purposes only.",
-          legal: "Use is subject to our Terms of Service."
+          secondary:
+            'These templates are provided for informational purposes only.',
+          legal: 'Use is subject to our Terms of Service.',
         };
-        
+
       case 'enhanced':
         return {
           primary: baseText,
           secondary: `These templates are for informational purposes only and should not substitute for advice from a licensed attorney. You are responsible for ensuring the document meets your specific needs and complies with ${stateName} state laws.`,
-          legal: "Use is subject to our Terms of Service (Delaware law, arbitration clause applies)."
+          legal:
+            'Use is subject to our Terms of Service (Delaware law, arbitration clause applies).',
         };
-        
+
       case 'strict':
         return {
           primary: baseText,
           secondary: `⚠️ WARNING: Legal document preparation without attorney supervision may constitute unauthorized practice of law in some jurisdictions. These templates are provided for informational purposes only and should not be used without consulting a licensed attorney in ${stateName}.`,
-          legal: "You assume all risks associated with using these documents. Refunds available within 30 days. Use is subject to our Terms of Service (Delaware law, arbitration clause applies)."
+          legal:
+            'You assume all risks associated with using these documents. Refunds available within 30 days. Use is subject to our Terms of Service (Delaware law, arbitration clause applies).',
         };
-        
+
       default:
         return {
           primary: baseText,
-          secondary: "Use at your own discretion.",
-          legal: ""
+          secondary: 'Use at your own discretion.',
+          legal: '',
         };
     }
   };
@@ -107,12 +118,14 @@ export default function DynamicDisclaimer({
       {/* Risk Level Indicator */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <Badge 
-            variant="outline" 
+          <Badge
+            variant="outline"
             className={
-              riskLevel === 'green' ? 'text-green-600 border-green-200 bg-green-50' :
-              riskLevel === 'amber' ? 'text-amber-600 border-amber-200 bg-amber-50' :
-              'text-red-600 border-red-200 bg-red-50'
+              riskLevel === 'green'
+                ? 'text-green-600 border-green-200 bg-green-50'
+                : riskLevel === 'amber'
+                  ? 'text-amber-600 border-amber-200 bg-amber-50'
+                  : 'text-red-600 border-red-200 bg-red-50'
             }
           >
             {riskLevel.toUpperCase()} RISK
@@ -121,7 +134,7 @@ export default function DynamicDisclaimer({
             {stateName} ({stateCode})
           </span>
         </div>
-        
+
         {placement === 'checkout' && (
           <button className="text-xs text-primary hover:underline flex items-center gap-1">
             View State Requirements
@@ -135,9 +148,7 @@ export default function DynamicDisclaimer({
         {getIcon()}
         <AlertDescription>
           <div className="space-y-2">
-            <p className="font-medium text-sm">
-              {disclaimerText.primary}
-            </p>
+            <p className="font-medium text-sm">{disclaimerText.primary}</p>
             <p className="text-xs leading-relaxed">
               {disclaimerText.secondary}
             </p>
@@ -152,7 +163,9 @@ export default function DynamicDisclaimer({
             <div className="flex items-start gap-2 mb-2">
               <Scale className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
               <div className="space-y-1">
-                <p className="text-sm font-medium">Additional Requirements for {stateName}:</p>
+                <p className="text-sm font-medium">
+                  Additional Requirements for {stateName}:
+                </p>
                 <ul className="text-xs space-y-1 text-muted-foreground">
                   {requirements.map((req, index) => (
                     <li key={index} className="flex items-start gap-2">
@@ -179,9 +192,10 @@ export default function DynamicDisclaimer({
         <Alert variant="destructive">
           <AlertTriangle className="h-4 w-4" />
           <AlertDescription className="text-xs">
-            <strong>Service Restricted:</strong> Due to strict regulatory requirements in {stateName}, 
-            this service is not currently available. We recommend consulting with a licensed attorney 
-            in your state for legal document preparation.
+            <strong>Service Restricted:</strong> Due to strict regulatory
+            requirements in {stateName}, this service is not currently
+            available. We recommend consulting with a licensed attorney in your
+            state for legal document preparation.
           </AlertDescription>
         </Alert>
       )}
@@ -191,9 +205,10 @@ export default function DynamicDisclaimer({
         <Alert>
           <CheckCircle className="h-4 w-4 text-green-600" />
           <AlertDescription className="text-xs">
-            <strong>Enhanced Legal Protections:</strong> {stateName} has progressive regulations 
-            that provide additional protections for online legal services. You can use our service 
-            with confidence under regulatory oversight.
+            <strong>Enhanced Legal Protections:</strong> {stateName} has
+            progressive regulations that provide additional protections for
+            online legal services. You can use our service with confidence under
+            regulatory oversight.
           </AlertDescription>
         </Alert>
       )}
@@ -210,10 +225,14 @@ export function DocumentDisclaimer(props: Omit<DisclaimerProps, 'placement'>) {
   return <DynamicDisclaimer {...props} placement="document" />;
 }
 
-export function FooterDisclaimer(props: Omit<DisclaimerProps, 'placement' | 'showMinimal'>) {
+export function FooterDisclaimer(
+  props: Omit<DisclaimerProps, 'placement' | 'showMinimal'>,
+) {
   return <DynamicDisclaimer {...props} placement="footer" showMinimal />;
 }
 
-export function InlineDisclaimer(props: Omit<DisclaimerProps, 'placement' | 'showMinimal'>) {
+export function InlineDisclaimer(
+  props: Omit<DisclaimerProps, 'placement' | 'showMinimal'>,
+) {
   return <DynamicDisclaimer {...props} placement="inline" showMinimal />;
 }

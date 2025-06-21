@@ -95,7 +95,10 @@ export const employeeEvaluationFormQuestions: FormQuestion[] = [
       { value: '1-5', label: '1-5 Scale (1=Poor, 5=Excellent)' },
       { value: '1-10', label: '1-10 Scale (1=Poor, 10=Excellent)' },
       { value: 'letter-grade', label: 'Letter Grade (A, B, C, D, F)' },
-      { value: 'descriptive', label: 'Descriptive (Excellent, Good, Fair, Poor)' },
+      {
+        value: 'descriptive',
+        label: 'Descriptive (Excellent, Good, Fair, Poor)',
+      },
     ],
     required: true,
     group: 'evaluation',

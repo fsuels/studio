@@ -47,7 +47,7 @@ Don't risk using generic templates that may not comply with Ohio law. Get a prof
 
 [Create Ohio LLC Operating Agreement]
 
-*Trusted by thousands of Ohio businesses*
+_Trusted by thousands of Ohio businesses_
 
 ---
 

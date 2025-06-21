@@ -10,21 +10,21 @@ export async function POST(request: NextRequest) {
     if (!text || typeof text !== 'string') {
       return NextResponse.json(
         { error: 'Text is required and must be a string' },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
     if (text.length < 10) {
       return NextResponse.json(
         { error: 'Text is too short to simplify' },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
     if (text.length > 5000) {
       return NextResponse.json(
         { error: 'Text is too long (max 5,000 characters)' },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -37,16 +37,15 @@ export async function POST(request: NextRequest) {
       simplified: simplifiedText,
       simplifiedAt: new Date().toISOString(),
     });
-
   } catch (error) {
     console.error('[API] Legal jargon simplification error:', error);
-    
+
     return NextResponse.json(
-      { 
+      {
         error: 'Internal server error',
-        message: error instanceof Error ? error.message : 'Unknown error'
+        message: error instanceof Error ? error.message : 'Unknown error',
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -58,18 +57,21 @@ export async function GET(request: NextRequest) {
       endpoint: '/api/accessibility/simplify',
       method: 'POST',
       body: {
-        text: 'string (required, 10-5000 chars)'
-      }
+        text: 'string (required, 10-5000 chars)',
+      },
     },
     examples: [
       {
-        original: 'The party of the first part hereby agrees to indemnify and hold harmless the party of the second part.',
-        simplified: 'The first person agrees to protect and pay for any damages to the second person.'
+        original:
+          'The party of the first part hereby agrees to indemnify and hold harmless the party of the second part.',
+        simplified:
+          'The first person agrees to protect and pay for any damages to the second person.',
       },
       {
-        original: 'Notwithstanding any provision to the contrary herein contained.',
-        simplified: 'Despite anything else written in this document.'
-      }
-    ]
+        original:
+          'Notwithstanding any provision to the contrary herein contained.',
+        simplified: 'Despite anything else written in this document.',
+      },
+    ],
   });
 }

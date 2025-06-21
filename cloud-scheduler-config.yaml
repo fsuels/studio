@@ -6,90 +6,89 @@
 
 # Legal Updates Processing Job - Runs every 6 hours
 legal-updates-rss-processing:
-  schedule: "0 */6 * * *"  # Every 6 hours at minute 0
-  timezone: "America/New_York"
-  uri: "https://123legaldoc.com/api/legal-updates/process"
-  http_method: "POST"
+  schedule: '0 */6 * * *' # Every 6 hours at minute 0
+  timezone: 'America/New_York'
+  uri: 'https://123legaldoc.com/api/legal-updates/process'
+  http_method: 'POST'
   headers:
-    x-scheduler-token: "${CLOUD_SCHEDULER_TOKEN}"
-    content-type: "application/json"
+    x-scheduler-token: '${CLOUD_SCHEDULER_TOKEN}'
+    content-type: 'application/json'
   body: |
     {
       "source": "cloud_scheduler",
       "job": "rss_processing"
     }
-  description: "Fetch and process legal updates from RSS feeds using AI summarization"
+  description: 'Fetch and process legal updates from RSS feeds using AI summarization'
   retry_config:
     retry_count: 3
-    min_backoff_duration: "30s"
-    max_backoff_duration: "300s"
+    min_backoff_duration: '30s'
+    max_backoff_duration: '300s'
 
 # Daily Email Digest - Runs at 7 AM EST Monday-Friday
 legal-updates-daily-email:
-  schedule: "0 7 * * 1-5"  # 7 AM Monday-Friday
-  timezone: "America/New_York"
-  uri: "https://123legaldoc.com/api/legal-updates/email?frequency=daily"
-  http_method: "POST"
+  schedule: '0 7 * * 1-5' # 7 AM Monday-Friday
+  timezone: 'America/New_York'
+  uri: 'https://123legaldoc.com/api/legal-updates/email?frequency=daily'
+  http_method: 'POST'
   headers:
-    x-scheduler-token: "${CLOUD_SCHEDULER_TOKEN}"
-    content-type: "application/json"
+    x-scheduler-token: '${CLOUD_SCHEDULER_TOKEN}'
+    content-type: 'application/json'
   body: |
     {
       "source": "cloud_scheduler",
       "job": "daily_email_digest"
     }
-  description: "Send daily legal update email digest to subscribed users"
+  description: 'Send daily legal update email digest to subscribed users'
   retry_config:
     retry_count: 2
-    min_backoff_duration: "60s"
-    max_backoff_duration: "600s"
+    min_backoff_duration: '60s'
+    max_backoff_duration: '600s'
 
 # Weekly Email Digest - Runs at 8 AM EST on Mondays
 legal-updates-weekly-email:
-  schedule: "0 8 * * 1"  # 8 AM Monday
-  timezone: "America/New_York"
-  uri: "https://123legaldoc.com/api/legal-updates/email?frequency=weekly"
-  http_method: "POST"
+  schedule: '0 8 * * 1' # 8 AM Monday
+  timezone: 'America/New_York'
+  uri: 'https://123legaldoc.com/api/legal-updates/email?frequency=weekly'
+  http_method: 'POST'
   headers:
-    x-scheduler-token: "${CLOUD_SCHEDULER_TOKEN}"
-    content-type: "application/json"
+    x-scheduler-token: '${CLOUD_SCHEDULER_TOKEN}'
+    content-type: 'application/json'
   body: |
     {
       "source": "cloud_scheduler",
       "job": "weekly_email_digest"
     }
-  description: "Send weekly legal update email digest to subscribed users"
+  description: 'Send weekly legal update email digest to subscribed users'
   retry_config:
     retry_count: 2
-    min_backoff_duration: "60s"
-    max_backoff_duration: "600s"
+    min_backoff_duration: '60s'
+    max_backoff_duration: '600s'
 
 # Immediate Email Processing - Runs every 2 hours for urgent updates
 legal-updates-immediate-email:
-  schedule: "0 */2 * * *"  # Every 2 hours
-  timezone: "America/New_York"
-  uri: "https://123legaldoc.com/api/legal-updates/email?frequency=immediate"
-  http_method: "POST"
+  schedule: '0 */2 * * *' # Every 2 hours
+  timezone: 'America/New_York'
+  uri: 'https://123legaldoc.com/api/legal-updates/email?frequency=immediate'
+  http_method: 'POST'
   headers:
-    x-scheduler-token: "${CLOUD_SCHEDULER_TOKEN}"
-    content-type: "application/json"
+    x-scheduler-token: '${CLOUD_SCHEDULER_TOKEN}'
+    content-type: 'application/json'
   body: |
     {
       "source": "cloud_scheduler",
       "job": "immediate_email_digest"
     }
-  description: "Send immediate email alerts for critical legal updates"
+  description: 'Send immediate email alerts for critical legal updates'
   retry_config:
     retry_count: 2
-    min_backoff_duration: "30s"
-    max_backoff_duration: "300s"
-
+    min_backoff_duration: '30s'
+    max_backoff_duration: '300s'
 # Deployment Commands:
-# 
+#
 # 1. Set up environment variables:
 # export CLOUD_SCHEDULER_TOKEN="your-secure-scheduler-token"
 # export PROJECT_ID="your-gcp-project-id"
-# 
+#
 # 2. Create the jobs:
 # gcloud scheduler jobs create http legal-updates-rss-processing \
 #   --schedule="0 */6 * * *" \

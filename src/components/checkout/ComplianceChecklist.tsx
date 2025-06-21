@@ -5,17 +5,17 @@ import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { 
-  CheckCircle2, 
-  XCircle, 
-  AlertTriangle, 
-  Shield, 
+import {
+  CheckCircle2,
+  XCircle,
+  AlertTriangle,
+  Shield,
   FileText,
   Eye,
   DollarSign,
   MapPin,
   Clock,
-  Users
+  Users,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -45,7 +45,7 @@ interface ComplianceChecklistProps {
 const ComplianceChecklist: React.FC<ComplianceChecklistProps> = ({
   checkoutState,
   onRetest,
-  className
+  className,
 }) => {
   const [checklist, setChecklist] = React.useState<ComplianceItem[]>([]);
 
@@ -63,7 +63,7 @@ const ComplianceChecklist: React.FC<ComplianceChecklistProps> = ({
         status: checkoutState.termsAccepted ? 'pass' : 'fail',
         required: true,
         category: 'upl',
-        details: 'Prevents unauthorized practice of law claims'
+        details: 'Prevents unauthorized practice of law claims',
       },
       {
         id: 'footer_disclaimer',
@@ -72,7 +72,7 @@ const ComplianceChecklist: React.FC<ComplianceChecklistProps> = ({
         status: 'pass', // Assuming footer is always present
         required: true,
         category: 'upl',
-        details: 'Required on every page for UPL protection'
+        details: 'Required on every page for UPL protection',
       },
       {
         id: 'no_legal_advice',
@@ -81,7 +81,7 @@ const ComplianceChecklist: React.FC<ComplianceChecklistProps> = ({
         status: 'pass',
         required: true,
         category: 'upl',
-        details: 'Core UPL protection statement'
+        details: 'Core UPL protection statement',
       },
 
       // FTC Compliance
@@ -92,16 +92,17 @@ const ComplianceChecklist: React.FC<ComplianceChecklistProps> = ({
         status: checkoutState.priceDisclosed ? 'pass' : 'fail',
         required: true,
         category: 'ftc',
-        details: 'Avoids FTC "hidden fee" scrutiny'
+        details: 'Avoids FTC "hidden fee" scrutiny',
       },
       {
         id: 'scroll_tracking',
         title: 'Terms Scroll Tracking',
-        description: 'Modal scroll tracked to ensure reasonable opportunity to read',
+        description:
+          'Modal scroll tracked to ensure reasonable opportunity to read',
         status: checkoutState.scrolledToBottom ? 'pass' : 'warning',
         required: false,
         category: 'ftc',
-        details: 'Demonstrates user had opportunity to review terms'
+        details: 'Demonstrates user had opportunity to review terms',
       },
 
       // State-Specific Compliance
@@ -112,7 +113,7 @@ const ComplianceChecklist: React.FC<ComplianceChecklistProps> = ({
         status: checkoutState.userState === 'NC' ? 'pass' : 'pending',
         required: true,
         category: 'state',
-        details: 'NC consent judgment compliance (LegalZoom 2015)'
+        details: 'NC consent judgment compliance (LegalZoom 2015)',
       },
       {
         id: 'venue_clause',
@@ -121,7 +122,7 @@ const ComplianceChecklist: React.FC<ComplianceChecklistProps> = ({
         status: checkoutState.userState ? 'pass' : 'warning',
         required: true,
         category: 'state',
-        details: 'State-specific dispute resolution terms'
+        details: 'State-specific dispute resolution terms',
       },
 
       // UI/UX Compliance
@@ -132,7 +133,7 @@ const ComplianceChecklist: React.FC<ComplianceChecklistProps> = ({
         status: 'pass',
         required: false,
         category: 'ui',
-        details: 'Reduces buyer anxiety while maintaining compliance'
+        details: 'Reduces buyer anxiety while maintaining compliance',
       },
       {
         id: 'acceptance_logging',
@@ -141,8 +142,8 @@ const ComplianceChecklist: React.FC<ComplianceChecklistProps> = ({
         status: checkoutState.termsAccepted ? 'pass' : 'pending',
         required: true,
         category: 'upl',
-        details: 'Legal proof of informed consent'
-      }
+        details: 'Legal proof of informed consent',
+      },
     ];
 
     setChecklist(items);
@@ -201,10 +202,14 @@ const ComplianceChecklist: React.FC<ComplianceChecklistProps> = ({
   };
 
   const overallStatus = () => {
-    const requiredItems = checklist.filter(item => item.required);
-    const passedRequired = requiredItems.filter(item => item.status === 'pass');
-    const failedRequired = requiredItems.filter(item => item.status === 'fail');
-    
+    const requiredItems = checklist.filter((item) => item.required);
+    const passedRequired = requiredItems.filter(
+      (item) => item.status === 'pass',
+    );
+    const failedRequired = requiredItems.filter(
+      (item) => item.status === 'fail',
+    );
+
     if (failedRequired.length > 0) return 'fail';
     if (passedRequired.length === requiredItems.length) return 'pass';
     return 'warning';
@@ -212,9 +217,11 @@ const ComplianceChecklist: React.FC<ComplianceChecklistProps> = ({
 
   const getComplianceSummary = () => {
     const total = checklist.length;
-    const passed = checklist.filter(item => item.status === 'pass').length;
-    const failed = checklist.filter(item => item.status === 'fail').length;
-    const warnings = checklist.filter(item => item.status === 'warning').length;
+    const passed = checklist.filter((item) => item.status === 'pass').length;
+    const failed = checklist.filter((item) => item.status === 'fail').length;
+    const warnings = checklist.filter(
+      (item) => item.status === 'warning',
+    ).length;
 
     return { total, passed, failed, warnings };
   };
@@ -223,9 +230,9 @@ const ComplianceChecklist: React.FC<ComplianceChecklistProps> = ({
   const status = overallStatus();
 
   return (
-    <div className={cn("space-y-4", className)}>
+    <div className={cn('space-y-4', className)}>
       {/* Overall Status Header */}
-      <Card className={cn("border-2", getStatusColor(status))}>
+      <Card className={cn('border-2', getStatusColor(status))}>
         <CardHeader>
           <CardTitle className="flex items-center justify-between">
             <div className="flex items-center gap-2">
@@ -235,7 +242,7 @@ const ComplianceChecklist: React.FC<ComplianceChecklistProps> = ({
                 {status.toUpperCase()}
               </Badge>
             </div>
-            
+
             {onRetest && (
               <Button variant="outline" size="sm" onClick={onRetest}>
                 Re-test
@@ -246,19 +253,27 @@ const ComplianceChecklist: React.FC<ComplianceChecklistProps> = ({
         <CardContent>
           <div className="grid grid-cols-4 gap-4 text-center">
             <div>
-              <div className="text-2xl font-bold text-green-600">{summary.passed}</div>
+              <div className="text-2xl font-bold text-green-600">
+                {summary.passed}
+              </div>
               <div className="text-xs text-muted-foreground">Passed</div>
             </div>
             <div>
-              <div className="text-2xl font-bold text-red-600">{summary.failed}</div>
+              <div className="text-2xl font-bold text-red-600">
+                {summary.failed}
+              </div>
               <div className="text-xs text-muted-foreground">Failed</div>
             </div>
             <div>
-              <div className="text-2xl font-bold text-yellow-600">{summary.warnings}</div>
+              <div className="text-2xl font-bold text-yellow-600">
+                {summary.warnings}
+              </div>
               <div className="text-xs text-muted-foreground">Warnings</div>
             </div>
             <div>
-              <div className="text-2xl font-bold text-blue-600">{summary.total}</div>
+              <div className="text-2xl font-bold text-blue-600">
+                {summary.total}
+              </div>
               <div className="text-xs text-muted-foreground">Total</div>
             </div>
           </div>
@@ -266,8 +281,10 @@ const ComplianceChecklist: React.FC<ComplianceChecklistProps> = ({
       </Card>
 
       {/* Detailed Checklist by Category */}
-      {['upl', 'ftc', 'state', 'ui'].map(category => {
-        const categoryItems = checklist.filter(item => item.category === category);
+      {['upl', 'ftc', 'state', 'ui'].map((category) => {
+        const categoryItems = checklist.filter(
+          (item) => item.category === category,
+        );
         if (categoryItems.length === 0) return null;
 
         return (
@@ -283,7 +300,7 @@ const ComplianceChecklist: React.FC<ComplianceChecklistProps> = ({
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                {categoryItems.map(item => (
+                {categoryItems.map((item) => (
                   <ComplianceItemCard key={item.id} item={item} />
                 ))}
               </div>
@@ -309,13 +326,16 @@ const ComplianceChecklist: React.FC<ComplianceChecklistProps> = ({
               </div>
               <div className="flex justify-between">
                 <span className="text-muted-foreground">Document Type:</span>
-                <span className="font-medium">{checkoutState.documentType}</span>
+                <span className="font-medium">
+                  {checkoutState.documentType}
+                </span>
               </div>
               {checkoutState.userState === 'NC' && (
                 <div className="mt-3 p-3 bg-blue-50 border border-blue-200 rounded">
                   <p className="text-blue-800 text-xs">
-                    <strong>North Carolina Special Requirements:</strong> No warranty disclaimers allowed. 
-                    Venue must be NC courts. Additional consumer protections apply.
+                    <strong>North Carolina Special Requirements:</strong> No
+                    warranty disclaimers allowed. Venue must be NC courts.
+                    Additional consumer protections apply.
                   </p>
                 </div>
               )}
@@ -356,12 +376,10 @@ const ComplianceItemCard: React.FC<{ item: ComplianceItem }> = ({ item }) => {
   };
 
   return (
-    <div className={cn("p-3 border rounded-lg", getStatusColor(item.status))}>
+    <div className={cn('p-3 border rounded-lg', getStatusColor(item.status))}>
       <div className="flex items-start gap-3">
-        <div className="shrink-0 mt-0.5">
-          {getStatusIcon(item.status)}
-        </div>
-        
+        <div className="shrink-0 mt-0.5">{getStatusIcon(item.status)}</div>
+
         <div className="flex-1">
           <div className="flex items-center justify-between mb-1">
             <h4 className="font-medium text-sm">{item.title}</h4>
@@ -371,11 +389,11 @@ const ComplianceItemCard: React.FC<{ item: ComplianceItem }> = ({ item }) => {
               </Badge>
             )}
           </div>
-          
+
           <p className="text-sm text-muted-foreground mb-2">
             {item.description}
           </p>
-          
+
           {item.details && (
             <p className="text-xs text-muted-foreground italic">
               💡 {item.details}

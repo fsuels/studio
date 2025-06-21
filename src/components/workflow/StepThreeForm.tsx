@@ -6,7 +6,8 @@ import { LegalDocument } from '@/lib/document-library';
 import dynamic from 'next/dynamic';
 
 const PDFPreview = dynamic(
-  () => import('@/components/document/PDFPreview').then((mod) => mod.PDFPreview),
+  () =>
+    import('@/components/document/PDFPreview').then((mod) => mod.PDFPreview),
   {
     ssr: false,
     loading: () => (
@@ -46,7 +47,11 @@ export function StepThreeForm({
 
         <div className="flex-1 space-y-4">
           <div className="flex items-center">
-            <Toggle id="notarize-toggle" pressed={notarize} onPressedChange={setNotarize} />
+            <Toggle
+              id="notarize-toggle"
+              pressed={notarize}
+              onPressedChange={setNotarize}
+            />
             <label htmlFor="notarize-toggle" className="ml-2">
               Add Notarization (+$5)
             </label>

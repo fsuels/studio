@@ -24,13 +24,21 @@ export const internationalTradeAgreementMeta: LegalDocument = {
   translations: {
     en: {
       name: 'International Trade Agreement',
-      description: 'Agreement for international business transactions and trade relationships.',
-      aliases: ['import export agreement', 'international sales contract', 'global trade contract'],
+      description:
+        'Agreement for international business transactions and trade relationships.',
+      aliases: [
+        'import export agreement',
+        'international sales contract',
+        'global trade contract',
+      ],
     },
     es: {
       name: 'Acuerdo de Comercio Internacional',
       description: 'Acuerdo para transacciones comerciales internacionales.',
-      aliases: ['contrato de importación exportación', 'acuerdo comercial global'],
+      aliases: [
+        'contrato de importación exportación',
+        'acuerdo comercial global',
+      ],
     },
   },
 };

@@ -186,7 +186,10 @@ export const remodelingContractQuestions: FormQuestion[] = [
     type: 'select',
     label: 'Payment Schedule',
     options: [
-      { value: 'upfront-progress-final', label: 'Down Payment + Progress + Final' },
+      {
+        value: 'upfront-progress-final',
+        label: 'Down Payment + Progress + Final',
+      },
       { value: 'milestone-based', label: 'Milestone-Based Payments' },
       { value: 'weekly', label: 'Weekly Payments' },
       { value: 'monthly', label: 'Monthly Payments' },

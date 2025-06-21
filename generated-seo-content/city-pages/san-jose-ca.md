@@ -30,7 +30,7 @@ San Jose offers a dynamic business environment with opportunities across industr
 
 [Start Your San Jose Legal Document]
 
-*Trusted by hundreds of San Jose businesses*
+_Trusted by hundreds of San Jose businesses_
 
 ---
 

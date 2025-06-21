@@ -24,12 +24,18 @@ export const startupEquityAgreementMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Startup Equity Agreement',
-      description: 'Agreement for equity distribution and vesting in startup companies.',
-      aliases: ['equity split agreement', 'founder agreement', 'equity vesting agreement'],
+      description:
+        'Agreement for equity distribution and vesting in startup companies.',
+      aliases: [
+        'equity split agreement',
+        'founder agreement',
+        'equity vesting agreement',
+      ],
     },
     es: {
       name: 'Acuerdo de Participación en Startup',
-      description: 'Acuerdo para distribución de participaciones en empresas emergentes.',
+      description:
+        'Acuerdo para distribución de participaciones en empresas emergentes.',
       aliases: ['acuerdo de fundadores', 'contrato de participación'],
     },
   },

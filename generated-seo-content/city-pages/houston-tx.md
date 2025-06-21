@@ -30,7 +30,7 @@ Houston offers a dynamic business environment with opportunities across industri
 
 [Start Your Houston Legal Document]
 
-*Trusted by hundreds of Houston businesses*
+_Trusted by hundreds of Houston businesses_
 
 ---
 

@@ -2,7 +2,10 @@
 
 import React, { Suspense, lazy, ComponentType } from 'react';
 import { Spinner } from '@/components/ui/Spinner';
-import { BaseComponentProps, ClassNameHelpers } from '@/lib/component-standards';
+import {
+  BaseComponentProps,
+  ClassNameHelpers,
+} from '@/lib/component-standards';
 
 export interface LazyComponentProps extends BaseComponentProps {
   fallback?: React.ReactNode;
@@ -18,7 +21,10 @@ class LazyErrorBoundary extends React.Component<
   { children: React.ReactNode; fallback?: React.ReactNode },
   ErrorBoundaryState
 > {
-  constructor(props: { children: React.ReactNode; fallback?: React.ReactNode }) {
+  constructor(props: {
+    children: React.ReactNode;
+    fallback?: React.ReactNode;
+  }) {
     super(props);
     this.state = { hasError: false };
   }
@@ -36,7 +42,9 @@ class LazyErrorBoundary extends React.Component<
       return (
         this.props.fallback || (
           <div className="flex flex-col items-center justify-center p-8 text-center">
-            <p className="text-red-600 mb-2">Something went wrong loading this component.</p>
+            <p className="text-red-600 mb-2">
+              Something went wrong loading this component.
+            </p>
             <button
               onClick={() => this.setState({ hasError: false })}
               className="text-blue-600 hover:text-blue-700 underline"
@@ -66,7 +74,7 @@ export function createLazyComponent<T extends ComponentType<any>>(
     fallback?: React.ReactNode;
     errorBoundary?: boolean;
     preload?: boolean;
-  }
+  },
 ) {
   const LazyComponent = lazy(async () => {
     const module = await importFn();
@@ -77,23 +85,25 @@ export function createLazyComponent<T extends ComponentType<any>>(
   const preload = () => importFn();
 
   // Wrapped component with loading and error handling
-  const WrappedComponent = React.forwardRef<any, React.ComponentProps<T>>((props, ref) => {
-    const content = (
-      <Suspense fallback={options?.fallback || <DefaultLoadingFallback />}>
-        <LazyComponent {...props} ref={ref} />
-      </Suspense>
-    );
-
-    if (options?.errorBoundary !== false) {
-      return (
-        <LazyErrorBoundary fallback={options?.fallback}>
-          {content}
-        </LazyErrorBoundary>
+  const WrappedComponent = React.forwardRef<any, React.ComponentProps<T>>(
+    (props, ref) => {
+      const content = (
+        <Suspense fallback={options?.fallback || <DefaultLoadingFallback />}>
+          <LazyComponent {...props} ref={ref} />
+        </Suspense>
       );
-    }
 
-    return content;
-  });
+      if (options?.errorBoundary !== false) {
+        return (
+          <LazyErrorBoundary fallback={options?.fallback}>
+            {content}
+          </LazyErrorBoundary>
+        );
+      }
+
+      return content;
+    },
+  );
 
   WrappedComponent.displayName = `Lazy(${LazyComponent.displayName || 'Component'})`;
 
@@ -111,7 +121,7 @@ export function createLazyComponent<T extends ComponentType<any>>(
 // Intersection Observer hook for lazy loading on visibility
 export function useLazyLoad(
   threshold = 0.1,
-  rootMargin = '50px'
+  rootMargin = '50px',
 ): [React.RefObject<HTMLDivElement>, boolean] {
   const [isIntersecting, setIsIntersecting] = React.useState(false);
   const targetRef = React.useRef<HTMLDivElement>(null);
@@ -127,7 +137,7 @@ export function useLazyLoad(
           observer.disconnect();
         }
       },
-      { threshold, rootMargin }
+      { threshold, rootMargin },
     );
 
     observer.observe(target);
@@ -158,17 +168,17 @@ export const LazyLoad: React.FC<{
 // Common lazy-loaded components
 export const LazyImage = createLazyComponent(
   () => import('@/components/shared/media/AutoImage'),
-  { fallback: <div className="bg-gray-200 animate-pulse" /> }
+  { fallback: <div className="bg-gray-200 animate-pulse" /> },
 );
 
 export const LazyDocumentPreview = createLazyComponent(
   () => import('@/components/document/DocumentPreview'),
-  { errorBoundary: true }
+  { errorBoundary: true },
 );
 
 export const LazyWizardForm = createLazyComponent(
   () => import('@/components/forms/WizardForm'),
-  { errorBoundary: true }
+  { errorBoundary: true },
 );
 
 // Preload critical components

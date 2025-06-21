@@ -9,9 +9,9 @@ export const metadata = {
   offerRecordingHelp: false,
   basePrice: 5,
   states: 'all',
-  templatePaths: { 
-    en: "en/us/living-will.md", 
-    es: "es/us/living-will.md" 
+  templatePaths: {
+    en: 'en/us/living-will.md',
+    es: 'es/us/living-will.md',
   },
   upsellClauses: [],
   translations: {

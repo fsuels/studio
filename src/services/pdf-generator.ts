@@ -58,7 +58,7 @@ export async function generatePdfDocument(
     const addFooter = (currentPage: any, hasNotarySeal = false) => {
       const pageSize = currentPage.getSize();
       let footerY = FOOTER_STYLE.margin.bottom;
-      
+
       // Auto-scale: if footer clashes with notary seal on final page, push seal up
       if (hasNotarySeal && FOOTER_CONFIG.autoScale) {
         footerY += FOOTER_CONFIG.notarySealOffset * 72; // Convert 0.5 inch to points (72 points per inch)
@@ -74,15 +74,17 @@ export async function generatePdfDocument(
         font: helveticaFont,
         size: FOOTER_STYLE.fontSize,
         color: rgb(0.42, 0.45, 0.5), // #6B7280 in RGB
-        maxWidth: pageSize.width - FOOTER_STYLE.margin.left - FOOTER_STYLE.margin.right,
+        maxWidth:
+          pageSize.width - FOOTER_STYLE.margin.left - FOOTER_STYLE.margin.right,
       });
     };
 
     // Track pages and notary seal requirements
     const pages = [page];
-    const isNotaryDocument = options.documentType.toLowerCase().includes('notary') || 
-                            options.documentType.toLowerCase().includes('affidavit') ||
-                            options.documentType.toLowerCase().includes('power of attorney');
+    const isNotaryDocument =
+      options.documentType.toLowerCase().includes('notary') ||
+      options.documentType.toLowerCase().includes('affidavit') ||
+      options.documentType.toLowerCase().includes('power of attorney');
 
     // Add footer to current page
     addFooter(page);
@@ -106,7 +108,10 @@ export async function generatePdfDocument(
 
       // Check if text will fit on the current page (accounting for footer space)
       const textHeight = fontSize * 1.2; // Approximate height
-      const footerSpace = FOOTER_STYLE.margin.bottom + FOOTER_STYLE.fontSize + FOOTER_CONFIG.minContentGap;
+      const footerSpace =
+        FOOTER_STYLE.margin.bottom +
+        FOOTER_STYLE.fontSize +
+        FOOTER_CONFIG.minContentGap;
       if (y - textHeight < margin + footerSpace) {
         // Add a new page if content doesn't fit
         const newPage = pdfDoc.addPage();
@@ -130,9 +135,12 @@ export async function generatePdfDocument(
 
     // 4. Add Placeholder Signature Line and Notary Section (if applicable)
     y -= 40; // Space before signature
-    const footerSpace = FOOTER_STYLE.margin.bottom + FOOTER_STYLE.fontSize + FOOTER_CONFIG.minContentGap;
+    const footerSpace =
+      FOOTER_STYLE.margin.bottom +
+      FOOTER_STYLE.fontSize +
+      FOOTER_CONFIG.minContentGap;
     const signatureAreaHeight = isNotaryDocument ? 120 : 50; // Extra space for notary seal
-    
+
     if (y < margin + footerSpace + signatureAreaHeight) {
       // Check if enough space for signature/notary area on this page
       const newPage = pdfDoc.addPage();
@@ -143,7 +151,7 @@ export async function generatePdfDocument(
 
     // Determine if this is the final page (for notary seal auto-scaling)
     const isFinalPage = page === pages[pages.length - 1];
-    
+
     // Re-add footer to final page with notary seal consideration
     if (isFinalPage && isNotaryDocument) {
       // Remove existing footer and re-add with notary seal offset
@@ -179,7 +187,7 @@ export async function generatePdfDocument(
         color: rgb(0, 0, 0),
       });
       y -= 20;
-      
+
       // Notary signature line
       page.drawLine({
         start: { x: margin, y: y },
@@ -199,10 +207,16 @@ export async function generatePdfDocument(
       // Notary seal placeholder (positioned to avoid footer clash)
       const sealX = margin + 250;
       const sealY = y + 10;
-      const adjustedSealY = isFinalPage ? 
-        Math.max(sealY, FOOTER_STYLE.margin.bottom + FOOTER_STYLE.fontSize + FOOTER_CONFIG.notarySealOffset * 72 + 30) : 
-        sealY;
-      
+      const adjustedSealY = isFinalPage
+        ? Math.max(
+            sealY,
+            FOOTER_STYLE.margin.bottom +
+              FOOTER_STYLE.fontSize +
+              FOOTER_CONFIG.notarySealOffset * 72 +
+              30,
+          )
+        : sealY;
+
       page.drawRectangle({
         x: sealX,
         y: adjustedSealY,

@@ -15,7 +15,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { 
+import {
   TrendingDown,
   TrendingUp,
   Users,
@@ -37,21 +37,23 @@ import {
   Timer,
   Gauge,
   Settings,
-  ExternalLink
+  ExternalLink,
 } from 'lucide-react';
 
 interface FunnelAnalyticsProps {
   className?: string;
 }
 
-export default function FunnelAnalyticsDashboard({ className }: FunnelAnalyticsProps) {
+export default function FunnelAnalyticsDashboard({
+  className,
+}: FunnelAnalyticsProps) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [timeframe, setTimeframe] = useState('30d');
   const [activeTab, setActiveTab] = useState('overview');
   const [documentFilter, setDocumentFilter] = useState('');
   const [sourceFilter, setSourceFilter] = useState('');
-  
+
   // Data states
   const [overview, setOverview] = useState<any>(null);
   const [conversionMetrics, setConversionMetrics] = useState<any>(null);
@@ -61,7 +63,7 @@ export default function FunnelAnalyticsDashboard({ className }: FunnelAnalyticsP
 
   useEffect(() => {
     fetchData();
-    
+
     // Set up real-time updates
     const interval = setInterval(fetchRealtimeData, 30000); // Every 30 seconds
     return () => clearInterval(interval);
@@ -75,28 +77,29 @@ export default function FunnelAnalyticsDashboard({ className }: FunnelAnalyticsP
       const params = new URLSearchParams({
         timeframe,
         ...(documentFilter && { documentType: documentFilter }),
-        ...(sourceFilter && { source: sourceFilter })
+        ...(sourceFilter && { source: sourceFilter }),
       });
 
-      const [overviewRes, metricsRes, abandonmentRes, stepDetailsRes] = await Promise.all([
-        fetch(`/api/analytics/funnel?type=overview&${params}`),
-        fetch(`/api/analytics/funnel?type=conversion_metrics&${params}`),
-        fetch(`/api/analytics/funnel?type=abandonment_analysis&${params}`),
-        fetch(`/api/analytics/funnel?type=step_details&${params}`)
-      ]);
+      const [overviewRes, metricsRes, abandonmentRes, stepDetailsRes] =
+        await Promise.all([
+          fetch(`/api/analytics/funnel?type=overview&${params}`),
+          fetch(`/api/analytics/funnel?type=conversion_metrics&${params}`),
+          fetch(`/api/analytics/funnel?type=abandonment_analysis&${params}`),
+          fetch(`/api/analytics/funnel?type=step_details&${params}`),
+        ]);
 
-      const [overviewData, metricsData, abandonmentData, stepDetailsData] = await Promise.all([
-        overviewRes.json(),
-        metricsRes.json(),
-        abandonmentRes.json(),
-        stepDetailsRes.json()
-      ]);
+      const [overviewData, metricsData, abandonmentData, stepDetailsData] =
+        await Promise.all([
+          overviewRes.json(),
+          metricsRes.json(),
+          abandonmentRes.json(),
+          stepDetailsRes.json(),
+        ]);
 
       if (overviewData.success) setOverview(overviewData.data);
       if (metricsData.success) setConversionMetrics(metricsData.data);
       if (abandonmentData.success) setAbandonmentAnalysis(abandonmentData.data);
       if (stepDetailsData.success) setStepDetails(stepDetailsData.data);
-
     } catch (err) {
       setError('Failed to load funnel analytics data');
     } finally {
@@ -106,9 +109,11 @@ export default function FunnelAnalyticsDashboard({ className }: FunnelAnalyticsP
 
   const fetchRealtimeData = async () => {
     try {
-      const response = await fetch('/api/analytics/funnel?type=realtime_sessions');
+      const response = await fetch(
+        '/api/analytics/funnel?type=realtime_sessions',
+      );
       const data = await response.json();
-      
+
       if (data.success) {
         setRealtimeSessions(data.data);
       }
@@ -132,9 +137,11 @@ export default function FunnelAnalyticsDashboard({ className }: FunnelAnalyticsP
       visit: <Eye className="h-4 w-4" />,
       draft: <Settings className="h-4 w-4" />,
       checkout: <Target className="h-4 w-4" />,
-      signed: <PlayCircle className="h-4 w-4" />
+      signed: <PlayCircle className="h-4 w-4" />,
     };
-    return icons[step as keyof typeof icons] || <Activity className="h-4 w-4" />;
+    return (
+      icons[step as keyof typeof icons] || <Activity className="h-4 w-4" />
+    );
   };
 
   const getConversionColor = (rate: number) => {
@@ -216,18 +223,26 @@ export default function FunnelAnalyticsDashboard({ className }: FunnelAnalyticsP
               <div className="flex items-center gap-6 text-sm">
                 <div className="flex items-center gap-1">
                   <Users className="h-4 w-4 text-blue-600" />
-                  <span className="font-semibold">{realtimeSessions.activeSessions}</span>
+                  <span className="font-semibold">
+                    {realtimeSessions.activeSessions}
+                  </span>
                   <span className="text-muted-foreground">active</span>
                 </div>
                 <div className="flex items-center gap-1">
                   <AlertTriangle className="h-4 w-4 text-red-600" />
-                  <span className="font-semibold">{realtimeSessions.atRiskSessions.length}</span>
+                  <span className="font-semibold">
+                    {realtimeSessions.atRiskSessions.length}
+                  </span>
                   <span className="text-muted-foreground">at risk</span>
                 </div>
                 <div className="flex items-center gap-1">
                   <Target className="h-4 w-4 text-green-600" />
-                  <span className="font-semibold">{realtimeSessions.recentConversions.length}</span>
-                  <span className="text-muted-foreground">recent conversions</span>
+                  <span className="font-semibold">
+                    {realtimeSessions.recentConversions.length}
+                  </span>
+                  <span className="text-muted-foreground">
+                    recent conversions
+                  </span>
                 </div>
               </div>
             </div>
@@ -252,8 +267,14 @@ export default function FunnelAnalyticsDashboard({ className }: FunnelAnalyticsP
                 <CardContent className="p-4">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm font-medium text-muted-foreground">Overall Conversion</p>
-                      <p className="text-2xl font-bold">{formatPercentage(overview.conversionRates.visitToSigned)}</p>
+                      <p className="text-sm font-medium text-muted-foreground">
+                        Overall Conversion
+                      </p>
+                      <p className="text-2xl font-bold">
+                        {formatPercentage(
+                          overview.conversionRates.visitToSigned,
+                        )}
+                      </p>
                       <div className="text-sm text-muted-foreground">
                         Visit → Signed
                       </div>
@@ -267,12 +288,18 @@ export default function FunnelAnalyticsDashboard({ className }: FunnelAnalyticsP
                 <CardContent className="p-4">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm font-medium text-muted-foreground">Highest Dropoff</p>
+                      <p className="text-sm font-medium text-muted-foreground">
+                        Highest Dropoff
+                      </p>
                       <p className="text-2xl font-bold text-red-600">
-                        {formatPercentage(overview.abandonmentSummary.highestDropoff?.percentage || 0)}
+                        {formatPercentage(
+                          overview.abandonmentSummary.highestDropoff
+                            ?.percentage || 0,
+                        )}
                       </p>
                       <div className="text-sm text-muted-foreground capitalize">
-                        {overview.abandonmentSummary.highestDropoff?.step || 'N/A'}
+                        {overview.abandonmentSummary.highestDropoff?.step ||
+                          'N/A'}
                       </div>
                     </div>
                     <TrendingDown className="h-8 w-8 text-red-600" />
@@ -284,8 +311,14 @@ export default function FunnelAnalyticsDashboard({ className }: FunnelAnalyticsP
                 <CardContent className="p-4">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm font-medium text-muted-foreground">Avg Conversion Time</p>
-                      <p className="text-2xl font-bold">{formatTime(overview.timeMetrics?.avgTimeToConvert || 0)}</p>
+                      <p className="text-sm font-medium text-muted-foreground">
+                        Avg Conversion Time
+                      </p>
+                      <p className="text-2xl font-bold">
+                        {formatTime(
+                          overview.timeMetrics?.avgTimeToConvert || 0,
+                        )}
+                      </p>
                       <div className="text-sm text-muted-foreground">
                         Visit to signed
                       </div>
@@ -299,9 +332,13 @@ export default function FunnelAnalyticsDashboard({ className }: FunnelAnalyticsP
                 <CardContent className="p-4">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm font-medium text-muted-foreground">Recovery Potential</p>
+                      <p className="text-sm font-medium text-muted-foreground">
+                        Recovery Potential
+                      </p>
                       <p className="text-2xl font-bold text-purple-600">
-                        {formatPercentage(overview.abandonmentSummary.recoveryPotential || 0)}
+                        {formatPercentage(
+                          overview.abandonmentSummary.recoveryPotential || 0,
+                        )}
                       </p>
                       <div className="text-sm text-muted-foreground">
                         Revenue recoverable
@@ -330,12 +367,20 @@ export default function FunnelAnalyticsDashboard({ className }: FunnelAnalyticsP
                       {getStepIcon('visit')}
                       <div>
                         <div className="font-medium">Visit → Draft</div>
-                        <div className="text-sm text-muted-foreground">Initial engagement</div>
+                        <div className="text-sm text-muted-foreground">
+                          Initial engagement
+                        </div>
                       </div>
                     </div>
                     <div className="flex items-center gap-3">
-                      <Badge className={getConversionColor(overview.conversionRates.visitToDraft)}>
-                        {formatPercentage(overview.conversionRates.visitToDraft)}
+                      <Badge
+                        className={getConversionColor(
+                          overview.conversionRates.visitToDraft,
+                        )}
+                      >
+                        {formatPercentage(
+                          overview.conversionRates.visitToDraft,
+                        )}
                       </Badge>
                       <ArrowRight className="h-4 w-4 text-muted-foreground" />
                     </div>
@@ -346,12 +391,20 @@ export default function FunnelAnalyticsDashboard({ className }: FunnelAnalyticsP
                       {getStepIcon('draft')}
                       <div>
                         <div className="font-medium">Draft → Checkout</div>
-                        <div className="text-sm text-muted-foreground">Form completion</div>
+                        <div className="text-sm text-muted-foreground">
+                          Form completion
+                        </div>
                       </div>
                     </div>
                     <div className="flex items-center gap-3">
-                      <Badge className={getConversionColor(overview.conversionRates.draftToCheckout)}>
-                        {formatPercentage(overview.conversionRates.draftToCheckout)}
+                      <Badge
+                        className={getConversionColor(
+                          overview.conversionRates.draftToCheckout,
+                        )}
+                      >
+                        {formatPercentage(
+                          overview.conversionRates.draftToCheckout,
+                        )}
                       </Badge>
                       <ArrowRight className="h-4 w-4 text-muted-foreground" />
                     </div>
@@ -362,12 +415,20 @@ export default function FunnelAnalyticsDashboard({ className }: FunnelAnalyticsP
                       {getStepIcon('checkout')}
                       <div>
                         <div className="font-medium">Checkout → Signed</div>
-                        <div className="text-sm text-muted-foreground">Payment completion</div>
+                        <div className="text-sm text-muted-foreground">
+                          Payment completion
+                        </div>
                       </div>
                     </div>
                     <div className="flex items-center gap-3">
-                      <Badge className={getConversionColor(overview.conversionRates.checkoutToSigned)}>
-                        {formatPercentage(overview.conversionRates.checkoutToSigned)}
+                      <Badge
+                        className={getConversionColor(
+                          overview.conversionRates.checkoutToSigned,
+                        )}
+                      >
+                        {formatPercentage(
+                          overview.conversionRates.checkoutToSigned,
+                        )}
                       </Badge>
                       <Target className="h-4 w-4 text-green-600" />
                     </div>
@@ -388,39 +449,57 @@ export default function FunnelAnalyticsDashboard({ className }: FunnelAnalyticsP
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
-                  {overview.topOptimizations.map((optimization: any, index: number) => (
-                    <div key={index} className="flex items-center justify-between p-3 border rounded-lg">
-                      <div className="flex items-center gap-3">
-                        <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                          optimization.priority === 'critical' ? 'bg-red-100 text-red-600' :
-                          optimization.priority === 'high' ? 'bg-orange-100 text-orange-600' :
-                          'bg-yellow-100 text-yellow-600'
-                        }`}>
-                          {index + 1}
+                  {overview.topOptimizations.map(
+                    (optimization: any, index: number) => (
+                      <div
+                        key={index}
+                        className="flex items-center justify-between p-3 border rounded-lg"
+                      >
+                        <div className="flex items-center gap-3">
+                          <div
+                            className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                              optimization.priority === 'critical'
+                                ? 'bg-red-100 text-red-600'
+                                : optimization.priority === 'high'
+                                  ? 'bg-orange-100 text-orange-600'
+                                  : 'bg-yellow-100 text-yellow-600'
+                            }`}
+                          >
+                            {index + 1}
+                          </div>
+                          <div>
+                            <div className="font-medium">
+                              {optimization.issue}
+                            </div>
+                            <div className="text-sm text-muted-foreground">
+                              {optimization.step} step
+                            </div>
+                          </div>
                         </div>
-                        <div>
-                          <div className="font-medium">{optimization.issue}</div>
-                          <div className="text-sm text-muted-foreground">{optimization.step} step</div>
+                        <div className="flex items-center gap-3">
+                          <div className="text-right">
+                            <div className="text-sm font-semibold text-green-600">
+                              +{optimization.estimatedImpact}% impact
+                            </div>
+                            <div className="text-xs text-muted-foreground">
+                              {optimization.implementationEffort} effort
+                            </div>
+                          </div>
+                          <Badge
+                            variant={
+                              optimization.priority === 'critical'
+                                ? 'destructive'
+                                : optimization.priority === 'high'
+                                  ? 'default'
+                                  : 'secondary'
+                            }
+                          >
+                            {optimization.priority}
+                          </Badge>
                         </div>
                       </div>
-                      <div className="flex items-center gap-3">
-                        <div className="text-right">
-                          <div className="text-sm font-semibold text-green-600">
-                            +{optimization.estimatedImpact}% impact
-                          </div>
-                          <div className="text-xs text-muted-foreground">
-                            {optimization.implementationEffort} effort
-                          </div>
-                        </div>
-                        <Badge variant={
-                          optimization.priority === 'critical' ? 'destructive' :
-                          optimization.priority === 'high' ? 'default' : 'secondary'
-                        }>
-                          {optimization.priority}
-                        </Badge>
-                      </div>
-                    </div>
-                  ))}
+                    ),
+                  )}
                 </div>
               </CardContent>
             </Card>
@@ -441,25 +520,39 @@ export default function FunnelAnalyticsDashboard({ className }: FunnelAnalyticsP
                         <div className="flex items-center gap-3">
                           {getStepIcon(step.step)}
                           <div>
-                            <h3 className="text-lg font-semibold capitalize">{step.step}</h3>
+                            <h3 className="text-lg font-semibold capitalize">
+                              {step.step}
+                            </h3>
                             <p className="text-sm text-muted-foreground">
-                              {step.sessions.toLocaleString()} sessions • {step.uniqueUsers.toLocaleString()} users
+                              {step.sessions.toLocaleString()} sessions •{' '}
+                              {step.uniqueUsers.toLocaleString()} users
                             </p>
                           </div>
                         </div>
                         <div className="flex items-center gap-4">
                           <div className="text-right">
-                            <div className="text-2xl font-bold">{formatTime(step.avgTimeOnStep)}</div>
-                            <div className="text-xs text-muted-foreground">avg time</div>
+                            <div className="text-2xl font-bold">
+                              {formatTime(step.avgTimeOnStep)}
+                            </div>
+                            <div className="text-xs text-muted-foreground">
+                              avg time
+                            </div>
                           </div>
                           <div className="text-right">
-                            <div className={`text-2xl font-bold ${
-                              step.dropoffRate > 30 ? 'text-red-600' : 
-                              step.dropoffRate > 15 ? 'text-yellow-600' : 'text-green-600'
-                            }`}>
+                            <div
+                              className={`text-2xl font-bold ${
+                                step.dropoffRate > 30
+                                  ? 'text-red-600'
+                                  : step.dropoffRate > 15
+                                    ? 'text-yellow-600'
+                                    : 'text-green-600'
+                              }`}
+                            >
                               {formatPercentage(step.dropoffRate)}
                             </div>
-                            <div className="text-xs text-muted-foreground">dropoff rate</div>
+                            <div className="text-xs text-muted-foreground">
+                              dropoff rate
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -468,36 +561,53 @@ export default function FunnelAnalyticsDashboard({ className }: FunnelAnalyticsP
                         <div>
                           <h4 className="font-medium mb-2">Common Issues</h4>
                           <ul className="space-y-1 text-sm">
-                            {step.commonIssues.map((issue: string, i: number) => (
-                              <li key={i} className="flex items-center gap-2 text-red-600">
-                                <div className="w-1 h-1 bg-red-600 rounded-full"></div>
-                                {issue}
-                              </li>
-                            ))}
+                            {step.commonIssues.map(
+                              (issue: string, i: number) => (
+                                <li
+                                  key={i}
+                                  className="flex items-center gap-2 text-red-600"
+                                >
+                                  <div className="w-1 h-1 bg-red-600 rounded-full"></div>
+                                  {issue}
+                                </li>
+                              ),
+                            )}
                           </ul>
                         </div>
 
                         <div>
-                          <h4 className="font-medium mb-2">Conversion Factors</h4>
+                          <h4 className="font-medium mb-2">
+                            Conversion Factors
+                          </h4>
                           <ul className="space-y-1 text-sm">
-                            {step.conversionFactors.map((factor: string, i: number) => (
-                              <li key={i} className="flex items-center gap-2 text-green-600">
-                                <div className="w-1 h-1 bg-green-600 rounded-full"></div>
-                                {factor}
-                              </li>
-                            ))}
+                            {step.conversionFactors.map(
+                              (factor: string, i: number) => (
+                                <li
+                                  key={i}
+                                  className="flex items-center gap-2 text-green-600"
+                                >
+                                  <div className="w-1 h-1 bg-green-600 rounded-full"></div>
+                                  {factor}
+                                </li>
+                              ),
+                            )}
                           </ul>
                         </div>
 
                         <div>
                           <h4 className="font-medium mb-2">Top Exit Pages</h4>
                           <ul className="space-y-1 text-sm">
-                            {step.topExitPages.slice(0, 3).map((page: string, i: number) => (
-                              <li key={i} className="flex items-center gap-2 text-muted-foreground">
-                                <ExternalLink className="w-3 h-3" />
-                                {page}
-                              </li>
-                            ))}
+                            {step.topExitPages
+                              .slice(0, 3)
+                              .map((page: string, i: number) => (
+                                <li
+                                  key={i}
+                                  className="flex items-center gap-2 text-muted-foreground"
+                                >
+                                  <ExternalLink className="w-3 h-3" />
+                                  {page}
+                                </li>
+                              ))}
                           </ul>
                         </div>
                       </div>
@@ -522,41 +632,68 @@ export default function FunnelAnalyticsDashboard({ className }: FunnelAnalyticsP
                 </CardHeader>
                 <CardContent>
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {abandonmentAnalysis.abandonmentPoints.map((point: any, index: number) => (
-                      <div key={index} className="p-4 border rounded-lg">
-                        <div className="flex items-center justify-between mb-3">
-                          <div className="flex items-center gap-2">
-                            {getStepIcon(point.step)}
-                            <span className="font-medium capitalize">{point.step}</span>
+                    {abandonmentAnalysis.abandonmentPoints.map(
+                      (point: any, index: number) => (
+                        <div key={index} className="p-4 border rounded-lg">
+                          <div className="flex items-center justify-between mb-3">
+                            <div className="flex items-center gap-2">
+                              {getStepIcon(point.step)}
+                              <span className="font-medium capitalize">
+                                {point.step}
+                              </span>
+                            </div>
+                            <Badge
+                              variant={
+                                getDropoffSeverity(point.percentage) ===
+                                'critical'
+                                  ? 'destructive'
+                                  : getDropoffSeverity(point.percentage) ===
+                                      'high'
+                                    ? 'default'
+                                    : 'secondary'
+                              }
+                            >
+                              {getDropoffSeverity(point.percentage)}
+                            </Badge>
                           </div>
-                          <Badge variant={
-                            getDropoffSeverity(point.percentage) === 'critical' ? 'destructive' :
-                            getDropoffSeverity(point.percentage) === 'high' ? 'default' : 'secondary'
-                          }>
-                            {getDropoffSeverity(point.percentage)}
-                          </Badge>
+
+                          <div className="space-y-2">
+                            <div className="flex justify-between">
+                              <span className="text-sm text-muted-foreground">
+                                Abandonment Rate
+                              </span>
+                              <span className="font-semibold">
+                                {formatPercentage(point.percentage)}
+                              </span>
+                            </div>
+                            <div className="flex justify-between">
+                              <span className="text-sm text-muted-foreground">
+                                Count
+                              </span>
+                              <span className="font-semibold">
+                                {point.count.toLocaleString()}
+                              </span>
+                            </div>
+                            <div className="flex justify-between">
+                              <span className="text-sm text-muted-foreground">
+                                Avg Time Before
+                              </span>
+                              <span className="font-semibold">
+                                {formatTime(point.avgTimeBeforeAbandon)}
+                              </span>
+                            </div>
+                            <div className="flex justify-between">
+                              <span className="text-sm text-muted-foreground">
+                                Recovery Potential
+                              </span>
+                              <span className="font-semibold text-green-600">
+                                {formatPercentage(point.recoveryPotential)}
+                              </span>
+                            </div>
+                          </div>
                         </div>
-                        
-                        <div className="space-y-2">
-                          <div className="flex justify-between">
-                            <span className="text-sm text-muted-foreground">Abandonment Rate</span>
-                            <span className="font-semibold">{formatPercentage(point.percentage)}</span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span className="text-sm text-muted-foreground">Count</span>
-                            <span className="font-semibold">{point.count.toLocaleString()}</span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span className="text-sm text-muted-foreground">Avg Time Before</span>
-                            <span className="font-semibold">{formatTime(point.avgTimeBeforeAbandon)}</span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span className="text-sm text-muted-foreground">Recovery Potential</span>
-                            <span className="font-semibold text-green-600">{formatPercentage(point.recoveryPotential)}</span>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
+                      ),
+                    )}
                   </div>
                 </CardContent>
               </Card>
@@ -568,29 +705,47 @@ export default function FunnelAnalyticsDashboard({ className }: FunnelAnalyticsP
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-3">
-                    {abandonmentAnalysis.abandonmentFactors.map((factor: any, index: number) => (
-                      <div key={index} className="flex items-center justify-between p-3 border rounded-lg">
-                        <div>
-                          <div className="font-medium">{factor.factor}</div>
-                          <div className="text-sm text-muted-foreground">{factor.description}</div>
-                        </div>
-                        <div className="flex items-center gap-4">
-                          <div className="text-right">
-                            <div className="text-sm font-semibold">{formatPercentage(factor.impact * 100)}</div>
-                            <div className="text-xs text-muted-foreground">impact</div>
+                    {abandonmentAnalysis.abandonmentFactors.map(
+                      (factor: any, index: number) => (
+                        <div
+                          key={index}
+                          className="flex items-center justify-between p-3 border rounded-lg"
+                        >
+                          <div>
+                            <div className="font-medium">{factor.factor}</div>
+                            <div className="text-sm text-muted-foreground">
+                              {factor.description}
+                            </div>
                           </div>
-                          <div className="text-right">
-                            <div className="text-sm font-semibold">{formatPercentage(factor.correlation * 100)}</div>
-                            <div className="text-xs text-muted-foreground">correlation</div>
+                          <div className="flex items-center gap-4">
+                            <div className="text-right">
+                              <div className="text-sm font-semibold">
+                                {formatPercentage(factor.impact * 100)}
+                              </div>
+                              <div className="text-xs text-muted-foreground">
+                                impact
+                              </div>
+                            </div>
+                            <div className="text-right">
+                              <div className="text-sm font-semibold">
+                                {formatPercentage(factor.correlation * 100)}
+                              </div>
+                              <div className="text-xs text-muted-foreground">
+                                correlation
+                              </div>
+                            </div>
+                            {factor.actionable && (
+                              <Badge
+                                variant="outline"
+                                className="text-green-600 border-green-200"
+                              >
+                                Actionable
+                              </Badge>
+                            )}
                           </div>
-                          {factor.actionable && (
-                            <Badge variant="outline" className="text-green-600 border-green-200">
-                              Actionable
-                            </Badge>
-                          )}
                         </div>
-                      </div>
-                    ))}
+                      ),
+                    )}
                   </div>
                 </CardContent>
               </Card>
@@ -609,61 +764,88 @@ export default function FunnelAnalyticsDashboard({ className }: FunnelAnalyticsP
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {abandonmentAnalysis.uxOptimizations.map((optimization: any, index: number) => (
-                    <div key={index} className="p-4 border rounded-lg">
-                      <div className="flex items-start justify-between mb-3">
-                        <div className="flex items-start gap-3">
-                          <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                            optimization.priority === 'critical' ? 'bg-red-100 text-red-600' :
-                            optimization.priority === 'high' ? 'bg-orange-100 text-orange-600' :
-                            optimization.priority === 'medium' ? 'bg-yellow-100 text-yellow-600' :
-                            'bg-blue-100 text-blue-600'
-                          }`}>
-                            {index + 1}
+                  {abandonmentAnalysis.uxOptimizations.map(
+                    (optimization: any, index: number) => (
+                      <div key={index} className="p-4 border rounded-lg">
+                        <div className="flex items-start justify-between mb-3">
+                          <div className="flex items-start gap-3">
+                            <div
+                              className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                                optimization.priority === 'critical'
+                                  ? 'bg-red-100 text-red-600'
+                                  : optimization.priority === 'high'
+                                    ? 'bg-orange-100 text-orange-600'
+                                    : optimization.priority === 'medium'
+                                      ? 'bg-yellow-100 text-yellow-600'
+                                      : 'bg-blue-100 text-blue-600'
+                              }`}
+                            >
+                              {index + 1}
+                            </div>
+                            <div>
+                              <h3 className="font-semibold">
+                                {optimization.issue}
+                              </h3>
+                              <p className="text-sm text-muted-foreground capitalize">
+                                {optimization.step} step optimization
+                              </p>
+                            </div>
                           </div>
-                          <div>
-                            <h3 className="font-semibold">{optimization.issue}</h3>
-                            <p className="text-sm text-muted-foreground capitalize">
-                              {optimization.step} step optimization
-                            </p>
-                          </div>
+                          <Badge
+                            variant={
+                              optimization.priority === 'critical'
+                                ? 'destructive'
+                                : optimization.priority === 'high'
+                                  ? 'default'
+                                  : 'secondary'
+                            }
+                          >
+                            {optimization.priority}
+                          </Badge>
                         </div>
-                        <Badge variant={
-                          optimization.priority === 'critical' ? 'destructive' :
-                          optimization.priority === 'high' ? 'default' : 'secondary'
-                        }>
-                          {optimization.priority}
-                        </Badge>
-                      </div>
 
-                      <div className="mb-3">
-                        <p className="text-sm">{optimization.recommendation}</p>
-                      </div>
+                        <div className="mb-3">
+                          <p className="text-sm">
+                            {optimization.recommendation}
+                          </p>
+                        </div>
 
-                      <div className="flex items-center justify-between text-sm">
-                        <div className="flex items-center gap-4">
-                          <div>
-                            <span className="text-muted-foreground">Impact: </span>
-                            <span className="font-semibold text-green-600">+{optimization.estimatedImpact}%</span>
+                        <div className="flex items-center justify-between text-sm">
+                          <div className="flex items-center gap-4">
+                            <div>
+                              <span className="text-muted-foreground">
+                                Impact:{' '}
+                              </span>
+                              <span className="font-semibold text-green-600">
+                                +{optimization.estimatedImpact}%
+                              </span>
+                            </div>
+                            <div>
+                              <span className="text-muted-foreground">
+                                Effort:{' '}
+                              </span>
+                              <span className="font-semibold">
+                                {optimization.implementationEffort}
+                              </span>
+                            </div>
                           </div>
-                          <div>
-                            <span className="text-muted-foreground">Effort: </span>
-                            <span className="font-semibold">{optimization.implementationEffort}</span>
+                          <div className="flex items-center gap-2">
+                            {optimization.testingRequired && (
+                              <Badge
+                                variant="outline"
+                                className="text-blue-600 border-blue-200"
+                              >
+                                A/B Test Required
+                              </Badge>
+                            )}
+                            <Button size="sm" variant="outline">
+                              Implement
+                            </Button>
                           </div>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          {optimization.testingRequired && (
-                            <Badge variant="outline" className="text-blue-600 border-blue-200">
-                              A/B Test Required
-                            </Badge>
-                          )}
-                          <Button size="sm" variant="outline">
-                            Implement
-                          </Button>
                         </div>
                       </div>
-                    </div>
-                  ))}
+                    ),
+                  )}
                 </div>
               </CardContent>
             </Card>
@@ -683,13 +865,20 @@ export default function FunnelAnalyticsDashboard({ className }: FunnelAnalyticsP
                 </CardHeader>
                 <CardContent>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    {Object.entries(realtimeSessions.currentStepDistribution).map(([step, count]: [string, any]) => (
-                      <div key={step} className="text-center p-4 border rounded-lg">
+                    {Object.entries(
+                      realtimeSessions.currentStepDistribution,
+                    ).map(([step, count]: [string, any]) => (
+                      <div
+                        key={step}
+                        className="text-center p-4 border rounded-lg"
+                      >
                         <div className="flex items-center justify-center mb-2">
                           {getStepIcon(step)}
                         </div>
                         <div className="text-2xl font-bold">{count}</div>
-                        <div className="text-sm text-muted-foreground capitalize">{step}</div>
+                        <div className="text-sm text-muted-foreground capitalize">
+                          {step}
+                        </div>
                       </div>
                     ))}
                   </div>
@@ -706,30 +895,39 @@ export default function FunnelAnalyticsDashboard({ className }: FunnelAnalyticsP
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-3">
-                    {realtimeSessions.atRiskSessions.map((session: any, index: number) => (
-                      <div key={index} className="flex items-center justify-between p-3 border rounded-lg bg-red-50/50 border-red-200">
-                        <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 bg-red-100 rounded-full flex items-center justify-center">
-                            <span className="text-sm font-semibold text-red-600">
-                              {(session.abandonmentRisk * 100).toFixed(0)}%
-                            </span>
-                          </div>
-                          <div>
-                            <div className="font-medium">{session.sessionId}</div>
-                            <div className="text-sm text-muted-foreground">
-                              {session.documentType} • {formatTime(session.timeOnStep)} on {session.currentStep}
+                    {realtimeSessions.atRiskSessions.map(
+                      (session: any, index: number) => (
+                        <div
+                          key={index}
+                          className="flex items-center justify-between p-3 border rounded-lg bg-red-50/50 border-red-200"
+                        >
+                          <div className="flex items-center gap-3">
+                            <div className="w-8 h-8 bg-red-100 rounded-full flex items-center justify-center">
+                              <span className="text-sm font-semibold text-red-600">
+                                {(session.abandonmentRisk * 100).toFixed(0)}%
+                              </span>
+                            </div>
+                            <div>
+                              <div className="font-medium">
+                                {session.sessionId}
+                              </div>
+                              <div className="text-sm text-muted-foreground">
+                                {session.documentType} •{' '}
+                                {formatTime(session.timeOnStep)} on{' '}
+                                {session.currentStep}
+                              </div>
                             </div>
                           </div>
+                          <div className="flex items-center gap-2">
+                            <Badge variant="destructive">High Risk</Badge>
+                            <Button size="sm" variant="outline">
+                              <Zap className="h-4 w-4 mr-1" />
+                              Intervene
+                            </Button>
+                          </div>
                         </div>
-                        <div className="flex items-center gap-2">
-                          <Badge variant="destructive">High Risk</Badge>
-                          <Button size="sm" variant="outline">
-                            <Zap className="h-4 w-4 mr-1" />
-                            Intervene
-                          </Button>
-                        </div>
-                      </div>
-                    ))}
+                      ),
+                    )}
                   </div>
                 </CardContent>
               </Card>
@@ -744,29 +942,42 @@ export default function FunnelAnalyticsDashboard({ className }: FunnelAnalyticsP
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-3">
-                    {realtimeSessions.recentConversions.map((conversion: any, index: number) => (
-                      <div key={index} className="flex items-center justify-between p-3 border rounded-lg bg-green-50/50 border-green-200">
-                        <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
-                            <Target className="h-4 w-4 text-green-600" />
+                    {realtimeSessions.recentConversions.map(
+                      (conversion: any, index: number) => (
+                        <div
+                          key={index}
+                          className="flex items-center justify-between p-3 border rounded-lg bg-green-50/50 border-green-200"
+                        >
+                          <div className="flex items-center gap-3">
+                            <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
+                              <Target className="h-4 w-4 text-green-600" />
+                            </div>
+                            <div>
+                              <div className="font-medium">
+                                {conversion.sessionId}
+                              </div>
+                              <div className="text-sm text-muted-foreground">
+                                {conversion.documentType} •{' '}
+                                {formatTime(conversion.conversionTime)} to
+                                convert
+                              </div>
+                            </div>
                           </div>
-                          <div>
-                            <div className="font-medium">{conversion.sessionId}</div>
-                            <div className="text-sm text-muted-foreground">
-                              {conversion.documentType} • {formatTime(conversion.conversionTime)} to convert
+                          <div className="flex items-center gap-2">
+                            <div className="text-right">
+                              <div className="font-semibold text-green-600">
+                                ${conversion.value}
+                              </div>
+                              <div className="text-xs text-muted-foreground">
+                                {new Date(
+                                  conversion.completedAt,
+                                ).toLocaleTimeString()}
+                              </div>
                             </div>
                           </div>
                         </div>
-                        <div className="flex items-center gap-2">
-                          <div className="text-right">
-                            <div className="font-semibold text-green-600">${conversion.value}</div>
-                            <div className="text-xs text-muted-foreground">
-                              {new Date(conversion.completedAt).toLocaleTimeString()}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
+                      ),
+                    )}
                   </div>
                 </CardContent>
               </Card>

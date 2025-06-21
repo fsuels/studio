@@ -1,4 +1,4 @@
-import { MetadataRoute } from 'next'
+import { MetadataRoute } from 'next';
 
 export default function robots(): MetadataRoute.Robots {
   return {
@@ -16,7 +16,7 @@ export default function robots(): MetadataRoute.Robots {
           '/auth/',
           '/checkout/',
           '/*?*', // Block query parameters for clean SEO
-        ]
+        ],
       },
       {
         userAgent: 'Googlebot',
@@ -28,8 +28,8 @@ export default function robots(): MetadataRoute.Robots {
           '/dashboard/',
           '/generate/',
           '/auth/',
-          '/checkout/'
-        ]
+          '/checkout/',
+        ],
       },
       {
         userAgent: 'Bingbot',
@@ -41,11 +41,11 @@ export default function robots(): MetadataRoute.Robots {
           '/dashboard/',
           '/generate/',
           '/auth/',
-          '/checkout/'
-        ]
-      }
+          '/checkout/',
+        ],
+      },
     ],
     sitemap: 'https://123legaldoc.com/sitemap.xml',
-    host: 'https://123legaldoc.com'
-  }
+    host: 'https://123legaldoc.com',
+  };
 }

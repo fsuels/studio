@@ -24,12 +24,18 @@ export const aviationCharterAgreementMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Aviation Charter Agreement',
-      description: 'Agreement for chartering aircraft for transportation and aviation services.',
-      aliases: ['aircraft charter agreement', 'private jet charter', 'flight charter contract'],
+      description:
+        'Agreement for chartering aircraft for transportation and aviation services.',
+      aliases: [
+        'aircraft charter agreement',
+        'private jet charter',
+        'flight charter contract',
+      ],
     },
     es: {
       name: 'Acuerdo de Flete Aéreo',
-      description: 'Acuerdo para fletar aeronaves para servicios de transporte aéreo.',
+      description:
+        'Acuerdo para fletar aeronaves para servicios de transporte aéreo.',
       aliases: ['contrato de vuelo charter', 'acuerdo de jet privado'],
     },
   },

@@ -66,13 +66,13 @@ export const PatentLicensingAgreementSchema = z.object({
   technicalDocumentation: z.boolean().default(true),
   trainingProvision: z.boolean().default(false),
   technicalSupport: z.string().optional(),
-  knowHow Transfer: z.boolean().default(false),
+  knowHowTransfer: z.boolean().default(false),
   tradeSecrets: z.boolean().default(false),
   
   // Quality Control
   qualityStandards: z.string().optional(),
   manufacturingStandards: z.string().optional(),
-  testing Requirements: z.string().optional(),
+  testingRequirements: z.string().optional(),
   approvalRights: z.boolean().default(true),
   recallRights: z.boolean().default(true),
   

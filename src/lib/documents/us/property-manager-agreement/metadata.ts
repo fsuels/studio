@@ -24,12 +24,14 @@ export const propertyManagerAgreementMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Property Manager Agreement',
-      description: 'Agreement for property management services and responsibilities',
+      description:
+        'Agreement for property management services and responsibilities',
       aliases: [],
     },
     es: {
       name: 'Property Manager Agreement', // TODO: Add Spanish translation
-      description: 'Agreement for property management services and responsibilities', // TODO: Add Spanish translation
+      description:
+        'Agreement for property management services and responsibilities', // TODO: Add Spanish translation
       aliases: [],
     },
   },

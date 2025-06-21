@@ -24,12 +24,14 @@ export const proofOfIncomeLetterMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Proof of Income Letter',
-      description: 'Official letter verifying employee income for third parties',
+      description:
+        'Official letter verifying employee income for third parties',
       aliases: [],
     },
     es: {
       name: 'Proof of Income Letter',
-      description: 'Official letter verifying employee income for third parties',
+      description:
+        'Official letter verifying employee income for third parties',
       aliases: [],
     },
   },

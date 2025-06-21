@@ -24,12 +24,14 @@ export const retailSpaceLeaseMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Retail Space Lease',
-      description: 'Commercial lease agreement for retail locations and storefronts',
+      description:
+        'Commercial lease agreement for retail locations and storefronts',
       aliases: [],
     },
     es: {
       name: 'Retail Space Lease', // TODO: Add Spanish translation
-      description: 'Commercial lease agreement for retail locations and storefronts', // TODO: Add Spanish translation
+      description:
+        'Commercial lease agreement for retail locations and storefronts', // TODO: Add Spanish translation
       aliases: [],
     },
   },

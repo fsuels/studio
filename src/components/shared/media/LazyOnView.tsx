@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState, type ComponentType } from 'react';
 
 function lazyOnView<T>(
   loader: () => Promise<{ default: ComponentType<T> }>,
-  options?: { placeholder?: React.ReactNode; rootMargin?: string }
+  options?: { placeholder?: React.ReactNode; rootMargin?: string },
 ) {
   return function LazyLoaded(props: T) {
     const [Comp, setComp] = useState<ComponentType<T> | null>(null);
@@ -21,14 +21,16 @@ function lazyOnView<T>(
             }
           });
         },
-        { rootMargin: options?.rootMargin ?? '200px' }
+        { rootMargin: options?.rootMargin ?? '200px' },
       );
       observer.observe(node);
       return () => observer.disconnect();
     }, []);
 
     return (
-      <div ref={ref}>{Comp ? <Comp {...props} /> : options?.placeholder ?? null}</div>
+      <div ref={ref}>
+        {Comp ? <Comp {...props} /> : (options?.placeholder ?? null)}
+      </div>
     );
   };
 }

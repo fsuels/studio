@@ -47,7 +47,7 @@ Don't risk using generic templates that may not comply with Georgia law. Get a p
 
 [Create Georgia LLC Operating Agreement]
 
-*Trusted by thousands of Georgia businesses*
+_Trusted by thousands of Georgia businesses_
 
 ---
 

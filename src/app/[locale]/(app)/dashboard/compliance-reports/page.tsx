@@ -2,22 +2,34 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { 
-  Shield, 
-  Download, 
-  FileText, 
+import {
+  Shield,
+  Download,
+  FileText,
   BarChart3,
   CheckCircle,
   XCircle,
   AlertTriangle,
   Calendar,
   Users,
-  Database
+  Database,
 } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
@@ -52,7 +64,7 @@ interface ComplianceReport {
 export default function ComplianceReportsPage() {
   const { user } = useAuth();
   const { toast } = useToast();
-  
+
   const [report, setReport] = useState<ComplianceReport | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
@@ -60,12 +72,36 @@ export default function ComplianceReportsPage() {
   const [selectedFormat, setSelectedFormat] = useState('json');
 
   const reportTypes = [
-    { id: 'overview', name: 'Compliance Overview', description: 'General compliance status across all frameworks' },
-    { id: 'gdpr', name: 'GDPR Report', description: 'GDPR-specific compliance analysis' },
-    { id: 'ccpa', name: 'CCPA Report', description: 'California Consumer Privacy Act compliance' },
-    { id: 'soc2', name: 'SOC 2 Report', description: 'SOC 2 audit trail analysis' },
-    { id: 'security', name: 'Security Audit', description: 'Security events and access controls' },
-    { id: 'user_activity', name: 'User Activity', description: 'User behavior and system interactions' }
+    {
+      id: 'overview',
+      name: 'Compliance Overview',
+      description: 'General compliance status across all frameworks',
+    },
+    {
+      id: 'gdpr',
+      name: 'GDPR Report',
+      description: 'GDPR-specific compliance analysis',
+    },
+    {
+      id: 'ccpa',
+      name: 'CCPA Report',
+      description: 'California Consumer Privacy Act compliance',
+    },
+    {
+      id: 'soc2',
+      name: 'SOC 2 Report',
+      description: 'SOC 2 audit trail analysis',
+    },
+    {
+      id: 'security',
+      name: 'Security Audit',
+      description: 'Security events and access controls',
+    },
+    {
+      id: 'user_activity',
+      name: 'User Activity',
+      description: 'User behavior and system interactions',
+    },
   ];
 
   useEffect(() => {
@@ -75,7 +111,9 @@ export default function ComplianceReportsPage() {
   const generateReport = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch(`/api/compliance/reports?type=${selectedReportType}`);
+      const response = await fetch(
+        `/api/compliance/reports?type=${selectedReportType}`,
+      );
       if (response.ok) {
         const reportData = await response.json();
         setReport(reportData);
@@ -87,7 +125,7 @@ export default function ComplianceReportsPage() {
       toast({
         title: 'Error',
         description: 'Failed to generate compliance report',
-        variant: 'destructive'
+        variant: 'destructive',
       });
     } finally {
       setIsLoading(false);
@@ -100,18 +138,18 @@ export default function ComplianceReportsPage() {
       const response = await fetch('/api/compliance/reports', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           reportType: selectedReportType,
           format: selectedFormat,
-          includeUserData: false
-        })
+          includeUserData: false,
+        }),
       });
 
       if (response.ok) {
         const contentDisposition = response.headers.get('content-disposition');
-        const filename = contentDisposition 
+        const filename = contentDisposition
           ? contentDisposition.split('filename=')[1]?.replace(/"/g, '')
           : `compliance-report-${selectedReportType}-${Date.now()}.${selectedFormat}`;
 
@@ -127,7 +165,7 @@ export default function ComplianceReportsPage() {
 
         toast({
           title: 'Report Downloaded',
-          description: 'Detailed compliance report has been downloaded'
+          description: 'Detailed compliance report has been downloaded',
         });
       } else {
         throw new Error('Failed to download report');
@@ -137,7 +175,7 @@ export default function ComplianceReportsPage() {
       toast({
         title: 'Download Failed',
         description: 'Failed to download detailed report',
-        variant: 'destructive'
+        variant: 'destructive',
       });
     } finally {
       setIsGenerating(false);
@@ -189,9 +227,13 @@ export default function ComplianceReportsPage() {
           <FileText className="h-6 w-6 text-blue-600" />
           <h1 className="text-3xl font-bold">Compliance Reports</h1>
         </div>
-        
+
         <div className="flex space-x-2">
-          <Button variant="outline" onClick={generateReport} disabled={isLoading}>
+          <Button
+            variant="outline"
+            onClick={generateReport}
+            disabled={isLoading}
+          >
             {isLoading ? 'Generating...' : 'Refresh Report'}
           </Button>
           <Button onClick={downloadDetailedReport} disabled={isGenerating}>
@@ -213,7 +255,10 @@ export default function ComplianceReportsPage() {
           <div className="grid gap-4 md:grid-cols-2">
             <div className="space-y-2">
               <label className="text-sm font-medium">Report Type</label>
-              <Select value={selectedReportType} onValueChange={setSelectedReportType}>
+              <Select
+                value={selectedReportType}
+                onValueChange={setSelectedReportType}
+              >
                 <SelectTrigger>
                   <SelectValue placeholder="Select report type" />
                 </SelectTrigger>
@@ -226,10 +271,13 @@ export default function ComplianceReportsPage() {
                 </SelectContent>
               </Select>
               <p className="text-sm text-muted-foreground">
-                {reportTypes.find(t => t.id === selectedReportType)?.description}
+                {
+                  reportTypes.find((t) => t.id === selectedReportType)
+                    ?.description
+                }
               </p>
             </div>
-            
+
             <div className="space-y-2">
               <label className="text-sm font-medium">Export Format</label>
               <Select value={selectedFormat} onValueChange={setSelectedFormat}>
@@ -249,10 +297,15 @@ export default function ComplianceReportsPage() {
       {report && (
         <>
           {/* Compliance Status */}
-          <Card className={`border-l-4 ${
-            report.complianceLevel === 'compliant' ? 'border-green-500' :
-            report.complianceLevel === 'partial' ? 'border-yellow-500' : 'border-red-500'
-          }`}>
+          <Card
+            className={`border-l-4 ${
+              report.complianceLevel === 'compliant'
+                ? 'border-green-500'
+                : report.complianceLevel === 'partial'
+                  ? 'border-yellow-500'
+                  : 'border-red-500'
+            }`}
+          >
             <CardHeader>
               <CardTitle className="flex items-center space-x-2">
                 {getComplianceLevelIcon(report.complianceLevel)}
@@ -262,15 +315,17 @@ export default function ComplianceReportsPage() {
             <CardContent className="space-y-4">
               <div className="flex items-center justify-between">
                 <span className="font-medium">{report.title}</span>
-                <Badge className={getComplianceLevelColor(report.complianceLevel)}>
+                <Badge
+                  className={getComplianceLevelColor(report.complianceLevel)}
+                >
                   {report.complianceLevel.toUpperCase().replace('_', ' ')}
                 </Badge>
               </div>
-              
+
               <p className="text-sm text-muted-foreground">
                 {report.description}
               </p>
-              
+
               <div className="text-xs text-muted-foreground">
                 Generated: {new Date(report.generatedAt).toLocaleString()}
               </div>
@@ -292,8 +347,12 @@ export default function ComplianceReportsPage() {
                     <div className="flex items-center space-x-2">
                       <Database className="h-8 w-8 text-blue-600" />
                       <div>
-                        <div className="text-2xl font-bold">{report.metrics.totalEvents}</div>
-                        <p className="text-sm text-muted-foreground">Total Events</p>
+                        <div className="text-2xl font-bold">
+                          {report.metrics.totalEvents}
+                        </div>
+                        <p className="text-sm text-muted-foreground">
+                          Total Events
+                        </p>
                       </div>
                     </div>
                   </CardContent>
@@ -304,8 +363,12 @@ export default function ComplianceReportsPage() {
                     <div className="flex items-center space-x-2">
                       <Calendar className="h-8 w-8 text-green-600" />
                       <div>
-                        <div className="text-2xl font-bold">{report.metrics.recentEvents}</div>
-                        <p className="text-sm text-muted-foreground">Recent Events</p>
+                        <div className="text-2xl font-bold">
+                          {report.metrics.recentEvents}
+                        </div>
+                        <p className="text-sm text-muted-foreground">
+                          Recent Events
+                        </p>
                       </div>
                     </div>
                   </CardContent>
@@ -316,8 +379,12 @@ export default function ComplianceReportsPage() {
                     <div className="flex items-center space-x-2">
                       <Users className="h-8 w-8 text-purple-600" />
                       <div>
-                        <div className="text-2xl font-bold">{report.metrics.uniqueUsers}</div>
-                        <p className="text-sm text-muted-foreground">Active Users</p>
+                        <div className="text-2xl font-bold">
+                          {report.metrics.uniqueUsers}
+                        </div>
+                        <p className="text-sm text-muted-foreground">
+                          Active Users
+                        </p>
                       </div>
                     </div>
                   </CardContent>
@@ -328,8 +395,15 @@ export default function ComplianceReportsPage() {
                     <div className="flex items-center space-x-2">
                       <Shield className="h-8 w-8 text-orange-600" />
                       <div>
-                        <div className="text-2xl font-bold">{Math.round(report.metrics.integrityChecks.integrityScore)}%</div>
-                        <p className="text-sm text-muted-foreground">Integrity Score</p>
+                        <div className="text-2xl font-bold">
+                          {Math.round(
+                            report.metrics.integrityChecks.integrityScore,
+                          )}
+                          %
+                        </div>
+                        <p className="text-sm text-muted-foreground">
+                          Integrity Score
+                        </p>
                       </div>
                     </div>
                   </CardContent>
@@ -346,21 +420,29 @@ export default function ComplianceReportsPage() {
                     <div className="space-y-3">
                       <div className="flex justify-between items-center">
                         <span className="text-sm">Authentication Events</span>
-                        <span className="font-semibold">{report.metrics.complianceEvents.authentication}</span>
+                        <span className="font-semibold">
+                          {report.metrics.complianceEvents.authentication}
+                        </span>
                       </div>
                       <div className="flex justify-between items-center">
                         <span className="text-sm">Data Access Events</span>
-                        <span className="font-semibold">{report.metrics.complianceEvents.dataAccess}</span>
+                        <span className="font-semibold">
+                          {report.metrics.complianceEvents.dataAccess}
+                        </span>
                       </div>
                     </div>
                     <div className="space-y-3">
                       <div className="flex justify-between items-center">
                         <span className="text-sm">Policy Interactions</span>
-                        <span className="font-semibold">{report.metrics.complianceEvents.policyInteraction}</span>
+                        <span className="font-semibold">
+                          {report.metrics.complianceEvents.policyInteraction}
+                        </span>
                       </div>
                       <div className="flex justify-between items-center">
                         <span className="text-sm">Document Operations</span>
-                        <span className="font-semibold">{report.metrics.complianceEvents.documentOperations}</span>
+                        <span className="font-semibold">
+                          {report.metrics.complianceEvents.documentOperations}
+                        </span>
                       </div>
                     </div>
                   </div>
@@ -380,21 +462,28 @@ export default function ComplianceReportsPage() {
                 <CardContent>
                   <div className="space-y-3">
                     {Object.entries(report.metrics.eventTypeCounts)
-                      .sort(([,a], [,b]) => (b as number) - (a as number))
+                      .sort(([, a], [, b]) => (b as number) - (a as number))
                       .slice(0, 8)
                       .map(([type, count]) => (
-                        <div key={type} className="flex items-center justify-between">
-                          <span className="text-sm">{type.replace(/_/g, ' ')}</span>
+                        <div
+                          key={type}
+                          className="flex items-center justify-between"
+                        >
+                          <span className="text-sm">
+                            {type.replace(/_/g, ' ')}
+                          </span>
                           <div className="flex items-center space-x-2">
                             <div className="w-24 h-2 bg-gray-200 rounded">
-                              <div 
-                                className="h-2 bg-blue-500 rounded" 
-                                style={{ 
-                                  width: `${((count as number) / Math.max(...Object.values(report.metrics.eventTypeCounts))) * 100}%` 
+                              <div
+                                className="h-2 bg-blue-500 rounded"
+                                style={{
+                                  width: `${((count as number) / Math.max(...Object.values(report.metrics.eventTypeCounts))) * 100}%`,
                                 }}
                               />
                             </div>
-                            <span className="text-sm font-semibold w-8 text-right">{count as number}</span>
+                            <span className="text-sm font-semibold w-8 text-right">
+                              {count as number}
+                            </span>
                           </div>
                         </div>
                       ))}
@@ -410,18 +499,27 @@ export default function ComplianceReportsPage() {
                 <CardContent className="space-y-4">
                   <div className="flex justify-between items-center">
                     <span>Events with Cryptographic Hashes</span>
-                    <span className="font-semibold">{report.metrics.integrityChecks.eventsWithHashes}</span>
+                    <span className="font-semibold">
+                      {report.metrics.integrityChecks.eventsWithHashes}
+                    </span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span>Integrity Score</span>
                     <div className="flex items-center space-x-2">
                       <div className="w-24 h-2 bg-gray-200 rounded">
-                        <div 
-                          className="h-2 bg-green-500 rounded" 
-                          style={{ width: `${report.metrics.integrityChecks.integrityScore}%` }}
+                        <div
+                          className="h-2 bg-green-500 rounded"
+                          style={{
+                            width: `${report.metrics.integrityChecks.integrityScore}%`,
+                          }}
                         />
                       </div>
-                      <span className="font-semibold">{Math.round(report.metrics.integrityChecks.integrityScore)}%</span>
+                      <span className="font-semibold">
+                        {Math.round(
+                          report.metrics.integrityChecks.integrityScore,
+                        )}
+                        %
+                      </span>
                     </div>
                   </div>
                 </CardContent>
@@ -440,11 +538,15 @@ export default function ComplianceReportsPage() {
                   {report.recommendations.length > 0 ? (
                     <ul className="space-y-3">
                       {report.recommendations.map((recommendation, index) => (
-                        <li key={index} className="flex items-start space-x-3 p-3 bg-gray-50 rounded-lg">
+                        <li
+                          key={index}
+                          className="flex items-start space-x-3 p-3 bg-gray-50 rounded-lg"
+                        >
                           <div className="flex-shrink-0 mt-1">
                             {recommendation.startsWith('✅') ? (
                               <CheckCircle className="h-4 w-4 text-green-600" />
-                            ) : recommendation.startsWith('⚠️') || recommendation.startsWith('🚨') ? (
+                            ) : recommendation.startsWith('⚠️') ||
+                              recommendation.startsWith('🚨') ? (
                               <AlertTriangle className="h-4 w-4 text-yellow-600" />
                             ) : (
                               <Shield className="h-4 w-4 text-blue-600" />

@@ -29,7 +29,8 @@ export const quitclaimDeedMeta: LegalDocument = {
     },
     es: {
       name: 'Escritura de Finiquito',
-      description: 'Transferir interés en una propiedad sin garantía de título.',
+      description:
+        'Transferir interés en una propiedad sin garantía de título.',
       aliases: [
         'transferencia de propiedad',
         'escritura de finiquito',

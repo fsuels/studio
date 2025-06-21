@@ -73,7 +73,6 @@ const FieldRenderer = React.memo(function FieldRenderer({
     return null;
   }
 
-
   const fieldSchemaFromQuestions = doc.questions?.find(
     (q) => q.id === fieldKey,
   );
@@ -200,7 +199,6 @@ const FieldRenderer = React.memo(function FieldRenderer({
     ? t(fieldSchema.tooltip, { defaultValue: fieldSchema.tooltip })
     : '';
 
-
   const fieldError = errors[fieldKey];
 
   let inputType: React.HTMLInputTypeAttribute = 'text';
@@ -299,10 +297,15 @@ const FieldRenderer = React.memo(function FieldRenderer({
       <div className="flex items-start gap-2">
         <Label
           htmlFor={fieldKey}
-          className={cn('font-semibold text-lg leading-relaxed', fieldError && 'text-destructive')}
+          className={cn(
+            'font-semibold text-lg leading-relaxed',
+            fieldError && 'text-destructive',
+          )}
         >
           {labelText}{' '}
-          {fieldSchema?.required && <span className="text-destructive text-sm">*</span>}
+          {fieldSchema?.required && (
+            <span className="text-destructive text-sm">*</span>
+          )}
         </Label>
         {tooltipText && (
           <div className="relative">
@@ -320,21 +323,23 @@ const FieldRenderer = React.memo(function FieldRenderer({
             {showTooltip && isMounted && (
               <div
                 className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 w-80 max-w-[90vw] text-sm bg-blue-50 text-blue-900 border-blue-200 border shadow-xl rounded-lg p-4 z-[999999]"
-                style={{ 
+                style={{
                   position: 'fixed',
                   left: '50%',
                   transform: 'translateX(-50%)',
                   top: 'auto',
-                  bottom: '50%'
+                  bottom: '50%',
                 }}
               >
-                <p className="leading-relaxed font-medium whitespace-normal">{tooltipText}</p>
+                <p className="leading-relaxed font-medium whitespace-normal">
+                  {tooltipText}
+                </p>
                 <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-blue-200"></div>
               </div>
             )}
             {showTooltip && (
-              <div 
-                className="fixed inset-0 z-[999998]" 
+              <div
+                className="fixed inset-0 z-[999998]"
                 onClick={() => setShowTooltip(false)}
               />
             )}

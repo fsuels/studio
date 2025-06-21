@@ -38,11 +38,7 @@ export {
 } from './SidebarMenuSub';
 
 // Control Components
-export {
-  SidebarTrigger,
-  SidebarRail,
-  SidebarInput,
-} from './SidebarControls';
+export { SidebarTrigger, SidebarRail, SidebarInput } from './SidebarControls';
 
 // Types and Constants
 export type * from './types';

@@ -30,7 +30,7 @@ export const tenantMaintenanceRequestMeta: LegalDocument = {
         'repair request',
         'maintenance form',
         'tenant repair request',
-        'property maintenance request'
+        'property maintenance request',
       ],
     },
     es: {
@@ -40,7 +40,7 @@ export const tenantMaintenanceRequestMeta: LegalDocument = {
       aliases: [
         'solicitud de reparación',
         'formulario de mantenimiento',
-        'solicitud de reparación del inquilino'
+        'solicitud de reparación del inquilino',
       ],
     },
   },

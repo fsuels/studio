@@ -372,7 +372,6 @@ export default function VehicleBillOfSaleDisplay({
 
   return (
     <section aria-label="Vehicle Bill of Sale">
-
       <div className="container mx-auto px-4 pt-6 text-center">
         <h2 className="flex items-center gap-2 text-2xl font-semibold">
           <BookOpen aria-hidden="true" className="h-6 w-6 text-teal-600" />
@@ -386,8 +385,16 @@ export default function VehicleBillOfSaleDisplay({
       <ol className="mx-auto my-8 grid max-w-4xl gap-6 md:grid-cols-3">
         {[
           { Icon: Edit, title: 'Answer 9 questions', copy: 'Takes 3 min' },
-          { Icon: Signature, title: 'Download & e-Sign', copy: 'Legally binding' },
-          { Icon: ShieldCheck, title: 'Store & Share', copy: 'Bank-grade security' },
+          {
+            Icon: Signature,
+            title: 'Download & e-Sign',
+            copy: 'Legally binding',
+          },
+          {
+            Icon: ShieldCheck,
+            title: 'Store & Share',
+            copy: 'Bank-grade security',
+          },
         ].map(({ Icon, title, copy }) => (
           <li key={title} className="flex items-start gap-4">
             <Icon className="h-8 w-8 text-teal-500" />
@@ -400,7 +407,6 @@ export default function VehicleBillOfSaleDisplay({
       </ol>
 
       <div className="container mx-auto px-4 py-12">
-
         <div className="flex justify-center mb-6">
           <Input
             type="text"

@@ -47,7 +47,7 @@ Don't risk using generic templates that may not comply with Kentucky law. Get a 
 
 [Create Kentucky Service Agreement]
 
-*Trusted by thousands of Kentucky businesses*
+_Trusted by thousands of Kentucky businesses_
 
 ---
 

@@ -1,11 +1,21 @@
 // Automated A/B Testing Lifecycle Management
 // Intelligent experiment automation with performance-based decisions
 
-import { experimentEngine, type Experiment, type ExperimentResults } from './experiment-engine';
+import {
+  experimentEngine,
+  type Experiment,
+  type ExperimentResults,
+} from './experiment-engine';
 import { monitoringService, type ExperimentHealth } from './monitoring-service';
 import { alertSystem } from './alert-system';
-import { ALL_EXPERIMENT_TEMPLATES, createExperimentFromTemplate } from './experiment-templates';
-import { ALL_COMPLEX_FLOW_EXPERIMENTS, createComplexFlowExperiment } from './complex-flow-experiments';
+import {
+  ALL_EXPERIMENT_TEMPLATES,
+  createExperimentFromTemplate,
+} from './experiment-templates';
+import {
+  ALL_COMPLEX_FLOW_EXPERIMENTS,
+  createComplexFlowExperiment,
+} from './complex-flow-experiments';
 
 export interface AutomationRule {
   id: string;
@@ -13,11 +23,20 @@ export interface AutomationRule {
   description: string;
   enabled: boolean;
   trigger: {
-    type: 'time_based' | 'performance_based' | 'significance_based' | 'sample_size_based';
+    type:
+      | 'time_based'
+      | 'performance_based'
+      | 'significance_based'
+      | 'sample_size_based';
     conditions: Record<string, any>;
   };
   action: {
-    type: 'stop_experiment' | 'start_experiment' | 'reallocate_traffic' | 'create_followup' | 'implement_winner';
+    type:
+      | 'stop_experiment'
+      | 'start_experiment'
+      | 'reallocate_traffic'
+      | 'create_followup'
+      | 'implement_winner';
     parameters: Record<string, any>;
   };
   cooldownHours: number;
@@ -73,8 +92,8 @@ class AutomationEngineService {
       minimumSampleSizeMultiplier: 1.0,
       performanceThresholds: {
         criticalDropPercentage: 25,
-        warningDropPercentage: 15
-      }
+        warningDropPercentage: 15,
+      },
     };
   }
 
@@ -83,24 +102,25 @@ class AutomationEngineService {
     this.addRule({
       id: 'auto_stop_significance',
       name: 'Auto-stop Significant Experiments',
-      description: 'Automatically stop experiments that reach statistical significance',
+      description:
+        'Automatically stop experiments that reach statistical significance',
       enabled: true,
       trigger: {
         type: 'significance_based',
         conditions: {
           minimumConfidence: 0.95,
           minimumSampleSize: 1000,
-          minimumDaysRunning: 3
-        }
+          minimumDaysRunning: 3,
+        },
       },
       action: {
         type: 'stop_experiment',
         parameters: {
           reason: 'Statistical significance achieved',
-          notifyStakeholders: true
-        }
+          notifyStakeholders: true,
+        },
       },
-      cooldownHours: 0
+      cooldownHours: 0,
     });
 
     // Auto-stop on timeout
@@ -113,17 +133,17 @@ class AutomationEngineService {
         type: 'time_based',
         conditions: {
           durationMultiplier: 2.0,
-          noSignificance: true
-        }
+          noSignificance: true,
+        },
       },
       action: {
         type: 'stop_experiment',
         parameters: {
           reason: 'Maximum duration exceeded',
-          notifyStakeholders: true
-        }
+          notifyStakeholders: true,
+        },
       },
-      cooldownHours: 24
+      cooldownHours: 24,
     });
 
     // Auto-reallocate traffic from poor performers
@@ -137,17 +157,17 @@ class AutomationEngineService {
         conditions: {
           performanceDropPercentage: 20,
           minimumSampleSize: 500,
-          confidenceLevel: 0.90
-        }
+          confidenceLevel: 0.9,
+        },
       },
       action: {
         type: 'reallocate_traffic',
         parameters: {
           reduceTrafficTo: 10,
-          redistributeToOthers: true
-        }
+          redistributeToOthers: true,
+        },
       },
-      cooldownHours: 12
+      cooldownHours: 12,
     });
 
     // Auto-create follow-up experiments
@@ -160,17 +180,17 @@ class AutomationEngineService {
         type: 'significance_based',
         conditions: {
           minimumConfidence: 0.95,
-          minimumImpact: 10
-        }
+          minimumImpact: 10,
+        },
       },
       action: {
         type: 'create_followup',
         parameters: {
           basedOnWinner: true,
-          queueForLater: true
-        }
+          queueForLater: true,
+        },
       },
-      cooldownHours: 0
+      cooldownHours: 0,
     });
 
     // Emergency stop for critical performance drops
@@ -184,18 +204,18 @@ class AutomationEngineService {
         conditions: {
           performanceDropPercentage: 30,
           minimumSampleSize: 100,
-          emergencyLevel: true
-        }
+          emergencyLevel: true,
+        },
       },
       action: {
         type: 'stop_experiment',
         parameters: {
           reason: 'Critical performance degradation',
           emergencyStop: true,
-          notifyStakeholders: true
-        }
+          notifyStakeholders: true,
+        },
       },
-      cooldownHours: 0
+      cooldownHours: 0,
     });
 
     // Auto-start queued experiments
@@ -208,16 +228,16 @@ class AutomationEngineService {
         type: 'time_based',
         conditions: {
           maxConcurrentExperiments: 5,
-          checkInterval: 60 // minutes
-        }
+          checkInterval: 60, // minutes
+        },
       },
       action: {
         type: 'start_experiment',
         parameters: {
-          fromQueue: true
-        }
+          fromQueue: true,
+        },
       },
-      cooldownHours: 1
+      cooldownHours: 1,
     });
   }
 
@@ -226,7 +246,7 @@ class AutomationEngineService {
   }
 
   updateRule(ruleId: string, updates: Partial<AutomationRule>): void {
-    const index = this.rules.findIndex(r => r.id === ruleId);
+    const index = this.rules.findIndex((r) => r.id === ruleId);
     if (index !== -1) {
       this.rules[index] = { ...this.rules[index], ...updates };
     }
@@ -254,11 +274,14 @@ class AutomationEngineService {
     console.log('🤖 A/B Testing Automation Engine started');
 
     // Run automation checks every 5 minutes
-    this.automationInterval = setInterval(async () => {
-      if (this.running) {
-        await this.runAutomationCycle();
-      }
-    }, 5 * 60 * 1000);
+    this.automationInterval = setInterval(
+      async () => {
+        if (this.running) {
+          await this.runAutomationCycle();
+        }
+      },
+      5 * 60 * 1000,
+    );
 
     // Initial run
     setTimeout(() => this.runAutomationCycle(), 1000);
@@ -290,17 +313,18 @@ class AutomationEngineService {
 
       // Generate insights and recommendations
       await this.generateAutomationInsights();
-
     } catch (error) {
       console.error('❌ Automation cycle failed:', error);
     }
   }
 
-  private async processExperimentAutomation(experiment: Experiment): Promise<void> {
+  private async processExperimentAutomation(
+    experiment: Experiment,
+  ): Promise<void> {
     const results = await experimentEngine.calculateResults(experiment.id);
     const health = monitoringService.getExperimentHealth(experiment.id);
 
-    for (const rule of this.rules.filter(r => r.enabled)) {
+    for (const rule of this.rules.filter((r) => r.enabled)) {
       if (this.isRuleOnCooldown(rule)) {
         continue;
       }
@@ -318,8 +342,10 @@ class AutomationEngineService {
     }
 
     const lastExecuted = new Date(rule.lastExecuted);
-    const cooldownEnd = new Date(lastExecuted.getTime() + rule.cooldownHours * 60 * 60 * 1000);
-    
+    const cooldownEnd = new Date(
+      lastExecuted.getTime() + rule.cooldownHours * 60 * 60 * 1000,
+    );
+
     return new Date() < cooldownEnd;
   }
 
@@ -327,7 +353,7 @@ class AutomationEngineService {
     rule: AutomationRule,
     experiment: Experiment,
     results: ExperimentResults,
-    health: ExperimentHealth | null
+    health: ExperimentHealth | null,
   ): Promise<boolean> {
     const { trigger } = rule;
 
@@ -335,17 +361,24 @@ class AutomationEngineService {
       case 'significance_based':
         return (
           results.isStatisticallySignificant &&
-          results.confidence >= (trigger.conditions.minimumConfidence || 0.95) &&
-          this.getSampleSize(results) >= (trigger.conditions.minimumSampleSize || 1000) &&
-          this.getDaysRunning(experiment) >= (trigger.conditions.minimumDaysRunning || 1)
+          results.confidence >=
+            (trigger.conditions.minimumConfidence || 0.95) &&
+          this.getSampleSize(results) >=
+            (trigger.conditions.minimumSampleSize || 1000) &&
+          this.getDaysRunning(experiment) >=
+            (trigger.conditions.minimumDaysRunning || 1)
         );
 
       case 'time_based':
         const daysRunning = this.getDaysRunning(experiment);
-        const maxDuration = experiment.estimatedDuration * (trigger.conditions.durationMultiplier || 2);
+        const maxDuration =
+          experiment.estimatedDuration *
+          (trigger.conditions.durationMultiplier || 2);
         const exceededDuration = daysRunning > maxDuration;
-        const noSignificance = trigger.conditions.noSignificance ? !results.isStatisticallySignificant : true;
-        
+        const noSignificance = trigger.conditions.noSignificance
+          ? !results.isStatisticallySignificant
+          : true;
+
         return exceededDuration && noSignificance;
 
       case 'performance_based':
@@ -353,7 +386,9 @@ class AutomationEngineService {
 
       case 'sample_size_based':
         const sampleSize = this.getSampleSize(results);
-        const targetSize = experiment.minSampleSize * (trigger.conditions.sampleSizeMultiplier || 1);
+        const targetSize =
+          experiment.minSampleSize *
+          (trigger.conditions.sampleSizeMultiplier || 1);
         return sampleSize >= targetSize;
 
       default:
@@ -364,11 +399,13 @@ class AutomationEngineService {
   private async executeRule(
     rule: AutomationRule,
     experiment: Experiment,
-    results: ExperimentResults
+    results: ExperimentResults,
   ): Promise<void> {
     const { action } = rule;
 
-    console.log(`🤖 Executing automation rule: ${rule.name} for experiment ${experiment.name}`);
+    console.log(
+      `🤖 Executing automation rule: ${rule.name} for experiment ${experiment.name}`,
+    );
 
     switch (action.type) {
       case 'stop_experiment':
@@ -380,7 +417,11 @@ class AutomationEngineService {
         break;
 
       case 'reallocate_traffic':
-        await this.autoReallocateTraffic(experiment, results, action.parameters);
+        await this.autoReallocateTraffic(
+          experiment,
+          results,
+          action.parameters,
+        );
         break;
 
       case 'create_followup':
@@ -396,41 +437,52 @@ class AutomationEngineService {
   private async autoStopExperiment(
     experiment: Experiment,
     results: ExperimentResults,
-    parameters: Record<string, any>
+    parameters: Record<string, any>,
   ): Promise<void> {
     await experimentEngine.stopExperiment(experiment.id);
 
-    console.log(`⏹️ Auto-stopped experiment: ${experiment.name} - ${parameters.reason}`);
+    console.log(
+      `⏹️ Auto-stopped experiment: ${experiment.name} - ${parameters.reason}`,
+    );
 
     if (parameters.notifyStakeholders) {
-      await alertSystem.processAlert({
-        id: `auto_stop_${experiment.id}_${Date.now()}`,
-        experimentId: experiment.id,
-        type: 'significance_reached',
-        priority: parameters.emergencyStop ? 'critical' : 'medium',
-        message: `Experiment "${experiment.name}" automatically stopped: ${parameters.reason}`,
-        data: {
-          reason: parameters.reason,
-          isEmergency: parameters.emergencyStop || false,
-          results: {
-            isSignificant: results.isStatisticallySignificant,
-            confidence: results.confidence,
-            winningVariant: results.winningVariant
-          }
+      await alertSystem.processAlert(
+        {
+          id: `auto_stop_${experiment.id}_${Date.now()}`,
+          experimentId: experiment.id,
+          type: 'significance_reached',
+          priority: parameters.emergencyStop ? 'critical' : 'medium',
+          message: `Experiment "${experiment.name}" automatically stopped: ${parameters.reason}`,
+          data: {
+            reason: parameters.reason,
+            isEmergency: parameters.emergencyStop || false,
+            results: {
+              isSignificant: results.isStatisticallySignificant,
+              confidence: results.confidence,
+              winningVariant: results.winningVariant,
+            },
+          },
+          createdAt: new Date().toISOString(),
+          acknowledged: false,
         },
-        createdAt: new Date().toISOString(),
-        acknowledged: false
-      }, experiment, results);
+        experiment,
+        results,
+      );
     }
   }
 
-  private async autoStartExperiment(parameters: Record<string, any>): Promise<void> {
+  private async autoStartExperiment(
+    parameters: Record<string, any>,
+  ): Promise<void> {
     if (parameters.fromQueue) {
       const readyExperiments = this.getReadyQueuedExperiments();
       const currentRunning = await experimentEngine.getRunningExperiments();
       const maxConcurrent = parameters.maxConcurrentExperiments || 5;
 
-      if (currentRunning.length < maxConcurrent && readyExperiments.length > 0) {
+      if (
+        currentRunning.length < maxConcurrent &&
+        readyExperiments.length > 0
+      ) {
         const nextExperiment = readyExperiments[0];
         await this.startQueuedExperiment(nextExperiment);
       }
@@ -440,55 +492,70 @@ class AutomationEngineService {
   private async autoReallocateTraffic(
     experiment: Experiment,
     results: ExperimentResults,
-    parameters: Record<string, any>
+    parameters: Record<string, any>,
   ): Promise<void> {
     // Identify poor-performing variants
     const conversionRates = results.conversionRates;
-    const avgConversionRate = Object.values(conversionRates).reduce((sum, rate) => sum + rate, 0) / Object.keys(conversionRates).length;
-    
-    const poorPerformers = Object.entries(conversionRates).filter(([_, rate]) => 
-      rate < avgConversionRate * 0.8
+    const avgConversionRate =
+      Object.values(conversionRates).reduce((sum, rate) => sum + rate, 0) /
+      Object.keys(conversionRates).length;
+
+    const poorPerformers = Object.entries(conversionRates).filter(
+      ([_, rate]) => rate < avgConversionRate * 0.8,
     );
 
     // This would integrate with your experiment engine to update traffic allocation
-    console.log(`🔄 Auto-reallocating traffic for experiment ${experiment.name}`);
-    console.log(`Poor performers: ${poorPerformers.map(([id]) => id).join(', ')}`);
+    console.log(
+      `🔄 Auto-reallocating traffic for experiment ${experiment.name}`,
+    );
+    console.log(
+      `Poor performers: ${poorPerformers.map(([id]) => id).join(', ')}`,
+    );
 
     // Log the action
-    await alertSystem.processAlert({
-      id: `traffic_realloc_${experiment.id}_${Date.now()}`,
-      experimentId: experiment.id,
-      type: 'performance_drop',
-      priority: 'medium',
-      message: `Traffic automatically reallocated for experiment "${experiment.name}" due to poor performance`,
-      data: {
-        poorPerformers: poorPerformers.map(([id]) => id),
-        newAllocation: parameters.reduceTrafficTo || 10
+    await alertSystem.processAlert(
+      {
+        id: `traffic_realloc_${experiment.id}_${Date.now()}`,
+        experimentId: experiment.id,
+        type: 'performance_drop',
+        priority: 'medium',
+        message: `Traffic automatically reallocated for experiment "${experiment.name}" due to poor performance`,
+        data: {
+          poorPerformers: poorPerformers.map(([id]) => id),
+          newAllocation: parameters.reduceTrafficTo || 10,
+        },
+        createdAt: new Date().toISOString(),
+        acknowledged: false,
       },
-      createdAt: new Date().toISOString(),
-      acknowledged: false
-    }, experiment, results);
+      experiment,
+      results,
+    );
   }
 
   private async autoCreateFollowup(
     experiment: Experiment,
     results: ExperimentResults,
-    parameters: Record<string, any>
+    parameters: Record<string, any>,
   ): Promise<void> {
     if (!results.winningVariant) return;
 
     // Generate follow-up experiment based on the winning variant
-    const followupId = await this.generateFollowupExperiment(experiment, results);
-    
+    const followupId = await this.generateFollowupExperiment(
+      experiment,
+      results,
+    );
+
     if (followupId && parameters.queueForLater) {
       this.queueExperiment({
         id: followupId,
         priority: 2,
         templateId: followupId,
-        scheduledStart: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(), // Start in 1 week
+        scheduledStart: new Date(
+          Date.now() + 7 * 24 * 60 * 60 * 1000,
+        ).toISOString(), // Start in 1 week
         dependencies: [experiment.id],
         autoStart: true,
-        reason: `Follow-up to successful experiment: ${experiment.name}`
+        reason: `Follow-up to successful experiment: ${experiment.name}`,
       });
     }
   }
@@ -496,49 +563,66 @@ class AutomationEngineService {
   private async autoImplementWinner(
     experiment: Experiment,
     results: ExperimentResults,
-    parameters: Record<string, any>
+    parameters: Record<string, any>,
   ): Promise<void> {
     if (!results.winningVariant || !this.policy.autoImplementWinners) {
       return;
     }
 
     // This would integrate with your deployment system
-    console.log(`🚀 Auto-implementing winner for experiment ${experiment.name}: ${results.winningVariant}`);
+    console.log(
+      `🚀 Auto-implementing winner for experiment ${experiment.name}: ${results.winningVariant}`,
+    );
 
     // Log the implementation
-    await alertSystem.processAlert({
-      id: `auto_implement_${experiment.id}_${Date.now()}`,
-      experimentId: experiment.id,
-      type: 'significance_reached',
-      priority: 'high',
-      message: `Winning variant automatically implemented for experiment "${experiment.name}"`,
-      data: {
-        winningVariant: results.winningVariant,
-        impact: results.effectSize,
-        confidence: results.confidence
+    await alertSystem.processAlert(
+      {
+        id: `auto_implement_${experiment.id}_${Date.now()}`,
+        experimentId: experiment.id,
+        type: 'significance_reached',
+        priority: 'high',
+        message: `Winning variant automatically implemented for experiment "${experiment.name}"`,
+        data: {
+          winningVariant: results.winningVariant,
+          impact: results.effectSize,
+          confidence: results.confidence,
+        },
+        createdAt: new Date().toISOString(),
+        acknowledged: false,
       },
-      createdAt: new Date().toISOString(),
-      acknowledged: false
-    }, experiment, results);
+      experiment,
+      results,
+    );
   }
 
   // Utility methods
   private getSampleSize(results: ExperimentResults): number {
-    return Object.values(results.sampleSizes).reduce((sum, size) => sum + size, 0);
+    return Object.values(results.sampleSizes).reduce(
+      (sum, size) => sum + size,
+      0,
+    );
   }
 
   private getDaysRunning(experiment: Experiment): number {
     if (!experiment.startDate) return 0;
-    return Math.floor((Date.now() - new Date(experiment.startDate).getTime()) / (1000 * 60 * 60 * 24));
+    return Math.floor(
+      (Date.now() - new Date(experiment.startDate).getTime()) /
+        (1000 * 60 * 60 * 24),
+    );
   }
 
-  private hasPerformanceIssue(results: ExperimentResults, conditions: Record<string, any>): boolean {
+  private hasPerformanceIssue(
+    results: ExperimentResults,
+    conditions: Record<string, any>,
+  ): boolean {
     const conversionRates = Object.values(results.conversionRates);
-    const avgRate = conversionRates.reduce((sum, rate) => sum + rate, 0) / conversionRates.length;
+    const avgRate =
+      conversionRates.reduce((sum, rate) => sum + rate, 0) /
+      conversionRates.length;
     const minRate = Math.min(...conversionRates);
-    
+
     const dropPercentage = ((avgRate - minRate) / avgRate) * 100;
-    
+
     return dropPercentage >= (conditions.performanceDropPercentage || 20);
   }
 
@@ -546,7 +630,7 @@ class AutomationEngineService {
   queueExperiment(queueItem: ExperimentQueue): void {
     this.experimentQueue.push(queueItem);
     this.experimentQueue.sort((a, b) => b.priority - a.priority);
-    
+
     console.log(`📋 Queued experiment: ${queueItem.reason}`);
   }
 
@@ -556,29 +640,35 @@ class AutomationEngineService {
 
   private getReadyQueuedExperiments(): ExperimentQueue[] {
     const now = new Date();
-    
-    return this.experimentQueue.filter(item => {
+
+    return this.experimentQueue.filter((item) => {
       const scheduledTime = new Date(item.scheduledStart);
       const isTimeReady = scheduledTime <= now;
-      
+
       // Check dependencies
-      const dependenciesCompleted = !item.dependencies || item.dependencies.every(depId => {
-        // This would check if the dependency experiment is completed
-        return true; // Simplified for now
-      });
-      
+      const dependenciesCompleted =
+        !item.dependencies ||
+        item.dependencies.every((depId) => {
+          // This would check if the dependency experiment is completed
+          return true; // Simplified for now
+        });
+
       return isTimeReady && dependenciesCompleted;
     });
   }
 
-  private async startQueuedExperiment(queueItem: ExperimentQueue): Promise<void> {
+  private async startQueuedExperiment(
+    queueItem: ExperimentQueue,
+  ): Promise<void> {
     try {
       let experimentId: string;
 
       if (queueItem.templateId) {
         experimentId = await createExperimentFromTemplate(queueItem.templateId);
       } else if (queueItem.complexFlowId) {
-        experimentId = await createComplexFlowExperiment(queueItem.complexFlowId);
+        experimentId = await createComplexFlowExperiment(
+          queueItem.complexFlowId,
+        );
       } else {
         throw new Error('No template or complex flow ID specified');
       }
@@ -588,10 +678,11 @@ class AutomationEngineService {
       }
 
       // Remove from queue
-      this.experimentQueue = this.experimentQueue.filter(item => item.id !== queueItem.id);
+      this.experimentQueue = this.experimentQueue.filter(
+        (item) => item.id !== queueItem.id,
+      );
 
       console.log(`🚀 Started queued experiment: ${experimentId}`);
-
     } catch (error) {
       console.error(`❌ Failed to start queued experiment:`, error);
     }
@@ -599,11 +690,11 @@ class AutomationEngineService {
 
   private async generateFollowupExperiment(
     experiment: Experiment,
-    results: ExperimentResults
+    results: ExperimentResults,
   ): Promise<string | null> {
     // Generate intelligent follow-up based on results
     // This is a simplified version - in practice, you'd use AI/ML to generate optimal follow-ups
-    
+
     const impact = results.effectSize || 0;
     const tags = experiment.tags || [];
 
@@ -620,14 +711,17 @@ class AutomationEngineService {
 
   // Analytics and Insights
   private async generateAutomationInsights(): Promise<void> {
-    const rules = this.rules.filter(r => r.enabled);
-    const recentlyExecuted = rules.filter(r => 
-      r.lastExecuted && 
-      new Date(r.lastExecuted).getTime() > Date.now() - 24 * 60 * 60 * 1000
+    const rules = this.rules.filter((r) => r.enabled);
+    const recentlyExecuted = rules.filter(
+      (r) =>
+        r.lastExecuted &&
+        new Date(r.lastExecuted).getTime() > Date.now() - 24 * 60 * 60 * 1000,
     );
 
     if (recentlyExecuted.length > 0) {
-      console.log(`🔍 Automation insights: ${recentlyExecuted.length} rules executed in last 24h`);
+      console.log(
+        `🔍 Automation insights: ${recentlyExecuted.length} rules executed in last 24h`,
+      );
     }
   }
 
@@ -647,31 +741,40 @@ class AutomationEngineService {
     policy: AutomationPolicy;
     activeRules: number;
   }> {
-    const recent24h = this.rules.filter(r => 
-      r.lastExecuted && 
-      new Date(r.lastExecuted).getTime() > Date.now() - 24 * 60 * 60 * 1000
+    const recent24h = this.rules.filter(
+      (r) =>
+        r.lastExecuted &&
+        new Date(r.lastExecuted).getTime() > Date.now() - 24 * 60 * 60 * 1000,
     );
 
     const readyExperiments = this.getReadyQueuedExperiments();
-    const waitingExperiments = this.experimentQueue.filter(item => 
-      !readyExperiments.includes(item)
+    const waitingExperiments = this.experimentQueue.filter(
+      (item) => !readyExperiments.includes(item),
     );
 
     return {
       summary: {
         rulesExecuted24h: recent24h.length,
-        experimentsAutoStopped: recent24h.filter(r => r.action.type === 'stop_experiment').length,
-        experimentsAutoStarted: recent24h.filter(r => r.action.type === 'start_experiment').length,
-        trafficReallocations: recent24h.filter(r => r.action.type === 'reallocate_traffic').length,
-        followupsCreated: recent24h.filter(r => r.action.type === 'create_followup').length
+        experimentsAutoStopped: recent24h.filter(
+          (r) => r.action.type === 'stop_experiment',
+        ).length,
+        experimentsAutoStarted: recent24h.filter(
+          (r) => r.action.type === 'start_experiment',
+        ).length,
+        trafficReallocations: recent24h.filter(
+          (r) => r.action.type === 'reallocate_traffic',
+        ).length,
+        followupsCreated: recent24h.filter(
+          (r) => r.action.type === 'create_followup',
+        ).length,
       },
       queueStatus: {
         totalQueued: this.experimentQueue.length,
         readyToStart: readyExperiments.length,
-        waitingForDependencies: waitingExperiments.length
+        waitingForDependencies: waitingExperiments.length,
       },
       policy: this.policy,
-      activeRules: this.rules.filter(r => r.enabled).length
+      activeRules: this.rules.filter((r) => r.enabled).length,
     };
   }
 }

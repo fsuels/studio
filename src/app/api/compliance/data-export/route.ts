@@ -3,7 +3,14 @@ import { NextRequest, NextResponse } from 'next/server';
 import { requireAuth } from '@/lib/server-auth';
 import { auditService } from '@/services/firebase-audit-service';
 import { getDb } from '@/lib/firebase';
-import { collection, query, where, getDocs, doc, getDoc } from 'firebase/firestore';
+import {
+  collection,
+  query,
+  where,
+  getDocs,
+  doc,
+  getDoc,
+} from 'firebase/firestore';
 
 interface DSARRequest {
   userId: string;
@@ -33,7 +40,9 @@ export async function POST(request: NextRequest) {
   const requestId = `dsar_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
   const logPrefix = `[API /compliance/data-export] [${requestId}]`;
 
-  console.log(`${logPrefix} Received DSAR request: ${request.method} ${request.url}`);
+  console.log(
+    `${logPrefix} Received DSAR request: ${request.method} ${request.url}`,
+  );
 
   try {
     // Authenticate user
@@ -42,9 +51,15 @@ export async function POST(request: NextRequest) {
     const user = authResult;
 
     const body: DSARRequest = await request.json();
-    const { requestType = 'full_export', format = 'json', includeDeleted = false } = body;
+    const {
+      requestType = 'full_export',
+      format = 'json',
+      includeDeleted = false,
+    } = body;
 
-    console.log(`${logPrefix} Processing DSAR for user ${user.uid}, type: ${requestType}, format: ${format}`);
+    console.log(
+      `${logPrefix} Processing DSAR for user ${user.uid}, type: ${requestType}, format: ${format}`,
+    );
 
     // Log the DSAR request itself
     await auditService.logComplianceEvent('consent_given', {
@@ -54,11 +69,15 @@ export async function POST(request: NextRequest) {
       includeDeleted,
       requestId,
       ipAddress: request.headers.get('x-forwarded-for') || 'unknown',
-      userAgent: request.headers.get('user-agent') || 'unknown'
+      userAgent: request.headers.get('user-agent') || 'unknown',
     });
 
     // Export user data
-    const exportData = await exportUserData(user.uid, requestType, includeDeleted);
+    const exportData = await exportUserData(
+      user.uid,
+      requestType,
+      includeDeleted,
+    );
 
     // Format the response based on requested format
     let responseContent: string;
@@ -83,7 +102,9 @@ export async function POST(request: NextRequest) {
         fileName = `data-export-${user.uid}-${Date.now()}.json`;
     }
 
-    console.log(`${logPrefix} Successfully generated DSAR export (${responseContent.length} bytes)`);
+    console.log(
+      `${logPrefix} Successfully generated DSAR export (${responseContent.length} bytes)`,
+    );
 
     return new NextResponse(responseContent, {
       status: 200,
@@ -93,11 +114,11 @@ export async function POST(request: NextRequest) {
         'Content-Length': responseContent.length.toString(),
       },
     });
-
   } catch (error: unknown) {
     console.error(`${logPrefix} DSAR export error:`, error);
 
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    const errorMessage =
+      error instanceof Error ? error.message : 'Unknown error';
 
     // Log the failed request
     try {
@@ -106,7 +127,7 @@ export async function POST(request: NextRequest) {
         error: errorMessage,
         requestId,
         ipAddress: request.headers.get('x-forwarded-for') || 'unknown',
-        userAgent: request.headers.get('user-agent') || 'unknown'
+        userAgent: request.headers.get('user-agent') || 'unknown',
       });
     } catch (auditError) {
       console.error(`${logPrefix} Failed to log DSAR error:`, auditError);
@@ -115,10 +136,11 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(
       {
         error: 'Failed to export user data',
-        details: process.env.NODE_ENV === 'development' ? errorMessage : undefined,
-        requestId
+        details:
+          process.env.NODE_ENV === 'development' ? errorMessage : undefined,
+        requestId,
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -126,7 +148,7 @@ export async function POST(request: NextRequest) {
 async function exportUserData(
   userId: string,
   requestType: string,
-  includeDeleted: boolean
+  includeDeleted: boolean,
 ): Promise<UserDataExport> {
   const db = await getDb();
   const exportData: UserDataExport = {
@@ -139,8 +161,8 @@ async function exportUserData(
       exportDate: new Date().toISOString(),
       requestType,
       totalRecords: 0,
-      retentionPolicy: '7 years from last activity'
-    }
+      retentionPolicy: '7 years from last activity',
+    },
   };
 
   try {
@@ -153,38 +175,40 @@ async function exportUserData(
     // Export documents (if requested)
     if (requestType === 'full_export' || requestType === 'documents_only') {
       const documentsQuery = query(
-        collection(db, 'users', userId, 'documents')
+        collection(db, 'users', userId, 'documents'),
       );
       const documentsSnap = await getDocs(documentsQuery);
-      
+
       exportData.documents = documentsSnap.docs
-        .map(doc => ({ id: doc.id, ...doc.data() }))
-        .filter(doc => includeDeleted || !doc.deletedAt);
+        .map((doc) => ({ id: doc.id, ...doc.data() }))
+        .filter((doc) => includeDeleted || !doc.deletedAt);
     }
 
     // Export folders
     if (requestType === 'full_export') {
-      const foldersQuery = query(
-        collection(db, 'users', userId, 'folders')
-      );
+      const foldersQuery = query(collection(db, 'users', userId, 'folders'));
       const foldersSnap = await getDocs(foldersQuery);
-      exportData.folders = foldersSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      exportData.folders = foldersSnap.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
     }
 
     // Export audit trail (always included for compliance)
     exportData.auditTrail = await auditService.getUserAuditTrail(userId, 10000);
 
     // Calculate total records
-    exportData.metadata.totalRecords = 
+    exportData.metadata.totalRecords =
       (exportData.userData.profile ? 1 : 0) +
       exportData.documents.length +
       exportData.auditTrail.length +
       exportData.folders.length;
 
-    console.log(`Exported ${exportData.metadata.totalRecords} records for user ${userId}`);
-    
-    return exportData;
+    console.log(
+      `Exported ${exportData.metadata.totalRecords} records for user ${userId}`,
+    );
 
+    return exportData;
   } catch (error) {
     console.error('Error exporting user data:', error);
     throw error;
@@ -198,26 +222,36 @@ function convertToCSV(data: UserDataExport): string {
   csvLines.push('Export Type,Timestamp,Record Type,ID,Data');
 
   // Add metadata
-  csvLines.push(`"Metadata","${data.metadata.exportDate}","export_info","metadata","${JSON.stringify(data.metadata).replace(/"/g, '""')}"`);
+  csvLines.push(
+    `"Metadata","${data.metadata.exportDate}","export_info","metadata","${JSON.stringify(data.metadata).replace(/"/g, '""')}"`,
+  );
 
   // Add user profile
   if (data.userData.profile) {
-    csvLines.push(`"User Data","${data.metadata.exportDate}","profile","user_profile","${JSON.stringify(data.userData.profile).replace(/"/g, '""')}"`);
+    csvLines.push(
+      `"User Data","${data.metadata.exportDate}","profile","user_profile","${JSON.stringify(data.userData.profile).replace(/"/g, '""')}"`,
+    );
   }
 
   // Add documents
-  data.documents.forEach(doc => {
-    csvLines.push(`"Documents","${doc.createdAt || data.metadata.exportDate}","document","${doc.id}","${JSON.stringify(doc).replace(/"/g, '""')}"`);
+  data.documents.forEach((doc) => {
+    csvLines.push(
+      `"Documents","${doc.createdAt || data.metadata.exportDate}","document","${doc.id}","${JSON.stringify(doc).replace(/"/g, '""')}"`,
+    );
   });
 
   // Add audit trail
-  data.auditTrail.forEach(event => {
-    csvLines.push(`"Audit Trail","${event.timestamp || data.metadata.exportDate}","audit_event","${event.id}","${JSON.stringify(event).replace(/"/g, '""')}"`);
+  data.auditTrail.forEach((event) => {
+    csvLines.push(
+      `"Audit Trail","${event.timestamp || data.metadata.exportDate}","audit_event","${event.id}","${JSON.stringify(event).replace(/"/g, '""')}"`,
+    );
   });
 
   // Add folders
-  data.folders.forEach(folder => {
-    csvLines.push(`"Folders","${folder.createdAt || data.metadata.exportDate}","folder","${folder.id}","${JSON.stringify(folder).replace(/"/g, '""')}"`);
+  data.folders.forEach((folder) => {
+    csvLines.push(
+      `"Folders","${folder.createdAt || data.metadata.exportDate}","folder","${folder.id}","${JSON.stringify(folder).replace(/"/g, '""')}"`,
+    );
   });
 
   return csvLines.join('\n');
@@ -231,9 +265,11 @@ export async function GET(request: NextRequest) {
     const user = authResult;
 
     const db = await getDb();
-    
+
     // Count user's data
-    const documentsQuery = query(collection(db, 'users', user.uid, 'documents'));
+    const documentsQuery = query(
+      collection(db, 'users', user.uid, 'documents'),
+    );
     const documentsSnap = await getDocs(documentsQuery);
     const documentCount = documentsSnap.size;
 
@@ -245,18 +281,17 @@ export async function GET(request: NextRequest) {
       availableData: {
         documents: documentCount,
         auditTrail: hasAuditTrail,
-        profile: true
+        profile: true,
       },
       supportedFormats: ['json', 'csv'],
       retentionPolicy: '7 years from last activity',
-      estimatedExportSize: `${Math.max(1, Math.ceil(documentCount / 10))} MB`
+      estimatedExportSize: `${Math.max(1, Math.ceil(documentCount / 10))} MB`,
     });
-
   } catch (error) {
     console.error('Error getting export info:', error);
     return NextResponse.json(
       { error: 'Failed to get export information' },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

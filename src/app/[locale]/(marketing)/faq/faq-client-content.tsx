@@ -73,9 +73,7 @@ export default function FaqClientContent({ locale }: FaqClientContentProps) {
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         ref={inputRef}
-        onFocus={() =>
-          window.innerWidth < 640 && inputRef.current?.select()
-        }
+        onFocus={() => window.innerWidth < 640 && inputRef.current?.select()}
         className="mb-4 w-full rounded-md border px-3 py-2"
       />
       <Accordion

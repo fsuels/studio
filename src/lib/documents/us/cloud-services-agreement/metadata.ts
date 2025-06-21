@@ -29,7 +29,8 @@ export const cloudServicesAgreementMeta: LegalDocument = {
     },
     es: {
       name: 'Acuerdo de Servicios en la Nube',
-      description: 'Acuerdo para servicios de computación y hospedaje en la nube.',
+      description:
+        'Acuerdo para servicios de computación y hospedaje en la nube.',
       aliases: ['hospedaje en la nube', 'acuerdo SaaS'],
     },
   },

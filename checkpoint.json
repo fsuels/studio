@@ -67,16 +67,7 @@
     "intent_recognition",
     "multilingual_ai"
   ],
-  "languages_supported": [
-    "en",
-    "es",
-    "fr",
-    "pt",
-    "de",
-    "zh",
-    "ja",
-    "ar"
-  ],
+  "languages_supported": ["en", "es", "fr", "pt", "de", "zh", "ja", "ar"],
   "payment_systems": [
     "stripe_integration",
     "subscription_management",

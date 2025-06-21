@@ -23,21 +23,23 @@ export const rentalAgreementMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Rental Agreement',
-      description: 'Create a legally binding rental agreement with our easy-to-use template. State-specific requirements included.',
+      description:
+        'Create a legally binding rental agreement with our easy-to-use template. State-specific requirements included.',
       aliases: [
         'rental contract',
         'property rental',
         'lease contract',
-        'tenancy agreement'
+        'tenancy agreement',
       ],
     },
     es: {
       name: 'Acuerdo de Alquiler',
-      description: 'Crea un acuerdo de alquiler legalmente válido con nuestra plantilla fácil de usar. Incluye requisitos específicos del estado.',
+      description:
+        'Crea un acuerdo de alquiler legalmente válido con nuestra plantilla fácil de usar. Incluye requisitos específicos del estado.',
       aliases: [
         'contrato de alquiler',
         'contrato de renta',
-        'acuerdo de arrendamiento'
+        'acuerdo de arrendamiento',
       ],
     },
   },

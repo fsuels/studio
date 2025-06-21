@@ -9,9 +9,9 @@ export const metadata = {
   offerRecordingHelp: false,
   basePrice: 20,
   states: 'all',
-  templatePaths: { 
-    en: "en/us/education-trust.md", 
-    es: "es/us/education-trust.md" 
+  templatePaths: {
+    en: 'en/us/education-trust.md',
+    es: 'es/us/education-trust.md',
   },
   upsellClauses: [],
   translations: {
@@ -19,13 +19,22 @@ export const metadata = {
       name: 'Education Trust',
       description:
         'A specialized trust designed to fund educational expenses for beneficiaries with tax advantages.',
-      aliases: ['educational trust', 'tuition trust', 'scholarship trust', '529 trust alternative'],
+      aliases: [
+        'educational trust',
+        'tuition trust',
+        'scholarship trust',
+        '529 trust alternative',
+      ],
     },
     es: {
       name: 'Fideicomiso Educativo',
       description:
         'Un fideicomiso especializado diseñado para financiar gastos educativos para beneficiarios con ventajas fiscales.',
-      aliases: ['fideicomiso educacional', 'fideicomiso de matrícula', 'fideicomiso de beca'],
+      aliases: [
+        'fideicomiso educacional',
+        'fideicomiso de matrícula',
+        'fideicomiso de beca',
+      ],
     },
   },
 };

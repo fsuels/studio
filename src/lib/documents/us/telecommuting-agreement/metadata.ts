@@ -26,13 +26,21 @@ export const telecommutingAgreementMeta: LegalDocument = {
       name: 'Telecommuting Agreement',
       description:
         'Establish terms and conditions for remote work arrangements between employer and employee.',
-      aliases: ['remote work agreement', 'telework policy', 'work from home contract'],
+      aliases: [
+        'remote work agreement',
+        'telework policy',
+        'work from home contract',
+      ],
     },
     es: {
       name: 'Acuerdo de Teletrabajo',
       description:
         'Establecer términos y condiciones para acuerdos de trabajo remoto entre empleador y empleado.',
-      aliases: ['acuerdo de trabajo remoto', 'política de teletrabajo', 'contrato de trabajo desde casa'],
+      aliases: [
+        'acuerdo de trabajo remoto',
+        'política de teletrabajo',
+        'contrato de trabajo desde casa',
+      ],
     },
   },
 };

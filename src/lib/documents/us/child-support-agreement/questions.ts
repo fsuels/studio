@@ -276,7 +276,10 @@ export const childSupportAgreementQuestions: FormQuestion[] = [
     options: [
       { value: 'age-18', label: 'Until Child Reaches Age 18' },
       { value: 'age-19', label: 'Until Child Reaches Age 19' },
-      { value: 'high-school-graduation', label: 'Until High School Graduation' },
+      {
+        value: 'high-school-graduation',
+        label: 'Until High School Graduation',
+      },
       { value: 'college-graduation', label: 'Until College Graduation' },
       { value: 'specific-date', label: 'Until Specific Date' },
       { value: 'court-order', label: 'Until Court Order' },

@@ -24,12 +24,18 @@ export const employmentVerificationLetterMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Employment Verification Letter',
-      description: 'Official letter confirming employee status, salary, and employment details.',
-      aliases: ['employment letter', 'verification of employment', 'salary verification'],
+      description:
+        'Official letter confirming employee status, salary, and employment details.',
+      aliases: [
+        'employment letter',
+        'verification of employment',
+        'salary verification',
+      ],
     },
     es: {
       name: 'Carta de Verificación de Empleo',
-      description: 'Carta oficial que confirma el estado del empleado, salario y detalles del empleo.',
+      description:
+        'Carta oficial que confirma el estado del empleado, salario y detalles del empleo.',
       aliases: ['carta de empleo', 'verificación de empleo'],
     },
   },

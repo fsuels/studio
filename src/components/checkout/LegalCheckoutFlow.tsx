@@ -4,7 +4,13 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Badge } from '@/components/ui/badge';
 import { Shield, FileText, AlertCircle, CheckCircle2 } from 'lucide-react';
@@ -35,12 +41,14 @@ const LegalCheckoutFlow: React.FC<LegalCheckoutFlowProps> = ({
   userState,
   documentType,
   onPayment,
-  className
+  className,
 }) => {
   const [termsAccepted, setTermsAccepted] = React.useState(false);
   const [termsModalOpen, setTermsModalOpen] = React.useState(false);
   const [scrolledToBottom, setScrolledToBottom] = React.useState(false);
-  const [acceptance, setAcceptance] = React.useState<TermsAcceptance | null>(null);
+  const [acceptance, setAcceptance] = React.useState<TermsAcceptance | null>(
+    null,
+  );
 
   const isNorthCarolina = userState === 'NC';
   const total = price + tax;
@@ -50,39 +58,42 @@ const LegalCheckoutFlow: React.FC<LegalCheckoutFlowProps> = ({
   const handleTermsScroll = (e: React.UIEvent<HTMLDivElement>) => {
     const { scrollTop, scrollHeight, clientHeight } = e.currentTarget;
     const scrollPercentage = (scrollTop + clientHeight) / scrollHeight;
-    
+
     if (scrollPercentage >= 0.95 && !scrolledToBottom) {
       setScrolledToBottom(true);
     }
   };
 
   // Log acceptance event
-  const logAcceptanceEvent = React.useCallback(async (accepted: boolean) => {
-    if (!accepted) return;
+  const logAcceptanceEvent = React.useCallback(
+    async (accepted: boolean) => {
+      if (!accepted) return;
 
-    const acceptanceData: TermsAcceptance = {
-      userId: 'current-user-id', // Replace with actual user ID
-      ip: await getUserIP(),
-      termsVersion,
-      state: userState,
-      timestamp: new Date(),
-      scrolledToBottom,
-      documentType
-    };
+      const acceptanceData: TermsAcceptance = {
+        userId: 'current-user-id', // Replace with actual user ID
+        ip: await getUserIP(),
+        termsVersion,
+        state: userState,
+        timestamp: new Date(),
+        scrolledToBottom,
+        documentType,
+      };
 
-    setAcceptance(acceptanceData);
+      setAcceptance(acceptanceData);
 
-    // In real implementation, send to your logging service
-    try {
-      await fetch('/api/legal/log-acceptance', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(acceptanceData)
-      });
-    } catch (error) {
-      console.error('Failed to log terms acceptance:', error);
-    }
-  }, [userState, scrolledToBottom, documentType, termsVersion]);
+      // In real implementation, send to your logging service
+      try {
+        await fetch('/api/legal/log-acceptance', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(acceptanceData),
+        });
+      } catch (error) {
+        console.error('Failed to log terms acceptance:', error);
+      }
+    },
+    [userState, scrolledToBottom, documentType, termsVersion],
+  );
 
   const handleTermsChange = (checked: boolean) => {
     setTermsAccepted(checked);
@@ -103,24 +114,24 @@ const LegalCheckoutFlow: React.FC<LegalCheckoutFlowProps> = ({
   };
 
   return (
-    <div className={cn("space-y-6", className)}>
+    <div className={cn('space-y-6', className)}>
       {/* Order Summary */}
       <div className="rounded-lg border bg-white p-6 shadow-sm">
         <h3 className="text-lg font-semibold mb-4">Order Summary</h3>
-        
+
         <div className="space-y-3">
           <div className="flex justify-between items-center">
             <span className="text-gray-600">{documentType}</span>
             <span className="font-medium">${price.toFixed(2)}</span>
           </div>
-          
+
           {tax > 0 && (
             <div className="flex justify-between items-center text-sm">
               <span className="text-gray-500">Tax ({userState})</span>
               <span>${tax.toFixed(2)}</span>
             </div>
           )}
-          
+
           <div className="border-t pt-3">
             <div className="flex justify-between items-center font-semibold text-lg">
               <span>Total</span>
@@ -177,8 +188,8 @@ const LegalCheckoutFlow: React.FC<LegalCheckoutFlowProps> = ({
             <div className="flex items-start gap-2">
               <AlertCircle className="h-4 w-4 text-blue-600 mt-0.5 flex-shrink-0" />
               <p className="text-xs text-blue-800">
-                North Carolina purchasers: Standard warranty disclaimers do not apply. 
-                Disputes will be resolved in North Carolina courts.
+                North Carolina purchasers: Standard warranty disclaimers do not
+                apply. Disputes will be resolved in North Carolina courts.
               </p>
             </div>
           </div>
@@ -218,7 +229,10 @@ const LegalCheckoutFlow: React.FC<LegalCheckoutFlowProps> = ({
       {termsAccepted && (
         <div className="rounded-lg border border-amber-200 bg-amber-50 p-4">
           <div className="flex items-start gap-3">
-            <Badge variant="outline" className="bg-amber-100 text-amber-800 border-amber-300">
+            <Badge
+              variant="outline"
+              className="bg-amber-100 text-amber-800 border-amber-300"
+            >
               Optional
             </Badge>
             <div className="flex-1">
@@ -226,9 +240,14 @@ const LegalCheckoutFlow: React.FC<LegalCheckoutFlowProps> = ({
                 Want Legal Review?
               </h4>
               <p className="text-sm text-amber-800 mb-3">
-                Have a licensed attorney review your completed document for accuracy and compliance.
+                Have a licensed attorney review your completed document for
+                accuracy and compliance.
               </p>
-              <Button variant="outline" size="sm" className="border-amber-300 hover:bg-amber-100">
+              <Button
+                variant="outline"
+                size="sm"
+                className="border-amber-300 hover:bg-amber-100"
+              >
                 Add Legal Review (+$99)
               </Button>
             </div>
@@ -253,17 +272,21 @@ const TermsModal: React.FC<{
           Important: Read Before You Buy
         </DialogTitle>
       </DialogHeader>
-      
+
       <ScrollArea className="h-96 pr-4" onScrollCapture={onScroll}>
         <div className="space-y-4 text-sm">
           {/* Core Disclaimer */}
           <section>
             <h3 className="font-semibold mb-2">Legal Disclaimer</h3>
             <p className="text-gray-700 mb-3">
-              <strong>123LegalDoc is not a law firm; no attorney-client relationship is created.</strong> 
-              This platform provides self-help legal document templates for informational purposes only. 
-              The information and templates are not legal advice and should not be used as a substitute 
-              for competent legal counsel.
+              <strong>
+                123LegalDoc is not a law firm; no attorney-client relationship
+                is created.
+              </strong>
+              This platform provides self-help legal document templates for
+              informational purposes only. The information and templates are not
+              legal advice and should not be used as a substitute for competent
+              legal counsel.
             </p>
           </section>
 
@@ -271,8 +294,9 @@ const TermsModal: React.FC<{
           <section>
             <h3 className="font-semibold mb-2">What You're Purchasing</h3>
             <p className="text-gray-700 mb-2">
-              You are purchasing access to a digital document template that you can customize 
-              and download. This is a self-help legal form, not legal representation.
+              You are purchasing access to a digital document template that you
+              can customize and download. This is a self-help legal form, not
+              legal representation.
             </p>
             <ul className="list-disc list-inside text-gray-700 space-y-1">
               <li>Instant download access to document template</li>
@@ -287,13 +311,15 @@ const TermsModal: React.FC<{
             <section>
               <h3 className="font-semibold mb-2">Warranties and Disclaimers</h3>
               <p className="text-gray-700 mb-2">
-                THE TEMPLATE IS PROVIDED "AS-IS" WITHOUT WARRANTIES OF ANY KIND, 
-                EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO WARRANTIES OF 
-                MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, OR NON-INFRINGEMENT.
+                THE TEMPLATE IS PROVIDED "AS-IS" WITHOUT WARRANTIES OF ANY KIND,
+                EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO WARRANTIES OF
+                MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, OR
+                NON-INFRINGEMENT.
               </p>
               <p className="text-gray-700">
-                We do not warrant that the template will meet your specific legal needs 
-                or that it will be suitable for your particular jurisdiction or situation.
+                We do not warrant that the template will meet your specific
+                legal needs or that it will be suitable for your particular
+                jurisdiction or situation.
               </p>
             </section>
           )}
@@ -301,10 +327,13 @@ const TermsModal: React.FC<{
           {/* North Carolina Specific Terms */}
           {isNorthCarolina && (
             <section className="p-3 bg-blue-50 border border-blue-200 rounded">
-              <h3 className="font-semibold mb-2 text-blue-900">North Carolina Purchasers</h3>
+              <h3 className="font-semibold mb-2 text-blue-900">
+                North Carolina Purchasers
+              </h3>
               <p className="text-blue-800 text-sm">
-                The above warranty disclaimer does not apply to North Carolina purchasers. 
-                Any disputes will be resolved in North Carolina courts under North Carolina law.
+                The above warranty disclaimer does not apply to North Carolina
+                purchasers. Any disputes will be resolved in North Carolina
+                courts under North Carolina law.
               </p>
             </section>
           )}
@@ -313,8 +342,9 @@ const TermsModal: React.FC<{
           <section>
             <h3 className="font-semibold mb-2">Limitation of Liability</h3>
             <p className="text-gray-700">
-              In no event shall 123LegalDoc be liable for any indirect, incidental, special, 
-              consequential, or punitive damages arising from your use of the templates or services.
+              In no event shall 123LegalDoc be liable for any indirect,
+              incidental, special, consequential, or punitive damages arising
+              from your use of the templates or services.
             </p>
           </section>
 
@@ -334,23 +364,26 @@ const TermsModal: React.FC<{
           <section>
             <h3 className="font-semibold mb-2">Jurisdiction and Venue</h3>
             <p className="text-gray-700">
-              {isNorthCarolina 
-                ? "For North Carolina purchasers, disputes will be resolved in North Carolina courts under North Carolina law."
-                : "These terms are governed by Delaware law. Any disputes will be resolved in Delaware courts."
-              }
+              {isNorthCarolina
+                ? 'For North Carolina purchasers, disputes will be resolved in North Carolina courts under North Carolina law.'
+                : 'These terms are governed by Delaware law. Any disputes will be resolved in Delaware courts.'}
             </p>
           </section>
 
           {/* Professional Legal Services */}
           <section>
-            <h3 className="font-semibold mb-2">When to Seek Professional Help</h3>
+            <h3 className="font-semibold mb-2">
+              When to Seek Professional Help
+            </h3>
             <p className="text-gray-700 mb-2">
               You should consult with a licensed attorney if:
             </p>
             <ul className="list-disc list-inside text-gray-700 space-y-1">
               <li>Your situation involves complex legal issues</li>
               <li>Significant assets or legal rights are at stake</li>
-              <li>You're unsure about legal requirements in your jurisdiction</li>
+              <li>
+                You're unsure about legal requirements in your jurisdiction
+              </li>
               <li>The document requires notarization or court filing</li>
               <li>You need legal advice about your specific situation</li>
             </ul>
@@ -359,7 +392,10 @@ const TermsModal: React.FC<{
           {/* Terms Version */}
           <section className="text-xs text-gray-500 border-t pt-3">
             <p>Terms Version: 2025.1.0 | Last Updated: January 2025</p>
-            <p>By purchasing, you acknowledge that you have read and understood these terms.</p>
+            <p>
+              By purchasing, you acknowledge that you have read and understood
+              these terms.
+            </p>
           </section>
         </div>
       </ScrollArea>

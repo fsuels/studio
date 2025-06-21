@@ -14,5 +14,6 @@ export default async function FraudDetectionPage() {
 
 export const metadata = {
   title: 'Fraud Detection & Risk Scoring | Admin Dashboard',
-  description: 'Advanced fraud detection with velocity checks, device fingerprinting, and chargeback prediction',
+  description:
+    'Advanced fraud detection with velocity checks, device fingerprinting, and chargeback prediction',
 };

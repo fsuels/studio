@@ -1,13 +1,29 @@
 // Session Recording and Replay System for Support
 import { db } from '@/lib/firebase';
-import { collection, addDoc, query, where, orderBy, getDocs, doc, updateDoc } from 'firebase/firestore';
+import {
+  collection,
+  addDoc,
+  query,
+  where,
+  orderBy,
+  getDocs,
+  doc,
+  updateDoc,
+} from 'firebase/firestore';
 
 export interface SessionEvent {
   id: string;
   sessionId: string;
   userId?: string;
   timestamp: number;
-  type: 'click' | 'scroll' | 'input' | 'navigation' | 'error' | 'form_submit' | 'document_action';
+  type:
+    | 'click'
+    | 'scroll'
+    | 'input'
+    | 'navigation'
+    | 'error'
+    | 'form_submit'
+    | 'document_action';
   data: {
     element?: string;
     url?: string;
@@ -66,8 +82,8 @@ class SessionRecorder {
       url: window.location.href,
       viewport: {
         width: window.innerWidth,
-        height: window.innerHeight
-      }
+        height: window.innerHeight,
+      },
     });
   }
 
@@ -80,7 +96,7 @@ class SessionRecorder {
     // Mouse clicks
     document.addEventListener('click', (e) => {
       if (!this.isRecording) return;
-      
+
       const target = e.target as HTMLElement;
       this.recordEvent('click', {
         element: this.getElementSelector(target),
@@ -88,36 +104,36 @@ class SessionRecorder {
         metadata: {
           tagName: target.tagName,
           className: target.className,
-          textContent: target.textContent?.slice(0, 100)
-        }
+          textContent: target.textContent?.slice(0, 100),
+        },
       });
     });
 
     // Form inputs
     document.addEventListener('input', (e) => {
       if (!this.isRecording) return;
-      
+
       const target = e.target as HTMLInputElement;
       if (target.type === 'password') return; // Don't record passwords
-      
+
       this.recordEvent('input', {
         element: this.getElementSelector(target),
         value: this.sanitizeValue(target.value),
         metadata: {
           inputType: target.type,
-          name: target.name
-        }
+          name: target.name,
+        },
       });
     });
 
     // Scroll events (debounced)
     document.addEventListener('scroll', () => {
       if (!this.isRecording) return;
-      
+
       clearTimeout(this.debounceTimer);
       this.debounceTimer = setTimeout(() => {
         this.recordEvent('scroll', {
-          coordinates: { x: window.scrollX, y: window.scrollY }
+          coordinates: { x: window.scrollX, y: window.scrollY },
         });
       }, 100);
     });
@@ -125,38 +141,38 @@ class SessionRecorder {
     // Navigation changes
     window.addEventListener('popstate', () => {
       if (!this.isRecording) return;
-      
+
       this.recordEvent('navigation', {
-        url: window.location.href
+        url: window.location.href,
       });
     });
 
     // Error tracking
     window.addEventListener('error', (e) => {
       if (!this.isRecording) return;
-      
+
       this.recordEvent('error', {
         errorMessage: e.message,
         url: e.filename,
         metadata: {
           lineno: e.lineno,
           colno: e.colno,
-          stack: e.error?.stack
-        }
+          stack: e.error?.stack,
+        },
       });
     });
 
     // Form submissions
     document.addEventListener('submit', (e) => {
       if (!this.isRecording) return;
-      
+
       const form = e.target as HTMLFormElement;
       this.recordEvent('form_submit', {
         element: this.getElementSelector(form),
         metadata: {
           action: form.action,
-          method: form.method
-        }
+          method: form.method,
+        },
       });
     });
   }
@@ -168,7 +184,7 @@ class SessionRecorder {
       userId: this.userId,
       timestamp: Date.now(),
       type,
-      data
+      data,
     };
 
     this.events.push(event);
@@ -195,10 +211,10 @@ class SessionRecorder {
         userAgent: navigator.userAgent,
         events: eventsToFlush,
         metadata: {
-          errors: eventsToFlush.filter(e => e.type === 'error').length
+          errors: eventsToFlush.filter((e) => e.type === 'error').length,
         },
         tags: [],
-        isActive: this.isRecording
+        isActive: this.isRecording,
       };
 
       await addDoc(collection(db, 'sessionReplays'), sessionData);
@@ -210,7 +226,7 @@ class SessionRecorder {
   private getElementSelector(element: Element): string {
     if (element.id) return `#${element.id}`;
     if (element.className) {
-      const classes = element.className.split(' ').filter(c => c);
+      const classes = element.className.split(' ').filter((c) => c);
       if (classes.length > 0) return `.${classes[0]}`;
     }
     return element.tagName.toLowerCase();
@@ -221,15 +237,19 @@ class SessionRecorder {
     if (value.includes('@')) return '[email]';
     if (/^\d{4}/.test(value) && value.length >= 15) return '[card_number]';
     if (/^\d{3}-\d{2}-\d{4}$/.test(value)) return '[ssn]';
-    
+
     return value.length > 50 ? value.slice(0, 50) + '...' : value;
   }
 
   // Public API for tracking specific events
-  trackDocumentAction(documentType: string, action: string, metadata?: Record<string, any>) {
+  trackDocumentAction(
+    documentType: string,
+    action: string,
+    metadata?: Record<string, any>,
+  ) {
     this.recordEvent('document_action', {
       documentType,
-      metadata: { action, ...metadata }
+      metadata: { action, ...metadata },
     });
   }
 
@@ -245,7 +265,10 @@ class SessionRecorder {
 
 // Session Replay API for support team
 export class SessionReplayAPI {
-  static async getSessionsByUser(userId: string, limit = 10): Promise<SessionReplay[]> {
+  static async getSessionsByUser(
+    userId: string,
+    limit = 10,
+  ): Promise<SessionReplay[]> {
     const q = query(
       collection(db, 'sessionReplays'),
       where('userId', '==', userId),
@@ -254,17 +277,21 @@ export class SessionReplayAPI {
     );
 
     const snapshot = await getDocs(q);
-    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as SessionReplay));
+    return snapshot.docs.map(
+      (doc) => ({ id: doc.id, ...doc.data() }) as SessionReplay,
+    );
   }
 
   static async getSessionsByTicket(ticketId: string): Promise<SessionReplay[]> {
     const q = query(
       collection(db, 'sessionReplays'),
-      where('metadata.supportTicketId', '==', ticketId)
+      where('metadata.supportTicketId', '==', ticketId),
     );
 
     const snapshot = await getDocs(q);
-    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as SessionReplay));
+    return snapshot.docs.map(
+      (doc) => ({ id: doc.id, ...doc.data() }) as SessionReplay,
+    );
   }
 
   static async searchSessions(filters: {
@@ -290,49 +317,59 @@ export class SessionReplayAPI {
     }
 
     const snapshot = await getDocs(q);
-    let results = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as SessionReplay));
+    let results = snapshot.docs.map(
+      (doc) => ({ id: doc.id, ...doc.data() }) as SessionReplay,
+    );
 
     // Client-side filtering for complex conditions
     if (filters.hasErrors) {
-      results = results.filter(session => 
-        session.events.some(event => event.type === 'error')
+      results = results.filter((session) =>
+        session.events.some((event) => event.type === 'error'),
       );
     }
 
     if (filters.documentTypes?.length) {
-      results = results.filter(session =>
-        session.events.some(event => 
-          event.type === 'document_action' && 
-          filters.documentTypes!.includes(event.data.documentType!)
-        )
+      results = results.filter((session) =>
+        session.events.some(
+          (event) =>
+            event.type === 'document_action' &&
+            filters.documentTypes!.includes(event.data.documentType!),
+        ),
       );
     }
 
     if (filters.tags?.length) {
-      results = results.filter(session =>
-        filters.tags!.some(tag => session.tags.includes(tag))
+      results = results.filter((session) =>
+        filters.tags!.some((tag) => session.tags.includes(tag)),
       );
     }
 
     return results.sort((a, b) => b.startTime - a.startTime);
   }
 
-  static async linkSessionToTicket(sessionId: string, ticketId: string): Promise<void> {
+  static async linkSessionToTicket(
+    sessionId: string,
+    ticketId: string,
+  ): Promise<void> {
     await updateDoc(doc(db, 'sessionReplays', sessionId), {
-      'metadata.supportTicketId': ticketId
+      'metadata.supportTicketId': ticketId,
     });
   }
 
-  static async addSessionTags(sessionId: string, tags: string[]): Promise<void> {
+  static async addSessionTags(
+    sessionId: string,
+    tags: string[],
+  ): Promise<void> {
     const sessionDoc = doc(db, 'sessionReplays', sessionId);
     await updateDoc(sessionDoc, {
-      tags: tags
+      tags: tags,
     });
   }
 }
 
 // Global session recorder instance
-export const sessionRecorder = typeof window !== 'undefined' ? new SessionRecorder() : null;
+export const sessionRecorder =
+  typeof window !== 'undefined' ? new SessionRecorder() : null;
 
 // Auto-start recording for authenticated users
 if (typeof window !== 'undefined') {

@@ -26,20 +26,13 @@ export const consignmentAgreementMeta: LegalDocument = {
       name: 'Consignment Agreement',
       description:
         'Create a legally binding Consignment Agreement with our easy-to-use template. State-specific requirements included.',
-      aliases: [
-        'consignment contract',
-        'consignment deal',
-        'sales agreement',
-      ],
+      aliases: ['consignment contract', 'consignment deal', 'sales agreement'],
     },
     es: {
       name: 'Acuerdo de Consignación',
       description:
         'Crea un Acuerdo de Consignación legalmente válido con nuestra plantilla fácil de usar. Incluye requisitos específicos del estado.',
-      aliases: [
-        'contrato de consignación',
-        'acuerdo de ventas',
-      ],
+      aliases: ['contrato de consignación', 'acuerdo de ventas'],
     },
   },
 };

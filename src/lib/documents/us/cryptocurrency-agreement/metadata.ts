@@ -24,12 +24,18 @@ export const cryptocurrencyAgreementMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Cryptocurrency Agreement',
-      description: 'Agreement for cryptocurrency transactions, trading, and digital asset services.',
-      aliases: ['crypto agreement', 'digital asset agreement', 'blockchain agreement'],
+      description:
+        'Agreement for cryptocurrency transactions, trading, and digital asset services.',
+      aliases: [
+        'crypto agreement',
+        'digital asset agreement',
+        'blockchain agreement',
+      ],
     },
     es: {
       name: 'Acuerdo de Criptomonedas',
-      description: 'Acuerdo para transacciones de criptomonedas, comercio y servicios de activos digitales.',
+      description:
+        'Acuerdo para transacciones de criptomonedas, comercio y servicios de activos digitales.',
       aliases: ['acuerdo crypto', 'acuerdo de activos digitales'],
     },
   },

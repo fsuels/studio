@@ -14,12 +14,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { 
-  GitCompare, 
-  Clock, 
-  User, 
-  Plus, 
-  Minus, 
+import {
+  GitCompare,
+  Clock,
+  User,
+  Plus,
+  Minus,
   Edit,
   Download,
   Share,
@@ -28,7 +28,7 @@ import {
   ArrowRight,
   Eye,
   AlertCircle,
-  CheckCircle
+  CheckCircle,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -75,14 +75,20 @@ const DocumentComparison: React.FC<DocumentComparisonProps> = ({
   versions,
   onVersionRestore,
   onClose,
-  className
+  className,
 }) => {
   const { t } = useTranslation('comparison');
-  const [leftVersion, setLeftVersion] = React.useState<string>(versions[1]?.id || '');
-  const [rightVersion, setRightVersion] = React.useState<string>(versions[0]?.id || '');
+  const [leftVersion, setLeftVersion] = React.useState<string>(
+    versions[1]?.id || '',
+  );
+  const [rightVersion, setRightVersion] = React.useState<string>(
+    versions[0]?.id || '',
+  );
   const [diffs, setDiffs] = React.useState<Diff[]>([]);
   const [isLoading, setIsLoading] = React.useState(false);
-  const [viewMode, setViewMode] = React.useState<'side-by-side' | 'unified'>('side-by-side');
+  const [viewMode, setViewMode] = React.useState<'side-by-side' | 'unified'>(
+    'side-by-side',
+  );
   const [showOnlyChanges, setShowOnlyChanges] = React.useState(false);
 
   // Generate comparison when versions change
@@ -94,7 +100,7 @@ const DocumentComparison: React.FC<DocumentComparisonProps> = ({
 
   const generateComparison = async () => {
     setIsLoading(true);
-    
+
     try {
       const response = await fetch('/api/documents/compare', {
         method: 'POST',
@@ -102,8 +108,8 @@ const DocumentComparison: React.FC<DocumentComparisonProps> = ({
         body: JSON.stringify({
           documentId,
           leftVersionId: leftVersion,
-          rightVersionId: rightVersion
-        })
+          rightVersionId: rightVersion,
+        }),
       });
 
       const comparison = await response.json();
@@ -115,55 +121,67 @@ const DocumentComparison: React.FC<DocumentComparisonProps> = ({
     }
   };
 
-  const getVersionById = (id: string) => versions.find(v => v.id === id);
+  const getVersionById = (id: string) => versions.find((v) => v.id === id);
   const leftVersionData = getVersionById(leftVersion);
   const rightVersionData = getVersionById(rightVersion);
 
   const changeStats = React.useMemo(() => {
     const stats = {
-      additions: diffs.filter(d => d.type === 'added').length,
-      deletions: diffs.filter(d => d.type === 'removed').length,
-      modifications: diffs.filter(d => d.type === 'modified').length
+      additions: diffs.filter((d) => d.type === 'added').length,
+      deletions: diffs.filter((d) => d.type === 'removed').length,
+      modifications: diffs.filter((d) => d.type === 'modified').length,
     };
     return {
       ...stats,
-      total: stats.additions + stats.deletions + stats.modifications
+      total: stats.additions + stats.deletions + stats.modifications,
     };
   }, [diffs]);
 
-  const filteredDiffs = showOnlyChanges 
-    ? diffs.filter(d => d.type !== 'unchanged')
+  const filteredDiffs = showOnlyChanges
+    ? diffs.filter((d) => d.type !== 'unchanged')
     : diffs;
 
   const getDiffIcon = (type: string) => {
     switch (type) {
-      case 'added': return <Plus className="h-3 w-3 text-green-600" />;
-      case 'removed': return <Minus className="h-3 w-3 text-red-600" />;
-      case 'modified': return <Edit className="h-3 w-3 text-blue-600" />;
-      default: return null;
+      case 'added':
+        return <Plus className="h-3 w-3 text-green-600" />;
+      case 'removed':
+        return <Minus className="h-3 w-3 text-red-600" />;
+      case 'modified':
+        return <Edit className="h-3 w-3 text-blue-600" />;
+      default:
+        return null;
     }
   };
 
   const getDiffColor = (type: string) => {
     switch (type) {
-      case 'added': return 'bg-green-50 border-green-200 text-green-900';
-      case 'removed': return 'bg-red-50 border-red-200 text-red-900';
-      case 'modified': return 'bg-blue-50 border-blue-200 text-blue-900';
-      default: return 'bg-gray-50 border-gray-200 text-gray-900';
+      case 'added':
+        return 'bg-green-50 border-green-200 text-green-900';
+      case 'removed':
+        return 'bg-red-50 border-red-200 text-red-900';
+      case 'modified':
+        return 'bg-blue-50 border-blue-200 text-blue-900';
+      default:
+        return 'bg-gray-50 border-gray-200 text-gray-900';
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'approved': return <CheckCircle className="h-4 w-4 text-green-600" />;
-      case 'review': return <AlertCircle className="h-4 w-4 text-yellow-600" />;
-      case 'published': return <Eye className="h-4 w-4 text-blue-600" />;
-      default: return <Edit className="h-4 w-4 text-gray-600" />;
+      case 'approved':
+        return <CheckCircle className="h-4 w-4 text-green-600" />;
+      case 'review':
+        return <AlertCircle className="h-4 w-4 text-yellow-600" />;
+      case 'published':
+        return <Eye className="h-4 w-4 text-blue-600" />;
+      default:
+        return <Edit className="h-4 w-4 text-gray-600" />;
     }
   };
 
   return (
-    <div className={cn("space-y-4", className)}>
+    <div className={cn('space-y-4', className)}>
       {/* Header */}
       <Card>
         <CardHeader className="pb-3">
@@ -172,16 +190,20 @@ const DocumentComparison: React.FC<DocumentComparisonProps> = ({
               <GitCompare className="h-5 w-5" />
               Document Comparison
             </CardTitle>
-            
+
             <div className="flex items-center gap-2">
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => setViewMode(viewMode === 'side-by-side' ? 'unified' : 'side-by-side')}
+                onClick={() =>
+                  setViewMode(
+                    viewMode === 'side-by-side' ? 'unified' : 'side-by-side',
+                  )
+                }
               >
                 {viewMode === 'side-by-side' ? 'Unified View' : 'Side by Side'}
               </Button>
-              
+
               {onClose && (
                 <Button variant="ghost" size="sm" onClick={onClose}>
                   <ArrowLeft className="h-4 w-4" />
@@ -201,7 +223,7 @@ const DocumentComparison: React.FC<DocumentComparisonProps> = ({
                   <SelectValue placeholder="Select version" />
                 </SelectTrigger>
                 <SelectContent>
-                  {versions.map(version => (
+                  {versions.map((version) => (
                     <SelectItem key={version.id} value={version.id}>
                       <div className="flex items-center gap-2">
                         {getStatusIcon(version.status)}
@@ -223,7 +245,7 @@ const DocumentComparison: React.FC<DocumentComparisonProps> = ({
                   <SelectValue placeholder="Select version" />
                 </SelectTrigger>
                 <SelectContent>
-                  {versions.map(version => (
+                  {versions.map((version) => (
                     <SelectItem key={version.id} value={version.id}>
                       <div className="flex items-center gap-2">
                         {getStatusIcon(version.status)}
@@ -287,7 +309,9 @@ const DocumentComparison: React.FC<DocumentComparisonProps> = ({
           <CardContent className="flex items-center justify-center py-12">
             <div className="text-center">
               <div className="animate-spin rounded-full h-8 w-8 border-2 border-primary border-t-transparent mx-auto mb-2" />
-              <p className="text-sm text-muted-foreground">Generating comparison...</p>
+              <p className="text-sm text-muted-foreground">
+                Generating comparison...
+              </p>
             </div>
           </CardContent>
         </Card>
@@ -320,25 +344,23 @@ const DocumentComparison: React.FC<DocumentComparisonProps> = ({
         <Card>
           <CardContent className="flex items-center justify-between p-4">
             <div className="text-sm text-muted-foreground">
-              Comparing v{leftVersionData.version} with v{rightVersionData.version}
+              Comparing v{leftVersionData.version} with v
+              {rightVersionData.version}
             </div>
-            
+
             <div className="flex items-center gap-2">
               <Button variant="outline" size="sm">
                 <Download className="h-4 w-4 mr-1" />
                 Export Diff
               </Button>
-              
+
               <Button variant="outline" size="sm">
                 <Share className="h-4 w-4 mr-1" />
                 Share
               </Button>
 
               {onVersionRestore && (
-                <Button 
-                  onClick={() => onVersionRestore(leftVersion)}
-                  size="sm"
-                >
+                <Button onClick={() => onVersionRestore(leftVersion)} size="sm">
                   <History className="h-4 w-4 mr-1" />
                   Restore v{leftVersionData.version}
                 </Button>
@@ -352,22 +374,26 @@ const DocumentComparison: React.FC<DocumentComparisonProps> = ({
 };
 
 // Version info component
-const VersionInfo: React.FC<{ version: DocumentVersion; side: 'left' | 'right' }> = ({ 
-  version, 
-  side 
-}) => {
+const VersionInfo: React.FC<{
+  version: DocumentVersion;
+  side: 'left' | 'right';
+}> = ({ version, side }) => {
   return (
-    <div className={cn(
-      "space-y-2 p-3 rounded-lg border",
-      side === 'left' ? 'bg-red-50 border-red-200' : 'bg-green-50 border-green-200'
-    )}>
+    <div
+      className={cn(
+        'space-y-2 p-3 rounded-lg border',
+        side === 'left'
+          ? 'bg-red-50 border-red-200'
+          : 'bg-green-50 border-green-200',
+      )}
+    >
       <div className="flex items-center justify-between">
         <h4 className="font-medium text-sm">Version {version.version}</h4>
         <Badge variant="outline" className="text-xs">
           {version.status}
         </Badge>
       </div>
-      
+
       <div className="space-y-1 text-xs text-muted-foreground">
         <div className="flex items-center gap-1">
           <User className="h-3 w-3" />
@@ -378,10 +404,8 @@ const VersionInfo: React.FC<{ version: DocumentVersion; side: 'left' | 'right' }
           {version.timestamp.toLocaleString()}
         </div>
       </div>
-      
-      {version.description && (
-        <p className="text-xs">{version.description}</p>
-      )}
+
+      {version.description && <p className="text-xs">{version.description}</p>}
     </div>
   );
 };
@@ -391,14 +415,18 @@ const SideBySideView: React.FC<{ diffs: Diff[] }> = ({ diffs }) => {
   return (
     <div className="grid grid-cols-2 divide-x">
       <div className="p-4 space-y-2">
-        <h3 className="text-sm font-medium text-red-600 mb-3">Previous Version</h3>
+        <h3 className="text-sm font-medium text-red-600 mb-3">
+          Previous Version
+        </h3>
         {diffs.map((diff, index) => (
           <DiffLine key={index} diff={diff} side="left" />
         ))}
       </div>
-      
+
       <div className="p-4 space-y-2">
-        <h3 className="text-sm font-medium text-green-600 mb-3">Current Version</h3>
+        <h3 className="text-sm font-medium text-green-600 mb-3">
+          Current Version
+        </h3>
         {diffs.map((diff, index) => (
           <DiffLine key={index} diff={diff} side="right" />
         ))}
@@ -419,27 +447,40 @@ const UnifiedView: React.FC<{ diffs: Diff[] }> = ({ diffs }) => {
 };
 
 // Diff line component for side-by-side view
-const DiffLine: React.FC<{ diff: Diff; side: 'left' | 'right' }> = ({ diff, side }) => {
+const DiffLine: React.FC<{ diff: Diff; side: 'left' | 'right' }> = ({
+  diff,
+  side,
+}) => {
   const showValue = side === 'left' ? diff.oldValue : diff.newValue;
-  const isVisible = side === 'left' 
-    ? diff.type === 'removed' || diff.type === 'modified' || diff.type === 'unchanged'
-    : diff.type === 'added' || diff.type === 'modified' || diff.type === 'unchanged';
+  const isVisible =
+    side === 'left'
+      ? diff.type === 'removed' ||
+        diff.type === 'modified' ||
+        diff.type === 'unchanged'
+      : diff.type === 'added' ||
+        diff.type === 'modified' ||
+        diff.type === 'unchanged';
 
   if (!isVisible || !showValue) return <div className="h-6" />;
 
   return (
-    <div className={cn(
-      "p-2 rounded text-sm border",
-      diff.type === 'unchanged' ? 'bg-gray-50 border-gray-200' :
-      side === 'left' ? 'bg-red-50 border-red-200' : 'bg-green-50 border-green-200'
-    )}>
+    <div
+      className={cn(
+        'p-2 rounded text-sm border',
+        diff.type === 'unchanged'
+          ? 'bg-gray-50 border-gray-200'
+          : side === 'left'
+            ? 'bg-red-50 border-red-200'
+            : 'bg-green-50 border-green-200',
+      )}
+    >
       <div className="flex items-start gap-2">
-        <span className="text-xs text-muted-foreground font-mono">{diff.field}:</span>
+        <span className="text-xs text-muted-foreground font-mono">
+          {diff.field}:
+        </span>
         <span className="flex-1">{showValue}</span>
         {diff.type !== 'unchanged' && (
-          <div className="shrink-0">
-            {getDiffIcon(diff.type)}
-          </div>
+          <div className="shrink-0">{getDiffIcon(diff.type)}</div>
         )}
       </div>
     </div>
@@ -459,14 +500,18 @@ const UnifiedDiffLine: React.FC<{ diff: Diff }> = ({ diff }) => {
 
   return (
     <div className="space-y-1">
-      <div className="text-xs text-muted-foreground font-medium">{diff.field}</div>
-      
+      <div className="text-xs text-muted-foreground font-medium">
+        {diff.field}
+      </div>
+
       {diff.type === 'modified' && (
         <>
           <div className="p-2 rounded text-sm bg-red-50 border border-red-200">
             <div className="flex items-start gap-2">
               <Minus className="h-3 w-3 text-red-600 mt-0.5 shrink-0" />
-              <span className="flex-1 line-through opacity-75">{diff.oldValue}</span>
+              <span className="flex-1 line-through opacity-75">
+                {diff.oldValue}
+              </span>
             </div>
           </div>
           <div className="p-2 rounded text-sm bg-green-50 border border-green-200">
@@ -477,7 +522,7 @@ const UnifiedDiffLine: React.FC<{ diff: Diff }> = ({ diff }) => {
           </div>
         </>
       )}
-      
+
       {diff.type === 'added' && (
         <div className="p-2 rounded text-sm bg-green-50 border border-green-200">
           <div className="flex items-start gap-2">
@@ -486,12 +531,14 @@ const UnifiedDiffLine: React.FC<{ diff: Diff }> = ({ diff }) => {
           </div>
         </div>
       )}
-      
+
       {diff.type === 'removed' && (
         <div className="p-2 rounded text-sm bg-red-50 border border-red-200">
           <div className="flex items-start gap-2">
             <Minus className="h-3 w-3 text-red-600 mt-0.5 shrink-0" />
-            <span className="flex-1 line-through opacity-75">{diff.oldValue}</span>
+            <span className="flex-1 line-through opacity-75">
+              {diff.oldValue}
+            </span>
           </div>
         </div>
       )}
@@ -501,10 +548,14 @@ const UnifiedDiffLine: React.FC<{ diff: Diff }> = ({ diff }) => {
 
 function getDiffIcon(type: string) {
   switch (type) {
-    case 'added': return <Plus className="h-3 w-3 text-green-600" />;
-    case 'removed': return <Minus className="h-3 w-3 text-red-600" />;
-    case 'modified': return <Edit className="h-3 w-3 text-blue-600" />;
-    default: return null;
+    case 'added':
+      return <Plus className="h-3 w-3 text-green-600" />;
+    case 'removed':
+      return <Minus className="h-3 w-3 text-red-600" />;
+    case 'modified':
+      return <Edit className="h-3 w-3 text-blue-600" />;
+    default:
+      return null;
   }
 }
 

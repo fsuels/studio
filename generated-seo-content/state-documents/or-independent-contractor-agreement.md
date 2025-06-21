@@ -47,7 +47,7 @@ Don't risk using generic templates that may not comply with Oregon law. Get a pr
 
 [Create Oregon Independent Contractor Agreement]
 
-*Trusted by thousands of Oregon businesses*
+_Trusted by thousands of Oregon businesses_
 
 ---
 

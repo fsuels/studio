@@ -3,7 +3,13 @@
 
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -29,7 +35,9 @@ export default function DataExportPage() {
   const [exportInfo, setExportInfo] = useState<ExportInfo | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isExporting, setIsExporting] = useState(false);
-  const [requestType, setRequestType] = useState<'full_export' | 'audit_trail_only' | 'documents_only'>('full_export');
+  const [requestType, setRequestType] = useState<
+    'full_export' | 'audit_trail_only' | 'documents_only'
+  >('full_export');
   const [format, setFormat] = useState<'json' | 'csv'>('json');
   const [includeDeleted, setIncludeDeleted] = useState(false);
 
@@ -51,7 +59,7 @@ export default function DataExportPage() {
       toast({
         title: 'Error',
         description: 'Failed to load export information',
-        variant: 'destructive'
+        variant: 'destructive',
       });
     } finally {
       setIsLoading(false);
@@ -66,20 +74,20 @@ export default function DataExportPage() {
       const response = await fetch('/api/compliance/data-export', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           userId: user.uid,
           requestType,
           format,
-          includeDeleted
-        })
+          includeDeleted,
+        }),
       });
 
       if (response.ok) {
         // Get the filename from Content-Disposition header
         const contentDisposition = response.headers.get('content-disposition');
-        const filename = contentDisposition 
+        const filename = contentDisposition
           ? contentDisposition.split('filename=')[1]?.replace(/"/g, '')
           : `data-export-${user.uid}-${Date.now()}.${format}`;
 
@@ -96,7 +104,8 @@ export default function DataExportPage() {
 
         toast({
           title: 'Export Complete',
-          description: 'Your data has been exported and downloaded successfully.'
+          description:
+            'Your data has been exported and downloaded successfully.',
         });
       } else {
         const error = await response.json();
@@ -106,8 +115,9 @@ export default function DataExportPage() {
       console.error('Export error:', error);
       toast({
         title: 'Export Failed',
-        description: error instanceof Error ? error.message : 'Failed to export data',
-        variant: 'destructive'
+        description:
+          error instanceof Error ? error.message : 'Failed to export data',
+        variant: 'destructive',
       });
     } finally {
       setIsExporting(false);
@@ -131,10 +141,11 @@ export default function DataExportPage() {
         <Shield className="h-6 w-6 text-blue-600" />
         <h1 className="text-3xl font-bold">Export Your Data</h1>
       </div>
-      
+
       <p className="text-muted-foreground">
-        Download a copy of your personal data stored in our system. This export is provided 
-        in compliance with data protection regulations including GDPR and CCPA.
+        Download a copy of your personal data stored in our system. This export
+        is provided in compliance with data protection regulations including
+        GDPR and CCPA.
       </p>
 
       {exportInfo && (
@@ -156,9 +167,11 @@ export default function DataExportPage() {
                   <FileText className="h-4 w-4" />
                   <span>Documents</span>
                 </span>
-                <span className="font-semibold">{exportInfo.availableData.documents}</span>
+                <span className="font-semibold">
+                  {exportInfo.availableData.documents}
+                </span>
               </div>
-              
+
               <div className="flex justify-between items-center">
                 <span className="flex items-center space-x-2">
                   <Shield className="h-4 w-4" />
@@ -168,18 +181,21 @@ export default function DataExportPage() {
                   {exportInfo.availableData.auditTrail ? 'Available' : 'None'}
                 </span>
               </div>
-              
+
               <div className="flex justify-between items-center">
                 <span className="flex items-center space-x-2">
                   <Clock className="h-4 w-4" />
                   <span>Estimated Size</span>
                 </span>
-                <span className="font-semibold">{exportInfo.estimatedExportSize}</span>
+                <span className="font-semibold">
+                  {exportInfo.estimatedExportSize}
+                </span>
               </div>
-              
+
               <div className="pt-2 border-t">
                 <p className="text-sm text-muted-foreground">
-                  <strong>Retention Policy:</strong> {exportInfo.retentionPolicy}
+                  <strong>Retention Policy:</strong>{' '}
+                  {exportInfo.retentionPolicy}
                 </p>
               </div>
             </CardContent>
@@ -197,7 +213,10 @@ export default function DataExportPage() {
               {/* Request Type */}
               <div className="space-y-3">
                 <Label className="text-sm font-medium">What to export</Label>
-                <RadioGroup value={requestType} onValueChange={(value: any) => setRequestType(value)}>
+                <RadioGroup
+                  value={requestType}
+                  onValueChange={(value: any) => setRequestType(value)}
+                >
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="full_export" id="full" />
                     <Label htmlFor="full">Complete data export</Label>
@@ -216,7 +235,10 @@ export default function DataExportPage() {
               {/* Format */}
               <div className="space-y-3">
                 <Label className="text-sm font-medium">Export format</Label>
-                <RadioGroup value={format} onValueChange={(value: any) => setFormat(value)}>
+                <RadioGroup
+                  value={format}
+                  onValueChange={(value: any) => setFormat(value)}
+                >
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="json" id="json" />
                     <Label htmlFor="json">JSON (structured data)</Label>
@@ -230,10 +252,12 @@ export default function DataExportPage() {
 
               {/* Include Deleted */}
               <div className="flex items-center space-x-2">
-                <Checkbox 
+                <Checkbox
                   id="deleted"
                   checked={includeDeleted}
-                  onCheckedChange={(checked) => setIncludeDeleted(checked as boolean)}
+                  onCheckedChange={(checked) =>
+                    setIncludeDeleted(checked as boolean)
+                  }
                 />
                 <Label htmlFor="deleted" className="text-sm">
                   Include deleted documents
@@ -241,8 +265,8 @@ export default function DataExportPage() {
               </div>
 
               {/* Export Button */}
-              <Button 
-                onClick={handleExport} 
+              <Button
+                onClick={handleExport}
                 disabled={isExporting}
                 className="w-full"
               >
@@ -261,16 +285,21 @@ export default function DataExportPage() {
         </CardHeader>
         <CardContent className="space-y-3 text-sm text-muted-foreground">
           <p>
-            <strong>Right to Access:</strong> You have the right to obtain a copy of your personal data we process.
+            <strong>Right to Access:</strong> You have the right to obtain a
+            copy of your personal data we process.
           </p>
           <p>
-            <strong>Data Portability:</strong> You can receive your data in a structured, commonly used format.
+            <strong>Data Portability:</strong> You can receive your data in a
+            structured, commonly used format.
           </p>
           <p>
-            <strong>Audit Trail:</strong> Your audit trail contains a complete record of actions taken on your data for security and compliance purposes.
+            <strong>Audit Trail:</strong> Your audit trail contains a complete
+            record of actions taken on your data for security and compliance
+            purposes.
           </p>
           <p>
-            <strong>Questions?</strong> Contact us at privacy@123legaldoc.com for any data-related inquiries.
+            <strong>Questions?</strong> Contact us at privacy@123legaldoc.com
+            for any data-related inquiries.
           </p>
         </CardContent>
       </Card>

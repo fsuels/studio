@@ -68,16 +68,16 @@ export default function CompletePage({
             {related.map((doc) => (
               <Card key={doc.id} className="border border-border shadow-sm">
                 <CardHeader>
-                  <CardTitle className="text-lg">
-                    {getName(doc)}
-                  </CardTitle>
+                  <CardTitle className="text-lg">{getName(doc)}</CardTitle>
                   <CardDescription className="text-sm">
                     {getDesc(doc)}
                   </CardDescription>
                 </CardHeader>
                 <CardFooter>
                   <Button asChild className="w-full">
-                    <Link href={`/${params.locale}/docs/${doc.id}/start`}>Start</Link>
+                    <Link href={`/${params.locale}/docs/${doc.id}/start`}>
+                      Start
+                    </Link>
                   </Button>
                 </CardFooter>
               </Card>

@@ -24,12 +24,14 @@ export const employeeEvaluationFormMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Employee Evaluation Form',
-      description: 'Comprehensive employee performance evaluation and review form.',
+      description:
+        'Comprehensive employee performance evaluation and review form.',
       aliases: ['performance review', 'employee assessment', 'annual review'],
     },
     es: {
       name: 'Formulario de Evaluación de Empleado',
-      description: 'Formulario integral de evaluación y revisión del desempeño del empleado.',
+      description:
+        'Formulario integral de evaluación y revisión del desempeño del empleado.',
       aliases: ['revisión de desempeño', 'evaluación anual'],
     },
   },

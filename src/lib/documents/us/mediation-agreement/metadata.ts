@@ -24,13 +24,21 @@ export const mediationAgreementMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Mediation Agreement',
-      description: 'Agreement to resolve disputes through mediation with the help of a neutral mediator.',
-      aliases: ['dispute mediation agreement', 'alternative dispute resolution agreement'],
+      description:
+        'Agreement to resolve disputes through mediation with the help of a neutral mediator.',
+      aliases: [
+        'dispute mediation agreement',
+        'alternative dispute resolution agreement',
+      ],
     },
     es: {
       name: 'Acuerdo de Mediación',
-      description: 'Acuerdo para resolver disputas a través de mediación con la ayuda de un mediador neutral.',
-      aliases: ['acuerdo de mediación de disputas', 'acuerdo de resolución alternativa'],
+      description:
+        'Acuerdo para resolver disputas a través de mediación con la ayuda de un mediador neutral.',
+      aliases: [
+        'acuerdo de mediación de disputas',
+        'acuerdo de resolución alternativa',
+      ],
     },
   },
 };

@@ -5,43 +5,33 @@ import { exportService } from '@/lib/vector-search/export-service';
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { 
-      userId, 
-      query, 
-      filters, 
-      options,
-      action = 'create'
-    } = body;
+    const { userId, query, filters, options, action = 'create' } = body;
 
     switch (action) {
       case 'create':
         return await handleCreateExport(userId, query, filters, options);
-      
+
       case 'status':
         return await handleGetStatus(body.jobId);
-      
+
       case 'list':
         return await handleListExports(userId);
-      
+
       case 'stats':
         return await handleGetStats();
-      
-      default:
-        return NextResponse.json(
-          { error: 'Invalid action' },
-          { status: 400 }
-        );
-    }
 
+      default:
+        return NextResponse.json({ error: 'Invalid action' }, { status: 400 });
+    }
   } catch (error) {
     console.error('Export API error:', error);
-    
+
     return NextResponse.json(
-      { 
+      {
         error: 'Internal server error',
         message: error instanceof Error ? error.message : 'Unknown error',
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -58,39 +48,35 @@ export async function GET(request: NextRequest) {
         if (!jobId) {
           return NextResponse.json(
             { error: 'Job ID is required' },
-            { status: 400 }
+            { status: 400 },
           );
         }
         return await handleGetStatus(jobId);
-      
+
       case 'list':
         if (!userId) {
           return NextResponse.json(
             { error: 'User ID is required' },
-            { status: 400 }
+            { status: 400 },
           );
         }
         return await handleListExports(userId);
-      
+
       case 'stats':
         return await handleGetStats();
-      
-      default:
-        return NextResponse.json(
-          { error: 'Invalid action' },
-          { status: 400 }
-        );
-    }
 
+      default:
+        return NextResponse.json({ error: 'Invalid action' }, { status: 400 });
+    }
   } catch (error) {
     console.error('Export GET API error:', error);
-    
+
     return NextResponse.json(
-      { 
+      {
         error: 'Internal server error',
         message: error instanceof Error ? error.message : 'Unknown error',
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -102,12 +88,12 @@ async function handleCreateExport(
   userId: string,
   query: string,
   filters?: any,
-  options?: any
+  options?: any,
 ) {
   if (!userId || !query) {
     return NextResponse.json(
       { error: 'User ID and query are required' },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
@@ -126,19 +112,19 @@ async function handleCreateExport(
 
   // Check user export limits (in production, implement proper rate limiting)
   const userJobs = exportService.getUserExportJobs(userId);
-  const recentJobs = userJobs.filter(job => {
+  const recentJobs = userJobs.filter((job) => {
     const jobTime = new Date(job.createdAt).getTime();
-    const oneHourAgo = Date.now() - (60 * 60 * 1000);
+    const oneHourAgo = Date.now() - 60 * 60 * 1000;
     return jobTime > oneHourAgo;
   });
 
   if (recentJobs.length >= 5) {
     return NextResponse.json(
-      { 
+      {
         error: 'Export limit exceeded',
         message: 'Maximum 5 exports per hour allowed',
       },
-      { status: 429 }
+      { status: 429 },
     );
   }
 
@@ -146,7 +132,7 @@ async function handleCreateExport(
     userId,
     query,
     filters,
-    validatedOptions
+    validatedOptions,
   );
 
   return NextResponse.json({
@@ -160,11 +146,11 @@ async function handleCreateExport(
  */
 async function handleGetStatus(jobId: string) {
   const job = exportService.getExportJob(jobId);
-  
+
   if (!job) {
     return NextResponse.json(
       { error: 'Export job not found' },
-      { status: 404 }
+      { status: 404 },
     );
   }
 
@@ -178,7 +164,7 @@ async function handleGetStatus(jobId: string) {
  */
 async function handleListExports(userId: string) {
   const jobs = exportService.getUserExportJobs(userId);
-  
+
   return NextResponse.json({
     jobs,
     total: jobs.length,
@@ -190,7 +176,7 @@ async function handleListExports(userId: string) {
  */
 async function handleGetStats() {
   const stats = exportService.getExportStats();
-  
+
   return NextResponse.json({
     stats,
   });

@@ -26,13 +26,21 @@ export const partnershipDissolutionAgreementMeta: LegalDocument = {
       name: 'Partnership Dissolution Agreement',
       description:
         'Agreement to formally dissolve a partnership and distribute assets.',
-      aliases: ['partnership termination', 'business dissolution', 'wind-up agreement'],
+      aliases: [
+        'partnership termination',
+        'business dissolution',
+        'wind-up agreement',
+      ],
     },
     es: {
       name: 'Acuerdo de Disolución de Sociedad',
       description:
         'Acuerdo para disolver formalmente una sociedad y distribuir activos.',
-      aliases: ['terminación de sociedad', 'disolución de negocio', 'acuerdo de liquidación'],
+      aliases: [
+        'terminación de sociedad',
+        'disolución de negocio',
+        'acuerdo de liquidación',
+      ],
     },
   },
 };

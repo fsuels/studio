@@ -24,12 +24,18 @@ export const farmLeaseAgreementMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Farm Lease Agreement',
-      description: 'Agreement for leasing agricultural land and farming operations.',
-      aliases: ['agricultural lease', 'farmland rental agreement', 'crop share lease'],
+      description:
+        'Agreement for leasing agricultural land and farming operations.',
+      aliases: [
+        'agricultural lease',
+        'farmland rental agreement',
+        'crop share lease',
+      ],
     },
     es: {
       name: 'Acuerdo de Arrendamiento de Granja',
-      description: 'Acuerdo para arrendar tierras agrícolas y operaciones agrícolas.',
+      description:
+        'Acuerdo para arrendar tierras agrícolas y operaciones agrícolas.',
       aliases: ['arrendamiento agrícola', 'acuerdo de alquiler de tierras'],
     },
   },

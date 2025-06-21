@@ -211,13 +211,18 @@ export default function AuthModal({
         {/* ---------------- form fields ---------------- */}
         <div className="space-y-4 py-4">
           <div>
-            <Label htmlFor="email-modal" className="text-xs font-medium text-muted-foreground">
+            <Label
+              htmlFor="email-modal"
+              className="text-xs font-medium text-muted-foreground"
+            >
               {t('Email', { defaultValue: 'Email' })}
             </Label>
             <Input
               id="email-modal"
               type="email"
-              placeholder={t('Enter your email', { defaultValue: 'Enter your email' })}
+              placeholder={t('Enter your email', {
+                defaultValue: 'Enter your email',
+              })}
               className="bg-background border-input mt-1 h-10"
               value={emailModal}
               onChange={(e) => setEmailModal(e.target.value)}
@@ -227,13 +232,18 @@ export default function AuthModal({
           </div>
 
           <div>
-            <Label htmlFor="password-modal" className="text-xs font-medium text-muted-foreground">
+            <Label
+              htmlFor="password-modal"
+              className="text-xs font-medium text-muted-foreground"
+            >
               {t('Password', { defaultValue: 'Password' })}
             </Label>
             <Input
               id="password-modal"
               type="password"
-              placeholder={t('Enter your password', { defaultValue: 'Enter your password' })}
+              placeholder={t('Enter your password', {
+                defaultValue: 'Enter your password',
+              })}
               className="bg-background border-input mt-1 h-10"
               value={passwordModal}
               onChange={(e) => setPasswordModal(e.target.value)}
@@ -248,12 +258,16 @@ export default function AuthModal({
                 htmlFor="confirm-password-modal"
                 className="text-xs font-medium text-muted-foreground"
               >
-                {t('authModal.confirmPasswordLabel', { defaultValue: 'Confirm Password' })}
+                {t('authModal.confirmPasswordLabel', {
+                  defaultValue: 'Confirm Password',
+                })}
               </Label>
               <Input
                 id="confirm-password-modal"
                 type="password"
-                placeholder={t('authModal.confirmPasswordPlaceholder', { defaultValue: 'Confirm your password' })}
+                placeholder={t('authModal.confirmPasswordPlaceholder', {
+                  defaultValue: 'Confirm your password',
+                })}
                 className="bg-background border-input mt-1 h-10"
                 value={confirmPasswordModal}
                 onChange={(e) => setConfirmPasswordModal(e.target.value)}
@@ -274,14 +288,20 @@ export default function AuthModal({
             {isSubmitting
               ? t('authModal.submitting', { defaultValue: 'Processing...' })
               : authMode === 'signin'
-              ? t('Sign In', { defaultValue: 'Sign In' })
-              : t('authModal.createAccountButton', { defaultValue: 'Create Account' })}
+                ? t('Sign In', { defaultValue: 'Sign In' })
+                : t('authModal.createAccountButton', {
+                    defaultValue: 'Create Account',
+                  })}
           </Button>
 
           <p className="text-center text-sm text-muted-foreground">
             {authMode === 'signin'
-              ? t('authModal.promptSignUp', { defaultValue: "Don't have an account?" })
-              : t('authModal.promptSignInShort', { defaultValue: 'Already have an account?' })}{' '}
+              ? t('authModal.promptSignUp', {
+                  defaultValue: "Don't have an account?",
+                })
+              : t('authModal.promptSignInShort', {
+                  defaultValue: 'Already have an account?',
+                })}{' '}
             <Link
               href="#"
               onClick={(e) => {

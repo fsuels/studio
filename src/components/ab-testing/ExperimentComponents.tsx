@@ -7,11 +7,15 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { useExperimentWithAuth, useFunnelTrackingWithAuth } from '@/lib/ab-testing/auth-integration';
+import {
+  useExperimentWithAuth,
+  useFunnelTrackingWithAuth,
+} from '@/lib/ab-testing/auth-integration';
 
 // 1. Homepage Hero CTA Button with A/B Testing
 export function HeroCTAButton({ className }: { className?: string }) {
-  const { variant, isLoading, trackConversion } = useExperimentWithAuth('homepage_cta_color');
+  const { variant, isLoading, trackConversion } =
+    useExperimentWithAuth('homepage_cta_color');
   const { trackStep } = useFunnelTrackingWithAuth();
 
   const handleClick = () => {
@@ -32,7 +36,7 @@ export function HeroCTAButton({ className }: { className?: string }) {
   // Control variant
   if (!variant || variant === 'variant_0') {
     return (
-      <Button 
+      <Button
         className={`${className} bg-blue-600 hover:bg-blue-700`}
         onClick={handleClick}
         size="lg"
@@ -44,7 +48,7 @@ export function HeroCTAButton({ className }: { className?: string }) {
 
   // Treatment variant - Orange Action-Oriented
   return (
-    <Button 
+    <Button
       className={`${className} bg-orange-600 hover:bg-orange-700`}
       onClick={handleClick}
       size="lg"
@@ -55,14 +59,16 @@ export function HeroCTAButton({ className }: { className?: string }) {
 }
 
 // 2. Checkout Button with Urgency Testing
-export function CheckoutButton({ 
-  onCheckout, 
-  className 
-}: { 
+export function CheckoutButton({
+  onCheckout,
+  className,
+}: {
   onCheckout: () => void;
   className?: string;
 }) {
-  const { variant, isLoading, trackConversion } = useExperimentWithAuth('checkout_button_urgency');
+  const { variant, isLoading, trackConversion } = useExperimentWithAuth(
+    'checkout_button_urgency',
+  );
   const { trackStep } = useFunnelTrackingWithAuth();
 
   const handleClick = () => {
@@ -80,15 +86,22 @@ export function CheckoutButton({
   }
 
   const variants = {
-    'variant_0': { text: 'Continue', color: 'bg-blue-600 hover:bg-blue-700' },
-    'variant_1': { text: 'Get My Document Now', color: 'bg-red-600 hover:bg-red-700' },
-    'variant_2': { text: 'Create Legal Document', color: 'bg-green-600 hover:bg-green-700' }
+    variant_0: { text: 'Continue', color: 'bg-blue-600 hover:bg-blue-700' },
+    variant_1: {
+      text: 'Get My Document Now',
+      color: 'bg-red-600 hover:bg-red-700',
+    },
+    variant_2: {
+      text: 'Create Legal Document',
+      color: 'bg-green-600 hover:bg-green-700',
+    },
   };
 
-  const config = variants[variant as keyof typeof variants] || variants.variant_0;
+  const config =
+    variants[variant as keyof typeof variants] || variants.variant_0;
 
   return (
-    <Button 
+    <Button
       className={`${className} ${config.color}`}
       onClick={handleClick}
       size="lg"
@@ -100,7 +113,9 @@ export function CheckoutButton({
 
 // 3. Homepage Headlines with Value Prop Testing
 export function HeroHeadlines() {
-  const { variant, isLoading, trackConversion } = useExperimentWithAuth('homepage_headline_value_prop');
+  const { variant, isLoading, trackConversion } = useExperimentWithAuth(
+    'homepage_headline_value_prop',
+  );
 
   React.useEffect(() => {
     if (!isLoading && variant) {
@@ -119,37 +134,38 @@ export function HeroHeadlines() {
   }
 
   const headlines = {
-    'variant_0': {
+    variant_0: {
       main: 'Legal Documents You Can Trust',
-      sub: 'Professionally drafted legal forms for all your needs'
+      sub: 'Professionally drafted legal forms for all your needs',
     },
-    'variant_1': {
+    variant_1: {
       main: 'Legal Documents in Minutes, Not Hours',
-      sub: 'Create legally-binding documents instantly with our simple wizard'
+      sub: 'Create legally-binding documents instantly with our simple wizard',
     },
-    'variant_2': {
+    variant_2: {
       main: 'Save $500+ on Legal Fees',
-      sub: 'Get lawyer-quality documents without the lawyer prices'
-    }
+      sub: 'Get lawyer-quality documents without the lawyer prices',
+    },
   };
 
-  const content = headlines[variant as keyof typeof headlines] || headlines.variant_0;
+  const content =
+    headlines[variant as keyof typeof headlines] || headlines.variant_0;
 
   return (
     <div className="text-center">
       <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-4">
         {content.main}
       </h1>
-      <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-        {content.sub}
-      </p>
+      <p className="text-xl text-gray-600 max-w-2xl mx-auto">{content.sub}</p>
     </div>
   );
 }
 
 // 4. Trust Signals for Checkout
 export function CheckoutTrustSignals() {
-  const { variant, isLoading, trackConversion } = useExperimentWithAuth('checkout_trust_signals');
+  const { variant, isLoading, trackConversion } = useExperimentWithAuth(
+    'checkout_trust_signals',
+  );
 
   React.useEffect(() => {
     if (!isLoading && variant) {
@@ -174,7 +190,9 @@ export function CheckoutTrustSignals() {
           <div className="w-6 h-6 bg-green-600 rounded flex items-center justify-center">
             <span className="text-white text-xs">🔒</span>
           </div>
-          <span className="text-sm text-gray-600">Your data is protected with 256-bit SSL encryption</span>
+          <span className="text-sm text-gray-600">
+            Your data is protected with 256-bit SSL encryption
+          </span>
         </div>
       </div>
     );
@@ -185,9 +203,12 @@ export function CheckoutTrustSignals() {
     return (
       <div className="bg-green-50 p-4 rounded border border-green-200">
         <div className="text-center">
-          <div className="font-semibold text-green-800">100% Money-Back Guarantee</div>
+          <div className="font-semibold text-green-800">
+            100% Money-Back Guarantee
+          </div>
           <div className="text-sm text-green-700 mt-1">
-            If you're not completely satisfied, we'll refund your purchase within 30 days.
+            If you're not completely satisfied, we'll refund your purchase
+            within 30 days.
           </div>
         </div>
       </div>
@@ -228,16 +249,18 @@ export function CheckoutTrustSignals() {
 }
 
 // 5. Pricing Display with Different Formats
-export function DocumentPricing({ 
-  basePrice = 29.99, 
+export function DocumentPricing({
+  basePrice = 29.99,
   documentType = 'Legal Document',
-  onPurchase 
+  onPurchase,
 }: {
   basePrice?: number;
   documentType?: string;
   onPurchase?: () => void;
 }) {
-  const { variant, isLoading, trackConversion } = useExperimentWithAuth('pricing_display_format');
+  const { variant, isLoading, trackConversion } = useExperimentWithAuth(
+    'pricing_display_format',
+  );
 
   const handlePurchaseClick = () => {
     trackConversion('pricing_purchase_click');
@@ -276,14 +299,19 @@ export function DocumentPricing({
             <div className="text-sm text-gray-500 line-through">
               Lawyer fees: ${lawyerPrice.toFixed(0)}+
             </div>
-            <div className="text-3xl font-bold text-green-600">${basePrice}</div>
+            <div className="text-3xl font-bold text-green-600">
+              ${basePrice}
+            </div>
             <div className="text-sm font-semibold text-green-600">
               Save ${savings.toFixed(0)}+
             </div>
             <Badge variant="secondary" className="mt-2">
               94% Savings
             </Badge>
-            <Button onClick={handlePurchaseClick} className="mt-3 w-full bg-green-600 hover:bg-green-700">
+            <Button
+              onClick={handlePurchaseClick}
+              className="mt-3 w-full bg-green-600 hover:bg-green-700"
+            >
               Get Instant Savings
             </Button>
           </div>
@@ -331,7 +359,9 @@ export function DocumentPricing({
 
 // 6. Social Proof Elements
 export function SocialProofBanner() {
-  const { variant, isLoading, trackConversion } = useExperimentWithAuth('homepage_social_proof');
+  const { variant, isLoading, trackConversion } = useExperimentWithAuth(
+    'homepage_social_proof',
+  );
 
   React.useEffect(() => {
     if (!isLoading && variant) {
@@ -365,7 +395,7 @@ export function SocialProofBanner() {
 
     React.useEffect(() => {
       const interval = setInterval(() => {
-        setCount(c => c + Math.floor(Math.random() * 3));
+        setCount((c) => c + Math.floor(Math.random() * 3));
       }, 30000); // Update every 30 seconds
 
       return () => clearInterval(interval);
@@ -396,7 +426,8 @@ export function SocialProofBanner() {
           <span>Live: 247 documents created today</span>
         </div>
         <div className="flex items-center justify-center gap-1 text-yellow-500">
-          ⭐⭐⭐⭐⭐ <span className="text-xs text-gray-500 ml-1">4.9/5 rating</span>
+          ⭐⭐⭐⭐⭐{' '}
+          <span className="text-xs text-gray-500 ml-1">4.9/5 rating</span>
         </div>
       </div>
     );
@@ -406,9 +437,18 @@ export function SocialProofBanner() {
 }
 
 // 7. Simplified Signup Form
-export function ExperimentalSignupForm({ onSignup }: { onSignup: (data: any) => void }) {
-  const { variant, isLoading, trackConversion } = useExperimentWithAuth('signup_form_length');
-  const [formData, setFormData] = React.useState({ email: '', name: '', phone: '' });
+export function ExperimentalSignupForm({
+  onSignup,
+}: {
+  onSignup: (data: any) => void;
+}) {
+  const { variant, isLoading, trackConversion } =
+    useExperimentWithAuth('signup_form_length');
+  const [formData, setFormData] = React.useState({
+    email: '',
+    name: '',
+    phone: '',
+  });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -433,7 +473,9 @@ export function ExperimentalSignupForm({ onSignup }: { onSignup: (data: any) => 
             required
             className="w-full px-3 py-2 border border-gray-300 rounded-md"
             value={formData.email}
-            onChange={e => setFormData(prev => ({ ...prev, email: e.target.value }))}
+            onChange={(e) =>
+              setFormData((prev) => ({ ...prev, email: e.target.value }))
+            }
           />
         </div>
         <div>
@@ -445,7 +487,9 @@ export function ExperimentalSignupForm({ onSignup }: { onSignup: (data: any) => 
             required
             className="w-full px-3 py-2 border border-gray-300 rounded-md"
             value={formData.name}
-            onChange={e => setFormData(prev => ({ ...prev, name: e.target.value }))}
+            onChange={(e) =>
+              setFormData((prev) => ({ ...prev, name: e.target.value }))
+            }
           />
         </div>
         <div>
@@ -457,7 +501,9 @@ export function ExperimentalSignupForm({ onSignup }: { onSignup: (data: any) => 
             required
             className="w-full px-3 py-2 border border-gray-300 rounded-md"
             value={formData.phone}
-            onChange={e => setFormData(prev => ({ ...prev, phone: e.target.value }))}
+            onChange={(e) =>
+              setFormData((prev) => ({ ...prev, phone: e.target.value }))
+            }
           />
         </div>
         <Button type="submit" className="w-full">
@@ -479,7 +525,9 @@ export function ExperimentalSignupForm({ onSignup }: { onSignup: (data: any) => 
           required
           className="w-full px-3 py-2 border border-gray-300 rounded-md"
           value={formData.email}
-          onChange={e => setFormData(prev => ({ ...prev, email: e.target.value }))}
+          onChange={(e) =>
+            setFormData((prev) => ({ ...prev, email: e.target.value }))
+          }
           placeholder="Enter your email to get started"
         />
       </div>
@@ -500,7 +548,8 @@ export function ABTestingDemo() {
       <div className="text-center">
         <h1 className="text-3xl font-bold mb-4">A/B Testing Demo</h1>
         <p className="text-gray-600">
-          This page demonstrates various A/B tests in action. Refresh to see different variants.
+          This page demonstrates various A/B tests in action. Refresh to see
+          different variants.
         </p>
       </div>
 
@@ -518,7 +567,7 @@ export function ABTestingDemo() {
       <section>
         <h2 className="text-xl font-semibold mb-4">Pricing Display</h2>
         <div className="max-w-sm mx-auto">
-          <DocumentPricing 
+          <DocumentPricing
             basePrice={29.99}
             documentType="Bill of Sale"
             onPurchase={() => alert('Purchase clicked!')}
@@ -537,7 +586,9 @@ export function ABTestingDemo() {
       <section>
         <h2 className="text-xl font-semibold mb-4">Signup Form</h2>
         <div className="max-w-md mx-auto">
-          <ExperimentalSignupForm onSignup={(data) => console.log('Signup:', data)} />
+          <ExperimentalSignupForm
+            onSignup={(data) => console.log('Signup:', data)}
+          />
         </div>
       </section>
     </div>

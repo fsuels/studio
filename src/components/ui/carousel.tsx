@@ -203,7 +203,8 @@ const CarouselPrevious = React.forwardRef<
     <button
       ref={ref}
       type="button"
-      className={cn( // Apply className prop here
+      className={cn(
+        // Apply className prop here
         'absolute h-10 w-10 rounded-full border bg-background text-foreground flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none',
         orientation === 'horizontal'
           ? '-left-12 top-1/2 -translate-y-1/2'
@@ -232,7 +233,8 @@ const CarouselNext = React.forwardRef<
     <button
       ref={ref}
       type="button"
-      className={cn( // Apply className prop here
+      className={cn(
+        // Apply className prop here
         'absolute h-10 w-10 rounded-full border bg-background text-foreground flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none',
         orientation === 'horizontal'
           ? '-right-12 top-1/2 -translate-y-1/2'

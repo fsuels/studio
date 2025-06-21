@@ -25,7 +25,11 @@ export const realEstatePurchaseAgreementMeta: LegalDocument = {
     en: {
       name: 'Real Estate Purchase Agreement',
       description: 'Agreement for the purchase and sale of real property.',
-      aliases: ['home purchase agreement', 'property purchase contract', 'real estate sales contract'],
+      aliases: [
+        'home purchase agreement',
+        'property purchase contract',
+        'real estate sales contract',
+      ],
     },
     es: {
       name: 'Acuerdo de Compra de Bienes Raíces',

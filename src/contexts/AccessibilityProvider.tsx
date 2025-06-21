@@ -16,24 +16,24 @@ export interface AccessibilityPreferences {
   showDocumentSummary: boolean;
   simplifyLegalJargon: boolean;
   readingLevel: 'simple' | 'standard' | 'advanced';
-  
+
   // Visual Accessibility
   dyslexiaFriendlyFont: boolean;
   fontSize: 'small' | 'medium' | 'large' | 'extra-large';
   lineHeight: 'comfortable' | 'relaxed' | 'loose';
   highContrast: boolean;
   reduceMotion: boolean;
-  
+
   // Cognitive Accessibility
   showProgressIndicators: boolean;
   breakDownComplexForms: boolean;
   highlightImportantSections: boolean;
-  
+
   // Navigation & Controls
   keyboardShortcutsEnabled: boolean;
   focusIndicatorEnhanced: boolean;
   skipLinksVisible: boolean;
-  
+
   // AI Assistance
   autoExplainClauses: boolean;
   contextualHelp: boolean;
@@ -47,24 +47,24 @@ const DEFAULT_PREFERENCES: AccessibilityPreferences = {
   showDocumentSummary: false,
   simplifyLegalJargon: false,
   readingLevel: 'standard',
-  
+
   // Visual Accessibility
   dyslexiaFriendlyFont: false,
   fontSize: 'medium',
   lineHeight: 'comfortable',
   highContrast: false,
   reduceMotion: false,
-  
+
   // Cognitive Accessibility
   showProgressIndicators: true,
   breakDownComplexForms: false,
   highlightImportantSections: false,
-  
+
   // Navigation & Controls
   keyboardShortcutsEnabled: true,
   focusIndicatorEnhanced: false,
   skipLinksVisible: false,
-  
+
   // AI Assistance
   autoExplainClauses: false,
   contextualHelp: false,
@@ -82,7 +82,9 @@ interface AccessibilityContextType {
 }
 
 // Create context
-const AccessibilityContext = createContext<AccessibilityContextType | undefined>(undefined);
+const AccessibilityContext = createContext<
+  AccessibilityContextType | undefined
+>(undefined);
 
 // Local storage key
 const STORAGE_KEY = 'accessibility-preferences';
@@ -92,8 +94,11 @@ interface AccessibilityProviderProps {
   children: ReactNode;
 }
 
-export function AccessibilityProvider({ children }: AccessibilityProviderProps) {
-  const [preferences, setPreferences] = useState<AccessibilityPreferences>(DEFAULT_PREFERENCES);
+export function AccessibilityProvider({
+  children,
+}: AccessibilityProviderProps) {
+  const [preferences, setPreferences] =
+    useState<AccessibilityPreferences>(DEFAULT_PREFERENCES);
   const [mounted, setMounted] = useState(false);
 
   // Load preferences from localStorage on mount
@@ -126,60 +131,71 @@ export function AccessibilityProvider({ children }: AccessibilityProviderProps) 
     if (!mounted) return;
 
     const root = document.documentElement;
-    
+
     // Font family
     if (preferences.dyslexiaFriendlyFont) {
-      root.style.setProperty('--font-family-accessible', '"OpenDyslexic", "Arial", sans-serif');
+      root.style.setProperty(
+        '--font-family-accessible',
+        '"OpenDyslexic", "Arial", sans-serif',
+      );
       document.body.classList.add('dyslexia-friendly-font');
     } else {
       root.style.removeProperty('--font-family-accessible');
       document.body.classList.remove('dyslexia-friendly-font');
     }
-    
+
     // Font size
     const fontSizeMap = {
-      'small': '0.875rem',
-      'medium': '1rem',
-      'large': '1.125rem',
-      'extra-large': '1.25rem'
+      small: '0.875rem',
+      medium: '1rem',
+      large: '1.125rem',
+      'extra-large': '1.25rem',
     };
-    root.style.setProperty('--font-size-accessible', fontSizeMap[preferences.fontSize]);
-    
+    root.style.setProperty(
+      '--font-size-accessible',
+      fontSizeMap[preferences.fontSize],
+    );
+
     // Line height
     const lineHeightMap = {
-      'comfortable': '1.5',
-      'relaxed': '1.6',
-      'loose': '1.8'
+      comfortable: '1.5',
+      relaxed: '1.6',
+      loose: '1.8',
     };
-    root.style.setProperty('--line-height-accessible', lineHeightMap[preferences.lineHeight]);
-    
+    root.style.setProperty(
+      '--line-height-accessible',
+      lineHeightMap[preferences.lineHeight],
+    );
+
     // High contrast
     if (preferences.highContrast) {
       document.body.classList.add('high-contrast');
     } else {
       document.body.classList.remove('high-contrast');
     }
-    
+
     // Reduce motion
     if (preferences.reduceMotion) {
       document.body.classList.add('reduce-motion');
     } else {
       document.body.classList.remove('reduce-motion');
     }
-    
+
     // Enhanced focus indicators
     if (preferences.focusIndicatorEnhanced) {
       document.body.classList.add('enhanced-focus');
     } else {
       document.body.classList.remove('enhanced-focus');
     }
-
   }, [preferences, mounted]);
 
   // Update preferences function
-  const updatePreferences = useCallback((updates: Partial<AccessibilityPreferences>) => {
-    setPreferences(prev => ({ ...prev, ...updates }));
-  }, []);
+  const updatePreferences = useCallback(
+    (updates: Partial<AccessibilityPreferences>) => {
+      setPreferences((prev) => ({ ...prev, ...updates }));
+    },
+    [],
+  );
 
   // Reset preferences function
   const resetPreferences = useCallback(() => {
@@ -188,7 +204,7 @@ export function AccessibilityProvider({ children }: AccessibilityProviderProps) 
 
   // Toggle plain language mode
   const togglePlainLanguageMode = useCallback(() => {
-    setPreferences(prev => ({
+    setPreferences((prev) => ({
       ...prev,
       plainLanguageMode: !prev.plainLanguageMode,
       showDocumentSummary: !prev.plainLanguageMode,
@@ -211,29 +227,34 @@ export function AccessibilityProvider({ children }: AccessibilityProviderProps) 
   }, [preferences]);
 
   // Keyboard shortcuts
-  const keyboardShortcuts = useMemo(() => ({
-    'togglePlainLanguage': togglePlainLanguageMode,
-    'increaseFontSize': () => {
-      const sizes = ['small', 'medium', 'large', 'extra-large'] as const;
-      const currentIndex = sizes.indexOf(preferences.fontSize);
-      if (currentIndex < sizes.length - 1) {
-        updatePreferences({ fontSize: sizes[currentIndex + 1] });
-      }
-    },
-    'decreaseFontSize': () => {
-      const sizes = ['small', 'medium', 'large', 'extra-large'] as const;
-      const currentIndex = sizes.indexOf(preferences.fontSize);
-      if (currentIndex > 0) {
-        updatePreferences({ fontSize: sizes[currentIndex - 1] });
-      }
-    },
-    'toggleHighContrast': () => {
-      updatePreferences({ highContrast: !preferences.highContrast });
-    },
-    'toggleDyslexiaFont': () => {
-      updatePreferences({ dyslexiaFriendlyFont: !preferences.dyslexiaFriendlyFont });
-    },
-  }), [preferences, updatePreferences, togglePlainLanguageMode]);
+  const keyboardShortcuts = useMemo(
+    () => ({
+      togglePlainLanguage: togglePlainLanguageMode,
+      increaseFontSize: () => {
+        const sizes = ['small', 'medium', 'large', 'extra-large'] as const;
+        const currentIndex = sizes.indexOf(preferences.fontSize);
+        if (currentIndex < sizes.length - 1) {
+          updatePreferences({ fontSize: sizes[currentIndex + 1] });
+        }
+      },
+      decreaseFontSize: () => {
+        const sizes = ['small', 'medium', 'large', 'extra-large'] as const;
+        const currentIndex = sizes.indexOf(preferences.fontSize);
+        if (currentIndex > 0) {
+          updatePreferences({ fontSize: sizes[currentIndex - 1] });
+        }
+      },
+      toggleHighContrast: () => {
+        updatePreferences({ highContrast: !preferences.highContrast });
+      },
+      toggleDyslexiaFont: () => {
+        updatePreferences({
+          dyslexiaFriendlyFont: !preferences.dyslexiaFriendlyFont,
+        });
+      },
+    }),
+    [preferences, updatePreferences, togglePlainLanguageMode],
+  );
 
   // Keyboard event listener
   useEffect(() => {
@@ -292,7 +313,9 @@ export function AccessibilityProvider({ children }: AccessibilityProviderProps) 
 export function useAccessibility() {
   const context = useContext(AccessibilityContext);
   if (context === undefined) {
-    throw new Error('useAccessibility must be used within an AccessibilityProvider');
+    throw new Error(
+      'useAccessibility must be used within an AccessibilityProvider',
+    );
   }
   return context;
 }

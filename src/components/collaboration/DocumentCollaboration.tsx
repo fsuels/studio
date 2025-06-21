@@ -9,21 +9,26 @@ import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Textarea } from '@/components/ui/textarea';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/DropdownMenu';
-import { 
-  Users, 
-  Share2, 
-  MessageCircle, 
-  Clock, 
-  Check, 
-  X, 
-  Edit, 
+import {
+  Users,
+  Share2,
+  MessageCircle,
+  Clock,
+  Check,
+  X,
+  Edit,
   Eye,
   MoreVertical,
   Send,
@@ -36,10 +41,15 @@ import {
   WifiOff,
   AtSign,
   Pin,
-  Reply
+  Reply,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { CollaborationClient, CollaborationUser, PresenceInfo, Comment as CollabComment } from '@/lib/collaboration/client';
+import {
+  CollaborationClient,
+  CollaborationUser,
+  PresenceInfo,
+  Comment as CollabComment,
+} from '@/lib/collaboration/client';
 import { useAuth } from '@/lib/auth';
 
 interface Collaborator {
@@ -85,24 +95,29 @@ const DocumentCollaboration: React.FC<DocumentCollaborationProps> = ({
   authToken,
   onSave,
   className,
-  enableRealtime = true
+  enableRealtime = true,
 }) => {
   const { t } = useTranslation('collaboration');
   const { user } = useAuth();
-  
+
   // Legacy state for backwards compatibility
   const [collaborators, setCollaborators] = React.useState<Collaborator[]>([]);
   const [comments, setComments] = React.useState<Comment[]>([]);
   const [versions, setVersions] = React.useState<DocumentVersion[]>([]);
-  
+
   // Real-time collaboration state
-  const [collaborationClient, setCollaborationClient] = React.useState<CollaborationClient | null>(null);
-  const [realtimePresence, setRealtimePresence] = React.useState<PresenceInfo[]>([]);
-  const [realtimeComments, setRealtimeComments] = React.useState<CollabComment[]>([]);
+  const [collaborationClient, setCollaborationClient] =
+    React.useState<CollaborationClient | null>(null);
+  const [realtimePresence, setRealtimePresence] = React.useState<
+    PresenceInfo[]
+  >([]);
+  const [realtimeComments, setRealtimeComments] = React.useState<
+    CollabComment[]
+  >([]);
   const [isConnected, setIsConnected] = React.useState(false);
   const [mentions, setMentions] = React.useState<any[]>([]);
   const [unreadMentions, setUnreadMentions] = React.useState(0);
-  
+
   // UI state
   const [newComment, setNewComment] = React.useState('');
   const [selectedField, setSelectedField] = React.useState<string | null>(null);
@@ -110,16 +125,21 @@ const DocumentCollaboration: React.FC<DocumentCollaborationProps> = ({
   const [inviteEmail, setInviteEmail] = React.useState('');
   const [mentionQuery, setMentionQuery] = React.useState('');
   const [showMentionPopup, setShowMentionPopup] = React.useState(false);
-  const [replyToComment, setReplyToComment] = React.useState<string | null>(null);
+  const [replyToComment, setReplyToComment] = React.useState<string | null>(
+    null,
+  );
 
-  const currentUser: CollaborationUser = React.useMemo(() => ({
-    id: user?.uid || currentUserId,
-    name: user?.displayName || 'Unknown User',
-    email: user?.email || '',
-    avatar: user?.photoURL,
-    color: generateUserColor(user?.uid || currentUserId),
-    role: 'editor', // This should come from document permissions
-  }), [user, currentUserId]);
+  const currentUser: CollaborationUser = React.useMemo(
+    () => ({
+      id: user?.uid || currentUserId,
+      name: user?.displayName || 'Unknown User',
+      email: user?.email || '',
+      avatar: user?.photoURL,
+      color: generateUserColor(user?.uid || currentUserId),
+      role: 'editor', // This should come from document permissions
+    }),
+    [user, currentUserId],
+  );
 
   // Initialize real-time collaboration
   React.useEffect(() => {
@@ -146,8 +166,8 @@ const DocumentCollaboration: React.FC<DocumentCollaborationProps> = ({
     });
 
     client.on('comment_added', (comment: CollabComment) => {
-      setRealtimeComments(prev => [...prev, comment]);
-      
+      setRealtimeComments((prev) => [...prev, comment]);
+
       // Show notification if it's not from current user
       if (comment.authorId !== currentUser.id) {
         showCommentNotification(comment);
@@ -155,11 +175,11 @@ const DocumentCollaboration: React.FC<DocumentCollaborationProps> = ({
     });
 
     client.on('mention_created', (mention: any) => {
-      setMentions(prev => [...prev, mention]);
-      
+      setMentions((prev) => [...prev, mention]);
+
       // If mention is for current user, increment unread count
       if (mention.toUserId === currentUser.id) {
-        setUnreadMentions(prev => prev + 1);
+        setUnreadMentions((prev) => prev + 1);
         showMentionNotification(mention);
       }
     });
@@ -180,11 +200,12 @@ const DocumentCollaboration: React.FC<DocumentCollaborationProps> = ({
   // Fallback to legacy collaboration for non-realtime mode
   const loadCollaborationData = async () => {
     try {
-      const [collabResponse, commentsResponse, versionsResponse] = await Promise.all([
-        fetch(`/api/documents/${documentId}/collaborators`),
-        fetch(`/api/documents/${documentId}/comments`),
-        fetch(`/api/documents/${documentId}/versions`)
-      ]);
+      const [collabResponse, commentsResponse, versionsResponse] =
+        await Promise.all([
+          fetch(`/api/documents/${documentId}/collaborators`),
+          fetch(`/api/documents/${documentId}/comments`),
+          fetch(`/api/documents/${documentId}/versions`),
+        ]);
 
       setCollaborators(await collabResponse.json());
       setComments(await commentsResponse.json());
@@ -197,7 +218,7 @@ const DocumentCollaboration: React.FC<DocumentCollaborationProps> = ({
   const setupRealtimeUpdates = () => {
     // Setup WebSocket or EventSource for real-time updates (legacy)
     const eventSource = new EventSource(`/api/documents/${documentId}/stream`);
-    
+
     eventSource.onmessage = (event) => {
       const update = JSON.parse(event.data);
       handleRealtimeUpdate(update);
@@ -209,18 +230,25 @@ const DocumentCollaboration: React.FC<DocumentCollaborationProps> = ({
   const handleRealtimeUpdate = (update: any) => {
     switch (update.type) {
       case 'collaborator_joined':
-        setCollaborators(prev => [...prev.filter(c => c.id !== update.collaborator.id), update.collaborator]);
+        setCollaborators((prev) => [
+          ...prev.filter((c) => c.id !== update.collaborator.id),
+          update.collaborator,
+        ]);
         break;
       case 'collaborator_left':
-        setCollaborators(prev => prev.filter(c => c.id !== update.collaboratorId));
+        setCollaborators((prev) =>
+          prev.filter((c) => c.id !== update.collaboratorId),
+        );
         break;
       case 'comment_added':
-        setComments(prev => [...prev, update.comment]);
+        setComments((prev) => [...prev, update.comment]);
         break;
       case 'comment_resolved':
-        setComments(prev => prev.map(c => 
-          c.id === update.commentId ? { ...c, resolved: true } : c
-        ));
+        setComments((prev) =>
+          prev.map((c) =>
+            c.id === update.commentId ? { ...c, resolved: true } : c,
+          ),
+        );
         break;
       case 'field_changed':
         showFieldChangeNotification(update);
@@ -246,7 +274,7 @@ const DocumentCollaboration: React.FC<DocumentCollaborationProps> = ({
 
   const showUserLeftNotification = (userId: string) => {
     // Implement toast notification for user leaving
-    const user = getActivePresence().find(p => p.user.id === userId);
+    const user = getActivePresence().find((p) => p.user.id === userId);
     if (user) {
       console.log(`${user.user.name} left the document`);
     }
@@ -266,8 +294,8 @@ const DocumentCollaboration: React.FC<DocumentCollaborationProps> = ({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           email: inviteEmail,
-          role: 'editor'
-        })
+          role: 'editor',
+        }),
       });
 
       setInviteEmail('');
@@ -295,17 +323,17 @@ const DocumentCollaboration: React.FC<DocumentCollaborationProps> = ({
         content: newComment,
         timestamp: new Date(),
         fieldId: selectedField || undefined,
-        resolved: false
+        resolved: false,
       };
 
       try {
         await fetch(`/api/documents/${documentId}/comments`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(comment)
+          body: JSON.stringify(comment),
         });
 
-        setComments(prev => [...prev, comment]);
+        setComments((prev) => [...prev, comment]);
         setNewComment('');
       } catch (error) {
         console.error('Failed to add comment:', error);
@@ -340,13 +368,16 @@ const DocumentCollaboration: React.FC<DocumentCollaborationProps> = ({
       collaborationClient.resolveComment(commentId);
     } else {
       try {
-        await fetch(`/api/documents/${documentId}/comments/${commentId}/resolve`, {
-          method: 'POST'
-        });
+        await fetch(
+          `/api/documents/${documentId}/comments/${commentId}/resolve`,
+          {
+            method: 'POST',
+          },
+        );
 
-        setComments(prev => prev.map(c => 
-          c.id === commentId ? { ...c, resolved: true } : c
-        ));
+        setComments((prev) =>
+          prev.map((c) => (c.id === commentId ? { ...c, resolved: true } : c)),
+        );
       } catch (error) {
         console.error('Failed to resolve comment:', error);
       }
@@ -354,19 +385,21 @@ const DocumentCollaboration: React.FC<DocumentCollaborationProps> = ({
   };
 
   const markMentionAsRead = (mentionId: string) => {
-    setMentions(prev => prev.map(m => 
-      m.id === mentionId ? { ...m, read: true } : m
-    ));
-    setUnreadMentions(prev => Math.max(0, prev - 1));
+    setMentions((prev) =>
+      prev.map((m) => (m.id === mentionId ? { ...m, read: true } : m)),
+    );
+    setUnreadMentions((prev) => Math.max(0, prev - 1));
   };
 
   // Helper functions to get the right data based on mode
   const getActivePresence = (): (PresenceInfo | Collaborator)[] => {
-    return enableRealtime ? realtimePresence : collaborators.map(c => ({
-      ...c,
-      status: c.status || 'offline',
-      lastSeen: c.lastSeen || Date.now(),
-    }));
+    return enableRealtime
+      ? realtimePresence
+      : collaborators.map((c) => ({
+          ...c,
+          status: c.status || 'offline',
+          lastSeen: c.lastSeen || Date.now(),
+        }));
   };
 
   const getActiveComments = (): (CollabComment | Comment)[] => {
@@ -379,66 +412,89 @@ const DocumentCollaboration: React.FC<DocumentCollaborationProps> = ({
 
   const generateUserColor = (userId: string): string => {
     const colors = [
-      '#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', 
-      '#FFEAA7', '#DDA0DD', '#98D8C8', '#FFB6C1'
+      '#FF6B6B',
+      '#4ECDC4',
+      '#45B7D1',
+      '#96CEB4',
+      '#FFEAA7',
+      '#DDA0DD',
+      '#98D8C8',
+      '#FFB6C1',
     ];
-    
+
     let hash = 0;
     for (let i = 0; i < userId.length; i++) {
       hash = userId.charCodeAt(i) + ((hash << 5) - hash);
     }
-    
+
     return colors[Math.abs(hash) % colors.length];
   };
 
   const getRoleIcon = (role: string) => {
     switch (role) {
-      case 'owner': return <Users className="h-3 w-3" />;
-      case 'editor': return <Edit className="h-3 w-3" />;
-      case 'reviewer': return <MessageCircle className="h-3 w-3" />;
-      case 'viewer': return <Eye className="h-3 w-3" />;
-      default: return <Users className="h-3 w-3" />;
+      case 'owner':
+        return <Users className="h-3 w-3" />;
+      case 'editor':
+        return <Edit className="h-3 w-3" />;
+      case 'reviewer':
+        return <MessageCircle className="h-3 w-3" />;
+      case 'viewer':
+        return <Eye className="h-3 w-3" />;
+      default:
+        return <Users className="h-3 w-3" />;
     }
   };
 
   const getRoleColor = (role: string) => {
     switch (role) {
-      case 'owner': return 'bg-purple-100 text-purple-800';
-      case 'editor': return 'bg-blue-100 text-blue-800';
-      case 'reviewer': return 'bg-orange-100 text-orange-800';
-      case 'viewer': return 'bg-gray-100 text-gray-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'owner':
+        return 'bg-purple-100 text-purple-800';
+      case 'editor':
+        return 'bg-blue-100 text-blue-800';
+      case 'reviewer':
+        return 'bg-orange-100 text-orange-800';
+      case 'viewer':
+        return 'bg-gray-100 text-gray-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
     }
   };
 
   const filteredMentionUsers = (): CollaborationUser[] => {
     const query = mentionQuery.toLowerCase();
     return getActivePresence()
-      .filter(p => 'user' in p ? p.user.id !== currentUser.id : p.id !== currentUser.id)
-      .map(p => 'user' in p ? p.user : {
-        id: p.id,
-        name: p.name,
-        email: p.email,
-        avatar: p.avatar,
-        color: generateUserColor(p.id),
-        role: p.role as any,
-      })
-      .filter(user => 
-        user.name.toLowerCase().includes(query) || 
-        user.email.toLowerCase().includes(query)
+      .filter((p) =>
+        'user' in p ? p.user.id !== currentUser.id : p.id !== currentUser.id,
+      )
+      .map((p) =>
+        'user' in p
+          ? p.user
+          : {
+              id: p.id,
+              name: p.name,
+              email: p.email,
+              avatar: p.avatar,
+              color: generateUserColor(p.id),
+              role: p.role as any,
+            },
+      )
+      .filter(
+        (user) =>
+          user.name.toLowerCase().includes(query) ||
+          user.email.toLowerCase().includes(query),
       )
       .slice(0, 5);
   };
 
-  const unresolvedComments = getActiveComments().filter(c => !c.resolved);
+  const unresolvedComments = getActiveComments().filter((c) => !c.resolved);
   const activePresence = getActivePresence();
-  const currentUserData = activePresence.find(p => 
-    'user' in p ? p.user.id === currentUser.id : p.id === currentUser.id
+  const currentUserData = activePresence.find((p) =>
+    'user' in p ? p.user.id === currentUser.id : p.id === currentUser.id,
   );
 
   return (
     <TooltipProvider>
-      <div className={cn("space-y-4", className)}>
+      <div className={cn('space-y-4', className)}>
         {/* Real-time Status Bar */}
         {enableRealtime && (
           <Card className="border-l-4 border-l-blue-500">
@@ -452,7 +508,9 @@ const DocumentCollaboration: React.FC<DocumentCollaborationProps> = ({
                       <WifiOff className="h-4 w-4 text-red-500" />
                     )}
                     <span className="text-sm font-medium">
-                      {getConnectionStatus() ? 'Live Collaboration Active' : 'Connecting...'}
+                      {getConnectionStatus()
+                        ? 'Live Collaboration Active'
+                        : 'Connecting...'}
                     </span>
                   </div>
 
@@ -466,7 +524,8 @@ const DocumentCollaboration: React.FC<DocumentCollaborationProps> = ({
 
                 <div className="flex items-center gap-2">
                   <span className="text-xs text-muted-foreground">
-                    {activePresence.length} user{activePresence.length !== 1 ? 's' : ''} online
+                    {activePresence.length} user
+                    {activePresence.length !== 1 ? 's' : ''} online
                   </span>
                 </div>
               </div>
@@ -488,7 +547,11 @@ const DocumentCollaboration: React.FC<DocumentCollaborationProps> = ({
                 )}
               </CardTitle>
               <div className="flex items-center gap-2">
-                <Button variant="outline" size="sm" onClick={() => setShowVersionHistory(true)}>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setShowVersionHistory(true)}
+                >
                   <History className="h-4 w-4 mr-1" />
                   History
                 </Button>
@@ -499,7 +562,7 @@ const DocumentCollaboration: React.FC<DocumentCollaborationProps> = ({
               </div>
             </div>
           </CardHeader>
-        
+
           <CardContent className="space-y-4">
             {/* Active Collaborators */}
             <div>
@@ -508,9 +571,13 @@ const DocumentCollaboration: React.FC<DocumentCollaborationProps> = ({
               </h3>
               <div className="flex items-center gap-2 flex-wrap">
                 {activePresence.map((presenceItem) => {
-                  const collaborator = 'user' in presenceItem ? presenceItem.user : presenceItem;
-                  const status = 'user' in presenceItem ? presenceItem.status : presenceItem.status;
-                  
+                  const collaborator =
+                    'user' in presenceItem ? presenceItem.user : presenceItem;
+                  const status =
+                    'user' in presenceItem
+                      ? presenceItem.status
+                      : presenceItem.status;
+
                   return (
                     <Tooltip key={collaborator.id}>
                       <TooltipTrigger>
@@ -518,23 +585,39 @@ const DocumentCollaboration: React.FC<DocumentCollaborationProps> = ({
                           <div className="relative">
                             <Avatar className="h-6 w-6">
                               <AvatarImage src={collaborator.avatar} />
-                              <AvatarFallback 
+                              <AvatarFallback
                                 className="text-xs"
-                                style={{ backgroundColor: collaborator.color || '#94A3B8' }}
+                                style={{
+                                  backgroundColor:
+                                    collaborator.color || '#94A3B8',
+                                }}
                               >
                                 {collaborator.name.charAt(0)}
                               </AvatarFallback>
                             </Avatar>
-                            <div className={cn(
-                              "absolute -bottom-0.5 -right-0.5 h-2 w-2 rounded-full border border-background",
-                              status === 'online' ? 'bg-green-500' :
-                              status === 'away' ? 'bg-yellow-500' : 'bg-gray-400'
-                            )} />
+                            <div
+                              className={cn(
+                                'absolute -bottom-0.5 -right-0.5 h-2 w-2 rounded-full border border-background',
+                                status === 'online'
+                                  ? 'bg-green-500'
+                                  : status === 'away'
+                                    ? 'bg-yellow-500'
+                                    : 'bg-gray-400',
+                              )}
+                            />
                           </div>
-                          
-                          <span className="text-sm font-medium">{collaborator.name}</span>
-                          
-                          <Badge variant="outline" className={cn("text-xs", getRoleColor(collaborator.role))}>
+
+                          <span className="text-sm font-medium">
+                            {collaborator.name}
+                          </span>
+
+                          <Badge
+                            variant="outline"
+                            className={cn(
+                              'text-xs',
+                              getRoleColor(collaborator.role),
+                            )}
+                          >
                             <div className="flex items-center gap-1">
                               {getRoleIcon(collaborator.role)}
                               {collaborator.role}
@@ -559,11 +642,18 @@ const DocumentCollaboration: React.FC<DocumentCollaborationProps> = ({
                       <TooltipContent>
                         <div className="text-center">
                           <p className="font-medium">{collaborator.name}</p>
-                          <p className="text-xs text-muted-foreground">{collaborator.email}</p>
-                          <p className="text-xs text-muted-foreground capitalize">{status}</p>
+                          <p className="text-xs text-muted-foreground">
+                            {collaborator.email}
+                          </p>
+                          <p className="text-xs text-muted-foreground capitalize">
+                            {status}
+                          </p>
                           {enableRealtime && 'lastSeen' in presenceItem && (
                             <p className="text-xs text-muted-foreground">
-                              Last seen: {new Date(presenceItem.lastSeen).toLocaleTimeString()}
+                              Last seen:{' '}
+                              {new Date(
+                                presenceItem.lastSeen,
+                              ).toLocaleTimeString()}
                             </p>
                           )}
                         </div>
@@ -575,21 +665,24 @@ const DocumentCollaboration: React.FC<DocumentCollaborationProps> = ({
             </div>
 
             {/* Invite New Collaborator */}
-            {(currentUserData && ('role' in currentUserData ? currentUserData.role === 'owner' : true)) && (
-              <div className="flex gap-2">
-                <Input
-                  placeholder="Enter email to invite..."
-                  value={inviteEmail}
-                  onChange={(e) => setInviteEmail(e.target.value)}
-                  onKeyDown={(e) => e.key === 'Enter' && inviteCollaborator()}
-                />
-                <Button onClick={inviteCollaborator} disabled={!inviteEmail}>
-                  <UserPlus className="h-4 w-4" />
-                </Button>
-              </div>
-            )}
+            {currentUserData &&
+              ('role' in currentUserData
+                ? currentUserData.role === 'owner'
+                : true) && (
+                <div className="flex gap-2">
+                  <Input
+                    placeholder="Enter email to invite..."
+                    value={inviteEmail}
+                    onChange={(e) => setInviteEmail(e.target.value)}
+                    onKeyDown={(e) => e.key === 'Enter' && inviteCollaborator()}
+                  />
+                  <Button onClick={inviteCollaborator} disabled={!inviteEmail}>
+                    <UserPlus className="h-4 w-4" />
+                  </Button>
+                </div>
+              )}
           </CardContent>
-      </Card>
+        </Card>
 
         {/* Comments & Feedback */}
         <Card>
@@ -611,10 +704,10 @@ const DocumentCollaboration: React.FC<DocumentCollaborationProps> = ({
                     {unresolvedComments.length} unresolved
                   </Badge>
                 )}
-                {mentions.filter(m => !m.read).length > 0 && (
+                {mentions.filter((m) => !m.read).length > 0 && (
                   <Badge variant="secondary" className="gap-1">
                     <AtSign className="h-3 w-3" />
-                    {mentions.filter(m => !m.read).length}
+                    {mentions.filter((m) => !m.read).length}
                   </Badge>
                 )}
               </div>
@@ -626,15 +719,21 @@ const DocumentCollaboration: React.FC<DocumentCollaborationProps> = ({
             <div className="space-y-2">
               <div className="relative">
                 <Textarea
-                  placeholder={enableRealtime ? "Add a comment, @mention someone, or suggestion..." : "Add a comment or suggestion..."}
+                  placeholder={
+                    enableRealtime
+                      ? 'Add a comment, @mention someone, or suggestion...'
+                      : 'Add a comment or suggestion...'
+                  }
                   value={newComment}
                   onChange={(e) => {
                     setNewComment(e.target.value);
-                    
+
                     // Handle mention triggers
                     if (enableRealtime && e.target.value.includes('@')) {
                       const lastAtIndex = e.target.value.lastIndexOf('@');
-                      const textAfterAt = e.target.value.substring(lastAtIndex + 1);
+                      const textAfterAt = e.target.value.substring(
+                        lastAtIndex + 1,
+                      );
                       if (!textAfterAt.includes(' ')) {
                         setMentionQuery(textAfterAt);
                         setShowMentionPopup(true);
@@ -657,13 +756,18 @@ const DocumentCollaboration: React.FC<DocumentCollaborationProps> = ({
                 {/* Mention Popup */}
                 {showMentionPopup && enableRealtime && (
                   <div className="absolute bottom-full left-0 w-full bg-background border rounded-lg shadow-lg p-2 z-10">
-                    <div className="text-xs text-muted-foreground mb-2">Mention someone:</div>
+                    <div className="text-xs text-muted-foreground mb-2">
+                      Mention someone:
+                    </div>
                     {filteredMentionUsers().map((user) => (
                       <div
                         key={user.id}
                         className="flex items-center gap-2 p-2 hover:bg-muted rounded cursor-pointer"
                         onClick={() => {
-                          const beforeAt = newComment.substring(0, newComment.lastIndexOf('@'));
+                          const beforeAt = newComment.substring(
+                            0,
+                            newComment.lastIndexOf('@'),
+                          );
                           setNewComment(`${beforeAt}@${user.name} `);
                           setShowMentionPopup(false);
                         }}
@@ -676,7 +780,9 @@ const DocumentCollaboration: React.FC<DocumentCollaborationProps> = ({
                         </Avatar>
                         <div>
                           <div className="text-sm font-medium">{user.name}</div>
-                          <div className="text-xs text-muted-foreground">{user.email}</div>
+                          <div className="text-xs text-muted-foreground">
+                            {user.email}
+                          </div>
                         </div>
                       </div>
                     ))}
@@ -687,7 +793,9 @@ const DocumentCollaboration: React.FC<DocumentCollaborationProps> = ({
               <div className="flex justify-between items-center">
                 <div className="flex items-center gap-2">
                   <p className="text-xs text-muted-foreground">
-                    {selectedField ? `Commenting on field: ${selectedField}` : 'General comment'}
+                    {selectedField
+                      ? `Commenting on field: ${selectedField}`
+                      : 'General comment'}
                   </p>
                   {enableRealtime && (
                     <Button
@@ -701,8 +809,8 @@ const DocumentCollaboration: React.FC<DocumentCollaborationProps> = ({
                     </Button>
                   )}
                 </div>
-                <Button 
-                  onClick={addComment} 
+                <Button
+                  onClick={addComment}
                   disabled={!newComment.trim()}
                   size="sm"
                   className="gap-1"
@@ -721,19 +829,30 @@ const DocumentCollaboration: React.FC<DocumentCollaborationProps> = ({
                   comment={comment}
                   collaborators={activePresence}
                   onResolve={() => resolveComment(comment.id)}
-                  onReply={enableRealtime ? (content) => addReply(comment.id, content) : undefined}
-                  canResolve={currentUserData && ('role' in currentUserData ? 
-                    currentUserData.role === 'owner' || currentUserData.role === 'editor' : true)}
+                  onReply={
+                    enableRealtime
+                      ? (content) => addReply(comment.id, content)
+                      : undefined
+                  }
+                  canResolve={
+                    currentUserData &&
+                    ('role' in currentUserData
+                      ? currentUserData.role === 'owner' ||
+                        currentUserData.role === 'editor'
+                      : true)
+                  }
                   enableRealtime={enableRealtime}
                   replyToComment={replyToComment}
                   setReplyToComment={setReplyToComment}
                 />
               ))}
-              
+
               {getActiveComments().length === 0 && (
                 <div className="text-center text-muted-foreground py-4">
                   <MessageCircle className="h-8 w-8 mx-auto mb-2 opacity-50" />
-                  <p className="text-sm">No comments yet. Start the conversation!</p>
+                  <p className="text-sm">
+                    No comments yet. Start the conversation!
+                  </p>
                 </div>
               )}
             </div>
@@ -767,17 +886,26 @@ const EnhancedCommentItem: React.FC<{
   enableRealtime: boolean;
   replyToComment: string | null;
   setReplyToComment: (id: string | null) => void;
-}> = ({ comment, collaborators, onResolve, onReply, canResolve, enableRealtime, replyToComment, setReplyToComment }) => {
+}> = ({
+  comment,
+  collaborators,
+  onResolve,
+  onReply,
+  canResolve,
+  enableRealtime,
+  replyToComment,
+  setReplyToComment,
+}) => {
   const [replyContent, setReplyContent] = React.useState('');
-  
-  const author = collaborators.find(c => 
-    'user' in c ? c.user.id === comment.authorId : c.id === comment.authorId
+
+  const author = collaborators.find((c) =>
+    'user' in c ? c.user.id === comment.authorId : c.id === comment.authorId,
   );
-  
+
   const authorData = 'user' in (author || {}) ? author!.user : author;
-  
+
   const isReplying = replyToComment === comment.id;
-  
+
   const handleReply = () => {
     if (replyContent.trim() && onReply) {
       onReply(replyContent);
@@ -785,34 +913,37 @@ const EnhancedCommentItem: React.FC<{
       setReplyToComment(null);
     }
   };
-  
+
   return (
-    <div className={cn(
-      "flex gap-3 p-3 rounded-lg border transition-all",
-      comment.resolved ? "bg-muted/50 opacity-75" : "bg-background",
-      enableRealtime && "hover:shadow-sm"
-    )}>
+    <div
+      className={cn(
+        'flex gap-3 p-3 rounded-lg border transition-all',
+        comment.resolved ? 'bg-muted/50 opacity-75' : 'bg-background',
+        enableRealtime && 'hover:shadow-sm',
+      )}
+    >
       <Avatar className="h-8 w-8">
         <AvatarImage src={authorData?.avatar} />
-        <AvatarFallback 
+        <AvatarFallback
           className="text-xs"
           style={{ backgroundColor: authorData?.color || '#94A3B8' }}
         >
           {authorData?.name?.charAt(0) || '?'}
         </AvatarFallback>
       </Avatar>
-      
+
       <div className="flex-1 space-y-1">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <span className="text-sm font-medium">{authorData?.name || 'Unknown'}</span>
+            <span className="text-sm font-medium">
+              {authorData?.name || 'Unknown'}
+            </span>
             <span className="text-xs text-muted-foreground">
-              {'timestamp' in comment 
-                ? (comment.timestamp instanceof Date 
-                  ? comment.timestamp.toLocaleString() 
-                  : new Date(comment.timestamp).toLocaleString())
-                : 'Just now'
-              }
+              {'timestamp' in comment
+                ? comment.timestamp instanceof Date
+                  ? comment.timestamp.toLocaleString()
+                  : new Date(comment.timestamp).toLocaleString()
+                : 'Just now'}
             </span>
             {'fieldId' in comment && comment.fieldId && (
               <Badge variant="outline" className="text-xs">
@@ -826,19 +957,21 @@ const EnhancedCommentItem: React.FC<{
               </Badge>
             )}
           </div>
-          
+
           <div className="flex items-center gap-1">
             {enableRealtime && onReply && !comment.resolved && (
-              <Button 
-                variant="ghost" 
-                size="sm" 
+              <Button
+                variant="ghost"
+                size="sm"
                 className="h-6 w-6 p-0"
-                onClick={() => setReplyToComment(isReplying ? null : comment.id)}
+                onClick={() =>
+                  setReplyToComment(isReplying ? null : comment.id)
+                }
               >
                 <Reply className="h-3 w-3" />
               </Button>
             )}
-            
+
             {!comment.resolved && canResolve && (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -856,34 +989,40 @@ const EnhancedCommentItem: React.FC<{
             )}
           </div>
         </div>
-        
+
         <p className="text-sm whitespace-pre-wrap">{comment.content}</p>
-        
+
         {/* Replies */}
-        {'replies' in comment && comment.replies && comment.replies.length > 0 && (
-          <div className="mt-2 space-y-2 border-l-2 border-muted pl-3">
-            {comment.replies.map((reply) => (
-              <div key={reply.id} className="flex gap-2">
-                <Avatar className="h-6 w-6">
-                  <AvatarImage src={authorData?.avatar} />
-                  <AvatarFallback className="text-xs">
-                    {reply.authorName?.charAt(0) || '?'}
-                  </AvatarFallback>
-                </Avatar>
-                <div className="flex-1">
-                  <div className="flex items-center gap-2">
-                    <span className="text-xs font-medium">{reply.authorName}</span>
-                    <span className="text-xs text-muted-foreground">
-                      {new Date(reply.timestamp).toLocaleString()}
-                    </span>
+        {'replies' in comment &&
+          comment.replies &&
+          comment.replies.length > 0 && (
+            <div className="mt-2 space-y-2 border-l-2 border-muted pl-3">
+              {comment.replies.map((reply) => (
+                <div key={reply.id} className="flex gap-2">
+                  <Avatar className="h-6 w-6">
+                    <AvatarImage src={authorData?.avatar} />
+                    <AvatarFallback className="text-xs">
+                      {reply.authorName?.charAt(0) || '?'}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-medium">
+                        {reply.authorName}
+                      </span>
+                      <span className="text-xs text-muted-foreground">
+                        {new Date(reply.timestamp).toLocaleString()}
+                      </span>
+                    </div>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      {reply.content}
+                    </p>
                   </div>
-                  <p className="text-xs text-muted-foreground mt-1">{reply.content}</p>
                 </div>
-              </div>
-            ))}
-          </div>
-        )}
-        
+              ))}
+            </div>
+          )}
+
         {/* Reply Input */}
         {isReplying && onReply && (
           <div className="mt-2 space-y-2">
@@ -904,8 +1043,8 @@ const EnhancedCommentItem: React.FC<{
               }}
             />
             <div className="flex justify-end gap-2">
-              <Button 
-                variant="ghost" 
+              <Button
+                variant="ghost"
                 size="sm"
                 onClick={() => {
                   setReplyToComment(null);
@@ -914,7 +1053,7 @@ const EnhancedCommentItem: React.FC<{
               >
                 Cancel
               </Button>
-              <Button 
+              <Button
                 size="sm"
                 onClick={handleReply}
                 disabled={!replyContent.trim()}
@@ -926,7 +1065,7 @@ const EnhancedCommentItem: React.FC<{
             </div>
           </div>
         )}
-        
+
         {comment.resolved && (
           <div className="flex items-center gap-1 text-xs text-green-600 mt-2">
             <Check className="h-3 w-3" />
@@ -956,22 +1095,31 @@ const VersionHistoryModal: React.FC<{
             </Button>
           </div>
         </CardHeader>
-        
+
         <CardContent className="overflow-y-auto">
           <div className="space-y-3">
             {versions.map((version) => {
-              const author = collaborators.find(c => c.id === version.authorId);
-              
+              const author = collaborators.find(
+                (c) => c.id === version.authorId,
+              );
+
               return (
-                <div key={version.id} className="flex items-center justify-between p-3 border rounded-lg">
+                <div
+                  key={version.id}
+                  className="flex items-center justify-between p-3 border rounded-lg"
+                >
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1">
-                      <span className="text-sm font-medium">{author?.name || 'Unknown'}</span>
+                      <span className="text-sm font-medium">
+                        {author?.name || 'Unknown'}
+                      </span>
                       <span className="text-xs text-muted-foreground">
                         {version.timestamp.toLocaleString()}
                       </span>
                     </div>
-                    <p className="text-sm text-muted-foreground">{version.description}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {version.description}
+                    </p>
                     <div className="flex gap-1 mt-1">
                       {version.changes.slice(0, 3).map((change, idx) => (
                         <Badge key={idx} variant="outline" className="text-xs">
@@ -985,9 +1133,9 @@ const VersionHistoryModal: React.FC<{
                       )}
                     </div>
                   </div>
-                  
-                  <Button 
-                    variant="outline" 
+
+                  <Button
+                    variant="outline"
                     size="sm"
                     onClick={() => onRestore(version.id)}
                   >

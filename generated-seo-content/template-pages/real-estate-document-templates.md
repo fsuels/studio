@@ -7,6 +7,7 @@ Discover our comprehensive collection of real estate document templates. Each te
 ### Featured Real Estate Document Templates
 
 Our real estate document templates are designed for:
+
 - **Businesses of all sizes**: From startups to enterprises
 - **Multiple industries**: Technology, healthcare, retail, and more
 - **All US states**: State-specific compliance included
@@ -46,9 +47,9 @@ Our real estate document templates are designed for:
 
 ### Customer Reviews
 
-*"Best real estate document templates I've found online. Professional quality at a fraction of attorney costs."* - Business Owner
+_"Best real estate document templates I've found online. Professional quality at a fraction of attorney costs."_ - Business Owner
 
-*"Saved my company thousands using these templates instead of hiring lawyers."* - Startup Founder
+_"Saved my company thousands using these templates instead of hiring lawyers."_ - Startup Founder
 
 ### Get Started Today
 

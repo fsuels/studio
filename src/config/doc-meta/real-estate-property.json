@@ -2,12 +2,8 @@
   "architect-contract": {
     "title": "Architect Contract",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Architect Contract.",
     "popular": false,
     "fieldCount": 15,
@@ -16,12 +12,8 @@
   "certificate-substantial-completion": {
     "title": "Certificate Substantial Completion",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Certificate Substantial Completion.",
     "popular": false,
     "fieldCount": 15,
@@ -30,12 +22,8 @@
   "change-order": {
     "title": "Change Order",
     "complexity": "easy",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Change Order.",
     "popular": false,
     "fieldCount": 5,
@@ -44,12 +32,8 @@
   "commercial-lease-agreement": {
     "title": "Commercial Lease Agreement",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Commercial Lease Agreement.",
     "popular": false,
     "fieldCount": 15,
@@ -58,12 +42,8 @@
   "commercial-lease-with-option-to-purchase": {
     "title": "Commercial Lease With Option To Purchase",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Commercial Lease With Option To Purchase.",
     "popular": false,
     "fieldCount": 15,
@@ -72,12 +52,8 @@
   "construction-bid-form": {
     "title": "Construction Bid Form",
     "complexity": "easy",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Construction Bid Form.",
     "popular": false,
     "fieldCount": 5,
@@ -86,12 +62,8 @@
   "construction-contract": {
     "title": "Construction Contract",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Construction Contract.",
     "popular": false,
     "fieldCount": 15,
@@ -100,12 +72,8 @@
   "construction-management-agreement": {
     "title": "Construction Management Agreement",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Construction Management Agreement.",
     "popular": false,
     "fieldCount": 15,
@@ -114,12 +82,8 @@
   "earnest-money-agreement": {
     "title": "Earnest Money Agreement",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Earnest Money Agreement.",
     "popular": false,
     "fieldCount": 15,
@@ -128,12 +92,8 @@
   "eviction-notice": {
     "title": "Eviction Notice",
     "complexity": "easy",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Eviction Notice.",
     "popular": false,
     "fieldCount": 5,
@@ -142,12 +102,8 @@
   "general-contractor-agreement": {
     "title": "General Contractor Agreement",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for General Contractor Agreement.",
     "popular": false,
     "fieldCount": 15,
@@ -156,12 +112,8 @@
   "home-improvement-contract": {
     "title": "Home Improvement Contract",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Home Improvement Contract.",
     "popular": false,
     "fieldCount": 15,
@@ -170,12 +122,8 @@
   "landscaping-contract": {
     "title": "Landscaping Contract",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Landscaping Contract.",
     "popular": false,
     "fieldCount": 15,
@@ -184,12 +132,8 @@
   "late-rent-notice": {
     "title": "Late Rent Notice",
     "complexity": "easy",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Late Rent Notice.",
     "popular": false,
     "fieldCount": 5,
@@ -198,12 +142,8 @@
   "lease-addendum": {
     "title": "Lease Addendum",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Lease Addendum.",
     "popular": false,
     "fieldCount": 15,
@@ -212,12 +152,8 @@
   "lease-agreement": {
     "title": "Lease Agreement",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Lease Agreement.",
     "popular": true,
     "fieldCount": 15,
@@ -226,12 +162,8 @@
   "lease-amendment": {
     "title": "Lease Amendment",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Lease Amendment.",
     "popular": false,
     "fieldCount": 15,
@@ -240,12 +172,8 @@
   "lease-renewal-agreement": {
     "title": "Lease Renewal Agreement",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Lease Renewal Agreement.",
     "popular": false,
     "fieldCount": 15,
@@ -254,12 +182,8 @@
   "lease-termination-letter": {
     "title": "Lease Termination Letter",
     "complexity": "easy",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Lease Termination Letter.",
     "popular": false,
     "fieldCount": 5,
@@ -268,12 +192,8 @@
   "mechanics-lien": {
     "title": "Mechanics Lien",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Mechanics Lien.",
     "popular": false,
     "fieldCount": 15,
@@ -282,12 +202,8 @@
   "mechanics-lien-waiver": {
     "title": "Mechanics Lien Waiver",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Mechanics Lien Waiver.",
     "popular": false,
     "fieldCount": 15,
@@ -296,13 +212,8 @@
   "mortgage-agreement": {
     "title": "Mortgage Agreement",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign",
-      "notary"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign", "notary"],
     "description": "Template for Mortgage Agreement.",
     "popular": false,
     "fieldCount": 15,
@@ -311,12 +222,8 @@
   "notice-of-lease-violation": {
     "title": "Notice Of Lease Violation",
     "complexity": "easy",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Notice Of Lease Violation.",
     "popular": false,
     "fieldCount": 5,
@@ -325,12 +232,8 @@
   "notice-to-enter": {
     "title": "Notice To Enter",
     "complexity": "easy",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Notice To Enter.",
     "popular": false,
     "fieldCount": 5,
@@ -339,12 +242,8 @@
   "notice-to-pay-rent-or-quit": {
     "title": "Notice To Pay Rent Or Quit",
     "complexity": "easy",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Notice To Pay Rent Or Quit.",
     "popular": false,
     "fieldCount": 5,
@@ -353,12 +252,8 @@
   "notice-to-proceed": {
     "title": "Notice To Proceed",
     "complexity": "easy",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Notice To Proceed.",
     "popular": false,
     "fieldCount": 5,
@@ -367,12 +262,8 @@
   "office-space-lease": {
     "title": "Office Space Lease",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Office Space Lease.",
     "popular": false,
     "fieldCount": 15,
@@ -381,12 +272,8 @@
   "parking-space-lease-agreement": {
     "title": "Parking Space Lease Agreement",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Parking Space Lease Agreement.",
     "popular": false,
     "fieldCount": 15,
@@ -395,13 +282,8 @@
   "property-deed": {
     "title": "Property Deed",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign",
-      "notary"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign", "notary"],
     "description": "Template for Property Deed.",
     "popular": false,
     "fieldCount": 15,
@@ -410,12 +292,8 @@
   "property-manager-agreement": {
     "title": "Property Manager Agreement",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Property Manager Agreement.",
     "popular": false,
     "fieldCount": 15,
@@ -424,12 +302,8 @@
   "purchase-agreement": {
     "title": "Purchase Agreement",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Purchase Agreement.",
     "popular": true,
     "fieldCount": 15,
@@ -438,13 +312,8 @@
   "quitclaim-deed": {
     "title": "Quitclaim Deed",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign",
-      "notary"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign", "notary"],
     "description": "Template for Quitclaim Deed.",
     "popular": false,
     "fieldCount": 15,
@@ -453,12 +322,8 @@
   "real-estate-purchase-agreement": {
     "title": "Real Estate Purchase Agreement",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Real Estate Purchase Agreement.",
     "popular": false,
     "fieldCount": 15,
@@ -467,12 +332,8 @@
   "remodeling-contract": {
     "title": "Remodeling Contract",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Remodeling Contract.",
     "popular": false,
     "fieldCount": 15,
@@ -481,12 +342,8 @@
   "rent-increase-letter": {
     "title": "Rent Increase Letter",
     "complexity": "easy",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Rent Increase Letter.",
     "popular": false,
     "fieldCount": 5,
@@ -495,12 +352,8 @@
   "rent-receipt": {
     "title": "Rent Receipt",
     "complexity": "easy",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Rent Receipt.",
     "popular": false,
     "fieldCount": 5,
@@ -509,12 +362,8 @@
   "rental-agreement": {
     "title": "Rental Agreement",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Rental Agreement.",
     "popular": false,
     "fieldCount": 15,
@@ -523,12 +372,8 @@
   "residential-lease-agreement": {
     "title": "Residential Lease Agreement",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Residential Lease Agreement.",
     "popular": true,
     "fieldCount": 15,
@@ -537,12 +382,8 @@
   "residential-rental-application": {
     "title": "Residential Rental Application",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Residential Rental Application.",
     "popular": false,
     "fieldCount": 15,
@@ -551,12 +392,8 @@
   "residential-rental-inspection-report": {
     "title": "Residential Rental Inspection Report",
     "complexity": "easy",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Residential Rental Inspection Report.",
     "popular": false,
     "fieldCount": 5,
@@ -565,12 +402,8 @@
   "retail-space-lease": {
     "title": "Retail Space Lease",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Retail Space Lease.",
     "popular": false,
     "fieldCount": 15,
@@ -579,12 +412,8 @@
   "roofing-contract": {
     "title": "Roofing Contract",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Roofing Contract.",
     "popular": false,
     "fieldCount": 15,
@@ -593,12 +422,8 @@
   "room-rental-agreement": {
     "title": "Room Rental Agreement",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Room Rental Agreement.",
     "popular": false,
     "fieldCount": 15,
@@ -607,12 +432,8 @@
   "roommate-agreement": {
     "title": "Roommate Agreement",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Roommate Agreement.",
     "popular": false,
     "fieldCount": 15,
@@ -621,12 +442,8 @@
   "storage-space-lease-agreement": {
     "title": "Storage Space Lease Agreement",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Storage Space Lease Agreement.",
     "popular": false,
     "fieldCount": 15,
@@ -635,12 +452,8 @@
   "subcontractor-agreement": {
     "title": "Subcontractor Agreement",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Subcontractor Agreement.",
     "popular": false,
     "fieldCount": 15,
@@ -649,12 +462,8 @@
   "sublease-agreement": {
     "title": "Sublease Agreement",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Sublease Agreement.",
     "popular": false,
     "fieldCount": 15,
@@ -663,12 +472,8 @@
   "tenant-maintenance-request": {
     "title": "Tenant Maintenance Request",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Tenant Maintenance Request.",
     "popular": false,
     "fieldCount": 15,
@@ -677,12 +482,8 @@
   "triple-net-lease": {
     "title": "Triple Net Lease",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Triple Net Lease.",
     "popular": false,
     "fieldCount": 15,
@@ -691,12 +492,8 @@
   "vacation-rental-agreement": {
     "title": "Vacation Rental Agreement",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Vacation Rental Agreement.",
     "popular": false,
     "fieldCount": 15,
@@ -705,12 +502,8 @@
   "warehouse-lease": {
     "title": "Warehouse Lease",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Warehouse Lease.",
     "popular": false,
     "fieldCount": 15,
@@ -719,13 +512,8 @@
   "warranty-deed": {
     "title": "Warranty Deed",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign",
-      "notary"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign", "notary"],
     "description": "Template for Warranty Deed.",
     "popular": false,
     "fieldCount": 15,

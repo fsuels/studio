@@ -5,7 +5,12 @@ import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 import type { LegalDocument } from '@/lib/document-library';
 import type { CategoryInfo } from '@/components/workflow/Step1DocumentSelector';
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/ui/accordion';
 import { getDocTranslation } from '@/lib/i18nUtils';
 
 interface MobileDocsAccordionProps {
@@ -14,16 +19,23 @@ interface MobileDocsAccordionProps {
   onLinkClick?: () => void;
 }
 
-export default function MobileDocsAccordion({ categories, documents, onLinkClick }: MobileDocsAccordionProps) {
+export default function MobileDocsAccordion({
+  categories,
+  documents,
+  onLinkClick,
+}: MobileDocsAccordionProps) {
   const { t, i18n } = useTranslation('common');
   const locale = i18n.language as 'en' | 'es';
   const [openKey, setOpenKey] = React.useState<string | null>(null);
 
-  const toggle = (key: string) => setOpenKey((prev) => (prev === key ? null : key));
+  const toggle = (key: string) =>
+    setOpenKey((prev) => (prev === key ? null : key));
 
   const docsForCategory = (key: string) =>
     documents.filter(
-      (doc) => doc.category.trim().toLowerCase() === key.trim().toLowerCase() && doc.id !== 'general-inquiry',
+      (doc) =>
+        doc.category.trim().toLowerCase() === key.trim().toLowerCase() &&
+        doc.id !== 'general-inquiry',
     );
 
   return (

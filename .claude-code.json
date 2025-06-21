@@ -1,7 +1,13 @@
 {
   "context": {
     "framework": "next.js",
-    "firebase_services": ["firestore", "auth", "storage", "hosting", "functions"],
+    "firebase_services": [
+      "firestore",
+      "auth",
+      "storage",
+      "hosting",
+      "functions"
+    ],
     "key_files": [
       "src/lib/firebase.ts",
       "src/hooks/useAuth.tsx",

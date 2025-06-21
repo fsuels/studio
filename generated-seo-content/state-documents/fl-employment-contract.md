@@ -47,7 +47,7 @@ Don't risk using generic templates that may not comply with Florida law. Get a p
 
 [Create Florida Employment Contract]
 
-*Trusted by thousands of Florida businesses*
+_Trusted by thousands of Florida businesses_
 
 ---
 

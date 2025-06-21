@@ -2,7 +2,12 @@
 'use client';
 
 import React, { useEffect, useCallback } from 'react';
-import { useRouter, usePathname, useSearchParams, useParams } from 'next/navigation';
+import {
+  useRouter,
+  usePathname,
+  useSearchParams,
+  useParams,
+} from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import { Languages } from 'lucide-react';
 import { toast } from 'sonner';
@@ -17,53 +22,61 @@ interface LanguageSwitchProps {
 const availableLocales: Array<'en' | 'es'> = ['en', 'es'];
 const localeNames = {
   en: 'English',
-  es: 'Español'
+  es: 'Español',
 };
 
-export default function LanguageSwitch({ 
-  currentLocale, 
-  showToast = true 
+export default function LanguageSwitch({
+  currentLocale,
+  showToast = true,
 }: LanguageSwitchProps) {
   const router = useRouter();
   const pathname = usePathname() ?? '';
   const searchParams = useSearchParams();
   const { t } = useTranslation('common');
 
-  const switchLanguage = useCallback((targetLocale?: 'en' | 'es') => {
-    // If no target locale specified, cycle to the next one
-    const newLocale = targetLocale || (currentLocale === 'en' ? 'es' : 'en');
-    
-    if (newLocale === currentLocale) {
-      if (showToast) {
-        toast.info(t('Language already selected', { 
-          defaultValue: `Already using ${localeNames[currentLocale]}` 
-        }));
+  const switchLanguage = useCallback(
+    (targetLocale?: 'en' | 'es') => {
+      // If no target locale specified, cycle to the next one
+      const newLocale = targetLocale || (currentLocale === 'en' ? 'es' : 'en');
+
+      if (newLocale === currentLocale) {
+        if (showToast) {
+          toast.info(
+            t('Language already selected', {
+              defaultValue: `Already using ${localeNames[currentLocale]}`,
+            }),
+          );
+        }
+        return;
       }
-      return;
-    }
 
-    // Build new path with swapped locale
-    let newPath = pathname.startsWith(`/${currentLocale}`)
-      ? pathname.replace(`/${currentLocale}`, `/${newLocale}`)
-      : `/${newLocale}${pathname === '/' ? '' : pathname}`;
+      // Build new path with swapped locale
+      let newPath = pathname.startsWith(`/${currentLocale}`)
+        ? pathname.replace(`/${currentLocale}`, `/${newLocale}`)
+        : `/${newLocale}${pathname === '/' ? '' : pathname}`;
 
-    // Preserve query parameters
-    const query = searchParams ? searchParams.toString() : '';
-    if (query) newPath += `?${query}`;
+      // Preserve query parameters
+      const query = searchParams ? searchParams.toString() : '';
+      if (query) newPath += `?${query}`;
 
-    // Show toast notification
-    if (showToast) {
-      toast.success(t('Language switched', { 
-        defaultValue: `Switched to ${localeNames[newLocale]}` 
-      }), {
-        icon: <Languages className="h-4 w-4" />,
-        duration: 2000,
-      });
-    }
+      // Show toast notification
+      if (showToast) {
+        toast.success(
+          t('Language switched', {
+            defaultValue: `Switched to ${localeNames[newLocale]}`,
+          }),
+          {
+            icon: <Languages className="h-4 w-4" />,
+            duration: 2000,
+          },
+        );
+      }
 
-    // Navigate to new locale
-    router.push(newPath);
-  }, [currentLocale, pathname, searchParams, router, t, showToast]);
+      // Navigate to new locale
+      router.push(newPath);
+    },
+    [currentLocale, pathname, searchParams, router, t, showToast],
+  );
 
   // Handle ⌘L keyboard shortcut for language switching
   useEffect(() => {
@@ -81,7 +94,7 @@ export default function LanguageSwitch({
 
   // Expose switch function for external use
   React.useImperativeHandle(React.createRef(), () => ({
-    switchLanguage
+    switchLanguage,
   }));
 
   return null; // This is a headless component that only handles keyboard shortcuts
@@ -94,42 +107,50 @@ export function useLanguageSwitch(currentLocale: 'en' | 'es') {
   const searchParams = useSearchParams();
   const { t } = useTranslation('common');
 
-  const switchLanguage = useCallback((targetLocale?: 'en' | 'es', showToast = true) => {
-    const newLocale = targetLocale || (currentLocale === 'en' ? 'es' : 'en');
-    
-    if (newLocale === currentLocale) {
-      if (showToast) {
-        toast.info(t('Language already selected', { 
-          defaultValue: `Already using ${localeNames[currentLocale]}` 
-        }));
+  const switchLanguage = useCallback(
+    (targetLocale?: 'en' | 'es', showToast = true) => {
+      const newLocale = targetLocale || (currentLocale === 'en' ? 'es' : 'en');
+
+      if (newLocale === currentLocale) {
+        if (showToast) {
+          toast.info(
+            t('Language already selected', {
+              defaultValue: `Already using ${localeNames[currentLocale]}`,
+            }),
+          );
+        }
+        return;
       }
-      return;
-    }
 
-    let newPath = pathname.startsWith(`/${currentLocale}`)
-      ? pathname.replace(`/${currentLocale}`, `/${newLocale}`)
-      : `/${newLocale}${pathname === '/' ? '' : pathname}`;
+      let newPath = pathname.startsWith(`/${currentLocale}`)
+        ? pathname.replace(`/${currentLocale}`, `/${newLocale}`)
+        : `/${newLocale}${pathname === '/' ? '' : pathname}`;
 
-    const query = searchParams ? searchParams.toString() : '';
-    if (query) newPath += `?${query}`;
+      const query = searchParams ? searchParams.toString() : '';
+      if (query) newPath += `?${query}`;
 
-    if (showToast) {
-      toast.success(t('Language switched', { 
-        defaultValue: `Switched to ${localeNames[newLocale]}` 
-      }), {
-        icon: <Languages className="h-4 w-4" />,
-        duration: 2000,
-      });
-    }
+      if (showToast) {
+        toast.success(
+          t('Language switched', {
+            defaultValue: `Switched to ${localeNames[newLocale]}`,
+          }),
+          {
+            icon: <Languages className="h-4 w-4" />,
+            duration: 2000,
+          },
+        );
+      }
 
-    router.push(newPath);
-  }, [currentLocale, pathname, searchParams, router, t]);
+      router.push(newPath);
+    },
+    [currentLocale, pathname, searchParams, router, t],
+  );
 
   return {
     switchLanguage,
     currentLocale,
     availableLocales,
     localeNames,
-    nextLocale: currentLocale === 'en' ? 'es' : 'en'
+    nextLocale: currentLocale === 'en' ? 'es' : 'en',
   };
 }

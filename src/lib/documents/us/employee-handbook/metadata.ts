@@ -24,12 +24,14 @@ export const employeeHandbookMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Employee Handbook',
-      description: 'Comprehensive employee handbook covering policies, procedures, and workplace guidelines.',
+      description:
+        'Comprehensive employee handbook covering policies, procedures, and workplace guidelines.',
       aliases: ['staff handbook', 'employee manual', 'workplace policies'],
     },
     es: {
       name: 'Manual del Empleado',
-      description: 'Manual integral del empleado que cubre políticas, procedimientos y pautas del lugar de trabajo.',
+      description:
+        'Manual integral del empleado que cubre políticas, procedimientos y pautas del lugar de trabajo.',
       aliases: ['manual de personal', 'políticas laborales'],
     },
   },

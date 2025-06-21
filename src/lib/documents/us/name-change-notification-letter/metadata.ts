@@ -24,13 +24,18 @@ export const nameChangeNotificationLetterMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Name Change Notification Letter',
-      description: 'Letter to notify institutions and organizations of legal name change.',
+      description:
+        'Letter to notify institutions and organizations of legal name change.',
       aliases: ['name change letter', 'legal name update notification'],
     },
     es: {
       name: 'Carta de Notificación de Cambio de Nombre',
-      description: 'Carta para notificar a instituciones sobre cambio legal de nombre.',
-      aliases: ['carta de cambio de nombre', 'notificación de actualización de nombre'],
+      description:
+        'Carta para notificar a instituciones sobre cambio legal de nombre.',
+      aliases: [
+        'carta de cambio de nombre',
+        'notificación de actualización de nombre',
+      ],
     },
   },
 };

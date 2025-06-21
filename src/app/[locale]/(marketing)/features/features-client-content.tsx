@@ -15,9 +15,7 @@ import {
   X,
 } from 'lucide-react';
 import React from 'react';
-import {
-  Card,
-} from '@/components/ui/card';
+import { Card } from '@/components/ui/card';
 import {
   Table,
   TableBody,
@@ -176,7 +174,10 @@ export default function FeaturesClientContent() {
               </TableRow>
               <TableRow>
                 <TableCell>
-                  {t('whyChooseUs.instantDownload', 'Instant Document Download')}
+                  {t(
+                    'whyChooseUs.instantDownload',
+                    'Instant Document Download',
+                  )}
                 </TableCell>
                 <TableCell className="text-center">
                   <Check className="h-5 w-5 text-green-500 mx-auto" />

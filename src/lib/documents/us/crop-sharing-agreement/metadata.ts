@@ -29,7 +29,8 @@ export const cropSharingAgreementMeta: LegalDocument = {
     },
     es: {
       name: 'Acuerdo de Participación de Cultivos',
-      description: 'Acuerdo para participación de cultivos y asociaciones agrícolas.',
+      description:
+        'Acuerdo para participación de cultivos y asociaciones agrícolas.',
       aliases: ['acuerdo de aparcería', 'sociedad agrícola'],
     },
   },

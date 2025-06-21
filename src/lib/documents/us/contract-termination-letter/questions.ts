@@ -57,7 +57,7 @@ export const contractTerminationLetterQuestions: FormQuestion[] = [
     id: 'recipientName',
     type: 'text',
     label: 'Recipient Full Name',
-    placeholder: 'Enter recipient\'s full name',
+    placeholder: "Enter recipient's full name",
     required: true,
     section: 'Recipient Information',
   },
@@ -73,7 +73,7 @@ export const contractTerminationLetterQuestions: FormQuestion[] = [
     id: 'recipientCompany',
     type: 'text',
     label: 'Recipient Company/Organization',
-    placeholder: 'Enter recipient\'s company name if applicable',
+    placeholder: "Enter recipient's company name if applicable",
     required: false,
     section: 'Recipient Information',
   },
@@ -81,7 +81,7 @@ export const contractTerminationLetterQuestions: FormQuestion[] = [
     id: 'recipientAddress',
     type: 'address',
     label: 'Recipient Address',
-    placeholder: 'Enter recipient\'s complete address',
+    placeholder: "Enter recipient's complete address",
     required: true,
     section: 'Recipient Information',
   },
@@ -183,7 +183,7 @@ export const contractTerminationLetterQuestions: FormQuestion[] = [
   },
   {
     id: 'noticePeriod',
-    type: 'text', 
+    type: 'text',
     label: 'Required Notice Period',
     placeholder: 'e.g., 30 days, 60 days',
     required: false,
@@ -304,7 +304,7 @@ export const contractTerminationLetterQuestions: FormQuestion[] = [
     section: 'Settlement Terms',
   },
 
-  // Legal References  
+  // Legal References
   {
     id: 'terminationClauseReference',
     type: 'text',

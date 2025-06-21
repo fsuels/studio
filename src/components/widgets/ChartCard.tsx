@@ -3,8 +3,28 @@
 import React from 'react';
 import useSWR from 'swr';
 import { z } from 'zod';
-import { ResponsiveContainer, LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  ResponsiveContainer,
+  LineChart,
+  Line,
+  BarChart,
+  Bar,
+  PieChart,
+  Pie,
+  Cell,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+} from 'recharts';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { AlertCircle, TrendingUp, TrendingDown, Minus } from 'lucide-react';
 
@@ -18,14 +38,14 @@ const BaseDataPointSchema = z.object({
 const TimeSeriesDataSchema = z.array(
   BaseDataPointSchema.extend({
     date: z.string(),
-  })
+  }),
 );
 
 const CategoryDataSchema = z.array(
   BaseDataPointSchema.extend({
     category: z.string(),
     color: z.string().optional(),
-  })
+  }),
 );
 
 const MetricResponseSchema = z.object({
@@ -72,7 +92,7 @@ const fetcher = async (url: string): Promise<MetricResponse> => {
     throw new Error(`HTTP error! status: ${response.status}`);
   }
   const data = await response.json();
-  
+
   // Validate response with Zod schema
   try {
     return MetricResponseSchema.parse(data);
@@ -102,8 +122,8 @@ const formatValue = (value: number, format?: string, unit?: string): string => {
 
 const renderTrendIcon = (changeType?: string, change?: number) => {
   if (!changeType || change === undefined) return null;
-  
-  const iconClass = "h-4 w-4 ml-1";
+
+  const iconClass = 'h-4 w-4 ml-1';
   switch (changeType) {
     case 'increase':
       return <TrendingUp className={`${iconClass} text-green-500`} />;
@@ -138,25 +158,22 @@ const renderChart = (data: any[], chartType: string, height: number) => {
         <ResponsiveContainer width="100%" height={height}>
           <LineChart {...commonProps}>
             <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
-            <XAxis 
-              dataKey="date" 
+            <XAxis
+              dataKey="date"
               tick={{ fontSize: 12 }}
               className="fill-muted-foreground"
             />
-            <YAxis 
-              tick={{ fontSize: 12 }}
-              className="fill-muted-foreground"
-            />
-            <Tooltip 
+            <YAxis tick={{ fontSize: 12 }} className="fill-muted-foreground" />
+            <Tooltip
               contentStyle={{
                 backgroundColor: 'hsl(var(--background))',
                 border: '1px solid hsl(var(--border))',
                 borderRadius: '6px',
               }}
             />
-            <Line 
-              type="monotone" 
-              dataKey="value" 
+            <Line
+              type="monotone"
+              dataKey="value"
               stroke={COLORS[0]}
               strokeWidth={2}
               dot={{ r: 4 }}
@@ -171,27 +188,20 @@ const renderChart = (data: any[], chartType: string, height: number) => {
         <ResponsiveContainer width="100%" height={height}>
           <BarChart {...commonProps}>
             <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
-            <XAxis 
-              dataKey="name" 
+            <XAxis
+              dataKey="name"
               tick={{ fontSize: 12 }}
               className="fill-muted-foreground"
             />
-            <YAxis 
-              tick={{ fontSize: 12 }}
-              className="fill-muted-foreground"
-            />
-            <Tooltip 
+            <YAxis tick={{ fontSize: 12 }} className="fill-muted-foreground" />
+            <Tooltip
               contentStyle={{
                 backgroundColor: 'hsl(var(--background))',
                 border: '1px solid hsl(var(--border))',
                 borderRadius: '6px',
               }}
             />
-            <Bar 
-              dataKey="value" 
-              fill={COLORS[0]}
-              radius={[2, 2, 0, 0]}
-            />
+            <Bar dataKey="value" fill={COLORS[0]} radius={[2, 2, 0, 0]} />
           </BarChart>
         </ResponsiveContainer>
       );
@@ -207,16 +217,18 @@ const renderChart = (data: any[], chartType: string, height: number) => {
               outerRadius={80}
               fill="#8884d8"
               dataKey="value"
-              label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+              label={({ name, percent }) =>
+                `${name} ${(percent * 100).toFixed(0)}%`
+              }
             >
               {data.map((entry, index) => (
-                <Cell 
-                  key={`cell-${index}`} 
-                  fill={entry.color || COLORS[index % COLORS.length]} 
+                <Cell
+                  key={`cell-${index}`}
+                  fill={entry.color || COLORS[index % COLORS.length]}
                 />
               ))}
             </Pie>
-            <Tooltip 
+            <Tooltip
               contentStyle={{
                 backgroundColor: 'hsl(var(--background))',
                 border: '1px solid hsl(var(--border))',
@@ -237,14 +249,14 @@ const renderChart = (data: any[], chartType: string, height: number) => {
   }
 };
 
-export function ChartCard({ 
-  queryKey, 
-  title, 
-  description, 
-  chartType = 'line', 
+export function ChartCard({
+  queryKey,
+  title,
+  description,
+  chartType = 'line',
   height = 300,
   refreshInterval = 30000, // 30 seconds
-  className = ''
+  className = '',
 }: ChartCardProps) {
   const { data, error, isLoading, mutate } = useSWR(
     `/api/metrics?metric=${encodeURIComponent(queryKey)}`,
@@ -254,7 +266,7 @@ export function ChartCard({
       revalidateOnFocus: false,
       revalidateOnReconnect: true,
       dedupingInterval: 10000, // 10 seconds
-    }
+    },
   );
 
   const handleRefresh = () => {
@@ -276,7 +288,7 @@ export function ChartCard({
             <div className="text-center">
               <AlertCircle className="h-8 w-8 mx-auto mb-2" />
               <p className="text-sm">Failed to load metric data</p>
-              <button 
+              <button
                 onClick={handleRefresh}
                 className="mt-2 text-xs underline hover:no-underline"
               >
@@ -325,14 +337,15 @@ export function ChartCard({
     );
   }
 
-  const { current, previous, change, changeType, chartData, format, unit } = data.data;
+  const { current, previous, change, changeType, chartData, format, unit } =
+    data.data;
 
   return (
     <Card className={className}>
       <CardHeader>
         <CardTitle className="flex items-center justify-between">
           <span>{title}</span>
-          <button 
+          <button
             onClick={handleRefresh}
             className="text-xs text-muted-foreground hover:text-foreground transition-colors"
             title="Refresh data"
@@ -347,7 +360,10 @@ export function ChartCard({
           </div>
           {change !== undefined && (
             <div className="flex items-center text-sm text-muted-foreground">
-              <span>{change > 0 ? '+' : ''}{formatValue(change, format, unit)}</span>
+              <span>
+                {change > 0 ? '+' : ''}
+                {formatValue(change, format, unit)}
+              </span>
               {renderTrendIcon(changeType, change)}
             </div>
           )}

@@ -1,19 +1,26 @@
 // Role-based feature toggle system for 123LegalDoc
-import { 
-  UserRole, 
-  Permission, 
-  FeatureToggle, 
-  FeatureContext, 
+import {
+  UserRole,
+  Permission,
+  FeatureToggle,
+  FeatureContext,
   UserWithRole,
-  RoleAuditEvent 
+  RoleAuditEvent,
 } from '@/types/roles';
 
 export interface FeatureToggleService {
   isFeatureEnabled(featureKey: string, context: FeatureContext): boolean;
   getEnabledFeatures(context: FeatureContext): string[];
-  toggleFeature(featureKey: string, enabled: boolean, adminId: string): Promise<void>;
+  toggleFeature(
+    featureKey: string,
+    enabled: boolean,
+    adminId: string,
+  ): Promise<void>;
   createFeature(feature: Omit<FeatureToggle, 'key'>): Promise<FeatureToggle>;
-  updateFeature(featureKey: string, updates: Partial<FeatureToggle>): Promise<FeatureToggle>;
+  updateFeature(
+    featureKey: string,
+    updates: Partial<FeatureToggle>,
+  ): Promise<FeatureToggle>;
   getFeatureUsage(featureKey: string): Promise<FeatureUsageStats>;
 }
 
@@ -29,7 +36,7 @@ export interface FeatureUsageStats {
 class RoleBasedFeatureToggleService implements FeatureToggleService {
   private features: Map<string, FeatureToggle> = new Map();
   private usageStats: Map<string, FeatureUsageStats> = new Map();
-  
+
   constructor() {
     this.initializeDefaultFeatures();
   }
@@ -206,7 +213,7 @@ class RoleBasedFeatureToggleService implements FeatureToggleService {
       },
     ];
 
-    defaultFeatures.forEach(feature => {
+    defaultFeatures.forEach((feature) => {
       this.features.set(feature.key, feature);
     });
   }
@@ -233,38 +240,44 @@ class RoleBasedFeatureToggleService implements FeatureToggleService {
 
     // Check rollout strategy
     const { rolloutStrategy } = feature;
-    
+
     switch (rolloutStrategy.type) {
       case 'all':
         return true;
-        
+
       case 'roles':
         return rolloutStrategy.roles?.includes(context.userRole) || false;
-        
+
       case 'users':
         return rolloutStrategy.userIds?.includes(context.userId) || false;
-        
+
       case 'environments':
-        return rolloutStrategy.environments?.includes(context.environment) || false;
-        
+        return (
+          rolloutStrategy.environments?.includes(context.environment) || false
+        );
+
       case 'percentage':
         // Use consistent hash based on userId for stable rollout
         const hash = this.hashUserId(context.userId);
         const threshold = (rolloutStrategy.percentage || 0) / 100;
         return hash < threshold;
-        
+
       default:
         return false;
     }
   }
 
   getEnabledFeatures(context: FeatureContext): string[] {
-    return Array.from(this.features.keys()).filter(featureKey => 
-      this.isFeatureEnabled(featureKey, context)
+    return Array.from(this.features.keys()).filter((featureKey) =>
+      this.isFeatureEnabled(featureKey, context),
     );
   }
 
-  async toggleFeature(featureKey: string, enabled: boolean, adminId: string): Promise<void> {
+  async toggleFeature(
+    featureKey: string,
+    enabled: boolean,
+    adminId: string,
+  ): Promise<void> {
     const feature = this.features.get(featureKey);
     if (!feature) {
       throw new Error(`Feature "${featureKey}" not found`);
@@ -293,7 +306,9 @@ class RoleBasedFeatureToggleService implements FeatureToggleService {
     this.auditFeatureChange(auditEvent);
   }
 
-  async createFeature(featureData: Omit<FeatureToggle, 'key'>): Promise<FeatureToggle> {
+  async createFeature(
+    featureData: Omit<FeatureToggle, 'key'>,
+  ): Promise<FeatureToggle> {
     const key = this.generateFeatureKey(featureData.name);
     const feature: FeatureToggle = {
       key,
@@ -304,7 +319,10 @@ class RoleBasedFeatureToggleService implements FeatureToggleService {
     return feature;
   }
 
-  async updateFeature(featureKey: string, updates: Partial<FeatureToggle>): Promise<FeatureToggle> {
+  async updateFeature(
+    featureKey: string,
+    updates: Partial<FeatureToggle>,
+  ): Promise<FeatureToggle> {
     const feature = this.features.get(featureKey);
     if (!feature) {
       throw new Error(`Feature "${featureKey}" not found`);
@@ -341,7 +359,7 @@ class RoleBasedFeatureToggleService implements FeatureToggleService {
   }
 
   getFeaturesByRole(role: UserRole): FeatureToggle[] {
-    return this.getAllFeatures().filter(feature => {
+    return this.getAllFeatures().filter((feature) => {
       if (feature.rolloutStrategy.type === 'roles') {
         return feature.rolloutStrategy.roles?.includes(role);
       }
@@ -359,11 +377,11 @@ class RoleBasedFeatureToggleService implements FeatureToggleService {
 
     // Super admins can manage all features
     if (userRole === 'super_admin') return true;
-    
+
     // Admins can manage most features except system-critical ones
     if (userRole === 'admin') {
       const restrictedFeatures = ['super_admin_only', 'system_critical'];
-      return !feature.tags.some(tag => restrictedFeatures.includes(tag));
+      return !feature.tags.some((tag) => restrictedFeatures.includes(tag));
     }
 
     return false;
@@ -373,7 +391,7 @@ class RoleBasedFeatureToggleService implements FeatureToggleService {
     let hash = 0;
     for (let i = 0; i < userId.length; i++) {
       const char = userId.charCodeAt(i);
-      hash = ((hash << 5) - hash) + char;
+      hash = (hash << 5) - hash + char;
       hash = hash & hash; // Convert to 32-bit integer
     }
     return Math.abs(hash) / Math.pow(2, 31);
@@ -394,7 +412,10 @@ class RoleBasedFeatureToggleService implements FeatureToggleService {
 }
 
 // React hook for feature toggles
-export function useFeatureToggle(featureKey: string, context?: Partial<FeatureContext>) {
+export function useFeatureToggle(
+  featureKey: string,
+  context?: Partial<FeatureContext>,
+) {
   const defaultContext: FeatureContext = {
     userId: 'anonymous',
     userRole: 'viewer',
@@ -402,8 +423,11 @@ export function useFeatureToggle(featureKey: string, context?: Partial<FeatureCo
     ...context,
   };
 
-  const isEnabled = featureToggleService.isFeatureEnabled(featureKey, defaultContext);
-  
+  const isEnabled = featureToggleService.isFeatureEnabled(
+    featureKey,
+    defaultContext,
+  );
+
   return {
     isEnabled,
     toggle: async (enabled: boolean, adminId: string) => {
@@ -426,11 +450,13 @@ export function useEnabledFeatures(context?: Partial<FeatureContext>) {
 
 // Permission-based feature access helper
 export function hasFeatureAccess(
-  userRole: UserRole, 
-  permissions: Permission[], 
-  featureKey: string
+  userRole: UserRole,
+  permissions: Permission[],
+  featureKey: string,
 ): boolean {
-  const feature = featureToggleService.getAllFeatures().find(f => f.key === featureKey);
+  const feature = featureToggleService
+    .getAllFeatures()
+    .find((f) => f.key === featureKey);
   if (!feature) return false;
 
   // Check if feature is enabled for this role
@@ -449,11 +475,11 @@ export function hasFeatureAccess(
 }
 
 // Feature flag evaluation for conditional rendering
-export function FeatureFlag({ 
-  feature, 
-  userRole, 
-  children, 
-  fallback = null 
+export function FeatureFlag({
+  feature,
+  userRole,
+  children,
+  fallback = null,
 }: {
   feature: string;
   userRole: UserRole;
@@ -463,11 +489,12 @@ export function FeatureFlag({
   const context: FeatureContext = {
     userId: 'current_user',
     userRole,
-    environment: process.env.NODE_ENV === 'development' ? 'development' : 'production',
+    environment:
+      process.env.NODE_ENV === 'development' ? 'development' : 'production',
   };
 
   const isEnabled = featureToggleService.isFeatureEnabled(feature, context);
-  
+
   return isEnabled ? children : fallback;
 }
 
@@ -478,20 +505,28 @@ export const featureToggleService = new RoleBasedFeatureToggleService();
 export const FeatureUtils = {
   // Get features by category/tag
   getFeaturesByTag: (tag: string): FeatureToggle[] => {
-    return featureToggleService.getAllFeatures().filter(feature => 
-      feature.tags.includes(tag)
-    );
+    return featureToggleService
+      .getAllFeatures()
+      .filter((feature) => feature.tags.includes(tag));
   },
 
   // Check if feature is in beta/preview
   isPreviewFeature: (featureKey: string): boolean => {
-    const feature = featureToggleService.getAllFeatures().find(f => f.key === featureKey);
-    return feature?.tags.includes('preview') || feature?.tags.includes('beta') || false;
+    const feature = featureToggleService
+      .getAllFeatures()
+      .find((f) => f.key === featureKey);
+    return (
+      feature?.tags.includes('preview') ||
+      feature?.tags.includes('beta') ||
+      false
+    );
   },
 
   // Get feature rollout percentage
   getRolloutPercentage: (featureKey: string): number => {
-    const feature = featureToggleService.getAllFeatures().find(f => f.key === featureKey);
+    const feature = featureToggleService
+      .getAllFeatures()
+      .find((f) => f.key === featureKey);
     if (feature?.rolloutStrategy.type === 'percentage') {
       return feature.rolloutStrategy.percentage || 0;
     }

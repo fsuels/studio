@@ -25,7 +25,11 @@ interface MobileDrawerProps {
   onClose: () => void;
 }
 
-export default function MobileDrawer({ open, children, onClose }: MobileDrawerProps) {
+export default function MobileDrawer({
+  open,
+  children,
+  onClose,
+}: MobileDrawerProps) {
   const isDesktop = useMediaQuery('(min-width:768px)');
   const { t } = useTranslation();
 
@@ -36,7 +40,7 @@ export default function MobileDrawer({ open, children, onClose }: MobileDrawerPr
         onClose();
       }
     },
-    { axis: 'y' }
+    { axis: 'y' },
   );
 
   React.useEffect(() => {

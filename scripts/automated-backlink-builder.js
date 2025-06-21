@@ -15,36 +15,44 @@ class AutomatedBacklinkBuilder {
     this.completedOutreach = [];
     this.prospects = new Map();
     this.emailTemplates = new Map();
-    
+
     // Directories and file paths
     this.reportsDir = path.join(__dirname, '../backlink-reports');
     this.queueFile = path.join(this.reportsDir, 'outreach-queue.json');
     this.completedFile = path.join(this.reportsDir, 'completed-outreach.json');
     this.prospectsFile = path.join(this.reportsDir, 'prospects-database.json');
-    this.dailyLogFile = path.join(this.reportsDir, `daily-outreach-${this.getDateString()}.json`);
-    
+    this.dailyLogFile = path.join(
+      this.reportsDir,
+      `daily-outreach-${this.getDateString()}.json`,
+    );
+
     // Target domain types with authority scores
     this.targetDomainTypes = {
       gov: {
         priority: 10,
         authorityScore: 95,
-        examples: ['irs.gov', 'sba.gov', 'dol.gov', 'ftc.gov']
+        examples: ['irs.gov', 'sba.gov', 'dol.gov', 'ftc.gov'],
       },
       edu: {
         priority: 9,
         authorityScore: 85,
-        examples: ['harvard.edu', 'stanford.edu', 'mit.edu']
+        examples: ['harvard.edu', 'stanford.edu', 'mit.edu'],
       },
       legalDirectory: {
         priority: 8,
         authorityScore: 75,
-        examples: ['justia.com', 'findlaw.com', 'lawyers.com', 'martindale.com']
+        examples: [
+          'justia.com',
+          'findlaw.com',
+          'lawyers.com',
+          'martindale.com',
+        ],
       },
       stateLegal: {
         priority: 9,
         authorityScore: 90,
-        examples: ['courts.ca.gov', 'nycourts.gov', 'flcourts.org']
-      }
+        examples: ['courts.ca.gov', 'nycourts.gov', 'flcourts.org'],
+      },
     };
 
     // White-hat outreach strategies
@@ -54,7 +62,7 @@ class AutomatedBacklinkBuilder {
       directorySubmission: 'Legal directory submission',
       educationalResource: 'Educational resource contribution',
       governmentResource: 'Government resource page suggestion',
-      guestContribution: 'Expert content contribution offer'
+      guestContribution: 'Expert content contribution offer',
     };
 
     this.initializeSystem();
@@ -80,8 +88,8 @@ class AutomatedBacklinkBuilder {
 
   getTodayOutreachCount() {
     const today = this.getDateString();
-    return this.completedOutreach.filter(outreach => 
-      outreach.dateSent && outreach.dateSent.startsWith(today)
+    return this.completedOutreach.filter(
+      (outreach) => outreach.dateSent && outreach.dateSent.startsWith(today),
     ).length;
   }
 
@@ -93,23 +101,33 @@ class AutomatedBacklinkBuilder {
   }
 
   saveOutreachQueue() {
-    fs.writeFileSync(this.queueFile, JSON.stringify(this.outreachQueue, null, 2));
+    fs.writeFileSync(
+      this.queueFile,
+      JSON.stringify(this.outreachQueue, null, 2),
+    );
   }
 
   loadCompletedOutreach() {
     if (fs.existsSync(this.completedFile)) {
-      this.completedOutreach = JSON.parse(fs.readFileSync(this.completedFile, 'utf8'));
+      this.completedOutreach = JSON.parse(
+        fs.readFileSync(this.completedFile, 'utf8'),
+      );
     }
   }
 
   saveCompletedOutreach() {
-    fs.writeFileSync(this.completedFile, JSON.stringify(this.completedOutreach, null, 2));
+    fs.writeFileSync(
+      this.completedFile,
+      JSON.stringify(this.completedOutreach, null, 2),
+    );
   }
 
   loadProspectsDatabase() {
     if (fs.existsSync(this.prospectsFile)) {
-      const prospectsArray = JSON.parse(fs.readFileSync(this.prospectsFile, 'utf8'));
-      this.prospects = new Map(prospectsArray.map(p => [p.id, p]));
+      const prospectsArray = JSON.parse(
+        fs.readFileSync(this.prospectsFile, 'utf8'),
+      );
+      this.prospects = new Map(prospectsArray.map((p) => [p.id, p]));
     } else {
       this.seedProspectsDatabase();
     }
@@ -117,7 +135,10 @@ class AutomatedBacklinkBuilder {
 
   saveProspectsDatabase() {
     const prospectsArray = Array.from(this.prospects.values());
-    fs.writeFileSync(this.prospectsFile, JSON.stringify(prospectsArray, null, 2));
+    fs.writeFileSync(
+      this.prospectsFile,
+      JSON.stringify(prospectsArray, null, 2),
+    );
   }
 
   // Email templates for different outreach types
@@ -142,7 +163,7 @@ Would you consider adding us to your resources page? I'm happy to provide any ad
 Best regards,
 {{senderName}}
 Legal Content Team
-123LegalDoc`
+123LegalDoc`,
     });
 
     this.emailTemplates.set('brokenLink', {
@@ -165,7 +186,7 @@ Thank you for maintaining such helpful resources!
 Best regards,
 {{senderName}}
 Legal Content Team
-123LegalDoc`
+123LegalDoc`,
     });
 
     this.emailTemplates.set('directorySubmission', {
@@ -193,7 +214,7 @@ I'm happy to provide any additional information for your review process.
 Best regards,
 {{senderName}}
 Legal Content Team
-123LegalDoc`
+123LegalDoc`,
     });
 
     this.emailTemplates.set('educationalResource', {
@@ -220,7 +241,7 @@ We'd be honored to be included in your legal education resources.
 Best regards,
 {{senderName}}
 Legal Content Team
-123LegalDoc`
+123LegalDoc`,
     });
   }
 
@@ -233,14 +254,15 @@ Legal Content Team
         domain: 'sba.gov',
         type: 'gov',
         url: 'https://www.sba.gov/business-guide/launch-your-business/choose-business-structure',
-        contactPage: 'https://www.sba.gov/about-sba/sba-locations/headquarters-offices',
+        contactPage:
+          'https://www.sba.gov/about-sba/sba-locations/headquarters-offices',
         priority: 10,
         strategy: 'resourcePage',
         notes: 'SBA has extensive small business legal resources',
         targetPage: 'Business formation legal documents',
         estimatedAuthority: 95,
         lastContacted: null,
-        status: 'prospective'
+        status: 'prospective',
       },
       {
         id: 'irs-gov-business-resources',
@@ -254,7 +276,7 @@ Legal Content Team
         targetPage: 'Business formation and tax documents',
         estimatedAuthority: 98,
         lastContacted: null,
-        status: 'prospective'
+        status: 'prospective',
       },
       {
         id: 'ftc-gov-consumer-resources',
@@ -268,7 +290,7 @@ Legal Content Team
         targetPage: 'Consumer protection legal documents',
         estimatedAuthority: 94,
         lastContacted: null,
-        status: 'prospective'
+        status: 'prospective',
       },
       {
         id: 'dol-gov-workplace-rights',
@@ -282,7 +304,7 @@ Legal Content Team
         targetPage: 'Employment law documents',
         estimatedAuthority: 93,
         lastContacted: null,
-        status: 'prospective'
+        status: 'prospective',
       },
 
       // Educational domains (.edu)
@@ -298,7 +320,7 @@ Legal Content Team
         targetPage: 'Clinical legal education resources',
         estimatedAuthority: 92,
         lastContacted: null,
-        status: 'prospective'
+        status: 'prospective',
       },
       {
         id: 'stanford-law-clinics',
@@ -312,7 +334,7 @@ Legal Content Team
         targetPage: 'Clinical and experiential learning',
         estimatedAuthority: 91,
         lastContacted: null,
-        status: 'prospective'
+        status: 'prospective',
       },
 
       // State legal domains
@@ -328,7 +350,7 @@ Legal Content Team
         targetPage: 'Self-help legal resources',
         estimatedAuthority: 96,
         lastContacted: null,
-        status: 'prospective'
+        status: 'prospective',
       },
       {
         id: 'nycourts-gov-self-help',
@@ -342,7 +364,7 @@ Legal Content Team
         targetPage: 'Court help and legal resources',
         estimatedAuthority: 95,
         lastContacted: null,
-        status: 'prospective'
+        status: 'prospective',
       },
 
       // Legal directories
@@ -358,7 +380,7 @@ Legal Content Team
         targetPage: 'Legal resources directory',
         estimatedAuthority: 78,
         lastContacted: null,
-        status: 'prospective'
+        status: 'prospective',
       },
       {
         id: 'findlaw-resources',
@@ -372,22 +394,26 @@ Legal Content Team
         targetPage: 'Legal information and lawyer directory',
         estimatedAuthority: 82,
         lastContacted: null,
-        status: 'prospective'
-      }
+        status: 'prospective',
+      },
     ];
 
-    seedProspects.forEach(prospect => {
+    seedProspects.forEach((prospect) => {
       this.prospects.set(prospect.id, prospect);
     });
 
     this.saveProspectsDatabase();
-    console.log(`📋 Seeded prospects database with ${seedProspects.length} high-authority targets`);
+    console.log(
+      `📋 Seeded prospects database with ${seedProspects.length} high-authority targets`,
+    );
   }
 
   // Main automation functions
   async runDailyOutreach() {
     console.log('📧 Automated Backlink Builder - Daily Outreach\n');
-    console.log('════════════════════════════════════════════════════════════════\n');
+    console.log(
+      '════════════════════════════════════════════════════════════════\n',
+    );
 
     const todayCount = this.getTodayOutreachCount();
     const remaining = this.dailyOutreachLimit - todayCount;
@@ -407,7 +433,7 @@ Legal Content Team
     const toProcess = Math.min(remaining, this.outreachQueue.length);
     if (toProcess > 0) {
       console.log(`📧 Processing ${toProcess} queued outreach requests...\n`);
-      
+
       for (let i = 0; i < toProcess; i++) {
         const outreach = this.outreachQueue.shift();
         await this.sendOutreach(outreach);
@@ -415,7 +441,8 @@ Legal Content Team
     }
 
     // Fill queue with new prospects if needed
-    if (this.outreachQueue.length < 50) { // Keep 50 prospects in queue
+    if (this.outreachQueue.length < 50) {
+      // Keep 50 prospects in queue
       await this.generateNewProspects();
     }
 
@@ -428,27 +455,27 @@ Legal Content Team
     console.log(`📧 Sending outreach to: ${outreach.domain}`);
     console.log(`   Strategy: ${outreach.strategy}`);
     console.log(`   Priority: ${outreach.priority}/10`);
-    
+
     // In real implementation, this would send actual emails
     // For now, we simulate the process
-    
+
     const emailContent = this.generateEmailContent(outreach);
-    
+
     // Simulate email sending
     const success = Math.random() > 0.1; // 90% success rate simulation
-    
+
     if (success) {
       console.log(`   ✅ Email sent successfully`);
-      
+
       // Move to completed with tracking info
       const completedOutreach = {
         ...outreach,
         dateSent: new Date().toISOString(),
         emailSubject: emailContent.subject,
         status: 'sent',
-        trackingId: `track_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+        trackingId: `track_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
       };
-      
+
       this.completedOutreach.push(completedOutreach);
     } else {
       console.log(`   ❌ Email failed to send - retrying later`);
@@ -458,9 +485,9 @@ Legal Content Team
         this.outreachQueue.push(outreach);
       }
     }
-    
+
     console.log('');
-    
+
     // Rate limiting - space out emails
     await this.sleep(2000); // 2 second delay between emails
   }
@@ -488,7 +515,7 @@ Legal Content Team
       '{{documentCount}}': '200+',
       '{{userCount}}': '100,000',
       '{{institutionName}}': this.extractSiteName(outreach.domain),
-      '{{senderName}}': 'Sarah Martinez'
+      '{{senderName}}': 'Sarah Martinez',
     };
 
     Object.entries(variables).forEach(([placeholder, value]) => {
@@ -507,13 +534,13 @@ Legal Content Team
   extractStateName(domain) {
     // Extract state from domains like courts.ca.gov
     const stateCodes = {
-      'ca': 'California',
-      'ny': 'New York', 
-      'tx': 'Texas',
-      'fl': 'Florida',
-      'il': 'Illinois'
+      ca: 'California',
+      ny: 'New York',
+      tx: 'Texas',
+      fl: 'Florida',
+      il: 'Illinois',
     };
-    
+
     const parts = domain.split('.');
     for (const part of parts) {
       if (stateCodes[part.toLowerCase()]) {
@@ -525,16 +552,16 @@ Legal Content Team
 
   async generateNewProspects() {
     console.log('🔍 Generating new prospects...');
-    
+
     // Prioritize prospects that haven't been contacted
     const uncontactedProspects = Array.from(this.prospects.values())
-      .filter(p => p.status === 'prospective')
+      .filter((p) => p.status === 'prospective')
       .sort((a, b) => b.priority - a.priority);
 
     let added = 0;
     const maxToAdd = 20;
 
-    uncontactedProspects.slice(0, maxToAdd).forEach(prospect => {
+    uncontactedProspects.slice(0, maxToAdd).forEach((prospect) => {
       const outreach = {
         id: prospect.id,
         domain: prospect.domain,
@@ -546,15 +573,15 @@ Legal Content Team
         notes: prospect.notes,
         targetPage: prospect.targetPage,
         estimatedAuthority: prospect.estimatedAuthority,
-        queuedAt: new Date().toISOString()
+        queuedAt: new Date().toISOString(),
       };
 
       this.outreachQueue.push(outreach);
-      
+
       // Mark prospect as queued
       prospect.status = 'queued';
       prospect.queuedAt = new Date().toISOString();
-      
+
       added++;
     });
 
@@ -564,8 +591,8 @@ Legal Content Team
 
   generateDailyReport() {
     const today = this.getDateString();
-    const todayOutreach = this.completedOutreach.filter(o => 
-      o.dateSent && o.dateSent.startsWith(today)
+    const todayOutreach = this.completedOutreach.filter(
+      (o) => o.dateSent && o.dateSent.startsWith(today),
     );
 
     const report = {
@@ -576,27 +603,29 @@ Legal Content Team
       totalProspects: this.prospects.size,
       byDomainType: this.analyzeDomainTypes(todayOutreach),
       byStrategy: this.analyzeStrategies(todayOutreach),
-      topTargets: todayOutreach.slice(0, 5).map(o => ({
+      topTargets: todayOutreach.slice(0, 5).map((o) => ({
         domain: o.domain,
         strategy: o.strategy,
         priority: o.priority,
-        authority: o.estimatedAuthority
-      }))
+        authority: o.estimatedAuthority,
+      })),
     };
 
     fs.writeFileSync(this.dailyLogFile, JSON.stringify(report, null, 2));
-    
+
     console.log('📊 Daily Outreach Report Generated:');
     console.log(`   📧 Emails Sent: ${report.outreachSent}`);
     console.log(`   🎯 .gov domains: ${report.byDomainType.gov || 0}`);
     console.log(`   🎓 .edu domains: ${report.byDomainType.edu || 0}`);
-    console.log(`   ⚖️  Legal directories: ${report.byDomainType.legalDirectory || 0}`);
+    console.log(
+      `   ⚖️  Legal directories: ${report.byDomainType.legalDirectory || 0}`,
+    );
     console.log(`   🏛️  State legal: ${report.byDomainType.stateLegal || 0}`);
   }
 
   analyzeDomainTypes(outreach) {
     const analysis = {};
-    outreach.forEach(o => {
+    outreach.forEach((o) => {
       analysis[o.type] = (analysis[o.type] || 0) + 1;
     });
     return analysis;
@@ -604,7 +633,7 @@ Legal Content Team
 
   analyzeStrategies(outreach) {
     const analysis = {};
-    outreach.forEach(o => {
+    outreach.forEach((o) => {
       analysis[o.strategy] = (analysis[o.strategy] || 0) + 1;
     });
     return analysis;
@@ -614,9 +643,9 @@ Legal Content Team
   generateWeeklyReport() {
     const weekAgo = new Date();
     weekAgo.setDate(weekAgo.getDate() - 7);
-    
-    const weeklyOutreach = this.completedOutreach.filter(o => 
-      new Date(o.dateSent) >= weekAgo
+
+    const weeklyOutreach = this.completedOutreach.filter(
+      (o) => new Date(o.dateSent) >= weekAgo,
     );
 
     const report = {
@@ -629,28 +658,35 @@ Legal Content Team
       topAuthorities: weeklyOutreach
         .sort((a, b) => b.estimatedAuthority - a.estimatedAuthority)
         .slice(0, 10)
-        .map(o => ({
+        .map((o) => ({
           domain: o.domain,
           authority: o.estimatedAuthority,
-          strategy: o.strategy
+          strategy: o.strategy,
         })),
       prospects: {
         total: this.prospects.size,
-        contacted: Array.from(this.prospects.values()).filter(p => p.status !== 'prospective').length,
-        remaining: Array.from(this.prospects.values()).filter(p => p.status === 'prospective').length
-      }
+        contacted: Array.from(this.prospects.values()).filter(
+          (p) => p.status !== 'prospective',
+        ).length,
+        remaining: Array.from(this.prospects.values()).filter(
+          (p) => p.status === 'prospective',
+        ).length,
+      },
     };
 
-    const reportPath = path.join(this.reportsDir, `weekly-backlink-report-${this.getDateString()}.json`);
+    const reportPath = path.join(
+      this.reportsDir,
+      `weekly-backlink-report-${this.getDateString()}.json`,
+    );
     fs.writeFileSync(reportPath, JSON.stringify(report, null, 2));
-    
+
     console.log(`📊 Weekly report saved: ${reportPath}`);
     return report;
   }
 
   // Utility methods
   sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
+    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 
   addProspect(prospectData) {
@@ -658,18 +694,18 @@ Legal Content Team
       id: prospectData.id || `prospect_${Date.now()}`,
       ...prospectData,
       status: 'prospective',
-      addedAt: new Date().toISOString()
+      addedAt: new Date().toISOString(),
     };
-    
+
     this.prospects.set(prospect.id, prospect);
     this.saveProspectsDatabase();
-    
+
     console.log(`✅ Added new prospect: ${prospect.domain}`);
   }
 
   getStats() {
     const totalOutreach = this.completedOutreach.length;
-    const last30Days = this.completedOutreach.filter(o => {
+    const last30Days = this.completedOutreach.filter((o) => {
       const outreachDate = new Date(o.dateSent);
       const thirtyDaysAgo = new Date();
       thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
@@ -683,7 +719,7 @@ Legal Content Team
       queueSize: this.outreachQueue.length,
       totalProspects: this.prospects.size,
       domainTypes: this.analyzeDomainTypes(this.completedOutreach),
-      strategies: this.analyzeStrategies(this.completedOutreach)
+      strategies: this.analyzeStrategies(this.completedOutreach),
     };
   }
 }
@@ -691,28 +727,29 @@ Legal Content Team
 // CLI execution
 if (require.main === module) {
   const builder = new AutomatedBacklinkBuilder();
-  
+
   const command = process.argv[2];
-  
+
   switch (command) {
     case 'run':
     case 'daily':
-      builder.runDailyOutreach()
+      builder
+        .runDailyOutreach()
         .then(() => {
           console.log('\n🎯 Daily outreach complete!');
           process.exit(0);
         })
-        .catch(error => {
+        .catch((error) => {
           console.error('❌ Daily outreach failed:', error);
           process.exit(1);
         });
       break;
-      
+
     case 'weekly':
       builder.generateWeeklyReport();
       console.log('\n📊 Weekly report generated!');
       break;
-      
+
     case 'stats':
       const stats = builder.getStats();
       console.log('📊 Backlink Builder Statistics:');
@@ -722,7 +759,7 @@ if (require.main === module) {
       console.log(`   Queue Size: ${stats.queueSize}`);
       console.log(`   Total Prospects: ${stats.totalProspects}`);
       break;
-      
+
     default:
       console.log('📧 Automated Backlink Builder');
       console.log('Available commands:');

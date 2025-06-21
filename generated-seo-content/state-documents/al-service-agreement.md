@@ -47,7 +47,7 @@ Don't risk using generic templates that may not comply with Alabama law. Get a p
 
 [Create Alabama Service Agreement]
 
-*Trusted by thousands of Alabama businesses*
+_Trusted by thousands of Alabama businesses_
 
 ---
 

@@ -9,9 +9,9 @@ export const metadata = {
   offerRecordingHelp: false,
   basePrice: 5,
   states: 'all',
-  templatePaths: { 
-    en: "en/us/non-compete-agreement.md", 
-    es: "es/us/non-compete-agreement.md" 
+  templatePaths: {
+    en: 'en/us/non-compete-agreement.md',
+    es: 'es/us/non-compete-agreement.md',
   },
   upsellClauses: [],
   translations: {

@@ -8,7 +8,7 @@ import { templateSubmissionWorkflow } from '@/lib/marketplace/template-submissio
  */
 export async function POST(
   request: NextRequest,
-  { params }: { params: { submissionId: string } }
+  { params }: { params: { submissionId: string } },
 ) {
   try {
     // TODO: Add authentication and reviewer permission checks
@@ -31,21 +31,24 @@ export async function POST(
     if (!decision || !feedback || !qualityScore) {
       return NextResponse.json(
         { error: 'Missing required fields: decision, feedback, qualityScore' },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
     if (!['approved', 'rejected', 'needs_changes'].includes(decision)) {
       return NextResponse.json(
-        { error: 'Invalid decision. Must be: approved, rejected, or needs_changes' },
-        { status: 400 }
+        {
+          error:
+            'Invalid decision. Must be: approved, rejected, or needs_changes',
+        },
+        { status: 400 },
       );
     }
 
     if (qualityScore < 1 || qualityScore > 10) {
       return NextResponse.json(
         { error: 'Quality score must be between 1 and 10' },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -71,17 +74,16 @@ export async function POST(
         message: 'Review submitted successfully',
       },
     });
-
   } catch (error) {
     console.error('Submit review error:', error);
-    
+
     return NextResponse.json(
-      { 
-        success: false, 
+      {
+        success: false,
         error: 'Failed to submit review',
         details: error instanceof Error ? error.message : 'Unknown error',
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -92,7 +94,7 @@ export async function POST(
  */
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { submissionId: string } }
+  { params }: { params: { submissionId: string } },
 ) {
   try {
     // TODO: Add authentication and admin permission checks
@@ -103,16 +105,13 @@ export async function PATCH(
 
     const { submissionId } = params;
     const body = await request.json();
-    const {
-      reviewerId,
-      priority = 'normal',
-    } = body;
+    const { reviewerId, priority = 'normal' } = body;
 
     // Validate required fields
     if (!reviewerId) {
       return NextResponse.json(
         { error: 'Missing required field: reviewerId' },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -135,17 +134,16 @@ export async function PATCH(
         message: 'Reviewer assigned successfully',
       },
     });
-
   } catch (error) {
     console.error('Assign reviewer error:', error);
-    
+
     return NextResponse.json(
-      { 
-        success: false, 
+      {
+        success: false,
         error: 'Failed to assign reviewer',
         details: error instanceof Error ? error.message : 'Unknown error',
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

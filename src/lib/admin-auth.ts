@@ -6,12 +6,12 @@ import { cookies } from 'next/headers';
 // Admin credentials - In production, use environment variables
 const ADMIN_CREDENTIALS = {
   username: 'Fsuels',
-  password: 'F$uels15394600!'
+  password: 'F$uels15394600!',
 };
 
 // JWT secret - In production, use a strong environment variable
 const JWT_SECRET = new TextEncoder().encode(
-  process.env.JWT_SECRET || 'your-super-secret-jwt-key-change-in-production'
+  process.env.JWT_SECRET || 'your-super-secret-jwt-key-change-in-production',
 );
 
 export interface AdminUser {
@@ -21,8 +21,14 @@ export interface AdminUser {
 }
 
 // Authenticate admin credentials
-export function validateAdminCredentials(username: string, password: string): boolean {
-  return username === ADMIN_CREDENTIALS.username && password === ADMIN_CREDENTIALS.password;
+export function validateAdminCredentials(
+  username: string,
+  password: string,
+): boolean {
+  return (
+    username === ADMIN_CREDENTIALS.username &&
+    password === ADMIN_CREDENTIALS.password
+  );
 }
 
 // Create admin JWT token
@@ -43,18 +49,23 @@ export async function createAdminToken(username: string): Promise<string> {
 }
 
 // Verify admin JWT token
-export async function verifyAdminToken(token: string): Promise<AdminUser | null> {
+export async function verifyAdminToken(
+  token: string,
+): Promise<AdminUser | null> {
   try {
     const { payload } = await jwtVerify(token, JWT_SECRET);
-    
-    if (payload.role === 'admin' && payload.username === ADMIN_CREDENTIALS.username) {
+
+    if (
+      payload.role === 'admin' &&
+      payload.username === ADMIN_CREDENTIALS.username
+    ) {
       return {
         username: payload.username as string,
         role: 'admin',
         loginTime: payload.loginTime as string,
       };
     }
-    
+
     return null;
   } catch (error) {
     console.error('JWT verification failed:', error);
@@ -63,10 +74,12 @@ export async function verifyAdminToken(token: string): Promise<AdminUser | null>
 }
 
 // Get admin user from request cookies
-export async function getAdminUser(request?: NextRequest): Promise<AdminUser | null> {
+export async function getAdminUser(
+  request?: NextRequest,
+): Promise<AdminUser | null> {
   try {
     let token: string | undefined;
-    
+
     if (request) {
       // Server-side: get from request cookies
       token = request.cookies.get('admin-token')?.value;
@@ -74,7 +87,9 @@ export async function getAdminUser(request?: NextRequest): Promise<AdminUser | n
       // Client-side: get from document cookies
       if (typeof document !== 'undefined') {
         const cookies = document.cookie.split(';');
-        const adminCookie = cookies.find(cookie => cookie.trim().startsWith('admin-token='));
+        const adminCookie = cookies.find((cookie) =>
+          cookie.trim().startsWith('admin-token='),
+        );
         token = adminCookie?.split('=')[1];
       }
     }
@@ -100,26 +115,29 @@ export function setAdminCookie(token: string): void {
 // Clear admin token from cookies
 export function clearAdminCookie(): void {
   if (typeof document !== 'undefined') {
-    document.cookie = 'admin-token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+    document.cookie =
+      'admin-token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
   }
 }
 
 // Middleware helper to protect admin routes
-export async function requireAdmin(request: NextRequest): Promise<AdminUser | Response> {
+export async function requireAdmin(
+  request: NextRequest,
+): Promise<AdminUser | Response> {
   const adminUser = await getAdminUser(request);
-  
+
   if (!adminUser) {
     return new Response(
       JSON.stringify({ error: 'Unauthorized - Admin access required' }),
-      { 
+      {
         status: 401,
         headers: {
           'Content-Type': 'application/json',
-        }
-      }
+        },
+      },
     );
   }
-  
+
   return adminUser;
 }
 
@@ -140,23 +158,23 @@ const loginAttempts = new Map<string, { count: number; lastAttempt: number }>();
 export function checkLoginRateLimit(ip: string): boolean {
   const now = Date.now();
   const attempts = loginAttempts.get(ip);
-  
+
   if (!attempts) {
     loginAttempts.set(ip, { count: 1, lastAttempt: now });
     return true;
   }
-  
+
   // Reset counter if more than 15 minutes have passed
   if (now - attempts.lastAttempt > 15 * 60 * 1000) {
     loginAttempts.set(ip, { count: 1, lastAttempt: now });
     return true;
   }
-  
+
   // Allow up to 5 attempts per 15 minutes
   if (attempts.count >= 5) {
     return false;
   }
-  
+
   attempts.count++;
   attempts.lastAttempt = now;
   return true;
@@ -174,19 +192,23 @@ export interface AdminSession {
 
 const activeSessions = new Map<string, AdminSession>();
 
-export function createAdminSession(username: string, ip: string, userAgent: string): string {
+export function createAdminSession(
+  username: string,
+  ip: string,
+  userAgent: string,
+): string {
   const sessionId = generateSecureSession();
   const now = new Date().toISOString();
-  
+
   const session: AdminSession = {
     username,
     ip,
     userAgent,
     loginTime: now,
     lastActivity: now,
-    sessionId
+    sessionId,
   };
-  
+
   activeSessions.set(sessionId, session);
   return sessionId;
 }
@@ -210,7 +232,7 @@ export function removeSession(sessionId: string): void {
 export function cleanupOldSessions(): void {
   const now = Date.now();
   const maxAge = 24 * 60 * 60 * 1000; // 24 hours
-  
+
   for (const [sessionId, session] of activeSessions.entries()) {
     const sessionTime = new Date(session.lastActivity).getTime();
     if (now - sessionTime > maxAge) {
@@ -223,15 +245,15 @@ export function cleanupOldSessions(): void {
 export async function requireAdminAuth(): Promise<AdminUser> {
   const cookieStore = await cookies();
   const token = cookieStore.get('admin-token')?.value;
-  
+
   if (!token) {
     throw new Error('Admin authentication required');
   }
-  
+
   const adminUser = await verifyAdminToken(token);
   if (!adminUser) {
     throw new Error('Invalid admin session');
   }
-  
+
   return adminUser;
 }

@@ -2,29 +2,40 @@
 // Complete data persistence layer with real-time synchronization
 
 import React from 'react';
-import { 
-  collection, 
-  doc, 
-  setDoc, 
-  getDoc, 
-  getDocs, 
-  updateDoc, 
-  deleteDoc, 
-  query, 
-  where, 
-  orderBy, 
+import {
+  collection,
+  doc,
+  setDoc,
+  getDoc,
+  getDocs,
+  updateDoc,
+  deleteDoc,
+  query,
+  where,
+  orderBy,
   limit,
   onSnapshot,
   writeBatch,
   serverTimestamp,
   increment,
   arrayUnion,
-  arrayRemove
+  arrayRemove,
 } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
-import { type Experiment, type ExperimentResults, type ExperimentEvent } from './experiment-engine';
-import { type MonitoringAlert, type ExperimentHealth } from './monitoring-service';
-import { type AutomationRule, type AutomationPolicy, type ExperimentQueue } from './automation-engine';
+import {
+  type Experiment,
+  type ExperimentResults,
+  type ExperimentEvent,
+} from './experiment-engine';
+import {
+  type MonitoringAlert,
+  type ExperimentHealth,
+} from './monitoring-service';
+import {
+  type AutomationRule,
+  type AutomationPolicy,
+  type ExperimentQueue,
+} from './automation-engine';
 
 // Collection names
 const COLLECTIONS = {
@@ -37,11 +48,12 @@ const COLLECTIONS = {
   AUTOMATION_POLICY: 'ab_automation_policy',
   EXPERIMENT_QUEUE: 'ab_experiment_queue',
   USER_ASSIGNMENTS: 'ab_user_assignments',
-  GROWTH_METRICS: 'ab_growth_metrics'
+  GROWTH_METRICS: 'ab_growth_metrics',
 } as const;
 
 // Firestore document interfaces
-interface FirestoreExperiment extends Omit<Experiment, 'createdAt' | 'updatedAt'> {
+interface FirestoreExperiment
+  extends Omit<Experiment, 'createdAt' | 'updatedAt'> {
   createdAt: any; // Firestore Timestamp
   updatedAt: any; // Firestore Timestamp
 }
@@ -83,76 +95,86 @@ class FirestoreABTestingService {
     const firestoreDoc: FirestoreExperiment = {
       ...experiment,
       createdAt: serverTimestamp(),
-      updatedAt: serverTimestamp()
+      updatedAt: serverTimestamp(),
     };
-    
+
     await setDoc(docRef, firestoreDoc);
   }
 
   async getExperiment(experimentId: string): Promise<Experiment | null> {
     const docRef = doc(db, COLLECTIONS.EXPERIMENTS, experimentId);
     const docSnap = await getDoc(docRef);
-    
+
     if (!docSnap.exists()) {
       return null;
     }
-    
+
     const data = docSnap.data() as FirestoreExperiment;
     return {
       ...data,
-      createdAt: data.createdAt?.toDate?.()?.toISOString() || new Date().toISOString(),
-      updatedAt: data.updatedAt?.toDate?.()?.toISOString() || new Date().toISOString()
+      createdAt:
+        data.createdAt?.toDate?.()?.toISOString() || new Date().toISOString(),
+      updatedAt:
+        data.updatedAt?.toDate?.()?.toISOString() || new Date().toISOString(),
     };
   }
 
-  async updateExperiment(experimentId: string, updates: Partial<Experiment>): Promise<void> {
+  async updateExperiment(
+    experimentId: string,
+    updates: Partial<Experiment>,
+  ): Promise<void> {
     const docRef = doc(db, COLLECTIONS.EXPERIMENTS, experimentId);
     await updateDoc(docRef, {
       ...updates,
-      updatedAt: serverTimestamp()
+      updatedAt: serverTimestamp(),
     });
   }
 
   async deleteExperiment(experimentId: string): Promise<void> {
     const batch = writeBatch(db);
-    
+
     // Delete experiment
     const experimentRef = doc(db, COLLECTIONS.EXPERIMENTS, experimentId);
     batch.delete(experimentRef);
-    
+
     // Delete related events
     const eventsQuery = query(
       collection(db, COLLECTIONS.EXPERIMENT_EVENTS),
-      where('experimentId', '==', experimentId)
+      where('experimentId', '==', experimentId),
     );
     const eventsSnapshot = await getDocs(eventsQuery);
-    eventsSnapshot.docs.forEach(doc => batch.delete(doc.ref));
-    
+    eventsSnapshot.docs.forEach((doc) => batch.delete(doc.ref));
+
     // Delete results
     const resultsRef = doc(db, COLLECTIONS.EXPERIMENT_RESULTS, experimentId);
     batch.delete(resultsRef);
-    
+
     // Delete user assignments
     const assignmentsQuery = query(
       collection(db, COLLECTIONS.USER_ASSIGNMENTS),
-      where('experimentId', '==', experimentId)
+      where('experimentId', '==', experimentId),
     );
     const assignmentsSnapshot = await getDocs(assignmentsQuery);
-    assignmentsSnapshot.docs.forEach(doc => batch.delete(doc.ref));
-    
+    assignmentsSnapshot.docs.forEach((doc) => batch.delete(doc.ref));
+
     await batch.commit();
   }
 
   async getAllExperiments(): Promise<Experiment[]> {
-    const q = query(collection(db, COLLECTIONS.EXPERIMENTS), orderBy('createdAt', 'desc'));
+    const q = query(
+      collection(db, COLLECTIONS.EXPERIMENTS),
+      orderBy('createdAt', 'desc'),
+    );
     const querySnapshot = await getDocs(q);
-    
-    return querySnapshot.docs.map(doc => {
+
+    return querySnapshot.docs.map((doc) => {
       const data = doc.data() as FirestoreExperiment;
       return {
         ...data,
-        createdAt: data.createdAt?.toDate?.()?.toISOString() || new Date().toISOString(),
-        updatedAt: data.updatedAt?.toDate?.()?.toISOString() || new Date().toISOString()
+        createdAt:
+          data.createdAt?.toDate?.()?.toISOString() || new Date().toISOString(),
+        updatedAt:
+          data.updatedAt?.toDate?.()?.toISOString() || new Date().toISOString(),
       };
     });
   }
@@ -161,35 +183,42 @@ class FirestoreABTestingService {
     const q = query(
       collection(db, COLLECTIONS.EXPERIMENTS),
       where('status', '==', 'running'),
-      orderBy('createdAt', 'desc')
+      orderBy('createdAt', 'desc'),
     );
     const querySnapshot = await getDocs(q);
-    
-    return querySnapshot.docs.map(doc => {
+
+    return querySnapshot.docs.map((doc) => {
       const data = doc.data() as FirestoreExperiment;
       return {
         ...data,
-        createdAt: data.createdAt?.toDate?.()?.toISOString() || new Date().toISOString(),
-        updatedAt: data.updatedAt?.toDate?.()?.toISOString() || new Date().toISOString()
+        createdAt:
+          data.createdAt?.toDate?.()?.toISOString() || new Date().toISOString(),
+        updatedAt:
+          data.updatedAt?.toDate?.()?.toISOString() || new Date().toISOString(),
       };
     });
   }
 
-  async getExperimentsByDateRange(startDate: string, endDate: string): Promise<Experiment[]> {
+  async getExperimentsByDateRange(
+    startDate: string,
+    endDate: string,
+  ): Promise<Experiment[]> {
     const q = query(
       collection(db, COLLECTIONS.EXPERIMENTS),
       where('createdAt', '>=', new Date(startDate)),
       where('createdAt', '<=', new Date(endDate)),
-      orderBy('createdAt', 'desc')
+      orderBy('createdAt', 'desc'),
     );
     const querySnapshot = await getDocs(q);
-    
-    return querySnapshot.docs.map(doc => {
+
+    return querySnapshot.docs.map((doc) => {
       const data = doc.data() as FirestoreExperiment;
       return {
         ...data,
-        createdAt: data.createdAt?.toDate?.()?.toISOString() || new Date().toISOString(),
-        updatedAt: data.updatedAt?.toDate?.()?.toISOString() || new Date().toISOString()
+        createdAt:
+          data.createdAt?.toDate?.()?.toISOString() || new Date().toISOString(),
+        updatedAt:
+          data.updatedAt?.toDate?.()?.toISOString() || new Date().toISOString(),
       };
     });
   }
@@ -201,104 +230,113 @@ class FirestoreABTestingService {
       ...event,
       eventData: {
         ...event.eventData,
-        timestamp: serverTimestamp()
-      }
+        timestamp: serverTimestamp(),
+      },
     };
-    
+
     await setDoc(docRef, firestoreEvent);
-    
+
     // Update experiment statistics in real-time
-    await this.updateExperimentStatistics(event.experimentId, event.variantId, event.eventType);
+    await this.updateExperimentStatistics(
+      event.experimentId,
+      event.variantId,
+      event.eventType,
+    );
   }
 
   private async updateExperimentStatistics(
-    experimentId: string, 
-    variantId: string, 
-    eventType: string
+    experimentId: string,
+    variantId: string,
+    eventType: string,
   ): Promise<void> {
     const experimentRef = doc(db, COLLECTIONS.EXPERIMENTS, experimentId);
-    
+
     // Increment counters based on event type
     const updates: Record<string, any> = {
-      updatedAt: serverTimestamp()
+      updatedAt: serverTimestamp(),
     };
-    
+
     if (eventType === 'assignment') {
       updates[`statistics.${variantId}.assignments`] = increment(1);
     } else if (eventType === 'conversion') {
       updates[`statistics.${variantId}.conversions`] = increment(1);
     }
-    
+
     await updateDoc(experimentRef, updates);
   }
 
   async getExperimentEvents(
-    experimentId: string, 
-    variantId?: string, 
+    experimentId: string,
+    variantId?: string,
     eventType?: string,
-    limitCount = 1000
+    limitCount = 1000,
   ): Promise<ExperimentEvent[]> {
     let q = query(
       collection(db, COLLECTIONS.EXPERIMENT_EVENTS),
       where('experimentId', '==', experimentId),
       orderBy('eventData.timestamp', 'desc'),
-      limit(limitCount)
+      limit(limitCount),
     );
-    
+
     if (variantId) {
       q = query(q, where('variantId', '==', variantId));
     }
-    
+
     if (eventType) {
       q = query(q, where('eventType', '==', eventType));
     }
-    
+
     const querySnapshot = await getDocs(q);
-    
-    return querySnapshot.docs.map(doc => {
+
+    return querySnapshot.docs.map((doc) => {
       const data = doc.data() as FirestoreExperimentEvent;
       return {
         ...data,
         eventData: {
           ...data.eventData,
-          timestamp: data.eventData.timestamp?.toDate?.()?.toISOString() || new Date().toISOString()
-        }
+          timestamp:
+            data.eventData.timestamp?.toDate?.()?.toISOString() ||
+            new Date().toISOString(),
+        },
       };
     });
   }
 
   // User Assignment Management
   async assignUserToExperiment(
-    userId: string, 
-    experimentId: string, 
+    userId: string,
+    experimentId: string,
     variantId: string,
     deviceId?: string,
-    sessionId?: string
+    sessionId?: string,
   ): Promise<void> {
     const docId = `${userId}_${experimentId}`;
     const docRef = doc(db, COLLECTIONS.USER_ASSIGNMENTS, docId);
-    
+
     const assignment: UserAssignment = {
       userId,
       experimentId,
       variantId,
       assignedAt: serverTimestamp(),
       deviceId,
-      sessionId
+      sessionId,
     };
-    
+
     await setDoc(docRef, assignment);
   }
 
-  async getUserAssignment(userId: string, experimentId: string): Promise<string | null> {
+  async getUserAssignment(
+    userId: string,
+    experimentId: string,
+  ): Promise<string | null> {
     const docId = `${userId}_${experimentId}`;
     const docRef = doc(db, COLLECTIONS.USER_ASSIGNMENTS, docId);
     const docSnap = await getDoc(docRef);
-    
+
     if (!docSnap.exists()) {
       return null;
     }
-    
+
     const data = docSnap.data() as UserAssignment;
     return data.variantId;
   }
@@ -306,36 +344,41 @@ class FirestoreABTestingService {
   async getUserExperiments(userId: string): Promise<Record<string, string>> {
     const q = query(
       collection(db, COLLECTIONS.USER_ASSIGNMENTS),
-      where('userId', '==', userId)
+      where('userId', '==', userId),
     );
     const querySnapshot = await getDocs(q);
-    
+
     const assignments: Record<string, string> = {};
-    querySnapshot.docs.forEach(doc => {
+    querySnapshot.docs.forEach((doc) => {
       const data = doc.data() as UserAssignment;
       assignments[data.experimentId] = data.variantId;
     });
-    
+
     return assignments;
   }
 
   // Results Storage
-  async saveExperimentResults(experimentId: string, results: ExperimentResults): Promise<void> {
+  async saveExperimentResults(
+    experimentId: string,
+    results: ExperimentResults,
+  ): Promise<void> {
     const docRef = doc(db, COLLECTIONS.EXPERIMENT_RESULTS, experimentId);
     await setDoc(docRef, {
       ...results,
-      updatedAt: serverTimestamp()
+      updatedAt: serverTimestamp(),
     });
   }
 
-  async getExperimentResults(experimentId: string): Promise<ExperimentResults | null> {
+  async getExperimentResults(
+    experimentId: string,
+  ): Promise<ExperimentResults | null> {
     const docRef = doc(db, COLLECTIONS.EXPERIMENT_RESULTS, experimentId);
     const docSnap = await getDoc(docRef);
-    
+
     if (!docSnap.exists()) {
       return null;
     }
-    
+
     return docSnap.data() as ExperimentResults;
   }
 
@@ -344,7 +387,7 @@ class FirestoreABTestingService {
     const docRef = doc(db, COLLECTIONS.MONITORING_ALERTS, alert.id);
     await setDoc(docRef, {
       ...alert,
-      createdAt: serverTimestamp()
+      createdAt: serverTimestamp(),
     });
   }
 
@@ -353,15 +396,16 @@ class FirestoreABTestingService {
       collection(db, COLLECTIONS.MONITORING_ALERTS),
       where('acknowledged', '==', false),
       orderBy('createdAt', 'desc'),
-      limit(50)
+      limit(50),
     );
     const querySnapshot = await getDocs(q);
-    
-    return querySnapshot.docs.map(doc => {
+
+    return querySnapshot.docs.map((doc) => {
       const data = doc.data();
       return {
         ...data,
-        createdAt: data.createdAt?.toDate?.()?.toISOString() || new Date().toISOString()
+        createdAt:
+          data.createdAt?.toDate?.()?.toISOString() || new Date().toISOString(),
       } as MonitoringAlert;
     });
   }
@@ -370,7 +414,7 @@ class FirestoreABTestingService {
     const docRef = doc(db, COLLECTIONS.MONITORING_ALERTS, alertId);
     await updateDoc(docRef, {
       acknowledged: true,
-      acknowledgedAt: serverTimestamp()
+      acknowledgedAt: serverTimestamp(),
     });
   }
 
@@ -378,34 +422,42 @@ class FirestoreABTestingService {
     const docRef = doc(db, COLLECTIONS.EXPERIMENT_HEALTH, health.experimentId);
     await setDoc(docRef, {
       ...health,
-      lastChecked: serverTimestamp()
+      lastChecked: serverTimestamp(),
     });
   }
 
-  async getExperimentHealth(experimentId: string): Promise<ExperimentHealth | null> {
+  async getExperimentHealth(
+    experimentId: string,
+  ): Promise<ExperimentHealth | null> {
     const docRef = doc(db, COLLECTIONS.EXPERIMENT_HEALTH, experimentId);
     const docSnap = await getDoc(docRef);
-    
+
     if (!docSnap.exists()) {
       return null;
     }
-    
+
     const data = docSnap.data();
     return {
       ...data,
-      lastChecked: data.lastChecked?.toDate?.()?.toISOString() || new Date().toISOString()
+      lastChecked:
+        data.lastChecked?.toDate?.()?.toISOString() || new Date().toISOString(),
     } as ExperimentHealth;
   }
 
   async getAllExperimentHealth(): Promise<ExperimentHealth[]> {
-    const q = query(collection(db, COLLECTIONS.EXPERIMENT_HEALTH), orderBy('lastChecked', 'desc'));
+    const q = query(
+      collection(db, COLLECTIONS.EXPERIMENT_HEALTH),
+      orderBy('lastChecked', 'desc'),
+    );
     const querySnapshot = await getDocs(q);
-    
-    return querySnapshot.docs.map(doc => {
+
+    return querySnapshot.docs.map((doc) => {
       const data = doc.data();
       return {
         ...data,
-        lastChecked: data.lastChecked?.toDate?.()?.toISOString() || new Date().toISOString()
+        lastChecked:
+          data.lastChecked?.toDate?.()?.toISOString() ||
+          new Date().toISOString(),
       } as ExperimentHealth;
     });
   }
@@ -413,62 +465,62 @@ class FirestoreABTestingService {
   // Automation Configuration
   async saveAutomationRules(rules: AutomationRule[]): Promise<void> {
     const batch = writeBatch(db);
-    
-    rules.forEach(rule => {
+
+    rules.forEach((rule) => {
       const docRef = doc(db, COLLECTIONS.AUTOMATION_RULES, rule.id);
       batch.set(docRef, {
         ...rule,
-        updatedAt: serverTimestamp()
+        updatedAt: serverTimestamp(),
       });
     });
-    
+
     await batch.commit();
   }
 
   async getAutomationRules(): Promise<AutomationRule[]> {
     const q = query(collection(db, COLLECTIONS.AUTOMATION_RULES));
     const querySnapshot = await getDocs(q);
-    
-    return querySnapshot.docs.map(doc => doc.data() as AutomationRule);
+
+    return querySnapshot.docs.map((doc) => doc.data() as AutomationRule);
   }
 
   async saveAutomationPolicy(policy: AutomationPolicy): Promise<void> {
     const docRef = doc(db, COLLECTIONS.AUTOMATION_POLICY, 'default');
     await setDoc(docRef, {
       ...policy,
-      updatedAt: serverTimestamp()
+      updatedAt: serverTimestamp(),
     });
   }
 
   async getAutomationPolicy(): Promise<AutomationPolicy | null> {
     const docRef = doc(db, COLLECTIONS.AUTOMATION_POLICY, 'default');
     const docSnap = await getDoc(docRef);
-    
+
     if (!docSnap.exists()) {
       return null;
     }
-    
+
     return docSnap.data() as AutomationPolicy;
   }
 
   // Experiment Queue
   async saveExperimentQueue(queue: ExperimentQueue[]): Promise<void> {
     const batch = writeBatch(db);
-    
+
     // Clear existing queue
     const existingQuery = query(collection(db, COLLECTIONS.EXPERIMENT_QUEUE));
     const existingSnapshot = await getDocs(existingQuery);
-    existingSnapshot.docs.forEach(doc => batch.delete(doc.ref));
-    
+    existingSnapshot.docs.forEach((doc) => batch.delete(doc.ref));
+
     // Add new queue items
-    queue.forEach(item => {
+    queue.forEach((item) => {
       const docRef = doc(collection(db, COLLECTIONS.EXPERIMENT_QUEUE));
       batch.set(docRef, {
         ...item,
-        createdAt: serverTimestamp()
+        createdAt: serverTimestamp(),
       });
     });
-    
+
     await batch.commit();
   }
 
@@ -476,11 +528,11 @@ class FirestoreABTestingService {
     const q = query(
       collection(db, COLLECTIONS.EXPERIMENT_QUEUE),
       orderBy('priority', 'desc'),
-      orderBy('scheduledStart', 'asc')
+      orderBy('scheduledStart', 'asc'),
     );
     const querySnapshot = await getDocs(q);
-    
-    return querySnapshot.docs.map(doc => doc.data() as ExperimentQueue);
+
+    return querySnapshot.docs.map((doc) => doc.data() as ExperimentQueue);
   }
 
   // Growth Metrics Storage
@@ -493,62 +545,67 @@ class FirestoreABTestingService {
       experimentsRunning: number;
       experimentsCompleted: number;
       statisticallySignificantWins: number;
-    }
+    },
   ): Promise<void> {
     const date = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
     const docId = `${date}_${timeframe}`;
     const docRef = doc(db, COLLECTIONS.GROWTH_METRICS, docId);
-    
+
     const snapshot: GrowthMetricsSnapshot = {
       date,
       timeframe,
       ...metrics,
-      createdAt: serverTimestamp()
+      createdAt: serverTimestamp(),
     };
-    
+
     await setDoc(docRef, snapshot);
   }
 
   async getGrowthMetricsHistory(
     timeframe: '24h' | '7d' | '30d',
-    days = 30
+    days = 30,
   ): Promise<GrowthMetricsSnapshot[]> {
     const startDate = new Date();
     startDate.setDate(startDate.getDate() - days);
     const startDateStr = startDate.toISOString().split('T')[0];
-    
+
     const q = query(
       collection(db, COLLECTIONS.GROWTH_METRICS),
       where('timeframe', '==', timeframe),
       where('date', '>=', startDateStr),
-      orderBy('date', 'desc')
+      orderBy('date', 'desc'),
     );
-    
+
     const querySnapshot = await getDocs(q);
-    
-    return querySnapshot.docs.map(doc => {
+
+    return querySnapshot.docs.map((doc) => {
       const data = doc.data();
       return {
         ...data,
-        createdAt: data.createdAt?.toDate?.()?.toISOString() || new Date().toISOString()
+        createdAt:
+          data.createdAt?.toDate?.()?.toISOString() || new Date().toISOString(),
       } as GrowthMetricsSnapshot;
     });
   }
 
   // Real-time Subscriptions
   subscribeToExperiment(
-    experimentId: string, 
-    callback: (experiment: Experiment | null) => void
+    experimentId: string,
+    callback: (experiment: Experiment | null) => void,
   ): () => void {
     const docRef = doc(db, COLLECTIONS.EXPERIMENTS, experimentId);
-    
+
     return onSnapshot(docRef, (doc) => {
       if (doc.exists()) {
         const data = doc.data() as FirestoreExperiment;
         callback({
           ...data,
-          createdAt: data.createdAt?.toDate?.()?.toISOString() || new Date().toISOString(),
-          updatedAt: data.updatedAt?.toDate?.()?.toISOString() || new Date().toISOString()
+          createdAt:
+            data.createdAt?.toDate?.()?.toISOString() ||
+            new Date().toISOString(),
+          updatedAt:
+            data.updatedAt?.toDate?.()?.toISOString() ||
+            new Date().toISOString(),
         });
       } else {
         callback(null);
@@ -558,10 +615,10 @@ class FirestoreABTestingService {
 
   subscribeToExperimentResults(
     experimentId: string,
-    callback: (results: ExperimentResults | null) => void
+    callback: (results: ExperimentResults | null) => void,
   ): () => void {
     const docRef = doc(db, COLLECTIONS.EXPERIMENT_RESULTS, experimentId);
-    
+
     return onSnapshot(docRef, (doc) => {
       if (doc.exists()) {
         callback(doc.data() as ExperimentResults);
@@ -576,15 +633,17 @@ class FirestoreABTestingService {
       collection(db, COLLECTIONS.MONITORING_ALERTS),
       where('acknowledged', '==', false),
       orderBy('createdAt', 'desc'),
-      limit(20)
+      limit(20),
     );
-    
+
     return onSnapshot(q, (querySnapshot) => {
-      const alerts = querySnapshot.docs.map(doc => {
+      const alerts = querySnapshot.docs.map((doc) => {
         const data = doc.data();
         return {
           ...data,
-          createdAt: data.createdAt?.toDate?.()?.toISOString() || new Date().toISOString()
+          createdAt:
+            data.createdAt?.toDate?.()?.toISOString() ||
+            new Date().toISOString(),
         } as MonitoringAlert;
       });
       callback(alerts);
@@ -592,35 +651,37 @@ class FirestoreABTestingService {
   }
 
   // Batch Operations
-  async bulkUpdateExperiments(updates: Array<{ id: string; data: Partial<Experiment> }>): Promise<void> {
+  async bulkUpdateExperiments(
+    updates: Array<{ id: string; data: Partial<Experiment> }>,
+  ): Promise<void> {
     const batch = writeBatch(db);
-    
+
     updates.forEach(({ id, data }) => {
       const docRef = doc(db, COLLECTIONS.EXPERIMENTS, id);
       batch.update(docRef, {
         ...data,
-        updatedAt: serverTimestamp()
+        updatedAt: serverTimestamp(),
       });
     });
-    
+
     await batch.commit();
   }
 
   async bulkTrackEvents(events: ExperimentEvent[]): Promise<void> {
     const batch = writeBatch(db);
-    
-    events.forEach(event => {
+
+    events.forEach((event) => {
       const docRef = doc(collection(db, COLLECTIONS.EXPERIMENT_EVENTS));
       const firestoreEvent: FirestoreExperimentEvent = {
         ...event,
         eventData: {
           ...event.eventData,
-          timestamp: serverTimestamp()
-        }
+          timestamp: serverTimestamp(),
+        },
       };
       batch.set(docRef, firestoreEvent);
     });
-    
+
     await batch.commit();
   }
 
@@ -639,14 +700,14 @@ class FirestoreABTestingService {
       results,
       alerts,
       automationRules,
-      automationPolicy
+      automationPolicy,
     ] = await Promise.all([
       this.getAllExperiments(),
       this.getAllEvents(),
       this.getAllResults(),
       this.getAllAlerts(),
       this.getAutomationRules(),
-      this.getAutomationPolicy()
+      this.getAutomationPolicy(),
     ]);
 
     return {
@@ -655,22 +716,27 @@ class FirestoreABTestingService {
       results,
       alerts,
       automationRules,
-      automationPolicy
+      automationPolicy,
     };
   }
 
   private async getAllEvents(): Promise<ExperimentEvent[]> {
-    const q = query(collection(db, COLLECTIONS.EXPERIMENT_EVENTS), limit(10000));
+    const q = query(
+      collection(db, COLLECTIONS.EXPERIMENT_EVENTS),
+      limit(10000),
+    );
     const querySnapshot = await getDocs(q);
-    
-    return querySnapshot.docs.map(doc => {
+
+    return querySnapshot.docs.map((doc) => {
       const data = doc.data() as FirestoreExperimentEvent;
       return {
         ...data,
         eventData: {
           ...data.eventData,
-          timestamp: data.eventData.timestamp?.toDate?.()?.toISOString() || new Date().toISOString()
-        }
+          timestamp:
+            data.eventData.timestamp?.toDate?.()?.toISOString() ||
+            new Date().toISOString(),
+        },
       };
     });
   }
@@ -678,19 +744,20 @@ class FirestoreABTestingService {
   private async getAllResults(): Promise<ExperimentResults[]> {
     const q = query(collection(db, COLLECTIONS.EXPERIMENT_RESULTS));
     const querySnapshot = await getDocs(q);
-    
-    return querySnapshot.docs.map(doc => doc.data() as ExperimentResults);
+
+    return querySnapshot.docs.map((doc) => doc.data() as ExperimentResults);
   }
 
   private async getAllAlerts(): Promise<MonitoringAlert[]> {
     const q = query(collection(db, COLLECTIONS.MONITORING_ALERTS), limit(1000));
     const querySnapshot = await getDocs(q);
-    
-    return querySnapshot.docs.map(doc => {
+
+    return querySnapshot.docs.map((doc) => {
       const data = doc.data();
       return {
         ...data,
-        createdAt: data.createdAt?.toDate?.()?.toISOString() || new Date().toISOString()
+        createdAt:
+          data.createdAt?.toDate?.()?.toISOString() || new Date().toISOString(),
       } as MonitoringAlert;
     });
   }
@@ -705,10 +772,13 @@ export function useFirestoreExperiment(experimentId: string) {
   const [loading, setLoading] = React.useState(true);
 
   React.useEffect(() => {
-    const unsubscribe = firestoreABTesting.subscribeToExperiment(experimentId, (exp) => {
-      setExperiment(exp);
-      setLoading(false);
-    });
+    const unsubscribe = firestoreABTesting.subscribeToExperiment(
+      experimentId,
+      (exp) => {
+        setExperiment(exp);
+        setLoading(false);
+      },
+    );
 
     return unsubscribe;
   }, [experimentId]);
@@ -721,10 +791,13 @@ export function useFirestoreExperimentResults(experimentId: string) {
   const [loading, setLoading] = React.useState(true);
 
   React.useEffect(() => {
-    const unsubscribe = firestoreABTesting.subscribeToExperimentResults(experimentId, (res) => {
-      setResults(res);
-      setLoading(false);
-    });
+    const unsubscribe = firestoreABTesting.subscribeToExperimentResults(
+      experimentId,
+      (res) => {
+        setResults(res);
+        setLoading(false);
+      },
+    );
 
     return unsubscribe;
   }, [experimentId]);

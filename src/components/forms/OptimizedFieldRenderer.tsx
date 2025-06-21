@@ -33,9 +33,12 @@ import { Button } from '@/components/ui/button';
 import { FormComponentProps } from '@/lib/component-standards';
 
 // Lazy load heavy components
-const SmartInput = dynamic(() => import('@/components/forms/wizard/SmartInput'), {
-  loading: () => <div className="h-10 bg-gray-100 animate-pulse rounded" />,
-});
+const SmartInput = dynamic(
+  () => import('@/components/forms/wizard/SmartInput'),
+  {
+    loading: () => <div className="h-10 bg-gray-100 animate-pulse rounded" />,
+  },
+);
 
 const AddressField = dynamic(() => import('./AddressField'), {
   loading: () => <div className="h-10 bg-gray-100 animate-pulse rounded" />,
@@ -58,15 +61,15 @@ interface ZodDefExtras {
 // Memoized field schema extraction
 const useFieldSchema = (
   fieldKey: string,
-  doc: LegalDocument
+  doc: LegalDocument,
 ): Question | undefined => {
   return useMemo(() => {
     if (!doc) {
       return undefined;
     }
-    
+
     const fieldSchemaFromQuestions = doc.questions?.find(
-      (q) => q.id === fieldKey
+      (q) => q.id === fieldKey,
     );
 
     const zodSchema = doc.schema as unknown as {
@@ -104,8 +107,8 @@ const useFieldSchema = (
             ? 'date'
             : fieldSchemaFromZod._def?.typeName === 'ZodBoolean'
               ? 'boolean'
-              : fieldSchemaFromZod._def?.innerType?._def?.typeName === 'ZodEnum' ||
-                  fieldSchemaFromZod._def?.typeName === 'ZodEnum'
+              : fieldSchemaFromZod._def?.innerType?._def?.typeName ===
+                    'ZodEnum' || fieldSchemaFromZod._def?.typeName === 'ZodEnum'
                 ? 'select'
                 : fieldKey.toLowerCase().includes('address')
                   ? 'address'
@@ -133,7 +136,7 @@ const useFieldSchema = (
 // Memoized input type detection
 const useInputType = (
   fieldKey: string,
-  fieldSchema?: Question
+  fieldSchema?: Question,
 ): React.HTMLInputTypeAttribute => {
   return useMemo(() => {
     if (
@@ -154,11 +157,11 @@ const useInputType = (
     ) {
       return 'number';
     }
-    
+
     if (fieldSchema?.type === 'date') {
       return 'date';
     }
-    
+
     if (
       fieldKey.endsWith('_phone') ||
       (fieldSchema?.label &&
@@ -167,7 +170,7 @@ const useInputType = (
     ) {
       return 'tel';
     }
-    
+
     return 'text';
   }, [fieldKey, fieldSchema]);
 };
@@ -185,8 +188,7 @@ const FieldLabel = React.memo<{
       htmlFor={fieldKey}
       className={cn('font-medium', error && 'text-destructive')}
     >
-      {labelText}{' '}
-      {required && <span className="text-destructive">*</span>}
+      {labelText} {required && <span className="text-destructive">*</span>}
     </Label>
     {tooltipText && (
       <Tooltip>
@@ -248,24 +250,29 @@ export const OptimizedFieldRenderer = React.memo<FieldRendererProps>(
 
     // Memoized translations
     const labelText = useMemo(
-      () => fieldSchema?.label
-        ? t(fieldSchema.label, { defaultValue: fieldSchema.label })
-        : prettify(fieldKey),
-      [fieldSchema?.label, fieldKey, t]
+      () =>
+        fieldSchema?.label
+          ? t(fieldSchema.label, { defaultValue: fieldSchema.label })
+          : prettify(fieldKey),
+      [fieldSchema?.label, fieldKey, t],
     );
 
     const placeholderText = useMemo(
-      () => fieldSchema?.placeholder
-        ? t(fieldSchema.placeholder, { defaultValue: fieldSchema.placeholder })
-        : '',
-      [fieldSchema?.placeholder, t]
+      () =>
+        fieldSchema?.placeholder
+          ? t(fieldSchema.placeholder, {
+              defaultValue: fieldSchema.placeholder,
+            })
+          : '',
+      [fieldSchema?.placeholder, t],
     );
 
     const tooltipText = useMemo(
-      () => fieldSchema?.tooltip
-        ? t(fieldSchema.tooltip, { defaultValue: fieldSchema.tooltip })
-        : '',
-      [fieldSchema?.tooltip, t]
+      () =>
+        fieldSchema?.tooltip
+          ? t(fieldSchema.tooltip, { defaultValue: fieldSchema.tooltip })
+          : '',
+      [fieldSchema?.tooltip, t],
     );
 
     const fieldError = errors[fieldKey];
@@ -274,7 +281,7 @@ export const OptimizedFieldRenderer = React.memo<FieldRendererProps>(
     useEffect(() => {
       if (fieldKey === 'vin' && vinData && setValue) {
         const updates: Array<[string, any]> = [];
-        
+
         if (vinData.make && !watch('make')) {
           updates.push(['make', vinData.make]);
         }
@@ -302,7 +309,7 @@ export const OptimizedFieldRenderer = React.memo<FieldRendererProps>(
     ) {
       if (process.env.NODE_ENV === 'development') {
         console.warn(
-          `[FieldRenderer] Field schema not found for key: ${fieldKey} in document: ${doc.name}`
+          `[FieldRenderer] Field schema not found for key: ${fieldKey} in document: ${doc.name}`,
         );
       }
       return null;
@@ -408,7 +415,9 @@ export const OptimizedFieldRenderer = React.memo<FieldRendererProps>(
         )}
         {fieldSchema?.helperText && !fieldError && (
           <p className="text-xs text-muted-foreground">
-            {t(fieldSchema.helperText, { defaultValue: fieldSchema.helperText })}
+            {t(fieldSchema.helperText, {
+              defaultValue: fieldSchema.helperText,
+            })}
           </p>
         )}
       </div>
@@ -416,95 +425,88 @@ export const OptimizedFieldRenderer = React.memo<FieldRendererProps>(
   },
   // Custom comparison function for memo
   (prevProps, nextProps) => {
-    return prevProps.fieldKey === nextProps.fieldKey &&
-           prevProps.doc.id === nextProps.doc.id;
-  }
+    return (
+      prevProps.fieldKey === nextProps.fieldKey &&
+      prevProps.doc.id === nextProps.doc.id
+    );
+  },
 );
 
 // Sub-components for better code organization
-const NotarizationField = React.memo<any>(({ 
-  control, 
-  errors, 
-  notaryIsRequiredByState, 
-  formStateCode, 
-  t 
-}) => (
-  <div className="space-y-2 pt-4 border-t mt-4">
-    <div className="flex items-center space-x-2">
-      <Controller
-        name="notarizationPreference"
-        control={control}
-        defaultValue={notaryIsRequiredByState || false}
-        render={({ field }) => (
-          <Checkbox
-            id="notarization-toggle"
-            checked={notaryIsRequiredByState || (field.value as boolean)}
-            onCheckedChange={(checked) => {
-              if (notaryIsRequiredByState && !checked) return;
-              field.onChange(checked);
-            }}
-            disabled={notaryIsRequiredByState}
-            aria-invalid={!!errors.notarizationPreference}
-          />
-        )}
-      />
-      <Label htmlFor="notarization-toggle" className="text-sm font-normal">
-        {notaryIsRequiredByState
-          ? t('Notarization (Required by State)')
-          : t('Add Notarization (Optional)')}
-      </Label>
+const NotarizationField = React.memo<any>(
+  ({ control, errors, notaryIsRequiredByState, formStateCode, t }) => (
+    <div className="space-y-2 pt-4 border-t mt-4">
+      <div className="flex items-center space-x-2">
+        <Controller
+          name="notarizationPreference"
+          control={control}
+          defaultValue={notaryIsRequiredByState || false}
+          render={({ field }) => (
+            <Checkbox
+              id="notarization-toggle"
+              checked={notaryIsRequiredByState || (field.value as boolean)}
+              onCheckedChange={(checked) => {
+                if (notaryIsRequiredByState && !checked) return;
+                field.onChange(checked);
+              }}
+              disabled={notaryIsRequiredByState}
+              aria-invalid={!!errors.notarizationPreference}
+            />
+          )}
+        />
+        <Label htmlFor="notarization-toggle" className="text-sm font-normal">
+          {notaryIsRequiredByState
+            ? t('Notarization (Required by State)')
+            : t('Add Notarization (Optional)')}
+        </Label>
+      </div>
+      {notaryIsRequiredByState && (
+        <p className="text-xs text-muted-foreground">
+          {t('Notarization is required for {{stateCode}}.', {
+            stateCode: formStateCode,
+          })}
+        </p>
+      )}
     </div>
-    {notaryIsRequiredByState && (
-      <p className="text-xs text-muted-foreground">
-        {t('Notarization is required for {{stateCode}}.', {
-          stateCode: formStateCode,
-        })}
-      </p>
-    )}
-  </div>
-));
+  ),
+);
 
 NotarizationField.displayName = 'NotarizationField';
 
-const SelectField = React.memo<any>(({ 
-  fieldKey, 
-  fieldSchema, 
-  control, 
-  placeholderText, 
-  fieldError, 
-  t 
-}) => (
-  <Controller
-    name={fieldKey}
-    control={control}
-    rules={{ required: fieldSchema?.required }}
-    render={({ field }) => (
-      <Select
-        onValueChange={field.onChange}
-        value={(field.value as string) || undefined}
-      >
-        <SelectTrigger
-          id={fieldKey}
-          className={cn(
-            'bg-background max-w-sm',
-            fieldError && 'border-destructive focus:ring-destructive',
-          )}
-          aria-invalid={!!fieldError}
-          aria-label={placeholderText || t('Select...')}
+const SelectField = React.memo<any>(
+  ({ fieldKey, fieldSchema, control, placeholderText, fieldError, t }) => (
+    <Controller
+      name={fieldKey}
+      control={control}
+      rules={{ required: fieldSchema?.required }}
+      render={({ field }) => (
+        <Select
+          onValueChange={field.onChange}
+          value={(field.value as string) || undefined}
         >
-          <SelectValue placeholder={placeholderText || t('Select...')} />
-        </SelectTrigger>
-        <SelectContent>
-          {fieldSchema.options?.map((opt: any) => (
-            <SelectItem key={opt.value} value={String(opt.value)}>
-              {t(opt.label, { defaultValue: opt.label })}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-    )}
-  />
-));
+          <SelectTrigger
+            id={fieldKey}
+            className={cn(
+              'bg-background max-w-sm',
+              fieldError && 'border-destructive focus:ring-destructive',
+            )}
+            aria-invalid={!!fieldError}
+            aria-label={placeholderText || t('Select...')}
+          >
+            <SelectValue placeholder={placeholderText || t('Select...')} />
+          </SelectTrigger>
+          <SelectContent>
+            {fieldSchema.options?.map((opt: any) => (
+              <SelectItem key={opt.value} value={String(opt.value)}>
+                {t(opt.label, { defaultValue: opt.label })}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      )}
+    />
+  ),
+);
 
 SelectField.displayName = 'SelectField';
 

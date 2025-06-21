@@ -24,13 +24,25 @@ export const photoReleaseFormMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Photo Release Form',
-      description: 'Permission and release form for photography and image usage rights.',
-      aliases: ['photography release', 'image release', 'photo consent', 'picture release'],
+      description:
+        'Permission and release form for photography and image usage rights.',
+      aliases: [
+        'photography release',
+        'image release',
+        'photo consent',
+        'picture release',
+      ],
     },
     es: {
       name: 'Formulario de Liberación Fotográfica',
-      description: 'Formulario de permiso y liberación para fotografía y derechos de uso de imagen.',
-      aliases: ['liberación fotografía', 'liberación imagen', 'consentimiento foto', 'liberación fotografica'],
+      description:
+        'Formulario de permiso y liberación para fotografía y derechos de uso de imagen.',
+      aliases: [
+        'liberación fotografía',
+        'liberación imagen',
+        'consentimiento foto',
+        'liberación fotografica',
+      ],
     },
   },
 };

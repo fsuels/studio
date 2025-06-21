@@ -24,8 +24,13 @@ export const salesAgreementMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Sales Agreement',
-      description: 'Create a comprehensive sales agreement for goods or products.',
-      aliases: ['purchase and sale agreement', 'sale contract', 'goods agreement'],
+      description:
+        'Create a comprehensive sales agreement for goods or products.',
+      aliases: [
+        'purchase and sale agreement',
+        'sale contract',
+        'goods agreement',
+      ],
     },
     es: {
       name: 'Acuerdo de Venta',

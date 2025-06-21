@@ -17,16 +17,16 @@ interface HeaderSearchProps {
   className?: string;
 }
 
-export default function HeaderSearch({ 
-  clientLocale, 
-  mounted, 
-  className = '' 
+export default function HeaderSearch({
+  clientLocale,
+  mounted,
+  className = '',
 }: HeaderSearchProps) {
   const { t: tHeader } = useTranslation('header');
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState<LegalDocument[]>([]);
   const [showResults, setShowResults] = useState(false);
-  
+
   const searchInputRef = useRef<HTMLInputElement>(null);
   const searchResultsRef = useRef<HTMLDivElement>(null);
 

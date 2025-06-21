@@ -47,7 +47,7 @@ Don't risk using generic templates that may not comply with Arizona law. Get a p
 
 [Create Arizona Service Agreement]
 
-*Trusted by thousands of Arizona businesses*
+_Trusted by thousands of Arizona businesses_
 
 ---
 

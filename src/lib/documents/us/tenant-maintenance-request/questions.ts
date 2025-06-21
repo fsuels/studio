@@ -27,7 +27,7 @@ export const tenantMaintenanceRequestQuestions: FormQuestion[] = [
     required: true,
     group: 'tenant',
   },
-  
+
   // Property Information
   {
     id: 'propertyAddress',
@@ -49,7 +49,7 @@ export const tenantMaintenanceRequestQuestions: FormQuestion[] = [
     id: 'landlordName',
     type: 'text',
     label: 'Landlord Name',
-    placeholder: 'Enter landlord\'s full name',
+    placeholder: "Enter landlord's full name",
     required: true,
     group: 'property',
   },
@@ -73,7 +73,7 @@ export const tenantMaintenanceRequestQuestions: FormQuestion[] = [
     id: 'propertyManagerName',
     type: 'text',
     label: 'Property Manager Name (if applicable)',
-    placeholder: 'Enter property manager\'s name',
+    placeholder: "Enter property manager's name",
     required: false,
     group: 'property',
   },
@@ -85,7 +85,7 @@ export const tenantMaintenanceRequestQuestions: FormQuestion[] = [
     required: false,
     group: 'property',
   },
-  
+
   // Request Details
   {
     id: 'requestDate',
@@ -139,7 +139,7 @@ export const tenantMaintenanceRequestQuestions: FormQuestion[] = [
     required: true,
     group: 'request',
   },
-  
+
   // Detailed Issues
   {
     id: 'waterLeak',
@@ -197,7 +197,7 @@ export const tenantMaintenanceRequestQuestions: FormQuestion[] = [
     required: false,
     group: 'issues',
   },
-  
+
   // Additional Information
   {
     id: 'howLongProblem',
@@ -225,12 +225,12 @@ export const tenantMaintenanceRequestQuestions: FormQuestion[] = [
   {
     id: 'attemptedRepairs',
     type: 'textarea',
-    label: 'Any repairs you\'ve attempted',
+    label: "Any repairs you've attempted",
     placeholder: 'Describe any attempts to fix the issue...',
     required: false,
     group: 'additional',
   },
-  
+
   // Access Information
   {
     id: 'preferredContactMethod',
@@ -276,7 +276,7 @@ export const tenantMaintenanceRequestQuestions: FormQuestion[] = [
     group: 'access',
     dependsOn: 'petsPresent',
   },
-  
+
   // Emergency Contact
   {
     id: 'emergencyContactName',
@@ -294,7 +294,7 @@ export const tenantMaintenanceRequestQuestions: FormQuestion[] = [
     required: false,
     group: 'emergency',
   },
-  
+
   // Documentation
   {
     id: 'photosAvailable',

@@ -49,13 +49,13 @@ export default function ProfileSettings() {
 
   const handleSave = async () => {
     setIsSaving(true);
-    
+
     try {
       const { password, ...rest } = form;
-      
+
       // Update user profile data
       updateUser(rest);
-      
+
       // Update password separately if provided
       if (password) {
         updateUser({ password });
@@ -64,14 +64,16 @@ export default function ProfileSettings() {
       // Show success toast
       toast({
         title: t('Changes saved successfully', 'Changes saved successfully'),
-        description: t('Your profile has been updated', 'Your profile has been updated'),
+        description: t(
+          'Your profile has been updated',
+          'Your profile has been updated',
+        ),
       });
 
       // Clear password field after successful save
       if (password) {
-        setForm(prev => ({ ...prev, password: '' }));
+        setForm((prev) => ({ ...prev, password: '' }));
       }
-
     } catch (error) {
       console.error('Error saving profile:', error);
       toast({
@@ -185,7 +187,10 @@ export default function ProfileSettings() {
                 {t('Authorized contacts', 'Authorized contacts')}
               </Label>
               <p className="text-sm text-muted-foreground">
-                {t('You currently have no authorized contacts.', 'You currently have no authorized contacts.')}
+                {t(
+                  'You currently have no authorized contacts.',
+                  'You currently have no authorized contacts.',
+                )}
               </p>
             </div>
           </div>
@@ -195,7 +200,10 @@ export default function ProfileSettings() {
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <span className="text-sm text-muted-foreground">
-                {t('Receive text updates for your order and account.', 'Receive text updates for your order and account.')}
+                {t(
+                  'Receive text updates for your order and account.',
+                  'Receive text updates for your order and account.',
+                )}
               </span>
               <Switch
                 checked={form.textUpdates}

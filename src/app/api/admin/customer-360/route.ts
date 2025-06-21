@@ -1,8 +1,8 @@
 // Customer 360 API for admin dashboard
 import { NextRequest, NextResponse } from 'next/server';
 import { requireAdmin } from '@/lib/admin-auth';
-import { 
-  generateMockCustomer360Data, 
+import {
+  generateMockCustomer360Data,
   generateMockOrders,
   type Customer360Data,
   type CustomerInfo,
@@ -10,12 +10,14 @@ import {
 
 // Mock customer database - in production, use your actual database
 const generateMockCustomerList = (count: number = 100) => {
-  const customers: Array<CustomerInfo & { 
-    healthScore: number; 
-    needsAttention: boolean;
-    lastActivityDays: number;
-  }> = [];
-  
+  const customers: Array<
+    CustomerInfo & {
+      healthScore: number;
+      needsAttention: boolean;
+      lastActivityDays: number;
+    }
+  > = [];
+
   for (let i = 0; i < count; i++) {
     const data = generateMockCustomer360Data();
     customers.push({
@@ -25,7 +27,7 @@ const generateMockCustomerList = (count: number = 100) => {
       lastActivityDays: data.metrics.lastActivityDays,
     });
   }
-  
+
   return customers;
 };
 
@@ -52,10 +54,10 @@ export async function GET(request: NextRequest) {
     // If requesting specific customer data
     if (customerId) {
       const customer360Data = generateMockCustomer360Data(customerId);
-      
+
       return NextResponse.json({
         success: true,
-        data: customer360Data
+        data: customer360Data,
       });
     }
 
@@ -65,21 +67,26 @@ export async function GET(request: NextRequest) {
     // Search filter
     if (search) {
       const searchLower = search.toLowerCase();
-      filteredCustomers = filteredCustomers.filter(customer => 
-        customer.firstName.toLowerCase().includes(searchLower) ||
-        customer.lastName.toLowerCase().includes(searchLower) ||
-        customer.email.toLowerCase().includes(searchLower)
+      filteredCustomers = filteredCustomers.filter(
+        (customer) =>
+          customer.firstName.toLowerCase().includes(searchLower) ||
+          customer.lastName.toLowerCase().includes(searchLower) ||
+          customer.email.toLowerCase().includes(searchLower),
       );
     }
 
     // Risk level filter
     if (riskFilter !== 'all') {
-      filteredCustomers = filteredCustomers.filter(customer => customer.churnRisk === riskFilter);
+      filteredCustomers = filteredCustomers.filter(
+        (customer) => customer.churnRisk === riskFilter,
+      );
     }
 
     // Plan tier filter
     if (tierFilter !== 'all') {
-      filteredCustomers = filteredCustomers.filter(customer => customer.planTier === tierFilter);
+      filteredCustomers = filteredCustomers.filter(
+        (customer) => customer.planTier === tierFilter,
+      );
     }
 
     // Sort customers
@@ -105,7 +112,7 @@ export async function GET(request: NextRequest) {
           bValue = b.lifetimeValue;
           break;
         case 'churnRisk':
-          const riskOrder = { 'low': 1, 'medium': 2, 'high': 3 };
+          const riskOrder = { low: 1, medium: 2, high: 3 };
           aValue = riskOrder[a.churnRisk as keyof typeof riskOrder];
           bValue = riskOrder[b.churnRisk as keyof typeof riskOrder];
           break;
@@ -130,29 +137,42 @@ export async function GET(request: NextRequest) {
     // Calculate summary stats
     const summary = {
       totalCustomers: total,
-      highRiskCustomers: filteredCustomers.filter(c => c.churnRisk === 'high').length,
-      needingAttention: filteredCustomers.filter(c => c.needsAttention).length,
-      averageHealthScore: filteredCustomers.length > 0 
-        ? Math.round(filteredCustomers.reduce((sum, c) => sum + c.healthScore, 0) / filteredCustomers.length)
-        : 0,
+      highRiskCustomers: filteredCustomers.filter((c) => c.churnRisk === 'high')
+        .length,
+      needingAttention: filteredCustomers.filter((c) => c.needsAttention)
+        .length,
+      averageHealthScore:
+        filteredCustomers.length > 0
+          ? Math.round(
+              filteredCustomers.reduce((sum, c) => sum + c.healthScore, 0) /
+                filteredCustomers.length,
+            )
+          : 0,
       totalLTV: filteredCustomers.reduce((sum, c) => sum + c.lifetimeValue, 0),
       planTierDistribution: {
-        free: filteredCustomers.filter(c => c.planTier === 'free').length,
-        basic: filteredCustomers.filter(c => c.planTier === 'basic').length,
-        premium: filteredCustomers.filter(c => c.planTier === 'premium').length,
-        enterprise: filteredCustomers.filter(c => c.planTier === 'enterprise').length,
+        free: filteredCustomers.filter((c) => c.planTier === 'free').length,
+        basic: filteredCustomers.filter((c) => c.planTier === 'basic').length,
+        premium: filteredCustomers.filter((c) => c.planTier === 'premium')
+          .length,
+        enterprise: filteredCustomers.filter((c) => c.planTier === 'enterprise')
+          .length,
       },
       churnRiskDistribution: {
-        low: filteredCustomers.filter(c => c.churnRisk === 'low').length,
-        medium: filteredCustomers.filter(c => c.churnRisk === 'medium').length,
-        high: filteredCustomers.filter(c => c.churnRisk === 'high').length,
+        low: filteredCustomers.filter((c) => c.churnRisk === 'low').length,
+        medium: filteredCustomers.filter((c) => c.churnRisk === 'medium')
+          .length,
+        high: filteredCustomers.filter((c) => c.churnRisk === 'high').length,
       },
       recentActivity: {
-        active7days: filteredCustomers.filter(c => c.lastActivityDays <= 7).length,
-        active30days: filteredCustomers.filter(c => c.lastActivityDays <= 30).length,
-        inactive30plus: filteredCustomers.filter(c => c.lastActivityDays > 30).length,
-        inactive90plus: filteredCustomers.filter(c => c.lastActivityDays > 90).length,
-      }
+        active7days: filteredCustomers.filter((c) => c.lastActivityDays <= 7)
+          .length,
+        active30days: filteredCustomers.filter((c) => c.lastActivityDays <= 30)
+          .length,
+        inactive30plus: filteredCustomers.filter((c) => c.lastActivityDays > 30)
+          .length,
+        inactive90plus: filteredCustomers.filter((c) => c.lastActivityDays > 90)
+          .length,
+      },
     };
 
     return NextResponse.json({
@@ -165,7 +185,7 @@ export async function GET(request: NextRequest) {
           total,
           totalPages,
           hasNext: page < totalPages,
-          hasPrev: page > 1
+          hasPrev: page > 1,
         },
         summary,
         filters: {
@@ -173,20 +193,19 @@ export async function GET(request: NextRequest) {
           riskFilter,
           tierFilter,
           sortBy,
-          sortOrder
-        }
-      }
+          sortOrder,
+        },
+      },
     });
-
   } catch (error) {
     console.error('Customer 360 API error:', error);
-    
+
     return NextResponse.json(
-      { 
-        success: false, 
-        error: 'Failed to retrieve customer data' 
+      {
+        success: false,
+        error: 'Failed to retrieve customer data',
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -203,12 +222,14 @@ export async function PATCH(request: NextRequest) {
     const { customerId, updates } = body;
 
     // Find customer in mock data
-    const customerIndex = mockCustomerList.findIndex(customer => customer.id === customerId);
-    
+    const customerIndex = mockCustomerList.findIndex(
+      (customer) => customer.id === customerId,
+    );
+
     if (customerIndex === -1) {
       return NextResponse.json(
         { success: false, error: 'Customer not found' },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
@@ -217,23 +238,25 @@ export async function PATCH(request: NextRequest) {
       ...mockCustomerList[customerIndex],
       ...updates,
       // Always update the lastActivityAt when admin makes changes
-      lastActivityAt: new Date().toISOString()
+      lastActivityAt: new Date().toISOString(),
     };
 
     // In production, you would also create an audit trail entry here
-    console.log(`Admin ${(adminResult as any).username} updated customer ${customerId}:`, updates);
+    console.log(
+      `Admin ${(adminResult as any).username} updated customer ${customerId}:`,
+      updates,
+    );
 
     return NextResponse.json({
       success: true,
-      data: mockCustomerList[customerIndex]
+      data: mockCustomerList[customerIndex],
     });
-
   } catch (error) {
     console.error('Customer update error:', error);
-    
+
     return NextResponse.json(
       { success: false, error: 'Failed to update customer' },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -253,7 +276,7 @@ export async function POST(request: NextRequest) {
     if (!customerId || !type || !title) {
       return NextResponse.json(
         { success: false, error: 'Missing required fields' },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -268,15 +291,15 @@ export async function POST(request: NextRequest) {
       metadata: {
         ...metadata,
         adminUser: (adminResult as any).username,
-        source: 'admin_manual'
+        source: 'admin_manual',
       },
       severity: 'info' as const,
       source: 'manual' as const,
       actor: {
         type: 'admin' as const,
         id: (adminResult as any).username,
-        name: (adminResult as any).username
-      }
+        name: (adminResult as any).username,
+      },
     };
 
     // In production, save to database
@@ -284,15 +307,14 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      data: timelineEvent
+      data: timelineEvent,
     });
-
   } catch (error) {
     console.error('Timeline event creation error:', error);
-    
+
     return NextResponse.json(
       { success: false, error: 'Failed to create timeline event' },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

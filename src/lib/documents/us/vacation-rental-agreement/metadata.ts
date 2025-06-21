@@ -29,7 +29,8 @@ export const vacationRentalAgreementMeta: LegalDocument = {
     },
     es: {
       name: 'Acuerdo de Alquiler Vacacional',
-      description: 'Acuerdo para alquileres de propiedades vacacionales a corto plazo.',
+      description:
+        'Acuerdo para alquileres de propiedades vacacionales a corto plazo.',
       aliases: ['alquiler de vacaciones', 'alquiler de casa vacacional'],
     },
   },

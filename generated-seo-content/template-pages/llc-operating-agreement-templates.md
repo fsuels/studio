@@ -7,6 +7,7 @@ Discover our comprehensive collection of llc operating agreement templates. Each
 ### Featured LLC Operating Agreement Templates
 
 Our llc operating agreement templates are designed for:
+
 - **Businesses of all sizes**: From startups to enterprises
 - **Multiple industries**: Technology, healthcare, retail, and more
 - **All US states**: State-specific compliance included
@@ -46,9 +47,9 @@ Our llc operating agreement templates are designed for:
 
 ### Customer Reviews
 
-*"Best llc operating agreement templates I've found online. Professional quality at a fraction of attorney costs."* - Business Owner
+_"Best llc operating agreement templates I've found online. Professional quality at a fraction of attorney costs."_ - Business Owner
 
-*"Saved my company thousands using these templates instead of hiring lawyers."* - Startup Founder
+_"Saved my company thousands using these templates instead of hiring lawyers."_ - Startup Founder
 
 ### Get Started Today
 

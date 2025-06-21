@@ -30,14 +30,14 @@ interface EnhancedSearchOptions {
 export async function enhancedSearch(
   query: string,
   locale: 'en' | 'es' = 'en',
-  options: EnhancedSearchOptions = {}
+  options: EnhancedSearchOptions = {},
 ): Promise<SearchResult[]> {
   const {
     includePopular = false,
     maxResults = 10,
     roleFilter,
     situationFilter,
-    complexityFilter
+    complexityFilter,
   } = options;
 
   if (!query.trim() && !includePopular) {
@@ -49,13 +49,13 @@ export async function enhancedSearch(
 
   // 1. Expand query with synonyms
   const expandedQueries = expandQueryWithSynonyms(query.toLowerCase().trim());
-  
+
   // 2. Search through document slugs and metadata
   const allSlugs = Object.keys(slugMap);
-  
+
   for (const slug of allSlugs) {
     if (processedSlugs.has(slug)) continue;
-    
+
     try {
       const meta = await getDocMeta(slug);
       if (!meta) continue;
@@ -65,10 +65,14 @@ export async function enhancedSearch(
 
       // Check if document matches filters
       if (complexityFilter && meta.complexity !== complexityFilter) continue;
-      
+
       if (roleFilter && !isDocumentRelevantToRole(slug, roleFilter)) continue;
-      
-      if (situationFilter && !isDocumentRelevantToSituation(slug, situationFilter)) continue;
+
+      if (
+        situationFilter &&
+        !isDocumentRelevantToSituation(slug, situationFilter)
+      )
+        continue;
 
       // Calculate relevance score
       const titleLower = meta.title.toLowerCase();
@@ -82,14 +86,19 @@ export async function enhancedSearch(
 
       // Synonym matches
       for (const expandedQuery of expandedQueries) {
-        if (titleLower.includes(expandedQuery) || descLower.includes(expandedQuery)) {
+        if (
+          titleLower.includes(expandedQuery) ||
+          descLower.includes(expandedQuery)
+        ) {
           relevanceScore += 75;
           if (matchType === 'fuzzy') matchType = 'synonym';
         }
       }
 
       // Category name match
-      const categoryName = taxonomy.categories[meta.category as keyof typeof taxonomy.categories]?.name || '';
+      const categoryName =
+        taxonomy.categories[meta.category as keyof typeof taxonomy.categories]
+          ?.name || '';
       if (categoryName.toLowerCase().includes(query.toLowerCase())) {
         relevanceScore += 50;
         if (matchType === 'fuzzy') matchType = 'category';
@@ -119,10 +128,13 @@ export async function enhancedSearch(
           complexity: meta.complexity,
           popular: meta.popular,
           category: slugMap[slug as keyof typeof slugMap] || 'misc',
-          relevanceScore: includePopular && meta.popular ? Math.max(relevanceScore, 50) : relevanceScore,
-          matchType
+          relevanceScore:
+            includePopular && meta.popular
+              ? Math.max(relevanceScore, 50)
+              : relevanceScore,
+          matchType,
         });
-        
+
         processedSlugs.add(slug);
       }
     } catch (error) {
@@ -142,23 +154,23 @@ export async function enhancedSearch(
  */
 function expandQueryWithSynonyms(query: string): string[] {
   const expanded = new Set([query]);
-  
+
   // Split query into words for multi-word synonym matching
   const queryWords = query.split(/\s+/);
-  
+
   // Check each synonym entry
   Object.entries(taxonomy.synonyms).forEach(([synonym, targets]) => {
     // Check if the query contains this synonym
     if (query.includes(synonym.toLowerCase())) {
-      targets.forEach(target => {
+      targets.forEach((target) => {
         if (typeof target === 'string') {
           expanded.add(target.toLowerCase());
         }
       });
     }
-    
+
     // Check if any target matches our query
-    targets.forEach(target => {
+    targets.forEach((target) => {
       if (typeof target === 'string' && query.includes(target.toLowerCase())) {
         expanded.add(synonym.toLowerCase());
       }
@@ -191,7 +203,10 @@ function isDocumentRelevantToRole(slug: string, roleKey: string): boolean {
 /**
  * Check if a document is relevant to a specific situation
  */
-function isDocumentRelevantToSituation(slug: string, situationKey: string): boolean {
+function isDocumentRelevantToSituation(
+  slug: string,
+  situationKey: string,
+): boolean {
   const situation = taxonomy.situations[situationKey];
   if (!situation?.domains) return true;
 
@@ -199,7 +214,8 @@ function isDocumentRelevantToSituation(slug: string, situationKey: string): bool
   if (!docCategory) return true;
 
   // Check if document's category domain matches situation domains
-  const categoryData = taxonomy.categories[docCategory as keyof typeof taxonomy.categories];
+  const categoryData =
+    taxonomy.categories[docCategory as keyof typeof taxonomy.categories];
   if (!categoryData) return true;
 
   return situation.domains.includes(categoryData.name);
@@ -208,19 +224,26 @@ function isDocumentRelevantToSituation(slug: string, situationKey: string): bool
 /**
  * Fallback to original search for backward compatibility
  */
-export function legacySearch(query: string, locale: 'en' | 'es', state?: string): LegalDocument[] {
+export function legacySearch(
+  query: string,
+  locale: 'en' | 'es',
+  state?: string,
+): LegalDocument[] {
   return originalSearch(query, locale, state);
 }
 
 /**
  * Get popular documents for a specific role
  */
-export async function getPopularDocumentsForRole(roleKey: string, maxResults: number = 5): Promise<SearchResult[]> {
+export async function getPopularDocumentsForRole(
+  roleKey: string,
+  maxResults: number = 5,
+): Promise<SearchResult[]> {
   const role = taxonomy.roles[roleKey];
   if (!role?.quickDocs) return [];
 
   const results: SearchResult[] = [];
-  
+
   for (const [slug, weight] of Object.entries(role.quickDocs)) {
     try {
       const meta = await getDocMeta(slug);
@@ -233,7 +256,7 @@ export async function getPopularDocumentsForRole(roleKey: string, maxResults: nu
           popular: meta.popular,
           category: slugMap[slug as keyof typeof slugMap] || 'misc',
           relevanceScore: weight,
-          matchType: 'exact'
+          matchType: 'exact',
         });
       }
     } catch (error) {
@@ -249,7 +272,9 @@ export async function getPopularDocumentsForRole(roleKey: string, maxResults: nu
 /**
  * Get suggestions for empty search (popular documents)
  */
-export async function getSearchSuggestions(locale: 'en' | 'es' = 'en'): Promise<SearchResult[]> {
+export async function getSearchSuggestions(
+  locale: 'en' | 'es' = 'en',
+): Promise<SearchResult[]> {
   return enhancedSearch('', locale, { includePopular: true, maxResults: 6 });
 }
 

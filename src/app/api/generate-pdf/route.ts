@@ -23,7 +23,9 @@ export async function POST(request: NextRequest) {
   const logPrefix = `[API /generate-pdf] [${requestId}]`;
   let documentType: string = 'unknown';
 
-  console.log(`${logPrefix} Received request: ${request.method} ${request.url}`);
+  console.log(
+    `${logPrefix} Received request: ${request.method} ${request.url}`,
+  );
 
   // Authenticate user first
   const authResult = await requireAuth(request);
@@ -38,12 +40,15 @@ export async function POST(request: NextRequest) {
     console.warn(
       `${logPrefix} API Route Disabled (NEXT_PUBLIC_DISABLE_API_ROUTES=true). Returning 503.`,
     );
-    return NextResponse.json({
-      error: 'PDF Generation is disabled in the current environment.',
-      details:
-        'This API route is not available when NEXT_PUBLIC_DISABLE_API_ROUTES is set to true.',
-      code: 'API_DISABLED_PDF_GENERATION',
-    }, { status: 503 });
+    return NextResponse.json(
+      {
+        error: 'PDF Generation is disabled in the current environment.',
+        details:
+          'This API route is not available when NEXT_PUBLIC_DISABLE_API_ROUTES is set to true.',
+        code: 'API_DISABLED_PDF_GENERATION',
+      },
+      { status: 503 },
+    );
   }
 
   try {
@@ -68,11 +73,14 @@ export async function POST(request: NextRequest) {
       console.error(
         `${logPrefix} Invalid input: Missing or invalid documentType.`,
       );
-      return NextResponse.json({
-        error:
-          'Invalid input for PDF generation: documentType is required and must be a non-empty string.',
-        code: 'INVALID_INPUT_PDF_DOCTYPE',
-      }, { status: 400 });
+      return NextResponse.json(
+        {
+          error:
+            'Invalid input for PDF generation: documentType is required and must be a non-empty string.',
+          code: 'INVALID_INPUT_PDF_DOCTYPE',
+        },
+        { status: 400 },
+      );
     }
     if (
       !answers ||
@@ -105,7 +113,7 @@ export async function POST(request: NextRequest) {
     console.log(
       `${logPrefix} Successfully generated PDF (${pdfBytes.length} bytes) for "${documentType}". Sending response.`,
     );
-    
+
     // Log successful PDF download
     await auditService.logDocumentEvent(
       'download',
@@ -118,10 +126,10 @@ export async function POST(request: NextRequest) {
         pdfSize: pdfBytes.length,
         requestId,
         ipAddress: request.headers.get('x-forwarded-for') || 'unknown',
-        userAgent: request.headers.get('user-agent') || 'unknown'
-      }
+        userAgent: request.headers.get('user-agent') || 'unknown',
+      },
     );
-    
+
     return new NextResponse(Buffer.from(pdfBytes), {
       status: 200,
       headers: {
@@ -195,8 +203,8 @@ export async function POST(request: NextRequest) {
           error: clientErrorMessage,
           requestId,
           ipAddress: request.headers.get('x-forwarded-for') || 'unknown',
-          userAgent: request.headers.get('user-agent') || 'unknown'
-        }
+          userAgent: request.headers.get('user-agent') || 'unknown',
+        },
       );
     }
 
@@ -219,53 +227,63 @@ export async function POST(request: NextRequest) {
 }
 
 // Create a monitored version of the POST function
-export const monitoredPOST = withHealthMonitoring(async (request: NextRequest) => {
-  const startTime = performance.now();
-  
-  try {
-    // Record queue depth before processing
-    await operationalHealth.recordQueueOperation('pdf_generation', 'depth', getPdfQueueDepth());
-    
-    const response = await originalPOST(request);
-    
-    // Record successful PDF generation metrics
-    const endTime = performance.now();
-    const duration = endTime - startTime;
-    
-    await operationalHealth.recordMetric({
-      metricType: 'latency',
-      value: duration,
-      endpoint: '/api/generate-pdf',
-      metadata: {
-        success: response.status < 400,
-        statusCode: response.status,
-        operation: 'pdf_generation'
-      }
-    });
-    
-    // Record queue depth after processing
-    await operationalHealth.recordQueueOperation('pdf_generation', 'dequeue', getPdfQueueDepth());
-    
-    return response;
-  } catch (error) {
-    // Record error metrics
-    const endTime = performance.now();
-    const duration = endTime - startTime;
-    
-    await operationalHealth.recordMetric({
-      metricType: 'error_rate',
-      value: 1,
-      endpoint: '/api/generate-pdf',
-      metadata: {
-        error: error instanceof Error ? error.message : String(error),
-        duration,
-        operation: 'pdf_generation'
-      }
-    });
-    
-    throw error;
-  }
-});
+export const monitoredPOST = withHealthMonitoring(
+  async (request: NextRequest) => {
+    const startTime = performance.now();
+
+    try {
+      // Record queue depth before processing
+      await operationalHealth.recordQueueOperation(
+        'pdf_generation',
+        'depth',
+        getPdfQueueDepth(),
+      );
+
+      const response = await originalPOST(request);
+
+      // Record successful PDF generation metrics
+      const endTime = performance.now();
+      const duration = endTime - startTime;
+
+      await operationalHealth.recordMetric({
+        metricType: 'latency',
+        value: duration,
+        endpoint: '/api/generate-pdf',
+        metadata: {
+          success: response.status < 400,
+          statusCode: response.status,
+          operation: 'pdf_generation',
+        },
+      });
+
+      // Record queue depth after processing
+      await operationalHealth.recordQueueOperation(
+        'pdf_generation',
+        'dequeue',
+        getPdfQueueDepth(),
+      );
+
+      return response;
+    } catch (error) {
+      // Record error metrics
+      const endTime = performance.now();
+      const duration = endTime - startTime;
+
+      await operationalHealth.recordMetric({
+        metricType: 'error_rate',
+        value: 1,
+        endpoint: '/api/generate-pdf',
+        metadata: {
+          error: error instanceof Error ? error.message : String(error),
+          duration,
+          operation: 'pdf_generation',
+        },
+      });
+
+      throw error;
+    }
+  },
+);
 
 // Helper function to get current PDF queue depth (placeholder)
 function getPdfQueueDepth(): number {

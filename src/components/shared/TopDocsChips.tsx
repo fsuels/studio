@@ -81,7 +81,6 @@ const TopDocsChips = React.memo(function TopDocsChips() {
     setIsLoading(false);
   }, [isHydrated]);
 
-
   const categories = React.useMemo(
     () => Array.from(new Set(topDocs.map((d) => d.category))).sort(),
     [topDocs],
@@ -99,7 +98,6 @@ const TopDocsChips = React.memo(function TopDocsChips() {
     selectedCategory === 'All'
       ? topDocs
       : topDocs.filter((d) => d.category === selectedCategory);
-
 
   const handleExploreAll = () => {
     const workflowStartElement = document.getElementById('workflow-start');
@@ -130,127 +128,130 @@ const TopDocsChips = React.memo(function TopDocsChips() {
   return (
     <TooltipProvider>
       <section className="container mx-auto px-4 py-16">
-      <h2 className="text-xl font-semibold text-center mb-6 text-foreground">
-        {tCommon('TopDocsChips.title', {
-          defaultValue: 'Popular Legal Documents',
-        })}
-      </h2>
-      {categories.length > 1 && (
-        <div className="mb-4 flex flex-wrap justify-center gap-2">
-          <Button
-            size="sm"
-            variant={selectedCategory === 'All' ? 'default' : 'outline'}
-            onClick={() => setSelectedCategory('All')}
-          >
-            {tCommon('All', { defaultValue: 'All' })}
-          </Button>
-          {categoriesToShow.map((cat) => (
+        <h2 className="text-xl font-semibold text-center mb-6 text-foreground">
+          {tCommon('TopDocsChips.title', {
+            defaultValue: 'Popular Legal Documents',
+          })}
+        </h2>
+        {categories.length > 1 && (
+          <div className="mb-4 flex flex-wrap justify-center gap-2">
             <Button
-              key={cat}
               size="sm"
-              variant={selectedCategory === cat ? 'default' : 'outline'}
-              onClick={() => setSelectedCategory(cat)}
+              variant={selectedCategory === 'All' ? 'default' : 'outline'}
+              onClick={() => setSelectedCategory('All')}
             >
-              {tCommon(cat, { defaultValue: cat })}
+              {tCommon('All', { defaultValue: 'All' })}
             </Button>
-          ))}
-          {isMobile && moreCategories.length > 0 && (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button size="sm" variant="outline">
-                  {tCommon('more', { defaultValue: 'More' })}
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="center">
-                {moreCategories.map((cat) => (
-                  <DropdownMenuItem
-                    key={cat}
-                    onSelect={() => setSelectedCategory(cat)}
-                  >
-                    {tCommon(cat, { defaultValue: cat })}
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
-          )}
-        </div>
-      )}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {filteredDocs.map((doc) => {
-          const Icon = categoryIcons[doc.category] || FileText;
-          const badge = badges[doc.id];
-          return (
-            <Link
-              key={doc.id}
-              href={`/${locale}/docs/${doc.id}`}
-              prefetch
-              className="p-4 border border-gray-200 rounded-lg bg-card shadow-sm transition-all hover:-translate-y-[2px] hover:shadow-lg hover:border-[#006EFF] hover:bg-muted"
-            >
-              <div className="flex items-start justify-between">
-                <div className="flex items-center gap-2">
-                  {React.createElement(Icon, {
-                    className: 'h-4 w-4 text-primary/80',
-                  })}
-                  <span className="text-sm font-medium">
-                    {doc.translations?.[locale as 'en' | 'es']?.name ||
-                      doc.translations?.en?.name ||
-                      doc.name ||
-                      doc.id}
-                  </span>
+            {categoriesToShow.map((cat) => (
+              <Button
+                key={cat}
+                size="sm"
+                variant={selectedCategory === cat ? 'default' : 'outline'}
+                onClick={() => setSelectedCategory(cat)}
+              >
+                {tCommon(cat, { defaultValue: cat })}
+              </Button>
+            ))}
+            {isMobile && moreCategories.length > 0 && (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button size="sm" variant="outline">
+                    {tCommon('more', { defaultValue: 'More' })}
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="center">
+                  {moreCategories.map((cat) => (
+                    <DropdownMenuItem
+                      key={cat}
+                      onSelect={() => setSelectedCategory(cat)}
+                    >
+                      {tCommon(cat, { defaultValue: cat })}
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            )}
+          </div>
+        )}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {filteredDocs.map((doc) => {
+            const Icon = categoryIcons[doc.category] || FileText;
+            const badge = badges[doc.id];
+            return (
+              <Link
+                key={doc.id}
+                href={`/${locale}/docs/${doc.id}`}
+                prefetch
+                className="p-4 border border-gray-200 rounded-lg bg-card shadow-sm transition-all hover:-translate-y-[2px] hover:shadow-lg hover:border-[#006EFF] hover:bg-muted"
+              >
+                <div className="flex items-start justify-between">
+                  <div className="flex items-center gap-2">
+                    {React.createElement(Icon, {
+                      className: 'h-4 w-4 text-primary/80',
+                    })}
+                    <span className="text-sm font-medium">
+                      {doc.translations?.[locale as 'en' | 'es']?.name ||
+                        doc.translations?.en?.name ||
+                        doc.name ||
+                        doc.id}
+                    </span>
+                  </div>
+                  {badge && (
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Badge
+                          variant="secondary"
+                          className="flex items-center space-x-1"
+                        >
+                          {badge === 'new' ? (
+                            <Zap className="h-3 w-3" />
+                          ) : (
+                            <RefreshCcw className="h-3 w-3" />
+                          )}
+                          <span className="capitalize">
+                            {tCommon(`TopDocsChips.badge.${badge}`, {
+                              defaultValue: badge === 'new' ? 'New' : 'Updated',
+                            })}
+                          </span>
+                        </Badge>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        {badge === 'new'
+                          ? tCommon('TopDocsChips.tooltip.new', {
+                              defaultValue: 'Recently added',
+                            })
+                          : tCommon('TopDocsChips.tooltip.updated', {
+                              defaultValue: 'Recently refreshed',
+                            })}
+                      </TooltipContent>
+                    </Tooltip>
+                  )}
                 </div>
-                {badge && (
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Badge variant="secondary" className="flex items-center space-x-1">
-                        {badge === 'new' ? (
-                          <Zap className="h-3 w-3" />
-                        ) : (
-                          <RefreshCcw className="h-3 w-3" />
-                        )}
-                        <span className="capitalize">
-                          {tCommon(`TopDocsChips.badge.${badge}`, {
-                            defaultValue: badge === 'new' ? 'New' : 'Updated',
-                          })}
-                        </span>
-                      </Badge>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      {badge === 'new'
-                        ? tCommon('TopDocsChips.tooltip.new', {
-                            defaultValue: 'Recently added',
-                          })
-                        : tCommon('TopDocsChips.tooltip.updated', {
-                            defaultValue: 'Recently refreshed',
-                          })}
-                    </TooltipContent>
-                  </Tooltip>
-                )}
-              </div>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <span className="mt-2 flex items-center gap-1 text-xs text-muted-foreground">
-                    <Clock className="h-3 w-3" />
-                    ~3 min
-                  </span>
-                </TooltipTrigger>
-                <TooltipContent>Average completion time</TooltipContent>
-              </Tooltip>
-            </Link>
-          );
-        })}
-      </div>
-      <div className="text-center mt-6">
-        <Button
-          variant="link"
-          onClick={handleExploreAll}
-          className="text-primary text-sm"
-        >
-          {tCommon('stepOne.exploreAllCategoriesButton', {
-            defaultValue: 'Explore All Document Categories',
-          })}{' '}
-          →
-        </Button>
-      </div>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <span className="mt-2 flex items-center gap-1 text-xs text-muted-foreground">
+                      <Clock className="h-3 w-3" />
+                      ~3 min
+                    </span>
+                  </TooltipTrigger>
+                  <TooltipContent>Average completion time</TooltipContent>
+                </Tooltip>
+              </Link>
+            );
+          })}
+        </div>
+        <div className="text-center mt-6">
+          <Button
+            variant="link"
+            onClick={handleExploreAll}
+            className="text-primary text-sm"
+          >
+            {tCommon('stepOne.exploreAllCategoriesButton', {
+              defaultValue: 'Explore All Document Categories',
+            })}{' '}
+            →
+          </Button>
+        </div>
       </section>
     </TooltipProvider>
   );

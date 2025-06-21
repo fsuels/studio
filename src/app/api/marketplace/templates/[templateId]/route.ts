@@ -17,7 +17,7 @@ import type { MarketplaceTemplate } from '@/types/marketplace';
  */
 export async function GET(
   request: NextRequest,
-  { params }: { params: { templateId: string } }
+  { params }: { params: { templateId: string } },
 ) {
   try {
     const { templateId } = params;
@@ -32,7 +32,7 @@ export async function GET(
     if (!templateSnap.exists()) {
       return NextResponse.json(
         { error: 'Template not found' },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
@@ -42,7 +42,10 @@ export async function GET(
     } as MarketplaceTemplate;
 
     // Check visibility permissions
-    if (template.visibility === 'private' || template.moderationStatus !== 'approved') {
+    if (
+      template.visibility === 'private' ||
+      template.moderationStatus !== 'approved'
+    ) {
       // TODO: Check if user is the owner or has admin permissions
       // const user = await getCurrentUser(request);
       // if (!user || (user.id !== template.createdBy && !user.isAdmin)) {
@@ -62,7 +65,7 @@ export async function GET(
     if (template.currentVersion) {
       const currentVersion = await templateVersionManager.getVersion(
         templateId,
-        template.currentVersion
+        template.currentVersion,
       );
       response.currentVersion = currentVersion;
     }
@@ -92,7 +95,7 @@ export async function GET(
     updateDoc(templateRef, {
       'stats.viewCount': (template.stats as any).viewCount + 1 || 1,
       lastViewed: serverTimestamp(),
-    }).catch(error => {
+    }).catch((error) => {
       console.warn('Failed to update view count:', error);
     });
 
@@ -100,16 +103,15 @@ export async function GET(
       success: true,
       data: response,
     });
-
   } catch (error) {
     console.error('Get template error:', error);
-    
+
     return NextResponse.json(
-      { 
-        success: false, 
-        error: 'Failed to fetch template' 
+      {
+        success: false,
+        error: 'Failed to fetch template',
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -120,7 +122,7 @@ export async function GET(
  */
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { templateId: string } }
+  { params }: { params: { templateId: string } },
 ) {
   try {
     // TODO: Add authentication
@@ -139,7 +141,7 @@ export async function PATCH(
     if (!templateSnap.exists()) {
       return NextResponse.json(
         { error: 'Template not found' },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
@@ -182,10 +184,13 @@ export async function PATCH(
     // Special handling for pricing changes
     if (body.pricing) {
       // Validate pricing structure
-      if (typeof body.pricing.basePrice !== 'number' || body.pricing.basePrice < 0) {
+      if (
+        typeof body.pricing.basePrice !== 'number' ||
+        body.pricing.basePrice < 0
+      ) {
         return NextResponse.json(
           { error: 'Invalid pricing data' },
-          { status: 400 }
+          { status: 400 },
         );
       }
     }
@@ -200,16 +205,15 @@ export async function PATCH(
         message: 'Template updated successfully',
       },
     });
-
   } catch (error) {
     console.error('Update template error:', error);
-    
+
     return NextResponse.json(
-      { 
-        success: false, 
-        error: 'Failed to update template' 
+      {
+        success: false,
+        error: 'Failed to update template',
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -220,7 +224,7 @@ export async function PATCH(
  */
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { templateId: string } }
+  { params }: { params: { templateId: string } },
 ) {
   try {
     // TODO: Add authentication
@@ -240,7 +244,7 @@ export async function DELETE(
     if (!templateSnap.exists()) {
       return NextResponse.json(
         { error: 'Template not found' },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
@@ -257,22 +261,23 @@ export async function DELETE(
     // Check if template has installations
     if (template.stats.totalInstalls > 0 && !force) {
       return NextResponse.json(
-        { 
-          error: 'Cannot delete template with active installations. Use force=true to archive.',
+        {
+          error:
+            'Cannot delete template with active installations. Use force=true to archive.',
           code: 'TEMPLATE_IN_USE',
           installations: template.stats.totalInstalls,
         },
-        { status: 409 }
+        { status: 409 },
       );
     }
 
     if (force || template.stats.totalInstalls === 0) {
       // Hard delete if forced or no installations
       await deleteDoc(templateRef);
-      
+
       // TODO: Also delete all versions and related data
       // This should be handled by Cloud Functions in production
-      
+
       return NextResponse.json({
         success: true,
         data: {
@@ -299,16 +304,15 @@ export async function DELETE(
         },
       });
     }
-
   } catch (error) {
     console.error('Delete template error:', error);
-    
+
     return NextResponse.json(
-      { 
-        success: false, 
-        error: 'Failed to delete template' 
+      {
+        success: false,
+        error: 'Failed to delete template',
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

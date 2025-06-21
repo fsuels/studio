@@ -24,12 +24,18 @@ export const productLiabilityWaiverMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Product Liability Waiver',
-      description: 'Release form protecting manufacturers and retailers from product-related claims and injuries.',
-      aliases: ['product waiver', 'manufacturing liability waiver', 'product release'],
+      description:
+        'Release form protecting manufacturers and retailers from product-related claims and injuries.',
+      aliases: [
+        'product waiver',
+        'manufacturing liability waiver',
+        'product release',
+      ],
     },
     es: {
       name: 'Exención de Responsabilidad de Producto',
-      description: 'Formulario de liberación que protege a fabricantes y vendedores de reclamos relacionados con productos.',
+      description:
+        'Formulario de liberación que protege a fabricantes y vendedores de reclamos relacionados con productos.',
       aliases: ['exención de producto', 'liberación de fabricante'],
     },
   },

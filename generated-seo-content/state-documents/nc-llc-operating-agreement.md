@@ -47,7 +47,7 @@ Don't risk using generic templates that may not comply with North Carolina law. 
 
 [Create North Carolina LLC Operating Agreement]
 
-*Trusted by thousands of North Carolina businesses*
+_Trusted by thousands of North Carolina businesses_
 
 ---
 

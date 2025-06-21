@@ -24,12 +24,18 @@ export const agriculturalAgreementMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Agricultural Agreement',
-      description: 'Agreement for farming, agricultural services, and crop sharing arrangements.',
-      aliases: ['farming agreement', 'crop share agreement', 'agricultural services contract'],
+      description:
+        'Agreement for farming, agricultural services, and crop sharing arrangements.',
+      aliases: [
+        'farming agreement',
+        'crop share agreement',
+        'agricultural services contract',
+      ],
     },
     es: {
       name: 'Acuerdo Agrícola',
-      description: 'Acuerdo para agricultura, servicios agrícolas y arreglos de participación de cultivos.',
+      description:
+        'Acuerdo para agricultura, servicios agrícolas y arreglos de participación de cultivos.',
       aliases: ['acuerdo de agricultura', 'contrato de servicios agrícolas'],
     },
   },

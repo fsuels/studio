@@ -30,7 +30,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
  */
 export async function GET(
   request: NextRequest,
-  { params }: { params: { templateId: string } }
+  { params }: { params: { templateId: string } },
 ) {
   try {
     // TODO: Add authentication
@@ -51,26 +51,36 @@ export async function GET(
     if (!templateSnap.exists()) {
       return NextResponse.json(
         { error: 'Template not found' },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
     const template = templateSnap.data() as MarketplaceTemplate;
 
     // Check if already installed
-    const installationsRef = collection(db, 'users', userId, 'template-installations');
+    const installationsRef = collection(
+      db,
+      'users',
+      userId,
+      'template-installations',
+    );
     const existingQuery = query(
       installationsRef,
       where('templateId', '==', templateId),
-      where('status', 'in', ['active', 'trial'])
+      where('status', 'in', ['active', 'trial']),
     );
     const existingSnap = await getDocs(existingQuery);
 
     const isInstalled = !existingSnap.empty;
-    const currentInstallation = isInstalled ? existingSnap.docs[0].data() as TemplateInstallation : null;
+    const currentInstallation = isInstalled
+      ? (existingSnap.docs[0].data() as TemplateInstallation)
+      : null;
 
     // Determine pricing and options
-    const pricingOptions = calculatePricingOptions(template.pricing, isInstalled);
+    const pricingOptions = calculatePricingOptions(
+      template.pricing,
+      isInstalled,
+    );
 
     return NextResponse.json({
       success: true,
@@ -89,16 +99,15 @@ export async function GET(
         requiresPayment: template.pricing.type !== 'free' && !isInstalled,
       },
     });
-
   } catch (error) {
     console.error('Get installation status error:', error);
-    
+
     return NextResponse.json(
-      { 
-        success: false, 
-        error: 'Failed to check installation status' 
+      {
+        success: false,
+        error: 'Failed to check installation status',
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -109,7 +118,7 @@ export async function GET(
  */
 export async function POST(
   request: NextRequest,
-  { params }: { params: { templateId: string } }
+  { params }: { params: { templateId: string } },
 ) {
   try {
     // TODO: Add authentication
@@ -120,7 +129,7 @@ export async function POST(
 
     const { templateId } = params;
     const body = await request.json();
-    const { 
+    const {
       version,
       installationType = 'purchased',
       paymentMethodId,
@@ -137,17 +146,20 @@ export async function POST(
     if (!templateSnap.exists()) {
       return NextResponse.json(
         { error: 'Template not found' },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
     const template = templateSnap.data() as MarketplaceTemplate;
 
     // Check if template is available for installation
-    if (template.moderationStatus !== 'approved' || template.visibility !== 'public') {
+    if (
+      template.moderationStatus !== 'approved' ||
+      template.visibility !== 'public'
+    ) {
       return NextResponse.json(
         { error: 'Template not available for installation' },
-        { status: 403 }
+        { status: 403 },
       );
     }
 
@@ -155,18 +167,23 @@ export async function POST(
     const installVersion = version || template.currentVersion;
 
     // Check if already installed
-    const installationsRef = collection(db, 'users', userId, 'template-installations');
+    const installationsRef = collection(
+      db,
+      'users',
+      userId,
+      'template-installations',
+    );
     const existingQuery = query(
       installationsRef,
       where('templateId', '==', templateId),
-      where('status', 'in', ['active', 'trial'])
+      where('status', 'in', ['active', 'trial']),
     );
     const existingSnap = await getDocs(existingQuery);
 
     if (!existingSnap.empty && template.pricing.type !== 'usage-based') {
       return NextResponse.json(
         { error: 'Template already installed' },
-        { status: 409 }
+        { status: 409 },
       );
     }
 
@@ -183,7 +200,6 @@ export async function POST(
         installationType: 'free',
         pricing: template.pricing,
       });
-
     } else if (trial && template.pricing.type !== 'free') {
       // Trial installation
       const trialDuration = 7 * 24 * 60 * 60 * 1000; // 7 days
@@ -195,13 +211,12 @@ export async function POST(
         pricing: template.pricing,
         expiresAt: new Date(Date.now() + trialDuration),
       });
-
     } else {
       // Paid installation
       if (!paymentMethodId) {
         return NextResponse.json(
           { error: 'Payment method required for paid templates' },
-          { status: 400 }
+          { status: 400 },
         );
       }
 
@@ -217,7 +232,7 @@ export async function POST(
       if (!paymentResult.success) {
         return NextResponse.json(
           { error: 'Payment failed', details: paymentResult.error },
-          { status: 402 }
+          { status: 402 },
         );
       }
 
@@ -237,7 +252,13 @@ export async function POST(
     await updateTemplateStats(templateId, template, installationRecord);
 
     // TODO: Add to user's installed templates collection
-    const userTemplateRef = doc(db, 'users', userId, 'installed-templates', templateId);
+    const userTemplateRef = doc(
+      db,
+      'users',
+      userId,
+      'installed-templates',
+      templateId,
+    );
     await setDoc(userTemplateRef, {
       templateId,
       version: installVersion,
@@ -254,17 +275,16 @@ export async function POST(
         message: 'Template installed successfully',
       },
     });
-
   } catch (error) {
     console.error('Template installation error:', error);
-    
+
     return NextResponse.json(
-      { 
-        success: false, 
+      {
+        success: false,
         error: 'Failed to install template',
         details: error instanceof Error ? error.message : 'Unknown error',
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -272,7 +292,10 @@ export async function POST(
 /**
  * Calculate pricing options for a template
  */
-function calculatePricingOptions(pricing: TemplatePricing, isInstalled: boolean) {
+function calculatePricingOptions(
+  pricing: TemplatePricing,
+  isInstalled: boolean,
+) {
   const options: any = {
     free: pricing.type === 'free',
     oneTime: pricing.type === 'one-time',
@@ -324,8 +347,10 @@ async function createInstallationRecord(params: {
   expiresAt?: Date;
 }): Promise<TemplateInstallation> {
   const db = await getDb();
-  const installationRef = doc(collection(db, 'users', params.userId, 'template-installations'));
-  
+  const installationRef = doc(
+    collection(db, 'users', params.userId, 'template-installations'),
+  );
+
   const installation: TemplateInstallation = {
     id: installationRef.id,
     userId: params.userId,
@@ -358,9 +383,9 @@ async function processPayment(params: {
 }) {
   try {
     const { template, paymentMethodId } = params;
-    
+
     const amount = Math.round(template.pricing.basePrice * 100); // Convert to cents
-    
+
     const paymentIntent = await stripe.paymentIntents.create({
       amount,
       currency: template.pricing.currency || 'usd',
@@ -378,12 +403,12 @@ async function processPayment(params: {
       success: true,
       paymentIntent,
     };
-
   } catch (error) {
     console.error('Stripe payment error:', error);
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Payment processing failed',
+      error:
+        error instanceof Error ? error.message : 'Payment processing failed',
     };
   }
 }
@@ -394,7 +419,7 @@ async function processPayment(params: {
 async function updateTemplateStats(
   templateId: string,
   template: MarketplaceTemplate,
-  installation: TemplateInstallation
+  installation: TemplateInstallation,
 ) {
   const db = await getDb();
   const templateRef = doc(db, 'marketplace-templates', templateId);
@@ -406,8 +431,10 @@ async function updateTemplateStats(
   };
 
   if (installation.amountPaid) {
-    updates['stats.totalRevenue'] = (template.stats.totalRevenue || 0) + (installation.amountPaid / 100);
-    updates['stats.revenueThisMonth'] = (template.stats.revenueThisMonth || 0) + (installation.amountPaid / 100);
+    updates['stats.totalRevenue'] =
+      (template.stats.totalRevenue || 0) + installation.amountPaid / 100;
+    updates['stats.revenueThisMonth'] =
+      (template.stats.revenueThisMonth || 0) + installation.amountPaid / 100;
   }
 
   await updateDoc(templateRef, updates);

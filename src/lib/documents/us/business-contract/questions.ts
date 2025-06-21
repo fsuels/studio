@@ -20,7 +20,8 @@ export const businessContractQuestions: FormQuestion[] = [
     id: 'contractTitle',
     type: 'text',
     label: 'Contract Title',
-    placeholder: 'e.g., Software Development Agreement, Product Supply Contract',
+    placeholder:
+      'e.g., Software Development Agreement, Product Supply Contract',
     required: true,
     group: 'basic',
   },
@@ -219,7 +220,8 @@ export const businessContractQuestions: FormQuestion[] = [
     id: 'terminationClause',
     type: 'textarea',
     label: 'Termination Conditions',
-    placeholder: 'Specify conditions under which the contract can be terminated',
+    placeholder:
+      'Specify conditions under which the contract can be terminated',
     required: false,
     group: 'termination',
   },

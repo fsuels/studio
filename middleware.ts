@@ -4,23 +4,25 @@ import { tenantMiddleware } from '@/middleware/tenant';
 export async function middleware(request: NextRequest) {
   // Handle tenant routing first
   const tenantResponse = await tenantMiddleware(request);
-  
+
   // If tenant middleware returned a redirect or rewrite, use it
-  if (tenantResponse.headers.get('x-middleware-rewrite') || 
-      tenantResponse.headers.get('x-middleware-redirect') ||
-      tenantResponse.status !== 200) {
+  if (
+    tenantResponse.headers.get('x-middleware-rewrite') ||
+    tenantResponse.headers.get('x-middleware-redirect') ||
+    tenantResponse.status !== 200
+  ) {
     return tenantResponse;
   }
 
   // Add security headers for all requests
   const response = tenantResponse;
-  
+
   // Security headers
   response.headers.set('X-Frame-Options', 'DENY');
   response.headers.set('X-Content-Type-Options', 'nosniff');
   response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
   response.headers.set('X-XSS-Protection', '1; mode=block');
-  
+
   // CSP header (adjust based on your needs)
   const cspHeader = [
     "default-src 'self'",
@@ -31,9 +33,9 @@ export async function middleware(request: NextRequest) {
     "connect-src 'self' *.firebase.googleapis.com *.stripe.com *.intercom.io wss://*.intercom.io",
     "frame-src 'self' *.stripe.com *.intercom.io",
   ].join('; ');
-  
+
   response.headers.set('Content-Security-Policy', cspHeader);
-  
+
   return response;
 }
 

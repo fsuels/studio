@@ -24,9 +24,9 @@ const load = new Function(`${jsCode}; return prettify;`);
 const prettify = load();
 
 test('prettify converts snake_case to title case', () => {
- expect(prettify('buyer_name')).toBe('Buyer Name');
+  expect(prettify('buyer_name')).toBe('Buyer Name');
 });
 
 test('prettify converts camelCase to title case', () => {
- expect(prettify('vehicleVin')).toBe('Vehicle Vin');
+  expect(prettify('vehicleVin')).toBe('Vehicle Vin');
 });

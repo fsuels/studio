@@ -8,5 +8,5 @@ import type { ComponentType } from 'react';
  *   • shows nothing while loading (customise if you prefer)
  */
 export const lazyClient = <T extends ComponentType<unknown>>(
-  loader: () => Promise<{ default: T }>
+  loader: () => Promise<{ default: T }>,
 ) => dynamic(loader, { ssr: false, loading: () => null });

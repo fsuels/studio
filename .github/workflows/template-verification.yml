@@ -17,145 +17,145 @@ on:
 jobs:
   verify-templates:
     runs-on: ubuntu-latest
-    
+
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
-      
-    - name: Setup Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '18'
-        cache: 'npm'
-        
-    - name: Install dependencies
-      run: npm ci
-      
-    - name: Run template verification
-      run: npm run verify-templates
-      
-    - name: Upload verification report
-      if: always()
-      uses: actions/upload-artifact@v3
-      with:
-        name: template-verification-report
-        path: template-verification-report.json
-        
-    - name: Comment PR with results
-      if: github.event_name == 'pull_request' && failure()
-      uses: actions/github-script@v6
-      with:
-        script: |
-          const fs = require('fs');
-          const report = JSON.parse(fs.readFileSync('template-verification-report.json', 'utf8'));
-          
-          const comment = `## ❌ Template Verification Failed
-          
-          **Summary:**
-          - Total Templates: ${report.summary.totalTemplates}
-          - Valid Templates: ${report.summary.validTemplates}
-          - Invalid Templates: ${report.summary.invalidTemplates}
-          - Total Errors: ${report.summary.totalErrors}
-          - Total Warnings: ${report.summary.totalWarnings}
-          
-          Please fix the template issues before merging.
-          
-          See the [verification report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}) for details.`;
-          
-          github.rest.issues.createComment({
-            issue_number: context.issue.number,
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            body: comment
-          });
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run template verification
+        run: npm run verify-templates
+
+      - name: Upload verification report
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: template-verification-report
+          path: template-verification-report.json
+
+      - name: Comment PR with results
+        if: github.event_name == 'pull_request' && failure()
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const fs = require('fs');
+            const report = JSON.parse(fs.readFileSync('template-verification-report.json', 'utf8'));
+
+            const comment = `## ❌ Template Verification Failed
+
+            **Summary:**
+            - Total Templates: ${report.summary.totalTemplates}
+            - Valid Templates: ${report.summary.validTemplates}
+            - Invalid Templates: ${report.summary.invalidTemplates}
+            - Total Errors: ${report.summary.totalErrors}
+            - Total Warnings: ${report.summary.totalWarnings}
+
+            Please fix the template issues before merging.
+
+            See the [verification report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}) for details.`;
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });
 
   check-duplicates:
     runs-on: ubuntu-latest
     needs: verify-templates
-    
+
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
-      
-    - name: Check for duplicate templates
-      run: |
-        echo "Checking for duplicate content across templates..."
-        
-        # Create MD5 hashes of all templates
-        find public/templates -name "*.md" -type f -exec md5sum {} \; | sort > template-hashes.txt
-        
-        # Check for duplicates
-        if [ $(cut -d' ' -f1 template-hashes.txt | sort | uniq -d | wc -l) -gt 0 ]; then
-          echo "❌ DUPLICATE TEMPLATES DETECTED!"
-          echo "The following files have identical content:"
-          
-          # Show which files are duplicates
-          while read hash; do
-            echo "Hash: $hash"
-            grep "$hash" template-hashes.txt | cut -d' ' -f3-
-            echo ""
-          done < <(cut -d' ' -f1 template-hashes.txt | sort | uniq -d)
-          
-          exit 1
-        else
-          echo "✅ No duplicate templates found"
-        fi
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Check for duplicate templates
+        run: |
+          echo "Checking for duplicate content across templates..."
+
+          # Create MD5 hashes of all templates
+          find public/templates -name "*.md" -type f -exec md5sum {} \; | sort > template-hashes.txt
+
+          # Check for duplicates
+          if [ $(cut -d' ' -f1 template-hashes.txt | sort | uniq -d | wc -l) -gt 0 ]; then
+            echo "❌ DUPLICATE TEMPLATES DETECTED!"
+            echo "The following files have identical content:"
+            
+            # Show which files are duplicates
+            while read hash; do
+              echo "Hash: $hash"
+              grep "$hash" template-hashes.txt | cut -d' ' -f3-
+              echo ""
+            done < <(cut -d' ' -f1 template-hashes.txt | sort | uniq -d)
+            
+            exit 1
+          else
+            echo "✅ No duplicate templates found"
+          fi
 
   template-coverage:
     runs-on: ubuntu-latest
     needs: verify-templates
-    
+
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
-      
-    - name: Check template coverage
-      run: |
-        echo "Checking template coverage..."
-        
-        # List of required templates
-        REQUIRED_TEMPLATES=(
-          "bill-of-sale-vehicle"
-          "promissory-note"
-          "lease-agreement"
-          "nda"
-          "power-of-attorney"
-          "child-medical-consent"
-          "living-trust"
-          "service-agreement"
-          "employment-offer-letter"
-          "independent-contractor-agreement"
-          "last-will-testament"
-          "eviction-notice"
-          "operating-agreement"
-          "commercial-lease-agreement"
-          "employment-termination-letter"
-          "healthcare-power-of-attorney"
-          "quitclaim-deed"
-          "prenuptial-agreement"
-          "affidavit-general"
-          "articles-of-incorporation-biz"
-          "child-custody-agreement"
-          "demand-letter-payment"
-          "divorce-settlement-agreement"
-          "invoice"
-          "living-will"
-          "non-compete-agreement"
-          "partnership-agreement"
-        )
-        
-        MISSING_TEMPLATES=()
-        
-        for template in "${REQUIRED_TEMPLATES[@]}"; do
-          if [ ! -f "public/templates/en/${template}.md" ]; then
-            MISSING_TEMPLATES+=("$template")
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Check template coverage
+        run: |
+          echo "Checking template coverage..."
+
+          # List of required templates
+          REQUIRED_TEMPLATES=(
+            "bill-of-sale-vehicle"
+            "promissory-note"
+            "lease-agreement"
+            "nda"
+            "power-of-attorney"
+            "child-medical-consent"
+            "living-trust"
+            "service-agreement"
+            "employment-offer-letter"
+            "independent-contractor-agreement"
+            "last-will-testament"
+            "eviction-notice"
+            "operating-agreement"
+            "commercial-lease-agreement"
+            "employment-termination-letter"
+            "healthcare-power-of-attorney"
+            "quitclaim-deed"
+            "prenuptial-agreement"
+            "affidavit-general"
+            "articles-of-incorporation-biz"
+            "child-custody-agreement"
+            "demand-letter-payment"
+            "divorce-settlement-agreement"
+            "invoice"
+            "living-will"
+            "non-compete-agreement"
+            "partnership-agreement"
+          )
+
+          MISSING_TEMPLATES=()
+
+          for template in "${REQUIRED_TEMPLATES[@]}"; do
+            if [ ! -f "public/templates/en/${template}.md" ]; then
+              MISSING_TEMPLATES+=("$template")
+            fi
+          done
+
+          if [ ${#MISSING_TEMPLATES[@]} -gt 0 ]; then
+            echo "❌ Missing required templates:"
+            printf '%s\n' "${MISSING_TEMPLATES[@]}"
+            exit 1
+          else
+            echo "✅ All required templates present"
           fi
-        done
-        
-        if [ ${#MISSING_TEMPLATES[@]} -gt 0 ]; then
-          echo "❌ Missing required templates:"
-          printf '%s\n' "${MISSING_TEMPLATES[@]}"
-          exit 1
-        else
-          echo "✅ All required templates present"
-        fi

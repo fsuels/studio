@@ -33,13 +33,18 @@ export function useDeviceInfo(): DeviceInfo {
       const width = window.innerWidth;
       const height = window.innerHeight;
       const userAgent = navigator.userAgent;
-      
+
       // Screen size detection
-      const screenSize = 
-        width < 640 ? 'xs' :
-        width < 768 ? 'sm' :
-        width < 1024 ? 'md' :
-        width < 1280 ? 'lg' : 'xl';
+      const screenSize =
+        width < 640
+          ? 'xs'
+          : width < 768
+            ? 'sm'
+            : width < 1024
+              ? 'md'
+              : width < 1280
+                ? 'lg'
+                : 'xl';
 
       // Device type detection
       const isMobile = width < 768 || /Mobi|Android/i.test(userAgent);
@@ -47,17 +52,20 @@ export function useDeviceInfo(): DeviceInfo {
       const isDesktop = !isMobile && !isTablet;
 
       // Capabilities detection
-      const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+      const isTouchDevice =
+        'ontouchstart' in window || navigator.maxTouchPoints > 0;
       const hasHighDensityScreen = window.devicePixelRatio > 1.5;
-      
+
       // Network detection
       const connection = (navigator as any).connection;
-      const hasSlowConnection = connection && 
-        (connection.effectiveType === 'slow-2g' || connection.effectiveType === '2g');
+      const hasSlowConnection =
+        connection &&
+        (connection.effectiveType === 'slow-2g' ||
+          connection.effectiveType === '2g');
 
       // Memory detection
-      const hasLimitedMemory = (navigator as any).deviceMemory && 
-        (navigator as any).deviceMemory < 4;
+      const hasLimitedMemory =
+        (navigator as any).deviceMemory && (navigator as any).deviceMemory < 4;
 
       // Orientation
       const orientation = height > width ? 'portrait' : 'landscape';
@@ -92,19 +100,22 @@ export function useDeviceInfo(): DeviceInfo {
 export function useAdaptiveLoading() {
   const deviceInfo = useDeviceInfo();
 
-  const shouldLazyLoad = useCallback((priority: 'high' | 'medium' | 'low' = 'medium') => {
-    if (priority === 'high') return false;
-    
-    if (deviceInfo.hasSlowConnection || deviceInfo.hasLimitedMemory) {
-      return true;
-    }
-    
-    if (deviceInfo.isMobile && priority === 'low') {
-      return true;
-    }
-    
-    return false;
-  }, [deviceInfo]);
+  const shouldLazyLoad = useCallback(
+    (priority: 'high' | 'medium' | 'low' = 'medium') => {
+      if (priority === 'high') return false;
+
+      if (deviceInfo.hasSlowConnection || deviceInfo.hasLimitedMemory) {
+        return true;
+      }
+
+      if (deviceInfo.isMobile && priority === 'low') {
+        return true;
+      }
+
+      return false;
+    },
+    [deviceInfo],
+  );
 
   const getImageQuality = useCallback(() => {
     if (deviceInfo.hasSlowConnection) return 'low';
@@ -150,18 +161,21 @@ export function useTouchOptimization() {
     };
   }, [deviceInfo]);
 
-  const preventZoom = useCallback((inputProps: any) => {
-    if (deviceInfo.isMobile) {
-      return {
-        ...inputProps,
-        style: {
-          ...inputProps.style,
-          fontSize: '16px', // Prevents zoom on iOS
-        },
-      };
-    }
-    return inputProps;
-  }, [deviceInfo]);
+  const preventZoom = useCallback(
+    (inputProps: any) => {
+      if (deviceInfo.isMobile) {
+        return {
+          ...inputProps,
+          style: {
+            ...inputProps.style,
+            fontSize: '16px', // Prevents zoom on iOS
+          },
+        };
+      }
+      return inputProps;
+    },
+    [deviceInfo],
+  );
 
   return {
     getTouchProps,
@@ -214,13 +228,16 @@ export function usePerformanceMonitoring() {
     new PerformanceObserver((list) => {
       const entries = list.getEntries();
       const lastEntry = entries[entries.length - 1];
-      setMetrics(prev => ({ ...prev, lcp: lastEntry.startTime }));
+      setMetrics((prev) => ({ ...prev, lcp: lastEntry.startTime }));
     }).observe({ entryTypes: ['largest-contentful-paint'] });
 
     // First Input Delay
     new PerformanceObserver((list) => {
       const entry = list.getEntries()[0];
-      setMetrics(prev => ({ ...prev, fid: entry.processingStart - entry.startTime }));
+      setMetrics((prev) => ({
+        ...prev,
+        fid: entry.processingStart - entry.startTime,
+      }));
     }).observe({ entryTypes: ['first-input'] });
 
     // Cumulative Layout Shift
@@ -231,25 +248,27 @@ export function usePerformanceMonitoring() {
           clsValue += (entry as any).value;
         }
       }
-      setMetrics(prev => ({ ...prev, cls: clsValue }));
+      setMetrics((prev) => ({ ...prev, cls: clsValue }));
     }).observe({ entryTypes: ['layout-shift'] });
 
     // First Contentful Paint
     new PerformanceObserver((list) => {
       const entry = list.getEntries()[0];
-      setMetrics(prev => ({ ...prev, fcp: entry.startTime }));
+      setMetrics((prev) => ({ ...prev, fcp: entry.startTime }));
     }).observe({ entryTypes: ['paint'] });
-
   }, []);
 
   return metrics;
 }
 
 // Bundle splitting optimization
-export function getDynamicImport(componentPath: string, options?: {
-  preload?: boolean;
-  chunkName?: string;
-}) {
+export function getDynamicImport(
+  componentPath: string,
+  options?: {
+    preload?: boolean;
+    chunkName?: string;
+  },
+) {
   const importPromise = import(
     /* webpackChunkName: "[request]" */
     componentPath
@@ -270,11 +289,11 @@ export function getOptimizedImageProps(
     quality?: 'low' | 'medium' | 'high';
     sizes?: string;
     priority?: boolean;
-  }
+  },
 ) {
   const { getImageQuality } = useAdaptiveLoading();
   const quality = options?.quality || getImageQuality();
-  
+
   const qualityMap = {
     low: 60,
     medium: 75,
@@ -284,7 +303,9 @@ export function getOptimizedImageProps(
   return {
     src,
     quality: qualityMap[quality],
-    sizes: options?.sizes || '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw',
+    sizes:
+      options?.sizes ||
+      '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw',
     priority: options?.priority || false,
     loading: options?.priority ? 'eager' : 'lazy',
   };
@@ -294,7 +315,8 @@ export function getOptimizedImageProps(
 export function registerServiceWorker() {
   if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-      navigator.serviceWorker.register('/sw.js')
+      navigator.serviceWorker
+        .register('/sw.js')
         .then((registration) => {
           console.log('SW registered: ', registration);
         })

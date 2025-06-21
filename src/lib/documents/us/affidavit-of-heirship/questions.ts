@@ -241,7 +241,8 @@ export const questions: Question[] = [
     label: 'Duration and nature of your relationship',
     required: true,
     section: 'Affiant Information',
-    placeholder: 'e.g., Close family friend for 25 years, neighbor for 10 years',
+    placeholder:
+      'e.g., Close family friend for 25 years, neighbor for 10 years',
   },
 
   // Section 3: Marital Status
@@ -267,7 +268,10 @@ export const questions: Question[] = [
     required: false,
     section: 'Spouse Information',
     placeholder: "Enter spouse's full name",
-    condition: { field: 'decedentMaritalStatus', value: ['married', 'widowed'] },
+    condition: {
+      field: 'decedentMaritalStatus',
+      value: ['married', 'widowed'],
+    },
   },
   {
     id: 'spouseStillLiving',
@@ -279,7 +283,10 @@ export const questions: Question[] = [
       { value: 'true', label: 'Yes, spouse is still living' },
       { value: 'false', label: 'No, spouse is deceased' },
     ],
-    condition: { field: 'decedentMaritalStatus', value: ['married', 'widowed'] },
+    condition: {
+      field: 'decedentMaritalStatus',
+      value: ['married', 'widowed'],
+    },
   },
   {
     id: 'spouseDateOfDeath',
@@ -295,7 +302,10 @@ export const questions: Question[] = [
     label: 'Date of Marriage',
     required: false,
     section: 'Spouse Information',
-    condition: { field: 'decedentMaritalStatus', value: ['married', 'widowed'] },
+    condition: {
+      field: 'decedentMaritalStatus',
+      value: ['married', 'widowed'],
+    },
   },
   {
     id: 'marriagePlace',
@@ -304,7 +314,10 @@ export const questions: Question[] = [
     required: false,
     section: 'Spouse Information',
     placeholder: 'City, State',
-    condition: { field: 'decedentMaritalStatus', value: ['married', 'widowed'] },
+    condition: {
+      field: 'decedentMaritalStatus',
+      value: ['married', 'widowed'],
+    },
   },
 
   // Section 5: Children Information
@@ -326,7 +339,8 @@ export const questions: Question[] = [
     required: false,
     section: 'Children',
     condition: { field: 'hasChildren', value: 'true' },
-    description: 'List all children of the deceased, including adopted children.',
+    description:
+      'List all children of the deceased, including adopted children.',
     arrayConfig: {
       minItems: 1,
       maxItems: 20,
@@ -578,7 +592,10 @@ export const questions: Question[] = [
     section: 'Estate Information',
     options: [
       { value: 'true', label: 'Yes, the deceased left a will' },
-      { value: 'false', label: 'No, the deceased died without a will (intestate)' },
+      {
+        value: 'false',
+        label: 'No, the deceased died without a will (intestate)',
+      },
     ],
   },
   {
@@ -618,8 +635,10 @@ export const questions: Question[] = [
     label: 'Description of Property/Assets',
     required: true,
     section: 'Property Information',
-    placeholder: 'Describe the property or assets for which heirship is being established...',
-    description: 'Include detailed description of all property, real estate, or assets.',
+    placeholder:
+      'Describe the property or assets for which heirship is being established...',
+    description:
+      'Include detailed description of all property, real estate, or assets.',
   },
   {
     id: 'propertyAddress',
@@ -720,8 +739,10 @@ export const questions: Question[] = [
     label: 'Additional Information',
     required: false,
     section: 'Additional Information',
-    placeholder: 'Provide any additional relevant information about the deceased or their family...',
-    description: 'Include any other relevant information that supports the heirship claims.',
+    placeholder:
+      'Provide any additional relevant information about the deceased or their family...',
+    description:
+      'Include any other relevant information that supports the heirship claims.',
   },
 
   // Section 12: Witnesses
@@ -732,7 +753,8 @@ export const questions: Question[] = [
     required: false,
     section: 'Witnesses',
     placeholder: 'Enter first witness full name',
-    description: 'Witnesses should be disinterested parties who knew the deceased.',
+    description:
+      'Witnesses should be disinterested parties who knew the deceased.',
   },
   {
     id: 'witness1Address',
@@ -818,7 +840,8 @@ export const questions: Question[] = [
       { value: 'WI', label: 'Wisconsin' },
       { value: 'WY', label: 'Wyoming' },
     ],
-    description: 'Select the state where this affidavit of heirship will be filed.',
+    description:
+      'Select the state where this affidavit of heirship will be filed.',
   },
   {
     id: 'county',

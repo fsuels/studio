@@ -47,7 +47,7 @@ Don't risk using generic templates that may not comply with Maryland law. Get a 
 
 [Create Maryland LLC Operating Agreement]
 
-*Trusted by thousands of Maryland businesses*
+_Trusted by thousands of Maryland businesses_
 
 ---
 

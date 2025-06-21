@@ -101,7 +101,12 @@ export const achAuthorizationFormQuestions: Question[] = [
     ],
     tooltip: 'Required for recurring payments',
   },
-  { id: 'firstPaymentDate', label: 'First Payment Date', type: 'date', required: true },
+  {
+    id: 'firstPaymentDate',
+    label: 'First Payment Date',
+    type: 'date',
+    required: true,
+  },
   {
     id: 'finalPaymentDate',
     label: 'Final Payment Date',

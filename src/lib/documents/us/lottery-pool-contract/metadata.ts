@@ -24,13 +24,18 @@ export const lotteryPoolContractMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Lottery Pool Contract',
-      description: 'Agreement for group lottery ticket purchases and winnings distribution.',
+      description:
+        'Agreement for group lottery ticket purchases and winnings distribution.',
       aliases: ['lottery syndicate agreement', 'group lottery contract'],
     },
     es: {
       name: 'Contrato de Grupo de Lotería',
-      description: 'Acuerdo para compras grupales de boletos de lotería y distribución de ganancias.',
-      aliases: ['acuerdo de sindicato de lotería', 'contrato grupal de lotería'],
+      description:
+        'Acuerdo para compras grupales de boletos de lotería y distribución de ganancias.',
+      aliases: [
+        'acuerdo de sindicato de lotería',
+        'contrato grupal de lotería',
+      ],
     },
   },
 };

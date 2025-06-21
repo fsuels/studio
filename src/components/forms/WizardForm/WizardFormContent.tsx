@@ -36,41 +36,42 @@ export default function WizardFormContent({
 
   // Render current step content
   const currentField = steps[currentStepIndex];
-  
-  const formContent = isHydrated && currentField ? (
-    <div className="space-y-8">
-      <div className="text-center mb-6">
-        {currentField.section && (
-          <div className="inline-flex items-center px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-medium mb-4">
-            {currentField.section}
-          </div>
-        )}
+
+  const formContent =
+    isHydrated && currentField ? (
+      <div className="space-y-8">
+        <div className="text-center mb-6">
+          {currentField.section && (
+            <div className="inline-flex items-center px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-medium mb-4">
+              {currentField.section}
+            </div>
+          )}
+        </div>
+
+        <div className="max-w-md mx-auto">
+          <FieldRenderer
+            fieldKey={currentField.id}
+            doc={doc}
+            onFocus={() => onFieldFocus?.(currentField.id)}
+          />
+        </div>
       </div>
-      
-      <div className="max-w-md mx-auto">
-        <FieldRenderer
-          fieldKey={currentField.id}
-          doc={doc}
-          onFocus={() => onFieldFocus?.(currentField.id)}
-        />
+    ) : steps.length === 0 ? (
+      <div className="mt-6 min-h-[200px] flex flex-col items-center justify-center text-center">
+        <p className="text-muted-foreground mb-4">
+          {t('dynamicForm.noQuestionsNeeded', {
+            documentType:
+              locale === 'es'
+                ? doc.translations?.es?.name ||
+                  doc.translations?.en?.name ||
+                  doc.name
+                : doc.translations?.en?.name ||
+                  doc.name ||
+                  doc.translations?.es?.name,
+          })}
+        </p>
       </div>
-    </div>
-  ) : steps.length === 0 ? (
-    <div className="mt-6 min-h-[200px] flex flex-col items-center justify-center text-center">
-      <p className="text-muted-foreground mb-4">
-        {t('dynamicForm.noQuestionsNeeded', {
-          documentType:
-            locale === 'es'
-              ? doc.translations?.es?.name ||
-                doc.translations?.en?.name ||
-                doc.name
-              : doc.translations?.en?.name ||
-                doc.name ||
-                doc.translations?.es?.name,
-        })}
-      </p>
-    </div>
-  ) : null;
+    ) : null;
 
   return (
     <>

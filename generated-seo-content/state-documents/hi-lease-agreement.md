@@ -47,7 +47,7 @@ Don't risk using generic templates that may not comply with Hawaii law. Get a pr
 
 [Create Hawaii Lease Agreement]
 
-*Trusted by thousands of Hawaii businesses*
+_Trusted by thousands of Hawaii businesses_
 
 ---
 

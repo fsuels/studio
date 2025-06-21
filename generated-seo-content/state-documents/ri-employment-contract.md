@@ -47,7 +47,7 @@ Don't risk using generic templates that may not comply with Rhode Island law. Ge
 
 [Create Rhode Island Employment Contract]
 
-*Trusted by thousands of Rhode Island businesses*
+_Trusted by thousands of Rhode Island businesses_
 
 ---
 

@@ -24,12 +24,18 @@ export const securityAgreementMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Security Agreement',
-      description: 'Legal agreement creating a security interest in personal property to secure debt obligations.',
-      aliases: ['collateral agreement', 'secured transaction agreement', 'UCC security agreement'],
+      description:
+        'Legal agreement creating a security interest in personal property to secure debt obligations.',
+      aliases: [
+        'collateral agreement',
+        'secured transaction agreement',
+        'UCC security agreement',
+      ],
     },
     es: {
       name: 'Acuerdo de Garantía',
-      description: 'Acuerdo legal que crea un interés de garantía en propiedad personal para asegurar obligaciones de deuda.',
+      description:
+        'Acuerdo legal que crea un interés de garantía en propiedad personal para asegurar obligaciones de deuda.',
       aliases: ['acuerdo de colateral', 'acuerdo de transacción garantizada'],
     },
   },

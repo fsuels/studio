@@ -22,26 +22,31 @@ sidebar/
 ## Components by Category
 
 ### Context & Provider
+
 - **SidebarProvider**: Main context provider with state management
 - **useSidebar**: Hook to access sidebar context
 
 ### Core Components
+
 - **Sidebar**: Main sidebar container with mobile/desktop logic
 - **SidebarInset**: Main content area that adjusts to sidebar state
 
 ### Layout Components
+
 - **SidebarHeader**: Header section of the sidebar
 - **SidebarFooter**: Footer section of the sidebar
 - **SidebarContent**: Scrollable content area
 - **SidebarSeparator**: Visual separator component
 
 ### Group Components
+
 - **SidebarGroup**: Container for grouped content
 - **SidebarGroupLabel**: Label for a group
 - **SidebarGroupAction**: Action button for a group
 - **SidebarGroupContent**: Content container within a group
 
 ### Menu Components
+
 - **SidebarMenu**: List container for menu items
 - **SidebarMenuItem**: Individual menu item container
 - **SidebarMenuButton**: Interactive menu button with tooltip support
@@ -50,11 +55,13 @@ sidebar/
 - **SidebarMenuSkeleton**: Loading skeleton for menu items
 
 ### Submenu Components
+
 - **SidebarMenuSub**: Container for submenu items
 - **SidebarMenuSubItem**: Individual submenu item container
 - **SidebarMenuSubButton**: Interactive submenu button
 
 ### Control Components
+
 - **SidebarTrigger**: Button to toggle sidebar state
 - **SidebarRail**: Hover area for expanding collapsed sidebar
 - **SidebarInput**: Input component styled for sidebar
@@ -90,17 +97,13 @@ function App() {
             <SidebarGroupContent>
               <SidebarMenu>
                 <SidebarMenuItem>
-                  <SidebarMenuButton>
-                    Home
-                  </SidebarMenuButton>
+                  <SidebarMenuButton>Home</SidebarMenuButton>
                 </SidebarMenuItem>
               </SidebarMenu>
             </SidebarGroupContent>
           </SidebarGroup>
         </SidebarContent>
-        <SidebarFooter>
-          Footer content
-        </SidebarFooter>
+        <SidebarFooter>Footer content</SidebarFooter>
       </Sidebar>
     </SidebarProvider>
   );

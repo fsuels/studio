@@ -24,13 +24,20 @@ export const statementOfWorkMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Statement of Work (SOW)',
-      description: 'Create a detailed SOW defining project scope, deliverables, and timeline.',
+      description:
+        'Create a detailed SOW defining project scope, deliverables, and timeline.',
       aliases: ['SOW', 'statement of work', 'project scope', 'work order'],
     },
     es: {
       name: 'Declaración de Trabajo (SOW)',
-      description: 'Crea un SOW detallado que defina el alcance del proyecto, entregables y cronograma.',
-      aliases: ['SOW', 'declaración de trabajo', 'alcance del proyecto', 'orden de trabajo'],
+      description:
+        'Crea un SOW detallado que defina el alcance del proyecto, entregables y cronograma.',
+      aliases: [
+        'SOW',
+        'declaración de trabajo',
+        'alcance del proyecto',
+        'orden de trabajo',
+      ],
     },
   },
 };

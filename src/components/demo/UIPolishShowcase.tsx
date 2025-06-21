@@ -35,14 +35,18 @@ import {
 } from 'lucide-react';
 
 export default function UIPolishShowcase() {
-  const [activeDemo, setActiveDemo] = useState<'summary' | 'skeleton' | 'actions' | 'optimistic'>('summary');
+  const [activeDemo, setActiveDemo] = useState<
+    'summary' | 'skeleton' | 'actions' | 'optimistic'
+  >('summary');
   const [isLoading, setIsLoading] = useState(false);
-  const [optimisticStates, setOptimisticStates] = useState<Record<string, boolean>>({});
+  const [optimisticStates, setOptimisticStates] = useState<
+    Record<string, boolean>
+  >({});
 
   const triggerOptimisticUpdate = (key: string) => {
-    setOptimisticStates(prev => ({ ...prev, [key]: true }));
+    setOptimisticStates((prev) => ({ ...prev, [key]: true }));
     setTimeout(() => {
-      setOptimisticStates(prev => ({ ...prev, [key]: false }));
+      setOptimisticStates((prev) => ({ ...prev, [key]: false }));
     }, 2000);
   };
 
@@ -55,19 +59,26 @@ export default function UIPolishShowcase() {
     <div className="space-y-8 p-6">
       {/* Header */}
       <div className="text-center space-y-4">
-        <h1 className="text-4xl font-bold text-gray-900">Quick-Win UI Polish Showcase</h1>
+        <h1 className="text-4xl font-bold text-gray-900">
+          Quick-Win UI Polish Showcase
+        </h1>
         <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-          Experience the enhanced admin interface with sticky summary bars, contextual inline actions, 
-          skeleton loaders, and optimistic updates for blazing-fast perceived performance.
+          Experience the enhanced admin interface with sticky summary bars,
+          contextual inline actions, skeleton loaders, and optimistic updates
+          for blazing-fast perceived performance.
         </p>
-        
+
         {/* Demo Navigation */}
         <div className="flex justify-center gap-2 mt-6">
           {[
             { key: 'summary', label: 'Sticky Summary Bar', icon: DollarSign },
             { key: 'skeleton', label: 'Skeleton Loaders', icon: RefreshCw },
             { key: 'actions', label: 'Inline Actions', icon: MessageSquare },
-            { key: 'optimistic', label: 'Optimistic Updates', icon: TrendingUp },
+            {
+              key: 'optimistic',
+              label: 'Optimistic Updates',
+              icon: TrendingUp,
+            },
           ].map(({ key, label, icon: Icon }) => (
             <Button
               key={key}
@@ -96,10 +107,11 @@ export default function UIPolishShowcase() {
               </CardHeader>
               <CardContent className="space-y-4">
                 <p className="text-gray-600">
-                  The sticky summary bar appears in the top-right corner when you scroll down, 
-                  providing instant access to key metrics and quick actions.
+                  The sticky summary bar appears in the top-right corner when
+                  you scroll down, providing instant access to key metrics and
+                  quick actions.
                 </p>
-                
+
                 {/* Features List */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-3">
@@ -123,7 +135,7 @@ export default function UIPolishShowcase() {
                       </li>
                     </ul>
                   </div>
-                  
+
                   <div className="space-y-3">
                     <h4 className="font-semibold">Metrics Tracked:</h4>
                     <ul className="space-y-2 text-sm">
@@ -146,11 +158,12 @@ export default function UIPolishShowcase() {
                     </ul>
                   </div>
                 </div>
-                
+
                 <div className="bg-blue-50 p-4 rounded-lg">
                   <p className="text-sm text-blue-800">
-                    💡 <strong>Pro Tip:</strong> Scroll down this page to see the sticky summary bar in action! 
-                    It automatically appears when you scroll past the fold.
+                    💡 <strong>Pro Tip:</strong> Scroll down this page to see
+                    the sticky summary bar in action! It automatically appears
+                    when you scroll past the fold.
                   </p>
                 </div>
               </CardContent>
@@ -169,15 +182,19 @@ export default function UIPolishShowcase() {
                     Advanced Skeleton Loaders
                   </span>
                   <Button onClick={triggerLoading} disabled={isLoading}>
-                    {isLoading ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Play className="h-4 w-4 mr-2" />}
+                    {isLoading ? (
+                      <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                    ) : (
+                      <Play className="h-4 w-4 mr-2" />
+                    )}
                     {isLoading ? 'Loading...' : 'Demo Loading'}
                   </Button>
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-6">
                 <p className="text-gray-600">
-                  Sophisticated skeleton loading patterns that match your actual content structure 
-                  for superior perceived performance.
+                  Sophisticated skeleton loading patterns that match your actual
+                  content structure for superior perceived performance.
                 </p>
 
                 {/* Skeleton Variants */}
@@ -213,7 +230,9 @@ export default function UIPolishShowcase() {
                 {/* Full Component Skeletons */}
                 {isLoading && (
                   <div className="mt-8">
-                    <h4 className="font-semibold mb-4">Component-Specific Skeletons</h4>
+                    <h4 className="font-semibold mb-4">
+                      Component-Specific Skeletons
+                    </h4>
                     <div className="bg-gray-50 p-4 rounded-lg">
                       <OrdersTableSkeleton rows={3} />
                     </div>
@@ -236,8 +255,8 @@ export default function UIPolishShowcase() {
               </CardHeader>
               <CardContent className="space-y-6">
                 <p className="text-gray-600">
-                  Quick actions are now directly accessible beside each row, eliminating the need 
-                  to open dropdown menus for common tasks.
+                  Quick actions are now directly accessible beside each row,
+                  eliminating the need to open dropdown menus for common tasks.
                 </p>
 
                 {/* Sample Order Rows */}
@@ -245,18 +264,49 @@ export default function UIPolishShowcase() {
                   <table className="w-full">
                     <thead className="bg-gray-50">
                       <tr>
-                        <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Order</th>
-                        <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Customer</th>
-                        <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Amount</th>
-                        <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Status</th>
-                        <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Quick Actions</th>
+                        <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">
+                          Order
+                        </th>
+                        <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">
+                          Customer
+                        </th>
+                        <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">
+                          Amount
+                        </th>
+                        <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">
+                          Status
+                        </th>
+                        <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">
+                          Quick Actions
+                        </th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-200">
                       {[
-                        { id: '1', order: '#ORD-2024-001', customer: 'John Smith', email: 'john@example.com', amount: '$89.99', status: 'completed' },
-                        { id: '2', order: '#ORD-2024-002', customer: 'Sarah Johnson', email: 'sarah@example.com', amount: '$129.99', status: 'processing' },
-                        { id: '3', order: '#ORD-2024-003', customer: 'Mike Davis', email: 'mike@example.com', amount: '$59.99', status: 'pending' },
+                        {
+                          id: '1',
+                          order: '#ORD-2024-001',
+                          customer: 'John Smith',
+                          email: 'john@example.com',
+                          amount: '$89.99',
+                          status: 'completed',
+                        },
+                        {
+                          id: '2',
+                          order: '#ORD-2024-002',
+                          customer: 'Sarah Johnson',
+                          email: 'sarah@example.com',
+                          amount: '$129.99',
+                          status: 'processing',
+                        },
+                        {
+                          id: '3',
+                          order: '#ORD-2024-003',
+                          customer: 'Mike Davis',
+                          email: 'mike@example.com',
+                          amount: '$59.99',
+                          status: 'pending',
+                        },
                       ].map((order) => (
                         <tr key={order.id} className="hover:bg-gray-50">
                           <td className="px-4 py-3">
@@ -266,7 +316,9 @@ export default function UIPolishShowcase() {
                                 variant="ghost"
                                 size="sm"
                                 className="h-6 w-6 p-0"
-                                onClick={() => navigator.clipboard.writeText(order.order)}
+                                onClick={() =>
+                                  navigator.clipboard.writeText(order.order)
+                                }
                               >
                                 <Copy className="h-3 w-3" />
                               </Button>
@@ -274,17 +326,25 @@ export default function UIPolishShowcase() {
                           </td>
                           <td className="px-4 py-3">
                             <div>
-                              <div className="font-medium">{order.customer}</div>
-                              <div className="text-sm text-gray-600">{order.email}</div>
+                              <div className="font-medium">
+                                {order.customer}
+                              </div>
+                              <div className="text-sm text-gray-600">
+                                {order.email}
+                              </div>
                             </div>
                           </td>
-                          <td className="px-4 py-3 font-semibold">{order.amount}</td>
+                          <td className="px-4 py-3 font-semibold">
+                            {order.amount}
+                          </td>
                           <td className="px-4 py-3">
                             <Badge
                               className={
-                                order.status === 'completed' ? 'bg-green-100 text-green-800' :
-                                order.status === 'processing' ? 'bg-blue-100 text-blue-800' :
-                                'bg-yellow-100 text-yellow-800'
+                                order.status === 'completed'
+                                  ? 'bg-green-100 text-green-800'
+                                  : order.status === 'processing'
+                                    ? 'bg-blue-100 text-blue-800'
+                                    : 'bg-yellow-100 text-yellow-800'
                               }
                             >
                               {order.status}
@@ -296,7 +356,9 @@ export default function UIPolishShowcase() {
                                 variant="ghost"
                                 size="sm"
                                 className="h-8 w-8 p-0 text-red-600 hover:bg-red-50"
-                                onClick={() => triggerOptimisticUpdate(`refund_${order.id}`)}
+                                onClick={() =>
+                                  triggerOptimisticUpdate(`refund_${order.id}`)
+                                }
                               >
                                 <RotateCcw className="h-4 w-4" />
                               </Button>
@@ -304,7 +366,9 @@ export default function UIPolishShowcase() {
                                 variant="ghost"
                                 size="sm"
                                 className="h-8 w-8 p-0 text-blue-600 hover:bg-blue-50"
-                                onClick={() => triggerOptimisticUpdate(`email_${order.id}`)}
+                                onClick={() =>
+                                  triggerOptimisticUpdate(`email_${order.id}`)
+                                }
                               >
                                 <Mail className="h-4 w-4" />
                               </Button>
@@ -365,13 +429,20 @@ export default function UIPolishShowcase() {
               </CardHeader>
               <CardContent className="space-y-6">
                 <p className="text-gray-600">
-                  Actions feel instant with optimistic updates that show results immediately, 
-                  with graceful fallback if the server operation fails.
+                  Actions feel instant with optimistic updates that show results
+                  immediately, with graceful fallback if the server operation
+                  fails.
                 </p>
 
                 {/* Demo Actions */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <Card className={optimisticStates.status ? 'bg-blue-50 border-blue-200' : ''}>
+                  <Card
+                    className={
+                      optimisticStates.status
+                        ? 'bg-blue-50 border-blue-200'
+                        : ''
+                    }
+                  >
                     <CardContent className="p-4">
                       <h4 className="font-semibold mb-2">Status Change</h4>
                       <p className="text-sm text-gray-600 mb-3">
@@ -395,7 +466,11 @@ export default function UIPolishShowcase() {
                     </CardContent>
                   </Card>
 
-                  <Card className={optimisticStates.refund ? 'bg-red-50 border-red-200' : ''}>
+                  <Card
+                    className={
+                      optimisticStates.refund ? 'bg-red-50 border-red-200' : ''
+                    }
+                  >
                     <CardContent className="p-4">
                       <h4 className="font-semibold mb-2">Process Refund</h4>
                       <p className="text-sm text-gray-600 mb-3">
@@ -420,7 +495,13 @@ export default function UIPolishShowcase() {
                     </CardContent>
                   </Card>
 
-                  <Card className={optimisticStates.email ? 'bg-green-50 border-green-200' : ''}>
+                  <Card
+                    className={
+                      optimisticStates.email
+                        ? 'bg-green-50 border-green-200'
+                        : ''
+                    }
+                  >
                     <CardContent className="p-4">
                       <h4 className="font-semibold mb-2">Send Email</h4>
                       <p className="text-sm text-gray-600 mb-3">
@@ -448,8 +529,9 @@ export default function UIPolishShowcase() {
 
                 <div className="bg-green-50 p-4 rounded-lg">
                   <p className="text-sm text-green-800">
-                    ✨ <strong>The Magic:</strong> Users see instant feedback while the actual API call happens in the background. 
-                    If it fails, the UI gracefully reverts with an error message.
+                    ✨ <strong>The Magic:</strong> Users see instant feedback
+                    while the actual API call happens in the background. If it
+                    fails, the UI gracefully reverts with an error message.
                   </p>
                 </div>
               </CardContent>
@@ -463,7 +545,9 @@ export default function UIPolishShowcase() {
 
       {/* Scroll prompt */}
       <div className="text-center py-8 text-gray-500">
-        <p className="text-sm">↓ Scroll down to see the sticky summary bar in action ↓</p>
+        <p className="text-sm">
+          ↓ Scroll down to see the sticky summary bar in action ↓
+        </p>
       </div>
 
       {/* Extra content to enable scrolling */}
@@ -471,10 +555,12 @@ export default function UIPolishShowcase() {
         {Array.from({ length: 10 }).map((_, i) => (
           <Card key={i} className="p-8">
             <div className="text-center space-y-4">
-              <h3 className="text-xl font-semibold">Sample Content Section {i + 1}</h3>
+              <h3 className="text-xl font-semibold">
+                Sample Content Section {i + 1}
+              </h3>
               <p className="text-gray-600">
-                This is sample content to demonstrate scrolling behavior. 
-                Notice how the sticky summary bar appears as you scroll down.
+                This is sample content to demonstrate scrolling behavior. Notice
+                how the sticky summary bar appears as you scroll down.
               </p>
             </div>
           </Card>

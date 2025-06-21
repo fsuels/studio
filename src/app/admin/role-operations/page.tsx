@@ -28,7 +28,7 @@ export default function RoleOperationsPage() {
     // In production, get actual user role from authentication context
     const mockUserRole: UserRole = 'admin';
     const mockUserId = 'admin-user-1';
-    
+
     setCurrentUserRole(mockUserRole);
     setCurrentUserId(mockUserId);
   }, []);
@@ -36,7 +36,7 @@ export default function RoleOperationsPage() {
   const handleRefresh = async () => {
     setIsLoading(true);
     // Simulate API refresh
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise((resolve) => setTimeout(resolve, 1000));
     setIsLoading(false);
   };
 
@@ -60,14 +60,15 @@ export default function RoleOperationsPage() {
           </CardHeader>
           <CardContent>
             <p className="text-gray-600 mb-4">
-              You don't have permission to access Role Operations. This feature requires Administrator privileges.
+              You don't have permission to access Role Operations. This feature
+              requires Administrator privileges.
             </p>
             <div className="flex items-center gap-2">
               <Badge variant="outline" className="bg-red-50 text-red-700">
                 Current Role: {currentUserRole.replace('_', ' ').toUpperCase()}
               </Badge>
             </div>
-            <Button 
+            <Button
               onClick={handleGoBack}
               className="w-full mt-4"
               variant="outline"
@@ -100,9 +101,14 @@ export default function RoleOperationsPage() {
               </Button>
               <div className="flex items-center gap-2">
                 <Shield className="h-6 w-6 text-primary" />
-                <h1 className="text-xl font-semibold">Role Operations Center</h1>
+                <h1 className="text-xl font-semibold">
+                  Role Operations Center
+                </h1>
               </div>
-              <Badge variant="outline" className="bg-orange-50 text-orange-700 border-orange-200">
+              <Badge
+                variant="outline"
+                className="bg-orange-50 text-orange-700 border-orange-200"
+              >
                 ADMIN ACCESS
               </Badge>
             </div>
@@ -116,13 +122,15 @@ export default function RoleOperationsPage() {
                 </div>
                 <div className="flex items-center gap-1 text-xs text-muted-foreground mt-1">
                   <Activity className="h-3 w-3" />
-                  <span>Role: {currentUserRole.replace('_', ' ').toUpperCase()}</span>
+                  <span>
+                    Role: {currentUserRole.replace('_', ' ').toUpperCase()}
+                  </span>
                 </div>
               </div>
-              
+
               <div className="flex gap-2">
-                <Button 
-                  variant="outline" 
+                <Button
+                  variant="outline"
                   size="sm"
                   onClick={handleRefresh}
                   disabled={isLoading}
@@ -134,12 +142,12 @@ export default function RoleOperationsPage() {
                   )}
                   Refresh
                 </Button>
-                
+
                 <Button variant="outline" size="sm">
                   <Download className="h-4 w-4 mr-2" />
                   Export
                 </Button>
-                
+
                 <Button variant="outline" size="sm">
                   <Settings className="h-4 w-4 mr-2" />
                   Settings
@@ -157,8 +165,9 @@ export default function RoleOperationsPage() {
             <AlertTriangle className="h-5 w-5 text-yellow-600" />
             <div className="flex-1">
               <p className="text-sm text-yellow-800">
-                <strong>Security Notice:</strong> You are accessing role management operations. 
-                All actions are logged and audited for compliance purposes.
+                <strong>Security Notice:</strong> You are accessing role
+                management operations. All actions are logged and audited for
+                compliance purposes.
               </p>
             </div>
             <CheckCircle className="h-5 w-5 text-green-600" />
@@ -168,7 +177,7 @@ export default function RoleOperationsPage() {
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <RoleManagementDashboard 
+        <RoleManagementDashboard
           currentUserRole={currentUserRole}
           currentUserId={currentUserId}
         />

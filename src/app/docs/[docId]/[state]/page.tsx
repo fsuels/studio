@@ -9,4 +9,3 @@ export default function LegacyDocStateRedirect({
 }) {
   redirect(`/en/docs/${params.docId}/${params.state}`);
 }
-

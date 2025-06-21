@@ -24,12 +24,18 @@ export const businessContractMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Business Contract',
-      description: 'Create a comprehensive business contract for goods, services, or partnerships.',
-      aliases: ['commercial contract', 'business agreement', 'commercial agreement'],
+      description:
+        'Create a comprehensive business contract for goods, services, or partnerships.',
+      aliases: [
+        'commercial contract',
+        'business agreement',
+        'commercial agreement',
+      ],
     },
     es: {
       name: 'Contrato Comercial',
-      description: 'Crea un contrato comercial integral para bienes, servicios o asociaciones.',
+      description:
+        'Crea un contrato comercial integral para bienes, servicios o asociaciones.',
       aliases: ['contrato de negocios', 'acuerdo comercial'],
     },
   },

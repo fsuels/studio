@@ -23,21 +23,23 @@ export const boatBillOfSaleMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Boat Bill of Sale',
-      description: 'Create a legally binding boat bill of sale with our easy-to-use template. State-specific requirements included.',
+      description:
+        'Create a legally binding boat bill of sale with our easy-to-use template. State-specific requirements included.',
       aliases: [
         'vessel bill of sale',
         'watercraft sale',
         'boat purchase agreement',
-        'marine bill of sale'
+        'marine bill of sale',
       ],
     },
     es: {
       name: 'Contrato de Compraventa de Embarcación',
-      description: 'Crea un contrato de compraventa de embarcación legalmente válido con nuestra plantilla fácil de usar. Incluye requisitos específicos del estado.',
+      description:
+        'Crea un contrato de compraventa de embarcación legalmente válido con nuestra plantilla fácil de usar. Incluye requisitos específicos del estado.',
       aliases: [
         'venta de barco',
         'compraventa de embarcación',
-        'contrato de venta marina'
+        'contrato de venta marina',
       ],
     },
   },

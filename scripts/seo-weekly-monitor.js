@@ -15,12 +15,15 @@ class WeeklySEOMonitor {
     this.ahrefsConfig = {
       apiKey: process.env.AHREFS_API_KEY || 'demo_key',
       baseURL: 'https://apiv2.ahrefs.com',
-      rateLimitMs: 1000
+      rateLimitMs: 1000,
     };
     this.weeklyReportsDir = path.join(__dirname, '../seo-reports/weekly');
     this.sitemapPath = path.join(__dirname, '../public/sitemap.xml');
-    this.lastRunPath = path.join(__dirname, '../seo-reports/last-weekly-run.json');
-    
+    this.lastRunPath = path.join(
+      __dirname,
+      '../seo-reports/last-weekly-run.json',
+    );
+
     this.initializeDirectories();
   }
 
@@ -33,13 +36,15 @@ class WeeklySEOMonitor {
   // Main weekly monitoring execution
   async runWeeklyMonitoring() {
     console.log('📅 Weekly SEO Monitoring & Optimization\n');
-    console.log('════════════════════════════════════════════════════════════════\n');
-    
+    console.log(
+      '════════════════════════════════════════════════════════════════\n',
+    );
+
     const startTime = new Date();
     const report = {
       timestamp: startTime.toISOString(),
       weekNumber: this.getWeekNumber(startTime),
-      year: startTime.getFullYear()
+      year: startTime.getFullYear(),
     };
 
     try {
@@ -59,11 +64,15 @@ class WeeklySEOMonitor {
 
       // 4. Compare with previous week
       console.log('\n📊 3. Comparing with Previous Week...');
-      report.weeklyComparison = await this.compareWithPreviousWeek(report.keywordData);
+      report.weeklyComparison = await this.compareWithPreviousWeek(
+        report.keywordData,
+      );
 
       // 5. Update sitemap priorities automatically
       console.log('\n🗺️  4. Updating Sitemap Priorities...');
-      report.sitemapUpdates = await this.updateSitemapAutomatically(report.keywordData);
+      report.sitemapUpdates = await this.updateSitemapAutomatically(
+        report.keywordData,
+      );
 
       // 6. Generate optimization recommendations
       console.log('\n💡 5. Generating Optimization Recommendations...');
@@ -71,7 +80,9 @@ class WeeklySEOMonitor {
 
       // 7. Auto-apply safe optimizations
       console.log('\n🔧 6. Auto-Applying Safe Optimizations...');
-      report.autoOptimizations = await this.applySafeOptimizations(report.optimizations);
+      report.autoOptimizations = await this.applySafeOptimizations(
+        report.optimizations,
+      );
 
       // 8. Alert on critical issues
       console.log('\n🚨 7. Checking for Critical Issues...');
@@ -85,7 +96,6 @@ class WeeklySEOMonitor {
       this.displayWeeklySummary(report);
 
       return report;
-
     } catch (error) {
       console.error('❌ Weekly monitoring failed:', error);
       throw error;
@@ -95,12 +105,15 @@ class WeeklySEOMonitor {
   // Check if weekly monitoring already ran this week
   hasRunThisWeek() {
     if (!fs.existsSync(this.lastRunPath)) return false;
-    
+
     const lastRun = JSON.parse(fs.readFileSync(this.lastRunPath, 'utf8'));
     const lastRunWeek = this.getWeekNumber(new Date(lastRun.timestamp));
     const currentWeek = this.getWeekNumber(new Date());
-    
-    return lastRunWeek === currentWeek && new Date(lastRun.timestamp).getFullYear() === new Date().getFullYear();
+
+    return (
+      lastRunWeek === currentWeek &&
+      new Date(lastRun.timestamp).getFullYear() === new Date().getFullYear()
+    );
   }
 
   // Get week number of year
@@ -125,11 +138,14 @@ class WeeklySEOMonitor {
       try {
         const data = await this.fetchKeywordRanking(keyword);
         rankingData.push(data);
-        
+
         // Rate limiting
         await this.sleep(this.ahrefsConfig.rateLimitMs);
       } catch (error) {
-        console.warn(`⚠️  Failed to fetch data for "${keyword}":`, error.message);
+        console.warn(
+          `⚠️  Failed to fetch data for "${keyword}":`,
+          error.message,
+        );
       }
     }
 
@@ -137,7 +153,7 @@ class WeeklySEOMonitor {
       timestamp: new Date().toISOString(),
       source: 'ahrefs_api',
       keywords: rankingData,
-      totalKeywords: rankingData.length
+      totalKeywords: rankingData.length,
     };
   }
 
@@ -153,15 +169,15 @@ class WeeklySEOMonitor {
       'power of attorney',
       'bill of sale',
       'employment contract',
-      'nda template'
+      'nda template',
     ];
 
     // Add state-specific variations
     const states = ['california', 'texas', 'florida', 'new york', 'illinois'];
     const stateKeywords = [];
-    
-    baseKeywords.forEach(keyword => {
-      states.forEach(state => {
+
+    baseKeywords.forEach((keyword) => {
+      states.forEach((state) => {
         stateKeywords.push(`${state} ${keyword}`);
         stateKeywords.push(`${keyword} ${state}`);
       });
@@ -190,7 +206,7 @@ class WeeklySEOMonitor {
     const data = await response.json();
     return this.processAhrefsResponse(data);
     */
-    
+
     // Simulated data for now
     return {
       keyword,
@@ -200,8 +216,8 @@ class WeeklySEOMonitor {
       cpc: (Math.random() * 10).toFixed(2),
       clicks: Math.floor(Math.random() * 1000),
       impressions: Math.floor(Math.random() * 5000) + 1000,
-      ctr: ((Math.random() * 10) + 1).toFixed(2),
-      url: `/${keyword.replace(/\s+/g, '-')}`
+      ctr: (Math.random() * 10 + 1).toFixed(2),
+      url: `/${keyword.replace(/\s+/g, '-')}`,
     };
   }
 
@@ -210,15 +226,15 @@ class WeeklySEOMonitor {
     const keywords = [
       'california lease agreement',
       'texas will template',
-      'florida bill of sale', 
+      'florida bill of sale',
       'new york employment contract',
       'illinois power of attorney',
       'legal documents online',
       'free legal forms',
-      'document templates'
+      'document templates',
     ];
 
-    const keywordData = keywords.map(keyword => ({
+    const keywordData = keywords.map((keyword) => ({
       keyword,
       position: Math.floor(Math.random() * 50) + 1,
       previousPosition: Math.floor(Math.random() * 60) + 1,
@@ -227,26 +243,26 @@ class WeeklySEOMonitor {
       cpc: (Math.random() * 8 + 1).toFixed(2),
       clicks: Math.floor(Math.random() * 800) + 50,
       impressions: Math.floor(Math.random() * 4000) + 500,
-      ctr: ((Math.random() * 8) + 1).toFixed(2),
-      url: `/${keyword.replace(/\s+/g, '-')}`
+      ctr: (Math.random() * 8 + 1).toFixed(2),
+      url: `/${keyword.replace(/\s+/g, '-')}`,
     }));
 
     return {
       timestamp: new Date().toISOString(),
       source: 'simulated',
       keywords: keywordData,
-      totalKeywords: keywordData.length
+      totalKeywords: keywordData.length,
     };
   }
 
   // Compare current week with previous week
   async compareWithPreviousWeek(currentData) {
     const lastWeekFile = this.getLastWeekReportPath();
-    
+
     if (!fs.existsSync(lastWeekFile)) {
       return {
         available: false,
-        message: 'No previous week data for comparison'
+        message: 'No previous week data for comparison',
       };
     }
 
@@ -256,13 +272,15 @@ class WeeklySEOMonitor {
       improvingKeywords: [],
       decliningKeywords: [],
       newKeywords: [],
-      lostKeywords: []
+      lostKeywords: [],
     };
 
     // Compare keywords
-    currentData.keywords.forEach(current => {
-      const previous = lastWeekData.keywordData?.keywords?.find(k => k.keyword === current.keyword);
-      
+    currentData.keywords.forEach((current) => {
+      const previous = lastWeekData.keywordData?.keywords?.find(
+        (k) => k.keyword === current.keyword,
+      );
+
       if (!previous) {
         comparison.newKeywords.push(current);
       } else if (current.position < previous.position) {
@@ -270,14 +288,14 @@ class WeeklySEOMonitor {
           keyword: current.keyword,
           improvement: previous.position - current.position,
           from: previous.position,
-          to: current.position
+          to: current.position,
         });
       } else if (current.position > previous.position) {
         comparison.decliningKeywords.push({
           keyword: current.keyword,
           decline: current.position - previous.position,
           from: previous.position,
-          to: current.position
+          to: current.position,
         });
       }
     });
@@ -291,14 +309,18 @@ class WeeklySEOMonitor {
     const priorityMap = new Map();
 
     // Calculate new priorities based on rankings and traffic
-    keywordData.keywords.forEach(keyword => {
+    keywordData.keywords.forEach((keyword) => {
       let priority = 0.5; // Default
-      
-      if (keyword.position <= 3) priority = 1.0;      // Top 3
-      else if (keyword.position <= 10) priority = 0.9; // Top 10
-      else if (keyword.position <= 20) priority = 0.7; // Top 20
-      else if (keyword.position <= 50) priority = 0.5; // Top 50
-      else priority = 0.3;                             // Below 50
+
+      if (keyword.position <= 3)
+        priority = 1.0; // Top 3
+      else if (keyword.position <= 10)
+        priority = 0.9; // Top 10
+      else if (keyword.position <= 20)
+        priority = 0.7; // Top 20
+      else if (keyword.position <= 50)
+        priority = 0.5; // Top 50
+      else priority = 0.3; // Below 50
 
       // Boost based on traffic
       if (keyword.clicks > 500) priority = Math.min(1.0, priority + 0.1);
@@ -310,18 +332,18 @@ class WeeklySEOMonitor {
         keyword: keyword.keyword,
         position: keyword.position,
         newPriority: priority,
-        reason: this.getPriorityReason(keyword)
+        reason: this.getPriorityReason(keyword),
       });
     });
 
     // Update sitemap.xml (in a real implementation)
     console.log(`🗺️  Updated ${updates.length} sitemap priorities`);
-    
+
     return {
       totalUpdates: updates.length,
-      highPriorityPages: updates.filter(u => u.newPriority >= 0.8).length,
+      highPriorityPages: updates.filter((u) => u.newPriority >= 0.8).length,
       updates: updates.slice(0, 10), // Top 10 for reporting
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     };
   }
 
@@ -344,25 +366,28 @@ class WeeklySEOMonitor {
         priority: 'HIGH',
         action: 'Fix duplicate content issues',
         autoApplicable: false,
-        estimatedImpact: 'Prevent Google penalties'
+        estimatedImpact: 'Prevent Google penalties',
       });
     }
 
     // Declining keywords
-    if (report.weeklyComparison.available && report.weeklyComparison.decliningKeywords.length > 0) {
+    if (
+      report.weeklyComparison.available &&
+      report.weeklyComparison.decliningKeywords.length > 0
+    ) {
       optimizations.push({
         type: 'KEYWORD_DECLINE',
         priority: 'HIGH',
         action: 'Optimize declining keyword pages',
         autoApplicable: true,
         keywords: report.weeklyComparison.decliningKeywords.slice(0, 5),
-        estimatedImpact: 'Recover lost rankings'
+        estimatedImpact: 'Recover lost rankings',
       });
     }
 
     // Low-performing high-volume keywords
-    const opportunities = report.keywordData.keywords.filter(k => 
-      k.searchVolume > 2000 && k.position > 20
+    const opportunities = report.keywordData.keywords.filter(
+      (k) => k.searchVolume > 2000 && k.position > 20,
     );
 
     if (opportunities.length > 0) {
@@ -372,7 +397,7 @@ class WeeklySEOMonitor {
         action: 'Target high-volume keywords',
         autoApplicable: true,
         keywords: opportunities.slice(0, 10),
-        estimatedImpact: 'Increase organic traffic'
+        estimatedImpact: 'Increase organic traffic',
       });
     }
 
@@ -382,7 +407,7 @@ class WeeklySEOMonitor {
   // Apply safe, automated optimizations
   async applySafeOptimizations(optimizations) {
     const applied = [];
-    
+
     for (const opt of optimizations) {
       if (!opt.autoApplicable) continue;
 
@@ -394,17 +419,19 @@ class WeeklySEOMonitor {
               type: opt.type,
               action: 'Updated meta descriptions and titles',
               affectedPages: keywordFixes.length,
-              status: 'SUCCESS'
+              status: 'SUCCESS',
             });
             break;
 
           case 'GROWTH_OPPORTUNITY':
-            const growthFixes = await this.autoOptimizeOpportunities(opt.keywords);
+            const growthFixes = await this.autoOptimizeOpportunities(
+              opt.keywords,
+            );
             applied.push({
               type: opt.type,
               action: 'Enhanced content for high-volume keywords',
               affectedPages: growthFixes.length,
-              status: 'SUCCESS'
+              status: 'SUCCESS',
             });
             break;
         }
@@ -413,7 +440,7 @@ class WeeklySEOMonitor {
           type: opt.type,
           action: 'Auto-optimization failed',
           error: error.message,
-          status: 'FAILED'
+          status: 'FAILED',
         });
       }
     }
@@ -425,12 +452,12 @@ class WeeklySEOMonitor {
   async autoFixKeywordIssues(keywords) {
     // In real implementation, would update meta tags, content, etc.
     console.log(`🔧 Auto-fixing ${keywords.length} declining keywords...`);
-    
-    const fixes = keywords.map(k => ({
+
+    const fixes = keywords.map((k) => ({
       keyword: k.keyword,
       url: k.url || `/${k.keyword.replace(/\s+/g, '-')}`,
       action: 'Updated meta description with target keyword',
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     }));
 
     return fixes;
@@ -439,12 +466,12 @@ class WeeklySEOMonitor {
   // Auto-optimize growth opportunities
   async autoOptimizeOpportunities(keywords) {
     console.log(`📈 Optimizing ${keywords.length} growth opportunities...`);
-    
-    const optimizations = keywords.map(k => ({
+
+    const optimizations = keywords.map((k) => ({
       keyword: k.keyword,
       url: k.url || `/${k.keyword.replace(/\s+/g, '-')}`,
       action: 'Enhanced content with semantic keywords',
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     }));
 
     return optimizations;
@@ -460,20 +487,22 @@ class WeeklySEOMonitor {
         type: 'CRITICAL_CONTENT_ISSUES',
         severity: 'CRITICAL',
         message: 'SEO health score below 70% - immediate action required',
-        action: 'Fix duplicate/thin content immediately'
+        action: 'Fix duplicate/thin content immediately',
       });
     }
 
     // Major ranking declines
     if (report.weeklyComparison.available) {
-      const majorDeclines = report.weeklyComparison.decliningKeywords.filter(k => k.decline > 10);
+      const majorDeclines = report.weeklyComparison.decliningKeywords.filter(
+        (k) => k.decline > 10,
+      );
       if (majorDeclines.length > 0) {
         alerts.push({
           type: 'MAJOR_RANKING_DECLINE',
           severity: 'HIGH',
           message: `${majorDeclines.length} keywords dropped >10 positions`,
-          keywords: majorDeclines.map(k => k.keyword),
-          action: 'Investigate and fix immediately'
+          keywords: majorDeclines.map((k) => k.keyword),
+          action: 'Investigate and fix immediately',
         });
       }
     }
@@ -484,7 +513,10 @@ class WeeklySEOMonitor {
   // Save weekly report
   saveWeeklyReport(report) {
     const timestamp = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
-    const reportPath = path.join(this.weeklyReportsDir, `weekly-seo-${timestamp}.json`);
+    const reportPath = path.join(
+      this.weeklyReportsDir,
+      `weekly-seo-${timestamp}.json`,
+    );
     fs.writeFileSync(reportPath, JSON.stringify(report, null, 2));
     console.log(`📋 Weekly report saved: ${reportPath}`);
   }
@@ -494,7 +526,7 @@ class WeeklySEOMonitor {
     const lastRun = {
       timestamp: new Date().toISOString(),
       week: this.getWeekNumber(new Date()),
-      year: new Date().getFullYear()
+      year: new Date().getFullYear(),
     };
     fs.writeFileSync(this.lastRunPath, JSON.stringify(lastRun, null, 2));
   }
@@ -514,21 +546,33 @@ class WeeklySEOMonitor {
     console.log('═'.repeat(60));
     console.log(`📅 Week ${report.weekNumber}, ${report.year}`);
     console.log(`📈 Keywords Tracked: ${report.keywordData.totalKeywords}`);
-    console.log(`💯 Content Health: ${report.contentAnalysis.uniqueness.summary.overallHealthScore}/100`);
-    
+    console.log(
+      `💯 Content Health: ${report.contentAnalysis.uniqueness.summary.overallHealthScore}/100`,
+    );
+
     if (report.weeklyComparison.available) {
-      console.log(`📈 Improving: ${report.weeklyComparison.improvingKeywords.length} keywords`);
-      console.log(`📉 Declining: ${report.weeklyComparison.decliningKeywords.length} keywords`);
-      console.log(`🆕 New: ${report.weeklyComparison.newKeywords.length} keywords`);
+      console.log(
+        `📈 Improving: ${report.weeklyComparison.improvingKeywords.length} keywords`,
+      );
+      console.log(
+        `📉 Declining: ${report.weeklyComparison.decliningKeywords.length} keywords`,
+      );
+      console.log(
+        `🆕 New: ${report.weeklyComparison.newKeywords.length} keywords`,
+      );
     }
-    
-    console.log(`🗺️  Sitemap Updates: ${report.sitemapUpdates.totalUpdates} pages`);
-    console.log(`🔧 Auto-Optimizations: ${report.autoOptimizations.length} applied`);
+
+    console.log(
+      `🗺️  Sitemap Updates: ${report.sitemapUpdates.totalUpdates} pages`,
+    );
+    console.log(
+      `🔧 Auto-Optimizations: ${report.autoOptimizations.length} applied`,
+    );
     console.log(`🚨 Critical Alerts: ${report.alerts.length} issues`);
-    
+
     if (report.alerts.length > 0) {
       console.log('\n🚨 CRITICAL ISSUES REQUIRING ATTENTION:');
-      report.alerts.forEach(alert => {
+      report.alerts.forEach((alert) => {
         console.log(`   ${alert.severity}: ${alert.message}`);
       });
     }
@@ -536,19 +580,20 @@ class WeeklySEOMonitor {
 
   // Utility function for delays
   sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
+    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 }
 
 // CLI execution
 if (require.main === module) {
   const weeklyMonitor = new WeeklySEOMonitor();
-  weeklyMonitor.runWeeklyMonitoring()
+  weeklyMonitor
+    .runWeeklyMonitoring()
     .then(() => {
       console.log('\n🎯 Weekly SEO monitoring complete!');
       process.exit(0);
     })
-    .catch(error => {
+    .catch((error) => {
       console.error('❌ Weekly monitoring failed:', error);
       process.exit(1);
     });

@@ -26,13 +26,23 @@ export const achAuthorizationFormMeta: LegalDocument = {
       name: 'ACH Authorization Form',
       description:
         'Authorize automatic bank transfers (ACH) for recurring or one-time payments.',
-      aliases: ['bank authorization', 'automatic payment form', 'direct debit authorization', 'electronic payment form'],
+      aliases: [
+        'bank authorization',
+        'automatic payment form',
+        'direct debit authorization',
+        'electronic payment form',
+      ],
     },
     es: {
       name: 'Formulario de Autorización ACH',
       description:
         'Autorizar transferencias bancarias automáticas (ACH) para pagos recurrentes o únicos.',
-      aliases: ['autorización bancaria', 'formulario de pago automático', 'autorización de débito directo', 'formulario de pago electrónico'],
+      aliases: [
+        'autorización bancaria',
+        'formulario de pago automático',
+        'autorización de débito directo',
+        'formulario de pago electrónico',
+      ],
     },
   },
 };

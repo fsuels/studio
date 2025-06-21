@@ -24,12 +24,18 @@ export const solarEnergyAgreementMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Solar Energy Agreement',
-      description: 'Agreement for solar panel installation and energy services.',
-      aliases: ['solar installation contract', 'solar power agreement', 'photovoltaic contract'],
+      description:
+        'Agreement for solar panel installation and energy services.',
+      aliases: [
+        'solar installation contract',
+        'solar power agreement',
+        'photovoltaic contract',
+      ],
     },
     es: {
       name: 'Acuerdo de Energía Solar',
-      description: 'Acuerdo para instalación de paneles solares y servicios energéticos.',
+      description:
+        'Acuerdo para instalación de paneles solares y servicios energéticos.',
       aliases: ['contrato de instalación solar', 'acuerdo fotovoltaico'],
     },
   },

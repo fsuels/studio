@@ -18,10 +18,10 @@ class TranslationValidator {
     this.consecutiveFailures = 0;
     this.maxConsecutiveFailures = 3;
     this.checkpointPath = path.join(__dirname, '../checkpoint.json');
-    
+
     // Legal terminology database (simplified version)
     this.legalTermsDatabase = this.loadLegalTermsDatabase();
-    
+
     // Business intelligence weighting factors
     this.businessWeights = this.loadBusinessWeights();
   }
@@ -39,15 +39,15 @@ class TranslationValidator {
         'lease-agreement': 8,
         'commercial-lease-agreement': 8,
         'employment-contract': 7,
-        'nda': 7,
+        nda: 7,
         'partnership-agreement': 7,
         'promissory-note': 6,
         'bill-of-sale-vehicle': 6,
-        'invoice': 3,
+        invoice: 3,
         'demand-letter': 4,
-        default: 5
+        default: 5,
       },
-      
+
       // Risk multipliers (regulatory/legal consequences)
       risk: {
         'last-will-testament': 3.0,
@@ -57,13 +57,13 @@ class TranslationValidator {
         'commercial-lease-agreement': 2.2,
         'employment-contract': 2.0,
         'lease-agreement': 1.8,
-        'nda': 1.5,
+        nda: 1.5,
         'promissory-note': 1.5,
         'bill-of-sale-vehicle': 1.2,
-        'invoice': 1.0,
-        default: 1.5
+        invoice: 1.0,
+        default: 1.5,
       },
-      
+
       // Cost factors (translation fix cost in hours)
       cost: {
         'last-will-testament': 8,
@@ -73,12 +73,12 @@ class TranslationValidator {
         'commercial-lease-agreement': 8,
         'employment-contract': 6,
         'lease-agreement': 4,
-        'nda': 3,
+        nda: 3,
         'promissory-note': 3,
         'bill-of-sale-vehicle': 2,
-        'invoice': 1,
-        default: 4
-      }
+        invoice: 1,
+        default: 4,
+      },
     };
   }
 
@@ -90,19 +90,19 @@ class TranslationValidator {
         official: ['contrato', 'convenio', 'acuerdo'],
         regions: {
           MX: 'contrato',
-          ES: 'contrato', 
+          ES: 'contrato',
           AR: 'contrato',
-          CO: 'contrato'
-        }
+          CO: 'contrato',
+        },
       },
       agreement: {
         official: ['acuerdo', 'convenio', 'contrato'],
         regions: {
           MX: 'acuerdo',
           ES: 'acuerdo',
-          AR: 'acuerdo', 
-          CO: 'acuerdo'
-        }
+          AR: 'acuerdo',
+          CO: 'acuerdo',
+        },
       },
       party: {
         official: ['parte', 'partida'],
@@ -110,8 +110,8 @@ class TranslationValidator {
           MX: 'parte',
           ES: 'parte',
           AR: 'parte',
-          CO: 'parte'
-        }
+          CO: 'parte',
+        },
       },
       signature: {
         official: ['firma', 'signatura'],
@@ -119,8 +119,8 @@ class TranslationValidator {
           MX: 'firma',
           ES: 'firma',
           AR: 'firma',
-          CO: 'firma'
-        }
+          CO: 'firma',
+        },
       },
       notarization: {
         official: ['notarización', 'notariado'],
@@ -128,8 +128,8 @@ class TranslationValidator {
           MX: 'notarización',
           ES: 'notarización',
           AR: 'notarización',
-          CO: 'notarización'
-        }
+          CO: 'notarización',
+        },
       },
       lease: {
         official: ['arrendamiento', 'alquiler'],
@@ -137,8 +137,8 @@ class TranslationValidator {
           MX: 'arrendamiento',
           ES: 'alquiler',
           AR: 'alquiler',
-          CO: 'arrendamiento'
-        }
+          CO: 'arrendamiento',
+        },
       },
       tenant: {
         official: ['inquilino', 'arrendatario'],
@@ -146,8 +146,8 @@ class TranslationValidator {
           MX: 'inquilino',
           ES: 'inquilino',
           AR: 'inquilino',
-          CO: 'arrendatario'
-        }
+          CO: 'arrendatario',
+        },
       },
       landlord: {
         official: ['propietario', 'arrendador'],
@@ -155,8 +155,8 @@ class TranslationValidator {
           MX: 'propietario',
           ES: 'propietario',
           AR: 'propietario',
-          CO: 'arrendador'
-        }
+          CO: 'arrendador',
+        },
       },
       'power-of-attorney': {
         official: ['poder notarial', 'poder general', 'poder especial'],
@@ -164,8 +164,8 @@ class TranslationValidator {
           MX: 'poder notarial',
           ES: 'poder notarial',
           AR: 'poder general',
-          CO: 'poder notarial'
-        }
+          CO: 'poder notarial',
+        },
       },
       'bill-of-sale': {
         official: ['contrato de compraventa', 'factura de venta'],
@@ -173,36 +173,39 @@ class TranslationValidator {
           MX: 'contrato de compraventa',
           ES: 'contrato de compraventa',
           AR: 'contrato de compraventa',
-          CO: 'contrato de compraventa'
-        }
-      }
+          CO: 'contrato de compraventa',
+        },
+      },
     };
   }
 
   // Calculate similarity between two strings (Levenshtein distance based)
   calculateSimilarity(str1, str2) {
     if (!str1 || !str2) return 0;
-    
+
     const longer = str1.length > str2.length ? str1 : str2;
     const shorter = str1.length > str2.length ? str2 : str1;
-    
+
     if (longer.length === 0) return 100;
-    
-    const distance = this.levenshteinDistance(longer.toLowerCase(), shorter.toLowerCase());
-    return Math.round((longer.length - distance) / longer.length * 100);
+
+    const distance = this.levenshteinDistance(
+      longer.toLowerCase(),
+      shorter.toLowerCase(),
+    );
+    return Math.round(((longer.length - distance) / longer.length) * 100);
   }
 
   levenshteinDistance(str1, str2) {
     const matrix = [];
-    
+
     for (let i = 0; i <= str2.length; i++) {
       matrix[i] = [i];
     }
-    
+
     for (let j = 0; j <= str1.length; j++) {
       matrix[0][j] = j;
     }
-    
+
     for (let i = 1; i <= str2.length; i++) {
       for (let j = 1; j <= str1.length; j++) {
         if (str2.charAt(i - 1) === str1.charAt(j - 1)) {
@@ -211,31 +214,39 @@ class TranslationValidator {
           matrix[i][j] = Math.min(
             matrix[i - 1][j - 1] + 1,
             matrix[i][j - 1] + 1,
-            matrix[i - 1][j] + 1
+            matrix[i - 1][j] + 1,
           );
         }
       }
     }
-    
+
     return matrix[str2.length][str1.length];
   }
 
   // Validate a Spanish translation against English original
-  validateTranslation(englishText, spanishText, documentType, region = 'general') {
+  validateTranslation(
+    englishText,
+    spanishText,
+    documentType,
+    region = 'general',
+  ) {
     const validationResult = {
       confidence: 0,
       issues: [],
       recommendations: [],
-      shouldFallback: false
+      shouldFallback: false,
     };
 
     // 1. Length similarity check (translations should be similar length)
-    const lengthRatio = Math.min(englishText.length, spanishText.length) / 
-                       Math.max(englishText.length, spanishText.length);
+    const lengthRatio =
+      Math.min(englishText.length, spanishText.length) /
+      Math.max(englishText.length, spanishText.length);
     const lengthScore = lengthRatio * 100;
 
     if (lengthScore < 50) {
-      validationResult.issues.push('Significant length difference between translations');
+      validationResult.issues.push(
+        'Significant length difference between translations',
+      );
     }
 
     // 2. Legal terminology validation
@@ -244,19 +255,27 @@ class TranslationValidator {
     const spanishWords = spanishText.toLowerCase().split(/\s+/);
 
     // Check for key legal terms
-    Object.keys(this.legalTermsDatabase).forEach(englishTerm => {
-      if (englishWords.some(word => word.includes(englishTerm.replace('-', ' ')))) {
+    Object.keys(this.legalTermsDatabase).forEach((englishTerm) => {
+      if (
+        englishWords.some((word) =>
+          word.includes(englishTerm.replace('-', ' ')),
+        )
+      ) {
         const termData = this.legalTermsDatabase[englishTerm];
         const expectedSpanishTerms = termData.official;
-        
-        const hasValidTranslation = expectedSpanishTerms.some(spanishTerm =>
-          spanishWords.some(word => word.includes(spanishTerm))
+
+        const hasValidTranslation = expectedSpanishTerms.some((spanishTerm) =>
+          spanishWords.some((word) => word.includes(spanishTerm)),
         );
 
         if (!hasValidTranslation) {
           terminologyScore -= 20;
-          validationResult.issues.push(`Missing translation for legal term: ${englishTerm}`);
-          validationResult.recommendations.push(`Consider using: ${expectedSpanishTerms.join(' or ')}`);
+          validationResult.issues.push(
+            `Missing translation for legal term: ${englishTerm}`,
+          );
+          validationResult.recommendations.push(
+            `Consider using: ${expectedSpanishTerms.join(' or ')}`,
+          );
         }
       }
     });
@@ -264,7 +283,8 @@ class TranslationValidator {
     // 3. Structure consistency check
     const englishSentences = englishText.split(/[.!?]+/).length;
     const spanishSentences = spanishText.split(/[.!?]+/).length;
-    const structureScore = Math.abs(englishSentences - spanishSentences) <= 2 ? 100 : 70;
+    const structureScore =
+      Math.abs(englishSentences - spanishSentences) <= 2 ? 100 : 70;
 
     // 4. Special character and formatting check
     const englishBrackets = (englishText.match(/\{\{.*?\}\}/g) || []).length;
@@ -272,22 +292,31 @@ class TranslationValidator {
     const formattingScore = englishBrackets === spanishBrackets ? 100 : 50;
 
     if (englishBrackets !== spanishBrackets) {
-      validationResult.issues.push('Template variable mismatch between languages');
+      validationResult.issues.push(
+        'Template variable mismatch between languages',
+      );
     }
 
     // Calculate base confidence
     const baseConfidence = Math.round(
-      (lengthScore * 0.2 + terminologyScore * 0.5 + structureScore * 0.2 + formattingScore * 0.1)
+      lengthScore * 0.2 +
+        terminologyScore * 0.5 +
+        structureScore * 0.2 +
+        formattingScore * 0.1,
     );
 
     // Apply business intelligence weighting: impact × risk ÷ cost
-    const businessScore = this.calculateBusinessIntelligenceScore(documentType, baseConfidence);
-    
+    const businessScore = this.calculateBusinessIntelligenceScore(
+      documentType,
+      baseConfidence,
+    );
+
     validationResult.confidence = businessScore.weightedConfidence;
     validationResult.businessMetrics = businessScore.metrics;
 
     // Determine if fallback is needed (enhanced threshold at 70%)
-    validationResult.shouldFallback = validationResult.confidence < this.confidenceThreshold;
+    validationResult.shouldFallback =
+      validationResult.confidence < this.confidenceThreshold;
 
     return validationResult;
   }
@@ -295,24 +324,35 @@ class TranslationValidator {
   // Calculate business intelligence weighted confidence score
   calculateBusinessIntelligenceScore(documentType, baseConfidence) {
     // Get document-specific weights or defaults
-    const impact = this.businessWeights.impact[documentType] || this.businessWeights.impact.default;
-    const risk = this.businessWeights.risk[documentType] || this.businessWeights.risk.default;
-    const cost = this.businessWeights.cost[documentType] || this.businessWeights.cost.default;
-    
+    const impact =
+      this.businessWeights.impact[documentType] ||
+      this.businessWeights.impact.default;
+    const risk =
+      this.businessWeights.risk[documentType] ||
+      this.businessWeights.risk.default;
+    const cost =
+      this.businessWeights.cost[documentType] ||
+      this.businessWeights.cost.default;
+
     // Business Intelligence Formula: (impact × risk ÷ cost) as confidence multiplier
     const businessMultiplier = (impact * risk) / cost;
-    
+
     // Apply multiplier to base confidence (with ceiling at 100)
-    const weightedConfidence = Math.min(100, Math.round(baseConfidence * (1 + businessMultiplier * 0.1)));
-    
+    const weightedConfidence = Math.min(
+      100,
+      Math.round(baseConfidence * (1 + businessMultiplier * 0.1)),
+    );
+
     // For high-risk documents, apply stricter scoring
     let finalConfidence = weightedConfidence;
-    if (risk >= 2.5) { // High-risk documents
+    if (risk >= 2.5) {
+      // High-risk documents
       finalConfidence = Math.round(weightedConfidence * 0.85); // 15% stricter
-    } else if (risk >= 2.0) { // Medium-high risk
+    } else if (risk >= 2.0) {
+      // Medium-high risk
       finalConfidence = Math.round(weightedConfidence * 0.92); // 8% stricter
     }
-    
+
     const metrics = {
       documentType,
       baseConfidence,
@@ -322,12 +362,19 @@ class TranslationValidator {
       businessMultiplier: Math.round(businessMultiplier * 100) / 100,
       weightedConfidence,
       finalConfidence,
-      riskCategory: risk >= 2.5 ? 'HIGH' : risk >= 2.0 ? 'MEDIUM-HIGH' : risk >= 1.5 ? 'MEDIUM' : 'LOW'
+      riskCategory:
+        risk >= 2.5
+          ? 'HIGH'
+          : risk >= 2.0
+            ? 'MEDIUM-HIGH'
+            : risk >= 1.5
+              ? 'MEDIUM'
+              : 'LOW',
     };
-    
+
     return {
       weightedConfidence: finalConfidence,
-      metrics
+      metrics,
     };
   }
 
@@ -335,8 +382,10 @@ class TranslationValidator {
   updateConsecutiveFailures(documentType, confidence) {
     if (confidence < this.confidenceThreshold) {
       this.consecutiveFailures++;
-      console.log(`⚠️  Consecutive failure ${this.consecutiveFailures}/${this.maxConsecutiveFailures} for ${documentType}`);
-      
+      console.log(
+        `⚠️  Consecutive failure ${this.consecutiveFailures}/${this.maxConsecutiveFailures} for ${documentType}`,
+      );
+
       if (this.consecutiveFailures >= this.maxConsecutiveFailures) {
         this.pauseSystem();
         this.sendSlAlert(documentType, confidence);
@@ -351,13 +400,18 @@ class TranslationValidator {
   // Pause system by updating checkpoint.json
   pauseSystem() {
     try {
-      const checkpoint = JSON.parse(fs.readFileSync(this.checkpointPath, 'utf8'));
+      const checkpoint = JSON.parse(
+        fs.readFileSync(this.checkpointPath, 'utf8'),
+      );
       checkpoint.paused = true;
       checkpoint.pausedAt = new Date().toISOString();
       checkpoint.pauseReason = `Translation confidence below ${this.confidenceThreshold}% for ${this.maxConsecutiveFailures} consecutive documents`;
       checkpoint.consecutiveFailures = this.consecutiveFailures;
-      
-      fs.writeFileSync(this.checkpointPath, JSON.stringify(checkpoint, null, 2));
+
+      fs.writeFileSync(
+        this.checkpointPath,
+        JSON.stringify(checkpoint, null, 2),
+      );
       console.log('🚫 SYSTEM PAUSED - Updated checkpoint.json');
     } catch (error) {
       console.error('❌ Failed to update checkpoint.json:', error.message);
@@ -374,29 +428,31 @@ class TranslationValidator {
       consecutiveFailures: this.consecutiveFailures,
       threshold: this.confidenceThreshold,
       actionTaken: 'SYSTEM_PAUSED',
-      requiresImmediate: true
+      requiresImmediate: true,
     };
-    
+
     // Log alert details
     console.log('🚨 ALERT SENT TO SL:');
     console.log(JSON.stringify(alertData, null, 2));
-    
+
     // Save alert to file (email integration would go here)
     const alertsDir = path.join(__dirname, '../alerts');
     if (!fs.existsSync(alertsDir)) {
       fs.mkdirSync(alertsDir, { recursive: true });
     }
-    
+
     const alertFile = path.join(alertsDir, `sl-alert-${Date.now()}.json`);
     fs.writeFileSync(alertFile, JSON.stringify(alertData, null, 2));
-    
+
     console.log(`📧 Alert saved to: ${alertFile}`);
   }
 
   // Validate all templates
   validateAllTemplates() {
     console.log('🌐 Translation Validation Chain\n');
-    console.log('Validating Spanish translations against English originals...\n');
+    console.log(
+      'Validating Spanish translations against English originals...\n',
+    );
 
     const enTemplatesDir = path.join(this.templatesDir, 'en');
     const esTemplatesDir = path.join(this.templatesDir, 'es');
@@ -406,7 +462,9 @@ class TranslationValidator {
       return;
     }
 
-    const enTemplates = fs.readdirSync(enTemplatesDir).filter(f => f.endsWith('.md'));
+    const enTemplates = fs
+      .readdirSync(enTemplatesDir)
+      .filter((f) => f.endsWith('.md'));
     let totalValidated = 0;
     let totalFallbacks = 0;
     let totalIssues = 0;
@@ -417,20 +475,33 @@ class TranslationValidator {
       const esPath = path.join(esTemplatesDir, templateFile);
 
       if (!fs.existsSync(esPath)) {
-        this.logError(docId, 'missing_spanish_template', 'Spanish template not found');
+        this.logError(
+          docId,
+          'missing_spanish_template',
+          'Spanish template not found',
+        );
         continue;
       }
 
       const englishContent = fs.readFileSync(enPath, 'utf8');
       const spanishContent = fs.readFileSync(esPath, 'utf8');
 
-      const validation = this.validateTranslation(englishContent, spanishContent, docId);
+      const validation = this.validateTranslation(
+        englishContent,
+        spanishContent,
+        docId,
+      );
       this.validationResults[docId] = validation;
 
       // Check for consecutive failures and pause system if needed
-      const systemPaused = this.updateConsecutiveFailures(docId, validation.confidence);
+      const systemPaused = this.updateConsecutiveFailures(
+        docId,
+        validation.confidence,
+      );
       if (systemPaused) {
-        console.log('🚫 System paused due to consecutive failures. Stopping validation.');
+        console.log(
+          '🚫 System paused due to consecutive failures. Stopping validation.',
+        );
         break;
       }
 
@@ -439,27 +510,36 @@ class TranslationValidator {
       if (validation.issues.length > 0) totalIssues++;
 
       console.log(`📄 ${docId}:`);
-      console.log(`   🎯 Base Confidence: ${validation.businessMetrics?.baseConfidence || 'N/A'}%`);
+      console.log(
+        `   🎯 Base Confidence: ${validation.businessMetrics?.baseConfidence || 'N/A'}%`,
+      );
       console.log(`   📊 Business Weighted: ${validation.confidence}%`);
-      console.log(`   💼 Risk Category: ${validation.businessMetrics?.riskCategory || 'N/A'}`);
-      console.log(`   📈 Impact×Risk÷Cost: ${validation.businessMetrics?.businessMultiplier || 'N/A'}`);
-      
+      console.log(
+        `   💼 Risk Category: ${validation.businessMetrics?.riskCategory || 'N/A'}`,
+      );
+      console.log(
+        `   📈 Impact×Risk÷Cost: ${validation.businessMetrics?.businessMultiplier || 'N/A'}`,
+      );
+
       if (validation.shouldFallback) {
         console.log(`   ⚠️  FALLBACK RECOMMENDED - Low confidence translation`);
-        this.logError(docId, 'low_confidence_translation', 
-          `Confidence ${validation.confidence}% below threshold ${this.confidenceThreshold}%`);
+        this.logError(
+          docId,
+          'low_confidence_translation',
+          `Confidence ${validation.confidence}% below threshold ${this.confidenceThreshold}%`,
+        );
       }
 
       if (validation.issues.length > 0) {
         console.log(`   ⚠️  Issues found:`);
-        validation.issues.forEach(issue => {
+        validation.issues.forEach((issue) => {
           console.log(`      • ${issue}`);
         });
       }
 
       if (validation.recommendations.length > 0) {
         console.log(`   💡 Recommendations:`);
-        validation.recommendations.forEach(rec => {
+        validation.recommendations.forEach((rec) => {
           console.log(`      • ${rec}`);
         });
       }
@@ -473,7 +553,9 @@ class TranslationValidator {
     console.log(`   📄 Templates Validated: ${totalValidated}`);
     console.log(`   ⚠️  Recommended Fallbacks: ${totalFallbacks}`);
     console.log(`   🚨 Templates with Issues: ${totalIssues}`);
-    console.log(`   📈 Overall Quality Rate: ${Math.round((totalValidated - totalFallbacks) / totalValidated * 100)}%`);
+    console.log(
+      `   📈 Overall Quality Rate: ${Math.round(((totalValidated - totalFallbacks) / totalValidated) * 100)}%`,
+    );
 
     // Save validation report
     const report = {
@@ -482,13 +564,15 @@ class TranslationValidator {
         totalValidated,
         totalFallbacks,
         totalIssues,
-        qualityRate: Math.round((totalValidated - totalFallbacks) / totalValidated * 100)
+        qualityRate: Math.round(
+          ((totalValidated - totalFallbacks) / totalValidated) * 100,
+        ),
       },
       results: this.validationResults,
       errors: this.errorLog,
       thresholds: {
-        confidenceThreshold: this.confidenceThreshold
-      }
+        confidenceThreshold: this.confidenceThreshold,
+      },
     };
 
     const reportsDir = path.join(__dirname, '../translation-reports');
@@ -496,7 +580,10 @@ class TranslationValidator {
       fs.mkdirSync(reportsDir, { recursive: true });
     }
 
-    const reportPath = path.join(reportsDir, `translation-report-${Date.now()}.json`);
+    const reportPath = path.join(
+      reportsDir,
+      `translation-report-${Date.now()}.json`,
+    );
     fs.writeFileSync(reportPath, JSON.stringify(report, null, 2));
 
     // Save error log
@@ -516,7 +603,8 @@ class TranslationValidator {
       documentId,
       errorType,
       message,
-      severity: errorType === 'low_confidence_translation' ? 'warning' : 'error'
+      severity:
+        errorType === 'low_confidence_translation' ? 'warning' : 'error',
     });
   }
 

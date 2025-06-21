@@ -7,7 +7,7 @@ export const liabilityWaiverQuestions: DocumentQuestion[] = [
     text: 'What is the name of your organization?',
     type: 'text',
     required: true,
-    placeholder: 'ABC Fitness Center, LLC'
+    placeholder: 'ABC Fitness Center, LLC',
   },
   {
     id: 'organization.type',
@@ -18,49 +18,49 @@ export const liabilityWaiverQuestions: DocumentQuestion[] = [
       { value: 'business', label: 'Business' },
       { value: 'nonprofit', label: 'Non-profit organization' },
       { value: 'government', label: 'Government entity' },
-      { value: 'individual', label: 'Individual/Sole proprietor' }
-    ]
+      { value: 'individual', label: 'Individual/Sole proprietor' },
+    ],
   },
   {
     id: 'organization.address',
     text: 'Organization street address',
     type: 'text',
     required: true,
-    placeholder: '123 Main Street'
+    placeholder: '123 Main Street',
   },
   {
     id: 'organization.city',
     text: 'City',
     type: 'text',
-    required: true
+    required: true,
   },
   {
     id: 'organization.state',
     text: 'State',
     type: 'select',
     required: true,
-    placeholder: 'Select state'
+    placeholder: 'Select state',
   },
   {
     id: 'organization.zipCode',
     text: 'ZIP Code',
     type: 'text',
     required: true,
-    placeholder: '12345'
+    placeholder: '12345',
   },
   {
     id: 'organization.phone',
     text: 'Phone number',
     type: 'tel',
     required: true,
-    placeholder: '(555) 123-4567'
+    placeholder: '(555) 123-4567',
   },
   {
     id: 'organization.email',
     text: 'Contact email',
     type: 'email',
     required: true,
-    placeholder: 'contact@example.com'
+    placeholder: 'contact@example.com',
   },
 
   // Activity Information
@@ -69,7 +69,7 @@ export const liabilityWaiverQuestions: DocumentQuestion[] = [
     text: 'What is the name of the activity or program?',
     type: 'text',
     required: true,
-    placeholder: 'Rock Climbing Experience'
+    placeholder: 'Rock Climbing Experience',
   },
   {
     id: 'activity.type',
@@ -83,23 +83,24 @@ export const liabilityWaiverQuestions: DocumentQuestion[] = [
       { value: 'educational', label: 'Educational/Workshop' },
       { value: 'entertainment', label: 'Entertainment/Recreation' },
       { value: 'medical', label: 'Medical/Wellness' },
-      { value: 'other', label: 'Other' }
-    ]
+      { value: 'other', label: 'Other' },
+    ],
   },
   {
     id: 'activity.description',
     text: 'Describe the activity in detail',
     type: 'textarea',
     required: true,
-    placeholder: 'Provide a comprehensive description of the activity, including what participants will be doing...',
-    minLength: 50
+    placeholder:
+      'Provide a comprehensive description of the activity, including what participants will be doing...',
+    minLength: 50,
   },
   {
     id: 'activity.location',
     text: 'Where does the activity take place?',
     type: 'text',
     required: true,
-    placeholder: 'Facility name and/or address'
+    placeholder: 'Facility name and/or address',
   },
   {
     id: 'activity.frequency',
@@ -109,8 +110,8 @@ export const liabilityWaiverQuestions: DocumentQuestion[] = [
     options: [
       { value: 'oneTime', label: 'One-time event' },
       { value: 'recurring', label: 'Recurring activity' },
-      { value: 'membership', label: 'Ongoing membership' }
-    ]
+      { value: 'membership', label: 'Ongoing membership' },
+    ],
   },
 
   // Participant Information
@@ -119,14 +120,14 @@ export const liabilityWaiverQuestions: DocumentQuestion[] = [
     text: 'Require emergency contact information?',
     type: 'boolean',
     required: true,
-    helpText: 'Highly recommended for activities with physical risks'
+    helpText: 'Highly recommended for activities with physical risks',
   },
   {
     id: 'participantInfo.requireMedicalInfo',
     text: 'Require medical information disclosure?',
     type: 'boolean',
     required: true,
-    helpText: 'Important for physical activities'
+    helpText: 'Important for physical activities',
   },
 
   // Risks
@@ -136,14 +137,14 @@ export const liabilityWaiverQuestions: DocumentQuestion[] = [
     type: 'array',
     required: true,
     placeholder: 'E.g., Physical injury, muscle strain, falls',
-    helpText: 'Add each risk separately'
+    helpText: 'Add each risk separately',
   },
   {
     id: 'risks.specificHazards',
     text: 'List any specific hazards (optional)',
     type: 'array',
     required: false,
-    placeholder: 'E.g., Heights, water hazards, equipment malfunction'
+    placeholder: 'E.g., Heights, water hazards, equipment malfunction',
   },
 
   // Medical Considerations
@@ -151,25 +152,25 @@ export const liabilityWaiverQuestions: DocumentQuestion[] = [
     id: 'medical.requireMedicalDisclosure',
     text: 'Require participants to disclose medical conditions?',
     type: 'boolean',
-    required: true
+    required: true,
   },
   {
     id: 'medical.requirePhysicianClearance',
     text: 'Require physician clearance for participation?',
     type: 'boolean',
-    required: true
+    required: true,
   },
   {
     id: 'medical.firstAidAvailable',
     text: 'Is first aid available on site?',
     type: 'boolean',
-    required: true
+    required: true,
   },
   {
     id: 'medical.medicalPersonnelOnSite',
     text: 'Are medical personnel present during activities?',
     type: 'boolean',
-    required: true
+    required: true,
   },
 
   // Waiver Clauses
@@ -178,14 +179,14 @@ export const liabilityWaiverQuestions: DocumentQuestion[] = [
     text: 'Include photo/video release?',
     type: 'boolean',
     required: true,
-    helpText: 'Allows use of participant images for marketing'
+    helpText: 'Allows use of participant images for marketing',
   },
   {
     id: 'waiverClauses.equipmentResponsibility',
     text: 'Include equipment damage responsibility clause?',
     type: 'boolean',
     required: true,
-    helpText: 'Makes participants responsible for damaged equipment'
+    helpText: 'Makes participants responsible for damaged equipment',
   },
 
   // Minor Provisions
@@ -193,7 +194,7 @@ export const liabilityWaiverQuestions: DocumentQuestion[] = [
     id: 'minorProvisions.allowMinors',
     text: 'Do you allow minors to participate?',
     type: 'boolean',
-    required: true
+    required: true,
   },
   {
     id: 'minorProvisions.minimumAge',
@@ -201,7 +202,7 @@ export const liabilityWaiverQuestions: DocumentQuestion[] = [
     type: 'number',
     required: false,
     placeholder: '13',
-    conditionalOn: { field: 'minorProvisions.allowMinors', value: true }
+    conditionalOn: { field: 'minorProvisions.allowMinors', value: true },
   },
 
   // Insurance
@@ -209,29 +210,29 @@ export const liabilityWaiverQuestions: DocumentQuestion[] = [
     id: 'insurance.participantInsuranceRequired',
     text: 'Do participants need their own insurance?',
     type: 'boolean',
-    required: true
+    required: true,
   },
   {
     id: 'insurance.organizationInsured',
     text: 'Does your organization have liability insurance?',
     type: 'boolean',
-    required: true
+    required: true,
   },
 
   // Legal Provisions
   {
     id: 'legalProvisions.governingState',
-    text: 'Which state\'s laws will govern this waiver?',
+    text: "Which state's laws will govern this waiver?",
     type: 'select',
     required: true,
-    placeholder: 'Select state'
+    placeholder: 'Select state',
   },
   {
     id: 'legalProvisions.venueJurisdiction',
     text: 'County for legal venue/jurisdiction',
     type: 'text',
     required: true,
-    placeholder: 'County name'
+    placeholder: 'County name',
   },
 
   // Signature Requirements
@@ -239,12 +240,12 @@ export const liabilityWaiverQuestions: DocumentQuestion[] = [
     id: 'signatureRequirements.witnessRequired',
     text: 'Require witness signature?',
     type: 'boolean',
-    required: true
+    required: true,
   },
   {
     id: 'signatureRequirements.notarizationRequired',
     text: 'Require notarization?',
     type: 'boolean',
-    required: true
-  }
+    required: true,
+  },
 ];

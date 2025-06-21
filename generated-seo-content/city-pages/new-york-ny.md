@@ -30,7 +30,7 @@ New York offers a dynamic business environment with opportunities across industr
 
 [Start Your New York Legal Document]
 
-*Trusted by hundreds of New York businesses*
+_Trusted by hundreds of New York businesses_
 
 ---
 

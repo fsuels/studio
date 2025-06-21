@@ -47,7 +47,7 @@ Don't risk using generic templates that may not comply with California law. Get 
 
 [Create California Non-Disclosure Agreement]
 
-*Trusted by thousands of California businesses*
+_Trusted by thousands of California businesses_
 
 ---
 

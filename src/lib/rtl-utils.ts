@@ -28,10 +28,10 @@ const RTL_LANGUAGES = new Set([
  */
 export function isRTL(locale: string): boolean {
   if (!locale) return false;
-  
+
   // Handle full locale codes (e.g., 'ar-SA', 'he-IL')
   const langCode = locale.toLowerCase().split('-')[0];
-  
+
   return RTL_LANGUAGES.has(langCode) || RTL_LANGUAGES.has(locale.toLowerCase());
 }
 
@@ -63,7 +63,7 @@ export function getDirectionalClasses(locale: string): {
   borderEnd: string;
 } {
   const isRtl = isRTL(locale);
-  
+
   return {
     dir: isRtl ? 'rtl' : 'ltr',
     textAlign: isRtl ? 'text-end' : 'text-start',
@@ -82,7 +82,7 @@ export function getDirectionalClasses(locale: string): {
 export function applyDirectionalClass(
   locale: string,
   ltrClass: string,
-  rtlClass: string
+  rtlClass: string,
 ): string {
   return isRTL(locale) ? rtlClass : ltrClass;
 }
@@ -93,14 +93,14 @@ export function applyDirectionalClass(
 export function useDirectional(locale: string) {
   const direction = getTextDirection(locale);
   const isRtl = direction === 'rtl';
-  
+
   return {
     direction,
     isRtl,
     isLtr: !isRtl,
     dirAttribute: getDirAttribute(locale),
     classes: getDirectionalClasses(locale),
-    apply: (ltrClass: string, rtlClass: string) => 
+    apply: (ltrClass: string, rtlClass: string) =>
       applyDirectionalClass(locale, ltrClass, rtlClass),
   };
 }
@@ -108,7 +108,10 @@ export function useDirectional(locale: string) {
 /**
  * Flips horizontal positioning values for RTL
  */
-export function flipForRTL(locale: string, value: 'left' | 'right'): 'left' | 'right' {
+export function flipForRTL(
+  locale: string,
+  value: 'left' | 'right',
+): 'left' | 'right' {
   if (!isRTL(locale)) return value;
   return value === 'left' ? 'right' : 'left';
 }
@@ -120,10 +123,10 @@ export function getLogicalSpacingClass(
   locale: string,
   property: 'margin' | 'padding',
   side: 'start' | 'end',
-  size: string
+  size: string,
 ): string {
   const prefix = property === 'margin' ? 'm' : 'p';
   const logicalSide = side === 'start' ? 's' : 'e';
-  
+
   return `${prefix}${logicalSide}-${size}`;
 }

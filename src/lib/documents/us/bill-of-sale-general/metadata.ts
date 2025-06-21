@@ -3,7 +3,10 @@ import type { LegalDocument } from '@/types/documents';
 import { billOfSaleGeneralSchema } from './schema';
 import { billOfSaleGeneralQuestions } from './questions';
 
-export const billOfSaleGeneralMeta: Omit<LegalDocument, 'schema' | 'questions'> = {
+export const billOfSaleGeneralMeta: Omit<
+  LegalDocument,
+  'schema' | 'questions'
+> = {
   id: 'bill-of-sale-general',
   jurisdiction: 'US',
   category: 'Legal',
@@ -24,13 +27,23 @@ export const billOfSaleGeneralMeta: Omit<LegalDocument, 'schema' | 'questions'> 
       name: 'General Bill of Sale',
       description:
         'Legal document transferring ownership of personal property from seller to buyer.',
-      aliases: ['bill of sale', 'sales receipt', 'property transfer', 'general bill of sale'],
+      aliases: [
+        'bill of sale',
+        'sales receipt',
+        'property transfer',
+        'general bill of sale',
+      ],
     },
     es: {
       name: 'Factura de Venta General',
       description:
         'Documento legal que transfiere la propiedad de bienes personales del vendedor al comprador.',
-      aliases: ['factura de venta', 'recibo de venta', 'transferencia de propiedad', 'factura general'],
+      aliases: [
+        'factura de venta',
+        'recibo de venta',
+        'transferencia de propiedad',
+        'factura general',
+      ],
     },
   },
 };

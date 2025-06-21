@@ -26,8 +26,7 @@ export const schema = z
     state: z.string().length(2, 'State must be 2 characters.'),
   })
   .refine(
-    (data) =>
-      data.pets_allowed === 'specific' ? !!data.pet_conditions : true,
+    (data) => (data.pets_allowed === 'specific' ? !!data.pet_conditions : true),
     {
       message:
         'Pet conditions are required if pets are allowed with specific conditions',

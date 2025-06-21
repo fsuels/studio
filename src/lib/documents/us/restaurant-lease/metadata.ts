@@ -24,12 +24,14 @@ export const restaurantLeaseMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Restaurant Lease',
-      description: 'Specialized lease agreement for restaurant and food service businesses',
+      description:
+        'Specialized lease agreement for restaurant and food service businesses',
       aliases: [],
     },
     es: {
       name: 'Restaurant Lease', // TODO: Add Spanish translation
-      description: 'Specialized lease agreement for restaurant and food service businesses', // TODO: Add Spanish translation
+      description:
+        'Specialized lease agreement for restaurant and food service businesses', // TODO: Add Spanish translation
       aliases: [],
     },
   },

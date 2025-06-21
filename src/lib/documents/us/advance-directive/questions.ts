@@ -118,7 +118,8 @@ export const questions: Question[] = [
     required: true,
     section: 'Health Care Agent',
     placeholder: "Enter your health care agent's full name",
-    description: 'This person will make medical decisions for you if you cannot.',
+    description:
+      'This person will make medical decisions for you if you cannot.',
   },
   {
     id: 'agentAddress',
@@ -231,7 +232,8 @@ export const questions: Question[] = [
       { value: 'true', label: 'Yes, I want to designate an alternate agent' },
       { value: 'false', label: 'No, I only want one health care agent' },
     ],
-    description: 'An alternate agent will act if your primary agent is unavailable.',
+    description:
+      'An alternate agent will act if your primary agent is unavailable.',
   },
   {
     id: 'alternateAgentName',
@@ -356,11 +358,21 @@ export const questions: Question[] = [
     required: true,
     section: 'Medical Treatment Preferences',
     options: [
-      { value: 'continue', label: 'I want life-sustaining treatment to be provided' },
-      { value: 'discontinue', label: 'I want life-sustaining treatment to be withheld or withdrawn' },
-      { value: 'undecided', label: 'I want my agent to decide based on my best interests' },
+      {
+        value: 'continue',
+        label: 'I want life-sustaining treatment to be provided',
+      },
+      {
+        value: 'discontinue',
+        label: 'I want life-sustaining treatment to be withheld or withdrawn',
+      },
+      {
+        value: 'undecided',
+        label: 'I want my agent to decide based on my best interests',
+      },
     ],
-    description: 'Life-sustaining treatment includes mechanical ventilation, dialysis, and other treatments that may prolong life.',
+    description:
+      'Life-sustaining treatment includes mechanical ventilation, dialysis, and other treatments that may prolong life.',
   },
   {
     id: 'artificialNutrition',
@@ -369,11 +381,21 @@ export const questions: Question[] = [
     required: true,
     section: 'Medical Treatment Preferences',
     options: [
-      { value: 'provide', label: 'I want artificial nutrition and hydration to be provided' },
-      { value: 'withhold', label: 'I want artificial nutrition and hydration to be withheld' },
-      { value: 'undecided', label: 'I want my agent to decide based on my best interests' },
+      {
+        value: 'provide',
+        label: 'I want artificial nutrition and hydration to be provided',
+      },
+      {
+        value: 'withhold',
+        label: 'I want artificial nutrition and hydration to be withheld',
+      },
+      {
+        value: 'undecided',
+        label: 'I want my agent to decide based on my best interests',
+      },
     ],
-    description: 'Artificial nutrition and hydration includes feeding tubes and IV fluids.',
+    description:
+      'Artificial nutrition and hydration includes feeding tubes and IV fluids.',
   },
   {
     id: 'painMedication',
@@ -382,11 +404,21 @@ export const questions: Question[] = [
     required: true,
     section: 'Medical Treatment Preferences',
     options: [
-      { value: 'provide', label: 'I want pain relief medication even if it hastens death' },
-      { value: 'withhold', label: 'I want pain relief medication only if it does not hasten death' },
-      { value: 'undecided', label: 'I want my agent to decide based on my best interests' },
+      {
+        value: 'provide',
+        label: 'I want pain relief medication even if it hastens death',
+      },
+      {
+        value: 'withhold',
+        label: 'I want pain relief medication only if it does not hasten death',
+      },
+      {
+        value: 'undecided',
+        label: 'I want my agent to decide based on my best interests',
+      },
     ],
-    description: 'Pain relief medication may sometimes hasten death as a side effect.',
+    description:
+      'Pain relief medication may sometimes hasten death as a side effect.',
   },
   {
     id: 'comfortCare',
@@ -395,11 +427,18 @@ export const questions: Question[] = [
     required: true,
     section: 'Medical Treatment Preferences',
     options: [
-      { value: 'provide', label: 'I want comfort care and palliative measures' },
+      {
+        value: 'provide',
+        label: 'I want comfort care and palliative measures',
+      },
       { value: 'withhold', label: 'I do not want comfort care' },
-      { value: 'undecided', label: 'I want my agent to decide based on my best interests' },
+      {
+        value: 'undecided',
+        label: 'I want my agent to decide based on my best interests',
+      },
     ],
-    description: 'Comfort care includes measures to keep you comfortable and free from pain.',
+    description:
+      'Comfort care includes measures to keep you comfortable and free from pain.',
   },
 
   // Section 5: Additional Instructions
@@ -409,8 +448,10 @@ export const questions: Question[] = [
     label: 'Additional Instructions for Your Health Care Agent',
     required: false,
     section: 'Additional Instructions',
-    placeholder: 'Provide any additional instructions or preferences for your health care agent...',
-    description: 'Include any specific wishes about your medical care that are not covered above.',
+    placeholder:
+      'Provide any additional instructions or preferences for your health care agent...',
+    description:
+      'Include any specific wishes about your medical care that are not covered above.',
   },
   {
     id: 'specificMedicalConditions',
@@ -418,8 +459,10 @@ export const questions: Question[] = [
     label: 'Specific Medical Conditions or Treatments',
     required: false,
     section: 'Additional Instructions',
-    placeholder: 'Describe any specific medical conditions or treatments you want to address...',
-    description: 'Include instructions for specific medical conditions you have or treatments you do/do not want.',
+    placeholder:
+      'Describe any specific medical conditions or treatments you want to address...',
+    description:
+      'Include instructions for specific medical conditions you have or treatments you do/do not want.',
   },
   {
     id: 'religiousBeliefs',
@@ -427,8 +470,10 @@ export const questions: Question[] = [
     label: 'Religious or Personal Beliefs',
     required: false,
     section: 'Additional Instructions',
-    placeholder: 'Describe any religious or personal beliefs that should guide your medical care...',
-    description: 'Include any religious, spiritual, or personal beliefs that should influence your care.',
+    placeholder:
+      'Describe any religious or personal beliefs that should guide your medical care...',
+    description:
+      'Include any religious, spiritual, or personal beliefs that should influence your care.',
   },
 
   // Section 6: Organ Donation
@@ -439,11 +484,18 @@ export const questions: Question[] = [
     required: true,
     section: 'Organ Donation',
     options: [
-      { value: 'yes', label: 'I want to donate my organs and tissues for transplantation' },
+      {
+        value: 'yes',
+        label: 'I want to donate my organs and tissues for transplantation',
+      },
       { value: 'no', label: 'I do not want to donate my organs and tissues' },
-      { value: 'undecided', label: 'I want my agent to decide about organ donation' },
+      {
+        value: 'undecided',
+        label: 'I want my agent to decide about organ donation',
+      },
     ],
-    description: 'This preference will be communicated to medical professionals and your agent.',
+    description:
+      'This preference will be communicated to medical professionals and your agent.',
   },
   {
     id: 'organDonationSpecific',
@@ -451,8 +503,10 @@ export const questions: Question[] = [
     label: 'Specific Organ Donation Instructions',
     required: false,
     section: 'Organ Donation',
-    placeholder: 'Specify any particular organs or tissues you want to donate or exclude...',
-    description: 'If you have specific preferences about which organs or tissues to donate, include them here.',
+    placeholder:
+      'Specify any particular organs or tissues you want to donate or exclude...',
+    description:
+      'If you have specific preferences about which organs or tissues to donate, include them here.',
     condition: { field: 'organDonation', value: 'yes' },
   },
 
@@ -464,7 +518,8 @@ export const questions: Question[] = [
     required: true,
     section: 'Witnesses',
     placeholder: 'Enter first witness full name',
-    description: 'Witnesses cannot be related to you or beneficiaries of your estate.',
+    description:
+      'Witnesses cannot be related to you or beneficiaries of your estate.',
   },
   {
     id: 'witness1Address',
@@ -481,7 +536,8 @@ export const questions: Question[] = [
     required: true,
     section: 'Witnesses',
     placeholder: 'Enter second witness full name',
-    description: 'The second witness must be a different person from the first witness.',
+    description:
+      'The second witness must be a different person from the first witness.',
   },
   {
     id: 'witness2Address',

@@ -24,12 +24,14 @@ export const restaurantAgreementMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Restaurant Agreement',
-      description: 'Agreement for restaurant operations, partnerships, or management.',
+      description:
+        'Agreement for restaurant operations, partnerships, or management.',
       aliases: ['restaurant partnership', 'restaurant management agreement'],
     },
     es: {
       name: 'Acuerdo de Restaurante',
-      description: 'Acuerdo para operaciones, asociaciones o gestión de restaurantes.',
+      description:
+        'Acuerdo para operaciones, asociaciones o gestión de restaurantes.',
       aliases: ['sociedad de restaurante', 'acuerdo de gestión'],
     },
   },

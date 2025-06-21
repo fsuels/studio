@@ -24,12 +24,18 @@ export const loanModificationAgreementMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Loan Modification Agreement',
-      description: 'Agreement to modify the terms and conditions of an existing loan agreement.',
-      aliases: ['loan amendment', 'loan restructure agreement', 'loan workout agreement'],
+      description:
+        'Agreement to modify the terms and conditions of an existing loan agreement.',
+      aliases: [
+        'loan amendment',
+        'loan restructure agreement',
+        'loan workout agreement',
+      ],
     },
     es: {
       name: 'Acuerdo de Modificación de Préstamo',
-      description: 'Acuerdo para modificar los términos y condiciones de un acuerdo de préstamo existente.',
+      description:
+        'Acuerdo para modificar los términos y condiciones de un acuerdo de préstamo existente.',
       aliases: ['enmienda de préstamo', 'acuerdo de reestructuración'],
     },
   },

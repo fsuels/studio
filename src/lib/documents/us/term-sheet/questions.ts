@@ -7,7 +7,7 @@ export const termSheetQuestions: FormQuestion[] = [
     label: 'Company Name',
     required: true,
     placeholder: 'Enter the full legal name of the company',
-    validation: { min: 1 }
+    validation: { min: 1 },
   },
   {
     id: 'companyAddress',
@@ -15,15 +15,15 @@ export const termSheetQuestions: FormQuestion[] = [
     label: 'Company Address',
     required: true,
     placeholder: 'Enter the complete address of the company',
-    validation: { min: 10, max: 300 }
+    validation: { min: 10, max: 300 },
   },
   {
     id: 'businessDescription',
     type: 'textarea',
     label: 'Business Description',
     required: true,
-    placeholder: 'Provide a brief description of the company\'s business',
-    validation: { min: 20, max: 500 }
+    placeholder: "Provide a brief description of the company's business",
+    validation: { min: 20, max: 500 },
   },
   {
     id: 'investmentAmount',
@@ -31,7 +31,7 @@ export const termSheetQuestions: FormQuestion[] = [
     label: 'Investment Amount',
     required: true,
     validation: { min: 1 },
-    placeholder: 'Enter the total investment amount in dollars'
+    placeholder: 'Enter the total investment amount in dollars',
   },
   {
     id: 'investmentType',
@@ -42,8 +42,8 @@ export const termSheetQuestions: FormQuestion[] = [
       { value: 'equity', label: 'Equity Investment' },
       { value: 'convertible-debt', label: 'Convertible Debt' },
       { value: 'safe', label: 'SAFE (Simple Agreement for Future Equity)' },
-      { value: 'debt', label: 'Debt Investment' }
-    ]
+      { value: 'debt', label: 'Debt Investment' },
+    ],
   },
   {
     id: 'securityType',
@@ -51,7 +51,7 @@ export const termSheetQuestions: FormQuestion[] = [
     label: 'Security Type',
     required: true,
     placeholder: 'e.g., Series A Preferred Stock, Convertible Note',
-    defaultValue: 'Preferred Stock'
+    defaultValue: 'Preferred Stock',
   },
   {
     id: 'preMoneyValuation',
@@ -59,7 +59,7 @@ export const termSheetQuestions: FormQuestion[] = [
     label: 'Pre-Money Valuation',
     required: true,
     validation: { min: 0 },
-    placeholder: 'Enter the pre-money valuation in dollars'
+    placeholder: 'Enter the pre-money valuation in dollars',
   },
   {
     id: 'postMoneyValuation',
@@ -67,14 +67,14 @@ export const termSheetQuestions: FormQuestion[] = [
     label: 'Post-Money Valuation',
     required: true,
     validation: { min: 0 },
-    placeholder: 'Enter the post-money valuation in dollars'
+    placeholder: 'Enter the post-money valuation in dollars',
   },
   {
     id: 'leadInvestor',
     type: 'text',
     label: 'Lead Investor',
     required: true,
-    placeholder: 'Enter the name of the lead investor'
+    placeholder: 'Enter the name of the lead investor',
   },
   {
     id: 'investorType',
@@ -86,15 +86,15 @@ export const termSheetQuestions: FormQuestion[] = [
       { value: 'venture-capital', label: 'Venture Capital' },
       { value: 'private-equity', label: 'Private Equity' },
       { value: 'angel', label: 'Angel Investor' },
-      { value: 'strategic', label: 'Strategic Investor' }
-    ]
+      { value: 'strategic', label: 'Strategic Investor' },
+    ],
   },
   {
     id: 'totalInvestors',
     type: 'number',
     label: 'Total Number of Investors',
     required: true,
-    validation: { min: 1 }
+    validation: { min: 1 },
   },
   {
     id: 'liquidationPreference',
@@ -102,7 +102,7 @@ export const termSheetQuestions: FormQuestion[] = [
     label: 'Liquidation Preference',
     required: false,
     defaultValue: '1x non-participating',
-    placeholder: 'e.g., 1x non-participating, 2x participating'
+    placeholder: 'e.g., 1x non-participating, 2x participating',
   },
   {
     id: 'antiDilutionProvision',
@@ -113,8 +113,8 @@ export const termSheetQuestions: FormQuestion[] = [
     options: [
       { value: 'weighted-average', label: 'Weighted Average' },
       { value: 'full-ratchet', label: 'Full Ratchet' },
-      { value: 'none', label: 'None' }
-    ]
+      { value: 'none', label: 'None' },
+    ],
   },
   {
     id: 'boardComposition.totalSeats',
@@ -122,7 +122,7 @@ export const termSheetQuestions: FormQuestion[] = [
     label: 'Total Board Seats',
     required: true,
     validation: { min: 1 },
-    defaultValue: 5
+    defaultValue: 5,
   },
   {
     id: 'boardComposition.investorSeats',
@@ -130,7 +130,7 @@ export const termSheetQuestions: FormQuestion[] = [
     label: 'Investor Board Seats',
     required: true,
     validation: { min: 0 },
-    defaultValue: 2
+    defaultValue: 2,
   },
   {
     id: 'boardComposition.founderSeats',
@@ -138,7 +138,7 @@ export const termSheetQuestions: FormQuestion[] = [
     label: 'Founder Board Seats',
     required: true,
     validation: { min: 0 },
-    defaultValue: 2
+    defaultValue: 2,
   },
   {
     id: 'boardComposition.independentSeats',
@@ -146,7 +146,7 @@ export const termSheetQuestions: FormQuestion[] = [
     label: 'Independent Board Seats',
     required: true,
     validation: { min: 0 },
-    defaultValue: 1
+    defaultValue: 1,
   },
   {
     id: 'employeeStockPool',
@@ -155,7 +155,7 @@ export const termSheetQuestions: FormQuestion[] = [
     required: false,
     validation: { min: 0, max: 100 },
     defaultValue: 10,
-    placeholder: 'Enter percentage for employee stock options'
+    placeholder: 'Enter percentage for employee stock options',
   },
   {
     id: 'stockPoolTiming',
@@ -164,9 +164,15 @@ export const termSheetQuestions: FormQuestion[] = [
     required: true,
     defaultValue: 'post-money',
     options: [
-      { value: 'pre-money', label: 'Pre-Money (pool created before investment)' },
-      { value: 'post-money', label: 'Post-Money (pool created after investment)' }
-    ]
+      {
+        value: 'pre-money',
+        label: 'Pre-Money (pool created before investment)',
+      },
+      {
+        value: 'post-money',
+        label: 'Post-Money (pool created after investment)',
+      },
+    ],
   },
   {
     id: 'useOfFunds',
@@ -182,24 +188,24 @@ export const termSheetQuestions: FormQuestion[] = [
           type: 'text',
           label: 'Category',
           required: true,
-          placeholder: 'e.g., Product Development, Marketing, Operations'
+          placeholder: 'e.g., Product Development, Marketing, Operations',
         },
         {
           id: 'amount',
           type: 'number',
           label: 'Amount ($)',
           required: true,
-          validation: { min: 0 }
+          validation: { min: 0 },
         },
         {
           id: 'percentage',
           type: 'number',
           label: 'Percentage (%)',
           required: true,
-          validation: { min: 0, max: 100 }
-        }
-      ]
-    }
+          validation: { min: 0, max: 100 },
+        },
+      ],
+    },
   },
   {
     id: 'exclusivityPeriod',
@@ -207,7 +213,7 @@ export const termSheetQuestions: FormQuestion[] = [
     label: 'Exclusivity Period',
     required: false,
     defaultValue: '30 days',
-    placeholder: 'e.g., 30 days, 45 days'
+    placeholder: 'e.g., 30 days, 45 days',
   },
   {
     id: 'closingTimeline',
@@ -215,7 +221,7 @@ export const termSheetQuestions: FormQuestion[] = [
     label: 'Closing Timeline',
     required: false,
     defaultValue: '60 days',
-    placeholder: 'e.g., 60 days, 90 days'
+    placeholder: 'e.g., 60 days, 90 days',
   },
   {
     id: 'additionalTerms',
@@ -223,20 +229,20 @@ export const termSheetQuestions: FormQuestion[] = [
     label: 'Additional Terms',
     required: false,
     placeholder: 'Enter any additional terms or conditions',
-    validation: { max: 1000 }
+    validation: { max: 1000 },
   },
   {
     id: 'termSheetDate',
     type: 'date',
     label: 'Term Sheet Date',
     required: true,
-    helpText: 'Date this term sheet is issued'
+    helpText: 'Date this term sheet is issued',
   },
   {
     id: 'expirationDate',
     type: 'date',
     label: 'Expiration Date',
     required: true,
-    helpText: 'Date when this term sheet expires'
-  }
+    helpText: 'Date when this term sheet expires',
+  },
 ];

@@ -47,7 +47,7 @@ Don't risk using generic templates that may not comply with New Mexico law. Get 
 
 [Create New Mexico Employment Contract]
 
-*Trusted by thousands of New Mexico businesses*
+_Trusted by thousands of New Mexico businesses_
 
 ---
 

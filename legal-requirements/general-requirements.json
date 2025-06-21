@@ -14,13 +14,21 @@
       "emissions-compliance": "state.hasEmissionsRequirements"
     },
     "stateSpecific": {
-      "notarization": ["LA", "MT", "WV", "OH", "PA", "NV", "OK", "AZ", "KY", "WY"],
+      "notarization": [
+        "LA",
+        "MT",
+        "WV",
+        "OH",
+        "PA",
+        "NV",
+        "OK",
+        "AZ",
+        "KY",
+        "WY"
+      ],
       "title-transfer-required": "all"
     },
-    "mandatoryDisclosures": [
-      "vehicle-condition",
-      "known-defects"
-    ]
+    "mandatoryDisclosures": ["vehicle-condition", "known-defects"]
   },
   "lease-agreement": {
     "requiredClauses": [
@@ -193,11 +201,7 @@
       "holographic-will-allowed": ["CA", "TX", "VA", "WV", "AK", "AZ"],
       "self-proving-affidavit": "recommended in all states"
     },
-    "capacityRequirements": [
-      "age-majority",
-      "sound-mind",
-      "free-from-duress"
-    ]
+    "capacityRequirements": ["age-majority", "sound-mind", "free-from-duress"]
   },
   "divorce-settlement-agreement": {
     "requiredClauses": [
@@ -239,12 +243,7 @@
       "single-member-allowed": "all states",
       "series-llc-allowed": ["DE", "NV", "TX", "IL"]
     },
-    "taxElections": [
-      "disregarded-entity",
-      "partnership",
-      "s-corp",
-      "c-corp"
-    ]
+    "taxElections": ["disregarded-entity", "partnership", "s-corp", "c-corp"]
   },
   "quitclaim-deed": {
     "requiredClauses": [

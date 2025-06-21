@@ -29,7 +29,8 @@ export const membershipCancellationLetterMeta: LegalDocument = {
     },
     es: {
       name: 'Carta de Cancelación de Membresía',
-      description: 'Carta para cancelar membresías de gimnasio, club o servicios.',
+      description:
+        'Carta para cancelar membresías de gimnasio, club o servicios.',
       aliases: ['carta de cancelación', 'carta de terminación de membresía'],
     },
   },

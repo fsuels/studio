@@ -14,16 +14,16 @@ const handle = app.getRequestHandler();
 async function main() {
   try {
     console.log('🚀 Starting application servers...');
-    
+
     // Prepare Next.js app
     await app.prepare();
-    
+
     // Start collaboration server on separate port
     if (process.env.ENABLE_COLLABORATION === 'true') {
       console.log('🔄 Starting collaboration server...');
       await startCollaborationServer();
     }
-    
+
     // Create HTTP server for Next.js
     const server = createServer(async (req, res) => {
       try {
@@ -34,16 +34,18 @@ async function main() {
         res.end('internal server error');
       }
     });
-    
+
     server.listen(port, () => {
       console.log(`🌟 Next.js server ready on http://${hostname}:${port}`);
-      
+
       if (process.env.ENABLE_COLLABORATION === 'true') {
-        console.log(`🤝 Collaboration server ready on port ${process.env.COLLABORATION_PORT || 3001}`);
+        console.log(
+          `🤝 Collaboration server ready on port ${process.env.COLLABORATION_PORT || 3001}`,
+        );
         console.log('📊 Real-time collaboration features enabled');
       }
     });
-    
+
     // Graceful shutdown
     process.on('SIGTERM', () => {
       console.log('SIGTERM received, shutting down gracefully');
@@ -52,7 +54,7 @@ async function main() {
         process.exit(0);
       });
     });
-    
+
     process.on('SIGINT', () => {
       console.log('SIGINT received, shutting down gracefully');
       server.close(() => {
@@ -60,7 +62,6 @@ async function main() {
         process.exit(0);
       });
     });
-    
   } catch (error) {
     console.error('Failed to start servers:', error);
     process.exit(1);

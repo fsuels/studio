@@ -32,10 +32,7 @@
     "why": {
       "title": "¿Por Qué Necesitas Uno (Incluso en Estados de \"Apretón de Manos\")?",
       "table": {
-        "headers": [
-          "Riesgo Sin Contrato de Compraventa",
-          "Protección Con Uno"
-        ],
+        "headers": ["Riesgo Sin Contrato de Compraventa", "Protección Con Uno"],
         "rows": [
           [
             "No puedes probar que ya no eres dueño del auto—multas o peajes aún llegan a tu nombre",
@@ -186,8 +183,7 @@
   },
   "finalCtaTitle": "¿Listo para Cerrar el Trato?",
   "finalCtaSubtitle": "Evita el estrés del papeleo. Haz clic en “Comenzar Mi Contrato de Compraventa” a continuación, responde unas pocas preguntas guiadas y descarga tu documento aprobado por abogados en minutos.",
-  "startMyBillOfSaleButton": "Comenzar Mi Contrato de Compraventa"
-,
+  "startMyBillOfSaleButton": "Comenzar Mi Contrato de Compraventa",
   "faqSearchPlaceholder": "Buscar en las preguntas...",
   "noFaqResults": "Ninguna pregunta coincide con tu búsqueda."
 }

@@ -24,13 +24,22 @@ export const eventPlanningContractMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Event Planning Contract',
-      description: 'Contract between event planner and client for event planning services.',
-      aliases: ['event planner agreement', 'party planning contract', 'wedding planning contract'],
+      description:
+        'Contract between event planner and client for event planning services.',
+      aliases: [
+        'event planner agreement',
+        'party planning contract',
+        'wedding planning contract',
+      ],
     },
     es: {
       name: 'Contrato de Planificación de Eventos',
-      description: 'Contrato entre planificador de eventos y cliente para servicios de planificación.',
-      aliases: ['acuerdo de planificador de eventos', 'contrato de planificación de bodas'],
+      description:
+        'Contrato entre planificador de eventos y cliente para servicios de planificación.',
+      aliases: [
+        'acuerdo de planificador de eventos',
+        'contrato de planificación de bodas',
+      ],
     },
   },
 };

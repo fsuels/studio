@@ -3,12 +3,7 @@
 
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  FolderOpen,
-  FileQuestion,
-  Lock,
-  Share2,
-} from 'lucide-react';
+import { FolderOpen, FileQuestion, Lock, Share2 } from 'lucide-react';
 import StepCard from './StepCard';
 
 const steps = [
@@ -62,8 +57,7 @@ const HowItWorks = React.memo(function HowItWorks() {
         <h2 className="text-3xl font-bold text-foreground">
           <span>
             {t('home.howItWorksSectionTitle.main', {
-              defaultValue:
-                'Generate and Personalize Legal Forms',
+              defaultValue: 'Generate and Personalize Legal Forms',
             })}
           </span>
         </h2>

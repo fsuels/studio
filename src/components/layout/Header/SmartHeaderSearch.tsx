@@ -12,14 +12,14 @@ interface SmartHeaderSearchProps {
   className?: string;
 }
 
-const SmartHeaderSearch: React.FC<SmartHeaderSearchProps> = ({ 
-  clientLocale, 
-  mounted, 
-  className 
+const SmartHeaderSearch: React.FC<SmartHeaderSearchProps> = ({
+  clientLocale,
+  mounted,
+  className,
 }) => {
   // Get user role from localStorage if available
   const [userRole, setUserRole] = React.useState<string | undefined>();
-  
+
   React.useEffect(() => {
     if (mounted) {
       try {

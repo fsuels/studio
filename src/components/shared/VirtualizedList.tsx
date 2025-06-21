@@ -2,7 +2,11 @@
 
 import React, { useRef, useEffect, useCallback } from 'react';
 import { useVirtual } from '@tanstack/react-virtual';
-import { BaseComponentProps, ListComponentProps, ClassNameHelpers } from '@/lib/component-standards';
+import {
+  BaseComponentProps,
+  ListComponentProps,
+  ClassNameHelpers,
+} from '@/lib/component-standards';
 
 export interface VirtualizedListProps<T> extends ListComponentProps<T> {
   itemHeight?: number | ((index: number) => number);
@@ -40,7 +44,7 @@ export const VirtualizedList = React.memo(function VirtualizedList<T>({
         }
         return itemHeight;
       },
-      [itemHeight]
+      [itemHeight],
     ),
     overscan,
   });
@@ -53,7 +57,7 @@ export const VirtualizedList = React.memo(function VirtualizedList<T>({
         onItemClick(item, index);
       }
     },
-    [onItemClick]
+    [onItemClick],
   );
 
   // Loading state
@@ -86,7 +90,7 @@ export const VirtualizedList = React.memo(function VirtualizedList<T>({
   const containerClasses = ClassNameHelpers.cn(
     'overflow-auto',
     containerClassName,
-    className
+    className,
   );
 
   return (
@@ -94,7 +98,10 @@ export const VirtualizedList = React.memo(function VirtualizedList<T>({
       ref={parentRef}
       className={containerClasses}
       style={{
-        height: typeof containerHeight === 'number' ? `${containerHeight}px` : containerHeight,
+        height:
+          typeof containerHeight === 'number'
+            ? `${containerHeight}px`
+            : containerHeight,
       }}
       data-testid={testId || 'virtualized-list'}
       role="list"
@@ -113,7 +120,7 @@ export const VirtualizedList = React.memo(function VirtualizedList<T>({
             ? keyExtractor(item, virtualRow.index)
             : virtualRow.index;
 
-          const itemClasses = 
+          const itemClasses =
             typeof itemClassName === 'function'
               ? itemClassName(item, virtualRow.index)
               : itemClassName;
@@ -147,7 +154,8 @@ export const VirtualizedList = React.memo(function VirtualizedList<T>({
 }) as <T>(props: VirtualizedListProps<T>) => JSX.Element;
 
 // Optimized grid version for card layouts
-export interface VirtualizedGridProps<T> extends Omit<VirtualizedListProps<T>, 'itemHeight'> {
+export interface VirtualizedGridProps<T>
+  extends Omit<VirtualizedListProps<T>, 'itemHeight'> {
   columns?: number;
   gap?: number;
   itemHeight?: number;
@@ -221,7 +229,7 @@ export const VirtualizedGrid = React.memo(function VirtualizedGrid<T>({
   const containerClasses = ClassNameHelpers.cn(
     'overflow-auto',
     containerClassName,
-    className
+    className,
   );
 
   return (
@@ -229,7 +237,10 @@ export const VirtualizedGrid = React.memo(function VirtualizedGrid<T>({
       ref={parentRef}
       className={containerClasses}
       style={{
-        height: typeof containerHeight === 'number' ? `${containerHeight}px` : containerHeight,
+        height:
+          typeof containerHeight === 'number'
+            ? `${containerHeight}px`
+            : containerHeight,
       }}
       data-testid={testId || 'virtualized-grid'}
       role="grid"
@@ -269,7 +280,7 @@ export const VirtualizedGrid = React.memo(function VirtualizedGrid<T>({
                   ? keyExtractor(item, itemIndex)
                   : itemIndex;
 
-                const itemClasses = 
+                const itemClasses =
                   typeof itemClassName === 'function'
                     ? itemClassName(item, itemIndex)
                     : itemClassName;
@@ -308,7 +319,7 @@ export function useInfiniteScroll(
   options?: {
     threshold?: number;
     enabled?: boolean;
-  }
+  },
 ) {
   const { threshold = 0.9, enabled = true } = options || {};
   const observerRef = useRef<IntersectionObserver>();
@@ -326,7 +337,7 @@ export function useInfiniteScroll(
           callback();
         }
       },
-      { threshold }
+      { threshold },
     );
 
     observerRef.current.observe(target);

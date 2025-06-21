@@ -22,21 +22,21 @@ class DocumentSystemMonitor {
         qualityScore: 85,
         errorCount: 5,
         warningCount: 20,
-        documentCount: 45
-      }
+        documentCount: 45,
+      },
     };
   }
 
   async collectMetrics() {
     const timestamp = new Date().toISOString();
-    
+
     try {
       // Run quality verification
       const { execSync } = require('child_process');
       const result = execSync('node scripts/quality-verification-system.js', {
         cwd: path.join(__dirname, '..'),
         encoding: 'utf8',
-        stdio: 'pipe'
+        stdio: 'pipe',
       });
 
       // Find latest quality report
@@ -45,12 +45,13 @@ class DocumentSystemMonitor {
         throw new Error('Quality reports directory not found');
       }
 
-      const reports = fs.readdirSync(reportDir)
-        .filter(f => f.endsWith('.json'))
-        .map(f => ({
+      const reports = fs
+        .readdirSync(reportDir)
+        .filter((f) => f.endsWith('.json'))
+        .map((f) => ({
           name: f,
           path: path.join(reportDir, f),
-          mtime: fs.statSync(path.join(reportDir, f)).mtime
+          mtime: fs.statSync(path.join(reportDir, f)).mtime,
         }))
         .sort((a, b) => b.mtime - a.mtime);
 
@@ -59,7 +60,7 @@ class DocumentSystemMonitor {
       }
 
       const latestReport = JSON.parse(fs.readFileSync(reports[0].path, 'utf8'));
-      
+
       const metrics = {
         timestamp,
         qualityScore: latestReport.score || 0,
@@ -72,12 +73,12 @@ class DocumentSystemMonitor {
         systemHealth: this.calculateSystemHealth(latestReport),
         uptime: process.uptime(),
         memoryUsage: process.memoryUsage(),
-        nodeVersion: process.version
+        nodeVersion: process.version,
       };
 
       // Add to history
       this.metricsHistory.push(metrics);
-      
+
       // Trim history to retention period
       while (this.metricsHistory.length > this.config.historyRetention) {
         this.metricsHistory.shift();
@@ -87,7 +88,6 @@ class DocumentSystemMonitor {
       this.checkAlerts(metrics);
 
       return metrics;
-      
     } catch (error) {
       const errorMetrics = {
         timestamp,
@@ -102,7 +102,7 @@ class DocumentSystemMonitor {
         warnings: [],
         uptime: process.uptime(),
         memoryUsage: process.memoryUsage(),
-        nodeVersion: process.version
+        nodeVersion: process.version,
       };
 
       this.metricsHistory.push(errorMetrics);
@@ -113,7 +113,7 @@ class DocumentSystemMonitor {
   calculateSystemHealth(report) {
     const score = report.score || 0;
     const errors = report.summary?.failedChecks || 0;
-    
+
     if (errors > 0) return 'critical';
     if (score < this.config.thresholds.qualityScore) return 'warning';
     if (score >= 95) return 'excellent';
@@ -122,20 +122,32 @@ class DocumentSystemMonitor {
 
   checkAlerts(metrics) {
     const now = Date.now();
-    
+
     // Quality score alert
     if (metrics.qualityScore < this.config.thresholds.qualityScore) {
-      this.addAlert('quality_score', `Quality score dropped to ${metrics.qualityScore}`, 'warning');
+      this.addAlert(
+        'quality_score',
+        `Quality score dropped to ${metrics.qualityScore}`,
+        'warning',
+      );
     }
 
     // Error count alert
     if (metrics.failedChecks > this.config.thresholds.errorCount) {
-      this.addAlert('error_count', `High error count: ${metrics.failedChecks} errors`, 'critical');
+      this.addAlert(
+        'error_count',
+        `High error count: ${metrics.failedChecks} errors`,
+        'critical',
+      );
     }
 
     // Document count alert
     if (metrics.totalDocuments < this.config.thresholds.documentCount) {
-      this.addAlert('document_count', `Document count below threshold: ${metrics.totalDocuments}`, 'warning');
+      this.addAlert(
+        'document_count',
+        `Document count below threshold: ${metrics.totalDocuments}`,
+        'warning',
+      );
     }
 
     // System error alert
@@ -144,18 +156,22 @@ class DocumentSystemMonitor {
     }
 
     // Clean old alerts (older than 1 hour)
-    this.alerts = this.alerts.filter(alert => now - alert.timestamp < 60 * 60 * 1000);
+    this.alerts = this.alerts.filter(
+      (alert) => now - alert.timestamp < 60 * 60 * 1000,
+    );
   }
 
   addAlert(type, message, severity) {
-    const existingAlert = this.alerts.find(a => a.type === type && a.message === message);
+    const existingAlert = this.alerts.find(
+      (a) => a.type === type && a.message === message,
+    );
     if (!existingAlert) {
       this.alerts.push({
         type,
         message,
         severity,
         timestamp: Date.now(),
-        count: 1
+        count: 1,
       });
     } else {
       existingAlert.count++;
@@ -164,18 +180,20 @@ class DocumentSystemMonitor {
   }
 
   generateDashboardHTML() {
-    const latestMetrics = this.metricsHistory[this.metricsHistory.length - 1] || {};
-    const healthColor = {
-      excellent: '#10b981',
-      good: '#3b82f6',
-      warning: '#f59e0b',
-      critical: '#ef4444'
-    }[latestMetrics.systemHealth] || '#6b7280';
+    const latestMetrics =
+      this.metricsHistory[this.metricsHistory.length - 1] || {};
+    const healthColor =
+      {
+        excellent: '#10b981',
+        good: '#3b82f6',
+        warning: '#f59e0b',
+        critical: '#ef4444',
+      }[latestMetrics.systemHealth] || '#6b7280';
 
     const chartData = this.metricsHistory.slice(-60); // Last hour
-    const scoreData = chartData.map(m => m.qualityScore || 0);
-    const errorData = chartData.map(m => m.failedChecks || 0);
-    const warningData = chartData.map(m => m.warningChecks || 0);
+    const scoreData = chartData.map((m) => m.qualityScore || 0);
+    const errorData = chartData.map((m) => m.failedChecks || 0);
+    const warningData = chartData.map((m) => m.warningChecks || 0);
 
     return `
 <!DOCTYPE html>
@@ -354,30 +372,47 @@ class DocumentSystemMonitor {
         </div>
 
         <!-- Active Alerts -->
-        ${this.alerts.length > 0 ? `
+        ${
+          this.alerts.length > 0
+            ? `
         <div class="card" style="margin-top: 1.5rem;">
             <h3>🚨 Active Alerts</h3>
-            ${this.alerts.map(alert => `
+            ${this.alerts
+              .map(
+                (alert) => `
                 <div class="alert alert-${alert.severity}">
                     <strong>${alert.type.replace('_', ' ').toUpperCase()}:</strong> ${alert.message}
                     ${alert.count > 1 ? ` (${alert.count} times)` : ''}
                 </div>
-            `).join('')}
+            `,
+              )
+              .join('')}
         </div>
-        ` : ''}
+        `
+            : ''
+        }
 
         <!-- Recent Issues -->
-        ${latestMetrics.errors && latestMetrics.errors.length > 0 ? `
+        ${
+          latestMetrics.errors && latestMetrics.errors.length > 0
+            ? `
         <div class="card" style="margin-top: 1.5rem;">
             <h3>❌ Recent Errors</h3>
-            ${latestMetrics.errors.slice(0, 5).map(error => `
+            ${latestMetrics.errors
+              .slice(0, 5)
+              .map(
+                (error) => `
                 <div class="alert alert-critical">
                     <strong>${error.check}:</strong> ${error.message}
                     ${error.file ? ` (${error.file})` : ''}
                 </div>
-            `).join('')}
+            `,
+              )
+              .join('')}
         </div>
-        ` : ''}
+        `
+            : ''
+        }
     </div>
 
     <script>
@@ -456,7 +491,7 @@ class DocumentSystemMonitor {
   startServer() {
     const server = http.createServer(async (req, res) => {
       const parsedUrl = url.parse(req.url, true);
-      
+
       if (parsedUrl.pathname === '/') {
         // Serve dashboard
         res.writeHead(200, { 'Content-Type': 'text/html' });
@@ -468,15 +503,18 @@ class DocumentSystemMonitor {
         res.end(JSON.stringify(metrics, null, 2));
       } else if (parsedUrl.pathname === '/api/health') {
         // Health check endpoint
-        const metrics = this.metricsHistory[this.metricsHistory.length - 1] || {};
+        const metrics =
+          this.metricsHistory[this.metricsHistory.length - 1] || {};
         res.writeHead(200, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({
-          status: metrics.systemHealth || 'unknown',
-          score: metrics.qualityScore || 0,
-          errors: metrics.failedChecks || 0,
-          warnings: metrics.warningChecks || 0,
-          timestamp: metrics.timestamp || new Date().toISOString()
-        }));
+        res.end(
+          JSON.stringify({
+            status: metrics.systemHealth || 'unknown',
+            score: metrics.qualityScore || 0,
+            errors: metrics.failedChecks || 0,
+            warnings: metrics.warningChecks || 0,
+            timestamp: metrics.timestamp || new Date().toISOString(),
+          }),
+        );
       } else {
         res.writeHead(404, { 'Content-Type': 'text/plain' });
         res.end('Not Found');
@@ -484,9 +522,15 @@ class DocumentSystemMonitor {
     });
 
     server.listen(this.config.port, () => {
-      console.log(`🏥 Document System Monitor running on http://localhost:${this.config.port}`);
-      console.log(`📊 API endpoint: http://localhost:${this.config.port}/api/metrics`);
-      console.log(`🏥 Health check: http://localhost:${this.config.port}/api/health`);
+      console.log(
+        `🏥 Document System Monitor running on http://localhost:${this.config.port}`,
+      );
+      console.log(
+        `📊 API endpoint: http://localhost:${this.config.port}/api/metrics`,
+      );
+      console.log(
+        `🏥 Health check: http://localhost:${this.config.port}/api/health`,
+      );
     });
 
     // Start collecting metrics

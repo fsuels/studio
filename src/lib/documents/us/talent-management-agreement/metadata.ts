@@ -24,12 +24,18 @@ export const talentManagementAgreementMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Talent Management Agreement',
-      description: 'Agreement between talent and management for career representation.',
-      aliases: ['artist management contract', 'celebrity management agreement', 'performer management deal'],
+      description:
+        'Agreement between talent and management for career representation.',
+      aliases: [
+        'artist management contract',
+        'celebrity management agreement',
+        'performer management deal',
+      ],
     },
     es: {
       name: 'Acuerdo de Representación de Talento',
-      description: 'Acuerdo entre talento y representación para gestión de carrera.',
+      description:
+        'Acuerdo entre talento y representación para gestión de carrera.',
       aliases: ['contrato de management', 'acuerdo de representación'],
     },
   },

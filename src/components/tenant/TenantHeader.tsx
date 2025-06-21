@@ -13,17 +13,20 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/DropdownMenu';
 import { useTenant } from '@/contexts/TenantContext';
-import { useTenantBranding, useCompanyInfo } from '@/contexts/TenantBrandingContext';
-import { 
-  Menu, 
-  X, 
-  User, 
-  Settings, 
-  LogOut, 
-  FileText, 
-  Users, 
+import {
+  useTenantBranding,
+  useCompanyInfo,
+} from '@/contexts/TenantBrandingContext';
+import {
+  Menu,
+  X,
+  User,
+  Settings,
+  LogOut,
+  FileText,
+  Users,
   BarChart3,
-  HelpCircle 
+  HelpCircle,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -38,14 +41,28 @@ export function TenantHeader() {
   }
 
   const navigation = [
-    { name: 'Documents', href: `/tenant/${tenant.slug}/documents`, icon: FileText },
-    { name: 'Templates', href: `/tenant/${tenant.slug}/templates`, icon: FileText },
-    ...(hasPermission('tenant.manage_users') ? [
-      { name: 'Team', href: `/tenant/${tenant.slug}/team`, icon: Users }
-    ] : []),
-    ...(hasPermission('tenant.view_analytics') ? [
-      { name: 'Analytics', href: `/tenant/${tenant.slug}/analytics`, icon: BarChart3 }
-    ] : []),
+    {
+      name: 'Documents',
+      href: `/tenant/${tenant.slug}/documents`,
+      icon: FileText,
+    },
+    {
+      name: 'Templates',
+      href: `/tenant/${tenant.slug}/templates`,
+      icon: FileText,
+    },
+    ...(hasPermission('tenant.manage_users')
+      ? [{ name: 'Team', href: `/tenant/${tenant.slug}/team`, icon: Users }]
+      : []),
+    ...(hasPermission('tenant.view_analytics')
+      ? [
+          {
+            name: 'Analytics',
+            href: `/tenant/${tenant.slug}/analytics`,
+            icon: BarChart3,
+          },
+        ]
+      : []),
   ];
 
   return (
@@ -90,9 +107,14 @@ export function TenantHeader() {
             {tenantUser ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="flex items-center space-x-2">
+                  <Button
+                    variant="ghost"
+                    className="flex items-center space-x-2"
+                  >
                     <Avatar className="h-8 w-8">
-                      <AvatarImage src={`https://avatar.vercel.sh/${tenantUser.userId}`} />
+                      <AvatarImage
+                        src={`https://avatar.vercel.sh/${tenantUser.userId}`}
+                      />
                       <AvatarFallback>
                         {tenantUser.userId.slice(0, 2).toUpperCase()}
                       </AvatarFallback>
@@ -135,9 +157,7 @@ export function TenantHeader() {
                 <Button variant="outline" size="sm">
                   Sign In
                 </Button>
-                <Button size="sm">
-                  Get Started
-                </Button>
+                <Button size="sm">Get Started</Button>
               </div>
             )}
 

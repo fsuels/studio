@@ -12,9 +12,18 @@ export const SPECIAL_FIELD_CONFIGS = {
   ODO_STATUS: {
     id: 'odo_status',
     options: [
-      { value: 'ACTUAL', translationKey: 'documents:fields.odo_status.options.ACTUAL' },
-      { value: 'EXCEEDS', translationKey: 'documents:fields.odo_status.options.EXCEEDS' },
-      { value: 'NOT_ACTUAL', translationKey: 'documents:fields.odo_status.options.NOT_ACTUAL' },
+      {
+        value: 'ACTUAL',
+        translationKey: 'documents:fields.odo_status.options.ACTUAL',
+      },
+      {
+        value: 'EXCEEDS',
+        translationKey: 'documents:fields.odo_status.options.EXCEEDS',
+      },
+      {
+        value: 'NOT_ACTUAL',
+        translationKey: 'documents:fields.odo_status.options.NOT_ACTUAL',
+      },
     ],
   },
 } as const;

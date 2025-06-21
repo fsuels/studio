@@ -5,7 +5,8 @@ import EnhancedOrdersTable from '@/components/admin/EnhancedOrdersTable';
 
 export const metadata: Metadata = {
   title: 'Enhanced Orders - Admin Dashboard',
-  description: 'Advanced order management with inline actions, optimistic updates, and real-time metrics',
+  description:
+    'Advanced order management with inline actions, optimistic updates, and real-time metrics',
 };
 
 export default function EnhancedOrdersPage() {
@@ -14,9 +15,12 @@ export default function EnhancedOrdersPage() {
       <div className="container mx-auto px-4">
         {/* Page Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Enhanced Orders Dashboard</h1>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+            Enhanced Orders Dashboard
+          </h1>
           <p className="text-gray-600">
-            Advanced order management with inline actions, optimistic updates, and real-time performance metrics
+            Advanced order management with inline actions, optimistic updates,
+            and real-time performance metrics
           </p>
         </div>
 

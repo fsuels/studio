@@ -47,7 +47,7 @@ Don't risk using generic templates that may not comply with Nevada law. Get a pr
 
 [Create Nevada Lease Agreement]
 
-*Trusted by thousands of Nevada businesses*
+_Trusted by thousands of Nevada businesses_
 
 ---
 

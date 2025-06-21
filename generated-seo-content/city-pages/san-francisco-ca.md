@@ -30,7 +30,7 @@ San Francisco offers a dynamic business environment with opportunities across in
 
 [Start Your San Francisco Legal Document]
 
-*Trusted by hundreds of San Francisco businesses*
+_Trusted by hundreds of San Francisco businesses_
 
 ---
 

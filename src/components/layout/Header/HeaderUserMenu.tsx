@@ -11,12 +11,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
-import {
-  UserPlus,
-  LogIn,
-  LogOut,
-  UserCircle,
-} from 'lucide-react';
+import { UserPlus, LogIn, LogOut, UserCircle } from 'lucide-react';
 import { UserMenuSkeleton } from '@/components/ui/SkeletonVariants';
 import { RoleSelector } from '@/components/shared';
 
@@ -25,16 +20,19 @@ interface HeaderUserMenuProps {
   mounted: boolean;
 }
 
-export default function HeaderUserMenu({ 
-  clientLocale, 
-  mounted 
+export default function HeaderUserMenu({
+  clientLocale,
+  mounted,
 }: HeaderUserMenuProps) {
   const { t: tHeader } = useTranslation('header');
   const { isLoggedIn, isLoading: authIsLoading, user, logout } = useAuth();
 
   if (!mounted) {
     return (
-      <div className="flex items-center gap-2" data-testid="header-user-skeleton">
+      <div
+        className="flex items-center gap-2"
+        data-testid="header-user-skeleton"
+      >
         <UserMenuSkeleton />
         <UserMenuSkeleton />
       </div>
@@ -53,7 +51,7 @@ export default function HeaderUserMenu({
     return (
       <div className="flex items-center gap-2">
         <RoleSelector size="sm" className="hidden md:flex" />
-        
+
         <Link href={`/${clientLocale}/dashboard`}>
           <Button
             variant="outline"
@@ -66,11 +64,7 @@ export default function HeaderUserMenu({
 
         <Popover>
           <PopoverTrigger asChild>
-            <Button
-              variant="outline"
-              size="sm"
-              className="gap-2"
-            >
+            <Button variant="outline" size="sm" className="gap-2">
               <UserCircle className="h-4 w-4" />
               <span className="hidden sm:inline">
                 {user.email?.split('@')[0] || 'User'}
@@ -82,12 +76,12 @@ export default function HeaderUserMenu({
               <div className="px-2 py-1.5 text-sm text-muted-foreground border-b">
                 {user.email}
               </div>
-              
+
               {/* Role selector for mobile */}
               <div className="md:hidden px-2">
                 <RoleSelector size="sm" className="w-full" />
               </div>
-              
+
               <Button
                 variant="ghost"
                 size="sm"
@@ -107,13 +101,9 @@ export default function HeaderUserMenu({
   return (
     <div className="flex items-center gap-2">
       <RoleSelector size="sm" className="hidden lg:flex" />
-      
+
       <Link href={`/${clientLocale}/signin`}>
-        <Button
-          variant="outline"
-          size="sm"
-          className="gap-2"
-        >
+        <Button variant="outline" size="sm" className="gap-2">
           <LogIn className="h-4 w-4" />
           <span className="hidden sm:inline">
             {tHeader('nav.signin', { defaultValue: 'Sign In' })}
@@ -121,10 +111,7 @@ export default function HeaderUserMenu({
         </Button>
       </Link>
       <Link href={`/${clientLocale}/signup`}>
-        <Button
-          size="sm"
-          className="gap-2 bg-primary hover:bg-primary/90"
-        >
+        <Button size="sm" className="gap-2 bg-primary hover:bg-primary/90">
           <UserPlus className="h-4 w-4" />
           <span className="hidden sm:inline">
             {tHeader('nav.signup', { defaultValue: 'Sign Up' })}

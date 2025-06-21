@@ -95,7 +95,8 @@ export const questions: Question[] = [
     label: 'Medical Treatment Authority',
     type: 'textarea',
     required: true,
-    placeholder: 'Describe the scope of medical treatment decisions your agent may make',
+    placeholder:
+      'Describe the scope of medical treatment decisions your agent may make',
   },
   {
     id: 'hospitalAdmissionAuthority',
@@ -147,7 +148,7 @@ export const questions: Question[] = [
     options: [
       { value: 'continue', label: 'Continue life support' },
       { value: 'discontinue', label: 'Discontinue life support' },
-      { value: 'agent_discretion', label: 'Leave to agent\'s discretion' },
+      { value: 'agent_discretion', label: "Leave to agent's discretion" },
     ],
   },
   {
@@ -158,7 +159,7 @@ export const questions: Question[] = [
     options: [
       { value: 'yes', label: 'Yes, authorize organ donation' },
       { value: 'no', label: 'No, do not authorize organ donation' },
-      { value: 'agent_discretion', label: 'Leave to agent\'s discretion' },
+      { value: 'agent_discretion', label: "Leave to agent's discretion" },
     ],
   },
   {
@@ -169,7 +170,7 @@ export const questions: Question[] = [
     options: [
       { value: 'yes', label: 'Yes, authorize autopsy' },
       { value: 'no', label: 'No, do not authorize autopsy' },
-      { value: 'agent_discretion', label: 'Leave to agent\'s discretion' },
+      { value: 'agent_discretion', label: "Leave to agent's discretion" },
     ],
   },
   {
@@ -194,7 +195,8 @@ export const questions: Question[] = [
     id: 'religiousMoralBeliefs',
     label: 'Religious or Moral Beliefs (Optional)',
     type: 'textarea',
-    placeholder: 'Any religious or moral beliefs that should guide medical decisions',
+    placeholder:
+      'Any religious or moral beliefs that should guide medical decisions',
   },
   {
     id: 'nursingHomePlacement',
@@ -204,9 +206,10 @@ export const questions: Question[] = [
   },
   {
     id: 'limitationsOnAuthority',
-    label: 'Limitations on Agent\'s Authority (Optional)',
+    label: "Limitations on Agent's Authority (Optional)",
     type: 'textarea',
-    placeholder: 'Any limitations or restrictions on your agent\'s decision-making authority',
+    placeholder:
+      "Any limitations or restrictions on your agent's decision-making authority",
   },
   {
     id: 'witnessOneName',

@@ -40,4 +40,4 @@ Reconozco haber recibido esta carta de terminación.
 
 [Firma del Empleado]
 
-Fecha: ********\_\_\_\_********
+Fecha: **\*\*\*\***\_\_\_\_**\*\*\*\***

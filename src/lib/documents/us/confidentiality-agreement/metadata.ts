@@ -24,13 +24,25 @@ export const confidentialityAgreementMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Confidentiality Agreement',
-      description: 'General confidentiality agreement to protect sensitive information shared between parties.',
-      aliases: ['confidential agreement', 'secrecy agreement', 'non-disclosure', 'privacy agreement'],
+      description:
+        'General confidentiality agreement to protect sensitive information shared between parties.',
+      aliases: [
+        'confidential agreement',
+        'secrecy agreement',
+        'non-disclosure',
+        'privacy agreement',
+      ],
     },
     es: {
       name: 'Acuerdo de Confidencialidad',
-      description: 'Acuerdo general de confidencialidad para proteger información sensible compartida entre partes.',
-      aliases: ['acuerdo confidencial', 'acuerdo de secreto', 'no divulgación', 'acuerdo de privacidad'],
+      description:
+        'Acuerdo general de confidencialidad para proteger información sensible compartida entre partes.',
+      aliases: [
+        'acuerdo confidencial',
+        'acuerdo de secreto',
+        'no divulgación',
+        'acuerdo de privacidad',
+      ],
     },
   },
 };

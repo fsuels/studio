@@ -30,7 +30,7 @@ Los Angeles offers a dynamic business environment with opportunities across indu
 
 [Start Your Los Angeles Legal Document]
 
-*Trusted by hundreds of Los Angeles businesses*
+_Trusted by hundreds of Los Angeles businesses_
 
 ---
 

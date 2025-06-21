@@ -30,7 +30,7 @@ Chicago offers a dynamic business environment with opportunities across industri
 
 [Start Your Chicago Legal Document]
 
-*Trusted by hundreds of Chicago businesses*
+_Trusted by hundreds of Chicago businesses_
 
 ---
 

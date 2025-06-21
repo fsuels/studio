@@ -19,20 +19,30 @@ export const CohabitationAgreementSchema = z.object({
   partner2DateOfBirth: z.string().optional(),
 
   // Relationship Information
-  relationshipStartDate: z.string().min(1, 'Relationship start date is required'),
-  cohabitationStartDate: z.string().min(1, 'Cohabitation start date is required'),
-  sharedResidenceAddress: z.string().min(1, 'Shared residence address is required'),
+  relationshipStartDate: z
+    .string()
+    .min(1, 'Relationship start date is required'),
+  cohabitationStartDate: z
+    .string()
+    .min(1, 'Cohabitation start date is required'),
+  sharedResidenceAddress: z
+    .string()
+    .min(1, 'Shared residence address is required'),
 
   // Financial Arrangements
   separateProperty: z.boolean().default(true),
   sharedExpenses: z.boolean().default(true),
-  expenseSharingMethod: z.enum(['equal', 'proportional-income', 'other']).default('equal'),
+  expenseSharingMethod: z
+    .enum(['equal', 'proportional-income', 'other'])
+    .default('equal'),
   expenseSharingDetails: z.string().optional(),
   jointBankAccount: z.boolean().default(false),
   jointBankAccountDetails: z.string().optional(),
 
   // Property Ownership
-  realEstateOwnership: z.enum(['separate', 'joint', 'none']).default('separate'),
+  realEstateOwnership: z
+    .enum(['separate', 'joint', 'none'])
+    .default('separate'),
   realEstateDetails: z.string().optional(),
   personalPropertySeparate: z.boolean().default(true),
   jointPurchasesHandling: z.string().optional(),
@@ -56,7 +66,9 @@ export const CohabitationAgreementSchema = z.object({
   childSupportArrangements: z.string().optional(),
 
   // Healthcare and Medical
-  healthInsurance: z.enum(['separate', 'shared', 'one-covers-both']).default('separate'),
+  healthInsurance: z
+    .enum(['separate', 'shared', 'one-covers-both'])
+    .default('separate'),
   healthInsuranceDetails: z.string().optional(),
   medicalDecisionMaking: z.boolean().default(false),
   medicalPowerOfAttorney: z.boolean().default(false),
@@ -65,7 +77,9 @@ export const CohabitationAgreementSchema = z.object({
   terminationNotice: z.number().default(30),
   terminationProcedure: z.string().optional(),
   propertyDivision: z.string().optional(),
-  disputeResolution: z.enum(['mediation', 'arbitration', 'court']).default('mediation'),
+  disputeResolution: z
+    .enum(['mediation', 'arbitration', 'court'])
+    .default('mediation'),
 
   // Other Provisions
   inheritanceRights: z.boolean().default(false),
@@ -78,7 +92,9 @@ export const CohabitationAgreementSchema = z.object({
   governingState: z.string().min(1, 'Governing state is required'),
   severabilityClause: z.boolean().default(true),
   entireAgreementClause: z.boolean().default(true),
-  modificationRequirements: z.enum(['written', 'verbal', 'notarized']).default('written'),
+  modificationRequirements: z
+    .enum(['written', 'verbal', 'notarized'])
+    .default('written'),
 
   // Additional Terms
   additionalTerms: z.string().optional(),

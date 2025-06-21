@@ -51,7 +51,7 @@ export const questions: Question[] = [
     label: 'Primary Remote Work Location',
     required: true,
     category: 'Work Location',
-    placeholder: 'Employee\'s home address or designated workspace',
+    placeholder: "Employee's home address or designated workspace",
   },
   {
     id: 'companyEquipmentProvided',

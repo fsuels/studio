@@ -47,7 +47,7 @@ Don't risk using generic templates that may not comply with Washington law. Get 
 
 [Create Washington Lease Agreement]
 
-*Trusted by thousands of Washington businesses*
+_Trusted by thousands of Washington businesses_
 
 ---
 

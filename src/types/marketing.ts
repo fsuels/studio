@@ -16,7 +16,12 @@ export interface MarketingAttribution {
   firstTouch: MarketingTouchpoint;
   lastTouch: MarketingTouchpoint;
   assistingTouches: MarketingTouchpoint[];
-  attributionModel: 'first_touch' | 'last_touch' | 'linear' | 'time_decay' | 'position_based';
+  attributionModel:
+    | 'first_touch'
+    | 'last_touch'
+    | 'linear'
+    | 'time_decay'
+    | 'position_based';
   revenueAttributed: number;
   conversionValue: number;
   conversionType: 'order' | 'signup' | 'download' | 'trial' | 'consultation';
@@ -45,8 +50,17 @@ export interface MarketingTouchpoint {
 export interface MarketingChannel {
   id: string;
   name: string;
-  category: 'paid_search' | 'organic_search' | 'social_media' | 'email' | 'direct' | 
-           'referral' | 'display' | 'affiliate' | 'content' | 'other';
+  category:
+    | 'paid_search'
+    | 'organic_search'
+    | 'social_media'
+    | 'email'
+    | 'direct'
+    | 'referral'
+    | 'display'
+    | 'affiliate'
+    | 'content'
+    | 'other';
   subcategory?: string;
   platform?: string; // Google Ads, Facebook, LinkedIn, etc.
   costModel: 'cpc' | 'cpm' | 'cpa' | 'flat_rate' | 'revenue_share';
@@ -205,10 +219,22 @@ export interface JourneyTouchpoint {
   id: string;
   timestamp: string;
   channel: string;
-  touchpointType: 'paid' | 'organic' | 'direct' | 'social' | 'email' | 'referral';
+  touchpointType:
+    | 'paid'
+    | 'organic'
+    | 'direct'
+    | 'social'
+    | 'email'
+    | 'referral';
   utm: UTMParameters;
   page: string;
-  event: 'page_view' | 'form_start' | 'form_complete' | 'download' | 'signup' | 'purchase';
+  event:
+    | 'page_view'
+    | 'form_start'
+    | 'form_complete'
+    | 'download'
+    | 'signup'
+    | 'purchase';
   value?: number;
   duration?: number;
   exitPage?: string;
@@ -217,7 +243,13 @@ export interface JourneyTouchpoint {
 }
 
 export interface JourneyStage {
-  stage: 'awareness' | 'consideration' | 'intent' | 'purchase' | 'retention' | 'advocacy';
+  stage:
+    | 'awareness'
+    | 'consideration'
+    | 'intent'
+    | 'purchase'
+    | 'retention'
+    | 'advocacy';
   enteredAt: string;
   exitedAt?: string;
   duration?: number;
@@ -276,8 +308,14 @@ export interface ChannelROI {
 }
 
 export interface ChannelRecommendation {
-  type: 'increase_budget' | 'decrease_budget' | 'optimize_targeting' | 'test_creative' | 
-        'pause_campaign' | 'expand_reach' | 'improve_landing_page';
+  type:
+    | 'increase_budget'
+    | 'decrease_budget'
+    | 'optimize_targeting'
+    | 'test_creative'
+    | 'pause_campaign'
+    | 'expand_reach'
+    | 'improve_landing_page';
   priority: 'high' | 'medium' | 'low';
   impact: 'high' | 'medium' | 'low';
   effort: 'high' | 'medium' | 'low';
@@ -300,9 +338,17 @@ export interface MarketingDashboardData {
   campaigns: CampaignPerformance[];
   attribution: {
     modelComparison: Record<string, { conversions: number; revenue: number }>;
-    topPerformingChannels: Array<{ channel: string; revenue: number; growth: number }>;
+    topPerformingChannels: Array<{
+      channel: string;
+      revenue: number;
+      growth: number;
+    }>;
     channelMix: Record<string, number>;
-    conversionPaths: Array<{ path: string; conversions: number; revenue: number }>;
+    conversionPaths: Array<{
+      path: string;
+      conversions: number;
+      revenue: number;
+    }>;
   };
   discounts: {
     totalCodesActive: number;
@@ -314,7 +360,10 @@ export interface MarketingDashboardData {
   timeframe: {
     current: { startDate: string; endDate: string };
     previous: { startDate: string; endDate: string };
-    comparison: Record<string, { current: number; previous: number; change: number }>;
+    comparison: Record<
+      string,
+      { current: number; previous: number; change: number }
+    >;
   };
   goals: {
     revenueTarget: number;
@@ -335,7 +384,11 @@ export interface MarketingInsight {
   description: string;
   impact: number; // potential revenue impact
   confidence: number; // 0-100 confidence score
-  dataPoints: Array<{ metric: string; value: number; trend: 'up' | 'down' | 'stable' }>;
+  dataPoints: Array<{
+    metric: string;
+    value: number;
+    trend: 'up' | 'down' | 'stable';
+  }>;
   recommendations: string[];
   createdAt: string;
 }

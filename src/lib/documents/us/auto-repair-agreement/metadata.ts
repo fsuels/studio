@@ -24,13 +24,22 @@ export const autoRepairAgreementMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Auto Repair Agreement',
-      description: 'Agreement between auto repair shop and customer for vehicle repair services.',
-      aliases: ['vehicle repair agreement', 'automotive service agreement', 'car repair contract'],
+      description:
+        'Agreement between auto repair shop and customer for vehicle repair services.',
+      aliases: [
+        'vehicle repair agreement',
+        'automotive service agreement',
+        'car repair contract',
+      ],
     },
     es: {
       name: 'Acuerdo de Reparación Automotriz',
-      description: 'Acuerdo entre taller de reparación y cliente para servicios de reparación de vehículos.',
-      aliases: ['acuerdo de reparación de vehículos', 'contrato de servicio automotriz'],
+      description:
+        'Acuerdo entre taller de reparación y cliente para servicios de reparación de vehículos.',
+      aliases: [
+        'acuerdo de reparación de vehículos',
+        'contrato de servicio automotriz',
+      ],
     },
   },
 };

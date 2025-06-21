@@ -10,56 +10,56 @@ export const ceaseDesistLetterQuestions: DocumentQuestion[] = [
     options: [
       { value: 'individual', label: 'Individual' },
       { value: 'business', label: 'Business/Organization' },
-      { value: 'attorney', label: 'Attorney/Law Firm' }
-    ]
+      { value: 'attorney', label: 'Attorney/Law Firm' },
+    ],
   },
   {
     id: 'sender.name',
     text: 'Your full name or business name',
     type: 'text',
     required: true,
-    placeholder: 'John Smith or ABC Company, LLC'
+    placeholder: 'John Smith or ABC Company, LLC',
   },
   {
     id: 'sender.address',
     text: 'Your street address',
     type: 'text',
     required: true,
-    placeholder: '123 Main Street'
+    placeholder: '123 Main Street',
   },
   {
     id: 'sender.city',
     text: 'City',
     type: 'text',
-    required: true
+    required: true,
   },
   {
     id: 'sender.state',
     text: 'State',
     type: 'select',
     required: true,
-    placeholder: 'Select state'
+    placeholder: 'Select state',
   },
   {
     id: 'sender.zipCode',
     text: 'ZIP Code',
     type: 'text',
     required: true,
-    placeholder: '12345'
+    placeholder: '12345',
   },
   {
     id: 'sender.phone',
     text: 'Phone number',
     type: 'tel',
     required: true,
-    placeholder: '(555) 123-4567'
+    placeholder: '(555) 123-4567',
   },
   {
     id: 'sender.email',
     text: 'Email address',
     type: 'email',
     required: true,
-    placeholder: 'contact@example.com'
+    placeholder: 'contact@example.com',
   },
 
   // Recipient Information
@@ -71,42 +71,42 @@ export const ceaseDesistLetterQuestions: DocumentQuestion[] = [
     options: [
       { value: 'individual', label: 'Individual person' },
       { value: 'business', label: 'Business/Organization' },
-      { value: 'unknown', label: 'Unknown entity' }
-    ]
+      { value: 'unknown', label: 'Unknown entity' },
+    ],
   },
   {
     id: 'recipient.name',
-    text: 'Recipient\'s name or business name',
+    text: "Recipient's name or business name",
     type: 'text',
     required: true,
-    placeholder: 'Jane Doe or XYZ Corporation'
+    placeholder: 'Jane Doe or XYZ Corporation',
   },
   {
     id: 'recipient.address',
-    text: 'Recipient\'s address',
+    text: "Recipient's address",
     type: 'text',
     required: true,
-    placeholder: '456 Oak Avenue'
+    placeholder: '456 Oak Avenue',
   },
   {
     id: 'recipient.city',
     text: 'City',
     type: 'text',
-    required: true
+    required: true,
   },
   {
     id: 'recipient.state',
     text: 'State',
     type: 'select',
     required: true,
-    placeholder: 'Select state'
+    placeholder: 'Select state',
   },
   {
     id: 'recipient.zipCode',
     text: 'ZIP Code',
     type: 'text',
     required: true,
-    placeholder: '12345'
+    placeholder: '12345',
   },
 
   // Violation Details
@@ -126,16 +126,17 @@ export const ceaseDesistLetterQuestions: DocumentQuestion[] = [
       { value: 'trade_secret_theft', label: 'Trade secret theft' },
       { value: 'privacy_invasion', label: 'Invasion of privacy' },
       { value: 'debt_collection_abuse', label: 'Abusive debt collection' },
-      { value: 'other', label: 'Other' }
-    ]
+      { value: 'other', label: 'Other' },
+    ],
   },
   {
     id: 'violation.description',
     text: 'Describe the harmful activity in detail',
     type: 'textarea',
     required: true,
-    placeholder: 'Provide a comprehensive description of the activities you want stopped, including dates, locations, and specific actions...',
-    minLength: 100
+    placeholder:
+      'Provide a comprehensive description of the activities you want stopped, including dates, locations, and specific actions...',
+    minLength: 100,
   },
   {
     id: 'violation.specificActivities',
@@ -143,14 +144,14 @@ export const ceaseDesistLetterQuestions: DocumentQuestion[] = [
     type: 'array',
     required: true,
     placeholder: 'E.g., Using my copyrighted images on their website',
-    helpText: 'Add each specific activity separately'
+    helpText: 'Add each specific activity separately',
   },
   {
     id: 'violation.ongoingViolation',
     text: 'Is this an ongoing violation?',
     type: 'boolean',
     required: true,
-    helpText: 'Is the harmful activity continuing to occur?'
+    helpText: 'Is the harmful activity continuing to occur?',
   },
 
   // Evidence
@@ -159,19 +160,19 @@ export const ceaseDesistLetterQuestions: DocumentQuestion[] = [
     text: 'Do you have documents as evidence?',
     type: 'boolean',
     required: true,
-    helpText: 'Contracts, registrations, correspondence, etc.'
+    helpText: 'Contracts, registrations, correspondence, etc.',
   },
   {
     id: 'evidence.photographsAvailable',
     text: 'Do you have photographs or screenshots as evidence?',
     type: 'boolean',
-    required: true
+    required: true,
   },
   {
     id: 'evidence.witnessesAvailable',
     text: 'Do you have witnesses to the violation?',
     type: 'boolean',
-    required: true
+    required: true,
   },
 
   // Demands - Immediate Actions
@@ -181,14 +182,14 @@ export const ceaseDesistLetterQuestions: DocumentQuestion[] = [
     type: 'array',
     required: true,
     placeholder: 'E.g., Remove all infringing content from website',
-    helpText: 'List each required action separately'
+    helpText: 'List each required action separately',
   },
   {
     id: 'demands.monetaryDemands.damagesRequested',
     text: 'Are you requesting monetary damages?',
     type: 'boolean',
     required: true,
-    helpText: 'Compensation for losses you\'ve suffered'
+    helpText: "Compensation for losses you've suffered",
   },
   {
     id: 'demands.monetaryDemands.damageAmount',
@@ -196,8 +197,11 @@ export const ceaseDesistLetterQuestions: DocumentQuestion[] = [
     type: 'number',
     required: false,
     placeholder: '5000',
-    conditionalOn: { field: 'demands.monetaryDemands.damagesRequested', value: true },
-    helpText: 'Enter amount in dollars'
+    conditionalOn: {
+      field: 'demands.monetaryDemands.damagesRequested',
+      value: true,
+    },
+    helpText: 'Enter amount in dollars',
   },
 
   // Timeline
@@ -207,14 +211,14 @@ export const ceaseDesistLetterQuestions: DocumentQuestion[] = [
     type: 'number',
     required: true,
     placeholder: '10',
-    helpText: 'Typical range is 5-30 business days'
+    helpText: 'Typical range is 5-30 business days',
   },
   {
     id: 'timeline.gracePeriodOffered',
     text: 'Offer a grace period for good faith efforts?',
     type: 'boolean',
     required: true,
-    helpText: 'Additional time if they show they\'re working to comply'
+    helpText: "Additional time if they show they're working to comply",
   },
 
   // Consequences
@@ -223,7 +227,7 @@ export const ceaseDesistLetterQuestions: DocumentQuestion[] = [
     text: 'Threaten legal action for non-compliance?',
     type: 'boolean',
     required: true,
-    helpText: 'Makes the letter more serious but may escalate conflict'
+    helpText: 'Makes the letter more serious but may escalate conflict',
   },
   {
     id: 'consequences.specificLegalActions',
@@ -231,20 +235,20 @@ export const ceaseDesistLetterQuestions: DocumentQuestion[] = [
     type: 'array',
     required: false,
     placeholder: 'E.g., Federal lawsuit for trademark infringement',
-    conditionalOn: { field: 'consequences.legalActionThreatened', value: true }
+    conditionalOn: { field: 'consequences.legalActionThreatened', value: true },
   },
   {
     id: 'consequences.injunctiveReliefMentioned',
     text: 'Mention seeking injunctive relief (court order)?',
     type: 'boolean',
     required: true,
-    helpText: 'Court order to stop the harmful activity'
+    helpText: 'Court order to stop the harmful activity',
   },
   {
     id: 'consequences.monetaryDamagesMentioned',
     text: 'Mention seeking monetary damages in court?',
     type: 'boolean',
-    required: true
+    required: true,
   },
 
   // Communication
@@ -253,7 +257,7 @@ export const ceaseDesistLetterQuestions: DocumentQuestion[] = [
     text: 'Require a written response?',
     type: 'boolean',
     required: true,
-    helpText: 'Confirming they will comply with your demands'
+    helpText: 'Confirming they will comply with your demands',
   },
   {
     id: 'communication.preferredContactMethod',
@@ -264,15 +268,15 @@ export const ceaseDesistLetterQuestions: DocumentQuestion[] = [
       { value: 'email', label: 'Email' },
       { value: 'phone', label: 'Phone' },
       { value: 'mail', label: 'US Mail' },
-      { value: 'attorney_only', label: 'Through attorney only' }
-    ]
+      { value: 'attorney_only', label: 'Through attorney only' },
+    ],
   },
   {
     id: 'communication.noDirectContactRequested',
     text: 'Request that they not contact you directly?',
     type: 'boolean',
     required: true,
-    helpText: 'Useful in harassment cases'
+    helpText: 'Useful in harassment cases',
   },
 
   // Delivery
@@ -285,22 +289,22 @@ export const ceaseDesistLetterQuestions: DocumentQuestion[] = [
       { value: 'certified_mail', label: 'Certified mail (recommended)' },
       { value: 'personal_service', label: 'Personal service' },
       { value: 'email', label: 'Email only' },
-      { value: 'multiple_methods', label: 'Multiple methods' }
-    ]
+      { value: 'multiple_methods', label: 'Multiple methods' },
+    ],
   },
 
   // Additional Terms
   {
     id: 'additionalTerms.governingLaw',
-    text: 'Which state\'s laws should govern this matter?',
+    text: "Which state's laws should govern this matter?",
     type: 'select',
     required: true,
-    placeholder: 'Select state'
+    placeholder: 'Select state',
   },
   {
     id: 'additionalTerms.confidentialityRequest',
     text: 'Request that they keep this letter confidential?',
     type: 'boolean',
-    required: true
-  }
+    required: true,
+  },
 ];

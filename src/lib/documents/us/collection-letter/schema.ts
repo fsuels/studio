@@ -2,7 +2,10 @@ import { z } from 'zod';
 import { usStates } from '@/lib/usStates';
 
 export const CollectionLetterSchema = z.object({
-  date: z.string().min(1).regex(/^\d{4}-\d{2}-\d{2}$/, 'Date must be in YYYY-MM-DD format'),
+  date: z
+    .string()
+    .min(1)
+    .regex(/^\d{4}-\d{2}-\d{2}$/, 'Date must be in YYYY-MM-DD format'),
   creditorName: z.string().min(1),
   creditorAddress: z.string().min(1),
   debtorName: z.string().min(1),
@@ -10,16 +13,29 @@ export const CollectionLetterSchema = z.object({
   originalDebtAmount: z.coerce.number().positive(),
   currentBalance: z.coerce.number().positive(),
   accountNumber: z.string().min(1),
-  dueDate: z.string().min(1).regex(/^\d{4}-\d{2}-\d{2}$/, 'Date must be in YYYY-MM-DD format'),
+  dueDate: z
+    .string()
+    .min(1)
+    .regex(/^\d{4}-\d{2}-\d{2}$/, 'Date must be in YYYY-MM-DD format'),
   daysPastDue: z.coerce.number().int().nonnegative(),
-  collectionType: z.enum(['First Notice', 'Second Notice', 'Final Notice', 'Pre-Legal']),
-  paymentOptions: z.array(z.enum([
-    'Full Payment',
-    'Payment Plan',
-    'Settlement Offer',
-    'Contact for Arrangement'
-  ])),
-  responseDeadline: z.string().min(1).regex(/^\d{4}-\d{2}-\d{2}$/, 'Date must be in YYYY-MM-DD format'),
+  collectionType: z.enum([
+    'First Notice',
+    'Second Notice',
+    'Final Notice',
+    'Pre-Legal',
+  ]),
+  paymentOptions: z.array(
+    z.enum([
+      'Full Payment',
+      'Payment Plan',
+      'Settlement Offer',
+      'Contact for Arrangement',
+    ]),
+  ),
+  responseDeadline: z
+    .string()
+    .min(1)
+    .regex(/^\d{4}-\d{2}-\d{2}$/, 'Date must be in YYYY-MM-DD format'),
   lateFees: z.coerce.number().nonnegative().optional(),
   interestCharges: z.coerce.number().nonnegative().optional(),
   totalAmountDue: z.coerce.number().positive(),

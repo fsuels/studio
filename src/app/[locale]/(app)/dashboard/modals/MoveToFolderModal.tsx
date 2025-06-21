@@ -36,14 +36,16 @@ export default function MoveToFolderModal({
 }: MoveToFolderModalProps) {
   const { t } = useTranslation('common');
   const [search, setSearch] = useState('');
-  const [selectedFolderId, setSelectedFolderId] = useState<string | null>(currentFolderId || null);
+  const [selectedFolderId, setSelectedFolderId] = useState<string | null>(
+    currentFolderId || null,
+  );
 
   // Filter folders based on search
   const filteredFolders = useMemo(() => {
     if (!search.trim()) return folders;
     const searchLower = search.toLowerCase();
-    return folders.filter(folder => 
-      folder.name.toLowerCase().includes(searchLower)
+    return folders.filter((folder) =>
+      folder.name.toLowerCase().includes(searchLower),
     );
   }, [folders, search]);
 
@@ -65,8 +67,10 @@ export default function MoveToFolderModal({
         <DialogHeader>
           <DialogTitle>{t('Move to Folder')}</DialogTitle>
           <DialogDescription>
-            {documentName 
-              ? t('Select a folder to move "{{name}}" into', { name: documentName })
+            {documentName
+              ? t('Select a folder to move "{{name}}" into', {
+                  name: documentName,
+                })
               : t('Select a destination folder')}
           </DialogDescription>
         </DialogHeader>
@@ -117,7 +121,9 @@ export default function MoveToFolderModal({
                   disabled={isCurrent}
                 >
                   <Folder className="h-4 w-4 flex-shrink-0" />
-                  <span className="flex-1 text-left truncate">{folder.name}</span>
+                  <span className="flex-1 text-left truncate">
+                    {folder.name}
+                  </span>
                   <span className="text-xs text-muted-foreground">
                     {count > 0 && `(${count})`}
                   </span>
@@ -138,8 +144,8 @@ export default function MoveToFolderModal({
           <Button variant="outline" onClick={handleClose} className="flex-1">
             {t('Cancel')}
           </Button>
-          <Button 
-            onClick={handleMove} 
+          <Button
+            onClick={handleMove}
             className="flex-1"
             disabled={selectedFolderId === currentFolderId}
           >

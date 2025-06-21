@@ -49,14 +49,16 @@ export const trademarkApplicationWorksheetQuestions: Question[] = [
     label: 'Description of the Mark',
     type: 'textarea',
     required: true,
-    placeholder: 'Describe what the trademark looks like, colors, elements, etc.',
+    placeholder:
+      'Describe what the trademark looks like, colors, elements, etc.',
   },
   {
     id: 'goodsServices',
     label: 'Goods and/or Services',
     type: 'textarea',
     required: true,
-    placeholder: 'Describe the specific goods or services the trademark will be used for',
+    placeholder:
+      'Describe the specific goods or services the trademark will be used for',
   },
   {
     id: 'trademarkClass',
@@ -93,7 +95,8 @@ export const trademarkApplicationWorksheetQuestions: Question[] = [
     id: 'priority',
     label: 'Priority Claim (if applicable)',
     type: 'text',
-    placeholder: 'Foreign priority information if claiming priority from another country',
+    placeholder:
+      'Foreign priority information if claiming priority from another country',
   },
   {
     id: 'attorneyName',

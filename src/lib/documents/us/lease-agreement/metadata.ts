@@ -9,9 +9,9 @@ export const metadata = {
   offerRecordingHelp: true,
   basePrice: 5,
   states: 'all',
-  templatePaths: { 
-    en: "en/us/lease-agreement.md", 
-    es: "es/us/lease-agreement.md" 
+  templatePaths: {
+    en: 'en/us/lease-agreement.md',
+    es: 'es/us/lease-agreement.md',
   },
   upsellClauses: [],
   translations: {

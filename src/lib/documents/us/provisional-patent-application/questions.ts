@@ -58,7 +58,8 @@ export const provisionalPatentApplicationQuestions: Question[] = [
     label: 'Summary of Invention',
     type: 'textarea',
     required: true,
-    placeholder: 'Brief summary of what the invention does and its main advantages',
+    placeholder:
+      'Brief summary of what the invention does and its main advantages',
   },
   {
     id: 'detailedDescription',
@@ -77,7 +78,8 @@ export const provisionalPatentApplicationQuestions: Question[] = [
     id: 'claims',
     label: 'Claims (Optional for Provisional)',
     type: 'textarea',
-    placeholder: 'What you claim as your invention (optional for provisional applications)',
+    placeholder:
+      'What you claim as your invention (optional for provisional applications)',
   },
   {
     id: 'abstractText',

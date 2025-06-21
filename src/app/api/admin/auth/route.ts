@@ -1,11 +1,11 @@
 // Admin authentication API
 import { NextRequest, NextResponse } from 'next/server';
-import { 
-  validateAdminCredentials, 
-  createAdminToken, 
+import {
+  validateAdminCredentials,
+  createAdminToken,
   verifyAdminToken,
   checkLoginRateLimit,
-  createAdminSession 
+  createAdminSession,
 } from '@/lib/admin-auth';
 import { getClientIP } from '@/lib/geolocation';
 
@@ -21,33 +21,35 @@ export async function POST(request: NextRequest) {
       // Check rate limiting
       if (!checkLoginRateLimit(clientIP)) {
         return NextResponse.json(
-          { 
-            success: false, 
-            error: 'Too many login attempts. Please try again in 15 minutes.' 
+          {
+            success: false,
+            error: 'Too many login attempts. Please try again in 15 minutes.',
           },
-          { status: 429 }
+          { status: 429 },
         );
       }
 
       // Validate credentials
       if (!validateAdminCredentials(username, password)) {
         return NextResponse.json(
-          { 
-            success: false, 
-            error: 'Invalid username or password' 
+          {
+            success: false,
+            error: 'Invalid username or password',
           },
-          { status: 401 }
+          { status: 401 },
         );
       }
 
       // Create JWT token
       const token = await createAdminToken(username);
-      
+
       // Create session
       const sessionId = createAdminSession(username, clientIP, userAgent);
 
       // Log successful login
-      console.log(`Admin login successful: ${username} from ${clientIP} at ${new Date().toISOString()}`);
+      console.log(
+        `Admin login successful: ${username} from ${clientIP} at ${new Date().toISOString()}`,
+      );
 
       // Set HTTP-only cookie
       const response = NextResponse.json({
@@ -56,9 +58,9 @@ export async function POST(request: NextRequest) {
           username,
           role: 'admin',
           loginTime: new Date().toISOString(),
-          sessionId
+          sessionId,
         },
-        message: 'Login successful'
+        message: 'Login successful',
       });
 
       response.cookies.set('admin-token', token, {
@@ -66,7 +68,7 @@ export async function POST(request: NextRequest) {
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'strict',
         maxAge: 24 * 60 * 60, // 24 hours
-        path: '/'
+        path: '/',
       });
 
       return response;
@@ -76,7 +78,7 @@ export async function POST(request: NextRequest) {
       // Clear the cookie
       const response = NextResponse.json({
         success: true,
-        message: 'Logged out successfully'
+        message: 'Logged out successfully',
       });
 
       response.cookies.set('admin-token', '', {
@@ -84,24 +86,25 @@ export async function POST(request: NextRequest) {
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'strict',
         maxAge: 0,
-        path: '/'
+        path: '/',
       });
 
-      console.log(`Admin logout: ${username} from ${clientIP} at ${new Date().toISOString()}`);
+      console.log(
+        `Admin logout: ${username} from ${clientIP} at ${new Date().toISOString()}`,
+      );
 
       return response;
     }
 
     return NextResponse.json(
       { success: false, error: 'Invalid action' },
-      { status: 400 }
+      { status: 400 },
     );
-
   } catch (error) {
     console.error('Admin auth error:', error);
     return NextResponse.json(
       { success: false, error: 'Authentication failed' },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -110,37 +113,36 @@ export async function POST(request: NextRequest) {
 export async function GET(request: NextRequest) {
   try {
     const token = request.cookies.get('admin-token')?.value;
-    
+
     if (!token) {
       return NextResponse.json({
         success: false,
         authenticated: false,
-        error: 'No token found'
+        error: 'No token found',
       });
     }
 
     const adminUser = await verifyAdminToken(token);
-    
+
     if (!adminUser) {
       return NextResponse.json({
         success: false,
         authenticated: false,
-        error: 'Invalid token'
+        error: 'Invalid token',
       });
     }
 
     return NextResponse.json({
       success: true,
       authenticated: true,
-      user: adminUser
+      user: adminUser,
     });
-
   } catch (error) {
     console.error('Admin auth check error:', error);
     return NextResponse.json({
       success: false,
       authenticated: false,
-      error: 'Authentication check failed'
+      error: 'Authentication check failed',
     });
   }
 }

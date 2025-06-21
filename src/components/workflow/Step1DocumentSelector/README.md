@@ -23,17 +23,20 @@ Step1DocumentSelector/
 ## Key Components
 
 ### Core Components
+
 - **DocumentCard**: Displays individual legal documents with pricing and metadata
-- **CategoryCard**: Shows document categories with icons and labels  
+- **CategoryCard**: Shows document categories with icons and labels
 - **TopDocChip**: Compact display for featured documents
 
 ### View Components
+
 - **SearchResultsView**: Handles global search results display
 - **TopDocumentsView**: Shows featured/popular documents
 - **AllCategoriesView**: Displays all available document categories
 - **DocumentsInCategoryView**: Shows documents within a selected category with search
 
 ### Supporting Files
+
 - **types.ts**: All TypeScript interfaces and type definitions
 - **constants.ts**: Category definitions, placeholder data, and utility functions
 - **index.tsx**: Clean public API with proper exports
@@ -61,7 +64,7 @@ import Step1DocumentSelector from './Step1DocumentSelector';
   isReadOnly={false}
   globalSearchTerm={searchTerm}
   globalSelectedState={selectedState}
-/>
+/>;
 ```
 
 ## Component Relationships
@@ -70,7 +73,7 @@ import Step1DocumentSelector from './Step1DocumentSelector';
 Step1DocumentSelector (Main)
 ├── SearchResultsView
 │   └── DocumentCard
-├── TopDocumentsView  
+├── TopDocumentsView
 │   └── TopDocChip
 ├── AllCategoriesView
 │   └── CategoryCard

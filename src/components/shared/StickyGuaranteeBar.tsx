@@ -1,6 +1,6 @@
-"use client";
-import { useEffect, useState } from "react";
-import Link from "next/link";
+'use client';
+import { useEffect, useState } from 'react';
+import Link from 'next/link';
 
 interface Props {
   href: string;
@@ -13,8 +13,8 @@ export default function StickyGuaranteeBar({ href, label }: Props) {
   useEffect(() => {
     const onScroll = () =>
       setShow(window.scrollY > 600 && window.innerWidth >= 1024); // desktop only
-    window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
+    window.addEventListener('scroll', onScroll);
+    return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
   if (!show) return null;

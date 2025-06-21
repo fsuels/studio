@@ -65,7 +65,10 @@ export const patentAssignmentQuestions: Question[] = [
     required: true,
     options: [
       { value: 'full', label: 'Full Assignment (complete ownership transfer)' },
-      { value: 'partial', label: 'Partial Assignment (partial ownership transfer)' },
+      {
+        value: 'partial',
+        label: 'Partial Assignment (partial ownership transfer)',
+      },
     ],
   },
   {
@@ -73,7 +76,8 @@ export const patentAssignmentQuestions: Question[] = [
     label: 'Consideration (Payment/Value)',
     type: 'text',
     required: true,
-    placeholder: 'e.g., $10,000, employment agreement, other valuable consideration',
+    placeholder:
+      'e.g., $10,000, employment agreement, other valuable consideration',
   },
   {
     id: 'assignmentDate',

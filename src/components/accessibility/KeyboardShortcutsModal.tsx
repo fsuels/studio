@@ -39,19 +39,24 @@ interface KeyboardShortcutsModalProps {
   onClose: () => void;
 }
 
-export function KeyboardShortcutsModal({ isOpen, onClose }: KeyboardShortcutsModalProps) {
+export function KeyboardShortcutsModal({
+  isOpen,
+  onClose,
+}: KeyboardShortcutsModalProps) {
   const { preferences } = useAccessibility();
   const [platform, setPlatform] = useState<'mac' | 'windows'>('windows');
 
   useEffect(() => {
     // Detect platform
     if (typeof window !== 'undefined') {
-      setPlatform(navigator.platform.toLowerCase().includes('mac') ? 'mac' : 'windows');
+      setPlatform(
+        navigator.platform.toLowerCase().includes('mac') ? 'mac' : 'windows',
+      );
     }
   }, []);
 
-  const getModKey = () => platform === 'mac' ? '⌘' : 'Ctrl';
-  const getAltKey = () => platform === 'mac' ? '⌥' : 'Alt';
+  const getModKey = () => (platform === 'mac' ? '⌘' : 'Ctrl');
+  const getAltKey = () => (platform === 'mac' ? '⌥' : 'Alt');
 
   const keyboardShortcuts: KeyboardShortcut[] = [
     {
@@ -182,7 +187,9 @@ export function KeyboardShortcutsModal({ isOpen, onClose }: KeyboardShortcutsMod
     <div className="flex items-center gap-1">
       {keyCombo.map((key, index) => (
         <React.Fragment key={index}>
-          {index > 0 && <span className="text-muted-foreground text-xs">+</span>}
+          {index > 0 && (
+            <span className="text-muted-foreground text-xs">+</span>
+          )}
           <Badge variant="secondary" className="px-2 py-1 text-xs font-mono">
             {key}
           </Badge>
@@ -191,18 +198,21 @@ export function KeyboardShortcutsModal({ isOpen, onClose }: KeyboardShortcutsMod
     </div>
   );
 
-  const ShortcutRow = ({ 
-    shortcut, 
-    isAvailable = true 
-  }: { 
+  const ShortcutRow = ({
+    shortcut,
+    isAvailable = true,
+  }: {
     shortcut: KeyboardShortcut['shortcuts'][0];
     isAvailable?: boolean;
   }) => {
     const Icon = shortcut.icon;
-    const available = shortcut.available !== undefined ? shortcut.available : isAvailable;
-    
+    const available =
+      shortcut.available !== undefined ? shortcut.available : isAvailable;
+
     return (
-      <div className={`flex items-center justify-between py-2 ${!available ? 'opacity-50' : ''}`}>
+      <div
+        className={`flex items-center justify-between py-2 ${!available ? 'opacity-50' : ''}`}
+      >
         <div className="flex items-center gap-3">
           {Icon && <Icon className="h-4 w-4 text-muted-foreground" />}
           <span className="text-sm">{shortcut.description}</span>
@@ -226,10 +236,11 @@ export function KeyboardShortcutsModal({ isOpen, onClose }: KeyboardShortcutsMod
             Keyboard Shortcuts
           </DialogTitle>
           <DialogDescription>
-            Navigate and control the application using your keyboard. 
+            Navigate and control the application using your keyboard.
             {!preferences.keyboardShortcutsEnabled && (
               <span className="text-orange-600 dark:text-orange-400">
-                {' '}Some accessibility shortcuts are currently disabled.
+                {' '}
+                Some accessibility shortcuts are currently disabled.
               </span>
             )}
           </DialogDescription>
@@ -260,16 +271,13 @@ export function KeyboardShortcutsModal({ isOpen, onClose }: KeyboardShortcutsMod
                 )}
                 {category.category}
               </h3>
-              
+
               <div className="space-y-1">
                 {category.shortcuts.map((shortcut, shortcutIndex) => (
-                  <ShortcutRow
-                    key={shortcutIndex}
-                    shortcut={shortcut}
-                  />
+                  <ShortcutRow key={shortcutIndex} shortcut={shortcut} />
                 ))}
               </div>
-              
+
               {categoryIndex < keyboardShortcuts.length - 1 && (
                 <Separator className="mt-4" />
               )}
@@ -281,9 +289,15 @@ export function KeyboardShortcutsModal({ isOpen, onClose }: KeyboardShortcutsMod
             <h4 className="font-medium text-sm">Tips:</h4>
             <ul className="text-sm text-muted-foreground space-y-1">
               <li>• Hold keys simultaneously to activate shortcuts</li>
-              <li>• Screen reader shortcuts work with NVDA, JAWS, and VoiceOver</li>
-              <li>• Enable accessibility features in Settings for more shortcuts</li>
-              <li>• Press Tab to navigate through any interface systematically</li>
+              <li>
+                • Screen reader shortcuts work with NVDA, JAWS, and VoiceOver
+              </li>
+              <li>
+                • Enable accessibility features in Settings for more shortcuts
+              </li>
+              <li>
+                • Press Tab to navigate through any interface systematically
+              </li>
             </ul>
           </div>
 
@@ -297,7 +311,8 @@ export function KeyboardShortcutsModal({ isOpen, onClose }: KeyboardShortcutsMod
                 </span>
               </div>
               <p className="text-sm text-orange-700 dark:text-orange-200 mb-3">
-                Enable keyboard shortcuts in the accessibility settings to use Alt+ shortcuts.
+                Enable keyboard shortcuts in the accessibility settings to use
+                Alt+ shortcuts.
               </p>
               <Button
                 size="sm"

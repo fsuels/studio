@@ -42,19 +42,15 @@ export async function saveFormProgress({
 }): Promise<void> {
   if (!userId || !docType) return;
 
-  const db = await getDb();            // already cached singleton
-  const {
-    doc,
-    setDoc,
-    serverTimestamp,
-  } = await import('firebase/firestore');
+  const db = await getDb(); // already cached singleton
+  const { doc, setDoc, serverTimestamp } = await import('firebase/firestore');
 
   const ref = doc(
     db,
     'users',
     userId,
     'documents',
-    progressDocId(docType, state || 'NA')
+    progressDocId(docType, state || 'NA'),
   );
 
   const payload: Partial<FormProgressDoc> = {
@@ -74,7 +70,7 @@ export async function saveFormProgress({
   });
 
   await setDoc(ref, payload, { merge: true });
-  
+
   // Log form progress save
   await auditService.logDocumentEvent(
     'edit',
@@ -85,8 +81,8 @@ export async function saveFormProgress({
       action: 'form_save',
       state: state || 'NA',
       fieldCount: Object.keys(formData || {}).length,
-      isAutoSave: true
-    }
+      isAutoSave: true,
+    },
   );
 }
 
@@ -104,10 +100,7 @@ export async function loadFormProgress({
 
   const effectiveState = state || 'NA';
   const db = await getDb();
-  const {
-    doc,
-    getDoc,
-  } = await import('firebase/firestore');
+  const { doc, getDoc } = await import('firebase/firestore');
 
   try {
     // Attempt to load the specific state
@@ -116,7 +109,7 @@ export async function loadFormProgress({
       'users',
       userId,
       'documents',
-      progressDocId(docType, effectiveState)
+      progressDocId(docType, effectiveState),
     );
     const snap = await getDoc(ref);
     if (snap.exists()) {
@@ -131,7 +124,7 @@ export async function loadFormProgress({
         'users',
         userId,
         'documents',
-        progressDocId(docType, 'NA')
+        progressDocId(docType, 'NA'),
       );
       const fallbackSnap = await getDoc(fallbackRef);
       if (fallbackSnap.exists()) {
@@ -149,29 +142,21 @@ export async function loadFormProgress({
 /* ---------- list-recent ------------------------------------------------- */
 export async function listRecentProgress(
   userId: string,
-  maxResults = 5
+  maxResults = 5,
 ): Promise<FormProgressDoc[]> {
   if (!userId) return [];
 
   const db = await getDb();
-  const {
-    collection,
-    query,
-    orderBy,
-    limit,
-    getDocs,
-  } = await import('firebase/firestore');
+  const { collection, query, orderBy, limit, getDocs } = await import(
+    'firebase/firestore'
+  );
 
   try {
     /* -------------------------------------------------------------
        Firestore can serve this out of an index directly.
     ------------------------------------------------------------- */
     const colRef = collection(db, 'users', userId, 'documents');
-    const q = query(
-      colRef,
-      orderBy('updatedAt', 'desc'),
-      limit(maxResults)
-    );
+    const q = query(colRef, orderBy('updatedAt', 'desc'), limit(maxResults));
     const snaps = await getDocs(q);
     return snaps.docs.map((d) => d.data() as FormProgressDoc);
   } catch (err) {

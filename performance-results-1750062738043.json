@@ -90,8 +90,6 @@
     "overallScore": 95,
     "grade": "A",
     "passed": true,
-    "recommendations": [
-      "Continue monitoring performance metrics regularly"
-    ]
+    "recommendations": ["Continue monitoring performance metrics regularly"]
   }
 }

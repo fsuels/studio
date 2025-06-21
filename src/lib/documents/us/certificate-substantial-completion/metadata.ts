@@ -24,13 +24,22 @@ export const certificatesubstantialcompletionMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Certificate of Substantial Completion',
-      description: 'Official certificate documenting substantial completion of construction work for project milestone.',
-      aliases: ['substantial completion certificate', 'completion certificate', 'project completion document'],
+      description:
+        'Official certificate documenting substantial completion of construction work for project milestone.',
+      aliases: [
+        'substantial completion certificate',
+        'completion certificate',
+        'project completion document',
+      ],
     },
     es: {
       name: 'Certificado de Finalización Sustancial',
-      description: 'Certificado oficial que documenta la finalización sustancial del trabajo de construcción para el hito del proyecto.',
-      aliases: ['certificado de finalización sustancial', 'certificado de finalización'],
+      description:
+        'Certificado oficial que documenta la finalización sustancial del trabajo de construcción para el hito del proyecto.',
+      aliases: [
+        'certificado de finalización sustancial',
+        'certificado de finalización',
+      ],
     },
   },
 };

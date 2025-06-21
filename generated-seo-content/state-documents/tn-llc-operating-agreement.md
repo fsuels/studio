@@ -47,7 +47,7 @@ Don't risk using generic templates that may not comply with Tennessee law. Get a
 
 [Create Tennessee LLC Operating Agreement]
 
-*Trusted by thousands of Tennessee businesses*
+_Trusted by thousands of Tennessee businesses_
 
 ---
 

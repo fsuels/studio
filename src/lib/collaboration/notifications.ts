@@ -29,12 +29,13 @@ export class CollaborationNotificationService {
     toUserId: string,
     documentId: string,
     content: string,
-    documentTitle?: string
+    documentTitle?: string,
   ): Promise<void> {
     try {
       const payload: NotificationPayload = {
         title: `${fromUser.name} mentioned you`,
-        body: content.length > 100 ? `${content.substring(0, 100)}...` : content,
+        body:
+          content.length > 100 ? `${content.substring(0, 100)}...` : content,
         data: {
           type: 'mention',
           documentId,
@@ -47,7 +48,12 @@ export class CollaborationNotificationService {
       };
 
       await this.sendNotification(payload);
-      await this.storeMentionInDatabase(fromUser, toUserId, documentId, content);
+      await this.storeMentionInDatabase(
+        fromUser,
+        toUserId,
+        documentId,
+        content,
+      );
     } catch (error) {
       console.error('Failed to send mention notification:', error);
     }
@@ -58,14 +64,15 @@ export class CollaborationNotificationService {
     documentId: string,
     content: string,
     collaboratorIds: string[],
-    documentTitle?: string
+    documentTitle?: string,
   ): Promise<void> {
     try {
       const notifications = collaboratorIds
-        .filter(id => id !== author.id)
-        .map(userId => ({
+        .filter((id) => id !== author.id)
+        .map((userId) => ({
           title: `New comment from ${author.name}`,
-          body: content.length > 100 ? `${content.substring(0, 100)}...` : content,
+          body:
+            content.length > 100 ? `${content.substring(0, 100)}...` : content,
           data: {
             type: 'comment',
             documentId,
@@ -77,7 +84,9 @@ export class CollaborationNotificationService {
           type: 'comment' as const,
         }));
 
-      await Promise.all(notifications.map(payload => this.sendNotification(payload)));
+      await Promise.all(
+        notifications.map((payload) => this.sendNotification(payload)),
+      );
     } catch (error) {
       console.error('Failed to send comment notifications:', error);
     }
@@ -87,14 +96,16 @@ export class CollaborationNotificationService {
     user: CollaborationUser,
     documentId: string,
     collaboratorIds: string[],
-    documentTitle?: string
+    documentTitle?: string,
   ): Promise<void> {
     try {
       const notifications = collaboratorIds
-        .filter(id => id !== user.id)
-        .map(userId => ({
+        .filter((id) => id !== user.id)
+        .map((userId) => ({
           title: `${user.name} joined the document`,
-          body: documentTitle ? `Now collaborating on "${documentTitle}"` : 'Started collaborating',
+          body: documentTitle
+            ? `Now collaborating on "${documentTitle}"`
+            : 'Started collaborating',
           data: {
             type: 'join',
             documentId,
@@ -106,7 +117,9 @@ export class CollaborationNotificationService {
           type: 'join' as const,
         }));
 
-      await Promise.all(notifications.map(payload => this.sendNotification(payload)));
+      await Promise.all(
+        notifications.map((payload) => this.sendNotification(payload)),
+      );
     } catch (error) {
       console.error('Failed to send user joined notifications:', error);
     }
@@ -117,12 +130,12 @@ export class CollaborationNotificationService {
     documentId: string,
     updateType: string,
     collaboratorIds: string[],
-    documentTitle?: string
+    documentTitle?: string,
   ): Promise<void> {
     try {
       const notifications = collaboratorIds
-        .filter(id => id !== author.id)
-        .map(userId => ({
+        .filter((id) => id !== author.id)
+        .map((userId) => ({
           title: `Document updated by ${author.name}`,
           body: `${updateType} in "${documentTitle || 'document'}"`,
           data: {
@@ -137,7 +150,9 @@ export class CollaborationNotificationService {
           type: 'edit' as const,
         }));
 
-      await Promise.all(notifications.map(payload => this.sendNotification(payload)));
+      await Promise.all(
+        notifications.map((payload) => this.sendNotification(payload)),
+      );
     } catch (error) {
       console.error('Failed to send document update notifications:', error);
     }
@@ -146,7 +161,7 @@ export class CollaborationNotificationService {
   private async sendNotification(payload: NotificationPayload): Promise<void> {
     // Check user notification settings
     const settings = await this.getUserNotificationSettings(payload.userId);
-    
+
     if (!settings.pushEnabled) {
       return;
     }
@@ -158,7 +173,7 @@ export class CollaborationNotificationService {
 
     // Get user's FCM tokens
     const tokens = await this.getUserFCMTokens(payload.userId);
-    
+
     if (tokens.length === 0) {
       console.log(`No FCM tokens found for user ${payload.userId}`);
       return;
@@ -203,31 +218,38 @@ export class CollaborationNotificationService {
 
     try {
       const response = await this.messaging.sendEachForMulticast(message);
-      
+
       // Handle failed tokens
       if (response.failureCount > 0) {
         const failedTokens: string[] = [];
         response.responses.forEach((resp, idx) => {
           if (!resp.success) {
             failedTokens.push(tokens[idx]);
-            console.error(`Failed to send to token ${tokens[idx]}:`, resp.error);
+            console.error(
+              `Failed to send to token ${tokens[idx]}:`,
+              resp.error,
+            );
           }
         });
-        
+
         // Remove invalid tokens
         await this.removeInvalidTokens(payload.userId, failedTokens);
       }
 
-      console.log(`Successfully sent notification to ${response.successCount} devices`);
+      console.log(
+        `Successfully sent notification to ${response.successCount} devices`,
+      );
     } catch (error) {
       console.error('Failed to send FCM notification:', error);
     }
   }
 
-  private async getUserNotificationSettings(userId: string): Promise<UserNotificationSettings> {
+  private async getUserNotificationSettings(
+    userId: string,
+  ): Promise<UserNotificationSettings> {
     try {
       const doc = await firestore.collection('user_settings').doc(userId).get();
-      
+
       if (!doc.exists) {
         // Return default settings
         return {
@@ -262,7 +284,10 @@ export class CollaborationNotificationService {
     }
   }
 
-  private shouldSendNotificationType(type: string, settings: UserNotificationSettings): boolean {
+  private shouldSendNotificationType(
+    type: string,
+    settings: UserNotificationSettings,
+  ): boolean {
     switch (type) {
       case 'mention':
         return settings.mentions;
@@ -280,8 +305,11 @@ export class CollaborationNotificationService {
 
   private async getUserFCMTokens(userId: string): Promise<string[]> {
     try {
-      const doc = await firestore.collection('user_fcm_tokens').doc(userId).get();
-      
+      const doc = await firestore
+        .collection('user_fcm_tokens')
+        .doc(userId)
+        .get();
+
       if (!doc.exists) {
         return [];
       }
@@ -294,18 +322,23 @@ export class CollaborationNotificationService {
     }
   }
 
-  private async removeInvalidTokens(userId: string, tokens: string[]): Promise<void> {
+  private async removeInvalidTokens(
+    userId: string,
+    tokens: string[],
+  ): Promise<void> {
     try {
       const docRef = firestore.collection('user_fcm_tokens').doc(userId);
-      
+
       await firestore.runTransaction(async (transaction) => {
         const doc = await transaction.get(docRef);
-        
+
         if (doc.exists) {
           const data = doc.data();
           const currentTokens = data?.tokens || [];
-          const validTokens = currentTokens.filter((token: string) => !tokens.includes(token));
-          
+          const validTokens = currentTokens.filter(
+            (token: string) => !tokens.includes(token),
+          );
+
           transaction.update(docRef, { tokens: validTokens });
         }
       });
@@ -322,7 +355,7 @@ export class CollaborationNotificationService {
         .where('read', '==', false)
         .count()
         .get();
-      
+
       return snapshot.data().count;
     } catch (error) {
       console.error('Failed to get unread count:', error);
@@ -334,7 +367,7 @@ export class CollaborationNotificationService {
     fromUser: CollaborationUser,
     toUserId: string,
     documentId: string,
-    content: string
+    content: string,
   ): Promise<void> {
     try {
       await firestore.collection('mentions').add({
@@ -354,14 +387,14 @@ export class CollaborationNotificationService {
   async registerFCMToken(userId: string, token: string): Promise<void> {
     try {
       const docRef = firestore.collection('user_fcm_tokens').doc(userId);
-      
+
       await firestore.runTransaction(async (transaction) => {
         const doc = await transaction.get(docRef);
-        
+
         if (doc.exists) {
           const data = doc.data();
           const tokens = data?.tokens || [];
-          
+
           if (!tokens.includes(token)) {
             tokens.push(token);
             transaction.update(docRef, { tokens });
@@ -377,21 +410,27 @@ export class CollaborationNotificationService {
 
   async updateNotificationSettings(
     userId: string,
-    settings: Partial<UserNotificationSettings>
+    settings: Partial<UserNotificationSettings>,
   ): Promise<void> {
     try {
       const docRef = firestore.collection('user_settings').doc(userId);
-      
-      await docRef.set({
-        notifications: settings,
-        updatedAt: Date.now(),
-      }, { merge: true });
+
+      await docRef.set(
+        {
+          notifications: settings,
+          updatedAt: Date.now(),
+        },
+        { merge: true },
+      );
     } catch (error) {
       console.error('Failed to update notification settings:', error);
     }
   }
 
-  async markNotificationAsRead(userId: string, notificationId: string): Promise<void> {
+  async markNotificationAsRead(
+    userId: string,
+    notificationId: string,
+  ): Promise<void> {
     try {
       await firestore
         .collection('notifications')
@@ -411,8 +450,8 @@ export class CollaborationNotificationService {
         .get();
 
       const batch = firestore.batch();
-      
-      snapshot.docs.forEach(doc => {
+
+      snapshot.docs.forEach((doc) => {
         batch.update(doc.ref, { read: true, readAt: Date.now() });
       });
 

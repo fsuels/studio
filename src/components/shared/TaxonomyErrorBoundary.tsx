@@ -36,10 +36,10 @@ class TaxonomyErrorBoundary extends React.Component<
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
     console.error('Taxonomy Error Boundary caught an error:', error, errorInfo);
-    
+
     // Report to analytics
     this.props.onError?.(error, errorInfo);
-    
+
     this.setState({
       error,
       errorInfo,
@@ -57,17 +57,22 @@ class TaxonomyErrorBoundary extends React.Component<
         return <FallbackComponent retry={this.handleRetry} />;
       }
 
-      return <DefaultErrorFallback error={this.state.error} onRetry={this.handleRetry} />;
+      return (
+        <DefaultErrorFallback
+          error={this.state.error}
+          onRetry={this.handleRetry}
+        />
+      );
     }
 
     return this.props.children;
   }
 }
 
-const DefaultErrorFallback: React.FC<{ error?: Error; onRetry: () => void }> = ({ 
-  error, 
-  onRetry 
-}) => (
+const DefaultErrorFallback: React.FC<{
+  error?: Error;
+  onRetry: () => void;
+}> = ({ error, onRetry }) => (
   <Card className="border-destructive/50 bg-destructive/5">
     <CardHeader>
       <CardTitle className="flex items-center gap-2 text-destructive">
@@ -77,20 +82,18 @@ const DefaultErrorFallback: React.FC<{ error?: Error; onRetry: () => void }> = (
     </CardHeader>
     <CardContent className="space-y-3">
       <p className="text-sm text-muted-foreground">
-        We're having trouble loading the enhanced features. You can still browse documents using the basic navigation.
+        We're having trouble loading the enhanced features. You can still browse
+        documents using the basic navigation.
       </p>
       {process.env.NODE_ENV === 'development' && error && (
         <details className="text-xs bg-muted p-2 rounded">
-          <summary className="cursor-pointer font-medium">Error Details</summary>
+          <summary className="cursor-pointer font-medium">
+            Error Details
+          </summary>
           <pre className="mt-2 whitespace-pre-wrap">{error.stack}</pre>
         </details>
       )}
-      <Button 
-        onClick={onRetry} 
-        variant="outline" 
-        size="sm" 
-        className="gap-2"
-      >
+      <Button onClick={onRetry} variant="outline" size="sm" className="gap-2">
         <RefreshCw className="h-4 w-4" />
         Try Again
       </Button>

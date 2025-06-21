@@ -24,7 +24,8 @@ export const franchiseDisclosureAgreementMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Franchise Disclosure Agreement',
-      description: 'Comprehensive franchise disclosure document and agreement for franchisors and franchisees.',
+      description:
+        'Comprehensive franchise disclosure document and agreement for franchisors and franchisees.',
       aliases: ['fdd', 'franchise agreement', 'franchising contract'],
     },
     es: {

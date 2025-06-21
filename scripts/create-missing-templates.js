@@ -15,8 +15,9 @@ const esTemplatesDir = path.join(templatesDir, 'es');
 const usDocsDir = path.join(__dirname, '../src/lib/documents/us');
 
 // Get list of all document directories
-const documentDirs = fs.readdirSync(usDocsDir)
-  .filter(item => {
+const documentDirs = fs
+  .readdirSync(usDocsDir)
+  .filter((item) => {
     const itemPath = path.join(usDocsDir, item);
     return fs.statSync(itemPath).isDirectory();
   })
@@ -123,69 +124,153 @@ Esta plantilla se proporciona únicamente con fines informativos y no constituye
 
 // Document name mappings for better templates
 const documentNames = {
-  'affidavit': { en: 'General Affidavit', es: 'Declaración Jurada General' },
-  'affidavit-general': { en: 'General Affidavit', es: 'Declaración Jurada General' },
-  'articles-of-incorporation': { en: 'Articles of Incorporation', es: 'Artículos de Incorporación' },
-  'articles-of-incorporation-biz': { en: 'Business Articles of Incorporation', es: 'Artículos de Incorporación Comercial' },
-  'boat-bill-of-sale': { en: 'Boat Bill of Sale', es: 'Contrato de Compraventa de Embarcación' },
-  'child-custody-agreement': { en: 'Child Custody Agreement', es: 'Acuerdo de Custodia de Menores' },
-  'child-medical-consent': { en: 'Child Medical Consent', es: 'Consentimiento Médico Infantil' },
-  'commercial-lease-agreement': { en: 'Commercial Lease Agreement', es: 'Contrato de Arrendamiento Comercial' },
-  'consignment-agreement': { en: 'Consignment Agreement', es: 'Acuerdo de Consignación' },
-  'copyright-assignment': { en: 'Copyright Assignment', es: 'Cesión de Derechos de Autor' },
+  affidavit: { en: 'General Affidavit', es: 'Declaración Jurada General' },
+  'affidavit-general': {
+    en: 'General Affidavit',
+    es: 'Declaración Jurada General',
+  },
+  'articles-of-incorporation': {
+    en: 'Articles of Incorporation',
+    es: 'Artículos de Incorporación',
+  },
+  'articles-of-incorporation-biz': {
+    en: 'Business Articles of Incorporation',
+    es: 'Artículos de Incorporación Comercial',
+  },
+  'boat-bill-of-sale': {
+    en: 'Boat Bill of Sale',
+    es: 'Contrato de Compraventa de Embarcación',
+  },
+  'child-custody-agreement': {
+    en: 'Child Custody Agreement',
+    es: 'Acuerdo de Custodia de Menores',
+  },
+  'child-medical-consent': {
+    en: 'Child Medical Consent',
+    es: 'Consentimiento Médico Infantil',
+  },
+  'commercial-lease-agreement': {
+    en: 'Commercial Lease Agreement',
+    es: 'Contrato de Arrendamiento Comercial',
+  },
+  'consignment-agreement': {
+    en: 'Consignment Agreement',
+    es: 'Acuerdo de Consignación',
+  },
+  'copyright-assignment': {
+    en: 'Copyright Assignment',
+    es: 'Cesión de Derechos de Autor',
+  },
   'demand-letter': { en: 'Demand Letter', es: 'Carta de Demanda' },
-  'demand-letter-payment': { en: 'Payment Demand Letter', es: 'Carta de Demanda de Pago' },
+  'demand-letter-payment': {
+    en: 'Payment Demand Letter',
+    es: 'Carta de Demanda de Pago',
+  },
   'divorce-settlement': { en: 'Divorce Settlement', es: 'Acuerdo de Divorcio' },
-  'divorce-settlement-agreement': { en: 'Divorce Settlement Agreement', es: 'Acuerdo de Liquidación de Divorcio' },
-  'employment-contract': { en: 'Employment Contract', es: 'Contrato de Empleo' },
-  'employment-offer-letter': { en: 'Employment Offer Letter', es: 'Carta de Oferta de Empleo' },
-  'employment-termination-letter': { en: 'Employment Termination Letter', es: 'Carta de Terminación de Empleo' },
+  'divorce-settlement-agreement': {
+    en: 'Divorce Settlement Agreement',
+    es: 'Acuerdo de Liquidación de Divorcio',
+  },
+  'employment-contract': {
+    en: 'Employment Contract',
+    es: 'Contrato de Empleo',
+  },
+  'employment-offer-letter': {
+    en: 'Employment Offer Letter',
+    es: 'Carta de Oferta de Empleo',
+  },
+  'employment-termination-letter': {
+    en: 'Employment Termination Letter',
+    es: 'Carta de Terminación de Empleo',
+  },
   'eviction-notice': { en: 'Eviction Notice', es: 'Aviso de Desalojo' },
   'general-inquiry': { en: 'General Inquiry', es: 'Consulta General' },
-  'healthcare-power-of-attorney': { en: 'Healthcare Power of Attorney', es: 'Poder Notarial de Salud' },
-  'independent-contractor-agreement': { en: 'Independent Contractor Agreement', es: 'Acuerdo de Contratista Independiente' },
-  'invoice': { en: 'Invoice', es: 'Factura' },
-  'last-will-testament': { en: 'Last Will and Testament', es: 'Último Testamento' },
+  'healthcare-power-of-attorney': {
+    en: 'Healthcare Power of Attorney',
+    es: 'Poder Notarial de Salud',
+  },
+  'independent-contractor-agreement': {
+    en: 'Independent Contractor Agreement',
+    es: 'Acuerdo de Contratista Independiente',
+  },
+  invoice: { en: 'Invoice', es: 'Factura' },
+  'last-will-testament': {
+    en: 'Last Will and Testament',
+    es: 'Último Testamento',
+  },
   'lease-agreement': { en: 'Lease Agreement', es: 'Contrato de Arrendamiento' },
-  'licensing-agreement': { en: 'Licensing Agreement', es: 'Acuerdo de Licencia' },
+  'licensing-agreement': {
+    en: 'Licensing Agreement',
+    es: 'Acuerdo de Licencia',
+  },
   'living-trust': { en: 'Living Trust', es: 'Fideicomiso en Vida' },
   'living-will': { en: 'Living Will', es: 'Testamento en Vida' },
-  'llc-operating-agreement': { en: 'LLC Operating Agreement', es: 'Acuerdo Operativo de LLC' },
+  'llc-operating-agreement': {
+    en: 'LLC Operating Agreement',
+    es: 'Acuerdo Operativo de LLC',
+  },
   'loan-agreement': { en: 'Loan Agreement', es: 'Contrato de Préstamo' },
   'medical-consent': { en: 'Medical Consent', es: 'Consentimiento Médico' },
-  'nda': { en: 'Non-Disclosure Agreement', es: 'Acuerdo de Confidencialidad' },
-  'non-compete-agreement': { en: 'Non-Compete Agreement', es: 'Acuerdo de No Competencia' },
-  'non-disclosure-agreement': { en: 'Non-Disclosure Agreement', es: 'Acuerdo de No Divulgación' },
+  nda: { en: 'Non-Disclosure Agreement', es: 'Acuerdo de Confidencialidad' },
+  'non-compete-agreement': {
+    en: 'Non-Compete Agreement',
+    es: 'Acuerdo de No Competencia',
+  },
+  'non-disclosure-agreement': {
+    en: 'Non-Disclosure Agreement',
+    es: 'Acuerdo de No Divulgación',
+  },
   'offer-letter': { en: 'Offer Letter', es: 'Carta de Oferta' },
   'operating-agreement': { en: 'Operating Agreement', es: 'Acuerdo Operativo' },
-  'partnership-agreement': { en: 'Partnership Agreement', es: 'Acuerdo de Sociedad' },
+  'partnership-agreement': {
+    en: 'Partnership Agreement',
+    es: 'Acuerdo de Sociedad',
+  },
   'power-of-attorney': { en: 'Power of Attorney', es: 'Poder Notarial' },
-  'prenuptial-agreement': { en: 'Prenuptial Agreement', es: 'Acuerdo Prenupcial' },
+  'prenuptial-agreement': {
+    en: 'Prenuptial Agreement',
+    es: 'Acuerdo Prenupcial',
+  },
   'promissory-note': { en: 'Promissory Note', es: 'Pagaré' },
   'property-deed': { en: 'Property Deed', es: 'Escritura de Propiedad' },
   'purchase-agreement': { en: 'Purchase Agreement', es: 'Acuerdo de Compra' },
   'quitclaim-deed': { en: 'Quitclaim Deed', es: 'Escritura de Renuncia' },
   'rental-agreement': { en: 'Rental Agreement', es: 'Contrato de Alquiler' },
-  'residential-lease-agreement': { en: 'Residential Lease Agreement', es: 'Contrato de Arrendamiento Residencial' },
+  'residential-lease-agreement': {
+    en: 'Residential Lease Agreement',
+    es: 'Contrato de Arrendamiento Residencial',
+  },
   'service-agreement': { en: 'Service Agreement', es: 'Acuerdo de Servicios' },
-  'severance-agreement': { en: 'Severance Agreement', es: 'Acuerdo de Indemnización' },
-  'termination-letter': { en: 'Termination Letter', es: 'Carta de Terminación' },
-  'trademark-assignment': { en: 'Trademark Assignment', es: 'Cesión de Marca Registrada' },
-  'vehicle-bill-of-sale': { en: 'Vehicle Bill of Sale', es: 'Contrato de Compraventa de Vehículo' }
+  'severance-agreement': {
+    en: 'Severance Agreement',
+    es: 'Acuerdo de Indemnización',
+  },
+  'termination-letter': {
+    en: 'Termination Letter',
+    es: 'Carta de Terminación',
+  },
+  'trademark-assignment': {
+    en: 'Trademark Assignment',
+    es: 'Cesión de Marca Registrada',
+  },
+  'vehicle-bill-of-sale': {
+    en: 'Vehicle Bill of Sale',
+    es: 'Contrato de Compraventa de Vehículo',
+  },
 };
 
 const documentDescriptions = {
-  'affidavit': { 
+  affidavit: {
     en: 'A sworn statement of facts made under oath for legal proceedings.',
-    es: 'Una declaración jurada de hechos hecha bajo juramento para procedimientos legales.'
+    es: 'Una declaración jurada de hechos hecha bajo juramento para procedimientos legales.',
   },
-  'affidavit-general': { 
+  'affidavit-general': {
     en: 'A general sworn statement document for various legal purposes.',
-    es: 'Un documento de declaración jurada general para varios propósitos legales.'
+    es: 'Un documento de declaración jurada general para varios propósitos legales.',
   },
-  'articles-of-incorporation': { 
+  'articles-of-incorporation': {
     en: 'Legal document establishing a corporation as a separate legal entity.',
-    es: 'Documento legal que establece una corporación como entidad legal separada.'
+    es: 'Documento legal que establece una corporación como entidad legal separada.',
   },
   // Add more descriptions as needed - using generic fallback for now
 };
@@ -194,21 +279,21 @@ let createdCount = 0;
 let skippedCount = 0;
 
 // Process each document directory
-documentDirs.forEach(dir => {
+documentDirs.forEach((dir) => {
   const enTemplatePath = path.join(enTemplatesDir, `${dir}.md`);
   const esTemplatePath = path.join(esTemplatesDir, `${dir}.md`);
-  
+
   const hasEnTemplate = fs.existsSync(enTemplatePath);
   const hasEsTemplate = fs.existsSync(esTemplatePath);
-  
-  const docInfo = documentNames[dir] || { 
-    en: dir.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
-    es: dir.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())
+
+  const docInfo = documentNames[dir] || {
+    en: dir.replace(/-/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase()),
+    es: dir.replace(/-/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase()),
   };
-  
+
   const docDesc = documentDescriptions[dir] || {
     en: `Professional legal document template for ${docInfo.en.toLowerCase()}.`,
-    es: `Plantilla de documento legal profesional para ${docInfo.es.toLowerCase()}.`
+    es: `Plantilla de documento legal profesional para ${docInfo.es.toLowerCase()}.`,
   };
 
   let created = false;
@@ -242,17 +327,28 @@ console.log(`   ⏭️  Documents already complete: ${skippedCount}`);
 console.log(`   📄 Total documents: ${documentDirs.length}`);
 
 // Verify completion
-const finalEnCount = fs.readdirSync(enTemplatesDir).filter(f => f.endsWith('.md')).length;
-const finalEsCount = fs.readdirSync(esTemplatesDir).filter(f => f.endsWith('.md')).length;
+const finalEnCount = fs
+  .readdirSync(enTemplatesDir)
+  .filter((f) => f.endsWith('.md')).length;
+const finalEsCount = fs
+  .readdirSync(esTemplatesDir)
+  .filter((f) => f.endsWith('.md')).length;
 
 console.log(`\n📊 Final Template Count:`);
 console.log(`   🇺🇸 English templates: ${finalEnCount}`);
 console.log(`   🇪🇸 Spanish templates: ${finalEsCount}`);
 
-if (finalEnCount >= documentDirs.length && finalEsCount >= documentDirs.length) {
-  console.log(`\n🎉 SUCCESS! All ${documentDirs.length} documents now have both English and Spanish templates!`);
+if (
+  finalEnCount >= documentDirs.length &&
+  finalEsCount >= documentDirs.length
+) {
+  console.log(
+    `\n🎉 SUCCESS! All ${documentDirs.length} documents now have both English and Spanish templates!`,
+  );
 } else {
-  console.log(`\n⚠️  Some templates may still be missing. Please review the output above.`);
+  console.log(
+    `\n⚠️  Some templates may still be missing. Please review the output above.`,
+  );
 }
 
 console.log(`\n✨ Template creation complete!`);

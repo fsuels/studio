@@ -27,7 +27,7 @@ export async function POST(request: NextRequest) {
     if (!reviewId || !comment) {
       return NextResponse.json(
         { error: 'Review ID and comment are required' },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -36,7 +36,7 @@ export async function POST(request: NextRequest) {
     if (!validationResult.isValid) {
       return NextResponse.json(
         { error: validationResult.error },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -55,39 +55,50 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       success: true,
       comment: processedComment,
-      message: 'Comment added successfully'
+      message: 'Comment added successfully',
     });
-
   } catch (error) {
     console.error('Failed to add comment:', error);
     return NextResponse.json(
       { error: 'Failed to add comment' },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
 
 function validateComment(comment: any): { isValid: boolean; error?: string } {
-  if (!comment.type || !['suggestion', 'correction', 'approval', 'concern'].includes(comment.type)) {
+  if (
+    !comment.type ||
+    !['suggestion', 'correction', 'approval', 'concern'].includes(comment.type)
+  ) {
     return { isValid: false, error: 'Invalid comment type' };
   }
 
   if (!comment.reason || comment.reason.trim().length < 5) {
-    return { isValid: false, error: 'Comment reason must be at least 5 characters' };
+    return {
+      isValid: false,
+      error: 'Comment reason must be at least 5 characters',
+    };
   }
 
   if (comment.type === 'correction' && !comment.suggestedText) {
     return { isValid: false, error: 'Corrections must include suggested text' };
   }
 
-  if (comment.severity && !['low', 'medium', 'high'].includes(comment.severity)) {
+  if (
+    comment.severity &&
+    !['low', 'medium', 'high'].includes(comment.severity)
+  ) {
     return { isValid: false, error: 'Invalid severity level' };
   }
 
   return { isValid: true };
 }
 
-async function processComment(reviewId: string, comment: any): Promise<ReviewComment> {
+async function processComment(
+  reviewId: string,
+  comment: any,
+): Promise<ReviewComment> {
   // Generate unique comment ID
   const commentId = `comment_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 
@@ -115,7 +126,7 @@ async function processComment(reviewId: string, comment: any): Promise<ReviewCom
     resolved: false,
     threadId,
     tags: [...autoTags, ...(comment.tags || [])],
-    attachments: comment.attachments || []
+    attachments: comment.attachments || [],
   };
 
   // Save comment to database
@@ -168,7 +179,7 @@ function generateAutoTags(comment: any): string[] {
 
 function determineSeverity(comment: any): 'low' | 'medium' | 'high' {
   const reason = comment.reason.toLowerCase();
-  
+
   // High severity indicators
   if (
     comment.type === 'concern' ||
@@ -196,13 +207,16 @@ function determineSeverity(comment: any): 'low' | 'medium' | 'high' {
   return 'low';
 }
 
-async function updateReviewMetrics(reviewId: string, comment: ReviewComment): Promise<void> {
+async function updateReviewMetrics(
+  reviewId: string,
+  comment: ReviewComment,
+): Promise<void> {
   // Update review statistics
   const metrics = {
     totalComments: await getCommentCount(reviewId),
     unresolvedComments: await getUnresolvedCommentCount(reviewId),
     severityBreakdown: await getSeverityBreakdown(reviewId),
-    lastActivity: comment.timestamp
+    lastActivity: comment.timestamp,
   };
 
   // Calculate review quality score
@@ -214,7 +228,7 @@ async function updateReviewMetrics(reviewId: string, comment: ReviewComment): Pr
   console.log('Review metrics updated:', {
     reviewId,
     totalComments: metrics.totalComments,
-    qualityScore
+    qualityScore,
   });
 }
 
@@ -229,7 +243,7 @@ async function notifyCommentAdded(comment: ReviewComment): Promise<void> {
     commentId: comment.id,
     commentType: comment.type,
     severity: comment.severity,
-    message: `New ${comment.type} comment added to translation review`
+    message: `New ${comment.type} comment added to translation review`,
   });
 
   // For high severity comments, notify supervisors
@@ -239,7 +253,7 @@ async function notifyCommentAdded(comment: ReviewComment): Promise<void> {
       targetUserId: 'supervisor',
       commentId: comment.id,
       urgency: 'high',
-      message: `High severity ${comment.type} comment requires immediate attention`
+      message: `High severity ${comment.type} comment requires immediate attention`,
     });
   }
 
@@ -249,9 +263,12 @@ async function notifyCommentAdded(comment: ReviewComment): Promise<void> {
   }
 }
 
-async function checkWorkflowTriggers(reviewId: string, comment: ReviewComment): Promise<void> {
+async function checkWorkflowTriggers(
+  reviewId: string,
+  comment: ReviewComment,
+): Promise<void> {
   // Check if comment triggers automatic workflow actions
-  
+
   if (comment.type === 'approval' && comment.severity === 'low') {
     // Approval comment might allow stage progression
     await checkStageProgression(reviewId, comment.stageId);
@@ -266,21 +283,30 @@ async function checkWorkflowTriggers(reviewId: string, comment: ReviewComment): 
   await checkStageCompletionConditions(reviewId, comment.stageId);
 }
 
-async function checkStageProgression(reviewId: string, stageId: string): Promise<void> {
+async function checkStageProgression(
+  reviewId: string,
+  stageId: string,
+): Promise<void> {
   // In real implementation, check if stage has enough approvals to proceed
   console.log('Checking stage progression:', { reviewId, stageId });
 }
 
-async function flagReviewForAttention(reviewId: string, comment: ReviewComment): Promise<void> {
+async function flagReviewForAttention(
+  reviewId: string,
+  comment: ReviewComment,
+): Promise<void> {
   // Flag review for supervisor attention
   console.log('Review flagged for attention:', {
     reviewId,
     reason: comment.reason,
-    severity: comment.severity
+    severity: comment.severity,
   });
 }
 
-async function checkStageCompletionConditions(reviewId: string, stageId: string): Promise<void> {
+async function checkStageCompletionConditions(
+  reviewId: string,
+  stageId: string,
+): Promise<void> {
   // Check if stage meets completion criteria
   console.log('Checking stage completion conditions:', { reviewId, stageId });
 }
@@ -296,12 +322,14 @@ async function getUnresolvedCommentCount(reviewId: string): Promise<number> {
   return Math.floor(Math.random() * 5);
 }
 
-async function getSeverityBreakdown(reviewId: string): Promise<Record<string, number>> {
+async function getSeverityBreakdown(
+  reviewId: string,
+): Promise<Record<string, number>> {
   // Mock implementation
   return {
     low: Math.floor(Math.random() * 5),
     medium: Math.floor(Math.random() * 3),
-    high: Math.floor(Math.random() * 2)
+    high: Math.floor(Math.random() * 2),
   };
 }
 
@@ -309,16 +337,17 @@ function calculateReviewQualityScore(metrics: any): number {
   // Simple quality score calculation
   const totalComments = metrics.totalComments;
   const severityBreakdown = metrics.severityBreakdown;
-  
+
   if (totalComments === 0) return 1.0;
-  
+
   // Weight severity impact
-  const score = 1.0 - (
-    (severityBreakdown.high * 0.3 + 
-     severityBreakdown.medium * 0.1 + 
-     severityBreakdown.low * 0.05) / totalComments
-  );
-  
+  const score =
+    1.0 -
+    (severityBreakdown.high * 0.3 +
+      severityBreakdown.medium * 0.1 +
+      severityBreakdown.low * 0.05) /
+      totalComments;
+
   return Math.max(0, Math.min(1, score));
 }
 
@@ -328,26 +357,33 @@ async function saveCommentToDatabase(comment: ReviewComment): Promise<void> {
     id: comment.id,
     type: comment.type,
     severity: comment.severity,
-    timestamp: comment.timestamp
+    timestamp: comment.timestamp,
   });
 }
 
-async function saveReviewMetrics(reviewId: string, metrics: any, qualityScore: number): Promise<void> {
+async function saveReviewMetrics(
+  reviewId: string,
+  metrics: any,
+  qualityScore: number,
+): Promise<void> {
   // Mock implementation - save metrics to database
   console.log('Review metrics saved:', {
     reviewId,
     qualityScore,
-    totalComments: metrics.totalComments
+    totalComments: metrics.totalComments,
   });
 }
 
-async function logCommentEvent(comment: ReviewComment, eventType: string): Promise<void> {
+async function logCommentEvent(
+  comment: ReviewComment,
+  eventType: string,
+): Promise<void> {
   // Mock implementation - log to audit trail
   console.log('Comment event logged:', {
     commentId: comment.id,
     eventType,
     timestamp: new Date(),
-    reviewId: comment.reviewId
+    reviewId: comment.reviewId,
   });
 }
 

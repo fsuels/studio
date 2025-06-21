@@ -24,13 +24,22 @@ export const copyrightAssignmentAgreementMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Copyright Assignment Agreement',
-      description: 'Comprehensive agreement for transferring copyright ownership of creative works.',
-      aliases: ['copyright transfer', 'copyright conveyance', 'intellectual property assignment'],
+      description:
+        'Comprehensive agreement for transferring copyright ownership of creative works.',
+      aliases: [
+        'copyright transfer',
+        'copyright conveyance',
+        'intellectual property assignment',
+      ],
     },
     es: {
       name: 'Acuerdo de Cesión de Derechos de Autor',
-      description: 'Acuerdo integral para transferir la propiedad de derechos de autor de obras creativas.',
-      aliases: ['transferencia de derechos de autor', 'cesión de propiedad intelectual'],
+      description:
+        'Acuerdo integral para transferir la propiedad de derechos de autor de obras creativas.',
+      aliases: [
+        'transferencia de derechos de autor',
+        'cesión de propiedad intelectual',
+      ],
     },
   },
 };

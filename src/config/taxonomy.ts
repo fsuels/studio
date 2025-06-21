@@ -1,1276 +1,1081 @@
 // Auto-generated taxonomy split from docs-structure v5
 export const taxonomy = {
-  "version": "5.0.0",
-  "feature_flags": {
-    "wizard_v3": true,
-    "ai_chat_suggestion": {
-      "enabled": true,
-      "owner": "AI",
-      "expires": "2025-12-17"
+  version: '5.0.0',
+  feature_flags: {
+    wizard_v3: true,
+    ai_chat_suggestion: {
+      enabled: true,
+      owner: 'AI',
+      expires: '2025-12-17',
     },
-    "smart_flows": {
-      "enabled": true,
-      "owner": "Product",
-      "expires": "2025-12-17"
+    smart_flows: {
+      enabled: true,
+      owner: 'Product',
+      expires: '2025-12-17',
     },
-    "wizard_v4": {
-      "enabled": true,
-      "owner": "UX",
-      "expires": "2025-12-17"
-    }
+    wizard_v4: {
+      enabled: true,
+      owner: 'UX',
+      expires: '2025-12-17',
+    },
   },
-  "situations": {
-    "home-property": {
-      "label": "🏠 Home & Property",
-      "roles": [
-        "Landlord",
-        "Home-buyer"
-      ],
-      "domains": [
-        "Real Estate & Property",
-        "Construction & Trades"
-      ],
-      "order": 7,
-      "icon": "🏢"
+  situations: {
+    'home-property': {
+      label: '🏠 Home & Property',
+      roles: ['Landlord', 'Home-buyer'],
+      domains: ['Real Estate & Property', 'Construction & Trades'],
+      order: 7,
+      icon: '🏢',
     },
-    "work-career": {
-      "label": "💼 Work & Career",
-      "roles": [
-        "Employer",
-        "Employee",
-        "Freelancer"
-      ],
-      "domains": [
-        "Employment & HR",
-        "Business & Start-ups"
-      ],
-      "order": 12,
-      "icon": "🎯"
+    'work-career': {
+      label: '💼 Work & Career',
+      roles: ['Employer', 'Employee', 'Freelancer'],
+      domains: ['Employment & HR', 'Business & Start-ups'],
+      order: 12,
+      icon: '🎯',
     },
-    "family-relationships": {
-      "label": "👨‍👩‍👧‍👦 Family & Relationships",
-      "roles": [
-        "Parent",
-        "Spouse",
-        "Caretaker"
-      ],
-      "domains": [
-        "Personal & Family",
-        "Estate Planning"
-      ],
-      "order": 4,
-      "icon": "👨‍👩‍👧‍👦"
+    'family-relationships': {
+      label: '👨‍👩‍👧‍👦 Family & Relationships',
+      roles: ['Parent', 'Spouse', 'Caretaker'],
+      domains: ['Personal & Family', 'Estate Planning'],
+      order: 4,
+      icon: '👨‍👩‍👧‍👦',
     },
-    "health-medical": {
-      "label": "🏥 Health & Medical",
-      "roles": [
-        "Patient",
-        "Caregiver"
-      ],
-      "domains": [
-        "Health & Care"
-      ],
-      "order": 6,
-      "icon": "💰"
+    'health-medical': {
+      label: '🏥 Health & Medical',
+      roles: ['Patient', 'Caregiver'],
+      domains: ['Health & Care'],
+      order: 6,
+      icon: '💰',
     },
-    "money-finance": {
-      "label": "💰 Money & Finance",
-      "roles": [
-        "Borrower",
-        "Lender"
-      ],
-      "domains": [
-        "Finance & Lending"
-      ],
-      "order": 9,
-      "icon": "💻"
+    'money-finance': {
+      label: '💰 Money & Finance',
+      roles: ['Borrower', 'Lender'],
+      domains: ['Finance & Lending'],
+      order: 9,
+      icon: '💻',
     },
-    "business-operations": {
-      "label": "🏢 Business Operations",
-      "roles": [
-        "Startup Founder",
-        "Manager"
-      ],
-      "domains": [
-        "Business & Start-ups",
-        "Employment & HR"
-      ],
-      "order": 2,
-      "icon": "💼"
+    'business-operations': {
+      label: '🏢 Business Operations',
+      roles: ['Startup Founder', 'Manager'],
+      domains: ['Business & Start-ups', 'Employment & HR'],
+      order: 2,
+      icon: '💼',
     },
-    "legal-protection": {
-      "label": "⚖️ Legal Protection",
-      "roles": [
-        "Business Owner",
-        "Individual"
-      ],
-      "domains": [
-        "Legal Process & Disputes",
-        "IP & Creative Works"
-      ],
-      "order": 8,
-      "icon": "⚖️"
+    'legal-protection': {
+      label: '⚖️ Legal Protection',
+      roles: ['Business Owner', 'Individual'],
+      domains: ['Legal Process & Disputes', 'IP & Creative Works'],
+      order: 8,
+      icon: '⚖️',
     },
-    "technology-digital": {
-      "label": "💻 Technology & Digital",
-      "roles": [
-        "Developer",
-        "Product Manager"
-      ],
-      "domains": [
-        "Technology & Digital"
-      ],
-      "order": 11,
-      "icon": "📋"
+    'technology-digital': {
+      label: '💻 Technology & Digital',
+      roles: ['Developer', 'Product Manager'],
+      domains: ['Technology & Digital'],
+      order: 11,
+      icon: '📋',
     },
-    "specialized-industries": {
-      "label": "🌾 Specialized Industries",
-      "roles": [
-        "Farmer",
-        "Miner",
-        "Restaurateur"
-      ],
-      "domains": [
-        "Agriculture & Energy",
-        "Construction & Trades"
-      ],
-      "order": 10,
-      "icon": "🌾"
+    'specialized-industries': {
+      label: '🌾 Specialized Industries',
+      roles: ['Farmer', 'Miner', 'Restaurateur'],
+      domains: ['Agriculture & Energy', 'Construction & Trades'],
+      order: 10,
+      icon: '🌾',
     },
-    "general-forms": {
-      "label": "📋 General Forms & Documents",
-      "roles": [
-        "General User"
-      ],
-      "domains": [
-        "Personal & Family",
-        "Legal Process & Disputes"
-      ],
-      "order": 5,
-      "icon": "🏥"
+    'general-forms': {
+      label: '📋 General Forms & Documents',
+      roles: ['General User'],
+      domains: ['Personal & Family', 'Legal Process & Disputes'],
+      order: 5,
+      icon: '🏥',
     },
-    "assets-gear": {
-      "label": "🎯 Assets & Gear",
-      "icon": "🎯",
-      "order": 7,
-      "roles": [
-        "Asset Owner",
-        "Renter"
-      ],
-      "domains": [
-        "Real Estate & Property",
-        "Construction & Trades"
-      ]
+    'assets-gear': {
+      label: '🎯 Assets & Gear',
+      icon: '🎯',
+      order: 7,
+      roles: ['Asset Owner', 'Renter'],
+      domains: ['Real Estate & Property', 'Construction & Trades'],
     },
-    "life-changes": {
-      "label": "🔄 Major Life Changes",
-      "roles": [
-        "Individual",
-        "Parent",
-        "Spouse"
-      ],
-      "domains": [
-        "Personal & Family",
-        "Estate Planning",
-        "Finance & Lending"
-      ],
-      "order": 3,
-      "icon": "🔄"
-    }
+    'life-changes': {
+      label: '🔄 Major Life Changes',
+      roles: ['Individual', 'Parent', 'Spouse'],
+      domains: ['Personal & Family', 'Estate Planning', 'Finance & Lending'],
+      order: 3,
+      icon: '🔄',
+    },
   },
-  "categories": {
-    "real-estate-property": {
-      "name": "Real Estate & Property",
-      "situations": [
-        "home-property"
-      ],
-      "subs": {
-        "buying-selling": {
-          "name": "Buying / Selling",
-          "docs": [
-            "real-estate-purchase-agreement",
-            "purchase-agreement",
-            "property-deed",
-            "quitclaim-deed",
-            "warranty-deed",
-            "earnest-money-agreement",
-            "mortgage-agreement"
+  categories: {
+    'real-estate-property': {
+      name: 'Real Estate & Property',
+      situations: ['home-property'],
+      subs: {
+        'buying-selling': {
+          name: 'Buying / Selling',
+          docs: [
+            'real-estate-purchase-agreement',
+            'purchase-agreement',
+            'property-deed',
+            'quitclaim-deed',
+            'warranty-deed',
+            'earnest-money-agreement',
+            'mortgage-agreement',
           ],
-          "displayName": "Buying / Selling",
-          "icon": "📑"
+          displayName: 'Buying / Selling',
+          icon: '📑',
         },
-        "renting-leasing": {
-          "name": "Renting / Leasing",
-          "docs": [
-            "residential-lease-agreement",
-            "lease-agreement",
-            "rental-agreement",
-            "commercial-lease-agreement",
-            "office-space-lease",
-            "retail-space-lease",
-            "warehouse-lease",
-            "triple-net-lease",
-            "room-rental-agreement",
-            "roommate-agreement",
-            "sublease-agreement",
-            "vacation-rental-agreement",
-            "parking-space-lease-agreement",
-            "storage-space-lease-agreement",
-            "lease-addendum",
-            "lease-amendment",
-            "lease-renewal-agreement",
-            "lease-termination-letter",
-            "pet-addendum",
-            "pet-agreement",
-            "commercial-lease-with-option-to-purchase"
+        'renting-leasing': {
+          name: 'Renting / Leasing',
+          docs: [
+            'residential-lease-agreement',
+            'lease-agreement',
+            'rental-agreement',
+            'commercial-lease-agreement',
+            'office-space-lease',
+            'retail-space-lease',
+            'warehouse-lease',
+            'triple-net-lease',
+            'room-rental-agreement',
+            'roommate-agreement',
+            'sublease-agreement',
+            'vacation-rental-agreement',
+            'parking-space-lease-agreement',
+            'storage-space-lease-agreement',
+            'lease-addendum',
+            'lease-amendment',
+            'lease-renewal-agreement',
+            'lease-termination-letter',
+            'pet-addendum',
+            'pet-agreement',
+            'commercial-lease-with-option-to-purchase',
           ],
-          "displayName": "Renting / Leasing",
-          "icon": "📑"
+          displayName: 'Renting / Leasing',
+          icon: '📑',
         },
-        "property-management": {
-          "name": "Property Management",
-          "docs": [
-            "property-manager-agreement",
-            "eviction-notice",
-            "notice-to-pay-rent-or-quit",
-            "late-rent-notice",
-            "notice-of-lease-violation",
-            "notice-to-enter",
-            "rent-increase-letter",
-            "rent-receipt",
-            "tenant-maintenance-request",
-            "residential-rental-application",
-            "residential-rental-inspection-report"
+        'property-management': {
+          name: 'Property Management',
+          docs: [
+            'property-manager-agreement',
+            'eviction-notice',
+            'notice-to-pay-rent-or-quit',
+            'late-rent-notice',
+            'notice-of-lease-violation',
+            'notice-to-enter',
+            'rent-increase-letter',
+            'rent-receipt',
+            'tenant-maintenance-request',
+            'residential-rental-application',
+            'residential-rental-inspection-report',
           ],
-          "displayName": "Property Management",
-          "icon": "📑"
+          displayName: 'Property Management',
+          icon: '📑',
         },
-        "improvements-services": {
-          "name": "Improvements / Services",
-          "docs": [
-            "construction-contract",
-            "home-improvement-contract",
-            "remodeling-contract",
-            "roofing-contract",
-            "landscaping-contract",
-            "architect-contract",
-            "general-contractor-agreement",
-            "subcontractor-agreement",
-            "construction-bid-form",
-            "change-order",
-            "certificate-substantial-completion",
-            "notice-to-proceed",
-            "mechanics-lien",
-            "mechanics-lien-waiver",
-            "construction-management-agreement"
+        'improvements-services': {
+          name: 'Improvements / Services',
+          docs: [
+            'construction-contract',
+            'home-improvement-contract',
+            'remodeling-contract',
+            'roofing-contract',
+            'landscaping-contract',
+            'architect-contract',
+            'general-contractor-agreement',
+            'subcontractor-agreement',
+            'construction-bid-form',
+            'change-order',
+            'certificate-substantial-completion',
+            'notice-to-proceed',
+            'mechanics-lien',
+            'mechanics-lien-waiver',
+            'construction-management-agreement',
           ],
-          "displayName": "Improvements / Services",
-          "icon": "📑"
-        }
+          displayName: 'Improvements / Services',
+          icon: '📑',
+        },
       },
-      "displayName": "Real Estate & Property",
-      "icon": "🏠",
-      "order": 1,
-      "helpText": "Documents for buying, selling, renting, or managing property",
-      "commonQuestions": [
-        "What documents do I need to rent out my property?",
-        "How do I evict a tenant legally?"
-      ]
-    },
-    "employment-hr": {
-      "name": "Employment & HR",
-      "situations": [
-        "work-career"
+      displayName: 'Real Estate & Property',
+      icon: '🏠',
+      order: 1,
+      helpText: 'Documents for buying, selling, renting, or managing property',
+      commonQuestions: [
+        'What documents do I need to rent out my property?',
+        'How do I evict a tenant legally?',
       ],
-      "subs": {
-        "getting-hired": {
-          "name": "Getting Hired",
-          "docs": [
-            "employment-offer-letter",
-            "employment-contract",
-            "executive-employment-agreement",
-            "internship-agreement",
-            "job-application-form",
-            "independent-contractor-agreement",
-            "consulting-agreement",
-            "offer-letter"
+    },
+    'employment-hr': {
+      name: 'Employment & HR',
+      situations: ['work-career'],
+      subs: {
+        'getting-hired': {
+          name: 'Getting Hired',
+          docs: [
+            'employment-offer-letter',
+            'employment-contract',
+            'executive-employment-agreement',
+            'internship-agreement',
+            'job-application-form',
+            'independent-contractor-agreement',
+            'consulting-agreement',
+            'offer-letter',
           ],
-          "displayName": "Getting Hired",
-          "icon": "📑"
+          displayName: 'Getting Hired',
+          icon: '📑',
         },
-        "during-employment": {
-          "name": "During Employment",
-          "docs": [
-            "employee-handbook",
-            "employee-evaluation-form",
-            "employee-warning-notice",
-            "progressive-discipline-policy",
-            "leave-of-absence-request-form",
-            "work-from-home-agreement",
-            "telecommuting-agreement",
-            "employee-bonus-plan",
-            "equity-incentive-plan",
-            "invention-assignment-agreement",
-            "employee-non-disclosure-agreement",
-            "non-compete-agreement"
+        'during-employment': {
+          name: 'During Employment',
+          docs: [
+            'employee-handbook',
+            'employee-evaluation-form',
+            'employee-warning-notice',
+            'progressive-discipline-policy',
+            'leave-of-absence-request-form',
+            'work-from-home-agreement',
+            'telecommuting-agreement',
+            'employee-bonus-plan',
+            'equity-incentive-plan',
+            'invention-assignment-agreement',
+            'employee-non-disclosure-agreement',
+            'non-compete-agreement',
           ],
-          "displayName": "During Employment",
-          "icon": "📑"
+          displayName: 'During Employment',
+          icon: '📑',
         },
-        "leaving-verification": {
-          "name": "Leaving / Verification",
-          "docs": [
-            "resignation-letter",
-            "resignation-letter-personal",
-            "two-weeks-notice-letter",
-            "employment-termination-letter",
-            "severance-agreement",
-            "employment-verification-letter",
-            "salary-verification-letter",
-            "proof-of-income-letter"
+        'leaving-verification': {
+          name: 'Leaving / Verification',
+          docs: [
+            'resignation-letter',
+            'resignation-letter-personal',
+            'two-weeks-notice-letter',
+            'employment-termination-letter',
+            'severance-agreement',
+            'employment-verification-letter',
+            'salary-verification-letter',
+            'proof-of-income-letter',
           ],
-          "displayName": "Leaving / Verification",
-          "icon": "📑"
-        }
+          displayName: 'Leaving / Verification',
+          icon: '📑',
+        },
       },
-      "displayName": "Employment & HR",
-      "icon": "💼",
-      "order": 2
+      displayName: 'Employment & HR',
+      icon: '💼',
+      order: 2,
     },
-    "personal-family": {
-      "name": "Personal & Family",
-      "situations": [
-        "family-relationships"
-      ],
-      "subs": {
-        "marriage-separation": {
-          "name": "Marriage & Separation",
-          "docs": [
-            "prenuptial-agreement",
-            "postnuptial-agreement",
-            "cohabitation-agreement",
-            "marriage-separation-agreement",
-            "separation-agreement",
-            "divorce-settlement",
-            "divorce-settlement-agreement"
+    'personal-family': {
+      name: 'Personal & Family',
+      situations: ['family-relationships'],
+      subs: {
+        'marriage-separation': {
+          name: 'Marriage & Separation',
+          docs: [
+            'prenuptial-agreement',
+            'postnuptial-agreement',
+            'cohabitation-agreement',
+            'marriage-separation-agreement',
+            'separation-agreement',
+            'divorce-settlement',
+            'divorce-settlement-agreement',
           ],
-          "displayName": "Marriage & Separation",
-          "icon": "📑"
+          displayName: 'Marriage & Separation',
+          icon: '📑',
         },
-        "parenting": {
-          "name": "Parenting",
-          "docs": [
-            "child-custody-agreement",
-            "parenting-plan",
-            "child-support-agreement",
-            "child-medical-consent",
-            "child-travel-consent",
-            "child-care-contract",
-            "child-care-authorization-form",
-            "power-of-attorney-for-child",
-            "guardianship-agreement"
+        parenting: {
+          name: 'Parenting',
+          docs: [
+            'child-custody-agreement',
+            'parenting-plan',
+            'child-support-agreement',
+            'child-medical-consent',
+            'child-travel-consent',
+            'child-care-contract',
+            'child-care-authorization-form',
+            'power-of-attorney-for-child',
+            'guardianship-agreement',
           ],
-          "displayName": "Parenting",
-          "icon": "📑"
+          displayName: 'Parenting',
+          icon: '📑',
         },
-        "pets": {
-          "name": "Pets",
-          "docs": [
-            "pet-custody-agreement",
-            "pet-agreement",
-            "pet-addendum",
-            "dog-breeding-agreement",
-            "horse-boarding-agreement"
+        pets: {
+          name: 'Pets',
+          docs: [
+            'pet-custody-agreement',
+            'pet-agreement',
+            'pet-addendum',
+            'dog-breeding-agreement',
+            'horse-boarding-agreement',
           ],
-          "displayName": "Pets",
-          "icon": "📑"
+          displayName: 'Pets',
+          icon: '📑',
         },
-        "elder-care": {
-          "name": "Elder Care",
-          "docs": [
-            "elder-care-agreement",
-            "personal-care-agreement"
-          ],
-          "displayName": "Elder Care",
-          "icon": "📑"
-        }
+        'elder-care': {
+          name: 'Elder Care',
+          docs: ['elder-care-agreement', 'personal-care-agreement'],
+          displayName: 'Elder Care',
+          icon: '📑',
+        },
       },
-      "displayName": "Personal & Family",
-      "icon": "👨‍👩‍👧‍👦",
-      "order": 3
+      displayName: 'Personal & Family',
+      icon: '👨‍👩‍👧‍👦',
+      order: 3,
     },
-    "health-care": {
-      "name": "Health & Care",
-      "situations": [
-        "health-medical"
-      ],
-      "subs": {
-        "medical-decisions": {
-          "name": "Medical Decisions",
-          "docs": [
-            "advance-directive",
-            "advance-directive-revocation",
-            "living-will",
-            "healthcare-power-of-attorney",
-            "medical-power-of-attorney",
-            "health-care-directive",
-            "medical-consent",
-            "medical-consent-form",
-            "hipaa-authorization-form"
+    'health-care': {
+      name: 'Health & Care',
+      situations: ['health-medical'],
+      subs: {
+        'medical-decisions': {
+          name: 'Medical Decisions',
+          docs: [
+            'advance-directive',
+            'advance-directive-revocation',
+            'living-will',
+            'healthcare-power-of-attorney',
+            'medical-power-of-attorney',
+            'health-care-directive',
+            'medical-consent',
+            'medical-consent-form',
+            'hipaa-authorization-form',
           ],
-          "displayName": "Medical Decisions",
-          "icon": "📑"
+          displayName: 'Medical Decisions',
+          icon: '📑',
         },
-        "health-services": {
-          "name": "Health Services",
-          "docs": [
-            "personal-training-agreement",
-            "fitness-waiver",
-            "coaching-agreement",
-            "telemedicine-agreement",
-            "clinical-trial-agreement"
+        'health-services': {
+          name: 'Health Services',
+          docs: [
+            'personal-training-agreement',
+            'fitness-waiver',
+            'coaching-agreement',
+            'telemedicine-agreement',
+            'clinical-trial-agreement',
           ],
-          "displayName": "Health Services",
-          "icon": "📑"
-        }
+          displayName: 'Health Services',
+          icon: '📑',
+        },
       },
-      "displayName": "Health & Care",
-      "icon": "🏥",
-      "order": 4
+      displayName: 'Health & Care',
+      icon: '🏥',
+      order: 4,
     },
-    "finance-lending": {
-      "name": "Finance & Lending",
-      "situations": [
-        "money-finance"
-      ],
-      "subs": {
-        "loans-credit": {
-          "name": "Loans & Credit",
-          "docs": [
-            "loan-agreement",
-            "personal-loan-agreement",
-            "student-loan-agreement",
-            "promissory-note",
-            "promissory-note-installment-payments",
-            "promissory-note-balloon-payments",
-            "loan-modification-agreement",
-            "loan-modification-letter",
-            "credit-card-agreement",
-            "revolving-credit-agreement"
+    'finance-lending': {
+      name: 'Finance & Lending',
+      situations: ['money-finance'],
+      subs: {
+        'loans-credit': {
+          name: 'Loans & Credit',
+          docs: [
+            'loan-agreement',
+            'personal-loan-agreement',
+            'student-loan-agreement',
+            'promissory-note',
+            'promissory-note-installment-payments',
+            'promissory-note-balloon-payments',
+            'loan-modification-agreement',
+            'loan-modification-letter',
+            'credit-card-agreement',
+            'revolving-credit-agreement',
           ],
-          "displayName": "Loans & Credit",
-          "icon": "📑"
+          displayName: 'Loans & Credit',
+          icon: '📑',
         },
-        "debt-payments": {
-          "name": "Debt & Payments",
-          "docs": [
-            "debt-settlement-agreement",
-            "debt-validation-letter",
-            "collection-letter",
-            "payment-plan",
-            "payment-bond",
-            "demand-letter",
-            "demand-letter-payment"
+        'debt-payments': {
+          name: 'Debt & Payments',
+          docs: [
+            'debt-settlement-agreement',
+            'debt-validation-letter',
+            'collection-letter',
+            'payment-plan',
+            'payment-bond',
+            'demand-letter',
+            'demand-letter-payment',
           ],
-          "displayName": "Debt & Payments",
-          "icon": "📑"
+          displayName: 'Debt & Payments',
+          icon: '📑',
         },
-        "banking-transactions": {
-          "name": "Banking & Transactions",
-          "docs": [
-            "ach-authorization-form",
-            "direct-deposit-form",
-            "invoice",
-            "purchase-order",
-            "receipt",
-            "statement-of-account"
+        'banking-transactions': {
+          name: 'Banking & Transactions',
+          docs: [
+            'ach-authorization-form',
+            'direct-deposit-form',
+            'invoice',
+            'purchase-order',
+            'receipt',
+            'statement-of-account',
           ],
-          "displayName": "Banking & Transactions",
-          "icon": "📑"
-        }
+          displayName: 'Banking & Transactions',
+          icon: '📑',
+        },
       },
-      "displayName": "Finance & Lending",
-      "icon": "💰",
-      "order": 5
+      displayName: 'Finance & Lending',
+      icon: '💰',
+      order: 5,
     },
-    "business-startups": {
-      "name": "Business & Start-ups",
-      "situations": [
-        "business-operations"
-      ],
-      "subs": {
-        "starting-business": {
-          "name": "Starting a Business",
-          "docs": [
-            "articles-of-incorporation",
-            "articles-of-incorporation-biz",
-            "corporate-bylaws",
-            "nonprofit-bylaws",
-            "operating-agreement",
-            "single-member-llc-operating-agreement",
-            "partnership-agreement",
-            "limited-partnership-agreement",
-            "joint-venture-agreement",
-            "business-plan",
-            "board-resolution"
+    'business-startups': {
+      name: 'Business & Start-ups',
+      situations: ['business-operations'],
+      subs: {
+        'starting-business': {
+          name: 'Starting a Business',
+          docs: [
+            'articles-of-incorporation',
+            'articles-of-incorporation-biz',
+            'corporate-bylaws',
+            'nonprofit-bylaws',
+            'operating-agreement',
+            'single-member-llc-operating-agreement',
+            'partnership-agreement',
+            'limited-partnership-agreement',
+            'joint-venture-agreement',
+            'business-plan',
+            'board-resolution',
           ],
-          "displayName": "Starting a Business",
-          "icon": "📑"
+          displayName: 'Starting a Business',
+          icon: '📑',
         },
-        "business-agreements": {
-          "name": "Business Agreements",
-          "docs": [
-            "business-contract",
-            "service-agreement",
-            "service-level-agreement",
-            "vendor-agreement",
-            "commission-agreement",
-            "affiliate-marketing-agreement",
-            "sponsorship-agreement",
-            "memorandum-of-understanding",
-            "memorandum-of-agreement",
-            "letter-of-intent",
-            "term-sheet",
-            "statement-of-work",
-            "government-contract-agreement"
+        'business-agreements': {
+          name: 'Business Agreements',
+          docs: [
+            'business-contract',
+            'service-agreement',
+            'service-level-agreement',
+            'vendor-agreement',
+            'commission-agreement',
+            'affiliate-marketing-agreement',
+            'sponsorship-agreement',
+            'memorandum-of-understanding',
+            'memorandum-of-agreement',
+            'letter-of-intent',
+            'term-sheet',
+            'statement-of-work',
+            'government-contract-agreement',
           ],
-          "displayName": "Business Agreements",
-          "icon": "📑"
+          displayName: 'Business Agreements',
+          icon: '📑',
         },
-        "specialized-industries": {
-          "name": "Specialized Industries",
-          "docs": [
-            "restaurant-agreement",
-            "restaurant-lease",
-            "food-truck-agreement",
-            "bar-agreement",
-            "hotel-agreement",
-            "catering-agreement",
-            "event-planning-contract",
-            "transportation-service-agreement",
-            "warehouse-agreement",
-            "bookkeeping-services-agreement",
-            "tax-preparation-agreement"
+        'specialized-industries': {
+          name: 'Specialized Industries',
+          docs: [
+            'restaurant-agreement',
+            'restaurant-lease',
+            'food-truck-agreement',
+            'bar-agreement',
+            'hotel-agreement',
+            'catering-agreement',
+            'event-planning-contract',
+            'transportation-service-agreement',
+            'warehouse-agreement',
+            'bookkeeping-services-agreement',
+            'tax-preparation-agreement',
           ],
-          "displayName": "Specialized Industries",
-          "icon": "📑"
+          displayName: 'Specialized Industries',
+          icon: '📑',
         },
-        "marketing-talent": {
-          "name": "Marketing & Talent",
-          "docs": [
-            "marketing-agreement",
-            "social-media-management-agreement",
-            "influencer-agreement",
-            "brand-ambassador-agreement",
-            "endorsement-agreement",
-            "talent-agreement",
-            "talent-management-agreement",
-            "recording-artist-agreement"
+        'marketing-talent': {
+          name: 'Marketing & Talent',
+          docs: [
+            'marketing-agreement',
+            'social-media-management-agreement',
+            'influencer-agreement',
+            'brand-ambassador-agreement',
+            'endorsement-agreement',
+            'talent-agreement',
+            'talent-management-agreement',
+            'recording-artist-agreement',
           ],
-          "displayName": "Marketing & Talent",
-          "icon": "📑"
+          displayName: 'Marketing & Talent',
+          icon: '📑',
         },
-        "finance-equity": {
-          "name": "Finance Equity",
-          "docs": [
-            "startup-equity-agreement",
-            "investment-agreement"
-          ]
-        }
+        'finance-equity': {
+          name: 'Finance Equity',
+          docs: ['startup-equity-agreement', 'investment-agreement'],
+        },
       },
-      "displayName": "Business & Start-ups",
-      "icon": "🏢",
-      "order": 6
+      displayName: 'Business & Start-ups',
+      icon: '🏢',
+      order: 6,
     },
-    "ip-creative": {
-      "name": "IP & Creative Works",
-      "situations": [
-        "legal-protection"
-      ],
-      "subs": {
-        "intellectual-property": {
-          "name": "Intellectual Property",
-          "docs": [
-            "copyright-assignment",
-            "copyright-assignment-agreement",
-            "copyright-license-agreement",
-            "trademark-assignment",
-            "trademark-license-agreement",
-            "trademark-application-worksheet",
-            "patent-assignment",
-            "patent-application-assignment",
-            "patent-license-agreement",
-            "patent-licensing-agreement",
-            "provisional-patent-application"
+    'ip-creative': {
+      name: 'IP & Creative Works',
+      situations: ['legal-protection'],
+      subs: {
+        'intellectual-property': {
+          name: 'Intellectual Property',
+          docs: [
+            'copyright-assignment',
+            'copyright-assignment-agreement',
+            'copyright-license-agreement',
+            'trademark-assignment',
+            'trademark-license-agreement',
+            'trademark-application-worksheet',
+            'patent-assignment',
+            'patent-application-assignment',
+            'patent-license-agreement',
+            'patent-licensing-agreement',
+            'provisional-patent-application',
           ],
-          "displayName": "Intellectual Property",
-          "icon": "📑"
+          displayName: 'Intellectual Property',
+          icon: '📑',
         },
-        "confidentiality": {
-          "name": "Confidentiality",
-          "docs": [
-            "non-disclosure-agreement",
-            "nda",
-            "mutual-non-disclosure-agreement",
-            "confidentiality-agreement"
+        confidentiality: {
+          name: 'Confidentiality',
+          docs: [
+            'non-disclosure-agreement',
+            'nda',
+            'mutual-non-disclosure-agreement',
+            'confidentiality-agreement',
           ],
-          "displayName": "Confidentiality",
-          "icon": "📑"
+          displayName: 'Confidentiality',
+          icon: '📑',
         },
-        "liability-safety": {
-          "name": "Liability & Safety",
-          "docs": [
-            "general-liability-waiver",
-            "liability-waiver",
-            "release-of-liability",
-            "hold-harmless-agreement",
-            "indemnity-agreement",
-            "professional-liability-waiver",
-            "product-liability-waiver"
+        'liability-safety': {
+          name: 'Liability & Safety',
+          docs: [
+            'general-liability-waiver',
+            'liability-waiver',
+            'release-of-liability',
+            'hold-harmless-agreement',
+            'indemnity-agreement',
+            'professional-liability-waiver',
+            'product-liability-waiver',
           ],
-          "displayName": "Liability & Safety",
-          "icon": "📑"
-        }
+          displayName: 'Liability & Safety',
+          icon: '📑',
+        },
       },
-      "displayName": "IP & Creative Works",
-      "icon": "📂",
-      "order": 7
+      displayName: 'IP & Creative Works',
+      icon: '📂',
+      order: 7,
     },
-    "legal-process-disputes": {
-      "name": "Legal Process & Disputes",
-      "situations": [
-        "legal-protection",
-        "general-forms"
-      ],
-      "subs": {
-        "disputes-claims": {
-          "name": "Disputes & Claims",
-          "docs": [
-            "cease-desist-letter",
-            "breach-contract-notice",
-            "complaint-letter",
-            "arbitration-agreement",
-            "mediation-agreement",
-            "settlement-agreement",
-            "small-claims-worksheet",
-            "court-filing-document"
+    'legal-process-disputes': {
+      name: 'Legal Process & Disputes',
+      situations: ['legal-protection', 'general-forms'],
+      subs: {
+        'disputes-claims': {
+          name: 'Disputes & Claims',
+          docs: [
+            'cease-desist-letter',
+            'breach-contract-notice',
+            'complaint-letter',
+            'arbitration-agreement',
+            'mediation-agreement',
+            'settlement-agreement',
+            'small-claims-worksheet',
+            'court-filing-document',
           ],
-          "displayName": "Disputes & Claims",
-          "icon": "📑"
+          displayName: 'Disputes & Claims',
+          icon: '📑',
         },
-        "notices-letters": {
-          "name": "Notices & Letters",
-          "docs": [
-            "termination-letter",
-            "contract-termination-letter",
-            "name-change-notification-letter",
-            "force-majeure-notice",
-            "notarization-request",
-            "general-inquiry"
+        'notices-letters': {
+          name: 'Notices & Letters',
+          docs: [
+            'termination-letter',
+            'contract-termination-letter',
+            'name-change-notification-letter',
+            'force-majeure-notice',
+            'notarization-request',
+            'general-inquiry',
           ],
-          "displayName": "Notices & Letters",
-          "icon": "📑"
+          displayName: 'Notices & Letters',
+          icon: '📑',
         },
-        "affidavits-declarations": {
-          "name": "Affidavits & Declarations",
-          "docs": [
-            "affidavit",
-            "affidavit-general",
-            "affidavit-of-death",
-            "affidavit-of-heirship",
-            "affidavit-of-identity",
-            "affidavit-of-survivorship",
-            "immigration-affidavit",
-            "small-estate-affidavit"
+        'affidavits-declarations': {
+          name: 'Affidavits & Declarations',
+          docs: [
+            'affidavit',
+            'affidavit-general',
+            'affidavit-of-death',
+            'affidavit-of-heirship',
+            'affidavit-of-identity',
+            'affidavit-of-survivorship',
+            'immigration-affidavit',
+            'small-estate-affidavit',
           ],
-          "displayName": "Affidavits & Declarations",
-          "icon": "📑"
+          displayName: 'Affidavits & Declarations',
+          icon: '📑',
         },
-        "reports-documentation": {
-          "name": "Reports & Documentation",
-          "docs": [
-            "incident-report",
-            "accident-report",
-            "covid19-health-screening",
-            "insurance-claim-form",
-            "bid-proposal"
+        'reports-documentation': {
+          name: 'Reports & Documentation',
+          docs: [
+            'incident-report',
+            'accident-report',
+            'covid19-health-screening',
+            'insurance-claim-form',
+            'bid-proposal',
           ],
-          "displayName": "Reports & Documentation",
-          "icon": "📑"
-        }
+          displayName: 'Reports & Documentation',
+          icon: '📑',
+        },
       },
-      "displayName": "Legal Process & Disputes",
-      "icon": "⚖️",
-      "order": 8
+      displayName: 'Legal Process & Disputes',
+      icon: '⚖️',
+      order: 8,
     },
-    "estate-planning": {
-      "name": "Estate Planning",
-      "situations": [
-        "family-relationships"
-      ],
-      "subs": {
-        "wills-trusts": {
-          "name": "Wills & Trusts",
-          "docs": [
-            "last-will-testament",
-            "simple-will",
-            "pour-over-will",
-            "living-trust",
-            "joint-living-trust",
-            "living-trust-amendment",
-            "codicil-to-will",
-            "revocation-of-power-of-attorney"
+    'estate-planning': {
+      name: 'Estate Planning',
+      situations: ['family-relationships'],
+      subs: {
+        'wills-trusts': {
+          name: 'Wills & Trusts',
+          docs: [
+            'last-will-testament',
+            'simple-will',
+            'pour-over-will',
+            'living-trust',
+            'joint-living-trust',
+            'living-trust-amendment',
+            'codicil-to-will',
+            'revocation-of-power-of-attorney',
           ],
-          "displayName": "Wills & Trusts",
-          "icon": "📑"
+          displayName: 'Wills & Trusts',
+          icon: '📑',
         },
-        "powers-of-attorney": {
-          "name": "Powers of Attorney",
-          "docs": [
-            "power-of-attorney",
-            "durable-power-of-attorney",
-            "revocation-of-power-of-attorney"
+        'powers-of-attorney': {
+          name: 'Powers of Attorney',
+          docs: [
+            'power-of-attorney',
+            'durable-power-of-attorney',
+            'revocation-of-power-of-attorney',
           ],
-          "displayName": "Powers of Attorney",
-          "icon": "📑"
-        }
-      },
-      "displayName": "Estate Planning",
-      "icon": "📜",
-      "order": 9
-    },
-    "construction-trades": {
-      "name": "Construction & Trades",
-      "situations": [
-        "home-property"
-      ],
-      "subs": {
-        "contracts-bonds": {
-          "name": "Contracts & Bonds",
-          "docs": [
-            "payment-bond",
-            "performance-bond",
-            "security-agreement"
-          ],
-          "displayName": "Contracts & Bonds",
-          "icon": "📑"
-        }
-      },
-      "displayName": "Construction & Trades",
-      "icon": "🛠️",
-      "order": 10
-    },
-    "technology-digital": {
-      "name": "Technology & Digital",
-      "situations": [
-        "technology-digital"
-      ],
-      "subs": {
-        "software-development": {
-          "name": "Software & Development",
-          "docs": [
-            "software-license-agreement",
-            "app-development-agreement",
-            "web-development-agreement",
-            "website-development-agreement",
-            "cloud-services-agreement",
-            "data-processing-agreement",
-            "cybersecurity-agreement",
-            "ecommerce-terms-of-service"
-          ],
-          "displayName": "Software & Development",
-          "icon": "📑"
+          displayName: 'Powers of Attorney',
+          icon: '📑',
         },
-        "digital-assets": {
-          "name": "Digital Assets",
-          "docs": [
-            "digital-asset-agreement",
-            "cryptocurrency-agreement",
-            "gaming-agreement",
-            "music-license-agreement",
-            "music-licensing-agreement",
-            "video-release"
-          ],
-          "displayName": "Digital Assets",
-          "icon": "📑"
-        }
       },
-      "displayName": "Technology & Digital",
-      "icon": "💻",
-      "order": 11
+      displayName: 'Estate Planning',
+      icon: '📜',
+      order: 9,
     },
-    "agriculture-energy": {
-      "name": "Agriculture & Energy",
-      "situations": [
-        "specialized-industries"
-      ],
-      "subs": {
-        "agriculture-resources": {
-          "name": "Agriculture & Resources",
-          "docs": [
-            "agricultural-agreement",
-            "farm-lease-agreement",
-            "crop-sharing-agreement",
-            "livestock-purchase-agreement",
-            "timber-sale-agreement",
-            "oil-gas-lease",
-            "oil-gas-lease-agreement",
-            "water-rights-agreement",
-            "mining-agreement",
-            "mining-lease-agreement"
-          ],
-          "displayName": "Agriculture & Resources",
-          "icon": "📑"
+    'construction-trades': {
+      name: 'Construction & Trades',
+      situations: ['home-property'],
+      subs: {
+        'contracts-bonds': {
+          name: 'Contracts & Bonds',
+          docs: ['payment-bond', 'performance-bond', 'security-agreement'],
+          displayName: 'Contracts & Bonds',
+          icon: '📑',
         },
-        "education-research": {
-          "name": "Education & Research",
-          "docs": [
-            "tuition-agreement",
-            "tutoring-agreement",
-            "athletic-scholarship-agreement",
-            "research-agreement",
-            "education-trust"
+      },
+      displayName: 'Construction & Trades',
+      icon: '🛠️',
+      order: 10,
+    },
+    'technology-digital': {
+      name: 'Technology & Digital',
+      situations: ['technology-digital'],
+      subs: {
+        'software-development': {
+          name: 'Software & Development',
+          docs: [
+            'software-license-agreement',
+            'app-development-agreement',
+            'web-development-agreement',
+            'website-development-agreement',
+            'cloud-services-agreement',
+            'data-processing-agreement',
+            'cybersecurity-agreement',
+            'ecommerce-terms-of-service',
           ],
-          "displayName": "Education & Research",
-          "icon": "📑"
+          displayName: 'Software & Development',
+          icon: '📑',
         },
-        "travel-events": {
-          "name": "Travel & Events",
-          "docs": [
-            "travel-insurance-agreement",
-            "aviation-charter-agreement",
-            "maritime-charter-agreement",
-            "hunting-lease-agreement"
+        'digital-assets': {
+          name: 'Digital Assets',
+          docs: [
+            'digital-asset-agreement',
+            'cryptocurrency-agreement',
+            'gaming-agreement',
+            'music-license-agreement',
+            'music-licensing-agreement',
+            'video-release',
           ],
-          "displayName": "Travel & Events",
-          "icon": "📑"
-        }
-      },
-      "displayName": "Agriculture & Energy",
-      "icon": "🌾",
-      "order": 12
-    },
-    "vehicles-equipment": {
-      "name": "Vehicles & Equipment",
-      "situations": [
-        "vehicles-equipment"
-      ],
-      "subs": {
-        "vehicle-transactions": {
-          "name": "Vehicle Transactions",
-          "docs": [
-            "vehicle-bill-of-sale",
-            "boat-bill-of-sale",
-            "bill-of-sale-general",
-            "vehicle-lease-agreement"
-          ],
-          "displayName": "Vehicle Transactions",
-          "icon": "📑"
+          displayName: 'Digital Assets',
+          icon: '📑',
         },
-        "services-rentals": {
-          "name": "Services & Rentals",
-          "docs": [
-            "auto-repair-agreement",
-            "automotive-service-agreement",
-            "ride-sharing-agreement"
-          ],
-          "displayName": "Services & Rentals",
-          "icon": "📑"
-        }
       },
-      "displayName": "Vehicles & Equipment",
-      "icon": "📂",
-      "order": 13
+      displayName: 'Technology & Digital',
+      icon: '💻',
+      order: 11,
     },
-    "general-forms": {
-      "name": "General Forms & Miscellaneous",
-      "situations": [
-        "general-forms"
-      ],
-      "subs": {
-        "misc-agreements": {
-          "name": "Miscellaneous Agreements",
-          "docs": [
-            "lottery-pool-contract",
-            "volunteer-agreement",
-            "donation-agreement",
-            "licensing-agreement",
-            "licensing-agreement-general",
-            "royalty-agreement",
-            "franchise-agreement",
-            "franchise-disclosure-agreement",
-            "stock-purchase-agreement",
-            "shareholder-agreement",
-            "buy-sell-agreement",
-            "partnership-amendment",
-            "partnership-dissolution-agreement",
-            "contract-amendment",
-            "assignment-agreement",
-            "consignment-agreement",
-            "sales-agreement",
-            "sale-of-goods",
-            "performance-bond",
-            "international-trade-agreement",
-            "film-production-agreement",
-            "environmental-agreement",
-            "retirement-plan-agreement",
-            "private-placement-memorandum",
-            "membership-agreement",
-            "membership-cancellation-letter",
-            "sports-agreement",
-            "release-for-use-of-likeness",
-            "solar-energy-agreement",
-            "startup-equity-agreement"
+    'agriculture-energy': {
+      name: 'Agriculture & Energy',
+      situations: ['specialized-industries'],
+      subs: {
+        'agriculture-resources': {
+          name: 'Agriculture & Resources',
+          docs: [
+            'agricultural-agreement',
+            'farm-lease-agreement',
+            'crop-sharing-agreement',
+            'livestock-purchase-agreement',
+            'timber-sale-agreement',
+            'oil-gas-lease',
+            'oil-gas-lease-agreement',
+            'water-rights-agreement',
+            'mining-agreement',
+            'mining-lease-agreement',
           ],
-          "displayName": "Miscellaneous Agreements",
-          "icon": "📑"
-        }
+          displayName: 'Agriculture & Resources',
+          icon: '📑',
+        },
+        'education-research': {
+          name: 'Education & Research',
+          docs: [
+            'tuition-agreement',
+            'tutoring-agreement',
+            'athletic-scholarship-agreement',
+            'research-agreement',
+            'education-trust',
+          ],
+          displayName: 'Education & Research',
+          icon: '📑',
+        },
+        'travel-events': {
+          name: 'Travel & Events',
+          docs: [
+            'travel-insurance-agreement',
+            'aviation-charter-agreement',
+            'maritime-charter-agreement',
+            'hunting-lease-agreement',
+          ],
+          displayName: 'Travel & Events',
+          icon: '📑',
+        },
       },
-      "displayName": "General Forms & Miscellaneous",
-      "icon": "📂",
-      "order": 14,
-      "expandable": true,
-      "defaultVisible": 10,
-      "sortBy": "popular"
+      displayName: 'Agriculture & Energy',
+      icon: '🌾',
+      order: 12,
     },
-    "ip-creative-works": {
-      "name": "ip-creative-works",
-      "subs": {
-        "media-releases": {
-          "name": "Media Releases",
-          "docs": [
-            "model-release",
-            "photo-release-form",
-            "photography-release"
-          ]
-        }
-      }
+    'vehicles-equipment': {
+      name: 'Vehicles & Equipment',
+      situations: ['vehicles-equipment'],
+      subs: {
+        'vehicle-transactions': {
+          name: 'Vehicle Transactions',
+          docs: [
+            'vehicle-bill-of-sale',
+            'boat-bill-of-sale',
+            'bill-of-sale-general',
+            'vehicle-lease-agreement',
+          ],
+          displayName: 'Vehicle Transactions',
+          icon: '📑',
+        },
+        'services-rentals': {
+          name: 'Services & Rentals',
+          docs: [
+            'auto-repair-agreement',
+            'automotive-service-agreement',
+            'ride-sharing-agreement',
+          ],
+          displayName: 'Services & Rentals',
+          icon: '📑',
+        },
+      },
+      displayName: 'Vehicles & Equipment',
+      icon: '📂',
+      order: 13,
     },
-    "assets-gear": {
-      "name": "assets-gear",
-      "subs": {
-        "services-rentals": {
-          "name": "Services Rentals",
-          "docs": [
-            "equipment-rental-agreement"
-          ]
-        }
-      }
-    }
+    'general-forms': {
+      name: 'General Forms & Miscellaneous',
+      situations: ['general-forms'],
+      subs: {
+        'misc-agreements': {
+          name: 'Miscellaneous Agreements',
+          docs: [
+            'lottery-pool-contract',
+            'volunteer-agreement',
+            'donation-agreement',
+            'licensing-agreement',
+            'licensing-agreement-general',
+            'royalty-agreement',
+            'franchise-agreement',
+            'franchise-disclosure-agreement',
+            'stock-purchase-agreement',
+            'shareholder-agreement',
+            'buy-sell-agreement',
+            'partnership-amendment',
+            'partnership-dissolution-agreement',
+            'contract-amendment',
+            'assignment-agreement',
+            'consignment-agreement',
+            'sales-agreement',
+            'sale-of-goods',
+            'performance-bond',
+            'international-trade-agreement',
+            'film-production-agreement',
+            'environmental-agreement',
+            'retirement-plan-agreement',
+            'private-placement-memorandum',
+            'membership-agreement',
+            'membership-cancellation-letter',
+            'sports-agreement',
+            'release-for-use-of-likeness',
+            'solar-energy-agreement',
+            'startup-equity-agreement',
+          ],
+          displayName: 'Miscellaneous Agreements',
+          icon: '📑',
+        },
+      },
+      displayName: 'General Forms & Miscellaneous',
+      icon: '📂',
+      order: 14,
+      expandable: true,
+      defaultVisible: 10,
+      sortBy: 'popular',
+    },
+    'ip-creative-works': {
+      name: 'ip-creative-works',
+      subs: {
+        'media-releases': {
+          name: 'Media Releases',
+          docs: ['model-release', 'photo-release-form', 'photography-release'],
+        },
+      },
+    },
+    'assets-gear': {
+      name: 'assets-gear',
+      subs: {
+        'services-rentals': {
+          name: 'Services Rentals',
+          docs: ['equipment-rental-agreement'],
+        },
+      },
+    },
   },
-  "synonyms": {
-    "rental": [
-      "lease",
-      "tenancy"
+  synonyms: {
+    rental: ['lease', 'tenancy'],
+    nda: ['non-disclosure-agreement', 'mutual-non-disclosure-agreement'],
+    eviction: ['eviction-notice', 'notice-to-pay-rent-or-quit'],
+    'bill of sale': ['bill-of-sale-general', 'vehicle-bill-of-sale'],
+    poa: ['power-of-attorney', 'durable-power-of-attorney'],
+    paternity: ['child-custody-agreement'],
+    llc: ['operating-agreement', 'articles-of-incorporation'],
+    ppm: ['private-placement-memorandum'],
+    sow: ['statement-of-work'],
+    'quit claim': ['quitclaim-deed'],
+    resume: ['job-application-form'],
+    w9: ['tax-preparation-agreement'],
+    'security deposit': ['payment-bond'],
+    lease: [
+      'rental-agreement',
+      'residential-lease-agreement',
+      'commercial-lease-agreement',
     ],
-    "nda": [
-      "non-disclosure-agreement",
-      "mutual-non-disclosure-agreement"
-    ],
-    "eviction": [
-      "eviction-notice",
-      "notice-to-pay-rent-or-quit"
-    ],
-    "bill of sale": [
-      "bill-of-sale-general",
-      "vehicle-bill-of-sale"
-    ],
-    "poa": [
-      "power-of-attorney",
-      "durable-power-of-attorney"
-    ],
-    "paternity": [
-      "child-custody-agreement"
-    ],
-    "llc": [
-      "operating-agreement",
-      "articles-of-incorporation"
-    ],
-    "ppm": [
-      "private-placement-memorandum"
-    ],
-    "sow": [
-      "statement-of-work"
-    ],
-    "quit claim": [
-      "quitclaim-deed"
-    ],
-    "resume": [
-      "job-application-form"
-    ],
-    "w9": [
-      "tax-preparation-agreement"
-    ],
-    "security deposit": [
-      "payment-bond"
-    ],
-    "lease": [
-      "rental-agreement",
-      "residential-lease-agreement",
-      "commercial-lease-agreement"
-    ],
-    "survey": [
-      "incident-report"
-    ],
-    "medical consent": [
-      "medical-consent-form"
-    ],
-    "will": [
-      "last-will-testament",
-      "living-will",
-      "simple-will"
-    ],
-    "child custody": [
-      "child-custody-agreement"
-    ],
-    "startup": [
-      "new-business",
-      "incorporate",
-      "founder"
-    ],
-    "loan": [
-      "loan-agreement",
-      "promissory-note"
-    ],
-    "copyright": [
-      "copyright-assignment",
-      "copyright-license-agreement"
-    ],
-    "trademark": [
-      "trademark-license-agreement",
-      "trademark-assignment"
-    ],
-    "contract": [
-      "agreement",
-      "document",
-      "form"
-    ],
-    "divorce": [
-      "separation",
-      "dissolution"
-    ],
-    "freelance": [
-      "independent-contractor",
-      "1099",
-      "consultant"
-    ]
+    survey: ['incident-report'],
+    'medical consent': ['medical-consent-form'],
+    will: ['last-will-testament', 'living-will', 'simple-will'],
+    'child custody': ['child-custody-agreement'],
+    startup: ['new-business', 'incorporate', 'founder'],
+    loan: ['loan-agreement', 'promissory-note'],
+    copyright: ['copyright-assignment', 'copyright-license-agreement'],
+    trademark: ['trademark-license-agreement', 'trademark-assignment'],
+    contract: ['agreement', 'document', 'form'],
+    divorce: ['separation', 'dissolution'],
+    freelance: ['independent-contractor', '1099', 'consultant'],
   },
-  "roles": {
-    "landlord": {
-      "quickDocs": {
-        "residential-lease-agreement": 1.0,
-        "eviction-notice": 0.95,
-        "rent-receipt": 0.8,
-        "notice-to-pay-rent-or-quit": 0.85
-      }
+  roles: {
+    landlord: {
+      quickDocs: {
+        'residential-lease-agreement': 1.0,
+        'eviction-notice': 0.95,
+        'rent-receipt': 0.8,
+        'notice-to-pay-rent-or-quit': 0.85,
+      },
     },
-    "startup-founder": {
-      "quickDocs": {
-        "articles-of-incorporation": 1.0,
-        "operating-agreement": 0.9,
-        "employment-contract": 0.7,
-        "nda": 0.8,
-        "shareholder-agreement": 0.7
-      }
+    'startup-founder': {
+      quickDocs: {
+        'articles-of-incorporation': 1.0,
+        'operating-agreement': 0.9,
+        'employment-contract': 0.7,
+        nda: 0.8,
+        'shareholder-agreement': 0.7,
+      },
     },
-    "freelancer": {
-      "quickDocs": {
-        "independent-contractor-agreement": 1.0,
-        "invoice": 0.9,
-        "non-disclosure-agreement": 0.8,
-        "statement-of-work": 0.75
-      }
+    freelancer: {
+      quickDocs: {
+        'independent-contractor-agreement': 1.0,
+        invoice: 0.9,
+        'non-disclosure-agreement': 0.8,
+        'statement-of-work': 0.75,
+      },
     },
-    "home-buyer": {
-      "quickDocs": {
-        "real-estate-purchase-agreement": 1.0,
-        "earnest-money-agreement": 0.8,
-        "property-deed": 0.7
-      }
+    'home-buyer': {
+      quickDocs: {
+        'real-estate-purchase-agreement': 1.0,
+        'earnest-money-agreement': 0.8,
+        'property-deed': 0.7,
+      },
     },
-    "employee": {
-      "icon": "👩‍💼",
-      "description": "Resources for employees managing their job life‑cycle.",
-      "emptyStateCTA": "Explore key employment documents.",
-      "order": 4,
-      "quickDocs": {
-        "employment-contract": 1.0,
-        "resignation-letter": 0.8,
-        "employment-verification-letter": 0.7
-      }
+    employee: {
+      icon: '👩‍💼',
+      description: 'Resources for employees managing their job life‑cycle.',
+      emptyStateCTA: 'Explore key employment documents.',
+      order: 4,
+      quickDocs: {
+        'employment-contract': 1.0,
+        'resignation-letter': 0.8,
+        'employment-verification-letter': 0.7,
+      },
     },
-    "investor": {
-      "icon": "💹",
-      "description": "Documents for venture and angel investors.",
-      "emptyStateCTA": "Prepare your next investment.",
-      "order": 5,
-      "quickDocs": {
-        "private-placement-memorandum": 1.0,
-        "stock-purchase-agreement": 0.9,
-        "term-sheet": 0.8
-      }
+    investor: {
+      icon: '💹',
+      description: 'Documents for venture and angel investors.',
+      emptyStateCTA: 'Prepare your next investment.',
+      order: 5,
+      quickDocs: {
+        'private-placement-memorandum': 1.0,
+        'stock-purchase-agreement': 0.9,
+        'term-sheet': 0.8,
+      },
     },
-    "healthcare-pro": {
-      "icon": "🩺",
-      "description": "Healthcare professionals' common forms.",
-      "emptyStateCTA": "Manage patient documentation.",
-      "order": 6,
-      "quickDocs": {
-        "hipaa-authorization-form": 1.0,
-        "medical-consent-form": 0.9,
-        "telemedicine-agreement": 0.8
-      }
-    }
+    'healthcare-pro': {
+      icon: '🩺',
+      description: "Healthcare professionals' common forms.",
+      emptyStateCTA: 'Manage patient documentation.',
+      order: 6,
+      quickDocs: {
+        'hipaa-authorization-form': 1.0,
+        'medical-consent-form': 0.9,
+        'telemedicine-agreement': 0.8,
+      },
+    },
   },
-  "flows": {
-    "eviction_basic": {
-      "label": "Evict a residential tenant",
-      "steps": [
-        "notice-to-pay-rent-or-quit",
-        "eviction-notice",
-        "lease-termination-letter"
-      ]
-    },
-    "hire_employee": {
-      "label": "Hire your first employee",
-      "steps": [
-        "employment-offer-letter",
-        "employment-contract",
-        "employee-handbook",
-        "employee-non-disclosure-agreement"
-      ]
-    },
-    "start_business_simple": {
-      "label": "Start an LLC in the US",
-      "steps": [
-        "articles-of-incorporation",
-        "operating-agreement",
-        "ein-application-form"
-      ]
-    },
-    "buy_home": {
-      "label": "Buy a Home",
-      "prereq": [
-        "real-estate-purchase-agreement"
+  flows: {
+    eviction_basic: {
+      label: 'Evict a residential tenant',
+      steps: [
+        'notice-to-pay-rent-or-quit',
+        'eviction-notice',
+        'lease-termination-letter',
       ],
-      "steps": [
-        "earnest-money-agreement",
-        "property-deed",
-        "mortgage-agreement"
-      ],
-      "optional": [
-        "inspection-contingency-addendum"
-      ]
     },
-    "divorce_process": {
-      "label": "Handle a Divorce Amicably",
-      "prereq": [
-        "marriage-separation-agreement"
+    hire_employee: {
+      label: 'Hire your first employee',
+      steps: [
+        'employment-offer-letter',
+        'employment-contract',
+        'employee-handbook',
+        'employee-non-disclosure-agreement',
       ],
-      "steps": [
-        "divorce-settlement-agreement",
-        "child-custody-agreement",
-        "child-support-agreement"
-      ],
-      "optional": []
     },
-    "raise_seed_funding": {
-      "label": "Raise Seed Funding",
-      "prereq": [
-        "term-sheet"
+    start_business_simple: {
+      label: 'Start an LLC in the US',
+      steps: [
+        'articles-of-incorporation',
+        'operating-agreement',
+        'ein-application-form',
       ],
-      "steps": [
-        "private-placement-memorandum",
-        "stock-purchase-agreement",
-        "investment-agreement"
+    },
+    buy_home: {
+      label: 'Buy a Home',
+      prereq: ['real-estate-purchase-agreement'],
+      steps: ['earnest-money-agreement', 'property-deed', 'mortgage-agreement'],
+      optional: ['inspection-contingency-addendum'],
+    },
+    divorce_process: {
+      label: 'Handle a Divorce Amicably',
+      prereq: ['marriage-separation-agreement'],
+      steps: [
+        'divorce-settlement-agreement',
+        'child-custody-agreement',
+        'child-support-agreement',
       ],
-      "optional": []
+      optional: [],
     },
-    "start_rental_property": {
-      "label": "Become a Landlord",
-      "steps": [
-        "property-deed",
-        "residential-lease-agreement",
-        "pet-addendum",
-        "property-manager-agreement"
-      ]
+    raise_seed_funding: {
+      label: 'Raise Seed Funding',
+      prereq: ['term-sheet'],
+      steps: [
+        'private-placement-memorandum',
+        'stock-purchase-agreement',
+        'investment-agreement',
+      ],
+      optional: [],
     },
-    "freelance_setup": {
-      "label": "Start Freelancing",
-      "steps": [
-        "independent-contractor-agreement",
-        "invoice",
-        "non-disclosure-agreement",
-        "statement-of-work"
-      ]
-    }
+    start_rental_property: {
+      label: 'Become a Landlord',
+      steps: [
+        'property-deed',
+        'residential-lease-agreement',
+        'pet-addendum',
+        'property-manager-agreement',
+      ],
+    },
+    freelance_setup: {
+      label: 'Start Freelancing',
+      steps: [
+        'independent-contractor-agreement',
+        'invoice',
+        'non-disclosure-agreement',
+        'statement-of-work',
+      ],
+    },
   },
-  "i18n": {
-    "en": {
-      "labels": {
-        "home-property": "🏠 Home & Property",
-        "work-career": "💼 Work & Career",
-        "family-relationships": "👨‍👩‍👧‍👦 Family & Relationships",
-        "health-medical": "🏥 Health & Medical",
-        "money-finance": "💰 Money & Finance",
-        "business-operations": "🏢 Business Operations",
-        "legal-protection": "⚖️ Legal Protection",
-        "technology-digital": "💻 Technology & Digital",
-        "specialized-industries": "🌾 Specialized Industries",
-        "general-forms": "📋 General Forms & Documents",
-        "assets-gear": "🎯 Assets & Gear"
-      }
+  i18n: {
+    en: {
+      labels: {
+        'home-property': '🏠 Home & Property',
+        'work-career': '💼 Work & Career',
+        'family-relationships': '👨‍👩‍👧‍👦 Family & Relationships',
+        'health-medical': '🏥 Health & Medical',
+        'money-finance': '💰 Money & Finance',
+        'business-operations': '🏢 Business Operations',
+        'legal-protection': '⚖️ Legal Protection',
+        'technology-digital': '💻 Technology & Digital',
+        'specialized-industries': '🌾 Specialized Industries',
+        'general-forms': '📋 General Forms & Documents',
+        'assets-gear': '🎯 Assets & Gear',
+      },
     },
-    "es": {
-      "labels": {
-        "home-property": "🏠 Home & Property",
-        "work-career": "💼 Work & Career",
-        "family-relationships": "👨‍👩‍👧‍👦 Family & Relationships",
-        "health-medical": "🏥 Health & Medical",
-        "money-finance": "💰 Money & Finance",
-        "business-operations": "🏢 Business Operations",
-        "legal-protection": "⚖️ Legal Protection",
-        "technology-digital": "💻 Technology & Digital",
-        "specialized-industries": "🌾 Specialized Industries",
-        "general-forms": "📋 General Forms & Documents",
-        "assets-gear": "🎯 Assets & Gear"
-      }
+    es: {
+      labels: {
+        'home-property': '🏠 Home & Property',
+        'work-career': '💼 Work & Career',
+        'family-relationships': '👨‍👩‍👧‍👦 Family & Relationships',
+        'health-medical': '🏥 Health & Medical',
+        'money-finance': '💰 Money & Finance',
+        'business-operations': '🏢 Business Operations',
+        'legal-protection': '⚖️ Legal Protection',
+        'technology-digital': '💻 Technology & Digital',
+        'specialized-industries': '🌾 Specialized Industries',
+        'general-forms': '📋 General Forms & Documents',
+        'assets-gear': '🎯 Assets & Gear',
+      },
     },
-    "fr": {
-      "labels": {
-        "home-property": "🏠 Home & Property",
-        "work-career": "💼 Work & Career",
-        "family-relationships": "👨‍👩‍👧‍👦 Family & Relationships",
-        "health-medical": "🏥 Health & Medical",
-        "money-finance": "💰 Money & Finance",
-        "business-operations": "🏢 Business Operations",
-        "legal-protection": "⚖️ Legal Protection",
-        "technology-digital": "💻 Technology & Digital",
-        "specialized-industries": "🌾 Specialized Industries",
-        "general-forms": "📋 General Forms & Documents",
-        "assets-gear": "🎯 Assets & Gear"
-      }
-    }
+    fr: {
+      labels: {
+        'home-property': '🏠 Home & Property',
+        'work-career': '💼 Work & Career',
+        'family-relationships': '👨‍👩‍👧‍👦 Family & Relationships',
+        'health-medical': '🏥 Health & Medical',
+        'money-finance': '💰 Money & Finance',
+        'business-operations': '🏢 Business Operations',
+        'legal-protection': '⚖️ Legal Protection',
+        'technology-digital': '💻 Technology & Digital',
+        'specialized-industries': '🌾 Specialized Industries',
+        'general-forms': '📋 General Forms & Documents',
+        'assets-gear': '🎯 Assets & Gear',
+      },
+    },
   },
-  "schemaUrl": "https://123legaldoc.com/schema/docs-structure-5.json",
-  "helpers": {
-    "getDocsBySituation": "function getDocsBySituation(key){ /* returns array */ }",
-    "searchDocs": "function searchDocs(q){ /* fuzzy search using synonyms */ }"
+  schemaUrl: 'https://123legaldoc.com/schema/docs-structure-5.json',
+  helpers: {
+    getDocsBySituation:
+      'function getDocsBySituation(key){ /* returns array */ }',
+    searchDocs: 'function searchDocs(q){ /* fuzzy search using synonyms */ }',
   },
-  "mobileConfig": {
-    "collapseCategoriesDefault": true,
-    "showQuickAccessOnly": [
-      "home-property",
-      "work-career",
-      "family-relationships"
+  mobileConfig: {
+    collapseCategoriesDefault: true,
+    showQuickAccessOnly: [
+      'home-property',
+      'work-career',
+      'family-relationships',
     ],
-    "enableSwipeNavigation": true
+    enableSwipeNavigation: true,
   },
-  "analyticsEvents": {
-    "documentView": true,
-    "categoryBrowse": true,
-    "searchQuery": true,
-    "flowCompletion": true,
-    "roleSelection": true
-  }
+  analyticsEvents: {
+    documentView: true,
+    categoryBrowse: true,
+    searchQuery: true,
+    flowCompletion: true,
+    roleSelection: true,
+  },
 } as const;

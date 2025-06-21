@@ -210,7 +210,7 @@ export const jobApplicationFormQuestions: FormQuestion[] = [
   {
     id: 'requireDriversLicense',
     type: 'checkbox',
-    label: 'Require valid driver\'s license',
+    label: "Require valid driver's license",
     required: false,
     group: 'transportation',
   },
@@ -260,7 +260,8 @@ export const jobApplicationFormQuestions: FormQuestion[] = [
     id: 'applicationInstructions',
     type: 'textarea',
     label: 'Application Instructions',
-    placeholder: 'Provide instructions for completing and submitting the application',
+    placeholder:
+      'Provide instructions for completing and submitting the application',
     required: false,
     group: 'submission',
   },

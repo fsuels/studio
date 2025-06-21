@@ -24,12 +24,18 @@ export const trademarkLicenseAgreementMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Trademark License Agreement',
-      description: 'Agreement granting rights to use trademark and brand names with quality control provisions.',
-      aliases: ['brand licensing agreement', 'trademark usage agreement', 'licensing contract'],
+      description:
+        'Agreement granting rights to use trademark and brand names with quality control provisions.',
+      aliases: [
+        'brand licensing agreement',
+        'trademark usage agreement',
+        'licensing contract',
+      ],
     },
     es: {
       name: 'Acuerdo de Licencia de Marca Registrada',
-      description: 'Acuerdo que otorga derechos para usar marcas registradas y nombres comerciales con control de calidad.',
+      description:
+        'Acuerdo que otorga derechos para usar marcas registradas y nombres comerciales con control de calidad.',
       aliases: ['acuerdo de licencia de marca', 'contrato de licencia'],
     },
   },

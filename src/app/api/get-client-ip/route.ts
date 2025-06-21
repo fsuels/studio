@@ -8,10 +8,10 @@ export async function GET(request: NextRequest) {
     const realIp = request.headers.get('x-real-ip');
     const cfConnectingIp = request.headers.get('cf-connecting-ip'); // Cloudflare
     const xVercelForwardedFor = request.headers.get('x-vercel-forwarded-for'); // Vercel
-    
+
     // Parse the IP address
     let clientIp = 'unknown';
-    
+
     if (cfConnectingIp) {
       clientIp = cfConnectingIp;
     } else if (xVercelForwardedFor) {
@@ -28,24 +28,23 @@ export async function GET(request: NextRequest) {
       userAgent: request.headers.get('user-agent') || '',
       acceptLanguage: request.headers.get('accept-language') || '',
       referer: request.headers.get('referer') || '',
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     };
 
     return NextResponse.json({
       ip: clientIp,
       metadata,
-      success: true
+      success: true,
     });
-
   } catch (error) {
     console.error('Failed to get client IP:', error);
     return NextResponse.json(
-      { 
+      {
         ip: 'unknown',
         error: 'Failed to determine client IP',
-        success: false
+        success: false,
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

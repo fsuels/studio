@@ -1,7 +1,13 @@
 // src/components/DocumentDetail.tsx
 'use client';
 
-import React, { useEffect, useState, useMemo, Children, isValidElement } from 'react';
+import React, {
+  useEffect,
+  useState,
+  useMemo,
+  Children,
+  isValidElement,
+} from 'react';
 // Lazy load react-markdown to reduce initial bundle size
 const ReactMarkdown = React.lazy(() => import('react-markdown'));
 import { useTranslation } from 'react-i18next';
@@ -216,7 +222,10 @@ const DocumentDetail = React.memo(function DocumentDetail({
                 ),
                 h1: (props) => <h1 {...props} className="text-center" />,
                 // FIXED: ensure markdown images include dimensions
-                img: ({ src = '', ...rest }: React.ImgHTMLAttributes<HTMLImageElement>) => (
+                img: ({
+                  src = '',
+                  ...rest
+                }: React.ImgHTMLAttributes<HTMLImageElement>) => (
                   <AutoImage src={src} {...rest} className="mx-auto" />
                 ),
               }}

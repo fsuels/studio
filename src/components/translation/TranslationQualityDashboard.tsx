@@ -20,7 +20,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
-import { 
+import {
   Brain,
   AlertTriangle,
   CheckCircle,
@@ -36,7 +36,7 @@ import {
   RefreshCw,
   Target,
   Zap,
-  Award
+  Award,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -97,15 +97,19 @@ interface TranslationQualityDashboardProps {
   className?: string;
 }
 
-const TranslationQualityDashboard: React.FC<TranslationQualityDashboardProps> = ({
+const TranslationQualityDashboard: React.FC<
+  TranslationQualityDashboardProps
+> = ({
   translationId,
   qualityMetrics,
   onRefresh,
   onExportReport,
-  className
+  className,
 }) => {
   const { t } = useTranslation('quality');
-  const [activeTab, setActiveTab] = React.useState<'overview' | 'breakdown' | 'factors' | 'recommendations'>('overview');
+  const [activeTab, setActiveTab] = React.useState<
+    'overview' | 'breakdown' | 'factors' | 'recommendations'
+  >('overview');
 
   const getScoreColor = (score: number) => {
     if (score >= 0.85) return 'text-green-600';
@@ -121,33 +125,46 @@ const TranslationQualityDashboard: React.FC<TranslationQualityDashboardProps> = 
 
   const getRiskColor = (level: string) => {
     switch (level) {
-      case 'low': return 'text-green-600 bg-green-100';
-      case 'medium': return 'text-yellow-600 bg-yellow-100';
-      case 'high': return 'text-orange-600 bg-orange-100';
-      case 'critical': return 'text-red-600 bg-red-100';
-      default: return 'text-gray-600 bg-gray-100';
+      case 'low':
+        return 'text-green-600 bg-green-100';
+      case 'medium':
+        return 'text-yellow-600 bg-yellow-100';
+      case 'high':
+        return 'text-orange-600 bg-orange-100';
+      case 'critical':
+        return 'text-red-600 bg-red-100';
+      default:
+        return 'text-gray-600 bg-gray-100';
     }
   };
 
   const getTrendIcon = (improvement: number) => {
-    if (improvement > 0.05) return <TrendingUp className="h-4 w-4 text-green-600" />;
-    if (improvement < -0.05) return <TrendingDown className="h-4 w-4 text-red-600" />;
+    if (improvement > 0.05)
+      return <TrendingUp className="h-4 w-4 text-green-600" />;
+    if (improvement < -0.05)
+      return <TrendingDown className="h-4 w-4 text-red-600" />;
     return <BarChart3 className="h-4 w-4 text-gray-600" />;
   };
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
-      case 'linguistic': return <Globe className="h-4 w-4" />;
-      case 'terminology': return <BookOpen className="h-4 w-4" />;
-      case 'contextual': return <Target className="h-4 w-4" />;
-      case 'structural': return <Settings className="h-4 w-4" />;
-      case 'jurisdictional': return <Scale className="h-4 w-4" />;
-      default: return <Brain className="h-4 w-4" />;
+      case 'linguistic':
+        return <Globe className="h-4 w-4" />;
+      case 'terminology':
+        return <BookOpen className="h-4 w-4" />;
+      case 'contextual':
+        return <Target className="h-4 w-4" />;
+      case 'structural':
+        return <Settings className="h-4 w-4" />;
+      case 'jurisdictional':
+        return <Scale className="h-4 w-4" />;
+      default:
+        return <Brain className="h-4 w-4" />;
     }
   };
 
   return (
-    <div className={cn("space-y-6", className)}>
+    <div className={cn('space-y-6', className)}>
       {/* Header */}
       <Card>
         <CardHeader>
@@ -159,7 +176,7 @@ const TranslationQualityDashboard: React.FC<TranslationQualityDashboardProps> = 
                 ID: {translationId.slice(-8)}
               </Badge>
             </CardTitle>
-            
+
             <div className="flex items-center gap-2">
               {onRefresh && (
                 <Button variant="outline" size="sm" onClick={onRefresh}>
@@ -180,33 +197,41 @@ const TranslationQualityDashboard: React.FC<TranslationQualityDashboardProps> = 
       {/* Overview Dashboard */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Overall Score */}
-        <Card className={cn("col-span-1", getScoreBgColor(qualityMetrics.overall))}>
+        <Card
+          className={cn('col-span-1', getScoreBgColor(qualityMetrics.overall))}
+        >
           <CardContent className="p-6">
             <div className="text-center">
               <div className="text-4xl font-bold mb-2">
                 {Math.round(qualityMetrics.overall * 100)}%
               </div>
-              <div className="text-sm font-medium mb-4">Overall Quality Score</div>
-              
+              <div className="text-sm font-medium mb-4">
+                Overall Quality Score
+              </div>
+
               <div className="relative w-32 h-32 mx-auto">
                 <div className="absolute inset-0 rounded-full border-8 border-gray-200"></div>
-                <div 
+                <div
                   className={cn(
-                    "absolute inset-0 rounded-full border-8 border-transparent",
-                    qualityMetrics.overall >= 0.85 ? "border-t-green-500 border-r-green-500" :
-                    qualityMetrics.overall >= 0.7 ? "border-t-yellow-500 border-r-yellow-500" :
-                    "border-t-red-500 border-r-red-500"
+                    'absolute inset-0 rounded-full border-8 border-transparent',
+                    qualityMetrics.overall >= 0.85
+                      ? 'border-t-green-500 border-r-green-500'
+                      : qualityMetrics.overall >= 0.7
+                        ? 'border-t-yellow-500 border-r-yellow-500'
+                        : 'border-t-red-500 border-r-red-500',
                   )}
                   style={{
                     transform: `rotate(${qualityMetrics.overall * 360}deg)`,
-                    transition: 'transform 1s ease-in-out'
+                    transition: 'transform 1s ease-in-out',
                   }}
                 ></div>
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <Award className={cn(
-                    "h-8 w-8",
-                    getScoreColor(qualityMetrics.overall)
-                  )} />
+                  <Award
+                    className={cn(
+                      'h-8 w-8',
+                      getScoreColor(qualityMetrics.overall),
+                    )}
+                  />
                 </div>
               </div>
             </div>
@@ -224,23 +249,27 @@ const TranslationQualityDashboard: React.FC<TranslationQualityDashboardProps> = 
           <CardContent className="space-y-4">
             <div className="flex items-center justify-between">
               <span className="text-sm font-medium">Risk Level</span>
-              <Badge className={getRiskColor(qualityMetrics.riskAssessment.level)}>
+              <Badge
+                className={getRiskColor(qualityMetrics.riskAssessment.level)}
+              >
                 {qualityMetrics.riskAssessment.level.toUpperCase()}
               </Badge>
             </div>
-            
+
             <Separator />
-            
+
             <div className="space-y-2">
               <div className="text-sm font-medium">Key Risk Factors:</div>
-              {qualityMetrics.riskAssessment.factors.slice(0, 3).map((factor, index) => (
-                <div key={index} className="flex items-start gap-2 text-xs">
-                  <AlertTriangle className="h-3 w-3 text-amber-500 mt-0.5 shrink-0" />
-                  <span className="text-muted-foreground">{factor}</span>
-                </div>
-              ))}
+              {qualityMetrics.riskAssessment.factors
+                .slice(0, 3)
+                .map((factor, index) => (
+                  <div key={index} className="flex items-start gap-2 text-xs">
+                    <AlertTriangle className="h-3 w-3 text-amber-500 mt-0.5 shrink-0" />
+                    <span className="text-muted-foreground">{factor}</span>
+                  </div>
+                ))}
             </div>
-            
+
             {qualityMetrics.riskAssessment.reviewRequirements.length > 0 && (
               <>
                 <Separator />
@@ -268,22 +297,27 @@ const TranslationQualityDashboard: React.FC<TranslationQualityDashboardProps> = 
               <span className="text-sm font-medium">Improvement</span>
               <div className="flex items-center gap-1">
                 {getTrendIcon(qualityMetrics.trends.improvement)}
-                <span className={cn(
-                  "text-sm font-medium",
-                  qualityMetrics.trends.improvement > 0 ? "text-green-600" : 
-                  qualityMetrics.trends.improvement < 0 ? "text-red-600" : "text-gray-600"
-                )}>
+                <span
+                  className={cn(
+                    'text-sm font-medium',
+                    qualityMetrics.trends.improvement > 0
+                      ? 'text-green-600'
+                      : qualityMetrics.trends.improvement < 0
+                        ? 'text-red-600'
+                        : 'text-gray-600',
+                  )}
+                >
                   {qualityMetrics.trends.improvement > 0 ? '+' : ''}
                   {Math.round(qualityMetrics.trends.improvement * 100)}%
                 </span>
               </div>
             </div>
-            
+
             <div className="flex items-center justify-between">
               <span className="text-sm font-medium">Consistency</span>
               <div className="flex items-center gap-2">
-                <Progress 
-                  value={qualityMetrics.trends.consistencyScore * 100} 
+                <Progress
+                  value={qualityMetrics.trends.consistencyScore * 100}
                   className="w-16 h-2"
                 />
                 <span className="text-sm text-muted-foreground">
@@ -291,21 +325,26 @@ const TranslationQualityDashboard: React.FC<TranslationQualityDashboardProps> = 
                 </span>
               </div>
             </div>
-            
+
             <Separator />
-            
+
             <div className="space-y-2">
               <div className="text-sm font-medium">Recent Translations:</div>
-              {qualityMetrics.trends.recentTranslations.slice(0, 3).map((translation, index) => (
-                <div key={index} className="flex items-center justify-between text-xs">
-                  <span className="text-muted-foreground">
-                    {translation.documentType}
-                  </span>
-                  <span className={getScoreColor(translation.score)}>
-                    {Math.round(translation.score * 100)}%
-                  </span>
-                </div>
-              ))}
+              {qualityMetrics.trends.recentTranslations
+                .slice(0, 3)
+                .map((translation, index) => (
+                  <div
+                    key={index}
+                    className="flex items-center justify-between text-xs"
+                  >
+                    <span className="text-muted-foreground">
+                      {translation.documentType}
+                    </span>
+                    <span className={getScoreColor(translation.score)}>
+                      {Math.round(translation.score * 100)}%
+                    </span>
+                  </div>
+                ))}
             </div>
           </CardContent>
         </Card>
@@ -318,15 +357,17 @@ const TranslationQualityDashboard: React.FC<TranslationQualityDashboardProps> = 
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
-            {Object.entries(qualityMetrics.breakdown).map(([category, score]) => (
-              <QualityMetricCard
-                key={category}
-                category={category}
-                score={score}
-                benchmark={qualityMetrics.benchmarks.industryAverage}
-                icon={getCategoryIcon(category.toLowerCase())}
-              />
-            ))}
+            {Object.entries(qualityMetrics.breakdown).map(
+              ([category, score]) => (
+                <QualityMetricCard
+                  key={category}
+                  category={category}
+                  score={score}
+                  benchmark={qualityMetrics.benchmarks.industryAverage}
+                  icon={getCategoryIcon(category.toLowerCase())}
+                />
+              ),
+            )}
           </div>
         </CardContent>
       </Card>
@@ -359,12 +400,17 @@ const TranslationQualityDashboard: React.FC<TranslationQualityDashboardProps> = 
               </AccordionTrigger>
               <AccordionContent>
                 <div className="space-y-2">
-                  {qualityMetrics.recommendations.map((recommendation, index) => (
-                    <div key={index} className="flex items-start gap-2 text-sm">
-                      <Zap className="h-4 w-4 text-blue-500 mt-0.5 shrink-0" />
-                      <span>{recommendation}</span>
-                    </div>
-                  ))}
+                  {qualityMetrics.recommendations.map(
+                    (recommendation, index) => (
+                      <div
+                        key={index}
+                        className="flex items-start gap-2 text-sm"
+                      >
+                        <Zap className="h-4 w-4 text-blue-500 mt-0.5 shrink-0" />
+                        <span>{recommendation}</span>
+                      </div>
+                    ),
+                  )}
                 </div>
               </AccordionContent>
             </AccordionItem>
@@ -379,22 +425,34 @@ const TranslationQualityDashboard: React.FC<TranslationQualityDashboardProps> = 
                   <BenchmarkCard
                     title="Industry Average"
                     value={qualityMetrics.benchmarks.industryAverage}
-                    comparison={qualityMetrics.overall - qualityMetrics.benchmarks.industryAverage}
+                    comparison={
+                      qualityMetrics.overall -
+                      qualityMetrics.benchmarks.industryAverage
+                    }
                   />
                   <BenchmarkCard
                     title="Top Performer"
                     value={qualityMetrics.benchmarks.topPerformer}
-                    comparison={qualityMetrics.overall - qualityMetrics.benchmarks.topPerformer}
+                    comparison={
+                      qualityMetrics.overall -
+                      qualityMetrics.benchmarks.topPerformer
+                    }
                   />
                   <BenchmarkCard
                     title="Target Score"
                     value={qualityMetrics.benchmarks.targetScore}
-                    comparison={qualityMetrics.overall - qualityMetrics.benchmarks.targetScore}
+                    comparison={
+                      qualityMetrics.overall -
+                      qualityMetrics.benchmarks.targetScore
+                    }
                   />
                   <BenchmarkCard
                     title="Minimum Required"
                     value={qualityMetrics.benchmarks.minimumAcceptable}
-                    comparison={qualityMetrics.overall - qualityMetrics.benchmarks.minimumAcceptable}
+                    comparison={
+                      qualityMetrics.overall -
+                      qualityMetrics.benchmarks.minimumAcceptable
+                    }
                   />
                 </div>
               </AccordionContent>
@@ -422,7 +480,7 @@ const QualityMetricCard: React.FC<{
   const formatCategoryName = (category: string) => {
     return category
       .replace(/([A-Z])/g, ' $1')
-      .replace(/^./, str => str.toUpperCase())
+      .replace(/^./, (str) => str.toUpperCase())
       .trim();
   };
 
@@ -434,7 +492,7 @@ const QualityMetricCard: React.FC<{
             <CardContent className="p-4 flex flex-col justify-between h-full">
               <div className="flex items-center justify-between">
                 <div className="text-muted-foreground">{icon}</div>
-                <div className={cn("text-lg font-bold", getScoreColor(score))}>
+                <div className={cn('text-lg font-bold', getScoreColor(score))}>
                   {Math.round(score * 100)}%
                 </div>
               </div>
@@ -448,12 +506,17 @@ const QualityMetricCard: React.FC<{
           <div className="text-center">
             <div className="font-medium">{formatCategoryName(category)}</div>
             <div className="text-sm">Score: {Math.round(score * 100)}%</div>
-            <div className="text-sm">Benchmark: {Math.round(benchmark * 100)}%</div>
-            <div className={cn(
-              "text-sm",
-              score >= benchmark ? "text-green-600" : "text-red-600"
-            )}>
-              {score >= benchmark ? '↑' : '↓'} {Math.abs(score - benchmark).toFixed(2)}
+            <div className="text-sm">
+              Benchmark: {Math.round(benchmark * 100)}%
+            </div>
+            <div
+              className={cn(
+                'text-sm',
+                score >= benchmark ? 'text-green-600' : 'text-red-600',
+              )}
+            >
+              {score >= benchmark ? '↑' : '↓'}{' '}
+              {Math.abs(score - benchmark).toFixed(2)}
             </div>
           </div>
         </TooltipContent>
@@ -466,31 +529,40 @@ const QualityMetricCard: React.FC<{
 const QualityFactorItem: React.FC<{ factor: QualityFactor }> = ({ factor }) => {
   const getImpactColor = (impact: string) => {
     switch (impact) {
-      case 'positive': return 'text-green-600 bg-green-100';
-      case 'negative': return 'text-red-600 bg-red-100';
-      default: return 'text-gray-600 bg-gray-100';
+      case 'positive':
+        return 'text-green-600 bg-green-100';
+      case 'negative':
+        return 'text-red-600 bg-red-100';
+      default:
+        return 'text-gray-600 bg-gray-100';
     }
   };
 
   const getImpactIcon = (impact: string) => {
     switch (impact) {
-      case 'positive': return <CheckCircle className="h-3 w-3" />;
-      case 'negative': return <AlertTriangle className="h-3 w-3" />;
-      default: return <BarChart3 className="h-3 w-3" />;
+      case 'positive':
+        return <CheckCircle className="h-3 w-3" />;
+      case 'negative':
+        return <AlertTriangle className="h-3 w-3" />;
+      default:
+        return <BarChart3 className="h-3 w-3" />;
     }
   };
 
   return (
     <div className="flex items-start gap-3 p-3 border rounded-lg">
-      <div className="shrink-0 mt-0.5">
-        {getCategoryIcon(factor.category)}
-      </div>
-      
+      <div className="shrink-0 mt-0.5">{getCategoryIcon(factor.category)}</div>
+
       <div className="flex-1 space-y-1">
         <div className="flex items-center justify-between">
-          <div className="font-medium text-sm">{factor.factor.replace(/_/g, ' ')}</div>
+          <div className="font-medium text-sm">
+            {factor.factor.replace(/_/g, ' ')}
+          </div>
           <div className="flex items-center gap-2">
-            <Badge variant="outline" className={cn("text-xs", getImpactColor(factor.impact))}>
+            <Badge
+              variant="outline"
+              className={cn('text-xs', getImpactColor(factor.impact))}
+            >
               <div className="flex items-center gap-1">
                 {getImpactIcon(factor.impact)}
                 {factor.impact}
@@ -522,15 +594,16 @@ const BenchmarkCard: React.FC<{
   return (
     <Card>
       <CardContent className="p-3 text-center">
-        <div className="text-lg font-bold">
-          {Math.round(value * 100)}%
-        </div>
+        <div className="text-lg font-bold">{Math.round(value * 100)}%</div>
         <div className="text-xs text-muted-foreground mb-2">{title}</div>
-        <div className={cn(
-          "text-xs font-medium",
-          comparison >= 0 ? "text-green-600" : "text-red-600"
-        )}>
-          {comparison >= 0 ? '+' : ''}{Math.round(comparison * 100)}%
+        <div
+          className={cn(
+            'text-xs font-medium',
+            comparison >= 0 ? 'text-green-600' : 'text-red-600',
+          )}
+        >
+          {comparison >= 0 ? '+' : ''}
+          {Math.round(comparison * 100)}%
         </div>
       </CardContent>
     </Card>

@@ -47,7 +47,7 @@ Don't risk using generic templates that may not comply with New Jersey law. Get 
 
 [Create New Jersey Independent Contractor Agreement]
 
-*Trusted by thousands of New Jersey businesses*
+_Trusted by thousands of New Jersey businesses_
 
 ---
 

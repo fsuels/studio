@@ -44,7 +44,7 @@ export const inventionAssignmentAgreementQuestions: Question[] = [
     label: 'Scope of Work',
     type: 'textarea',
     required: true,
-    placeholder: 'Describe the employee\'s work responsibilities',
+    placeholder: "Describe the employee's work responsibilities",
   },
   {
     id: 'inventionDefinition',

@@ -20,23 +20,23 @@ interface Reviewer {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { targetLanguage, jurisdiction, documentType, specializations } = body;
+    const { targetLanguage, jurisdiction, documentType, specializations } =
+      body;
 
     // Get available reviewers based on criteria
     const reviewers = await getAvailableReviewers({
       targetLanguage,
       jurisdiction,
       documentType,
-      specializations: specializations || []
+      specializations: specializations || [],
     });
 
     return NextResponse.json(reviewers);
-
   } catch (error) {
     console.error('Failed to fetch reviewers:', error);
     return NextResponse.json(
       { error: 'Failed to fetch reviewers' },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -49,7 +49,7 @@ async function getAvailableReviewers(criteria: {
 }): Promise<Reviewer[]> {
   // In a real implementation, this would query a database
   // For now, we'll return mock data filtered by criteria
-  
+
   const allReviewers: Reviewer[] = [
     {
       id: 'reviewer_1',
@@ -64,7 +64,7 @@ async function getAvailableReviewers(criteria: {
       certifications: ['Certified Legal Translator', 'Bar Association Member'],
       availability: 'available',
       pricePerHour: 125,
-      jurisdiction: ['ES', 'MX', 'AR']
+      jurisdiction: ['ES', 'MX', 'AR'],
     },
     {
       id: 'reviewer_2',
@@ -76,10 +76,13 @@ async function getAvailableReviewers(criteria: {
       languages: ['fr', 'en'],
       rating: 4.8,
       reviewCount: 203,
-      certifications: ['Avocat au Barreau de Paris', 'Legal Translation Certificate'],
+      certifications: [
+        'Avocat au Barreau de Paris',
+        'Legal Translation Certificate',
+      ],
       availability: 'available',
       pricePerHour: 140,
-      jurisdiction: ['FR', 'BE', 'CA-QC']
+      jurisdiction: ['FR', 'BE', 'CA-QC'],
     },
     {
       id: 'reviewer_3',
@@ -87,14 +90,18 @@ async function getAvailableReviewers(criteria: {
       email: 'k.weber@rechtsberatung.de',
       avatar: '/avatars/klaus.jpg',
       type: 'legal_professional',
-      specializations: ['commercial_law', 'international_law', 'legal_translation'],
+      specializations: [
+        'commercial_law',
+        'international_law',
+        'legal_translation',
+      ],
       languages: ['de', 'en'],
       rating: 4.7,
       reviewCount: 89,
       certifications: ['Rechtsanwalt', 'Certified Court Interpreter'],
       availability: 'busy',
       pricePerHour: 160,
-      jurisdiction: ['DE', 'AT', 'CH']
+      jurisdiction: ['DE', 'AT', 'CH'],
     },
     {
       id: 'reviewer_4',
@@ -109,7 +116,7 @@ async function getAvailableReviewers(criteria: {
       certifications: ['Avvocato', 'Legal Translation Specialist'],
       availability: 'available',
       pricePerHour: 110,
-      jurisdiction: ['IT']
+      jurisdiction: ['IT'],
     },
     {
       id: 'reviewer_5',
@@ -121,10 +128,13 @@ async function getAvailableReviewers(criteria: {
       languages: ['pt', 'en'],
       rating: 4.5,
       reviewCount: 67,
-      certifications: ['Native Speaker Certificate', 'Translation Review Specialist'],
+      certifications: [
+        'Native Speaker Certificate',
+        'Translation Review Specialist',
+      ],
       availability: 'available',
       pricePerHour: 75,
-      jurisdiction: ['BR', 'PT']
+      jurisdiction: ['BR', 'PT'],
     },
     {
       id: 'reviewer_6',
@@ -132,39 +142,52 @@ async function getAvailableReviewers(criteria: {
       email: 's.chen@legaltrans.com',
       avatar: '/avatars/sarah.jpg',
       type: 'subject_expert',
-      specializations: ['intellectual_property', 'technology_law', 'legal_translation'],
+      specializations: [
+        'intellectual_property',
+        'technology_law',
+        'legal_translation',
+      ],
       languages: ['en', 'es', 'fr'],
       rating: 4.9,
       reviewCount: 245,
-      certifications: ['PhD in Legal Studies', 'IP Law Specialist', 'Certified Legal Translator'],
+      certifications: [
+        'PhD in Legal Studies',
+        'IP Law Specialist',
+        'Certified Legal Translator',
+      ],
       availability: 'available',
       pricePerHour: 200,
-      jurisdiction: ['US-ALL', 'CA-ALL', 'EU']
-    }
+      jurisdiction: ['US-ALL', 'CA-ALL', 'EU'],
+    },
   ];
 
   // Filter reviewers based on criteria
-  let filteredReviewers = allReviewers.filter(reviewer => {
+  let filteredReviewers = allReviewers.filter((reviewer) => {
     // Check language compatibility
-    if (criteria.targetLanguage && !reviewer.languages.includes(criteria.targetLanguage)) {
+    if (
+      criteria.targetLanguage &&
+      !reviewer.languages.includes(criteria.targetLanguage)
+    ) {
       return false;
     }
 
     // Check jurisdiction compatibility
     if (criteria.jurisdiction) {
-      const hasJurisdiction = reviewer.jurisdiction.some(j => 
-        j === criteria.jurisdiction || 
-        j.startsWith(criteria.jurisdiction?.split('-')[0] || '') ||
-        criteria.jurisdiction?.startsWith(j.split('-')[0])
+      const hasJurisdiction = reviewer.jurisdiction.some(
+        (j) =>
+          j === criteria.jurisdiction ||
+          j.startsWith(criteria.jurisdiction?.split('-')[0] || '') ||
+          criteria.jurisdiction?.startsWith(j.split('-')[0]),
       );
       if (!hasJurisdiction) return false;
     }
 
     // Check specializations
     if (criteria.specializations.length > 0) {
-      const hasSpecialization = criteria.specializations.some(spec =>
-        reviewer.specializations.includes(spec) ||
-        reviewer.specializations.includes('legal_translation')
+      const hasSpecialization = criteria.specializations.some(
+        (spec) =>
+          reviewer.specializations.includes(spec) ||
+          reviewer.specializations.includes('legal_translation'),
       );
       if (!hasSpecialization) return false;
     }
@@ -175,18 +198,20 @@ async function getAvailableReviewers(criteria: {
   // Sort by rating and availability
   filteredReviewers.sort((a, b) => {
     // Available reviewers first
-    if (a.availability === 'available' && b.availability !== 'available') return -1;
-    if (b.availability === 'available' && a.availability !== 'available') return 1;
-    
+    if (a.availability === 'available' && b.availability !== 'available')
+      return -1;
+    if (b.availability === 'available' && a.availability !== 'available')
+      return 1;
+
     // Then by rating
     return b.rating - a.rating;
   });
 
   // Add estimated turnaround time based on availability and workload
-  return filteredReviewers.map(reviewer => ({
+  return filteredReviewers.map((reviewer) => ({
     ...reviewer,
     estimatedTurnaround: getEstimatedTurnaround(reviewer),
-    isRecommended: reviewer.rating >= 4.7 && reviewer.reviewCount >= 50
+    isRecommended: reviewer.rating >= 4.7 && reviewer.reviewCount >= 50,
   }));
 }
 

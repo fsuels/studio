@@ -22,7 +22,11 @@ export interface Step1DocumentSelectorProps {
   globalSelectedState: string;
 }
 
-export type ViewType = 'top-docs' | 'all-categories' | 'documents-in-category' | 'search-results';
+export type ViewType =
+  | 'top-docs'
+  | 'all-categories'
+  | 'documents-in-category'
+  | 'search-results';
 
 export interface BaseComponentProps {
   disabled: boolean;

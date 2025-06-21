@@ -10,12 +10,12 @@ import type { ChangelogEntry } from '@/types/marketplace';
  */
 export async function GET(
   request: NextRequest,
-  { params }: { params: { templateId: string } }
+  { params }: { params: { templateId: string } },
 ) {
   try {
     const { templateId } = params;
     const url = new URL(request.url);
-    
+
     const stableOnly = url.searchParams.get('stable') === 'true';
     const includeStatus = url.searchParams.get('status')?.split(',') as any;
     const limit = parseInt(url.searchParams.get('limit') || '10');
@@ -38,7 +38,7 @@ export async function GET(
       for (let i = 0; i < versions.length - 1; i++) {
         const fromVersion = versions[i + 1]; // Older version
         const toVersion = versions[i]; // Newer version
-        
+
         try {
           const diff = generateTemplateDiff(fromVersion, toVersion);
           diffs.push({
@@ -48,7 +48,10 @@ export async function GET(
             hasBreakingChanges: diff.summary.breakingChanges > 0,
           });
         } catch (error) {
-          console.warn(`Failed to generate diff between ${fromVersion.version} and ${toVersion.version}:`, error);
+          console.warn(
+            `Failed to generate diff between ${fromVersion.version} and ${toVersion.version}:`,
+            error,
+          );
         }
       }
       response.diffs = diffs;
@@ -58,16 +61,15 @@ export async function GET(
       success: true,
       data: response,
     });
-
   } catch (error) {
     console.error('Get template versions error:', error);
-    
+
     return NextResponse.json(
-      { 
-        success: false, 
-        error: 'Failed to fetch template versions' 
+      {
+        success: false,
+        error: 'Failed to fetch template versions',
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -78,7 +80,7 @@ export async function GET(
  */
 export async function POST(
   request: NextRequest,
-  { params }: { params: { templateId: string } }
+  { params }: { params: { templateId: string } },
 ) {
   try {
     // TODO: Add authentication and permission checks
@@ -89,7 +91,7 @@ export async function POST(
 
     const { templateId } = params;
     const body = await request.json();
-    
+
     const {
       version,
       document,
@@ -104,14 +106,14 @@ export async function POST(
     if (!document) {
       return NextResponse.json(
         { error: 'Document content is required' },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
     if (!version && !autoIncrement) {
       return NextResponse.json(
         { error: 'Version number or autoIncrement must be specified' },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -119,7 +121,8 @@ export async function POST(
 
     // Auto-increment version if requested
     if (autoIncrement) {
-      const latestVersion = await templateVersionManager.getLatestVersion(templateId);
+      const latestVersion =
+        await templateVersionManager.getLatestVersion(templateId);
       if (!latestVersion) {
         versionNumber = '1.0.0';
       } else {
@@ -129,26 +132,27 @@ export async function POST(
             breaking: incrementType === 'major' || breaking,
             features: incrementType === 'minor',
             fixes: incrementType === 'patch',
-          }
+          },
         );
       }
     }
 
     // Validate version compatibility
-    const validationResults = await templateVersionManager.validateCompatibility(
-      templateId,
-      versionNumber,
-      document
-    );
+    const validationResults =
+      await templateVersionManager.validateCompatibility(
+        templateId,
+        versionNumber,
+        document,
+      );
 
-    const errors = validationResults.filter(r => r.status === 'fail');
+    const errors = validationResults.filter((r) => r.status === 'fail');
     if (errors.length > 0) {
       return NextResponse.json(
-        { 
+        {
           error: 'Version validation failed',
           validationErrors: errors,
         },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -177,17 +181,16 @@ export async function POST(
         message: 'Version created successfully',
       },
     });
-
   } catch (error) {
     console.error('Create version error:', error);
-    
+
     return NextResponse.json(
-      { 
-        success: false, 
+      {
+        success: false,
         error: 'Failed to create version',
         details: error instanceof Error ? error.message : 'Unknown error',
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

@@ -412,7 +412,10 @@ export const noticetoproceedQuestions: FormQuestion[] = [
       { value: 'email', label: 'Email' },
       { value: 'phone', label: 'Phone' },
       { value: 'meetings', label: 'Meetings' },
-      { value: 'project-management-software', label: 'Project Management Software' },
+      {
+        value: 'project-management-software',
+        label: 'Project Management Software',
+      },
     ],
     required: false,
     group: 'communication',

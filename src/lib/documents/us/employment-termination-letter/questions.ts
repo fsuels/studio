@@ -19,10 +19,10 @@ export const questions: Question[] = [
     type: 'text',
     required: true,
   },
-  { 
-    id: 'employeePosition', 
-    label: 'Position / Job Title', 
-    type: 'text' 
+  {
+    id: 'employeePosition',
+    label: 'Position / Job Title',
+    type: 'text',
   },
   {
     id: 'terminationDate',

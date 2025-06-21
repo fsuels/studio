@@ -37,10 +37,10 @@ interface StickySummaryBarProps {
   refreshInterval?: number;
 }
 
-export function StickySummaryBar({ 
-  className, 
+export function StickySummaryBar({
+  className,
   apiEndpoint = '/api/admin/summary',
-  refreshInterval = 30000 // 30 seconds
+  refreshInterval = 30000, // 30 seconds
 }: StickySummaryBarProps) {
   const [metrics, setMetrics] = useState<SummaryMetrics | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -51,7 +51,7 @@ export function StickySummaryBar({
   useEffect(() => {
     fetchMetrics();
     const interval = setInterval(fetchMetrics, refreshInterval);
-    
+
     // Sticky behavior
     const handleScroll = () => {
       const scrollY = window.scrollY;
@@ -59,7 +59,7 @@ export function StickySummaryBar({
     };
 
     window.addEventListener('scroll', handleScroll);
-    
+
     return () => {
       clearInterval(interval);
       window.removeEventListener('scroll', handleScroll);
@@ -71,7 +71,7 @@ export function StickySummaryBar({
       setError(null);
       const response = await fetch(apiEndpoint);
       const data = await response.json();
-      
+
       if (data.success) {
         setMetrics(data.data);
       } else {
@@ -98,7 +98,7 @@ export function StickySummaryBar({
     return {
       value: `${isPositive ? '+' : ''}${change.toFixed(1)}%`,
       color: isPositive ? 'text-green-600' : 'text-red-600',
-      icon: isPositive ? TrendingUp : TrendingDown
+      icon: isPositive ? TrendingUp : TrendingDown,
     };
   };
 
@@ -111,11 +111,15 @@ export function StickySummaryBar({
 
   if (isLoading) {
     return (
-      <div className={cn(
-        "fixed top-4 right-4 z-50 transition-all duration-300",
-        isSticky ? "translate-y-0 opacity-100" : "translate-y-[-100px] opacity-0",
-        className
-      )}>
+      <div
+        className={cn(
+          'fixed top-4 right-4 z-50 transition-all duration-300',
+          isSticky
+            ? 'translate-y-0 opacity-100'
+            : 'translate-y-[-100px] opacity-0',
+          className,
+        )}
+      >
         <Card className="bg-white/95 backdrop-blur-sm border shadow-lg">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
@@ -134,11 +138,15 @@ export function StickySummaryBar({
 
   if (error || !metrics) {
     return (
-      <div className={cn(
-        "fixed top-4 right-4 z-50 transition-all duration-300",
-        isSticky ? "translate-y-0 opacity-100" : "translate-y-[-100px] opacity-0",
-        className
-      )}>
+      <div
+        className={cn(
+          'fixed top-4 right-4 z-50 transition-all duration-300',
+          isSticky
+            ? 'translate-y-0 opacity-100'
+            : 'translate-y-[-100px] opacity-0',
+          className,
+        )}
+      >
         <Card className="bg-red-50/95 backdrop-blur-sm border border-red-200 shadow-lg">
           <CardContent className="p-4">
             <div className="flex items-center gap-2 text-red-600">
@@ -155,11 +163,15 @@ export function StickySummaryBar({
   const ordersChange = formatChange(metrics.ordersChange);
 
   return (
-    <div className={cn(
-      "fixed top-4 right-4 z-50 transition-all duration-300",
-      isSticky ? "translate-y-0 opacity-100" : "translate-y-[-100px] opacity-0",
-      className
-    )}>
+    <div
+      className={cn(
+        'fixed top-4 right-4 z-50 transition-all duration-300',
+        isSticky
+          ? 'translate-y-0 opacity-100'
+          : 'translate-y-[-100px] opacity-0',
+        className,
+      )}
+    >
       <Card className="bg-white/95 backdrop-blur-sm border shadow-lg hover:shadow-xl transition-shadow">
         <CardContent className="p-4">
           {/* Compact View */}
@@ -183,20 +195,26 @@ export function StickySummaryBar({
 
               {/* Open Issues */}
               <div className="flex items-center gap-2">
-                <div className={cn(
-                  "p-1.5 rounded-full",
-                  metrics.openIssues > 0 ? "bg-red-100" : "bg-gray-100"
-                )}>
-                  <AlertTriangle className={cn(
-                    "h-4 w-4",
-                    metrics.openIssues > 0 ? "text-red-600" : "text-gray-400"
-                  )} />
+                <div
+                  className={cn(
+                    'p-1.5 rounded-full',
+                    metrics.openIssues > 0 ? 'bg-red-100' : 'bg-gray-100',
+                  )}
+                >
+                  <AlertTriangle
+                    className={cn(
+                      'h-4 w-4',
+                      metrics.openIssues > 0 ? 'text-red-600' : 'text-gray-400',
+                    )}
+                  />
                 </div>
                 <div>
-                  <div className={cn(
-                    "text-lg font-bold",
-                    metrics.openIssues > 0 ? "text-red-600" : "text-gray-900"
-                  )}>
+                  <div
+                    className={cn(
+                      'text-lg font-bold',
+                      metrics.openIssues > 0 ? 'text-red-600' : 'text-gray-900',
+                    )}
+                  >
                     {metrics.openIssues}
                   </div>
                   <div className="text-xs text-gray-500">Open Issues</div>
@@ -219,10 +237,9 @@ export function StickySummaryBar({
                   onClick={fetchMetrics}
                   className="h-8 w-8 p-0"
                 >
-                  <RefreshCw className={cn(
-                    "h-4 w-4",
-                    isLoading && "animate-spin"
-                  )} />
+                  <RefreshCw
+                    className={cn('h-4 w-4', isLoading && 'animate-spin')}
+                  />
                 </Button>
               </div>
             </div>
@@ -252,10 +269,9 @@ export function StickySummaryBar({
                     onClick={fetchMetrics}
                     className="h-8 w-8 p-0"
                   >
-                    <RefreshCw className={cn(
-                      "h-4 w-4",
-                      isLoading && "animate-spin"
-                    )} />
+                    <RefreshCw
+                      className={cn('h-4 w-4', isLoading && 'animate-spin')}
+                    />
                   </Button>
                 </div>
               </div>
@@ -266,7 +282,12 @@ export function StickySummaryBar({
                 <div className="p-3 bg-gradient-to-br from-green-50 to-emerald-50 rounded-lg border border-green-100">
                   <div className="flex items-center justify-between mb-1">
                     <DollarSign className="h-4 w-4 text-green-600" />
-                    <div className={cn("flex items-center gap-1 text-xs", revenueChange.color)}>
+                    <div
+                      className={cn(
+                        'flex items-center gap-1 text-xs',
+                        revenueChange.color,
+                      )}
+                    >
                       <revenueChange.icon className="h-3 w-3" />
                       {revenueChange.value}
                     </div>
@@ -281,7 +302,12 @@ export function StickySummaryBar({
                 <div className="p-3 bg-gradient-to-br from-blue-50 to-cyan-50 rounded-lg border border-blue-100">
                   <div className="flex items-center justify-between mb-1">
                     <Users className="h-4 w-4 text-blue-600" />
-                    <div className={cn("flex items-center gap-1 text-xs", ordersChange.color)}>
+                    <div
+                      className={cn(
+                        'flex items-center gap-1 text-xs',
+                        ordersChange.color,
+                      )}
+                    >
                       <ordersChange.icon className="h-3 w-3" />
                       {ordersChange.value}
                     </div>
@@ -297,7 +323,10 @@ export function StickySummaryBar({
                   <div className="flex items-center justify-between mb-1">
                     <Clock className="h-4 w-4 text-yellow-600" />
                     {metrics.pendingRefunds > 0 && (
-                      <Badge variant="outline" className="bg-yellow-100 text-yellow-800 text-xs px-1.5 py-0.5">
+                      <Badge
+                        variant="outline"
+                        className="bg-yellow-100 text-yellow-800 text-xs px-1.5 py-0.5"
+                      >
                         Urgent
                       </Badge>
                     )}
@@ -312,18 +341,22 @@ export function StickySummaryBar({
                 <div className="p-3 bg-gradient-to-br from-purple-50 to-violet-50 rounded-lg border border-purple-100">
                   <div className="flex items-center justify-between mb-1">
                     <Zap className="h-4 w-4 text-purple-600" />
-                    <Badge 
-                      variant="outline" 
+                    <Badge
+                      variant="outline"
                       className={cn(
-                        "text-xs px-1.5 py-0.5",
-                        metrics.avgResponseTime <= 60 
-                          ? "bg-green-100 text-green-800" 
-                          : metrics.avgResponseTime <= 180 
-                          ? "bg-yellow-100 text-yellow-800"
-                          : "bg-red-100 text-red-800"
+                        'text-xs px-1.5 py-0.5',
+                        metrics.avgResponseTime <= 60
+                          ? 'bg-green-100 text-green-800'
+                          : metrics.avgResponseTime <= 180
+                            ? 'bg-yellow-100 text-yellow-800'
+                            : 'bg-red-100 text-red-800',
                       )}
                     >
-                      {metrics.avgResponseTime <= 60 ? 'Fast' : metrics.avgResponseTime <= 180 ? 'OK' : 'Slow'}
+                      {metrics.avgResponseTime <= 60
+                        ? 'Fast'
+                        : metrics.avgResponseTime <= 180
+                          ? 'OK'
+                          : 'Slow'}
                     </Badge>
                   </div>
                   <div className="text-lg font-bold text-gray-900">
@@ -338,14 +371,17 @@ export function StickySummaryBar({
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <TrendingUp className="h-4 w-4 text-indigo-600" />
-                    <span className="text-sm font-medium text-gray-700">Conversion Rate</span>
+                    <span className="text-sm font-medium text-gray-700">
+                      Conversion Rate
+                    </span>
                   </div>
                   <div className="text-right">
                     <div className="text-lg font-bold text-gray-900">
                       {metrics.conversionRate.toFixed(1)}%
                     </div>
                     <div className="text-xs text-gray-500">
-                      Last updated: {new Date(metrics.lastUpdated).toLocaleTimeString()}
+                      Last updated:{' '}
+                      {new Date(metrics.lastUpdated).toLocaleTimeString()}
                     </div>
                   </div>
                 </div>

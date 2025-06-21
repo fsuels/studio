@@ -9,7 +9,15 @@ import { SmartAssistantBar } from '@/components/shared';
 import LiveActivityFeed from './LiveActivityFeed';
 import { TrustBanner } from './TrustBanner'; // Assuming TrustBanner is a separate component
 import { AutoImage } from '@/components/shared'; // Import AutoImage
-import { ShieldCheck, Users, Globe, Zap, FileText, UserCheck, Send } from 'lucide-react';
+import {
+  ShieldCheck,
+  Users,
+  Globe,
+  Zap,
+  FileText,
+  UserCheck,
+  Send,
+} from 'lucide-react';
 import Link from 'next/link';
 import { track } from '@/lib/analytics';
 
@@ -34,7 +42,6 @@ const HeroAIExperience = React.memo(function HeroAIExperience() {
     // Example navigation: router.push(`/${i18n.language}/generate?search=${encodeURIComponent(submittedQuery)}`);
   };
 
-
   const samplePrompts = [
     { key: 'samplePrompt1', defaultText: 'I need a rental agreement' },
     { key: 'samplePrompt2', defaultText: 'Help me sell my car' },
@@ -42,19 +49,32 @@ const HeroAIExperience = React.memo(function HeroAIExperience() {
   ];
 
   const keyBenefits = [
-    { icon: Zap, textKey: 'hero.benefit1', defaultText: 'AI-Powered Document Matching' },
-    { icon: FileText, textKey: 'hero.benefit2', defaultText: 'Guided Questionnaires' },
-    { icon: UserCheck, textKey: 'hero.benefit3', defaultText: 'Attorney-Reviewed Templates' },
-    { icon: Send, textKey: 'hero.benefit4', defaultText: 'Instant Download & eSign' },
+    {
+      icon: Zap,
+      textKey: 'hero.benefit1',
+      defaultText: 'AI-Powered Document Matching',
+    },
+    {
+      icon: FileText,
+      textKey: 'hero.benefit2',
+      defaultText: 'Guided Questionnaires',
+    },
+    {
+      icon: UserCheck,
+      textKey: 'hero.benefit3',
+      defaultText: 'Attorney-Reviewed Templates',
+    },
+    {
+      icon: Send,
+      textKey: 'hero.benefit4',
+      defaultText: 'Instant Download & eSign',
+    },
   ];
-
 
   const placeholderText = '...';
 
   return (
-    <section
-      className="relative overflow-hidden bg-gradient-to-br from-sky-100 via-indigo-50 to-purple-50 dark:from-slate-900 dark:via-slate-800 dark:to-indigo-900 pt-12 pb-16 md:pt-16 md:pb-24"
-    >
+    <section className="relative overflow-hidden bg-gradient-to-br from-sky-100 via-indigo-50 to-purple-50 dark:from-slate-900 dark:via-slate-800 dark:to-indigo-900 pt-12 pb-16 md:pt-16 md:pb-24">
       <div className="container mx-auto px-4">
         <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
           {/* Left Column: Text content, Smart Assistant, CTAs */}
@@ -102,10 +122,14 @@ const HeroAIExperience = React.memo(function HeroAIExperience() {
                   key={prompt.key}
                   variant="link"
                   size="sm"
-                  onClick={() => handleSamplePrompt(t(prompt.key, {defaultValue: prompt.defaultText}))}
+                  onClick={() =>
+                    handleSamplePrompt(
+                      t(prompt.key, { defaultValue: prompt.defaultText }),
+                    )
+                  }
                   className="text-primary p-0 h-auto hover:underline text-xs"
                 >
-                  {t(prompt.key, {defaultValue: prompt.defaultText})}
+                  {t(prompt.key, { defaultValue: prompt.defaultText })}
                 </Button>
               ))}
             </div>
@@ -136,7 +160,7 @@ const HeroAIExperience = React.memo(function HeroAIExperience() {
               </Button>
             </div>
 
-             <div className="mt-6 flex items-center justify-center md:justify-start gap-6 text-xs text-muted-foreground">
+            <div className="mt-6 flex items-center justify-center md:justify-start gap-6 text-xs text-muted-foreground">
               <div className="flex items-center gap-1">
                 <ShieldCheck className="h-4 w-4 text-primary" />
                 <span>ISO 27001</span>
@@ -169,16 +193,23 @@ const HeroAIExperience = React.memo(function HeroAIExperience() {
               data-ai-hint="team collaboration"
               priority
             />
-             <div className="mt-6 grid grid-cols-2 gap-4">
-                {keyBenefits.map((benefit, index) => (
-                  <div key={index} className="flex items-start gap-3 p-3 bg-background/50 dark:bg-slate-800/50 rounded-lg shadow-sm border border-border/50">
-                    <benefit.icon className="h-5 w-5 text-primary mt-0.5 shrink-0" />
-                    <div>
-                      <h4 className="text-sm font-semibold text-foreground">{t(benefit.textKey, {defaultValue: benefit.defaultText})}</h4>
-                    </div>
+            <div className="mt-6 grid grid-cols-2 gap-4">
+              {keyBenefits.map((benefit, index) => (
+                <div
+                  key={index}
+                  className="flex items-start gap-3 p-3 bg-background/50 dark:bg-slate-800/50 rounded-lg shadow-sm border border-border/50"
+                >
+                  <benefit.icon className="h-5 w-5 text-primary mt-0.5 shrink-0" />
+                  <div>
+                    <h4 className="text-sm font-semibold text-foreground">
+                      {t(benefit.textKey, {
+                        defaultValue: benefit.defaultText,
+                      })}
+                    </h4>
                   </div>
-                ))}
-              </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 

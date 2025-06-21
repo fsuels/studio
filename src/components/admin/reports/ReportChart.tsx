@@ -1,20 +1,20 @@
 'use client';
 
 import React from 'react';
-import { 
-  BarChart, 
-  Bar, 
-  LineChart, 
-  Line, 
-  PieChart, 
-  Pie, 
+import {
+  BarChart,
+  Bar,
+  LineChart,
+  Line,
+  PieChart,
+  Pie,
   Cell,
-  XAxis, 
-  YAxis, 
-  CartesianGrid, 
-  Tooltip, 
-  Legend, 
-  ResponsiveContainer 
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
 } from 'recharts';
 
 interface ReportChartProps {
@@ -58,7 +58,10 @@ export function ReportChart({ data, type, height = 400 }: ReportChartProps) {
       // Format YYYY-MM to readable month
       const [year, month] = value.split('-');
       const date = new Date(parseInt(year), parseInt(month) - 1);
-      return date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+      return date.toLocaleDateString('en-US', {
+        month: 'short',
+        year: 'numeric',
+      });
     }
     return value;
   };
@@ -67,20 +70,23 @@ export function ReportChart({ data, type, height = 400 }: ReportChartProps) {
     case 'bar':
       return (
         <ResponsiveContainer width="100%" height={height}>
-          <BarChart data={data} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+          <BarChart
+            data={data}
+            margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+          >
             <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
-            <XAxis 
-              dataKey="period" 
+            <XAxis
+              dataKey="period"
               tick={{ fontSize: 12 }}
               tickFormatter={formatAxisTick}
               className="fill-muted-foreground"
             />
-            <YAxis 
+            <YAxis
               tick={{ fontSize: 12 }}
               tickFormatter={formatAxisTick}
               className="fill-muted-foreground"
             />
-            <Tooltip 
+            <Tooltip
               formatter={formatTooltipValue}
               labelFormatter={(label) => `Period: ${formatAxisTick(label)}`}
               contentStyle={{
@@ -91,8 +97,8 @@ export function ReportChart({ data, type, height = 400 }: ReportChartProps) {
               }}
             />
             <Legend />
-            <Bar 
-              dataKey="value" 
+            <Bar
+              dataKey="value"
               fill={COLORS[0]}
               name="Value"
               radius={[2, 2, 0, 0]}
@@ -104,20 +110,23 @@ export function ReportChart({ data, type, height = 400 }: ReportChartProps) {
     case 'line':
       return (
         <ResponsiveContainer width="100%" height={height}>
-          <LineChart data={data} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+          <LineChart
+            data={data}
+            margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+          >
             <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
-            <XAxis 
-              dataKey="period" 
+            <XAxis
+              dataKey="period"
               tick={{ fontSize: 12 }}
               tickFormatter={formatAxisTick}
               className="fill-muted-foreground"
             />
-            <YAxis 
+            <YAxis
               tick={{ fontSize: 12 }}
               tickFormatter={formatAxisTick}
               className="fill-muted-foreground"
             />
-            <Tooltip 
+            <Tooltip
               formatter={formatTooltipValue}
               labelFormatter={(label) => `Period: ${formatAxisTick(label)}`}
               contentStyle={{
@@ -128,9 +137,9 @@ export function ReportChart({ data, type, height = 400 }: ReportChartProps) {
               }}
             />
             <Legend />
-            <Line 
-              type="monotone" 
-              dataKey="value" 
+            <Line
+              type="monotone"
+              dataKey="value"
               stroke={COLORS[0]}
               strokeWidth={2}
               dot={{ r: 4 }}
@@ -164,13 +173,18 @@ export function ReportChart({ data, type, height = 400 }: ReportChartProps) {
               outerRadius={120}
               fill="#8884d8"
               dataKey="value"
-              label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+              label={({ name, percent }) =>
+                `${name} ${(percent * 100).toFixed(0)}%`
+              }
             >
               {pieData.map((entry: any, index: number) => (
-                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                <Cell
+                  key={`cell-${index}`}
+                  fill={COLORS[index % COLORS.length]}
+                />
               ))}
             </Pie>
-            <Tooltip 
+            <Tooltip
               formatter={formatTooltipValue}
               contentStyle={{
                 backgroundColor: 'hsl(var(--background))',

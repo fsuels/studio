@@ -10,7 +10,7 @@ export async function POST(request: NextRequest) {
     if (!userId || !email || !milestone) {
       return NextResponse.json(
         { error: 'Missing required fields: userId, email, milestone' },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -22,47 +22,50 @@ export async function POST(request: NextRequest) {
       milestone,
       persona,
       userData,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
 
     // Example integration points:
-    
+
     // 1. Mailchimp Journey Trigger
     // await triggerMailchimpJourney(email, milestone, persona);
-    
+
     // 2. SendGrid Template Email
     // await sendTemplateEmail(email, getTemplateForMilestone(milestone), userData);
-    
+
     // 3. Custom Email Service
     // await customEmailService.sendMilestoneEmail({ userId, email, milestone, persona });
 
     // 4. Add to Firestore for tracking
     // await addEmailEventToFirestore({ userId, email, milestone, sentAt: new Date() });
 
-    return NextResponse.json({ 
-      success: true, 
-      message: `Milestone email queued for ${milestone}` 
+    return NextResponse.json({
+      success: true,
+      message: `Milestone email queued for ${milestone}`,
     });
-
   } catch (error) {
     console.error('Error processing milestone email:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
 
 // Helper functions for specific email service integrations
 
-async function triggerMailchimpJourney(email: string, milestone: string, persona?: string) {
+async function triggerMailchimpJourney(
+  email: string,
+  milestone: string,
+  persona?: string,
+) {
   // Example Mailchimp integration
   const journeyMap: Record<string, string> = {
-    'welcome_sequence': 'journey_welcome',
-    'first_document': 'journey_first_doc', 
-    'onboarding_complete': 'journey_complete',
-    'retention_7d': 'journey_retention_week',
-    'retention_30d': 'journey_retention_month'
+    welcome_sequence: 'journey_welcome',
+    first_document: 'journey_first_doc',
+    onboarding_complete: 'journey_complete',
+    retention_7d: 'journey_retention_week',
+    retention_30d: 'journey_retention_month',
   };
 
   const journeyId = journeyMap[milestone];
@@ -89,12 +92,12 @@ async function triggerMailchimpJourney(email: string, milestone: string, persona
 
 function getTemplateForMilestone(milestone: string): string {
   const templates: Record<string, string> = {
-    'welcome_sequence': 'd-welcome123',
-    'first_document': 'd-firstdoc456', 
-    'onboarding_complete': 'd-complete789',
-    'retention_7d': 'd-retention7d',
-    'retention_30d': 'd-retention30d'
+    welcome_sequence: 'd-welcome123',
+    first_document: 'd-firstdoc456',
+    onboarding_complete: 'd-complete789',
+    retention_7d: 'd-retention7d',
+    retention_30d: 'd-retention30d',
   };
-  
+
   return templates[milestone] || 'd-default';
 }

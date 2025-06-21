@@ -23,7 +23,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { 
+import {
   X,
   User,
   CreditCard,
@@ -44,7 +44,7 @@ import {
   Save,
   RefreshCw,
   ExternalLink,
-  Copy
+  Copy,
 } from 'lucide-react';
 import { type Order } from '@/lib/orders';
 
@@ -54,14 +54,18 @@ interface OrderDetailModalProps {
   orderId: string | null;
 }
 
-export default function OrderDetailModal({ isOpen, onClose, orderId }: OrderDetailModalProps) {
+export default function OrderDetailModal({
+  isOpen,
+  onClose,
+  orderId,
+}: OrderDetailModalProps) {
   const [order, setOrder] = useState<Order | null>(null);
   const [relatedOrders, setRelatedOrders] = useState<Order[]>([]);
   const [customerSummary, setCustomerSummary] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState('overview');
-  
+
   // Edit states
   const [isEditing, setIsEditing] = useState(false);
   const [editedStatus, setEditedStatus] = useState('');
@@ -109,11 +113,11 @@ export default function OrderDetailModal({ isOpen, onClose, orderId }: OrderDeta
       const response = await fetch(`/api/admin/orders/${orderId}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action, data })
+        body: JSON.stringify({ action, data }),
       });
 
       const result = await response.json();
-      
+
       if (result.success) {
         setOrder(result.data);
         setIsEditing(false);
@@ -128,33 +132,38 @@ export default function OrderDetailModal({ isOpen, onClose, orderId }: OrderDeta
 
   const handleSaveChanges = () => {
     const updates: any = {};
-    
+
     if (editedStatus !== order?.status) {
       updateOrder('update_status', { status: editedStatus });
     }
-    
+
     if (newNote.trim()) {
       updateOrder('add_note', { note: newNote.trim() });
     }
-    
-    if (fraudScore !== order?.fraudAnalysis.score || 
-        fraudRecommendation !== order?.fraudAnalysis.recommendation) {
-      updateOrder('update_fraud_score', { 
-        score: fraudScore, 
-        recommendation: fraudRecommendation 
+
+    if (
+      fraudScore !== order?.fraudAnalysis.score ||
+      fraudRecommendation !== order?.fraudAnalysis.recommendation
+    ) {
+      updateOrder('update_fraud_score', {
+        score: fraudScore,
+        recommendation: fraudRecommendation,
       });
     }
   };
 
   const processRefund = () => {
     if (!order) return;
-    const amount = prompt('Enter refund amount:', order.payment.amount.toString());
+    const amount = prompt(
+      'Enter refund amount:',
+      order.payment.amount.toString(),
+    );
     const reason = prompt('Enter refund reason:', 'Customer request');
-    
+
     if (amount && reason) {
-      updateOrder('process_refund', { 
-        amount: parseFloat(amount), 
-        reason 
+      updateOrder('process_refund', {
+        amount: parseFloat(amount),
+        reason,
       });
     }
   };
@@ -176,7 +185,7 @@ export default function OrderDetailModal({ isOpen, onClose, orderId }: OrderDeta
       day: 'numeric',
       year: 'numeric',
       hour: '2-digit',
-      minute: '2-digit'
+      minute: '2-digit',
     });
   };
 
@@ -186,11 +195,14 @@ export default function OrderDetailModal({ isOpen, onClose, orderId }: OrderDeta
       processing: 'bg-blue-100 text-blue-800 border-blue-200',
       pending: 'bg-yellow-100 text-yellow-800 border-yellow-200',
       cancelled: 'bg-gray-100 text-gray-800 border-gray-200',
-      refunded: 'bg-red-100 text-red-800 border-red-200'
+      refunded: 'bg-red-100 text-red-800 border-red-200',
     };
-    
+
     return (
-      <Badge variant="outline" className={variants[status as keyof typeof variants] || 'bg-gray-100'}>
+      <Badge
+        variant="outline"
+        className={variants[status as keyof typeof variants] || 'bg-gray-100'}
+      >
         {status.charAt(0).toUpperCase() + status.slice(1)}
       </Badge>
     );
@@ -205,18 +217,24 @@ export default function OrderDetailModal({ isOpen, onClose, orderId }: OrderDeta
         </Badge>
       );
     }
-    
+
     if (recommendation === 'review' || score >= 30) {
       return (
-        <Badge variant="outline" className="gap-1 text-amber-600 border-amber-200 bg-amber-50">
+        <Badge
+          variant="outline"
+          className="gap-1 text-amber-600 border-amber-200 bg-amber-50"
+        >
           <AlertTriangle className="h-3 w-3" />
           Medium Risk ({score}%)
         </Badge>
       );
     }
-    
+
     return (
-      <Badge variant="outline" className="gap-1 text-green-600 border-green-200 bg-green-50">
+      <Badge
+        variant="outline"
+        className="gap-1 text-green-600 border-green-200 bg-green-50"
+      >
         <CheckCircle className="h-3 w-3" />
         Low Risk ({score}%)
       </Badge>
@@ -263,7 +281,11 @@ export default function OrderDetailModal({ isOpen, onClose, orderId }: OrderDeta
             <div className="h-64 bg-gray-200 rounded"></div>
           </div>
         ) : order ? (
-          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+          <Tabs
+            value={activeTab}
+            onValueChange={setActiveTab}
+            className="w-full"
+          >
             <TabsList className="grid w-full grid-cols-5">
               <TabsTrigger value="overview">Overview</TabsTrigger>
               <TabsTrigger value="customer">Customer</TabsTrigger>
@@ -284,13 +306,18 @@ export default function OrderDetailModal({ isOpen, onClose, orderId }: OrderDeta
                   <CardContent>
                     <div className="flex items-center justify-between">
                       {isEditing ? (
-                        <Select value={editedStatus} onValueChange={setEditedStatus}>
+                        <Select
+                          value={editedStatus}
+                          onValueChange={setEditedStatus}
+                        >
                           <SelectTrigger className="w-full">
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
                             <SelectItem value="pending">Pending</SelectItem>
-                            <SelectItem value="processing">Processing</SelectItem>
+                            <SelectItem value="processing">
+                              Processing
+                            </SelectItem>
                             <SelectItem value="completed">Completed</SelectItem>
                             <SelectItem value="cancelled">Cancelled</SelectItem>
                             <SelectItem value="refunded">Refunded</SelectItem>
@@ -337,11 +364,15 @@ export default function OrderDetailModal({ isOpen, onClose, orderId }: OrderDeta
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    {getFraudBadge(order.fraudAnalysis.score, order.fraudAnalysis.recommendation)}
+                    {getFraudBadge(
+                      order.fraudAnalysis.score,
+                      order.fraudAnalysis.recommendation,
+                    )}
                     {order.fraudAnalysis.distanceAlert && (
                       <div className="text-xs text-amber-600 mt-2 flex items-center gap-1">
                         <MapPin className="h-3 w-3" />
-                        {order.fraudAnalysis.ipVsAddressDistance?.toFixed(0)}mi distance alert
+                        {order.fraudAnalysis.ipVsAddressDistance?.toFixed(0)}mi
+                        distance alert
                       </div>
                     )}
                   </CardContent>
@@ -356,16 +387,23 @@ export default function OrderDetailModal({ isOpen, onClose, orderId }: OrderDeta
                 <CardContent>
                   <div className="space-y-3">
                     {order.items.map((item) => (
-                      <div key={item.id} className="flex items-center justify-between p-3 border rounded-lg">
+                      <div
+                        key={item.id}
+                        className="flex items-center justify-between p-3 border rounded-lg"
+                      >
                         <div>
                           <div className="font-medium">{item.documentType}</div>
-                          <div className="text-sm text-muted-foreground">{item.documentName}</div>
+                          <div className="text-sm text-muted-foreground">
+                            {item.documentName}
+                          </div>
                           <div className="text-xs text-muted-foreground">
                             State: {item.stateCode} • Qty: {item.quantity}
                           </div>
                         </div>
                         <div className="text-right">
-                          <div className="font-semibold">{formatCurrency(item.price)}</div>
+                          <div className="font-semibold">
+                            {formatCurrency(item.price)}
+                          </div>
                           <Button variant="ghost" size="sm">
                             <Download className="h-4 w-4 mr-2" />
                             Download
@@ -385,8 +423,10 @@ export default function OrderDetailModal({ isOpen, onClose, orderId }: OrderDeta
                 <CardContent>
                   <div className="flex flex-wrap gap-3">
                     <Button
-                      variant={isEditing ? "default" : "outline"}
-                      onClick={() => isEditing ? handleSaveChanges() : setIsEditing(true)}
+                      variant={isEditing ? 'default' : 'outline'}
+                      onClick={() =>
+                        isEditing ? handleSaveChanges() : setIsEditing(true)
+                      }
                     >
                       {isEditing ? (
                         <>
@@ -400,24 +440,27 @@ export default function OrderDetailModal({ isOpen, onClose, orderId }: OrderDeta
                         </>
                       )}
                     </Button>
-                    
+
                     {isEditing && (
-                      <Button variant="ghost" onClick={() => setIsEditing(false)}>
+                      <Button
+                        variant="ghost"
+                        onClick={() => setIsEditing(false)}
+                      >
                         Cancel
                       </Button>
                     )}
-                    
+
                     <Button variant="outline" onClick={processRefund}>
                       <DollarSign className="h-4 w-4 mr-2" />
                       Process Refund
                     </Button>
-                    
+
                     <Button variant="outline">
                       <Download className="h-4 w-4 mr-2" />
                       Download Invoice
                     </Button>
                   </div>
-                  
+
                   {isEditing && (
                     <div className="mt-4 space-y-3">
                       <div>
@@ -451,23 +494,35 @@ export default function OrderDetailModal({ isOpen, onClose, orderId }: OrderDeta
                       <div className="font-semibold text-lg">
                         {order.customer.firstName} {order.customer.lastName}
                       </div>
-                      <div className="text-muted-foreground">Customer ID: {order.customer.id}</div>
+                      <div className="text-muted-foreground">
+                        Customer ID: {order.customer.id}
+                      </div>
                     </div>
-                    
+
                     <div className="space-y-2">
                       <div className="flex items-center gap-2">
                         <Mail className="h-4 w-4" />
                         <span>{order.customer.email}</span>
-                        <Button variant="ghost" size="sm" onClick={() => copyToClipboard(order.customer.email)}>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => copyToClipboard(order.customer.email)}
+                        >
                           <Copy className="h-3 w-3" />
                         </Button>
                       </div>
-                      
+
                       {order.customer.phone && (
                         <div className="flex items-center gap-2">
                           <Phone className="h-4 w-4" />
                           <span>{order.customer.phone}</span>
-                          <Button variant="ghost" size="sm" onClick={() => copyToClipboard(order.customer.phone)}>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() =>
+                              copyToClipboard(order.customer.phone)
+                            }
+                          >
                             <Copy className="h-3 w-3" />
                           </Button>
                         </div>
@@ -475,10 +530,16 @@ export default function OrderDetailModal({ isOpen, onClose, orderId }: OrderDeta
                     </div>
 
                     <div>
-                      <div className="text-sm font-medium mb-2">Billing Address</div>
+                      <div className="text-sm font-medium mb-2">
+                        Billing Address
+                      </div>
                       <div className="text-sm text-muted-foreground">
-                        {order.customer.billingAddress.street}<br />
-                        {order.customer.billingAddress.city}, {order.customer.billingAddress.state} {order.customer.billingAddress.zipCode}<br />
+                        {order.customer.billingAddress.street}
+                        <br />
+                        {order.customer.billingAddress.city},{' '}
+                        {order.customer.billingAddress.state}{' '}
+                        {order.customer.billingAddress.zipCode}
+                        <br />
                         {order.customer.billingAddress.country}
                       </div>
                     </div>
@@ -496,25 +557,40 @@ export default function OrderDetailModal({ isOpen, onClose, orderId }: OrderDeta
                     {customerSummary && (
                       <div className="grid grid-cols-2 gap-4">
                         <div>
-                          <div className="text-2xl font-bold">{customerSummary.totalOrders}</div>
-                          <div className="text-sm text-muted-foreground">Total Orders</div>
+                          <div className="text-2xl font-bold">
+                            {customerSummary.totalOrders}
+                          </div>
+                          <div className="text-sm text-muted-foreground">
+                            Total Orders
+                          </div>
                         </div>
-                        
-                        <div>
-                          <div className="text-2xl font-bold">{formatCurrency(customerSummary.totalSpent)}</div>
-                          <div className="text-sm text-muted-foreground">Total Spent</div>
-                        </div>
-                        
-                        <div>
-                          <div className="text-2xl font-bold">{customerSummary.averageFraudScore}</div>
-                          <div className="text-sm text-muted-foreground">Avg Fraud Score</div>
-                        </div>
-                        
+
                         <div>
                           <div className="text-2xl font-bold">
-                            {order.customer.riskLevel.charAt(0).toUpperCase() + order.customer.riskLevel.slice(1)}
+                            {formatCurrency(customerSummary.totalSpent)}
                           </div>
-                          <div className="text-sm text-muted-foreground">Risk Level</div>
+                          <div className="text-sm text-muted-foreground">
+                            Total Spent
+                          </div>
+                        </div>
+
+                        <div>
+                          <div className="text-2xl font-bold">
+                            {customerSummary.averageFraudScore}
+                          </div>
+                          <div className="text-sm text-muted-foreground">
+                            Avg Fraud Score
+                          </div>
+                        </div>
+
+                        <div>
+                          <div className="text-2xl font-bold">
+                            {order.customer.riskLevel.charAt(0).toUpperCase() +
+                              order.customer.riskLevel.slice(1)}
+                          </div>
+                          <div className="text-sm text-muted-foreground">
+                            Risk Level
+                          </div>
                         </div>
                       </div>
                     )}
@@ -533,23 +609,42 @@ export default function OrderDetailModal({ isOpen, onClose, orderId }: OrderDeta
                 <CardContent>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                      <div className="text-sm font-medium mb-2">IP Location</div>
+                      <div className="text-sm font-medium mb-2">
+                        IP Location
+                      </div>
                       <div className="text-sm">
-                        <div>{order.customer.ipLocation.city}, {order.customer.ipLocation.state}</div>
-                        <div className="text-muted-foreground">{order.customer.ipLocation.country}</div>
-                        <div className="text-muted-foreground">IP: {order.customer.ipLocation.ip}</div>
-                        <div className="text-muted-foreground">Provider: {order.customer.ipLocation.provider}</div>
-                        <div className="text-muted-foreground">Confidence: {order.customer.ipLocation.confidence}</div>
+                        <div>
+                          {order.customer.ipLocation.city},{' '}
+                          {order.customer.ipLocation.state}
+                        </div>
+                        <div className="text-muted-foreground">
+                          {order.customer.ipLocation.country}
+                        </div>
+                        <div className="text-muted-foreground">
+                          IP: {order.customer.ipLocation.ip}
+                        </div>
+                        <div className="text-muted-foreground">
+                          Provider: {order.customer.ipLocation.provider}
+                        </div>
+                        <div className="text-muted-foreground">
+                          Confidence: {order.customer.ipLocation.confidence}
+                        </div>
                       </div>
                     </div>
-                    
+
                     <div>
-                      <div className="text-sm font-medium mb-2">Distance Analysis</div>
+                      <div className="text-sm font-medium mb-2">
+                        Distance Analysis
+                      </div>
                       {order.fraudAnalysis.distanceAlert ? (
                         <Alert variant="destructive">
                           <AlertTriangle className="h-4 w-4" />
                           <AlertDescription>
-                            IP location is {order.fraudAnalysis.ipVsAddressDistance?.toFixed(0)} miles from billing address
+                            IP location is{' '}
+                            {order.fraudAnalysis.ipVsAddressDistance?.toFixed(
+                              0,
+                            )}{' '}
+                            miles from billing address
                           </AlertDescription>
                         </Alert>
                       ) : (
@@ -571,16 +666,23 @@ export default function OrderDetailModal({ isOpen, onClose, orderId }: OrderDeta
                   <CardContent>
                     <div className="space-y-3">
                       {relatedOrders.map((relatedOrder) => (
-                        <div key={relatedOrder.id} className="flex items-center justify-between p-3 border rounded-lg">
+                        <div
+                          key={relatedOrder.id}
+                          className="flex items-center justify-between p-3 border rounded-lg"
+                        >
                           <div>
-                            <div className="font-medium">{relatedOrder.orderNumber}</div>
+                            <div className="font-medium">
+                              {relatedOrder.orderNumber}
+                            </div>
                             <div className="text-sm text-muted-foreground">
                               {formatDate(relatedOrder.createdAt)}
                             </div>
                           </div>
                           <div className="flex items-center gap-3">
                             <div className="text-right">
-                              <div className="font-semibold">{formatCurrency(relatedOrder.payment.amount)}</div>
+                              <div className="font-semibold">
+                                {formatCurrency(relatedOrder.payment.amount)}
+                              </div>
                               {getStatusBadge(relatedOrder.status)}
                             </div>
                             <Button variant="ghost" size="sm">
@@ -613,18 +715,25 @@ export default function OrderDetailModal({ isOpen, onClose, orderId }: OrderDeta
                           min="0"
                           max="100"
                           value={fraudScore}
-                          onChange={(e) => setFraudScore(parseInt(e.target.value))}
+                          onChange={(e) =>
+                            setFraudScore(parseInt(e.target.value))
+                          }
                           className="mt-1"
                         />
                       ) : (
-                        <div className="text-2xl font-bold mt-1">{order.fraudAnalysis.score}%</div>
+                        <div className="text-2xl font-bold mt-1">
+                          {order.fraudAnalysis.score}%
+                        </div>
                       )}
                     </div>
-                    
+
                     <div>
                       <Label>Recommendation</Label>
                       {isEditing ? (
-                        <Select value={fraudRecommendation} onValueChange={setFraudRecommendation}>
+                        <Select
+                          value={fraudRecommendation}
+                          onValueChange={setFraudRecommendation}
+                        >
                           <SelectTrigger className="mt-1">
                             <SelectValue />
                           </SelectTrigger>
@@ -636,18 +745,23 @@ export default function OrderDetailModal({ isOpen, onClose, orderId }: OrderDeta
                         </Select>
                       ) : (
                         <div className="mt-1">
-                          {getFraudBadge(order.fraudAnalysis.score, order.fraudAnalysis.recommendation)}
+                          {getFraudBadge(
+                            order.fraudAnalysis.score,
+                            order.fraudAnalysis.recommendation,
+                          )}
                         </div>
                       )}
                     </div>
-                    
+
                     <div>
                       <Label>Distance Alert</Label>
                       <div className="mt-1">
                         {order.fraudAnalysis.distanceAlert ? (
                           <Badge variant="destructive">Active</Badge>
                         ) : (
-                          <Badge variant="outline" className="text-green-600">None</Badge>
+                          <Badge variant="outline" className="text-green-600">
+                            None
+                          </Badge>
                         )}
                       </div>
                     </div>
@@ -657,7 +771,10 @@ export default function OrderDetailModal({ isOpen, onClose, orderId }: OrderDeta
                     <Label>Risk Factors</Label>
                     <div className="mt-2 space-y-2">
                       {order.fraudAnalysis.factors.map((factor, index) => (
-                        <div key={index} className="flex items-center gap-2 text-sm">
+                        <div
+                          key={index}
+                          className="flex items-center gap-2 text-sm"
+                        >
                           <AlertTriangle className="h-4 w-4 text-amber-500" />
                           {factor}
                         </div>
@@ -680,10 +797,15 @@ export default function OrderDetailModal({ isOpen, onClose, orderId }: OrderDeta
                   <div className="space-y-4">
                     {order.timeline.length > 0 ? (
                       order.timeline.map((event) => (
-                        <div key={event.id} className="flex gap-4 pb-4 border-b last:border-b-0">
+                        <div
+                          key={event.id}
+                          className="flex gap-4 pb-4 border-b last:border-b-0"
+                        >
                           <div className="w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
                           <div className="flex-1">
-                            <div className="font-medium">{event.description}</div>
+                            <div className="font-medium">
+                              {event.description}
+                            </div>
                             <div className="text-sm text-muted-foreground">
                               {formatDate(event.timestamp)}
                             </div>
@@ -717,7 +839,10 @@ export default function OrderDetailModal({ isOpen, onClose, orderId }: OrderDeta
                   {order.documents.length > 0 ? (
                     <div className="space-y-3">
                       {order.documents.map((doc) => (
-                        <div key={doc.id} className="flex items-center justify-between p-3 border rounded-lg">
+                        <div
+                          key={doc.id}
+                          className="flex items-center justify-between p-3 border rounded-lg"
+                        >
                           <div>
                             <div className="font-medium">{doc.name}</div>
                             <div className="text-sm text-muted-foreground">

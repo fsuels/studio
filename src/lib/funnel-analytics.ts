@@ -179,7 +179,6 @@ class FunnelAnalyticsEngine {
 
       // Check for abandonment patterns
       this.checkAbandonmentRisk(session);
-
     } catch (error) {
       console.error('Error tracking funnel step:', error);
     }
@@ -200,7 +199,7 @@ class FunnelAnalyticsEngine {
       session.abandoned = true;
       session.abandonedAt = now.toISOString();
       session.abandonmentReason = this.inferAbandonmentReason(session);
-      
+
       // Stream abandonment event to BigQuery
       if (this.bigQueryEnabled) {
         this.streamAbandonmentEvent(session);
@@ -215,11 +214,17 @@ class FunnelAnalyticsEngine {
   // Calculate conversion metrics
   calculateConversionMetrics(timeframe: string = '30d'): ConversionMetrics {
     const sessions = this.getSessionsInTimeframe(timeframe);
-    
+
     const visitSessions = sessions.length;
-    const draftSessions = sessions.filter(s => this.hasStep(s, 'draft')).length;
-    const checkoutSessions = sessions.filter(s => this.hasStep(s, 'checkout')).length;
-    const signedSessions = sessions.filter(s => this.hasStep(s, 'signed')).length;
+    const draftSessions = sessions.filter((s) =>
+      this.hasStep(s, 'draft'),
+    ).length;
+    const checkoutSessions = sessions.filter((s) =>
+      this.hasStep(s, 'checkout'),
+    ).length;
+    const signedSessions = sessions.filter((s) =>
+      this.hasStep(s, 'signed'),
+    ).length;
 
     return {
       overall: {
@@ -228,31 +233,46 @@ class FunnelAnalyticsEngine {
         visitToCheckout: this.calculateRate(checkoutSessions, visitSessions),
         draftToCheckout: this.calculateRate(checkoutSessions, draftSessions),
         draftToSigned: this.calculateRate(signedSessions, draftSessions),
-        checkoutToSigned: this.calculateRate(signedSessions, checkoutSessions)
+        checkoutToSigned: this.calculateRate(signedSessions, checkoutSessions),
       },
       stepDropoffs: {
-        visitToDraft: this.calculateRate(visitSessions - draftSessions, visitSessions),
-        draftToCheckout: this.calculateRate(draftSessions - checkoutSessions, draftSessions),
-        checkoutToSigned: this.calculateRate(checkoutSessions - signedSessions, checkoutSessions)
+        visitToDraft: this.calculateRate(
+          visitSessions - draftSessions,
+          visitSessions,
+        ),
+        draftToCheckout: this.calculateRate(
+          draftSessions - checkoutSessions,
+          draftSessions,
+        ),
+        checkoutToSigned: this.calculateRate(
+          checkoutSessions - signedSessions,
+          checkoutSessions,
+        ),
       },
       timeMetrics: this.calculateTimeMetrics(sessions),
-      segmentedMetrics: this.calculateSegmentedMetrics(sessions)
+      segmentedMetrics: this.calculateSegmentedMetrics(sessions),
     };
   }
 
   // Analyze abandonment patterns
   analyzeAbandonment(): AbandonmentAnalysis {
-    const abandonedSessions = Array.from(this.sessions.values())
-      .filter(s => s.abandoned || (!s.completed && this.isStale(s)));
+    const abandonedSessions = Array.from(this.sessions.values()).filter(
+      (s) => s.abandoned || (!s.completed && this.isStale(s)),
+    );
 
-    const abandonmentPoints = this.calculateAbandonmentPoints(abandonedSessions);
-    const abandonmentFactors = this.identifyAbandonmentFactors(abandonedSessions);
-    const uxOptimizations = this.generateUXOptimizations(abandonmentPoints, abandonmentFactors);
+    const abandonmentPoints =
+      this.calculateAbandonmentPoints(abandonedSessions);
+    const abandonmentFactors =
+      this.identifyAbandonmentFactors(abandonedSessions);
+    const uxOptimizations = this.generateUXOptimizations(
+      abandonmentPoints,
+      abandonmentFactors,
+    );
 
     return {
       abandonmentPoints,
       abandonmentFactors,
-      uxOptimizations
+      uxOptimizations,
     };
   }
 
@@ -281,7 +301,7 @@ class FunnelAnalyticsEngine {
       form_interactions: step.metadata.formInteractions,
       error_encountered: step.metadata.errorEncountered,
       error_type: step.metadata.errorType,
-      created_at: new Date().toISOString()
+      created_at: new Date().toISOString(),
     };
 
     try {
@@ -306,7 +326,7 @@ class FunnelAnalyticsEngine {
       abandoned: false,
       documentType: firstStep.metadata.documentType,
       source: firstStep.metadata.source || 'direct',
-      campaign: firstStep.metadata.campaign
+      campaign: firstStep.metadata.campaign,
     };
   }
 
@@ -317,7 +337,7 @@ class FunnelAnalyticsEngine {
   }
 
   private hasStep(session: FunnelSession, step: string): boolean {
-    return session.steps.some(s => s.step === step);
+    return session.steps.some((s) => s.step === step);
   }
 
   private calculateRate(numerator: number, denominator: number): number {
@@ -325,40 +345,47 @@ class FunnelAnalyticsEngine {
   }
 
   private calculateTimeMetrics(sessions: FunnelSession[]) {
-    const completedSessions = sessions.filter(s => s.completed);
-    
+    const completedSessions = sessions.filter((s) => s.completed);
+
     const conversionTimes = completedSessions
-      .map(s => s.conversionTime!)
-      .filter(t => t !== undefined);
+      .map((s) => s.conversionTime!)
+      .filter((t) => t !== undefined);
 
     return {
-      avgTimeToConvert: conversionTimes.length > 0 
-        ? conversionTimes.reduce((sum, time) => sum + time, 0) / conversionTimes.length 
-        : 0,
+      avgTimeToConvert:
+        conversionTimes.length > 0
+          ? conversionTimes.reduce((sum, time) => sum + time, 0) /
+            conversionTimes.length
+          : 0,
       avgTimePerStep: {
         visit: this.calculateAvgTimeOnStep(sessions, 'visit'),
         draft: this.calculateAvgTimeOnStep(sessions, 'draft'),
-        checkout: this.calculateAvgTimeOnStep(sessions, 'checkout')
+        checkout: this.calculateAvgTimeOnStep(sessions, 'checkout'),
       },
-      medianConversionTime: this.calculateMedian(conversionTimes)
+      medianConversionTime: this.calculateMedian(conversionTimes),
     };
   }
 
-  private calculateAvgTimeOnStep(sessions: FunnelSession[], step: string): number {
+  private calculateAvgTimeOnStep(
+    sessions: FunnelSession[],
+    step: string,
+  ): number {
     const times = sessions
-      .flatMap(s => s.steps)
-      .filter(s => s.step === step && s.metadata.timeOnStep)
-      .map(s => s.metadata.timeOnStep!);
+      .flatMap((s) => s.steps)
+      .filter((s) => s.step === step && s.metadata.timeOnStep)
+      .map((s) => s.metadata.timeOnStep!);
 
-    return times.length > 0 ? times.reduce((sum, time) => sum + time, 0) / times.length : 0;
+    return times.length > 0
+      ? times.reduce((sum, time) => sum + time, 0) / times.length
+      : 0;
   }
 
   private calculateMedian(values: number[]): number {
     if (values.length === 0) return 0;
     const sorted = [...values].sort((a, b) => a - b);
     const mid = Math.floor(sorted.length / 2);
-    return sorted.length % 2 === 0 
-      ? (sorted[mid - 1] + sorted[mid]) / 2 
+    return sorted.length % 2 === 0
+      ? (sorted[mid - 1] + sorted[mid]) / 2
       : sorted[mid];
   }
 
@@ -373,27 +400,39 @@ class FunnelAnalyticsEngine {
       bySource: this.calculateMetricsForGroups(bySource),
       byDevice: {},
       byCountry: {},
-      byCohort: {}
+      byCohort: {},
     };
   }
 
-  private groupSessionsBy(sessions: FunnelSession[], field: keyof FunnelSession): Record<string, FunnelSession[]> {
-    return sessions.reduce((groups, session) => {
-      const key = String(session[field] || 'unknown');
-      if (!groups[key]) groups[key] = [];
-      groups[key].push(session);
-      return groups;
-    }, {} as Record<string, FunnelSession[]>);
+  private groupSessionsBy(
+    sessions: FunnelSession[],
+    field: keyof FunnelSession,
+  ): Record<string, FunnelSession[]> {
+    return sessions.reduce(
+      (groups, session) => {
+        const key = String(session[field] || 'unknown');
+        if (!groups[key]) groups[key] = [];
+        groups[key].push(session);
+        return groups;
+      },
+      {} as Record<string, FunnelSession[]>,
+    );
   }
 
   private calculateMetricsForGroups(groups: Record<string, FunnelSession[]>) {
     const result: Record<string, any> = {};
-    
+
     for (const [key, sessions] of Object.entries(groups)) {
       const visitSessions = sessions.length;
-      const draftSessions = sessions.filter(s => this.hasStep(s, 'draft')).length;
-      const checkoutSessions = sessions.filter(s => this.hasStep(s, 'checkout')).length;
-      const signedSessions = sessions.filter(s => this.hasStep(s, 'signed')).length;
+      const draftSessions = sessions.filter((s) =>
+        this.hasStep(s, 'draft'),
+      ).length;
+      const checkoutSessions = sessions.filter((s) =>
+        this.hasStep(s, 'checkout'),
+      ).length;
+      const signedSessions = sessions.filter((s) =>
+        this.hasStep(s, 'signed'),
+      ).length;
 
       result[key] = {
         visitToSigned: this.calculateRate(signedSessions, visitSessions),
@@ -401,7 +440,7 @@ class FunnelAnalyticsEngine {
         visitToCheckout: this.calculateRate(checkoutSessions, visitSessions),
         draftToCheckout: this.calculateRate(checkoutSessions, draftSessions),
         draftToSigned: this.calculateRate(signedSessions, draftSessions),
-        checkoutToSigned: this.calculateRate(signedSessions, checkoutSessions)
+        checkoutToSigned: this.calculateRate(signedSessions, checkoutSessions),
       };
     }
 
@@ -412,20 +451,20 @@ class FunnelAnalyticsEngine {
     const stepCounts = {
       visit: 0,
       draft: 0,
-      checkout: 0
+      checkout: 0,
     };
 
     const stepTimes = {
       visit: [] as number[],
       draft: [] as number[],
-      checkout: [] as number[]
+      checkout: [] as number[],
     };
 
-    abandonedSessions.forEach(session => {
+    abandonedSessions.forEach((session) => {
       const lastStep = session.steps[session.steps.length - 1];
       if (lastStep && lastStep.step in stepCounts) {
         stepCounts[lastStep.step as keyof typeof stepCounts]++;
-        
+
         const timeOnStep = lastStep.metadata.timeOnStep || 0;
         stepTimes[lastStep.step as keyof typeof stepTimes].push(timeOnStep);
       }
@@ -437,11 +476,22 @@ class FunnelAnalyticsEngine {
       step,
       count,
       percentage: this.calculateRate(count, totalAbandoned),
-      avgTimeBeforeAbandon: stepTimes[step as keyof typeof stepTimes].length > 0
-        ? stepTimes[step as keyof typeof stepTimes].reduce((sum, time) => sum + time, 0) / stepTimes[step as keyof typeof stepTimes].length
-        : 0,
-      commonReasons: this.identifyCommonAbandonmentReasons(abandonedSessions, step),
-      recoveryPotential: this.calculateRecoveryPotential(step, count, totalAbandoned)
+      avgTimeBeforeAbandon:
+        stepTimes[step as keyof typeof stepTimes].length > 0
+          ? stepTimes[step as keyof typeof stepTimes].reduce(
+              (sum, time) => sum + time,
+              0,
+            ) / stepTimes[step as keyof typeof stepTimes].length
+          : 0,
+      commonReasons: this.identifyCommonAbandonmentReasons(
+        abandonedSessions,
+        step,
+      ),
+      recoveryPotential: this.calculateRecoveryPotential(
+        step,
+        count,
+        totalAbandoned,
+      ),
     }));
   }
 
@@ -453,29 +503,29 @@ class FunnelAnalyticsEngine {
         impact: 0.15,
         correlation: 0.73,
         description: 'Slow page loads correlate with abandonment',
-        actionable: true
+        actionable: true,
       },
       {
         factor: 'Form Complexity',
         impact: 0.22,
         correlation: 0.68,
         description: 'Complex forms increase abandonment risk',
-        actionable: true
+        actionable: true,
       },
       {
         factor: 'Mobile Experience',
         impact: 0.18,
         correlation: 0.71,
         description: 'Poor mobile UX drives abandonment',
-        actionable: true
+        actionable: true,
       },
       {
         factor: 'Pricing Transparency',
         impact: 0.12,
         correlation: 0.64,
         description: 'Hidden costs cause checkout abandonment',
-        actionable: true
-      }
+        actionable: true,
+      },
     ];
   }
 
@@ -488,7 +538,7 @@ class FunnelAnalyticsEngine {
         recommendation: 'Simplify checkout flow and improve trust signals',
         estimatedImpact: 15.5,
         implementationEffort: 'medium' as const,
-        testingRequired: true
+        testingRequired: true,
       },
       {
         priority: 'high' as const,
@@ -497,7 +547,7 @@ class FunnelAnalyticsEngine {
         recommendation: 'Add auto-save and progress indicators',
         estimatedImpact: 12.3,
         implementationEffort: 'low' as const,
-        testingRequired: true
+        testingRequired: true,
       },
       {
         priority: 'medium' as const,
@@ -506,28 +556,35 @@ class FunnelAnalyticsEngine {
         recommendation: 'Optimize landing page and value proposition',
         estimatedImpact: 8.7,
         implementationEffort: 'high' as const,
-        testingRequired: true
-      }
+        testingRequired: true,
+      },
     ];
   }
 
-  private identifyCommonAbandonmentReasons(sessions: FunnelSession[], step: string): string[] {
+  private identifyCommonAbandonmentReasons(
+    sessions: FunnelSession[],
+    step: string,
+  ): string[] {
     // Analyze abandonment reasons for a specific step
     return [
       'Long form completion time',
       'Technical errors',
       'Pricing concerns',
       'Trust issues',
-      'Competitor comparison'
+      'Competitor comparison',
     ];
   }
 
-  private calculateRecoveryPotential(step: string, abandonCount: number, totalAbandoned: number): number {
+  private calculateRecoveryPotential(
+    step: string,
+    abandonCount: number,
+    totalAbandoned: number,
+  ): number {
     // Calculate the potential revenue recovery based on step and historical data
     const baseRecovery = {
       visit: 0.05,
       draft: 0.25,
-      checkout: 0.45
+      checkout: 0.45,
     };
 
     return (baseRecovery[step as keyof typeof baseRecovery] || 0) * 100;
@@ -535,26 +592,26 @@ class FunnelAnalyticsEngine {
 
   private inferAbandonmentReason(session: FunnelSession): string {
     const lastStep = session.steps[session.steps.length - 1];
-    
+
     if (lastStep?.metadata.errorEncountered) {
       return 'Technical Error';
     }
-    
+
     if (lastStep?.metadata.timeOnStep && lastStep.metadata.timeOnStep > 300) {
       return 'Long Completion Time';
     }
-    
+
     if (session.currentStep === 'checkout') {
       return 'Checkout Hesitation';
     }
-    
+
     return 'Unknown';
   }
 
   private checkAbandonmentRisk(session: FunnelSession): void {
     // Real-time abandonment risk detection
     const risk = this.calculateAbandonmentRisk(session);
-    
+
     if (risk > 0.7) {
       // Trigger intervention (exit intent popup, chat offer, etc.)
       this.triggerRetentionIntervention(session);
@@ -563,41 +620,43 @@ class FunnelAnalyticsEngine {
 
   private calculateAbandonmentRisk(session: FunnelSession): number {
     let risk = 0;
-    
+
     const lastStep = session.steps[session.steps.length - 1];
     if (!lastStep) return 0;
-    
+
     // Time on current step
     if (lastStep.metadata.timeOnStep && lastStep.metadata.timeOnStep > 180) {
       risk += 0.3;
     }
-    
+
     // Error encounters
     if (lastStep.metadata.errorEncountered) {
       risk += 0.4;
     }
-    
+
     // Low engagement indicators
     if (lastStep.metadata.scrollDepth && lastStep.metadata.scrollDepth < 30) {
       risk += 0.2;
     }
-    
+
     if (lastStep.metadata.clickCount && lastStep.metadata.clickCount < 3) {
       risk += 0.1;
     }
-    
+
     return Math.min(1, risk);
   }
 
   private triggerRetentionIntervention(session: FunnelSession): void {
     // In production, trigger retention mechanisms
-    console.log(`Triggering retention intervention for session ${session.sessionId}`);
+    console.log(
+      `Triggering retention intervention for session ${session.sessionId}`,
+    );
   }
 
   private getSessionsInTimeframe(timeframe: string): FunnelSession[] {
     const now = new Date();
     const cutoff = new Date();
-    
+
     switch (timeframe) {
       case '7d':
         cutoff.setDate(now.getDate() - 7);
@@ -611,22 +670,27 @@ class FunnelAnalyticsEngine {
       default:
         cutoff.setDate(now.getDate() - 30);
     }
-    
-    return Array.from(this.sessions.values())
-      .filter(session => new Date(session.startTime) >= cutoff);
+
+    return Array.from(this.sessions.values()).filter(
+      (session) => new Date(session.startTime) >= cutoff,
+    );
   }
 
   private isStale(session: FunnelSession): boolean {
     const lastActivity = new Date(session.endTime || session.startTime);
     const now = new Date();
-    const hoursSinceActivity = (now.getTime() - lastActivity.getTime()) / (1000 * 60 * 60);
-    
+    const hoursSinceActivity =
+      (now.getTime() - lastActivity.getTime()) / (1000 * 60 * 60);
+
     return hoursSinceActivity > 24; // Consider stale after 24 hours
   }
 
   private persistSession(session: FunnelSession): void {
     // In production, persist to database
-    localStorage.setItem(`funnel_session_${session.sessionId}`, JSON.stringify(session));
+    localStorage.setItem(
+      `funnel_session_${session.sessionId}`,
+      JSON.stringify(session),
+    );
   }
 
   private async streamAbandonmentEvent(session: FunnelSession): Promise<void> {
@@ -641,7 +705,7 @@ class FunnelAnalyticsEngine {
       time_in_funnel: session.conversionTime || 0,
       document_type: session.documentType,
       source: session.source,
-      created_at: new Date().toISOString()
+      created_at: new Date().toISOString(),
     };
 
     if (this.bigQueryEnabled) {
@@ -671,10 +735,10 @@ export function generateDeviceId(): string {
 export function createFunnelStep(
   step: FunnelStep['step'],
   sessionId: string,
-  metadata: Partial<FunnelStep['metadata']> = {}
+  metadata: Partial<FunnelStep['metadata']> = {},
 ): FunnelStep {
   const stepOrder = { visit: 1, draft: 2, checkout: 3, signed: 4 }[step];
-  
+
   return {
     step,
     stepOrder,
@@ -683,11 +747,14 @@ export function createFunnelStep(
     deviceId: generateDeviceId(),
     metadata: {
       userAgent: navigator?.userAgent,
-      pageLoadTime: performance?.timing ? 
-        performance.timing.loadEventEnd - performance.timing.navigationStart : undefined,
+      pageLoadTime: performance?.timing
+        ? performance.timing.loadEventEnd - performance.timing.navigationStart
+        : undefined,
       screenResolution: screen ? `${screen.width}x${screen.height}` : undefined,
-      viewportSize: window ? `${window.innerWidth}x${window.innerHeight}` : undefined,
-      ...metadata
-    }
+      viewportSize: window
+        ? `${window.innerWidth}x${window.innerHeight}`
+        : undefined,
+      ...metadata,
+    },
   };
 }

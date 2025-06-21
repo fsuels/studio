@@ -1,11 +1,11 @@
 import type { Question } from '@/types/documents';
 
 export const questions: Question[] = [
-  { 
-    id: 'companyName', 
-    label: 'Company Name', 
-    type: 'text', 
-    required: true 
+  {
+    id: 'companyName',
+    label: 'Company Name',
+    type: 'text',
+    required: true,
   },
   {
     id: 'employeeName',
@@ -23,8 +23,7 @@ export const questions: Question[] = [
     id: 'geographicScope',
     label: 'Geographic Scope of Restriction',
     type: 'text',
-    placeholder:
-      'e.g., 50 miles radius from main office, State of California',
+    placeholder: 'e.g., 50 miles radius from main office, State of California',
   },
   {
     id: 'durationMonths',

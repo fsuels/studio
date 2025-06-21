@@ -24,12 +24,18 @@ export const affiliateMarketingAgreementMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Affiliate Marketing Agreement',
-      description: 'Agreement for affiliate marketing partnerships and commission-based promotions.',
-      aliases: ['affiliate program agreement', 'commission agreement', 'partner marketing agreement'],
+      description:
+        'Agreement for affiliate marketing partnerships and commission-based promotions.',
+      aliases: [
+        'affiliate program agreement',
+        'commission agreement',
+        'partner marketing agreement',
+      ],
     },
     es: {
       name: 'Acuerdo de Marketing de Afiliados',
-      description: 'Acuerdo para asociaciones de marketing de afiliados y promociones basadas en comisiones.',
+      description:
+        'Acuerdo para asociaciones de marketing de afiliados y promociones basadas en comisiones.',
       aliases: ['acuerdo de programa de afiliados', 'acuerdo de comisiones'],
     },
   },

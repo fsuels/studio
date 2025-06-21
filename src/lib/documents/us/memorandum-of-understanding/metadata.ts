@@ -24,12 +24,14 @@ export const memorandumOfUnderstandingMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Memorandum of Understanding (MOU)',
-      description: 'Create a formal MOU to outline mutual understanding and cooperation between parties.',
+      description:
+        'Create a formal MOU to outline mutual understanding and cooperation between parties.',
       aliases: ['MOU', 'memorandum of understanding', 'cooperation agreement'],
     },
     es: {
       name: 'Memorando de Entendimiento (MOU)',
-      description: 'Crea un MOU formal para delinear el entendimiento mutuo y la cooperación entre partes.',
+      description:
+        'Crea un MOU formal para delinear el entendimiento mutuo y la cooperación entre partes.',
       aliases: ['MOU', 'memorando de entendimiento', 'acuerdo de cooperación'],
     },
   },

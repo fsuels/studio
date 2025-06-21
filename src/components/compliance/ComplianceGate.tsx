@@ -6,14 +6,14 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
-import { 
-  Shield, 
-  AlertTriangle, 
-  CheckCircle, 
-  MapPin, 
+import {
+  Shield,
+  AlertTriangle,
+  CheckCircle,
+  MapPin,
   Loader2,
   ExternalLink,
-  Users
+  Users,
 } from 'lucide-react';
 
 export interface ComplianceResult {
@@ -39,11 +39,11 @@ interface ComplianceGateProps {
   sessionId?: string;
 }
 
-export default function ComplianceGate({ 
-  children, 
-  onComplianceResult, 
+export default function ComplianceGate({
+  children,
+  onComplianceResult,
   mockState,
-  sessionId 
+  sessionId,
 }: ComplianceGateProps) {
   const [loading, setLoading] = useState(true);
   const [compliance, setCompliance] = useState<ComplianceResult | null>(null);
@@ -62,7 +62,7 @@ export default function ComplianceGate({
         },
         body: JSON.stringify({
           sessionId: sessionId || crypto.randomUUID(),
-          mockState
+          mockState,
         }),
       });
 
@@ -74,11 +74,10 @@ export default function ComplianceGate({
 
       setCompliance(data.compliance);
       onComplianceResult?.(data.compliance);
-
     } catch (err) {
       console.error('Compliance check error:', err);
       setError((err as Error).message);
-      
+
       // Fallback to blocked state for safety
       const fallbackCompliance: ComplianceResult = {
         allowed: false,
@@ -86,19 +85,21 @@ export default function ComplianceGate({
         disclaimerLevel: 'strict',
         reason: 'Unable to verify compliance - access temporarily restricted',
         requirements: ['Contact support for assistance'],
-        recommendations: ['Try refreshing the page', 'Check your internet connection'],
+        recommendations: [
+          'Try refreshing the page',
+          'Check your internet connection',
+        ],
         waitlistEligible: true,
         location: {
           state: 'Unknown',
           stateCode: 'UNK',
           country: 'Unknown',
-          confidence: 'low'
-        }
+          confidence: 'low',
+        },
       };
-      
+
       setCompliance(fallbackCompliance);
       onComplianceResult?.(fallbackCompliance);
-      
     } finally {
       setLoading(false);
     }
@@ -109,25 +110,33 @@ export default function ComplianceGate({
   }, [mockState]);
 
   const handleRetry = () => {
-    setRetryCount(prev => prev + 1);
+    setRetryCount((prev) => prev + 1);
     checkCompliance();
   };
 
   const getRiskColor = (risk: string) => {
     switch (risk) {
-      case 'green': return 'text-green-600 bg-green-50 border-green-200';
-      case 'amber': return 'text-amber-600 bg-amber-50 border-amber-200';
-      case 'red': return 'text-red-600 bg-red-50 border-red-200';
-      default: return 'text-gray-600 bg-gray-50 border-gray-200';
+      case 'green':
+        return 'text-green-600 bg-green-50 border-green-200';
+      case 'amber':
+        return 'text-amber-600 bg-amber-50 border-amber-200';
+      case 'red':
+        return 'text-red-600 bg-red-50 border-red-200';
+      default:
+        return 'text-gray-600 bg-gray-50 border-gray-200';
     }
   };
 
   const getRiskIcon = (risk: string) => {
     switch (risk) {
-      case 'green': return <CheckCircle className="h-5 w-5" />;
-      case 'amber': return <AlertTriangle className="h-5 w-5" />;
-      case 'red': return <Shield className="h-5 w-5" />;
-      default: return <AlertTriangle className="h-5 w-5" />;
+      case 'green':
+        return <CheckCircle className="h-5 w-5" />;
+      case 'amber':
+        return <AlertTriangle className="h-5 w-5" />;
+      case 'red':
+        return <Shield className="h-5 w-5" />;
+      default:
+        return <AlertTriangle className="h-5 w-5" />;
     }
   };
 
@@ -164,7 +173,11 @@ export default function ComplianceGate({
               </AlertDescription>
             </Alert>
           )}
-          <Button onClick={handleRetry} disabled={retryCount >= 3} className="w-full">
+          <Button
+            onClick={handleRetry}
+            disabled={retryCount >= 3}
+            className="w-full"
+          >
             {retryCount >= 3 ? 'Contact Support' : 'Try Again'}
           </Button>
         </CardContent>
@@ -179,8 +192,13 @@ export default function ComplianceGate({
         {/* Location indicator */}
         <div className="flex items-center justify-center gap-2 text-xs text-muted-foreground">
           <MapPin className="h-3 w-3" />
-          <span>{compliance.location.state}, {compliance.location.country}</span>
-          <Badge variant="outline" className={getRiskColor(compliance.riskLevel)}>
+          <span>
+            {compliance.location.state}, {compliance.location.country}
+          </span>
+          <Badge
+            variant="outline"
+            className={getRiskColor(compliance.riskLevel)}
+          >
             {compliance.riskLevel.toUpperCase()}
           </Badge>
         </div>
@@ -190,7 +208,10 @@ export default function ComplianceGate({
           <Alert className={getRiskColor(compliance.riskLevel)}>
             <Shield className="h-4 w-4" />
             <AlertDescription className="text-xs">
-              {getDisclaimerText(compliance.disclaimerLevel, compliance.location.stateCode)}
+              {getDisclaimerText(
+                compliance.disclaimerLevel,
+                compliance.location.stateCode,
+              )}
             </AlertDescription>
           </Alert>
         )}
@@ -198,7 +219,9 @@ export default function ComplianceGate({
         {/* Show requirements if any */}
         {compliance.requirements.length > 0 && (
           <div className="text-xs space-y-1">
-            <p className="font-medium">Requirements for {compliance.location.state}:</p>
+            <p className="font-medium">
+              Requirements for {compliance.location.state}:
+            </p>
             <ul className="list-disc list-inside space-y-0.5 text-muted-foreground">
               {compliance.requirements.map((req, index) => (
                 <li key={index}>{req}</li>
@@ -223,9 +246,7 @@ export default function ComplianceGate({
       </CardHeader>
       <CardContent className="space-y-4">
         <Alert className={getRiskColor(compliance.riskLevel)}>
-          <AlertDescription>
-            {compliance.reason}
-          </AlertDescription>
+          <AlertDescription>{compliance.reason}</AlertDescription>
         </Alert>
 
         {compliance.requirements.length > 0 && (
@@ -242,19 +263,20 @@ export default function ComplianceGate({
           </div>
         )}
 
-        {compliance.recommendations && compliance.recommendations.length > 0 && (
-          <div className="space-y-2">
-            <p className="text-sm font-medium">What You Can Do:</p>
-            <ul className="text-xs space-y-1 text-muted-foreground">
-              {compliance.recommendations.map((rec, index) => (
-                <li key={index} className="flex items-start gap-2">
-                  <CheckCircle className="h-3 w-3 mt-0.5 flex-shrink-0 text-green-500" />
-                  <span>{rec}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
+        {compliance.recommendations &&
+          compliance.recommendations.length > 0 && (
+            <div className="space-y-2">
+              <p className="text-sm font-medium">What You Can Do:</p>
+              <ul className="text-xs space-y-1 text-muted-foreground">
+                {compliance.recommendations.map((rec, index) => (
+                  <li key={index} className="flex items-start gap-2">
+                    <CheckCircle className="h-3 w-3 mt-0.5 flex-shrink-0 text-green-500" />
+                    <span>{rec}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
 
         {compliance.waitlistEligible && (
           <div className="space-y-3 pt-4 border-t">
@@ -263,8 +285,9 @@ export default function ComplianceGate({
               <span className="font-medium">Join the Waitlist</span>
             </div>
             <p className="text-xs text-muted-foreground">
-              We&apos;re working to expand service to {compliance.location.state}. 
-              Join our waitlist to be notified when it becomes available.
+              We&apos;re working to expand service to{' '}
+              {compliance.location.state}. Join our waitlist to be notified when
+              it becomes available.
             </p>
             <Button className="w-full" variant="outline">
               <ExternalLink className="h-4 w-4 mr-2" />
@@ -287,9 +310,13 @@ export default function ComplianceGate({
 }
 
 // Get disclaimer text based on level
-function getDisclaimerText(level: 'basic' | 'enhanced' | 'strict', stateCode: string): string {
-  const baseText = "123LegalDoc provides self-help legal document templates and is not a law firm.";
-  
+function getDisclaimerText(
+  level: 'basic' | 'enhanced' | 'strict',
+  stateCode: string,
+): string {
+  const baseText =
+    '123LegalDoc provides self-help legal document templates and is not a law firm.';
+
   switch (level) {
     case 'enhanced':
       return `${baseText} These templates are for informational purposes only. You are responsible for ensuring compliance with ${stateCode} state laws.`;

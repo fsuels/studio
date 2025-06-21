@@ -31,33 +31,34 @@ export function ReportTable({ data }: ReportTableProps) {
   const columns = Object.keys(data[0]);
 
   // Filter data based on search term
-  const filteredData = data.filter(row =>
-    columns.some(column =>
-      String(row[column]).toLowerCase().includes(searchTerm.toLowerCase())
-    )
+  const filteredData = data.filter((row) =>
+    columns.some((column) =>
+      String(row[column]).toLowerCase().includes(searchTerm.toLowerCase()),
+    ),
   );
 
   // Sort data
-  const sortedData = sortColumn && sortDirection
-    ? [...filteredData].sort((a, b) => {
-        const aVal = a[sortColumn];
-        const bVal = b[sortColumn];
-        
-        // Handle different data types
-        if (typeof aVal === 'number' && typeof bVal === 'number') {
-          return sortDirection === 'asc' ? aVal - bVal : bVal - aVal;
-        }
-        
-        const aStr = String(aVal).toLowerCase();
-        const bStr = String(bVal).toLowerCase();
-        
-        if (sortDirection === 'asc') {
-          return aStr.localeCompare(bStr);
-        } else {
-          return bStr.localeCompare(aStr);
-        }
-      })
-    : filteredData;
+  const sortedData =
+    sortColumn && sortDirection
+      ? [...filteredData].sort((a, b) => {
+          const aVal = a[sortColumn];
+          const bVal = b[sortColumn];
+
+          // Handle different data types
+          if (typeof aVal === 'number' && typeof bVal === 'number') {
+            return sortDirection === 'asc' ? aVal - bVal : bVal - aVal;
+          }
+
+          const aStr = String(aVal).toLowerCase();
+          const bStr = String(bVal).toLowerCase();
+
+          if (sortDirection === 'asc') {
+            return aStr.localeCompare(bStr);
+          } else {
+            return bStr.localeCompare(aStr);
+          }
+        })
+      : filteredData;
 
   // Paginate data
   const totalPages = Math.ceil(sortedData.length / itemsPerPage);
@@ -96,7 +97,10 @@ export function ReportTable({ data }: ReportTableProps) {
 
     if (typeof value === 'number') {
       // Format numbers with commas
-      if (column.toLowerCase().includes('amount') || column.toLowerCase().includes('price')) {
+      if (
+        column.toLowerCase().includes('amount') ||
+        column.toLowerCase().includes('price')
+      ) {
         return `$${value.toLocaleString()}`;
       }
       return value.toLocaleString();
@@ -104,7 +108,10 @@ export function ReportTable({ data }: ReportTableProps) {
 
     if (typeof value === 'string') {
       // Format dates
-      if (column.toLowerCase().includes('date') || column.toLowerCase().includes('time')) {
+      if (
+        column.toLowerCase().includes('date') ||
+        column.toLowerCase().includes('time')
+      ) {
         try {
           const date = new Date(value);
           if (!isNaN(date.getTime())) {
@@ -126,11 +133,7 @@ export function ReportTable({ data }: ReportTableProps) {
 
       // Truncate long strings
       if (value.length > 50) {
-        return (
-          <span title={value}>
-            {value.substring(0, 47)}...
-          </span>
-        );
+        return <span title={value}>{value.substring(0, 47)}...</span>;
       }
     }
 
@@ -140,7 +143,7 @@ export function ReportTable({ data }: ReportTableProps) {
   const formatColumnName = (column: string) => {
     return column
       .split('_')
-      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
       .join(' ');
   };
 
@@ -148,13 +151,13 @@ export function ReportTable({ data }: ReportTableProps) {
     if (sortColumn !== column) {
       return <ArrowUpDown className="h-4 w-4" />;
     }
-    
+
     if (sortDirection === 'asc') {
       return <ArrowUp className="h-4 w-4" />;
     } else if (sortDirection === 'desc') {
       return <ArrowDown className="h-4 w-4" />;
     }
-    
+
     return <ArrowUpDown className="h-4 w-4" />;
   };
 
@@ -175,7 +178,9 @@ export function ReportTable({ data }: ReportTableProps) {
           />
         </div>
         <div className="text-sm text-muted-foreground">
-          Showing {startIndex + 1}-{Math.min(startIndex + itemsPerPage, sortedData.length)} of {sortedData.length} results
+          Showing {startIndex + 1}-
+          {Math.min(startIndex + itemsPerPage, sortedData.length)} of{' '}
+          {sortedData.length} results
         </div>
       </div>
 
@@ -185,7 +190,7 @@ export function ReportTable({ data }: ReportTableProps) {
           <table className="w-full">
             <thead className="bg-muted">
               <tr>
-                {columns.map(column => (
+                {columns.map((column) => (
                   <th
                     key={column}
                     className="px-4 py-3 text-left text-sm font-medium text-muted-foreground"
@@ -197,9 +202,7 @@ export function ReportTable({ data }: ReportTableProps) {
                       onClick={() => handleSort(column)}
                     >
                       <span>{formatColumnName(column)}</span>
-                      <span className="ml-2">
-                        {getSortIcon(column)}
-                      </span>
+                      <span className="ml-2">{getSortIcon(column)}</span>
                     </Button>
                   </th>
                 ))}
@@ -208,7 +211,7 @@ export function ReportTable({ data }: ReportTableProps) {
             <tbody className="divide-y">
               {paginatedData.map((row, index) => (
                 <tr key={index} className="hover:bg-muted/50">
-                  {columns.map(column => (
+                  {columns.map((column) => (
                     <td key={column} className="px-4 py-3 text-sm">
                       {formatCellValue(row[column], column)}
                     </td>
@@ -230,12 +233,12 @@ export function ReportTable({ data }: ReportTableProps) {
             <Button
               variant="outline"
               size="sm"
-              onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+              onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
               disabled={currentPage === 1}
             >
               Previous
             </Button>
-            
+
             {/* Page numbers */}
             <div className="flex items-center gap-1">
               {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
@@ -249,7 +252,7 @@ export function ReportTable({ data }: ReportTableProps) {
                 } else {
                   pageNum = currentPage - 2 + i;
                 }
-                
+
                 return (
                   <Button
                     key={pageNum}
@@ -263,11 +266,13 @@ export function ReportTable({ data }: ReportTableProps) {
                 );
               })}
             </div>
-            
+
             <Button
               variant="outline"
               size="sm"
-              onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+              onClick={() =>
+                setCurrentPage((prev) => Math.min(totalPages, prev + 1))
+              }
               disabled={currentPage === totalPages}
             >
               Next

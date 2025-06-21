@@ -24,12 +24,14 @@ export const affidavitOfIdentityMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Affidavit of Identity',
-      description: 'Sworn statement verifying identity for legal or administrative purposes.',
+      description:
+        'Sworn statement verifying identity for legal or administrative purposes.',
       aliases: ['identity affidavit', 'sworn identity statement'],
     },
     es: {
       name: 'Declaración Jurada de Identidad',
-      description: 'Declaración jurada que verifica la identidad para propósitos legales o administrativos.',
+      description:
+        'Declaración jurada que verifica la identidad para propósitos legales o administrativos.',
       aliases: ['declaración de identidad', 'declaración jurada de identidad'],
     },
   },

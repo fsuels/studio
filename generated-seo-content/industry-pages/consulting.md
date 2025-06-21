@@ -15,6 +15,7 @@ Consulting businesses face unique legal challenges requiring specialized documen
 ### Why Consulting Needs Specialized Legal Documents
 
 Consulting businesses require documents that address:
+
 - Industry-specific regulations and compliance requirements
 - Common consulting business practices and terminology
 - Risk management specific to consulting operations
@@ -31,4 +32,4 @@ Our consulting templates include:
 
 [Browse Consulting Documents]
 
-*Trusted by thousands of consulting professionals*
+_Trusted by thousands of consulting professionals_

@@ -47,7 +47,7 @@ Don't risk using generic templates that may not comply with Indiana law. Get a p
 
 [Create Indiana LLC Operating Agreement]
 
-*Trusted by thousands of Indiana businesses*
+_Trusted by thousands of Indiana businesses_
 
 ---
 

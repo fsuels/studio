@@ -17,24 +17,28 @@ This document outlines the accessibility standards and practices for 123legaldoc
 Our platform adheres to the Web Content Accessibility Guidelines (WCAG) 2.2 Level AA standards, which are built on four main principles:
 
 ### 1. Perceivable
+
 - **Color Contrast**: Minimum 4.5:1 ratio for normal text, 3:1 for large text
 - **Alt Text**: All images have descriptive alternative text
 - **Text Scaling**: Content remains readable when scaled up to 200%
 - **Audio/Video**: Captions and transcripts provided when applicable
 
 ### 2. Operable
+
 - **Keyboard Navigation**: All functionality accessible via keyboard
 - **Focus Management**: Visible focus indicators on all interactive elements
 - **No Seizure Triggers**: No flashing content that could trigger seizures
 - **Sufficient Time**: Users have adequate time to read and interact with content
 
 ### 3. Understandable
+
 - **Clear Language**: Plain language principles applied throughout
 - **Consistent Navigation**: Predictable navigation patterns
 - **Error Prevention**: Form validation with clear error messages
 - **Help Text**: Context-sensitive help available
 
 ### 4. Robust
+
 - **Semantic HTML**: Proper use of HTML elements and ARIA attributes
 - **Cross-Platform**: Compatible with assistive technologies
 - **Future-Proof**: Code that works with evolving web standards
@@ -44,29 +48,36 @@ Our platform adheres to the Web Content Accessibility Guidelines (WCAG) 2.2 Leve
 ### HTML and Semantic Structure
 
 #### Headings
+
 ```html
 <!-- ✅ Correct: Logical heading hierarchy -->
 <h1>Main Page Title</h1>
-  <h2>Section Title</h2>
-    <h3>Subsection Title</h3>
-  <h2>Another Section</h2>
+<h2>Section Title</h2>
+<h3>Subsection Title</h3>
+<h2>Another Section</h2>
 
 <!-- ❌ Incorrect: Skipping heading levels -->
 <h1>Main Title</h1>
-  <h4>Subsection Title</h4>
+<h4>Subsection Title</h4>
 ```
 
 #### Landmarks
+
 ```html
 <!-- ✅ Use semantic landmarks -->
 <header role="banner">
-<nav role="navigation" aria-label="Main navigation">
-<main role="main">
-<aside role="complementary">
-<footer role="contentinfo">
+  <nav role="navigation" aria-label="Main navigation">
+    <main role="main">
+      <aside role="complementary">
+        <footer role="contentinfo"></footer>
+      </aside>
+    </main>
+  </nav>
+</header>
 ```
 
 #### Lists
+
 ```html
 <!-- ✅ Use proper list markup -->
 <ul>
@@ -79,28 +90,25 @@ Our platform adheres to the Web Content Accessibility Guidelines (WCAG) 2.2 Leve
 ### Forms and Input Accessibility
 
 #### Labels and Descriptions
+
 ```html
 <!-- ✅ Proper labeling -->
 <label for="email">Email Address</label>
-<input 
-  id="email" 
-  type="email" 
-  aria-describedby="email-help"
-  required 
-/>
+<input id="email" type="email" aria-describedby="email-help" required />
 <div id="email-help">We'll never share your email address</div>
 ```
 
 #### Error States
+
 ```html
 <!-- ✅ Accessible error handling -->
 <label for="password">Password</label>
-<input 
-  id="password" 
-  type="password" 
+<input
+  id="password"
+  type="password"
   aria-invalid="true"
   aria-describedby="password-error"
-  required 
+  required
 />
 <div id="password-error" role="alert">
   Password must be at least 8 characters long
@@ -108,10 +116,11 @@ Our platform adheres to the Web Content Accessibility Guidelines (WCAG) 2.2 Leve
 ```
 
 #### Required Fields
+
 ```html
 <!-- ✅ Clear required field indication -->
 <label for="name">
-  Full Name 
+  Full Name
   <abbr title="required" aria-label="required">*</abbr>
 </label>
 <input id="name" type="text" required aria-required="true" />
@@ -120,6 +129,7 @@ Our platform adheres to the Web Content Accessibility Guidelines (WCAG) 2.2 Leve
 ### Interactive Elements
 
 #### Buttons
+
 ```html
 <!-- ✅ Descriptive button text -->
 <button type="button" aria-label="Close dialog">
@@ -128,34 +138,30 @@ Our platform adheres to the Web Content Accessibility Guidelines (WCAG) 2.2 Leve
 </button>
 
 <!-- ✅ Toggle buttons -->
-<button 
-  aria-pressed="false" 
+<button
+  aria-pressed="false"
   aria-label="Toggle dark mode"
-  onClick={toggleTheme}
+  onClick="{toggleTheme}"
 >
   Theme Toggle
 </button>
 ```
 
 #### Links
+
 ```html
 <!-- ✅ Descriptive link text -->
-<a href="/documents/bill-of-sale">
-  Create a Bill of Sale document
-</a>
+<a href="/documents/bill-of-sale"> Create a Bill of Sale document </a>
 
 <!-- ❌ Avoid generic link text -->
 <a href="/documents/bill-of-sale">Click here</a>
 ```
 
 #### Dropdowns and Menus
+
 ```html
 <!-- ✅ Proper dropdown implementation -->
-<button 
-  aria-expanded="false" 
-  aria-haspopup="true"
-  aria-controls="menu-items"
->
+<button aria-expanded="false" aria-haspopup="true" aria-controls="menu-items">
   Document Types
 </button>
 <ul id="menu-items" role="menu">
@@ -168,6 +174,7 @@ Our platform adheres to the Web Content Accessibility Guidelines (WCAG) 2.2 Leve
 ### Focus Management
 
 #### Focus Indicators
+
 ```css
 /* ✅ Visible focus indicators */
 .focus-visible:focus {
@@ -181,11 +188,10 @@ button:focus-visible {
 ```
 
 #### Skip Links
+
 ```html
 <!-- ✅ Skip to main content -->
-<a href="#main-content" className="skip-link">
-  Skip to main content
-</a>
+<a href="#main-content" className="skip-link"> Skip to main content </a>
 <main id="main-content">
   <!-- Main content -->
 </main>
@@ -194,31 +200,27 @@ button:focus-visible {
 ### ARIA Patterns
 
 #### Live Regions
+
 ```html
 <!-- ✅ Status updates -->
-<div aria-live="polite" id="status">
-  Document saved successfully
-</div>
+<div aria-live="polite" id="status">Document saved successfully</div>
 
 <!-- ✅ Error announcements -->
-<div aria-live="assertive" role="alert">
-  Please correct the errors below
-</div>
+<div aria-live="assertive" role="alert">Please correct the errors below</div>
 ```
 
 #### Modal Dialogs
+
 ```html
 <!-- ✅ Accessible modal -->
-<div 
-  role="dialog" 
+<div
+  role="dialog"
   aria-labelledby="modal-title"
   aria-describedby="modal-description"
   aria-modal="true"
 >
   <h2 id="modal-title">Confirm Document Deletion</h2>
-  <p id="modal-description">
-    This action cannot be undone. Are you sure?
-  </p>
+  <p id="modal-description">This action cannot be undone. Are you sure?</p>
   <button type="button">Cancel</button>
   <button type="button">Delete</button>
 </div>
@@ -227,11 +229,12 @@ button:focus-visible {
 ## Dark Mode Accessibility
 
 ### Theme Implementation
+
 ```tsx
 // ✅ Accessible theme toggle
 export function ThemeToggleButton() {
-  const { theme, setTheme } = useTheme()
-  const isDark = theme === 'dark'
+  const { theme, setTheme } = useTheme();
+  const isDark = theme === 'dark';
 
   return (
     <button
@@ -240,11 +243,12 @@ export function ThemeToggleButton() {
     >
       {isDark ? <Sun /> : <Moon />}
     </button>
-  )
+  );
 }
 ```
 
 ### Color Contrast in Dark Mode
+
 - Ensure 4.5:1 contrast ratio for text in both light and dark themes
 - Test all interactive elements in both modes
 - Provide high contrast mode support when possible
@@ -254,16 +258,19 @@ export function ThemeToggleButton() {
 ### Automated Testing Tools
 
 #### 1. axe-core (Playwright)
+
 ```bash
 npm run accessibility:e2e
 ```
 
 #### 2. jest-axe (Component Testing)
+
 ```bash
 npm run accessibility:test
 ```
 
 #### 3. pa11y (CLI Auditing)
+
 ```bash
 npm run accessibility:audit
 ```
@@ -271,6 +278,7 @@ npm run accessibility:audit
 ### Manual Testing Checklist
 
 #### Keyboard Navigation
+
 - [ ] Tab through all interactive elements
 - [ ] Use arrow keys for menus and dropdowns
 - [ ] Press Escape to close modals/menus
@@ -278,6 +286,7 @@ npm run accessibility:audit
 - [ ] Navigate forms with Tab and Shift+Tab
 
 #### Screen Reader Testing
+
 - [ ] Test with NVDA (Windows) or VoiceOver (Mac)
 - [ ] Verify all content is announced
 - [ ] Check heading navigation
@@ -285,6 +294,7 @@ npm run accessibility:audit
 - [ ] Verify button and link purposes are clear
 
 #### Visual Testing
+
 - [ ] Zoom to 200% and verify readability
 - [ ] Test in high contrast mode
 - [ ] Verify focus indicators are visible
@@ -296,6 +306,7 @@ npm run accessibility:audit
 ### Component Development
 
 #### 1. Start with Semantic HTML
+
 ```tsx
 // ✅ Semantic foundation
 function DocumentCard({ document }) {
@@ -305,15 +316,16 @@ function DocumentCard({ document }) {
       <p>{document.description}</p>
       <a href={document.url}>Create document</a>
     </article>
-  )
+  );
 }
 ```
 
 #### 2. Add ARIA When Needed
+
 ```tsx
 // ✅ Enhanced with ARIA
 function DocumentCard({ document, onFavorite }) {
-  const [isFavorite, setIsFavorite] = useState(false)
+  const [isFavorite, setIsFavorite] = useState(false);
 
   return (
     <article>
@@ -328,47 +340,50 @@ function DocumentCard({ document, onFavorite }) {
       </button>
       <a href={document.url}>Create document</a>
     </article>
-  )
+  );
 }
 ```
 
 #### 3. Test Early and Often
+
 ```tsx
 // ✅ Include accessibility tests
-import { render } from '@testing-library/react'
-import { axe } from 'jest-axe'
+import { render } from '@testing-library/react';
+import { axe } from 'jest-axe';
 
 test('DocumentCard should be accessible', async () => {
-  const { container } = render(<DocumentCard document={mockDocument} />)
-  const results = await axe(container)
-  expect(results).toHaveNoViolations()
-})
+  const { container } = render(<DocumentCard document={mockDocument} />);
+  const results = await axe(container);
+  expect(results).toHaveNoViolations();
+});
 ```
 
 ### Form Development
 
 #### 1. Always Use Labels
+
 ```tsx
 function ContactForm() {
   return (
     <form>
       <label htmlFor="name">Full Name</label>
       <input id="name" type="text" required />
-      
+
       <label htmlFor="email">Email Address</label>
       <input id="email" type="email" required />
-      
+
       <button type="submit">Send Message</button>
     </form>
-  )
+  );
 }
 ```
 
 #### 2. Provide Clear Error Messages
+
 ```tsx
 function FormField({ label, error, ...props }) {
-  const fieldId = props.id || `field-${Math.random()}`
-  const errorId = error ? `${fieldId}-error` : undefined
+  const fieldId = props.id || `field-${Math.random()}`;
+  const errorId = error ? `${fieldId}-error` : undefined;
 
   return (
     <div>
@@ -385,13 +400,14 @@ function FormField({ label, error, ...props }) {
         </div>
       )}
     </div>
-  )
+  );
 }
 ```
 
 ## Common Accessibility Issues and Solutions
 
 ### Issue 1: Missing Form Labels
+
 ```html
 <!-- ❌ Problem -->
 <input type="email" placeholder="Email" />
@@ -402,6 +418,7 @@ function FormField({ label, error, ...props }) {
 ```
 
 ### Issue 2: Poor Color Contrast
+
 ```css
 /* ❌ Problem: Insufficient contrast */
 .text-light-gray {
@@ -415,6 +432,7 @@ function FormField({ label, error, ...props }) {
 ```
 
 ### Issue 3: Keyboard Traps
+
 ```tsx
 // ❌ Problem: Focus gets stuck
 function Modal() {
@@ -423,49 +441,57 @@ function Modal() {
       <input type="text" />
       <button>Close</button>
     </div>
-  )
+  );
 }
 
 // ✅ Solution: Proper focus management
 function Modal({ onClose }) {
-  const firstElementRef = useRef()
-  const lastElementRef = useRef()
+  const firstElementRef = useRef();
+  const lastElementRef = useRef();
 
   const handleKeyDown = (e) => {
     if (e.key === 'Tab') {
       if (e.shiftKey && document.activeElement === firstElementRef.current) {
-        e.preventDefault()
-        lastElementRef.current.focus()
-      } else if (!e.shiftKey && document.activeElement === lastElementRef.current) {
-        e.preventDefault()
-        firstElementRef.current.focus()
+        e.preventDefault();
+        lastElementRef.current.focus();
+      } else if (
+        !e.shiftKey &&
+        document.activeElement === lastElementRef.current
+      ) {
+        e.preventDefault();
+        firstElementRef.current.focus();
       }
     }
-  }
+  };
 
   return (
     <div role="dialog" onKeyDown={handleKeyDown}>
       <input ref={firstElementRef} type="text" />
-      <button ref={lastElementRef} onClick={onClose}>Close</button>
+      <button ref={lastElementRef} onClick={onClose}>
+        Close
+      </button>
     </div>
-  )
+  );
 }
 ```
 
 ## Resources and Tools
 
 ### Testing Tools
+
 - **axe DevTools**: Browser extension for manual testing
 - **WAVE**: Web accessibility evaluation tool
 - **Lighthouse**: Built-in Chrome accessibility audit
 - **Color Contrast Analyzers**: Various browser extensions
 
 ### Screen Readers
+
 - **NVDA** (Windows): Free, widely used
 - **VoiceOver** (Mac): Built into macOS
 - **JAWS** (Windows): Professional screen reader
 
 ### Documentation
+
 - [WCAG 2.2 Guidelines](https://www.w3.org/WAI/WCAG22/quickref/)
 - [ARIA Authoring Practices Guide](https://www.w3.org/WAI/ARIA/apg/)
 - [MDN Accessibility Documentation](https://developer.mozilla.org/en-US/docs/Web/Accessibility)
@@ -473,6 +499,7 @@ function Modal({ onClose }) {
 ## Compliance Checklist
 
 ### Before Each Release
+
 - [ ] Run automated accessibility tests (`npm run accessibility:full`)
 - [ ] Test keyboard navigation on new features
 - [ ] Verify color contrast ratios
@@ -483,6 +510,7 @@ function Modal({ onClose }) {
 - [ ] Verify semantic HTML structure
 
 ### Ongoing Monitoring
+
 - [ ] Monthly accessibility audits using pa11y
 - [ ] Quarterly manual testing with assistive technologies
 - [ ] Annual accessibility review with external audit
@@ -491,6 +519,7 @@ function Modal({ onClose }) {
 ## Contact and Support
 
 For accessibility questions or to report accessibility issues:
+
 - **Developer Team**: Include accessibility tests in all PRs
 - **QA Team**: Include accessibility in testing protocols
 - **Legal/Compliance**: Regular accessibility compliance reviews

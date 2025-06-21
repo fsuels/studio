@@ -31,7 +31,7 @@ interface StateContentPage {
     competitorAnalysis: string[];
   };
   structuredData: any;
-  faq: Array<{question: string; answer: string}>;
+  faq: Array<{ question: string; answer: string }>;
 }
 
 export class StateContentOptimizer {
@@ -40,38 +40,49 @@ export class StateContentOptimizer {
       code: 'CA',
       name: 'California',
       population: 39538223,
-      majorCities: ['Los Angeles', 'San Francisco', 'San Diego', 'Sacramento', 'San Jose'],
+      majorCities: [
+        'Los Angeles',
+        'San Francisco',
+        'San Diego',
+        'Sacramento',
+        'San Jose',
+      ],
       businessFriendlyRank: 32,
       commonLegalIssues: [
         'Employment law compliance',
         'Environmental regulations',
         'Consumer protection',
-        'Real estate disclosure requirements'
+        'Real estate disclosure requirements',
       ],
       uniqueLaws: [
         'California Consumer Privacy Act (CCPA)',
         'Strict employment laws (meal breaks, overtime)',
         'Prop 65 chemical disclosure requirements',
-        'Strong tenant protection laws'
+        'Strong tenant protection laws',
       ],
       regulatoryBodies: [
         'California Department of Business Oversight',
         'California Public Utilities Commission',
-        'California Environmental Protection Agency'
+        'California Environmental Protection Agency',
       ],
-      economicDrivers: ['Technology', 'Entertainment', 'Agriculture', 'Tourism'],
+      economicDrivers: [
+        'Technology',
+        'Entertainment',
+        'Agriculture',
+        'Tourism',
+      ],
       seoKeywords: [
         'california legal documents',
         'ca business contracts',
         'california employment law',
-        'los angeles legal forms'
+        'los angeles legal forms',
       ],
       searchVolume: {
         'employment-contract': 8900,
-        'nda': 12100,
+        nda: 12100,
         'lease-agreement': 15600,
-        'llc-operating-agreement': 7200
-      }
+        'llc-operating-agreement': 7200,
+      },
     },
     {
       code: 'TX',
@@ -83,125 +94,142 @@ export class StateContentOptimizer {
         'Oil and gas rights',
         'Construction contracts',
         'Business formation',
-        'Employment at-will considerations'
+        'Employment at-will considerations',
       ],
       uniqueLaws: [
         'Texas Business Organizations Code',
         'Strong property rights protections',
         'Limited non-compete enforceability',
-        'Homestead exemption laws'
+        'Homestead exemption laws',
       ],
       regulatoryBodies: [
         'Texas Secretary of State',
         'Texas Workforce Commission',
-        'Texas Department of Banking'
+        'Texas Department of Banking',
       ],
       economicDrivers: ['Energy', 'Technology', 'Aerospace', 'Agriculture'],
       seoKeywords: [
         'texas legal documents',
         'tx business formation',
         'houston contracts',
-        'dallas legal forms'
+        'dallas legal forms',
       ],
       searchVolume: {
         'employment-contract': 6700,
         'llc-operating-agreement': 9800,
         'service-agreement': 5400,
-        'lease-agreement': 11200
-      }
+        'lease-agreement': 11200,
+      },
     },
     {
       code: 'NY',
       name: 'New York',
       population: 19453561,
-      majorCities: ['New York City', 'Buffalo', 'Albany', 'Syracuse', 'Rochester'],
+      majorCities: [
+        'New York City',
+        'Buffalo',
+        'Albany',
+        'Syracuse',
+        'Rochester',
+      ],
       businessFriendlyRank: 45,
       commonLegalIssues: [
         'Complex employment regulations',
         'Real estate law compliance',
         'Financial services regulations',
-        'Licensing requirements'
+        'Licensing requirements',
       ],
       uniqueLaws: [
         'New York SHIELD Act (data protection)',
         'Complex rent control and stabilization laws',
         'Strict wage and hour laws',
-        'Martin Act (securities regulations)'
+        'Martin Act (securities regulations)',
       ],
       regulatoryBodies: [
         'New York Department of Financial Services',
         'New York State Department of Labor',
-        'New York State Division of Housing'
+        'New York State Division of Housing',
       ],
       economicDrivers: ['Finance', 'Real Estate', 'Media', 'Technology'],
       seoKeywords: [
         'new york legal documents',
         'nyc business contracts',
         'new york employment law',
-        'manhattan legal forms'
+        'manhattan legal forms',
       ],
       searchVolume: {
         'lease-agreement': 18900,
         'employment-contract': 7800,
-        'nda': 9600,
-        'service-agreement': 4300
-      }
+        nda: 9600,
+        'service-agreement': 4300,
+      },
     },
     {
       code: 'FL',
       name: 'Florida',
       population: 21538187,
-      majorCities: ['Miami', 'Tampa', 'Orlando', 'Jacksonville', 'Fort Lauderdale'],
+      majorCities: [
+        'Miami',
+        'Tampa',
+        'Orlando',
+        'Jacksonville',
+        'Fort Lauderdale',
+      ],
       businessFriendlyRank: 7,
       commonLegalIssues: [
         'Tourism and hospitality law',
         'Real estate transactions',
         'International business considerations',
-        'Hurricane and disaster planning'
+        'Hurricane and disaster planning',
       ],
       uniqueLaws: [
         'Florida Homestead Act protections',
         'No state income tax',
         'Sunshine Law (public records)',
-        'Strong asset protection laws'
+        'Strong asset protection laws',
       ],
       regulatoryBodies: [
         'Florida Department of Business and Professional Regulation',
         'Florida Division of Corporations',
-        'Florida Real Estate Commission'
+        'Florida Real Estate Commission',
       ],
-      economicDrivers: ['Tourism', 'Agriculture', 'Aerospace', 'International Trade'],
+      economicDrivers: [
+        'Tourism',
+        'Agriculture',
+        'Aerospace',
+        'International Trade',
+      ],
       seoKeywords: [
         'florida legal documents',
         'miami business contracts',
         'florida real estate forms',
-        'orlando legal documents'
+        'orlando legal documents',
       ],
       searchVolume: {
         'lease-agreement': 9800,
         'llc-operating-agreement': 6700,
         'employment-contract': 4900,
-        'service-agreement': 3800
-      }
-    }
+        'service-agreement': 3800,
+      },
+    },
   ];
 
   // Generate SEO-optimized state pages for all document types
   generateStateContentPages(): StateContentPage[] {
     const pages: StateContentPage[] = [];
-    
+
     const documentTypes = [
       'employment-contract',
-      'llc-operating-agreement', 
+      'llc-operating-agreement',
       'lease-agreement',
       'nda',
       'service-agreement',
       'independent-contractor-agreement',
-      'partnership-agreement'
+      'partnership-agreement',
     ];
 
-    this.states.forEach(state => {
-      documentTypes.forEach(docType => {
+    this.states.forEach((state) => {
+      documentTypes.forEach((docType) => {
         const page = this.generateStatePage(state, docType);
         pages.push(page);
       });
@@ -211,10 +239,13 @@ export class StateContentOptimizer {
     return pages;
   }
 
-  private generateStatePage(state: StateProfile, documentType: string): StateContentPage {
+  private generateStatePage(
+    state: StateProfile,
+    documentType: string,
+  ): StateContentPage {
     const docInfo = this.getDocumentInfo(documentType);
     const primaryCity = state.majorCities[0];
-    
+
     return {
       documentType,
       state: state.code,
@@ -229,27 +260,29 @@ export class StateContentOptimizer {
           `${state.name.toLowerCase()} ${docInfo.name.toLowerCase()}`,
           `${primaryCity.toLowerCase()} legal documents`,
           `${state.code.toLowerCase()} business forms`,
-          ...state.majorCities.map(city => `${city.toLowerCase()} ${documentType.replace('-', ' ')}`)
+          ...state.majorCities.map(
+            (city) => `${city.toLowerCase()} ${documentType.replace('-', ' ')}`,
+          ),
         ],
         competitorAnalysis: [
           'legalzoom alternatives',
           'rocket lawyer competitors',
-          'nolo legal forms'
-        ]
+          'nolo legal forms',
+        ],
       },
       structuredData: this.generateStructuredData(state, documentType, docInfo),
-      faq: this.generateStateSpecificFAQ(state, documentType, docInfo)
+      faq: this.generateStateSpecificFAQ(state, documentType, docInfo),
     };
   }
 
   private generateStateSpecificContent(
-    state: StateProfile, 
-    documentType: string, 
-    docInfo: any
+    state: StateProfile,
+    documentType: string,
+    docInfo: any,
   ): string {
     const primaryCity = state.majorCities[0];
     const searchVolume = state.searchVolume[documentType] || 1000;
-    
+
     return `
 # ${docInfo.name} for ${state.name} - Legal Requirements & Templates
 
@@ -260,10 +293,10 @@ ${state.name} has specific legal requirements that make generic templates risky.
 ## ${state.name}-Specific Legal Requirements
 
 ### Key Compliance Areas:
-${state.uniqueLaws.map(law => `- **${law}**: Critical for ${state.name} businesses`).join('\n')}
+${state.uniqueLaws.map((law) => `- **${law}**: Critical for ${state.name} businesses`).join('\n')}
 
 ### Common Legal Issues in ${state.name}:
-${state.commonLegalIssues.map(issue => `- ${issue}`).join('\n')}
+${state.commonLegalIssues.map((issue) => `- ${issue}`).join('\n')}
 
 ## ${docInfo.name} Requirements in ${state.name}
 
@@ -278,22 +311,24 @@ Our ${state.name} ${docInfo.name.toLowerCase()} templates include:
 
 Our ${docInfo.name.toLowerCase()} templates are widely used across ${state.name}:
 
-${state.majorCities.map((city, index) => {
-  const usage = Math.round(searchVolume * (1 - index * 0.15));
-  return `- **${city}**: ${usage}+ businesses served`;
-}).join('\n')}
+${state.majorCities
+  .map((city, index) => {
+    const usage = Math.round(searchVolume * (1 - index * 0.15));
+    return `- **${city}**: ${usage}+ businesses served`;
+  })
+  .join('\n')}
 
 ## ${state.name} Business Environment
 
 ${state.name} ranks #${state.businessFriendlyRank} for business friendliness, with strong economic drivers in ${state.economicDrivers.join(', ')}. Our documents help you navigate ${state.name}'s business landscape efficiently.
 
 ### Economic Focus Areas:
-${state.economicDrivers.map(driver => `- **${driver}**: Major ${state.name} industry requiring specialized contracts`).join('\n')}
+${state.economicDrivers.map((driver) => `- **${driver}**: Major ${state.name} industry requiring specialized contracts`).join('\n')}
 
 ## Regulatory Oversight in ${state.name}
 
 Key regulatory bodies overseeing business documents:
-${state.regulatoryBodies.map(body => `- ${body}`).join('\n')}
+${state.regulatoryBodies.map((body) => `- ${body}`).join('\n')}
 
 ## Get Started with Your ${state.name} ${docInfo.name}
 
@@ -314,109 +349,118 @@ ${state.regulatoryBodies.map(body => `- ${body}`).join('\n')}
     `;
   }
 
-  private generateStructuredData(state: StateProfile, documentType: string, docInfo: any) {
+  private generateStructuredData(
+    state: StateProfile,
+    documentType: string,
+    docInfo: any,
+  ) {
     return {
-      "@context": "https://schema.org",
-      "@type": "Service",
-      "name": `${docInfo.name} - ${state.name}`,
-      "description": `Professional ${docInfo.name.toLowerCase()} templates compliant with ${state.name} state law`,
-      "provider": {
-        "@type": "Organization",
-        "name": "123LegalDoc",
-        "url": "https://123legaldoc.com"
+      '@context': 'https://schema.org',
+      '@type': 'Service',
+      name: `${docInfo.name} - ${state.name}`,
+      description: `Professional ${docInfo.name.toLowerCase()} templates compliant with ${state.name} state law`,
+      provider: {
+        '@type': 'Organization',
+        name: '123LegalDoc',
+        url: 'https://123legaldoc.com',
       },
-      "areaServed": {
-        "@type": "State",
-        "name": state.name
+      areaServed: {
+        '@type': 'State',
+        name: state.name,
       },
-      "offers": {
-        "@type": "Offer",
-        "price": "29.00",
-        "priceCurrency": "USD"
+      offers: {
+        '@type': 'Offer',
+        price: '29.00',
+        priceCurrency: 'USD',
       },
-      "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "4.8",
-        "reviewCount": Math.round(state.searchVolume[documentType] * 0.15) || 150
-      }
+      aggregateRating: {
+        '@type': 'AggregateRating',
+        ratingValue: '4.8',
+        reviewCount: Math.round(state.searchVolume[documentType] * 0.15) || 150,
+      },
     };
   }
 
   private generateStateSpecificFAQ(
-    state: StateProfile, 
-    documentType: string, 
-    docInfo: any
-  ): Array<{question: string; answer: string}> {
+    state: StateProfile,
+    documentType: string,
+    docInfo: any,
+  ): Array<{ question: string; answer: string }> {
     const primaryCity = state.majorCities[0];
-    
+
     return [
       {
         question: `Is this ${docInfo.name} valid in ${state.name}?`,
-        answer: `Yes, our ${docInfo.name.toLowerCase()} templates are specifically designed for ${state.name} and comply with all state requirements including ${state.uniqueLaws[0]}. They're valid in ${primaryCity}, ${state.majorCities[1]}, and throughout ${state.name}.`
+        answer: `Yes, our ${docInfo.name.toLowerCase()} templates are specifically designed for ${state.name} and comply with all state requirements including ${state.uniqueLaws[0]}. They're valid in ${primaryCity}, ${state.majorCities[1]}, and throughout ${state.name}.`,
       },
       {
         question: `What makes ${state.name} ${docInfo.name.toLowerCase()}s different?`,
-        answer: `${state.name} has specific requirements including ${state.uniqueLaws[0]} and oversight by ${state.regulatoryBodies[0]}. Our templates include all necessary ${state.name}-specific clauses and disclosures.`
+        answer: `${state.name} has specific requirements including ${state.uniqueLaws[0]} and oversight by ${state.regulatoryBodies[0]}. Our templates include all necessary ${state.name}-specific clauses and disclosures.`,
       },
       {
         question: `How much does a ${docInfo.name} cost in ${state.name}?`,
-        answer: `Our ${state.name} ${docInfo.name.toLowerCase()} costs $29, compared to $800-2000+ for attorney-drafted documents in ${primaryCity}. You get the same legal protection at a fraction of the cost.`
+        answer: `Our ${state.name} ${docInfo.name.toLowerCase()} costs $29, compared to $800-2000+ for attorney-drafted documents in ${primaryCity}. You get the same legal protection at a fraction of the cost.`,
       },
       {
         question: `Can I use this ${docInfo.name} in ${primaryCity}?`,
-        answer: `Absolutely! Our ${docInfo.name.toLowerCase()} is valid throughout ${state.name}, including ${primaryCity}, ${state.majorCities[1]}, and all other cities. It includes ${primaryCity}-specific business considerations where applicable.`
+        answer: `Absolutely! Our ${docInfo.name.toLowerCase()} is valid throughout ${state.name}, including ${primaryCity}, ${state.majorCities[1]}, and all other cities. It includes ${primaryCity}-specific business considerations where applicable.`,
       },
       {
         question: `What ${state.name} laws affect this ${docInfo.name}?`,
-        answer: `Key ${state.name} laws include ${state.uniqueLaws.slice(0, 2).join(' and ')}. Our template automatically incorporates all relevant ${state.name} legal requirements and is regularly updated for compliance.`
-      }
+        answer: `Key ${state.name} laws include ${state.uniqueLaws.slice(0, 2).join(' and ')}. Our template automatically incorporates all relevant ${state.name} legal requirements and is regularly updated for compliance.`,
+      },
     ];
   }
 
   private getDocumentInfo(documentType: string) {
-    const documentMap: Record<string, {name: string; category: string; description: string}> = {
+    const documentMap: Record<
+      string,
+      { name: string; category: string; description: string }
+    > = {
       'employment-contract': {
         name: 'Employment Contract',
         category: 'Employment',
-        description: 'Comprehensive employment agreement'
+        description: 'Comprehensive employment agreement',
       },
       'llc-operating-agreement': {
         name: 'LLC Operating Agreement',
         category: 'Business',
-        description: 'Limited liability company operating agreement'
+        description: 'Limited liability company operating agreement',
       },
       'lease-agreement': {
         name: 'Lease Agreement',
         category: 'Real Estate',
-        description: 'Residential or commercial lease agreement'
+        description: 'Residential or commercial lease agreement',
       },
-      'nda': {
+      nda: {
         name: 'Non-Disclosure Agreement',
         category: 'Business',
-        description: 'Confidentiality and non-disclosure agreement'
+        description: 'Confidentiality and non-disclosure agreement',
       },
       'service-agreement': {
         name: 'Service Agreement',
         category: 'Business',
-        description: 'Professional services agreement'
+        description: 'Professional services agreement',
       },
       'independent-contractor-agreement': {
         name: 'Independent Contractor Agreement',
         category: 'Business',
-        description: 'Agreement for independent contractor services'
+        description: 'Agreement for independent contractor services',
       },
       'partnership-agreement': {
         name: 'Partnership Agreement',
         category: 'Business',
-        description: 'Business partnership agreement'
-      }
+        description: 'Business partnership agreement',
+      },
     };
 
-    return documentMap[documentType] || {
-      name: 'Legal Document',
-      category: 'General',
-      description: 'Professional legal document'
-    };
+    return (
+      documentMap[documentType] || {
+        name: 'Legal Document',
+        category: 'General',
+        description: 'Professional legal document',
+      }
+    );
   }
 
   // Generate city-specific landing pages for major metropolitan areas
@@ -430,8 +474,9 @@ ${state.regulatoryBodies.map(body => `- ${body}`).join('\n')}
   }> {
     const cityPages: any[] = [];
 
-    this.states.forEach(state => {
-      state.majorCities.slice(0, 2).forEach(city => { // Top 2 cities per state
+    this.states.forEach((state) => {
+      state.majorCities.slice(0, 2).forEach((city) => {
+        // Top 2 cities per state
         cityPages.push({
           city,
           state: state.name,
@@ -442,8 +487,8 @@ ${state.regulatoryBodies.map(body => `- ${body}`).join('\n')}
             `${city.toLowerCase()} legal documents`,
             `${city.toLowerCase()} business contracts`,
             `legal forms ${city.toLowerCase()}`,
-            `${city.toLowerCase()} attorney alternative`
-          ]
+            `${city.toLowerCase()} attorney alternative`,
+          ],
         });
       });
     });
@@ -453,7 +498,7 @@ ${state.regulatoryBodies.map(body => `- ${body}`).join('\n')}
 
   private generateCityContent(city: string, state: StateProfile): string {
     const businessCount = Math.round(state.population * 0.08); // Estimate businesses
-    
+
     return `
 # Professional Legal Documents in ${city}, ${state.name}
 
@@ -496,9 +541,9 @@ Based on ${city} business activity, the most requested documents include:
     const statePages = this.states.length * 7; // 50 states * 7 document types
     const cityPages = this.states.length * 2; // 50 states * 2 major cities
     const industryPages = 6 * 7; // 6 industries * 7 document types
-    
+
     const totalPages = statePages + cityPages + industryPages;
-    
+
     // Calculate estimated monthly organic traffic
     const averageSearchVolume = 5000;
     const estimatedCTR = 0.05; // 5% click-through rate
@@ -508,13 +553,13 @@ Based on ${city} business activity, the most requested documents include:
       totalPages,
       estimatedTraffic: Math.round(estimatedTraffic),
       keywordCoverage: totalPages * 10, // ~10 keywords per page
-      competitiveAdvantage: `${totalPages}x more content than major competitors`
+      competitiveAdvantage: `${totalPages}x more content than major competitors`,
     };
   }
 
   // Get state profile by code
   getStateProfile(stateCode: string): StateProfile | undefined {
-    return this.states.find(state => state.code === stateCode);
+    return this.states.find((state) => state.code === stateCode);
   }
 
   // Get all states for sitemap generation

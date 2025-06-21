@@ -77,11 +77,11 @@ export class CollaborationClient {
   constructor(
     documentId: string,
     currentUser: CollaborationUser,
-    authToken: string
+    authToken: string,
   ) {
     this.documentId = documentId;
     this.currentUser = currentUser;
-    
+
     // Initialize Yjs document
     this.ydoc = new Y.Doc();
     this.ytext = this.ydoc.getText('content');
@@ -90,17 +90,13 @@ export class CollaborationClient {
     this.ypresence = this.ydoc.getMap('presence');
 
     // Connect to collaboration server
-    const wsUrl = process.env.NEXT_PUBLIC_COLLABORATION_WS_URL || 'ws://localhost:3001';
-    this.provider = new WebsocketProvider(
-      wsUrl,
-      documentId,
-      this.ydoc,
-      {
-        params: {
-          token: authToken,
-        },
-      }
-    );
+    const wsUrl =
+      process.env.NEXT_PUBLIC_COLLABORATION_WS_URL || 'ws://localhost:3001';
+    this.provider = new WebsocketProvider(wsUrl, documentId, this.ydoc, {
+      params: {
+        token: authToken,
+      },
+    });
 
     this.setupEventListeners();
     this.startPresenceHeartbeat();
@@ -151,7 +147,7 @@ export class CollaborationClient {
   private handleCustomMessage(message: any): void {
     try {
       const data = JSON.parse(message);
-      
+
       switch (data.type) {
         case 'cursor_moved':
           this.emit('cursor_moved', data);
@@ -185,7 +181,7 @@ export class CollaborationClient {
       this.ytext,
       editor.getModel()!,
       new Set([editor]),
-      this.provider.awareness
+      this.provider.awareness,
     );
 
     // Set user info for awareness
@@ -279,8 +275,8 @@ export class CollaborationClient {
 
   public resolveComment(commentId: string): void {
     const comments = this.ycomments.toArray();
-    const commentIndex = comments.findIndex(c => c.id === commentId);
-    
+    const commentIndex = comments.findIndex((c) => c.id === commentId);
+
     if (commentIndex !== -1) {
       const comment = { ...comments[commentIndex], resolved: true };
       this.ycomments.delete(commentIndex, 1);
@@ -290,8 +286,8 @@ export class CollaborationClient {
 
   public addReplyToComment(commentId: string, content: string): void {
     const comments = this.ycomments.toArray();
-    const commentIndex = comments.findIndex(c => c.id === commentId);
-    
+    const commentIndex = comments.findIndex((c) => c.id === commentId);
+
     if (commentIndex !== -1) {
       const comment = comments[commentIndex];
       const reply: Comment = {
@@ -314,7 +310,11 @@ export class CollaborationClient {
     }
   }
 
-  public createMention(userId: string, content: string, position: CursorPosition): void {
+  public createMention(
+    userId: string,
+    content: string,
+    position: CursorPosition,
+  ): void {
     const mention: Mention = {
       id: this.generateId(),
       fromUserId: this.currentUser.id,
@@ -342,7 +342,7 @@ export class CollaborationClient {
   public getPresence(): PresenceInfo[] {
     const awareness = this.provider.awareness;
     const states = Array.from(awareness.getStates().entries());
-    
+
     return states
       .filter(([clientId]) => clientId !== awareness.clientID)
       .map(([clientId, state]) => ({
@@ -351,7 +351,7 @@ export class CollaborationClient {
         lastSeen: Date.now(),
         status: 'online' as const,
       }))
-      .filter(info => info.user);
+      .filter((info) => info.user);
   }
 
   public getMetadata(): any {
@@ -402,7 +402,7 @@ export class CollaborationClient {
   private emit(event: string, data?: any): void {
     const callbacks = this.callbacks.get(event);
     if (callbacks) {
-      callbacks.forEach(callback => callback(data));
+      callbacks.forEach((callback) => callback(data));
     }
   }
 
@@ -414,7 +414,7 @@ export class CollaborationClient {
     if (this.presenceInterval) {
       clearInterval(this.presenceInterval);
     }
-    
+
     if (this.cursorUpdateTimeout) {
       clearTimeout(this.cursorUpdateTimeout);
     }

@@ -24,12 +24,14 @@ export const employeeNonDisclosureAgreementMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Employee Non-Disclosure Agreement',
-      description: 'Employee-specific confidentiality and non-disclosure agreement',
+      description:
+        'Employee-specific confidentiality and non-disclosure agreement',
       aliases: [],
     },
     es: {
       name: 'Employee Non-Disclosure Agreement',
-      description: 'Employee-specific confidentiality and non-disclosure agreement',
+      description:
+        'Employee-specific confidentiality and non-disclosure agreement',
       aliases: [],
     },
   },

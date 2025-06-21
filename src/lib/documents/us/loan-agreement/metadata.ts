@@ -23,21 +23,23 @@ export const loanAgreementMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Loan Agreement',
-      description: 'Create a legally binding loan agreement with our easy-to-use template. State-specific requirements included.',
+      description:
+        'Create a legally binding loan agreement with our easy-to-use template. State-specific requirements included.',
       aliases: [
         'loan contract',
         'personal loan',
         'lending agreement',
-        'borrowing contract'
+        'borrowing contract',
       ],
     },
     es: {
       name: 'Acuerdo de Préstamo',
-      description: 'Crea un acuerdo de préstamo legalmente válido con nuestra plantilla fácil de usar. Incluye requisitos específicos del estado.',
+      description:
+        'Crea un acuerdo de préstamo legalmente válido con nuestra plantilla fácil de usar. Incluye requisitos específicos del estado.',
       aliases: [
         'contrato de préstamo',
         'préstamo personal',
-        'acuerdo de préstamo'
+        'acuerdo de préstamo',
       ],
     },
   },

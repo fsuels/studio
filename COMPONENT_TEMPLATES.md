@@ -14,10 +14,10 @@ interface ComponentNameProps {
   children?: React.ReactNode;
 }
 
-export default function ComponentName({ 
-  className, 
+export default function ComponentName({
+  className,
   children,
-  ...props 
+  ...props
 }: ComponentNameProps) {
   return (
     <div className={cn('component-name', className)} {...props}>
@@ -57,10 +57,10 @@ interface FormComponentNameProps {
   className?: string;
 }
 
-export default function FormComponentName({ 
-  onSubmit, 
+export default function FormComponentName({
+  onSubmit,
   defaultValues,
-  className 
+  className
 }: FormComponentNameProps) {
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -229,6 +229,7 @@ export const documentNameQuestions: Question[] = [
 ## Component File Organization
 
 ### Directory Structure
+
 ```
 src/components/[category]/ComponentName/
 ├── index.tsx              # Main component
@@ -240,6 +241,7 @@ src/components/[category]/ComponentName/
 ```
 
 ### Barrel Export Pattern
+
 ```typescript
 // src/components/[category]/index.ts
 export { default as ComponentName } from './ComponentName';

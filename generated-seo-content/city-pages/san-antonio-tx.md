@@ -30,7 +30,7 @@ San Antonio offers a dynamic business environment with opportunities across indu
 
 [Start Your San Antonio Legal Document]
 
-*Trusted by hundreds of San Antonio businesses*
+_Trusted by hundreds of San Antonio businesses_
 
 ---
 

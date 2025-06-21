@@ -24,7 +24,8 @@ export const complaintLetterMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Complaint Letter',
-      description: 'Formal letter to address grievances with businesses or services.',
+      description:
+        'Formal letter to address grievances with businesses or services.',
       aliases: ['grievance letter', 'formal complaint', 'dispute letter'],
     },
     es: {

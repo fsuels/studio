@@ -43,17 +43,22 @@ class TaxonomyAnalytics {
       search_duration_ms: analytics.searchDuration,
       match_types: analytics.matchTypes,
       user_role: analytics.userRole,
-      has_results: analytics.resultsCount > 0
+      has_results: analytics.resultsCount > 0,
     });
   }
 
-  trackSearchResult(analytics: SearchAnalytics & { selectedResult: string; selectedPosition: number }): void {
+  trackSearchResult(
+    analytics: SearchAnalytics & {
+      selectedResult: string;
+      selectedPosition: number;
+    },
+  ): void {
     this.track('taxonomy_search_result_clicked', {
       query: analytics.query,
       selected_document: analytics.selectedResult,
       position: analytics.selectedPosition,
       total_results: analytics.resultsCount,
-      user_role: analytics.userRole
+      user_role: analytics.userRole,
     });
   }
 
@@ -64,43 +69,58 @@ class TaxonomyAnalytics {
       category_key: analytics.categoryKey,
       document_slug: analytics.documentSlug,
       source: analytics.source,
-      user_role: analytics.userRole
+      user_role: analytics.userRole,
     });
   }
 
   // Track role selection and changes
-  trackRoleSelection(previousRole: string | null, newRole: string | null): void {
+  trackRoleSelection(
+    previousRole: string | null,
+    newRole: string | null,
+  ): void {
     this.track('taxonomy_role_changed', {
       previous_role: previousRole,
       new_role: newRole,
-      is_first_selection: !previousRole
+      is_first_selection: !previousRole,
     });
   }
 
   // Track mega menu interactions
-  trackMegaMenuInteraction(action: 'open' | 'close' | 'situation_expand' | 'quick_access_click', details?: Record<string, any>): void {
+  trackMegaMenuInteraction(
+    action: 'open' | 'close' | 'situation_expand' | 'quick_access_click',
+    details?: Record<string, any>,
+  ): void {
     this.track('taxonomy_mega_menu', {
       action,
-      ...details
+      ...details,
     });
   }
 
   // Track document metadata loading performance
-  trackMetadataPerformance(slug: string, loadTime: number, fromCache: boolean, error?: boolean): void {
+  trackMetadataPerformance(
+    slug: string,
+    loadTime: number,
+    fromCache: boolean,
+    error?: boolean,
+  ): void {
     this.track('taxonomy_metadata_performance', {
       document_slug: slug,
       load_time_ms: loadTime,
       from_cache: fromCache,
-      error: error || false
+      error: error || false,
     });
   }
 
   // Track feature usage
-  trackFeatureUsage(feature: string, enabled: boolean, details?: Record<string, any>): void {
+  trackFeatureUsage(
+    feature: string,
+    enabled: boolean,
+    details?: Record<string, any>,
+  ): void {
     this.track('taxonomy_feature_usage', {
       feature,
       enabled,
-      ...details
+      ...details,
     });
   }
 
@@ -111,7 +131,7 @@ class TaxonomyAnalytics {
       properties,
       timestamp: Date.now(),
       sessionId: this.sessionId,
-      userId: this.userId
+      userId: this.userId,
     };
 
     this.events.push(taxonomyEvent);
@@ -130,7 +150,7 @@ class TaxonomyAnalytics {
         (window as any).gtag('event', event.event, {
           custom_parameter_sessionId: event.sessionId,
           custom_parameter_userId: event.userId,
-          ...event.properties
+          ...event.properties,
         });
       }
 
@@ -138,7 +158,7 @@ class TaxonomyAnalytics {
       await fetch('/api/analytics/taxonomy', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(event)
+        body: JSON.stringify(event),
       }).catch(() => {
         // Fail silently for analytics
       });
@@ -186,7 +206,7 @@ class TaxonomyAnalytics {
     return {
       sessionId: this.sessionId,
       eventsCount: this.events.length,
-      recentEvents: this.events.slice(-10)
+      recentEvents: this.events.slice(-10),
     };
   }
 
@@ -200,13 +220,21 @@ class TaxonomyAnalytics {
 export const taxonomyAnalytics = new TaxonomyAnalytics();
 
 // Convenience functions for common tracking
-export const trackSearch = (analytics: SearchAnalytics) => taxonomyAnalytics.trackSearch(analytics);
-export const trackSearchResult = (analytics: SearchAnalytics & { selectedResult: string; selectedPosition: number }) => 
-  taxonomyAnalytics.trackSearchResult(analytics);
-export const trackNavigation = (analytics: NavigationAnalytics) => taxonomyAnalytics.trackNavigation(analytics);
-export const trackRoleSelection = (prev: string | null, next: string | null) => 
+export const trackSearch = (analytics: SearchAnalytics) =>
+  taxonomyAnalytics.trackSearch(analytics);
+export const trackSearchResult = (
+  analytics: SearchAnalytics & {
+    selectedResult: string;
+    selectedPosition: number;
+  },
+) => taxonomyAnalytics.trackSearchResult(analytics);
+export const trackNavigation = (analytics: NavigationAnalytics) =>
+  taxonomyAnalytics.trackNavigation(analytics);
+export const trackRoleSelection = (prev: string | null, next: string | null) =>
   taxonomyAnalytics.trackRoleSelection(prev, next);
-export const trackMegaMenu = (action: 'open' | 'close' | 'situation_expand' | 'quick_access_click', details?: Record<string, any>) => 
-  taxonomyAnalytics.trackMegaMenuInteraction(action, details);
+export const trackMegaMenu = (
+  action: 'open' | 'close' | 'situation_expand' | 'quick_access_click',
+  details?: Record<string, any>,
+) => taxonomyAnalytics.trackMegaMenuInteraction(action, details);
 
 export default taxonomyAnalytics;

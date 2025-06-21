@@ -2,12 +2,18 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { 
+import {
   Activity,
   AlertTriangle,
   CheckCircle,
@@ -21,7 +27,7 @@ import {
   Server,
   Wifi,
   AlertCircle,
-  RefreshCw
+  RefreshCw,
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
@@ -85,12 +91,12 @@ export default function OperationalHealthPage() {
 
   useEffect(() => {
     fetchHealthData();
-    
+
     let interval: NodeJS.Timeout;
     if (autoRefresh) {
       interval = setInterval(fetchHealthData, 30000); // Refresh every 30 seconds
     }
-    
+
     return () => {
       if (interval) clearInterval(interval);
     };
@@ -107,7 +113,7 @@ export default function OperationalHealthPage() {
         toast({
           title: 'Access Denied',
           description: 'Admin privileges required to view operational health',
-          variant: 'destructive'
+          variant: 'destructive',
         });
       } else {
         throw new Error('Failed to fetch health data');
@@ -117,7 +123,7 @@ export default function OperationalHealthPage() {
       toast({
         title: 'Error',
         description: 'Failed to load operational health data',
-        variant: 'destructive'
+        variant: 'destructive',
       });
     } finally {
       setIsLoading(false);
@@ -129,13 +135,13 @@ export default function OperationalHealthPage() {
       const response = await fetch('/api/health/metrics', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'resolve_alert', alertId })
+        body: JSON.stringify({ action: 'resolve_alert', alertId }),
       });
 
       if (response.ok) {
         toast({
           title: 'Alert Resolved',
-          description: 'Alert has been marked as resolved'
+          description: 'Alert has been marked as resolved',
         });
         fetchHealthData(); // Refresh data
       } else {
@@ -145,7 +151,7 @@ export default function OperationalHealthPage() {
       toast({
         title: 'Error',
         description: 'Failed to resolve alert',
-        variant: 'destructive'
+        variant: 'destructive',
       });
     }
   };
@@ -155,13 +161,14 @@ export default function OperationalHealthPage() {
       const response = await fetch('/api/health/metrics', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'test_alert' })
+        body: JSON.stringify({ action: 'test_alert' }),
       });
 
       if (response.ok) {
         toast({
           title: 'Test Alert Triggered',
-          description: 'A test alert has been created to verify notification systems'
+          description:
+            'A test alert has been created to verify notification systems',
         });
         setTimeout(fetchHealthData, 2000); // Refresh after 2 seconds
       } else {
@@ -171,7 +178,7 @@ export default function OperationalHealthPage() {
       toast({
         title: 'Error',
         description: 'Failed to trigger test alert',
-        variant: 'destructive'
+        variant: 'destructive',
       });
     }
   };
@@ -255,7 +262,8 @@ export default function OperationalHealthPage() {
           <AlertCircle className="h-4 w-4" />
           <AlertTitle>Unable to Load Health Data</AlertTitle>
           <AlertDescription>
-            Failed to retrieve operational health metrics. Please check your permissions and try again.
+            Failed to retrieve operational health metrics. Please check your
+            permissions and try again.
           </AlertDescription>
         </Alert>
       </div>
@@ -270,14 +278,16 @@ export default function OperationalHealthPage() {
           <Activity className="h-6 w-6 text-blue-600" />
           <h1 className="text-3xl font-bold">Operational Health</h1>
         </div>
-        
+
         <div className="flex items-center space-x-2">
           <Button
             variant="outline"
             size="sm"
             onClick={() => setAutoRefresh(!autoRefresh)}
           >
-            <Wifi className={`h-4 w-4 mr-2 ${autoRefresh ? 'text-green-600' : 'text-gray-400'}`} />
+            <Wifi
+              className={`h-4 w-4 mr-2 ${autoRefresh ? 'text-green-600' : 'text-gray-400'}`}
+            />
             Auto Refresh
           </Button>
           <Button variant="outline" size="sm" onClick={testAlert}>
@@ -291,7 +301,9 @@ export default function OperationalHealthPage() {
       </div>
 
       {/* System Status Banner */}
-      <Card className={`border-l-4 ${getStatusColor(healthData.metrics.systemHealth.status)}`}>
+      <Card
+        className={`border-l-4 ${getStatusColor(healthData.metrics.systemHealth.status)}`}
+      >
         <CardContent className="flex items-center justify-between pt-6">
           <div className="flex items-center space-x-4">
             {getStatusIcon(healthData.metrics.systemHealth.status)}
@@ -304,9 +316,11 @@ export default function OperationalHealthPage() {
               </p>
             </div>
           </div>
-          
+
           <div className="text-right">
-            <div className="text-2xl font-bold">{healthData.metrics.systemHealth.uptime}%</div>
+            <div className="text-2xl font-bold">
+              {healthData.metrics.systemHealth.uptime}%
+            </div>
             <div className="text-sm text-muted-foreground">Uptime</div>
           </div>
         </CardContent>
@@ -368,7 +382,7 @@ export default function OperationalHealthPage() {
               </div>
             </div>
             <div className="mt-2 text-xs text-muted-foreground">
-              Success: {healthData.metrics.throughput.successfulRequests} | 
+              Success: {healthData.metrics.throughput.successfulRequests} |
               Failed: {healthData.metrics.throughput.failedRequests}
             </div>
           </CardContent>
@@ -387,8 +401,8 @@ export default function OperationalHealthPage() {
               </div>
             </div>
             <div className="mt-2 text-xs text-muted-foreground">
-              Max: {healthData.metrics.queueDepth.max} | 
-              Processing: {healthData.metrics.queueDepth.processing}
+              Max: {healthData.metrics.queueDepth.max} | Processing:{' '}
+              {healthData.metrics.queueDepth.processing}
             </div>
           </CardContent>
         </Card>
@@ -398,7 +412,7 @@ export default function OperationalHealthPage() {
         <TabsList>
           <TabsTrigger value="overview">Overview</TabsTrigger>
           <TabsTrigger value="alerts">
-            Alerts 
+            Alerts
             {healthData.summary.activeAlerts > 0 && (
               <Badge className="ml-2 bg-red-100 text-red-800">
                 {healthData.summary.activeAlerts}
@@ -418,19 +432,27 @@ export default function OperationalHealthPage() {
               <CardContent className="space-y-4">
                 <div className="flex justify-between items-center">
                   <span>P50 (Median)</span>
-                  <span className="font-semibold">{formatLatency(healthData.metrics.latency.p50)}</span>
+                  <span className="font-semibold">
+                    {formatLatency(healthData.metrics.latency.p50)}
+                  </span>
                 </div>
                 <div className="flex justify-between items-center">
                   <span>P95</span>
-                  <span className="font-semibold">{formatLatency(healthData.metrics.latency.p95)}</span>
+                  <span className="font-semibold">
+                    {formatLatency(healthData.metrics.latency.p95)}
+                  </span>
                 </div>
                 <div className="flex justify-between items-center">
                   <span>P99</span>
-                  <span className="font-semibold">{formatLatency(healthData.metrics.latency.p99)}</span>
+                  <span className="font-semibold">
+                    {formatLatency(healthData.metrics.latency.p99)}
+                  </span>
                 </div>
                 <div className="flex justify-between items-center">
                   <span>Average</span>
-                  <span className="font-semibold">{formatLatency(healthData.metrics.latency.avg)}</span>
+                  <span className="font-semibold">
+                    {formatLatency(healthData.metrics.latency.avg)}
+                  </span>
                 </div>
               </CardContent>
             </Card>
@@ -442,11 +464,15 @@ export default function OperationalHealthPage() {
               <CardContent className="space-y-4">
                 <div className="flex justify-between items-center">
                   <span>Health Score</span>
-                  <span className="font-semibold">{healthData.metrics.systemHealth.score}/100</span>
+                  <span className="font-semibold">
+                    {healthData.metrics.systemHealth.score}/100
+                  </span>
                 </div>
                 <div className="flex justify-between items-center">
                   <span>Uptime</span>
-                  <span className="font-semibold">{healthData.metrics.systemHealth.uptime}%</span>
+                  <span className="font-semibold">
+                    {healthData.metrics.systemHealth.uptime}%
+                  </span>
                 </div>
                 <div className="flex justify-between items-center">
                   <span>Last Updated</span>
@@ -488,16 +514,19 @@ export default function OperationalHealthPage() {
                         <p className="text-sm text-muted-foreground">
                           {new Date(alert.timestamp).toLocaleString()}
                         </p>
-                        {alert.metadata && Object.keys(alert.metadata).length > 0 && (
-                          <details className="text-sm text-muted-foreground">
-                            <summary className="cursor-pointer">View details</summary>
-                            <pre className="mt-2 p-2 bg-gray-50 rounded text-xs">
-                              {JSON.stringify(alert.metadata, null, 2)}
-                            </pre>
-                          </details>
-                        )}
+                        {alert.metadata &&
+                          Object.keys(alert.metadata).length > 0 && (
+                            <details className="text-sm text-muted-foreground">
+                              <summary className="cursor-pointer">
+                                View details
+                              </summary>
+                              <pre className="mt-2 p-2 bg-gray-50 rounded text-xs">
+                                {JSON.stringify(alert.metadata, null, 2)}
+                              </pre>
+                            </details>
+                          )}
                       </div>
-                      
+
                       {!alert.resolved && (
                         <Button
                           variant="outline"
@@ -529,7 +558,9 @@ export default function OperationalHealthPage() {
                   <div className="text-3xl font-bold text-blue-600">
                     {(healthData.metrics.errorRate.current * 100).toFixed(3)}%
                   </div>
-                  <div className="text-sm text-muted-foreground">Current Error Rate</div>
+                  <div className="text-sm text-muted-foreground">
+                    Current Error Rate
+                  </div>
                   <div className="flex items-center justify-center mt-1">
                     {getTrendIcon(healthData.metrics.errorRate.trend)}
                     <span className="text-xs ml-1">
@@ -537,19 +568,25 @@ export default function OperationalHealthPage() {
                     </span>
                   </div>
                 </div>
-                
+
                 <div className="text-center">
                   <div className="text-3xl font-bold text-green-600">
-                    {Math.round(healthData.metrics.throughput.requestsPerMinute)}
+                    {Math.round(
+                      healthData.metrics.throughput.requestsPerMinute,
+                    )}
                   </div>
-                  <div className="text-sm text-muted-foreground">Requests per Minute</div>
+                  <div className="text-sm text-muted-foreground">
+                    Requests per Minute
+                  </div>
                 </div>
-                
+
                 <div className="text-center">
                   <div className="text-3xl font-bold text-purple-600">
                     {formatLatency(healthData.metrics.latency.p95)}
                   </div>
-                  <div className="text-sm text-muted-foreground">95th Percentile Latency</div>
+                  <div className="text-sm text-muted-foreground">
+                    95th Percentile Latency
+                  </div>
                 </div>
               </div>
             </CardContent>

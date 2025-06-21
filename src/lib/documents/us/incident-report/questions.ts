@@ -6,27 +6,27 @@ export const incidentReportQuestions: DocumentQuestion[] = [
     id: 'basicInfo.dateOfIncident',
     text: 'When did the incident occur?',
     type: 'date',
-    required: true
+    required: true,
   },
   {
     id: 'basicInfo.timeOfIncident',
     text: 'What time did the incident occur?',
     type: 'time',
-    required: true
+    required: true,
   },
   {
     id: 'basicInfo.location',
     text: 'Where did the incident occur?',
     type: 'text',
     required: true,
-    placeholder: 'Be specific: building, floor, room, equipment, etc.'
+    placeholder: 'Be specific: building, floor, room, equipment, etc.',
   },
   {
     id: 'basicInfo.department',
     text: 'Department where incident occurred',
     type: 'text',
     required: false,
-    placeholder: 'Manufacturing, Office, Warehouse, etc.'
+    placeholder: 'Manufacturing, Office, Warehouse, etc.',
   },
   {
     id: 'basicInfo.shift',
@@ -38,8 +38,8 @@ export const incidentReportQuestions: DocumentQuestion[] = [
       { value: 'evening', label: 'Evening shift' },
       { value: 'night', label: 'Night shift' },
       { value: 'weekend', label: 'Weekend' },
-      { value: 'other', label: 'Other' }
-    ]
+      { value: 'other', label: 'Other' },
+    ],
   },
 
   // Reporter Information
@@ -48,26 +48,26 @@ export const incidentReportQuestions: DocumentQuestion[] = [
     text: 'Your name (person completing this report)',
     type: 'text',
     required: true,
-    placeholder: 'Full name'
+    placeholder: 'Full name',
   },
   {
     id: 'reporter.title',
     text: 'Your job title',
     type: 'text',
-    required: false
+    required: false,
   },
   {
     id: 'reporter.phone',
     text: 'Your phone number',
     type: 'tel',
     required: true,
-    placeholder: '(555) 123-4567'
+    placeholder: '(555) 123-4567',
   },
   {
     id: 'reporter.email',
     text: 'Your email address',
     type: 'email',
-    required: true
+    required: true,
   },
   {
     id: 'reporter.relationship',
@@ -78,8 +78,8 @@ export const incidentReportQuestions: DocumentQuestion[] = [
       { value: 'witness', label: 'Witness' },
       { value: 'supervisor', label: 'Supervisor' },
       { value: 'injured_party', label: 'Injured party' },
-      { value: 'other', label: 'Other' }
-    ]
+      { value: 'other', label: 'Other' },
+    ],
   },
 
   // Incident Type
@@ -95,8 +95,8 @@ export const incidentReportQuestions: DocumentQuestion[] = [
       { value: 'property_damage', label: 'Property damage' },
       { value: 'security', label: 'Security incident' },
       { value: 'environmental', label: 'Environmental incident' },
-      { value: 'other', label: 'Other' }
-    ]
+      { value: 'other', label: 'Other' },
+    ],
   },
   {
     id: 'incidentType.severity',
@@ -107,14 +107,14 @@ export const incidentReportQuestions: DocumentQuestion[] = [
       { value: 'minor', label: 'Minor - First aid only' },
       { value: 'moderate', label: 'Moderate - Medical treatment required' },
       { value: 'serious', label: 'Serious - Emergency room visit' },
-      { value: 'critical', label: 'Critical - Hospitalization' }
-    ]
+      { value: 'critical', label: 'Critical - Hospitalization' },
+    ],
   },
   {
     id: 'incidentType.workRelated',
     text: 'Was this incident work-related?',
     type: 'boolean',
-    required: true
+    required: true,
   },
 
   // Injured Person
@@ -124,21 +124,21 @@ export const incidentReportQuestions: DocumentQuestion[] = [
     type: 'text',
     required: false,
     placeholder: 'Full name of injured person',
-    conditionalOn: { field: 'incidentType.category', value: 'injury' }
+    conditionalOn: { field: 'incidentType.category', value: 'injury' },
   },
   {
     id: 'injuredPersons.0.jobTitle',
     text: 'Job title of injured person',
     type: 'text',
     required: false,
-    conditionalOn: { field: 'incidentType.category', value: 'injury' }
+    conditionalOn: { field: 'incidentType.category', value: 'injury' },
   },
   {
     id: 'injuredPersons.0.department',
     text: 'Department of injured person',
     type: 'text',
     required: false,
-    conditionalOn: { field: 'incidentType.category', value: 'injury' }
+    conditionalOn: { field: 'incidentType.category', value: 'injury' },
   },
 
   // Injury Details
@@ -148,21 +148,21 @@ export const incidentReportQuestions: DocumentQuestion[] = [
     type: 'array',
     required: false,
     placeholder: 'E.g., Left hand, lower back, head',
-    conditionalOn: { field: 'incidentType.category', value: 'injury' }
+    conditionalOn: { field: 'incidentType.category', value: 'injury' },
   },
   {
     id: 'injuryDetails.medicalTreatment.firstAidGiven',
     text: 'Was first aid given?',
     type: 'boolean',
     required: false,
-    conditionalOn: { field: 'incidentType.category', value: 'injury' }
+    conditionalOn: { field: 'incidentType.category', value: 'injury' },
   },
   {
     id: 'injuryDetails.medicalTreatment.sentToDoctor',
     text: 'Was the person sent to a doctor or hospital?',
     type: 'boolean',
     required: false,
-    conditionalOn: { field: 'incidentType.category', value: 'injury' }
+    conditionalOn: { field: 'incidentType.category', value: 'injury' },
   },
 
   // Description
@@ -171,8 +171,9 @@ export const incidentReportQuestions: DocumentQuestion[] = [
     text: 'Describe in detail what happened',
     type: 'textarea',
     required: true,
-    placeholder: 'Provide a clear, detailed description of the incident. Include sequence of events, conditions present, and any other relevant details...',
-    minLength: 50
+    placeholder:
+      'Provide a clear, detailed description of the incident. Include sequence of events, conditions present, and any other relevant details...',
+    minLength: 50,
   },
   {
     id: 'description.whatWasDoing',
@@ -180,14 +181,14 @@ export const incidentReportQuestions: DocumentQuestion[] = [
     type: 'textarea',
     required: true,
     placeholder: 'Describe the specific activity or task being performed',
-    minLength: 20
+    minLength: 20,
   },
   {
     id: 'description.equipmentInvolved',
     text: 'What equipment was involved? (if any)',
     type: 'array',
     required: false,
-    placeholder: 'List each piece of equipment separately'
+    placeholder: 'List each piece of equipment separately',
   },
 
   // Witnesses
@@ -196,7 +197,7 @@ export const incidentReportQuestions: DocumentQuestion[] = [
     text: 'Witness name',
     type: 'text',
     required: false,
-    placeholder: 'Full name of witness'
+    placeholder: 'Full name of witness',
   },
   {
     id: 'witnesses.0.phone',
@@ -204,7 +205,7 @@ export const incidentReportQuestions: DocumentQuestion[] = [
     type: 'tel',
     required: false,
     placeholder: '(555) 123-4567',
-    conditionalOn: { field: 'witnesses.0.name', value: true }
+    conditionalOn: { field: 'witnesses.0.name', value: true },
   },
   {
     id: 'witnesses.0.statement',
@@ -212,7 +213,7 @@ export const incidentReportQuestions: DocumentQuestion[] = [
     type: 'textarea',
     required: false,
     placeholder: 'What did the witness see or hear?',
-    conditionalOn: { field: 'witnesses.0.name', value: true }
+    conditionalOn: { field: 'witnesses.0.name', value: true },
   },
 
   // Property Damage
@@ -220,7 +221,7 @@ export const incidentReportQuestions: DocumentQuestion[] = [
     id: 'propertyDamage.damageOccurred',
     text: 'Did property damage occur?',
     type: 'boolean',
-    required: true
+    required: true,
   },
   {
     id: 'propertyDamage.estimatedCost',
@@ -228,7 +229,7 @@ export const incidentReportQuestions: DocumentQuestion[] = [
     type: 'number',
     required: false,
     placeholder: '0',
-    conditionalOn: { field: 'propertyDamage.damageOccurred', value: true }
+    conditionalOn: { field: 'propertyDamage.damageOccurred', value: true },
   },
   {
     id: 'propertyDamage.description',
@@ -236,7 +237,7 @@ export const incidentReportQuestions: DocumentQuestion[] = [
     type: 'textarea',
     required: false,
     placeholder: 'Detail what was damaged and extent of damage',
-    conditionalOn: { field: 'propertyDamage.damageOccurred', value: true }
+    conditionalOn: { field: 'propertyDamage.damageOccurred', value: true },
   },
 
   // Contributing Factors
@@ -245,14 +246,15 @@ export const incidentReportQuestions: DocumentQuestion[] = [
     text: 'Were there any unsafe conditions?',
     type: 'array',
     required: false,
-    placeholder: 'E.g., Wet floor, poor lighting, blocked walkway'
+    placeholder: 'E.g., Wet floor, poor lighting, blocked walkway',
   },
   {
     id: 'contributingFactors.unsafeActions',
     text: 'Were there any unsafe actions?',
     type: 'array',
     required: false,
-    placeholder: 'E.g., Not wearing PPE, shortcuts taken, procedures not followed'
+    placeholder:
+      'E.g., Not wearing PPE, shortcuts taken, procedures not followed',
   },
 
   // Immediate Actions
@@ -261,13 +263,14 @@ export const incidentReportQuestions: DocumentQuestion[] = [
     text: 'What immediate actions were taken?',
     type: 'textarea',
     required: false,
-    placeholder: 'Describe any immediate steps taken to secure the area, provide aid, etc.'
+    placeholder:
+      'Describe any immediate steps taken to secure the area, provide aid, etc.',
   },
   {
     id: 'correctiveActions.followUpRequired',
     text: 'Is follow-up action required?',
     type: 'boolean',
-    required: true
+    required: true,
   },
 
   // Additional Information
@@ -275,19 +278,19 @@ export const incidentReportQuestions: DocumentQuestion[] = [
     id: 'additionalInfo.photos',
     text: 'Were photos taken?',
     type: 'boolean',
-    required: true
+    required: true,
   },
   {
     id: 'additionalInfo.policeNotified',
     text: 'Were police notified?',
     type: 'boolean',
-    required: true
+    required: true,
   },
   {
     id: 'additionalInfo.additionalComments',
     text: 'Additional comments or information',
     type: 'textarea',
     required: false,
-    placeholder: 'Any other relevant information not covered above'
-  }
+    placeholder: 'Any other relevant information not covered above',
+  },
 ];

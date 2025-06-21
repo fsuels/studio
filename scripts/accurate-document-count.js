@@ -14,9 +14,11 @@ const usDocsPath = path.join(__dirname, '../src/lib/documents/us/index.ts');
 let usDocuments = [];
 if (fs.existsSync(usDocsPath)) {
   const usContent = fs.readFileSync(usDocsPath, 'utf8');
-  const exportLines = usContent.split('\n').filter(line => line.trim().startsWith('export {'));
-  
-  exportLines.forEach(line => {
+  const exportLines = usContent
+    .split('\n')
+    .filter((line) => line.trim().startsWith('export {'));
+
+  exportLines.forEach((line) => {
     const match = line.match(/export \{ (.+) \}/);
     if (match) {
       const docName = match[1].trim();
@@ -27,16 +29,21 @@ if (fs.existsSync(usDocsPath)) {
   });
 }
 
-// Count Canadian documents  
+// Count Canadian documents
 const caDocsPath = path.join(__dirname, '../src/lib/documents/ca/index.ts');
 let caDocuments = [];
 if (fs.existsSync(caDocsPath)) {
   const caContent = fs.readFileSync(caDocsPath, 'utf8');
-  const exportLines = caContent.split('\n').filter(line => 
-    line.includes('export') && line.includes('from') && !line.includes('//')
-  );
-  
-  exportLines.forEach(line => {
+  const exportLines = caContent
+    .split('\n')
+    .filter(
+      (line) =>
+        line.includes('export') &&
+        line.includes('from') &&
+        !line.includes('//'),
+    );
+
+  exportLines.forEach((line) => {
     const match = line.match(/from ['"]\.\/([^'";]+)['"];?/);
     if (match) {
       const docName = match[1].trim();
@@ -48,15 +55,19 @@ if (fs.existsSync(caDocsPath)) {
 }
 
 // Count additional documents (only actual document objects)
-const additionsPath = path.join(__dirname, '../src/lib/document-library-additions.ts');
+const additionsPath = path.join(
+  __dirname,
+  '../src/lib/document-library-additions.ts',
+);
 let additionalDocuments = [];
 if (fs.existsSync(additionsPath)) {
   const additionsContent = fs.readFileSync(additionsPath, 'utf8');
-  
+
   // Find all document objects in the array
-  const docRegex = /{\s*id:\s*['"`]([^'"`]+)['"`][^}]*name:\s*['"`]([^'"`]+)['"`]/g;
+  const docRegex =
+    /{\s*id:\s*['"`]([^'"`]+)['"`][^}]*name:\s*['"`]([^'"`]+)['"`]/g;
   let match;
-  
+
   while ((match = docRegex.exec(additionsContent)) !== null) {
     const docId = match[1];
     const docName = match[2];
@@ -88,16 +99,19 @@ let esTemplateCount = 0;
 
 if (fs.existsSync(templatesDir)) {
   if (fs.existsSync(path.join(templatesDir, 'en'))) {
-    enTemplateCount = fs.readdirSync(path.join(templatesDir, 'en'))
-      .filter(f => f.endsWith('.md')).length;
+    enTemplateCount = fs
+      .readdirSync(path.join(templatesDir, 'en'))
+      .filter((f) => f.endsWith('.md')).length;
   }
   if (fs.existsSync(path.join(templatesDir, 'es'))) {
-    esTemplateCount = fs.readdirSync(path.join(templatesDir, 'es'))
-      .filter(f => f.endsWith('.md')).length;
+    esTemplateCount = fs
+      .readdirSync(path.join(templatesDir, 'es'))
+      .filter((f) => f.endsWith('.md')).length;
   }
 }
 
-const totalDocuments = usDocuments.length + caDocuments.length + additionalDocuments.length;
+const totalDocuments =
+  usDocuments.length + caDocuments.length + additionalDocuments.length;
 
 console.log(`\n📄 Template Files:`);
 console.log(`   English: ${enTemplateCount} templates`);
@@ -107,9 +121,13 @@ console.log(`\n🎯 SUMMARY:`);
 console.log(`┌─────────────────────────────────────┐`);
 console.log(`│  📚 TOTAL DOCUMENTS: ${totalDocuments.toString().padEnd(14)} │`);
 console.log(`├─────────────────────────────────────┤`);
-console.log(`│  🇺🇸 US Documents: ${usDocuments.length.toString().padEnd(17)} │`);
+console.log(
+  `│  🇺🇸 US Documents: ${usDocuments.length.toString().padEnd(17)} │`,
+);
 console.log(`│  🇨🇦 Canadian: ${caDocuments.length.toString().padEnd(21)} │`);
-console.log(`│  ➕ Additional: ${additionalDocuments.length.toString().padEnd(19)} │`);
+console.log(
+  `│  ➕ Additional: ${additionalDocuments.length.toString().padEnd(19)} │`,
+);
 console.log(`└─────────────────────────────────────┘`);
 
 console.log(`\n🏆 Status:`);

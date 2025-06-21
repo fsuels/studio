@@ -13,9 +13,7 @@
         "Missing translation for legal term: notarization",
         "Template variable mismatch between languages"
       ],
-      "recommendations": [
-        "Consider using: notarización or notariado"
-      ],
+      "recommendations": ["Consider using: notarización or notariado"],
       "shouldFallback": false,
       "businessMetrics": {
         "documentType": "affidavit-general",
@@ -35,9 +33,7 @@
         "Missing translation for legal term: notarization",
         "Template variable mismatch between languages"
       ],
-      "recommendations": [
-        "Consider using: notarización or notariado"
-      ],
+      "recommendations": ["Consider using: notarización or notariado"],
       "shouldFallback": false,
       "businessMetrics": {
         "documentType": "affidavit",
@@ -58,9 +54,7 @@
         "Missing translation for legal term: lease",
         "Template variable mismatch between languages"
       ],
-      "recommendations": [
-        "Consider using: arrendamiento or alquiler"
-      ],
+      "recommendations": ["Consider using: arrendamiento or alquiler"],
       "shouldFallback": false,
       "businessMetrics": {
         "documentType": "articles-of-incorporation-biz",
@@ -80,9 +74,7 @@
         "Missing translation for legal term: notarization",
         "Template variable mismatch between languages"
       ],
-      "recommendations": [
-        "Consider using: notarización or notariado"
-      ],
+      "recommendations": ["Consider using: notarización or notariado"],
       "shouldFallback": false,
       "businessMetrics": {
         "documentType": "articles-of-incorporation",
@@ -119,9 +111,7 @@
         "Missing translation for legal term: notarization",
         "Template variable mismatch between languages"
       ],
-      "recommendations": [
-        "Consider using: notarización or notariado"
-      ],
+      "recommendations": ["Consider using: notarización or notariado"],
       "shouldFallback": false,
       "businessMetrics": {
         "documentType": "boat-bill-of-sale",
@@ -142,9 +132,7 @@
         "Missing translation for legal term: notarization",
         "Template variable mismatch between languages"
       ],
-      "recommendations": [
-        "Consider using: notarización or notariado"
-      ],
+      "recommendations": ["Consider using: notarización or notariado"],
       "shouldFallback": false,
       "businessMetrics": {
         "documentType": "child-custody-agreement",
@@ -164,9 +152,7 @@
         "Missing translation for legal term: notarization",
         "Template variable mismatch between languages"
       ],
-      "recommendations": [
-        "Consider using: notarización or notariado"
-      ],
+      "recommendations": ["Consider using: notarización or notariado"],
       "shouldFallback": false,
       "businessMetrics": {
         "documentType": "child-medical-consent",
@@ -213,9 +199,7 @@
         "Missing translation for legal term: notarization",
         "Template variable mismatch between languages"
       ],
-      "recommendations": [
-        "Consider using: notarización or notariado"
-      ],
+      "recommendations": ["Consider using: notarización or notariado"],
       "shouldFallback": false,
       "businessMetrics": {
         "documentType": "consignment-agreement",
@@ -235,9 +219,7 @@
         "Missing translation for legal term: notarization",
         "Template variable mismatch between languages"
       ],
-      "recommendations": [
-        "Consider using: notarización or notariado"
-      ],
+      "recommendations": ["Consider using: notarización or notariado"],
       "shouldFallback": false,
       "businessMetrics": {
         "documentType": "copyright-assignment",
@@ -253,9 +235,7 @@
     },
     "demand-letter-payment": {
       "confidence": 94,
-      "issues": [
-        "Template variable mismatch between languages"
-      ],
+      "issues": ["Template variable mismatch between languages"],
       "recommendations": [],
       "shouldFallback": false,
       "businessMetrics": {
@@ -276,9 +256,7 @@
         "Missing translation for legal term: notarization",
         "Template variable mismatch between languages"
       ],
-      "recommendations": [
-        "Consider using: notarización or notariado"
-      ],
+      "recommendations": ["Consider using: notarización or notariado"],
       "shouldFallback": false,
       "businessMetrics": {
         "documentType": "demand-letter",
@@ -323,9 +301,7 @@
         "Missing translation for legal term: notarization",
         "Template variable mismatch between languages"
       ],
-      "recommendations": [
-        "Consider using: notarización or notariado"
-      ],
+      "recommendations": ["Consider using: notarización or notariado"],
       "shouldFallback": false,
       "businessMetrics": {
         "documentType": "divorce-settlement",
@@ -345,9 +321,7 @@
         "Missing translation for legal term: notarization",
         "Template variable mismatch between languages"
       ],
-      "recommendations": [
-        "Consider using: notarización or notariado"
-      ],
+      "recommendations": ["Consider using: notarización or notariado"],
       "shouldFallback": false,
       "businessMetrics": {
         "documentType": "employment-contract",
@@ -367,9 +341,7 @@
         "Missing translation for legal term: lease",
         "Template variable mismatch between languages"
       ],
-      "recommendations": [
-        "Consider using: arrendamiento or alquiler"
-      ],
+      "recommendations": ["Consider using: arrendamiento or alquiler"],
       "shouldFallback": false,
       "businessMetrics": {
         "documentType": "employment-offer-letter",
@@ -389,9 +361,7 @@
         "Missing translation for legal term: lease",
         "Template variable mismatch between languages"
       ],
-      "recommendations": [
-        "Consider using: arrendamiento or alquiler"
-      ],
+      "recommendations": ["Consider using: arrendamiento or alquiler"],
       "shouldFallback": false,
       "businessMetrics": {
         "documentType": "employment-termination-letter",
@@ -431,12 +401,8 @@
     },
     "general-inquiry": {
       "confidence": 100,
-      "issues": [
-        "Missing translation for legal term: lease"
-      ],
-      "recommendations": [
-        "Consider using: arrendamiento or alquiler"
-      ],
+      "issues": ["Missing translation for legal term: lease"],
+      "recommendations": ["Consider using: arrendamiento or alquiler"],
       "shouldFallback": false,
       "businessMetrics": {
         "documentType": "general-inquiry",
@@ -501,9 +467,7 @@
         "Missing translation for legal term: lease",
         "Template variable mismatch between languages"
       ],
-      "recommendations": [
-        "Consider using: arrendamiento or alquiler"
-      ],
+      "recommendations": ["Consider using: arrendamiento or alquiler"],
       "shouldFallback": false,
       "businessMetrics": {
         "documentType": "invoice",
@@ -524,9 +488,7 @@
         "Missing translation for legal term: notarization",
         "Template variable mismatch between languages"
       ],
-      "recommendations": [
-        "Consider using: notarización or notariado"
-      ],
+      "recommendations": ["Consider using: notarización or notariado"],
       "shouldFallback": false,
       "businessMetrics": {
         "documentType": "last-will-testament",
@@ -600,9 +562,7 @@
         "Missing translation for legal term: notarization",
         "Template variable mismatch between languages"
       ],
-      "recommendations": [
-        "Consider using: notarización or notariado"
-      ],
+      "recommendations": ["Consider using: notarización or notariado"],
       "shouldFallback": false,
       "businessMetrics": {
         "documentType": "licensing-agreement",
@@ -672,9 +632,7 @@
         "Missing translation for legal term: notarization",
         "Template variable mismatch between languages"
       ],
-      "recommendations": [
-        "Consider using: notarización or notariado"
-      ],
+      "recommendations": ["Consider using: notarización or notariado"],
       "shouldFallback": false,
       "businessMetrics": {
         "documentType": "llc-operating-agreement",
@@ -694,9 +652,7 @@
         "Missing translation for legal term: notarization",
         "Template variable mismatch between languages"
       ],
-      "recommendations": [
-        "Consider using: notarización or notariado"
-      ],
+      "recommendations": ["Consider using: notarización or notariado"],
       "shouldFallback": false,
       "businessMetrics": {
         "documentType": "loan-agreement",
@@ -716,9 +672,7 @@
         "Missing translation for legal term: notarization",
         "Template variable mismatch between languages"
       ],
-      "recommendations": [
-        "Consider using: notarización or notariado"
-      ],
+      "recommendations": ["Consider using: notarización or notariado"],
       "shouldFallback": false,
       "businessMetrics": {
         "documentType": "medical-consent",
@@ -738,9 +692,7 @@
         "Missing translation for legal term: notarization",
         "Template variable mismatch between languages"
       ],
-      "recommendations": [
-        "Consider using: notarización or notariado"
-      ],
+      "recommendations": ["Consider using: notarización or notariado"],
       "shouldFallback": false,
       "businessMetrics": {
         "documentType": "nda",
@@ -761,9 +713,7 @@
         "Missing translation for legal term: notarization",
         "Template variable mismatch between languages"
       ],
-      "recommendations": [
-        "Consider using: notarización or notariado"
-      ],
+      "recommendations": ["Consider using: notarización or notariado"],
       "shouldFallback": false,
       "businessMetrics": {
         "documentType": "non-compete-agreement",
@@ -783,9 +733,7 @@
         "Missing translation for legal term: notarization",
         "Template variable mismatch between languages"
       ],
-      "recommendations": [
-        "Consider using: notarización or notariado"
-      ],
+      "recommendations": ["Consider using: notarización or notariado"],
       "shouldFallback": false,
       "businessMetrics": {
         "documentType": "non-disclosure-agreement",
@@ -805,9 +753,7 @@
         "Missing translation for legal term: notarization",
         "Template variable mismatch between languages"
       ],
-      "recommendations": [
-        "Consider using: notarización or notariado"
-      ],
+      "recommendations": ["Consider using: notarización or notariado"],
       "shouldFallback": false,
       "businessMetrics": {
         "documentType": "offer-letter",
@@ -848,9 +794,7 @@
         "Missing translation for legal term: notarization",
         "Template variable mismatch between languages"
       ],
-      "recommendations": [
-        "Consider using: notarización or notariado"
-      ],
+      "recommendations": ["Consider using: notarización or notariado"],
       "shouldFallback": false,
       "businessMetrics": {
         "documentType": "partnership-agreement",
@@ -922,9 +866,7 @@
         "Missing translation for legal term: notarization",
         "Template variable mismatch between languages"
       ],
-      "recommendations": [
-        "Consider using: notarización or notariado"
-      ],
+      "recommendations": ["Consider using: notarización or notariado"],
       "shouldFallback": false,
       "businessMetrics": {
         "documentType": "prenuptial-agreement",
@@ -971,9 +913,7 @@
         "Missing translation for legal term: notarization",
         "Template variable mismatch between languages"
       ],
-      "recommendations": [
-        "Consider using: notarización or notariado"
-      ],
+      "recommendations": ["Consider using: notarización or notariado"],
       "shouldFallback": false,
       "businessMetrics": {
         "documentType": "property-deed",
@@ -993,9 +933,7 @@
         "Missing translation for legal term: notarization",
         "Template variable mismatch between languages"
       ],
-      "recommendations": [
-        "Consider using: notarización or notariado"
-      ],
+      "recommendations": ["Consider using: notarización or notariado"],
       "shouldFallback": false,
       "businessMetrics": {
         "documentType": "purchase-agreement",
@@ -1041,9 +979,7 @@
         "Missing translation for legal term: notarization",
         "Template variable mismatch between languages"
       ],
-      "recommendations": [
-        "Consider using: notarización or notariado"
-      ],
+      "recommendations": ["Consider using: notarización or notariado"],
       "shouldFallback": false,
       "businessMetrics": {
         "documentType": "rental-agreement",
@@ -1063,9 +999,7 @@
         "Missing translation for legal term: notarization",
         "Template variable mismatch between languages"
       ],
-      "recommendations": [
-        "Consider using: notarización or notariado"
-      ],
+      "recommendations": ["Consider using: notarización or notariado"],
       "shouldFallback": false,
       "businessMetrics": {
         "documentType": "residential-lease-agreement",
@@ -1105,9 +1039,7 @@
         "Missing translation for legal term: notarization",
         "Template variable mismatch between languages"
       ],
-      "recommendations": [
-        "Consider using: notarización or notariado"
-      ],
+      "recommendations": ["Consider using: notarización or notariado"],
       "shouldFallback": false,
       "businessMetrics": {
         "documentType": "severance-agreement",
@@ -1127,9 +1059,7 @@
         "Missing translation for legal term: notarization",
         "Template variable mismatch between languages"
       ],
-      "recommendations": [
-        "Consider using: notarización or notariado"
-      ],
+      "recommendations": ["Consider using: notarización or notariado"],
       "shouldFallback": false,
       "businessMetrics": {
         "documentType": "termination-letter",
@@ -1149,9 +1079,7 @@
         "Missing translation for legal term: notarization",
         "Template variable mismatch between languages"
       ],
-      "recommendations": [
-        "Consider using: notarización or notariado"
-      ],
+      "recommendations": ["Consider using: notarización or notariado"],
       "shouldFallback": false,
       "businessMetrics": {
         "documentType": "trademark-assignment",

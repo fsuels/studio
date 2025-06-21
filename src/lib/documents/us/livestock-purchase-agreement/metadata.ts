@@ -25,7 +25,11 @@ export const livestockPurchaseAgreementMeta: LegalDocument = {
     en: {
       name: 'Livestock Purchase Agreement',
       description: 'Agreement for the purchase and sale of livestock animals.',
-      aliases: ['cattle purchase agreement', 'animal sale contract', 'livestock bill of sale'],
+      aliases: [
+        'cattle purchase agreement',
+        'animal sale contract',
+        'livestock bill of sale',
+      ],
     },
     es: {
       name: 'Acuerdo de Compra de Ganado',

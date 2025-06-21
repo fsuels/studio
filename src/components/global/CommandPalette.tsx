@@ -23,12 +23,17 @@ import {
   Share2,
   Copy,
   Languages,
-  Globe
+  Globe,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { enhancedSearch, getSearchSuggestions } from '@/lib/enhanced-search';
 import { Badge } from '@/components/ui/badge';
-import { updateUrlParams, getCurrentSearchParams, createShareableUrl, type SearchParams } from '@/lib/url-params';
+import {
+  updateUrlParams,
+  getCurrentSearchParams,
+  createShareableUrl,
+  type SearchParams,
+} from '@/lib/url-params';
 import { useLanguageSwitch } from './LanguageSwitch';
 
 interface SearchResult {
@@ -64,19 +69,20 @@ export default function CommandPalette({
   isOpen,
   onClose,
   locale,
-  userRole
+  userRole,
 }: CommandPaletteProps) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const { t } = useTranslation(['common', 'header']);
-  const { switchLanguage, availableLocales, localeNames, nextLocale } = useLanguageSwitch(locale);
-  
+  const { switchLanguage, availableLocales, localeNames, nextLocale } =
+    useLanguageSwitch(locale);
+
   const [search, setSearch] = useState('');
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
   const [isSearching, setIsSearching] = useState(false);
   const [selectedFilter, setSelectedFilter] = useState<string>('all');
-  
+
   const debounceRef = useRef<NodeJS.Timeout | null>(null);
 
   // Initialize from URL parameters
@@ -91,11 +97,11 @@ export default function CommandPalette({
       }
     }
   }, [isOpen]);
-  
+
   // Generate navigation actions based on user role and current path
   const getNavigationActions = useCallback((): CommandAction[] => {
     const isAdmin = userRole === 'admin' || pathname?.includes('/admin');
-    
+
     const baseActions: CommandAction[] = [
       {
         id: 'home',
@@ -105,7 +111,7 @@ export default function CommandPalette({
         action: () => router.push(`/${locale}`),
         group: 'navigation',
         keywords: ['home', 'homepage', 'start'],
-        url: `/${locale}`
+        url: `/${locale}`,
       },
       {
         id: 'dashboard',
@@ -115,7 +121,7 @@ export default function CommandPalette({
         action: () => router.push(`/${locale}/dashboard`),
         group: 'navigation',
         keywords: ['dashboard', 'documents', 'account', 'my'],
-        url: `/${locale}/dashboard`
+        url: `/${locale}/dashboard`,
       },
       {
         id: 'generate',
@@ -125,7 +131,7 @@ export default function CommandPalette({
         action: () => router.push(`/${locale}/generate`),
         group: 'navigation',
         keywords: ['create', 'new', 'document', 'generate', 'start'],
-        url: `/${locale}/generate`
+        url: `/${locale}/generate`,
       },
       {
         id: 'docs',
@@ -135,7 +141,7 @@ export default function CommandPalette({
         action: () => router.push(`/${locale}/docs`),
         group: 'navigation',
         keywords: ['browse', 'templates', 'documents', 'library'],
-        url: `/${locale}/docs`
+        url: `/${locale}/docs`,
       },
       {
         id: 'support',
@@ -145,8 +151,8 @@ export default function CommandPalette({
         action: () => router.push(`/${locale}/support`),
         group: 'navigation',
         keywords: ['help', 'support', 'contact', 'faq'],
-        url: `/${locale}/support`
-      }
+        url: `/${locale}/support`,
+      },
     ];
 
     // Add admin actions if user has admin role
@@ -160,7 +166,7 @@ export default function CommandPalette({
           action: () => router.push(`/${locale}/admin`),
           group: 'admin',
           keywords: ['admin', 'control', 'management'],
-          url: `/${locale}/admin`
+          url: `/${locale}/admin`,
         },
         {
           id: 'admin-users',
@@ -170,7 +176,7 @@ export default function CommandPalette({
           action: () => router.push(`/${locale}/admin/users`),
           group: 'admin',
           keywords: ['users', 'roles', 'permissions', 'manage'],
-          url: `/${locale}/admin/users`
+          url: `/${locale}/admin/users`,
         },
         {
           id: 'admin-analytics',
@@ -180,7 +186,7 @@ export default function CommandPalette({
           action: () => router.push(`/${locale}/admin/analytics`),
           group: 'admin',
           keywords: ['analytics', 'reports', 'stats', 'metrics'],
-          url: `/${locale}/admin/analytics`
+          url: `/${locale}/admin/analytics`,
         },
         {
           id: 'admin-fraud',
@@ -190,7 +196,7 @@ export default function CommandPalette({
           action: () => router.push(`/${locale}/admin/fraud-detection`),
           group: 'admin',
           keywords: ['fraud', 'security', 'detection', 'monitor'],
-          url: `/${locale}/admin/fraud-detection`
+          url: `/${locale}/admin/fraud-detection`,
         },
         {
           id: 'admin-audit',
@@ -200,8 +206,8 @@ export default function CommandPalette({
           action: () => router.push(`/${locale}/admin/audit-trails`),
           group: 'admin',
           keywords: ['audit', 'logs', 'history', 'trail'],
-          url: `/${locale}/admin/audit-trails`
-        }
+          url: `/${locale}/admin/audit-trails`,
+        },
       );
     }
 
@@ -220,7 +226,7 @@ export default function CommandPalette({
           updateUrlParams({ filter: 'all', q: search || undefined });
         },
         group: 'filters',
-        keywords: ['all', 'everything']
+        keywords: ['all', 'everything'],
       },
       {
         id: 'filter-documents',
@@ -231,7 +237,7 @@ export default function CommandPalette({
           updateUrlParams({ filter: 'documents', q: search || undefined });
         },
         group: 'filters',
-        keywords: ['documents', 'templates']
+        keywords: ['documents', 'templates'],
       },
       {
         id: 'filter-navigation',
@@ -242,8 +248,8 @@ export default function CommandPalette({
           updateUrlParams({ filter: 'navigation', q: search || undefined });
         },
         group: 'filters',
-        keywords: ['navigation', 'pages']
-      }
+        keywords: ['navigation', 'pages'],
+      },
     ];
 
     if (userRole === 'admin') {
@@ -256,7 +262,7 @@ export default function CommandPalette({
           updateUrlParams({ filter: 'admin', q: search || undefined });
         },
         group: 'filters',
-        keywords: ['admin', 'management']
+        keywords: ['admin', 'management'],
       });
     }
 
@@ -270,7 +276,7 @@ export default function CommandPalette({
         action: async () => {
           const shareUrl = createShareableUrl({
             q: search || undefined,
-            filter: selectedFilter !== 'all' ? selectedFilter : undefined
+            filter: selectedFilter !== 'all' ? selectedFilter : undefined,
           });
           try {
             await navigator.clipboard.writeText(shareUrl);
@@ -280,7 +286,7 @@ export default function CommandPalette({
           }
         },
         group: 'actions',
-        keywords: ['share', 'copy', 'url', 'link']
+        keywords: ['share', 'copy', 'url', 'link'],
       },
       {
         id: 'copy-search',
@@ -298,25 +304,29 @@ export default function CommandPalette({
           }
         },
         group: 'actions',
-        keywords: ['copy', 'search', 'query', 'clipboard']
-      }
+        keywords: ['copy', 'search', 'query', 'clipboard'],
+      },
     );
 
     // Add language switching actions
-    filterActions.push(
-      {
-        id: 'switch-language',
-        title: `Switch to ${localeNames[nextLocale]}`,
-        description: `Change language to ${localeNames[nextLocale]} (⌘L)`,
-        icon: <Languages className="h-4 w-4" />,
-        action: () => switchLanguage(nextLocale),
-        group: 'language',
-        keywords: ['language', 'locale', 'switch', nextLocale, localeNames[nextLocale].toLowerCase()]
-      }
-    );
+    filterActions.push({
+      id: 'switch-language',
+      title: `Switch to ${localeNames[nextLocale]}`,
+      description: `Change language to ${localeNames[nextLocale]} (⌘L)`,
+      icon: <Languages className="h-4 w-4" />,
+      action: () => switchLanguage(nextLocale),
+      group: 'language',
+      keywords: [
+        'language',
+        'locale',
+        'switch',
+        nextLocale,
+        localeNames[nextLocale].toLowerCase(),
+      ],
+    });
 
     // Add individual language options
-    availableLocales.forEach(lang => {
+    availableLocales.forEach((lang) => {
       if (lang !== locale) {
         filterActions.push({
           id: `language-${lang}`,
@@ -325,46 +335,63 @@ export default function CommandPalette({
           icon: <Globe className="h-4 w-4" />,
           action: () => switchLanguage(lang),
           group: 'language',
-          keywords: ['language', 'locale', lang, localeNames[lang].toLowerCase()]
+          keywords: [
+            'language',
+            'locale',
+            lang,
+            localeNames[lang].toLowerCase(),
+          ],
         });
       }
     });
 
     return filterActions;
-  }, [selectedFilter, userRole, search, switchLanguage, nextLocale, localeNames, availableLocales, locale]);
+  }, [
+    selectedFilter,
+    userRole,
+    search,
+    switchLanguage,
+    nextLocale,
+    localeNames,
+    availableLocales,
+    locale,
+  ]);
 
   // Debounced search for documents
-  const performDocumentSearch = useCallback(async (query: string) => {
-    if (query.trim().length < 2) {
-      if (query.trim().length === 0) {
-        // Show suggestions when empty
-        try {
-          const suggestions = await getSearchSuggestions(locale);
-          setSearchResults(suggestions);
-        } catch (error) {
-          console.error('Failed to get suggestions:', error);
+  const performDocumentSearch = useCallback(
+    async (query: string) => {
+      if (query.trim().length < 2) {
+        if (query.trim().length === 0) {
+          // Show suggestions when empty
+          try {
+            const suggestions = await getSearchSuggestions(locale);
+            setSearchResults(suggestions);
+          } catch (error) {
+            console.error('Failed to get suggestions:', error);
+            setSearchResults([]);
+          }
+        } else {
           setSearchResults([]);
         }
-      } else {
-        setSearchResults([]);
+        return;
       }
-      return;
-    }
 
-    setIsSearching(true);
-    try {
-      const results = await enhancedSearch(query, locale, {
-        maxResults: 20,
-        roleFilter: userRole,
-      });
-      setSearchResults(results);
-    } catch (error) {
-      console.error('Search error:', error);
-      setSearchResults([]);
-    } finally {
-      setIsSearching(false);
-    }
-  }, [locale, userRole]);
+      setIsSearching(true);
+      try {
+        const results = await enhancedSearch(query, locale, {
+          maxResults: 20,
+          roleFilter: userRole,
+        });
+        setSearchResults(results);
+      } catch (error) {
+        console.error('Search error:', error);
+        setSearchResults([]);
+      } finally {
+        setIsSearching(false);
+      }
+    },
+    [locale, userRole],
+  );
 
   // Debounced search effect
   useEffect(() => {
@@ -374,13 +401,16 @@ export default function CommandPalette({
 
     debounceRef.current = setTimeout(() => {
       performDocumentSearch(search);
-      
+
       // Update URL parameters with search query
       if (search.trim()) {
-        updateUrlParams({ 
-          q: search, 
-          filter: selectedFilter !== 'all' ? selectedFilter : undefined 
-        }, { replace: true });
+        updateUrlParams(
+          {
+            q: search,
+            filter: selectedFilter !== 'all' ? selectedFilter : undefined,
+          },
+          { replace: true },
+        );
       }
     }, 300);
 
@@ -425,25 +455,35 @@ export default function CommandPalette({
     return () => document.removeEventListener('keydown', down);
   }, [isOpen, onClose, switchLanguage, nextLocale]);
 
-  const handleSelect = useCallback((callback: () => void) => {
-    callback();
-    onClose();
-  }, [onClose]);
+  const handleSelect = useCallback(
+    (callback: () => void) => {
+      callback();
+      onClose();
+    },
+    [onClose],
+  );
 
   const getComplexityColor = (complexity: string) => {
     switch (complexity) {
-      case 'easy': return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200';
-      case 'medium': return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200';
-      case 'advanced': return 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200';
-      default: return 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200';
+      case 'easy':
+        return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200';
+      case 'medium':
+        return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200';
+      case 'advanced':
+        return 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200';
+      default:
+        return 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200';
     }
   };
 
   const getMatchIcon = (matchType: string) => {
     switch (matchType) {
-      case 'exact': return <Zap className="h-3 w-3 text-blue-500" />;
-      case 'synonym': return <Star className="h-3 w-3 text-yellow-500" />;
-      default: return <Search className="h-3 w-3 text-gray-400" />;
+      case 'exact':
+        return <Zap className="h-3 w-3 text-blue-500" />;
+      case 'synonym':
+        return <Star className="h-3 w-3 text-yellow-500" />;
+      default:
+        return <Search className="h-3 w-3 text-gray-400" />;
     }
   };
 
@@ -451,19 +491,22 @@ export default function CommandPalette({
 
   const navigationActions = getNavigationActions();
   const filterActions = getFilterActions();
-  
+
   // Filter results based on selectedFilter
-  const filteredNavigationActions = selectedFilter === 'all' || selectedFilter === 'navigation' 
-    ? navigationActions.filter(action => action.group === 'navigation')
-    : [];
-  
-  const filteredAdminActions = selectedFilter === 'all' || selectedFilter === 'admin'
-    ? navigationActions.filter(action => action.group === 'admin')
-    : [];
-    
-  const filteredDocumentResults = selectedFilter === 'all' || selectedFilter === 'documents'
-    ? searchResults
-    : [];
+  const filteredNavigationActions =
+    selectedFilter === 'all' || selectedFilter === 'navigation'
+      ? navigationActions.filter((action) => action.group === 'navigation')
+      : [];
+
+  const filteredAdminActions =
+    selectedFilter === 'all' || selectedFilter === 'admin'
+      ? navigationActions.filter((action) => action.group === 'admin')
+      : [];
+
+  const filteredDocumentResults =
+    selectedFilter === 'all' || selectedFilter === 'documents'
+      ? searchResults
+      : [];
 
   return (
     <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm">
@@ -489,26 +532,9 @@ export default function CommandPalette({
 
             {/* Filter Actions */}
             <Command.Group heading="Filters">
-              {filterActions.filter(action => action.group === 'filters').map((action) => (
-                <Command.Item
-                  key={action.id}
-                  value={action.id}
-                  onSelect={() => handleSelect(action.action)}
-                  className="flex items-center gap-2 px-3 py-2 text-sm cursor-pointer hover:bg-accent"
-                >
-                  <div className="flex items-center gap-2 flex-1">
-                    {action.icon}
-                    <span>{action.title}</span>
-                  </div>
-                  <Filter className="h-3 w-3 text-muted-foreground" />
-                </Command.Item>
-              ))}
-            </Command.Group>
-
-            {/* Action Commands */}
-            {filterActions.filter(action => action.group === 'actions').length > 0 && (
-              <Command.Group heading="Actions">
-                {filterActions.filter(action => action.group === 'actions').map((action) => (
+              {filterActions
+                .filter((action) => action.group === 'filters')
+                .map((action) => (
                   <Command.Item
                     key={action.id}
                     value={action.id}
@@ -517,15 +543,39 @@ export default function CommandPalette({
                   >
                     <div className="flex items-center gap-2 flex-1">
                       {action.icon}
-                      <div>
-                        <div className="font-medium">{action.title}</div>
-                        {action.description && (
-                          <div className="text-xs text-muted-foreground">{action.description}</div>
-                        )}
-                      </div>
+                      <span>{action.title}</span>
                     </div>
+                    <Filter className="h-3 w-3 text-muted-foreground" />
                   </Command.Item>
                 ))}
+            </Command.Group>
+
+            {/* Action Commands */}
+            {filterActions.filter((action) => action.group === 'actions')
+              .length > 0 && (
+              <Command.Group heading="Actions">
+                {filterActions
+                  .filter((action) => action.group === 'actions')
+                  .map((action) => (
+                    <Command.Item
+                      key={action.id}
+                      value={action.id}
+                      onSelect={() => handleSelect(action.action)}
+                      className="flex items-center gap-2 px-3 py-2 text-sm cursor-pointer hover:bg-accent"
+                    >
+                      <div className="flex items-center gap-2 flex-1">
+                        {action.icon}
+                        <div>
+                          <div className="font-medium">{action.title}</div>
+                          {action.description && (
+                            <div className="text-xs text-muted-foreground">
+                              {action.description}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </Command.Item>
+                  ))}
               </Command.Group>
             )}
 
@@ -544,7 +594,9 @@ export default function CommandPalette({
                       <div>
                         <div className="font-medium">{action.title}</div>
                         {action.description && (
-                          <div className="text-xs text-muted-foreground">{action.description}</div>
+                          <div className="text-xs text-muted-foreground">
+                            {action.description}
+                          </div>
                         )}
                       </div>
                     </div>
@@ -569,7 +621,9 @@ export default function CommandPalette({
                       <div>
                         <div className="font-medium">{action.title}</div>
                         {action.description && (
-                          <div className="text-xs text-muted-foreground">{action.description}</div>
+                          <div className="text-xs text-muted-foreground">
+                            {action.description}
+                          </div>
                         )}
                       </div>
                     </div>
@@ -581,12 +635,18 @@ export default function CommandPalette({
 
             {/* Document Results */}
             {filteredDocumentResults.length > 0 && (
-              <Command.Group heading={search.trim() ? "Documents" : "Popular Documents"}>
+              <Command.Group
+                heading={search.trim() ? 'Documents' : 'Popular Documents'}
+              >
                 {filteredDocumentResults.map((result) => (
                   <Command.Item
                     key={result.slug}
                     value={result.slug}
-                    onSelect={() => handleSelect(() => router.push(`/${locale}/docs/${result.slug}`))}
+                    onSelect={() =>
+                      handleSelect(() =>
+                        router.push(`/${locale}/docs/${result.slug}`),
+                      )
+                    }
                     className="flex items-start gap-3 px-3 py-2 text-sm cursor-pointer hover:bg-accent"
                   >
                     <div className="mt-0.5 text-muted-foreground">
@@ -594,7 +654,9 @@ export default function CommandPalette({
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-1">
-                        <span className="font-medium truncate">{result.title}</span>
+                        <span className="font-medium truncate">
+                          {result.title}
+                        </span>
                         {result.popular && (
                           <Star className="h-3 w-3 text-yellow-500 shrink-0" />
                         )}
@@ -606,9 +668,12 @@ export default function CommandPalette({
                       )}
                     </div>
                     <div className="flex items-center gap-1 shrink-0">
-                      <Badge 
-                        variant="secondary" 
-                        className={cn("text-xs px-1.5 py-0.5", getComplexityColor(result.complexity))}
+                      <Badge
+                        variant="secondary"
+                        className={cn(
+                          'text-xs px-1.5 py-0.5',
+                          getComplexityColor(result.complexity),
+                        )}
                       >
                         {result.complexity}
                       </Badge>
@@ -624,20 +689,20 @@ export default function CommandPalette({
             <div>
               <kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100">
                 ⌘K
-              </kbd>
-              {' '}to open
+              </kbd>{' '}
+              to open
             </div>
             <div>
               <kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100">
                 ↑↓
-              </kbd>
-              {' '}to navigate
+              </kbd>{' '}
+              to navigate
             </div>
             <div>
               <kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100">
                 ↵
-              </kbd>
-              {' '}to select
+              </kbd>{' '}
+              to select
             </div>
           </div>
         </Command>

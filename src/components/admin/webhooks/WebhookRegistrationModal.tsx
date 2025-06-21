@@ -15,31 +15,96 @@ interface WebhookRegistrationModalProps {
 }
 
 const WEBHOOK_EVENTS = [
-  { id: 'document.created', label: 'Document Created', description: 'When a new document is created' },
-  { id: 'document.updated', label: 'Document Updated', description: 'When a document is modified' },
-  { id: 'document.signed', label: 'Document Signed', description: 'When a document is electronically signed' },
-  { id: 'document.completed', label: 'Document Completed', description: 'When a document workflow is finished' },
-  { id: 'document.deleted', label: 'Document Deleted', description: 'When a document is deleted' },
-  { id: 'user.created', label: 'User Created', description: 'When a new user account is created' },
-  { id: 'user.updated', label: 'User Updated', description: 'When user information is updated' },
-  { id: 'payment.succeeded', label: 'Payment Succeeded', description: 'When a payment is successful' },
-  { id: 'payment.failed', label: 'Payment Failed', description: 'When a payment fails' },
-  { id: 'subscription.created', label: 'Subscription Created', description: 'When a new subscription is created' },
-  { id: 'subscription.updated', label: 'Subscription Updated', description: 'When subscription is modified' },
-  { id: 'subscription.cancelled', label: 'Subscription Cancelled', description: 'When subscription is cancelled' },
-  { id: 'compliance.audit', label: 'Compliance Audit', description: 'When compliance events occur' },
-  { id: 'template.created', label: 'Template Created', description: 'When a new template is created' },
-  { id: 'template.updated', label: 'Template Updated', description: 'When a template is modified' }
+  {
+    id: 'document.created',
+    label: 'Document Created',
+    description: 'When a new document is created',
+  },
+  {
+    id: 'document.updated',
+    label: 'Document Updated',
+    description: 'When a document is modified',
+  },
+  {
+    id: 'document.signed',
+    label: 'Document Signed',
+    description: 'When a document is electronically signed',
+  },
+  {
+    id: 'document.completed',
+    label: 'Document Completed',
+    description: 'When a document workflow is finished',
+  },
+  {
+    id: 'document.deleted',
+    label: 'Document Deleted',
+    description: 'When a document is deleted',
+  },
+  {
+    id: 'user.created',
+    label: 'User Created',
+    description: 'When a new user account is created',
+  },
+  {
+    id: 'user.updated',
+    label: 'User Updated',
+    description: 'When user information is updated',
+  },
+  {
+    id: 'payment.succeeded',
+    label: 'Payment Succeeded',
+    description: 'When a payment is successful',
+  },
+  {
+    id: 'payment.failed',
+    label: 'Payment Failed',
+    description: 'When a payment fails',
+  },
+  {
+    id: 'subscription.created',
+    label: 'Subscription Created',
+    description: 'When a new subscription is created',
+  },
+  {
+    id: 'subscription.updated',
+    label: 'Subscription Updated',
+    description: 'When subscription is modified',
+  },
+  {
+    id: 'subscription.cancelled',
+    label: 'Subscription Cancelled',
+    description: 'When subscription is cancelled',
+  },
+  {
+    id: 'compliance.audit',
+    label: 'Compliance Audit',
+    description: 'When compliance events occur',
+  },
+  {
+    id: 'template.created',
+    label: 'Template Created',
+    description: 'When a new template is created',
+  },
+  {
+    id: 'template.updated',
+    label: 'Template Updated',
+    description: 'When a template is modified',
+  },
 ];
 
-export function WebhookRegistrationModal({ onClose, onSuccess }: WebhookRegistrationModalProps) {
+export function WebhookRegistrationModal({
+  onClose,
+  onSuccess,
+}: WebhookRegistrationModalProps) {
   const [url, setUrl] = useState('');
   const [selectedEvents, setSelectedEvents] = useState<string[]>([]);
   const [organizationId, setOrganizationId] = useState('');
   const [maxRetries, setMaxRetries] = useState(3);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [urlValidation, setUrlValidation] = useState<'idle' | 'validating' | 'valid' | 'invalid'>('idle');
+  const [urlValidation, setUrlValidation] = useState<
+    'idle' | 'validating' | 'valid' | 'invalid'
+  >('idle');
 
   const validateUrl = async (webhookUrl: string) => {
     if (!webhookUrl) {
@@ -53,14 +118,14 @@ export function WebhookRegistrationModal({ onClose, onSuccess }: WebhookRegistra
     }
 
     setUrlValidation('validating');
-    
+
     try {
       // Basic URL validation
       new URL(webhookUrl);
-      
+
       // Additional validation could be added here (e.g., DNS lookup)
-      await new Promise(resolve => setTimeout(resolve, 500)); // Simulate validation delay
-      
+      await new Promise((resolve) => setTimeout(resolve, 500)); // Simulate validation delay
+
       setUrlValidation('valid');
     } catch {
       setUrlValidation('invalid');
@@ -70,7 +135,7 @@ export function WebhookRegistrationModal({ onClose, onSuccess }: WebhookRegistra
   const handleUrlChange = (newUrl: string) => {
     setUrl(newUrl);
     setError(null);
-    
+
     // Debounce URL validation
     const timeoutId = setTimeout(() => {
       validateUrl(newUrl);
@@ -80,10 +145,10 @@ export function WebhookRegistrationModal({ onClose, onSuccess }: WebhookRegistra
   };
 
   const handleEventToggle = (eventId: string) => {
-    setSelectedEvents(prev => 
+    setSelectedEvents((prev) =>
       prev.includes(eventId)
-        ? prev.filter(e => e !== eventId)
-        : [...prev, eventId]
+        ? prev.filter((e) => e !== eventId)
+        : [...prev, eventId],
     );
   };
 
@@ -91,13 +156,13 @@ export function WebhookRegistrationModal({ onClose, onSuccess }: WebhookRegistra
     if (selectedEvents.length === WEBHOOK_EVENTS.length) {
       setSelectedEvents([]);
     } else {
-      setSelectedEvents(WEBHOOK_EVENTS.map(e => e.id));
+      setSelectedEvents(WEBHOOK_EVENTS.map((e) => e.id));
     }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!url || selectedEvents.length === 0) {
       setError('Please provide a webhook URL and select at least one event');
       return;
@@ -122,9 +187,9 @@ export function WebhookRegistrationModal({ onClose, onSuccess }: WebhookRegistra
           retryPolicy: {
             maxRetries,
             backoffMultiplier: 2,
-            maxBackoffSeconds: 300
-          }
-        })
+            maxBackoffSeconds: 300,
+          },
+        }),
       });
 
       const data = await response.json();
@@ -155,7 +220,7 @@ export function WebhookRegistrationModal({ onClose, onSuccess }: WebhookRegistra
             </Button>
           </div>
         </CardHeader>
-        
+
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Error Alert */}
@@ -201,7 +266,9 @@ export function WebhookRegistrationModal({ onClose, onSuccess }: WebhookRegistra
 
             {/* Organization ID */}
             <div className="space-y-2">
-              <Label htmlFor="organization-id">Organization ID (Optional)</Label>
+              <Label htmlFor="organization-id">
+                Organization ID (Optional)
+              </Label>
               <Input
                 id="organization-id"
                 placeholder="org_12345..."
@@ -223,10 +290,12 @@ export function WebhookRegistrationModal({ onClose, onSuccess }: WebhookRegistra
                   size="sm"
                   onClick={handleSelectAllEvents}
                 >
-                  {selectedEvents.length === WEBHOOK_EVENTS.length ? 'Deselect All' : 'Select All'}
+                  {selectedEvents.length === WEBHOOK_EVENTS.length
+                    ? 'Deselect All'
+                    : 'Select All'}
                 </Button>
               </div>
-              
+
               <div className="grid grid-cols-1 gap-3 max-h-60 overflow-y-auto border rounded-lg p-3">
                 {WEBHOOK_EVENTS.map((event) => (
                   <div key={event.id} className="flex items-start space-x-3">
@@ -249,13 +318,17 @@ export function WebhookRegistrationModal({ onClose, onSuccess }: WebhookRegistra
                   </div>
                 ))}
               </div>
-              
+
               {selectedEvents.length > 0 && (
                 <div className="flex flex-wrap gap-1">
                   {selectedEvents.map((eventId) => {
-                    const event = WEBHOOK_EVENTS.find(e => e.id === eventId);
+                    const event = WEBHOOK_EVENTS.find((e) => e.id === eventId);
                     return (
-                      <Badge key={eventId} variant="secondary" className="text-xs">
+                      <Badge
+                        key={eventId}
+                        variant="secondary"
+                        className="text-xs"
+                      >
                         {event?.label}
                       </Badge>
                     );
@@ -284,7 +357,11 @@ export function WebhookRegistrationModal({ onClose, onSuccess }: WebhookRegistra
             <div className="flex items-center gap-3 pt-4">
               <Button
                 type="submit"
-                disabled={loading || urlValidation !== 'valid' || selectedEvents.length === 0}
+                disabled={
+                  loading ||
+                  urlValidation !== 'valid' ||
+                  selectedEvents.length === 0
+                }
                 className="flex-1"
               >
                 {loading ? (

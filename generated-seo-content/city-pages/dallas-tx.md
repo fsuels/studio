@@ -30,7 +30,7 @@ Dallas offers a dynamic business environment with opportunities across industrie
 
 [Start Your Dallas Legal Document]
 
-*Trusted by hundreds of Dallas businesses*
+_Trusted by hundreds of Dallas businesses_
 
 ---
 

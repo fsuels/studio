@@ -24,12 +24,14 @@ export const mechanicsLienMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Mechanics Lien',
-      description: 'Legal claim against property for unpaid work or materials provided for construction improvements.',
+      description:
+        'Legal claim against property for unpaid work or materials provided for construction improvements.',
       aliases: ['construction lien', 'materialman lien', 'contractor lien'],
     },
     es: {
       name: 'Gravamen de Mecánicos',
-      description: 'Reclamo legal contra la propiedad por trabajo no pagado o materiales proporcionados para mejoras de construcción.',
+      description:
+        'Reclamo legal contra la propiedad por trabajo no pagado o materiales proporcionados para mejoras de construcción.',
       aliases: ['gravamen de construcción', 'gravamen de contratista'],
     },
   },

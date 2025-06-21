@@ -62,14 +62,17 @@ class CheckoutComplianceEngine {
       requiresVenueClause: true,
       requiresAdditionalDisclaimer: isNorthCarolina,
       courtVenue: stateRules?.courtVenue || 'Delaware',
-      applicableLaw: stateRules?.applicableLaw || 'Delaware'
+      applicableLaw: stateRules?.applicableLaw || 'Delaware',
     };
   }
 
   /**
    * Generate state-specific terms text
    */
-  generateTermsText(state: string, documentType: string): {
+  generateTermsText(
+    state: string,
+    documentType: string,
+  ): {
     disclaimerText: string;
     warrantyText: string;
     venueText: string;
@@ -79,17 +82,20 @@ class CheckoutComplianceEngine {
     const isNC = state === 'NC';
 
     const disclaimerText = this.generateDisclaimerText();
-    const warrantyText = config.requiresWarrantyDisclaimer 
-      ? this.generateWarrantyText() 
+    const warrantyText = config.requiresWarrantyDisclaimer
+      ? this.generateWarrantyText()
       : '';
     const venueText = this.generateVenueText(config);
-    const additionalNotices = this.generateAdditionalNotices(state, documentType);
+    const additionalNotices = this.generateAdditionalNotices(
+      state,
+      documentType,
+    );
 
     return {
       disclaimerText,
       warrantyText,
       venueText,
-      additionalNotices
+      additionalNotices,
     };
   }
 
@@ -112,16 +118,22 @@ class CheckoutComplianceEngine {
 
     // UPL Compliance
     if (!params.termsAccepted) {
-      violations.push('Terms must be accepted before purchase (UPL compliance)');
+      violations.push(
+        'Terms must be accepted before purchase (UPL compliance)',
+      );
     }
 
     // FTC Compliance
     if (!params.scrolledToBottom) {
-      warnings.push('User may not have had reasonable opportunity to read terms');
+      warnings.push(
+        'User may not have had reasonable opportunity to read terms',
+      );
     }
 
     if (!params.priceDisclosed) {
-      violations.push('Total price must be clearly disclosed (FTC requirement)');
+      violations.push(
+        'Total price must be clearly disclosed (FTC requirement)',
+      );
     }
 
     // State-specific compliance
@@ -132,7 +144,7 @@ class CheckoutComplianceEngine {
     return {
       compliant: violations.length === 0,
       violations,
-      warnings
+      warnings,
     };
   }
 
@@ -147,25 +159,30 @@ class CheckoutComplianceEngine {
   } {
     return {
       checkboxLabels: {
-        short: "Self-help template, no legal advice — I accept.",
-        standard: "I agree to the Terms & Disclaimer",
-        detailed: "I understand this is a DIY legal template and agree to the terms"
+        short: 'Self-help template, no legal advice — I accept.',
+        standard: 'I agree to the Terms & Disclaimer',
+        detailed:
+          'I understand this is a DIY legal template and agree to the terms',
       },
       modalHeadings: {
-        warning: "Important: Read Before You Buy",
-        informational: "Terms & Disclaimer",
-        friendly: "Quick Legal Notes"
+        warning: 'Important: Read Before You Buy',
+        informational: 'Terms & Disclaimer',
+        friendly: 'Quick Legal Notes',
       },
       disclaimerSentences: {
-        core: "123LegalDoc is not a law firm; no attorney-client relationship is created.",
-        extended: "This platform provides self-help legal document templates for informational purposes only. The information and templates are not legal advice.",
-        simple: "DIY legal template · Not legal advice"
+        core: '123LegalDoc is not a law firm; no attorney-client relationship is created.',
+        extended:
+          'This platform provides self-help legal document templates for informational purposes only. The information and templates are not legal advice.',
+        simple: 'DIY legal template · Not legal advice',
       },
       warrantyLines: {
-        standard: "Product provided as-is, without implied warranties of merchantability or fitness.",
-        nonNC: "THE TEMPLATE IS PROVIDED \"AS-IS\" WITHOUT WARRANTIES OF ANY KIND, EXPRESS OR IMPLIED.",
-        ncOverride: "The above warranty disclaimer does not apply to North Carolina purchasers."
-      }
+        standard:
+          'Product provided as-is, without implied warranties of merchantability or fitness.',
+        nonNC:
+          'THE TEMPLATE IS PROVIDED "AS-IS" WITHOUT WARRANTIES OF ANY KIND, EXPRESS OR IMPLIED.',
+        ncOverride:
+          'The above warranty disclaimer does not apply to North Carolina purchasers.',
+      },
     };
   }
 
@@ -175,63 +192,72 @@ class CheckoutComplianceEngine {
         requiresNoLegalAdviceDisclaimer: true,
         requiresNoAttorneyClientDisclaimer: true,
         requiresNotLawFirmDisclaimer: true,
-        requiresTermsAcceptance: true
+        requiresTermsAcceptance: true,
       },
       stateSpecific: {
-        'NC': {
+        NC: {
           state: 'NC',
           overrides: {
             warrantyDisclaimer: false, // NC prohibits warranty disclaimers
             venueClause: true,
             additionalNotices: [
-              "North Carolina purchasers: Standard warranty disclaimers do not apply.",
-              "Disputes will be resolved in North Carolina courts under North Carolina law."
-            ]
+              'North Carolina purchasers: Standard warranty disclaimers do not apply.',
+              'Disputes will be resolved in North Carolina courts under North Carolina law.',
+            ],
           },
           courtVenue: 'North Carolina',
-          applicableLaw: 'North Carolina'
+          applicableLaw: 'North Carolina',
         },
-        'DE': {
+        DE: {
           state: 'DE',
           overrides: {
             warrantyDisclaimer: true,
             venueClause: true,
-            additionalNotices: []
+            additionalNotices: [],
           },
           courtVenue: 'Delaware',
-          applicableLaw: 'Delaware'
-        }
+          applicableLaw: 'Delaware',
+        },
       },
       ftcCompliance: {
         requiresScrollTracking: true,
         requiresPriceTransparency: true,
         requiresNoHiddenFees: true,
-        requiresReasonableOpportunityToRead: true
-      }
+        requiresReasonableOpportunityToRead: true,
+      },
     };
   }
 
   private generateDisclaimerText(): string {
-    return "123LegalDoc is not a law firm; no attorney-client relationship is created. " +
-           "This platform provides self-help legal document templates for informational purposes only. " +
-           "The information and templates are not legal advice and should not be used as a substitute " +
-           "for competent legal counsel.";
+    return (
+      '123LegalDoc is not a law firm; no attorney-client relationship is created. ' +
+      'This platform provides self-help legal document templates for informational purposes only. ' +
+      'The information and templates are not legal advice and should not be used as a substitute ' +
+      'for competent legal counsel.'
+    );
   }
 
   private generateWarrantyText(): string {
-    return "THE TEMPLATE IS PROVIDED \"AS-IS\" WITHOUT WARRANTIES OF ANY KIND, " +
-           "EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO WARRANTIES OF " +
-           "MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, OR NON-INFRINGEMENT. " +
-           "We do not warrant that the template will meet your specific legal needs " +
-           "or that it will be suitable for your particular jurisdiction or situation.";
+    return (
+      'THE TEMPLATE IS PROVIDED "AS-IS" WITHOUT WARRANTIES OF ANY KIND, ' +
+      'EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO WARRANTIES OF ' +
+      'MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, OR NON-INFRINGEMENT. ' +
+      'We do not warrant that the template will meet your specific legal needs ' +
+      'or that it will be suitable for your particular jurisdiction or situation.'
+    );
   }
 
   private generateVenueText(config: ComplianceConfig): string {
-    return `These terms are governed by ${config.applicableLaw} law. ` +
-           `Any disputes will be resolved in ${config.courtVenue} courts.`;
+    return (
+      `These terms are governed by ${config.applicableLaw} law. ` +
+      `Any disputes will be resolved in ${config.courtVenue} courts.`
+    );
   }
 
-  private generateAdditionalNotices(state: string, documentType: string): string[] {
+  private generateAdditionalNotices(
+    state: string,
+    documentType: string,
+  ): string[] {
     const notices: string[] = [];
     const stateRules = this.complianceRules.stateSpecific[state];
 
@@ -242,8 +268,8 @@ class CheckoutComplianceEngine {
     // Document-type specific notices
     if (this.isHighRiskDocument(documentType)) {
       notices.push(
-        "This document type may have complex legal requirements. " +
-        "Consider consulting with a licensed attorney before use."
+        'This document type may have complex legal requirements. ' +
+          'Consider consulting with a licensed attorney before use.',
       );
     }
 
@@ -264,7 +290,9 @@ class CheckoutComplianceEngine {
 
     if (state === 'NC') {
       // Additional NC-specific validations could go here
-      warnings.push('North Carolina has specific UPL restrictions - ensure compliance');
+      warnings.push(
+        'North Carolina has specific UPL restrictions - ensure compliance',
+      );
     }
 
     return { violations, warnings };
@@ -278,11 +306,11 @@ class CheckoutComplianceEngine {
       'divorce_agreement',
       'custody_agreement',
       'real_estate_contract',
-      'business_formation'
+      'business_formation',
     ];
 
-    return highRiskDocuments.some(type => 
-      documentType.toLowerCase().includes(type.toLowerCase())
+    return highRiskDocuments.some((type) =>
+      documentType.toLowerCase().includes(type.toLowerCase()),
     );
   }
 }
@@ -291,7 +319,7 @@ class CheckoutComplianceEngine {
 export const checkoutCompliance = new CheckoutComplianceEngine();
 
 // Convenience functions
-export const getStateCompliance = (state: string) => 
+export const getStateCompliance = (state: string) =>
   checkoutCompliance.getStateCompliance(state);
 
 export const generateTermsText = (state: string, documentType: string) =>
@@ -300,7 +328,6 @@ export const generateTermsText = (state: string, documentType: string) =>
 export const validateCheckout = (params: any) =>
   checkoutCompliance.validateCheckoutCompliance(params);
 
-export const getCheckoutCopy = () =>
-  checkoutCompliance.getCheckoutCopy();
+export const getCheckoutCopy = () => checkoutCompliance.getCheckoutCopy();
 
 export default CheckoutComplianceEngine;

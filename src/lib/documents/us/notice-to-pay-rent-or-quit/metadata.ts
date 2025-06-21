@@ -24,12 +24,14 @@ export const noticeToPayRentOrQuitMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Notice to Pay Rent or Quit',
-      description: 'Legal notice for unpaid rent requiring payment or vacating premises',
+      description:
+        'Legal notice for unpaid rent requiring payment or vacating premises',
       aliases: [],
     },
     es: {
       name: 'Notice to Pay Rent or Quit', // TODO: Add Spanish translation
-      description: 'Legal notice for unpaid rent requiring payment or vacating premises', // TODO: Add Spanish translation
+      description:
+        'Legal notice for unpaid rent requiring payment or vacating premises', // TODO: Add Spanish translation
       aliases: [],
     },
   },

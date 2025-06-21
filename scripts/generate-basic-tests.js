@@ -40,9 +40,9 @@ const priorityComponents = [
 
 function generateTests() {
   console.log('🧪 Generating basic tests for priority components...');
-  
+
   const testsDir = 'src/components/shared/__tests__';
-  
+
   // Ensure test directory exists
   if (!fs.existsSync(testsDir)) {
     fs.mkdirSync(testsDir, { recursive: true });
@@ -50,23 +50,26 @@ function generateTests() {
 
   for (const component of priorityComponents) {
     const testFilePath = path.join(testsDir, `${component.name}.test.tsx`);
-    
+
     // Skip if test already exists
     if (fs.existsSync(testFilePath)) {
       console.log(`⏭️  Skipping ${component.name} - test already exists`);
       continue;
     }
-    
+
     const testContent = testTemplate(component.name, component.path);
-    
+
     try {
       fs.writeFileSync(testFilePath, testContent.trim());
       console.log(`✅ Generated test for ${component.name}`);
     } catch (error) {
-      console.error(`❌ Failed to generate test for ${component.name}:`, error.message);
+      console.error(
+        `❌ Failed to generate test for ${component.name}:`,
+        error.message,
+      );
     }
   }
-  
+
   console.log('🎉 Test generation completed!');
 }
 

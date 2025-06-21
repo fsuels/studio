@@ -8,11 +8,11 @@ export const questions: Question[] = [
     type: 'text',
     required: true,
   },
-  { 
-    id: 'tenantName', 
-    label: 'Tenant Name', 
-    type: 'text', 
-    required: true 
+  {
+    id: 'tenantName',
+    label: 'Tenant Name',
+    type: 'text',
+    required: true,
   },
   {
     id: 'propertyAddress',

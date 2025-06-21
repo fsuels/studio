@@ -1,10 +1,30 @@
 import type { Question } from '@/types/documents';
 
 export const statementOfAccountQuestions: Question[] = [
-  { id: 'statementDate', label: 'Statement Date', type: 'date', required: true },
-  { id: 'statementPeriodStart', label: 'Statement Period Start', type: 'date', required: true },
-  { id: 'statementPeriodEnd', label: 'Statement Period End', type: 'date', required: true },
-  { id: 'accountHolderName', label: 'Account Holder Name', type: 'text', required: true },
+  {
+    id: 'statementDate',
+    label: 'Statement Date',
+    type: 'date',
+    required: true,
+  },
+  {
+    id: 'statementPeriodStart',
+    label: 'Statement Period Start',
+    type: 'date',
+    required: true,
+  },
+  {
+    id: 'statementPeriodEnd',
+    label: 'Statement Period End',
+    type: 'date',
+    required: true,
+  },
+  {
+    id: 'accountHolderName',
+    label: 'Account Holder Name',
+    type: 'text',
+    required: true,
+  },
   {
     id: 'accountHolderAddress',
     label: 'Account Holder Address',
@@ -69,7 +89,12 @@ export const statementOfAccountQuestions: Question[] = [
     required: true,
     placeholder: 'Minimum payment required',
   },
-  { id: 'paymentDueDate', label: 'Payment Due Date', type: 'date', required: true },
+  {
+    id: 'paymentDueDate',
+    label: 'Payment Due Date',
+    type: 'date',
+    required: true,
+  },
   {
     id: 'interestRate',
     label: 'Interest Rate (%)',

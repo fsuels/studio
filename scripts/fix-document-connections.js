@@ -11,8 +11,9 @@ console.log('🔧 Fixing Document Connections...\n');
 
 // Get list of actual document directories
 const usDocsDir = path.join(__dirname, '../src/lib/documents/us');
-const documentDirs = fs.readdirSync(usDocsDir)
-  .filter(item => {
+const documentDirs = fs
+  .readdirSync(usDocsDir)
+  .filter((item) => {
     const itemPath = path.join(usDocsDir, item);
     return fs.statSync(itemPath).isDirectory();
   })
@@ -32,10 +33,12 @@ function toCamelCase(str) {
 const newIndexContent = `// src/lib/documents/us/index.ts
 // Auto-generated US documents index - connects all document folders
 
-${documentDirs.map(dir => {
-  const camelCase = toCamelCase(dir);
-  return `export { ${camelCase} } from './${dir}';`;
-}).join('\n')}
+${documentDirs
+  .map((dir) => {
+    const camelCase = toCamelCase(dir);
+    return `export { ${camelCase} } from './${dir}';`;
+  })
+  .join('\n')}
 
 // Export count for verification
 export const US_DOCUMENT_COUNT = ${documentDirs.length};
@@ -50,19 +53,19 @@ console.log(`\n✅ Updated US index with ${documentDirs.length} exports`);
 // Now check which documents need index.ts files created
 console.log('\n🔍 Checking document structure...');
 
-documentDirs.forEach(dir => {
+documentDirs.forEach((dir) => {
   const docPath = path.join(usDocsDir, dir);
   const hasIndex = fs.existsSync(path.join(docPath, 'index.ts'));
   const hasMetadata = fs.existsSync(path.join(docPath, 'metadata.ts'));
   const hasSchema = fs.existsSync(path.join(docPath, 'schema.ts'));
   const hasQuestions = fs.existsSync(path.join(docPath, 'questions.ts'));
-  
+
   const missing = [];
   if (!hasIndex) missing.push('index.ts');
   if (!hasMetadata) missing.push('metadata.ts');
   if (!hasSchema) missing.push('schema.ts');
   if (!hasQuestions) missing.push('questions.ts');
-  
+
   if (missing.length > 0) {
     console.log(`   ⚠️  ${dir}: Missing ${missing.join(', ')}`);
   } else {
@@ -79,25 +82,25 @@ const esTemplatesDir = path.join(templatesDir, 'es');
 
 let missingTemplates = [];
 
-documentDirs.forEach(dir => {
+documentDirs.forEach((dir) => {
   const enTemplate = path.join(enTemplatesDir, `${dir}.md`);
   const esTemplate = path.join(esTemplatesDir, `${dir}.md`);
-  
+
   const hasEn = fs.existsSync(enTemplate);
   const hasEs = fs.existsSync(esTemplate);
-  
+
   if (!hasEn || !hasEs) {
     missingTemplates.push({
       dir,
       missingEn: !hasEn,
-      missingEs: !hasEs
+      missingEs: !hasEs,
     });
   }
 });
 
 if (missingTemplates.length > 0) {
   console.log('Missing templates:');
-  missingTemplates.forEach(item => {
+  missingTemplates.forEach((item) => {
     const missing = [];
     if (item.missingEn) missing.push('EN');
     if (item.missingEs) missing.push('ES');
@@ -112,5 +115,9 @@ console.log(`   📁 Document directories: ${documentDirs.length}`);
 console.log(`   📤 Exports created: ${documentDirs.length}`);
 console.log(`   📄 Missing templates: ${missingTemplates.length}`);
 
-console.log('\n✨ Document connections fixed! All documents should now be available.');
-console.log('Next: Run the app to verify all documents appear in menus and search.');
+console.log(
+  '\n✨ Document connections fixed! All documents should now be available.',
+);
+console.log(
+  'Next: Run the app to verify all documents appear in menus and search.',
+);

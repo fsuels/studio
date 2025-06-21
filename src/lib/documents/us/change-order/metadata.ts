@@ -24,13 +24,19 @@ export const changeOrderMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Change Order',
-      description: 'Create a formal change order to modify project scope, timeline, or budget.',
+      description:
+        'Create a formal change order to modify project scope, timeline, or budget.',
       aliases: ['change order', 'project change request', 'modification order'],
     },
     es: {
       name: 'Orden de Cambio',
-      description: 'Crea una orden de cambio formal para modificar alcance, cronograma o presupuesto del proyecto.',
-      aliases: ['orden de cambio', 'solicitud de cambio de proyecto', 'orden de modificación'],
+      description:
+        'Crea una orden de cambio formal para modificar alcance, cronograma o presupuesto del proyecto.',
+      aliases: [
+        'orden de cambio',
+        'solicitud de cambio de proyecto',
+        'orden de modificación',
+      ],
     },
   },
 };

@@ -13,16 +13,16 @@ class SEOContentLibraryGenerator {
       pagesGenerated: 0,
       keywordsCovered: 0,
       estimatedTraffic: 0,
-      generationTime: 0
+      generationTime: 0,
     };
   }
 
   async generateMassiveContentLibrary() {
     console.log('🚀 Generating Massive SEO Content Library...');
     console.log('===============================================\n');
-    
+
     const startTime = Date.now();
-    
+
     // Ensure output directory exists
     if (!fs.existsSync(this.outputDir)) {
       fs.mkdirSync(this.outputDir, { recursive: true });
@@ -37,7 +37,7 @@ class SEOContentLibraryGenerator {
     await this.generateHowToGuides();
     await this.generateLegalUpdatePages();
     await this.generateTemplatePages();
-    
+
     this.stats.generationTime = Date.now() - startTime;
     this.generateSummaryReport();
   }
@@ -45,7 +45,7 @@ class SEOContentLibraryGenerator {
   // Generate state-specific document pages (350 pages: 50 states × 7 documents)
   async generateStateDocumentPages() {
     console.log('📍 Generating state-specific document pages...');
-    
+
     const states = [
       { code: 'AL', name: 'Alabama', population: 5024279 },
       { code: 'AK', name: 'Alaska', population: 733391 },
@@ -96,17 +96,37 @@ class SEOContentLibraryGenerator {
       { code: 'WA', name: 'Washington', population: 7693612 },
       { code: 'WV', name: 'West Virginia', population: 1793716 },
       { code: 'WI', name: 'Wisconsin', population: 5893718 },
-      { code: 'WY', name: 'Wyoming', population: 576851 }
+      { code: 'WY', name: 'Wyoming', population: 576851 },
     ];
 
     const documents = [
-      { id: 'employment-contract', name: 'Employment Contract', searchVolume: 8900 },
-      { id: 'llc-operating-agreement', name: 'LLC Operating Agreement', searchVolume: 7200 },
+      {
+        id: 'employment-contract',
+        name: 'Employment Contract',
+        searchVolume: 8900,
+      },
+      {
+        id: 'llc-operating-agreement',
+        name: 'LLC Operating Agreement',
+        searchVolume: 7200,
+      },
       { id: 'lease-agreement', name: 'Lease Agreement', searchVolume: 15600 },
       { id: 'nda', name: 'Non-Disclosure Agreement', searchVolume: 12100 },
-      { id: 'service-agreement', name: 'Service Agreement', searchVolume: 5400 },
-      { id: 'independent-contractor-agreement', name: 'Independent Contractor Agreement', searchVolume: 4800 },
-      { id: 'partnership-agreement', name: 'Partnership Agreement', searchVolume: 3200 }
+      {
+        id: 'service-agreement',
+        name: 'Service Agreement',
+        searchVolume: 5400,
+      },
+      {
+        id: 'independent-contractor-agreement',
+        name: 'Independent Contractor Agreement',
+        searchVolume: 4800,
+      },
+      {
+        id: 'partnership-agreement',
+        name: 'Partnership Agreement',
+        searchVolume: 3200,
+      },
     ];
 
     const stateDocDir = path.join(this.outputDir, 'state-documents');
@@ -115,16 +135,16 @@ class SEOContentLibraryGenerator {
     }
 
     let generated = 0;
-    
+
     for (const state of states) {
       for (const doc of documents) {
         const content = this.generateStateDocumentContent(state, doc);
         const filename = `${state.code.toLowerCase()}-${doc.id}.md`;
         const filepath = path.join(stateDocDir, filename);
-        
+
         fs.writeFileSync(filepath, content);
         generated++;
-        
+
         this.stats.keywordsCovered += 8; // ~8 keywords per page
         this.stats.estimatedTraffic += Math.round(doc.searchVolume * 0.05); // 5% CTR estimate
       }
@@ -136,7 +156,7 @@ class SEOContentLibraryGenerator {
 
   generateStateDocumentContent(state, document) {
     const businessCount = Math.round(state.population * 0.08);
-    
+
     return `# ${document.name} ${state.name} - State-Specific Legal Requirements
 
 ## ${document.name} for ${state.name} Businesses
@@ -199,19 +219,22 @@ Don't risk using generic templates that may not comply with ${state.name} law. G
   // Generate industry-specific pages
   async generateIndustryPages() {
     console.log('🏭 Generating industry-specific pages...');
-    
+
     const industries = [
       { id: 'technology', name: 'Technology & Software', businesses: 285000 },
       { id: 'healthcare', name: 'Healthcare & Medical', businesses: 450000 },
       { id: 'real-estate', name: 'Real Estate', businesses: 195000 },
       { id: 'construction', name: 'Construction', businesses: 670000 },
       { id: 'consulting', name: 'Consulting', businesses: 850000 },
-      { id: 'retail', name: 'Retail & E-commerce', businesses: 950000 }
+      { id: 'retail', name: 'Retail & E-commerce', businesses: 950000 },
     ];
 
     const documents = [
-      'employment-contract', 'nda', 'service-agreement', 
-      'independent-contractor-agreement', 'partnership-agreement'
+      'employment-contract',
+      'nda',
+      'service-agreement',
+      'independent-contractor-agreement',
+      'partnership-agreement',
     ];
 
     const industryDir = path.join(this.outputDir, 'industry-pages');
@@ -220,26 +243,29 @@ Don't risk using generic templates that may not comply with ${state.name} law. G
     }
 
     let generated = 0;
-    
+
     for (const industry of industries) {
       // Main industry page
       const industryContent = this.generateIndustryContent(industry);
       fs.writeFileSync(
-        path.join(industryDir, `${industry.id}.md`), 
-        industryContent
+        path.join(industryDir, `${industry.id}.md`),
+        industryContent,
       );
       generated++;
 
       // Industry + document combination pages
       for (const doc of documents) {
-        const comboContent = this.generateIndustryDocumentContent(industry, doc);
+        const comboContent = this.generateIndustryDocumentContent(
+          industry,
+          doc,
+        );
         fs.writeFileSync(
-          path.join(industryDir, `${industry.id}-${doc}.md`), 
-          comboContent
+          path.join(industryDir, `${industry.id}-${doc}.md`),
+          comboContent,
         );
         generated++;
       }
-      
+
       this.stats.keywordsCovered += 15; // ~15 keywords per industry
       this.stats.estimatedTraffic += 3500; // Estimated traffic per industry
     }
@@ -288,7 +314,7 @@ Our ${industry.name.toLowerCase()} templates include:
 
   generateIndustryDocumentContent(industry, documentId) {
     const docName = this.getDocumentName(documentId);
-    
+
     return `# ${docName} for ${industry.name} - Industry-Specific Template
 
 ## ${industry.name} ${docName}
@@ -315,7 +341,7 @@ Our ${docName.toLowerCase()} is specifically tailored for ${industry.name.toLowe
   // Generate major city pages
   async generateCityPages() {
     console.log('🏙️ Generating major city pages...');
-    
+
     const majorCities = [
       { name: 'New York', state: 'NY', population: 8336817 },
       { name: 'Los Angeles', state: 'CA', population: 3898747 },
@@ -336,7 +362,7 @@ Our ${docName.toLowerCase()} is specifically tailored for ${industry.name.toLowe
       { name: 'Indianapolis', state: 'IN', population: 876384 },
       { name: 'Seattle', state: 'WA', population: 753675 },
       { name: 'Denver', state: 'CO', population: 715522 },
-      { name: 'Boston', state: 'MA', population: 685094 }
+      { name: 'Boston', state: 'MA', population: 685094 },
     ];
 
     const cityDir = path.join(this.outputDir, 'city-pages');
@@ -345,13 +371,13 @@ Our ${docName.toLowerCase()} is specifically tailored for ${industry.name.toLowe
     }
 
     let generated = 0;
-    
+
     for (const city of majorCities) {
       const content = this.generateCityContent(city);
       const filename = `${city.name.toLowerCase().replace(/\s+/g, '-')}-${city.state.toLowerCase()}.md`;
       fs.writeFileSync(path.join(cityDir, filename), content);
       generated++;
-      
+
       this.stats.keywordsCovered += 6; // ~6 keywords per city
       this.stats.estimatedTraffic += Math.round(city.population * 0.001); // Population-based traffic estimate
     }
@@ -362,7 +388,7 @@ Our ${docName.toLowerCase()} is specifically tailored for ${industry.name.toLowe
 
   generateCityContent(city) {
     const businessCount = Math.round(city.population * 0.12); // Higher ratio for cities
-    
+
     return `# Legal Documents ${city.name}, ${city.state} - Professional Templates
 
 ## ${city.name} Legal Document Services
@@ -406,7 +432,7 @@ ${city.name} offers a dynamic business environment with opportunities across ind
   // Generate FAQ pages
   async generateFAQPages() {
     console.log('❓ Generating FAQ pages...');
-    
+
     const faqCategories = [
       { id: 'general', name: 'General Questions', questions: 12 },
       { id: 'pricing', name: 'Pricing & Payment', questions: 8 },
@@ -414,7 +440,7 @@ ${city.name} offers a dynamic business environment with opportunities across ind
       { id: 'customization', name: 'Document Customization', questions: 7 },
       { id: 'business', name: 'Business Documents', questions: 15 },
       { id: 'employment', name: 'Employment Law', questions: 12 },
-      { id: 'real-estate', name: 'Real Estate', questions: 9 }
+      { id: 'real-estate', name: 'Real Estate', questions: 9 },
     ];
 
     const faqDir = path.join(this.outputDir, 'faq-pages');
@@ -423,12 +449,12 @@ ${city.name} offers a dynamic business environment with opportunities across ind
     }
 
     let generated = 0;
-    
+
     for (const category of faqCategories) {
       const content = this.generateFAQContent(category);
       fs.writeFileSync(path.join(faqDir, `${category.id}-faq.md`), content);
       generated++;
-      
+
       this.stats.keywordsCovered += category.questions * 2; // 2 keywords per question
       this.stats.estimatedTraffic += category.questions * 180; // FAQ traffic estimate
     }
@@ -446,7 +472,7 @@ Get answers to the most frequently asked questions about ${category.name.toLower
 
 ### Popular Questions About ${category.name}
 
-${Array.from({length: category.questions}, (_, i) => {
+${Array.from({ length: category.questions }, (_, i) => {
   return this.generateSampleFAQ(category.id, i + 1);
 }).join('\n\n')}
 
@@ -468,25 +494,27 @@ Can't find the answer you're looking for? Our customer support team is here to h
         'How long does it take to create a legal document?',
         'Are your documents legally binding?',
         'Can I use these documents in any state?',
-        'What formats do you provide?'
+        'What formats do you provide?',
       ],
       pricing: [
         'How much do legal documents cost?',
         'Do you offer refunds?',
         'Are there any hidden fees?',
-        'Do you offer bulk discounts?'
+        'Do you offer bulk discounts?',
       ],
       legal: [
         'Are your documents attorney-reviewed?',
         'How do you ensure legal compliance?',
         'Do I need a lawyer to review my document?',
-        'What if laws change after I download?'
-      ]
+        'What if laws change after I download?',
+      ],
     };
 
-    const questions = faqs[categoryId] || [`Sample question ${index} about ${categoryId}`];
+    const questions = faqs[categoryId] || [
+      `Sample question ${index} about ${categoryId}`,
+    ];
     const question = questions[Math.min(index - 1, questions.length - 1)];
-    
+
     return `**Q: ${question}**
 
 A: This is a detailed answer explaining ${question.toLowerCase()}. Our platform provides comprehensive guidance and ensures all documents meet current legal standards.`;
@@ -495,13 +523,19 @@ A: This is a detailed answer explaining ${question.toLowerCase()}. Our platform 
   // Generate comparison pages
   async generateComparisonPages() {
     console.log('⚖️ Generating comparison pages...');
-    
+
     const comparisons = [
       { title: '123LegalDoc vs LegalZoom', competitor: 'LegalZoom' },
       { title: '123LegalDoc vs Rocket Lawyer', competitor: 'Rocket Lawyer' },
       { title: '123LegalDoc vs Nolo', competitor: 'Nolo' },
-      { title: 'Online Legal Documents vs Hiring a Lawyer', competitor: 'Traditional Attorney' },
-      { title: 'DIY Legal Forms vs Professional Templates', competitor: 'DIY Forms' }
+      {
+        title: 'Online Legal Documents vs Hiring a Lawyer',
+        competitor: 'Traditional Attorney',
+      },
+      {
+        title: 'DIY Legal Forms vs Professional Templates',
+        competitor: 'DIY Forms',
+      },
     ];
 
     const comparisonDir = path.join(this.outputDir, 'comparison-pages');
@@ -510,13 +544,14 @@ A: This is a detailed answer explaining ${question.toLowerCase()}. Our platform 
     }
 
     let generated = 0;
-    
+
     for (const comparison of comparisons) {
       const content = this.generateComparisonContent(comparison);
-      const filename = comparison.title.toLowerCase().replace(/[^a-z0-9]/g, '-') + '.md';
+      const filename =
+        comparison.title.toLowerCase().replace(/[^a-z0-9]/g, '-') + '.md';
       fs.writeFileSync(path.join(comparisonDir, filename), content);
       generated++;
-      
+
       this.stats.keywordsCovered += 10; // Comparison keywords
       this.stats.estimatedTraffic += 2400; // High-intent comparison traffic
     }
@@ -581,7 +616,7 @@ Choosing the right legal document service is crucial for your business. This com
   // Generate how-to guides
   async generateHowToGuides() {
     console.log('📚 Generating how-to guides...');
-    
+
     const guides = [
       'How to Create an Employment Contract',
       'How to Start an LLC',
@@ -592,7 +627,7 @@ Choosing the right legal document service is crucial for your business. This com
       'How to Protect Your Business with Legal Documents',
       'How to Choose the Right Legal Document',
       'How to Customize Legal Templates',
-      'How to Ensure Legal Compliance'
+      'How to Ensure Legal Compliance',
     ];
 
     const guidesDir = path.join(this.outputDir, 'how-to-guides');
@@ -601,13 +636,13 @@ Choosing the right legal document service is crucial for your business. This com
     }
 
     let generated = 0;
-    
+
     for (const guide of guides) {
       const content = this.generateHowToContent(guide);
       const filename = guide.toLowerCase().replace(/[^a-z0-9]/g, '-') + '.md';
       fs.writeFileSync(path.join(guidesDir, filename), content);
       generated++;
-      
+
       this.stats.keywordsCovered += 8; // How-to keywords
       this.stats.estimatedTraffic += 3200; // Educational content traffic
     }
@@ -673,7 +708,7 @@ While this guide provides comprehensive information, consider using professional
   // Generate legal update pages
   async generateLegalUpdatePages() {
     console.log('📰 Generating legal update pages...');
-    
+
     const updates = [
       'California Employment Law Changes 2024',
       'Texas Business Formation Updates',
@@ -684,7 +719,7 @@ While this guide provides comprehensive information, consider using professional
       'Employment Contract Requirements 2024',
       'LLC Formation Law Updates',
       'Lease Agreement Legal Changes',
-      'Non-Compete Agreement Regulations'
+      'Non-Compete Agreement Regulations',
     ];
 
     const updatesDir = path.join(this.outputDir, 'legal-updates');
@@ -693,13 +728,13 @@ While this guide provides comprehensive information, consider using professional
     }
 
     let generated = 0;
-    
+
     for (const update of updates) {
       const content = this.generateLegalUpdateContent(update);
       const filename = update.toLowerCase().replace(/[^a-z0-9]/g, '-') + '.md';
       fs.writeFileSync(path.join(updatesDir, filename), content);
       generated++;
-      
+
       this.stats.keywordsCovered += 6; // Update keywords
       this.stats.estimatedTraffic += 1800; // News/update traffic
     }
@@ -761,7 +796,7 @@ Subscribe to our legal update newsletter to stay informed about changes affectin
   // Generate template showcase pages
   async generateTemplatePages() {
     console.log('📄 Generating template showcase pages...');
-    
+
     const templates = [
       'Employment Contract Templates',
       'LLC Operating Agreement Templates',
@@ -772,7 +807,7 @@ Subscribe to our legal update newsletter to stay informed about changes affectin
       'Independent Contractor Templates',
       'Business Formation Templates',
       'Real Estate Document Templates',
-      'Free Legal Form Templates'
+      'Free Legal Form Templates',
     ];
 
     const templatesDir = path.join(this.outputDir, 'template-pages');
@@ -781,13 +816,14 @@ Subscribe to our legal update newsletter to stay informed about changes affectin
     }
 
     let generated = 0;
-    
+
     for (const template of templates) {
       const content = this.generateTemplateContent(template);
-      const filename = template.toLowerCase().replace(/[^a-z0-9]/g, '-') + '.md';
+      const filename =
+        template.toLowerCase().replace(/[^a-z0-9]/g, '-') + '.md';
       fs.writeFileSync(path.join(templatesDir, filename), content);
       generated++;
-      
+
       this.stats.keywordsCovered += 12; // Template keywords
       this.stats.estimatedTraffic += 4500; // High-intent template traffic
     }
@@ -867,10 +903,10 @@ Don't waste time with generic templates or expensive attorneys. Get professional
       'employment-contract': 'Employment Contract',
       'llc-operating-agreement': 'LLC Operating Agreement',
       'lease-agreement': 'Lease Agreement',
-      'nda': 'Non-Disclosure Agreement',
+      nda: 'Non-Disclosure Agreement',
       'service-agreement': 'Service Agreement',
       'independent-contractor-agreement': 'Independent Contractor Agreement',
-      'partnership-agreement': 'Partnership Agreement'
+      'partnership-agreement': 'Partnership Agreement',
     };
     return names[documentId] || 'Legal Document';
   }
@@ -978,15 +1014,21 @@ Generated on: ${new Date().toISOString()}
 `;
 
     fs.writeFileSync(path.join(this.outputDir, 'GENERATION_REPORT.md'), report);
-    
+
     console.log('\n' + '='.repeat(60));
     console.log('🎉 SEO CONTENT LIBRARY GENERATION COMPLETE! 🎉');
     console.log('='.repeat(60));
-    console.log(`📊 Total Pages: ${this.stats.pagesGenerated.toLocaleString()}`);
+    console.log(
+      `📊 Total Pages: ${this.stats.pagesGenerated.toLocaleString()}`,
+    );
     console.log(`🔍 Keywords: ${this.stats.keywordsCovered.toLocaleString()}`);
-    console.log(`📈 Est. Traffic: ${this.stats.estimatedTraffic.toLocaleString()}/month`);
+    console.log(
+      `📈 Est. Traffic: ${this.stats.estimatedTraffic.toLocaleString()}/month`,
+    );
     console.log(`⏱️  Time: ${(this.stats.generationTime / 1000).toFixed(1)}s`);
-    console.log(`💰 Revenue Potential: $${Math.round(this.stats.estimatedTraffic * 0.025 * 35 * 12).toLocaleString()}/year`);
+    console.log(
+      `💰 Revenue Potential: $${Math.round(this.stats.estimatedTraffic * 0.025 * 35 * 12).toLocaleString()}/year`,
+    );
     console.log('='.repeat(60));
     console.log(`📁 Content saved to: ${this.outputDir}/`);
     console.log(`📋 Full report: ${this.outputDir}/GENERATION_REPORT.md`);

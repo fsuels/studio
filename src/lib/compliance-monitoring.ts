@@ -19,7 +19,12 @@ interface ComplianceFramework {
 interface ComplianceRequirement {
   id: string;
   frameworkId: string;
-  category: 'data_protection' | 'security' | 'operational' | 'reporting' | 'governance';
+  category:
+    | 'data_protection'
+    | 'security'
+    | 'operational'
+    | 'reporting'
+    | 'governance';
   title: string;
   description: string;
   mandatory: boolean;
@@ -34,10 +39,20 @@ interface ComplianceControl {
   name: string;
   type: 'preventive' | 'detective' | 'corrective' | 'directive';
   automatable: boolean;
-  frequency: 'continuous' | 'daily' | 'weekly' | 'monthly' | 'quarterly' | 'annually';
+  frequency:
+    | 'continuous'
+    | 'daily'
+    | 'weekly'
+    | 'monthly'
+    | 'quarterly'
+    | 'annually';
   responsible: string[];
   implementation: {
-    status: 'not_implemented' | 'in_progress' | 'implemented' | 'needs_improvement';
+    status:
+      | 'not_implemented'
+      | 'in_progress'
+      | 'implemented'
+      | 'needs_improvement';
     lastReviewed: string;
     nextReview: string;
     effectiveness: number; // 0-100
@@ -156,8 +171,9 @@ export class ComplianceMonitoring {
       penalties: {
         minor: 'Up to €10 million or 2% of annual global turnover',
         major: 'Up to €20 million or 4% of annual global turnover',
-        critical: 'Up to €20 million or 4% of annual global turnover plus business interruption'
-      }
+        critical:
+          'Up to €20 million or 4% of annual global turnover plus business interruption',
+      },
     });
 
     // SOX Framework
@@ -166,14 +182,16 @@ export class ComplianceMonitoring {
       name: 'Sarbanes-Oxley Act',
       version: '2002',
       jurisdiction: ['US'],
-      description: 'US federal law for corporate financial reporting and governance',
+      description:
+        'US federal law for corporate financial reporting and governance',
       requirements: this.createSOXRequirements(),
       assessmentCriteria: this.createSOXCriteria(),
       penalties: {
         minor: 'Up to $1 million and/or 10 years imprisonment',
         major: 'Up to $5 million and/or 20 years imprisonment',
-        critical: 'Up to $5 million and/or 20 years imprisonment plus SEC enforcement'
-      }
+        critical:
+          'Up to $5 million and/or 20 years imprisonment plus SEC enforcement',
+      },
     });
 
     // ISO 27001 Framework
@@ -182,14 +200,15 @@ export class ComplianceMonitoring {
       name: 'ISO/IEC 27001',
       version: '2022',
       jurisdiction: ['Global'],
-      description: 'International standard for information security management systems',
+      description:
+        'International standard for information security management systems',
       requirements: this.createISO27001Requirements(),
       assessmentCriteria: this.createISO27001Criteria(),
       penalties: {
         minor: 'Certification suspension',
         major: 'Certification withdrawal',
-        critical: 'Certification withdrawal and reputational damage'
-      }
+        critical: 'Certification withdrawal and reputational damage',
+      },
     });
 
     // SOC 2 Framework
@@ -204,8 +223,8 @@ export class ComplianceMonitoring {
       penalties: {
         minor: 'Qualified opinion',
         major: 'Adverse opinion',
-        critical: 'Audit failure and customer contract breaches'
-      }
+        critical: 'Audit failure and customer contract breaches',
+      },
     });
 
     console.log(`✅ Initialized ${this.frameworks.size} compliance frameworks`);
@@ -219,7 +238,8 @@ export class ComplianceMonitoring {
         frameworkId: 'gdpr',
         category: 'data_protection',
         title: 'Lawful Basis for Processing',
-        description: 'Ensure all personal data processing has a lawful basis under Article 6',
+        description:
+          'Ensure all personal data processing has a lawful basis under Article 6',
         mandatory: true,
         implementationLevel: 'basic',
         controls: [
@@ -234,19 +254,28 @@ export class ComplianceMonitoring {
               status: 'implemented',
               lastReviewed: '2024-01-15T00:00:00Z',
               nextReview: '2024-04-15T00:00:00Z',
-              effectiveness: 95
-            }
-          }
+              effectiveness: 95,
+            },
+          },
         ],
-        evidence: ['data_processing_register', 'consent_records', 'legal_assessments'],
-        testProcedures: ['review_processing_activities', 'verify_lawful_basis', 'test_consent_mechanisms']
+        evidence: [
+          'data_processing_register',
+          'consent_records',
+          'legal_assessments',
+        ],
+        testProcedures: [
+          'review_processing_activities',
+          'verify_lawful_basis',
+          'test_consent_mechanisms',
+        ],
       },
       {
         id: 'gdpr_002',
         frameworkId: 'gdpr',
         category: 'data_protection',
         title: 'Data Subject Rights',
-        description: 'Implement mechanisms for data subject rights (access, rectification, erasure, etc.)',
+        description:
+          'Implement mechanisms for data subject rights (access, rectification, erasure, etc.)',
         mandatory: true,
         implementationLevel: 'intermediate',
         controls: [
@@ -261,13 +290,21 @@ export class ComplianceMonitoring {
               status: 'implemented',
               lastReviewed: '2024-01-10T00:00:00Z',
               nextReview: '2024-07-10T00:00:00Z',
-              effectiveness: 88
-            }
-          }
+              effectiveness: 88,
+            },
+          },
         ],
-        evidence: ['dsr_portal_logs', 'response_time_metrics', 'customer_feedback'],
-        testProcedures: ['test_dsr_portal', 'measure_response_times', 'verify_data_accuracy']
-      }
+        evidence: [
+          'dsr_portal_logs',
+          'response_time_metrics',
+          'customer_feedback',
+        ],
+        testProcedures: [
+          'test_dsr_portal',
+          'measure_response_times',
+          'verify_data_accuracy',
+        ],
+      },
     ];
   }
 
@@ -279,27 +316,35 @@ export class ComplianceMonitoring {
         name: 'Data Processing Transparency',
         weight: 0.3,
         evaluationMethod: 'hybrid',
-        metrics: ['consent_rate', 'privacy_notice_clarity', 'dsr_response_time'],
+        metrics: [
+          'consent_rate',
+          'privacy_notice_clarity',
+          'dsr_response_time',
+        ],
         thresholds: {
           excellent: 95,
           satisfactory: 80,
           needsImprovement: 60,
-          inadequate: 40
-        }
+          inadequate: 40,
+        },
       },
       {
         id: 'gdpr_crit_002',
         name: 'Data Security Measures',
         weight: 0.4,
         evaluationMethod: 'automated',
-        metrics: ['encryption_coverage', 'access_control_effectiveness', 'breach_response_time'],
+        metrics: [
+          'encryption_coverage',
+          'access_control_effectiveness',
+          'breach_response_time',
+        ],
         thresholds: {
           excellent: 98,
           satisfactory: 90,
           needsImprovement: 75,
-          inadequate: 50
-        }
-      }
+          inadequate: 50,
+        },
+      },
     ];
   }
 
@@ -311,7 +356,8 @@ export class ComplianceMonitoring {
         frameworkId: 'sox',
         category: 'governance',
         title: 'Management Assessment of Internal Controls',
-        description: 'Annual assessment of internal controls over financial reporting',
+        description:
+          'Annual assessment of internal controls over financial reporting',
         mandatory: true,
         implementationLevel: 'advanced',
         controls: [
@@ -326,13 +372,21 @@ export class ComplianceMonitoring {
               status: 'implemented',
               lastReviewed: '2024-01-01T00:00:00Z',
               nextReview: '2025-01-01T00:00:00Z',
-              effectiveness: 92
-            }
-          }
+              effectiveness: 92,
+            },
+          },
         ],
-        evidence: ['icfr_assessment_report', 'management_certification', 'audit_workpapers'],
-        testProcedures: ['review_control_design', 'test_control_effectiveness', 'evaluate_deficiencies']
-      }
+        evidence: [
+          'icfr_assessment_report',
+          'management_certification',
+          'audit_workpapers',
+        ],
+        testProcedures: [
+          'review_control_design',
+          'test_control_effectiveness',
+          'evaluate_deficiencies',
+        ],
+      },
     ];
   }
 
@@ -344,14 +398,18 @@ export class ComplianceMonitoring {
         name: 'Control Environment',
         weight: 0.35,
         evaluationMethod: 'manual',
-        metrics: ['tone_at_top', 'organizational_structure', 'competence_commitment'],
+        metrics: [
+          'tone_at_top',
+          'organizational_structure',
+          'competence_commitment',
+        ],
         thresholds: {
           excellent: 90,
           satisfactory: 75,
           needsImprovement: 60,
-          inadequate: 45
-        }
-      }
+          inadequate: 45,
+        },
+      },
     ];
   }
 
@@ -378,13 +436,21 @@ export class ComplianceMonitoring {
               status: 'implemented',
               lastReviewed: '2024-01-15T00:00:00Z',
               nextReview: '2025-01-15T00:00:00Z',
-              effectiveness: 90
-            }
-          }
+              effectiveness: 90,
+            },
+          },
         ],
-        evidence: ['security_policies', 'policy_approval_records', 'training_records'],
-        testProcedures: ['policy_review', 'approval_verification', 'training_effectiveness']
-      }
+        evidence: [
+          'security_policies',
+          'policy_approval_records',
+          'training_records',
+        ],
+        testProcedures: [
+          'policy_review',
+          'approval_verification',
+          'training_effectiveness',
+        ],
+      },
     ];
   }
 
@@ -401,9 +467,9 @@ export class ComplianceMonitoring {
           excellent: 95,
           satisfactory: 85,
           needsImprovement: 70,
-          inadequate: 55
-        }
-      }
+          inadequate: 55,
+        },
+      },
     ];
   }
 
@@ -415,7 +481,8 @@ export class ComplianceMonitoring {
         frameworkId: 'soc2',
         category: 'security',
         title: 'Logical and Physical Access Controls',
-        description: 'Implement controls to restrict logical and physical access',
+        description:
+          'Implement controls to restrict logical and physical access',
         mandatory: true,
         implementationLevel: 'intermediate',
         controls: [
@@ -430,13 +497,21 @@ export class ComplianceMonitoring {
               status: 'implemented',
               lastReviewed: '2024-01-20T00:00:00Z',
               nextReview: '2024-04-20T00:00:00Z',
-              effectiveness: 94
-            }
-          }
+              effectiveness: 94,
+            },
+          },
         ],
-        evidence: ['access_control_matrix', 'access_logs', 'periodic_access_reviews'],
-        testProcedures: ['test_access_controls', 'review_user_access', 'validate_segregation']
-      }
+        evidence: [
+          'access_control_matrix',
+          'access_logs',
+          'periodic_access_reviews',
+        ],
+        testProcedures: [
+          'test_access_controls',
+          'review_user_access',
+          'validate_segregation',
+        ],
+      },
     ];
   }
 
@@ -448,14 +523,18 @@ export class ComplianceMonitoring {
         name: 'Trust Services Criteria',
         weight: 1.0,
         evaluationMethod: 'manual',
-        metrics: ['security_controls', 'availability_controls', 'confidentiality_controls'],
+        metrics: [
+          'security_controls',
+          'availability_controls',
+          'confidentiality_controls',
+        ],
         thresholds: {
           excellent: 95,
           satisfactory: 85,
           needsImprovement: 70,
-          inadequate: 55
-        }
-      }
+          inadequate: 55,
+        },
+      },
     ];
   }
 
@@ -470,14 +549,14 @@ export class ComplianceMonitoring {
         'data_processing_without_consent',
         'dsr_response_time_exceeded',
         'data_breach_notification_delay',
-        'cross_border_transfer_violations'
+        'cross_border_transfer_violations',
       ],
       alertThresholds: {
-        'dsr_response_time': 720, // 30 days in hours
-        'breach_notification_time': 72, // 72 hours
-        'consent_rate': 0.95 // 95% minimum
+        dsr_response_time: 720, // 30 days in hours
+        breach_notification_time: 72, // 72 hours
+        consent_rate: 0.95, // 95% minimum
       },
-      frequency: 'continuous'
+      frequency: 'continuous',
     });
 
     // Monitor SOX compliance
@@ -487,14 +566,14 @@ export class ComplianceMonitoring {
         'segregation_of_duties_violations',
         'unauthorized_system_changes',
         'financial_data_access_anomalies',
-        'control_effectiveness_degradation'
+        'control_effectiveness_degradation',
       ],
       alertThresholds: {
-        'segregation_violations': 0,
-        'unauthorized_changes': 0,
-        'access_anomalies': 5
+        segregation_violations: 0,
+        unauthorized_changes: 0,
+        access_anomalies: 5,
       },
-      frequency: 'daily'
+      frequency: 'daily',
     });
 
     // Monitor ISO 27001 compliance
@@ -504,17 +583,19 @@ export class ComplianceMonitoring {
         'security_incident_count',
         'vulnerability_remediation_time',
         'access_control_violations',
-        'policy_compliance_rate'
+        'policy_compliance_rate',
       ],
       alertThresholds: {
-        'critical_incidents': 0,
-        'high_vulnerabilities': 5,
-        'compliance_rate': 0.95
+        critical_incidents: 0,
+        high_vulnerabilities: 5,
+        compliance_rate: 0.95,
       },
-      frequency: 'continuous'
+      frequency: 'continuous',
     });
 
-    console.log(`✅ Continuous monitoring configured for ${this.continuousMonitoring.size} frameworks`);
+    console.log(
+      `✅ Continuous monitoring configured for ${this.continuousMonitoring.size} frameworks`,
+    );
   }
 
   // Initialize alert thresholds
@@ -530,9 +611,11 @@ export class ComplianceMonitoring {
   async conductAssessment(
     frameworkId: string,
     scope: string[],
-    assessor: string
+    assessor: string,
   ): Promise<ComplianceAssessment> {
-    console.log(`📊 Conducting ${frameworkId.toUpperCase()} compliance assessment...`);
+    console.log(
+      `📊 Conducting ${frameworkId.toUpperCase()} compliance assessment...`,
+    );
 
     const framework = this.frameworks.get(frameworkId);
     if (!framework) {
@@ -550,9 +633,9 @@ export class ComplianceMonitoring {
 
     for (const requirement of framework.requirements) {
       if (scope.includes(requirement.category)) {
-        const { score, requirementFindings, requirementRecommendations } = 
+        const { score, requirementFindings, requirementRecommendations } =
           await this.evaluateRequirement(requirement);
-        
+
         totalScore += score;
         maxScore += 100; // Each requirement is scored out of 100
         findings.push(...requirementFindings);
@@ -572,31 +655,35 @@ export class ComplianceMonitoring {
       scope,
       period: {
         start: new Date(Date.now() - 90 * 24 * 60 * 60 * 1000).toISOString(), // Last 90 days
-        end: assessmentDate
+        end: assessmentDate,
       },
       overallScore: Math.round(overallScore),
       maturityLevel,
       findings,
       recommendations,
       riskProfile,
-      certification: this.determineCertificationStatus(overallScore, findings)
+      certification: this.determineCertificationStatus(overallScore, findings),
     };
 
     this.assessments.set(assessmentId, assessment);
 
-    console.log(`✅ Assessment completed: ${overallScore.toFixed(1)}% (${maturityLevel})`);
+    console.log(
+      `✅ Assessment completed: ${overallScore.toFixed(1)}% (${maturityLevel})`,
+    );
     return assessment;
   }
 
   // Evaluate individual requirement
-  private async evaluateRequirement(requirement: ComplianceRequirement): Promise<{
+  private async evaluateRequirement(
+    requirement: ComplianceRequirement,
+  ): Promise<{
     score: number;
     requirementFindings: ComplianceFinding[];
     requirementRecommendations: ComplianceRecommendation[];
   }> {
     const findings: ComplianceFinding[] = [];
     const recommendations: ComplianceRecommendation[] = [];
-    
+
     let controlScores = 0;
     let controlCount = 0;
 
@@ -615,22 +702,29 @@ export class ComplianceMonitoring {
           requirementId: requirement.id,
           title: `Control Effectiveness Below Threshold: ${control.name}`,
           description: `Control "${control.name}" has effectiveness of ${controlScore}%, below the 80% threshold`,
-          evidence: [`control_test_results_${control.id}`, `effectiveness_metrics_${control.id}`],
-          impact: 'Increased risk of compliance violation and potential regulatory penalties',
+          evidence: [
+            `control_test_results_${control.id}`,
+            `effectiveness_metrics_${control.id}`,
+          ],
+          impact:
+            'Increased risk of compliance violation and potential regulatory penalties',
           likelihood: controlScore < 60 ? 'high' : 'medium',
-          riskRating: this.calculateRiskRating(controlScore < 60 ? 'high' : 'medium', 'high'),
+          riskRating: this.calculateRiskRating(
+            controlScore < 60 ? 'high' : 'medium',
+            'high',
+          ),
           remediation: {
             actions: [
               'Review control design and implementation',
               'Enhance control testing procedures',
               'Provide additional training to responsible parties',
-              'Consider control automation opportunities'
+              'Consider control automation opportunities',
             ],
             timeline: controlScore < 60 ? '30 days' : '60 days',
             responsible: control.responsible,
-            cost: 'medium'
+            cost: 'medium',
           },
-          status: 'open'
+          status: 'open',
         });
       }
 
@@ -645,15 +739,15 @@ export class ComplianceMonitoring {
           benefits: [
             'Enhanced compliance posture',
             'Reduced audit findings',
-            'Improved operational efficiency'
+            'Improved operational efficiency',
           ],
           implementation: {
             effort: 'low',
             timeline: '90 days',
             resources: ['security_team', 'process_owner'],
-            dependencies: []
+            dependencies: [],
           },
-          businessValue: 75
+          businessValue: 75,
         });
       }
     }
@@ -663,12 +757,14 @@ export class ComplianceMonitoring {
     return {
       score: averageScore,
       requirementFindings: findings,
-      requirementRecommendations: recommendations
+      requirementRecommendations: recommendations,
     };
   }
 
   // Determine maturity level based on score
-  private determineMaturityLevel(score: number): ComplianceAssessment['maturityLevel'] {
+  private determineMaturityLevel(
+    score: number,
+  ): ComplianceAssessment['maturityLevel'] {
     if (score >= 90) return 'optimized';
     if (score >= 75) return 'managed';
     if (score >= 60) return 'developing';
@@ -676,56 +772,79 @@ export class ComplianceMonitoring {
   }
 
   // Calculate risk profile
-  private calculateRiskProfile(findings: ComplianceFinding[]): ComplianceAssessment['riskProfile'] {
-    const high = findings.filter(f => f.severity === 'critical' || f.severity === 'high').length;
-    const medium = findings.filter(f => f.severity === 'medium').length;
-    const low = findings.filter(f => f.severity === 'low').length;
+  private calculateRiskProfile(
+    findings: ComplianceFinding[],
+  ): ComplianceAssessment['riskProfile'] {
+    const high = findings.filter(
+      (f) => f.severity === 'critical' || f.severity === 'high',
+    ).length;
+    const medium = findings.filter((f) => f.severity === 'medium').length;
+    const low = findings.filter((f) => f.severity === 'low').length;
 
     return { high, medium, low };
   }
 
   // Determine certification status
-  private determineCertificationStatus(score: number, findings: ComplianceFinding[]): ComplianceAssessment['certification'] {
-    const criticalFindings = findings.filter(f => f.severity === 'critical').length;
-    const highFindings = findings.filter(f => f.severity === 'high').length;
+  private determineCertificationStatus(
+    score: number,
+    findings: ComplianceFinding[],
+  ): ComplianceAssessment['certification'] {
+    const criticalFindings = findings.filter(
+      (f) => f.severity === 'critical',
+    ).length;
+    const highFindings = findings.filter((f) => f.severity === 'high').length;
 
     if (criticalFindings > 0) {
       return { status: 'not_certified' };
     } else if (highFindings > 0 || score < 80) {
-      return { 
+      return {
         status: 'conditionally_certified',
-        validUntil: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000).toISOString() // 90 days
+        validUntil: new Date(
+          Date.now() + 90 * 24 * 60 * 60 * 1000,
+        ).toISOString(), // 90 days
       };
     } else {
       return {
         status: 'certified',
-        validUntil: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString(), // 1 year
-        certifyingBody: 'Internal Assessment'
+        validUntil: new Date(
+          Date.now() + 365 * 24 * 60 * 60 * 1000,
+        ).toISOString(), // 1 year
+        certifyingBody: 'Internal Assessment',
       };
     }
   }
 
   // Calculate risk rating
   private calculateRiskRating(likelihood: string, impact: string): number {
-    const likelihoodScores = { very_low: 1, low: 2, medium: 3, high: 4, very_high: 5 };
+    const likelihoodScores = {
+      very_low: 1,
+      low: 2,
+      medium: 3,
+      high: 4,
+      very_high: 5,
+    };
     const impactScores = { low: 1, medium: 2, high: 3, critical: 4 };
-    
-    const likelihoodScore = likelihoodScores[likelihood as keyof typeof likelihoodScores] || 3;
+
+    const likelihoodScore =
+      likelihoodScores[likelihood as keyof typeof likelihoodScores] || 3;
     const impactScore = impactScores[impact as keyof typeof impactScores] || 2;
-    
+
     return likelihoodScore * impactScore;
   }
 
   // Generate compliance dashboard
   generateComplianceDashboard(): {
     overallStatus: 'compliant' | 'partially_compliant' | 'non_compliant';
-    frameworkStatuses: Record<string, {
-      score: number;
-      maturityLevel: string;
-      lastAssessed: string;
-      criticalFindings: number;
-      certification: string;
-    }>;
+    frameworkStatuses: Record<
+      string,
+      {
+        score: number;
+        maturityLevel: string;
+        lastAssessed: string;
+        criticalFindings: number;
+        certification: string;
+      }
+    >;
     trends: {
       scoreImprovement: number;
       findingsReduction: number;
@@ -750,9 +869,13 @@ export class ComplianceMonitoring {
     const latestAssessments = this.getLatestAssessments();
 
     // Calculate overall status
-    const avgScore = latestAssessments.reduce((sum, a) => sum + a.overallScore, 0) / latestAssessments.length;
-    const criticalFindings = latestAssessments.reduce((sum, a) => 
-      sum + a.findings.filter(f => f.severity === 'critical').length, 0
+    const avgScore =
+      latestAssessments.reduce((sum, a) => sum + a.overallScore, 0) /
+      latestAssessments.length;
+    const criticalFindings = latestAssessments.reduce(
+      (sum, a) =>
+        sum + a.findings.filter((f) => f.severity === 'critical').length,
+      0,
     );
 
     let overallStatus: 'compliant' | 'partially_compliant' | 'non_compliant';
@@ -766,13 +889,15 @@ export class ComplianceMonitoring {
 
     // Framework statuses
     const frameworkStatuses: Record<string, any> = {};
-    latestAssessments.forEach(assessment => {
+    latestAssessments.forEach((assessment) => {
       frameworkStatuses[assessment.frameworkId] = {
         score: assessment.overallScore,
         maturityLevel: assessment.maturityLevel,
         lastAssessed: assessment.assessmentDate,
-        criticalFindings: assessment.findings.filter(f => f.severity === 'critical').length,
-        certification: assessment.certification.status
+        criticalFindings: assessment.findings.filter(
+          (f) => f.severity === 'critical',
+        ).length,
+        certification: assessment.certification.status,
       };
     });
 
@@ -780,7 +905,7 @@ export class ComplianceMonitoring {
     const trends = {
       scoreImprovement: 5.2, // Simulated improvement
       findingsReduction: -12, // Negative indicates reduction
-      controlEffectiveness: 3.8 // Improvement percentage
+      controlEffectiveness: 3.8, // Improvement percentage
     };
 
     // Upcoming deadlines
@@ -789,23 +914,25 @@ export class ComplianceMonitoring {
         framework: 'gdpr',
         deadline: '2024-05-25T00:00:00Z',
         activity: 'Annual GDPR Assessment',
-        daysRemaining: this.calculateDaysRemaining('2024-05-25T00:00:00Z')
+        daysRemaining: this.calculateDaysRemaining('2024-05-25T00:00:00Z'),
       },
       {
         framework: 'sox',
         deadline: '2024-12-31T00:00:00Z',
         activity: 'SOX 404 Assessment',
-        daysRemaining: this.calculateDaysRemaining('2024-12-31T00:00:00Z')
-      }
+        daysRemaining: this.calculateDaysRemaining('2024-12-31T00:00:00Z'),
+      },
     ];
 
     // Risk summary
-    const allFindings = latestAssessments.flatMap(a => a.findings);
+    const allFindings = latestAssessments.flatMap((a) => a.findings);
     const riskSummary = {
       totalRisks: allFindings.length,
-      highRisks: allFindings.filter(f => f.severity === 'critical' || f.severity === 'high').length,
-      mediumRisks: allFindings.filter(f => f.severity === 'medium').length,
-      lowRisks: allFindings.filter(f => f.severity === 'low').length
+      highRisks: allFindings.filter(
+        (f) => f.severity === 'critical' || f.severity === 'high',
+      ).length,
+      mediumRisks: allFindings.filter((f) => f.severity === 'medium').length,
+      lowRisks: allFindings.filter((f) => f.severity === 'low').length,
     };
 
     return {
@@ -813,17 +940,20 @@ export class ComplianceMonitoring {
       frameworkStatuses,
       trends,
       upcomingDeadlines,
-      riskSummary
+      riskSummary,
     };
   }
 
   // Get latest assessments for each framework
   private getLatestAssessments(): ComplianceAssessment[] {
     const latest: Map<string, ComplianceAssessment> = new Map();
-    
-    Array.from(this.assessments.values()).forEach(assessment => {
+
+    Array.from(this.assessments.values()).forEach((assessment) => {
       const existing = latest.get(assessment.frameworkId);
-      if (!existing || new Date(assessment.assessmentDate) > new Date(existing.assessmentDate)) {
+      if (
+        !existing ||
+        new Date(assessment.assessmentDate) > new Date(existing.assessmentDate)
+      ) {
         latest.set(assessment.frameworkId, assessment);
       }
     });
@@ -840,14 +970,19 @@ export class ComplianceMonitoring {
   }
 
   // Monitoring alert system
-  async checkComplianceAlerts(): Promise<Array<{
-    framework: string;
-    alertType: 'threshold_exceeded' | 'deadline_approaching' | 'control_failure';
-    severity: 'low' | 'medium' | 'high' | 'critical';
-    message: string;
-    timestamp: string;
-    requiresAction: boolean;
-  }>> {
+  async checkComplianceAlerts(): Promise<
+    Array<{
+      framework: string;
+      alertType:
+        | 'threshold_exceeded'
+        | 'deadline_approaching'
+        | 'control_failure';
+      severity: 'low' | 'medium' | 'high' | 'critical';
+      message: string;
+      timestamp: string;
+      requiresAction: boolean;
+    }>
+  > {
     const alerts = [];
     const now = new Date();
 
@@ -855,7 +990,7 @@ export class ComplianceMonitoring {
     for (const [metricName, threshold] of this.alertThresholds.entries()) {
       // Simulate metric checking
       const currentValue = this.getCurrentMetricValue(metricName);
-      
+
       if (currentValue > threshold) {
         alerts.push({
           framework: metricName.split('_')[0],
@@ -863,18 +998,26 @@ export class ComplianceMonitoring {
           severity: 'high' as const,
           message: `${metricName} exceeded threshold: ${currentValue} > ${threshold}`,
           timestamp: now.toISOString(),
-          requiresAction: true
+          requiresAction: true,
         });
       }
     }
 
     // Check deadline alerts
     const upcomingDeadlines = [
-      { framework: 'gdpr', deadline: '2024-05-25T00:00:00Z', activity: 'Annual Assessment' },
-      { framework: 'sox', deadline: '2024-12-31T00:00:00Z', activity: 'SOX 404 Assessment' }
+      {
+        framework: 'gdpr',
+        deadline: '2024-05-25T00:00:00Z',
+        activity: 'Annual Assessment',
+      },
+      {
+        framework: 'sox',
+        deadline: '2024-12-31T00:00:00Z',
+        activity: 'SOX 404 Assessment',
+      },
     ];
 
-    upcomingDeadlines.forEach(deadline => {
+    upcomingDeadlines.forEach((deadline) => {
       const daysRemaining = this.calculateDaysRemaining(deadline.deadline);
       if (daysRemaining <= 30 && daysRemaining > 0) {
         alerts.push({
@@ -883,7 +1026,7 @@ export class ComplianceMonitoring {
           severity: daysRemaining <= 7 ? 'high' : 'medium',
           message: `${deadline.activity} due in ${daysRemaining} days`,
           timestamp: now.toISOString(),
-          requiresAction: true
+          requiresAction: true,
         });
       }
     });
@@ -895,11 +1038,11 @@ export class ComplianceMonitoring {
   private getCurrentMetricValue(metricName: string): number {
     // In production, this would fetch real metrics
     const simulatedValues: Record<string, number> = {
-      'gdpr_dsr_response_time': 600, // 25 days
-      'gdpr_breach_notification': 48, // 48 hours
-      'sox_segregation_violations': 0,
-      'iso27001_critical_incidents': 1,
-      'soc2_access_violations': 2
+      gdpr_dsr_response_time: 600, // 25 days
+      gdpr_breach_notification: 48, // 48 hours
+      sox_segregation_violations: 0,
+      iso27001_critical_incidents: 1,
+      soc2_access_violations: 2,
     };
 
     return simulatedValues[metricName] || 0;
@@ -929,16 +1072,21 @@ export class ComplianceMonitoring {
     monitoringCoverage: number;
   } {
     const allAssessments = Array.from(this.assessments.values());
-    const allFindings = allAssessments.flatMap(a => a.findings);
-    
+    const allFindings = allAssessments.flatMap((a) => a.findings);
+
     return {
       activeFrameworks: this.frameworks.size,
       totalAssessments: allAssessments.length,
-      averageAssessmentScore: allAssessments.reduce((sum, a) => sum + a.overallScore, 0) / allAssessments.length,
-      activeFindings: allFindings.filter(f => f.status === 'open' || f.status === 'in_progress').length,
-      resolvedFindings: allFindings.filter(f => f.status === 'resolved').length,
+      averageAssessmentScore:
+        allAssessments.reduce((sum, a) => sum + a.overallScore, 0) /
+        allAssessments.length,
+      activeFindings: allFindings.filter(
+        (f) => f.status === 'open' || f.status === 'in_progress',
+      ).length,
+      resolvedFindings: allFindings.filter((f) => f.status === 'resolved')
+        .length,
       upcomingDeadlines: 2, // Simulated
-      monitoringCoverage: 98 // Percentage of requirements covered by monitoring
+      monitoringCoverage: 98, // Percentage of requirements covered by monitoring
     };
   }
 }

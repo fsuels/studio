@@ -24,13 +24,22 @@ export const architectContractMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Architect Services Contract',
-      description: 'Professional services agreement for architectural design, planning, and construction administration.',
-      aliases: ['architectural services agreement', 'design professional contract', 'architect agreement'],
+      description:
+        'Professional services agreement for architectural design, planning, and construction administration.',
+      aliases: [
+        'architectural services agreement',
+        'design professional contract',
+        'architect agreement',
+      ],
     },
     es: {
       name: 'Contrato de Servicios de Arquitecto',
-      description: 'Acuerdo de servicios profesionales para diseño arquitectónico, planificación y administración de construcción.',
-      aliases: ['acuerdo de servicios arquitectónicos', 'contrato de profesional de diseño'],
+      description:
+        'Acuerdo de servicios profesionales para diseño arquitectónico, planificación y administración de construcción.',
+      aliases: [
+        'acuerdo de servicios arquitectónicos',
+        'contrato de profesional de diseño',
+      ],
     },
   },
 };

@@ -6,7 +6,7 @@ import { redirect } from 'next/navigation';
 import { validateInviteToken } from '@/lib/tenant-invites';
 
 interface TenantRoomPageProps {
-  params: { 
+  params: {
     slug: string;
     token: string;
   };
@@ -22,7 +22,7 @@ export default async function TenantRoomPage({ params }: TenantRoomPageProps) {
 
   // Validate the invite token
   const invitation = await validateInviteToken(params.token, tenant.id);
-  
+
   if (!invitation) {
     redirect(`/tenant/${params.slug}/invite-invalid`);
   }
@@ -36,8 +36,8 @@ export default async function TenantRoomPage({ params }: TenantRoomPageProps) {
   }
 
   return (
-    <TenantInviteRoom 
-      tenant={tenant} 
+    <TenantInviteRoom
+      tenant={tenant}
       invitation={invitation}
       token={params.token}
     />
@@ -49,13 +49,14 @@ export async function generateMetadata({ params }: TenantRoomPageProps) {
   const headersList = headers();
   const tenant = await getTenantFromHeaders(headersList);
 
-  const companyName = tenant?.branding?.companyName || tenant?.name || 'Legal Document Portal';
+  const companyName =
+    tenant?.branding?.companyName || tenant?.name || 'Legal Document Portal';
 
   return {
     title: `Join ${companyName} - Document Collaboration`,
     description: `You've been invited to collaborate on legal documents with ${companyName}`,
     robots: 'noindex, nofollow', // Don't index invite pages
-    
+
     openGraph: {
       title: `Join ${companyName}`,
       description: `You've been invited to collaborate on legal documents with ${companyName}`,

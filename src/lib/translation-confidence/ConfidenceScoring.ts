@@ -46,7 +46,7 @@ class TranslationConfidenceScorer {
   private qualityThresholds = {
     high: 0.85,
     medium: 0.7,
-    low: 0.5
+    low: 0.5,
   };
 
   constructor() {
@@ -58,7 +58,7 @@ class TranslationConfidenceScorer {
    */
   async calculateConfidence(
     translationResult: any,
-    context: TranslationContext
+    context: TranslationContext,
   ): Promise<ConfidenceMetrics> {
     const factors: ConfidenceFactor[] = [];
 
@@ -66,35 +66,35 @@ class TranslationConfidenceScorer {
     const linguisticScore = await this.assessLinguisticAccuracy(
       translationResult,
       context,
-      factors
+      factors,
     );
 
     // 2. Legal Terminology Validation
     const terminologyScore = await this.assessLegalTerminology(
       translationResult,
       context,
-      factors
+      factors,
     );
 
     // 3. Contextual Relevance Check
     const contextualScore = await this.assessContextualRelevance(
       translationResult,
       context,
-      factors
+      factors,
     );
 
     // 4. Structural Integrity Validation
     const structuralScore = await this.assessStructuralIntegrity(
       translationResult,
       context,
-      factors
+      factors,
     );
 
     // 5. Jurisdictional Compliance Check
     const jurisdictionalScore = await this.assessJurisdictionalCompliance(
       translationResult,
       context,
-      factors
+      factors,
     );
 
     // Calculate weighted overall score
@@ -103,56 +103,71 @@ class TranslationConfidenceScorer {
       legalTerminology: terminologyScore,
       contextualRelevance: contextualScore,
       structuralIntegrity: structuralScore,
-      jurisdictionalCompliance: jurisdictionalScore
+      jurisdictionalCompliance: jurisdictionalScore,
     };
 
     const weights = this.getScoreWeights(context);
     const overall = this.calculateWeightedScore(breakdown, weights);
 
     // Generate recommendations and risk assessment
-    const recommendations = this.generateRecommendations(breakdown, factors, context);
-    const riskAssessment = this.assessTranslationRisk(breakdown, factors, context);
+    const recommendations = this.generateRecommendations(
+      breakdown,
+      factors,
+      context,
+    );
+    const riskAssessment = this.assessTranslationRisk(
+      breakdown,
+      factors,
+      context,
+    );
 
     return {
       overall,
       breakdown,
       factors,
       recommendations,
-      riskAssessment
+      riskAssessment,
     };
   }
 
   private async assessLinguisticAccuracy(
     result: any,
     context: TranslationContext,
-    factors: ConfidenceFactor[]
+    factors: ConfidenceFactor[],
   ): Promise<number> {
     let score = 0.8; // Base score
 
     // Grammar and syntax check
-    const grammarScore = await this.checkGrammarAndSyntax(result.translatedText, context.targetLanguage);
+    const grammarScore = await this.checkGrammarAndSyntax(
+      result.translatedText,
+      context.targetLanguage,
+    );
     factors.push({
       category: 'linguistic',
       factor: 'grammar_syntax',
       impact: grammarScore > 0.8 ? 'positive' : 'negative',
       weight: 0.3,
       score: grammarScore,
-      description: `Grammar and syntax accuracy: ${Math.round(grammarScore * 100)}%`
+      description: `Grammar and syntax accuracy: ${Math.round(grammarScore * 100)}%`,
     });
 
     // Fluency assessment
-    const fluencyScore = await this.assessFluency(result.translatedText, context.targetLanguage);
+    const fluencyScore = await this.assessFluency(
+      result.translatedText,
+      context.targetLanguage,
+    );
     factors.push({
       category: 'linguistic',
       factor: 'fluency',
       impact: fluencyScore > 0.75 ? 'positive' : 'negative',
       weight: 0.25,
       score: fluencyScore,
-      description: `Text fluency rating: ${Math.round(fluencyScore * 100)}%`
+      description: `Text fluency rating: ${Math.round(fluencyScore * 100)}%`,
     });
 
     // Length consistency (important for legal documents)
-    const lengthRatio = result.translatedText.length / result.originalText.length;
+    const lengthRatio =
+      result.translatedText.length / result.originalText.length;
     const lengthScore = this.assessLengthConsistency(lengthRatio, context);
     factors.push({
       category: 'linguistic',
@@ -160,43 +175,54 @@ class TranslationConfidenceScorer {
       impact: lengthScore > 0.7 ? 'positive' : 'negative',
       weight: 0.15,
       score: lengthScore,
-      description: `Length ratio: ${lengthRatio.toFixed(2)} (target: 0.8-1.3)`
+      description: `Length ratio: ${lengthRatio.toFixed(2)} (target: 0.8-1.3)`,
     });
 
     // Cultural appropriateness
-    const culturalScore = await this.assessCulturalAppropriateness(result.translatedText, context);
+    const culturalScore = await this.assessCulturalAppropriateness(
+      result.translatedText,
+      context,
+    );
     factors.push({
       category: 'linguistic',
       factor: 'cultural_appropriateness',
       impact: culturalScore > 0.8 ? 'positive' : 'negative',
       weight: 0.2,
       score: culturalScore,
-      description: `Cultural adaptation score: ${Math.round(culturalScore * 100)}%`
+      description: `Cultural adaptation score: ${Math.round(culturalScore * 100)}%`,
     });
 
     // Register preservation (formal legal register)
-    const registerScore = this.assessLegalRegister(result.translatedText, context);
+    const registerScore = this.assessLegalRegister(
+      result.translatedText,
+      context,
+    );
     factors.push({
       category: 'linguistic',
       factor: 'legal_register',
       impact: registerScore > 0.8 ? 'positive' : 'negative',
       weight: 0.1,
       score: registerScore,
-      description: `Legal register preservation: ${Math.round(registerScore * 100)}%`
+      description: `Legal register preservation: ${Math.round(registerScore * 100)}%`,
     });
 
-    return (grammarScore * 0.3 + fluencyScore * 0.25 + lengthScore * 0.15 + 
-           culturalScore * 0.2 + registerScore * 0.1);
+    return (
+      grammarScore * 0.3 +
+      fluencyScore * 0.25 +
+      lengthScore * 0.15 +
+      culturalScore * 0.2 +
+      registerScore * 0.1
+    );
   }
 
   private async assessLegalTerminology(
     result: any,
     context: TranslationContext,
-    factors: ConfidenceFactor[]
+    factors: ConfidenceFactor[],
   ): Promise<number> {
     const legalTerms = result.legalTerms || [];
     const preservedTerms = result.preservedTerms || [];
-    
+
     if (legalTerms.length === 0) {
       factors.push({
         category: 'terminology',
@@ -204,7 +230,7 @@ class TranslationConfidenceScorer {
         impact: 'neutral',
         weight: 0.1,
         score: 0.5,
-        description: 'No legal terms identified - may be non-legal content'
+        description: 'No legal terms identified - may be non-legal content',
       });
       return 0.7; // Neutral score for non-legal content
     }
@@ -215,7 +241,7 @@ class TranslationConfidenceScorer {
 
     for (const term of legalTerms) {
       totalConfidence += term.confidence;
-      
+
       if (term.confidence >= 0.9) {
         highConfidenceTerms++;
       } else if (term.confidence < 0.6) {
@@ -230,29 +256,30 @@ class TranslationConfidenceScorer {
           impact: 'negative',
           weight: 0.3,
           score: 0.3,
-          description: `Term "${term.term}" may not be applicable in ${context.jurisdiction}`
+          description: `Term "${term.term}" may not be applicable in ${context.jurisdiction}`,
         });
       }
     }
 
     const averageConfidence = totalConfidence / legalTerms.length;
-    
+
     factors.push({
       category: 'terminology',
       factor: 'average_confidence',
       impact: averageConfidence > 0.8 ? 'positive' : 'negative',
       weight: 0.4,
       score: averageConfidence,
-      description: `Average legal term confidence: ${Math.round(averageConfidence * 100)}%`
+      description: `Average legal term confidence: ${Math.round(averageConfidence * 100)}%`,
     });
 
     factors.push({
       category: 'terminology',
       factor: 'high_confidence_ratio',
-      impact: highConfidenceTerms / legalTerms.length > 0.7 ? 'positive' : 'negative',
+      impact:
+        highConfidenceTerms / legalTerms.length > 0.7 ? 'positive' : 'negative',
       weight: 0.3,
       score: highConfidenceTerms / legalTerms.length,
-      description: `${highConfidenceTerms}/${legalTerms.length} terms with high confidence`
+      description: `${highConfidenceTerms}/${legalTerms.length} terms with high confidence`,
     });
 
     // Penalty for preserved terms (indicates translation difficulty)
@@ -263,7 +290,7 @@ class TranslationConfidenceScorer {
       impact: 'negative',
       weight: 0.2,
       score: Math.max(0, 1 - preservationPenalty),
-      description: `${preservedTerms.length} terms preserved in original language`
+      description: `${preservedTerms.length} terms preserved in original language`,
     });
 
     return Math.max(0.1, averageConfidence - preservationPenalty);
@@ -272,7 +299,7 @@ class TranslationConfidenceScorer {
   private async assessContextualRelevance(
     result: any,
     context: TranslationContext,
-    factors: ConfidenceFactor[]
+    factors: ConfidenceFactor[],
   ): Promise<number> {
     // Document type alignment
     const typeScore = this.assessDocumentTypeAlignment(result, context);
@@ -282,29 +309,35 @@ class TranslationConfidenceScorer {
       impact: typeScore > 0.8 ? 'positive' : 'negative',
       weight: 0.3,
       score: typeScore,
-      description: `Document type alignment score: ${Math.round(typeScore * 100)}%`
+      description: `Document type alignment score: ${Math.round(typeScore * 100)}%`,
     });
 
     // Purpose preservation (legal intent)
-    const purposeScore = await this.assessLegalPurposePreservation(result, context);
+    const purposeScore = await this.assessLegalPurposePreservation(
+      result,
+      context,
+    );
     factors.push({
       category: 'contextual',
       factor: 'purpose_preservation',
       impact: purposeScore > 0.85 ? 'positive' : 'negative',
       weight: 0.4,
       score: purposeScore,
-      description: `Legal purpose preservation: ${Math.round(purposeScore * 100)}%`
+      description: `Legal purpose preservation: ${Math.round(purposeScore * 100)}%`,
     });
 
     // Stakeholder appropriateness
-    const stakeholderScore = this.assessStakeholderAppropriateness(result, context);
+    const stakeholderScore = this.assessStakeholderAppropriateness(
+      result,
+      context,
+    );
     factors.push({
       category: 'contextual',
       factor: 'stakeholder_appropriateness',
       impact: stakeholderScore > 0.75 ? 'positive' : 'negative',
       weight: 0.3,
       score: stakeholderScore,
-      description: `Appropriate for target audience: ${Math.round(stakeholderScore * 100)}%`
+      description: `Appropriate for target audience: ${Math.round(stakeholderScore * 100)}%`,
     });
 
     return typeScore * 0.3 + purposeScore * 0.4 + stakeholderScore * 0.3;
@@ -313,7 +346,7 @@ class TranslationConfidenceScorer {
   private async assessStructuralIntegrity(
     result: any,
     context: TranslationContext,
-    factors: ConfidenceFactor[]
+    factors: ConfidenceFactor[],
   ): Promise<number> {
     // Section/clause preservation
     const structureScore = this.checkStructuralPreservation(result);
@@ -323,7 +356,7 @@ class TranslationConfidenceScorer {
       impact: structureScore > 0.9 ? 'positive' : 'negative',
       weight: 0.4,
       score: structureScore,
-      description: `Document structure preserved: ${Math.round(structureScore * 100)}%`
+      description: `Document structure preserved: ${Math.round(structureScore * 100)}%`,
     });
 
     // Numbering and formatting
@@ -334,7 +367,7 @@ class TranslationConfidenceScorer {
       impact: formattingScore > 0.95 ? 'positive' : 'negative',
       weight: 0.3,
       score: formattingScore,
-      description: `Formatting consistency: ${Math.round(formattingScore * 100)}%`
+      description: `Formatting consistency: ${Math.round(formattingScore * 100)}%`,
     });
 
     // Cross-references integrity
@@ -345,7 +378,7 @@ class TranslationConfidenceScorer {
       impact: referencesScore > 0.9 ? 'positive' : 'negative',
       weight: 0.3,
       score: referencesScore,
-      description: `Cross-references maintained: ${Math.round(referencesScore * 100)}%`
+      description: `Cross-references maintained: ${Math.round(referencesScore * 100)}%`,
     });
 
     return structureScore * 0.4 + formattingScore * 0.3 + referencesScore * 0.3;
@@ -354,7 +387,7 @@ class TranslationConfidenceScorer {
   private async assessJurisdictionalCompliance(
     result: any,
     context: TranslationContext,
-    factors: ConfidenceFactor[]
+    factors: ConfidenceFactor[],
   ): Promise<number> {
     // Legal system compatibility
     const systemScore = this.assessLegalSystemCompatibility(result, context);
@@ -364,18 +397,21 @@ class TranslationConfidenceScorer {
       impact: systemScore > 0.8 ? 'positive' : 'negative',
       weight: 0.4,
       score: systemScore,
-      description: `Compatible with ${context.legalSystem}: ${Math.round(systemScore * 100)}%`
+      description: `Compatible with ${context.legalSystem}: ${Math.round(systemScore * 100)}%`,
     });
 
     // Jurisdiction-specific requirements
-    const requirementsScore = await this.checkJurisdictionRequirements(result, context);
+    const requirementsScore = await this.checkJurisdictionRequirements(
+      result,
+      context,
+    );
     factors.push({
       category: 'jurisdictional',
       factor: 'jurisdiction_requirements',
       impact: requirementsScore > 0.85 ? 'positive' : 'negative',
       weight: 0.35,
       score: requirementsScore,
-      description: `Meets ${context.jurisdiction} requirements: ${Math.round(requirementsScore * 100)}%`
+      description: `Meets ${context.jurisdiction} requirements: ${Math.round(requirementsScore * 100)}%`,
     });
 
     // Regulatory compliance indicators
@@ -386,10 +422,12 @@ class TranslationConfidenceScorer {
       impact: complianceScore > 0.8 ? 'positive' : 'negative',
       weight: 0.25,
       score: complianceScore,
-      description: `Regulatory compliance indicators: ${Math.round(complianceScore * 100)}%`
+      description: `Regulatory compliance indicators: ${Math.round(complianceScore * 100)}%`,
     });
 
-    return systemScore * 0.4 + requirementsScore * 0.35 + complianceScore * 0.25;
+    return (
+      systemScore * 0.4 + requirementsScore * 0.35 + complianceScore * 0.25
+    );
   }
 
   private getScoreWeights(context: TranslationContext): Record<string, number> {
@@ -399,7 +437,7 @@ class TranslationConfidenceScorer {
       legalTerminology: 0.3,
       contextualRelevance: 0.2,
       structuralIntegrity: 0.15,
-      jurisdictionalCompliance: 0.1
+      jurisdictionalCompliance: 0.1,
     };
 
     // Increase terminology weight for complex legal documents
@@ -409,7 +447,10 @@ class TranslationConfidenceScorer {
     }
 
     // Increase jurisdictional weight for cross-border documents
-    if (context.documentType.includes('international') || context.documentType.includes('cross-border')) {
+    if (
+      context.documentType.includes('international') ||
+      context.documentType.includes('cross-border')
+    ) {
       baseWeights.jurisdictionalCompliance = 0.2;
       baseWeights.contextualRelevance = 0.15;
     }
@@ -419,7 +460,7 @@ class TranslationConfidenceScorer {
 
   private calculateWeightedScore(
     breakdown: Record<string, number>,
-    weights: Record<string, number>
+    weights: Record<string, number>,
   ): number {
     let weightedSum = 0;
     let totalWeight = 0;
@@ -436,7 +477,7 @@ class TranslationConfidenceScorer {
   private generateRecommendations(
     breakdown: Record<string, number>,
     factors: ConfidenceFactor[],
-    context: TranslationContext
+    context: TranslationContext,
   ): string[] {
     const recommendations: string[] = [];
     const lowScoreThreshold = 0.7;
@@ -444,17 +485,23 @@ class TranslationConfidenceScorer {
     // Analyze low-scoring areas
     for (const [category, score] of Object.entries(breakdown)) {
       if (score < lowScoreThreshold) {
-        recommendations.push(...this.getCategoryRecommendations(category, score, factors, context));
+        recommendations.push(
+          ...this.getCategoryRecommendations(category, score, factors, context),
+        );
       }
     }
 
     // General recommendations based on context
     if (context.userExperience === 'beginner') {
-      recommendations.push('Consider professional legal review due to user experience level');
+      recommendations.push(
+        'Consider professional legal review due to user experience level',
+      );
     }
 
     if (context.complexity === 'highly_complex') {
-      recommendations.push('Highly complex document requires expert validation');
+      recommendations.push(
+        'Highly complex document requires expert validation',
+      );
     }
 
     return [...new Set(recommendations)]; // Remove duplicates
@@ -464,7 +511,7 @@ class TranslationConfidenceScorer {
     category: string,
     score: number,
     factors: ConfidenceFactor[],
-    context: TranslationContext
+    context: TranslationContext,
   ): string[] {
     const recommendations: string[] = [];
 
@@ -473,24 +520,26 @@ class TranslationConfidenceScorer {
         recommendations.push('Review grammar and syntax with native speaker');
         recommendations.push('Consider professional linguistic editing');
         break;
-      
+
       case 'legalTerminology':
         recommendations.push('Validate legal terms with subject matter expert');
         recommendations.push('Cross-reference with legal dictionaries');
         break;
-      
+
       case 'contextualRelevance':
         recommendations.push('Review document purpose alignment');
         recommendations.push('Validate appropriateness for target audience');
         break;
-      
+
       case 'structuralIntegrity':
         recommendations.push('Verify document formatting and structure');
         recommendations.push('Check all cross-references and numbering');
         break;
-      
+
       case 'jurisdictionalCompliance':
-        recommendations.push(`Validate compliance with ${context.jurisdiction} legal requirements`);
+        recommendations.push(
+          `Validate compliance with ${context.jurisdiction} legal requirements`,
+        );
         recommendations.push('Consider local legal expert review');
         break;
     }
@@ -501,11 +550,15 @@ class TranslationConfidenceScorer {
   private assessTranslationRisk(
     breakdown: Record<string, number>,
     factors: ConfidenceFactor[],
-    context: TranslationContext
+    context: TranslationContext,
   ): RiskAssessment {
-    const criticalFactors = factors.filter(f => f.impact === 'negative' && f.score < 0.5);
-    const highRiskFactors = factors.filter(f => f.impact === 'negative' && f.score < 0.7);
-    
+    const criticalFactors = factors.filter(
+      (f) => f.impact === 'negative' && f.score < 0.5,
+    );
+    const highRiskFactors = factors.filter(
+      (f) => f.impact === 'negative' && f.score < 0.7,
+    );
+
     let riskLevel: 'low' | 'medium' | 'high' | 'critical' = 'low';
     const riskFactors: string[] = [];
     const mitigationStrategies: string[] = [];
@@ -517,12 +570,15 @@ class TranslationConfidenceScorer {
       riskFactors.push('Critical translation accuracy issues detected');
       mitigationStrategies.push('Complete re-translation recommended');
       reviewRequirements.push('Expert legal translator review required');
-    } else if (highRiskFactors.length > 2 || Object.values(breakdown).some(s => s < 0.6)) {
+    } else if (
+      highRiskFactors.length > 2 ||
+      Object.values(breakdown).some((s) => s < 0.6)
+    ) {
       riskLevel = 'high';
       riskFactors.push('Multiple accuracy concerns identified');
       mitigationStrategies.push('Comprehensive professional review');
       reviewRequirements.push('Legal professional validation required');
-    } else if (Object.values(breakdown).some(s => s < 0.75)) {
+    } else if (Object.values(breakdown).some((s) => s < 0.75)) {
       riskLevel = 'medium';
       riskFactors.push('Some accuracy issues require attention');
       mitigationStrategies.push('Targeted review of flagged areas');
@@ -535,7 +591,10 @@ class TranslationConfidenceScorer {
       reviewRequirements.push('Specialized expert review required');
     }
 
-    if (context.documentType.includes('contract') || context.documentType.includes('agreement')) {
+    if (
+      context.documentType.includes('contract') ||
+      context.documentType.includes('agreement')
+    ) {
       mitigationStrategies.push('Legal liability review recommended');
     }
 
@@ -543,70 +602,112 @@ class TranslationConfidenceScorer {
       level: riskLevel,
       factors: riskFactors,
       mitigationStrategies,
-      reviewRequirements
+      reviewRequirements,
     };
   }
 
   // Helper methods (simplified implementations)
-  private async checkGrammarAndSyntax(text: string, language: string): Promise<number> {
+  private async checkGrammarAndSyntax(
+    text: string,
+    language: string,
+  ): Promise<number> {
     // In real implementation, integrate with grammar checking service
     return 0.85 + Math.random() * 0.1;
   }
 
   private async assessFluency(text: string, language: string): Promise<number> {
     // Basic fluency indicators
-    const avgSentenceLength = text.split('.').map(s => s.trim().split(' ').length).reduce((a, b) => a + b, 0) / text.split('.').length;
-    const complexityScore = avgSentenceLength > 15 && avgSentenceLength < 30 ? 0.9 : 0.7;
+    const avgSentenceLength =
+      text
+        .split('.')
+        .map((s) => s.trim().split(' ').length)
+        .reduce((a, b) => a + b, 0) / text.split('.').length;
+    const complexityScore =
+      avgSentenceLength > 15 && avgSentenceLength < 30 ? 0.9 : 0.7;
     return Math.min(1, complexityScore + Math.random() * 0.1);
   }
 
-  private assessLengthConsistency(ratio: number, context: TranslationContext): number {
+  private assessLengthConsistency(
+    ratio: number,
+    context: TranslationContext,
+  ): number {
     // Expected length ratios for different language pairs
     const expectedRatios: Record<string, number> = {
       'en-es': 1.15,
       'en-fr': 1.1,
       'en-de': 0.9,
       'en-pt': 1.1,
-      'en-it': 1.05
+      'en-it': 1.05,
     };
 
     const languagePair = `${context.sourceLanguage}-${context.targetLanguage}`;
     const expected = expectedRatios[languagePair] || 1.0;
     const deviation = Math.abs(ratio - expected) / expected;
-    
+
     return Math.max(0, 1 - deviation);
   }
 
-  private async assessCulturalAppropriateness(text: string, context: TranslationContext): Promise<number> {
+  private async assessCulturalAppropriateness(
+    text: string,
+    context: TranslationContext,
+  ): Promise<number> {
     // Simplified cultural assessment
     return 0.8 + Math.random() * 0.15;
   }
 
-  private assessLegalRegister(text: string, context: TranslationContext): number {
+  private assessLegalRegister(
+    text: string,
+    context: TranslationContext,
+  ): number {
     // Check for formal legal language patterns
-    const formalIndicators = ['hereby', 'whereas', 'thereof', 'herein', 'aforesaid'];
-    const informalIndicators = ['can\'t', 'won\'t', 'it\'s', 'you\'ll'];
-    
-    const formalCount = formalIndicators.filter(word => text.toLowerCase().includes(word)).length;
-    const informalCount = informalIndicators.filter(word => text.toLowerCase().includes(word)).length;
-    
-    return Math.max(0.3, Math.min(1, (formalCount - informalCount * 2) / 10 + 0.7));
+    const formalIndicators = [
+      'hereby',
+      'whereas',
+      'thereof',
+      'herein',
+      'aforesaid',
+    ];
+    const informalIndicators = ["can't", "won't", "it's", "you'll"];
+
+    const formalCount = formalIndicators.filter((word) =>
+      text.toLowerCase().includes(word),
+    ).length;
+    const informalCount = informalIndicators.filter((word) =>
+      text.toLowerCase().includes(word),
+    ).length;
+
+    return Math.max(
+      0.3,
+      Math.min(1, (formalCount - informalCount * 2) / 10 + 0.7),
+    );
   }
 
-  private isTermApplicableToJurisdiction(term: any, jurisdiction: string): boolean {
+  private isTermApplicableToJurisdiction(
+    term: any,
+    jurisdiction: string,
+  ): boolean {
     // Simplified jurisdiction check
     return true; // In real implementation, check against jurisdiction database
   }
 
-  private assessDocumentTypeAlignment(result: any, context: TranslationContext): number {
+  private assessDocumentTypeAlignment(
+    result: any,
+    context: TranslationContext,
+  ): number {
     return 0.85 + Math.random() * 0.1;
   }
 
-  private async assessLegalPurposePreservation(result: any, context: TranslationContext): Promise<number> {
+  private async assessLegalPurposePreservation(
+    result: any,
+    context: TranslationContext,
+  ): Promise<number> {
     return 0.8 + Math.random() * 0.15;
   }
 
-  private assessStakeholderAppropriateness(result: any, context: TranslationContext): number {
+  private assessStakeholderAppropriateness(
+    result: any,
+    context: TranslationContext,
+  ): number {
     return 0.75 + Math.random() * 0.2;
   }
 
@@ -622,15 +723,24 @@ class TranslationConfidenceScorer {
     return 0.88 + Math.random() * 0.1;
   }
 
-  private assessLegalSystemCompatibility(result: any, context: TranslationContext): number {
+  private assessLegalSystemCompatibility(
+    result: any,
+    context: TranslationContext,
+  ): number {
     return 0.8 + Math.random() * 0.15;
   }
 
-  private async checkJurisdictionRequirements(result: any, context: TranslationContext): Promise<number> {
+  private async checkJurisdictionRequirements(
+    result: any,
+    context: TranslationContext,
+  ): Promise<number> {
     return 0.82 + Math.random() * 0.13;
   }
 
-  private assessRegulatoryCompliance(result: any, context: TranslationContext): number {
+  private assessRegulatoryCompliance(
+    result: any,
+    context: TranslationContext,
+  ): number {
     return 0.78 + Math.random() * 0.17;
   }
 
@@ -644,7 +754,9 @@ class TranslationConfidenceScorer {
 export const confidenceScorer = new TranslationConfidenceScorer();
 
 // Convenience function
-export const calculateTranslationConfidence = (result: any, context: TranslationContext) =>
-  confidenceScorer.calculateConfidence(result, context);
+export const calculateTranslationConfidence = (
+  result: any,
+  context: TranslationContext,
+) => confidenceScorer.calculateConfidence(result, context);
 
 export default TranslationConfidenceScorer;

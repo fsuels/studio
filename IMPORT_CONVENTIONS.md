@@ -9,56 +9,60 @@ All component groups have barrel exports through `index.ts` files, allowing for 
 ### Available Component Categories
 
 #### Core UI Components
+
 ```typescript
 import { Button, Input, Card } from '@/components/ui/button';
 import { Dialog, DialogContent } from '@/components/ui/dialog';
 ```
 
 #### Layout Components
+
 ```typescript
 import { Header, Footer, Layout } from '@/components/layout';
 ```
 
 #### Form Components
+
 ```typescript
-import { 
-  FieldRenderer, 
-  DynamicFormRenderer, 
-  WizardForm 
+import {
+  FieldRenderer,
+  DynamicFormRenderer,
+  WizardForm,
 } from '@/components/forms';
 ```
 
 #### Workflow Components
+
 ```typescript
-import { 
-  Step1DocumentSelector, 
-  ReviewStep, 
-  DisclaimerStep 
+import {
+  Step1DocumentSelector,
+  ReviewStep,
+  DisclaimerStep,
 } from '@/components/workflow';
 ```
 
 #### Document Components
+
 ```typescript
-import { 
-  PDFPreview, 
-  DocumentDetail, 
-  DocumentPreview 
+import {
+  PDFPreview,
+  DocumentDetail,
+  DocumentPreview,
 } from '@/components/document';
 ```
 
 #### Shared Utilities
+
 ```typescript
-import { 
-  EmptyState, 
-  ProgressBar, 
-  SearchBar 
-} from '@/components/shared';
+import { EmptyState, ProgressBar, SearchBar } from '@/components/shared';
 ```
 
 ## Import Patterns
 
 ### 1. Preferred: Category-based Imports
+
 Use barrel exports for organized imports:
+
 ```typescript
 // ✅ Good - Category-based barrel import
 import { Button, Input } from '@/components/ui';
@@ -67,7 +71,9 @@ import { FieldRenderer } from '@/components/forms';
 ```
 
 ### 2. Alternative: Direct Component Import
+
 For single components or when tree-shaking is critical:
+
 ```typescript
 // ✅ Acceptable - Direct import
 import Button from '@/components/ui/button';
@@ -75,7 +81,9 @@ import Header from '@/components/layout/Header';
 ```
 
 ### 3. Avoid: Deep Imports
+
 Avoid importing from internal implementation details:
+
 ```typescript
 // ❌ Avoid - Deep internal imports
 import WizardAuth from '@/components/forms/WizardForm/WizardAuth';
@@ -87,6 +95,7 @@ import ReviewFieldItem from '@/components/workflow/ReviewStep/ReviewFieldItem';
 For large components or lazy loading, use consistent dynamic import patterns:
 
 ### Client-side Dynamic Imports
+
 ```typescript
 import { lazyClient } from '@/lib/lazy-client';
 
@@ -95,6 +104,7 @@ const LazyComponent = lazyClient(() => import('@/components/forms/WizardForm'));
 ```
 
 ### Server-side Dynamic Imports
+
 ```typescript
 import dynamic from 'next/dynamic';
 
@@ -108,6 +118,7 @@ const DynamicChart = dynamic(() => import('@/components/ui/chart'), {
 ## Type Imports
 
 Always use `import type` for TypeScript types:
+
 ```typescript
 // ✅ Good - Type-only imports
 import type { LegalDocument } from '@/types/documents';
@@ -121,6 +132,7 @@ import { Button, type ButtonProps } from '@/components/ui/button';
 ## Re-exports
 
 When creating wrapper components, use consistent re-export patterns:
+
 ```typescript
 // ✅ Good - Clean re-export
 export { Button as PrimaryButton } from '@/components/ui/button';
@@ -130,7 +142,9 @@ export type { ButtonProps as PrimaryButtonProps } from '@/components/ui/button';
 ## Best Practices
 
 ### 1. Import Organization
+
 Organize imports in this order:
+
 1. React and core libraries
 2. Third-party libraries
 3. Internal utilities and lib
@@ -148,11 +162,13 @@ import type { LegalDocument } from '@/types/documents';
 ```
 
 ### 2. Avoid Circular Dependencies
+
 - Never import from parent directories in child components
 - Use dependency injection or context when needed
 - Keep component hierarchies clean
 
 ### 3. Tree Shaking Optimization
+
 - Barrel exports are configured for optimal tree shaking
 - Avoid wildcard exports where possible
 - Use named exports consistently
@@ -160,6 +176,7 @@ import type { LegalDocument } from '@/types/documents';
 ## ESLint Configuration
 
 The project includes automated import sorting and unused import detection:
+
 - Import order is enforced automatically
 - Unused imports are flagged as errors
 - Alphabetical sorting within groups

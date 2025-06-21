@@ -1,14 +1,22 @@
 import React from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { Building, ArrowLeft, HelpCircle, Mail } from 'lucide-react';
 
 interface TenantNotFoundPageProps {
   searchParams: { slug?: string };
 }
 
-export default function TenantNotFoundPage({ searchParams }: TenantNotFoundPageProps) {
+export default function TenantNotFoundPage({
+  searchParams,
+}: TenantNotFoundPageProps) {
   const { slug } = searchParams;
 
   return (
@@ -24,7 +32,10 @@ export default function TenantNotFoundPage({ searchParams }: TenantNotFoundPageP
             <CardTitle className="text-2xl">Organization Not Found</CardTitle>
             <CardDescription>
               {slug ? (
-                <>The organization "<strong>{slug}</strong>" could not be found or is no longer active.</>
+                <>
+                  The organization "<strong>{slug}</strong>" could not be found
+                  or is no longer active.
+                </>
               ) : (
                 <>The requested organization could not be found.</>
               )}
@@ -48,7 +59,7 @@ export default function TenantNotFoundPage({ searchParams }: TenantNotFoundPageP
                   Go to 123LegalDoc
                 </Link>
               </Button>
-              
+
               <Button variant="outline" asChild className="w-full">
                 <Link href="/support">
                   <HelpCircle className="mr-2 h-4 w-4" />
@@ -60,8 +71,8 @@ export default function TenantNotFoundPage({ searchParams }: TenantNotFoundPageP
             <div className="pt-4 border-t border-gray-200">
               <p className="text-xs text-gray-500 text-center">
                 Need help? Email us at{' '}
-                <a 
-                  href="mailto:support@123legaldoc.com" 
+                <a
+                  href="mailto:support@123legaldoc.com"
                   className="text-blue-600 hover:underline"
                 >
                   support@123legaldoc.com

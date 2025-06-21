@@ -24,13 +24,22 @@ export const roofingContractMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Roofing Contract',
-      description: 'Professional contract for roofing projects including repairs, replacements, and new installations.',
-      aliases: ['roof repair contract', 'roof replacement agreement', 'roofing service contract'],
+      description:
+        'Professional contract for roofing projects including repairs, replacements, and new installations.',
+      aliases: [
+        'roof repair contract',
+        'roof replacement agreement',
+        'roofing service contract',
+      ],
     },
     es: {
       name: 'Contrato de Techado',
-      description: 'Contrato profesional para proyectos de techado incluyendo reparaciones, reemplazos e instalaciones nuevas.',
-      aliases: ['contrato de reparación de techo', 'acuerdo de reemplazo de techo'],
+      description:
+        'Contrato profesional para proyectos de techado incluyendo reparaciones, reemplazos e instalaciones nuevas.',
+      aliases: [
+        'contrato de reparación de techo',
+        'acuerdo de reemplazo de techo',
+      ],
     },
   },
 };

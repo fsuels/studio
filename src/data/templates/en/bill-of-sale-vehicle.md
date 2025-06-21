@@ -57,26 +57,26 @@ This Agreement shall be governed by and construed in accordance with the laws of
 
 **IN WITNESS WHEREOF**, the Parties have executed this Agreement as of the date first written above.
 
-| Seller Signature                                   | Date                   |
-| -------------------------------------------------- | ---------------------- |
-| **********\_\_\_\_**********                       | **********\_********** |
-| ({{seller_name}})                                  |                        |
-| {{#if seller_phone}}Phone: {{seller_phone}}{{/if}} |                        |
+| Seller Signature                                   | Date                               |
+| -------------------------------------------------- | ---------------------------------- |
+| \***\*\*\*\*\***\_\_\_\_\***\*\*\*\*\***           | \***\*\*\*\*\***\_\***\*\*\*\*\*** |
+| ({{seller_name}})                                  |                                    |
+| {{#if seller_phone}}Phone: {{seller_phone}}{{/if}} |                                    |
 
 {{#if seller2_name}}
-| **********\_\_\_\_**********| **********\_**********|
+| \***\*\*\*\*\***\_\_\_\_\***\*\*\*\*\***| \***\*\*\*\*\***\_\***\*\*\*\*\***|
 | ({{seller2_name}}) | |
 | {{#if seller2_phone}}Phone: {{seller2_phone}}{{/if}} | |
 {{/if}}
 
-| Buyer Signature                                  | Date                   |
-| ------------------------------------------------ | ---------------------- |
-| **********\_\_\_\_**********                     | **********\_********** |
-| ({{buyer_name}})                                 |                        |
-| {{#if buyer_phone}}Phone: {{buyer_phone}}{{/if}} |                        |
+| Buyer Signature                                  | Date                               |
+| ------------------------------------------------ | ---------------------------------- |
+| \***\*\*\*\*\***\_\_\_\_\***\*\*\*\*\***         | \***\*\*\*\*\***\_\***\*\*\*\*\*** |
+| ({{buyer_name}})                                 |                                    |
+| {{#if buyer_phone}}Phone: {{buyer_phone}}{{/if}} |                                    |
 
 {{#if buyer2_name}}
-| **********\_\_\_\_**********| **********\_**********|
+| \***\*\*\*\*\***\_\_\_\_\***\*\*\*\*\***| \***\*\*\*\*\***\_\***\*\*\*\*\***|
 | ({{buyer2_name}}) | |
 | {{#if buyer2_phone}}Phone: {{buyer2_phone}}{{/if}} | |
 {{/if}}
@@ -86,10 +86,10 @@ This Agreement shall be governed by and construed in accordance with the laws of
 State of **{{state}}**
 County of **{{county}}**
 
-On this **\_\_\_\_** day of ********\_\_******, 20\_\_**, before me, the undersigned, a Notary Public in and for said State, personally appeared **{{seller_name}}** and **{{buyer_name}}**, personally known to me (or proved to me on the basis of satisfactory evidence) to be the persons whose names are subscribed to this Agreement and acknowledged that they executed the same for the purposes therein contained.
+On this **\_\_\_\_** day of **\*\*\*\***\_\_**\*\***, 20\_\_**, before me, the undersigned, a Notary Public in and for said State, personally appeared **{{seller_name}}** and **{{buyer_name}}\*\*, personally known to me (or proved to me on the basis of satisfactory evidence) to be the persons whose names are subscribed to this Agreement and acknowledged that they executed the same for the purposes therein contained.
 
-**Notary Public:** ************\_\_************
-My Commission Expires: ******\_\_******
+**Notary Public:** \***\*\*\*\*\*\*\***\_\_\***\*\*\*\*\*\*\***
+My Commission Expires: **\*\***\_\_**\*\***
 
 ---
 

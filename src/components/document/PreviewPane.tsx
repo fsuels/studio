@@ -1,12 +1,25 @@
 // src/components/PreviewPane.tsx
 'use client';
 
-import React, { useEffect, useState, useCallback, useMemo, useRef } from 'react';
+import React, {
+  useEffect,
+  useState,
+  useCallback,
+  useMemo,
+  useRef,
+} from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
 import { useFormContext } from 'react-hook-form';
-import { Loader2, AlertTriangle, Eye, ChevronLeft, ChevronRight, FileText } from 'lucide-react';
+import {
+  Loader2,
+  AlertTriangle,
+  Eye,
+  ChevronLeft,
+  ChevronRight,
+  FileText,
+} from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { debounce } from '@/lib/debounce';
 import { documentLibrary } from '@/lib/document-library';
@@ -23,7 +36,13 @@ interface PreviewPaneProps {
   onFieldClick?: (fieldId: string) => void; // Navigation to specific field
 }
 
-export default function PreviewPane({ locale, docId, currentFieldId, enableInlineEditing = false, onFieldClick }: PreviewPaneProps) {
+export default function PreviewPane({
+  locale,
+  docId,
+  currentFieldId,
+  enableInlineEditing = false,
+  onFieldClick,
+}: PreviewPaneProps) {
   const { t } = useTranslation('common');
   const formContext = useFormContext();
   const { watch, setValue } = formContext || {};
@@ -65,13 +84,15 @@ export default function PreviewPane({ locale, docId, currentFieldId, enableInlin
     if (currentFieldId && previewRef.current) {
       // Add a small delay to ensure the DOM has updated
       setTimeout(() => {
-        const highlightedElement = previewRef.current?.querySelector('mark.highlight-current');
+        const highlightedElement = previewRef.current?.querySelector(
+          'mark.highlight-current',
+        );
         if (highlightedElement) {
           highlightedElement.scrollIntoView({
             behavior: 'smooth',
             block: 'center',
           });
-          
+
           // Add a pulse animation
           highlightedElement.classList.add('pulse-animation');
           setTimeout(() => {
@@ -81,7 +102,6 @@ export default function PreviewPane({ locale, docId, currentFieldId, enableInlin
       }, 300); // Increased delay to ensure markdown is processed
     }
   }, [currentFieldId, processedMarkdown]);
-
 
   useEffect(() => {
     if (!isHydrated || !docConfig) {
@@ -135,17 +155,17 @@ export default function PreviewPane({ locale, docId, currentFieldId, enableInlin
   const splitContentIntoPages = useCallback((content: string) => {
     // Disable automatic pagination to prevent text size issues
     // Only split on explicit page breaks
-    const pageBreakPattern = /(?:^|\n)(?:---\s*page\s*break\s*---|\*\*\*\s*page\s*break\s*\*\*\*|\\newpage|\f)/gim;
+    const pageBreakPattern =
+      /(?:^|\n)(?:---\s*page\s*break\s*---|\*\*\*\s*page\s*break\s*\*\*\*|\\newpage|\f)/gim;
     let pages = content.split(pageBreakPattern);
-    
+
     // If no explicit page breaks, return single page to avoid layout issues
     if (pages.length === 1) {
       return [content];
     }
-    
-    return pages.filter(page => page.trim().length > 0);
-  }, []);
 
+    return pages.filter((page) => page.trim().length > 0);
+  }, []);
 
   const updatePreviewContent = useCallback(
     (formData: Record<string, unknown>, currentRawMarkdown: string) => {
@@ -155,23 +175,24 @@ export default function PreviewPane({ locale, docId, currentFieldId, enableInlin
         return '';
       }
       let tempMd = currentRawMarkdown;
-      
+
       // First, collect all placeholders to identify fields
-      const placeholderMatches = currentRawMarkdown.match(/\{\{[^}]+\}\}/g) || [];
+      const placeholderMatches =
+        currentRawMarkdown.match(/\{\{[^}]+\}\}/g) || [];
       const fieldKeys = new Set<string>();
-      placeholderMatches.forEach(match => {
+      placeholderMatches.forEach((match) => {
         const key = match.replace(/[{}]/g, '').trim();
         fieldKeys.add(key);
       });
-      
+
       // Process each field
       for (const key of fieldKeys) {
         const placeholderRegex = new RegExp(`{{\\s*${key.trim()}\\s*}}`, 'g');
         const value = formData[key];
-        
+
         // Check if this is the currently edited field
         const isCurrentField = currentFieldId === key;
-        
+
         if (isCurrentField && value) {
           // Highlight the current field with a special marker
           tempMd = tempMd.replace(
@@ -187,14 +208,17 @@ export default function PreviewPane({ locale, docId, currentFieldId, enableInlin
         } else {
           // Empty field - clickable to navigate to that question
           tempMd = tempMd.replace(
-            placeholderRegex, 
-            `<span class="empty-field clickable-field" data-field-id="${key}" role="button" tabindex="0" title="Click to fill this field">____</span>`
+            placeholderRegex,
+            `<span class="empty-field clickable-field" data-field-id="${key}" role="button" tabindex="0" title="Click to fill this field">____</span>`,
           );
         }
       }
-      
+
       // Replace any remaining placeholders that weren't processed
-      tempMd = tempMd.replace(/\{\{.*?\}\}/g, '<span class="empty-field">____</span>');
+      tempMd = tempMd.replace(
+        /\{\{.*?\}\}/g,
+        '<span class="empty-field">____</span>',
+      );
 
       let titleToUse = docConfig?.translations?.en?.name; // Default to English name
       if (locale === 'es' && docConfig?.translations?.es?.name) {
@@ -211,12 +235,12 @@ export default function PreviewPane({ locale, docId, currentFieldId, enableInlin
       // Split content into pages and update pagination state
       const pages = splitContentIntoPages(tempMd);
       setTotalPages(pages.length);
-      
+
       // Ensure current page is within bounds
       if (currentPage > pages.length) {
         setCurrentPage(1);
       }
-      
+
       // Return the current page content or full content if only one page
       return pages.length > 1 ? pages[currentPage - 1] : tempMd;
     },
@@ -245,18 +269,18 @@ export default function PreviewPane({ locale, docId, currentFieldId, enableInlin
 
     const formData = watch();
     if (formData) {
-      debouncedUpdatePreview(
-        formData as Record<string, unknown>,
-        rawMarkdown,
-      );
+      debouncedUpdatePreview(formData as Record<string, unknown>, rawMarkdown);
     }
-    
+
     const subscription = watch((formData) => {
       if (formData) {
-        debouncedUpdatePreview(formData as Record<string, unknown>, rawMarkdown);
+        debouncedUpdatePreview(
+          formData as Record<string, unknown>,
+          rawMarkdown,
+        );
       }
     });
-    
+
     return () => {
       subscription?.unsubscribe();
       debouncedUpdatePreview.cancel();
@@ -271,17 +295,20 @@ export default function PreviewPane({ locale, docId, currentFieldId, enableInlin
   ]);
 
   // Handle clicks on clickable fields
-  const handleFieldClick = useCallback((event: React.MouseEvent) => {
-    const target = event.target as HTMLElement;
-    const clickableField = target.closest('.clickable-field') as HTMLElement;
-    
-    if (clickableField && onFieldClick) {
-      const fieldId = clickableField.getAttribute('data-field-id');
-      if (fieldId) {
-        onFieldClick(fieldId);
+  const handleFieldClick = useCallback(
+    (event: React.MouseEvent) => {
+      const target = event.target as HTMLElement;
+      const clickableField = target.closest('.clickable-field') as HTMLElement;
+
+      if (clickableField && onFieldClick) {
+        const fieldId = clickableField.getAttribute('data-field-id');
+        if (fieldId) {
+          onFieldClick(fieldId);
+        }
       }
-    }
-  }, [onFieldClick]);
+    },
+    [onFieldClick],
+  );
 
   if (!isHydrated) {
     return (
@@ -325,10 +352,10 @@ export default function PreviewPane({ locale, docId, currentFieldId, enableInlin
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <FileText className="h-4 w-4" />
               <span>
-                {t('Page {{current}} of {{total}}', { 
-                  current: currentPage, 
+                {t('Page {{current}} of {{total}}', {
+                  current: currentPage,
                   total: totalPages,
-                  defaultValue: `Page ${currentPage} of ${totalPages}`
+                  defaultValue: `Page ${currentPage} of ${totalPages}`,
                 })}
               </span>
             </div>
@@ -336,7 +363,7 @@ export default function PreviewPane({ locale, docId, currentFieldId, enableInlin
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
                 disabled={currentPage === 1}
                 className="h-8 w-8 p-0"
               >
@@ -345,7 +372,9 @@ export default function PreviewPane({ locale, docId, currentFieldId, enableInlin
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                onClick={() =>
+                  setCurrentPage((prev) => Math.min(totalPages, prev + 1))
+                }
                 disabled={currentPage === totalPages}
                 className="h-8 w-8 p-0"
               >
@@ -354,7 +383,7 @@ export default function PreviewPane({ locale, docId, currentFieldId, enableInlin
             </div>
           </div>
         )}
-        
+
         <div
           ref={previewRef}
           className="flex-1 overflow-y-auto bg-white"
@@ -371,49 +400,49 @@ export default function PreviewPane({ locale, docId, currentFieldId, enableInlin
                 border-bottom: 1px solid #e5e7eb;
                 padding-bottom: 0.75rem;
               }
-              
+
               .prose h2 {
                 font-size: 1.25rem;
                 font-weight: bold;
                 margin: 2rem 0 1rem 0;
                 color: #1f2937;
               }
-              
+
               .prose h3 {
                 font-size: 1.125rem;
                 font-weight: 600;
                 margin: 1.5rem 0 0.75rem 0;
                 color: #374151;
               }
-              
+
               .prose p {
                 margin: 0.75rem 0;
                 line-height: 1.6;
               }
-              
+
               .prose hr {
                 margin: 2rem 0;
                 border-top: 1px solid #d1d5db;
               }
-              
+
               .prose table {
                 width: 100%;
                 margin: 1.5rem 0;
                 border-collapse: collapse;
               }
-              
+
               .prose th,
               .prose td {
                 border: 1px solid #d1d5db;
                 padding: 0.75rem;
                 text-align: left;
               }
-              
+
               .prose th {
                 background-color: #f9fafb;
                 font-weight: bold;
               }
-              
+
               /* Field highlighting */
               .highlight-current {
                 background-color: rgba(59, 130, 246, 0.2);
@@ -423,7 +452,7 @@ export default function PreviewPane({ locale, docId, currentFieldId, enableInlin
                 display: inline;
                 font-weight: bold;
               }
-              
+
               .filled-field {
                 background-color: rgba(34, 197, 94, 0.1);
                 border: 1px solid rgba(34, 197, 94, 0.3);
@@ -433,7 +462,7 @@ export default function PreviewPane({ locale, docId, currentFieldId, enableInlin
                 font-weight: bold;
                 color: #065f46;
               }
-              
+
               .empty-field {
                 background-color: rgba(156, 163, 175, 0.1);
                 border: 1px dashed rgba(156, 163, 175, 0.5);
@@ -443,75 +472,81 @@ export default function PreviewPane({ locale, docId, currentFieldId, enableInlin
                 display: inline;
                 font-style: italic;
               }
-              
+
               /* Clickable field interactions */
               .clickable-field {
                 cursor: pointer;
                 transition: all 0.2s ease-in-out;
                 position: relative;
               }
-              
+
               .clickable-field:hover {
                 transform: translateY(-1px);
                 box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
               }
-              
+
               .filled-field.clickable-field:hover {
                 background-color: rgba(34, 197, 94, 0.2);
                 border-color: rgba(34, 197, 94, 0.5);
               }
-              
+
               .empty-field.clickable-field:hover {
                 background-color: rgba(156, 163, 175, 0.2);
                 border-color: rgba(156, 163, 175, 0.7);
                 color: rgba(156, 163, 175, 1);
               }
-              
+
               .highlight-current.clickable-field:hover {
                 background-color: rgba(59, 130, 246, 0.3);
               }
-              
+
               .clickable-field:focus {
                 outline: 2px solid rgb(59, 130, 246);
                 outline-offset: 2px;
               }
-              
+
               .pulse-animation {
                 animation: pulse 2s ease-in-out;
               }
-              
+
               @keyframes pulse {
-                0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7); }
-                70% { box-shadow: 0 0 0 8px rgba(59, 130, 246, 0); }
-                100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
+                0% {
+                  box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7);
+                }
+                70% {
+                  box-shadow: 0 0 0 8px rgba(59, 130, 246, 0);
+                }
+                100% {
+                  box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
+                }
               }
             `}</style>
-          <ReactMarkdown
-            remarkPlugins={[remarkGfm]}
-            rehypePlugins={[rehypeRaw]}
-            components={{
-              p: (props) => <p {...props} className="select-none" />,
-              h1: (props) => <h1 {...props} className="text-center" />,
-              mark: ({ className, children, ...props }) => (
-                <mark className={className} {...props}>
-                  {children}
-                </mark>
-              ),
-              span: ({ className, children, ...props }) => (
-                <span className={className} {...props}>
-                  {children}
-                </span>
-              ),
-              img: ({
-                src = '',
-                ...rest
-              }: React.ImgHTMLAttributes<HTMLImageElement>) => (
-                <AutoImage src={src} {...rest} className="mx-auto" />
-              ),
-            }}
-          >
-            {processedMarkdown}
-          </ReactMarkdown>
+            <ReactMarkdown
+              remarkPlugins={[remarkGfm]}
+              rehypePlugins={[rehypeRaw]}
+              components={{
+                p: (props) => <p {...props} className="select-none" />,
+                h1: (props) => <h1 {...props} className="text-center" />,
+                mark: ({ className, children, ...props }) => (
+                  <mark className={className} {...props}>
+                    {children}
+                  </mark>
+                ),
+                span: ({ className, children, ...props }) => (
+                  <span className={className} {...props}>
+                    {children}
+                  </span>
+                ),
+                img: ({
+                  src = '',
+                  ...rest
+                }: React.ImgHTMLAttributes<HTMLImageElement>) => (
+                  <AutoImage src={src} {...rest} className="mx-auto" />
+                ),
+              }}
+            >
+              {processedMarkdown}
+            </ReactMarkdown>
           </div>
         </div>
       </div>

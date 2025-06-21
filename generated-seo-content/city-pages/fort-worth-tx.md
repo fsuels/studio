@@ -30,7 +30,7 @@ Fort Worth offers a dynamic business environment with opportunities across indus
 
 [Start Your Fort Worth Legal Document]
 
-*Trusted by hundreds of Fort Worth businesses*
+_Trusted by hundreds of Fort Worth businesses_
 
 ---
 

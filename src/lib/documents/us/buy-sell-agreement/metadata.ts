@@ -26,13 +26,21 @@ export const buySellAgreementMeta: LegalDocument = {
       name: 'Buy-Sell Agreement',
       description:
         'Agreement governing the transfer of business ownership interests upon triggering events.',
-      aliases: ['buyout agreement', 'business succession', 'ownership transfer'],
+      aliases: [
+        'buyout agreement',
+        'business succession',
+        'ownership transfer',
+      ],
     },
     es: {
       name: 'Acuerdo de Compra-Venta',
       description:
         'Acuerdo que rige la transferencia de participaciones comerciales ante eventos desencadenantes.',
-      aliases: ['acuerdo de compra', 'sucesión empresarial', 'transferencia de propiedad'],
+      aliases: [
+        'acuerdo de compra',
+        'sucesión empresarial',
+        'transferencia de propiedad',
+      ],
     },
   },
 };

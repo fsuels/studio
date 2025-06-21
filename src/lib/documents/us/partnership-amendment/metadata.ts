@@ -26,13 +26,21 @@ export const partnershipAmendmentMeta: LegalDocument = {
       name: 'Partnership Amendment',
       description:
         'Amendment to modify existing partnership agreement terms and conditions.',
-      aliases: ['partnership modification', 'agreement amendment', 'partnership change'],
+      aliases: [
+        'partnership modification',
+        'agreement amendment',
+        'partnership change',
+      ],
     },
     es: {
       name: 'Enmienda de Sociedad',
       description:
         'Enmienda para modificar los términos y condiciones del acuerdo de sociedad existente.',
-      aliases: ['modificación de sociedad', 'enmienda de acuerdo', 'cambio de sociedad'],
+      aliases: [
+        'modificación de sociedad',
+        'enmienda de acuerdo',
+        'cambio de sociedad',
+      ],
     },
   },
 };

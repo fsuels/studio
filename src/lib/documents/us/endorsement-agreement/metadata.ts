@@ -1,6 +1,9 @@
 import type { LegalDocument } from '@/types/documents';
 
-export const endorsementAgreementMeta: Omit<LegalDocument, 'schema' | 'questions'> = {
+export const endorsementAgreementMeta: Omit<
+  LegalDocument,
+  'schema' | 'questions'
+> = {
   id: 'endorsement-agreement',
   jurisdiction: 'US',
   category: 'Business',
@@ -21,13 +24,21 @@ export const endorsementAgreementMeta: Omit<LegalDocument, 'schema' | 'questions
       name: 'Endorsement Agreement',
       description:
         'Agreement for celebrity, influencer, or spokesperson endorsement services.',
-      aliases: ['Influencer agreement', 'Spokesperson agreement', 'Celebrity endorsement contract'],
+      aliases: [
+        'Influencer agreement',
+        'Spokesperson agreement',
+        'Celebrity endorsement contract',
+      ],
     },
     es: {
       name: 'Acuerdo de Patrocinio',
       description:
         'Acuerdo para servicios de patrocinio de celebridades, influencers o portavoces.',
-      aliases: ['Acuerdo influencer', 'Contrato portavoz', 'Contrato patrocinio celebridad'],
+      aliases: [
+        'Acuerdo influencer',
+        'Contrato portavoz',
+        'Contrato patrocinio celebridad',
+      ],
     },
   },
 };

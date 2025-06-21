@@ -47,7 +47,7 @@ Don't risk using generic templates that may not comply with Pennsylvania law. Ge
 
 [Create Pennsylvania Employment Contract]
 
-*Trusted by thousands of Pennsylvania businesses*
+_Trusted by thousands of Pennsylvania businesses_
 
 ---
 

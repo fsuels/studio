@@ -15,38 +15,38 @@ interface CommentResolution {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { reviewId, commentId, resolutionType = 'accepted', resolutionNotes, resolvedBy } = body;
+    const {
+      reviewId,
+      commentId,
+      resolutionType = 'accepted',
+      resolutionNotes,
+      resolvedBy,
+    } = body;
 
     if (!reviewId || !commentId) {
       return NextResponse.json(
         { error: 'Review ID and comment ID are required' },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
     // Get the comment to be resolved
     const comment = await getCommentById(commentId);
     if (!comment) {
-      return NextResponse.json(
-        { error: 'Comment not found' },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: 'Comment not found' }, { status: 404 });
     }
 
     if (comment.resolved) {
       return NextResponse.json(
         { error: 'Comment is already resolved' },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
     // Validate resolution permissions
     const canResolve = await validateResolutionPermissions(comment, resolvedBy);
     if (!canResolve.allowed) {
-      return NextResponse.json(
-        { error: canResolve.reason },
-        { status: 403 }
-      );
+      return NextResponse.json({ error: canResolve.reason }, { status: 403 });
     }
 
     // Create resolution record
@@ -55,7 +55,7 @@ export async function POST(request: NextRequest) {
       resolvedBy: resolvedBy || 'system',
       resolutionType,
       resolutionNotes,
-      originalComment: comment
+      originalComment: comment,
     });
 
     // Update comment status
@@ -78,14 +78,13 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       success: true,
       resolution,
-      message: 'Comment resolved successfully'
+      message: 'Comment resolved successfully',
     });
-
   } catch (error) {
     console.error('Failed to resolve comment:', error);
     return NextResponse.json(
       { error: 'Failed to resolve comment' },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -93,7 +92,7 @@ export async function POST(request: NextRequest) {
 async function getCommentById(commentId: string): Promise<any> {
   // Mock implementation - in real app, fetch from database
   const mockComments: Record<string, any> = {
-    'comment_1': {
+    comment_1: {
       id: 'comment_1',
       reviewId: 'review_123',
       stageId: 'legal_review',
@@ -105,16 +104,19 @@ async function getCommentById(commentId: string): Promise<any> {
       severity: 'medium',
       timestamp: new Date(),
       resolved: false,
-      position: { start: 45, end: 58 }
-    }
+      position: { start: 45, end: 58 },
+    },
   };
 
   return mockComments[commentId] || null;
 }
 
-async function validateResolutionPermissions(comment: any, resolvedBy: string): Promise<{ allowed: boolean; reason?: string }> {
+async function validateResolutionPermissions(
+  comment: any,
+  resolvedBy: string,
+): Promise<{ allowed: boolean; reason?: string }> {
   // In real implementation, check user roles and permissions
-  
+
   // System can always resolve
   if (resolvedBy === 'system') {
     return { allowed: true };
@@ -135,9 +137,9 @@ async function validateResolutionPermissions(comment: any, resolvedBy: string): 
     return { allowed: true };
   }
 
-  return { 
-    allowed: false, 
-    reason: 'Insufficient permissions to resolve this comment' 
+  return {
+    allowed: false,
+    reason: 'Insufficient permissions to resolve this comment',
   };
 }
 
@@ -148,14 +150,21 @@ async function createCommentResolution(params: {
   resolutionNotes?: string;
   originalComment: any;
 }): Promise<CommentResolution> {
-  
   // Determine if follow-up is required
-  const followUpRequired = determineFollowUpRequirement(params.originalComment, params.resolutionType);
+  const followUpRequired = determineFollowUpRequirement(
+    params.originalComment,
+    params.resolutionType,
+  );
 
   // Track implemented changes
   const implementedChanges = [];
-  if (params.resolutionType === 'accepted' && params.originalComment.suggestedText) {
-    implementedChanges.push(`Applied suggestion: "${params.originalComment.suggestedText}"`);
+  if (
+    params.resolutionType === 'accepted' &&
+    params.originalComment.suggestedText
+  ) {
+    implementedChanges.push(
+      `Applied suggestion: "${params.originalComment.suggestedText}"`,
+    );
   }
 
   const resolution: CommentResolution = {
@@ -166,7 +175,7 @@ async function createCommentResolution(params: {
     resolutionType: params.resolutionType as any,
     resolutionNotes: params.resolutionNotes,
     implementedChanges,
-    followUpRequired
+    followUpRequired,
   };
 
   // Save resolution to database
@@ -178,9 +187,15 @@ async function createCommentResolution(params: {
   return resolution;
 }
 
-function determineFollowUpRequirement(comment: any, resolutionType: string): boolean {
+function determineFollowUpRequirement(
+  comment: any,
+  resolutionType: string,
+): boolean {
   // High severity comments that are rejected or partially resolved need follow-up
-  if (comment.severity === 'high' && (resolutionType === 'rejected' || resolutionType === 'partial')) {
+  if (
+    comment.severity === 'high' &&
+    (resolutionType === 'rejected' || resolutionType === 'partial')
+  ) {
     return true;
   }
 
@@ -197,30 +212,37 @@ function determineFollowUpRequirement(comment: any, resolutionType: string): boo
   return false;
 }
 
-async function updateCommentResolution(commentId: string, resolution: CommentResolution): Promise<void> {
+async function updateCommentResolution(
+  commentId: string,
+  resolution: CommentResolution,
+): Promise<void> {
   // Update comment in database to mark as resolved
   console.log('Comment marked as resolved:', {
     commentId,
     resolutionId: resolution.id,
     resolvedAt: resolution.resolvedAt,
-    resolutionType: resolution.resolutionType
+    resolutionType: resolution.resolutionType,
   });
 }
 
-async function applyCommentChanges(reviewId: string, comment: any, resolution: CommentResolution): Promise<void> {
+async function applyCommentChanges(
+  reviewId: string,
+  comment: any,
+  resolution: CommentResolution,
+): Promise<void> {
   if (!comment.suggestedText || !comment.position) {
     return;
   }
 
   // Get current translation text
   const currentTranslation = await getCurrentTranslation(reviewId);
-  
+
   // Apply the suggested change
   const updatedText = applyTextChange(
     currentTranslation,
     comment.position,
     comment.originalText,
-    comment.suggestedText
+    comment.suggestedText,
   );
 
   // Save updated translation
@@ -228,14 +250,14 @@ async function applyCommentChanges(reviewId: string, comment: any, resolution: C
     changeType: 'comment_resolution',
     commentId: comment.id,
     resolutionId: resolution.id,
-    appliedBy: resolution.resolvedBy
+    appliedBy: resolution.resolvedBy,
   });
 
   console.log('Comment changes applied:', {
     reviewId,
     commentId: comment.id,
     originalText: comment.originalText,
-    suggestedText: comment.suggestedText
+    suggestedText: comment.suggestedText,
   });
 }
 
@@ -243,39 +265,55 @@ function applyTextChange(
   text: string,
   position: { start: number; end: number },
   originalText: string,
-  suggestedText: string
+  suggestedText: string,
 ): string {
   // Validate position
-  if (position.start < 0 || position.end > text.length || position.start >= position.end) {
+  if (
+    position.start < 0 ||
+    position.end > text.length ||
+    position.start >= position.end
+  ) {
     console.warn('Invalid position for text change');
     return text;
   }
 
   // Extract the text at the position to verify it matches originalText
   const textAtPosition = text.substring(position.start, position.end);
-  
+
   if (textAtPosition.toLowerCase() !== originalText.toLowerCase()) {
     console.warn('Text at position does not match original text', {
       expected: originalText,
-      found: textAtPosition
+      found: textAtPosition,
     });
     // Try to find the text elsewhere in the document
     const index = text.toLowerCase().indexOf(originalText.toLowerCase());
     if (index !== -1) {
-      return text.substring(0, index) + suggestedText + text.substring(index + originalText.length);
+      return (
+        text.substring(0, index) +
+        suggestedText +
+        text.substring(index + originalText.length)
+      );
     }
     return text; // No change if text not found
   }
 
   // Apply the change
-  return text.substring(0, position.start) + suggestedText + text.substring(position.end);
+  return (
+    text.substring(0, position.start) +
+    suggestedText +
+    text.substring(position.end)
+  );
 }
 
-async function updateReviewProgress(reviewId: string, resolution: CommentResolution): Promise<void> {
+async function updateReviewProgress(
+  reviewId: string,
+  resolution: CommentResolution,
+): Promise<void> {
   // Calculate new progress metrics
   const totalComments = await getTotalCommentsCount(reviewId);
   const resolvedComments = await getResolvedCommentsCount(reviewId);
-  const progressPercentage = totalComments > 0 ? (resolvedComments / totalComments) * 100 : 0;
+  const progressPercentage =
+    totalComments > 0 ? (resolvedComments / totalComments) * 100 : 0;
 
   // Update review metrics
   await saveReviewProgress(reviewId, {
@@ -283,18 +321,21 @@ async function updateReviewProgress(reviewId: string, resolution: CommentResolut
     resolvedComments,
     progressPercentage,
     lastResolutionAt: resolution.resolvedAt,
-    lastResolutionBy: resolution.resolvedBy
+    lastResolutionBy: resolution.resolvedBy,
   });
 
   console.log('Review progress updated:', {
     reviewId,
     progressPercentage: Math.round(progressPercentage),
     resolvedComments,
-    totalComments
+    totalComments,
   });
 }
 
-async function notifyCommentResolution(resolution: CommentResolution, originalComment: any): Promise<void> {
+async function notifyCommentResolution(
+  resolution: CommentResolution,
+  originalComment: any,
+): Promise<void> {
   const notifications = [];
 
   // Notify comment author
@@ -303,7 +344,7 @@ async function notifyCommentResolution(resolution: CommentResolution, originalCo
       type: 'comment_resolved',
       targetUserId: originalComment.reviewerId,
       resolutionType: resolution.resolutionType,
-      message: `Your ${originalComment.type} comment has been ${resolution.resolutionType}`
+      message: `Your ${originalComment.type} comment has been ${resolution.resolutionType}`,
     });
   }
 
@@ -314,7 +355,7 @@ async function notifyCommentResolution(resolution: CommentResolution, originalCo
       targetRole: 'review_manager',
       commentSeverity: originalComment.severity,
       followUpRequired: resolution.followUpRequired,
-      message: `High priority comment resolution requires attention`
+      message: `High priority comment resolution requires attention`,
     });
   }
 
@@ -324,12 +365,21 @@ async function notifyCommentResolution(resolution: CommentResolution, originalCo
   }
 }
 
-async function checkStageProgressionAfterResolution(reviewId: string, stageId: string): Promise<void> {
+async function checkStageProgressionAfterResolution(
+  reviewId: string,
+  stageId: string,
+): Promise<void> {
   // Check if stage completion criteria are met
-  const unresolvedCriticalComments = await getUnresolvedCriticalComments(reviewId, stageId);
+  const unresolvedCriticalComments = await getUnresolvedCriticalComments(
+    reviewId,
+    stageId,
+  );
   const stageProgress = await getStageProgress(reviewId, stageId);
 
-  if (unresolvedCriticalComments === 0 && stageProgress.completionPercentage >= 90) {
+  if (
+    unresolvedCriticalComments === 0 &&
+    stageProgress.completionPercentage >= 90
+  ) {
     // Stage might be ready for progression
     await evaluateStageCompletion(reviewId, stageId);
   }
@@ -341,17 +391,24 @@ async function isReviewManager(userId: string): Promise<boolean> {
   return userId.includes('manager') || userId.includes('admin');
 }
 
-async function isStageSupervisor(userId: string, stageId: string): Promise<boolean> {
+async function isStageSupervisor(
+  userId: string,
+  stageId: string,
+): Promise<boolean> {
   // Mock implementation
   return userId.includes('supervisor') || userId.includes(stageId);
 }
 
 async function getCurrentTranslation(reviewId: string): Promise<string> {
   // Mock implementation
-  return "This is a sample legal document with consideration clause...";
+  return 'This is a sample legal document with consideration clause...';
 }
 
-async function updateTranslationText(reviewId: string, newText: string, metadata: any): Promise<void> {
+async function updateTranslationText(
+  reviewId: string,
+  newText: string,
+  metadata: any,
+): Promise<void> {
   console.log('Translation text updated:', { reviewId, metadata });
 }
 
@@ -363,35 +420,52 @@ async function getResolvedCommentsCount(reviewId: string): Promise<number> {
   return Math.floor(Math.random() * 15) + 3;
 }
 
-async function getUnresolvedCriticalComments(reviewId: string, stageId: string): Promise<number> {
+async function getUnresolvedCriticalComments(
+  reviewId: string,
+  stageId: string,
+): Promise<number> {
   return Math.floor(Math.random() * 3);
 }
 
-async function getStageProgress(reviewId: string, stageId: string): Promise<any> {
+async function getStageProgress(
+  reviewId: string,
+  stageId: string,
+): Promise<any> {
   return {
     completionPercentage: Math.floor(Math.random() * 30) + 70,
     resolvedIssues: Math.floor(Math.random() * 10),
-    totalIssues: Math.floor(Math.random() * 5) + 10
+    totalIssues: Math.floor(Math.random() * 5) + 10,
   };
 }
 
-async function saveResolutionToDatabase(resolution: CommentResolution): Promise<void> {
+async function saveResolutionToDatabase(
+  resolution: CommentResolution,
+): Promise<void> {
   console.log('Resolution saved to database:', resolution.id);
 }
 
-async function saveReviewProgress(reviewId: string, progress: any): Promise<void> {
+async function saveReviewProgress(
+  reviewId: string,
+  progress: any,
+): Promise<void> {
   console.log('Review progress saved:', { reviewId, progress });
 }
 
-async function logResolutionEvent(resolution: CommentResolution, comment: any): Promise<void> {
+async function logResolutionEvent(
+  resolution: CommentResolution,
+  comment: any,
+): Promise<void> {
   console.log('Resolution event logged:', {
     resolutionId: resolution.id,
     commentType: comment.type,
-    resolutionType: resolution.resolutionType
+    resolutionType: resolution.resolutionType,
   });
 }
 
-async function evaluateStageCompletion(reviewId: string, stageId: string): Promise<void> {
+async function evaluateStageCompletion(
+  reviewId: string,
+  stageId: string,
+): Promise<void> {
   console.log('Evaluating stage completion:', { reviewId, stageId });
 }
 

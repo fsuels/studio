@@ -24,12 +24,18 @@ export const socialMediaManagementAgreementMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Social Media Management Agreement',
-      description: 'Professional agreement for social media marketing and management services between agency and client.',
-      aliases: ['social media contract', 'digital marketing agreement', 'social media services contract'],
+      description:
+        'Professional agreement for social media marketing and management services between agency and client.',
+      aliases: [
+        'social media contract',
+        'digital marketing agreement',
+        'social media services contract',
+      ],
     },
     es: {
       name: 'Acuerdo de Gestión de Redes Sociales',
-      description: 'Acuerdo profesional para servicios de marketing y gestión de redes sociales entre agencia y cliente.',
+      description:
+        'Acuerdo profesional para servicios de marketing y gestión de redes sociales entre agencia y cliente.',
       aliases: ['contrato de redes sociales', 'acuerdo de marketing digital'],
     },
   },

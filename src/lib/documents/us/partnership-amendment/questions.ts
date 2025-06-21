@@ -41,14 +41,16 @@ export const partnershipAmendmentQuestions: Question[] = [
     label: 'Amendment Description',
     type: 'textarea',
     required: true,
-    placeholder: 'Briefly describe what is being amended in the partnership agreement',
+    placeholder:
+      'Briefly describe what is being amended in the partnership agreement',
   },
   {
     id: 'specificChanges',
     label: 'Specific Changes',
     type: 'textarea',
     required: true,
-    placeholder: 'Detail the exact changes being made to the original agreement',
+    placeholder:
+      'Detail the exact changes being made to the original agreement',
   },
   {
     id: 'effectiveDate',
@@ -60,13 +62,15 @@ export const partnershipAmendmentQuestions: Question[] = [
     id: 'newPartnerInfo',
     label: 'New Partner Information (if applicable)',
     type: 'textarea',
-    placeholder: 'If adding a new partner, provide their name, address, and contribution',
+    placeholder:
+      'If adding a new partner, provide their name, address, and contribution',
   },
   {
     id: 'departingPartnerInfo',
     label: 'Departing Partner Information (if applicable)',
     type: 'textarea',
-    placeholder: 'If a partner is leaving, provide their name and terms of departure',
+    placeholder:
+      'If a partner is leaving, provide their name and terms of departure',
   },
   {
     id: 'capitalAdjustments',

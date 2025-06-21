@@ -1,4 +1,4 @@
-"use client";
+'use client';
 /* src/lib/documents/us/vehicle-bill-of-sale-client.ts
    Tiny client-only stub so lazyClient() can still load something
    without shadowing the real document definition folder. */

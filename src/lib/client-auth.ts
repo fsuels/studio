@@ -9,7 +9,7 @@ export async function getAuthToken(): Promise<string | null> {
   try {
     const auth = getAuth(app);
     const user = auth.currentUser;
-    
+
     if (!user) {
       console.warn('[client-auth] No authenticated user found');
       return null;
@@ -28,10 +28,10 @@ export async function getAuthToken(): Promise<string | null> {
  */
 export async function authenticatedFetch(
   url: string,
-  options: RequestInit = {}
+  options: RequestInit = {},
 ): Promise<Response> {
   const token = await getAuthToken();
-  
+
   if (!token) {
     throw new Error('User not authenticated');
   }
@@ -50,7 +50,7 @@ export async function authenticatedFetch(
  */
 export async function authenticatedPost<T>(
   url: string,
-  data: T
+  data: T,
 ): Promise<Response> {
   return authenticatedFetch(url, {
     method: 'POST',
@@ -70,11 +70,15 @@ export async function generateAuthenticatedPdf(params: {
   state?: string;
 }): Promise<Blob> {
   const response = await authenticatedPost('/api/generate-pdf', params);
-  
+
   if (!response.ok) {
-    const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
-    throw new Error(errorData.error || `HTTP ${response.status}: ${response.statusText}`);
+    const errorData = await response
+      .json()
+      .catch(() => ({ error: 'Unknown error' }));
+    throw new Error(
+      errorData.error || `HTTP ${response.status}: ${response.statusText}`,
+    );
   }
-  
+
   return response.blob();
 }

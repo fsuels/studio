@@ -47,7 +47,7 @@ Don't risk using generic templates that may not comply with Iowa law. Get a prof
 
 [Create Iowa Non-Disclosure Agreement]
 
-*Trusted by thousands of Iowa businesses*
+_Trusted by thousands of Iowa businesses_
 
 ---
 

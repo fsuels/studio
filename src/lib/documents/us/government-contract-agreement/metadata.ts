@@ -24,12 +24,14 @@ export const governmentContractAgreementMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Government Contract Agreement',
-      description: 'Agreement for providing goods or services to government agencies.',
+      description:
+        'Agreement for providing goods or services to government agencies.',
       aliases: ['federal contract', 'public sector agreement', 'gsa contract'],
     },
     es: {
       name: 'Acuerdo de Contrato Gubernamental',
-      description: 'Acuerdo para proporcionar bienes o servicios a agencias gubernamentales.',
+      description:
+        'Acuerdo para proporcionar bienes o servicios a agencias gubernamentales.',
       aliases: ['contrato federal', 'acuerdo de sector público'],
     },
   },

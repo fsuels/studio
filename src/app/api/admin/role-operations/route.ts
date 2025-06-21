@@ -1,9 +1,9 @@
 // Role Operations API for team & role management
 import { NextRequest, NextResponse } from 'next/server';
 import { requireAdmin } from '@/lib/admin-auth';
-import { 
-  UserRole, 
-  Permission, 
+import {
+  UserRole,
+  Permission,
   UserWithRole,
   RoleManagementOperation,
   RoleAuditEvent,
@@ -16,11 +16,11 @@ import { impersonationService } from '@/lib/impersonation';
 const generateMockUsers = (count: number = 100): UserWithRole[] => {
   const roles: UserRole[] = ['admin', 'support', 'qa', 'user', 'viewer'];
   const users: UserWithRole[] = [];
-  
+
   for (let i = 0; i < count; i++) {
     const role = roles[Math.floor(Math.random() * roles.length)];
     const roleDefinition = DEFAULT_ROLES[role];
-    
+
     users.push({
       id: `user-${i + 1}`,
       email: `user${i + 1}@123legaldoc.com`,
@@ -28,11 +28,24 @@ const generateMockUsers = (count: number = 100): UserWithRole[] => {
       role,
       permissions: roleDefinition.permissions,
       features: roleDefinition.features,
-      createdAt: new Date(Date.now() - Math.random() * 90 * 24 * 60 * 60 * 1000).toISOString(),
-      lastLogin: Math.random() > 0.3 ? new Date(Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000).toISOString() : undefined,
+      createdAt: new Date(
+        Date.now() - Math.random() * 90 * 24 * 60 * 60 * 1000,
+      ).toISOString(),
+      lastLogin:
+        Math.random() > 0.3
+          ? new Date(
+              Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000,
+            ).toISOString()
+          : undefined,
       isActive: Math.random() > 0.1,
-      teamId: Math.random() > 0.5 ? `team-${Math.floor(Math.random() * 5) + 1}` : undefined,
-      managedBy: Math.random() > 0.5 ? `admin-${Math.floor(Math.random() * 3) + 1}` : undefined,
+      teamId:
+        Math.random() > 0.5
+          ? `team-${Math.floor(Math.random() * 5) + 1}`
+          : undefined,
+      managedBy:
+        Math.random() > 0.5
+          ? `admin-${Math.floor(Math.random() * 3) + 1}`
+          : undefined,
       impersonationSettings: {
         allowImpersonation: Math.random() > 0.2,
         maxDuration: [60, 120, 240, 480][Math.floor(Math.random() * 4)],
@@ -40,7 +53,7 @@ const generateMockUsers = (count: number = 100): UserWithRole[] => {
       },
     });
   }
-  
+
   return users;
 };
 
@@ -65,63 +78,63 @@ export async function GET(request: NextRequest) {
     switch (action) {
       case 'users':
         return getUsersData(request, { page, limit, search, roleFilter });
-      
+
       case 'features':
         return getFeaturesData(request);
-      
+
       case 'audit':
         return getAuditData(request, { page, limit });
-      
+
       case 'impersonation':
         return getImpersonationData(request);
-      
+
       case 'stats':
         return getStatsData(request);
-      
+
       default:
         return getDashboardData(request);
     }
-
   } catch (error) {
     console.error('Role operations API error:', error);
-    
+
     return NextResponse.json(
-      { 
-        success: false, 
-        error: 'Failed to retrieve role operations data' 
+      {
+        success: false,
+        error: 'Failed to retrieve role operations data',
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
 
 async function getUsersData(
-  request: NextRequest, 
-  filters: { page: number; limit: number; search: string; roleFilter: string }
+  request: NextRequest,
+  filters: { page: number; limit: number; search: string; roleFilter: string },
 ) {
   const { page, limit, search, roleFilter } = filters;
-  
+
   // Filter users
   let filteredUsers = mockUsersDB;
-  
+
   if (search) {
     const searchLower = search.toLowerCase();
-    filteredUsers = filteredUsers.filter(user => 
-      user.name.toLowerCase().includes(searchLower) ||
-      user.email.toLowerCase().includes(searchLower)
+    filteredUsers = filteredUsers.filter(
+      (user) =>
+        user.name.toLowerCase().includes(searchLower) ||
+        user.email.toLowerCase().includes(searchLower),
     );
   }
-  
+
   if (roleFilter !== 'all') {
-    filteredUsers = filteredUsers.filter(user => user.role === roleFilter);
+    filteredUsers = filteredUsers.filter((user) => user.role === roleFilter);
   }
-  
+
   // Pagination
   const total = filteredUsers.length;
   const totalPages = Math.ceil(total / limit);
   const offset = (page - 1) * limit;
   const paginatedUsers = filteredUsers.slice(offset, offset + limit);
-  
+
   return NextResponse.json({
     success: true,
     data: {
@@ -132,54 +145,57 @@ async function getUsersData(
         total,
         totalPages,
         hasNext: page < totalPages,
-        hasPrev: page > 1
-      }
-    }
+        hasPrev: page > 1,
+      },
+    },
   });
 }
 
 async function getFeaturesData(request: NextRequest) {
   const features = featureToggleService.getAllFeatures();
-  
+
   return NextResponse.json({
     success: true,
     data: {
       features,
       stats: {
         total: features.length,
-        enabled: features.filter(f => f.enabled).length,
-        disabled: features.filter(f => !f.enabled).length,
-        byOwner: features.reduce((acc, f) => {
-          acc[f.owner] = (acc[f.owner] || 0) + 1;
-          return acc;
-        }, {} as Record<string, number>),
-      }
-    }
+        enabled: features.filter((f) => f.enabled).length,
+        disabled: features.filter((f) => !f.enabled).length,
+        byOwner: features.reduce(
+          (acc, f) => {
+            acc[f.owner] = (acc[f.owner] || 0) + 1;
+            return acc;
+          },
+          {} as Record<string, number>,
+        ),
+      },
+    },
   });
 }
 
 async function getAuditData(
   request: NextRequest,
-  filters: { page: number; limit: number }
+  filters: { page: number; limit: number },
 ) {
   const { page, limit } = filters;
-  
+
   // Generate mock audit events if empty
   if (auditEventsDB.length === 0) {
     auditEventsDB = generateMockAuditEvents(200);
   }
-  
+
   // Sort by timestamp (most recent first)
-  const sortedEvents = [...auditEventsDB].sort((a, b) => 
-    new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+  const sortedEvents = [...auditEventsDB].sort(
+    (a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime(),
   );
-  
+
   // Pagination
   const total = sortedEvents.length;
   const totalPages = Math.ceil(total / limit);
   const offset = (page - 1) * limit;
   const paginatedEvents = sortedEvents.slice(offset, offset + limit);
-  
+
   return NextResponse.json({
     success: true,
     data: {
@@ -190,40 +206,44 @@ async function getAuditData(
         total,
         totalPages,
         hasNext: page < totalPages,
-        hasPrev: page > 1
-      }
-    }
+        hasPrev: page > 1,
+      },
+    },
   });
 }
 
 async function getImpersonationData(request: NextRequest) {
   const activeSessions = await impersonationService.getActiveSessions();
-  
+
   return NextResponse.json({
     success: true,
     data: {
       activeSessions,
       stats: {
         totalActive: activeSessions.length,
-        totalToday: activeSessions.filter(s => 
-          new Date(s.startedAt).toDateString() === new Date().toDateString()
+        totalToday: activeSessions.filter(
+          (s) =>
+            new Date(s.startedAt).toDateString() === new Date().toDateString(),
         ).length,
-      }
-    }
+      },
+    },
   });
 }
 
 async function getStatsData(request: NextRequest) {
   const totalUsers = mockUsersDB.length;
-  const activeUsers = mockUsersDB.filter(u => u.isActive).length;
-  const roleDistribution = mockUsersDB.reduce((acc, user) => {
-    acc[user.role] = (acc[user.role] || 0) + 1;
-    return acc;
-  }, {} as Record<UserRole, number>);
-  
+  const activeUsers = mockUsersDB.filter((u) => u.isActive).length;
+  const roleDistribution = mockUsersDB.reduce(
+    (acc, user) => {
+      acc[user.role] = (acc[user.role] || 0) + 1;
+      return acc;
+    },
+    {} as Record<UserRole, number>,
+  );
+
   const features = featureToggleService.getAllFeatures();
   const activeSessions = await impersonationService.getActiveSessions();
-  
+
   return NextResponse.json({
     success: true,
     data: {
@@ -235,22 +255,24 @@ async function getStatsData(request: NextRequest) {
       },
       features: {
         total: features.length,
-        enabled: features.filter(f => f.enabled).length,
-        disabled: features.filter(f => !f.enabled).length,
+        enabled: features.filter((f) => f.enabled).length,
+        disabled: features.filter((f) => !f.enabled).length,
       },
       impersonation: {
         activeSessions: activeSessions.length,
-        todaySessions: activeSessions.filter(s => 
-          new Date(s.startedAt).toDateString() === new Date().toDateString()
+        todaySessions: activeSessions.filter(
+          (s) =>
+            new Date(s.startedAt).toDateString() === new Date().toDateString(),
         ).length,
       },
       audit: {
         totalEvents: auditEventsDB.length,
-        todayEvents: auditEventsDB.filter(e =>
-          new Date(e.timestamp).toDateString() === new Date().toDateString()
+        todayEvents: auditEventsDB.filter(
+          (e) =>
+            new Date(e.timestamp).toDateString() === new Date().toDateString(),
         ).length,
-      }
-    }
+      },
+    },
   });
 }
 
@@ -259,11 +281,11 @@ async function getDashboardData(request: NextRequest) {
   const statsResponse = await getStatsData(request);
   const impersonationResponse = await getImpersonationData(request);
   const featuresResponse = await getFeaturesData(request);
-  
+
   const statsData = (await statsResponse.json()).data;
   const impersonationData = (await impersonationResponse.json()).data;
   const featuresData = (await featuresResponse.json()).data;
-  
+
   return NextResponse.json({
     success: true,
     data: {
@@ -271,10 +293,13 @@ async function getDashboardData(request: NextRequest) {
       activeSessions: impersonationData.activeSessions,
       features: featuresData.features.slice(0, 10), // Top 10 features
       recentUsers: mockUsersDB
-        .filter(u => u.lastLogin)
-        .sort((a, b) => new Date(b.lastLogin!).getTime() - new Date(a.lastLogin!).getTime())
-        .slice(0, 5)
-    }
+        .filter((u) => u.lastLogin)
+        .sort(
+          (a, b) =>
+            new Date(b.lastLogin!).getTime() - new Date(a.lastLogin!).getTime(),
+        )
+        .slice(0, 5),
+    },
   });
 }
 
@@ -291,35 +316,34 @@ export async function POST(request: NextRequest) {
     switch (action) {
       case 'assign_role':
         return handleRoleAssignment(request, params, adminResult as any);
-      
+
       case 'toggle_feature':
         return handleFeatureToggle(request, params, adminResult as any);
-      
+
       case 'start_impersonation':
         return handleStartImpersonation(request, params, adminResult as any);
-      
+
       case 'end_impersonation':
         return handleEndImpersonation(request, params, adminResult as any);
-      
+
       case 'create_user':
         return handleCreateUser(request, params, adminResult as any);
-      
+
       case 'update_user':
         return handleUpdateUser(request, params, adminResult as any);
-      
+
       default:
         return NextResponse.json(
           { success: false, error: 'Invalid action' },
-          { status: 400 }
+          { status: 400 },
         );
     }
-
   } catch (error) {
     console.error('Role operations POST error:', error);
-    
+
     return NextResponse.json(
       { success: false, error: 'Failed to perform role operation' },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -327,21 +351,21 @@ export async function POST(request: NextRequest) {
 async function handleRoleAssignment(
   request: NextRequest,
   params: { userId: string; newRole: UserRole; reason: string },
-  admin: any
+  admin: any,
 ) {
   const { userId, newRole, reason } = params;
-  
-  const userIndex = mockUsersDB.findIndex(user => user.id === userId);
+
+  const userIndex = mockUsersDB.findIndex((user) => user.id === userId);
   if (userIndex === -1) {
     return NextResponse.json(
       { success: false, error: 'User not found' },
-      { status: 404 }
+      { status: 404 },
     );
   }
-  
+
   const oldRole = mockUsersDB[userIndex].role;
   const roleDefinition = DEFAULT_ROLES[newRole];
-  
+
   // Update user role
   mockUsersDB[userIndex] = {
     ...mockUsersDB[userIndex],
@@ -349,7 +373,7 @@ async function handleRoleAssignment(
     permissions: roleDefinition.permissions,
     features: roleDefinition.features,
   };
-  
+
   // Create audit event
   const auditEvent: RoleAuditEvent = {
     id: crypto.randomUUID(),
@@ -368,27 +392,27 @@ async function handleRoleAssignment(
       reason,
     },
   };
-  
+
   auditEventsDB.push(auditEvent);
-  
+
   return NextResponse.json({
     success: true,
     data: {
       user: mockUsersDB[userIndex],
       auditEvent,
-    }
+    },
   });
 }
 
 async function handleFeatureToggle(
   request: NextRequest,
   params: { featureKey: string; enabled: boolean },
-  admin: any
+  admin: any,
 ) {
   const { featureKey, enabled } = params;
-  
+
   await featureToggleService.toggleFeature(featureKey, enabled, admin.username);
-  
+
   // Create audit event
   const auditEvent: RoleAuditEvent = {
     id: crypto.randomUUID(),
@@ -405,19 +429,19 @@ async function handleFeatureToggle(
       enabled,
     },
   };
-  
+
   auditEventsDB.push(auditEvent);
-  
+
   return NextResponse.json({
     success: true,
-    data: { featureKey, enabled, auditEvent }
+    data: { featureKey, enabled, auditEvent },
   });
 }
 
 async function handleStartImpersonation(
   request: NextRequest,
   params: any,
-  admin: any
+  admin: any,
 ) {
   const session = await impersonationService.startImpersonation({
     ...params,
@@ -427,43 +451,43 @@ async function handleStartImpersonation(
     ipAddress: request.ip || 'unknown',
     userAgent: request.headers.get('user-agent') || 'unknown',
   });
-  
+
   return NextResponse.json({
     success: true,
-    data: { session }
+    data: { session },
   });
 }
 
 async function handleEndImpersonation(
   request: NextRequest,
   params: { sessionId: string; reason?: string },
-  admin: any
+  admin: any,
 ) {
   const { sessionId, reason } = params;
-  
+
   await impersonationService.endImpersonation(sessionId, reason);
-  
+
   return NextResponse.json({
     success: true,
-    data: { sessionId, ended: true }
+    data: { sessionId, ended: true },
   });
 }
 
 async function handleCreateUser(
   request: NextRequest,
   params: { email: string; name: string; role: UserRole },
-  admin: any
+  admin: any,
 ) {
   const { email, name, role } = params;
-  
+
   // Check if user already exists
-  if (mockUsersDB.find(user => user.email === email)) {
+  if (mockUsersDB.find((user) => user.email === email)) {
     return NextResponse.json(
       { success: false, error: 'User with this email already exists' },
-      { status: 400 }
+      { status: 400 },
     );
   }
-  
+
   const roleDefinition = DEFAULT_ROLES[role];
   const newUser: UserWithRole = {
     id: `user-${Date.now()}`,
@@ -480,9 +504,9 @@ async function handleCreateUser(
       auditRequired: true,
     },
   };
-  
+
   mockUsersDB.push(newUser);
-  
+
   // Create audit event
   const auditEvent: RoleAuditEvent = {
     id: crypto.randomUUID(),
@@ -502,33 +526,33 @@ async function handleCreateUser(
       action: 'create_user',
     },
   };
-  
+
   auditEventsDB.push(auditEvent);
-  
+
   return NextResponse.json({
     success: true,
-    data: { user: newUser, auditEvent }
+    data: { user: newUser, auditEvent },
   });
 }
 
 async function handleUpdateUser(
   request: NextRequest,
   params: { userId: string; updates: Partial<UserWithRole> },
-  admin: any
+  admin: any,
 ) {
   const { userId, updates } = params;
-  
-  const userIndex = mockUsersDB.findIndex(user => user.id === userId);
+
+  const userIndex = mockUsersDB.findIndex((user) => user.id === userId);
   if (userIndex === -1) {
     return NextResponse.json(
       { success: false, error: 'User not found' },
-      { status: 404 }
+      { status: 404 },
     );
   }
-  
+
   const oldUser = { ...mockUsersDB[userIndex] };
   mockUsersDB[userIndex] = { ...mockUsersDB[userIndex], ...updates };
-  
+
   // Create audit event
   const auditEvent: RoleAuditEvent = {
     id: crypto.randomUUID(),
@@ -545,12 +569,12 @@ async function handleUpdateUser(
       oldValues: oldUser,
     },
   };
-  
+
   auditEventsDB.push(auditEvent);
-  
+
   return NextResponse.json({
     success: true,
-    data: { user: mockUsersDB[userIndex], auditEvent }
+    data: { user: mockUsersDB[userIndex], auditEvent },
   });
 }
 
@@ -558,11 +582,17 @@ async function handleUpdateUser(
 function generateMockAuditEvents(count: number): RoleAuditEvent[] {
   const events: RoleAuditEvent[] = [];
   const eventTypes: RoleAuditEvent['type'][] = [
-    'role_assigned', 'role_removed', 'permission_granted', 'permission_revoked',
-    'impersonation_started', 'impersonation_ended', 'feature_toggle_changed',
-    'user_activated', 'user_deactivated'
+    'role_assigned',
+    'role_removed',
+    'permission_granted',
+    'permission_revoked',
+    'impersonation_started',
+    'impersonation_ended',
+    'feature_toggle_changed',
+    'user_activated',
+    'user_deactivated',
   ];
-  
+
   for (let i = 0; i < count; i++) {
     events.push({
       id: `event-${i + 1}`,
@@ -571,11 +601,13 @@ function generateMockAuditEvents(count: number): RoleAuditEvent[] {
       performedByRole: 'admin',
       targetUserId: `user-${Math.floor(Math.random() * 100) + 1}`,
       description: `Mock audit event ${i + 1} - automated system activity`,
-      timestamp: new Date(Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000).toISOString(),
+      timestamp: new Date(
+        Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000,
+      ).toISOString(),
       ipAddress: `192.168.1.${Math.floor(Math.random() * 255)}`,
       userAgent: 'Mozilla/5.0 (Admin Dashboard)',
     });
   }
-  
+
   return events;
 }

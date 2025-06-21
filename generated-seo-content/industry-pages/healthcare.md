@@ -15,6 +15,7 @@ Healthcare & Medical businesses face unique legal challenges requiring specializ
 ### Why Healthcare & Medical Needs Specialized Legal Documents
 
 Healthcare & Medical businesses require documents that address:
+
 - Industry-specific regulations and compliance requirements
 - Common healthcare & medical business practices and terminology
 - Risk management specific to healthcare & medical operations
@@ -31,4 +32,4 @@ Our healthcare & medical templates include:
 
 [Browse Healthcare & Medical Documents]
 
-*Trusted by thousands of healthcare & medical professionals*
+_Trusted by thousands of healthcare & medical professionals_

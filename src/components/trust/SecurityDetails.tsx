@@ -1,15 +1,21 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { 
-  Lock, 
-  Shield, 
-  Key, 
-  Server, 
-  Eye, 
+import {
+  Lock,
+  Shield,
+  Key,
+  Server,
+  Eye,
   EyeOff,
   Copy,
   Check,
@@ -18,7 +24,7 @@ import {
   AlertTriangle,
   Clock,
   Globe,
-  Database
+  Database,
 } from 'lucide-react';
 
 interface SecurityDetail {
@@ -35,57 +41,69 @@ const securityDetails: SecurityDetail[] = [
   {
     category: 'Data Encryption',
     title: 'AES-256 Encryption',
-    description: 'All data is encrypted at rest and in transit using industry-standard AES-256 encryption',
-    technical: 'AES-256-GCM with PBKDF2 key derivation (100,000 iterations), TLS 1.3 for transport',
+    description:
+      'All data is encrypted at rest and in transit using industry-standard AES-256 encryption',
+    technical:
+      'AES-256-GCM with PBKDF2 key derivation (100,000 iterations), TLS 1.3 for transport',
     compliance: ['SOC 2', 'GDPR', 'CCPA'],
     icon: Lock,
-    color: 'green'
+    color: 'green',
   },
   {
     category: 'Access Control',
     title: 'Multi-Factor Authentication',
-    description: 'Role-based access control with mandatory 2FA for all administrative functions',
-    technical: 'RBAC with OAuth 2.0, SAML 2.0, TOTP/SMS 2FA, privilege escalation monitoring',
+    description:
+      'Role-based access control with mandatory 2FA for all administrative functions',
+    technical:
+      'RBAC with OAuth 2.0, SAML 2.0, TOTP/SMS 2FA, privilege escalation monitoring',
     compliance: ['SOC 2', 'ISO 27001'],
     icon: Key,
-    color: 'blue'
+    color: 'blue',
   },
   {
     category: 'Infrastructure',
     title: 'Secure Cloud Architecture',
-    description: 'Multi-region deployment with automated failover and disaster recovery',
-    technical: 'Firebase/GCP infrastructure, auto-scaling, load balancing, 99.9% SLA',
+    description:
+      'Multi-region deployment with automated failover and disaster recovery',
+    technical:
+      'Firebase/GCP infrastructure, auto-scaling, load balancing, 99.9% SLA',
     compliance: ['SOC 2', 'ISO 27001', 'GDPR'],
     icon: Server,
-    color: 'purple'
+    color: 'purple',
   },
   {
     category: 'Monitoring',
     title: 'Real-time Security Monitoring',
-    description: '24/7 security monitoring with automated threat detection and response',
-    technical: 'SIEM integration, anomaly detection, automated incident response workflows',
+    description:
+      '24/7 security monitoring with automated threat detection and response',
+    technical:
+      'SIEM integration, anomaly detection, automated incident response workflows',
     compliance: ['SOC 2', 'GDPR'],
     icon: Eye,
-    color: 'orange'
+    color: 'orange',
   },
   {
     category: 'Data Privacy',
     title: 'Privacy by Design',
-    description: 'Data minimization, purpose limitation, and automated retention policies',
-    technical: 'Automated data classification, retention policies, deletion workflows',
+    description:
+      'Data minimization, purpose limitation, and automated retention policies',
+    technical:
+      'Automated data classification, retention policies, deletion workflows',
     compliance: ['GDPR', 'CCPA', 'SOC 2'],
     icon: Shield,
-    color: 'indigo'
+    color: 'indigo',
   },
   {
     category: 'Backups',
     title: 'Encrypted Backups',
-    description: 'Automated encrypted backups with point-in-time recovery capabilities',
-    technical: 'Continuous backup to geographically distributed locations, AES-256 encryption',
+    description:
+      'Automated encrypted backups with point-in-time recovery capabilities',
+    technical:
+      'Continuous backup to geographically distributed locations, AES-256 encryption',
     compliance: ['SOC 2', 'GDPR'],
     icon: Database,
-    color: 'teal'
-  }
+    color: 'teal',
+  },
 ];
 
 export function SecurityDetails() {
@@ -93,19 +111,19 @@ export function SecurityDetails() {
   const [copiedItems, setCopiedItems] = useState<string[]>([]);
 
   const toggleExpanded = (title: string) => {
-    setExpandedItems(prev => 
-      prev.includes(title) 
-        ? prev.filter(item => item !== title)
-        : [...prev, title]
+    setExpandedItems((prev) =>
+      prev.includes(title)
+        ? prev.filter((item) => item !== title)
+        : [...prev, title],
     );
   };
 
   const copyToClipboard = async (text: string, itemTitle: string) => {
     try {
       await navigator.clipboard.writeText(text);
-      setCopiedItems(prev => [...prev, itemTitle]);
+      setCopiedItems((prev) => [...prev, itemTitle]);
       setTimeout(() => {
-        setCopiedItems(prev => prev.filter(item => item !== itemTitle));
+        setCopiedItems((prev) => prev.filter((item) => item !== itemTitle));
       }, 2000);
     } catch (error) {
       console.error('Failed to copy:', error);
@@ -119,7 +137,7 @@ export function SecurityDetails() {
       purple: 'text-purple-600 bg-purple-100',
       orange: 'text-orange-600 bg-orange-100',
       indigo: 'text-indigo-600 bg-indigo-100',
-      teal: 'text-teal-600 bg-teal-100'
+      teal: 'text-teal-600 bg-teal-100',
     };
     return colors[color as keyof typeof colors] || 'text-gray-600 bg-gray-100';
   };
@@ -131,7 +149,7 @@ export function SecurityDetails() {
       purple: 'text-purple-600',
       orange: 'text-orange-600',
       indigo: 'text-indigo-600',
-      teal: 'text-teal-600'
+      teal: 'text-teal-600',
     };
     return colors[color as keyof typeof colors] || 'text-gray-600';
   };
@@ -174,7 +192,9 @@ export function SecurityDetails() {
             <div key={index} className="border rounded-lg p-4 space-y-3">
               <div className="flex items-start justify-between">
                 <div className="flex items-start gap-3">
-                  <detail.icon className={`h-6 w-6 mt-1 ${getIconColor(detail.color)}`} />
+                  <detail.icon
+                    className={`h-6 w-6 mt-1 ${getIconColor(detail.color)}`}
+                  />
                   <div className="space-y-2">
                     <div className="flex items-center gap-2">
                       <h4 className="font-semibold">{detail.title}</h4>
@@ -187,7 +207,10 @@ export function SecurityDetails() {
                     </p>
                     <div className="flex flex-wrap gap-1">
                       {detail.compliance.map((standard, i) => (
-                        <Badge key={i} className={getColorClasses(detail.color)}>
+                        <Badge
+                          key={i}
+                          className={getColorClasses(detail.color)}
+                        >
                           {standard}
                         </Badge>
                       ))}
@@ -210,11 +233,15 @@ export function SecurityDetails() {
               {expandedItems.includes(detail.title) && (
                 <div className="bg-muted/30 rounded-lg p-3 space-y-3">
                   <div className="flex items-center justify-between">
-                    <h5 className="font-medium text-sm">Technical Implementation</h5>
+                    <h5 className="font-medium text-sm">
+                      Technical Implementation
+                    </h5>
                     <Button
                       variant="ghost"
                       size="sm"
-                      onClick={() => copyToClipboard(detail.technical, detail.title)}
+                      onClick={() =>
+                        copyToClipboard(detail.technical, detail.title)
+                      }
                     >
                       {copiedItems.includes(detail.title) ? (
                         <Check className="h-3 w-3 text-green-600" />
@@ -238,7 +265,7 @@ export function SecurityDetails() {
             <Clock className="h-4 w-4" />
             Security Practices
           </h4>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="border rounded-lg p-4">
               <h5 className="font-medium mb-2">Incident Response</h5>
@@ -249,7 +276,7 @@ export function SecurityDetails() {
                 <li>• Customer notification within 72 hours</li>
               </ul>
             </div>
-            
+
             <div className="border rounded-lg p-4">
               <h5 className="font-medium mb-2">Data Protection</h5>
               <ul className="text-sm text-muted-foreground space-y-1">
@@ -267,10 +294,12 @@ export function SecurityDetails() {
           <div className="flex items-start gap-2">
             <AlertTriangle className="h-5 w-5 text-orange-600 mt-0.5" />
             <div>
-              <h5 className="font-medium text-orange-800">Responsible Disclosure</h5>
+              <h5 className="font-medium text-orange-800">
+                Responsible Disclosure
+              </h5>
               <p className="text-sm text-orange-700 mt-1">
-                Found a security vulnerability? We appreciate responsible disclosure through our 
-                security contact or bug bounty program.
+                Found a security vulnerability? We appreciate responsible
+                disclosure through our security contact or bug bounty program.
               </p>
               <div className="flex gap-2 mt-3">
                 <Button variant="outline" size="sm">
@@ -306,7 +335,10 @@ export function SecurityDetails() {
         <div className="text-center pt-4 border-t">
           <p className="text-sm text-muted-foreground">
             For technical security questions, contact our security team at{' '}
-            <a href="mailto:security@123legaldoc.com" className="text-primary hover:underline">
+            <a
+              href="mailto:security@123legaldoc.com"
+              className="text-primary hover:underline"
+            >
               security@123legaldoc.com
             </a>
           </p>

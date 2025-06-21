@@ -24,12 +24,14 @@ export const miningLeaseAgreementMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Mining Lease Agreement',
-      description: 'Agreement for leasing land or mineral rights for mining operations.',
+      description:
+        'Agreement for leasing land or mineral rights for mining operations.',
       aliases: ['mineral lease', 'mining rights agreement', 'extraction lease'],
     },
     es: {
       name: 'Acuerdo de Arrendamiento Minero',
-      description: 'Acuerdo para arrendar tierras o derechos minerales para operaciones mineras.',
+      description:
+        'Acuerdo para arrendar tierras o derechos minerales para operaciones mineras.',
       aliases: ['arrendamiento mineral', 'acuerdo de derechos mineros'],
     },
   },

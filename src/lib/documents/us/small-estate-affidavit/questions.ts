@@ -236,7 +236,8 @@ export const questions: Question[] = [
     required: true,
     section: 'Estate Information',
     placeholder: 'Enter total dollar amount (e.g., $50,000)',
-    description: 'Include the value of all assets owned by the deceased at time of death.',
+    description:
+      'Include the value of all assets owned by the deceased at time of death.',
   },
   {
     id: 'hasWill',
@@ -246,7 +247,10 @@ export const questions: Question[] = [
     section: 'Estate Information',
     options: [
       { value: 'true', label: 'Yes, the deceased left a will' },
-      { value: 'false', label: 'No, the deceased died without a will (intestate)' },
+      {
+        value: 'false',
+        label: 'No, the deceased died without a will (intestate)',
+      },
     ],
   },
   {
@@ -259,7 +263,8 @@ export const questions: Question[] = [
       { value: 'true', label: 'Yes, there are probate proceedings' },
       { value: 'false', label: 'No, there are no probate proceedings' },
     ],
-    description: 'Small estate affidavits are typically used when no formal probate is required.',
+    description:
+      'Small estate affidavits are typically used when no formal probate is required.',
   },
 
   // Section 4: Heirs Information
@@ -321,7 +326,8 @@ export const questions: Question[] = [
     required: true,
     section: 'Debts and Liabilities',
     placeholder: 'Enter total dollar amount (e.g., $5,000 or $0)',
-    description: 'Include all known debts, loans, and liabilities of the deceased.',
+    description:
+      'Include all known debts, loans, and liabilities of the deceased.',
   },
   {
     id: 'debtsPaid',
@@ -361,7 +367,8 @@ export const questions: Question[] = [
           type: 'text',
           label: 'Asset Description',
           required: true,
-          placeholder: 'e.g., Bank account at ABC Bank, 2010 Honda Civic, Real estate at 123 Main St',
+          placeholder:
+            'e.g., Bank account at ABC Bank, 2010 Honda Civic, Real estate at 123 Main St',
         },
         {
           id: 'value',
@@ -409,8 +416,10 @@ export const questions: Question[] = [
     label: 'Additional Information',
     required: false,
     section: 'Additional Information',
-    placeholder: 'Provide any additional relevant information about the estate...',
-    description: 'Include any other relevant information about the estate or circumstances.',
+    placeholder:
+      'Provide any additional relevant information about the estate...',
+    description:
+      'Include any other relevant information about the estate or circumstances.',
   },
 
   // Section 9: Legal Information
@@ -472,7 +481,8 @@ export const questions: Question[] = [
       { value: 'WI', label: 'Wisconsin' },
       { value: 'WY', label: 'Wyoming' },
     ],
-    description: 'Select the state where this small estate affidavit will be filed.',
+    description:
+      'Select the state where this small estate affidavit will be filed.',
   },
   {
     id: 'county',

@@ -140,7 +140,8 @@ export const memorandumOfAgreementQuestions: FormQuestion[] = [
     id: 'party2Obligations',
     type: 'textarea',
     label: 'Second Party Obligations',
-    placeholder: 'List specific obligations and commitments of the second party',
+    placeholder:
+      'List specific obligations and commitments of the second party',
     required: true,
     group: 'obligations',
   },
@@ -326,7 +327,8 @@ export const memorandumOfAgreementQuestions: FormQuestion[] = [
     id: 'terminationClause',
     type: 'textarea',
     label: 'Termination Conditions',
-    placeholder: 'Specify conditions under which the agreement can be terminated',
+    placeholder:
+      'Specify conditions under which the agreement can be terminated',
     required: false,
     group: 'termination',
   },

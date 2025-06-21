@@ -12,7 +12,9 @@ if (!path) {
   console.error('Please provide a path to a JSON file of reviews');
   process.exit(1);
 }
-const data: Record<string, unknown>[] = JSON.parse(fs.readFileSync(path, 'utf8'));
+const data: Record<string, unknown>[] = JSON.parse(
+  fs.readFileSync(path, 'utf8'),
+);
 
 await Promise.all(
   data.map((r) =>

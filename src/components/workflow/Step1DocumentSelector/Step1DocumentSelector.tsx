@@ -24,11 +24,7 @@ import AllCategoriesView from './AllCategoriesView';
 import DocumentsInCategoryView from './DocumentsInCategoryView';
 
 // Import types and constants
-import {
-  Step1DocumentSelectorProps,
-  ViewType,
-  SimpleT,
-} from './types';
+import { Step1DocumentSelectorProps, ViewType, SimpleT } from './types';
 import {
   CATEGORY_LIST,
   getDocName,
@@ -55,7 +51,7 @@ const Step1DocumentSelector = React.memo(function Step1DocumentSelector({
   );
 
   const [currentView, setCurrentView] = useState<ViewType>(
-    initialSelectedCategory ? 'documents-in-category' : 'top-docs'
+    initialSelectedCategory ? 'documents-in-category' : 'top-docs',
   );
   const [selectedCategoryInternal, setSelectedCategoryInternal] = useState<
     string | null

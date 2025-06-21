@@ -24,13 +24,22 @@ export const researchAgreementMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Research Agreement',
-      description: 'Agreement for research collaboration and academic research projects.',
-      aliases: ['research collaboration agreement', 'academic research contract', 'study agreement'],
+      description:
+        'Agreement for research collaboration and academic research projects.',
+      aliases: [
+        'research collaboration agreement',
+        'academic research contract',
+        'study agreement',
+      ],
     },
     es: {
       name: 'Acuerdo de Investigación',
-      description: 'Acuerdo para colaboración de investigación y proyectos de investigación académica.',
-      aliases: ['acuerdo de colaboración de investigación', 'contrato de investigación académica'],
+      description:
+        'Acuerdo para colaboración de investigación y proyectos de investigación académica.',
+      aliases: [
+        'acuerdo de colaboración de investigación',
+        'contrato de investigación académica',
+      ],
     },
   },
 };

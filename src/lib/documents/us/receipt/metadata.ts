@@ -26,13 +26,23 @@ export const receiptMeta: LegalDocument = {
       name: 'Receipt',
       description:
         'Create a professional receipt for payments, services, or transactions with detailed records.',
-      aliases: ['payment receipt', 'invoice receipt', 'transaction receipt', 'proof of payment'],
+      aliases: [
+        'payment receipt',
+        'invoice receipt',
+        'transaction receipt',
+        'proof of payment',
+      ],
     },
     es: {
       name: 'Recibo',
       description:
         'Crear un recibo profesional para pagos, servicios o transacciones con registros detallados.',
-      aliases: ['recibo de pago', 'recibo de factura', 'recibo de transacción', 'comprobante de pago'],
+      aliases: [
+        'recibo de pago',
+        'recibo de factura',
+        'recibo de transacción',
+        'comprobante de pago',
+      ],
     },
   },
 };

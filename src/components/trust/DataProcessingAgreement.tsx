@@ -4,30 +4,36 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
-import { 
-  Form, 
-  FormControl, 
-  FormField, 
-  FormItem, 
-  FormLabel, 
-  FormMessage 
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
 } from '@/components/ui/form';
-import { 
-  FileText, 
-  Download, 
-  Send, 
-  CheckCircle2, 
-  AlertCircle, 
+import {
+  FileText,
+  Download,
+  Send,
+  CheckCircle2,
+  AlertCircle,
   Loader2,
   Building,
   MapPin,
   Globe,
   Calendar,
-  Shield
+  Shield,
 } from 'lucide-react';
 
 const dpaFormSchema = z.object({
@@ -39,8 +45,10 @@ const dpaFormSchema = z.object({
   companyAddress: z.string().min(10, 'Please provide complete company address'),
   country: z.string().min(2, 'Country is required'),
   dataTypes: z.array(z.string()).min(1, 'Please select at least one data type'),
-  processingPurpose: z.string().min(10, 'Please describe the processing purpose'),
-  effectiveDate: z.string().min(1, 'Effective date is required')
+  processingPurpose: z
+    .string()
+    .min(10, 'Please describe the processing purpose'),
+  effectiveDate: z.string().min(1, 'Effective date is required'),
 });
 
 type DPAFormData = z.infer<typeof dpaFormSchema>;
@@ -52,12 +60,15 @@ interface FormStatus {
 }
 
 const dataTypeOptions = [
-  { id: 'personal_identifiers', label: 'Personal Identifiers (name, email, phone)' },
+  {
+    id: 'personal_identifiers',
+    label: 'Personal Identifiers (name, email, phone)',
+  },
   { id: 'financial_data', label: 'Financial Data (payment info, billing)' },
   { id: 'document_content', label: 'Document Content and Metadata' },
   { id: 'usage_analytics', label: 'Usage Analytics and Logs' },
   { id: 'authentication_data', label: 'Authentication Data' },
-  { id: 'business_data', label: 'Business Information and Records' }
+  { id: 'business_data', label: 'Business Information and Records' },
 ];
 
 export function DataProcessingAgreement() {
@@ -75,8 +86,8 @@ export function DataProcessingAgreement() {
       country: '',
       dataTypes: [],
       processingPurpose: '',
-      effectiveDate: ''
-    }
+      effectiveDate: '',
+    },
   });
 
   const onSubmit = async (data: DPAFormData) => {
@@ -91,7 +102,7 @@ export function DataProcessingAgreement() {
         body: JSON.stringify({
           ...data,
           timestamp: new Date().toISOString(),
-          userAgent: navigator.userAgent
+          userAgent: navigator.userAgent,
         }),
       });
 
@@ -100,18 +111,18 @@ export function DataProcessingAgreement() {
       }
 
       const result = await response.json();
-      
-      setFormStatus({ 
-        type: 'success', 
+
+      setFormStatus({
+        type: 'success',
         message: 'Data Processing Agreement generated successfully.',
-        downloadUrl: result.downloadUrl
+        downloadUrl: result.downloadUrl,
       });
-      
     } catch (error) {
       console.error('DPA generation error:', error);
-      setFormStatus({ 
-        type: 'error', 
-        message: 'Failed to generate DPA. Please try again or contact our compliance team.'
+      setFormStatus({
+        type: 'error',
+        message:
+          'Failed to generate DPA. Please try again or contact our compliance team.',
       });
     }
   };
@@ -121,7 +132,10 @@ export function DataProcessingAgreement() {
     if (checked) {
       form.setValue('dataTypes', [...currentDataTypes, dataTypeId]);
     } else {
-      form.setValue('dataTypes', currentDataTypes.filter(id => id !== dataTypeId));
+      form.setValue(
+        'dataTypes',
+        currentDataTypes.filter((id) => id !== dataTypeId),
+      );
     }
   };
 
@@ -138,7 +152,7 @@ export function DataProcessingAgreement() {
           <div className="bg-green-50 border border-green-200 rounded-lg p-4">
             <p className="text-sm text-green-800">{formStatus.message}</p>
           </div>
-          
+
           <div className="flex flex-col sm:flex-row gap-3">
             <Button className="flex-1" asChild>
               <a href={formStatus.downloadUrl} download>
@@ -146,17 +160,18 @@ export function DataProcessingAgreement() {
                 Download DPA
               </a>
             </Button>
-            <Button 
-              variant="outline" 
+            <Button
+              variant="outline"
               className="flex-1"
               onClick={() => setFormStatus({ type: 'idle' })}
             >
               Generate Another DPA
             </Button>
           </div>
-          
+
           <p className="text-xs text-muted-foreground">
-            The download link will expire in 24 hours. Please save the document locally.
+            The download link will expire in 24 hours. Please save the document
+            locally.
           </p>
         </CardContent>
       </Card>
@@ -171,7 +186,8 @@ export function DataProcessingAgreement() {
           <CardTitle>Data Processing Agreement</CardTitle>
         </div>
         <CardDescription>
-          Generate a customized DPA for GDPR compliance and data processing transparency
+          Generate a customized DPA for GDPR compliance and data processing
+          transparency
         </CardDescription>
         <div className="flex gap-2 mt-2">
           <Badge variant="secondary" className="bg-green-100 text-green-800">
@@ -328,14 +344,19 @@ export function DataProcessingAgreement() {
                   <FormLabel>Types of Personal Data Processed</FormLabel>
                   <div className="grid grid-cols-1 gap-3">
                     {dataTypeOptions.map((dataType) => (
-                      <div key={dataType.id} className="flex items-center space-x-2">
+                      <div
+                        key={dataType.id}
+                        className="flex items-center space-x-2"
+                      >
                         <input
                           type="checkbox"
                           id={dataType.id}
                           className="h-4 w-4 rounded border-input"
-                          onChange={(e) => handleDataTypeChange(dataType.id, e.target.checked)}
+                          onChange={(e) =>
+                            handleDataTypeChange(dataType.id, e.target.checked)
+                          }
                         />
-                        <label 
+                        <label
                           htmlFor={dataType.id}
                           className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                         >
@@ -382,14 +403,16 @@ export function DataProcessingAgreement() {
                 <li>GDPR-compliant data processing terms</li>
                 <li>Security measures and breach notification procedures</li>
                 <li>Data subject rights and deletion procedures</li>
-                <li>Subprocessor terms and international transfer safeguards</li>
+                <li>
+                  Subprocessor terms and international transfer safeguards
+                </li>
                 <li>Customized for your specific data processing activities</li>
               </ul>
             </div>
 
-            <Button 
-              type="submit" 
-              className="w-full" 
+            <Button
+              type="submit"
+              className="w-full"
               disabled={formStatus.type === 'loading'}
             >
               {formStatus.type === 'loading' ? (
@@ -406,7 +429,8 @@ export function DataProcessingAgreement() {
             </Button>
 
             <p className="text-xs text-muted-foreground text-center">
-              The generated DPA is legally compliant with GDPR Article 28 requirements. Review with your legal team before execution.
+              The generated DPA is legally compliant with GDPR Article 28
+              requirements. Review with your legal team before execution.
             </p>
           </form>
         </Form>

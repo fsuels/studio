@@ -7,20 +7,35 @@ import type { MarketplaceTemplate } from '@/types/marketplace';
 
 // Mock Lucide React icons
 jest.mock('lucide-react', () => ({
-  Star: ({ className }: { className?: string }) => <div data-testid="star-icon" className={className} />,
-  Download: ({ className }: { className?: string }) => <div data-testid="download-icon" className={className} />,
-  Eye: ({ className }: { className?: string }) => <div data-testid="eye-icon" className={className} />,
-  Shield: ({ className }: { className?: string }) => <div data-testid="shield-icon" className={className} />,
-  Crown: ({ className }: { className?: string }) => <div data-testid="crown-icon" className={className} />,
-  DollarSign: ({ className }: { className?: string }) => <div data-testid="dollar-icon" className={className} />,
-  Clock: ({ className }: { className?: string }) => <div data-testid="clock-icon" className={className} />,
+  Star: ({ className }: { className?: string }) => (
+    <div data-testid="star-icon" className={className} />
+  ),
+  Download: ({ className }: { className?: string }) => (
+    <div data-testid="download-icon" className={className} />
+  ),
+  Eye: ({ className }: { className?: string }) => (
+    <div data-testid="eye-icon" className={className} />
+  ),
+  Shield: ({ className }: { className?: string }) => (
+    <div data-testid="shield-icon" className={className} />
+  ),
+  Crown: ({ className }: { className?: string }) => (
+    <div data-testid="crown-icon" className={className} />
+  ),
+  DollarSign: ({ className }: { className?: string }) => (
+    <div data-testid="dollar-icon" className={className} />
+  ),
+  Clock: ({ className }: { className?: string }) => (
+    <div data-testid="clock-icon" className={className} />
+  ),
 }));
 
 const mockTemplate: MarketplaceTemplate = {
   id: 'test-template-1',
   name: 'Professional Service Agreement',
   slug: 'professional-service-agreement',
-  description: 'A comprehensive service agreement template for professional services',
+  description:
+    'A comprehensive service agreement template for professional services',
   createdBy: 'creator123',
   creatorProfile: {
     userId: 'creator123',
@@ -96,11 +111,17 @@ describe('TemplateCard', () => {
         template={mockTemplate}
         onInstall={mockOnInstall}
         onPreview={mockOnPreview}
-      />
+      />,
     );
 
-    expect(screen.getByText('Professional Service Agreement')).toBeInTheDocument();
-    expect(screen.getByText('A comprehensive service agreement template for professional services')).toBeInTheDocument();
+    expect(
+      screen.getByText('Professional Service Agreement'),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        'A comprehensive service agreement template for professional services',
+      ),
+    ).toBeInTheDocument();
     expect(screen.getByText('Business Contracts')).toBeInTheDocument();
     expect(screen.getByText('$29.99')).toBeInTheDocument();
   });
@@ -111,7 +132,7 @@ describe('TemplateCard', () => {
         template={mockTemplate}
         onInstall={mockOnInstall}
         onPreview={mockOnPreview}
-      />
+      />,
     );
 
     expect(screen.getAllByTestId('crown-icon')).toHaveLength(2); // Featured badge + featured indicator
@@ -125,7 +146,7 @@ describe('TemplateCard', () => {
         showCreator={true}
         onInstall={mockOnInstall}
         onPreview={mockOnPreview}
-      />
+      />,
     );
 
     expect(screen.getByText('John Doe')).toBeInTheDocument();
@@ -138,7 +159,7 @@ describe('TemplateCard', () => {
         showCreator={false}
         onInstall={mockOnInstall}
         onPreview={mockOnPreview}
-      />
+      />,
     );
 
     expect(screen.queryByText('John Doe')).not.toBeInTheDocument();
@@ -155,7 +176,7 @@ describe('TemplateCard', () => {
         template={freeTemplate}
         onInstall={mockOnInstall}
         onPreview={mockOnPreview}
-      />
+      />,
     );
 
     expect(screen.getByText('Free')).toBeInTheDocument();
@@ -167,7 +188,7 @@ describe('TemplateCard', () => {
         template={mockTemplate}
         onInstall={mockOnInstall}
         onPreview={mockOnPreview}
-      />
+      />,
     );
 
     expect(screen.getByText('4.7')).toBeInTheDocument(); // Rating
@@ -180,7 +201,7 @@ describe('TemplateCard', () => {
         template={mockTemplate}
         onInstall={mockOnInstall}
         onPreview={mockOnPreview}
-      />
+      />,
     );
 
     expect(screen.getByText('contract')).toBeInTheDocument();
@@ -194,7 +215,7 @@ describe('TemplateCard', () => {
         template={mockTemplate}
         onInstall={mockOnInstall}
         onPreview={mockOnPreview}
-      />
+      />,
     );
 
     expect(screen.getByText('Languages:')).toBeInTheDocument();
@@ -207,7 +228,7 @@ describe('TemplateCard', () => {
         template={mockTemplate}
         onInstall={mockOnInstall}
         onPreview={mockOnPreview}
-      />
+      />,
     );
 
     const previewButton = screen.getByRole('button', { name: /preview/i });
@@ -222,7 +243,7 @@ describe('TemplateCard', () => {
         template={mockTemplate}
         onInstall={mockOnInstall}
         onPreview={mockOnPreview}
-      />
+      />,
     );
 
     const installButton = screen.getByRole('button', { name: /buy now/i });
@@ -242,10 +263,12 @@ describe('TemplateCard', () => {
         template={freeTemplate}
         onInstall={mockOnInstall}
         onPreview={mockOnPreview}
-      />
+      />,
     );
 
-    expect(screen.getByRole('button', { name: /install/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: /install/i }),
+    ).toBeInTheDocument();
   });
 
   it('shows "Buy Now" button text for paid templates', () => {
@@ -254,10 +277,12 @@ describe('TemplateCard', () => {
         template={mockTemplate}
         onInstall={mockOnInstall}
         onPreview={mockOnPreview}
-      />
+      />,
     );
 
-    expect(screen.getByRole('button', { name: /buy now/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: /buy now/i }),
+    ).toBeInTheDocument();
   });
 
   it('applies correct styling for different sizes', () => {
@@ -267,7 +292,7 @@ describe('TemplateCard', () => {
         size="compact"
         onInstall={mockOnInstall}
         onPreview={mockOnPreview}
-      />
+      />,
     );
 
     let card = screen.getByRole('generic', { name: '' }).parentElement;
@@ -279,7 +304,7 @@ describe('TemplateCard', () => {
         size="featured"
         onInstall={mockOnInstall}
         onPreview={mockOnPreview}
-      />
+      />,
     );
 
     card = screen.getByRole('generic', { name: '' }).parentElement;
@@ -297,7 +322,7 @@ describe('TemplateCard', () => {
         template={templateWithManyTags}
         onInstall={mockOnInstall}
         onPreview={mockOnPreview}
-      />
+      />,
     );
 
     expect(screen.getByText('+2')).toBeInTheDocument(); // Shows +2 for remaining tags
@@ -321,7 +346,7 @@ describe('TemplateCard', () => {
         template={templateWithLargeNumbers}
         onInstall={mockOnInstall}
         onPreview={mockOnPreview}
-      />
+      />,
     );
 
     expect(screen.getByText('1.5M')).toBeInTheDocument();

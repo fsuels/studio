@@ -47,7 +47,7 @@ Don't risk using generic templates that may not comply with Mississippi law. Get
 
 [Create Mississippi Lease Agreement]
 
-*Trusted by thousands of Mississippi businesses*
+_Trusted by thousands of Mississippi businesses_
 
 ---
 

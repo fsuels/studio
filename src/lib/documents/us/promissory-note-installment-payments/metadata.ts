@@ -26,13 +26,23 @@ export const promissoryNoteInstallmentPaymentsMeta: LegalDocument = {
       name: 'Promissory Note - Installment Payments',
       description:
         'Create a promissory note with structured installment payments, including payment schedule and terms.',
-      aliases: ['installment loan', 'payment plan note', 'structured loan', 'installment promissory note'],
+      aliases: [
+        'installment loan',
+        'payment plan note',
+        'structured loan',
+        'installment promissory note',
+      ],
     },
     es: {
       name: 'Pagaré - Pagos a Plazos',
       description:
         'Crear un pagaré con pagos estructurados a plazos, incluyendo cronograma de pagos y términos.',
-      aliases: ['préstamo a plazos', 'nota de plan de pagos', 'préstamo estructurado', 'pagaré a plazos'],
+      aliases: [
+        'préstamo a plazos',
+        'nota de plan de pagos',
+        'préstamo estructurado',
+        'pagaré a plazos',
+      ],
     },
   },
 };

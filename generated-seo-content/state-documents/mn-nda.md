@@ -47,7 +47,7 @@ Don't risk using generic templates that may not comply with Minnesota law. Get a
 
 [Create Minnesota Non-Disclosure Agreement]
 
-*Trusted by thousands of Minnesota businesses*
+_Trusted by thousands of Minnesota businesses_
 
 ---
 

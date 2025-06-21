@@ -1,7 +1,11 @@
 // Admin API for order management
 import { NextRequest, NextResponse } from 'next/server';
 import { requireAdmin } from '@/lib/admin-auth';
-import { generateMockOrders, calculateOrderSummary, type Order } from '@/lib/orders';
+import {
+  generateMockOrders,
+  calculateOrderSummary,
+  type Order,
+} from '@/lib/orders';
 
 // Mock database - in production, use your actual database
 let ordersDB: Order[] = generateMockOrders(150);
@@ -31,34 +35,41 @@ export async function GET(request: NextRequest) {
     // Search filter
     if (search) {
       const searchLower = search.toLowerCase();
-      filteredOrders = filteredOrders.filter(order => 
-        order.orderNumber.toLowerCase().includes(searchLower) ||
-        order.customer.email.toLowerCase().includes(searchLower) ||
-        order.customer.firstName.toLowerCase().includes(searchLower) ||
-        order.customer.lastName.toLowerCase().includes(searchLower) ||
-        order.items.some(item => item.documentType.toLowerCase().includes(searchLower))
+      filteredOrders = filteredOrders.filter(
+        (order) =>
+          order.orderNumber.toLowerCase().includes(searchLower) ||
+          order.customer.email.toLowerCase().includes(searchLower) ||
+          order.customer.firstName.toLowerCase().includes(searchLower) ||
+          order.customer.lastName.toLowerCase().includes(searchLower) ||
+          order.items.some((item) =>
+            item.documentType.toLowerCase().includes(searchLower),
+          ),
       );
     }
 
     // Status filter
     if (status) {
-      filteredOrders = filteredOrders.filter(order => order.status === status);
+      filteredOrders = filteredOrders.filter(
+        (order) => order.status === status,
+      );
     }
 
     // Risk level filter
     if (riskLevel) {
-      filteredOrders = filteredOrders.filter(order => order.fraudAnalysis.recommendation === riskLevel);
+      filteredOrders = filteredOrders.filter(
+        (order) => order.fraudAnalysis.recommendation === riskLevel,
+      );
     }
 
     // Date range filter
     if (dateFrom) {
-      filteredOrders = filteredOrders.filter(order => 
-        new Date(order.createdAt) >= new Date(dateFrom)
+      filteredOrders = filteredOrders.filter(
+        (order) => new Date(order.createdAt) >= new Date(dateFrom),
       );
     }
     if (dateTo) {
-      filteredOrders = filteredOrders.filter(order => 
-        new Date(order.createdAt) <= new Date(dateTo)
+      filteredOrders = filteredOrders.filter(
+        (order) => new Date(order.createdAt) <= new Date(dateTo),
       );
     }
 
@@ -101,9 +112,10 @@ export async function GET(request: NextRequest) {
     const summary = calculateOrderSummary(filteredOrders);
 
     // Add fraud alerts count
-    const fraudAlerts = filteredOrders.filter(order => 
-      order.fraudAnalysis.distanceAlert || 
-      order.fraudAnalysis.recommendation === 'decline'
+    const fraudAlerts = filteredOrders.filter(
+      (order) =>
+        order.fraudAnalysis.distanceAlert ||
+        order.fraudAnalysis.recommendation === 'decline',
     ).length;
 
     return NextResponse.json({
@@ -116,11 +128,11 @@ export async function GET(request: NextRequest) {
           total,
           totalPages,
           hasNext: page < totalPages,
-          hasPrev: page > 1
+          hasPrev: page > 1,
         },
         summary: {
           ...summary,
-          fraudAlerts
+          fraudAlerts,
         },
         filters: {
           search,
@@ -129,20 +141,19 @@ export async function GET(request: NextRequest) {
           dateFrom,
           dateTo,
           sortBy,
-          sortOrder
-        }
-      }
+          sortOrder,
+        },
+      },
     });
-
   } catch (error) {
     console.error('Admin orders API error:', error);
-    
+
     return NextResponse.json(
-      { 
-        success: false, 
-        error: 'Failed to retrieve orders' 
+      {
+        success: false,
+        error: 'Failed to retrieve orders',
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -158,12 +169,12 @@ export async function PATCH(request: NextRequest) {
     const body = await request.json();
     const { orderId, updates } = body;
 
-    const orderIndex = ordersDB.findIndex(order => order.id === orderId);
-    
+    const orderIndex = ordersDB.findIndex((order) => order.id === orderId);
+
     if (orderIndex === -1) {
       return NextResponse.json(
         { success: false, error: 'Order not found' },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
@@ -171,7 +182,7 @@ export async function PATCH(request: NextRequest) {
     ordersDB[orderIndex] = {
       ...ordersDB[orderIndex],
       ...updates,
-      updatedAt: new Date().toISOString()
+      updatedAt: new Date().toISOString(),
     };
 
     // Add timeline event
@@ -181,21 +192,20 @@ export async function PATCH(request: NextRequest) {
         type: updates.status,
         description: `Status changed to ${updates.status}`,
         timestamp: new Date().toISOString(),
-        data: { adminUser: (adminResult as any).username }
+        data: { adminUser: (adminResult as any).username },
       });
     }
 
     return NextResponse.json({
       success: true,
-      data: ordersDB[orderIndex]
+      data: ordersDB[orderIndex],
     });
-
   } catch (error) {
     console.error('Order update error:', error);
-    
+
     return NextResponse.json(
       { success: false, error: 'Failed to update order' },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

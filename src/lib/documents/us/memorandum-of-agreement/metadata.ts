@@ -24,12 +24,14 @@ export const memorandumOfAgreementMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Memorandum of Agreement (MOA)',
-      description: 'Create a formal MOA establishing binding obligations and agreements between parties.',
+      description:
+        'Create a formal MOA establishing binding obligations and agreements between parties.',
       aliases: ['MOA', 'memorandum of agreement', 'formal agreement'],
     },
     es: {
       name: 'Memorando de Acuerdo (MOA)',
-      description: 'Crea un MOA formal que establece obligaciones y acuerdos vinculantes entre partes.',
+      description:
+        'Crea un MOA formal que establece obligaciones y acuerdos vinculantes entre partes.',
       aliases: ['MOA', 'memorando de acuerdo', 'acuerdo formal'],
     },
   },

@@ -5,12 +5,12 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { 
-  FileText, 
-  Clock, 
-  Users, 
-  Star, 
-  CheckCircle2, 
+import {
+  FileText,
+  Clock,
+  Users,
+  Star,
+  CheckCircle2,
   AlertTriangle,
   Info,
   Download,
@@ -20,7 +20,7 @@ import {
   Gavel,
   TrendingUp,
   Lightbulb,
-  Shield
+  Shield,
 } from 'lucide-react';
 import { SmartDocumentRecommendations } from './SmartDocumentRecommendations';
 
@@ -56,7 +56,7 @@ interface ContentRichDocumentPageProps {
 export function ContentRichDocumentPage({
   document,
   userState = 'CA',
-  className = ''
+  className = '',
 }: ContentRichDocumentPageProps) {
   const [activeTab, setActiveTab] = useState('overview');
 
@@ -67,45 +67,51 @@ export function ContentRichDocumentPage({
       specificRules: [
         'Document must include California-specific clauses',
         'Comply with California state employment laws',
-        'Include required worker protection statements'
+        'Include required worker protection statements',
       ],
       fees: [
         { type: 'Filing', amount: 25 },
-        { type: 'Notarization', amount: 15 }
+        { type: 'Notarization', amount: 15 },
       ],
-      timeframes: 'Effective immediately upon signing'
+      timeframes: 'Effective immediately upon signing',
     },
     {
       state: 'TX',
       specificRules: [
         'Texas-specific legal language required',
         'Notarization mandatory for certain sections',
-        'Comply with Texas Business Organizations Code'
+        'Comply with Texas Business Organizations Code',
       ],
       fees: [
         { type: 'Filing', amount: 30 },
-        { type: 'Notarization', amount: 10 }
+        { type: 'Notarization', amount: 10 },
       ],
-      timeframes: 'Effective within 10 business days'
-    }
+      timeframes: 'Effective within 10 business days',
+    },
   ];
 
-  const currentStateReq = stateRequirements.find(req => req.state === userState) || stateRequirements[0];
+  const currentStateReq =
+    stateRequirements.find((req) => req.state === userState) ||
+    stateRequirements[0];
 
   const getComplexityColor = (complexity: string) => {
     switch (complexity) {
-      case 'low': return 'bg-green-100 text-green-800';
-      case 'medium': return 'bg-yellow-100 text-yellow-800';
-      case 'high': return 'bg-red-100 text-red-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'low':
+        return 'bg-green-100 text-green-800';
+      case 'medium':
+        return 'bg-yellow-100 text-yellow-800';
+      case 'high':
+        return 'bg-red-100 text-red-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
     }
   };
 
   const renderStarRating = (rating: number) => {
     return Array.from({ length: 5 }, (_, i) => (
-      <Star 
-        key={i} 
-        className={`h-4 w-4 ${i < rating ? 'text-yellow-400 fill-current' : 'text-gray-300'}`} 
+      <Star
+        key={i}
+        className={`h-4 w-4 ${i < rating ? 'text-yellow-400 fill-current' : 'text-gray-300'}`}
       />
     ));
   };
@@ -119,7 +125,8 @@ export function ContentRichDocumentPage({
             <div>
               <h1 className="text-3xl font-bold mb-2">{document.name}</h1>
               <p className="text-purple-100 text-lg">
-                Create a legally binding {document.name.toLowerCase()} in minutes with our AI-powered platform
+                Create a legally binding {document.name.toLowerCase()} in
+                minutes with our AI-powered platform
               </p>
             </div>
             <Badge className="bg-white text-purple-600">
@@ -149,11 +156,18 @@ export function ContentRichDocumentPage({
           </div>
 
           <div className="flex gap-4">
-            <Button size="lg" className="bg-white text-purple-600 hover:bg-gray-100">
+            <Button
+              size="lg"
+              className="bg-white text-purple-600 hover:bg-gray-100"
+            >
               <FileText className="h-5 w-5 mr-2" />
               Start Document
             </Button>
-            <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-purple-600">
+            <Button
+              size="lg"
+              variant="outline"
+              className="border-white text-white hover:bg-white hover:text-purple-600"
+            >
               <Download className="h-5 w-5 mr-2" />
               Download Sample
             </Button>
@@ -188,10 +202,14 @@ export function ContentRichDocumentPage({
                     {document.complexity}
                   </Badge>
                 </div>
-                
+
                 <div className="flex justify-between">
                   <span className="text-gray-600">Valid in:</span>
-                  <span>{document.states === 'all' ? 'All 50 states' : `${document.states.length} states`}</span>
+                  <span>
+                    {document.states === 'all'
+                      ? 'All 50 states'
+                      : `${document.states.length} states`}
+                  </span>
                 </div>
 
                 <div className="flex justify-between">
@@ -201,7 +219,9 @@ export function ContentRichDocumentPage({
 
                 <div className="flex justify-between">
                   <span className="text-gray-600">Business value:</span>
-                  <span className="text-green-600 font-medium">{document.businessValue}</span>
+                  <span className="text-green-600 font-medium">
+                    {document.businessValue}
+                  </span>
                 </div>
               </CardContent>
             </Card>
@@ -254,19 +274,22 @@ export function ContentRichDocumentPage({
                 <div className="p-4 border rounded-lg">
                   <h4 className="font-semibold mb-2">Save Time & Money</h4>
                   <p className="text-sm text-gray-600">
-                    Create documents in minutes instead of hours. Save thousands in legal fees.
+                    Create documents in minutes instead of hours. Save thousands
+                    in legal fees.
                   </p>
                 </div>
                 <div className="p-4 border rounded-lg">
                   <h4 className="font-semibold mb-2">Legal Compliance</h4>
                   <p className="text-sm text-gray-600">
-                    Automatically includes all required clauses and state-specific requirements.
+                    Automatically includes all required clauses and
+                    state-specific requirements.
                   </p>
                 </div>
                 <div className="p-4 border rounded-lg">
                   <h4 className="font-semibold mb-2">Professional Quality</h4>
                   <p className="text-sm text-gray-600">
-                    Created by legal experts and regularly updated for current laws.
+                    Created by legal experts and regularly updated for current
+                    laws.
                   </p>
                 </div>
               </div>
@@ -300,7 +323,10 @@ export function ContentRichDocumentPage({
                 <h4 className="font-semibold mb-2">Associated Fees:</h4>
                 <div className="space-y-2">
                   {currentStateReq.fees.map((fee, index) => (
-                    <div key={index} className="flex justify-between items-center p-2 bg-gray-50 rounded">
+                    <div
+                      key={index}
+                      className="flex justify-between items-center p-2 bg-gray-50 rounded"
+                    >
                       <span>{fee.type}</span>
                       <span className="font-medium">${fee.amount}</span>
                     </div>
@@ -310,7 +336,9 @@ export function ContentRichDocumentPage({
 
               <div>
                 <h4 className="font-semibold mb-2">Timeframes:</h4>
-                <p className="text-sm text-gray-600">{currentStateReq.timeframes}</p>
+                <p className="text-sm text-gray-600">
+                  {currentStateReq.timeframes}
+                </p>
               </div>
             </CardContent>
           </Card>
@@ -358,19 +386,31 @@ export function ContentRichDocumentPage({
             <CardContent>
               <div className="grid md:grid-cols-3 gap-4">
                 <div className="text-center p-4 border rounded-lg">
-                  <h4 className="font-semibold text-red-600">Traditional Lawyer</h4>
-                  <div className="text-2xl font-bold text-red-600 mt-2">$500-2000</div>
-                  <p className="text-sm text-gray-600 mt-1">+ 1-2 weeks wait time</p>
+                  <h4 className="font-semibold text-red-600">
+                    Traditional Lawyer
+                  </h4>
+                  <div className="text-2xl font-bold text-red-600 mt-2">
+                    $500-2000
+                  </div>
+                  <p className="text-sm text-gray-600 mt-1">
+                    + 1-2 weeks wait time
+                  </p>
                 </div>
                 <div className="text-center p-4 border-2 border-purple-600 rounded-lg bg-purple-50">
                   <h4 className="font-semibold text-purple-600">123LegalDoc</h4>
-                  <div className="text-2xl font-bold text-purple-600 mt-2">$29</div>
-                  <p className="text-sm text-gray-600 mt-1">Instant generation</p>
+                  <div className="text-2xl font-bold text-purple-600 mt-2">
+                    $29
+                  </div>
+                  <p className="text-sm text-gray-600 mt-1">
+                    Instant generation
+                  </p>
                   <Badge className="mt-2 bg-purple-600">Best Value</Badge>
                 </div>
                 <div className="text-center p-4 border rounded-lg">
                   <h4 className="font-semibold text-gray-600">DIY Template</h4>
-                  <div className="text-2xl font-bold text-gray-600 mt-2">$0-50</div>
+                  <div className="text-2xl font-bold text-gray-600 mt-2">
+                    $0-50
+                  </div>
                   <p className="text-sm text-red-600 mt-1">Risk of errors</p>
                 </div>
               </div>
@@ -383,20 +423,20 @@ export function ContentRichDocumentPage({
           {[
             {
               q: `Is this ${document.name} legally binding?`,
-              a: `Yes, when properly completed and executed, this ${document.name} is legally binding in all applicable jurisdictions. Our documents are created by legal experts and regularly updated.`
+              a: `Yes, when properly completed and executed, this ${document.name} is legally binding in all applicable jurisdictions. Our documents are created by legal experts and regularly updated.`,
             },
             {
-              q: "Can I customize the document for my specific needs?",
-              a: "Absolutely! Our AI-powered platform allows for extensive customization while maintaining legal compliance. You can add specific clauses, modify terms, and tailor the document to your unique situation."
+              q: 'Can I customize the document for my specific needs?',
+              a: 'Absolutely! Our AI-powered platform allows for extensive customization while maintaining legal compliance. You can add specific clauses, modify terms, and tailor the document to your unique situation.',
             },
             {
-              q: "What if I need help completing the document?",
-              a: "We provide 24/7 customer support, detailed help text throughout the process, and access to legal resources. For complex situations, we can connect you with licensed attorneys."
+              q: 'What if I need help completing the document?',
+              a: 'We provide 24/7 customer support, detailed help text throughout the process, and access to legal resources. For complex situations, we can connect you with licensed attorneys.',
             },
             {
-              q: "How quickly can I get my completed document?",
-              a: "Most documents can be completed in 10-30 minutes. Once finished, you'll instantly receive PDF and Word versions via email and can download them immediately."
-            }
+              q: 'How quickly can I get my completed document?',
+              a: "Most documents can be completed in 10-30 minutes. Once finished, you'll instantly receive PDF and Word versions via email and can download them immediately.",
+            },
           ].map((faq, index) => (
             <Card key={index}>
               <CardHeader>
@@ -413,23 +453,26 @@ export function ContentRichDocumentPage({
           {/* Customer Reviews */}
           {[
             {
-              name: "Sarah M.",
+              name: 'Sarah M.',
               rating: 5,
-              review: "Incredibly easy to use and saved me hundreds in legal fees. The document was professional and comprehensive.",
-              date: "2024-01-10"
+              review:
+                'Incredibly easy to use and saved me hundreds in legal fees. The document was professional and comprehensive.',
+              date: '2024-01-10',
             },
             {
-              name: "Michael R.",
+              name: 'Michael R.',
               rating: 5,
-              review: "The state-specific requirements feature is amazing. Knew exactly what I needed for Texas law compliance.",
-              date: "2024-01-05"
+              review:
+                'The state-specific requirements feature is amazing. Knew exactly what I needed for Texas law compliance.',
+              date: '2024-01-05',
             },
             {
-              name: "Jennifer L.",
+              name: 'Jennifer L.',
               rating: 4,
-              review: "Great platform overall. Customer support was very helpful when I had questions about specific clauses.",
-              date: "2023-12-28"
-            }
+              review:
+                'Great platform overall. Customer support was very helpful when I had questions about specific clauses.',
+              date: '2023-12-28',
+            },
           ].map((review, index) => (
             <Card key={index}>
               <CardContent className="pt-4">
@@ -450,7 +493,7 @@ export function ContentRichDocumentPage({
       </Tabs>
 
       {/* Related Documents */}
-      <SmartDocumentRecommendations 
+      <SmartDocumentRecommendations
         currentDocument={document.id}
         className="mt-8"
       />

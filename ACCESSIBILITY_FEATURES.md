@@ -9,6 +9,7 @@ The Plain-Language & Accessibility Mode is a comprehensive system designed to ma
 ## ✨ Features
 
 ### 📖 Plain Language & Reading Support
+
 - **Plain Language Mode**: Simplifies legal documents with AI-powered summaries
 - **Document Summarization**: AI-generated plain English summaries of complex documents
 - **Legal Jargon Simplification**: Replaces complex legal terms with everyday language
@@ -16,6 +17,7 @@ The Plain-Language & Accessibility Mode is a comprehensive system designed to ma
 - **Reading Time Estimation**: Shows estimated time to read documents
 
 ### 👁️ Visual Accessibility
+
 - **Dyslexia-Friendly Fonts**: OpenDyslexic font support for improved readability
 - **Font Size Control**: Adjustable text size (Small, Medium, Large, Extra Large)
 - **Line Height Options**: Comfortable, Relaxed, or Loose spacing
@@ -24,6 +26,7 @@ The Plain-Language & Accessibility Mode is a comprehensive system designed to ma
 - **Enhanced Focus Indicators**: Larger, more visible focus outlines
 
 ### 🧠 Cognitive Accessibility
+
 - **Progress Indicators**: Visual progress bars and step indicators
 - **Complex Form Breakdown**: Long forms split into manageable steps
 - **Important Section Highlighting**: Critical information visually emphasized
@@ -31,6 +34,7 @@ The Plain-Language & Accessibility Mode is a comprehensive system designed to ma
 - **Contextual Help**: Helpful tips and guidance throughout the interface
 
 ### ⌨️ Navigation & Controls
+
 - **Keyboard Shortcuts**: Complete keyboard navigation support
 - **Skip Links**: Quick navigation to main content areas
 - **Voice Guidance**: Audio cues and voice navigation assistance
@@ -39,30 +43,36 @@ The Plain-Language & Accessibility Mode is a comprehensive system designed to ma
 ## 🎮 How to Use
 
 ### Quick Access Toolbar
+
 A floating toolbar appears on the right side of the screen when accessibility features are enabled:
+
 - **Quick toggles** for Plain Language, Dyslexia Font, High Contrast, and Auto Explain
 - **Settings panel** for detailed customization
 - **Collapsible design** for minimal screen space usage
 
 ### Keyboard Shortcuts
-| Shortcut | Action |
-|----------|--------|
-| `Alt + P` | Toggle Plain Language Mode |
-| `Alt + D` | Toggle Dyslexia-Friendly Font |
-| `Alt + C` | Toggle High Contrast |
-| `Alt + E` | Toggle Auto-Explain Clauses |
-| `Alt + +` | Increase Font Size |
-| `Alt + -` | Decrease Font Size |
-| `⌘/Ctrl + /` | Show Keyboard Shortcuts Help |
-| `⌘/Ctrl + K` | Open Command Palette |
+
+| Shortcut     | Action                        |
+| ------------ | ----------------------------- |
+| `Alt + P`    | Toggle Plain Language Mode    |
+| `Alt + D`    | Toggle Dyslexia-Friendly Font |
+| `Alt + C`    | Toggle High Contrast          |
+| `Alt + E`    | Toggle Auto-Explain Clauses   |
+| `Alt + +`    | Increase Font Size            |
+| `Alt + -`    | Decrease Font Size            |
+| `⌘/Ctrl + /` | Show Keyboard Shortcuts Help  |
+| `⌘/Ctrl + K` | Open Command Palette          |
 
 ### Settings Panel
+
 Access comprehensive settings through:
+
 1. The floating toolbar settings button
 2. User profile settings
 3. Document-specific accessibility options
 
 Settings are organized in four tabs:
+
 - **Reading**: Plain language options and reading levels
 - **Visual**: Font, size, contrast, and motion settings
 - **Cognitive**: Progress indicators and explanatory features
@@ -73,15 +83,15 @@ Settings are organized in four tabs:
 ### Using Accessibility Components
 
 ```tsx
-import { 
+import {
   AccessibleDocumentWrapper,
   DocumentSummary,
   AccessibilityToolbar,
-  useAccessibility 
+  useAccessibility
 } from '@/components/accessibility';
 
 // Wrap documents for full accessibility
-<AccessibleDocumentWrapper 
+<AccessibleDocumentWrapper
   documentText={content}
   documentType="Contract"
 >
@@ -89,7 +99,7 @@ import {
 </AccessibleDocumentWrapper>
 
 // Add enhanced clause tooltips
-<ClauseTooltip 
+<ClauseTooltip
   id="clause-1"
   text="The complex legal text"
   importance="high"
@@ -104,6 +114,7 @@ const { preferences, updatePreferences } = useAccessibility();
 ### API Endpoints
 
 **Document Summarization**
+
 ```http
 POST /api/accessibility/summarize
 Content-Type: application/json
@@ -120,6 +131,7 @@ Content-Type: application/json
 ```
 
 **Legal Jargon Simplification**
+
 ```http
 POST /api/accessibility/simplify
 Content-Type: application/json
@@ -146,15 +158,17 @@ The system automatically applies these CSS classes based on user preferences:
 ## 🎨 Styling & Theming
 
 ### CSS Custom Properties
+
 ```css
 :root {
-  --font-family-accessible: /* Dyslexia-friendly font */
-  --font-size-accessible: /* User-selected font size */
-  --line-height-accessible: /* User-selected line height */
+  --font-family-accessible: /* Dyslexia-friendly font */ --font-size-accessible:
+    /* User-selected font size */
+    --line-height-accessible: /* User-selected line height */;
 }
 ```
 
 ### Dark Mode Compatibility
+
 All accessibility features are fully compatible with the existing dark/light theme system.
 
 ## 📱 Responsive Design
@@ -166,6 +180,7 @@ All accessibility features are fully compatible with the existing dark/light the
 ## 🔍 Testing & Compliance
 
 ### WCAG 2.2 AA Compliance
+
 - ✅ Keyboard navigation
 - ✅ Screen reader compatibility
 - ✅ Color contrast ratios
@@ -174,6 +189,7 @@ All accessibility features are fully compatible with the existing dark/light the
 - ✅ Semantic markup
 
 ### Testing Tools
+
 - Automated axe-core testing
 - E2E accessibility tests with Playwright
 - Screen reader testing
@@ -182,18 +198,21 @@ All accessibility features are fully compatible with the existing dark/light the
 ## 🚀 Performance
 
 ### Optimization Features
+
 - **Lazy loading**: Accessibility components load on demand
 - **Caching**: AI explanations cached in localStorage
 - **Efficient re-renders**: Context optimized for minimal updates
 - **Bundle splitting**: Accessibility code split from main bundle
 
 ### API Rate Limiting
+
 - Document summarization: 10 requests per hour per user
 - Jargon simplification: Unlimited with caching
 
 ## 📊 Analytics
 
 The system tracks accessibility feature usage to improve the experience:
+
 - Feature adoption rates
 - Most commonly used shortcuts
 - Performance metrics
@@ -217,21 +236,25 @@ The system tracks accessibility feature usage to improve the experience:
 ### Common Issues
 
 **Shortcuts not working**
+
 - Ensure keyboard shortcuts are enabled in settings
 - Check for browser extension conflicts
 - Verify correct key combinations for your platform
 
 **Fonts not changing**
+
 - Clear browser cache
 - Check if browser supports custom fonts
 - Verify accessibility mode is active
 
 **AI features not working**
+
 - Check network connection
 - Verify API keys are configured
 - Check rate limiting status
 
 ### Getting Help
+
 - Use the keyboard shortcut help (⌘/Ctrl + /)
 - Access the accessibility settings panel
 - Contact support with accessibility feedback
@@ -239,6 +262,7 @@ The system tracks accessibility feature usage to improve the experience:
 ## 🔮 Future Enhancements
 
 Planned improvements:
+
 - **Voice commands**: Full voice navigation
 - **AI personalization**: Learning user preferences
 - **Advanced translations**: Multi-language AI summaries
@@ -255,4 +279,4 @@ Planned improvements:
 
 ---
 
-*This accessibility system represents a significant step forward in making legal documents accessible to everyone, regardless of their abilities or technical expertise.*
+_This accessibility system represents a significant step forward in making legal documents accessible to everyone, regardless of their abilities or technical expertise._

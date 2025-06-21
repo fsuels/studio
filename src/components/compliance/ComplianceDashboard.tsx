@@ -6,17 +6,17 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { 
-  BarChart, 
-  Bar, 
-  XAxis, 
-  YAxis, 
-  CartesianGrid, 
-  Tooltip, 
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
   ResponsiveContainer,
   PieChart,
   Pie,
-  Cell
+  Cell,
 } from 'recharts';
 import {
   Shield,
@@ -26,7 +26,7 @@ import {
   TrendingUp,
   MapPin,
   RefreshCw,
-  Download
+  Download,
 } from 'lucide-react';
 
 interface ComplianceStats {
@@ -41,19 +41,25 @@ interface ComplianceStats {
 
 interface WaitlistStats {
   total: number;
-  byState: Record<string, {
-    stateName: string;
-    count: number;
-    urgent: number;
-    recent: number;
-  }>;
+  byState: Record<
+    string,
+    {
+      stateName: string;
+      count: number;
+      urgent: number;
+      recent: number;
+    }
+  >;
   topDocuments: Array<{ document: string; count: number }>;
   recentSignups: number;
 }
 
 export default function ComplianceDashboard() {
-  const [complianceStats, setComplianceStats] = useState<ComplianceStats | null>(null);
-  const [waitlistStats, setWaitlistStats] = useState<WaitlistStats | null>(null);
+  const [complianceStats, setComplianceStats] =
+    useState<ComplianceStats | null>(null);
+  const [waitlistStats, setWaitlistStats] = useState<WaitlistStats | null>(
+    null,
+  );
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [lastRefresh, setLastRefresh] = useState<Date>(new Date());
@@ -82,15 +88,21 @@ export default function ComplianceDashboard() {
         blockedPurchases: 158,
         byRiskLevel: { green: 45, amber: 1044, red: 158 },
         byState: {
-          'CA': 234, 'TX': 89, 'NY': 156, 'FL': 123, 'WA': 67,
-          'NC': 45, 'MO': 24, 'AZ': 34, 'UT': 12
+          CA: 234,
+          TX: 89,
+          NY: 156,
+          FL: 123,
+          WA: 67,
+          NC: 45,
+          MO: 24,
+          AZ: 34,
+          UT: 12,
         },
         geolocationFailures: 12,
-        lastUpdated: new Date().toISOString()
+        lastUpdated: new Date().toISOString(),
       });
 
       setLastRefresh(new Date());
-
     } catch (err) {
       setError((err as Error).message);
     } finally {
@@ -106,18 +118,21 @@ export default function ComplianceDashboard() {
 
   const getConversionRate = () => {
     if (!complianceStats) return 0;
-    return ((complianceStats.allowedPurchases / complianceStats.totalChecks) * 100).toFixed(1);
+    return (
+      (complianceStats.allowedPurchases / complianceStats.totalChecks) *
+      100
+    ).toFixed(1);
   };
 
   const getRiskColors = () => ({
     green: '#10b981',
-    amber: '#f59e0b', 
-    red: '#ef4444'
+    amber: '#f59e0b',
+    red: '#ef4444',
   });
 
   const formatStateData = () => {
     if (!complianceStats) return [];
-    
+
     return Object.entries(complianceStats.byState)
       .map(([state, count]) => ({ state, count }))
       .sort((a, b) => b.count - a.count)
@@ -126,12 +141,12 @@ export default function ComplianceDashboard() {
 
   const formatRiskData = () => {
     if (!complianceStats) return [];
-    
+
     const colors = getRiskColors();
     return Object.entries(complianceStats.byRiskLevel).map(([risk, value]) => ({
       name: risk.toUpperCase(),
       value,
-      color: colors[risk as keyof typeof colors]
+      color: colors[risk as keyof typeof colors],
     }));
   };
 
@@ -162,8 +177,15 @@ export default function ComplianceDashboard() {
           </p>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" size="sm" onClick={fetchStats} disabled={loading}>
-            <RefreshCw className={`h-4 w-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={fetchStats}
+            disabled={loading}
+          >
+            <RefreshCw
+              className={`h-4 w-4 mr-2 ${loading ? 'animate-spin' : ''}`}
+            />
             Refresh
           </Button>
           <Button variant="outline" size="sm">
@@ -188,7 +210,9 @@ export default function ComplianceDashboard() {
             <Shield className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{complianceStats?.totalChecks.toLocaleString()}</div>
+            <div className="text-2xl font-bold">
+              {complianceStats?.totalChecks.toLocaleString()}
+            </div>
             <p className="text-xs text-muted-foreground">
               +12% from last month
             </p>
@@ -197,7 +221,9 @@ export default function ComplianceDashboard() {
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Conversion Rate</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Conversion Rate
+            </CardTitle>
             <CheckCircle className="h-4 w-4 text-green-600" />
           </CardHeader>
           <CardContent>
@@ -210,11 +236,15 @@ export default function ComplianceDashboard() {
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Blocked Requests</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Blocked Requests
+            </CardTitle>
             <AlertTriangle className="h-4 w-4 text-red-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{complianceStats?.blockedPurchases.toLocaleString()}</div>
+            <div className="text-2xl font-bold">
+              {complianceStats?.blockedPurchases.toLocaleString()}
+            </div>
             <p className="text-xs text-muted-foreground">
               From restricted states
             </p>
@@ -223,11 +253,15 @@ export default function ComplianceDashboard() {
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Waitlist Signups</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Waitlist Signups
+            </CardTitle>
             <Users className="h-4 w-4 text-blue-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{waitlistStats?.total || 0}</div>
+            <div className="text-2xl font-bold">
+              {waitlistStats?.total || 0}
+            </div>
             <p className="text-xs text-muted-foreground">
               {waitlistStats?.recentSignups || 0} in last 24h
             </p>
@@ -267,7 +301,9 @@ export default function ComplianceDashboard() {
         {/* Top States by Volume */}
         <Card>
           <CardHeader>
-            <CardTitle className="text-lg">Top States by Check Volume</CardTitle>
+            <CardTitle className="text-lg">
+              Top States by Check Volume
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <ResponsiveContainer width="100%" height={200}>
@@ -294,7 +330,10 @@ export default function ComplianceDashboard() {
             <CardContent>
               <div className="space-y-2 max-h-64 overflow-y-auto">
                 {Object.entries(waitlistStats.byState).map(([state, data]) => (
-                  <div key={state} className="flex items-center justify-between p-2 rounded border">
+                  <div
+                    key={state}
+                    className="flex items-center justify-between p-2 rounded border"
+                  >
                     <div className="flex items-center gap-2">
                       <MapPin className="h-4 w-4 text-muted-foreground" />
                       <span className="font-medium">{data.stateName}</span>
@@ -322,12 +361,17 @@ export default function ComplianceDashboard() {
           {/* Most Requested Documents */}
           <Card>
             <CardHeader>
-              <CardTitle className="text-lg">Most Requested Documents</CardTitle>
+              <CardTitle className="text-lg">
+                Most Requested Documents
+              </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-2">
                 {waitlistStats.topDocuments.slice(0, 8).map((doc, index) => (
-                  <div key={index} className="flex items-center justify-between p-2">
+                  <div
+                    key={index}
+                    className="flex items-center justify-between p-2"
+                  >
                     <span className="text-sm">{doc.document}</span>
                     <Badge variant="outline">{doc.count} requests</Badge>
                   </div>
@@ -348,12 +392,16 @@ export default function ComplianceDashboard() {
             <div className="flex items-center gap-2">
               <div className="w-3 h-3 bg-green-500 rounded-full"></div>
               <span className="text-sm">Geolocation Service</span>
-              <Badge variant="outline" className="text-xs">Online</Badge>
+              <Badge variant="outline" className="text-xs">
+                Online
+              </Badge>
             </div>
             <div className="flex items-center gap-2">
               <div className="w-3 h-3 bg-green-500 rounded-full"></div>
               <span className="text-sm">Compliance API</span>
-              <Badge variant="outline" className="text-xs">Online</Badge>
+              <Badge variant="outline" className="text-xs">
+                Online
+              </Badge>
             </div>
             <div className="flex items-center gap-2">
               <div className="w-3 h-3 bg-amber-500 rounded-full"></div>

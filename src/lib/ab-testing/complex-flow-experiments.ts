@@ -7,14 +7,19 @@ import { abTestingIntegration } from './integration';
 export interface FlowExperiment {
   id: string;
   name: string;
-  type: 'funnel_optimization' | 'user_journey' | 'onboarding' | 'checkout_flow' | 'document_wizard';
+  type:
+    | 'funnel_optimization'
+    | 'user_journey'
+    | 'onboarding'
+    | 'checkout_flow'
+    | 'document_wizard';
   complexity: 'medium' | 'high' | 'very_high';
   estimatedImpact: number;
   implementationEffort: 'medium' | 'high' | 'very_high';
   testDuration: number; // days
   description: string;
   hypothesis: string;
-  
+
   // Multi-step flow definition
   flowSteps: Array<{
     step: string;
@@ -23,7 +28,7 @@ export interface FlowExperiment {
     proposedChanges: string[];
     keyMetrics: string[];
   }>;
-  
+
   variants: Array<{
     name: string;
     description: string;
@@ -33,20 +38,20 @@ export interface FlowExperiment {
       changes: Record<string, any>;
     }>;
   }>;
-  
+
   // Advanced metrics
   primaryGoals: Array<{
     metric: string;
     target: number;
     priority: 'primary' | 'secondary';
   }>;
-  
+
   funnelTracking: {
     steps: string[];
     dropoffPoints: string[];
     conversionEvents: string[];
   };
-  
+
   // Success criteria
   successCriteria: {
     minimumLift: number;
@@ -66,9 +71,11 @@ export const DOCUMENT_WIZARD_EXPERIMENTS: FlowExperiment[] = [
     estimatedImpact: 25,
     implementationEffort: 'high',
     testDuration: 21,
-    description: 'Test progressive disclosure vs traditional form wizard for document creation',
-    hypothesis: 'Breaking complex legal forms into micro-steps with contextual help will increase completion rates and reduce abandonment',
-    
+    description:
+      'Test progressive disclosure vs traditional form wizard for document creation',
+    hypothesis:
+      'Breaking complex legal forms into micro-steps with contextual help will increase completion rates and reduce abandonment',
+
     flowSteps: [
       {
         step: 'document_selection',
@@ -77,9 +84,13 @@ export const DOCUMENT_WIZARD_EXPERIMENTS: FlowExperiment[] = [
         proposedChanges: [
           'Interactive document finder with questions',
           'Situation-based recommendations',
-          'Preview of form complexity'
+          'Preview of form complexity',
         ],
-        keyMetrics: ['selection_time', 'correct_document_selection', 'help_requests']
+        keyMetrics: [
+          'selection_time',
+          'correct_document_selection',
+          'help_requests',
+        ],
       },
       {
         step: 'information_collection',
@@ -88,9 +99,9 @@ export const DOCUMENT_WIZARD_EXPERIMENTS: FlowExperiment[] = [
         proposedChanges: [
           'One question at a time with progress indicators',
           'Contextual legal explanations',
-          'Smart field pre-filling'
+          'Smart field pre-filling',
         ],
-        keyMetrics: ['form_completion_rate', 'time_per_field', 'error_rate']
+        keyMetrics: ['form_completion_rate', 'time_per_field', 'error_rate'],
       },
       {
         step: 'review_and_customize',
@@ -99,9 +110,9 @@ export const DOCUMENT_WIZARD_EXPERIMENTS: FlowExperiment[] = [
         proposedChanges: [
           'Guided review with explanations',
           'Suggested customizations',
-          'Real-time legal validity checks'
+          'Real-time legal validity checks',
         ],
-        keyMetrics: ['review_time', 'customization_rate', 'legal_help_usage']
+        keyMetrics: ['review_time', 'customization_rate', 'legal_help_usage'],
       },
       {
         step: 'finalization',
@@ -110,18 +121,22 @@ export const DOCUMENT_WIZARD_EXPERIMENTS: FlowExperiment[] = [
         proposedChanges: [
           'Value reinforcement messaging',
           'Upsell related documents',
-          'Next steps guidance'
+          'Next steps guidance',
         ],
-        keyMetrics: ['checkout_completion', 'additional_purchases', 'satisfaction_score']
-      }
+        keyMetrics: [
+          'checkout_completion',
+          'additional_purchases',
+          'satisfaction_score',
+        ],
+      },
     ],
-    
+
     variants: [
       {
         name: 'Control - Traditional Wizard',
         description: 'Current multi-page form approach',
         isControl: true,
-        flowModifications: []
+        flowModifications: [],
       },
       {
         name: 'Progressive Disclosure',
@@ -133,10 +148,10 @@ export const DOCUMENT_WIZARD_EXPERIMENTS: FlowExperiment[] = [
             changes: {
               layout: 'single_question',
               help_type: 'contextual_explanations',
-              progress_indicator: 'step_by_step'
-            }
-          }
-        ]
+              progress_indicator: 'step_by_step',
+            },
+          },
+        ],
       },
       {
         name: 'AI-Assisted Flow',
@@ -147,40 +162,51 @@ export const DOCUMENT_WIZARD_EXPERIMENTS: FlowExperiment[] = [
             step: 'document_selection',
             changes: {
               selection_method: 'ai_questionnaire',
-              recommendations: 'situation_based'
-            }
+              recommendations: 'situation_based',
+            },
           },
           {
             step: 'information_collection',
             changes: {
               assistance: 'ai_powered',
               pre_filling: 'smart_suggestions',
-              validation: 'real_time'
-            }
-          }
-        ]
-      }
+              validation: 'real_time',
+            },
+          },
+        ],
+      },
     ],
-    
+
     primaryGoals: [
       { metric: 'wizard_completion_rate', target: 20, priority: 'primary' },
       { metric: 'user_satisfaction', target: 15, priority: 'primary' },
-      { metric: 'time_to_complete', target: -30, priority: 'secondary' }
+      { metric: 'time_to_complete', target: -30, priority: 'secondary' },
     ],
-    
+
     funnelTracking: {
-      steps: ['wizard_start', 'document_selected', 'form_started', 'form_completed', 'review_started', 'checkout_completed'],
+      steps: [
+        'wizard_start',
+        'document_selected',
+        'form_started',
+        'form_completed',
+        'review_started',
+        'checkout_completed',
+      ],
       dropoffPoints: ['form_abandon', 'review_abandon', 'checkout_abandon'],
-      conversionEvents: ['wizard_complete', 'document_purchase', 'satisfaction_survey']
+      conversionEvents: [
+        'wizard_complete',
+        'document_purchase',
+        'satisfaction_survey',
+      ],
     },
-    
+
     successCriteria: {
       minimumLift: 15,
       confidenceLevel: 95,
       minimumSampleSize: 2000,
-      maxTestDuration: 28
-    }
-  }
+      maxTestDuration: 28,
+    },
+  },
 ];
 
 // Onboarding Flow Optimization
@@ -193,9 +219,11 @@ export const ONBOARDING_EXPERIMENTS: FlowExperiment[] = [
     estimatedImpact: 35,
     implementationEffort: 'very_high',
     testDuration: 30,
-    description: 'Test personalized onboarding flows based on user type and legal needs',
-    hypothesis: 'Tailoring onboarding experience to user type (individual vs business) and legal expertise will increase engagement and first document creation',
-    
+    description:
+      'Test personalized onboarding flows based on user type and legal needs',
+    hypothesis:
+      'Tailoring onboarding experience to user type (individual vs business) and legal expertise will increase engagement and first document creation',
+
     flowSteps: [
       {
         step: 'welcome_and_profiling',
@@ -204,9 +232,13 @@ export const ONBOARDING_EXPERIMENTS: FlowExperiment[] = [
         proposedChanges: [
           'User type identification (individual/business)',
           'Legal experience assessment',
-          'Goal-based customization'
+          'Goal-based customization',
         ],
-        keyMetrics: ['profile_completion', 'accuracy_of_profiling', 'engagement_score']
+        keyMetrics: [
+          'profile_completion',
+          'accuracy_of_profiling',
+          'engagement_score',
+        ],
       },
       {
         step: 'personalized_tour',
@@ -215,9 +247,13 @@ export const ONBOARDING_EXPERIMENTS: FlowExperiment[] = [
         proposedChanges: [
           'Role-specific feature highlights',
           'Use case demonstrations',
-          'Complexity level adjustment'
+          'Complexity level adjustment',
         ],
-        keyMetrics: ['tour_completion', 'feature_interaction', 'tour_skip_rate']
+        keyMetrics: [
+          'tour_completion',
+          'feature_interaction',
+          'tour_skip_rate',
+        ],
       },
       {
         step: 'first_document_guidance',
@@ -226,18 +262,22 @@ export const ONBOARDING_EXPERIMENTS: FlowExperiment[] = [
         proposedChanges: [
           'Curated document recommendations',
           'Guided first-time creation',
-          'Success celebration and next steps'
+          'Success celebration and next steps',
         ],
-        keyMetrics: ['first_document_created', 'guided_completion_rate', 'time_to_first_value']
-      }
+        keyMetrics: [
+          'first_document_created',
+          'guided_completion_rate',
+          'time_to_first_value',
+        ],
+      },
     ],
-    
+
     variants: [
       {
         name: 'Control - Generic Onboarding',
         description: 'Current one-size-fits-all onboarding',
         isControl: true,
-        flowModifications: []
+        flowModifications: [],
       },
       {
         name: 'Basic Personalization',
@@ -248,10 +288,10 @@ export const ONBOARDING_EXPERIMENTS: FlowExperiment[] = [
             step: 'welcome_and_profiling',
             changes: {
               profiling_questions: 'basic_user_type',
-              customization_level: 'content_only'
-            }
-          }
-        ]
+              customization_level: 'content_only',
+            },
+          },
+        ],
       },
       {
         name: 'Advanced Personalization',
@@ -262,39 +302,51 @@ export const ONBOARDING_EXPERIMENTS: FlowExperiment[] = [
             step: 'welcome_and_profiling',
             changes: {
               profiling_questions: 'comprehensive',
-              ai_analysis: 'user_intent_detection'
-            }
+              ai_analysis: 'user_intent_detection',
+            },
           },
           {
             step: 'personalized_tour',
             changes: {
               tour_type: 'adaptive',
-              content_level: 'expertise_matched'
-            }
-          }
-        ]
-      }
+              content_level: 'expertise_matched',
+            },
+          },
+        ],
+      },
     ],
-    
+
     primaryGoals: [
       { metric: 'first_document_creation', target: 35, priority: 'primary' },
       { metric: 'day_7_retention', target: 25, priority: 'primary' },
-      { metric: 'onboarding_completion', target: 20, priority: 'secondary' }
+      { metric: 'onboarding_completion', target: 20, priority: 'secondary' },
     ],
-    
+
     funnelTracking: {
-      steps: ['signup_complete', 'profile_created', 'tour_started', 'tour_completed', 'first_doc_started', 'first_doc_completed'],
+      steps: [
+        'signup_complete',
+        'profile_created',
+        'tour_started',
+        'tour_completed',
+        'first_doc_started',
+        'first_doc_completed',
+      ],
       dropoffPoints: ['profile_abandon', 'tour_abandon', 'first_doc_abandon'],
-      conversionEvents: ['profile_complete', 'tour_complete', 'first_doc_success', 'day_7_active']
+      conversionEvents: [
+        'profile_complete',
+        'tour_complete',
+        'first_doc_success',
+        'day_7_active',
+      ],
     },
-    
+
     successCriteria: {
       minimumLift: 20,
       confidenceLevel: 95,
       minimumSampleSize: 3000,
-      maxTestDuration: 35
-    }
-  }
+      maxTestDuration: 35,
+    },
+  },
 ];
 
 // Complete Checkout Flow Optimization
@@ -307,9 +359,11 @@ export const CHECKOUT_FLOW_EXPERIMENTS: FlowExperiment[] = [
     estimatedImpact: 28,
     implementationEffort: 'high',
     testDuration: 14,
-    description: 'Optimize entire checkout flow with trust signals and reduced friction',
-    hypothesis: 'Streamlined single-page checkout with progressive trust building will reduce abandonment and increase conversion',
-    
+    description:
+      'Optimize entire checkout flow with trust signals and reduced friction',
+    hypothesis:
+      'Streamlined single-page checkout with progressive trust building will reduce abandonment and increase conversion',
+
     flowSteps: [
       {
         step: 'cart_review',
@@ -318,9 +372,13 @@ export const CHECKOUT_FLOW_EXPERIMENTS: FlowExperiment[] = [
         proposedChanges: [
           'Inline cart with document preview',
           'Value reinforcement messaging',
-          'Related document suggestions'
+          'Related document suggestions',
         ],
-        keyMetrics: ['cart_engagement', 'upsell_acceptance', 'proceed_to_checkout']
+        keyMetrics: [
+          'cart_engagement',
+          'upsell_acceptance',
+          'proceed_to_checkout',
+        ],
       },
       {
         step: 'customer_information',
@@ -329,9 +387,13 @@ export const CHECKOUT_FLOW_EXPERIMENTS: FlowExperiment[] = [
         proposedChanges: [
           'Single-page adaptive form',
           'Smart address completion',
-          'Progressive trust indicators'
+          'Progressive trust indicators',
         ],
-        keyMetrics: ['form_completion_speed', 'error_rate', 'abandonment_point']
+        keyMetrics: [
+          'form_completion_speed',
+          'error_rate',
+          'abandonment_point',
+        ],
       },
       {
         step: 'payment_processing',
@@ -340,9 +402,13 @@ export const CHECKOUT_FLOW_EXPERIMENTS: FlowExperiment[] = [
         proposedChanges: [
           'Multiple payment options',
           'Security badge prominence',
-          'Real-time validation'
+          'Real-time validation',
         ],
-        keyMetrics: ['payment_completion', 'payment_errors', 'security_confidence']
+        keyMetrics: [
+          'payment_completion',
+          'payment_errors',
+          'security_confidence',
+        ],
       },
       {
         step: 'confirmation_and_delivery',
@@ -351,18 +417,22 @@ export const CHECKOUT_FLOW_EXPERIMENTS: FlowExperiment[] = [
         proposedChanges: [
           'Immediate document preview',
           'Next steps guidance',
-          'Satisfaction survey'
+          'Satisfaction survey',
         ],
-        keyMetrics: ['satisfaction_score', 'document_download', 'support_contact_rate']
-      }
+        keyMetrics: [
+          'satisfaction_score',
+          'document_download',
+          'support_contact_rate',
+        ],
+      },
     ],
-    
+
     variants: [
       {
         name: 'Control - Multi-Step Checkout',
         description: 'Current multi-page checkout process',
         isControl: true,
-        flowModifications: []
+        flowModifications: [],
       },
       {
         name: 'Single-Page Streamlined',
@@ -374,10 +444,10 @@ export const CHECKOUT_FLOW_EXPERIMENTS: FlowExperiment[] = [
             changes: {
               layout: 'single_page',
               trust_signals: 'progressive',
-              form_type: 'adaptive'
-            }
-          }
-        ]
+              form_type: 'adaptive',
+            },
+          },
+        ],
       },
       {
         name: 'Express Checkout',
@@ -389,32 +459,46 @@ export const CHECKOUT_FLOW_EXPERIMENTS: FlowExperiment[] = [
             changes: {
               guest_option: 'prominent',
               required_fields: 'minimal',
-              payment_integration: 'express'
-            }
-          }
-        ]
-      }
+              payment_integration: 'express',
+            },
+          },
+        ],
+      },
     ],
-    
+
     primaryGoals: [
       { metric: 'checkout_conversion', target: 28, priority: 'primary' },
       { metric: 'checkout_abandonment', target: -35, priority: 'primary' },
-      { metric: 'time_to_complete_purchase', target: -40, priority: 'secondary' }
+      {
+        metric: 'time_to_complete_purchase',
+        target: -40,
+        priority: 'secondary',
+      },
     ],
-    
+
     funnelTracking: {
-      steps: ['cart_view', 'checkout_start', 'info_completed', 'payment_submitted', 'order_confirmed'],
+      steps: [
+        'cart_view',
+        'checkout_start',
+        'info_completed',
+        'payment_submitted',
+        'order_confirmed',
+      ],
       dropoffPoints: ['cart_abandon', 'info_abandon', 'payment_abandon'],
-      conversionEvents: ['checkout_complete', 'payment_success', 'document_delivered']
+      conversionEvents: [
+        'checkout_complete',
+        'payment_success',
+        'document_delivered',
+      ],
     },
-    
+
     successCriteria: {
       minimumLift: 20,
       confidenceLevel: 95,
       minimumSampleSize: 1500,
-      maxTestDuration: 21
-    }
-  }
+      maxTestDuration: 21,
+    },
+  },
 ];
 
 // Advanced Funnel Optimization
@@ -427,9 +511,11 @@ export const FUNNEL_OPTIMIZATION_EXPERIMENTS: FlowExperiment[] = [
     estimatedImpact: 40,
     implementationEffort: 'very_high',
     testDuration: 45,
-    description: 'Comprehensive optimization of entire user journey from landing to document completion',
-    hypothesis: 'Coordinated optimization across all touchpoints will create compounding conversion improvements',
-    
+    description:
+      'Comprehensive optimization of entire user journey from landing to document completion',
+    hypothesis:
+      'Coordinated optimization across all touchpoints will create compounding conversion improvements',
+
     flowSteps: [
       {
         step: 'landing_and_discovery',
@@ -438,9 +524,9 @@ export const FUNNEL_OPTIMIZATION_EXPERIMENTS: FlowExperiment[] = [
         proposedChanges: [
           'Dynamic landing pages by traffic source',
           'Personalized value propositions',
-          'Interactive document finder'
+          'Interactive document finder',
         ],
-        keyMetrics: ['bounce_rate', 'page_depth', 'cta_engagement']
+        keyMetrics: ['bounce_rate', 'page_depth', 'cta_engagement'],
       },
       {
         step: 'document_exploration',
@@ -449,9 +535,13 @@ export const FUNNEL_OPTIMIZATION_EXPERIMENTS: FlowExperiment[] = [
         proposedChanges: [
           'AI-powered document recommendations',
           'Visual document complexity indicators',
-          'Social proof integration'
+          'Social proof integration',
         ],
-        keyMetrics: ['documents_viewed', 'preview_engagement', 'selection_accuracy']
+        keyMetrics: [
+          'documents_viewed',
+          'preview_engagement',
+          'selection_accuracy',
+        ],
       },
       {
         step: 'document_creation',
@@ -460,9 +550,13 @@ export const FUNNEL_OPTIMIZATION_EXPERIMENTS: FlowExperiment[] = [
         proposedChanges: [
           'Adaptive complexity based on user skill',
           'Real-time help and validation',
-          'Progress gamification'
+          'Progress gamification',
         ],
-        keyMetrics: ['creation_completion', 'help_usage', 'satisfaction_during_creation']
+        keyMetrics: [
+          'creation_completion',
+          'help_usage',
+          'satisfaction_during_creation',
+        ],
       },
       {
         step: 'purchase_and_delivery',
@@ -471,18 +565,22 @@ export const FUNNEL_OPTIMIZATION_EXPERIMENTS: FlowExperiment[] = [
         proposedChanges: [
           'Value-reinforced checkout',
           'Instant preview and download',
-          'Proactive follow-up support'
+          'Proactive follow-up support',
         ],
-        keyMetrics: ['purchase_conversion', 'delivery_satisfaction', 'repeat_intent']
-      }
+        keyMetrics: [
+          'purchase_conversion',
+          'delivery_satisfaction',
+          'repeat_intent',
+        ],
+      },
     ],
-    
+
     variants: [
       {
         name: 'Control - Current Experience',
         description: 'Existing user journey without optimization',
         isControl: true,
-        flowModifications: []
+        flowModifications: [],
       },
       {
         name: 'Coordinated Optimization',
@@ -494,40 +592,57 @@ export const FUNNEL_OPTIMIZATION_EXPERIMENTS: FlowExperiment[] = [
             changes: {
               personalization: 'traffic_source_based',
               value_prop: 'dynamic',
-              interaction: 'enhanced'
-            }
+              interaction: 'enhanced',
+            },
           },
           {
             step: 'document_creation',
             changes: {
               complexity_adaptation: 'user_based',
               assistance: 'ai_powered',
-              motivation: 'gamified'
-            }
-          }
-        ]
-      }
+              motivation: 'gamified',
+            },
+          },
+        ],
+      },
     ],
-    
+
     primaryGoals: [
       { metric: 'overall_conversion_rate', target: 40, priority: 'primary' },
       { metric: 'customer_lifetime_value', target: 25, priority: 'primary' },
-      { metric: 'user_satisfaction_score', target: 20, priority: 'secondary' }
+      { metric: 'user_satisfaction_score', target: 20, priority: 'secondary' },
     ],
-    
+
     funnelTracking: {
-      steps: ['landing', 'document_browse', 'creation_start', 'creation_complete', 'purchase', 'delivery'],
-      dropoffPoints: ['bounce', 'browse_abandon', 'creation_abandon', 'checkout_abandon'],
-      conversionEvents: ['deep_engagement', 'creation_success', 'purchase_complete', 'satisfaction_high']
+      steps: [
+        'landing',
+        'document_browse',
+        'creation_start',
+        'creation_complete',
+        'purchase',
+        'delivery',
+      ],
+      dropoffPoints: [
+        'bounce',
+        'browse_abandon',
+        'creation_abandon',
+        'checkout_abandon',
+      ],
+      conversionEvents: [
+        'deep_engagement',
+        'creation_success',
+        'purchase_complete',
+        'satisfaction_high',
+      ],
     },
-    
+
     successCriteria: {
       minimumLift: 25,
       confidenceLevel: 95,
       minimumSampleSize: 5000,
-      maxTestDuration: 60
-    }
-  }
+      maxTestDuration: 60,
+    },
+  },
 ];
 
 // All complex flow experiments
@@ -535,7 +650,7 @@ export const ALL_COMPLEX_FLOW_EXPERIMENTS: FlowExperiment[] = [
   ...DOCUMENT_WIZARD_EXPERIMENTS,
   ...ONBOARDING_EXPERIMENTS,
   ...CHECKOUT_FLOW_EXPERIMENTS,
-  ...FUNNEL_OPTIMIZATION_EXPERIMENTS
+  ...FUNNEL_OPTIMIZATION_EXPERIMENTS,
 ];
 
 // Advanced experiment creation with flow tracking
@@ -545,9 +660,11 @@ export async function createComplexFlowExperiment(
     testDuration?: number;
     targetAudience?: { percentage: number };
     owner?: string;
-  }
+  },
 ): Promise<string> {
-  const flowExperiment = ALL_COMPLEX_FLOW_EXPERIMENTS.find(e => e.id === flowExperimentId);
+  const flowExperiment = ALL_COMPLEX_FLOW_EXPERIMENTS.find(
+    (e) => e.id === flowExperimentId,
+  );
   if (!flowExperiment) {
     throw new Error(`Flow experiment ${flowExperimentId} not found`);
   }
@@ -559,10 +676,13 @@ export async function createComplexFlowExperiment(
     description: variant.description,
     trafficAllocation: Math.floor(100 / flowExperiment.variants.length),
     isControl: variant.isControl,
-    featureConfig: variant.flowModifications.reduce((config, mod) => ({
-      ...config,
-      [`${mod.step}_config`]: mod.changes
-    }), {} as Record<string, any>)
+    featureConfig: variant.flowModifications.reduce(
+      (config, mod) => ({
+        ...config,
+        [`${mod.step}_config`]: mod.changes,
+      }),
+      {} as Record<string, any>,
+    ),
   }));
 
   const experiment = await experimentEngine.createExperiment({
@@ -577,12 +697,12 @@ export async function createComplexFlowExperiment(
       name: flowExperiment.primaryGoals[0].metric,
       type: 'conversion',
       goal: 'increase',
-      minimumDetectableEffect: flowExperiment.successCriteria.minimumLift
+      minimumDetectableEffect: flowExperiment.successCriteria.minimumLift,
     },
-    secondaryMetrics: flowExperiment.primaryGoals.slice(1).map(goal => ({
+    secondaryMetrics: flowExperiment.primaryGoals.slice(1).map((goal) => ({
       name: goal.metric,
       type: 'conversion' as const,
-      goal: goal.target > 0 ? 'increase' as const : 'decrease' as const
+      goal: goal.target > 0 ? ('increase' as const) : ('decrease' as const),
     })),
     startDate: new Date().toISOString(),
     estimatedDuration: options?.testDuration || flowExperiment.testDuration,
@@ -591,7 +711,7 @@ export async function createComplexFlowExperiment(
     significanceLevel: 0.05,
     owner: options?.owner || 'product_team',
     team: 'growth',
-    tags: [flowExperiment.type, 'complex_flow', flowExperiment.complexity]
+    tags: [flowExperiment.type, 'complex_flow', flowExperiment.complexity],
   });
 
   return experiment.id;
@@ -603,7 +723,9 @@ export class FlowExperimentTracker {
   private experimentId: string;
 
   constructor(flowExperimentId: string, experimentId: string) {
-    const flowExperiment = ALL_COMPLEX_FLOW_EXPERIMENTS.find(e => e.id === flowExperimentId);
+    const flowExperiment = ALL_COMPLEX_FLOW_EXPERIMENTS.find(
+      (e) => e.id === flowExperimentId,
+    );
     if (!flowExperiment) {
       throw new Error(`Flow experiment ${flowExperimentId} not found`);
     }
@@ -611,9 +733,15 @@ export class FlowExperimentTracker {
     this.experimentId = experimentId;
   }
 
-  trackFlowStep(userId: string, step: string, metadata?: Record<string, any>): void {
+  trackFlowStep(
+    userId: string,
+    step: string,
+    metadata?: Record<string, any>,
+  ): void {
     if (!this.flowExperiment.funnelTracking.steps.includes(step)) {
-      console.warn(`Step ${step} not defined in flow experiment ${this.flowExperiment.id}`);
+      console.warn(
+        `Step ${step} not defined in flow experiment ${this.flowExperiment.id}`,
+      );
       return;
     }
 
@@ -630,9 +758,9 @@ export class FlowExperimentTracker {
         metadata: {
           flowStep: step,
           flowExperiment: this.flowExperiment.id,
-          ...metadata
-        }
-      }
+          ...metadata,
+        },
+      },
     });
   }
 
@@ -650,13 +778,16 @@ export class FlowExperimentTracker {
         metadata: {
           dropoffPoint,
           reason,
-          flowExperiment: this.flowExperiment.id
-        }
-      }
+          flowExperiment: this.flowExperiment.id,
+        },
+      },
     });
   }
 
-  trackFlowCompletion(userId: string, completionMetrics?: Record<string, number>): void {
+  trackFlowCompletion(
+    userId: string,
+    completionMetrics?: Record<string, number>,
+  ): void {
     experimentEngine.trackEvent({
       experimentId: this.experimentId,
       variantId: this.getUserVariant(userId) || 'unknown',
@@ -669,9 +800,9 @@ export class FlowExperimentTracker {
         timestamp: new Date().toISOString(),
         metadata: {
           flowExperiment: this.flowExperiment.id,
-          completionMetrics
-        }
-      }
+          completionMetrics,
+        },
+      },
     });
   }
 
@@ -682,40 +813,48 @@ export class FlowExperimentTracker {
 }
 
 // Utility function to get recommended complex experiments
-export function getRecommendedComplexExperiments(
-  constraints?: {
-    maxComplexity?: 'medium' | 'high' | 'very_high';
-    maxImplementationEffort?: 'medium' | 'high' | 'very_high';
-    minImpact?: number;
-    maxDuration?: number;
-  }
-): FlowExperiment[] {
+export function getRecommendedComplexExperiments(constraints?: {
+  maxComplexity?: 'medium' | 'high' | 'very_high';
+  maxImplementationEffort?: 'medium' | 'high' | 'very_high';
+  minImpact?: number;
+  maxDuration?: number;
+}): FlowExperiment[] {
   let filtered = ALL_COMPLEX_FLOW_EXPERIMENTS;
 
   if (constraints?.maxComplexity) {
     const complexityOrder = { medium: 1, high: 2, very_high: 3 };
     const maxLevel = complexityOrder[constraints.maxComplexity];
-    filtered = filtered.filter(e => complexityOrder[e.complexity] <= maxLevel);
+    filtered = filtered.filter(
+      (e) => complexityOrder[e.complexity] <= maxLevel,
+    );
   }
 
   if (constraints?.maxImplementationEffort) {
     const effortOrder = { medium: 1, high: 2, very_high: 3 };
     const maxLevel = effortOrder[constraints.maxImplementationEffort];
-    filtered = filtered.filter(e => effortOrder[e.implementationEffort] <= maxLevel);
+    filtered = filtered.filter(
+      (e) => effortOrder[e.implementationEffort] <= maxLevel,
+    );
   }
 
   if (constraints?.minImpact) {
-    filtered = filtered.filter(e => e.estimatedImpact >= constraints.minImpact);
+    filtered = filtered.filter(
+      (e) => e.estimatedImpact >= constraints.minImpact,
+    );
   }
 
   if (constraints?.maxDuration) {
-    filtered = filtered.filter(e => e.testDuration <= constraints.maxDuration);
+    filtered = filtered.filter(
+      (e) => e.testDuration <= constraints.maxDuration,
+    );
   }
 
   return filtered.sort((a, b) => {
     // Sort by impact/complexity ratio
-    const aRatio = a.estimatedImpact / ({ medium: 1, high: 2, very_high: 3 }[a.complexity]);
-    const bRatio = b.estimatedImpact / ({ medium: 1, high: 2, very_high: 3 }[b.complexity]);
+    const aRatio =
+      a.estimatedImpact / { medium: 1, high: 2, very_high: 3 }[a.complexity];
+    const bRatio =
+      b.estimatedImpact / { medium: 1, high: 2, very_high: 3 }[b.complexity];
     return bRatio - aRatio;
   });
 }

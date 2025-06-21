@@ -47,7 +47,7 @@ Don't risk using generic templates that may not comply with Utah law. Get a prof
 
 [Create Utah Independent Contractor Agreement]
 
-*Trusted by thousands of Utah businesses*
+_Trusted by thousands of Utah businesses_
 
 ---
 

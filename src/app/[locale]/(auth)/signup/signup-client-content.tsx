@@ -51,22 +51,22 @@ export default function SignUpClientContent({
     if (email && password) {
       try {
         const userCredential = await signUp(email, password);
-        
+
         // Initialize onboarding for new user
         if (userCredential?.user?.uid) {
           const tracker = createProgressTracker(userCredential.user.uid);
           await tracker.initializeProgress(); // Will be set up in onboarding wizard
         }
-        
+
         // Log successful signup
         await auditService.logAuthEvent('signup', {
           email,
           ipAddress: window.location.hostname,
           userAgent: navigator.userAgent,
           locale,
-          success: true
+          success: true,
         });
-        
+
         toast({
           title: t('Account Created!'),
           description: t('Redirecting to your dashboard...'),
@@ -80,9 +80,9 @@ export default function SignUpClientContent({
           userAgent: navigator.userAgent,
           locale,
           success: false,
-          error: err?.message || 'Authentication error'
+          error: err?.message || 'Authentication error',
         });
-        
+
         toast({
           title: t('Signup Failed', { defaultValue: 'Signup Failed' }),
           description: err?.message || 'Authentication error',

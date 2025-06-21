@@ -23,22 +23,20 @@ export const offerLetterMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Job Offer Letter',
-      description: 'Create a professional employment offer letter with our easy-to-use template. State-specific requirements included.',
+      description:
+        'Create a professional employment offer letter with our easy-to-use template. State-specific requirements included.',
       aliases: [
         'job offer letter',
         'employment offer',
         'offer of employment',
-        'job offer'
+        'job offer',
       ],
     },
     es: {
       name: 'Carta de Oferta Laboral',
-      description: 'Crea una carta de oferta de empleo profesional con nuestra plantilla fácil de usar. Incluye requisitos específicos del estado.',
-      aliases: [
-        'oferta de trabajo',
-        'carta de trabajo',
-        'oferta de empleo'
-      ],
+      description:
+        'Crea una carta de oferta de empleo profesional con nuestra plantilla fácil de usar. Incluye requisitos específicos del estado.',
+      aliases: ['oferta de trabajo', 'carta de trabajo', 'oferta de empleo'],
     },
   },
 };

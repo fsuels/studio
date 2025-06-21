@@ -26,13 +26,21 @@ export const employeeBonusPlanMeta: LegalDocument = {
       name: 'Employee Bonus Plan',
       description:
         'Structured bonus plan document outlining performance-based compensation and incentive programs.',
-      aliases: ['incentive plan', 'performance bonus structure', 'employee rewards program'],
+      aliases: [
+        'incentive plan',
+        'performance bonus structure',
+        'employee rewards program',
+      ],
     },
     es: {
       name: 'Plan de Bonificación de Empleados',
       description:
         'Documento de plan de bonificación estructurado que describe la compensación basada en el rendimiento y los programas de incentivos.',
-      aliases: ['plan de incentivos', 'estructura de bonificación por rendimiento', 'programa de recompensas para empleados'],
+      aliases: [
+        'plan de incentivos',
+        'estructura de bonificación por rendimiento',
+        'programa de recompensas para empleados',
+      ],
     },
   },
 };

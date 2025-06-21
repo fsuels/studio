@@ -39,7 +39,10 @@ import {
   Phone,
   Calendar,
 } from 'lucide-react';
-import { generateMockCustomer360Data, type Customer360Data } from '@/lib/orders';
+import {
+  generateMockCustomer360Data,
+  type Customer360Data,
+} from '@/lib/orders';
 
 // Mock data for customer list
 const mockCustomers = Array.from({ length: 50 }, (_, index) => {
@@ -62,21 +65,29 @@ const mockCustomers = Array.from({ length: 50 }, (_, index) => {
 export default function Customer360Page() {
   const searchParams = useSearchParams();
   const [selectedCustomerId, setSelectedCustomerId] = useState<string | null>(
-    searchParams.get('customerId')
+    searchParams.get('customerId'),
   );
-  const [customer360Data, setCustomer360Data] = useState<Customer360Data | null>(null);
+  const [customer360Data, setCustomer360Data] =
+    useState<Customer360Data | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
-  const [filterRisk, setFilterRisk] = useState<'all' | 'high' | 'medium' | 'low'>('all');
-  const [filterTier, setFilterTier] = useState<'all' | 'free' | 'basic' | 'premium' | 'enterprise'>('all');
+  const [filterRisk, setFilterRisk] = useState<
+    'all' | 'high' | 'medium' | 'low'
+  >('all');
+  const [filterTier, setFilterTier] = useState<
+    'all' | 'free' | 'basic' | 'premium' | 'enterprise'
+  >('all');
 
   // Filter customers based on search and filters
-  const filteredCustomers = mockCustomers.filter(customer => {
-    const matchesSearch = customer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         customer.email.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesRisk = filterRisk === 'all' || customer.churnRisk === filterRisk;
-    const matchesTier = filterTier === 'all' || customer.planTier === filterTier;
-    
+  const filteredCustomers = mockCustomers.filter((customer) => {
+    const matchesSearch =
+      customer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      customer.email.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesRisk =
+      filterRisk === 'all' || customer.churnRisk === filterRisk;
+    const matchesTier =
+      filterTier === 'all' || customer.planTier === filterTier;
+
     return matchesSearch && matchesRisk && matchesTier;
   });
 
@@ -110,20 +121,29 @@ export default function Customer360Page() {
 
   const getChurnRiskColor = (risk: string) => {
     switch (risk) {
-      case 'low': return 'bg-green-100 text-green-800';
-      case 'medium': return 'bg-yellow-100 text-yellow-800';
-      case 'high': return 'bg-red-100 text-red-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'low':
+        return 'bg-green-100 text-green-800';
+      case 'medium':
+        return 'bg-yellow-100 text-yellow-800';
+      case 'high':
+        return 'bg-red-100 text-red-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
     }
   };
 
   const getPlanTierColor = (tier: string) => {
     switch (tier) {
-      case 'free': return 'bg-gray-100 text-gray-800';
-      case 'basic': return 'bg-blue-100 text-blue-800';
-      case 'premium': return 'bg-purple-100 text-purple-800';
-      case 'enterprise': return 'bg-yellow-100 text-yellow-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'free':
+        return 'bg-gray-100 text-gray-800';
+      case 'basic':
+        return 'bg-blue-100 text-blue-800';
+      case 'premium':
+        return 'bg-purple-100 text-purple-800';
+      case 'enterprise':
+        return 'bg-yellow-100 text-yellow-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
     }
   };
 
@@ -136,10 +156,12 @@ export default function Customer360Page() {
   // Calculate summary statistics
   const summaryStats = {
     totalCustomers: filteredCustomers.length,
-    highRiskCustomers: filteredCustomers.filter(c => c.churnRisk === 'high').length,
-    needingAttention: filteredCustomers.filter(c => c.needsAttention).length,
+    highRiskCustomers: filteredCustomers.filter((c) => c.churnRisk === 'high')
+      .length,
+    needingAttention: filteredCustomers.filter((c) => c.needsAttention).length,
     averageHealthScore: Math.round(
-      filteredCustomers.reduce((sum, c) => sum + c.healthScore, 0) / filteredCustomers.length
+      filteredCustomers.reduce((sum, c) => sum + c.healthScore, 0) /
+        filteredCustomers.length,
     ),
     totalLTV: filteredCustomers.reduce((sum, c) => sum + c.lifetimeValue, 0),
   };
@@ -193,9 +215,12 @@ export default function Customer360Page() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Customer 360 Intelligence</h1>
+          <h1 className="text-3xl font-bold text-gray-900">
+            Customer 360 Intelligence
+          </h1>
           <p className="text-gray-600 mt-1">
-            Complete customer insights with timeline, orders, support tickets, NPS, and churn risk
+            Complete customer insights with timeline, orders, support tickets,
+            NPS, and churn risk
           </p>
         </div>
         <Button>
@@ -210,8 +235,12 @@ export default function Customer360Page() {
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Total Customers</p>
-                <p className="text-2xl font-bold text-gray-900">{summaryStats.totalCustomers}</p>
+                <p className="text-sm font-medium text-gray-600">
+                  Total Customers
+                </p>
+                <p className="text-2xl font-bold text-gray-900">
+                  {summaryStats.totalCustomers}
+                </p>
               </div>
               <Users className="h-8 w-8 text-blue-500" />
             </div>
@@ -223,7 +252,9 @@ export default function Customer360Page() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600">High Risk</p>
-                <p className="text-2xl font-bold text-red-600">{summaryStats.highRiskCustomers}</p>
+                <p className="text-2xl font-bold text-red-600">
+                  {summaryStats.highRiskCustomers}
+                </p>
               </div>
               <AlertTriangle className="h-8 w-8 text-red-500" />
             </div>
@@ -234,8 +265,12 @@ export default function Customer360Page() {
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Need Attention</p>
-                <p className="text-2xl font-bold text-orange-600">{summaryStats.needingAttention}</p>
+                <p className="text-sm font-medium text-gray-600">
+                  Need Attention
+                </p>
+                <p className="text-2xl font-bold text-orange-600">
+                  {summaryStats.needingAttention}
+                </p>
               </div>
               <TrendingDown className="h-8 w-8 text-orange-500" />
             </div>
@@ -246,8 +281,12 @@ export default function Customer360Page() {
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Avg Health Score</p>
-                <p className={`text-2xl font-bold ${getHealthScoreColor(summaryStats.averageHealthScore)}`}>
+                <p className="text-sm font-medium text-gray-600">
+                  Avg Health Score
+                </p>
+                <p
+                  className={`text-2xl font-bold ${getHealthScoreColor(summaryStats.averageHealthScore)}`}
+                >
                   {summaryStats.averageHealthScore}/100
                 </p>
               </div>
@@ -345,25 +384,37 @@ export default function Customer360Page() {
                 >
                   <TableCell>
                     <div>
-                      <div className="font-medium text-gray-900">{customer.name}</div>
-                      <div className="text-sm text-gray-600">{customer.email}</div>
+                      <div className="font-medium text-gray-900">
+                        {customer.name}
+                      </div>
+                      <div className="text-sm text-gray-600">
+                        {customer.email}
+                      </div>
                       <div className="text-xs text-gray-400">
                         Joined {formatDate(customer.joinDate)}
                       </div>
                     </div>
                   </TableCell>
                   <TableCell>
-                    <Badge className={getPlanTierColor(customer.planTier)} variant="outline">
+                    <Badge
+                      className={getPlanTierColor(customer.planTier)}
+                      variant="outline"
+                    >
                       {customer.planTier.toUpperCase()}
                     </Badge>
                   </TableCell>
                   <TableCell>
-                    <span className={`font-medium ${getHealthScoreColor(customer.healthScore)}`}>
+                    <span
+                      className={`font-medium ${getHealthScoreColor(customer.healthScore)}`}
+                    >
                       {customer.healthScore}/100
                     </span>
                   </TableCell>
                   <TableCell>
-                    <Badge className={getChurnRiskColor(customer.churnRisk)} variant="outline">
+                    <Badge
+                      className={getChurnRiskColor(customer.churnRisk)}
+                      variant="outline"
+                    >
                       {customer.churnRisk.toUpperCase()}
                     </Badge>
                   </TableCell>
@@ -372,18 +423,30 @@ export default function Customer360Page() {
                   </TableCell>
                   <TableCell>{customer.totalOrders}</TableCell>
                   <TableCell>
-                    <span className={customer.lastActivity > 30 ? 'text-red-600' : 'text-green-600'}>
+                    <span
+                      className={
+                        customer.lastActivity > 30
+                          ? 'text-red-600'
+                          : 'text-green-600'
+                      }
+                    >
                       {customer.lastActivity}d ago
                     </span>
                   </TableCell>
                   <TableCell>
                     {customer.needsAttention ? (
-                      <Badge className="bg-orange-100 text-orange-800" variant="outline">
+                      <Badge
+                        className="bg-orange-100 text-orange-800"
+                        variant="outline"
+                      >
                         <AlertTriangle className="h-3 w-3 mr-1" />
                         Attention
                       </Badge>
                     ) : (
-                      <Badge className="bg-green-100 text-green-800" variant="outline">
+                      <Badge
+                        className="bg-green-100 text-green-800"
+                        variant="outline"
+                      >
                         <CheckCircle className="h-3 w-3 mr-1" />
                         Healthy
                       </Badge>

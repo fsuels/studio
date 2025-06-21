@@ -29,8 +29,12 @@ export const huntingLeaseAgreementMeta: LegalDocument = {
     },
     es: {
       name: 'Acuerdo de Arrendamiento de Caza',
-      description: 'Acuerdo para arrendar derechos de caza en propiedad privada.',
-      aliases: ['arrendamiento de derechos de caza', 'arrendamiento recreativo'],
+      description:
+        'Acuerdo para arrendar derechos de caza en propiedad privada.',
+      aliases: [
+        'arrendamiento de derechos de caza',
+        'arrendamiento recreativo',
+      ],
     },
   },
 };

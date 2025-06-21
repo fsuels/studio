@@ -6,19 +6,22 @@ import React, { useState, useEffect, useCallback } from 'react';
 type Step = any; // Temporary placeholder
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/hooks/useAuth';
-import { createProgressTracker, OnboardingStep } from '@/lib/onboarding/progress-tracker';
+import {
+  createProgressTracker,
+  OnboardingStep,
+} from '@/lib/onboarding/progress-tracker';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
-import { 
-  Sparkles, 
-  Users, 
-  Building2, 
+import {
+  Sparkles,
+  Users,
+  Building2,
   User,
   CheckCircle,
   ArrowRight,
-  X
+  X,
 } from 'lucide-react';
 
 interface OnboardingWizardProps {
@@ -38,18 +41,20 @@ interface PersonaOption {
 export const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
   autoStart = false,
   onComplete,
-  onSkip
+  onSkip,
 }) => {
   const { t } = useTranslation('common');
   const { user } = useAuth();
-  
+
   const [run, setRun] = useState(false);
   const [stepIndex, setStepIndex] = useState(0);
   const [showPersonaSelection, setShowPersonaSelection] = useState(true);
   const [selectedPersona, setSelectedPersona] = useState<string>('');
   const [steps, setSteps] = useState<Step[]>([]);
   const [progress, setProgress] = useState(0);
-  const [tracker, setTracker] = useState<ReturnType<typeof createProgressTracker> | null>(null);
+  const [tracker, setTracker] = useState<ReturnType<
+    typeof createProgressTracker
+  > | null>(null);
 
   const personaOptions: PersonaOption[] = [
     {
@@ -57,22 +62,37 @@ export const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
       label: 'Business Owner',
       description: 'Contracts, NDAs, and business agreements',
       icon: <Building2 className="h-6 w-6" />,
-      features: ['Business contracts', 'Employee agreements', 'Vendor contracts', 'E-signature workflows']
+      features: [
+        'Business contracts',
+        'Employee agreements',
+        'Vendor contracts',
+        'E-signature workflows',
+      ],
     },
     {
       id: 'individual',
       label: 'Individual',
       description: 'Personal legal documents and forms',
       icon: <User className="h-6 w-6" />,
-      features: ['Wills & estate planning', 'Rental agreements', 'Personal contracts', 'Online notary']
+      features: [
+        'Wills & estate planning',
+        'Rental agreements',
+        'Personal contracts',
+        'Online notary',
+      ],
     },
     {
       id: 'hr',
       label: 'HR Professional',
       description: 'Employee documentation and HR forms',
       icon: <Users className="h-6 w-6" />,
-      features: ['Employment contracts', 'Employee handbook', 'HR policies', 'Bulk document creation']
-    }
+      features: [
+        'Employment contracts',
+        'Employee handbook',
+        'HR policies',
+        'Bulk document creation',
+      ],
+    },
   ];
 
   useEffect(() => {
@@ -89,7 +109,7 @@ export const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
 
   const initializeOnboarding = async () => {
     if (!tracker) return;
-    
+
     const existingProgress = await tracker.getProgress();
     if (existingProgress?.isCompleted) {
       return; // Don't show onboarding if already completed
@@ -103,56 +123,60 @@ export const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
 
     setSelectedPersona(persona);
     await tracker.initializeProgress(persona);
-    
+
     const onboardingSteps = tracker.getStepsForPersona(persona);
-    const joyrideSteps: Step[] = onboardingSteps.map((step: OnboardingStep) => ({
-      target: step.target,
-      content: (
-        <div className="p-4">
-          <h3 className="font-semibold text-lg mb-2">{step.title}</h3>
-          <p className="text-muted-foreground mb-3">{step.content}</p>
-          <div className="flex items-center gap-2">
-            <Sparkles className="h-4 w-4 text-primary" />
-            <span className="text-sm text-primary font-medium">AI-Powered Assistant</span>
+    const joyrideSteps: Step[] = onboardingSteps.map(
+      (step: OnboardingStep) => ({
+        target: step.target,
+        content: (
+          <div className="p-4">
+            <h3 className="font-semibold text-lg mb-2">{step.title}</h3>
+            <p className="text-muted-foreground mb-3">{step.content}</p>
+            <div className="flex items-center gap-2">
+              <Sparkles className="h-4 w-4 text-primary" />
+              <span className="text-sm text-primary font-medium">
+                AI-Powered Assistant
+              </span>
+            </div>
           </div>
-        </div>
-      ),
-      placement: step.placement,
-      disableBeacon: step.disableBeacon,
-      hideCloseButton: step.hideCloseButton,
-      spotlightClicks: step.spotlightClicks,
-      styles: {
-        options: {
-          primaryColor: 'hsl(var(--primary))',
-          backgroundColor: 'hsl(var(--background))',
-          textColor: 'hsl(var(--foreground))',
-          arrowColor: 'hsl(var(--background))',
-          overlayColor: 'rgba(0, 0, 0, 0.4)',
+        ),
+        placement: step.placement,
+        disableBeacon: step.disableBeacon,
+        hideCloseButton: step.hideCloseButton,
+        spotlightClicks: step.spotlightClicks,
+        styles: {
+          options: {
+            primaryColor: 'hsl(var(--primary))',
+            backgroundColor: 'hsl(var(--background))',
+            textColor: 'hsl(var(--foreground))',
+            arrowColor: 'hsl(var(--background))',
+            overlayColor: 'rgba(0, 0, 0, 0.4)',
+          },
+          tooltip: {
+            borderRadius: '8px',
+            fontSize: '14px',
+          },
+          tooltipContent: {
+            padding: '0',
+          },
+          buttonNext: {
+            backgroundColor: 'hsl(var(--primary))',
+            color: 'hsl(var(--primary-foreground))',
+            borderRadius: '6px',
+            fontSize: '14px',
+            fontWeight: '500',
+          },
+          buttonBack: {
+            color: 'hsl(var(--muted-foreground))',
+            fontSize: '14px',
+          },
+          buttonSkip: {
+            color: 'hsl(var(--muted-foreground))',
+            fontSize: '14px',
+          },
         },
-        tooltip: {
-          borderRadius: '8px',
-          fontSize: '14px',
-        },
-        tooltipContent: {
-          padding: '0',
-        },
-        buttonNext: {
-          backgroundColor: 'hsl(var(--primary))',
-          color: 'hsl(var(--primary-foreground))',
-          borderRadius: '6px',
-          fontSize: '14px',
-          fontWeight: '500',
-        },
-        buttonBack: {
-          color: 'hsl(var(--muted-foreground))',
-          fontSize: '14px',
-        },
-        buttonSkip: {
-          color: 'hsl(var(--muted-foreground))',
-          fontSize: '14px',
-        },
-      }
-    }));
+      }),
+    );
 
     setSteps(joyrideSteps);
     setShowPersonaSelection(false);
@@ -170,14 +194,14 @@ export const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
   //         await tracker.updateStep(currentStep.id);
   //       }
   //     }
-      
+
   //     setStepIndex(index + (action === 'next' ? 1 : -1));
   //     setProgress(((index + 1) / steps.length) * 100);
   //   }
 
   //   if (status === STATUS.FINISHED || status === STATUS.SKIPPED) {
   //     setRun(false);
-      
+
   //     if (status === STATUS.FINISHED && tracker) {
   //       await tracker.markMilestone('dashboardTour');
   //       onComplete?.();
@@ -194,12 +218,14 @@ export const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
           <div className="mx-auto w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-4">
             <Sparkles className="h-8 w-8 text-primary" />
           </div>
-          <CardTitle className="text-2xl mb-2">Welcome to 123LegalDoc!</CardTitle>
+          <CardTitle className="text-2xl mb-2">
+            Welcome to 123LegalDoc!
+          </CardTitle>
           <p className="text-muted-foreground">
             Let's personalize your experience. What best describes you?
           </p>
         </CardHeader>
-        
+
         <CardContent className="space-y-6">
           <div className="grid md:grid-cols-3 gap-4">
             {personaOptions.map((option) => (
@@ -213,17 +239,22 @@ export const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
                     {option.icon}
                   </div>
                   <h3 className="font-semibold text-lg mb-2">{option.label}</h3>
-                  <p className="text-sm text-muted-foreground mb-4">{option.description}</p>
-                  
+                  <p className="text-sm text-muted-foreground mb-4">
+                    {option.description}
+                  </p>
+
                   <div className="space-y-2">
                     {option.features.map((feature, index) => (
-                      <div key={index} className="flex items-center gap-2 text-sm">
+                      <div
+                        key={index}
+                        className="flex items-center gap-2 text-sm"
+                      >
                         <CheckCircle className="h-3 w-3 text-green-600" />
                         <span>{feature}</span>
                       </div>
                     ))}
                   </div>
-                  
+
                   <Button className="w-full mt-4 gap-2">
                     Get Started
                     <ArrowRight className="h-4 w-4" />
@@ -232,10 +263,10 @@ export const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
               </Card>
             ))}
           </div>
-          
+
           <div className="text-center pt-4 border-t">
-            <Button 
-              variant="ghost" 
+            <Button
+              variant="ghost"
               onClick={() => {
                 setShowPersonaSelection(false);
                 onSkip?.();
@@ -261,7 +292,7 @@ export const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
   return (
     <>
       {showPersonaSelection && <PersonaSelectionModal />}
-      
+
       {/* {run && steps.length > 0 && (
         <Joyride
           steps={steps}
@@ -286,7 +317,7 @@ export const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
           }}
         />
       )} */}
-      
+
       {run && (
         <div className="fixed top-4 right-4 z-[9999]">
           <Card className="w-64">

@@ -16,22 +16,22 @@ interface EnhancedMegaMenuContentProps {
   onLinkClick?: () => void;
 }
 
-const EnhancedMegaMenuContent: React.FC<EnhancedMegaMenuContentProps> = ({ 
-  locale, 
-  onLinkClick 
+const EnhancedMegaMenuContent: React.FC<EnhancedMegaMenuContentProps> = ({
+  locale,
+  onLinkClick,
 }) => {
   const { i18n } = useTranslation();
-  
+
   // Check if taxonomy features are enabled
   const useTaxonomy = taxonomy.feature_flags?.wizard_v4?.enabled;
-  
+
   // Get user role from localStorage or context (if available)
   const [userRole, setUserRole] = React.useState<string | null>(null);
-  
+
   React.useEffect(() => {
     // Track mega menu open
     trackMegaMenu('open', { enhanced_mode: useTaxonomy, locale });
-    
+
     // Try to get user role from localStorage
     try {
       const savedRole = localStorage.getItem('userRole');
@@ -62,7 +62,7 @@ const EnhancedMegaMenuContent: React.FC<EnhancedMegaMenuContentProps> = ({
             <p className="text-sm text-muted-foreground mb-2">
               Enhanced navigation temporarily unavailable
             </p>
-            <button 
+            <button
               onClick={retry}
               className="text-primary hover:underline text-sm"
             >

@@ -7,7 +7,7 @@ export const equipmentRentalAgreementQuestions: FormQuestion[] = [
     id: 'lessorName',
     type: 'text',
     label: 'Equipment Owner Full Name',
-    placeholder: 'Enter the equipment owner\'s full name',
+    placeholder: "Enter the equipment owner's full name",
     required: true,
     group: 'lessor',
   },
@@ -23,7 +23,7 @@ export const equipmentRentalAgreementQuestions: FormQuestion[] = [
     id: 'lessorAddress',
     type: 'textarea',
     label: 'Owner Address',
-    placeholder: 'Enter the owner\'s complete address',
+    placeholder: "Enter the owner's complete address",
     required: true,
     group: 'lessor',
   },
@@ -43,13 +43,13 @@ export const equipmentRentalAgreementQuestions: FormQuestion[] = [
     required: true,
     group: 'lessor',
   },
-  
+
   // Lessee Information
   {
     id: 'lesseeName',
     type: 'text',
     label: 'Renter Full Name',
-    placeholder: 'Enter the renter\'s full name',
+    placeholder: "Enter the renter's full name",
     required: true,
     group: 'lessee',
   },
@@ -65,7 +65,7 @@ export const equipmentRentalAgreementQuestions: FormQuestion[] = [
     id: 'lesseeAddress',
     type: 'textarea',
     label: 'Renter Address',
-    placeholder: 'Enter the renter\'s complete address',
+    placeholder: "Enter the renter's complete address",
     required: true,
     group: 'lessee',
   },
@@ -88,12 +88,12 @@ export const equipmentRentalAgreementQuestions: FormQuestion[] = [
   {
     id: 'lesseeDriverLicense',
     type: 'text',
-    label: 'Renter Driver\'s License Number',
-    placeholder: 'Enter driver\'s license number',
+    label: "Renter Driver's License Number",
+    placeholder: "Enter driver's license number",
     required: false,
     group: 'lessee',
   },
-  
+
   // Equipment Details
   {
     id: 'equipmentType',
@@ -139,7 +139,8 @@ export const equipmentRentalAgreementQuestions: FormQuestion[] = [
     id: 'equipmentDescription',
     type: 'textarea',
     label: 'Equipment Description',
-    placeholder: 'Describe the equipment, including any accessories or attachments',
+    placeholder:
+      'Describe the equipment, including any accessories or attachments',
     required: true,
     group: 'equipment',
   },
@@ -164,7 +165,7 @@ export const equipmentRentalAgreementQuestions: FormQuestion[] = [
     required: true,
     group: 'equipment',
   },
-  
+
   // Rental Terms
   {
     id: 'rentalStartDate',
@@ -217,7 +218,7 @@ export const equipmentRentalAgreementQuestions: FormQuestion[] = [
     required: false,
     group: 'terms',
   },
-  
+
   // Financial Terms
   {
     id: 'rentalRate',
@@ -270,7 +271,7 @@ export const equipmentRentalAgreementQuestions: FormQuestion[] = [
     required: true,
     group: 'financial',
   },
-  
+
   // Insurance and Liability
   {
     id: 'insuranceRequired',
@@ -321,7 +322,7 @@ export const equipmentRentalAgreementQuestions: FormQuestion[] = [
     group: 'insurance',
     dependsOn: 'damageWaiver',
   },
-  
+
   // Operating Conditions
   {
     id: 'authorizedOperators',
@@ -366,7 +367,7 @@ export const equipmentRentalAgreementQuestions: FormQuestion[] = [
     required: true,
     group: 'operations',
   },
-  
+
   // Additional Terms
   {
     id: 'fuelPolicy',
@@ -418,7 +419,7 @@ export const equipmentRentalAgreementQuestions: FormQuestion[] = [
     group: 'additional',
     dependsOn: 'earlyTerminationAllowed',
   },
-  
+
   // Special Conditions
   {
     id: 'specialConditions',
@@ -444,7 +445,7 @@ export const equipmentRentalAgreementQuestions: FormQuestion[] = [
     required: false,
     group: 'special',
   },
-  
+
   // Emergency Contact
   {
     id: 'emergencyContactName',

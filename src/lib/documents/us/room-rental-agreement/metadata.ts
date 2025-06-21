@@ -30,7 +30,7 @@ export const roomRentalAgreementMeta: LegalDocument = {
         'room lease',
         'bedroom rental',
         'shared housing agreement',
-        'room sharing contract'
+        'room sharing contract',
       ],
     },
     es: {
@@ -40,7 +40,7 @@ export const roomRentalAgreementMeta: LegalDocument = {
       aliases: [
         'arrendamiento de habitación',
         'alquiler de dormitorio',
-        'acuerdo de vivienda compartida'
+        'acuerdo de vivienda compartida',
       ],
     },
   },

@@ -35,8 +35,7 @@ const getFirebaseConfig = () => ({
   messagingSenderId:
     process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID ||
     defaultFirebaseConfig.messagingSenderId,
-  appId:
-    process.env.NEXT_PUBLIC_FIREBASE_APP_ID || defaultFirebaseConfig.appId,
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID || defaultFirebaseConfig.appId,
   measurementId:
     process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID ||
     defaultFirebaseConfig.measurementId,

@@ -24,12 +24,14 @@ export const noticeToEnterMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Notice to Enter',
-      description: 'Landlord notice to enter rental property for inspections or repairs',
+      description:
+        'Landlord notice to enter rental property for inspections or repairs',
       aliases: [],
     },
     es: {
       name: 'Notice to Enter', // TODO: Add Spanish translation
-      description: 'Landlord notice to enter rental property for inspections or repairs', // TODO: Add Spanish translation
+      description:
+        'Landlord notice to enter rental property for inspections or repairs', // TODO: Add Spanish translation
       aliases: [],
     },
   },

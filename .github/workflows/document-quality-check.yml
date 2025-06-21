@@ -2,9 +2,9 @@ name: Document Quality Check
 
 on:
   push:
-    branches: [ main, master, develop ]
+    branches: [main, master, develop]
   pull_request:
-    branches: [ main, master, develop ]
+    branches: [main, master, develop]
   schedule:
     # Run daily at 2 AM UTC
     - cron: '0 2 * * *'
@@ -12,176 +12,176 @@ on:
 jobs:
   document-quality:
     runs-on: ubuntu-latest
-    
+
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '18'
-        cache: 'npm'
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
 
-    - name: Install dependencies
-      run: npm ci
+      - name: Install dependencies
+        run: npm ci
 
-    - name: Run Document Quality Verification
-      id: quality-check
-      run: |
-        echo "🔍 Running comprehensive document quality verification..."
-        node scripts/quality-verification-system.js
-        echo "quality_check_exit_code=$?" >> $GITHUB_OUTPUT
+      - name: Run Document Quality Verification
+        id: quality-check
+        run: |
+          echo "🔍 Running comprehensive document quality verification..."
+          node scripts/quality-verification-system.js
+          echo "quality_check_exit_code=$?" >> $GITHUB_OUTPUT
 
-    - name: Upload Quality Report
-      uses: actions/upload-artifact@v3
-      if: always()
-      with:
-        name: quality-report-${{ github.sha }}
-        path: quality-reports/
-        retention-days: 30
+      - name: Upload Quality Report
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: quality-report-${{ github.sha }}
+          path: quality-reports/
+          retention-days: 30
 
-    - name: TypeScript Check
-      run: |
-        echo "🔍 Checking TypeScript compilation..."
-        npx tsc --noEmit --skipLibCheck
+      - name: TypeScript Check
+        run: |
+          echo "🔍 Checking TypeScript compilation..."
+          npx tsc --noEmit --skipLibCheck
 
-    - name: ESLint Check
-      run: |
-        echo "🔍 Running ESLint..."
-        npx eslint src/ --ext .ts,.tsx --format json --output-file eslint-report.json || true
-        npx eslint src/ --ext .ts,.tsx
+      - name: ESLint Check
+        run: |
+          echo "🔍 Running ESLint..."
+          npx eslint src/ --ext .ts,.tsx --format json --output-file eslint-report.json || true
+          npx eslint src/ --ext .ts,.tsx
 
-    - name: Upload ESLint Report
-      uses: actions/upload-artifact@v3
-      if: always()
-      with:
-        name: eslint-report-${{ github.sha }}
-        path: eslint-report.json
-        retention-days: 7
+      - name: Upload ESLint Report
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: eslint-report-${{ github.sha }}
+          path: eslint-report.json
+          retention-days: 7
 
-    - name: Template Verification
-      run: |
-        echo "🔍 Verifying document templates..."
-        npm run verify-templates || true
+      - name: Template Verification
+        run: |
+          echo "🔍 Verifying document templates..."
+          npm run verify-templates || true
 
-    - name: Generate Summary Report
-      if: always()
-      run: |
-        echo "📊 DOCUMENT QUALITY SUMMARY" >> $GITHUB_STEP_SUMMARY
-        echo "=========================" >> $GITHUB_STEP_SUMMARY
-        echo "" >> $GITHUB_STEP_SUMMARY
-        
-        # Get latest quality report
-        LATEST_REPORT=$(ls -t quality-reports/*.json 2>/dev/null | head -1)
-        if [ -f "$LATEST_REPORT" ]; then
-          SCORE=$(jq -r '.score // "N/A"' "$LATEST_REPORT")
-          ERRORS=$(jq -r '.summary.failedChecks // 0' "$LATEST_REPORT")
-          WARNINGS=$(jq -r '.summary.warningChecks // 0' "$LATEST_REPORT")
-          DOCUMENTS=$(jq -r '.summary.totalDocuments // 0' "$LATEST_REPORT")
-          
-          echo "🎯 **Quality Score:** $SCORE/100" >> $GITHUB_STEP_SUMMARY
-          echo "📁 **Total Documents:** $DOCUMENTS" >> $GITHUB_STEP_SUMMARY
-          echo "❌ **Errors:** $ERRORS" >> $GITHUB_STEP_SUMMARY
-          echo "⚠️ **Warnings:** $WARNINGS" >> $GITHUB_STEP_SUMMARY
+      - name: Generate Summary Report
+        if: always()
+        run: |
+          echo "📊 DOCUMENT QUALITY SUMMARY" >> $GITHUB_STEP_SUMMARY
+          echo "=========================" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          
-          if [ "$ERRORS" -eq 0 ]; then
-            echo "✅ **Status:** All quality checks passed!" >> $GITHUB_STEP_SUMMARY
+
+          # Get latest quality report
+          LATEST_REPORT=$(ls -t quality-reports/*.json 2>/dev/null | head -1)
+          if [ -f "$LATEST_REPORT" ]; then
+            SCORE=$(jq -r '.score // "N/A"' "$LATEST_REPORT")
+            ERRORS=$(jq -r '.summary.failedChecks // 0' "$LATEST_REPORT")
+            WARNINGS=$(jq -r '.summary.warningChecks // 0' "$LATEST_REPORT")
+            DOCUMENTS=$(jq -r '.summary.totalDocuments // 0' "$LATEST_REPORT")
+            
+            echo "🎯 **Quality Score:** $SCORE/100" >> $GITHUB_STEP_SUMMARY
+            echo "📁 **Total Documents:** $DOCUMENTS" >> $GITHUB_STEP_SUMMARY
+            echo "❌ **Errors:** $ERRORS" >> $GITHUB_STEP_SUMMARY
+            echo "⚠️ **Warnings:** $WARNINGS" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            
+            if [ "$ERRORS" -eq 0 ]; then
+              echo "✅ **Status:** All quality checks passed!" >> $GITHUB_STEP_SUMMARY
+            else
+              echo "🚨 **Status:** Quality issues found that need attention" >> $GITHUB_STEP_SUMMARY
+            fi
           else
-            echo "🚨 **Status:** Quality issues found that need attention" >> $GITHUB_STEP_SUMMARY
+            echo "⚠️ No quality report generated" >> $GITHUB_STEP_SUMMARY
           fi
-        else
-          echo "⚠️ No quality report generated" >> $GITHUB_STEP_SUMMARY
-        fi
 
-    - name: Comment PR with Quality Results
-      if: github.event_name == 'pull_request'
-      uses: actions/github-script@v6
-      with:
-        script: |
-          const fs = require('fs');
-          const path = require('path');
-          
-          // Find latest quality report
-          const reportDir = 'quality-reports';
-          if (!fs.existsSync(reportDir)) {
-            console.log('No quality reports directory found');
-            return;
-          }
-          
-          const reports = fs.readdirSync(reportDir)
-            .filter(f => f.endsWith('.json'))
-            .map(f => ({
-              name: f,
-              path: path.join(reportDir, f),
-              mtime: fs.statSync(path.join(reportDir, f)).mtime
-            }))
-            .sort((a, b) => b.mtime - a.mtime);
-          
-          if (reports.length === 0) {
-            console.log('No quality reports found');
-            return;
-          }
-          
-          const latestReport = JSON.parse(fs.readFileSync(reports[0].path, 'utf8'));
-          
-          const score = latestReport.score || 0;
-          const errors = latestReport.summary?.failedChecks || 0;
-          const warnings = latestReport.summary?.warningChecks || 0;
-          const documents = latestReport.summary?.totalDocuments || 0;
-          
-          const scoreEmoji = score >= 95 ? '🎉' : score >= 85 ? '✅' : score >= 70 ? '⚠️' : '🚨';
-          
-          let comment = `## ${scoreEmoji} Document Quality Report\n\n`;
-          comment += `| Metric | Value |\n`;
-          comment += `|--------|-------|\n`;
-          comment += `| 🎯 Quality Score | **${score}/100** |\n`;
-          comment += `| 📁 Total Documents | ${documents} |\n`;
-          comment += `| ❌ Errors | ${errors} |\n`;
-          comment += `| ⚠️ Warnings | ${warnings} |\n\n`;
-          
-          if (errors > 0) {
-            comment += `### 🚨 Critical Issues\n`;
-            latestReport.errors?.slice(0, 5).forEach(error => {
-              comment += `- **${error.check}**: ${error.message}\n`;
-            });
-            if (latestReport.errors?.length > 5) {
-              comment += `- ... and ${latestReport.errors.length - 5} more errors\n`;
-            }
-            comment += '\n';
-          }
-          
-          if (warnings > 0 && warnings <= 10) {
-            comment += `### ⚠️ Warnings\n`;
-            latestReport.warnings?.slice(0, 3).forEach(warning => {
-              comment += `- **${warning.check}**: ${warning.message}\n`;
-            });
-            if (latestReport.warnings?.length > 3) {
-              comment += `- ... and ${latestReport.warnings.length - 3} more warnings\n`;
-            }
-            comment += '\n';
-          }
-          
-          if (latestReport.recommendations?.length > 0) {
-            comment += `### 💡 Recommendations\n`;
-            latestReport.recommendations.forEach(rec => {
-              comment += `- **${rec.category}**: ${rec.message}\n`;
-            });
-          }
-          
-          comment += `\n---\n*Report generated at ${latestReport.timestamp}*`;
-          
-          github.rest.issues.createComment({
-            issue_number: context.issue.number,
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            body: comment
-          });
+      - name: Comment PR with Quality Results
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const fs = require('fs');
+            const path = require('path');
 
-    - name: Fail on Critical Issues
-      if: steps.quality-check.outputs.quality_check_exit_code != '0'
-      run: |
-        echo "🚨 Critical document quality issues found!"
-        echo "Please review the quality report and fix all errors before merging."
-        exit 1
+            // Find latest quality report
+            const reportDir = 'quality-reports';
+            if (!fs.existsSync(reportDir)) {
+              console.log('No quality reports directory found');
+              return;
+            }
+
+            const reports = fs.readdirSync(reportDir)
+              .filter(f => f.endsWith('.json'))
+              .map(f => ({
+                name: f,
+                path: path.join(reportDir, f),
+                mtime: fs.statSync(path.join(reportDir, f)).mtime
+              }))
+              .sort((a, b) => b.mtime - a.mtime);
+
+            if (reports.length === 0) {
+              console.log('No quality reports found');
+              return;
+            }
+
+            const latestReport = JSON.parse(fs.readFileSync(reports[0].path, 'utf8'));
+
+            const score = latestReport.score || 0;
+            const errors = latestReport.summary?.failedChecks || 0;
+            const warnings = latestReport.summary?.warningChecks || 0;
+            const documents = latestReport.summary?.totalDocuments || 0;
+
+            const scoreEmoji = score >= 95 ? '🎉' : score >= 85 ? '✅' : score >= 70 ? '⚠️' : '🚨';
+
+            let comment = `## ${scoreEmoji} Document Quality Report\n\n`;
+            comment += `| Metric | Value |\n`;
+            comment += `|--------|-------|\n`;
+            comment += `| 🎯 Quality Score | **${score}/100** |\n`;
+            comment += `| 📁 Total Documents | ${documents} |\n`;
+            comment += `| ❌ Errors | ${errors} |\n`;
+            comment += `| ⚠️ Warnings | ${warnings} |\n\n`;
+
+            if (errors > 0) {
+              comment += `### 🚨 Critical Issues\n`;
+              latestReport.errors?.slice(0, 5).forEach(error => {
+                comment += `- **${error.check}**: ${error.message}\n`;
+              });
+              if (latestReport.errors?.length > 5) {
+                comment += `- ... and ${latestReport.errors.length - 5} more errors\n`;
+              }
+              comment += '\n';
+            }
+
+            if (warnings > 0 && warnings <= 10) {
+              comment += `### ⚠️ Warnings\n`;
+              latestReport.warnings?.slice(0, 3).forEach(warning => {
+                comment += `- **${warning.check}**: ${warning.message}\n`;
+              });
+              if (latestReport.warnings?.length > 3) {
+                comment += `- ... and ${latestReport.warnings.length - 3} more warnings\n`;
+              }
+              comment += '\n';
+            }
+
+            if (latestReport.recommendations?.length > 0) {
+              comment += `### 💡 Recommendations\n`;
+              latestReport.recommendations.forEach(rec => {
+                comment += `- **${rec.category}**: ${rec.message}\n`;
+              });
+            }
+
+            comment += `\n---\n*Report generated at ${latestReport.timestamp}*`;
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });
+
+      - name: Fail on Critical Issues
+        if: steps.quality-check.outputs.quality_check_exit_code != '0'
+        run: |
+          echo "🚨 Critical document quality issues found!"
+          echo "Please review the quality report and fix all errors before merging."
+          exit 1

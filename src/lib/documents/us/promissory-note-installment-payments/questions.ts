@@ -54,7 +54,12 @@ export const promissoryNoteInstallmentPaymentsQuestions: Question[] = [
     required: true,
     placeholder: 'e.g., 500',
   },
-  { id: 'firstPaymentDate', label: 'First Payment Date', type: 'date', required: true },
+  {
+    id: 'firstPaymentDate',
+    label: 'First Payment Date',
+    type: 'date',
+    required: true,
+  },
   {
     id: 'paymentFrequency',
     label: 'Payment Frequency',
@@ -67,7 +72,12 @@ export const promissoryNoteInstallmentPaymentsQuestions: Question[] = [
       { value: 'Quarterly', label: 'Quarterly' },
     ],
   },
-  { id: 'finalPaymentDate', label: 'Final Payment Date', type: 'date', required: true },
+  {
+    id: 'finalPaymentDate',
+    label: 'Final Payment Date',
+    type: 'date',
+    required: true,
+  },
   {
     id: 'governingLaw',
     label: 'Governing Law',

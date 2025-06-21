@@ -4,7 +4,7 @@ import { schema } from './schema';
 import { questions } from './questions';
 
 export const employmentTerminationLetter: LegalDocument = {
-  ...employmentTerminationLetterMeta,  
+  ...employmentTerminationLetterMeta,
   schema,
   questions,
 };

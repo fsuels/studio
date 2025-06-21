@@ -65,7 +65,8 @@ export const questions: Question[] = [
     label: 'Terminal Condition Treatment Preferences',
     type: 'textarea',
     required: true,
-    placeholder: 'Your wishes regarding treatment if you have a terminal condition',
+    placeholder:
+      'Your wishes regarding treatment if you have a terminal condition',
   },
   {
     id: 'persistentVegetativeState',
@@ -98,7 +99,10 @@ export const questions: Question[] = [
     label: 'Specific Life-Sustaining Treatment Conditions (if applicable)',
     type: 'textarea',
     placeholder: 'Describe specific conditions for life-sustaining treatment',
-    dependsOn: { field: 'lifeSustainingTreatment', value: 'specific_conditions' },
+    dependsOn: {
+      field: 'lifeSustainingTreatment',
+      value: 'specific_conditions',
+    },
   },
   {
     id: 'artificialNutrition',
@@ -144,7 +148,10 @@ export const questions: Question[] = [
     options: [
       { value: 'yes', label: 'Yes, attempt CPR' },
       { value: 'no', label: 'No CPR (DNR)' },
-      { value: 'limited_circumstances', label: 'Only in limited circumstances' },
+      {
+        value: 'limited_circumstances',
+        label: 'Only in limited circumstances',
+      },
     ],
   },
   {
@@ -212,7 +219,10 @@ export const questions: Question[] = [
     label: 'Organ Donation Details (if applicable)',
     type: 'textarea',
     placeholder: 'Specify which organs or research purposes',
-    dependsOn: { field: 'organDonation', value: ['specific_organs', 'research_only'] },
+    dependsOn: {
+      field: 'organDonation',
+      value: ['specific_organs', 'research_only'],
+    },
   },
   {
     id: 'tissueDonation',
@@ -282,19 +292,22 @@ export const questions: Question[] = [
     id: 'burialCremationDetails',
     label: 'Burial/Cremation Details (Optional)',
     type: 'textarea',
-    placeholder: 'Specific instructions for burial, cremation, or other arrangements',
+    placeholder:
+      'Specific instructions for burial, cremation, or other arrangements',
   },
   {
     id: 'pregnancyConsiderations',
     label: 'Pregnancy Considerations (Optional)',
     type: 'textarea',
-    placeholder: 'Special instructions if you are pregnant when this directive applies',
+    placeholder:
+      'Special instructions if you are pregnant when this directive applies',
   },
   {
     id: 'specificMedicalConditions',
     label: 'Specific Medical Conditions (Optional)',
     type: 'textarea',
-    placeholder: 'Any current medical conditions that affect your treatment preferences',
+    placeholder:
+      'Any current medical conditions that affect your treatment preferences',
   },
   {
     id: 'treatmentPreferences',

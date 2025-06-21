@@ -30,7 +30,7 @@ Charlotte offers a dynamic business environment with opportunities across indust
 
 [Start Your Charlotte Legal Document]
 
-*Trusted by hundreds of Charlotte businesses*
+_Trusted by hundreds of Charlotte businesses_
 
 ---
 

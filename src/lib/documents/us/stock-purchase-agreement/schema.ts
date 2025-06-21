@@ -30,7 +30,8 @@ export const stockPurchaseAgreementSchema = z.object({
     paymentMethod: z.enum(['cash', 'check', 'wire-transfer', 'installments', 'other']),
     paymentSchedule: z.string().optional(),
     closingDate: z.string().min(1, 'Closing date is required'),
-    closingLocation: z.string().min(1, 'Closing location is required')\n  }),
+    closingLocation: z.string().min(1, 'Closing location is required'),
+  }),
   
   // Representations and Warranties
   sellerRepresentations: z.object({

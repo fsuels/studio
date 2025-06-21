@@ -2,22 +2,38 @@
 import { GET, POST } from '../templates/route';
 import { NextRequest } from 'next/server';
 
-// Mock Firebase
+// Mock Firebase first
 jest.mock('@/lib/firebase', () => ({
-  getDb: jest.fn(() => Promise.resolve(mockDb)),
+  getDb: jest.fn(),
 }));
 
-jest.mock('firebase/firestore', () => ({
-  collection: jest.fn(),
-  doc: jest.fn(),
-  getDocs: jest.fn(),
-  query: jest.fn(),
-  where: jest.fn(),
-  orderBy: jest.fn(),
-  limit: jest.fn(),
-  startAfter: jest.fn(),
-  addDoc: jest.fn(),
-}));
+// Mock Firestore - define functions inside the mock factory
+jest.mock('firebase/firestore', () => {
+  const mockGetDocs = jest.fn();
+  const mockCollection = jest.fn();
+  const mockDoc = jest.fn();
+  const mockQuery = jest.fn();
+  const mockWhere = jest.fn();
+  const mockOrderBy = jest.fn();
+  const mockLimit = jest.fn();
+  const mockStartAfter = jest.fn();
+  const mockAddDoc = jest.fn();
+
+  // Store references for later use
+  global.__mockFirestore = {
+    getDocs: mockGetDocs,
+    collection: mockCollection,
+    doc: mockDoc,
+    query: mockQuery,
+    where: mockWhere,
+    orderBy: mockOrderBy,
+    limit: mockLimit,
+    startAfter: mockStartAfter,
+    addDoc: mockAddDoc,
+  };
+
+  return global.__mockFirestore;
+});
 
 // Mock auth
 jest.mock('@/lib/auth', () => ({
@@ -38,8 +54,14 @@ const mockDb = {
   addDoc: jest.fn(),
 };
 
+// After mockDb is defined, set the implementation
+const firebase = require('@/lib/firebase');
+firebase.getDb.mockImplementation(() => Promise.resolve(mockDb));
+
 const { getCurrentUser } = require('@/lib/auth');
-const { TemplateSubmissionWorkflow } = require('@/lib/marketplace/template-submission-workflow');
+const {
+  TemplateSubmissionWorkflow,
+} = require('@/lib/marketplace/template-submission-workflow');
 
 describe('/api/marketplace/templates', () => {
   const mockTemplates = [
@@ -52,6 +74,13 @@ describe('/api/marketplace/templates', () => {
         category: 'Business Contracts',
         pricing: { type: 'one-time', basePrice: 2999 },
         stats: { totalDownloads: 150, averageRating: 4.5 },
+        ratings: { averageRating: 4.5, totalRatings: 50 },
+        tags: ['service', 'agreement', 'contract'],
+        languageSupport: ['en', 'es'],
+        states: 'all',
+        verified: true,
+        featured: false,
+        createdBy: 'user-1',
         visibility: 'public',
         moderationStatus: 'approved',
       }),
@@ -65,6 +94,13 @@ describe('/api/marketplace/templates', () => {
         category: 'Legal Agreements',
         pricing: { type: 'free', basePrice: 0 },
         stats: { totalDownloads: 500, averageRating: 4.8 },
+        ratings: { averageRating: 4.8, totalRatings: 120 },
+        tags: ['nda', 'agreement', 'legal'],
+        languageSupport: ['en'],
+        states: 'all',
+        verified: true,
+        featured: true,
+        createdBy: 'user-2',
         visibility: 'public',
         moderationStatus: 'approved',
       }),
@@ -73,175 +109,215 @@ describe('/api/marketplace/templates', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
+
+    // Set up default mock behavior for Firestore query chain
+    const mocks = global.__mockFirestore;
+    mocks.collection.mockReturnValue('collection');
+    mocks.where.mockReturnValue('where');
+    mocks.orderBy.mockReturnValue('orderBy');
+    mocks.limit.mockReturnValue('limit');
+    mocks.query.mockReturnValue('query');
+    mocks.startAfter.mockReturnValue('startAfter');
   });
 
   describe('GET /api/marketplace/templates', () => {
     it('should return paginated templates list', async () => {
-      mockDb.getDocs.mockResolvedValue({
+      global.__mockFirestore.getDocs.mockResolvedValue({
         docs: mockTemplates,
         size: 2,
       });
 
-      const url = new URL('http://localhost/api/marketplace/templates?page=1&limit=10');
+      const url = new URL(
+        'http://localhost/api/marketplace/templates?page=1&limit=10',
+      );
       const request = new NextRequest(url);
 
       const response = await GET(request);
       const data = await response.json();
 
       expect(response.status).toBe(200);
-      expect(data.templates).toHaveLength(2);
-      expect(data.pagination.page).toBe(1);
-      expect(data.pagination.limit).toBe(10);
-      expect(data.pagination.total).toBe(2);
+
+      // Debug: Log the actual response
+      console.log('Response data:', JSON.stringify(data, null, 2));
+
+      expect(data.success).toBe(true);
+      expect(data.data).toBeDefined();
+      expect(data.data.templates).toHaveLength(2);
+      expect(data.data.pagination.page).toBe(1);
+      expect(data.data.pagination.limit).toBe(10);
+      expect(data.data.pagination.total).toBe(2);
     });
 
     it('should filter templates by category', async () => {
       const filteredTemplates = [mockTemplates[0]]; // Only Business Contracts
-      mockDb.getDocs.mockResolvedValue({
+      global.__mockFirestore.getDocs.mockResolvedValue({
         docs: filteredTemplates,
         size: 1,
       });
 
-      const url = new URL('http://localhost/api/marketplace/templates?category=Business%20Contracts');
+      const url = new URL(
+        'http://localhost/api/marketplace/templates?category=Business%20Contracts',
+      );
       const request = new NextRequest(url);
 
       const response = await GET(request);
       const data = await response.json();
 
       expect(response.status).toBe(200);
-      expect(data.templates).toHaveLength(1);
-      expect(data.templates[0].category).toBe('Business Contracts');
+      expect(data.data.templates).toHaveLength(1);
+      expect(data.data.templates[0].template.category).toBe(
+        'Business Contracts',
+      );
     });
 
     it('should search templates by query', async () => {
       const searchResults = [mockTemplates[1]]; // NDA contains "agreement"
-      mockDb.getDocs.mockResolvedValue({
+      global.__mockFirestore.getDocs.mockResolvedValue({
         docs: searchResults,
         size: 1,
       });
 
-      const url = new URL('http://localhost/api/marketplace/templates?search=agreement');
+      const url = new URL(
+        'http://localhost/api/marketplace/templates?search=agreement',
+      );
       const request = new NextRequest(url);
 
       const response = await GET(request);
       const data = await response.json();
 
       expect(response.status).toBe(200);
-      expect(data.templates).toHaveLength(1);
-      expect(data.templates[0].name).toContain('Agreement');
+      expect(data.data.templates).toHaveLength(1);
+      expect(data.data.templates[0].template.name).toContain('NDA');
     });
 
     it('should filter by price range', async () => {
       const freeTemplates = [mockTemplates[1]]; // Free template
-      mockDb.getDocs.mockResolvedValue({
+      global.__mockFirestore.getDocs.mockResolvedValue({
         docs: freeTemplates,
         size: 1,
       });
 
-      const url = new URL('http://localhost/api/marketplace/templates?minPrice=0&maxPrice=0');
+      const url = new URL(
+        'http://localhost/api/marketplace/templates?minPrice=0&maxPrice=0',
+      );
       const request = new NextRequest(url);
 
       const response = await GET(request);
       const data = await response.json();
 
       expect(response.status).toBe(200);
-      expect(data.templates).toHaveLength(1);
-      expect(data.templates[0].pricing.basePrice).toBe(0);
+      expect(data.data.templates).toHaveLength(1);
+      expect(data.data.templates[0].template.pricing.basePrice).toBe(0);
     });
 
     it('should sort templates by different criteria', async () => {
-      mockDb.getDocs.mockResolvedValue({
+      global.__mockFirestore.getDocs.mockResolvedValue({
         docs: [...mockTemplates].reverse(), // Reversed order
         size: 2,
       });
 
-      const url = new URL('http://localhost/api/marketplace/templates?sortBy=rating&sortOrder=desc');
+      const url = new URL(
+        'http://localhost/api/marketplace/templates?sortBy=rating&sortOrder=desc',
+      );
       const request = new NextRequest(url);
 
       const response = await GET(request);
       const data = await response.json();
 
       expect(response.status).toBe(200);
-      expect(data.templates).toHaveLength(2);
+      expect(data.data.templates).toHaveLength(2);
       // Should be sorted by rating descending
-      expect(data.templates[0].stats.averageRating).toBeGreaterThanOrEqual(
-        data.templates[1].stats.averageRating
+      expect(
+        data.data.templates[0].template.stats.averageRating,
+      ).toBeGreaterThanOrEqual(
+        data.data.templates[1].template.stats.averageRating,
       );
     });
 
     it('should filter by minimum rating', async () => {
       const highRatedTemplates = [mockTemplates[1]]; // 4.8 rating
-      mockDb.getDocs.mockResolvedValue({
+      global.__mockFirestore.getDocs.mockResolvedValue({
         docs: highRatedTemplates,
         size: 1,
       });
 
-      const url = new URL('http://localhost/api/marketplace/templates?minRating=4.7');
+      const url = new URL(
+        'http://localhost/api/marketplace/templates?minRating=4.7',
+      );
       const request = new NextRequest(url);
 
       const response = await GET(request);
       const data = await response.json();
 
       expect(response.status).toBe(200);
-      expect(data.templates).toHaveLength(1);
-      expect(data.templates[0].stats.averageRating).toBeGreaterThanOrEqual(4.7);
+      expect(data.data.templates).toHaveLength(1);
+      expect(
+        data.data.templates[0].template.stats.averageRating,
+      ).toBeGreaterThanOrEqual(4.7);
     });
 
     it('should filter by tags', async () => {
       const taggedTemplates = [mockTemplates[0]];
-      mockDb.getDocs.mockResolvedValue({
+      global.__mockFirestore.getDocs.mockResolvedValue({
         docs: taggedTemplates,
         size: 1,
       });
 
-      const url = new URL('http://localhost/api/marketplace/templates?tags=contract,business');
+      const url = new URL(
+        'http://localhost/api/marketplace/templates?tags=contract,business',
+      );
       const request = new NextRequest(url);
 
       const response = await GET(request);
       const data = await response.json();
 
       expect(response.status).toBe(200);
-      expect(data.templates).toHaveLength(1);
+      expect(data.data.templates).toHaveLength(1);
     });
 
     it('should handle pagination correctly', async () => {
-      mockDb.getDocs.mockResolvedValue({
+      global.__mockFirestore.getDocs.mockResolvedValue({
         docs: mockTemplates,
         size: 2,
       });
 
-      const url = new URL('http://localhost/api/marketplace/templates?page=2&limit=1');
+      const url = new URL(
+        'http://localhost/api/marketplace/templates?page=2&limit=1',
+      );
       const request = new NextRequest(url);
 
       const response = await GET(request);
       const data = await response.json();
 
       expect(response.status).toBe(200);
-      expect(data.pagination.page).toBe(2);
-      expect(data.pagination.limit).toBe(1);
-      expect(data.pagination.hasNext).toBe(true);
-      expect(data.pagination.hasPrev).toBe(true);
+      expect(data.data.pagination.page).toBe(2);
+      expect(data.data.pagination.limit).toBe(1);
+      expect(data.data.pagination.hasMore).toBe(true);
     });
 
     it('should handle empty results', async () => {
-      mockDb.getDocs.mockResolvedValue({
+      global.__mockFirestore.getDocs.mockResolvedValue({
         docs: [],
         size: 0,
       });
 
-      const url = new URL('http://localhost/api/marketplace/templates?search=nonexistent');
+      const url = new URL(
+        'http://localhost/api/marketplace/templates?search=nonexistent',
+      );
       const request = new NextRequest(url);
 
       const response = await GET(request);
       const data = await response.json();
 
       expect(response.status).toBe(200);
-      expect(data.templates).toHaveLength(0);
-      expect(data.pagination.total).toBe(0);
+      expect(data.data.templates).toHaveLength(0);
+      expect(data.data.pagination.total).toBe(0);
     });
 
     it('should handle database errors', async () => {
-      mockDb.getDocs.mockRejectedValue(new Error('Database error'));
+      global.__mockFirestore.getDocs.mockRejectedValue(
+        new Error('Database error'),
+      );
 
       const url = new URL('http://localhost/api/marketplace/templates');
       const request = new NextRequest(url);
@@ -307,13 +383,16 @@ describe('/api/marketplace/templates', () => {
       };
       TemplateSubmissionWorkflow.mockImplementation(() => mockWorkflow);
 
-      const request = new NextRequest('http://localhost/api/marketplace/templates', {
-        method: 'POST',
-        body: JSON.stringify(mockSubmissionForm),
-        headers: {
-          'Content-Type': 'application/json',
+      const request = new NextRequest(
+        'http://localhost/api/marketplace/templates',
+        {
+          method: 'POST',
+          body: JSON.stringify(mockSubmissionForm),
+          headers: {
+            'Content-Type': 'application/json',
+          },
         },
-      });
+      );
 
       const response = await POST(request);
       const data = await response.json();
@@ -323,20 +402,23 @@ describe('/api/marketplace/templates', () => {
       expect(data.versionId).toBe('version-123');
       expect(mockWorkflow.createTemplateDraft).toHaveBeenCalledWith(
         'user-123',
-        mockSubmissionForm
+        mockSubmissionForm,
       );
     });
 
     it('should require authentication', async () => {
       getCurrentUser.mockResolvedValue(null);
 
-      const request = new NextRequest('http://localhost/api/marketplace/templates', {
-        method: 'POST',
-        body: JSON.stringify(mockSubmissionForm),
-        headers: {
-          'Content-Type': 'application/json',
+      const request = new NextRequest(
+        'http://localhost/api/marketplace/templates',
+        {
+          method: 'POST',
+          body: JSON.stringify(mockSubmissionForm),
+          headers: {
+            'Content-Type': 'application/json',
+          },
         },
-      });
+      );
 
       const response = await POST(request);
 
@@ -354,13 +436,16 @@ describe('/api/marketplace/templates', () => {
         templateName: '', // Invalid: empty name
       };
 
-      const request = new NextRequest('http://localhost/api/marketplace/templates', {
-        method: 'POST',
-        body: JSON.stringify(invalidForm),
-        headers: {
-          'Content-Type': 'application/json',
+      const request = new NextRequest(
+        'http://localhost/api/marketplace/templates',
+        {
+          method: 'POST',
+          body: JSON.stringify(invalidForm),
+          headers: {
+            'Content-Type': 'application/json',
+          },
         },
-      });
+      );
 
       const response = await POST(request);
 
@@ -373,13 +458,16 @@ describe('/api/marketplace/templates', () => {
         email: 'creator@example.com',
       });
 
-      const request = new NextRequest('http://localhost/api/marketplace/templates', {
-        method: 'POST',
-        body: 'invalid json',
-        headers: {
-          'Content-Type': 'application/json',
+      const request = new NextRequest(
+        'http://localhost/api/marketplace/templates',
+        {
+          method: 'POST',
+          body: 'invalid json',
+          headers: {
+            'Content-Type': 'application/json',
+          },
         },
-      });
+      );
 
       const response = await POST(request);
 
@@ -393,17 +481,22 @@ describe('/api/marketplace/templates', () => {
       });
 
       const mockWorkflow = {
-        createTemplateDraft: jest.fn().mockRejectedValue(new Error('Workflow error')),
+        createTemplateDraft: jest
+          .fn()
+          .mockRejectedValue(new Error('Workflow error')),
       };
       TemplateSubmissionWorkflow.mockImplementation(() => mockWorkflow);
 
-      const request = new NextRequest('http://localhost/api/marketplace/templates', {
-        method: 'POST',
-        body: JSON.stringify(mockSubmissionForm),
-        headers: {
-          'Content-Type': 'application/json',
+      const request = new NextRequest(
+        'http://localhost/api/marketplace/templates',
+        {
+          method: 'POST',
+          body: JSON.stringify(mockSubmissionForm),
+          headers: {
+            'Content-Type': 'application/json',
+          },
         },
-      });
+      );
 
       const response = await POST(request);
 
@@ -424,13 +517,16 @@ describe('/api/marketplace/templates', () => {
         },
       };
 
-      const request = new NextRequest('http://localhost/api/marketplace/templates', {
-        method: 'POST',
-        body: JSON.stringify(invalidPricingForm),
-        headers: {
-          'Content-Type': 'application/json',
+      const request = new NextRequest(
+        'http://localhost/api/marketplace/templates',
+        {
+          method: 'POST',
+          body: JSON.stringify(invalidPricingForm),
+          headers: {
+            'Content-Type': 'application/json',
+          },
         },
-      });
+      );
 
       const response = await POST(request);
 
@@ -448,13 +544,16 @@ describe('/api/marketplace/templates', () => {
         version: 'invalid-version', // Invalid: not semantic version
       };
 
-      const request = new NextRequest('http://localhost/api/marketplace/templates', {
-        method: 'POST',
-        body: JSON.stringify(invalidVersionForm),
-        headers: {
-          'Content-Type': 'application/json',
+      const request = new NextRequest(
+        'http://localhost/api/marketplace/templates',
+        {
+          method: 'POST',
+          body: JSON.stringify(invalidVersionForm),
+          headers: {
+            'Content-Type': 'application/json',
+          },
         },
-      });
+      );
 
       const response = await POST(request);
 

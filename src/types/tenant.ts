@@ -3,31 +3,31 @@ export interface Tenant {
   slug: string; // URL-friendly identifier
   name: string;
   description?: string;
-  
+
   // Contact Information
   ownerUserId: string;
   contactEmail: string;
   contactPhone?: string;
-  
+
   // Branding
   branding: TenantBranding;
-  
+
   // Domain Configuration
   domains: TenantDomain[];
-  
+
   // Subscription & Billing
   subscription: TenantSubscription;
-  
+
   // Features & Limits
   features: TenantFeatures;
   limits: TenantLimits;
-  
+
   // Status & Timestamps
   status: 'active' | 'inactive' | 'suspended' | 'trial';
   createdAt: string;
   updatedAt: string;
   trialEndsAt?: string;
-  
+
   // Settings
   settings: TenantSettings;
 }
@@ -40,12 +40,12 @@ export interface TenantBranding {
   accentColor?: string;
   fontFamily?: string;
   customCss?: string;
-  
+
   // Company Details
   companyName: string;
   tagline?: string;
   footerText?: string;
-  
+
   // Legal
   termsUrl?: string;
   privacyUrl?: string;
@@ -73,7 +73,7 @@ export interface TenantSubscription {
   cancelAtPeriodEnd: boolean;
   stripeCustomerId?: string;
   stripeSubscriptionId?: string;
-  
+
   // Usage-based billing
   monthlyDocumentQuota: number;
   documentsUsedThisMonth: number;
@@ -111,7 +111,7 @@ export interface TenantSettings {
   enableComments: boolean;
   timezone: string;
   dateFormat: string;
-  
+
   // Email notifications
   emailNotifications: {
     newUserSignup: boolean;
@@ -120,7 +120,7 @@ export interface TenantSettings {
     documentCompleted: boolean;
     systemUpdates: boolean;
   };
-  
+
   // Security
   security: {
     enforcePasswordPolicy: boolean;
@@ -144,9 +144,14 @@ export interface TenantUser {
   lastActiveAt?: string;
 }
 
-export type TenantUserRole = 'admin' | 'manager' | 'editor' | 'viewer' | 'guest';
+export type TenantUserRole =
+  | 'admin'
+  | 'manager'
+  | 'editor'
+  | 'viewer'
+  | 'guest';
 
-export type TenantPermission = 
+export type TenantPermission =
   | 'tenant.manage_settings'
   | 'tenant.manage_users'
   | 'tenant.manage_billing'
@@ -169,17 +174,17 @@ export interface TenantInvite {
   email: string;
   role: TenantUserRole;
   permissions: TenantPermission[];
-  
+
   // Invitation Details
   invitedBy: string; // User ID of inviter
   inviteMessage?: string;
   expiresAt: string;
   acceptedAt?: string;
-  
+
   // Status
   status: 'pending' | 'accepted' | 'expired' | 'revoked';
   createdAt: string;
-  
+
   // Access Control
   restrictToIpRange?: string;
   maxUses?: number;
@@ -194,20 +199,20 @@ export interface TenantChatRoom {
   name: string;
   description?: string;
   type: 'general' | 'document' | 'support' | 'private';
-  
+
   // Stream Chat Integration
   streamChannelId: string;
   streamChannelType: 'team' | 'messaging';
-  
+
   // Members
   members: string[]; // User IDs
   admins: string[]; // User IDs with admin rights
-  
+
   // Settings
   isPrivate: boolean;
   allowGuestAccess: boolean;
   retentionDays?: number;
-  
+
   createdAt: string;
   updatedAt: string;
   createdBy: string;
@@ -220,25 +225,31 @@ export interface TenantAuditEvent {
   userId: string;
   userEmail: string;
   userRole: TenantUserRole;
-  
+
   // Event Details
   action: TenantAuditAction;
-  resourceType: 'document' | 'user' | 'tenant' | 'template' | 'invite' | 'billing';
+  resourceType:
+    | 'document'
+    | 'user'
+    | 'tenant'
+    | 'template'
+    | 'invite'
+    | 'billing';
   resourceId?: string;
-  
+
   // Context
   description: string;
   metadata?: Record<string, any>;
   ipAddress: string;
   userAgent: string;
   timestamp: string;
-  
+
   // Risk Assessment
   riskLevel: 'low' | 'medium' | 'high';
   complianceFlags?: string[];
 }
 
-export type TenantAuditAction = 
+export type TenantAuditAction =
   | 'tenant.created'
   | 'tenant.updated'
   | 'tenant.suspended'
@@ -267,7 +278,7 @@ export interface TenantAnalytics {
   period: 'day' | 'week' | 'month' | 'quarter' | 'year';
   startDate: string;
   endDate: string;
-  
+
   // Usage Metrics
   metrics: {
     documentsCreated: number;
@@ -276,32 +287,32 @@ export interface TenantAnalytics {
     activeUsers: number;
     newUsers: number;
     totalUsers: number;
-    
+
     // Engagement
     avgSessionDuration: number;
     avgDocumentsPerUser: number;
     userRetentionRate: number;
-    
+
     // Performance
     avgDocumentCompletionTime: number;
     documentSuccessRate: number;
     errorRate: number;
   };
-  
+
   // Top Documents
   topDocuments: Array<{
     documentType: string;
     count: number;
     completionRate: number;
   }>;
-  
+
   // User Activity
   userActivity: Array<{
     userId: string;
     documentsCreated: number;
     lastActive: string;
   }>;
-  
+
   generatedAt: string;
 }
 
@@ -331,36 +342,54 @@ export const TENANT_PLANS = {
   trial: {
     name: 'Trial',
     price: 0,
-    features: { ...DEFAULT_TENANT_FEATURES, customDomain: false, advancedBranding: false },
+    features: {
+      ...DEFAULT_TENANT_FEATURES,
+      customDomain: false,
+      advancedBranding: false,
+    },
     limits: { ...DEFAULT_TENANT_LIMITS, maxUsers: 3, maxDocumentsPerMonth: 10 },
   },
   starter: {
     name: 'Starter',
     price: 299,
     features: { ...DEFAULT_TENANT_FEATURES, customDomain: true },
-    limits: { ...DEFAULT_TENANT_LIMITS, maxUsers: 25, maxDocumentsPerMonth: 500 },
+    limits: {
+      ...DEFAULT_TENANT_LIMITS,
+      maxUsers: 25,
+      maxDocumentsPerMonth: 500,
+    },
   },
   professional: {
-    name: 'Professional', 
+    name: 'Professional',
     price: 799,
-    features: { ...DEFAULT_TENANT_FEATURES, customDomain: true, advancedBranding: true, apiAccess: true },
-    limits: { ...DEFAULT_TENANT_LIMITS, maxUsers: 100, maxDocumentsPerMonth: 2000, maxStorageGB: 25 },
+    features: {
+      ...DEFAULT_TENANT_FEATURES,
+      customDomain: true,
+      advancedBranding: true,
+      apiAccess: true,
+    },
+    limits: {
+      ...DEFAULT_TENANT_LIMITS,
+      maxUsers: 100,
+      maxDocumentsPerMonth: 2000,
+      maxStorageGB: 25,
+    },
   },
   enterprise: {
     name: 'Enterprise',
     price: 1999,
-    features: { 
-      ...DEFAULT_TENANT_FEATURES, 
-      customDomain: true, 
-      advancedBranding: true, 
+    features: {
+      ...DEFAULT_TENANT_FEATURES,
+      customDomain: true,
+      advancedBranding: true,
       apiAccess: true,
       ssoIntegration: true,
       bulkOperations: true,
       customTemplates: true,
       advancedAnalytics: true,
     },
-    limits: { 
-      ...DEFAULT_TENANT_LIMITS, 
+    limits: {
+      ...DEFAULT_TENANT_LIMITS,
       maxUsers: -1, // unlimited
       maxDocumentsPerMonth: -1, // unlimited
       maxStorageGB: 100,
@@ -370,10 +399,13 @@ export const TENANT_PLANS = {
 } as const;
 
 // Role Permissions
-export const TENANT_ROLE_PERMISSIONS: Record<TenantUserRole, TenantPermission[]> = {
+export const TENANT_ROLE_PERMISSIONS: Record<
+  TenantUserRole,
+  TenantPermission[]
+> = {
   admin: [
     'tenant.manage_settings',
-    'tenant.manage_users', 
+    'tenant.manage_users',
     'tenant.manage_billing',
     'tenant.manage_branding',
     'tenant.view_analytics',
@@ -388,7 +420,7 @@ export const TENANT_ROLE_PERMISSIONS: Record<TenantUserRole, TenantPermission[]>
   ],
   manager: [
     'tenant.manage_users',
-    'tenant.view_analytics', 
+    'tenant.view_analytics',
     'documents.create',
     'documents.edit_all',
     'documents.view_all',
@@ -396,15 +428,7 @@ export const TENANT_ROLE_PERMISSIONS: Record<TenantUserRole, TenantPermission[]>
     'templates.create',
     'templates.edit',
   ],
-  editor: [
-    'documents.create',
-    'documents.view_all',
-    'documents.share',
-  ],
-  viewer: [
-    'documents.view_all',
-  ],
-  guest: [
-    'documents.view_all',
-  ],
+  editor: ['documents.create', 'documents.view_all', 'documents.share'],
+  viewer: ['documents.view_all'],
+  guest: ['documents.view_all'],
 };

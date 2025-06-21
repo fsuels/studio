@@ -47,7 +47,7 @@ Don't risk using generic templates that may not comply with Nebraska law. Get a 
 
 [Create Nebraska Partnership Agreement]
 
-*Trusted by thousands of Nebraska businesses*
+_Trusted by thousands of Nebraska businesses_
 
 ---
 

@@ -2,12 +2,8 @@
   "ach-authorization-form": {
     "title": "Ach Authorization Form",
     "complexity": "easy",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Ach Authorization Form.",
     "popular": false,
     "fieldCount": 5,
@@ -16,12 +12,8 @@
   "collection-letter": {
     "title": "Collection Letter",
     "complexity": "easy",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Collection Letter.",
     "popular": false,
     "fieldCount": 5,
@@ -30,12 +22,8 @@
   "credit-card-agreement": {
     "title": "Credit Card Agreement",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Credit Card Agreement.",
     "popular": false,
     "fieldCount": 15,
@@ -44,12 +32,8 @@
   "debt-settlement-agreement": {
     "title": "Debt Settlement Agreement",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Debt Settlement Agreement.",
     "popular": false,
     "fieldCount": 15,
@@ -58,12 +42,8 @@
   "debt-validation-letter": {
     "title": "Debt Validation Letter",
     "complexity": "easy",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Debt Validation Letter.",
     "popular": false,
     "fieldCount": 5,
@@ -72,12 +52,8 @@
   "demand-letter": {
     "title": "Demand Letter",
     "complexity": "easy",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Demand Letter.",
     "popular": false,
     "fieldCount": 5,
@@ -86,12 +62,8 @@
   "demand-letter-payment": {
     "title": "Demand Letter Payment",
     "complexity": "easy",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Demand Letter Payment.",
     "popular": false,
     "fieldCount": 5,
@@ -100,12 +72,8 @@
   "direct-deposit-form": {
     "title": "Direct Deposit Form",
     "complexity": "easy",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Direct Deposit Form.",
     "popular": false,
     "fieldCount": 5,
@@ -114,12 +82,8 @@
   "invoice": {
     "title": "Invoice",
     "complexity": "easy",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Invoice.",
     "popular": true,
     "fieldCount": 5,
@@ -128,12 +92,8 @@
   "loan-agreement": {
     "title": "Loan Agreement",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Loan Agreement.",
     "popular": true,
     "fieldCount": 15,
@@ -142,12 +102,8 @@
   "loan-modification-agreement": {
     "title": "Loan Modification Agreement",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Loan Modification Agreement.",
     "popular": false,
     "fieldCount": 15,
@@ -156,12 +112,8 @@
   "loan-modification-letter": {
     "title": "Loan Modification Letter",
     "complexity": "easy",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Loan Modification Letter.",
     "popular": false,
     "fieldCount": 5,
@@ -170,12 +122,8 @@
   "payment-plan": {
     "title": "Payment Plan",
     "complexity": "advanced",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Payment Plan.",
     "popular": false,
     "fieldCount": 30,
@@ -184,12 +132,8 @@
   "personal-loan-agreement": {
     "title": "Personal Loan Agreement",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Personal Loan Agreement.",
     "popular": false,
     "fieldCount": 15,
@@ -198,12 +142,8 @@
   "promissory-note": {
     "title": "Promissory Note",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Promissory Note.",
     "popular": false,
     "fieldCount": 15,
@@ -212,12 +152,8 @@
   "promissory-note-balloon-payments": {
     "title": "Promissory Note Balloon Payments",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Promissory Note Balloon Payments.",
     "popular": false,
     "fieldCount": 15,
@@ -226,12 +162,8 @@
   "promissory-note-installment-payments": {
     "title": "Promissory Note Installment Payments",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Promissory Note Installment Payments.",
     "popular": false,
     "fieldCount": 15,
@@ -240,12 +172,8 @@
   "purchase-order": {
     "title": "Purchase Order",
     "complexity": "easy",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Purchase Order.",
     "popular": false,
     "fieldCount": 5,
@@ -254,12 +182,8 @@
   "receipt": {
     "title": "Receipt",
     "complexity": "easy",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Receipt.",
     "popular": false,
     "fieldCount": 5,
@@ -268,12 +192,8 @@
   "revolving-credit-agreement": {
     "title": "Revolving Credit Agreement",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Revolving Credit Agreement.",
     "popular": false,
     "fieldCount": 15,
@@ -282,12 +202,8 @@
   "statement-of-account": {
     "title": "Statement Of Account",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Statement Of Account.",
     "popular": false,
     "fieldCount": 15,
@@ -296,12 +212,8 @@
   "student-loan-agreement": {
     "title": "Student Loan Agreement",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Student Loan Agreement.",
     "popular": false,
     "fieldCount": 15,

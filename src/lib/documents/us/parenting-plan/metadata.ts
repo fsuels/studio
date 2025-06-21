@@ -24,13 +24,23 @@ export const parentingPlanMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Parenting Plan',
-      description: 'Comprehensive plan for child custody, visitation, and parental responsibilities.',
-      aliases: ['custody agreement', 'visitation schedule', 'co-parenting plan'],
+      description:
+        'Comprehensive plan for child custody, visitation, and parental responsibilities.',
+      aliases: [
+        'custody agreement',
+        'visitation schedule',
+        'co-parenting plan',
+      ],
     },
     es: {
       name: 'Plan de Crianza',
-      description: 'Plan integral para custodia infantil, visitación y responsabilidades parentales.',
-      aliases: ['acuerdo de custodia', 'horario de visitación', 'plan de co-crianza'],
+      description:
+        'Plan integral para custodia infantil, visitación y responsabilidades parentales.',
+      aliases: [
+        'acuerdo de custodia',
+        'horario de visitación',
+        'plan de co-crianza',
+      ],
     },
   },
 };

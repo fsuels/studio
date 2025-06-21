@@ -24,13 +24,22 @@ export const personalTrainingAgreementMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Personal Training Agreement',
-      description: 'Agreement between personal trainer and client for fitness training services.',
-      aliases: ['fitness training contract', 'personal trainer agreement', 'training services contract'],
+      description:
+        'Agreement between personal trainer and client for fitness training services.',
+      aliases: [
+        'fitness training contract',
+        'personal trainer agreement',
+        'training services contract',
+      ],
     },
     es: {
       name: 'Acuerdo de Entrenamiento Personal',
-      description: 'Acuerdo entre entrenador personal y cliente para servicios de entrenamiento físico.',
-      aliases: ['contrato de entrenamiento físico', 'acuerdo de entrenador personal'],
+      description:
+        'Acuerdo entre entrenador personal y cliente para servicios de entrenamiento físico.',
+      aliases: [
+        'contrato de entrenamiento físico',
+        'acuerdo de entrenador personal',
+      ],
     },
   },
 };

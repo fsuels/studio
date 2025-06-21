@@ -30,7 +30,7 @@ Denver offers a dynamic business environment with opportunities across industrie
 
 [Start Your Denver Legal Document]
 
-*Trusted by hundreds of Denver businesses*
+_Trusted by hundreds of Denver businesses_
 
 ---
 

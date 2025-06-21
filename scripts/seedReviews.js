@@ -37,8 +37,6 @@ const reviews = [
   },
 ];
 
-await Promise.all(
-  reviews.map((r) => db.collection('reviews').add(r)),
-);
+await Promise.all(reviews.map((r) => db.collection('reviews').add(r)));
 console.log('✅ 3 reviews seeded');
 process.exit(0);

@@ -79,11 +79,7 @@ export default function DocumentFlow({ initialDocId }: DocumentFlowProps = {}) {
           />
         )}
 
-        {step === 3 && (
-          <StepThreeInput
-            templateId={templateId}
-          />
-        )}
+        {step === 3 && <StepThreeInput templateId={templateId} />}
       </SlideFade>
     </div>
   );

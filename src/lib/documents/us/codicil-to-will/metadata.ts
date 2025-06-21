@@ -24,12 +24,14 @@ export const codicilToWillMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Codicil to Will',
-      description: 'Make amendments to your existing will without rewriting the entire document.',
+      description:
+        'Make amendments to your existing will without rewriting the entire document.',
       aliases: ['will amendment', 'will codicil', 'will modification'],
     },
     es: {
       name: 'Codicilo al Testamento',
-      description: 'Haz enmiendas a tu testamento existente sin reescribir todo el documento.',
+      description:
+        'Haz enmiendas a tu testamento existente sin reescribir todo el documento.',
       aliases: ['enmienda al testamento', 'modificación de testamento'],
     },
   },

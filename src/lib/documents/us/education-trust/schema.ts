@@ -10,22 +10,38 @@ export const schema = z.object({
   successorTrusteeName: z.string().optional(),
   successorTrusteeAddress: z.string().optional(),
   primaryBeneficiary: z.string().min(1, 'Primary beneficiary is required'),
-  primaryBeneficiaryAge: z.string().min(1, 'Primary beneficiary age is required'),
-  primaryBeneficiaryRelation: z.string().min(1, 'Relationship to primary beneficiary is required'),
+  primaryBeneficiaryAge: z
+    .string()
+    .min(1, 'Primary beneficiary age is required'),
+  primaryBeneficiaryRelation: z
+    .string()
+    .min(1, 'Relationship to primary beneficiary is required'),
   additionalBeneficiaries: z.string().optional(),
   educationalPurpose: z.string().min(1, 'Educational purpose is required'),
-  eligibleExpenses: z.string().min(1, 'Eligible expenses definition is required'),
+  eligibleExpenses: z
+    .string()
+    .min(1, 'Eligible expenses definition is required'),
   initialFunding: z.string().min(1, 'Initial funding amount is required'),
   additionalContributions: z.string().optional(),
   investmentGuidelines: z.string().min(1, 'Investment guidelines are required'),
   distributionTriggers: z.string().min(1, 'Distribution triggers are required'),
-  distributionLimitations: z.string().min(1, 'Distribution limitations are required'),
+  distributionLimitations: z
+    .string()
+    .min(1, 'Distribution limitations are required'),
   ageRestrictions: z.string().optional(),
   academicRequirements: z.string().optional(),
-  institutionRequirements: z.string().min(1, 'Educational institution requirements are required'),
-  surplusFundsDisposition: z.string().min(1, 'Surplus funds disposition is required'),
-  terminationConditions: z.string().min(1, 'Trust termination conditions are required'),
-  reportingRequirements: z.string().min(1, 'Reporting requirements are required'),
+  institutionRequirements: z
+    .string()
+    .min(1, 'Educational institution requirements are required'),
+  surplusFundsDisposition: z
+    .string()
+    .min(1, 'Surplus funds disposition is required'),
+  terminationConditions: z
+    .string()
+    .min(1, 'Trust termination conditions are required'),
+  reportingRequirements: z
+    .string()
+    .min(1, 'Reporting requirements are required'),
   specialProvisions: z.string().optional(),
   witnessOneName: z.string().min(1, 'First witness name is required'),
   witnessOneAddress: z.string().min(1, 'First witness address is required'),

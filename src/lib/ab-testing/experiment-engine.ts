@@ -12,7 +12,7 @@ export interface Experiment {
   description: string;
   hypothesis: string;
   status: 'draft' | 'running' | 'paused' | 'completed' | 'archived';
-  
+
   // Experiment Configuration
   targetAudience: {
     percentage: number; // 0-100, percentage of users to include
@@ -22,9 +22,9 @@ export interface Experiment {
     newUsersOnly?: boolean;
     returningUsersOnly?: boolean;
   };
-  
+
   variants: ExperimentVariant[];
-  
+
   // Success Metrics
   primaryMetric: {
     name: string;
@@ -32,13 +32,13 @@ export interface Experiment {
     goal: 'increase' | 'decrease';
     minimumDetectableEffect: number; // percentage
   };
-  
+
   secondaryMetrics: Array<{
     name: string;
     type: 'conversion' | 'revenue' | 'engagement' | 'retention';
     goal: 'increase' | 'decrease';
   }>;
-  
+
   // Timing & Statistical Configuration
   startDate?: string;
   endDate?: string;
@@ -46,17 +46,17 @@ export interface Experiment {
   minSampleSize: number;
   statisticalPower: number; // 0.8 = 80%
   significanceLevel: number; // 0.05 = 95% confidence
-  
+
   // Feature Flag Integration
   featureFlag?: string; // Links to existing feature toggle
-  
+
   // Metadata
   owner: string;
   team: string;
   tags: string[];
   createdAt: string;
   updatedAt: string;
-  
+
   // Results (populated after completion)
   results?: ExperimentResults;
 }
@@ -77,29 +77,32 @@ export interface ExperimentResults {
   pValue: number;
   effectSize: number; // percentage lift
   statisticalPower: number;
-  
+
   // Winner Analysis
   winningVariant?: string;
   controlPerformance: number;
   bestVariantPerformance: number;
-  
+
   // Bayesian Analysis
   bayesianResults: {
-    posteriorDistributions: Record<string, {
-      alpha: number;
-      beta: number;
-      mean: number;
-      variance: number;
-    }>;
+    posteriorDistributions: Record<
+      string,
+      {
+        alpha: number;
+        beta: number;
+        mean: number;
+        variance: number;
+      }
+    >;
     probabilityOfBeingBest: Record<string, number>;
     expectedLoss: Record<string, number>;
     recommendedAction: 'ship' | 'continue' | 'stop';
   };
-  
+
   // Metrics Results
   primaryMetricResults: MetricResults;
   secondaryMetricResults: Record<string, MetricResults>;
-  
+
   // Business Impact
   estimatedRevenueImpact?: {
     dailyImpact: number;
@@ -107,19 +110,23 @@ export interface ExperimentResults {
     annualImpact: number;
     confidenceInterval: [number, number];
   };
-  
+
   // Sample Size & Traffic
   sampleSizes: Record<string, number>; // variant_id -> sample size
   conversionRates: Record<string, number>; // variant_id -> conversion rate
-  
+
   // Recommendations
   recommendation: {
-    action: 'ship_winner' | 'ship_control' | 'continue_test' | 'stop_inconclusive';
+    action:
+      | 'ship_winner'
+      | 'ship_control'
+      | 'continue_test'
+      | 'stop_inconclusive';
     reasoning: string;
     confidence: number;
     nextSteps: string[];
   };
-  
+
   lastUpdated: string;
 }
 
@@ -129,13 +136,16 @@ export interface MetricResults {
     sampleSize: number;
     standardError: number;
   };
-  variants: Record<string, {
-    value: number;
-    sampleSize: number;
-    standardError: number;
-    lift: number;
-    liftConfidenceInterval: [number, number];
-  }>;
+  variants: Record<
+    string,
+    {
+      value: number;
+      sampleSize: number;
+      standardError: number;
+      lift: number;
+      liftConfidenceInterval: [number, number];
+    }
+  >;
 }
 
 export interface ExperimentEvent {
@@ -164,7 +174,7 @@ class ExperimentEngine {
   private async initializeFromFirestore(): Promise<void> {
     try {
       const experiments = await firestoreABTesting.getAllExperiments();
-      experiments.forEach(exp => {
+      experiments.forEach((exp) => {
         this.experimentsCache.set(exp.id, exp);
       });
     } catch (error) {
@@ -173,21 +183,23 @@ class ExperimentEngine {
   }
 
   // Experiment Lifecycle Management
-  async createExperiment(experiment: Omit<Experiment, 'id' | 'createdAt' | 'updatedAt'>): Promise<Experiment> {
+  async createExperiment(
+    experiment: Omit<Experiment, 'id' | 'createdAt' | 'updatedAt'>,
+  ): Promise<Experiment> {
     const id = this.generateExperimentId();
     const now = new Date().toISOString();
-    
+
     const newExperiment: Experiment = {
       ...experiment,
       id,
       createdAt: now,
       updatedAt: now,
-      status: 'draft'
+      status: 'draft',
     };
 
     // Validate experiment configuration
     this.validateExperiment(newExperiment);
-    
+
     // Create associated feature flag if needed
     if (!newExperiment.featureFlag) {
       const featureKey = `experiment_${id}`;
@@ -197,10 +209,10 @@ class ExperimentEngine {
         enabled: false,
         rolloutStrategy: {
           type: 'percentage',
-          percentage: 0
+          percentage: 0,
         },
         owner: newExperiment.owner,
-        tags: ['experiment', 'ab_test', ...newExperiment.tags]
+        tags: ['experiment', 'ab_test', ...newExperiment.tags],
       });
       newExperiment.featureFlag = featureKey;
     }
@@ -208,7 +220,7 @@ class ExperimentEngine {
     // Save to Firestore
     await firestoreABTesting.saveExperiment(newExperiment);
     this.experimentsCache.set(id, newExperiment);
-    
+
     return newExperiment;
   }
 
@@ -223,7 +235,7 @@ class ExperimentEngine {
     if (experiment) {
       this.experimentsCache.set(experimentId, experiment);
     }
-    
+
     return experiment;
   }
 
@@ -240,16 +252,16 @@ class ExperimentEngine {
     // Activate feature flag
     if (experiment.featureFlag) {
       await featureToggleService.toggleFeature(
-        experiment.featureFlag, 
-        true, 
-        experiment.owner
+        experiment.featureFlag,
+        true,
+        experiment.owner,
       );
-      
+
       await featureToggleService.updateFeature(experiment.featureFlag, {
         rolloutStrategy: {
           type: 'percentage',
-          percentage: experiment.targetAudience.percentage
-        }
+          percentage: experiment.targetAudience.percentage,
+        },
       });
     }
 
@@ -257,11 +269,11 @@ class ExperimentEngine {
     const updates = {
       status: 'running' as const,
       startDate: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
+      updatedAt: new Date().toISOString(),
     };
 
     await firestoreABTesting.updateExperiment(experimentId, updates);
-    
+
     // Update cache
     const updatedExperiment = { ...experiment, ...updates };
     this.experimentsCache.set(experimentId, updatedExperiment);
@@ -276,9 +288,9 @@ class ExperimentEngine {
     // Deactivate feature flag
     if (experiment.featureFlag) {
       await featureToggleService.toggleFeature(
-        experiment.featureFlag, 
-        false, 
-        experiment.owner
+        experiment.featureFlag,
+        false,
+        experiment.owner,
       );
     }
 
@@ -289,20 +301,26 @@ class ExperimentEngine {
       status: 'completed' as const,
       endDate: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
-      results
+      results,
     };
 
     await firestoreABTesting.updateExperiment(experimentId, updates);
-    
+
     // Update cache
     const updatedExperiment = { ...experiment, ...updates };
     this.experimentsCache.set(experimentId, updatedExperiment);
   }
 
   // User Assignment & Variant Selection
-  async assignUserToExperiment(experimentId: string, userId: string): Promise<string | null> {
+  async assignUserToExperiment(
+    experimentId: string,
+    userId: string,
+  ): Promise<string | null> {
     // Check existing assignment first
-    const existingAssignment = await firestoreABTesting.getUserAssignment(userId, experimentId);
+    const existingAssignment = await firestoreABTesting.getUserAssignment(
+      userId,
+      experimentId,
+    );
     if (existingAssignment) {
       return existingAssignment;
     }
@@ -319,21 +337,21 @@ class ExperimentEngine {
 
     // Assign variant using consistent hashing
     const variantId = this.selectVariant(userId, experiment);
-    
+
     // Store assignment in Firestore
     await firestoreABTesting.assignUserToExperiment(
-      userId, 
-      experimentId, 
+      userId,
+      experimentId,
       variantId,
       this.getCurrentDeviceId(userId),
-      this.getCurrentSessionId(userId)
+      this.getCurrentSessionId(userId),
     );
-    
+
     // Update cache
     const userExperiments = this.userAssignmentsCache.get(userId) || {};
     userExperiments[experimentId] = variantId;
     this.userAssignmentsCache.set(userId, userExperiments);
-    
+
     // Track assignment event
     await this.trackEvent({
       experimentId,
@@ -342,10 +360,10 @@ class ExperimentEngine {
       sessionId: this.getCurrentSessionId(userId),
       eventType: 'assignment',
       eventData: {
-        timestamp: new Date().toISOString()
-      }
+        timestamp: new Date().toISOString(),
+      },
     });
-    
+
     return variantId;
   }
 
@@ -358,7 +376,7 @@ class ExperimentEngine {
     // Load from Firestore
     const assignments = await firestoreABTesting.getUserExperiments(userId);
     this.userAssignmentsCache.set(userId, assignments);
-    
+
     return assignments;
   }
 
@@ -370,13 +388,13 @@ class ExperimentEngine {
   async trackEvent(event: ExperimentEvent): Promise<void> {
     // Store in Firestore
     await firestoreABTesting.trackEvent(event);
-    
+
     // Update funnel analytics if applicable
     if (event.eventType === 'conversion' && event.eventData.metric) {
       funnelAnalytics.track(event.userId, event.eventData.metric, {
         experiment: event.experimentId,
         variant: event.variantId,
-        value: event.eventData.value
+        value: event.eventData.value,
       });
     }
   }
@@ -384,7 +402,8 @@ class ExperimentEngine {
   // Statistical Analysis & Results
   async calculateResults(experimentId: string): Promise<ExperimentResults> {
     // Check if results are cached in Firestore
-    const cachedResults = await firestoreABTesting.getExperimentResults(experimentId);
+    const cachedResults =
+      await firestoreABTesting.getExperimentResults(experimentId);
     if (cachedResults && this.isResultsCurrent(cachedResults)) {
       return cachedResults;
     }
@@ -396,76 +415,104 @@ class ExperimentEngine {
 
     // Get events from Firestore
     const events = await firestoreABTesting.getExperimentEvents(experimentId);
-    
+
     // Calculate sample sizes and conversion rates
     const sampleSizes: Record<string, number> = {};
     const conversions: Record<string, number> = {};
     const conversionRates: Record<string, number> = {};
 
     // Initialize counters
-    experiment.variants.forEach(variant => {
+    experiment.variants.forEach((variant) => {
       sampleSizes[variant.id] = 0;
       conversions[variant.id] = 0;
       conversionRates[variant.id] = 0;
     });
 
     // Count assignments and conversions
-    events.forEach(event => {
+    events.forEach((event) => {
       if (event.eventType === 'assignment') {
         sampleSizes[event.variantId] = (sampleSizes[event.variantId] || 0) + 1;
-      } else if (event.eventType === 'conversion' && event.eventData.metric === experiment.primaryMetric.name) {
+      } else if (
+        event.eventType === 'conversion' &&
+        event.eventData.metric === experiment.primaryMetric.name
+      ) {
         conversions[event.variantId] = (conversions[event.variantId] || 0) + 1;
       }
     });
 
     // Calculate conversion rates
-    Object.keys(sampleSizes).forEach(variantId => {
+    Object.keys(sampleSizes).forEach((variantId) => {
       if (sampleSizes[variantId] > 0) {
-        conversionRates[variantId] = conversions[variantId] / sampleSizes[variantId];
+        conversionRates[variantId] =
+          conversions[variantId] / sampleSizes[variantId];
       }
     });
 
     // Find control and best variant
-    const controlVariant = experiment.variants.find(v => v.isControl);
+    const controlVariant = experiment.variants.find((v) => v.isControl);
     const controlVariantId = controlVariant?.id || experiment.variants[0].id;
     const controlPerformance = conversionRates[controlVariantId] || 0;
 
-    const bestVariantId = Object.entries(conversionRates)
-      .reduce((best, [id, rate]) => rate > best.rate ? { id, rate } : best, 
-              { id: controlVariantId, rate: controlPerformance }).id;
+    const bestVariantId = Object.entries(conversionRates).reduce(
+      (best, [id, rate]) => (rate > best.rate ? { id, rate } : best),
+      { id: controlVariantId, rate: controlPerformance },
+    ).id;
     const bestVariantPerformance = conversionRates[bestVariantId] || 0;
 
     // Calculate effect size
-    const effectSize = controlPerformance > 0 
-      ? ((bestVariantPerformance - controlPerformance) / controlPerformance) * 100 
-      : 0;
+    const effectSize =
+      controlPerformance > 0
+        ? ((bestVariantPerformance - controlPerformance) / controlPerformance) *
+          100
+        : 0;
 
     // Simplified statistical significance (in practice, use proper statistical tests)
-    const totalSampleSize = Object.values(sampleSizes).reduce((sum, size) => sum + size, 0);
-    const isStatisticallySignificant = totalSampleSize >= experiment.minSampleSize && Math.abs(effectSize) >= experiment.primaryMetric.minimumDetectableEffect;
+    const totalSampleSize = Object.values(sampleSizes).reduce(
+      (sum, size) => sum + size,
+      0,
+    );
+    const isStatisticallySignificant =
+      totalSampleSize >= experiment.minSampleSize &&
+      Math.abs(effectSize) >= experiment.primaryMetric.minimumDetectableEffect;
 
     // Bayesian analysis (simplified)
-    const bayesianResults = this.performBayesianAnalysis(conversionRates, sampleSizes);
+    const bayesianResults = this.performBayesianAnalysis(
+      conversionRates,
+      sampleSizes,
+    );
 
     // Primary metric results
     const primaryMetricResults: MetricResults = {
       control: {
         value: controlPerformance,
         sampleSize: sampleSizes[controlVariantId] || 0,
-        standardError: this.calculateStandardError(controlPerformance, sampleSizes[controlVariantId] || 0)
+        standardError: this.calculateStandardError(
+          controlPerformance,
+          sampleSizes[controlVariantId] || 0,
+        ),
       },
-      variants: {}
+      variants: {},
     };
 
-    experiment.variants.filter(v => !v.isControl).forEach(variant => {
-      primaryMetricResults.variants[variant.id] = {
-        value: conversionRates[variant.id] || 0,
-        sampleSize: sampleSizes[variant.id] || 0,
-        standardError: this.calculateStandardError(conversionRates[variant.id] || 0, sampleSizes[variant.id] || 0),
-        lift: controlPerformance > 0 ? ((conversionRates[variant.id] || 0) - controlPerformance) / controlPerformance * 100 : 0,
-        liftConfidenceInterval: [0, 0] // Simplified
-      };
-    });
+    experiment.variants
+      .filter((v) => !v.isControl)
+      .forEach((variant) => {
+        primaryMetricResults.variants[variant.id] = {
+          value: conversionRates[variant.id] || 0,
+          sampleSize: sampleSizes[variant.id] || 0,
+          standardError: this.calculateStandardError(
+            conversionRates[variant.id] || 0,
+            sampleSizes[variant.id] || 0,
+          ),
+          lift:
+            controlPerformance > 0
+              ? (((conversionRates[variant.id] || 0) - controlPerformance) /
+                  controlPerformance) *
+                100
+              : 0,
+          liftConfidenceInterval: [0, 0], // Simplified
+        };
+      });
 
     // Generate recommendation
     const recommendation = this.generateRecommendation(
@@ -473,7 +520,7 @@ class ExperimentEngine {
       effectSize,
       bestVariantId,
       controlVariantId,
-      experiment
+      experiment,
     );
 
     const results: ExperimentResults = {
@@ -491,7 +538,7 @@ class ExperimentEngine {
       sampleSizes,
       conversionRates,
       recommendation,
-      lastUpdated: new Date().toISOString()
+      lastUpdated: new Date().toISOString(),
     };
 
     // Cache results in Firestore
@@ -509,8 +556,14 @@ class ExperimentEngine {
     return await firestoreABTesting.getRunningExperiments();
   }
 
-  async getExperimentsByDateRange(startDate: string, endDate: string): Promise<Experiment[]> {
-    return await firestoreABTesting.getExperimentsByDateRange(startDate, endDate);
+  async getExperimentsByDateRange(
+    startDate: string,
+    endDate: string,
+  ): Promise<Experiment[]> {
+    return await firestoreABTesting.getExperimentsByDateRange(
+      startDate,
+      endDate,
+    );
   }
 
   // Utility Methods
@@ -527,12 +580,15 @@ class ExperimentEngine {
       throw new Error('Experiment must have at least 2 variants');
     }
 
-    const totalAllocation = experiment.variants.reduce((sum, v) => sum + v.trafficAllocation, 0);
+    const totalAllocation = experiment.variants.reduce(
+      (sum, v) => sum + v.trafficAllocation,
+      0,
+    );
     if (Math.abs(totalAllocation - 100) > 0.01) {
       throw new Error('Variant traffic allocation must sum to 100%');
     }
 
-    const controlVariants = experiment.variants.filter(v => v.isControl);
+    const controlVariants = experiment.variants.filter((v) => v.isControl);
     if (controlVariants.length !== 1) {
       throw new Error('Experiment must have exactly one control variant');
     }
@@ -542,14 +598,14 @@ class ExperimentEngine {
     // Hash user ID to determine if they're in the target percentage
     const hash = this.hashString(userId + experiment.id);
     const userPercentile = (hash % 10000) / 100; // 0-99.99
-    
+
     return userPercentile < experiment.targetAudience.percentage;
   }
 
   private selectVariant(userId: string, experiment: Experiment): string {
     const hash = this.hashString(userId + experiment.id + 'variant');
     const randomValue = (hash % 10000) / 100; // 0-99.99
-    
+
     let cumulativeAllocation = 0;
     for (const variant of experiment.variants) {
       cumulativeAllocation += variant.trafficAllocation;
@@ -557,7 +613,7 @@ class ExperimentEngine {
         return variant.id;
       }
     }
-    
+
     // Fallback to first variant
     return experiment.variants[0].id;
   }
@@ -566,7 +622,7 @@ class ExperimentEngine {
     let hash = 0;
     for (let i = 0; i < str.length; i++) {
       const char = str.charCodeAt(i);
-      hash = ((hash << 5) - hash) + char;
+      hash = (hash << 5) - hash + char;
       hash = hash & hash; // Convert to 32-bit integer
     }
     return Math.abs(hash);
@@ -583,14 +639,15 @@ class ExperimentEngine {
   private isResultsCurrent(results: ExperimentResults): boolean {
     const lastUpdated = new Date(results.lastUpdated);
     const now = new Date();
-    const hoursSinceUpdate = (now.getTime() - lastUpdated.getTime()) / (1000 * 60 * 60);
-    
+    const hoursSinceUpdate =
+      (now.getTime() - lastUpdated.getTime()) / (1000 * 60 * 60);
+
     return hoursSinceUpdate < 1; // Results are current if updated within last hour
   }
 
   private performBayesianAnalysis(
     conversionRates: Record<string, number>,
-    sampleSizes: Record<string, number>
+    sampleSizes: Record<string, number>,
   ): ExperimentResults['bayesianResults'] {
     const posteriorDistributions: Record<string, any> = {};
     const probabilityOfBeingBest: Record<string, number> = {};
@@ -601,22 +658,23 @@ class ExperimentEngine {
       const sampleSize = sampleSizes[variantId] || 0;
       const successes = Math.round(rate * sampleSize);
       const failures = sampleSize - successes;
-      
+
       // Beta(α, β) where α = successes + 1, β = failures + 1 (uniform prior)
       const alpha = successes + 1;
       const beta = failures + 1;
-      
+
       posteriorDistributions[variantId] = {
         alpha,
         beta,
         mean: alpha / (alpha + beta),
-        variance: (alpha * beta) / ((alpha + beta) ** 2 * (alpha + beta + 1))
+        variance: (alpha * beta) / ((alpha + beta) ** 2 * (alpha + beta + 1)),
       };
     });
 
     // Calculate probability of being best (simplified)
-    Object.keys(conversionRates).forEach(variantId => {
-      probabilityOfBeingBest[variantId] = 1 / Object.keys(conversionRates).length; // Simplified
+    Object.keys(conversionRates).forEach((variantId) => {
+      probabilityOfBeingBest[variantId] =
+        1 / Object.keys(conversionRates).length; // Simplified
       expectedLoss[variantId] = 0; // Simplified
     });
 
@@ -624,7 +682,7 @@ class ExperimentEngine {
       posteriorDistributions,
       probabilityOfBeingBest,
       expectedLoss,
-      recommendedAction: 'continue' // Simplified
+      recommendedAction: 'continue', // Simplified
     };
   }
 
@@ -638,31 +696,33 @@ class ExperimentEngine {
     effectSize: number,
     bestVariantId: string,
     controlVariantId: string,
-    experiment: Experiment
+    experiment: Experiment,
   ): ExperimentResults['recommendation'] {
     if (!isSignificant) {
       return {
         action: 'continue_test',
-        reasoning: 'Experiment has not yet reached statistical significance. Continue running to gather more data.',
+        reasoning:
+          'Experiment has not yet reached statistical significance. Continue running to gather more data.',
         confidence: 0.6,
         nextSteps: [
           'Continue running the experiment',
           'Monitor for statistical significance',
-          'Ensure sufficient sample size is being collected'
-        ]
+          'Ensure sufficient sample size is being collected',
+        ],
       };
     }
 
     if (bestVariantId === controlVariantId) {
       return {
         action: 'ship_control',
-        reasoning: 'Control variant is performing best with statistical significance.',
+        reasoning:
+          'Control variant is performing best with statistical significance.',
         confidence: 0.9,
         nextSteps: [
           'Maintain current implementation',
           'Document learnings from the experiment',
-          'Consider testing alternative approaches'
-        ]
+          'Consider testing alternative approaches',
+        ],
       };
     }
 
@@ -674,20 +734,21 @@ class ExperimentEngine {
         nextSteps: [
           'Implement the winning variant',
           'Monitor post-implementation metrics',
-          'Plan follow-up experiments to optimize further'
-        ]
+          'Plan follow-up experiments to optimize further',
+        ],
       };
     }
 
     return {
       action: 'stop_inconclusive',
-      reasoning: 'While statistically significant, the effect size is below the minimum detectable effect threshold.',
+      reasoning:
+        'While statistically significant, the effect size is below the minimum detectable effect threshold.',
       confidence: 0.7,
       nextSteps: [
         'Stop the experiment',
         'Analyze why effect size was smaller than expected',
-        'Design follow-up experiments with larger potential impact'
-      ]
+        'Design follow-up experiments with larger potential impact',
+      ],
     };
   }
 }

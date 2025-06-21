@@ -23,20 +23,20 @@ export interface TemplateVersion {
   minorVersion: number;
   patchVersion: number;
   prerelease?: string; // e.g., "beta.1", "alpha.2"
-  
+
   // Version metadata
   createdAt: Timestamp;
   createdBy: string; // creator userId
   status: 'draft' | 'published' | 'deprecated' | 'archived';
-  
+
   // Template content (extends LegalDocument)
   document: LegalDocument;
-  
+
   // Change tracking
   changelog: ChangelogEntry[];
   breaking: boolean; // true if this version has breaking changes
   compatibility: CompatibilityInfo;
-  
+
   // Quality metrics
   validationResults?: ValidationResult[];
   testResults?: TestResult[];
@@ -97,7 +97,7 @@ export interface TestResult {
  */
 export interface MarketplaceTemplate {
   id: string;
-  
+
   // Template identity
   name: string;
   slug: string; // URL-friendly identifier
@@ -105,39 +105,39 @@ export interface MarketplaceTemplate {
   translations?: {
     [lang: string]: LocalizedText;
   };
-  
+
   // Creator information
   createdBy: string; // userId of template creator
   creatorProfile: CreatorProfile;
   maintainers: string[]; // additional userIds who can update
-  
+
   // Template metadata
   category: string;
   tags: string[];
   jurisdiction: string;
   states?: string[] | 'all';
   languageSupport: string[];
-  
+
   // Marketplace-specific fields
   visibility: 'public' | 'private' | 'unlisted';
   pricing: TemplatePricing;
   licenseType: 'free' | 'premium' | 'commercial';
-  
+
   // Version management
   currentVersion: SemanticVersion;
   latestVersionId: string;
   versions: string[]; // array of version IDs
-  
+
   // Community metrics
   stats: TemplateStats;
   ratings: RatingsSummary;
-  
+
   // Marketplace metadata
   publishedAt?: Timestamp;
   lastUpdated: Timestamp;
   featured: boolean;
   verified: boolean; // official verification badge
-  
+
   // Moderation
   moderationStatus: 'pending' | 'approved' | 'rejected' | 'flagged';
   moderatedBy?: string;
@@ -156,13 +156,13 @@ export interface CreatorProfile {
   website?: string;
   verified: boolean;
   badges: CreatorBadge[];
-  
+
   // Creator stats
   totalTemplates: number;
   totalDownloads: number;
   totalRevenue: number;
   averageRating: number;
-  
+
   // Professional info (optional)
   credentials?: string[];
   specializations?: string[];
@@ -188,18 +188,18 @@ export interface TemplatePricing {
   type: 'free' | 'one-time' | 'subscription' | 'usage-based';
   basePrice: number; // in cents
   currency: string;
-  
+
   // Subscription pricing (if applicable)
   subscriptionInterval?: 'month' | 'year';
-  
+
   // Usage-based pricing (if applicable)
   pricePerUse?: number;
   freeUsageLimit?: number;
-  
+
   // Revenue sharing
   creatorShare: number; // percentage (0-100)
   platformFee: number; // percentage (0-100)
-  
+
   // Promotional pricing
   discountedPrice?: number;
   discountExpiry?: Timestamp;
@@ -214,22 +214,22 @@ export interface TemplateStats {
   totalInstalls: number;
   totalRevenue: number;
   uniqueUsers: number;
-  
+
   // Time-based metrics
   downloadsThisMonth: number;
   downloadsThisWeek: number;
   revenueThisMonth: number;
-  
+
   // Quality metrics
   totalRatings: number;
   averageRating: number;
   completionRate: number; // percentage of users who complete documents
-  
+
   // Engagement metrics
   forkCount: number; // how many times template was forked/customized
   favoriteCount: number;
   reportCount: number;
-  
+
   // Version metrics
   versionCount: number;
   lastVersionDate: Timestamp;
@@ -242,7 +242,7 @@ export interface TemplateStats {
 export interface RatingsSummary {
   averageRating: number;
   totalRatings: number;
-  
+
   // Rating distribution
   ratingDistribution: {
     5: number;
@@ -251,7 +251,7 @@ export interface RatingsSummary {
     2: number;
     1: number;
   };
-  
+
   // Recent ratings trend
   recentTrend: 'improving' | 'declining' | 'stable';
   trendChange: number; // percentage change
@@ -264,25 +264,25 @@ export interface TemplateReview {
   id: string;
   templateId: string;
   templateVersion: SemanticVersion;
-  
+
   // Review content
   rating: 1 | 2 | 3 | 4 | 5;
   title?: string;
   comment?: string;
   pros?: string[];
   cons?: string[];
-  
+
   // Reviewer information
   reviewerId: string;
   reviewerName?: string; // anonymized if preferred
   verified: boolean; // verified purchase/usage
-  
+
   // Review metadata
   createdAt: Timestamp;
   updatedAt?: Timestamp;
   helpful: number; // helpful votes count
   notHelpful: number; // not helpful votes count
-  
+
   // Moderation
   flagged: boolean;
   flaggedReasons?: string[];
@@ -297,26 +297,26 @@ export interface TemplateInstallation {
   userId: string;
   templateId: string;
   templateVersion: SemanticVersion;
-  
+
   // Installation details
   installedAt: Timestamp;
   installationType: 'free' | 'purchased' | 'trial' | 'subscription';
-  
+
   // Payment information (if applicable)
   paymentId?: string;
   amountPaid?: number;
   currency?: string;
-  
+
   // Usage tracking
   firstUsed?: Timestamp;
   lastUsed?: Timestamp;
   usageCount: number;
   documentsGenerated: number;
-  
+
   // Installation status
   status: 'active' | 'expired' | 'cancelled' | 'refunded';
   expiresAt?: Timestamp;
-  
+
   // User feedback
   satisfactionRating?: 1 | 2 | 3 | 4 | 5;
   recommendationLikelihood?: number; // 0-10 NPS score
@@ -342,7 +342,13 @@ export interface MarketplaceSearchFilters {
   createdBy?: string;
   verified?: boolean;
   featured?: boolean;
-  sortBy?: 'relevance' | 'rating' | 'downloads' | 'price' | 'newest' | 'updated';
+  sortBy?:
+    | 'relevance'
+    | 'rating'
+    | 'downloads'
+    | 'price'
+    | 'newest'
+    | 'updated';
   sortOrder?: 'asc' | 'desc';
 }
 
@@ -365,16 +371,16 @@ export interface TemplateFork {
   originalVersion: SemanticVersion;
   forkedBy: string;
   forkedAt: Timestamp;
-  
+
   // Fork details
   name: string;
   description?: string;
   visibility: 'private' | 'public';
-  
+
   // Customizations made
   changes: ChangelogEntry[];
   customFields?: Record<string, any>;
-  
+
   // Fork status
   status: 'draft' | 'published' | 'archived';
   parentSync: boolean; // whether fork stays synced with original
@@ -389,24 +395,24 @@ export interface TemplateCollection {
   name: string;
   description: string;
   createdBy: string;
-  
+
   // Collection content
   templateIds: string[];
   templateVersions: { [templateId: string]: SemanticVersion };
-  
+
   // Collection metadata
   category: string;
   tags: string[];
   featured: boolean;
-  
+
   // Pricing (if different from individual templates)
   bundlePrice?: number;
   discount?: number; // percentage discount from individual prices
-  
+
   // Collection stats
   downloadCount: number;
   rating: number;
-  
+
   // Timestamps
   createdAt: Timestamp;
   updatedAt: Timestamp;
@@ -418,17 +424,17 @@ export interface TemplateCollection {
 
 /**
  * Firestore collections for Template Marketplace:
- * 
+ *
  * /marketplace-templates/{templateId}
  * /marketplace-templates/{templateId}/versions/{versionId}
  * /marketplace-templates/{templateId}/reviews/{reviewId}
  * /marketplace-templates/{templateId}/installations/{installationId}
  * /marketplace-templates/{templateId}/forks/{forkId}
- * 
+ *
  * /template-collections/{collectionId}
  * /creator-profiles/{userId}
  * /marketplace-stats/{templateId}
- * 
+ *
  * User-scoped:
  * /users/{userId}/installed-templates/{templateId}
  * /users/{userId}/template-purchases/{purchaseId}

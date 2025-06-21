@@ -5,7 +5,15 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { X, Clock, CheckCircle, XCircle, RefreshCw, Eye, Copy } from 'lucide-react';
+import {
+  X,
+  Clock,
+  CheckCircle,
+  XCircle,
+  RefreshCw,
+  Eye,
+  Copy,
+} from 'lucide-react';
 
 interface WebhookSubscription {
   id: string;
@@ -56,12 +64,17 @@ interface WebhookDetailsModalProps {
   onUpdate: () => void;
 }
 
-export function WebhookDetailsModal({ webhook, onClose, onUpdate }: WebhookDetailsModalProps) {
+export function WebhookDetailsModal({
+  webhook,
+  onClose,
+  onUpdate,
+}: WebhookDetailsModalProps) {
   const [deliveries, setDeliveries] = useState<WebhookDelivery[]>([]);
   const [deliveryStats, setDeliveryStats] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [selectedDelivery, setSelectedDelivery] = useState<WebhookDelivery | null>(null);
+  const [selectedDelivery, setSelectedDelivery] =
+    useState<WebhookDelivery | null>(null);
 
   useEffect(() => {
     fetchDeliveryHistory();
@@ -70,7 +83,9 @@ export function WebhookDetailsModal({ webhook, onClose, onUpdate }: WebhookDetai
   const fetchDeliveryHistory = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`/api/webhooks/${webhook.id}/deliveries?limit=50`);
+      const response = await fetch(
+        `/api/webhooks/${webhook.id}/deliveries?limit=50`,
+      );
       const data = await response.json();
 
       if (!response.ok) {
@@ -90,7 +105,7 @@ export function WebhookDetailsModal({ webhook, onClose, onUpdate }: WebhookDetai
   const handleTestWebhook = async () => {
     try {
       const response = await fetch(`/api/webhooks/${webhook.id}/test`, {
-        method: 'POST'
+        method: 'POST',
       });
 
       const data = await response.json();
@@ -157,7 +172,9 @@ export function WebhookDetailsModal({ webhook, onClose, onUpdate }: WebhookDetai
                   {webhook.isActive ? 'Active' : 'Inactive'}
                 </Badge>
               </CardTitle>
-              <p className="text-sm text-muted-foreground mt-1">{webhook.url}</p>
+              <p className="text-sm text-muted-foreground mt-1">
+                {webhook.url}
+              </p>
             </div>
             <div className="flex items-center gap-2">
               <Button variant="outline" size="sm" onClick={handleTestWebhook}>
@@ -169,7 +186,7 @@ export function WebhookDetailsModal({ webhook, onClose, onUpdate }: WebhookDetai
             </div>
           </div>
         </CardHeader>
-        
+
         <CardContent>
           <Tabs defaultValue="overview" className="space-y-4">
             <TabsList>
@@ -183,16 +200,22 @@ export function WebhookDetailsModal({ webhook, onClose, onUpdate }: WebhookDetai
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <Card>
                   <CardHeader className="pb-2">
-                    <CardTitle className="text-sm font-medium">Total Deliveries</CardTitle>
+                    <CardTitle className="text-sm font-medium">
+                      Total Deliveries
+                    </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-bold">{webhook.deliveryStats.totalDeliveries}</div>
+                    <div className="text-2xl font-bold">
+                      {webhook.deliveryStats.totalDeliveries}
+                    </div>
                   </CardContent>
                 </Card>
-                
+
                 <Card>
                   <CardHeader className="pb-2">
-                    <CardTitle className="text-sm font-medium">Successful</CardTitle>
+                    <CardTitle className="text-sm font-medium">
+                      Successful
+                    </CardTitle>
                   </CardHeader>
                   <CardContent>
                     <div className="text-2xl font-bold text-green-600">
@@ -203,7 +226,9 @@ export function WebhookDetailsModal({ webhook, onClose, onUpdate }: WebhookDetai
 
                 <Card>
                   <CardHeader className="pb-2">
-                    <CardTitle className="text-sm font-medium">Failed</CardTitle>
+                    <CardTitle className="text-sm font-medium">
+                      Failed
+                    </CardTitle>
                   </CardHeader>
                   <CardContent>
                     <div className="text-2xl font-bold text-red-600">
@@ -214,14 +239,20 @@ export function WebhookDetailsModal({ webhook, onClose, onUpdate }: WebhookDetai
 
                 <Card>
                   <CardHeader className="pb-2">
-                    <CardTitle className="text-sm font-medium">Success Rate</CardTitle>
+                    <CardTitle className="text-sm font-medium">
+                      Success Rate
+                    </CardTitle>
                   </CardHeader>
                   <CardContent>
                     <div className="text-2xl font-bold">
                       {webhook.deliveryStats.totalDeliveries > 0
-                        ? Math.round((webhook.deliveryStats.successfulDeliveries / webhook.deliveryStats.totalDeliveries) * 100)
-                        : 0
-                      }%
+                        ? Math.round(
+                            (webhook.deliveryStats.successfulDeliveries /
+                              webhook.deliveryStats.totalDeliveries) *
+                              100,
+                          )
+                        : 0}
+                      %
                     </div>
                   </CardContent>
                 </Card>
@@ -260,11 +291,16 @@ export function WebhookDetailsModal({ webhook, onClose, onUpdate }: WebhookDetai
                   ) : (
                     <div className="space-y-2">
                       {deliveries.slice(0, 5).map((delivery) => (
-                        <div key={delivery.id} className="flex items-center justify-between p-3 border rounded-lg">
+                        <div
+                          key={delivery.id}
+                          className="flex items-center justify-between p-3 border rounded-lg"
+                        >
                           <div className="flex items-center gap-3">
                             {getStatusIcon(delivery.status)}
                             <div>
-                              <p className="font-medium">{delivery.eventType}</p>
+                              <p className="font-medium">
+                                {delivery.eventType}
+                              </p>
                               <p className="text-sm text-muted-foreground">
                                 {formatDate(delivery.createdAt)}
                               </p>
@@ -299,26 +335,40 @@ export function WebhookDetailsModal({ webhook, onClose, onUpdate }: WebhookDetai
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                       <Card>
                         <CardContent className="pt-6">
-                          <div className="text-2xl font-bold">{deliveryStats.total}</div>
+                          <div className="text-2xl font-bold">
+                            {deliveryStats.total}
+                          </div>
                           <p className="text-xs text-muted-foreground">Total</p>
                         </CardContent>
                       </Card>
                       <Card>
                         <CardContent className="pt-6">
-                          <div className="text-2xl font-bold text-green-600">{deliveryStats.successful}</div>
-                          <p className="text-xs text-muted-foreground">Successful</p>
+                          <div className="text-2xl font-bold text-green-600">
+                            {deliveryStats.successful}
+                          </div>
+                          <p className="text-xs text-muted-foreground">
+                            Successful
+                          </p>
                         </CardContent>
                       </Card>
                       <Card>
                         <CardContent className="pt-6">
-                          <div className="text-2xl font-bold text-red-600">{deliveryStats.failed}</div>
-                          <p className="text-xs text-muted-foreground">Failed</p>
+                          <div className="text-2xl font-bold text-red-600">
+                            {deliveryStats.failed}
+                          </div>
+                          <p className="text-xs text-muted-foreground">
+                            Failed
+                          </p>
                         </CardContent>
                       </Card>
                       <Card>
                         <CardContent className="pt-6">
-                          <div className="text-2xl font-bold text-yellow-600">{deliveryStats.retrying}</div>
-                          <p className="text-xs text-muted-foreground">Retrying</p>
+                          <div className="text-2xl font-bold text-yellow-600">
+                            {deliveryStats.retrying}
+                          </div>
+                          <p className="text-xs text-muted-foreground">
+                            Retrying
+                          </p>
                         </CardContent>
                       </Card>
                     </div>
@@ -326,17 +376,23 @@ export function WebhookDetailsModal({ webhook, onClose, onUpdate }: WebhookDetai
 
                   <div className="space-y-2">
                     {deliveries.map((delivery) => (
-                      <Card key={delivery.id} className="cursor-pointer hover:shadow-md transition-shadow"
-                            onClick={() => setSelectedDelivery(delivery)}>
+                      <Card
+                        key={delivery.id}
+                        className="cursor-pointer hover:shadow-md transition-shadow"
+                        onClick={() => setSelectedDelivery(delivery)}
+                      >
                         <CardContent className="p-4">
                           <div className="flex items-center justify-between">
                             <div className="flex items-center gap-3">
                               {getStatusIcon(delivery.status)}
                               <div>
-                                <p className="font-medium">{delivery.eventType}</p>
+                                <p className="font-medium">
+                                  {delivery.eventType}
+                                </p>
                                 <p className="text-sm text-muted-foreground">
                                   {formatDate(delivery.createdAt)}
-                                  {delivery.deliveredAt && ` • Delivered: ${formatDate(delivery.deliveredAt)}`}
+                                  {delivery.deliveredAt &&
+                                    ` • Delivered: ${formatDate(delivery.deliveredAt)}`}
                                 </p>
                               </div>
                             </div>
@@ -380,8 +436,14 @@ export function WebhookDetailsModal({ webhook, onClose, onUpdate }: WebhookDetai
                     <div>
                       <p className="text-sm font-medium">Webhook ID</p>
                       <div className="flex items-center gap-2">
-                        <code className="text-xs bg-muted px-2 py-1 rounded">{webhook.id}</code>
-                        <Button variant="ghost" size="sm" onClick={() => copyToClipboard(webhook.id)}>
+                        <code className="text-xs bg-muted px-2 py-1 rounded">
+                          {webhook.id}
+                        </code>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => copyToClipboard(webhook.id)}
+                        >
                           <Copy className="h-3 w-3" />
                         </Button>
                       </div>
@@ -389,22 +451,32 @@ export function WebhookDetailsModal({ webhook, onClose, onUpdate }: WebhookDetai
                     <div>
                       <p className="text-sm font-medium">URL</p>
                       <div className="flex items-center gap-2">
-                        <code className="text-xs bg-muted px-2 py-1 rounded break-all">{webhook.url}</code>
-                        <Button variant="ghost" size="sm" onClick={() => copyToClipboard(webhook.url)}>
+                        <code className="text-xs bg-muted px-2 py-1 rounded break-all">
+                          {webhook.url}
+                        </code>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => copyToClipboard(webhook.url)}
+                        >
                           <Copy className="h-3 w-3" />
                         </Button>
                       </div>
                     </div>
                     <div>
                       <p className="text-sm font-medium">Status</p>
-                      <Badge variant={webhook.isActive ? 'default' : 'secondary'}>
+                      <Badge
+                        variant={webhook.isActive ? 'default' : 'secondary'}
+                      >
                         {webhook.isActive ? 'Active' : 'Inactive'}
                       </Badge>
                     </div>
                     {webhook.organizationId && (
                       <div>
                         <p className="text-sm font-medium">Organization ID</p>
-                        <code className="text-xs bg-muted px-2 py-1 rounded">{webhook.organizationId}</code>
+                        <code className="text-xs bg-muted px-2 py-1 rounded">
+                          {webhook.organizationId}
+                        </code>
                       </div>
                     )}
                   </CardContent>
@@ -417,15 +489,21 @@ export function WebhookDetailsModal({ webhook, onClose, onUpdate }: WebhookDetai
                   <CardContent className="space-y-3">
                     <div>
                       <p className="text-sm font-medium">Max Retries</p>
-                      <p className="text-sm text-muted-foreground">{webhook.retryPolicy.maxRetries}</p>
+                      <p className="text-sm text-muted-foreground">
+                        {webhook.retryPolicy.maxRetries}
+                      </p>
                     </div>
                     <div>
                       <p className="text-sm font-medium">Backoff Multiplier</p>
-                      <p className="text-sm text-muted-foreground">{webhook.retryPolicy.backoffMultiplier}x</p>
+                      <p className="text-sm text-muted-foreground">
+                        {webhook.retryPolicy.backoffMultiplier}x
+                      </p>
                     </div>
                     <div>
                       <p className="text-sm font-medium">Max Backoff</p>
-                      <p className="text-sm text-muted-foreground">{webhook.retryPolicy.maxBackoffSeconds}s</p>
+                      <p className="text-sm text-muted-foreground">
+                        {webhook.retryPolicy.maxBackoffSeconds}s
+                      </p>
                     </div>
                   </CardContent>
                 </Card>
@@ -437,16 +515,22 @@ export function WebhookDetailsModal({ webhook, onClose, onUpdate }: WebhookDetai
                   <CardContent className="space-y-3">
                     <div>
                       <p className="text-sm font-medium">Created</p>
-                      <p className="text-sm text-muted-foreground">{formatDate(webhook.createdAt)}</p>
+                      <p className="text-sm text-muted-foreground">
+                        {formatDate(webhook.createdAt)}
+                      </p>
                     </div>
                     <div>
                       <p className="text-sm font-medium">Last Updated</p>
-                      <p className="text-sm text-muted-foreground">{formatDate(webhook.updatedAt)}</p>
+                      <p className="text-sm text-muted-foreground">
+                        {formatDate(webhook.updatedAt)}
+                      </p>
                     </div>
                     {webhook.lastDeliveryAt && (
                       <div>
                         <p className="text-sm font-medium">Last Delivery</p>
-                        <p className="text-sm text-muted-foreground">{formatDate(webhook.lastDeliveryAt)}</p>
+                        <p className="text-sm text-muted-foreground">
+                          {formatDate(webhook.lastDeliveryAt)}
+                        </p>
                       </div>
                     )}
                   </CardContent>
@@ -464,7 +548,11 @@ export function WebhookDetailsModal({ webhook, onClose, onUpdate }: WebhookDetai
             <CardHeader>
               <div className="flex items-center justify-between">
                 <CardTitle>Delivery Details</CardTitle>
-                <Button variant="ghost" size="icon" onClick={() => setSelectedDelivery(null)}>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => setSelectedDelivery(null)}
+                >
                   <X className="h-4 w-4" />
                 </Button>
               </div>
@@ -473,7 +561,9 @@ export function WebhookDetailsModal({ webhook, onClose, onUpdate }: WebhookDetai
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <p className="text-sm font-medium">Event Type</p>
-                  <p className="text-sm text-muted-foreground">{selectedDelivery.eventType}</p>
+                  <p className="text-sm text-muted-foreground">
+                    {selectedDelivery.eventType}
+                  </p>
                 </div>
                 <div>
                   <p className="text-sm font-medium">Status</p>
@@ -486,11 +576,15 @@ export function WebhookDetailsModal({ webhook, onClose, onUpdate }: WebhookDetai
                 </div>
                 <div>
                   <p className="text-sm font-medium">Attempts</p>
-                  <p className="text-sm text-muted-foreground">{selectedDelivery.attempts}</p>
+                  <p className="text-sm text-muted-foreground">
+                    {selectedDelivery.attempts}
+                  </p>
                 </div>
                 <div>
                   <p className="text-sm font-medium">Status Code</p>
-                  <p className="text-sm text-muted-foreground">{selectedDelivery.statusCode || 'N/A'}</p>
+                  <p className="text-sm text-muted-foreground">
+                    {selectedDelivery.statusCode || 'N/A'}
+                  </p>
                 </div>
               </div>
 

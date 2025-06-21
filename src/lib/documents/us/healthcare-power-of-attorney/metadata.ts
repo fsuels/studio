@@ -24,7 +24,8 @@ export const healthcarePowerOfAttorneyMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Healthcare Power of Attorney',
-      description: 'Appoint an agent to make healthcare decisions if you cannot.',
+      description:
+        'Appoint an agent to make healthcare decisions if you cannot.',
       aliases: [
         'medical poa',
         'healthcare proxy',

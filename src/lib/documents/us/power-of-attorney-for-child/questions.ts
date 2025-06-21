@@ -42,23 +42,23 @@ export const questions: Question[] = [
   },
   {
     id: 'childName',
-    label: 'Child\'s Full Name',
+    label: "Child's Full Name",
     type: 'text',
     required: true,
-    placeholder: 'Enter child\'s full legal name',
+    placeholder: "Enter child's full legal name",
   },
   {
     id: 'childDateOfBirth',
-    label: 'Child\'s Date of Birth',
+    label: "Child's Date of Birth",
     type: 'date',
     required: true,
   },
   {
     id: 'childAddress',
-    label: 'Child\'s Address',
+    label: "Child's Address",
     type: 'textarea',
     required: true,
-    placeholder: 'Child\'s current address',
+    placeholder: "Child's current address",
   },
   {
     id: 'additionalChildren',
@@ -89,7 +89,7 @@ export const questions: Question[] = [
   },
   {
     id: 'agentRelationship',
-    label: 'Agent\'s Relationship to Child',
+    label: "Agent's Relationship to Child",
     type: 'text',
     required: true,
     placeholder: 'e.g., grandparent, aunt, uncle, family friend',
@@ -129,7 +129,8 @@ export const questions: Question[] = [
     label: 'Purpose/Reason for This Authority',
     type: 'textarea',
     required: true,
-    placeholder: 'Explain why this POA is needed (travel, temporary care, etc.)',
+    placeholder:
+      'Explain why this POA is needed (travel, temporary care, etc.)',
   },
   {
     id: 'medicalCareAuthority',
@@ -214,17 +215,18 @@ export const questions: Question[] = [
     id: 'specificRestrictions',
     label: 'Specific Restrictions (Optional)',
     type: 'textarea',
-    placeholder: 'Any limitations or restrictions on the agent\'s authority',
+    placeholder: "Any limitations or restrictions on the agent's authority",
   },
   {
     id: 'medicalInformation',
     label: 'Important Medical Information (Optional)',
     type: 'textarea',
-    placeholder: 'Any medical conditions or health information the agent should know',
+    placeholder:
+      'Any medical conditions or health information the agent should know',
   },
   {
     id: 'allergies',
-    label: 'Child\'s Allergies (Optional)',
+    label: "Child's Allergies (Optional)",
     type: 'textarea',
     placeholder: 'List any allergies the child has',
   },
@@ -238,19 +240,19 @@ export const questions: Question[] = [
     id: 'primaryPhysician',
     label: 'Primary Physician Name (Optional)',
     type: 'text',
-    placeholder: 'Child\'s primary doctor',
+    placeholder: "Child's primary doctor",
   },
   {
     id: 'primaryPhysicianPhone',
     label: 'Primary Physician Phone (Optional)',
     type: 'text',
-    placeholder: 'Phone number for child\'s primary doctor',
+    placeholder: "Phone number for child's primary doctor",
   },
   {
     id: 'insurance',
     label: 'Insurance Provider (Optional)',
     type: 'text',
-    placeholder: 'Child\'s health insurance provider',
+    placeholder: "Child's health insurance provider",
   },
   {
     id: 'insurancePolicyNumber',

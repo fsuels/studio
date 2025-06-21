@@ -1,16 +1,22 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { 
-  Activity, 
-  CheckCircle2, 
-  AlertCircle, 
-  Clock, 
+import {
+  Activity,
+  CheckCircle2,
+  AlertCircle,
+  Clock,
   ExternalLink,
-  TrendingUp
+  TrendingUp,
 } from 'lucide-react';
 
 interface StatusData {
@@ -31,7 +37,11 @@ interface StatusData {
   components: Array<{
     id: string;
     name: string;
-    status: 'operational' | 'degraded_performance' | 'partial_outage' | 'major_outage';
+    status:
+      | 'operational'
+      | 'degraded_performance'
+      | 'partial_outage'
+      | 'major_outage';
   }>;
 }
 
@@ -53,24 +63,24 @@ export function UptimeStatus() {
       // In production, you would fetch from your actual Statuspage API
       // const response = await fetch('https://123legaldoc.statuspage.io/api/v2/summary.json');
       // const data = await response.json();
-      
+
       // Mock data for demonstration
       const mockData: StatusData = {
         status: {
           indicator: 'none',
-          description: 'All Systems Operational'
+          description: 'All Systems Operational',
         },
         incidents: [],
         overall_uptime: {
-          uptime_percentage: 99.97
+          uptime_percentage: 99.97,
         },
         components: [
           { id: '1', name: 'Website', status: 'operational' },
           { id: '2', name: 'Document Generation API', status: 'operational' },
           { id: '3', name: 'User Authentication', status: 'operational' },
           { id: '4', name: 'Payment Processing', status: 'operational' },
-          { id: '5', name: 'AI Services', status: 'operational' }
-        ]
+          { id: '5', name: 'AI Services', status: 'operational' },
+        ],
       };
 
       setStatusData(mockData);
@@ -189,9 +199,15 @@ export function UptimeStatus() {
         <div className="space-y-2">
           <h4 className="font-medium text-sm">Service Components</h4>
           {statusData.components.map((component) => (
-            <div key={component.id} className="flex items-center justify-between py-2">
+            <div
+              key={component.id}
+              className="flex items-center justify-between py-2"
+            >
               <span className="text-sm">{component.name}</span>
-              <Badge variant="secondary" className={getStatusColor(component.status)}>
+              <Badge
+                variant="secondary"
+                className={getStatusColor(component.status)}
+              >
                 {getStatusIcon(component.status)}
                 {component.status.replace('_', ' ')}
               </Badge>
@@ -207,7 +223,10 @@ export function UptimeStatus() {
               <div key={incident.id} className="p-3 border rounded-lg">
                 <div className="flex items-center justify-between">
                   <span className="font-medium text-sm">{incident.name}</span>
-                  <Badge variant="outline" className={getStatusColor(incident.impact)}>
+                  <Badge
+                    variant="outline"
+                    className={getStatusColor(incident.impact)}
+                  >
                     {incident.status}
                   </Badge>
                 </div>

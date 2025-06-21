@@ -14,6 +14,7 @@
 I, **{{affiant_name}}**, being duly sworn, depose and state as follows:
 
 **Affiant's Information:**
+
 - **Full Name:** {{affiant_name}}
 - **Address:** {{affiant_address}}
 - **Date of Birth:** {{affiant_dob}}
@@ -35,10 +36,13 @@ This Affidavit is made for the following purpose:
 ## 3. Statement of Facts
 
 ### 3.1 Personal Knowledge
+
 I have personal knowledge of the facts stated in this Affidavit, and if called upon to testify, I could competently testify to the truth of the matters stated herein.
 
 ### 3.2 Factual Statements
+
 {{#if numbered_facts}}
+
 1. {{fact_1}}
 
 2. {{fact_2}}
@@ -56,6 +60,7 @@ I have personal knowledge of the facts stated in this Affidavit, and if called u
 {{/if}}
 
 ### 3.3 Supporting Information
+
 {{#if supporting_documents}}
 **Supporting Documents:** The following documents are attached and incorporated by reference:
 {{supporting_document_list}}
@@ -70,14 +75,17 @@ I have personal knowledge of the facts stated in this Affidavit, and if called u
 ## 4. Circumstances and Context
 
 ### 4.1 Date and Time of Events
+
 **Date(s) of Relevant Events:** {{event_dates}}  
 **Time(s) of Relevant Events:** {{event_times}}  
 **Location(s) of Relevant Events:** {{event_locations}}
 
 ### 4.2 Relationship to Matter
+
 **My Relationship to This Matter:** {{relationship_to_matter}}
 
 ### 4.3 How I Obtained Knowledge
+
 **Source of Knowledge:** {{knowledge_source}}
 
 ---
@@ -85,9 +93,11 @@ I have personal knowledge of the facts stated in this Affidavit, and if called u
 ## 5. Additional Declarations
 
 ### 5.1 Memory and Mental State
+
 I was mentally competent and of sound mind during the events described herein, and my memory of these events is clear and accurate.
 
 ### 5.2 No Compensation
+
 {{#if no_compensation}}
 I am not being compensated or promised any benefit for making this Affidavit.
 {{else}}
@@ -95,6 +105,7 @@ I am not being compensated or promised any benefit for making this Affidavit.
 {{/if}}
 
 ### 5.3 No Coercion
+
 I am making this Affidavit voluntarily, without coercion, duress, or undue influence from any person.
 
 ---
@@ -102,12 +113,15 @@ I am making this Affidavit voluntarily, without coercion, duress, or undue influ
 ## 6. Verification and Oath
 
 ### 6.1 Truth and Accuracy
+
 I declare under penalty of perjury that the foregoing statements are true and correct to the best of my knowledge, information, and belief.
 
 ### 6.2 Complete Disclosure
+
 I have disclosed all material facts known to me regarding this matter and have not withheld any relevant information.
 
 ### 6.3 Updates or Corrections
+
 {{#if corrections_needed}}
 **Corrections to Previous Statements:** {{corrections_details}}
 {{else}}
@@ -134,6 +148,7 @@ No attachments are included with this Affidavit.
 ## 8. Legal Consequences Notice
 
 I understand that:
+
 - This Affidavit may be used in legal proceedings
 - False statements made herein may subject me to penalties for perjury
 - This Affidavit has the same force and effect as if given under oath in open court
@@ -147,11 +162,11 @@ I understand that:
 
 **AFFIANT:**
 
-| Signature | Date |
-|-----------|------|
-| _________________________________ | {{execution_date}} |
-| {{affiant_name}} | |
-| Print Name: {{affiant_name}} | |
+| Signature                          | Date               |
+| ---------------------------------- | ------------------ |
+| ****************\_**************** | {{execution_date}} |
+| {{affiant_name}}                   |                    |
+| Print Name: {{affiant_name}}       |                    |
 
 ---
 
@@ -166,13 +181,12 @@ I certify under PENALTY OF PERJURY under the laws of the State of {{state}} that
 
 **WITNESS** my hand and official seal.
 
-**Notary Public:** _________________________________  
-**My Commission Expires:** _________________________
+**Notary Public:** ****************\_****************  
+**My Commission Expires:** ************\_************
 
 **[Notary Seal]**
 
-{{#if witnesses_present}}
----
+## {{#if witnesses_present}}
 
 ## 11. Witnesses
 
@@ -180,21 +194,22 @@ I certify under PENALTY OF PERJURY under the laws of the State of {{state}} that
 
 I witnessed the signing of this Affidavit by {{affiant_name}}.
 
-| Signature | Date |
-|-----------|------|
-| _________________________________ | {{execution_date}} |
-| {{witness_1_name}} | |
-| Address: {{witness_1_address}} | |
+| Signature                          | Date               |
+| ---------------------------------- | ------------------ |
+| ****************\_**************** | {{execution_date}} |
+| {{witness_1_name}}                 |                    |
+| Address: {{witness_1_address}}     |                    |
 
 **WITNESS 2:**
 
 I witnessed the signing of this Affidavit by {{affiant_name}}.
 
-| Signature | Date |
-|-----------|------|
-| _________________________________ | {{execution_date}} |
-| {{witness_2_name}} | |
-| Address: {{witness_2_address}} | |
+| Signature                          | Date               |
+| ---------------------------------- | ------------------ |
+| ****************\_**************** | {{execution_date}} |
+| {{witness_2_name}}                 |                    |
+| Address: {{witness_2_address}}     |                    |
+
 {{/if}}
 
 ---
@@ -212,10 +227,11 @@ I hereby certify that a true and correct copy of this Affidavit was served upon 
 **Served by:** {{served_by_name}}  
 **Date of Service:** {{service_date}}
 
-| Signature of Person Serving | Date |
-|----------------------------|------|
-| _________________________________ | {{service_date}} |
-| {{served_by_name}} | |
+| Signature of Person Serving        | Date             |
+| ---------------------------------- | ---------------- |
+| ****************\_**************** | {{service_date}} |
+| {{served_by_name}}                 |                  |
+
 {{/if}}
 
 ---
@@ -239,6 +255,6 @@ I hereby certify that a true and correct copy of this Affidavit was served upon 
 
 **IMPORTANT LEGAL NOTICE:** This general affidavit should be reviewed by qualified legal counsel to ensure it meets the specific requirements for its intended use. Affidavits must be truthful and complete, as false statements may result in perjury charges. The format and requirements for affidavits may vary by jurisdiction and purpose.
 
-*Template generated by 123LegalDoc - Professional Legal Document Platform*
----
+## _Template generated by 123LegalDoc - Professional Legal Document Platform_
+
 © 2025 123LegalDoc · DIY form · Not legal advice · Terms: 123LegalDoc.com/terms

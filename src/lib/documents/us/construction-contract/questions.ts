@@ -137,7 +137,10 @@ export const constructionContractQuestions: FormQuestion[] = [
     label: 'Project Type',
     options: [
       { value: 'residential-new', label: 'New Residential Construction' },
-      { value: 'residential-addition', label: 'Residential Addition/Renovation' },
+      {
+        value: 'residential-addition',
+        label: 'Residential Addition/Renovation',
+      },
       { value: 'commercial-new', label: 'New Commercial Construction' },
       { value: 'commercial-renovation', label: 'Commercial Renovation' },
       { value: 'industrial', label: 'Industrial Construction' },
@@ -291,7 +294,7 @@ export const constructionContractQuestions: FormQuestion[] = [
   {
     id: 'builderRiskInsurance',
     type: 'checkbox',
-    label: 'Require builder\'s risk insurance',
+    label: "Require builder's risk insurance",
     required: false,
     group: 'insurance',
   },

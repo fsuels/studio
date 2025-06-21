@@ -7,12 +7,14 @@ This guide explains the authentication patterns used in the 123legaldoc applicat
 ### 1. User Authentication (Firebase Auth)
 
 **Client-Side (`/src/hooks/useAuth.tsx`)**
+
 - Firebase Authentication with email/password
 - React Context for state management
 - Local storage persistence
 - Used for regular user authentication
 
 **Server-Side (`/src/lib/server-auth.ts`)**
+
 - Firebase Admin SDK for token verification
 - Extracts Bearer tokens from Authorization header
 - Verifies Firebase ID tokens
@@ -21,6 +23,7 @@ This guide explains the authentication patterns used in the 123legaldoc applicat
 ### 2. Admin Authentication (JWT)
 
 **Server-Side (`/src/lib/admin-auth.ts`)**
+
 - Custom JWT-based authentication
 - Used for admin panel access
 - Separate from user authentication
@@ -31,6 +34,7 @@ This guide explains the authentication patterns used in the 123legaldoc applicat
 ### For API Routes
 
 #### 1. Standard Authentication (Recommended)
+
 ```typescript
 import { requireAuth } from '@/lib/server-auth';
 
@@ -40,21 +44,22 @@ export async function POST(request: NextRequest) {
   if (authResult instanceof Response) {
     return authResult; // Returns 401 if auth fails
   }
-  
+
   const user = authResult;
   console.log(`User authenticated: ${user.uid} (${user.email})`);
-  
+
   // Your API logic here...
 }
 ```
 
 #### 2. Optional Authentication
+
 ```typescript
 import { authenticateUser } from '@/lib/server-auth';
 
 export async function POST(request: NextRequest) {
   const user = await authenticateUser(request);
-  
+
   if (user) {
     // Authenticated user logic
     console.log(`Authenticated user: ${user.uid}`);
@@ -62,19 +67,20 @@ export async function POST(request: NextRequest) {
     // Anonymous user logic
     console.log('Anonymous user');
   }
-  
+
   // Your API logic here...
 }
 ```
 
 #### 3. Development Fallback
+
 ```typescript
 import { authenticateUserWithFallback } from '@/lib/server-auth';
 
 export async function POST(request: NextRequest) {
   const user = await authenticateUserWithFallback(request);
   // Always returns a user (mock in development)
-  
+
   // Your API logic here...
 }
 ```
@@ -82,6 +88,7 @@ export async function POST(request: NextRequest) {
 ### For Client-Side API Calls
 
 #### 1. Automatic Token Attachment
+
 ```typescript
 import { authenticatedFetch } from '@/lib/client-auth';
 
@@ -96,6 +103,7 @@ const response = await authenticatedFetch('/api/protected-route', {
 ```
 
 #### 2. Simplified POST Requests
+
 ```typescript
 import { authenticatedPost } from '@/lib/client-auth';
 
@@ -106,19 +114,21 @@ const response = await authenticatedPost('/api/generate-pdf', {
 ```
 
 #### 3. PDF Generation Helper
+
 ```typescript
 import { generateAuthenticatedPdf } from '@/lib/client-auth';
 
 const pdfBlob = await generateAuthenticatedPdf({
   documentType: 'bill-of-sale-vehicle',
   answers: formData,
-  state: 'CA'
+  state: 'CA',
 });
 ```
 
 ## API Route Examples
 
 ### Protected PDF Generation
+
 ```typescript
 // /src/app/api/generate-pdf/route.ts
 import { NextRequest, NextResponse } from 'next/server';
@@ -137,10 +147,10 @@ export async function POST(request: NextRequest) {
   const { documentType, answers } = body;
 
   // Generate PDF for authenticated user
-  const pdfBytes = await generatePdfDocument({ 
-    documentType, 
+  const pdfBytes = await generatePdfDocument({
+    documentType,
     answers,
-    userId: user.uid // Include user ID in generation
+    userId: user.uid, // Include user ID in generation
   });
 
   return new NextResponse(Buffer.from(pdfBytes), {
@@ -153,6 +163,7 @@ export async function POST(request: NextRequest) {
 ```
 
 ### Admin-Only Routes
+
 ```typescript
 // /src/app/api/admin/orders/route.ts
 import { requireAdmin } from '@/lib/admin-auth';
@@ -172,6 +183,7 @@ export async function GET(request: NextRequest) {
 ## React Component Usage
 
 ### With Authentication Hook
+
 ```typescript
 import { useAuth } from '@/hooks/useAuth';
 import { generateAuthenticatedPdf } from '@/lib/client-auth';
@@ -190,7 +202,7 @@ function MyComponent() {
         documentType: 'bill-of-sale-vehicle',
         answers: formData,
       });
-      
+
       // Handle PDF download
       const url = URL.createObjectURL(pdfBlob);
       const a = document.createElement('a');
@@ -246,11 +258,13 @@ NEXT_PUBLIC_FIREBASE_PROJECT_ID=your_project_id
 To migrate existing API routes from mock authentication:
 
 1. **Import the new auth functions**:
+
    ```typescript
    import { requireAuth } from '@/lib/server-auth';
    ```
 
 2. **Add authentication check**:
+
    ```typescript
    const authResult = await requireAuth(request);
    if (authResult instanceof Response) {
@@ -260,10 +274,11 @@ To migrate existing API routes from mock authentication:
    ```
 
 3. **Update client-side calls**:
+
    ```typescript
    // Old
    const response = await fetch('/api/endpoint', { ... });
-   
+
    // New
    const response = await authenticatedFetch('/api/endpoint', { ... });
    ```

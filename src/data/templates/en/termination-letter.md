@@ -40,4 +40,4 @@ I acknowledge receipt of this termination letter.
 
 [Employee Signature]
 
-Date: ********\_\_\_\_********
+Date: **\*\*\*\***\_\_\_\_**\*\*\*\***

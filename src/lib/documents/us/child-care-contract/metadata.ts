@@ -24,12 +24,18 @@ export const childCareContractMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Child Care Contract',
-      description: 'Agreement between parents and childcare provider for babysitting services.',
-      aliases: ['babysitting contract', 'nanny agreement', 'childcare agreement'],
+      description:
+        'Agreement between parents and childcare provider for babysitting services.',
+      aliases: [
+        'babysitting contract',
+        'nanny agreement',
+        'childcare agreement',
+      ],
     },
     es: {
       name: 'Contrato de Cuidado Infantil',
-      description: 'Acuerdo entre padres y proveedor de cuidado infantil para servicios de niñera.',
+      description:
+        'Acuerdo entre padres y proveedor de cuidado infantil para servicios de niñera.',
       aliases: ['contrato de niñera', 'acuerdo de cuidado de niños'],
     },
   },

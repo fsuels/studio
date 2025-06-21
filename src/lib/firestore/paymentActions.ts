@@ -24,14 +24,11 @@ export async function createPaymentRecord({
   session_id: string;
 }): Promise<void> {
   const db = await getDb();
-  await addDoc(
-    collection(db, 'users', userId, 'payments'),
-    {
-      documentId: docId,
-      sessionId: session_id,
-      date: serverTimestamp(),
-    }
-  );
+  await addDoc(collection(db, 'users', userId, 'payments'), {
+    documentId: docId,
+    sessionId: session_id,
+    date: serverTimestamp(),
+  });
 }
 
 export async function hasUserPaidForDocument(

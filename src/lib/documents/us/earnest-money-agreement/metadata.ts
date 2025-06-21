@@ -24,12 +24,14 @@ export const earnestMoneyAgreementMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Earnest Money Agreement',
-      description: 'Agreement for earnest money deposits in real estate transactions',
+      description:
+        'Agreement for earnest money deposits in real estate transactions',
       aliases: [],
     },
     es: {
       name: 'Earnest Money Agreement', // TODO: Add Spanish translation
-      description: 'Agreement for earnest money deposits in real estate transactions', // TODO: Add Spanish translation
+      description:
+        'Agreement for earnest money deposits in real estate transactions', // TODO: Add Spanish translation
       aliases: [],
     },
   },

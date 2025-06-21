@@ -9,17 +9,17 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
-import { 
-  MessageCircle, 
-  Lightbulb, 
-  CheckCircle, 
+import {
+  MessageCircle,
+  Lightbulb,
+  CheckCircle,
   AlertTriangle,
   ArrowRight,
   ArrowLeft,
   Sparkles,
   Brain,
   Users,
-  Clock
+  Clock,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -50,13 +50,15 @@ const SmartDocumentWizard: React.FC<SmartDocumentWizardProps> = ({
   documentType,
   userProfile,
   onComplete,
-  onCancel
+  onCancel,
 }) => {
   const { t } = useTranslation('wizard');
   const [currentStep, setCurrentStep] = React.useState(0);
   const [responses, setResponses] = React.useState<Record<string, any>>({});
   const [isProcessing, setIsProcessing] = React.useState(false);
-  const [aiSuggestions, setAiSuggestions] = React.useState<Record<string, string>>({});
+  const [aiSuggestions, setAiSuggestions] = React.useState<
+    Record<string, string>
+  >({});
   const [steps, setSteps] = React.useState<WizardStep[]>([]);
 
   // Initialize wizard steps based on document type and user profile
@@ -72,7 +74,10 @@ const SmartDocumentWizard: React.FC<SmartDocumentWizardProps> = ({
     }
   }, [currentStep, steps, responses, aiSuggestions]);
 
-  const generateAISuggestion = async (step: WizardStep, context: Record<string, any>) => {
+  const generateAISuggestion = async (
+    step: WizardStep,
+    context: Record<string, any>,
+  ) => {
     try {
       setIsProcessing(true);
       const response = await fetch('/api/ai/wizard-suggestion', {
@@ -82,14 +87,14 @@ const SmartDocumentWizard: React.FC<SmartDocumentWizardProps> = ({
           step,
           context,
           documentType,
-          userProfile
-        })
+          userProfile,
+        }),
       });
 
       const { suggestion } = await response.json();
-      setAiSuggestions(prev => ({
+      setAiSuggestions((prev) => ({
         ...prev,
-        [step.id]: suggestion
+        [step.id]: suggestion,
       }));
     } catch (error) {
       console.warn('Failed to get AI suggestion:', error);
@@ -99,27 +104,33 @@ const SmartDocumentWizard: React.FC<SmartDocumentWizardProps> = ({
   };
 
   const handleResponse = (stepId: string, value: any) => {
-    setResponses(prev => ({ ...prev, [stepId]: value }));
-    
+    setResponses((prev) => ({ ...prev, [stepId]: value }));
+
     // Trigger smart suggestions for related fields
     triggerSmartSuggestions(stepId, value);
   };
 
   const triggerSmartSuggestions = async (stepId: string, value: any) => {
     // Find dependent fields and pre-populate them intelligently
-    const dependentSteps = steps.filter(step => 
-      step.dependencies?.includes(stepId)
+    const dependentSteps = steps.filter((step) =>
+      step.dependencies?.includes(stepId),
     );
 
     for (const depStep of dependentSteps) {
-      const smartValue = await getSmartDefault(depStep, { ...responses, [stepId]: value });
+      const smartValue = await getSmartDefault(depStep, {
+        ...responses,
+        [stepId]: value,
+      });
       if (smartValue) {
-        setResponses(prev => ({ ...prev, [depStep.id]: smartValue }));
+        setResponses((prev) => ({ ...prev, [depStep.id]: smartValue }));
       }
     }
   };
 
-  const getSmartDefault = async (step: WizardStep, context: Record<string, any>) => {
+  const getSmartDefault = async (
+    step: WizardStep,
+    context: Record<string, any>,
+  ) => {
     try {
       const response = await fetch('/api/ai/smart-default', {
         method: 'POST',
@@ -128,8 +139,8 @@ const SmartDocumentWizard: React.FC<SmartDocumentWizardProps> = ({
           step,
           context,
           documentType,
-          userProfile
-        })
+          userProfile,
+        }),
       });
 
       const { defaultValue } = await response.json();
@@ -155,7 +166,7 @@ const SmartDocumentWizard: React.FC<SmartDocumentWizardProps> = ({
 
   const handleComplete = async () => {
     setIsProcessing(true);
-    
+
     // Generate final document with AI enhancement
     try {
       const response = await fetch('/api/ai/enhance-document', {
@@ -164,8 +175,8 @@ const SmartDocumentWizard: React.FC<SmartDocumentWizardProps> = ({
         body: JSON.stringify({
           responses,
           documentType,
-          userProfile
-        })
+          userProfile,
+        }),
       });
 
       const enhancedData = await response.json();
@@ -217,7 +228,7 @@ const SmartDocumentWizard: React.FC<SmartDocumentWizardProps> = ({
           </CardTitle>
           <p className="text-muted-foreground">{currentStepData.description}</p>
         </CardHeader>
-        
+
         <CardContent className="space-y-4">
           {/* AI Suggestion */}
           {aiSuggestions[currentStepData.id] && (
@@ -225,7 +236,9 @@ const SmartDocumentWizard: React.FC<SmartDocumentWizardProps> = ({
               <div className="flex items-start gap-2">
                 <Lightbulb className="h-4 w-4 text-blue-600 mt-0.5" />
                 <div>
-                  <p className="text-sm font-medium text-blue-900">AI Suggestion</p>
+                  <p className="text-sm font-medium text-blue-900">
+                    AI Suggestion
+                  </p>
                   <p className="text-sm text-blue-800 mt-1">
                     {aiSuggestions[currentStepData.id]}
                   </p>
@@ -240,7 +253,9 @@ const SmartDocumentWizard: React.FC<SmartDocumentWizardProps> = ({
               <div className="flex items-start gap-2">
                 <AlertTriangle className="h-4 w-4 text-amber-600 mt-0.5" />
                 <div>
-                  <p className="text-sm font-medium text-amber-900">Legal Tip</p>
+                  <p className="text-sm font-medium text-amber-900">
+                    Legal Tip
+                  </p>
                   <p className="text-sm text-amber-800 mt-1">
                     {currentStepData.legalTip}
                   </p>
@@ -275,7 +290,9 @@ const SmartDocumentWizard: React.FC<SmartDocumentWizardProps> = ({
               </Button>
               <Button
                 onClick={nextStep}
-                disabled={currentStepData.required && !responses[currentStepData.id]}
+                disabled={
+                  currentStepData.required && !responses[currentStepData.id]
+                }
                 className="gap-2"
               >
                 {currentStep === steps.length - 1 ? 'Complete' : 'Next'}
@@ -312,23 +329,27 @@ const StepInput: React.FC<{
             <Card
               key={option.value}
               className={cn(
-                "cursor-pointer transition-colors hover:bg-muted/50",
-                value === option.value && "ring-2 ring-primary bg-primary/5"
+                'cursor-pointer transition-colors hover:bg-muted/50',
+                value === option.value && 'ring-2 ring-primary bg-primary/5',
               )}
               onClick={() => onChange(option.value)}
             >
               <CardContent className="p-3">
                 <div className="flex items-center gap-2">
-                  <div className={cn(
-                    "w-4 h-4 rounded-full border-2",
-                    value === option.value 
-                      ? "bg-primary border-primary" 
-                      : "border-muted-foreground"
-                  )} />
+                  <div
+                    className={cn(
+                      'w-4 h-4 rounded-full border-2',
+                      value === option.value
+                        ? 'bg-primary border-primary'
+                        : 'border-muted-foreground',
+                    )}
+                  />
                   <div>
                     <p className="font-medium">{option.label}</p>
                     {option.description && (
-                      <p className="text-sm text-muted-foreground">{option.description}</p>
+                      <p className="text-sm text-muted-foreground">
+                        {option.description}
+                      </p>
                     )}
                   </div>
                 </div>
@@ -372,7 +393,7 @@ const ContextSidebar: React.FC<{
   totalSteps: number;
 }> = ({ documentType, responses, currentStep, totalSteps }) => {
   const completedFields = Object.keys(responses).length;
-  
+
   return (
     <Card className="bg-muted/30">
       <CardHeader className="pb-3">
@@ -386,7 +407,7 @@ const ContextSidebar: React.FC<{
           <span>Fields Completed</span>
           <Badge variant="secondary">{completedFields}</Badge>
         </div>
-        
+
         <div className="flex items-center justify-between">
           <span>Estimated Time</span>
           <div className="flex items-center gap-1 text-muted-foreground">
@@ -406,19 +427,23 @@ const ContextSidebar: React.FC<{
 };
 
 // Smart step generation based on document type
-function generateSmartSteps(documentType: string, userProfile?: any): WizardStep[] {
+function generateSmartSteps(
+  documentType: string,
+  userProfile?: any,
+): WizardStep[] {
   // This would be dynamically generated based on document metadata
   // For now, showing example structure
-  
+
   const baseSteps: WizardStep[] = [
     {
       id: 'document_purpose',
-      title: 'What\'s the purpose of this document?',
+      title: "What's the purpose of this document?",
       description: 'Help us understand your specific needs',
       type: 'question',
       required: true,
       aiSuggestion: 'Consider your primary goal and any specific circumstances',
-      legalTip: 'Being specific about your purpose helps ensure the document meets your needs'
+      legalTip:
+        'Being specific about your purpose helps ensure the document meets your needs',
     },
     {
       id: 'parties_involved',
@@ -429,9 +454,9 @@ function generateSmartSteps(documentType: string, userProfile?: any): WizardStep
       options: [
         { value: 'individual', label: 'Individual to Individual' },
         { value: 'business', label: 'Business to Individual' },
-        { value: 'business_to_business', label: 'Business to Business' }
-      ]
-    }
+        { value: 'business_to_business', label: 'Business to Business' },
+      ],
+    },
   ];
 
   return baseSteps;

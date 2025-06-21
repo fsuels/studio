@@ -29,7 +29,8 @@ export const franchiseAgreementMeta: LegalDocument = {
     },
     es: {
       name: 'Acuerdo de Franquicia',
-      description: 'Acuerdo para operaciones comerciales y licencias de franquicia.',
+      description:
+        'Acuerdo para operaciones comerciales y licencias de franquicia.',
       aliases: ['contrato de franquicia'],
     },
   },

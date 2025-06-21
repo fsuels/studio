@@ -26,13 +26,23 @@ export const debtValidationLetterMeta: LegalDocument = {
       name: 'Debt Validation Letter',
       description:
         'Request debt validation from collectors to verify legitimacy and accuracy of claimed debt.',
-      aliases: ['debt dispute letter', 'validation request', 'debt verification', 'collector challenge'],
+      aliases: [
+        'debt dispute letter',
+        'validation request',
+        'debt verification',
+        'collector challenge',
+      ],
     },
     es: {
       name: 'Carta de Validación de Deuda',
       description:
         'Solicitar validación de deuda de cobradores para verificar legitimidad y precisión de la deuda reclamada.',
-      aliases: ['carta de disputa de deuda', 'solicitud de validación', 'verificación de deuda', 'desafío de cobrador'],
+      aliases: [
+        'carta de disputa de deuda',
+        'solicitud de validación',
+        'verificación de deuda',
+        'desafío de cobrador',
+      ],
     },
   },
 };

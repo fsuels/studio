@@ -104,7 +104,10 @@ export const arbitrationAgreementQuestions: FormQuestion[] = [
       { value: 'all-disputes', label: 'All Disputes' },
       { value: 'contract-disputes', label: 'Contract Disputes Only' },
       { value: 'specific-disputes', label: 'Specific Types of Disputes' },
-      { value: 'excluding-certain-disputes', label: 'All Except Certain Disputes' },
+      {
+        value: 'excluding-certain-disputes',
+        label: 'All Except Certain Disputes',
+      },
     ],
     required: true,
     group: 'scope',

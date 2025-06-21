@@ -24,12 +24,14 @@ export const residentialRentalApplicationMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Residential Rental Application',
-      description: 'Comprehensive rental application form for prospective tenants',
+      description:
+        'Comprehensive rental application form for prospective tenants',
       aliases: [],
     },
     es: {
       name: 'Residential Rental Application', // TODO: Add Spanish translation
-      description: 'Comprehensive rental application form for prospective tenants', // TODO: Add Spanish translation
+      description:
+        'Comprehensive rental application form for prospective tenants', // TODO: Add Spanish translation
       aliases: [],
     },
   },

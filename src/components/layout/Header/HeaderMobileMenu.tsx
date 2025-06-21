@@ -7,7 +7,10 @@ import { Button } from '@/components/ui/button';
 import { Menu as MenuIcon, X as CloseIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { ProgressiveLoader } from '@/components/ui/ProgressiveLoader';
-import { MobileNavigation, MobileNavigationSkeleton } from '@/components/ui/MobileNavigation';
+import {
+  MobileNavigation,
+  MobileNavigationSkeleton,
+} from '@/components/ui/MobileNavigation';
 import { ThemeToggleButton } from '@/components/ui/theme-toggle';
 
 interface HeaderMobileMenuProps {
@@ -70,7 +73,9 @@ export default function HeaderMobileMenu({
                 variant="ghost"
                 size="icon"
                 onClick={onClose}
-                aria-label={tHeader('nav.closeMenu', { defaultValue: 'Close menu' })}
+                aria-label={tHeader('nav.closeMenu', {
+                  defaultValue: 'Close menu',
+                })}
               >
                 <CloseIcon className="h-5 w-5" />
               </Button>
@@ -80,7 +85,9 @@ export default function HeaderMobileMenu({
           {/* Content */}
           <div className="flex-1 overflow-y-auto">
             <ProgressiveLoader
-              component={() => import('@/components/mobile/MobileDocsAccordion')}
+              component={() =>
+                import('@/components/mobile/MobileDocsAccordion')
+              }
               fallback={<MobileNavigationSkeleton />}
               delay={50}
               props={{ locale: clientLocale, onLinkClick: onClose }}

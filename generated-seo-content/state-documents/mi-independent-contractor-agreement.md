@@ -47,7 +47,7 @@ Don't risk using generic templates that may not comply with Michigan law. Get a 
 
 [Create Michigan Independent Contractor Agreement]
 
-*Trusted by thousands of Michigan businesses*
+_Trusted by thousands of Michigan businesses_
 
 ---
 

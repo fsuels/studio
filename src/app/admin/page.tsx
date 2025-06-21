@@ -8,18 +8,21 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { 
-  Shield, 
-  Eye, 
-  EyeOff, 
-  Loader2, 
+import {
+  Shield,
+  Eye,
+  EyeOff,
+  Loader2,
   Lock,
   AlertTriangle,
-  CheckCircle
+  CheckCircle,
 } from 'lucide-react';
 
 export default function AdminLoginPage() {
-  const [credentials, setCredentials] = useState({ username: '', password: '' });
+  const [credentials, setCredentials] = useState({
+    username: '',
+    password: '',
+  });
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -36,7 +39,7 @@ export default function AdminLoginPage() {
     try {
       const response = await fetch('/api/admin/auth');
       const data = await response.json();
-      
+
       if (data.authenticated) {
         setIsAuthenticated(true);
         router.push('/admin/dashboard');
@@ -84,7 +87,7 @@ export default function AdminLoginPage() {
   };
 
   const handleInputChange = (field: 'username' | 'password', value: string) => {
-    setCredentials(prev => ({ ...prev, [field]: value }));
+    setCredentials((prev) => ({ ...prev, [field]: value }));
     setError(null);
   };
 
@@ -94,7 +97,9 @@ export default function AdminLoginPage() {
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-center">
           <Loader2 className="h-8 w-8 animate-spin mx-auto text-primary" />
-          <p className="mt-2 text-sm text-muted-foreground">Checking authentication...</p>
+          <p className="mt-2 text-sm text-muted-foreground">
+            Checking authentication...
+          </p>
         </div>
       </div>
     );
@@ -153,7 +158,9 @@ export default function AdminLoginPage() {
                   type="text"
                   placeholder="Enter admin username"
                   value={credentials.username}
-                  onChange={(e) => handleInputChange('username', e.target.value)}
+                  onChange={(e) =>
+                    handleInputChange('username', e.target.value)
+                  }
                   required
                   autoComplete="username"
                   className="w-full"
@@ -169,7 +176,9 @@ export default function AdminLoginPage() {
                     type={showPassword ? 'text' : 'password'}
                     placeholder="Enter admin password"
                     value={credentials.password}
-                    onChange={(e) => handleInputChange('password', e.target.value)}
+                    onChange={(e) =>
+                      handleInputChange('password', e.target.value)
+                    }
                     required
                     autoComplete="current-password"
                     className="w-full pr-10"
@@ -200,10 +209,12 @@ export default function AdminLoginPage() {
               )}
 
               {/* Submit Button */}
-              <Button 
-                type="submit" 
-                className="w-full" 
-                disabled={loading || !credentials.username || !credentials.password}
+              <Button
+                type="submit"
+                className="w-full"
+                disabled={
+                  loading || !credentials.username || !credentials.password
+                }
               >
                 {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                 {loading ? 'Authenticating...' : 'Sign In'}
@@ -232,7 +243,10 @@ export default function AdminLoginPage() {
           <p>© {new Date().getFullYear()} 123LegalDoc. Admin Portal v1.0</p>
           <p className="mt-1">
             For support, contact:{' '}
-            <a href="mailto:admin@123legaldoc.com" className="text-primary hover:underline">
+            <a
+              href="mailto:admin@123legaldoc.com"
+              className="text-primary hover:underline"
+            >
               admin@123legaldoc.com
             </a>
           </p>

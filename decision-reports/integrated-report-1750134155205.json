@@ -21426,9 +21426,7 @@
             "type": "RANKING_DECLINE",
             "message": "1 keywords losing rankings",
             "action": "Content optimization needed",
-            "keywords": [
-              "texas will template"
-            ]
+            "keywords": ["texas will template"]
           }
         ]
       },

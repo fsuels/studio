@@ -8,10 +8,10 @@ export const invoiceQuestions: Question[] = [
     type: 'text',
     required: true,
   },
-  { 
-    id: 'recipientAddress', 
-    label: 'Recipient Address', 
-    type: 'textarea' 
+  {
+    id: 'recipientAddress',
+    label: 'Recipient Address',
+    type: 'textarea',
   },
   {
     id: 'yourName',
@@ -25,16 +25,16 @@ export const invoiceQuestions: Question[] = [
     type: 'text',
     required: true,
   },
-  { 
-    id: 'invoiceDate', 
-    label: 'Invoice Date', 
-    type: 'date', 
-    required: true 
+  {
+    id: 'invoiceDate',
+    label: 'Invoice Date',
+    type: 'date',
+    required: true,
   },
-  { 
-    id: 'dueDate', 
-    label: 'Payment Due Date', 
-    type: 'date' 
+  {
+    id: 'dueDate',
+    label: 'Payment Due Date',
+    type: 'date',
   },
   {
     id: 'lineItems',

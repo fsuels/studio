@@ -2,7 +2,13 @@
 
 import React, { useState } from 'react';
 import { Tenant, TenantInvite } from '@/types/tenant';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -10,17 +16,17 @@ import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Separator } from '@/components/ui/separator';
 import { useRouter } from 'next/navigation';
-import { 
-  Users, 
-  Mail, 
-  Shield, 
-  Clock, 
-  CheckCircle, 
+import {
+  Users,
+  Mail,
+  Shield,
+  Clock,
+  CheckCircle,
   ArrowRight,
   Building,
   FileText,
   MessageCircle,
-  Star
+  Star,
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
@@ -30,7 +36,11 @@ interface TenantInviteRoomProps {
   token: string;
 }
 
-export function TenantInviteRoom({ tenant, invitation, token }: TenantInviteRoomProps) {
+export function TenantInviteRoom({
+  tenant,
+  invitation,
+  token,
+}: TenantInviteRoomProps) {
   const [isAccepting, setIsAccepting] = useState(false);
   const [userInfo, setUserInfo] = useState({
     firstName: '',
@@ -56,7 +66,7 @@ export function TenantInviteRoom({ tenant, invitation, token }: TenantInviteRoom
       }
 
       const result = await response.json();
-      
+
       toast({
         title: 'Welcome aboard!',
         description: 'Your invitation has been accepted successfully.',
@@ -83,8 +93,10 @@ export function TenantInviteRoom({ tenant, invitation, token }: TenantInviteRoom
   const getExpirationTime = () => {
     const now = new Date();
     const expires = new Date(invitation.expiresAt);
-    const diffHours = Math.ceil((expires.getTime() - now.getTime()) / (1000 * 60 * 60));
-    
+    const diffHours = Math.ceil(
+      (expires.getTime() - now.getTime()) / (1000 * 60 * 60),
+    );
+
     if (diffHours > 24) {
       return `${Math.ceil(diffHours / 24)} days`;
     }
@@ -105,7 +117,8 @@ export function TenantInviteRoom({ tenant, invitation, token }: TenantInviteRoom
             You're Invited!
           </h1>
           <p className="text-lg text-gray-600">
-            Join {tenant.branding?.companyName || tenant.name} to collaborate on legal documents
+            Join {tenant.branding?.companyName || tenant.name} to collaborate on
+            legal documents
           </p>
         </div>
 
@@ -120,24 +133,34 @@ export function TenantInviteRoom({ tenant, invitation, token }: TenantInviteRoom
           <CardContent className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <Label className="text-sm font-medium text-gray-500">Organization</Label>
-                <p className="text-lg font-semibold">{tenant.branding?.companyName || tenant.name}</p>
+                <Label className="text-sm font-medium text-gray-500">
+                  Organization
+                </Label>
+                <p className="text-lg font-semibold">
+                  {tenant.branding?.companyName || tenant.name}
+                </p>
               </div>
               <div>
-                <Label className="text-sm font-medium text-gray-500">Your Role</Label>
+                <Label className="text-sm font-medium text-gray-500">
+                  Your Role
+                </Label>
                 <Badge variant="secondary" className="text-sm">
                   {formatRole(invitation.role)}
                 </Badge>
               </div>
               <div>
-                <Label className="text-sm font-medium text-gray-500">Invited Email</Label>
+                <Label className="text-sm font-medium text-gray-500">
+                  Invited Email
+                </Label>
                 <div className="flex items-center">
                   <Mail className="h-4 w-4 mr-2 text-gray-400" />
                   <span>{invitation.email}</span>
                 </div>
               </div>
               <div>
-                <Label className="text-sm font-medium text-gray-500">Expires In</Label>
+                <Label className="text-sm font-medium text-gray-500">
+                  Expires In
+                </Label>
                 <div className="flex items-center">
                   <Clock className="h-4 w-4 mr-2 text-gray-400" />
                   <span>{getExpirationTime()}</span>
@@ -147,10 +170,14 @@ export function TenantInviteRoom({ tenant, invitation, token }: TenantInviteRoom
 
             {invitation.inviteMessage && (
               <div>
-                <Label className="text-sm font-medium text-gray-500">Personal Message</Label>
+                <Label className="text-sm font-medium text-gray-500">
+                  Personal Message
+                </Label>
                 <Card className="mt-2">
                   <CardContent className="p-4">
-                    <p className="text-gray-700 italic">"{invitation.inviteMessage}"</p>
+                    <p className="text-gray-700 italic">
+                      "{invitation.inviteMessage}"
+                    </p>
                   </CardContent>
                 </Card>
               </div>
@@ -173,21 +200,27 @@ export function TenantInviteRoom({ tenant, invitation, token }: TenantInviteRoom
                   <FileText className="h-6 w-6 text-green-600" />
                 </div>
                 <h4 className="font-medium">Document Creation</h4>
-                <p className="text-sm text-gray-600">Create and edit legal documents</p>
+                <p className="text-sm text-gray-600">
+                  Create and edit legal documents
+                </p>
               </div>
               <div className="text-center">
                 <div className="bg-purple-100 p-3 rounded-full w-fit mx-auto mb-2">
                   <Users className="h-6 w-6 text-purple-600" />
                 </div>
                 <h4 className="font-medium">Team Collaboration</h4>
-                <p className="text-sm text-gray-600">Work together with your team</p>
+                <p className="text-sm text-gray-600">
+                  Work together with your team
+                </p>
               </div>
               <div className="text-center">
                 <div className="bg-orange-100 p-3 rounded-full w-fit mx-auto mb-2">
                   <MessageCircle className="h-6 w-6 text-orange-600" />
                 </div>
                 <h4 className="font-medium">Real-time Chat</h4>
-                <p className="text-sm text-gray-600">Discuss documents in real-time</p>
+                <p className="text-sm text-gray-600">
+                  Discuss documents in real-time
+                </p>
               </div>
             </div>
           </CardContent>
@@ -208,7 +241,9 @@ export function TenantInviteRoom({ tenant, invitation, token }: TenantInviteRoom
                 <Input
                   id="firstName"
                   value={userInfo.firstName}
-                  onChange={(e) => setUserInfo({ ...userInfo, firstName: e.target.value })}
+                  onChange={(e) =>
+                    setUserInfo({ ...userInfo, firstName: e.target.value })
+                  }
                   placeholder="Enter your first name"
                 />
               </div>
@@ -217,19 +252,23 @@ export function TenantInviteRoom({ tenant, invitation, token }: TenantInviteRoom
                 <Input
                   id="lastName"
                   value={userInfo.lastName}
-                  onChange={(e) => setUserInfo({ ...userInfo, lastName: e.target.value })}
+                  onChange={(e) =>
+                    setUserInfo({ ...userInfo, lastName: e.target.value })
+                  }
                   placeholder="Enter your last name"
                 />
               </div>
             </div>
-            
+
             <div>
               <Label htmlFor="password">Password</Label>
               <Input
                 id="password"
                 type="password"
                 value={userInfo.password}
-                onChange={(e) => setUserInfo({ ...userInfo, password: e.target.value })}
+                onChange={(e) =>
+                  setUserInfo({ ...userInfo, password: e.target.value })
+                }
                 placeholder="Create a secure password"
               />
             </div>
@@ -239,20 +278,31 @@ export function TenantInviteRoom({ tenant, invitation, token }: TenantInviteRoom
                 id="acceptTerms"
                 type="checkbox"
                 checked={userInfo.acceptTerms}
-                onChange={(e) => setUserInfo({ ...userInfo, acceptTerms: e.target.checked })}
+                onChange={(e) =>
+                  setUserInfo({ ...userInfo, acceptTerms: e.target.checked })
+                }
                 className="rounded border-gray-300"
               />
               <Label htmlFor="acceptTerms" className="text-sm">
                 I agree to the{' '}
-                <a href={tenant.branding?.termsUrl || `/tenant/${tenant.slug}/terms`} 
-                   target="_blank" 
-                   className="text-blue-600 hover:underline">
+                <a
+                  href={
+                    tenant.branding?.termsUrl || `/tenant/${tenant.slug}/terms`
+                  }
+                  target="_blank"
+                  className="text-blue-600 hover:underline"
+                >
                   Terms of Service
-                </a>
-                {' '}and{' '}
-                <a href={tenant.branding?.privacyUrl || `/tenant/${tenant.slug}/privacy`} 
-                   target="_blank" 
-                   className="text-blue-600 hover:underline">
+                </a>{' '}
+                and{' '}
+                <a
+                  href={
+                    tenant.branding?.privacyUrl ||
+                    `/tenant/${tenant.slug}/privacy`
+                  }
+                  target="_blank"
+                  className="text-blue-600 hover:underline"
+                >
                   Privacy Policy
                 </a>
               </Label>
@@ -263,7 +313,13 @@ export function TenantInviteRoom({ tenant, invitation, token }: TenantInviteRoom
             <div className="flex flex-col sm:flex-row gap-3">
               <Button
                 onClick={handleAcceptInvitation}
-                disabled={isAccepting || !userInfo.firstName || !userInfo.lastName || !userInfo.password || !userInfo.acceptTerms}
+                disabled={
+                  isAccepting ||
+                  !userInfo.firstName ||
+                  !userInfo.lastName ||
+                  !userInfo.password ||
+                  !userInfo.acceptTerms
+                }
                 className="flex-1"
               >
                 {isAccepting ? (
@@ -288,10 +344,13 @@ export function TenantInviteRoom({ tenant, invitation, token }: TenantInviteRoom
             <div className="flex items-center">
               <Shield className="h-5 w-5 text-green-600 mr-2" />
               <div>
-                <p className="text-sm font-medium text-green-800">Secure Invitation</p>
+                <p className="text-sm font-medium text-green-800">
+                  Secure Invitation
+                </p>
                 <p className="text-sm text-green-700">
-                  This invitation is encrypted and expires in {getExpirationTime()}. 
-                  Your data is protected with bank-level security.
+                  This invitation is encrypted and expires in{' '}
+                  {getExpirationTime()}. Your data is protected with bank-level
+                  security.
                 </p>
               </div>
             </div>

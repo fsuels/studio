@@ -2,12 +2,8 @@
   "software-license-agreement": {
     "title": "Software License Agreement",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Software License Agreement.",
     "popular": false,
     "fieldCount": 15,
@@ -16,12 +12,8 @@
   "app-development-agreement": {
     "title": "App Development Agreement",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for App Development Agreement.",
     "popular": false,
     "fieldCount": 15,
@@ -30,12 +22,8 @@
   "web-development-agreement": {
     "title": "Web Development Agreement",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Web Development Agreement.",
     "popular": false,
     "fieldCount": 15,
@@ -44,12 +32,8 @@
   "website-development-agreement": {
     "title": "Website Development Agreement",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Website Development Agreement.",
     "popular": false,
     "fieldCount": 15,
@@ -58,12 +42,8 @@
   "cloud-services-agreement": {
     "title": "Cloud Services Agreement",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Cloud Services Agreement.",
     "popular": false,
     "fieldCount": 15,
@@ -72,12 +52,8 @@
   "data-processing-agreement": {
     "title": "Data Processing Agreement",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Data Processing Agreement.",
     "popular": false,
     "fieldCount": 15,
@@ -86,12 +62,8 @@
   "cybersecurity-agreement": {
     "title": "Cybersecurity Agreement",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Cybersecurity Agreement.",
     "popular": false,
     "fieldCount": 15,
@@ -100,12 +72,8 @@
   "ecommerce-terms-of-service": {
     "title": "Ecommerce Terms Of Service",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Ecommerce Terms Of Service.",
     "popular": false,
     "fieldCount": 15,
@@ -114,12 +82,8 @@
   "digital-asset-agreement": {
     "title": "Digital Asset Agreement",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Digital Asset Agreement.",
     "popular": false,
     "fieldCount": 15,
@@ -128,12 +92,8 @@
   "cryptocurrency-agreement": {
     "title": "Cryptocurrency Agreement",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Cryptocurrency Agreement.",
     "popular": false,
     "fieldCount": 15,
@@ -142,12 +102,8 @@
   "gaming-agreement": {
     "title": "Gaming Agreement",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Gaming Agreement.",
     "popular": false,
     "fieldCount": 15,
@@ -156,12 +112,8 @@
   "music-license-agreement": {
     "title": "Music License Agreement",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Music License Agreement.",
     "popular": false,
     "fieldCount": 15,
@@ -170,12 +122,8 @@
   "music-licensing-agreement": {
     "title": "Music Licensing Agreement",
     "complexity": "advanced",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Music Licensing Agreement.",
     "popular": false,
     "fieldCount": 30,
@@ -184,12 +132,8 @@
   "video-release": {
     "title": "Video Release",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Video Release.",
     "popular": false,
     "fieldCount": 15,

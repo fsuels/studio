@@ -2,19 +2,31 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { 
-  Shield, 
-  Play, 
-  CheckCircle, 
-  XCircle, 
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import {
+  Shield,
+  Play,
+  CheckCircle,
+  XCircle,
   AlertTriangle,
   Clock,
   Info,
-  Download
+  Download,
 } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
@@ -54,7 +66,7 @@ interface TestInfo {
 export default function TestIntegrityPage() {
   const { user } = useAuth();
   const { toast } = useToast();
-  
+
   const [testInfo, setTestInfo] = useState<TestInfo | null>(null);
   const [testResults, setTestResults] = useState<TestResponse | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -79,7 +91,7 @@ export default function TestIntegrityPage() {
       toast({
         title: 'Error',
         description: 'Failed to load test information',
-        variant: 'destructive'
+        variant: 'destructive',
       });
     } finally {
       setIsLoading(false);
@@ -94,21 +106,23 @@ export default function TestIntegrityPage() {
       const response = await fetch('/api/compliance/test-integrity', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          testType: selectedTestType
-        })
+          testType: selectedTestType,
+        }),
       });
 
       if (response.ok) {
         const results = await response.json();
         setTestResults(results);
-        
+
         toast({
-          title: results.summary.overallPassed ? 'Tests Passed' : 'Tests Failed',
+          title: results.summary.overallPassed
+            ? 'Tests Passed'
+            : 'Tests Failed',
           description: `${results.summary.passedTests}/${results.summary.totalTests} tests passed (${results.summary.successRate})`,
-          variant: results.summary.overallPassed ? 'default' : 'destructive'
+          variant: results.summary.overallPassed ? 'default' : 'destructive',
         });
       } else {
         const error = await response.json();
@@ -118,8 +132,11 @@ export default function TestIntegrityPage() {
       console.error('Error running tests:', error);
       toast({
         title: 'Test Failed',
-        description: error instanceof Error ? error.message : 'Failed to run integrity tests',
-        variant: 'destructive'
+        description:
+          error instanceof Error
+            ? error.message
+            : 'Failed to run integrity tests',
+        variant: 'destructive',
       });
     } finally {
       setIsRunning(false);
@@ -129,7 +146,9 @@ export default function TestIntegrityPage() {
   const downloadTestReport = () => {
     if (!testResults) return;
 
-    const blob = new Blob([JSON.stringify(testResults, null, 2)], { type: 'application/json' });
+    const blob = new Blob([JSON.stringify(testResults, null, 2)], {
+      type: 'application/json',
+    });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
@@ -141,7 +160,7 @@ export default function TestIntegrityPage() {
 
     toast({
       title: 'Report Downloaded',
-      description: 'Test report has been saved to your downloads'
+      description: 'Test report has been saved to your downloads',
     });
   };
 
@@ -176,7 +195,7 @@ export default function TestIntegrityPage() {
           <Shield className="h-6 w-6 text-blue-600" />
           <h1 className="text-3xl font-bold">Integrity Testing</h1>
         </div>
-        
+
         {testResults && (
           <Button variant="outline" onClick={downloadTestReport}>
             <Download className="h-4 w-4 mr-2" />
@@ -186,8 +205,9 @@ export default function TestIntegrityPage() {
       </div>
 
       <p className="text-muted-foreground">
-        Test the integrity and functionality of your audit trail system. These tests verify that 
-        audit events are being created, stored, and verified correctly.
+        Test the integrity and functionality of your audit trail system. These
+        tests verify that audit events are being created, stored, and verified
+        correctly.
       </p>
 
       {/* Test Configuration */}
@@ -204,7 +224,10 @@ export default function TestIntegrityPage() {
         <CardContent className="space-y-4">
           <div className="space-y-2">
             <label className="text-sm font-medium">Test Type</label>
-            <Select value={selectedTestType} onValueChange={setSelectedTestType}>
+            <Select
+              value={selectedTestType}
+              onValueChange={setSelectedTestType}
+            >
               <SelectTrigger className="w-full md:w-1/2">
                 <SelectValue placeholder="Select test type" />
               </SelectTrigger>
@@ -216,15 +239,19 @@ export default function TestIntegrityPage() {
                 ))}
               </SelectContent>
             </Select>
-            {testInfo?.availableTests.find(t => t.id === selectedTestType)?.description && (
+            {testInfo?.availableTests.find((t) => t.id === selectedTestType)
+              ?.description && (
               <p className="text-sm text-muted-foreground">
-                {testInfo.availableTests.find(t => t.id === selectedTestType)?.description}
+                {
+                  testInfo.availableTests.find((t) => t.id === selectedTestType)
+                    ?.description
+                }
               </p>
             )}
           </div>
 
-          <Button 
-            onClick={runIntegrityTests} 
+          <Button
+            onClick={runIntegrityTests}
             disabled={isRunning}
             className="w-full md:w-auto"
           >
@@ -247,7 +274,9 @@ export default function TestIntegrityPage() {
       {testResults && (
         <>
           {/* Summary */}
-          <Card className={`border-l-4 ${testResults.summary.overallPassed ? 'border-green-500' : 'border-red-500'}`}>
+          <Card
+            className={`border-l-4 ${testResults.summary.overallPassed ? 'border-green-500' : 'border-red-500'}`}
+          >
             <CardHeader>
               <CardTitle className="flex items-center space-x-2">
                 {testResults.summary.overallPassed ? (
@@ -261,23 +290,35 @@ export default function TestIntegrityPage() {
             <CardContent className="space-y-4">
               <div className="grid gap-4 md:grid-cols-4">
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-blue-600">{testResults.summary.totalTests}</div>
-                  <div className="text-sm text-muted-foreground">Total Tests</div>
+                  <div className="text-2xl font-bold text-blue-600">
+                    {testResults.summary.totalTests}
+                  </div>
+                  <div className="text-sm text-muted-foreground">
+                    Total Tests
+                  </div>
                 </div>
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-green-600">{testResults.summary.passedTests}</div>
+                  <div className="text-2xl font-bold text-green-600">
+                    {testResults.summary.passedTests}
+                  </div>
                   <div className="text-sm text-muted-foreground">Passed</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-red-600">{testResults.summary.failedTests}</div>
+                  <div className="text-2xl font-bold text-red-600">
+                    {testResults.summary.failedTests}
+                  </div>
                   <div className="text-sm text-muted-foreground">Failed</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-purple-600">{testResults.summary.successRate}</div>
-                  <div className="text-sm text-muted-foreground">Success Rate</div>
+                  <div className="text-2xl font-bold text-purple-600">
+                    {testResults.summary.successRate}
+                  </div>
+                  <div className="text-sm text-muted-foreground">
+                    Success Rate
+                  </div>
                 </div>
               </div>
-              
+
               <div className="text-sm text-muted-foreground">
                 Executed at: {new Date(testResults.executedAt).toLocaleString()}
               </div>
@@ -294,11 +335,14 @@ export default function TestIntegrityPage() {
             </CardHeader>
             <CardContent className="space-y-4">
               {testResults.results.map((result, index) => (
-                <div key={index} className="flex items-start space-x-4 p-4 border rounded-lg">
+                <div
+                  key={index}
+                  className="flex items-start space-x-4 p-4 border rounded-lg"
+                >
                   <div className="flex-shrink-0 mt-1">
                     {getTestIcon(result.passed)}
                   </div>
-                  
+
                   <div className="flex-1 space-y-2">
                     <div className="flex items-center justify-between">
                       <h3 className="font-medium">{result.testName}</h3>
@@ -306,11 +350,11 @@ export default function TestIntegrityPage() {
                         {result.passed ? 'PASSED' : 'FAILED'}
                       </Badge>
                     </div>
-                    
+
                     <p className="text-sm text-muted-foreground">
                       {result.message}
                     </p>
-                    
+
                     {result.details && (
                       <details className="text-sm text-muted-foreground">
                         <summary className="cursor-pointer hover:text-foreground">

@@ -5,18 +5,11 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { 
-  Grid,
-  List,
-  Crown,
-  TrendingUp,
-  Clock,
-  Filter,
-} from 'lucide-react';
+import { Grid, List, Crown, TrendingUp, Clock, Filter } from 'lucide-react';
 import { TemplateCard } from '@/components/marketplace/TemplateCard';
 import { MarketplaceSearch } from '@/components/marketplace/MarketplaceSearch';
-import type { 
-  MarketplaceTemplate, 
+import type {
+  MarketplaceTemplate,
   MarketplaceSearchFilters,
   MarketplaceSearchResult,
 } from '@/types/marketplace';
@@ -31,7 +24,7 @@ export default function MarketplacePage({ params }: MarketplacePageProps) {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [currentPage, setCurrentPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
-  
+
   const [filters, setFilters] = useState<MarketplaceSearchFilters>({
     sortBy: 'relevance',
     sortOrder: 'desc',
@@ -72,7 +65,8 @@ export default function MarketplacePage({ params }: MarketplacePageProps) {
     {
       id: 'featured-1',
       title: 'Professional Service Agreement',
-      description: 'Comprehensive service agreement template for professional services',
+      description:
+        'Comprehensive service agreement template for professional services',
       category: 'Business Contracts',
       downloads: 15420,
       rating: 4.8,
@@ -80,9 +74,10 @@ export default function MarketplacePage({ params }: MarketplacePageProps) {
       featured: true,
     },
     {
-      id: 'featured-2', 
+      id: 'featured-2',
       title: 'Residential Lease Agreement',
-      description: 'State-compliant residential lease template with customizable terms',
+      description:
+        'State-compliant residential lease template with customizable terms',
       category: 'Real Estate',
       downloads: 23150,
       rating: 4.9,
@@ -101,51 +96,60 @@ export default function MarketplacePage({ params }: MarketplacePageProps) {
     },
   ];
 
-  const loadTemplates = useCallback(async (page = 1, newFilters = filters) => {
-    setIsLoading(true);
-    try {
-      const params = new URLSearchParams({
-        page: page.toString(),
-        limit: '20',
-        ...Object.entries(newFilters).reduce((acc, [key, value]) => {
-          if (value !== undefined && value !== null) {
-            if (Array.isArray(value)) {
-              acc[key] = value.join(',');
-            } else {
-              acc[key] = value.toString();
-            }
-          }
-          return acc;
-        }, {} as Record<string, string>),
-      });
+  const loadTemplates = useCallback(
+    async (page = 1, newFilters = filters) => {
+      setIsLoading(true);
+      try {
+        const params = new URLSearchParams({
+          page: page.toString(),
+          limit: '20',
+          ...Object.entries(newFilters).reduce(
+            (acc, [key, value]) => {
+              if (value !== undefined && value !== null) {
+                if (Array.isArray(value)) {
+                  acc[key] = value.join(',');
+                } else {
+                  acc[key] = value.toString();
+                }
+              }
+              return acc;
+            },
+            {} as Record<string, string>,
+          ),
+        });
 
-      const response = await fetch(`/api/marketplace/templates?${params}`);
-      const data = await response.json();
-      
-      if (data.success) {
-        if (page === 1) {
-          setTemplates(data.data.templates);
-        } else {
-          setTemplates(prev => [...prev, ...data.data.templates]);
+        const response = await fetch(`/api/marketplace/templates?${params}`);
+        const data = await response.json();
+
+        if (data.success) {
+          if (page === 1) {
+            setTemplates(data.data.templates);
+          } else {
+            setTemplates((prev) => [...prev, ...data.data.templates]);
+          }
+          setHasMore(data.data.pagination.hasMore);
+          setCurrentPage(page);
         }
-        setHasMore(data.data.pagination.hasMore);
-        setCurrentPage(page);
+      } catch (error) {
+        console.error('Failed to load templates:', error);
+      } finally {
+        setIsLoading(false);
       }
-    } catch (error) {
-      console.error('Failed to load templates:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [filters]);
+    },
+    [filters],
+  );
 
   useEffect(() => {
     loadTemplates(1, filters);
   }, [filters]);
 
-  const handleFiltersChange = useCallback((newFilters: MarketplaceSearchFilters) => {
-    setFilters(newFilters);
-    setCurrentPage(1);
-  }, []);
+  const handleFiltersChange = useCallback(
+    (newFilters: MarketplaceSearchFilters) => {
+      setFilters(newFilters);
+      setCurrentPage(1);
+    },
+    [],
+  );
 
   const handleLoadMore = () => {
     if (!isLoading && hasMore) {
@@ -180,10 +184,12 @@ export default function MarketplacePage({ params }: MarketplacePageProps) {
     <div className="container mx-auto px-4 py-8 space-y-8">
       {/* Page Header */}
       <div className="text-center space-y-4">
-        <h1 className="text-4xl font-bold tracking-tight">Template Marketplace</h1>
+        <h1 className="text-4xl font-bold tracking-tight">
+          Template Marketplace
+        </h1>
         <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-          Discover professional legal document templates created by verified experts. 
-          Get the documents you need, when you need them.
+          Discover professional legal document templates created by verified
+          experts. Get the documents you need, when you need them.
         </p>
       </div>
 
@@ -197,7 +203,7 @@ export default function MarketplacePage({ params }: MarketplacePageProps) {
               Editor's Choice
             </Badge>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {featuredTemplates.map((template) => (
               <div key={template.id} className="bg-white rounded-lg p-4 border">
@@ -210,7 +216,7 @@ export default function MarketplacePage({ params }: MarketplacePageProps) {
                   </div>
                   <Crown className="h-4 w-4 text-yellow-500 flex-shrink-0" />
                 </div>
-                
+
                 <div className="flex items-center justify-between text-sm text-muted-foreground mb-3">
                   <span>{template.category}</span>
                   <div className="flex items-center gap-2">
@@ -219,7 +225,7 @@ export default function MarketplacePage({ params }: MarketplacePageProps) {
                     <span>{template.downloads.toLocaleString()} downloads</span>
                   </div>
                 </div>
-                
+
                 <div className="flex items-center justify-between">
                   <span className="font-bold text-lg">
                     ${(template.price / 100).toFixed(2)}
@@ -237,13 +243,17 @@ export default function MarketplacePage({ params }: MarketplacePageProps) {
         <Card>
           <CardContent className="p-4 text-center">
             <div className="text-2xl font-bold text-blue-600">1,200+</div>
-            <div className="text-sm text-muted-foreground">Templates Available</div>
+            <div className="text-sm text-muted-foreground">
+              Templates Available
+            </div>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-4 text-center">
             <div className="text-2xl font-bold text-green-600">450+</div>
-            <div className="text-sm text-muted-foreground">Verified Creators</div>
+            <div className="text-sm text-muted-foreground">
+              Verified Creators
+            </div>
           </CardContent>
         </Card>
         <Card>
@@ -275,16 +285,19 @@ export default function MarketplacePage({ params }: MarketplacePageProps) {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
           <h2 className="text-xl font-semibold">
-            {filters.query ? `Search results for "${filters.query}"` : 'All Templates'}
+            {filters.query
+              ? `Search results for "${filters.query}"`
+              : 'All Templates'}
           </h2>
           {getActiveFiltersCount() > 0 && (
             <Badge variant="secondary" className="gap-1">
               <Filter className="h-3 w-3" />
-              {getActiveFiltersCount()} filter{getActiveFiltersCount() !== 1 ? 's' : ''} applied
+              {getActiveFiltersCount()} filter
+              {getActiveFiltersCount() !== 1 ? 's' : ''} applied
             </Badge>
           )}
         </div>
-        
+
         {/* View Mode Toggle */}
         <div className="flex items-center gap-2">
           <Button
@@ -326,19 +339,26 @@ export default function MarketplacePage({ params }: MarketplacePageProps) {
             <div className="text-6xl mb-4">🔍</div>
             <h3 className="text-lg font-semibold mb-2">No templates found</h3>
             <p className="text-muted-foreground mb-4">
-              Try adjusting your search criteria or browse our featured templates above.
+              Try adjusting your search criteria or browse our featured
+              templates above.
             </p>
-            <Button onClick={() => handleFiltersChange({ sortBy: 'relevance', sortOrder: 'desc' })}>
+            <Button
+              onClick={() =>
+                handleFiltersChange({ sortBy: 'relevance', sortOrder: 'desc' })
+              }
+            >
               Clear Filters
             </Button>
           </CardContent>
         </Card>
       ) : (
-        <div className={
-          viewMode === 'grid' 
-            ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'
-            : 'space-y-4'
-        }>
+        <div
+          className={
+            viewMode === 'grid'
+              ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'
+              : 'space-y-4'
+          }
+        >
           {templates.map((result) => (
             <TemplateCard
               key={result.template.id}
@@ -354,7 +374,7 @@ export default function MarketplacePage({ params }: MarketplacePageProps) {
       {/* Load More Button */}
       {hasMore && templates.length > 0 && (
         <div className="text-center">
-          <Button 
+          <Button
             onClick={handleLoadMore}
             disabled={isLoading}
             size="lg"
@@ -378,9 +398,12 @@ export default function MarketplacePage({ params }: MarketplacePageProps) {
       {/* Marketplace Info */}
       <Card className="bg-muted/30">
         <CardContent className="p-6 text-center">
-          <h3 className="text-lg font-semibold mb-2">Become a Template Creator</h3>
+          <h3 className="text-lg font-semibold mb-2">
+            Become a Template Creator
+          </h3>
           <p className="text-muted-foreground mb-4">
-            Share your expertise and earn money by creating professional legal templates.
+            Share your expertise and earn money by creating professional legal
+            templates.
           </p>
           <div className="flex justify-center gap-4">
             <Button asChild>

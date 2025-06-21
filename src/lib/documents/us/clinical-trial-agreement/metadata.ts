@@ -24,13 +24,22 @@ export const clinicalTrialAgreementMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Clinical Trial Agreement',
-      description: 'Agreement for conducting clinical trials and medical research studies.',
-      aliases: ['research study agreement', 'clinical research contract', 'trial participation agreement'],
+      description:
+        'Agreement for conducting clinical trials and medical research studies.',
+      aliases: [
+        'research study agreement',
+        'clinical research contract',
+        'trial participation agreement',
+      ],
     },
     es: {
       name: 'Acuerdo de Ensayo Clínico',
-      description: 'Acuerdo para realizar ensayos clínicos y estudios de investigación médica.',
-      aliases: ['contrato de investigación clínica', 'acuerdo de estudio médico'],
+      description:
+        'Acuerdo para realizar ensayos clínicos y estudios de investigación médica.',
+      aliases: [
+        'contrato de investigación clínica',
+        'acuerdo de estudio médico',
+      ],
     },
   },
 };

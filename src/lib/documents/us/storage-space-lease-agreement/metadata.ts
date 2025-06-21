@@ -24,12 +24,14 @@ export const storageSpaceLeaseAgreementMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Storage Space Lease Agreement',
-      description: 'Lease agreement for storage units and self-storage facilities',
+      description:
+        'Lease agreement for storage units and self-storage facilities',
       aliases: [],
     },
     es: {
       name: 'Storage Space Lease Agreement', // TODO: Add Spanish translation
-      description: 'Lease agreement for storage units and self-storage facilities', // TODO: Add Spanish translation
+      description:
+        'Lease agreement for storage units and self-storage facilities', // TODO: Add Spanish translation
       aliases: [],
     },
   },

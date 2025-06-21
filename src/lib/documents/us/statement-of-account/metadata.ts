@@ -26,13 +26,23 @@ export const statementOfAccountMeta: LegalDocument = {
       name: 'Statement of Account',
       description:
         'Generate detailed account statements showing transactions, balances, and payment information.',
-      aliases: ['account statement', 'billing statement', 'financial statement', 'account summary'],
+      aliases: [
+        'account statement',
+        'billing statement',
+        'financial statement',
+        'account summary',
+      ],
     },
     es: {
       name: 'Estado de Cuenta',
       description:
         'Generar estados de cuenta detallados mostrando transacciones, saldos e información de pagos.',
-      aliases: ['estado de cuenta', 'estado de facturación', 'estado financiero', 'resumen de cuenta'],
+      aliases: [
+        'estado de cuenta',
+        'estado de facturación',
+        'estado financiero',
+        'resumen de cuenta',
+      ],
     },
   },
 };

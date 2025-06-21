@@ -28,7 +28,7 @@ class MetadataCache {
     'power-of-attorney',
     'last-will-testament',
     'operating-agreement',
-    'purchase-agreement'
+    'purchase-agreement',
   ];
 
   constructor() {
@@ -48,15 +48,15 @@ class MetadataCache {
 
     // Cache miss - fetch from source
     this.stats.misses++;
-    
+
     try {
       const data = await getDocMeta(slug);
-      
+
       if (data) {
         this.set(slug, data);
         return data;
       }
-      
+
       return null;
     } catch (error) {
       console.warn(`Failed to fetch metadata for ${slug}:`, error);
@@ -66,7 +66,7 @@ class MetadataCache {
 
   set(slug: string, data: any): void {
     const now = Date.now();
-    
+
     // Implement LRU eviction if cache is full
     if (this.cache.size >= this.MAX_SIZE && !this.cache.has(slug)) {
       this.evictOldest();
@@ -75,7 +75,7 @@ class MetadataCache {
     this.cache.set(slug, {
       data,
       timestamp: now,
-      expiresAt: now + this.TTL
+      expiresAt: now + this.TTL,
     });
 
     this.stats.size = this.cache.size;
@@ -128,17 +128,17 @@ class MetadataCache {
   getCached(slug: string): any | null {
     const now = Date.now();
     const entry = this.cache.get(slug);
-    
+
     if (entry && entry.expiresAt > now) {
       return entry.data;
     }
-    
+
     // Remove expired entry
     if (entry) {
       this.cache.delete(slug);
       this.stats.size = this.cache.size;
     }
-    
+
     return null;
   }
 
@@ -154,22 +154,25 @@ class MetadataCache {
 
   // Clean up expired entries periodically
   private startCleanupTimer(): void {
-    setInterval(() => {
-      const now = Date.now();
-      let cleaned = 0;
+    setInterval(
+      () => {
+        const now = Date.now();
+        let cleaned = 0;
 
-      for (const [slug, entry] of this.cache.entries()) {
-        if (entry.expiresAt <= now) {
-          this.cache.delete(slug);
-          cleaned++;
+        for (const [slug, entry] of this.cache.entries()) {
+          if (entry.expiresAt <= now) {
+            this.cache.delete(slug);
+            cleaned++;
+          }
         }
-      }
 
-      if (cleaned > 0) {
-        this.stats.size = this.cache.size;
-        console.log(`Cleaned ${cleaned} expired cache entries`);
-      }
-    }, 2 * 60 * 1000); // Every 2 minutes
+        if (cleaned > 0) {
+          this.stats.size = this.cache.size;
+          console.log(`Cleaned ${cleaned} expired cache entries`);
+        }
+      },
+      2 * 60 * 1000,
+    ); // Every 2 minutes
   }
 
   // Evict oldest entry (LRU)
@@ -194,7 +197,7 @@ class MetadataCache {
     const total = this.stats.hits + this.stats.misses;
     return {
       ...this.stats,
-      hitRate: total > 0 ? this.stats.hits / total : 0
+      hitRate: total > 0 ? this.stats.hits / total : 0,
     };
   }
 
@@ -209,11 +212,13 @@ class MetadataCache {
     try {
       const { taxonomy } = await import('@/config/taxonomy');
       const role = taxonomy.roles[roleKey];
-      
+
       if (role?.quickDocs) {
         const slugs = Object.keys(role.quickDocs);
         await this.getBatch(slugs);
-        console.log(`Warmed cache for role ${roleKey} with ${slugs.length} documents`);
+        console.log(
+          `Warmed cache for role ${roleKey} with ${slugs.length} documents`,
+        );
       }
     } catch (error) {
       console.warn(`Failed to warm cache for role ${roleKey}:`, error);

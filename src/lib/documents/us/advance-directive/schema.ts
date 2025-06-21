@@ -9,7 +9,9 @@ export const AdvanceDirectiveSchema = z.object({
   principalState: z.string().length(2, 'State must be 2 characters.'),
   principalZip: z.string().min(5, 'ZIP code must be at least 5 characters.'),
   principalPhone: z.string().min(10, "Principal's phone number is required."),
-  principalDateOfBirth: z.string().min(1, "Principal's date of birth is required."),
+  principalDateOfBirth: z
+    .string()
+    .min(1, "Principal's date of birth is required."),
 
   // Health Care Agent Information
   agentName: z.string().min(1, "Health care agent's name is required."),
@@ -17,8 +19,12 @@ export const AdvanceDirectiveSchema = z.object({
   agentCity: z.string().min(1, "Health care agent's city is required."),
   agentState: z.string().length(2, 'State must be 2 characters.'),
   agentZip: z.string().min(5, 'ZIP code must be at least 5 characters.'),
-  agentPhone: z.string().min(10, "Health care agent's phone number is required."),
-  agentRelationship: z.string().min(1, "Agent's relationship to principal is required."),
+  agentPhone: z
+    .string()
+    .min(10, "Health care agent's phone number is required."),
+  agentRelationship: z
+    .string()
+    .min(1, "Agent's relationship to principal is required."),
 
   // Alternate Agent Information (Optional)
   hasAlternateAgent: z.boolean().default(false),
@@ -31,9 +37,15 @@ export const AdvanceDirectiveSchema = z.object({
   alternateAgentRelationship: z.string().optional(),
 
   // Medical Treatment Preferences
-  lifeSustainingTreatment: z.enum(['continue', 'discontinue', 'undecided']).default('undecided'),
-  artificialNutrition: z.enum(['provide', 'withhold', 'undecided']).default('undecided'),
-  painMedication: z.enum(['provide', 'withhold', 'undecided']).default('provide'),
+  lifeSustainingTreatment: z
+    .enum(['continue', 'discontinue', 'undecided'])
+    .default('undecided'),
+  artificialNutrition: z
+    .enum(['provide', 'withhold', 'undecided'])
+    .default('undecided'),
+  painMedication: z
+    .enum(['provide', 'withhold', 'undecided'])
+    .default('provide'),
   comfortCare: z.enum(['provide', 'withhold', 'undecided']).default('provide'),
 
   // Additional Instructions
@@ -46,10 +58,10 @@ export const AdvanceDirectiveSchema = z.object({
   organDonationSpecific: z.string().optional(),
 
   // Witness Information
-  witness1Name: z.string().min(1, "First witness name is required."),
-  witness1Address: z.string().min(1, "First witness address is required."),
-  witness2Name: z.string().min(1, "Second witness name is required."),
-  witness2Address: z.string().min(1, "Second witness address is required."),
+  witness1Name: z.string().min(1, 'First witness name is required.'),
+  witness1Address: z.string().min(1, 'First witness address is required.'),
+  witness2Name: z.string().min(1, 'Second witness name is required.'),
+  witness2Address: z.string().min(1, 'Second witness address is required.'),
 
   // Legal Information
   state: z.string().length(2, 'State must be 2 characters.'),

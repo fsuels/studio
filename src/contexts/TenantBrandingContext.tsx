@@ -6,7 +6,7 @@ import { TenantBranding } from '@/types/tenant';
 interface TenantBrandingContextValue {
   branding: TenantBranding | null;
   isWhiteLabel: boolean;
-  
+
   // Helper functions
   getPrimaryColor: () => string;
   getSecondaryColor: () => string;
@@ -17,25 +17,33 @@ interface TenantBrandingContextValue {
   getFaviconUrl: () => string | undefined;
 }
 
-const TenantBrandingContext = createContext<TenantBrandingContextValue | undefined>(undefined);
+const TenantBrandingContext = createContext<
+  TenantBrandingContextValue | undefined
+>(undefined);
 
 interface TenantBrandingProviderProps {
   children: React.ReactNode;
   branding: TenantBranding | null;
 }
 
-export function TenantBrandingProvider({ children, branding }: TenantBrandingProviderProps) {
+export function TenantBrandingProvider({
+  children,
+  branding,
+}: TenantBrandingProviderProps) {
   // Apply branding to document root
   useEffect(() => {
     if (!branding) return;
 
     const root = document.documentElement;
-    
+
     // Apply CSS custom properties for theming
     root.style.setProperty('--tenant-primary', branding.primaryColor);
     root.style.setProperty('--tenant-secondary', branding.secondaryColor);
-    root.style.setProperty('--tenant-accent', branding.accentColor || branding.primaryColor);
-    
+    root.style.setProperty(
+      '--tenant-accent',
+      branding.accentColor || branding.primaryColor,
+    );
+
     if (branding.fontFamily) {
       root.style.setProperty('--tenant-font-family', branding.fontFamily);
     }
@@ -56,7 +64,7 @@ export function TenantBrandingProvider({ children, branding }: TenantBrandingPro
       root.style.removeProperty('--tenant-secondary');
       root.style.removeProperty('--tenant-accent');
       root.style.removeProperty('--tenant-font-family');
-      
+
       removeCustomCSS();
     };
   }, [branding]);
@@ -96,7 +104,8 @@ export function TenantBrandingProvider({ children, branding }: TenantBrandingPro
   // Helper functions
   const getPrimaryColor = () => branding?.primaryColor || '#2563eb';
   const getSecondaryColor = () => branding?.secondaryColor || '#64748b';
-  const getAccentColor = () => branding?.accentColor || branding?.primaryColor || '#0f172a';
+  const getAccentColor = () =>
+    branding?.accentColor || branding?.primaryColor || '#0f172a';
   const getFontFamily = () => branding?.fontFamily || 'system-ui, sans-serif';
   const getCompanyName = () => branding?.companyName || 'Legal Document Portal';
   const getLogoUrl = () => branding?.logoUrl;
@@ -124,7 +133,9 @@ export function TenantBrandingProvider({ children, branding }: TenantBrandingPro
 export function useTenantBranding() {
   const context = useContext(TenantBrandingContext);
   if (context === undefined) {
-    throw new Error('useTenantBranding must be used within a TenantBrandingProvider');
+    throw new Error(
+      'useTenantBranding must be used within a TenantBrandingProvider',
+    );
   }
   return context;
 }
@@ -132,7 +143,7 @@ export function useTenantBranding() {
 // Convenience hooks for specific branding elements
 export function useBrandedButton() {
   const { getPrimaryColor, getSecondaryColor } = useTenantBranding();
-  
+
   return {
     primaryButtonStyle: {
       backgroundColor: getPrimaryColor(),
@@ -146,18 +157,19 @@ export function useBrandedButton() {
 }
 
 export function useBrandedColors() {
-  const { getPrimaryColor, getSecondaryColor, getAccentColor } = useTenantBranding();
-  
+  const { getPrimaryColor, getSecondaryColor, getAccentColor } =
+    useTenantBranding();
+
   return {
     primary: getPrimaryColor(),
-    secondary: getSecondaryColor(), 
+    secondary: getSecondaryColor(),
     accent: getAccentColor(),
   };
 }
 
 export function useBrandedTypography() {
   const { getFontFamily } = useTenantBranding();
-  
+
   return {
     fontFamily: getFontFamily(),
     headingStyle: {
@@ -171,7 +183,7 @@ export function useBrandedTypography() {
 
 export function useCompanyInfo() {
   const { branding, getCompanyName, getLogoUrl } = useTenantBranding();
-  
+
   return {
     companyName: getCompanyName(),
     logoUrl: getLogoUrl(),

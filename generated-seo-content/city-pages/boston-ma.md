@@ -30,7 +30,7 @@ Boston offers a dynamic business environment with opportunities across industrie
 
 [Start Your Boston Legal Document]
 
-*Trusted by hundreds of Boston businesses*
+_Trusted by hundreds of Boston businesses_
 
 ---
 

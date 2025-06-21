@@ -26,13 +26,21 @@ export const executiveEmploymentAgreementMeta: LegalDocument = {
       name: 'Executive Employment Agreement',
       description:
         'Comprehensive employment contract for executive-level positions with enhanced terms, benefits, and protections.',
-      aliases: ['executive contract', 'C-level agreement', 'senior management contract'],
+      aliases: [
+        'executive contract',
+        'C-level agreement',
+        'senior management contract',
+      ],
     },
     es: {
       name: 'Contrato de Empleo Ejecutivo',
       description:
         'Contrato de empleo integral para puestos ejecutivos con términos, beneficios y protecciones mejoradas.',
-      aliases: ['contrato ejecutivo', 'acuerdo de nivel C', 'contrato de alta gerencia'],
+      aliases: [
+        'contrato ejecutivo',
+        'acuerdo de nivel C',
+        'contrato de alta gerencia',
+      ],
     },
   },
 };

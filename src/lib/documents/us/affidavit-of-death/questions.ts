@@ -244,7 +244,8 @@ export const questions: Question[] = [
     label: 'Purpose of This Affidavit',
     required: true,
     section: 'Purpose of Affidavit',
-    placeholder: 'Explain why you need this affidavit of death (e.g., to close bank accounts, transfer property, collect benefits, etc.)',
+    placeholder:
+      'Explain why you need this affidavit of death (e.g., to close bank accounts, transfer property, collect benefits, etc.)',
     description: 'Describe the specific reason why this affidavit is needed.',
   },
   {
@@ -253,7 +254,8 @@ export const questions: Question[] = [
     label: 'Specific Institution or Organization',
     required: false,
     section: 'Purpose of Affidavit',
-    placeholder: 'e.g., First National Bank, Social Security Administration, Insurance Company',
+    placeholder:
+      'e.g., First National Bank, Social Security Administration, Insurance Company',
     description: 'Name the specific institution that requires this affidavit.',
   },
   {
@@ -294,9 +296,13 @@ export const questions: Question[] = [
     section: 'Death Certificate Information',
     options: [
       { value: 'true', label: 'Yes, I have a certified death certificate' },
-      { value: 'false', label: 'No, I do not have a certified death certificate' },
+      {
+        value: 'false',
+        label: 'No, I do not have a certified death certificate',
+      },
     ],
-    description: 'A certified death certificate is the preferred proof of death.',
+    description:
+      'A certified death certificate is the preferred proof of death.',
   },
   {
     id: 'deathCertificateNumber',
@@ -409,7 +415,8 @@ export const questions: Question[] = [
     required: false,
     section: 'Witnesses',
     condition: { field: 'hasWitnesses', value: 'true' },
-    description: 'List people who witnessed the death or can verify the death occurred.',
+    description:
+      'List people who witnessed the death or can verify the death occurred.',
     arrayConfig: {
       minItems: 1,
       maxItems: 5,
@@ -578,8 +585,10 @@ export const questions: Question[] = [
     label: 'Additional Information',
     required: false,
     section: 'Additional Information',
-    placeholder: 'Provide any additional relevant information about the death or circumstances...',
-    description: 'Include any other information that supports the fact of death.',
+    placeholder:
+      'Provide any additional relevant information about the death or circumstances...',
+    description:
+      'Include any other information that supports the fact of death.',
   },
 
   // Section 11: Legal Information

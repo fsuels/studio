@@ -5,7 +5,9 @@ import React from 'react';
 import dynamic from 'next/dynamic';
 import type { LegalDocument } from '@/lib/document-library';
 
-const PaymentModal = dynamic(() => import('@/components/shared').then(m => ({ default: m.PaymentModal })));
+const PaymentModal = dynamic(() =>
+  import('@/components/shared').then((m) => ({ default: m.PaymentModal })),
+);
 
 interface WizardPaymentProps {
   showPaymentModal: boolean;
@@ -24,9 +26,10 @@ export default function WizardPayment({
   onClose,
   onSuccess,
 }: WizardPaymentProps) {
-  const documentName = locale === 'es'
-    ? doc.translations?.es?.name || doc.translations?.en?.name || doc.name
-    : doc.translations?.en?.name || doc.name || doc.translations?.es?.name;
+  const documentName =
+    locale === 'es'
+      ? doc.translations?.es?.name || doc.translations?.en?.name || doc.name
+      : doc.translations?.en?.name || doc.name || doc.translations?.es?.name;
 
   return (
     <PaymentModal

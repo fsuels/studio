@@ -24,7 +24,7 @@ export async function POST(request: NextRequest) {
       state,
       timestamp,
       scrolledToBottom,
-      documentType
+      documentType,
     } = body;
 
     // Get additional tracking data
@@ -42,7 +42,7 @@ export async function POST(request: NextRequest) {
       scrolledToBottom,
       documentType,
       userAgent,
-      sessionId: generateSessionId()
+      sessionId: generateSessionId(),
     };
 
     // Log the acceptance for legal compliance
@@ -55,14 +55,13 @@ export async function POST(request: NextRequest) {
       success: true,
       acceptanceId: acceptanceRecord.sessionId,
       complianceStatus: complianceChecks,
-      message: 'Terms acceptance logged successfully'
+      message: 'Terms acceptance logged successfully',
     });
-
   } catch (error) {
     console.error('Failed to log terms acceptance:', error);
     return NextResponse.json(
       { error: 'Failed to log acceptance' },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -70,26 +69,23 @@ export async function POST(request: NextRequest) {
 async function logTermsAcceptance(acceptance: TermsAcceptance): Promise<void> {
   try {
     // Log to our immutable audit trail
-    await auditService.logComplianceEvent(
-      'terms_accepted',
-      {
-        termsVersion: acceptance.termsVersion,
-        documentType: acceptance.documentType,
-        state: acceptance.state,
-        scrolledToBottom: acceptance.scrolledToBottom,
-        ipAddress: acceptance.ip,
-        userAgent: acceptance.userAgent,
-        sessionId: acceptance.sessionId,
-        timestamp: acceptance.timestamp.toISOString(),
-        compliantLogging: true
-      }
-    );
-    
+    await auditService.logComplianceEvent('terms_accepted', {
+      termsVersion: acceptance.termsVersion,
+      documentType: acceptance.documentType,
+      state: acceptance.state,
+      scrolledToBottom: acceptance.scrolledToBottom,
+      ipAddress: acceptance.ip,
+      userAgent: acceptance.userAgent,
+      sessionId: acceptance.sessionId,
+      timestamp: acceptance.timestamp.toISOString(),
+      compliantLogging: true,
+    });
+
     console.log('Terms Acceptance Logged to Audit Trail:', {
       userId: acceptance.userId,
       termsVersion: acceptance.termsVersion,
       documentType: acceptance.documentType,
-      timestamp: acceptance.timestamp
+      timestamp: acceptance.timestamp,
     });
   } catch (error) {
     console.error('Failed to log to audit trail:', error);
@@ -97,9 +93,12 @@ async function logTermsAcceptance(acceptance: TermsAcceptance): Promise<void> {
     const logEntry = {
       ...acceptance,
       loggedAt: new Date().toISOString(),
-      compliantLogging: true
+      compliantLogging: true,
     };
-    console.log('Fallback Terms Acceptance Log:', JSON.stringify(logEntry, null, 2));
+    console.log(
+      'Fallback Terms Acceptance Log:',
+      JSON.stringify(logEntry, null, 2),
+    );
   }
 }
 
@@ -123,28 +122,37 @@ async function performComplianceChecks(acceptance: TermsAcceptance): Promise<{
   // North Carolina Specific Compliance
   if (acceptance.state === 'NC') {
     // Check for NC-specific requirements
-    if (acceptance.documentType && isLegalAdviceDocument(acceptance.documentType)) {
-      issues.push('NC residents require additional disclaimers for legal advice documents');
+    if (
+      acceptance.documentType &&
+      isLegalAdviceDocument(acceptance.documentType)
+    ) {
+      issues.push(
+        'NC residents require additional disclaimers for legal advice documents',
+      );
       ncCompliant = false;
     }
   }
 
   // FTC Compliance Check
   if (!acceptance.scrolledToBottom) {
-    issues.push('User may not have had reasonable opportunity to read terms (FTC requirement)');
+    issues.push(
+      'User may not have had reasonable opportunity to read terms (FTC requirement)',
+    );
     ftcCompliant = false;
   }
 
   // IP and User Agent Check
   if (!acceptance.ip || acceptance.ip === 'unknown') {
-    issues.push('Unable to verify user location for jurisdiction-specific compliance');
+    issues.push(
+      'Unable to verify user location for jurisdiction-specific compliance',
+    );
   }
 
   return {
     uplCompliant,
     ncCompliant,
     ftcCompliant,
-    issues
+    issues,
   };
 }
 
@@ -158,11 +166,11 @@ function isLegalAdviceDocument(documentType: string): boolean {
     'court_filing',
     'will',
     'trust',
-    'power_of_attorney'
+    'power_of_attorney',
   ];
 
-  return legalAdviceDocuments.some(type => 
-    documentType.toLowerCase().includes(type.toLowerCase())
+  return legalAdviceDocuments.some((type) =>
+    documentType.toLowerCase().includes(type.toLowerCase()),
   );
 }
 

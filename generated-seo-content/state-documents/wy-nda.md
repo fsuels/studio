@@ -47,7 +47,7 @@ Don't risk using generic templates that may not comply with Wyoming law. Get a p
 
 [Create Wyoming Non-Disclosure Agreement]
 
-*Trusted by thousands of Wyoming businesses*
+_Trusted by thousands of Wyoming businesses_
 
 ---
 

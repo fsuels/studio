@@ -1,21 +1,23 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
-import HeaderSearch from '../HeaderSearch'
-import { getDocumentLibrary } from '@/lib/document-library'
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import HeaderSearch from '../HeaderSearch';
+import { getDocumentLibrary } from '@/lib/document-library';
 
 // Mock the document library
 jest.mock('@/lib/document-library', () => ({
   getDocumentLibrary: jest.fn(),
-}))
+}));
 
 // Mock next/navigation
 jest.mock('next/navigation', () => ({
   useRouter: () => ({
     push: jest.fn(),
   }),
-}))
+}));
 
-const mockGetDocumentLibrary = getDocumentLibrary as jest.MockedFunction<typeof getDocumentLibrary>
+const mockGetDocumentLibrary = getDocumentLibrary as jest.MockedFunction<
+  typeof getDocumentLibrary
+>;
 
 const mockDocuments = [
   {
@@ -38,124 +40,128 @@ const mockDocuments = [
       },
     },
   },
-]
+];
 
 describe('HeaderSearch', () => {
   beforeEach(() => {
-    mockGetDocumentLibrary.mockReturnValue(mockDocuments as any)
-  })
+    mockGetDocumentLibrary.mockReturnValue(mockDocuments as any);
+  });
 
   afterEach(() => {
-    jest.clearAllMocks()
-  })
+    jest.clearAllMocks();
+  });
 
   it('renders search input when mounted', () => {
-    render(<HeaderSearch clientLocale="en" mounted={true} />)
-    
-    const searchInput = screen.getByPlaceholderText(/Search documents/i)
-    expect(searchInput).toBeInTheDocument()
-  })
+    render(<HeaderSearch clientLocale="en" mounted={true} />);
+
+    const searchInput = screen.getByPlaceholderText(/Search documents/i);
+    expect(searchInput).toBeInTheDocument();
+  });
 
   it('does not render search input when not mounted', () => {
-    render(<HeaderSearch clientLocale="en" mounted={false} />)
-    
-    const searchInput = screen.queryByPlaceholderText(/Search documents/i)
-    expect(searchInput).not.toBeInTheDocument()
-  })
+    render(<HeaderSearch clientLocale="en" mounted={false} />);
+
+    const searchInput = screen.queryByPlaceholderText(/Search documents/i);
+    expect(searchInput).not.toBeInTheDocument();
+  });
 
   it('filters documents based on search query', async () => {
-    const user = userEvent.setup()
-    render(<HeaderSearch clientLocale="en" mounted={true} />)
-    
-    const searchInput = screen.getByPlaceholderText(/Search documents/i)
-    await user.type(searchInput, 'bill')
-    
+    const user = userEvent.setup();
+    render(<HeaderSearch clientLocale="en" mounted={true} />);
+
+    const searchInput = screen.getByPlaceholderText(/Search documents/i);
+    await user.type(searchInput, 'bill');
+
     await waitFor(() => {
-      expect(screen.getByText('Bill of Sale')).toBeInTheDocument()
-      expect(screen.queryByText('Rental Agreement')).not.toBeInTheDocument()
-    })
-  })
+      expect(screen.getByText('Bill of Sale')).toBeInTheDocument();
+      expect(screen.queryByText('Rental Agreement')).not.toBeInTheDocument();
+    });
+  });
 
   it('shows search results dropdown when typing', async () => {
-    const user = userEvent.setup()
-    render(<HeaderSearch clientLocale="en" mounted={true} />)
-    
-    const searchInput = screen.getByPlaceholderText(/Search documents/i)
-    await user.type(searchInput, 'sale')
-    
+    const user = userEvent.setup();
+    render(<HeaderSearch clientLocale="en" mounted={true} />);
+
+    const searchInput = screen.getByPlaceholderText(/Search documents/i);
+    await user.type(searchInput, 'sale');
+
     await waitFor(() => {
-      const resultsContainer = screen.getByRole('list')
-      expect(resultsContainer).toBeInTheDocument()
-    })
-  })
+      const resultsContainer = screen.getByRole('list');
+      expect(resultsContainer).toBeInTheDocument();
+    });
+  });
 
   it('hides search results when clicking outside', async () => {
-    const user = userEvent.setup()
+    const user = userEvent.setup();
     render(
       <div>
         <HeaderSearch clientLocale="en" mounted={true} />
         <button>Outside element</button>
-      </div>
-    )
-    
-    const searchInput = screen.getByPlaceholderText(/Search documents/i)
-    await user.type(searchInput, 'bill')
-    
+      </div>,
+    );
+
+    const searchInput = screen.getByPlaceholderText(/Search documents/i);
+    await user.type(searchInput, 'bill');
+
     await waitFor(() => {
-      expect(screen.getByText('Bill of Sale')).toBeInTheDocument()
-    })
-    
-    const outsideElement = screen.getByText('Outside element')
-    await user.click(outsideElement)
-    
+      expect(screen.getByText('Bill of Sale')).toBeInTheDocument();
+    });
+
+    const outsideElement = screen.getByText('Outside element');
+    await user.click(outsideElement);
+
     await waitFor(() => {
-      expect(screen.queryByText('Bill of Sale')).not.toBeInTheDocument()
-    })
-  })
+      expect(screen.queryByText('Bill of Sale')).not.toBeInTheDocument();
+    });
+  });
 
   it('searches document aliases', async () => {
-    const user = userEvent.setup()
-    render(<HeaderSearch clientLocale="en" mounted={true} />)
-    
-    const searchInput = screen.getByPlaceholderText(/Search documents/i)
-    await user.type(searchInput, 'lease')
-    
+    const user = userEvent.setup();
+    render(<HeaderSearch clientLocale="en" mounted={true} />);
+
+    const searchInput = screen.getByPlaceholderText(/Search documents/i);
+    await user.type(searchInput, 'lease');
+
     await waitFor(() => {
-      expect(screen.getByText('Rental Agreement')).toBeInTheDocument()
-    })
-  })
+      expect(screen.getByText('Rental Agreement')).toBeInTheDocument();
+    });
+  });
 
   it('shows no results message when no matches found', async () => {
-    const user = userEvent.setup()
-    render(<HeaderSearch clientLocale="en" mounted={true} />)
-    
-    const searchInput = screen.getByPlaceholderText(/Search documents/i)
-    await user.type(searchInput, 'nonexistent')
-    
+    const user = userEvent.setup();
+    render(<HeaderSearch clientLocale="en" mounted={true} />);
+
+    const searchInput = screen.getByPlaceholderText(/Search documents/i);
+    await user.type(searchInput, 'nonexistent');
+
     await waitFor(() => {
-      expect(screen.getByText(/No documents found/i)).toBeInTheDocument()
-    })
-  })
+      expect(screen.getByText(/No documents found/i)).toBeInTheDocument();
+    });
+  });
 
   it('handles form submission', async () => {
-    const user = userEvent.setup()
-    render(<HeaderSearch clientLocale="en" mounted={true} />)
-    
-    const searchInput = screen.getByPlaceholderText(/Search documents/i)
-    await user.type(searchInput, 'bill')
-    
-    const form = searchInput.closest('form')
-    expect(form).toBeInTheDocument()
-    
-    fireEvent.submit(form!)
+    const user = userEvent.setup();
+    render(<HeaderSearch clientLocale="en" mounted={true} />);
+
+    const searchInput = screen.getByPlaceholderText(/Search documents/i);
+    await user.type(searchInput, 'bill');
+
+    const form = searchInput.closest('form');
+    expect(form).toBeInTheDocument();
+
+    fireEvent.submit(form!);
     // Router push would be called, but we're just testing the form submission doesn't error
-  })
+  });
 
   it('applies custom className', () => {
     const { container } = render(
-      <HeaderSearch clientLocale="en" mounted={true} className="custom-class" />
-    )
-    
-    expect(container.firstChild).toHaveClass('custom-class')
-  })
-})
+      <HeaderSearch
+        clientLocale="en"
+        mounted={true}
+        className="custom-class"
+      />,
+    );
+
+    expect(container.firstChild).toHaveClass('custom-class');
+  });
+});

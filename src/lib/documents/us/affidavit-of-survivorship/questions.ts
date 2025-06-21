@@ -287,7 +287,8 @@ export const questions: Question[] = [
     required: true,
     section: 'Property Information',
     placeholder: 'Provide a detailed description of the property or asset...',
-    description: 'Include all identifying information such as legal description, account numbers, etc.',
+    description:
+      'Include all identifying information such as legal description, account numbers, etc.',
   },
   {
     id: 'propertyAddress',
@@ -296,7 +297,8 @@ export const questions: Question[] = [
     required: true,
     section: 'Property Information',
     placeholder: 'Enter the property street address',
-    description: 'For accounts, enter the institution address. For vehicles, enter where located.',
+    description:
+      'For accounts, enter the institution address. For vehicles, enter where located.',
   },
   {
     id: 'propertyCity',
@@ -382,7 +384,10 @@ export const questions: Question[] = [
     required: false,
     section: 'Account Information',
     placeholder: 'Enter bank or financial institution name',
-    condition: { field: 'propertyType', value: ['bank_account', 'investment_account'] },
+    condition: {
+      field: 'propertyType',
+      value: ['bank_account', 'investment_account'],
+    },
   },
   {
     id: 'accountNumber',
@@ -391,7 +396,10 @@ export const questions: Question[] = [
     required: false,
     section: 'Account Information',
     placeholder: 'Enter account number',
-    condition: { field: 'propertyType', value: ['bank_account', 'investment_account'] },
+    condition: {
+      field: 'propertyType',
+      value: ['bank_account', 'investment_account'],
+    },
   },
   {
     id: 'accountType',
@@ -400,7 +408,10 @@ export const questions: Question[] = [
     required: false,
     section: 'Account Information',
     placeholder: 'e.g., Checking, Savings, CD, Investment',
-    condition: { field: 'propertyType', value: ['bank_account', 'investment_account'] },
+    condition: {
+      field: 'propertyType',
+      value: ['bank_account', 'investment_account'],
+    },
   },
 
   // Section 6: Vehicle Information (conditional)
@@ -449,9 +460,15 @@ export const questions: Question[] = [
     required: true,
     section: 'Ownership Details',
     options: [
-      { value: 'joint_tenants', label: 'Joint Tenants with Right of Survivorship' },
+      {
+        value: 'joint_tenants',
+        label: 'Joint Tenants with Right of Survivorship',
+      },
       { value: 'tenants_entirety', label: 'Tenants by the Entirety' },
-      { value: 'joint_account', label: 'Joint Account with Right of Survivorship' },
+      {
+        value: 'joint_account',
+        label: 'Joint Account with Right of Survivorship',
+      },
       { value: 'other', label: 'Other' },
     ],
   },
@@ -471,7 +488,8 @@ export const questions: Question[] = [
     required: true,
     section: 'Ownership Details',
     placeholder: 'e.g., 50% each, Equal ownership',
-    description: 'Describe how the property was owned between you and the deceased.',
+    description:
+      'Describe how the property was owned between you and the deceased.',
   },
   {
     id: 'survivorshipRights',
@@ -481,9 +499,13 @@ export const questions: Question[] = [
     section: 'Ownership Details',
     options: [
       { value: 'true', label: 'Yes, ownership included right of survivorship' },
-      { value: 'false', label: 'No, ownership did not include right of survivorship' },
+      {
+        value: 'false',
+        label: 'No, ownership did not include right of survivorship',
+      },
     ],
-    description: 'Right of survivorship means the surviving owner automatically inherits the deceased owner\'s share.',
+    description:
+      "Right of survivorship means the surviving owner automatically inherits the deceased owner's share.",
   },
   {
     id: 'survivorshipDescription',
@@ -491,8 +513,10 @@ export const questions: Question[] = [
     label: 'Description of Survivorship Rights',
     required: true,
     section: 'Ownership Details',
-    placeholder: 'Describe the survivorship provisions and how ownership passes to you...',
-    description: 'Explain how the property ownership transfers to you as the survivor.',
+    placeholder:
+      'Describe the survivorship provisions and how ownership passes to you...',
+    description:
+      'Explain how the property ownership transfers to you as the survivor.',
   },
 
   // Section 8: Original Ownership Documentation
@@ -528,8 +552,10 @@ export const questions: Question[] = [
     label: 'Additional Recording Information',
     required: false,
     section: 'Original Documentation',
-    placeholder: 'Provide any additional recording or documentation information...',
-    description: 'Include any other relevant information about the original ownership documents.',
+    placeholder:
+      'Provide any additional recording or documentation information...',
+    description:
+      'Include any other relevant information about the original ownership documents.',
   },
 
   // Section 9: Death Certificate Information
@@ -566,7 +592,10 @@ export const questions: Question[] = [
     section: 'Additional Owners',
     options: [
       { value: 'true', label: 'Yes, there were other owners' },
-      { value: 'false', label: 'No, only you and the deceased owned this property' },
+      {
+        value: 'false',
+        label: 'No, only you and the deceased owned this property',
+      },
     ],
   },
   {
@@ -700,7 +729,8 @@ export const questions: Question[] = [
     required: false,
     section: 'Additional Information',
     placeholder: 'Provide any additional relevant information...',
-    description: 'Include any other information relevant to the survivorship claim.',
+    description:
+      'Include any other information relevant to the survivorship claim.',
   },
 
   // Section 14: Legal Information

@@ -6,22 +6,28 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Textarea } from '@/components/ui/textarea';
-import { 
-  BarChart3, 
-  LineChart, 
-  PieChart, 
-  Table, 
-  Play, 
-  Save, 
+import {
+  BarChart3,
+  LineChart,
+  PieChart,
+  Table,
+  Play,
+  Save,
   Download,
   Plus,
   Trash2,
   Database,
   Filter,
-  Eye
+  Eye,
 } from 'lucide-react';
 import { ReportChart } from './ReportChart';
 import { ReportTable } from './ReportTable';
@@ -44,7 +50,14 @@ interface DataField {
 interface Filter {
   id: string;
   field: string;
-  operator: 'equals' | 'not_equals' | 'greater_than' | 'less_than' | 'contains' | 'starts_with' | 'between';
+  operator:
+    | 'equals'
+    | 'not_equals'
+    | 'greater_than'
+    | 'less_than'
+    | 'contains'
+    | 'starts_with'
+    | 'between';
   value: any;
   value2?: any; // For 'between' operator
 }
@@ -56,7 +69,10 @@ interface ReportConfig {
   dataSource: string;
   filters: Filter[];
   groupBy: string[];
-  aggregations: { field: string; function: 'count' | 'sum' | 'avg' | 'min' | 'max' }[];
+  aggregations: {
+    field: string;
+    function: 'count' | 'sum' | 'avg' | 'min' | 'max';
+  }[];
   chartType: 'bar' | 'line' | 'pie' | 'table';
   timeRange?: {
     start: string;
@@ -78,8 +94,8 @@ const DATA_SOURCES: DataSource[] = [
       { name: 'updated_at', type: 'date', label: 'Updated Date' },
       { name: 'user_id', type: 'string', label: 'User ID' },
       { name: 'is_signed', type: 'boolean', label: 'Is Signed' },
-      { name: 'page_count', type: 'number', label: 'Page Count' }
-    ]
+      { name: 'page_count', type: 'number', label: 'Page Count' },
+    ],
   },
   {
     id: 'users',
@@ -94,8 +110,8 @@ const DATA_SOURCES: DataSource[] = [
       { name: 'plan', type: 'string', label: 'Subscription Plan' },
       { name: 'document_count', type: 'number', label: 'Documents Created' },
       { name: 'is_verified', type: 'boolean', label: 'Email Verified' },
-      { name: 'state', type: 'string', label: 'State' }
-    ]
+      { name: 'state', type: 'string', label: 'State' },
+    ],
   },
   {
     id: 'payments',
@@ -110,8 +126,8 @@ const DATA_SOURCES: DataSource[] = [
       { name: 'created_at', type: 'date', label: 'Payment Date' },
       { name: 'user_id', type: 'string', label: 'User ID' },
       { name: 'subscription_id', type: 'string', label: 'Subscription ID' },
-      { name: 'payment_method', type: 'string', label: 'Payment Method' }
-    ]
+      { name: 'payment_method', type: 'string', label: 'Payment Method' },
+    ],
   },
   {
     id: 'compliance',
@@ -126,16 +142,16 @@ const DATA_SOURCES: DataSource[] = [
       { name: 'user_id', type: 'string', label: 'User ID' },
       { name: 'resource', type: 'string', label: 'Resource' },
       { name: 'action', type: 'string', label: 'Action' },
-      { name: 'state', type: 'string', label: 'State' }
-    ]
-  }
+      { name: 'state', type: 'string', label: 'State' },
+    ],
+  },
 ];
 
 const CHART_TYPES = [
   { id: 'bar', name: 'Bar Chart', icon: BarChart3 },
   { id: 'line', name: 'Line Chart', icon: LineChart },
   { id: 'pie', name: 'Pie Chart', icon: PieChart },
-  { id: 'table', name: 'Data Table', icon: Table }
+  { id: 'table', name: 'Data Table', icon: Table },
 ];
 
 const AGGREGATION_FUNCTIONS = [
@@ -143,7 +159,7 @@ const AGGREGATION_FUNCTIONS = [
   { id: 'sum', name: 'Sum' },
   { id: 'avg', name: 'Average' },
   { id: 'min', name: 'Minimum' },
-  { id: 'max', name: 'Maximum' }
+  { id: 'max', name: 'Maximum' },
 ];
 
 const FILTER_OPERATORS = [
@@ -153,7 +169,7 @@ const FILTER_OPERATORS = [
   { id: 'less_than', name: 'Less Than' },
   { id: 'contains', name: 'Contains' },
   { id: 'starts_with', name: 'Starts With' },
-  { id: 'between', name: 'Between' }
+  { id: 'between', name: 'Between' },
 ];
 
 export function ReportBuilder() {
@@ -164,15 +180,17 @@ export function ReportBuilder() {
     filters: [],
     groupBy: [],
     aggregations: [],
-    chartType: 'bar'
+    chartType: 'bar',
   });
-  
+
   const [reportData, setReportData] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [savedReports, setSavedReports] = useState<ReportConfig[]>([]);
 
-  const selectedDataSource = DATA_SOURCES.find(ds => ds.id === config.dataSource);
+  const selectedDataSource = DATA_SOURCES.find(
+    (ds) => ds.id === config.dataSource,
+  );
 
   useEffect(() => {
     loadSavedReports();
@@ -190,18 +208,25 @@ export function ReportBuilder() {
           filters: [],
           groupBy: ['type', 'created_at'],
           aggregations: [{ field: 'id', function: 'count' }],
-          chartType: 'line'
+          chartType: 'line',
         },
         {
-          id: 'report_2', 
+          id: 'report_2',
           name: 'Revenue by Plan',
           description: 'Monthly revenue breakdown by subscription plan',
           dataSource: 'payments',
-          filters: [{ id: '1', field: 'status', operator: 'equals', value: 'succeeded' }],
+          filters: [
+            {
+              id: '1',
+              field: 'status',
+              operator: 'equals',
+              value: 'succeeded',
+            },
+          ],
           groupBy: ['subscription_id'],
           aggregations: [{ field: 'amount', function: 'sum' }],
-          chartType: 'pie'
-        }
+          chartType: 'pie',
+        },
       ];
       setSavedReports(mockReports);
     } catch (err) {
@@ -228,8 +253,8 @@ export function ReportBuilder() {
       // const data = await response.json();
 
       // Mock data for demonstration
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
       const mockData = generateMockData(config);
       setReportData(mockData);
     } catch (err: any) {
@@ -243,16 +268,16 @@ export function ReportBuilder() {
     // Generate realistic mock data based on the configuration
     const data = [];
     const now = new Date();
-    
+
     for (let i = 0; i < 12; i++) {
       const date = new Date(now.getFullYear(), now.getMonth() - i, 1);
       data.push({
         period: date.toISOString().substring(0, 7), // YYYY-MM format
         value: Math.floor(Math.random() * 1000) + 100,
-        category: ['Category A', 'Category B', 'Category C'][i % 3]
+        category: ['Category A', 'Category B', 'Category C'][i % 3],
       });
     }
-    
+
     return data.reverse();
   };
 
@@ -261,54 +286,56 @@ export function ReportBuilder() {
       id: Date.now().toString(),
       field: selectedDataSource?.fields[0]?.name || '',
       operator: 'equals',
-      value: ''
+      value: '',
     };
-    setConfig(prev => ({
+    setConfig((prev) => ({
       ...prev,
-      filters: [...prev.filters, newFilter]
+      filters: [...prev.filters, newFilter],
     }));
   };
 
   const updateFilter = (filterId: string, updates: Partial<Filter>) => {
-    setConfig(prev => ({
+    setConfig((prev) => ({
       ...prev,
-      filters: prev.filters.map(f => 
-        f.id === filterId ? { ...f, ...updates } : f
-      )
+      filters: prev.filters.map((f) =>
+        f.id === filterId ? { ...f, ...updates } : f,
+      ),
     }));
   };
 
   const removeFilter = (filterId: string) => {
-    setConfig(prev => ({
+    setConfig((prev) => ({
       ...prev,
-      filters: prev.filters.filter(f => f.id !== filterId)
+      filters: prev.filters.filter((f) => f.id !== filterId),
     }));
   };
 
   const addAggregation = () => {
     const newAggregation = {
-      field: selectedDataSource?.fields.find(f => f.type === 'number')?.name || 'id',
-      function: 'count' as const
+      field:
+        selectedDataSource?.fields.find((f) => f.type === 'number')?.name ||
+        'id',
+      function: 'count' as const,
     };
-    setConfig(prev => ({
+    setConfig((prev) => ({
       ...prev,
-      aggregations: [...prev.aggregations, newAggregation]
+      aggregations: [...prev.aggregations, newAggregation],
     }));
   };
 
   const updateAggregation = (index: number, updates: any) => {
-    setConfig(prev => ({
+    setConfig((prev) => ({
       ...prev,
-      aggregations: prev.aggregations.map((agg, i) => 
-        i === index ? { ...agg, ...updates } : agg
-      )
+      aggregations: prev.aggregations.map((agg, i) =>
+        i === index ? { ...agg, ...updates } : agg,
+      ),
     }));
   };
 
   const removeAggregation = (index: number) => {
-    setConfig(prev => ({
+    setConfig((prev) => ({
       ...prev,
-      aggregations: prev.aggregations.filter((_, i) => i !== index)
+      aggregations: prev.aggregations.filter((_, i) => i !== index),
     }));
   };
 
@@ -322,13 +349,13 @@ export function ReportBuilder() {
       // In a real implementation, this would save to the backend
       const reportWithId = {
         ...config,
-        id: config.id || `report_${Date.now()}`
+        id: config.id || `report_${Date.now()}`,
       };
-      
-      setSavedReports(prev => {
-        const existing = prev.findIndex(r => r.id === reportWithId.id);
+
+      setSavedReports((prev) => {
+        const existing = prev.findIndex((r) => r.id === reportWithId.id);
         if (existing >= 0) {
-          return prev.map((r, i) => i === existing ? reportWithId : r);
+          return prev.map((r, i) => (i === existing ? reportWithId : r));
         }
         return [...prev, reportWithId];
       });
@@ -349,7 +376,9 @@ export function ReportBuilder() {
 
     const csv = [
       ['Period', 'Value', 'Category'].join(','),
-      ...reportData.map((row: any) => [row.period, row.value, row.category].join(','))
+      ...reportData.map((row: any) =>
+        [row.period, row.value, row.category].join(','),
+      ),
     ].join('\n');
 
     const blob = new Blob([csv], { type: 'text/csv' });
@@ -397,7 +426,9 @@ export function ReportBuilder() {
                 <Input
                   id="report-name"
                   value={config.name}
-                  onChange={(e) => setConfig(prev => ({ ...prev, name: e.target.value }))}
+                  onChange={(e) =>
+                    setConfig((prev) => ({ ...prev, name: e.target.value }))
+                  }
                   placeholder="Enter report name"
                 />
               </div>
@@ -407,7 +438,12 @@ export function ReportBuilder() {
                 <Textarea
                   id="report-description"
                   value={config.description}
-                  onChange={(e) => setConfig(prev => ({ ...prev, description: e.target.value }))}
+                  onChange={(e) =>
+                    setConfig((prev) => ({
+                      ...prev,
+                      description: e.target.value,
+                    }))
+                  }
                   placeholder="Describe what this report shows"
                   rows={2}
                 />
@@ -416,18 +452,29 @@ export function ReportBuilder() {
               {/* Data Source */}
               <div className="space-y-2">
                 <Label>Data Source</Label>
-                <Select value={config.dataSource} onValueChange={(value) => 
-                  setConfig(prev => ({ ...prev, dataSource: value, filters: [], groupBy: [], aggregations: [] }))
-                }>
+                <Select
+                  value={config.dataSource}
+                  onValueChange={(value) =>
+                    setConfig((prev) => ({
+                      ...prev,
+                      dataSource: value,
+                      filters: [],
+                      groupBy: [],
+                      aggregations: [],
+                    }))
+                  }
+                >
                   <SelectTrigger>
                     <SelectValue placeholder="Select data source" />
                   </SelectTrigger>
                   <SelectContent>
-                    {DATA_SOURCES.map(source => (
+                    {DATA_SOURCES.map((source) => (
                       <SelectItem key={source.id} value={source.id}>
                         <div>
                           <div className="font-medium">{source.name}</div>
-                          <div className="text-sm text-muted-foreground">{source.description}</div>
+                          <div className="text-sm text-muted-foreground">
+                            {source.description}
+                          </div>
                         </div>
                       </SelectItem>
                     ))}
@@ -439,14 +486,21 @@ export function ReportBuilder() {
               <div className="space-y-2">
                 <Label>Chart Type</Label>
                 <div className="grid grid-cols-2 gap-2">
-                  {CHART_TYPES.map(type => {
+                  {CHART_TYPES.map((type) => {
                     const Icon = type.icon;
                     return (
                       <Button
                         key={type.id}
-                        variant={config.chartType === type.id ? 'default' : 'outline'}
+                        variant={
+                          config.chartType === type.id ? 'default' : 'outline'
+                        }
                         className="h-auto p-3 flex flex-col gap-1"
-                        onClick={() => setConfig(prev => ({ ...prev, chartType: type.id as any }))}
+                        onClick={() =>
+                          setConfig((prev) => ({
+                            ...prev,
+                            chartType: type.id as any,
+                          }))
+                        }
                       >
                         <Icon className="h-4 w-4" />
                         <span className="text-xs">{type.name}</span>
@@ -465,11 +519,18 @@ export function ReportBuilder() {
             </CardHeader>
             <CardContent>
               <div className="space-y-2">
-                {savedReports.map(report => (
-                  <div key={report.id} className="flex items-center justify-between p-2 border rounded">
+                {savedReports.map((report) => (
+                  <div
+                    key={report.id}
+                    className="flex items-center justify-between p-2 border rounded"
+                  >
                     <div className="flex-1 min-w-0">
-                      <p className="font-medium text-sm truncate">{report.name}</p>
-                      <p className="text-xs text-muted-foreground truncate">{report.description}</p>
+                      <p className="font-medium text-sm truncate">
+                        {report.name}
+                      </p>
+                      <p className="text-xs text-muted-foreground truncate">
+                        {report.description}
+                      </p>
                     </div>
                     <Button
                       variant="ghost"
@@ -500,7 +561,11 @@ export function ReportBuilder() {
                   <CardHeader>
                     <div className="flex items-center justify-between">
                       <CardTitle>Data Aggregations</CardTitle>
-                      <Button variant="outline" size="sm" onClick={addAggregation}>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={addAggregation}
+                      >
                         <Plus className="h-4 w-4 mr-2" />
                         Add Aggregation
                       </Button>
@@ -509,21 +574,27 @@ export function ReportBuilder() {
                   <CardContent>
                     {config.aggregations.length === 0 ? (
                       <p className="text-muted-foreground text-center py-4">
-                        No aggregations configured. Add at least one to generate a report.
+                        No aggregations configured. Add at least one to generate
+                        a report.
                       </p>
                     ) : (
                       <div className="space-y-3">
                         {config.aggregations.map((agg, index) => (
-                          <div key={index} className="flex items-center gap-3 p-3 border rounded">
+                          <div
+                            key={index}
+                            className="flex items-center gap-3 p-3 border rounded"
+                          >
                             <Select
                               value={agg.function}
-                              onValueChange={(value) => updateAggregation(index, { function: value })}
+                              onValueChange={(value) =>
+                                updateAggregation(index, { function: value })
+                              }
                             >
                               <SelectTrigger className="w-32">
                                 <SelectValue />
                               </SelectTrigger>
                               <SelectContent>
-                                {AGGREGATION_FUNCTIONS.map(func => (
+                                {AGGREGATION_FUNCTIONS.map((func) => (
                                   <SelectItem key={func.id} value={func.id}>
                                     {func.name}
                                   </SelectItem>
@@ -532,14 +603,19 @@ export function ReportBuilder() {
                             </Select>
                             <Select
                               value={agg.field}
-                              onValueChange={(value) => updateAggregation(index, { field: value })}
+                              onValueChange={(value) =>
+                                updateAggregation(index, { field: value })
+                              }
                             >
                               <SelectTrigger className="flex-1">
                                 <SelectValue />
                               </SelectTrigger>
                               <SelectContent>
-                                {selectedDataSource.fields.map(field => (
-                                  <SelectItem key={field.name} value={field.name}>
+                                {selectedDataSource.fields.map((field) => (
+                                  <SelectItem
+                                    key={field.name}
+                                    value={field.name}
+                                  >
                                     {field.label} ({field.type})
                                   </SelectItem>
                                 ))}
@@ -577,22 +653,31 @@ export function ReportBuilder() {
                   <CardContent>
                     {config.filters.length === 0 ? (
                       <p className="text-muted-foreground text-center py-4">
-                        No filters configured. Add filters to narrow down your data.
+                        No filters configured. Add filters to narrow down your
+                        data.
                       </p>
                     ) : (
                       <div className="space-y-3">
-                        {config.filters.map(filter => (
-                          <div key={filter.id} className="flex items-center gap-3 p-3 border rounded">
+                        {config.filters.map((filter) => (
+                          <div
+                            key={filter.id}
+                            className="flex items-center gap-3 p-3 border rounded"
+                          >
                             <Select
                               value={filter.field}
-                              onValueChange={(value) => updateFilter(filter.id, { field: value })}
+                              onValueChange={(value) =>
+                                updateFilter(filter.id, { field: value })
+                              }
                             >
                               <SelectTrigger className="w-40">
                                 <SelectValue />
                               </SelectTrigger>
                               <SelectContent>
-                                {selectedDataSource.fields.map(field => (
-                                  <SelectItem key={field.name} value={field.name}>
+                                {selectedDataSource.fields.map((field) => (
+                                  <SelectItem
+                                    key={field.name}
+                                    value={field.name}
+                                  >
                                     {field.label}
                                   </SelectItem>
                                 ))}
@@ -600,13 +685,17 @@ export function ReportBuilder() {
                             </Select>
                             <Select
                               value={filter.operator}
-                              onValueChange={(value) => updateFilter(filter.id, { operator: value as any })}
+                              onValueChange={(value) =>
+                                updateFilter(filter.id, {
+                                  operator: value as any,
+                                })
+                              }
                             >
                               <SelectTrigger className="w-32">
                                 <SelectValue />
                               </SelectTrigger>
                               <SelectContent>
-                                {FILTER_OPERATORS.map(op => (
+                                {FILTER_OPERATORS.map((op) => (
                                   <SelectItem key={op.id} value={op.id}>
                                     {op.name}
                                   </SelectItem>
@@ -615,7 +704,11 @@ export function ReportBuilder() {
                             </Select>
                             <Input
                               value={filter.value}
-                              onChange={(e) => updateFilter(filter.id, { value: e.target.value })}
+                              onChange={(e) =>
+                                updateFilter(filter.id, {
+                                  value: e.target.value,
+                                })
+                              }
                               placeholder="Filter value"
                               className="flex-1"
                             />
@@ -643,27 +736,35 @@ export function ReportBuilder() {
                     <div className="space-y-3">
                       <Label>Group By Fields</Label>
                       <div className="grid grid-cols-1 gap-2">
-                        {selectedDataSource.fields.map(field => (
-                          <div key={field.name} className="flex items-center space-x-2">
+                        {selectedDataSource.fields.map((field) => (
+                          <div
+                            key={field.name}
+                            className="flex items-center space-x-2"
+                          >
                             <input
                               type="checkbox"
                               id={`group-${field.name}`}
                               checked={config.groupBy.includes(field.name)}
                               onChange={(e) => {
                                 if (e.target.checked) {
-                                  setConfig(prev => ({
+                                  setConfig((prev) => ({
                                     ...prev,
-                                    groupBy: [...prev.groupBy, field.name]
+                                    groupBy: [...prev.groupBy, field.name],
                                   }));
                                 } else {
-                                  setConfig(prev => ({
+                                  setConfig((prev) => ({
                                     ...prev,
-                                    groupBy: prev.groupBy.filter(g => g !== field.name)
+                                    groupBy: prev.groupBy.filter(
+                                      (g) => g !== field.name,
+                                    ),
                                   }));
                                 }
                               }}
                             />
-                            <Label htmlFor={`group-${field.name}`} className="text-sm">
+                            <Label
+                              htmlFor={`group-${field.name}`}
+                              className="text-sm"
+                            >
                               {field.label} ({field.type})
                             </Label>
                           </div>
@@ -679,7 +780,9 @@ export function ReportBuilder() {
               <CardContent className="flex items-center justify-center h-64">
                 <div className="text-center">
                   <Database className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                  <p className="text-muted-foreground">Select a data source to begin configuring your report</p>
+                  <p className="text-muted-foreground">
+                    Select a data source to begin configuring your report
+                  </p>
                 </div>
               </CardContent>
             </Card>
@@ -687,9 +790,13 @@ export function ReportBuilder() {
 
           {/* Actions */}
           <div className="flex items-center gap-3">
-            <Button 
+            <Button
               onClick={executeReport}
-              disabled={loading || !config.dataSource || config.aggregations.length === 0}
+              disabled={
+                loading ||
+                !config.dataSource ||
+                config.aggregations.length === 0
+              }
               className="flex-1"
             >
               {loading ? (
@@ -704,7 +811,11 @@ export function ReportBuilder() {
                 </>
               )}
             </Button>
-            <Button variant="outline" onClick={saveReport} disabled={!config.name}>
+            <Button
+              variant="outline"
+              onClick={saveReport}
+              disabled={!config.name}
+            >
               <Save className="h-4 w-4 mr-2" />
               Save
             </Button>
@@ -724,7 +835,9 @@ export function ReportBuilder() {
           <CardHeader>
             <CardTitle>Report Results</CardTitle>
             {config.description && (
-              <p className="text-sm text-muted-foreground">{config.description}</p>
+              <p className="text-sm text-muted-foreground">
+                {config.description}
+              </p>
             )}
           </CardHeader>
           <CardContent>

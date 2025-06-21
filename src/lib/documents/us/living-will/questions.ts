@@ -30,8 +30,14 @@ export const questions: Question[] = [
     type: 'select',
     required: true,
     options: [
-      { value: 'withdraw', label: 'Withdraw artificial nutrition and hydration' },
-      { value: 'continue', label: 'Continue artificial nutrition and hydration' },
+      {
+        value: 'withdraw',
+        label: 'Withdraw artificial nutrition and hydration',
+      },
+      {
+        value: 'continue',
+        label: 'Continue artificial nutrition and hydration',
+      },
       { value: 'limited', label: 'Limited artificial nutrition and hydration' },
     ],
   },
@@ -40,7 +46,8 @@ export const questions: Question[] = [
     label: 'Pain Management Preferences',
     type: 'textarea',
     required: true,
-    placeholder: 'Describe your preferences for pain management and comfort care',
+    placeholder:
+      'Describe your preferences for pain management and comfort care',
   },
   {
     id: 'organDonation',

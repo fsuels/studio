@@ -24,13 +24,25 @@ export const royaltyAgreementMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Royalty Agreement',
-      description: 'Agreement for royalty payments and distribution of intellectual property licensing revenue.',
-      aliases: ['royalty contract', 'licensing royalty', 'ip royalty', 'revenue sharing'],
+      description:
+        'Agreement for royalty payments and distribution of intellectual property licensing revenue.',
+      aliases: [
+        'royalty contract',
+        'licensing royalty',
+        'ip royalty',
+        'revenue sharing',
+      ],
     },
     es: {
       name: 'Acuerdo de Regalías',
-      description: 'Acuerdo para pagos de regalías y distribución de ingresos por licenciamiento de propiedad intelectual.',
-      aliases: ['contrato regalías', 'regalías licenciamiento', 'regalías pi', 'participación ingresos'],
+      description:
+        'Acuerdo para pagos de regalías y distribución de ingresos por licenciamiento de propiedad intelectual.',
+      aliases: [
+        'contrato regalías',
+        'regalías licenciamiento',
+        'regalías pi',
+        'participación ingresos',
+      ],
     },
   },
 };

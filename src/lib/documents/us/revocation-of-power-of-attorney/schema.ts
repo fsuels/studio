@@ -18,7 +18,9 @@ export const schema = z.object({
   remainingPowers: z.string().optional(),
   newAgent: z.string().optional(),
   newAgentAddress: z.string().optional(),
-  notificationRequirements: z.string().min(1, 'Notification requirements are required'),
+  notificationRequirements: z
+    .string()
+    .min(1, 'Notification requirements are required'),
   thirdPartyNotification: z.string().optional(),
   bankNotification: z.boolean().default(false),
   bankNames: z.string().optional(),
@@ -29,7 +31,9 @@ export const schema = z.object({
   governmentAgencyNotification: z.boolean().default(false),
   governmentAgencyNames: z.string().optional(),
   additionalNotifications: z.string().optional(),
-  confirmationOfCapacity: z.string().min(1, 'Confirmation of capacity is required'),
+  confirmationOfCapacity: z
+    .string()
+    .min(1, 'Confirmation of capacity is required'),
   witnessOneName: z.string().min(1, 'First witness name is required'),
   witnessOneAddress: z.string().min(1, 'First witness address is required'),
   witnessTwoName: z.string().min(1, 'Second witness name is required'),

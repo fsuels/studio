@@ -35,7 +35,10 @@ const getInputType = (
   return 'text';
 };
 
-export default function FieldEditor({ field, actualSchemaShape }: FieldEditorProps) {
+export default function FieldEditor({
+  field,
+  actualSchemaShape,
+}: FieldEditorProps) {
   const { t } = useTranslation('common');
   const {
     control,
@@ -95,23 +98,16 @@ export default function FieldEditor({ field, actualSchemaShape }: FieldEditorPro
                     shouldDirty: true,
                   });
                 if (actualSchemaShape?.[`${prefix}_postal_code`])
-                  setValue(
-                    `${prefix}_postal_code`,
-                    parts.postalCode,
-                    {
-                      shouldValidate: true,
-                      shouldDirty: true,
-                    },
-                  );
+                  setValue(`${prefix}_postal_code`, parts.postalCode, {
+                    shouldValidate: true,
+                    shouldDirty: true,
+                  });
               }
             }}
-            placeholder={t(
-              field.placeholder || 'Enter address...',
-              {
-                ns: 'documents',
-                defaultValue: field.placeholder || 'Enter address...',
-              },
-            )}
+            placeholder={t(field.placeholder || 'Enter address...', {
+              ns: 'documents',
+              defaultValue: field.placeholder || 'Enter address...',
+            })}
             className="max-w-md"
             error={errors[field.id]?.message as string | undefined}
             tooltip={
@@ -181,25 +177,20 @@ export default function FieldEditor({ field, actualSchemaShape }: FieldEditorPro
                 id={`review-${field.id}`}
                 className={cn(
                   'max-w-md text-sm',
-                  errors[field.id] && 'border-destructive focus:ring-destructive',
+                  errors[field.id] &&
+                    'border-destructive focus:ring-destructive',
                 )}
                 aria-invalid={!!errors[field.id]}
-                aria-label={t(
-                  field.placeholder || 'Select...',
-                  {
-                    ns: 'documents',
-                    defaultValue: field.placeholder || 'Select...',
-                  },
-                )}
+                aria-label={t(field.placeholder || 'Select...', {
+                  ns: 'documents',
+                  defaultValue: field.placeholder || 'Select...',
+                })}
               >
                 <SelectValue
-                  placeholder={t(
-                    field.placeholder || 'Select...',
-                    {
-                      ns: 'documents',
-                      defaultValue: field.placeholder || 'Select...',
-                    },
-                  )}
+                  placeholder={t(field.placeholder || 'Select...', {
+                    ns: 'documents',
+                    defaultValue: field.placeholder || 'Select...',
+                  })}
                 />
               </SelectTrigger>
               <SelectContent>
@@ -239,12 +230,7 @@ export default function FieldEditor({ field, actualSchemaShape }: FieldEditorPro
           );
         }
 
-        return (
-          <Input
-            {...commonInputProps}
-            type={getInputType(field.type)}
-          />
-        );
+        return <Input {...commonInputProps} type={getInputType(field.type)} />;
       }}
     />
   );

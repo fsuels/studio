@@ -1,7 +1,7 @@
 'use client';
 'use client';
 // src/lib/bundles.ts
-'use client';  // Ensure Firestore client SDK runs in the browser
+'use client'; // Ensure Firestore client SDK runs in the browser
 
 import { getDb } from '@/lib/firebase';
 import { collection, getDocs, query, orderBy, limit } from 'firebase/firestore';

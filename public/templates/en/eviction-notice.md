@@ -19,8 +19,9 @@
 **Property Manager:** {{#if property_manager}}{{property_manager_name}}{{else}}N/A{{/if}}
 
 **Type of Notice:** {{notice_type}}
+
 - [ ] Pay Rent or Quit
-- [ ] Cure or Quit  
+- [ ] Cure or Quit
 - [ ] Unconditional Quit
 - [ ] Notice to Quit (End of Tenancy)
 
@@ -29,6 +30,7 @@
 ## 2. Reason for Notice
 
 {{#if pay_rent_or_quit}}
+
 ### PAY RENT OR QUIT NOTICE
 
 You are hereby notified that you are in default in the payment of rent for the above-described premises. The rental period and amount due are as follows:
@@ -44,6 +46,7 @@ You are required to pay the total amount due within **{{pay_or_quit_days}}** day
 {{/if}}
 
 {{#if cure_or_quit}}
+
 ### CURE OR QUIT NOTICE
 
 You are hereby notified that you are in violation of the terms of your lease agreement in the following manner:
@@ -55,6 +58,7 @@ You are required to cure the above-mentioned violations within **{{cure_period_d
 {{/if}}
 
 {{#if unconditional_quit}}
+
 ### UNCONDITIONAL QUIT NOTICE
 
 You are hereby required to quit and deliver up possession of the above-described premises to the landlord within **{{quit_days}}** days after service of this notice.
@@ -64,6 +68,7 @@ You are hereby required to quit and deliver up possession of the above-described
 {{/if}}
 
 {{#if end_tenancy}}
+
 ### NOTICE TO QUIT (END OF TENANCY)
 
 You are hereby notified that your tenancy of the above-described premises will terminate on **{{termination_date}}**. You are required to quit and deliver up possession of the premises to the landlord on or before that date.
@@ -96,23 +101,28 @@ The undersigned landlord declares under penalty of perjury that the facts stated
 ## 5. Important Information for Tenants
 
 ### 5.1 Tenant Rights
+
 You may have certain rights under federal, state, and local law. Contact a tenant's rights organization or attorney if you have questions about your rights.
 
 ### 5.2 COVID-19 Protections
+
 {{#if covid_protections}}
 Special protections may apply due to COVID-19. Check with local authorities about current tenant protections and eviction moratoriums.
 {{/if}}
 
 ### 5.3 Payment Options
+
 {{#if payment_options}}
 **Payment can be made to:**
+
 - **Address:** {{payment_address}}
 - **Online:** {{online_payment_info}}
 - **Phone:** {{payment_phone}}
 - **Hours:** {{payment_hours}}
-{{/if}}
+  {{/if}}
 
 ### 5.4 Contact Information
+
 For questions about this notice, contact:
 **Name:** {{contact_name}}  
 **Phone:** {{contact_phone}}  
@@ -125,6 +135,7 @@ For questions about this notice, contact:
 This notice is served upon you in the following manner:
 
 **Method of Service:**
+
 - [ ] Personal service upon the tenant
 - [ ] Substituted service (left with person of suitable age at residence)
 - [ ] Posted conspicuously on the premises after attempted personal service
@@ -151,7 +162,7 @@ I, {{server_name}}, declare under penalty of perjury under the laws of {{state}}
 **Address:** {{server_address}}  
 **Phone:** {{server_phone}}
 
-**Signature:** _________________________________  
+**Signature:** ******\*\*\*\*******\_******\*\*\*\*******  
 **Date:** {{service_date}}
 
 ---
@@ -166,8 +177,9 @@ I, {{server_name}}, declare under penalty of perjury under the laws of {{state}}
 {{/if}}
 
 **Notice Period Requirements:**
+
 - **Pay or Quit:** {{state_pay_quit_days}} days minimum
-- **Cure or Quit:** {{state_cure_quit_days}} days minimum  
+- **Cure or Quit:** {{state_cure_quit_days}} days minimum
 - **Month-to-Month Termination:** {{state_month_to_month_days}} days
 - **Other:** {{state_other_requirements}}
 
@@ -176,14 +188,17 @@ I, {{server_name}}, declare under penalty of perjury under the laws of {{state}}
 ## 9. Additional Information
 
 ### 9.1 Lease Reference
+
 This notice is given under the terms of the lease agreement dated {{lease_date}} and applicable state law.
 
 ### 9.2 Acceptance of Partial Payment
+
 {{#if partial_payment_policy}}
 **Important:** Acceptance of partial payment after service of this notice may invalidate this notice under state law.
 {{/if}}
 
 ### 9.3 Translation
+
 {{#if translation_required}}
 This notice is available in other languages. Contact {{translation_contact}} for translation services.
 {{/if}}
@@ -194,16 +209,16 @@ This notice is available in other languages. Contact {{translation_contact}} for
 
 **LANDLORD/AUTHORIZED AGENT:**
 
-| Signature | Date |
-|-----------|------|
-| _________________________________ | {{notice_date}} |
-| {{landlord_name}} | |
-| {{landlord_title}} | |
+| Signature                                  | Date            |
+| ------------------------------------------ | --------------- |
+| ******\*\*\*\*******\_******\*\*\*\******* | {{notice_date}} |
+| {{landlord_name}}                          |                 |
+| {{landlord_title}}                         |                 |
 
 ---
 
 **IMPORTANT LEGAL NOTICE:** This eviction notice must comply with federal, state, and local landlord-tenant laws. Laws vary significantly by jurisdiction and are subject to change. This notice should be reviewed by a qualified attorney to ensure compliance with current law and proper procedures.
 
-*Template generated by 123LegalDoc - Professional Legal Document Platform*
----
+## _Template generated by 123LegalDoc - Professional Legal Document Platform_
+
 © 2025 123LegalDoc · DIY form · Not legal advice · Terms: 123LegalDoc.com/terms

@@ -24,12 +24,18 @@ export const durablePowerOfAttorneyMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Durable Power of Attorney',
-      description: 'Grant someone authority to act on your behalf for financial and legal matters, even if you become incapacitated.',
-      aliases: ['financial power of attorney', 'general power of attorney', 'durable POA'],
+      description:
+        'Grant someone authority to act on your behalf for financial and legal matters, even if you become incapacitated.',
+      aliases: [
+        'financial power of attorney',
+        'general power of attorney',
+        'durable POA',
+      ],
     },
     es: {
       name: 'Poder Duradero',
-      description: 'Otorga a alguien autoridad para actuar en tu nombre en asuntos financieros y legales, incluso si quedas incapacitado.',
+      description:
+        'Otorga a alguien autoridad para actuar en tu nombre en asuntos financieros y legales, incluso si quedas incapacitado.',
       aliases: ['poder financiero', 'poder general', 'POA duradero'],
     },
   },

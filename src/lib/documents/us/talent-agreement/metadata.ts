@@ -24,12 +24,18 @@ export const talentAgreementMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Talent Agreement',
-      description: 'Agreement for talent representation and entertainment industry services.',
-      aliases: ['artist agreement', 'performer contract', 'entertainment agreement'],
+      description:
+        'Agreement for talent representation and entertainment industry services.',
+      aliases: [
+        'artist agreement',
+        'performer contract',
+        'entertainment agreement',
+      ],
     },
     es: {
       name: 'Acuerdo de Talento',
-      description: 'Acuerdo para representación de talento y servicios de la industria del entretenimiento.',
+      description:
+        'Acuerdo para representación de talento y servicios de la industria del entretenimiento.',
       aliases: ['acuerdo de artista', 'contrato de intérprete'],
     },
   },

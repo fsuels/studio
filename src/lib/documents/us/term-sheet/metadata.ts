@@ -27,7 +27,11 @@ export const termSheetMeta: Omit<LegalDocument, 'schema' | 'questions'> = {
       name: 'Hoja de Términos de Inversión',
       description:
         'Acuerdo no vinculante que describe los términos y condiciones clave para rondas de financiación de inversión.',
-      aliases: ['Hoja de términos', 'Términos de inversión', 'Términos de financiación'],
+      aliases: [
+        'Hoja de términos',
+        'Términos de inversión',
+        'Términos de financiación',
+      ],
     },
   },
 };

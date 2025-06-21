@@ -47,7 +47,7 @@ Don't risk using generic templates that may not comply with Montana law. Get a p
 
 [Create Montana Non-Disclosure Agreement]
 
-*Trusted by thousands of Montana businesses*
+_Trusted by thousands of Montana businesses_
 
 ---
 

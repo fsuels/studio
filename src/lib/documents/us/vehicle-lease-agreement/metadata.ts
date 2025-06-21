@@ -25,12 +25,20 @@ export const vehicleLeaseAgreementMeta: LegalDocument = {
     en: {
       name: 'Vehicle Lease Agreement',
       description: 'Agreement for leasing vehicles between lessor and lessee.',
-      aliases: ['car lease agreement', 'auto lease contract', 'vehicle rental agreement'],
+      aliases: [
+        'car lease agreement',
+        'auto lease contract',
+        'vehicle rental agreement',
+      ],
     },
     es: {
       name: 'Acuerdo de Arrendamiento de Vehículo',
-      description: 'Acuerdo para arrendamiento de vehículos entre arrendador y arrendatario.',
-      aliases: ['contrato de arrendamiento de auto', 'acuerdo de alquiler de vehículo'],
+      description:
+        'Acuerdo para arrendamiento de vehículos entre arrendador y arrendatario.',
+      aliases: [
+        'contrato de arrendamiento de auto',
+        'acuerdo de alquiler de vehículo',
+      ],
     },
   },
 };

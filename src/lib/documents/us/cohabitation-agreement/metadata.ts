@@ -30,7 +30,7 @@ export const cohabitationAgreementMeta: LegalDocument = {
         'domestic partnership agreement',
         'living together agreement',
         'unmarried couple agreement',
-        'common law agreement'
+        'common law agreement',
       ],
     },
     es: {
@@ -40,7 +40,7 @@ export const cohabitationAgreementMeta: LegalDocument = {
       aliases: [
         'acuerdo de pareja de hecho',
         'acuerdo de convivencia',
-        'acuerdo de unión libre'
+        'acuerdo de unión libre',
       ],
     },
   },

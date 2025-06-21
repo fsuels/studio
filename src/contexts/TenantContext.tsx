@@ -10,7 +10,7 @@ interface TenantContextValue {
   hasPermission: (permission: TenantPermission) => boolean;
   isLoading: boolean;
   error: string | null;
-  
+
   // Actions
   updateTenant: (updates: Partial<Tenant>) => Promise<void>;
   refreshTenantData: () => Promise<void>;
@@ -24,9 +24,15 @@ interface TenantProviderProps {
   initialTenantUser?: TenantUser | null;
 }
 
-export function TenantProvider({ children, tenant, initialTenantUser }: TenantProviderProps) {
+export function TenantProvider({
+  children,
+  tenant,
+  initialTenantUser,
+}: TenantProviderProps) {
   const [currentTenant, setCurrentTenant] = useState<Tenant>(tenant);
-  const [tenantUser, setTenantUser] = useState<TenantUser | null>(initialTenantUser || null);
+  const [tenantUser, setTenantUser] = useState<TenantUser | null>(
+    initialTenantUser || null,
+  );
   const [permissions, setPermissions] = useState<TenantPermission[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -43,7 +49,7 @@ export function TenantProvider({ children, tenant, initialTenantUser }: TenantPr
 
       // Fetch current user's tenant membership and permissions
       const response = await fetch(`/api/tenants/${tenant.id}/current-user`);
-      
+
       if (response.ok) {
         const data = await response.json();
         setTenantUser(data.tenantUser);
@@ -101,7 +107,7 @@ export function TenantProvider({ children, tenant, initialTenantUser }: TenantPr
 
       const [tenantResponse, userData] = await Promise.all([
         fetch(`/api/tenants/${tenant.id}`),
-        loadTenantUserData()
+        loadTenantUserData(),
       ]);
 
       if (tenantResponse.ok) {
@@ -128,9 +134,7 @@ export function TenantProvider({ children, tenant, initialTenantUser }: TenantPr
   };
 
   return (
-    <TenantContext.Provider value={value}>
-      {children}
-    </TenantContext.Provider>
+    <TenantContext.Provider value={value}>{children}</TenantContext.Provider>
   );
 }
 

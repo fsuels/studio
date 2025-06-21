@@ -6,13 +6,13 @@ console.log('🔍 Validating SEO infrastructure...');
 const seoComponents = [
   'src/components/seo/SchemaMarkup.tsx',
   'src/components/seo/MetaTags.tsx',
-  'src/components/seo/Breadcrumbs.tsx'
+  'src/components/seo/Breadcrumbs.tsx',
 ];
 
 let validated = 0;
 let errors = 0;
 
-seoComponents.forEach(component => {
+seoComponents.forEach((component) => {
   if (fs.existsSync(component)) {
     console.log(`✅ ${component} exists`);
     validated++;
@@ -35,9 +35,11 @@ if (fs.existsSync('src/app/robots.ts')) {
   console.log('✅ Robots.txt generator exists');
   validated++;
 } else {
-  console.log('❌ Missing robots.txt generator');  
+  console.log('❌ Missing robots.txt generator');
   errors++;
 }
 
-console.log(`✅ SEO validation complete: ${validated} components validated, ${errors} errors`);
+console.log(
+  `✅ SEO validation complete: ${validated} components validated, ${errors} errors`,
+);
 process.exit(errors > 0 ? 1 : 0);

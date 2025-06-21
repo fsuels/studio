@@ -19842,19 +19842,14 @@
         "type": "RANKING_DECLINE",
         "message": "1 keywords losing rankings",
         "action": "Content optimization needed",
-        "keywords": [
-          "legal documents online"
-        ]
+        "keywords": ["legal documents online"]
       },
       {
         "priority": "MEDIUM",
         "type": "GROWTH_OPPORTUNITY",
         "message": "2 high-volume keywords can be improved",
         "action": "Focus optimization efforts",
-        "keywords": [
-          "california lease agreement",
-          "texas will template"
-        ]
+        "keywords": ["california lease agreement", "texas will template"]
       }
     ]
   },

@@ -8,7 +8,7 @@ const actionSchema = z.object({
   updateId: z.string(),
   action: z.enum(['read', 'bookmark', 'dismiss', 'share', 'click']),
   userId: z.string().optional(),
-  metadata: z.record(z.any()).optional()
+  metadata: z.record(z.any()).optional(),
 });
 
 interface UserInteraction {
@@ -32,7 +32,7 @@ export async function POST(request: NextRequest) {
     if (!validatedData.userId) {
       return NextResponse.json(
         { error: 'User ID is required' },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -43,10 +43,10 @@ export async function POST(request: NextRequest) {
     const interactionRef = adminDb
       .collection('user_legal_update_interactions')
       .doc(interactionId);
-    
+
     const interactionDoc = await interactionRef.get();
-    const currentInteraction = interactionDoc.exists 
-      ? interactionDoc.data() as UserInteraction
+    const currentInteraction = interactionDoc.exists
+      ? (interactionDoc.data() as UserInteraction)
       : {
           userId,
           updateId,
@@ -54,7 +54,7 @@ export async function POST(request: NextRequest) {
           isBookmarked: false,
           isDismissed: false,
           lastInteractionAt: new Date(),
-          interactionCount: 0
+          interactionCount: 0,
         };
 
     // Update based on action
@@ -89,10 +89,7 @@ export async function POST(request: NextRequest) {
         break;
 
       default:
-        return NextResponse.json(
-          { error: 'Invalid action' },
-          { status: 400 }
-        );
+        return NextResponse.json({ error: 'Invalid action' }, { status: 400 });
     }
 
     updatedInteraction.lastInteractionAt = now;
@@ -115,23 +112,22 @@ export async function POST(request: NextRequest) {
       interaction: {
         isRead: updatedInteraction.isRead,
         isBookmarked: updatedInteraction.isBookmarked,
-        isDismissed: updatedInteraction.isDismissed
-      }
+        isDismissed: updatedInteraction.isDismissed,
+      },
     });
-
   } catch (error) {
     console.error('Legal update action error:', error);
-    
+
     if (error instanceof z.ZodError) {
       return NextResponse.json(
         { error: 'Invalid request data', details: error.errors },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
     return NextResponse.json(
       { error: 'Failed to process action' },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -140,11 +136,11 @@ async function logAnalyticsEvent(
   updateId: string,
   userId: string,
   action: string,
-  metadata?: Record<string, any>
+  metadata?: Record<string, any>,
 ) {
   try {
     const { COLLECTIONS } = await import('@/lib/legal-updates/schema');
-    
+
     const analyticsEvent = {
       id: `${updateId}_${userId}_${Date.now()}`,
       updateId,
@@ -153,10 +149,10 @@ async function logAnalyticsEvent(
       metadata: {
         ...metadata,
         userAgent: metadata?.userAgent || 'unknown',
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       },
       timestamp: new Date(),
-      source: 'dashboard'
+      source: 'dashboard',
     };
 
     await adminDb
@@ -169,9 +165,8 @@ async function logAnalyticsEvent(
       updateId,
       userId,
       action,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
-
   } catch (error) {
     console.error('Failed to log analytics event:', error);
     // Don't fail the main request for analytics errors
@@ -180,21 +175,20 @@ async function logAnalyticsEvent(
 
 async function updateNotificationStatus(
   updateId: string,
-  statusField: 'dashboardShown' | 'emailSent'
+  statusField: 'dashboardShown' | 'emailSent',
 ) {
   try {
     const { COLLECTIONS } = await import('@/lib/legal-updates/schema');
-    
+
     const updateData: any = {
       [`notificationStatus.${statusField}`]: true,
-      [`notificationStatus.${statusField}At`]: new Date()
+      [`notificationStatus.${statusField}At`]: new Date(),
     };
 
     await adminDb
       .collection(COLLECTIONS.PROCESSED_LEGAL_UPDATES)
       .doc(updateId)
       .update(updateData);
-
   } catch (error) {
     console.error('Failed to update notification status:', error);
     // Don't fail the main request
@@ -210,7 +204,7 @@ export async function GET(request: NextRequest) {
     if (!userId) {
       return NextResponse.json(
         { error: 'User ID is required' },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -219,14 +213,14 @@ export async function GET(request: NextRequest) {
       const interactionRef = adminDb
         .collection('user_legal_update_interactions')
         .doc(`${userId}_${updateId}`);
-      
+
       const interactionDoc = await interactionRef.get();
-      
+
       if (!interactionDoc.exists) {
         return NextResponse.json({
           isRead: false,
           isBookmarked: false,
-          isDismissed: false
+          isDismissed: false,
         });
       }
 
@@ -237,7 +231,7 @@ export async function GET(request: NextRequest) {
         isDismissed: interaction?.isDismissed || false,
         readAt: interaction?.readAt?.toDate?.()?.toISOString(),
         bookmarkedAt: interaction?.bookmarkedAt?.toDate?.()?.toISOString(),
-        dismissedAt: interaction?.dismissedAt?.toDate?.()?.toISOString()
+        dismissedAt: interaction?.dismissedAt?.toDate?.()?.toISOString(),
       });
     } else {
       // Get user's interaction summary
@@ -248,30 +242,32 @@ export async function GET(request: NextRequest) {
         .limit(100)
         .get();
 
-      const interactions = interactionsSnapshot.docs.map(doc => ({
+      const interactions = interactionsSnapshot.docs.map((doc) => ({
         updateId: doc.data().updateId,
         isRead: doc.data().isRead,
         isBookmarked: doc.data().isBookmarked,
         isDismissed: doc.data().isDismissed,
-        lastInteractionAt: doc.data().lastInteractionAt?.toDate?.()?.toISOString()
+        lastInteractionAt: doc
+          .data()
+          .lastInteractionAt?.toDate?.()
+          ?.toISOString(),
       }));
 
       const summary = {
         totalInteractions: interactions.length,
-        readCount: interactions.filter(i => i.isRead).length,
-        bookmarkedCount: interactions.filter(i => i.isBookmarked).length,
-        dismissedCount: interactions.filter(i => i.isDismissed).length,
-        recentInteractions: interactions.slice(0, 10)
+        readCount: interactions.filter((i) => i.isRead).length,
+        bookmarkedCount: interactions.filter((i) => i.isBookmarked).length,
+        dismissedCount: interactions.filter((i) => i.isDismissed).length,
+        recentInteractions: interactions.slice(0, 10),
       };
 
       return NextResponse.json(summary);
     }
-
   } catch (error) {
     console.error('Get interaction error:', error);
     return NextResponse.json(
       { error: 'Failed to get interaction data' },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

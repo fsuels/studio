@@ -19,7 +19,10 @@ declare global {
 
   type Buffer = unknown;
   const Buffer: {
-    from(input: string | ArrayBuffer | ArrayBufferView, encoding?: string): Buffer;
+    from(
+      input: string | ArrayBuffer | ArrayBufferView,
+      encoding?: string,
+    ): Buffer;
   };
 }
 

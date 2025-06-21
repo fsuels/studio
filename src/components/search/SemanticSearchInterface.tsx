@@ -2,13 +2,30 @@
 'use client';
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { Search, Filter, Download, Save, Clock, FileText, Tag, MapPin, Scale, Users } from 'lucide-react';
+import {
+  Search,
+  Filter,
+  Download,
+  Save,
+  Clock,
+  FileText,
+  Tag,
+  MapPin,
+  Scale,
+  Users,
+} from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
@@ -118,11 +135,17 @@ const SemanticSearchInterface: React.FC = () => {
       });
 
       // Add filter parameters
-      filters.category.forEach(cat => searchParams.append('category', cat));
-      filters.complexity.forEach(comp => searchParams.append('complexity', comp));
-      filters.jurisdiction.forEach(jur => searchParams.append('jurisdiction', jur));
-      filters.governingLaw.forEach(law => searchParams.append('governingLaw', law));
-      filters.tags.forEach(tag => searchParams.append('tags', tag));
+      filters.category.forEach((cat) => searchParams.append('category', cat));
+      filters.complexity.forEach((comp) =>
+        searchParams.append('complexity', comp),
+      );
+      filters.jurisdiction.forEach((jur) =>
+        searchParams.append('jurisdiction', jur),
+      );
+      filters.governingLaw.forEach((law) =>
+        searchParams.append('governingLaw', law),
+      );
+      filters.tags.forEach((tag) => searchParams.append('tags', tag));
 
       if (filters.dateRange) {
         searchParams.append('dateStart', filters.dateRange.start);
@@ -148,19 +171,22 @@ const SemanticSearchInterface: React.FC = () => {
   }, [debouncedQuery, filters]);
 
   const handleFilterChange = (filterType: keyof SearchFilters, value: any) => {
-    setFilters(prev => ({
+    setFilters((prev) => ({
       ...prev,
       [filterType]: value,
     }));
   };
 
-  const toggleFilterValue = (filterType: keyof SearchFilters, value: string) => {
-    setFilters(prev => {
+  const toggleFilterValue = (
+    filterType: keyof SearchFilters,
+    value: string,
+  ) => {
+    setFilters((prev) => {
       const currentValues = prev[filterType] as string[];
       const newValues = currentValues.includes(value)
-        ? currentValues.filter(v => v !== value)
+        ? currentValues.filter((v) => v !== value)
         : [...currentValues, value];
-      
+
       return {
         ...prev,
         [filterType]: newValues,
@@ -198,7 +224,7 @@ const SemanticSearchInterface: React.FC = () => {
 
       const data = await response.json();
       if (data.success) {
-        setSavedViews(prev => [...prev, data.savedView]);
+        setSavedViews((prev) => [...prev, data.savedView]);
       }
     } catch (error) {
       console.error('Failed to save view:', error);
@@ -247,9 +273,11 @@ const SemanticSearchInterface: React.FC = () => {
   const pollExportStatus = async (jobId: string) => {
     const poll = async () => {
       try {
-        const response = await fetch(`/api/exports?jobId=${jobId}&action=status`);
+        const response = await fetch(
+          `/api/exports?jobId=${jobId}&action=status`,
+        );
         const data = await response.json();
-        
+
         if (data.job.status === 'completed' && data.job.downloadUrl) {
           // Trigger download
           window.open(data.job.downloadUrl, '_blank');
@@ -263,7 +291,7 @@ const SemanticSearchInterface: React.FC = () => {
         console.error('Export status check failed:', error);
       }
     };
-    
+
     poll();
   };
 
@@ -288,7 +316,9 @@ const SemanticSearchInterface: React.FC = () => {
           >
             <Filter className="h-4 w-4" />
             Filters
-            {Object.values(filters).some(f => Array.isArray(f) ? f.length > 0 : f !== 0.7) && (
+            {Object.values(filters).some((f) =>
+              Array.isArray(f) ? f.length > 0 : f !== 0.7,
+            ) && (
               <Badge variant="secondary" className="ml-1">
                 Active
               </Badge>
@@ -314,33 +344,45 @@ const SemanticSearchInterface: React.FC = () => {
         </div>
 
         {/* Active Filters */}
-        {Object.entries(filters).some(([key, value]) => 
-          Array.isArray(value) ? value.length > 0 : (key === 'minScore' && value !== 0.7)
+        {Object.entries(filters).some(([key, value]) =>
+          Array.isArray(value)
+            ? value.length > 0
+            : key === 'minScore' && value !== 0.7,
         ) && (
           <div className="flex flex-wrap gap-2 items-center">
             <span className="text-sm text-gray-600">Active filters:</span>
-            {filters.category.map(cat => (
-              <Badge key={cat} variant="secondary" className="cursor-pointer" 
-                onClick={() => toggleFilterValue('category', cat)}>
+            {filters.category.map((cat) => (
+              <Badge
+                key={cat}
+                variant="secondary"
+                className="cursor-pointer"
+                onClick={() => toggleFilterValue('category', cat)}
+              >
                 Category: {cat} ×
               </Badge>
             ))}
-            {filters.complexity.map(comp => (
-              <Badge key={comp} variant="secondary" className="cursor-pointer"
-                onClick={() => toggleFilterValue('complexity', comp)}>
+            {filters.complexity.map((comp) => (
+              <Badge
+                key={comp}
+                variant="secondary"
+                className="cursor-pointer"
+                onClick={() => toggleFilterValue('complexity', comp)}
+              >
                 Complexity: {comp} ×
               </Badge>
             ))}
-            {filters.jurisdiction.map(jur => (
-              <Badge key={jur} variant="secondary" className="cursor-pointer"
-                onClick={() => toggleFilterValue('jurisdiction', jur)}>
+            {filters.jurisdiction.map((jur) => (
+              <Badge
+                key={jur}
+                variant="secondary"
+                className="cursor-pointer"
+                onClick={() => toggleFilterValue('jurisdiction', jur)}
+              >
                 Jurisdiction: {jur} ×
               </Badge>
             ))}
             {filters.minScore !== 0.7 && (
-              <Badge variant="secondary">
-                Min Score: {filters.minScore}
-              </Badge>
+              <Badge variant="secondary">Min Score: {filters.minScore}</Badge>
             )}
             <Button variant="ghost" size="sm" onClick={clearFilters}>
               Clear All
@@ -386,7 +428,9 @@ const SemanticSearchInterface: React.FC = () => {
                   <Label>Minimum Relevance Score: {filters.minScore}</Label>
                   <Slider
                     value={[filters.minScore]}
-                    onValueChange={([value]) => handleFilterChange('minScore', value)}
+                    onValueChange={([value]) =>
+                      handleFilterChange('minScore', value)
+                    }
                     min={0.1}
                     max={1.0}
                     step={0.1}
@@ -403,20 +447,28 @@ const SemanticSearchInterface: React.FC = () => {
                     </Label>
                     <div className="space-y-2 max-h-32 overflow-y-auto">
                       {Object.entries(facets.categories)
-                        .sort(([,a], [,b]) => b - a)
+                        .sort(([, a], [, b]) => b - a)
                         .slice(0, 10)
                         .map(([category, count]) => (
-                        <div key={category} className="flex items-center space-x-2">
-                          <Checkbox
-                            id={`cat-${category}`}
-                            checked={filters.category.includes(category)}
-                            onCheckedChange={() => toggleFilterValue('category', category)}
-                          />
-                          <Label htmlFor={`cat-${category}`} className="text-sm flex-1 cursor-pointer">
-                            {category} ({count})
-                          </Label>
-                        </div>
-                      ))}
+                          <div
+                            key={category}
+                            className="flex items-center space-x-2"
+                          >
+                            <Checkbox
+                              id={`cat-${category}`}
+                              checked={filters.category.includes(category)}
+                              onCheckedChange={() =>
+                                toggleFilterValue('category', category)
+                              }
+                            />
+                            <Label
+                              htmlFor={`cat-${category}`}
+                              className="text-sm flex-1 cursor-pointer"
+                            >
+                              {category} ({count})
+                            </Label>
+                          </div>
+                        ))}
                     </div>
                   </div>
                 )}
@@ -429,18 +481,28 @@ const SemanticSearchInterface: React.FC = () => {
                       Complexity
                     </Label>
                     <div className="space-y-2">
-                      {Object.entries(facets.complexities).map(([complexity, count]) => (
-                        <div key={complexity} className="flex items-center space-x-2">
-                          <Checkbox
-                            id={`comp-${complexity}`}
-                            checked={filters.complexity.includes(complexity)}
-                            onCheckedChange={() => toggleFilterValue('complexity', complexity)}
-                          />
-                          <Label htmlFor={`comp-${complexity}`} className="text-sm flex-1 cursor-pointer">
-                            {complexity} ({count})
-                          </Label>
-                        </div>
-                      ))}
+                      {Object.entries(facets.complexities).map(
+                        ([complexity, count]) => (
+                          <div
+                            key={complexity}
+                            className="flex items-center space-x-2"
+                          >
+                            <Checkbox
+                              id={`comp-${complexity}`}
+                              checked={filters.complexity.includes(complexity)}
+                              onCheckedChange={() =>
+                                toggleFilterValue('complexity', complexity)
+                              }
+                            />
+                            <Label
+                              htmlFor={`comp-${complexity}`}
+                              className="text-sm flex-1 cursor-pointer"
+                            >
+                              {complexity} ({count})
+                            </Label>
+                          </div>
+                        ),
+                      )}
                     </div>
                   </div>
                 )}
@@ -454,20 +516,30 @@ const SemanticSearchInterface: React.FC = () => {
                     </Label>
                     <div className="space-y-2 max-h-32 overflow-y-auto">
                       {Object.entries(facets.jurisdictions)
-                        .sort(([,a], [,b]) => b - a)
+                        .sort(([, a], [, b]) => b - a)
                         .slice(0, 10)
                         .map(([jurisdiction, count]) => (
-                        <div key={jurisdiction} className="flex items-center space-x-2">
-                          <Checkbox
-                            id={`jur-${jurisdiction}`}
-                            checked={filters.jurisdiction.includes(jurisdiction)}
-                            onCheckedChange={() => toggleFilterValue('jurisdiction', jurisdiction)}
-                          />
-                          <Label htmlFor={`jur-${jurisdiction}`} className="text-sm flex-1 cursor-pointer">
-                            {jurisdiction} ({count})
-                          </Label>
-                        </div>
-                      ))}
+                          <div
+                            key={jurisdiction}
+                            className="flex items-center space-x-2"
+                          >
+                            <Checkbox
+                              id={`jur-${jurisdiction}`}
+                              checked={filters.jurisdiction.includes(
+                                jurisdiction,
+                              )}
+                              onCheckedChange={() =>
+                                toggleFilterValue('jurisdiction', jurisdiction)
+                              }
+                            />
+                            <Label
+                              htmlFor={`jur-${jurisdiction}`}
+                              className="text-sm flex-1 cursor-pointer"
+                            >
+                              {jurisdiction} ({count})
+                            </Label>
+                          </div>
+                        ))}
                     </div>
                   </div>
                 )}
@@ -477,7 +549,7 @@ const SemanticSearchInterface: React.FC = () => {
         )}
 
         {/* Main Results */}
-        <div className={showFilters ? "lg:col-span-3" : "lg:col-span-4"}>
+        <div className={showFilters ? 'lg:col-span-3' : 'lg:col-span-4'}>
           <Tabs defaultValue="results" className="space-y-4">
             <div className="flex justify-between items-center">
               <TabsList>
@@ -488,7 +560,7 @@ const SemanticSearchInterface: React.FC = () => {
                   Saved Views ({savedViews.length})
                 </TabsTrigger>
               </TabsList>
-              
+
               {loading && (
                 <div className="flex items-center gap-2 text-sm text-gray-600">
                   <Clock className="h-4 w-4 animate-spin" />
@@ -502,16 +574,22 @@ const SemanticSearchInterface: React.FC = () => {
                 <Card>
                   <CardContent className="p-8 text-center">
                     <FileText className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                    <h3 className="text-lg font-medium text-gray-900 mb-2">No results found</h3>
+                    <h3 className="text-lg font-medium text-gray-900 mb-2">
+                      No results found
+                    </h3>
                     <p className="text-gray-600">
-                      Try adjusting your search query or filters to find what you're looking for.
+                      Try adjusting your search query or filters to find what
+                      you're looking for.
                     </p>
                   </CardContent>
                 </Card>
               )}
 
               {results.map((result, index) => (
-                <Card key={result.id} className="hover:shadow-md transition-shadow">
+                <Card
+                  key={result.id}
+                  className="hover:shadow-md transition-shadow"
+                >
                   <CardContent className="p-6">
                     <div className="flex justify-between items-start mb-3">
                       <div className="flex items-center gap-3">
@@ -521,9 +599,14 @@ const SemanticSearchInterface: React.FC = () => {
                         <Badge variant="secondary">
                           {result.metadata.category}
                         </Badge>
-                        <Badge 
-                          variant={result.metadata.complexity === 'easy' ? 'default' : 
-                                  result.metadata.complexity === 'medium' ? 'secondary' : 'destructive'}
+                        <Badge
+                          variant={
+                            result.metadata.complexity === 'easy'
+                              ? 'default'
+                              : result.metadata.complexity === 'medium'
+                                ? 'secondary'
+                                : 'destructive'
+                          }
                         >
                           {result.metadata.complexity}
                         </Badge>
@@ -556,15 +639,18 @@ const SemanticSearchInterface: React.FC = () => {
                           {result.metadata.jurisdiction}
                         </div>
                       )}
-                      {result.metadata.parties && result.metadata.parties.length > 0 && (
-                        <div className="flex items-center gap-1">
-                          <Users className="h-3 w-3" />
-                          {result.metadata.parties.length} parties
-                        </div>
-                      )}
+                      {result.metadata.parties &&
+                        result.metadata.parties.length > 0 && (
+                          <div className="flex items-center gap-1">
+                            <Users className="h-3 w-3" />
+                            {result.metadata.parties.length} parties
+                          </div>
+                        )}
                       <div className="flex items-center gap-1">
                         <Clock className="h-3 w-3" />
-                        {new Date(result.metadata.createdAt).toLocaleDateString()}
+                        {new Date(
+                          result.metadata.createdAt,
+                        ).toLocaleDateString()}
                       </div>
                       {result.metadata.tags.length > 0 && (
                         <div className="flex items-center gap-1">
@@ -584,22 +670,36 @@ const SemanticSearchInterface: React.FC = () => {
                 <Card>
                   <CardContent className="p-8 text-center">
                     <Save className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                    <h3 className="text-lg font-medium text-gray-900 mb-2">No saved views</h3>
+                    <h3 className="text-lg font-medium text-gray-900 mb-2">
+                      No saved views
+                    </h3>
                     <p className="text-gray-600">
-                      Save your search queries and filters for quick access later.
+                      Save your search queries and filters for quick access
+                      later.
                     </p>
                   </CardContent>
                 </Card>
               ) : (
                 savedViews.map((view) => (
-                  <Card key={view.id} className="cursor-pointer hover:shadow-md transition-shadow"
-                    onClick={() => loadSavedView(view)}>
+                  <Card
+                    key={view.id}
+                    className="cursor-pointer hover:shadow-md transition-shadow"
+                    onClick={() => loadSavedView(view)}
+                  >
                     <CardContent className="p-4">
-                      <h4 className="font-medium text-gray-900 mb-2">{view.name}</h4>
-                      <p className="text-sm text-gray-600 mb-2">"{view.query}"</p>
+                      <h4 className="font-medium text-gray-900 mb-2">
+                        {view.name}
+                      </h4>
+                      <p className="text-sm text-gray-600 mb-2">
+                        "{view.query}"
+                      </p>
                       <div className="flex flex-wrap gap-1">
-                        {view.filters.category.map(cat => (
-                          <Badge key={cat} variant="outline" className="text-xs">
+                        {view.filters.category.map((cat) => (
+                          <Badge
+                            key={cat}
+                            variant="outline"
+                            className="text-xs"
+                          >
                             {cat}
                           </Badge>
                         ))}

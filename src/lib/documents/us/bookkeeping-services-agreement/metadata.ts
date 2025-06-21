@@ -24,13 +24,22 @@ export const bookkeepingServicesAgreementMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Bookkeeping Services Agreement',
-      description: 'Professional agreement for bookkeeping and accounting services between service provider and client.',
-      aliases: ['accounting services agreement', 'financial services contract', 'bookkeeper contract'],
+      description:
+        'Professional agreement for bookkeeping and accounting services between service provider and client.',
+      aliases: [
+        'accounting services agreement',
+        'financial services contract',
+        'bookkeeper contract',
+      ],
     },
     es: {
       name: 'Acuerdo de Servicios de Contabilidad',
-      description: 'Acuerdo profesional para servicios de contabilidad y teneduría de libros entre proveedor y cliente.',
-      aliases: ['contrato de servicios contables', 'acuerdo de servicios financieros'],
+      description:
+        'Acuerdo profesional para servicios de contabilidad y teneduría de libros entre proveedor y cliente.',
+      aliases: [
+        'contrato de servicios contables',
+        'acuerdo de servicios financieros',
+      ],
     },
   },
 };

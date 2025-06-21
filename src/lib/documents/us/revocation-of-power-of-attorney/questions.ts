@@ -17,14 +17,14 @@ export const questions: Question[] = [
   },
   {
     id: 'agentName',
-    label: 'Agent\'s Full Name (Person Being Revoked)',
+    label: "Agent's Full Name (Person Being Revoked)",
     type: 'text',
     required: true,
     placeholder: 'Full name of the agent whose authority is being revoked',
   },
   {
     id: 'agentAddress',
-    label: 'Agent\'s Address',
+    label: "Agent's Address",
     type: 'textarea',
     required: true,
     placeholder: 'Complete address of the agent',
@@ -60,7 +60,8 @@ export const questions: Question[] = [
     id: 'recordingInformation',
     label: 'Recording Information (Optional)',
     type: 'textarea',
-    placeholder: 'If the original POA was recorded, provide book/page or document number',
+    placeholder:
+      'If the original POA was recorded, provide book/page or document number',
   },
   {
     id: 'revocationDate',

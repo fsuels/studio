@@ -347,7 +347,8 @@ export const serviceLevelAgreementQuestions: FormQuestion[] = [
     id: 'terminationClause',
     type: 'textarea',
     label: 'Termination Conditions',
-    placeholder: 'Specify conditions under which the agreement can be terminated',
+    placeholder:
+      'Specify conditions under which the agreement can be terminated',
     required: false,
     group: 'termination',
   },

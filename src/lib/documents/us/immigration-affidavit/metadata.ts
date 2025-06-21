@@ -24,12 +24,18 @@ export const immigrationAffidavitMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Immigration Affidavit',
-      description: 'Sworn statement for immigration proceedings and applications.',
-      aliases: ['affidavit of support', 'immigration statement', 'sworn immigration declaration'],
+      description:
+        'Sworn statement for immigration proceedings and applications.',
+      aliases: [
+        'affidavit of support',
+        'immigration statement',
+        'sworn immigration declaration',
+      ],
     },
     es: {
       name: 'Declaración Jurada de Inmigración',
-      description: 'Declaración jurada para procedimientos y aplicaciones de inmigración.',
+      description:
+        'Declaración jurada para procedimientos y aplicaciones de inmigración.',
       aliases: ['declaración de apoyo', 'declaración de inmigración'],
     },
   },

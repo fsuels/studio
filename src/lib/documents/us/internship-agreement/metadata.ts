@@ -24,12 +24,18 @@ export const internshipAgreementMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Internship Agreement',
-      description: 'Agreement between company and intern for internship programs and work experience.',
-      aliases: ['intern agreement', 'work experience agreement', 'student internship contract'],
+      description:
+        'Agreement between company and intern for internship programs and work experience.',
+      aliases: [
+        'intern agreement',
+        'work experience agreement',
+        'student internship contract',
+      ],
     },
     es: {
       name: 'Acuerdo de Pasantía',
-      description: 'Acuerdo entre empresa y pasante para programas de pasantía y experiencia laboral.',
+      description:
+        'Acuerdo entre empresa y pasante para programas de pasantía y experiencia laboral.',
       aliases: ['acuerdo de intern', 'contrato de experiencia laboral'],
     },
   },

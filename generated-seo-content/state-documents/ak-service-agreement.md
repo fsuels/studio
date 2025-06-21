@@ -47,7 +47,7 @@ Don't risk using generic templates that may not comply with Alaska law. Get a pr
 
 [Create Alaska Service Agreement]
 
-*Trusted by thousands of Alaska businesses*
+_Trusted by thousands of Alaska businesses_
 
 ---
 

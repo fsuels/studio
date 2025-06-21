@@ -5,12 +5,12 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
-import { 
-  CheckCircle2, 
-  Download, 
-  Share2, 
-  Star, 
-  FileText, 
+import {
+  CheckCircle2,
+  Download,
+  Share2,
+  Star,
+  FileText,
   Mail,
   Printer,
   Shield,
@@ -20,7 +20,7 @@ import {
   Search,
   Sparkles,
   ExternalLink,
-  MessageCircle
+  MessageCircle,
 } from 'lucide-react';
 import { Textarea } from '@/components/ui/textarea';
 import { SmartDocumentRecommendations } from './SmartDocumentRecommendations';
@@ -45,7 +45,7 @@ interface SEODocumentCompletionFlowProps {
 export function SEODocumentCompletionFlow({
   document,
   onAction,
-  className = ''
+  className = '',
 }: SEODocumentCompletionFlowProps) {
   const [currentStep, setCurrentStep] = useState(0);
   const [userRating, setUserRating] = useState(0);
@@ -56,7 +56,7 @@ export function SEODocumentCompletionFlow({
     { id: 'completion', title: 'Document Generated', completed: true },
     { id: 'download', title: 'Download & Review', completed: false },
     { id: 'feedback', title: 'Share Feedback', completed: false },
-    { id: 'next-steps', title: 'What\'s Next?', completed: false }
+    { id: 'next-steps', title: "What's Next?", completed: false },
   ];
 
   useEffect(() => {
@@ -73,7 +73,7 @@ export function SEODocumentCompletionFlow({
 
   const handleDownload = (format: 'pdf' | 'docx') => {
     onAction?.('download', { format, documentId: document.id });
-    
+
     // Track for SEO and analytics
     if (typeof window !== 'undefined') {
       // Analytics tracking would go here
@@ -83,11 +83,13 @@ export function SEODocumentCompletionFlow({
 
   const handleShare = (method: 'email' | 'link') => {
     onAction?.('share', { method, documentId: document.id });
-    
+
     if (method === 'email') {
       const subject = `My ${document.name} from 123LegalDoc`;
       const body = `I've just created a ${document.name} using 123LegalDoc. Check it out: ${document.shareUrl}`;
-      window.open(`mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`);
+      window.open(
+        `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`,
+      );
     } else {
       navigator.clipboard.writeText(document.shareUrl);
     }
@@ -95,10 +97,10 @@ export function SEODocumentCompletionFlow({
 
   const submitReview = () => {
     if (userRating > 0) {
-      onAction?.('review', { 
-        rating: userRating, 
+      onAction?.('review', {
+        rating: userRating,
         text: reviewText,
-        documentId: document.id 
+        documentId: document.id,
       });
       setShowNextSteps(true);
     }
@@ -106,10 +108,12 @@ export function SEODocumentCompletionFlow({
 
   const renderStarRating = (interactive = false) => {
     return Array.from({ length: 5 }, (_, i) => (
-      <Star 
-        key={i} 
+      <Star
+        key={i}
         className={`h-6 w-6 cursor-pointer transition-colors ${
-          i < userRating ? 'text-yellow-400 fill-current' : 'text-gray-300 hover:text-yellow-300'
+          i < userRating
+            ? 'text-yellow-400 fill-current'
+            : 'text-gray-300 hover:text-yellow-300'
         }`}
         onClick={interactive ? () => setUserRating(i + 1) : undefined}
       />
@@ -122,16 +126,17 @@ export function SEODocumentCompletionFlow({
     if (document.category === 'Business') {
       recommendations.push({
         title: 'Set up business banking',
-        description: 'Open a business bank account to separate personal and business finances',
+        description:
+          'Open a business bank account to separate personal and business finances',
         urgency: 'high',
-        timeframe: 'Within 1 week'
+        timeframe: 'Within 1 week',
       });
-      
+
       recommendations.push({
         title: 'Register for business licenses',
         description: 'Check what licenses your business needs in your state',
         urgency: 'medium',
-        timeframe: 'Within 30 days'
+        timeframe: 'Within 30 days',
       });
     }
 
@@ -140,7 +145,7 @@ export function SEODocumentCompletionFlow({
         title: 'Employee handbook creation',
         description: 'Develop comprehensive employee policies and procedures',
         urgency: 'medium',
-        timeframe: 'Within 2 weeks'
+        timeframe: 'Within 2 weeks',
       });
     }
 
@@ -149,7 +154,7 @@ export function SEODocumentCompletionFlow({
         title: 'Property insurance review',
         description: 'Ensure adequate coverage for your property',
         urgency: 'high',
-        timeframe: 'Before move-in'
+        timeframe: 'Before move-in',
       });
     }
 
@@ -165,9 +170,10 @@ export function SEODocumentCompletionFlow({
           Your {document.name} is Ready!
         </h1>
         <p className="text-green-100 text-lg">
-          Legally compliant document created for {document.state} in just minutes
+          Legally compliant document created for {document.state} in just
+          minutes
         </p>
-        
+
         {/* SEO-Rich Metadata Display */}
         <div className="flex justify-center gap-6 mt-4 text-sm">
           <div className="flex items-center gap-1">
@@ -192,15 +198,18 @@ export function SEODocumentCompletionFlow({
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            <Progress value={(currentStep + 1) / steps.length * 100} className="h-2" />
-            
+            <Progress
+              value={((currentStep + 1) / steps.length) * 100}
+              className="h-2"
+            />
+
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {steps.map((step, index) => (
-                <div 
+                <div
                   key={step.id}
                   className={`p-3 rounded-lg border text-center ${
-                    index <= currentStep 
-                      ? 'bg-green-50 border-green-200' 
+                    index <= currentStep
+                      ? 'bg-green-50 border-green-200'
                       : 'bg-gray-50 border-gray-200'
                   }`}
                 >
@@ -225,21 +234,23 @@ export function SEODocumentCompletionFlow({
         </CardHeader>
         <CardContent>
           <div className="grid md:grid-cols-2 gap-4">
-            <Button 
-              size="lg" 
+            <Button
+              size="lg"
               className="h-16 bg-red-600 hover:bg-red-700"
               onClick={() => handleDownload('pdf')}
             >
               <FileText className="h-6 w-6 mr-3" />
               <div className="text-left">
                 <div className="font-semibold">Download PDF</div>
-                <div className="text-sm opacity-90">Perfect for printing & sharing</div>
+                <div className="text-sm opacity-90">
+                  Perfect for printing & sharing
+                </div>
               </div>
             </Button>
-            
-            <Button 
-              size="lg" 
-              variant="outline" 
+
+            <Button
+              size="lg"
+              variant="outline"
               className="h-16"
               onClick={() => handleDownload('docx')}
             >
@@ -281,9 +292,7 @@ export function SEODocumentCompletionFlow({
             <p className="text-gray-600 mb-3">
               How was your experience creating this {document.name}?
             </p>
-            <div className="flex gap-1 mb-4">
-              {renderStarRating(true)}
-            </div>
+            <div className="flex gap-1 mb-4">{renderStarRating(true)}</div>
           </div>
 
           <div>
@@ -295,7 +304,7 @@ export function SEODocumentCompletionFlow({
             />
           </div>
 
-          <Button 
+          <Button
             onClick={submitReview}
             disabled={userRating === 0}
             className="bg-purple-600 hover:bg-purple-700"
@@ -309,7 +318,8 @@ export function SEODocumentCompletionFlow({
                 🎉 Thank you for your {userRating}-star review!
               </p>
               <p className="text-purple-600 text-sm mt-1">
-                Your feedback helps us improve and helps other users find reliable legal documents.
+                Your feedback helps us improve and helps other users find
+                reliable legal documents.
               </p>
             </div>
           )}
@@ -331,15 +341,19 @@ export function SEODocumentCompletionFlow({
                 <div key={index} className="p-4 border rounded-lg">
                   <div className="flex justify-between items-start mb-2">
                     <h4 className="font-semibold">{rec.title}</h4>
-                    <Badge className={
-                      rec.urgency === 'high' 
-                        ? 'bg-red-100 text-red-800' 
-                        : 'bg-yellow-100 text-yellow-800'
-                    }>
+                    <Badge
+                      className={
+                        rec.urgency === 'high'
+                          ? 'bg-red-100 text-red-800'
+                          : 'bg-yellow-100 text-yellow-800'
+                      }
+                    >
                       {rec.urgency} priority
                     </Badge>
                   </div>
-                  <p className="text-gray-600 text-sm mb-2">{rec.description}</p>
+                  <p className="text-gray-600 text-sm mb-2">
+                    {rec.description}
+                  </p>
                   <p className="text-sm text-purple-600 font-medium">
                     ⏰ Timeline: {rec.timeframe}
                   </p>
@@ -352,9 +366,13 @@ export function SEODocumentCompletionFlow({
                 Need Help with Next Steps?
               </h4>
               <p className="text-blue-700 text-sm mb-3">
-                Our legal experts can guide you through the process and recommend additional documents.
+                Our legal experts can guide you through the process and
+                recommend additional documents.
               </p>
-              <Button variant="outline" className="border-blue-300 text-blue-700">
+              <Button
+                variant="outline"
+                className="border-blue-300 text-blue-700"
+              >
                 <ExternalLink className="h-4 w-4 mr-2" />
                 Get Expert Guidance
               </Button>
@@ -368,7 +386,7 @@ export function SEODocumentCompletionFlow({
         <h2 className="text-2xl font-bold mb-4">
           Other Popular {document.category} Documents in {document.state}
         </h2>
-        <SmartDocumentRecommendations 
+        <SmartDocumentRecommendations
           currentDocument={document.id}
           userProfile={{ location: document.state }}
         />
@@ -382,10 +400,12 @@ export function SEODocumentCompletionFlow({
               Join 50,000+ Satisfied Customers
             </h3>
             <p className="text-gray-600 max-w-2xl mx-auto">
-              123LegalDoc has helped thousands create legally compliant {document.category.toLowerCase()} documents. 
-              Our AI-powered platform ensures accuracy while saving you time and money compared to traditional legal services.
+              123LegalDoc has helped thousands create legally compliant{' '}
+              {document.category.toLowerCase()} documents. Our AI-powered
+              platform ensures accuracy while saving you time and money compared
+              to traditional legal services.
             </p>
-            
+
             <div className="flex justify-center gap-8 text-sm text-gray-600">
               <div className="flex items-center gap-1">
                 <Shield className="h-4 w-4 text-green-600" />

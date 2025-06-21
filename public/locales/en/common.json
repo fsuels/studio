@@ -318,15 +318,15 @@
         "title": "User Dashboard",
         "desc": "Manage your documents and settings easily."
       },
-    "security": {
-      "title": "Privacy & Security",
-      "desc": "Encrypted data and compliant practices."
+      "security": {
+        "title": "Privacy & Security",
+        "desc": "Encrypted data and compliant practices."
+      }
+    },
+    "customize": {
+      "title": "Customize Your Document",
+      "desc": "Make edits with our built-in editor so every clause fits your exact situation."
     }
-  },
-  "customize": {
-    "title": "Customize Your Document",
-    "desc": "Make edits with our built-in editor so every clause fits your exact situation."
-  }
   },
   "pricing": {
     "title": "Simple, Transparent Pricing",

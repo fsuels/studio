@@ -1,6 +1,9 @@
 import type { LegalDocument } from '@/types/documents';
 
-export const marketingAgreementMeta: Omit<LegalDocument, 'schema' | 'questions'> = {
+export const marketingAgreementMeta: Omit<
+  LegalDocument,
+  'schema' | 'questions'
+> = {
   id: 'marketing-agreement',
   jurisdiction: 'US',
   category: 'Business',
@@ -21,13 +24,21 @@ export const marketingAgreementMeta: Omit<LegalDocument, 'schema' | 'questions'>
       name: 'Marketing Agreement',
       description:
         'Agreement for marketing and promotional services between parties.',
-      aliases: ['Marketing contract', 'Promotional agreement', 'Advertising agreement'],
+      aliases: [
+        'Marketing contract',
+        'Promotional agreement',
+        'Advertising agreement',
+      ],
     },
     es: {
       name: 'Acuerdo de Marketing',
       description:
         'Acuerdo para servicios de marketing y promoción entre las partes.',
-      aliases: ['Contrato marketing', 'Acuerdo promocional', 'Contrato publicitario'],
+      aliases: [
+        'Contrato marketing',
+        'Acuerdo promocional',
+        'Contrato publicitario',
+      ],
     },
   },
 };

@@ -9,9 +9,9 @@ export const metadata = {
   offerRecordingHelp: false,
   basePrice: 10,
   states: 'all',
-  templatePaths: { 
-    en: "en/us/living-trust.md", 
-    es: "es/us/living-trust.md" 
+  templatePaths: {
+    en: 'en/us/living-trust.md',
+    es: 'es/us/living-trust.md',
   },
   upsellClauses: [],
   translations: {
@@ -25,7 +25,11 @@ export const metadata = {
       name: 'Fideicomiso en Vida (Revocable)',
       description:
         'Gestionar activos durante la vida y distribuirlos después de la muerte, potencialmente evitando el proceso sucesorio.',
-      aliases: ['fideicomiso revocable', 'planificación patrimonial', 'evitar sucesorio'],
+      aliases: [
+        'fideicomiso revocable',
+        'planificación patrimonial',
+        'evitar sucesorio',
+      ],
     },
   },
 };

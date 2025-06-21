@@ -47,7 +47,7 @@ const Header = React.memo(function Header() {
   }, [isMegaMenuOpen]);
 
   const handleMobileMenuToggle = () => {
-    setIsMobileMenuOpen(prev => !prev);
+    setIsMobileMenuOpen((prev) => !prev);
     if (isMegaMenuOpen) {
       setIsMegaMenuOpen(false);
     }
@@ -69,10 +69,7 @@ const Header = React.memo(function Header() {
 
           {/* Desktop Search */}
           <div className="hidden md:flex items-center flex-1 max-w-md mx-4">
-            <SmartHeaderSearch 
-              clientLocale={clientLocale} 
-              mounted={mounted} 
-            />
+            <SmartHeaderSearch clientLocale={clientLocale} mounted={mounted} />
           </div>
 
           {/* Mobile menu toggle */}
@@ -92,7 +89,7 @@ const Header = React.memo(function Header() {
             )}
           >
             <Nav />
-            
+
             <HeaderMegaMenu
               clientLocale={clientLocale}
               mounted={mounted}
@@ -106,17 +103,14 @@ const Header = React.memo(function Header() {
             <CommandPaletteTrigger />
             <LanguageSwitcher />
             <ThemeToggleButton />
-            <HeaderUserMenu 
-              clientLocale={clientLocale} 
-              mounted={mounted} 
-            />
+            <HeaderUserMenu clientLocale={clientLocale} mounted={mounted} />
           </div>
         </div>
 
         {/* Mobile Search */}
         <div className="md:hidden pb-3">
-          <SmartHeaderSearch 
-            clientLocale={clientLocale} 
+          <SmartHeaderSearch
+            clientLocale={clientLocale}
             mounted={mounted}
             className="w-full"
           />

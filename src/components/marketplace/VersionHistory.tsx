@@ -5,13 +5,13 @@ import React, { useState } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { 
+import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from '@/components/ui/collapsible';
-import { 
-  GitBranch, 
+import {
+  GitBranch,
   Clock,
   Download,
   Eye,
@@ -25,7 +25,11 @@ import {
   Shield,
   Zap,
 } from 'lucide-react';
-import type { TemplateVersion, ChangelogEntry, SemanticVersion } from '@/types/marketplace';
+import type {
+  TemplateVersion,
+  ChangelogEntry,
+  SemanticVersion,
+} from '@/types/marketplace';
 
 interface VersionHistoryProps {
   templateId: string;
@@ -40,7 +44,12 @@ interface VersionItemProps {
   onInstall: (versionId: string) => void;
 }
 
-function VersionItem({ version, isLatest, onPreview, onInstall }: VersionItemProps) {
+function VersionItem({
+  version,
+  isLatest,
+  onPreview,
+  onInstall,
+}: VersionItemProps) {
   const [isExpanded, setIsExpanded] = useState(isLatest);
 
   const getChangeTypeIcon = (type: ChangelogEntry['type']) => {
@@ -73,7 +82,11 @@ function VersionItem({ version, isLatest, onPreview, onInstall }: VersionItemPro
     };
 
     return (
-      <Badge className={variants[type] || 'bg-gray-100 text-gray-800 border-gray-300'}>
+      <Badge
+        className={
+          variants[type] || 'bg-gray-100 text-gray-800 border-gray-300'
+        }
+      >
         {type.charAt(0).toUpperCase() + type.slice(1)}
       </Badge>
     );
@@ -94,13 +107,16 @@ function VersionItem({ version, isLatest, onPreview, onInstall }: VersionItemPro
   };
 
   const formatDate = (date: any) => {
-    return new Date(date.toDate ? date.toDate() : date).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-    });
+    return new Date(date.toDate ? date.toDate() : date).toLocaleDateString(
+      'en-US',
+      {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+      },
+    );
   };
 
   const getVersionType = (version: string) => {
@@ -125,10 +141,12 @@ function VersionItem({ version, isLatest, onPreview, onInstall }: VersionItemPro
                   )}
                   <GitBranch className="h-5 w-5" />
                 </div>
-                
+
                 <div>
                   <div className="flex items-center gap-2">
-                    <CardTitle className="text-lg">v{version.version}</CardTitle>
+                    <CardTitle className="text-lg">
+                      v{version.version}
+                    </CardTitle>
                     {isLatest && (
                       <Badge className="bg-primary/10 text-primary border-primary/30">
                         Latest
@@ -139,7 +157,9 @@ function VersionItem({ version, isLatest, onPreview, onInstall }: VersionItemPro
                         Breaking
                       </Badge>
                     )}
-                    <Badge variant="outline">{getVersionType(version.version)}</Badge>
+                    <Badge variant="outline">
+                      {getVersionType(version.version)}
+                    </Badge>
                   </div>
                   <div className="flex items-center gap-4 text-sm text-muted-foreground mt-1">
                     <div className="flex items-center gap-1">
@@ -166,7 +186,7 @@ function VersionItem({ version, isLatest, onPreview, onInstall }: VersionItemPro
                   <Eye className="h-4 w-4 mr-1" />
                   Preview
                 </Button>
-                
+
                 {isLatest && (
                   <Button
                     size="sm"
@@ -187,22 +207,27 @@ function VersionItem({ version, isLatest, onPreview, onInstall }: VersionItemPro
         <CollapsibleContent>
           <CardContent className="pt-0">
             {/* Compatibility Info */}
-            {(version.breaking || !version.compatibility.backwardCompatible) && (
+            {(version.breaking ||
+              !version.compatibility.backwardCompatible) && (
               <div className="mb-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
                 <div className="flex items-start gap-2">
                   <AlertTriangle className="h-5 w-5 text-yellow-600 mt-0.5" />
                   <div>
-                    <h4 className="font-semibold text-yellow-800">Compatibility Notice</h4>
+                    <h4 className="font-semibold text-yellow-800">
+                      Compatibility Notice
+                    </h4>
                     <p className="text-sm text-yellow-700 mt-1">
-                      {version.breaking && 'This version contains breaking changes. '}
-                      {!version.compatibility.backwardCompatible && 
+                      {version.breaking &&
+                        'This version contains breaking changes. '}
+                      {!version.compatibility.backwardCompatible &&
                         'This version is not backward compatible with previous versions. '}
-                      {version.compatibility.migrationRequired && 
+                      {version.compatibility.migrationRequired &&
                         'Migration may be required for existing documents.'}
                     </p>
                     {version.compatibility.migrationGuide && (
                       <p className="text-sm text-yellow-700 mt-2">
-                        <strong>Migration Guide:</strong> {version.compatibility.migrationGuide}
+                        <strong>Migration Guide:</strong>{' '}
+                        {version.compatibility.migrationGuide}
                       </p>
                     )}
                   </div>
@@ -213,30 +238,35 @@ function VersionItem({ version, isLatest, onPreview, onInstall }: VersionItemPro
             {/* Changelog */}
             <div className="space-y-4">
               <h4 className="font-semibold">What's Changed</h4>
-              
+
               {version.changelog.length > 0 ? (
                 <div className="space-y-3">
                   {version.changelog.map((change, index) => (
-                    <div key={index} className="flex items-start gap-3 p-3 bg-muted/30 rounded-lg">
+                    <div
+                      key={index}
+                      className="flex items-start gap-3 p-3 bg-muted/30 rounded-lg"
+                    >
                       <div className="flex-shrink-0 mt-0.5">
                         {getChangeTypeIcon(change.type)}
                       </div>
-                      
+
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-2">
                           {getChangeTypeBadge(change.type)}
                           {getImpactBadge(change.impact)}
                         </div>
-                        
+
                         <p className="text-sm">{change.description}</p>
-                        
-                        {change.affectedFields && change.affectedFields.length > 0 && (
-                          <div className="mt-2">
-                            <span className="text-xs text-muted-foreground">
-                              Affected fields: {change.affectedFields.join(', ')}
-                            </span>
-                          </div>
-                        )}
+
+                        {change.affectedFields &&
+                          change.affectedFields.length > 0 && (
+                            <div className="mt-2">
+                              <span className="text-xs text-muted-foreground">
+                                Affected fields:{' '}
+                                {change.affectedFields.join(', ')}
+                              </span>
+                            </div>
+                          )}
 
                         {change.translations && (
                           <div className="mt-2">
@@ -245,12 +275,21 @@ function VersionItem({ version, isLatest, onPreview, onInstall }: VersionItemPro
                                 View translations
                               </summary>
                               <div className="mt-1 space-y-1">
-                                {Object.entries(change.translations).map(([lang, desc]) => (
-                                  <div key={lang} className="flex gap-2">
-                                    <Badge variant="outline" className="text-xs">{lang.toUpperCase()}</Badge>
-                                    <span className="text-muted-foreground">{desc}</span>
-                                  </div>
-                                ))}
+                                {Object.entries(change.translations).map(
+                                  ([lang, desc]) => (
+                                    <div key={lang} className="flex gap-2">
+                                      <Badge
+                                        variant="outline"
+                                        className="text-xs"
+                                      >
+                                        {lang.toUpperCase()}
+                                      </Badge>
+                                      <span className="text-muted-foreground">
+                                        {desc}
+                                      </span>
+                                    </div>
+                                  ),
+                                )}
                               </div>
                             </details>
                           </div>
@@ -276,36 +315,62 @@ function VersionItem({ version, isLatest, onPreview, onInstall }: VersionItemPro
                     <span>{getVersionType(version.version)}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground">Breaking Changes:</span>
-                    <span className={version.breaking ? 'text-red-600' : 'text-green-600'}>
+                    <span className="text-muted-foreground">
+                      Breaking Changes:
+                    </span>
+                    <span
+                      className={
+                        version.breaking ? 'text-red-600' : 'text-green-600'
+                      }
+                    >
                       {version.breaking ? 'Yes' : 'No'}
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground">Backward Compatible:</span>
-                    <span className={version.compatibility.backwardCompatible ? 'text-green-600' : 'text-red-600'}>
+                    <span className="text-muted-foreground">
+                      Backward Compatible:
+                    </span>
+                    <span
+                      className={
+                        version.compatibility.backwardCompatible
+                          ? 'text-green-600'
+                          : 'text-red-600'
+                      }
+                    >
                       {version.compatibility.backwardCompatible ? 'Yes' : 'No'}
                     </span>
                   </div>
                 </div>
-                
+
                 <div className="space-y-2">
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground">Migration Required:</span>
-                    <span className={version.compatibility.migrationRequired ? 'text-yellow-600' : 'text-green-600'}>
+                    <span className="text-muted-foreground">
+                      Migration Required:
+                    </span>
+                    <span
+                      className={
+                        version.compatibility.migrationRequired
+                          ? 'text-yellow-600'
+                          : 'text-green-600'
+                      }
+                    >
                       {version.compatibility.migrationRequired ? 'Yes' : 'No'}
                     </span>
                   </div>
                   {version.compatibility.minimumAppVersion && (
                     <div className="flex justify-between">
-                      <span className="text-muted-foreground">Min App Version:</span>
+                      <span className="text-muted-foreground">
+                        Min App Version:
+                      </span>
                       <span>{version.compatibility.minimumAppVersion}</span>
                     </div>
                   )}
                   {version.prerelease && (
                     <div className="flex justify-between">
                       <span className="text-muted-foreground">Prerelease:</span>
-                      <span className="text-orange-600">{version.prerelease}</span>
+                      <span className="text-orange-600">
+                        {version.prerelease}
+                      </span>
                     </div>
                   )}
                 </div>
@@ -313,28 +378,38 @@ function VersionItem({ version, isLatest, onPreview, onInstall }: VersionItemPro
             </div>
 
             {/* Validation Results */}
-            {version.validationResults && version.validationResults.length > 0 && (
-              <div className="mt-6 pt-4 border-t">
-                <h4 className="font-semibold mb-3">Validation Results</h4>
-                <div className="space-y-2">
-                  {version.validationResults.map((result, index) => (
-                    <div key={index} className={`flex items-center gap-2 text-sm p-2 rounded ${
-                      result.status === 'pass' ? 'bg-green-50 text-green-800' :
-                      result.status === 'fail' ? 'bg-red-50 text-red-800' :
-                      'bg-yellow-50 text-yellow-800'
-                    }`}>
-                      <div className={`w-2 h-2 rounded-full ${
-                        result.status === 'pass' ? 'bg-green-500' :
-                        result.status === 'fail' ? 'bg-red-500' :
-                        'bg-yellow-500'
-                      }`} />
-                      <span className="font-medium">{result.rule}:</span>
-                      <span>{result.message}</span>
-                    </div>
-                  ))}
+            {version.validationResults &&
+              version.validationResults.length > 0 && (
+                <div className="mt-6 pt-4 border-t">
+                  <h4 className="font-semibold mb-3">Validation Results</h4>
+                  <div className="space-y-2">
+                    {version.validationResults.map((result, index) => (
+                      <div
+                        key={index}
+                        className={`flex items-center gap-2 text-sm p-2 rounded ${
+                          result.status === 'pass'
+                            ? 'bg-green-50 text-green-800'
+                            : result.status === 'fail'
+                              ? 'bg-red-50 text-red-800'
+                              : 'bg-yellow-50 text-yellow-800'
+                        }`}
+                      >
+                        <div
+                          className={`w-2 h-2 rounded-full ${
+                            result.status === 'pass'
+                              ? 'bg-green-500'
+                              : result.status === 'fail'
+                                ? 'bg-red-500'
+                                : 'bg-yellow-500'
+                          }`}
+                        />
+                        <span className="font-medium">{result.rule}:</span>
+                        <span>{result.message}</span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
           </CardContent>
         </CollapsibleContent>
       </Collapsible>
@@ -342,14 +417,22 @@ function VersionItem({ version, isLatest, onPreview, onInstall }: VersionItemPro
   );
 }
 
-export function VersionHistory({ templateId, versions, currentVersion }: VersionHistoryProps) {
+export function VersionHistory({
+  templateId,
+  versions,
+  currentVersion,
+}: VersionHistoryProps) {
   const [sortOrder, setSortOrder] = useState<'newest' | 'oldest'>('newest');
 
   const sortedVersions = [...versions].sort((a, b) => {
-    const dateA = new Date(a.createdAt.toDate ? a.createdAt.toDate() : a.createdAt);
-    const dateB = new Date(b.createdAt.toDate ? b.createdAt.toDate() : b.createdAt);
-    
-    return sortOrder === 'newest' 
+    const dateA = new Date(
+      a.createdAt.toDate ? a.createdAt.toDate() : a.createdAt,
+    );
+    const dateB = new Date(
+      b.createdAt.toDate ? b.createdAt.toDate() : b.createdAt,
+    );
+
+    return sortOrder === 'newest'
       ? dateB.getTime() - dateA.getTime()
       : dateA.getTime() - dateB.getTime();
   });
@@ -371,7 +454,8 @@ export function VersionHistory({ templateId, versions, currentVersion }: Version
         <div>
           <h2 className="text-2xl font-bold">Version History</h2>
           <p className="text-muted-foreground">
-            {versions.length} version{versions.length !== 1 ? 's' : ''} available
+            {versions.length} version{versions.length !== 1 ? 's' : ''}{' '}
+            available
           </p>
         </div>
 
@@ -409,7 +493,9 @@ export function VersionHistory({ templateId, versions, currentVersion }: Version
           <Card>
             <CardContent className="p-12 text-center">
               <GitBranch className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-              <h3 className="text-lg font-semibold mb-2">No version history available</h3>
+              <h3 className="text-lg font-semibold mb-2">
+                No version history available
+              </h3>
               <p className="text-muted-foreground">
                 Version history will appear here as the template is updated.
               </p>

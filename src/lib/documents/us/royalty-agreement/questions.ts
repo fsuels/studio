@@ -31,7 +31,8 @@ export const royaltyAgreementQuestions: Question[] = [
     label: 'Description of Intellectual Property',
     type: 'textarea',
     required: true,
-    placeholder: 'Describe the IP being licensed (patent, trademark, copyright, etc.)',
+    placeholder:
+      'Describe the IP being licensed (patent, trademark, copyright, etc.)',
   },
   {
     id: 'royaltyRate',

@@ -17,19 +17,23 @@ export default function RootClient({
   children: React.ReactNode;
 }) {
   // Create QueryClient instance once per app session
-  const [queryClient] = useState(() => new QueryClient({
-    defaultOptions: {
-      queries: {
-        staleTime: 60 * 1000, // 1 minute
-        refetchOnWindowFocus: false,
-        retry: 2,
-        retryDelay: attemptIndex => Math.min(1000 * 2 ** attemptIndex, 30000),
-      },
-      mutations: {
-        retry: 1,
-      },
-    },
-  }));
+  const [queryClient] = useState(
+    () =>
+      new QueryClient({
+        defaultOptions: {
+          queries: {
+            staleTime: 60 * 1000, // 1 minute
+            refetchOnWindowFocus: false,
+            retry: 2,
+            retryDelay: (attemptIndex) =>
+              Math.min(1000 * 2 ** attemptIndex, 30000),
+          },
+          mutations: {
+            retry: 1,
+          },
+        },
+      }),
+  );
 
   if (typeof window !== 'undefined') {
     mark('root-layout-start');

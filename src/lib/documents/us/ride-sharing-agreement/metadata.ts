@@ -25,7 +25,11 @@ export const rideSharingAgreementMeta: LegalDocument = {
     en: {
       name: 'Ride Sharing Agreement',
       description: 'Agreement for ride sharing and carpooling arrangements.',
-      aliases: ['carpool agreement', 'rideshare contract', 'driver passenger agreement'],
+      aliases: [
+        'carpool agreement',
+        'rideshare contract',
+        'driver passenger agreement',
+      ],
     },
     es: {
       name: 'Acuerdo de Viaje Compartido',

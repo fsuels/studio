@@ -15,6 +15,7 @@ Technology & Software businesses face unique legal challenges requiring speciali
 ### Why Technology & Software Needs Specialized Legal Documents
 
 Technology & Software businesses require documents that address:
+
 - Industry-specific regulations and compliance requirements
 - Common technology & software business practices and terminology
 - Risk management specific to technology & software operations
@@ -31,4 +32,4 @@ Our technology & software templates include:
 
 [Browse Technology & Software Documents]
 
-*Trusted by thousands of technology & software professionals*
+_Trusted by thousands of technology & software professionals_

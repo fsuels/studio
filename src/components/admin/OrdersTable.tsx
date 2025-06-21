@@ -7,13 +7,13 @@ import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { 
-  Table, 
-  TableBody, 
-  TableCell, 
-  TableHead, 
-  TableHeader, 
-  TableRow 
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
 } from '@/components/ui/table';
 import {
   Select,
@@ -29,10 +29,10 @@ import {
   DropdownMenuTrigger,
   DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu';
-import { 
-  Search, 
-  Filter, 
-  ArrowUpDown, 
+import {
+  Search,
+  Filter,
+  ArrowUpDown,
   MoreHorizontal,
   Eye,
   AlertTriangle,
@@ -45,7 +45,7 @@ import {
   Users,
   TrendingUp,
   Download,
-  RefreshCw
+  RefreshCw,
 } from 'lucide-react';
 import { type Order } from '@/lib/orders';
 import OrderDetailModal from './OrderDetailModal';
@@ -59,30 +59,39 @@ export default function OrdersTable({ className }: OrdersTableProps) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [summary, setSummary] = useState<any>(null);
-  
+
   // Modal state
   const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null);
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
-  
+
   // Filters
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
   const [riskFilter, setRiskFilter] = useState('');
   const [dateFrom, setDateFrom] = useState('');
   const [dateTo, setDateTo] = useState('');
-  
+
   // Pagination
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [total, setTotal] = useState(0);
-  
+
   // Sorting
   const [sortBy, setSortBy] = useState('createdAt');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
 
   useEffect(() => {
     fetchOrders();
-  }, [page, search, statusFilter, riskFilter, dateFrom, dateTo, sortBy, sortOrder]);
+  }, [
+    page,
+    search,
+    statusFilter,
+    riskFilter,
+    dateFrom,
+    dateTo,
+    sortBy,
+    sortOrder,
+  ]);
 
   const fetchOrders = async () => {
     try {
@@ -98,7 +107,7 @@ export default function OrdersTable({ className }: OrdersTableProps) {
         dateFrom,
         dateTo,
         sortBy,
-        sortOrder
+        sortOrder,
       });
 
       const response = await fetch(`/api/admin/orders?${params}`);
@@ -134,11 +143,14 @@ export default function OrdersTable({ className }: OrdersTableProps) {
       processing: 'bg-blue-100 text-blue-800 border-blue-200',
       pending: 'bg-yellow-100 text-yellow-800 border-yellow-200',
       cancelled: 'bg-gray-100 text-gray-800 border-gray-200',
-      refunded: 'bg-red-100 text-red-800 border-red-200'
+      refunded: 'bg-red-100 text-red-800 border-red-200',
     };
-    
+
     return (
-      <Badge variant="outline" className={variants[status as keyof typeof variants] || 'bg-gray-100'}>
+      <Badge
+        variant="outline"
+        className={variants[status as keyof typeof variants] || 'bg-gray-100'}
+      >
         {status.charAt(0).toUpperCase() + status.slice(1)}
       </Badge>
     );
@@ -146,7 +158,7 @@ export default function OrdersTable({ className }: OrdersTableProps) {
 
   const getFraudBadge = (fraudAnalysis: any) => {
     const { recommendation, score, distanceAlert } = fraudAnalysis;
-    
+
     // Enhanced risk level determination
     if (recommendation === 'decline' || score >= 800) {
       return (
@@ -156,36 +168,48 @@ export default function OrdersTable({ className }: OrdersTableProps) {
         </Badge>
       );
     }
-    
+
     if (score >= 600) {
       return (
-        <Badge variant="destructive" className="gap-1 bg-orange-100 text-orange-700 border-orange-300">
+        <Badge
+          variant="destructive"
+          className="gap-1 bg-orange-100 text-orange-700 border-orange-300"
+        >
           <AlertTriangle className="h-3 w-3" />
           High Risk
         </Badge>
       );
     }
-    
+
     if (recommendation === 'review' || score >= 400 || distanceAlert) {
       return (
-        <Badge variant="outline" className="gap-1 text-amber-600 border-amber-200 bg-amber-50">
+        <Badge
+          variant="outline"
+          className="gap-1 text-amber-600 border-amber-200 bg-amber-50"
+        >
           <AlertTriangle className="h-3 w-3" />
           Medium Risk
         </Badge>
       );
     }
-    
+
     if (score >= 200) {
       return (
-        <Badge variant="outline" className="gap-1 text-blue-600 border-blue-200 bg-blue-50">
+        <Badge
+          variant="outline"
+          className="gap-1 text-blue-600 border-blue-200 bg-blue-50"
+        >
           <CheckCircle className="h-3 w-3" />
           Low Risk
         </Badge>
       );
     }
-    
+
     return (
-      <Badge variant="outline" className="gap-1 text-green-600 border-green-200 bg-green-50">
+      <Badge
+        variant="outline"
+        className="gap-1 text-green-600 border-green-200 bg-green-50"
+      >
         <CheckCircle className="h-3 w-3" />
         Very Low Risk
       </Badge>
@@ -205,7 +229,7 @@ export default function OrdersTable({ className }: OrdersTableProps) {
       day: 'numeric',
       year: 'numeric',
       hour: '2-digit',
-      minute: '2-digit'
+      minute: '2-digit',
     });
   };
 
@@ -249,44 +273,60 @@ export default function OrdersTable({ className }: OrdersTableProps) {
             <CardContent className="p-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-muted-foreground">Total Revenue</p>
-                  <p className="text-2xl font-bold">{formatCurrency(summary.totalRevenue)}</p>
+                  <p className="text-sm font-medium text-muted-foreground">
+                    Total Revenue
+                  </p>
+                  <p className="text-2xl font-bold">
+                    {formatCurrency(summary.totalRevenue)}
+                  </p>
                 </div>
                 <DollarSign className="h-8 w-8 text-green-600" />
               </div>
             </CardContent>
           </Card>
-          
+
           <Card>
             <CardContent className="p-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-muted-foreground">Total Orders</p>
-                  <p className="text-2xl font-bold">{summary.totalOrders.toLocaleString()}</p>
+                  <p className="text-sm font-medium text-muted-foreground">
+                    Total Orders
+                  </p>
+                  <p className="text-2xl font-bold">
+                    {summary.totalOrders.toLocaleString()}
+                  </p>
                 </div>
                 <Users className="h-8 w-8 text-blue-600" />
               </div>
             </CardContent>
           </Card>
-          
+
           <Card>
             <CardContent className="p-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-muted-foreground">Avg Order Value</p>
-                  <p className="text-2xl font-bold">{formatCurrency(summary.averageOrderValue)}</p>
+                  <p className="text-sm font-medium text-muted-foreground">
+                    Avg Order Value
+                  </p>
+                  <p className="text-2xl font-bold">
+                    {formatCurrency(summary.averageOrderValue)}
+                  </p>
                 </div>
                 <TrendingUp className="h-8 w-8 text-purple-600" />
               </div>
             </CardContent>
           </Card>
-          
+
           <Card>
             <CardContent className="p-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-muted-foreground">Fraud Alerts</p>
-                  <p className="text-2xl font-bold text-red-600">{summary.fraudAlerts}</p>
+                  <p className="text-sm font-medium text-muted-foreground">
+                    Fraud Alerts
+                  </p>
+                  <p className="text-2xl font-bold text-red-600">
+                    {summary.fraudAlerts}
+                  </p>
                 </div>
                 <AlertTriangle className="h-8 w-8 text-red-600" />
               </div>
@@ -325,7 +365,7 @@ export default function OrdersTable({ className }: OrdersTableProps) {
                 />
               </div>
             </div>
-            
+
             <Select value={statusFilter} onValueChange={setStatusFilter}>
               <SelectTrigger className="w-40">
                 <SelectValue placeholder="Status" />
@@ -339,7 +379,7 @@ export default function OrdersTable({ className }: OrdersTableProps) {
                 <SelectItem value="refunded">Refunded</SelectItem>
               </SelectContent>
             </Select>
-            
+
             <Select value={riskFilter} onValueChange={setRiskFilter}>
               <SelectTrigger className="w-40">
                 <SelectValue placeholder="Risk Level" />
@@ -366,20 +406,32 @@ export default function OrdersTable({ className }: OrdersTableProps) {
               <TableHeader>
                 <TableRow>
                   <TableHead>
-                    <Button variant="ghost" size="sm" onClick={() => handleSort('orderNumber')}>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => handleSort('orderNumber')}
+                    >
                       Order
                       <ArrowUpDown className="ml-2 h-4 w-4" />
                     </Button>
                   </TableHead>
                   <TableHead>
-                    <Button variant="ghost" size="sm" onClick={() => handleSort('customerName')}>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => handleSort('customerName')}
+                    >
                       Customer
                       <ArrowUpDown className="ml-2 h-4 w-4" />
                     </Button>
                   </TableHead>
                   <TableHead>Document</TableHead>
                   <TableHead>
-                    <Button variant="ghost" size="sm" onClick={() => handleSort('amount')}>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => handleSort('amount')}
+                    >
                       Amount
                       <ArrowUpDown className="ml-2 h-4 w-4" />
                     </Button>
@@ -388,7 +440,11 @@ export default function OrdersTable({ className }: OrdersTableProps) {
                   <TableHead>Fraud Risk</TableHead>
                   <TableHead>Location</TableHead>
                   <TableHead>
-                    <Button variant="ghost" size="sm" onClick={() => handleSort('createdAt')}>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => handleSort('createdAt')}
+                    >
                       Date
                       <ArrowUpDown className="ml-2 h-4 w-4" />
                     </Button>
@@ -402,45 +458,55 @@ export default function OrdersTable({ className }: OrdersTableProps) {
                     <TableCell className="font-medium">
                       <div>
                         <div className="font-semibold">{order.orderNumber}</div>
-                        <div className="text-xs text-muted-foreground">{order.id.slice(0, 8)}</div>
+                        <div className="text-xs text-muted-foreground">
+                          {order.id.slice(0, 8)}
+                        </div>
                       </div>
                     </TableCell>
-                    
+
                     <TableCell>
                       <div>
                         <div className="font-medium">
                           {order.customer.firstName} {order.customer.lastName}
                         </div>
-                        <div className="text-sm text-muted-foreground">{order.customer.email}</div>
+                        <div className="text-sm text-muted-foreground">
+                          {order.customer.email}
+                        </div>
                         {order.customer.phone && (
-                          <div className="text-xs text-muted-foreground">{order.customer.phone}</div>
+                          <div className="text-xs text-muted-foreground">
+                            {order.customer.phone}
+                          </div>
                         )}
                       </div>
                     </TableCell>
-                    
+
                     <TableCell>
                       <div>
-                        <div className="font-medium">{order.items[0]?.documentType}</div>
+                        <div className="font-medium">
+                          {order.items[0]?.documentType}
+                        </div>
                         <div className="text-sm text-muted-foreground">
-                          {order.items.length} item{order.items.length > 1 ? 's' : ''}
+                          {order.items.length} item
+                          {order.items.length > 1 ? 's' : ''}
                         </div>
                       </div>
                     </TableCell>
-                    
+
                     <TableCell>
                       <div>
-                        <div className="font-semibold">{formatCurrency(order.payment.amount)}</div>
+                        <div className="font-semibold">
+                          {formatCurrency(order.payment.amount)}
+                        </div>
                         <div className="text-xs text-muted-foreground flex items-center gap-1">
                           <CreditCard className="h-3 w-3" />
-                          {order.payment.cardBrand} •••• {order.payment.cardLast4}
+                          {order.payment.cardBrand} ••••{' '}
+                          {order.payment.cardLast4}
                         </div>
                       </div>
                     </TableCell>
-                    
-                    <TableCell>
-                      {getStatusBadge(order.status)}
-                    </TableCell>
-                    
+
+                    <TableCell>{getStatusBadge(order.status)}</TableCell>
+
                     <TableCell>
                       <div className="space-y-1">
                         {getFraudBadge(order.fraudAnalysis)}
@@ -455,31 +521,35 @@ export default function OrdersTable({ className }: OrdersTableProps) {
                         )}
                       </div>
                     </TableCell>
-                    
+
                     <TableCell>
                       <div>
                         <div className="text-sm font-medium">
-                          {order.customer.billingAddress.city}, {order.customer.billingAddress.state}
+                          {order.customer.billingAddress.city},{' '}
+                          {order.customer.billingAddress.state}
                         </div>
                         <div className="text-xs text-muted-foreground">
-                          IP: {order.customer.ipLocation.city}, {order.customer.ipLocation.state}
+                          IP: {order.customer.ipLocation.city},{' '}
+                          {order.customer.ipLocation.state}
                         </div>
                         <div className="text-xs text-muted-foreground">
                           {order.customer.ipLocation.ip}
                         </div>
                       </div>
                     </TableCell>
-                    
+
                     <TableCell>
                       <div>
-                        <div className="text-sm">{formatDate(order.createdAt)}</div>
+                        <div className="text-sm">
+                          {formatDate(order.createdAt)}
+                        </div>
                         <div className="text-xs text-muted-foreground flex items-center gap-1">
                           <Clock className="h-3 w-3" />
                           {new Date(order.createdAt).toLocaleTimeString()}
                         </div>
                       </div>
                     </TableCell>
-                    
+
                     <TableCell>
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
@@ -488,7 +558,9 @@ export default function OrdersTable({ className }: OrdersTableProps) {
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                          <DropdownMenuItem onClick={() => handleViewOrder(order.id)}>
+                          <DropdownMenuItem
+                            onClick={() => handleViewOrder(order.id)}
+                          >
                             <Eye className="mr-2 h-4 w-4" />
                             View Details
                           </DropdownMenuItem>
@@ -497,9 +569,7 @@ export default function OrdersTable({ className }: OrdersTableProps) {
                             Download Documents
                           </DropdownMenuItem>
                           <DropdownMenuSeparator />
-                          <DropdownMenuItem>
-                            Edit Order
-                          </DropdownMenuItem>
+                          <DropdownMenuItem>Edit Order</DropdownMenuItem>
                           <DropdownMenuItem className="text-red-600">
                             Process Refund
                           </DropdownMenuItem>
@@ -518,10 +588,10 @@ export default function OrdersTable({ className }: OrdersTableProps) {
               Showing {orders.length} of {total.toLocaleString()} orders
             </div>
             <div className="flex items-center gap-2">
-              <Button 
-                variant="outline" 
-                size="sm" 
-                onClick={() => setPage(p => Math.max(1, p - 1))}
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setPage((p) => Math.max(1, p - 1))}
                 disabled={page === 1}
               >
                 Previous
@@ -529,10 +599,10 @@ export default function OrdersTable({ className }: OrdersTableProps) {
               <span className="text-sm">
                 Page {page} of {totalPages}
               </span>
-              <Button 
-                variant="outline" 
-                size="sm" 
-                onClick={() => setPage(p => Math.min(totalPages, p + 1))}
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
                 disabled={page === totalPages}
               >
                 Next

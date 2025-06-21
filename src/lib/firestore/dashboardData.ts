@@ -106,26 +106,38 @@ export async function getUserFolders(
   console.info(
     `[dashboardData] fetched ${snap.size} folders for ${userId} in ${Date.now() - start}ms`,
   );
-  return snap.docs.map((d) => ({ id: d.id, name: (d.data().name as string) || d.id }));
+  return snap.docs.map((d) => ({
+    id: d.id,
+    name: (d.data().name as string) || d.id,
+  }));
 }
 
 export async function getUserDocumentsPaginated(
   userId: string,
   max = 20,
   lastDocId?: string,
-): Promise<{ documents: DashboardDocument[]; hasMore: boolean; lastDocId?: string }> {
+): Promise<{
+  documents: DashboardDocument[];
+  hasMore: boolean;
+  lastDocId?: string;
+}> {
   const db = await getDb();
-  const col = collection(db, "users", userId, "documents");
+  const col = collection(db, 'users', userId, 'documents');
 
   let startSnap;
   if (lastDocId) {
-    const docRef = doc(db, "users", userId, "documents", lastDocId);
+    const docRef = doc(db, 'users', userId, 'documents', lastDocId);
     startSnap = await getDoc(docRef);
   }
 
   const q = startSnap
-    ? query(col, orderBy("updatedAt", "desc"), startAfter(startSnap), limit(max + 1))
-    : query(col, orderBy("updatedAt", "desc"), limit(max + 1));
+    ? query(
+        col,
+        orderBy('updatedAt', 'desc'),
+        startAfter(startSnap),
+        limit(max + 1),
+      )
+    : query(col, orderBy('updatedAt', 'desc'), limit(max + 1));
 
   const snap = await getDocs(q);
   const docs = snap.docs
@@ -148,7 +160,7 @@ export async function getUserDocumentsPaginated(
           docConfig?.translations?.en?.name ||
           docType,
         date: data.updatedAt || data.createdAt || new Date(),
-        status: (data.status as string) || "Draft",
+        status: (data.status as string) || 'Draft',
         docType,
         folderId: data.folderId as string | undefined,
       } as DashboardDocument;

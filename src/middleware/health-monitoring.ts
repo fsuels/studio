@@ -13,19 +13,24 @@ interface PerformanceData {
 // Store performance data for ongoing requests
 const performanceStore = new Map<string, PerformanceData>();
 
-export function withHealthMonitoring(handler: (req: NextRequest) => Promise<NextResponse>) {
+export function withHealthMonitoring(
+  handler: (req: NextRequest) => Promise<NextResponse>,
+) {
   return async (req: NextRequest): Promise<NextResponse> => {
     const requestId = generateRequestId();
     const startTime = performance.now();
     const route = new URL(req.url).pathname;
-    
+
     // Store request start data
     performanceStore.set(requestId, {
       startTime,
       route,
       method: req.method,
       userAgent: req.headers.get('user-agent') || undefined,
-      ip: req.headers.get('x-forwarded-for') || req.headers.get('x-real-ip') || undefined
+      ip:
+        req.headers.get('x-forwarded-for') ||
+        req.headers.get('x-real-ip') ||
+        undefined,
     });
 
     let response: NextResponse;
@@ -36,24 +41,31 @@ export function withHealthMonitoring(handler: (req: NextRequest) => Promise<Next
       response = await handler(req);
     } catch (err) {
       error = err instanceof Error ? err : new Error(String(err));
-      
+
       // Create error response
       response = NextResponse.json(
-        { 
+        {
           error: 'Internal Server Error',
-          message: process.env.NODE_ENV === 'development' ? error.message : undefined
+          message:
+            process.env.NODE_ENV === 'development' ? error.message : undefined,
         },
-        { status: 500 }
+        { status: 500 },
       );
     } finally {
       // Calculate metrics
       const endTime = performance.now();
       const duration = endTime - startTime;
       const success = !error && response.status < 400;
-      
+
       // Record metrics
-      await recordRequestMetrics(route, duration, success, response.status, error);
-      
+      await recordRequestMetrics(
+        route,
+        duration,
+        success,
+        response.status,
+        error,
+      );
+
       // Clean up
       performanceStore.delete(requestId);
     }
@@ -67,7 +79,7 @@ async function recordRequestMetrics(
   duration: number,
   success: boolean,
   statusCode: number,
-  error: Error | null
+  error: Error | null,
 ): Promise<void> {
   try {
     // Record latency
@@ -79,28 +91,28 @@ async function recordRequestMetrics(
         metricType: 'error_rate',
         value: 1,
         endpoint,
-        metadata: { 
-          statusCode, 
+        metadata: {
+          statusCode,
           errorMessage: error?.message,
-          errorType: 'server_error'
-        }
+          errorType: 'server_error',
+        },
       });
     } else if (statusCode >= 400) {
       await operationalHealth.recordMetric({
         metricType: 'error_rate',
         value: 1,
         endpoint,
-        metadata: { 
+        metadata: {
           statusCode,
-          errorType: 'client_error'
-        }
+          errorType: 'client_error',
+        },
       });
     } else {
       await operationalHealth.recordMetric({
         metricType: 'success_rate',
         value: 1,
         endpoint,
-        metadata: { statusCode }
+        metadata: { statusCode },
       });
     }
 
@@ -109,20 +121,22 @@ async function recordRequestMetrics(
       await operationalHealth.recordMetric({
         metricType: 'queue_depth',
         value: getCurrentPdfQueueDepth(),
-        metadata: { 
+        metadata: {
           endpoint,
           operation: 'pdf_generation',
           duration,
-          success
-        }
+          success,
+        },
       });
     }
 
     // Log slow requests
-    if (duration > 5000) { // 5 seconds
-      console.warn(`Slow request detected: ${endpoint} took ${duration.toFixed(2)}ms`);
+    if (duration > 5000) {
+      // 5 seconds
+      console.warn(
+        `Slow request detected: ${endpoint} took ${duration.toFixed(2)}ms`,
+      );
     }
-
   } catch (metricError) {
     console.error('Failed to record request metrics:', metricError);
   }
@@ -140,7 +154,7 @@ function generateRequestId(): string {
 
 // API Route wrapper for easy integration
 export function createHealthMonitoredRoute(
-  handler: (req: NextRequest) => Promise<NextResponse>
+  handler: (req: NextRequest) => Promise<NextResponse>,
 ) {
   return withHealthMonitoring(handler);
 }
@@ -156,7 +170,7 @@ export function monitorApiRoute(routeHandler: any) {
         return await routeHandler(request);
       }
     });
-    
+
     return wrappedHandler(req);
   };
 }
@@ -170,12 +184,12 @@ export function healthMonitoringMiddleware() {
     const route = req.route?.path || req.path || req.url;
 
     // Override response methods to capture metrics
-    res.send = function(data: any) {
+    res.send = function (data: any) {
       recordResponseMetrics(route, startTime, this.statusCode);
       return originalSend.call(this, data);
     };
 
-    res.json = function(data: any) {
+    res.json = function (data: any) {
       recordResponseMetrics(route, startTime, this.statusCode);
       return originalJson.call(this, data);
     };
@@ -184,20 +198,26 @@ export function healthMonitoringMiddleware() {
   };
 }
 
-function recordResponseMetrics(route: string, startTime: number, statusCode: number) {
+function recordResponseMetrics(
+  route: string,
+  startTime: number,
+  statusCode: number,
+) {
   const duration = performance.now() - startTime;
   const success = statusCode < 400;
-  
+
   // Record metrics without await to avoid blocking response
   setImmediate(() => {
-    recordRequestMetrics(route, duration, success, statusCode, null).catch(console.error);
+    recordRequestMetrics(route, duration, success, statusCode, null).catch(
+      console.error,
+    );
   });
 }
 
 // Error boundary wrapper for React components
 export function withErrorTracking<T extends object>(
   Component: React.ComponentType<T>,
-  componentName?: string
+  componentName?: string,
 ) {
   return function WrappedComponent(props: T) {
     const handleError = async (error: Error, errorInfo: any) => {
@@ -210,8 +230,8 @@ export function withErrorTracking<T extends object>(
             errorMessage: error.message,
             errorStack: error.stack,
             componentStack: errorInfo.componentStack,
-            errorType: 'react_error'
-          }
+            errorType: 'react_error',
+          },
         });
       } catch (metricError) {
         console.error('Failed to record component error:', metricError);
@@ -235,12 +255,15 @@ export function monitorClientPerformance() {
   // Monitor page load performance
   window.addEventListener('load', () => {
     setTimeout(() => {
-      const navigation = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
-      
+      const navigation = performance.getEntriesByType(
+        'navigation',
+      )[0] as PerformanceNavigationTiming;
+
       if (navigation) {
         const loadTime = navigation.loadEventEnd - navigation.fetchStart;
-        const domContentLoaded = navigation.domContentLoadedEventEnd - navigation.fetchStart;
-        
+        const domContentLoaded =
+          navigation.domContentLoadedEventEnd - navigation.fetchStart;
+
         // Send to API endpoint
         fetch('/api/health/metrics', {
           method: 'POST',
@@ -250,10 +273,11 @@ export function monitorClientPerformance() {
             metrics: {
               pageLoadTime: loadTime,
               domContentLoaded,
-              firstContentfulPaint: navigation.responseStart - navigation.fetchStart,
-              route: window.location.pathname
-            }
-          })
+              firstContentfulPaint:
+                navigation.responseStart - navigation.fetchStart,
+              route: window.location.pathname,
+            },
+          }),
         }).catch(console.error);
       }
     }, 1000);
@@ -271,9 +295,9 @@ export function monitorClientPerformance() {
           filename: event.filename,
           lineno: event.lineno,
           colno: event.colno,
-          route: window.location.pathname
-        }
-      })
+          route: window.location.pathname,
+        },
+      }),
     }).catch(console.error);
   });
 
@@ -287,9 +311,9 @@ export function monitorClientPerformance() {
         error: {
           message: event.reason?.message || String(event.reason),
           type: 'unhandled_promise_rejection',
-          route: window.location.pathname
-        }
-      })
+          route: window.location.pathname,
+        },
+      }),
     }).catch(console.error);
   });
 }

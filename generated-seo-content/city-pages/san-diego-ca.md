@@ -30,7 +30,7 @@ San Diego offers a dynamic business environment with opportunities across indust
 
 [Start Your San Diego Legal Document]
 
-*Trusted by hundreds of San Diego businesses*
+_Trusted by hundreds of San Diego businesses_
 
 ---
 

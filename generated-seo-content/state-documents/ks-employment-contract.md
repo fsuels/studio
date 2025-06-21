@@ -47,7 +47,7 @@ Don't risk using generic templates that may not comply with Kansas law. Get a pr
 
 [Create Kansas Employment Contract]
 
-*Trusted by thousands of Kansas businesses*
+_Trusted by thousands of Kansas businesses_
 
 ---
 

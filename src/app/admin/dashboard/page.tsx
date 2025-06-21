@@ -9,10 +9,10 @@ import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import ComplianceDashboard from '@/components/compliance/ComplianceDashboard';
-import { 
-  LogOut, 
-  Shield, 
-  User, 
+import {
+  LogOut,
+  Shield,
+  User,
   Clock,
   Loader2,
   Settings,
@@ -22,7 +22,7 @@ import {
   AlertTriangle,
   TrendingUp,
   Globe,
-  FileBarChart
+  FileBarChart,
 } from 'lucide-react';
 import MarketingInsightsDashboard from '@/components/admin/MarketingInsightsDashboard';
 import { WebhookDashboard } from '@/components/admin/webhooks/WebhookDashboard';
@@ -49,7 +49,7 @@ export default function AdminDashboardPage() {
     try {
       const response = await fetch('/api/admin/auth');
       const data = await response.json();
-      
+
       if (data.authenticated) {
         setAdminUser(data.user);
       } else {
@@ -76,7 +76,7 @@ export default function AdminDashboardPage() {
           username: adminUser?.username,
         }),
       });
-      
+
       router.push('/admin');
     } catch (err) {
       setError('Logout failed');
@@ -90,7 +90,9 @@ export default function AdminDashboardPage() {
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center space-y-4">
           <Loader2 className="h-8 w-8 animate-spin mx-auto text-primary" />
-          <p className="text-sm text-muted-foreground">Loading admin dashboard...</p>
+          <p className="text-sm text-muted-foreground">
+            Loading admin dashboard...
+          </p>
         </div>
       </div>
     );
@@ -121,7 +123,10 @@ export default function AdminDashboardPage() {
                 <Shield className="h-6 w-6 text-primary" />
                 <h1 className="text-xl font-semibold">123LegalDoc Admin</h1>
               </div>
-              <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
+              <Badge
+                variant="outline"
+                className="bg-green-50 text-green-700 border-green-200"
+              >
                 LIVE SYSTEM
               </Badge>
             </div>
@@ -136,12 +141,14 @@ export default function AdminDashboardPage() {
                 </div>
                 <div className="flex items-center gap-1 text-xs text-muted-foreground mt-1">
                   <Clock className="h-3 w-3" />
-                  <span>Since {new Date(adminUser.loginTime).toLocaleTimeString()}</span>
+                  <span>
+                    Since {new Date(adminUser.loginTime).toLocaleTimeString()}
+                  </span>
                 </div>
               </div>
-              <Button 
-                variant="outline" 
-                size="sm" 
+              <Button
+                variant="outline"
+                size="sm"
                 onClick={handleLogout}
                 disabled={loggingOut}
               >
@@ -176,11 +183,17 @@ export default function AdminDashboardPage() {
               <BarChart3 className="h-4 w-4" />
               Compliance
             </TabsTrigger>
-            <TabsTrigger value="experiments" className="flex items-center gap-2">
+            <TabsTrigger
+              value="experiments"
+              className="flex items-center gap-2"
+            >
               <TrendingUp className="h-4 w-4" />
               A/B Tests
             </TabsTrigger>
-            <TabsTrigger value="customer360" className="flex items-center gap-2">
+            <TabsTrigger
+              value="customer360"
+              className="flex items-center gap-2"
+            >
               <Users className="h-4 w-4" />
               Customer 360
             </TabsTrigger>
@@ -204,7 +217,10 @@ export default function AdminDashboardPage() {
               <Users className="h-4 w-4" />
               Waitlist
             </TabsTrigger>
-            <TabsTrigger value="regulations" className="flex items-center gap-2">
+            <TabsTrigger
+              value="regulations"
+              className="flex items-center gap-2"
+            >
               <Database className="h-4 w-4" />
               Regulations
             </TabsTrigger>
@@ -217,9 +233,12 @@ export default function AdminDashboardPage() {
           {/* Compliance Tab */}
           <TabsContent value="compliance" className="space-y-6">
             <div>
-              <h2 className="text-2xl font-bold mb-2">Real-Time Compliance Monitoring</h2>
+              <h2 className="text-2xl font-bold mb-2">
+                Real-Time Compliance Monitoring
+              </h2>
               <p className="text-muted-foreground">
-                Monitor UPL compliance across all 50 states with real-time analytics and alerts.
+                Monitor UPL compliance across all 50 states with real-time
+                analytics and alerts.
               </p>
             </div>
             <ComplianceDashboard />
@@ -228,9 +247,12 @@ export default function AdminDashboardPage() {
           {/* A/B Testing Experiments Tab */}
           <TabsContent value="experiments" className="space-y-6">
             <div>
-              <h2 className="text-2xl font-bold mb-2">A/B Testing & Experimentation</h2>
+              <h2 className="text-2xl font-bold mb-2">
+                A/B Testing & Experimentation
+              </h2>
               <p className="text-muted-foreground">
-                Optimize conversion rates with statistical experiments and Bayesian impact analysis.
+                Optimize conversion rates with statistical experiments and
+                Bayesian impact analysis.
               </p>
             </div>
             <ExperimentsManagement />
@@ -239,9 +261,12 @@ export default function AdminDashboardPage() {
           {/* Customer 360 Tab */}
           <TabsContent value="customer360" className="space-y-6">
             <div>
-              <h2 className="text-2xl font-bold mb-2">Customer 360 Intelligence</h2>
+              <h2 className="text-2xl font-bold mb-2">
+                Customer 360 Intelligence
+              </h2>
               <p className="text-muted-foreground">
-                Complete customer insights with timeline, orders, support tickets, NPS, and churn risk analysis.
+                Complete customer insights with timeline, orders, support
+                tickets, NPS, and churn risk analysis.
               </p>
             </div>
             <Customer360Management />
@@ -250,9 +275,12 @@ export default function AdminDashboardPage() {
           {/* Role Operations Tab */}
           <TabsContent value="roleops" className="space-y-6">
             <div>
-              <h2 className="text-2xl font-bold mb-2">Team & Role Operations</h2>
+              <h2 className="text-2xl font-bold mb-2">
+                Team & Role Operations
+              </h2>
               <p className="text-muted-foreground">
-                Manage user roles, permissions, feature toggles, and impersonation capabilities.
+                Manage user roles, permissions, feature toggles, and
+                impersonation capabilities.
               </p>
             </div>
             <RoleOperationsManagement />
@@ -268,7 +296,8 @@ export default function AdminDashboardPage() {
             <div>
               <h2 className="text-2xl font-bold mb-2">Webhook Management</h2>
               <p className="text-muted-foreground">
-                Manage webhook subscriptions, monitor delivery status, and view event logs for real-time integrations.
+                Manage webhook subscriptions, monitor delivery status, and view
+                event logs for real-time integrations.
               </p>
             </div>
             <WebhookDashboard />
@@ -279,7 +308,8 @@ export default function AdminDashboardPage() {
             <div>
               <h2 className="text-2xl font-bold mb-2">Report Builder</h2>
               <p className="text-muted-foreground">
-                Create custom reports and visualizations from your data with low-code SQL→chart builder.
+                Create custom reports and visualizations from your data with
+                low-code SQL→chart builder.
               </p>
             </div>
             <ReportBuilder />
@@ -290,7 +320,8 @@ export default function AdminDashboardPage() {
             <div>
               <h2 className="text-2xl font-bold mb-2">Waitlist Management</h2>
               <p className="text-muted-foreground">
-                Manage signups from restricted states and track expansion opportunities.
+                Manage signups from restricted states and track expansion
+                opportunities.
               </p>
             </div>
             <WaitlistManagement />
@@ -299,7 +330,9 @@ export default function AdminDashboardPage() {
           {/* Regulations Tab */}
           <TabsContent value="regulations" className="space-y-6">
             <div>
-              <h2 className="text-2xl font-bold mb-2">State Regulations Editor</h2>
+              <h2 className="text-2xl font-bold mb-2">
+                State Regulations Editor
+              </h2>
               <p className="text-muted-foreground">
                 Update state risk classifications and compliance requirements.
               </p>
@@ -312,7 +345,8 @@ export default function AdminDashboardPage() {
             <div>
               <h2 className="text-2xl font-bold mb-2">System Settings</h2>
               <p className="text-muted-foreground">
-                Configure compliance thresholds, monitoring alerts, and system preferences.
+                Configure compliance thresholds, monitoring alerts, and system
+                preferences.
               </p>
             </div>
             <SystemSettings />
@@ -333,30 +367,36 @@ function ExperimentsManagement() {
       <CardContent>
         <div className="space-y-4">
           <p className="text-muted-foreground">
-            Advanced experimentation platform with statistical significance testing, Bayesian analysis, and revenue impact measurement.
+            Advanced experimentation platform with statistical significance
+            testing, Bayesian analysis, and revenue impact measurement.
           </p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="p-4 border rounded-lg">
-              <h3 className="font-semibold text-lg mb-2">Statistical Analysis</h3>
+              <h3 className="font-semibold text-lg mb-2">
+                Statistical Analysis
+              </h3>
               <p className="text-sm text-muted-foreground">
-                Bayesian and Frequentist analysis with automatic winner detection and confidence intervals.
+                Bayesian and Frequentist analysis with automatic winner
+                detection and confidence intervals.
               </p>
             </div>
             <div className="p-4 border rounded-lg">
               <h3 className="font-semibold text-lg mb-2">Revenue Impact</h3>
               <p className="text-sm text-muted-foreground">
-                Real-time revenue tracking with estimated monthly and annual impact calculations.
+                Real-time revenue tracking with estimated monthly and annual
+                impact calculations.
               </p>
             </div>
             <div className="p-4 border rounded-lg">
               <h3 className="font-semibold text-lg mb-2">Funnel Integration</h3>
               <p className="text-sm text-muted-foreground">
-                Seamless integration with existing funnel analytics and conversion tracking.
+                Seamless integration with existing funnel analytics and
+                conversion tracking.
               </p>
             </div>
           </div>
           <div className="pt-4">
-            <Button 
+            <Button
               onClick={() => window.open('/admin/experiments', '_blank')}
               className="w-full"
             >
@@ -377,8 +417,8 @@ function WaitlistManagement() {
       </CardHeader>
       <CardContent>
         <p className="text-muted-foreground">
-          Waitlist management interface will be displayed here.
-          This includes signup analytics, priority management, and notification systems.
+          Waitlist management interface will be displayed here. This includes
+          signup analytics, priority management, and notification systems.
         </p>
       </CardContent>
     </Card>
@@ -393,8 +433,8 @@ function RegulationsEditor() {
       </CardHeader>
       <CardContent>
         <p className="text-muted-foreground">
-          State regulations editor will be displayed here.
-          This includes risk level adjustments, requirement updates, and source documentation.
+          State regulations editor will be displayed here. This includes risk
+          level adjustments, requirement updates, and source documentation.
         </p>
       </CardContent>
     </Card>
@@ -410,30 +450,36 @@ function Customer360Management() {
       <CardContent>
         <div className="space-y-4">
           <p className="text-muted-foreground">
-            Advanced customer intelligence dashboard with timeline views, churn risk analysis, and lifetime value tracking.
+            Advanced customer intelligence dashboard with timeline views, churn
+            risk analysis, and lifetime value tracking.
           </p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="p-4 border rounded-lg">
               <h3 className="font-semibold text-lg mb-2">Customer Timeline</h3>
               <p className="text-sm text-muted-foreground">
-                Complete customer journey with orders, support tickets, NPS responses, and document interactions.
+                Complete customer journey with orders, support tickets, NPS
+                responses, and document interactions.
               </p>
             </div>
             <div className="p-4 border rounded-lg">
-              <h3 className="font-semibold text-lg mb-2">Churn Risk Analysis</h3>
+              <h3 className="font-semibold text-lg mb-2">
+                Churn Risk Analysis
+              </h3>
               <p className="text-sm text-muted-foreground">
-                AI-powered churn prediction with health scores and proactive intervention recommendations.
+                AI-powered churn prediction with health scores and proactive
+                intervention recommendations.
               </p>
             </div>
             <div className="p-4 border rounded-lg">
               <h3 className="font-semibold text-lg mb-2">LTV & Plan Tiers</h3>
               <p className="text-sm text-muted-foreground">
-                Lifetime value calculations with plan tier badges and upgrade opportunities.
+                Lifetime value calculations with plan tier badges and upgrade
+                opportunities.
               </p>
             </div>
           </div>
           <div className="pt-4">
-            <Button 
+            <Button
               onClick={() => window.open('/admin/customer-360', '_blank')}
               className="w-full"
             >
@@ -455,30 +501,36 @@ function RoleOperationsManagement() {
       <CardContent>
         <div className="space-y-4">
           <p className="text-muted-foreground">
-            Complete role-based access control with user impersonation, feature toggles, and team management.
+            Complete role-based access control with user impersonation, feature
+            toggles, and team management.
           </p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="p-4 border rounded-lg">
-              <h3 className="font-semibold text-lg mb-2">Role-Based Permissions</h3>
+              <h3 className="font-semibold text-lg mb-2">
+                Role-Based Permissions
+              </h3>
               <p className="text-sm text-muted-foreground">
-                Manage user roles, permissions, and access controls with granular security settings.
+                Manage user roles, permissions, and access controls with
+                granular security settings.
               </p>
             </div>
             <div className="p-4 border rounded-lg">
               <h3 className="font-semibold text-lg mb-2">User Impersonation</h3>
               <p className="text-sm text-muted-foreground">
-                Login-as functionality for support teams with full audit trails and security controls.
+                Login-as functionality for support teams with full audit trails
+                and security controls.
               </p>
             </div>
             <div className="p-4 border rounded-lg">
               <h3 className="font-semibold text-lg mb-2">Feature Toggles</h3>
               <p className="text-sm text-muted-foreground">
-                Role-based feature flags for controlled rollouts and A/B testing capabilities.
+                Role-based feature flags for controlled rollouts and A/B testing
+                capabilities.
               </p>
             </div>
           </div>
           <div className="pt-4">
-            <Button 
+            <Button
               onClick={() => window.open('/admin/role-operations', '_blank')}
               className="w-full"
             >
@@ -499,8 +551,8 @@ function SystemSettings() {
       </CardHeader>
       <CardContent>
         <p className="text-muted-foreground">
-          System settings interface will be displayed here.
-          This includes compliance thresholds, alert configurations, and API settings.
+          System settings interface will be displayed here. This includes
+          compliance thresholds, alert configurations, and API settings.
         </p>
       </CardContent>
     </Card>

@@ -26,13 +26,23 @@ export const loanModificationLetterMeta: LegalDocument = {
       name: 'Loan Modification Letter',
       description:
         'Request a loan modification from your lender due to financial hardship or changed circumstances.',
-      aliases: ['loan mod request', 'payment modification', 'hardship letter', 'loan adjustment request'],
+      aliases: [
+        'loan mod request',
+        'payment modification',
+        'hardship letter',
+        'loan adjustment request',
+      ],
     },
     es: {
       name: 'Carta de Modificación de Préstamo',
       description:
         'Solicitar una modificación de préstamo de su prestamista debido a dificultades financieras o circunstancias cambiadas.',
-      aliases: ['solicitud de modificación', 'modificación de pago', 'carta de dificultad', 'solicitud de ajuste de préstamo'],
+      aliases: [
+        'solicitud de modificación',
+        'modificación de pago',
+        'carta de dificultad',
+        'solicitud de ajuste de préstamo',
+      ],
     },
   },
 };

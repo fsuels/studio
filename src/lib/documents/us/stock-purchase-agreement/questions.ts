@@ -7,7 +7,7 @@ export const stockPurchaseAgreementQuestions: FormQuestion[] = [
     label: 'Company Name',
     required: true,
     placeholder: 'Enter the full legal name of the company',
-    validation: { min: 1 }
+    validation: { min: 1 },
   },
   {
     id: 'stateOfIncorporation',
@@ -64,8 +64,8 @@ export const stockPurchaseAgreementQuestions: FormQuestion[] = [
       { value: 'WA', label: 'Washington' },
       { value: 'WV', label: 'West Virginia' },
       { value: 'WI', label: 'Wisconsin' },
-      { value: 'WY', label: 'Wyoming' }
-    ]
+      { value: 'WY', label: 'Wyoming' },
+    ],
   },
   {
     id: 'sellerName',
@@ -73,7 +73,7 @@ export const stockPurchaseAgreementQuestions: FormQuestion[] = [
     label: 'Seller Name',
     required: true,
     placeholder: 'Enter the full name of the seller',
-    validation: { min: 1 }
+    validation: { min: 1 },
   },
   {
     id: 'sellerAddress',
@@ -81,7 +81,7 @@ export const stockPurchaseAgreementQuestions: FormQuestion[] = [
     label: 'Seller Address',
     required: true,
     placeholder: 'Enter the complete address of the seller',
-    validation: { min: 10, max: 300 }
+    validation: { min: 10, max: 300 },
   },
   {
     id: 'sellerType',
@@ -90,8 +90,8 @@ export const stockPurchaseAgreementQuestions: FormQuestion[] = [
     required: true,
     options: [
       { value: 'individual', label: 'Individual' },
-      { value: 'entity', label: 'Business Entity' }
-    ]
+      { value: 'entity', label: 'Business Entity' },
+    ],
   },
   {
     id: 'buyerName',
@@ -99,7 +99,7 @@ export const stockPurchaseAgreementQuestions: FormQuestion[] = [
     label: 'Buyer Name',
     required: true,
     placeholder: 'Enter the full name of the buyer',
-    validation: { min: 1 }
+    validation: { min: 1 },
   },
   {
     id: 'buyerAddress',
@@ -107,7 +107,7 @@ export const stockPurchaseAgreementQuestions: FormQuestion[] = [
     label: 'Buyer Address',
     required: true,
     placeholder: 'Enter the complete address of the buyer',
-    validation: { min: 10, max: 300 }
+    validation: { min: 10, max: 300 },
   },
   {
     id: 'buyerType',
@@ -116,8 +116,8 @@ export const stockPurchaseAgreementQuestions: FormQuestion[] = [
     required: true,
     options: [
       { value: 'individual', label: 'Individual' },
-      { value: 'entity', label: 'Business Entity' }
-    ]
+      { value: 'entity', label: 'Business Entity' },
+    ],
   },
   {
     id: 'stockDetails.shareClass',
@@ -125,7 +125,7 @@ export const stockPurchaseAgreementQuestions: FormQuestion[] = [
     label: 'Share Class',
     required: true,
     placeholder: 'e.g., Common Stock, Preferred Stock',
-    defaultValue: 'Common Stock'
+    defaultValue: 'Common Stock',
   },
   {
     id: 'stockDetails.numberOfShares',
@@ -133,7 +133,7 @@ export const stockPurchaseAgreementQuestions: FormQuestion[] = [
     label: 'Number of Shares',
     required: true,
     validation: { min: 1 },
-    placeholder: 'Enter the number of shares being purchased'
+    placeholder: 'Enter the number of shares being purchased',
   },
   {
     id: 'stockDetails.sharePrice',
@@ -141,7 +141,7 @@ export const stockPurchaseAgreementQuestions: FormQuestion[] = [
     label: 'Price per Share',
     required: true,
     validation: { min: 0 },
-    placeholder: 'Enter the price per share in dollars'
+    placeholder: 'Enter the price per share in dollars',
   },
   {
     id: 'stockDetails.totalPurchasePrice',
@@ -150,7 +150,7 @@ export const stockPurchaseAgreementQuestions: FormQuestion[] = [
     required: true,
     validation: { min: 0 },
     placeholder: 'Enter the total purchase price',
-    helpText: 'This should equal number of shares × price per share'
+    helpText: 'This should equal number of shares × price per share',
   },
   {
     id: 'purchaseTerms.paymentMethod',
@@ -162,30 +162,34 @@ export const stockPurchaseAgreementQuestions: FormQuestion[] = [
       { value: 'check', label: 'Check' },
       { value: 'wire-transfer', label: 'Wire Transfer' },
       { value: 'installments', label: 'Installment Payments' },
-      { value: 'other', label: 'Other' }
-    ]
+      { value: 'other', label: 'Other' },
+    ],
   },
   {
     id: 'purchaseTerms.paymentSchedule',
     type: 'textarea',
     label: 'Payment Schedule',
     required: false,
-    placeholder: 'Describe the payment schedule (required for installment payments)',
-    conditional: { field: 'purchaseTerms.paymentMethod', value: 'installments' }
+    placeholder:
+      'Describe the payment schedule (required for installment payments)',
+    conditional: {
+      field: 'purchaseTerms.paymentMethod',
+      value: 'installments',
+    },
   },
   {
     id: 'purchaseTerms.closingDate',
     type: 'date',
     label: 'Closing Date',
     required: true,
-    helpText: 'Date when the transaction will be completed'
+    helpText: 'Date when the transaction will be completed',
   },
   {
     id: 'purchaseTerms.closingLocation',
     type: 'text',
     label: 'Closing Location',
     required: true,
-    placeholder: 'Where will the closing take place?'
+    placeholder: 'Where will the closing take place?',
   },
   {
     id: 'buyerRepresentations.accreditedInvestor',
@@ -193,14 +197,14 @@ export const stockPurchaseAgreementQuestions: FormQuestion[] = [
     label: 'Buyer is an Accredited Investor',
     required: false,
     defaultValue: false,
-    helpText: 'Check if buyer meets accredited investor requirements'
+    helpText: 'Check if buyer meets accredited investor requirements',
   },
   {
     id: 'covenants.nonCompete',
     type: 'checkbox',
     label: 'Include Non-Compete Clause',
     required: false,
-    defaultValue: false
+    defaultValue: false,
   },
   {
     id: 'covenants.nonCompetePeriod',
@@ -208,14 +212,14 @@ export const stockPurchaseAgreementQuestions: FormQuestion[] = [
     label: 'Non-Compete Period',
     required: false,
     placeholder: 'e.g., 2 years',
-    conditional: { field: 'covenants.nonCompete', value: true }
+    conditional: { field: 'covenants.nonCompete', value: true },
   },
   {
     id: 'covenants.confidentiality',
     type: 'checkbox',
     label: 'Include Confidentiality Clause',
     required: false,
-    defaultValue: true
+    defaultValue: true,
   },
   {
     id: 'indemnification.indemnityPeriod',
@@ -223,14 +227,14 @@ export const stockPurchaseAgreementQuestions: FormQuestion[] = [
     label: 'Indemnification Period',
     required: false,
     defaultValue: '2 years',
-    placeholder: 'How long will indemnification last?'
+    placeholder: 'How long will indemnification last?',
   },
   {
     id: 'indemnification.escrowAmount',
     type: 'text',
     label: 'Escrow Amount',
     required: false,
-    placeholder: 'Amount to be held in escrow (if any)'
+    placeholder: 'Amount to be held in escrow (if any)',
   },
   {
     id: 'disputeResolution.method',
@@ -241,8 +245,8 @@ export const stockPurchaseAgreementQuestions: FormQuestion[] = [
     options: [
       { value: 'arbitration', label: 'Arbitration' },
       { value: 'mediation', label: 'Mediation' },
-      { value: 'litigation', label: 'Court Litigation' }
-    ]
+      { value: 'litigation', label: 'Court Litigation' },
+    ],
   },
   {
     id: 'disputeResolution.governingLaw',
@@ -299,8 +303,8 @@ export const stockPurchaseAgreementQuestions: FormQuestion[] = [
       { value: 'WA', label: 'Washington' },
       { value: 'WV', label: 'West Virginia' },
       { value: 'WI', label: 'Wisconsin' },
-      { value: 'WY', label: 'Wyoming' }
-    ]
+      { value: 'WY', label: 'Wyoming' },
+    ],
   },
   {
     id: 'additionalTerms',
@@ -308,20 +312,20 @@ export const stockPurchaseAgreementQuestions: FormQuestion[] = [
     label: 'Additional Terms',
     required: false,
     placeholder: 'Enter any additional terms or provisions for this agreement',
-    validation: { max: 1000 }
+    validation: { max: 1000 },
   },
   {
     id: 'agreementDate',
     type: 'date',
     label: 'Agreement Date',
     required: true,
-    helpText: 'Date this stock purchase agreement is signed'
+    helpText: 'Date this stock purchase agreement is signed',
   },
   {
     id: 'notarization',
     type: 'checkbox',
     label: 'Require Notarization',
     required: false,
-    defaultValue: true
-  }
+    defaultValue: true,
+  },
 ];

@@ -24,12 +24,18 @@ export const notarizationRequestMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Notarization Request',
-      description: 'Form to request notarial services for document authentication.',
-      aliases: ['notary request', 'document notarization', 'notarial certificate'],
+      description:
+        'Form to request notarial services for document authentication.',
+      aliases: [
+        'notary request',
+        'document notarization',
+        'notarial certificate',
+      ],
     },
     es: {
       name: 'Solicitud de Notarización',
-      description: 'Formulario para solicitar servicios notariales para autenticación de documentos.',
+      description:
+        'Formulario para solicitar servicios notariales para autenticación de documentos.',
       aliases: ['solicitud notarial', 'notarización de documento'],
     },
   },

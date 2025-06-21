@@ -3,7 +3,10 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '@/hooks/useAuth';
-import { createProgressTracker, OnboardingProgress } from '@/lib/onboarding/progress-tracker';
+import {
+  createProgressTracker,
+  OnboardingProgress,
+} from '@/lib/onboarding/progress-tracker';
 
 export interface UseOnboardingReturn {
   progress: OnboardingProgress | null;
@@ -13,7 +16,9 @@ export interface UseOnboardingReturn {
   startOnboarding: () => void;
   completeOnboarding: () => void;
   skipOnboarding: () => void;
-  markMilestone: (milestone: keyof OnboardingProgress['milestones']) => Promise<void>;
+  markMilestone: (
+    milestone: keyof OnboardingProgress['milestones'],
+  ) => Promise<void>;
   resetOnboarding: () => Promise<void>;
 }
 
@@ -21,16 +26,20 @@ export const useOnboarding = (): UseOnboardingReturn => {
   const { user, isLoggedIn } = useAuth();
   const [progress, setProgress] = useState<OnboardingProgress | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [tracker, setTracker] = useState<ReturnType<typeof createProgressTracker> | null>(null);
+  const [tracker, setTracker] = useState<ReturnType<
+    typeof createProgressTracker
+  > | null>(null);
 
   useEffect(() => {
     if (user?.uid) {
-      setTracker(createProgressTracker(
-        user.uid, 
-        user.email || undefined,
-        user.displayName || user.name || undefined,
-        'en' // You could get this from i18n or user preferences
-      ));
+      setTracker(
+        createProgressTracker(
+          user.uid,
+          user.email || undefined,
+          user.displayName || user.name || undefined,
+          'en', // You could get this from i18n or user preferences
+        ),
+      );
     } else {
       setTracker(null);
       setProgress(null);
@@ -61,10 +70,11 @@ export const useOnboarding = (): UseOnboardingReturn => {
   }, [tracker, loadProgress]);
 
   const isOnboardingComplete = progress?.isCompleted ?? false;
-  
-  const shouldShowOnboarding = isLoggedIn && 
-    !isLoading && 
-    !isOnboardingComplete && 
+
+  const shouldShowOnboarding =
+    isLoggedIn &&
+    !isLoading &&
+    !isOnboardingComplete &&
     (!progress || progress.currentStep === 0);
 
   const startOnboarding = useCallback(() => {
@@ -96,9 +106,9 @@ export const useOnboarding = (): UseOnboardingReturn => {
       const updateData = {
         isCompleted: true,
         currentStep: tracker.getStepsForPersona().length,
-        completedAt: new Date()
+        completedAt: new Date(),
       };
-      
+
       // We'll need to add a method to update progress manually
       await loadProgress();
     } catch (error) {
@@ -106,16 +116,19 @@ export const useOnboarding = (): UseOnboardingReturn => {
     }
   }, [tracker, loadProgress]);
 
-  const markMilestone = useCallback(async (milestone: keyof OnboardingProgress['milestones']) => {
-    if (!tracker) return;
+  const markMilestone = useCallback(
+    async (milestone: keyof OnboardingProgress['milestones']) => {
+      if (!tracker) return;
 
-    try {
-      await tracker.markMilestone(milestone);
-      await loadProgress();
-    } catch (error) {
-      console.error('Error marking milestone:', error);
-    }
-  }, [tracker, loadProgress]);
+      try {
+        await tracker.markMilestone(milestone);
+        await loadProgress();
+      } catch (error) {
+        console.error('Error marking milestone:', error);
+      }
+    },
+    [tracker, loadProgress],
+  );
 
   const resetOnboarding = useCallback(async () => {
     if (!tracker) return;
@@ -137,6 +150,6 @@ export const useOnboarding = (): UseOnboardingReturn => {
     completeOnboarding,
     skipOnboarding,
     markMilestone,
-    resetOnboarding
+    resetOnboarding,
   };
 };

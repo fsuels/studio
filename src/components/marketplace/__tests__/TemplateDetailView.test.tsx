@@ -10,26 +10,58 @@ jest.mock('lucide-react', () => ({
   Star: ({ className, fill }: { className?: string; fill?: string }) => (
     <div data-testid="star-icon" className={className} data-fill={fill} />
   ),
-  Download: ({ className }: { className?: string }) => <div data-testid="download-icon" className={className} />,
-  Eye: ({ className }: { className?: string }) => <div data-testid="eye-icon" className={className} />,
-  Shield: ({ className }: { className?: string }) => <div data-testid="shield-icon" className={className} />,
-  Crown: ({ className }: { className?: string }) => <div data-testid="crown-icon" className={className} />,
-  Calendar: ({ className }: { className?: string }) => <div data-testid="calendar-icon" className={className} />,
-  Globe: ({ className }: { className?: string }) => <div data-testid="globe-icon" className={className} />,
-  FileText: ({ className }: { className?: string }) => <div data-testid="file-text-icon" className={className} />,
-  Users: ({ className }: { className?: string }) => <div data-testid="users-icon" className={className} />,
-  Heart: ({ className }: { className?: string }) => <div data-testid="heart-icon" className={className} />,
-  Share2: ({ className }: { className?: string }) => <div data-testid="share-icon" className={className} />,
-  ChevronDown: ({ className }: { className?: string }) => <div data-testid="chevron-down-icon" className={className} />,
-  ChevronUp: ({ className }: { className?: string }) => <div data-testid="chevron-up-icon" className={className} />,
+  Download: ({ className }: { className?: string }) => (
+    <div data-testid="download-icon" className={className} />
+  ),
+  Eye: ({ className }: { className?: string }) => (
+    <div data-testid="eye-icon" className={className} />
+  ),
+  Shield: ({ className }: { className?: string }) => (
+    <div data-testid="shield-icon" className={className} />
+  ),
+  Crown: ({ className }: { className?: string }) => (
+    <div data-testid="crown-icon" className={className} />
+  ),
+  Calendar: ({ className }: { className?: string }) => (
+    <div data-testid="calendar-icon" className={className} />
+  ),
+  Globe: ({ className }: { className?: string }) => (
+    <div data-testid="globe-icon" className={className} />
+  ),
+  FileText: ({ className }: { className?: string }) => (
+    <div data-testid="file-text-icon" className={className} />
+  ),
+  Users: ({ className }: { className?: string }) => (
+    <div data-testid="users-icon" className={className} />
+  ),
+  Heart: ({ className }: { className?: string }) => (
+    <div data-testid="heart-icon" className={className} />
+  ),
+  Share2: ({ className }: { className?: string }) => (
+    <div data-testid="share-icon" className={className} />
+  ),
+  ChevronDown: ({ className }: { className?: string }) => (
+    <div data-testid="chevron-down-icon" className={className} />
+  ),
+  ChevronUp: ({ className }: { className?: string }) => (
+    <div data-testid="chevron-up-icon" className={className} />
+  ),
 }));
 
 // Mock UI components
 jest.mock('@/components/ui/button', () => ({
-  Button: ({ children, onClick, variant, size, className, disabled, ...props }: any) => (
-    <button 
-      onClick={onClick} 
-      className={className} 
+  Button: ({
+    children,
+    onClick,
+    variant,
+    size,
+    className,
+    disabled,
+    ...props
+  }: any) => (
+    <button
+      onClick={onClick}
+      className={className}
       disabled={disabled}
       data-variant={variant}
       data-size={size}
@@ -53,7 +85,9 @@ jest.mock('@/components/ui/separator', () => ({
 }));
 
 jest.mock('@/components/ui/avatar', () => ({
-  Avatar: ({ children, className }: any) => <div className={className}>{children}</div>,
+  Avatar: ({ children, className }: any) => (
+    <div className={className}>{children}</div>
+  ),
   AvatarImage: ({ src, alt }: any) => <img src={src} alt={alt} />,
   AvatarFallback: ({ children }: any) => <div>{children}</div>,
 }));
@@ -64,7 +98,9 @@ jest.mock('@/components/ui/tabs', () => ({
       {children}
     </div>
   ),
-  TabsList: ({ children, className }: any) => <div className={className}>{children}</div>,
+  TabsList: ({ children, className }: any) => (
+    <div className={className}>{children}</div>
+  ),
   TabsTrigger: ({ children, value, className }: any) => (
     <button className={className} data-value={value}>
       {children}
@@ -103,7 +139,8 @@ const mockTemplate: MarketplaceTemplate = {
   id: 'template-123',
   name: 'Professional Service Agreement',
   slug: 'professional-service-agreement',
-  description: 'A comprehensive service agreement template for professional services. This template includes all necessary clauses for service delivery, payment terms, and legal protection.',
+  description:
+    'A comprehensive service agreement template for professional services. This template includes all necessary clauses for service delivery, payment terms, and legal protection.',
   createdBy: 'creator-456',
   creatorProfile: {
     userId: 'creator-456',
@@ -188,8 +225,12 @@ describe('TemplateDetailView', () => {
   it('renders template information correctly', () => {
     render(<TemplateDetailView {...defaultProps} />);
 
-    expect(screen.getByText('Professional Service Agreement')).toBeInTheDocument();
-    expect(screen.getByText(/A comprehensive service agreement template/)).toBeInTheDocument();
+    expect(
+      screen.getByText('Professional Service Agreement'),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(/A comprehensive service agreement template/),
+    ).toBeInTheDocument();
     expect(screen.getByText('Business Contracts')).toBeInTheDocument();
     expect(screen.getByText('$29.99')).toBeInTheDocument();
     expect(screen.getByText('v1.3.0')).toBeInTheDocument();
@@ -199,7 +240,9 @@ describe('TemplateDetailView', () => {
     render(<TemplateDetailView {...defaultProps} />);
 
     expect(screen.getByText('John Doe')).toBeInTheDocument();
-    expect(screen.getByText(/Professional template creator/)).toBeInTheDocument();
+    expect(
+      screen.getByText(/Professional template creator/),
+    ).toBeInTheDocument();
     expect(screen.getByTestId('shield-icon')).toBeInTheDocument(); // Verified badge
   });
 
@@ -215,7 +258,7 @@ describe('TemplateDetailView', () => {
 
     expect(screen.getByText('4.8')).toBeInTheDocument();
     expect(screen.getByText('(234 reviews)')).toBeInTheDocument();
-    
+
     // Should have 5 star icons (filled and unfilled)
     const starIcons = screen.getAllByTestId('star-icon');
     expect(starIcons).toHaveLength(5);
@@ -268,7 +311,9 @@ describe('TemplateDetailView', () => {
   it('calls onFavorite when favorite button is clicked', () => {
     render(<TemplateDetailView {...defaultProps} />);
 
-    const favoriteButton = screen.getByRole('button', { name: /add to favorites/i });
+    const favoriteButton = screen.getByRole('button', {
+      name: /add to favorites/i,
+    });
     fireEvent.click(favoriteButton);
 
     expect(mockOnFavorite).toHaveBeenCalledWith('template-123');
@@ -286,7 +331,9 @@ describe('TemplateDetailView', () => {
   it('shows "Remove from favorites" when template is favorited', () => {
     render(<TemplateDetailView {...defaultProps} isFavorited={true} />);
 
-    expect(screen.getByRole('button', { name: /remove from favorites/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: /remove from favorites/i }),
+    ).toBeInTheDocument();
   });
 
   it('shows "Install" for free templates', () => {
@@ -298,14 +345,16 @@ describe('TemplateDetailView', () => {
     render(<TemplateDetailView {...defaultProps} template={freeTemplate} />);
 
     expect(screen.getByText('Free')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /install/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: /install/i }),
+    ).toBeInTheDocument();
   });
 
   it('displays loading state', () => {
     render(<TemplateDetailView {...defaultProps} isLoading={true} />);
 
     const buttons = screen.getAllByRole('button');
-    buttons.forEach(button => {
+    buttons.forEach((button) => {
       expect(button).toBeDisabled();
     });
   });
@@ -365,12 +414,16 @@ describe('TemplateDetailView', () => {
       description: longDescription,
     };
 
-    render(<TemplateDetailView {...defaultProps} template={templateWithLongDesc} />);
+    render(
+      <TemplateDetailView {...defaultProps} template={templateWithLongDesc} />,
+    );
 
     const expandButton = screen.getByRole('button', { name: /show more/i });
     fireEvent.click(expandButton);
 
-    expect(screen.getByRole('button', { name: /show less/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: /show less/i }),
+    ).toBeInTheDocument();
   });
 
   it('displays rating distribution', () => {

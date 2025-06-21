@@ -35,9 +35,11 @@ export function SmartDocumentRecommendations({
   currentDocument,
   userProfile,
   searchQuery,
-  className = ''
+  className = '',
 }: SmartRecommendationsProps) {
-  const [recommendations, setRecommendations] = useState<DocumentRecommendation[]>([]);
+  const [recommendations, setRecommendations] = useState<
+    DocumentRecommendation[]
+  >([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -46,7 +48,7 @@ export function SmartDocumentRecommendations({
 
   const generateRecommendations = async () => {
     setLoading(true);
-    
+
     // AI-powered recommendation engine simulation
     const allDocuments = [
       {
@@ -54,55 +56,58 @@ export function SmartDocumentRecommendations({
         name: 'LLC Operating Agreement',
         category: 'Business',
         estimatedTime: '20-30 minutes',
-        popularity: 95
+        popularity: 95,
       },
       {
         id: 'employment-contract',
         name: 'Employment Contract',
         category: 'Employment',
         estimatedTime: '15-25 minutes',
-        popularity: 88
+        popularity: 88,
       },
       {
         id: 'lease-agreement',
         name: 'Residential Lease Agreement',
         category: 'Real Estate',
         estimatedTime: '10-20 minutes',
-        popularity: 92
+        popularity: 92,
       },
       {
         id: 'non-disclosure-agreement',
         name: 'Non-Disclosure Agreement',
         category: 'Business',
         estimatedTime: '10-15 minutes',
-        popularity: 89
+        popularity: 89,
       },
       {
         id: 'power-of-attorney',
         name: 'Power of Attorney',
         category: 'Estate Planning',
         estimatedTime: '15-25 minutes',
-        popularity: 76
+        popularity: 76,
       },
       {
         id: 'service-agreement',
         name: 'Service Agreement',
         category: 'Business',
         estimatedTime: '15-20 minutes',
-        popularity: 84
-      }
+        popularity: 84,
+      },
     ];
 
     // AI recommendation logic
     const recommendations = allDocuments
-      .map(doc => {
+      .map((doc) => {
         let confidence = 50;
         let reason = 'Popular document';
         let priority: 'high' | 'medium' | 'low' = 'medium';
         let seoBoost = 1;
 
         // Industry-based recommendations
-        if (userProfile?.industry === 'technology' && doc.category === 'Business') {
+        if (
+          userProfile?.industry === 'technology' &&
+          doc.category === 'Business'
+        ) {
           confidence += 25;
           reason = 'Recommended for tech companies';
           priority = 'high';
@@ -130,7 +135,10 @@ export function SmartDocumentRecommendations({
         // Related documents logic
         const relatedDocs: string[] = [];
         if (currentDocument === 'llc-operating-agreement') {
-          if (doc.id === 'employment-contract' || doc.id === 'non-disclosure-agreement') {
+          if (
+            doc.id === 'employment-contract' ||
+            doc.id === 'non-disclosure-agreement'
+          ) {
             confidence += 30;
             reason = 'Often needed together';
             relatedDocs.push(currentDocument);
@@ -142,8 +150,10 @@ export function SmartDocumentRecommendations({
         confidence += doc.popularity * 0.2;
 
         // Previous documents pattern
-        if (userProfile?.previousDocs?.includes('vehicle-bill-of-sale') && 
-            doc.category === 'Real Estate') {
+        if (
+          userProfile?.previousDocs?.includes('vehicle-bill-of-sale') &&
+          doc.category === 'Real Estate'
+        ) {
           confidence += 20;
           reason = 'Based on your document history';
           seoBoost = 1.4;
@@ -155,7 +165,7 @@ export function SmartDocumentRecommendations({
           reason,
           priority,
           relatedDocs,
-          seoBoost
+          seoBoost,
         } as DocumentRecommendation;
       })
       .sort((a, b) => b.confidence - a.confidence)
@@ -167,10 +177,14 @@ export function SmartDocumentRecommendations({
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case 'high': return 'bg-red-100 text-red-800 border-red-200';
-      case 'medium': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
-      case 'low': return 'bg-gray-100 text-gray-800 border-gray-200';
-      default: return 'bg-gray-100 text-gray-800 border-gray-200';
+      case 'high':
+        return 'bg-red-100 text-red-800 border-red-200';
+      case 'medium':
+        return 'bg-yellow-100 text-yellow-800 border-yellow-200';
+      case 'low':
+        return 'bg-gray-100 text-gray-800 border-gray-200';
+      default:
+        return 'bg-gray-100 text-gray-800 border-gray-200';
     }
   };
 
@@ -191,7 +205,7 @@ export function SmartDocumentRecommendations({
         </CardHeader>
         <CardContent>
           <div className="space-y-3">
-            {[1, 2, 3].map(i => (
+            {[1, 2, 3].map((i) => (
               <div key={i} className="h-16 bg-gray-200 rounded animate-pulse" />
             ))}
           </div>
@@ -227,7 +241,9 @@ export function SmartDocumentRecommendations({
                   <Badge className={getPriorityColor(rec.priority)}>
                     {rec.priority}
                   </Badge>
-                  <span className={`text-sm font-medium ${getConfidenceColor(rec.confidence)}`}>
+                  <span
+                    className={`text-sm font-medium ${getConfidenceColor(rec.confidence)}`}
+                  >
                     {rec.confidence}% match
                   </span>
                 </div>
@@ -253,7 +269,10 @@ export function SmartDocumentRecommendations({
               <div className="flex justify-between items-center">
                 <Badge variant="outline">{rec.category}</Badge>
                 <Link href={`/docs/${rec.id}/start`}>
-                  <Button size="sm" className="bg-purple-600 hover:bg-purple-700">
+                  <Button
+                    size="sm"
+                    className="bg-purple-600 hover:bg-purple-700"
+                  >
                     Start Document
                   </Button>
                 </Link>
@@ -273,7 +292,8 @@ export function SmartDocumentRecommendations({
         <div className="mt-4 p-3 bg-purple-50 rounded-lg">
           <p className="text-sm text-purple-700">
             <Sparkles className="inline h-4 w-4 mr-1" />
-            Recommendations improve as you use our platform. Each suggestion is optimized for SEO and user engagement.
+            Recommendations improve as you use our platform. Each suggestion is
+            optimized for SEO and user engagement.
           </p>
         </div>
       </CardContent>

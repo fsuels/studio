@@ -22,10 +22,22 @@ import { Footer } from '@/components/layout/Footer';
 import dynamic from 'next/dynamic';
 
 // Load non-critical widgets lazily
-const ContactFormButton = dynamic(() => import('@/components/shared').then(m => ({ default: m.ContactFormButton })));
-const ActivityTicker = dynamic(() => import('@/components/shared').then(m => ({ default: m.ActivityTicker })));
-const AccessibilityToolbar = dynamic(() => import('@/components/accessibility/AccessibilityToolbar').then(m => ({ default: m.AccessibilityToolbar })));
-const GlobalKeyboardShortcuts = dynamic(() => import('@/components/accessibility/GlobalKeyboardShortcuts').then(m => ({ default: m.GlobalKeyboardShortcuts })));
+const ContactFormButton = dynamic(() =>
+  import('@/components/shared').then((m) => ({ default: m.ContactFormButton })),
+);
+const ActivityTicker = dynamic(() =>
+  import('@/components/shared').then((m) => ({ default: m.ActivityTicker })),
+);
+const AccessibilityToolbar = dynamic(() =>
+  import('@/components/accessibility/AccessibilityToolbar').then((m) => ({
+    default: m.AccessibilityToolbar,
+  })),
+);
+const GlobalKeyboardShortcuts = dynamic(() =>
+  import('@/components/accessibility/GlobalKeyboardShortcuts').then((m) => ({
+    default: m.GlobalKeyboardShortcuts,
+  })),
+);
 
 const AppShell = React.memo(function AppShell({
   children,

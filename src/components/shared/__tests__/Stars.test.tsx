@@ -12,26 +12,29 @@ describe('Stars Component', () => {
   it('displays rating with aria label', () => {
     render(<Stars rating={4} maxRating={5} />);
     const starsContainer = screen.getByRole('img');
-    expect(starsContainer).toHaveAttribute('aria-label', 'Rating: 4 out of 5 stars');
+    expect(starsContainer).toHaveAttribute(
+      'aria-label',
+      'Rating: 4 out of 5 stars',
+    );
   });
 
   it('handles interactive rating changes', () => {
     const mockOnChange = jest.fn();
     render(<Stars rating={3} interactive onChange={mockOnChange} />);
-    
+
     const stars = screen.getAllByRole('button');
     fireEvent.click(stars[4]); // Click 5th star
-    
+
     expect(mockOnChange).toHaveBeenCalledWith(5);
   });
 
   it('supports keyboard navigation', () => {
     const mockOnChange = jest.fn();
     render(<Stars rating={2} interactive onChange={mockOnChange} />);
-    
+
     const stars = screen.getAllByRole('button');
     fireEvent.keyDown(stars[2], { key: 'Enter' });
-    
+
     expect(mockOnChange).toHaveBeenCalledWith(3);
   });
 
@@ -41,7 +44,9 @@ describe('Stars Component', () => {
   });
 
   it('applies correct size classes', () => {
-    const { rerender } = render(<Stars rating={3} size="sm" data-testid="stars" />);
+    const { rerender } = render(
+      <Stars rating={3} size="sm" data-testid="stars" />,
+    );
     let stars = screen.getByTestId('stars').querySelectorAll('svg');
     expect(stars[0]).toHaveClass('h-3', 'w-3');
 
@@ -59,6 +64,9 @@ describe('Stars Component', () => {
   it('handles half ratings when allowed', () => {
     render(<Stars rating={3.5} allowHalf />);
     const container = screen.getByRole('img');
-    expect(container).toHaveAttribute('aria-label', 'Rating: 3.5 out of 5 stars');
+    expect(container).toHaveAttribute(
+      'aria-label',
+      'Rating: 3.5 out of 5 stars',
+    );
   });
 });

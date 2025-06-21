@@ -2,12 +2,7 @@
 
 import React, { useEffect, useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import {
@@ -63,7 +58,12 @@ import {
   uploadBytesResumable,
   getDownloadURL,
 } from 'firebase/storage';
-import { getFirestore, doc as firestoreDoc, setDoc, serverTimestamp } from 'firebase/firestore';
+import {
+  getFirestore,
+  doc as firestoreDoc,
+  setDoc,
+  serverTimestamp,
+} from 'firebase/firestore';
 import { useAuth } from '@/hooks/useAuth';
 import { useRouter } from 'next/navigation';
 import { useOptimizedDashboardData } from '@/hooks/useOptimizedDashboardData';
@@ -75,7 +75,10 @@ import {
   updateDocumentFolder,
   bulkMoveDocuments,
 } from '@/lib/firestore/documentActions';
-import type { DashboardDocument, DashboardFolder } from '@/lib/firestore/dashboardData';
+import type {
+  DashboardDocument,
+  DashboardFolder,
+} from '@/lib/firestore/dashboardData';
 import { getUserDocuments } from '@/lib/firestore/dashboardData';
 import { useQueryClient } from '@tanstack/react-query';
 import { useToast } from '@/hooks/use-toast';
@@ -93,7 +96,12 @@ interface FirestoreTimestamp {
 
 type DashboardFile =
   | (DashboardDocument & { type: 'document' })
-  | (DashboardFolder & { type: 'folder'; status?: string; date?: FirestoreTimestamp | Date | string; docType?: string });
+  | (DashboardFolder & {
+      type: 'folder';
+      status?: string;
+      date?: FirestoreTimestamp | Date | string;
+      docType?: string;
+    });
 
 export interface DashboardClientContentProps {
   locale: 'en' | 'es';
@@ -103,7 +111,9 @@ export default function DashboardClientContent({
   locale,
 }: DashboardClientContentProps) {
   const { t, i18n } = useTranslation('common');
-  const [activeTab, setActiveTab] = useState<'documents' | 'payments' | 'profile'>('documents');
+  const [activeTab, setActiveTab] = useState<
+    'documents' | 'payments' | 'profile'
+  >('documents');
   const { user, isLoggedIn, isLoading: authLoading, logout } = useAuth();
   const router = useRouter();
   const { shouldShowOnboarding, markMilestone } = useOnboarding();
@@ -133,13 +143,13 @@ export default function DashboardClientContent({
 
   const files: DashboardFile[] = React.useMemo(() => {
     // Filter documents based on current folder
-    const filteredDocs = currentFolderId 
-      ? documents.filter(d => d.folderId === currentFolderId)
-      : documents.filter(d => !d.folderId); // Root level documents only
-    
+    const filteredDocs = currentFolderId
+      ? documents.filter((d) => d.folderId === currentFolderId)
+      : documents.filter((d) => !d.folderId); // Root level documents only
+
     // Only show folders at root level
     const displayFolders = currentFolderId ? [] : folders;
-    
+
     return [
       ...displayFolders.map((f) => ({ ...f, type: 'folder' as const })),
       ...filteredDocs.map((d) => ({ ...d, type: 'document' as const })),
@@ -149,7 +159,7 @@ export default function DashboardClientContent({
   // Calculate document counts per folder
   const documentsPerFolder = React.useMemo(() => {
     const counts: Record<string, number> = {};
-    documents.forEach(doc => {
+    documents.forEach((doc) => {
       if (doc.folderId) {
         counts[doc.folderId] = (counts[doc.folderId] || 0) + 1;
       }
@@ -229,7 +239,10 @@ export default function DashboardClientContent({
       status: 'Uploading',
       docType: 'uploaded',
     };
-    queryClient.setQueryData<DashboardDocument[]>(key, (old = []) => [...old, optimistic]);
+    queryClient.setQueryData<DashboardDocument[]>(key, (old = []) => [
+      ...old,
+      optimistic,
+    ]);
     try {
       const storage = getStorage();
       const db = getFirestore();
@@ -251,18 +264,15 @@ export default function DashboardClientContent({
         );
       });
       const url = await getDownloadURL(task.snapshot.ref);
-      await setDoc(
-        firestoreDoc(db, 'users', user.uid, 'documents', newId),
-        {
-          name: file.name,
-          createdAt: serverTimestamp(),
-          updatedAt: serverTimestamp(),
-          status: 'Uploaded',
-          docType: 'uploaded',
-          storagePath: path,
-          url,
-        },
-      );
+      await setDoc(firestoreDoc(db, 'users', user.uid, 'documents', newId), {
+        name: file.name,
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp(),
+        status: 'Uploaded',
+        docType: 'uploaded',
+        storagePath: path,
+        url,
+      });
       queryClient.invalidateQueries({ queryKey: key });
       toast({ title: t('Document uploaded') });
       setUploadProgress(100);
@@ -300,10 +310,12 @@ export default function DashboardClientContent({
     setSelectedIds([]);
     const key = ['dashboardDocuments', user!.uid] as const;
     const previous = queryClient.getQueryData<DashboardDocument[]>(key);
-    queryClient.setQueryData<DashboardDocument[]>(key, (old) =>
-      old?.map((d) =>
-        ids.includes(d.id) ? { ...d, folderId: folderId || undefined } : d,
-      ) || [],
+    queryClient.setQueryData<DashboardDocument[]>(
+      key,
+      (old) =>
+        old?.map((d) =>
+          ids.includes(d.id) ? { ...d, folderId: folderId || undefined } : d,
+        ) || [],
     );
     try {
       await bulkMoveDocuments(user!.uid, ids, folderId);
@@ -319,8 +331,12 @@ export default function DashboardClientContent({
   const handleMove = async (docId: string, folderId: string | null) => {
     const key = ['dashboardDocuments', user!.uid] as const;
     const previous = queryClient.getQueryData<DashboardDocument[]>(key);
-    queryClient.setQueryData<DashboardDocument[]>(key, (old) =>
-      old?.map((d) => (d.id === docId ? { ...d, folderId: folderId || undefined } : d)) || [],
+    queryClient.setQueryData<DashboardDocument[]>(
+      key,
+      (old) =>
+        old?.map((d) =>
+          d.id === docId ? { ...d, folderId: folderId || undefined } : d,
+        ) || [],
     );
     try {
       await updateDocumentFolder(user!.uid, docId, folderId);
@@ -408,16 +424,18 @@ export default function DashboardClientContent({
             valA = (a.status || '').toLowerCase();
             valB = (b.status || '').toLowerCase();
           } else {
-            const dA = (typeof a.date === 'object' && a.date && 'toDate' in a.date)
-              ? (a.date as FirestoreTimestamp).toDate()
-              : a.date
-                ? new Date(a.date as string)
-                : new Date(0);
-            const dB = (typeof b.date === 'object' && b.date && 'toDate' in b.date)
-              ? (b.date as FirestoreTimestamp).toDate()
-              : b.date
-                ? new Date(b.date as string)
-                : new Date(0);
+            const dA =
+              typeof a.date === 'object' && a.date && 'toDate' in a.date
+                ? (a.date as FirestoreTimestamp).toDate()
+                : a.date
+                  ? new Date(a.date as string)
+                  : new Date(0);
+            const dB =
+              typeof b.date === 'object' && b.date && 'toDate' in b.date
+                ? (b.date as FirestoreTimestamp).toDate()
+                : b.date
+                  ? new Date(b.date as string)
+                  : new Date(0);
             valA = dA.getTime();
             valB = dB.getTime();
           }
@@ -455,7 +473,9 @@ export default function DashboardClientContent({
                 </Button>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button variant="outline" data-tour="create-document">{t('New')} ▼</Button>
+                    <Button variant="outline" data-tour="create-document">
+                      {t('New')} ▼
+                    </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="start">
                     <DropdownMenuItem onSelect={() => setShowFolderModal(true)}>
@@ -464,10 +484,14 @@ export default function DashboardClientContent({
                     <DropdownMenuItem asChild>
                       <Link href={`/${locale}/templates`}>{t('Document')}</Link>
                     </DropdownMenuItem>
-                    <DropdownMenuItem onSelect={() => router.push(`/${locale}/online-notary`)}>
+                    <DropdownMenuItem
+                      onSelect={() => router.push(`/${locale}/online-notary`)}
+                    >
                       {t('Notarization')}
                     </DropdownMenuItem>
-                    <DropdownMenuItem onSelect={() => router.push(`/${locale}/signwell`)}>
+                    <DropdownMenuItem
+                      onSelect={() => router.push(`/${locale}/signwell`)}
+                    >
                       {t('eSign')}
                     </DropdownMenuItem>
                   </DropdownMenuContent>
@@ -494,10 +518,16 @@ export default function DashboardClientContent({
                 </Button>
                 <span className="text-muted-foreground">/</span>
                 <span className="font-medium">
-                  {folders.find(f => f.id === currentFolderId)?.name || currentFolderId}
+                  {folders.find((f) => f.id === currentFolderId)?.name ||
+                    currentFolderId}
                 </span>
                 <span className="text-muted-foreground ml-2">
-                  ({documents.filter(d => d.folderId === currentFolderId).length} {t('items')})
+                  (
+                  {
+                    documents.filter((d) => d.folderId === currentFolderId)
+                      .length
+                  }{' '}
+                  {t('items')})
                 </span>
               </div>
             )}
@@ -513,7 +543,10 @@ export default function DashboardClientContent({
                       {t('None')}
                     </DropdownMenuItem>
                     {folders.map((f) => (
-                      <DropdownMenuItem key={f.id} onSelect={() => handleBulkMove(f.id)}>
+                      <DropdownMenuItem
+                        key={f.id}
+                        onSelect={() => handleBulkMove(f.id)}
+                      >
                         {t(f.name, f.name)}
                       </DropdownMenuItem>
                     ))}
@@ -532,7 +565,10 @@ export default function DashboardClientContent({
 
             {isUploading && (
               <div className="mb-4">
-                <Progress value={uploadProgress} aria-label={t('Upload progress')} />
+                <Progress
+                  value={uploadProgress}
+                  aria-label={t('Upload progress')}
+                />
               </div>
             )}
 
@@ -541,7 +577,9 @@ export default function DashboardClientContent({
                 <TableRow>
                   <TableHead className="w-4">
                     <Checkbox
-                      checked={selectedIds.length === files.length && files.length > 0}
+                      checked={
+                        selectedIds.length === files.length && files.length > 0
+                      }
                       onCheckedChange={toggleSelectAll}
                       aria-label={t('Select all')}
                     />
@@ -551,27 +589,36 @@ export default function DashboardClientContent({
                     className="cursor-pointer select-none"
                   >
                     {t('Name')}{' '}
-                    {sortBy === 'name' && (sortDir === 'asc'
-                      ? <ChevronUp className="inline h-3 w-3" />
-                      : <ChevronDown className="inline h-3 w-3" />)}
+                    {sortBy === 'name' &&
+                      (sortDir === 'asc' ? (
+                        <ChevronUp className="inline h-3 w-3" />
+                      ) : (
+                        <ChevronDown className="inline h-3 w-3" />
+                      ))}
                   </TableHead>
                   <TableHead
                     onClick={() => handleSort('date')}
                     className="cursor-pointer select-none"
                   >
                     {t('LastModified', 'Last Modified')}{' '}
-                    {sortBy === 'date' && (sortDir === 'asc'
-                      ? <ChevronUp className="inline h-3 w-3" />
-                      : <ChevronDown className="inline h-3 w-3" />)}
+                    {sortBy === 'date' &&
+                      (sortDir === 'asc' ? (
+                        <ChevronUp className="inline h-3 w-3" />
+                      ) : (
+                        <ChevronDown className="inline h-3 w-3" />
+                      ))}
                   </TableHead>
                   <TableHead
                     onClick={() => handleSort('status')}
                     className="cursor-pointer select-none"
                   >
                     {t('Status')}{' '}
-                    {sortBy === 'status' && (sortDir === 'asc'
-                      ? <ChevronUp className="inline h-3 w-3" />
-                      : <ChevronDown className="inline h-3 w-3" />)}
+                    {sortBy === 'status' &&
+                      (sortDir === 'asc' ? (
+                        <ChevronUp className="inline h-3 w-3" />
+                      ) : (
+                        <ChevronDown className="inline h-3 w-3" />
+                      ))}
                   </TableHead>
                   <TableHead className="w-8"></TableHead>
                 </TableRow>
@@ -617,8 +664,12 @@ export default function DashboardClientContent({
                         )}
                       </span>
                     </TableCell>
-                    <TableCell>{item.date ? formatDate(item.date) : '-'}</TableCell>
-                    <TableCell>{item.type === 'folder' ? '-' : t(item.status)}</TableCell>
+                    <TableCell>
+                      {item.date ? formatDate(item.date) : '-'}
+                    </TableCell>
+                    <TableCell>
+                      {item.type === 'folder' ? '-' : t(item.status)}
+                    </TableCell>
                     <TableCell className="text-right">
                       {item.type === 'document' && (
                         <DropdownMenu>
@@ -628,15 +679,29 @@ export default function DashboardClientContent({
                             </Button>
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end">
-                            <DropdownMenuItem onSelect={() => router.push(`/${locale}/docs/${item.docType}/view?docId=${item.id}`)}>{t('View')}</DropdownMenuItem>
-                            <DropdownMenuItem onSelect={() => setRenameDoc(item)}>
+                            <DropdownMenuItem
+                              onSelect={() =>
+                                router.push(
+                                  `/${locale}/docs/${item.docType}/view?docId=${item.id}`,
+                                )
+                              }
+                            >
+                              {t('View')}
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                              onSelect={() => setRenameDoc(item)}
+                            >
                               {t('Rename')}
                             </DropdownMenuItem>
-                            <DropdownMenuItem onSelect={() => setMoveModalState({
-                              open: true,
-                              documentId: item.id,
-                              documentName: item.name
-                            })}>
+                            <DropdownMenuItem
+                              onSelect={() =>
+                                setMoveModalState({
+                                  open: true,
+                                  documentId: item.id,
+                                  documentName: item.name,
+                                })
+                              }
+                            >
                               <Folder className="mr-2 h-4 w-4" />
                               {t('Move to Folder')}
                             </DropdownMenuItem>
@@ -644,25 +709,41 @@ export default function DashboardClientContent({
                               disabled={duplicatingDocId === item.id}
                               onSelect={async () => {
                                 setDuplicatingDocId(item.id);
-                                const key = ['dashboardDocuments', user!.uid] as const;
-                                const previous = queryClient.getQueryData<DashboardDocument[]>(key);
+                                const key = [
+                                  'dashboardDocuments',
+                                  user!.uid,
+                                ] as const;
+                                const previous =
+                                  queryClient.getQueryData<DashboardDocument[]>(
+                                    key,
+                                  );
                                 const tempId = `copy-${Date.now()}`;
-                                queryClient.setQueryData<DashboardDocument[]>(key, (old = []) => [
-                                  ...old,
-                                  { ...(item as DashboardDocument), id: tempId, name: `${item.name} (Copy)` },
-                                ]);
+                                queryClient.setQueryData<DashboardDocument[]>(
+                                  key,
+                                  (old = []) => [
+                                    ...old,
+                                    {
+                                      ...(item as DashboardDocument),
+                                      id: tempId,
+                                      name: `${item.name} (Copy)`,
+                                    },
+                                  ],
+                                );
                                 try {
                                   await duplicateDocument(user!.uid, item.id);
                                   toast({ title: t('Document duplicated') });
                                 } catch {
-                                  if (previous) queryClient.setQueryData(key, previous);
+                                  if (previous)
+                                    queryClient.setQueryData(key, previous);
                                   toast({
                                     title: t('Error duplicating document'),
                                     variant: 'destructive',
                                   });
                                 } finally {
                                   setDuplicatingDocId(null);
-                                  queryClient.invalidateQueries({ queryKey: key });
+                                  queryClient.invalidateQueries({
+                                    queryKey: key,
+                                  });
                                 }
                               }}
                             >
@@ -674,19 +755,33 @@ export default function DashboardClientContent({
                             </DropdownMenuItem>
                             <DropdownMenuItem
                               onSelect={async () => {
-                                const key = ['dashboardDocuments', user!.uid] as const;
-                                const previous = queryClient.getQueryData<DashboardDocument[]>(key);
-                                queryClient.setQueryData<DashboardDocument[]>(key, (old) =>
-                                  old?.filter((d) => d.id !== item.id) || []
+                                const key = [
+                                  'dashboardDocuments',
+                                  user!.uid,
+                                ] as const;
+                                const previous =
+                                  queryClient.getQueryData<DashboardDocument[]>(
+                                    key,
+                                  );
+                                queryClient.setQueryData<DashboardDocument[]>(
+                                  key,
+                                  (old) =>
+                                    old?.filter((d) => d.id !== item.id) || [],
                                 );
                                 try {
                                   await softDeleteDocument(user!.uid, item.id);
                                   toast({ title: t('Document deleted') });
                                 } catch {
-                                  if (previous) queryClient.setQueryData(key, previous);
-                                  toast({ title: t('Error deleting document'), variant: 'destructive' });
+                                  if (previous)
+                                    queryClient.setQueryData(key, previous);
+                                  toast({
+                                    title: t('Error deleting document'),
+                                    variant: 'destructive',
+                                  });
                                 } finally {
-                                  queryClient.invalidateQueries({ queryKey: key });
+                                  queryClient.invalidateQueries({
+                                    queryKey: key,
+                                  });
                                 }
                               }}
                             >
@@ -700,17 +795,19 @@ export default function DashboardClientContent({
                 ))}
               </TableBody>
             </Table>
-            
+
             {sorted.length === 0 && !isLoadingData && (
               <div className="text-center py-8">
                 <FileText className="mx-auto h-12 w-12 text-muted-foreground/50" />
-                <h3 className="mt-4 text-lg font-medium">{t('No documents yet')}</h3>
+                <h3 className="mt-4 text-lg font-medium">
+                  {t('No documents yet')}
+                </h3>
                 <p className="mt-2 text-sm text-muted-foreground">
                   {t('Upload a file or create a new document to get started.')}
                 </p>
               </div>
             )}
-            
+
             <RenameModal
               open={!!renameDoc}
               currentName={renameDoc?.name || ''}
@@ -718,9 +815,14 @@ export default function DashboardClientContent({
               onRename={async (name) => {
                 if (!renameDoc) return;
                 const key = ['dashboardDocuments', user!.uid] as const;
-                const previous = queryClient.getQueryData<DashboardDocument[]>(key);
-                queryClient.setQueryData<DashboardDocument[]>(key, (old) =>
-                  old?.map((d) => (d.id === renameDoc.id ? { ...d, name } : d)) || []
+                const previous =
+                  queryClient.getQueryData<DashboardDocument[]>(key);
+                queryClient.setQueryData<DashboardDocument[]>(
+                  key,
+                  (old) =>
+                    old?.map((d) =>
+                      d.id === renameDoc.id ? { ...d, name } : d,
+                    ) || [],
                 );
                 try {
                   await renameDocument(user!.uid, renameDoc.id, name);
@@ -737,12 +839,15 @@ export default function DashboardClientContent({
                 }
               }}
             />
-            
+
             <MoveToFolderModal
               open={moveModalState.open}
               onClose={() => setMoveModalState({ open: false })}
               folders={folders}
-              currentFolderId={documents.find(d => d.id === moveModalState.documentId)?.folderId}
+              currentFolderId={
+                documents.find((d) => d.id === moveModalState.documentId)
+                  ?.folderId
+              }
               documentName={moveModalState.documentName}
               documentsCount={documentsPerFolder}
               onMove={async (folderId) => {
@@ -755,14 +860,16 @@ export default function DashboardClientContent({
           </>
         );
       }
-      
+
       case 'payments':
         return (
           <div className="space-y-6">
             {/* Header with summary stats */}
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
               <div>
-                <h2 className="text-xl font-semibold text-foreground">{t('Payment History')}</h2>
+                <h2 className="text-xl font-semibold text-foreground">
+                  {t('Payment History')}
+                </h2>
                 <p className="text-sm text-muted-foreground">
                   {t('Manage and view your billing history and invoices')}
                 </p>
@@ -785,30 +892,53 @@ export default function DashboardClientContent({
                 <CardContent className="p-4">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm font-medium text-gray-600">{t('Total Spent')}</p>
+                      <p className="text-sm font-medium text-gray-600">
+                        {t('Total Spent')}
+                      </p>
                       <p className="text-2xl font-bold text-gray-900">
-                        ${payments.reduce((sum, p) => sum + (parseFloat(String(p.amount).replace(/[^0-9.]/g, '')) || 0), 0).toFixed(2)}
+                        $
+                        {payments
+                          .reduce(
+                            (sum, p) =>
+                              sum +
+                              (parseFloat(
+                                String(p.amount).replace(/[^0-9.]/g, ''),
+                              ) || 0),
+                            0,
+                          )
+                          .toFixed(2)}
                       </p>
                     </div>
                     <CreditCard className="h-8 w-8 text-blue-500" />
                   </div>
                 </CardContent>
               </Card>
-              
+
               <Card className="bg-gradient-to-r from-green-50 to-green-100 border-green-200">
                 <CardContent className="p-4">
                   <div className="flex items-center justify-between gap-4">
                     <div>
-                      <p className="text-sm font-medium text-gray-600">{t('This Month')}</p>
+                      <p className="text-sm font-medium text-gray-600">
+                        {t('This Month')}
+                      </p>
                       <p className="text-2xl font-bold text-gray-900">
-                        ${payments
-                          .filter(p => {
+                        $
+                        {payments
+                          .filter((p) => {
                             const paymentDate = new Date(p.date);
                             const now = new Date();
-                            return paymentDate.getMonth() === now.getMonth() && 
-                                   paymentDate.getFullYear() === now.getFullYear();
+                            return (
+                              paymentDate.getMonth() === now.getMonth() &&
+                              paymentDate.getFullYear() === now.getFullYear()
+                            );
                           })
-                          .reduce((sum, p) => sum + (parseFloat(p.amount.replace(/[^0-9.]/g, '')) || 0), 0)
+                          .reduce(
+                            (sum, p) =>
+                              sum +
+                              (parseFloat(p.amount.replace(/[^0-9.]/g, '')) ||
+                                0),
+                            0,
+                          )
                           .toFixed(2)}
                       </p>
                     </div>
@@ -816,13 +946,17 @@ export default function DashboardClientContent({
                   </div>
                 </CardContent>
               </Card>
-              
+
               <Card className="bg-gradient-to-r from-purple-50 to-purple-100 border-purple-200">
                 <CardContent className="p-4">
                   <div className="flex items-center justify-between gap-4">
                     <div>
-                      <p className="text-sm font-medium text-gray-600">{t('Total Orders')}</p>
-                      <p className="text-2xl font-bold text-gray-900">{payments.length}</p>
+                      <p className="text-sm font-medium text-gray-600">
+                        {t('Total Orders')}
+                      </p>
+                      <p className="text-2xl font-bold text-gray-900">
+                        {payments.length}
+                      </p>
                     </div>
                     <ShoppingBag className="h-8 w-8 text-purple-500" />
                   </div>
@@ -835,7 +969,9 @@ export default function DashboardClientContent({
               <CardHeader className="border-b bg-gray-50/50">
                 <div className="flex items-center justify-between">
                   <div>
-                    <CardTitle className="text-lg font-semibold">{t('Transaction History')}</CardTitle>
+                    <CardTitle className="text-lg font-semibold">
+                      {t('Transaction History')}
+                    </CardTitle>
                     <p className="text-sm text-muted-foreground mt-1">
                       {t('Displaying transactions from all services')}
                     </p>
@@ -853,20 +989,35 @@ export default function DashboardClientContent({
                     <Table>
                       <TableHeader>
                         <TableRow className="bg-gray-50/30">
-                          <TableHead className="font-semibold text-gray-700 py-4">{t('Product/Service')}</TableHead>
-                          <TableHead className="font-semibold text-gray-700">{t('Purchase Date')}</TableHead>
-                          <TableHead className="font-semibold text-gray-700">{t('Amount')}</TableHead>
-                          <TableHead className="font-semibold text-gray-700">{t('Status')}</TableHead>
-                          <TableHead className="font-semibold text-gray-700 text-right">{t('Actions')}</TableHead>
+                          <TableHead className="font-semibold text-gray-700 py-4">
+                            {t('Product/Service')}
+                          </TableHead>
+                          <TableHead className="font-semibold text-gray-700">
+                            {t('Purchase Date')}
+                          </TableHead>
+                          <TableHead className="font-semibold text-gray-700">
+                            {t('Amount')}
+                          </TableHead>
+                          <TableHead className="font-semibold text-gray-700">
+                            {t('Status')}
+                          </TableHead>
+                          <TableHead className="font-semibold text-gray-700 text-right">
+                            {t('Actions')}
+                          </TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
                         {payments.map((payment, index) => {
-                          const amount = parseFloat(String(payment.amount).replace(/[^0-9.]/g, '')) || 0;
-                          const isRecent = new Date(payment.date) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
-                          
+                          const amount =
+                            parseFloat(
+                              String(payment.amount).replace(/[^0-9.]/g, ''),
+                            ) || 0;
+                          const isRecent =
+                            new Date(payment.date) >
+                            new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+
                           return (
-                            <TableRow 
+                            <TableRow
                               key={payment.id || `payment-${index}`}
                               className="hover:bg-gray-50/50 transition-colors border-b border-gray-100"
                             >
@@ -879,7 +1030,10 @@ export default function DashboardClientContent({
                                   </div>
                                   <div className="min-w-0 flex-1">
                                     <p className="font-medium text-gray-900 truncate">
-                                      {t(payment.documentName, payment.documentName)}
+                                      {t(
+                                        payment.documentName,
+                                        payment.documentName,
+                                      )}
                                     </p>
                                     <div className="flex items-center gap-2 mt-1">
                                       <span className="text-xs text-gray-500">
@@ -894,21 +1048,24 @@ export default function DashboardClientContent({
                                   </div>
                                 </div>
                               </TableCell>
-                              
+
                               <TableCell className="py-4">
                                 <div className="text-sm">
                                   <p className="font-medium text-gray-900">
                                     {formatDate(payment.date)}
                                   </p>
                                   <p className="text-gray-500 text-xs mt-1">
-                                    {new Date(payment.date).toLocaleTimeString([], {
-                                      hour: '2-digit',
-                                      minute: '2-digit'
-                                    })}
+                                    {new Date(payment.date).toLocaleTimeString(
+                                      [],
+                                      {
+                                        hour: '2-digit',
+                                        minute: '2-digit',
+                                      },
+                                    )}
                                   </p>
                                 </div>
                               </TableCell>
-                              
+
                               <TableCell className="py-4">
                                 <div className="text-sm">
                                   <p className="font-semibold text-gray-900">
@@ -916,22 +1073,29 @@ export default function DashboardClientContent({
                                   </p>
                                 </div>
                               </TableCell>
-                              
+
                               <TableCell className="py-4">
                                 <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 border border-green-200">
                                   <CheckCircle className="mr-1 h-3 w-3" />
                                   {t('Completed')}
                                 </span>
                               </TableCell>
-                              
+
                               <TableCell className="py-4 text-right">
                                 <DropdownMenu>
                                   <DropdownMenuTrigger asChild>
-                                    <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                                    <Button
+                                      variant="ghost"
+                                      size="sm"
+                                      className="h-8 w-8 p-0"
+                                    >
                                       <MoreVertical className="h-4 w-4" />
                                     </Button>
                                   </DropdownMenuTrigger>
-                                  <DropdownMenuContent align="end" className="w-48">
+                                  <DropdownMenuContent
+                                    align="end"
+                                    className="w-48"
+                                  >
                                     <DropdownMenuItem className="cursor-pointer">
                                       <Download className="mr-2 h-4 w-4" />
                                       {t('Download Invoice')}
@@ -958,7 +1122,9 @@ export default function DashboardClientContent({
                       {t('No payment history')}
                     </h3>
                     <p className="text-gray-500 mb-6 max-w-sm mx-auto">
-                      {t('When you make purchases or subscribe to services, your payment history will appear here.')}
+                      {t(
+                        'When you make purchases or subscribe to services, your payment history will appear here.',
+                      )}
                     </p>
                     <Button onClick={() => router.push(`/${locale}/templates`)}>
                       <Plus className="mr-2 h-4 w-4" />
@@ -979,7 +1145,9 @@ export default function DashboardClientContent({
                       {t('Payment Information')}
                     </h4>
                     <p className="text-sm text-blue-700 leading-relaxed">
-                      {t('All payments are processed securely through Stripe. You can download invoices and receipts at any time. For billing questions, contact our support team.')}
+                      {t(
+                        'All payments are processed securely through Stripe. You can download invoices and receipts at any time. For billing questions, contact our support team.',
+                      )}
                     </p>
                   </div>
                 </div>
@@ -987,10 +1155,10 @@ export default function DashboardClientContent({
             </Card>
           </div>
         );
-        
+
       case 'profile':
         return <ProfileSettings />;
-        
+
       default:
         return null;
     }
@@ -1017,7 +1185,10 @@ export default function DashboardClientContent({
       </p>
 
       <div className="flex flex-col md:flex-row gap-8">
-        <nav className="w-full md:w-64 space-y-2 shrink-0" data-tour="dashboard-nav">
+        <nav
+          className="w-full md:w-64 space-y-2 shrink-0"
+          data-tour="dashboard-nav"
+        >
           <Button
             variant={activeTab === 'documents' ? 'secondary' : 'ghost'}
             className="w-full justify-start text-left"
@@ -1044,8 +1215,10 @@ export default function DashboardClientContent({
         <div className="flex-1 bg-card p-4 sm:p-6 rounded-xl shadow-xl border border-border min-h-[300px]">
           {/* Show onboarding checklist if user hasn't completed onboarding */}
           {shouldShowOnboarding && activeTab === 'documents' && (
-            <OnboardingChecklist 
-              onDismiss={() => {/* Handle dismiss */}}
+            <OnboardingChecklist
+              onDismiss={() => {
+                /* Handle dismiss */
+              }}
             />
           )}
           {renderContent()}
@@ -1053,12 +1226,14 @@ export default function DashboardClientContent({
       </div>
 
       {/* Onboarding Wizard - shows on first visit */}
-      <OnboardingWizard 
+      <OnboardingWizard
         autoStart={shouldShowOnboarding}
         onComplete={async () => {
           await markMilestone('dashboardTour');
         }}
-        onSkip={() => {/* Handle skip */}}
+        onSkip={() => {
+          /* Handle skip */
+        }}
       />
     </main>
   );

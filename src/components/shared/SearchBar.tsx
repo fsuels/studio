@@ -100,7 +100,8 @@ const SearchBar = React.memo(function SearchBar() {
     : 'Loading…';
   const suggestionsHint = isHydrated
     ? tHeader('SearchBar.suggestionsHint', {
-        defaultValue: 'Popular: Lease \u00b7 Will \u00b7 Bill of Sale \u00b7 Power of Attorney',
+        defaultValue:
+          'Popular: Lease \u00b7 Will \u00b7 Bill of Sale \u00b7 Power of Attorney',
       })
     : '';
 

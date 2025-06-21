@@ -12,15 +12,15 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
-import { 
-  Sparkles, 
-  Copy, 
-  Check, 
-  Brain, 
+import {
+  Sparkles,
+  Copy,
+  Check,
+  Brain,
   Lightbulb,
   Clock,
   User,
-  Building
+  Building,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -54,13 +54,17 @@ const SmartFormField: React.FC<SmartFormFieldProps> = ({
   fieldId,
   documentType,
   userContext,
-  className
+  className,
 }) => {
   const [suggestions, setSuggestions] = React.useState<SmartSuggestion[]>([]);
   const [isLoadingSuggestions, setIsLoadingSuggestions] = React.useState(false);
   const [showSuggestions, setShowSuggestions] = React.useState(false);
-  const [recentlyCopied, setRecentlyCopied] = React.useState<string | null>(null);
-  const [typingTimer, setTypingTimer] = React.useState<NodeJS.Timeout | null>(null);
+  const [recentlyCopied, setRecentlyCopied] = React.useState<string | null>(
+    null,
+  );
+  const [typingTimer, setTypingTimer] = React.useState<NodeJS.Timeout | null>(
+    null,
+  );
 
   // Generate smart suggestions based on context
   React.useEffect(() => {
@@ -71,7 +75,7 @@ const SmartFormField: React.FC<SmartFormFieldProps> = ({
 
   const generateSmartSuggestions = async () => {
     setIsLoadingSuggestions(true);
-    
+
     try {
       const response = await fetch('/api/ai/field-suggestions', {
         method: 'POST',
@@ -81,13 +85,13 @@ const SmartFormField: React.FC<SmartFormFieldProps> = ({
           currentValue: value,
           documentType,
           userContext,
-          fieldType: type
-        })
+          fieldType: type,
+        }),
       });
 
       const { suggestions: newSuggestions } = await response.json();
       setSuggestions(newSuggestions || []);
-      
+
       if (newSuggestions?.length > 0) {
         setShowSuggestions(true);
       }
@@ -100,26 +104,28 @@ const SmartFormField: React.FC<SmartFormFieldProps> = ({
 
   const handleChange = (newValue: string) => {
     onChange(newValue);
-    
+
     // Debounce suggestions
     if (typingTimer) {
       clearTimeout(typingTimer);
     }
-    
-    setTypingTimer(setTimeout(() => {
-      if (newValue.length > 2) {
-        generateSmartSuggestions();
-      } else {
-        setSuggestions([]);
-        setShowSuggestions(false);
-      }
-    }, 500));
+
+    setTypingTimer(
+      setTimeout(() => {
+        if (newValue.length > 2) {
+          generateSmartSuggestions();
+        } else {
+          setSuggestions([]);
+          setShowSuggestions(false);
+        }
+      }, 500),
+    );
   };
 
   const applySuggestion = (suggestion: SmartSuggestion) => {
     onChange(suggestion.value);
     setShowSuggestions(false);
-    
+
     // Track suggestion usage
     trackSuggestionUsage(suggestion);
   };
@@ -145,8 +151,8 @@ const SmartFormField: React.FC<SmartFormFieldProps> = ({
           documentType,
           suggestion: suggestion.value,
           source: suggestion.source,
-          confidence: suggestion.confidence
-        })
+          confidence: suggestion.confidence,
+        }),
       });
     } catch (error) {
       // Fail silently
@@ -155,16 +161,22 @@ const SmartFormField: React.FC<SmartFormFieldProps> = ({
 
   const getSuggestionIcon = (source: string) => {
     switch (source) {
-      case 'ai': return <Brain className="h-3 w-3" />;
-      case 'pattern': return <Lightbulb className="h-3 w-3" />;
-      case 'user_history': return <User className="h-3 w-3" />;
-      case 'legal_standard': return <Building className="h-3 w-3" />;
-      default: return <Sparkles className="h-3 w-3" />;
+      case 'ai':
+        return <Brain className="h-3 w-3" />;
+      case 'pattern':
+        return <Lightbulb className="h-3 w-3" />;
+      case 'user_history':
+        return <User className="h-3 w-3" />;
+      case 'legal_standard':
+        return <Building className="h-3 w-3" />;
+      default:
+        return <Sparkles className="h-3 w-3" />;
     }
   };
 
   const getSuggestionColor = (confidence: number) => {
-    if (confidence >= 0.8) return 'bg-green-100 text-green-800 border-green-200';
+    if (confidence >= 0.8)
+      return 'bg-green-100 text-green-800 border-green-200';
     if (confidence >= 0.6) return 'bg-blue-100 text-blue-800 border-blue-200';
     return 'bg-gray-100 text-gray-800 border-gray-200';
   };
@@ -172,14 +184,15 @@ const SmartFormField: React.FC<SmartFormFieldProps> = ({
   const renderInput = () => {
     const commonProps = {
       value,
-      onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => 
-        handleChange(e.target.value),
+      onChange: (
+        e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+      ) => handleChange(e.target.value),
       placeholder,
       required,
       className: cn(
-        "transition-all duration-200",
-        suggestions.length > 0 && "border-blue-300 shadow-sm"
-      )
+        'transition-all duration-200',
+        suggestions.length > 0 && 'border-blue-300 shadow-sm',
+      ),
     };
 
     switch (type) {
@@ -195,7 +208,7 @@ const SmartFormField: React.FC<SmartFormFieldProps> = ({
   };
 
   return (
-    <div className={cn("space-y-2", className)}>
+    <div className={cn('space-y-2', className)}>
       <label className="text-sm font-medium flex items-center gap-2">
         {label}
         {required && <span className="text-red-500">*</span>}
@@ -218,7 +231,7 @@ const SmartFormField: React.FC<SmartFormFieldProps> = ({
                 <Sparkles className="h-3 w-3 text-primary" />
                 <span className="text-xs font-medium">Smart Suggestions</span>
               </div>
-              
+
               {suggestions.slice(0, 3).map((suggestion, index) => (
                 <div
                   key={index}
@@ -235,18 +248,21 @@ const SmartFormField: React.FC<SmartFormFieldProps> = ({
                       </p>
                     )}
                   </div>
-                  
+
                   <div className="flex items-center gap-2 ml-2">
-                    <Badge 
-                      variant="outline" 
-                      className={cn("text-xs px-1.5 py-0.5", getSuggestionColor(suggestion.confidence))}
+                    <Badge
+                      variant="outline"
+                      className={cn(
+                        'text-xs px-1.5 py-0.5',
+                        getSuggestionColor(suggestion.confidence),
+                      )}
                     >
                       <div className="flex items-center gap-1">
                         {getSuggestionIcon(suggestion.source)}
                         {Math.round(suggestion.confidence * 100)}%
                       </div>
                     </Badge>
-                    
+
                     <Button
                       variant="ghost"
                       size="sm"
@@ -265,7 +281,7 @@ const SmartFormField: React.FC<SmartFormFieldProps> = ({
                   </div>
                 </div>
               ))}
-              
+
               <div className="px-2 py-1 border-t">
                 <p className="text-xs text-muted-foreground">
                   Click to apply • Right-click for more options
@@ -277,7 +293,7 @@ const SmartFormField: React.FC<SmartFormFieldProps> = ({
       </div>
 
       {/* Smart Validation */}
-      <SmartValidation 
+      <SmartValidation
         value={value}
         fieldId={fieldId}
         type={type}
@@ -319,8 +335,8 @@ const SmartValidation: React.FC<{
           fieldId,
           value,
           type,
-          documentType
-        })
+          documentType,
+        }),
       });
 
       const result = await response.json();
@@ -340,7 +356,7 @@ const SmartValidation: React.FC<{
           <span className="text-amber-800">{validationResult.warning}</span>
         </div>
       )}
-      
+
       {validationResult.suggestion && (
         <div className="flex items-start gap-2 p-2 bg-blue-50 border border-blue-200 rounded text-sm">
           <Brain className="h-4 w-4 text-blue-600 mt-0.5 shrink-0" />

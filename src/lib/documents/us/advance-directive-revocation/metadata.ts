@@ -1,7 +1,10 @@
 // src/lib/documents/us/advance-directive-revocation/metadata.ts
 import type { LegalDocument } from '@/types/documents';
 
-export const advanceDirectiveRevocationMeta: Omit<LegalDocument, 'schema' | 'questions'> = {
+export const advanceDirectiveRevocationMeta: Omit<
+  LegalDocument,
+  'schema' | 'questions'
+> = {
   id: 'advance-directive-revocation',
   jurisdiction: 'US',
   category: 'Estate Planning',
@@ -20,7 +23,8 @@ export const advanceDirectiveRevocationMeta: Omit<LegalDocument, 'schema' | 'que
   translations: {
     en: {
       name: 'Advance Directive Revocation',
-      description: 'Legal document to revoke or cancel a previously executed advance healthcare directive.',
+      description:
+        'Legal document to revoke or cancel a previously executed advance healthcare directive.',
       aliases: [
         'revocation of advance directive',
         'advance healthcare directive revocation',
@@ -32,7 +36,8 @@ export const advanceDirectiveRevocationMeta: Omit<LegalDocument, 'schema' | 'que
     },
     es: {
       name: 'Revocación de Directiva Médica Anticipada',
-      description: 'Documento legal para revocar o cancelar una directiva médica anticipada ejecutada previamente.',
+      description:
+        'Documento legal para revocar o cancelar una directiva médica anticipada ejecutada previamente.',
       aliases: [
         'revocación de directiva anticipada',
         'revocación de directiva médica anticipada',

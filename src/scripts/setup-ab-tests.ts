@@ -2,11 +2,11 @@
 // Setup script for immediate A/B testing implementation
 // Run this script to create high-impact experiments ready for production
 
-import { 
+import {
   setupHighPriorityExperiments,
   getRecommendedExperiments,
   createExperimentFromTemplate,
-  ALL_EXPERIMENT_TEMPLATES
+  ALL_EXPERIMENT_TEMPLATES,
 } from '@/lib/ab-testing/experiment-templates';
 import { experimentEngine } from '@/lib/ab-testing/experiment-engine';
 
@@ -26,7 +26,7 @@ class ABTestSetupManager {
       maxExperiments: 3,
       categories: [],
       dryRun: false,
-      ...options
+      ...options,
     };
   }
 
@@ -36,13 +36,15 @@ class ABTestSetupManager {
     // Get the highest impact, lowest effort experiments
     const quickWins = getRecommendedExperiments({
       maxEffort: 'low',
-      minImpact: 10
+      minImpact: 10,
     }).slice(0, this.options.maxExperiments);
 
     console.log('📊 Recommended Quick Win Experiments:');
     quickWins.forEach((template, index) => {
       console.log(`${index + 1}. ${template.name}`);
-      console.log(`   Impact: ${template.estimatedImpact}% | Effort: ${template.implementationEffort}`);
+      console.log(
+        `   Impact: ${template.estimatedImpact}% | Effort: ${template.implementationEffort}`,
+      );
       console.log(`   Category: ${template.category}`);
       console.log(`   Hypothesis: ${template.hypothesis}\n`);
     });
@@ -60,7 +62,7 @@ class ABTestSetupManager {
         const experimentId = await createExperimentFromTemplate(template.id, {
           targetAudience: { percentage: 50 },
           duration: template.estimatedDuration,
-          owner: 'growth_team'
+          owner: 'growth_team',
         });
 
         createdExperiments.push(experimentId);
@@ -79,8 +81,8 @@ class ABTestSetupManager {
     if (createdExperiments.length > 0) {
       console.log('\n🎉 Setup Complete!');
       console.log(`Created ${createdExperiments.length} experiments:`);
-      createdExperiments.forEach(id => console.log(`  - ${id}`));
-      
+      createdExperiments.forEach((id) => console.log(`  - ${id}`));
+
       if (!this.options.autoStart) {
         console.log('\n📋 Next steps:');
         console.log('1. Review experiments in admin dashboard');
@@ -90,8 +92,11 @@ class ABTestSetupManager {
     }
   }
 
-  async createSingleExperiment(templateId: string, startImmediately = false): Promise<string | null> {
-    const template = ALL_EXPERIMENT_TEMPLATES.find(t => t.id === templateId);
+  async createSingleExperiment(
+    templateId: string,
+    startImmediately = false,
+  ): Promise<string | null> {
+    const template = ALL_EXPERIMENT_TEMPLATES.find((t) => t.id === templateId);
     if (!template) {
       console.error(`❌ Template not found: ${templateId}`);
       return null;
@@ -126,16 +131,27 @@ class ABTestSetupManager {
   listAllTemplates(): void {
     console.log('📋 Available A/B Test Templates:\n');
 
-    const categories = ['cta', 'headline', 'trust', 'pricing', 'form', 'social_proof'];
-    
-    categories.forEach(category => {
-      const templates = ALL_EXPERIMENT_TEMPLATES.filter(t => t.category === category);
+    const categories = [
+      'cta',
+      'headline',
+      'trust',
+      'pricing',
+      'form',
+      'social_proof',
+    ];
+
+    categories.forEach((category) => {
+      const templates = ALL_EXPERIMENT_TEMPLATES.filter(
+        (t) => t.category === category,
+      );
       if (templates.length === 0) return;
 
       console.log(`\n📂 ${category.toUpperCase().replace('_', ' ')} TESTS:`);
-      templates.forEach(template => {
+      templates.forEach((template) => {
         console.log(`  🧪 ${template.name} (${template.id})`);
-        console.log(`     Impact: ${template.estimatedImpact}% | Effort: ${template.implementationEffort} | Priority: ${template.priority}`);
+        console.log(
+          `     Impact: ${template.estimatedImpact}% | Effort: ${template.implementationEffort} | Priority: ${template.priority}`,
+        );
         console.log(`     ${template.description}`);
       });
     });
@@ -168,17 +184,21 @@ class ABTestSetupManager {
     console.log('   - Implement winning variants permanently\n');
 
     console.log('5. EXPECTED RESULTS:');
-    ALL_EXPERIMENT_TEMPLATES
-      .filter(t => t.priority === 'high')
-      .forEach(template => {
-        console.log(`   - ${template.name}: +${template.estimatedImpact}% conversion lift`);
-      });
+    ALL_EXPERIMENT_TEMPLATES.filter((t) => t.priority === 'high').forEach(
+      (template) => {
+        console.log(
+          `   - ${template.name}: +${template.estimatedImpact}% conversion lift`,
+        );
+      },
+    );
 
-    const totalImpact = ALL_EXPERIMENT_TEMPLATES
-      .filter(t => t.priority === 'high')
-      .reduce((sum, t) => sum + t.estimatedImpact, 0);
-    
-    console.log(`\n🎯 TOTAL EXPECTED IMPACT: +${Math.round(totalImpact / 3)}% average conversion improvement\n`);
+    const totalImpact = ALL_EXPERIMENT_TEMPLATES.filter(
+      (t) => t.priority === 'high',
+    ).reduce((sum, t) => sum + t.estimatedImpact, 0);
+
+    console.log(
+      `\n🎯 TOTAL EXPECTED IMPACT: +${Math.round(totalImpact / 3)}% average conversion improvement\n`,
+    );
   }
 }
 
@@ -189,8 +209,10 @@ async function main() {
 
   const setupManager = new ABTestSetupManager({
     autoStart: args.includes('--start'),
-    maxExperiments: parseInt(args.find(arg => arg.startsWith('--max='))?.split('=')[1] || '3'),
-    dryRun: args.includes('--dry-run')
+    maxExperiments: parseInt(
+      args.find((arg) => arg.startsWith('--max='))?.split('=')[1] || '3',
+    ),
+    dryRun: args.includes('--dry-run'),
   });
 
   switch (command) {
@@ -201,10 +223,15 @@ async function main() {
     case 'create':
       const templateId = args[1];
       if (!templateId) {
-        console.error('❌ Template ID required. Use: npm run ab-test create <template_id>');
+        console.error(
+          '❌ Template ID required. Use: npm run ab-test create <template_id>',
+        );
         return;
       }
-      await setupManager.createSingleExperiment(templateId, args.includes('--start'));
+      await setupManager.createSingleExperiment(
+        templateId,
+        args.includes('--start'),
+      );
       break;
 
     case 'list':
@@ -218,7 +245,7 @@ async function main() {
     case 'quick-start':
       console.log('🚀 123LegalDoc A/B Testing Quick Start\n');
       console.log('This will set up 3 high-impact experiments in 5 minutes:\n');
-      
+
       console.log('1. Homepage CTA Button Color & Text');
       console.log('   Expected: +8% click-through rate');
       console.log('2. Checkout Button Urgency Language');
@@ -227,14 +254,24 @@ async function main() {
       console.log('   Expected: +18% checkout completion\n');
 
       console.log('💰 BUSINESS IMPACT:');
-      console.log('   Current: 1000 visitors/day → 50 conversions → $1,500/day');
-      console.log('   With A/B tests: 1000 visitors/day → 69 conversions → $2,070/day');
+      console.log(
+        '   Current: 1000 visitors/day → 50 conversions → $1,500/day',
+      );
+      console.log(
+        '   With A/B tests: 1000 visitors/day → 69 conversions → $2,070/day',
+      );
       console.log('   Additional revenue: $570/day = $208,050/year\n');
 
       console.log('📋 SETUP COMMANDS:');
-      console.log('   npm run ab-test setup --start    # Create and start experiments');
-      console.log('   npm run ab-test list             # View all available tests');
-      console.log('   npm run ab-test guide            # Implementation guide\n');
+      console.log(
+        '   npm run ab-test setup --start    # Create and start experiments',
+      );
+      console.log(
+        '   npm run ab-test list             # View all available tests',
+      );
+      console.log(
+        '   npm run ab-test guide            # Implementation guide\n',
+      );
 
       break;
 
@@ -262,7 +299,7 @@ async function main() {
 export {
   ABTestSetupManager,
   setupHighPriorityExperiments,
-  getRecommendedExperiments
+  getRecommendedExperiments,
 };
 
 // Run if called directly

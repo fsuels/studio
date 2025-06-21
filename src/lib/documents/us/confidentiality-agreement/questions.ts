@@ -57,7 +57,8 @@ export const confidentialityAgreementQuestions: Question[] = [
     label: 'Description of Confidential Information',
     type: 'textarea',
     required: true,
-    placeholder: 'e.g., Technical specifications, business strategies, financial information',
+    placeholder:
+      'e.g., Technical specifications, business strategies, financial information',
   },
   {
     id: 'termYears',

@@ -1,7 +1,10 @@
 // src/lib/documents/us/affidavit-of-survivorship/metadata.ts
 import type { LegalDocument } from '@/types/documents';
 
-export const affidavitOfSurvivorshipMeta: Omit<LegalDocument, 'schema' | 'questions'> = {
+export const affidavitOfSurvivorshipMeta: Omit<
+  LegalDocument,
+  'schema' | 'questions'
+> = {
   id: 'affidavit-of-survivorship',
   jurisdiction: 'US',
   category: 'Legal',
@@ -20,7 +23,8 @@ export const affidavitOfSurvivorshipMeta: Omit<LegalDocument, 'schema' | 'questi
   translations: {
     en: {
       name: 'Affidavit of Survivorship',
-      description: 'Legal document for surviving joint owners to establish sole ownership of property after the death of a co-owner.',
+      description:
+        'Legal document for surviving joint owners to establish sole ownership of property after the death of a co-owner.',
       aliases: [
         'survivorship affidavit',
         'joint tenant survivorship affidavit',
@@ -32,7 +36,8 @@ export const affidavitOfSurvivorshipMeta: Omit<LegalDocument, 'schema' | 'questi
     },
     es: {
       name: 'Declaración Jurada de Supervivencia',
-      description: 'Documento legal para propietarios conjuntos supervivientes para establecer la propiedad única de bienes después de la muerte de un co-propietario.',
+      description:
+        'Documento legal para propietarios conjuntos supervivientes para establecer la propiedad única de bienes después de la muerte de un co-propietario.',
       aliases: [
         'declaración jurada de supervivencia',
         'declaración jurada de supervivencia de inquilinos conjuntos',

@@ -26,7 +26,9 @@ export default function StepOneExplanation() {
               Answer a Few Simple Questions
             </h3>
             <p className="mt-2 text-lg text-gray-600 max-w-md leading-relaxed">
-              Choose the document you’d like to create from our library of templates. All of our templates are sourced by attorneys to ensure they’re accurate, thorough, and up to date.
+              Choose the document you’d like to create from our library of
+              templates. All of our templates are sourced by attorneys to ensure
+              they’re accurate, thorough, and up to date.
             </p>
           </div>
         </div>

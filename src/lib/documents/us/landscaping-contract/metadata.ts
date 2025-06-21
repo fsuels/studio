@@ -24,13 +24,22 @@ export const landscapingContractMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Landscaping Contract',
-      description: 'Professional contract for landscaping services including design, installation, and maintenance work.',
-      aliases: ['landscape design contract', 'yard work agreement', 'garden services contract'],
+      description:
+        'Professional contract for landscaping services including design, installation, and maintenance work.',
+      aliases: [
+        'landscape design contract',
+        'yard work agreement',
+        'garden services contract',
+      ],
     },
     es: {
       name: 'Contrato de Paisajismo',
-      description: 'Contrato profesional para servicios de paisajismo incluyendo diseño, instalación y trabajo de mantenimiento.',
-      aliases: ['contrato de diseño de paisaje', 'acuerdo de trabajo de jardín'],
+      description:
+        'Contrato profesional para servicios de paisajismo incluyendo diseño, instalación y trabajo de mantenimiento.',
+      aliases: [
+        'contrato de diseño de paisaje',
+        'acuerdo de trabajo de jardín',
+      ],
     },
   },
 };

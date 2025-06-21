@@ -49,17 +49,19 @@ const AddressField = React.memo(function AddressField({
     setValue: rhfSetValue,
     formState: { errors: formErrors },
   } = useFormContext();
-  
+
   const inputRef = useRef<HTMLInputElement>(null);
   const autocompleteRef = useRef<google.maps.places.Autocomplete | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isReady, setIsReady] = useState(false);
   const [debugInfo, setDebugInfo] = useState('');
   const fieldErrorActual = formErrors[name]?.message || error;
-  
+
   // Check if Google Maps API key is available
-  const hasGoogleMapsApiKey = !!process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY && 
-    process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY !== 'your_google_maps_api_key_here';
+  const hasGoogleMapsApiKey =
+    !!process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY &&
+    process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY !==
+      'your_google_maps_api_key_here';
 
   const { ref: rhfRef, ...restOfRegister } = register(name, { required });
 
@@ -84,7 +86,10 @@ const AddressField = React.memo(function AddressField({
           }
         };
         checkLoaded();
-        setTimeout(() => reject(new Error('Timeout loading Google Maps')), 10000);
+        setTimeout(
+          () => reject(new Error('Timeout loading Google Maps')),
+          10000,
+        );
       });
       return googleMapsLoadPromise;
     }
@@ -94,7 +99,9 @@ const AddressField = React.memo(function AddressField({
 
     googleMapsLoadPromise = new Promise((resolve, reject) => {
       // Check if script already exists
-      const existingScript = document.querySelector('script[src*="maps.googleapis.com"]');
+      const existingScript = document.querySelector(
+        'script[src*="maps.googleapis.com"]',
+      );
       if (existingScript) {
         existingScript.remove();
       }
@@ -144,7 +151,7 @@ const AddressField = React.memo(function AddressField({
     const initAutocomplete = async () => {
       try {
         await loadGoogleMaps();
-        
+
         if (!mounted || !inputRef.current) {
           return;
         }
@@ -158,8 +165,8 @@ const AddressField = React.memo(function AddressField({
             {
               types: ['address'],
               componentRestrictions: { country: ['us', 'ca', 'mx'] },
-              fields: ['formatted_address', 'address_components', 'geometry']
-            }
+              fields: ['formatted_address', 'address_components', 'geometry'],
+            },
           );
 
           setDebugInfo('Autocomplete object created successfully');
@@ -168,42 +175,53 @@ const AddressField = React.memo(function AddressField({
           if (autocompleteRef.current) {
             // Check if predictions are working
             const service = new window.google.maps.places.AutocompleteService();
-            
+
             // Test with a simple query
             service.getPlacePredictions(
               {
                 input: '123 main',
-                componentRestrictions: { country: ['us', 'ca', 'mx'] }
+                componentRestrictions: { country: ['us', 'ca', 'mx'] },
               },
               (predictions, status) => {
-                if (status === window.google.maps.places.PlacesServiceStatus.OK) {
-                  setDebugInfo(`✅ Predictions working: ${predictions?.length || 0} results for "123 main"`);
+                if (
+                  status === window.google.maps.places.PlacesServiceStatus.OK
+                ) {
+                  setDebugInfo(
+                    `✅ Predictions working: ${predictions?.length || 0} results for "123 main"`,
+                  );
                 } else {
                   const statusMessages: Record<string, string> = {
-                    'REQUEST_DENIED': 'API key issue - check restrictions/billing',
-                    'OVER_QUERY_LIMIT': 'Quota exceeded - check Google Cloud Console',
-                    'INVALID_REQUEST': 'Invalid request format',
-                    'UNKNOWN_ERROR': 'Server error - try again',
-                    'ZERO_RESULTS': 'No results found'
+                    REQUEST_DENIED:
+                      'API key issue - check restrictions/billing',
+                    OVER_QUERY_LIMIT:
+                      'Quota exceeded - check Google Cloud Console',
+                    INVALID_REQUEST: 'Invalid request format',
+                    UNKNOWN_ERROR: 'Server error - try again',
+                    ZERO_RESULTS: 'No results found',
                   };
-                  const message = statusMessages[status] || `Unknown status: ${status}`;
-                  setDebugInfo(`❌ API restricted - falling back to manual entry`);
+                  const message =
+                    statusMessages[status] || `Unknown status: ${status}`;
+                  setDebugInfo(
+                    `❌ API restricted - falling back to manual entry`,
+                  );
                   console.error('Google Places API Error:', status, message);
-                  
+
                   // Disable autocomplete and fall back to manual entry
                   setIsReady(false);
                   if (autocompleteRef.current && window.google?.maps?.event) {
-                    window.google.maps.event.clearInstanceListeners(autocompleteRef.current);
+                    window.google.maps.event.clearInstanceListeners(
+                      autocompleteRef.current,
+                    );
                   }
                   autocompleteRef.current = null;
                 }
-              }
+              },
             );
 
             // Handle place selection
             autocompleteRef.current.addListener('place_changed', () => {
               const place = autocompleteRef.current?.getPlace();
-              
+
               if (!place || !place.formatted_address) {
                 setDebugInfo('No place selected or invalid place');
                 return;
@@ -211,7 +229,7 @@ const AddressField = React.memo(function AddressField({
 
               setDebugInfo(`Selected: ${place.formatted_address}`);
               const formattedAddress = place.formatted_address;
-              
+
               // Parse address components
               const addressParts: Record<string, string> = {};
               if (place.address_components) {
@@ -239,7 +257,8 @@ const AddressField = React.memo(function AddressField({
               }
 
               const parsedParts = {
-                street: `${addressParts.street_number || ''} ${addressParts.route || ''}`.trim(),
+                street:
+                  `${addressParts.street_number || ''} ${addressParts.route || ''}`.trim(),
                 city: addressParts.city || '',
                 state: addressParts.state || '',
                 postalCode: addressParts.postal_code || '',
@@ -260,19 +279,18 @@ const AddressField = React.memo(function AddressField({
             setIsReady(true);
             setIsLoading(false);
             setDebugInfo('Autocomplete ready and tested');
-
           } else {
             throw new Error('Failed to create autocomplete object');
           }
-
         } catch (autocompleteError) {
           throw new Error(`Autocomplete creation failed: ${autocompleteError}`);
         }
-
       } catch (error) {
         if (mounted) {
           setIsLoading(false);
-          setDebugInfo(`Error: ${error instanceof Error ? error.message : 'Unknown error'}`);
+          setDebugInfo(
+            `Error: ${error instanceof Error ? error.message : 'Unknown error'}`,
+          );
           console.error('Google Maps initialization error:', error);
         }
       }
@@ -283,44 +301,64 @@ const AddressField = React.memo(function AddressField({
     return () => {
       mounted = false;
       if (autocompleteRef.current && window.google?.maps?.event) {
-        window.google.maps.event.clearInstanceListeners(autocompleteRef.current);
+        window.google.maps.event.clearInstanceListeners(
+          autocompleteRef.current,
+        );
       }
     };
-  }, [hasGoogleMapsApiKey, loadGoogleMaps, controlledOnChange, rhfSetValue, name]);
+  }, [
+    hasGoogleMapsApiKey,
+    loadGoogleMaps,
+    controlledOnChange,
+    rhfSetValue,
+    name,
+  ]);
 
   // Handle focus
   const handleFocus = useCallback(() => {
     onFocus?.();
-    setDebugInfo(prev => `${prev} | Input focused`);
+    setDebugInfo((prev) => `${prev} | Input focused`);
   }, [onFocus]);
 
   // Handle key events for debugging
-  const handleKeyDown = useCallback((e: React.KeyboardEvent<HTMLInputElement>) => {
-    const target = e.target as HTMLInputElement;
-    setDebugInfo(`Key: ${e.key} | Current value: "${target.value}" | Autocomplete: ${isReady ? 'Active' : 'Inactive'}`);
-  }, [isReady]);
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent<HTMLInputElement>) => {
+      const target = e.target as HTMLInputElement;
+      setDebugInfo(
+        `Key: ${e.key} | Current value: "${target.value}" | Autocomplete: ${isReady ? 'Active' : 'Inactive'}`,
+      );
+    },
+    [isReady],
+  );
 
   // Handle input events (raw input detection)
   const handleInput = useCallback((e: React.FormEvent<HTMLInputElement>) => {
     const target = e.target as HTMLInputElement;
-    setDebugInfo(`Input Event: "${target.value}" | Length: ${target.value.length}`);
+    setDebugInfo(
+      `Input Event: "${target.value}" | Length: ${target.value.length}`,
+    );
   }, []);
 
   // Handle manual input changes
-  const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setDebugInfo(`Typing: "${value}" (Length: ${value.length}) | Event: ${e.type}`);
-    
-    // Always allow typing and form updates
-    if (controlledOnChange) {
-      controlledOnChange(value);
-    } else {
-      rhfSetValue(name, value, {
-        shouldValidate: true,
-        shouldDirty: true,
-      });
-    }
-  }, [controlledOnChange, rhfSetValue, name]);
+  const handleInputChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const value = e.target.value;
+      setDebugInfo(
+        `Typing: "${value}" (Length: ${value.length}) | Event: ${e.type}`,
+      );
+
+      // Always allow typing and form updates
+      if (controlledOnChange) {
+        controlledOnChange(value);
+      } else {
+        rhfSetValue(name, value, {
+          shouldValidate: true,
+          shouldDirty: true,
+        });
+      }
+    },
+    [controlledOnChange, rhfSetValue, name],
+  );
 
   if (!hasGoogleMapsApiKey) {
     return (
@@ -367,7 +405,8 @@ const AddressField = React.memo(function AddressField({
           {...restOfRegister}
           className={cn(
             'flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
-            fieldErrorActual && 'border-destructive focus-visible:ring-destructive'
+            fieldErrorActual &&
+              'border-destructive focus-visible:ring-destructive',
           )}
         />
         {fieldErrorActual && (
@@ -376,7 +415,9 @@ const AddressField = React.memo(function AddressField({
           </p>
         )}
         <p className="text-xs text-muted-foreground">
-          {t('Address autocomplete unavailable - Google Maps API key not configured')}
+          {t(
+            'Address autocomplete unavailable - Google Maps API key not configured',
+          )}
         </p>
       </div>
     );
@@ -418,7 +459,7 @@ const AddressField = React.memo(function AddressField({
           </Tooltip>
         )}
       </div>
-      
+
       <div className="relative">
         <input
           ref={(el) => {
@@ -432,10 +473,13 @@ const AddressField = React.memo(function AddressField({
           onInput={handleInput}
           onKeyDown={handleKeyDown}
           onFocus={handleFocus}
-          placeholder={placeholder ? t(placeholder) : t('Start typing your address...')}
+          placeholder={
+            placeholder ? t(placeholder) : t('Start typing your address...')
+          }
           className={cn(
             'flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 pr-10 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
-            fieldErrorActual && 'border-destructive focus-visible:ring-destructive'
+            fieldErrorActual &&
+              'border-destructive focus-visible:ring-destructive',
           )}
           autoComplete="off"
         />
@@ -449,37 +493,58 @@ const AddressField = React.memo(function AddressField({
           )}
         </div>
       </div>
-      
+
       {fieldErrorActual && (
         <p className="text-xs text-destructive mt-1">
           {t(String(fieldErrorActual))}
         </p>
       )}
-      
+
       {/* Debug info - remove in production */}
       {process.env.NODE_ENV === 'development' && (
         <div className="text-xs text-muted-foreground bg-gray-50 p-2 rounded">
-          <p><strong>Debug:</strong> {debugInfo}</p>
-          <p><strong>API Key Status:</strong> {hasGoogleMapsApiKey ? 'Configured' : 'Missing'}</p>
-          <p><strong>Google Maps Loaded:</strong> {typeof window !== 'undefined' && window.google?.maps?.places?.Autocomplete ? 'Yes' : 'No'}</p>
-          <p><strong>Autocomplete Ready:</strong> {autocompleteRef.current ? 'Yes' : 'No'}</p>
+          <p>
+            <strong>Debug:</strong> {debugInfo}
+          </p>
+          <p>
+            <strong>API Key Status:</strong>{' '}
+            {hasGoogleMapsApiKey ? 'Configured' : 'Missing'}
+          </p>
+          <p>
+            <strong>Google Maps Loaded:</strong>{' '}
+            {typeof window !== 'undefined' &&
+            window.google?.maps?.places?.Autocomplete
+              ? 'Yes'
+              : 'No'}
+          </p>
+          <p>
+            <strong>Autocomplete Ready:</strong>{' '}
+            {autocompleteRef.current ? 'Yes' : 'No'}
+          </p>
           {typeof window !== 'undefined' && window.location && (
-            <p><strong>Current Domain:</strong> {window.location.hostname}</p>
+            <p>
+              <strong>Current Domain:</strong> {window.location.hostname}
+            </p>
           )}
         </div>
       )}
-      
+
       {isLoading && (
         <p className="text-xs text-muted-foreground">
           {t('Loading address suggestions...')}
         </p>
       )}
-      
+
       {!isLoading && !isReady && hasGoogleMapsApiKey && (
         <div className="text-xs text-blue-600 bg-blue-50 p-2 rounded border border-blue-200">
           <p className="font-medium">💡 Manual Address Entry</p>
-          <p>Type your complete address (autocomplete unavailable due to API restrictions)</p>
-          <p className="text-xs mt-1 text-blue-500">Example: 123 Main St, City, State 12345</p>
+          <p>
+            Type your complete address (autocomplete unavailable due to API
+            restrictions)
+          </p>
+          <p className="text-xs mt-1 text-blue-500">
+            Example: 123 Main St, City, State 12345
+          </p>
         </div>
       )}
     </div>

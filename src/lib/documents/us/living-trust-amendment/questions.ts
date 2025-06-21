@@ -52,7 +52,8 @@ export const questions: Question[] = [
     label: 'Section/Article Being Amended',
     type: 'text',
     required: true,
-    placeholder: 'Specify which section, article, or paragraph is being amended',
+    placeholder:
+      'Specify which section, article, or paragraph is being amended',
   },
   {
     id: 'specificChanges',
@@ -66,7 +67,8 @@ export const questions: Question[] = [
     label: 'New Language/Terms',
     type: 'textarea',
     required: true,
-    placeholder: 'Enter the exact new language that will replace or be added to the trust',
+    placeholder:
+      'Enter the exact new language that will replace or be added to the trust',
   },
   {
     id: 'replacementClause',

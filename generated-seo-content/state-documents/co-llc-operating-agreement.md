@@ -47,7 +47,7 @@ Don't risk using generic templates that may not comply with Colorado law. Get a 
 
 [Create Colorado LLC Operating Agreement]
 
-*Trusted by thousands of Colorado businesses*
+_Trusted by thousands of Colorado businesses_
 
 ---
 

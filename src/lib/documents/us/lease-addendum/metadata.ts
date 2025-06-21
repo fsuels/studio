@@ -24,12 +24,14 @@ export const leaseAddendumMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Lease Addendum',
-      description: 'Add terms to existing lease agreements with a legally binding lease addendum',
+      description:
+        'Add terms to existing lease agreements with a legally binding lease addendum',
       aliases: [],
     },
     es: {
       name: 'Lease Addendum', // TODO: Add Spanish translation
-      description: 'Add terms to existing lease agreements with a legally binding lease addendum', // TODO: Add Spanish translation
+      description:
+        'Add terms to existing lease agreements with a legally binding lease addendum', // TODO: Add Spanish translation
       aliases: [],
     },
   },

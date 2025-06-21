@@ -1,13 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getCachedDocumentSummary, DocumentSummaryOptions } from '@/ai/flows/summarize-document';
+import {
+  getCachedDocumentSummary,
+  DocumentSummaryOptions,
+} from '@/ai/flows/summarize-document';
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { 
-      documentText, 
-      documentType, 
-      options = {} 
+    const {
+      documentText,
+      documentType,
+      options = {},
     }: {
       documentText: string;
       documentType?: string;
@@ -18,31 +21,35 @@ export async function POST(request: NextRequest) {
     if (!documentText || typeof documentText !== 'string') {
       return NextResponse.json(
         { error: 'Document text is required and must be a string' },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
     if (documentText.length < 50) {
       return NextResponse.json(
         { error: 'Document text is too short to summarize' },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
     if (documentText.length > 50000) {
       return NextResponse.json(
         { error: 'Document text is too long (max 50,000 characters)' },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
     // Generate summary
-    const summary = await getCachedDocumentSummary(documentText, documentType, options);
+    const summary = await getCachedDocumentSummary(
+      documentText,
+      documentType,
+      options,
+    );
 
     if (!summary) {
       return NextResponse.json(
         { error: 'Failed to generate document summary' },
-        { status: 500 }
+        { status: 500 },
       );
     }
 
@@ -51,16 +58,15 @@ export async function POST(request: NextRequest) {
       summary,
       generatedAt: new Date().toISOString(),
     });
-
   } catch (error) {
     console.error('[API] Document summarization error:', error);
-    
+
     return NextResponse.json(
-      { 
+      {
         error: 'Internal server error',
-        message: error instanceof Error ? error.message : 'Unknown error'
+        message: error instanceof Error ? error.message : 'Unknown error',
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -78,7 +84,7 @@ function checkRateLimit(clientId: string): boolean {
     // Reset or initialize
     requestCounts.set(clientId, {
       count: 1,
-      resetTime: now + RATE_WINDOW
+      resetTime: now + RATE_WINDOW,
     });
     return true;
   }
@@ -104,13 +110,13 @@ export async function GET(request: NextRequest) {
           readingLevel: 'simple | standard | advanced',
           maxLength: 'brief | detailed | comprehensive',
           focusAreas: 'string[]',
-          includeKeyTerms: 'boolean'
-        }
-      }
+          includeKeyTerms: 'boolean',
+        },
+      },
     },
     rateLimit: {
       requests: RATE_LIMIT,
-      window: '1 hour'
-    }
+      window: '1 hour',
+    },
   });
 }

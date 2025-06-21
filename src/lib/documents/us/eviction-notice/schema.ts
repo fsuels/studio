@@ -12,8 +12,14 @@ export const schema = z
       },
     ),
     reasonDetails: z.string().optional(),
-    noticeDate: z.string().min(1, 'Notice date is required.').regex(/^\d{4}-\d{2}-\d{2}$/, 'Date must be in YYYY-MM-DD format'),
-    vacateDate: z.string().min(1, 'Vacate date is required.').regex(/^\d{4}-\d{2}-\d{2}$/, 'Date must be in YYYY-MM-DD format'),
+    noticeDate: z
+      .string()
+      .min(1, 'Notice date is required.')
+      .regex(/^\d{4}-\d{2}-\d{2}$/, 'Date must be in YYYY-MM-DD format'),
+    vacateDate: z
+      .string()
+      .min(1, 'Vacate date is required.')
+      .regex(/^\d{4}-\d{2}-\d{2}$/, 'Date must be in YYYY-MM-DD format'),
     state: z.string().length(2, 'State must be 2 characters.'),
   })
   .refine(
@@ -23,8 +29,7 @@ export const schema = z
         ? !!data.reasonDetails
         : true,
     {
-      message:
-        "Details are required if reason is 'Lease Violation' or 'Other'",
+      message: "Details are required if reason is 'Lease Violation' or 'Other'",
       path: ['reasonDetails'],
     },
   );

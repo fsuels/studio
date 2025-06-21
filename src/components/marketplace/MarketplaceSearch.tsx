@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { 
+import {
   Select,
   SelectContent,
   SelectItem,
@@ -15,10 +15,10 @@ import {
 } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Slider } from '@/components/ui/slider';
-import { 
-  Search, 
-  Filter, 
-  X, 
+import {
+  Search,
+  Filter,
+  X,
   Star,
   DollarSign,
   Globe,
@@ -53,55 +53,70 @@ export function MarketplaceSearch({
   ]);
 
   // Update search query
-  const handleSearchChange = useCallback((query: string) => {
-    onFiltersChange({
-      ...filters,
-      query: query || undefined,
-    });
-  }, [filters, onFiltersChange]);
+  const handleSearchChange = useCallback(
+    (query: string) => {
+      onFiltersChange({
+        ...filters,
+        query: query || undefined,
+      });
+    },
+    [filters, onFiltersChange],
+  );
 
   // Update category
-  const handleCategoryChange = useCallback((category: string) => {
-    onFiltersChange({
-      ...filters,
-      category: category === 'all' ? undefined : category,
-    });
-  }, [filters, onFiltersChange]);
+  const handleCategoryChange = useCallback(
+    (category: string) => {
+      onFiltersChange({
+        ...filters,
+        category: category === 'all' ? undefined : category,
+      });
+    },
+    [filters, onFiltersChange],
+  );
 
   // Update sorting
-  const handleSortChange = useCallback((sortBy: string) => {
-    const [field, order] = sortBy.split('-');
-    onFiltersChange({
-      ...filters,
-      sortBy: field as any,
-      sortOrder: order as 'asc' | 'desc',
-    });
-  }, [filters, onFiltersChange]);
+  const handleSortChange = useCallback(
+    (sortBy: string) => {
+      const [field, order] = sortBy.split('-');
+      onFiltersChange({
+        ...filters,
+        sortBy: field as any,
+        sortOrder: order as 'asc' | 'desc',
+      });
+    },
+    [filters, onFiltersChange],
+  );
 
   // Toggle tag
-  const handleTagToggle = useCallback((tag: string) => {
-    const currentTags = filters.tags || [];
-    const newTags = currentTags.includes(tag)
-      ? currentTags.filter(t => t !== tag)
-      : [...currentTags, tag];
-    
-    onFiltersChange({
-      ...filters,
-      tags: newTags.length > 0 ? newTags : undefined,
-    });
-  }, [filters, onFiltersChange]);
+  const handleTagToggle = useCallback(
+    (tag: string) => {
+      const currentTags = filters.tags || [];
+      const newTags = currentTags.includes(tag)
+        ? currentTags.filter((t) => t !== tag)
+        : [...currentTags, tag];
+
+      onFiltersChange({
+        ...filters,
+        tags: newTags.length > 0 ? newTags : undefined,
+      });
+    },
+    [filters, onFiltersChange],
+  );
 
   // Update price range
-  const handlePriceRangeChange = useCallback((range: number[]) => {
-    setPriceRange(range);
-    onFiltersChange({
-      ...filters,
-      priceRange: {
-        min: range[0],
-        max: range[1],
-      },
-    });
-  }, [filters, onFiltersChange]);
+  const handlePriceRangeChange = useCallback(
+    (range: number[]) => {
+      setPriceRange(range);
+      onFiltersChange({
+        ...filters,
+        priceRange: {
+          min: range[0],
+          max: range[1],
+        },
+      });
+    },
+    [filters, onFiltersChange],
+  );
 
   // Clear all filters
   const clearFilters = useCallback(() => {
@@ -217,18 +232,18 @@ export function MarketplaceSearch({
           {filters.category && (
             <Badge variant="secondary" className="gap-1">
               Category: {filters.category}
-              <X 
-                className="h-3 w-3 cursor-pointer" 
+              <X
+                className="h-3 w-3 cursor-pointer"
                 onClick={() => handleCategoryChange('all')}
               />
             </Badge>
           )}
-          
+
           {filters.tags?.map((tag) => (
             <Badge key={tag} variant="secondary" className="gap-1">
               {tag}
-              <X 
-                className="h-3 w-3 cursor-pointer" 
+              <X
+                className="h-3 w-3 cursor-pointer"
                 onClick={() => handleTagToggle(tag)}
               />
             </Badge>
@@ -238,9 +253,11 @@ export function MarketplaceSearch({
             <Badge variant="secondary" className="gap-1">
               <Shield className="h-3 w-3" />
               Verified Only
-              <X 
-                className="h-3 w-3 cursor-pointer" 
-                onClick={() => onFiltersChange({ ...filters, verified: undefined })}
+              <X
+                className="h-3 w-3 cursor-pointer"
+                onClick={() =>
+                  onFiltersChange({ ...filters, verified: undefined })
+                }
               />
             </Badge>
           )}
@@ -249,9 +266,11 @@ export function MarketplaceSearch({
             <Badge variant="secondary" className="gap-1">
               <Crown className="h-3 w-3" />
               Featured Only
-              <X 
-                className="h-3 w-3 cursor-pointer" 
-                onClick={() => onFiltersChange({ ...filters, featured: undefined })}
+              <X
+                className="h-3 w-3 cursor-pointer"
+                onClick={() =>
+                  onFiltersChange({ ...filters, featured: undefined })
+                }
               />
             </Badge>
           )}
@@ -295,10 +314,11 @@ export function MarketplaceSearch({
               </div>
               <Select
                 value={filters.rating?.min?.toString() || 'any'}
-                onValueChange={(value) => 
+                onValueChange={(value) =>
                   onFiltersChange({
                     ...filters,
-                    rating: value === 'any' ? undefined : { min: parseFloat(value) }
+                    rating:
+                      value === 'any' ? undefined : { min: parseFloat(value) },
                   })
                 }
                 disabled={isLoading}
@@ -324,10 +344,10 @@ export function MarketplaceSearch({
               </div>
               <Select
                 value={filters.jurisdiction || 'any'}
-                onValueChange={(value) => 
+                onValueChange={(value) =>
                   onFiltersChange({
                     ...filters,
-                    jurisdiction: value === 'any' ? undefined : value
+                    jurisdiction: value === 'any' ? undefined : value,
                   })
                 }
                 disabled={isLoading}
@@ -351,10 +371,10 @@ export function MarketplaceSearch({
               <label className="text-sm font-medium">Language</label>
               <Select
                 value={filters.language || 'any'}
-                onValueChange={(value) => 
+                onValueChange={(value) =>
                   onFiltersChange({
                     ...filters,
-                    language: value === 'any' ? undefined : value
+                    language: value === 'any' ? undefined : value,
                   })
                 }
                 disabled={isLoading}
@@ -384,17 +404,20 @@ export function MarketplaceSearch({
                     onCheckedChange={(checked) =>
                       onFiltersChange({
                         ...filters,
-                        verified: checked ? true : undefined
+                        verified: checked ? true : undefined,
                       })
                     }
                     disabled={isLoading}
                   />
-                  <label htmlFor="verified" className="text-sm flex items-center gap-1">
+                  <label
+                    htmlFor="verified"
+                    className="text-sm flex items-center gap-1"
+                  >
                     <Shield className="h-3 w-3" />
                     Verified creators only
                   </label>
                 </div>
-                
+
                 <div className="flex items-center space-x-2">
                   <Checkbox
                     id="featured"
@@ -402,12 +425,15 @@ export function MarketplaceSearch({
                     onCheckedChange={(checked) =>
                       onFiltersChange({
                         ...filters,
-                        featured: checked ? true : undefined
+                        featured: checked ? true : undefined,
                       })
                     }
                     disabled={isLoading}
                   />
-                  <label htmlFor="featured" className="text-sm flex items-center gap-1">
+                  <label
+                    htmlFor="featured"
+                    className="text-sm flex items-center gap-1"
+                  >
                     <Crown className="h-3 w-3" />
                     Featured templates only
                   </label>
@@ -422,7 +448,9 @@ export function MarketplaceSearch({
                 {tags.slice(0, 12).map((tag) => (
                   <Badge
                     key={tag}
-                    variant={filters.tags?.includes(tag) ? 'default' : 'outline'}
+                    variant={
+                      filters.tags?.includes(tag) ? 'default' : 'outline'
+                    }
                     className="cursor-pointer"
                     onClick={() => handleTagToggle(tag)}
                   >

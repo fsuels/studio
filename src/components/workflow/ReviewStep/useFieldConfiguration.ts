@@ -15,7 +15,10 @@ interface UseFieldConfigurationProps {
   actualSchemaShape?: Record<string, z.ZodTypeAny>;
 }
 
-export function useFieldConfiguration({ doc, actualSchemaShape }: UseFieldConfigurationProps) {
+export function useFieldConfiguration({
+  doc,
+  actualSchemaShape,
+}: UseFieldConfigurationProps) {
   const { t } = useTranslation('common');
   const { getValues } = useFormContext<FormValues>();
 
@@ -112,7 +115,7 @@ export function useFieldConfiguration({ doc, actualSchemaShape }: UseFieldConfig
             ? usStates.map((s) => ({ value: s.value, label: s.label }))
             : undefined) ??
           (fieldId === SPECIAL_FIELD_CONFIGS.ODO_STATUS.id
-            ? SPECIAL_FIELD_CONFIGS.ODO_STATUS.options.map(opt => ({
+            ? SPECIAL_FIELD_CONFIGS.ODO_STATUS.options.map((opt) => ({
                 value: opt.value,
                 label: t(opt.translationKey, {
                   defaultValue: prettify(opt.value),

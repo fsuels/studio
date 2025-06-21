@@ -1,12 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -87,7 +82,14 @@ interface SessionEvent {
   id: string;
   sessionId: string;
   timestamp: number;
-  type: 'click' | 'scroll' | 'input' | 'navigation' | 'error' | 'form_submit' | 'document_action';
+  type:
+    | 'click'
+    | 'scroll'
+    | 'input'
+    | 'navigation'
+    | 'error'
+    | 'form_submit'
+    | 'document_action';
   data: {
     element?: string;
     url?: string;
@@ -126,10 +128,14 @@ interface RefundRequest {
 }
 
 export default function SupportToolkitDashboard() {
-  const [activeTab, setActiveTab] = useState<'sessions' | 'refunds' | 'analytics'>('sessions');
+  const [activeTab, setActiveTab] = useState<
+    'sessions' | 'refunds' | 'analytics'
+  >('sessions');
   const [sessions, setSessions] = useState<SessionReplay[]>([]);
   const [refunds, setRefunds] = useState<RefundRequest[]>([]);
-  const [selectedSession, setSelectedSession] = useState<SessionReplay | null>(null);
+  const [selectedSession, setSelectedSession] = useState<SessionReplay | null>(
+    null,
+  );
   const [playbackTime, setPlaybackTime] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [playbackSpeed, setPlaybackSpeed] = useState(1);
@@ -137,13 +143,13 @@ export default function SupportToolkitDashboard() {
   const [filterCriteria, setFilterCriteria] = useState({
     hasErrors: false,
     documentType: '',
-    dateRange: '7d'
+    dateRange: '7d',
   });
   const [refundForm, setRefundForm] = useState({
     orderId: '',
     amount: '',
     reason: 'customer_request',
-    notes: ''
+    notes: '',
   });
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
@@ -159,7 +165,8 @@ export default function SupportToolkitDashboard() {
     try {
       const params = new URLSearchParams();
       if (filterCriteria.hasErrors) params.append('hasErrors', 'true');
-      if (filterCriteria.documentType) params.append('documentTypes', filterCriteria.documentType);
+      if (filterCriteria.documentType)
+        params.append('documentTypes', filterCriteria.documentType);
       if (filterCriteria.dateRange) {
         const daysAgo = parseInt(filterCriteria.dateRange.replace('d', ''));
         const startDate = new Date(Date.now() - daysAgo * 24 * 60 * 60 * 1000);
@@ -167,16 +174,18 @@ export default function SupportToolkitDashboard() {
       }
       params.append('limit', '50');
 
-      const response = await fetch(`/api/support-toolkit/session-replay?${params}`);
+      const response = await fetch(
+        `/api/support-toolkit/session-replay?${params}`,
+      );
       const data = await response.json();
-      
+
       if (data.success) {
         setSessions(data.data.sessions);
       } else {
         toast({
           title: 'Error',
           description: 'Failed to load session replays',
-          variant: 'destructive'
+          variant: 'destructive',
         });
       }
     } catch (error) {
@@ -184,7 +193,7 @@ export default function SupportToolkitDashboard() {
       toast({
         title: 'Error',
         description: 'Failed to load session replays',
-        variant: 'destructive'
+        variant: 'destructive',
       });
     } finally {
       setIsLoading(false);
@@ -195,7 +204,7 @@ export default function SupportToolkitDashboard() {
     try {
       const response = await fetch('/api/support-toolkit/refunds?pending=true');
       const data = await response.json();
-      
+
       if (data.success) {
         setRefunds(data.data.refunds);
       }
@@ -209,7 +218,7 @@ export default function SupportToolkitDashboard() {
       toast({
         title: 'Validation Error',
         description: 'Order ID and amount are required',
-        variant: 'destructive'
+        variant: 'destructive',
       });
       return;
     }
@@ -225,31 +234,36 @@ export default function SupportToolkitDashboard() {
           reason: refundForm.reason,
           agentId: 'current_agent', // This would come from auth context
           agentName: 'Support Agent',
-          notes: refundForm.notes
-        })
+          notes: refundForm.notes,
+        }),
       });
 
       const data = await response.json();
-      
+
       if (data.success) {
         toast({
           title: 'Success',
           description: data.message,
         });
-        setRefundForm({ orderId: '', amount: '', reason: 'customer_request', notes: '' });
+        setRefundForm({
+          orderId: '',
+          amount: '',
+          reason: 'customer_request',
+          notes: '',
+        });
         loadRefunds();
       } else {
         toast({
           title: 'Error',
           description: data.error,
-          variant: 'destructive'
+          variant: 'destructive',
         });
       }
     } catch (error) {
       toast({
         title: 'Error',
         description: 'Failed to create refund',
-        variant: 'destructive'
+        variant: 'destructive',
       });
     }
   };
@@ -263,12 +277,12 @@ export default function SupportToolkitDashboard() {
           action: 'approve_refund',
           refundId,
           agentId: 'current_agent',
-          agentName: 'Support Agent'
-        })
+          agentName: 'Support Agent',
+        }),
       });
 
       const data = await response.json();
-      
+
       if (data.success) {
         toast({
           title: 'Success',
@@ -279,14 +293,14 @@ export default function SupportToolkitDashboard() {
         toast({
           title: 'Error',
           description: data.error,
-          variant: 'destructive'
+          variant: 'destructive',
         });
       }
     } catch (error) {
       toast({
         title: 'Error',
         description: 'Failed to approve refund',
-        variant: 'destructive'
+        variant: 'destructive',
       });
     }
   };
@@ -299,12 +313,12 @@ export default function SupportToolkitDashboard() {
         body: JSON.stringify({
           action: 'link_to_ticket',
           sessionId,
-          ticketId
-        })
+          ticketId,
+        }),
       });
 
       const data = await response.json();
-      
+
       if (data.success) {
         toast({
           title: 'Success',
@@ -316,7 +330,7 @@ export default function SupportToolkitDashboard() {
       toast({
         title: 'Error',
         description: 'Failed to link session',
-        variant: 'destructive'
+        variant: 'destructive',
       });
     }
   };
@@ -333,22 +347,30 @@ export default function SupportToolkitDashboard() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'pending': return 'bg-yellow-100 text-yellow-800';
-      case 'approved': return 'bg-blue-100 text-blue-800';
-      case 'processed': return 'bg-green-100 text-green-800';
-      case 'failed': return 'bg-red-100 text-red-800';
-      case 'rejected': return 'bg-gray-100 text-gray-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'pending':
+        return 'bg-yellow-100 text-yellow-800';
+      case 'approved':
+        return 'bg-blue-100 text-blue-800';
+      case 'processed':
+        return 'bg-green-100 text-green-800';
+      case 'failed':
+        return 'bg-red-100 text-red-800';
+      case 'rejected':
+        return 'bg-gray-100 text-gray-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
     }
   };
 
-  const filteredSessions = sessions.filter(session => {
+  const filteredSessions = sessions.filter((session) => {
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
       return (
         session.sessionId.toLowerCase().includes(query) ||
         session.userId?.toLowerCase().includes(query) ||
-        session.metadata.documentTypes?.some(type => type.toLowerCase().includes(query))
+        session.metadata.documentTypes?.some((type) =>
+          type.toLowerCase().includes(query),
+        )
       );
     }
     return true;
@@ -360,11 +382,15 @@ export default function SupportToolkitDashboard() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-gray-900">Support Toolkit</h1>
-          <p className="text-gray-600">Session replay, refund management, and faster issue resolution</p>
+          <p className="text-gray-600">
+            Session replay, refund management, and faster issue resolution
+          </p>
         </div>
         <div className="flex gap-2">
           <Button variant="outline" onClick={loadSessions} disabled={isLoading}>
-            <RefreshCw className={`h-4 w-4 mr-2 ${isLoading ? 'animate-spin' : ''}`} />
+            <RefreshCw
+              className={`h-4 w-4 mr-2 ${isLoading ? 'animate-spin' : ''}`}
+            />
             Refresh
           </Button>
         </div>
@@ -376,9 +402,11 @@ export default function SupportToolkitDashboard() {
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Active Sessions</p>
+                <p className="text-sm font-medium text-gray-600">
+                  Active Sessions
+                </p>
                 <p className="text-2xl font-bold text-gray-900">
-                  {sessions.filter(s => s.isActive).length}
+                  {sessions.filter((s) => s.isActive).length}
                 </p>
               </div>
               <Activity className="h-8 w-8 text-blue-600" />
@@ -390,9 +418,15 @@ export default function SupportToolkitDashboard() {
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Error Sessions</p>
+                <p className="text-sm font-medium text-gray-600">
+                  Error Sessions
+                </p>
                 <p className="text-2xl font-bold text-gray-900">
-                  {sessions.filter(s => s.metadata.errors && s.metadata.errors > 0).length}
+                  {
+                    sessions.filter(
+                      (s) => s.metadata.errors && s.metadata.errors > 0,
+                    ).length
+                  }
                 </p>
               </div>
               <AlertTriangle className="h-8 w-8 text-red-600" />
@@ -404,9 +438,11 @@ export default function SupportToolkitDashboard() {
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Pending Refunds</p>
+                <p className="text-sm font-medium text-gray-600">
+                  Pending Refunds
+                </p>
                 <p className="text-2xl font-bold text-gray-900">
-                  {refunds.filter(r => r.status === 'pending').length}
+                  {refunds.filter((r) => r.status === 'pending').length}
                 </p>
               </div>
               <Clock className="h-8 w-8 text-yellow-600" />
@@ -418,10 +454,15 @@ export default function SupportToolkitDashboard() {
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Today's Refunds</p>
+                <p className="text-sm font-medium text-gray-600">
+                  Today's Refunds
+                </p>
                 <p className="text-2xl font-bold text-gray-900">
-                  ${refunds
-                    .filter(r => Date.now() - r.createdAt < 24 * 60 * 60 * 1000)
+                  $
+                  {refunds
+                    .filter(
+                      (r) => Date.now() - r.createdAt < 24 * 60 * 60 * 1000,
+                    )
                     .reduce((sum, r) => sum + r.amount, 0)
                     .toFixed(2)}
                 </p>
@@ -433,10 +474,18 @@ export default function SupportToolkitDashboard() {
       </div>
 
       {/* Main Content */}
-      <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as any)} className="space-y-4">
+      <Tabs
+        value={activeTab}
+        onValueChange={(value) => setActiveTab(value as any)}
+        className="space-y-4"
+      >
         <TabsList className="grid w-full grid-cols-3">
-          <TabsTrigger value="sessions">Session Replays ({sessions.length})</TabsTrigger>
-          <TabsTrigger value="refunds">Refund Management ({refunds.length})</TabsTrigger>
+          <TabsTrigger value="sessions">
+            Session Replays ({sessions.length})
+          </TabsTrigger>
+          <TabsTrigger value="refunds">
+            Refund Management ({refunds.length})
+          </TabsTrigger>
           <TabsTrigger value="analytics">Analytics</TabsTrigger>
         </TabsList>
 
@@ -492,29 +541,46 @@ export default function SupportToolkitDashboard() {
                         )}
                       </TableCell>
                       <TableCell>
-                        {session.duration ? formatDuration(session.duration) : 'Active'}
+                        {session.duration
+                          ? formatDuration(session.duration)
+                          : 'Active'}
                       </TableCell>
                       <TableCell>
                         <div className="flex flex-wrap gap-1">
-                          {session.metadata.documentTypes?.slice(0, 2).map((type) => (
-                            <Badge key={type} variant="outline" className="text-xs">
-                              {type}
-                            </Badge>
-                          ))}
-                          {(session.metadata.documentTypes?.length || 0) > 2 && (
+                          {session.metadata.documentTypes
+                            ?.slice(0, 2)
+                            .map((type) => (
+                              <Badge
+                                key={type}
+                                variant="outline"
+                                className="text-xs"
+                              >
+                                {type}
+                              </Badge>
+                            ))}
+                          {(session.metadata.documentTypes?.length || 0) >
+                            2 && (
                             <Badge variant="outline" className="text-xs">
-                              +{(session.metadata.documentTypes?.length || 0) - 2}
+                              +
+                              {(session.metadata.documentTypes?.length || 0) -
+                                2}
                             </Badge>
                           )}
                         </div>
                       </TableCell>
                       <TableCell>
                         {session.metadata.errors ? (
-                          <Badge className="bg-red-100 text-red-800" variant="outline">
+                          <Badge
+                            className="bg-red-100 text-red-800"
+                            variant="outline"
+                          >
                             {session.metadata.errors} errors
                           </Badge>
                         ) : (
-                          <Badge className="bg-green-100 text-green-800" variant="outline">
+                          <Badge
+                            className="bg-green-100 text-green-800"
+                            variant="outline"
+                          >
                             No errors
                           </Badge>
                         )}
@@ -524,13 +590,19 @@ export default function SupportToolkitDashboard() {
                         <div className="flex gap-2">
                           <Dialog>
                             <DialogTrigger asChild>
-                              <Button variant="ghost" size="sm" onClick={() => setSelectedSession(session)}>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => setSelectedSession(session)}
+                              >
                                 <Eye className="h-4 w-4" />
                               </Button>
                             </DialogTrigger>
                             <DialogContent className="max-w-4xl">
                               <DialogHeader>
-                                <DialogTitle>Session Replay - {session.sessionId}</DialogTitle>
+                                <DialogTitle>
+                                  Session Replay - {session.sessionId}
+                                </DialogTitle>
                               </DialogHeader>
                               <SessionReplayViewer session={session} />
                             </DialogContent>
@@ -571,7 +643,12 @@ export default function SupportToolkitDashboard() {
                   <Input
                     id="orderId"
                     value={refundForm.orderId}
-                    onChange={(e) => setRefundForm(prev => ({ ...prev, orderId: e.target.value }))}
+                    onChange={(e) =>
+                      setRefundForm((prev) => ({
+                        ...prev,
+                        orderId: e.target.value,
+                      }))
+                    }
                     placeholder="order_123..."
                   />
                 </div>
@@ -582,21 +659,39 @@ export default function SupportToolkitDashboard() {
                     type="number"
                     step="0.01"
                     value={refundForm.amount}
-                    onChange={(e) => setRefundForm(prev => ({ ...prev, amount: e.target.value }))}
+                    onChange={(e) =>
+                      setRefundForm((prev) => ({
+                        ...prev,
+                        amount: e.target.value,
+                      }))
+                    }
                     placeholder="0.00"
                   />
                 </div>
                 <div>
                   <Label htmlFor="reason">Reason</Label>
-                  <Select value={refundForm.reason} onValueChange={(value) => setRefundForm(prev => ({ ...prev, reason: value }))}>
+                  <Select
+                    value={refundForm.reason}
+                    onValueChange={(value) =>
+                      setRefundForm((prev) => ({ ...prev, reason: value }))
+                    }
+                  >
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="customer_request">Customer Request</SelectItem>
-                      <SelectItem value="technical_issue">Technical Issue</SelectItem>
-                      <SelectItem value="billing_error">Billing Error</SelectItem>
-                      <SelectItem value="fraud_protection">Fraud Protection</SelectItem>
+                      <SelectItem value="customer_request">
+                        Customer Request
+                      </SelectItem>
+                      <SelectItem value="technical_issue">
+                        Technical Issue
+                      </SelectItem>
+                      <SelectItem value="billing_error">
+                        Billing Error
+                      </SelectItem>
+                      <SelectItem value="fraud_protection">
+                        Fraud Protection
+                      </SelectItem>
                       <SelectItem value="goodwill">Goodwill</SelectItem>
                     </SelectContent>
                   </Select>
@@ -606,7 +701,12 @@ export default function SupportToolkitDashboard() {
                   <Textarea
                     id="notes"
                     value={refundForm.notes}
-                    onChange={(e) => setRefundForm(prev => ({ ...prev, notes: e.target.value }))}
+                    onChange={(e) =>
+                      setRefundForm((prev) => ({
+                        ...prev,
+                        notes: e.target.value,
+                      }))
+                    }
                     placeholder="Internal notes for this refund..."
                   />
                 </div>
@@ -638,30 +738,41 @@ export default function SupportToolkitDashboard() {
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-                      {refunds.filter(r => r.status === 'pending').map((refund) => (
-                        <TableRow key={refund.id}>
-                          <TableCell className="font-mono text-sm">{refund.orderId}</TableCell>
-                          <TableCell className="font-semibold">${refund.amount.toFixed(2)}</TableCell>
-                          <TableCell>
-                            <Badge variant="outline" className="capitalize">
-                              {refund.reason.replace('_', ' ')}
-                            </Badge>
-                          </TableCell>
-                          <TableCell>{refund.requestedBy.name}</TableCell>
-                          <TableCell>{formatDate(refund.createdAt)}</TableCell>
-                          <TableCell>
-                            <div className="flex gap-2">
-                              <Button size="sm" onClick={() => approveRefund(refund.id)}>
-                                <CheckCircle className="h-4 w-4 mr-1" />
-                                Approve
-                              </Button>
-                              <Button variant="outline" size="sm">
-                                <Eye className="h-4 w-4" />
-                              </Button>
-                            </div>
-                          </TableCell>
-                        </TableRow>
-                      ))}
+                      {refunds
+                        .filter((r) => r.status === 'pending')
+                        .map((refund) => (
+                          <TableRow key={refund.id}>
+                            <TableCell className="font-mono text-sm">
+                              {refund.orderId}
+                            </TableCell>
+                            <TableCell className="font-semibold">
+                              ${refund.amount.toFixed(2)}
+                            </TableCell>
+                            <TableCell>
+                              <Badge variant="outline" className="capitalize">
+                                {refund.reason.replace('_', ' ')}
+                              </Badge>
+                            </TableCell>
+                            <TableCell>{refund.requestedBy.name}</TableCell>
+                            <TableCell>
+                              {formatDate(refund.createdAt)}
+                            </TableCell>
+                            <TableCell>
+                              <div className="flex gap-2">
+                                <Button
+                                  size="sm"
+                                  onClick={() => approveRefund(refund.id)}
+                                >
+                                  <CheckCircle className="h-4 w-4 mr-1" />
+                                  Approve
+                                </Button>
+                                <Button variant="outline" size="sm">
+                                  <Eye className="h-4 w-4" />
+                                </Button>
+                              </div>
+                            </TableCell>
+                          </TableRow>
+                        ))}
                     </TableBody>
                   </Table>
                 </CardContent>
@@ -686,13 +797,25 @@ export default function SupportToolkitDashboard() {
                   <div className="flex items-center justify-between">
                     <span className="text-sm font-medium">Error Rate</span>
                     <span className="text-lg font-bold text-red-600">
-                      {((sessions.filter(s => s.metadata.errors && s.metadata.errors > 0).length / sessions.length) * 100).toFixed(1)}%
+                      {(
+                        (sessions.filter(
+                          (s) => s.metadata.errors && s.metadata.errors > 0,
+                        ).length /
+                          sessions.length) *
+                        100
+                      ).toFixed(1)}
+                      %
                     </span>
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-sm font-medium">Avg Duration</span>
                     <span className="text-lg font-bold">
-                      {formatDuration(sessions.reduce((sum, s) => sum + (s.duration || 0), 0) / sessions.length)}
+                      {formatDuration(
+                        sessions.reduce(
+                          (sum, s) => sum + (s.duration || 0),
+                          0,
+                        ) / sessions.length,
+                      )}
                     </span>
                   </div>
                 </div>
@@ -712,13 +835,23 @@ export default function SupportToolkitDashboard() {
                   <div className="flex items-center justify-between">
                     <span className="text-sm font-medium">Total Amount</span>
                     <span className="text-lg font-bold">
-                      ${refunds.reduce((sum, r) => sum + r.amount, 0).toFixed(2)}
+                      $
+                      {refunds.reduce((sum, r) => sum + r.amount, 0).toFixed(2)}
                     </span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium">Auto-Approval Rate</span>
+                    <span className="text-sm font-medium">
+                      Auto-Approval Rate
+                    </span>
                     <span className="text-lg font-bold text-green-600">
-                      {((refunds.filter(r => r.metadata.autoApprovalRules?.length).length / refunds.length) * 100).toFixed(1)}%
+                      {(
+                        (refunds.filter(
+                          (r) => r.metadata.autoApprovalRules?.length,
+                        ).length /
+                          refunds.length) *
+                        100
+                      ).toFixed(1)}
+                      %
                     </span>
                   </div>
                 </div>
@@ -744,23 +877,52 @@ function SessionReplayViewer({ session }: { session: SessionReplay }) {
       {/* Playback Controls */}
       <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
         <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm" onClick={() => setIsPlaying(!isPlaying)}>
-            {isPlaying ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setIsPlaying(!isPlaying)}
+          >
+            {isPlaying ? (
+              <Pause className="h-4 w-4" />
+            ) : (
+              <Play className="h-4 w-4" />
+            )}
           </Button>
-          <Button variant="outline" size="sm" onClick={() => setCurrentEventIndex(Math.max(0, currentEventIndex - 1))}>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() =>
+              setCurrentEventIndex(Math.max(0, currentEventIndex - 1))
+            }
+          >
             <Rewind className="h-4 w-4" />
           </Button>
-          <Button variant="outline" size="sm" onClick={() => setCurrentEventIndex(Math.min(session.events.length - 1, currentEventIndex + 1))}>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() =>
+              setCurrentEventIndex(
+                Math.min(session.events.length - 1, currentEventIndex + 1),
+              )
+            }
+          >
             <FastForward className="h-4 w-4" />
           </Button>
-          <Button variant="outline" size="sm" onClick={() => setCurrentEventIndex(0)}>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setCurrentEventIndex(0)}
+          >
             <RotateCcw className="h-4 w-4" />
           </Button>
         </div>
-        
+
         <div className="flex items-center gap-2">
           <span className="text-sm font-medium">Speed:</span>
-          <Select value={playbackSpeed.toString()} onValueChange={(value) => setPlaybackSpeed(parseFloat(value))}>
+          <Select
+            value={playbackSpeed.toString()}
+            onValueChange={(value) => setPlaybackSpeed(parseFloat(value))}
+          >
             <SelectTrigger className="w-20">
               <SelectValue />
             </SelectTrigger>
@@ -777,13 +939,19 @@ function SessionReplayViewer({ session }: { session: SessionReplay }) {
       {/* Progress Bar */}
       <div className="space-y-2">
         <div className="flex items-center justify-between text-sm">
-          <span>Event {currentEventIndex + 1} of {session.events.length}</span>
-          <span>{new Date(currentEvent?.timestamp || 0).toLocaleTimeString()}</span>
+          <span>
+            Event {currentEventIndex + 1} of {session.events.length}
+          </span>
+          <span>
+            {new Date(currentEvent?.timestamp || 0).toLocaleTimeString()}
+          </span>
         </div>
         <div className="w-full bg-gray-200 rounded-full h-2">
-          <div 
-            className="bg-blue-600 h-2 rounded-full transition-all" 
-            style={{ width: `${((currentEventIndex + 1) / session.events.length) * 100}%` }}
+          <div
+            className="bg-blue-600 h-2 rounded-full transition-all"
+            style={{
+              width: `${((currentEventIndex + 1) / session.events.length) * 100}%`,
+            }}
           />
         </div>
       </div>
@@ -792,36 +960,49 @@ function SessionReplayViewer({ session }: { session: SessionReplay }) {
       {currentEvent && (
         <Card>
           <CardHeader>
-            <CardTitle className="text-lg">Current Event: {currentEvent.type}</CardTitle>
+            <CardTitle className="text-lg">
+              Current Event: {currentEvent.type}
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-2 gap-4 text-sm">
               <div>
                 <span className="font-medium text-gray-600">Element:</span>
-                <p className="text-gray-900">{currentEvent.data.element || 'N/A'}</p>
+                <p className="text-gray-900">
+                  {currentEvent.data.element || 'N/A'}
+                </p>
               </div>
               <div>
                 <span className="font-medium text-gray-600">URL:</span>
-                <p className="text-gray-900 truncate">{currentEvent.data.url || 'N/A'}</p>
+                <p className="text-gray-900 truncate">
+                  {currentEvent.data.url || 'N/A'}
+                </p>
               </div>
               <div>
                 <span className="font-medium text-gray-600">Coordinates:</span>
                 <p className="text-gray-900">
-                  {currentEvent.data.coordinates ? `${currentEvent.data.coordinates.x}, ${currentEvent.data.coordinates.y}` : 'N/A'}
+                  {currentEvent.data.coordinates
+                    ? `${currentEvent.data.coordinates.x}, ${currentEvent.data.coordinates.y}`
+                    : 'N/A'}
                 </p>
               </div>
               <div>
                 <span className="font-medium text-gray-600">Value:</span>
-                <p className="text-gray-900">{currentEvent.data.value || 'N/A'}</p>
+                <p className="text-gray-900">
+                  {currentEvent.data.value || 'N/A'}
+                </p>
               </div>
             </div>
-            
-            {currentEvent.type === 'error' && currentEvent.data.errorMessage && (
-              <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg">
-                <span className="font-medium text-red-800">Error:</span>
-                <p className="text-red-700 text-sm mt-1">{currentEvent.data.errorMessage}</p>
-              </div>
-            )}
+
+            {currentEvent.type === 'error' &&
+              currentEvent.data.errorMessage && (
+                <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+                  <span className="font-medium text-red-800">Error:</span>
+                  <p className="text-red-700 text-sm mt-1">
+                    {currentEvent.data.errorMessage}
+                  </p>
+                </div>
+              )}
           </CardContent>
         </Card>
       )}
@@ -837,15 +1018,23 @@ function SessionReplayViewer({ session }: { session: SessionReplay }) {
               <div
                 key={event.id}
                 className={`p-2 rounded cursor-pointer transition-colors ${
-                  index === currentEventIndex ? 'bg-blue-100 border border-blue-300' : 'bg-gray-50 hover:bg-gray-100'
+                  index === currentEventIndex
+                    ? 'bg-blue-100 border border-blue-300'
+                    : 'bg-gray-50 hover:bg-gray-100'
                 }`}
                 onClick={() => setCurrentEventIndex(index)}
               >
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium capitalize">{event.type.replace('_', ' ')}</span>
-                  <span className="text-xs text-gray-500">{new Date(event.timestamp).toLocaleTimeString()}</span>
+                  <span className="text-sm font-medium capitalize">
+                    {event.type.replace('_', ' ')}
+                  </span>
+                  <span className="text-xs text-gray-500">
+                    {new Date(event.timestamp).toLocaleTimeString()}
+                  </span>
                 </div>
-                <p className="text-xs text-gray-600 truncate">{event.data.element || event.data.url}</p>
+                <p className="text-xs text-gray-600 truncate">
+                  {event.data.element || event.data.url}
+                </p>
               </div>
             ))}
           </div>

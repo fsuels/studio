@@ -24,13 +24,22 @@ export const childTravelConsentMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Child Travel Consent',
-      description: 'Consent form for minor children traveling without both parents.',
-      aliases: ['minor travel consent', 'child travel authorization', 'travel permission letter'],
+      description:
+        'Consent form for minor children traveling without both parents.',
+      aliases: [
+        'minor travel consent',
+        'child travel authorization',
+        'travel permission letter',
+      ],
     },
     es: {
       name: 'Consentimiento de Viaje de Menor',
-      description: 'Formulario de consentimiento para menores que viajan sin ambos padres.',
-      aliases: ['consentimiento de viaje menor', 'autorización de viaje infantil'],
+      description:
+        'Formulario de consentimiento para menores que viajan sin ambos padres.',
+      aliases: [
+        'consentimiento de viaje menor',
+        'autorización de viaje infantil',
+      ],
     },
   },
 };

@@ -8,7 +8,12 @@ export { default as Breadcrumb } from './Breadcrumb';
 export { default as RoleSelector } from './RoleSelector';
 export { default as SituationBasedCategoryGroups } from './SituationBasedCategoryGroups';
 export { default as TaxonomyErrorBoundary } from './TaxonomyErrorBoundary';
-export { default as AccessibleTaxonomyNav, SkipToContent, useKeyboardShortcuts, announceToScreenReader } from './AccessibleTaxonomyNav';
+export {
+  default as AccessibleTaxonomyNav,
+  SkipToContent,
+  useKeyboardShortcuts,
+  announceToScreenReader,
+} from './AccessibleTaxonomyNav';
 
 // Navigation components
 export * from './navigation';

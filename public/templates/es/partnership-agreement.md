@@ -56,26 +56,26 @@ Este Acuerdo se regirá e interpretará de conformidad con las leyes del Estado 
 
 **EN FE DE LO CUAL**, las Partes han ejecutado este Acuerdo en la fecha indicada anteriormente.
 
-| Firma del Vendedor                                    | Fecha                  |
-| ----------------------------------------------------- | ---------------------- |
-| **********\_\_\_\_**********                          | **********\_********** |
-| ({{seller_name}})                                     |                        |
-| {{#if seller_phone}}Teléfono: {{seller_phone}}{{/if}} |                        |
+| Firma del Vendedor                                    | Fecha                              |
+| ----------------------------------------------------- | ---------------------------------- |
+| \***\*\*\*\*\***\_\_\_\_\***\*\*\*\*\***              | \***\*\*\*\*\***\_\***\*\*\*\*\*** |
+| ({{seller_name}})                                     |                                    |
+| {{#if seller_phone}}Teléfono: {{seller_phone}}{{/if}} |                                    |
 
 {{#if seller2_name}}
-| **********\_\_\_\_**********| **********\_**********|
+| \***\*\*\*\*\***\_\_\_\_\***\*\*\*\*\***| \***\*\*\*\*\***\_\***\*\*\*\*\***|
 | ({{seller2_name}}) | |
 | {{#if seller2_phone}}Teléfono: {{seller2_phone}}{{/if}} | |
 {{/if}}
 
-| Firma del Comprador                                 | Fecha                  |
-| --------------------------------------------------- | ---------------------- |
-| **********\_\_\_\_**********                        | **********\_********** |
-| ({{buyer_name}})                                    |                        |
-| {{#if buyer_phone}}Teléfono: {{buyer_phone}}{{/if}} |                        |
+| Firma del Comprador                                 | Fecha                              |
+| --------------------------------------------------- | ---------------------------------- |
+| \***\*\*\*\*\***\_\_\_\_\***\*\*\*\*\***            | \***\*\*\*\*\***\_\***\*\*\*\*\*** |
+| ({{buyer_name}})                                    |                                    |
+| {{#if buyer_phone}}Teléfono: {{buyer_phone}}{{/if}} |                                    |
 
 {{#if buyer2_name}}
-| **********\_\_\_\_**********| **********\_**********|
+| \***\*\*\*\*\***\_\_\_\_\***\*\*\*\*\***| \***\*\*\*\*\***\_\***\*\*\*\*\***|
 | ({{buyer2_name}}) | |
 | {{#if buyer2_phone}}Teléfono: {{buyer2_phone}}{{/if}} | |
 {{/if}}
@@ -85,14 +85,15 @@ Este Acuerdo se regirá e interpretará de conformidad con las leyes del Estado 
 Estado de **{{state}}**
 Condado de **{{county}}**
 
-En este día **\_\_\_\_** de ********\_\_******, 20\_\_**, ante mí, el suscrito, Notario Público en y para dicho Estado, comparecieron personalmente **{{seller_name}}** y **{{buyer_name}}**, conocidos personalmente por mí (o comprobados ante mí sobre la base de evidencia satisfactoria) como las personas cuyos nombres están suscritos a este Acuerdo y reconocieron que lo ejecutaron para los fines contenidos en el mismo.
+En este día **\_\_\_\_** de **\*\*\*\***\_\_**\*\***, 20\_\_**, ante mí, el suscrito, Notario Público en y para dicho Estado, comparecieron personalmente **{{seller_name}}** y **{{buyer_name}}\*\*, conocidos personalmente por mí (o comprobados ante mí sobre la base de evidencia satisfactoria) como las personas cuyos nombres están suscritos a este Acuerdo y reconocieron que lo ejecutaron para los fines contenidos en el mismo.
 
-**Notario Público:** ************\_\_************
-Mi Comisión Expira: ******\_\_******
+**Notario Público:** \***\*\*\*\*\*\*\***\_\_\***\*\*\*\*\*\*\***
+Mi Comisión Expira: **\*\***\_\_**\*\***
 
 ---
 
 _Plantilla generada por 123 LegalDoc. Reemplace los campos entre corchetes con datos reales._
 
 ---
+
 © 2025 123LegalDoc · Formulario DIY · No es asesoramiento legal · Términos: 123LegalDoc.com/terms

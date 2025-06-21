@@ -17,7 +17,12 @@ export const receiptQuestions: Question[] = [
     required: true,
     placeholder: 'Street, City, State, ZIP',
   },
-  { id: 'payeeName', label: 'Payee Name (Receiver)', type: 'text', required: true },
+  {
+    id: 'payeeName',
+    label: 'Payee Name (Receiver)',
+    type: 'text',
+    required: true,
+  },
   {
     id: 'payeeAddress',
     label: 'Payee Address',

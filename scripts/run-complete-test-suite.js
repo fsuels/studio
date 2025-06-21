@@ -17,8 +17,8 @@ class CompleteTestSuite {
         totalTests: 0,
         passed: 0,
         failed: 0,
-        duration: 0
-      }
+        duration: 0,
+      },
     };
     this.startTime = Date.now();
   }
@@ -26,17 +26,17 @@ class CompleteTestSuite {
   async runPhase(phaseName, command, description) {
     console.log(`\n🔄 ${phaseName}: ${description}`);
     console.log('='.repeat(50));
-    
+
     const phaseStart = Date.now();
     let success = false;
     let output = '';
     let error = '';
 
     try {
-      output = execSync(command, { 
+      output = execSync(command, {
         encoding: 'utf8',
         timeout: 300000, // 5 minute timeout
-        cwd: process.cwd()
+        cwd: process.cwd(),
       });
       success = true;
       console.log(`✅ ${phaseName} completed successfully`);
@@ -46,14 +46,14 @@ class CompleteTestSuite {
     }
 
     const duration = Date.now() - phaseStart;
-    
+
     this.results.phases[phaseName] = {
       description,
       command,
       success,
       duration,
       output: output.slice(0, 1000), // Truncate long output
-      error: error.slice(0, 500)
+      error: error.slice(0, 500),
     };
 
     return success;
@@ -67,44 +67,46 @@ class CompleteTestSuite {
     await this.runPhase(
       'Performance Benchmarks',
       'node scripts/performance-benchmark.js',
-      'Analyzing performance metrics and Core Web Vitals'
+      'Analyzing performance metrics and Core Web Vitals',
     );
 
     // Phase 2: Accessibility Testing
     await this.runPhase(
       'Accessibility Tests',
       'npx playwright test e2e/accessibility-tests.spec.ts',
-      'Testing WCAG 2.1 AA compliance and keyboard navigation'
+      'Testing WCAG 2.1 AA compliance and keyboard navigation',
     );
 
     // Phase 3: Visual Regression Testing
     await this.runPhase(
       'Visual Regression Tests',
       'npx playwright test e2e/visual-regression.spec.ts',
-      'Checking visual consistency across components and viewports'
+      'Checking visual consistency across components and viewports',
     );
 
     // Phase 4: End-to-End User Journey Testing
     await this.runPhase(
       'E2E User Journeys',
       'npx playwright test e2e/user-journeys.spec.ts',
-      'Testing critical user paths and workflows'
+      'Testing critical user paths and workflows',
     );
 
     // Phase 5: Component Unit Tests
-    const hasJest = fs.existsSync(path.join(process.cwd(), 'node_modules/.bin/jest'));
+    const hasJest = fs.existsSync(
+      path.join(process.cwd(), 'node_modules/.bin/jest'),
+    );
     if (hasJest) {
       await this.runPhase(
         'Unit Tests',
         'npm test',
-        'Running component unit tests and integration tests'
+        'Running component unit tests and integration tests',
       );
     } else {
       console.log('⏭️  Skipping unit tests - Jest not configured');
       this.results.phases['Unit Tests'] = {
         description: 'Component unit tests',
         skipped: true,
-        reason: 'Jest not configured'
+        reason: 'Jest not configured',
       };
     }
 
@@ -112,14 +114,14 @@ class CompleteTestSuite {
     await this.runPhase(
       'Document Library Validation',
       'node scripts/validate-document-library.js',
-      'Validating all 38 document types and schemas'
+      'Validating all 38 document types and schemas',
     );
 
     // Phase 7: SEO Infrastructure Validation
     await this.runPhase(
       'SEO Validation',
       'node scripts/validate-seo-infrastructure.js',
-      'Checking SEO metadata, sitemaps, and structured data'
+      'Checking SEO metadata, sitemaps, and structured data',
     );
 
     this.generateSummary();
@@ -134,7 +136,7 @@ class CompleteTestSuite {
     let passed = 0;
     let failed = 0;
 
-    Object.values(this.results.phases).forEach(phase => {
+    Object.values(this.results.phases).forEach((phase) => {
       if (!phase.skipped) {
         totalTests++;
         if (phase.success) {
@@ -150,8 +152,9 @@ class CompleteTestSuite {
       totalTests,
       passed,
       failed,
-      successRate: totalTests > 0 ? ((passed / totalTests) * 100).toFixed(1) : 0,
-      overallStatus: failed === 0 ? 'PASSED' : 'FAILED'
+      successRate:
+        totalTests > 0 ? ((passed / totalTests) * 100).toFixed(1) : 0,
+      overallStatus: failed === 0 ? 'PASSED' : 'FAILED',
     };
 
     console.log('\n📊 Test Suite Summary');
@@ -160,14 +163,18 @@ class CompleteTestSuite {
     console.log(`Passed: ${passed}`);
     console.log(`Failed: ${failed}`);
     console.log(`Success Rate: ${this.results.summary.successRate}%`);
-    console.log(`Duration: ${(this.results.summary.duration / 1000).toFixed(1)}s`);
+    console.log(
+      `Duration: ${(this.results.summary.duration / 1000).toFixed(1)}s`,
+    );
     console.log(`Overall Status: ${this.results.summary.overallStatus}`);
 
     if (failed > 0) {
       console.log('\n❌ Failed Phases:');
       Object.entries(this.results.phases).forEach(([name, phase]) => {
         if (!phase.success && !phase.skipped) {
-          console.log(`  - ${name}: ${phase.error?.split('\n')[0] || 'Unknown error'}`);
+          console.log(
+            `  - ${name}: ${phase.error?.split('\n')[0] || 'Unknown error'}`,
+          );
         }
       });
     }
@@ -176,17 +183,17 @@ class CompleteTestSuite {
   saveResults() {
     const resultsPath = `test-suite-results-${Date.now()}.json`;
     fs.writeFileSync(resultsPath, JSON.stringify(this.results, null, 2));
-    
+
     console.log(`\n💾 Results saved to: ${resultsPath}`);
-    
+
     // Also create a simple status file for CI/CD
     const statusFile = {
       status: this.results.summary.overallStatus,
       timestamp: this.results.timestamp,
       successRate: this.results.summary.successRate,
-      duration: this.results.summary.duration
+      duration: this.results.summary.duration,
     };
-    
+
     fs.writeFileSync('test-status.json', JSON.stringify(statusFile, null, 2));
   }
 }
@@ -290,11 +297,12 @@ process.exit(errors > 0 ? 1 : 0);
 async function main() {
   try {
     await createSupportingScripts();
-    
+
     const testSuite = new CompleteTestSuite();
     await testSuite.runTestSuite();
-    
-    const exitCode = testSuite.results.summary.overallStatus === 'PASSED' ? 0 : 1;
+
+    const exitCode =
+      testSuite.results.summary.overallStatus === 'PASSED' ? 0 : 1;
     process.exit(exitCode);
   } catch (error) {
     console.error('❌ Test suite execution failed:', error.message);

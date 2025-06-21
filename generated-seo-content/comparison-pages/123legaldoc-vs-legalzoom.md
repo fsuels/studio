@@ -6,25 +6,28 @@ Choosing the right legal document service is crucial for your business. This com
 
 ### Quick Comparison Summary
 
-| Feature | 123LegalDoc | LegalZoom |
-|---------|-------------|-----------|
-| **Price** | Starting at $29 | Starting at $79+ |
-| **Time to Complete** | 10-15 minutes | 30-60 minutes |
-| **State Compliance** | All 50 states | Limited states |
-| **Customer Support** | 24/7 chat & phone | Business hours only |
-| **Money-Back Guarantee** | 100% | Limited |
+| Feature                  | 123LegalDoc       | LegalZoom           |
+| ------------------------ | ----------------- | ------------------- |
+| **Price**                | Starting at $29   | Starting at $79+    |
+| **Time to Complete**     | 10-15 minutes     | 30-60 minutes       |
+| **State Compliance**     | All 50 states     | Limited states      |
+| **Customer Support**     | 24/7 chat & phone | Business hours only |
+| **Money-Back Guarantee** | 100%              | Limited             |
 
 ### Detailed Feature Comparison
 
 #### Pricing & Value
+
 - **123LegalDoc**: Transparent pricing starting at $29
 - **LegalZoom**: Higher prices with hidden fees
 
 #### Document Quality
+
 - **123LegalDoc**: Attorney-created, state-specific templates
 - **LegalZoom**: Generic templates with limited customization
 
 #### User Experience
+
 - **123LegalDoc**: Intuitive, fast completion process
 - **LegalZoom**: Complex, time-consuming workflow
 
@@ -38,9 +41,9 @@ Choosing the right legal document service is crucial for your business. This com
 
 ### Customer Reviews
 
-*"Switched from LegalZoom to 123LegalDoc and saved hundreds. Much easier to use!"* - Sarah M.
+_"Switched from LegalZoom to 123LegalDoc and saved hundreds. Much easier to use!"_ - Sarah M.
 
-*"123LegalDoc's customer service is outstanding. LegalZoom never responded to my questions."* - Mike R.
+_"123LegalDoc's customer service is outstanding. LegalZoom never responded to my questions."_ - Mike R.
 
 [Start with 123LegalDoc Today]
 

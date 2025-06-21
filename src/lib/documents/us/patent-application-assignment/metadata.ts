@@ -24,13 +24,25 @@ export const patentApplicationAssignmentMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Patent Application Assignment Agreement',
-      description: 'Legal document to transfer patent application rights from one party to another.',
-      aliases: ['patent app assignment', 'application transfer', 'patent application transfer', 'patent rights assignment'],
+      description:
+        'Legal document to transfer patent application rights from one party to another.',
+      aliases: [
+        'patent app assignment',
+        'application transfer',
+        'patent application transfer',
+        'patent rights assignment',
+      ],
     },
     es: {
       name: 'Acuerdo de Asignación de Solicitud de Patente',
-      description: 'Documento legal para transferir los derechos de solicitud de patente de una parte a otra.',
-      aliases: ['asignación solicitud patente', 'transferencia aplicación', 'transferencia solicitud patente', 'asignación derechos patente'],
+      description:
+        'Documento legal para transferir los derechos de solicitud de patente de una parte a otra.',
+      aliases: [
+        'asignación solicitud patente',
+        'transferencia aplicación',
+        'transferencia solicitud patente',
+        'asignación derechos patente',
+      ],
     },
   },
 };

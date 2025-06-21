@@ -24,12 +24,18 @@ export const jobApplicationFormMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Job Application Form',
-      description: 'Professional job application form for collecting candidate information.',
-      aliases: ['employment application', 'hiring form', 'candidate application'],
+      description:
+        'Professional job application form for collecting candidate information.',
+      aliases: [
+        'employment application',
+        'hiring form',
+        'candidate application',
+      ],
     },
     es: {
       name: 'Formulario de Solicitud de Empleo',
-      description: 'Formulario profesional de solicitud de empleo para recopilar información de candidatos.',
+      description:
+        'Formulario profesional de solicitud de empleo para recopilar información de candidatos.',
       aliases: ['solicitud de trabajo', 'formulario de contratación'],
     },
   },

@@ -42,7 +42,7 @@ class YjsCollaborationServer {
   private createServer(): Server {
     return Server.configure({
       port: parseInt(process.env.COLLABORATION_PORT || '3001'),
-      
+
       extensions: [
         new Logger({
           onLoadDocument: (data) => {
@@ -52,10 +52,14 @@ class YjsCollaborationServer {
             console.log(`Document stored: ${data.documentName}`);
           },
           onConnect: (data) => {
-            console.log(`User connected: ${data.context.user?.name || 'Anonymous'} to ${data.documentName}`);
+            console.log(
+              `User connected: ${data.context.user?.name || 'Anonymous'} to ${data.documentName}`,
+            );
           },
           onDisconnect: (data) => {
-            console.log(`User disconnected: ${data.context.user?.name || 'Anonymous'} from ${data.documentName}`);
+            console.log(
+              `User disconnected: ${data.context.user?.name || 'Anonymous'} from ${data.documentName}`,
+            );
           },
         }),
 
@@ -69,10 +73,10 @@ class YjsCollaborationServer {
 
       async onAuthenticate(data) {
         const { token } = data;
-        
+
         try {
           const user = await authenticateCollaborator(token);
-          
+
           if (!user) {
             throw new Error('Invalid authentication token');
           }
@@ -85,7 +89,7 @@ class YjsCollaborationServer {
               avatar: user.avatar,
               role: user.role,
               color: user.color || this.generateUserColor(user.id),
-            }
+            },
           };
         } catch (error) {
           console.error('Authentication failed:', error);
@@ -99,7 +103,7 @@ class YjsCollaborationServer {
 
         // Check if user has access to this document
         const hasAccess = await authorizeDocumentAccess(documentName, user.id);
-        
+
         if (!hasAccess) {
           throw new Error('Access denied to document');
         }
@@ -110,10 +114,10 @@ class YjsCollaborationServer {
 
       async onStoreDocument(data) {
         const { documentName, document, context } = data;
-        
+
         // Store document updates in your database
         await this.persistDocument(documentName, document, context.user);
-        
+
         // Broadcast document update event
         await this.presenceService.broadcastToDocument(documentName, {
           type: 'document_updated',
@@ -146,11 +150,14 @@ class YjsCollaborationServer {
           });
 
           // Send current presence to new user
-          const currentPresence = await this.presenceService.getDocumentPresence(documentName);
-          context.sendStateless(JSON.stringify({
-            type: 'presence_update',
-            presence: currentPresence,
-          }));
+          const currentPresence =
+            await this.presenceService.getDocumentPresence(documentName);
+          context.sendStateless(
+            JSON.stringify({
+              type: 'presence_update',
+              presence: currentPresence,
+            }),
+          );
         }
       },
 
@@ -161,9 +168,12 @@ class YjsCollaborationServer {
         if (user) {
           // Remove user presence
           await this.presenceService.removeUserPresence(user.id, documentName);
-          
+
           // Remove cursor position
-          await this.presenceService.removeCursorPosition(user.id, documentName);
+          await this.presenceService.removeCursorPosition(
+            user.id,
+            documentName,
+          );
 
           // Broadcast user left event
           await this.presenceService.broadcastToDocument(documentName, {
@@ -176,7 +186,7 @@ class YjsCollaborationServer {
 
       async onRequest(data) {
         const { request, response } = data;
-        
+
         // Handle custom requests like cursor positions, mentions, etc.
         if (request.headers['x-custom-action']) {
           return this.handleCustomAction(data);
@@ -185,7 +195,7 @@ class YjsCollaborationServer {
 
       async onMessage(data) {
         const { message, context, documentName } = data;
-        
+
         try {
           const messageData = JSON.parse(message);
           await this.handleCustomMessage(messageData, context, documentName);
@@ -196,18 +206,20 @@ class YjsCollaborationServer {
     });
   }
 
-  private async initializeDocument(documentName: string): Promise<Uint8Array | null> {
+  private async initializeDocument(
+    documentName: string,
+  ): Promise<Uint8Array | null> {
     try {
       // Try to load existing document from your database
       const existingDoc = await this.loadPersistedDocument(documentName);
-      
+
       if (existingDoc) {
         return existingDoc;
       }
 
       // Create new document
       const ydoc = new Y.Doc();
-      
+
       // Initialize with basic structure for legal documents
       const ytext = ydoc.getText('content');
       const ymeta = ydoc.getMap('metadata');
@@ -226,10 +238,14 @@ class YjsCollaborationServer {
     }
   }
 
-  private async persistDocument(documentName: string, document: Document, user?: CollaboratorInfo): Promise<void> {
+  private async persistDocument(
+    documentName: string,
+    document: Document,
+    user?: CollaboratorInfo,
+  ): Promise<void> {
     try {
       const update = Y.encodeStateAsUpdate(document);
-      
+
       // Store in your database (implement based on your DB structure)
       await this.saveDocumentUpdate({
         documentId: documentName,
@@ -237,25 +253,26 @@ class YjsCollaborationServer {
         userId: user?.id,
         timestamp: Date.now(),
       });
-
     } catch (error) {
       console.error('Error persisting document:', error);
     }
   }
 
-  private async loadPersistedDocument(documentName: string): Promise<Uint8Array | null> {
+  private async loadPersistedDocument(
+    documentName: string,
+  ): Promise<Uint8Array | null> {
     try {
       // Load from your database (implement based on your DB structure)
       const updates = await this.getDocumentUpdates(documentName);
-      
+
       if (updates.length === 0) {
         return null;
       }
 
       const ydoc = new Y.Doc();
-      
+
       // Apply all updates
-      updates.forEach(update => {
+      updates.forEach((update) => {
         Y.applyUpdate(ydoc, new Uint8Array(update.update));
       });
 
@@ -267,16 +284,20 @@ class YjsCollaborationServer {
   }
 
   private async handleCustomMessage(
-    message: any, 
-    context: any, 
-    documentName: string
+    message: any,
+    context: any,
+    documentName: string,
   ): Promise<void> {
     const user = context.user as CollaboratorInfo;
 
     switch (message.type) {
       case 'cursor_update':
-        await this.presenceService.setCursorPosition(user.id, documentName, message.position);
-        
+        await this.presenceService.setCursorPosition(
+          user.id,
+          documentName,
+          message.position,
+        );
+
         // Broadcast cursor update to other users
         await this.presenceService.broadcastToDocument(documentName, {
           type: 'cursor_moved',
@@ -322,7 +343,11 @@ class YjsCollaborationServer {
     // This can be used for features like file uploads, mentions, etc.
   }
 
-  private async handleCommentAdd(message: any, user: CollaboratorInfo, documentName: string): Promise<void> {
+  private async handleCommentAdd(
+    message: any,
+    user: CollaboratorInfo,
+    documentName: string,
+  ): Promise<void> {
     const comment = {
       id: message.commentId || this.generateId(),
       content: message.content,
@@ -343,7 +368,11 @@ class YjsCollaborationServer {
     });
   }
 
-  private async handleMention(message: any, user: CollaboratorInfo, documentName: string): Promise<void> {
+  private async handleMention(
+    message: any,
+    user: CollaboratorInfo,
+    documentName: string,
+  ): Promise<void> {
     const mention = {
       id: this.generateId(),
       fromUser: user,
@@ -368,15 +397,21 @@ class YjsCollaborationServer {
 
   private generateUserColor(userId: string): string {
     const colors = [
-      '#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', 
-      '#FFEAA7', '#DDA0DD', '#98D8C8', '#FFB6C1'
+      '#FF6B6B',
+      '#4ECDC4',
+      '#45B7D1',
+      '#96CEB4',
+      '#FFEAA7',
+      '#DDA0DD',
+      '#98D8C8',
+      '#FFB6C1',
     ];
-    
+
     let hash = 0;
     for (let i = 0; i < userId.length; i++) {
       hash = userId.charCodeAt(i) + ((hash << 5) - hash);
     }
-    
+
     return colors[Math.abs(hash) % colors.length];
   }
 
@@ -408,7 +443,9 @@ class YjsCollaborationServer {
 
   public async start(): Promise<void> {
     await this.server.listen();
-    console.log(`🚀 Yjs Collaboration Server running on port ${process.env.COLLABORATION_PORT || 3001}`);
+    console.log(
+      `🚀 Yjs Collaboration Server running on port ${process.env.COLLABORATION_PORT || 3001}`,
+    );
   }
 
   public async stop(): Promise<void> {

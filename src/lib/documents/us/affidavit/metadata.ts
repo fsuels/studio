@@ -23,21 +23,23 @@ export const affidavitMeta: LegalDocument = {
   translations: {
     en: {
       name: 'General Affidavit',
-      description: 'Create a legally binding general affidavit with our easy-to-use template. State-specific requirements included.',
+      description:
+        'Create a legally binding general affidavit with our easy-to-use template. State-specific requirements included.',
       aliases: [
         'sworn statement',
         'sworn declaration',
         'statement under oath',
-        'legal affidavit'
+        'legal affidavit',
       ],
     },
     es: {
       name: 'Declaración Jurada General',
-      description: 'Crea una declaración jurada general legalmente válida con nuestra plantilla fácil de usar. Incluye requisitos específicos del estado.',
+      description:
+        'Crea una declaración jurada general legalmente válida con nuestra plantilla fácil de usar. Incluye requisitos específicos del estado.',
       aliases: [
         'declaración jurada',
         'declaración bajo juramento',
-        'afidávit legal'
+        'afidávit legal',
       ],
     },
   },

@@ -36,11 +36,7 @@ export const demandLetterMeta: LegalDocument = {
       name: 'Carta de Demanda de Pago',
       description:
         'Crea una Carta de Demanda de Pago legalmente válida con nuestra plantilla fácil de usar. Incluye requisitos específicos del estado.',
-      aliases: [
-        'carta de cobro',
-        'aviso de demanda',
-        'carta de reclamación',
-      ],
+      aliases: ['carta de cobro', 'aviso de demanda', 'carta de reclamación'],
     },
   },
 };

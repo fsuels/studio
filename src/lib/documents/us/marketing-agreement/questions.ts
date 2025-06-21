@@ -6,8 +6,8 @@ export const marketingAgreementQuestions: FormQuestion[] = [
     type: 'text',
     label: 'Client Name',
     required: true,
-    placeholder: 'Enter the client\'s name or company name',
-    validation: { min: 1 }
+    placeholder: "Enter the client's name or company name",
+    validation: { min: 1 },
   },
   {
     id: 'clientAddress',
@@ -15,15 +15,15 @@ export const marketingAgreementQuestions: FormQuestion[] = [
     label: 'Client Address',
     required: true,
     placeholder: 'Enter the complete address of the client',
-    validation: { min: 10, max: 300 }
+    validation: { min: 10, max: 300 },
   },
   {
     id: 'marketingCompanyName',
     type: 'text',
     label: 'Marketing Company Name',
     required: true,
-    placeholder: 'Enter the marketing company\'s name',
-    validation: { min: 1 }
+    placeholder: "Enter the marketing company's name",
+    validation: { min: 1 },
   },
   {
     id: 'marketingCompanyAddress',
@@ -31,7 +31,7 @@ export const marketingAgreementQuestions: FormQuestion[] = [
     label: 'Marketing Company Address',
     required: true,
     placeholder: 'Enter the complete address of the marketing company',
-    validation: { min: 10, max: 300 }
+    validation: { min: 10, max: 300 },
   },
   {
     id: 'campaignDescription',
@@ -39,7 +39,7 @@ export const marketingAgreementQuestions: FormQuestion[] = [
     label: 'Campaign Description',
     required: true,
     placeholder: 'Describe the marketing campaign and objectives',
-    validation: { min: 20, max: 1000 }
+    validation: { min: 20, max: 1000 },
   },
   {
     id: 'campaignDuration',
@@ -47,7 +47,7 @@ export const marketingAgreementQuestions: FormQuestion[] = [
     label: 'Campaign Duration',
     required: true,
     placeholder: 'e.g., 6 months, 1 year',
-    validation: { min: 1 }
+    validation: { min: 1 },
   },
   {
     id: 'totalBudget',
@@ -55,7 +55,7 @@ export const marketingAgreementQuestions: FormQuestion[] = [
     label: 'Total Marketing Budget',
     required: true,
     validation: { min: 0 },
-    placeholder: 'Enter the total budget in dollars'
+    placeholder: 'Enter the total budget in dollars',
   },
   {
     id: 'paymentStructure',
@@ -66,8 +66,8 @@ export const marketingAgreementQuestions: FormQuestion[] = [
       { value: 'monthly', label: 'Monthly Payments' },
       { value: 'milestone', label: 'Milestone-Based' },
       { value: 'performance', label: 'Performance-Based' },
-      { value: 'upfront', label: 'Upfront Payment' }
-    ]
+      { value: 'upfront', label: 'Upfront Payment' },
+    ],
   },
   {
     id: 'paymentTerms',
@@ -75,7 +75,7 @@ export const marketingAgreementQuestions: FormQuestion[] = [
     label: 'Payment Terms',
     required: true,
     placeholder: 'Describe the payment schedule and terms',
-    validation: { min: 10, max: 500 }
+    validation: { min: 10, max: 500 },
   },
   {
     id: 'reportingFrequency',
@@ -86,8 +86,8 @@ export const marketingAgreementQuestions: FormQuestion[] = [
     options: [
       { value: 'weekly', label: 'Weekly Reports' },
       { value: 'monthly', label: 'Monthly Reports' },
-      { value: 'quarterly', label: 'Quarterly Reports' }
-    ]
+      { value: 'quarterly', label: 'Quarterly Reports' },
+    ],
   },
   {
     id: 'contentOwnership',
@@ -98,15 +98,15 @@ export const marketingAgreementQuestions: FormQuestion[] = [
     options: [
       { value: 'client', label: 'Client owns all content' },
       { value: 'agency', label: 'Agency retains content rights' },
-      { value: 'shared', label: 'Shared ownership' }
-    ]
+      { value: 'shared', label: 'Shared ownership' },
+    ],
   },
   {
     id: 'confidentialityClause',
     type: 'checkbox',
     label: 'Include Confidentiality Clause',
     required: false,
-    defaultValue: true
+    defaultValue: true,
   },
   {
     id: 'terminationNotice',
@@ -114,7 +114,7 @@ export const marketingAgreementQuestions: FormQuestion[] = [
     label: 'Termination Notice Period',
     required: false,
     defaultValue: '30 days',
-    placeholder: 'e.g., 30 days, 60 days'
+    placeholder: 'e.g., 30 days, 60 days',
   },
   {
     id: 'additionalTerms',
@@ -122,13 +122,13 @@ export const marketingAgreementQuestions: FormQuestion[] = [
     label: 'Additional Terms',
     required: false,
     placeholder: 'Enter any additional terms or conditions',
-    validation: { max: 1000 }
+    validation: { max: 1000 },
   },
   {
     id: 'agreementDate',
     type: 'date',
     label: 'Agreement Date',
     required: true,
-    helpText: 'Date this marketing agreement is signed'
-  }
+    helpText: 'Date this marketing agreement is signed',
+  },
 ];

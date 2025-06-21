@@ -1,7 +1,13 @@
 // Enhanced role-based access control system for legal document SaaS
-export type UserRole = 'super_admin' | 'admin' | 'support' | 'qa' | 'user' | 'viewer';
+export type UserRole =
+  | 'super_admin'
+  | 'admin'
+  | 'support'
+  | 'qa'
+  | 'user'
+  | 'viewer';
 
-export type Permission = 
+export type Permission =
   // Admin permissions
   | 'admin.full_access'
   | 'admin.user_management'
@@ -12,7 +18,7 @@ export type Permission =
   | 'admin.view_audit_logs'
   | 'admin.manage_compliance'
   | 'admin.financial_data'
-  
+
   // Support permissions
   | 'support.view_customers'
   | 'support.impersonate_customers'
@@ -22,7 +28,7 @@ export type Permission =
   | 'support.refund_orders'
   | 'support.send_emails'
   | 'support.view_basic_analytics'
-  
+
   // QA permissions
   | 'qa.test_environments'
   | 'qa.feature_preview'
@@ -30,7 +36,7 @@ export type Permission =
   | 'qa.view_test_data'
   | 'qa.manage_test_scenarios'
   | 'qa.access_dev_tools'
-  
+
   // User permissions
   | 'user.create_documents'
   | 'user.view_own_documents'
@@ -38,14 +44,14 @@ export type Permission =
   | 'user.edit_profile'
   | 'user.view_billing'
   | 'user.upgrade_plan'
-  
+
   // Document permissions
   | 'documents.create'
   | 'documents.view_all'
   | 'documents.edit_all'
   | 'documents.delete_all'
   | 'documents.manage_templates'
-  
+
   // Analytics permissions
   | 'analytics.view_revenue'
   | 'analytics.view_user_data'
@@ -101,7 +107,11 @@ export interface ImpersonationSession {
   userAgent: string;
   isActive: boolean;
   endedAt?: string;
-  endReason?: 'manual_end' | 'timeout' | 'admin_terminated' | 'system_terminated';
+  endReason?:
+    | 'manual_end'
+    | 'timeout'
+    | 'admin_terminated'
+    | 'system_terminated';
   actionsPerformed: ImpersonationAction[];
 }
 
@@ -136,9 +146,18 @@ export interface FeatureToggle {
 
 export interface RoleAuditEvent {
   id: string;
-  type: 'role_assigned' | 'role_removed' | 'permission_granted' | 'permission_revoked' | 
-        'impersonation_started' | 'impersonation_ended' | 'feature_toggle_changed' |
-        'role_created' | 'role_modified' | 'user_activated' | 'user_deactivated';
+  type:
+    | 'role_assigned'
+    | 'role_removed'
+    | 'permission_granted'
+    | 'permission_revoked'
+    | 'impersonation_started'
+    | 'impersonation_ended'
+    | 'feature_toggle_changed'
+    | 'role_created'
+    | 'role_modified'
+    | 'user_activated'
+    | 'user_deactivated';
   performedBy: string;
   performedByRole: UserRole;
   targetUserId?: string;
@@ -185,8 +204,15 @@ export interface FeatureContext {
 
 // Role management operations
 export interface RoleManagementOperation {
-  type: 'assign_role' | 'remove_role' | 'grant_permission' | 'revoke_permission' | 
-        'enable_feature' | 'disable_feature' | 'start_impersonation' | 'end_impersonation';
+  type:
+    | 'assign_role'
+    | 'remove_role'
+    | 'grant_permission'
+    | 'revoke_permission'
+    | 'enable_feature'
+    | 'disable_feature'
+    | 'start_impersonation'
+    | 'end_impersonation';
   targetUserId: string;
   targetRole?: UserRole;
   targetPermission?: Permission;
@@ -226,7 +252,7 @@ export const DEFAULT_ROLES: Record<UserRole, RoleDefinition> = {
     maxImpersonationDuration: 480, // 8 hours
     features: ['*'], // All features
   },
-  
+
   admin: {
     name: 'admin',
     displayName: 'Administrator',
@@ -252,7 +278,7 @@ export const DEFAULT_ROLES: Record<UserRole, RoleDefinition> = {
     maxImpersonationDuration: 240, // 4 hours
     features: ['admin_dashboard', 'advanced_analytics', 'feature_management'],
   },
-  
+
   support: {
     name: 'support',
     displayName: 'Customer Support',
@@ -278,7 +304,7 @@ export const DEFAULT_ROLES: Record<UserRole, RoleDefinition> = {
       allowedEnvironments: ['production', 'staging'],
     },
   },
-  
+
   qa: {
     name: 'qa',
     displayName: 'Quality Assurance',
@@ -302,7 +328,7 @@ export const DEFAULT_ROLES: Record<UserRole, RoleDefinition> = {
       allowedEnvironments: ['staging', 'development'],
     },
   },
-  
+
   user: {
     name: 'user',
     displayName: 'User',
@@ -320,7 +346,7 @@ export const DEFAULT_ROLES: Record<UserRole, RoleDefinition> = {
     canImpersonate: [],
     features: ['document_creation', 'basic_templates', 'user_dashboard'],
   },
-  
+
   viewer: {
     name: 'viewer',
     displayName: 'Viewer',

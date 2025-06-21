@@ -27,7 +27,9 @@ export default function StepThreeExplanation() {
               Save, Print, Download, Share
             </h3>
             <p className="mt-2 text-lg text-gray-600 max-w-md leading-relaxed">
-              Once your legal document has been created and customized to fit your needs, it’s yours! Save it, print it, and share it with anyone you choose.
+              Once your legal document has been created and customized to fit
+              your needs, it’s yours! Save it, print it, and share it with
+              anyone you choose.
             </p>
           </div>
         </div>

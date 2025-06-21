@@ -5,7 +5,15 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Plus, Play, Pause, Trash2, Eye, Settings, Activity } from 'lucide-react';
+import {
+  Plus,
+  Play,
+  Pause,
+  Trash2,
+  Eye,
+  Settings,
+  Activity,
+} from 'lucide-react';
 import { WebhookRegistrationModal } from './WebhookRegistrationModal';
 import { WebhookDetailsModal } from './WebhookDetailsModal';
 import { EventLogViewer } from './EventLogViewer';
@@ -38,7 +46,8 @@ export function WebhookDashboard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showRegistrationModal, setShowRegistrationModal] = useState(false);
-  const [selectedWebhook, setSelectedWebhook] = useState<WebhookSubscription | null>(null);
+  const [selectedWebhook, setSelectedWebhook] =
+    useState<WebhookSubscription | null>(null);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
 
   useEffect(() => {
@@ -69,7 +78,7 @@ export function WebhookDashboard() {
       const response = await fetch(`/api/webhooks/${webhookId}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ isActive: !isActive })
+        body: JSON.stringify({ isActive: !isActive }),
       });
 
       if (!response.ok) {
@@ -85,13 +94,17 @@ export function WebhookDashboard() {
   };
 
   const handleDeleteWebhook = async (webhookId: string) => {
-    if (!confirm('Are you sure you want to delete this webhook? This action cannot be undone.')) {
+    if (
+      !confirm(
+        'Are you sure you want to delete this webhook? This action cannot be undone.',
+      )
+    ) {
       return;
     }
 
     try {
       const response = await fetch(`/api/webhooks/${webhookId}`, {
-        method: 'DELETE'
+        method: 'DELETE',
       });
 
       if (!response.ok) {
@@ -109,7 +122,7 @@ export function WebhookDashboard() {
   const handleTestWebhook = async (webhookId: string) => {
     try {
       const response = await fetch(`/api/webhooks/${webhookId}/test`, {
-        method: 'POST'
+        method: 'POST',
       });
 
       const data = await response.json();
@@ -129,15 +142,23 @@ export function WebhookDashboard() {
     return new Date(timestamp.seconds * 1000).toLocaleString();
   };
 
-  const getStatusColor = (isActive: boolean, stats: WebhookSubscription['deliveryStats']) => {
+  const getStatusColor = (
+    isActive: boolean,
+    stats: WebhookSubscription['deliveryStats'],
+  ) => {
     if (!isActive) return 'secondary';
-    if (stats.failedDeliveries > stats.successfulDeliveries) return 'destructive';
+    if (stats.failedDeliveries > stats.successfulDeliveries)
+      return 'destructive';
     return 'default';
   };
 
-  const calculateSuccessRate = (stats: WebhookSubscription['deliveryStats']) => {
+  const calculateSuccessRate = (
+    stats: WebhookSubscription['deliveryStats'],
+  ) => {
     if (stats.totalDeliveries === 0) return 0;
-    return Math.round((stats.successfulDeliveries / stats.totalDeliveries) * 100);
+    return Math.round(
+      (stats.successfulDeliveries / stats.totalDeliveries) * 100,
+    );
   };
 
   if (loading) {
@@ -168,9 +189,9 @@ export function WebhookDashboard() {
       {error && (
         <div className="bg-destructive/10 border border-destructive/20 rounded-lg p-4">
           <p className="text-destructive font-medium">Error: {error}</p>
-          <Button 
-            variant="outline" 
-            size="sm" 
+          <Button
+            variant="outline"
+            size="sm"
             className="mt-2"
             onClick={() => setError(null)}
           >
@@ -183,27 +204,32 @@ export function WebhookDashboard() {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium">Total Webhooks</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Total Webhooks
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{webhooks.length}</div>
             <p className="text-xs text-muted-foreground">
-              {webhooks.filter(w => w.isActive).length} active
+              {webhooks.filter((w) => w.isActive).length} active
             </p>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium">Total Deliveries</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Total Deliveries
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {webhooks.reduce((sum, w) => sum + w.deliveryStats.totalDeliveries, 0)}
+              {webhooks.reduce(
+                (sum, w) => sum + w.deliveryStats.totalDeliveries,
+                0,
+              )}
             </div>
-            <p className="text-xs text-muted-foreground">
-              All time deliveries
-            </p>
+            <p className="text-xs text-muted-foreground">All time deliveries</p>
           </CardContent>
         </Card>
 
@@ -213,13 +239,23 @@ export function WebhookDashboard() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {webhooks.length > 0 
+              {webhooks.length > 0
                 ? Math.round(
-                    webhooks.reduce((sum, w) => sum + w.deliveryStats.successfulDeliveries, 0) /
-                    Math.max(webhooks.reduce((sum, w) => sum + w.deliveryStats.totalDeliveries, 0), 1) * 100
+                    (webhooks.reduce(
+                      (sum, w) => sum + w.deliveryStats.successfulDeliveries,
+                      0,
+                    ) /
+                      Math.max(
+                        webhooks.reduce(
+                          (sum, w) => sum + w.deliveryStats.totalDeliveries,
+                          0,
+                        ),
+                        1,
+                      )) *
+                      100,
                   )
-                : 0
-              }%
+                : 0}
+              %
             </div>
             <p className="text-xs text-muted-foreground">
               Overall success rate
@@ -229,15 +265,18 @@ export function WebhookDashboard() {
 
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium">Failed Deliveries</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Failed Deliveries
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-destructive">
-              {webhooks.reduce((sum, w) => sum + w.deliveryStats.failedDeliveries, 0)}
+              {webhooks.reduce(
+                (sum, w) => sum + w.deliveryStats.failedDeliveries,
+                0,
+              )}
             </div>
-            <p className="text-xs text-muted-foreground">
-              Require attention
-            </p>
+            <p className="text-xs text-muted-foreground">Require attention</p>
           </CardContent>
         </Card>
       </div>
@@ -254,9 +293,12 @@ export function WebhookDashboard() {
             <Card>
               <CardContent className="flex flex-col items-center justify-center h-64">
                 <Activity className="h-12 w-12 text-muted-foreground mb-4" />
-                <h3 className="text-lg font-medium mb-2">No webhooks configured</h3>
+                <h3 className="text-lg font-medium mb-2">
+                  No webhooks configured
+                </h3>
                 <p className="text-muted-foreground text-center mb-4">
-                  Start by creating your first webhook to receive real-time notifications
+                  Start by creating your first webhook to receive real-time
+                  notifications
                 </p>
                 <Button onClick={() => setShowRegistrationModal(true)}>
                   <Plus className="h-4 w-4 mr-2" />
@@ -272,7 +314,12 @@ export function WebhookDashboard() {
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
                         <CardTitle className="text-lg">{webhook.url}</CardTitle>
-                        <Badge variant={getStatusColor(webhook.isActive, webhook.deliveryStats)}>
+                        <Badge
+                          variant={getStatusColor(
+                            webhook.isActive,
+                            webhook.deliveryStats,
+                          )}
+                        >
                           {webhook.isActive ? 'Active' : 'Inactive'}
                         </Badge>
                         <Badge variant="outline">
@@ -290,12 +337,15 @@ export function WebhookDashboard() {
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() => handleToggleWebhook(webhook.id, webhook.isActive)}
-                        >
-                          {webhook.isActive ? 
-                            <Pause className="h-4 w-4" /> : 
-                            <Play className="h-4 w-4" />
+                          onClick={() =>
+                            handleToggleWebhook(webhook.id, webhook.isActive)
                           }
+                        >
+                          {webhook.isActive ? (
+                            <Pause className="h-4 w-4" />
+                          ) : (
+                            <Play className="h-4 w-4" />
+                          )}
                         </Button>
                         <Button
                           variant="outline"
@@ -323,7 +373,11 @@ export function WebhookDashboard() {
                         <p className="text-sm font-medium">Events</p>
                         <div className="flex flex-wrap gap-1 mt-1">
                           {webhook.events.slice(0, 3).map((event) => (
-                            <Badge key={event} variant="outline" className="text-xs">
+                            <Badge
+                              key={event}
+                              variant="outline"
+                              className="text-xs"
+                            >
                               {event}
                             </Badge>
                           ))}
@@ -334,23 +388,23 @@ export function WebhookDashboard() {
                           )}
                         </div>
                       </div>
-                      
+
                       <div>
                         <p className="text-sm font-medium">Delivery Stats</p>
                         <p className="text-sm text-muted-foreground">
-                          {webhook.deliveryStats.totalDeliveries} total, {' '}
-                          {webhook.deliveryStats.successfulDeliveries} successful, {' '}
-                          {webhook.deliveryStats.failedDeliveries} failed
+                          {webhook.deliveryStats.totalDeliveries} total,{' '}
+                          {webhook.deliveryStats.successfulDeliveries}{' '}
+                          successful, {webhook.deliveryStats.failedDeliveries}{' '}
+                          failed
                         </p>
                       </div>
 
                       <div>
                         <p className="text-sm font-medium">Last Delivery</p>
                         <p className="text-sm text-muted-foreground">
-                          {webhook.lastDeliveryAt 
+                          {webhook.lastDeliveryAt
                             ? formatDate(webhook.lastDeliveryAt)
-                            : 'Never'
-                          }
+                            : 'Never'}
                         </p>
                       </div>
                     </div>

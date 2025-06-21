@@ -25,12 +25,20 @@ export const automotiveServiceAgreementMeta: LegalDocument = {
     en: {
       name: 'Automotive Service Agreement',
       description: 'Agreement for automotive repair and maintenance services.',
-      aliases: ['car repair agreement', 'vehicle service contract', 'auto maintenance agreement'],
+      aliases: [
+        'car repair agreement',
+        'vehicle service contract',
+        'auto maintenance agreement',
+      ],
     },
     es: {
       name: 'Acuerdo de Servicio Automotriz',
-      description: 'Acuerdo para servicios de reparación y mantenimiento automotriz.',
-      aliases: ['acuerdo de reparación de autos', 'contrato de servicio vehicular'],
+      description:
+        'Acuerdo para servicios de reparación y mantenimiento automotriz.',
+      aliases: [
+        'acuerdo de reparación de autos',
+        'contrato de servicio vehicular',
+      ],
     },
   },
 };

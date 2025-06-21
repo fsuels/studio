@@ -47,7 +47,7 @@ Don't risk using generic templates that may not comply with Idaho law. Get a pro
 
 [Create Idaho Service Agreement]
 
-*Trusted by thousands of Idaho businesses*
+_Trusted by thousands of Idaho businesses_
 
 ---
 

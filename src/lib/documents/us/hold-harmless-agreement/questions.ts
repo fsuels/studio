@@ -9,9 +9,10 @@ export const holdHarmlessAgreementQuestions: DocumentQuestion[] = [
     required: true,
     options: [
       { value: 'unilateral', label: 'Unilateral (One party protected)' },
-      { value: 'mutual', label: 'Mutual (Both parties protected)' }
+      { value: 'mutual', label: 'Mutual (Both parties protected)' },
     ],
-    helpText: 'Unilateral protects only one party, mutual protects both parties'
+    helpText:
+      'Unilateral protects only one party, mutual protects both parties',
   },
 
   // Indemnitee Information
@@ -22,42 +23,42 @@ export const holdHarmlessAgreementQuestions: DocumentQuestion[] = [
     required: true,
     options: [
       { value: 'individual', label: 'Individual' },
-      { value: 'business', label: 'Business/Organization' }
-    ]
+      { value: 'business', label: 'Business/Organization' },
+    ],
   },
   {
     id: 'indemnitee.name',
     text: 'Full legal name of the protected party',
     type: 'text',
     required: true,
-    placeholder: 'John Smith or ABC Company, LLC'
+    placeholder: 'John Smith or ABC Company, LLC',
   },
   {
     id: 'indemnitee.address',
     text: 'Street address of the protected party',
     type: 'text',
     required: true,
-    placeholder: '123 Main Street'
+    placeholder: '123 Main Street',
   },
   {
     id: 'indemnitee.city',
     text: 'City',
     type: 'text',
-    required: true
+    required: true,
   },
   {
     id: 'indemnitee.state',
     text: 'State',
     type: 'select',
     required: true,
-    placeholder: 'Select state'
+    placeholder: 'Select state',
   },
   {
     id: 'indemnitee.zipCode',
     text: 'ZIP Code',
     type: 'text',
     required: true,
-    placeholder: '12345'
+    placeholder: '12345',
   },
 
   // Indemnitor Information
@@ -68,42 +69,42 @@ export const holdHarmlessAgreementQuestions: DocumentQuestion[] = [
     required: true,
     options: [
       { value: 'individual', label: 'Individual' },
-      { value: 'business', label: 'Business/Organization' }
-    ]
+      { value: 'business', label: 'Business/Organization' },
+    ],
   },
   {
     id: 'indemnitor.name',
     text: 'Full legal name of the party assuming risk',
     type: 'text',
     required: true,
-    placeholder: 'Jane Doe or XYZ Corporation'
+    placeholder: 'Jane Doe or XYZ Corporation',
   },
   {
     id: 'indemnitor.address',
     text: 'Street address of the party assuming risk',
     type: 'text',
     required: true,
-    placeholder: '456 Oak Avenue'
+    placeholder: '456 Oak Avenue',
   },
   {
     id: 'indemnitor.city',
     text: 'City',
     type: 'text',
-    required: true
+    required: true,
   },
   {
     id: 'indemnitor.state',
     text: 'State',
     type: 'select',
     required: true,
-    placeholder: 'Select state'
+    placeholder: 'Select state',
   },
   {
     id: 'indemnitor.zipCode',
     text: 'ZIP Code',
     type: 'text',
     required: true,
-    placeholder: '12345'
+    placeholder: '12345',
   },
 
   // Activity Details
@@ -111,22 +112,23 @@ export const holdHarmlessAgreementQuestions: DocumentQuestion[] = [
     id: 'effectiveDate',
     text: 'When does this agreement become effective?',
     type: 'date',
-    required: true
+    required: true,
   },
   {
     id: 'activityDescription',
     text: 'Describe the activity, event, or situation covered by this agreement',
     type: 'textarea',
     required: true,
-    placeholder: 'Provide a detailed description of the activity, project, or situation...',
-    minLength: 50
+    placeholder:
+      'Provide a detailed description of the activity, project, or situation...',
+    minLength: 50,
   },
   {
     id: 'location',
     text: 'Where will the activity take place? (Optional)',
     type: 'text',
     required: false,
-    placeholder: 'Specific address or general location'
+    placeholder: 'Specific address or general location',
   },
   {
     id: 'duration.type',
@@ -136,8 +138,8 @@ export const holdHarmlessAgreementQuestions: DocumentQuestion[] = [
     options: [
       { value: 'oneTime', label: 'One-time event' },
       { value: 'ongoing', label: 'Ongoing/Indefinite' },
-      { value: 'specific', label: 'Specific time period' }
-    ]
+      { value: 'specific', label: 'Specific time period' },
+    ],
   },
 
   // Scope of Protection
@@ -150,9 +152,9 @@ export const holdHarmlessAgreementQuestions: DocumentQuestion[] = [
       { value: 'propertyDamage', label: 'Property damage' },
       { value: 'personalInjury', label: 'Personal injury' },
       { value: 'financialLoss', label: 'Financial loss' },
-      { value: 'intellectualProperty', label: 'Intellectual property claims' }
+      { value: 'intellectualProperty', label: 'Intellectual property claims' },
     ],
-    helpText: 'Select all that apply'
+    helpText: 'Select all that apply',
   },
 
   // Specific Risks
@@ -162,7 +164,7 @@ export const holdHarmlessAgreementQuestions: DocumentQuestion[] = [
     type: 'array',
     required: true,
     placeholder: 'E.g., Physical injury from equipment use',
-    helpText: 'Add each risk separately'
+    helpText: 'Add each risk separately',
   },
 
   // Insurance
@@ -171,7 +173,7 @@ export const holdHarmlessAgreementQuestions: DocumentQuestion[] = [
     text: 'Is insurance required?',
     type: 'boolean',
     required: true,
-    helpText: 'Will the indemnitor need to maintain insurance coverage?'
+    helpText: 'Will the indemnitor need to maintain insurance coverage?',
   },
   {
     id: 'insuranceDetails.minimumCoverage',
@@ -179,7 +181,7 @@ export const holdHarmlessAgreementQuestions: DocumentQuestion[] = [
     type: 'number',
     required: false,
     placeholder: '1000000',
-    conditionalOn: { field: 'insuranceRequired', value: true }
+    conditionalOn: { field: 'insuranceRequired', value: true },
   },
 
   // Additional Provisions
@@ -188,22 +190,22 @@ export const holdHarmlessAgreementQuestions: DocumentQuestion[] = [
     text: 'Include duty to defend?',
     type: 'boolean',
     required: true,
-    helpText: 'Requires indemnitor to provide legal defense'
+    helpText: 'Requires indemnitor to provide legal defense',
   },
   {
     id: 'additionalProvisions.attorneyFeesIncluded',
     text: 'Include attorney fees in indemnification?',
     type: 'boolean',
-    required: true
+    required: true,
   },
 
   // Governing Law
   {
     id: 'governingState',
-    text: 'Which state\'s laws will govern this agreement?',
+    text: "Which state's laws will govern this agreement?",
     type: 'select',
     required: true,
-    placeholder: 'Select state'
+    placeholder: 'Select state',
   },
   {
     id: 'disputeResolution',
@@ -213,7 +215,7 @@ export const holdHarmlessAgreementQuestions: DocumentQuestion[] = [
     options: [
       { value: 'litigation', label: 'Court litigation' },
       { value: 'arbitration', label: 'Binding arbitration' },
-      { value: 'mediation', label: 'Mediation first, then litigation' }
-    ]
-  }
+      { value: 'mediation', label: 'Mediation first, then litigation' },
+    ],
+  },
 ];

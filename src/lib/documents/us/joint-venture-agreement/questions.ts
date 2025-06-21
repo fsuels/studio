@@ -79,14 +79,16 @@ export const jointVentureAgreementQuestions: Question[] = [
     label: 'Venture Objectives',
     type: 'textarea',
     required: true,
-    placeholder: 'Describe the specific goals and objectives of the joint venture',
+    placeholder:
+      'Describe the specific goals and objectives of the joint venture',
   },
   {
     id: 'contributions',
     label: 'Party Contributions',
     type: 'textarea',
     required: true,
-    placeholder: 'Describe what each party will contribute (money, resources, expertise, etc.)',
+    placeholder:
+      'Describe what each party will contribute (money, resources, expertise, etc.)',
   },
   {
     id: 'profitSharing',
@@ -121,14 +123,16 @@ export const jointVentureAgreementQuestions: Question[] = [
     label: 'Intellectual Property Rights',
     type: 'textarea',
     required: true,
-    placeholder: 'How intellectual property created or used will be owned and protected',
+    placeholder:
+      'How intellectual property created or used will be owned and protected',
   },
   {
     id: 'confidentiality',
     label: 'Confidentiality Terms',
     type: 'textarea',
     required: true,
-    placeholder: 'Confidentiality obligations regarding trade secrets and sensitive information',
+    placeholder:
+      'Confidentiality obligations regarding trade secrets and sensitive information',
   },
   {
     id: 'terminationConditions',

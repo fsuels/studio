@@ -32,21 +32,21 @@ interface MegaMenuContentProps {
 
 // Define document categories with icons and improved organization
 const CATEGORIES = [
-  { 
-    key: 'Real Estate & Property', 
-    icon: Home, 
+  {
+    key: 'Real Estate & Property',
+    icon: Home,
     labelKey: 'categories.realEstate',
     priority: 1,
     subcategories: [
       'Residential Leasing',
-      'Commercial Leasing', 
+      'Commercial Leasing',
       'Real-Estate Transactions',
-      'Deeds & Financing'
-    ]
+      'Deeds & Financing',
+    ],
   },
-  { 
-    key: 'Estate Planning', 
-    icon: FileText, 
+  {
+    key: 'Estate Planning',
+    icon: FileText,
     labelKey: 'categories.estatePlanning',
     priority: 2,
     subcategories: [
@@ -54,12 +54,12 @@ const CATEGORIES = [
       'Trusts',
       'Powers of Attorney',
       'Advance Directives',
-      'Estate Administration'
-    ]
+      'Estate Administration',
+    ],
   },
-  { 
-    key: 'Business & Commercial', 
-    icon: Briefcase, 
+  {
+    key: 'Business & Commercial',
+    icon: Briefcase,
     labelKey: 'categories.business',
     priority: 3,
     subcategories: [
@@ -67,12 +67,12 @@ const CATEGORIES = [
       'Sales & Purchasing',
       'Company Formation & Governance',
       'Marketing & Services',
-      'Tech & Web'
-    ]
+      'Tech & Web',
+    ],
   },
-  { 
-    key: 'Employment & HR', 
-    icon: Building, 
+  {
+    key: 'Employment & HR',
+    icon: Building,
     labelKey: 'categories.employment',
     priority: 4,
     subcategories: [
@@ -80,73 +80,60 @@ const CATEGORIES = [
       'Policies & Benefits',
       'Performance & Discipline',
       'Separation',
-      'Restrictions'
-    ]
+      'Restrictions',
+    ],
   },
-  { 
-    key: 'Finance & Lending', 
-    icon: DollarSign, 
+  {
+    key: 'Finance & Lending',
+    icon: DollarSign,
     labelKey: 'categories.finance',
     priority: 5,
     subcategories: [
       'Loans & Notes',
       'Security & Collateral',
       'Debt & Collection',
-      'Instruments'
-    ]
+      'Instruments',
+    ],
   },
-  { 
-    key: 'Intellectual Property', 
-    icon: Scale, 
+  {
+    key: 'Intellectual Property',
+    icon: Scale,
     labelKey: 'categories.intellectualProperty',
     priority: 6,
     subcategories: [
       'Confidentiality & NDAs',
       'Trademark',
       'Patent & Invention',
-      'Copyright & Media'
-    ]
+      'Copyright & Media',
+    ],
   },
-  { 
-    key: 'Risk & Liability', 
-    icon: Heart, 
+  {
+    key: 'Risk & Liability',
+    icon: Heart,
     labelKey: 'categories.riskLiability',
     priority: 7,
-    subcategories: [
-      'Waivers & Releases',
-      'Reports'
-    ]
+    subcategories: ['Waivers & Releases', 'Reports'],
   },
-  { 
-    key: 'Family & Personal', 
-    icon: Users, 
+  {
+    key: 'Family & Personal',
+    icon: Users,
     labelKey: 'categories.family',
     priority: 8,
-    subcategories: [
-      'Parenting & Childcare',
-      'Affidavits'
-    ]
+    subcategories: ['Parenting & Childcare', 'Affidavits'],
   },
-  { 
-    key: 'Construction & Home Improvement', 
-    icon: Building, 
+  {
+    key: 'Construction & Home Improvement',
+    icon: Building,
     labelKey: 'categories.construction',
     priority: 9,
-    subcategories: [
-      'Contracts',
-      'Bids, Bonds & Liens'
-    ]
+    subcategories: ['Contracts', 'Bids, Bonds & Liens'],
   },
-  { 
-    key: 'Dispute Resolution', 
-    icon: Scale, 
+  {
+    key: 'Dispute Resolution',
+    icon: Scale,
     labelKey: 'categories.disputeResolution',
     priority: 10,
-    subcategories: [
-      'Demand & Warnings',
-      'ADR & Settlement',
-      'Court Prep'
-    ]
+    subcategories: ['Demand & Warnings', 'ADR & Settlement', 'Court Prep'],
   },
 ];
 
@@ -156,7 +143,7 @@ const MAX_DOCS_PER_CATEGORY = 8;
 const DOCUMENT_CATEGORY_MAPPING: Record<string, string> = {
   // Real Estate & Property
   'lease-agreement': 'Real Estate & Property',
-  'residential-lease-agreement': 'Real Estate & Property', 
+  'residential-lease-agreement': 'Real Estate & Property',
   'room-rental-agreement': 'Real Estate & Property',
   'sublease-agreement': 'Real Estate & Property',
   'lease-renewal-agreement': 'Real Estate & Property',
@@ -168,7 +155,7 @@ const DOCUMENT_CATEGORY_MAPPING: Record<string, string> = {
   'eviction-notice': 'Real Estate & Property',
   'quitclaim-deed': 'Real Estate & Property',
   'property-deed': 'Real Estate & Property',
-  
+
   // Estate Planning
   'last-will-testament': 'Estate Planning',
   'simple-will': 'Estate Planning',
@@ -178,7 +165,7 @@ const DOCUMENT_CATEGORY_MAPPING: Record<string, string> = {
   'power-of-attorney': 'Estate Planning',
   'durable-power-of-attorney': 'Estate Planning',
   'healthcare-power-of-attorney': 'Estate Planning',
-  
+
   // Business & Commercial
   'articles-of-incorporation': 'Business & Commercial',
   'articles-of-incorporation-biz': 'Business & Commercial',
@@ -193,7 +180,7 @@ const DOCUMENT_CATEGORY_MAPPING: Record<string, string> = {
   'purchase-agreement': 'Business & Commercial',
   'consignment-agreement': 'Business & Commercial',
   'licensing-agreement': 'Business & Commercial',
-  
+
   // Employment & HR
   'employment-offer-letter': 'Employment & HR',
   'employment-contract': 'Employment & HR',
@@ -201,7 +188,7 @@ const DOCUMENT_CATEGORY_MAPPING: Record<string, string> = {
   'termination-letter': 'Employment & HR',
   'severance-agreement': 'Employment & HR',
   'non-compete-agreement': 'Employment & HR',
-  
+
   // Finance & Lending
   'promissory-note': 'Finance & Lending',
   'loan-agreement': 'Finance & Lending',
@@ -209,13 +196,13 @@ const DOCUMENT_CATEGORY_MAPPING: Record<string, string> = {
   'boat-bill-of-sale': 'Finance & Lending',
   'demand-letter': 'Finance & Lending',
   'demand-letter-payment': 'Finance & Lending',
-  'invoice': 'Finance & Lending',
-  
+  invoice: 'Finance & Lending',
+
   // Intellectual Property
   'non-disclosure-agreement': 'Intellectual Property',
   'copyright-assignment': 'Intellectual Property',
   'trademark-assignment': 'Intellectual Property',
-  
+
   // Family & Personal
   'child-custody-agreement': 'Family & Personal',
   'child-medical-consent': 'Family & Personal',
@@ -224,7 +211,7 @@ const DOCUMENT_CATEGORY_MAPPING: Record<string, string> = {
   'divorce-settlement': 'Family & Personal',
   'divorce-settlement-agreement': 'Family & Personal',
   'affidavit-general': 'Family & Personal',
-  
+
   // Dispute Resolution (fallback for demand letters and legal documents)
   // Note: Some documents like demand-letter could be in multiple categories
 };
@@ -239,11 +226,12 @@ const MemoizedDocLink = React.memo(function DocLink({
   onClick?: () => void;
 }) {
   const { t } = useTranslation('common');
-  
+
   // Get the document name from translations
-  const docName = locale === 'es' && doc.translations?.es?.name
-    ? doc.translations.es.name
-    : doc.translations?.en?.name || doc.name || doc.id;
+  const docName =
+    locale === 'es' && doc.translations?.es?.name
+      ? doc.translations.es.name
+      : doc.translations?.en?.name || doc.name || doc.id;
 
   const docHref = `/${locale}/docs/${doc.id}`;
 
@@ -253,9 +241,11 @@ const MemoizedDocLink = React.memo(function DocLink({
         href={docHref}
         onClick={onClick}
         className="block w-full text-left px-4 md:px-4 py-3.5 md:py-3 min-h-[44px] md:min-h-0 text-base md:text-sm text-foreground md:text-muted-foreground font-medium md:font-normal hover:text-primary hover:underline hover:bg-muted/40 active:bg-muted/60 transition-colors duration-150 rounded-md"
-        title={locale === 'es' && doc.translations?.es?.description
-          ? doc.translations.es.description
-          : doc.translations?.en?.description || doc.description}
+        title={
+          locale === 'es' && doc.translations?.es?.description
+            ? doc.translations.es.description
+            : doc.translations?.en?.description || doc.description
+        }
       >
         {t(docName, { defaultValue: docName })}
       </Link>
@@ -272,23 +262,24 @@ export default function MegaMenuContent({
   // Get all documents and categorize them
   const categorizedDocuments = useMemo(() => {
     const categories: Record<string, LegalDocument[]> = {};
-    
+
     // Initialize all categories
-    CATEGORIES.forEach(cat => {
+    CATEGORIES.forEach((cat) => {
       categories[cat.key] = [];
     });
 
     // Filter out general inquiry and categorize documents
-    const validDocuments = documentLibrary.filter(doc => 
-      doc.id !== 'general-inquiry' && 
-      doc.schema && 
-      doc.translations?.en?.name
+    const validDocuments = documentLibrary.filter(
+      (doc) =>
+        doc.id !== 'general-inquiry' &&
+        doc.schema &&
+        doc.translations?.en?.name,
     );
 
-    validDocuments.forEach(doc => {
+    validDocuments.forEach((doc) => {
       // Use explicit mapping first, then fallback to document's category
       let mappedCategory = DOCUMENT_CATEGORY_MAPPING[doc.id];
-      
+
       if (!mappedCategory) {
         // Fallback mapping based on original document category
         const originalCategory = doc.category || 'Business';
@@ -319,7 +310,7 @@ export default function MegaMenuContent({
             mappedCategory = 'Business & Commercial'; // Default fallback
         }
       }
-      
+
       if (categories[mappedCategory]) {
         categories[mappedCategory].push(doc);
       } else {
@@ -329,14 +320,16 @@ export default function MegaMenuContent({
     });
 
     // Sort documents within each category by name
-    Object.keys(categories).forEach(categoryKey => {
+    Object.keys(categories).forEach((categoryKey) => {
       categories[categoryKey].sort((a, b) => {
-        const nameA = locale === 'es' && a.translations?.es?.name
-          ? a.translations.es.name
-          : a.translations?.en?.name || a.name || a.id;
-        const nameB = locale === 'es' && b.translations?.es?.name
-          ? b.translations.es.name
-          : b.translations?.en?.name || b.name || b.id;
+        const nameA =
+          locale === 'es' && a.translations?.es?.name
+            ? a.translations.es.name
+            : a.translations?.en?.name || a.name || a.id;
+        const nameB =
+          locale === 'es' && b.translations?.es?.name
+            ? b.translations.es.name
+            : b.translations?.en?.name || b.name || b.id;
         return nameA.localeCompare(nameB);
       });
     });
@@ -344,10 +337,12 @@ export default function MegaMenuContent({
     return categories;
   }, [locale]);
 
-  const [openCategories, setOpenCategories] = React.useState<Record<string, boolean>>(() => {
+  const [openCategories, setOpenCategories] = React.useState<
+    Record<string, boolean>
+  >(() => {
     // Default open the categories with the most documents
     const initial: Record<string, boolean> = {};
-    CATEGORIES.forEach(cat => {
+    CATEGORIES.forEach((cat) => {
       const docCount = categorizedDocuments[cat.key]?.length || 0;
       initial[cat.key] = docCount > 0 && cat.priority <= 3; // Open top 3 categories if they have docs
     });
@@ -355,15 +350,15 @@ export default function MegaMenuContent({
   });
 
   const handleToggle = React.useCallback((categoryKey: string) => {
-    setOpenCategories(prev => ({ 
-      ...prev, 
-      [categoryKey]: !prev[categoryKey] 
+    setOpenCategories((prev) => ({
+      ...prev,
+      [categoryKey]: !prev[categoryKey],
     }));
   }, []);
 
   // Filter categories that have documents
-  const categoriesWithDocs = CATEGORIES.filter(cat => 
-    categorizedDocuments[cat.key]?.length > 0
+  const categoriesWithDocs = CATEGORIES.filter(
+    (cat) => categorizedDocuments[cat.key]?.length > 0,
   );
 
   const totalDocuments = Object.values(categorizedDocuments).flat().length;
@@ -377,9 +372,9 @@ export default function MegaMenuContent({
             {t('megaMenu.title', { defaultValue: 'Legal Documents' })}
           </h3>
           <p className="text-sm text-muted-foreground">
-            {t('megaMenu.subtitle', { 
+            {t('megaMenu.subtitle', {
               defaultValue: 'Browse {{count}} professional legal documents',
-              count: totalDocuments
+              count: totalDocuments,
             })}
           </p>
         </div>
@@ -389,8 +384,10 @@ export default function MegaMenuContent({
           {categoriesWithDocs.map((category) => {
             const categoryDocs = categorizedDocuments[category.key] || [];
             const isOpen = openCategories[category.key];
-            const displayDocs = isOpen ? categoryDocs : categoryDocs.slice(0, MAX_DOCS_PER_CATEGORY);
-            
+            const displayDocs = isOpen
+              ? categoryDocs
+              : categoryDocs.slice(0, MAX_DOCS_PER_CATEGORY);
+
             return (
               <div key={category.key} className="space-y-2">
                 <Accordion
@@ -403,7 +400,7 @@ export default function MegaMenuContent({
                     <AccordionTrigger
                       className={cn(
                         'font-semibold text-sm md:text-base flex items-center border-b border-border pb-2 hover:text-primary transition-colors',
-                        category.priority <= 2 && 'text-primary'
+                        category.priority <= 2 && 'text-primary',
                       )}
                     >
                       <category.icon className="mr-2 h-4 w-4 md:h-5 md:w-5" />
@@ -433,19 +430,21 @@ export default function MegaMenuContent({
                               />
                             ))}
                           </ul>
-                          
-                          {!isOpen && categoryDocs.length > MAX_DOCS_PER_CATEGORY && (
-                            <button
-                              onClick={() => handleToggle(category.key)}
-                              className="text-xs text-primary font-medium hover:underline mt-2"
-                            >
-                              {t('megaMenu.showMore', {
-                                defaultValue: '+{{count}} more',
-                                count: categoryDocs.length - MAX_DOCS_PER_CATEGORY
-                              })}
-                            </button>
-                          )}
-                          
+
+                          {!isOpen &&
+                            categoryDocs.length > MAX_DOCS_PER_CATEGORY && (
+                              <button
+                                onClick={() => handleToggle(category.key)}
+                                className="text-xs text-primary font-medium hover:underline mt-2"
+                              >
+                                {t('megaMenu.showMore', {
+                                  defaultValue: '+{{count}} more',
+                                  count:
+                                    categoryDocs.length - MAX_DOCS_PER_CATEGORY,
+                                })}
+                              </button>
+                            )}
+
                           {categoryDocs.length > 5 && (
                             <Link
                               href={`/${locale}/?category=${encodeURIComponent(category.key)}#workflow-start`}
@@ -453,8 +452,11 @@ export default function MegaMenuContent({
                               onClick={onLinkClick}
                             >
                               {t('megaMenu.browseAll', {
-                                defaultValue: 'Browse all {{category}} documents →',
-                                category: t(category.labelKey, { defaultValue: category.key })
+                                defaultValue:
+                                  'Browse all {{category}} documents →',
+                                category: t(category.labelKey, {
+                                  defaultValue: category.key,
+                                }),
                               })}
                             </Link>
                           )}
@@ -476,9 +478,9 @@ export default function MegaMenuContent({
             onClick={onLinkClick}
           >
             <FileText className="h-4 w-4" />
-            {t('megaMenu.viewAll', { 
+            {t('megaMenu.viewAll', {
               defaultValue: 'View all {{count}} documents',
-              count: totalDocuments
+              count: totalDocuments,
             })}
           </Link>
         </div>

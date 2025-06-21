@@ -1,7 +1,11 @@
 // Automated Alert System for A/B Testing
 // Multi-channel notifications for experiment events and performance changes
 
-import { type MonitoringAlert, type ExperimentHealth, type GrowthMetrics } from './monitoring-service';
+import {
+  type MonitoringAlert,
+  type ExperimentHealth,
+  type GrowthMetrics,
+} from './monitoring-service';
 import { type Experiment, type ExperimentResults } from './experiment-engine';
 
 export interface AlertChannel {
@@ -62,8 +66,8 @@ class AlertSystemService {
         smtpHost: process.env.SMTP_HOST || 'smtp.gmail.com',
         smtpPort: parseInt(process.env.SMTP_PORT || '587'),
         smtpUser: process.env.SMTP_USER,
-        smtpPass: process.env.SMTP_PASSWORD
-      }
+        smtpPass: process.env.SMTP_PASSWORD,
+      },
     });
 
     // Slack channel
@@ -75,8 +79,8 @@ class AlertSystemService {
       config: {
         webhookUrl: process.env.SLACK_WEBHOOK_URL,
         channel: '#growth-experiments',
-        username: '123LegalDoc A/B Testing'
-      }
+        username: '123LegalDoc A/B Testing',
+      },
     });
 
     // Webhook for external integrations
@@ -90,9 +94,9 @@ class AlertSystemService {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${process.env.ANALYTICS_WEBHOOK_TOKEN}`
-        }
-      }
+          Authorization: `Bearer ${process.env.ANALYTICS_WEBHOOK_TOKEN}`,
+        },
+      },
     });
 
     // Browser notifications
@@ -101,7 +105,7 @@ class AlertSystemService {
       name: 'Browser Notifications',
       type: 'browser',
       enabled: true,
-      config: {}
+      config: {},
     });
   }
 
@@ -130,10 +134,10 @@ class AlertSystemService {
       enabled: true,
       conditions: {
         eventTypes: ['performance_drop', 'error_rate_high'],
-        priorities: ['high', 'critical']
+        priorities: ['high', 'critical'],
       },
       channels: ['email_admin', 'slack_growth'],
-      cooldownMinutes: 15
+      cooldownMinutes: 15,
     });
 
     // Statistical significance achieved
@@ -145,10 +149,10 @@ class AlertSystemService {
       conditions: {
         eventTypes: ['significance_reached'],
         priorities: ['low', 'medium', 'high'],
-        minimumConfidence: 0.95
+        minimumConfidence: 0.95,
       },
       channels: ['slack_growth', 'webhook_analytics'],
-      cooldownMinutes: 60
+      cooldownMinutes: 60,
     });
 
     // Experiment duration warnings
@@ -159,10 +163,10 @@ class AlertSystemService {
       enabled: true,
       conditions: {
         eventTypes: ['duration_exceeded'],
-        priorities: ['medium', 'high']
+        priorities: ['medium', 'high'],
       },
       channels: ['email_admin'],
-      cooldownMinutes: 1440 // Daily
+      cooldownMinutes: 1440, // Daily
     });
 
     // High-impact experiment completion
@@ -174,10 +178,10 @@ class AlertSystemService {
       conditions: {
         eventTypes: ['significance_reached'],
         priorities: ['medium', 'high'],
-        minimumImpact: 15
+        minimumImpact: 15,
       },
       channels: ['email_admin', 'slack_growth'],
-      cooldownMinutes: 0
+      cooldownMinutes: 0,
     });
   }
 
@@ -186,7 +190,7 @@ class AlertSystemService {
   }
 
   updateRule(ruleId: string, updates: Partial<AlertRule>): void {
-    const index = this.rules.findIndex(r => r.id === ruleId);
+    const index = this.rules.findIndex((r) => r.id === ruleId);
     if (index !== -1) {
       this.rules[index] = { ...this.rules[index], ...updates };
     }
@@ -202,7 +206,8 @@ class AlertSystemService {
     this.addTemplate('significance_reached', 'medium', {
       type: 'significance_reached',
       priority: 'medium',
-      subject: '🎯 A/B Test Reached Statistical Significance - {{experimentName}}',
+      subject:
+        '🎯 A/B Test Reached Statistical Significance - {{experimentName}}',
       htmlTemplate: `
         <h2>🎯 Statistical Significance Achieved!</h2>
         <p><strong>Experiment:</strong> {{experimentName}}</p>
@@ -245,8 +250,8 @@ class AlertSystemService {
         confidence: '{{confidence}}',
         impact: '{{impact}}',
         winningVariant: '{{winningVariant}}',
-        sampleSize: '{{sampleSize}}'
-      }
+        sampleSize: '{{sampleSize}}',
+      },
     });
 
     // Performance drop template
@@ -293,8 +298,8 @@ class AlertSystemService {
         experiment: '{{experimentName}}',
         severity: 'high',
         dropPercentage: '{{dropPercentage}}',
-        affectedVariant: '{{affectedVariant}}'
-      }
+        affectedVariant: '{{affectedVariant}}',
+      },
     });
 
     // Duration exceeded template
@@ -340,25 +345,36 @@ class AlertSystemService {
         event: 'experiment_duration_exceeded',
         experiment: '{{experimentName}}',
         expectedDuration: '{{expectedDuration}}',
-        actualDuration: '{{actualDuration}}'
-      }
+        actualDuration: '{{actualDuration}}',
+      },
     });
   }
 
-  addTemplate(type: MonitoringAlert['type'], priority: MonitoringAlert['priority'], template: NotificationTemplate): void {
+  addTemplate(
+    type: MonitoringAlert['type'],
+    priority: MonitoringAlert['priority'],
+    template: NotificationTemplate,
+  ): void {
     const key = `${type}_${priority}`;
     this.templates.set(key, template);
   }
 
-  getTemplate(type: MonitoringAlert['type'], priority: MonitoringAlert['priority']): NotificationTemplate | undefined {
+  getTemplate(
+    type: MonitoringAlert['type'],
+    priority: MonitoringAlert['priority'],
+  ): NotificationTemplate | undefined {
     const key = `${type}_${priority}`;
     return this.templates.get(key) || this.templates.get(`${type}_medium`); // Fallback to medium priority
   }
 
   // Main alert processing
-  async processAlert(alert: MonitoringAlert, experiment?: Experiment, results?: ExperimentResults): Promise<void> {
-    const applicableRules = this.rules.filter(rule => 
-      rule.enabled && this.doesAlertMatchRule(alert, rule)
+  async processAlert(
+    alert: MonitoringAlert,
+    experiment?: Experiment,
+    results?: ExperimentResults,
+  ): Promise<void> {
+    const applicableRules = this.rules.filter(
+      (rule) => rule.enabled && this.doesAlertMatchRule(alert, rule),
     );
 
     for (const rule of applicableRules) {
@@ -367,7 +383,7 @@ class AlertSystemService {
       }
 
       await this.sendAlert(alert, rule, experiment, results);
-      
+
       // Update last triggered
       rule.lastTriggered = new Date().toISOString();
     }
@@ -386,8 +402,8 @@ class AlertSystemService {
 
     // Check experiment tags if specified
     if (rule.conditions.experimentTags && alert.data.tags) {
-      const hasMatchingTag = rule.conditions.experimentTags.some(tag => 
-        alert.data.tags.includes(tag)
+      const hasMatchingTag = rule.conditions.experimentTags.some((tag) =>
+        alert.data.tags.includes(tag),
       );
       if (!hasMatchingTag) {
         return false;
@@ -417,20 +433,24 @@ class AlertSystemService {
     }
 
     const lastTriggered = new Date(rule.lastTriggered);
-    const cooldownEnd = new Date(lastTriggered.getTime() + rule.cooldownMinutes * 60000);
-    
+    const cooldownEnd = new Date(
+      lastTriggered.getTime() + rule.cooldownMinutes * 60000,
+    );
+
     return new Date() < cooldownEnd;
   }
 
   private async sendAlert(
-    alert: MonitoringAlert, 
-    rule: AlertRule, 
-    experiment?: Experiment, 
-    results?: ExperimentResults
+    alert: MonitoringAlert,
+    rule: AlertRule,
+    experiment?: Experiment,
+    results?: ExperimentResults,
   ): Promise<void> {
     const template = this.getTemplate(alert.type, alert.priority);
     if (!template) {
-      console.warn(`No template found for alert type ${alert.type} with priority ${alert.priority}`);
+      console.warn(
+        `No template found for alert type ${alert.type} with priority ${alert.priority}`,
+      );
       return;
     }
 
@@ -451,9 +471,9 @@ class AlertSystemService {
   }
 
   private buildTemplateContext(
-    alert: MonitoringAlert, 
-    experiment?: Experiment, 
-    results?: ExperimentResults
+    alert: MonitoringAlert,
+    experiment?: Experiment,
+    results?: ExperimentResults,
   ): Record<string, string> {
     return {
       experimentName: experiment?.name || 'Unknown Experiment',
@@ -461,24 +481,30 @@ class AlertSystemService {
       alertType: alert.type,
       alertPriority: alert.priority,
       alertMessage: alert.message,
-      confidence: results?.confidence ? (results.confidence * 100).toFixed(1) : 'N/A',
+      confidence: results?.confidence
+        ? (results.confidence * 100).toFixed(1)
+        : 'N/A',
       impact: results?.effectSize ? results.effectSize.toFixed(1) : 'N/A',
       winningVariant: results?.winningVariant || 'N/A',
-      sampleSize: results ? Object.values(results.sampleSizes).reduce((sum, size) => sum + size, 0).toLocaleString() : 'N/A',
+      sampleSize: results
+        ? Object.values(results.sampleSizes)
+            .reduce((sum, size) => sum + size, 0)
+            .toLocaleString()
+        : 'N/A',
       dropPercentage: alert.data.dropPercentage || 'N/A',
       affectedVariant: alert.data.affectedVariant || 'N/A',
       expectedDuration: experiment?.estimatedDuration?.toString() || 'N/A',
       actualDuration: alert.data.actualDuration || 'N/A',
       currentStatus: experiment?.status || 'N/A',
       dashboardUrl: `${process.env.NEXT_PUBLIC_APP_URL}/admin/experiments/${alert.experimentId}`,
-      timestamp: new Date(alert.createdAt).toLocaleString()
+      timestamp: new Date(alert.createdAt).toLocaleString(),
     };
   }
 
   private async sendToChannel(
-    channel: AlertChannel, 
-    template: NotificationTemplate, 
-    context: Record<string, string>
+    channel: AlertChannel,
+    template: NotificationTemplate,
+    context: Record<string, string>,
   ): Promise<void> {
     switch (channel.type) {
       case 'email':
@@ -499,16 +525,19 @@ class AlertSystemService {
     }
   }
 
-  private interpolateTemplate(template: string, context: Record<string, string>): string {
+  private interpolateTemplate(
+    template: string,
+    context: Record<string, string>,
+  ): string {
     return template.replace(/\{\{(\w+)\}\}/g, (match, key) => {
       return context[key] || match;
     });
   }
 
   private async sendEmail(
-    channel: AlertChannel, 
-    template: NotificationTemplate, 
-    context: Record<string, string>
+    channel: AlertChannel,
+    template: NotificationTemplate,
+    context: Record<string, string>,
   ): Promise<void> {
     const subject = this.interpolateTemplate(template.subject, context);
     const htmlBody = this.interpolateTemplate(template.htmlTemplate, context);
@@ -520,9 +549,9 @@ class AlertSystemService {
   }
 
   private async sendSlack(
-    channel: AlertChannel, 
-    template: NotificationTemplate, 
-    context: Record<string, string>
+    channel: AlertChannel,
+    template: NotificationTemplate,
+    context: Record<string, string>,
   ): Promise<void> {
     const message = this.interpolateTemplate(template.slackTemplate, context);
 
@@ -531,13 +560,13 @@ class AlertSystemService {
         channel: channel.config.channel,
         username: channel.config.username,
         text: message,
-        icon_emoji: ':warning:'
+        icon_emoji: ':warning:',
       };
 
       const response = await fetch(channel.config.webhookUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
+        body: JSON.stringify(payload),
       });
 
       if (!response.ok) {
@@ -547,19 +576,21 @@ class AlertSystemService {
   }
 
   private async sendWebhook(
-    channel: AlertChannel, 
-    template: NotificationTemplate, 
-    context: Record<string, string>
+    channel: AlertChannel,
+    template: NotificationTemplate,
+    context: Record<string, string>,
   ): Promise<void> {
     let payload = template.webhookPayload;
-    
+
     // Interpolate values in payload
-    payload = JSON.parse(this.interpolateTemplate(JSON.stringify(payload), context));
+    payload = JSON.parse(
+      this.interpolateTemplate(JSON.stringify(payload), context),
+    );
 
     const response = await fetch(channel.config.url, {
       method: channel.config.method || 'POST',
       headers: channel.config.headers || { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
+      body: JSON.stringify(payload),
     });
 
     if (!response.ok) {
@@ -568,9 +599,9 @@ class AlertSystemService {
   }
 
   private async sendBrowserNotification(
-    channel: AlertChannel, 
-    template: NotificationTemplate, 
-    context: Record<string, string>
+    channel: AlertChannel,
+    template: NotificationTemplate,
+    context: Record<string, string>,
   ): Promise<void> {
     const title = this.interpolateTemplate(template.subject, context);
     const body = context.alertMessage;
@@ -580,7 +611,7 @@ class AlertSystemService {
         new Notification(title, {
           body,
           icon: '/favicon.ico',
-          tag: context.experimentId
+          tag: context.experimentId,
         });
       } else if (Notification.permission !== 'denied') {
         await Notification.requestPermission();
@@ -589,9 +620,9 @@ class AlertSystemService {
   }
 
   private async sendSMS(
-    channel: AlertChannel, 
-    template: NotificationTemplate, 
-    context: Record<string, string>
+    channel: AlertChannel,
+    template: NotificationTemplate,
+    context: Record<string, string>,
   ): Promise<void> {
     // Implement SMS integration (Twilio, etc.)
     console.log(`📱 SMS Alert: ${context.alertMessage}`);
@@ -606,7 +637,7 @@ class AlertSystemService {
     return {
       channels: Array.from(this.channels.values()),
       rules: this.rules,
-      templates: Array.from(this.templates.values())
+      templates: Array.from(this.templates.values()),
     };
   }
 
@@ -617,7 +648,7 @@ class AlertSystemService {
   }): void {
     if (config.channels) {
       this.channels.clear();
-      config.channels.forEach(channel => this.addChannel(channel));
+      config.channels.forEach((channel) => this.addChannel(channel));
     }
 
     if (config.rules) {
@@ -626,7 +657,7 @@ class AlertSystemService {
 
     if (config.templates) {
       this.templates.clear();
-      config.templates.forEach(template => {
+      config.templates.forEach((template) => {
         this.addTemplate(template.type, template.priority, template);
       });
     }
@@ -648,10 +679,10 @@ export async function testAlert(channelId: string): Promise<void> {
       experiment: 'Test Experiment',
       confidence: 95.5,
       impact: 18.2,
-      winningVariant: 'Variant B'
+      winningVariant: 'Variant B',
     },
     createdAt: new Date().toISOString(),
-    acknowledged: false
+    acknowledged: false,
   };
 
   await alertSystem.processAlert(testAlert);

@@ -2,7 +2,8 @@ import jwt from 'jsonwebtoken';
 import { TenantInvite, TenantUserRole, TenantPermission } from '@/types/tenant';
 
 // JWT secret for invitation tokens (should be in environment variables)
-const INVITE_JWT_SECRET = process.env.TENANT_INVITE_JWT_SECRET || 'your-super-secret-invite-key';
+const INVITE_JWT_SECRET =
+  process.env.TENANT_INVITE_JWT_SECRET || 'your-super-secret-invite-key';
 const INVITE_EXPIRY_HOURS = 72; // 3 days
 
 export interface InviteTokenPayload {
@@ -16,7 +17,12 @@ export interface InviteTokenPayload {
   exp: number;
 }
 
-export async function createInviteToken(invite: Omit<TenantInvite, 'id' | 'token' | 'createdAt' | 'status' | 'usesCount'>): Promise<string> {
+export async function createInviteToken(
+  invite: Omit<
+    TenantInvite,
+    'id' | 'token' | 'createdAt' | 'status' | 'usesCount'
+  >,
+): Promise<string> {
   const payload: Partial<InviteTokenPayload> = {
     inviteId: generateInviteId(),
     tenantId: invite.tenantId,
@@ -35,7 +41,10 @@ export async function createInviteToken(invite: Omit<TenantInvite, 'id' | 'token
   return token;
 }
 
-export async function validateInviteToken(token: string, tenantId?: string): Promise<TenantInvite | null> {
+export async function validateInviteToken(
+  token: string,
+  tenantId?: string,
+): Promise<TenantInvite | null> {
   try {
     const decoded = jwt.verify(token, INVITE_JWT_SECRET, {
       issuer: '123legaldoc-tenant-invites',
@@ -49,7 +58,7 @@ export async function validateInviteToken(token: string, tenantId?: string): Pro
 
     // Check if invitation exists in database and is still valid
     const invitation = await getInvitationFromDatabase(decoded.inviteId);
-    
+
     if (!invitation) {
       return null;
     }
@@ -81,22 +90,25 @@ export async function validateInviteToken(token: string, tenantId?: string): Pro
 }
 
 export async function acceptInvitation(
-  token: string, 
+  token: string,
   userInfo: {
     firstName: string;
     lastName: string;
     password: string;
-  }
+  },
 ): Promise<{ success: boolean; tenantUser?: any; error?: string }> {
   try {
     const invitation = await validateInviteToken(token);
-    
+
     if (!invitation) {
       return { success: false, error: 'Invalid or expired invitation' };
     }
 
     if (invitation.status !== 'pending') {
-      return { success: false, error: 'Invitation has already been used or expired' };
+      return {
+        success: false,
+        error: 'Invitation has already been used or expired',
+      };
     }
 
     // Create or update user account
@@ -155,7 +167,9 @@ export async function createTenantInvitation(params: {
   maxUses?: number;
 }): Promise<{ invitation: TenantInvite; token: string }> {
   const expiresAt = new Date();
-  expiresAt.setHours(expiresAt.getHours() + (params.expiresInHours || INVITE_EXPIRY_HOURS));
+  expiresAt.setHours(
+    expiresAt.getHours() + (params.expiresInHours || INVITE_EXPIRY_HOURS),
+  );
 
   // Create invitation record
   const invitation: Omit<TenantInvite, 'id' | 'token' | 'createdAt'> = {
@@ -183,10 +197,13 @@ export async function createTenantInvitation(params: {
   return { invitation: savedInvitation, token };
 }
 
-export async function revokeInvitation(invitationId: string, revokedBy: string): Promise<boolean> {
+export async function revokeInvitation(
+  invitationId: string,
+  revokedBy: string,
+): Promise<boolean> {
   try {
     await updateInvitationStatus(invitationId, 'revoked');
-    
+
     // Log audit event
     const invitation = await getInvitationFromDatabase(invitationId);
     if (invitation) {
@@ -206,13 +223,17 @@ export async function revokeInvitation(invitationId: string, revokedBy: string):
   }
 }
 
-export async function getInvitationsByTenant(tenantId: string): Promise<TenantInvite[]> {
+export async function getInvitationsByTenant(
+  tenantId: string,
+): Promise<TenantInvite[]> {
   // TODO: Implement database query
   // Query Firestore for invitations by tenant
   return [];
 }
 
-export async function getInvitationsByEmail(email: string): Promise<TenantInvite[]> {
+export async function getInvitationsByEmail(
+  email: string,
+): Promise<TenantInvite[]> {
   // TODO: Implement database query
   // Query Firestore for invitations by email
   return [];
@@ -220,13 +241,17 @@ export async function getInvitationsByEmail(email: string): Promise<TenantInvite
 
 // Helper functions - these would connect to your actual database
 
-async function getInvitationFromDatabase(inviteId: string): Promise<TenantInvite | null> {
+async function getInvitationFromDatabase(
+  inviteId: string,
+): Promise<TenantInvite | null> {
   // TODO: Implement Firebase query
   // Query Firestore for invitation by ID
   return null;
 }
 
-async function saveInvitationToDatabase(invitation: Omit<TenantInvite, 'id' | 'createdAt'> & { token: string }): Promise<TenantInvite> {
+async function saveInvitationToDatabase(
+  invitation: Omit<TenantInvite, 'id' | 'createdAt'> & { token: string },
+): Promise<TenantInvite> {
   // TODO: Implement Firebase save
   // Save invitation to Firestore
   const now = new Date().toISOString();
@@ -237,7 +262,10 @@ async function saveInvitationToDatabase(invitation: Omit<TenantInvite, 'id' | 'c
   } as TenantInvite;
 }
 
-async function updateInvitationStatus(invitationId: string, status: TenantInvite['status']): Promise<void> {
+async function updateInvitationStatus(
+  invitationId: string,
+  status: TenantInvite['status'],
+): Promise<void> {
   // TODO: Implement Firebase update
   // Update invitation status in Firestore
 }
@@ -289,7 +317,12 @@ function generateInviteId(): string {
 }
 
 // Utility to generate secure invite URLs
-export function generateInviteUrl(tenantSlug: string, token: string, baseUrl?: string): string {
-  const base = baseUrl || process.env.NEXT_PUBLIC_SITE_URL || 'https://123legaldoc.com';
+export function generateInviteUrl(
+  tenantSlug: string,
+  token: string,
+  baseUrl?: string,
+): string {
+  const base =
+    baseUrl || process.env.NEXT_PUBLIC_SITE_URL || 'https://123legaldoc.com';
   return `${base}/tenant/${tenantSlug}/room/${token}`;
 }

@@ -24,13 +24,22 @@ export const taxPreparationAgreementMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Tax Preparation Agreement',
-      description: 'Professional agreement for tax preparation and filing services between preparer and client.',
-      aliases: ['tax service agreement', 'tax preparer contract', 'tax filing agreement'],
+      description:
+        'Professional agreement for tax preparation and filing services between preparer and client.',
+      aliases: [
+        'tax service agreement',
+        'tax preparer contract',
+        'tax filing agreement',
+      ],
     },
     es: {
       name: 'Acuerdo de Preparación de Impuestos',
-      description: 'Acuerdo profesional para servicios de preparación y presentación de impuestos entre preparador y cliente.',
-      aliases: ['acuerdo de servicios fiscales', 'contrato de preparador de impuestos'],
+      description:
+        'Acuerdo profesional para servicios de preparación y presentación de impuestos entre preparador y cliente.',
+      aliases: [
+        'acuerdo de servicios fiscales',
+        'contrato de preparador de impuestos',
+      ],
     },
   },
 };

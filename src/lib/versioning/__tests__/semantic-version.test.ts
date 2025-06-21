@@ -65,9 +65,15 @@ describe('Semantic Version Utilities', () => {
     });
 
     it('should throw error for invalid versions', () => {
-      expect(() => parseVersion('1.2')).toThrow('Invalid semantic version: 1.2');
-      expect(() => parseVersion('invalid')).toThrow('Invalid semantic version: invalid');
-      expect(() => parseVersion('1.2.3.4')).toThrow('Invalid semantic version: 1.2.3.4');
+      expect(() => parseVersion('1.2')).toThrow(
+        'Invalid semantic version: 1.2',
+      );
+      expect(() => parseVersion('invalid')).toThrow(
+        'Invalid semantic version: invalid',
+      );
+      expect(() => parseVersion('1.2.3.4')).toThrow(
+        'Invalid semantic version: 1.2.3.4',
+      );
     });
   });
 
@@ -134,7 +140,9 @@ describe('Semantic Version Utilities', () => {
 
     it('should handle prerelease increments', () => {
       expect(incrementVersion('1.0.0', 'prerelease')).toBe('1.0.1-alpha.0');
-      expect(incrementVersion('1.0.0-alpha.1', 'prerelease')).toBe('1.0.0-alpha.2');
+      expect(incrementVersion('1.0.0-alpha.1', 'prerelease')).toBe(
+        '1.0.0-alpha.2',
+      );
       expect(incrementVersion('1.0.0-beta', 'prerelease')).toBe('1.0.0-beta.1');
     });
   });
@@ -149,7 +157,12 @@ describe('Semantic Version Utilities', () => {
     it('should handle prerelease versions in sorting', () => {
       const versions = ['1.0.0', '1.0.0-alpha', '1.0.0-beta', '1.0.0-alpha.1'];
       const sorted = sortVersions(versions);
-      expect(sorted).toEqual(['1.0.0-alpha', '1.0.0-alpha.1', '1.0.0-beta', '1.0.0']);
+      expect(sorted).toEqual([
+        '1.0.0-alpha',
+        '1.0.0-alpha.1',
+        '1.0.0-beta',
+        '1.0.0',
+      ]);
     });
   });
 

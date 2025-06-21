@@ -30,7 +30,7 @@ Austin offers a dynamic business environment with opportunities across industrie
 
 [Start Your Austin Legal Document]
 
-*Trusted by hundreds of Austin businesses*
+_Trusted by hundreds of Austin businesses_
 
 ---
 

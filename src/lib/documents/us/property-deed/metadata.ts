@@ -26,11 +26,7 @@ export const propertyDeedMeta: LegalDocument = {
       name: 'Property Deed',
       description:
         'Create a legally binding Property Deed with our easy-to-use template. State-specific requirements included.',
-      aliases: [
-        'real estate deed',
-        'property transfer',
-        'deed of property',
-      ],
+      aliases: ['real estate deed', 'property transfer', 'deed of property'],
     },
     es: {
       name: 'Escritura de Propiedad',

@@ -43,7 +43,11 @@ export default function RootLayout({
       name="viewport"
       content="width=device-width, initial-scale=1, maximum-scale=1"
     />,
-    <meta key="description" name="description" content={SEOConfig.description} />,
+    <meta
+      key="description"
+      name="description"
+      content={SEOConfig.description}
+    />,
     <title key="title">{SEOConfig.title}</title>,
     <Script key="defer-css" id="defer-layout-css" strategy="beforeInteractive">
       {`
@@ -71,18 +75,8 @@ export default function RootLayout({
           : setup();
       `}
     </Script>,
-    <link
-      key="alt-en"
-      rel="alternate"
-      href={`${siteUrl}/en/`}
-      hrefLang="en"
-    />,
-    <link
-      key="alt-es"
-      rel="alternate"
-      href={`${siteUrl}/es/`}
-      hrefLang="es"
-    />,
+    <link key="alt-en" rel="alternate" href={`${siteUrl}/en/`} hrefLang="en" />,
+    <link key="alt-es" rel="alternate" href={`${siteUrl}/es/`} hrefLang="es" />,
   ];
 
   return (

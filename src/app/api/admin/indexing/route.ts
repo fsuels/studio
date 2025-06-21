@@ -25,35 +25,31 @@ export async function POST(request: NextRequest) {
     switch (action) {
       case 'start_bulk_indexing':
         return await handleStartBulkIndexing(params);
-      
+
       case 'index_single_document':
         return await handleIndexSingleDocument(params);
-      
+
       case 'initialize_index':
         return await handleInitializeIndex();
-      
+
       case 'get_index_stats':
         return await handleGetIndexStats();
-      
+
       case 'cleanup_index':
         return await handleCleanupIndex();
-      
-      default:
-        return NextResponse.json(
-          { error: 'Invalid action' },
-          { status: 400 }
-        );
-    }
 
+      default:
+        return NextResponse.json({ error: 'Invalid action' }, { status: 400 });
+    }
   } catch (error) {
     console.error('Admin indexing API error:', error);
-    
+
     return NextResponse.json(
-      { 
+      {
         error: 'Internal server error',
         message: error instanceof Error ? error.message : 'Unknown error',
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -67,29 +63,25 @@ export async function GET(request: NextRequest) {
     switch (action) {
       case 'job_status':
         return await handleGetJobStatus(jobId);
-      
+
       case 'list_jobs':
         return await handleListJobs();
-      
+
       case 'index_stats':
         return await handleGetIndexStats();
-      
-      default:
-        return NextResponse.json(
-          { error: 'Invalid action' },
-          { status: 400 }
-        );
-    }
 
+      default:
+        return NextResponse.json({ error: 'Invalid action' }, { status: 400 });
+    }
   } catch (error) {
     console.error('Admin indexing GET API error:', error);
-    
+
     return NextResponse.json(
-      { 
+      {
         error: 'Internal server error',
         message: error instanceof Error ? error.message : 'Unknown error',
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -106,11 +98,11 @@ async function handleStartBulkIndexing(params: any) {
 
     // Get all document IDs
     const allDocIds = await documentAnalyzer.getAllDocumentIds(locale);
-    
+
     if (allDocIds.length === 0) {
       return NextResponse.json(
         { error: 'No documents found to index' },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -136,8 +128,8 @@ async function handleStartBulkIndexing(params: any) {
     activeJobs.set(jobId, job);
 
     // Start processing asynchronously
-    processBulkIndexing(jobId, docsToProcess, locale, batchSize)
-      .catch(error => {
+    processBulkIndexing(jobId, docsToProcess, locale, batchSize).catch(
+      (error) => {
         console.error(`Bulk indexing job ${jobId} failed:`, error);
         const job = activeJobs.get(jobId);
         if (job) {
@@ -145,7 +137,8 @@ async function handleStartBulkIndexing(params: any) {
           job.completedAt = new Date().toISOString();
           activeJobs.set(jobId, job);
         }
-      });
+      },
+    );
 
     return NextResponse.json({
       success: true,
@@ -153,14 +146,13 @@ async function handleStartBulkIndexing(params: any) {
       totalDocuments: docsToProcess.length,
       estimatedTime: `${Math.ceil(docsToProcess.length / batchSize)} minutes`,
     });
-
   } catch (error) {
     return NextResponse.json(
-      { 
+      {
         error: 'Failed to start bulk indexing',
         message: error instanceof Error ? error.message : 'Unknown error',
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -172,7 +164,7 @@ async function processBulkIndexing(
   jobId: string,
   docIds: string[],
   locale: 'en' | 'es',
-  batchSize: number
+  batchSize: number,
 ) {
   const job = activeJobs.get(jobId);
   if (!job) return;
@@ -184,24 +176,26 @@ async function processBulkIndexing(
     // Process in batches
     for (let i = 0; i < docIds.length; i += batchSize) {
       const batch = docIds.slice(i, i + batchSize);
-      
+
       const batchResult = await documentAnalyzer.processDocumentBatch(
         batch,
         locale,
-        batch.length
+        batch.length,
       );
 
       // Update job progress
       job.successful.push(...batchResult.successful);
       job.failed.push(...batchResult.failed);
       job.processedDocuments += batch.length;
-      job.progress = Math.round((job.processedDocuments / job.totalDocuments) * 100);
-      
+      job.progress = Math.round(
+        (job.processedDocuments / job.totalDocuments) * 100,
+      );
+
       activeJobs.set(jobId, job);
 
       // Rate limiting between batches
       if (i + batchSize < docIds.length) {
-        await new Promise(resolve => setTimeout(resolve, 2000));
+        await new Promise((resolve) => setTimeout(resolve, 2000));
       }
     }
 
@@ -209,7 +203,6 @@ async function processBulkIndexing(
     job.status = 'completed';
     job.completedAt = new Date().toISOString();
     activeJobs.set(jobId, job);
-
   } catch (error) {
     console.error(`Bulk indexing job ${jobId} failed:`, error);
     job.status = 'failed';
@@ -227,14 +220,17 @@ async function handleIndexSingleDocument(params: any) {
   if (!docId) {
     return NextResponse.json(
       { error: 'Document ID is required' },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
   try {
     // Check if document needs processing
     if (!force) {
-      const needsProcessing = await documentAnalyzer.needsReprocessing(docId, locale);
+      const needsProcessing = await documentAnalyzer.needsReprocessing(
+        docId,
+        locale,
+      );
       if (!needsProcessing) {
         return NextResponse.json({
           success: true,
@@ -261,15 +257,14 @@ async function handleIndexSingleDocument(params: any) {
         },
       },
     });
-
   } catch (error) {
     return NextResponse.json(
-      { 
+      {
         error: 'Failed to index document',
         message: error instanceof Error ? error.message : 'Unknown error',
         docId,
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -285,14 +280,13 @@ async function handleInitializeIndex() {
       success: true,
       message: 'Pinecone index initialized successfully',
     });
-
   } catch (error) {
     return NextResponse.json(
-      { 
+      {
         error: 'Failed to initialize index',
         message: error instanceof Error ? error.message : 'Unknown error',
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -308,14 +302,13 @@ async function handleGetIndexStats() {
       success: true,
       stats,
     });
-
   } catch (error) {
     return NextResponse.json(
-      { 
+      {
         error: 'Failed to get index stats',
         message: error instanceof Error ? error.message : 'Unknown error',
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -331,14 +324,13 @@ async function handleCleanupIndex() {
       success: true,
       message: 'Index cleanup completed',
     });
-
   } catch (error) {
     return NextResponse.json(
-      { 
+      {
         error: 'Failed to cleanup index',
         message: error instanceof Error ? error.message : 'Unknown error',
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -348,18 +340,12 @@ async function handleCleanupIndex() {
  */
 async function handleGetJobStatus(jobId: string | null) {
   if (!jobId) {
-    return NextResponse.json(
-      { error: 'Job ID is required' },
-      { status: 400 }
-    );
+    return NextResponse.json({ error: 'Job ID is required' }, { status: 400 });
   }
 
   const job = activeJobs.get(jobId);
   if (!job) {
-    return NextResponse.json(
-      { error: 'Job not found' },
-      { status: 404 }
-    );
+    return NextResponse.json({ error: 'Job not found' }, { status: 404 });
   }
 
   return NextResponse.json({
@@ -371,8 +357,9 @@ async function handleGetJobStatus(jobId: string | null) {
  * List all jobs
  */
 async function handleListJobs() {
-  const jobs = Array.from(activeJobs.values())
-    .sort((a, b) => new Date(b.startedAt).getTime() - new Date(a.startedAt).getTime());
+  const jobs = Array.from(activeJobs.values()).sort(
+    (a, b) => new Date(b.startedAt).getTime() - new Date(a.startedAt).getTime(),
+  );
 
   return NextResponse.json({
     jobs,

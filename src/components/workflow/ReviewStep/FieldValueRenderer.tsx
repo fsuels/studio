@@ -11,17 +11,20 @@ interface FieldValueRendererProps {
   locale: 'en' | 'es';
 }
 
-export default function FieldValueRenderer({ field, locale }: FieldValueRendererProps) {
+export default function FieldValueRenderer({
+  field,
+  locale,
+}: FieldValueRendererProps) {
   const { t } = useTranslation('common');
   const { getValues } = useFormContext<FormValues>();
-  
+
   const value = getValues(field.id);
   const isMissing =
     field.required &&
     (value === undefined || value === null || String(value).trim() === '');
 
   if (field.type === 'boolean') return <>{value ? t('Yes') : t('No')}</>;
-  
+
   if (
     field.type === 'select' &&
     field.options &&
@@ -31,21 +34,19 @@ export default function FieldValueRenderer({ field, locale }: FieldValueRenderer
     const opt = field.options.find((o) => String(o.value) === String(value));
     return <>{opt?.label || String(value)}</>;
   }
-  
+
   if (value instanceof Date) return <>{value.toLocaleDateString(locale)}</>;
-  
+
   if (isMissing)
     return (
       <span className="italic text-destructive">
         {t('wizard.fieldRequired')}
       </span>
     );
-    
+
   return (
     <>
-      {value !== undefined &&
-      value !== null &&
-      String(value).trim() !== '' ? (
+      {value !== undefined && value !== null && String(value).trim() !== '' ? (
         String(value)
       ) : (
         <span className="italic text-muted-foreground/70">

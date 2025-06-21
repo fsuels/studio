@@ -47,7 +47,7 @@ Don't risk using generic templates that may not comply with North Carolina law. 
 
 [Create North Carolina Independent Contractor Agreement]
 
-*Trusted by thousands of North Carolina businesses*
+_Trusted by thousands of North Carolina businesses_
 
 ---
 

@@ -37,7 +37,7 @@ export interface DocumentSummary {
 export async function summarizeDocument(
   documentText: string,
   documentType?: string,
-  options: DocumentSummaryOptions = {}
+  options: DocumentSummaryOptions = {},
 ): Promise<DocumentSummary | null> {
   const client = initOpenAI();
   if (!client) {
@@ -49,35 +49,49 @@ export async function summarizeDocument(
     readingLevel = 'standard',
     maxLength = 'detailed',
     focusAreas = [],
-    includeKeyTerms = true
+    includeKeyTerms = true,
   } = options;
 
   // Estimate reading time (average 200 words per minute)
   const wordCount = documentText.split(/\s+/).length;
   const readingTimeMinutes = Math.ceil(wordCount / 200);
-  const readingTime = readingTimeMinutes < 1 ? '< 1 minute' : `${readingTimeMinutes} minute${readingTimeMinutes > 1 ? 's' : ''}`;
+  const readingTime =
+    readingTimeMinutes < 1
+      ? '< 1 minute'
+      : `${readingTimeMinutes} minute${readingTimeMinutes > 1 ? 's' : ''}`;
 
   // Determine complexity based on document length and legal terminology
-  const hasComplexTerms = /\b(whereas|heretofore|pursuant|notwithstanding|indemnify|covenant|warranty|liability|damages|breach|remedy|jurisdiction|venue|arbitration|mediation)\b/gi.test(documentText);
-  const complexity: 'low' | 'medium' | 'high' = 
-    wordCount < 500 && !hasComplexTerms ? 'low' :
-    wordCount < 1500 && !hasComplexTerms ? 'medium' : 'high';
+  const hasComplexTerms =
+    /\b(whereas|heretofore|pursuant|notwithstanding|indemnify|covenant|warranty|liability|damages|breach|remedy|jurisdiction|venue|arbitration|mediation)\b/gi.test(
+      documentText,
+    );
+  const complexity: 'low' | 'medium' | 'high' =
+    wordCount < 500 && !hasComplexTerms
+      ? 'low'
+      : wordCount < 1500 && !hasComplexTerms
+        ? 'medium'
+        : 'high';
 
   const readingLevelInstructions = {
-    simple: 'Use simple, everyday language. Write at a 6th-grade reading level. Avoid legal jargon.',
-    standard: 'Use clear, accessible language. Write at a high school reading level. Explain legal terms when needed.',
-    advanced: 'Use professional but clear language. Write at a college reading level. Include necessary legal terminology with context.'
+    simple:
+      'Use simple, everyday language. Write at a 6th-grade reading level. Avoid legal jargon.',
+    standard:
+      'Use clear, accessible language. Write at a high school reading level. Explain legal terms when needed.',
+    advanced:
+      'Use professional but clear language. Write at a college reading level. Include necessary legal terminology with context.',
   };
 
   const lengthInstructions = {
     brief: 'Keep the summary to 2-3 sentences maximum.',
     detailed: 'Provide a thorough but concise summary in 1-2 paragraphs.',
-    comprehensive: 'Provide a detailed summary with comprehensive coverage of all major sections.'
+    comprehensive:
+      'Provide a detailed summary with comprehensive coverage of all major sections.',
   };
 
-  const focusInstruction = focusAreas.length > 0 
-    ? `Pay special attention to these areas: ${focusAreas.join(', ')}.`
-    : '';
+  const focusInstruction =
+    focusAreas.length > 0
+      ? `Pay special attention to these areas: ${focusAreas.join(', ')}.`
+      : '';
 
   const prompt = `
     You are a legal document expert specializing in plain-language explanations. 
@@ -122,33 +136,35 @@ export async function summarizeDocument(
 
     // Parse the JSON response
     const parsedResponse = JSON.parse(content);
-    
+
     const summary: DocumentSummary = {
       summary: parsedResponse.summary || '',
       keyPoints: parsedResponse.keyPoints || [],
-      importantTerms: includeKeyTerms ? (parsedResponse.importantTerms || []) : undefined,
+      importantTerms: includeKeyTerms
+        ? parsedResponse.importantTerms || []
+        : undefined,
       readingTime,
       complexity,
       warnings: parsedResponse.warnings || [],
     };
 
     return summary;
-
   } catch (err) {
     console.error('[summarize-document] API error', err);
-    
+
     // Return a fallback summary
     return {
-      summary: 'Unable to generate AI summary at this time. Please review the document manually.',
+      summary:
+        'Unable to generate AI summary at this time. Please review the document manually.',
       keyPoints: [
         'Review all sections carefully',
         'Pay attention to your rights and obligations',
         'Note any important dates or deadlines',
-        'Consider consulting with a legal professional if needed'
+        'Consider consulting with a legal professional if needed',
       ],
       readingTime,
       complexity,
-      warnings: ['AI summarization temporarily unavailable']
+      warnings: ['AI summarization temporarily unavailable'],
     };
   }
 }
@@ -187,17 +203,20 @@ export async function simplifyLegalJargon(text: string): Promise<string> {
 }
 
 // Cache for document summaries to avoid repeated API calls
-const summaryCache = new Map<string, { summary: DocumentSummary; timestamp: number }>();
+const summaryCache = new Map<
+  string,
+  { summary: DocumentSummary; timestamp: number }
+>();
 const CACHE_DURATION = 60 * 60 * 1000; // 1 hour
 
 export async function getCachedDocumentSummary(
   documentText: string,
   documentType?: string,
-  options: DocumentSummaryOptions = {}
+  options: DocumentSummaryOptions = {},
 ): Promise<DocumentSummary | null> {
   // Create a cache key based on document content and options
   const cacheKey = `${documentType || 'unknown'}-${JSON.stringify(options)}-${documentText.slice(0, 100)}`;
-  
+
   // Check cache first
   const cached = summaryCache.get(cacheKey);
   if (cached && Date.now() - cached.timestamp < CACHE_DURATION) {
@@ -206,7 +225,7 @@ export async function getCachedDocumentSummary(
 
   // Generate new summary
   const summary = await summarizeDocument(documentText, documentType, options);
-  
+
   // Cache the result
   if (summary) {
     summaryCache.set(cacheKey, { summary, timestamp: Date.now() });

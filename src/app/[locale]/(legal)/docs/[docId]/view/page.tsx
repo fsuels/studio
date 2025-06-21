@@ -14,7 +14,11 @@ import { Loader2, Share2 } from 'lucide-react';
 import { getDb } from '@/lib/firebase';
 import { doc, getDoc } from 'firebase/firestore';
 import { hasUserPaidForDocument } from '@/lib/firestore/paymentActions';
-import { getStorage, ref as storageRef, getDownloadURL } from 'firebase/storage';
+import {
+  getStorage,
+  ref as storageRef,
+  getDownloadURL,
+} from 'firebase/storage';
 import { auditService } from '@/services/firebase-audit-service';
 
 interface ViewDocumentPageProps {
@@ -23,10 +27,10 @@ interface ViewDocumentPageProps {
 
 export default function ViewDocumentPage({ params }: ViewDocumentPageProps) {
   const { locale, docId } = params;
-  const searchParams   = useSearchParams();
+  const searchParams = useSearchParams();
   /* Dashboard passes ?docId=abc123, but direct navigation (or refresh)
      gives you only the route param.  */
-  const savedDocId     = searchParams.get('docId') || docId;
+  const savedDocId = searchParams.get('docId') || docId;
   const { isLoggedIn, isLoading: authLoading, user } = useAuth();
   const router = useRouter();
 
@@ -65,7 +69,9 @@ export default function ViewDocumentPage({ params }: ViewDocumentPageProps) {
           markdown = data.markdown; // legacy markdown field
         } else if (data.storagePath) {
           const storage = getStorage();
-          const url = await getDownloadURL(storageRef(storage, data.storagePath));
+          const url = await getDownloadURL(
+            storageRef(storage, data.storagePath),
+          );
           const res = await fetch(url);
           markdown = await res.text();
         } else if (data.url) {
@@ -85,13 +91,17 @@ export default function ViewDocumentPage({ params }: ViewDocumentPageProps) {
           /*  Optional but highly recommended: write it back so subsequent
               visits are instant. Fail‑safe — ignore any permission errors.  */
           try {
-            await setDoc(docRef, { contentMarkdown: markdown, updatedAt: serverTimestamp() }, { merge: true });
+            await setDoc(
+              docRef,
+              { contentMarkdown: markdown, updatedAt: serverTimestamp() },
+              { merge: true },
+            );
           } catch (_) {} // read‑only environments (preview channels) can skip this
         }
 
         setMarkdownContent(markdown || null);
         setLoadError(null);
-        
+
         // Log document view event
         if (markdown) {
           await auditService.logDocumentEvent(
@@ -103,18 +113,19 @@ export default function ViewDocumentPage({ params }: ViewDocumentPageProps) {
               locale,
               hasContent: !!markdown,
               contentSource: data.contentMarkdown ? 'cached' : 'generated',
-              documentLength: markdown.length
-            }
+              documentLength: markdown.length,
+            },
           );
         }
-        
+
         const paid = await hasUserPaidForDocument(uid, savedDocId);
         setHasPaid(paid);
       } catch (err: any) {
         console.error('[view page] failed to load saved content', err);
-        const msg = err?.message === 'timeout'
-          ? 'Request timed out. Please try again.'
-          : 'Failed to load document.';
+        const msg =
+          err?.message === 'timeout'
+            ? 'Request timed out. Please try again.'
+            : 'Failed to load document.';
         setLoadError(msg);
       } finally {
         if (!cancelled) setIsLoadingContent(false);
@@ -236,7 +247,8 @@ export default function ViewDocumentPage({ params }: ViewDocumentPageProps) {
           </Button>
 
           <Button onClick={handleShare} variant="outline">
-            <Share2 className="mr-2 h-4 w-4" />Share
+            <Share2 className="mr-2 h-4 w-4" />
+            Share
           </Button>
 
           <Button variant="secondary" onClick={handleDownload}>

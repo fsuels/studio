@@ -13,8 +13,8 @@ export const indemnityAgreementQuestions: DocumentQuestion[] = [
       { value: 'partner', label: 'Business Partner' },
       { value: 'tenant', label: 'Tenant/Landlord' },
       { value: 'service_provider', label: 'Service Provider' },
-      { value: 'other', label: 'Other' }
-    ]
+      { value: 'other', label: 'Other' },
+    ],
   },
 
   // Indemnitee Information
@@ -26,56 +26,56 @@ export const indemnityAgreementQuestions: DocumentQuestion[] = [
     options: [
       { value: 'individual', label: 'Individual' },
       { value: 'business', label: 'Business' },
-      { value: 'government', label: 'Government Entity' }
-    ]
+      { value: 'government', label: 'Government Entity' },
+    ],
   },
   {
     id: 'indemnitee.name',
     text: 'Full legal name of the protected party',
     type: 'text',
     required: true,
-    placeholder: 'ABC Corporation or John Smith'
+    placeholder: 'ABC Corporation or John Smith',
   },
   {
     id: 'indemnitee.address',
     text: 'Street address',
     type: 'text',
     required: true,
-    placeholder: '123 Main Street'
+    placeholder: '123 Main Street',
   },
   {
     id: 'indemnitee.city',
     text: 'City',
     type: 'text',
-    required: true
+    required: true,
   },
   {
     id: 'indemnitee.state',
     text: 'State',
     type: 'select',
     required: true,
-    placeholder: 'Select state'
+    placeholder: 'Select state',
   },
   {
     id: 'indemnitee.zipCode',
     text: 'ZIP Code',
     type: 'text',
     required: true,
-    placeholder: '12345'
+    placeholder: '12345',
   },
   {
     id: 'indemnitee.phone',
     text: 'Phone number',
     type: 'tel',
     required: true,
-    placeholder: '(555) 123-4567'
+    placeholder: '(555) 123-4567',
   },
   {
     id: 'indemnitee.email',
     text: 'Email address',
     type: 'email',
     required: true,
-    placeholder: 'contact@example.com'
+    placeholder: 'contact@example.com',
   },
 
   // Indemnitor Information
@@ -87,56 +87,56 @@ export const indemnityAgreementQuestions: DocumentQuestion[] = [
     options: [
       { value: 'individual', label: 'Individual' },
       { value: 'business', label: 'Business' },
-      { value: 'government', label: 'Government Entity' }
-    ]
+      { value: 'government', label: 'Government Entity' },
+    ],
   },
   {
     id: 'indemnitor.name',
     text: 'Full legal name of the indemnifying party',
     type: 'text',
     required: true,
-    placeholder: 'XYZ Services, LLC or Jane Doe'
+    placeholder: 'XYZ Services, LLC or Jane Doe',
   },
   {
     id: 'indemnitor.address',
     text: 'Street address',
     type: 'text',
     required: true,
-    placeholder: '456 Oak Avenue'
+    placeholder: '456 Oak Avenue',
   },
   {
     id: 'indemnitor.city',
     text: 'City',
     type: 'text',
-    required: true
+    required: true,
   },
   {
     id: 'indemnitor.state',
     text: 'State',
     type: 'select',
     required: true,
-    placeholder: 'Select state'
+    placeholder: 'Select state',
   },
   {
     id: 'indemnitor.zipCode',
     text: 'ZIP Code',
     type: 'text',
     required: true,
-    placeholder: '12345'
+    placeholder: '12345',
   },
   {
     id: 'indemnitor.phone',
     text: 'Phone number',
     type: 'tel',
     required: true,
-    placeholder: '(555) 987-6543'
+    placeholder: '(555) 987-6543',
   },
   {
     id: 'indemnitor.email',
     text: 'Email address',
     type: 'email',
     required: true,
-    placeholder: 'info@example.com'
+    placeholder: 'info@example.com',
   },
 
   // Agreement Details
@@ -145,21 +145,22 @@ export const indemnityAgreementQuestions: DocumentQuestion[] = [
     text: 'Describe the project, activity, or situation covered by this indemnity',
     type: 'textarea',
     required: true,
-    placeholder: 'Provide a detailed description of the work, project, or activities that this indemnity agreement covers...',
-    minLength: 50
+    placeholder:
+      'Provide a detailed description of the work, project, or activities that this indemnity agreement covers...',
+    minLength: 50,
   },
   {
     id: 'context.effectiveDate',
     text: 'When does this agreement become effective?',
     type: 'date',
-    required: true
+    required: true,
   },
   {
     id: 'context.terminationDate',
     text: 'When does this agreement end? (Optional)',
     type: 'date',
     required: false,
-    helpText: 'Leave blank if ongoing'
+    helpText: 'Leave blank if ongoing',
   },
 
   // Scope of Indemnification
@@ -169,11 +170,21 @@ export const indemnityAgreementQuestions: DocumentQuestion[] = [
     type: 'select',
     required: true,
     options: [
-      { value: 'broad', label: 'Broad Form - Covers all claims regardless of fault' },
-      { value: 'intermediate', label: 'Intermediate Form - Covers shared and indemnitee fault' },
-      { value: 'limited', label: 'Limited Form - Covers only indemnitor fault' }
+      {
+        value: 'broad',
+        label: 'Broad Form - Covers all claims regardless of fault',
+      },
+      {
+        value: 'intermediate',
+        label: 'Intermediate Form - Covers shared and indemnitee fault',
+      },
+      {
+        value: 'limited',
+        label: 'Limited Form - Covers only indemnitor fault',
+      },
     ],
-    helpText: 'Broad form provides maximum protection but may not be enforceable in all states'
+    helpText:
+      'Broad form provides maximum protection but may not be enforceable in all states',
   },
   {
     id: 'indemnificationScope.coveredClaims',
@@ -188,8 +199,8 @@ export const indemnityAgreementQuestions: DocumentQuestion[] = [
       { value: 'employmentClaims', label: 'Employment-related claims' },
       { value: 'environmentalClaims', label: 'Environmental claims' },
       { value: 'contractualLiability', label: 'Contractual liability' },
-      { value: 'professionalErrors', label: 'Professional errors & omissions' }
-    ]
+      { value: 'professionalErrors', label: 'Professional errors & omissions' },
+    ],
   },
 
   // Financial Limits
@@ -198,7 +209,7 @@ export const indemnityAgreementQuestions: DocumentQuestion[] = [
     text: 'Do you want to set a monetary limit on indemnification?',
     type: 'boolean',
     required: true,
-    helpText: 'Setting limits caps the indemnitor\'s financial exposure'
+    helpText: "Setting limits caps the indemnitor's financial exposure",
   },
   {
     id: 'financialTerms.monetaryLimit.limitAmount',
@@ -206,8 +217,11 @@ export const indemnityAgreementQuestions: DocumentQuestion[] = [
     type: 'number',
     required: false,
     placeholder: '1000000',
-    conditionalOn: { field: 'financialTerms.monetaryLimit.hasLimit', value: true },
-    helpText: 'Enter amount in dollars'
+    conditionalOn: {
+      field: 'financialTerms.monetaryLimit.hasLimit',
+      value: true,
+    },
+    helpText: 'Enter amount in dollars',
   },
 
   // Defense Obligations
@@ -216,7 +230,7 @@ export const indemnityAgreementQuestions: DocumentQuestion[] = [
     text: 'Should the indemnitor have a duty to defend claims?',
     type: 'boolean',
     required: true,
-    helpText: 'This requires the indemnitor to provide legal defense'
+    helpText: 'This requires the indemnitor to provide legal defense',
   },
   {
     id: 'defenseObligations.selectionOfCounsel',
@@ -226,8 +240,8 @@ export const indemnityAgreementQuestions: DocumentQuestion[] = [
     options: [
       { value: 'indemnitor', label: 'Indemnitor chooses' },
       { value: 'indemnitee', label: 'Indemnitee chooses' },
-      { value: 'mutual', label: 'Mutual agreement required' }
-    ]
+      { value: 'mutual', label: 'Mutual agreement required' },
+    ],
   },
 
   // Insurance Requirements
@@ -236,7 +250,7 @@ export const indemnityAgreementQuestions: DocumentQuestion[] = [
     text: 'Require the indemnitor to maintain insurance?',
     type: 'boolean',
     required: true,
-    helpText: 'Insurance backing strengthens indemnification'
+    helpText: 'Insurance backing strengthens indemnification',
   },
   {
     id: 'insuranceRequirements.generalLiability.minimumAmount',
@@ -245,7 +259,7 @@ export const indemnityAgreementQuestions: DocumentQuestion[] = [
     required: false,
     placeholder: '1000000',
     conditionalOn: { field: 'insuranceRequirements.required', value: true },
-    helpText: 'Enter amount in dollars'
+    helpText: 'Enter amount in dollars',
   },
 
   // Key Exclusions
@@ -254,14 +268,15 @@ export const indemnityAgreementQuestions: DocumentQuestion[] = [
     text: 'Exclude gross negligence from indemnification?',
     type: 'boolean',
     required: true,
-    helpText: 'Recommended - indemnification for gross negligence may not be enforceable'
+    helpText:
+      'Recommended - indemnification for gross negligence may not be enforceable',
   },
   {
     id: 'exclusions.soleNegligence',
     text: 'Exclude sole negligence of indemnitee?',
     type: 'boolean',
     required: true,
-    helpText: 'Some states require this exclusion'
+    helpText: 'Some states require this exclusion',
   },
 
   // Notice Requirements
@@ -271,30 +286,30 @@ export const indemnityAgreementQuestions: DocumentQuestion[] = [
     type: 'number',
     required: true,
     placeholder: '30',
-    helpText: 'Typical range is 10-30 days'
+    helpText: 'Typical range is 10-30 days',
   },
   {
     id: 'procedures.noticeAddress',
     text: 'Address for claim notices',
     type: 'text',
     required: true,
-    placeholder: 'Same as indemnitor address or specify different address'
+    placeholder: 'Same as indemnitor address or specify different address',
   },
 
   // Governing Law
   {
     id: 'governingLaw.state',
-    text: 'Which state\'s laws will govern this agreement?',
+    text: "Which state's laws will govern this agreement?",
     type: 'select',
     required: true,
-    placeholder: 'Select state'
+    placeholder: 'Select state',
   },
   {
     id: 'governingLaw.venue',
     text: 'County/city for legal venue',
     type: 'text',
     required: true,
-    placeholder: 'County or city name'
+    placeholder: 'County or city name',
   },
   {
     id: 'governingLaw.disputeResolution',
@@ -304,7 +319,10 @@ export const indemnityAgreementQuestions: DocumentQuestion[] = [
     options: [
       { value: 'litigation', label: 'Court litigation' },
       { value: 'arbitration', label: 'Binding arbitration' },
-      { value: 'mediation_then_arbitration', label: 'Mediation, then arbitration' }
-    ]
-  }
+      {
+        value: 'mediation_then_arbitration',
+        label: 'Mediation, then arbitration',
+      },
+    ],
+  },
 ];

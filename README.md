@@ -70,7 +70,6 @@ NEXT_PUBLIC_SITE_URL=https://example.com npm run build
 npm start
 ```
 
-
 The site will now be available on `https://localhost:<port>` (or your configured
 domain) and Lighthouse should no longer flag insecure requests.
 

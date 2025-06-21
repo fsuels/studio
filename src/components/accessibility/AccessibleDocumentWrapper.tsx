@@ -35,7 +35,8 @@ export function AccessibleDocumentWrapper({
 
     const updateProgress = () => {
       const scrollTop = window.scrollY;
-      const documentHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const documentHeight =
+        document.documentElement.scrollHeight - window.innerHeight;
       const progress = Math.min((scrollTop / documentHeight) * 100, 100);
       setReadingProgress(progress);
     };
@@ -50,23 +51,27 @@ export function AccessibleDocumentWrapper({
       const words = documentText.split(/\s+/).length;
       const minutes = Math.ceil(words / 200); // Average reading speed
       setEstimatedReadingTime(
-        minutes < 1 ? '< 1 minute' : `${minutes} minute${minutes > 1 ? 's' : ''}`
+        minutes < 1
+          ? '< 1 minute'
+          : `${minutes} minute${minutes > 1 ? 's' : ''}`,
       );
     }
   }, [documentText]);
 
   // Skip links for better navigation
   const SkipLinks = () => (
-    <div className={`skip-links ${preferences.skipLinksVisible ? 'block' : ''}`}>
-      <a 
-        href="#document-summary" 
+    <div
+      className={`skip-links ${preferences.skipLinksVisible ? 'block' : ''}`}
+    >
+      <a
+        href="#document-summary"
         className="skip-link"
         aria-label="Skip to document summary"
       >
         Skip to Summary
       </a>
-      <a 
-        href="#document-content" 
+      <a
+        href="#document-content"
         className="skip-link"
         aria-label="Skip to main document content"
       >
@@ -77,17 +82,19 @@ export function AccessibleDocumentWrapper({
 
   // Reading progress indicator
   const ReadingProgress = () => {
-    if (!preferences.showProgressIndicators || !showProgressIndicator) return null;
-    
+    if (!preferences.showProgressIndicators || !showProgressIndicator)
+      return null;
+
     return (
       <div className="reading-progress sticky top-0 z-40">
-        <Progress 
-          value={readingProgress} 
+        <Progress
+          value={readingProgress}
           className="h-1"
           aria-label={`Reading progress: ${Math.round(readingProgress)}%`}
         />
         <div className="sr-only" aria-live="polite">
-          {readingProgress > 0 && `Reading progress: ${Math.round(readingProgress)}%`}
+          {readingProgress > 0 &&
+            `Reading progress: ${Math.round(readingProgress)}%`}
         </div>
       </div>
     );
@@ -113,7 +120,7 @@ export function AccessibleDocumentWrapper({
             </div>
           )}
         </div>
-        
+
         <div className="flex items-center gap-2">
           {preferences.showDocumentSummary && (
             <Button
@@ -122,11 +129,15 @@ export function AccessibleDocumentWrapper({
               onClick={() => setShowSummary(!showSummary)}
               className="flex items-center gap-1"
             >
-              {showSummary ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+              {showSummary ? (
+                <EyeOff className="h-4 w-4" />
+              ) : (
+                <Eye className="h-4 w-4" />
+              )}
               {showSummary ? 'Hide' : 'Show'} Summary
             </Button>
           )}
-          
+
           {isAccessibilityModeActive && (
             <Badge variant="default" className="flex items-center gap-1">
               <Settings className="h-3 w-3" />
@@ -141,25 +152,25 @@ export function AccessibleDocumentWrapper({
   // Apply accessibility classes to the wrapper
   const getAccessibilityClasses = () => {
     const classes = [];
-    
+
     if (preferences.dyslexiaFriendlyFont) {
       classes.push('dyslexia-friendly-font');
     }
-    
+
     if (preferences.highContrast) {
       classes.push('high-contrast');
     }
-    
+
     if (preferences.reduceMotion) {
       classes.push('reduce-motion');
     }
-    
+
     if (preferences.focusIndicatorEnhanced) {
       classes.push('enhanced-focus');
     }
-    
+
     classes.push('accessibility-mode');
-    
+
     return classes.join(' ');
   };
 
@@ -167,8 +178,8 @@ export function AccessibleDocumentWrapper({
     <>
       <SkipLinks />
       <ReadingProgress />
-      
-      <div 
+
+      <div
         className={`
           ${getAccessibilityClasses()} 
           ${className || ''}
@@ -179,11 +190,9 @@ export function AccessibleDocumentWrapper({
         }}
       >
         <DocumentMetadata />
-        
+
         {/* Document Summary */}
-        {preferences.showDocumentSummary && 
-         showSummary && 
-         documentText && (
+        {preferences.showDocumentSummary && showSummary && documentText && (
           <div id="document-summary" className="mb-6">
             <DocumentSummary
               documentText={documentText}
@@ -192,9 +201,9 @@ export function AccessibleDocumentWrapper({
             />
           </div>
         )}
-        
+
         {/* Main Document Content */}
-        <div 
+        <div
           id="document-content"
           className={`
             ${preferences.breakDownComplexForms ? 'space-y-6' : ''}
@@ -205,7 +214,7 @@ export function AccessibleDocumentWrapper({
         >
           {children}
         </div>
-        
+
         {/* Footer with accessibility info */}
         {isAccessibilityModeActive && (
           <div className="mt-8 p-4 bg-muted/30 rounded-lg border border-dashed">
@@ -228,7 +237,9 @@ export function AccessibleDocumentWrapper({
                   <li>• High contrast mode enabled</li>
                 )}
                 {preferences.keyboardShortcutsEnabled && (
-                  <li>• Keyboard shortcuts enabled (press ⌘/Ctrl + / for help)</li>
+                  <li>
+                    • Keyboard shortcuts enabled (press ⌘/Ctrl + / for help)
+                  </li>
                 )}
               </ul>
             </div>

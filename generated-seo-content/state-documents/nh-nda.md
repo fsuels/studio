@@ -47,7 +47,7 @@ Don't risk using generic templates that may not comply with New Hampshire law. G
 
 [Create New Hampshire Non-Disclosure Agreement]
 
-*Trusted by thousands of New Hampshire businesses*
+_Trusted by thousands of New Hampshire businesses_
 
 ---
 

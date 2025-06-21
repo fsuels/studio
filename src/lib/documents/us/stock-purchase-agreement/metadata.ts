@@ -1,6 +1,9 @@
 import type { LegalDocument } from '@/types/documents';
 
-export const stockPurchaseAgreementMeta: Omit<LegalDocument, 'schema' | 'questions'> = {
+export const stockPurchaseAgreementMeta: Omit<
+  LegalDocument,
+  'schema' | 'questions'
+> = {
   id: 'stock-purchase-agreement',
   jurisdiction: 'US',
   category: 'Corporate',
@@ -21,13 +24,21 @@ export const stockPurchaseAgreementMeta: Omit<LegalDocument, 'schema' | 'questio
       name: 'Stock Purchase Agreement',
       description:
         'Agreement for the purchase and sale of company stock between parties.',
-      aliases: ['Share purchase agreement', 'Equity purchase agreement', 'Stock sale agreement'],
+      aliases: [
+        'Share purchase agreement',
+        'Equity purchase agreement',
+        'Stock sale agreement',
+      ],
     },
     es: {
       name: 'Acuerdo de Compra de Acciones',
       description:
         'Acuerdo para la compra y venta de acciones de la empresa entre las partes.',
-      aliases: ['Acuerdo compra acciones', 'Acuerdo venta acciones', 'Compraventa acciones'],
+      aliases: [
+        'Acuerdo compra acciones',
+        'Acuerdo venta acciones',
+        'Compraventa acciones',
+      ],
     },
   },
 };

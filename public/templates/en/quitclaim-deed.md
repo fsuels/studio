@@ -15,6 +15,7 @@
 **Recording Information:** {{recording_info}} (to be completed by recorder)
 
 ### 1.1 Parties
+
 **Grantor (Current Owner):** {{grantor_name}}  
 **Grantor Address:** {{grantor_address}}  
 **Grantor Status:** {{grantor_marital_status}}
@@ -39,16 +40,19 @@
 ## 2. Property Description
 
 ### 2.1 Property Address
+
 **Property Address:** {{property_address}}  
 **City:** {{city}}, **State:** {{state}}, **ZIP:** {{zip_code}}  
 **County:** {{county}}
 
 ### 2.2 Legal Description
+
 {{legal_description}}
 
 **Assessor's Parcel Number (APN):** {{assessors_parcel_number}}
 
 ### 2.3 Property Details
+
 **Property Type:** {{property_type}} (Residential/Commercial/Vacant Land)  
 **Approximate Size:** {{property_size}}  
 **Zoning:** {{zoning_designation}}
@@ -58,13 +62,15 @@
 ## 3. Consideration and Transfer
 
 ### 3.1 Consideration
+
 {{#if nominal_consideration}}
 **Consideration:** For the sum of Ten Dollars ($10.00) and other good and valuable consideration, receipt of which is hereby acknowledged.
 {{else}}
-**Consideration:** For the sum of **${{consideration_amount}}** and other good and valuable consideration, receipt of which is hereby acknowledged.
+**Consideration:** For the sum of **${{consideration_amount}}\*\* and other good and valuable consideration, receipt of which is hereby acknowledged.
 {{/if}}
 
 ### 3.2 Transfer Statement
+
 The Grantor(s) hereby remise, release, and forever quitclaim to the Grantee(s), their heirs and assigns, all right, title, interest, claim, and demand which the Grantor(s) have in and to the above-described property.
 
 ---
@@ -72,10 +78,13 @@ The Grantor(s) hereby remise, release, and forever quitclaim to the Grantee(s), 
 ## 4. Quitclaim Language and Warranties
 
 ### 4.1 Nature of Quitclaim Deed
+
 **IMPORTANT:** This is a Quitclaim Deed. The Grantor makes NO WARRANTIES regarding title to the property. The Grantor conveys only whatever interest, if any, the Grantor may have in the property. The Grantee receives no guarantees about the quality or extent of the title being transferred.
 
 ### 4.2 No Title Warranties
+
 The Grantor does NOT warrant or guarantee:
+
 - That the Grantor owns the property
 - That the title is clear and marketable
 - That there are no liens or encumbrances
@@ -83,7 +92,9 @@ The Grantor does NOT warrant or guarantee:
 - Protection against title defects
 
 ### 4.3 "As-Is" Transfer
+
 The property is transferred in its current condition, "AS-IS," without any warranties or representations regarding:
+
 - Physical condition of the property
 - Compliance with building codes or zoning laws
 - Environmental conditions
@@ -95,13 +106,16 @@ The property is transferred in its current condition, "AS-IS," without any warra
 ## 5. Subject to Existing Conditions
 
 ### 5.1 Existing Encumbrances
+
 This transfer is subject to:
+
 - All existing liens, mortgages, and encumbrances of record
 - Easements, restrictions, and covenants of record
 - Property taxes and assessments
 - {{existing_encumbrances}}
 
 ### 5.2 Specific Reservations
+
 {{#if has_reservations}}
 The Grantor reserves the following rights:
 {{reserved_rights}}
@@ -117,6 +131,7 @@ The Grantor makes no reservations of rights in the property.
 {{quitclaim_purpose}}
 
 **Common Uses Include:**
+
 - Transfer between family members
 - Adding/removing spouse from title
 - Clearing title defects
@@ -129,11 +144,13 @@ The Grantor makes no reservations of rights in the property.
 ## 7. Tax Information
 
 ### 7.1 Property Tax Information
+
 **Current Year Taxes:** {{current_tax_amount}}  
 **Tax Year:** {{tax_year}}  
 **Tax Responsibility:** {{tax_responsibility}}
 
 ### 7.2 Transfer Tax
+
 {{#if transfer_tax_applicable}}
 **Transfer Tax Due:** ${{transfer_tax_amount}}  
 **Transfer Tax Paid By:** {{transfer_tax_paid_by}}
@@ -146,6 +163,7 @@ The Grantor makes no reservations of rights in the property.
 ## 8. Additional Provisions
 
 ### 8.1 Special Conditions
+
 {{#if special_conditions}}
 {{special_conditions}}
 {{else}}
@@ -153,9 +171,11 @@ No special conditions apply to this transfer.
 {{/if}}
 
 ### 8.2 Effective Date
+
 This deed shall be effective as of {{effective_date}}.
 
 ### 8.3 Governing Law
+
 This deed shall be governed by the laws of {{state}}.
 
 ---
@@ -163,6 +183,7 @@ This deed shall be governed by the laws of {{state}}.
 ## 9. Grantor Acknowledgment
 
 The Grantor(s) acknowledge that:
+
 - They understand the nature of a quitclaim deed
 - They are making no warranties regarding title
 - They have read and understand this document
@@ -176,20 +197,21 @@ The Grantor(s) acknowledge that:
 
 **GRANTOR:**
 
-| Signature | Date |
-|-----------|------|
-| _________________________________ | {{deed_date}} |
-| {{grantor_name}} | |
-| Print Name: {{grantor_name}} | |
+| Signature                                  | Date          |
+| ------------------------------------------ | ------------- |
+| ******\*\*\*\*******\_******\*\*\*\******* | {{deed_date}} |
+| {{grantor_name}}                           |               |
+| Print Name: {{grantor_name}}               |               |
 
 {{#if multiple_grantors}}
 **ADDITIONAL GRANTOR:**
 
-| Signature | Date |
-|-----------|------|
-| _________________________________ | {{deed_date}} |
-| {{grantor_2_name}} | |
-| Print Name: {{grantor_2_name}} | |
+| Signature                                  | Date          |
+| ------------------------------------------ | ------------- |
+| ******\*\*\*\*******\_******\*\*\*\******* | {{deed_date}} |
+| {{grantor_2_name}}                         |               |
+| Print Name: {{grantor_2_name}}             |               |
+
 {{/if}}
 
 ---
@@ -205,8 +227,8 @@ I certify under PENALTY OF PERJURY under the laws of the State of {{state}} that
 
 **WITNESS** my hand and official seal.
 
-**Notary Public:** _________________________________  
-**My Commission Expires:** _________________________
+**Notary Public:** ******\*\*\*\*******\_******\*\*\*\*******  
+**My Commission Expires:** ****\*\*\*\*****\_****\*\*\*\*****
 
 **[Notary Seal]**
 
@@ -216,16 +238,17 @@ I certify under PENALTY OF PERJURY under the laws of the State of {{state}} that
 
 **For Recorder's Use Only:**
 
-**Document Number:** ___________________  
-**Recording Date:** ___________________  
-**Recording Time:** ___________________  
-**Recorded By:** ___________________
+**Document Number:** **\*\*\*\***\_\_\_**\*\*\*\***  
+**Recording Date:** **\*\*\*\***\_\_\_**\*\*\*\***  
+**Recording Time:** **\*\*\*\***\_\_\_**\*\*\*\***  
+**Recorded By:** **\*\*\*\***\_\_\_**\*\*\*\***
 
 **Recording Fees:**
-- Recording Fee: $___________
-- Transfer Tax: $___________
-- Other Fees: $___________
-- **Total:** $___________
+
+- Recording Fee: $\***\*\_\_\_\*\***
+- Transfer Tax: $\***\*\_\_\_\*\***
+- Other Fees: $\***\*\_\_\_\*\***
+- **Total:** $\***\*\_\_\_\*\***
 
 ---
 
@@ -243,22 +266,26 @@ After recording, return this document to:
 ## 14. Important Notices
 
 ### 14.1 Title Insurance Recommendation
+
 **STRONGLY RECOMMENDED:** The Grantee should obtain title insurance to protect against title defects, liens, or other issues not revealed by this quitclaim deed.
 
 ### 14.2 Professional Advice
+
 This deed should be reviewed by qualified legal and tax professionals before execution, especially for:
+
 - Tax implications of the transfer
 - Estate planning considerations
 - Potential liability issues
 - Recording requirements
 
 ### 14.3 Recording Requirement
+
 This deed must be recorded in the county recorder's office where the property is located to provide public notice of the transfer.
 
 ---
 
 **IMPORTANT LEGAL NOTICE:** This quitclaim deed should be reviewed by a qualified real estate attorney to ensure compliance with state and local laws. Quitclaim deeds provide no title warranties and should be used only when the parties understand the risks involved. Always obtain title insurance and professional legal advice before completing real estate transfers.
 
-*Template generated by 123LegalDoc - Professional Legal Document Platform*
----
+## _Template generated by 123LegalDoc - Professional Legal Document Platform_
+
 © 2025 123LegalDoc · DIY form · Not legal advice · Terms: 123LegalDoc.com/terms

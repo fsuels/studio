@@ -24,12 +24,18 @@ export const roommateAgreementMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Roommate Agreement',
-      description: 'Establish clear rules and responsibilities for shared living arrangements.',
-      aliases: ['roommate contract', 'shared living agreement', 'housemate agreement'],
+      description:
+        'Establish clear rules and responsibilities for shared living arrangements.',
+      aliases: [
+        'roommate contract',
+        'shared living agreement',
+        'housemate agreement',
+      ],
     },
     es: {
       name: 'Acuerdo de Compañeros de Cuarto',
-      description: 'Establece reglas claras y responsabilidades para arreglos de vida compartida.',
+      description:
+        'Establece reglas claras y responsabilidades para arreglos de vida compartida.',
       aliases: ['contrato de compañeros de cuarto', 'acuerdo de convivencia'],
     },
   },

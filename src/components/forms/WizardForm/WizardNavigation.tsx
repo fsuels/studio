@@ -38,13 +38,17 @@ export default function WizardNavigation({
 
   const getButtonText = () => {
     if (isReviewing) {
-      return t('wizard.generateDocument', { defaultValue: 'Generate Document' });
+      return t('wizard.generateDocument', {
+        defaultValue: 'Generate Document',
+      });
     }
     if (isLastStep && totalSteps > 0) {
       return t('wizard.reviewAnswers', { defaultValue: 'Review Answers' });
     }
     if (totalSteps === 0) {
-      return t('wizard.generateDocument', { defaultValue: 'Generate Document' });
+      return t('wizard.generateDocument', {
+        defaultValue: 'Generate Document',
+      });
     }
     return t('wizard.continue', { defaultValue: 'Continue' });
   };

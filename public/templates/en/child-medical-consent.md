@@ -10,12 +10,12 @@ I, **{{parent_guardian_name}}**, am the **{{relationship}}** (parent/legal guard
 
 ## 1. Child Information
 
-| Field | Information |
-|-------|-------------|
-| **Child's Full Name** | {{child_name}} |
-| **Date of Birth** | {{child_dob}} |
-| **Address** | {{child_address}} |
-| **Phone Number** | {{emergency_phone}} |
+| Field                 | Information         |
+| --------------------- | ------------------- |
+| **Child's Full Name** | {{child_name}}      |
+| **Date of Birth**     | {{child_dob}}       |
+| **Address**           | {{child_address}}   |
+| **Phone Number**      | {{emergency_phone}} |
 
 ---
 
@@ -30,20 +30,25 @@ I hereby authorize **{{caregiver_name}}**, residing at **{{caregiver_address}}**
 ## 3. Medical Information
 
 ### Current Medications:
+
 {{child_medications}}
 
 ### Known Allergies:
+
 {{child_allergies}}
 
 ### Medical Conditions:
+
 {{medical_conditions}}
 
 ### Primary Care Physician:
+
 - **Doctor:** {{doctor_name}}
 - **Phone:** {{doctor_phone}}
 - **Address:** {{doctor_address}}
 
 ### Preferred Hospital:
+
 {{preferred_hospital}}
 
 ---
@@ -58,29 +63,32 @@ I authorize the above-named caregiver to:
 4. **Medical Transportation:** Authorize transportation to medical facilities when necessary
 
 ### Restrictions (if any):
+
 {{restrictions}}
 
 ---
 
 ## 5. Insurance Information
 
-| Field | Information |
-|-------|-------------|
+| Field                  | Information           |
+| ---------------------- | --------------------- |
 | **Insurance Provider** | {{insurance_company}} |
-| **Policy Number** | {{policy_number}} |
-| **Group Number** | {{group_number}} |
-| **Primary Insured** | {{primary_insured}} |
+| **Policy Number**      | {{policy_number}}     |
+| **Group Number**       | {{group_number}}      |
+| **Primary Insured**    | {{primary_insured}}   |
 
 ---
 
 ## 6. Emergency Contacts
 
 ### Primary Contact:
+
 - **Name:** {{emergency_contact_1_name}}
 - **Relationship:** {{emergency_contact_1_relationship}}
 - **Phone:** {{emergency_contact_1_phone}}
 
 ### Secondary Contact:
+
 - **Name:** {{emergency_contact_2_name}}
 - **Relationship:** {{emergency_contact_2_relationship}}
 - **Phone:** {{emergency_contact_2_phone}}
@@ -104,18 +112,18 @@ I understand that this authorization allows the named caregiver to make medical 
 
 **Parent/Guardian Signature:**
 
-| Signature | Date |
-|-----------|------|
-| _________________________________ | _____________ |
-| {{parent_guardian_name}} | |
-| {{parent_title}} of {{child_name}} | |
+| Signature                                  | Date               |
+| ------------------------------------------ | ------------------ |
+| ******\*\*\*\*******\_******\*\*\*\******* | **\*\***\_**\*\*** |
+| {{parent_guardian_name}}                   |                    |
+| {{parent_title}} of {{child_name}}         |                    |
 
 **Witness Signature:**
 
-| Signature | Date |
-|-----------|------|
-| _________________________________ | _____________ |
-| Witness Name: ________________________ | |
+| Signature                                      | Date               |
+| ---------------------------------------------- | ------------------ |
+| ******\*\*\*\*******\_******\*\*\*\*******     | **\*\***\_**\*\*** |
+| Witness Name: ****\*\*****\_\_\_\_****\*\***** |                    |
 
 ---
 
@@ -124,19 +132,19 @@ I understand that this authorization allows the named caregiver to make medical 
 **State of {{state}}**  
 **County of {{county}}**
 
-On this _____ day of _________, 20___, before me personally appeared {{parent_guardian_name}}, who proved to me on the basis of satisfactory evidence to be the person whose name is subscribed to the within instrument and acknowledged to me that he/she executed the same in his/her authorized capacity, and that by his/her signature on the instrument the person, or the entity upon behalf of which the person acted, executed the instrument.
+On this **\_** day of \***\*\_\*\***, 20\_\_\_, before me personally appeared {{parent_guardian_name}}, who proved to me on the basis of satisfactory evidence to be the person whose name is subscribed to the within instrument and acknowledged to me that he/she executed the same in his/her authorized capacity, and that by his/her signature on the instrument the person, or the entity upon behalf of which the person acted, executed the instrument.
 
 I certify under PENALTY OF PERJURY under the laws of the State of {{state}} that the foregoing paragraph is true and correct.
 
 **WITNESS** my hand and official seal.
 
-**Notary Public:** _________________________________  
-**My Commission Expires:** _________________________
+**Notary Public:** ******\*\*\*\*******\_******\*\*\*\*******  
+**My Commission Expires:** ****\*\*\*\*****\_****\*\*\*\*****
 
 ---
 
 **IMPORTANT LEGAL NOTICE:** This form should be reviewed by a licensed attorney to ensure compliance with state laws. Medical providers may require additional documentation. Keep copies of this form with you at all times when caring for the child.
 
-*Template generated by 123LegalDoc - Professional Legal Document Platform*
----
+## _Template generated by 123LegalDoc - Professional Legal Document Platform_
+
 © 2025 123LegalDoc · DIY form · Not legal advice · Terms: 123LegalDoc.com/terms

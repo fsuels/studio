@@ -1,12 +1,12 @@
 // src/lib/legal-updates/rss-parser.ts
 import Parser from 'rss-parser';
 import { adminDb } from '@/lib/firebase-admin';
-import { 
-  LegalUpdateSource, 
-  RawLegalUpdate, 
+import {
+  LegalUpdateSource,
+  RawLegalUpdate,
   createUpdateId,
   COLLECTIONS,
-  RawLegalUpdateSchema 
+  RawLegalUpdateSchema,
 } from './schema';
 
 interface RSSItem {
@@ -39,8 +39,9 @@ class LegalUpdateRSSParser {
       timeout: this.timeoutMs,
       maxRedirects: 5,
       headers: {
-        'User-Agent': '123LegalDoc Legal Update Service 1.0 (+https://123legaldoc.com)',
-        'Accept': 'application/rss+xml, application/xml, text/xml'
+        'User-Agent':
+          '123LegalDoc Legal Update Service 1.0 (+https://123legaldoc.com)',
+        Accept: 'application/rss+xml, application/xml, text/xml',
       },
       customFields: {
         item: [
@@ -48,27 +49,34 @@ class LegalUpdateRSSParser {
           ['dc:date', 'dcDate'],
           ['content:encoded', 'contentEncoded'],
           ['media:content', 'mediaContent'],
-          ['category', 'categories']
-        ]
-      }
+          ['category', 'categories'],
+        ],
+      },
     });
   }
 
-  async fetchUpdatesFromSource(source: LegalUpdateSource): Promise<RawLegalUpdate[]> {
+  async fetchUpdatesFromSource(
+    source: LegalUpdateSource,
+  ): Promise<RawLegalUpdate[]> {
     try {
-      console.log(`Fetching legal updates from: ${source.name} (${source.rssUrl})`);
-      
+      console.log(
+        `Fetching legal updates from: ${source.name} (${source.rssUrl})`,
+      );
+
       const feed = await this.parseRSSFeed(source.rssUrl);
       const updates: RawLegalUpdate[] = [];
 
       for (const item of feed.items) {
         try {
           const rawUpdate = await this.convertRSSItemToUpdate(item, source);
-          if (rawUpdate && await this.shouldProcessUpdate(rawUpdate)) {
+          if (rawUpdate && (await this.shouldProcessUpdate(rawUpdate))) {
             updates.push(rawUpdate);
           }
         } catch (error) {
-          console.error(`Error processing RSS item from ${source.name}:`, error);
+          console.error(
+            `Error processing RSS item from ${source.name}:`,
+            error,
+          );
           // Continue processing other items
         }
       }
@@ -76,9 +84,10 @@ class LegalUpdateRSSParser {
       // Update source last fetched timestamp
       await this.updateSourceLastFetched(source.id);
 
-      console.log(`Fetched ${updates.length} new legal updates from ${source.name}`);
+      console.log(
+        `Fetched ${updates.length} new legal updates from ${source.name}`,
+      );
       return updates;
-
     } catch (error) {
       console.error(`Error fetching updates from ${source.name}:`, error);
       throw new Error(`Failed to fetch updates from ${source.name}: ${error}`);
@@ -94,12 +103,15 @@ class LegalUpdateRSSParser {
         return feed;
       } catch (error) {
         lastError = error as Error;
-        console.warn(`RSS fetch attempt ${attempt}/${this.maxRetries} failed for ${url}:`, error);
-        
+        console.warn(
+          `RSS fetch attempt ${attempt}/${this.maxRetries} failed for ${url}:`,
+          error,
+        );
+
         if (attempt < this.maxRetries) {
           // Exponential backoff
           const delay = Math.pow(2, attempt) * 1000;
-          await new Promise(resolve => setTimeout(resolve, delay));
+          await new Promise((resolve) => setTimeout(resolve, delay));
         }
       }
     }
@@ -108,8 +120,8 @@ class LegalUpdateRSSParser {
   }
 
   private async convertRSSItemToUpdate(
-    item: RSSItem, 
-    source: LegalUpdateSource
+    item: RSSItem,
+    source: LegalUpdateSource,
   ): Promise<RawLegalUpdate | null> {
     if (!item.title || !item.link) {
       console.warn('RSS item missing required fields (title/link), skipping');
@@ -123,7 +135,8 @@ class LegalUpdateRSSParser {
     }
 
     // Extract and clean content
-    const content = item.contentEncoded || item.content || item.description || '';
+    const content =
+      item.contentEncoded || item.content || item.description || '';
     const description = item.contentSnippet || item.description || '';
 
     // Extract tags from categories and content
@@ -144,11 +157,11 @@ class LegalUpdateRSSParser {
           name: source.name,
           jurisdiction: source.jurisdiction,
           type: source.type,
-          category: source.category
-        }
+          category: source.category,
+        },
       },
       processedAt: new Date(),
-      status: 'pending'
+      status: 'pending',
     };
 
     // Validate the schema
@@ -183,7 +196,7 @@ class LegalUpdateRSSParser {
     // Add category tags from RSS item
     if (item.category) {
       if (Array.isArray(item.category)) {
-        item.category.forEach(cat => tags.add(cat.toLowerCase()));
+        item.category.forEach((cat) => tags.add(cat.toLowerCase()));
       } else {
         tags.add(item.category.toLowerCase());
       }
@@ -191,21 +204,41 @@ class LegalUpdateRSSParser {
 
     if (item.categories) {
       if (Array.isArray(item.categories)) {
-        item.categories.forEach(cat => tags.add(cat.toLowerCase()));
+        item.categories.forEach((cat) => tags.add(cat.toLowerCase()));
       }
     }
 
     // Extract legal keywords from title and description
     const text = `${item.title} ${item.description}`.toLowerCase();
     const legalKeywords = [
-      'regulation', 'law', 'statute', 'compliance', 'requirement',
-      'deadline', 'filing', 'amendment', 'repeal', 'effective',
-      'notice', 'rule', 'order', 'decision', 'judgment',
-      'business', 'employment', 'tax', 'real estate', 'contract',
-      'liability', 'disclosure', 'privacy', 'data', 'security'
+      'regulation',
+      'law',
+      'statute',
+      'compliance',
+      'requirement',
+      'deadline',
+      'filing',
+      'amendment',
+      'repeal',
+      'effective',
+      'notice',
+      'rule',
+      'order',
+      'decision',
+      'judgment',
+      'business',
+      'employment',
+      'tax',
+      'real estate',
+      'contract',
+      'liability',
+      'disclosure',
+      'privacy',
+      'data',
+      'security',
     ];
 
-    legalKeywords.forEach(keyword => {
+    legalKeywords.forEach((keyword) => {
       if (text.includes(keyword)) {
         tags.add(keyword);
       }
@@ -268,10 +301,13 @@ class LegalUpdateRSSParser {
         .doc(sourceId)
         .update({
           lastFetched: new Date(),
-          updatedAt: new Date()
+          updatedAt: new Date(),
         });
     } catch (error) {
-      console.error(`Failed to update lastFetched for source ${sourceId}:`, error);
+      console.error(
+        `Failed to update lastFetched for source ${sourceId}:`,
+        error,
+      );
     }
   }
 
@@ -279,8 +315,8 @@ class LegalUpdateRSSParser {
     if (updates.length === 0) return;
 
     const batch = adminDb.batch();
-    
-    updates.forEach(update => {
+
+    updates.forEach((update) => {
       const docRef = adminDb
         .collection(COLLECTIONS.RAW_LEGAL_UPDATES)
         .doc(update.id);
@@ -303,9 +339,9 @@ class LegalUpdateRSSParser {
         .where('isActive', '==', true)
         .get();
 
-      return snapshot.docs.map(doc => ({
+      return snapshot.docs.map((doc) => ({
         id: doc.id,
-        ...doc.data()
+        ...doc.data(),
       })) as LegalUpdateSource[];
     } catch (error) {
       console.error('Failed to fetch active sources:', error);
@@ -326,7 +362,7 @@ class LegalUpdateRSSParser {
     const sources = await this.fetchAllActiveSources();
     const results = {
       totalUpdates: 0,
-      sourceResults: [] as any[]
+      sourceResults: [] as any[],
     };
 
     for (const source of sources) {
@@ -338,11 +374,10 @@ class LegalUpdateRSSParser {
           sourceId: source.id,
           sourceName: source.name,
           updateCount: updates.length,
-          success: true
+          success: true,
         });
 
         results.totalUpdates += updates.length;
-
       } catch (error) {
         console.error(`Failed to process source ${source.name}:`, error);
         results.sourceResults.push({
@@ -350,7 +385,7 @@ class LegalUpdateRSSParser {
           sourceName: source.name,
           updateCount: 0,
           success: false,
-          error: error instanceof Error ? error.message : 'Unknown error'
+          error: error instanceof Error ? error.message : 'Unknown error',
         });
       }
     }

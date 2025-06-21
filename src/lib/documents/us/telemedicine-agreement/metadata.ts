@@ -25,7 +25,11 @@ export const telemedicineAgreementMeta: LegalDocument = {
     en: {
       name: 'Telemedicine Agreement',
       description: 'Agreement for telehealth and remote medical services.',
-      aliases: ['telehealth agreement', 'virtual care agreement', 'remote medical consultation'],
+      aliases: [
+        'telehealth agreement',
+        'virtual care agreement',
+        'remote medical consultation',
+      ],
     },
     es: {
       name: 'Acuerdo de Telemedicina',

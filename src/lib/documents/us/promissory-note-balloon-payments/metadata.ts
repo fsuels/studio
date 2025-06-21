@@ -26,13 +26,23 @@ export const promissoryNoteBalloonPaymentsMeta: LegalDocument = {
       name: 'Promissory Note - Balloon Payments',
       description:
         'Create a promissory note with balloon payment structure, including regular payments and final balloon payment.',
-      aliases: ['balloon loan', 'balloon note', 'balloon payment loan', 'balloon promissory note'],
+      aliases: [
+        'balloon loan',
+        'balloon note',
+        'balloon payment loan',
+        'balloon promissory note',
+      ],
     },
     es: {
       name: 'Pagaré - Pagos Globo',
       description:
         'Crear un pagaré con estructura de pago globo, incluyendo pagos regulares y pago final globo.',
-      aliases: ['préstamo globo', 'nota globo', 'préstamo con pago globo', 'pagaré globo'],
+      aliases: [
+        'préstamo globo',
+        'nota globo',
+        'préstamo con pago globo',
+        'pagaré globo',
+      ],
     },
   },
 };

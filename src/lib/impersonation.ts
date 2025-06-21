@@ -1,21 +1,28 @@
 // User impersonation system for customer support and QA
-import { 
-  UserRole, 
-  ImpersonationSession, 
-  ImpersonationAction, 
+import {
+  UserRole,
+  ImpersonationSession,
+  ImpersonationAction,
   RoleAuditEvent,
   UserWithRole,
   ROLE_HIERARCHY,
 } from '@/types/roles';
 
 export interface ImpersonationService {
-  startImpersonation(params: StartImpersonationParams): Promise<ImpersonationSession>;
+  startImpersonation(
+    params: StartImpersonationParams,
+  ): Promise<ImpersonationSession>;
   endImpersonation(sessionId: string, reason?: string): Promise<void>;
   getCurrentSession(adminId: string): Promise<ImpersonationSession | null>;
   getActiveSessions(): Promise<ImpersonationSession[]>;
-  logAction(sessionId: string, action: Omit<ImpersonationAction, 'id' | 'sessionId' | 'timestamp'>): Promise<void>;
+  logAction(
+    sessionId: string,
+    action: Omit<ImpersonationAction, 'id' | 'sessionId' | 'timestamp'>,
+  ): Promise<void>;
   canImpersonate(adminRole: UserRole, targetRole: UserRole): boolean;
-  getImpersonationHistory(targetUserId?: string): Promise<ImpersonationSession[]>;
+  getImpersonationHistory(
+    targetUserId?: string,
+  ): Promise<ImpersonationSession[]>;
   validateSession(sessionId: string): Promise<boolean>;
 }
 
@@ -51,10 +58,14 @@ class UserImpersonationService implements ImpersonationService {
   private activeSessions: Map<string, ImpersonationSession> = new Map();
   private sessionActions: Map<string, ImpersonationAction[]> = new Map();
 
-  async startImpersonation(params: StartImpersonationParams): Promise<ImpersonationSession> {
+  async startImpersonation(
+    params: StartImpersonationParams,
+  ): Promise<ImpersonationSession> {
     // Validate permissions
     if (!this.canImpersonate(params.adminRole, params.targetUserRole)) {
-      throw new Error(`Role ${params.adminRole} cannot impersonate ${params.targetUserRole}`);
+      throw new Error(
+        `Role ${params.adminRole} cannot impersonate ${params.targetUserRole}`,
+      );
     }
 
     // Check if admin already has an active session
@@ -65,7 +76,10 @@ class UserImpersonationService implements ImpersonationService {
 
     // Determine session duration based on role
     const maxDuration = this.getMaxDurationForRole(params.adminRole);
-    const sessionDuration = Math.min(params.duration || maxDuration, maxDuration);
+    const sessionDuration = Math.min(
+      params.duration || maxDuration,
+      maxDuration,
+    );
 
     // Create impersonation session
     const session: ImpersonationSession = {
@@ -118,7 +132,10 @@ class UserImpersonationService implements ImpersonationService {
     return session;
   }
 
-  async endImpersonation(sessionId: string, reason = 'manual_end'): Promise<void> {
+  async endImpersonation(
+    sessionId: string,
+    reason = 'manual_end',
+  ): Promise<void> {
     const session = this.activeSessions.get(sessionId);
     if (!session) {
       throw new Error('Impersonation session not found');
@@ -167,7 +184,9 @@ class UserImpersonationService implements ImpersonationService {
     this.activeSessions.delete(sessionId);
   }
 
-  async getCurrentSession(adminId: string): Promise<ImpersonationSession | null> {
+  async getCurrentSession(
+    adminId: string,
+  ): Promise<ImpersonationSession | null> {
     for (const session of this.activeSessions.values()) {
       if (session.adminId === adminId && session.isActive) {
         // Check if session has expired
@@ -198,8 +217,8 @@ class UserImpersonationService implements ImpersonationService {
   }
 
   async logAction(
-    sessionId: string, 
-    actionData: Omit<ImpersonationAction, 'id' | 'sessionId' | 'timestamp'>
+    sessionId: string,
+    actionData: Omit<ImpersonationAction, 'id' | 'sessionId' | 'timestamp'>,
   ): Promise<void> {
     const session = this.activeSessions.get(sessionId);
     if (!session) {
@@ -233,14 +252,18 @@ class UserImpersonationService implements ImpersonationService {
     return adminHierarchy.canImpersonate.includes(targetRole);
   }
 
-  async getImpersonationHistory(targetUserId?: string): Promise<ImpersonationSession[]> {
+  async getImpersonationHistory(
+    targetUserId?: string,
+  ): Promise<ImpersonationSession[]> {
     // In production, this would query the database
     const allSessions = Array.from(this.activeSessions.values());
-    
+
     if (targetUserId) {
-      return allSessions.filter(session => session.targetUserId === targetUserId);
+      return allSessions.filter(
+        (session) => session.targetUserId === targetUserId,
+      );
     }
-    
+
     return allSessions;
   }
 
@@ -263,11 +286,11 @@ class UserImpersonationService implements ImpersonationService {
   private getMaxDurationForRole(role: UserRole): number {
     const durations: Record<UserRole, number> = {
       super_admin: 480, // 8 hours
-      admin: 240,       // 4 hours
-      support: 120,     // 2 hours
-      qa: 480,          // 8 hours for testing
-      user: 0,          // Cannot impersonate
-      viewer: 0,        // Cannot impersonate
+      admin: 240, // 4 hours
+      support: 120, // 2 hours
+      qa: 480, // 8 hours for testing
+      user: 0, // Cannot impersonate
+      viewer: 0, // Cannot impersonate
     };
     return durations[role] || 0;
   }
@@ -278,7 +301,9 @@ class UserImpersonationService implements ImpersonationService {
     return Math.round((end.getTime() - start.getTime()) / (1000 * 60)); // minutes
   }
 
-  private async createAuditEvent(event: Omit<RoleAuditEvent, 'id'>): Promise<void> {
+  private async createAuditEvent(
+    event: Omit<RoleAuditEvent, 'id'>,
+  ): Promise<void> {
     // In production, save to audit database
     console.log('Impersonation audit event:', event);
   }
@@ -287,7 +312,7 @@ class UserImpersonationService implements ImpersonationService {
   getImpersonationContext(adminId: string): Promise<ImpersonationContext> {
     return new Promise(async (resolve) => {
       const session = await this.getCurrentSession(adminId);
-      
+
       if (!session) {
         resolve({
           isImpersonating: false,
@@ -331,33 +356,44 @@ class UserImpersonationService implements ImpersonationService {
 
 // React hooks for impersonation
 export function useImpersonation(adminId?: string) {
-  const [impersonationContext, setImpersonationContext] = 
+  const [impersonationContext, setImpersonationContext] =
     React.useState<ImpersonationContext | null>(null);
 
   React.useEffect(() => {
     if (adminId) {
-      impersonationService.getImpersonationContext(adminId)
+      impersonationService
+        .getImpersonationContext(adminId)
         .then(setImpersonationContext);
     }
   }, [adminId]);
 
   const startImpersonation = async (params: StartImpersonationParams) => {
     const session = await impersonationService.startImpersonation(params);
-    const context = await impersonationService.getImpersonationContext(params.adminId);
+    const context = await impersonationService.getImpersonationContext(
+      params.adminId,
+    );
     setImpersonationContext(context);
     return session;
   };
 
   const endImpersonation = async (reason?: string) => {
     if (impersonationContext?.session) {
-      await impersonationService.endImpersonation(impersonationContext.session.id, reason);
+      await impersonationService.endImpersonation(
+        impersonationContext.session.id,
+        reason,
+      );
       setImpersonationContext(null);
     }
   };
 
-  const logAction = async (actionData: Omit<ImpersonationAction, 'id' | 'sessionId' | 'timestamp'>) => {
+  const logAction = async (
+    actionData: Omit<ImpersonationAction, 'id' | 'sessionId' | 'timestamp'>,
+  ) => {
     if (impersonationContext?.session) {
-      await impersonationService.logAction(impersonationContext.session.id, actionData);
+      await impersonationService.logAction(
+        impersonationContext.session.id,
+        actionData,
+      );
     }
   };
 
@@ -372,20 +408,23 @@ export function useImpersonation(adminId?: string) {
 
 // Impersonation action logger hook
 export function useImpersonationLogger() {
-  const logAction = React.useCallback(async (
-    sessionId: string,
-    action: string,
-    description: string,
-    riskLevel: 'low' | 'medium' | 'high' = 'low',
-    metadata?: Record<string, any>
-  ) => {
-    await impersonationService.logAction(sessionId, {
-      action,
-      description,
-      riskLevel,
-      metadata,
-    });
-  }, []);
+  const logAction = React.useCallback(
+    async (
+      sessionId: string,
+      action: string,
+      description: string,
+      riskLevel: 'low' | 'medium' | 'high' = 'low',
+      metadata?: Record<string, any>,
+    ) => {
+      await impersonationService.logAction(sessionId, {
+        action,
+        description,
+        riskLevel,
+        metadata,
+      });
+    },
+    [],
+  );
 
   return { logAction };
 }
@@ -406,7 +445,7 @@ export function ImpersonationGuard({
 }) {
   // This would integrate with your auth context
   const isImpersonating = false; // Get from context
-  
+
   if (isImpersonating && !allowDuringImpersonation) {
     return fallback;
   }
@@ -425,18 +464,25 @@ export const impersonationService = new UserImpersonationService();
 // Impersonation utilities
 export const ImpersonationUtils = {
   // Check if action is allowed during impersonation
-  isActionAllowed: (action: string, restrictions: ImpersonationContext['restrictions']): boolean => {
+  isActionAllowed: (
+    action: string,
+    restrictions: ImpersonationContext['restrictions'],
+  ): boolean => {
     const highRiskActions = ['delete_user', 'change_billing', 'refund_payment'];
-    const mediumRiskActions = ['edit_profile', 'change_password', 'download_data'];
-    
+    const mediumRiskActions = [
+      'edit_profile',
+      'change_password',
+      'download_data',
+    ];
+
     if (highRiskActions.includes(action)) {
       return restrictions.canDeleteData;
     }
-    
+
     if (mediumRiskActions.includes(action)) {
       return restrictions.canModifyUser;
     }
-    
+
     return true; // Allow low-risk actions
   },
 
@@ -444,14 +490,17 @@ export const ImpersonationUtils = {
   getTimeRemaining: (session: ImpersonationSession): number => {
     const now = new Date();
     const end = new Date(session.endsAt);
-    return Math.max(0, Math.round((end.getTime() - now.getTime()) / (1000 * 60)));
+    return Math.max(
+      0,
+      Math.round((end.getTime() - now.getTime()) / (1000 * 60)),
+    );
   },
 
   // Format session duration
   formatDuration: (minutes: number): string => {
     const hours = Math.floor(minutes / 60);
     const mins = minutes % 60;
-    
+
     if (hours > 0) {
       return `${hours}h ${mins}m`;
     }
@@ -462,15 +511,15 @@ export const ImpersonationUtils = {
   getActionRiskLevel: (action: string): 'low' | 'medium' | 'high' => {
     const highRisk = ['delete', 'payment', 'billing', 'admin'];
     const mediumRisk = ['edit', 'update', 'create', 'modify'];
-    
-    if (highRisk.some(keyword => action.toLowerCase().includes(keyword))) {
+
+    if (highRisk.some((keyword) => action.toLowerCase().includes(keyword))) {
       return 'high';
     }
-    
-    if (mediumRisk.some(keyword => action.toLowerCase().includes(keyword))) {
+
+    if (mediumRisk.some((keyword) => action.toLowerCase().includes(keyword))) {
       return 'medium';
     }
-    
+
     return 'low';
   },
 };

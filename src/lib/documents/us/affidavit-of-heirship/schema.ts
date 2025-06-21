@@ -4,13 +4,15 @@ import { z } from 'zod';
 export const AffidavitOfHeirshipSchema = z.object({
   // Deceased Person Information
   decedentName: z.string().min(1, "Deceased person's name is required."),
-  decedentDateOfDeath: z.string().min(1, "Date of death is required."),
-  decedentDateOfBirth: z.string().min(1, "Date of birth is required."),
+  decedentDateOfDeath: z.string().min(1, 'Date of death is required.'),
+  decedentDateOfBirth: z.string().min(1, 'Date of birth is required.'),
   decedentAddress: z.string().min(1, "Deceased person's address is required."),
   decedentCity: z.string().min(1, "Deceased person's city is required."),
   decedentState: z.string().length(2, 'State must be 2 characters.'),
   decedentZip: z.string().min(5, 'ZIP code must be at least 5 characters.'),
-  decedentSSN: z.string().min(1, "Deceased person's Social Security Number is required."),
+  decedentSSN: z
+    .string()
+    .min(1, "Deceased person's Social Security Number is required."),
 
   // Affiant Information
   affiantName: z.string().min(1, "Affiant's name is required."),
@@ -19,33 +21,41 @@ export const AffidavitOfHeirshipSchema = z.object({
   affiantState: z.string().length(2, 'State must be 2 characters.'),
   affiantZip: z.string().min(5, 'ZIP code must be at least 5 characters.'),
   affiantPhone: z.string().min(10, "Affiant's phone number is required."),
-  affiantRelationship: z.string().min(1, "Affiant's relationship to deceased is required."),
-  
+  affiantRelationship: z
+    .string()
+    .min(1, "Affiant's relationship to deceased is required."),
+
   // Affiant's knowledge of the deceased
   yearsKnownDecedent: z.string().min(1, 'Years known decedent is required.'),
-  relationshipDuration: z.string().min(1, 'Duration of relationship is required.'),
+  relationshipDuration: z
+    .string()
+    .min(1, 'Duration of relationship is required.'),
 
   // Family Information
   decedentMaritalStatus: z.enum(['single', 'married', 'divorced', 'widowed']),
-  
+
   // Spouse Information (if married or widowed)
   spouseName: z.string().optional(),
   spouseDateOfDeath: z.string().optional(),
   spouseStillLiving: z.boolean().optional(),
-  
+
   // Marriage Information
   marriageDate: z.string().optional(),
   marriagePlace: z.string().optional(),
-  
+
   // Children Information
   hasChildren: z.boolean().default(false),
-  children: z.array(z.object({
-    name: z.string().min(1, 'Child name is required.'),
-    dateOfBirth: z.string().min(1, 'Date of birth is required.'),
-    isLiving: z.boolean().default(true),
-    dateOfDeath: z.string().optional(),
-    address: z.string().optional(),
-  })).optional(),
+  children: z
+    .array(
+      z.object({
+        name: z.string().min(1, 'Child name is required.'),
+        dateOfBirth: z.string().min(1, 'Date of birth is required.'),
+        isLiving: z.boolean().default(true),
+        dateOfDeath: z.string().optional(),
+        address: z.string().optional(),
+      }),
+    )
+    .optional(),
 
   // Parents Information
   fatherName: z.string().optional(),
@@ -57,24 +67,32 @@ export const AffidavitOfHeirshipSchema = z.object({
 
   // Siblings Information
   hasSiblings: z.boolean().default(false),
-  siblings: z.array(z.object({
-    name: z.string().min(1, 'Sibling name is required.'),
-    dateOfBirth: z.string().optional(),
-    isLiving: z.boolean().default(true),
-    dateOfDeath: z.string().optional(),
-    address: z.string().optional(),
-  })).optional(),
+  siblings: z
+    .array(
+      z.object({
+        name: z.string().min(1, 'Sibling name is required.'),
+        dateOfBirth: z.string().optional(),
+        isLiving: z.boolean().default(true),
+        dateOfDeath: z.string().optional(),
+        address: z.string().optional(),
+      }),
+    )
+    .optional(),
 
   // Other Heirs
   hasOtherHeirs: z.boolean().default(false),
-  otherHeirs: z.array(z.object({
-    name: z.string().min(1, 'Heir name is required.'),
-    relationship: z.string().min(1, 'Relationship is required.'),
-    dateOfBirth: z.string().optional(),
-    isLiving: z.boolean().default(true),
-    dateOfDeath: z.string().optional(),
-    address: z.string().min(1, 'Address is required.'),
-  })).optional(),
+  otherHeirs: z
+    .array(
+      z.object({
+        name: z.string().min(1, 'Heir name is required.'),
+        relationship: z.string().min(1, 'Relationship is required.'),
+        dateOfBirth: z.string().optional(),
+        isLiving: z.boolean().default(true),
+        dateOfDeath: z.string().optional(),
+        address: z.string().min(1, 'Address is required.'),
+      }),
+    )
+    .optional(),
 
   // Estate Information
   hasWill: z.boolean().default(false),
@@ -92,7 +110,7 @@ export const AffidavitOfHeirshipSchema = z.object({
 
   // Additional Information
   additionalInformation: z.string().optional(),
-  
+
   // Witness Information (if required)
   witness1Name: z.string().optional(),
   witness1Address: z.string().optional(),

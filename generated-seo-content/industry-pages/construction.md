@@ -15,6 +15,7 @@ Construction businesses face unique legal challenges requiring specialized docum
 ### Why Construction Needs Specialized Legal Documents
 
 Construction businesses require documents that address:
+
 - Industry-specific regulations and compliance requirements
 - Common construction business practices and terminology
 - Risk management specific to construction operations
@@ -31,4 +32,4 @@ Our construction templates include:
 
 [Browse Construction Documents]
 
-*Trusted by thousands of construction professionals*
+_Trusted by thousands of construction professionals_

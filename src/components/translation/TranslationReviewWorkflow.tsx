@@ -15,18 +15,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from '@/components/ui/tabs';
-import { 
-  CheckCircle, 
-  XCircle, 
-  Clock, 
-  MessageCircle, 
-  Edit, 
+  CheckCircle,
+  XCircle,
+  Clock,
+  MessageCircle,
+  Edit,
   Eye,
   Users,
   AlertTriangle,
@@ -39,7 +34,7 @@ import {
   BookOpen,
   Star,
   History,
-  Download
+  Download,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -48,7 +43,11 @@ interface ReviewStage {
   name: string;
   description: string;
   required: boolean;
-  reviewerType: 'ai' | 'legal_professional' | 'native_speaker' | 'subject_expert';
+  reviewerType:
+    | 'ai'
+    | 'legal_professional'
+    | 'native_speaker'
+    | 'subject_expert';
   estimatedTime: number; // in minutes
 }
 
@@ -114,15 +113,16 @@ const REVIEW_STAGES: ReviewStage[] = [
     description: 'Automated legal accuracy and terminology validation',
     required: true,
     reviewerType: 'ai',
-    estimatedTime: 2
+    estimatedTime: 2,
   },
   {
     id: 'legal_review',
     name: 'Legal Professional Review',
-    description: 'Review by qualified legal professional in target jurisdiction',
+    description:
+      'Review by qualified legal professional in target jurisdiction',
     required: true,
     reviewerType: 'legal_professional',
-    estimatedTime: 30
+    estimatedTime: 30,
   },
   {
     id: 'linguistic_review',
@@ -130,7 +130,7 @@ const REVIEW_STAGES: ReviewStage[] = [
     description: 'Language fluency and cultural appropriateness review',
     required: false,
     reviewerType: 'native_speaker',
-    estimatedTime: 20
+    estimatedTime: 20,
   },
   {
     id: 'final_approval',
@@ -138,8 +138,8 @@ const REVIEW_STAGES: ReviewStage[] = [
     description: 'Senior legal reviewer final approval',
     required: true,
     reviewerType: 'legal_professional',
-    estimatedTime: 15
-  }
+    estimatedTime: 15,
+  },
 ];
 
 const TranslationReviewWorkflow: React.FC<TranslationReviewWorkflowProps> = ({
@@ -149,14 +149,21 @@ const TranslationReviewWorkflow: React.FC<TranslationReviewWorkflowProps> = ({
   targetLanguage,
   jurisdiction,
   onReviewComplete,
-  className
+  className,
 }) => {
   const { t } = useTranslation('review');
   const [review, setReview] = React.useState<TranslationReview | null>(null);
-  const [availableReviewers, setAvailableReviewers] = React.useState<Reviewer[]>([]);
-  const [selectedReviewers, setSelectedReviewers] = React.useState<Record<string, string>>({});
+  const [availableReviewers, setAvailableReviewers] = React.useState<
+    Reviewer[]
+  >([]);
+  const [selectedReviewers, setSelectedReviewers] = React.useState<
+    Record<string, string>
+  >({});
   const [newComment, setNewComment] = React.useState('');
-  const [selectedText, setSelectedText] = React.useState<{start: number; end: number} | null>(null);
+  const [selectedText, setSelectedText] = React.useState<{
+    start: number;
+    end: number;
+  } | null>(null);
   const [activeTab, setActiveTab] = React.useState('overview');
 
   // Initialize review workflow
@@ -167,15 +174,23 @@ const TranslationReviewWorkflow: React.FC<TranslationReviewWorkflowProps> = ({
 
   const initializeReview = () => {
     // Determine required stages based on translation quality and complexity
-    const requiredStages = REVIEW_STAGES.filter(stage => {
+    const requiredStages = REVIEW_STAGES.filter((stage) => {
       if (stage.required) return true;
-      
+
       // Add linguistic review for low confidence translations
-      if (stage.id === 'linguistic_review' && translationResult.confidence < 0.8) return true;
-      
+      if (
+        stage.id === 'linguistic_review' &&
+        translationResult.confidence < 0.8
+      )
+        return true;
+
       // Add subject expert review for complex documents
-      if (stage.id === 'subject_expert' && ['contract', 'agreement', 'legal_opinion'].includes(documentType)) return true;
-      
+      if (
+        stage.id === 'subject_expert' &&
+        ['contract', 'agreement', 'legal_opinion'].includes(documentType)
+      )
+        return true;
+
       return false;
     });
 
@@ -187,7 +202,15 @@ const TranslationReviewWorkflow: React.FC<TranslationReviewWorkflowProps> = ({
       stages: requiredStages,
       reviewers: [],
       comments: [],
-      estimatedCompletion: new Date(Date.now() + requiredStages.reduce((total, stage) => total + stage.estimatedTime, 0) * 60 * 1000)
+      estimatedCompletion: new Date(
+        Date.now() +
+          requiredStages.reduce(
+            (total, stage) => total + stage.estimatedTime,
+            0,
+          ) *
+            60 *
+            1000,
+      ),
     };
 
     setReview(newReview);
@@ -202,8 +225,8 @@ const TranslationReviewWorkflow: React.FC<TranslationReviewWorkflowProps> = ({
           targetLanguage,
           jurisdiction,
           documentType,
-          specializations: ['legal_translation', documentType]
-        })
+          specializations: ['legal_translation', documentType],
+        }),
       });
 
       const reviewers = await response.json();
@@ -223,22 +246,29 @@ const TranslationReviewWorkflow: React.FC<TranslationReviewWorkflowProps> = ({
         body: JSON.stringify({
           reviewId: review.id,
           stageId,
-          reviewerId
-        })
+          reviewerId,
+        }),
       });
 
-      setSelectedReviewers(prev => ({
+      setSelectedReviewers((prev) => ({
         ...prev,
-        [stageId]: reviewerId
+        [stageId]: reviewerId,
       }));
 
       // Update review with assigned reviewer
-      const reviewer = availableReviewers.find(r => r.id === reviewerId);
+      const reviewer = availableReviewers.find((r) => r.id === reviewerId);
       if (reviewer) {
-        setReview(prev => prev ? {
-          ...prev,
-          reviewers: [...prev.reviewers.filter(r => r.id !== reviewerId), reviewer]
-        } : null);
+        setReview((prev) =>
+          prev
+            ? {
+                ...prev,
+                reviewers: [
+                  ...prev.reviewers.filter((r) => r.id !== reviewerId),
+                  reviewer,
+                ],
+              }
+            : null,
+        );
       }
     } catch (error) {
       console.error('Failed to assign reviewer:', error);
@@ -255,17 +285,21 @@ const TranslationReviewWorkflow: React.FC<TranslationReviewWorkflowProps> = ({
         body: JSON.stringify({
           reviewId: review.id,
           translationResult,
-          assignedReviewers: selectedReviewers
-        })
+          assignedReviewers: selectedReviewers,
+        }),
       });
 
-      setReview(prev => prev ? { ...prev, status: 'in_review' } : null);
+      setReview((prev) => (prev ? { ...prev, status: 'in_review' } : null));
     } catch (error) {
       console.error('Failed to start review:', error);
     }
   };
 
-  const addComment = async (type: ReviewComment['type'], reason: string, suggestedText?: string) => {
+  const addComment = async (
+    type: ReviewComment['type'],
+    reason: string,
+    suggestedText?: string,
+  ) => {
     if (!review || !newComment.trim()) return;
 
     const comment: ReviewComment = {
@@ -273,14 +307,18 @@ const TranslationReviewWorkflow: React.FC<TranslationReviewWorkflowProps> = ({
       reviewerId: 'current-user', // Replace with actual user ID
       stageId: review.currentStage,
       type,
-      originalText: selectedText ? 
-        translationResult.translatedText.substring(selectedText.start, selectedText.end) : '',
+      originalText: selectedText
+        ? translationResult.translatedText.substring(
+            selectedText.start,
+            selectedText.end,
+          )
+        : '',
       suggestedText,
       reason: newComment,
       severity: type === 'concern' ? 'high' : 'medium',
       timestamp: new Date(),
       position: selectedText,
-      resolved: false
+      resolved: false,
     };
 
     try {
@@ -289,14 +327,18 @@ const TranslationReviewWorkflow: React.FC<TranslationReviewWorkflowProps> = ({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           reviewId: review.id,
-          comment
-        })
+          comment,
+        }),
       });
 
-      setReview(prev => prev ? {
-        ...prev,
-        comments: [...prev.comments, comment]
-      } : null);
+      setReview((prev) =>
+        prev
+          ? {
+              ...prev,
+              comments: [...prev.comments, comment],
+            }
+          : null,
+      );
 
       setNewComment('');
       setSelectedText(null);
@@ -314,16 +356,20 @@ const TranslationReviewWorkflow: React.FC<TranslationReviewWorkflowProps> = ({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           reviewId: review.id,
-          commentId
-        })
+          commentId,
+        }),
       });
 
-      setReview(prev => prev ? {
-        ...prev,
-        comments: prev.comments.map(c => 
-          c.id === commentId ? { ...c, resolved: true } : c
-        )
-      } : null);
+      setReview((prev) =>
+        prev
+          ? {
+              ...prev,
+              comments: prev.comments.map((c) =>
+                c.id === commentId ? { ...c, resolved: true } : c,
+              ),
+            }
+          : null,
+      );
     } catch (error) {
       console.error('Failed to resolve comment:', error);
     }
@@ -331,10 +377,12 @@ const TranslationReviewWorkflow: React.FC<TranslationReviewWorkflowProps> = ({
 
   const getStageStatus = (stageId: string) => {
     if (!review) return 'pending';
-    
-    const currentIndex = review.stages.findIndex(s => s.id === review.currentStage);
-    const stageIndex = review.stages.findIndex(s => s.id === stageId);
-    
+
+    const currentIndex = review.stages.findIndex(
+      (s) => s.id === review.currentStage,
+    );
+    const stageIndex = review.stages.findIndex((s) => s.id === stageId);
+
     if (stageIndex < currentIndex) return 'completed';
     if (stageIndex === currentIndex) return 'active';
     return 'pending';
@@ -342,48 +390,65 @@ const TranslationReviewWorkflow: React.FC<TranslationReviewWorkflowProps> = ({
 
   const getStageIcon = (status: string) => {
     switch (status) {
-      case 'completed': return <CheckCircle className="h-5 w-5 text-green-600" />;
-      case 'active': return <Clock className="h-5 w-5 text-blue-600" />;
-      case 'pending': return <Clock className="h-5 w-5 text-gray-400" />;
-      default: return <Clock className="h-5 w-5 text-gray-400" />;
+      case 'completed':
+        return <CheckCircle className="h-5 w-5 text-green-600" />;
+      case 'active':
+        return <Clock className="h-5 w-5 text-blue-600" />;
+      case 'pending':
+        return <Clock className="h-5 w-5 text-gray-400" />;
+      default:
+        return <Clock className="h-5 w-5 text-gray-400" />;
     }
   };
 
   const getCommentIcon = (type: string) => {
     switch (type) {
-      case 'suggestion': return <MessageCircle className="h-4 w-4 text-blue-600" />;
-      case 'correction': return <Edit className="h-4 w-4 text-orange-600" />;
-      case 'approval': return <ThumbsUp className="h-4 w-4 text-green-600" />;
-      case 'concern': return <AlertTriangle className="h-4 w-4 text-red-600" />;
-      default: return <MessageCircle className="h-4 w-4 text-gray-600" />;
+      case 'suggestion':
+        return <MessageCircle className="h-4 w-4 text-blue-600" />;
+      case 'correction':
+        return <Edit className="h-4 w-4 text-orange-600" />;
+      case 'approval':
+        return <ThumbsUp className="h-4 w-4 text-green-600" />;
+      case 'concern':
+        return <AlertTriangle className="h-4 w-4 text-red-600" />;
+      default:
+        return <MessageCircle className="h-4 w-4 text-gray-600" />;
     }
   };
 
-  const unresolvedComments = review?.comments.filter(c => !c.resolved) || [];
-  const totalEstimatedTime = review?.stages.reduce((total, stage) => total + stage.estimatedTime, 0) || 0;
+  const unresolvedComments = review?.comments.filter((c) => !c.resolved) || [];
+  const totalEstimatedTime =
+    review?.stages.reduce((total, stage) => total + stage.estimatedTime, 0) ||
+    0;
 
   if (!review) {
     return <div>Loading review workflow...</div>;
   }
 
   return (
-    <div className={cn("space-y-6", className)}>
+    <div className={cn('space-y-6', className)}>
       {/* Header */}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Scale className="h-5 w-5" />
             Translation Review Workflow
-            <Badge variant="outline" className={cn(
-              review.status === 'completed' ? 'bg-green-100 text-green-800' :
-              review.status === 'in_review' ? 'bg-blue-100 text-blue-800' :
-              review.status === 'rejected' ? 'bg-red-100 text-red-800' :
-              'bg-gray-100 text-gray-800'
-            )}>
+            <Badge
+              variant="outline"
+              className={cn(
+                review.status === 'completed'
+                  ? 'bg-green-100 text-green-800'
+                  : review.status === 'in_review'
+                    ? 'bg-blue-100 text-blue-800'
+                    : review.status === 'rejected'
+                      ? 'bg-red-100 text-red-800'
+                      : 'bg-gray-100 text-gray-800',
+              )}
+            >
               {review.status.replace('_', ' ')}
             </Badge>
           </CardTitle>
-          
+
           <div className="flex items-center gap-4 text-sm text-muted-foreground">
             <div className="flex items-center gap-1">
               <Clock className="h-4 w-4" />
@@ -422,14 +487,14 @@ const TranslationReviewWorkflow: React.FC<TranslationReviewWorkflowProps> = ({
               <div className="space-y-4">
                 {review.stages.map((stage, index) => {
                   const status = getStageStatus(stage.id);
-                  const reviewer = review.reviewers.find(r => selectedReviewers[stage.id] === r.id);
-                  
+                  const reviewer = review.reviewers.find(
+                    (r) => selectedReviewers[stage.id] === r.id,
+                  );
+
                   return (
                     <div key={stage.id} className="flex items-center gap-4">
-                      <div className="shrink-0">
-                        {getStageIcon(status)}
-                      </div>
-                      
+                      <div className="shrink-0">{getStageIcon(status)}</div>
+
                       <div className="flex-1">
                         <div className="flex items-center justify-between">
                           <h4 className="font-medium">{stage.name}</h4>
@@ -438,18 +503,26 @@ const TranslationReviewWorkflow: React.FC<TranslationReviewWorkflowProps> = ({
                               {stage.estimatedTime}min
                             </Badge>
                             {stage.required && (
-                              <Badge variant="destructive" className="text-xs">Required</Badge>
+                              <Badge variant="destructive" className="text-xs">
+                                Required
+                              </Badge>
                             )}
                           </div>
                         </div>
-                        <p className="text-sm text-muted-foreground">{stage.description}</p>
+                        <p className="text-sm text-muted-foreground">
+                          {stage.description}
+                        </p>
                         {reviewer && (
                           <div className="flex items-center gap-2 mt-1">
                             <Avatar className="h-5 w-5">
                               <AvatarImage src={reviewer.avatar} />
-                              <AvatarFallback>{reviewer.name[0]}</AvatarFallback>
+                              <AvatarFallback>
+                                {reviewer.name[0]}
+                              </AvatarFallback>
                             </Avatar>
-                            <span className="text-xs text-muted-foreground">{reviewer.name}</span>
+                            <span className="text-xs text-muted-foreground">
+                              {reviewer.name}
+                            </span>
                           </div>
                         )}
                       </div>
@@ -471,28 +544,34 @@ const TranslationReviewWorkflow: React.FC<TranslationReviewWorkflowProps> = ({
                   <div className="text-2xl font-bold text-blue-600">
                     {Math.round(translationResult.confidence * 100)}%
                   </div>
-                  <div className="text-xs text-muted-foreground">AI Confidence</div>
+                  <div className="text-xs text-muted-foreground">
+                    AI Confidence
+                  </div>
                 </div>
-                
+
                 <div className="text-center">
                   <div className="text-2xl font-bold text-green-600">
                     {translationResult.legalTerms.length}
                   </div>
-                  <div className="text-xs text-muted-foreground">Legal Terms</div>
+                  <div className="text-xs text-muted-foreground">
+                    Legal Terms
+                  </div>
                 </div>
-                
+
                 <div className="text-center">
                   <div className="text-2xl font-bold text-amber-600">
                     {translationResult.warnings.length}
                   </div>
                   <div className="text-xs text-muted-foreground">Warnings</div>
                 </div>
-                
+
                 <div className="text-center">
                   <div className="text-2xl font-bold text-purple-600">
                     {review.qualityScore || '--'}
                   </div>
-                  <div className="text-xs text-muted-foreground">Quality Score</div>
+                  <div className="text-xs text-muted-foreground">
+                    Quality Score
+                  </div>
                 </div>
               </div>
             </CardContent>
@@ -501,22 +580,27 @@ const TranslationReviewWorkflow: React.FC<TranslationReviewWorkflowProps> = ({
 
         {/* Review Stages Tab */}
         <TabsContent value="stages" className="space-y-4">
-          {review.stages.map(stage => (
+          {review.stages.map((stage) => (
             <ReviewStageCard
               key={stage.id}
               stage={stage}
               status={getStageStatus(stage.id)}
-              availableReviewers={availableReviewers.filter(r => r.type === stage.reviewerType)}
+              availableReviewers={availableReviewers.filter(
+                (r) => r.type === stage.reviewerType,
+              )}
               selectedReviewer={selectedReviewers[stage.id]}
-              onAssignReviewer={(reviewerId) => assignReviewer(stage.id, reviewerId)}
+              onAssignReviewer={(reviewerId) =>
+                assignReviewer(stage.id, reviewerId)
+              }
             />
           ))}
-          
-          {review.status === 'pending' && Object.keys(selectedReviewers).length > 0 && (
-            <Button onClick={startReview} className="w-full">
-              Start Review Process
-            </Button>
-          )}
+
+          {review.status === 'pending' &&
+            Object.keys(selectedReviewers).length > 0 && (
+              <Button onClick={startReview} className="w-full">
+                Start Review Process
+              </Button>
+            )}
         </TabsContent>
 
         {/* Comments Tab */}
@@ -533,9 +617,9 @@ const TranslationReviewWorkflow: React.FC<TranslationReviewWorkflowProps> = ({
                 onChange={(e) => setNewComment(e.target.value)}
                 rows={3}
               />
-              
+
               <div className="flex gap-2">
-                <Button 
+                <Button
                   onClick={() => addComment('suggestion', newComment)}
                   disabled={!newComment.trim()}
                   size="sm"
@@ -544,8 +628,8 @@ const TranslationReviewWorkflow: React.FC<TranslationReviewWorkflowProps> = ({
                   <MessageCircle className="h-4 w-4 mr-1" />
                   Suggestion
                 </Button>
-                
-                <Button 
+
+                <Button
                   onClick={() => addComment('correction', newComment)}
                   disabled={!newComment.trim()}
                   size="sm"
@@ -554,8 +638,8 @@ const TranslationReviewWorkflow: React.FC<TranslationReviewWorkflowProps> = ({
                   <Edit className="h-4 w-4 mr-1" />
                   Correction
                 </Button>
-                
-                <Button 
+
+                <Button
                   onClick={() => addComment('concern', newComment)}
                   disabled={!newComment.trim()}
                   size="sm"
@@ -570,15 +654,17 @@ const TranslationReviewWorkflow: React.FC<TranslationReviewWorkflowProps> = ({
 
           {/* Comments List */}
           <div className="space-y-3">
-            {review.comments.map(comment => (
+            {review.comments.map((comment) => (
               <CommentCard
                 key={comment.id}
                 comment={comment}
-                reviewer={review.reviewers.find(r => r.id === comment.reviewerId)}
+                reviewer={review.reviewers.find(
+                  (r) => r.id === comment.reviewerId,
+                )}
                 onResolve={() => resolveComment(comment.id)}
               />
             ))}
-            
+
             {review.comments.length === 0 && (
               <Card>
                 <CardContent className="flex flex-col items-center justify-center py-8">
@@ -593,7 +679,7 @@ const TranslationReviewWorkflow: React.FC<TranslationReviewWorkflowProps> = ({
         {/* Reviewers Tab */}
         <TabsContent value="reviewers" className="space-y-4">
           <div className="grid gap-4">
-            {availableReviewers.map(reviewer => (
+            {availableReviewers.map((reviewer) => (
               <ReviewerCard key={reviewer.id} reviewer={reviewer} />
             ))}
           </div>
@@ -610,22 +696,34 @@ const ReviewStageCard: React.FC<{
   availableReviewers: Reviewer[];
   selectedReviewer?: string;
   onAssignReviewer: (reviewerId: string) => void;
-}> = ({ stage, status, availableReviewers, selectedReviewer, onAssignReviewer }) => {
+}> = ({
+  stage,
+  status,
+  availableReviewers,
+  selectedReviewer,
+  onAssignReviewer,
+}) => {
   return (
-    <Card className={cn(
-      "transition-colors",
-      status === 'active' ? 'ring-2 ring-blue-500' : '',
-      status === 'completed' ? 'bg-green-50' : ''
-    )}>
+    <Card
+      className={cn(
+        'transition-colors',
+        status === 'active' ? 'ring-2 ring-blue-500' : '',
+        status === 'completed' ? 'bg-green-50' : '',
+      )}
+    >
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
           <CardTitle className="text-lg flex items-center gap-2">
-            {status === 'completed' && <CheckCircle className="h-5 w-5 text-green-600" />}
+            {status === 'completed' && (
+              <CheckCircle className="h-5 w-5 text-green-600" />
+            )}
             {status === 'active' && <Clock className="h-5 w-5 text-blue-600" />}
-            {status === 'pending' && <Clock className="h-5 w-5 text-gray-400" />}
+            {status === 'pending' && (
+              <Clock className="h-5 w-5 text-gray-400" />
+            )}
             {stage.name}
           </CardTitle>
-          
+
           <div className="flex items-center gap-2">
             <Badge variant="outline">{stage.estimatedTime}min</Badge>
             {stage.required && <Badge variant="destructive">Required</Badge>}
@@ -633,17 +731,20 @@ const ReviewStageCard: React.FC<{
         </div>
         <p className="text-muted-foreground">{stage.description}</p>
       </CardHeader>
-      
+
       <CardContent>
         {stage.reviewerType !== 'ai' && (
           <div className="space-y-3">
             <label className="text-sm font-medium">Assign Reviewer</label>
-            <Select value={selectedReviewer || ''} onValueChange={onAssignReviewer}>
+            <Select
+              value={selectedReviewer || ''}
+              onValueChange={onAssignReviewer}
+            >
               <SelectTrigger>
                 <SelectValue placeholder="Select a reviewer" />
               </SelectTrigger>
               <SelectContent>
-                {availableReviewers.map(reviewer => (
+                {availableReviewers.map((reviewer) => (
                   <SelectItem key={reviewer.id} value={reviewer.id}>
                     <div className="flex items-center gap-2">
                       <Avatar className="h-6 w-6">
@@ -653,7 +754,8 @@ const ReviewStageCard: React.FC<{
                       <div>
                         <div className="font-medium">{reviewer.name}</div>
                         <div className="text-xs text-muted-foreground">
-                          {reviewer.specializations.join(', ')} • ⭐ {reviewer.rating}
+                          {reviewer.specializations.join(', ')} • ⭐{' '}
+                          {reviewer.rating}
                         </div>
                       </div>
                     </div>
@@ -675,17 +777,17 @@ const CommentCard: React.FC<{
   onResolve: () => void;
 }> = ({ comment, reviewer, onResolve }) => {
   return (
-    <Card className={cn(
-      "transition-colors",
-      comment.resolved ? 'bg-gray-50 opacity-75' : '',
-      comment.severity === 'high' ? 'border-red-200' : ''
-    )}>
+    <Card
+      className={cn(
+        'transition-colors',
+        comment.resolved ? 'bg-gray-50 opacity-75' : '',
+        comment.severity === 'high' ? 'border-red-200' : '',
+      )}
+    >
       <CardContent className="p-4">
         <div className="flex items-start gap-3">
-          <div className="shrink-0 mt-1">
-            {getCommentIcon(comment.type)}
-          </div>
-          
+          <div className="shrink-0 mt-1">{getCommentIcon(comment.type)}</div>
+
           <div className="flex-1 space-y-2">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
@@ -695,7 +797,9 @@ const CommentCard: React.FC<{
                     <AvatarFallback>{reviewer.name[0]}</AvatarFallback>
                   </Avatar>
                 )}
-                <span className="font-medium text-sm">{reviewer?.name || 'Reviewer'}</span>
+                <span className="font-medium text-sm">
+                  {reviewer?.name || 'Reviewer'}
+                </span>
                 <Badge variant="outline" className="text-xs">
                   {comment.type}
                 </Badge>
@@ -703,30 +807,30 @@ const CommentCard: React.FC<{
                   {comment.timestamp.toLocaleString()}
                 </span>
               </div>
-              
+
               {!comment.resolved && (
                 <Button onClick={onResolve} size="sm" variant="ghost">
                   <CheckCircle className="h-4 w-4" />
                 </Button>
               )}
             </div>
-            
+
             <p className="text-sm">{comment.reason}</p>
-            
+
             {comment.originalText && (
               <div className="bg-red-50 border border-red-200 p-2 rounded text-xs">
-                <span className="font-medium">Original: </span>
-                "{comment.originalText}"
+                <span className="font-medium">Original: </span>"
+                {comment.originalText}"
               </div>
             )}
-            
+
             {comment.suggestedText && (
               <div className="bg-green-50 border border-green-200 p-2 rounded text-xs">
-                <span className="font-medium">Suggested: </span>
-                "{comment.suggestedText}"
+                <span className="font-medium">Suggested: </span>"
+                {comment.suggestedText}"
               </div>
             )}
-            
+
             {comment.resolved && (
               <div className="flex items-center gap-1 text-xs text-green-600">
                 <CheckCircle className="h-3 w-3" />
@@ -750,7 +854,7 @@ const ReviewerCard: React.FC<{ reviewer: Reviewer }> = ({ reviewer }) => {
             <AvatarImage src={reviewer.avatar} />
             <AvatarFallback>{reviewer.name[0]}</AvatarFallback>
           </Avatar>
-          
+
           <div className="flex-1">
             <div className="flex items-center justify-between mb-2">
               <h4 className="font-medium">{reviewer.name}</h4>
@@ -762,21 +866,21 @@ const ReviewerCard: React.FC<{ reviewer: Reviewer }> = ({ reviewer }) => {
                 </span>
               </div>
             </div>
-            
+
             <div className="space-y-2">
               <div className="flex flex-wrap gap-1">
-                {reviewer.specializations.map(spec => (
+                {reviewer.specializations.map((spec) => (
                   <Badge key={spec} variant="outline" className="text-xs">
                     {spec}
                   </Badge>
                 ))}
               </div>
-              
+
               <div className="flex items-center gap-2 text-xs text-muted-foreground">
                 <Globe className="h-3 w-3" />
                 Languages: {reviewer.languages.join(', ')}
               </div>
-              
+
               {reviewer.certifications.length > 0 && (
                 <div className="flex items-center gap-2 text-xs text-muted-foreground">
                   <BookOpen className="h-3 w-3" />
@@ -793,11 +897,16 @@ const ReviewerCard: React.FC<{ reviewer: Reviewer }> = ({ reviewer }) => {
 
 function getCommentIcon(type: string) {
   switch (type) {
-    case 'suggestion': return <MessageCircle className="h-4 w-4 text-blue-600" />;
-    case 'correction': return <Edit className="h-4 w-4 text-orange-600" />;
-    case 'approval': return <ThumbsUp className="h-4 w-4 text-green-600" />;
-    case 'concern': return <AlertTriangle className="h-4 w-4 text-red-600" />;
-    default: return <MessageCircle className="h-4 w-4 text-gray-600" />;
+    case 'suggestion':
+      return <MessageCircle className="h-4 w-4 text-blue-600" />;
+    case 'correction':
+      return <Edit className="h-4 w-4 text-orange-600" />;
+    case 'approval':
+      return <ThumbsUp className="h-4 w-4 text-green-600" />;
+    case 'concern':
+      return <AlertTriangle className="h-4 w-4 text-red-600" />;
+    default:
+      return <MessageCircle className="h-4 w-4 text-gray-600" />;
   }
 }
 

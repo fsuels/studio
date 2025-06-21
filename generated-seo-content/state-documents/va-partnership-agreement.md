@@ -47,7 +47,7 @@ Don't risk using generic templates that may not comply with Virginia law. Get a 
 
 [Create Virginia Partnership Agreement]
 
-*Trusted by thousands of Virginia businesses*
+_Trusted by thousands of Virginia businesses_
 
 ---
 

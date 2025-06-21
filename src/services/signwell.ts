@@ -1,15 +1,15 @@
 // src/services/signwell.ts
 
 export interface SignWellDocumentResponse {
-  documentId: string
-  signingUrl?: string
-  raw?: unknown
+  documentId: string;
+  signingUrl?: string;
+  raw?: unknown;
 }
 
 export interface SignWellStatusResponse {
-  status: string
-  signingUrl?: string
-  raw?: unknown
+  status: string;
+  signingUrl?: string;
+  raw?: unknown;
 }
 
 /**
@@ -24,11 +24,11 @@ export async function createSignWellDocument(
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ pdfBase64, fileName }),
-  })
+  });
   if (!res.ok) {
-    throw new Error(`SignWell API error: ${res.status} ${res.statusText}`)
+    throw new Error(`SignWell API error: ${res.status} ${res.statusText}`);
   }
-  return (await res.json()) as SignWellDocumentResponse
+  return (await res.json()) as SignWellDocumentResponse;
 }
 
 /**
@@ -39,16 +39,18 @@ export async function createSignWellDocument(
 export async function fetchSignWellStatus(
   documentId: string,
 ): Promise<SignWellStatusResponse> {
-  const res = await fetch(`/api/signwell/${encodeURIComponent(documentId)}`)
+  const res = await fetch(`/api/signwell/${encodeURIComponent(documentId)}`);
   if (!res.ok) {
-    throw new Error(`SignWell status check failed: ${res.status} ${res.statusText}`)
+    throw new Error(
+      `SignWell status check failed: ${res.status} ${res.statusText}`,
+    );
   }
-  const data = await res.json()
+  const data = await res.json();
   return {
     status: data.status as string,
     signingUrl: data.signingUrl as string | undefined,
     raw: data,
-  }
+  };
 }
 
 /**
@@ -56,9 +58,9 @@ export async function fetchSignWellStatus(
  * View pages can `import { getSignWellUrl }` directly.
  */
 export async function getSignWellUrl(documentId: string): Promise<string> {
-  const { signingUrl } = await fetchSignWellStatus(documentId)
+  const { signingUrl } = await fetchSignWellStatus(documentId);
   if (!signingUrl) {
-    throw new Error(`No signingUrl returned for document ${documentId}`)
+    throw new Error(`No signingUrl returned for document ${documentId}`);
   }
-  return signingUrl
+  return signingUrl;
 }

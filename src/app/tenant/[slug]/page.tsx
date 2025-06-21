@@ -40,26 +40,32 @@ export async function generateMetadata({ params }: TenantPageProps) {
 
   return {
     title: `${tenant.branding?.companyName || tenant.name} - Legal Documents`,
-    description: tenant.branding?.tagline || `Create professional legal documents with ${tenant.name}`,
+    description:
+      tenant.branding?.tagline ||
+      `Create professional legal documents with ${tenant.name}`,
     keywords: 'legal documents, contracts, forms, templates',
     robots: 'index, follow',
-    
+
     // Open Graph
     openGraph: {
       title: `${tenant.branding?.companyName || tenant.name} - Legal Documents`,
-      description: tenant.branding?.tagline || `Create professional legal documents with ${tenant.name}`,
+      description:
+        tenant.branding?.tagline ||
+        `Create professional legal documents with ${tenant.name}`,
       type: 'website',
       ...(tenant.branding?.logoUrl && { images: [tenant.branding.logoUrl] }),
     },
-    
+
     // Twitter Card
     twitter: {
       card: 'summary_large_image',
       title: `${tenant.branding?.companyName || tenant.name} - Legal Documents`,
-      description: tenant.branding?.tagline || `Create professional legal documents with ${tenant.name}`,
+      description:
+        tenant.branding?.tagline ||
+        `Create professional legal documents with ${tenant.name}`,
       ...(tenant.branding?.logoUrl && { images: [tenant.branding.logoUrl] }),
     },
-    
+
     // Favicon
     ...(tenant.branding?.faviconUrl && {
       icons: {
@@ -68,7 +74,7 @@ export async function generateMetadata({ params }: TenantPageProps) {
         apple: tenant.branding.faviconUrl,
       },
     }),
-    
+
     // Theme color
     themeColor: tenant.branding?.primaryColor || '#2563eb',
   };

@@ -24,13 +24,22 @@ export const constructionmanagementagreementMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Construction Management Agreement',
-      description: 'Professional construction management services agreement between owner and construction manager.',
-      aliases: ['CM agreement', 'construction manager contract', 'project management agreement'],
+      description:
+        'Professional construction management services agreement between owner and construction manager.',
+      aliases: [
+        'CM agreement',
+        'construction manager contract',
+        'project management agreement',
+      ],
     },
     es: {
       name: 'Acuerdo de Gestión de Construcción',
-      description: 'Acuerdo de servicios profesionales de gestión de construcción entre propietario y gestor de construcción.',
-      aliases: ['acuerdo de gestión de construcción', 'contrato de gestor de construcción'],
+      description:
+        'Acuerdo de servicios profesionales de gestión de construcción entre propietario y gestor de construcción.',
+      aliases: [
+        'acuerdo de gestión de construcción',
+        'contrato de gestor de construcción',
+      ],
     },
   },
 };

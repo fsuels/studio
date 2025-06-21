@@ -3,7 +3,9 @@ import { z } from 'zod';
 export const schema = z.object({
   principalName: z.string().min(1, 'Principal name is required'),
   principalAddress: z.string().min(1, 'Principal address is required'),
-  principalDateOfBirth: z.string().min(1, 'Principal date of birth is required'),
+  principalDateOfBirth: z
+    .string()
+    .min(1, 'Principal date of birth is required'),
   agentName: z.string().min(1, 'Agent name is required'),
   agentAddress: z.string().min(1, 'Agent address is required'),
   agentPhone: z.string().min(1, 'Agent phone number is required'),
@@ -16,7 +18,9 @@ export const schema = z.object({
   secondAlternateAgentAddress: z.string().optional(),
   effectiveDate: z.enum(['immediately', 'upon_incapacity', 'specific_date']),
   specificEffectiveDate: z.string().optional(),
-  medicalTreatmentAuthority: z.string().min(1, 'Medical treatment authority is required'),
+  medicalTreatmentAuthority: z
+    .string()
+    .min(1, 'Medical treatment authority is required'),
   hospitalAdmissionAuthority: z.boolean().default(true),
   medicationAuthority: z.boolean().default(true),
   surgicalProcedureAuthority: z.boolean().default(true),

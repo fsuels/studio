@@ -24,12 +24,14 @@ export const investmentAgreementMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Investment Agreement',
-      description: 'Agreement outlining terms for investment transactions and partnerships.',
+      description:
+        'Agreement outlining terms for investment transactions and partnerships.',
       aliases: ['investor agreement', 'investment contract'],
     },
     es: {
       name: 'Acuerdo de Inversión',
-      description: 'Acuerdo que describe términos para transacciones de inversión.',
+      description:
+        'Acuerdo que describe términos para transacciones de inversión.',
       aliases: ['contrato de inversionista', 'acuerdo de capital'],
     },
   },

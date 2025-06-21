@@ -16,23 +16,23 @@ const dpaRequestSchema = z.object({
   processingPurpose: z.string().min(10),
   effectiveDate: z.string(),
   timestamp: z.string(),
-  userAgent: z.string()
+  userAgent: z.string(),
 });
 
 const dataTypeLabels: Record<string, string> = {
-  'personal_identifiers': 'Personal Identifiers (name, email, phone)',
-  'financial_data': 'Financial Data (payment info, billing)',
-  'document_content': 'Document Content and Metadata',
-  'usage_analytics': 'Usage Analytics and Logs',
-  'authentication_data': 'Authentication Data',
-  'business_data': 'Business Information and Records'
+  personal_identifiers: 'Personal Identifiers (name, email, phone)',
+  financial_data: 'Financial Data (payment info, billing)',
+  document_content: 'Document Content and Metadata',
+  usage_analytics: 'Usage Analytics and Logs',
+  authentication_data: 'Authentication Data',
+  business_data: 'Business Information and Records',
 };
 
 async function generateDPAPDF(data: any): Promise<Buffer> {
   const pdfDoc = await PDFDocument.create();
   const page = pdfDoc.addPage([612, 792]); // Standard US Letter size
   const { width, height } = page.getSize();
-  
+
   const helveticaFont = await pdfDoc.embedFont(StandardFonts.Helvetica);
   const helveticaBoldFont = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
 
@@ -42,7 +42,12 @@ async function generateDPAPDF(data: any): Promise<Buffer> {
   const lineHeight = 20;
 
   // Helper function to add text
-  const addText = (text: string, font = helveticaFont, fontSize = 12, x = leftMargin) => {
+  const addText = (
+    text: string,
+    font = helveticaFont,
+    fontSize = 12,
+    x = leftMargin,
+  ) => {
     page.drawText(text, {
       x,
       y: yPosition,
@@ -54,15 +59,19 @@ async function generateDPAPDF(data: any): Promise<Buffer> {
   };
 
   // Helper function to add wrapped text
-  const addWrappedText = (text: string, font = helveticaFont, fontSize = 12) => {
+  const addWrappedText = (
+    text: string,
+    font = helveticaFont,
+    fontSize = 12,
+  ) => {
     const words = text.split(' ');
     let line = '';
     const maxWidth = width - leftMargin - rightMargin;
-    
+
     for (const word of words) {
       const testLine = line + word + ' ';
       const textWidth = font.widthOfTextAtSize(testLine, fontSize);
-      
+
       if (textWidth > maxWidth && line !== '') {
         addText(line.trim(), font, fontSize);
         line = word + ' ';
@@ -70,7 +79,7 @@ async function generateDPAPDF(data: any): Promise<Buffer> {
         line = testLine;
       }
     }
-    
+
     if (line.trim() !== '') {
       addText(line.trim(), font, fontSize);
     }
@@ -81,14 +90,22 @@ async function generateDPAPDF(data: any): Promise<Buffer> {
   yPosition -= 10;
 
   // Header information
-  addText(`Generated on: ${new Date().toLocaleDateString()}`, helveticaFont, 10);
-  addText(`Effective Date: ${new Date(data.effectiveDate).toLocaleDateString()}`, helveticaFont, 10);
+  addText(
+    `Generated on: ${new Date().toLocaleDateString()}`,
+    helveticaFont,
+    10,
+  );
+  addText(
+    `Effective Date: ${new Date(data.effectiveDate).toLocaleDateString()}`,
+    helveticaFont,
+    10,
+  );
   yPosition -= 20;
 
   // Parties section
   addText('PARTIES', helveticaBoldFont, 14);
   yPosition -= 5;
-  
+
   addText('Data Controller:', helveticaBoldFont, 12);
   addText(`Company: ${data.companyName}`, helveticaFont, 11);
   addText(`Legal Entity: ${data.legalEntityName}`, helveticaFont, 11);
@@ -138,10 +155,10 @@ async function generateDPAPDF(data: any): Promise<Buffer> {
     'Regular security audits and vulnerability assessments',
     'SOC 2 Type II certified security controls',
     'Incident response and breach notification procedures',
-    'Data backup and disaster recovery protocols'
+    'Data backup and disaster recovery protocols',
   ];
 
-  securityMeasures.forEach(measure => {
+  securityMeasures.forEach((measure) => {
     addText(`• ${measure}`, helveticaFont, 11);
   });
   yPosition -= 10;
@@ -188,18 +205,21 @@ async function generateDPAPDF(data: any): Promise<Buffer> {
   return Buffer.from(await pdfDoc.save());
 }
 
-async function uploadToFirebaseStorage(pdfBuffer: Buffer, filename: string): Promise<string> {
+async function uploadToFirebaseStorage(
+  pdfBuffer: Buffer,
+  filename: string,
+): Promise<string> {
   const bucket = adminStorage.bucket();
   const file = bucket.file(`dpa-agreements/${filename}`);
-  
+
   await file.save(pdfBuffer, {
     metadata: {
       contentType: 'application/pdf',
       metadata: {
         generated: new Date().toISOString(),
-        source: 'trust_center_dpa_generator'
-      }
-    }
+        source: 'trust_center_dpa_generator',
+      },
+    },
   });
 
   // Generate signed URL valid for 24 hours
@@ -220,20 +240,20 @@ async function generateDPAId(): Promise<string> {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    
+
     // Validate request data
     const validatedData = dpaRequestSchema.parse(body);
-    
+
     // Generate unique DPA ID
     const dpaId = await generateDPAId();
     const filename = `${dpaId}-${validatedData.companyName.replace(/[^a-zA-Z0-9]/g, '_')}.pdf`;
-    
+
     // Generate PDF
     const pdfBuffer = await generateDPAPDF(validatedData);
-    
+
     // Upload to Firebase Storage and get signed URL
     const downloadUrl = await uploadToFirebaseStorage(pdfBuffer, filename);
-    
+
     // Store DPA generation record in Firestore
     const dpaRecord = {
       dpaId,
@@ -251,14 +271,13 @@ export async function POST(request: NextRequest) {
       downloadUrl,
       downloadExpires: new Date(Date.now() + 24 * 60 * 60 * 1000),
       createdAt: new Date(),
-      ipAddress: request.ip || request.headers.get('x-forwarded-for') || 'unknown',
+      ipAddress:
+        request.ip || request.headers.get('x-forwarded-for') || 'unknown',
       userAgent: validatedData.userAgent,
-      status: 'generated'
+      status: 'generated',
     };
 
-    const docRef = await adminDb
-      .collection('dpa_agreements')
-      .add(dpaRecord);
+    const docRef = await adminDb.collection('dpa_agreements').add(dpaRecord);
 
     // Log audit event
     await auditService.logComplianceEvent('dpa_generated', {
@@ -269,7 +288,7 @@ export async function POST(request: NextRequest) {
       firestoreDocId: docRef.id,
       ipAddress: dpaRecord.ipAddress,
       userAgent: validatedData.userAgent,
-      dataTypes: validatedData.dataTypes
+      dataTypes: validatedData.dataTypes,
     });
 
     return NextResponse.json({
@@ -278,22 +297,21 @@ export async function POST(request: NextRequest) {
       downloadUrl,
       filename,
       expiresAt: dpaRecord.downloadExpires.toISOString(),
-      message: 'Data Processing Agreement generated successfully'
+      message: 'Data Processing Agreement generated successfully',
     });
-
   } catch (error) {
     console.error('DPA generation API error:', error);
-    
+
     if (error instanceof z.ZodError) {
       return NextResponse.json(
         { error: 'Invalid request data', details: error.errors },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
     return NextResponse.json(
       { error: 'Failed to generate DPA' },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -303,13 +321,10 @@ export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams;
     const adminToken = searchParams.get('admin_token');
-    
+
     // Simple admin authentication (in production, use proper auth)
     if (adminToken !== process.env.ADMIN_API_TOKEN) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const thirtyDaysAgo = new Date();
@@ -322,41 +337,43 @@ export async function GET(request: NextRequest) {
       .limit(100)
       .get();
 
-    const dpas = recentDPAsSnapshot.docs.map(doc => ({
+    const dpas = recentDPAsSnapshot.docs.map((doc) => ({
       id: doc.id,
       ...doc.data(),
       createdAt: doc.data().createdAt.toDate().toISOString(),
       effectiveDate: doc.data().effectiveDate.toDate().toISOString(),
-      downloadExpires: doc.data().downloadExpires.toDate().toISOString()
+      downloadExpires: doc.data().downloadExpires.toDate().toISOString(),
     }));
 
     const stats = {
       totalGenerated: dpas.length,
       topCountries: getTopCountries(dpas),
       dataTypeDistribution: getDataTypeDistribution(dpas),
-      dailyGeneration: getDailyGeneration(dpas)
+      dailyGeneration: getDailyGeneration(dpas),
     };
 
     return NextResponse.json({
       success: true,
       stats,
-      recentDPAs: dpas.slice(0, 10) // Return 10 most recent
+      recentDPAs: dpas.slice(0, 10), // Return 10 most recent
     });
-
   } catch (error) {
     console.error('DPA stats API error:', error);
     return NextResponse.json(
       { error: 'Failed to fetch statistics' },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
 
 function getTopCountries(dpas: any[]): { country: string; count: number }[] {
-  const countryCounts = dpas.reduce((acc, dpa) => {
-    acc[dpa.country] = (acc[dpa.country] || 0) + 1;
-    return acc;
-  }, {} as Record<string, number>);
+  const countryCounts = dpas.reduce(
+    (acc, dpa) => {
+      acc[dpa.country] = (acc[dpa.country] || 0) + 1;
+      return acc;
+    },
+    {} as Record<string, number>,
+  );
 
   return Object.entries(countryCounts)
     .map(([country, count]) => ({ country, count }))
@@ -364,10 +381,12 @@ function getTopCountries(dpas: any[]): { country: string; count: number }[] {
     .slice(0, 5);
 }
 
-function getDataTypeDistribution(dpas: any[]): { dataType: string; count: number }[] {
+function getDataTypeDistribution(
+  dpas: any[],
+): { dataType: string; count: number }[] {
   const dataTypeCounts: Record<string, number> = {};
-  
-  dpas.forEach(dpa => {
+
+  dpas.forEach((dpa) => {
     dpa.dataTypes.forEach((dataType: string) => {
       dataTypeCounts[dataType] = (dataTypeCounts[dataType] || 0) + 1;
     });
@@ -379,11 +398,14 @@ function getDataTypeDistribution(dpas: any[]): { dataType: string; count: number
 }
 
 function getDailyGeneration(dpas: any[]): { date: string; count: number }[] {
-  const dailyCounts = dpas.reduce((acc, dpa) => {
-    const date = new Date(dpa.createdAt).toDateString();
-    acc[date] = (acc[date] || 0) + 1;
-    return acc;
-  }, {} as Record<string, number>);
+  const dailyCounts = dpas.reduce(
+    (acc, dpa) => {
+      const date = new Date(dpa.createdAt).toDateString();
+      acc[date] = (acc[date] || 0) + 1;
+      return acc;
+    },
+    {} as Record<string, number>,
+  );
 
   return Object.entries(dailyCounts)
     .map(([date, count]) => ({ date, count }))

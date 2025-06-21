@@ -24,12 +24,14 @@ export const mortgageAgreementMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Mortgage Agreement',
-      description: 'Legal agreement for home mortgage loan terms and conditions.',
+      description:
+        'Legal agreement for home mortgage loan terms and conditions.',
       aliases: ['mortgage contract', 'home loan agreement', 'mortgage note'],
     },
     es: {
       name: 'Acuerdo de Hipoteca',
-      description: 'Acuerdo legal para términos y condiciones de préstamo hipotecario.',
+      description:
+        'Acuerdo legal para términos y condiciones de préstamo hipotecario.',
       aliases: ['contrato de hipoteca', 'acuerdo de préstamo'],
     },
   },

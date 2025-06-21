@@ -24,12 +24,14 @@ export const nonprofitBylawsMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Nonprofit Bylaws',
-      description: 'Governing bylaws for nonprofit organizations and charitable entities.',
+      description:
+        'Governing bylaws for nonprofit organizations and charitable entities.',
       aliases: ['501c3 bylaws', 'charity bylaws', 'nonprofit constitution'],
     },
     es: {
       name: 'Estatutos de Organización Sin Fines de Lucro',
-      description: 'Estatutos para organizaciones sin fines de lucro y entidades caritativas.',
+      description:
+        'Estatutos para organizaciones sin fines de lucro y entidades caritativas.',
       aliases: ['estatutos 501c3', 'reglamento de ONG'],
     },
   },

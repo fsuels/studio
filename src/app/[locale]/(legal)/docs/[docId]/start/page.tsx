@@ -30,9 +30,10 @@ export async function generateStaticParams(): Promise<
   // derive locales array
   const locales: ('en' | 'es')[] =
     Array.isArray(localizations) && localizations.length > 0
-      ? (localizations.map((l) =>
-          typeof l === 'string' ? l : l.id
-        ) as ('en' | 'es')[])
+      ? (localizations.map((l) => (typeof l === 'string' ? l : l.id)) as (
+          | 'en'
+          | 'es'
+        )[])
       : (['en', 'es'] as ('en' | 'es')[]);
 
   const params: Array<{ locale: 'en' | 'es'; docId: string }> = [];
@@ -42,21 +43,21 @@ export async function generateStaticParams(): Promise<
       if (!doc.id) {
         if (isDev)
           console.warn(
-            `[generateStaticParams] Skipping doc with missing id for locale "${locale}".`
+            `[generateStaticParams] Skipping doc with missing id for locale "${locale}".`,
           );
         continue;
       }
       if (doc.id === 'general-inquiry') {
         if (isDev)
           console.warn(
-            `[generateStaticParams] Skipping "general-inquiry" doc for locale "${locale}".`
+            `[generateStaticParams] Skipping "general-inquiry" doc for locale "${locale}".`,
           );
         continue;
       }
       if (!doc.schema) {
         if (isDev)
           console.warn(
-            `[generateStaticParams] Document "${doc.id}" missing schema for locale "${locale}". Skipping.`
+            `[generateStaticParams] Document "${doc.id}" missing schema for locale "${locale}". Skipping.`,
           );
         continue;
       }
@@ -65,12 +66,10 @@ export async function generateStaticParams(): Promise<
   }
 
   if (isDev) {
-    console.log(
-      `[generateStaticParams] Generated ${params.length} params.`
-    );
+    console.log(`[generateStaticParams] Generated ${params.length} params.`);
     if (params.length === 0) {
       console.warn(
-        '[generateStaticParams] No params generated—check documentLibrary & localizations.'
+        '[generateStaticParams] No params generated—check documentLibrary & localizations.',
       );
     }
   }
@@ -95,7 +94,5 @@ export default async function StartWizardPage({
   }
 
   // Delegate to the client for the form + preview + autosave logic
-  return (
-    <StartWizardPageClient locale={locale} docId={docId} />
-  );
+  return <StartWizardPageClient locale={locale} docId={docId} />;
 }

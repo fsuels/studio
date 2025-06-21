@@ -313,7 +313,7 @@ export const bidproposalQuestions: FormQuestion[] = [
   {
     id: 'builderRiskInsurance',
     type: 'checkbox',
-    label: 'Builder\'s risk insurance provided',
+    label: "Builder's risk insurance provided",
     required: false,
     group: 'insurance',
   },

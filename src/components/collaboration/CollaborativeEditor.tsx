@@ -5,11 +5,22 @@ import React from 'react';
 import { Editor } from '@monaco-editor/react';
 import type * as Monaco from 'monaco-editor';
 import { useAuth } from '@/lib/auth';
-import { CollaborationClient, CollaborationUser, PresenceInfo, Comment, CursorPosition } from '@/lib/collaboration/client';
+import {
+  CollaborationClient,
+  CollaborationUser,
+  PresenceInfo,
+  Comment,
+  CursorPosition,
+} from '@/lib/collaboration/client';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 import { MessageCircle, Users, Wifi, WifiOff } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -42,24 +53,32 @@ const CollaborativeEditor: React.FC<CollaborativeEditorProps> = ({
   readOnly = false,
 }) => {
   const { user } = useAuth();
-  const [editor, setEditor] = React.useState<Monaco.editor.IStandaloneCodeEditor | null>(null);
+  const [editor, setEditor] =
+    React.useState<Monaco.editor.IStandaloneCodeEditor | null>(null);
   const [monaco, setMonaco] = React.useState<typeof Monaco | null>(null);
-  const [collaborationClient, setCollaborationClient] = React.useState<CollaborationClient | null>(null);
+  const [collaborationClient, setCollaborationClient] =
+    React.useState<CollaborationClient | null>(null);
   const [presence, setPresence] = React.useState<PresenceInfo[]>([]);
   const [comments, setComments] = React.useState<Comment[]>([]);
   const [isConnected, setIsConnected] = React.useState(false);
-  const [liveCursors, setLiveCursors] = React.useState<Map<string, LiveCursor>>(new Map());
+  const [liveCursors, setLiveCursors] = React.useState<Map<string, LiveCursor>>(
+    new Map(),
+  );
   const [showingComment, setShowingComment] = React.useState(false);
-  const [commentPosition, setCommentPosition] = React.useState<CursorPosition | null>(null);
+  const [commentPosition, setCommentPosition] =
+    React.useState<CursorPosition | null>(null);
 
-  const currentUser: CollaborationUser = React.useMemo(() => ({
-    id: user?.uid || 'anonymous',
-    name: user?.displayName || 'Anonymous User',
-    email: user?.email || '',
-    avatar: user?.photoURL,
-    color: generateUserColor(user?.uid || 'anonymous'),
-    role: 'editor', // This should come from document permissions
-  }), [user]);
+  const currentUser: CollaborationUser = React.useMemo(
+    () => ({
+      id: user?.uid || 'anonymous',
+      name: user?.displayName || 'Anonymous User',
+      email: user?.email || '',
+      avatar: user?.photoURL,
+      color: generateUserColor(user?.uid || 'anonymous'),
+      role: 'editor', // This should come from document permissions
+    }),
+    [user],
+  );
 
   React.useEffect(() => {
     if (!user || !authToken) return;
@@ -121,7 +140,7 @@ const CollaborativeEditor: React.FC<CollaborativeEditorProps> = ({
 
   const handleEditorDidMount = (
     editorInstance: Monaco.editor.IStandaloneCodeEditor,
-    monacoInstance: typeof Monaco
+    monacoInstance: typeof Monaco,
   ) => {
     setEditor(editorInstance);
     setMonaco(monacoInstance);
@@ -150,16 +169,23 @@ const CollaborativeEditor: React.FC<CollaborativeEditorProps> = ({
     });
 
     // Add shortcut for mentions
-    editorInstance.addCommand(monacoInstance.KeyMod.CtrlCmd | monacoInstance.KeyCode.KeyM, () => {
-      // Trigger mention popup
-      triggerMentionPopup();
-    });
+    editorInstance.addCommand(
+      monacoInstance.KeyMod.CtrlCmd | monacoInstance.KeyCode.KeyM,
+      () => {
+        // Trigger mention popup
+        triggerMentionPopup();
+      },
+    );
   };
 
-  const updateLiveCursor = (userId: string, user: CollaborationUser, position: CursorPosition) => {
+  const updateLiveCursor = (
+    userId: string,
+    user: CollaborationUser,
+    position: CursorPosition,
+  ) => {
     if (userId === currentUser.id) return;
 
-    setLiveCursors(prev => {
+    setLiveCursors((prev) => {
       const newCursors = new Map(prev);
       newCursors.set(userId, {
         userId,
@@ -170,10 +196,14 @@ const CollaborativeEditor: React.FC<CollaborativeEditorProps> = ({
     });
   };
 
-  const updateLiveSelection = (userId: string, user: CollaborationUser, selection: any) => {
+  const updateLiveSelection = (
+    userId: string,
+    user: CollaborationUser,
+    selection: any,
+  ) => {
     if (userId === currentUser.id) return;
 
-    setLiveCursors(prev => {
+    setLiveCursors((prev) => {
       const newCursors = new Map(prev);
       const existing = newCursors.get(userId);
       if (existing) {
@@ -191,7 +221,7 @@ const CollaborativeEditor: React.FC<CollaborativeEditorProps> = ({
   };
 
   const removeLiveCursor = (userId: string) => {
-    setLiveCursors(prev => {
+    setLiveCursors((prev) => {
       const newCursors = new Map(prev);
       newCursors.delete(userId);
       return newCursors;
@@ -205,21 +235,22 @@ const CollaborativeEditor: React.FC<CollaborativeEditorProps> = ({
 
     liveCursors.forEach((cursor) => {
       const { user, position } = cursor;
-      
+
       // Cursor decoration
       decorations.push({
         range: new monaco.Range(
           position.line,
           position.column,
           position.line,
-          position.column
+          position.column,
         ),
         options: {
           className: 'live-cursor',
           beforeContentClassName: 'live-cursor-line',
           afterContentClassName: 'live-cursor-label',
           glyphMarginClassName: 'live-cursor-glyph',
-          stickiness: monaco.editor.TrackedRangeStickiness.NeverGrowsWhenTypingAtEdges,
+          stickiness:
+            monaco.editor.TrackedRangeStickiness.NeverGrowsWhenTypingAtEdges,
         },
       });
 
@@ -230,27 +261,34 @@ const CollaborativeEditor: React.FC<CollaborativeEditorProps> = ({
             position.selection.startLine,
             position.selection.startColumn,
             position.selection.endLine,
-            position.selection.endColumn
+            position.selection.endColumn,
           ),
           options: {
             className: 'live-selection',
-            stickiness: monaco.editor.TrackedRangeStickiness.NeverGrowsWhenTypingAtEdges,
+            stickiness:
+              monaco.editor.TrackedRangeStickiness.NeverGrowsWhenTypingAtEdges,
           },
         });
       }
     });
 
     const existingDecorations = Array.from(liveCursors.values())
-      .map(cursor => cursor.decoration)
+      .map((cursor) => cursor.decoration)
       .filter(Boolean)
       .flat() as string[];
 
-    const newDecorations = editor.deltaDecorations(existingDecorations, decorations);
-    
+    const newDecorations = editor.deltaDecorations(
+      existingDecorations,
+      decorations,
+    );
+
     // Update decoration IDs
     let decorationIndex = 0;
     liveCursors.forEach((cursor, userId) => {
-      cursor.decoration = newDecorations.slice(decorationIndex, decorationIndex + (cursor.position.selection ? 2 : 1));
+      cursor.decoration = newDecorations.slice(
+        decorationIndex,
+        decorationIndex + (cursor.position.selection ? 2 : 1),
+      );
       decorationIndex += cursor.position.selection ? 2 : 1;
     });
   };
@@ -259,7 +297,7 @@ const CollaborativeEditor: React.FC<CollaborativeEditorProps> = ({
     if (!collaborationClient || !commentPosition) return;
 
     const comment = collaborationClient.addComment(content, commentPosition);
-    
+
     if (onCommentAdd) {
       onCommentAdd(comment);
     }
@@ -275,20 +313,26 @@ const CollaborativeEditor: React.FC<CollaborativeEditorProps> = ({
 
   const generateUserColor = (userId: string): string => {
     const colors = [
-      '#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', 
-      '#FFEAA7', '#DDA0DD', '#98D8C8', '#FFB6C1'
+      '#FF6B6B',
+      '#4ECDC4',
+      '#45B7D1',
+      '#96CEB4',
+      '#FFEAA7',
+      '#DDA0DD',
+      '#98D8C8',
+      '#FFB6C1',
     ];
-    
+
     let hash = 0;
     for (let i = 0; i < userId.length; i++) {
       hash = userId.charCodeAt(i) + ((hash << 5) - hash);
     }
-    
+
     return colors[Math.abs(hash) % colors.length];
   };
 
   return (
-    <div className={cn("relative", className)}>
+    <div className={cn('relative', className)}>
       {/* Collaboration Toolbar */}
       <Card className="mb-4 p-3">
         <div className="flex items-center justify-between">
@@ -314,7 +358,7 @@ const CollaborativeEditor: React.FC<CollaborativeEditorProps> = ({
                       <TooltipTrigger>
                         <Avatar className="h-6 w-6 border-2 border-background">
                           <AvatarImage src={presenceInfo.user.avatar} />
-                          <AvatarFallback 
+                          <AvatarFallback
                             className="text-xs"
                             style={{ backgroundColor: presenceInfo.user.color }}
                           >
@@ -324,12 +368,14 @@ const CollaborativeEditor: React.FC<CollaborativeEditorProps> = ({
                       </TooltipTrigger>
                       <TooltipContent>
                         <p>{presenceInfo.user.name}</p>
-                        <p className="text-xs text-muted-foreground">{presenceInfo.user.role}</p>
+                        <p className="text-xs text-muted-foreground">
+                          {presenceInfo.user.role}
+                        </p>
                       </TooltipContent>
                     </Tooltip>
                   ))}
                 </TooltipProvider>
-                
+
                 {presence.length > 5 && (
                   <div className="h-6 w-6 rounded-full bg-muted border-2 border-background flex items-center justify-center">
                     <span className="text-xs">+{presence.length - 5}</span>
@@ -342,7 +388,7 @@ const CollaborativeEditor: React.FC<CollaborativeEditorProps> = ({
           <div className="flex items-center gap-2">
             <Button variant="ghost" size="sm" className="gap-1">
               <MessageCircle className="h-4 w-4" />
-              {comments.filter(c => !c.resolved).length}
+              {comments.filter((c) => !c.resolved).length}
             </Button>
           </div>
         </div>
@@ -388,8 +434,8 @@ const CollaborativeEditor: React.FC<CollaborativeEditorProps> = ({
                 }}
               />
               <div className="flex justify-end gap-2 mt-3">
-                <Button 
-                  variant="ghost" 
+                <Button
+                  variant="ghost"
                   size="sm"
                   onClick={() => {
                     setShowingComment(false);
@@ -398,10 +444,13 @@ const CollaborativeEditor: React.FC<CollaborativeEditorProps> = ({
                 >
                   Cancel
                 </Button>
-                <Button 
+                <Button
                   size="sm"
                   onClick={(e) => {
-                    const textarea = e.currentTarget.parentElement?.parentElement?.querySelector('textarea');
+                    const textarea =
+                      e.currentTarget.parentElement?.parentElement?.querySelector(
+                        'textarea',
+                      );
                     if (textarea?.value) {
                       addComment(textarea.value);
                     }
@@ -420,7 +469,7 @@ const CollaborativeEditor: React.FC<CollaborativeEditorProps> = ({
         .live-cursor {
           border-left: 2px solid var(--cursor-color);
         }
-        
+
         .live-cursor-line::before {
           content: '';
           position: absolute;
@@ -430,7 +479,7 @@ const CollaborativeEditor: React.FC<CollaborativeEditorProps> = ({
           height: 100%;
           background-color: var(--cursor-color);
         }
-        
+
         .live-cursor-label::after {
           content: attr(data-user-name);
           position: absolute;
@@ -444,7 +493,7 @@ const CollaborativeEditor: React.FC<CollaborativeEditorProps> = ({
           white-space: nowrap;
           z-index: 10;
         }
-        
+
         .live-selection {
           background-color: var(--selection-color);
           opacity: 0.3;

@@ -30,7 +30,9 @@ const AutoImage: React.FC<AutoImageProps> = ({
   blurDataURL,
   ...props
 }) => {
-  const [dims, setDims] = useState<{ width: number; height: number } | null>(null);
+  const [dims, setDims] = useState<{ width: number; height: number } | null>(
+    null,
+  );
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
 
@@ -38,11 +40,16 @@ const AutoImage: React.FC<AutoImageProps> = ({
   const getAspectRatio = () => {
     if (typeof aspectRatio === 'number') return aspectRatio;
     switch (aspectRatio) {
-      case 'square': return 1;
-      case 'video': return 16/9;
-      case 'landscape': return 4/3;
-      case 'portrait': return 3/4;
-      default: return undefined;
+      case 'square':
+        return 1;
+      case 'video':
+        return 16 / 9;
+      case 'landscape':
+        return 4 / 3;
+      case 'portrait':
+        return 3 / 4;
+      default:
+        return undefined;
     }
   };
 
@@ -66,7 +73,7 @@ const AutoImage: React.FC<AutoImageProps> = ({
     (typeof width === 'string' ? parseInt(width, 10) : width) ??
     dims?.width ??
     400;
-  
+
   let finalHeight =
     (typeof height === 'string' ? parseInt(height, 10) : height) ??
     dims?.height ??
@@ -80,11 +87,12 @@ const AutoImage: React.FC<AutoImageProps> = ({
   }
 
   // Generate a simple blur placeholder if none provided
-  const defaultBlurDataURL = blurDataURL || 
+  const defaultBlurDataURL =
+    blurDataURL ||
     `data:image/svg+xml;base64,${Buffer.from(
       `<svg width="${finalWidth}" height="${finalHeight}" xmlns="http://www.w3.org/2000/svg">
         <rect width="100%" height="100%" fill="#f3f4f6"/>
-      </svg>`
+      </svg>`,
     ).toString('base64')}`;
 
   const handleLoad = () => {
@@ -98,10 +106,10 @@ const AutoImage: React.FC<AutoImageProps> = ({
 
   if (hasError) {
     return (
-      <div 
+      <div
         className={cn(
           'flex items-center justify-center bg-muted text-muted-foreground rounded',
-          className
+          className,
         )}
         style={{ width: finalWidth, height: finalHeight }}
       >
@@ -113,8 +121,8 @@ const AutoImage: React.FC<AutoImageProps> = ({
   return (
     <div className={cn('relative overflow-hidden', className)}>
       {showSkeleton && isLoading && (
-        <Skeleton 
-          className="absolute inset-0 z-10" 
+        <Skeleton
+          className="absolute inset-0 z-10"
           style={{ width: finalWidth, height: finalHeight }}
         />
       )}
@@ -128,7 +136,7 @@ const AutoImage: React.FC<AutoImageProps> = ({
         onError={handleError}
         className={cn(
           'transition-opacity duration-300',
-          isLoading && showSkeleton ? 'opacity-0' : 'opacity-100'
+          isLoading && showSkeleton ? 'opacity-0' : 'opacity-100',
         )}
         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
         {...props}

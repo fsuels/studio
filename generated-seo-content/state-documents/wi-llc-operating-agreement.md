@@ -47,7 +47,7 @@ Don't risk using generic templates that may not comply with Wisconsin law. Get a
 
 [Create Wisconsin LLC Operating Agreement]
 
-*Trusted by thousands of Wisconsin businesses*
+_Trusted by thousands of Wisconsin businesses_
 
 ---
 

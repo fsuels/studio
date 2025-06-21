@@ -9,11 +9,11 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Progress } from '@/components/ui/progress';
-import { 
-  Star, 
-  Download, 
-  Eye, 
-  Shield, 
+import {
+  Star,
+  Download,
+  Eye,
+  Shield,
   Crown,
   DollarSign,
   Clock,
@@ -68,7 +68,13 @@ export function TemplateDetailView({
   const getRatingPercentage = (rating: number) => {
     const total = template.ratings.totalRatings;
     if (total === 0) return 0;
-    return (template.ratings.ratingDistribution[rating as keyof typeof template.ratings.ratingDistribution] / total) * 100;
+    return (
+      (template.ratings.ratingDistribution[
+        rating as keyof typeof template.ratings.ratingDistribution
+      ] /
+        total) *
+      100
+    );
   };
 
   return (
@@ -96,15 +102,19 @@ export function TemplateDetailView({
               <Badge variant="outline">v{template.currentVersion}</Badge>
             </div>
 
-            <h1 className="text-3xl font-bold tracking-tight">{template.name}</h1>
-            <p className="text-lg text-muted-foreground">{template.description}</p>
+            <h1 className="text-3xl font-bold tracking-tight">
+              {template.name}
+            </h1>
+            <p className="text-lg text-muted-foreground">
+              {template.description}
+            </p>
           </div>
 
           {/* Creator Info */}
           <div className="flex items-center gap-3 p-4 bg-muted/30 rounded-lg">
             <Avatar className="h-12 w-12">
-              <AvatarImage 
-                src={template.creatorProfile?.avatar} 
+              <AvatarImage
+                src={template.creatorProfile?.avatar}
                 alt={template.creatorProfile?.displayName}
               />
               <AvatarFallback>
@@ -121,16 +131,29 @@ export function TemplateDetailView({
                 )}
               </div>
               <p className="text-sm text-muted-foreground">
-                {template.creatorProfile?.bio || 'Professional template creator'}
+                {template.creatorProfile?.bio ||
+                  'Professional template creator'}
               </p>
               <div className="flex items-center gap-4 mt-1 text-xs text-muted-foreground">
-                <span>{template.creatorProfile?.totalTemplates || 0} templates</span>
-                <span>{formatNumber(template.creatorProfile?.totalDownloads || 0)} downloads</span>
-                <span>⭐ {template.creatorProfile?.averageRating?.toFixed(1) || '0.0'}</span>
+                <span>
+                  {template.creatorProfile?.totalTemplates || 0} templates
+                </span>
+                <span>
+                  {formatNumber(template.creatorProfile?.totalDownloads || 0)}{' '}
+                  downloads
+                </span>
+                <span>
+                  ⭐{' '}
+                  {template.creatorProfile?.averageRating?.toFixed(1) || '0.0'}
+                </span>
               </div>
             </div>
             {onContactCreator && (
-              <Button variant="outline" size="sm" onClick={() => onContactCreator(template.createdBy)}>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => onContactCreator(template.createdBy)}
+              >
                 <MessageSquare className="h-4 w-4 mr-1" />
                 Contact
               </Button>
@@ -142,7 +165,9 @@ export function TemplateDetailView({
             <div className="text-center p-3 bg-muted/30 rounded-lg">
               <div className="flex items-center justify-center gap-1 mb-1">
                 <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                <span className="font-bold">{template.ratings.averageRating.toFixed(1)}</span>
+                <span className="font-bold">
+                  {template.ratings.averageRating.toFixed(1)}
+                </span>
               </div>
               <p className="text-xs text-muted-foreground">
                 {formatNumber(template.ratings.totalRatings)} reviews
@@ -152,7 +177,9 @@ export function TemplateDetailView({
             <div className="text-center p-3 bg-muted/30 rounded-lg">
               <div className="flex items-center justify-center gap-1 mb-1">
                 <Download className="h-4 w-4" />
-                <span className="font-bold">{formatNumber(template.stats.totalDownloads)}</span>
+                <span className="font-bold">
+                  {formatNumber(template.stats.totalDownloads)}
+                </span>
               </div>
               <p className="text-xs text-muted-foreground">downloads</p>
             </div>
@@ -160,7 +187,9 @@ export function TemplateDetailView({
             <div className="text-center p-3 bg-muted/30 rounded-lg">
               <div className="flex items-center justify-center gap-1 mb-1">
                 <Users className="h-4 w-4" />
-                <span className="font-bold">{formatNumber(template.stats.uniqueUsers)}</span>
+                <span className="font-bold">
+                  {formatNumber(template.stats.uniqueUsers)}
+                </span>
               </div>
               <p className="text-xs text-muted-foreground">users</p>
             </div>
@@ -185,11 +214,17 @@ export function TemplateDetailView({
                 <span>Get This Template</span>
                 <div className="text-right">
                   <div className="text-2xl font-bold">
-                    {formatPrice(template.pricing.basePrice, template.pricing.currency)}
+                    {formatPrice(
+                      template.pricing.basePrice,
+                      template.pricing.currency,
+                    )}
                   </div>
                   {template.pricing.discountedPrice && (
                     <div className="text-sm text-muted-foreground line-through">
-                      {formatPrice(template.pricing.basePrice, template.pricing.currency)}
+                      {formatPrice(
+                        template.pricing.basePrice,
+                        template.pricing.currency,
+                      )}
                     </div>
                   )}
                 </div>
@@ -198,8 +233,8 @@ export function TemplateDetailView({
             <CardContent className="space-y-4">
               {/* Action Buttons */}
               <div className="space-y-2">
-                <Button 
-                  className="w-full" 
+                <Button
+                  className="w-full"
                   size="lg"
                   onClick={() => onInstall(template.id)}
                 >
@@ -215,9 +250,9 @@ export function TemplateDetailView({
                     </>
                   )}
                 </Button>
-                
-                <Button 
-                  variant="outline" 
+
+                <Button
+                  variant="outline"
                   className="w-full"
                   onClick={() => onPreview(template.id)}
                 >
@@ -236,11 +271,13 @@ export function TemplateDetailView({
                   </li>
                   <li className="flex items-center gap-2">
                     <Globe className="h-4 w-4 text-blue-500" />
-                    Valid for {template.jurisdiction || 'Multiple jurisdictions'}
+                    Valid for{' '}
+                    {template.jurisdiction || 'Multiple jurisdictions'}
                   </li>
                   <li className="flex items-center gap-2">
                     <Languages className="h-4 w-4 text-purple-500" />
-                    Available in {template.languageSupport.join(', ').toUpperCase()}
+                    Available in{' '}
+                    {template.languageSupport.join(', ').toUpperCase()}
                   </li>
                   <li className="flex items-center gap-2">
                     <GitBranch className="h-4 w-4 text-orange-500" />
@@ -307,11 +344,17 @@ export function TemplateDetailView({
                     </div>
                     <div className="flex justify-between">
                       <span>States:</span>
-                      <span>{Array.isArray(template.states) ? template.states.join(', ') : 'All'}</span>
+                      <span>
+                        {Array.isArray(template.states)
+                          ? template.states.join(', ')
+                          : 'All'}
+                      </span>
                     </div>
                     <div className="flex justify-between">
                       <span>Languages:</span>
-                      <span>{template.languageSupport.join(', ').toUpperCase()}</span>
+                      <span>
+                        {template.languageSupport.join(', ').toUpperCase()}
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -321,15 +364,26 @@ export function TemplateDetailView({
                   <div className="text-sm space-y-1">
                     <div className="flex justify-between">
                       <span>Notarization:</span>
-                      <span>{template.requiresNotarization ? 'Required' : 'Not required'}</span>
+                      <span>
+                        {template.requiresNotarization
+                          ? 'Required'
+                          : 'Not required'}
+                      </span>
                     </div>
                     <div className="flex justify-between">
                       <span>Recording:</span>
-                      <span>{template.canBeRecorded ? 'Available' : 'Not available'}</span>
+                      <span>
+                        {template.canBeRecorded ? 'Available' : 'Not available'}
+                      </span>
                     </div>
                     <div className="flex justify-between">
                       <span>Base Price:</span>
-                      <span>{formatPrice(template.pricing.basePrice, template.pricing.currency)}</span>
+                      <span>
+                        {formatPrice(
+                          template.pricing.basePrice,
+                          template.pricing.currency,
+                        )}
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -350,9 +404,9 @@ export function TemplateDetailView({
                       <span className="text-sm">{rating}</span>
                       <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
                     </div>
-                    <Progress 
-                      value={getRatingPercentage(rating)} 
-                      className="flex-1 h-2" 
+                    <Progress
+                      value={getRatingPercentage(rating)}
+                      className="flex-1 h-2"
                     />
                     <span className="text-xs text-muted-foreground w-10 text-right">
                       {getRatingPercentage(rating).toFixed(0)}%
@@ -369,15 +423,15 @@ export function TemplateDetailView({
         </TabsContent>
 
         <TabsContent value="versions">
-          <VersionHistory 
-            templateId={template.id} 
+          <VersionHistory
+            templateId={template.id}
             versions={versions}
             currentVersion={template.currentVersion}
           />
         </TabsContent>
 
         <TabsContent value="creator">
-          <CreatorProfile 
+          <CreatorProfile
             creatorId={template.createdBy}
             profile={template.creatorProfile}
           />

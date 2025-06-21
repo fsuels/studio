@@ -2,80 +2,80 @@ import type { Question } from '@/types/documents';
 
 export const articlesOfIncorporationQuestions: Question[] = [
   {
-    "id": "name",
-    "label": "Name",
-    "type": "text",
-    "required": true,
-    "placeholder": "Enter name..."
+    id: 'name',
+    label: 'Name',
+    type: 'text',
+    required: true,
+    placeholder: 'Enter name...',
   },
   {
-    "id": "email",
-    "label": "Email",
-    "type": "text",
-    "required": false,
-    "placeholder": "Enter email..."
+    id: 'email',
+    label: 'Email',
+    type: 'text',
+    required: false,
+    placeholder: 'Enter email...',
   },
   {
-    "id": "address",
-    "label": "Address",
-    "type": "address",
-    "required": true,
-    "placeholder": "Enter address..."
+    id: 'address',
+    label: 'Address',
+    type: 'address',
+    required: true,
+    placeholder: 'Enter address...',
   },
   {
-    "id": "city",
-    "label": "City",
-    "type": "text",
-    "required": true,
-    "placeholder": "Enter city..."
+    id: 'city',
+    label: 'City',
+    type: 'text',
+    required: true,
+    placeholder: 'Enter city...',
   },
   {
-    "id": "state",
-    "label": "State",
-    "type": "text",
-    "required": true,
-    "placeholder": "Enter state..."
+    id: 'state',
+    label: 'State',
+    type: 'text',
+    required: true,
+    placeholder: 'Enter state...',
   },
   {
-    "id": "zipCode",
-    "label": "Zip Code",
-    "type": "text",
-    "required": true,
-    "placeholder": "Enter zip code..."
+    id: 'zipCode',
+    label: 'Zip Code',
+    type: 'text',
+    required: true,
+    placeholder: 'Enter zip code...',
   },
   {
-    "id": "date",
-    "label": "Date",
-    "type": "date",
-    "required": true,
-    "placeholder": "Enter date..."
+    id: 'date',
+    label: 'Date',
+    type: 'date',
+    required: true,
+    placeholder: 'Enter date...',
   },
   {
-    "id": "companyName",
-    "label": "Company Name",
-    "type": "text",
-    "required": true,
-    "placeholder": "Enter company name..."
+    id: 'companyName',
+    label: 'Company Name',
+    type: 'text',
+    required: true,
+    placeholder: 'Enter company name...',
   },
   {
-    "id": "businessAddress",
-    "label": "Business Address",
-    "type": "address",
-    "required": true,
-    "placeholder": "Enter business address..."
+    id: 'businessAddress',
+    label: 'Business Address',
+    type: 'address',
+    required: true,
+    placeholder: 'Enter business address...',
   },
   {
-    "id": "taxId",
-    "label": "Tax Id",
-    "type": "text",
-    "required": false,
-    "placeholder": "Enter tax id..."
+    id: 'taxId',
+    label: 'Tax Id',
+    type: 'text',
+    required: false,
+    placeholder: 'Enter tax id...',
   },
   {
-    "id": "businessType",
-    "label": "Business Type",
-    "type": "select",
-    "required": true,
-    "placeholder": "Enter business type..."
-  }
+    id: 'businessType',
+    label: 'Business Type',
+    type: 'select',
+    required: true,
+    placeholder: 'Enter business type...',
+  },
 ];

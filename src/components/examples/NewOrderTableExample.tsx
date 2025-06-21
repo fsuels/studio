@@ -15,16 +15,16 @@ function EnhancedOrderTable() {
       status: 'completed',
       amount: '$299.99',
       date: '2024-01-15',
-      actions: ['view', 'download', 'refund']
+      actions: ['view', 'download', 'refund'],
     },
     {
-      id: 'ORD-002', 
+      id: 'ORD-002',
       customer: 'Jane Smith',
       document: 'Promissory Note',
       status: 'pending',
       amount: '$199.99',
       date: '2024-01-14',
-      actions: ['view', 'complete']
+      actions: ['view', 'complete'],
     },
   ];
 
@@ -33,13 +33,15 @@ function EnhancedOrderTable() {
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold tracking-tight">Orders</h2>
-          <p className="text-muted-foreground">Enhanced order management with improved UX</p>
+          <p className="text-muted-foreground">
+            Enhanced order management with improved UX
+          </p>
         </div>
         <Badge variant="secondary" className="bg-green-100 text-green-800">
           NEW TABLE
         </Badge>
       </div>
-      
+
       <div className="rounded-md border">
         <div className="p-4 border-b bg-muted/50">
           <div className="flex items-center gap-4">
@@ -53,25 +55,39 @@ function EnhancedOrderTable() {
               Export
             </Button>
             <div className="ml-auto">
-              <input 
-                placeholder="Search orders..." 
+              <input
+                placeholder="Search orders..."
                 className="px-3 py-1 border rounded-md"
               />
             </div>
           </div>
         </div>
-        
+
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead className="border-b">
               <tr>
-                <th className="h-12 px-4 text-left align-middle font-medium">Order ID</th>
-                <th className="h-12 px-4 text-left align-middle font-medium">Customer</th>
-                <th className="h-12 px-4 text-left align-middle font-medium">Document</th>
-                <th className="h-12 px-4 text-left align-middle font-medium">Status</th>
-                <th className="h-12 px-4 text-left align-middle font-medium">Amount</th>
-                <th className="h-12 px-4 text-left align-middle font-medium">Date</th>
-                <th className="h-12 px-4 text-left align-middle font-medium">Actions</th>
+                <th className="h-12 px-4 text-left align-middle font-medium">
+                  Order ID
+                </th>
+                <th className="h-12 px-4 text-left align-middle font-medium">
+                  Customer
+                </th>
+                <th className="h-12 px-4 text-left align-middle font-medium">
+                  Document
+                </th>
+                <th className="h-12 px-4 text-left align-middle font-medium">
+                  Status
+                </th>
+                <th className="h-12 px-4 text-left align-middle font-medium">
+                  Amount
+                </th>
+                <th className="h-12 px-4 text-left align-middle font-medium">
+                  Date
+                </th>
+                <th className="h-12 px-4 text-left align-middle font-medium">
+                  Actions
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -81,7 +97,11 @@ function EnhancedOrderTable() {
                   <td className="p-4">{order.customer}</td>
                   <td className="p-4">{order.document}</td>
                   <td className="p-4">
-                    <Badge variant={order.status === 'completed' ? 'default' : 'secondary'}>
+                    <Badge
+                      variant={
+                        order.status === 'completed' ? 'default' : 'secondary'
+                      }
+                    >
                       {order.status}
                     </Badge>
                   </td>
@@ -115,10 +135,18 @@ function LegacyOrderTable() {
         <table className="w-full">
           <thead className="border-b">
             <tr>
-              <th className="h-12 px-4 text-left align-middle font-medium">Order ID</th>
-              <th className="h-12 px-4 text-left align-middle font-medium">Customer</th>
-              <th className="h-12 px-4 text-left align-middle font-medium">Status</th>
-              <th className="h-12 px-4 text-left align-middle font-medium">Amount</th>
+              <th className="h-12 px-4 text-left align-middle font-medium">
+                Order ID
+              </th>
+              <th className="h-12 px-4 text-left align-middle font-medium">
+                Customer
+              </th>
+              <th className="h-12 px-4 text-left align-middle font-medium">
+                Status
+              </th>
+              <th className="h-12 px-4 text-left align-middle font-medium">
+                Amount
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -142,15 +170,20 @@ function LegacyOrderTable() {
 }
 
 // Export the feature-flagged component using withFlag HOC
-export const OrderTable = withFlag('newOrderTable', LegacyOrderTable)(EnhancedOrderTable);
+export const OrderTable = withFlag(
+  'newOrderTable',
+  LegacyOrderTable,
+)(EnhancedOrderTable);
 
 // Alternative usage patterns:
 
 // 1. Direct component wrapping
-export const NewOrderTableDirect = withFlag('newOrderTable')(EnhancedOrderTable);
+export const NewOrderTableDirect =
+  withFlag('newOrderTable')(EnhancedOrderTable);
 
 // 2. With null fallback (show nothing if disabled)
-export const NewOrderTableOrNothing = withFlag('newOrderTable')(EnhancedOrderTable);
+export const NewOrderTableOrNothing =
+  withFlag('newOrderTable')(EnhancedOrderTable);
 
 // 3. Usage example in a parent component
 export function OrderManagementPage() {
@@ -159,7 +192,7 @@ export function OrderManagementPage() {
       {/* This will show EnhancedOrderTable if 'newOrderTable' flag is enabled,
           otherwise falls back to LegacyOrderTable */}
       <OrderTable />
-      
+
       {/* Example of other flag usage */}
       {/* <FeatureFlag flag="enhancedSearch">
         <EnhancedSearchBar />

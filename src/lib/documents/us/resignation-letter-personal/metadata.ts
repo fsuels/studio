@@ -24,12 +24,14 @@ export const resignationLetterPersonalMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Resignation Letter (Personal)',
-      description: 'Professional letter to formally resign from employment for personal reasons.',
+      description:
+        'Professional letter to formally resign from employment for personal reasons.',
       aliases: ['personal resignation letter', 'job resignation letter'],
     },
     es: {
       name: 'Carta de Renuncia (Personal)',
-      description: 'Carta profesional para renunciar formalmente al empleo por razones personales.',
+      description:
+        'Carta profesional para renunciar formalmente al empleo por razones personales.',
       aliases: ['carta de renuncia personal', 'carta de renuncia laboral'],
     },
   },

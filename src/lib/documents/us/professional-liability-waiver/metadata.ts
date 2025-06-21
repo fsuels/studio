@@ -24,13 +24,22 @@ export const professionalLiabilityWaiverMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Professional Liability Waiver',
-      description: 'Waiver protecting professionals from malpractice and professional liability claims.',
-      aliases: ['malpractice waiver', 'professional indemnity waiver', 'service liability waiver'],
+      description:
+        'Waiver protecting professionals from malpractice and professional liability claims.',
+      aliases: [
+        'malpractice waiver',
+        'professional indemnity waiver',
+        'service liability waiver',
+      ],
     },
     es: {
       name: 'Exención de Responsabilidad Profesional',
-      description: 'Exención que protege a profesionales de reclamos de negligencia profesional y responsabilidad.',
-      aliases: ['exención de negligencia profesional', 'exención de servicios profesionales'],
+      description:
+        'Exención que protege a profesionales de reclamos de negligencia profesional y responsabilidad.',
+      aliases: [
+        'exención de negligencia profesional',
+        'exención de servicios profesionales',
+      ],
     },
   },
 };

@@ -18,18 +18,23 @@ export async function POST(request: NextRequest) {
   const requestId = `req_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
   const logPrefix = `[API /infer-document-type] [${requestId}]`;
 
-  console.log(`${logPrefix} Received request: ${request.method} ${request.url}`);
+  console.log(
+    `${logPrefix} Received request: ${request.method} ${request.url}`,
+  );
 
   if (process.env.NEXT_PUBLIC_DISABLE_API_ROUTES === 'true') {
     console.warn(
       `${logPrefix} API Route Disabled (NEXT_PUBLIC_DISABLE_API_ROUTES=true). Returning 503.`,
     );
-    return NextResponse.json({
-      error: 'AI document inference is disabled in the current environment.',
-      details:
-        'This API route is not available when NEXT_PUBLIC_DISABLE_API_ROUTES is set to true.',
-      code: 'API_DISABLED_INFERENCE',
-    }, { status: 503 });
+    return NextResponse.json(
+      {
+        error: 'AI document inference is disabled in the current environment.',
+        details:
+          'This API route is not available when NEXT_PUBLIC_DISABLE_API_ROUTES is set to true.',
+        code: 'API_DISABLED_INFERENCE',
+      },
+      { status: 503 },
+    );
   }
 
   try {
@@ -48,11 +53,14 @@ export async function POST(request: NextRequest) {
       const errorMessages = validationResult.error.errors
         .map((e) => `${e.path.join('.') || 'input'}: ${e.message}`)
         .join('; ');
-      return NextResponse.json({
-        error: `Invalid input for document inference: ${errorMessages}`,
-        details: validationErrors,
-        code: 'INVALID_INPUT_INFERENCE',
-      }, { status: 400 });
+      return NextResponse.json(
+        {
+          error: `Invalid input for document inference: ${errorMessages}`,
+          details: validationErrors,
+          code: 'INVALID_INPUT_INFERENCE',
+        },
+        { status: 400 },
+      );
     }
 
     const input = validationResult.data;

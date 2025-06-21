@@ -2,7 +2,11 @@
 
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ExclamationTriangleIcon, EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
+import {
+  ExclamationTriangleIcon,
+  EyeIcon,
+  EyeSlashIcon,
+} from '@heroicons/react/24/outline';
 
 interface ValidationResult {
   confidence: number;
@@ -26,7 +30,7 @@ export default function TranslationFallback({
   documentId,
   className = '',
   forceValidation = false,
-  showDebugInfo = false
+  showDebugInfo = false,
 }: TranslationFallbackProps) {
   const { t, i18n } = useTranslation();
   const [validation, setValidation] = useState<ValidationResult | null>(null);
@@ -35,7 +39,8 @@ export default function TranslationFallback({
   const [showOriginal, setShowOriginal] = useState(false);
 
   const isSpanish = i18n.language === 'es';
-  const shouldValidate = isSpanish && (forceValidation || process.env.NODE_ENV === 'development');
+  const shouldValidate =
+    isSpanish && (forceValidation || process.env.NODE_ENV === 'development');
 
   useEffect(() => {
     if (!shouldValidate || !englishText || !spanishText) return;
@@ -49,13 +54,13 @@ export default function TranslationFallback({
           body: JSON.stringify({
             englishText,
             spanishText,
-            documentId
-          })
+            documentId,
+          }),
         });
-        
+
         const result: ValidationResult = await response.json();
         setValidation(result);
-        
+
         // Auto-fallback if confidence is low
         if (result.shouldFallback) {
           setManualFallback(true);
@@ -67,7 +72,7 @@ export default function TranslationFallback({
           confidence: 0,
           shouldFallback: true,
           issues: ['Validation service unavailable'],
-          recommendations: ['Using English version for safety']
+          recommendations: ['Using English version for safety'],
         });
         setManualFallback(true);
       } finally {
@@ -87,7 +92,8 @@ export default function TranslationFallback({
     return <div className={className}>{spanishText}</div>;
   }
 
-  const shouldShowFallback = manualFallback || (validation?.shouldFallback && !showOriginal);
+  const shouldShowFallback =
+    manualFallback || (validation?.shouldFallback && !showOriginal);
   const contentToShow = shouldShowFallback ? englishText : spanishText;
 
   return (
@@ -102,10 +108,11 @@ export default function TranslationFallback({
             <div className="ml-3 flex-1">
               <p className="text-sm text-yellow-700">
                 {t('translation.fallback.notice', {
-                  defaultValue: 'Este contenido se muestra en inglés para garantizar precisión legal. La traducción al español está siendo mejorada.'
+                  defaultValue:
+                    'Este contenido se muestra en inglés para garantizar precisión legal. La traducción al español está siendo mejorada.',
                 })}
               </p>
-              
+
               {/* Toggle button to show original Spanish */}
               <button
                 onClick={() => setShowOriginal(!showOriginal)}
@@ -114,12 +121,16 @@ export default function TranslationFallback({
                 {showOriginal ? (
                   <>
                     <EyeSlashIcon className="h-3 w-3" />
-                    {t('translation.fallback.hide_spanish', { defaultValue: 'Ocultar español' })}
+                    {t('translation.fallback.hide_spanish', {
+                      defaultValue: 'Ocultar español',
+                    })}
                   </>
                 ) : (
                   <>
                     <EyeIcon className="h-3 w-3" />
-                    {t('translation.fallback.show_spanish', { defaultValue: 'Ver español' })}
+                    {t('translation.fallback.show_spanish', {
+                      defaultValue: 'Ver español',
+                    })}
                   </>
                 )}
               </button>
@@ -129,7 +140,9 @@ export default function TranslationFallback({
       )}
 
       {/* Content */}
-      <div className={`content ${shouldShowFallback ? 'english-fallback' : 'spanish-content'}`}>
+      <div
+        className={`content ${shouldShowFallback ? 'english-fallback' : 'spanish-content'}`}
+      >
         {loading ? (
           <div className="animate-pulse bg-gray-200 h-4 w-full rounded"></div>
         ) : (
@@ -138,41 +151,56 @@ export default function TranslationFallback({
       </div>
 
       {/* Debug Information - Development only */}
-      {(showDebugInfo || process.env.NODE_ENV === 'development') && validation && (
-        <details className="mt-4 p-3 bg-gray-50 border rounded-md text-xs">
-          <summary className="cursor-pointer font-medium text-gray-700">
-            🔧 Translation Debug Info
-          </summary>
-          <div className="mt-2 space-y-1 text-gray-600">
-            <div><strong>Document:</strong> {documentId}</div>
-            <div><strong>Confidence:</strong> {validation.confidence}%</div>
-            <div><strong>Fallback:</strong> {validation.shouldFallback ? 'Yes' : 'No'}</div>
-            <div><strong>Status:</strong> {shouldShowFallback ? 'Using English' : 'Using Spanish'}</div>
-            
-            {validation.issues.length > 0 && (
+      {(showDebugInfo || process.env.NODE_ENV === 'development') &&
+        validation && (
+          <details className="mt-4 p-3 bg-gray-50 border rounded-md text-xs">
+            <summary className="cursor-pointer font-medium text-gray-700">
+              🔧 Translation Debug Info
+            </summary>
+            <div className="mt-2 space-y-1 text-gray-600">
               <div>
-                <strong>Issues:</strong>
-                <ul className="ml-4 mt-1">
-                  {validation.issues.map((issue, index) => (
-                    <li key={index} className="text-red-600">• {issue}</li>
-                  ))}
-                </ul>
+                <strong>Document:</strong> {documentId}
               </div>
-            )}
-            
-            {validation.recommendations.length > 0 && (
               <div>
-                <strong>Recommendations:</strong>
-                <ul className="ml-4 mt-1">
-                  {validation.recommendations.map((rec, index) => (
-                    <li key={index} className="text-blue-600">• {rec}</li>
-                  ))}
-                </ul>
+                <strong>Confidence:</strong> {validation.confidence}%
               </div>
-            )}
-          </div>
-        </details>
-      )}
+              <div>
+                <strong>Fallback:</strong>{' '}
+                {validation.shouldFallback ? 'Yes' : 'No'}
+              </div>
+              <div>
+                <strong>Status:</strong>{' '}
+                {shouldShowFallback ? 'Using English' : 'Using Spanish'}
+              </div>
+
+              {validation.issues.length > 0 && (
+                <div>
+                  <strong>Issues:</strong>
+                  <ul className="ml-4 mt-1">
+                    {validation.issues.map((issue, index) => (
+                      <li key={index} className="text-red-600">
+                        • {issue}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {validation.recommendations.length > 0 && (
+                <div>
+                  <strong>Recommendations:</strong>
+                  <ul className="ml-4 mt-1">
+                    {validation.recommendations.map((rec, index) => (
+                      <li key={index} className="text-blue-600">
+                        • {rec}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+          </details>
+        )}
 
       {/* Manual fallback controls - Development only */}
       {process.env.NODE_ENV === 'development' && (

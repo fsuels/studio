@@ -9,30 +9,28 @@ interface RouteParams {
   };
 }
 
-export async function GET(
-  request: NextRequest,
-  { params }: RouteParams
-) {
+export async function GET(request: NextRequest, { params }: RouteParams) {
   try {
     const { filename } = params;
-    
+
     // Validate filename to prevent directory traversal
-    if (!filename || filename.includes('..') || filename.includes('/') || filename.includes('\\')) {
-      return NextResponse.json(
-        { error: 'Invalid filename' },
-        { status: 400 }
-      );
+    if (
+      !filename ||
+      filename.includes('..') ||
+      filename.includes('/') ||
+      filename.includes('\\')
+    ) {
+      return NextResponse.json({ error: 'Invalid filename' }, { status: 400 });
     }
 
     // Validate file extension
     const allowedExtensions = ['.csv', '.json', '.xlsx'];
-    const hasValidExtension = allowedExtensions.some(ext => filename.endsWith(ext));
-    
+    const hasValidExtension = allowedExtensions.some((ext) =>
+      filename.endsWith(ext),
+    );
+
     if (!hasValidExtension) {
-      return NextResponse.json(
-        { error: 'Invalid file type' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'Invalid file type' }, { status: 400 });
     }
 
     // Construct file path
@@ -43,15 +41,12 @@ export async function GET(
       // Check if file exists
       await stat(filepath);
     } catch (error) {
-      return NextResponse.json(
-        { error: 'File not found' },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: 'File not found' }, { status: 404 });
     }
 
     // Read file
     const fileBuffer = await readFile(filepath);
-    
+
     // Determine content type
     let contentType = 'application/octet-stream';
     if (filename.endsWith('.csv')) {
@@ -59,7 +54,8 @@ export async function GET(
     } else if (filename.endsWith('.json')) {
       contentType = 'application/json';
     } else if (filename.endsWith('.xlsx')) {
-      contentType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+      contentType =
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
     }
 
     // Return file with appropriate headers
@@ -72,16 +68,15 @@ export async function GET(
         'Cache-Control': 'private, max-age=3600', // Cache for 1 hour
       },
     });
-
   } catch (error) {
     console.error('Download API error:', error);
-    
+
     return NextResponse.json(
-      { 
+      {
         error: 'Internal server error',
         message: error instanceof Error ? error.message : 'Unknown error',
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

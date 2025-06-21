@@ -24,13 +24,19 @@ export const serviceLevelAgreementMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Service Level Agreement (SLA)',
-      description: 'Create an SLA defining service performance standards and expectations between parties.',
+      description:
+        'Create an SLA defining service performance standards and expectations between parties.',
       aliases: ['SLA', 'service level agreement', 'performance agreement'],
     },
     es: {
       name: 'Acuerdo de Nivel de Servicio (SLA)',
-      description: 'Crea un SLA que defina estándares de rendimiento del servicio y expectativas entre partes.',
-      aliases: ['SLA', 'acuerdo de nivel de servicio', 'acuerdo de rendimiento'],
+      description:
+        'Crea un SLA que defina estándares de rendimiento del servicio y expectativas entre partes.',
+      aliases: [
+        'SLA',
+        'acuerdo de nivel de servicio',
+        'acuerdo de rendimiento',
+      ],
     },
   },
 };

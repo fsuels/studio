@@ -24,12 +24,18 @@ export const volunteerAgreementMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Volunteer Agreement',
-      description: 'Agreement between organization and volunteer for volunteer services and activities.',
-      aliases: ['volunteer contract', 'volunteer service agreement', 'community service agreement'],
+      description:
+        'Agreement between organization and volunteer for volunteer services and activities.',
+      aliases: [
+        'volunteer contract',
+        'volunteer service agreement',
+        'community service agreement',
+      ],
     },
     es: {
       name: 'Acuerdo de Voluntariado',
-      description: 'Acuerdo entre organización y voluntario para servicios y actividades de voluntariado.',
+      description:
+        'Acuerdo entre organización y voluntario para servicios y actividades de voluntariado.',
       aliases: ['contrato de voluntario', 'acuerdo de servicio voluntario'],
     },
   },

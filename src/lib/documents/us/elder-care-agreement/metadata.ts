@@ -24,12 +24,18 @@ export const elderCareAgreementMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Elder Care Agreement',
-      description: 'Agreement for providing care services to elderly individuals.',
-      aliases: ['senior care agreement', 'caregiving agreement', 'elderly care contract'],
+      description:
+        'Agreement for providing care services to elderly individuals.',
+      aliases: [
+        'senior care agreement',
+        'caregiving agreement',
+        'elderly care contract',
+      ],
     },
     es: {
       name: 'Acuerdo de Cuidado de Ancianos',
-      description: 'Acuerdo para proporcionar servicios de cuidado a personas mayores.',
+      description:
+        'Acuerdo para proporcionar servicios de cuidado a personas mayores.',
       aliases: ['contrato de cuidador', 'acuerdo de cuidado'],
     },
   },

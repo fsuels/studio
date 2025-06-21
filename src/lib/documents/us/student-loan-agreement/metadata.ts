@@ -24,12 +24,18 @@ export const studentLoanAgreementMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Student Loan Agreement',
-      description: 'Agreement for educational loan financing and repayment terms.',
-      aliases: ['education loan agreement', 'private student loan', 'educational financing agreement'],
+      description:
+        'Agreement for educational loan financing and repayment terms.',
+      aliases: [
+        'education loan agreement',
+        'private student loan',
+        'educational financing agreement',
+      ],
     },
     es: {
       name: 'Acuerdo de Préstamo Estudiantil',
-      description: 'Acuerdo para financiamiento educativo y términos de reembolso.',
+      description:
+        'Acuerdo para financiamiento educativo y términos de reembolso.',
       aliases: ['préstamo educativo', 'financiamiento estudiantil'],
     },
   },

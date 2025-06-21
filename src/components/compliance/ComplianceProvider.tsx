@@ -1,7 +1,13 @@
 // Context provider for compliance state management
 'use client';
 
-import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  ReactNode,
+} from 'react';
 
 export interface ComplianceState {
   allowed: boolean;
@@ -29,7 +35,9 @@ interface ComplianceContextType {
   isLoading: boolean;
 }
 
-const ComplianceContext = createContext<ComplianceContextType | undefined>(undefined);
+const ComplianceContext = createContext<ComplianceContextType | undefined>(
+  undefined,
+);
 
 interface ComplianceProviderProps {
   children: ReactNode;
@@ -37,10 +45,10 @@ interface ComplianceProviderProps {
   mockState?: string;
 }
 
-export function ComplianceProvider({ 
-  children, 
+export function ComplianceProvider({
+  children,
   autoCheck = true,
-  mockState 
+  mockState,
 }: ComplianceProviderProps) {
   const [compliance, setCompliance] = useState<ComplianceState | null>(null);
   const [loading, setLoading] = useState(autoCheck);
@@ -58,7 +66,7 @@ export function ComplianceProvider({
         },
         body: JSON.stringify({
           sessionId: crypto.randomUUID(),
-          mockState: options?.mockState || mockState
+          mockState: options?.mockState || mockState,
         }),
       });
 
@@ -71,13 +79,12 @@ export function ComplianceProvider({
       setCompliance({
         ...data.compliance,
         loading: false,
-        error: null
+        error: null,
       });
-
     } catch (err) {
       const errorMessage = (err as Error).message;
       setError(errorMessage);
-      
+
       // Set fallback blocked state for safety
       setCompliance({
         allowed: false,
@@ -91,12 +98,11 @@ export function ComplianceProvider({
           state: 'Unknown',
           stateCode: 'UNK',
           country: 'Unknown',
-          confidence: 'low'
+          confidence: 'low',
         },
         loading: false,
-        error: errorMessage
+        error: errorMessage,
       });
-      
     } finally {
       setLoading(false);
     }
@@ -113,7 +119,7 @@ export function ComplianceProvider({
     checkCompliance,
     isCompliant: compliance?.allowed || false,
     isBlocked: compliance ? !compliance.allowed : false,
-    isLoading: loading
+    isLoading: loading,
   };
 
   return (
@@ -138,7 +144,7 @@ export function withCompliance<P extends object>(
     redirectTo?: string;
     showWaitlist?: boolean;
     mockState?: string;
-  }
+  },
 ) {
   return function ComplianceProtectedComponent(props: P) {
     const { compliance, isLoading, isBlocked } = useCompliance();
@@ -180,7 +186,8 @@ export function withCompliance<P extends object>(
         <div className="text-center p-8">
           <h2 className="text-xl font-semibold mb-2">Service Not Available</h2>
           <p className="text-muted-foreground">
-            {compliance?.reason || 'This service is not available in your location.'}
+            {compliance?.reason ||
+              'This service is not available in your location.'}
           </p>
         </div>
       );
@@ -193,7 +200,7 @@ export function withCompliance<P extends object>(
 // Hook for getting disclaimer props
 export function useDisclaimerProps() {
   const { compliance } = useCompliance();
-  
+
   if (!compliance) {
     return null;
   }
@@ -203,6 +210,6 @@ export function useDisclaimerProps() {
     stateName: compliance.location.state,
     riskLevel: compliance.riskLevel,
     disclaimerLevel: compliance.disclaimerLevel,
-    requirements: compliance.requirements
+    requirements: compliance.requirements,
   };
 }

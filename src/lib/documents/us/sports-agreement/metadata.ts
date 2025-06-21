@@ -24,12 +24,14 @@ export const sportsAgreementMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Sports Agreement',
-      description: 'Agreement for sports activities, coaching, and athletic services.',
+      description:
+        'Agreement for sports activities, coaching, and athletic services.',
       aliases: ['athletic agreement', 'coaching contract', 'sports contract'],
     },
     es: {
       name: 'Acuerdo Deportivo',
-      description: 'Acuerdo para actividades deportivas, entrenamiento y servicios atléticos.',
+      description:
+        'Acuerdo para actividades deportivas, entrenamiento y servicios atléticos.',
       aliases: ['acuerdo atlético', 'contrato de entrenamiento'],
     },
   },

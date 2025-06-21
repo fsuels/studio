@@ -279,7 +279,7 @@ export const constructionbidformQuestions: FormQuestion[] = [
   {
     id: 'builderRiskRequired',
     type: 'checkbox',
-    label: 'Builder\'s risk insurance required',
+    label: "Builder's risk insurance required",
     required: false,
     group: 'insurance',
   },

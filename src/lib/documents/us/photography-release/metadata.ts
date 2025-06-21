@@ -24,12 +24,14 @@ export const photographyReleaseMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Photography Release',
-      description: 'Release form granting permission to use photographs and images.',
+      description:
+        'Release form granting permission to use photographs and images.',
       aliases: ['photo release', 'image release', 'model release'],
     },
     es: {
       name: 'Liberación de Fotografía',
-      description: 'Formulario de liberación que otorga permiso para usar fotografías e imágenes.',
+      description:
+        'Formulario de liberación que otorga permiso para usar fotografías e imágenes.',
       aliases: ['liberación de foto', 'liberación de imagen'],
     },
   },

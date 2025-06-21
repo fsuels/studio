@@ -24,13 +24,22 @@ export const paymentbondMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Payment Bond',
-      description: 'Surety bond guaranteeing payment to subcontractors and material suppliers on construction projects.',
-      aliases: ['labor and material bond', 'subcontractor payment bond', 'supplier bond'],
+      description:
+        'Surety bond guaranteeing payment to subcontractors and material suppliers on construction projects.',
+      aliases: [
+        'labor and material bond',
+        'subcontractor payment bond',
+        'supplier bond',
+      ],
     },
     es: {
       name: 'Fianza de Pago',
-      description: 'Fianza de garantía que garantiza el pago a subcontratistas y proveedores de materiales en proyectos de construcción.',
-      aliases: ['fianza de trabajo y materiales', 'fianza de pago de subcontratistas'],
+      description:
+        'Fianza de garantía que garantiza el pago a subcontratistas y proveedores de materiales en proyectos de construcción.',
+      aliases: [
+        'fianza de trabajo y materiales',
+        'fianza de pago de subcontratistas',
+      ],
     },
   },
 };

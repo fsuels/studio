@@ -24,12 +24,18 @@ export const softwareLicenseAgreementMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Software License Agreement',
-      description: 'Agreement governing the use and licensing of software applications.',
-      aliases: ['software licensing agreement', 'end user license agreement', 'EULA'],
+      description:
+        'Agreement governing the use and licensing of software applications.',
+      aliases: [
+        'software licensing agreement',
+        'end user license agreement',
+        'EULA',
+      ],
     },
     es: {
       name: 'Acuerdo de Licencia de Software',
-      description: 'Acuerdo que rige el uso y licenciamiento de aplicaciones de software.',
+      description:
+        'Acuerdo que rige el uso y licenciamiento de aplicaciones de software.',
       aliases: ['acuerdo de licenciamiento de software', 'EULA'],
     },
   },

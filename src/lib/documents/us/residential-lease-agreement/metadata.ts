@@ -23,21 +23,23 @@ export const residentialLeaseAgreementMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Residential Rental Agreement',
-      description: 'Create a legally binding residential lease agreement with our easy-to-use template. State-specific requirements included.',
+      description:
+        'Create a legally binding residential lease agreement with our easy-to-use template. State-specific requirements included.',
       aliases: [
         'residential lease contract',
         'apartment lease',
         'rental lease',
-        'home rental agreement'
+        'home rental agreement',
       ],
     },
     es: {
       name: 'Contrato de Alquiler Residencial',
-      description: 'Crea un acuerdo de arrendamiento residencial legalmente válido con nuestra plantilla fácil de usar. Incluye requisitos específicos del estado.',
+      description:
+        'Crea un acuerdo de arrendamiento residencial legalmente válido con nuestra plantilla fácil de usar. Incluye requisitos específicos del estado.',
       aliases: [
         'contrato de arrendamiento residencial',
         'arrendamiento de apartamento',
-        'contrato de alquiler'
+        'contrato de alquiler',
       ],
     },
   },

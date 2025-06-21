@@ -4,19 +4,23 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
-import { 
-  Search as SearchIcon, 
-  FileText, 
-  ExternalLink, 
+import {
+  Search as SearchIcon,
+  FileText,
+  ExternalLink,
   Star,
   Clock,
-  Zap
+  Zap,
 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
-import { enhancedSearch, getSearchSuggestions, legacySearch } from '@/lib/enhanced-search';
+import {
+  enhancedSearch,
+  getSearchSuggestions,
+  legacySearch,
+} from '@/lib/enhanced-search';
 import { taxonomy } from '@/config/taxonomy';
 import type { LegalDocument } from '@/lib/document-library';
 
@@ -38,11 +42,11 @@ interface EnhancedHeaderSearchProps {
   userRole?: string; // Optional: for role-based filtering
 }
 
-export default function EnhancedHeaderSearch({ 
-  clientLocale, 
-  mounted, 
+export default function EnhancedHeaderSearch({
+  clientLocale,
+  mounted,
   className = '',
-  userRole
+  userRole,
 }: EnhancedHeaderSearchProps) {
   const { t: tHeader } = useTranslation('header');
   const [searchQuery, setSearchQuery] = useState('');
@@ -50,7 +54,7 @@ export default function EnhancedHeaderSearch({
   const [showResults, setShowResults] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [suggestions, setSuggestions] = useState<SearchResult[]>([]);
-  
+
   const searchInputRef = useRef<HTMLInputElement>(null);
   const searchResultsRef = useRef<HTMLDivElement>(null);
   const debounceRef = useRef<NodeJS.Timeout | null>(null);
@@ -67,54 +71,63 @@ export default function EnhancedHeaderSearch({
   }, [mounted, clientLocale]);
 
   // Enhanced search functionality with debouncing
-  const performSearch = useCallback(async (query: string) => {
-    if (query.trim().length === 0) {
-      setSearchResults([]);
-      setShowResults(false);
-      return;
-    }
-
-    if (query.trim().length < 2) {
-      return;
-    }
-
-    setIsLoading(true);
-    
-    try {
-      // Check if enhanced search is enabled
-      const useEnhanced = taxonomy.feature_flags?.wizard_v4?.enabled;
-      
-      if (useEnhanced) {
-        const results = await enhancedSearch(query, clientLocale, {
-          maxResults: 8,
-          roleFilter: userRole,
-        });
-        setSearchResults(results);
-        setShowResults(results.length > 0);
-      } else {
-        // Fallback to legacy search
-        const legacyResults = legacySearch(query, clientLocale);
-        const mappedResults: SearchResult[] = legacyResults.slice(0, 8).map(doc => ({
-          slug: doc.id,
-          title: doc.translations?.[clientLocale]?.name || doc.name || doc.id,
-          description: doc.translations?.[clientLocale]?.description || doc.description || '',
-          complexity: 'medium', // Default complexity
-          popular: false,
-          category: doc.category,
-          relevanceScore: 50,
-          matchType: 'fuzzy' as const
-        }));
-        setSearchResults(mappedResults);
-        setShowResults(mappedResults.length > 0);
+  const performSearch = useCallback(
+    async (query: string) => {
+      if (query.trim().length === 0) {
+        setSearchResults([]);
+        setShowResults(false);
+        return;
       }
-    } catch (error) {
-      console.error('Search error:', error);
-      setSearchResults([]);
-      setShowResults(false);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [clientLocale, userRole]);
+
+      if (query.trim().length < 2) {
+        return;
+      }
+
+      setIsLoading(true);
+
+      try {
+        // Check if enhanced search is enabled
+        const useEnhanced = taxonomy.feature_flags?.wizard_v4?.enabled;
+
+        if (useEnhanced) {
+          const results = await enhancedSearch(query, clientLocale, {
+            maxResults: 8,
+            roleFilter: userRole,
+          });
+          setSearchResults(results);
+          setShowResults(results.length > 0);
+        } else {
+          // Fallback to legacy search
+          const legacyResults = legacySearch(query, clientLocale);
+          const mappedResults: SearchResult[] = legacyResults
+            .slice(0, 8)
+            .map((doc) => ({
+              slug: doc.id,
+              title:
+                doc.translations?.[clientLocale]?.name || doc.name || doc.id,
+              description:
+                doc.translations?.[clientLocale]?.description ||
+                doc.description ||
+                '',
+              complexity: 'medium', // Default complexity
+              popular: false,
+              category: doc.category,
+              relevanceScore: 50,
+              matchType: 'fuzzy' as const,
+            }));
+          setSearchResults(mappedResults);
+          setShowResults(mappedResults.length > 0);
+        }
+      } catch (error) {
+        console.error('Search error:', error);
+        setSearchResults([]);
+        setShowResults(false);
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [clientLocale, userRole],
+  );
 
   // Debounced search effect
   useEffect(() => {
@@ -169,35 +182,43 @@ export default function EnhancedHeaderSearch({
 
   const getComplexityColor = (complexity: string) => {
     switch (complexity) {
-      case 'easy': return 'bg-green-100 text-green-800';
-      case 'medium': return 'bg-yellow-100 text-yellow-800';
-      case 'advanced': return 'bg-red-100 text-red-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'easy':
+        return 'bg-green-100 text-green-800';
+      case 'medium':
+        return 'bg-yellow-100 text-yellow-800';
+      case 'advanced':
+        return 'bg-red-100 text-red-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
     }
   };
 
   const getMatchTypeIcon = (matchType: string) => {
     switch (matchType) {
-      case 'exact': return <Zap className="h-3 w-3" />;
-      case 'synonym': return <Star className="h-3 w-3" />;
-      default: return <FileText className="h-3 w-3" />;
+      case 'exact':
+        return <Zap className="h-3 w-3" />;
+      case 'synonym':
+        return <Star className="h-3 w-3" />;
+      default:
+        return <FileText className="h-3 w-3" />;
     }
   };
 
   if (!mounted) {
     return (
-      <div className={cn("relative flex-1 max-w-xs", className)}>
+      <div className={cn('relative flex-1 max-w-xs', className)}>
         <Skeleton className="h-10 w-full rounded-md" />
       </div>
     );
   }
 
-  const showSuggestions = searchQuery.trim().length === 0 && suggestions.length > 0;
+  const showSuggestions =
+    searchQuery.trim().length === 0 && suggestions.length > 0;
   const resultsToShow = showSuggestions ? suggestions : searchResults;
 
   return (
     <form
-      className={cn("relative flex-1 max-w-xs", className)}
+      className={cn('relative flex-1 max-w-xs', className)}
       onSubmit={handleSearchSubmit}
     >
       <SearchIcon className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground pointer-events-none" />
@@ -212,7 +233,7 @@ export default function EnhancedHeaderSearch({
         disabled={!mounted}
         aria-label={placeholderSearch}
       />
-      
+
       {/* Loading indicator */}
       {isLoading && (
         <div className="absolute right-3 top-1/2 -translate-y-1/2">
@@ -229,10 +250,12 @@ export default function EnhancedHeaderSearch({
           {/* Header for suggestions vs search results */}
           {showSuggestions && (
             <div className="px-3 py-2 text-xs font-medium text-muted-foreground border-b bg-muted/50">
-              {tHeader('search.suggestions', { defaultValue: 'Popular Documents' })}
+              {tHeader('search.suggestions', {
+                defaultValue: 'Popular Documents',
+              })}
             </div>
           )}
-          
+
           <ul className="py-1">
             {resultsToShow.map((result) => (
               <li key={result.slug}>
@@ -245,10 +268,12 @@ export default function EnhancedHeaderSearch({
                   <div className="shrink-0 mt-0.5 text-muted-foreground">
                     {getMatchTypeIcon(result.matchType)}
                   </div>
-                  
+
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1">
-                      <span className="font-medium truncate">{result.title}</span>
+                      <span className="font-medium truncate">
+                        {result.title}
+                      </span>
                       {result.popular && (
                         <Star className="h-3 w-3 text-yellow-500 shrink-0" />
                       )}
@@ -259,11 +284,14 @@ export default function EnhancedHeaderSearch({
                       </p>
                     )}
                   </div>
-                  
+
                   <div className="flex items-center gap-1 shrink-0">
-                    <Badge 
-                      variant="secondary" 
-                      className={cn("text-xs px-1.5 py-0.5", getComplexityColor(result.complexity))}
+                    <Badge
+                      variant="secondary"
+                      className={cn(
+                        'text-xs px-1.5 py-0.5',
+                        getComplexityColor(result.complexity),
+                      )}
                     >
                       {result.complexity}
                     </Badge>
@@ -273,7 +301,7 @@ export default function EnhancedHeaderSearch({
               </li>
             ))}
           </ul>
-          
+
           {/* Enhanced search hint */}
           {!showSuggestions && searchQuery.trim().length > 0 && (
             <div className="px-3 py-2 text-xs text-muted-foreground border-t bg-muted/30">

@@ -38,7 +38,9 @@ const SearchResultsView: React.FC<SearchResultsViewProps> = ({
                   t={t}
                   i18nLanguage={i18nLanguage}
                   placeholderNoDescription={placeholderNoDescription}
-                  placeholderRequiresNotarization={placeholderRequiresNotarization}
+                  placeholderRequiresNotarization={
+                    placeholderRequiresNotarization
+                  }
                   placeholderCanBeRecorded={placeholderCanBeRecorded}
                 />
               ))}

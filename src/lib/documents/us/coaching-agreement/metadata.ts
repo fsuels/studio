@@ -24,12 +24,14 @@ export const coachingAgreementMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Coaching Agreement',
-      description: 'Agreement for professional coaching and mentoring services.',
+      description:
+        'Agreement for professional coaching and mentoring services.',
       aliases: ['life coaching', 'business coaching', 'mentor agreement'],
     },
     es: {
       name: 'Acuerdo de Coaching',
-      description: 'Acuerdo para servicios profesionales de coaching y mentoría.',
+      description:
+        'Acuerdo para servicios profesionales de coaching y mentoría.',
       aliases: ['coaching de vida', 'coaching empresarial'],
     },
   },

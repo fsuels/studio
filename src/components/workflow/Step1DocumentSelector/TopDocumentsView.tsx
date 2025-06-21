@@ -4,7 +4,8 @@ import TopDocChip from './TopDocChip';
 import { ViewComponentProps } from './types';
 import { PLACEHOLDER_TOP_DOCS } from './constants';
 
-interface TopDocumentsViewProps extends Omit<ViewComponentProps, 'documentsToDisplay'> {
+interface TopDocumentsViewProps
+  extends Omit<ViewComponentProps, 'documentsToDisplay'> {
   onExploreAllCategories: () => void;
 }
 

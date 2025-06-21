@@ -6,7 +6,8 @@ export const simpleWillQuestions: FormQuestion[] = [
     id: 'testatorName',
     type: 'text',
     label: 'Your Full Legal Name',
-    placeholder: 'Enter your full legal name as it appears on official documents',
+    placeholder:
+      'Enter your full legal name as it appears on official documents',
     required: true,
     group: 'testator',
   },
@@ -193,7 +194,10 @@ export const simpleWillQuestions: FormQuestion[] = [
     type: 'select',
     label: 'How should debts and expenses be paid?',
     options: [
-      { value: 'pay from estate', label: 'Pay from estate before distribution' },
+      {
+        value: 'pay from estate',
+        label: 'Pay from estate before distribution',
+      },
       { value: 'specific source', label: 'Pay from specific assets' },
       { value: 'proportional', label: 'Deduct proportionally from all gifts' },
     ],

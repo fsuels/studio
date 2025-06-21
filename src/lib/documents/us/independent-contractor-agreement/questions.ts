@@ -9,8 +9,7 @@ export const questions: Question[] = [
   },
   {
     id: 'contractorName',
-    label:
-      'documents.us.independent-contractor-agreement.contractorName.label',
+    label: 'documents.us.independent-contractor-agreement.contractorName.label',
     type: 'text',
     required: true,
   },

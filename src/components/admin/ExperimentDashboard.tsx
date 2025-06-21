@@ -1,17 +1,23 @@
 'use client';
 
 import React, { useState, useEffect, useMemo } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { 
-  AlertTriangle, 
-  TrendingUp, 
-  TrendingDown, 
-  Play, 
-  Pause, 
+import {
+  AlertTriangle,
+  TrendingUp,
+  TrendingDown,
+  Play,
+  Pause,
   BarChart3,
   Target,
   Users,
@@ -21,10 +27,17 @@ import {
   Clock,
   DollarSign,
   Activity,
-  Lightbulb
+  Lightbulb,
 } from 'lucide-react';
-import { experimentEngine, type Experiment, type ExperimentResults } from '@/lib/ab-testing/experiment-engine';
-import { abTestingIntegration, useExperimentRecommendations } from '@/lib/ab-testing/integration';
+import {
+  experimentEngine,
+  type Experiment,
+  type ExperimentResults,
+} from '@/lib/ab-testing/experiment-engine';
+import {
+  abTestingIntegration,
+  useExperimentRecommendations,
+} from '@/lib/ab-testing/integration';
 
 interface ExperimentDashboardProps {
   className?: string;
@@ -32,9 +45,15 @@ interface ExperimentDashboardProps {
 
 export function ExperimentDashboard({ className }: ExperimentDashboardProps) {
   const [experiments, setExperiments] = useState<Experiment[]>([]);
-  const [selectedExperiment, setSelectedExperiment] = useState<string | null>(null);
+  const [selectedExperiment, setSelectedExperiment] = useState<string | null>(
+    null,
+  );
   const [loading, setLoading] = useState(true);
-  const { recommendations, loading: recsLoading, refresh: refreshRecommendations } = useExperimentRecommendations();
+  const {
+    recommendations,
+    loading: recsLoading,
+    refresh: refreshRecommendations,
+  } = useExperimentRecommendations();
 
   useEffect(() => {
     loadExperiments();
@@ -51,16 +70,19 @@ export function ExperimentDashboard({ className }: ExperimentDashboardProps) {
     }
   };
 
-  const runningExperiments = useMemo(() => 
-    experiments.filter(exp => exp.status === 'running'), [experiments]
+  const runningExperiments = useMemo(
+    () => experiments.filter((exp) => exp.status === 'running'),
+    [experiments],
   );
 
-  const completedExperiments = useMemo(() => 
-    experiments.filter(exp => exp.status === 'completed'), [experiments]
+  const completedExperiments = useMemo(
+    () => experiments.filter((exp) => exp.status === 'completed'),
+    [experiments],
   );
 
-  const draftExperiments = useMemo(() => 
-    experiments.filter(exp => exp.status === 'draft'), [experiments]
+  const draftExperiments = useMemo(
+    () => experiments.filter((exp) => exp.status === 'draft'),
+    [experiments],
   );
 
   const handleStartExperiment = async (experimentId: string) => {
@@ -99,7 +121,9 @@ export function ExperimentDashboard({ className }: ExperimentDashboardProps) {
               <Activity className="h-4 w-4 text-green-600" />
               <div>
                 <p className="text-sm font-medium text-gray-600">Running</p>
-                <p className="text-2xl font-bold">{runningExperiments.length}</p>
+                <p className="text-2xl font-bold">
+                  {runningExperiments.length}
+                </p>
               </div>
             </div>
           </CardContent>
@@ -111,7 +135,9 @@ export function ExperimentDashboard({ className }: ExperimentDashboardProps) {
               <CheckCircle className="h-4 w-4 text-blue-600" />
               <div>
                 <p className="text-sm font-medium text-gray-600">Completed</p>
-                <p className="text-2xl font-bold">{completedExperiments.length}</p>
+                <p className="text-2xl font-bold">
+                  {completedExperiments.length}
+                </p>
               </div>
             </div>
           </CardContent>
@@ -136,11 +162,16 @@ export function ExperimentDashboard({ className }: ExperimentDashboardProps) {
               <div>
                 <p className="text-sm font-medium text-gray-600">Win Rate</p>
                 <p className="text-2xl font-bold">
-                  {completedExperiments.length > 0 
-                    ? Math.round((completedExperiments.filter(exp => 
-                        exp.results?.status === 'significant_winner'
-                      ).length / completedExperiments.length) * 100)
-                    : 0}%
+                  {completedExperiments.length > 0
+                    ? Math.round(
+                        (completedExperiments.filter(
+                          (exp) => exp.results?.status === 'significant_winner',
+                        ).length /
+                          completedExperiments.length) *
+                          100,
+                      )
+                    : 0}
+                  %
                 </p>
               </div>
             </div>
@@ -161,14 +192,19 @@ export function ExperimentDashboard({ className }: ExperimentDashboardProps) {
             <Card>
               <CardContent className="p-8 text-center">
                 <Activity className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">No Running Experiments</h3>
-                <p className="text-gray-600 mb-4">Start an experiment from your drafts or create a new one to begin optimizing.</p>
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                  No Running Experiments
+                </h3>
+                <p className="text-gray-600 mb-4">
+                  Start an experiment from your drafts or create a new one to
+                  begin optimizing.
+                </p>
                 <Button>Create New Experiment</Button>
               </CardContent>
             </Card>
           ) : (
             <div className="grid gap-4">
-              {runningExperiments.map(experiment => (
+              {runningExperiments.map((experiment) => (
                 <ExperimentCard
                   key={experiment.id}
                   experiment={experiment}
@@ -182,7 +218,7 @@ export function ExperimentDashboard({ className }: ExperimentDashboardProps) {
 
         <TabsContent value="completed" className="space-y-4">
           <div className="grid gap-4">
-            {completedExperiments.map(experiment => (
+            {completedExperiments.map((experiment) => (
               <CompletedExperimentCard
                 key={experiment.id}
                 experiment={experiment}
@@ -194,7 +230,7 @@ export function ExperimentDashboard({ className }: ExperimentDashboardProps) {
 
         <TabsContent value="draft" className="space-y-4">
           <div className="grid gap-4">
-            {draftExperiments.map(experiment => (
+            {draftExperiments.map((experiment) => (
               <DraftExperimentCard
                 key={experiment.id}
                 experiment={experiment}
@@ -206,7 +242,7 @@ export function ExperimentDashboard({ className }: ExperimentDashboardProps) {
         </TabsContent>
 
         <TabsContent value="recommendations" className="space-y-4">
-          <ExperimentRecommendations 
+          <ExperimentRecommendations
             recommendations={recommendations}
             loading={recsLoading}
             onRefresh={refreshRecommendations}
@@ -225,16 +261,24 @@ export function ExperimentDashboard({ className }: ExperimentDashboardProps) {
   );
 }
 
-function ExperimentCard({ experiment, onStop, onViewDetails }: {
+function ExperimentCard({
+  experiment,
+  onStop,
+  onViewDetails,
+}: {
   experiment: Experiment;
   onStop: () => void;
   onViewDetails: () => void;
 }) {
   const daysRunning = Math.floor(
-    (new Date().getTime() - new Date(experiment.startDate).getTime()) / (1000 * 60 * 60 * 24)
+    (new Date().getTime() - new Date(experiment.startDate).getTime()) /
+      (1000 * 60 * 60 * 24),
   );
 
-  const progress = Math.min((daysRunning / experiment.estimatedDuration) * 100, 100);
+  const progress = Math.min(
+    (daysRunning / experiment.estimatedDuration) * 100,
+    100,
+  );
 
   return (
     <Card>
@@ -269,19 +313,26 @@ function ExperimentCard({ experiment, onStop, onViewDetails }: {
               {daysRunning} of {experiment.estimatedDuration} days
             </p>
           </div>
-          
+
           <div>
-            <p className="text-sm font-medium text-gray-600 mb-1">Primary Metric</p>
-            <p className="text-sm font-semibold">{experiment.primaryMetric.name}</p>
+            <p className="text-sm font-medium text-gray-600 mb-1">
+              Primary Metric
+            </p>
+            <p className="text-sm font-semibold">
+              {experiment.primaryMetric.name}
+            </p>
             <p className="text-xs text-gray-500 capitalize">
-              Goal: {experiment.primaryMetric.goal} {experiment.primaryMetric.type}
+              Goal: {experiment.primaryMetric.goal}{' '}
+              {experiment.primaryMetric.type}
             </p>
           </div>
 
           <div>
-            <p className="text-sm font-medium text-gray-600 mb-1">Traffic Split</p>
+            <p className="text-sm font-medium text-gray-600 mb-1">
+              Traffic Split
+            </p>
             <div className="space-y-1">
-              {experiment.variants.map(variant => (
+              {experiment.variants.map((variant) => (
                 <div key={variant.id} className="flex justify-between text-xs">
                   <span className={variant.isControl ? 'font-semibold' : ''}>
                     {variant.name} {variant.isControl && '(Control)'}
@@ -303,13 +354,16 @@ function ExperimentCard({ experiment, onStop, onViewDetails }: {
   );
 }
 
-function CompletedExperimentCard({ experiment, onViewDetails }: {
+function CompletedExperimentCard({
+  experiment,
+  onViewDetails,
+}: {
   experiment: Experiment;
   onViewDetails: () => void;
 }) {
   const results = experiment.results;
-  const winnerVariant = results?.winningVariant 
-    ? experiment.variants.find(v => v.id === results.winningVariant)
+  const winnerVariant = results?.winningVariant
+    ? experiment.variants.find((v) => v.id === results.winningVariant)
     : null;
 
   return (
@@ -321,13 +375,25 @@ function CompletedExperimentCard({ experiment, onViewDetails }: {
             <CardDescription>{experiment.description}</CardDescription>
           </div>
           <div className="flex items-center space-x-2">
-            <Badge 
-              variant={results?.status === 'significant_winner' ? 'default' : 'secondary'}
+            <Badge
+              variant={
+                results?.status === 'significant_winner'
+                  ? 'default'
+                  : 'secondary'
+              }
             >
-              {results?.status === 'significant_winner' && <TrendingUp className="h-3 w-3 mr-1" />}
-              {results?.status === 'significant_loser' && <TrendingDown className="h-3 w-3 mr-1" />}
-              {results?.status === 'no_significant_difference' && <XCircle className="h-3 w-3 mr-1" />}
-              {results?.status === 'insufficient_data' && <AlertTriangle className="h-3 w-3 mr-1" />}
+              {results?.status === 'significant_winner' && (
+                <TrendingUp className="h-3 w-3 mr-1" />
+              )}
+              {results?.status === 'significant_loser' && (
+                <TrendingDown className="h-3 w-3 mr-1" />
+              )}
+              {results?.status === 'no_significant_difference' && (
+                <XCircle className="h-3 w-3 mr-1" />
+              )}
+              {results?.status === 'insufficient_data' && (
+                <AlertTriangle className="h-3 w-3 mr-1" />
+              )}
               {results?.status.replace('_', ' ').toUpperCase()}
             </Badge>
             <Button variant="outline" size="sm" onClick={onViewDetails}>
@@ -345,18 +411,25 @@ function CompletedExperimentCard({ experiment, onViewDetails }: {
               {winnerVariant?.name || 'No significant difference'}
             </p>
             <p className="text-xs text-gray-500">
-              {results?.confidence && `${(results.confidence * 100).toFixed(1)}% confidence`}
+              {results?.confidence &&
+                `${(results.confidence * 100).toFixed(1)}% confidence`}
             </p>
           </div>
 
           <div>
-            <p className="text-sm font-medium text-gray-600 mb-1">Revenue Impact</p>
+            <p className="text-sm font-medium text-gray-600 mb-1">
+              Revenue Impact
+            </p>
             {results?.estimatedRevenueImpact ? (
               <>
                 <p className="text-sm font-semibold">
-                  ${results.estimatedRevenueImpact.monthlyImpact.toLocaleString()}/mo
+                  $
+                  {results.estimatedRevenueImpact.monthlyImpact.toLocaleString()}
+                  /mo
                 </p>
-                <p className="text-xs text-gray-500">Estimated monthly impact</p>
+                <p className="text-xs text-gray-500">
+                  Estimated monthly impact
+                </p>
               </>
             ) : (
               <p className="text-sm text-gray-500">Not calculated</p>
@@ -366,16 +439,19 @@ function CompletedExperimentCard({ experiment, onViewDetails }: {
           <div>
             <p className="text-sm font-medium text-gray-600 mb-1">Duration</p>
             <p className="text-sm">
-              {experiment.startDate && experiment.endDate && (
+              {experiment.startDate &&
+                experiment.endDate &&
                 Math.floor(
-                  (new Date(experiment.endDate).getTime() - new Date(experiment.startDate).getTime()) 
-                  / (1000 * 60 * 60 * 24)
-                )
-              )} days
+                  (new Date(experiment.endDate).getTime() -
+                    new Date(experiment.startDate).getTime()) /
+                    (1000 * 60 * 60 * 24),
+                )}{' '}
+              days
             </p>
             <p className="text-xs text-gray-500">
-              {new Date(experiment.startDate).toLocaleDateString()} - {' '}
-              {experiment.endDate && new Date(experiment.endDate).toLocaleDateString()}
+              {new Date(experiment.startDate).toLocaleDateString()} -{' '}
+              {experiment.endDate &&
+                new Date(experiment.endDate).toLocaleDateString()}
             </p>
           </div>
         </div>
@@ -384,7 +460,11 @@ function CompletedExperimentCard({ experiment, onViewDetails }: {
   );
 }
 
-function DraftExperimentCard({ experiment, onStart, onViewDetails }: {
+function DraftExperimentCard({
+  experiment,
+  onStart,
+  onViewDetails,
+}: {
   experiment: Experiment;
   onStart: () => void;
   onViewDetails: () => void;
@@ -420,8 +500,12 @@ function DraftExperimentCard({ experiment, onStart, onViewDetails }: {
           </div>
 
           <div>
-            <p className="text-sm font-medium text-gray-600 mb-1">Target Audience</p>
-            <p className="text-sm">{experiment.targetAudience.percentage}% of users</p>
+            <p className="text-sm font-medium text-gray-600 mb-1">
+              Target Audience
+            </p>
+            <p className="text-sm">
+              {experiment.targetAudience.percentage}% of users
+            </p>
             {experiment.targetAudience.roles && (
               <p className="text-xs text-gray-500">
                 Roles: {experiment.targetAudience.roles.join(', ')}
@@ -430,7 +514,9 @@ function DraftExperimentCard({ experiment, onStart, onViewDetails }: {
           </div>
 
           <div>
-            <p className="text-sm font-medium text-gray-600 mb-1">Estimated Duration</p>
+            <p className="text-sm font-medium text-gray-600 mb-1">
+              Estimated Duration
+            </p>
             <p className="text-sm">{experiment.estimatedDuration} days</p>
             <p className="text-xs text-gray-500">
               Min sample: {experiment.minSampleSize.toLocaleString()}
@@ -448,10 +534,18 @@ function ExperimentResultsSummary({ results }: { results: ExperimentResults }) {
       <div>
         <p className="font-medium text-gray-600 mb-1">Status</p>
         <div className="flex items-center space-x-1">
-          {results.status === 'significant_winner' && <TrendingUp className="h-4 w-4 text-green-600" />}
-          {results.status === 'significant_loser' && <TrendingDown className="h-4 w-4 text-red-600" />}
-          {results.status === 'no_significant_difference' && <XCircle className="h-4 w-4 text-gray-600" />}
-          {results.status === 'insufficient_data' && <AlertTriangle className="h-4 w-4 text-yellow-600" />}
+          {results.status === 'significant_winner' && (
+            <TrendingUp className="h-4 w-4 text-green-600" />
+          )}
+          {results.status === 'significant_loser' && (
+            <TrendingDown className="h-4 w-4 text-red-600" />
+          )}
+          {results.status === 'no_significant_difference' && (
+            <XCircle className="h-4 w-4 text-gray-600" />
+          )}
+          {results.status === 'insufficient_data' && (
+            <AlertTriangle className="h-4 w-4 text-yellow-600" />
+          )}
           <span className="capitalize">{results.status.replace('_', ' ')}</span>
         </div>
       </div>
@@ -464,20 +558,22 @@ function ExperimentResultsSummary({ results }: { results: ExperimentResults }) {
       <div>
         <p className="font-medium text-gray-600 mb-1">Sample Size</p>
         <p>
-          {Object.values(results.sampleSizes).reduce((sum, size) => sum + size, 0).toLocaleString()}
+          {Object.values(results.sampleSizes)
+            .reduce((sum, size) => sum + size, 0)
+            .toLocaleString()}
         </p>
       </div>
     </div>
   );
 }
 
-function ExperimentRecommendations({ 
-  recommendations, 
-  loading, 
-  onRefresh 
-}: { 
-  recommendations: any[]; 
-  loading: boolean; 
+function ExperimentRecommendations({
+  recommendations,
+  loading,
+  onRefresh,
+}: {
+  recommendations: any[];
+  loading: boolean;
   onRefresh: () => void;
 }) {
   if (loading) {
@@ -502,8 +598,13 @@ function ExperimentRecommendations({
         <Card>
           <CardContent className="p-8 text-center">
             <Lightbulb className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">No Recommendations</h3>
-            <p className="text-gray-600">All key metrics are performing well. Check back later for new opportunities.</p>
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">
+              No Recommendations
+            </h3>
+            <p className="text-gray-600">
+              All key metrics are performing well. Check back later for new
+              opportunities.
+            </p>
           </CardContent>
         </Card>
       ) : (
@@ -517,7 +618,15 @@ function ExperimentRecommendations({
                     <CardDescription>{rec.description}</CardDescription>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <Badge variant={rec.priority === 'high' ? 'destructive' : rec.priority === 'medium' ? 'default' : 'secondary'}>
+                    <Badge
+                      variant={
+                        rec.priority === 'high'
+                          ? 'destructive'
+                          : rec.priority === 'medium'
+                            ? 'default'
+                            : 'secondary'
+                      }
+                    >
                       {rec.priority} priority
                     </Badge>
                     <Badge variant="outline">
@@ -529,7 +638,9 @@ function ExperimentRecommendations({
               <CardContent>
                 <div className="space-y-3">
                   <div>
-                    <p className="text-sm font-medium text-gray-600 mb-1">Hypothesis</p>
+                    <p className="text-sm font-medium text-gray-600 mb-1">
+                      Hypothesis
+                    </p>
                     <p className="text-sm">{rec.suggestedTest.hypothesis}</p>
                   </div>
 
@@ -537,18 +648,26 @@ function ExperimentRecommendations({
                     <div>
                       <p className="font-medium text-gray-600 mb-1">Variants</p>
                       <ul className="space-y-1">
-                        {rec.suggestedTest.variants.map((variant: string, idx: number) => (
-                          <li key={idx} className="text-gray-700">• {variant}</li>
-                        ))}
+                        {rec.suggestedTest.variants.map(
+                          (variant: string, idx: number) => (
+                            <li key={idx} className="text-gray-700">
+                              • {variant}
+                            </li>
+                          ),
+                        )}
                       </ul>
                     </div>
 
                     <div>
                       <p className="font-medium text-gray-600 mb-1">Metrics</p>
                       <ul className="space-y-1">
-                        {rec.suggestedTest.metrics.map((metric: string, idx: number) => (
-                          <li key={idx} className="text-gray-700">• {metric}</li>
-                        ))}
+                        {rec.suggestedTest.metrics.map(
+                          (metric: string, idx: number) => (
+                            <li key={idx} className="text-gray-700">
+                              • {metric}
+                            </li>
+                          ),
+                        )}
                       </ul>
                     </div>
 
@@ -573,11 +692,11 @@ function ExperimentRecommendations({
   );
 }
 
-function ExperimentDetailsModal({ 
-  experimentId, 
-  onClose 
-}: { 
-  experimentId: string; 
+function ExperimentDetailsModal({
+  experimentId,
+  onClose,
+}: {
+  experimentId: string;
   onClose: () => void;
 }) {
   const [experiment, setExperiment] = useState<Experiment | null>(null);
@@ -588,7 +707,8 @@ function ExperimentDetailsModal({
     setExperiment(exp || null);
 
     if (exp?.results) {
-      abTestingIntegration.getExperimentResultsWithFunnelInsights(experimentId)
+      abTestingIntegration
+        .getExperimentResultsWithFunnelInsights(experimentId)
         .then(setResults)
         .catch(console.error);
     }
@@ -604,7 +724,9 @@ function ExperimentDetailsModal({
         <div className="p-6 border-b">
           <div className="flex items-center justify-between">
             <h2 className="text-xl font-semibold">{experiment.name}</h2>
-            <Button variant="outline" onClick={onClose}>Close</Button>
+            <Button variant="outline" onClick={onClose}>
+              Close
+            </Button>
           </div>
         </div>
 
@@ -612,11 +734,19 @@ function ExperimentDetailsModal({
           {/* Experiment details and results would go here */}
           <div className="space-y-6">
             <div>
-              <h3 className="text-lg font-medium mb-2">Experiment Configuration</h3>
+              <h3 className="text-lg font-medium mb-2">
+                Experiment Configuration
+              </h3>
               <div className="bg-gray-50 p-4 rounded-lg">
-                <p><strong>Hypothesis:</strong> {experiment.hypothesis}</p>
-                <p><strong>Status:</strong> {experiment.status}</p>
-                <p><strong>Duration:</strong> {experiment.estimatedDuration} days</p>
+                <p>
+                  <strong>Hypothesis:</strong> {experiment.hypothesis}
+                </p>
+                <p>
+                  <strong>Status:</strong> {experiment.status}
+                </p>
+                <p>
+                  <strong>Duration:</strong> {experiment.estimatedDuration} days
+                </p>
               </div>
             </div>
 

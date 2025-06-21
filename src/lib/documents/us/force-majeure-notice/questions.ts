@@ -7,14 +7,14 @@ export const forceMajeureNoticeQuestions: DocumentQuestion[] = [
     text: 'Your name or business name (giving notice)',
     type: 'text',
     required: true,
-    placeholder: 'ABC Company, LLC'
+    placeholder: 'ABC Company, LLC',
   },
   {
     id: 'receivingParty.name',
     text: 'Name of party receiving notice',
     type: 'text',
     required: true,
-    placeholder: 'XYZ Corporation'
+    placeholder: 'XYZ Corporation',
   },
 
   // Contract Information
@@ -23,20 +23,21 @@ export const forceMajeureNoticeQuestions: DocumentQuestion[] = [
     text: 'Title or description of the contract',
     type: 'text',
     required: true,
-    placeholder: 'Service Agreement, Supply Contract, etc.'
+    placeholder: 'Service Agreement, Supply Contract, etc.',
   },
   {
     id: 'contractInfo.contractDate',
     text: 'Date the contract was signed',
     type: 'date',
-    required: true
+    required: true,
   },
   {
     id: 'contractInfo.forceMajeureClauseExists',
     text: 'Does your contract have a force majeure clause?',
     type: 'boolean',
     required: true,
-    helpText: 'This notice is most effective if your contract includes force majeure provisions'
+    helpText:
+      'This notice is most effective if your contract includes force majeure provisions',
   },
   {
     id: 'contractInfo.clauseText',
@@ -44,7 +45,10 @@ export const forceMajeureNoticeQuestions: DocumentQuestion[] = [
     type: 'textarea',
     required: false,
     placeholder: 'Paste the exact text of the force majeure clause here...',
-    conditionalOn: { field: 'contractInfo.forceMajeureClauseExists', value: true }
+    conditionalOn: {
+      field: 'contractInfo.forceMajeureClauseExists',
+      value: true,
+    },
   },
 
   // Force Majeure Event
@@ -54,7 +58,10 @@ export const forceMajeureNoticeQuestions: DocumentQuestion[] = [
     type: 'select',
     required: true,
     options: [
-      { value: 'natural_disaster', label: 'Natural disaster (earthquake, hurricane, flood, etc.)' },
+      {
+        value: 'natural_disaster',
+        label: 'Natural disaster (earthquake, hurricane, flood, etc.)',
+      },
       { value: 'pandemic', label: 'Pandemic/epidemic' },
       { value: 'government_action', label: 'Government action/regulation' },
       { value: 'war_terrorism', label: 'War/terrorism/civil unrest' },
@@ -62,42 +69,43 @@ export const forceMajeureNoticeQuestions: DocumentQuestion[] = [
       { value: 'supply_chain_disruption', label: 'Supply chain disruption' },
       { value: 'cyberattack', label: 'Cyberattack/system failure' },
       { value: 'infrastructure_failure', label: 'Infrastructure failure' },
-      { value: 'other', label: 'Other unforeseeable event' }
-    ]
+      { value: 'other', label: 'Other unforeseeable event' },
+    ],
   },
   {
     id: 'event.eventDescription',
     text: 'Describe the force majeure event in detail',
     type: 'textarea',
     required: true,
-    placeholder: 'Provide a comprehensive description of what happened, when it started, its scope and impact...',
-    minLength: 100
+    placeholder:
+      'Provide a comprehensive description of what happened, when it started, its scope and impact...',
+    minLength: 100,
   },
   {
     id: 'event.eventStartDate',
     text: 'When did the event begin?',
     type: 'date',
-    required: true
+    required: true,
   },
   {
     id: 'event.eventLocation',
     text: 'Where did the event occur?',
     type: 'text',
     required: true,
-    placeholder: 'Geographic location or scope of the event'
+    placeholder: 'Geographic location or scope of the event',
   },
   {
     id: 'event.ongoingEvent',
     text: 'Is this event still ongoing?',
     type: 'boolean',
-    required: true
+    required: true,
   },
   {
     id: 'event.estimatedEndDate',
     text: 'Estimated end date (if known)',
     type: 'date',
     required: false,
-    conditionalOn: { field: 'event.ongoingEvent', value: false }
+    conditionalOn: { field: 'event.ongoingEvent', value: false },
   },
 
   // Impact on Performance
@@ -106,7 +114,8 @@ export const forceMajeureNoticeQuestions: DocumentQuestion[] = [
     text: 'First affected contractual obligation',
     type: 'text',
     required: true,
-    placeholder: 'E.g., Delivery of goods, provision of services, payment deadline'
+    placeholder:
+      'E.g., Delivery of goods, provision of services, payment deadline',
   },
   {
     id: 'performanceImpact.affectedObligations.0.impactType',
@@ -114,27 +123,32 @@ export const forceMajeureNoticeQuestions: DocumentQuestion[] = [
     type: 'select',
     required: true,
     options: [
-      { value: 'complete_impossibility', label: 'Complete impossibility to perform' },
+      {
+        value: 'complete_impossibility',
+        label: 'Complete impossibility to perform',
+      },
       { value: 'partial_impossibility', label: 'Partial impossibility' },
       { value: 'significant_delay', label: 'Significant delay in performance' },
-      { value: 'increased_cost', label: 'Substantially increased cost' }
-    ]
+      { value: 'increased_cost', label: 'Substantially increased cost' },
+    ],
   },
   {
     id: 'performanceImpact.affectedObligations.0.description',
     text: 'Describe how this obligation is affected',
     type: 'textarea',
     required: true,
-    placeholder: 'Explain specifically how the force majeure event prevents or delays performance of this obligation...',
-    minLength: 50
+    placeholder:
+      'Explain specifically how the force majeure event prevents or delays performance of this obligation...',
+    minLength: 50,
   },
   {
     id: 'performanceImpact.causalConnection',
     text: 'Explain how the event directly prevents your performance',
     type: 'textarea',
     required: true,
-    placeholder: 'Clearly establish the causal connection between the force majeure event and your inability to perform...',
-    minLength: 50
+    placeholder:
+      'Clearly establish the causal connection between the force majeure event and your inability to perform...',
+    minLength: 50,
   },
 
   // Mitigation Efforts
@@ -143,7 +157,7 @@ export const forceMajeureNoticeQuestions: DocumentQuestion[] = [
     text: 'What efforts have you made to mitigate the impact?',
     type: 'text',
     required: false,
-    placeholder: 'E.g., Sought alternative suppliers, relocated operations'
+    placeholder: 'E.g., Sought alternative suppliers, relocated operations',
   },
   {
     id: 'mitigation.effortsMade.0.result',
@@ -151,22 +165,26 @@ export const forceMajeureNoticeQuestions: DocumentQuestion[] = [
     type: 'text',
     required: false,
     placeholder: 'Successful, partially successful, unsuccessful',
-    conditionalOn: { field: 'mitigation.effortsMade.0.effort', value: true }
+    conditionalOn: { field: 'mitigation.effortsMade.0.effort', value: true },
   },
   {
     id: 'mitigation.alternativePerformance.available',
     text: 'Is alternative performance possible?',
     type: 'boolean',
     required: true,
-    helpText: 'Can you perform the contract in a different way?'
+    helpText: 'Can you perform the contract in a different way?',
   },
   {
     id: 'mitigation.alternativePerformance.description',
     text: 'Describe the alternative performance available',
     type: 'textarea',
     required: false,
-    placeholder: 'Explain what alternative performance is possible and any limitations...',
-    conditionalOn: { field: 'mitigation.alternativePerformance.available', value: true }
+    placeholder:
+      'Explain what alternative performance is possible and any limitations...',
+    conditionalOn: {
+      field: 'mitigation.alternativePerformance.available',
+      value: true,
+    },
   },
 
   // Performance Changes
@@ -175,7 +193,7 @@ export const forceMajeureNoticeQuestions: DocumentQuestion[] = [
     text: 'Are you requesting suspension of performance?',
     type: 'boolean',
     required: true,
-    helpText: 'Temporary halt to your contractual obligations'
+    helpText: 'Temporary halt to your contractual obligations',
   },
   {
     id: 'performanceChanges.suspensionScope',
@@ -184,16 +202,19 @@ export const forceMajeureNoticeQuestions: DocumentQuestion[] = [
     required: false,
     options: [
       { value: 'complete', label: 'Complete suspension of all obligations' },
-      { value: 'partial', label: 'Partial suspension of specific obligations' }
+      { value: 'partial', label: 'Partial suspension of specific obligations' },
     ],
-    conditionalOn: { field: 'performanceChanges.suspensionRequested', value: true }
+    conditionalOn: {
+      field: 'performanceChanges.suspensionRequested',
+      value: true,
+    },
   },
   {
     id: 'performanceChanges.timeExtensionRequested',
     text: 'Are you requesting a time extension?',
     type: 'boolean',
     required: true,
-    helpText: 'Additional time to complete performance after event ends'
+    helpText: 'Additional time to complete performance after event ends',
   },
   {
     id: 'performanceChanges.extensionPeriod',
@@ -201,7 +222,10 @@ export const forceMajeureNoticeQuestions: DocumentQuestion[] = [
     type: 'text',
     required: false,
     placeholder: 'E.g., 30 days, 3 months, time equal to delay period',
-    conditionalOn: { field: 'performanceChanges.timeExtensionRequested', value: true }
+    conditionalOn: {
+      field: 'performanceChanges.timeExtensionRequested',
+      value: true,
+    },
   },
 
   // Notice Timing
@@ -209,7 +233,7 @@ export const forceMajeureNoticeQuestions: DocumentQuestion[] = [
     id: 'noticeDetails.noticeDate',
     text: 'Date you are giving this notice',
     type: 'date',
-    required: true
+    required: true,
   },
   {
     id: 'noticeDetails.daysFromEvent',
@@ -217,14 +241,14 @@ export const forceMajeureNoticeQuestions: DocumentQuestion[] = [
     type: 'number',
     required: true,
     placeholder: '15',
-    helpText: 'Many contracts require prompt notice'
+    helpText: 'Many contracts require prompt notice',
   },
   {
     id: 'noticeDetails.timelyNotice',
     text: 'Are you giving this notice within the required timeframe?',
     type: 'boolean',
     required: true,
-    helpText: 'Check your contract for notice requirements'
+    helpText: 'Check your contract for notice requirements',
   },
   {
     id: 'noticeDetails.delayExplanation',
@@ -232,7 +256,7 @@ export const forceMajeureNoticeQuestions: DocumentQuestion[] = [
     type: 'textarea',
     required: false,
     placeholder: 'Explain the circumstances that prevented earlier notice...',
-    conditionalOn: { field: 'noticeDetails.timelyNotice', value: false }
+    conditionalOn: { field: 'noticeDetails.timelyNotice', value: false },
   },
 
   // Evidence
@@ -240,19 +264,19 @@ export const forceMajeureNoticeQuestions: DocumentQuestion[] = [
     id: 'evidence.mediaReports',
     text: 'Are there media reports about this event?',
     type: 'boolean',
-    required: true
+    required: true,
   },
   {
     id: 'evidence.governmentNotices',
     text: 'Are there government notices or declarations?',
     type: 'boolean',
-    required: true
+    required: true,
   },
   {
     id: 'evidence.expertReports',
     text: 'Do you have expert reports or assessments?',
     type: 'boolean',
-    required: true
+    required: true,
   },
 
   // Financial Impact
@@ -260,7 +284,7 @@ export const forceMajeureNoticeQuestions: DocumentQuestion[] = [
     id: 'financial.lossIncurred',
     text: 'Have you incurred financial losses?',
     type: 'boolean',
-    required: true
+    required: true,
   },
   {
     id: 'financial.lossAmount',
@@ -269,19 +293,19 @@ export const forceMajeureNoticeQuestions: DocumentQuestion[] = [
     required: false,
     placeholder: '50000',
     conditionalOn: { field: 'financial.lossIncurred', value: true },
-    helpText: 'Enter amount in dollars'
+    helpText: 'Enter amount in dollars',
   },
   {
     id: 'financial.insuranceCoverage.applicableCoverage',
     text: 'Do you have applicable insurance coverage?',
     type: 'boolean',
-    required: true
+    required: true,
   },
   {
     id: 'financial.compensationSought',
     text: 'Are you seeking compensation for losses?',
     type: 'boolean',
-    required: true
+    required: true,
   },
 
   // Resumption Plans
@@ -289,21 +313,21 @@ export const forceMajeureNoticeQuestions: DocumentQuestion[] = [
     id: 'resumption.intendToResume',
     text: 'Do you intend to resume performance when possible?',
     type: 'boolean',
-    required: true
+    required: true,
   },
   {
     id: 'resumption.estimatedResumptionDate',
     text: 'Estimated date when you can resume performance',
     type: 'date',
     required: false,
-    conditionalOn: { field: 'resumption.intendToResume', value: true }
+    conditionalOn: { field: 'resumption.intendToResume', value: true },
   },
   {
     id: 'resumption.notificationCommitment.willNotifyWhenAble',
-    text: 'Will you notify when you\'re able to resume?',
+    text: "Will you notify when you're able to resume?",
     type: 'boolean',
     required: true,
-    conditionalOn: { field: 'resumption.intendToResume', value: true }
+    conditionalOn: { field: 'resumption.intendToResume', value: true },
   },
 
   // Communication
@@ -311,19 +335,19 @@ export const forceMajeureNoticeQuestions: DocumentQuestion[] = [
     id: 'communication.requestAcknowledgment',
     text: 'Request acknowledgment of this notice?',
     type: 'boolean',
-    required: true
+    required: true,
   },
   {
     id: 'communication.requestDiscussion',
     text: 'Request discussion about the situation?',
     type: 'boolean',
-    required: true
+    required: true,
   },
   {
     id: 'communication.ongoingCommunication.regularUpdates',
     text: 'Commit to providing regular updates?',
     type: 'boolean',
-    required: true
+    required: true,
   },
   {
     id: 'communication.ongoingCommunication.updateFrequency',
@@ -334,8 +358,11 @@ export const forceMajeureNoticeQuestions: DocumentQuestion[] = [
       { value: 'weekly', label: 'Weekly' },
       { value: 'biweekly', label: 'Every two weeks' },
       { value: 'monthly', label: 'Monthly' },
-      { value: 'as_needed', label: 'As developments occur' }
+      { value: 'as_needed', label: 'As developments occur' },
     ],
-    conditionalOn: { field: 'communication.ongoingCommunication.regularUpdates', value: true }
-  }
+    conditionalOn: {
+      field: 'communication.ongoingCommunication.regularUpdates',
+      value: true,
+    },
+  },
 ];

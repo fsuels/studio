@@ -24,13 +24,19 @@ export const releaseOfLiabilityMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Release of Liability',
-      description: 'General release form to waive liability for activities or services.',
+      description:
+        'General release form to waive liability for activities or services.',
       aliases: ['liability release', 'general release', 'waiver and release'],
     },
     es: {
       name: 'Liberación de Responsabilidad',
-      description: 'Formulario general de liberación para eximir responsabilidad por actividades o servicios.',
-      aliases: ['liberación de responsabilidad', 'liberación general', 'exención y liberación'],
+      description:
+        'Formulario general de liberación para eximir responsabilidad por actividades o servicios.',
+      aliases: [
+        'liberación de responsabilidad',
+        'liberación general',
+        'exención y liberación',
+      ],
     },
   },
 };

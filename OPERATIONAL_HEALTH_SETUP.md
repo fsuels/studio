@@ -5,7 +5,7 @@
 Your 123LegalDoc platform now includes enterprise-grade operational health monitoring with:
 
 - **Real-time metrics**: Error rates, P95 latency, queue depth, throughput
-- **Instant alerts**: Slack, webhook, and email notifications  
+- **Instant alerts**: Slack, webhook, and email notifications
 - **Anomaly detection**: Automatic threshold monitoring
 - **Compliance dashboards**: Admin and user-facing interfaces
 - **Immutable audit trail**: Cryptographically secure event logging
@@ -35,12 +35,14 @@ ADMIN_EMAIL_DOMAIN=@123legaldoc.com
 ### 2. Slack Integration Setup
 
 1. **Create Slack App**:
+
    - Go to https://api.slack.com/apps
    - Create new app for your workspace
    - Enable "Incoming Webhooks"
    - Create webhook for your alerts channel
 
 2. **Configure Webhook**:
+
    ```bash
    SLACK_WEBHOOK_URL=https://hooks.slack.com/services/T00000000/B00000000/XXXXXXXXXXXXXXXXXXXXXXXX
    SLACK_ALERT_CHANNEL=#operational-alerts
@@ -57,7 +59,8 @@ Grant admin access by adding your email domain:
 
 ```typescript
 // In operational health components, admin check:
-const isAdmin = user.email?.endsWith('@123legaldoc.com') || user.uid === 'admin-user-id';
+const isAdmin =
+  user.email?.endsWith('@123legaldoc.com') || user.uid === 'admin-user-id';
 ```
 
 ## 📊 Features
@@ -67,7 +70,7 @@ const isAdmin = user.email?.endsWith('@123legaldoc.com') || user.uid === 'admin-
 Access at `/admin/operational-health`:
 
 - **Error Rate**: Current rate, P95, trending
-- **Latency**: P50, P95, P99 response times  
+- **Latency**: P50, P95, P99 response times
 - **Throughput**: Requests per minute, success/failure rates
 - **Queue Depth**: Current processing queue status
 - **System Health Score**: 0-100 overall health rating
@@ -75,11 +78,13 @@ Access at `/admin/operational-health`:
 ### Automatic Alerting
 
 **Alert Triggers**:
+
 - Error rate > 5% (warning) / 10% (critical)
-- P95 latency > 2s (warning) / 5s (critical) 
+- P95 latency > 2s (warning) / 5s (critical)
 - Queue depth > 100 (warning) / 500 (critical)
 
 **Notification Channels**:
+
 - Slack messages with severity colors
 - Webhook POST requests with full alert data
 - Console logging (fallback)
@@ -118,15 +123,19 @@ import { operationalHealth } from '@/lib/operational-health';
 // Record custom latency
 await operationalHealth.recordLatency('/api/custom', duration, success);
 
-// Record queue operations  
-await operationalHealth.recordQueueOperation('email_queue', 'enqueue', queueSize);
+// Record queue operations
+await operationalHealth.recordQueueOperation(
+  'email_queue',
+  'enqueue',
+  queueSize,
+);
 
 // Record custom metrics
 await operationalHealth.recordMetric({
   metricType: 'custom_metric',
   value: someValue,
   endpoint: '/api/endpoint',
-  metadata: { customData: 'value' }
+  metadata: { customData: 'value' },
 });
 ```
 
@@ -149,10 +158,10 @@ const MyComponent = withErrorTracking(() => {
 
 ```typescript
 const thresholds = {
-  errorRate: { warning: 0.05, critical: 0.10 },     // 5%, 10%
-  latencyP95: { warning: 2000, critical: 5000 },    // 2s, 5s
-  queueDepth: { warning: 100, critical: 500 },      // 100, 500 items
-  memoryUsage: { warning: 0.80, critical: 0.95 }    // 80%, 95%
+  errorRate: { warning: 0.05, critical: 0.1 }, // 5%, 10%
+  latencyP95: { warning: 2000, critical: 5000 }, // 2s, 5s
+  queueDepth: { warning: 100, critical: 500 }, // 100, 500 items
+  memoryUsage: { warning: 0.8, critical: 0.95 }, // 80%, 95%
 };
 ```
 
@@ -173,7 +182,7 @@ private thresholds = {
 ### Admin Dashboard (`/admin/operational-health`)
 
 - Real-time system metrics
-- Active alerts management  
+- Active alerts management
 - Performance trends
 - Alert resolution workflow
 
@@ -225,15 +234,17 @@ match /operational_alerts/{alertId} {
   "channel": "#alerts",
   "username": "123LegalDoc Monitor",
   "icon_emoji": ":warning:",
-  "attachments": [{
-    "color": "#cc0000",
-    "title": "CRITICAL Alert: High Error Rate",
-    "text": "Error rate exceeded 10% threshold",
-    "fields": [
-      { "title": "Severity", "value": "critical", "short": true },
-      { "title": "Endpoint", "value": "/api/generate-pdf", "short": true }
-    ]
-  }]
+  "attachments": [
+    {
+      "color": "#cc0000",
+      "title": "CRITICAL Alert: High Error Rate",
+      "text": "Error rate exceeded 10% threshold",
+      "fields": [
+        { "title": "Severity", "value": "critical", "short": true },
+        { "title": "Endpoint", "value": "/api/generate-pdf", "short": true }
+      ]
+    }
+  ]
 }
 ```
 
@@ -242,7 +253,7 @@ match /operational_alerts/{alertId} {
 ```json
 {
   "alert_id": "alert_1234567890_abc123",
-  "type": "error_spike", 
+  "type": "error_spike",
   "severity": "critical",
   "message": "Critical error rate: 12.5%",
   "timestamp": 1640995200000,
@@ -265,6 +276,7 @@ match /operational_alerts/{alertId} {
 ### Health Checks
 
 Access health status:
+
 - **Public**: `/api/health/metrics?public=true` (basic status)
 - **Admin**: `/api/health/metrics` (detailed metrics)
 
@@ -273,11 +285,13 @@ Access health status:
 **Common Issues**:
 
 1. **No metrics appearing**:
+
    - Check Firebase authentication
    - Verify Firestore rules deployment
    - Ensure admin privileges
 
 2. **Alerts not firing**:
+
    - Test with `/admin/operational-health` "Test Alert" button
    - Check Slack webhook URL validity
    - Verify environment variables

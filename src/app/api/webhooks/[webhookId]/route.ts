@@ -5,28 +5,37 @@ import { validateRequest } from '@/lib/auth-validation';
 import { z } from 'zod';
 
 const UpdateWebhookSchema = z.object({
-  url: z.string().url().refine(url => url.startsWith('https://'), {
-    message: 'Webhook URL must use HTTPS'
-  }).optional(),
-  events: z.array(z.enum([
-    'document.created',
-    'document.updated', 
-    'document.signed',
-    'document.completed',
-    'document.deleted',
-    'user.created',
-    'user.updated',
-    'payment.succeeded',
-    'payment.failed',
-    'subscription.created',
-    'subscription.updated',
-    'subscription.cancelled',
-    'compliance.audit',
-    'template.created',
-    'template.updated'
-  ])).min(1, 'At least one event must be selected').optional(),
+  url: z
+    .string()
+    .url()
+    .refine((url) => url.startsWith('https://'), {
+      message: 'Webhook URL must use HTTPS',
+    })
+    .optional(),
+  events: z
+    .array(
+      z.enum([
+        'document.created',
+        'document.updated',
+        'document.signed',
+        'document.completed',
+        'document.deleted',
+        'user.created',
+        'user.updated',
+        'payment.succeeded',
+        'payment.failed',
+        'subscription.created',
+        'subscription.updated',
+        'subscription.cancelled',
+        'compliance.audit',
+        'template.created',
+        'template.updated',
+      ]),
+    )
+    .min(1, 'At least one event must be selected')
+    .optional(),
   isActive: z.boolean().optional(),
-  metadata: z.record(z.any()).optional()
+  metadata: z.record(z.any()).optional(),
 });
 
 interface RouteParams {
@@ -35,15 +44,15 @@ interface RouteParams {
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: RouteParams }
+  { params }: { params: RouteParams },
 ) {
   try {
     // Validate authentication
     const { user, error: authError } = await validateRequest(request);
     if (authError || !user) {
       return NextResponse.json(
-        { error: 'Authentication required' }, 
-        { status: 401 }
+        { error: 'Authentication required' },
+        { status: 401 },
       );
     }
 
@@ -52,13 +61,10 @@ export async function GET(
 
     // Get webhook details
     const subscriptions = await registry.getSubscriptions(user.uid);
-    const webhook = subscriptions.find(sub => sub.id === webhookId);
+    const webhook = subscriptions.find((sub) => sub.id === webhookId);
 
     if (!webhook) {
-      return NextResponse.json(
-        { error: 'Webhook not found' },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: 'Webhook not found' }, { status: 404 });
     }
 
     return NextResponse.json({
@@ -76,34 +82,33 @@ export async function GET(
         deliveryStats: webhook.deliveryStats,
         retryPolicy: webhook.retryPolicy,
         // Show partial secret for verification
-        secret: `${webhook.secret.substring(0, 8)}...`
-      }
+        secret: `${webhook.secret.substring(0, 8)}...`,
+      },
     });
-
   } catch (error: any) {
     console.error('Error fetching webhook:', error);
-    
+
     return NextResponse.json(
-      { 
+      {
         error: 'Failed to fetch webhook',
-        message: error.message 
-      }, 
-      { status: 500 }
+        message: error.message,
+      },
+      { status: 500 },
     );
   }
 }
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: RouteParams }
+  { params }: { params: RouteParams },
 ) {
   try {
     // Validate authentication
     const { user, error: authError } = await validateRequest(request);
     if (authError || !user) {
       return NextResponse.json(
-        { error: 'Authentication required' }, 
-        { status: 401 }
+        { error: 'Authentication required' },
+        { status: 401 },
       );
     }
 
@@ -112,14 +117,14 @@ export async function PATCH(
     // Parse request body
     const body = await request.json();
     const validation = UpdateWebhookSchema.safeParse(body);
-    
+
     if (!validation.success) {
       return NextResponse.json(
-        { 
+        {
           error: 'Invalid request data',
-          details: validation.error.issues 
-        }, 
-        { status: 400 }
+          details: validation.error.issues,
+        },
+        { status: 400 },
       );
     }
 
@@ -134,8 +139,8 @@ export async function PATCH(
         url: updates.url,
         events: updates.events as WebhookEvent[] | undefined,
         isActive: updates.isActive,
-        metadata: updates.metadata
-      }
+        metadata: updates.metadata,
+      },
     );
 
     // Log webhook update for audit
@@ -151,41 +156,40 @@ export async function PATCH(
         organizationId: updatedWebhook.organizationId,
         metadata: updatedWebhook.metadata,
         updatedAt: updatedWebhook.updatedAt,
-        deliveryStats: updatedWebhook.deliveryStats
-      }
+        deliveryStats: updatedWebhook.deliveryStats,
+      },
     });
-
   } catch (error: any) {
     console.error('Error updating webhook:', error);
-    
-    if (error.message.includes('not found') || error.message.includes('unauthorized')) {
-      return NextResponse.json(
-        { error: 'Webhook not found' },
-        { status: 404 }
-      );
+
+    if (
+      error.message.includes('not found') ||
+      error.message.includes('unauthorized')
+    ) {
+      return NextResponse.json({ error: 'Webhook not found' }, { status: 404 });
     }
-    
+
     return NextResponse.json(
-      { 
+      {
         error: 'Failed to update webhook',
-        message: error.message 
-      }, 
-      { status: 500 }
+        message: error.message,
+      },
+      { status: 500 },
     );
   }
 }
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: RouteParams }
+  { params }: { params: RouteParams },
 ) {
   try {
     // Validate authentication
     const { user, error: authError } = await validateRequest(request);
     if (authError || !user) {
       return NextResponse.json(
-        { error: 'Authentication required' }, 
-        { status: 401 }
+        { error: 'Authentication required' },
+        { status: 401 },
       );
     }
 
@@ -198,7 +202,7 @@ export async function DELETE(
     if (!success) {
       return NextResponse.json(
         { error: 'Failed to delete webhook' },
-        { status: 500 }
+        { status: 500 },
       );
     }
 
@@ -207,25 +211,24 @@ export async function DELETE(
 
     return NextResponse.json({
       success: true,
-      message: 'Webhook deleted successfully'
+      message: 'Webhook deleted successfully',
     });
-
   } catch (error: any) {
     console.error('Error deleting webhook:', error);
-    
-    if (error.message.includes('not found') || error.message.includes('unauthorized')) {
-      return NextResponse.json(
-        { error: 'Webhook not found' },
-        { status: 404 }
-      );
+
+    if (
+      error.message.includes('not found') ||
+      error.message.includes('unauthorized')
+    ) {
+      return NextResponse.json({ error: 'Webhook not found' }, { status: 404 });
     }
-    
+
     return NextResponse.json(
-      { 
+      {
         error: 'Failed to delete webhook',
-        message: error.message 
-      }, 
-      { status: 500 }
+        message: error.message,
+      },
+      { status: 500 },
     );
   }
 }

@@ -5,16 +5,13 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 
 // Base skeleton element
-export function SkeletonElement({ 
-  className = '', 
-  ...props 
+export function SkeletonElement({
+  className = '',
+  ...props
 }: React.HTMLAttributes<HTMLDivElement>) {
   return (
     <div
-      className={cn(
-        "animate-pulse bg-gray-200 rounded",
-        className
-      )}
+      className={cn('animate-pulse bg-gray-200 rounded', className)}
       {...props}
     />
   );
@@ -63,7 +60,17 @@ export function OrdersTableSkeleton({ rows = 5 }: { rows?: number }) {
             <table className="w-full">
               <thead>
                 <tr className="border-b bg-gray-50">
-                  {['Order', 'Customer', 'Document', 'Amount', 'Status', 'Risk', 'Location', 'Date', ''].map((header, index) => (
+                  {[
+                    'Order',
+                    'Customer',
+                    'Document',
+                    'Amount',
+                    'Status',
+                    'Risk',
+                    'Location',
+                    'Date',
+                    '',
+                  ].map((header, index) => (
                     <th key={index} className="px-4 py-3 text-left">
                       <SkeletonElement className="h-4 w-20" />
                     </th>
@@ -176,12 +183,15 @@ export function Customer360Skeleton() {
             <SkeletonElement key={index} className="h-10 w-24" />
           ))}
         </div>
-        
+
         {/* Tab content */}
         <Card>
           <CardContent className="p-6 space-y-4">
             {Array.from({ length: 6 }).map((_, index) => (
-              <div key={index} className="flex items-start gap-3 pb-3 border-b border-gray-100 last:border-b-0">
+              <div
+                key={index}
+                className="flex items-start gap-3 pb-3 border-b border-gray-100 last:border-b-0"
+              >
                 <SkeletonElement className="h-8 w-8 rounded-full" />
                 <div className="flex-1 space-y-2">
                   <SkeletonElement className="h-4 w-3/4" />
@@ -245,7 +255,10 @@ export function SessionReplaySkeleton() {
         <CardContent>
           <div className="space-y-3">
             {Array.from({ length: 8 }).map((_, index) => (
-              <div key={index} className="flex items-center justify-between p-2 rounded bg-gray-50">
+              <div
+                key={index}
+                className="flex items-center justify-between p-2 rounded bg-gray-50"
+              >
                 <div className="flex items-center gap-2">
                   <SkeletonElement className="h-4 w-20" />
                   <SkeletonElement className="h-4 w-32" />
@@ -304,7 +317,15 @@ export function SupportToolkitSkeleton() {
               <table className="w-full">
                 <thead>
                   <tr className="border-b bg-gray-50">
-                    {['Session ID', 'User', 'Duration', 'Documents', 'Errors', 'Created', 'Actions'].map((header, index) => (
+                    {[
+                      'Session ID',
+                      'User',
+                      'Duration',
+                      'Documents',
+                      'Errors',
+                      'Created',
+                      'Actions',
+                    ].map((header, index) => (
                       <th key={index} className="px-4 py-3 text-left">
                         <SkeletonElement className="h-4 w-20" />
                       </th>
@@ -326,18 +347,18 @@ export function SupportToolkitSkeleton() {
 }
 
 // Shimmer effect variant
-export function ShimmerSkeleton({ 
-  className = '', 
-  ...props 
+export function ShimmerSkeleton({
+  className = '',
+  ...props
 }: React.HTMLAttributes<HTMLDivElement>) {
   return (
     <div
       className={cn(
-        "relative overflow-hidden bg-gray-200 rounded",
-        "before:absolute before:inset-0",
-        "before:-translate-x-full before:animate-[shimmer_2s_infinite]",
-        "before:bg-gradient-to-r before:from-transparent before:via-white/60 before:to-transparent",
-        className
+        'relative overflow-hidden bg-gray-200 rounded',
+        'before:absolute before:inset-0',
+        'before:-translate-x-full before:animate-[shimmer_2s_infinite]',
+        'before:bg-gradient-to-r before:from-transparent before:via-white/60 before:to-transparent',
+        className,
       )}
       {...props}
     />
@@ -345,16 +366,16 @@ export function ShimmerSkeleton({
 }
 
 // Pulse skeleton variant
-export function PulseSkeleton({ 
-  className = '', 
-  ...props 
+export function PulseSkeleton({
+  className = '',
+  ...props
 }: React.HTMLAttributes<HTMLDivElement>) {
   return (
     <div
       className={cn(
-        "animate-pulse bg-gray-200 rounded",
-        "animate-[pulse_1.5s_ease-in-out_infinite]",
-        className
+        'animate-pulse bg-gray-200 rounded',
+        'animate-[pulse_1.5s_ease-in-out_infinite]',
+        className,
       )}
       {...props}
     />
@@ -362,18 +383,18 @@ export function PulseSkeleton({
 }
 
 // Wave skeleton variant
-export function WaveSkeleton({ 
-  className = '', 
-  ...props 
+export function WaveSkeleton({
+  className = '',
+  ...props
 }: React.HTMLAttributes<HTMLDivElement>) {
   return (
     <div
       className={cn(
-        "relative overflow-hidden bg-gray-200 rounded",
-        "before:absolute before:inset-0",
-        "before:-translate-x-full before:animate-[wave_1.5s_ease-in-out_infinite]",
-        "before:bg-gradient-to-r before:from-transparent before:via-gray-300 before:to-transparent",
-        className
+        'relative overflow-hidden bg-gray-200 rounded',
+        'before:absolute before:inset-0',
+        'before:-translate-x-full before:animate-[wave_1.5s_ease-in-out_infinite]',
+        'before:bg-gradient-to-r before:from-transparent before:via-gray-300 before:to-transparent',
+        className,
       )}
       {...props}
     />

@@ -4,7 +4,15 @@ export const partnershipDissolutionAgreementSchema = z.object({
   partnershipName: z.string().min(1),
   originalAgreementDate: z.string().min(1), // Date
   partnerNames: z.string().min(1),
-  dissolutionReason: z.enum(['mutual_agreement', 'expiration', 'partner_withdrawal', 'breach', 'bankruptcy', 'death', 'other']),
+  dissolutionReason: z.enum([
+    'mutual_agreement',
+    'expiration',
+    'partner_withdrawal',
+    'breach',
+    'bankruptcy',
+    'death',
+    'other',
+  ]),
   dissolutionDate: z.string().min(1), // Date
   businessAssets: z.string().min(1),
   businessLiabilities: z.string().min(1),

@@ -30,7 +30,7 @@ export const leaseAmendmentMeta: LegalDocument = {
         'lease modification',
         'rental amendment',
         'lease change',
-        'lease alteration'
+        'lease alteration',
       ],
     },
     es: {
@@ -40,7 +40,7 @@ export const leaseAmendmentMeta: LegalDocument = {
       aliases: [
         'modificación de arrendamiento',
         'cambio de alquiler',
-        'alteración de contrato'
+        'alteración de contrato',
       ],
     },
   },

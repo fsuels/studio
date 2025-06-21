@@ -21,7 +21,14 @@ export const LeaseAmendmentSchema = z.object({
   // Amendment Details
   amendmentDate: z.string().min(1, 'Amendment date is required'),
   amendmentNumber: z.number().default(1),
-  amendmentType: z.enum(['rent-change', 'term-extension', 'term-modification', 'add-provision', 'remove-provision', 'other']),
+  amendmentType: z.enum([
+    'rent-change',
+    'term-extension',
+    'term-modification',
+    'add-provision',
+    'remove-provision',
+    'other',
+  ]),
 
   // Rent Changes
   rentChange: z.boolean().default(false),
@@ -79,7 +86,9 @@ export const LeaseAmendmentSchema = z.object({
   useChange: z.boolean().default(false),
   permittedUse: z.string().optional(),
   businessUseAllowed: z.boolean().optional(),
-  smokingPolicy: z.enum(['allowed', 'prohibited', 'designated-areas']).optional(),
+  smokingPolicy: z
+    .enum(['allowed', 'prohibited', 'designated-areas'])
+    .optional(),
 
   // Late Fee Changes
   lateFeeChange: z.boolean().default(false),
@@ -90,11 +99,15 @@ export const LeaseAmendmentSchema = z.object({
   // Additional Provisions
   addedProvisions: z.array(z.string()).default([]),
   removedProvisions: z.array(z.string()).default([]),
-  modifiedProvisions: z.array(z.object({
-    provision: z.string(),
-    oldText: z.string(),
-    newText: z.string(),
-  })).default([]),
+  modifiedProvisions: z
+    .array(
+      z.object({
+        provision: z.string(),
+        oldText: z.string(),
+        newText: z.string(),
+      }),
+    )
+    .default([]),
 
   // Special Conditions
   specialConditions: z.string().optional(),

@@ -1308,10 +1308,7 @@
       "priority": "low",
       "category": "Search Optimization",
       "message": "Add search aliases to 22 documents",
-      "actions": [
-        "Run add-aliases script",
-        "Review document discoverability"
-      ]
+      "actions": ["Run add-aliases script", "Review document discoverability"]
     }
   ]
 }

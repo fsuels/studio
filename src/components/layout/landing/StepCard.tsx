@@ -19,8 +19,12 @@ const StepCard = React.memo(function StepCard({
         {number}
       </div>
       {icon && <div className="mb-4 text-primary">{icon}</div>}
-      <h3 className="text-xl font-semibold mb-2 text-card-foreground">{title}</h3>
-      {desc && <p className="text-muted-foreground text-sm flex-grow">{desc}</p>}
+      <h3 className="text-xl font-semibold mb-2 text-card-foreground">
+        {title}
+      </h3>
+      {desc && (
+        <p className="text-muted-foreground text-sm flex-grow">{desc}</p>
+      )}
     </div>
   );
 });

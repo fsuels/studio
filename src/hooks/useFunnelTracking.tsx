@@ -3,11 +3,11 @@
 
 import { useEffect, useRef, useCallback, useState } from 'react';
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
-import { 
-  funnelAnalytics, 
-  createFunnelStep, 
-  generateSessionId, 
-  type FunnelStep 
+import {
+  funnelAnalytics,
+  createFunnelStep,
+  generateSessionId,
+  type FunnelStep,
 } from '@/lib/funnel-analytics';
 
 // Main funnel tracking hook
@@ -15,11 +15,13 @@ export function useFunnelTracking() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const router = useRouter();
-  
+
   const sessionIdRef = useRef<string | null>(null);
   const stepTimerRef = useRef<number | null>(null);
   const pageLoadTimeRef = useRef<number>(Date.now());
-  const [currentStep, setCurrentStep] = useState<FunnelStep['step'] | null>(null);
+  const [currentStep, setCurrentStep] = useState<FunnelStep['step'] | null>(
+    null,
+  );
 
   // Initialize session
   useEffect(() => {
@@ -30,41 +32,49 @@ export function useFunnelTracking() {
   }, []);
 
   // Track funnel step
-  const trackStep = useCallback(async (
-    step: FunnelStep['step'],
-    metadata: Partial<FunnelStep['metadata']> = {}
-  ) => {
-    if (!sessionIdRef.current) return;
+  const trackStep = useCallback(
+    async (
+      step: FunnelStep['step'],
+      metadata: Partial<FunnelStep['metadata']> = {},
+    ) => {
+      if (!sessionIdRef.current) return;
 
-    const timeOnPreviousStep = stepTimerRef.current 
-      ? Date.now() - stepTimerRef.current 
-      : 0;
+      const timeOnPreviousStep = stepTimerRef.current
+        ? Date.now() - stepTimerRef.current
+        : 0;
 
-    const enhancedMetadata = {
-      ...metadata,
-      source: getTrafficSource(),
-      campaign: searchParams?.get('utm_campaign') || undefined,
-      referrer: document.referrer || undefined,
-      pageLoadTime: Date.now() - pageLoadTimeRef.current,
-      timeOnStep: timeOnPreviousStep > 0 ? timeOnPreviousStep / 1000 : undefined,
-      userAgent: navigator.userAgent,
-      ipAddress: await getClientIP(),
-      device: getDeviceType(),
-      browser: getBrowserInfo(),
-      os: getOSInfo(),
-      countryCode: await getCountryCode(),
-      scrollDepth: getScrollDepth(),
-      clickCount: getClickCount(),
-      formInteractions: getFormInteractions()
-    };
+      const enhancedMetadata = {
+        ...metadata,
+        source: getTrafficSource(),
+        campaign: searchParams?.get('utm_campaign') || undefined,
+        referrer: document.referrer || undefined,
+        pageLoadTime: Date.now() - pageLoadTimeRef.current,
+        timeOnStep:
+          timeOnPreviousStep > 0 ? timeOnPreviousStep / 1000 : undefined,
+        userAgent: navigator.userAgent,
+        ipAddress: await getClientIP(),
+        device: getDeviceType(),
+        browser: getBrowserInfo(),
+        os: getOSInfo(),
+        countryCode: await getCountryCode(),
+        scrollDepth: getScrollDepth(),
+        clickCount: getClickCount(),
+        formInteractions: getFormInteractions(),
+      };
 
-    const funnelStep = createFunnelStep(step, sessionIdRef.current, enhancedMetadata);
-    
-    await funnelAnalytics.trackStep(funnelStep);
-    
-    setCurrentStep(step);
-    stepTimerRef.current = Date.now();
-  }, [searchParams]);
+      const funnelStep = createFunnelStep(
+        step,
+        sessionIdRef.current,
+        enhancedMetadata,
+      );
+
+      await funnelAnalytics.trackStep(funnelStep);
+
+      setCurrentStep(step);
+      stepTimerRef.current = Date.now();
+    },
+    [searchParams],
+  );
 
   // Auto-track based on pathname
   useEffect(() => {
@@ -72,7 +82,7 @@ export function useFunnelTracking() {
     if (step) {
       trackStep(step, {
         documentType: inferDocumentType(pathname),
-        previousStep: currentStep || undefined
+        previousStep: currentStep || undefined,
       });
     }
   }, [pathname, trackStep, currentStep]);
@@ -80,7 +90,7 @@ export function useFunnelTracking() {
   return {
     trackStep,
     currentStep,
-    sessionId: sessionIdRef.current
+    sessionId: sessionIdRef.current,
   };
 }
 
@@ -88,63 +98,69 @@ export function useFunnelTracking() {
 export function useEventTracking() {
   const { trackStep, sessionId } = useFunnelTracking();
 
-  const trackEvent = useCallback(async (
-    eventName: string,
-    properties: Record<string, any> = {}
-  ) => {
-    if (!sessionId) return;
+  const trackEvent = useCallback(
+    async (eventName: string, properties: Record<string, any> = {}) => {
+      if (!sessionId) return;
 
-    // Map events to funnel steps
-    const stepMapping: Record<string, FunnelStep['step']> = {
-      'page_view': 'visit',
-      'document_selected': 'visit',
-      'form_started': 'draft',
-      'form_saved': 'draft',
-      'checkout_initiated': 'checkout',
-      'payment_started': 'checkout',
-      'document_signed': 'signed',
-      'order_completed': 'signed'
-    };
+      // Map events to funnel steps
+      const stepMapping: Record<string, FunnelStep['step']> = {
+        page_view: 'visit',
+        document_selected: 'visit',
+        form_started: 'draft',
+        form_saved: 'draft',
+        checkout_initiated: 'checkout',
+        payment_started: 'checkout',
+        document_signed: 'signed',
+        order_completed: 'signed',
+      };
 
-    const step = stepMapping[eventName];
-    if (step) {
-      await trackStep(step, properties);
-    }
+      const step = stepMapping[eventName];
+      if (step) {
+        await trackStep(step, properties);
+      }
 
-    // Also send to analytics service
-    await sendEventToAnalytics(eventName, properties, sessionId);
-  }, [trackStep, sessionId]);
+      // Also send to analytics service
+      await sendEventToAnalytics(eventName, properties, sessionId);
+    },
+    [trackStep, sessionId],
+  );
 
-  const trackFormInteraction = useCallback((
-    formName: string,
-    fieldName: string,
-    action: 'focus' | 'blur' | 'change' | 'error'
-  ) => {
-    trackEvent('form_interaction', {
-      formName,
-      fieldName,
-      action,
-      timestamp: new Date().toISOString()
-    });
-  }, [trackEvent]);
+  const trackFormInteraction = useCallback(
+    (
+      formName: string,
+      fieldName: string,
+      action: 'focus' | 'blur' | 'change' | 'error',
+    ) => {
+      trackEvent('form_interaction', {
+        formName,
+        fieldName,
+        action,
+        timestamp: new Date().toISOString(),
+      });
+    },
+    [trackEvent],
+  );
 
-  const trackErrorEncounter = useCallback((
-    errorType: string,
-    errorMessage: string,
-    context: Record<string, any> = {}
-  ) => {
-    trackEvent('error_encountered', {
-      errorType,
-      errorMessage,
-      context,
-      timestamp: new Date().toISOString()
-    });
-  }, [trackEvent]);
+  const trackErrorEncounter = useCallback(
+    (
+      errorType: string,
+      errorMessage: string,
+      context: Record<string, any> = {},
+    ) => {
+      trackEvent('error_encountered', {
+        errorType,
+        errorMessage,
+        context,
+        timestamp: new Date().toISOString(),
+      });
+    },
+    [trackEvent],
+  );
 
   const trackAbandonmentIntent = useCallback(() => {
     trackEvent('abandonment_intent', {
       trigger: 'exit_intent',
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
   }, [trackEvent]);
 
@@ -152,7 +168,7 @@ export function useEventTracking() {
     trackEvent,
     trackFormInteraction,
     trackErrorEncounter,
-    trackAbandonmentIntent
+    trackAbandonmentIntent,
   };
 }
 
@@ -170,24 +186,34 @@ export function useAbandonmentDetection() {
       if (inactivityTimerRef.current) {
         clearTimeout(inactivityTimerRef.current);
       }
-      
-      inactivityTimerRef.current = setTimeout(() => {
-        // User inactive for 5 minutes
-        trackAbandonmentIntent();
-        setShowRetentionOffer(true);
-      }, 5 * 60 * 1000);
+
+      inactivityTimerRef.current = setTimeout(
+        () => {
+          // User inactive for 5 minutes
+          trackAbandonmentIntent();
+          setShowRetentionOffer(true);
+        },
+        5 * 60 * 1000,
+      );
     };
 
-    const events = ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart', 'click'];
-    
-    events.forEach(event => {
+    const events = [
+      'mousedown',
+      'mousemove',
+      'keypress',
+      'scroll',
+      'touchstart',
+      'click',
+    ];
+
+    events.forEach((event) => {
       document.addEventListener(event, resetInactivityTimer, true);
     });
 
     resetInactivityTimer();
 
     return () => {
-      events.forEach(event => {
+      events.forEach((event) => {
         document.removeEventListener(event, resetInactivityTimer, true);
       });
       if (inactivityTimerRef.current) {
@@ -203,7 +229,7 @@ export function useAbandonmentDetection() {
         mouseLeaveBoundaryRef.current = true;
         trackAbandonmentIntent();
         setShowRetentionOffer(true);
-        
+
         // Reset after 10 seconds
         setTimeout(() => {
           mouseLeaveBoundaryRef.current = false;
@@ -212,7 +238,7 @@ export function useAbandonmentDetection() {
     };
 
     document.addEventListener('mouseleave', handleMouseLeave);
-    
+
     return () => {
       document.removeEventListener('mouseleave', handleMouseLeave);
     };
@@ -224,7 +250,7 @@ export function useAbandonmentDetection() {
 
   return {
     showRetentionOffer,
-    dismissRetentionOffer
+    dismissRetentionOffer,
   };
 }
 
@@ -235,38 +261,50 @@ export function useFormTracking(formName: string) {
   const [formState, setFormState] = useState({
     started: false,
     completed: false,
-    abandonmentRisk: 0
+    abandonmentRisk: 0,
   });
 
-  const trackFieldFocus = useCallback((fieldName: string) => {
-    if (!formState.started) {
-      setFormState(prev => ({ ...prev, started: true }));
-    }
-    trackFormInteraction(formName, fieldName, 'focus');
-  }, [formName, trackFormInteraction, formState.started]);
+  const trackFieldFocus = useCallback(
+    (fieldName: string) => {
+      if (!formState.started) {
+        setFormState((prev) => ({ ...prev, started: true }));
+      }
+      trackFormInteraction(formName, fieldName, 'focus');
+    },
+    [formName, trackFormInteraction, formState.started],
+  );
 
-  const trackFieldBlur = useCallback((fieldName: string, value: any) => {
-    trackFormInteraction(formName, fieldName, 'blur');
-    
-    // Calculate abandonment risk based on time spent and completion
-    const timeSpent = (Date.now() - startTimeRef.current) / 1000;
-    const riskScore = calculateFormAbandonmentRisk(timeSpent, value);
-    
-    setFormState(prev => ({ ...prev, abandonmentRisk: riskScore }));
-  }, [formName, trackFormInteraction]);
+  const trackFieldBlur = useCallback(
+    (fieldName: string, value: any) => {
+      trackFormInteraction(formName, fieldName, 'blur');
 
-  const trackFieldChange = useCallback((fieldName: string, value: any) => {
-    trackFormInteraction(formName, fieldName, 'change');
-  }, [formName, trackFormInteraction]);
+      // Calculate abandonment risk based on time spent and completion
+      const timeSpent = (Date.now() - startTimeRef.current) / 1000;
+      const riskScore = calculateFormAbandonmentRisk(timeSpent, value);
 
-  const trackFieldError = useCallback((fieldName: string, error: string) => {
-    trackFormInteraction(formName, fieldName, 'error');
-  }, [formName, trackFormInteraction]);
+      setFormState((prev) => ({ ...prev, abandonmentRisk: riskScore }));
+    },
+    [formName, trackFormInteraction],
+  );
+
+  const trackFieldChange = useCallback(
+    (fieldName: string, value: any) => {
+      trackFormInteraction(formName, fieldName, 'change');
+    },
+    [formName, trackFormInteraction],
+  );
+
+  const trackFieldError = useCallback(
+    (fieldName: string, error: string) => {
+      trackFormInteraction(formName, fieldName, 'error');
+    },
+    [formName, trackFormInteraction],
+  );
 
   const trackFormCompletion = useCallback(() => {
-    setFormState(prev => ({ ...prev, completed: true }));
+    setFormState((prev) => ({ ...prev, completed: true }));
     const timeToComplete = (Date.now() - startTimeRef.current) / 1000;
-    
+
     trackFormInteraction(formName, 'form_complete', 'change');
   }, [formName, trackFormInteraction]);
 
@@ -276,7 +314,7 @@ export function useFormTracking(formName: string) {
     trackFieldChange,
     trackFieldError,
     trackFormCompletion,
-    formState
+    formState,
   };
 }
 
@@ -288,15 +326,19 @@ export function usePerformanceTracking() {
     // Track page load performance
     const trackPagePerformance = () => {
       if (typeof window !== 'undefined' && window.performance) {
-        const navigation = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
-        
+        const navigation = performance.getEntriesByType(
+          'navigation',
+        )[0] as PerformanceNavigationTiming;
+
         if (navigation) {
           trackEvent('page_performance', {
             loadTime: navigation.loadEventEnd - navigation.loadEventStart,
-            domContentLoaded: navigation.domContentLoadedEventEnd - navigation.domContentLoadedEventStart,
+            domContentLoaded:
+              navigation.domContentLoadedEventEnd -
+              navigation.domContentLoadedEventStart,
             firstPaint: getFirstPaint(),
             firstContentfulPaint: getFirstContentfulPaint(),
-            largestContentfulPaint: getLargestContentfulPaint()
+            largestContentfulPaint: getLargestContentfulPaint(),
           });
         }
       }
@@ -322,10 +364,10 @@ export function usePerformanceTracking() {
             clsScore += (entry as any).value;
           }
         }
-        
+
         trackEvent('core_web_vitals', {
           metric: 'CLS',
-          value: clsScore
+          value: clsScore,
         });
       }).observe({ type: 'layout-shift', buffered: true });
 
@@ -334,7 +376,7 @@ export function usePerformanceTracking() {
         for (const entry of list.getEntries()) {
           trackEvent('core_web_vitals', {
             metric: 'FID',
-            value: (entry as any).processingStart - entry.startTime
+            value: (entry as any).processingStart - entry.startTime,
           });
         }
       }).observe({ type: 'first-input', buffered: true });
@@ -345,7 +387,7 @@ export function usePerformanceTracking() {
 // Utility functions
 function getOrCreateSessionId(): string {
   if (typeof window === 'undefined') return generateSessionId();
-  
+
   let sessionId = sessionStorage.getItem('funnel_session_id');
   if (!sessionId) {
     sessionId = generateSessionId();
@@ -355,9 +397,11 @@ function getOrCreateSessionId(): string {
 }
 
 function inferStepFromPath(pathname: string): FunnelStep['step'] | null {
-  if (pathname.includes('/docs/') && pathname.includes('/start')) return 'draft';
+  if (pathname.includes('/docs/') && pathname.includes('/start'))
+    return 'draft';
   if (pathname.includes('/checkout')) return 'checkout';
-  if (pathname.includes('/complete') || pathname.includes('/success')) return 'signed';
+  if (pathname.includes('/complete') || pathname.includes('/success'))
+    return 'signed';
   if (pathname.includes('/docs/')) return 'visit';
   return null;
 }
@@ -369,19 +413,19 @@ function inferDocumentType(pathname: string): string | undefined {
 
 function getTrafficSource(): string {
   if (typeof window === 'undefined') return 'unknown';
-  
+
   const referrer = document.referrer;
   if (!referrer) return 'direct';
-  
+
   try {
     const domain = new URL(referrer).hostname;
-    
+
     if (domain.includes('google')) return 'google';
     if (domain.includes('facebook') || domain.includes('fb')) return 'facebook';
     if (domain.includes('twitter') || domain.includes('t.co')) return 'twitter';
     if (domain.includes('linkedin')) return 'linkedin';
     if (domain.includes('youtube')) return 'youtube';
-    
+
     return 'referral';
   } catch {
     return 'unknown';
@@ -410,7 +454,7 @@ async function getCountryCode(): Promise<string> {
 
 function getDeviceType(): string {
   if (typeof window === 'undefined') return 'unknown';
-  
+
   const width = window.innerWidth;
   if (width < 768) return 'mobile';
   if (width < 1024) return 'tablet';
@@ -419,7 +463,7 @@ function getDeviceType(): string {
 
 function getBrowserInfo(): string {
   if (typeof window === 'undefined') return 'unknown';
-  
+
   const userAgent = navigator.userAgent;
   if (userAgent.includes('Chrome')) return 'chrome';
   if (userAgent.includes('Firefox')) return 'firefox';
@@ -430,7 +474,7 @@ function getBrowserInfo(): string {
 
 function getOSInfo(): string {
   if (typeof window === 'undefined') return 'unknown';
-  
+
   const userAgent = navigator.userAgent;
   if (userAgent.includes('Windows')) return 'windows';
   if (userAgent.includes('Mac')) return 'macos';
@@ -442,10 +486,11 @@ function getOSInfo(): string {
 
 function getScrollDepth(): number {
   if (typeof window === 'undefined') return 0;
-  
+
   const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-  const documentHeight = document.documentElement.scrollHeight - window.innerHeight;
-  
+  const documentHeight =
+    document.documentElement.scrollHeight - window.innerHeight;
+
   return documentHeight > 0 ? (scrollTop / documentHeight) * 100 : 0;
 }
 
@@ -460,46 +505,61 @@ function getClickCount(): number {
 
 let formInteractionCount = 0;
 if (typeof window !== 'undefined') {
-  document.addEventListener('focus', (e) => {
-    if ((e.target as HTMLElement).tagName === 'INPUT' || (e.target as HTMLElement).tagName === 'TEXTAREA') {
-      formInteractionCount++;
-    }
-  }, true);
+  document.addEventListener(
+    'focus',
+    (e) => {
+      if (
+        (e.target as HTMLElement).tagName === 'INPUT' ||
+        (e.target as HTMLElement).tagName === 'TEXTAREA'
+      ) {
+        formInteractionCount++;
+      }
+    },
+    true,
+  );
 }
 
 function getFormInteractions(): number {
   return formInteractionCount;
 }
 
-function calculateFormAbandonmentRisk(timeSpent: number, currentValue: any): number {
+function calculateFormAbandonmentRisk(
+  timeSpent: number,
+  currentValue: any,
+): number {
   let risk = 0;
-  
+
   // Time-based risk
   if (timeSpent > 300) risk += 0.3; // 5+ minutes
   if (timeSpent > 600) risk += 0.2; // 10+ minutes
-  
+
   // Completion-based risk
-  if (!currentValue || (typeof currentValue === 'string' && currentValue.length < 3)) {
+  if (
+    !currentValue ||
+    (typeof currentValue === 'string' && currentValue.length < 3)
+  ) {
     risk += 0.4;
   }
-  
+
   return Math.min(1, risk);
 }
 
 function getFirstPaint(): number | undefined {
   const paintEntries = performance.getEntriesByType('paint');
-  const firstPaint = paintEntries.find(entry => entry.name === 'first-paint');
+  const firstPaint = paintEntries.find((entry) => entry.name === 'first-paint');
   return firstPaint?.startTime;
 }
 
 function getFirstContentfulPaint(): number | undefined {
   const paintEntries = performance.getEntriesByType('paint');
-  const fcp = paintEntries.find(entry => entry.name === 'first-contentful-paint');
+  const fcp = paintEntries.find(
+    (entry) => entry.name === 'first-contentful-paint',
+  );
   return fcp?.startTime;
 }
 
 function getLargestContentfulPaint(): Promise<number | undefined> {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     new PerformanceObserver((list) => {
       const entries = list.getEntries();
       const lastEntry = entries[entries.length - 1];
@@ -509,9 +569,9 @@ function getLargestContentfulPaint(): Promise<number | undefined> {
 }
 
 async function sendEventToAnalytics(
-  eventName: string, 
-  properties: Record<string, any>, 
-  sessionId: string
+  eventName: string,
+  properties: Record<string, any>,
+  sessionId: string,
 ): Promise<void> {
   try {
     await fetch('/api/analytics/events', {
@@ -521,8 +581,8 @@ async function sendEventToAnalytics(
         event: eventName,
         properties,
         sessionId,
-        timestamp: new Date().toISOString()
-      })
+        timestamp: new Date().toISOString(),
+      }),
     });
   } catch (error) {
     console.error('Failed to send event to analytics:', error);

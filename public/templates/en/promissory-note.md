@@ -16,6 +16,7 @@
 ## PARTIES
 
 **BORROWER/MAKER** (Person/Entity borrowing money):
+
 - **Name**: {{borrowerName}}
 - **Address**: {{borrowerAddress}}, {{borrowerCity}}, {{borrowerState}} {{borrowerZip}}
 - **Phone**: {{borrowerPhone}}
@@ -23,6 +24,7 @@
 - **SSN/EIN**: {{borrowerTaxId}}
 
 **LENDER/PAYEE** (Person/Entity lending money):
+
 - **Name**: {{lenderName}}
 - **Address**: {{lenderAddress}}, {{lenderCity}}, {{lenderState}} {{lenderZip}}
 - **Phone**: {{lenderPhone}}
@@ -39,11 +41,13 @@ FOR VALUE RECEIVED, the Borrower promises to pay to the order of the Lender the 
 ## LOAN TERMS
 
 ### 1. PRINCIPAL AMOUNT
+
 - **Original Principal**: ${{principalAmount}}
 - **Disbursement Date**: {{disbursementDate}}
 - **Disbursement Method**: {{disbursementMethod}}
 
 ### 2. INTEREST PROVISIONS
+
 - **Interest Rate**: {{interestRate}}% per annum
 - **Interest Type**: {{interestType}}
   - [ ] Simple Interest
@@ -52,7 +56,9 @@ FOR VALUE RECEIVED, the Borrower promises to pay to the order of the Lender the 
 - **Accrual Start Date**: {{interestAccrualStartDate}}
 
 ### 3. PAYMENT TERMS
+
 **Payment Schedule**: {{paymentSchedule}}
+
 - [ ] Lump Sum Payment (due {{maturityDate}})
 - [ ] Monthly Installments
 - [ ] Quarterly Installments
@@ -61,6 +67,7 @@ FOR VALUE RECEIVED, the Borrower promises to pay to the order of the Lender the 
 - [ ] Custom Schedule
 
 **For Installment Payments:**
+
 - **Payment Amount**: ${{installmentAmount}} per {{paymentFrequency}}
 - **First Payment Due**: {{firstPaymentDate}}
 - **Payment Due Date**: {{paymentDueDay}} of each {{paymentFrequency}}
@@ -69,7 +76,9 @@ FOR VALUE RECEIVED, the Borrower promises to pay to the order of the Lender the 
 - **Payment Address**: {{paymentAddress}}
 
 ### 4. PAYMENT APPLICATION
+
 Payments will be applied in the following order:
+
 1. Late fees and charges
 2. Accrued interest
 3. Principal balance
@@ -80,7 +89,9 @@ Payments will be applied in the following order:
 ## SECURITY AND COLLATERAL
 
 ### 5. SECURITY PROVISIONS
+
 **Secured/Unsecured**: {{securityType}}
+
 - [ ] UNSECURED NOTE (no collateral)
 - [ ] SECURED NOTE (collateral required)
 
@@ -96,7 +107,9 @@ Payments will be applied in the following order:
 ## DEFAULT AND REMEDIES
 
 ### 6. EVENTS OF DEFAULT
+
 The following shall constitute events of default under this Note:
+
 - Failure to make any payment when due after {{gracePeriod}} days written notice
 - Breach of any covenant or agreement in this Note
 - Filing of bankruptcy by Borrower
@@ -105,15 +118,19 @@ The following shall constitute events of default under this Note:
 - {{additionalDefaultEvents}}
 
 ### 7. LATE FEES AND CHARGES
+
 - **Late Fee**: {{lateFeeAmount}} or {{lateFeePercentage}}% of overdue payment (whichever is {{lateFeeCalculation}})
 - **Grace Period**: {{gracePeriod}} days after due date
 - **Maximum Late Fee**: ${{maxLateFee}} (where required by law)
 
 ### 8. DEFAULT INTEREST RATE
+
 Upon default, interest shall accrue at {{defaultInterestRate}}% per annum (not to exceed maximum allowed by law).
 
 ### 9. REMEDIES UPON DEFAULT
+
 Upon default, Lender may:
+
 - Declare entire unpaid balance immediately due and payable
 - Exercise all rights and remedies available at law or equity
 - Collect reasonable attorneys' fees and costs
@@ -124,7 +141,9 @@ Upon default, Lender may:
 ## ADDITIONAL PROVISIONS
 
 ### 10. PREPAYMENT
+
 **Prepayment Allowed**: {{prepaymentAllowed}}
+
 - [ ] Full or partial prepayment allowed without penalty
 - [ ] Prepayment penalty: {{prepaymentPenalty}}
 - [ ] No prepayment allowed
@@ -132,18 +151,23 @@ Upon default, Lender may:
 **Prepayment Application**: Prepayments applied to {{prepaymentApplication}}
 
 ### 11. ACCELERATION CLAUSE
+
 Upon default, the entire unpaid balance of this Note shall become immediately due and payable without notice or demand.
 
 ### 12. COLLECTION COSTS
+
 Borrower agrees to pay all costs of collection, including reasonable attorneys' fees, court costs, and collection agency fees incurred by Lender in enforcing this Note.
 
 ### 13. WAIVERS
+
 Borrower waives presentment, demand, protest, and notice of dishonor.
 
 ### 14. MODIFICATION
+
 This Note may only be modified by written agreement signed by both parties.
 
 ### 15. ASSIGNMENT
+
 Lender may assign this Note without consent of Borrower. Borrower may not assign obligations under this Note without written consent of Lender.
 
 ---
@@ -151,18 +175,23 @@ Lender may assign this Note without consent of Borrower. Borrower may not assign
 ## LEGAL PROVISIONS
 
 ### 16. GOVERNING LAW
+
 This Note shall be governed by and construed in accordance with the laws of the State of {{governingLaw}}.
 
 ### 17. JURISDICTION
+
 Any legal action relating to this Note shall be brought in the courts of {{jurisdiction}}.
 
 ### 18. USURY SAVINGS CLAUSE
+
 If any interest charged exceeds the maximum rate allowed by law, such excess shall be applied to reduce the principal balance or returned to Borrower as required by law.
 
 ### 19. SEVERABILITY
+
 If any provision of this Note is invalid or unenforceable, the remaining provisions shall remain in full force and effect.
 
 ### 20. JOINT AND SEVERAL LIABILITY
+
 If more than one person signs as Borrower, their liability shall be joint and several.
 
 ---
@@ -170,6 +199,7 @@ If more than one person signs as Borrower, their liability shall be joint and se
 ## CO-SIGNER PROVISIONS (if applicable)
 
 ### 21. CO-SIGNER INFORMATION
+
 **Co-Signer Name**: {{coSignerName}}
 **Co-Signer Address**: {{coSignerAddress}}
 **Relationship to Borrower**: {{coSignerRelationship}}
@@ -183,18 +213,23 @@ The Co-Signer unconditionally guarantees payment of all obligations under this N
 ## ADDITIONAL TERMS AND CONDITIONS
 
 ### 22. PURPOSE OF LOAN
+
 **Loan Purpose**: {{loanPurpose}}
 
 ### 23. INSURANCE REQUIREMENTS (if applicable)
+
 {{insuranceRequirements}}
 
 ### 24. REPORTING REQUIREMENTS
+
 {{reportingRequirements}}
 
 ### 25. ADDITIONAL COVENANTS
+
 {{additionalCovenants}}
 
 ### 26. SPECIAL CONDITIONS
+
 {{specialConditions}}
 
 ---
@@ -206,7 +241,7 @@ The Co-Signer unconditionally guarantees payment of all obligations under this N
 **PRIMARY BORROWER:**
 By signing below, I acknowledge that I have read and understand this Promissory Note and agree to be bound by its terms.
 
-Signature: _________________________________________ Date: ___________
+Signature: ********\*\*\*\*********\_********\*\*\*\********* Date: \***\*\_\_\_\*\***
 {{borrowerName}}
 Print Name: {{borrowerPrintName}}
 Title (if entity): {{borrowerTitle}}
@@ -217,7 +252,7 @@ Title (if entity): {{borrowerTitle}}
 
 By signing below, I unconditionally guarantee the payment of this Note and waive notice of default and demand for payment.
 
-Co-Signer Signature: _________________________________________ Date: ___________
+Co-Signer Signature: ********\*\*\*\*********\_********\*\*\*\********* Date: \***\*\_\_\_\*\***
 {{coSignerName}}
 Print Name: {{coSignerPrintName}}
 
@@ -234,7 +269,7 @@ I certify under PENALTY OF PERJURY under the laws of the State of {{notaryState}
 
 WITNESS my hand and official seal.
 
-Notary Public Signature: _________________________________________
+Notary Public Signature: ********\*\*\*\*********\_********\*\*\*\*********
 {{notaryName}}, Notary Public
 My commission expires: {{notaryExpiration}}
 
@@ -244,8 +279,8 @@ My commission expires: {{notaryExpiration}}
 
 ## PAYMENT RECORD (Optional)
 
-| Payment # | Due Date | Payment Date | Amount Paid | Principal | Interest | Balance |
-|-----------|----------|--------------|-------------|-----------|----------|---------|
+| Payment #              | Due Date | Payment Date | Amount Paid | Principal | Interest | Balance |
+| ---------------------- | -------- | ------------ | ----------- | --------- | -------- | ------- |
 | {{paymentRecordTable}} |
 
 ---
@@ -256,7 +291,7 @@ The Lender acknowledges receipt of this executed Promissory Note and agrees to t
 
 **LENDER:**
 
-Signature: _________________________________________ Date: ___________
+Signature: ********\*\*\*\*********\_********\*\*\*\********* Date: \***\*\_\_\_\*\***
 {{lenderName}}
 Print Name: {{lenderPrintName}}
 Title (if entity): {{lenderTitle}}
@@ -266,15 +301,18 @@ Title (if entity): {{lenderTitle}}
 ## IMPORTANT DISCLOSURES
 
 ### TRUTH IN LENDING DISCLOSURES (if applicable)
+
 {{truthInLendingDisclosures}}
 
 ### INTEREST RATE INFORMATION
+
 - **Annual Percentage Rate (APR)**: {{apr}}%
 - **Finance Charge**: ${{financeCharge}}
 - **Amount Financed**: ${{amountFinanced}}
 - **Total of Payments**: ${{totalPayments}}
 
 ### STATE-SPECIFIC DISCLOSURES
+
 {{stateSpecificDisclosures}}
 
 ---
@@ -282,6 +320,7 @@ Title (if entity): {{lenderTitle}}
 ## LEGAL NOTICES
 
 ### NOTICE TO BORROWER
+
 - You are borrowing ${{principalAmount}} at {{interestRate}}% annual interest
 - Your payment schedule is described above
 - Late payments may result in additional fees
@@ -289,6 +328,7 @@ Title (if entity): {{lenderTitle}}
 - You may prepay this loan {{prepaymentTerms}}
 
 ### RIGHT TO CANCEL (if applicable)
+
 {{rightToCancelNotice}}
 
 ---
@@ -296,6 +336,7 @@ Title (if entity): {{lenderTitle}}
 **LEGAL DISCLAIMER**: This Promissory Note template is provided for general informational purposes and may not comply with all state and federal lending laws. Lending laws vary significantly by state and type of transaction. Interest rate limits, disclosure requirements, and collection procedures are regulated by state and federal law. It is strongly recommended to consult with a qualified attorney before executing any promissory note, particularly for larger amounts or complex transactions. This template does not constitute legal advice.
 
 **COMPLIANCE NOTICE**: Lenders should ensure compliance with:
+
 - State usury laws and interest rate limits
 - Truth in Lending Act (if applicable)
 - Fair Debt Collection Practices Act
@@ -305,6 +346,8 @@ Title (if entity): {{lenderTitle}}
 ---
 
 **Generated by 123LegalDoc**  
-*Professional Legal Documents Made Simple*
+_Professional Legal Documents Made Simple_
+
 ---
+
 © 2025 123LegalDoc · DIY form · Not legal advice · Terms: 123LegalDoc.com/terms

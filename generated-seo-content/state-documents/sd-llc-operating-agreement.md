@@ -47,7 +47,7 @@ Don't risk using generic templates that may not comply with South Dakota law. Ge
 
 [Create South Dakota LLC Operating Agreement]
 
-*Trusted by thousands of South Dakota businesses*
+_Trusted by thousands of South Dakota businesses_
 
 ---
 

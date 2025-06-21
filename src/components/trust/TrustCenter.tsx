@@ -3,7 +3,13 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { auditService } from '@/services/firebase-audit-service';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import TrustBadges from '@/components/shared/TrustBadges';
@@ -14,16 +20,16 @@ import { SOC2RequestForm } from './SOC2RequestForm';
 import { DataProcessingAgreement } from './DataProcessingAgreement';
 import { SecurityDetails } from './SecurityDetails';
 import { BugBountyProgram } from './BugBountyProgram';
-import { 
-  Shield, 
-  Lock, 
-  FileText, 
-  Award, 
-  Globe, 
+import {
+  Shield,
+  Lock,
+  FileText,
+  Award,
+  Globe,
   Zap,
   CheckCircle2,
   ExternalLink,
-  Download
+  Download,
 } from 'lucide-react';
 
 interface TrustCenterProps {
@@ -43,7 +49,7 @@ export function TrustCenter({ locale }: TrustCenterProps) {
           referrer: document.referrer,
           timestamp: new Date().toISOString(),
           pageUrl: window.location.href,
-          userId: user?.uid || 'anonymous'
+          userId: user?.uid || 'anonymous',
         });
       } catch (error) {
         console.error('Failed to log trust center view:', error);
@@ -80,8 +86,9 @@ export function TrustCenter({ locale }: TrustCenterProps) {
           </h1>
         </div>
         <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-          Enterprise-grade security, compliance certifications, and transparency for legal professionals. 
-          Proactively addressing your security questionnaires and due diligence requirements.
+          Enterprise-grade security, compliance certifications, and transparency
+          for legal professionals. Proactively addressing your security
+          questionnaires and due diligence requirements.
         </p>
         <TrustBadges className="mt-6" />
       </div>
@@ -124,7 +131,10 @@ export function TrustCenter({ locale }: TrustCenterProps) {
             </div>
           </CardHeader>
           <CardContent>
-            <Badge variant="secondary" className="bg-purple-100 text-purple-800">
+            <Badge
+              variant="secondary"
+              className="bg-purple-100 text-purple-800"
+            >
               Compliant
             </Badge>
           </CardContent>
@@ -138,7 +148,10 @@ export function TrustCenter({ locale }: TrustCenterProps) {
             </div>
           </CardHeader>
           <CardContent>
-            <Badge variant="secondary" className="bg-orange-100 text-orange-800">
+            <Badge
+              variant="secondary"
+              className="bg-orange-100 text-orange-800"
+            >
               Encrypted
             </Badge>
           </CardContent>
@@ -165,7 +178,7 @@ export function TrustCenter({ locale }: TrustCenterProps) {
       {/* Bottom Section */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <BugBountyProgram />
-        
+
         {/* Contact for Custom Compliance */}
         <Card>
           <CardHeader>
@@ -174,13 +187,15 @@ export function TrustCenter({ locale }: TrustCenterProps) {
               <CardTitle>Custom Compliance Requirements</CardTitle>
             </div>
             <CardDescription>
-              Need specific compliance documentation or have custom security requirements?
+              Need specific compliance documentation or have custom security
+              requirements?
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <p className="text-sm text-muted-foreground">
-              Our compliance team can provide custom documentation, additional certifications, 
-              and work with your security team to meet specific requirements.
+              Our compliance team can provide custom documentation, additional
+              certifications, and work with your security team to meet specific
+              requirements.
             </p>
             <div className="flex flex-col sm:flex-row gap-3">
               <Button variant="outline" className="flex-1">
@@ -199,9 +214,12 @@ export function TrustCenter({ locale }: TrustCenterProps) {
       {/* Footer */}
       <div className="text-center pt-8 border-t">
         <p className="text-sm text-muted-foreground">
-          All compliance documents and certifications are updated in real-time. 
+          All compliance documents and certifications are updated in real-time.
           Questions? Contact our compliance team at{' '}
-          <a href="mailto:compliance@123legaldoc.com" className="text-primary hover:underline">
+          <a
+            href="mailto:compliance@123legaldoc.com"
+            className="text-primary hover:underline"
+          >
             compliance@123legaldoc.com
           </a>
         </p>

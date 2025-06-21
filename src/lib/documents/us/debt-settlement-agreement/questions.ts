@@ -57,7 +57,12 @@ export const debtSettlementAgreementQuestions: Question[] = [
     required: true,
     placeholder: 'Amount per payment or lump sum',
   },
-  { id: 'paymentDate', label: 'First Payment Date', type: 'date', required: true },
+  {
+    id: 'paymentDate',
+    label: 'First Payment Date',
+    type: 'date',
+    required: true,
+  },
   {
     id: 'numberOfPayments',
     label: 'Number of Payments',

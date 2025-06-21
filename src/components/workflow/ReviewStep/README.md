@@ -5,6 +5,7 @@ This directory contains the modular breakdown of the ReviewStep component, organ
 ## Component Structure
 
 ### 1. **ReviewStepContainer.tsx**
+
 - **Purpose**: Main container component that manages the review step state and orchestrates other components
 - **Responsibilities**:
   - Form state management (editing, saving, canceling)
@@ -13,6 +14,7 @@ This directory contains the modular breakdown of the ReviewStep component, organ
   - Focus management for editing fields
 
 ### 2. **ReviewFieldItem.tsx**
+
 - **Purpose**: Individual field display and edit component
 - **Responsibilities**:
   - Renders field label, value, and edit button
@@ -21,6 +23,7 @@ This directory contains the modular breakdown of the ReviewStep component, organ
   - Displays validation errors
 
 ### 3. **FieldEditor.tsx**
+
 - **Purpose**: Handles the editing interface for different field types
 - **Responsibilities**:
   - Renders appropriate input components based on field type
@@ -29,6 +32,7 @@ This directory contains the modular breakdown of the ReviewStep component, organ
   - Provides Controller wrapper for form integration
 
 ### 4. **FieldValueRenderer.tsx**
+
 - **Purpose**: Displays field values in read-only mode
 - **Responsibilities**:
   - Formats values based on field type (boolean, select, date, etc.)
@@ -36,6 +40,7 @@ This directory contains the modular breakdown of the ReviewStep component, organ
   - Provides consistent value display formatting
 
 ### 5. **useFieldConfiguration.ts**
+
 - **Purpose**: Custom hook for processing schema and question configuration
 - **Responsibilities**:
   - Combines schema and question definitions
@@ -44,6 +49,7 @@ This directory contains the modular breakdown of the ReviewStep component, organ
   - Maintains field ordering from wizard flow
 
 ### 6. **types.ts**
+
 - **Purpose**: Type definitions shared across components
 - **Contains**:
   - `ReviewField` interface
@@ -65,7 +71,7 @@ This directory contains the modular breakdown of the ReviewStep component, organ
 import ReviewStep from '@/components/workflow/ReviewStep';
 
 // The main ReviewStep component automatically uses the modular structure
-<ReviewStep doc={document} locale="en" />
+<ReviewStep doc={document} locale="en" />;
 ```
 
 ## Benefits of This Structure

@@ -9,9 +9,9 @@ export const metadata = {
   offerRecordingHelp: false,
   basePrice: 15,
   states: 'all',
-  templatePaths: { 
-    en: "en/us/pour-over-will.md", 
-    es: "es/us/pour-over-will.md" 
+  templatePaths: {
+    en: 'en/us/pour-over-will.md',
+    es: 'es/us/pour-over-will.md',
   },
   upsellClauses: [],
   translations: {
@@ -19,13 +19,22 @@ export const metadata = {
       name: 'Pour-Over Will',
       description:
         'A will that transfers assets to your existing trust, ensuring trust administration of all assets.',
-      aliases: ['trust will', 'pour over will', 'trust transfer will', 'estate planning will'],
+      aliases: [
+        'trust will',
+        'pour over will',
+        'trust transfer will',
+        'estate planning will',
+      ],
     },
     es: {
       name: 'Testamento de Transferencia',
       description:
         'Un testamento que transfiere activos a su fideicomiso existente, asegurando la administración fiduciaria de todos los activos.',
-      aliases: ['testamento fideicomiso', 'testamento de transferencia', 'testamento de administración'],
+      aliases: [
+        'testamento fideicomiso',
+        'testamento de transferencia',
+        'testamento de administración',
+      ],
     },
   },
 };

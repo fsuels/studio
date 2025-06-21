@@ -65,8 +65,18 @@ export const promissoryNoteBalloonPaymentsQuestions: Question[] = [
     required: true,
     placeholder: 'e.g., 25000',
   },
-  { id: 'balloonPaymentDate', label: 'Balloon Payment Date', type: 'date', required: true },
-  { id: 'firstPaymentDate', label: 'First Payment Date', type: 'date', required: true },
+  {
+    id: 'balloonPaymentDate',
+    label: 'Balloon Payment Date',
+    type: 'date',
+    required: true,
+  },
+  {
+    id: 'firstPaymentDate',
+    label: 'First Payment Date',
+    type: 'date',
+    required: true,
+  },
   {
     id: 'governingLaw',
     label: 'Governing Law',

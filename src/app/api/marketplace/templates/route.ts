@@ -34,13 +34,18 @@ export async function GET(request: NextRequest) {
       jurisdiction: searchParams.jurisdiction || undefined,
       states: searchParams.states ? searchParams.states.split(',') : undefined,
       language: searchParams.language || undefined,
-      priceRange: searchParams.minPrice || searchParams.maxPrice ? {
-        min: parseInt(searchParams.minPrice || '0'),
-        max: parseInt(searchParams.maxPrice || '999999'),
-      } : undefined,
-      rating: searchParams.minRating ? {
-        min: parseFloat(searchParams.minRating),
-      } : undefined,
+      priceRange:
+        searchParams.minPrice || searchParams.maxPrice
+          ? {
+              min: parseInt(searchParams.minPrice || '0'),
+              max: parseInt(searchParams.maxPrice || '999999'),
+            }
+          : undefined,
+      rating: searchParams.minRating
+        ? {
+            min: parseFloat(searchParams.minRating),
+          }
+        : undefined,
       createdBy: searchParams.createdBy || undefined,
       verified: searchParams.verified === 'true' || undefined,
       featured: searchParams.featured === 'true' || undefined,
@@ -105,14 +110,16 @@ export async function GET(request: NextRequest) {
 
     // Handle pagination cursor
     if (page > 1 && searchParams.cursor) {
-      const cursorDoc = await getDoc(doc(db, 'marketplace-templates', searchParams.cursor));
+      const cursorDoc = await getDoc(
+        doc(db, 'marketplace-templates', searchParams.cursor),
+      );
       if (cursorDoc.exists()) {
         q = query(q, startAfter(cursorDoc));
       }
     }
 
     const snapshot = await getDocs(q);
-    let templates = snapshot.docs.map(doc => ({
+    let templates = snapshot.docs.map((doc) => ({
       id: doc.id,
       ...doc.data(),
     })) as MarketplaceTemplate[];
@@ -120,59 +127,62 @@ export async function GET(request: NextRequest) {
     // Apply client-side filters (for complex queries not supported by Firestore)
     if (filters.query) {
       const queryLower = filters.query.toLowerCase();
-      templates = templates.filter(template => 
-        template.name.toLowerCase().includes(queryLower) ||
-        template.description.toLowerCase().includes(queryLower) ||
-        template.tags.some(tag => tag.toLowerCase().includes(queryLower))
+      templates = templates.filter(
+        (template) =>
+          template.name.toLowerCase().includes(queryLower) ||
+          template.description.toLowerCase().includes(queryLower) ||
+          template.tags.some((tag) => tag.toLowerCase().includes(queryLower)),
       );
     }
 
     if (filters.tags && filters.tags.length > 0) {
-      templates = templates.filter(template =>
-        filters.tags!.some(tag => template.tags.includes(tag))
+      templates = templates.filter((template) =>
+        filters.tags!.some((tag) => template.tags.includes(tag)),
       );
     }
 
     if (filters.states && filters.states.length > 0) {
-      templates = templates.filter(template =>
-        template.states === 'all' ||
-        (Array.isArray(template.states) && 
-         filters.states!.some(state => template.states.includes(state)))
+      templates = templates.filter(
+        (template) =>
+          template.states === 'all' ||
+          (Array.isArray(template.states) &&
+            filters.states!.some((state) => template.states.includes(state))),
       );
     }
 
     if (filters.language) {
-      templates = templates.filter(template =>
-        template.languageSupport.includes(filters.language!)
+      templates = templates.filter((template) =>
+        template.languageSupport.includes(filters.language!),
       );
     }
 
     if (filters.priceRange) {
-      templates = templates.filter(template =>
-        template.pricing.basePrice >= filters.priceRange!.min &&
-        template.pricing.basePrice <= filters.priceRange!.max
+      templates = templates.filter(
+        (template) =>
+          template.pricing.basePrice >= filters.priceRange!.min &&
+          template.pricing.basePrice <= filters.priceRange!.max,
       );
     }
 
     if (filters.rating) {
-      templates = templates.filter(template =>
-        template.ratings.averageRating >= filters.rating!.min
+      templates = templates.filter(
+        (template) => template.ratings.averageRating >= filters.rating!.min,
       );
     }
 
     if (filters.createdBy) {
-      templates = templates.filter(template =>
-        template.createdBy === filters.createdBy
+      templates = templates.filter(
+        (template) => template.createdBy === filters.createdBy,
       );
     }
 
     // Calculate relevance scores if searching
-    const results: MarketplaceSearchResult[] = templates.map(template => {
+    const results: MarketplaceSearchResult[] = templates.map((template) => {
       let relevanceScore = 0;
 
       if (filters.query) {
         const query = filters.query.toLowerCase();
-        
+
         // Higher score for exact matches in name
         if (template.name.toLowerCase().includes(query)) {
           relevanceScore += 10;
@@ -184,7 +194,7 @@ export async function GET(request: NextRequest) {
         }
 
         // Lower score for tag matches
-        if (template.tags.some(tag => tag.toLowerCase().includes(query))) {
+        if (template.tags.some((tag) => tag.toLowerCase().includes(query))) {
           relevanceScore += 3;
         }
 
@@ -227,16 +237,15 @@ export async function GET(request: NextRequest) {
         filters,
       },
     });
-
   } catch (error) {
     console.error('Marketplace templates API error:', error);
-    
+
     return NextResponse.json(
-      { 
-        success: false, 
-        error: 'Failed to fetch templates' 
+      {
+        success: false,
+        error: 'Failed to fetch templates',
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -254,17 +263,13 @@ export async function POST(request: NextRequest) {
     // }
 
     const body = await request.json();
-    const {
-      template,
-      initialVersion,
-      submissionNotes,
-    } = body;
+    const { template, initialVersion, submissionNotes } = body;
 
     // Validate required fields
     if (!template.name || !template.description || !template.category) {
       return NextResponse.json(
         { error: 'Missing required template fields' },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -344,16 +349,15 @@ export async function POST(request: NextRequest) {
         message: 'Template submitted for review',
       },
     });
-
   } catch (error) {
     console.error('Template submission error:', error);
-    
+
     return NextResponse.json(
-      { 
-        success: false, 
-        error: 'Failed to submit template' 
+      {
+        success: false,
+        error: 'Failed to submit template',
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

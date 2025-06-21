@@ -69,7 +69,8 @@
       "Bash(\"/mnt/c/Users/Fsuels/OneDrive/Desktop/123legaldoc/studio-master/update-disclaimers.sh\")",
       "Bash(./update-footer.sh)",
       "Bash(./revert-footer.sh:*)",
-      "Bash(npx eslint:*)"
+      "Bash(npx eslint:*)",
+      "Bash(npx jest:*)"
     ],
     "deny": []
   }

@@ -37,7 +37,7 @@ export const petAgreementQuestions: FormQuestion[] = [
     id: 'petName',
     type: 'text',
     label: 'Pet Name',
-    placeholder: 'Enter your pet\'s name',
+    placeholder: "Enter your pet's name",
     required: true,
     group: 'pet',
   },

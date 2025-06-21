@@ -1,13 +1,13 @@
 // src/lib/legal-updates/ai-summarizer.ts
 import OpenAI from 'openai';
 import { adminDb } from '@/lib/firebase-admin';
-import { 
+import {
   RawLegalUpdate,
   ProcessedLegalUpdate,
   LegalUpdateSource,
   createUpdateId,
   COLLECTIONS,
-  ProcessedLegalUpdateSchema
+  ProcessedLegalUpdateSchema,
 } from './schema';
 
 interface SummarizationResult {
@@ -41,19 +41,19 @@ class LegalUpdateAISummarizer {
     if (!process.env.OPENAI_API_KEY) {
       throw new Error('OPENAI_API_KEY environment variable is required');
     }
-    
+
     this.openai = new OpenAI({
       apiKey: process.env.OPENAI_API_KEY,
     });
   }
 
   async processRawUpdate(
-    rawUpdate: RawLegalUpdate, 
-    source: LegalUpdateSource
+    rawUpdate: RawLegalUpdate,
+    source: LegalUpdateSource,
   ): Promise<ProcessedLegalUpdate | null> {
     try {
       console.log(`Processing raw update: ${rawUpdate.title}`);
-      
+
       const startTime = Date.now();
       const summarization = await this.summarizeUpdate(rawUpdate, source);
       const processingTime = Date.now() - startTime;
@@ -81,15 +81,15 @@ class LegalUpdateAISummarizer {
           processingTime,
           confidence: summarization.confidence,
           tags: summarization.tags,
-          relatedUpdates: [] // Will be populated later by similarity matching
+          relatedUpdates: [], // Will be populated later by similarity matching
         },
         publishedDate: rawUpdate.publishedDate,
         processedAt: new Date(),
         status: 'active',
         notificationStatus: {
           emailSent: false,
-          dashboardShown: false
-        }
+          dashboardShown: false,
+        },
       };
 
       // Validate the schema
@@ -103,7 +103,6 @@ class LegalUpdateAISummarizer {
 
       console.log(`Successfully processed update: ${processedUpdate.id}`);
       return processedUpdate;
-
     } catch (error) {
       console.error(`Error processing raw update ${rawUpdate.id}:`, error);
       await this.updateRawUpdateStatus(rawUpdate.id, 'failed');
@@ -113,26 +112,26 @@ class LegalUpdateAISummarizer {
 
   private async summarizeUpdate(
     rawUpdate: RawLegalUpdate,
-    source: LegalUpdateSource
+    source: LegalUpdateSource,
   ): Promise<SummarizationResult | null> {
     try {
       const prompt = this.buildSummarizationPrompt(rawUpdate, source);
-      
+
       const completion = await this.openai.chat.completions.create({
         model: this.model,
         messages: [
           {
             role: 'system',
-            content: this.getSystemPrompt()
+            content: this.getSystemPrompt(),
           },
           {
             role: 'user',
-            content: prompt
-          }
+            content: prompt,
+          },
         ],
         max_tokens: this.maxTokens,
         temperature: this.temperature,
-        response_format: { type: "json_object" }
+        response_format: { type: 'json_object' },
       });
 
       const content = completion.choices[0]?.message?.content;
@@ -142,7 +141,6 @@ class LegalUpdateAISummarizer {
 
       const result = JSON.parse(content);
       return this.validateAndTransformResult(result);
-
     } catch (error) {
       console.error('OpenAI API error:', error);
       return null;
@@ -171,7 +169,7 @@ Provide responses in JSON format with high confidence scores for actionable item
 
   private buildSummarizationPrompt(
     rawUpdate: RawLegalUpdate,
-    source: LegalUpdateSource
+    source: LegalUpdateSource,
   ): string {
     return `Analyze this legal update and provide a structured summary:
 
@@ -226,7 +224,7 @@ Guidelines:
     if (result.actionItems) {
       result.actionItems = result.actionItems.map((item: any) => ({
         ...item,
-        deadline: item.deadline ? new Date(item.deadline) : undefined
+        deadline: item.deadline ? new Date(item.deadline) : undefined,
       }));
     }
 
@@ -235,7 +233,11 @@ Guidelines:
     }
 
     // Validate required fields
-    if (!result.summary || !result.keyPoints || !Array.isArray(result.keyPoints)) {
+    if (
+      !result.summary ||
+      !result.keyPoints ||
+      !Array.isArray(result.keyPoints)
+    ) {
       throw new Error('Invalid summarization result structure');
     }
 
@@ -245,7 +247,9 @@ Guidelines:
     return result as SummarizationResult;
   }
 
-  private async saveProcessedUpdate(update: ProcessedLegalUpdate): Promise<void> {
+  private async saveProcessedUpdate(
+    update: ProcessedLegalUpdate,
+  ): Promise<void> {
     try {
       await adminDb
         .collection(COLLECTIONS.PROCESSED_LEGAL_UPDATES)
@@ -258,8 +262,8 @@ Guidelines:
   }
 
   private async updateRawUpdateStatus(
-    rawUpdateId: string, 
-    status: 'processed' | 'failed'
+    rawUpdateId: string,
+    status: 'processed' | 'failed',
   ): Promise<void> {
     try {
       await adminDb
@@ -284,7 +288,7 @@ Guidelines:
     const results = {
       processed: 0,
       failed: 0,
-      results: [] as any[]
+      results: [] as any[],
     };
 
     try {
@@ -296,11 +300,13 @@ Guidelines:
         .limit(20) // Process in batches
         .get();
 
-      console.log(`Found ${pendingSnapshot.docs.length} pending updates to process`);
+      console.log(
+        `Found ${pendingSnapshot.docs.length} pending updates to process`,
+      );
 
       for (const doc of pendingSnapshot.docs) {
         const rawUpdate = { id: doc.id, ...doc.data() } as RawLegalUpdate;
-        
+
         try {
           // Get source information
           const sourceDoc = await adminDb
@@ -312,15 +318,21 @@ Guidelines:
             throw new Error(`Source ${rawUpdate.sourceId} not found`);
           }
 
-          const source = { id: sourceDoc.id, ...sourceDoc.data() } as LegalUpdateSource;
-          const processedUpdate = await this.processRawUpdate(rawUpdate, source);
+          const source = {
+            id: sourceDoc.id,
+            ...sourceDoc.data(),
+          } as LegalUpdateSource;
+          const processedUpdate = await this.processRawUpdate(
+            rawUpdate,
+            source,
+          );
 
           if (processedUpdate) {
             results.processed++;
             results.results.push({
               id: rawUpdate.id,
               title: rawUpdate.title,
-              success: true
+              success: true,
             });
           } else {
             results.failed++;
@@ -328,35 +340,37 @@ Guidelines:
               id: rawUpdate.id,
               title: rawUpdate.title,
               success: false,
-              error: 'Processing failed'
+              error: 'Processing failed',
             });
           }
-
         } catch (error) {
           results.failed++;
           results.results.push({
             id: rawUpdate.id,
             title: rawUpdate.title,
             success: false,
-            error: error instanceof Error ? error.message : 'Unknown error'
+            error: error instanceof Error ? error.message : 'Unknown error',
           });
           console.error(`Failed to process update ${rawUpdate.id}:`, error);
         }
 
         // Add delay between API calls to respect rate limits
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        await new Promise((resolve) => setTimeout(resolve, 1000));
       }
-
     } catch (error) {
       console.error('Error processing pending updates:', error);
       throw error;
     }
 
-    console.log(`Processing complete: ${results.processed} successful, ${results.failed} failed`);
+    console.log(
+      `Processing complete: ${results.processed} successful, ${results.failed} failed`,
+    );
     return results;
   }
 
-  async reprocessUpdate(updateId: string): Promise<ProcessedLegalUpdate | null> {
+  async reprocessUpdate(
+    updateId: string,
+  ): Promise<ProcessedLegalUpdate | null> {
     try {
       // Get the raw update
       const rawDoc = await adminDb
@@ -380,11 +394,13 @@ Guidelines:
         throw new Error(`Source ${rawUpdate.sourceId} not found`);
       }
 
-      const source = { id: sourceDoc.id, ...sourceDoc.data() } as LegalUpdateSource;
+      const source = {
+        id: sourceDoc.id,
+        ...sourceDoc.data(),
+      } as LegalUpdateSource;
 
       // Reprocess
       return await this.processRawUpdate(rawUpdate, source);
-
     } catch (error) {
       console.error(`Error reprocessing update ${updateId}:`, error);
       return null;

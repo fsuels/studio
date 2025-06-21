@@ -9,9 +9,9 @@ export const metadata = {
   offerRecordingHelp: false,
   basePrice: 5,
   states: 'all',
-  templatePaths: { 
-    en: "en/us/independent-contractor-agreement.md", 
-    es: "es/us/independent-contractor-agreement.md" 
+  templatePaths: {
+    en: 'en/us/independent-contractor-agreement.md',
+    es: 'es/us/independent-contractor-agreement.md',
   },
   upsellClauses: [],
   translations: {

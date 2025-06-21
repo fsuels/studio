@@ -24,12 +24,18 @@ export const childSupportAgreementMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Child Support Agreement',
-      description: 'Comprehensive agreement establishing child support payment terms and responsibilities.',
-      aliases: ['child support contract', 'support payment agreement', 'custody support agreement'],
+      description:
+        'Comprehensive agreement establishing child support payment terms and responsibilities.',
+      aliases: [
+        'child support contract',
+        'support payment agreement',
+        'custody support agreement',
+      ],
     },
     es: {
       name: 'Acuerdo de Manutención Infantil',
-      description: 'Acuerdo integral que establece términos de pago y responsabilidades de manutención infantil.',
+      description:
+        'Acuerdo integral que establece términos de pago y responsabilidades de manutención infantil.',
       aliases: ['contrato de manutención', 'acuerdo de apoyo financiero'],
     },
   },

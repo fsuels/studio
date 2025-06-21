@@ -24,12 +24,18 @@ export const constructionContractMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Construction Contract',
-      description: 'Comprehensive contract for construction projects including new builds and major renovations.',
-      aliases: ['building contract', 'general contractor agreement', 'construction agreement'],
+      description:
+        'Comprehensive contract for construction projects including new builds and major renovations.',
+      aliases: [
+        'building contract',
+        'general contractor agreement',
+        'construction agreement',
+      ],
     },
     es: {
       name: 'Contrato de Construcción',
-      description: 'Contrato integral para proyectos de construcción incluyendo nuevas construcciones y renovaciones importantes.',
+      description:
+        'Contrato integral para proyectos de construcción incluyendo nuevas construcciones y renovaciones importantes.',
       aliases: ['contrato de construcción', 'acuerdo de contratista general'],
     },
   },

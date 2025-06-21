@@ -37,267 +37,278 @@ export interface WizardFormRef {
   navigateToField: (fieldId: string) => void;
 }
 
-const WizardForm = forwardRef<WizardFormRef, WizardFormProps>(function WizardForm({
-  locale,
-  doc,
-  onComplete,
-  onFieldFocus,
-}, ref) {
-  const { t } = useTranslation('common');
-  const { toast } = useToast();
-  const { isLoggedIn, isLoading: authIsLoading, user } = useAuth();
-  const router = useRouter();
-  const { getValues, trigger } = useFormContext();
+const WizardForm = forwardRef<WizardFormRef, WizardFormProps>(
+  function WizardForm({ locale, doc, onComplete, onFieldFocus }, ref) {
+    const { t } = useTranslation('common');
+    const { toast } = useToast();
+    const { isLoggedIn, isLoading: authIsLoading, user } = useAuth();
+    const router = useRouter();
+    const { getValues, trigger } = useFormContext();
 
-  // Component state
-  const [currentStepIndex, setCurrentStepIndex] = useState(0);
-  const [isReviewing, setIsReviewing] = useState(false);
-  const [isHydrated, setIsHydrated] = useState(false);
-  const [formIsSubmitting, setFormIsSubmitting] = useState(false);
-  const [isSavingDraft, setIsSavingDraft] = useState(false);
-  const [pendingSaveDraft, setPendingSaveDraft] = useState(false);
-  
-  // Modal state
-  const [showAuthModal, setShowAuthModal] = useState(false);
-  const [showPaymentModal, setShowPaymentModal] = useState(false);
-  const [paymentClientSecret, setPaymentClientSecret] = useState<string | null>(null);
+    // Component state
+    const [currentStepIndex, setCurrentStepIndex] = useState(0);
+    const [isReviewing, setIsReviewing] = useState(false);
+    const [isHydrated, setIsHydrated] = useState(false);
+    const [formIsSubmitting, setFormIsSubmitting] = useState(false);
+    const [isSavingDraft, setIsSavingDraft] = useState(false);
+    const [pendingSaveDraft, setPendingSaveDraft] = useState(false);
 
-  const liveRef = useRef<HTMLDivElement>(null);
+    // Modal state
+    const [showAuthModal, setShowAuthModal] = useState(false);
+    const [showPaymentModal, setShowPaymentModal] = useState(false);
+    const [paymentClientSecret, setPaymentClientSecret] = useState<
+      string | null
+    >(null);
 
-  // Get steps and progress
-  const { steps, totalSteps } = useWizardSteps(doc);
-  const progress = calculateProgress(currentStepIndex, totalSteps, isReviewing);
-  const currentField = steps[currentStepIndex];
+    const liveRef = useRef<HTMLDivElement>(null);
 
-  // Effects
-  useEffect(() => {
-    setIsHydrated(true);
-  }, []);
-
-  // Track current field focus for preview highlighting
-  useEffect(() => {
-    if (currentField && onFieldFocus && !isReviewing) {
-      onFieldFocus(currentField.id);
-    } else if (isReviewing && onFieldFocus) {
-      // Clear focus when in review mode
-      onFieldFocus(undefined);
-    }
-  }, [currentField, onFieldFocus, isReviewing]);
-
-  // Navigation to specific field
-  const navigateToField = useCallback((fieldId: string) => {
-    const fieldIndex = steps.findIndex(step => step.id === fieldId);
-    if (fieldIndex !== -1) {
-      setCurrentStepIndex(fieldIndex);
-      setIsReviewing(false);
-      
-      // Scroll to top
-      if (typeof window !== 'undefined') {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      }
-    }
-  }, [steps]);
-
-  // Expose navigation function through ref
-  useImperativeHandle(ref, () => ({
-    navigateToField,
-  }), [navigateToField]);
-
-  useEffect(() => {
-    if (pendingSaveDraft && !isLoggedIn && !authIsLoading) {
-      setShowAuthModal(true);
-    }
-  }, [pendingSaveDraft, isLoggedIn, authIsLoading]);
-
-  // Navigation handlers
-  const handlePreviousStep = useCallback(() => {
-    if (isReviewing) {
-      setIsReviewing(false);
-    } else if (currentStepIndex > 0) {
-      setCurrentStepIndex((prev) => prev - 1);
-    }
-    
-    if (typeof window !== 'undefined') {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-  }, [currentStepIndex, isReviewing]);
-
-  const handleNextStep = useCallback(async () => {
-    setFormIsSubmitting(true);
-
-    try {
-      // Validate current step
-      if (currentField) {
-        const isValid = await trigger(currentField.id);
-        if (!isValid) {
-          toast({
-            title: t('Validation Error'),
-            description: t('Please fix the errors before continuing.'),
-            variant: 'destructive',
-          });
-          return;
-        }
-      }
-
-      // Proceed to next step or review
-      if (currentStepIndex < totalSteps - 1) {
-        setCurrentStepIndex((prev) => prev + 1);
-      } else {
-        // If on the last question, validate all fields before moving to review
-        const allFieldsValid = await trigger();
-        if (allFieldsValid) {
-          setIsReviewing(true);
-        } else {
-          toast({
-            title: t('Validation Failed'),
-            description: t(
-              'Please correct all errors before reviewing your answers.',
-            ),
-            variant: 'destructive',
-          });
-          return;
-        }
-      }
-
-      if (typeof window !== 'undefined') {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      }
-
-      // Update screen reader
-      if (liveRef.current && currentField) {
-        liveRef.current.innerText = `${currentField.label} ${t('updated', { defaultValue: 'updated' })}`;
-        setTimeout(() => {
-          if (liveRef.current) liveRef.current.innerText = '';
-        }, 1000);
-      }
-    } finally {
-      setFormIsSubmitting(false);
-    }
-  }, [
-    currentStepIndex,
-    totalSteps,
-    isReviewing,
-    currentField,
-    trigger,
-    toast,
-    t,
-  ]);
-
-  // Draft saving
-  const handleSaveAndFinishLater = useCallback(async () => {
-    if (!isLoggedIn) {
-      setPendingSaveDraft(true);
-      return;
-    }
-
-    setIsSavingDraft(true);
-    try {
-      const formData = getValues();
-      await saveFormProgress(doc.id, formData, locale);
-      
-      toast({
-        title: t('wizard.draftSaved', { defaultValue: 'Draft Saved' }),
-        description: t('wizard.draftSavedDescription', {
-          defaultValue: 'Your progress has been saved. You can continue later from your dashboard.',
-        }),
-      });
-      
-      router.push(`/${locale}/dashboard`);
-    } catch (error) {
-      console.error('Failed to save draft:', error);
-      toast({
-        title: t('Error'),
-        description: t('wizard.draftSaveError', {
-          defaultValue: 'Failed to save draft. Please try again.',
-        }),
-        variant: 'destructive',
-      });
-    } finally {
-      setIsSavingDraft(false);
-      setPendingSaveDraft(false);
-    }
-  }, [getValues, doc.id, locale, router, toast, t, isLoggedIn]);
-
-  // Auth success handler
-  const handleAuthSuccess = useCallback(() => {
-    setShowAuthModal(false);
-    if (pendingSaveDraft) {
-      handleSaveAndFinishLater();
-    }
-  }, [pendingSaveDraft, handleSaveAndFinishLater]);
-
-  // Payment success handler
-  const handlePaymentSuccess = useCallback(() => {
-    localStorage.removeItem(`draft-${doc.id}-${locale}`);
-    setShowPaymentModal(false);
-    setPaymentClientSecret(null);
-    onComplete(`/${locale}/dashboard?paymentSuccess=true&docId=${doc.id}`);
-  }, [doc.id, locale, onComplete]);
-
-  // Show skeleton while loading auth or not hydrated
-  if (!isHydrated || authIsLoading) {
-    return (
-      <TooltipProvider>
-        <div className="bg-card rounded-xl shadow-2xl p-6 md:p-8 border border-border/50 backdrop-blur-sm">
-          <WizardSkeleton />
-        </div>
-      </TooltipProvider>
+    // Get steps and progress
+    const { steps, totalSteps } = useWizardSteps(doc);
+    const progress = calculateProgress(
+      currentStepIndex,
+      totalSteps,
+      isReviewing,
     );
-  }
+    const currentField = steps[currentStepIndex];
 
-  return (
-    <>
-      <TooltipProvider>
-        <div className="bg-card rounded-xl shadow-2xl p-6 md:p-8 border border-border/50 backdrop-blur-sm transition-all duration-300 hover:shadow-3xl">
-          <WizardProgress progress={progress} totalSteps={totalSteps} />
-          
-          <div className="min-h-[400px] flex flex-col justify-center">
-            <WizardFormContent
-              doc={doc}
-              locale={locale}
+    // Effects
+    useEffect(() => {
+      setIsHydrated(true);
+    }, []);
+
+    // Track current field focus for preview highlighting
+    useEffect(() => {
+      if (currentField && onFieldFocus && !isReviewing) {
+        onFieldFocus(currentField.id);
+      } else if (isReviewing && onFieldFocus) {
+        // Clear focus when in review mode
+        onFieldFocus(undefined);
+      }
+    }, [currentField, onFieldFocus, isReviewing]);
+
+    // Navigation to specific field
+    const navigateToField = useCallback(
+      (fieldId: string) => {
+        const fieldIndex = steps.findIndex((step) => step.id === fieldId);
+        if (fieldIndex !== -1) {
+          setCurrentStepIndex(fieldIndex);
+          setIsReviewing(false);
+
+          // Scroll to top
+          if (typeof window !== 'undefined') {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }
+        }
+      },
+      [steps],
+    );
+
+    // Expose navigation function through ref
+    useImperativeHandle(
+      ref,
+      () => ({
+        navigateToField,
+      }),
+      [navigateToField],
+    );
+
+    useEffect(() => {
+      if (pendingSaveDraft && !isLoggedIn && !authIsLoading) {
+        setShowAuthModal(true);
+      }
+    }, [pendingSaveDraft, isLoggedIn, authIsLoading]);
+
+    // Navigation handlers
+    const handlePreviousStep = useCallback(() => {
+      if (isReviewing) {
+        setIsReviewing(false);
+      } else if (currentStepIndex > 0) {
+        setCurrentStepIndex((prev) => prev - 1);
+      }
+
+      if (typeof window !== 'undefined') {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }, [currentStepIndex, isReviewing]);
+
+    const handleNextStep = useCallback(async () => {
+      setFormIsSubmitting(true);
+
+      try {
+        // Validate current step
+        if (currentField) {
+          const isValid = await trigger(currentField.id);
+          if (!isValid) {
+            toast({
+              title: t('Validation Error'),
+              description: t('Please fix the errors before continuing.'),
+              variant: 'destructive',
+            });
+            return;
+          }
+        }
+
+        // Proceed to next step or review
+        if (currentStepIndex < totalSteps - 1) {
+          setCurrentStepIndex((prev) => prev + 1);
+        } else {
+          // If on the last question, validate all fields before moving to review
+          const allFieldsValid = await trigger();
+          if (allFieldsValid) {
+            setIsReviewing(true);
+          } else {
+            toast({
+              title: t('Validation Failed'),
+              description: t(
+                'Please correct all errors before reviewing your answers.',
+              ),
+              variant: 'destructive',
+            });
+            return;
+          }
+        }
+
+        if (typeof window !== 'undefined') {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Update screen reader
+        if (liveRef.current && currentField) {
+          liveRef.current.innerText = `${currentField.label} ${t('updated', { defaultValue: 'updated' })}`;
+          setTimeout(() => {
+            if (liveRef.current) liveRef.current.innerText = '';
+          }, 1000);
+        }
+      } finally {
+        setFormIsSubmitting(false);
+      }
+    }, [
+      currentStepIndex,
+      totalSteps,
+      isReviewing,
+      currentField,
+      trigger,
+      toast,
+      t,
+    ]);
+
+    // Draft saving
+    const handleSaveAndFinishLater = useCallback(async () => {
+      if (!isLoggedIn) {
+        setPendingSaveDraft(true);
+        return;
+      }
+
+      setIsSavingDraft(true);
+      try {
+        const formData = getValues();
+        await saveFormProgress(doc.id, formData, locale);
+
+        toast({
+          title: t('wizard.draftSaved', { defaultValue: 'Draft Saved' }),
+          description: t('wizard.draftSavedDescription', {
+            defaultValue:
+              'Your progress has been saved. You can continue later from your dashboard.',
+          }),
+        });
+
+        router.push(`/${locale}/dashboard`);
+      } catch (error) {
+        console.error('Failed to save draft:', error);
+        toast({
+          title: t('Error'),
+          description: t('wizard.draftSaveError', {
+            defaultValue: 'Failed to save draft. Please try again.',
+          }),
+          variant: 'destructive',
+        });
+      } finally {
+        setIsSavingDraft(false);
+        setPendingSaveDraft(false);
+      }
+    }, [getValues, doc.id, locale, router, toast, t, isLoggedIn]);
+
+    // Auth success handler
+    const handleAuthSuccess = useCallback(() => {
+      setShowAuthModal(false);
+      if (pendingSaveDraft) {
+        handleSaveAndFinishLater();
+      }
+    }, [pendingSaveDraft, handleSaveAndFinishLater]);
+
+    // Payment success handler
+    const handlePaymentSuccess = useCallback(() => {
+      localStorage.removeItem(`draft-${doc.id}-${locale}`);
+      setShowPaymentModal(false);
+      setPaymentClientSecret(null);
+      onComplete(`/${locale}/dashboard?paymentSuccess=true&docId=${doc.id}`);
+    }, [doc.id, locale, onComplete]);
+
+    // Show skeleton while loading auth or not hydrated
+    if (!isHydrated || authIsLoading) {
+      return (
+        <TooltipProvider>
+          <div className="bg-card rounded-xl shadow-2xl p-6 md:p-8 border border-border/50 backdrop-blur-sm">
+            <WizardSkeleton />
+          </div>
+        </TooltipProvider>
+      );
+    }
+
+    return (
+      <>
+        <TooltipProvider>
+          <div className="bg-card rounded-xl shadow-2xl p-6 md:p-8 border border-border/50 backdrop-blur-sm transition-all duration-300 hover:shadow-3xl">
+            <WizardProgress progress={progress} totalSteps={totalSteps} />
+
+            <div className="min-h-[400px] flex flex-col justify-center">
+              <WizardFormContent
+                doc={doc}
+                locale={locale}
+                currentStepIndex={currentStepIndex}
+                isReviewing={isReviewing}
+                steps={steps}
+                isHydrated={isHydrated}
+                onFieldFocus={onFieldFocus}
+              />
+            </div>
+
+            <div className="sr-only" aria-live="polite" ref={liveRef}></div>
+
+            <WizardNavigation
               currentStepIndex={currentStepIndex}
+              totalSteps={totalSteps}
               isReviewing={isReviewing}
-              steps={steps}
-              isHydrated={isHydrated}
-              onFieldFocus={onFieldFocus}
+              formIsSubmitting={formIsSubmitting}
+              authIsLoading={authIsLoading}
+              isSavingDraft={isSavingDraft}
+              onPreviousStep={handlePreviousStep}
+              onNextStep={handleNextStep}
+              onSaveAndFinishLater={handleSaveAndFinishLater}
             />
           </div>
+        </TooltipProvider>
 
-          <div className="sr-only" aria-live="polite" ref={liveRef}></div>
+        <WizardAuth
+          showAuthModal={showAuthModal}
+          onClose={() => {
+            setShowAuthModal(false);
+            setPendingSaveDraft(false);
+          }}
+          onAuthSuccess={handleAuthSuccess}
+        />
 
-          <WizardNavigation
-            currentStepIndex={currentStepIndex}
-            totalSteps={totalSteps}
-            isReviewing={isReviewing}
-            formIsSubmitting={formIsSubmitting}
-            authIsLoading={authIsLoading}
-            isSavingDraft={isSavingDraft}
-            onPreviousStep={handlePreviousStep}
-            onNextStep={handleNextStep}
-            onSaveAndFinishLater={handleSaveAndFinishLater}
-          />
-        </div>
-      </TooltipProvider>
-
-      <WizardAuth
-        showAuthModal={showAuthModal}
-        onClose={() => {
-          setShowAuthModal(false);
-          setPendingSaveDraft(false);
-        }}
-        onAuthSuccess={handleAuthSuccess}
-      />
-
-      <WizardPayment
-        showPaymentModal={showPaymentModal}
-        paymentClientSecret={paymentClientSecret}
-        doc={doc}
-        locale={locale}
-        onClose={() => setShowPaymentModal(false)}
-        onSuccess={handlePaymentSuccess}
-      />
-    </>
-  );
-});
+        <WizardPayment
+          showPaymentModal={showPaymentModal}
+          paymentClientSecret={paymentClientSecret}
+          doc={doc}
+          locale={locale}
+          onClose={() => setShowPaymentModal(false)}
+          onSuccess={handlePaymentSuccess}
+        />
+      </>
+    );
+  },
+);
 
 export default WizardForm;

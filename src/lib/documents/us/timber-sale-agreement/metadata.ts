@@ -24,12 +24,18 @@ export const timberSaleAgreementMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Timber Sale Agreement',
-      description: 'Agreement for the sale and harvesting of timber from forestland.',
-      aliases: ['logging agreement', 'forest harvesting contract', 'tree cutting agreement'],
+      description:
+        'Agreement for the sale and harvesting of timber from forestland.',
+      aliases: [
+        'logging agreement',
+        'forest harvesting contract',
+        'tree cutting agreement',
+      ],
     },
     es: {
       name: 'Acuerdo de Venta de Madera',
-      description: 'Acuerdo para la venta y cosecha de madera de tierras forestales.',
+      description:
+        'Acuerdo para la venta y cosecha de madera de tierras forestales.',
       aliases: ['acuerdo de tala', 'contrato de cosecha forestal'],
     },
   },

@@ -8,9 +8,12 @@ export default async function ExperimentsPage() {
   return (
     <div className="container mx-auto py-6">
       <div className="mb-6">
-        <h1 className="text-2xl font-bold mb-2">A/B Testing & Experimentation</h1>
+        <h1 className="text-2xl font-bold mb-2">
+          A/B Testing & Experimentation
+        </h1>
         <p className="text-muted-foreground">
-          Manage conversion optimization experiments with statistical analysis and revenue impact measurement.
+          Manage conversion optimization experiments with statistical analysis
+          and revenue impact measurement.
         </p>
       </div>
       <ExperimentDashboard />
@@ -20,5 +23,6 @@ export default async function ExperimentsPage() {
 
 export const metadata = {
   title: 'A/B Testing & Experiments | Admin Dashboard',
-  description: 'Manage conversion optimization experiments with statistical analysis and Bayesian impact measurement',
+  description:
+    'Manage conversion optimization experiments with statistical analysis and Bayesian impact measurement',
 };

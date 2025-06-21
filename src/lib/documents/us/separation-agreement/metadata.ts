@@ -24,12 +24,14 @@ export const separationAgreementMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Separation Agreement',
-      description: 'General agreement for couples separating and dividing assets.',
+      description:
+        'General agreement for couples separating and dividing assets.',
       aliases: ['legal separation', 'separation contract'],
     },
     es: {
       name: 'Acuerdo de Separación',
-      description: 'Acuerdo general para parejas que se separan y dividen bienes.',
+      description:
+        'Acuerdo general para parejas que se separan y dividen bienes.',
       aliases: ['separación legal', 'contrato de separación'],
     },
   },

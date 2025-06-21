@@ -70,18 +70,20 @@ export class RevenueServingSystem {
     // Get template information
     const templateRef = doc(db, 'marketplace-templates', params.templateId);
     const templateSnap = await getDoc(templateRef);
-    
+
     if (!templateSnap.exists()) {
       throw new Error('Template not found');
     }
 
     const template = templateSnap.data() as MarketplaceTemplate;
-    
+
     // Calculate revenue split
     const creatorSharePercent = template.pricing.creatorShare || 70;
     const platformFeePercent = template.pricing.platformFee || 30;
-    
-    const creatorShare = Math.round((params.totalAmount * creatorSharePercent) / 100);
+
+    const creatorShare = Math.round(
+      (params.totalAmount * creatorSharePercent) / 100,
+    );
     const platformFee = params.totalAmount - creatorShare;
 
     // Create transaction record
@@ -92,25 +94,25 @@ export class RevenueServingSystem {
       installationId: params.installationId,
       creatorId: template.createdBy,
       buyerId: params.buyerId,
-      
+
       // Financial details
       totalAmount: params.totalAmount,
       creatorShare,
       platformFee,
       currency: params.currency,
-      
+
       // Share percentages
       creatorSharePercent,
       platformFeePercent,
-      
+
       // Payment references
       paymentIntentId: params.paymentIntentId,
       stripeTransferId: null, // Will be set when transfer is created
-      
+
       // Status tracking
       status: 'pending_transfer',
       createdAt: serverTimestamp(),
-      
+
       // Metadata
       templateName: template.name,
       templateVersion: template.currentVersion,
@@ -190,18 +192,20 @@ export class RevenueServingSystem {
         currency: params.currency,
         payoutPeriod: params.payoutPeriod,
         transactionIds: params.transactionIds,
-        
+
         // Stripe references
         stripeTransferId: transfer.id,
-        
+
         // Status
         status: 'completed',
         createdAt: serverTimestamp(),
         processedAt: serverTimestamp(),
-        
+
         // Metadata
         transactionCount: params.transactionIds.length,
-        averageTransactionValue: Math.round(params.amount / params.transactionIds.length),
+        averageTransactionValue: Math.round(
+          params.amount / params.transactionIds.length,
+        ),
       };
 
       await setDoc(payoutRef, payout);
@@ -233,7 +237,6 @@ export class RevenueServingSystem {
         amount: netAmount,
         fees: stripeFee,
       };
-
     } catch (error) {
       // Handle payout failure
       await this.handlePayoutFailure({
@@ -251,10 +254,13 @@ export class RevenueServingSystem {
   /**
    * Get creator earnings summary
    */
-  async getCreatorEarnings(creatorId: string, period?: {
-    startDate: Date;
-    endDate: Date;
-  }): Promise<{
+  async getCreatorEarnings(
+    creatorId: string,
+    period?: {
+      startDate: Date;
+      endDate: Date;
+    },
+  ): Promise<{
     totalEarnings: number;
     pendingEarnings: number;
     paidEarnings: number;
@@ -277,7 +283,7 @@ export class RevenueServingSystem {
     let transactionsQuery = query(
       collection(db, 'revenue-transactions'),
       where('creatorId', '==', creatorId),
-      orderBy('createdAt', 'desc')
+      orderBy('createdAt', 'desc'),
     );
 
     // Apply date filter if provided
@@ -285,17 +291,20 @@ export class RevenueServingSystem {
       transactionsQuery = query(
         transactionsQuery,
         where('createdAt', '>=', period.startDate),
-        where('createdAt', '<=', period.endDate)
+        where('createdAt', '<=', period.endDate),
       );
     }
 
     const transactionsSnap = await getDocs(transactionsQuery);
-    const transactions = transactionsSnap.docs.map(doc => doc.data());
+    const transactions = transactionsSnap.docs.map((doc) => doc.data());
 
     // Calculate aggregated metrics
-    const totalEarnings = transactions.reduce((sum, t) => sum + (t.creatorShare || 0), 0);
+    const totalEarnings = transactions.reduce(
+      (sum, t) => sum + (t.creatorShare || 0),
+      0,
+    );
     const pendingEarnings = transactions
-      .filter(t => t.status === 'pending_transfer')
+      .filter((t) => t.status === 'pending_transfer')
       .reduce((sum, t) => sum + (t.creatorShare || 0), 0);
     const paidEarnings = totalEarnings - pendingEarnings;
 
@@ -303,17 +312,25 @@ export class RevenueServingSystem {
     const currentMonth = new Date();
     currentMonth.setDate(1);
     const currentMonthEarnings = transactions
-      .filter(t => new Date(t.createdAt.toDate()) >= currentMonth)
+      .filter((t) => new Date(t.createdAt.toDate()) >= currentMonth)
       .reduce((sum, t) => sum + (t.creatorShare || 0), 0);
 
     // Transaction metrics
     const transactionCount = transactions.length;
-    const averageTransactionValue = transactionCount > 0 ? totalEarnings / transactionCount : 0;
+    const averageTransactionValue =
+      transactionCount > 0 ? totalEarnings / transactionCount : 0;
 
     // Top performing templates
-    const templateRevenue = new Map<string, { revenue: number; sales: number; name: string }>();
-    transactions.forEach(t => {
-      const existing = templateRevenue.get(t.templateId) || { revenue: 0, sales: 0, name: t.templateName || '' };
+    const templateRevenue = new Map<
+      string,
+      { revenue: number; sales: number; name: string }
+    >();
+    transactions.forEach((t) => {
+      const existing = templateRevenue.get(t.templateId) || {
+        revenue: 0,
+        sales: 0,
+        name: t.templateName || '',
+      };
       templateRevenue.set(t.templateId, {
         revenue: existing.revenue + (t.creatorShare || 0),
         sales: existing.sales + 1,
@@ -356,13 +373,16 @@ export class RevenueServingSystem {
   /**
    * Set up Stripe Connect for creator
    */
-  async setupStripeConnect(creatorId: string, params: {
-    email: string;
-    businessType: 'individual' | 'company';
-    country: string;
-    returnUrl: string;
-    refreshUrl: string;
-  }): Promise<{
+  async setupStripeConnect(
+    creatorId: string,
+    params: {
+      email: string;
+      businessType: 'individual' | 'company';
+      country: string;
+      returnUrl: string;
+      refreshUrl: string;
+    },
+  ): Promise<{
     accountId: string;
     onboardingUrl: string;
   }> {
@@ -400,7 +420,6 @@ export class RevenueServingSystem {
         accountId: account.id,
         onboardingUrl: accountLink.url,
       };
-
     } catch (error) {
       console.error('Stripe Connect setup error:', error);
       throw new Error('Failed to set up payment processing');
@@ -456,7 +475,7 @@ export class RevenueServingSystem {
       collection(db, 'revenue-transactions'),
       where('createdAt', '>=', params.period.startDate),
       where('createdAt', '<=', params.period.endDate),
-      orderBy('createdAt', 'desc')
+      orderBy('createdAt', 'desc'),
     );
 
     // Filter by creator if specified
@@ -465,16 +484,26 @@ export class RevenueServingSystem {
     }
 
     const transactionsSnap = await getDocs(q);
-    const transactions = transactionsSnap.docs.map(doc => doc.data());
+    const transactions = transactionsSnap.docs.map((doc) => doc.data());
 
     // Calculate summary metrics
-    const totalRevenue = transactions.reduce((sum, t) => sum + (t.totalAmount || 0), 0);
-    const creatorRevenue = transactions.reduce((sum, t) => sum + (t.creatorShare || 0), 0);
-    const platformRevenue = transactions.reduce((sum, t) => sum + (t.platformFee || 0), 0);
+    const totalRevenue = transactions.reduce(
+      (sum, t) => sum + (t.totalAmount || 0),
+      0,
+    );
+    const creatorRevenue = transactions.reduce(
+      (sum, t) => sum + (t.creatorShare || 0),
+      0,
+    );
+    const platformRevenue = transactions.reduce(
+      (sum, t) => sum + (t.platformFee || 0),
+      0,
+    );
     const transactionCount = transactions.length;
-    const uniqueCreators = new Set(transactions.map(t => t.creatorId)).size;
-    const uniqueBuyers = new Set(transactions.map(t => t.buyerId)).size;
-    const averageTransactionValue = transactionCount > 0 ? totalRevenue / transactionCount : 0;
+    const uniqueCreators = new Set(transactions.map((t) => t.creatorId)).size;
+    const uniqueBuyers = new Set(transactions.map((t) => t.buyerId)).size;
+    const averageTransactionValue =
+      transactionCount > 0 ? totalRevenue / transactionCount : 0;
 
     const summary = {
       totalRevenue,
@@ -510,7 +539,7 @@ export class RevenueServingSystem {
     const db = await this.ensureDb();
     const profileRef = doc(db, 'creator-profiles', creatorId);
     const profileSnap = await getDoc(profileRef);
-    
+
     if (!profileSnap.exists()) {
       throw new Error('Creator profile not found');
     }
@@ -521,7 +550,7 @@ export class RevenueServingSystem {
   private async updateCreatorEarnings(creatorId: string, updates: any) {
     const db = await this.ensureDb();
     const profileRef = doc(db, 'creator-profiles', creatorId);
-    
+
     // Get current values
     const profileSnap = await getDoc(profileRef);
     const currentData = profileSnap.data() || {};
@@ -529,15 +558,18 @@ export class RevenueServingSystem {
     const updateData: any = {};
 
     if (updates.pendingAmount !== undefined) {
-      updateData.pendingEarnings = (currentData.pendingEarnings || 0) + updates.pendingAmount;
+      updateData.pendingEarnings =
+        (currentData.pendingEarnings || 0) + updates.pendingAmount;
     }
 
     if (updates.paidAmount !== undefined) {
-      updateData.totalEarnings = (currentData.totalEarnings || 0) + updates.paidAmount;
+      updateData.totalEarnings =
+        (currentData.totalEarnings || 0) + updates.paidAmount;
     }
 
     if (updates.totalEarnings !== undefined) {
-      updateData.totalRevenue = (currentData.totalRevenue || 0) + updates.totalEarnings;
+      updateData.totalRevenue =
+        (currentData.totalRevenue || 0) + updates.totalEarnings;
     }
 
     if (updates.lastPayoutDate) {
@@ -552,7 +584,7 @@ export class RevenueServingSystem {
   private async updateTemplateRevenue(templateId: string, revenue: any) {
     const db = await this.ensureDb();
     const templateRef = doc(db, 'marketplace-templates', templateId);
-    
+
     await updateDoc(templateRef, {
       'stats.totalRevenue': revenue.totalRevenue,
       'stats.revenueThisMonth': revenue.totalRevenue, // Simplified
@@ -562,7 +594,7 @@ export class RevenueServingSystem {
 
   private async handlePayoutFailure(params: any) {
     const db = await this.ensureDb();
-    
+
     // Log the failure
     const failureRef = doc(collection(db, 'payout-failures'));
     await setDoc(failureRef, {
@@ -577,8 +609,8 @@ export class RevenueServingSystem {
 
   private calculateTemplateBreakdown(transactions: any[]) {
     const breakdown = new Map();
-    
-    transactions.forEach(t => {
+
+    transactions.forEach((t) => {
       const existing = breakdown.get(t.templateId) || {
         templateId: t.templateId,
         templateName: t.templateName || 'Unknown',
@@ -586,16 +618,16 @@ export class RevenueServingSystem {
         sales: 0,
         uniqueBuyers: new Set(),
       };
-      
+
       existing.revenue += t.totalAmount || 0;
       existing.sales += 1;
       existing.uniqueBuyers.add(t.buyerId);
-      
+
       breakdown.set(t.templateId, existing);
     });
 
     return Array.from(breakdown.values())
-      .map(item => ({
+      .map((item) => ({
         ...item,
         uniqueBuyers: item.uniqueBuyers.size,
       }))
@@ -604,8 +636,8 @@ export class RevenueServingSystem {
 
   private calculateCreatorBreakdown(transactions: any[]) {
     const breakdown = new Map();
-    
-    transactions.forEach(t => {
+
+    transactions.forEach((t) => {
       const existing = breakdown.get(t.creatorId) || {
         creatorId: t.creatorId,
         creatorName: 'Creator', // TODO: Get from profile
@@ -613,16 +645,16 @@ export class RevenueServingSystem {
         templates: new Set(),
         sales: 0,
       };
-      
+
       existing.revenue += t.creatorShare || 0;
       existing.templates.add(t.templateId);
       existing.sales += 1;
-      
+
       breakdown.set(t.creatorId, existing);
     });
 
     return Array.from(breakdown.values())
-      .map(item => ({
+      .map((item) => ({
         ...item,
         templates: item.templates.size,
       }))
@@ -631,18 +663,20 @@ export class RevenueServingSystem {
 
   private calculatePeriodBreakdown(transactions: any[]) {
     const breakdown = new Map();
-    
-    transactions.forEach(t => {
+
+    transactions.forEach((t) => {
       const date = new Date(t.createdAt.toDate()).toISOString().split('T')[0];
       const existing = breakdown.get(date) || { date, revenue: 0, sales: 0 };
-      
+
       existing.revenue += t.totalAmount || 0;
       existing.sales += 1;
-      
+
       breakdown.set(date, existing);
     });
 
-    return Array.from(breakdown.values()).sort((a, b) => a.date.localeCompare(b.date));
+    return Array.from(breakdown.values()).sort((a, b) =>
+      a.date.localeCompare(b.date),
+    );
   }
 }
 

@@ -24,12 +24,18 @@ export const licensingAgreementGeneralMeta: LegalDocument = {
   translations: {
     en: {
       name: 'General Licensing Agreement',
-      description: 'Comprehensive licensing agreement for various types of intellectual property.',
-      aliases: ['general license agreement', 'IP licensing contract', 'licensing contract'],
+      description:
+        'Comprehensive licensing agreement for various types of intellectual property.',
+      aliases: [
+        'general license agreement',
+        'IP licensing contract',
+        'licensing contract',
+      ],
     },
     es: {
       name: 'Acuerdo General de Licencia',
-      description: 'Acuerdo integral de licencia para varios tipos de propiedad intelectual.',
+      description:
+        'Acuerdo integral de licencia para varios tipos de propiedad intelectual.',
       aliases: ['contrato general de licencia', 'acuerdo de licenciamiento'],
     },
   },

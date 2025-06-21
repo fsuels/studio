@@ -47,7 +47,7 @@ export default function FolderModal({ open, onClose }: FolderModalProps) {
     }
 
     setIsCreating(true);
-    
+
     // Close modal immediately
     onClose();
 
@@ -55,7 +55,7 @@ export default function FolderModal({ open, onClose }: FolderModalProps) {
     const tmpId = `tmp-${Date.now()}`;
     const prev = queryClient.getQueryData(key);
     const folderName = name || t('UntitledFolder', 'Untitled Folder');
-    
+
     // Add optimistic update
     queryClient.setQueryData(key, (old: any = []) => [
       ...old,
@@ -65,7 +65,9 @@ export default function FolderModal({ open, onClose }: FolderModalProps) {
     try {
       const newId = await createFolder(user.uid, folderName);
       queryClient.setQueryData(key, (old: any = []) =>
-        old.map((f: any) => (f.id === tmpId ? { id: newId, name: folderName } : f)),
+        old.map((f: any) =>
+          f.id === tmpId ? { id: newId, name: folderName } : f,
+        ),
       );
       queryClient.invalidateQueries({ queryKey: key });
       toast({ title: t('Folder created') });
@@ -75,9 +77,9 @@ export default function FolderModal({ open, onClose }: FolderModalProps) {
         queryClient.setQueryData(key, prev);
       }
       console.error('[FolderModal] create folder failed', err);
-      toast({ 
-        title: t('Error creating folder'), 
-        variant: 'destructive' 
+      toast({
+        title: t('Error creating folder'),
+        variant: 'destructive',
       });
     }
   };
@@ -96,11 +98,14 @@ export default function FolderModal({ open, onClose }: FolderModalProps) {
   };
 
   return (
-    <Dialog open={open} onOpenChange={(isOpen) => {
-      if (!isOpen && !isCreating) {
-        onClose();
-      }
-    }}>
+    <Dialog
+      open={open}
+      onOpenChange={(isOpen) => {
+        if (!isOpen && !isCreating) {
+          onClose();
+        }
+      }}
+    >
       <DialogContent className="sm:max-w-sm bg-card border-border p-6 rounded-lg shadow-xl">
         <DialogHeader>
           <DialogTitle>{t('newFolder', 'New Folder')}</DialogTitle>
@@ -108,30 +113,26 @@ export default function FolderModal({ open, onClose }: FolderModalProps) {
             {t('enterFolderName', 'Enter a name for your new folder.')}
           </DialogDescription>
         </DialogHeader>
-        
-        <Input 
-          value={name} 
+
+        <Input
+          value={name}
           onChange={(e) => setName(e.target.value)}
           onKeyDown={handleKeyDown}
           placeholder={t('UntitledFolder', 'Untitled Folder')}
           disabled={isCreating}
           autoFocus
         />
-        
+
         <DialogFooter className="mt-4">
-          <Button 
-            variant="outline" 
-            onClick={handleClose} 
+          <Button
+            variant="outline"
+            onClick={handleClose}
             type="button"
             disabled={isCreating}
           >
             {t('cancel', 'Cancel')}
           </Button>
-          <Button 
-            onClick={handleCreate} 
-            type="button" 
-            disabled={isCreating}
-          >
+          <Button onClick={handleCreate} type="button" disabled={isCreating}>
             {isCreating && <Spinner className="mr-2 h-4 w-4" />}
             {t('create', 'Create')}
           </Button>

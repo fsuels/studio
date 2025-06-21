@@ -30,7 +30,7 @@ Indianapolis offers a dynamic business environment with opportunities across ind
 
 [Start Your Indianapolis Legal Document]
 
-*Trusted by hundreds of Indianapolis businesses*
+_Trusted by hundreds of Indianapolis businesses_
 
 ---
 

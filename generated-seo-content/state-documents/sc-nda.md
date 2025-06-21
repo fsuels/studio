@@ -47,7 +47,7 @@ Don't risk using generic templates that may not comply with South Carolina law. 
 
 [Create South Carolina Non-Disclosure Agreement]
 
-*Trusted by thousands of South Carolina businesses*
+_Trusted by thousands of South Carolina businesses_
 
 ---
 

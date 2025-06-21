@@ -5,9 +5,14 @@ export const covid19HealthScreeningSchema = z.object({
   organization: z.object({
     name: z.string().min(1, 'Organization name is required'),
     address: z.string().min(1, 'Address is required'),
-    phone: z.string().regex(/^\(\d{3}\) \d{3}-\d{4}$/, 'Phone must be in format (XXX) XXX-XXXX'),
+    phone: z
+      .string()
+      .regex(
+        /^\(\d{3}\) \d{3}-\d{4}$/,
+        'Phone must be in format (XXX) XXX-XXXX',
+      ),
     contactPerson: z.string().optional(),
-    email: z.string().email('Invalid email address').optional()
+    email: z.string().email('Invalid email address').optional(),
   }),
 
   // Screening Configuration
@@ -17,7 +22,7 @@ export const covid19HealthScreeningSchema = z.object({
     temperatureCheck: z.boolean(),
     temperatureThreshold: z.number().min(90).max(110).optional(),
     requiresSignature: z.boolean(),
-    retentionPeriod: z.number().min(1).max(365) // days
+    retentionPeriod: z.number().min(1).max(365), // days
   }),
 
   // Personal Information Fields
@@ -27,11 +32,15 @@ export const covid19HealthScreeningSchema = z.object({
     requireDepartment: z.boolean(),
     requireContactInfo: z.boolean(),
     requireEmergencyContact: z.boolean(),
-    additionalFields: z.array(z.object({
-      fieldName: z.string(),
-      fieldType: z.enum(['text', 'number', 'boolean', 'date']),
-      required: z.boolean()
-    })).optional()
+    additionalFields: z
+      .array(
+        z.object({
+          fieldName: z.string(),
+          fieldType: z.enum(['text', 'number', 'boolean', 'date']),
+          required: z.boolean(),
+        }),
+      )
+      .optional(),
   }),
 
   // Health Questions
@@ -49,9 +58,14 @@ export const covid19HealthScreeningSchema = z.object({
       nausea: z.boolean().default(true),
       congestion: z.boolean().default(true),
       diarrhea: z.boolean().default(true),
-      customSymptoms: z.array(z.string()).optional()
+      customSymptoms: z.array(z.string()).optional(),
     }),
-    timeframeForSymptoms: z.enum(['24_hours', '48_hours', '72_hours', '14_days'])
+    timeframeForSymptoms: z.enum([
+      '24_hours',
+      '48_hours',
+      '72_hours',
+      '14_days',
+    ]),
   }),
 
   // Exposure Questions
@@ -61,7 +75,7 @@ export const covid19HealthScreeningSchema = z.object({
     householdMemberQuestion: z.boolean().default(true),
     healthcareFacilityQuestion: z.boolean(),
     customExposureQuestions: z.array(z.string()).optional(),
-    timeframeForExposure: z.enum(['7_days', '10_days', '14_days'])
+    timeframeForExposure: z.enum(['7_days', '10_days', '14_days']),
   }),
 
   // Testing Questions
@@ -70,7 +84,7 @@ export const covid19HealthScreeningSchema = z.object({
     pendingResultsQuestion: z.boolean(),
     positiveTestQuestion: z.boolean().default(true),
     quarantineQuestion: z.boolean().default(true),
-    isolationQuestion: z.boolean().default(true)
+    isolationQuestion: z.boolean().default(true),
   }),
 
   // Vaccination Questions
@@ -78,7 +92,7 @@ export const covid19HealthScreeningSchema = z.object({
     includeVaccinationStatus: z.boolean(),
     fullyVaccinatedDefinition: z.string().optional(),
     boosterStatus: z.boolean(),
-    vaccinationProofRequired: z.boolean()
+    vaccinationProofRequired: z.boolean(),
   }),
 
   // Risk Assessment
@@ -88,18 +102,23 @@ export const covid19HealthScreeningSchema = z.object({
     chronicConditions: z.boolean(),
     immunocompromised: z.boolean(),
     pregnancyStatus: z.boolean(),
-    customRiskFactors: z.array(z.string()).optional()
+    customRiskFactors: z.array(z.string()).optional(),
   }),
 
   // Response Protocols
   responseProtocols: z.object({
-    failedScreeningAction: z.enum(['deny_entry', 'isolate', 'send_home', 'refer_medical']),
+    failedScreeningAction: z.enum([
+      'deny_entry',
+      'isolate',
+      'send_home',
+      'refer_medical',
+    ]),
     temperatureFailAction: z.enum(['recheck', 'deny_entry', 'isolate']),
     documentationRequired: z.boolean(),
     notificationRequired: z.boolean(),
     managerNotification: z.boolean(),
     hrNotification: z.boolean(),
-    healthDeptNotification: z.boolean()
+    healthDeptNotification: z.boolean(),
   }),
 
   // Privacy and Compliance
@@ -109,7 +128,7 @@ export const covid19HealthScreeningSchema = z.object({
     dataUseStatement: z.string(),
     consentLanguage: z.string(),
     shareWithHealthDept: z.boolean(),
-    shareWithManagement: z.boolean()
+    shareWithManagement: z.boolean(),
   }),
 
   // Instructions and Disclaimers
@@ -117,11 +136,15 @@ export const covid19HealthScreeningSchema = z.object({
     preScreeningInstructions: z.string().optional(),
     completionInstructions: z.string().optional(),
     healthDisclaimer: z.string().optional(),
-    emergencyContacts: z.array(z.object({
-      title: z.string(),
-      phone: z.string(),
-      email: z.string().optional()
-    })).optional()
+    emergencyContacts: z
+      .array(
+        z.object({
+          title: z.string(),
+          phone: z.string(),
+          email: z.string().optional(),
+        }),
+      )
+      .optional(),
   }),
 
   // Digital Options
@@ -130,8 +153,10 @@ export const covid19HealthScreeningSchema = z.object({
     qrCodeAccess: z.boolean(),
     mobileOptimized: z.boolean(),
     autoSubmission: z.boolean(),
-    timestampSubmissions: z.boolean()
-  })
+    timestampSubmissions: z.boolean(),
+  }),
 });
 
-export type Covid19HealthScreening = z.infer<typeof covid19HealthScreeningSchema>;
+export type Covid19HealthScreening = z.infer<
+  typeof covid19HealthScreeningSchema
+>;

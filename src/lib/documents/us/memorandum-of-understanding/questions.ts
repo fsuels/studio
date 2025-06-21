@@ -132,7 +132,8 @@ export const memorandumOfUnderstandingQuestions: FormQuestion[] = [
     id: 'party1Responsibilities',
     type: 'textarea',
     label: 'First Party Responsibilities',
-    placeholder: 'List specific responsibilities and commitments of the first party',
+    placeholder:
+      'List specific responsibilities and commitments of the first party',
     required: true,
     group: 'responsibilities',
   },
@@ -140,7 +141,8 @@ export const memorandumOfUnderstandingQuestions: FormQuestion[] = [
     id: 'party2Responsibilities',
     type: 'textarea',
     label: 'Second Party Responsibilities',
-    placeholder: 'List specific responsibilities and commitments of the second party',
+    placeholder:
+      'List specific responsibilities and commitments of the second party',
     required: true,
     group: 'responsibilities',
   },

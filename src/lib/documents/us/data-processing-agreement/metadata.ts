@@ -24,12 +24,14 @@ export const dataProcessingAgreementMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Data Processing Agreement',
-      description: 'Agreement governing the processing and handling of personal data and information.',
+      description:
+        'Agreement governing the processing and handling of personal data and information.',
       aliases: ['DPA', 'data handling agreement', 'privacy agreement'],
     },
     es: {
       name: 'Acuerdo de Procesamiento de Datos',
-      description: 'Acuerdo que rige el procesamiento y manejo de datos personales e información.',
+      description:
+        'Acuerdo que rige el procesamiento y manejo de datos personales e información.',
       aliases: ['DPA', 'acuerdo de manejo de datos'],
     },
   },

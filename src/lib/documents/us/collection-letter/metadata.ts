@@ -26,13 +26,23 @@ export const collectionLetterMeta: LegalDocument = {
       name: 'Collection Letter',
       description:
         'Send professional debt collection letters to recover outstanding payments with legal compliance.',
-      aliases: ['debt collection letter', 'payment demand', 'collections notice', 'past due notice'],
+      aliases: [
+        'debt collection letter',
+        'payment demand',
+        'collections notice',
+        'past due notice',
+      ],
     },
     es: {
       name: 'Carta de Cobranza',
       description:
         'Enviar cartas profesionales de cobranza de deudas para recuperar pagos pendientes con cumplimiento legal.',
-      aliases: ['carta de cobranza de deuda', 'demanda de pago', 'aviso de cobranza', 'aviso de vencimiento'],
+      aliases: [
+        'carta de cobranza de deuda',
+        'demanda de pago',
+        'aviso de cobranza',
+        'aviso de vencimiento',
+      ],
     },
   },
 };

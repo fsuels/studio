@@ -10,7 +10,9 @@ export function MetricsDashboardExample() {
   return (
     <div className="space-y-6">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold tracking-tight">Analytics Dashboard</h1>
+        <h1 className="text-3xl font-bold tracking-tight">
+          Analytics Dashboard
+        </h1>
         <p className="text-muted-foreground">
           Real-time metrics for your legal document platform
         </p>
@@ -26,7 +28,7 @@ export function MetricsDashboardExample() {
           height={200}
           refreshInterval={30000}
         />
-        
+
         <ChartCard
           queryKey="revenue"
           title="Revenue"
@@ -35,7 +37,7 @@ export function MetricsDashboardExample() {
           height={200}
           refreshInterval={60000}
         />
-        
+
         <ChartCard
           queryKey="churn_rate"
           title="Churn Rate"
@@ -55,7 +57,7 @@ export function MetricsDashboardExample() {
           chartType="line"
           height={300}
         />
-        
+
         <ChartCard
           queryKey="avg_order_value"
           title="Average Order Value"
@@ -74,7 +76,7 @@ export function MetricsDashboardExample() {
           chartType="bar"
           height={300}
         />
-        
+
         <ChartCard
           queryKey="user_retention"
           title="User Retention"
@@ -93,7 +95,7 @@ export function MetricsDashboardExample() {
           chartType="pie"
           height={350}
         />
-        
+
         <ChartCard
           queryKey="session_duration"
           title="Average Session Duration"
@@ -112,7 +114,7 @@ export function MetricsDashboardExample() {
           chartType="line"
           height={300}
         />
-        
+
         <ChartCard
           queryKey="fraud_prevention_savings"
           title="Fraud Prevention Savings"
@@ -139,20 +141,27 @@ export function MetricsDashboardExample() {
         <h3 className="text-lg font-semibold mb-4">Implementation Guide</h3>
         <div className="space-y-3 text-sm text-muted-foreground">
           <p>
-            <strong>ChartCard Usage:</strong> Each ChartCard automatically fetches data from 
-            <code className="mx-1 px-1 bg-background rounded">/api/metrics?metric=QUERY_KEY</code>
+            <strong>ChartCard Usage:</strong> Each ChartCard automatically
+            fetches data from
+            <code className="mx-1 px-1 bg-background rounded">
+              /api/metrics?metric=QUERY_KEY
+            </code>
           </p>
           <p>
-            <strong>Data Validation:</strong> All responses are validated using Zod schemas for type safety
+            <strong>Data Validation:</strong> All responses are validated using
+            Zod schemas for type safety
           </p>
           <p>
-            <strong>Real-time Updates:</strong> SWR handles caching, revalidation, and automatic refreshing
+            <strong>Real-time Updates:</strong> SWR handles caching,
+            revalidation, and automatic refreshing
           </p>
           <p>
-            <strong>Responsive Design:</strong> Charts automatically resize and are mobile-friendly
+            <strong>Responsive Design:</strong> Charts automatically resize and
+            are mobile-friendly
           </p>
           <p>
-            <strong>Error Handling:</strong> Built-in error states and retry mechanisms
+            <strong>Error Handling:</strong> Built-in error states and retry
+            mechanisms
           </p>
         </div>
       </div>

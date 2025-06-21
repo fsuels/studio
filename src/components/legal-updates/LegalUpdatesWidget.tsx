@@ -2,14 +2,20 @@
 
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/hooks/useAuth';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { 
-  Scale, 
-  Clock, 
-  AlertTriangle, 
-  CheckCircle2, 
+import {
+  Scale,
+  Clock,
+  AlertTriangle,
+  CheckCircle2,
   ExternalLink,
   ChevronRight,
   Filter,
@@ -18,7 +24,7 @@ import {
   Bookmark,
   Share,
   X,
-  RefreshCw
+  RefreshCw,
 } from 'lucide-react';
 import { ProcessedLegalUpdate } from '@/lib/legal-updates/schema';
 
@@ -35,11 +41,11 @@ interface UpdateWithStatus extends ProcessedLegalUpdate {
   isDismissed?: boolean;
 }
 
-export function LegalUpdatesWidget({ 
-  className = '', 
+export function LegalUpdatesWidget({
+  className = '',
   maxItems = 5,
   showFilters = true,
-  showActions = true
+  showActions = true,
 }: LegalUpdatesWidgetProps) {
   const { user } = useAuth();
   const [updates, setUpdates] = useState<UpdateWithStatus[]>([]);
@@ -59,18 +65,17 @@ export function LegalUpdatesWidget({
       const queryParams = new URLSearchParams({
         limit: maxItems.toString(),
         filter,
-        userId: user?.uid || 'anonymous'
+        userId: user?.uid || 'anonymous',
       });
 
       const response = await fetch(`/api/legal-updates/feed?${queryParams}`);
-      
+
       if (!response.ok) {
         throw new Error('Failed to fetch legal updates');
       }
 
       const data = await response.json();
       setUpdates(data.updates || []);
-
     } catch (error) {
       console.error('Error fetching legal updates:', error);
       setError('Failed to load legal updates');
@@ -80,8 +85,8 @@ export function LegalUpdatesWidget({
   };
 
   const handleUpdateAction = async (
-    updateId: string, 
-    action: 'read' | 'bookmark' | 'dismiss' | 'share'
+    updateId: string,
+    action: 'read' | 'bookmark' | 'dismiss' | 'share',
   ) => {
     try {
       const response = await fetch('/api/legal-updates/action', {
@@ -92,7 +97,7 @@ export function LegalUpdatesWidget({
         body: JSON.stringify({
           updateId,
           action,
-          userId: user?.uid
+          userId: user?.uid,
         }),
       });
 
@@ -101,27 +106,30 @@ export function LegalUpdatesWidget({
       }
 
       // Update local state
-      setUpdates(prev => prev.map(update => {
-        if (update.id === updateId) {
-          switch (action) {
-            case 'read':
-              return { ...update, isRead: true };
-            case 'bookmark':
-              return { ...update, isBookmarked: !update.isBookmarked };
-            case 'dismiss':
-              return { ...update, isDismissed: true };
-            default:
-              return update;
+      setUpdates((prev) =>
+        prev.map((update) => {
+          if (update.id === updateId) {
+            switch (action) {
+              case 'read':
+                return { ...update, isRead: true };
+              case 'bookmark':
+                return { ...update, isBookmarked: !update.isBookmarked };
+              case 'dismiss':
+                return { ...update, isDismissed: true };
+              default:
+                return update;
+            }
           }
-        }
-        return update;
-      }));
+          return update;
+        }),
+      );
 
       if (action === 'share') {
         // Handle share action (copy link, etc.)
-        await navigator.clipboard.writeText(window.location.origin + '/legal-updates/' + updateId);
+        await navigator.clipboard.writeText(
+          window.location.origin + '/legal-updates/' + updateId,
+        );
       }
-
     } catch (error) {
       console.error('Error performing action:', error);
     }
@@ -157,9 +165,9 @@ export function LegalUpdatesWidget({
     }
   };
 
-  const filteredUpdates = updates.filter(update => {
+  const filteredUpdates = updates.filter((update) => {
     if (update.isDismissed) return false;
-    
+
     switch (filter) {
       case 'urgent':
         return update.urgency === 'critical' || update.urgency === 'high';
@@ -206,7 +214,12 @@ export function LegalUpdatesWidget({
           <div className="text-center py-4">
             <AlertTriangle className="h-8 w-8 text-red-500 mx-auto mb-2" />
             <p className="text-sm text-muted-foreground">{error}</p>
-            <Button variant="outline" size="sm" onClick={fetchLegalUpdates} className="mt-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={fetchLegalUpdates}
+              className="mt-2"
+            >
               <RefreshCw className="h-4 w-4" />
               Retry
             </Button>
@@ -225,7 +238,7 @@ export function LegalUpdatesWidget({
             <CardTitle>Legal Updates</CardTitle>
             {filteredUpdates.length > 0 && (
               <Badge variant="secondary">
-                {filteredUpdates.filter(u => !u.isRead).length} new
+                {filteredUpdates.filter((u) => !u.isRead).length} new
               </Badge>
             )}
           </div>
@@ -270,12 +283,11 @@ export function LegalUpdatesWidget({
           <div className="text-center py-8">
             <CheckCircle2 className="h-8 w-8 text-green-500 mx-auto mb-2" />
             <p className="text-sm text-muted-foreground">
-              {filter === 'urgent' 
-                ? 'No urgent updates at this time' 
+              {filter === 'urgent'
+                ? 'No urgent updates at this time'
                 : filter === 'unread'
-                ? 'All updates have been read'
-                : 'No legal updates available'
-              }
+                  ? 'All updates have been read'
+                  : 'No legal updates available'}
             </p>
           </div>
         ) : (
@@ -291,7 +303,9 @@ export function LegalUpdatesWidget({
                   <div className="flex items-start gap-3 flex-1">
                     {getUrgencyIcon(update.urgency)}
                     <div className="flex-1 space-y-1">
-                      <h4 className="font-medium leading-tight">{update.title}</h4>
+                      <h4 className="font-medium leading-tight">
+                        {update.title}
+                      </h4>
                       <p className="text-sm text-muted-foreground">
                         {update.summary}
                       </p>
@@ -300,8 +314,14 @@ export function LegalUpdatesWidget({
                           {update.jurisdiction}
                         </Badge>
                         {update.compliance.hasDeadline && (
-                          <Badge variant="outline" className="text-xs text-red-600">
-                            Deadline: {new Date(update.compliance.deadline!).toLocaleDateString()}
+                          <Badge
+                            variant="outline"
+                            className="text-xs text-red-600"
+                          >
+                            Deadline:{' '}
+                            {new Date(
+                              update.compliance.deadline!,
+                            ).toLocaleDateString()}
                           </Badge>
                         )}
                       </div>
@@ -325,7 +345,9 @@ export function LegalUpdatesWidget({
 
                 {update.actionItems.length > 0 && (
                   <div className="bg-background/50 rounded-lg p-3">
-                    <h5 className="font-medium text-sm mb-2">Action Required:</h5>
+                    <h5 className="font-medium text-sm mb-2">
+                      Action Required:
+                    </h5>
                     <ul className="text-sm space-y-1">
                       {update.actionItems.slice(0, 2).map((action, index) => (
                         <li key={index} className="flex items-start gap-2">
@@ -351,9 +373,13 @@ export function LegalUpdatesWidget({
                       <Button
                         variant="ghost"
                         size="sm"
-                        onClick={() => handleUpdateAction(update.id, 'bookmark')}
+                        onClick={() =>
+                          handleUpdateAction(update.id, 'bookmark')
+                        }
                       >
-                        <Bookmark className={`h-3 w-3 ${update.isBookmarked ? 'fill-current' : ''}`} />
+                        <Bookmark
+                          className={`h-3 w-3 ${update.isBookmarked ? 'fill-current' : ''}`}
+                        />
                       </Button>
                       <Button
                         variant="ghost"

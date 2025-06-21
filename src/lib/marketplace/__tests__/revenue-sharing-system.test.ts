@@ -1,6 +1,10 @@
 // src/lib/marketplace/__tests__/revenue-sharing-system.test.ts
-import { RevenueShareSystem } from '../revenue-sharing-system';
-import type { PurchaseEvent, PayoutRequest, RevenueReport } from '@/types/marketplace';
+import { RevenueServingSystem } from '../revenue-sharing-system';
+import type {
+  PurchaseEvent,
+  PayoutRequest,
+  RevenueReport,
+} from '@/types/marketplace';
 
 // Mock Stripe
 jest.mock('stripe', () => {
@@ -23,6 +27,11 @@ jest.mock('stripe', () => {
   }));
 });
 
+// Mock Firebase first without referencing mockDb
+jest.mock('@/lib/firebase', () => ({
+  getDb: jest.fn(),
+}));
+
 const mockDb = {
   collection: jest.fn(),
   doc: jest.fn(),
@@ -32,25 +41,42 @@ const mockDb = {
   addDoc: jest.fn(),
 };
 
-// Mock Firebase
-jest.mock('@/lib/firebase', () => ({
-  getDb: jest.fn(() => Promise.resolve(mockDb)),
-}));
+// After mockDb is defined, set the implementation
+const firebase = require('@/lib/firebase');
+firebase.getDb.mockImplementation(() => Promise.resolve(mockDb));
 
-jest.mock('firebase/firestore', () => ({
-  collection: jest.fn(),
-  doc: jest.fn(),
-  setDoc: jest.fn(),
-  getDoc: jest.fn(),
-  updateDoc: jest.fn(),
-  getDocs: jest.fn(),
-  query: jest.fn(),
-  where: jest.fn(),
-  orderBy: jest.fn(),
-  limit: jest.fn(),
-  serverTimestamp: jest.fn(() => ({ seconds: Date.now() / 1000 })),
-  addDoc: jest.fn(),
-}));
+// Mock Firestore - define functions inside the mock factory
+jest.mock('firebase/firestore', () => {
+  const mockGetDocs = jest.fn();
+  const mockCollection = jest.fn();
+  const mockDoc = jest.fn();
+  const mockSetDoc = jest.fn();
+  const mockGetDoc = jest.fn();
+  const mockUpdateDoc = jest.fn();
+  const mockQuery = jest.fn();
+  const mockWhere = jest.fn();
+  const mockOrderBy = jest.fn();
+  const mockLimit = jest.fn();
+  const mockAddDoc = jest.fn();
+
+  // Store references for later use
+  global.__mockFirestoreRevenue = {
+    getDocs: mockGetDocs,
+    collection: mockCollection,
+    doc: mockDoc,
+    setDoc: mockSetDoc,
+    getDoc: mockGetDoc,
+    updateDoc: mockUpdateDoc,
+    query: mockQuery,
+    where: mockWhere,
+    orderBy: mockOrderBy,
+    limit: mockLimit,
+    addDoc: mockAddDoc,
+    serverTimestamp: jest.fn(() => ({ seconds: Date.now() / 1000 })),
+  };
+
+  return global.__mockFirestoreRevenue;
+});
 
 const mockStripe = {
   accounts: {
@@ -70,8 +96,8 @@ const mockStripe = {
   },
 };
 
-describe('RevenueShareSystem', () => {
-  let revenueSystem: RevenueShareSystem;
+describe('RevenueServingSystem', () => {
+  let revenueSystem: RevenueServingSystem;
 
   const mockPurchaseEvent: PurchaseEvent = {
     templateId: 'template-123',
@@ -86,7 +112,7 @@ describe('RevenueShareSystem', () => {
   };
 
   beforeEach(() => {
-    revenueSystem = new RevenueShareSystem();
+    revenueSystem = new RevenueServingSystem();
     (revenueSystem as any).stripe = mockStripe;
     jest.clearAllMocks();
   });
@@ -101,7 +127,7 @@ describe('RevenueShareSystem', () => {
       };
 
       mockStripe.accounts.create.mockResolvedValue(mockAccount);
-      mockDb.setDoc.mockResolvedValue(undefined);
+      global.__mockFirestoreRevenue.setDoc.mockResolvedValue(undefined);
 
       const result = await revenueSystem.setupCreatorAccount({
         userId: 'creator-789',
@@ -132,7 +158,7 @@ describe('RevenueShareSystem', () => {
           email: 'invalid-email',
           country: 'US',
           businessType: 'individual',
-        })
+        }),
       ).rejects.toThrow('Failed to create Stripe Connect account');
     });
   });
@@ -140,8 +166,8 @@ describe('RevenueShareSystem', () => {
   describe('processRevenueShare', () => {
     it('should calculate and process revenue share correctly', async () => {
       const mockDocRef = { id: 'transaction-123' };
-      mockDb.doc.mockReturnValue(mockDocRef);
-      mockDb.setDoc.mockResolvedValue(undefined);
+      global.__mockFirestoreRevenue.doc.mockReturnValue(mockDocRef);
+      global.__mockFirestoreRevenue.setDoc.mockResolvedValue(undefined);
 
       const result = await revenueSystem.processRevenueShare(mockPurchaseEvent);
 
@@ -161,7 +187,7 @@ describe('RevenueShareSystem', () => {
           platformFee: 900,
           currency: 'USD',
           status: 'pending',
-        })
+        }),
       );
     });
 
@@ -174,8 +200,8 @@ describe('RevenueShareSystem', () => {
       };
 
       const mockDocRef = { id: 'transaction-123' };
-      mockDb.doc.mockReturnValue(mockDocRef);
-      mockDb.setDoc.mockResolvedValue(undefined);
+      global.__mockFirestoreRevenue.doc.mockReturnValue(mockDocRef);
+      global.__mockFirestoreRevenue.setDoc.mockResolvedValue(undefined);
 
       const result = await revenueSystem.processRevenueShare(smallPurchase);
 
@@ -200,7 +226,7 @@ describe('RevenueShareSystem', () => {
       };
 
       // Mock available balance
-      mockDb.getDoc.mockResolvedValue({
+      global.__mockFirestoreRevenue.getDoc.mockResolvedValue({
         exists: () => true,
         data: () => ({
           availableBalance: 15000, // $150.00
@@ -209,7 +235,7 @@ describe('RevenueShareSystem', () => {
 
       const mockPayoutRef = { id: 'payout-123' };
       mockDb.doc.mockReturnValue(mockPayoutRef);
-      mockDb.setDoc.mockResolvedValue(undefined);
+      global.__mockFirestoreRevenue.setDoc.mockResolvedValue(undefined);
 
       const result = await revenueSystem.requestPayout(payoutRequest);
 
@@ -232,16 +258,16 @@ describe('RevenueShareSystem', () => {
       };
 
       // Mock insufficient balance
-      mockDb.getDoc.mockResolvedValue({
+      global.__mockFirestoreRevenue.getDoc.mockResolvedValue({
         exists: () => true,
         data: () => ({
           availableBalance: 10000, // $100.00
         }),
       });
 
-      await expect(
-        revenueSystem.requestPayout(payoutRequest)
-      ).rejects.toThrow('Insufficient balance for payout request');
+      await expect(revenueSystem.requestPayout(payoutRequest)).rejects.toThrow(
+        'Insufficient balance for payout request',
+      );
     });
 
     it('should apply minimum payout amount', async () => {
@@ -257,14 +283,14 @@ describe('RevenueShareSystem', () => {
         },
       };
 
-      mockDb.getDoc.mockResolvedValue({
+      global.__mockFirestoreRevenue.getDoc.mockResolvedValue({
         exists: () => true,
         data: () => ({ availableBalance: 15000 }),
       });
 
-      await expect(
-        revenueSystem.requestPayout(payoutRequest)
-      ).rejects.toThrow('Minimum payout amount is $20.00');
+      await expect(revenueSystem.requestPayout(payoutRequest)).rejects.toThrow(
+        'Minimum payout amount is $20.00',
+      );
     });
   });
 
@@ -278,9 +304,12 @@ describe('RevenueShareSystem', () => {
       };
 
       mockStripe.transfers.create.mockResolvedValue(mockTransfer);
-      mockDb.updateDoc.mockResolvedValue(undefined);
+      global.__mockFirestoreRevenue.updateDoc.mockResolvedValue(undefined);
 
-      const result = await revenueSystem.processPayout('payout-123', 'acct_123456789');
+      const result = await revenueSystem.processPayout(
+        'payout-123',
+        'acct_123456789',
+      );
 
       expect(result.transferId).toBe('tr_123456789');
       expect(result.status).toBe('completed');
@@ -293,10 +322,12 @@ describe('RevenueShareSystem', () => {
     });
 
     it('should handle payout processing errors', async () => {
-      mockStripe.transfers.create.mockRejectedValue(new Error('Transfer failed'));
+      mockStripe.transfers.create.mockRejectedValue(
+        new Error('Transfer failed'),
+      );
 
       await expect(
-        revenueSystem.processPayout('payout-123', 'acct_123456789')
+        revenueSystem.processPayout('payout-123', 'acct_123456789'),
       ).rejects.toThrow('Failed to process payout');
     });
   });
@@ -326,7 +357,7 @@ describe('RevenueShareSystem', () => {
         },
       ];
 
-      mockDb.getDocs = jest.fn().mockResolvedValue({
+      global.__mockFirestoreRevenue.getDocs.mockResolvedValue({
         docs: mockTransactions,
       });
 
@@ -367,7 +398,7 @@ describe('RevenueShareSystem', () => {
         },
       ];
 
-      mockDb.getDocs = jest.fn().mockResolvedValue({
+      global.__mockFirestoreRevenue.getDocs.mockResolvedValue({
         docs: mockTransactions,
       });
 
@@ -384,7 +415,7 @@ describe('RevenueShareSystem', () => {
   describe('updateCreatorBalance', () => {
     it('should update creator balance after transaction', async () => {
       // Mock existing balance
-      mockDb.getDoc.mockResolvedValue({
+      global.__mockFirestoreRevenue.getDoc.mockResolvedValue({
         exists: () => true,
         data: () => ({
           availableBalance: 5000, // $50.00
@@ -392,48 +423,42 @@ describe('RevenueShareSystem', () => {
         }),
       });
 
-      mockDb.updateDoc.mockResolvedValue(undefined);
+      global.__mockFirestoreRevenue.updateDoc.mockResolvedValue(undefined);
 
       await revenueSystem.updateCreatorBalance('creator-789', 2099); // $20.99
 
-      expect(mockDb.updateDoc).toHaveBeenCalledWith(
-        expect.anything(),
-        {
-          availableBalance: 7099, // $70.99
-          totalEarned: 12099, // $120.99
-          lastUpdated: expect.any(Object),
-        }
-      );
+      expect(mockDb.updateDoc).toHaveBeenCalledWith(expect.anything(), {
+        availableBalance: 7099, // $70.99
+        totalEarned: 12099, // $120.99
+        lastUpdated: expect.any(Object),
+      });
     });
 
     it('should create balance record for new creator', async () => {
-      mockDb.getDoc.mockResolvedValue({
+      global.__mockFirestoreRevenue.getDoc.mockResolvedValue({
         exists: () => false,
       });
 
       const mockDocRef = { id: 'balance-123' };
-      mockDb.doc.mockReturnValue(mockDocRef);
-      mockDb.setDoc.mockResolvedValue(undefined);
+      global.__mockFirestoreRevenue.doc.mockReturnValue(mockDocRef);
+      global.__mockFirestoreRevenue.setDoc.mockResolvedValue(undefined);
 
       await revenueSystem.updateCreatorBalance('creator-789', 2099);
 
-      expect(mockDb.setDoc).toHaveBeenCalledWith(
-        mockDocRef,
-        {
-          creatorId: 'creator-789',
-          availableBalance: 2099,
-          totalEarned: 2099,
-          totalWithdrawn: 0,
-          currency: 'USD',
-          lastUpdated: expect.any(Object),
-        }
-      );
+      expect(mockDb.setDoc).toHaveBeenCalledWith(mockDocRef, {
+        creatorId: 'creator-789',
+        availableBalance: 2099,
+        totalEarned: 2099,
+        totalWithdrawn: 0,
+        currency: 'USD',
+        lastUpdated: expect.any(Object),
+      });
     });
   });
 
   describe('getCreatorBalance', () => {
     it('should retrieve creator balance', async () => {
-      mockDb.getDoc.mockResolvedValue({
+      global.__mockFirestoreRevenue.getDoc.mockResolvedValue({
         exists: () => true,
         data: () => ({
           availableBalance: 15000,
@@ -452,7 +477,7 @@ describe('RevenueShareSystem', () => {
     });
 
     it('should return zero balance for new creator', async () => {
-      mockDb.getDoc.mockResolvedValue({
+      global.__mockFirestoreRevenue.getDoc.mockResolvedValue({
         exists: () => false,
       });
 

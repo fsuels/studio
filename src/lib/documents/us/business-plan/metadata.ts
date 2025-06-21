@@ -24,13 +24,23 @@ export const businessPlanMeta: Omit<LegalDocument, 'schema' | 'questions'> = {
       name: 'Business Plan',
       description:
         'Comprehensive business plan template for startups and established businesses.',
-      aliases: ['business strategy', 'startup plan', 'company plan', 'business proposal'],
+      aliases: [
+        'business strategy',
+        'startup plan',
+        'company plan',
+        'business proposal',
+      ],
     },
     es: {
       name: 'Plan de Negocios',
       description:
         'Plantilla integral de plan de negocios para empresas nuevas y establecidas.',
-      aliases: ['estrategia comercial', 'plan de inicio', 'plan de empresa', 'propuesta de negocio'],
+      aliases: [
+        'estrategia comercial',
+        'plan de inicio',
+        'plan de empresa',
+        'propuesta de negocio',
+      ],
     },
   },
 };

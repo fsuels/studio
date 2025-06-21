@@ -7,17 +7,22 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
-import { 
-  ChevronRight, 
-  ChevronLeft, 
-  HelpCircle, 
-  CheckCircle2, 
+import {
+  ChevronRight,
+  ChevronLeft,
+  HelpCircle,
+  CheckCircle2,
   AlertCircle,
   Lightbulb,
   Search,
-  Sparkles
+  Sparkles,
 } from 'lucide-react';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 
 interface FormField {
   id: string;
@@ -56,13 +61,17 @@ export function EnhancedFormWizard({
   documentType,
   steps,
   onSubmit,
-  className = ''
+  className = '',
 }: EnhancedFormWizardProps) {
   const [currentStep, setCurrentStep] = useState(0);
   const [formData, setFormData] = useState<Record<string, any>>({});
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
-  const [smartSuggestions, setSmartSuggestions] = useState<Record<string, string[]>>({});
-  const [completedFields, setCompletedFields] = useState<Set<string>>(new Set());
+  const [smartSuggestions, setSmartSuggestions] = useState<
+    Record<string, string[]>
+  >({});
+  const [completedFields, setCompletedFields] = useState<Set<string>>(
+    new Set(),
+  );
 
   // AI-powered smart suggestions
   useEffect(() => {
@@ -71,20 +80,20 @@ export function EnhancedFormWizard({
 
   const generateSmartSuggestions = () => {
     const suggestions: Record<string, string[]> = {};
-    
+
     // Context-aware suggestions based on document type and previous inputs
     if (documentType === 'llc-operating-agreement') {
       suggestions.companyName = [
         `${formData.ownerName || 'Your'} Consulting LLC`,
         `${formData.ownerName || 'Your'} Ventures LLC`,
-        `${formData.city || 'City'} Professional Services LLC`
+        `${formData.city || 'City'} Professional Services LLC`,
       ];
-      
+
       suggestions.businessPurpose = [
         'Professional consulting services',
         'Technology and software development',
         'Marketing and advertising services',
-        'Real estate investment and management'
+        'Real estate investment and management',
       ];
     }
 
@@ -93,15 +102,15 @@ export function EnhancedFormWizard({
         'Senior Software Engineer',
         'Marketing Manager',
         'Operations Specialist',
-        'Business Development Representative'
+        'Business Development Representative',
       ];
-      
+
       if (formData.industry === 'technology') {
         suggestions.benefits = [
           'Health insurance and dental coverage',
           'Flexible work arrangements',
           'Professional development budget',
-          'Stock options or equity participation'
+          'Stock options or equity participation',
         ];
       }
     }
@@ -110,11 +119,11 @@ export function EnhancedFormWizard({
   };
 
   const handleFieldChange = (fieldId: string, value: any) => {
-    setFormData(prev => ({ ...prev, [fieldId]: value }));
-    
+    setFormData((prev) => ({ ...prev, [fieldId]: value }));
+
     // Clear error when user starts typing
     if (fieldErrors[fieldId]) {
-      setFieldErrors(prev => {
+      setFieldErrors((prev) => {
         const newErrors = { ...prev };
         delete newErrors[fieldId];
         return newErrors;
@@ -123,9 +132,9 @@ export function EnhancedFormWizard({
 
     // Mark field as completed if it has meaningful content
     if (value && value.toString().trim().length > 0) {
-      setCompletedFields(prev => new Set([...prev, fieldId]));
+      setCompletedFields((prev) => new Set([...prev, fieldId]));
     } else {
-      setCompletedFields(prev => {
+      setCompletedFields((prev) => {
         const newSet = new Set(prev);
         newSet.delete(fieldId);
         return newSet;
@@ -136,8 +145,8 @@ export function EnhancedFormWizard({
   const validateStep = () => {
     const currentStepData = steps[currentStep];
     const errors: Record<string, string> = {};
-    
-    currentStepData.fields.forEach(field => {
+
+    currentStepData.fields.forEach((field) => {
       // Skip validation if field is conditionally hidden
       if (field.conditionalLogic) {
         const showIf = field.conditionalLogic.showIf;
@@ -154,13 +163,17 @@ export function EnhancedFormWizard({
       // Custom validation rules
       if (formData[field.id] && field.validationRules) {
         const value = formData[field.id];
-        
+
         if (field.type === 'email' && !/\S+@\S+\.\S+/.test(value)) {
           errors[field.id] = 'Please enter a valid email address';
         }
-        
-        if (field.validationRules.minLength && value.length < field.validationRules.minLength) {
-          errors[field.id] = `Minimum ${field.validationRules.minLength} characters required`;
+
+        if (
+          field.validationRules.minLength &&
+          value.length < field.validationRules.minLength
+        ) {
+          errors[field.id] =
+            `Minimum ${field.validationRules.minLength} characters required`;
         }
       }
     });
@@ -186,14 +199,17 @@ export function EnhancedFormWizard({
   };
 
   const getProgressPercentage = () => {
-    const totalFields = steps.reduce((acc, step) => acc + step.fields.length, 0);
+    const totalFields = steps.reduce(
+      (acc, step) => acc + step.fields.length,
+      0,
+    );
     const completedCount = completedFields.size;
     return Math.round((completedCount / totalFields) * 100);
   };
 
   const shouldShowField = (field: FormField) => {
     if (!field.conditionalLogic) return true;
-    
+
     const showIf = field.conditionalLogic.showIf;
     const expectedValue = field.conditionalLogic.equals;
     return formData[showIf] === expectedValue;
@@ -213,11 +229,9 @@ export function EnhancedFormWizard({
             {field.label}
             {field.required && <span className="text-red-500 ml-1">*</span>}
           </Label>
-          
-          {isCompleted && (
-            <CheckCircle2 className="h-4 w-4 text-green-500" />
-          )}
-          
+
+          {isCompleted && <CheckCircle2 className="h-4 w-4 text-green-500" />}
+
           {field.helpText && (
             <TooltipProvider>
               <Tooltip>
@@ -243,7 +257,13 @@ export function EnhancedFormWizard({
             placeholder={field.placeholder}
             value={formData[field.id] || ''}
             onChange={(e) => handleFieldChange(field.id, e.target.value)}
-            className={hasError ? 'border-red-500' : isCompleted ? 'border-green-500' : ''}
+            className={
+              hasError
+                ? 'border-red-500'
+                : isCompleted
+                  ? 'border-green-500'
+                  : ''
+            }
           />
 
           {hasError && (
@@ -347,17 +367,20 @@ export function EnhancedFormWizard({
             <div
               key={index}
               className={`h-2 w-8 rounded-full ${
-                index === currentStep 
-                  ? 'bg-purple-600' 
-                  : index < currentStep 
-                    ? 'bg-green-500' 
+                index === currentStep
+                  ? 'bg-purple-600'
+                  : index < currentStep
+                    ? 'bg-green-500'
                     : 'bg-gray-200'
               }`}
             />
           ))}
         </div>
 
-        <Button onClick={nextStep} className="bg-purple-600 hover:bg-purple-700">
+        <Button
+          onClick={nextStep}
+          className="bg-purple-600 hover:bg-purple-700"
+        >
           {currentStep === steps.length - 1 ? 'Complete Document' : 'Next'}
           <ChevronRight className="h-4 w-4 ml-2" />
         </Button>

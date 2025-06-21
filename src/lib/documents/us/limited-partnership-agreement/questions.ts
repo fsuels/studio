@@ -20,7 +20,8 @@ export const limitedPartnershipAgreementQuestions: Question[] = [
     label: 'Business Purpose',
     type: 'textarea',
     required: true,
-    placeholder: 'Describe the business activities and purpose of the partnership',
+    placeholder:
+      'Describe the business activities and purpose of the partnership',
   },
   {
     id: 'generalPartnerName',
@@ -73,14 +74,16 @@ export const limitedPartnershipAgreementQuestions: Question[] = [
     id: 'additionalLimitedPartners',
     label: 'Additional Limited Partners',
     type: 'textarea',
-    placeholder: 'List additional limited partners with their contributions and percentages',
+    placeholder:
+      'List additional limited partners with their contributions and percentages',
   },
   {
     id: 'managementStructure',
     label: 'Management Structure',
     type: 'textarea',
     required: true,
-    placeholder: 'Describe how the partnership will be managed and decision-making authority',
+    placeholder:
+      'Describe how the partnership will be managed and decision-making authority',
   },
   {
     id: 'profitDistribution',
@@ -107,7 +110,8 @@ export const limitedPartnershipAgreementQuestions: Question[] = [
     id: 'withdrawalRestrictions',
     label: 'Withdrawal Restrictions',
     type: 'textarea',
-    placeholder: 'Restrictions on partner withdrawals and capital distributions',
+    placeholder:
+      'Restrictions on partner withdrawals and capital distributions',
   },
   {
     id: 'transferRestrictions',

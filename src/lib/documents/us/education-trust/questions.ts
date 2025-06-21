@@ -93,7 +93,8 @@ export const questions: Question[] = [
     label: 'Eligible Educational Expenses',
     type: 'textarea',
     required: true,
-    placeholder: 'Define what educational expenses can be paid (tuition, books, room & board, etc.)',
+    placeholder:
+      'Define what educational expenses can be paid (tuition, books, room & board, etc.)',
   },
   {
     id: 'initialFunding',
@@ -120,14 +121,16 @@ export const questions: Question[] = [
     label: 'Distribution Triggers',
     type: 'textarea',
     required: true,
-    placeholder: 'When distributions can be made (enrollment, grades, expenses incurred, etc.)',
+    placeholder:
+      'When distributions can be made (enrollment, grades, expenses incurred, etc.)',
   },
   {
     id: 'distributionLimitations',
     label: 'Distribution Limitations',
     type: 'textarea',
     required: true,
-    placeholder: 'Any limits on distributions (annual maximums, percentage limits, etc.)',
+    placeholder:
+      'Any limits on distributions (annual maximums, percentage limits, etc.)',
   },
   {
     id: 'ageRestrictions',
@@ -139,21 +142,24 @@ export const questions: Question[] = [
     id: 'academicRequirements',
     label: 'Academic Requirements (Optional)',
     type: 'textarea',
-    placeholder: 'GPA requirements, enrollment status, or other academic conditions',
+    placeholder:
+      'GPA requirements, enrollment status, or other academic conditions',
   },
   {
     id: 'institutionRequirements',
     label: 'Educational Institution Requirements',
     type: 'textarea',
     required: true,
-    placeholder: 'Requirements for eligible schools (accredited institutions, degree programs, etc.)',
+    placeholder:
+      'Requirements for eligible schools (accredited institutions, degree programs, etc.)',
   },
   {
     id: 'surplusFundsDisposition',
     label: 'Surplus Funds Disposition',
     type: 'textarea',
     required: true,
-    placeholder: 'What happens to unused funds if beneficiary doesn\'t use all educational funding',
+    placeholder:
+      "What happens to unused funds if beneficiary doesn't use all educational funding",
   },
   {
     id: 'terminationConditions',
@@ -167,7 +173,8 @@ export const questions: Question[] = [
     label: 'Reporting Requirements',
     type: 'textarea',
     required: true,
-    placeholder: 'Reporting obligations of trustee to trustor and beneficiaries',
+    placeholder:
+      'Reporting obligations of trustee to trustor and beneficiaries',
   },
   {
     id: 'specialProvisions',

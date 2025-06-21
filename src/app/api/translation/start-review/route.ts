@@ -24,7 +24,7 @@ export async function POST(request: NextRequest) {
     if (!reviewId || !translationResult) {
       return NextResponse.json(
         { error: 'Review ID and translation result are required' },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -32,7 +32,7 @@ export async function POST(request: NextRequest) {
     const workflow = await initiateReviewWorkflow({
       reviewId,
       translationResult,
-      assignedReviewers: assignedReviewers || {}
+      assignedReviewers: assignedReviewers || {},
     });
 
     // Perform initial AI validation
@@ -48,14 +48,13 @@ export async function POST(request: NextRequest) {
       success: true,
       workflow,
       aiValidation,
-      message: 'Review workflow started successfully'
+      message: 'Review workflow started successfully',
     });
-
   } catch (error) {
     console.error('Failed to start review:', error);
     return NextResponse.json(
       { error: 'Failed to start review workflow' },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -77,7 +76,7 @@ async function initiateReviewWorkflow(params: {
     currentStage: 'ai_validation',
     startedAt: new Date(),
     assignedReviewers,
-    qualityMetrics
+    qualityMetrics,
   };
 
   // Save workflow to database
@@ -87,7 +86,7 @@ async function initiateReviewWorkflow(params: {
   await logWorkflowEvent(workflow.id, 'workflow_started', {
     assignedReviewers: Object.keys(assignedReviewers).length,
     riskLevel: qualityMetrics.riskLevel,
-    aiConfidence: qualityMetrics.aiConfidence
+    aiConfidence: qualityMetrics.aiConfidence,
   });
 
   return workflow;
@@ -98,9 +97,10 @@ async function performAIValidation(translationResult: any) {
     confidenceCheck: translationResult.confidence >= 0.7,
     legalTermsCheck: translationResult.legalTerms?.length > 0,
     warningsCheck: translationResult.warnings?.length < 5,
-    preservationCheck: translationResult.preservedTerms?.every((term: string) => 
-      translationResult.translatedText.includes(term)
-    ) || true
+    preservationCheck:
+      translationResult.preservedTerms?.every((term: string) =>
+        translationResult.translatedText.includes(term),
+      ) || true,
   };
 
   const issues = [];
@@ -112,21 +112,20 @@ async function performAIValidation(translationResult: any) {
       type: 'low_confidence',
       severity: 'high',
       message: `Translation confidence is ${Math.round(translationResult.confidence * 100)}%, below recommended 70%`,
-      recommendation: 'Requires thorough human review before approval'
+      recommendation: 'Requires thorough human review before approval',
     });
   }
 
   // Check for high-risk warnings
-  const highRiskWarnings = translationResult.warnings?.filter(
-    (w: any) => w.severity === 'high'
-  ) || [];
-  
+  const highRiskWarnings =
+    translationResult.warnings?.filter((w: any) => w.severity === 'high') || [];
+
   if (highRiskWarnings.length > 0) {
     issues.push({
       type: 'high_risk_warnings',
       severity: 'high',
       message: `Found ${highRiskWarnings.length} high-risk translation warnings`,
-      recommendation: 'Review all flagged terms with legal expert'
+      recommendation: 'Review all flagged terms with legal expert',
     });
   }
 
@@ -137,7 +136,7 @@ async function performAIValidation(translationResult: any) {
       type: 'no_legal_terms',
       severity: 'medium',
       message: 'No legal terms identified in the document',
-      recommendation: 'Verify document type and content classification'
+      recommendation: 'Verify document type and content classification',
     });
   }
 
@@ -160,7 +159,7 @@ async function performAIValidation(translationResult: any) {
     issues,
     recommendations,
     completedAt: new Date(),
-    processingTime: 1500 + Math.random() * 1000 // Simulate processing time
+    processingTime: 1500 + Math.random() * 1000, // Simulate processing time
   };
 }
 
@@ -168,13 +167,13 @@ function calculateQualityMetrics(translationResult: any) {
   const aiConfidence = translationResult.confidence || 0;
   const legalTermsCount = translationResult.legalTerms?.length || 0;
   const warningsCount = translationResult.warnings?.length || 0;
-  const highRiskWarnings = translationResult.warnings?.filter(
-    (w: any) => w.severity === 'high'
-  ).length || 0;
+  const highRiskWarnings =
+    translationResult.warnings?.filter((w: any) => w.severity === 'high')
+      .length || 0;
 
   // Determine risk level
   let riskLevel: 'low' | 'medium' | 'high' = 'low';
-  
+
   if (aiConfidence < 0.6 || highRiskWarnings > 2) {
     riskLevel = 'high';
   } else if (aiConfidence < 0.8 || warningsCount > 3 || highRiskWarnings > 0) {
@@ -185,13 +184,13 @@ function calculateQualityMetrics(translationResult: any) {
     aiConfidence,
     legalTermsCount,
     warningsCount,
-    riskLevel
+    riskLevel,
   };
 }
 
 async function updateWorkflowWithAIResults(
   workflow: ReviewWorkflow,
-  aiValidation: any
+  aiValidation: any,
 ): Promise<void> {
   // Update workflow status based on AI validation results
   if (aiValidation.recommendation === 'reject') {
@@ -199,9 +198,12 @@ async function updateWorkflowWithAIResults(
     await logWorkflowEvent(workflow.id, 'ai_rejection', {
       reason: 'Failed AI validation',
       score: aiValidation.overallScore,
-      issues: aiValidation.issues.length
+      issues: aiValidation.issues.length,
     });
-  } else if (aiValidation.recommendation === 'proceed' && workflow.qualityMetrics.riskLevel === 'low') {
+  } else if (
+    aiValidation.recommendation === 'proceed' &&
+    workflow.qualityMetrics.riskLevel === 'low'
+  ) {
     // Low risk translations might skip some review stages
     workflow.currentStage = 'final_approval';
   } else {
@@ -217,13 +219,13 @@ async function updateWorkflowWithAIResults(
     score: aiValidation.overallScore,
     recommendation: aiValidation.recommendation,
     issues: aiValidation.issues.length,
-    nextStage: workflow.currentStage
+    nextStage: workflow.currentStage,
   });
 }
 
 async function notifyReviewersOfStart(
   workflow: ReviewWorkflow,
-  assignedReviewers: Record<string, string>
+  assignedReviewers: Record<string, string>,
 ): Promise<void> {
   // Notify each assigned reviewer
   for (const [stageId, reviewerId] of Object.entries(assignedReviewers)) {
@@ -233,7 +235,7 @@ async function notifyReviewersOfStart(
         workflowId: workflow.id,
         stageId,
         riskLevel: workflow.qualityMetrics.riskLevel,
-        estimatedStartDate: calculateStageStartDate(workflow, stageId)
+        estimatedStartDate: calculateStageStartDate(workflow, stageId),
       });
     } catch (error) {
       console.error(`Failed to notify reviewer ${reviewerId}:`, error);
@@ -242,15 +244,23 @@ async function notifyReviewersOfStart(
   }
 }
 
-function calculateStageStartDate(workflow: ReviewWorkflow, stageId: string): Date {
-  const stageOrder = ['ai_validation', 'legal_review', 'linguistic_review', 'final_approval'];
+function calculateStageStartDate(
+  workflow: ReviewWorkflow,
+  stageId: string,
+): Date {
+  const stageOrder = [
+    'ai_validation',
+    'legal_review',
+    'linguistic_review',
+    'final_approval',
+  ];
   const currentIndex = stageOrder.indexOf(workflow.currentStage);
   const targetIndex = stageOrder.indexOf(stageId);
-  
+
   // Calculate estimated start time based on stage position
   const hoursPerStage = 8; // Estimated 8 hours per stage
-  const hoursToAdd = Math.max(0, (targetIndex - currentIndex)) * hoursPerStage;
-  
+  const hoursToAdd = Math.max(0, targetIndex - currentIndex) * hoursPerStage;
+
   return new Date(workflow.startedAt.getTime() + hoursToAdd * 60 * 60 * 1000);
 }
 
@@ -260,20 +270,20 @@ async function saveWorkflowToDatabase(workflow: ReviewWorkflow): Promise<void> {
     id: workflow.id,
     status: workflow.status,
     currentStage: workflow.currentStage,
-    riskLevel: workflow.qualityMetrics.riskLevel
+    riskLevel: workflow.qualityMetrics.riskLevel,
   });
 }
 
 async function logWorkflowEvent(
   workflowId: string,
   eventType: string,
-  metadata: any
+  metadata: any,
 ): Promise<void> {
   const logEntry = {
     workflowId,
     eventType,
     timestamp: new Date(),
-    metadata
+    metadata,
   };
 
   // In real implementation, save to audit log
@@ -294,7 +304,7 @@ async function sendReviewStartNotification(params: {
     stageId: params.stageId,
     priority: params.riskLevel === 'high' ? 'urgent' : 'normal',
     estimatedStartDate: params.estimatedStartDate,
-    message: `Translation review workflow has started. Your stage (${params.stageId}) is estimated to begin at ${params.estimatedStartDate.toLocaleString()}`
+    message: `Translation review workflow has started. Your stage (${params.stageId}) is estimated to begin at ${params.estimatedStartDate.toLocaleString()}`,
   };
 
   // In real implementation, send via notification service

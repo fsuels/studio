@@ -30,13 +30,56 @@ export const questions: Question[] = [
     required: true,
     category: 'Company Information',
     options: [
-      'Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 
-      'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 
-      'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 
-      'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 
-      'New York', 'North Carolina', 'North Dakota', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 
-      'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 
-      'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'
+      'Alabama',
+      'Alaska',
+      'Arizona',
+      'Arkansas',
+      'California',
+      'Colorado',
+      'Connecticut',
+      'Delaware',
+      'Florida',
+      'Georgia',
+      'Hawaii',
+      'Idaho',
+      'Illinois',
+      'Indiana',
+      'Iowa',
+      'Kansas',
+      'Kentucky',
+      'Louisiana',
+      'Maine',
+      'Maryland',
+      'Massachusetts',
+      'Michigan',
+      'Minnesota',
+      'Mississippi',
+      'Missouri',
+      'Montana',
+      'Nebraska',
+      'Nevada',
+      'New Hampshire',
+      'New Jersey',
+      'New Mexico',
+      'New York',
+      'North Carolina',
+      'North Dakota',
+      'Ohio',
+      'Oklahoma',
+      'Oregon',
+      'Pennsylvania',
+      'Rhode Island',
+      'South Carolina',
+      'South Dakota',
+      'Tennessee',
+      'Texas',
+      'Utah',
+      'Vermont',
+      'Virginia',
+      'Washington',
+      'West Virginia',
+      'Wisconsin',
+      'Wyoming',
     ],
   },
   {
@@ -46,7 +89,7 @@ export const questions: Question[] = [
     required: true,
     category: 'Company Information',
   },
-  
+
   // Executive Information
   {
     id: 'executiveName',
@@ -76,13 +119,56 @@ export const questions: Question[] = [
     required: true,
     category: 'Executive Information',
     options: [
-      'Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 
-      'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 
-      'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 
-      'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 
-      'New York', 'North Carolina', 'North Dakota', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 
-      'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 
-      'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'
+      'Alabama',
+      'Alaska',
+      'Arizona',
+      'Arkansas',
+      'California',
+      'Colorado',
+      'Connecticut',
+      'Delaware',
+      'Florida',
+      'Georgia',
+      'Hawaii',
+      'Idaho',
+      'Illinois',
+      'Indiana',
+      'Iowa',
+      'Kansas',
+      'Kentucky',
+      'Louisiana',
+      'Maine',
+      'Maryland',
+      'Massachusetts',
+      'Michigan',
+      'Minnesota',
+      'Mississippi',
+      'Missouri',
+      'Montana',
+      'Nebraska',
+      'Nevada',
+      'New Hampshire',
+      'New Jersey',
+      'New Mexico',
+      'New York',
+      'North Carolina',
+      'North Dakota',
+      'Ohio',
+      'Oklahoma',
+      'Oregon',
+      'Pennsylvania',
+      'Rhode Island',
+      'South Carolina',
+      'South Dakota',
+      'Tennessee',
+      'Texas',
+      'Utah',
+      'Vermont',
+      'Virginia',
+      'Washington',
+      'West Virginia',
+      'Wisconsin',
+      'Wyoming',
     ],
   },
   {
@@ -92,7 +178,7 @@ export const questions: Question[] = [
     required: true,
     category: 'Executive Information',
   },
-  
+
   // Position Details
   {
     id: 'jobTitle',
@@ -100,7 +186,8 @@ export const questions: Question[] = [
     label: 'Job Title',
     required: true,
     category: 'Position Details',
-    placeholder: 'e.g., Chief Executive Officer, President, Chief Technology Officer',
+    placeholder:
+      'e.g., Chief Executive Officer, President, Chief Technology Officer',
   },
   {
     id: 'department',
@@ -124,7 +211,7 @@ export const questions: Question[] = [
     required: true,
     category: 'Position Details',
   },
-  
+
   // Compensation
   {
     id: 'annualSalary',
@@ -174,7 +261,7 @@ export const questions: Question[] = [
     category: 'Compensation',
     condition: { field: 'stockOptions', value: 'Yes' },
   },
-  
+
   // Benefits
   {
     id: 'healthInsurance',
@@ -238,7 +325,7 @@ export const questions: Question[] = [
     required: false,
     category: 'Benefits',
   },
-  
+
   // Executive Perks
   {
     id: 'companyVehicle',
@@ -287,7 +374,7 @@ export const questions: Question[] = [
     category: 'Executive Perks',
     options: ['Yes', 'No'],
   },
-  
+
   // Termination Terms
   {
     id: 'terminationNotice',
@@ -330,7 +417,7 @@ export const questions: Question[] = [
     category: 'Termination Terms',
     options: ['None', '6 months', '1 year', '18 months', '2 years'],
   },
-  
+
   // Confidentiality and IP
   {
     id: 'nonDisclosurePeriod',
@@ -340,7 +427,7 @@ export const questions: Question[] = [
     category: 'Confidentiality',
     options: ['2 years', '3 years', '5 years', 'Indefinite'],
   },
-  
+
   // Governing Law
   {
     id: 'governingState',
@@ -349,16 +436,59 @@ export const questions: Question[] = [
     required: true,
     category: 'Legal Terms',
     options: [
-      'Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 
-      'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 
-      'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 
-      'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 
-      'New York', 'North Carolina', 'North Dakota', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 
-      'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 
-      'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'
+      'Alabama',
+      'Alaska',
+      'Arizona',
+      'Arkansas',
+      'California',
+      'Colorado',
+      'Connecticut',
+      'Delaware',
+      'Florida',
+      'Georgia',
+      'Hawaii',
+      'Idaho',
+      'Illinois',
+      'Indiana',
+      'Iowa',
+      'Kansas',
+      'Kentucky',
+      'Louisiana',
+      'Maine',
+      'Maryland',
+      'Massachusetts',
+      'Michigan',
+      'Minnesota',
+      'Mississippi',
+      'Missouri',
+      'Montana',
+      'Nebraska',
+      'Nevada',
+      'New Hampshire',
+      'New Jersey',
+      'New Mexico',
+      'New York',
+      'North Carolina',
+      'North Dakota',
+      'Ohio',
+      'Oklahoma',
+      'Oregon',
+      'Pennsylvania',
+      'Rhode Island',
+      'South Carolina',
+      'South Dakota',
+      'Tennessee',
+      'Texas',
+      'Utah',
+      'Vermont',
+      'Virginia',
+      'Washington',
+      'West Virginia',
+      'Wisconsin',
+      'Wyoming',
     ],
   },
-  
+
   // Signatures
   {
     id: 'signatureDate',

@@ -24,12 +24,14 @@ export const courtFilingDocumentMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Court Filing Document',
-      description: 'General template for court filing documents and legal pleadings.',
+      description:
+        'General template for court filing documents and legal pleadings.',
       aliases: ['legal pleading', 'court document', 'legal filing'],
     },
     es: {
       name: 'Documento de Presentación Judicial',
-      description: 'Plantilla general para documentos de presentación judicial y alegatos legales.',
+      description:
+        'Plantilla general para documentos de presentación judicial y alegatos legales.',
       aliases: ['alegato legal', 'documento judicial'],
     },
   },

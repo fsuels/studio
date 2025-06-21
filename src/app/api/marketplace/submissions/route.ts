@@ -31,10 +31,13 @@ export async function GET(request: NextRequest) {
     const priority = url.searchParams.get('priority');
     const assignedReviewer = url.searchParams.get('assignedReviewer');
     const page = parseInt(url.searchParams.get('page') || '1');
-    const pageSize = Math.min(parseInt(url.searchParams.get('limit') || '20'), 50);
+    const pageSize = Math.min(
+      parseInt(url.searchParams.get('limit') || '20'),
+      50,
+    );
 
     const db = await getDb();
-    
+
     // Build query
     let q = query(collection(db, 'template-submissions'));
 
@@ -63,7 +66,7 @@ export async function GET(request: NextRequest) {
     }
 
     const submissionsSnap = await getDocs(q);
-    const submissions = submissionsSnap.docs.map(doc => ({
+    const submissions = submissionsSnap.docs.map((doc) => ({
       id: doc.id,
       ...doc.data(),
     }));
@@ -71,19 +74,25 @@ export async function GET(request: NextRequest) {
     // Get template details for each submission
     const enrichedSubmissions = await Promise.all(
       submissions.map(async (submission) => {
-        const templateRef = doc(db, 'marketplace-templates', submission.templateId);
+        const templateRef = doc(
+          db,
+          'marketplace-templates',
+          submission.templateId,
+        );
         const templateSnap = await doc(templateRef);
-        
+
         return {
           ...submission,
-          template: templateSnap.exists() ? {
-            id: templateSnap.id,
-            name: templateSnap.data()?.name,
-            category: templateSnap.data()?.category,
-            createdBy: templateSnap.data()?.createdBy,
-          } : null,
+          template: templateSnap.exists()
+            ? {
+                id: templateSnap.id,
+                name: templateSnap.data()?.name,
+                category: templateSnap.data()?.category,
+                createdBy: templateSnap.data()?.createdBy,
+              }
+            : null,
         };
-      })
+      }),
     );
 
     // Calculate queue statistics
@@ -107,16 +116,15 @@ export async function GET(request: NextRequest) {
         },
       },
     });
-
   } catch (error) {
     console.error('Get submissions error:', error);
-    
+
     return NextResponse.json(
-      { 
-        success: false, 
-        error: 'Failed to fetch submissions' 
+      {
+        success: false,
+        error: 'Failed to fetch submissions',
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -150,32 +158,37 @@ export async function POST(request: NextRequest) {
     // Validate required fields
     if (!name || !description || !category || !document) {
       return NextResponse.json(
-        { error: 'Missing required fields: name, description, category, document' },
-        { status: 400 }
+        {
+          error:
+            'Missing required fields: name, description, category, document',
+        },
+        { status: 400 },
       );
     }
 
     const userId = 'user-id'; // TODO: Get from auth
 
     // Create template draft
-    const { templateId, versionId } = await templateSubmissionWorkflow.createTemplateDraft({
-      name,
-      description,
-      category,
-      tags,
-      jurisdiction,
-      states,
-      languageSupport,
-      createdBy: userId,
-      document,
-      pricing,
-    });
+    const { templateId, versionId } =
+      await templateSubmissionWorkflow.createTemplateDraft({
+        name,
+        description,
+        category,
+        tags,
+        jurisdiction,
+        states,
+        languageSupport,
+        createdBy: userId,
+        document,
+        pricing,
+      });
 
     // Submit for review
-    const { submissionId, estimatedReviewTime } = await templateSubmissionWorkflow.submitForReview({
-      templateId,
-      submissionNotes,
-    });
+    const { submissionId, estimatedReviewTime } =
+      await templateSubmissionWorkflow.submitForReview({
+        templateId,
+        submissionNotes,
+      });
 
     return NextResponse.json({
       success: true,
@@ -188,17 +201,16 @@ export async function POST(request: NextRequest) {
         message: 'Template submitted successfully for review',
       },
     });
-
   } catch (error) {
     console.error('Create submission error:', error);
-    
+
     return NextResponse.json(
-      { 
-        success: false, 
+      {
+        success: false,
         error: 'Failed to create submission',
         details: error instanceof Error ? error.message : 'Unknown error',
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -208,7 +220,7 @@ export async function POST(request: NextRequest) {
  */
 async function calculateQueueStatistics() {
   const db = await getDb();
-  
+
   const stats = {
     total: 0,
     pending: 0,
@@ -224,11 +236,11 @@ async function calculateQueueStatistics() {
     // Get all submissions
     const allSubmissionsQuery = query(collection(db, 'template-submissions'));
     const allSubmissionsSnap = await getDocs(allSubmissionsQuery);
-    
+
     stats.total = allSubmissionsSnap.size;
 
     // Calculate status breakdown
-    allSubmissionsSnap.docs.forEach(doc => {
+    allSubmissionsSnap.docs.forEach((doc) => {
       const submission = doc.data();
       switch (submission.status) {
         case 'pending_assignment':
@@ -252,31 +264,37 @@ async function calculateQueueStatistics() {
 
     // Calculate average review time (for completed reviews)
     const completedSubmissions = allSubmissionsSnap.docs
-      .map(doc => doc.data())
-      .filter(s => s.completedAt && s.assignedAt);
+      .map((doc) => doc.data())
+      .filter((s) => s.completedAt && s.assignedAt);
 
     if (completedSubmissions.length > 0) {
       const totalReviewTime = completedSubmissions.reduce((sum, s) => {
         return sum + (s.completedAt.toMillis() - s.assignedAt.toMillis());
       }, 0);
-      
-      stats.averageReviewTime = totalReviewTime / completedSubmissions.length / (1000 * 60 * 60 * 24); // Convert to days
+
+      stats.averageReviewTime =
+        totalReviewTime / completedSubmissions.length / (1000 * 60 * 60 * 24); // Convert to days
     }
 
     // Find oldest pending submission
     const pendingSubmissions = allSubmissionsSnap.docs
-      .map(doc => ({ id: doc.id, ...doc.data() }))
-      .filter(s => s.status === 'pending_assignment' || s.status === 'pending_review')
+      .map((doc) => ({ id: doc.id, ...doc.data() }))
+      .filter(
+        (s) =>
+          s.status === 'pending_assignment' || s.status === 'pending_review',
+      )
       .sort((a, b) => a.submittedAt.toMillis() - b.submittedAt.toMillis());
 
     if (pendingSubmissions.length > 0) {
       stats.oldestSubmission = {
         id: pendingSubmissions[0].id,
         submittedAt: pendingSubmissions[0].submittedAt,
-        daysWaiting: Math.floor((Date.now() - pendingSubmissions[0].submittedAt.toMillis()) / (1000 * 60 * 60 * 24)),
+        daysWaiting: Math.floor(
+          (Date.now() - pendingSubmissions[0].submittedAt.toMillis()) /
+            (1000 * 60 * 60 * 24),
+        ),
       };
     }
-
   } catch (error) {
     console.warn('Failed to calculate queue statistics:', error);
   }

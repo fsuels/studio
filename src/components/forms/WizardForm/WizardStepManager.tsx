@@ -72,7 +72,7 @@ export function useWizardSteps(doc: LegalDocument) {
   }, [doc.questions, actualSchemaShape, t]);
 
   const totalSteps = steps.length;
-  
+
   return {
     steps,
     totalSteps,
@@ -83,7 +83,7 @@ export function useWizardSteps(doc: LegalDocument) {
 export function calculateProgress(
   currentStepIndex: number,
   totalSteps: number,
-  isReviewing: boolean
+  isReviewing: boolean,
 ): number {
   if (totalSteps === 0) return 100;
   if (isReviewing) return 100;

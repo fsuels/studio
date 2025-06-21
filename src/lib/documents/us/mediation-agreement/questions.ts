@@ -271,7 +271,10 @@ export const mediationAgreementQuestions: FormQuestion[] = [
     label: 'Scheduling Method',
     options: [
       { value: 'mutual-agreement', label: 'Mutual Agreement' },
-      { value: 'mediator-availability', label: 'Based on Mediator Availability' },
+      {
+        value: 'mediator-availability',
+        label: 'Based on Mediator Availability',
+      },
       { value: 'organization-scheduling', label: 'Organization Scheduling' },
     ],
     required: true,

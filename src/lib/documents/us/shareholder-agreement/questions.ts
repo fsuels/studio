@@ -7,7 +7,7 @@ export const shareholderAgreementQuestions: FormQuestion[] = [
     label: 'Company Name',
     required: true,
     placeholder: 'Enter the full legal name of the company',
-    validation: { min: 1 }
+    validation: { min: 1 },
   },
   {
     id: 'stateOfIncorporation',
@@ -64,8 +64,8 @@ export const shareholderAgreementQuestions: FormQuestion[] = [
       { value: 'WA', label: 'Washington' },
       { value: 'WV', label: 'West Virginia' },
       { value: 'WI', label: 'Wisconsin' },
-      { value: 'WY', label: 'Wyoming' }
-    ]
+      { value: 'WY', label: 'Wyoming' },
+    ],
   },
   {
     id: 'companyAddress',
@@ -73,7 +73,7 @@ export const shareholderAgreementQuestions: FormQuestion[] = [
     label: 'Company Address',
     required: true,
     placeholder: 'Enter the complete address of the company',
-    validation: { min: 10, max: 300 }
+    validation: { min: 10, max: 300 },
   },
   {
     id: 'shareholders',
@@ -89,21 +89,21 @@ export const shareholderAgreementQuestions: FormQuestion[] = [
           type: 'text',
           label: 'Shareholder Name',
           required: true,
-          placeholder: 'Enter shareholder\'s full name'
+          placeholder: "Enter shareholder's full name",
         },
         {
           id: 'address',
           type: 'textarea',
           label: 'Address',
           required: true,
-          placeholder: 'Enter complete address'
+          placeholder: 'Enter complete address',
         },
         {
           id: 'sharesOwned',
           type: 'number',
           label: 'Shares Owned',
           required: true,
-          validation: { min: 1 }
+          validation: { min: 1 },
         },
         {
           id: 'shareClass',
@@ -111,7 +111,7 @@ export const shareholderAgreementQuestions: FormQuestion[] = [
           label: 'Share Class',
           required: false,
           defaultValue: 'Common',
-          placeholder: 'e.g., Common, Preferred'
+          placeholder: 'e.g., Common, Preferred',
         },
         {
           id: 'ownershipPercentage',
@@ -119,24 +119,24 @@ export const shareholderAgreementQuestions: FormQuestion[] = [
           label: 'Ownership Percentage',
           required: true,
           validation: { min: 0, max: 100 },
-          placeholder: 'Enter percentage (0-100)'
-        }
-      ]
-    }
+          placeholder: 'Enter percentage (0-100)',
+        },
+      ],
+    },
   },
   {
     id: 'totalShares',
     type: 'number',
     label: 'Total Shares Outstanding',
     required: true,
-    validation: { min: 1 }
+    validation: { min: 1 },
   },
   {
     id: 'boardOfDirectors.totalDirectors',
     type: 'number',
     label: 'Number of Directors',
     required: true,
-    validation: { min: 1 }
+    validation: { min: 1 },
   },
   {
     id: 'boardOfDirectors.electionMethod',
@@ -147,8 +147,8 @@ export const shareholderAgreementQuestions: FormQuestion[] = [
     options: [
       { value: 'majority', label: 'Majority Voting' },
       { value: 'cumulative', label: 'Cumulative Voting' },
-      { value: 'class-based', label: 'Class-Based Voting' }
-    ]
+      { value: 'class-based', label: 'Class-Based Voting' },
+    ],
   },
   {
     id: 'votingAgreements.dragAlongRights',
@@ -156,7 +156,8 @@ export const shareholderAgreementQuestions: FormQuestion[] = [
     label: 'Include Drag-Along Rights',
     required: false,
     defaultValue: true,
-    helpText: 'Majority shareholders can force minority shareholders to join in sale'
+    helpText:
+      'Majority shareholders can force minority shareholders to join in sale',
   },
   {
     id: 'votingAgreements.tagAlongRights',
@@ -164,7 +165,7 @@ export const shareholderAgreementQuestions: FormQuestion[] = [
     label: 'Include Tag-Along Rights',
     required: false,
     defaultValue: true,
-    helpText: 'Minority shareholders can join in when majority sells'
+    helpText: 'Minority shareholders can join in when majority sells',
   },
   {
     id: 'votingAgreements.rightOfFirstRefusal',
@@ -172,21 +173,22 @@ export const shareholderAgreementQuestions: FormQuestion[] = [
     label: 'Include Right of First Refusal',
     required: false,
     defaultValue: true,
-    helpText: 'Existing shareholders get first opportunity to buy shares being sold'
+    helpText:
+      'Existing shareholders get first opportunity to buy shares being sold',
   },
   {
     id: 'transferRestrictions.transfersAllowed',
     type: 'checkbox',
     label: 'Allow Free Transfer of Shares',
     required: false,
-    defaultValue: false
+    defaultValue: false,
   },
   {
     id: 'transferRestrictions.approvalRequired',
     type: 'checkbox',
     label: 'Require Board Approval for Transfers',
     required: false,
-    defaultValue: true
+    defaultValue: true,
   },
   {
     id: 'buySellProvisions.valuationMethod',
@@ -197,22 +199,22 @@ export const shareholderAgreementQuestions: FormQuestion[] = [
     options: [
       { value: 'appraisal', label: 'Professional Appraisal' },
       { value: 'formula', label: 'Formula-Based' },
-      { value: 'multiple-of-earnings', label: 'Multiple of Earnings' }
-    ]
+      { value: 'multiple-of-earnings', label: 'Multiple of Earnings' },
+    ],
   },
   {
     id: 'confidentialityClause',
     type: 'checkbox',
     label: 'Include Confidentiality Clause',
     required: false,
-    defaultValue: true
+    defaultValue: true,
   },
   {
     id: 'nonCompeteClause',
     type: 'checkbox',
     label: 'Include Non-Compete Clause',
     required: false,
-    defaultValue: false
+    defaultValue: false,
   },
   {
     id: 'nonCompetePeriod',
@@ -220,7 +222,7 @@ export const shareholderAgreementQuestions: FormQuestion[] = [
     label: 'Non-Compete Period',
     required: false,
     placeholder: 'e.g., 2 years',
-    conditional: { field: 'nonCompeteClause', value: true }
+    conditional: { field: 'nonCompeteClause', value: true },
   },
   {
     id: 'disputeResolution.method',
@@ -231,8 +233,8 @@ export const shareholderAgreementQuestions: FormQuestion[] = [
     options: [
       { value: 'arbitration', label: 'Arbitration' },
       { value: 'mediation', label: 'Mediation' },
-      { value: 'litigation', label: 'Court Litigation' }
-    ]
+      { value: 'litigation', label: 'Court Litigation' },
+    ],
   },
   {
     id: 'disputeResolution.governingLaw',
@@ -289,8 +291,8 @@ export const shareholderAgreementQuestions: FormQuestion[] = [
       { value: 'WA', label: 'Washington' },
       { value: 'WV', label: 'West Virginia' },
       { value: 'WI', label: 'Wisconsin' },
-      { value: 'WY', label: 'Wyoming' }
-    ]
+      { value: 'WY', label: 'Wyoming' },
+    ],
   },
   {
     id: 'additionalProvisions',
@@ -298,20 +300,20 @@ export const shareholderAgreementQuestions: FormQuestion[] = [
     label: 'Additional Provisions',
     required: false,
     placeholder: 'Enter any additional terms or provisions for this agreement',
-    validation: { max: 1000 }
+    validation: { max: 1000 },
   },
   {
     id: 'agreementDate',
     type: 'date',
     label: 'Agreement Date',
     required: true,
-    helpText: 'Date this shareholder agreement is signed'
+    helpText: 'Date this shareholder agreement is signed',
   },
   {
     id: 'notarization',
     type: 'checkbox',
     label: 'Require Notarization',
     required: false,
-    defaultValue: true
-  }
+    defaultValue: true,
+  },
 ];

@@ -1,6 +1,9 @@
 import type { LegalDocument } from '@/types/documents';
 
-export const shareholderAgreementMeta: Omit<LegalDocument, 'schema' | 'questions'> = {
+export const shareholderAgreementMeta: Omit<
+  LegalDocument,
+  'schema' | 'questions'
+> = {
   id: 'shareholder-agreement',
   jurisdiction: 'US',
   category: 'Corporate',
@@ -21,13 +24,21 @@ export const shareholderAgreementMeta: Omit<LegalDocument, 'schema' | 'questions
       name: 'Shareholder Agreement',
       description:
         'Agreement between company shareholders governing rights, responsibilities, and transfer of shares.',
-      aliases: ['Shareholders agreement', 'Stock agreement', 'Equity agreement'],
+      aliases: [
+        'Shareholders agreement',
+        'Stock agreement',
+        'Equity agreement',
+      ],
     },
     es: {
       name: 'Acuerdo de Accionistas',
       description:
         'Acuerdo entre accionistas de la empresa que rige los derechos, responsabilidades y transferencia de acciones.',
-      aliases: ['Acuerdo accionistas', 'Acuerdo de acciones', 'Acuerdo de capital'],
+      aliases: [
+        'Acuerdo accionistas',
+        'Acuerdo de acciones',
+        'Acuerdo de capital',
+      ],
     },
   },
 };

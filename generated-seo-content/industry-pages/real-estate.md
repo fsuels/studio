@@ -15,6 +15,7 @@ Real Estate businesses face unique legal challenges requiring specialized docume
 ### Why Real Estate Needs Specialized Legal Documents
 
 Real Estate businesses require documents that address:
+
 - Industry-specific regulations and compliance requirements
 - Common real estate business practices and terminology
 - Risk management specific to real estate operations
@@ -31,4 +32,4 @@ Our real estate templates include:
 
 [Browse Real Estate Documents]
 
-*Trusted by thousands of real estate professionals*
+_Trusted by thousands of real estate professionals_

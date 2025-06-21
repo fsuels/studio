@@ -23,21 +23,23 @@ export const severanceAgreementMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Severance Agreement',
-      description: 'Create a legally binding severance agreement with our easy-to-use template. State-specific requirements included.',
+      description:
+        'Create a legally binding severance agreement with our easy-to-use template. State-specific requirements included.',
       aliases: [
         'severance contract',
         'separation agreement',
         'employment separation',
-        'severance package'
+        'severance package',
       ],
     },
     es: {
       name: 'Acuerdo de Indemnización',
-      description: 'Crea un acuerdo de indemnización legalmente válido con nuestra plantilla fácil de usar. Incluye requisitos específicos del estado.',
+      description:
+        'Crea un acuerdo de indemnización legalmente válido con nuestra plantilla fácil de usar. Incluye requisitos específicos del estado.',
       aliases: [
         'contrato de indemnización',
         'acuerdo de separación',
-        'paquete de indemnización'
+        'paquete de indemnización',
       ],
     },
   },

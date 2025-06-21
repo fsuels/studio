@@ -24,12 +24,18 @@ export const transportationServiceAgreementMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Transportation Service Agreement',
-      description: 'Agreement for transportation and delivery services between provider and client.',
-      aliases: ['delivery service agreement', 'transport contract', 'logistics service agreement'],
+      description:
+        'Agreement for transportation and delivery services between provider and client.',
+      aliases: [
+        'delivery service agreement',
+        'transport contract',
+        'logistics service agreement',
+      ],
     },
     es: {
       name: 'Acuerdo de Servicio de Transporte',
-      description: 'Acuerdo para servicios de transporte y entrega entre proveedor y cliente.',
+      description:
+        'Acuerdo para servicios de transporte y entrega entre proveedor y cliente.',
       aliases: ['acuerdo de servicio de entrega', 'contrato de transporte'],
     },
   },

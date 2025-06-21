@@ -14,7 +14,7 @@ export interface MilestoneEmailData {
 
 export class MilestoneEmailService {
   private static instance: MilestoneEmailService;
-  
+
   static getInstance(): MilestoneEmailService {
     if (!MilestoneEmailService.instance) {
       MilestoneEmailService.instance = new MilestoneEmailService();
@@ -34,41 +34,55 @@ export class MilestoneEmailService {
       });
 
       if (!response.ok) {
-        throw new Error(`Failed to trigger milestone email: ${response.statusText}`);
+        throw new Error(
+          `Failed to trigger milestone email: ${response.statusText}`,
+        );
       }
 
-      console.log(`Milestone email triggered for ${data.milestone}:`, data.userId);
+      console.log(
+        `Milestone email triggered for ${data.milestone}:`,
+        data.userId,
+      );
     } catch (error) {
       console.error('Error triggering milestone email:', error);
       // Don't throw - email failures shouldn't break user experience
     }
   }
 
-  async triggerWelcomeSequence(data: Omit<MilestoneEmailData, 'milestone'>): Promise<void> {
+  async triggerWelcomeSequence(
+    data: Omit<MilestoneEmailData, 'milestone'>,
+  ): Promise<void> {
     await this.triggerMilestoneEmail({
       ...data,
-      milestone: 'welcome_sequence'
+      milestone: 'welcome_sequence',
     });
   }
 
-  async triggerOnboardingComplete(data: Omit<MilestoneEmailData, 'milestone'>): Promise<void> {
+  async triggerOnboardingComplete(
+    data: Omit<MilestoneEmailData, 'milestone'>,
+  ): Promise<void> {
     await this.triggerMilestoneEmail({
       ...data,
-      milestone: 'onboarding_complete'
+      milestone: 'onboarding_complete',
     });
   }
 
-  async triggerFirstDocumentCreated(data: Omit<MilestoneEmailData, 'milestone'>): Promise<void> {
+  async triggerFirstDocumentCreated(
+    data: Omit<MilestoneEmailData, 'milestone'>,
+  ): Promise<void> {
     await this.triggerMilestoneEmail({
       ...data,
-      milestone: 'first_document'
+      milestone: 'first_document',
     });
   }
 
-  async triggerRetentionEmail(data: Omit<MilestoneEmailData, 'milestone'>, daysInactive: number): Promise<void> {
+  async triggerRetentionEmail(
+    data: Omit<MilestoneEmailData, 'milestone'>,
+    daysInactive: number,
+  ): Promise<void> {
     await this.triggerMilestoneEmail({
       ...data,
-      milestone: `retention_${daysInactive}d`
+      milestone: `retention_${daysInactive}d`,
     });
   }
 }

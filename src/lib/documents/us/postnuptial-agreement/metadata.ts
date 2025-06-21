@@ -24,12 +24,14 @@ export const postnuptialAgreementMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Postnuptial Agreement',
-      description: 'Agreement between married spouses regarding property and financial matters.',
+      description:
+        'Agreement between married spouses regarding property and financial matters.',
       aliases: ['post-marital agreement', 'marital property agreement'],
     },
     es: {
       name: 'Acuerdo Postnupcial',
-      description: 'Acuerdo entre cónyuges casados sobre asuntos de propiedad y financieros.',
+      description:
+        'Acuerdo entre cónyuges casados sobre asuntos de propiedad y financieros.',
       aliases: ['acuerdo post-matrimonial', 'acuerdo de propiedad marital'],
     },
   },

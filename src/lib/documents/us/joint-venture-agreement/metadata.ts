@@ -26,13 +26,21 @@ export const jointVentureAgreementMeta: LegalDocument = {
       name: 'Joint Venture Agreement',
       description:
         'Agreement between parties to collaborate on a specific business project or venture.',
-      aliases: ['business collaboration', 'joint venture', 'strategic partnership'],
+      aliases: [
+        'business collaboration',
+        'joint venture',
+        'strategic partnership',
+      ],
     },
     es: {
       name: 'Acuerdo de Empresa Conjunta',
       description:
         'Acuerdo entre partes para colaborar en un proyecto comercial o empresa específica.',
-      aliases: ['colaboración empresarial', 'empresa conjunta', 'asociación estratégica'],
+      aliases: [
+        'colaboración empresarial',
+        'empresa conjunta',
+        'asociación estratégica',
+      ],
     },
   },
 };

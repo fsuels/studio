@@ -139,7 +139,8 @@ export const contractAmendmentQuestions: FormQuestion[] = [
     id: 'sectionsAmended',
     type: 'textarea',
     label: 'Sections Being Amended',
-    placeholder: 'Specify which sections, clauses, or provisions are being amended',
+    placeholder:
+      'Specify which sections, clauses, or provisions are being amended',
     required: true,
     section: 'Amendment Content',
   },
@@ -147,7 +148,8 @@ export const contractAmendmentQuestions: FormQuestion[] = [
     id: 'originalLanguage',
     type: 'textarea',
     label: 'Original Contract Language',
-    placeholder: 'Copy the exact language from the original contract that is being changed',
+    placeholder:
+      'Copy the exact language from the original contract that is being changed',
     required: true,
     section: 'Amendment Content',
   },

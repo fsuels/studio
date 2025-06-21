@@ -18,11 +18,11 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
-import { 
-  HelpCircle, 
-  BookOpen, 
-  Scale, 
-  AlertTriangle, 
+import {
+  HelpCircle,
+  BookOpen,
+  Scale,
+  AlertTriangle,
   Lightbulb,
   Search,
   ExternalLink,
@@ -31,7 +31,7 @@ import {
   Clock,
   Star,
   User,
-  Building
+  Building,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -80,14 +80,16 @@ const ContextualLegalHelp: React.FC<ContextualLegalHelpProps> = ({
   documentType,
   userJurisdiction = 'US-ALL',
   userExperience = 'beginner',
-  className
+  className,
 }) => {
   const { t } = useTranslation('help');
   const [legalConcepts, setLegalConcepts] = React.useState<LegalConcept[]>([]);
   const [examples, setExamples] = React.useState<ContextualExample[]>([]);
   const [resources, setResources] = React.useState<HelpResource[]>([]);
   const [searchQuery, setSearchQuery] = React.useState('');
-  const [activeTab, setActiveTab] = React.useState<'concepts' | 'examples' | 'resources'>('concepts');
+  const [activeTab, setActiveTab] = React.useState<
+    'concepts' | 'examples' | 'resources'
+  >('concepts');
   const [isLoading, setIsLoading] = React.useState(false);
 
   // Load contextual help content
@@ -97,7 +99,7 @@ const ContextualLegalHelp: React.FC<ContextualLegalHelpProps> = ({
 
   const loadContextualHelp = async () => {
     setIsLoading(true);
-    
+
     try {
       const response = await fetch('/api/help/contextual', {
         method: 'POST',
@@ -106,8 +108,8 @@ const ContextualLegalHelp: React.FC<ContextualLegalHelpProps> = ({
           fieldId,
           documentType,
           jurisdiction: userJurisdiction,
-          experience: userExperience
-        })
+          experience: userExperience,
+        }),
       });
 
       const data = await response.json();
@@ -129,13 +131,14 @@ const ContextualLegalHelp: React.FC<ContextualLegalHelpProps> = ({
       {
         id: 'consideration',
         term: 'Consideration',
-        definition: 'Something of value exchanged between parties in a contract.',
+        definition:
+          'Something of value exchanged between parties in a contract.',
         jurisdiction: ['US-ALL'],
         complexity: 'basic',
         examples: ['Money', 'Services', 'Goods', 'Promises'],
         relatedTerms: ['Contract', 'Agreement', 'Exchange'],
-        warnings: ['Consideration must have legal value']
-      }
+        warnings: ['Consideration must have legal value'],
+      },
     ]);
   };
 
@@ -150,8 +153,8 @@ const ContextualLegalHelp: React.FC<ContextualLegalHelpProps> = ({
           query,
           documentType,
           jurisdiction: userJurisdiction,
-          context: fieldId
-        })
+          context: fieldId,
+        }),
       });
 
       const results = await response.json();
@@ -172,55 +175,68 @@ const ContextualLegalHelp: React.FC<ContextualLegalHelpProps> = ({
 
   const getComplexityColor = (complexity: string) => {
     switch (complexity) {
-      case 'basic': return 'bg-green-100 text-green-800';
-      case 'intermediate': return 'bg-yellow-100 text-yellow-800';
-      case 'advanced': return 'bg-red-100 text-red-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'basic':
+        return 'bg-green-100 text-green-800';
+      case 'intermediate':
+        return 'bg-yellow-100 text-yellow-800';
+      case 'advanced':
+        return 'bg-red-100 text-red-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
     }
   };
 
   const getResourceIcon = (type: string) => {
     switch (type) {
-      case 'article': return <BookOpen className="h-4 w-4" />;
-      case 'video': return <Play className="h-4 w-4" />;
-      case 'example': return <Lightbulb className="h-4 w-4" />;
-      case 'template': return <User className="h-4 w-4" />;
-      case 'checklist': return <Building className="h-4 w-4" />;
-      default: return <HelpCircle className="h-4 w-4" />;
+      case 'article':
+        return <BookOpen className="h-4 w-4" />;
+      case 'video':
+        return <Play className="h-4 w-4" />;
+      case 'example':
+        return <Lightbulb className="h-4 w-4" />;
+      case 'template':
+        return <User className="h-4 w-4" />;
+      case 'checklist':
+        return <Building className="h-4 w-4" />;
+      default:
+        return <HelpCircle className="h-4 w-4" />;
     }
   };
 
-  const filteredConcepts = legalConcepts.filter(concept =>
-    !searchQuery || 
-    concept.term.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    concept.definition.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredConcepts = legalConcepts.filter(
+    (concept) =>
+      !searchQuery ||
+      concept.term.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      concept.definition.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
-  const filteredExamples = examples.filter(example =>
-    !searchQuery ||
-    example.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    example.scenario.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredExamples = examples.filter(
+    (example) =>
+      !searchQuery ||
+      example.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      example.scenario.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
-  const filteredResources = resources.filter(resource =>
-    !searchQuery ||
-    resource.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    resource.description.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredResources = resources.filter(
+    (resource) =>
+      !searchQuery ||
+      resource.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      resource.description.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button 
-          variant="outline" 
-          size="sm" 
-          className={cn("gap-2 h-8", className)}
+        <Button
+          variant="outline"
+          size="sm"
+          className={cn('gap-2 h-8', className)}
         >
           <HelpCircle className="h-4 w-4" />
           Legal Help
         </Button>
       </PopoverTrigger>
-      
+
       <PopoverContent className="w-96 p-0" align="end">
         <Card className="border-0 shadow-none">
           <CardHeader className="pb-3">
@@ -228,7 +244,7 @@ const ContextualLegalHelp: React.FC<ContextualLegalHelpProps> = ({
               <Scale className="h-5 w-5 text-primary" />
               Legal Assistant
             </CardTitle>
-            
+
             {/* Search */}
             <div className="relative">
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
@@ -248,16 +264,16 @@ const ContextualLegalHelp: React.FC<ContextualLegalHelpProps> = ({
               {[
                 { key: 'concepts', label: 'Terms', icon: BookOpen },
                 { key: 'examples', label: 'Examples', icon: Lightbulb },
-                { key: 'resources', label: 'Resources', icon: ExternalLink }
-              ].map(tab => (
+                { key: 'resources', label: 'Resources', icon: ExternalLink },
+              ].map((tab) => (
                 <button
                   key={tab.key}
                   onClick={() => setActiveTab(tab.key as any)}
                   className={cn(
-                    "flex-1 flex items-center justify-center gap-2 px-3 py-2 text-sm font-medium transition-colors",
-                    activeTab === tab.key 
-                      ? "text-primary border-b-2 border-primary bg-primary/5" 
-                      : "text-muted-foreground hover:text-foreground"
+                    'flex-1 flex items-center justify-center gap-2 px-3 py-2 text-sm font-medium transition-colors',
+                    activeTab === tab.key
+                      ? 'text-primary border-b-2 border-primary bg-primary/5'
+                      : 'text-muted-foreground hover:text-foreground',
                   )}
                 >
                   <tab.icon className="h-4 w-4" />
@@ -277,14 +293,14 @@ const ContextualLegalHelp: React.FC<ContextualLegalHelpProps> = ({
                   {/* Legal Concepts */}
                   {activeTab === 'concepts' && (
                     <div className="space-y-3">
-                      {filteredConcepts.map(concept => (
+                      {filteredConcepts.map((concept) => (
                         <LegalConceptCard
                           key={concept.id}
                           concept={concept}
                           onTermClick={handleTermClick}
                         />
                       ))}
-                      
+
                       {filteredConcepts.length === 0 && (
                         <div className="text-center text-muted-foreground py-4">
                           <BookOpen className="h-8 w-8 mx-auto mb-2 opacity-50" />
@@ -297,10 +313,10 @@ const ContextualLegalHelp: React.FC<ContextualLegalHelpProps> = ({
                   {/* Examples */}
                   {activeTab === 'examples' && (
                     <div className="space-y-3">
-                      {filteredExamples.map(example => (
+                      {filteredExamples.map((example) => (
                         <ExampleCard key={example.id} example={example} />
                       ))}
-                      
+
                       {filteredExamples.length === 0 && (
                         <div className="text-center text-muted-foreground py-4">
                           <Lightbulb className="h-8 w-8 mx-auto mb-2 opacity-50" />
@@ -313,10 +329,10 @@ const ContextualLegalHelp: React.FC<ContextualLegalHelpProps> = ({
                   {/* Resources */}
                   {activeTab === 'resources' && (
                     <div className="space-y-3">
-                      {filteredResources.map(resource => (
+                      {filteredResources.map((resource) => (
                         <ResourceCard key={resource.id} resource={resource} />
                       ))}
-                      
+
                       {filteredResources.length === 0 && (
                         <div className="text-center text-muted-foreground py-4">
                           <ExternalLink className="h-8 w-8 mx-auto mb-2 opacity-50" />
@@ -356,23 +372,26 @@ const LegalConceptCard: React.FC<{
       <div className="space-y-2">
         <div className="flex items-center justify-between">
           <h4 className="font-medium text-sm">{concept.term}</h4>
-          <Badge variant="outline" className={getComplexityColor(concept.complexity)}>
+          <Badge
+            variant="outline"
+            className={getComplexityColor(concept.complexity)}
+          >
             {concept.complexity}
           </Badge>
         </div>
-        
+
         <p className="text-sm text-muted-foreground">{concept.definition}</p>
-        
+
         {concept.warnings && concept.warnings.length > 0 && (
           <div className="flex items-start gap-2 p-2 bg-amber-50 border border-amber-200 rounded text-xs">
             <AlertTriangle className="h-3 w-3 text-amber-600 mt-0.5 shrink-0" />
             <span className="text-amber-800">{concept.warnings[0]}</span>
           </div>
         )}
-        
+
         {concept.relatedTerms.length > 0 && (
           <div className="flex flex-wrap gap-1">
-            {concept.relatedTerms.slice(0, 3).map(term => (
+            {concept.relatedTerms.slice(0, 3).map((term) => (
               <button
                 key={term}
                 onClick={() => onTermClick(term)}
@@ -400,10 +419,12 @@ const ExampleCard: React.FC<{ example: ContextualExample }> = ({ example }) => {
           <AccordionContent className="space-y-2 pt-2">
             <p className="text-sm text-muted-foreground">{example.scenario}</p>
             <p className="text-sm">{example.explanation}</p>
-            
+
             {example.tips.length > 0 && (
               <div>
-                <h5 className="text-xs font-medium text-green-800 mb-1">💡 Tips:</h5>
+                <h5 className="text-xs font-medium text-green-800 mb-1">
+                  💡 Tips:
+                </h5>
                 <ul className="text-xs text-muted-foreground space-y-1">
                   {example.tips.map((tip, idx) => (
                     <li key={idx}>• {tip}</li>
@@ -411,10 +432,12 @@ const ExampleCard: React.FC<{ example: ContextualExample }> = ({ example }) => {
                 </ul>
               </div>
             )}
-            
+
             {example.commonMistakes.length > 0 && (
               <div>
-                <h5 className="text-xs font-medium text-red-800 mb-1">⚠️ Common Mistakes:</h5>
+                <h5 className="text-xs font-medium text-red-800 mb-1">
+                  ⚠️ Common Mistakes:
+                </h5>
                 <ul className="text-xs text-muted-foreground space-y-1">
                   {example.commonMistakes.map((mistake, idx) => (
                     <li key={idx}>• {mistake}</li>
@@ -434,10 +457,8 @@ const ResourceCard: React.FC<{ resource: HelpResource }> = ({ resource }) => {
   return (
     <Card className="p-3 hover:bg-muted/50 transition-colors">
       <div className="flex items-start gap-3">
-        <div className="shrink-0 mt-0.5">
-          {getResourceIcon(resource.type)}
-        </div>
-        
+        <div className="shrink-0 mt-0.5">{getResourceIcon(resource.type)}</div>
+
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-1">
             <h4 className="font-medium text-sm truncate">{resource.title}</h4>
@@ -446,9 +467,11 @@ const ResourceCard: React.FC<{ resource: HelpResource }> = ({ resource }) => {
               {resource.rating.toFixed(1)}
             </div>
           </div>
-          
-          <p className="text-xs text-muted-foreground mb-2">{resource.description}</p>
-          
+
+          <p className="text-xs text-muted-foreground mb-2">
+            {resource.description}
+          </p>
+
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Badge variant="outline" className="text-xs">
@@ -461,7 +484,7 @@ const ResourceCard: React.FC<{ resource: HelpResource }> = ({ resource }) => {
                 </div>
               )}
             </div>
-            
+
             {resource.url && (
               <Button variant="ghost" size="sm" className="h-6 gap-1 text-xs">
                 Open
@@ -477,21 +500,31 @@ const ResourceCard: React.FC<{ resource: HelpResource }> = ({ resource }) => {
 
 function getComplexityColor(complexity: string) {
   switch (complexity) {
-    case 'basic': return 'bg-green-100 text-green-800';
-    case 'intermediate': return 'bg-yellow-100 text-yellow-800';
-    case 'advanced': return 'bg-red-100 text-red-800';
-    default: return 'bg-gray-100 text-gray-800';
+    case 'basic':
+      return 'bg-green-100 text-green-800';
+    case 'intermediate':
+      return 'bg-yellow-100 text-yellow-800';
+    case 'advanced':
+      return 'bg-red-100 text-red-800';
+    default:
+      return 'bg-gray-100 text-gray-800';
   }
 }
 
 function getResourceIcon(type: string) {
   switch (type) {
-    case 'article': return <BookOpen className="h-4 w-4" />;
-    case 'video': return <Play className="h-4 w-4" />;
-    case 'example': return <Lightbulb className="h-4 w-4" />;
-    case 'template': return <User className="h-4 w-4" />;
-    case 'checklist': return <Building className="h-4 w-4" />;
-    default: return <HelpCircle className="h-4 w-4" />;
+    case 'article':
+      return <BookOpen className="h-4 w-4" />;
+    case 'video':
+      return <Play className="h-4 w-4" />;
+    case 'example':
+      return <Lightbulb className="h-4 w-4" />;
+    case 'template':
+      return <User className="h-4 w-4" />;
+    case 'checklist':
+      return <Building className="h-4 w-4" />;
+    default:
+      return <HelpCircle className="h-4 w-4" />;
   }
 }
 

@@ -7,7 +7,7 @@ interface InvoiceData {
   date: string;
   dueDate: string;
   status: 'draft' | 'sent' | 'paid' | 'overdue' | 'void';
-  
+
   // Company information
   company: {
     name: string;
@@ -21,7 +21,7 @@ interface InvoiceData {
     logo?: string;
     taxId: string;
   };
-  
+
   // Customer information
   customer: {
     id: string;
@@ -34,7 +34,7 @@ interface InvoiceData {
     phone?: string;
     company?: string;
   };
-  
+
   // Invoice items
   items: Array<{
     id: string;
@@ -45,7 +45,7 @@ interface InvoiceData {
     taxable: boolean;
     category: 'document' | 'subscription' | 'service' | 'addon';
   }>;
-  
+
   // Totals and tax
   subtotal: number;
   taxRate: number;
@@ -53,12 +53,12 @@ interface InvoiceData {
   discountAmount?: number;
   discountPercentage?: number;
   total: number;
-  
+
   // Payment information
   paymentTerms: string;
   paymentMethods: string[];
   notes?: string;
-  
+
   // Metadata
   metadata: {
     subscriptionId?: string;
@@ -120,7 +120,7 @@ export class InvoiceGenerator {
       phone: '+1 (555) 123-4567',
       email: 'billing@123legaldoc.com',
       website: 'https://123legaldoc.com',
-      taxId: '12-3456789'
+      taxId: '12-3456789',
     };
   }
 
@@ -137,13 +137,13 @@ export class InvoiceGenerator {
         secondary: '#64748b',
         accent: '#3b82f6',
         text: '#1e293b',
-        background: '#ffffff'
+        background: '#ffffff',
       },
       fonts: {
         primary: 'Inter',
         secondary: 'system-ui',
-        size: { header: 24, body: 14, small: 12 }
-      }
+        size: { header: 24, body: 14, small: 12 },
+      },
     });
 
     // Professional template
@@ -157,13 +157,13 @@ export class InvoiceGenerator {
         secondary: '#6b7280',
         accent: '#059669',
         text: '#374151',
-        background: '#ffffff'
+        background: '#ffffff',
       },
       fonts: {
         primary: 'Arial',
         secondary: 'Helvetica',
-        size: { header: 22, body: 13, small: 11 }
-      }
+        size: { header: 22, body: 13, small: 11 },
+      },
     });
 
     // Minimal template
@@ -177,13 +177,13 @@ export class InvoiceGenerator {
         secondary: '#666666',
         accent: '#000000',
         text: '#333333',
-        background: '#ffffff'
+        background: '#ffffff',
       },
       fonts: {
         primary: 'Helvetica',
         secondary: 'Arial',
-        size: { header: 20, body: 12, small: 10 }
-      }
+        size: { header: 20, body: 12, small: 10 },
+      },
     });
   }
 
@@ -198,7 +198,7 @@ export class InvoiceGenerator {
       dueInDays?: number;
       discountPercentage?: number;
       taxRate?: number;
-    }
+    },
   ): Promise<InvoiceData> {
     console.log(`📄 Creating invoice for customer ${customerId}`);
 
@@ -210,8 +210,9 @@ export class InvoiceGenerator {
 
     // Calculate totals
     const subtotal = items.reduce((sum, item) => sum + item.totalPrice, 0);
-    const discountAmount = options?.discountPercentage ? 
-      (subtotal * (options.discountPercentage / 100)) : 0;
+    const discountAmount = options?.discountPercentage
+      ? subtotal * (options.discountPercentage / 100)
+      : 0;
     const taxableAmount = subtotal - discountAmount;
     const taxRate = options?.taxRate || 0.085; // Default 8.5% sales tax
     const taxAmount = taxableAmount * taxRate;
@@ -225,9 +226,9 @@ export class InvoiceGenerator {
       status: 'draft',
       company: { ...this.companyInfo },
       customer: customerData,
-      items: items.map(item => ({
+      items: items.map((item) => ({
         ...item,
-        id: item.id || this.generateItemId()
+        id: item.id || this.generateItemId(),
       })),
       subtotal,
       taxRate,
@@ -240,13 +241,13 @@ export class InvoiceGenerator {
         'Credit Card (Visa, MasterCard, American Express)',
         'ACH Bank Transfer',
         'Wire Transfer',
-        'Check'
+        'Check',
       ],
       notes: options?.notes,
       metadata: {
         generatedBy: 'system',
-        lastModified: now.toISOString()
-      }
+        lastModified: now.toISOString(),
+      },
     };
 
     this.invoices.set(invoiceId, invoice);
@@ -258,7 +259,7 @@ export class InvoiceGenerator {
   // Generate PDF invoice
   async generatePDF(
     invoiceId: string,
-    templateId: string = 'modern'
+    templateId: string = 'modern',
   ): Promise<{ success: boolean; pdfUrl?: string; error?: string }> {
     console.log(`📋 Generating PDF for invoice ${invoiceId}`);
 
@@ -275,10 +276,10 @@ export class InvoiceGenerator {
     try {
       // Generate HTML content
       const htmlContent = this.generateInvoiceHTML(invoice, template);
-      
+
       // In production, this would use a PDF generation library like Puppeteer or PDFKit
       const pdfBuffer = await this.convertHTMLToPDF(htmlContent);
-      
+
       // Save PDF and return URL
       const pdfUrl = await this.savePDFFile(invoiceId, pdfBuffer);
 
@@ -291,9 +292,12 @@ export class InvoiceGenerator {
   }
 
   // Generate HTML invoice
-  private generateInvoiceHTML(invoice: InvoiceData, template: InvoiceTemplate): string {
+  private generateInvoiceHTML(
+    invoice: InvoiceData,
+    template: InvoiceTemplate,
+  ): string {
     const { colors, fonts } = template;
-    
+
     return `
 <!DOCTYPE html>
 <html>
@@ -490,7 +494,9 @@ export class InvoiceGenerator {
             </tr>
         </thead>
         <tbody>
-            ${invoice.items.map(item => `
+            ${invoice.items
+              .map(
+                (item) => `
             <tr>
                 <td>
                     <strong>${item.description}</strong>
@@ -500,7 +506,9 @@ export class InvoiceGenerator {
                 <td class="text-right">$${item.unitPrice.toFixed(2)}</td>
                 <td class="text-right">$${item.totalPrice.toFixed(2)}</td>
             </tr>
-            `).join('')}
+            `,
+              )
+              .join('')}
         </tbody>
     </table>
 
@@ -509,12 +517,16 @@ export class InvoiceGenerator {
             <span>Subtotal:</span>
             <span>$${invoice.subtotal.toFixed(2)}</span>
         </div>
-        ${invoice.discountAmount ? `
+        ${
+          invoice.discountAmount
+            ? `
         <div class="totals-row">
             <span>Discount (${invoice.discountPercentage}%):</span>
             <span>-$${invoice.discountAmount.toFixed(2)}</span>
         </div>
-        ` : ''}
+        `
+            : ''
+        }
         <div class="totals-row">
             <span>Tax (${(invoice.taxRate * 100).toFixed(1)}%):</span>
             <span>$${invoice.taxAmount.toFixed(2)}</span>
@@ -531,18 +543,22 @@ export class InvoiceGenerator {
         <div class="payment-methods">
             <p><strong>Accepted Payment Methods:</strong></p>
             <ul>
-                ${invoice.paymentMethods.map(method => `<li>${method}</li>`).join('')}
+                ${invoice.paymentMethods.map((method) => `<li>${method}</li>`).join('')}
             </ul>
         </div>
         <p><small>Please include invoice number ${invoice.number} with your payment.</small></p>
     </div>
 
-    ${invoice.notes ? `
+    ${
+      invoice.notes
+        ? `
     <div class="notes">
         <h4>Notes</h4>
         <p>${invoice.notes}</p>
     </div>
-    ` : ''}
+    `
+        : ''
+    }
 
     <div class="footer">
         <p>Thank you for your business!</p>
@@ -559,20 +575,23 @@ export class InvoiceGenerator {
   private async convertHTMLToPDF(html: string): Promise<Buffer> {
     // In production, this would use Puppeteer, PDFKit, or similar
     console.log('🔄 Converting HTML to PDF...');
-    
+
     // Simulate PDF generation delay
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
     // Return simulated PDF buffer
     return Buffer.from(`PDF content for invoice: ${html.length} bytes`);
   }
 
   // Save PDF file (simulated)
-  private async savePDFFile(invoiceId: string, pdfBuffer: Buffer): Promise<string> {
+  private async savePDFFile(
+    invoiceId: string,
+    pdfBuffer: Buffer,
+  ): Promise<string> {
     // In production, this would save to cloud storage (AWS S3, Google Cloud, etc.)
     const filename = `invoice-${invoiceId}-${Date.now()}.pdf`;
     const url = `/api/invoices/${invoiceId}/pdf/${filename}`;
-    
+
     console.log(`💾 PDF saved: ${filename}`);
     return url;
   }
@@ -585,7 +604,7 @@ export class InvoiceGenerator {
       message?: string;
       ccEmails?: string[];
       attachPDF?: boolean;
-    }
+    },
   ): Promise<{ success: boolean; error?: string }> {
     console.log(`📧 Sending invoice ${invoiceId}`);
 
@@ -604,11 +623,18 @@ export class InvoiceGenerator {
     }
 
     // Prepare email content
-    const subject = options?.subject || `Invoice ${invoice.number} from ${invoice.company.name}`;
+    const subject =
+      options?.subject ||
+      `Invoice ${invoice.number} from ${invoice.company.name}`;
     const message = options?.message || this.getDefaultEmailMessage(invoice);
 
     // Simulate email sending
-    await this.simulateEmailSending(invoice.customer.email, subject, message, pdfUrl);
+    await this.simulateEmailSending(
+      invoice.customer.email,
+      subject,
+      message,
+      pdfUrl,
+    );
 
     // Update invoice status
     invoice.status = 'sent';
@@ -647,16 +673,16 @@ ${invoice.company.name}
     to: string,
     subject: string,
     message: string,
-    attachmentUrl?: string
+    attachmentUrl?: string,
   ): Promise<void> {
     console.log(`📤 Email sent to: ${to}`);
     console.log(`📋 Subject: ${subject}`);
     if (attachmentUrl) {
       console.log(`📎 Attachment: ${attachmentUrl}`);
     }
-    
+
     // Simulate email sending delay
-    await new Promise(resolve => setTimeout(resolve, 500));
+    await new Promise((resolve) => setTimeout(resolve, 500));
   }
 
   // Mark invoice as paid
@@ -664,7 +690,7 @@ ${invoice.company.name}
     invoiceId: string,
     paymentDate?: string,
     paymentMethod?: string,
-    transactionId?: string
+    transactionId?: string,
   ): Promise<InvoiceData> {
     const invoice = this.invoices.get(invoiceId);
     if (!invoice) {
@@ -673,13 +699,13 @@ ${invoice.company.name}
 
     invoice.status = 'paid';
     invoice.metadata.lastModified = new Date().toISOString();
-    
+
     // Add payment metadata
     invoice.metadata = {
       ...invoice.metadata,
       paymentDate: paymentDate || new Date().toISOString(),
       paymentMethod: paymentMethod || 'unknown',
-      transactionId: transactionId || 'manual'
+      transactionId: transactionId || 'manual',
     };
 
     console.log(`💰 Invoice ${invoice.number} marked as paid`);
@@ -694,7 +720,7 @@ ${invoice.company.name}
   // Get invoices by customer
   getCustomerInvoices(customerId: string): InvoiceData[] {
     return Array.from(this.invoices.values())
-      .filter(invoice => invoice.customer.id === customerId)
+      .filter((invoice) => invoice.customer.id === customerId)
       .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
   }
 
@@ -702,11 +728,11 @@ ${invoice.company.name}
   getOverdueInvoices(): InvoiceData[] {
     const now = new Date();
     return Array.from(this.invoices.values())
-      .filter(invoice => 
-        invoice.status === 'sent' && 
-        new Date(invoice.dueDate) < now
+      .filter(
+        (invoice) =>
+          invoice.status === 'sent' && new Date(invoice.dueDate) < now,
       )
-      .map(invoice => {
+      .map((invoice) => {
         invoice.status = 'overdue';
         return invoice;
       });
@@ -724,36 +750,48 @@ ${invoice.company.name}
     averagePaymentTime: number; // days
   } {
     const allInvoices = Array.from(this.invoices.values());
-    const paidInvoices = allInvoices.filter(inv => inv.status === 'paid');
+    const paidInvoices = allInvoices.filter((inv) => inv.status === 'paid');
     const overdueInvoices = this.getOverdueInvoices();
-    const outstandingInvoices = allInvoices.filter(inv => 
-      ['sent', 'overdue'].includes(inv.status)
+    const outstandingInvoices = allInvoices.filter((inv) =>
+      ['sent', 'overdue'].includes(inv.status),
     );
 
     const totalAmount = allInvoices.reduce((sum, inv) => sum + inv.total, 0);
     const paidAmount = paidInvoices.reduce((sum, inv) => sum + inv.total, 0);
-    const outstandingAmount = outstandingInvoices.reduce((sum, inv) => sum + inv.total, 0);
-    const overdueAmount = overdueInvoices.reduce((sum, inv) => sum + inv.total, 0);
+    const outstandingAmount = outstandingInvoices.reduce(
+      (sum, inv) => sum + inv.total,
+      0,
+    );
+    const overdueAmount = overdueInvoices.reduce(
+      (sum, inv) => sum + inv.total,
+      0,
+    );
 
-    const averageInvoiceValue = allInvoices.length > 0 ? totalAmount / allInvoices.length : 0;
-    const paymentSuccessRate = allInvoices.length > 0 ? 
-      (paidInvoices.length / allInvoices.length) * 100 : 0;
+    const averageInvoiceValue =
+      allInvoices.length > 0 ? totalAmount / allInvoices.length : 0;
+    const paymentSuccessRate =
+      allInvoices.length > 0
+        ? (paidInvoices.length / allInvoices.length) * 100
+        : 0;
 
     // Calculate average payment time
     let totalPaymentDays = 0;
     let paymentCount = 0;
-    
-    paidInvoices.forEach(invoice => {
+
+    paidInvoices.forEach((invoice) => {
       if (invoice.metadata.paymentDate) {
         const invoiceDate = new Date(invoice.date);
         const paymentDate = new Date(invoice.metadata.paymentDate);
-        const daysDiff = (paymentDate.getTime() - invoiceDate.getTime()) / (1000 * 60 * 60 * 24);
+        const daysDiff =
+          (paymentDate.getTime() - invoiceDate.getTime()) /
+          (1000 * 60 * 60 * 24);
         totalPaymentDays += daysDiff;
         paymentCount++;
       }
     });
 
-    const averagePaymentTime = paymentCount > 0 ? totalPaymentDays / paymentCount : 0;
+    const averagePaymentTime =
+      paymentCount > 0 ? totalPaymentDays / paymentCount : 0;
 
     return {
       totalInvoices: allInvoices.length,
@@ -763,7 +801,7 @@ ${invoice.company.name}
       overdueAmount: Math.round(overdueAmount * 100) / 100,
       averageInvoiceValue: Math.round(averageInvoiceValue * 100) / 100,
       paymentSuccessRate: Math.round(paymentSuccessRate * 100) / 100,
-      averagePaymentTime: Math.round(averagePaymentTime * 10) / 10
+      averagePaymentTime: Math.round(averagePaymentTime * 10) / 10,
     };
   }
 

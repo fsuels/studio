@@ -3,9 +3,11 @@
 ## Core Workflow Architecture
 
 ### Phase 1: Problem Decomposition Chain
+
 **Purpose**: Break complex problems into manageable, sequential tasks
 
 #### Chain Step 1.1: Context Gathering
+
 ```
 PROMPT: "Analyze the codebase structure and identify:
 1. Main architectural patterns
@@ -16,6 +18,7 @@ Output as structured JSON with confidence scores."
 ```
 
 #### Chain Step 1.2: Problem Classification
+
 ```
 PROMPT: "Based on the analysis from Step 1.1:
 - Classify issues by: complexity (1-5), impact (1-5), dependencies
@@ -25,6 +28,7 @@ Output as prioritized task matrix."
 ```
 
 #### Chain Step 1.3: Solution Planning
+
 ```
 PROMPT: "Using the task matrix from Step 1.2:
 - Create detailed implementation plans for top 3 priorities
@@ -36,6 +40,7 @@ Output as actionable project plan."
 ### Phase 2: Implementation Chain
 
 #### Chain Step 2.1: Code Analysis
+
 ```
 PROMPT: "For task [X] from the project plan:
 1. Read relevant files: [list from previous analysis]
@@ -46,6 +51,7 @@ Output as implementation blueprint."
 ```
 
 #### Chain Step 2.2: Code Generation
+
 ```
 PROMPT: "Using the blueprint from Step 2.1:
 - Generate minimal, focused code changes
@@ -56,6 +62,7 @@ Output as unified diff format."
 ```
 
 #### Chain Step 2.3: Validation & Review
+
 ```
 PROMPT: "Review the code changes from Step 2.2:
 - Check against original requirements
@@ -68,26 +75,29 @@ Output as review checklist with confidence scores."
 ## Advanced Search & Retrieval Integration
 
 ### Pattern 1: Dynamic Context Building
+
 ```yaml
 search_chain:
-  - initial_search: "Find all files mentioning [component/feature]"
-  - relevance_filter: "Rank results by modification date and import frequency"
-  - deep_search: "For top 5 results, extract implementation details"
-  - context_synthesis: "Create comprehensive context document"
+  - initial_search: 'Find all files mentioning [component/feature]'
+  - relevance_filter: 'Rank results by modification date and import frequency'
+  - deep_search: 'For top 5 results, extract implementation details'
+  - context_synthesis: 'Create comprehensive context document'
 ```
 
 ### Pattern 2: Progressive Documentation Search
+
 ```yaml
 documentation_chain:
-  - broad_search: "Find all documentation about [topic]"
-  - specific_search: "Within results, find [specific_pattern]"
-  - cross_reference: "Find code examples using these patterns"
-  - validation: "Verify documentation matches current implementation"
+  - broad_search: 'Find all documentation about [topic]'
+  - specific_search: 'Within results, find [specific_pattern]'
+  - cross_reference: 'Find code examples using these patterns'
+  - validation: 'Verify documentation matches current implementation'
 ```
 
 ## Specialized Chains for Common Tasks
 
 ### Refactoring Chain
+
 ```
 1. IDENTIFY: "Find all instances of [pattern] in codebase"
 2. ANALYZE: "Assess impact of changing each instance"
@@ -97,6 +107,7 @@ documentation_chain:
 ```
 
 ### Bug Investigation Chain
+
 ```
 1. REPRODUCE: "Analyze error logs and identify reproduction steps"
 2. TRACE: "Follow execution path to identify root cause"
@@ -106,6 +117,7 @@ documentation_chain:
 ```
 
 ### Feature Implementation Chain
+
 ```
 1. REQUIREMENTS: "Extract and clarify feature requirements"
 2. DESIGN: "Create technical design fitting existing architecture"
@@ -115,6 +127,7 @@ documentation_chain:
 ```
 
 ### Template Quality Verification Chain
+
 ```
 1. VERIFY: "Run npm run verify-templates to check all templates"
 2. IDENTIFY: "List any templates failing validation with specific errors"
@@ -125,6 +138,7 @@ documentation_chain:
 ```
 
 ### Comprehensive Quality, Legal & Translation Validation Chain
+
 ```
 1. QUALITY_CHECK: "Run npm run quality-check for technical validation"
    - Document structure integrity
@@ -207,6 +221,7 @@ documentation_chain:
 # Project: [Name]
 
 ## Phase 1: Analysis Chain Results
+
 - **Context Gathering Output**: [Structured findings]
 - **Problem Classification**: [Prioritized matrix]
 - **Solution Planning**: [Detailed plans]
@@ -214,23 +229,29 @@ documentation_chain:
 ## Phase 2: Implementation Chains
 
 ### Task 1: [Name]
+
 **Chain Execution**:
+
 - [ ] Code Analysis: [Blueprint link]
 - [ ] Code Generation: [Diff link]
 - [ ] Validation: [Review checklist]
 - [ ] Human Review: [Status]
 
 ### Task 2: [Name]
+
 [Repeat structure]
 
 ## Phase 3: Verification Chain
+
 - [ ] Integration Testing
 - [ ] Performance Validation
 - [ ] Documentation Update
 - [ ] Deployment Preparation
 
 ## Review Section
+
 **Chain Outputs Summary**:
+
 - Total chains executed: [X]
 - Success rate: [X%]
 - Key learnings: [List]
@@ -240,6 +261,7 @@ documentation_chain:
 ## Meta-Prompting Patterns
 
 ### Self-Improving Chains
+
 ```
 REFLECTION_PROMPT: "Analyze the output quality of the previous chain:
 - What worked well?
@@ -249,6 +271,7 @@ Generate improved prompt for next execution."
 ```
 
 ### Enhanced Confidence Scoring Chain with Business Intelligence
+
 ```
 CONFIDENCE_PROMPT: "For each step in the chain:
 - Calculate base confidence in understanding (0-100%)
@@ -262,6 +285,7 @@ Output as enhanced risk assessment matrix with business metrics."
 ```
 
 ### Business Intelligence Weighting Chain
+
 ```
 BUSINESS_INTELLIGENCE_CHAIN:
 1. IMPACT_ASSESSMENT: "Rate document legal liability potential (1-10)"
@@ -274,6 +298,7 @@ Output as business-intelligent confidence decision."
 ```
 
 ### SEO Content Uniqueness & Dynamic Monitoring Chain
+
 ```
 SEO_PROTECTION_CHAIN:
 1. CONTENT_ANALYSIS: "Analyze all content files for uniqueness using embeddings"
@@ -288,6 +313,7 @@ Output as comprehensive SEO protection report with auto-remediation."
 ```
 
 ### White-Hat Automated Backlink Building Chain
+
 ```
 BACKLINK_AUTOMATION_CHAIN:
 1. PROSPECT_DISCOVERY: "Identify .gov/.edu/legal-directory high-authority targets"
@@ -302,6 +328,7 @@ Output as sustainable, penalty-free backlink growth system."
 ```
 
 ### Market Readiness + Staged Rollout Validation Chain
+
 ```
 MARKET_READINESS_CHAIN:
 1. DATABASE_PRELOAD: "Populate market_requirements.db with country-specific compliance data"
@@ -318,6 +345,7 @@ Output as risk-gated international expansion system with compliance-based launch
 ## Best Practices
 
 ### Chain Design Principles
+
 1. **Single Responsibility**: Each chain step has one clear objective
 2. **Progressive Enhancement**: Build complexity gradually
 3. **Fail-Safe Design**: Include validation at each step
@@ -325,24 +353,27 @@ Output as risk-gated international expansion system with compliance-based launch
 5. **Human Checkpoints**: Insert review points for critical decisions
 
 ### Output Formatting Standards
+
 - Always output structured data (JSON/YAML) for chain inputs
 - Include confidence scores and uncertainty flags
 - Provide both summary and detailed views
 - Enable easy rollback with clear change tracking
 
 ### Error Handling Patterns
+
 ```yaml
 error_chain:
-  - detect: "Identify error type and severity"
-  - diagnose: "Trace error to root cause"
-  - recover: "Suggest recovery strategies"
-  - prevent: "Recommend preventive measures"
-  - document: "Update knowledge base"
+  - detect: 'Identify error type and severity'
+  - diagnose: 'Trace error to root cause'
+  - recover: 'Suggest recovery strategies'
+  - prevent: 'Recommend preventive measures'
+  - document: 'Update knowledge base'
 ```
 
 ## Integration with 123LegalDoc
 
 ### Legal Document Analysis Chain
+
 ```
 1. EXTRACT: "Parse document structure and key terms"
 2. CLASSIFY: "Categorize by document type and jurisdiction"
@@ -352,6 +383,7 @@ error_chain:
 ```
 
 ### Template Quality Assurance Chain
+
 ```
 1. SCAN: "Check all templates for duplicate content using hash comparison"
 2. VERIFY: "Run comprehensive validation against quality standards"
@@ -362,6 +394,7 @@ error_chain:
 ```
 
 ### Compliance Verification Chain
+
 ```
 1. REQUIREMENTS: "Load legal requirements from /legal-requirements/*.json"
 2. GAPS: "Run npm run legal-check to identify compliance gaps"
@@ -374,6 +407,7 @@ error_chain:
 ## Metrics and Monitoring
 
 ### Chain Performance Metrics
+
 - Average chain completion time
 - Step success rates
 - Context preservation quality
@@ -381,6 +415,7 @@ error_chain:
 - Human intervention frequency
 
 ### Continuous Improvement Loop
+
 ```
 WEEKLY_REVIEW_CHAIN:
 1. "Analyze all chain executions from past week"

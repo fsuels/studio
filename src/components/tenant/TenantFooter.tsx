@@ -3,13 +3,17 @@
 import React from 'react';
 import Link from 'next/link';
 import { useTenant } from '@/contexts/TenantContext';
-import { useTenantBranding, useCompanyInfo } from '@/contexts/TenantBrandingContext';
+import {
+  useTenantBranding,
+  useCompanyInfo,
+} from '@/contexts/TenantBrandingContext';
 import { Mail, Phone, MapPin, ExternalLink } from 'lucide-react';
 
 export function TenantFooter() {
   const { tenant } = useTenant();
   const { isWhiteLabel } = useTenantBranding();
-  const { companyName, footerText, supportEmail, termsUrl, privacyUrl } = useCompanyInfo();
+  const { companyName, footerText, supportEmail, termsUrl, privacyUrl } =
+    useCompanyInfo();
 
   if (!tenant) {
     return null;
@@ -26,7 +30,7 @@ export function TenantFooter() {
             <h3 className="text-lg font-semibold text-gray-900 mb-4">
               {companyName}
             </h3>
-            
+
             {tenant.description && (
               <p className="text-gray-600 mb-4 max-w-md">
                 {tenant.description}
@@ -34,9 +38,7 @@ export function TenantFooter() {
             )}
 
             {footerText && (
-              <p className="text-gray-600 mb-4 max-w-md">
-                {footerText}
-              </p>
+              <p className="text-gray-600 mb-4 max-w-md">{footerText}</p>
             )}
 
             {/* Contact Information */}
@@ -44,16 +46,22 @@ export function TenantFooter() {
               {supportEmail && (
                 <div className="flex items-center text-sm text-gray-600">
                   <Mail className="h-4 w-4 mr-2" />
-                  <a href={`mailto:${supportEmail}`} className="hover:text-gray-900">
+                  <a
+                    href={`mailto:${supportEmail}`}
+                    className="hover:text-gray-900"
+                  >
                     {supportEmail}
                   </a>
                 </div>
               )}
-              
+
               {tenant.contactPhone && (
                 <div className="flex items-center text-sm text-gray-600">
                   <Phone className="h-4 w-4 mr-2" />
-                  <a href={`tel:${tenant.contactPhone}`} className="hover:text-gray-900">
+                  <a
+                    href={`tel:${tenant.contactPhone}`}
+                    className="hover:text-gray-900"
+                  >
                     {tenant.contactPhone}
                   </a>
                 </div>
@@ -68,7 +76,7 @@ export function TenantFooter() {
             </h4>
             <ul className="space-y-2">
               <li>
-                <Link 
+                <Link
                   href={`/tenant/${tenant.slug}/documents`}
                   className="text-sm text-gray-600 hover:text-gray-900"
                 >
@@ -76,7 +84,7 @@ export function TenantFooter() {
                 </Link>
               </li>
               <li>
-                <Link 
+                <Link
                   href={`/tenant/${tenant.slug}/templates`}
                   className="text-sm text-gray-600 hover:text-gray-900"
                 >
@@ -84,7 +92,7 @@ export function TenantFooter() {
                 </Link>
               </li>
               <li>
-                <Link 
+                <Link
                   href={`/tenant/${tenant.slug}/help`}
                   className="text-sm text-gray-600 hover:text-gray-900"
                 >
@@ -102,7 +110,7 @@ export function TenantFooter() {
             <ul className="space-y-2">
               {termsUrl ? (
                 <li>
-                  <a 
+                  <a
                     href={termsUrl}
                     target="_blank"
                     rel="noopener noreferrer"
@@ -114,7 +122,7 @@ export function TenantFooter() {
                 </li>
               ) : (
                 <li>
-                  <Link 
+                  <Link
                     href={`/tenant/${tenant.slug}/terms`}
                     className="text-sm text-gray-600 hover:text-gray-900"
                   >
@@ -122,10 +130,10 @@ export function TenantFooter() {
                   </Link>
                 </li>
               )}
-              
+
               {privacyUrl ? (
                 <li>
-                  <a 
+                  <a
                     href={privacyUrl}
                     target="_blank"
                     rel="noopener noreferrer"
@@ -137,7 +145,7 @@ export function TenantFooter() {
                 </li>
               ) : (
                 <li>
-                  <Link 
+                  <Link
                     href={`/tenant/${tenant.slug}/privacy`}
                     className="text-sm text-gray-600 hover:text-gray-900"
                   >
@@ -145,9 +153,9 @@ export function TenantFooter() {
                   </Link>
                 </li>
               )}
-              
+
               <li>
-                <Link 
+                <Link
                   href={`/tenant/${tenant.slug}/disclaimer`}
                   className="text-sm text-gray-600 hover:text-gray-900"
                 >
@@ -164,13 +172,13 @@ export function TenantFooter() {
             <p className="text-sm text-gray-500">
               © {currentYear} {companyName}. All rights reserved.
             </p>
-            
+
             {/* Powered by link for non-white-label */}
             {!isWhiteLabel && (
               <p className="text-sm text-gray-500 mt-4 md:mt-0">
                 Powered by{' '}
-                <Link 
-                  href="https://123legaldoc.com" 
+                <Link
+                  href="https://123legaldoc.com"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-blue-600 hover:text-blue-800"

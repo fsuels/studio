@@ -19,7 +19,7 @@ export function useSessionRecording() {
       sessionRecorder.trackDocumentAction('user_session', 'user_identified', {
         userId: user.uid,
         email: user.email,
-        signInProvider: user.providerData?.[0]?.providerId
+        signInProvider: user.providerData?.[0]?.providerId,
       });
     }
 
@@ -41,72 +41,94 @@ export function useSessionRecording() {
   // Public API for tracking specific events from components
   const trackEvent = {
     documentStarted: (documentType: string, step: string) => {
-      sessionRecorder?.trackDocumentAction(documentType, 'document_started', { step });
+      sessionRecorder?.trackDocumentAction(documentType, 'document_started', {
+        step,
+      });
     },
-    
-    documentCompleted: (documentType: string, totalSteps: number, completedSteps: number) => {
-      sessionRecorder?.trackDocumentAction(documentType, 'document_completed', { 
-        totalSteps, 
+
+    documentCompleted: (
+      documentType: string,
+      totalSteps: number,
+      completedSteps: number,
+    ) => {
+      sessionRecorder?.trackDocumentAction(documentType, 'document_completed', {
+        totalSteps,
         completedSteps,
-        completionRate: completedSteps / totalSteps 
+        completionRate: completedSteps / totalSteps,
       });
     },
-    
-    documentAbandoned: (documentType: string, step: string, reason?: string) => {
-      sessionRecorder?.trackDocumentAction(documentType, 'document_abandoned', { 
-        step, 
-        reason: reason || 'unknown'
+
+    documentAbandoned: (
+      documentType: string,
+      step: string,
+      reason?: string,
+    ) => {
+      sessionRecorder?.trackDocumentAction(documentType, 'document_abandoned', {
+        step,
+        reason: reason || 'unknown',
       });
     },
-    
+
     paymentStarted: (amount: number, documentType: string) => {
-      sessionRecorder?.trackDocumentAction('payment', 'payment_started', { 
-        amount, 
-        documentType 
-      });
-    },
-    
-    paymentCompleted: (amount: number, documentType: string, paymentMethod: string) => {
-      sessionRecorder?.trackDocumentAction('payment', 'payment_completed', { 
-        amount, 
+      sessionRecorder?.trackDocumentAction('payment', 'payment_started', {
+        amount,
         documentType,
-        paymentMethod 
       });
     },
-    
-    paymentFailed: (amount: number, documentType: string, errorCode?: string) => {
-      sessionRecorder?.trackDocumentAction('payment', 'payment_failed', { 
-        amount, 
+
+    paymentCompleted: (
+      amount: number,
+      documentType: string,
+      paymentMethod: string,
+    ) => {
+      sessionRecorder?.trackDocumentAction('payment', 'payment_completed', {
+        amount,
         documentType,
-        errorCode 
+        paymentMethod,
       });
     },
-    
+
+    paymentFailed: (
+      amount: number,
+      documentType: string,
+      errorCode?: string,
+    ) => {
+      sessionRecorder?.trackDocumentAction('payment', 'payment_failed', {
+        amount,
+        documentType,
+        errorCode,
+      });
+    },
+
     supportRequest: (type: 'chat' | 'phone' | 'email', context?: string) => {
-      sessionRecorder?.trackDocumentAction('support', 'support_requested', { 
-        type, 
-        context 
+      sessionRecorder?.trackDocumentAction('support', 'support_requested', {
+        type,
+        context,
       });
     },
-    
-    formValidationError: (field: string, errorType: string, documentType: string) => {
-      sessionRecorder?.trackDocumentAction(documentType, 'validation_error', { 
-        field, 
-        errorType 
+
+    formValidationError: (
+      field: string,
+      errorType: string,
+      documentType: string,
+    ) => {
+      sessionRecorder?.trackDocumentAction(documentType, 'validation_error', {
+        field,
+        errorType,
       });
     },
-    
+
     searchPerformed: (query: string, resultsCount: number) => {
-      sessionRecorder?.trackDocumentAction('search', 'search_performed', { 
+      sessionRecorder?.trackDocumentAction('search', 'search_performed', {
         query: query.slice(0, 50), // Limit query length for privacy
-        resultsCount 
+        resultsCount,
       });
-    }
+    },
   };
 
   return {
     isRecording: isRecordingRef.current,
     sessionId: sessionRecorder?.getSessionId(),
-    trackEvent
+    trackEvent,
   };
 }

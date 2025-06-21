@@ -119,5 +119,6 @@ export const getDocAliases = (
     ? doc.translations?.es?.aliases || []
     : doc.translations?.en?.aliases || [];
 
-export const languageSupportsSpanish = (support: string[] | undefined): boolean =>
-  !!support && support.includes('es');
+export const languageSupportsSpanish = (
+  support: string[] | undefined,
+): boolean => !!support && support.includes('es');

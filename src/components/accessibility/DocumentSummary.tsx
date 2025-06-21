@@ -6,7 +6,11 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from '@/components/ui/collapsible';
 import { useAccessibility } from '@/contexts/AccessibilityProvider';
 import { DocumentSummary as DocumentSummaryType } from '@/ai/flows/summarize-document';
 import {
@@ -29,11 +33,11 @@ interface DocumentSummaryProps {
   onDismiss?: () => void;
 }
 
-export function DocumentSummary({ 
-  documentText, 
-  documentType, 
+export function DocumentSummary({
+  documentText,
+  documentType,
   className,
-  onDismiss 
+  onDismiss,
 }: DocumentSummaryProps) {
   const { preferences } = useAccessibility();
   const [summary, setSummary] = useState<DocumentSummaryType | null>(null);
@@ -92,7 +96,9 @@ export function DocumentSummary({
         }
       } catch (err) {
         if (isMounted) {
-          setError(err instanceof Error ? err.message : 'Failed to generate summary');
+          setError(
+            err instanceof Error ? err.message : 'Failed to generate summary',
+          );
           console.error('Document summary error:', err);
         }
       } finally {
@@ -111,9 +117,12 @@ export function DocumentSummary({
 
   const getComplexityColor = (complexity: 'low' | 'medium' | 'high') => {
     switch (complexity) {
-      case 'low': return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200';
-      case 'medium': return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200';
-      case 'high': return 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200';
+      case 'low':
+        return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200';
+      case 'medium':
+        return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200';
+      case 'high':
+        return 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200';
     }
   };
 
@@ -153,7 +162,9 @@ export function DocumentSummary({
 
   if (error) {
     return (
-      <Alert className={`border-orange-200 bg-orange-50 dark:bg-orange-950 ${className || ''}`}>
+      <Alert
+        className={`border-orange-200 bg-orange-50 dark:bg-orange-950 ${className || ''}`}
+      >
         <AlertTriangle className="h-4 w-4" />
         <AlertDescription className="flex items-center justify-between">
           <span>{error}</span>
@@ -198,7 +209,10 @@ export function DocumentSummary({
       <CardContent>
         <Collapsible open={isExpanded} onOpenChange={setIsExpanded}>
           <CollapsibleTrigger asChild>
-            <Button variant="ghost" className="flex items-center gap-2 p-0 h-auto">
+            <Button
+              variant="ghost"
+              className="flex items-center gap-2 p-0 h-auto"
+            >
               {isExpanded ? (
                 <ChevronDown className="h-4 w-4" />
               ) : (
@@ -207,7 +221,7 @@ export function DocumentSummary({
               <span className="font-medium">Summary</span>
             </Button>
           </CollapsibleTrigger>
-          
+
           <CollapsibleContent className="space-y-4 mt-3">
             {/* Main Summary */}
             <div className="prose prose-sm dark:prose-invert max-w-none">
@@ -237,23 +251,30 @@ export function DocumentSummary({
               <div>
                 <Collapsible open={showKeyTerms} onOpenChange={setShowKeyTerms}>
                   <CollapsibleTrigger asChild>
-                    <Button variant="ghost" className="flex items-center gap-2 p-0 h-auto">
+                    <Button
+                      variant="ghost"
+                      className="flex items-center gap-2 p-0 h-auto"
+                    >
                       {showKeyTerms ? (
                         <ChevronDown className="h-4 w-4" />
                       ) : (
                         <ChevronRight className="h-4 w-4" />
                       )}
                       <Lightbulb className="h-4 w-4" />
-                      <span className="font-medium">Important Terms ({summary.importantTerms.length})</span>
+                      <span className="font-medium">
+                        Important Terms ({summary.importantTerms.length})
+                      </span>
                     </Button>
                   </CollapsibleTrigger>
-                  
+
                   <CollapsibleContent className="mt-2">
                     <div className="space-y-2">
                       {summary.importantTerms.map((term, index) => (
                         <div key={index} className="p-3 bg-muted rounded-lg">
                           <div className="font-medium text-sm">{term.term}</div>
-                          <div className="text-sm text-muted-foreground mt-1">{term.definition}</div>
+                          <div className="text-sm text-muted-foreground mt-1">
+                            {term.definition}
+                          </div>
                         </div>
                       ))}
                     </div>
@@ -267,10 +288,14 @@ export function DocumentSummary({
               <Alert className="border-orange-200 bg-orange-50 dark:bg-orange-950">
                 <AlertTriangle className="h-4 w-4" />
                 <AlertDescription>
-                  <div className="font-medium mb-1">Important Considerations:</div>
+                  <div className="font-medium mb-1">
+                    Important Considerations:
+                  </div>
                   <ul className="space-y-1">
                     {summary.warnings.map((warning, index) => (
-                      <li key={index} className="text-sm">{warning}</li>
+                      <li key={index} className="text-sm">
+                        {warning}
+                      </li>
                     ))}
                   </ul>
                 </AlertDescription>
@@ -279,9 +304,10 @@ export function DocumentSummary({
 
             {/* Disclaimer */}
             <div className="text-xs text-muted-foreground p-3 bg-muted rounded-lg">
-              <strong>Disclaimer:</strong> This AI-generated summary is for informational purposes only 
-              and should not be considered legal advice. Always review the complete document and 
-              consult with a qualified attorney for legal matters.
+              <strong>Disclaimer:</strong> This AI-generated summary is for
+              informational purposes only and should not be considered legal
+              advice. Always review the complete document and consult with a
+              qualified attorney for legal matters.
             </div>
           </CollapsibleContent>
         </Collapsible>

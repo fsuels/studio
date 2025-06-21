@@ -10,18 +10,17 @@ interface WizardProgressProps {
   totalSteps: number;
 }
 
-export default function WizardProgress({ progress, totalSteps }: WizardProgressProps) {
+export default function WizardProgress({
+  progress,
+  totalSteps,
+}: WizardProgressProps) {
   const { t } = useTranslation('common');
 
   if (totalSteps === 0) return null;
 
   return (
     <div className="mb-6">
-      <Progress
-        value={progress}
-        className="w-full h-2"
-        aria-label="Progress"
-      />
+      <Progress value={progress} className="w-full h-2" aria-label="Progress" />
       <p className="text-xs text-muted-foreground mt-1 text-right">
         {Math.round(progress)}% {t('Complete')}
       </p>

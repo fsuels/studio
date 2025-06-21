@@ -7,16 +7,16 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Textarea } from '@/components/ui/textarea';
-import { 
+import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { 
-  Star, 
-  ThumbsUp, 
+import {
+  Star,
+  ThumbsUp,
   ThumbsDown,
   Flag,
   Filter,
@@ -38,7 +38,12 @@ interface ReviewItemProps {
   onFlag: (reviewId: string) => void;
 }
 
-function ReviewItem({ review, onHelpful, onNotHelpful, onFlag }: ReviewItemProps) {
+function ReviewItem({
+  review,
+  onHelpful,
+  onNotHelpful,
+  onFlag,
+}: ReviewItemProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [hasVoted, setHasVoted] = useState(false);
 
@@ -54,11 +59,14 @@ function ReviewItem({ review, onHelpful, onNotHelpful, onFlag }: ReviewItemProps
   };
 
   const formatDate = (date: any) => {
-    return new Date(date.toDate ? date.toDate() : date).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    });
+    return new Date(date.toDate ? date.toDate() : date).toLocaleDateString(
+      'en-US',
+      {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      },
+    );
   };
 
   const handleHelpful = () => {
@@ -88,7 +96,7 @@ function ReviewItem({ review, onHelpful, onNotHelpful, onFlag }: ReviewItemProps
                 {review.reviewerName?.charAt(0) || 'U'}
               </AvatarFallback>
             </Avatar>
-            
+
             <div>
               <div className="flex items-center gap-2">
                 <span className="font-semibold">
@@ -101,11 +109,9 @@ function ReviewItem({ review, onHelpful, onNotHelpful, onFlag }: ReviewItemProps
                   </Badge>
                 )}
               </div>
-              
+
               <div className="flex items-center gap-2 mt-1">
-                <div className="flex">
-                  {renderStars(review.rating)}
-                </div>
+                <div className="flex">{renderStars(review.rating)}</div>
                 <span className="text-sm text-muted-foreground">
                   {formatDate(review.createdAt)}
                 </span>
@@ -127,17 +133,17 @@ function ReviewItem({ review, onHelpful, onNotHelpful, onFlag }: ReviewItemProps
         </div>
 
         {/* Review Title */}
-        {review.title && (
-          <h4 className="font-semibold mb-2">{review.title}</h4>
-        )}
+        {review.title && <h4 className="font-semibold mb-2">{review.title}</h4>}
 
         {/* Review Content */}
         {review.comment && (
           <div className="mb-4">
-            <p className={`text-sm ${!isExpanded && shouldShowExpandButton ? 'line-clamp-3' : ''}`}>
+            <p
+              className={`text-sm ${!isExpanded && shouldShowExpandButton ? 'line-clamp-3' : ''}`}
+            >
               {review.comment}
             </p>
-            
+
             {shouldShowExpandButton && (
               <Button
                 variant="ghost"
@@ -146,9 +152,13 @@ function ReviewItem({ review, onHelpful, onNotHelpful, onFlag }: ReviewItemProps
                 className="mt-2 p-0 h-auto text-primary"
               >
                 {isExpanded ? (
-                  <>Show less <ChevronUp className="h-4 w-4 ml-1" /></>
+                  <>
+                    Show less <ChevronUp className="h-4 w-4 ml-1" />
+                  </>
                 ) : (
-                  <>Show more <ChevronDown className="h-4 w-4 ml-1" /></>
+                  <>
+                    Show more <ChevronDown className="h-4 w-4 ml-1" />
+                  </>
                 )}
               </Button>
             )}
@@ -160,7 +170,9 @@ function ReviewItem({ review, onHelpful, onNotHelpful, onFlag }: ReviewItemProps
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
             {review.pros && review.pros.length > 0 && (
               <div>
-                <h5 className="text-sm font-semibold text-green-700 mb-2">Pros:</h5>
+                <h5 className="text-sm font-semibold text-green-700 mb-2">
+                  Pros:
+                </h5>
                 <ul className="text-sm space-y-1">
                   {review.pros.map((pro, index) => (
                     <li key={index} className="flex items-start gap-1">
@@ -171,10 +183,12 @@ function ReviewItem({ review, onHelpful, onNotHelpful, onFlag }: ReviewItemProps
                 </ul>
               </div>
             )}
-            
+
             {review.cons && review.cons.length > 0 && (
               <div>
-                <h5 className="text-sm font-semibold text-red-700 mb-2">Cons:</h5>
+                <h5 className="text-sm font-semibold text-red-700 mb-2">
+                  Cons:
+                </h5>
                 <ul className="text-sm space-y-1">
                   {review.cons.map((con, index) => (
                     <li key={index} className="flex items-start gap-1">
@@ -190,8 +204,10 @@ function ReviewItem({ review, onHelpful, onNotHelpful, onFlag }: ReviewItemProps
 
         {/* Review Actions */}
         <div className="flex items-center gap-4 pt-4 border-t">
-          <span className="text-sm text-muted-foreground">Was this helpful?</span>
-          
+          <span className="text-sm text-muted-foreground">
+            Was this helpful?
+          </span>
+
           <Button
             variant="ghost"
             size="sm"
@@ -202,7 +218,7 @@ function ReviewItem({ review, onHelpful, onNotHelpful, onFlag }: ReviewItemProps
             <ThumbsUp className="h-4 w-4" />
             <span>{review.helpful}</span>
           </Button>
-          
+
           <Button
             variant="ghost"
             size="sm"
@@ -249,9 +265,11 @@ export function TemplateReviews({ templateId }: TemplateReviewsProps) {
         ...(showVerifiedOnly && { verified: 'true' }),
       });
 
-      const response = await fetch(`/api/marketplace/templates/${templateId}/reviews?${params}`);
+      const response = await fetch(
+        `/api/marketplace/templates/${templateId}/reviews?${params}`,
+      );
       const data = await response.json();
-      
+
       if (data.success) {
         setReviews(data.data.reviews);
       }
@@ -279,16 +297,19 @@ export function TemplateReviews({ templateId }: TemplateReviewsProps) {
 
   const handleSubmitReview = async () => {
     try {
-      const response = await fetch(`/api/marketplace/templates/${templateId}/reviews`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
+      const response = await fetch(
+        `/api/marketplace/templates/${templateId}/reviews`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(newReview),
         },
-        body: JSON.stringify(newReview),
-      });
+      );
 
       const data = await response.json();
-      
+
       if (data.success) {
         setShowWriteReview(false);
         setNewReview({
@@ -310,7 +331,9 @@ export function TemplateReviews({ templateId }: TemplateReviewsProps) {
       <Star
         key={i}
         className={`h-6 w-6 cursor-pointer transition-colors ${
-          i < rating ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300 hover:text-yellow-200'
+          i < rating
+            ? 'fill-yellow-400 text-yellow-400'
+            : 'text-gray-300 hover:text-yellow-200'
         }`}
         onClick={() => onChange?.(i + 1)}
       />
@@ -329,10 +352,7 @@ export function TemplateReviews({ templateId }: TemplateReviewsProps) {
         </div>
 
         <div className="flex gap-2">
-          <Button
-            onClick={() => setShowWriteReview(true)}
-            className="gap-2"
-          >
+          <Button onClick={() => setShowWriteReview(true)} className="gap-2">
             <MessageSquare className="h-4 w-4" />
             Write Review
           </Button>
@@ -374,7 +394,7 @@ export function TemplateReviews({ templateId }: TemplateReviewsProps) {
         </Select>
 
         <Button
-          variant={showVerifiedOnly ? "default" : "outline"}
+          variant={showVerifiedOnly ? 'default' : 'outline'}
           size="sm"
           onClick={() => setShowVerifiedOnly(!showVerifiedOnly)}
           className="gap-1"
@@ -393,48 +413,56 @@ export function TemplateReviews({ templateId }: TemplateReviewsProps) {
           <CardContent className="space-y-4">
             {/* Rating */}
             <div>
-              <label className="text-sm font-medium mb-2 block">Overall Rating</label>
+              <label className="text-sm font-medium mb-2 block">
+                Overall Rating
+              </label>
               <div className="flex">
-                {renderStars(newReview.rating, (rating) => 
-                  setNewReview(prev => ({ ...prev, rating }))
+                {renderStars(newReview.rating, (rating) =>
+                  setNewReview((prev) => ({ ...prev, rating })),
                 )}
               </div>
             </div>
 
             {/* Title */}
             <div>
-              <label className="text-sm font-medium mb-2 block">Review Title (Optional)</label>
+              <label className="text-sm font-medium mb-2 block">
+                Review Title (Optional)
+              </label>
               <input
                 type="text"
                 className="w-full px-3 py-2 border rounded-md"
                 placeholder="Summarize your experience..."
                 value={newReview.title}
-                onChange={(e) => setNewReview(prev => ({ ...prev, title: e.target.value }))}
+                onChange={(e) =>
+                  setNewReview((prev) => ({ ...prev, title: e.target.value }))
+                }
               />
             </div>
 
             {/* Comment */}
             <div>
-              <label className="text-sm font-medium mb-2 block">Your Review</label>
+              <label className="text-sm font-medium mb-2 block">
+                Your Review
+              </label>
               <Textarea
                 placeholder="Share your experience with this template..."
                 value={newReview.comment}
-                onChange={(e) => setNewReview(prev => ({ ...prev, comment: e.target.value }))}
+                onChange={(e) =>
+                  setNewReview((prev) => ({ ...prev, comment: e.target.value }))
+                }
                 rows={4}
               />
             </div>
 
             {/* Actions */}
             <div className="flex gap-2 justify-end">
-              <Button 
-                variant="outline" 
+              <Button
+                variant="outline"
                 onClick={() => setShowWriteReview(false)}
               >
                 Cancel
               </Button>
-              <Button onClick={handleSubmitReview}>
-                Submit Review
-              </Button>
+              <Button onClick={handleSubmitReview}>Submit Review</Button>
             </div>
           </CardContent>
         </Card>
@@ -468,7 +496,8 @@ export function TemplateReviews({ templateId }: TemplateReviewsProps) {
               <MessageSquare className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
               <h3 className="text-lg font-semibold mb-2">No reviews yet</h3>
               <p className="text-muted-foreground mb-4">
-                Be the first to review this template and help others make informed decisions.
+                Be the first to review this template and help others make
+                informed decisions.
               </p>
               <Button onClick={() => setShowWriteReview(true)}>
                 Write the First Review

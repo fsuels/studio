@@ -9,4 +9,3 @@ export default function LegacyDocViewRedirect({
 }) {
   redirect(`/en/docs/${params.docId}/view`);
 }
-

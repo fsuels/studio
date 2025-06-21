@@ -53,14 +53,16 @@ export const privatePlacementMemorandumQuestions: Question[] = [
     label: 'Use of Proceeds',
     type: 'textarea',
     required: true,
-    placeholder: 'Describe how the funds will be used (e.g., working capital, expansion, debt repayment)',
+    placeholder:
+      'Describe how the funds will be used (e.g., working capital, expansion, debt repayment)',
   },
   {
     id: 'businessDescription',
     label: 'Business Description',
     type: 'textarea',
     required: true,
-    placeholder: 'Detailed description of the company\'s business, products, services, and market',
+    placeholder:
+      "Detailed description of the company's business, products, services, and market",
   },
   {
     id: 'managementTeam',
@@ -74,7 +76,8 @@ export const privatePlacementMemorandumQuestions: Question[] = [
     label: 'Risk Factors',
     type: 'textarea',
     required: true,
-    placeholder: 'Material risks associated with the investment and business operations',
+    placeholder:
+      'Material risks associated with the investment and business operations',
   },
   {
     id: 'financialHighlights',
@@ -88,7 +91,8 @@ export const privatePlacementMemorandumQuestions: Question[] = [
     label: 'Terms of the Offering',
     type: 'textarea',
     required: true,
-    placeholder: 'Detailed terms including valuation, liquidation preferences, voting rights, etc.',
+    placeholder:
+      'Detailed terms including valuation, liquidation preferences, voting rights, etc.',
   },
   {
     id: 'closingDate',
@@ -107,7 +111,8 @@ export const privatePlacementMemorandumQuestions: Question[] = [
     label: 'Transfer Restrictions',
     type: 'textarea',
     required: true,
-    placeholder: 'Restrictions on transfer of securities, holding periods, etc.',
+    placeholder:
+      'Restrictions on transfer of securities, holding periods, etc.',
   },
   {
     id: 'exemptionProvision',

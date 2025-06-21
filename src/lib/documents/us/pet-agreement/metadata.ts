@@ -24,12 +24,14 @@ export const petAgreementMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Pet Agreement',
-      description: 'Establish rules and responsibilities for pets in rental properties.',
+      description:
+        'Establish rules and responsibilities for pets in rental properties.',
       aliases: ['pet addendum', 'pet policy', 'pet lease addendum'],
     },
     es: {
       name: 'Acuerdo de Mascotas',
-      description: 'Establece reglas y responsabilidades para mascotas en propiedades de alquiler.',
+      description:
+        'Establece reglas y responsabilidades para mascotas en propiedades de alquiler.',
       aliases: ['adenda de mascotas', 'política de mascotas'],
     },
   },

@@ -47,7 +47,7 @@ Don't risk using generic templates that may not comply with Connecticut law. Get
 
 [Create Connecticut Non-Disclosure Agreement]
 
-*Trusted by thousands of Connecticut businesses*
+_Trusted by thousands of Connecticut businesses_
 
 ---
 

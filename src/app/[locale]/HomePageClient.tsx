@@ -60,8 +60,10 @@ const TopDocsSkeleton = () => (
 
 const SearchBarSkeleton = () => (
   <div className="relative max-w-md">
-    <div className="h-12 bg-muted rounded-full w-full"></div> {/* Input field skeleton */}
-    <div className="mt-2 h-4 bg-muted rounded w-3/4"></div> {/* Trustline/Hint skeleton */}
+    <div className="h-12 bg-muted rounded-full w-full"></div>{' '}
+    {/* Input field skeleton */}
+    <div className="mt-2 h-4 bg-muted rounded w-3/4"></div>{' '}
+    {/* Trustline/Hint skeleton */}
   </div>
 );
 
@@ -69,24 +71,37 @@ const SearchBar = lazyOnView(() => import('@/components/shared/SearchBar'), {
   placeholder: <SearchBarSkeleton />,
 });
 
-const HowItWorks = lazyOnView(() => import('@/components/layout').then(m => ({ default: m.HowItWorks })), {
-  placeholder: <HowItWorksSkeleton />,
-});
+const HowItWorks = lazyOnView(
+  () => import('@/components/layout').then((m) => ({ default: m.HowItWorks })),
+  {
+    placeholder: <HowItWorksSkeleton />,
+  },
+);
 
 const TrustAndTestimonialsSection = lazyOnView(
-  () => import('@/components/layout').then(m => ({ default: m.TrustAndTestimonialsSection })),
+  () =>
+    import('@/components/layout').then((m) => ({
+      default: m.TrustAndTestimonialsSection,
+    })),
   {
     placeholder: <TestimonialsSkeleton />,
   },
 );
 
-const TopDocsChips = lazyOnView(() => import('@/components/shared/TopDocsChips'), {
-  placeholder: <TopDocsSkeleton />,
-});
+const TopDocsChips = lazyOnView(
+  () => import('@/components/shared/TopDocsChips'),
+  {
+    placeholder: <TopDocsSkeleton />,
+  },
+);
 
-const AnnouncementBar = lazyOnView(() => import('@/components/shared').then(m => ({ default: m.AnnouncementBar })), {
-  placeholder: null,
-});
+const AnnouncementBar = lazyOnView(
+  () =>
+    import('@/components/shared').then((m) => ({ default: m.AnnouncementBar })),
+  {
+    placeholder: null,
+  },
+);
 
 export default function HomePageClient() {
   const { t } = useTranslation('common');
@@ -97,8 +112,11 @@ export default function HomePageClient() {
   const locale = (params!.locale as 'en' | 'es') || 'en';
 
   const [globalSearchTerm, setGlobalSearchTerm] = useState('');
-  const [selectedCategoryForFilter, setSelectedCategoryForFilter] = useState<string | null>(null);
-  const [selectedDocument, setSelectedDocument] = useState<LegalDocument | null>(null);
+  const [selectedCategoryForFilter, setSelectedCategoryForFilter] = useState<
+    string | null
+  >(null);
+  const [selectedDocument, setSelectedDocument] =
+    useState<LegalDocument | null>(null);
   const [isHydrated, setIsHydrated] = useState(false);
 
   useEffect(() => {
@@ -130,7 +148,9 @@ export default function HomePageClient() {
     }
 
     if (categoryFromQuery && !selectedCategoryForFilter) {
-      const isValidCategory = CATEGORY_LIST.some((cat) => cat.key === categoryFromQuery);
+      const isValidCategory = CATEGORY_LIST.some(
+        (cat) => cat.key === categoryFromQuery,
+      );
       if (isValidCategory) {
         setSelectedCategoryForFilter(categoryFromQuery);
         // scrollToWorkflow(); // May not be needed
@@ -175,9 +195,7 @@ export default function HomePageClient() {
             </p>
             {/* Search Bar */}
             <div className="mt-8">
-              <div className="relative max-w-md">
-                {/* <SearchBar /> */}
-              </div>
+              <div className="relative max-w-md">{/* <SearchBar /> */}</div>
               <p className="mt-2 text-sm text-gray-500">
                 {t('home.hero2.trustline', {
                   defaultValue:
@@ -189,7 +207,11 @@ export default function HomePageClient() {
           {/* Right column */}
           <div className="mt-10 lg:mt-0 flex justify-center lg:justify-end mx-auto lg:ml-auto lg:mr-8">
             <AutoImage
-              src={locale === 'es' ? '/images/hero-main-es.png' : '/images/hero-main.png'}
+              src={
+                locale === 'es'
+                  ? '/images/hero-main-es.png'
+                  : '/images/hero-main.png'
+              }
               alt="Hero image illustrating legal document generation"
               className="w-full max-w-lg rounded-xl shadow-lg"
               data-ai-hint="team collaboration"
@@ -201,13 +223,13 @@ export default function HomePageClient() {
 
       {/* "Popular Legal Documents" section */}
       <TopDocsChips />
-      
+
       {/* "Generate and Personalize Legal Forms" section (formerly "How It Works") */}
       <HowItWorks />
 
       {/* "Trust and Testimonials" section */}
       <TrustAndTestimonialsSection />
-      
+
       <Separator className="my-12" />
 
       {/* The "What do you want to accomplish?" section and its contents have been removed. */}

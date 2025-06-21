@@ -12,7 +12,10 @@ interface TenantLayoutProps {
   params: { slug: string };
 }
 
-export default async function TenantLayout({ children, params }: TenantLayoutProps) {
+export default async function TenantLayout({
+  children,
+  params,
+}: TenantLayoutProps) {
   const headersList = headers();
   const tenant = await getTenantFromHeaders(headersList);
 
@@ -23,7 +26,7 @@ export default async function TenantLayout({ children, params }: TenantLayoutPro
   // Apply tenant-specific styling
   const brandingStyles = {
     '--primary-color': tenant.branding?.primaryColor || '#2563eb',
-    '--secondary-color': tenant.branding?.secondaryColor || '#64748b', 
+    '--secondary-color': tenant.branding?.secondaryColor || '#64748b',
     '--accent-color': tenant.branding?.accentColor || '#0f172a',
     '--font-family': tenant.branding?.fontFamily || 'system-ui, sans-serif',
   } as React.CSSProperties;
@@ -34,17 +37,17 @@ export default async function TenantLayout({ children, params }: TenantLayoutPro
         <div className="min-h-screen bg-background" style={brandingStyles}>
           {/* Inject custom CSS if provided */}
           {tenant.branding?.customCss && (
-            <style dangerouslySetInnerHTML={{ __html: tenant.branding.customCss }} />
+            <style
+              dangerouslySetInnerHTML={{ __html: tenant.branding.customCss }}
+            />
           )}
-          
+
           {/* Tenant-specific header */}
           <TenantHeader />
-          
+
           {/* Main content */}
-          <main className="flex-1">
-            {children}
-          </main>
-          
+          <main className="flex-1">{children}</main>
+
           {/* Tenant-specific footer */}
           <TenantFooter />
         </div>

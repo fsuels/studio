@@ -30,7 +30,7 @@ Philadelphia offers a dynamic business environment with opportunities across ind
 
 [Start Your Philadelphia Legal Document]
 
-*Trusted by hundreds of Philadelphia businesses*
+_Trusted by hundreds of Philadelphia businesses_
 
 ---
 

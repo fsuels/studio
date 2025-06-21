@@ -2,7 +2,10 @@ import { z } from 'zod';
 import { usStates } from '@/lib/usStates';
 
 export const RevolvingCreditAgreementSchema = z.object({
-  date: z.string().min(1).regex(/^\d{4}-\d{2}-\d{2}$/, 'Date must be in YYYY-MM-DD format'),
+  date: z
+    .string()
+    .min(1)
+    .regex(/^\d{4}-\d{2}-\d{2}$/, 'Date must be in YYYY-MM-DD format'),
   creditorName: z.string().min(1),
   creditorAddress: z.string().min(1),
   debtorName: z.string().min(1),
@@ -23,4 +26,6 @@ export const RevolvingCreditAgreementSchema = z.object({
   annualFee: z.coerce.number().nonnegative().optional(),
 });
 
-export type RevolvingCreditAgreementData = z.infer<typeof RevolvingCreditAgreementSchema>;
+export type RevolvingCreditAgreementData = z.infer<
+  typeof RevolvingCreditAgreementSchema
+>;

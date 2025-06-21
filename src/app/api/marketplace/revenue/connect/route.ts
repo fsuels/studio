@@ -27,7 +27,7 @@ export async function POST(request: NextRequest) {
     if (!email || !returnUrl || !refreshUrl) {
       return NextResponse.json(
         { error: 'Missing required fields: email, returnUrl, refreshUrl' },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -50,17 +50,16 @@ export async function POST(request: NextRequest) {
         message: 'Stripe Connect account created successfully',
       },
     });
-
   } catch (error) {
     console.error('Stripe Connect setup error:', error);
-    
+
     return NextResponse.json(
-      { 
-        success: false, 
+      {
+        success: false,
         error: 'Failed to set up payment processing',
         details: error instanceof Error ? error.message : 'Unknown error',
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -82,7 +81,7 @@ export async function GET(request: NextRequest) {
     // Get creator profile to check Stripe Connect status
     const db = await (await import('@/lib/firebase')).getDb();
     const { doc, getDoc } = await import('firebase/firestore');
-    
+
     const profileRef = doc(db, 'creator-profiles', userId);
     const profileSnap = await getDoc(profileRef);
 
@@ -119,7 +118,7 @@ export async function GET(request: NextRequest) {
 
     try {
       const account = await stripeInstance.accounts.retrieve(stripeAccountId);
-      
+
       const accountStatus = {
         connected: true,
         accountId: stripeAccountId,
@@ -129,9 +128,11 @@ export async function GET(request: NextRequest) {
         country: account.country,
         currency: account.default_currency,
         businessType: account.business_type,
-        accountStatus: account.details_submitted ? 
-          (account.charges_enabled && account.payouts_enabled ? 'active' : 'restricted') : 
-          'pending_onboarding',
+        accountStatus: account.details_submitted
+          ? account.charges_enabled && account.payouts_enabled
+            ? 'active'
+            : 'restricted'
+          : 'pending_onboarding',
         requirements: {
           currentlyDue: account.requirements?.currently_due || [],
           eventuallyDue: account.requirements?.eventually_due || [],
@@ -144,10 +145,9 @@ export async function GET(request: NextRequest) {
         success: true,
         data: accountStatus,
       });
-
     } catch (stripeError) {
       console.error('Stripe account retrieval error:', stripeError);
-      
+
       return NextResponse.json({
         success: true,
         data: {
@@ -158,16 +158,15 @@ export async function GET(request: NextRequest) {
         },
       });
     }
-
   } catch (error) {
     console.error('Get Connect status error:', error);
-    
+
     return NextResponse.json(
-      { 
-        success: false, 
-        error: 'Failed to check connection status' 
+      {
+        success: false,
+        error: 'Failed to check connection status',
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

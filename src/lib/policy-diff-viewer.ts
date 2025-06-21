@@ -21,7 +21,7 @@ export interface PolicyDiff {
   oldVersion: string;
   newVersion: string;
   diffType: 'content' | 'metadata' | 'permissions' | 'workflow';
-  
+
   // Change summary
   summary: {
     totalChanges: number;
@@ -31,15 +31,15 @@ export interface PolicyDiff {
     addedCharacters: number;
     removedCharacters: number;
   };
-  
+
   // Detailed differences
   sections: PolicyDiffSection[];
-  
+
   // Change classification
   changeType: 'major' | 'minor' | 'patch' | 'breaking';
   riskLevel: 'low' | 'medium' | 'high' | 'critical';
   complianceImpact: boolean;
-  
+
   // Actor information
   changedBy: {
     userId: string;
@@ -47,7 +47,7 @@ export interface PolicyDiff {
     role: string;
     timestamp: string;
   };
-  
+
   // Approval workflow
   approval: {
     required: boolean;
@@ -60,7 +60,7 @@ export interface PolicyDiff {
       comments?: string;
     }>;
   };
-  
+
   // Impact analysis
   impact: {
     affectedDocuments: string[];
@@ -148,7 +148,7 @@ export class PolicyDiffViewer {
       colorScheme: 'auto',
       diffAlgorithm: 'myers',
       ignoreWhitespace: false,
-      ignoreCase: false
+      ignoreCase: false,
     };
   }
 
@@ -167,12 +167,14 @@ export class PolicyDiffViewer {
     newContent: any,
     oldVersion: string,
     newVersion: string,
-    changedBy: PolicyDiff['changedBy']
+    changedBy: PolicyDiff['changedBy'],
   ): Promise<PolicyDiff> {
     const diffId = this.generateDiffId();
     const timestamp = new Date().toISOString();
 
-    console.log(`🔍 Generating policy diff: ${policyName} (${oldVersion} → ${newVersion})`);
+    console.log(
+      `🔍 Generating policy diff: ${policyName} (${oldVersion} → ${newVersion})`,
+    );
 
     // Analyze changes at different levels
     const sections = await this.analyzeSections(oldContent, newContent);
@@ -199,15 +201,23 @@ export class PolicyDiffViewer {
       approval: {
         required: this.requiresApproval(changeType, riskLevel),
         status: 'pending',
-        approvers: this.getRequiredApprovers(changeType, riskLevel)
+        approvers: this.getRequiredApprovers(changeType, riskLevel),
       },
-      impact
+      impact,
     };
 
     this.diffs.set(diffId, diff);
-    await this.updateTemplateHistory(policyId, policyName, newVersion, diff, changedBy);
+    await this.updateTemplateHistory(
+      policyId,
+      policyName,
+      newVersion,
+      diff,
+      changedBy,
+    );
 
-    console.log(`✅ Policy diff generated: ${diffId} (${changeType} change, ${riskLevel} risk)`);
+    console.log(
+      `✅ Policy diff generated: ${diffId} (${changeType} change, ${riskLevel} risk)`,
+    );
     return diff;
   }
 
@@ -217,7 +227,7 @@ export class PolicyDiffViewer {
     templateName: string,
     oldTemplate: any,
     newTemplate: any,
-    changedBy: PolicyDiff['changedBy']
+    changedBy: PolicyDiff['changedBy'],
   ): Promise<PolicyDiff> {
     const oldVersion = oldTemplate.version || 'unknown';
     const newVersion = newTemplate.version || 'unknown';
@@ -228,7 +238,7 @@ export class PolicyDiffViewer {
       questions: oldTemplate.questions || [],
       schema: oldTemplate.schema || {},
       template: oldTemplate.template || '',
-      styling: oldTemplate.styling || {}
+      styling: oldTemplate.styling || {},
     };
 
     const newContent = {
@@ -236,7 +246,7 @@ export class PolicyDiffViewer {
       questions: newTemplate.questions || [],
       schema: newTemplate.schema || {},
       template: newTemplate.template || '',
-      styling: newTemplate.styling || {}
+      styling: newTemplate.styling || {},
     };
 
     return this.generatePolicyDiff(
@@ -246,12 +256,15 @@ export class PolicyDiffViewer {
       newContent,
       oldVersion,
       newVersion,
-      changedBy
+      changedBy,
     );
   }
 
   // Analyze sections for differences
-  private async analyzeSections(oldContent: any, newContent: any): Promise<PolicyDiffSection[]> {
+  private async analyzeSections(
+    oldContent: any,
+    newContent: any,
+  ): Promise<PolicyDiffSection[]> {
     const sections: PolicyDiffSection[] = [];
 
     // Get all unique section keys
@@ -264,10 +277,13 @@ export class PolicyDiffViewer {
       const newValue = newContent?.[key];
 
       const changes = this.generateLineDiff(oldValue, newValue);
-      const hasChanges = changes.some(line => line.type !== 'unchanged');
+      const hasChanges = changes.some((line) => line.type !== 'unchanged');
       const totalLines = changes.length;
-      const changedLines = changes.filter(line => line.type !== 'unchanged').length;
-      const changePercentage = totalLines > 0 ? (changedLines / totalLines) * 100 : 0;
+      const changedLines = changes.filter(
+        (line) => line.type !== 'unchanged',
+      ).length;
+      const changePercentage =
+        totalLines > 0 ? (changedLines / totalLines) * 100 : 0;
 
       sections.push({
         sectionId: key,
@@ -275,7 +291,7 @@ export class PolicyDiffViewer {
         sectionType: this.detectSectionType(oldValue, newValue),
         changes,
         hasChanges,
-        changePercentage
+        changePercentage,
       });
     }
 
@@ -326,7 +342,7 @@ export class PolicyDiffViewer {
           lineNumber: lineNumber++,
           type: 'unchanged',
           oldContent: oldLine,
-          newContent: newLine
+          newContent: newLine,
         });
         oldIndex++;
         newIndex++;
@@ -335,7 +351,7 @@ export class PolicyDiffViewer {
         diffLines.push({
           lineNumber: lineNumber++,
           type: 'added',
-          newContent: newLine
+          newContent: newLine,
         });
         newIndex++;
       } else if (newIndex >= newLines.length) {
@@ -343,7 +359,7 @@ export class PolicyDiffViewer {
         diffLines.push({
           lineNumber: lineNumber++,
           type: 'removed',
-          oldContent: oldLine
+          oldContent: oldLine,
         });
         oldIndex++;
       } else {
@@ -352,7 +368,7 @@ export class PolicyDiffViewer {
           lineNumber: lineNumber++,
           type: 'modified',
           oldContent: oldLine,
-          newContent: newLine
+          newContent: newLine,
         });
         oldIndex++;
         newIndex++;
@@ -363,7 +379,9 @@ export class PolicyDiffViewer {
   }
 
   // Calculate change summary
-  private calculateSummary(sections: PolicyDiffSection[]): PolicyDiff['summary'] {
+  private calculateSummary(
+    sections: PolicyDiffSection[],
+  ): PolicyDiff['summary'] {
     let totalChanges = 0;
     let addedLines = 0;
     let removedLines = 0;
@@ -371,8 +389,8 @@ export class PolicyDiffViewer {
     let addedCharacters = 0;
     let removedCharacters = 0;
 
-    sections.forEach(section => {
-      section.changes.forEach(line => {
+    sections.forEach((section) => {
+      section.changes.forEach((line) => {
         switch (line.type) {
           case 'added':
             addedLines++;
@@ -400,12 +418,14 @@ export class PolicyDiffViewer {
       removedLines,
       modifiedLines,
       addedCharacters,
-      removedCharacters
+      removedCharacters,
     };
   }
 
   // Classify change type
-  private classifyChangeType(summary: PolicyDiff['summary']): PolicyDiff['changeType'] {
+  private classifyChangeType(
+    summary: PolicyDiff['summary'],
+  ): PolicyDiff['changeType'] {
     const { totalChanges, addedLines, removedLines, modifiedLines } = summary;
 
     // Breaking change indicators
@@ -429,8 +449,8 @@ export class PolicyDiffViewer {
 
   // Assess risk level
   private assessRiskLevel(
-    changeType: PolicyDiff['changeType'], 
-    summary: PolicyDiff['summary']
+    changeType: PolicyDiff['changeType'],
+    summary: PolicyDiff['summary'],
   ): PolicyDiff['riskLevel'] {
     if (changeType === 'breaking') {
       return 'critical';
@@ -450,27 +470,51 @@ export class PolicyDiffViewer {
   // Assess compliance impact
   private assessComplianceImpact(sections: PolicyDiffSection[]): boolean {
     const complianceKeywords = [
-      'gdpr', 'privacy', 'consent', 'data protection', 'retention',
-      'sox', 'financial', 'audit', 'control', 'segregation',
-      'hipaa', 'health', 'medical', 'patient',
-      'pci', 'payment', 'card', 'transaction'
+      'gdpr',
+      'privacy',
+      'consent',
+      'data protection',
+      'retention',
+      'sox',
+      'financial',
+      'audit',
+      'control',
+      'segregation',
+      'hipaa',
+      'health',
+      'medical',
+      'patient',
+      'pci',
+      'payment',
+      'card',
+      'transaction',
     ];
 
-    return sections.some(section =>
-      section.changes.some(line => {
-        const content = (line.oldContent || line.newContent || '').toLowerCase();
-        return complianceKeywords.some(keyword => content.includes(keyword));
-      })
+    return sections.some((section) =>
+      section.changes.some((line) => {
+        const content = (
+          line.oldContent ||
+          line.newContent ||
+          ''
+        ).toLowerCase();
+        return complianceKeywords.some((keyword) => content.includes(keyword));
+      }),
     );
   }
 
   // Analyze impact of changes
-  private async analyzeImpact(policyId: string, sections: PolicyDiffSection[]): Promise<PolicyDiff['impact']> {
+  private async analyzeImpact(
+    policyId: string,
+    sections: PolicyDiffSection[],
+  ): Promise<PolicyDiff['impact']> {
     // Simulate impact analysis - in production, this would query actual dependencies
     const affectedDocuments = this.findAffectedDocuments(policyId, sections);
     const affectedUsers = this.findAffectedUsers(policyId, sections);
     const affectedProcesses = this.findAffectedProcesses(policyId, sections);
-    const downstreamChanges = this.identifyDownstreamChanges(policyId, sections);
+    const downstreamChanges = this.identifyDownstreamChanges(
+      policyId,
+      sections,
+    );
     const rollbackComplexity = this.assessRollbackComplexity(sections);
 
     return {
@@ -478,7 +522,7 @@ export class PolicyDiffViewer {
       affectedUsers,
       affectedProcesses,
       downstreamChanges,
-      rollbackComplexity
+      rollbackComplexity,
     };
   }
 
@@ -505,31 +549,35 @@ export class PolicyDiffViewer {
     let results = Array.from(this.diffs.values());
 
     if (query.policyId) {
-      results = results.filter(diff => diff.policyId === query.policyId);
+      results = results.filter((diff) => diff.policyId === query.policyId);
     }
 
     if (query.changeType) {
-      results = results.filter(diff => diff.changeType === query.changeType);
+      results = results.filter((diff) => diff.changeType === query.changeType);
     }
 
     if (query.riskLevel) {
-      results = results.filter(diff => diff.riskLevel === query.riskLevel);
+      results = results.filter((diff) => diff.riskLevel === query.riskLevel);
     }
 
     if (query.dateFrom) {
-      results = results.filter(diff => diff.timestamp >= query.dateFrom!);
+      results = results.filter((diff) => diff.timestamp >= query.dateFrom!);
     }
 
     if (query.dateTo) {
-      results = results.filter(diff => diff.timestamp <= query.dateTo!);
+      results = results.filter((diff) => diff.timestamp <= query.dateTo!);
     }
 
     if (query.changedBy) {
-      results = results.filter(diff => diff.changedBy.userId === query.changedBy);
+      results = results.filter(
+        (diff) => diff.changedBy.userId === query.changedBy,
+      );
     }
 
     if (query.complianceImpact !== undefined) {
-      results = results.filter(diff => diff.complianceImpact === query.complianceImpact);
+      results = results.filter(
+        (diff) => diff.complianceImpact === query.complianceImpact,
+      );
     }
 
     return results.sort((a, b) => b.timestamp.localeCompare(a.timestamp));
@@ -570,10 +618,15 @@ export class PolicyDiffViewer {
         <p><strong>Total Changes:</strong> ${diff.summary.totalChanges}</p>
       </div>
       
-      ${diff.sections.filter(s => s.hasChanges).map(section => `
+      ${diff.sections
+        .filter((s) => s.hasChanges)
+        .map(
+          (section) => `
         <div class="diff-section">
           <div class="section-header">${section.sectionName} (${section.changePercentage.toFixed(1)}% changed)</div>
-          ${section.changes.map(line => `
+          ${section.changes
+            .map(
+              (line) => `
             <div class="diff-line ${line.type}">
               <span class="line-number">${line.lineNumber}</span>
               ${line.type === 'removed' ? '- ' + (line.oldContent || '') : ''}
@@ -581,9 +634,13 @@ export class PolicyDiffViewer {
               ${line.type === 'modified' ? '~ ' + (line.newContent || '') : ''}
               ${line.type === 'unchanged' ? '  ' + (line.oldContent || '') : ''}
             </div>
-          `).join('')}
+          `,
+            )
+            .join('')}
         </div>
-      `).join('')}
+      `,
+        )
+        .join('')}
     </body>
     </html>`;
 
@@ -596,14 +653,16 @@ export class PolicyDiffViewer {
     approverId: string,
     approverEmail: string,
     decision: 'approve' | 'reject',
-    comments?: string
+    comments?: string,
   ): Promise<void> {
     const diff = this.diffs.get(diffId);
     if (!diff) {
       throw new Error('Diff not found');
     }
 
-    const approver = diff.approval.approvers.find(a => a.userId === approverId);
+    const approver = diff.approval.approvers.find(
+      (a) => a.userId === approverId,
+    );
     if (!approver) {
       throw new Error('Approver not authorized');
     }
@@ -613,10 +672,10 @@ export class PolicyDiffViewer {
     approver.comments = comments;
 
     // Update overall approval status
-    const allDecisions = diff.approval.approvers.map(a => a.decision);
-    if (allDecisions.some(d => d === 'reject')) {
+    const allDecisions = diff.approval.approvers.map((a) => a.decision);
+    if (allDecisions.some((d) => d === 'reject')) {
       diff.approval.status = 'rejected';
-    } else if (allDecisions.every(d => d === 'approve')) {
+    } else if (allDecisions.every((d) => d === 'approve')) {
       diff.approval.status = 'approved';
     }
 
@@ -629,10 +688,10 @@ export class PolicyDiffViewer {
     templateName: string,
     version: string,
     diff: PolicyDiff,
-    author: PolicyDiff['changedBy']
+    author: PolicyDiff['changedBy'],
   ): void {
     let history = this.templateHistory.get(templateId);
-    
+
     if (!history) {
       history = {
         templateId,
@@ -642,7 +701,7 @@ export class PolicyDiffViewer {
         totalChanges: 0,
         lastModified: diff.timestamp,
         changeFrequency: 'low',
-        stabilityScore: 100
+        stabilityScore: 100,
       };
       this.templateHistory.set(templateId, history);
     }
@@ -652,7 +711,7 @@ export class PolicyDiffViewer {
       timestamp: diff.timestamp,
       author: {
         userId: author.userId,
-        email: author.email
+        email: author.email,
       },
       changelog: `${diff.changeType} change with ${diff.summary.totalChanges} modifications`,
       diff,
@@ -660,94 +719,141 @@ export class PolicyDiffViewer {
       compliance: {
         validated: false,
         frameworks: ['gdpr', 'sox'],
-        risks: diff.riskLevel === 'high' ? ['compliance_violation'] : []
-      }
+        risks: diff.riskLevel === 'high' ? ['compliance_violation'] : [],
+      },
     };
 
     history.versions.push(newVersion);
     history.totalChanges += diff.summary.totalChanges;
     history.lastModified = diff.timestamp;
-    
+
     // Update metrics
-    const recentChanges = history.versions.filter(v => 
-      new Date(v.timestamp) > new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
+    const recentChanges = history.versions.filter(
+      (v) =>
+        new Date(v.timestamp) > new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
     ).length;
-    
-    history.changeFrequency = recentChanges > 10 ? 'high' : recentChanges > 3 ? 'medium' : 'low';
-    history.stabilityScore = Math.max(0, 100 - (recentChanges * 5));
+
+    history.changeFrequency =
+      recentChanges > 10 ? 'high' : recentChanges > 3 ? 'medium' : 'low';
+    history.stabilityScore = Math.max(0, 100 - recentChanges * 5);
   }
 
-  private requiresApproval(changeType: PolicyDiff['changeType'], riskLevel: PolicyDiff['riskLevel']): boolean {
-    return changeType === 'major' || changeType === 'breaking' || riskLevel === 'high' || riskLevel === 'critical';
+  private requiresApproval(
+    changeType: PolicyDiff['changeType'],
+    riskLevel: PolicyDiff['riskLevel'],
+  ): boolean {
+    return (
+      changeType === 'major' ||
+      changeType === 'breaking' ||
+      riskLevel === 'high' ||
+      riskLevel === 'critical'
+    );
   }
 
   private getRequiredApprovers(
-    changeType: PolicyDiff['changeType'], 
-    riskLevel: PolicyDiff['riskLevel']
+    changeType: PolicyDiff['changeType'],
+    riskLevel: PolicyDiff['riskLevel'],
   ): PolicyDiff['approval']['approvers'] {
     const approvers: PolicyDiff['approval']['approvers'] = [];
 
     if (riskLevel === 'critical' || changeType === 'breaking') {
       approvers.push(
-        { userId: 'legal_counsel', email: 'legal@company.com', decision: 'pending' },
-        { userId: 'compliance_officer', email: 'compliance@company.com', decision: 'pending' },
-        { userId: 'cto', email: 'cto@company.com', decision: 'pending' }
+        {
+          userId: 'legal_counsel',
+          email: 'legal@company.com',
+          decision: 'pending',
+        },
+        {
+          userId: 'compliance_officer',
+          email: 'compliance@company.com',
+          decision: 'pending',
+        },
+        { userId: 'cto', email: 'cto@company.com', decision: 'pending' },
       );
     } else if (riskLevel === 'high' || changeType === 'major') {
       approvers.push(
-        { userId: 'legal_counsel', email: 'legal@company.com', decision: 'pending' },
-        { userId: 'compliance_officer', email: 'compliance@company.com', decision: 'pending' }
+        {
+          userId: 'legal_counsel',
+          email: 'legal@company.com',
+          decision: 'pending',
+        },
+        {
+          userId: 'compliance_officer',
+          email: 'compliance@company.com',
+          decision: 'pending',
+        },
       );
     } else {
-      approvers.push(
-        { userId: 'policy_manager', email: 'policy@company.com', decision: 'pending' }
-      );
+      approvers.push({
+        userId: 'policy_manager',
+        email: 'policy@company.com',
+        decision: 'pending',
+      });
     }
 
     return approvers;
   }
 
-  private detectSectionType(oldValue: any, newValue: any): PolicyDiffSection['sectionType'] {
+  private detectSectionType(
+    oldValue: any,
+    newValue: any,
+  ): PolicyDiffSection['sectionType'] {
     const value = newValue || oldValue;
-    
+
     if (typeof value === 'string') {
       if (value.includes('<') && value.includes('>')) return 'html';
       if (value.includes('#') || value.includes('**')) return 'markdown';
       if (value.includes('<?xml')) return 'xml';
       return 'text';
     }
-    
+
     if (Array.isArray(value) || typeof value === 'object') {
       return 'json';
     }
-    
+
     return 'text';
   }
 
   private formatSectionName(key: string): string {
-    return key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase());
+    return key
+      .replace(/([A-Z])/g, ' $1')
+      .replace(/^./, (str) => str.toUpperCase());
   }
 
   // Mock methods for impact analysis (would be implemented with real data)
-  private findAffectedDocuments(policyId: string, sections: PolicyDiffSection[]): string[] {
+  private findAffectedDocuments(
+    policyId: string,
+    sections: PolicyDiffSection[],
+  ): string[] {
     return [`doc_${Math.random().toString(36).substr(2, 8)}`];
   }
 
-  private findAffectedUsers(policyId: string, sections: PolicyDiffSection[]): string[] {
+  private findAffectedUsers(
+    policyId: string,
+    sections: PolicyDiffSection[],
+  ): string[] {
     return [`user_${Math.random().toString(36).substr(2, 8)}`];
   }
 
-  private findAffectedProcesses(policyId: string, sections: PolicyDiffSection[]): string[] {
+  private findAffectedProcesses(
+    policyId: string,
+    sections: PolicyDiffSection[],
+  ): string[] {
     return ['document_generation', 'approval_workflow'];
   }
 
-  private identifyDownstreamChanges(policyId: string, sections: PolicyDiffSection[]): string[] {
+  private identifyDownstreamChanges(
+    policyId: string,
+    sections: PolicyDiffSection[],
+  ): string[] {
     return ['template_validation', 'compliance_check'];
   }
 
-  private assessRollbackComplexity(sections: PolicyDiffSection[]): PolicyDiff['impact']['rollbackComplexity'] {
+  private assessRollbackComplexity(
+    sections: PolicyDiffSection[],
+  ): PolicyDiff['impact']['rollbackComplexity'] {
     const totalChanges = sections.reduce((sum, s) => sum + s.changes.length, 0);
-    
+
     if (totalChanges > 100) return 'critical';
     if (totalChanges > 50) return 'complex';
     if (totalChanges > 10) return 'moderate';
@@ -768,29 +874,30 @@ export class PolicyDiffViewer {
     complianceImpactCount: number;
   } {
     const allDiffs = Array.from(this.diffs.values());
-    
+
     const changeTypes: Record<string, number> = {};
     const riskLevels: Record<string, number> = {};
     let totalChanges = 0;
     let approvalPending = 0;
     let complianceImpact = 0;
 
-    allDiffs.forEach(diff => {
+    allDiffs.forEach((diff) => {
       changeTypes[diff.changeType] = (changeTypes[diff.changeType] || 0) + 1;
       riskLevels[diff.riskLevel] = (riskLevels[diff.riskLevel] || 0) + 1;
       totalChanges += diff.summary.totalChanges;
-      
+
       if (diff.approval.status === 'pending') approvalPending++;
       if (diff.complianceImpact) complianceImpact++;
     });
 
     return {
       totalDiffs: allDiffs.length,
-      avgChangesPerDiff: allDiffs.length > 0 ? Math.round(totalChanges / allDiffs.length) : 0,
+      avgChangesPerDiff:
+        allDiffs.length > 0 ? Math.round(totalChanges / allDiffs.length) : 0,
       changeTypeDistribution: changeTypes,
       riskLevelDistribution: riskLevels,
       approvalPendingCount: approvalPending,
-      complianceImpactCount: complianceImpact
+      complianceImpactCount: complianceImpact,
     };
   }
 }

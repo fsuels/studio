@@ -17,19 +17,20 @@ export interface StateRegulation {
 
 export const stateRegulations: Record<string, StateRegulation> = {
   // GREEN STATES - Active regulatory programs allow non-law firms
-  'AZ': {
+  AZ: {
     risk: 'green',
-    reason: 'Alternative Business Structure (ABS) program allows non-law firms under oversight',
+    reason:
+      'Alternative Business Structure (ABS) program allows non-law firms under oversight',
     blockCheckout: false,
     requiresRegistration: true,
     annualFee: 6000,
     specialRequirements: ['ABS filing required', 'Regulatory oversight'],
     disclaimerLevel: 'basic',
     lastUpdated: '2025-01-01',
-    sources: ['law.stanford.edu/abs-programs', 'azbar.org']
+    sources: ['law.stanford.edu/abs-programs', 'azbar.org'],
   },
-  'UT': {
-    risk: 'green', 
+  UT: {
+    risk: 'green',
     reason: 'Legal Tech Sandbox program permits innovative legal services',
     blockCheckout: false,
     requiresRegistration: true,
@@ -37,409 +38,432 @@ export const stateRegulations: Record<string, StateRegulation> = {
     specialRequirements: ['Sandbox registration', 'Annual reporting'],
     disclaimerLevel: 'basic',
     lastUpdated: '2025-01-01',
-    sources: ['utahinnovationoffice.org', 'utahbar.org/sandbox']
+    sources: ['utahinnovationoffice.org', 'utahbar.org/sandbox'],
   },
-  'WA': {
+  WA: {
     risk: 'green',
-    reason: 'Limited License Legal Technician (LLLT) program and regulatory flexibility',
+    reason:
+      'Limited License Legal Technician (LLLT) program and regulatory flexibility',
     blockCheckout: false,
     disclaimerLevel: 'basic',
     lastUpdated: '2025-01-01',
-    sources: ['wsba.org/licensing', 'reuters.com/legal-innovation']
+    sources: ['wsba.org/licensing', 'reuters.com/legal-innovation'],
   },
 
   // RED STATES - High enforcement risk, block until local attorney partnership
-  'TX': {
+  TX: {
     risk: 'red',
-    reason: 'Active UPL enforcement, recent cease-and-desist letters, strict corporate practice ban',
+    reason:
+      'Active UPL enforcement, recent cease-and-desist letters, strict corporate practice ban',
     blockCheckout: true,
     disclaimerLevel: 'strict',
-    specialRequirements: ['Named in-state attorney review required', 'Revenue sharing or flat fee arrangement'],
+    specialRequirements: [
+      'Named in-state attorney review required',
+      'Revenue sharing or flat fee arrangement',
+    ],
     lastUpdated: '2025-01-01',
-    sources: ['texasbar.com/upl', 'texasbar.com/ethics-opinions']
+    sources: ['texasbar.com/upl', 'texasbar.com/ethics-opinions'],
   },
-  'NC': {
+  NC: {
     risk: 'red',
-    reason: 'Required registration program for online document providers, strict Rule 5.5 enforcement',
+    reason:
+      'Required registration program for online document providers, strict Rule 5.5 enforcement',
     blockCheckout: true,
     disclaimerLevel: 'strict',
-    specialRequirements: ['State registration required', 'Attorney involvement mandatory'],
+    specialRequirements: [
+      'State registration required',
+      'Attorney involvement mandatory',
+    ],
     lastUpdated: '2025-01-01',
-    sources: ['ncbar.gov/registration', 'reuters.com/legal-nc-ruling']
+    sources: ['ncbar.gov/registration', 'reuters.com/legal-nc-ruling'],
   },
-  'MO': {
+  MO: {
     risk: 'red',
-    reason: 'Janson v. LegalZoom class settlement requires attorney involvement and refund guarantees',
+    reason:
+      'Janson v. LegalZoom class settlement requires attorney involvement and refund guarantees',
     blockCheckout: true,
     disclaimerLevel: 'strict',
-    specialRequirements: ['Attorney involvement required', 'Refund policy compliance', 'Settlement obligations'],
+    specialRequirements: [
+      'Attorney involvement required',
+      'Refund policy compliance',
+      'Settlement obligations',
+    ],
     lastUpdated: '2025-01-01',
-    sources: ['attorney.elderlawanswers.com/janson-settlement', 'mobar.org']
+    sources: ['attorney.elderlawanswers.com/janson-settlement', 'mobar.org'],
   },
 
   // AMBER STATES - Standard enforcement, enhanced disclaimers required
-  'AL': {
+  AL: {
     risk: 'amber',
-    reason: 'No regulatory sandbox, UPL enforcement focuses on personalized advice',
+    reason:
+      'No regulatory sandbox, UPL enforcement focuses on personalized advice',
     blockCheckout: false,
     disclaimerLevel: 'enhanced',
     lastUpdated: '2025-01-01',
-    sources: ['alabar.org']
+    sources: ['alabar.org'],
   },
-  'AK': {
+  AK: {
     risk: 'amber',
-    reason: 'Limited UPL enforcement history, standard template vendor treatment',
+    reason:
+      'Limited UPL enforcement history, standard template vendor treatment',
     blockCheckout: false,
     disclaimerLevel: 'enhanced',
     lastUpdated: '2025-01-01',
-    sources: ['alaskabar.org']
+    sources: ['alaskabar.org'],
   },
-  'AR': {
+  AR: {
     risk: 'amber',
-    reason: 'No specific template vendor restrictions, focus on advice vs. forms',
+    reason:
+      'No specific template vendor restrictions, focus on advice vs. forms',
     blockCheckout: false,
     disclaimerLevel: 'enhanced',
     lastUpdated: '2025-01-01',
-    sources: ['arkbar.com']
+    sources: ['arkbar.com'],
   },
-  'CA': {
+  CA: {
     risk: 'amber',
-    reason: 'Large market with case-by-case UPL enforcement, no systematic template restrictions',
+    reason:
+      'Large market with case-by-case UPL enforcement, no systematic template restrictions',
     blockCheckout: false,
     disclaimerLevel: 'enhanced',
     lastUpdated: '2025-01-01',
-    sources: ['calbar.ca.gov']
+    sources: ['calbar.ca.gov'],
   },
-  'CO': {
+  CO: {
     risk: 'amber',
     reason: 'No regulatory sandbox yet, traditional UPL enforcement model',
     blockCheckout: false,
     disclaimerLevel: 'enhanced',
     lastUpdated: '2025-01-01',
-    sources: ['coloradobar.org']
+    sources: ['coloradobar.org'],
   },
-  'CT': {
+  CT: {
     risk: 'amber',
-    reason: 'Conservative bar association but limited template vendor enforcement',
+    reason:
+      'Conservative bar association but limited template vendor enforcement',
     blockCheckout: false,
     disclaimerLevel: 'enhanced',
     lastUpdated: '2025-01-01',
-    sources: ['ctbar.org']
+    sources: ['ctbar.org'],
   },
-  'DE': {
+  DE: {
     risk: 'amber',
     reason: 'Corporate law focus, limited individual practice restrictions',
     blockCheckout: false,
     disclaimerLevel: 'enhanced',
     lastUpdated: '2025-01-01',
-    sources: ['dsba.org']
+    sources: ['dsba.org'],
   },
-  'FL': {
+  FL: {
     risk: 'amber',
-    reason: 'Large market, case-by-case enforcement, no systematic restrictions',
+    reason:
+      'Large market, case-by-case enforcement, no systematic restrictions',
     blockCheckout: false,
     disclaimerLevel: 'enhanced',
     lastUpdated: '2025-01-01',
-    sources: ['floridabar.org']
+    sources: ['floridabar.org'],
   },
-  'GA': {
+  GA: {
     risk: 'amber',
     reason: 'Traditional enforcement model, focus on personalized advice',
     blockCheckout: false,
     disclaimerLevel: 'enhanced',
     lastUpdated: '2025-01-01',
-    sources: ['gabar.org']
+    sources: ['gabar.org'],
   },
-  'HI': {
+  HI: {
     risk: 'amber',
     reason: 'Small market, limited enforcement activity against templates',
     blockCheckout: false,
     disclaimerLevel: 'enhanced',
     lastUpdated: '2025-01-01',
-    sources: ['hsba.org']
+    sources: ['hsba.org'],
   },
-  'ID': {
+  ID: {
     risk: 'amber',
     reason: 'No specific template restrictions, standard UPL framework',
     blockCheckout: false,
     disclaimerLevel: 'enhanced',
     lastUpdated: '2025-01-01',
-    sources: ['isb.idaho.gov']
+    sources: ['isb.idaho.gov'],
   },
-  'IL': {
+  IL: {
     risk: 'amber',
-    reason: 'Large market, traditional enforcement, no systematic template bans',
+    reason:
+      'Large market, traditional enforcement, no systematic template bans',
     blockCheckout: false,
     disclaimerLevel: 'enhanced',
     lastUpdated: '2025-01-01',
-    sources: ['illinoisbar.org']
+    sources: ['illinoisbar.org'],
   },
-  'IN': {
+  IN: {
     risk: 'amber',
     reason: 'Conservative bar but limited template enforcement history',
     blockCheckout: false,
     disclaimerLevel: 'enhanced',
     lastUpdated: '2025-01-01',
-    sources: ['inbar.org']
+    sources: ['inbar.org'],
   },
-  'IA': {
+  IA: {
     risk: 'amber',
     reason: 'No specific template vendor restrictions documented',
     blockCheckout: false,
     disclaimerLevel: 'enhanced',
     lastUpdated: '2025-01-01',
-    sources: ['iowabar.org']
+    sources: ['iowabar.org'],
   },
-  'KS': {
+  KS: {
     risk: 'amber',
     reason: 'Standard UPL enforcement, no template-specific restrictions',
     blockCheckout: false,
     disclaimerLevel: 'enhanced',
     lastUpdated: '2025-01-01',
-    sources: ['ksbar.org']
+    sources: ['ksbar.org'],
   },
-  'KY': {
+  KY: {
     risk: 'amber',
     reason: 'Traditional enforcement model, focus on advice vs forms',
     blockCheckout: false,
     disclaimerLevel: 'enhanced',
     lastUpdated: '2025-01-01',
-    sources: ['kybar.org']
+    sources: ['kybar.org'],
   },
-  'LA': {
+  LA: {
     risk: 'amber',
     reason: 'Civil law state with unique requirements but no template bans',
     blockCheckout: false,
     disclaimerLevel: 'enhanced',
     lastUpdated: '2025-01-01',
-    sources: ['lsba.org']
+    sources: ['lsba.org'],
   },
-  'ME': {
+  ME: {
     risk: 'amber',
     reason: 'Small market, limited enforcement against template vendors',
     blockCheckout: false,
     disclaimerLevel: 'enhanced',
     lastUpdated: '2025-01-01',
-    sources: ['mainebar.org']
+    sources: ['mainebar.org'],
   },
-  'MD': {
+  MD: {
     risk: 'amber',
     reason: 'No systematic template restrictions, case-by-case enforcement',
     blockCheckout: false,
     disclaimerLevel: 'enhanced',
     lastUpdated: '2025-01-01',
-    sources: ['msba.org']
+    sources: ['msba.org'],
   },
-  'MA': {
+  MA: {
     risk: 'amber',
-    reason: 'Traditional legal market, no specific template vendor restrictions',
+    reason:
+      'Traditional legal market, no specific template vendor restrictions',
     blockCheckout: false,
     disclaimerLevel: 'enhanced',
     lastUpdated: '2025-01-01',
-    sources: ['massbar.org']
+    sources: ['massbar.org'],
   },
-  'MI': {
+  MI: {
     risk: 'amber',
     reason: 'Large market, standard UPL enforcement practices',
     blockCheckout: false,
     disclaimerLevel: 'enhanced',
     lastUpdated: '2025-01-01',
-    sources: ['michbar.org']
+    sources: ['michbar.org'],
   },
-  'MN': {
+  MN: {
     risk: 'amber',
     reason: 'No template-specific restrictions, focus on personalized advice',
     blockCheckout: false,
     disclaimerLevel: 'enhanced',
     lastUpdated: '2025-01-01',
-    sources: ['mnbar.org']
+    sources: ['mnbar.org'],
   },
-  'MS': {
+  MS: {
     risk: 'amber',
     reason: 'Conservative market but limited template enforcement',
     blockCheckout: false,
     disclaimerLevel: 'enhanced',
     lastUpdated: '2025-01-01',
-    sources: ['msbar.org']
+    sources: ['msbar.org'],
   },
-  'MT': {
+  MT: {
     risk: 'amber',
     reason: 'Small market, minimal enforcement against form vendors',
     blockCheckout: false,
     disclaimerLevel: 'enhanced',
     lastUpdated: '2025-01-01',
-    sources: ['montanabar.org']
+    sources: ['montanabar.org'],
   },
-  'NE': {
+  NE: {
     risk: 'amber',
     reason: 'No specific template restrictions documented',
     blockCheckout: false,
     disclaimerLevel: 'enhanced',
     lastUpdated: '2025-01-01',
-    sources: ['nebar.com']
+    sources: ['nebar.com'],
   },
-  'NV': {
+  NV: {
     risk: 'amber',
-    reason: 'Business-friendly state, limited UPL enforcement against templates',
+    reason:
+      'Business-friendly state, limited UPL enforcement against templates',
     blockCheckout: false,
     disclaimerLevel: 'enhanced',
     lastUpdated: '2025-01-01',
-    sources: ['nvbar.org']
+    sources: ['nvbar.org'],
   },
-  'NH': {
+  NH: {
     risk: 'amber',
     reason: 'Small market, no systematic template restrictions',
     blockCheckout: false,
     disclaimerLevel: 'enhanced',
     lastUpdated: '2025-01-01',
-    sources: ['nhbar.org']
+    sources: ['nhbar.org'],
   },
-  'NJ': {
+  NJ: {
     risk: 'amber',
     reason: 'Large market, traditional enforcement, no template bans',
     blockCheckout: false,
     disclaimerLevel: 'enhanced',
     lastUpdated: '2025-01-01',
-    sources: ['njsba.com']
+    sources: ['njsba.com'],
   },
-  'NM': {
+  NM: {
     risk: 'amber',
     reason: 'No specific template vendor restrictions',
     blockCheckout: false,
     disclaimerLevel: 'enhanced',
     lastUpdated: '2025-01-01',
-    sources: ['nmbar.org']
+    sources: ['nmbar.org'],
   },
-  'NY': {
+  NY: {
     risk: 'amber',
     reason: 'Large market, traditional enforcement model, case-by-case review',
     blockCheckout: false,
     disclaimerLevel: 'enhanced',
     lastUpdated: '2025-01-01',
-    sources: ['nysba.org']
+    sources: ['nysba.org'],
   },
-  'ND': {
+  ND: {
     risk: 'amber',
     reason: 'Small market, minimal enforcement history against templates',
     blockCheckout: false,
     disclaimerLevel: 'enhanced',
     lastUpdated: '2025-01-01',
-    sources: ['sband.org']
+    sources: ['sband.org'],
   },
-  'OH': {
+  OH: {
     risk: 'amber',
     reason: 'Large market, standard UPL enforcement practices',
     blockCheckout: false,
     disclaimerLevel: 'enhanced',
     lastUpdated: '2025-01-01',
-    sources: ['ohiobar.org']
+    sources: ['ohiobar.org'],
   },
-  'OK': {
+  OK: {
     risk: 'amber',
     reason: 'No systematic template restrictions documented',
     blockCheckout: false,
     disclaimerLevel: 'enhanced',
     lastUpdated: '2025-01-01',
-    sources: ['okbar.org']
+    sources: ['okbar.org'],
   },
-  'OR': {
+  OR: {
     risk: 'amber',
     reason: 'Progressive state but no regulatory sandbox yet',
     blockCheckout: false,
     disclaimerLevel: 'enhanced',
     lastUpdated: '2025-01-01',
-    sources: ['osbar.org']
+    sources: ['osbar.org'],
   },
-  'PA': {
+  PA: {
     risk: 'amber',
     reason: 'Large market, conservative bar but limited template enforcement',
     blockCheckout: false,
     disclaimerLevel: 'enhanced',
     lastUpdated: '2025-01-01',
-    sources: ['pabar.org']
+    sources: ['pabar.org'],
   },
-  'RI': {
+  RI: {
     risk: 'amber',
     reason: 'Small market, no specific template restrictions',
     blockCheckout: false,
     disclaimerLevel: 'enhanced',
     lastUpdated: '2025-01-01',
-    sources: ['ribar.org']
+    sources: ['ribar.org'],
   },
-  'SC': {
+  SC: {
     risk: 'amber',
     reason: 'Conservative market but no systematic template bans',
     blockCheckout: false,
     disclaimerLevel: 'enhanced',
     lastUpdated: '2025-01-01',
-    sources: ['scbar.org']
+    sources: ['scbar.org'],
   },
-  'SD': {
+  SD: {
     risk: 'amber',
     reason: 'Small market, minimal enforcement against form vendors',
     blockCheckout: false,
     disclaimerLevel: 'enhanced',
     lastUpdated: '2025-01-01',
-    sources: ['statebarofsouthdakota.com']
+    sources: ['statebarofsouthdakota.com'],
   },
-  'TN': {
+  TN: {
     risk: 'amber',
     reason: 'No specific template vendor restrictions documented',
     blockCheckout: false,
     disclaimerLevel: 'enhanced',
     lastUpdated: '2025-01-01',
-    sources: ['tba.org']
+    sources: ['tba.org'],
   },
-  'VT': {
+  VT: {
     risk: 'amber',
     reason: 'Small market, no systematic template restrictions',
     blockCheckout: false,
     disclaimerLevel: 'enhanced',
     lastUpdated: '2025-01-01',
-    sources: ['vtbar.org']
+    sources: ['vtbar.org'],
   },
-  'VA': {
+  VA: {
     risk: 'amber',
     reason: 'Large market, traditional enforcement, no template-specific bans',
     blockCheckout: false,
     disclaimerLevel: 'enhanced',
     lastUpdated: '2025-01-01',
-    sources: ['vsb.org']
+    sources: ['vsb.org'],
   },
-  'WV': {
+  WV: {
     risk: 'amber',
     reason: 'Small market, limited enforcement against template vendors',
     blockCheckout: false,
     disclaimerLevel: 'enhanced',
     lastUpdated: '2025-01-01',
-    sources: ['wvbar.org']
+    sources: ['wvbar.org'],
   },
-  'WI': {
+  WI: {
     risk: 'amber',
     reason: 'No specific template restrictions, standard UPL framework',
     blockCheckout: false,
     disclaimerLevel: 'enhanced',
     lastUpdated: '2025-01-01',
-    sources: ['wisbar.org']
+    sources: ['wisbar.org'],
   },
-  'WY': {
+  WY: {
     risk: 'amber',
     reason: 'Small market, business-friendly, minimal template enforcement',
     blockCheckout: false,
     disclaimerLevel: 'enhanced',
     lastUpdated: '2025-01-01',
-    sources: ['wyomingbar.org']
+    sources: ['wyomingbar.org'],
   },
 
   // FEDERAL TERRITORIES
-  'DC': {
+  DC: {
     risk: 'amber',
     reason: 'Federal jurisdiction, traditional enforcement model',
     blockCheckout: false,
     disclaimerLevel: 'enhanced',
     lastUpdated: '2025-01-01',
-    sources: ['dcbar.org']
-  }
+    sources: ['dcbar.org'],
+  },
 };
 
 // Helper functions
@@ -452,8 +476,12 @@ export function canPurchaseInState(stateCode: string): boolean {
   return regulation ? !regulation.blockCheckout : true; // Default to allow if state not found
 }
 
-export function getDisclaimerLevel(stateCode: string): 'basic' | 'enhanced' | 'strict' {
-  return stateRegulations[stateCode?.toUpperCase()]?.disclaimerLevel || 'enhanced';
+export function getDisclaimerLevel(
+  stateCode: string,
+): 'basic' | 'enhanced' | 'strict' {
+  return (
+    stateRegulations[stateCode?.toUpperCase()]?.disclaimerLevel || 'enhanced'
+  );
 }
 
 export function getStateRequirements(stateCode: string): string[] {
@@ -483,7 +511,11 @@ export interface ComplianceEvent {
   timestamp: string;
   userIP: string;
   userState: string;
-  action: 'checkout_allowed' | 'checkout_blocked' | 'disclaimer_shown' | 'waitlist_signup';
+  action:
+    | 'checkout_allowed'
+    | 'checkout_blocked'
+    | 'disclaimer_shown'
+    | 'waitlist_signup';
   riskLevel: RiskLevel;
   disclaimerLevel: string;
   userAgent: string;
@@ -495,10 +527,10 @@ export function createComplianceEvent(
   userState: string,
   action: ComplianceEvent['action'],
   sessionId: string,
-  userAgent: string
+  userAgent: string,
 ): ComplianceEvent {
   const regulation = stateRegulations[userState?.toUpperCase()];
-  
+
   return {
     timestamp: new Date().toISOString(),
     userIP,
@@ -507,6 +539,6 @@ export function createComplianceEvent(
     riskLevel: regulation?.risk || 'amber',
     disclaimerLevel: regulation?.disclaimerLevel || 'enhanced',
     userAgent,
-    sessionId
+    sessionId,
   };
 }

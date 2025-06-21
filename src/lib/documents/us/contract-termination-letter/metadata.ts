@@ -3,7 +3,10 @@ import type { LegalDocument } from '@/types/documents';
 import { contractTerminationLetterSchema } from './schema';
 import { contractTerminationLetterQuestions } from './questions';
 
-export const contractTerminationLetterMeta: Omit<LegalDocument, 'schema' | 'questions'> = {
+export const contractTerminationLetterMeta: Omit<
+  LegalDocument,
+  'schema' | 'questions'
+> = {
   id: 'contract-termination-letter',
   jurisdiction: 'US',
   category: 'Business',
@@ -24,13 +27,21 @@ export const contractTerminationLetterMeta: Omit<LegalDocument, 'schema' | 'ques
       name: 'Contract Termination Letter',
       description:
         'Formally terminate a contract with proper notice and documentation.',
-      aliases: ['termination notice', 'contract cancellation', 'agreement termination'],
+      aliases: [
+        'termination notice',
+        'contract cancellation',
+        'agreement termination',
+      ],
     },
     es: {
       name: 'Carta de Terminación de Contrato',
       description:
         'Terminar formalmente un contrato con aviso y documentación adecuados.',
-      aliases: ['aviso de terminación', 'cancelación de contrato', 'terminación de acuerdo'],
+      aliases: [
+        'aviso de terminación',
+        'cancelación de contrato',
+        'terminación de acuerdo',
+      ],
     },
   },
 };

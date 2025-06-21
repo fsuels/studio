@@ -30,7 +30,7 @@ Phoenix offers a dynamic business environment with opportunities across industri
 
 [Start Your Phoenix Legal Document]
 
-*Trusted by hundreds of Phoenix businesses*
+_Trusted by hundreds of Phoenix businesses_
 
 ---
 

@@ -44,7 +44,7 @@ export interface WebhookDelivery {
   createdAt: Timestamp;
 }
 
-export type WebhookEvent = 
+export type WebhookEvent =
   | 'document.created'
   | 'document.updated'
   | 'document.signed'
@@ -83,10 +83,15 @@ export class WebhookRegistry {
     return WebhookRegistry.instance;
   }
 
-  async subscribe(subscription: Omit<WebhookSubscription, 'id' | 'createdAt' | 'updatedAt' | 'deliveryStats'>): Promise<WebhookSubscription> {
+  async subscribe(
+    subscription: Omit<
+      WebhookSubscription,
+      'id' | 'createdAt' | 'updatedAt' | 'deliveryStats'
+    >,
+  ): Promise<WebhookSubscription> {
     const id = this.generateId();
     const now = Timestamp.now();
-    
+
     const newSubscription: WebhookSubscription = {
       ...subscription,
       id,
@@ -103,35 +108,37 @@ export class WebhookRegistry {
 
     // Validate webhook URL
     await this.validateWebhookUrl(subscription.url);
-    
+
     this.subscriptions.set(id, newSubscription);
-    
+
     // Persist to database
     await this.persistSubscription(newSubscription);
-    
+
     return newSubscription;
   }
 
   async unsubscribe(subscriptionId: string, userId: string): Promise<boolean> {
     const subscription = this.subscriptions.get(subscriptionId);
-    
+
     if (!subscription || subscription.userId !== userId) {
       throw new Error('Webhook subscription not found or unauthorized');
     }
 
     this.subscriptions.delete(subscriptionId);
     await this.removeSubscriptionFromDb(subscriptionId);
-    
+
     return true;
   }
 
   async updateSubscription(
-    subscriptionId: string, 
-    userId: string, 
-    updates: Partial<Pick<WebhookSubscription, 'url' | 'events' | 'isActive' | 'metadata'>>
+    subscriptionId: string,
+    userId: string,
+    updates: Partial<
+      Pick<WebhookSubscription, 'url' | 'events' | 'isActive' | 'metadata'>
+    >,
   ): Promise<WebhookSubscription> {
     const subscription = this.subscriptions.get(subscriptionId);
-    
+
     if (!subscription || subscription.userId !== userId) {
       throw new Error('Webhook subscription not found or unauthorized');
     }
@@ -148,24 +155,37 @@ export class WebhookRegistry {
 
     this.subscriptions.set(subscriptionId, updatedSubscription);
     await this.persistSubscription(updatedSubscription);
-    
+
     return updatedSubscription;
   }
 
-  async getSubscriptions(userId: string, organizationId?: string): Promise<WebhookSubscription[]> {
+  async getSubscriptions(
+    userId: string,
+    organizationId?: string,
+  ): Promise<WebhookSubscription[]> {
     const userSubscriptions = Array.from(this.subscriptions.values()).filter(
-      sub => sub.userId === userId || 
-             (organizationId && sub.organizationId === organizationId)
+      (sub) =>
+        sub.userId === userId ||
+        (organizationId && sub.organizationId === organizationId),
     );
-    
+
     return userSubscriptions;
   }
 
-  async triggerWebhook(event: WebhookEvent, data: any, context: { userId?: string; organizationId?: string }): Promise<void> {
-    const relevantSubscriptions = Array.from(this.subscriptions.values()).filter(
-      sub => sub.isActive && 
-             sub.events.includes(event) &&
-             (context.organizationId ? sub.organizationId === context.organizationId : sub.userId === context.userId)
+  async triggerWebhook(
+    event: WebhookEvent,
+    data: any,
+    context: { userId?: string; organizationId?: string },
+  ): Promise<void> {
+    const relevantSubscriptions = Array.from(
+      this.subscriptions.values(),
+    ).filter(
+      (sub) =>
+        sub.isActive &&
+        sub.events.includes(event) &&
+        (context.organizationId
+          ? sub.organizationId === context.organizationId
+          : sub.userId === context.userId),
     );
 
     const payload: WebhookEventPayload = {
@@ -183,7 +203,10 @@ export class WebhookRegistry {
     }
   }
 
-  private async scheduleDelivery(subscription: WebhookSubscription, payload: WebhookEventPayload): Promise<void> {
+  private async scheduleDelivery(
+    subscription: WebhookSubscription,
+    payload: WebhookEventPayload,
+  ): Promise<void> {
     const delivery: WebhookDelivery = {
       id: this.generateId(),
       subscriptionId: subscription.id,
@@ -194,7 +217,10 @@ export class WebhookRegistry {
       headers: {
         'Content-Type': 'application/json',
         'User-Agent': '123LegalDoc-Webhooks/1.0',
-        'X-Webhook-Signature': this.generateSignature(payload, subscription.secret),
+        'X-Webhook-Signature': this.generateSignature(
+          payload,
+          subscription.secret,
+        ),
         'X-Webhook-Event': payload.type,
         'X-Webhook-ID': payload.id,
       },
@@ -230,7 +256,7 @@ export class WebhookRegistry {
         delivery.status = 'failed';
         delivery.errorMessage = `HTTP ${response.status}: ${response.statusText}`;
         subscription.deliveryStats.failedDeliveries++;
-        
+
         // Schedule retry if within limits
         if (delivery.attempts < subscription.retryPolicy.maxRetries) {
           await this.scheduleRetry(delivery, subscription.retryPolicy);
@@ -239,12 +265,11 @@ export class WebhookRegistry {
 
       subscription.deliveryStats.totalDeliveries++;
       subscription.lastDeliveryAt = Timestamp.now();
-      
     } catch (error: any) {
       delivery.status = 'failed';
       delivery.errorMessage = error.message;
       subscription.deliveryStats.failedDeliveries++;
-      
+
       // Schedule retry if within limits
       if (delivery.attempts < subscription.retryPolicy.maxRetries) {
         await this.scheduleRetry(delivery, subscription.retryPolicy);
@@ -256,14 +281,17 @@ export class WebhookRegistry {
     await this.persistSubscription(subscription);
   }
 
-  private async scheduleRetry(delivery: WebhookDelivery, retryPolicy: WebhookSubscription['retryPolicy']): Promise<void> {
+  private async scheduleRetry(
+    delivery: WebhookDelivery,
+    retryPolicy: WebhookSubscription['retryPolicy'],
+  ): Promise<void> {
     const backoffSeconds = Math.min(
       Math.pow(retryPolicy.backoffMultiplier, delivery.attempts),
-      retryPolicy.maxBackoffSeconds
+      retryPolicy.maxBackoffSeconds,
     );
-    
+
     delivery.nextRetryAt = Timestamp.fromMillis(
-      Date.now() + (backoffSeconds * 1000)
+      Date.now() + backoffSeconds * 1000,
     );
     delivery.status = 'retrying';
 
@@ -276,13 +304,16 @@ export class WebhookRegistry {
   private async validateWebhookUrl(url: string): Promise<void> {
     try {
       const parsedUrl = new URL(url);
-      
+
       // Security checks
       if (parsedUrl.protocol !== 'https:') {
         throw new Error('Webhook URL must use HTTPS');
       }
-      
-      if (parsedUrl.hostname === 'localhost' || parsedUrl.hostname.startsWith('127.')) {
+
+      if (
+        parsedUrl.hostname === 'localhost' ||
+        parsedUrl.hostname.startsWith('127.')
+      ) {
         throw new Error('Webhook URL cannot point to localhost');
       }
 
@@ -291,11 +322,10 @@ export class WebhookRegistry {
         method: 'HEAD',
         signal: AbortSignal.timeout(5000),
       });
-      
+
       if (!response.ok) {
         throw new Error(`Webhook URL validation failed: ${response.status}`);
       }
-      
     } catch (error: any) {
       throw new Error(`Invalid webhook URL: ${error.message}`);
     }
@@ -319,12 +349,16 @@ export class WebhookRegistry {
     return crypto.randomBytes(32).toString('base64');
   }
 
-  private async persistSubscription(subscription: WebhookSubscription): Promise<void> {
+  private async persistSubscription(
+    subscription: WebhookSubscription,
+  ): Promise<void> {
     // Implementation would persist to Firebase/database
     console.log('Persisting webhook subscription:', subscription.id);
   }
 
-  private async removeSubscriptionFromDb(subscriptionId: string): Promise<void> {
+  private async removeSubscriptionFromDb(
+    subscriptionId: string,
+  ): Promise<void> {
     // Implementation would remove from Firebase/database
     console.log('Removing webhook subscription:', subscriptionId);
   }
@@ -334,23 +368,30 @@ export class WebhookRegistry {
     console.log('Persisting webhook delivery:', delivery.id);
   }
 
-  async getDeliveryHistory(subscriptionId: string, userId: string, limit = 50): Promise<WebhookDelivery[]> {
+  async getDeliveryHistory(
+    subscriptionId: string,
+    userId: string,
+    limit = 50,
+  ): Promise<WebhookDelivery[]> {
     const subscription = this.subscriptions.get(subscriptionId);
-    
+
     if (!subscription || subscription.userId !== userId) {
       throw new Error('Webhook subscription not found or unauthorized');
     }
 
     // In a real implementation, this would query the database
     return this.deliveryQueue
-      .filter(d => d.subscriptionId === subscriptionId)
+      .filter((d) => d.subscriptionId === subscriptionId)
       .slice(-limit)
       .reverse();
   }
 
-  async testWebhook(subscriptionId: string, userId: string): Promise<WebhookDelivery> {
+  async testWebhook(
+    subscriptionId: string,
+    userId: string,
+  ): Promise<WebhookDelivery> {
     const subscription = this.subscriptions.get(subscriptionId);
-    
+
     if (!subscription || subscription.userId !== userId) {
       throw new Error('Webhook subscription not found or unauthorized');
     }
@@ -378,7 +419,10 @@ export class WebhookRegistry {
       headers: {
         'Content-Type': 'application/json',
         'User-Agent': '123LegalDoc-Webhooks/1.0',
-        'X-Webhook-Signature': this.generateSignature(testPayload, subscription.secret),
+        'X-Webhook-Signature': this.generateSignature(
+          testPayload,
+          subscription.secret,
+        ),
         'X-Webhook-Event': testPayload.type,
         'X-Webhook-ID': testPayload.id,
         'X-Webhook-Test': 'true',

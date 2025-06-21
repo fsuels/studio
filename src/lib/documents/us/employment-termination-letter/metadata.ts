@@ -30,7 +30,11 @@ export const employmentTerminationLetterMeta: LegalDocument = {
     es: {
       name: 'Carta de Terminación de Empleo',
       description: 'Notificar formalmente a un empleado de su despido.',
-      aliases: ['despedir empleado', 'carta de despido', 'aviso de terminación'],
+      aliases: [
+        'despedir empleado',
+        'carta de despido',
+        'aviso de terminación',
+      ],
     },
   },
 };

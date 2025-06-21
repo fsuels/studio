@@ -1,10 +1,10 @@
 // src/app/api/legal-updates/feed/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { adminDb } from '@/lib/firebase-admin';
-import { 
-  ProcessedLegalUpdate, 
+import {
+  ProcessedLegalUpdate,
   UserLegalUpdatePreferences,
-  COLLECTIONS 
+  COLLECTIONS,
 } from '@/lib/legal-updates/schema';
 
 interface FeedRequest {
@@ -31,7 +31,7 @@ export async function GET(request: NextRequest) {
       filter: (searchParams.get('filter') as any) || 'all',
       jurisdiction: searchParams.get('jurisdiction') || undefined,
       category: searchParams.get('category') || undefined,
-      offset: parseInt(searchParams.get('offset') || '0')
+      offset: parseInt(searchParams.get('offset') || '0'),
     };
 
     // Get user preferences if userId provided
@@ -41,9 +41,12 @@ export async function GET(request: NextRequest) {
         .collection(COLLECTIONS.USER_PREFERENCES)
         .doc(feedRequest.userId)
         .get();
-      
+
       if (prefDoc.exists) {
-        userPreferences = { id: prefDoc.id, ...prefDoc.data() } as UserLegalUpdatePreferences;
+        userPreferences = {
+          id: prefDoc.id,
+          ...prefDoc.data(),
+        } as UserLegalUpdatePreferences;
       }
     }
 
@@ -75,7 +78,9 @@ export async function GET(request: NextRequest) {
     // Apply urgency threshold from user preferences
     if (userPreferences?.urgencyThreshold) {
       const thresholds = ['critical', 'high', 'medium', 'low'];
-      const minUrgencyIndex = thresholds.indexOf(userPreferences.urgencyThreshold);
+      const minUrgencyIndex = thresholds.indexOf(
+        userPreferences.urgencyThreshold,
+      );
       const allowedUrgencies = thresholds.slice(0, minUrgencyIndex + 1);
       query = query.where('urgency', 'in', allowedUrgencies);
     }
@@ -92,9 +97,9 @@ export async function GET(request: NextRequest) {
     query = query.limit(feedRequest.limit);
 
     const snapshot = await query.get();
-    const updates = snapshot.docs.map(doc => ({
+    const updates = snapshot.docs.map((doc) => ({
       id: doc.id,
-      ...doc.data()
+      ...doc.data(),
     })) as ProcessedLegalUpdate[];
 
     // Get user interaction data
@@ -105,21 +110,25 @@ export async function GET(request: NextRequest) {
         }
 
         // Get user's interaction with this update
-        const userInteraction = await getUserInteraction(feedRequest.userId, update.id);
-        
+        const userInteraction = await getUserInteraction(
+          feedRequest.userId,
+          update.id,
+        );
+
         return {
           ...update,
           isRead: userInteraction?.isRead || false,
           isBookmarked: userInteraction?.isBookmarked || false,
-          isDismissed: userInteraction?.isDismissed || false
+          isDismissed: userInteraction?.isDismissed || false,
         };
-      })
+      }),
     );
 
     // Apply read/unread filter after getting user data
-    const filteredUpdates = feedRequest.filter === 'unread' 
-      ? updatesWithUserData.filter(u => !u.isRead)
-      : updatesWithUserData;
+    const filteredUpdates =
+      feedRequest.filter === 'unread'
+        ? updatesWithUserData.filter((u) => !u.isRead)
+        : updatesWithUserData;
 
     // Get summary statistics
     const stats = await getFeedStatistics(feedRequest.userId);
@@ -130,21 +139,22 @@ export async function GET(request: NextRequest) {
       pagination: {
         limit: feedRequest.limit,
         offset: feedRequest.offset,
-        hasMore: filteredUpdates.length === feedRequest.limit
+        hasMore: filteredUpdates.length === feedRequest.limit,
       },
       stats,
-      userPreferences: userPreferences ? {
-        jurisdictions: userPreferences.jurisdictions,
-        categories: userPreferences.categories,
-        urgencyThreshold: userPreferences.urgencyThreshold
-      } : null
+      userPreferences: userPreferences
+        ? {
+            jurisdictions: userPreferences.jurisdictions,
+            categories: userPreferences.categories,
+            urgencyThreshold: userPreferences.urgencyThreshold,
+          }
+        : null,
     });
-
   } catch (error) {
     console.error('Legal updates feed error:', error);
     return NextResponse.json(
       { error: 'Failed to fetch legal updates' },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -174,34 +184,34 @@ async function getFeedStatistics(userId?: string) {
         .where('status', '==', 'active')
         .count()
         .get(),
-      
+
       adminDb
         .collection(COLLECTIONS.PROCESSED_LEGAL_UPDATES)
         .where('status', '==', 'active')
         .where('publishedDate', '>=', sevenDaysAgo)
         .count()
         .get(),
-      
+
       adminDb
         .collection(COLLECTIONS.PROCESSED_LEGAL_UPDATES)
         .where('status', '==', 'active')
         .where('urgency', 'in', ['critical', 'high'])
         .where('publishedDate', '>=', sevenDaysAgo)
         .count()
-        .get()
+        .get(),
     ]);
 
     return {
       totalActive: totalSnapshot.data().count,
       recentCount: recentSnapshot.data().count,
-      urgentCount: urgentSnapshot.data().count
+      urgentCount: urgentSnapshot.data().count,
     };
   } catch (error) {
     console.error('Error fetching feed statistics:', error);
     return {
       totalActive: 0,
       recentCount: 0,
-      urgentCount: 0
+      urgentCount: 0,
     };
   }
 }

@@ -45,7 +45,7 @@ export class LegalResearchIntegration {
       coverage: ['federal', 'all_states', 'case_law', 'statutes'],
       updateFrequency: 'daily',
       reliability: 0.95,
-      costPerQuery: 0.50
+      costPerQuery: 0.5,
     },
     {
       name: 'Legal Information Institute',
@@ -53,16 +53,16 @@ export class LegalResearchIntegration {
       coverage: ['federal', 'all_states', 'regulations'],
       updateFrequency: 'weekly',
       reliability: 0.85,
-      costPerQuery: 0.00
+      costPerQuery: 0.0,
     },
     {
       name: 'State Legislative APIs',
       apiEndpoint: 'https://openstates.org/api',
       coverage: ['state_legislation', 'bill_tracking'],
       updateFrequency: 'daily',
-      reliability: 0.80,
-      costPerQuery: 0.00
-    }
+      reliability: 0.8,
+      costPerQuery: 0.0,
+    },
   ];
 
   private recentUpdates: Map<string, LegalUpdate[]> = new Map();
@@ -71,9 +71,9 @@ export class LegalResearchIntegration {
   // Monitor legal changes across all jurisdictions
   async monitorLegalChanges(): Promise<LegalUpdate[]> {
     console.log('🔍 Monitoring legal changes across all jurisdictions...');
-    
+
     const updates: LegalUpdate[] = [];
-    
+
     // Simulate legal research and monitoring
     const jurisdictions = ['federal', 'CA', 'TX', 'NY', 'FL'];
     const documentTypes = [
@@ -81,7 +81,7 @@ export class LegalResearchIntegration {
       'llc-operating-agreement',
       'lease-agreement',
       'nda',
-      'service-agreement'
+      'service-agreement',
     ];
 
     for (const jurisdiction of jurisdictions) {
@@ -94,7 +94,7 @@ export class LegalResearchIntegration {
     }
 
     // Cache updates for quick access
-    updates.forEach(update => {
+    updates.forEach((update) => {
       const key = `${update.jurisdiction}-${update.documentType}`;
       if (!this.recentUpdates.has(key)) {
         this.recentUpdates.set(key, []);
@@ -107,8 +107,8 @@ export class LegalResearchIntegration {
   }
 
   private async checkForUpdates(
-    jurisdiction: string, 
-    documentType: string
+    jurisdiction: string,
+    documentType: string,
   ): Promise<LegalUpdate | null> {
     // Simulate API calls to legal databases
     const simulatedUpdates: Partial<LegalUpdate>[] = [
@@ -119,16 +119,17 @@ export class LegalResearchIntegration {
         summary: 'California SB 1001: New salary transparency requirements',
         impact: 'high',
         affectedClauses: ['compensation', 'benefits'],
-        confidence: 0.95
+        confidence: 0.95,
       },
       {
         jurisdiction: 'TX',
         documentType: 'llc-operating-agreement',
         changeType: 'amendment',
-        summary: 'Texas Business Organizations Code amendment - virtual meetings',
+        summary:
+          'Texas Business Organizations Code amendment - virtual meetings',
         impact: 'medium',
         affectedClauses: ['meetings', 'voting'],
-        confidence: 0.88
+        confidence: 0.88,
       },
       {
         jurisdiction: 'NY',
@@ -137,7 +138,7 @@ export class LegalResearchIntegration {
         summary: 'NY Court of Appeals ruling on security deposit requirements',
         impact: 'high',
         affectedClauses: ['security_deposits', 'tenant_rights'],
-        confidence: 0.92
+        confidence: 0.92,
       },
       {
         jurisdiction: 'FL',
@@ -146,29 +147,35 @@ export class LegalResearchIntegration {
         summary: 'Florida consumer protection regulation updates',
         impact: 'medium',
         affectedClauses: ['liability', 'consumer_protection'],
-        confidence: 0.85
-      }
+        confidence: 0.85,
+      },
     ];
 
     // Return random update for simulation (25% chance)
     if (Math.random() < 0.25) {
       const template = simulatedUpdates.find(
-        u => u.jurisdiction === jurisdiction && u.documentType === documentType
+        (u) =>
+          u.jurisdiction === jurisdiction && u.documentType === documentType,
       );
-      
+
       if (template) {
         return {
           id: `update_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
           jurisdiction,
           documentType,
           changeType: template.changeType!,
-          effectiveDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(), // 30 days from now
+          effectiveDate: new Date(
+            Date.now() + 30 * 24 * 60 * 60 * 1000,
+          ).toISOString(), // 30 days from now
           summary: template.summary!,
           impact: template.impact!,
           affectedClauses: template.affectedClauses!,
-          recommendedActions: this.generateRecommendedActions(template.impact!, template.changeType!),
+          recommendedActions: this.generateRecommendedActions(
+            template.impact!,
+            template.changeType!,
+          ),
           source: this.databases[0].name,
-          confidence: template.confidence!
+          confidence: template.confidence!,
         };
       }
     }
@@ -176,7 +183,10 @@ export class LegalResearchIntegration {
     return null;
   }
 
-  private generateRecommendedActions(impact: string, changeType: string): string[] {
+  private generateRecommendedActions(
+    impact: string,
+    changeType: string,
+  ): string[] {
     const actions = [];
 
     if (impact === 'high') {
@@ -203,16 +213,16 @@ export class LegalResearchIntegration {
   // Analyze compliance status for all documents
   async analyzeComplianceStatus(): Promise<ComplianceStatus[]> {
     console.log('⚖️ Analyzing compliance status for all documents...');
-    
+
     const statuses: ComplianceStatus[] = [];
     const documents = [
       'employment-contract',
       'llc-operating-agreement',
       'lease-agreement',
       'nda',
-      'service-agreement'
+      'service-agreement',
     ];
-    
+
     const jurisdictions = ['CA', 'TX', 'NY', 'FL'];
 
     for (const doc of documents) {
@@ -222,25 +232,33 @@ export class LegalResearchIntegration {
       }
     }
 
-    console.log(`✅ Analyzed compliance for ${statuses.length} document-jurisdiction combinations`);
+    console.log(
+      `✅ Analyzed compliance for ${statuses.length} document-jurisdiction combinations`,
+    );
     return statuses;
   }
 
   private async assessDocumentCompliance(
     documentId: string,
-    jurisdiction: string
+    jurisdiction: string,
   ): Promise<ComplianceStatus> {
     // Simulate compliance analysis
     const baseScore = 85 + Math.random() * 10; // 85-95 base score
-    const issues = this.generateComplianceIssues(baseScore, documentId, jurisdiction);
-    
+    const issues = this.generateComplianceIssues(
+      baseScore,
+      documentId,
+      jurisdiction,
+    );
+
     const status: ComplianceStatus = {
       documentId,
       jurisdiction,
       lastUpdated: new Date().toISOString(),
       complianceScore: Math.round(baseScore),
       identifiedIssues: issues,
-      nextReviewDate: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000).toISOString() // 90 days
+      nextReviewDate: new Date(
+        Date.now() + 90 * 24 * 60 * 60 * 1000,
+      ).toISOString(), // 90 days
     };
 
     this.complianceCache.set(`${documentId}-${jurisdiction}`, status);
@@ -250,8 +268,12 @@ export class LegalResearchIntegration {
   private generateComplianceIssues(
     score: number,
     documentId: string,
-    jurisdiction: string
-  ): Array<{severity: 'critical' | 'warning' | 'info'; description: string; recommendation: string}> {
+    jurisdiction: string,
+  ): Array<{
+    severity: 'critical' | 'warning' | 'info';
+    description: string;
+    recommendation: string;
+  }> {
     const issues = [];
 
     // Generate issues based on score
@@ -259,7 +281,7 @@ export class LegalResearchIntegration {
       issues.push({
         severity: 'warning' as const,
         description: `${jurisdiction} specific language could be enhanced`,
-        recommendation: `Update document with latest ${jurisdiction} legal terminology`
+        recommendation: `Update document with latest ${jurisdiction} legal terminology`,
       });
     }
 
@@ -267,7 +289,7 @@ export class LegalResearchIntegration {
       issues.push({
         severity: 'critical' as const,
         description: `Potential compliance gap with recent ${jurisdiction} legislation`,
-        recommendation: `Immediate review required for ${jurisdiction} regulatory changes`
+        recommendation: `Immediate review required for ${jurisdiction} regulatory changes`,
       });
     }
 
@@ -276,7 +298,7 @@ export class LegalResearchIntegration {
       issues.push({
         severity: 'info' as const,
         description: 'Consider adding remote work provisions',
-        recommendation: 'Update template to include modern work arrangements'
+        recommendation: 'Update template to include modern work arrangements',
       });
     }
 
@@ -284,7 +306,7 @@ export class LegalResearchIntegration {
       issues.push({
         severity: 'warning' as const,
         description: 'California rent control compliance verification needed',
-        recommendation: 'Ensure compliance with local rent control ordinances'
+        recommendation: 'Ensure compliance with local rent control ordinances',
       });
     }
 
@@ -309,13 +331,15 @@ export class LegalResearchIntegration {
   } {
     const allStatuses = Array.from(this.complianceCache.values());
     const totalDocs = allStatuses.length;
-    const avgScore = allStatuses.reduce((sum, status) => sum + status.complianceScore, 0) / totalDocs;
-    
+    const avgScore =
+      allStatuses.reduce((sum, status) => sum + status.complianceScore, 0) /
+      totalDocs;
+
     let criticalIssues = 0;
     let warningIssues = 0;
-    
-    allStatuses.forEach(status => {
-      status.identifiedIssues.forEach(issue => {
+
+    allStatuses.forEach((status) => {
+      status.identifiedIssues.forEach((issue) => {
         if (issue.severity === 'critical') criticalIssues++;
         if (issue.severity === 'warning') warningIssues++;
       });
@@ -325,16 +349,16 @@ export class LegalResearchIntegration {
       'Implement automated compliance monitoring',
       'Set up quarterly legal update reviews',
       'Establish document versioning system',
-      'Create compliance tracking dashboard'
+      'Create compliance tracking dashboard',
     ];
 
     const priorityActions = allStatuses
-      .filter(status => status.complianceScore < 90)
-      .map(status => ({
+      .filter((status) => status.complianceScore < 90)
+      .map((status) => ({
         jurisdiction: status.jurisdiction,
         documentType: status.documentId,
         action: 'Update document for compliance',
-        deadline: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()
+        deadline: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
       }));
 
     return {
@@ -342,10 +366,10 @@ export class LegalResearchIntegration {
         totalDocuments: totalDocs,
         averageComplianceScore: Math.round(avgScore),
         criticalIssues,
-        warningIssues
+        warningIssues,
       },
       recommendations,
-      priorityActions
+      priorityActions,
     };
   }
 
@@ -356,7 +380,10 @@ export class LegalResearchIntegration {
   }
 
   // Get compliance status for specific document
-  getComplianceStatus(documentId: string, jurisdiction: string): ComplianceStatus | undefined {
+  getComplianceStatus(
+    documentId: string,
+    jurisdiction: string,
+  ): ComplianceStatus | undefined {
     return this.complianceCache.get(`${documentId}-${jurisdiction}`);
   }
 
@@ -370,13 +397,13 @@ export class LegalResearchIntegration {
   } {
     const documentsMonitored = 5 * 50; // 5 document types * 50 states
     const queriesPerMonth = documentsMonitored * 4; // Weekly checks
-    
-    const apiCosts = queriesPerMonth * 0.50; // Average cost per query
+
+    const apiCosts = queriesPerMonth * 0.5; // Average cost per query
     const complianceCosts = 500; // Monthly compliance monitoring
     const totalCosts = apiCosts + complianceCosts;
-    
+
     const costPerDoc = totalCosts / documentsMonitored;
-    
+
     // ROI: Prevent one lawsuit ($50K average) vs research costs
     const roiProjection = 50000 / (totalCosts * 12); // Annual ROI
 
@@ -385,7 +412,7 @@ export class LegalResearchIntegration {
       complianceMonitoringCosts: complianceCosts,
       totalMonthlyCosts: Math.round(totalCosts),
       costPerDocument: Math.round(costPerDoc * 100) / 100,
-      ROIProjection: Math.round(roiProjection * 100) / 100
+      ROIProjection: Math.round(roiProjection * 100) / 100,
     };
   }
 
@@ -398,11 +425,11 @@ export class LegalResearchIntegration {
     publishDate: string;
   }> {
     const seoContent = [];
-    
+
     this.recentUpdates.forEach((updates, key) => {
       const [jurisdiction, documentType] = key.split('-');
-      
-      updates.forEach(update => {
+
+      updates.forEach((update) => {
         if (update.impact === 'high') {
           seoContent.push({
             title: `${jurisdiction} ${documentType.replace('-', ' ')} Law Changes 2024`,
@@ -412,9 +439,9 @@ export class LegalResearchIntegration {
               `${jurisdiction} ${documentType} law`,
               `${jurisdiction} legal updates`,
               `${documentType} requirements ${jurisdiction}`,
-              `${jurisdiction} business law changes`
+              `${jurisdiction} business law changes`,
             ],
-            publishDate: new Date().toISOString()
+            publishDate: new Date().toISOString(),
           });
         }
       });
@@ -434,11 +461,11 @@ ${update.summary} - This ${update.changeType} affects ${update.documentType} doc
 ## Impact on Your Documents
 
 This change has ${update.impact} impact on existing documents. Specifically affected areas include:
-${update.affectedClauses.map(clause => `- ${clause}`).join('\n')}
+${update.affectedClauses.map((clause) => `- ${clause}`).join('\n')}
 
 ## Recommended Actions
 
-${update.recommendedActions.map(action => `- ${action}`).join('\n')}
+${update.recommendedActions.map((action) => `- ${action}`).join('\n')}
 
 ## Effective Date
 
@@ -460,18 +487,22 @@ Use our updated ${update.documentType} templates to ensure compliance with this 
     averageResponseTime: string;
     systemReliability: number;
   } {
-    const totalUpdates = Array.from(this.recentUpdates.values())
-      .reduce((sum, updates) => sum + updates.length, 0);
-    
-    const totalIssues = Array.from(this.complianceCache.values())
-      .reduce((sum, status) => sum + status.identifiedIssues.length, 0);
+    const totalUpdates = Array.from(this.recentUpdates.values()).reduce(
+      (sum, updates) => sum + updates.length,
+      0,
+    );
+
+    const totalIssues = Array.from(this.complianceCache.values()).reduce(
+      (sum, status) => sum + status.identifiedIssues.length,
+      0,
+    );
 
     return {
       documentsMonitored: this.complianceCache.size,
       updatesIdentified: totalUpdates,
       complianceIssuesFound: totalIssues,
       averageResponseTime: '2.3 seconds',
-      systemReliability: 0.97
+      systemReliability: 0.97,
     };
   }
 }

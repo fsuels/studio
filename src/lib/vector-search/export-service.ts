@@ -60,10 +60,10 @@ export class ExportService {
     userId: string,
     query: string,
     filters?: any,
-    options: ExportOptions = { format: 'csv' }
+    options: ExportOptions = { format: 'csv' },
   ): Promise<ExportJob> {
     const jobId = `export_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-    
+
     const job: ExportJob = {
       id: jobId,
       userId,
@@ -90,7 +90,7 @@ export class ExportService {
     this.jobs.set(jobId, job);
 
     // Start processing asynchronously
-    this.processExportJob(jobId).catch(error => {
+    this.processExportJob(jobId).catch((error) => {
       console.error(`Export job ${jobId} failed:`, error);
       this.updateJobStatus(jobId, 'failed', undefined, error.message);
     });
@@ -110,8 +110,11 @@ export class ExportService {
    */
   getUserExportJobs(userId: string): ExportJob[] {
     return Array.from(this.jobs.values())
-      .filter(job => job.userId === userId)
-      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+      .filter((job) => job.userId === userId)
+      .sort(
+        (a, b) =>
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+      );
   }
 
   /**
@@ -137,7 +140,7 @@ export class ExportService {
       const searchResponse = await pineconeService.semanticSearch(
         job.query,
         job.filters,
-        searchOptions
+        searchOptions,
       );
 
       this.updateJobStatus(jobId, 'processing', 60);
@@ -145,7 +148,7 @@ export class ExportService {
       // Sort and group results
       const processedResults = this.processSearchResults(
         searchResponse.results,
-        job.options
+        job.options,
       );
 
       job.totalResults = processedResults.length;
@@ -167,10 +170,14 @@ export class ExportService {
       const downloadUrl = await this.generateExportFile(jobId, exportResult);
 
       this.updateJobStatus(jobId, 'completed', 100, undefined, downloadUrl);
-
     } catch (error) {
       console.error(`Export job ${jobId} processing failed:`, error);
-      this.updateJobStatus(jobId, 'failed', undefined, error instanceof Error ? error.message : 'Unknown error');
+      this.updateJobStatus(
+        jobId,
+        'failed',
+        undefined,
+        error instanceof Error ? error.message : 'Unknown error',
+      );
     }
   }
 
@@ -211,7 +218,7 @@ export class ExportService {
     }
 
     // Transform results based on export options
-    return processedResults.map(result => {
+    return processedResults.map((result) => {
       const exportRow: any = {
         'Document ID': result.id,
         'Relevance Score': result.score.toFixed(3),
@@ -225,28 +232,29 @@ export class ExportService {
         exportRow['Governing Law'] = result.metadata.governingLaw || '';
         exportRow['Created Date'] = result.metadata.createdAt;
         exportRow['Last Modified'] = result.metadata.lastModified;
-        exportRow['Tags'] = Array.isArray(result.metadata.tags) 
-          ? result.metadata.tags.join('; ') 
+        exportRow['Tags'] = Array.isArray(result.metadata.tags)
+          ? result.metadata.tags.join('; ')
           : '';
-        exportRow['Parties'] = Array.isArray(result.metadata.parties) 
-          ? result.metadata.parties.join('; ') 
+        exportRow['Parties'] = Array.isArray(result.metadata.parties)
+          ? result.metadata.parties.join('; ')
           : '';
-        exportRow['Amounts'] = Array.isArray(result.metadata.amounts) 
-          ? result.metadata.amounts.join('; ') 
+        exportRow['Amounts'] = Array.isArray(result.metadata.amounts)
+          ? result.metadata.amounts.join('; ')
           : '';
-        exportRow['Key Dates'] = Array.isArray(result.metadata.dates) 
-          ? result.metadata.dates.join('; ') 
+        exportRow['Key Dates'] = Array.isArray(result.metadata.dates)
+          ? result.metadata.dates.join('; ')
           : '';
         exportRow['Match Explanation'] = result.explanation || '';
       }
 
       if (options.includeContent) {
-        exportRow['Content Preview'] = result.metadata.content?.slice(0, 500) + '...' || '';
+        exportRow['Content Preview'] =
+          result.metadata.content?.slice(0, 500) + '...' || '';
       }
 
       // Add custom fields if specified
       if (options.customFields) {
-        options.customFields.forEach(field => {
+        options.customFields.forEach((field) => {
           if (result.metadata[field] !== undefined) {
             exportRow[field] = result.metadata[field];
           }
@@ -260,7 +268,10 @@ export class ExportService {
   /**
    * Generate export file
    */
-  private async generateExportFile(jobId: string, exportResult: ExportResult): Promise<string> {
+  private async generateExportFile(
+    jobId: string,
+    exportResult: ExportResult,
+  ): Promise<string> {
     const job = this.jobs.get(jobId);
     if (!job) throw new Error('Job not found');
 
@@ -289,7 +300,10 @@ export class ExportService {
   /**
    * Generate CSV file
    */
-  private async generateCSVFile(filepath: string, exportResult: ExportResult): Promise<void> {
+  private async generateCSVFile(
+    filepath: string,
+    exportResult: ExportResult,
+  ): Promise<void> {
     const csvContent = stringify(exportResult.data, {
       header: true,
       quoted: true,
@@ -302,7 +316,10 @@ export class ExportService {
   /**
    * Generate JSON file
    */
-  private async generateJSONFile(filepath: string, exportResult: ExportResult): Promise<void> {
+  private async generateJSONFile(
+    filepath: string,
+    exportResult: ExportResult,
+  ): Promise<void> {
     const jsonContent = JSON.stringify(exportResult, null, 2);
     await writeFile(filepath, jsonContent, 'utf-8');
   }
@@ -310,7 +327,10 @@ export class ExportService {
   /**
    * Generate XLSX file (placeholder - would need xlsx library)
    */
-  private async generateXLSXFile(filepath: string, exportResult: ExportResult): Promise<void> {
+  private async generateXLSXFile(
+    filepath: string,
+    exportResult: ExportResult,
+  ): Promise<void> {
     // For now, generate CSV as fallback
     // In production, implement with xlsx library
     await this.generateCSVFile(filepath.replace('.xlsx', '.csv'), exportResult);
@@ -324,7 +344,7 @@ export class ExportService {
     status: ExportJob['status'],
     progress?: number,
     errorMessage?: string,
-    downloadUrl?: string
+    downloadUrl?: string,
   ): void {
     const job = this.jobs.get(jobId);
     if (!job) return;
@@ -365,8 +385,8 @@ export class ExportService {
    * Cleanup old export files (run periodically)
    */
   async cleanupOldExports(maxAgeHours: number = 24): Promise<void> {
-    const cutoffTime = Date.now() - (maxAgeHours * 60 * 60 * 1000);
-    
+    const cutoffTime = Date.now() - maxAgeHours * 60 * 60 * 1000;
+
     // Remove old jobs from memory
     for (const [jobId, job] of this.jobs.entries()) {
       const jobTime = new Date(job.createdAt).getTime();
@@ -390,13 +410,17 @@ export class ExportService {
     averageExportSize: number;
   } {
     const allJobs = Array.from(this.jobs.values());
-    
+
     return {
       totalJobs: allJobs.length,
-      completedJobs: allJobs.filter(job => job.status === 'completed').length,
-      failedJobs: allJobs.filter(job => job.status === 'failed').length,
-      pendingJobs: allJobs.filter(job => job.status === 'pending' || job.status === 'processing').length,
-      averageExportSize: allJobs.reduce((sum, job) => sum + job.totalResults, 0) / allJobs.length || 0,
+      completedJobs: allJobs.filter((job) => job.status === 'completed').length,
+      failedJobs: allJobs.filter((job) => job.status === 'failed').length,
+      pendingJobs: allJobs.filter(
+        (job) => job.status === 'pending' || job.status === 'processing',
+      ).length,
+      averageExportSize:
+        allJobs.reduce((sum, job) => sum + job.totalResults, 0) /
+          allJobs.length || 0,
     };
   }
 }

@@ -30,7 +30,7 @@ Jacksonville offers a dynamic business environment with opportunities across ind
 
 [Start Your Jacksonville Legal Document]
 
-*Trusted by hundreds of Jacksonville businesses*
+_Trusted by hundreds of Jacksonville businesses_
 
 ---
 

@@ -47,7 +47,7 @@ Don't risk using generic templates that may not comply with Louisiana law. Get a
 
 [Create Louisiana Independent Contractor Agreement]
 
-*Trusted by thousands of Louisiana businesses*
+_Trusted by thousands of Louisiana businesses_
 
 ---
 

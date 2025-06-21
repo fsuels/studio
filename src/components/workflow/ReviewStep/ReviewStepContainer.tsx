@@ -23,14 +23,12 @@ interface ReviewStepContainerProps {
   locale: 'en' | 'es';
 }
 
-export default function ReviewStepContainer({ doc, locale }: ReviewStepContainerProps) {
+export default function ReviewStepContainer({
+  doc,
+  locale,
+}: ReviewStepContainerProps) {
   const { t } = useTranslation('common');
-  const {
-    getValues,
-    setValue,
-    trigger,
-    watch,
-  } = useFormContext<FormValues>();
+  const { getValues, setValue, trigger, watch } = useFormContext<FormValues>();
   const { toast } = useToast();
 
   const [editingFieldId, setEditingFieldId] = useState<string | null>(null);

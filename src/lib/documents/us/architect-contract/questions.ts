@@ -140,7 +140,10 @@ export const architectContractQuestions: FormQuestion[] = [
     options: [
       { value: 'fixed-fee', label: 'Fixed Fee' },
       { value: 'hourly-rate', label: 'Hourly Rate' },
-      { value: 'percentage-of-construction', label: 'Percentage of Construction Cost' },
+      {
+        value: 'percentage-of-construction',
+        label: 'Percentage of Construction Cost',
+      },
       { value: 'cost-plus-fee', label: 'Cost Plus Fee' },
     ],
     required: true,

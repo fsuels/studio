@@ -24,12 +24,18 @@ export const maritimeCharterAgreementMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Maritime Charter Agreement',
-      description: 'Agreement for chartering vessels for maritime transportation and services.',
-      aliases: ['ship charter agreement', 'vessel charter contract', 'marine charter'],
+      description:
+        'Agreement for chartering vessels for maritime transportation and services.',
+      aliases: [
+        'ship charter agreement',
+        'vessel charter contract',
+        'marine charter',
+      ],
     },
     es: {
       name: 'Acuerdo de Flete Marítimo',
-      description: 'Acuerdo para fletar embarcaciones para transporte marítimo.',
+      description:
+        'Acuerdo para fletar embarcaciones para transporte marítimo.',
       aliases: ['contrato de fletamento', 'acuerdo naval'],
     },
   },

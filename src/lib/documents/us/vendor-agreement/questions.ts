@@ -7,7 +7,7 @@ export const vendorAgreementQuestions: FormQuestion[] = [
     label: 'Company Name',
     required: true,
     placeholder: 'Enter your company name',
-    validation: { min: 1 }
+    validation: { min: 1 },
   },
   {
     id: 'companyAddress',
@@ -15,15 +15,15 @@ export const vendorAgreementQuestions: FormQuestion[] = [
     label: 'Company Address',
     required: true,
     placeholder: 'Enter the complete address of your company',
-    validation: { min: 10, max: 300 }
+    validation: { min: 10, max: 300 },
   },
   {
     id: 'vendorName',
     type: 'text',
     label: 'Vendor Name',
     required: true,
-    placeholder: 'Enter the vendor\'s name or company name',
-    validation: { min: 1 }
+    placeholder: "Enter the vendor's name or company name",
+    validation: { min: 1 },
   },
   {
     id: 'vendorAddress',
@@ -31,7 +31,7 @@ export const vendorAgreementQuestions: FormQuestion[] = [
     label: 'Vendor Address',
     required: true,
     placeholder: 'Enter the complete address of the vendor',
-    validation: { min: 10, max: 300 }
+    validation: { min: 10, max: 300 },
   },
   {
     id: 'agreementType',
@@ -41,8 +41,8 @@ export const vendorAgreementQuestions: FormQuestion[] = [
     options: [
       { value: 'goods', label: 'Supply of Goods' },
       { value: 'services', label: 'Provision of Services' },
-      { value: 'both', label: 'Both Goods and Services' }
-    ]
+      { value: 'both', label: 'Both Goods and Services' },
+    ],
   },
   {
     id: 'productsServices',
@@ -58,31 +58,31 @@ export const vendorAgreementQuestions: FormQuestion[] = [
           type: 'text',
           label: 'Product/Service Name',
           required: true,
-          placeholder: 'Enter product or service name'
+          placeholder: 'Enter product or service name',
         },
         {
           id: 'description',
           type: 'textarea',
           label: 'Description',
           required: false,
-          placeholder: 'Detailed description (optional)'
+          placeholder: 'Detailed description (optional)',
         },
         {
           id: 'unitPrice',
           type: 'number',
           label: 'Unit Price ($)',
           required: false,
-          validation: { min: 0 }
+          validation: { min: 0 },
         },
         {
           id: 'unit',
           type: 'text',
           label: 'Unit',
           required: false,
-          placeholder: 'e.g., each, per hour, per pound'
-        }
-      ]
-    }
+          placeholder: 'e.g., each, per hour, per pound',
+        },
+      ],
+    },
   },
   {
     id: 'contractTerm',
@@ -90,21 +90,21 @@ export const vendorAgreementQuestions: FormQuestion[] = [
     label: 'Contract Term',
     required: true,
     placeholder: 'e.g., 1 year, 6 months, ongoing',
-    validation: { min: 1 }
+    validation: { min: 1 },
   },
   {
     id: 'renewalTerms',
     type: 'text',
     label: 'Renewal Terms',
     required: false,
-    placeholder: 'Automatic renewal terms (if applicable)'
+    placeholder: 'Automatic renewal terms (if applicable)',
   },
   {
     id: 'minimumOrder',
     type: 'text',
     label: 'Minimum Order Requirements',
     required: false,
-    placeholder: 'Minimum order quantity or value (if applicable)'
+    placeholder: 'Minimum order quantity or value (if applicable)',
   },
   {
     id: 'paymentTerms.paymentMethod',
@@ -117,15 +117,15 @@ export const vendorAgreementQuestions: FormQuestion[] = [
       { value: 'net-90', label: 'Net 90 days' },
       { value: 'cod', label: 'Cash on Delivery (COD)' },
       { value: 'prepaid', label: 'Prepaid' },
-      { value: 'other', label: 'Other' }
-    ]
+      { value: 'other', label: 'Other' },
+    ],
   },
   {
     id: 'paymentTerms.lateFees',
     type: 'checkbox',
     label: 'Include Late Payment Fees',
     required: false,
-    defaultValue: true
+    defaultValue: true,
   },
   {
     id: 'paymentTerms.lateFeeRate',
@@ -134,21 +134,21 @@ export const vendorAgreementQuestions: FormQuestion[] = [
     required: false,
     validation: { min: 0, max: 100 },
     placeholder: 'Enter monthly late fee percentage',
-    conditional: { field: 'paymentTerms.lateFees', value: true }
+    conditional: { field: 'paymentTerms.lateFees', value: true },
   },
   {
     id: 'deliveryTerms.deliveryTime',
     type: 'text',
     label: 'Delivery Time',
     required: false,
-    placeholder: 'e.g., 5-7 business days, 2 weeks'
+    placeholder: 'e.g., 5-7 business days, 2 weeks',
   },
   {
     id: 'deliveryTerms.shippingTerms',
     type: 'text',
     label: 'Shipping Terms',
     required: false,
-    placeholder: 'e.g., FOB destination, vendor pays shipping'
+    placeholder: 'e.g., FOB destination, vendor pays shipping',
   },
   {
     id: 'qualityStandards',
@@ -156,7 +156,7 @@ export const vendorAgreementQuestions: FormQuestion[] = [
     label: 'Quality Standards',
     required: false,
     placeholder: 'Describe quality standards and requirements',
-    validation: { max: 500 }
+    validation: { max: 500 },
   },
   {
     id: 'inspectionPeriod',
@@ -164,14 +164,14 @@ export const vendorAgreementQuestions: FormQuestion[] = [
     label: 'Inspection Period',
     required: false,
     defaultValue: '5 business days',
-    placeholder: 'Time allowed for inspection of goods/services'
+    placeholder: 'Time allowed for inspection of goods/services',
   },
   {
     id: 'confidentialityClause',
     type: 'checkbox',
     label: 'Include Confidentiality Clause',
     required: false,
-    defaultValue: true
+    defaultValue: true,
   },
   {
     id: 'warranties.warrantyPeriod',
@@ -179,14 +179,14 @@ export const vendorAgreementQuestions: FormQuestion[] = [
     label: 'Warranty Period',
     required: false,
     defaultValue: '1 year',
-    placeholder: 'e.g., 1 year, 6 months, 90 days'
+    placeholder: 'e.g., 1 year, 6 months, 90 days',
   },
   {
     id: 'limitationOfLiability',
     type: 'checkbox',
     label: 'Include Limitation of Liability Clause',
     required: false,
-    defaultValue: true
+    defaultValue: true,
   },
   {
     id: 'terminationClause.terminationNotice',
@@ -194,14 +194,14 @@ export const vendorAgreementQuestions: FormQuestion[] = [
     label: 'Termination Notice Period',
     required: false,
     defaultValue: '30 days',
-    placeholder: 'e.g., 30 days, 60 days'
+    placeholder: 'e.g., 30 days, 60 days',
   },
   {
     id: 'insuranceRequired',
     type: 'checkbox',
     label: 'Require Vendor Insurance',
     required: false,
-    defaultValue: false
+    defaultValue: false,
   },
   {
     id: 'insuranceRequirements',
@@ -209,7 +209,7 @@ export const vendorAgreementQuestions: FormQuestion[] = [
     label: 'Insurance Requirements',
     required: false,
     placeholder: 'Describe required insurance coverage and limits',
-    conditional: { field: 'insuranceRequired', value: true }
+    conditional: { field: 'insuranceRequired', value: true },
   },
   {
     id: 'additionalTerms',
@@ -217,13 +217,13 @@ export const vendorAgreementQuestions: FormQuestion[] = [
     label: 'Additional Terms',
     required: false,
     placeholder: 'Enter any additional terms or conditions',
-    validation: { max: 1000 }
+    validation: { max: 1000 },
   },
   {
     id: 'agreementDate',
     type: 'date',
     label: 'Agreement Date',
     required: true,
-    helpText: 'Date this vendor agreement is signed'
-  }
+    helpText: 'Date this vendor agreement is signed',
+  },
 ];

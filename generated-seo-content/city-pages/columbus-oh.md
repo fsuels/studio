@@ -30,7 +30,7 @@ Columbus offers a dynamic business environment with opportunities across industr
 
 [Start Your Columbus Legal Document]
 
-*Trusted by hundreds of Columbus businesses*
+_Trusted by hundreds of Columbus businesses_
 
 ---
 

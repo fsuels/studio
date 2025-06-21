@@ -83,7 +83,7 @@ export class AIDocumentAnalyzer {
         text: 'Either party may terminate this agreement with [X] days written notice',
         isRequired: true,
         jurisdictions: ['all'],
-        riskLevel: 'high'
+        riskLevel: 'high',
       },
       {
         id: 'intellectual_property',
@@ -92,7 +92,7 @@ export class AIDocumentAnalyzer {
         text: 'All intellectual property created during employment belongs to the company',
         isRequired: true,
         jurisdictions: ['all'],
-        riskLevel: 'high'
+        riskLevel: 'high',
       },
       {
         id: 'confidentiality_clause',
@@ -101,7 +101,7 @@ export class AIDocumentAnalyzer {
         text: 'Employee agrees to maintain confidentiality of proprietary information',
         isRequired: true,
         jurisdictions: ['all'],
-        riskLevel: 'medium'
+        riskLevel: 'medium',
       },
       {
         id: 'governing_law',
@@ -110,7 +110,7 @@ export class AIDocumentAnalyzer {
         text: 'This agreement shall be governed by the laws of [State]',
         isRequired: true,
         jurisdictions: ['all'],
-        riskLevel: 'medium'
+        riskLevel: 'medium',
       },
       {
         id: 'dispute_resolution',
@@ -119,7 +119,7 @@ export class AIDocumentAnalyzer {
         text: 'Disputes shall be resolved through binding arbitration',
         isRequired: false,
         jurisdictions: ['all'],
-        riskLevel: 'low'
+        riskLevel: 'low',
       },
       {
         id: 'force_majeure',
@@ -128,8 +128,8 @@ export class AIDocumentAnalyzer {
         text: 'Neither party liable for delays due to circumstances beyond their control',
         isRequired: false,
         jurisdictions: ['all'],
-        riskLevel: 'low'
-      }
+        riskLevel: 'low',
+      },
     ];
   }
 
@@ -137,10 +137,10 @@ export class AIDocumentAnalyzer {
   async analyzeDocument(
     file: File | Buffer,
     fileName: string,
-    jurisdiction: string = 'US'
+    jurisdiction: string = 'US',
   ): Promise<DocumentAnalysis> {
     console.log(`🔍 Analyzing document: ${fileName}`);
-    
+
     const startTime = performance.now();
     const fileId = this.generateFileId(fileName);
 
@@ -155,9 +155,16 @@ export class AIDocumentAnalyzer {
     const documentType = this.identifyDocumentType(documentText);
     const keyTerms = this.extractKeyTerms(documentText);
     const legalIssues = this.identifyLegalIssues(documentText, documentType);
-    const complianceCheck = this.performComplianceCheck(documentText, jurisdiction);
+    const complianceCheck = this.performComplianceCheck(
+      documentText,
+      jurisdiction,
+    );
     const riskAssessment = this.assessRisks(documentText, documentType);
-    const suggestions = this.generateSuggestions(documentText, documentType, legalIssues);
+    const suggestions = this.generateSuggestions(
+      documentText,
+      documentType,
+      legalIssues,
+    );
 
     const endTime = performance.now();
     const processingTime = endTime - startTime;
@@ -175,9 +182,9 @@ export class AIDocumentAnalyzer {
         legalIssues,
         complianceCheck,
         riskAssessment,
-        suggestions
+        suggestions,
       },
-      processingTime
+      processingTime,
     };
 
     // Cache the analysis
@@ -188,9 +195,12 @@ export class AIDocumentAnalyzer {
   }
 
   // Extract text from various document formats
-  private async extractTextFromDocument(file: File | Buffer, fileName: string): Promise<string> {
+  private async extractTextFromDocument(
+    file: File | Buffer,
+    fileName: string,
+  ): Promise<string> {
     const fileExtension = fileName.split('.').pop()?.toLowerCase();
-    
+
     // Simulate text extraction for different formats
     switch (fileExtension) {
       case 'pdf':
@@ -257,35 +267,44 @@ export class AIDocumentAnalyzer {
   }
 
   // Identify document type using AI analysis
-  private identifyDocumentType(text: string): { type: string; confidence: number } {
+  private identifyDocumentType(text: string): {
+    type: string;
+    confidence: number;
+  } {
     const textLower = text.toLowerCase();
-    
+
     // Employment contracts
     if (textLower.includes('employment') && textLower.includes('agreement')) {
       return { type: 'employment-contract', confidence: 0.95 };
     }
-    
+
     // NDAs
-    if (textLower.includes('non-disclosure') || textLower.includes('confidentiality')) {
+    if (
+      textLower.includes('non-disclosure') ||
+      textLower.includes('confidentiality')
+    ) {
       return { type: 'non-disclosure-agreement', confidence: 0.92 };
     }
-    
+
     // Service agreements
     if (textLower.includes('service') && textLower.includes('agreement')) {
       return { type: 'service-agreement', confidence: 0.88 };
     }
-    
+
     // Lease agreements
     if (textLower.includes('lease') || textLower.includes('rental')) {
-      return { type: 'lease-agreement', confidence: 0.90 };
+      return { type: 'lease-agreement', confidence: 0.9 };
     }
-    
+
     // LLC operating agreements
-    if (textLower.includes('llc') || textLower.includes('operating agreement')) {
+    if (
+      textLower.includes('llc') ||
+      textLower.includes('operating agreement')
+    ) {
       return { type: 'llc-operating-agreement', confidence: 0.93 };
     }
-    
-    return { type: 'unknown', confidence: 0.60 };
+
+    return { type: 'unknown', confidence: 0.6 };
   }
 
   // Extract key legal terms
@@ -296,27 +315,62 @@ export class AIDocumentAnalyzer {
     definition?: string;
   }> {
     const legalTerms = [
-      { term: 'confidential information', importance: 'high' as const, definition: 'Information not generally known that provides competitive advantage' },
-      { term: 'termination', importance: 'high' as const, definition: 'The ending of a contract or employment relationship' },
-      { term: 'intellectual property', importance: 'high' as const, definition: 'Creations of the mind protected by law' },
-      { term: 'governing law', importance: 'medium' as const, definition: 'The jurisdiction whose laws apply to the contract' },
-      { term: 'force majeure', importance: 'medium' as const, definition: 'Unforeseeable circumstances preventing contract fulfillment' },
-      { term: 'arbitration', importance: 'medium' as const, definition: 'Alternative dispute resolution outside of court' },
-      { term: 'indemnification', importance: 'high' as const, definition: 'Protection from liability for certain losses' },
-      { term: 'liability', importance: 'high' as const, definition: 'Legal responsibility for damages or losses' }
+      {
+        term: 'confidential information',
+        importance: 'high' as const,
+        definition:
+          'Information not generally known that provides competitive advantage',
+      },
+      {
+        term: 'termination',
+        importance: 'high' as const,
+        definition: 'The ending of a contract or employment relationship',
+      },
+      {
+        term: 'intellectual property',
+        importance: 'high' as const,
+        definition: 'Creations of the mind protected by law',
+      },
+      {
+        term: 'governing law',
+        importance: 'medium' as const,
+        definition: 'The jurisdiction whose laws apply to the contract',
+      },
+      {
+        term: 'force majeure',
+        importance: 'medium' as const,
+        definition:
+          'Unforeseeable circumstances preventing contract fulfillment',
+      },
+      {
+        term: 'arbitration',
+        importance: 'medium' as const,
+        definition: 'Alternative dispute resolution outside of court',
+      },
+      {
+        term: 'indemnification',
+        importance: 'high' as const,
+        definition: 'Protection from liability for certain losses',
+      },
+      {
+        term: 'liability',
+        importance: 'high' as const,
+        definition: 'Legal responsibility for damages or losses',
+      },
     ];
 
     const textLower = text.toLowerCase();
     const foundTerms = [];
 
     for (const term of legalTerms) {
-      const frequency = (textLower.match(new RegExp(term.term, 'g')) || []).length;
+      const frequency = (textLower.match(new RegExp(term.term, 'g')) || [])
+        .length;
       if (frequency > 0) {
         foundTerms.push({
           term: term.term,
           frequency,
           importance: term.importance,
-          definition: term.definition
+          definition: term.definition,
         });
       }
     }
@@ -325,7 +379,10 @@ export class AIDocumentAnalyzer {
   }
 
   // Identify potential legal issues
-  private identifyLegalIssues(text: string, documentType: string): Array<{
+  private identifyLegalIssues(
+    text: string,
+    documentType: string,
+  ): Array<{
     issue: string;
     severity: 'critical' | 'warning' | 'info';
     description: string;
@@ -341,9 +398,11 @@ export class AIDocumentAnalyzer {
         issues.push({
           issue: 'Missing Termination Clause',
           severity: 'critical' as const,
-          description: 'Employment contracts should specify termination conditions',
-          recommendation: 'Add a clear termination clause with notice requirements',
-          affectedClauses: ['employment terms']
+          description:
+            'Employment contracts should specify termination conditions',
+          recommendation:
+            'Add a clear termination clause with notice requirements',
+          affectedClauses: ['employment terms'],
         });
       }
 
@@ -353,7 +412,7 @@ export class AIDocumentAnalyzer {
           severity: 'warning' as const,
           description: 'Important to clarify ownership of work product',
           recommendation: 'Include intellectual property assignment clause',
-          affectedClauses: ['intellectual property']
+          affectedClauses: ['intellectual property'],
         });
       }
     }
@@ -363,9 +422,10 @@ export class AIDocumentAnalyzer {
         issues.push({
           issue: 'Undefined Agreement Term',
           severity: 'warning' as const,
-          description: 'NDA should specify how long confidentiality obligations last',
+          description:
+            'NDA should specify how long confidentiality obligations last',
           recommendation: 'Add specific term duration (e.g., 5 years)',
-          affectedClauses: ['term and duration']
+          affectedClauses: ['term and duration'],
         });
       }
     }
@@ -377,18 +437,23 @@ export class AIDocumentAnalyzer {
         severity: 'info' as const,
         description: 'Terms like "reasonable" can be ambiguous',
         recommendation: 'Consider defining what constitutes "reasonable"',
-        affectedClauses: ['general terms']
+        affectedClauses: ['general terms'],
       });
     }
 
     // Check for governing law
-    if (!textLower.includes('governing law') && !textLower.includes('governed by')) {
+    if (
+      !textLower.includes('governing law') &&
+      !textLower.includes('governed by')
+    ) {
       issues.push({
         issue: 'Missing Governing Law Clause',
         severity: 'warning' as const,
-        description: 'Contract should specify which state/jurisdiction laws apply',
-        recommendation: 'Add governing law clause specifying applicable jurisdiction',
-        affectedClauses: ['legal framework']
+        description:
+          'Contract should specify which state/jurisdiction laws apply',
+        recommendation:
+          'Add governing law clause specifying applicable jurisdiction',
+        affectedClauses: ['legal framework'],
       });
     }
 
@@ -396,7 +461,10 @@ export class AIDocumentAnalyzer {
   }
 
   // Perform compliance check
-  private performComplianceCheck(text: string, jurisdiction: string): {
+  private performComplianceCheck(
+    text: string,
+    jurisdiction: string,
+  ): {
     jurisdiction: string;
     complianceScore: number;
     missingElements: string[];
@@ -408,15 +476,19 @@ export class AIDocumentAnalyzer {
     const improvements = [];
 
     // Check required elements
-    const requiredClauses = this.legalClauses.filter(clause => 
-      clause.isRequired && 
-      (clause.jurisdictions.includes(jurisdiction) || clause.jurisdictions.includes('all'))
+    const requiredClauses = this.legalClauses.filter(
+      (clause) =>
+        clause.isRequired &&
+        (clause.jurisdictions.includes(jurisdiction) ||
+          clause.jurisdictions.includes('all')),
     );
 
     for (const clause of requiredClauses) {
       const clauseKeywords = clause.name.toLowerCase().split(' ');
-      const found = clauseKeywords.some(keyword => textLower.includes(keyword));
-      
+      const found = clauseKeywords.some((keyword) =>
+        textLower.includes(keyword),
+      );
+
       if (!found) {
         score -= 15;
         missingElements.push(clause.name);
@@ -426,10 +498,15 @@ export class AIDocumentAnalyzer {
 
     // Jurisdiction-specific checks
     if (jurisdiction === 'CA') {
-      if (!textLower.includes('meal break') && textLower.includes('employment')) {
+      if (
+        !textLower.includes('meal break') &&
+        textLower.includes('employment')
+      ) {
         score -= 10;
         missingElements.push('California meal break provisions');
-        improvements.push('Include California-specific meal break requirements');
+        improvements.push(
+          'Include California-specific meal break requirements',
+        );
       }
     }
 
@@ -437,12 +514,15 @@ export class AIDocumentAnalyzer {
       jurisdiction,
       complianceScore: Math.max(score, 0),
       missingElements,
-      recommendedImprovements: improvements
+      recommendedImprovements: improvements,
     };
   }
 
   // Assess legal risks
-  private assessRisks(text: string, documentType: string): {
+  private assessRisks(
+    text: string,
+    documentType: string,
+  ): {
     overallRisk: 'low' | 'medium' | 'high' | 'critical';
     riskFactors: Array<{
       factor: string;
@@ -455,31 +535,40 @@ export class AIDocumentAnalyzer {
     let totalRisk = 0;
 
     // Check for high-risk terms
-    if (textLower.includes('unlimited liability') || textLower.includes('unlimited damages')) {
+    if (
+      textLower.includes('unlimited liability') ||
+      textLower.includes('unlimited damages')
+    ) {
       riskFactors.push({
         factor: 'Unlimited Liability Exposure',
         impact: 80,
-        mitigation: 'Add liability cap or limitation clause'
+        mitigation: 'Add liability cap or limitation clause',
       });
       totalRisk += 80;
     }
 
     // Check for missing limitation of liability
-    if (!textLower.includes('limitation of liability') && !textLower.includes('liability cap')) {
+    if (
+      !textLower.includes('limitation of liability') &&
+      !textLower.includes('liability cap')
+    ) {
       riskFactors.push({
         factor: 'No Liability Protection',
         impact: 60,
-        mitigation: 'Include limitation of liability clause'
+        mitigation: 'Include limitation of liability clause',
       });
       totalRisk += 60;
     }
 
     // Check for automatic renewal
-    if (textLower.includes('automatic renewal') || textLower.includes('auto-renew')) {
+    if (
+      textLower.includes('automatic renewal') ||
+      textLower.includes('auto-renew')
+    ) {
       riskFactors.push({
         factor: 'Automatic Renewal Risk',
         impact: 40,
-        mitigation: 'Add clear termination procedures and notice requirements'
+        mitigation: 'Add clear termination procedures and notice requirements',
       });
       totalRisk += 40;
     }
@@ -489,7 +578,7 @@ export class AIDocumentAnalyzer {
       riskFactors.push({
         factor: 'Broad Indemnification Clause',
         impact: 50,
-        mitigation: 'Limit indemnification to specific scenarios'
+        mitigation: 'Limit indemnification to specific scenarios',
       });
       totalRisk += 50;
     }
@@ -503,15 +592,15 @@ export class AIDocumentAnalyzer {
 
     return {
       overallRisk,
-      riskFactors
+      riskFactors,
     };
   }
 
   // Generate improvement suggestions
   private generateSuggestions(
-    text: string, 
-    documentType: string, 
-    legalIssues: any[]
+    text: string,
+    documentType: string,
+    legalIssues: any[],
   ): Array<{
     type: 'improvement' | 'addition' | 'revision';
     priority: 'high' | 'medium' | 'low';
@@ -527,7 +616,7 @@ export class AIDocumentAnalyzer {
           type: 'addition' as const,
           priority: 'high' as const,
           suggestion: issue.recommendation,
-          reasoning: issue.description
+          reasoning: issue.description,
         });
       }
     }
@@ -538,7 +627,8 @@ export class AIDocumentAnalyzer {
         type: 'improvement' as const,
         priority: 'medium' as const,
         suggestion: 'Consider adding remote work policy clause',
-        reasoning: 'Modern employment agreements should address remote work arrangements'
+        reasoning:
+          'Modern employment agreements should address remote work arrangements',
       });
     }
 
@@ -547,7 +637,8 @@ export class AIDocumentAnalyzer {
         type: 'improvement' as const,
         priority: 'medium' as const,
         suggestion: 'Include specific examples of confidential information',
-        reasoning: 'Clear examples help prevent disputes about what information is protected'
+        reasoning:
+          'Clear examples help prevent disputes about what information is protected',
       });
     }
 
@@ -556,7 +647,8 @@ export class AIDocumentAnalyzer {
       type: 'addition' as const,
       priority: 'low' as const,
       suggestion: 'Add electronic signature clause',
-      reasoning: 'Allow for digital execution to streamline the signing process'
+      reasoning:
+        'Allow for digital execution to streamline the signing process',
     });
 
     return suggestions;
@@ -591,7 +683,7 @@ export class AIDocumentAnalyzer {
   // Generate analysis report
   generateAnalysisReport(analysis: DocumentAnalysis): string {
     const { analysisResults } = analysis;
-    
+
     return `
 # Document Analysis Report
 
@@ -608,29 +700,45 @@ export class AIDocumentAnalyzer {
 ## Key Findings
 
 ### Legal Issues Identified
-${analysisResults.legalIssues.map(issue => `
+${analysisResults.legalIssues
+  .map(
+    (issue) => `
 - **${issue.issue}** (${issue.severity.toUpperCase()})
   - ${issue.description}
   - Recommendation: ${issue.recommendation}
-`).join('')}
+`,
+  )
+  .join('')}
 
 ### Risk Factors
-${analysisResults.riskAssessment.riskFactors.map(risk => `
+${analysisResults.riskAssessment.riskFactors
+  .map(
+    (risk) => `
 - **${risk.factor}** (Impact: ${risk.impact}/100)
   - Mitigation: ${risk.mitigation}
-`).join('')}
+`,
+  )
+  .join('')}
 
 ### Recommendations
-${analysisResults.suggestions.map(suggestion => `
+${analysisResults.suggestions
+  .map(
+    (suggestion) => `
 - **${suggestion.type.toUpperCase()}** (${suggestion.priority} priority): ${suggestion.suggestion}
   - Reasoning: ${suggestion.reasoning}
-`).join('')}
+`,
+  )
+  .join('')}
 
 ### Key Terms Found
-${analysisResults.keyTerms.map(term => `
+${analysisResults.keyTerms
+  .map(
+    (term) => `
 - **${term.term}** (${term.frequency} occurrences, ${term.importance} importance)
   ${term.definition ? `- Definition: ${term.definition}` : ''}
-`).join('')}
+`,
+  )
+  .join('')}
 
 ## Compliance Status
 - **Jurisdiction**: ${analysisResults.complianceCheck.jurisdiction}
@@ -651,18 +759,20 @@ ${analysisResults.keyTerms.map(term => `
     documentTypesAnalyzed: Record<string, number>;
   } {
     const analyses = this.getAllAnalyses();
-    const avgProcessingTime = analyses.reduce((sum, a) => sum + a.processingTime, 0) / analyses.length;
-    
+    const avgProcessingTime =
+      analyses.reduce((sum, a) => sum + a.processingTime, 0) / analyses.length;
+
     const docTypes: Record<string, number> = {};
-    analyses.forEach(a => {
-      docTypes[a.analysisResults.documentType] = (docTypes[a.analysisResults.documentType] || 0) + 1;
+    analyses.forEach((a) => {
+      docTypes[a.analysisResults.documentType] =
+        (docTypes[a.analysisResults.documentType] || 0) + 1;
     });
 
     return {
       totalAnalyses: analyses.length,
       averageProcessingTime: avgProcessingTime || 0,
       cacheHitRate: 0.85, // Simulated cache hit rate
-      documentTypesAnalyzed: docTypes
+      documentTypesAnalyzed: docTypes,
     };
   }
 }

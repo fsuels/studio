@@ -24,12 +24,18 @@ export const guardianshipAgreementMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Guardianship Agreement',
-      description: 'Legal agreement establishing guardianship responsibilities and authority.',
-      aliases: ['guardian appointment', 'custody agreement', 'legal guardianship'],
+      description:
+        'Legal agreement establishing guardianship responsibilities and authority.',
+      aliases: [
+        'guardian appointment',
+        'custody agreement',
+        'legal guardianship',
+      ],
     },
     es: {
       name: 'Acuerdo de Tutelá',
-      description: 'Acuerdo legal que establece responsabilidades y autoridad de tutelá.',
+      description:
+        'Acuerdo legal que establece responsabilidades y autoridad de tutelá.',
       aliases: ['nombramiento de tutor', 'acuerdo de custodia'],
     },
   },

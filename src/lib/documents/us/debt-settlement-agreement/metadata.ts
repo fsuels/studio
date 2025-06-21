@@ -26,13 +26,23 @@ export const debtSettlementAgreementMeta: LegalDocument = {
       name: 'Debt Settlement Agreement',
       description:
         'Settle outstanding debt for less than the full amount owed with structured payment terms.',
-      aliases: ['debt compromise', 'settlement deal', 'debt resolution', 'payment settlement'],
+      aliases: [
+        'debt compromise',
+        'settlement deal',
+        'debt resolution',
+        'payment settlement',
+      ],
     },
     es: {
       name: 'Acuerdo de Liquidación de Deuda',
       description:
         'Liquidar deuda pendiente por menos del monto total adeudado con términos de pago estructurados.',
-      aliases: ['compromiso de deuda', 'acuerdo de liquidación', 'resolución de deuda', 'liquidación de pago'],
+      aliases: [
+        'compromiso de deuda',
+        'acuerdo de liquidación',
+        'resolución de deuda',
+        'liquidación de pago',
+      ],
     },
   },
 };

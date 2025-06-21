@@ -36,7 +36,10 @@ class TenantStreamChatManager {
     isPrivate?: boolean;
   }): Promise<TenantChatRoom> {
     try {
-      const channelId = this.generateChannelId(params.tenantId, params.roomName);
+      const channelId = this.generateChannelId(
+        params.tenantId,
+        params.roomName,
+      );
       const channelType = params.isPrivate ? 'messaging' : 'team';
 
       // Create Stream Chat channel
@@ -78,11 +81,15 @@ class TenantStreamChatManager {
   }
 
   // Create or update Stream Chat user for tenant context
-  async createTenantChatUser(tenantUser: TenantUser, tenant: Tenant, userInfo: {
-    name: string;
-    email: string;
-    avatar?: string;
-  }): Promise<TenantChatUser> {
+  async createTenantChatUser(
+    tenantUser: TenantUser,
+    tenant: Tenant,
+    userInfo: {
+      name: string;
+      email: string;
+      avatar?: string;
+    },
+  ): Promise<TenantChatUser> {
     const chatUser: TenantChatUser = {
       id: `${tenant.id}_${tenantUser.userId}`,
       name: userInfo.name,
@@ -107,7 +114,11 @@ class TenantStreamChatManager {
   }
 
   // Add member to tenant chat room
-  async addMemberToRoom(roomId: string, userId: string, role: 'member' | 'moderator' = 'member'): Promise<boolean> {
+  async addMemberToRoom(
+    roomId: string,
+    userId: string,
+    role: 'member' | 'moderator' = 'member',
+  ): Promise<boolean> {
     try {
       const channel = await this.getTenantChannel(roomId);
       if (!channel) {
@@ -139,7 +150,10 @@ class TenantStreamChatManager {
   }
 
   // Get tenant-specific channels for a user
-  async getTenantChannelsForUser(tenantId: string, userId: string): Promise<Channel[]> {
+  async getTenantChannelsForUser(
+    tenantId: string,
+    userId: string,
+  ): Promise<Channel[]> {
     try {
       const chatUserId = `${tenantId}_${userId}`;
       const filter = {
@@ -147,7 +161,9 @@ class TenantStreamChatManager {
         tenant_id: tenantId,
       };
 
-      const channels = await this.client.queryChannels(filter, { last_message_at: -1 });
+      const channels = await this.client.queryChannels(filter, {
+        last_message_at: -1,
+      });
       return channels;
     } catch (error) {
       console.error('Error getting tenant channels:', error);
@@ -175,7 +191,11 @@ class TenantStreamChatManager {
   }
 
   // Send system message to chat room
-  async sendSystemMessage(roomId: string, message: string, metadata?: Record<string, any>): Promise<boolean> {
+  async sendSystemMessage(
+    roomId: string,
+    message: string,
+    metadata?: Record<string, any>,
+  ): Promise<boolean> {
     try {
       const channel = await this.getTenantChannel(roomId);
       if (!channel) {
@@ -197,7 +217,12 @@ class TenantStreamChatManager {
   }
 
   // Mute/unmute user in tenant room
-  async muteUserInRoom(roomId: string, userId: string, muted: boolean, duration?: number): Promise<boolean> {
+  async muteUserInRoom(
+    roomId: string,
+    userId: string,
+    muted: boolean,
+    duration?: number,
+  ): Promise<boolean> {
     try {
       const channel = await this.getTenantChannel(roomId);
       if (!channel) {
@@ -234,7 +259,11 @@ class TenantStreamChatManager {
   }
 
   // Export chat history for compliance
-  async exportChatHistory(roomId: string, startDate?: Date, endDate?: Date): Promise<any[]> {
+  async exportChatHistory(
+    roomId: string,
+    startDate?: Date,
+    endDate?: Date,
+  ): Promise<any[]> {
     try {
       const channel = await this.getTenantChannel(roomId);
       if (!channel) {
@@ -243,7 +272,11 @@ class TenantStreamChatManager {
 
       const filter: any = {};
       if (startDate) filter.created_at = { $gte: startDate.toISOString() };
-      if (endDate) filter.created_at = { ...filter.created_at, $lte: endDate.toISOString() };
+      if (endDate)
+        filter.created_at = {
+          ...filter.created_at,
+          $lte: endDate.toISOString(),
+        };
 
       const messages = await channel.query({
         messages: { limit: 1000, ...filter },
@@ -315,14 +348,20 @@ export function createTenantChatManager(): TenantStreamChatManager {
   };
 
   if (!config.apiKey || !config.apiSecret) {
-    throw new Error('Stream Chat configuration missing. Set STREAM_CHAT_API_KEY and STREAM_CHAT_API_SECRET environment variables.');
+    throw new Error(
+      'Stream Chat configuration missing. Set STREAM_CHAT_API_KEY and STREAM_CHAT_API_SECRET environment variables.',
+    );
   }
 
   return new TenantStreamChatManager(config);
 }
 
 // High-level functions for tenant chat management
-export async function createTenantGeneralRoom(tenantId: string, createdBy: string, members: string[]): Promise<TenantChatRoom> {
+export async function createTenantGeneralRoom(
+  tenantId: string,
+  createdBy: string,
+  members: string[],
+): Promise<TenantChatRoom> {
   const manager = createTenantChatManager();
   return await manager.createTenantChatRoom({
     tenantId,
@@ -345,28 +384,43 @@ export async function createDocumentDiscussion(params: {
   return await manager.createDocumentChatRoom(params);
 }
 
-export async function setupTenantChatUser(tenantUser: TenantUser, tenant: Tenant, userInfo: {
-  name: string;
-  email: string;
-  avatar?: string;
-}): Promise<{ chatUser: TenantChatUser; token: string }> {
+export async function setupTenantChatUser(
+  tenantUser: TenantUser,
+  tenant: Tenant,
+  userInfo: {
+    name: string;
+    email: string;
+    avatar?: string;
+  },
+): Promise<{ chatUser: TenantChatUser; token: string }> {
   const manager = createTenantChatManager();
-  
-  const chatUser = await manager.createTenantChatUser(tenantUser, tenant, userInfo);
+
+  const chatUser = await manager.createTenantChatUser(
+    tenantUser,
+    tenant,
+    userInfo,
+  );
   const token = manager.generateTenantUserToken(tenant.id, tenantUser.userId);
-  
+
   return { chatUser, token };
 }
 
-export async function getTenantChatRooms(tenantId: string, userId: string): Promise<Channel[]> {
+export async function getTenantChatRooms(
+  tenantId: string,
+  userId: string,
+): Promise<Channel[]> {
   const manager = createTenantChatManager();
   return await manager.getTenantChannelsForUser(tenantId, userId);
 }
 
 // Utility functions for chat room management
-export function formatChatRoomName(tenant: Tenant, roomType: string, context?: string): string {
+export function formatChatRoomName(
+  tenant: Tenant,
+  roomType: string,
+  context?: string,
+): string {
   const companyName = tenant.branding?.companyName || tenant.name;
-  
+
   switch (roomType) {
     case 'general':
       return `${companyName} - General`;
@@ -424,5 +478,7 @@ export function getChatRoomPermissions(tenantUserRole: string): {
     },
   };
 
-  return permissions[tenantUserRole as keyof typeof permissions] || permissions.guest;
+  return (
+    permissions[tenantUserRole as keyof typeof permissions] || permissions.guest
+  );
 }

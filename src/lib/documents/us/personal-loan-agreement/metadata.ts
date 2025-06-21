@@ -24,12 +24,14 @@ export const personalLoanAgreementMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Personal Loan Agreement',
-      description: 'Comprehensive agreement for personal loans with detailed repayment terms and protections.',
+      description:
+        'Comprehensive agreement for personal loans with detailed repayment terms and protections.',
       aliases: ['loan contract', 'lending agreement', 'borrower agreement'],
     },
     es: {
       name: 'Acuerdo de Préstamo Personal',
-      description: 'Acuerdo integral para préstamos personales con términos de pago detallados y protecciones.',
+      description:
+        'Acuerdo integral para préstamos personales con términos de pago detallados y protecciones.',
       aliases: ['contrato de préstamo', 'acuerdo de préstamo'],
     },
   },

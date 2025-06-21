@@ -2,12 +2,8 @@
   "agricultural-agreement": {
     "title": "Agricultural Agreement",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Agricultural Agreement.",
     "popular": false,
     "fieldCount": 15,
@@ -16,12 +12,8 @@
   "farm-lease-agreement": {
     "title": "Farm Lease Agreement",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Farm Lease Agreement.",
     "popular": false,
     "fieldCount": 15,
@@ -30,12 +22,8 @@
   "crop-sharing-agreement": {
     "title": "Crop Sharing Agreement",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Crop Sharing Agreement.",
     "popular": false,
     "fieldCount": 15,
@@ -44,12 +32,8 @@
   "livestock-purchase-agreement": {
     "title": "Livestock Purchase Agreement",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Livestock Purchase Agreement.",
     "popular": false,
     "fieldCount": 15,
@@ -58,12 +42,8 @@
   "timber-sale-agreement": {
     "title": "Timber Sale Agreement",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Timber Sale Agreement.",
     "popular": false,
     "fieldCount": 15,
@@ -72,12 +52,8 @@
   "oil-gas-lease": {
     "title": "Oil Gas Lease",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Oil Gas Lease.",
     "popular": false,
     "fieldCount": 15,
@@ -86,12 +62,8 @@
   "oil-gas-lease-agreement": {
     "title": "Oil Gas Lease Agreement",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Oil Gas Lease Agreement.",
     "popular": false,
     "fieldCount": 15,
@@ -100,12 +72,8 @@
   "water-rights-agreement": {
     "title": "Water Rights Agreement",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Water Rights Agreement.",
     "popular": false,
     "fieldCount": 15,
@@ -114,12 +82,8 @@
   "mining-agreement": {
     "title": "Mining Agreement",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Mining Agreement.",
     "popular": false,
     "fieldCount": 15,
@@ -128,12 +92,8 @@
   "mining-lease-agreement": {
     "title": "Mining Lease Agreement",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Mining Lease Agreement.",
     "popular": false,
     "fieldCount": 15,
@@ -142,12 +102,8 @@
   "tuition-agreement": {
     "title": "Tuition Agreement",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Tuition Agreement.",
     "popular": false,
     "fieldCount": 15,
@@ -156,12 +112,8 @@
   "tutoring-agreement": {
     "title": "Tutoring Agreement",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Tutoring Agreement.",
     "popular": false,
     "fieldCount": 15,
@@ -170,12 +122,8 @@
   "athletic-scholarship-agreement": {
     "title": "Athletic Scholarship Agreement",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Athletic Scholarship Agreement.",
     "popular": false,
     "fieldCount": 15,
@@ -184,12 +132,8 @@
   "research-agreement": {
     "title": "Research Agreement",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Research Agreement.",
     "popular": false,
     "fieldCount": 15,
@@ -198,13 +142,8 @@
   "education-trust": {
     "title": "Education Trust",
     "complexity": "advanced",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign",
-      "notary"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign", "notary"],
     "description": "Template for Education Trust.",
     "popular": false,
     "fieldCount": 30,
@@ -213,12 +152,8 @@
   "travel-insurance-agreement": {
     "title": "Travel Insurance Agreement",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Travel Insurance Agreement.",
     "popular": false,
     "fieldCount": 15,
@@ -227,12 +162,8 @@
   "aviation-charter-agreement": {
     "title": "Aviation Charter Agreement",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Aviation Charter Agreement.",
     "popular": false,
     "fieldCount": 15,
@@ -241,12 +172,8 @@
   "maritime-charter-agreement": {
     "title": "Maritime Charter Agreement",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Maritime Charter Agreement.",
     "popular": false,
     "fieldCount": 15,
@@ -255,12 +182,8 @@
   "hunting-lease-agreement": {
     "title": "Hunting Lease Agreement",
     "complexity": "medium",
-    "jurisdiction": [
-      "US-ALL"
-    ],
-    "sign_method": [
-      "e-sign"
-    ],
+    "jurisdiction": ["US-ALL"],
+    "sign_method": ["e-sign"],
     "description": "Template for Hunting Lease Agreement.",
     "popular": false,
     "fieldCount": 15,

@@ -30,7 +30,7 @@ Seattle offers a dynamic business environment with opportunities across industri
 
 [Start Your Seattle Legal Document]
 
-*Trusted by hundreds of Seattle businesses*
+_Trusted by hundreds of Seattle businesses_
 
 ---
 

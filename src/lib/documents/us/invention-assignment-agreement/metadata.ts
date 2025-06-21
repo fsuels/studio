@@ -24,13 +24,25 @@ export const inventionAssignmentAgreementMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Invention Assignment Agreement',
-      description: 'Agreement assigning employee or contractor inventions to the company.',
-      aliases: ['employee invention assignment', 'contractor invention agreement', 'invention ownership', 'ip assignment'],
+      description:
+        'Agreement assigning employee or contractor inventions to the company.',
+      aliases: [
+        'employee invention assignment',
+        'contractor invention agreement',
+        'invention ownership',
+        'ip assignment',
+      ],
     },
     es: {
       name: 'Acuerdo de Asignación de Invenciones',
-      description: 'Acuerdo que asigna las invenciones de empleados o contratistas a la empresa.',
-      aliases: ['asignación invenciones empleado', 'acuerdo invenciones contratista', 'propiedad invenciones', 'asignación pi'],
+      description:
+        'Acuerdo que asigna las invenciones de empleados o contratistas a la empresa.',
+      aliases: [
+        'asignación invenciones empleado',
+        'acuerdo invenciones contratista',
+        'propiedad invenciones',
+        'asignación pi',
+      ],
     },
   },
 };

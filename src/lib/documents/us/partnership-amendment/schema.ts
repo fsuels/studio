@@ -4,7 +4,14 @@ export const partnershipAmendmentSchema = z.object({
   originalPartnershipName: z.string().min(1),
   originalAgreementDate: z.string().min(1), // Date
   partnerNames: z.string().min(1),
-  amendmentType: z.enum(['ownership_change', 'profit_sharing', 'management_change', 'capital_contribution', 'name_change', 'other']),
+  amendmentType: z.enum([
+    'ownership_change',
+    'profit_sharing',
+    'management_change',
+    'capital_contribution',
+    'name_change',
+    'other',
+  ]),
   amendmentDescription: z.string().min(1),
   specificChanges: z.string().min(1),
   effectiveDate: z.string().min(1), // Date

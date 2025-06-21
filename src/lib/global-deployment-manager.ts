@@ -79,13 +79,16 @@ interface DeploymentStatus {
   progress: number; // 0-100
   startTime: string;
   endTime?: string;
-  regionStatuses: Record<string, {
-    status: 'pending' | 'deploying' | 'healthy' | 'unhealthy' | 'failed';
-    instances: number;
-    healthyInstances: number;
-    lastHealthCheck: string;
-    deploymentTime: number; // milliseconds
-  }>;
+  regionStatuses: Record<
+    string,
+    {
+      status: 'pending' | 'deploying' | 'healthy' | 'unhealthy' | 'failed';
+      instances: number;
+      healthyInstances: number;
+      lastHealthCheck: string;
+      deploymentTime: number; // milliseconds
+    }
+  >;
   metrics: {
     totalRequests: number;
     errorRate: number;
@@ -101,7 +104,11 @@ interface DeploymentStatus {
 }
 
 interface TrafficDistribution {
-  strategy: 'geographic' | 'performance' | 'cost_optimized' | 'compliance_first';
+  strategy:
+    | 'geographic'
+    | 'performance'
+    | 'cost_optimized'
+    | 'compliance_first';
   rules: Array<{
     condition: string;
     targetRegion: string;
@@ -152,25 +159,25 @@ export class GlobalDeploymentManager {
             cpu: '128 vCPUs',
             memory: '512 GB',
             storage: '10 TB NVMe SSD',
-            bandwidth: '100 Gbps'
-          }
+            bandwidth: '100 Gbps',
+          },
         },
         compliance: {
           regulations: ['SOX', 'CCPA', 'HIPAA'],
           dataResidency: true,
-          certifications: ['SOC 2 Type II', 'ISO 27001', 'FedRAMP']
+          certifications: ['SOC 2 Type II', 'ISO 27001', 'FedRAMP'],
         },
         networking: {
           latency: 0, // Base region
           throughput: 100000,
-          availability: 99.99
+          availability: 99.99,
         },
         costProfile: {
           computeCostPerHour: 0.096,
           storageCostPerGB: 0.023,
           transferCostPerGB: 0.09,
-          currency: 'USD'
-        }
+          currency: 'USD',
+        },
       },
       {
         id: 'eu-west-1',
@@ -187,25 +194,25 @@ export class GlobalDeploymentManager {
             cpu: '64 vCPUs',
             memory: '256 GB',
             storage: '5 TB NVMe SSD',
-            bandwidth: '50 Gbps'
-          }
+            bandwidth: '50 Gbps',
+          },
         },
         compliance: {
           regulations: ['GDPR', 'ePrivacy Directive'],
           dataResidency: true,
-          certifications: ['ISO 27001', 'SOC 2 Type II']
+          certifications: ['ISO 27001', 'SOC 2 Type II'],
         },
         networking: {
           latency: 89,
           throughput: 50000,
-          availability: 99.95
+          availability: 99.95,
         },
         costProfile: {
           computeCostPerHour: 0.104,
           storageCostPerGB: 0.025,
           transferCostPerGB: 0.087,
-          currency: 'EUR'
-        }
+          currency: 'EUR',
+        },
       },
       {
         id: 'ap-southeast-1',
@@ -222,25 +229,25 @@ export class GlobalDeploymentManager {
             cpu: '32 vCPUs',
             memory: '128 GB',
             storage: '2 TB NVMe SSD',
-            bandwidth: '25 Gbps'
-          }
+            bandwidth: '25 Gbps',
+          },
         },
         compliance: {
           regulations: ['PDPA Singapore', 'Privacy Act'],
           dataResidency: true,
-          certifications: ['ISO 27001']
+          certifications: ['ISO 27001'],
         },
         networking: {
           latency: 178,
           throughput: 25000,
-          availability: 99.9
+          availability: 99.9,
         },
         costProfile: {
           computeCostPerHour: 0.112,
           storageCostPerGB: 0.028,
           transferCostPerGB: 0.12,
-          currency: 'USD'
-        }
+          currency: 'USD',
+        },
       },
       {
         id: 'sa-east-1',
@@ -257,25 +264,25 @@ export class GlobalDeploymentManager {
             cpu: '16 vCPUs',
             memory: '64 GB',
             storage: '1 TB NVMe SSD',
-            bandwidth: '10 Gbps'
-          }
+            bandwidth: '10 Gbps',
+          },
         },
         compliance: {
           regulations: ['LGPD', 'Marco Civil da Internet'],
           dataResidency: true,
-          certifications: ['ISO 27001']
+          certifications: ['ISO 27001'],
         },
         networking: {
           latency: 145,
           throughput: 10000,
-          availability: 99.5
+          availability: 99.5,
         },
         costProfile: {
           computeCostPerHour: 0.119,
           storageCostPerGB: 0.033,
           transferCostPerGB: 0.15,
-          currency: 'USD'
-        }
+          currency: 'USD',
+        },
       },
       {
         id: 'ap-northeast-1',
@@ -292,29 +299,29 @@ export class GlobalDeploymentManager {
             cpu: '32 vCPUs',
             memory: '128 GB',
             storage: '2 TB NVMe SSD',
-            bandwidth: '25 Gbps'
-          }
+            bandwidth: '25 Gbps',
+          },
         },
         compliance: {
           regulations: ['Personal Information Protection Law'],
           dataResidency: true,
-          certifications: ['ISO 27001', 'ISMS']
+          certifications: ['ISO 27001', 'ISMS'],
         },
         networking: {
           latency: 156,
           throughput: 25000,
-          availability: 99.9
+          availability: 99.9,
         },
         costProfile: {
           computeCostPerHour: 0.108,
           storageCostPerGB: 0.027,
           transferCostPerGB: 0.114,
-          currency: 'JPY'
-        }
-      }
+          currency: 'JPY',
+        },
+      },
     ];
 
-    regions.forEach(region => {
+    regions.forEach((region) => {
       this.regions.set(region.id, region);
     });
 
@@ -330,51 +337,51 @@ export class GlobalDeploymentManager {
           condition: 'country in [US, CA, MX]',
           targetRegion: 'us-east-1',
           weight: 100,
-          priority: 1
+          priority: 1,
         },
         {
           condition: 'country in [GB, FR, DE, ES, IT, NL, BE, IE]',
           targetRegion: 'eu-west-1',
           weight: 100,
-          priority: 1
+          priority: 1,
         },
         {
           condition: 'country in [SG, MY, TH, ID, VN, PH]',
           targetRegion: 'ap-southeast-1',
           weight: 100,
-          priority: 1
+          priority: 1,
         },
         {
           condition: 'country in [BR, AR, CL, PE, CO]',
           targetRegion: 'sa-east-1',
           weight: 100,
-          priority: 1
+          priority: 1,
         },
         {
           condition: 'country in [JP, KR]',
           targetRegion: 'ap-northeast-1',
           weight: 100,
-          priority: 1
-        }
+          priority: 1,
+        },
       ],
       fallbackRegion: 'us-east-1',
       geolocationMapping: {
-        'US': 'us-east-1',
-        'CA': 'us-east-1',
-        'MX': 'us-east-1',
-        'GB': 'eu-west-1',
-        'FR': 'eu-west-1',
-        'DE': 'eu-west-1',
-        'ES': 'eu-west-1',
-        'IT': 'eu-west-1',
-        'SG': 'ap-southeast-1',
-        'MY': 'ap-southeast-1',
-        'TH': 'ap-southeast-1',
-        'BR': 'sa-east-1',
-        'AR': 'sa-east-1',
-        'JP': 'ap-northeast-1',
-        'KR': 'ap-northeast-1'
-      }
+        US: 'us-east-1',
+        CA: 'us-east-1',
+        MX: 'us-east-1',
+        GB: 'eu-west-1',
+        FR: 'eu-west-1',
+        DE: 'eu-west-1',
+        ES: 'eu-west-1',
+        IT: 'eu-west-1',
+        SG: 'ap-southeast-1',
+        MY: 'ap-southeast-1',
+        TH: 'ap-southeast-1',
+        BR: 'sa-east-1',
+        AR: 'sa-east-1',
+        JP: 'ap-northeast-1',
+        KR: 'ap-northeast-1',
+      },
     };
 
     console.log('🌐 Traffic distribution configured for global routing');
@@ -385,14 +392,16 @@ export class GlobalDeploymentManager {
     name: string,
     version: string,
     targetRegions: string[],
-    strategy: DeploymentConfiguration['strategy'] = 'regional_rollout'
+    strategy: DeploymentConfiguration['strategy'] = 'regional_rollout',
   ): Promise<DeploymentConfiguration> {
     console.log(`🚀 Creating global deployment: ${name} v${version}`);
 
     const deploymentId = this.generateDeploymentId();
 
     // Validate regions
-    const invalidRegions = targetRegions.filter(region => !this.regions.has(region));
+    const invalidRegions = targetRegions.filter(
+      (region) => !this.regions.has(region),
+    );
     if (invalidRegions.length > 0) {
       throw new Error(`Invalid regions: ${invalidRegions.join(', ')}`);
     }
@@ -409,7 +418,7 @@ export class GlobalDeploymentManager {
         minInstances: 2,
         maxInstances: 20,
         targetCPU: 70,
-        targetMemory: 80
+        targetMemory: 80,
       },
       loadBalancing: {
         algorithm: 'geolocation',
@@ -417,20 +426,20 @@ export class GlobalDeploymentManager {
           path: '/health',
           interval: 30,
           timeout: 5,
-          retries: 3
-        }
+          retries: 3,
+        },
       },
       caching: {
         enabled: true,
         ttl: 3600,
         strategy: 'aggressive',
-        regions: targetRegions
+        regions: targetRegions,
       },
       database: {
         strategy: 'read_replicas',
         backupStrategy: 'continuous',
-        replicationLag: 100
-      }
+        replicationLag: 100,
+      },
     };
 
     this.deployments.set(deploymentId, deployment);
@@ -446,19 +455,19 @@ export class GlobalDeploymentManager {
         totalRequests: 0,
         errorRate: 0,
         averageResponseTime: 0,
-        throughput: 0
+        throughput: 0,
       },
-      issues: []
+      issues: [],
     };
 
     // Initialize region statuses
-    targetRegions.forEach(regionId => {
+    targetRegions.forEach((regionId) => {
       status.regionStatuses[regionId] = {
         status: 'pending',
         instances: 0,
         healthyInstances: 0,
         lastHealthCheck: new Date().toISOString(),
-        deploymentTime: 0
+        deploymentTime: 0,
       };
     });
 
@@ -509,7 +518,7 @@ export class GlobalDeploymentManager {
         region: 'global',
         severity: 'critical',
         message: `Deployment failed: ${error}`,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       });
 
       console.log(`❌ Deployment failed: ${deploymentId}`);
@@ -520,53 +529,53 @@ export class GlobalDeploymentManager {
   // Regional rollout strategy
   private async executeRegionalRollout(
     deployment: DeploymentConfiguration,
-    status: DeploymentStatus
+    status: DeploymentStatus,
   ): Promise<void> {
     console.log('🌍 Executing regional rollout deployment...');
 
     // Deploy to regions in order of priority (latency/capacity)
     const sortedRegions = this.sortRegionsByPriority(deployment.regions);
-    
+
     for (const regionId of sortedRegions) {
       console.log(`📍 Deploying to region: ${regionId}`);
-      
+
       const regionStatus = status.regionStatuses[regionId];
       regionStatus.status = 'deploying';
-      
+
       const startTime = Date.now();
-      
+
       try {
         // Simulate deployment process
         await this.deployToRegion(regionId, deployment);
-        
+
         regionStatus.status = 'healthy';
         regionStatus.instances = deployment.scaling.minInstances;
         regionStatus.healthyInstances = deployment.scaling.minInstances;
         regionStatus.deploymentTime = Date.now() - startTime;
         regionStatus.lastHealthCheck = new Date().toISOString();
-        
+
         // Update overall progress
-        const completedRegions = Object.values(status.regionStatuses)
-          .filter(rs => rs.status === 'healthy').length;
+        const completedRegions = Object.values(status.regionStatuses).filter(
+          (rs) => rs.status === 'healthy',
+        ).length;
         status.progress = (completedRegions / deployment.regions.length) * 100;
-        
+
         console.log(`✅ Successfully deployed to ${regionId}`);
-        
+
         // Wait before next region (progressive rollout)
         if (sortedRegions.indexOf(regionId) < sortedRegions.length - 1) {
           console.log('⏳ Waiting 5 minutes before next region...');
           await this.delay(5 * 60 * 1000); // 5 minutes
         }
-        
       } catch (error) {
         regionStatus.status = 'failed';
         status.issues.push({
           region: regionId,
           severity: 'critical',
           message: `Regional deployment failed: ${error}`,
-          timestamp: new Date().toISOString()
+          timestamp: new Date().toISOString(),
         });
-        
+
         throw new Error(`Failed to deploy to region ${regionId}: ${error}`);
       }
     }
@@ -575,7 +584,7 @@ export class GlobalDeploymentManager {
   // Blue-green deployment strategy
   private async executeBlueGreenDeployment(
     deployment: DeploymentConfiguration,
-    status: DeploymentStatus
+    status: DeploymentStatus,
   ): Promise<void> {
     console.log('🔵🟢 Executing blue-green deployment...');
 
@@ -583,20 +592,20 @@ export class GlobalDeploymentManager {
     for (const regionId of deployment.regions) {
       const regionStatus = status.regionStatuses[regionId];
       regionStatus.status = 'deploying';
-      
+
       // Deploy to green environment
       await this.deployToRegion(regionId, deployment, 'green');
-      
+
       // Health check green environment
       const isHealthy = await this.performHealthCheck(regionId, 'green');
-      
+
       if (isHealthy) {
         // Switch traffic to green
         await this.switchTraffic(regionId, 'green');
-        
+
         // Clean up blue environment
         await this.cleanupEnvironment(regionId, 'blue');
-        
+
         regionStatus.status = 'healthy';
         regionStatus.instances = deployment.scaling.minInstances;
         regionStatus.healthyInstances = deployment.scaling.minInstances;
@@ -610,25 +619,27 @@ export class GlobalDeploymentManager {
   // Canary deployment strategy
   private async executeCanaryDeployment(
     deployment: DeploymentConfiguration,
-    status: DeploymentStatus
+    status: DeploymentStatus,
   ): Promise<void> {
     console.log('🐤 Executing canary deployment...');
 
     // Start with 5% traffic
     const canaryPercentages = [5, 25, 50, 100];
-    
+
     for (const percentage of canaryPercentages) {
       console.log(`📊 Deploying canary at ${percentage}% traffic`);
-      
+
       for (const regionId of deployment.regions) {
         await this.deployCanaryVersion(regionId, deployment, percentage);
       }
-      
+
       // Monitor for 10 minutes
       await this.monitorCanaryDeployment(deployment, status, percentage);
-      
+
       if (percentage < 100) {
-        console.log(`⏳ Waiting 10 minutes before increasing to next percentage...`);
+        console.log(
+          `⏳ Waiting 10 minutes before increasing to next percentage...`,
+        );
         await this.delay(10 * 60 * 1000); // 10 minutes
       }
     }
@@ -637,30 +648,32 @@ export class GlobalDeploymentManager {
   // Rolling deployment strategy
   private async executeRollingDeployment(
     deployment: DeploymentConfiguration,
-    status: DeploymentStatus
+    status: DeploymentStatus,
   ): Promise<void> {
     console.log('🔄 Executing rolling deployment...');
 
     for (const regionId of deployment.regions) {
       const regionStatus = status.regionStatuses[regionId];
       regionStatus.status = 'deploying';
-      
+
       // Rolling update with 25% batches
       const instances = deployment.scaling.minInstances;
       const batchSize = Math.max(1, Math.floor(instances * 0.25));
-      
+
       for (let i = 0; i < instances; i += batchSize) {
         const batch = Math.min(batchSize, instances - i);
-        console.log(`🔄 Updating batch ${i / batchSize + 1} in ${regionId} (${batch} instances)`);
-        
+        console.log(
+          `🔄 Updating batch ${i / batchSize + 1} in ${regionId} (${batch} instances)`,
+        );
+
         await this.updateInstanceBatch(regionId, deployment, batch);
-        
+
         // Wait between batches
         if (i + batchSize < instances) {
           await this.delay(30 * 1000); // 30 seconds
         }
       }
-      
+
       regionStatus.status = 'healthy';
       regionStatus.instances = instances;
       regionStatus.healthyInstances = instances;
@@ -671,14 +684,16 @@ export class GlobalDeploymentManager {
   private async deployToRegion(
     regionId: string,
     deployment: DeploymentConfiguration,
-    environment: 'blue' | 'green' = 'blue'
+    environment: 'blue' | 'green' = 'blue',
   ): Promise<void> {
     const region = this.regions.get(regionId);
     if (!region) {
       throw new Error(`Region ${regionId} not found`);
     }
 
-    console.log(`🏗️ Deploying ${deployment.name} v${deployment.version} to ${region.name} (${environment})`);
+    console.log(
+      `🏗️ Deploying ${deployment.name} v${deployment.version} to ${region.name} (${environment})`,
+    );
 
     // Simulate deployment steps
     const steps = [
@@ -686,7 +701,7 @@ export class GlobalDeploymentManager {
       'Deploying application containers',
       'Configuring load balancers',
       'Setting up monitoring',
-      'Running health checks'
+      'Running health checks',
     ];
 
     for (const step of steps) {
@@ -700,28 +715,38 @@ export class GlobalDeploymentManager {
   // Perform health check
   private async performHealthCheck(
     regionId: string,
-    environment: 'blue' | 'green' = 'blue'
+    environment: 'blue' | 'green' = 'blue',
   ): Promise<boolean> {
     console.log(`🏥 Performing health check for ${regionId} (${environment})`);
-    
+
     // Simulate health check
     await this.delay(5000); // 5 seconds
-    
+
     // 95% success rate simulation
     const isHealthy = Math.random() > 0.05;
-    console.log(`${isHealthy ? '✅' : '❌'} Health check ${isHealthy ? 'passed' : 'failed'} for ${regionId}`);
-    
+    console.log(
+      `${isHealthy ? '✅' : '❌'} Health check ${isHealthy ? 'passed' : 'failed'} for ${regionId}`,
+    );
+
     return isHealthy;
   }
 
   // Switch traffic between environments
-  private async switchTraffic(regionId: string, targetEnvironment: 'blue' | 'green'): Promise<void> {
-    console.log(`🔀 Switching traffic to ${targetEnvironment} environment in ${regionId}`);
+  private async switchTraffic(
+    regionId: string,
+    targetEnvironment: 'blue' | 'green',
+  ): Promise<void> {
+    console.log(
+      `🔀 Switching traffic to ${targetEnvironment} environment in ${regionId}`,
+    );
     await this.delay(1000);
   }
 
   // Cleanup old environment
-  private async cleanupEnvironment(regionId: string, environment: 'blue' | 'green'): Promise<void> {
+  private async cleanupEnvironment(
+    regionId: string,
+    environment: 'blue' | 'green',
+  ): Promise<void> {
     console.log(`🧹 Cleaning up ${environment} environment in ${regionId}`);
     await this.delay(2000);
   }
@@ -730,7 +755,7 @@ export class GlobalDeploymentManager {
   private async deployCanaryVersion(
     regionId: string,
     deployment: DeploymentConfiguration,
-    percentage: number
+    percentage: number,
   ): Promise<void> {
     console.log(`🐤 Deploying canary version to ${regionId} at ${percentage}%`);
     await this.delay(3000);
@@ -740,23 +765,25 @@ export class GlobalDeploymentManager {
   private async monitorCanaryDeployment(
     deployment: DeploymentConfiguration,
     status: DeploymentStatus,
-    percentage: number
+    percentage: number,
   ): Promise<void> {
     console.log(`📊 Monitoring canary deployment at ${percentage}%...`);
-    
+
     // Simulate monitoring for 10 minutes
     for (let i = 0; i < 10; i++) {
       await this.delay(60000); // 1 minute
-      
+
       // Check metrics
       const errorRate = Math.random() * 0.02; // 0-2% error rate
       const responseTime = 150 + Math.random() * 100; // 150-250ms
-      
+
       status.metrics.errorRate = errorRate;
       status.metrics.averageResponseTime = responseTime;
-      
-      console.log(`   Minute ${i + 1}: Error rate ${(errorRate * 100).toFixed(2)}%, Response time ${responseTime.toFixed(0)}ms`);
-      
+
+      console.log(
+        `   Minute ${i + 1}: Error rate ${(errorRate * 100).toFixed(2)}%, Response time ${responseTime.toFixed(0)}ms`,
+      );
+
       // If error rate too high, rollback
       if (errorRate > 0.05) {
         console.log('❌ Error rate too high, rolling back...');
@@ -764,7 +791,7 @@ export class GlobalDeploymentManager {
         throw new Error('Canary deployment rolled back due to high error rate');
       }
     }
-    
+
     console.log('✅ Canary monitoring completed successfully');
   }
 
@@ -772,7 +799,7 @@ export class GlobalDeploymentManager {
   private async updateInstanceBatch(
     regionId: string,
     deployment: DeploymentConfiguration,
-    batchSize: number
+    batchSize: number,
   ): Promise<void> {
     console.log(`🔄 Updating ${batchSize} instances in ${regionId}`);
     await this.delay(batchSize * 1000); // 1 second per instance
@@ -783,13 +810,13 @@ export class GlobalDeploymentManager {
     return regionIds.sort((a, b) => {
       const regionA = this.regions.get(a);
       const regionB = this.regions.get(b);
-      
+
       if (!regionA || !regionB) return 0;
-      
+
       // Priority: capacity, then latency, then availability
       const scoreA = this.calculateRegionScore(regionA);
       const scoreB = this.calculateRegionScore(regionB);
-      
+
       return scoreB - scoreA; // Higher score first
     });
   }
@@ -797,16 +824,17 @@ export class GlobalDeploymentManager {
   // Calculate region deployment score
   private calculateRegionScore(region: Region): number {
     const capacityScore = {
-      'small': 1,
-      'medium': 2,
-      'large': 3,
-      'xlarge': 4
+      small: 1,
+      medium: 2,
+      large: 3,
+      xlarge: 4,
     }[region.dataCenter.capacity];
-    
-    const latencyScore = Math.max(0, 200 - region.networking.latency) / 200 * 100;
+
+    const latencyScore =
+      (Math.max(0, 200 - region.networking.latency) / 200) * 100;
     const availabilityScore = region.networking.availability;
-    
-    return (capacityScore * 25) + (latencyScore * 0.3) + (availabilityScore * 0.45);
+
+    return capacityScore * 25 + latencyScore * 0.3 + availabilityScore * 0.45;
   }
 
   // Rollback deployment
@@ -819,12 +847,12 @@ export class GlobalDeploymentManager {
     }
 
     status.status = 'rolled_back';
-    
+
     // Rollback each region
     for (const regionId of Object.keys(status.regionStatuses)) {
       console.log(`⏪ Rolling back region: ${regionId}`);
       await this.rollbackRegion(regionId);
-      
+
       status.regionStatuses[regionId].status = 'healthy';
     }
 
@@ -834,13 +862,13 @@ export class GlobalDeploymentManager {
   // Rollback specific region
   private async rollbackRegion(regionId: string): Promise<void> {
     console.log(`⏪ Rolling back region: ${regionId}`);
-    
+
     // Simulate rollback process
     const steps = [
       'Switching traffic to previous version',
       'Stopping new version containers',
       'Restoring previous configuration',
-      'Verifying rollback success'
+      'Verifying rollback success',
     ];
 
     for (const step of steps) {
@@ -852,7 +880,7 @@ export class GlobalDeploymentManager {
   // Start health monitoring
   private startHealthMonitoring(): void {
     console.log('❤️ Starting continuous health monitoring...');
-    
+
     setInterval(async () => {
       await this.performGlobalHealthCheck();
     }, 30000); // Every 30 seconds
@@ -864,20 +892,20 @@ export class GlobalDeploymentManager {
       if (status.status === 'completed') {
         for (const regionId of Object.keys(status.regionStatuses)) {
           const regionStatus = status.regionStatuses[regionId];
-          
+
           if (regionStatus.status === 'healthy') {
             const isHealthy = await this.performHealthCheck(regionId);
-            
+
             if (!isHealthy) {
               regionStatus.status = 'unhealthy';
               status.issues.push({
                 region: regionId,
                 severity: 'high',
                 message: 'Health check failed',
-                timestamp: new Date().toISOString()
+                timestamp: new Date().toISOString(),
               });
             }
-            
+
             regionStatus.lastHealthCheck = new Date().toISOString();
           }
         }
@@ -886,9 +914,14 @@ export class GlobalDeploymentManager {
   }
 
   // Get optimal region for user
-  getOptimalRegion(userCountry: string, userLat?: number, userLon?: number): string {
+  getOptimalRegion(
+    userCountry: string,
+    userLat?: number,
+    userLon?: number,
+  ): string {
     // First try geolocation mapping
-    const mappedRegion = this.trafficDistribution.geolocationMapping[userCountry];
+    const mappedRegion =
+      this.trafficDistribution.geolocationMapping[userCountry];
     if (mappedRegion && this.regions.has(mappedRegion)) {
       return mappedRegion;
     }
@@ -905,11 +938,11 @@ export class GlobalDeploymentManager {
   // Find closest region by geographic distance
   private findClosestRegion(lat: number, lon: number): string {
     const regionCoordinates: Record<string, [number, number]> = {
-      'us-east-1': [39.0458, -77.5081],        // Virginia
-      'eu-west-1': [53.3498, -6.2603],         // Dublin
-      'ap-southeast-1': [1.3521, 103.8198],    // Singapore
-      'sa-east-1': [-23.5505, -46.6333],       // São Paulo
-      'ap-northeast-1': [35.6762, 139.6503]    // Tokyo
+      'us-east-1': [39.0458, -77.5081], // Virginia
+      'eu-west-1': [53.3498, -6.2603], // Dublin
+      'ap-southeast-1': [1.3521, 103.8198], // Singapore
+      'sa-east-1': [-23.5505, -46.6333], // São Paulo
+      'ap-northeast-1': [35.6762, 139.6503], // Tokyo
     };
 
     let closestRegion = 'us-east-1';
@@ -929,13 +962,21 @@ export class GlobalDeploymentManager {
   }
 
   // Calculate distance between coordinates (Haversine formula)
-  private calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
+  private calculateDistance(
+    lat1: number,
+    lon1: number,
+    lat2: number,
+    lon2: number,
+  ): number {
     const R = 6371; // Earth's radius in kilometers
     const dLat = this.toRadians(lat2 - lat1);
     const dLon = this.toRadians(lon2 - lon1);
-    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-              Math.cos(this.toRadians(lat1)) * Math.cos(this.toRadians(lat2)) *
-              Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(this.toRadians(lat1)) *
+        Math.cos(this.toRadians(lat2)) *
+        Math.sin(dLon / 2) *
+        Math.sin(dLon / 2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     return R * c;
   }
@@ -956,43 +997,49 @@ export class GlobalDeploymentManager {
     healthyInstances: number;
   } {
     const allStatuses = Array.from(this.deploymentStatuses.values());
-    const completed = allStatuses.filter(s => s.status === 'completed');
-    const failed = allStatuses.filter(s => s.status === 'failed');
-    
-    const avgDeploymentTime = completed.reduce((sum, status) => {
-      if (status.endTime) {
-        const duration = new Date(status.endTime).getTime() - new Date(status.startTime).getTime();
-        return sum + duration;
-      }
-      return sum;
-    }, 0) / (completed.length || 1);
+    const completed = allStatuses.filter((s) => s.status === 'completed');
+    const failed = allStatuses.filter((s) => s.status === 'failed');
 
-    const successRate = allStatuses.length > 0 ? 
-      (completed.length / (completed.length + failed.length)) * 100 : 100;
+    const avgDeploymentTime =
+      completed.reduce((sum, status) => {
+        if (status.endTime) {
+          const duration =
+            new Date(status.endTime).getTime() -
+            new Date(status.startTime).getTime();
+          return sum + duration;
+        }
+        return sum;
+      }, 0) / (completed.length || 1);
+
+    const successRate =
+      allStatuses.length > 0
+        ? (completed.length / (completed.length + failed.length)) * 100
+        : 100;
 
     // Calculate instance counts
     let totalInstances = 0;
     let healthyInstances = 0;
-    
-    allStatuses.forEach(status => {
-      Object.values(status.regionStatuses).forEach(regionStatus => {
+
+    allStatuses.forEach((status) => {
+      Object.values(status.regionStatuses).forEach((regionStatus) => {
         totalInstances += regionStatus.instances;
         healthyInstances += regionStatus.healthyInstances;
       });
     });
 
-    const globalAvailability = totalInstances > 0 ? 
-      (healthyInstances / totalInstances) * 100 : 100;
+    const globalAvailability =
+      totalInstances > 0 ? (healthyInstances / totalInstances) * 100 : 100;
 
     return {
       totalDeployments: allStatuses.length,
-      activeDeployments: allStatuses.filter(s => s.status === 'in_progress').length,
+      activeDeployments: allStatuses.filter((s) => s.status === 'in_progress')
+        .length,
       totalRegions: this.regions.size,
       averageDeploymentTime: Math.round(avgDeploymentTime / (1000 * 60)), // minutes
       successRate: Math.round(successRate * 100) / 100,
       globalAvailability: Math.round(globalAvailability * 100) / 100,
       totalInstances,
-      healthyInstances
+      healthyInstances,
     };
   }
 
@@ -1002,7 +1049,7 @@ export class GlobalDeploymentManager {
   }
 
   private delay(ms: number): Promise<void> {
-    return new Promise(resolve => setTimeout(resolve, ms));
+    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 
   // Get all regions

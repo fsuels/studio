@@ -24,12 +24,18 @@ export const commissionAgreementMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Commission Agreement',
-      description: 'Comprehensive agreement establishing commission-based compensation structure and terms.',
-      aliases: ['sales commission agreement', 'commission contract', 'compensation agreement'],
+      description:
+        'Comprehensive agreement establishing commission-based compensation structure and terms.',
+      aliases: [
+        'sales commission agreement',
+        'commission contract',
+        'compensation agreement',
+      ],
     },
     es: {
       name: 'Acuerdo de Comisión',
-      description: 'Acuerdo integral que establece la estructura y términos de compensación basada en comisiones.',
+      description:
+        'Acuerdo integral que establece la estructura y términos de compensación basada en comisiones.',
       aliases: ['acuerdo de comisión de ventas', 'contrato de comisión'],
     },
   },

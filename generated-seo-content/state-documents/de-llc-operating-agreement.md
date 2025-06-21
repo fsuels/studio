@@ -47,7 +47,7 @@ Don't risk using generic templates that may not comply with Delaware law. Get a 
 
 [Create Delaware LLC Operating Agreement]
 
-*Trusted by thousands of Delaware businesses*
+_Trusted by thousands of Delaware businesses_
 
 ---
 

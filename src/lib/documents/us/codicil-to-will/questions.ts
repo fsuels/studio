@@ -188,7 +188,8 @@ export const codicilToWillQuestions: FormQuestion[] = [
   {
     id: 'confirmRemainingTerms',
     type: 'checkbox',
-    label: 'All other terms of my original will remain in full force and effect',
+    label:
+      'All other terms of my original will remain in full force and effect',
     required: false,
     group: 'confirmation',
   },

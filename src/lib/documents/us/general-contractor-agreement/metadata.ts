@@ -24,13 +24,22 @@ export const generalContractorAgreementMeta: LegalDocument = {
   translations: {
     en: {
       name: 'General Contractor Agreement',
-      description: 'Comprehensive agreement for general contracting and construction management services.',
-      aliases: ['gc agreement', 'construction management contract', 'prime contractor agreement'],
+      description:
+        'Comprehensive agreement for general contracting and construction management services.',
+      aliases: [
+        'gc agreement',
+        'construction management contract',
+        'prime contractor agreement',
+      ],
     },
     es: {
       name: 'Acuerdo de Contratista General',
-      description: 'Acuerdo integral para servicios de contratación general y gestión de construcción.',
-      aliases: ['contrato de construcción general', 'acuerdo de gestión de obra'],
+      description:
+        'Acuerdo integral para servicios de contratación general y gestión de construcción.',
+      aliases: [
+        'contrato de construcción general',
+        'acuerdo de gestión de obra',
+      ],
     },
   },
 };

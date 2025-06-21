@@ -24,12 +24,18 @@ export const homeImprovementContractMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Home Improvement Contract',
-      description: 'Comprehensive contract for home renovation, remodeling, and improvement projects.',
-      aliases: ['renovation contract', 'remodeling agreement', 'contractor agreement'],
+      description:
+        'Comprehensive contract for home renovation, remodeling, and improvement projects.',
+      aliases: [
+        'renovation contract',
+        'remodeling agreement',
+        'contractor agreement',
+      ],
     },
     es: {
       name: 'Contrato de Mejoras del Hogar',
-      description: 'Contrato integral para proyectos de renovación, remodelación y mejoras del hogar.',
+      description:
+        'Contrato integral para proyectos de renovación, remodelación y mejoras del hogar.',
       aliases: ['contrato de renovación', 'acuerdo de remodelación'],
     },
   },

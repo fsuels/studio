@@ -24,12 +24,18 @@ export const personalCareAgreementMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Personal Care Agreement',
-      description: 'Agreement for personal care services including caregiving, assistance, and support.',
-      aliases: ['caregiver agreement', 'personal assistance contract', 'care services agreement'],
+      description:
+        'Agreement for personal care services including caregiving, assistance, and support.',
+      aliases: [
+        'caregiver agreement',
+        'personal assistance contract',
+        'care services agreement',
+      ],
     },
     es: {
       name: 'Acuerdo de Cuidado Personal',
-      description: 'Acuerdo para servicios de cuidado personal incluyendo cuidado, asistencia y apoyo.',
+      description:
+        'Acuerdo para servicios de cuidado personal incluyendo cuidado, asistencia y apoyo.',
       aliases: ['acuerdo de cuidador', 'contrato de asistencia personal'],
     },
   },

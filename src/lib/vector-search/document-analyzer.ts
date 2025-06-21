@@ -48,11 +48,14 @@ export class DocumentAnalyzer {
   /**
    * Analyze a single document and extract structured information
    */
-  async analyzeDocument(docId: string, locale: 'en' | 'es' = 'en'): Promise<DocumentAnalysis> {
+  async analyzeDocument(
+    docId: string,
+    locale: 'en' | 'es' = 'en',
+  ): Promise<DocumentAnalysis> {
     try {
       // Read document content
       const content = await this.readDocumentContent(docId, locale);
-      
+
       // Get document metadata
       const meta = await getDocMeta(docId);
       if (!meta) {
@@ -63,11 +66,14 @@ export class DocumentAnalyzer {
       const extractedText = this.extractPlainText(content);
       const contentSections = this.extractContentSections(content);
       const entities = await this.extractEntities(extractedText);
-      
+
       // Calculate additional metadata
       const wordCount = this.calculateWordCount(extractedText);
       const readingTime = this.estimateReadingTime(wordCount);
-      const documentType = this.identifyDocumentType(extractedText, meta.category);
+      const documentType = this.identifyDocumentType(
+        extractedText,
+        meta.category,
+      );
 
       return {
         docId,
@@ -88,7 +94,6 @@ export class DocumentAnalyzer {
         },
         contentSections,
       };
-
     } catch (error) {
       console.error(`Error analyzing document ${docId}:`, error);
       throw error;
@@ -101,7 +106,7 @@ export class DocumentAnalyzer {
   async processDocumentBatch(
     docIds: string[],
     locale: 'en' | 'es' = 'en',
-    batchSize: number = 10
+    batchSize: number = 10,
   ): Promise<{
     successful: string[];
     failed: Array<{ docId: string; error: string }>;
@@ -112,13 +117,13 @@ export class DocumentAnalyzer {
     // Process in batches to avoid overwhelming the API
     for (let i = 0; i < docIds.length; i += batchSize) {
       const batch = docIds.slice(i, i + batchSize);
-      
+
       const batchResults = await Promise.allSettled(
         batch.map(async (docId) => {
           const analysis = await this.analyzeDocument(docId, locale);
           await this.indexDocumentAnalysis(analysis);
           return docId;
-        })
+        }),
       );
 
       batchResults.forEach((result, index) => {
@@ -134,7 +139,7 @@ export class DocumentAnalyzer {
 
       // Rate limiting between batches
       if (i + batchSize < docIds.length) {
-        await new Promise(resolve => setTimeout(resolve, 2000));
+        await new Promise((resolve) => setTimeout(resolve, 2000));
       }
     }
 
@@ -161,12 +166,15 @@ export class DocumentAnalyzer {
           parties: analysis.entities.parties,
           amounts: analysis.entities.amounts,
           dates: analysis.entities.dates,
-        }
+        },
       );
 
       console.log(`Successfully indexed document analysis: ${analysis.docId}`);
     } catch (error) {
-      console.error(`Failed to index document analysis ${analysis.docId}:`, error);
+      console.error(
+        `Failed to index document analysis ${analysis.docId}:`,
+        error,
+      );
       throw error;
     }
   }
@@ -174,12 +182,17 @@ export class DocumentAnalyzer {
   /**
    * Read document content from file system
    */
-  private async readDocumentContent(docId: string, locale: 'en' | 'es'): Promise<string> {
+  private async readDocumentContent(
+    docId: string,
+    locale: 'en' | 'es',
+  ): Promise<string> {
     try {
       const filePath = join(this.templateBasePath, locale, `${docId}.md`);
       return await readFile(filePath, 'utf-8');
     } catch (error) {
-      throw new Error(`Failed to read document ${docId}: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      throw new Error(
+        `Failed to read document ${docId}: ${error instanceof Error ? error.message : 'Unknown error'}`,
+      );
     }
   }
 
@@ -206,7 +219,9 @@ export class DocumentAnalyzer {
   /**
    * Extract structured content sections
    */
-  private extractContentSections(content: string): DocumentAnalysis['contentSections'] {
+  private extractContentSections(
+    content: string,
+  ): DocumentAnalysis['contentSections'] {
     const sections = {
       title: '',
       definitions: '',
@@ -222,19 +237,27 @@ export class DocumentAnalyzer {
     }
 
     // Extract definitions section
-    const definitionsMatch = content.match(/##?\s*(?:definitions?|defined terms?)\s*\n(.*?)(?=\n##|\n#|$)/si);
+    const definitionsMatch = content.match(
+      /##?\s*(?:definitions?|defined terms?)\s*\n(.*?)(?=\n##|\n#|$)/is,
+    );
     if (definitionsMatch) {
       sections.definitions = definitionsMatch[1].trim();
     }
 
     // Extract clauses (numbered or lettered sections)
-    const clauseMatches = content.match(/(?:^|\n)(?:\d+\.|\w\))\s+.*?(?=\n\d+\.|\n\w\)|$)/gis);
+    const clauseMatches = content.match(
+      /(?:^|\n)(?:\d+\.|\w\))\s+.*?(?=\n\d+\.|\n\w\)|$)/gis,
+    );
     if (clauseMatches) {
-      sections.clauses = clauseMatches.map(clause => clause.trim()).filter(Boolean);
+      sections.clauses = clauseMatches
+        .map((clause) => clause.trim())
+        .filter(Boolean);
     }
 
     // Extract signature section
-    const signatureMatch = content.match(/(?:signature|executed|witness|notary).*?$/si);
+    const signatureMatch = content.match(
+      /(?:signature|executed|witness|notary).*?$/is,
+    );
     if (signatureMatch) {
       sections.signatures = signatureMatch[0].trim();
     }
@@ -252,7 +275,9 @@ export class DocumentAnalyzer {
   /**
    * Extract entities from document text
    */
-  private async extractEntities(text: string): Promise<DocumentAnalysis['entities']> {
+  private async extractEntities(
+    text: string,
+  ): Promise<DocumentAnalysis['entities']> {
     const entities = {
       parties: [] as string[],
       amounts: [] as string[],
@@ -263,45 +288,59 @@ export class DocumentAnalyzer {
     };
 
     // Extract monetary amounts
-    const amountRegex = /\$[\d,]+(?:\.\d{2})?|\b\d+(?:,\d{3})*(?:\.\d{2})?\s*dollars?\b/gi;
+    const amountRegex =
+      /\$[\d,]+(?:\.\d{2})?|\b\d+(?:,\d{3})*(?:\.\d{2})?\s*dollars?\b/gi;
     const amounts = text.match(amountRegex);
     if (amounts) {
       entities.amounts = [...new Set(amounts.slice(0, 10))];
     }
 
     // Extract dates
-    const dateRegex = /\b(?:\d{1,2}\/\d{1,2}\/\d{4}|\d{4}-\d{2}-\d{2}|(?:January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{1,2},?\s+\d{4})\b/gi;
+    const dateRegex =
+      /\b(?:\d{1,2}\/\d{1,2}\/\d{4}|\d{4}-\d{2}-\d{2}|(?:January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{1,2},?\s+\d{4})\b/gi;
     const dates = text.match(dateRegex);
     if (dates) {
       entities.dates = [...new Set(dates.slice(0, 10))];
     }
 
     // Extract party names (companies, LLCs, etc.)
-    const partyRegex = /\b[A-Z][a-z]+(?:\s+[A-Z][a-z]+)*\s+(?:LLC|Inc|Corp|Corporation|Company|Co\.|Ltd|Limited)\b/g;
+    const partyRegex =
+      /\b[A-Z][a-z]+(?:\s+[A-Z][a-z]+)*\s+(?:LLC|Inc|Corp|Corporation|Company|Co\.|Ltd|Limited)\b/g;
     const parties = text.match(partyRegex);
     if (parties) {
       entities.parties = [...new Set(parties.slice(0, 10))];
     }
 
     // Extract jurisdictions
-    const jurisdictionRegex = /\b(?:state of |province of )?(?:alabama|alaska|arizona|arkansas|california|colorado|connecticut|delaware|florida|georgia|hawaii|idaho|illinois|indiana|iowa|kansas|kentucky|louisiana|maine|maryland|massachusetts|michigan|minnesota|mississippi|missouri|montana|nebraska|nevada|new hampshire|new jersey|new mexico|new york|north carolina|north dakota|ohio|oklahoma|oregon|pennsylvania|rhode island|south carolina|south dakota|tennessee|texas|utah|vermont|virginia|washington|west virginia|wisconsin|wyoming)\b/gi;
+    const jurisdictionRegex =
+      /\b(?:state of |province of )?(?:alabama|alaska|arizona|arkansas|california|colorado|connecticut|delaware|florida|georgia|hawaii|idaho|illinois|indiana|iowa|kansas|kentucky|louisiana|maine|maryland|massachusetts|michigan|minnesota|mississippi|missouri|montana|nebraska|nevada|new hampshire|new jersey|new mexico|new york|north carolina|north dakota|ohio|oklahoma|oregon|pennsylvania|rhode island|south carolina|south dakota|tennessee|texas|utah|vermont|virginia|washington|west virginia|wisconsin|wyoming)\b/gi;
     const jurisdictions = text.match(jurisdictionRegex);
     if (jurisdictions) {
-      entities.jurisdictions = [...new Set(jurisdictions.slice(0, 5).map(j => j.replace(/^(state of |province of )/i, '').trim()))];
+      entities.jurisdictions = [
+        ...new Set(
+          jurisdictions
+            .slice(0, 5)
+            .map((j) => j.replace(/^(state of |province of )/i, '').trim()),
+        ),
+      ];
     }
 
     // Extract governing law mentions
-    const governingLawRegex = /governed by|subject to.*?law|laws of\s+([^,\n.]+)/gi;
+    const governingLawRegex =
+      /governed by|subject to.*?law|laws of\s+([^,\n.]+)/gi;
     const governingLaws = text.match(governingLawRegex);
     if (governingLaws) {
       entities.governingLaws = [...new Set(governingLaws.slice(0, 5))];
     }
 
     // Extract key legal terms
-    const keyTermRegex = /\b(?:contract|agreement|consideration|breach|damages|liability|indemnity|warranty|guarantee|covenant|term|condition|clause|provision|party|obligation|right|remedy|force majeure|arbitration|mediation|jurisdiction|venue)\b/gi;
+    const keyTermRegex =
+      /\b(?:contract|agreement|consideration|breach|damages|liability|indemnity|warranty|guarantee|covenant|term|condition|clause|provision|party|obligation|right|remedy|force majeure|arbitration|mediation|jurisdiction|venue)\b/gi;
     const keyTerms = text.match(keyTermRegex);
     if (keyTerms) {
-      entities.keyTerms = [...new Set(keyTerms.slice(0, 20).map(term => term.toLowerCase()))];
+      entities.keyTerms = [
+        ...new Set(keyTerms.slice(0, 20).map((term) => term.toLowerCase())),
+      ];
     }
 
     return entities;
@@ -312,22 +351,23 @@ export class DocumentAnalyzer {
    */
   private generateTags(text: string, category: string): string[] {
     const tags = new Set<string>();
-    
+
     // Add category as base tag
     tags.add(category);
 
     // Common legal document tags
     const tagPatterns = {
-      'employment': /employment|employee|employer|job|work|salary|wage/i,
+      employment: /employment|employee|employer|job|work|salary|wage/i,
       'real-estate': /property|real estate|lease|rent|landlord|tenant/i,
-      'business': /business|company|corporation|LLC|partnership/i,
-      'contract': /contract|agreement|deal|terms|conditions/i,
-      'financial': /loan|money|payment|financial|bank|credit/i,
-      'intellectual-property': /patent|trademark|copyright|IP|intellectual property/i,
-      'family': /family|marriage|divorce|custody|child|spouse/i,
+      business: /business|company|corporation|LLC|partnership/i,
+      contract: /contract|agreement|deal|terms|conditions/i,
+      financial: /loan|money|payment|financial|bank|credit/i,
+      'intellectual-property':
+        /patent|trademark|copyright|IP|intellectual property/i,
+      family: /family|marriage|divorce|custody|child|spouse/i,
       'estate-planning': /will|estate|trust|inheritance|beneficiary/i,
-      'liability': /liability|indemnity|insurance|risk|damages/i,
-      'compliance': /compliance|regulation|law|legal|statute/i,
+      liability: /liability|indemnity|insurance|risk|damages/i,
+      compliance: /compliance|regulation|law|legal|statute/i,
     };
 
     // Check text against patterns
@@ -361,7 +401,10 @@ export class DocumentAnalyzer {
    * Calculate word count
    */
   private calculateWordCount(text: string): number {
-    return text.trim().split(/\s+/).filter(word => word.length > 0).length;
+    return text
+      .trim()
+      .split(/\s+/)
+      .filter((word) => word.length > 0).length;
   }
 
   /**
@@ -377,16 +420,16 @@ export class DocumentAnalyzer {
    */
   private identifyDocumentType(text: string, category: string): string {
     const typePatterns = {
-      'agreement': /agreement|contract|deal/i,
-      'notice': /notice|notification|inform/i,
-      'application': /application|apply|request/i,
-      'letter': /letter|correspondence|communication/i,
-      'form': /form|template|blank|fill/i,
-      'policy': /policy|procedure|guideline/i,
-      'waiver': /waiver|release|discharge/i,
-      'affidavit': /affidavit|sworn|declare under oath/i,
-      'deed': /deed|convey|transfer|grant/i,
-      'will': /will|testament|bequest|inherit/i,
+      agreement: /agreement|contract|deal/i,
+      notice: /notice|notification|inform/i,
+      application: /application|apply|request/i,
+      letter: /letter|correspondence|communication/i,
+      form: /form|template|blank|fill/i,
+      policy: /policy|procedure|guideline/i,
+      waiver: /waiver|release|discharge/i,
+      affidavit: /affidavit|sworn|declare under oath/i,
+      deed: /deed|convey|transfer|grant/i,
+      will: /will|testament|bequest|inherit/i,
     };
 
     // Check text against patterns
@@ -407,10 +450,10 @@ export class DocumentAnalyzer {
     try {
       const templateDir = join(this.templateBasePath, locale);
       const files = await readdir(templateDir);
-      
+
       return files
-        .filter(file => file.endsWith('.md'))
-        .map(file => file.replace('.md', ''));
+        .filter((file) => file.endsWith('.md'))
+        .map((file) => file.replace('.md', ''));
     } catch (error) {
       console.error(`Error reading template directory for ${locale}:`, error);
       return [];
@@ -420,11 +463,14 @@ export class DocumentAnalyzer {
   /**
    * Check if document needs reprocessing
    */
-  async needsReprocessing(docId: string, locale: 'en' | 'es' = 'en'): Promise<boolean> {
+  async needsReprocessing(
+    docId: string,
+    locale: 'en' | 'es' = 'en',
+  ): Promise<boolean> {
     try {
       // Check if document exists in Pinecone
       const stats = await pineconeService.getIndexStats();
-      
+
       // This is a simplified check - in production, you'd compare
       // file modification times, version numbers, etc.
       return true; // For now, always reprocess

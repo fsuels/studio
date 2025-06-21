@@ -97,7 +97,7 @@
 }
 
 .legal-jargon-simplified::after {
-  content: "📝";
+  content: '📝';
   position: absolute;
   top: -0.5rem;
   right: -0.5rem;
@@ -109,7 +109,11 @@
   position: sticky;
   top: 0;
   height: 4px;
-  background: linear-gradient(90deg, #4caf50 var(--progress, 0%), #e0e0e0 var(--progress, 0%));
+  background: linear-gradient(
+    90deg,
+    #4caf50 var(--progress, 0%),
+    #e0e0e0 var(--progress, 0%)
+  );
   z-index: 100;
 }
 
@@ -139,7 +143,7 @@
 }
 
 .form-step::after {
-  content: "";
+  content: '';
   position: absolute;
   top: 50%;
   right: -50%;
@@ -164,7 +168,7 @@
 }
 
 .important-section-highlight::before {
-  content: "⚠️ Important";
+  content: '⚠️ Important';
   position: absolute;
   top: -0.5rem;
   left: 1rem;
@@ -280,12 +284,12 @@
     flex-direction: row;
     max-width: none;
   }
-  
+
   .form-step-indicator {
     flex-direction: column;
     gap: 0.5rem;
   }
-  
+
   .form-step::after {
     display: none;
   }
@@ -344,7 +348,7 @@
   .skip-link {
     display: none !important;
   }
-  
+
   .plain-language-summary,
   .important-section-highlight {
     background: none !important;

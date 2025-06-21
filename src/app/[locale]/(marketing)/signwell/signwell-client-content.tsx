@@ -46,7 +46,7 @@ import { createSignWellDocument } from '@/services/signwell';
 
 const SignwellHeroAnimationClient = dynamic(
   () => import('@/components/motion/SignwellHeroAnimationClient'),
-  { ssr: false }
+  { ssr: false },
 );
 
 interface SignWellClientContentProps {

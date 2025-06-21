@@ -14,5 +14,6 @@ export default async function AIUsagePage() {
 
 export const metadata = {
   title: 'AI Usage & Cost Analytics | Admin Dashboard',
-  description: 'Track AI model usage, token consumption, costs, and optimize spending',
+  description:
+    'Track AI model usage, token consumption, costs, and optimize spending',
 };

@@ -47,7 +47,7 @@ Don't risk using generic templates that may not comply with New York law. Get a 
 
 [Create New York Partnership Agreement]
 
-*Trusted by thousands of New York businesses*
+_Trusted by thousands of New York businesses_
 
 ---
 

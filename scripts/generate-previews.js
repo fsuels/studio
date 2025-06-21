@@ -65,7 +65,9 @@ async function generatePreviews() {
       continue;
     }
 
-    for (const file of fs.readdirSync(mdLangDir).filter((f) => f.endsWith('.md'))) {
+    for (const file of fs
+      .readdirSync(mdLangDir)
+      .filter((f) => f.endsWith('.md'))) {
       const id = file.replace(/\.md$/, '');
       const mdPath = path.join(mdLangDir, file);
       const pngPath = path.join(pngLangDir, `${id}.png`);

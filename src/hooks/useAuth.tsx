@@ -10,7 +10,7 @@ import React, {
   ReactNode,
   useMemo,
 } from 'react';
-import { app } from '@/lib/firebase';        // ← Corrected import path
+import { app } from '@/lib/firebase'; // ← Corrected import path
 import {
   getAuth,
   onAuthStateChanged,
@@ -76,7 +76,7 @@ function useAuthHook(): AuthContextType {
         if (typeof window !== 'undefined') {
           localStorage.setItem(
             'mockAuth',
-            JSON.stringify({ isLoggedIn: true, user: newUser })
+            JSON.stringify({ isLoggedIn: true, user: newUser }),
           );
         }
       } else {
@@ -93,12 +93,7 @@ function useAuthHook(): AuthContextType {
 
   // login & logout update state + localStorage
   const login = useCallback(
-    async (
-      email: string,
-      password?: string,
-      uid?: string,
-      name?: string,
-    ) => {
+    async (email: string, password?: string, uid?: string, name?: string) => {
       try {
         const auth = getAuth(app);
         let fbUser = auth.currentUser;
@@ -121,7 +116,7 @@ function useAuthHook(): AuthContextType {
 
         localStorage.setItem(
           'mockAuth',
-          JSON.stringify({ isLoggedIn: true, user: newUser })
+          JSON.stringify({ isLoggedIn: true, user: newUser }),
         );
         setIsLoggedIn(true);
         setUser(newUser);
@@ -130,7 +125,7 @@ function useAuthHook(): AuthContextType {
         throw err;
       }
     },
-    [user]
+    [user],
   );
 
   const signUp = useCallback(
@@ -142,29 +137,33 @@ function useAuthHook(): AuthContextType {
       }
       await login(email, undefined, cred.user.uid, name);
     },
-    [login]
+    [login],
   );
 
   const logout = useCallback(async () => {
     const auth = getAuth(app);
     const currentUser = auth.currentUser;
-    
+
     try {
       // Log logout event before signing out
       if (currentUser) {
         await auditService.logAuthEvent('logout', {
           email: currentUser.email,
-          ipAddress: typeof window !== 'undefined' ? window.location.hostname : 'unknown',
-          userAgent: typeof window !== 'undefined' ? navigator.userAgent : 'unknown',
-          success: true
+          ipAddress:
+            typeof window !== 'undefined'
+              ? window.location.hostname
+              : 'unknown',
+          userAgent:
+            typeof window !== 'undefined' ? navigator.userAgent : 'unknown',
+          success: true,
         });
       }
-      
+
       await signOut(auth);
     } catch (err) {
       console.error('[useAuth] signOut error', err);
     }
-    
+
     localStorage.removeItem('mockAuth');
     setIsLoggedIn(false);
     setUser(null);
@@ -177,17 +176,17 @@ function useAuthHook(): AuthContextType {
         const updatedUser = { ...prevUser, ...updates };
         localStorage.setItem(
           'mockAuth',
-          JSON.stringify({ isLoggedIn: true, user: updatedUser })
+          JSON.stringify({ isLoggedIn: true, user: updatedUser }),
         );
         return updatedUser;
       });
     },
-    []
+    [],
   );
 
   const contextValue = useMemo(
     () => ({ isLoggedIn, user, isLoading, login, signUp, logout, updateUser }),
-    [isLoggedIn, user, isLoading, login, signUp, logout, updateUser]
+    [isLoggedIn, user, isLoading, login, signUp, logout, updateUser],
   );
 
   return contextValue;
@@ -196,7 +195,6 @@ function useAuthHook(): AuthContextType {
 // 4) The provider component
 export function AuthProvider({ children }: { children: ReactNode }) {
   const authHookValue = useAuthHook();
-
 
   return (
     <AuthContext.Provider value={authHookValue}>

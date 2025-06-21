@@ -2,13 +2,34 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Shield, Search, Download, Calendar, User, FileText, AlertCircle, CheckCircle } from 'lucide-react';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import {
+  Shield,
+  Search,
+  Download,
+  Calendar,
+  User,
+  FileText,
+  AlertCircle,
+  CheckCircle,
+} from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { auditService } from '@/services/firebase-audit-service';
 import { useToast } from '@/hooks/use-toast';
@@ -50,7 +71,7 @@ export default function UserAuditTrailPage() {
       toast({
         title: 'Error',
         description: 'Failed to load audit trail',
-        variant: 'destructive'
+        variant: 'destructive',
       });
     } finally {
       setIsLoading(false);
@@ -64,20 +85,20 @@ export default function UserAuditTrailPage() {
     try {
       const isValid = await auditService.verifyIntegrity(events);
       setIntegrityStatus(isValid);
-      
+
       toast({
         title: isValid ? 'Integrity Verified' : 'Integrity Check Failed',
-        description: isValid 
+        description: isValid
           ? 'Your audit trail is cryptographically secure and unmodified.'
           : 'Potential tampering detected in audit trail.',
-        variant: isValid ? 'default' : 'destructive'
+        variant: isValid ? 'default' : 'destructive',
       });
     } catch (error) {
       console.error('Error verifying integrity:', error);
       toast({
         title: 'Verification Failed',
         description: 'Could not verify audit trail integrity',
-        variant: 'destructive'
+        variant: 'destructive',
       });
     } finally {
       setIsVerifying(false);
@@ -101,14 +122,14 @@ export default function UserAuditTrailPage() {
 
       toast({
         title: 'Export Complete',
-        description: 'Audit trail exported successfully'
+        description: 'Audit trail exported successfully',
       });
     } catch (error) {
       console.error('Error exporting audit trail:', error);
       toast({
         title: 'Export Failed',
         description: 'Failed to export audit trail',
-        variant: 'destructive'
+        variant: 'destructive',
       });
     }
   };
@@ -155,7 +176,7 @@ export default function UserAuditTrailPage() {
 
   const formatTimestamp = (timestamp: any) => {
     if (!timestamp) return 'Unknown';
-    
+
     let date: Date;
     if (timestamp.toDate) {
       date = timestamp.toDate();
@@ -164,21 +185,25 @@ export default function UserAuditTrailPage() {
     } else {
       date = new Date(timestamp);
     }
-    
+
     return date.toLocaleString();
   };
 
-  const filteredEvents = events.filter(event => {
-    const matchesSearch = searchTerm === '' || 
+  const filteredEvents = events.filter((event) => {
+    const matchesSearch =
+      searchTerm === '' ||
       event.eventType.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      JSON.stringify(event.metadata).toLowerCase().includes(searchTerm.toLowerCase());
-    
-    const matchesType = eventTypeFilter === 'all' || event.eventType === eventTypeFilter;
-    
+      JSON.stringify(event.metadata)
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase());
+
+    const matchesType =
+      eventTypeFilter === 'all' || event.eventType === eventTypeFilter;
+
     return matchesSearch && matchesType;
   });
 
-  const uniqueEventTypes = Array.from(new Set(events.map(e => e.eventType)));
+  const uniqueEventTypes = Array.from(new Set(events.map((e) => e.eventType)));
 
   if (isLoading) {
     return (
@@ -199,17 +224,17 @@ export default function UserAuditTrailPage() {
           <Shield className="h-6 w-6 text-blue-600" />
           <h1 className="text-3xl font-bold">Your Audit Trail</h1>
         </div>
-        
+
         <div className="flex space-x-2">
-          <Button 
-            variant="outline" 
+          <Button
+            variant="outline"
             onClick={handleVerifyIntegrity}
             disabled={isVerifying || events.length === 0}
           >
             {isVerifying ? 'Verifying...' : 'Verify Integrity'}
           </Button>
-          <Button 
-            variant="outline" 
+          <Button
+            variant="outline"
             onClick={handleExportAuditTrail}
             disabled={events.length === 0}
           >
@@ -221,18 +246,21 @@ export default function UserAuditTrailPage() {
 
       {/* Integrity Status */}
       {integrityStatus !== null && (
-        <Card className={`border-l-4 ${integrityStatus ? 'border-green-500' : 'border-red-500'}`}>
+        <Card
+          className={`border-l-4 ${integrityStatus ? 'border-green-500' : 'border-red-500'}`}
+        >
           <CardContent className="flex items-center space-x-2 pt-4">
             {integrityStatus ? (
               <CheckCircle className="h-5 w-5 text-green-600" />
             ) : (
               <AlertCircle className="h-5 w-5 text-red-600" />
             )}
-            <span className={`font-medium ${integrityStatus ? 'text-green-700' : 'text-red-700'}`}>
-              {integrityStatus 
+            <span
+              className={`font-medium ${integrityStatus ? 'text-green-700' : 'text-red-700'}`}
+            >
+              {integrityStatus
                 ? 'Audit trail integrity verified - all events are authentic and unmodified'
-                : 'Integrity verification failed - potential tampering detected'
-              }
+                : 'Integrity verification failed - potential tampering detected'}
             </span>
           </CardContent>
         </Card>
@@ -258,18 +286,24 @@ export default function UserAuditTrailPage() {
                 />
               </div>
             </div>
-            
+
             <div className="space-y-2">
               <Label>Event Type</Label>
-              <Select value={eventTypeFilter} onValueChange={setEventTypeFilter}>
+              <Select
+                value={eventTypeFilter}
+                onValueChange={setEventTypeFilter}
+              >
                 <SelectTrigger>
                   <SelectValue placeholder="All events" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">All Events</SelectItem>
-                  {uniqueEventTypes.map(type => (
+                  {uniqueEventTypes.map((type) => (
                     <SelectItem key={type} value={type}>
-                      {type.replace(/_/g, ' ').toLowerCase().replace(/\b\w/g, l => l.toUpperCase())}
+                      {type
+                        .replace(/_/g, ' ')
+                        .toLowerCase()
+                        .replace(/\b\w/g, (l) => l.toUpperCase())}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -287,7 +321,8 @@ export default function UserAuditTrailPage() {
             <span>Activity Timeline</span>
           </CardTitle>
           <CardDescription>
-            Complete record of your account activity ({filteredEvents.length} events)
+            Complete record of your account activity ({filteredEvents.length}{' '}
+            events)
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -298,34 +333,41 @@ export default function UserAuditTrailPage() {
           ) : (
             <div className="space-y-4">
               {filteredEvents.map((event, index) => (
-                <div key={event.id || index} className="flex items-start space-x-4 p-4 border rounded-lg">
+                <div
+                  key={event.id || index}
+                  className="flex items-start space-x-4 p-4 border rounded-lg"
+                >
                   <div className="flex-shrink-0 mt-1">
                     {getEventIcon(event.eventType)}
                   </div>
-                  
+
                   <div className="flex-1 space-y-2">
                     <div className="flex items-center justify-between">
                       <Badge className={getEventTypeColor(event.eventType)}>
-                        {event.eventType.replace(/_/g, ' ').toLowerCase().replace(/\b\w/g, l => l.toUpperCase())}
+                        {event.eventType
+                          .replace(/_/g, ' ')
+                          .toLowerCase()
+                          .replace(/\b\w/g, (l) => l.toUpperCase())}
                       </Badge>
                       <span className="text-sm text-muted-foreground">
                         {formatTimestamp(event.timestamp)}
                       </span>
                     </div>
-                    
-                    {event.metadata && Object.keys(event.metadata).length > 0 && (
-                      <div className="text-sm text-muted-foreground">
-                        <details>
-                          <summary className="cursor-pointer hover:text-foreground">
-                            View details
-                          </summary>
-                          <pre className="mt-2 p-2 bg-gray-50 rounded text-xs overflow-x-auto">
-                            {JSON.stringify(event.metadata, null, 2)}
-                          </pre>
-                        </details>
-                      </div>
-                    )}
-                    
+
+                    {event.metadata &&
+                      Object.keys(event.metadata).length > 0 && (
+                        <div className="text-sm text-muted-foreground">
+                          <details>
+                            <summary className="cursor-pointer hover:text-foreground">
+                              View details
+                            </summary>
+                            <pre className="mt-2 p-2 bg-gray-50 rounded text-xs overflow-x-auto">
+                              {JSON.stringify(event.metadata, null, 2)}
+                            </pre>
+                          </details>
+                        </div>
+                      )}
+
                     {event.hash && (
                       <div className="text-xs text-muted-foreground font-mono">
                         Hash: {event.hash.substring(0, 16)}...
@@ -346,16 +388,20 @@ export default function UserAuditTrailPage() {
         </CardHeader>
         <CardContent className="space-y-3 text-sm text-muted-foreground">
           <p>
-            <strong>What is this?</strong> Your audit trail is a complete, tamper-proof record of all activities on your account.
+            <strong>What is this?</strong> Your audit trail is a complete,
+            tamper-proof record of all activities on your account.
           </p>
           <p>
-            <strong>Security:</strong> Each event is cryptographically signed and linked to prevent modification.
+            <strong>Security:</strong> Each event is cryptographically signed
+            and linked to prevent modification.
           </p>
           <p>
-            <strong>Privacy:</strong> Only you can see your audit trail. Administrators cannot modify these records.
+            <strong>Privacy:</strong> Only you can see your audit trail.
+            Administrators cannot modify these records.
           </p>
           <p>
-            <strong>Retention:</strong> Audit events are retained for 7 years for legal compliance purposes.
+            <strong>Retention:</strong> Audit events are retained for 7 years
+            for legal compliance purposes.
           </p>
         </CardContent>
       </Card>

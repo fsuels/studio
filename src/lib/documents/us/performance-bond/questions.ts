@@ -119,7 +119,10 @@ export const performanceBondQuestions: FormQuestion[] = [
     label: 'Bond Type',
     options: [
       { value: 'performance', label: 'Performance Bond' },
-      { value: 'payment-and-performance', label: 'Payment and Performance Bond' },
+      {
+        value: 'payment-and-performance',
+        label: 'Payment and Performance Bond',
+      },
       { value: 'completion', label: 'Completion Bond' },
       { value: 'maintenance', label: 'Maintenance Bond' },
     ],

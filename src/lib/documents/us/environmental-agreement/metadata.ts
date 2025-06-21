@@ -24,12 +24,18 @@ export const environmentalAgreementMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Environmental Agreement',
-      description: 'Agreement for environmental compliance, conservation, and sustainability projects.',
-      aliases: ['environmental compliance agreement', 'conservation agreement', 'sustainability contract'],
+      description:
+        'Agreement for environmental compliance, conservation, and sustainability projects.',
+      aliases: [
+        'environmental compliance agreement',
+        'conservation agreement',
+        'sustainability contract',
+      ],
     },
     es: {
       name: 'Acuerdo Ambiental',
-      description: 'Acuerdo para cumplimiento ambiental, conservación y proyectos de sostenibilidad.',
+      description:
+        'Acuerdo para cumplimiento ambiental, conservación y proyectos de sostenibilidad.',
       aliases: ['acuerdo de cumplimiento ambiental', 'acuerdo de conservación'],
     },
   },

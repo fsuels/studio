@@ -24,12 +24,18 @@ export const consultingAgreementMeta: LegalDocument = {
   translations: {
     en: {
       name: 'Consulting Agreement',
-      description: 'Establish terms for professional consulting services with clear scope and compensation.',
-      aliases: ['consultant contract', 'advisory agreement', 'professional services agreement'],
+      description:
+        'Establish terms for professional consulting services with clear scope and compensation.',
+      aliases: [
+        'consultant contract',
+        'advisory agreement',
+        'professional services agreement',
+      ],
     },
     es: {
       name: 'Acuerdo de Consultoría',
-      description: 'Establece términos para servicios de consultoría profesional con alcance y compensación claros.',
+      description:
+        'Establece términos para servicios de consultoría profesional con alcance y compensación claros.',
       aliases: ['contrato de consultor', 'acuerdo de asesoría'],
     },
   },

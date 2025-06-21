@@ -45,16 +45,20 @@ export const STATE_REQUIREMENTS: StateRequirement[] = [
           label: 'Smog Certificate Number',
           type: 'text',
           required: true,
-          description: 'Required for vehicles over 4 years old'
-        }
+          description: 'Required for vehicles over 4 years old',
+        },
       ],
       fees: [
-        { type: 'registration', amount: 65, description: 'Base registration fee' },
-        { type: 'title', amount: 23, description: 'Title transfer fee' }
-      ]
+        {
+          type: 'registration',
+          amount: 65,
+          description: 'Base registration fee',
+        },
+        { type: 'title', amount: 23, description: 'Title transfer fee' },
+      ],
     },
     lastUpdated: '2024-01-15',
-    source: 'California DMV'
+    source: 'California DMV',
   },
   {
     documentType: 'vehicle-bill-of-sale',
@@ -69,16 +73,20 @@ export const STATE_REQUIREMENTS: StateRequirement[] = [
           label: 'Texas Inspection Certificate',
           type: 'text',
           required: true,
-          description: 'Required safety inspection certificate'
-        }
+          description: 'Required safety inspection certificate',
+        },
       ],
       fees: [
         { type: 'title', amount: 33, description: 'Title application fee' },
-        { type: 'registration', amount: 50.75, description: 'Registration fee' }
-      ]
+        {
+          type: 'registration',
+          amount: 50.75,
+          description: 'Registration fee',
+        },
+      ],
     },
     lastUpdated: '2024-01-15',
-    source: 'Texas DMV'
+    source: 'Texas DMV',
   },
   {
     documentType: 'vehicle-bill-of-sale',
@@ -93,20 +101,20 @@ export const STATE_REQUIREMENTS: StateRequirement[] = [
           label: 'NY Emissions Certificate',
           type: 'text',
           required: true,
-          description: 'Required for vehicles in certain counties'
-        }
+          description: 'Required for vehicles in certain counties',
+        },
       ],
       restrictions: [
         'Sales tax must be paid within 60 days',
-        'Insurance must be obtained before registration'
+        'Insurance must be obtained before registration',
       ],
       fees: [
         { type: 'title', amount: 50, description: 'Title certificate fee' },
-        { type: 'registration', amount: 26, description: 'Registration fee' }
-      ]
+        { type: 'registration', amount: 26, description: 'Registration fee' },
+      ],
     },
     lastUpdated: '2024-01-15',
-    source: 'New York DMV'
+    source: 'New York DMV',
   },
 
   // Real Estate Requirements
@@ -123,23 +131,23 @@ export const STATE_REQUIREMENTS: StateRequirement[] = [
           label: 'Lead Paint Disclosure',
           type: 'checkbox',
           required: true,
-          description: 'Required for properties built before 1978'
+          description: 'Required for properties built before 1978',
         },
         {
           id: 'seismicDisclosure',
           label: 'Seismic Hazard Disclosure',
           type: 'checkbox',
           required: true,
-          description: 'Required in earthquake fault zones'
-        }
+          description: 'Required in earthquake fault zones',
+        },
       ],
       restrictions: [
         'Rent control laws apply in certain cities',
-        'Security deposit cannot exceed 2 months rent (unfurnished) or 3 months (furnished)'
-      ]
+        'Security deposit cannot exceed 2 months rent (unfurnished) or 3 months (furnished)',
+      ],
     },
     lastUpdated: '2024-01-15',
-    source: 'California Department of Real Estate'
+    source: 'California Department of Real Estate',
   },
 
   // Business Formation Requirements
@@ -156,16 +164,16 @@ export const STATE_REQUIREMENTS: StateRequirement[] = [
           label: 'Registered Agent Name',
           type: 'text',
           required: true,
-          description: 'Delaware registered agent required'
-        }
+          description: 'Delaware registered agent required',
+        },
       ],
       fees: [
         { type: 'formation', amount: 90, description: 'LLC formation fee' },
-        { type: 'franchise', amount: 300, description: 'Annual franchise tax' }
-      ]
+        { type: 'franchise', amount: 300, description: 'Annual franchise tax' },
+      ],
     },
     lastUpdated: '2024-01-15',
-    source: 'Delaware Division of Corporations'
+    source: 'Delaware Division of Corporations',
   },
 
   // Estate Planning Requirements
@@ -180,7 +188,7 @@ export const STATE_REQUIREMENTS: StateRequirement[] = [
       restrictions: [
         'Witnesses must be present at time of signing',
         'Witnesses cannot be beneficiaries',
-        'Self-proving affidavit recommended'
+        'Self-proving affidavit recommended',
       ],
       additionalFields: [
         {
@@ -188,13 +196,13 @@ export const STATE_REQUIREMENTS: StateRequirement[] = [
           label: 'Self-Proving Affidavit',
           type: 'checkbox',
           required: false,
-          description: 'Recommended to expedite probate process'
-        }
-      ]
+          description: 'Recommended to expedite probate process',
+        },
+      ],
     },
     lastUpdated: '2024-01-15',
-    source: 'Florida Probate Rules'
-  }
+    source: 'Florida Probate Rules',
+  },
 ];
 
 // State Requirements Service
@@ -214,7 +222,7 @@ export class StateRequirementsService {
   }
 
   private loadRequirements() {
-    STATE_REQUIREMENTS.forEach(req => {
+    STATE_REQUIREMENTS.forEach((req) => {
       const key = `${req.documentType}-${req.state}`;
       if (!this.requirements.has(key)) {
         this.requirements.set(key, []);
@@ -224,7 +232,10 @@ export class StateRequirementsService {
   }
 
   // Get requirements for specific document type and state
-  getRequirements(documentType: string, state: string): StateRequirement | null {
+  getRequirements(
+    documentType: string,
+    state: string,
+  ): StateRequirement | null {
     const key = `${documentType}-${state}`;
     const requirements = this.requirements.get(key);
     return requirements ? requirements[0] : null;
@@ -248,13 +259,16 @@ export class StateRequirementsService {
   }
 
   // Check if witnesses are required
-  requiresWitnesses(documentType: string, state: string): { required: boolean; count?: number } {
+  requiresWitnesses(
+    documentType: string,
+    state: string,
+  ): { required: boolean; count?: number } {
     const requirement = this.getRequirements(documentType, state);
     if (!requirement) return { required: false };
-    
+
     return {
       required: requirement.requirements.witnessRequired,
-      count: requirement.requirements.witnessCount
+      count: requirement.requirements.witnessCount,
     };
   }
 
@@ -277,7 +291,11 @@ export class StateRequirementsService {
   }
 
   // Validate document against state requirements
-  validateDocument(documentType: string, state: string, documentData: any): {
+  validateDocument(
+    documentType: string,
+    state: string,
+    documentData: any,
+  ): {
     valid: boolean;
     errors: string[];
     warnings: string[];
@@ -287,12 +305,14 @@ export class StateRequirementsService {
     const warnings: string[] = [];
 
     if (!requirement) {
-      warnings.push(`No specific requirements found for ${documentType} in ${state}`);
+      warnings.push(
+        `No specific requirements found for ${documentType} in ${state}`,
+      );
       return { valid: true, errors, warnings };
     }
 
     // Check required additional fields
-    requirement.requirements.additionalFields?.forEach(field => {
+    requirement.requirements.additionalFields?.forEach((field) => {
       if (field.required && !documentData[field.id]) {
         errors.push(`${field.label} is required for ${state}`);
       }
@@ -307,21 +327,23 @@ export class StateRequirementsService {
     if (requirement.requirements.witnessRequired) {
       const witnessCount = documentData.witnesses?.length || 0;
       const requiredCount = requirement.requirements.witnessCount || 1;
-      
+
       if (witnessCount < requiredCount) {
-        errors.push(`${requiredCount} witness(es) required in ${state}, found ${witnessCount}`);
+        errors.push(
+          `${requiredCount} witness(es) required in ${state}, found ${witnessCount}`,
+        );
       }
     }
 
     // Add restriction warnings
-    requirement.requirements.restrictions?.forEach(restriction => {
+    requirement.requirements.restrictions?.forEach((restriction) => {
       warnings.push(`${state} requirement: ${restriction}`);
     });
 
     return {
       valid: errors.length === 0,
       errors,
-      warnings
+      warnings,
     };
   }
 
@@ -336,7 +358,7 @@ export class StateRequirementsService {
       checklist.push({
         item: 'Document notarization',
         required: true,
-        description: 'Document must be notarized by a licensed notary public'
+        description: 'Document must be notarized by a licensed notary public',
       });
     }
 
@@ -344,7 +366,8 @@ export class StateRequirementsService {
       checklist.push({
         item: `${requirement.requirements.witnessCount || 1} witness(es)`,
         required: true,
-        description: 'Witnesses must be present during signing and not be beneficiaries'
+        description:
+          'Witnesses must be present during signing and not be beneficiaries',
       });
     }
 
@@ -352,16 +375,17 @@ export class StateRequirementsService {
       checklist.push({
         item: 'Document recording',
         required: true,
-        description: 'Document must be recorded with appropriate government office'
+        description:
+          'Document must be recorded with appropriate government office',
       });
     }
 
-    requirement.requirements.additionalFields?.forEach(field => {
+    requirement.requirements.additionalFields?.forEach((field) => {
       if (field.required) {
         checklist.push({
           item: field.label,
           required: true,
-          description: field.description
+          description: field.description,
         });
       }
     });
@@ -384,7 +408,11 @@ export const getStateRequirements = (documentType: string, state: string) => {
   return stateRequirements.getRequirements(documentType, state);
 };
 
-export const validateStateCompliance = (documentType: string, state: string, data: any) => {
+export const validateStateCompliance = (
+  documentType: string,
+  state: string,
+  data: any,
+) => {
   return stateRequirements.validateDocument(documentType, state, data);
 };
 

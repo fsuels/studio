@@ -8,17 +8,17 @@ const config: NextConfig = {
   // Enable static generation for better SEO and performance
   trailingSlash: false,
   generateEtags: true,
-  
+
   // Optimize for SEO and performance
   poweredByHeader: false,
   compress: true,
-  
+
   // Enable experimental features for better performance
   experimental: {
     optimizeCss: true,
     optimizePackageImports: ['lucide-react', '@radix-ui/react-icons'],
     allowedDevOrigins: [
-      'https://9000-idx-studio-1746374904264.cluster-ux5mmlia3zhhask7riihruxydo.cloudworkstations.dev'
+      'https://9000-idx-studio-1746374904264.cluster-ux5mmlia3zhhask7riihruxydo.cloudworkstations.dev',
     ],
   },
 
@@ -43,7 +43,7 @@ const config: NextConfig = {
           {
             key: 'Referrer-Policy',
             value: 'strict-origin-when-cross-origin',
-          }
+          },
         ],
       },
       {
@@ -63,8 +63,8 @@ const config: NextConfig = {
             value: 'public, max-age=86400, s-maxage=86400',
           },
         ],
-      }
-    ]
+      },
+    ];
   },
 
   // Redirects for SEO consolidation
@@ -92,8 +92,8 @@ const config: NextConfig = {
         ],
         destination: 'https://123legaldoc.com/:path*',
         permanent: true,
-      }
-    ]
+      },
+    ];
   },
 
   typescript: {
@@ -103,7 +103,7 @@ const config: NextConfig = {
     ignoreDuringBuilds: true, // Avoid blocking builds on ESLint errors
   },
   productionBrowserSourceMaps: false, // Disable in production for performance
-  
+
   images: {
     formats: ['image/avif', 'image/webp'],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
@@ -123,16 +123,16 @@ const config: NextConfig = {
 if (!isTurbopack) {
   const webpack = require('webpack');
   const customWebpackConfig = (
-    webpackConfig: WebpackConfiguration
+    webpackConfig: WebpackConfiguration,
   ): WebpackConfiguration => {
     webpackConfig.plugins = webpackConfig.plugins || [];
     webpackConfig.plugins.push(
       new webpack.IgnorePlugin({
         resourceRegExp: /^@opentelemetry\/exporter-jaeger$/,
-      })
+      }),
     );
     webpackConfig.plugins.push(
-      new webpack.IgnorePlugin({ resourceRegExp: /^handlebars$/ })
+      new webpack.IgnorePlugin({ resourceRegExp: /^handlebars$/ }),
     );
     return webpackConfig;
   };

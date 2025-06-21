@@ -9,9 +9,9 @@ export const metadata = {
   offerRecordingHelp: false,
   basePrice: 7,
   states: 'all',
-  templatePaths: { 
-    en: "en/us/last-will-testament.md", 
-    es: "es/us/last-will-testament.md" 
+  templatePaths: {
+    en: 'en/us/last-will-testament.md',
+    es: 'es/us/last-will-testament.md',
   },
   upsellClauses: [],
   translations: {

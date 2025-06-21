@@ -12,7 +12,9 @@ export interface AuthenticatedUser {
  * Extract and verify Firebase ID token from request headers
  * Returns authenticated user data or null if authentication fails
  */
-export async function authenticateUser(request: NextRequest): Promise<AuthenticatedUser | null> {
+export async function authenticateUser(
+  request: NextRequest,
+): Promise<AuthenticatedUser | null> {
   try {
     // Extract token from Authorization header
     const authHeader = request.headers.get('authorization');
@@ -46,25 +48,28 @@ export async function authenticateUser(request: NextRequest): Promise<Authentica
  * Middleware helper that requires authentication
  * Returns authenticated user or throws an error response
  */
-export async function requireAuth(request: NextRequest): Promise<AuthenticatedUser | Response> {
+export async function requireAuth(
+  request: NextRequest,
+): Promise<AuthenticatedUser | Response> {
   const user = await authenticateUser(request);
-  
+
   if (!user) {
     return new Response(
-      JSON.stringify({ 
+      JSON.stringify({
         error: 'Authentication required',
-        message: 'Please provide a valid Firebase ID token in the Authorization header',
-        code: 'UNAUTHORIZED'
+        message:
+          'Please provide a valid Firebase ID token in the Authorization header',
+        code: 'UNAUTHORIZED',
       }),
-      { 
+      {
         status: 401,
         headers: {
           'Content-Type': 'application/json',
-        }
-      }
+        },
+      },
     );
   }
-  
+
   return user;
 }
 
@@ -72,9 +77,11 @@ export async function requireAuth(request: NextRequest): Promise<AuthenticatedUs
  * Alternative authentication that falls back to mock for development
  * Use this during development/testing when you don't want to enforce real auth
  */
-export async function authenticateUserWithFallback(request: NextRequest): Promise<AuthenticatedUser> {
+export async function authenticateUserWithFallback(
+  request: NextRequest,
+): Promise<AuthenticatedUser> {
   const user = await authenticateUser(request);
-  
+
   if (user) {
     return user;
   }
@@ -85,7 +92,7 @@ export async function authenticateUserWithFallback(request: NextRequest): Promis
     return {
       uid: 'mock-user-dev',
       email: 'dev-user@example.com',
-      name: 'Development User'
+      name: 'Development User',
     };
   }
 

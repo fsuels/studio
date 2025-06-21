@@ -47,7 +47,7 @@ Don't risk using generic templates that may not comply with Texas law. Get a pro
 
 [Create Texas Employment Contract]
 
-*Trusted by thousands of Texas businesses*
+_Trusted by thousands of Texas businesses_
 
 ---
 

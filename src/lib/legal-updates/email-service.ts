@@ -1,10 +1,10 @@
 // src/lib/legal-updates/email-service.ts
 import sgMail from '@sendgrid/mail';
 import { adminDb } from '@/lib/firebase-admin';
-import { 
-  ProcessedLegalUpdate, 
+import {
+  ProcessedLegalUpdate,
   UserLegalUpdatePreferences,
-  COLLECTIONS 
+  COLLECTIONS,
 } from './schema';
 
 interface EmailTemplate {
@@ -39,7 +39,7 @@ class LegalUpdateEmailService {
   }
 
   async sendLegalUpdateDigest(
-    frequency: 'immediate' | 'daily' | 'weekly' = 'daily'
+    frequency: 'immediate' | 'daily' | 'weekly' = 'daily',
   ): Promise<{
     sent: number;
     failed: number;
@@ -52,7 +52,7 @@ class LegalUpdateEmailService {
     const results = {
       sent: 0,
       failed: 0,
-      results: [] as any[]
+      results: [] as any[],
     };
 
     try {
@@ -60,7 +60,9 @@ class LegalUpdateEmailService {
 
       // Get users who want email notifications for this frequency
       const eligibleUsers = await this.getEligibleUsers(frequency);
-      console.log(`Found ${eligibleUsers.length} eligible users for ${frequency} digest`);
+      console.log(
+        `Found ${eligibleUsers.length} eligible users for ${frequency} digest`,
+      );
 
       if (eligibleUsers.length === 0) {
         return results;
@@ -69,7 +71,9 @@ class LegalUpdateEmailService {
       // Get recent updates based on frequency
       const cutoffDate = this.getCutoffDate(frequency);
       const recentUpdates = await this.getRecentUpdates(cutoffDate);
-      console.log(`Found ${recentUpdates.length} recent updates since ${cutoffDate.toISOString()}`);
+      console.log(
+        `Found ${recentUpdates.length} recent updates since ${cutoffDate.toISOString()}`,
+      );
 
       if (recentUpdates.length === 0) {
         console.log('No recent updates to send');
@@ -78,32 +82,39 @@ class LegalUpdateEmailService {
 
       // Process users in batches
       const userBatches = this.chunkArray(eligibleUsers, this.batchSize);
-      
+
       for (const batch of userBatches) {
-        const batchResults = await this.processBatch(batch, recentUpdates, frequency);
+        const batchResults = await this.processBatch(
+          batch,
+          recentUpdates,
+          frequency,
+        );
         results.sent += batchResults.sent;
         results.failed += batchResults.failed;
         results.results.push(...batchResults.results);
 
         // Rate limiting delay between batches
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        await new Promise((resolve) => setTimeout(resolve, 1000));
       }
 
-      console.log(`Email digest complete: ${results.sent} sent, ${results.failed} failed`);
+      console.log(
+        `Email digest complete: ${results.sent} sent, ${results.failed} failed`,
+      );
       return results;
-
     } catch (error) {
       console.error('Email digest error:', error);
       throw error;
     }
   }
 
-  private async getEligibleUsers(frequency: string): Promise<Array<{
-    id: string;
-    email: string;
-    name: string;
-    preferences: UserLegalUpdatePreferences;
-  }>> {
+  private async getEligibleUsers(frequency: string): Promise<
+    Array<{
+      id: string;
+      email: string;
+      name: string;
+      preferences: UserLegalUpdatePreferences;
+    }>
+  > {
     try {
       // Get users with email notifications enabled and matching frequency
       const preferencesSnapshot = await adminDb
@@ -115,8 +126,11 @@ class LegalUpdateEmailService {
       const eligibleUsers = [];
 
       for (const doc of preferencesSnapshot.docs) {
-        const preferences = { id: doc.id, ...doc.data() } as UserLegalUpdatePreferences;
-        
+        const preferences = {
+          id: doc.id,
+          ...doc.data(),
+        } as UserLegalUpdatePreferences;
+
         // Get user profile for email and name
         const userDoc = await adminDb
           .collection('users')
@@ -125,12 +139,15 @@ class LegalUpdateEmailService {
 
         if (userDoc.exists) {
           const userData = userDoc.data();
-          if (userData?.email && this.shouldSendToUser(preferences, frequency)) {
+          if (
+            userData?.email &&
+            this.shouldSendToUser(preferences, frequency)
+          ) {
             eligibleUsers.push({
               id: preferences.userId,
               email: userData.email,
               name: userData.displayName || userData.name || 'User',
-              preferences
+              preferences,
             });
           }
         }
@@ -143,7 +160,10 @@ class LegalUpdateEmailService {
     }
   }
 
-  private shouldSendToUser(preferences: UserLegalUpdatePreferences, frequency: string): boolean {
+  private shouldSendToUser(
+    preferences: UserLegalUpdatePreferences,
+    frequency: string,
+  ): boolean {
     // Check if enough time has passed since last notification
     if (!preferences.lastNotified) {
       return true;
@@ -151,7 +171,8 @@ class LegalUpdateEmailService {
 
     const lastNotified = preferences.lastNotified;
     const now = new Date();
-    const hoursSinceLastNotification = (now.getTime() - lastNotified.getTime()) / (1000 * 60 * 60);
+    const hoursSinceLastNotification =
+      (now.getTime() - lastNotified.getTime()) / (1000 * 60 * 60);
 
     switch (frequency) {
       case 'immediate':
@@ -183,7 +204,9 @@ class LegalUpdateEmailService {
     return now;
   }
 
-  private async getRecentUpdates(cutoffDate: Date): Promise<ProcessedLegalUpdate[]> {
+  private async getRecentUpdates(
+    cutoffDate: Date,
+  ): Promise<ProcessedLegalUpdate[]> {
     try {
       const snapshot = await adminDb
         .collection(COLLECTIONS.PROCESSED_LEGAL_UPDATES)
@@ -193,9 +216,9 @@ class LegalUpdateEmailService {
         .limit(50) // Limit to most recent 50 updates
         .get();
 
-      return snapshot.docs.map(doc => ({
+      return snapshot.docs.map((doc) => ({
         id: doc.id,
-        ...doc.data()
+        ...doc.data(),
       })) as ProcessedLegalUpdate[];
     } catch (error) {
       console.error('Error getting recent updates:', error);
@@ -206,7 +229,7 @@ class LegalUpdateEmailService {
   private async processBatch(
     users: any[],
     allUpdates: ProcessedLegalUpdate[],
-    frequency: string
+    frequency: string,
   ): Promise<{
     sent: number;
     failed: number;
@@ -219,43 +242,49 @@ class LegalUpdateEmailService {
     const results = {
       sent: 0,
       failed: 0,
-      results: [] as any[]
+      results: [] as any[],
     };
 
     for (const user of users) {
       try {
         // Filter updates based on user preferences
-        const relevantUpdates = this.filterUpdatesForUser(allUpdates, user.preferences);
-        
+        const relevantUpdates = this.filterUpdatesForUser(
+          allUpdates,
+          user.preferences,
+        );
+
         if (relevantUpdates.length === 0) {
           continue; // Skip users with no relevant updates
         }
 
         // Generate email content
-        const emailTemplate = this.generateEmailTemplate(user, relevantUpdates, frequency);
-        
+        const emailTemplate = this.generateEmailTemplate(
+          user,
+          relevantUpdates,
+          frequency,
+        );
+
         // Send email
         await this.sendEmail(user.email, emailTemplate);
-        
+
         // Update user's last notified timestamp
         await this.updateLastNotified(user.id);
-        
+
         // Mark updates as email sent
-        await this.markUpdatesAsEmailSent(relevantUpdates.map(u => u.id));
+        await this.markUpdatesAsEmailSent(relevantUpdates.map((u) => u.id));
 
         results.sent++;
         results.results.push({
           email: user.email,
-          success: true
+          success: true,
         });
-
       } catch (error) {
         console.error(`Failed to send email to ${user.email}:`, error);
         results.failed++;
         results.results.push({
           email: user.email,
           success: false,
-          error: error instanceof Error ? error.message : 'Unknown error'
+          error: error instanceof Error ? error.message : 'Unknown error',
         });
       }
     }
@@ -265,26 +294,32 @@ class LegalUpdateEmailService {
 
   private filterUpdatesForUser(
     updates: ProcessedLegalUpdate[],
-    preferences: UserLegalUpdatePreferences
+    preferences: UserLegalUpdatePreferences,
   ): ProcessedLegalUpdate[] {
-    return updates.filter(update => {
+    return updates.filter((update) => {
       // Filter by jurisdiction
-      if (preferences.jurisdictions.length > 0 && 
-          !preferences.jurisdictions.includes(update.jurisdiction)) {
+      if (
+        preferences.jurisdictions.length > 0 &&
+        !preferences.jurisdictions.includes(update.jurisdiction)
+      ) {
         return false;
       }
 
       // Filter by category
-      if (preferences.categories.length > 0 && 
-          !preferences.categories.includes(update.category)) {
+      if (
+        preferences.categories.length > 0 &&
+        !preferences.categories.includes(update.category)
+      ) {
         return false;
       }
 
       // Filter by urgency threshold
       const urgencyLevels = ['critical', 'high', 'medium', 'low'];
       const updateUrgencyIndex = urgencyLevels.indexOf(update.urgency);
-      const thresholdIndex = urgencyLevels.indexOf(preferences.urgencyThreshold);
-      
+      const thresholdIndex = urgencyLevels.indexOf(
+        preferences.urgencyThreshold,
+      );
+
       if (updateUrgencyIndex > thresholdIndex) {
         return false; // Update is below threshold
       }
@@ -301,24 +336,46 @@ class LegalUpdateEmailService {
   private generateEmailTemplate(
     user: any,
     updates: ProcessedLegalUpdate[],
-    frequency: string
+    frequency: string,
   ): EmailTemplate {
-    const urgentCount = updates.filter(u => ['critical', 'high'].includes(u.urgency)).length;
+    const urgentCount = updates.filter((u) =>
+      ['critical', 'high'].includes(u.urgency),
+    ).length;
     const dashboardUrl = `${process.env.NEXT_PUBLIC_APP_URL}/dashboard`;
     const unsubscribeUrl = `${process.env.NEXT_PUBLIC_APP_URL}/legal-updates/unsubscribe?token=${this.generateUnsubscribeToken(user.id)}`;
 
-    const subject = this.generateSubject(urgentCount, updates.length, frequency);
-    const htmlContent = this.generateHtmlContent(user, updates, urgentCount, dashboardUrl, unsubscribeUrl);
-    const textContent = this.generateTextContent(user, updates, urgentCount, dashboardUrl, unsubscribeUrl);
+    const subject = this.generateSubject(
+      urgentCount,
+      updates.length,
+      frequency,
+    );
+    const htmlContent = this.generateHtmlContent(
+      user,
+      updates,
+      urgentCount,
+      dashboardUrl,
+      unsubscribeUrl,
+    );
+    const textContent = this.generateTextContent(
+      user,
+      updates,
+      urgentCount,
+      dashboardUrl,
+      unsubscribeUrl,
+    );
 
     return { subject, htmlContent, textContent };
   }
 
-  private generateSubject(urgentCount: number, totalCount: number, frequency: string): string {
+  private generateSubject(
+    urgentCount: number,
+    totalCount: number,
+    frequency: string,
+  ): string {
     if (urgentCount > 0) {
       return `🚨 ${urgentCount} Urgent Legal Update${urgentCount > 1 ? 's' : ''} - Action Required`;
     }
-    
+
     const frequencyText = frequency === 'weekly' ? 'Weekly' : 'Daily';
     return `📋 ${frequencyText} Legal Updates: ${totalCount} New Update${totalCount > 1 ? 's' : ''}`;
   }
@@ -328,7 +385,7 @@ class LegalUpdateEmailService {
     updates: ProcessedLegalUpdate[],
     urgentCount: number,
     dashboardUrl: string,
-    unsubscribeUrl: string
+    unsubscribeUrl: string,
   ): string {
     const sortedUpdates = updates.sort((a, b) => {
       const urgencyOrder = { critical: 0, high: 1, medium: 2, low: 3 };
@@ -369,14 +426,20 @@ class LegalUpdateEmailService {
             <p>Hello ${user.name}, here are your latest legal updates</p>
         </div>
 
-        ${urgentCount > 0 ? `
+        ${
+          urgentCount > 0
+            ? `
         <div class="update critical">
             <div class="update-title">🚨 ${urgentCount} Urgent Update${urgentCount > 1 ? 's' : ''} Require Immediate Attention</div>
             <p>These updates may affect your legal documents and compliance requirements. Please review them as soon as possible.</p>
         </div>
-        ` : ''}
+        `
+            : ''
+        }
 
-        ${sortedUpdates.map(update => `
+        ${sortedUpdates
+          .map(
+            (update) => `
         <div class="update ${update.urgency}">
             <div class="update-meta">
                 ${update.jurisdiction.toUpperCase()} • ${update.category} • ${this.getUrgencyLabel(update.urgency)}
@@ -385,16 +448,27 @@ class LegalUpdateEmailService {
             <div class="update-title">${update.title}</div>
             <div class="update-summary">${update.summary}</div>
             
-            ${update.actionItems.length > 0 ? `
+            ${
+              update.actionItems.length > 0
+                ? `
             <div class="action-items">
                 <h4>📋 Action Required:</h4>
-                ${update.actionItems.slice(0, 3).map(action => `
+                ${update.actionItems
+                  .slice(0, 3)
+                  .map(
+                    (action) => `
                     <div class="action-item">• ${action.description}</div>
-                `).join('')}
+                `,
+                  )
+                  .join('')}
             </div>
-            ` : ''}
+            `
+                : ''
+            }
         </div>
-        `).join('')}
+        `,
+          )
+          .join('')}
 
         <div style="text-align: center;">
             <a href="${dashboardUrl}" class="cta-button">View All Updates in Dashboard</a>
@@ -415,7 +489,7 @@ class LegalUpdateEmailService {
     updates: ProcessedLegalUpdate[],
     urgentCount: number,
     dashboardUrl: string,
-    unsubscribeUrl: string
+    unsubscribeUrl: string,
   ): string {
     const sortedUpdates = updates.sort((a, b) => {
       const urgencyOrder = { critical: 0, high: 1, medium: 2, low: 3 };
@@ -431,7 +505,9 @@ ${urgentCount > 0 ? `🚨 URGENT: ${urgentCount} update${urgentCount > 1 ? 's' :
 
 Here are your latest legal updates:
 
-${sortedUpdates.map(update => `
+${sortedUpdates
+  .map(
+    (update) => `
 ---
 ${update.title}
 ${update.jurisdiction.toUpperCase()} | ${update.category} | ${this.getUrgencyLabel(update.urgency)}
@@ -439,11 +515,20 @@ ${update.compliance.hasDeadline ? `Deadline: ${new Date(update.compliance.deadli
 
 ${update.summary}
 
-${update.actionItems.length > 0 ? `
+${
+  update.actionItems.length > 0
+    ? `
 Action Required:
-${update.actionItems.slice(0, 3).map(action => `• ${action.description}`).join('\n')}
-` : ''}
-`).join('\n')}
+${update.actionItems
+  .slice(0, 3)
+  .map((action) => `• ${action.description}`)
+  .join('\n')}
+`
+    : ''
+}
+`,
+  )
+  .join('\n')}
 
 View all updates: ${dashboardUrl}
 
@@ -457,11 +542,16 @@ Manage Preferences: ${dashboardUrl}/legal-updates/preferences
 
   private getUrgencyLabel(urgency: string): string {
     switch (urgency) {
-      case 'critical': return '🔴 Critical';
-      case 'high': return '🟠 High';
-      case 'medium': return '🟡 Medium';
-      case 'low': return '🔵 Low';
-      default: return urgency;
+      case 'critical':
+        return '🔴 Critical';
+      case 'high':
+        return '🟠 High';
+      case 'medium':
+        return '🟡 Medium';
+      case 'low':
+        return '🔵 Low';
+      default:
+        return urgency;
     }
   }
 
@@ -470,15 +560,15 @@ Manage Preferences: ${dashboardUrl}/legal-updates/preferences
       to,
       from: {
         email: this.fromEmail,
-        name: this.fromName
+        name: this.fromName,
       },
       subject: template.subject,
       html: template.htmlContent,
       text: template.textContent,
       trackingSettings: {
         clickTracking: { enable: true },
-        openTracking: { enable: true }
-      }
+        openTracking: { enable: true },
+      },
     };
 
     await sgMail.send(msg);
@@ -491,7 +581,7 @@ Manage Preferences: ${dashboardUrl}/legal-updates/preferences
         .doc(userId)
         .update({
           lastNotified: new Date(),
-          updatedAt: new Date()
+          updatedAt: new Date(),
         });
     } catch (error) {
       console.error('Failed to update last notified:', error);
@@ -501,15 +591,15 @@ Manage Preferences: ${dashboardUrl}/legal-updates/preferences
   private async markUpdatesAsEmailSent(updateIds: string[]): Promise<void> {
     try {
       const batch = adminDb.batch();
-      
-      updateIds.forEach(updateId => {
+
+      updateIds.forEach((updateId) => {
         const docRef = adminDb
           .collection(COLLECTIONS.PROCESSED_LEGAL_UPDATES)
           .doc(updateId);
-        
+
         batch.update(docRef, {
           'notificationStatus.emailSent': true,
-          'notificationStatus.emailSentAt': new Date()
+          'notificationStatus.emailSentAt': new Date(),
         });
       });
 

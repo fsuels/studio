@@ -30,17 +30,17 @@ export const equipmentRentalAgreementMeta: LegalDocument = {
         'equipment lease',
         'machinery rental',
         'tool rental agreement',
-        'equipment hire agreement'
+        'equipment hire agreement',
       ],
     },
     es: {
       name: 'Acuerdo de Alquiler de Equipos',
       description:
-        'Crea un acuerdo completo de alquiler de equipos para maquinaria, herramientas u otros equipos con términos claros y protecciones de responsabilidad.',
+        'Crea un acuerdo completo de alquiler de equipos para maquinaria, herramientas u otros equipos con tï¿½rminos claros y protecciones de responsabilidad.',
       aliases: [
         'arrendamiento de equipos',
         'alquiler de maquinaria',
-        'acuerdo de alquiler de herramientas'
+        'acuerdo de alquiler de herramientas',
       ],
     },
   },

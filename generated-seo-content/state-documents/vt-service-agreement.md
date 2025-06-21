@@ -47,7 +47,7 @@ Don't risk using generic templates that may not comply with Vermont law. Get a p
 
 [Create Vermont Service Agreement]
 
-*Trusted by thousands of Vermont businesses*
+_Trusted by thousands of Vermont businesses_
 
 ---
 

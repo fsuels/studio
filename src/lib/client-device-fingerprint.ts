@@ -44,19 +44,21 @@ class DeviceFingerprintCollector {
   private cacheExpiry: number = 0;
   private readonly CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
 
-  async collect(options: {
-    includeCanvas?: boolean;
-    includeWebGL?: boolean;
-    includeFonts?: boolean;
-    includePermissions?: boolean;
-    timeout?: number;
-  } = {}): Promise<DeviceFingerprintData> {
+  async collect(
+    options: {
+      includeCanvas?: boolean;
+      includeWebGL?: boolean;
+      includeFonts?: boolean;
+      includePermissions?: boolean;
+      timeout?: number;
+    } = {},
+  ): Promise<DeviceFingerprintData> {
     const {
       includeCanvas = true,
       includeWebGL = true,
       includeFonts = false, // Expensive operation
       includePermissions = false, // May prompt user
-      timeout = 3000
+      timeout = 3000,
     } = options;
 
     // Return cached result if still valid
@@ -71,45 +73,51 @@ class DeviceFingerprintCollector {
 
       Promise.all([
         this.getBasicData(),
-        includeCanvas ? this.getCanvasFingerprint() : Promise.resolve(undefined),
+        includeCanvas
+          ? this.getCanvasFingerprint()
+          : Promise.resolve(undefined),
         includeWebGL ? this.getWebGLFingerprint() : Promise.resolve(undefined),
         includeFonts ? this.getFontList() : Promise.resolve(undefined),
         this.getHardwareInfo(),
         this.getNetworkInfo(),
         this.getBatteryInfo(),
-        includePermissions ? this.getPermissions() : Promise.resolve({})
-      ]).then(([
-        basic,
-        canvas,
-        webgl,
-        fonts,
-        hardware,
-        network,
-        battery,
-        permissions
-      ]) => {
-        clearTimeout(timeoutId);
+        includePermissions ? this.getPermissions() : Promise.resolve({}),
+      ])
+        .then(
+          ([
+            basic,
+            canvas,
+            webgl,
+            fonts,
+            hardware,
+            network,
+            battery,
+            permissions,
+          ]) => {
+            clearTimeout(timeoutId);
 
-        const fingerprint: DeviceFingerprintData = {
-          ...basic,
-          ...(canvas && { canvas }),
-          ...(webgl && { webgl }),
-          ...(fonts && { fonts }),
-          hardware,
-          network,
-          ...(battery && { battery }),
-          permissions
-        };
+            const fingerprint: DeviceFingerprintData = {
+              ...basic,
+              ...(canvas && { canvas }),
+              ...(webgl && { webgl }),
+              ...(fonts && { fonts }),
+              hardware,
+              network,
+              ...(battery && { battery }),
+              permissions,
+            };
 
-        // Cache the result
-        this.cache = fingerprint;
-        this.cacheExpiry = Date.now() + this.CACHE_DURATION;
+            // Cache the result
+            this.cache = fingerprint;
+            this.cacheExpiry = Date.now() + this.CACHE_DURATION;
 
-        resolve(fingerprint);
-      }).catch(() => {
-        clearTimeout(timeoutId);
-        resolve(this.getBasicFingerprint());
-      });
+            resolve(fingerprint);
+          },
+        )
+        .catch(() => {
+          clearTimeout(timeoutId);
+          resolve(this.getBasicFingerprint());
+        });
     });
   }
 
@@ -120,7 +128,7 @@ class DeviceFingerprintCollector {
         width: screen.width,
         height: screen.height,
         colorDepth: screen.colorDepth,
-        pixelRatio: window.devicePixelRatio || 1
+        pixelRatio: window.devicePixelRatio || 1,
       },
       timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
       language: navigator.language,
@@ -131,7 +139,7 @@ class DeviceFingerprintCollector {
       touch: 'ontouchstart' in window,
       hardware: { cpuCores: navigator.hardwareConcurrency || 1 },
       network: {},
-      permissions: {}
+      permissions: {},
     };
   }
 
@@ -151,7 +159,7 @@ class DeviceFingerprintCollector {
         touch: false,
         hardware: { cpuCores: 1 },
         network: {},
-        permissions: {}
+        permissions: {},
       };
     }
   }
@@ -161,7 +169,7 @@ class DeviceFingerprintCollector {
       try {
         const canvas = document.createElement('canvas');
         const ctx = canvas.getContext('2d');
-        
+
         if (!ctx) {
           resolve('');
           return;
@@ -175,13 +183,13 @@ class DeviceFingerprintCollector {
         ctx.font = '14px Arial';
         ctx.fillStyle = '#f60';
         ctx.fillRect(125, 1, 62, 20);
-        
+
         ctx.fillStyle = '#069';
         ctx.fillText('Device fingerprint 🔒', 2, 15);
-        
+
         ctx.fillStyle = 'rgba(102, 204, 0, 0.7)';
         ctx.fillText('Canvas fingerprint', 4, 35);
-        
+
         // Add some geometric shapes
         ctx.globalCompositeOperation = 'multiply';
         ctx.fillStyle = 'rgb(255,0,255)';
@@ -203,8 +211,9 @@ class DeviceFingerprintCollector {
     return new Promise((resolve) => {
       try {
         const canvas = document.createElement('canvas');
-        const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
-        
+        const gl =
+          canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+
         if (!gl) {
           resolve('');
           return;
@@ -214,17 +223,19 @@ class DeviceFingerprintCollector {
         const vendor = gl.getParameter(gl.VENDOR);
         const renderer = gl.getParameter(gl.RENDERER);
         const version = gl.getParameter(gl.VERSION);
-        const shadingLanguageVersion = gl.getParameter(gl.SHADING_LANGUAGE_VERSION);
-        
+        const shadingLanguageVersion = gl.getParameter(
+          gl.SHADING_LANGUAGE_VERSION,
+        );
+
         // Get supported extensions
         const extensions = gl.getSupportedExtensions() || [];
-        
+
         const webglInfo = [
           vendor,
           renderer,
           version,
           shadingLanguageVersion,
-          extensions.slice(0, 10).join(',') // Limit to first 10 extensions
+          extensions.slice(0, 10).join(','), // Limit to first 10 extensions
         ].join('|');
 
         resolve(this.simpleHash(webglInfo).slice(-32));
@@ -238,14 +249,27 @@ class DeviceFingerprintCollector {
     return new Promise((resolve) => {
       const baseFonts = ['monospace', 'sans-serif', 'serif'];
       const testFonts = [
-        'Arial', 'Arial Black', 'Calibri', 'Cambria', 'Comic Sans MS',
-        'Consolas', 'Courier New', 'Georgia', 'Helvetica', 'Impact',
-        'Lucida Console', 'Lucida Sans Unicode', 'Palatino Linotype',
-        'Tahoma', 'Times New Roman', 'Trebuchet MS', 'Verdana'
+        'Arial',
+        'Arial Black',
+        'Calibri',
+        'Cambria',
+        'Comic Sans MS',
+        'Consolas',
+        'Courier New',
+        'Georgia',
+        'Helvetica',
+        'Impact',
+        'Lucida Console',
+        'Lucida Sans Unicode',
+        'Palatino Linotype',
+        'Tahoma',
+        'Times New Roman',
+        'Trebuchet MS',
+        'Verdana',
       ];
 
       const availableFonts: string[] = [];
-      
+
       // Create a test element
       const testElement = document.createElement('span');
       testElement.style.fontSize = '72px';
@@ -259,20 +283,20 @@ class DeviceFingerprintCollector {
         // Test each font
         for (const font of testFonts) {
           let detected = false;
-          
+
           for (const baseFont of baseFonts) {
             testElement.style.fontFamily = `${font}, ${baseFont}`;
             const width1 = testElement.offsetWidth;
-            
+
             testElement.style.fontFamily = baseFont;
             const width2 = testElement.offsetWidth;
-            
+
             if (width1 !== width2) {
               detected = true;
               break;
             }
           }
-          
+
           if (detected) {
             availableFonts.push(font);
           }
@@ -289,7 +313,7 @@ class DeviceFingerprintCollector {
 
   private async getHardwareInfo(): Promise<DeviceFingerprintData['hardware']> {
     const hardware: DeviceFingerprintData['hardware'] = {
-      cpuCores: navigator.hardwareConcurrency || 1
+      cpuCores: navigator.hardwareConcurrency || 1,
     };
 
     // Try to get memory info (Chrome only)
@@ -316,14 +340,16 @@ class DeviceFingerprintCollector {
     return network;
   }
 
-  private async getBatteryInfo(): Promise<DeviceFingerprintData['battery'] | undefined> {
+  private async getBatteryInfo(): Promise<
+    DeviceFingerprintData['battery'] | undefined
+  > {
     try {
       // Battery API (deprecated but still works in some browsers)
       if ('getBattery' in navigator) {
         const battery = await (navigator as any).getBattery();
         return {
           charging: battery.charging,
-          level: Math.round(battery.level * 100) / 100
+          level: Math.round(battery.level * 100) / 100,
         };
       }
     } catch (error) {
@@ -332,19 +358,25 @@ class DeviceFingerprintCollector {
     return undefined;
   }
 
-  private async getPermissions(): Promise<DeviceFingerprintData['permissions']> {
+  private async getPermissions(): Promise<
+    DeviceFingerprintData['permissions']
+  > {
     const permissions: DeviceFingerprintData['permissions'] = {};
 
     if ('permissions' in navigator) {
       try {
-        const notifications = await navigator.permissions.query({ name: 'notifications' as any });
+        const notifications = await navigator.permissions.query({
+          name: 'notifications' as any,
+        });
         permissions.notifications = notifications.state;
       } catch (error) {
         // Ignore errors
       }
 
       try {
-        const geolocation = await navigator.permissions.query({ name: 'geolocation' });
+        const geolocation = await navigator.permissions.query({
+          name: 'geolocation',
+        });
         permissions.geolocation = geolocation.state;
       } catch (error) {
         // Ignore errors
@@ -370,7 +402,7 @@ class DeviceFingerprintCollector {
     let hash = 0;
     for (let i = 0; i < str.length; i++) {
       const char = str.charCodeAt(i);
-      hash = ((hash << 5) - hash) + char;
+      hash = (hash << 5) - hash + char;
       hash = hash & hash; // Convert to 32-bit integer
     }
     return Math.abs(hash).toString(36);
@@ -394,7 +426,7 @@ class DeviceFingerprintCollector {
       data.hardware.cpuCores.toString(),
       data.hardware.memory?.toString() || '',
       data.network.connectionType || '',
-      data.battery ? `${data.battery.charging}${data.battery.level}` : ''
+      data.battery ? `${data.battery.charging}${data.battery.level}` : '',
     ].join('|');
 
     return `fp_${this.simpleHash(components)}`;
@@ -420,7 +452,7 @@ export async function collectDeviceFingerprint(options?: {
 }): Promise<{ data: DeviceFingerprintData; id: string }> {
   const data = await deviceFingerprint.collect(options);
   const id = deviceFingerprint.generateFingerprintId(data);
-  
+
   return { data, id };
 }
 
@@ -441,7 +473,7 @@ export function useDeviceFingerprint(options?: {
     data: null,
     id: null,
     loading: true,
-    error: null
+    error: null,
   });
 
   React.useEffect(() => {
@@ -454,7 +486,7 @@ export function useDeviceFingerprint(options?: {
             data,
             id,
             loading: false,
-            error: null
+            error: null,
           });
         }
       })
@@ -464,7 +496,7 @@ export function useDeviceFingerprint(options?: {
             data: null,
             id: null,
             loading: false,
-            error: error.message
+            error: error.message,
           });
         }
       });

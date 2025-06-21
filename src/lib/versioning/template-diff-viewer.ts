@@ -48,43 +48,52 @@ export interface MonacoDiffData {
  */
 export function generateTemplateDiff(
   originalVersion: TemplateVersion,
-  modifiedVersion: TemplateVersion
+  modifiedVersion: TemplateVersion,
 ): DiffResult {
   const changes: DiffChange[] = [];
-  
+
   // Compare basic metadata
-  const metadataChanges = compareMetadata(originalVersion.document, modifiedVersion.document);
+  const metadataChanges = compareMetadata(
+    originalVersion.document,
+    modifiedVersion.document,
+  );
   changes.push(...metadataChanges);
 
   // Compare questions/schema
   const questionChanges = compareQuestions(
     originalVersion.document.questions || [],
-    modifiedVersion.document.questions || []
+    modifiedVersion.document.questions || [],
   );
   changes.push(...questionChanges);
 
   // Compare template content
-  const templateChanges = compareTemplateContent(originalVersion.document, modifiedVersion.document);
+  const templateChanges = compareTemplateContent(
+    originalVersion.document,
+    modifiedVersion.document,
+  );
   changes.push(...templateChanges);
 
   // Compare pricing and business logic
-  const pricingChanges = comparePricing(originalVersion.document, modifiedVersion.document);
+  const pricingChanges = comparePricing(
+    originalVersion.document,
+    modifiedVersion.document,
+  );
   changes.push(...pricingChanges);
 
   // Categorize changes
-  const added = changes.filter(c => c.type === 'added');
-  const removed = changes.filter(c => c.type === 'removed');
-  const modified = changes.filter(c => c.type === 'modified');
-  const unchanged = changes.filter(c => c.type === 'unchanged');
+  const added = changes.filter((c) => c.type === 'added');
+  const removed = changes.filter((c) => c.type === 'removed');
+  const modified = changes.filter((c) => c.type === 'modified');
+  const unchanged = changes.filter((c) => c.type === 'unchanged');
 
   const summary: DiffSummary = {
     totalChanges: added.length + removed.length + modified.length,
     addedCount: added.length,
     removedCount: removed.length,
     modifiedCount: modified.length,
-    breakingChanges: changes.filter(c => c.severity === 'breaking').length,
-    newFeatures: changes.filter(c => c.severity === 'feature').length,
-    bugFixes: changes.filter(c => c.severity === 'fix').length,
+    breakingChanges: changes.filter((c) => c.severity === 'breaking').length,
+    newFeatures: changes.filter((c) => c.severity === 'feature').length,
+    bugFixes: changes.filter((c) => c.severity === 'fix').length,
   };
 
   return {
@@ -102,7 +111,7 @@ export function generateTemplateDiff(
 export function generateMonacoDiff(
   originalVersion: TemplateVersion,
   modifiedVersion: TemplateVersion,
-  format: 'json' | 'template' | 'questions' = 'json'
+  format: 'json' | 'template' | 'questions' = 'json',
 ): MonacoDiffData {
   let original: string;
   let modified: string;
@@ -122,8 +131,12 @@ export function generateMonacoDiff(
       break;
 
     case 'questions':
-      original = formatQuestionsForDiff(originalVersion.document.questions || []);
-      modified = formatQuestionsForDiff(modifiedVersion.document.questions || []);
+      original = formatQuestionsForDiff(
+        originalVersion.document.questions || [],
+      );
+      modified = formatQuestionsForDiff(
+        modifiedVersion.document.questions || [],
+      );
       language = 'yaml';
       break;
 
@@ -143,17 +156,44 @@ export function generateMonacoDiff(
 /**
  * Compare metadata between two documents
  */
-function compareMetadata(original: LegalDocument, modified: LegalDocument): DiffChange[] {
+function compareMetadata(
+  original: LegalDocument,
+  modified: LegalDocument,
+): DiffChange[] {
   const changes: DiffChange[] = [];
 
   const metadataFields = [
     { key: 'name', description: 'Template name', severity: 'style' as const },
-    { key: 'description', description: 'Template description', severity: 'style' as const },
-    { key: 'category', description: 'Template category', severity: 'feature' as const },
-    { key: 'jurisdiction', description: 'Legal jurisdiction', severity: 'breaking' as const },
-    { key: 'basePrice', description: 'Base price', severity: 'feature' as const },
-    { key: 'requiresNotarization', description: 'Notarization requirement', severity: 'breaking' as const },
-    { key: 'canBeRecorded', description: 'Recording capability', severity: 'feature' as const },
+    {
+      key: 'description',
+      description: 'Template description',
+      severity: 'style' as const,
+    },
+    {
+      key: 'category',
+      description: 'Template category',
+      severity: 'feature' as const,
+    },
+    {
+      key: 'jurisdiction',
+      description: 'Legal jurisdiction',
+      severity: 'breaking' as const,
+    },
+    {
+      key: 'basePrice',
+      description: 'Base price',
+      severity: 'feature' as const,
+    },
+    {
+      key: 'requiresNotarization',
+      description: 'Notarization requirement',
+      severity: 'breaking' as const,
+    },
+    {
+      key: 'canBeRecorded',
+      description: 'Recording capability',
+      severity: 'feature' as const,
+    },
   ];
 
   for (const field of metadataFields) {
@@ -198,12 +238,12 @@ function compareMetadata(original: LegalDocument, modified: LegalDocument): Diff
  */
 function compareQuestions(
   originalQuestions: any[],
-  modifiedQuestions: any[]
+  modifiedQuestions: any[],
 ): DiffChange[] {
   const changes: DiffChange[] = [];
 
-  const originalMap = new Map(originalQuestions.map(q => [q.id, q]));
-  const modifiedMap = new Map(modifiedQuestions.map(q => [q.id, q]));
+  const originalMap = new Map(originalQuestions.map((q) => [q.id, q]));
+  const modifiedMap = new Map(modifiedQuestions.map((q) => [q.id, q]));
 
   // Check for added questions
   for (const [id, question] of modifiedMap) {
@@ -234,12 +274,20 @@ function compareQuestions(
   // Check for modified questions
   for (const [id, modifiedQuestion] of modifiedMap) {
     const originalQuestion = originalMap.get(id);
-    if (originalQuestion && JSON.stringify(originalQuestion) !== JSON.stringify(modifiedQuestion)) {
-      const questionChanges = compareQuestionFields(originalQuestion, modifiedQuestion);
-      changes.push(...questionChanges.map(change => ({
-        ...change,
-        path: `questions.${id}.${change.path}`,
-      })));
+    if (
+      originalQuestion &&
+      JSON.stringify(originalQuestion) !== JSON.stringify(modifiedQuestion)
+    ) {
+      const questionChanges = compareQuestionFields(
+        originalQuestion,
+        modifiedQuestion,
+      );
+      changes.push(
+        ...questionChanges.map((change) => ({
+          ...change,
+          path: `questions.${id}.${change.path}`,
+        })),
+      );
     }
   }
 
@@ -251,8 +299,11 @@ function compareQuestions(
  */
 function compareQuestionFields(original: any, modified: any): DiffChange[] {
   const changes: DiffChange[] = [];
-  
-  const fieldSeverities: Record<string, 'breaking' | 'feature' | 'fix' | 'style'> = {
+
+  const fieldSeverities: Record<
+    string,
+    'breaking' | 'feature' | 'fix' | 'style'
+  > = {
     type: 'breaking',
     required: 'breaking',
     options: 'feature',
@@ -281,20 +332,30 @@ function compareQuestionFields(original: any, modified: any): DiffChange[] {
 /**
  * Compare template content
  */
-function compareTemplateContent(original: LegalDocument, modified: LegalDocument): DiffChange[] {
+function compareTemplateContent(
+  original: LegalDocument,
+  modified: LegalDocument,
+): DiffChange[] {
   const changes: DiffChange[] = [];
 
   // Compare template paths
   const originalPaths = original.templatePaths || {};
   const modifiedPaths = modified.templatePaths || {};
 
-  for (const lang of new Set([...Object.keys(originalPaths), ...Object.keys(modifiedPaths)])) {
+  for (const lang of new Set([
+    ...Object.keys(originalPaths),
+    ...Object.keys(modifiedPaths),
+  ])) {
     if (originalPaths[lang] !== modifiedPaths[lang]) {
       changes.push({
         path: `templatePaths.${lang}`,
         oldValue: originalPaths[lang],
         newValue: modifiedPaths[lang],
-        type: modifiedPaths[lang] ? (originalPaths[lang] ? 'modified' : 'added') : 'removed',
+        type: modifiedPaths[lang]
+          ? originalPaths[lang]
+            ? 'modified'
+            : 'added'
+          : 'removed',
         description: `Template path for ${lang}`,
         severity: 'feature',
       });
@@ -335,7 +396,10 @@ function compareTemplateContent(original: LegalDocument, modified: LegalDocument
 /**
  * Compare pricing information
  */
-function comparePricing(original: LegalDocument, modified: LegalDocument): DiffChange[] {
+function comparePricing(
+  original: LegalDocument,
+  modified: LegalDocument,
+): DiffChange[] {
   const changes: DiffChange[] = [];
 
   if (original.basePrice !== modified.basePrice) {
@@ -385,26 +449,28 @@ function getTemplateContent(document: LegalDocument): string | null {
  * Format questions for YAML-like diff viewing
  */
 function formatQuestionsForDiff(questions: any[]): string {
-  return questions.map(q => {
-    const lines = [
-      `- id: ${q.id}`,
-      `  label: "${q.label}"`,
-      `  type: ${q.type}`,
-      `  required: ${q.required || false}`,
-    ];
+  return questions
+    .map((q) => {
+      const lines = [
+        `- id: ${q.id}`,
+        `  label: "${q.label}"`,
+        `  type: ${q.type}`,
+        `  required: ${q.required || false}`,
+      ];
 
-    if (q.placeholder) lines.push(`  placeholder: "${q.placeholder}"`);
-    if (q.helperText) lines.push(`  helperText: "${q.helperText}"`);
-    if (q.options) {
-      lines.push('  options:');
-      q.options.forEach((opt: any) => {
-        lines.push(`    - value: "${opt.value}"`);
-        lines.push(`      label: "${opt.label}"`);
-      });
-    }
+      if (q.placeholder) lines.push(`  placeholder: "${q.placeholder}"`);
+      if (q.helperText) lines.push(`  helperText: "${q.helperText}"`);
+      if (q.options) {
+        lines.push('  options:');
+        q.options.forEach((opt: any) => {
+          lines.push(`    - value: "${opt.value}"`);
+          lines.push(`      label: "${opt.label}"`);
+        });
+      }
 
-    return lines.join('\n');
-  }).join('\n\n');
+      return lines.join('\n');
+    })
+    .join('\n\n');
 }
 
 /**
@@ -412,43 +478,47 @@ function formatQuestionsForDiff(questions: any[]): string {
  */
 export function generateChangelogFromDiff(
   diff: DiffResult,
-  versionType: 'major' | 'minor' | 'patch'
+  versionType: 'major' | 'minor' | 'patch',
 ): ChangelogEntry[] {
   const changelog: ChangelogEntry[] = [];
 
   // Group changes by type
-  const breakingChanges = [...diff.added, ...diff.removed, ...diff.modified]
-    .filter(c => c.severity === 'breaking');
-  
-  const features = [...diff.added, ...diff.modified]
-    .filter(c => c.severity === 'feature');
-  
-  const fixes = diff.modified.filter(c => c.severity === 'fix');
+  const breakingChanges = [
+    ...diff.added,
+    ...diff.removed,
+    ...diff.modified,
+  ].filter((c) => c.severity === 'breaking');
+
+  const features = [...diff.added, ...diff.modified].filter(
+    (c) => c.severity === 'feature',
+  );
+
+  const fixes = diff.modified.filter((c) => c.severity === 'fix');
 
   if (breakingChanges.length > 0) {
     changelog.push({
       type: 'changed',
-      description: `Breaking changes: ${breakingChanges.map(c => c.description).join(', ')}`,
+      description: `Breaking changes: ${breakingChanges.map((c) => c.description).join(', ')}`,
       impact: 'major',
-      affectedFields: breakingChanges.map(c => c.path),
+      affectedFields: breakingChanges.map((c) => c.path),
     });
   }
 
   if (features.length > 0) {
     changelog.push({
       type: 'added',
-      description: `New features: ${features.map(c => c.description).join(', ')}`,
+      description: `New features: ${features.map((c) => c.description).join(', ')}`,
       impact: 'minor',
-      affectedFields: features.map(c => c.path),
+      affectedFields: features.map((c) => c.path),
     });
   }
 
   if (fixes.length > 0) {
     changelog.push({
       type: 'fixed',
-      description: `Bug fixes: ${fixes.map(c => c.description).join(', ')}`,
+      description: `Bug fixes: ${fixes.map((c) => c.description).join(', ')}`,
       impact: 'patch',
-      affectedFields: fixes.map(c => c.path),
+      affectedFields: fixes.map((c) => c.path),
     });
   }
 

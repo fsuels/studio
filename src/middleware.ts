@@ -9,7 +9,8 @@ function getLocaleFromRequest(request: NextRequest): string {
   // Extract locale from pathname
   const pathname = request.nextUrl.pathname;
   const pathnameIsMissingLocale = supportedLocales.every(
-    (locale) => !pathname.startsWith(`/${locale}/`) && pathname !== `/${locale}`
+    (locale) =>
+      !pathname.startsWith(`/${locale}/`) && pathname !== `/${locale}`,
   );
 
   if (pathnameIsMissingLocale) {
@@ -34,19 +35,27 @@ export async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
 
   // Handle i18n routing for non-admin, non-API routes
-  if (!pathname.startsWith('/admin') && !pathname.startsWith('/api') && !pathname.startsWith('/_next')) {
+  if (
+    !pathname.startsWith('/admin') &&
+    !pathname.startsWith('/api') &&
+    !pathname.startsWith('/_next')
+  ) {
     const pathnameIsMissingLocale = supportedLocales.every(
-      (locale) => !pathname.startsWith(`/${locale}/`) && pathname !== `/${locale}`
+      (locale) =>
+        !pathname.startsWith(`/${locale}/`) && pathname !== `/${locale}`,
     );
 
     // Redirect if there is no locale
     if (pathnameIsMissingLocale) {
       const locale = getLocaleFromRequest(request);
-      const redirectUrl = new URL(`/${locale}${pathname === '/' ? '' : pathname}`, request.url);
-      
+      const redirectUrl = new URL(
+        `/${locale}${pathname === '/' ? '' : pathname}`,
+        request.url,
+      );
+
       // Preserve query parameters
       redirectUrl.search = request.nextUrl.search;
-      
+
       return NextResponse.redirect(redirectUrl);
     }
   }
@@ -60,7 +69,7 @@ export async function middleware(request: NextRequest) {
 
     // Check authentication for all other admin routes
     const adminUser = await getAdminUser(request);
-    
+
     if (!adminUser) {
       // Redirect to admin login
       return NextResponse.redirect(new URL('/admin', request.url));
@@ -69,7 +78,7 @@ export async function middleware(request: NextRequest) {
     // Add admin user info to headers for downstream use
     const requestHeaders = new Headers(request.headers);
     requestHeaders.set('x-admin-user', JSON.stringify(adminUser));
-    
+
     return NextResponse.next({
       request: {
         headers: requestHeaders,

@@ -10,12 +10,21 @@ export interface ImmutableAuditEvent {
   timestamp: string;
   previousHash: string;
   currentHash: string;
-  
+
   // Event metadata
-  eventType: 'policy_change' | 'template_update' | 'data_access' | 'consent_change' | 
-             'data_export' | 'data_deletion' | 'breach_incident' | 'user_action' | 
-             'system_config' | 'compliance_check' | 'audit_access';
-  
+  eventType:
+    | 'policy_change'
+    | 'template_update'
+    | 'data_access'
+    | 'consent_change'
+    | 'data_export'
+    | 'data_deletion'
+    | 'breach_incident'
+    | 'user_action'
+    | 'system_config'
+    | 'compliance_check'
+    | 'audit_access';
+
   // Actor information
   actor: {
     type: 'user' | 'system' | 'api' | 'admin' | 'automated';
@@ -27,24 +36,43 @@ export interface ImmutableAuditEvent {
     userAgent: string;
     deviceFingerprint?: string;
   };
-  
+
   // Resource affected
   resource: {
-    type: 'document' | 'template' | 'policy' | 'user_data' | 'system' | 'database';
+    type:
+      | 'document'
+      | 'template'
+      | 'policy'
+      | 'user_data'
+      | 'system'
+      | 'database';
     id: string;
     name?: string;
     version?: string;
     classification: 'public' | 'internal' | 'confidential' | 'restricted';
   };
-  
+
   // Action details
   action: {
-    operation: 'create' | 'read' | 'update' | 'delete' | 'export' | 'import' | 'approve' | 'reject';
+    operation:
+      | 'create'
+      | 'read'
+      | 'update'
+      | 'delete'
+      | 'export'
+      | 'import'
+      | 'approve'
+      | 'reject';
     description: string;
-    category: 'data_processing' | 'policy_management' | 'user_management' | 'security' | 'compliance';
+    category:
+      | 'data_processing'
+      | 'policy_management'
+      | 'user_management'
+      | 'security'
+      | 'compliance';
     outcome: 'success' | 'failure' | 'partial' | 'pending';
   };
-  
+
   // Change tracking
   changes?: {
     field: string;
@@ -53,17 +81,25 @@ export interface ImmutableAuditEvent {
     changeType: 'addition' | 'modification' | 'deletion';
     diff?: string; // Unified diff format
   }[];
-  
+
   // Compliance context
   compliance: {
-    frameworks: ('gdpr' | 'ccpa' | 'sox' | 'hipaa' | 'pci_dss' | 'iso27001' | 'soc2')[];
+    frameworks: (
+      | 'gdpr'
+      | 'ccpa'
+      | 'sox'
+      | 'hipaa'
+      | 'pci_dss'
+      | 'iso27001'
+      | 'soc2'
+    )[];
     legalBasis?: string;
     retentionPeriod?: number; // days
     dataSubjectRights?: string[];
     consentId?: string;
     processingPurpose?: string;
   };
-  
+
   // Technical context
   technical: {
     sourceSystem: string;
@@ -74,7 +110,7 @@ export interface ImmutableAuditEvent {
     checksumAfter?: string;
     backupReference?: string;
   };
-  
+
   // Evidence and attachments
   evidence: {
     screenshots?: string[];
@@ -83,7 +119,7 @@ export interface ImmutableAuditEvent {
     signatures?: string[];
     approvals?: string[];
   };
-  
+
   // Validation and integrity
   integrity: {
     signature: string; // Digital signature
@@ -169,8 +205,8 @@ export class ImmutableAuditTrail {
         firstEvent: '',
         lastEvent: '',
         integrityVerified: true,
-        complianceFrameworks: ['gdpr', 'sox', 'iso27001', 'soc2']
-      }
+        complianceFrameworks: ['gdpr', 'sox', 'iso27001', 'soc2'],
+      },
     };
 
     this.auditChains.set(genesisChain.id, genesisChain);
@@ -179,11 +215,19 @@ export class ImmutableAuditTrail {
 
   // Create immutable audit event
   async createAuditEvent(
-    eventData: Omit<ImmutableAuditEvent, 'id' | 'sequence' | 'timestamp' | 'previousHash' | 'currentHash' | 'integrity'>
+    eventData: Omit<
+      ImmutableAuditEvent,
+      | 'id'
+      | 'sequence'
+      | 'timestamp'
+      | 'previousHash'
+      | 'currentHash'
+      | 'integrity'
+    >,
   ): Promise<string> {
     const chainId = 'main_audit_chain';
     const chain = this.auditChains.get(chainId);
-    
+
     if (!chain) {
       throw new Error('Audit chain not found');
     }
@@ -192,9 +236,10 @@ export class ImmutableAuditTrail {
     const eventId = this.generateEventId();
     const timestamp = new Date().toISOString();
     const sequence = chain.events.length + 1;
-    const previousHash = chain.events.length > 0 ? 
-      chain.events[chain.events.length - 1].currentHash : 
-      '0000000000000000000000000000000000000000000000000000000000000000';
+    const previousHash =
+      chain.events.length > 0
+        ? chain.events[chain.events.length - 1].currentHash
+        : '0000000000000000000000000000000000000000000000000000000000000000';
 
     // Create event object
     const event: Omit<ImmutableAuditEvent, 'currentHash' | 'integrity'> = {
@@ -202,7 +247,7 @@ export class ImmutableAuditTrail {
       sequence,
       timestamp,
       previousHash,
-      ...eventData
+      ...eventData,
     };
 
     // Calculate hash and signature
@@ -217,8 +262,11 @@ export class ImmutableAuditTrail {
         signature,
         immutable: true,
         witnessHashes: [this.generateWitnessHash(eventHash)],
-        merkleRoot: this.calculateMerkleRoot([...chain.events.map(e => e.currentHash), eventHash])
-      }
+        merkleRoot: this.calculateMerkleRoot([
+          ...chain.events.map((e) => e.currentHash),
+          eventHash,
+        ]),
+      },
     };
 
     // Add to chain
@@ -235,7 +283,9 @@ export class ImmutableAuditTrail {
     // Log compliance-relevant events
     this.logComplianceEvent(completeEvent);
 
-    console.log(`🔐 Immutable audit event created: ${eventId} (sequence: ${sequence})`);
+    console.log(
+      `🔐 Immutable audit event created: ${eventId} (sequence: ${sequence})`,
+    );
     return eventId;
   }
 
@@ -248,10 +298,10 @@ export class ImmutableAuditTrail {
     newContent: any,
     actorId: string,
     actorEmail: string,
-    approvalId?: string
+    approvalId?: string,
   ): Promise<string> {
     const changes = this.generateDiff(oldContent, newContent);
-    
+
     return this.createAuditEvent({
       eventType: 'policy_change',
       actor: {
@@ -259,37 +309,37 @@ export class ImmutableAuditTrail {
         id: actorId,
         email: actorEmail,
         ipAddress: 'policy_editor',
-        userAgent: 'policy_management_system'
+        userAgent: 'policy_management_system',
       },
       resource: {
         type: 'policy',
         id: policyId,
         name: policyName,
         version: version,
-        classification: 'internal'
+        classification: 'internal',
       },
       action: {
         operation: 'update',
         description: `Policy ${policyName} updated to version ${version}`,
         category: 'policy_management',
-        outcome: 'success'
+        outcome: 'success',
       },
       changes,
       compliance: {
         frameworks: ['gdpr', 'sox', 'iso27001'],
         retentionPeriod: 2555, // 7 years
-        processingPurpose: 'policy_governance'
+        processingPurpose: 'policy_governance',
       },
       technical: {
         sourceSystem: 'policy_management',
         checksumBefore: this.calculateChecksum(oldContent),
         checksumAfter: this.calculateChecksum(newContent),
-        transactionId: approvalId
+        transactionId: approvalId,
       },
       evidence: {
         documents: [`policy_${policyId}_v${version}.pdf`],
-        approvals: approvalId ? [approvalId] : []
-      }
+        approvals: approvalId ? [approvalId] : [],
+      },
     });
   }
 
@@ -300,10 +350,10 @@ export class ImmutableAuditTrail {
     oldTemplate: any,
     newTemplate: any,
     actorId: string,
-    actorEmail: string
+    actorEmail: string,
   ): Promise<string> {
     const changes = this.generateDiff(oldTemplate, newTemplate);
-    
+
     return this.createAuditEvent({
       eventType: 'template_update',
       actor: {
@@ -311,34 +361,34 @@ export class ImmutableAuditTrail {
         id: actorId,
         email: actorEmail,
         ipAddress: 'template_editor',
-        userAgent: 'template_management_system'
+        userAgent: 'template_management_system',
       },
       resource: {
         type: 'template',
         id: templateId,
         name: templateName,
-        classification: 'internal'
+        classification: 'internal',
       },
       action: {
         operation: 'update',
         description: `Template ${templateName} updated`,
         category: 'data_processing',
-        outcome: 'success'
+        outcome: 'success',
       },
       changes,
       compliance: {
         frameworks: ['gdpr', 'ccpa'],
         retentionPeriod: 2555,
-        processingPurpose: 'document_generation'
+        processingPurpose: 'document_generation',
       },
       technical: {
         sourceSystem: 'template_engine',
         checksumBefore: this.calculateChecksum(oldTemplate),
-        checksumAfter: this.calculateChecksum(newTemplate)
+        checksumAfter: this.calculateChecksum(newTemplate),
       },
       evidence: {
-        documents: [`template_${templateId}_backup.json`]
-      }
+        documents: [`template_${templateId}_backup.json`],
+      },
     });
   }
 
@@ -350,7 +400,7 @@ export class ImmutableAuditTrail {
     actorId: string,
     actorEmail: string,
     legalBasis: string,
-    consentId?: string
+    consentId?: string,
   ): Promise<string> {
     return this.createAuditEvent({
       eventType: 'data_access',
@@ -359,35 +409,40 @@ export class ImmutableAuditTrail {
         id: actorId,
         email: actorEmail,
         ipAddress: 'data_access_system',
-        userAgent: 'data_management_portal'
+        userAgent: 'data_management_portal',
       },
       resource: {
         type: 'user_data',
         id: dataId,
         name: dataType,
-        classification: 'confidential'
+        classification: 'confidential',
       },
       action: {
         operation,
         description: `${operation} operation on ${dataType}`,
         category: 'data_processing',
-        outcome: 'success'
+        outcome: 'success',
       },
       compliance: {
         frameworks: ['gdpr', 'ccpa'],
         legalBasis,
         consentId,
-        dataSubjectRights: ['access', 'rectification', 'erasure', 'portability'],
+        dataSubjectRights: [
+          'access',
+          'rectification',
+          'erasure',
+          'portability',
+        ],
         retentionPeriod: 2555,
-        processingPurpose: 'service_provision'
+        processingPurpose: 'service_provision',
       },
       technical: {
         sourceSystem: 'data_access_portal',
-        correlationId: `data_access_${Date.now()}`
+        correlationId: `data_access_${Date.now()}`,
       },
       evidence: {
-        logs: [`data_access_${dataId}_${Date.now()}.log`]
-      }
+        logs: [`data_access_${dataId}_${Date.now()}.log`],
+      },
     });
   }
 
@@ -397,7 +452,7 @@ export class ImmutableAuditTrail {
     consentType: string,
     oldConsent: any,
     newConsent: any,
-    method: 'web_form' | 'email' | 'phone' | 'api'
+    method: 'web_form' | 'email' | 'phone' | 'api',
   ): Promise<string> {
     return this.createAuditEvent({
       eventType: 'consent_change',
@@ -405,19 +460,19 @@ export class ImmutableAuditTrail {
         type: 'user',
         id: userId,
         ipAddress: 'consent_portal',
-        userAgent: 'consent_management_system'
+        userAgent: 'consent_management_system',
       },
       resource: {
         type: 'user_data',
         id: `consent_${userId}`,
         name: consentType,
-        classification: 'confidential'
+        classification: 'confidential',
       },
       action: {
         operation: 'update',
         description: `Consent ${consentType} updated via ${method}`,
         category: 'data_processing',
-        outcome: 'success'
+        outcome: 'success',
       },
       changes: this.generateDiff(oldConsent, newConsent),
       compliance: {
@@ -425,16 +480,16 @@ export class ImmutableAuditTrail {
         legalBasis: 'consent',
         dataSubjectRights: ['withdraw_consent'],
         retentionPeriod: 2555,
-        processingPurpose: 'consent_management'
+        processingPurpose: 'consent_management',
       },
       technical: {
         sourceSystem: 'consent_manager',
         checksumBefore: this.calculateChecksum(oldConsent),
-        checksumAfter: this.calculateChecksum(newConsent)
+        checksumAfter: this.calculateChecksum(newConsent),
       },
       evidence: {
-        documents: [`consent_${userId}_${Date.now()}.json`]
-      }
+        documents: [`consent_${userId}_${Date.now()}.json`],
+      },
     });
   }
 
@@ -447,7 +502,7 @@ export class ImmutableAuditTrail {
   }> {
     const chainId = 'main_audit_chain';
     const chain = this.auditChains.get(chainId);
-    
+
     if (!chain) {
       throw new Error('Audit chain not found');
     }
@@ -456,34 +511,46 @@ export class ImmutableAuditTrail {
 
     // Apply filters
     if (query.startDate) {
-      filteredEvents = filteredEvents.filter(e => e.timestamp >= query.startDate!);
-    }
-    
-    if (query.endDate) {
-      filteredEvents = filteredEvents.filter(e => e.timestamp <= query.endDate!);
-    }
-    
-    if (query.eventTypes?.length) {
-      filteredEvents = filteredEvents.filter(e => query.eventTypes!.includes(e.eventType));
-    }
-    
-    if (query.actors?.length) {
-      filteredEvents = filteredEvents.filter(e => query.actors!.includes(e.actor.id));
-    }
-    
-    if (query.resources?.length) {
-      filteredEvents = filteredEvents.filter(e => query.resources!.includes(e.resource.id));
-    }
-    
-    if (query.complianceFrameworks?.length) {
-      filteredEvents = filteredEvents.filter(e => 
-        e.compliance.frameworks.some(f => query.complianceFrameworks!.includes(f))
+      filteredEvents = filteredEvents.filter(
+        (e) => e.timestamp >= query.startDate!,
       );
     }
-    
+
+    if (query.endDate) {
+      filteredEvents = filteredEvents.filter(
+        (e) => e.timestamp <= query.endDate!,
+      );
+    }
+
+    if (query.eventTypes?.length) {
+      filteredEvents = filteredEvents.filter((e) =>
+        query.eventTypes!.includes(e.eventType),
+      );
+    }
+
+    if (query.actors?.length) {
+      filteredEvents = filteredEvents.filter((e) =>
+        query.actors!.includes(e.actor.id),
+      );
+    }
+
+    if (query.resources?.length) {
+      filteredEvents = filteredEvents.filter((e) =>
+        query.resources!.includes(e.resource.id),
+      );
+    }
+
+    if (query.complianceFrameworks?.length) {
+      filteredEvents = filteredEvents.filter((e) =>
+        e.compliance.frameworks.some((f) =>
+          query.complianceFrameworks!.includes(f),
+        ),
+      );
+    }
+
     if (query.dataClassification?.length) {
-      filteredEvents = filteredEvents.filter(e => 
-        query.dataClassification!.includes(e.resource.classification)
+      filteredEvents = filteredEvents.filter((e) =>
+        query.dataClassification!.includes(e.resource.classification),
       );
     }
 
@@ -506,14 +573,16 @@ export class ImmutableAuditTrail {
       events: paginatedEvents,
       total: filteredEvents.length,
       hasMore,
-      integrityStatus: integrityStatus.isValid ? 'verified' : 'failed'
+      integrityStatus: integrityStatus.isValid ? 'verified' : 'failed',
     };
   }
 
   // Verify chain integrity
-  async verifyChainIntegrity(chainId: string = 'main_audit_chain'): Promise<IntegrityVerificationResult> {
+  async verifyChainIntegrity(
+    chainId: string = 'main_audit_chain',
+  ): Promise<IntegrityVerificationResult> {
     const chain = this.auditChains.get(chainId);
-    
+
     if (!chain) {
       throw new Error('Audit chain not found');
     }
@@ -525,14 +594,14 @@ export class ImmutableAuditTrail {
     for (let i = 0; i < chain.events.length; i++) {
       const event = chain.events[i];
       const isValid = await this.verifyEventIntegrity([event]);
-      
+
       if (isValid.isValid) {
         verifiedEvents++;
       } else {
         errors.push({
           eventId: event.id,
           error: 'Hash verification failed',
-          severity: 'critical'
+          severity: 'critical',
         });
       }
 
@@ -543,7 +612,7 @@ export class ImmutableAuditTrail {
           errors.push({
             eventId: event.id,
             error: 'Chain linkage broken',
-            severity: 'critical'
+            severity: 'critical',
           });
         }
       }
@@ -559,7 +628,9 @@ export class ImmutableAuditTrail {
       failedEvents: chain.events.length - verifiedEvents,
       errors,
       lastVerified: new Date().toISOString(),
-      nextVerification: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString() // 24 hours
+      nextVerification: new Date(
+        Date.now() + 24 * 60 * 60 * 1000,
+      ).toISOString(), // 24 hours
     };
   }
 
@@ -567,7 +638,7 @@ export class ImmutableAuditTrail {
   async exportAuditChain(
     chainId: string,
     format: 'json' | 'csv' | 'xml' | 'pdf',
-    includeEvidence: boolean = true
+    includeEvidence: boolean = true,
   ): Promise<{
     data: string | Buffer;
     filename: string;
@@ -579,7 +650,7 @@ export class ImmutableAuditTrail {
     };
   }> {
     const chain = this.auditChains.get(chainId);
-    
+
     if (!chain) {
       throw new Error('Audit chain not found');
     }
@@ -592,33 +663,37 @@ export class ImmutableAuditTrail {
 
     switch (format) {
       case 'json':
-        data = JSON.stringify({
-          chain,
-          exportMetadata: {
-            exportDate: new Date().toISOString(),
-            includeEvidence,
-            totalEvents: chain.events.length,
-            integrityVerified: chain.metadata.integrityVerified
-          }
-        }, null, 2);
+        data = JSON.stringify(
+          {
+            chain,
+            exportMetadata: {
+              exportDate: new Date().toISOString(),
+              includeEvidence,
+              totalEvents: chain.events.length,
+              integrityVerified: chain.metadata.integrityVerified,
+            },
+          },
+          null,
+          2,
+        );
         mimeType = 'application/json';
         break;
-        
+
       case 'csv':
         data = this.convertToCSV(chain.events);
         mimeType = 'text/csv';
         break;
-        
+
       case 'xml':
         data = this.convertToXML(chain);
         mimeType = 'application/xml';
         break;
-        
+
       case 'pdf':
         data = await this.generatePDFReport(chain);
         mimeType = 'application/pdf';
         break;
-        
+
       default:
         throw new Error('Unsupported export format');
     }
@@ -634,8 +709,8 @@ export class ImmutableAuditTrail {
       integrity: {
         checksum,
         signature,
-        timestamp: new Date().toISOString()
-      }
+        timestamp: new Date().toISOString(),
+      },
     };
   }
 
@@ -648,7 +723,9 @@ export class ImmutableAuditTrail {
     return crypto.randomBytes(32).toString('hex');
   }
 
-  private calculateHash(event: Omit<ImmutableAuditEvent, 'currentHash' | 'integrity'>): string {
+  private calculateHash(
+    event: Omit<ImmutableAuditEvent, 'currentHash' | 'integrity'>,
+  ): string {
     const eventString = JSON.stringify(event, Object.keys(event).sort());
     return crypto.createHash('sha256').update(eventString).digest('hex');
   }
@@ -666,21 +743,27 @@ export class ImmutableAuditTrail {
   }
 
   private generateWitnessHash(eventHash: string): string {
-    return crypto.createHash('sha256').update(eventHash + Date.now().toString()).digest('hex');
+    return crypto
+      .createHash('sha256')
+      .update(eventHash + Date.now().toString())
+      .digest('hex');
   }
 
   private calculateMerkleRoot(hashes: string[]): string {
     if (hashes.length === 0) return '';
     if (hashes.length === 1) return hashes[0];
-    
+
     const nextLevel: string[] = [];
     for (let i = 0; i < hashes.length; i += 2) {
       const left = hashes[i];
       const right = i + 1 < hashes.length ? hashes[i + 1] : left;
-      const combined = crypto.createHash('sha256').update(left + right).digest('hex');
+      const combined = crypto
+        .createHash('sha256')
+        .update(left + right)
+        .digest('hex');
       nextLevel.push(combined);
     }
-    
+
     return this.calculateMerkleRoot(nextLevel);
   }
 
@@ -689,21 +772,24 @@ export class ImmutableAuditTrail {
     return crypto.createHash('sha256').update(dataString).digest('hex');
   }
 
-  private generateDiff(oldData: any, newData: any): ImmutableAuditEvent['changes'] {
+  private generateDiff(
+    oldData: any,
+    newData: any,
+  ): ImmutableAuditEvent['changes'] {
     const changes: ImmutableAuditEvent['changes'] = [];
-    
+
     // Simple diff implementation - in production, use a proper diff library
     const oldKeys = Object.keys(oldData || {});
     const newKeys = Object.keys(newData || {});
     const allKeys = [...new Set([...oldKeys, ...newKeys])];
-    
-    allKeys.forEach(key => {
+
+    allKeys.forEach((key) => {
       const oldValue = oldData?.[key];
       const newValue = newData?.[key];
-      
+
       if (oldValue !== newValue) {
         let changeType: 'addition' | 'modification' | 'deletion';
-        
+
         if (oldValue === undefined) {
           changeType = 'addition';
         } else if (newValue === undefined) {
@@ -711,21 +797,23 @@ export class ImmutableAuditTrail {
         } else {
           changeType = 'modification';
         }
-        
+
         changes.push({
           field: key,
           oldValue,
           newValue,
           changeType,
-          diff: `- ${oldValue}\n+ ${newValue}`
+          diff: `- ${oldValue}\n+ ${newValue}`,
         });
       }
     });
-    
+
     return changes;
   }
 
-  private async verifyEventIntegrity(events: ImmutableAuditEvent[]): Promise<IntegrityVerificationResult> {
+  private async verifyEventIntegrity(
+    events: ImmutableAuditEvent[],
+  ): Promise<IntegrityVerificationResult> {
     let verifiedEvents = 0;
     const errors: IntegrityVerificationResult['errors'] = [];
 
@@ -734,14 +822,14 @@ export class ImmutableAuditTrail {
       const eventCopy = { ...event };
       delete (eventCopy as any).currentHash;
       delete (eventCopy as any).integrity;
-      
+
       const calculatedHash = this.calculateHash(eventCopy);
-      
+
       if (calculatedHash !== event.currentHash) {
         errors.push({
           eventId: event.id,
           error: 'Hash mismatch - event may be corrupted',
-          severity: 'critical'
+          severity: 'critical',
         });
       } else {
         verifiedEvents++;
@@ -755,7 +843,9 @@ export class ImmutableAuditTrail {
       failedEvents: events.length - verifiedEvents,
       errors,
       lastVerified: new Date().toISOString(),
-      nextVerification: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString()
+      nextVerification: new Date(
+        Date.now() + 24 * 60 * 60 * 1000,
+      ).toISOString(),
     };
   }
 
@@ -764,7 +854,7 @@ export class ImmutableAuditTrail {
     if (event.compliance.frameworks.includes('gdpr')) {
       console.log(`📋 GDPR audit event: ${event.action.description}`);
     }
-    
+
     if (event.compliance.frameworks.includes('sox')) {
       console.log(`📊 SOX audit event: ${event.action.description}`);
     }
@@ -772,11 +862,19 @@ export class ImmutableAuditTrail {
 
   private convertToCSV(events: ImmutableAuditEvent[]): string {
     const headers = [
-      'ID', 'Sequence', 'Timestamp', 'Event Type', 'Actor', 'Resource', 
-      'Action', 'Outcome', 'Compliance Frameworks', 'Hash'
+      'ID',
+      'Sequence',
+      'Timestamp',
+      'Event Type',
+      'Actor',
+      'Resource',
+      'Action',
+      'Outcome',
+      'Compliance Frameworks',
+      'Hash',
     ];
-    
-    const rows = events.map(event => [
+
+    const rows = events.map((event) => [
       event.id,
       event.sequence.toString(),
       event.timestamp,
@@ -786,12 +884,14 @@ export class ImmutableAuditTrail {
       event.action.description,
       event.action.outcome,
       event.compliance.frameworks.join(';'),
-      event.currentHash
+      event.currentHash,
     ]);
-    
-    return [headers, ...rows].map(row => 
-      row.map(cell => `"${cell.replace(/"/g, '""')}"`).join(',')
-    ).join('\n');
+
+    return [headers, ...rows]
+      .map((row) =>
+        row.map((cell) => `"${cell.replace(/"/g, '""')}"`).join(','),
+      )
+      .join('\n');
   }
 
   private convertToXML(chain: AuditChain): string {
@@ -803,12 +903,16 @@ export class ImmutableAuditTrail {
     <integrityVerified>${chain.metadata.integrityVerified}</integrityVerified>
   </metadata>
   <events>
-    ${chain.events.map(event => `
+    ${chain.events
+      .map(
+        (event) => `
     <event id="${event.id}" sequence="${event.sequence}">
       <timestamp>${event.timestamp}</timestamp>
       <eventType>${event.eventType}</eventType>
       <hash>${event.currentHash}</hash>
-    </event>`).join('')}
+    </event>`,
+      )
+      .join('')}
   </events>
 </auditChain>`;
   }
@@ -825,18 +929,22 @@ export class ImmutableAuditTrail {
         <p>Integrity Verified: ${chain.metadata.integrityVerified}</p>
         <table border="1">
           <tr><th>Sequence</th><th>Timestamp</th><th>Event Type</th><th>Description</th></tr>
-          ${chain.events.map(event => `
+          ${chain.events
+            .map(
+              (event) => `
             <tr>
               <td>${event.sequence}</td>
               <td>${event.timestamp}</td>
               <td>${event.eventType}</td>
               <td>${event.action.description}</td>
             </tr>
-          `).join('')}
+          `,
+            )
+            .join('')}
         </table>
       </body>
     </html>`;
-    
+
     return Buffer.from(htmlContent, 'utf-8');
   }
 
@@ -851,11 +959,16 @@ export class ImmutableAuditTrail {
     complianceFrameworks: string[];
   } {
     const allChains = Array.from(this.auditChains.values());
-    const totalEvents = allChains.reduce((sum, chain) => sum + chain.events.length, 0);
+    const totalEvents = allChains.reduce(
+      (sum, chain) => sum + chain.events.length,
+      0,
+    );
     const avgEvents = allChains.length > 0 ? totalEvents / allChains.length : 0;
-    
-    const allVerified = allChains.every(chain => chain.metadata.integrityVerified);
-    
+
+    const allVerified = allChains.every(
+      (chain) => chain.metadata.integrityVerified,
+    );
+
     return {
       totalChains: allChains.length,
       totalEvents,
@@ -863,7 +976,14 @@ export class ImmutableAuditTrail {
       integrityStatus: allVerified ? 'verified' : 'failed',
       storageUsed: `${(totalEvents * 2.5).toFixed(1)} KB`, // Estimated
       lastIntegrityCheck: new Date().toISOString(),
-      complianceFrameworks: ['gdpr', 'sox', 'iso27001', 'soc2', 'ccpa', 'hipaa']
+      complianceFrameworks: [
+        'gdpr',
+        'sox',
+        'iso27001',
+        'soc2',
+        'ccpa',
+        'hipaa',
+      ],
     };
   }
 }
