@@ -1,15 +1,11 @@
 // Advanced Fraud & Risk Scoring Page
 import { requireAdminAuth } from '@/lib/admin-auth';
-import FraudDetectionDashboard from '@/components/admin/FraudDetectionDashboard';
+import { LazyFraudDetectionDashboard } from '@/components/admin/LazyAdmin';
 
 export default async function FraudDetectionPage() {
   await requireAdminAuth();
 
-  return (
-    <div className="container mx-auto py-6">
-      <FraudDetectionDashboard />
-    </div>
-  );
+  return <LazyFraudDetectionDashboard />;
 }
 
 export const metadata = {

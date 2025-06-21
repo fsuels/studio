@@ -82,6 +82,35 @@ jest.mock('@radix-ui/react-dialog', () => ({
   Overlay: ({ children, ...props }) => <div data-testid="dialog-overlay" {...props}>{children}</div>,
 }));
 
+jest.mock('@radix-ui/react-checkbox', () => ({
+  Root: ({ checked, onCheckedChange, ...props }) => (
+    <input 
+      type="checkbox" 
+      checked={checked} 
+      onChange={(e) => onCheckedChange?.(e.target.checked)} 
+      {...props} 
+    />
+  ),
+  Indicator: ({ children }) => <span>{children}</span>,
+}));
+
+jest.mock('@radix-ui/react-slider', () => ({
+  Root: ({ value, onValueChange, min, max, step, ...props }) => (
+    <input
+      type="range"
+      value={value?.[0] || 0}
+      onChange={(e) => onValueChange?.([parseInt(e.target.value)])}
+      min={min}
+      max={max}
+      step={step}
+      {...props}
+    />
+  ),
+  Track: ({ children }) => <div>{children}</div>,
+  Range: () => <div />,
+  Thumb: () => <div />,
+}));
+
 jest.mock('@radix-ui/react-dropdown-menu', () => ({
   Root: ({ children }) => <div data-testid="dropdown-root">{children}</div>,
   Trigger: ({ children, ...props }) => <button data-testid="dropdown-trigger" {...props}>{children}</button>,

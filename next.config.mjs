@@ -13,7 +13,13 @@ const nextConfig = {
   /* Performance budgets and optimization */
   experimental: {
     bundlePagesRouterDependencies: true,
-    optimizePackageImports: ['@radix-ui/react-icons', 'lucide-react'],
+    optimizePackageImports: [
+      '@radix-ui/react-icons', 
+      'lucide-react',
+      '@tanstack/react-query',
+      'recharts',
+      'react-hook-form'
+    ],
   },
 
   /* Bundle analysis configuration */
@@ -27,6 +33,59 @@ const nextConfig = {
           openAnalyzer: true,
         }),
       );
+    }
+
+    // Enhanced code splitting configuration  
+    if (!isServer) {
+      config.optimization = {
+        ...config.optimization,
+        splitChunks: {
+          ...config.optimization.splitChunks,
+          cacheGroups: {
+            ...config.optimization.splitChunks?.cacheGroups,
+            // Admin components chunk
+            admin: {
+              test: /[\\/]components[\\/]admin[\\/]/,
+              name: 'admin',
+              chunks: 'async',
+              priority: 10,
+              enforce: true,
+            },
+            // Charts and analytics chunk
+            charts: {
+              test: /[\\/](recharts|chart\.js|d3)[\\/]/,
+              name: 'charts',
+              chunks: 'async',
+              priority: 9,
+              enforce: true,
+            },
+            // Collaboration features chunk
+            collaboration: {
+              test: /[\\/](collaboration|websocket|socket\.io)[\\/]/,
+              name: 'collaboration',
+              chunks: 'async',
+              priority: 8,
+              enforce: true,
+            },
+            // Form components chunk
+            forms: {
+              test: /[\\/]components[\\/](forms|wizard)[\\/]/,
+              name: 'forms',
+              chunks: 'async',
+              priority: 7,
+              enforce: true,
+            },
+            // Large UI libraries chunk
+            uiLibs: {
+              test: /[\\/]node_modules[\\/](@radix-ui|@monaco-editor|framer-motion)[\\/]/,
+              name: 'ui-libs',
+              chunks: 'async',
+              priority: 6,
+              enforce: true,
+            },
+          },
+        },
+      };
     }
 
     // Performance budgets

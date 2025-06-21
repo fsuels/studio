@@ -67,8 +67,8 @@ jest.mock('@/components/layout/Logo', () => {
 });
 
 jest.mock('@/components/shared/navigation/Nav', () => {
-  return function MockNav() {
-    return <div data-testid="nav">Navigation</div>;
+  return function MockNav({ locale }: { locale?: string }) {
+    return <div data-testid="nav">Nav for {locale || 'en'}</div>;
   };
 });
 

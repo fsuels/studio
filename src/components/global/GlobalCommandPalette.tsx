@@ -3,7 +3,12 @@
 import React, { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { useCommandPalette } from '@/hooks/useCommandPalette';
-import CommandPalette from './CommandPalette';
+import dynamic from 'next/dynamic';
+
+const CommandPalette = dynamic(() => import('./CommandPalette'), {
+  ssr: false,
+  loading: () => null, // No loading state needed since it's modal
+});
 
 interface GlobalCommandPaletteProps {
   locale?: 'en' | 'es';

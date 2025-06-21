@@ -18,6 +18,21 @@ jest.mock('lucide-react', () => ({
   ChevronDown: ({ className }: { className?: string }) => (
     <div data-testid="chevron-down-icon" className={className} />
   ),
+  Star: ({ className }: { className?: string }) => (
+    <div data-testid="star-icon" className={className} />
+  ),
+  DollarSign: ({ className }: { className?: string }) => (
+    <div data-testid="dollar-icon" className={className} />
+  ),
+  Globe: ({ className }: { className?: string }) => (
+    <div data-testid="globe-icon" className={className} />
+  ),
+  Shield: ({ className }: { className?: string }) => (
+    <div data-testid="shield-icon" className={className} />
+  ),
+  Crown: ({ className }: { className?: string }) => (
+    <div data-testid="crown-icon" className={className} />
+  ),
 }));
 
 // Mock UI components
@@ -80,13 +95,55 @@ jest.mock('@/components/ui/label', () => ({
   ),
 }));
 
+jest.mock('@/components/ui/badge', () => ({
+  Badge: ({ children, className }: any) => (
+    <span className={className}>{children}</span>
+  ),
+}));
+
+jest.mock('@/components/ui/card', () => ({
+  Card: ({ children, className }: any) => (
+    <div className={className}>{children}</div>
+  ),
+  CardContent: ({ children, className }: any) => (
+    <div className={className}>{children}</div>
+  ),
+  CardHeader: ({ children, className }: any) => (
+    <div className={className}>{children}</div>
+  ),
+  CardTitle: ({ children, className }: any) => (
+    <h3 className={className}>{children}</h3>
+  ),
+}));
+
+jest.mock('@/components/ui/slider', () => ({
+  Slider: ({ value, onValueChange, min, max, step, className }: any) => (
+    <input
+      type="range"
+      value={value?.[0] || 0}
+      onChange={(e) => onValueChange?.([parseInt(e.target.value)])}
+      min={min}
+      max={max}
+      step={step}
+      className={className}
+      data-testid="slider"
+    />
+  ),
+}));
+
 describe('MarketplaceSearch', () => {
-  const mockOnSearch = jest.fn();
-  const mockOnFilterChange = jest.fn();
+  const mockOnFiltersChange = jest.fn();
 
   const defaultProps = {
-    onSearch: mockOnSearch,
-    onFilterChange: mockOnFilterChange,
+    filters: {
+      query: '',
+      priceRange: { min: 0, max: 10000 },
+    },
+    onFiltersChange: mockOnFiltersChange,
+    categories: ['contract', 'agreement', 'form'],
+    tags: ['legal', 'business', 'personal'],
+    jurisdictions: ['US', 'UK', 'CA'],
+    languages: ['en', 'es'],
     isLoading: false,
   };
 
@@ -103,7 +160,7 @@ describe('MarketplaceSearch', () => {
     expect(screen.getByTestId('search-icon')).toBeInTheDocument();
   });
 
-  it('calls onSearch when typing in search input', async () => {
+  it('calls onFiltersChange when typing in search input', async () => {
     render(<MarketplaceSearch {...defaultProps} />);
 
     const searchInput = screen.getByPlaceholderText('Search templates...');
@@ -111,25 +168,39 @@ describe('MarketplaceSearch', () => {
 
     await waitFor(
       () => {
-        expect(mockOnSearch).toHaveBeenCalledWith('contract');
+        expect(mockOnFiltersChange).toHaveBeenCalledWith({
+          ...defaultProps.filters,
+          query: 'contract',
+        });
       },
       { timeout: 600 },
     ); // Wait for debounce
   });
 
   it('shows clear button when search has value', () => {
-    render(<MarketplaceSearch {...defaultProps} initialSearch="test" />);
+    const propsWithQuery = {
+      ...defaultProps,
+      filters: { ...defaultProps.filters, query: 'test' },
+    };
+    render(<MarketplaceSearch {...propsWithQuery} />);
 
     expect(screen.getByTestId('x-icon')).toBeInTheDocument();
   });
 
   it('clears search when clear button is clicked', () => {
-    render(<MarketplaceSearch {...defaultProps} initialSearch="test" />);
+    const propsWithQuery = {
+      ...defaultProps,
+      filters: { ...defaultProps.filters, query: 'test' },
+    };
+    render(<MarketplaceSearch {...propsWithQuery} />);
 
     const clearButton = screen.getByTestId('x-icon').closest('button');
     fireEvent.click(clearButton!);
 
-    expect(mockOnSearch).toHaveBeenCalledWith('');
+    expect(mockOnFiltersChange).toHaveBeenCalledWith({
+      ...defaultProps.filters,
+      query: undefined,
+    });
   });
 
   it('renders filter controls', () => {
