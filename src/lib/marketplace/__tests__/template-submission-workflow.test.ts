@@ -3,6 +3,14 @@ import { TemplateSubmissionWorkflow } from '../template-submission-workflow';
 import type { LegalDocument } from '@/types/documents';
 import type { SubmissionForm, SubmissionReview } from '@/types/marketplace';
 
+const mockDb = {
+  collection: jest.fn(),
+  doc: jest.fn(),
+  setDoc: jest.fn(),
+  getDoc: jest.fn(),
+  updateDoc: jest.fn(),
+};
+
 // Mock Firebase
 jest.mock('@/lib/firebase', () => ({
   getDb: jest.fn(() => Promise.resolve(mockDb)),
@@ -23,16 +31,8 @@ jest.mock('firebase/firestore', () => ({
   serverTimestamp: jest.fn(() => ({ seconds: Date.now() / 1000 })),
 }));
 
-const mockDb = {
-  collection: jest.fn(),
-  doc: jest.fn(),
-  setDoc: jest.fn(),
-  getDoc: jest.fn(),
-  updateDoc: jest.fn(),
-};
-
 // Mock email service
-jest.mock('@/lib/email', () => ({
+jest.mock('@/lib/legal-updates/email-service', () => ({
   sendEmail: jest.fn(),
 }));
 

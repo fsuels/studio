@@ -2,13 +2,11 @@
    Core: @eslint/js, @typescript-eslint, react, react-hooks, jsx-a11y        */
 
 import js from '@eslint/js';
-   import globals from 'globals';
-   import tseslint from 'typescript-eslint';
-   import pluginReact from 'eslint-plugin-react';
-   import pluginReactHooks from 'eslint-plugin-react-hooks';
-   import pluginA11y from 'eslint-plugin-jsx-a11y';
-   import pluginImport from 'eslint-plugin-import';
-   import { defineConfig } from 'eslint/config';
+import globals from 'globals';
+import tseslint from 'typescript-eslint';
+import pluginReact from 'eslint-plugin-react';
+import pluginReactHooks from 'eslint-plugin-react-hooks';
+import pluginA11y from 'eslint-plugin-jsx-a11y';
    
    /* pull a11y recommended rules and down-grade them to “warn” */
    const a11yWarnRules = {};
@@ -21,21 +19,21 @@ import js from '@eslint/js';
    /* react-hooks recommended */
    const hooksRules = pluginReactHooks.configs.recommended.rules ?? {};
    
-export default defineConfig([
+export default [
   {
     ignores: ['.next/**', 'public/**', 'coverage/**', '**/*.md', '**/*.json']
   },
+  
+  js.configs.recommended,
+  
   /* ───────── all JS/TS files ───────── */
   {
        files: ['**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
        plugins: {
-         js,
          react: pluginReact,
          'react-hooks': pluginReactHooks,
-         'jsx-a11y': pluginA11y,
-         import: pluginImport
+         'jsx-a11y': pluginA11y
        },
-       extends: ['js/recommended'],
        languageOptions: { globals: globals.browser },
        settings: { react: { version: 'detect' } },
    
@@ -45,28 +43,15 @@ export default defineConfig([
          /* react-hooks rules */
          ...hooksRules,
    
-         /* import rules */
-         'import/order': [
-           'error',
-           {
-             groups: ['builtin', 'external', 'internal', 'parent', 'sibling', 'index'],
-             'newlines-between': 'always',
-             alphabetize: { order: 'asc', caseInsensitive: true }
-           }
-         ],
-         'import/no-unused-modules': ['error', { unusedExports: true }],
-         '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
-   
          /* never-break-the-build overrides */
          'react/react-in-jsx-scope': 'off',
          'react/prop-types': 'off',
-         'no-irregular-whitespace': 'off',
-         '@typescript-eslint/no-empty-object-type': 'off'
+         'no-irregular-whitespace': 'off'
        }
      },
    
      /* TypeScript rules */
-     tseslint.configs.recommended,
+     ...tseslint.configs.recommended,
    
     /* React flat preset (after TS to avoid overlap) */
     pluginReact.configs.flat.recommended,
@@ -136,5 +121,5 @@ export default defineConfig([
          ]
        }
      }
-   ]);
+   ];
    

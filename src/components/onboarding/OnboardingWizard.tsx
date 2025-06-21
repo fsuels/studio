@@ -2,7 +2,8 @@
 'use client';
 
 import React, { useState, useEffect, useCallback } from 'react';
-import Joyride, { CallBackProps, STATUS, EVENTS, Step } from 'react-joyride';
+// import Joyride, { CallBackProps, STATUS, EVENTS, Step } from 'react-joyride';
+type Step = any; // Temporary placeholder
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/hooks/useAuth';
 import { createProgressTracker, OnboardingStep } from '@/lib/onboarding/progress-tracker';
@@ -158,33 +159,33 @@ export const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
     setRun(true);
   };
 
-  const handleJoyrideCallback = useCallback(async (data: CallBackProps) => {
-    const { status, type, index, action } = data;
+  // const handleJoyrideCallback = useCallback(async (data: CallBackProps) => {
+  //   const { status, type, index, action } = data;
 
-    if (type === EVENTS.STEP_AFTER || type === EVENTS.TARGET_NOT_FOUND) {
-      if (tracker && selectedPersona) {
-        const onboardingSteps = tracker.getStepsForPersona(selectedPersona);
-        const currentStep = onboardingSteps[index];
-        if (currentStep) {
-          await tracker.updateStep(currentStep.id);
-        }
-      }
+  //   if (type === EVENTS.STEP_AFTER || type === EVENTS.TARGET_NOT_FOUND) {
+  //     if (tracker && selectedPersona) {
+  //       const onboardingSteps = tracker.getStepsForPersona(selectedPersona);
+  //       const currentStep = onboardingSteps[index];
+  //       if (currentStep) {
+  //         await tracker.updateStep(currentStep.id);
+  //       }
+  //     }
       
-      setStepIndex(index + (action === 'next' ? 1 : -1));
-      setProgress(((index + 1) / steps.length) * 100);
-    }
+  //     setStepIndex(index + (action === 'next' ? 1 : -1));
+  //     setProgress(((index + 1) / steps.length) * 100);
+  //   }
 
-    if (status === STATUS.FINISHED || status === STATUS.SKIPPED) {
-      setRun(false);
+  //   if (status === STATUS.FINISHED || status === STATUS.SKIPPED) {
+  //     setRun(false);
       
-      if (status === STATUS.FINISHED && tracker) {
-        await tracker.markMilestone('dashboardTour');
-        onComplete?.();
-      } else {
-        onSkip?.();
-      }
-    }
-  }, [tracker, selectedPersona, steps.length, onComplete, onSkip]);
+  //     if (status === STATUS.FINISHED && tracker) {
+  //       await tracker.markMilestone('dashboardTour');
+  //       onComplete?.();
+  //     } else {
+  //       onSkip?.();
+  //     }
+  //   }
+  // }, [tracker, selectedPersona, steps.length, onComplete, onSkip]);
 
   const PersonaSelectionModal = () => (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
@@ -261,7 +262,7 @@ export const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
     <>
       {showPersonaSelection && <PersonaSelectionModal />}
       
-      {run && steps.length > 0 && (
+      {/* {run && steps.length > 0 && (
         <Joyride
           steps={steps}
           run={run}
@@ -284,7 +285,7 @@ export const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
             skip: t('Skip Tour')
           }}
         />
-      )}
+      )} */}
       
       {run && (
         <div className="fixed top-4 right-4 z-[9999]">

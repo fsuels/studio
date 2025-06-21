@@ -3,11 +3,6 @@ import { TemplateVersionManager } from '../template-version-manager';
 import type { LegalDocument } from '@/types/documents';
 import type { ChangelogEntry } from '@/types/marketplace';
 
-// Mock Firebase
-jest.mock('@/lib/firebase', () => ({
-  getDb: jest.fn(() => Promise.resolve(mockDb)),
-}));
-
 const mockDb = {
   collection: jest.fn(),
   doc: jest.fn(),
@@ -15,6 +10,11 @@ const mockDb = {
   getDoc: jest.fn(),
   updateDoc: jest.fn(),
 };
+
+// Mock Firebase
+jest.mock('@/lib/firebase', () => ({
+  getDb: jest.fn(() => Promise.resolve(mockDb)),
+}));
 
 // Mock Firestore functions
 jest.mock('firebase/firestore', () => ({

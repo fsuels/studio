@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
-import { useAuthContext } from '@/contexts/AuthContext';
+import { useAuth } from '@/hooks/useAuth';
 import { collection, query, orderBy, limit, getDocs, where, Timestamp } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { Button } from '@/components/ui/button';
@@ -83,7 +83,7 @@ interface AuditFilters {
 }
 
 export default function AuditTrailPage() {
-  const { user } = useAuthContext();
+  const { user } = useAuth();
   const [auditEvents, setAuditEvents] = useState<AuditEvent[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedEvent, setSelectedEvent] = useState<AuditEvent | null>(null);

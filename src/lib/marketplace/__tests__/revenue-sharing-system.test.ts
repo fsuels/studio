@@ -23,6 +23,15 @@ jest.mock('stripe', () => {
   }));
 });
 
+const mockDb = {
+  collection: jest.fn(),
+  doc: jest.fn(),
+  setDoc: jest.fn(),
+  getDoc: jest.fn(),
+  updateDoc: jest.fn(),
+  addDoc: jest.fn(),
+};
+
 // Mock Firebase
 jest.mock('@/lib/firebase', () => ({
   getDb: jest.fn(() => Promise.resolve(mockDb)),
@@ -42,15 +51,6 @@ jest.mock('firebase/firestore', () => ({
   serverTimestamp: jest.fn(() => ({ seconds: Date.now() / 1000 })),
   addDoc: jest.fn(),
 }));
-
-const mockDb = {
-  collection: jest.fn(),
-  doc: jest.fn(),
-  setDoc: jest.fn(),
-  getDoc: jest.fn(),
-  updateDoc: jest.fn(),
-  addDoc: jest.fn(),
-};
 
 const mockStripe = {
   accounts: {

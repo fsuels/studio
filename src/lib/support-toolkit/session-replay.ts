@@ -1,5 +1,5 @@
 // Session Recording and Replay System for Support
-import { db } from '@/lib/firebase/firebase';
+import { db } from '@/lib/firebase';
 import { collection, addDoc, query, where, orderBy, getDocs, doc, updateDoc } from 'firebase/firestore';
 
 export interface SessionEvent {

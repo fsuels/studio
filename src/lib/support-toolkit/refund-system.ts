@@ -1,5 +1,5 @@
 // Automated Refund/Credit System with Audit Trails
-import { db } from '@/lib/firebase/firebase';
+import { db } from '@/lib/firebase';
 import { collection, addDoc, query, where, getDocs, doc, updateDoc, getDoc } from 'firebase/firestore';
 import Stripe from 'stripe';
 

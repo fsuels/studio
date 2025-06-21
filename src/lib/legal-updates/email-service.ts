@@ -443,7 +443,7 @@ ${update.actionItems.length > 0 ? `
 Action Required:
 ${update.actionItems.slice(0, 3).map(action => `• ${action.description}`).join('\n')}
 ` : ''}
-`).join('\n'))}
+`).join('\n')}
 
 View all updates: ${dashboardUrl}
 

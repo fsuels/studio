@@ -18,7 +18,7 @@ jest.mock('react-i18next', () => ({
 }))
 
 // Mock components
-jest.mock('@/components/forms/SmartInput', () => {
+jest.mock('@/components/forms/wizard/SmartInput', () => {
   return function MockSmartInput({ rhfProps, ...props }: any) {
     return <input {...props} {...rhfProps} data-testid="smart-input" />
   }

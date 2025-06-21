@@ -227,7 +227,7 @@ export { tripleNetLeaseMeta as tripleNetLease } from './triple-net-lease';
 export { officeSpaceLeaseMeta as officeSpaceLease } from './office-space-lease';
 export { retailSpaceLeaseMeta as retailSpaceLease } from './retail-space-lease';
 export { restaurantLeaseMeta as restaurantLease } from './restaurant-lease';
-export { warehouseLeaseMeta as warehouseLease } from './warehouse-lease';
+export { metadata as warehouseLease } from './warehouse-lease';
 export { commercialLeaseWithOptionToPurchaseMeta as commercialLeaseWithOptionToPurchase } from './commercial-lease-with-option-to-purchase';
 export { storageSpaceLeaseAgreementMeta as storageSpaceLeaseAgreement } from './storage-space-lease-agreement';
 export { parkingSpaceLeaseAgreementMeta as parkingSpaceLeaseAgreement } from './parking-space-lease-agreement';
@@ -239,7 +239,7 @@ export { holdHarmlessAgreementMeta as holdHarmlessAgreement } from './hold-harml
 export { liabilityWaiverMeta as liabilityWaiver } from './liability-waiver';
 export { indemnityAgreementMeta as indemnityAgreement } from './indemnity-agreement';
 export { incidentReportMeta as incidentReport } from './incident-report';
-export { accidentReportMeta as accidentReport } from './accident-report';
+export { accidentReportMetadata as accidentReport } from './accident-report';
 export { covid19HealthScreeningMeta as covid19HealthScreening } from './covid19-health-screening';
 export { ceaseDesistLetterMeta as ceaseDesistLetter } from './cease-desist-letter';
 export { smallClaimsWorksheetMeta as smallClaimsWorksheet } from './small-claims-worksheet';

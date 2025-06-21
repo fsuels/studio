@@ -106,3 +106,32 @@ beforeAll(() => {
 afterAll(() => {
   console.error = originalError
 })
+
+// Mock Web APIs that are not available in Node.js test environment
+global.Request = global.Request || 
+  class Request {
+    constructor(input, init) {
+      this.url = input
+      this.method = init?.method || 'GET'
+      this.headers = new Map(Object.entries(init?.headers || {}))
+      this.body = init?.body
+    }
+  }
+
+global.Response = global.Response || 
+  class Response {
+    constructor(body, init) {
+      this.body = body
+      this.status = init?.status || 200
+      this.statusText = init?.statusText || 'OK'
+      this.headers = new Map(Object.entries(init?.headers || {}))
+    }
+    
+    json() {
+      return Promise.resolve(JSON.parse(this.body))
+    }
+    
+    text() {
+      return Promise.resolve(this.body)
+    }
+  }
