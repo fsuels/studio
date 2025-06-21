@@ -70,7 +70,10 @@
       "Bash(./update-footer.sh)",
       "Bash(./revert-footer.sh:*)",
       "Bash(npx eslint:*)",
-      "Bash(npx jest:*)"
+      "Bash(npx jest:*)",
+      "Bash(do echo \"=== $module ===\")",
+      "Bash(head:*)",
+      "Bash(jobs)"
     ],
     "deny": []
   }
