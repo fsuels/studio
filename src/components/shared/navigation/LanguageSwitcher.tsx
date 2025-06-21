@@ -17,6 +17,7 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
+import { getDirAttribute, isRTL, useDirectional } from '@/lib/rtl-utils';
 
 // Placeholder FlagUS Component - Replace with your actual SVG component
 const FlagUS = () => (
@@ -86,11 +87,25 @@ const LanguageSwitcher = React.memo(function LanguageSwitcher() {
     }
   }, [params.locale, pathname]);
 
+  // Update document attributes when locale changes
+  useEffect(() => {
+    if (isHydrated && currentRouteLocale) {
+      const dir = getDirAttribute(currentRouteLocale);
+      document.documentElement.setAttribute('dir', dir);
+      document.documentElement.setAttribute('lang', currentRouteLocale);
+    }
+  }, [currentRouteLocale, isHydrated]);
+
   const handleLocaleChange = (newLocale: 'en' | 'es') => {
     if (newLocale === currentRouteLocale) {
       setIsPopoverOpen(false);
       return;
     }
+
+    // Update document direction attribute
+    const newDir = getDirAttribute(newLocale);
+    document.documentElement.setAttribute('dir', newDir);
+    document.documentElement.setAttribute('lang', newLocale);
 
     // swap the locale prefix in the path
     let newPath = pathname.startsWith(`/${currentRouteLocale}`)

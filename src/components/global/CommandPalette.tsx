@@ -21,12 +21,15 @@ import {
   Filter,
   ArrowUpDown,
   Share2,
-  Copy
+  Copy,
+  Languages,
+  Globe
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { enhancedSearch, getSearchSuggestions } from '@/lib/enhanced-search';
 import { Badge } from '@/components/ui/badge';
 import { updateUrlParams, getCurrentSearchParams, createShareableUrl, type SearchParams } from '@/lib/url-params';
+import { useLanguageSwitch } from './LanguageSwitch';
 
 interface SearchResult {
   slug: string;
@@ -67,6 +70,7 @@ export default function CommandPalette({
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const { t } = useTranslation(['common', 'header']);
+  const { switchLanguage, availableLocales, localeNames, nextLocale } = useLanguageSwitch(locale);
   
   const [search, setSearch] = useState('');
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
@@ -298,8 +302,36 @@ export default function CommandPalette({
       }
     );
 
+    // Add language switching actions
+    filterActions.push(
+      {
+        id: 'switch-language',
+        title: `Switch to ${localeNames[nextLocale]}`,
+        description: `Change language to ${localeNames[nextLocale]} (⌘L)`,
+        icon: <Languages className="h-4 w-4" />,
+        action: () => switchLanguage(nextLocale),
+        group: 'language',
+        keywords: ['language', 'locale', 'switch', nextLocale, localeNames[nextLocale].toLowerCase()]
+      }
+    );
+
+    // Add individual language options
+    availableLocales.forEach(lang => {
+      if (lang !== locale) {
+        filterActions.push({
+          id: `language-${lang}`,
+          title: `Switch to ${localeNames[lang]}`,
+          description: `Change interface language to ${localeNames[lang]}`,
+          icon: <Globe className="h-4 w-4" />,
+          action: () => switchLanguage(lang),
+          group: 'language',
+          keywords: ['language', 'locale', lang, localeNames[lang].toLowerCase()]
+        });
+      }
+    });
+
     return filterActions;
-  }, [selectedFilter, userRole, search]);
+  }, [selectedFilter, userRole, search, switchLanguage, nextLocale, localeNames, availableLocales, locale]);
 
   // Debounced search for documents
   const performDocumentSearch = useCallback(async (query: string) => {
@@ -377,6 +409,13 @@ export default function CommandPalette({
           // Open command palette logic would be handled by parent
         }
       }
+      if (e.key === 'l' && (e.metaKey || e.ctrlKey)) {
+        e.preventDefault();
+        switchLanguage(nextLocale);
+        if (isOpen) {
+          onClose();
+        }
+      }
       if (e.key === 'Escape') {
         onClose();
       }
@@ -384,7 +423,7 @@ export default function CommandPalette({
 
     document.addEventListener('keydown', down);
     return () => document.removeEventListener('keydown', down);
-  }, [isOpen, onClose]);
+  }, [isOpen, onClose, switchLanguage, nextLocale]);
 
   const handleSelect = useCallback((callback: () => void) => {
     callback();

@@ -162,8 +162,57 @@ const config: Config = {
   plugins: [
     require('tailwindcss-animate'),
     require('@tailwindcss/typography'),
-    plugin(({ addVariant }) => {
+    require('tailwindcss-rtl'),
+    plugin(({ addVariant, addUtilities }) => {
       addVariant('hocus', ['&:hover', '&:focus-visible']);
+      
+      // Add logical properties for RTL support
+      addUtilities({
+        '.ms-auto': {
+          'margin-inline-start': 'auto',
+        },
+        '.me-auto': {
+          'margin-inline-end': 'auto',
+        },
+        '.ps-2': {
+          'padding-inline-start': '0.5rem',
+        },
+        '.ps-3': {
+          'padding-inline-start': '0.75rem',
+        },
+        '.ps-4': {
+          'padding-inline-start': '1rem',
+        },
+        '.pe-2': {
+          'padding-inline-end': '0.5rem',
+        },
+        '.pe-3': {
+          'padding-inline-end': '0.75rem',
+        },
+        '.pe-4': {
+          'padding-inline-end': '1rem',
+        },
+        '.border-s': {
+          'border-inline-start-width': '1px',
+        },
+        '.border-e': {
+          'border-inline-end-width': '1px',
+        },
+        '.text-start': {
+          'text-align': 'start',
+        },
+        '.text-end': {
+          'text-align': 'end',
+        },
+        '.rounded-s': {
+          'border-start-start-radius': '0.25rem',
+          'border-end-start-radius': '0.25rem',
+        },
+        '.rounded-e': {
+          'border-start-end-radius': '0.25rem',
+          'border-end-end-radius': '0.25rem',
+        },
+      });
     }),
   ],
 };

@@ -86,7 +86,7 @@ export default function RootLayout({
   ];
 
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" dir="ltr" suppressHydrationWarning>
       <Head>{headElements}</Head>
       <body
         className={`${inter.variable} ${merriweather.variable} antialiased flex flex-col min-h-screen overflow-x-hidden`}

@@ -3,6 +3,7 @@
 import type { ReactNode } from 'react'
 import { ClientProviders } from '@/components/providers/ClientProviders'
 import { Layout } from '@/components/layout/Layout'
+import LanguageSwitch from '@/components/global/LanguageSwitch'
 
 interface LocaleLayoutProps {
   children: ReactNode
@@ -22,6 +23,7 @@ export default async function LocaleLayout({
 
   return (
     <ClientProviders locale={detectedLocale}>
+      <LanguageSwitch currentLocale={detectedLocale} showToast={false} />
       <Layout>
         {children}
       </Layout>
