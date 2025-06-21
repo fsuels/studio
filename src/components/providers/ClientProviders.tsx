@@ -7,6 +7,7 @@ import I18nClientProvider from '@/components/providers/I18nProvider';
 import { Toaster } from '@/components/ui/toaster';
 import { CartProvider } from '@/contexts/CartProvider';
 import { AuthProvider } from '@/hooks/useAuth'; // Ensure this is the correct export
+import { AccessibilityProvider } from '@/contexts/AccessibilityProvider';
 import { Loader2 } from 'lucide-react';
 import { ThemeProvider } from 'next-themes';
 
@@ -23,6 +24,8 @@ import dynamic from 'next/dynamic';
 // Load non-critical widgets lazily
 const ContactFormButton = dynamic(() => import('@/components/shared').then(m => ({ default: m.ContactFormButton })));
 const ActivityTicker = dynamic(() => import('@/components/shared').then(m => ({ default: m.ActivityTicker })));
+const AccessibilityToolbar = dynamic(() => import('@/components/accessibility/AccessibilityToolbar').then(m => ({ default: m.AccessibilityToolbar })));
+const GlobalKeyboardShortcuts = dynamic(() => import('@/components/accessibility/GlobalKeyboardShortcuts').then(m => ({ default: m.GlobalKeyboardShortcuts })));
 
 const AppShell = React.memo(function AppShell({
   children,
@@ -42,6 +45,9 @@ const AppShell = React.memo(function AppShell({
       {children}
       <ContactFormButton />
       <ActivityTicker />
+      {/* Conditionally render accessibility components only on the client after mount */}
+      {isMounted && <AccessibilityToolbar />}
+      {isMounted && <GlobalKeyboardShortcuts />}
       {/* Conditionally render Toaster only on the client after mount */}
       {isMounted && <Toaster />}
     </>
@@ -80,9 +86,11 @@ export function ClientProviders({ children, locale }: ClientProvidersProps) {
       >
         <QueryClientProvider client={queryClient}>
           <AuthProvider>
-            <CartProvider>
-              <AppShell>{children}</AppShell>
-            </CartProvider>
+            <AccessibilityProvider>
+              <CartProvider>
+                <AppShell>{children}</AppShell>
+              </CartProvider>
+            </AccessibilityProvider>
           </AuthProvider>
         </QueryClientProvider>
       </I18nClientProvider>
