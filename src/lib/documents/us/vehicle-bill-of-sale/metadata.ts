@@ -16,8 +16,8 @@ export const vehicleBillOfSaleMeta: LegalDocument = {
   states: 'all', // Indicates available in all US states unless overridden
   // Standardized template paths
   templatePaths: {
-    en: '/templates/en/bill-of-sale-vehicle.md',
-    es: '/templates/es/bill-of-sale-vehicle.md',
+    en: '/templates/en/vehicle-bill-of-sale.md',
+    es: '/templates/es/vehicle-bill-of-sale.md',
   },
   requiresNotarizationStates: [
     'AZ',
