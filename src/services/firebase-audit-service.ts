@@ -11,16 +11,16 @@ import {
   Timestamp,
   DocumentData
 } from 'firebase/firestore'
-import { AuditEventManager, AuditEvent, EventType } from '@/lib/immutable-audit-trail'
+import { ImmutableAuditTrail, ImmutableAuditEvent, immutableAuditTrail } from '@/lib/immutable-audit-trail'
 import { auth } from '@/lib/firebase'
 
 export class FirebaseAuditService {
   private static instance: FirebaseAuditService
-  private auditManager: AuditEventManager
+  private auditManager: ImmutableAuditTrail
   private readonly COLLECTION_NAME = 'audit_events'
 
   private constructor() {
-    this.auditManager = new AuditEventManager()
+    this.auditManager = immutableAuditTrail
   }
 
   static getInstance(): FirebaseAuditService {
@@ -34,7 +34,7 @@ export class FirebaseAuditService {
    * Log an audit event to Firestore
    */
   async logEvent(
-    eventType: EventType,
+    eventType: ImmutableAuditEvent['eventType'],
     metadata: Record<string, any>,
     userId?: string
   ): Promise<void> {
