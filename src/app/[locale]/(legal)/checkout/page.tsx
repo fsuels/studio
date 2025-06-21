@@ -9,7 +9,7 @@ import { Loader2 } from 'lucide-react';
 
 // Load stripe.js just once
 const stripePromise = loadStripe(
-  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!,
+  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || 'pk_test_51234567890abcdefghijklmnopqrstuvwxyz',
 );
 
 export default function CheckoutPage() {

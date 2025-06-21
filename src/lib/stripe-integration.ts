@@ -46,7 +46,7 @@ export class StripeIntegration {
   constructor() {
     this.config = {
       publishableKey:
-        process.env.STRIPE_PUBLISHABLE_KEY || 'pk_test_123legaldoc',
+        process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || 'pk_test_123legaldoc',
       secretKey: process.env.STRIPE_SECRET_KEY || 'sk_test_123legaldoc',
       webhookSecret: process.env.STRIPE_WEBHOOK_SECRET || 'whsec_123legaldoc',
       apiVersion: '2023-10-16',

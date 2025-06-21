@@ -18,7 +18,7 @@ import {
 import { Button } from '@/components/ui/button';
 
 const stripePromise = loadStripe(
-  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || '',
+  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || 'pk_test_51234567890abcdefghijklmnopqrstuvwxyz',
 );
 
 interface PaymentModalProps {
