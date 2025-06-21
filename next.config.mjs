@@ -6,13 +6,18 @@ import webpack from 'webpack';
 /*  Core Next.js config                                                       */
 /* -------------------------------------------------------------------------- */
 const nextConfig = {
-  turbopack: {},
+  turbo: {
+    // Turbopack configuration replaces webpack config
+    rules: {
+      '*.ts': 'typescript',
+      '*.tsx': 'typescript',
+    },
+  },
   typescript: { ignoreBuildErrors: false },
   eslint: { ignoreDuringBuilds: false },
 
   /* Performance budgets and optimization */
   experimental: {
-    bundlePagesRouterDependencies: true,
     optimizePackageImports: [
       '@radix-ui/react-icons', 
       'lucide-react',

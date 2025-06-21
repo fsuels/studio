@@ -98,6 +98,19 @@ export async function getDb(): Promise<Firestore> {
 }
 
 /* ------------------------------------------------------------------ */
+/* Auth                                                               */
+/* ------------------------------------------------------------------ */
+let authInstance: any = null;
+export async function getAuth() {
+  if (authInstance) return authInstance;
+  const { getAuth } = await import('firebase/auth');
+  authInstance = getAuth(app);
+  return authInstance;
+}
+
+/* ------------------------------------------------------------------ */
 /* Exports                                                            */
 /* ------------------------------------------------------------------ */
 export { app };
+export const db = getDb();
+export const auth = getAuth();
