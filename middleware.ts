@@ -29,7 +29,7 @@ export async function middleware(request: NextRequest) {
     "script-src 'self' 'unsafe-inline' 'unsafe-eval' *.googletagmanager.com *.google-analytics.com *.stripe.com *.intercom.io",
     "style-src 'self' 'unsafe-inline' fonts.googleapis.com",
     "font-src 'self' fonts.gstatic.com",
-    "img-src 'self' data: blob: *.googleusercontent.com *.stripe.com *.intercom.io",
+    "img-src 'self' data: blob: *.googleusercontent.com *.stripe.com *.intercom.io cdn.simpleicons.org picsum.photos",
     "connect-src 'self' *.firebase.googleapis.com *.stripe.com *.intercom.io wss://*.intercom.io",
     "frame-src 'self' *.stripe.com *.intercom.io",
   ].join('; ');

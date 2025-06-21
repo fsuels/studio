@@ -196,6 +196,8 @@ export const Footer = React.memo(function Footer() {
               <div className="relative flex-grow rounded-full bg-[#F3F4F6] focus-within:ring-2 focus-within:ring-[#00C3A3] focus-within:ring-offset-2">
                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500 pointer-events-none" />
                 <Input
+                  id="newsletter-email"
+                  name="email"
                   type="email"
                   placeholder={t('emailPlaceholder', {
                     defaultValue: 'Enter your email',
