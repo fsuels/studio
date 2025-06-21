@@ -33,15 +33,7 @@ import {
 import { documentLibrary, type LegalDocument } from '@/lib/document-library';
 import { useIsMobile } from '@/hooks/use-mobile';
 
-// Placeholder data for top docs - in a real app, this would come from Firestore
-const staticTopDocIds: string[] = [
-  'bill-of-sale-vehicle',
-  'leaseAgreement',
-  'non-disclosure-agreement',
-  'powerOfAttorney',
-  'eviction-notice',
-  'last-will-testament',
-];
+import { taxonomy } from '@/config/taxonomy';
 
 const TopDocsChips = React.memo(function TopDocsChips() {
   // Use 'common' namespace for shared UI text
@@ -55,15 +47,33 @@ const TopDocsChips = React.memo(function TopDocsChips() {
   const [topDocs, setTopDocs] = useState<LegalDocument[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isHydrated, setIsHydrated] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState<string>('All');
+  const [selectedCategory, setSelectedCategory] = useState<string>('real-estate-property');
   const badges: Record<string, 'new' | 'updated'> = {
     powerOfAttorney: 'new',
     leaseAgreement: 'updated',
   };
-  const categoryIcons: Record<string, LucideIcon> = {
-    Finance: Folder,
-    'Real Estate': Home,
-    Family: Users,
+  
+  // Get all categories from taxonomy
+  const allCategories = Object.keys(taxonomy.categories);
+  
+  // Category display names and icons - using all your categories
+  const categoryMeta: Record<string, { label: string; icon: LucideIcon }> = {
+    'real-estate-property': { label: 'Real Estate & Property', icon: Home },
+    'employment-hr': { label: 'Employment & HR', icon: Users },
+    'personal-family': { label: 'Personal & Family', icon: Users },
+    'health-care': { label: 'Health & Care', icon: Users },
+    'finance-lending': { label: 'Finance & Lending', icon: Folder },
+    'business-startups': { label: 'Business & Start-ups', icon: Folder },
+    'ip-creative': { label: 'IP & Creative Works', icon: FileText },
+    'legal-process-disputes': { label: 'Legal Process & Disputes', icon: FileText },
+    'estate-planning': { label: 'Estate Planning', icon: FileText },
+    'construction-trades': { label: 'Construction & Trades', icon: FileText },
+    'technology-digital': { label: 'Technology & Digital', icon: FileText },
+    'agriculture-energy': { label: 'Agriculture & Energy', icon: FileText },
+    'vehicles-equipment': { label: 'Vehicles & Equipment', icon: FileText },
+    'general-forms': { label: 'General Forms', icon: FileText },
+    'ip-creative-works': { label: 'IP & Creative Works (Media)', icon: FileText },
+    'assets-gear': { label: 'Assets & Gear', icon: FileText },
   };
 
   useEffect(() => {
@@ -73,17 +83,14 @@ const TopDocsChips = React.memo(function TopDocsChips() {
   useEffect(() => {
     if (!isHydrated) return;
 
-    const resolvedTopDocs = staticTopDocIds
-      .map((id) => documentLibrary.find((doc) => doc.id === id))
-      .filter((doc): doc is LegalDocument => doc !== undefined);
-
-    setTopDocs(resolvedTopDocs);
+    // Get all documents from the library
+    setTopDocs(documentLibrary);
     setIsLoading(false);
   }, [isHydrated]);
 
   const categories = React.useMemo(
-    () => Array.from(new Set(topDocs.map((d) => d.category))).sort(),
-    [topDocs],
+    () => allCategories.filter(cat => categoryMeta[cat]),
+    [allCategories],
   );
   const isMobile = useIsMobile();
   const categoriesToShow = React.useMemo(
@@ -94,10 +101,33 @@ const TopDocsChips = React.memo(function TopDocsChips() {
     () => (isMobile ? categories.slice(3) : []),
     [isMobile, categories],
   );
-  const filteredDocs =
-    selectedCategory === 'All'
-      ? topDocs
-      : topDocs.filter((d) => d.category === selectedCategory);
+  // Create mapping from taxonomy keys to document category names
+  const taxonomyToDocCategory: Record<string, string[]> = {
+    'real-estate-property': ['Real Estate', 'Property'],
+    'employment-hr': ['Employment', 'HR'],
+    'personal-family': ['Personal', 'Family'],
+    'health-care': ['Health', 'Healthcare', 'Medical'],
+    'finance-lending': ['Finance', 'Financial', 'Lending'],
+    'business-startups': ['Business', 'Corporate'],
+    'ip-creative': ['Intellectual Property', 'IP', 'Creative'],
+    'legal-process-disputes': ['Legal', 'Disputes'],
+    'estate-planning': ['Estate Planning', 'Estate'],
+    'construction-trades': ['Construction', 'Trades'],
+    'technology-digital': ['Technology', 'Digital'],
+    'agriculture-energy': ['Agriculture', 'Energy'],
+    'vehicles-equipment': ['Vehicles', 'Equipment'],
+    'general-forms': ['General', 'Forms'],
+    'ip-creative-works': ['Creative Works', 'Media'],
+    'assets-gear': ['Assets', 'Gear'],
+  };
+
+  // Filter documents by selected category
+  const filteredDocs = React.useMemo(() => {
+    const validCategories = taxonomyToDocCategory[selectedCategory] || [];
+    return topDocs.filter((doc) => 
+      validCategories.includes(doc.category) || doc.category === selectedCategory
+    );
+  }, [topDocs, selectedCategory]);
 
   const handleExploreAll = () => {
     const workflowStartElement = document.getElementById('workflow-start');
@@ -133,15 +163,10 @@ const TopDocsChips = React.memo(function TopDocsChips() {
             defaultValue: 'Popular Legal Documents',
           })}
         </h2>
+        
+        {/* Category Filter Buttons */}
         {categories.length > 1 && (
-          <div className="mb-4 flex flex-wrap justify-center gap-2">
-            <Button
-              size="sm"
-              variant={selectedCategory === 'All' ? 'default' : 'outline'}
-              onClick={() => setSelectedCategory('All')}
-            >
-              {tCommon('All', { defaultValue: 'All' })}
-            </Button>
+          <div className="mb-6 flex flex-wrap justify-center gap-2">
             {categoriesToShow.map((cat) => (
               <Button
                 key={cat}
@@ -149,7 +174,7 @@ const TopDocsChips = React.memo(function TopDocsChips() {
                 variant={selectedCategory === cat ? 'default' : 'outline'}
                 onClick={() => setSelectedCategory(cat)}
               >
-                {tCommon(cat, { defaultValue: cat })}
+                {categoryMeta[cat]?.label || cat}
               </Button>
             ))}
             {isMobile && moreCategories.length > 0 && (
@@ -165,7 +190,7 @@ const TopDocsChips = React.memo(function TopDocsChips() {
                       key={cat}
                       onSelect={() => setSelectedCategory(cat)}
                     >
-                      {tCommon(cat, { defaultValue: cat })}
+                      {categoryMeta[cat]?.label || cat}
                     </DropdownMenuItem>
                   ))}
                 </DropdownMenuContent>
@@ -173,9 +198,14 @@ const TopDocsChips = React.memo(function TopDocsChips() {
             )}
           </div>
         )}
+
+        {/* Selected Category Name */}
+        <h3 className="text-lg font-medium text-center mb-4 text-foreground">
+          {categoryMeta[selectedCategory]?.label || selectedCategory}
+        </h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {filteredDocs.map((doc) => {
-            const Icon = categoryIcons[doc.category] || FileText;
+            const Icon = categoryMeta[doc.category]?.icon || FileText;
             const badge = badges[doc.id];
             return (
               <Link

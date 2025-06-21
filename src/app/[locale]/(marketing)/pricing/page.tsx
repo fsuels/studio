@@ -47,7 +47,6 @@ const PricingClientContent = dynamic(() => import('./pricing-client-content'), {
       </div>
     </div>
   ),
-  ssr: false, // Pricing page has interactive elements
 });
 interface PricingPageProps {
   params: { locale: 'en' | 'es' } & Record<string, string>;

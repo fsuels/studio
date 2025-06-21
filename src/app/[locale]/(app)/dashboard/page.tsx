@@ -61,11 +61,11 @@ const DashboardClientContent = dynamic(() => import('./dashboard-client-content'
       </div>
     </div>
   ),
-  ssr: false, // Dashboard needs client-side features
 });
 
 // Force dynamic rendering for user-specific dashboard content
-export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
+export const revalidate = 0;
 
 interface DashboardPageProps {
   params: {

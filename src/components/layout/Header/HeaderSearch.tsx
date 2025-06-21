@@ -37,7 +37,9 @@ export default function HeaderSearch({
   // Search functionality
   useEffect(() => {
     if (searchQuery.trim().length > 1) {
+      console.log('HeaderSearch - Searching for:', searchQuery);
       const results = search(searchQuery, clientLocale);
+      console.log('HeaderSearch - Results:', results);
       setSearchResults(results.slice(0, 8));
       setShowResults(results.length > 0);
     } else {

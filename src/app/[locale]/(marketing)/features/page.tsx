@@ -22,7 +22,6 @@ const FeaturesClientContent = dynamic(() => import('./features-client-content'),
       </div>
     </div>
   ),
-  ssr: false, // Features page doesn't need SSR for interactivity
 });
 
 // generateStaticParams is a server-side function and can be exported from a Server Component page

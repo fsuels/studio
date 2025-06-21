@@ -73,7 +73,8 @@
       "Bash(npx jest:*)",
       "Bash(do echo \"=== $module ===\")",
       "Bash(head:*)",
-      "Bash(jobs)"
+      "Bash(jobs)",
+      "Bash(git checkout:*)"
     ],
     "deny": []
   }

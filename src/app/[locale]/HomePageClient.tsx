@@ -221,11 +221,11 @@ export default function HomePageClient() {
         </div>
       </section>
 
-      {/* "Popular Legal Documents" section */}
-      <TopDocsChips />
-
       {/* "Generate and Personalize Legal Forms" section (formerly "How It Works") */}
       <HowItWorks />
+
+      {/* Popular Documents by Category */}
+      <TopDocsChips />
 
       {/* "Trust and Testimonials" section */}
       <TrustAndTestimonialsSection />

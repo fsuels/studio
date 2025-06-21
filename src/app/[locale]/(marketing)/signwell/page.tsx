@@ -1,5 +1,5 @@
 // src/app/[locale]/signwell/page.tsx
-export const dynamic = 'force-static';
+export const revalidate = 3600; // Revalidate every hour
 
 import type { Metadata } from 'next';
 import React from 'react';
@@ -41,7 +41,6 @@ const SignWellPageClient = dynamic(() => import('./SignWellPageClient'), {
       </div>
     </div>
   ),
-  ssr: false, // SignWell has heavy interactivity, no need for SSR
 });
 
 interface SignWellPageProps {

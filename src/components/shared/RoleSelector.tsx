@@ -67,14 +67,24 @@ const RoleSelector: React.FC<RoleSelectorProps> = ({
 
   // Get sorted roles by popularity (based on quickDocs count)
   const sortedRoles = React.useMemo(() => {
-    return Object.entries(taxonomy.roles).sort(([, a], [, b]) => {
-      const aQuickDocs = Object.keys(a.quickDocs || {}).length;
-      const bQuickDocs = Object.keys(b.quickDocs || {}).length;
-      return bQuickDocs - aQuickDocs; // Sort by number of quick docs descending
-    });
+    return Object.entries(taxonomy.roles)
+      .filter(([, role]) => role && typeof role === 'object')
+      .sort(([, a], [, b]) => {
+        const aQuickDocs = Object.keys(a.quickDocs || {}).length;
+        const bQuickDocs = Object.keys(b.quickDocs || {}).length;
+        return bQuickDocs - aQuickDocs; // Sort by number of quick docs descending
+      });
   }, []);
 
   const selectedRoleData = selectedRole ? taxonomy.roles[selectedRole] : null;
+  
+  // Helper function to format role key into display name
+  const formatRoleKey = (key: string): string => {
+    return key
+      .split(/[-_]/)
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
+  };
 
   if (!mounted) {
     return (
@@ -103,15 +113,15 @@ const RoleSelector: React.FC<RoleSelectorProps> = ({
         >
           <Users className="h-4 w-4" />
           <span className="truncate">
-            {selectedRoleData
-              ? selectedRoleData.name
+            {selectedRole
+              ? formatRoleKey(selectedRole)
               : t('roleSelector.selectRole', { defaultValue: 'Select Role' })}
           </span>
           <ChevronDown className="h-3 w-3 opacity-50" />
         </Button>
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent align="end" className="w-56">
+      <DropdownMenuContent align="end" className="w-64 max-h-96 overflow-y-auto">
         <DropdownMenuLabel className="text-xs font-medium text-muted-foreground">
           {t('roleSelector.yourRole', {
             defaultValue: 'What best describes you?',
@@ -136,39 +146,45 @@ const RoleSelector: React.FC<RoleSelectorProps> = ({
         )}
 
         {/* Role Options */}
-        {sortedRoles.map(([roleKey, role]) => {
-          const isSelected = selectedRole === roleKey;
-          const quickDocsCount = Object.keys(role.quickDocs || {}).length;
+        {sortedRoles.length > 0 ? (
+          sortedRoles.map(([roleKey, role]) => {
+            const isSelected = selectedRole === roleKey;
+            const quickDocsCount = Object.keys(role.quickDocs || {}).length;
 
-          return (
-            <DropdownMenuItem
-              key={roleKey}
-              onClick={() => handleRoleSelect(roleKey)}
-              className={cn(
-                'flex items-center justify-between',
-                isSelected && 'bg-primary/10',
-              )}
-            >
-              <div className="flex flex-col gap-0.5">
-                <div className="flex items-center gap-2">
-                  <span className="font-medium">{role.name}</span>
-                  {isSelected && <Check className="h-3 w-3 text-primary" />}
-                </div>
-                {role.description && (
-                  <span className="text-xs text-muted-foreground line-clamp-1">
-                    {role.description}
-                  </span>
+            return (
+              <DropdownMenuItem
+                key={roleKey}
+                onClick={() => handleRoleSelect(roleKey)}
+                className={cn(
+                  'flex items-center justify-between p-3 cursor-pointer hover:bg-accent',
+                  isSelected && 'bg-primary/10',
                 )}
-              </div>
+              >
+                <div className="flex flex-col gap-0.5">
+                  <div className="flex items-center gap-2">
+                    <span className="font-medium">{formatRoleKey(roleKey)}</span>
+                    {isSelected && <Check className="h-3 w-3 text-primary" />}
+                  </div>
+                  {role.description && (
+                    <span className="text-xs text-muted-foreground line-clamp-1">
+                      {role.description}
+                    </span>
+                  )}
+                </div>
 
-              {quickDocsCount > 0 && (
-                <Badge variant="secondary" className="text-xs">
-                  {quickDocsCount}
-                </Badge>
-              )}
-            </DropdownMenuItem>
-          );
-        })}
+                {quickDocsCount > 0 && (
+                  <Badge variant="secondary" className="text-xs">
+                    {quickDocsCount}
+                  </Badge>
+                )}
+              </DropdownMenuItem>
+            );
+          })
+        ) : (
+          <div className="p-3 text-sm text-muted-foreground text-center">
+            {t('roleSelector.noRoles', { defaultValue: 'No roles available' })}
+          </div>
+        )}
       </DropdownMenuContent>
     </DropdownMenu>
   );

@@ -47,18 +47,20 @@ export async function enhancedSearch(
   const results: SearchResult[] = [];
   const processedSlugs = new Set<string>();
 
-  // 1. Expand query with synonyms
-  const expandedQueries = expandQueryWithSynonyms(query.toLowerCase().trim());
+  try {
+    // 1. Expand query with synonyms
+    const expandedQueries = expandQueryWithSynonyms(query.toLowerCase().trim());
 
-  // 2. Search through document slugs and metadata
-  const allSlugs = Object.keys(slugMap);
+    // 2. Search through document slugs and metadata
+    const allSlugs = Object.keys(slugMap);
+    console.log('Enhanced search - total slugs:', allSlugs.length);
 
-  for (const slug of allSlugs) {
-    if (processedSlugs.has(slug)) continue;
+    for (const slug of allSlugs) {
+      if (processedSlugs.has(slug)) continue;
 
-    try {
-      const meta = await getDocMeta(slug);
-      if (!meta) continue;
+      try {
+        const meta = await getDocMeta(slug);
+        if (!meta) continue;
 
       let relevanceScore = 0;
       let matchType: SearchResult['matchType'] = 'fuzzy';
@@ -143,10 +145,26 @@ export async function enhancedSearch(
     }
   }
 
-  // Sort by relevance score and return top results
-  return results
-    .sort((a, b) => b.relevanceScore - a.relevanceScore)
-    .slice(0, maxResults);
+    // Sort by relevance score and return top results
+    return results
+      .sort((a, b) => b.relevanceScore - a.relevanceScore)
+      .slice(0, maxResults);
+  } catch (error) {
+    console.error('Enhanced search error:', error);
+    // Fallback to legacy search if enhanced search fails
+    return legacySearch(query, locale)
+      .slice(0, maxResults)
+      .map((doc) => ({
+        slug: doc.id,
+        title: doc.translations?.[locale]?.name || doc.name || doc.id,
+        description: doc.translations?.[locale]?.description || doc.description || '',
+        complexity: 'medium',
+        popular: false,
+        category: doc.category,
+        relevanceScore: 50,
+        matchType: 'fuzzy' as const,
+      }));
+  }
 }
 
 /**
@@ -157,6 +175,11 @@ function expandQueryWithSynonyms(query: string): string[] {
 
   // Split query into words for multi-word synonym matching
   const queryWords = query.split(/\s+/);
+
+  // Check if synonyms exist in taxonomy
+  if (!taxonomy.synonyms) {
+    return Array.from(expanded);
+  }
 
   // Check each synonym entry
   Object.entries(taxonomy.synonyms).forEach(([synonym, targets]) => {

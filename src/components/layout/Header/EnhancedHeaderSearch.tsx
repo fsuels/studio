@@ -88,17 +88,20 @@ export default function EnhancedHeaderSearch({
       try {
         // Check if enhanced search is enabled
         const useEnhanced = taxonomy.feature_flags?.wizard_v4?.enabled;
+        console.log('Performing search:', { query, useEnhanced, clientLocale });
 
         if (useEnhanced) {
           const results = await enhancedSearch(query, clientLocale, {
             maxResults: 8,
             roleFilter: userRole,
           });
+          console.log('Enhanced search results:', results);
           setSearchResults(results);
           setShowResults(results.length > 0);
         } else {
           // Fallback to legacy search
           const legacyResults = legacySearch(query, clientLocale);
+          console.log('Legacy search results:', legacyResults);
           const mappedResults: SearchResult[] = legacyResults
             .slice(0, 8)
             .map((doc) => ({

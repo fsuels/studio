@@ -19,11 +19,11 @@ import { StateSpecificLegalSchema } from '@/components/seo/LocalBusinessSchema';
 import Link from 'next/link';
 
 interface StateDocumentPageProps {
-  params: {
+  params: Promise<{
     locale: string;
     state: string;
     document: string;
-  };
+  }>;
 }
 
 export async function generateStaticParams() {
@@ -52,9 +52,8 @@ export async function generateStaticParams() {
 export async function generateMetadata({
   params,
 }: StateDocumentPageProps): Promise<Metadata> {
-  const stateSlug = params.state;
-  const documentSlug = params.document;
-  const locale = params.locale as 'en' | 'es';
+  const { state: stateSlug, document: documentSlug, locale } = await params;
+  const localeTyped = locale as 'en' | 'es';
 
   const stateObj = usStates.find(
     (s) => s.label.toLowerCase().replace(/\s+/g, '-') === stateSlug,
@@ -71,10 +70,10 @@ export async function generateMetadata({
 
   const stateName = stateObj.label;
   const documentName =
-    document.translations?.[locale]?.name || document.name || document.id;
+    document.translations?.[localeTyped]?.name || document.name || document.id;
   const documentDesc =
-    document.translations?.[locale]?.description || document.description || '';
-  const isSpanish = locale === 'es';
+    document.translations?.[localeTyped]?.description || document.description || '';
+  const isSpanish = localeTyped === 'es';
 
   const title = isSpanish
     ? `${documentName} de ${stateName} - Plantilla Gratuita 2025`
@@ -104,11 +103,11 @@ export async function generateMetadata({
       title,
       description,
       type: 'website',
-      locale: locale,
+      locale: localeTyped,
       siteName: '123LegalDoc',
     },
     alternates: {
-      canonical: `/${locale}/${stateSlug}/${documentSlug}`,
+      canonical: `/${localeTyped}/${stateSlug}/${documentSlug}`,
       languages: {
         en: `/en/${stateSlug}/${documentSlug}`,
         es: `/es/${stateSlug}/${documentSlug}`,
@@ -117,10 +116,9 @@ export async function generateMetadata({
   };
 }
 
-export default function StateDocumentPage({ params }: StateDocumentPageProps) {
-  const stateSlug = params.state;
-  const documentSlug = params.document;
-  const locale = params.locale as 'en' | 'es';
+export default async function StateDocumentPage({ params }: StateDocumentPageProps) {
+  const { state: stateSlug, document: documentSlug, locale } = await params;
+  const localeTyped = locale as 'en' | 'es';
 
   const stateObj = usStates.find(
     (s) => s.label.toLowerCase().replace(/\s+/g, '-') === stateSlug,
@@ -143,19 +141,19 @@ export default function StateDocumentPage({ params }: StateDocumentPageProps) {
 
   const stateName = stateObj.label;
   const documentName =
-    document.translations?.[locale]?.name || document.name || document.id;
+    document.translations?.[localeTyped]?.name || document.name || document.id;
   const documentDesc =
-    document.translations?.[locale]?.description || document.description || '';
-  const isSpanish = locale === 'es';
+    document.translations?.[localeTyped]?.description || document.description || '';
+  const isSpanish = localeTyped === 'es';
 
   const metaTags = generateDocumentMetaTags(
     documentName,
     stateName,
     undefined,
-    locale,
+    localeTyped,
   );
-  const breadcrumbs = generateStateBreadcrumbs(stateName, documentName, locale);
-  const faqs = generateDocumentFAQs(documentName, stateName, locale);
+  const breadcrumbs = generateStateBreadcrumbs(stateName, documentName, localeTyped);
+  const faqs = generateDocumentFAQs(documentName, stateName, localeTyped);
   const howToSteps = generateDocumentHowToSteps(documentName);
 
   return (
@@ -166,7 +164,7 @@ export default function StateDocumentPage({ params }: StateDocumentPageProps) {
         keywords={metaTags.keywords}
         documentType={documentName}
         state={stateName}
-        canonical={`/${locale}/${stateSlug}/${documentSlug}`}
+        canonical={`/${localeTyped}/${stateSlug}/${documentSlug}`}
         alternateLanguages={[
           { hrefLang: 'en', href: `/en/${stateSlug}/${documentSlug}` },
           { hrefLang: 'es', href: `/es/${stateSlug}/${documentSlug}` },
@@ -201,7 +199,7 @@ export default function StateDocumentPage({ params }: StateDocumentPageProps) {
       <StateSpecificLegalSchema
         state={stateName}
         documentTypes={[documentName]}
-        locale={locale}
+        locale={localeTyped}
       />
 
       <div className="container mx-auto px-4 py-8">
@@ -224,14 +222,14 @@ export default function StateDocumentPage({ params }: StateDocumentPageProps) {
 
             <div className="flex flex-col sm:flex-row gap-4">
               <Link
-                href={`/${locale}/docs/${documentSlug}/start`}
+                href={`/${localeTyped}/docs/${documentSlug}/start`}
                 className="bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors text-center"
               >
                 {isSpanish ? 'Crear Documento' : 'Create Document'}
               </Link>
 
               <Link
-                href={`/${locale}/docs/${documentSlug}`}
+                href={`/${localeTyped}/docs/${documentSlug}`}
                 className="border border-gray-300 text-gray-700 px-8 py-3 rounded-lg font-semibold hover:border-gray-400 transition-colors text-center"
               >
                 {isSpanish ? 'Ver Plantilla' : 'View Template'}
@@ -357,14 +355,14 @@ export default function StateDocumentPage({ params }: StateDocumentPageProps) {
 
                 <div className="space-y-3">
                   <Link
-                    href={`/${locale}/docs/${documentSlug}/start`}
+                    href={`/${localeTyped}/docs/${documentSlug}/start`}
                     className="block w-full bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-700 transition-colors text-center"
                   >
                     {isSpanish ? 'Crear Ahora' : 'Create Now'}
                   </Link>
 
                   <Link
-                    href={`/${locale}/docs/${documentSlug}/view`}
+                    href={`/${localeTyped}/docs/${documentSlug}/view`}
                     className="block w-full border border-gray-300 text-gray-700 px-4 py-2 rounded-lg font-semibold hover:border-gray-400 transition-colors text-center"
                   >
                     {isSpanish ? 'Vista Previa' : 'Preview'}
@@ -384,7 +382,7 @@ export default function StateDocumentPage({ params }: StateDocumentPageProps) {
                 </p>
 
                 <Link
-                  href={`/${locale}/support`}
+                  href={`/${localeTyped}/support`}
                   className="text-blue-600 hover:text-blue-700 font-medium text-sm"
                 >
                   {isSpanish ? 'Contactar Soporte' : 'Contact Support'}

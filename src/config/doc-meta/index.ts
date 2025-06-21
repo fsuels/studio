@@ -13,11 +13,18 @@ export async function getDocMetaByCategory(cat: string) {
 }
 
 export async function getDocMeta(slug: string): Promise<DocMeta | undefined> {
-  const mapping: Record<string, string> = JSON.parse(
-    process.env.NEXT_PUBLIC_SLUG_CAT_MAP ?? '{}',
-  );
-  const cat = mapping[slug];
-  if (!cat) return undefined;
-  const chunk = await getDocMetaByCategory(cat);
-  return chunk[slug];
+  try {
+    // Import the slug-category map directly
+    const slugCategoryMap = await import('./slug-category-map.json');
+    const mapping = slugCategoryMap.default as Record<string, string>;
+    
+    const cat = mapping[slug];
+    if (!cat) return undefined;
+    
+    const chunk = await getDocMetaByCategory(cat);
+    return chunk[slug];
+  } catch (error) {
+    console.error('Error loading doc meta for slug:', slug, error);
+    return undefined;
+  }
 }
