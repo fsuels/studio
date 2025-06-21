@@ -18,7 +18,7 @@ import {
 import { useAccessibility } from '@/contexts/AccessibilityProvider';
 import AccessibilitySettingsPanel from './AccessibilitySettingsPanel';
 import {
-  Universal,
+  Accessibility,
   Type,
   Contrast,
   FileText,
@@ -145,7 +145,7 @@ export function AccessibilityToolbar({ className }: AccessibilityToolbarProps) {
           <div className="flex items-center justify-between mb-3">
             {!isCollapsed && (
               <div className="flex items-center gap-2">
-                <Universal className="h-4 w-4 text-primary" />
+                <Accessibility className="h-4 w-4 text-primary" />
                 <span className="text-sm font-medium">Accessibility</span>
                 {isAccessibilityModeActive && (
                   <div className="w-2 h-2 bg-green-500 rounded-full" />
@@ -214,7 +214,7 @@ export function AccessibilityToolbar({ className }: AccessibilityToolbarProps) {
             >
               <SheetHeader>
                 <SheetTitle className="flex items-center gap-2">
-                  <Universal className="h-5 w-5" />
+                  <Accessibility className="h-5 w-5" />
                   Accessibility Settings
                 </SheetTitle>
               </SheetHeader>
