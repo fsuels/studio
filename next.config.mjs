@@ -123,6 +123,42 @@ const nextConfig = {
               priority: 8,
               enforce: true,
             },
+            // Document types - split by category for better caching
+            documentsEmployment: {
+              test: /[\\/]documents[\\/]us[\\/](employment-contract|termination-letter|offer-letter|severance-agreement|non-compete-agreement)[\\/]/,
+              name: 'docs-employment',
+              chunks: 'async',
+              priority: 15,
+              enforce: true,
+            },
+            documentsRealEstate: {
+              test: /[\\/]documents[\\/]us[\\/](rental-agreement|lease-agreement|property-deed|purchase-agreement|residential-lease-agreement)[\\/]/,
+              name: 'docs-real-estate',
+              chunks: 'async',
+              priority: 15,
+              enforce: true,
+            },
+            documentsLegal: {
+              test: /[\\/]documents[\\/]us[\\/](power-of-attorney|living-trust|last-will-testament|living-will|advance-directive)[\\/]/,
+              name: 'docs-legal',
+              chunks: 'async',
+              priority: 15,
+              enforce: true,
+            },
+            documentsBusiness: {
+              test: /[\\/]documents[\\/]us[\\/](business-contract|partnership-agreement|operating-agreement|consulting-agreement|service-agreement)[\\/]/,
+              name: 'docs-business',
+              chunks: 'async',
+              priority: 15,
+              enforce: true,
+            },
+            documentsFinancial: {
+              test: /[\\/]documents[\\/]us[\\/](promissory-note|loan-agreement|invoice)[\\/]/,
+              name: 'docs-financial',
+              chunks: 'async',
+              priority: 15,
+              enforce: true,
+            },
           },
         },
       };
