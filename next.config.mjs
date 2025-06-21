@@ -83,6 +83,46 @@ const nextConfig = {
               priority: 6,
               enforce: true,
             },
+            // Firebase services chunk (auth, firestore, admin)
+            firebase: {
+              test: /[\\/]node_modules[\\/](firebase|firebase-admin)[\\/]/,
+              name: 'firebase',
+              chunks: 'async',
+              priority: 12,
+              enforce: true,
+            },
+            // Payment processing chunk
+            payment: {
+              test: /[\\/](stripe|payment|@stripe)[\\/]/,
+              name: 'payment',
+              chunks: 'async',
+              priority: 11,
+              enforce: true,
+            },
+            // AI and ML libraries chunk
+            aiLibs: {
+              test: /[\\/]node_modules[\\/](openai|@google-cloud|@genkit-ai|@pinecone-database)[\\/]/,
+              name: 'ai-libs',
+              chunks: 'async',
+              priority: 10,
+              enforce: true,
+            },
+            // Collaboration real-time chunk
+            realtime: {
+              test: /[\\/]node_modules[\\/](yjs|y-|@hocuspocus|ioredis|socket\.io)[\\/]/,
+              name: 'realtime',
+              chunks: 'async',
+              priority: 9,
+              enforce: true,
+            },
+            // Analytics and monitoring chunk
+            analytics: {
+              test: /[\\/]node_modules[\\/](@sentry|@google-cloud\/pubsub)[\\/]/,
+              name: 'analytics',
+              chunks: 'async',
+              priority: 8,
+              enforce: true,
+            },
           },
         },
       };

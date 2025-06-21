@@ -39,15 +39,15 @@ export const createLazyAdminComponent = (
   });
 };
 
-// Pre-configured lazy admin components
+// Pre-configured lazy admin components - Updated to use optimized versions
 export const LazyFraudDetectionDashboard = createLazyAdminComponent(
-  '@/components/admin/FraudDetectionDashboard',
+  '@/components/admin/fraud-detection/FraudDetectionDashboard',
   'FraudDetectionDashboard',
   'Fraud Detection Dashboard'
 );
 
 export const LazyRevenueIntelligenceDashboard = createLazyAdminComponent(
-  '@/components/admin/RevenueIntelligenceDashboard',
+  '@/components/admin/revenue-intelligence/RevenueIntelligenceDashboard',
   'RevenueIntelligenceDashboard',
   'Revenue Intelligence Dashboard'
 );
