@@ -3,6 +3,15 @@ import type { Question } from '@/types/documents';
 
 export const vehicleBillOfSaleQuestions: Question[] = [
   {
+    id: 'state',
+    label: 'State of Sale (Governing Law & Notary)',
+    type: 'select',
+    required: true,
+    options: usStates.map((s) => ({ value: s.value, label: s.label })),
+    tooltip:
+      'The U.S. state whose laws will govern this agreement and where notarization may occur.',
+  },
+  {
     id: 'seller_name',
     label: "Seller's Full Name",
     type: 'text',
@@ -189,15 +198,6 @@ export const vehicleBillOfSaleQuestions: Question[] = [
     placeholder: 'e.g., 30-day warranty on drivetrain (if applicable)',
     tooltip:
       "If warranties are offered, describe them here. This field is only active if 'Sold As-Is' is 'No'.",
-  },
-  {
-    id: 'state',
-    label: 'State of Sale (Governing Law & Notary)',
-    type: 'select',
-    required: true,
-    options: usStates.map((s) => ({ value: s.value, label: s.label })),
-    tooltip:
-      'The U.S. state whose laws will govern this agreement and where notarization may occur.',
   },
   {
     id: 'county',

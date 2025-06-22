@@ -74,7 +74,10 @@
       "Bash(do echo \"=== $module ===\")",
       "Bash(head:*)",
       "Bash(jobs)",
-      "Bash(git checkout:*)"
+      "Bash(git checkout:*)",
+      "WebFetch(domain:www.alea.gov)",
+      "WebFetch(domain:eforms.com)",
+      "WebFetch(domain:www.flhsmv.gov)"
     ],
     "deny": []
   }

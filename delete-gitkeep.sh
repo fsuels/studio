@@ -1,0 +1,11 @@
+#!/bin/bash
+rm "/mnt/c/dev/123legaldoc/public/forms/vehicle-bill-of-sale/alabama/.gitkeep"
+rm "/mnt/c/dev/123legaldoc/public/forms/vehicle-bill-of-sale/colorado/.gitkeep"
+rm "/mnt/c/dev/123legaldoc/public/forms/vehicle-bill-of-sale/florida/.gitkeep"
+rm "/mnt/c/dev/123legaldoc/public/forms/vehicle-bill-of-sale/georgia/.gitkeep"
+rm "/mnt/c/dev/123legaldoc/public/forms/vehicle-bill-of-sale/idaho/.gitkeep"
+rm "/mnt/c/dev/123legaldoc/public/forms/vehicle-bill-of-sale/kansas/.gitkeep"
+rm "/mnt/c/dev/123legaldoc/public/forms/vehicle-bill-of-sale/maryland/.gitkeep"
+rm "/mnt/c/dev/123legaldoc/public/forms/vehicle-bill-of-sale/montana/.gitkeep"
+rm "/mnt/c/dev/123legaldoc/public/forms/vehicle-bill-of-sale/north-dakota/.gitkeep"
+rm "/mnt/c/dev/123legaldoc/public/forms/vehicle-bill-of-sale/west-virginia/.gitkeep"

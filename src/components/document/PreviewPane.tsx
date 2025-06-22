@@ -27,6 +27,8 @@ import { cn } from '@/lib/utils';
 import Image from 'next/image';
 import { AutoImage } from '@/components/shared';
 import { Button } from '@/components/ui/button';
+import StatePDFPreview from '@/components/document/StatePDFPreview';
+import { hasOfficialForm } from '@/lib/pdf/state-form-manager';
 
 interface PreviewPaneProps {
   locale: 'en' | 'es';
@@ -335,6 +337,28 @@ export default function PreviewPane({
           })}
         </p>
       </div>
+    );
+  }
+
+  // Check if this is a vehicle bill of sale with a state selected that has an official form
+  const selectedState = watch?.('state');
+  const currentFormData = watch?.() || {};
+  const isVehicleBillOfSale = docId === 'vehicle-bill-of-sale';
+  const shouldShowStatePDF = isVehicleBillOfSale && selectedState && hasOfficialForm(selectedState);
+  
+  // Debug form data
+  console.log('PreviewPane: selectedState =', selectedState);
+  console.log('PreviewPane: currentFormData =', currentFormData);
+  console.log('PreviewPane: shouldShowStatePDF =', shouldShowStatePDF);
+
+  // If we should show state PDF, render that instead
+  if (shouldShowStatePDF && !error) {
+    return (
+      <StatePDFPreview
+        state={selectedState}
+        formData={currentFormData}
+        documentType="vehicle-bill-of-sale"
+      />
     );
   }
 
