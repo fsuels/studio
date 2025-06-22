@@ -77,7 +77,14 @@
       "Bash(git checkout:*)",
       "WebFetch(domain:www.alea.gov)",
       "WebFetch(domain:eforms.com)",
-      "WebFetch(domain:www.flhsmv.gov)"
+      "WebFetch(domain:www.flhsmv.gov)",
+      "WebFetch(domain:mvd.dor.ga.gov)",
+      "WebFetch(domain:itd.idaho.gov)",
+      "WebFetch(domain:www.kdor.ks.gov)",
+      "WebFetch(domain:www.mva.maryland.gov)",
+      "WebFetch(domain:dojmt.gov)",
+      "WebFetch(domain:www.dot.nd.gov)",
+      "WebFetch(domain:transportation.wv.gov)"
     ],
     "deny": []
   }
