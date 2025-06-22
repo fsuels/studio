@@ -18,6 +18,7 @@ import {
   createUserWithEmailAndPassword,
   signOut,
   updateProfile,
+  sendPasswordResetEmail,
 } from 'firebase/auth';
 import { auditService } from '@/services/firebase-audit-service';
 
@@ -45,6 +46,7 @@ interface AuthContextType {
   signUp: (email: string, password: string, name?: string) => Promise<void>;
   logout: () => Promise<void>;
   updateUser: (updates: Partial<User> & { password?: string }) => void;
+  resetPassword: (email: string) => Promise<void>;
 }
 
 // 2) Create the context
@@ -184,9 +186,83 @@ function useAuthHook(): AuthContextType {
     [],
   );
 
+  const resetPassword = useCallback(async (email: string) => {
+    try {
+      const auth = getAuth(app);
+      
+      // Add additional error context and retry logic
+      console.log('[useAuth] Attempting password reset for:', email);
+      console.log('[useAuth] Auth instance:', auth);
+      console.log('[useAuth] Firebase app:', app);
+      
+      await sendPasswordResetEmail(auth, email);
+      
+      console.log('[useAuth] Password reset email sent successfully');
+      
+      // Log password reset attempt
+      await auditService.logAuthEvent('password_reset', {
+        email,
+        ipAddress:
+          typeof window !== 'undefined'
+            ? window.location.hostname
+            : 'unknown',
+        userAgent:
+          typeof window !== 'undefined' ? navigator.userAgent : 'unknown',
+        success: true,
+      });
+    } catch (err: any) {
+      console.error('[useAuth] resetPassword error details:', {
+        code: err?.code,
+        message: err?.message,
+        stack: err?.stack,
+        email,
+        authDomain: app?.options?.authDomain,
+        projectId: app?.options?.projectId,
+      });
+      
+      // Provide more specific error messages
+      let userFriendlyMessage = err?.message || 'Password reset failed';
+      
+      if (err?.code === 'auth/network-request-failed') {
+        userFriendlyMessage = 'Network error. Please check your internet connection and try again.';
+      } else if (err?.code === 'auth/user-not-found') {
+        userFriendlyMessage = 'No account found with this email address.';
+      } else if (err?.code === 'auth/invalid-email') {
+        userFriendlyMessage = 'Please enter a valid email address.';
+      } else if (err?.code === 'auth/too-many-requests') {
+        userFriendlyMessage = 'Too many attempts. Please wait a moment and try again.';
+      }
+      
+      // Log failed password reset attempt
+      try {
+        await auditService.logAuthEvent('password_reset', {
+          email,
+          ipAddress:
+            typeof window !== 'undefined'
+              ? window.location.hostname
+              : 'unknown',
+          userAgent:
+            typeof window !== 'undefined' ? navigator.userAgent : 'unknown',
+          success: false,
+          error: err?.code || 'Unknown error',
+          errorMessage: err?.message || 'Password reset failed',
+        });
+      } catch (auditError) {
+        console.error('[useAuth] Failed to log audit event:', auditError);
+      }
+      
+      // Create a new error with user-friendly message but preserve original error code
+      const enhancedError = new Error(userFriendlyMessage);
+      (enhancedError as any).code = err?.code;
+      (enhancedError as any).originalError = err;
+      
+      throw enhancedError;
+    }
+  }, []);
+
   const contextValue = useMemo(
-    () => ({ isLoggedIn, user, isLoading, login, signUp, logout, updateUser }),
-    [isLoggedIn, user, isLoading, login, signUp, logout, updateUser],
+    () => ({ isLoggedIn, user, isLoading, login, signUp, logout, updateUser, resetPassword }),
+    [isLoggedIn, user, isLoading, login, signUp, logout, updateUser, resetPassword],
   );
 
   return contextValue;

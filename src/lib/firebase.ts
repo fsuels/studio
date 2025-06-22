@@ -11,10 +11,10 @@ import type { Firestore } from 'firebase/firestore';
 /* Fallback config (env vars override)                                */
 /* ------------------------------------------------------------------ */
 const defaultFirebaseConfig = {
-  apiKey: 'AIzaSyDzchJQ-4ZypZ2Tscri3VfJEN2Ocqx0hU',
+  apiKey: 'AIzaSyDzchJQ-4ZypZ2Tscri3VYfJEN2Ocqx0hU',
   authDomain: 'legaldoc-26ea8.firebaseapp.com',
   projectId: 'legaldoc-26ea8',
-  storageBucket: 'legaldoc-26ea8.appspot.com',
+  storageBucket: 'legaldoc-26ea8.firebasestorage.app',
   messagingSenderId: '584726654660',
   appId: '1:584726654660:web:82597df4ee5bc2098ba391',
   measurementId: 'G-3VR0TDX4ZK',
@@ -46,7 +46,9 @@ const getFirebaseConfig = () => ({
 /* ------------------------------------------------------------------ */
 let app: FirebaseApp;
 if (!getApps().length) {
-  app = initializeApp(getFirebaseConfig());
+  const config = getFirebaseConfig();
+  app = initializeApp(config);
+  console.log('🔥 Firebase initialized successfully');
 } else {
   app = getApp();
 }
@@ -98,19 +100,15 @@ export async function getDb(): Promise<Firestore> {
 }
 
 /* ------------------------------------------------------------------ */
-/* Auth                                                               */
+/* Auth - Synchronous initialization for better compatibility         */
 /* ------------------------------------------------------------------ */
-let authInstance: any = null;
-export async function getAuth() {
-  if (authInstance) return authInstance;
-  const { getAuth } = await import('firebase/auth');
-  authInstance = getAuth(app);
-  return authInstance;
-}
+import { getAuth as getFirebaseAuth } from 'firebase/auth';
+
+// Initialize auth synchronously to avoid timing issues
+export const auth = getFirebaseAuth(app);
 
 /* ------------------------------------------------------------------ */
 /* Exports                                                            */
 /* ------------------------------------------------------------------ */
 export { app };
 export const db = getDb();
-export const auth = getAuth();

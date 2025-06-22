@@ -24,17 +24,21 @@ export async function middleware(request: NextRequest) {
   response.headers.set('X-XSS-Protection', '1; mode=block');
 
   // CSP header (adjust based on your needs)
+  // More permissive CSP for Firebase Auth compatibility
   const cspHeader = [
     "default-src 'self'",
-    "script-src 'self' 'unsafe-inline' 'unsafe-eval' *.googletagmanager.com *.google-analytics.com *.stripe.com *.intercom.io",
+    "script-src 'self' 'unsafe-inline' 'unsafe-eval' *.googletagmanager.com *.google-analytics.com *.stripe.com *.intercom.io *.googleapis.com *.gstatic.com",
     "style-src 'self' 'unsafe-inline' fonts.googleapis.com",
     "font-src 'self' fonts.gstatic.com",
     "img-src 'self' data: blob: *.googleusercontent.com *.stripe.com *.intercom.io cdn.simpleicons.org picsum.photos",
-    "connect-src 'self' *.firebase.googleapis.com *.stripe.com *.intercom.io wss://*.intercom.io",
-    "frame-src 'self' *.stripe.com *.intercom.io",
+    "connect-src 'self' *.firebase.googleapis.com *.firebaseapp.com *.googleapis.com identitytoolkit.googleapis.com securetoken.googleapis.com www.googleapis.com *.stripe.com *.intercom.io wss://*.intercom.io",
+    "frame-src 'self' *.stripe.com *.intercom.io *.firebaseapp.com *.googleapis.com",
   ].join('; ');
 
-  response.headers.set('Content-Security-Policy', cspHeader);
+  // Only apply CSP in production or when explicitly enabled
+  if (process.env.NODE_ENV === 'production' || process.env.ENABLE_CSP === 'true') {
+    response.headers.set('Content-Security-Policy', cspHeader);
+  }
 
   return response;
 }

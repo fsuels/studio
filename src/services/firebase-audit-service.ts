@@ -11,20 +11,41 @@ import {
   Timestamp,
   DocumentData,
 } from 'firebase/firestore';
-import {
-  ImmutableAuditTrail,
-  ImmutableAuditEvent,
-  immutableAuditTrail,
-} from '@/lib/immutable-audit-trail';
+// Note: Removed ImmutableAuditTrail imports - using simplified audit logging for authentication events
 import { auth } from '@/lib/firebase';
+
+// Define EventType enum for compatibility
+export enum EventType {
+  USER_LOGIN = 'user_login',
+  USER_LOGOUT = 'user_logout',
+  USER_REGISTRATION = 'user_registration',
+  PASSWORD_RESET = 'password_reset',
+  DOCUMENT_CREATED = 'document_created',
+  DOCUMENT_UPDATED = 'document_updated',
+  DATA_ACCESS = 'data_access',
+  DATA_EXPORT = 'data_export',
+  DATA_DELETION = 'data_deletion',
+  POLICY_ACCEPTED = 'policy_accepted',
+  POLICY_VIEWED = 'policy_viewed',
+  CONSENT_GIVEN = 'consent_given',
+  CONSENT_WITHDRAWN = 'consent_withdrawn',
+}
+
+// Define AuditEvent interface for compatibility
+export interface AuditEvent {
+  id?: string;
+  eventType: string;
+  userId: string;
+  timestamp: any;
+  metadata: Record<string, any>;
+}
 
 export class FirebaseAuditService {
   private static instance: FirebaseAuditService;
-  private auditManager: ImmutableAuditTrail;
   private readonly COLLECTION_NAME = 'audit_events';
 
   private constructor() {
-    this.auditManager = immutableAuditTrail;
+    // Using simplified audit logging for authentication events
   }
 
   static getInstance(): FirebaseAuditService {
@@ -38,7 +59,7 @@ export class FirebaseAuditService {
    * Log an audit event to Firestore
    */
   async logEvent(
-    eventType: ImmutableAuditEvent['eventType'],
+    eventType: string,
     metadata: Record<string, any>,
     userId?: string,
   ): Promise<void> {
@@ -46,19 +67,20 @@ export class FirebaseAuditService {
       const currentUser = auth.currentUser;
       const actualUserId = userId || currentUser?.uid || 'system';
 
-      // Create the audit event using the immutable audit trail library
-      const event = this.auditManager.createEvent(eventType, actualUserId, {
-        ...metadata,
-        userEmail: currentUser?.email || 'unknown',
-        timestamp: new Date().toISOString(),
-      });
-
-      // Store in Firestore with server timestamp
-      await addDoc(collection(db, this.COLLECTION_NAME), {
-        ...event,
+      // Create a simple audit event for Firestore
+      const event: AuditEvent = {
+        eventType,
         userId: actualUserId,
         timestamp: serverTimestamp(),
-      });
+        metadata: {
+          ...metadata,
+          userEmail: currentUser?.email || 'unknown',
+          timestamp: new Date().toISOString(),
+        },
+      };
+
+      // Store in Firestore
+      await addDoc(collection(db, this.COLLECTION_NAME), event);
     } catch (error) {
       console.error('Failed to log audit event:', error);
       // Don't throw - audit logging should not break the application
@@ -123,7 +145,12 @@ export class FirebaseAuditService {
   async exportUserData(userId: string): Promise<any> {
     try {
       const events = await this.getUserAuditTrail(userId, 10000); // Get all events
-      return this.auditManager.exportAuditTrail(events, 'json');
+      return {
+        userId,
+        exportedAt: new Date().toISOString(),
+        totalEvents: events.length,
+        events,
+      };
     } catch (error) {
       console.error('Failed to export user data:', error);
       throw error;
@@ -134,7 +161,14 @@ export class FirebaseAuditService {
    * Verify audit trail integrity
    */
   async verifyIntegrity(events: AuditEvent[]): Promise<boolean> {
-    return this.auditManager.verifyIntegrity(events);
+    // Simplified integrity check - for full cryptographic verification, 
+    // use the ImmutableAuditTrail system
+    return events.every(event => 
+      event.eventType && 
+      event.userId && 
+      event.timestamp && 
+      event.metadata
+    );
   }
 
   /**

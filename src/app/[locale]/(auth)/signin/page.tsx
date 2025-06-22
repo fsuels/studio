@@ -137,12 +137,20 @@ export default function SignInPage() {
               />
             </div>
             <div>
-              <Label
-                htmlFor="password-signin"
-                className="text-muted-foreground"
-              >
-                {t('Password')}
-              </Label>
+              <div className="flex items-center justify-between">
+                <Label
+                  htmlFor="password-signin"
+                  className="text-muted-foreground"
+                >
+                  {t('Password')}
+                </Label>
+                <Link
+                  href={`/${locale}/reset-password`}
+                  className="text-xs text-primary hover:text-primary/80 underline"
+                >
+                  {t('Forgot Password?', { defaultValue: 'Forgot Password?' })}
+                </Link>
+              </div>
               <Input
                 id="password-signin"
                 type="password"
