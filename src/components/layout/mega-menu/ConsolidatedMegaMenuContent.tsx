@@ -16,6 +16,7 @@ interface ConsolidatedMegaMenuContentProps {
   documents: LegalDocument[];
   onClose?: () => void;
   onLinkClick?: () => void;
+  activeCategory?: string | null;
 }
 
 interface PanelSection {
@@ -217,12 +218,13 @@ const panels: Panel[] = [
 export default function ConsolidatedMegaMenuContent({
   documents,
   onClose,
-  onLinkClick
+  onLinkClick,
+  activeCategory
 }: ConsolidatedMegaMenuContentProps) {
   const { t, i18n } = useTranslation('common');
   const currentLocale = i18n.language as 'en' | 'es';
   const [searchQuery, setSearchQuery] = useState('');
-  const [activePanel, setActivePanel] = useState('agreements');
+  const [activePanel, setActivePanel] = useState(activeCategory || 'agreements');
   const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({});
 
   // Create a map of document IDs to documents for quick lookup

@@ -11,8 +11,8 @@ import SmartHeaderSearch from './SmartHeaderSearch';
 import HeaderUserMenu from './HeaderUserMenu';
 import HeaderMegaMenu from './HeaderMegaMenu';
 import HeaderMobileMenu from './HeaderMobileMenu';
-// Temporarily revert to original approach to fix hydration issues
-// import CategoryNavigationBar from './CategoryNavigationBar';
+import DirectCategoryNav from './DirectCategoryNav';
+import CategoryDropdown from './CategoryDropdown';
 import { ThemeToggleButton } from '@/components/ui/theme-toggle';
 
 const Header = React.memo(function Header() {
@@ -26,6 +26,7 @@ const Header = React.memo(function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [isMegaMenuOpen, setIsMegaMenuOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [activeCategoryId, setActiveCategoryId] = useState<string | null>(null);
 
   // Mount and scroll effects
   useEffect(() => {
@@ -50,16 +51,33 @@ const Header = React.memo(function Header() {
     setIsMobileMenuOpen((prev) => !prev);
     if (isMegaMenuOpen) {
       setIsMegaMenuOpen(false);
+      setActiveCategoryId(null);
+    }
+  };
+
+  const handleCategorySelect = (categoryId: string) => {
+    if (activeCategoryId === categoryId && isMegaMenuOpen) {
+      // Close if clicking the same category
+      setIsMegaMenuOpen(false);
+      setActiveCategoryId(null);
+    } else {
+      // Open new category
+      setActiveCategoryId(categoryId);
+      setIsMegaMenuOpen(true);
+      if (isMobileMenuOpen) {
+        setIsMobileMenuOpen(false);
+      }
     }
   };
 
   return (
-    <header
-      className={cn(
-        'sticky top-0 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border/40 transition-all duration-300',
-        scrolled && 'shadow-sm border-border/60',
-      )}
-    >
+    <div className="relative">
+      <header
+        className={cn(
+          'sticky top-0 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border/40 transition-all duration-300',
+          scrolled && 'shadow-sm border-border/60',
+        )}
+      >
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16 gap-4">
           {/* Logo */}
@@ -81,18 +99,13 @@ const Header = React.memo(function Header() {
             onClose={() => setIsMobileMenuOpen(false)}
           />
 
-          {/* Desktop Navigation & Actions */}
-          <div
-            className={cn(
-              'hidden md:flex items-center flex-1 justify-center gap-3 md:gap-4 transition-opacity duration-200 ease-in-out',
-              scrolled && 'opacity-60',
-            )}
-          >
-            <HeaderMegaMenu
+          {/* Direct Category Navigation */}
+          <div className="hidden md:flex items-center flex-1 justify-center">
+            <DirectCategoryNav
               clientLocale={clientLocale}
               mounted={mounted}
-              isMegaMenuOpen={isMegaMenuOpen}
-              onOpenChange={setIsMegaMenuOpen}
+              onCategorySelect={handleCategorySelect}
+              activeCategoryId={activeCategoryId}
             />
           </div>
 
@@ -113,7 +126,19 @@ const Header = React.memo(function Header() {
           />
         </div>
       </div>
-    </header>
+      </header>
+
+      {/* Category Dropdown */}
+      <CategoryDropdown
+        locale={clientLocale}
+        activeCategory={activeCategoryId}
+        isOpen={isMegaMenuOpen}
+        onLinkClick={() => {
+          setIsMegaMenuOpen(false);
+          setActiveCategoryId(null);
+        }}
+      />
+    </div>
   );
 });
 

@@ -11,11 +11,13 @@ import { createPortal } from 'react-dom';
 interface ConsolidatedEnhancedMegaMenuContentProps {
   locale: 'en' | 'es';
   onLinkClick?: () => void;
+  activeCategory?: string | null;
 }
 
 const ConsolidatedEnhancedMegaMenuContent: React.FC<ConsolidatedEnhancedMegaMenuContentProps> = ({
   locale,
   onLinkClick,
+  activeCategory,
 }) => {
   const [isClient, setIsClient] = React.useState(false);
   const documents = getDocumentsForCountry('us'); // Default to US documents
@@ -51,6 +53,7 @@ const ConsolidatedEnhancedMegaMenuContent: React.FC<ConsolidatedEnhancedMegaMenu
       documents={documents}
       onClose={handleClose}
       onLinkClick={handleLinkClick}
+      activeCategory={activeCategory}
     />
   );
 };
