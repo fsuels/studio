@@ -4,9 +4,12 @@ import dynamic from 'next/dynamic';
 import { Skeleton } from '@/components/ui/skeleton';
 
 // Lazy load the heavy dashboard client content (1240+ lines)
-const DashboardClientContent = dynamic(() => import('./dashboard-client-content'), {
-  loading: () => (
-    <div className="p-6 space-y-8">
+const DashboardClientContent = dynamic(
+  () => import('./dashboard-client-content'),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="p-6 space-y-8">
       {/* Header Skeleton */}
       <div className="flex justify-between items-center">
         <div className="space-y-2">
@@ -60,8 +63,9 @@ const DashboardClientContent = dynamic(() => import('./dashboard-client-content'
         </div>
       </div>
     </div>
-  ),
-});
+    ),
+  },
+);
 
 // Force dynamic rendering for user-specific dashboard content
 export const runtime = 'nodejs';
@@ -74,6 +78,6 @@ interface DashboardPageProps {
 }
 
 export default async function DashboardPage({ params }: DashboardPageProps) {
-  const { locale } = await params;
+  const { locale } = params;
   return <DashboardClientContent locale={locale} />;
 }
