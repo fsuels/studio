@@ -94,18 +94,6 @@ export function ContentRichDocumentPage({
     stateRequirements.find((req) => req.state === userState) ||
     stateRequirements[0];
 
-  const getComplexityColor = (complexity: string) => {
-    switch (complexity) {
-      case 'low':
-        return 'bg-green-100 text-green-800';
-      case 'medium':
-        return 'bg-yellow-100 text-yellow-800';
-      case 'high':
-        return 'bg-red-100 text-red-800';
-      default:
-        return 'bg-gray-100 text-gray-800';
-    }
-  };
 
   const renderStarRating = (rating: number) => {
     return Array.from({ length: 5 }, (_, i) => (
@@ -196,12 +184,6 @@ export function ContentRichDocumentPage({
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Complexity:</span>
-                  <Badge className={getComplexityColor(document.complexity)}>
-                    {document.complexity}
-                  </Badge>
-                </div>
 
                 <div className="flex justify-between">
                   <span className="text-gray-600">Valid in:</span>

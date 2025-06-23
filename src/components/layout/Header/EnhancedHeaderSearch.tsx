@@ -183,18 +183,6 @@ export default function EnhancedHeaderSearch({
     }
   };
 
-  const getComplexityColor = (complexity: string) => {
-    switch (complexity) {
-      case 'easy':
-        return 'bg-green-100 text-green-800';
-      case 'medium':
-        return 'bg-yellow-100 text-yellow-800';
-      case 'advanced':
-        return 'bg-red-100 text-red-800';
-      default:
-        return 'bg-gray-100 text-gray-800';
-    }
-  };
 
   const getMatchTypeIcon = (matchType: string) => {
     switch (matchType) {
@@ -291,15 +279,6 @@ export default function EnhancedHeaderSearch({
                   </div>
 
                   <div className="flex items-center gap-1 shrink-0">
-                    <Badge
-                      variant="secondary"
-                      className={cn(
-                        'text-xs px-1.5 py-0.5',
-                        getComplexityColor(result.complexity),
-                      )}
-                    >
-                      {result.complexity}
-                    </Badge>
                     <ExternalLink className="h-3 w-3 text-muted-foreground/70 group-hover:text-muted-foreground" />
                   </div>
                 </Link>

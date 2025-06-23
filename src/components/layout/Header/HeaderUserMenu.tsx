@@ -13,7 +13,6 @@ import {
 } from '@/components/ui/popover';
 import { UserPlus, LogIn, LogOut, UserCircle } from 'lucide-react';
 import { UserMenuSkeleton } from '@/components/ui/SkeletonVariants';
-import { RoleSelector } from '@/components/shared';
 
 interface HeaderUserMenuProps {
   clientLocale: 'en' | 'es';
@@ -50,8 +49,6 @@ export default function HeaderUserMenu({
   if (isLoggedIn && user) {
     return (
       <div className="flex items-center gap-2">
-        <RoleSelector size="sm" className="hidden md:flex" />
-
         <Link href={`/${clientLocale}/dashboard`}>
           <Button
             variant="outline"
@@ -77,11 +74,6 @@ export default function HeaderUserMenu({
                 {user.email}
               </div>
 
-              {/* Role selector for mobile */}
-              <div className="md:hidden px-2">
-                <RoleSelector size="sm" className="w-full" />
-              </div>
-
               <Button
                 variant="ghost"
                 size="sm"
@@ -100,8 +92,6 @@ export default function HeaderUserMenu({
 
   return (
     <div className="flex items-center gap-2">
-      <RoleSelector size="sm" className="hidden lg:flex" />
-
       <Link href={`/${clientLocale}/signin`}>
         <Button variant="outline" size="sm" className="gap-2">
           <LogIn className="h-4 w-4" />

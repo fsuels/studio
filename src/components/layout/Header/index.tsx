@@ -4,7 +4,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import { Logo } from '@/components/layout/Logo';
-import Nav from '@/components/shared/navigation/Nav';
 import LanguageSwitcher from '@/components/shared/navigation/LanguageSwitcher';
 import { cn } from '@/lib/utils';
 
@@ -12,7 +11,6 @@ import SmartHeaderSearch from './SmartHeaderSearch';
 import HeaderUserMenu from './HeaderUserMenu';
 import HeaderMegaMenu from './HeaderMegaMenu';
 import HeaderMobileMenu from './HeaderMobileMenu';
-import CommandPaletteTrigger from './CommandPaletteTrigger';
 import { ThemeToggleButton } from '@/components/ui/theme-toggle';
 
 const Header = React.memo(function Header() {
@@ -88,8 +86,6 @@ const Header = React.memo(function Header() {
               scrolled && 'opacity-60',
             )}
           >
-            <Nav />
-
             <HeaderMegaMenu
               clientLocale={clientLocale}
               mounted={mounted}
@@ -100,7 +96,6 @@ const Header = React.memo(function Header() {
 
           {/* Right side actions */}
           <div className="hidden md:flex items-center gap-3">
-            <CommandPaletteTrigger />
             <LanguageSwitcher />
             <ThemeToggleButton />
             <HeaderUserMenu clientLocale={clientLocale} mounted={mounted} />

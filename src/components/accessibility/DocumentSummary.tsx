@@ -115,16 +115,6 @@ export function DocumentSummary({
     };
   }, [documentText, documentType, preferences.readingLevel]);
 
-  const getComplexityColor = (complexity: 'low' | 'medium' | 'high') => {
-    switch (complexity) {
-      case 'low':
-        return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200';
-      case 'medium':
-        return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200';
-      case 'high':
-        return 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200';
-    }
-  };
 
   const handleRefresh = () => {
     setIsLoading(true);
@@ -188,9 +178,6 @@ export function DocumentSummary({
           <div className="flex items-center gap-2">
             <Brain className="h-5 w-5 text-blue-600" />
             <CardTitle className="text-lg">Plain Language Summary</CardTitle>
-            <Badge className={getComplexityColor(summary.complexity)}>
-              {summary.complexity} complexity
-            </Badge>
           </div>
           <div className="flex items-center gap-2">
             <div className="flex items-center gap-1 text-sm text-muted-foreground">

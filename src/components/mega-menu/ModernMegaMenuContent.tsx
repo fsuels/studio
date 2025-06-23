@@ -1,217 +1,585 @@
 'use client';
 
-import React, { useState, useEffect, useRef, Fragment } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
-import {
-  ChevronLeft,
-  ChevronRight,
-  Star,
-  ExternalLink,
-  Briefcase,
-  Users,
-  Home,
-  DollarSign,
-  Lightbulb,
-} from 'lucide-react';
-import { useTheme } from 'next-themes';
+import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
+import { enhancedSearch } from '@/lib/enhanced-search';
+import { 
+  Search, 
+  ArrowRight, 
+  Briefcase, 
+  Users, 
+  Home, 
+  DollarSign,
+  Filter,
+  Sparkles,
+  Zap,
+  Target,
+  Heart,
+  FileText,
+  Shield,
+  X,
+  ChevronRight
+} from 'lucide-react';
 
-// Dynamic taxonomy config fetched at build/runtime
-import MENU_CONFIG from '@/config/menu-config.json';
+interface DocumentItem {
+  slug: string;
+  title: string;
+}
 
-/** Skeleton loader during hydration or slow networks */
-const MegaMenuSkeleton: React.FC = () => (
-  <div className="animate-pulse p-6 bg-gray-100 dark:bg-gray-800 rounded-lg">
-    <div className="h-6 bg-gray-300 dark:bg-gray-700 rounded w-1/3 mb-4" />
-    <div className="space-y-2">
-      {[...Array(5)].map((_, i) => (
-        <div key={i} className="h-4 bg-gray-300 dark:bg-gray-700 rounded" />
-      ))}
-    </div>
-  </div>
-);
+interface Category {
+  id: string;
+  name: string;
+  description: string;
+  icon: React.ReactNode;
+  color: string;
+  documents: DocumentItem[];
+}
 
-/** Popover for document preview snippet */
-const DocumentPreviewPopover: React.FC<{ slug: string }> = ({ slug }) => {
-  // placeholder for real popover logic
-  return null;
-};
+// Situation-based "What Do You Want to Accomplish?" structure
+interface SituationGoal {
+  id: string;
+  title: string;
+  description: string;
+  icon: React.ReactNode;
+  documents: DocumentItem[];
+  viewAllLink: string;
+}
 
-const ModernMegaMenuContent: React.FC<{ locale: string; onLinkClick?: () => void }> = ({ locale, onLinkClick }) => {
+interface SituationSection {
+  id: string;
+  title: string;
+  icon: React.ReactNode;
+  goals: SituationGoal[];
+}
+
+const SITUATION_SECTIONS: SituationSection[] = [
+  {
+    id: 'personal-life',
+    title: 'Your Personal Life',
+    icon: <Heart className="h-5 w-5" />,
+    goals: [
+      {
+        id: 'rent-property',
+        title: 'Rent Out Property',
+        description: 'Lease agreements, rental forms, and property management documents',
+        icon: <Home className="h-5 w-5" />,
+        documents: [
+          { slug: 'residential-rental-agreement', title: 'Residential Lease Agreement' },
+          { slug: 'lease-agreement', title: 'Commercial Lease Agreement' },
+          { slug: 'eviction-notice', title: 'Eviction Notice' },
+        ],
+        viewAllLink: '/docs?goal=rent-property'
+      },
+      {
+        id: 'plan-estate',
+        title: 'Plan My Estate',
+        description: 'Wills, trusts, and advance directives for your future',
+        icon: <FileText className="h-5 w-5" />,
+        documents: [
+          { slug: 'will', title: 'Last Will & Testament' },
+          { slug: 'living-trust', title: 'Living Trust' },
+          { slug: 'power-of-attorney', title: 'Power of Attorney' },
+        ],
+        viewAllLink: '/docs?goal=estate-planning'
+      },
+      {
+        id: 'sell-transfer-property',
+        title: 'Sell or Transfer Real Estate',
+        description: 'Agreements for buying, selling, or gifting property',
+        icon: <ArrowRight className="h-5 w-5" />,
+        documents: [
+          { slug: 'purchase-agreement', title: 'Real Estate Purchase Agreement' },
+          { slug: 'property-deed', title: 'Property Deed' },
+          { slug: 'quitclaim-deed', title: 'Quitclaim Deed' },
+        ],
+        viewAllLink: '/docs?goal=real-estate-transfer'
+      },
+      {
+        id: 'get-married',
+        title: 'Get Married',
+        description: 'Legal agreements for starting your marriage',
+        icon: <Users className="h-5 w-5" />,
+        documents: [
+          { slug: 'prenuptial-agreement', title: 'Prenuptial Agreement' },
+          { slug: 'marriage-contract', title: 'Marriage Contract' },
+          { slug: 'cohabitation-agreement', title: 'Cohabitation Agreement' },
+        ],
+        viewAllLink: '/docs?goal=marriage'
+      }
+    ]
+  },
+  {
+    id: 'business-finances',
+    title: 'Your Business & Finances',
+    icon: <Briefcase className="h-5 w-5" />,
+    goals: [
+      {
+        id: 'start-business',
+        title: 'Start a Business',
+        description: 'Formation documents, operating agreements, and business plans',
+        icon: <Sparkles className="h-5 w-5" />,
+        documents: [
+          { slug: 'articles-of-incorporation', title: 'Articles of Incorporation' },
+          { slug: 'operating-agreement', title: 'LLC Operating Agreement' },
+          { slug: 'business-plan', title: 'Business Plan Template' },
+          { slug: 'partnership-agreement', title: 'Partnership Agreement' },
+        ],
+        viewAllLink: '/docs?goal=start-business'
+      },
+      {
+        id: 'hire-employees',
+        title: 'Hire Employees or Contractors',
+        description: 'Employment contracts, NDAs, and hiring documents',
+        icon: <Users className="h-5 w-5" />,
+        documents: [
+          { slug: 'employment-contract', title: 'Employment Contract' },
+          { slug: 'independent-contractor-agreement', title: 'Independent Contractor Agreement' },
+          { slug: 'employment-offer-letter', title: 'Employment Offer Letter' },
+          { slug: 'non-disclosure-agreement', title: 'Non-Disclosure Agreement (NDA)' },
+        ],
+        viewAllLink: '/docs?goal=hire-employees'
+      },
+      {
+        id: 'protect-business',
+        title: 'Protect My Business',
+        description: 'NDAs, non-competes, and intellectual property protection',
+        icon: <Shield className="h-5 w-5" />,
+        documents: [
+          { slug: 'non-disclosure-agreement', title: 'Non-Disclosure Agreement (NDA)' },
+          { slug: 'non-compete-agreement', title: 'Non-Compete Agreement' },
+          { slug: 'copyright-assignment-agreement', title: 'Copyright Assignment Agreement' },
+        ],
+        viewAllLink: '/docs?goal=protect-business'
+      },
+      {
+        id: 'get-paid',
+        title: 'Get Paid or Collect Debts',
+        description: 'Invoices, demand letters, and payment agreements',
+        icon: <DollarSign className="h-5 w-5" />,
+        documents: [
+          { slug: 'demand-letter-payment', title: 'Demand Letter for Payment' },
+          { slug: 'promissory-note', title: 'Promissory Note' },
+          { slug: 'loan-agreement', title: 'Loan Agreement' },
+        ],
+        viewAllLink: '/docs?goal=get-paid'
+      }
+    ]
+  }
+];
+
+
+interface ModernMegaMenuContentProps {
+  locale: 'en' | 'es';
+  onLinkClick?: () => void;
+}
+
+const ModernMegaMenuContent: React.FC<ModernMegaMenuContentProps> = ({ locale, onLinkClick }) => {
   const { t } = useTranslation('common');
-  const { theme } = useTheme();
-  const [hydrated, setHydrated] = useState(false);
-  const [activeCat, setActiveCat] = useState<string>('');
-  const [startIdx, setStartIdx] = useState(0);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [activeFilter, setActiveFilter] = useState<'all'>('all');
+  const [isClient, setIsClient] = useState(false);
+  const [searchResults, setSearchResults] = useState<any[]>([]);
+  const [isSearching, setIsSearching] = useState(false);
+  const [expandedSection, setExpandedSection] = useState<'personal' | 'business' | null>(null);
 
-  const visibleCount = 4;
-  const cats = MENU_CONFIG.categories;
   useEffect(() => {
-    setHydrated(true);
-    setActiveCat(cats[0]?.id || '');
-  }, [cats]);
+    setIsClient(true);
+  }, []);
 
-  if (!hydrated || !activeCat) return <MegaMenuSkeleton />;
+  // Enhanced search with debouncing
+  const performSearch = useCallback(async (query: string) => {
+    if (!query.trim()) {
+      setSearchResults([]);
+      return;
+    }
 
-  const visibleCats = cats.slice(startIdx, Math.min(startIdx + visibleCount, cats.length));
-  const category = cats.find(c => c.id === activeCat)!;
+    setIsSearching(true);
+    try {
+      const results = await enhancedSearch(query, locale, {
+        maxResults: 8,
+        includePopular: activeFilter === 'popular',
+      });
+      setSearchResults(results);
+    } catch (error) {
+      console.error('Search error:', error);
+      setSearchResults([]);
+    } finally {
+      setIsSearching(false);
+    }
+  }, [locale, activeFilter]);
+
+  // Debounced search effect
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      if (searchQuery.trim()) {
+        performSearch(searchQuery);
+      } else {
+        setSearchResults([]);
+      }
+    }, 300);
+
+    return () => clearTimeout(timeoutId);
+  }, [searchQuery, performSearch]);
+
+  // Prevent hydration mismatch
+  if (!isClient) {
+    return (
+      <div className="w-full p-8 bg-white">
+        <div className="animate-pulse space-y-4">
+          <div className="h-8 bg-gray-200 rounded w-1/3"></div>
+          <div className="grid grid-cols-2 gap-4">
+            {[...Array(4)].map((_, i) => (
+              <div key={i} className="h-24 bg-gray-200 rounded"></div>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  const getFilteredDocs = () => {
+    return SITUATION_SECTIONS.flatMap(section => 
+      section.goals.flatMap(goal => goal.documents)
+    );
+  };
+
+  // Use enhanced search results when searching, otherwise use filtered docs
+  const displayDocs = searchQuery.trim() 
+    ? searchResults
+    : getFilteredDocs();
+
+  // Helper function to get match type icon
+  const getMatchTypeIcon = (matchType: string) => {
+    switch (matchType) {
+      case 'exact':
+        return <Target className="h-3 w-3 text-green-600" />;
+      case 'synonym':
+        return <Zap className="h-3 w-3 text-blue-600" />;
+      case 'category':
+        return <Filter className="h-3 w-3 text-purple-600" />;
+      default:
+        return <Search className="h-3 w-3 text-gray-500" />;
+    }
+  };
+
+  const personalSection = SITUATION_SECTIONS.find(s => s.id === 'personal-life');
+  const businessSection = SITUATION_SECTIONS.find(s => s.id === 'business-finances');
+
+  const handleSectionClick = (sectionId: 'personal' | 'business') => {
+    setExpandedSection(expandedSection === sectionId ? null : sectionId);
+  };
+
+  const handleClose = () => {
+    if (onLinkClick) onLinkClick();
+  };
 
   return (
-    <nav
-      aria-label={t('Main document menu')}
-      className="mega-menu relative bg-white dark:bg-gray-900 rounded-lg shadow-lg overflow-hidden"
-      data-theme={theme}
+    <div 
+      className="fixed inset-0 bg-white z-[9999] overflow-hidden flex flex-col animate-in fade-in duration-300"
+      role="menu" 
+      aria-label="Legal Document Categories"
+      style={{ zIndex: 9999 }}
     >
-      <style jsx>{`
-        @media print { .mega-menu { display: none; } }
-        .hide-scrollbar::-webkit-scrollbar { display: none; }
-        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-        .mask-fade { mask-image: linear-gradient(90deg, transparent, black 20px, black calc(100% - 20px), transparent); }
-      `}</style>
-
-      {/* Skip link */}
-      <a
-        href="#mega-docs"
-        className="sr-only focus:not-sr-only px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-md"
-      >
-        {t('Skip to documents')}
-      </a>
-
-      {/* noscript fallback */}
-      <noscript>
-        <ul>
-          {cats.map(cat => (
-            <li key={cat.id}>
-              <a href={`/${locale}/docs?category=${cat.id}`} className="font-semibold">
-                {cat.name}
-              </a>
-              <ul>
-                {cat.documents.slice(0, 5).map(doc => (
-                  <li key={doc.slug}>
-                    <a href={`/${locale}/docs/${doc.slug}`}>{doc.title}</a>
-                  </li>
-                ))}
-              </ul>
-            </li>
-          ))}
-        </ul>
-      </noscript>
-
-      {/* Tabs with chevrons */}
-      <div className="relative mt-4">
-        <button
-          onClick={() => setStartIdx(i => Math.max(0, i - 1))}
-          disabled={startIdx === 0}
-          aria-label={t('Scroll categories left')}
-          className="absolute left-0 top-1/2 transform -translate-y-1/2 z-10 p-1 bg-white dark:bg-gray-900 rounded-full shadow focus:outline-none focus:ring-2 focus:ring-teal-300 disabled:opacity-50"
-        >
-          <ChevronLeft />
-        </button>
-        <div
-          role="tablist"
-          aria-label={t('Document categories')}
-          className="flex overflow-x-scroll hide-scrollbar mask-fade px-12"
-        >
-          {visibleCats.map(cat => (
-            <button
-              key={cat.id}
-              role="tab"
-              aria-selected={activeCat === cat.id}
-              onClick={() => setActiveCat(cat.id)}
-              className={cn(
-                'relative pb-2 px-4 whitespace-nowrap font-medium focus:outline-none focus:ring-2 focus:ring-teal-300 transition-colors dark:text-gray-200',
-                activeCat === cat.id
-                  ? 'text-blue-600 border-b-2 border-blue-600'
-                  : 'text-gray-700 hover:border-b-2 hover:border-blue-300'
-              )}
-              style={{ minWidth: 120 }}
-            >
-              {/* Icon + label */}
-              <span className="inline-flex items-center gap-1">
-                {cat.icon}
-                {cat.name}
-              </span>
-            </button>
-          ))}
-        </div>
-        <button
-          onClick={() => setStartIdx(i => Math.min(cats.length - visibleCount, i + 1))}
-          disabled={startIdx + visibleCount >= cats.length}
-          aria-label={t('Scroll categories right')}
-          className="absolute right-0 top-1/2 transform -translate-y-1/2 z-10 p-1 bg-white dark:bg-gray-900 rounded-full shadow focus:outline-none focus:ring-2 focus:ring-teal-300 disabled:opacity-50"
-        >
-          <ChevronRight />
-        </button>
-      </div>
-
-      {/* See All */}
-      <div className="px-12 mt-2">
-        <Link
-          href={`/${locale}/docs?category=${category.id}`}
-          onClick={onLinkClick}
-          className="inline-flex items-center text-sm font-medium text-teal-600 hover:underline"
-        >
-          {t('See all')} {category.name} <ExternalLink className="ml-1 h-4 w-4" />
-        </Link>
-      </div>
-
-      {/* Document panel */}
-      <section
-        id="mega-docs"
-        role="region"
-        aria-live="polite"
-        className="grid grid-cols-1 md:grid-cols-4 gap-6 px-12 py-6"
-      >
-        {/* Thumbnail */}
-        <div className="hidden md:flex md:col-span-1 items-center justify-center">
-          <div className="bg-blue-50 dark:bg-blue-900 p-4 rounded-lg">
-            {category.icon}
+      {/* Header */}
+      <div className="flex items-center justify-between p-6 border-b border-gray-200">
+        <div className="flex items-center gap-4">
+          <div className="p-2 rounded-lg bg-gradient-to-r from-blue-500 to-indigo-600">
+            <Sparkles className="h-6 w-6 text-white" />
+          </div>
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900">Legal Documents</h1>
+            <p className="text-gray-600">What do you want to accomplish?</p>
           </div>
         </div>
 
-        {/* Documents */}
-        <div className="col-span-1 md:col-span-3">
-          <h2 className="text-blue-600 text-xl font-semibold mb-4">{t('Most Popular')}</h2>
-          <ul role="menu" className="space-y-3">
-            {category.documents.map((doc, i) => (
-              <Fragment key={doc.slug}>
-                <li role="none">
-                  <Link
-                    href={`/${locale}/docs/${doc.slug}`}
-                    onClick={onLinkClick}
-                    role="menuitem"
-                    className="flex items-center justify-between p-3 bg-white dark:bg-gray-800 rounded-lg hover:shadow-lg transform hover:-translate-y-1 transition focus:outline-none focus:ring-2 focus:ring-teal-300"
-                  >
-                    <div className="flex items-center gap-2">
-                      {doc.popular && <Star className="h-5 w-5 text-blue-600" />}
-                      <span
-                        className={cn(
-                          'leading-relaxed',
-                          doc.popular ? 'text-lg font-semibold' : 'text-base text-gray-600 dark:text-gray-400'
-                        )}
-                      >
-                        {doc.title}
-                      </span>
-                    </div>
-                    <ExternalLink className="h-5 w-5 text-gray-400 dark:text-gray-500" />
-                  </Link>
-                  <DocumentPreviewPopover slug={doc.slug} />
-                </li>
-                {i === 2 && <hr className="my-2 border-gray-200 dark:border-gray-700" />}
-              </Fragment>
-            ))}
-          </ul>
-        </div>
-      </section>
-
-      {/* Disclaimer */}
-      <div className="px-12 pb-6">
-        <p className="text-xs text-gray-500 dark:text-gray-400">
-          {t('Disclaimer')}: {t('Please consult a qualified attorney in your jurisdiction before using any legal document.')}
-        </p>
+        {/* Close Button */}
+        <button
+          onClick={handleClose}
+          className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
+          aria-label="Close menu"
+        >
+          <X className="h-6 w-6 text-gray-600" />
+        </button>
       </div>
-    </nav>
+
+      {/* Search Bar */}
+      <div className="p-6 border-b border-gray-100">
+        <div className="max-w-2xl mx-auto relative">
+          <Search className={cn(
+            "absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 transition-colors",
+            isSearching ? "text-blue-500 animate-pulse" : "text-gray-400"
+          )} />
+          <input
+            type="text"
+            placeholder="Search documents (try 'rental', 'nda', 'llc', etc.)..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full pl-12 pr-4 py-3 text-lg border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            aria-label="Search documents with smart suggestions"
+          />
+          {isSearching && (
+            <div className="absolute right-4 top-1/2 transform -translate-y-1/2">
+              <div className="animate-spin rounded-full h-5 w-5 border-2 border-blue-500 border-t-transparent"></div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <div className="flex-1 overflow-hidden">
+        {searchQuery ? (
+          /* Search Results */
+          <div className="h-full overflow-y-auto p-6">
+            <div className="max-w-6xl mx-auto">
+              <div className="mb-6">
+                <h2 className="text-xl font-semibold text-gray-900 mb-2">
+                  Search Results for "{searchQuery}"
+                </h2>
+                <p className="text-gray-600">
+                  {displayDocs.length} document{displayDocs.length !== 1 ? 's' : ''} found
+                  {searchQuery && !isSearching && displayDocs.length > 0 && (
+                    <span className="ml-2 text-blue-600">• Smart matching enabled</span>
+                  )}
+                </p>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {displayDocs.slice(0, 12).map((doc) => {
+                  const isSearchResult = searchQuery.trim() && doc.matchType;
+                  return (
+                    <Link
+                      key={doc.slug}
+                      href={`/${locale}/docs/${doc.slug}`}
+                      onClick={onLinkClick}
+                      className="group p-6 rounded-xl border border-gray-200 hover:border-blue-300 hover:shadow-lg transition-all duration-200 bg-white"
+                    >
+                      <div className="flex items-start gap-4">
+                        <div className="p-3 rounded-lg bg-blue-50 text-blue-600 group-hover:bg-blue-100 transition-colors">
+                          {isSearchResult ? getMatchTypeIcon(doc.matchType) : <FileText className="h-5 w-5" />}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors mb-2">
+                            {doc.title}
+                          </h3>
+                          {isSearchResult && doc.matchType && (
+                            <Badge 
+                              variant="secondary" 
+                              className={cn(
+                                "text-xs",
+                                doc.matchType === 'exact' ? 'bg-green-100 text-green-700' :
+                                doc.matchType === 'synonym' ? 'bg-blue-100 text-blue-700' :
+                                doc.matchType === 'category' ? 'bg-purple-100 text-purple-700' :
+                                'bg-gray-100 text-gray-700'
+                              )}
+                            >
+                              {doc.matchType === 'exact' ? 'Exact Match' :
+                               doc.matchType === 'synonym' ? 'Synonym' :
+                               doc.matchType === 'category' ? 'Category' : 'Match'}
+                            </Badge>
+                          )}
+                        </div>
+                        <ChevronRight className="h-5 w-5 text-gray-400 group-hover:text-blue-600 group-hover:translate-x-1 transition-all" />
+                      </div>
+                    </Link>
+                  );
+                })}
+              </div>
+
+              {displayDocs.length === 0 && !isSearching && (
+                <div className="text-center py-16 text-gray-500">
+                  <Search className="h-16 w-16 mx-auto mb-4 opacity-50" />
+                  <h3 className="text-lg font-medium text-gray-900 mb-2">No documents found</h3>
+                  <p>Try a different search term or browse by category below.</p>
+                </div>
+              )}
+
+              {isSearching && (
+                <div className="text-center py-16">
+                  <div className="inline-flex items-center gap-3 text-blue-600">
+                    <div className="animate-spin rounded-full h-6 w-6 border-2 border-blue-500 border-t-transparent"></div>
+                    <span className="text-lg">Searching with smart matching...</span>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        ) : (
+          /* Two-Column Layout */
+          <div className="h-full flex">
+            {/* Personal Life Column */}
+            <div className={cn(
+              "transition-all duration-500 ease-in-out border-r border-gray-200",
+              expandedSection === 'business' ? 'w-0 opacity-0 overflow-hidden' :
+              expandedSection === 'personal' ? 'w-full' : 'w-1/2'
+            )}>
+              <div className="h-full overflow-y-auto">
+                <button
+                  onClick={() => handleSectionClick('personal')}
+                  className="w-full p-8 text-left hover:bg-gray-50 transition-colors border-b border-gray-100"
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-4">
+                      <div className="p-3 rounded-xl bg-pink-100 text-pink-600">
+                        <Heart className="h-8 w-8" />
+                      </div>
+                      <div>
+                        <h2 className="text-3xl font-bold text-gray-900">{personalSection?.title}</h2>
+                        <p className="text-gray-600 mt-1">Personal, family & estate documents</p>
+                      </div>
+                    </div>
+                    <ChevronRight className={cn(
+                      "h-6 w-6 text-gray-400 transition-transform duration-300",
+                      expandedSection === 'personal' && "rotate-90"
+                    )} />
+                  </div>
+                </button>
+
+                {/* Personal Life Goals */}
+                {(expandedSection === 'personal' || expandedSection === null) && (
+                  <div className="p-8 space-y-6">
+                    {personalSection?.goals.map((goal) => (
+                      <div
+                        key={goal.id}
+                        className="group p-6 border border-gray-200 rounded-2xl hover:border-pink-300 hover:shadow-lg transition-all duration-200 bg-white"
+                      >
+                        <div className="flex items-start gap-4 mb-4">
+                          <div className="p-3 rounded-xl bg-gray-100 text-gray-600 group-hover:bg-pink-100 group-hover:text-pink-600 transition-colors">
+                            {goal.icon}
+                          </div>
+                          <div className="flex-1">
+                            <h3 className="text-xl font-semibold text-gray-900 group-hover:text-pink-600 transition-colors mb-2">
+                              {goal.title}
+                            </h3>
+                            <p className="text-gray-600 mb-4">
+                              {goal.description}
+                            </p>
+                          </div>
+                        </div>
+
+                        <div className="space-y-3 mb-4">
+                          {goal.documents.map((doc) => (
+                            <Link
+                              key={doc.slug}
+                              href={`/${locale}/docs/${doc.slug}`}
+                              onClick={onLinkClick}
+                              className="group/doc flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 transition-colors"
+                            >
+                              <div className="flex items-center gap-3">
+                                <FileText className="h-4 w-4 text-gray-400" />
+                                <span className="font-medium text-gray-700 group-hover/doc:text-pink-600 transition-colors">
+                                  {doc.title}
+                                </span>
+                              </div>
+                              <ArrowRight className="h-4 w-4 text-gray-400 group-hover/doc:text-pink-600 group-hover/doc:translate-x-1 transition-all" />
+                            </Link>
+                          ))}
+                        </div>
+
+                        <Link
+                          href={`${goal.viewAllLink}`}
+                          onClick={onLinkClick}
+                          className="inline-flex items-center gap-2 text-pink-600 hover:text-pink-700 font-medium transition-colors"
+                        >
+                          View All {goal.title} Documents
+                          <ArrowRight className="h-4 w-4" />
+                        </Link>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Business & Finance Column */}
+            <div className={cn(
+              "transition-all duration-500 ease-in-out",
+              expandedSection === 'personal' ? 'w-0 opacity-0 overflow-hidden' :
+              expandedSection === 'business' ? 'w-full' : 'w-1/2'
+            )}>
+              <div className="h-full overflow-y-auto">
+                <button
+                  onClick={() => handleSectionClick('business')}
+                  className="w-full p-8 text-left hover:bg-gray-50 transition-colors border-b border-gray-100"
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-4">
+                      <div className="p-3 rounded-xl bg-blue-100 text-blue-600">
+                        <Briefcase className="h-8 w-8" />
+                      </div>
+                      <div>
+                        <h2 className="text-3xl font-bold text-gray-900">{businessSection?.title}</h2>
+                        <p className="text-gray-600 mt-1">Business formation, employment & finance</p>
+                      </div>
+                    </div>
+                    <ChevronRight className={cn(
+                      "h-6 w-6 text-gray-400 transition-transform duration-300",
+                      expandedSection === 'business' && "rotate-90"
+                    )} />
+                  </div>
+                </button>
+
+                {/* Business Goals */}
+                {(expandedSection === 'business' || expandedSection === null) && (
+                  <div className="p-8 space-y-6">
+                    {businessSection?.goals.map((goal) => (
+                      <div
+                        key={goal.id}
+                        className="group p-6 border border-gray-200 rounded-2xl hover:border-blue-300 hover:shadow-lg transition-all duration-200 bg-white"
+                      >
+                        <div className="flex items-start gap-4 mb-4">
+                          <div className="p-3 rounded-xl bg-gray-100 text-gray-600 group-hover:bg-blue-100 group-hover:text-blue-600 transition-colors">
+                            {goal.icon}
+                          </div>
+                          <div className="flex-1">
+                            <h3 className="text-xl font-semibold text-gray-900 group-hover:text-blue-600 transition-colors mb-2">
+                              {goal.title}
+                            </h3>
+                            <p className="text-gray-600 mb-4">
+                              {goal.description}
+                            </p>
+                          </div>
+                        </div>
+
+                        <div className="space-y-3 mb-4">
+                          {goal.documents.map((doc) => (
+                            <Link
+                              key={doc.slug}
+                              href={`/${locale}/docs/${doc.slug}`}
+                              onClick={onLinkClick}
+                              className="group/doc flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 transition-colors"
+                            >
+                              <div className="flex items-center gap-3">
+                                <FileText className="h-4 w-4 text-gray-400" />
+                                <span className="font-medium text-gray-700 group-hover/doc:text-blue-600 transition-colors">
+                                  {doc.title}
+                                </span>
+                              </div>
+                              <ArrowRight className="h-4 w-4 text-gray-400 group-hover/doc:text-blue-600 group-hover/doc:translate-x-1 transition-all" />
+                            </Link>
+                          ))}
+                        </div>
+
+                        <Link
+                          href={`${goal.viewAllLink}`}
+                          onClick={onLinkClick}
+                          className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium transition-colors"
+                        >
+                          View All {goal.title} Documents
+                          <ArrowRight className="h-4 w-4" />
+                        </Link>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
   );
 };
 

@@ -84,7 +84,8 @@
       "WebFetch(domain:www.mva.maryland.gov)",
       "WebFetch(domain:dojmt.gov)",
       "WebFetch(domain:www.dot.nd.gov)",
-      "WebFetch(domain:transportation.wv.gov)"
+      "WebFetch(domain:transportation.wv.gov)",
+      "Bash(true)"
     ],
     "deny": []
   }

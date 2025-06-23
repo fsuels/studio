@@ -6,8 +6,6 @@ import { I18nextProvider } from 'react-i18next';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { AuthProvider } from '@/hooks/useAuth';
 import { Toaster } from '@/components/ui/toaster';
-import { CommandPaletteProvider } from '@/hooks/useCommandPalette';
-import GlobalCommandPalette from '@/components/global/GlobalCommandPalette';
 import i18n from '@/lib/i18n';
 import { mark, measure } from '@/utils/performance';
 
@@ -45,11 +43,8 @@ export default function RootClient({
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <I18nextProvider i18n={i18n}>
-          <CommandPaletteProvider>
-            {children}
-            <GlobalCommandPalette />
-            <Toaster />
-          </CommandPaletteProvider>
+          {children}
+          <Toaster />
         </I18nextProvider>
       </AuthProvider>
     </QueryClientProvider>

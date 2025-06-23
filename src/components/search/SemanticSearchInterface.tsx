@@ -361,16 +361,6 @@ const SemanticSearchInterface: React.FC = () => {
                 Category: {cat} ×
               </Badge>
             ))}
-            {filters.complexity.map((comp) => (
-              <Badge
-                key={comp}
-                variant="secondary"
-                className="cursor-pointer"
-                onClick={() => toggleFilterValue('complexity', comp)}
-              >
-                Complexity: {comp} ×
-              </Badge>
-            ))}
             {filters.jurisdiction.map((jur) => (
               <Badge
                 key={jur}
@@ -598,17 +588,6 @@ const SemanticSearchInterface: React.FC = () => {
                         </Badge>
                         <Badge variant="secondary">
                           {result.metadata.category}
-                        </Badge>
-                        <Badge
-                          variant={
-                            result.metadata.complexity === 'easy'
-                              ? 'default'
-                              : result.metadata.complexity === 'medium'
-                                ? 'secondary'
-                                : 'destructive'
-                          }
-                        >
-                          {result.metadata.complexity}
                         </Badge>
                       </div>
                       <Button variant="ghost" size="sm">

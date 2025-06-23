@@ -173,18 +173,6 @@ const ContextualLegalHelp: React.FC<ContextualLegalHelpProps> = ({
     searchHelp(term);
   };
 
-  const getComplexityColor = (complexity: string) => {
-    switch (complexity) {
-      case 'basic':
-        return 'bg-green-100 text-green-800';
-      case 'intermediate':
-        return 'bg-yellow-100 text-yellow-800';
-      case 'advanced':
-        return 'bg-red-100 text-red-800';
-      default:
-        return 'bg-gray-100 text-gray-800';
-    }
-  };
 
   const getResourceIcon = (type: string) => {
     switch (type) {
@@ -372,12 +360,6 @@ const LegalConceptCard: React.FC<{
       <div className="space-y-2">
         <div className="flex items-center justify-between">
           <h4 className="font-medium text-sm">{concept.term}</h4>
-          <Badge
-            variant="outline"
-            className={getComplexityColor(concept.complexity)}
-          >
-            {concept.complexity}
-          </Badge>
         </div>
 
         <p className="text-sm text-muted-foreground">{concept.definition}</p>
@@ -498,18 +480,6 @@ const ResourceCard: React.FC<{ resource: HelpResource }> = ({ resource }) => {
   );
 };
 
-function getComplexityColor(complexity: string) {
-  switch (complexity) {
-    case 'basic':
-      return 'bg-green-100 text-green-800';
-    case 'intermediate':
-      return 'bg-yellow-100 text-yellow-800';
-    case 'advanced':
-      return 'bg-red-100 text-red-800';
-    default:
-      return 'bg-gray-100 text-gray-800';
-  }
-}
 
 function getResourceIcon(type: string) {
   switch (type) {

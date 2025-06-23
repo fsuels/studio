@@ -151,18 +151,6 @@ const SituationBasedCategoryGroups: React.FC<
     loadSituationData();
   }, [maxSituations, docsPerSituation]);
 
-  const getComplexityColor = (complexity: string) => {
-    switch (complexity) {
-      case 'easy':
-        return 'bg-green-100 text-green-800 border-green-200';
-      case 'medium':
-        return 'bg-yellow-100 text-yellow-800 border-yellow-200';
-      case 'advanced':
-        return 'bg-red-100 text-red-800 border-red-200';
-      default:
-        return 'bg-gray-100 text-gray-800 border-gray-200';
-    }
-  };
 
   const getSituationIcon = (iconEmoji: string) => {
     // Map emoji to Lucide icons for better consistency
@@ -267,15 +255,6 @@ const SituationBasedCategoryGroups: React.FC<
                           <Star className="h-3 w-3 text-yellow-500 shrink-0" />
                         )}
                       </div>
-                      <Badge
-                        variant="outline"
-                        className={cn(
-                          'text-xs px-1.5 py-0.5 shrink-0 ml-2',
-                          getComplexityColor(doc.complexity),
-                        )}
-                      >
-                        {doc.complexity}
-                      </Badge>
                     </Link>
                   ))}
                 </div>

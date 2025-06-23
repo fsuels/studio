@@ -463,18 +463,6 @@ export default function CommandPalette({
     [onClose],
   );
 
-  const getComplexityColor = (complexity: string) => {
-    switch (complexity) {
-      case 'easy':
-        return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200';
-      case 'medium':
-        return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200';
-      case 'advanced':
-        return 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200';
-      default:
-        return 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200';
-    }
-  };
 
   const getMatchIcon = (matchType: string) => {
     switch (matchType) {
@@ -668,15 +656,6 @@ export default function CommandPalette({
                       )}
                     </div>
                     <div className="flex items-center gap-1 shrink-0">
-                      <Badge
-                        variant="secondary"
-                        className={cn(
-                          'text-xs px-1.5 py-0.5',
-                          getComplexityColor(result.complexity),
-                        )}
-                      >
-                        {result.complexity}
-                      </Badge>
                       <ExternalLink className="h-3 w-3 text-muted-foreground" />
                     </div>
                   </Command.Item>

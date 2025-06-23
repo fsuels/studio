@@ -125,19 +125,6 @@ const TaxonomyMegaMenuContent: React.FC<TaxonomyMegaMenuContentProps> = ({
     [],
   );
 
-  // Get complexity badge color
-  const getComplexityColor = (complexity: string) => {
-    switch (complexity) {
-      case 'easy':
-        return 'bg-green-100 text-green-800';
-      case 'medium':
-        return 'bg-yellow-100 text-yellow-800';
-      case 'advanced':
-        return 'bg-red-100 text-red-800';
-      default:
-        return 'bg-gray-100 text-gray-800';
-    }
-  };
 
   // Load quick docs on mount
   React.useEffect(() => {
@@ -204,7 +191,6 @@ const TaxonomyMegaMenuContent: React.FC<TaxonomyMegaMenuContentProps> = ({
                 getPopularDocs={getPopularDocsForSituation}
                 docPreviews={docPreviews}
                 loadingDocs={loadingDocs}
-                getComplexityColor={getComplexityColor}
               />
             ))}
           </div>
@@ -236,7 +222,6 @@ const SituationCard: React.FC<{
   getPopularDocs: (situationKey: string) => string[];
   docPreviews: Record<string, DocPreview>;
   loadingDocs: Set<string>;
-  getComplexityColor: (complexity: string) => string;
 }> = React.memo(
   ({
     situationKey,
@@ -247,7 +232,6 @@ const SituationCard: React.FC<{
     getPopularDocs,
     docPreviews,
     loadingDocs,
-    getComplexityColor,
   }) => {
     const popularDocs = React.useMemo(
       () => getPopularDocs(situationKey),
@@ -284,17 +268,6 @@ const SituationCard: React.FC<{
                     <span className="truncate">
                       {isLoading ? 'Loading...' : doc?.title || slug}
                     </span>
-                    {doc?.complexity && (
-                      <Badge
-                        variant="secondary"
-                        className={cn(
-                          'text-xs px-1 py-0',
-                          getComplexityColor(doc.complexity),
-                        )}
-                      >
-                        {doc.complexity}
-                      </Badge>
-                    )}
                   </Link>
                 );
               })}
