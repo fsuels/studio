@@ -11,6 +11,8 @@ import SmartHeaderSearch from './SmartHeaderSearch';
 import HeaderUserMenu from './HeaderUserMenu';
 import HeaderMegaMenu from './HeaderMegaMenu';
 import HeaderMobileMenu from './HeaderMobileMenu';
+// Temporarily revert to original approach to fix hydration issues
+// import CategoryNavigationBar from './CategoryNavigationBar';
 import { ThemeToggleButton } from '@/components/ui/theme-toggle';
 
 const Header = React.memo(function Header() {

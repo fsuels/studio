@@ -42,10 +42,10 @@ export default function HeaderMegaMenu({
       >
         <LayoutGrid className="h-4 w-4" />
         {mounted
-          ? tHeader('nav.makeDocuments', {
-              defaultValue: 'Make Documents',
+          ? tHeader('nav.browseDocuments', {
+              defaultValue: 'Browse Documents',
             })
-          : 'Make Documents'}
+          : 'Browse Documents'}
         {isMegaMenuOpen ? (
           <ChevronUp className="h-3 w-3" />
         ) : (
@@ -57,7 +57,7 @@ export default function HeaderMegaMenu({
       {isMegaMenuOpen && mounted && typeof window !== 'undefined' && createPortal(
         <ProgressiveLoader
           component={() =>
-            import('@/components/mega-menu/EnhancedMegaMenuContent')
+            import('@/components/mega-menu/ConsolidatedEnhancedMegaMenuContent')
           }
           fallback={<MegaMenuSkeleton />}
           delay={100}
