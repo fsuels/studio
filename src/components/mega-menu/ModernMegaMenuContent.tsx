@@ -686,27 +686,29 @@ const ModernMegaMenuContent: React.FC<ModernMegaMenuContentProps> = ({ locale, o
                               }}
                               onMouseLeave={() => setHoveredDoc(null)}
                             >
-                              <div className="flex items-center justify-between">
+                              <div className="flex items-start justify-between">
                                 <div className="flex items-center gap-3 flex-1">
-                                  <FileText className="h-4 w-4 text-gray-400" />
-                                  <span className="font-medium text-gray-700 group-hover/doc:text-pink-600 transition-colors">
-                                    {doc.title}
-                                  </span>
+                                  <FileText className="h-4 w-4 text-gray-400 mt-0.5" />
+                                  <div className="flex-1">
+                                    <div className="font-medium text-gray-700 group-hover/doc:text-pink-600 transition-colors pb-1">
+                                      {doc.title}
+                                    </div>
+                                    {hoveredDoc === doc.slug && doc.description && (
+                                      <div className="animate-in slide-in-from-top-1 duration-200">
+                                        <div className="text-xs text-gray-500 font-normal ml-2 mt-1">
+                                          <span className="font-medium text-gray-600">Use for:</span> {doc.description}
+                                        </div>
+                                      </div>
+                                    )}
+                                  </div>
                                 </div>
-                                <div className="relative flex items-center">
+                                <div className="relative flex items-center self-start mt-0.5">
                                   <ArrowRight className="h-4 w-4 text-gray-400 group-hover/doc:text-pink-600 group-hover/doc:opacity-0 transition-all duration-300" />
                                   <span className="absolute right-0 text-sm font-medium text-pink-600 opacity-0 group-hover/doc:opacity-100 transition-all duration-300 whitespace-nowrap">
                                     Start For Free
                                   </span>
                                 </div>
                               </div>
-                              {hoveredDoc === doc.slug && doc.description && (
-                                <div className="mt-2 pl-7 animate-in slide-in-from-top-1 duration-200">
-                                  <div className="text-sm text-gray-600">
-                                    <span className="font-medium">Use for:</span> {doc.description}
-                                  </div>
-                                </div>
-                              )}
                             </Link>
                           ))}
                         </div>
@@ -793,27 +795,29 @@ const ModernMegaMenuContent: React.FC<ModernMegaMenuContentProps> = ({ locale, o
                               }}
                               onMouseLeave={() => setHoveredDoc(null)}
                             >
-                              <div className="flex items-center justify-between">
+                              <div className="flex items-start justify-between">
                                 <div className="flex items-center gap-3 flex-1">
-                                  <FileText className="h-4 w-4 text-gray-400" />
-                                  <span className="font-medium text-gray-700 group-hover/doc:text-blue-600 transition-colors">
-                                    {doc.title}
-                                  </span>
+                                  <FileText className="h-4 w-4 text-gray-400 mt-0.5" />
+                                  <div className="flex-1">
+                                    <div className="font-medium text-gray-700 group-hover/doc:text-blue-600 transition-colors pb-1">
+                                      {doc.title}
+                                    </div>
+                                    {hoveredDoc === doc.slug && doc.description && (
+                                      <div className="animate-in slide-in-from-top-1 duration-200">
+                                        <div className="text-xs text-gray-500 font-normal ml-2 mt-1">
+                                          <span className="font-medium text-gray-600">Use for:</span> {doc.description}
+                                        </div>
+                                      </div>
+                                    )}
+                                  </div>
                                 </div>
-                                <div className="relative flex items-center">
+                                <div className="relative flex items-center self-start mt-0.5">
                                   <ArrowRight className="h-4 w-4 text-gray-400 group-hover/doc:text-blue-600 group-hover/doc:opacity-0 transition-all duration-300" />
                                   <span className="absolute right-0 text-sm font-medium text-blue-600 opacity-0 group-hover/doc:opacity-100 transition-all duration-300 whitespace-nowrap">
                                     Start For Free
                                   </span>
                                 </div>
                               </div>
-                              {hoveredDoc === doc.slug && doc.description && (
-                                <div className="mt-2 pl-7 animate-in slide-in-from-top-1 duration-200">
-                                  <div className="text-sm text-gray-600">
-                                    <span className="font-medium">Use for:</span> {doc.description}
-                                  </div>
-                                </div>
-                              )}
                             </Link>
                           ))}
                         </div>
