@@ -17,35 +17,47 @@ interface CategoryDropdownProps {
   isOpen: boolean;
 }
 
-// Category content mappings
-const categoryContent = {
-  'agreements': {
+// Category content mappings - User-intent focused
+interface CategoryContent {
+  title: string;
+  subtitle?: string;
+  sections: {
+    id: string;
+    label: string;
+    documents: string[];
+  }[];
+}
+
+const categoryContent: Record<string, CategoryContent> = {
+  'agreements-contracts': {
     title: 'Agreements & Contracts',
+    subtitle: 'Foundational agreements for business & legal needs',
     sections: [
       {
-        id: 'confidentiality',
-        label: 'Confidentiality',
-        documents: ['non-disclosure-agreement', 'confidentiality-agreement', 'employee-non-disclosure-agreement']
+        id: 'business-operations',
+        label: 'Business Operations',
+        documents: ['business-contract', 'service-agreement', 'consulting-agreement', 'sales-agreement', 'general-purchase-agreement', 'vendor-agreement', 'letter-of-intent', 'memorandum-of-agreement', 'memorandum-of-understanding', 'non-disclosure-agreement', 'confidentiality-agreement']
       },
       {
-        id: 'license-ip',
-        label: 'License & IP',
-        documents: ['copyright-assignment', 'copyright-license-agreement', 'trademark-assignment', 'patent-assignment', 'software-license-agreement', 'ip-assignment-agreement']
+        id: 'intellectual-property',
+        label: 'Intellectual Property & Licensing',
+        documents: ['copyright-assignment', 'copyright-license-agreement', 'trademark-assignment', 'trademark-license-agreement', 'patent-assignment', 'patent-license-agreement', 'general-licensing-agreement', 'software-license-agreement', 'music-license-agreement', 'invention-assignment-agreement']
       },
       {
-        id: 'service-sales',
-        label: 'Service & Sales',
-        documents: ['service-agreement', 'business-contract', 'consulting-agreement', 'consulting-services-agreement']
+        id: 'employment-hr',
+        label: 'Employment & HR',
+        documents: ['employment-contract', 'independent-contractor-agreement', 'non-compete-agreement', 'commission-agreement', 'employee-non-disclosure-agreement', 'severance-agreement', 'executive-employment-agreement', 'internship-agreement', 'telecommuting-agreement', 'work-from-home-agreement', 'volunteer-agreement']
       },
       {
-        id: 'employment',
-        label: 'Employment',
-        documents: ['employment-contract', 'independent-contractor-agreement', 'non-compete-agreement', 'commission-agreement']
+        id: 'partnerships',
+        label: 'Partnerships & Investments',
+        documents: ['partnership-agreement', 'partnership-agreement-amendment', 'partnership-dissolution-agreement', 'joint-venture-agreement', 'limited-partnership-agreement', 'shareholder-agreement', 'investment-agreement', 'startup-equity-agreement', 'private-placement-memorandum', 'investment-term-sheet']
       }
     ]
   },
   'letters-notices': {
     title: 'Letters & Notices',
+    subtitle: 'Formal communications & notifications',
     sections: [
       {
         id: 'payment-debt',
@@ -53,74 +65,97 @@ const categoryContent = {
         documents: ['demand-letter-payment', 'collection-letter', 'debt-validation-letter']
       },
       {
-        id: 'tenancy',
-        label: 'Tenancy',
-        documents: ['eviction-notice', 'late-rent-notice']
+        id: 'property-tenancy',
+        label: 'Property & Tenancy',
+        documents: ['eviction-notice', 'late-rent-notice', 'lease-termination-letter']
       },
       {
-        id: 'general',
-        label: 'General',
+        id: 'employment-hr-letters',
+        label: 'Employment & HR',
+        documents: ['employment-verification-letter', 'resignation-letter', 'employee-warning-notice']
+      },
+      {
+        id: 'general-personal',
+        label: 'General & Personal',
         documents: ['complaint-letter', 'cease-desist-letter', 'breach-contract-notice', 'contract-termination-letter']
       }
     ]
   },
   'forms-authorizations': {
     title: 'Forms & Authorizations',
+    subtitle: 'Official documentation & permissions',
     sections: [
       {
-        id: 'personal',
-        label: 'Personal',
+        id: 'personal-legal-affidavits',
+        label: 'Personal & Legal Affidavits',
+        documents: ['affidavit', 'affidavit-general', 'affidavit-of-death', 'affidavit-of-heirship', 'affidavit-of-identity']
+      },
+      {
+        id: 'powers-attorney-directives',
+        label: 'Powers of Attorney & Directives',
         documents: ['durable-power-of-attorney', 'advance-directive', 'living-will']
       },
       {
-        id: 'financial',
-        label: 'Financial',
-        documents: ['ach-authorization-form', 'promissory-note', 'loan-agreement']
+        id: 'medical-child-care',
+        label: 'Medical & Child Care',
+        documents: ['child-medical-consent', 'child-care-authorization-form']
       },
       {
-        id: 'medical',
-        label: 'Medical',
-        documents: ['child-medical-consent']
-      },
-      {
-        id: 'government',
-        label: 'Government',
-        documents: ['affidavit', 'affidavit-general']
+        id: 'property-transactions',
+        label: 'Property & Transactions',
+        documents: ['vehicle-bill-of-sale', 'bill-of-sale-general', 'boat-bill-of-sale', 'ach-authorization-form', 'promissory-note']
       }
     ]
   },
-  'family-legacy': {
-    title: 'Family & Legacy',
+  'family-personal': {
+    title: 'Family & Personal Life',
+    subtitle: 'Life events & relationships',
     sections: [
       {
-        id: 'protect',
-        label: 'Protect',
-        documents: ['last-will-testament']
+        id: 'estate-planning',
+        label: 'Estate Planning',
+        documents: ['last-will-testament', 'living-will', 'codicil-to-will']
       },
       {
-        id: 'care',
-        label: 'Care',
-        documents: ['child-custody-agreement', 'child-support-agreement']
+        id: 'marriage-relationships',
+        label: 'Marriage & Relationships',
+        documents: ['cohabitation-agreement', 'child-custody-agreement', 'child-support-agreement']
       },
       {
-        id: 'healthcare',
-        label: 'Healthcare',
-        documents: ['advance-directive', 'living-will']
+        id: 'children-dependents',
+        label: 'Children & Dependents',
+        documents: ['child-custody-agreement', 'child-support-agreement', 'child-care-contract', 'child-travel-consent']
+      },
+      {
+        id: 'personal-life',
+        label: 'Personal Life & Recreation',
+        documents: ['donation-agreement']
       }
     ]
   },
-  'business-finance-property': {
-    title: 'Business Finance & Property',
+  'business-commercial': {
+    title: 'Business & Commercial',
+    subtitle: 'Comprehensive business documents for all stages',
     sections: [
       {
-        id: 'finance',
-        label: 'Finance',
-        documents: ['promissory-note', 'loan-agreement']
+        id: 'business-formation',
+        label: 'Business Formation & Governance',
+        documents: ['articles-of-incorporation', 'corporate-bylaws', 'llc-operating-agreement', 'business-plan', 'board-resolution']
       },
       {
-        id: 'property',
-        label: 'Property',
-        documents: ['lease-agreement', 'quitclaim-deed', 'property-deed', 'commercial-lease-agreement', 'vehicle-bill-of-sale', 'bill-of-sale-general', 'boat-bill-of-sale']
+        id: 'finance-lending',
+        label: 'Finance & Lending',
+        documents: ['promissory-note', 'loan-agreement', 'debt-settlement-agreement', 'security-agreement']
+      },
+      {
+        id: 'commercial-real-estate',
+        label: 'Commercial Real Estate',
+        documents: ['commercial-lease-agreement', 'lease-agreement', 'property-deed', 'quitclaim-deed', 'real-estate-purchase-agreement']
+      },
+      {
+        id: 'industry-specific',
+        label: 'Industry-Specific Contracts',
+        documents: ['construction-contract', 'catering-agreement', 'auto-repair-agreement', 'consulting-agreement']
       }
     ]
   }
@@ -134,6 +169,14 @@ export default function CategoryDropdown({
 }: CategoryDropdownProps) {
   const { t } = useTranslation('common');
   const documents = getDocumentsForCountry('us');
+  const [expandedSections, setExpandedSections] = React.useState<Record<string, boolean>>({});
+
+  const toggleSection = (sectionId: string) => {
+    setExpandedSections(prev => ({
+      ...prev,
+      [sectionId]: !prev[sectionId]
+    }));
+  };
 
   // Handle escape key
   React.useEffect(() => {
@@ -176,9 +219,11 @@ export default function CategoryDropdown({
         "absolute top-full left-0 right-0 z-40 bg-background border-b border-border shadow-lg animate-in slide-in-from-top-2 duration-200"
       )}>
       <div className="container mx-auto px-4 py-6">
-        <div className="mb-4">
+        <div className="mb-6">
           <h2 className="text-xl font-semibold text-foreground">{content.title}</h2>
-          <p className="text-sm text-muted-foreground">Choose from our professionally crafted templates</p>
+          <p className="text-sm text-muted-foreground mt-1">
+            {content.subtitle || 'Choose from our professionally crafted templates'}
+          </p>
         </div>
         
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
@@ -190,7 +235,7 @@ export default function CategoryDropdown({
               <ul className="space-y-2">
                 {section.documents
                   .filter(docId => documentMap.has(docId))
-                  .slice(0, 4) // Show only first 4 documents
+                  .slice(0, expandedSections[section.id] ? section.documents.length : 4) // Show 4 or all documents
                   .map(docId => {
                     const doc = documentMap.get(docId)!;
                     const translatedDoc = getDocTranslation(doc, locale);
@@ -218,8 +263,14 @@ export default function CategoryDropdown({
                   })}
                 {section.documents.filter(docId => documentMap.has(docId)).length > 4 && (
                   <li>
-                    <button className="text-xs text-primary hover:underline font-medium">
-                      Show {section.documents.filter(docId => documentMap.has(docId)).length - 4} more...
+                    <button 
+                      onClick={() => toggleSection(section.id)}
+                      className="text-xs text-primary hover:underline font-medium"
+                    >
+                      {expandedSections[section.id] 
+                        ? 'Show less' 
+                        : `Show ${section.documents.filter(docId => documentMap.has(docId)).length - 4} more...`
+                      }
                     </button>
                   </li>
                 )}

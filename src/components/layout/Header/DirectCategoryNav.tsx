@@ -22,7 +22,7 @@ interface DirectCategoryNavProps {
 
 const categories = [
   {
-    id: 'agreements',
+    id: 'agreements-contracts',
     label: 'Agreements',
     icon: FileText,
   },
@@ -37,12 +37,12 @@ const categories = [
     icon: FileCheck,
   },
   {
-    id: 'family-legacy',
+    id: 'family-personal',
     label: 'Family',
     icon: Users,
   },
   {
-    id: 'business-finance-property',
+    id: 'business-commercial',
     label: 'Business',
     icon: Building,
   }

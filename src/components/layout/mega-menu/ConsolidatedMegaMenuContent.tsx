@@ -34,7 +34,7 @@ interface Panel {
 
 const panels: Panel[] = [
   {
-    id: 'agreements',
+    id: 'agreements-contracts',
     label: 'Agreements & Contracts',
     icon: FileText,
     sections: [
@@ -156,8 +156,8 @@ const panels: Panel[] = [
     ]
   },
   {
-    id: 'family-legacy',
-    label: 'Family & Legacy',
+    id: 'family-personal',
+    label: 'Family & Personal',
     icon: Users,
     sections: [
       {
@@ -186,8 +186,8 @@ const panels: Panel[] = [
     ]
   },
   {
-    id: 'business-finance-property',
-    label: 'Business Finance & Property',
+    id: 'business-commercial',
+    label: 'Business & Commercial',
     icon: Building,
     sections: [
       {
@@ -224,7 +224,7 @@ export default function ConsolidatedMegaMenuContent({
   const { t, i18n } = useTranslation('common');
   const currentLocale = i18n.language as 'en' | 'es';
   const [searchQuery, setSearchQuery] = useState('');
-  const [activePanel, setActivePanel] = useState(activeCategory || 'agreements');
+  const [activePanel, setActivePanel] = useState(activeCategory || 'agreements-contracts');
   const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({});
 
   // Create a map of document IDs to documents for quick lookup
