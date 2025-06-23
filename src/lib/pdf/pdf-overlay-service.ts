@@ -40,16 +40,15 @@ export async function overlayFormData(
       fields.forEach(field => {
         console.log(`📋 Available field: "${field.getName()}" (${field.constructor.name})`);
       });
-      
+
       return await smartFormFieldMapping(pdfDoc, formData, state);
-    } else {
-      // FALLBACK: No form fields - this is a scanned PDF
-      console.log('⚠️ FALLBACK MODE: No form fields detected - PDF appears to be scanned');
-      console.log('💡 Recommendation: Contact state DMV for fillable version');
-      
-      // Return original PDF with a warning overlay
-      return await addWarningOverlay(pdfDoc, 'Form fields not detected - please fill manually');
     }
+
+    // FALLBACK: No form fields - apply coordinate-based overlay
+    console.log('⚠️ FALLBACK MODE: No form fields detected - attempting coordinate overlay');
+    const overlaid = await coordinateBasedOverlayWithStateMapping(pdfDoc, formData, state);
+
+    return overlaid;
     
   } catch (error) {
     console.error('❌ PDF Overlay Error:', error);
