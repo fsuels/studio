@@ -5,7 +5,7 @@
 
 import { initializeApp, getApps, getApp, type FirebaseApp } from 'firebase/app';
 import type { Analytics } from 'firebase/analytics';
-import type { Firestore } from 'firebase/firestore';
+import { initializeFirestore, setLogLevel, type Firestore } from 'firebase/firestore';
 
 /* ------------------------------------------------------------------ */
 /* Fallback config (env vars override)                                */
@@ -70,12 +70,9 @@ export async function getAnalyticsInstance(): Promise<Analytics | null> {
 /* Firestore – optional HTTP long-polling and show only errors        */
 /* ------------------------------------------------------------------ */
 let dbInstance: Firestore | null = null;
-export async function getDb(): Promise<Firestore> {
-  if (dbInstance) return dbInstance;
 
-  const { initializeFirestore, setLogLevel } = await import(
-    'firebase/firestore'
-  );
+function initFirestore(): Firestore {
+  if (dbInstance) return dbInstance;
 
   const forcePolling =
     process.env.NEXT_PUBLIC_FIRESTORE_FORCE_POLLING === 'true';
@@ -97,6 +94,10 @@ export async function getDb(): Promise<Firestore> {
   setLogLevel('error');
 
   return dbInstance;
+}
+
+export function getDb(): Firestore {
+  return initFirestore();
 }
 
 /* ------------------------------------------------------------------ */
