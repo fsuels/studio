@@ -1,4 +1,5 @@
 // src/app/[locale]/dashboard/page.tsx
+'use client';
 import React from 'react';
 import dynamic from 'next/dynamic';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -63,10 +64,6 @@ const DashboardClientContent = dynamic(() => import('./dashboard-client-content'
     </div>
   ),
 });
-
-// Force dynamic rendering for user-specific dashboard content
-export const runtime = 'nodejs';
-export const revalidate = 0;
 
 interface DashboardPageProps {
   params: {

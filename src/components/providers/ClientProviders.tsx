@@ -28,11 +28,6 @@ const ContactFormButton = dynamic(() =>
 const ActivityTicker = dynamic(() =>
   import('@/components/shared').then((m) => ({ default: m.ActivityTicker })),
 );
-const AccessibilityToolbar = dynamic(() =>
-  import('@/components/accessibility/AccessibilityToolbar').then((m) => ({
-    default: m.AccessibilityToolbar,
-  })),
-);
 const GlobalKeyboardShortcuts = dynamic(() =>
   import('@/components/accessibility/GlobalKeyboardShortcuts').then((m) => ({
     default: m.GlobalKeyboardShortcuts,
@@ -58,7 +53,6 @@ const AppShell = React.memo(function AppShell({
       <ContactFormButton />
       <ActivityTicker />
       {/* Conditionally render accessibility components only on the client after mount */}
-      {isMounted && <AccessibilityToolbar />}
       {isMounted && <GlobalKeyboardShortcuts />}
       {/* Conditionally render Toaster only on the client after mount */}
       {isMounted && <Toaster />}

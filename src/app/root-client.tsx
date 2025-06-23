@@ -35,11 +35,8 @@ export default function RootClient({
       }),
   );
 
-  if (typeof window !== 'undefined') {
-    mark('root-layout-start');
-  }
-
   useEffect(() => {
+    mark('root-layout-start');
     mark('root-layout-end');
     measure('root-layout', 'root-layout-start', 'root-layout-end');
   }, []);
