@@ -5,6 +5,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 
 // Lazy load the heavy dashboard client content (1240+ lines)
 const DashboardClientContent = dynamic(() => import('./dashboard-client-content'), {
+  ssr: false,
   loading: () => (
     <div className="p-6 space-y-8">
       {/* Header Skeleton */}
