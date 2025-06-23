@@ -684,7 +684,12 @@ const ModernMegaMenuContent: React.FC<ModernMegaMenuContentProps> = ({ locale, o
                                   {doc.title}
                                 </span>
                               </div>
-                              <ArrowRight className="h-4 w-4 text-gray-400 group-hover/doc:text-pink-600 group-hover/doc:translate-x-1 transition-all" />
+                              <div className="relative flex items-center">
+                                <ArrowRight className="h-4 w-4 text-gray-400 group-hover/doc:text-pink-600 group-hover/doc:opacity-0 transition-all duration-300" />
+                                <span className="absolute right-0 text-sm font-medium text-pink-600 opacity-0 group-hover/doc:opacity-100 transition-all duration-300 whitespace-nowrap">
+                                  Start For Free
+                                </span>
+                              </div>
                             </Link>
                           ))}
                         </div>
@@ -771,7 +776,12 @@ const ModernMegaMenuContent: React.FC<ModernMegaMenuContentProps> = ({ locale, o
                                   {doc.title}
                                 </span>
                               </div>
-                              <ArrowRight className="h-4 w-4 text-gray-400 group-hover/doc:text-blue-600 group-hover/doc:translate-x-1 transition-all" />
+                              <div className="relative flex items-center">
+                                <ArrowRight className="h-4 w-4 text-gray-400 group-hover/doc:text-blue-600 group-hover/doc:opacity-0 transition-all duration-300" />
+                                <span className="absolute right-0 text-sm font-medium text-blue-600 opacity-0 group-hover/doc:opacity-100 transition-all duration-300 whitespace-nowrap">
+                                  Start For Free
+                                </span>
+                              </div>
                             </Link>
                           ))}
                         </div>
