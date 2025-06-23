@@ -5,7 +5,7 @@ import React, { useMemo } from 'react';
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils';
-import { ChevronRight } from 'lucide-react';
+import { ChevronRight, ChevronDown, TrendingUp } from 'lucide-react';
 import { getDocumentsForCountry } from '@/lib/document-library';
 import { getDocTranslation } from '@/lib/i18nUtils';
 import type { LegalDocument } from '@/lib/document-library';
@@ -27,6 +27,20 @@ interface CategoryContent {
     documents: string[];
   }[];
 }
+
+// Popular documents that should be shown first with visual indicators
+const popularDocuments = new Set([
+  'non-disclosure-agreement',
+  'employment-contract',
+  'independent-contractor-agreement',
+  'lease-agreement',
+  'last-will-testament',
+  'power-of-attorney',
+  'llc-operating-agreement',
+  'vehicle-bill-of-sale',
+  'partnership-agreement',
+  'service-agreement'
+]);
 
 const categoryContent: Record<string, CategoryContent> = {
   'agreements-contracts': {
@@ -247,56 +261,107 @@ export default function CategoryDropdown({
         </div>
         
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {content.sections.map(section => (
+          {content.sections.map(section => {
+            // Sort documents to show popular ones first
+            const sortedDocuments = section.documents
+              .filter(docId => documentMap.has(docId))
+              .sort((a, b) => {
+                const aIsPopular = popularDocuments.has(a);
+                const bIsPopular = popularDocuments.has(b);
+                if (aIsPopular && !bIsPopular) return -1;
+                if (!aIsPopular && bIsPopular) return 1;
+                return 0;
+              });
+              
+            return (
             <div key={section.id} className="space-y-4">
               <h3 className="font-semibold text-base text-foreground border-b border-border pb-2">
                 {section.label}
               </h3>
-              <ul className="space-y-2">
-                {section.documents
-                  .filter(docId => documentMap.has(docId))
-                  .slice(0, expandedSections[section.id] ? section.documents.length : 4) // Show 4 or all documents
-                  .map(docId => {
-                    const doc = documentMap.get(docId)!;
-                    const translatedDoc = getDocTranslation(doc, locale);
-                    return (
-                      <li key={docId}>
-                        <Link
-                          href={`/${locale}/docs/${doc.id}`}
-                          onClick={onLinkClick}
-                          className="group flex items-start justify-between p-2 rounded-md hover:bg-muted/50 transition-colors"
+              <div className="relative">
+                <ul className="space-y-2">
+                  {sortedDocuments
+                    .slice(0, expandedSections[section.id] ? sortedDocuments.length : 4) // Show 4 or all documents
+                    .map((docId, index) => {
+                      const doc = documentMap.get(docId)!;
+                      const translatedDoc = getDocTranslation(doc, locale);
+                      const isPopular = popularDocuments.has(docId);
+                      const isExpanded = expandedSections[section.id];
+                      const isNewlyVisible = isExpanded && index >= 4;
+                      
+                      return (
+                        <li 
+                          key={docId}
+                          className={cn(
+                            "transition-all duration-300",
+                            isNewlyVisible && "animate-in fade-in slide-in-from-top-2"
+                          )}
                         >
-                          <div className="flex-1 min-w-0">
-                            <div className="font-medium text-sm text-foreground group-hover:text-primary truncate">
-                              {translatedDoc.name}
-                            </div>
-                            {translatedDoc.description && (
-                              <div className="text-xs text-muted-foreground mt-1 line-clamp-2">
-                                {translatedDoc.description}
+                          <Link
+                            href={`/${locale}/docs/${doc.id}`}
+                            onClick={onLinkClick}
+                            className="group flex items-start justify-between p-2 rounded-md hover:bg-muted/50 transition-all duration-200 hover:shadow-sm"
+                          >
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-center gap-2">
+                                <div className="font-medium text-sm text-foreground group-hover:text-primary truncate">
+                                  {translatedDoc.name}
+                                </div>
+                                {isPopular && index < 4 && (
+                                  <span className="inline-flex items-center gap-1 px-2 py-0.5 text-xs font-medium bg-primary/10 text-primary rounded-full">
+                                    <TrendingUp className="h-3 w-3" />
+                                    Popular
+                                  </span>
+                                )}
                               </div>
-                            )}
-                          </div>
-                          <ChevronRight className="h-4 w-4 text-muted-foreground group-hover:text-primary ml-2 flex-shrink-0" />
-                        </Link>
-                      </li>
-                    );
-                  })}
-                {section.documents.filter(docId => documentMap.has(docId)).length > 4 && (
-                  <li>
+                              {translatedDoc.description && (
+                                <div className="text-xs text-muted-foreground mt-1 line-clamp-2">
+                                  {translatedDoc.description}
+                                </div>
+                              )}
+                            </div>
+                            <ChevronRight className="h-4 w-4 text-muted-foreground group-hover:text-primary ml-2 flex-shrink-0 transition-transform duration-200 group-hover:translate-x-0.5" />
+                          </Link>
+                        </li>
+                      );
+                    })}
+                </ul>
+                {sortedDocuments.length > 4 && (
+                  <div className="mt-3">
                     <button 
                       onClick={() => toggleSection(section.id)}
-                      className="text-xs text-primary hover:underline font-medium"
+                      className={cn(
+                        "group inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-full",
+                        "bg-muted/50 hover:bg-muted text-foreground",
+                        "transition-all duration-200 hover:shadow-sm",
+                        "focus:outline-none focus:ring-2 focus:ring-primary/20"
+                      )}
+                      aria-expanded={expandedSections[section.id]}
+                      aria-label={`${expandedSections[section.id] ? 'Show fewer' : 'View all'} ${section.label} documents`}
                     >
-                      {expandedSections[section.id] 
-                        ? 'Show less' 
-                        : `Show ${section.documents.filter(docId => documentMap.has(docId)).length - 4} more...`
-                      }
+                      <span className="flex items-center gap-1">
+                        {expandedSections[section.id] ? (
+                          <>Show fewer {section.label.toLowerCase()}</>
+                        ) : (
+                          <>
+                            View all {sortedDocuments.length} {section.label.toLowerCase()}
+                            <span className="text-xs text-muted-foreground ml-1">(+{sortedDocuments.length - 4} more)</span>
+                          </>
+                        )}
+                      </span>
+                      <ChevronDown 
+                        className={cn(
+                          "h-4 w-4 transition-transform duration-300",
+                          expandedSections[section.id] && "rotate-180"
+                        )} 
+                      />
                     </button>
-                  </li>
+                  </div>
                 )}
-              </ul>
+              </div>
             </div>
-          ))}
+            );
+          })}
         </div>
         
         {/* View All Link */}
